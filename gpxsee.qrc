@@ -1,0 +1,14 @@
+<RCC>
+    <qresource>
+        <file>icons/dialog-close.png</file>
+        <file>icons/document-open.png</file>
+        <file>icons/document-save-as.png</file>
+        <file>icons/document-save.png</file>
+        <file>icons/flag.png</file>
+        <file>icons/gpxsee.png</file>
+    </qresource>
+
+    <qresource>
+        <file>lang/gpxsee_cs.qm</file>
+    </qresource>
+</RCC>
