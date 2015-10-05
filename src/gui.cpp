@@ -58,7 +58,8 @@ void GUI::createActions()
 
 
 	// General actions
-	_exitAction = new QAction(tr("Exit"), this);
+	_exitAction = new QAction(QIcon(QPixmap(QUIT_ICON)), tr("Quit"), this);
+	_exitAction->setShortcut(QKeySequence::Quit);
 	connect(_exitAction, SIGNAL(triggered()), this, SLOT(close()));
 
 	_aboutAction = new QAction(QIcon(QPixmap(APP_ICON)),
@@ -70,17 +71,21 @@ void GUI::createActions()
 	// File related actions
 	_openFileAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)),
 	  tr("Open"), this);
+	_openFileAction->setShortcut(QKeySequence::Open);
 	connect(_openFileAction, SIGNAL(triggered()), this, SLOT(openFile()));
 	_saveFileAction = new QAction(QIcon(QPixmap(SAVE_FILE_ICON)),
 	  tr("Save"), this);
+	_saveFileAction->setShortcut(QKeySequence::Save);
 	_saveFileAction->setActionGroup(_fileActionGroup);
 	connect(_saveFileAction, SIGNAL(triggered()), this, SLOT(saveFile()));
 	_saveAsAction = new QAction(QIcon(QPixmap(SAVE_AS_ICON)),
 	  tr("Save as"), this);
+	_saveAsAction->setShortcut(QKeySequence::SaveAs);
 	_saveAsAction->setActionGroup(_fileActionGroup);
 	connect(_saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
 	_closeFileAction = new QAction(QIcon(QPixmap(CLOSE_FILE_ICON)),
 	  tr("Close"), this);
+	_closeFileAction->setShortcut(QKeySequence::Close);
 	_closeFileAction->setActionGroup(_fileActionGroup);
 	connect(_closeFileAction, SIGNAL(triggered()), this, SLOT(closeFile()));
 
@@ -98,9 +103,12 @@ void GUI::createMenus()
 {
 	_fileMenu = menuBar()->addMenu(tr("File"));
 	_fileMenu->addAction(_openFileAction);
+	_fileMenu->addSeparator();
 	_fileMenu->addAction(_saveFileAction);
 	_fileMenu->addAction(_saveAsAction);
+	_fileMenu->addSeparator();
 	_fileMenu->addAction(_closeFileAction);
+	_fileMenu->addSeparator();
 	_fileMenu->addAction(_exitAction);
 
 	_poiMenu = menuBar()->addMenu(tr("POI"));
@@ -118,9 +126,15 @@ void GUI::createToolBars()
 	_fileToolBar->addAction(_openFileAction);
 	_fileToolBar->addAction(_saveFileAction);
 	_fileToolBar->addAction(_closeFileAction);
+#ifdef __APPLE__
+	_fileToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+#endif // __APPLE__
 
 	_poiToolBar = addToolBar(tr("POI"));
 	_poiToolBar->addAction(_showPOIAction);
+#ifdef __APPLE__
+	_poiToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+#endif // __APPLE__
 }
 
 void GUI::createTrackView()

@@ -34,3 +34,4 @@ SOURCES += src/main.cpp \
     src/markeritem.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
+macx:ICON = icons/gpxsee.icns

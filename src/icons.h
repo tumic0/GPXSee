@@ -7,5 +7,6 @@
 #define SAVE_AS_ICON    ":/icons/document-save-as.png"
 #define CLOSE_FILE_ICON ":/icons/dialog-close.png"
 #define SHOW_POI_ICON   ":/icons/flag.png"
+#define QUIT_ICON       ":/icons/application-exit.png"
 
 #endif /* ICONS_H */

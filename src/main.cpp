@@ -13,6 +13,9 @@ int main(int argc, char *argv[])
 	QTranslator translator;
 	translator.load(QString(":/lang/gpxsee_") + locale);
 	app.installTranslator(&translator);
+#ifdef __APPLE__
+	app.setAttribute(Qt::AA_DontShowIconsInMenus);
+#endif // __APPLE__
 
 	GUI gui;
 	gui.setWindowIcon(QIcon(QPixmap(APP_ICON)));
