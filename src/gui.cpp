@@ -194,15 +194,14 @@ void GUI::openFile()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open file"));
 	QStringList list = files;
-	QStringList::Iterator it = list.begin();
+	QString lastFile;
 
-	while(it != list.end()) {
-		openFile(*it);
-		++it;
-	}
+	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
+		if (openFile(*it))
+			lastFile = *it;
 
-	if (!list.empty())
-		setDir(list.back());
+	if (!lastFile.isEmpty())
+		setDir(lastFile);
 }
 
 bool GUI::openFile(const QString &fileName)
