@@ -108,8 +108,10 @@ void GUI::createMenus()
 	_fileMenu->addAction(_saveAsAction);
 	_fileMenu->addSeparator();
 	_fileMenu->addAction(_closeFileAction);
+#ifndef __APPLE__
 	_fileMenu->addSeparator();
 	_fileMenu->addAction(_exitAction);
+#endif // __APPLE__
 
 	_poiMenu = menuBar()->addMenu(tr("POI"));
 	_poiMenu->addAction(_openPOIAction);
