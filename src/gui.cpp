@@ -13,7 +13,8 @@
 #include "icons.h"
 #include "keys.h"
 #include "gpx.h"
-#include "graph.h"
+#include "elevationgraph.h"
+#include "speedgraph.h"
 #include "track.h"
 
 #include <QDebug>
@@ -45,6 +46,7 @@ GUI::GUI()
 	setUnifiedTitleAndToolBarOnMac(true);
 
 	_dirIndex = -1;
+	_files = 0;
 
 	resize(600, 800);
 }
@@ -146,16 +148,8 @@ void GUI::createTrackView()
 
 void GUI::createTrackGraphs()
 {
-	_elevationGraph = new Graph;
-	_elevationGraph->setXLabel(tr("Distance [km]"));
-	_elevationGraph->setYLabel(tr("Elevation [m.a.s.l.]"));
-	_elevationGraph->setXScale(0.001);
-
-	_speedGraph = new Graph;
-	_speedGraph->setXLabel(tr("Distance [km]"));
-	_speedGraph->setYLabel(tr("Speed [km/h]"));
-	_speedGraph->setXScale(0.001);
-	_speedGraph->setYScale(3.6);
+	_elevationGraph = new ElevationGraph;
+	_speedGraph = new SpeedGraph;
 
 	_trackGraphs = new QTabWidget;
 	_trackGraphs->addTab(_elevationGraph, tr("Elevation"));
@@ -207,17 +201,28 @@ void GUI::openFile()
 bool GUI::openFile(const QString &fileName)
 {
 	GPX gpx;
+	QVector<QPointF> elevation;
+	QVector<QPointF> speed;
+	QVector<QPointF> track;
 
 	if (!fileName.isEmpty()) {
 		if (gpx.loadFile(fileName)) {
-			_elevationGraph->loadData(gpx.elevationGraph());
-			_speedGraph->loadData(gpx.speedGraph());
-			_track->loadData(gpx.track());
+			gpx.elevationGraph(elevation);
+			gpx.speedGraph(speed);
+			gpx.track(track);
+
+			_elevationGraph->loadData(elevation);
+			_speedGraph->loadData(speed);
+			_track->loadData(track);
 			if (_showPOIAction->isChecked())
 				_track->loadPOI(_poi);
 
 			_fileActionGroup->setEnabled(true);
-			_fileName->setText(fileName);
+
+			if (++_files > 1)
+				_fileName->setText(tr("%1 tracks").arg(_files));
+			else
+				_fileName->setText(fileName);
 
 			return true;
 		} else {
@@ -283,6 +288,8 @@ void GUI::saveFile(const QString &fileName)
 
 void GUI::closeFile()
 {
+	_files = 0;
+
 	_elevationGraph->clear();
 	_speedGraph->clear();
 	_track->clear();

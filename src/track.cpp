@@ -62,7 +62,6 @@ void Track::loadData(const QVector<QPointF> &track)
 	mi->setPos(pi->path().pointAtPercent(0));
 	_markers.append(mi);
 
-
 	for (int i = 0; i < _trackPaths.size(); i++) {
 		_markers.at(i)->setTransform(t);
 		_scene->addItem(_markers.at(i));

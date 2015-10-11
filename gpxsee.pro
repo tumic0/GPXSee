@@ -18,7 +18,10 @@ HEADERS += src/config.h \
     src/colorshop.h \
     src/keys.h \
     src/slideritem.h \
-    src/markeritem.h
+    src/markeritem.h \
+    src/infoitem.h \
+    src/elevationgraph.h \
+    src/speedgraph.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
@@ -31,7 +34,10 @@ SOURCES += src/main.cpp \
     src/poiitem.cpp \
     src/colorshop.cpp \
     src/slideritem.cpp \
-    src/markeritem.cpp
+    src/markeritem.cpp \
+    src/infoitem.cpp \
+    src/elevationgraph.cpp \
+    src/speedgraph.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx:ICON = icons/gpxsee.icns

@@ -11,9 +11,10 @@ class GPX
 public:
 	bool loadFile(const QString &fileName);
 	const QString &errorString() const {return _error;}
-	QVector<QPointF> elevationGraph() const;
-	QVector<QPointF> speedGraph() const;
-	QVector<QPointF> track() const;
+
+	void elevationGraph(QVector<QPointF> &graph) const;
+	void speedGraph(QVector<QPointF> &graph) const;
+	void track(QVector<QPointF> &track) const;
 
 private:
 	Parser _parser;

@@ -12,7 +12,8 @@
 #include <QFileInfoList>
 #include "poi.h"
 
-class Graph;
+class ElevationGraph;
+class SpeedGraph;
 class Track;
 
 class GUI : public QMainWindow
@@ -70,8 +71,8 @@ private:
 	QLabel *_fileName;
 	QLabel *_zoom;
 
-	Graph *_elevationGraph;
-	Graph *_speedGraph;
+	ElevationGraph *_elevationGraph;
+	SpeedGraph *_speedGraph;
 	Track *_track;
 
 	POI _poi;
@@ -80,6 +81,7 @@ private:
 	int _dirIndex;
 
 	QString _saveFileName;
+	unsigned _files;
 };
 
 #endif // GUI_H

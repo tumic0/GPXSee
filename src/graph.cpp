@@ -2,6 +2,8 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QEvent>
+#include "slideritem.h"
+#include "infoitem.h"
 #include "graph.h"
 
 #include <QDebug>
@@ -18,8 +20,11 @@ Graph::Graph(QWidget *parent)
 	_yAxis = new AxisItem(AxisItem::Y);
 
 	_slider = new SliderItem();
+	_slider->setZValue(2.0);
 	connect(_slider, SIGNAL(positionChanged(const QPointF&)), this,
 	  SLOT(emitSliderPositionChanged(const QPointF&)));
+
+	_info = new InfoItem();
 
 	_xMax = -FLT_MAX;
 	_xMin = FLT_MAX;
@@ -40,6 +45,9 @@ Graph::~Graph()
 	if (_slider->scene() != _scene)
 		delete _slider;
 
+	if (_info->scene() != _scene)
+		delete _info;
+
 	delete _scene;
 }
 
@@ -53,6 +61,40 @@ void Graph::updateBounds(const QPointF &point)
 		_yMin = point.y();
 	if (point.y() > _yMax)
 		_yMax = point.y();
+}
+
+void Graph::createXLabel()
+{
+	_xAxis->setLabel(QString("%1 [%2]").arg(_xLabel).arg(_xUnits));
+}
+
+void Graph::createYLabel()
+{
+	_yAxis->setLabel(QString("%1 [%2]").arg(_yLabel).arg(_yUnits));
+}
+
+void Graph::setXLabel(const QString &label)
+{
+	_xLabel = label;
+	createXLabel();
+}
+
+void Graph::setYLabel(const QString &label)
+{
+	_yLabel = label;
+	createYLabel();
+}
+
+void Graph::setXUnits(const QString &units)
+{
+	_xUnits = units;
+	createXLabel();
+}
+
+void Graph::setYUnits(const QString &units)
+{
+	_yUnits = units;
+	createYLabel();
 }
 
 void Graph::loadData(const QVector<QPointF> &data)
@@ -95,20 +137,22 @@ void Graph::resize(const QSizeF &size)
 		_scene->removeItem(_xAxis);
 	if (_yAxis->scene() == _scene)
 		_scene->removeItem(_yAxis);
-	_xAxis->setRange(QPointF(_xMin * _xScale, _xMax * _xScale));
-	_yAxis->setRange(QPointF(_yMin * _yScale, _yMax * _yScale));
-
 	if (_slider->scene() == _scene)
 		_scene->removeItem(_slider);
+	if (_info->scene() == _scene)
+		_scene->removeItem(_info);
 
 	for (int i = 0; i < _graphs.size(); i++)
 		_graphs.at(i)->resetTransform();
 
+	_xAxis->setRange(QPointF(_xMin * _xScale, _xMax * _xScale));
+	_yAxis->setRange(QPointF(_yMin * _yScale, _yMax * _yScale));
 	mx = _xAxis->margin();
 	my = _yAxis->margin();
 	r = _scene->itemsBoundingRect();
 	xs = (size.width() - (my.width() + mx.width())) / r.width();
-	ys = (size.height() - (mx.height() + my.height())) / r.height();
+	ys = (size.height() - (mx.height() + my.height())
+	  - _info->boundingRect().height()) / r.height();
 	transform.scale(xs, ys);
 
 	for (int i = 0; i < _graphs.size(); i++)
@@ -125,6 +169,11 @@ void Graph::resize(const QSizeF &size)
 	_slider->setArea(r);
 	_slider->setPos(r.bottomLeft());
 	_scene->addItem(_slider);
+
+	r = _scene->itemsBoundingRect();
+	_info->setPos(r.topLeft() + QPointF(r.width()/2
+	  - _info->boundingRect().width()/2, -_info->boundingRect().height()));
+	_scene->addItem(_info);
 
 	_scene->setSceneRect(_scene->itemsBoundingRect());
 }
@@ -158,6 +207,9 @@ void Graph::clear()
 	if (_slider->scene() == _scene)
 		_scene->removeItem(_slider);
 
+	if (_info->scene() == _scene)
+		_scene->removeItem(_info);
+
 	_scene->clear();
 	_graphs.clear();
 	_colorShop.reset();
@@ -184,4 +236,9 @@ qreal Graph::sliderPosition() const
 void Graph::setSliderPosition(qreal pos)
 {
 	_slider->setPos(pos * _slider->area().width(), 0);
+}
+
+void Graph::addInfo(const QString &key, const QString &value)
+{
+	_info->insert(key, value);
 }
