@@ -2,7 +2,7 @@
 #define INFOITEM_H
 
 #include <QGraphicsItem>
-#include <QMap>
+#include <QList>
 
 class InfoItem : public QGraphicsItem
 {
@@ -14,9 +14,21 @@ public:
 	  QWidget *widget);
 
 	void insert(const QString &key, const QString &value);
+	void clear() {_list.clear();}
 
 private:
-	QMap<QString, QString> _map;
+	class KV {
+	public:
+		QString key;
+		QString value;
+
+		KV(const QString &k, const QString &v)
+		  {key = k; value = v;}
+		bool operator==(const KV &other) const
+		  {return this->key == other.key;}
+	};
+
+	QList<KV> _list;
 };
 
 #endif // INFOITEM_H

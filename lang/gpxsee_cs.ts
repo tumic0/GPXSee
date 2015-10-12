@@ -222,7 +222,7 @@ Rádka %1</translation>
         <translation>Průměr</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="43"/>
+        <location filename="../src/speedgraph.cpp" line="44"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>

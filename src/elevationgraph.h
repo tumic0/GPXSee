@@ -5,6 +5,8 @@
 
 class ElevationGraph : public Graph
 {
+	Q_OBJECT
+
 public:
 	ElevationGraph();
 

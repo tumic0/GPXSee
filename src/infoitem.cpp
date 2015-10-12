@@ -17,15 +17,15 @@ QRectF InfoItem::boundingRect() const
 	font.setPixelSize(FONT_SIZE);
 	font.setFamily(FONT_FAMILY);
 	QFontMetrics fm(font);
-	QMap<QString, QString>::const_iterator i;
+	QList<KV>::const_iterator i;
 	int width = 0;
 
-	if (_map.isEmpty())
+	if (_list.isEmpty())
 		return QRectF();
 
-	for (i = _map.constBegin(); i != _map.constEnd(); i++) {
-		width += fm.width(i.key() + ": ");
-		width += fm.width(i.value()) + ((i == _map.end() - 1) ? 0 : PADDING);
+	for (i = _list.constBegin(); i != _list.constEnd(); i++) {
+		width += fm.width(i->key + ": ");
+		width += fm.width(i->value) + ((i == _list.end() - 1) ? 0 : PADDING);
 	}
 
 	return QRectF(0, 0, width, fm.height());
@@ -41,15 +41,15 @@ void InfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	font.setFamily(FONT_FAMILY);
 	painter->setFont(font);
 	QFontMetrics fm(font);
-	QMap<QString, QString>::const_iterator i;
+	QList<KV>::const_iterator i;
 	int width = 0;
 
-	for (i = _map.constBegin(); i != _map.constEnd(); i++) {
-		painter->drawText(width, fm.height() - fm.descent(), i.key() + ": ");
-		width += fm.width(i.key() + ": ");
-		painter->drawText(width, fm.height() - fm.descent(), i.value());
-		width += fm.width(i.value()) + ((i == _map.end() - 1) ? 0 : PADDING);
-		if (i != _map.end() - 1) {
+	for (i = _list.constBegin(); i != _list.constEnd(); i++) {
+		painter->drawText(width, fm.height() - fm.descent(), i->key + ": ");
+		width += fm.width(i->key + ": ");
+		painter->drawText(width, fm.height() - fm.descent(), i->value);
+		width += fm.width(i->value) + ((i == _list.end() - 1) ? 0 : PADDING);
+		if (i != _list.end() - 1) {
 			painter->save();
 			painter->setPen(Qt::gray);
 			painter->drawLine(width - PADDING/2, fm.descent(),
@@ -66,5 +66,11 @@ void InfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 void InfoItem::insert(const QString &key, const QString &value)
 {
-	_map.insert(key, value);
+	KV kv(key, value);
+	int i;
+
+	if ((i = _list.indexOf(kv)) < 0)
+		_list.append(kv);
+	else
+		_list[i] = kv;
 }

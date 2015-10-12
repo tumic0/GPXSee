@@ -6,6 +6,8 @@
 
 class SpeedGraph : public Graph
 {
+	Q_OBJECT
+
 public:
 	SpeedGraph();
 

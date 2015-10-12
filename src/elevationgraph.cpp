@@ -44,8 +44,8 @@ void ElevationGraph::loadData(const QVector<QPointF> &data)
 
 	addInfo(tr("Ascent"), QString::number((int)_ascent) + " " + _yUnits);
 	addInfo(tr("Descent"), QString::number((int)_descent) + " " + _yUnits);
-	addInfo(tr("Minimum"), QString::number((int)_min) + " " + _yUnits);
 	addInfo(tr("Maximum"), QString::number((int)_max) + " " + _yUnits);
+	addInfo(tr("Minimum"), QString::number((int)_min) + " " + _yUnits);
 
 	Graph::loadData(data);
 }

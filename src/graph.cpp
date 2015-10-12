@@ -210,6 +210,7 @@ void Graph::clear()
 	if (_info->scene() == _scene)
 		_scene->removeItem(_info);
 
+	_info->clear();
 	_scene->clear();
 	_graphs.clear();
 	_colorShop.reset();
