@@ -2,6 +2,7 @@
 #define GRAPH_H
 
 #include <QGraphicsView>
+#include <QGraphicsScene>
 #include <QVector>
 #include <QList>
 #include <QPointF>
@@ -11,6 +12,18 @@
 
 class SliderItem;
 class InfoItem;
+
+class Scene : public QGraphicsScene
+{
+	Q_OBJECT
+
+public:
+	Scene(QObject *parent = 0) : QGraphicsScene(parent) {}
+	void mousePressEvent(QGraphicsSceneMouseEvent *e);
+
+signals:
+	void mouseClicked(const QPointF &pos);
+};
 
 class Graph : public QGraphicsView
 {
@@ -48,6 +61,7 @@ protected:
 
 private slots:
 	void emitSliderPositionChanged(const QPointF &pos);
+	void newSliderPosition(const QPointF &pos);
 
 private:
 	void createXLabel();
@@ -55,8 +69,7 @@ private:
 	void updateBounds(const QPointF &point);
 	void resize(const QSizeF &size);
 
-
-	QGraphicsScene *_scene;
+	Scene *_scene;
 	AxisItem *_xAxis, *_yAxis;
 	SliderItem *_slider;
 	InfoItem *_info;

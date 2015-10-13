@@ -1,6 +1,6 @@
 #include <float.h>
 #include <QGraphicsView>
-#include <QGraphicsScene>
+#include <QGraphicsSceneMouseEvent>
 #include <QEvent>
 #include "slideritem.h"
 #include "infoitem.h"
@@ -10,10 +10,20 @@
 
 #define MARGIN 10.0
 
+
+void Scene::mousePressEvent(QGraphicsSceneMouseEvent *e)
+{
+	if (e->button() == Qt::LeftButton)
+		emit mouseClicked(e->scenePos());
+
+	QGraphicsScene::mousePressEvent(e);
+}
+
+
 Graph::Graph(QWidget *parent)
 	: QGraphicsView(parent)
 {
-	_scene = new QGraphicsScene(this);
+	_scene = new Scene(this);
 	setScene(_scene);
 
 	_xAxis = new AxisItem(AxisItem::X);
@@ -21,8 +31,11 @@ Graph::Graph(QWidget *parent)
 
 	_slider = new SliderItem();
 	_slider->setZValue(2.0);
+
 	connect(_slider, SIGNAL(positionChanged(const QPointF&)), this,
 	  SLOT(emitSliderPositionChanged(const QPointF&)));
+	connect(_scene, SIGNAL(mouseClicked(const QPointF&)), this,
+	  SLOT(newSliderPosition(const QPointF&)));
 
 	_info = new InfoItem();
 
@@ -237,6 +250,14 @@ qreal Graph::sliderPosition() const
 void Graph::setSliderPosition(qreal pos)
 {
 	_slider->setPos(pos * _slider->area().width(), 0);
+}
+
+void Graph::newSliderPosition(const QPointF &pos)
+{
+	if (_slider->area().contains(pos)) {
+		_slider->setPos(pos);
+		emitSliderPositionChanged(pos);
+	}
 }
 
 void Graph::addInfo(const QString &key, const QString &value)
