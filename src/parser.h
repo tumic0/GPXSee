@@ -10,6 +10,9 @@ struct TrackPoint
 	QPointF coordinates;
 	QDateTime timestamp;
 	qreal elevation;
+	qreal speed;
+
+	TrackPoint() {speed = -1;}
 };
 
 class Parser
@@ -23,11 +26,14 @@ private:
 	void gpx(QVector<TrackPoint> &data);
 	void trek(QVector<TrackPoint> &data);
 	void trekPoints(QVector<TrackPoint> &data);
+	void extensions(QVector<TrackPoint> &data);
 	void trekPointData(QVector<TrackPoint> &data);
 
 	void handleTrekPointAttributes(QVector<TrackPoint> &data,
 	  const QXmlStreamAttributes &attr);
 	void handleTrekPointData(QVector<TrackPoint> &data, QStringRef element,
+	  const QString &value);
+	void handleExtensionData(QVector<TrackPoint> &data, QStringRef element,
 	  const QString &value);
 
 	QXmlStreamReader _reader;

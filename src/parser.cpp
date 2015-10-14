@@ -1,5 +1,14 @@
 #include "parser.h"
 
+#include <QDebug>
+
+
+void Parser::handleExtensionData(QVector<TrackPoint> &data,
+  QStringRef element, const QString &value)
+{
+	if (element == "speed")
+		data.last().speed = value.toDouble();
+}
 
 void Parser::handleTrekPointData(QVector<TrackPoint> &data,
   QStringRef element, const QString &value)
@@ -19,11 +28,23 @@ void Parser::handleTrekPointAttributes(QVector<TrackPoint> &data,
 }
 
 
+void Parser::extensions(QVector<TrackPoint> &data)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "speed")
+			handleExtensionData(data, _reader.name(), _reader.readElementText());
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
 void Parser::trekPointData(QVector<TrackPoint> &data)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "ele" || _reader.name() == "time")
 			handleTrekPointData(data, _reader.name(), _reader.readElementText());
+		else if (_reader.name() == "extensions")
+			extensions(data);
 		else
 			_reader.skipCurrentElement();
 	}

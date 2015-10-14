@@ -1,5 +1,7 @@
 #include "speedgraph.h"
 
+#include <QDebug>
+
 SpeedGraph::SpeedGraph()
 {
 	_max = 0;
@@ -14,26 +16,35 @@ SpeedGraph::SpeedGraph()
 
 void SpeedGraph::loadData(const QVector<QPointF> &data)
 {
-	qreal max = 0, sum = 0, avg, distance, w;
+	qreal max = 0, sum = 0, w = 0, avg;
+	qreal dist;
 
-	distance = (data.at(data.size() - 1).x() - data.at(0).x());
+	if (data.size() < 2)
+		return;
+
+	dist = data.at(data.size() - 1).x() - data.at(0).x();
+
 
 	for (int i = 1; i < data.size(); i++) {
-		qreal val = data.at(i).y();
+		QPointF cur = data.at(i);
+		QPointF prev = data.at(i-1);
+		qreal ds = cur.x() - prev.x();
 
-		sum += val;
+		if (cur.y() == 0)
+			continue;
+		sum += ds;
+		w += ds / cur.y();
 
-		if (val > max)
-			max = val;
+		max = qMax(max, cur.y());
 	}
-	avg = sum / data.size();
+	avg = sum / w;
 
-	_avg.append(QPointF(avg, distance));
+	_avg.append(QPointF(dist, avg));
 
 	sum = 0; w = 0;
 	for (QList<QPointF>::iterator it = _avg.begin(); it != _avg.end(); it++) {
-		sum += it->x() * it->y();
-		w += it->y();
+		sum += it->y() * it->x();
+		w += it->x();
 	}
 	avg = sum / w;
 
