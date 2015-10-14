@@ -15,6 +15,8 @@ public:
 	void elevationGraph(QVector<QPointF> &graph) const;
 	void speedGraph(QVector<QPointF> &graph) const;
 	void track(QVector<QPointF> &track) const;
+	qreal distance();
+	qreal time();
 
 private:
 	Parser _parser;

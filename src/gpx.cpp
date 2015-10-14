@@ -29,16 +29,15 @@ bool GPX::loadFile(const QString &fileName)
 
 void GPX::elevationGraph(QVector<QPointF> &graph) const
 {
-	qreal dist = 0, ds, dh, acc;
+	qreal dist = 0, dh, acc;
 
 	if (!_data.size())
 		return;
 
 	graph.append(QPointF(0, _data.at(0).elevation));
 	for (int i = 1; i < _data.size(); i++) {
-		ds = llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
+		dist += llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
 		dh = _data.at(i).elevation;
-		dist += ds;
 		acc = (i == 1) ? dh : (ALPHA_E * dh) + (1.0 - ALPHA_E) * acc;
 		graph.append(QPointF(dist, acc));
 	}
@@ -72,4 +71,23 @@ void GPX::track(QVector<QPointF> &track) const
 		ll2mercator(_data.at(i).coordinates, p);
 		track.append(p);
 	}
+}
+
+qreal GPX::distance()
+{
+	qreal dist = 0;
+
+	for (int i = 1; i < _data.size(); i++)
+		dist += llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
+
+	return dist;
+}
+
+qreal GPX::time()
+{
+	if (_data.size() < 2)
+		return 0;
+
+	return (_data.at(0).timestamp.msecsTo(_data.at(_data.size() - 1).timestamp)
+	  / 1000.0);
 }

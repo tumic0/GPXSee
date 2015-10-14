@@ -68,8 +68,9 @@ private:
 	QAction *_openPOIAction;
 	QAction *_showPOIAction;
 
-	QLabel *_fileName;
-	QLabel *_zoom;
+	QLabel *_fileNameLabel;
+	QLabel *_distanceLabel;
+	QLabel *_timeLabel;
 
 	ElevationGraph *_elevationGraph;
 	SpeedGraph *_speedGraph;
@@ -82,6 +83,9 @@ private:
 
 	QString _saveFileName;
 	unsigned _files;
+
+	qreal _distance;
+	qreal _time;
 };
 
 #endif // GUI_H

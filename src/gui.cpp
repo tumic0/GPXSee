@@ -20,6 +20,18 @@
 #include <QDebug>
 
 
+static QString timeSpan(qreal time)
+{
+	unsigned h, m, s;
+
+	h = time / 3600;
+	m = (time - (h * 3600)) / 60;
+	s = time - (h * 3600) - (m * 60);
+
+	return QString("%1:%2:%3").arg(h).arg(m, 2, 10, QChar('0'))
+	  .arg(s,2, 10, QChar('0'));
+}
+
 GUI::GUI()
 {
 	createActions();
@@ -47,6 +59,8 @@ GUI::GUI()
 
 	_dirIndex = -1;
 	_files = 0;
+	_distance = 0;
+	_time = 0;
 
 	resize(600, 800);
 }
@@ -164,12 +178,15 @@ void GUI::createTrackGraphs()
 
 void GUI::createStatusBar()
 {
-	_fileName = new QLabel();
-	_zoom = new QLabel();
-	_zoom->setAlignment(Qt::AlignHCenter);
+	_fileNameLabel = new QLabel();
+	_distanceLabel = new QLabel();
+	_timeLabel = new QLabel();
+	_distanceLabel->setAlignment(Qt::AlignHCenter);
+	_timeLabel->setAlignment(Qt::AlignHCenter);
 
-	statusBar()->addPermanentWidget(_fileName, 9);
-	statusBar()->addPermanentWidget(_zoom, 1);
+	statusBar()->addPermanentWidget(_fileNameLabel, 8);
+	statusBar()->addPermanentWidget(_distanceLabel, 1);
+	statusBar()->addPermanentWidget(_timeLabel, 1);
 	statusBar()->setSizeGripEnabled(false);
 }
 
@@ -220,9 +237,14 @@ bool GUI::openFile(const QString &fileName)
 			_fileActionGroup->setEnabled(true);
 
 			if (++_files > 1)
-				_fileName->setText(tr("%1 tracks").arg(_files));
+				_fileNameLabel->setText(tr("%1 tracks").arg(_files));
 			else
-				_fileName->setText(fileName);
+				_fileNameLabel->setText(fileName);
+			_distance += gpx.distance();
+			_distanceLabel->setText(QString::number(_distance / 1000, 'f', 1)
+			  + " " + tr("km"));
+			_time += gpx.time();
+			_timeLabel->setText(timeSpan(_time));
 
 			return true;
 		} else {
@@ -289,11 +311,15 @@ void GUI::saveFile(const QString &fileName)
 void GUI::closeFile()
 {
 	_files = 0;
+	_distance = 0;
+	_time = 0;
 
 	_elevationGraph->clear();
 	_speedGraph->clear();
 	_track->clear();
-	_fileName->clear();
+	_fileNameLabel->clear();
+	_distanceLabel->clear();
+	_timeLabel->clear();
 
 	_fileActionGroup->setEnabled(false);
 }
