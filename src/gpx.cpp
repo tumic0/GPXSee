@@ -7,7 +7,7 @@
 
 
 #define ALPHA  0.5
-#define WINDOW 5
+#define WINDOW 11
 
 
 bool GPX::loadFile(const QString &fileName)
@@ -57,14 +57,51 @@ static qreal median(QVector<QPointF> v)
 	return v.at(v.size() / 2).y();
 }
 
+static qreal MAD(QVector<QPointF> v, qreal m)
+{
+	for (int i = 0; i < v.size(); i++)
+		v[i].setY(qAbs(v.at(i).y() - m));
+	qSort(v.begin(), v.end(), lt);
+	return v.at(v.size() / 2).y();
+}
+
+static QVector<QPointF> filter(const QVector<QPointF> &v)
+{
+	QList<int> rm;
+	QVector<QPointF> ret;
+	qreal m, M;
+
+
+	if (v.size() < WINDOW)
+		return QVector<QPointF>(v);
+
+	for (int i = WINDOW/2; i < v.size() - WINDOW/2; i++) {
+		m = median(v.mid(i - WINDOW/2, WINDOW));
+		M = MAD(v.mid(i - WINDOW/2, WINDOW), m);
+		if (qAbs((0.6745 * (v.at(i).y() - m)) / M) > 3.5)
+			rm.append(i);
+	}
+
+	QList<int>::const_iterator it = rm.begin();
+	for (int i = 0; i < v.size(); i++) {
+		if (*it != i)
+			ret.append(v.at(i));
+		else
+			it++;
+	}
+
+	return ret;
+}
+
 void GPX::speedGraph(QVector<QPointF> &graph) const
 {
 	qreal dist = 0, v, ds, dt;
+	QVector<QPointF> raw;
 
 	if (!_data.size())
 		return;
 
-	graph.append(QPointF(0, 0));
+	raw.append(QPointF(0, 0));
 	for (int i = 1; i < _data.size(); i++) {
 		ds = llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
 		dt = _data.at(i-1).timestamp.msecsTo(_data.at(i).timestamp) / 1000.0;
@@ -77,12 +114,10 @@ void GPX::speedGraph(QVector<QPointF> &graph) const
 		} else
 			v = _data.at(i).speed;
 
-		graph.append(QPointF(dist, v));
+		raw.append(QPointF(dist, v));
 	}
 
-	if (graph.size() > WINDOW)
-		for (int i = WINDOW/2; i < graph.size() - WINDOW/2; i++)
-			graph[i].setY(median(graph.mid(i - WINDOW/2, WINDOW)));
+	graph = filter(raw);
 }
 
 void GPX::track(QVector<QPointF> &track) const
