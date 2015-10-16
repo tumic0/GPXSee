@@ -229,7 +229,7 @@ bool GUI::openFile(const QString &fileName)
 			gpx.track(track);
 
 			_elevationGraph->loadData(elevation);
-			_speedGraph->loadData(speed);
+			_speedGraph->loadData(speed, gpx.time());
 			_track->loadData(track);
 			if (_showPOIAction->isChecked())
 				_track->loadPOI(_poi);

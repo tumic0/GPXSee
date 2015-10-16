@@ -11,7 +11,7 @@ class SpeedGraph : public Graph
 public:
 	SpeedGraph();
 
-	void loadData(const QVector<QPointF> &data);
+	void loadData(const QVector<QPointF> &data, qreal time);
 	void clear();
 
 private:

@@ -14,7 +14,7 @@ SpeedGraph::SpeedGraph()
 	Graph::setYScale(3.6);
 }
 
-void SpeedGraph::loadData(const QVector<QPointF> &data)
+void SpeedGraph::loadData(const QVector<QPointF> &data, qreal time)
 {
 	qreal max = 0, sum = 0, w = 0, avg;
 	qreal dist;
@@ -23,23 +23,12 @@ void SpeedGraph::loadData(const QVector<QPointF> &data)
 		return;
 
 	dist = data.at(data.size() - 1).x() - data.at(0).x();
-
-
-	for (int i = 1; i < data.size(); i++) {
-		QPointF cur = data.at(i);
-		QPointF prev = data.at(i-1);
-		qreal ds = cur.x() - prev.x();
-
-		if (cur.y() == 0)
-			continue;
-		sum += ds;
-		w += ds / cur.y();
-
-		max = qMax(max, cur.y());
-	}
-	avg = sum / w;
-
+	avg = dist / time;
 	_avg.append(QPointF(dist, avg));
+
+	for (int i = 0; i < data.size(); i++)
+		max = qMax(max, data.at(i).y());
+
 
 	sum = 0; w = 0;
 	for (QList<QPointF>::iterator it = _avg.begin(); it != _avg.end(); it++) {
@@ -47,13 +36,13 @@ void SpeedGraph::loadData(const QVector<QPointF> &data)
 		w += it->x();
 	}
 	avg = sum / w;
-
 	_max = qMax(_max, max);
 
-	addInfo(tr("Average"), QString::number(avg * _yScale, 'f', 1)
-	  + " " + _yUnits);
-	addInfo(tr("Maximum"), QString::number(_max * _yScale,  'f', 1)
-	  + " " + _yUnits);
+
+	addInfo(tr("Average"), QString::number(avg * _yScale, 'f', 1) + " "
+	  + _yUnits);
+	addInfo(tr("Maximum"), QString::number(_max * _yScale,  'f', 1) + " "
+	  + _yUnits);
 
 	Graph::loadData(data);
 }
