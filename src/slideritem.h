@@ -8,7 +8,7 @@ class SliderItem : public QGraphicsObject
 	Q_OBJECT
 
 public:
-	SliderItem();
+	SliderItem(QGraphicsObject *parent = 0);
 
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,

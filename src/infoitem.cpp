@@ -1,12 +1,12 @@
 #include <QFont>
 #include <QPainter>
+#include "config.h"
 #include "infoitem.h"
 
-#define FONT_FAMILY "Arial"
-#define FONT_SIZE   12
+
 #define PADDING     10
 
-InfoItem::InfoItem()
+InfoItem::InfoItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
 
 }
@@ -73,4 +73,6 @@ void InfoItem::insert(const QString &key, const QString &value)
 		_list.append(kv);
 	else
 		_list[i] = kv;
+
+	prepareGeometryChange();
 }

@@ -8,7 +8,7 @@ class ElevationGraph : public Graph
 	Q_OBJECT
 
 public:
-	ElevationGraph();
+	ElevationGraph(QWidget *parent = 0);
 
 	void loadData(const QVector<QPointF> &data);
 	void clear();

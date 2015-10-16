@@ -1,7 +1,7 @@
 #include <float.h>
 #include "elevationgraph.h"
 
-ElevationGraph::ElevationGraph()
+ElevationGraph::ElevationGraph(QWidget *parent) : Graph(parent)
 {
 	_ascent = 0;
 	_descent = 0;

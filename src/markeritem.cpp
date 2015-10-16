@@ -3,7 +3,7 @@
 
 #define SIZE 8
 
-MarkerItem::MarkerItem()
+MarkerItem::MarkerItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
 
 }

@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-SpeedGraph::SpeedGraph()
+SpeedGraph::SpeedGraph(QWidget *parent) : Graph(parent)
 {
 	_max = 0;
 
@@ -12,6 +12,7 @@ SpeedGraph::SpeedGraph()
 	Graph::setYUnits(tr("km/h"));
 	Graph::setXScale(0.001);
 	Graph::setYScale(3.6);
+	Graph::setPrecision(1);
 }
 
 void SpeedGraph::loadData(const QVector<QPointF> &data, qreal time)

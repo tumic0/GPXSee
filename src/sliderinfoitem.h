@@ -1,16 +1,18 @@
-#ifndef POIITEM_H
-#define POIITEM_H
+#ifndef SLIDERINFOITEM_H
+#define SLIDERINFOITEM_H
 
 #include <QGraphicsItem>
 
-class POIItem : public QGraphicsItem
+class SliderInfoItem : public QGraphicsItem
 {
 public:
-	POIItem(const QString &text, QGraphicsItem *parent = 0);
+	SliderInfoItem(QGraphicsItem *parent = 0);
 
 	QRectF boundingRect() const {return _boundingRect;}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
+
+	void setText(const QString &text);
 
 private:
 	void updateBoundingRect();
@@ -19,4 +21,4 @@ private:
 	QRectF _boundingRect;
 };
 
-#endif // POIITEM_H
+#endif // SLIDERINFOITEM_H

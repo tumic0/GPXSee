@@ -11,6 +11,7 @@
 
 
 class SliderItem;
+class SliderInfoItem;
 class InfoItem;
 
 class Scene : public QGraphicsScene
@@ -40,6 +41,7 @@ public:
 	void setYUnits(const QString &units);
 	void setXScale(qreal scale) {_xScale = scale;}
 	void setYScale(qreal scale) {_yScale = scale;}
+	void setPrecision(int p) {_precision = p;}
 
 	void plot(QPainter *painter, const QRectF &target);
 	void clear();
@@ -58,6 +60,7 @@ protected:
 	qreal _xScale, _yScale;
 	QString _xUnits, _yUnits;
 	QString _xLabel, _yLabel;
+	int _precision;
 
 private slots:
 	void emitSliderPositionChanged(const QPointF &pos);
@@ -70,13 +73,14 @@ private:
 	void resize(const QSizeF &size);
 
 	Scene *_scene;
+
 	AxisItem *_xAxis, *_yAxis;
 	SliderItem *_slider;
+	SliderInfoItem *_sliderInfo;
 	InfoItem *_info;
+
 	QList<QGraphicsPathItem*> _graphs;
-
 	qreal _xMin, _xMax, _yMin, _yMax;
-
 	ColorShop _colorShop;
 };
 

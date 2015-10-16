@@ -5,4 +5,7 @@
 #define APP_HOMEPAGE            "http://tumic.wz.cz/gpxsee"
 #define APP_VERSION             "0.1"
 
+#define FONT_FAMILY             "Arial"
+#define FONT_SIZE               12
+
 #endif /* CONFIG_H */

@@ -9,7 +9,7 @@ class SpeedGraph : public Graph
 	Q_OBJECT
 
 public:
-	SpeedGraph();
+	SpeedGraph(QWidget *parent = 0);
 
 	void loadData(const QVector<QPointF> &data, qreal time);
 	void clear();

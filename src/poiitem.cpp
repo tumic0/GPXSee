@@ -1,14 +1,14 @@
 #include <QPainter>
+#include "config.h"
 #include "poiitem.h"
 
 #include <QDebug>
 
-#define FONT_FAMILY "Arial"
-#define FONT_SIZE   12
 #define POINT_SIZE  8
 
 
-POIItem::POIItem(const QString &text)
+POIItem::POIItem(const QString &text, QGraphicsItem *parent)
+  : QGraphicsItem(parent)
 {
 	_text = text;
 	updateBoundingRect();

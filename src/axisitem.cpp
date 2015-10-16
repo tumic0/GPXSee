@@ -1,5 +1,6 @@
 #include <cmath>
 #include <QPainter>
+#include "config.h"
 #include "axisitem.h"
 
 #include <QDebug>
@@ -8,8 +9,6 @@
 #define PADDING     6
 #define XTICKS      15
 #define YTICKS      10
-#define FONT_FAMILY "Arial"
-#define FONT_SIZE   12
 
 
 struct Label {
@@ -64,7 +63,7 @@ static struct Label label(double min, double max, int ticks)
 }
 
 
-AxisItem::AxisItem(Type type)
+AxisItem::AxisItem(Type type, QGraphicsItem *parent) : QGraphicsItem(parent)
 {
 	_type = type;
 	_size = 0;

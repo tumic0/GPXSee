@@ -7,7 +7,7 @@
 class InfoItem : public QGraphicsItem
 {
 public:
-	InfoItem();
+	InfoItem(QGraphicsItem *parent = 0);
 
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,

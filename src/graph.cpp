@@ -2,11 +2,15 @@
 #include <QGraphicsView>
 #include <QGraphicsSceneMouseEvent>
 #include <QEvent>
+#include <QGraphicsSimpleTextItem>
 #include "slideritem.h"
+#include "sliderinfoitem.h"
 #include "infoitem.h"
+#include "config.h"
 #include "graph.h"
 
 #include <QDebug>
+
 
 #define MARGIN 10.0
 
@@ -39,6 +43,9 @@ Graph::Graph(QWidget *parent)
 
 	_info = new InfoItem();
 
+	_sliderInfo = new SliderInfoItem(_slider);
+	_sliderInfo->setZValue(2.0);
+
 	_xMax = -FLT_MAX;
 	_xMin = FLT_MAX;
 	_yMax = -FLT_MAX;
@@ -46,6 +53,8 @@ Graph::Graph(QWidget *parent)
 
 	_xScale = 1;
 	_yScale = 1;
+
+	_precision = 0;
 }
 
 Graph::~Graph()
@@ -135,6 +144,9 @@ void Graph::loadData(const QVector<QPointF> &data)
 	_scene->addItem(pi);
 	_graphs.append(pi);
 
+	if (_graphs.size() > 1)
+		_sliderInfo->hide();
+
 	resize(viewport()->size() - QSizeF(MARGIN, MARGIN));
 }
 
@@ -223,6 +235,8 @@ void Graph::clear()
 	if (_info->scene() == _scene)
 		_scene->removeItem(_info);
 
+	_sliderInfo->show();
+
 	_info->clear();
 	_scene->clear();
 	_graphs.clear();
@@ -240,6 +254,13 @@ void Graph::emitSliderPositionChanged(const QPointF &pos)
 {
 	qreal val = pos.x() / _slider->area().width();
 	emit sliderPositionChanged(val);
+
+	const QPainterPath &path = _graphs.at(0)->path();
+	QPointF p = path.pointAtPercent(val);
+	qreal r = (p.y() - path.boundingRect().bottom())
+	  / path.boundingRect().height();
+	_sliderInfo->setPos(QPointF(0, _slider->boundingRect().height() * r));
+	_sliderInfo->setText(QString::number(-p.y() * _yScale, 'f', _precision));
 }
 
 qreal Graph::sliderPosition() const

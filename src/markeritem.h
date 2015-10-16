@@ -6,7 +6,7 @@
 class MarkerItem : public QGraphicsItem
 {
 public:
-	MarkerItem();
+	MarkerItem(QGraphicsItem *parent = 0);
 
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,

@@ -8,7 +8,7 @@ class AxisItem : public QGraphicsItem
 public:
 	enum Type {X, Y};
 
-	AxisItem(Type type);
+	AxisItem(Type type, QGraphicsItem *parent = 0);
 
 	QRectF boundingRect() const {return _boundingRect;}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
