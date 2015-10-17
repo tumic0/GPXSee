@@ -26,12 +26,16 @@ Track::~Track()
 	delete _scene;
 }
 
-void Track::loadData(const QVector<QPointF> &track)
+void Track::loadGPX(const GPX &gpx)
 {
+	QVector<QPointF> track;
 	QPainterPath path;
 	QGraphicsPathItem *pi;
 	MarkerItem *mi;
 	QColor color = _colorShop.color();
+
+
+	gpx.track(track);
 
 	if (track.size() < 2)
 		return;

@@ -15,17 +15,18 @@ SpeedGraph::SpeedGraph(QWidget *parent) : Graph(parent)
 	Graph::setPrecision(1);
 }
 
-void SpeedGraph::loadData(const QVector<QPointF> &data, qreal time)
+void SpeedGraph::loadGPX(const GPX &gpx)
 {
+	QVector<QPointF> data;
 	qreal max = 0, sum = 0, w = 0, avg;
-	qreal dist;
 
-	if (data.size() < 2)
+
+	gpx.speedGraph(data);
+	if (data.isEmpty())
 		return;
 
-	dist = data.at(data.size() - 1).x() - data.at(0).x();
-	avg = dist / time;
-	_avg.append(QPointF(dist, avg));
+	avg = gpx.distance() / gpx.time();
+	_avg.append(QPointF(gpx.distance(), avg));
 
 	for (int i = 0; i < data.size(); i++)
 		max = qMax(max, data.at(i).y());

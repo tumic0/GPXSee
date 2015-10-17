@@ -218,33 +218,21 @@ void GUI::openFile()
 bool GUI::openFile(const QString &fileName)
 {
 	GPX gpx;
-	QVector<QPointF> elevation;
-	QVector<QPointF> speed;
-	QVector<QPointF> track;
 
 	if (!fileName.isEmpty()) {
 		if (gpx.loadFile(fileName)) {
-			gpx.elevationGraph(elevation);
-			gpx.speedGraph(speed);
-			gpx.track(track);
-
-			_elevationGraph->loadData(elevation);
-			_speedGraph->loadData(speed, gpx.time());
-			_track->loadData(track);
+			_elevationGraph->loadGPX(gpx);
+			_speedGraph->loadGPX(gpx);
+			_track->loadGPX(gpx);
 			if (_showPOIAction->isChecked())
 				_track->loadPOI(_poi);
 
-			_fileActionGroup->setEnabled(true);
-
-			if (++_files > 1)
-				_fileNameLabel->setText(tr("%1 tracks").arg(_files));
-			else
-				_fileNameLabel->setText(fileName);
 			_distance += gpx.distance();
-			_distanceLabel->setText(QString::number(_distance / 1000, 'f', 1)
-			  + " " + tr("km"));
 			_time += gpx.time();
-			_timeLabel->setText(timeSpan(_time));
+
+			updateStatusBarInfo(fileName);
+
+			_fileActionGroup->setEnabled(true);
 
 			return true;
 		} else {
@@ -330,6 +318,18 @@ void GUI::showPOI()
 		_track->loadPOI(_poi);
 	else
 		_track->clearPOI();
+}
+
+void GUI::updateStatusBarInfo(const QString &fileName)
+{
+	if (++_files > 1)
+		_fileNameLabel->setText(tr("%1 tracks").arg(_files));
+	else
+		_fileNameLabel->setText(fileName);
+
+	_distanceLabel->setText(QString::number(_distance / 1000, 'f', 1)
+	  + " " + tr("km"));
+	_timeLabel->setText(timeSpan(_time));
 }
 
 void GUI::graphChanged(int index)

@@ -15,12 +15,17 @@ ElevationGraph::ElevationGraph(QWidget *parent) : Graph(parent)
 	Graph::setXScale(0.001);
 }
 
-void ElevationGraph::loadData(const QVector<QPointF> &data)
+void ElevationGraph::loadGPX(const GPX &gpx)
 {
-	qreal ascent = 0, descent = 0;
-	qreal min = data.at(0).y();
-	qreal max = data.at(0).y();
+	QVector<QPointF> data;
+	qreal min, max, ascent = 0, descent = 0;
 
+
+	gpx.elevationGraph(data);
+	if (data.isEmpty())
+		return;
+
+	min = max = data.at(0).y();
 
 	for (int i = 1; i < data.size(); i++) {
 		qreal cur = data.at(i).y();
@@ -42,10 +47,10 @@ void ElevationGraph::loadData(const QVector<QPointF> &data)
 	_max = qMax(_max, max);
 	_min = qMin(_min, min);
 
-	addInfo(tr("Ascent"), QString::number((int)_ascent) + " " + _yUnits);
-	addInfo(tr("Descent"), QString::number((int)_descent) + " " + _yUnits);
-	addInfo(tr("Maximum"), QString::number((int)_max) + " " + _yUnits);
-	addInfo(tr("Minimum"), QString::number((int)_min) + " " + _yUnits);
+	addInfo(tr("Ascent"), QString::number(_ascent, 'f', 0) + " " + _yUnits);
+	addInfo(tr("Descent"), QString::number(_descent, 'f', 0) + " " + _yUnits);
+	addInfo(tr("Maximum"), QString::number(_max, 'f', 0) + " " + _yUnits);
+	addInfo(tr("Minimum"), QString::number(_min, 'f', 0) + " " + _yUnits);
 
 	Graph::loadData(data);
 }

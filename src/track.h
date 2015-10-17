@@ -7,6 +7,7 @@
 #include <QList>
 #include <QPrinter>
 #include "poi.h"
+#include "gpx.h"
 #include "colorshop.h"
 
 
@@ -21,7 +22,7 @@ public:
 	Track(QWidget *parent = 0);
 	~Track();
 
-	void loadData(const QVector<QPointF> &track);
+	void loadGPX(const GPX &gpx);
 	void loadPOI(const POI &poi);
 
 	void clearPOI();

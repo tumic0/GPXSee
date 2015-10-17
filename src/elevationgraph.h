@@ -2,6 +2,7 @@
 #define ELEVATIONGRAPH_H
 
 #include "graph.h"
+#include "gpx.h"
 
 class ElevationGraph : public Graph
 {
@@ -10,7 +11,7 @@ class ElevationGraph : public Graph
 public:
 	ElevationGraph(QWidget *parent = 0);
 
-	void loadData(const QVector<QPointF> &data);
+	void loadGPX(const GPX &gpx);
 	void clear();
 
 private:

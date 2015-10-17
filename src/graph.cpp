@@ -234,7 +234,6 @@ void Graph::clear()
 
 	if (_info->scene() == _scene)
 		_scene->removeItem(_info);
-
 	_sliderInfo->show();
 
 	_info->clear();
@@ -252,6 +251,9 @@ void Graph::clear()
 
 void Graph::emitSliderPositionChanged(const QPointF &pos)
 {
+	if (_graphs.isEmpty())
+		return;
+
 	qreal val = pos.x() / _slider->area().width();
 	emit sliderPositionChanged(val);
 

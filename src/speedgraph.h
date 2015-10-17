@@ -3,6 +3,7 @@
 
 #include <QList>
 #include "graph.h"
+#include "gpx.h"
 
 class SpeedGraph : public Graph
 {
@@ -11,7 +12,7 @@ class SpeedGraph : public Graph
 public:
 	SpeedGraph(QWidget *parent = 0);
 
-	void loadData(const QVector<QPointF> &data, qreal time);
+	void loadGPX(const GPX &gpx);
 	void clear();
 
 private:

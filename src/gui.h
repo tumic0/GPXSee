@@ -41,13 +41,13 @@ private:
 	void createMenus();
 	void createToolBars();
 	void createStatusBar();
-
 	void createTrackView();
 	void createTrackGraphs();
 
-	void keyPressEvent(QKeyEvent * event);
-
 	void saveFile(const QString &fileName);
+	void updateStatusBarInfo(const QString &fileName);
+
+	void keyPressEvent(QKeyEvent * event);
 
 	QMenu *_fileMenu;
 	QMenu *_aboutMenu;
