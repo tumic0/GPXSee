@@ -18,35 +18,39 @@ SpeedGraph::SpeedGraph(QWidget *parent) : Graph(parent)
 void SpeedGraph::loadGPX(const GPX &gpx)
 {
 	QVector<QPointF> data;
-	qreal max = 0, sum = 0, w = 0, avg;
+	qreal max = 0;
 
 
 	gpx.speedGraph(data);
 	if (data.isEmpty())
 		return;
 
-	avg = gpx.distance() / gpx.time();
-	_avg.append(QPointF(gpx.distance(), avg));
+	_avg.append(QPointF(gpx.distance(), gpx.distance() / gpx.time()));
 
 	for (int i = 0; i < data.size(); i++)
 		max = qMax(max, data.at(i).y());
-
-
-	sum = 0; w = 0;
-	for (QList<QPointF>::iterator it = _avg.begin(); it != _avg.end(); it++) {
-		sum += it->y() * it->x();
-		w += it->x();
-	}
-	avg = sum / w;
 	_max = qMax(_max, max);
 
 
-	addInfo(tr("Average"), QString::number(avg * _yScale, 'f', 1) + " "
+	addInfo(tr("Average"), QString::number(avg() * _yScale, 'f', 1) + " "
 	  + _yUnits);
 	addInfo(tr("Maximum"), QString::number(_max * _yScale,  'f', 1) + " "
 	  + _yUnits);
 
 	Graph::loadData(data);
+}
+
+qreal SpeedGraph::avg() const
+{
+	qreal sum = 0, w = 0;
+	QList<QPointF>::const_iterator it;
+
+	for (it = _avg.begin(); it != _avg.end(); it++) {
+		sum += it->y() * it->x();
+		w += it->x();
+	}
+
+	return (sum / w);
 }
 
 void SpeedGraph::clear()

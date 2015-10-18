@@ -8,7 +8,6 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QDir>
-#include "gui.h"
 #include "config.h"
 #include "icons.h"
 #include "keys.h"
@@ -16,8 +15,11 @@
 #include "elevationgraph.h"
 #include "speedgraph.h"
 #include "track.h"
+#include "infoitem.h"
+#include "gui.h"
 
 #include <QDebug>
+
 
 
 static QString timeSpan(qreal time)
@@ -287,12 +289,28 @@ void GUI::saveFile(const QString &fileName)
 	printer.setOutputFileName(fileName);
 
 	QPainter p(&printer);
-	int margin = (printer.paperRect().height() - printer.pageRect().height())
-	  / 2;
-	_track->plot(&p, QRectF(0, 0, printer.width(), (0.80 * printer.height())
-	  - margin));
+
+	_track->plot(&p, QRectF(0, 300, printer.width(), (0.80 * printer.height())
+	  - 400));
 	_elevationGraph->plot(&p,  QRectF(0, 0.80 * printer.height(),
 	  printer.width(), printer.height() * 0.20));
+
+	QGraphicsScene scene;
+	InfoItem info;
+	info.insert(tr("Distance"), QString::number(_distance / 1000, 'f', 1) + " "
+	  + tr("km"));
+	info.insert(tr("Time"), timeSpan(_time));
+	info.insert(tr("Ascent"), QString::number(_elevationGraph->ascent(), 'f', 0)
+	  + " " + tr("m"));
+	info.insert(tr("Descent"), QString::number(_elevationGraph->descent(), 'f',
+	  0) + " " + tr("m"));
+	info.insert(tr("Maximum"), QString::number(_elevationGraph->max(), 'f', 0)
+	  + " " + tr("m"));
+	info.insert(tr("Minimum"), QString::number(_elevationGraph->min(), 'f', 0)
+	  + " " + tr("m"));
+	scene.addItem(&info);
+	scene.render(&p, QRectF(0, 0, printer.width(), 200));
+
 	p.end();
 }
 

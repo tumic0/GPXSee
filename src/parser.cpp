@@ -18,6 +18,8 @@ void Parser::handleTrekPointData(QVector<TrackPoint> &data,
 	if (element == "time")
 		data.last().timestamp = QDateTime::fromString(value.toLatin1(),
 		  Qt::ISODate);
+	if (element == "geoidheight")
+		data.last().geoidheight = value.toLatin1().toDouble();
 }
 
 void Parser::handleTrekPointAttributes(QVector<TrackPoint> &data,
@@ -41,7 +43,8 @@ void Parser::extensions(QVector<TrackPoint> &data)
 void Parser::trekPointData(QVector<TrackPoint> &data)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "ele" || _reader.name() == "time")
+		if (_reader.name() == "ele" || _reader.name() == "time"
+		  || _reader.name() == "geoidheight")
 			handleTrekPointData(data, _reader.name(), _reader.readElementText());
 		else if (_reader.name() == "extensions")
 			extensions(data);

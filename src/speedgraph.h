@@ -15,6 +15,9 @@ public:
 	void loadGPX(const GPX &gpx);
 	void clear();
 
+	qreal avg() const;
+	qreal max() const {return _max;}
+
 private:
 	qreal _max;
 	QList<QPointF> _avg;

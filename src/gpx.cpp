@@ -11,68 +11,6 @@
 #define WINDOW_SF 11
 
 
-bool GPX::loadFile(const QString &fileName)
-{
-	QFile file(fileName);
-	bool ret;
-
-	_data.clear();
-	_error.clear();
-
-	if (!file.open(QFile::ReadOnly | QFile::Text)) {
-		_error = qPrintable(file.errorString());
-		return false;
-	}
-
-	if (!(ret = _parser.loadFile(&file, _data)))
-		_error = _parser.errorString();
-	file.close();
-
-	return ret;
-}
-
-static QVector<QPointF> filter(const QVector<QPointF> &v, int window)
-{
-	qreal acc = 0;
-	QVector<QPointF> ret;
-
-	if (v.size() < window)
-		return QVector<QPointF>(v);
-
-	for (int i = 0; i < window; i++)
-		acc += v.at(i).y();
-	for (int i = 0; i <= window/2; i++)
-		ret.append(QPointF(v.at(i).x(), acc/window));
-
-	for (int i = window/2 + 1; i < v.size() - window/2; i++) {
-		acc += v.at(i + window/2).y() - v.at(i - (window/2 + 1)).y();
-		ret.append(QPointF(v.at(i).x(), acc/window));
-	}
-
-	for (int i = v.size() - window/2; i < v.size(); i++)
-		ret.append(QPointF(v.at(i).x(), acc/window));
-
-	return ret;
-}
-
-
-void GPX::elevationGraph(QVector<QPointF> &graph) const
-{
-	qreal dist = 0;
-	QVector<QPointF> raw;
-
-	if (!_data.size())
-		return;
-
-	raw.append(QPointF(0, _data.at(0).elevation));
-	for (int i = 1; i < _data.size(); i++) {
-		dist += llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
-		raw.append(QPointF(dist,  _data.at(i).elevation));
-	}
-
-	graph = filter(raw, WINDOW_EF);
-}
-
 static bool lt(const QPointF &p1, const QPointF &p2)
 {
 	return p1.y() < p2.y();
@@ -118,6 +56,69 @@ static QVector<QPointF> eliminate(const QVector<QPointF> &v, int window)
 	}
 
 	return ret;
+}
+
+static QVector<QPointF> filter(const QVector<QPointF> &v, int window)
+{
+	qreal acc = 0;
+	QVector<QPointF> ret;
+
+	if (v.size() < window)
+		return QVector<QPointF>(v);
+
+	for (int i = 0; i < window; i++)
+		acc += v.at(i).y();
+	for (int i = 0; i <= window/2; i++)
+		ret.append(QPointF(v.at(i).x(), acc/window));
+
+	for (int i = window/2 + 1; i < v.size() - window/2; i++) {
+		acc += v.at(i + window/2).y() - v.at(i - (window/2 + 1)).y();
+		ret.append(QPointF(v.at(i).x(), acc/window));
+	}
+
+	for (int i = v.size() - window/2; i < v.size(); i++)
+		ret.append(QPointF(v.at(i).x(), acc/window));
+
+	return ret;
+}
+
+
+bool GPX::loadFile(const QString &fileName)
+{
+	QFile file(fileName);
+	bool ret;
+
+	_data.clear();
+	_error.clear();
+
+	if (!file.open(QFile::ReadOnly | QFile::Text)) {
+		_error = qPrintable(file.errorString());
+		return false;
+	}
+
+	if (!(ret = _parser.loadFile(&file, _data)))
+		_error = _parser.errorString();
+	file.close();
+
+	return ret;
+}
+
+void GPX::elevationGraph(QVector<QPointF> &graph) const
+{
+	qreal dist = 0;
+	QVector<QPointF> raw;
+
+	if (!_data.size())
+		return;
+
+	raw.append(QPointF(0, _data.at(0).elevation));
+	for (int i = 1; i < _data.size(); i++) {
+		dist += llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
+		raw.append(QPointF(dist,  _data.at(i).elevation
+		  - _data.at(i).geoidheight));
+	}
+
+	graph = filter(raw, WINDOW_EF);
 }
 
 void GPX::speedGraph(QVector<QPointF> &graph) const

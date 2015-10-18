@@ -14,6 +14,11 @@ public:
 	void loadGPX(const GPX &gpx);
 	void clear();
 
+	qreal ascent() const {return _ascent;}
+	qreal descent() const {return _descent;}
+	qreal max() const {return _max;}
+	qreal min() const {return _min;}
+
 private:
 	qreal _ascent, _descent;
 	qreal _max, _min;

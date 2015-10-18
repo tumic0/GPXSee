@@ -216,9 +216,11 @@ void Graph::plot(QPainter *painter, const QRectF &target)
 	QSizeF canvas = QSizeF(orig.height() * ratio, orig.height());
 
 	resize(canvas);
-	_slider->setVisible(false);
+	_slider->hide();
+	_info->hide();
 	_scene->render(painter, target, QRectF(), Qt::KeepAspectRatioByExpanding);
-	_slider->setVisible(true);
+	_slider->show();
+	_info->show();
 	resize(orig);
 }
 
