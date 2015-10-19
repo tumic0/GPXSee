@@ -297,17 +297,17 @@ void GUI::saveFile(const QString &fileName)
 
 	QGraphicsScene scene;
 	InfoItem info;
-	info.insert(tr("Distance"), QString::number(_distance / 1000, 'f', 1) + " "
-	  + tr("km"));
+	info.insert(tr("Distance"), QString::number(_distance / 1000, 'f', 1)
+	  + QString::fromUtf8("\u2009") + tr("km"));
 	info.insert(tr("Time"), timeSpan(_time));
 	info.insert(tr("Ascent"), QString::number(_elevationGraph->ascent(), 'f', 0)
-	  + " " + tr("m"));
+	  + QString::fromUtf8("\u2009") + tr("m"));
 	info.insert(tr("Descent"), QString::number(_elevationGraph->descent(), 'f',
-	  0) + " " + tr("m"));
+	  0) + QString::fromUtf8("\u2009") + tr("m"));
 	info.insert(tr("Maximum"), QString::number(_elevationGraph->max(), 'f', 0)
-	  + " " + tr("m"));
+	  + QString::fromUtf8("\u2009") + tr("m"));
 	info.insert(tr("Minimum"), QString::number(_elevationGraph->min(), 'f', 0)
-	  + " " + tr("m"));
+	  + QString::fromUtf8("\u2009") + tr("m"));
 	scene.addItem(&info);
 	scene.render(&p, QRectF(0, 0, printer.width(), 200));
 

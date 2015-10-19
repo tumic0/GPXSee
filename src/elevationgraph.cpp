@@ -47,10 +47,14 @@ void ElevationGraph::loadGPX(const GPX &gpx)
 	_max = qMax(_max, max);
 	_min = qMin(_min, min);
 
-	addInfo(tr("Ascent"), QString::number(_ascent, 'f', 0) + " " + _yUnits);
-	addInfo(tr("Descent"), QString::number(_descent, 'f', 0) + " " + _yUnits);
-	addInfo(tr("Maximum"), QString::number(_max, 'f', 0) + " " + _yUnits);
-	addInfo(tr("Minimum"), QString::number(_min, 'f', 0) + " " + _yUnits);
+	addInfo(tr("Ascent"), QString::number(_ascent, 'f', 0)
+	  + QString::fromUtf8("\u2009") + _yUnits);
+	addInfo(tr("Descent"), QString::number(_descent, 'f', 0)
+	  + QString::fromUtf8("\u2009") + _yUnits);
+	addInfo(tr("Maximum"), QString::number(_max, 'f', 0)
+	  + QString::fromUtf8("\u2009") + _yUnits);
+	addInfo(tr("Minimum"), QString::number(_min, 'f', 0)
+	  + QString::fromUtf8("\u2009") + _yUnits);
 
 	Graph::loadData(data);
 }

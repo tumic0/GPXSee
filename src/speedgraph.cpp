@@ -32,10 +32,10 @@ void SpeedGraph::loadGPX(const GPX &gpx)
 	_max = qMax(_max, max);
 
 
-	addInfo(tr("Average"), QString::number(avg() * _yScale, 'f', 1) + " "
-	  + _yUnits);
-	addInfo(tr("Maximum"), QString::number(_max * _yScale,  'f', 1) + " "
-	  + _yUnits);
+	addInfo(tr("Average"), QString::number(avg() * _yScale, 'f', 1)
+	  + QString::fromUtf8("\u2009") + _yUnits);
+	addInfo(tr("Maximum"), QString::number(_max * _yScale,  'f', 1)
+	  + QString::fromUtf8("\u2009") + _yUnits);
 
 	Graph::loadData(data);
 }
