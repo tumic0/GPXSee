@@ -24,8 +24,5 @@ int main(int argc, char *argv[])
 	for (int i = 1; i < argc; i++)
 		gui.openFile(argv[i]);
 
-	if (argc > 1)
-		gui.setDir(QString(argv[argc - 1]));
-
 	return app.exec();
 }

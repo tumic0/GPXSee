@@ -12,6 +12,8 @@
 #include <QFileInfoList>
 #include "poi.h"
 
+
+class FileBrowser;
 class ElevationGraph;
 class SpeedGraph;
 class Track;
@@ -24,7 +26,6 @@ public:
 	GUI();
 
 	bool openFile(const QString &fileName);
-	void setDir(const QString &file);
 
 private slots:
 	void about();
@@ -32,8 +33,10 @@ private slots:
 	void saveAs();
 	void openFile();
 	void closeFile();
+	void reloadFile();
 	void openPOIFile();
 	void showPOI();
+
 	void graphChanged(int);
 
 private:
@@ -44,8 +47,9 @@ private:
 	void createTrackView();
 	void createTrackGraphs();
 
+	bool loadFile(const QString &fileName);
 	void saveFile(const QString &fileName);
-	void updateStatusBarInfo(const QString &fileName);
+	void updateStatusBarInfo();
 
 	void keyPressEvent(QKeyEvent * event);
 
@@ -65,6 +69,7 @@ private:
 	QAction *_saveAsAction;
 	QAction *_openFileAction;
 	QAction *_closeFileAction;
+	QAction *_reloadFileAction;
 	QAction *_openPOIAction;
 	QAction *_showPOIAction;
 
@@ -78,11 +83,9 @@ private:
 
 	POI _poi;
 
-	QFileInfoList _dirFiles;
-	int _dirIndex;
-
+	FileBrowser *_browser;
+	QList<QString> _files;
 	QString _saveFileName;
-	unsigned _files;
 
 	qreal _distance;
 	qreal _time;

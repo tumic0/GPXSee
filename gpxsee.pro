@@ -22,7 +22,8 @@ HEADERS += src/config.h \
     src/infoitem.h \
     src/elevationgraph.h \
     src/speedgraph.h \
-    src/sliderinfoitem.h
+    src/sliderinfoitem.h \
+    src/filebrowser.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
@@ -39,7 +40,8 @@ SOURCES += src/main.cpp \
     src/infoitem.cpp \
     src/elevationgraph.cpp \
     src/speedgraph.cpp \
-    src/sliderinfoitem.cpp
+    src/sliderinfoitem.cpp \
+    src/filebrowser.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx:ICON = icons/gpxsee.icns
