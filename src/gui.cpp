@@ -82,6 +82,9 @@ void GUI::createActions()
 	_exitAction->setShortcut(QKeySequence::Quit);
 	connect(_exitAction, SIGNAL(triggered()), this, SLOT(close()));
 
+	// Help & About
+	_keysAction = new QAction(tr("Keyboard controls"), this);
+	connect(_keysAction, SIGNAL(triggered()), this, SLOT(keys()));
 	_aboutAction = new QAction(QIcon(QPixmap(APP_ICON)),
 	  tr("About GPXSee"), this);
 	connect(_aboutAction, SIGNAL(triggered()), this, SLOT(about()));
@@ -144,9 +147,11 @@ void GUI::createMenus()
 	_poiMenu->addAction(_openPOIAction);
 	_poiMenu->addAction(_showPOIAction);
 
-	_aboutMenu = menuBar()->addMenu(tr("Help"));
-	_aboutMenu->addAction(_aboutAction);
-	_aboutMenu->addAction(_aboutQtAction);
+	_helpMenu = menuBar()->addMenu(tr("Help"));
+	_helpMenu->addAction(_keysAction);
+	_helpMenu->addSeparator();
+	_helpMenu->addAction(_aboutAction);
+	_helpMenu->addAction(_aboutQtAction);
 }
 
 void GUI::createToolBars()
@@ -211,6 +216,18 @@ void GUI::about()
 	  "GNU General Public License version 3. For more info about GPXSee visit "
 	  "the project homepage at ")
 	  + QString("<a href=\""APP_HOMEPAGE"\">"APP_HOMEPAGE"</a>.</p>"));
+}
+
+void GUI::keys()
+{
+	QMessageBox msgBox(this);
+	msgBox.setText(QString("<h3>") + tr("Keyboard controls") + QString("</h3>")
+	  + QString("<div><table><tr><td width=\"120\">") + tr("Next file")
+	  + QString("</td><td><i>SPACE</i></td></tr><tr><td>") + tr("Previous file")
+	  + QString("</td><td><i>BACKSPACE</i></td></tr><tr><td>")
+	  + tr("Append modifier") + QString("</td><td><i>SHIFT</i></td></tr>"
+	  "</table></div>"));
+	msgBox.exec();
 }
 
 void GUI::openFile()

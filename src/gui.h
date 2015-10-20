@@ -29,6 +29,7 @@ public:
 
 private slots:
 	void about();
+	void keys();
 	void saveFile();
 	void saveAs();
 	void openFile();
@@ -54,7 +55,7 @@ private:
 	void keyPressEvent(QKeyEvent * event);
 
 	QMenu *_fileMenu;
-	QMenu *_aboutMenu;
+	QMenu *_helpMenu;
 	QMenu *_poiMenu;
 
 	QToolBar *_fileToolBar;
@@ -63,6 +64,7 @@ private:
 	QActionGroup *_fileActionGroup;
 
 	QAction *_exitAction;
+	QAction *_keysAction;
 	QAction *_aboutAction;
 	QAction *_aboutQtAction;
 	QAction *_saveFileAction;
