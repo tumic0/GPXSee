@@ -88,7 +88,7 @@ void GUI::createActions()
 	_aboutAction = new QAction(QIcon(QPixmap(APP_ICON)),
 	  tr("About GPXSee"), this);
 	connect(_aboutAction, SIGNAL(triggered()), this, SLOT(about()));
-	_aboutQtAction = new QAction(tr("About Qt"), this);
+	_aboutQtAction = new QAction(QIcon(QPixmap(QT_ICON)), tr("About Qt"), this);
 	connect(_aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
 	// File related actions
@@ -209,24 +209,37 @@ void GUI::createStatusBar()
 
 void GUI::about()
 {
-	QMessageBox::about(this, tr("About GPXSee"),
-	  QString("<h3>") + QString(APP_NAME" "APP_VERSION)
-	  + QString("</h3><p>") + tr("GPX viewer and analyzer") + QString("<p/>")
-	  + QString("<p>") + tr("GPXSee is distributed under the terms of the "
-	  "GNU General Public License version 3. For more info about GPXSee visit "
-	  "the project homepage at ")
-	  + QString("<a href=\""APP_HOMEPAGE"\">"APP_HOMEPAGE"</a>.</p>"));
+	QMessageBox msgBox(this);
+
+	msgBox.setWindowTitle(tr("About GPXSee"));
+	msgBox.setText(QString("<h3>") + QString(APP_NAME" "APP_VERSION)
+	  + QString("</h3><p>") + tr("GPX viewer and analyzer") + QString("<p/>"));
+	msgBox.setInformativeText(QString("<table width=\"300\"><tr><td>")
+	  + tr("GPXSee is distributed under the terms of the GNU General Public "
+	  "License version 3. For more info about GPXSee visit the project "
+	  "homepage at ") + QString("<a href=\""APP_HOMEPAGE"\">"APP_HOMEPAGE
+	  "</a>.</td></tr></table>"));
+
+	QIcon icon = msgBox.windowIcon();
+	QSize size = icon.actualSize(QSize(64, 64));
+	msgBox.setIconPixmap(icon.pixmap(size));
+
+	msgBox.exec();
 }
 
 void GUI::keys()
 {
 	QMessageBox msgBox(this);
-	msgBox.setText(QString("<h3>") + tr("Keyboard controls") + QString("</h3>")
-	  + QString("<div><table><tr><td width=\"120\">") + tr("Next file")
+
+	msgBox.setWindowTitle(tr("Keyboard controls"));
+	msgBox.setText(QString("<h3>") + tr("Keyboard controls") + QString("</h3>"));
+	msgBox.setInformativeText(
+	  QString("<div><table width=\"300\"><tr><td>") + tr("Next file")
 	  + QString("</td><td><i>SPACE</i></td></tr><tr><td>") + tr("Previous file")
 	  + QString("</td><td><i>BACKSPACE</i></td></tr><tr><td>")
 	  + tr("Append modifier") + QString("</td><td><i>SHIFT</i></td></tr>"
 	  "</table></div>"));
+
 	msgBox.exec();
 }
 
@@ -328,16 +341,16 @@ void GUI::saveFile(const QString &fileName)
 	QGraphicsScene scene;
 	InfoItem info;
 	info.insert(tr("Distance"), QString::number(_distance / 1000, 'f', 1)
-	  + QString::fromUtf8("\u2009") + tr("km"));
+	  + THIN_SPACE + tr("km"));
 	info.insert(tr("Time"), timeSpan(_time));
 	info.insert(tr("Ascent"), QString::number(_elevationGraph->ascent(), 'f', 0)
-	  + QString::fromUtf8("\u2009") + tr("m"));
+	  + THIN_SPACE + tr("m"));
 	info.insert(tr("Descent"), QString::number(_elevationGraph->descent(), 'f',
-	  0) + QString::fromUtf8("\u2009") + tr("m"));
+	  0) + THIN_SPACE + tr("m"));
 	info.insert(tr("Maximum"), QString::number(_elevationGraph->max(), 'f', 0)
-	  + QString::fromUtf8("\u2009") + tr("m"));
+	  + THIN_SPACE + tr("m"));
 	info.insert(tr("Minimum"), QString::number(_elevationGraph->min(), 'f', 0)
-	  + QString::fromUtf8("\u2009") + tr("m"));
+	  + THIN_SPACE + tr("m"));
 	scene.addItem(&info);
 	scene.render(&p, QRectF(0, 0, printer.width(), 200));
 

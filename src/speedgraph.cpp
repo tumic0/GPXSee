@@ -1,6 +1,8 @@
+#include "config.h"
 #include "speedgraph.h"
 
 #include <QDebug>
+
 
 SpeedGraph::SpeedGraph(QWidget *parent) : Graph(parent)
 {
@@ -33,9 +35,9 @@ void SpeedGraph::loadGPX(const GPX &gpx)
 
 
 	addInfo(tr("Average"), QString::number(avg() * _yScale, 'f', 1)
-	  + QString::fromUtf8("\u2009") + _yUnits);
+	  + THIN_SPACE + _yUnits);
 	addInfo(tr("Maximum"), QString::number(_max * _yScale,  'f', 1)
-	  + QString::fromUtf8("\u2009") + _yUnits);
+	  + THIN_SPACE + _yUnits);
 
 	Graph::loadData(data);
 }

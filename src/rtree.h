@@ -219,8 +219,6 @@ public:
 		
 		StackElement m_stack[MAX_STACK];              ///< Stack as we are doing iteration instead of recursion
 		int m_tos;                                    ///< Top Of Stack index
-		
-		friend RTree; // Allow hiding of non-public functions while allowing manipulation by logical owner
 	};
 	
 	/// Get 'first' for iteration

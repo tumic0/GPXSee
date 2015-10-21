@@ -49,7 +49,7 @@ static QVector<QPointF> eliminate(const QVector<QPointF> &v, int window)
 
 	QList<int>::const_iterator it = rm.begin();
 	for (int i = 0; i < v.size(); i++) {
-		if (*it != i)
+		if (it == rm.end() || *it != i)
 			ret.append(v.at(i));
 		else
 			it++;
