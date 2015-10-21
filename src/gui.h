@@ -9,7 +9,6 @@
 #include <QActionGroup>
 #include <QAction>
 #include <QLabel>
-#include <QFileInfoList>
 #include "poi.h"
 
 

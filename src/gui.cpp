@@ -7,7 +7,6 @@
 #include <QPrinter>
 #include <QPainter>
 #include <QKeyEvent>
-#include <QDir>
 #include "config.h"
 #include "icons.h"
 #include "keys.h"
