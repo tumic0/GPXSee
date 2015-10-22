@@ -137,7 +137,9 @@ void Graph::loadData(const QVector<QPointF> &data)
 	}
 
 	pi = new QGraphicsPathItem(path);
-	pi->setPen(QPen(color));
+	QBrush brush(color, Qt::SolidPattern);
+	QPen pen(brush, 0);
+	pi->setPen(pen);
 	_scene->addItem(pi);
 	_graphs.append(pi);
 
