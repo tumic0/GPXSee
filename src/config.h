@@ -3,7 +3,7 @@
 
 #define APP_NAME       "GPXSee"
 #define APP_HOMEPAGE   "http://tumic.wz.cz/gpxsee"
-#define APP_VERSION    "0.1"
+#define APP_VERSION    "1.0"
 
 #define FONT_FAMILY    "Arial"
 #define FONT_SIZE      12
