@@ -53,10 +53,8 @@ void Track::loadGPX(const GPX &gpx)
 		_scene->removeItem(_markers.at(i));
 	}
 
-	QBrush brush(color, Qt::SolidPattern);
-	QPen pen(brush, 0);
 	pi = new QGraphicsPathItem(path);
-	pi->setPen(pen);
+	pi->setPen(QPen(color));
 	_scene->addItem(pi);
 	_trackPaths.append(pi);
 
