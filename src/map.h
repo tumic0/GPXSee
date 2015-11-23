@@ -5,6 +5,9 @@
 #include "downloader.h"
 
 
+#define TILES_DIR "tiles"
+#define LIST_FILE "list.txt"
+
 class Tile
 {
 public:

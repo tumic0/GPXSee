@@ -1,7 +1,7 @@
 TARGET = GPXSee
 QT += core \
-	gui \
-	network
+    gui \
+    network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 greaterThan(QT_MAJOR_VERSION, 4): QT += printsupport
 HEADERS += src/config.h \
@@ -26,6 +26,7 @@ HEADERS += src/config.h \
     src/sliderinfoitem.h \
     src/filebrowser.h \
     src/map.h \
+    src/maplist.h \
     src/downloader.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
@@ -46,6 +47,7 @@ SOURCES += src/main.cpp \
     src/sliderinfoitem.cpp \
     src/filebrowser.cpp \
     src/map.cpp \
+    src/maplist.cpp \
     src/downloader.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts

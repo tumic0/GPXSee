@@ -13,6 +13,7 @@
 #include "keys.h"
 #include "gpx.h"
 #include "map.h"
+#include "maplist.h"
 #include "elevationgraph.h"
 #include "speedgraph.h"
 #include "track.h"
@@ -74,12 +75,8 @@ GUI::GUI()
 
 void GUI::loadMaps()
 {
-	_maps.append(new Map("Google maps",
-	  "http://mts1.google.com/vt/x=$x&y=$y&z=$z"));
-	_maps.append(new Map("Mapy.cz",
-	  "http://m1.mapserver.mapy.cz/wturist-m/$z-$x-$y"));
-	_maps.append(new Map("OSM",
-	  "http://tile.mtbmap.cz/mtbmap_tiles/$z/$x/$y.png"));
+	_maps = MapList::load(QString("%1/"TILES_DIR"/"LIST_FILE)
+	  .arg(QDir::homePath()));
 }
 
 void GUI::createMapActions()

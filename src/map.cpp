@@ -6,7 +6,6 @@
 
 #include <QDebug>
 
-#define TILES_DIR "tiles"
 
 Map::Map(const QString &name, const QString &url)
 {

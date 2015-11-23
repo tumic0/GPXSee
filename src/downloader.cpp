@@ -1,8 +1,22 @@
 #include <QFile>
 #include <QFileInfo>
+#include "config.h"
 #include "downloader.h"
 
 #include <QDebug>
+
+
+#ifdef Q_OS_LINUX
+#define PLATFORM_STR "Linux"
+#elif Q_OS_WIN32
+#define PLATFORM_STR "Windows"
+#elif Q_OS_MAC
+#define PLATFORM_STR "OS X"
+#else
+#define PLATFORM_STR "Unknown"
+#endif
+
+#define USER_AGENT APP_NAME"/"APP_VERSION" ("PLATFORM_STR"; Qt "QT_VERSION_STR")"
 
 
 Downloader::Downloader()
@@ -16,6 +30,7 @@ void Downloader::doDownload(const Download &dl)
 	QUrl url(dl.url());
 	QNetworkRequest request(url);
 	request.setAttribute(QNetworkRequest::User, QVariant(dl.file()));
+	request.setRawHeader("User-Agent", USER_AGENT);
 	QNetworkReply *reply = manager.get(request);
 
 	currentDownloads.append(reply);
@@ -26,7 +41,7 @@ bool Downloader::saveToDisk(const QString &filename, QIODevice *data)
 	QFile file(filename);
 
 	if (!file.open(QIODevice::WriteOnly)) {
-		fprintf(stderr, "Could not open %s for writing: %s\n",
+		fprintf(stderr, "Error writing map tile: %s: %s\n",
 		  qPrintable(filename), qPrintable(file.errorString()));
 		return false;
 	}
@@ -41,7 +56,7 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 {
 	QUrl url = reply->url();
 	if (reply->error()) {
-		fprintf(stderr, "Download of %s failed: %s\n",
+		fprintf(stderr, "Error downloading map tile: %s: %s\n",
 		  url.toEncoded().constData(), qPrintable(reply->errorString()));
 	} else {
 		QString filename = reply->request().attribute(QNetworkRequest::User)
