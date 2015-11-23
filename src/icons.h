@@ -9,6 +9,7 @@
 #define SAVE_AS_ICON     ":/icons/document-save-as.png"
 #define CLOSE_FILE_ICON  ":/icons/dialog-close.png"
 #define SHOW_POI_ICON    ":/icons/flag.png"
+#define SHOW_MAP_ICON    ":/icons/applications-internet.png"
 #define QUIT_ICON        ":/icons/application-exit.png"
 #define RELOAD_FILE_ICON ":/icons/view-refresh.png"
 

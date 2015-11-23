@@ -1,6 +1,7 @@
 TARGET = GPXSee
 QT += core \
-	gui
+	gui \
+	network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 greaterThan(QT_MAJOR_VERSION, 4): QT += printsupport
 HEADERS += src/config.h \
@@ -23,7 +24,9 @@ HEADERS += src/config.h \
     src/elevationgraph.h \
     src/speedgraph.h \
     src/sliderinfoitem.h \
-    src/filebrowser.h
+    src/filebrowser.h \
+    src/map.h \
+    src/downloader.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
@@ -41,7 +44,9 @@ SOURCES += src/main.cpp \
     src/elevationgraph.cpp \
     src/speedgraph.cpp \
     src/sliderinfoitem.cpp \
-    src/filebrowser.cpp
+    src/filebrowser.cpp \
+    src/map.cpp \
+    src/downloader.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx:ICON = icons/gpxsee.icns

@@ -150,12 +150,8 @@ void GPX::speedGraph(QVector<QPointF> &graph) const
 
 void GPX::track(QVector<QPointF> &track) const
 {
-	QPointF p;
-
-	for (int i = 0; i < _data.size(); i++) {
-		ll2mercator(_data.at(i).coordinates, p);
-		track.append(p);
-	}
+	for (int i = 0; i < _data.size(); i++)
+		track.append(ll2mercator(_data.at(i).coordinates));
 }
 
 qreal GPX::distance() const

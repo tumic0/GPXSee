@@ -3,7 +3,12 @@
 
 #include <QPointF>
 
-void ll2mercator(const QPointF &src, QPointF &dst);
+#define TILE_SIZE 256
+
+QPointF ll2mercator(const QPointF &ll);
 qreal llDistance(const QPointF &p1, const QPointF &p2);
+QPoint mercator2tile(const QPointF &m, int zoom);
+QPointF tile2mercator(const QPoint &tile, int zoom);
+int scale2zoom(qreal scale);
 
 #endif // LL_H

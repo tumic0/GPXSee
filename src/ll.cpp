@@ -20,8 +20,38 @@ qreal llDistance(const QPointF &p1, const QPointF &p2)
 	return (WGS84_RADIUS * c);
 }
 
-void ll2mercator(const QPointF &src, QPointF &dst)
+QPointF ll2mercator(const QPointF &ll)
 {
-	dst.setX(src.x());
-	dst.setY(rad2deg(log(tan(M_PI/4.0 + deg2rad(src.y())/2.0))));
+	QPointF m;
+
+	m.setX(ll.x());
+	m.setY(rad2deg(log(tan(M_PI/4.0 + deg2rad(ll.y())/2.0))));
+
+	return m;
+}
+
+QPoint mercator2tile(const QPointF &m, int z)
+{
+	QPoint tile;
+
+	tile.setX((int)(floor((m.x() + 180.0) / 360.0 * pow(2.0, z))));
+	tile.setY((int)(floor((1.0 - (m.y() / 180.0)) / 2.0 * pow(2.0, z))));
+
+	return tile;
+}
+
+QPointF tile2mercator(const QPoint &tile, int z)
+{
+	QPointF m;
+
+	m.setX(tile.x() / pow(2.0, z) * 360.0 - 180);
+	qreal n = M_PI - 2.0 * M_PI * tile.y() / pow(2.0, z);
+	m.setY(rad2deg(atan(0.5 * (exp(n) - exp(-n)))));
+
+	return ll2mercator(m);
+}
+
+int scale2zoom(qreal scale)
+{
+	return (int)log2(360.0/(scale * (qreal)TILE_SIZE));
 }

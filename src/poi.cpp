@@ -38,11 +38,9 @@ bool POI::loadFile(const QString &fileName)
 		}
 		QByteArray ba = list[2].trimmed();
 
-		QPointF p;
 		Entry entry;
-		ll2mercator(QPointF(lon, lat), p);
 		entry.description = QString::fromUtf8(ba.data(), ba.size());
-		entry.coordinates = p;
+		entry.coordinates = ll2mercator(QPointF(lon, lat));
 
 		_data.append(entry);
 		ln++;

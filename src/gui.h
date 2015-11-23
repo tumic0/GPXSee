@@ -16,6 +16,7 @@ class FileBrowser;
 class ElevationGraph;
 class SpeedGraph;
 class Track;
+class Map;
 
 class GUI : public QMainWindow
 {
@@ -36,10 +37,15 @@ private slots:
 	void reloadFile();
 	void openPOIFile();
 	void showPOI();
+	void showMap();
 
+	void mapChanged(int);
 	void graphChanged(int);
 
 private:
+	void loadMaps();
+
+	void createMapActions();
 	void createActions();
 	void createMenus();
 	void createToolBars();
@@ -56,9 +62,10 @@ private:
 	QMenu *_fileMenu;
 	QMenu *_helpMenu;
 	QMenu *_poiMenu;
+	QMenu *_mapMenu;
 
 	QToolBar *_fileToolBar;
-	QToolBar *_poiToolBar;
+	QToolBar *_showToolBar;
 	QTabWidget *_trackGraphs;
 	QActionGroup *_fileActionGroup;
 
@@ -73,6 +80,8 @@ private:
 	QAction *_reloadFileAction;
 	QAction *_openPOIAction;
 	QAction *_showPOIAction;
+	QAction *_showMapAction;
+	QList<QAction*> _mapActions;
 
 	QLabel *_fileNameLabel;
 	QLabel *_distanceLabel;
@@ -83,10 +92,12 @@ private:
 	Track *_track;
 
 	POI _poi;
+	QList<Map*> _maps;
 
 	FileBrowser *_browser;
 	QList<QString> _files;
 	QString _saveFileName;
+	Map *_currentMap;
 
 	qreal _distance;
 	qreal _time;

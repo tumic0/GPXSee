@@ -7,10 +7,12 @@
 #include <QPrinter>
 #include <QPainter>
 #include <QKeyEvent>
+#include <QSignalMapper>
 #include "config.h"
 #include "icons.h"
 #include "keys.h"
 #include "gpx.h"
+#include "map.h"
 #include "elevationgraph.h"
 #include "speedgraph.h"
 #include "track.h"
@@ -36,6 +38,8 @@ static QString timeSpan(qreal time)
 
 GUI::GUI()
 {
+	loadMaps();
+
 	createActions();
 	createMenus();
 	createToolBars();
@@ -66,6 +70,40 @@ GUI::GUI()
 	_time = 0;
 
 	resize(600, 800);
+}
+
+void GUI::loadMaps()
+{
+	_maps.append(new Map("Google maps",
+	  "http://mts1.google.com/vt/x=$x&y=$y&z=$z"));
+	_maps.append(new Map("Mapy.cz",
+	  "http://m1.mapserver.mapy.cz/wturist-m/$z-$x-$y"));
+	_maps.append(new Map("OSM",
+	  "http://tile.mtbmap.cz/mtbmap_tiles/$z/$x/$y.png"));
+}
+
+void GUI::createMapActions()
+{
+	QActionGroup *ag = new QActionGroup(this);
+	ag->setExclusive(true);
+
+	QSignalMapper *sm = new QSignalMapper(this);
+
+	for (int i = 0; i < _maps.count(); i++) {
+		QAction *a = new QAction(_maps.at(i)->name(), this);
+		a->setCheckable(true);
+		a->setActionGroup(ag);
+
+		sm->setMapping(a, i);
+		connect(a, SIGNAL(triggered()), sm, SLOT(map()));
+
+		_mapActions.append(a);
+	}
+
+	connect(sm, SIGNAL(mapped(int)), this, SLOT(mapChanged(int)));
+
+	_mapActions.at(0)->setChecked(true);
+	_currentMap = _maps.at(0);
 }
 
 void GUI::createActions()
@@ -118,12 +156,22 @@ void GUI::createActions()
 
 	// POI actions
 	_openPOIAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)),
-	  tr("Load file"), this);
+	  tr("Load POI file"), this);
 	connect(_openPOIAction, SIGNAL(triggered()), this, SLOT(openPOIFile()));
 	_showPOIAction = new QAction(QIcon(QPixmap(SHOW_POI_ICON)),
-	  tr("Show"), this);
+	  tr("Show POIs"), this);
 	_showPOIAction->setCheckable(true);
 	connect(_showPOIAction, SIGNAL(triggered()), this, SLOT(showPOI()));
+
+	// Map actions
+	_showMapAction = new QAction(QIcon(QPixmap(SHOW_MAP_ICON)), tr("Show map"),
+	  this);
+	_showMapAction->setCheckable(true);
+	connect(_showMapAction, SIGNAL(triggered()), this, SLOT(showMap()));
+	if (_maps.empty())
+		_showMapAction->setEnabled(false);
+	else
+		createMapActions();
 }
 
 void GUI::createMenus()
@@ -141,6 +189,11 @@ void GUI::createMenus()
 	_fileMenu->addSeparator();
 	_fileMenu->addAction(_exitAction);
 #endif // __APPLE__
+
+	_mapMenu = menuBar()->addMenu(tr("Map"));
+	_mapMenu->addActions(_mapActions);
+	_mapMenu->addSeparator();
+	_mapMenu->addAction(_showMapAction);
 
 	_poiMenu = menuBar()->addMenu(tr("POI"));
 	_poiMenu->addAction(_openPOIAction);
@@ -164,10 +217,11 @@ void GUI::createToolBars()
 	_fileToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 #endif // __APPLE__
 
-	_poiToolBar = addToolBar(tr("POI"));
-	_poiToolBar->addAction(_showPOIAction);
+	_showToolBar = addToolBar(tr("Show"));
+	_showToolBar->addAction(_showPOIAction);
+	_showToolBar->addAction(_showMapAction);
 #ifdef __APPLE__
-	_poiToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+	_showToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 #endif // __APPLE__
 }
 
@@ -402,6 +456,13 @@ void GUI::showPOI()
 		_track->clearPOI();
 }
 
+void GUI::showMap()
+{
+	if (_showMapAction->isChecked())
+		_track->setMap(_currentMap);
+	else
+		_track->setMap(0);
+}
 
 void GUI::updateStatusBarInfo()
 {
@@ -420,6 +481,14 @@ void GUI::updateStatusBarInfo()
 	_distanceLabel->setText(QString::number(_distance / 1000, 'f', 1)
 	  + " " + tr("km"));
 	_timeLabel->setText(timeSpan(_time));
+}
+
+void GUI::mapChanged(int index)
+{
+	_currentMap = _maps.at(index);
+
+	if (_showMapAction->isChecked())
+		_track->setMap(_currentMap);
 }
 
 void GUI::graphChanged(int index)

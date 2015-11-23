@@ -7,6 +7,7 @@
         <file>icons/flag.png</file>
         <file>icons/gpxsee.png</file>
         <file>icons/application-exit.png</file>
+        <file>icons/applications-internet.png</file>
         <file>icons/view-refresh.png</file>
         <file>lang/gpxsee_cs.qm</file>
     </qresource>
