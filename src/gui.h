@@ -36,8 +36,10 @@ private slots:
 	void closeFile();
 	void reloadFile();
 	void openPOIFile();
-	void showPOI();
-	void showMap();
+	void showPOI(bool checked);
+	void showMap(bool checked);
+	void showGraphs(bool checked);
+	void showToolbars(bool checked);
 
 	void mapChanged(int);
 	void graphChanged(int);
@@ -63,6 +65,7 @@ private:
 	QMenu *_helpMenu;
 	QMenu *_poiMenu;
 	QMenu *_mapMenu;
+	QMenu *_settingsMenu;
 
 	QToolBar *_fileToolBar;
 	QToolBar *_showToolBar;
@@ -81,6 +84,8 @@ private:
 	QAction *_openPOIAction;
 	QAction *_showPOIAction;
 	QAction *_showMapAction;
+	QAction *_showGraphsAction;
+	QAction *_showToolbarsAction;
 	QList<QAction*> _mapActions;
 
 	QLabel *_fileNameLabel;

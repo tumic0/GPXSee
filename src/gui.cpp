@@ -158,17 +158,29 @@ void GUI::createActions()
 	_showPOIAction = new QAction(QIcon(QPixmap(SHOW_POI_ICON)),
 	  tr("Show POIs"), this);
 	_showPOIAction->setCheckable(true);
-	connect(_showPOIAction, SIGNAL(triggered()), this, SLOT(showPOI()));
+	connect(_showPOIAction, SIGNAL(triggered(bool)), this, SLOT(showPOI(bool)));
 
 	// Map actions
 	_showMapAction = new QAction(QIcon(QPixmap(SHOW_MAP_ICON)), tr("Show map"),
 	  this);
 	_showMapAction->setCheckable(true);
-	connect(_showMapAction, SIGNAL(triggered()), this, SLOT(showMap()));
+	connect(_showMapAction, SIGNAL(triggered(bool)), this, SLOT(showMap(bool)));
 	if (_maps.empty())
 		_showMapAction->setEnabled(false);
 	else
 		createMapActions();
+
+	// Settings actions
+	_showGraphsAction = new QAction(tr("Show graphs"), this);
+	_showGraphsAction->setCheckable(true);
+	_showGraphsAction->setChecked(true);
+	connect(_showGraphsAction, SIGNAL(triggered(bool)), this,
+	  SLOT(showGraphs(bool)));
+	_showToolbarsAction = new QAction(tr("Show toolbars"), this);
+	_showToolbarsAction->setCheckable(true);
+	_showToolbarsAction->setChecked(true);
+	connect(_showToolbarsAction, SIGNAL(triggered(bool)), this,
+	  SLOT(showToolbars(bool)));
 }
 
 void GUI::createMenus()
@@ -195,6 +207,10 @@ void GUI::createMenus()
 	_poiMenu = menuBar()->addMenu(tr("POI"));
 	_poiMenu->addAction(_openPOIAction);
 	_poiMenu->addAction(_showPOIAction);
+
+	_settingsMenu = menuBar()->addMenu(tr("Settings"));
+	_settingsMenu->addAction(_showToolbarsAction);
+	_settingsMenu->addAction(_showGraphsAction);
 
 	_helpMenu = menuBar()->addMenu(tr("Help"));
 	_helpMenu->addAction(_keysAction);
@@ -445,20 +461,38 @@ void GUI::closeFile()
 	updateStatusBarInfo();
 }
 
-void GUI::showPOI()
+void GUI::showPOI(bool checked)
 {
-	if (_showPOIAction->isChecked())
+	if (checked)
 		_track->loadPOI(_poi);
 	else
 		_track->clearPOI();
 }
 
-void GUI::showMap()
+void GUI::showMap(bool checked)
 {
-	if (_showMapAction->isChecked())
+	if (checked)
 		_track->setMap(_currentMap);
 	else
 		_track->setMap(0);
+}
+
+void GUI::showGraphs(bool checked)
+{
+	_trackGraphs->setHidden(!checked);
+}
+
+void GUI::showToolbars(bool checked)
+{
+	if (checked) {
+		addToolBar(_fileToolBar);
+		addToolBar(_showToolBar);
+		_fileToolBar->show();
+		_showToolBar->show();
+	} else {
+		removeToolBar(_fileToolBar);
+		removeToolBar(_showToolBar);
+	}
 }
 
 void GUI::updateStatusBarInfo()
