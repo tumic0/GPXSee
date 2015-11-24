@@ -85,16 +85,16 @@ qreal Track::trackScale() const
 {
 	qreal bottom, top, left, right;
 
-	bottom = _trackPaths.at(0)->boundingRect().bottom();
-	top = _trackPaths.at(0)->boundingRect().top();
-	left = _trackPaths.at(0)->boundingRect().left();
-	right = _trackPaths.at(0)->boundingRect().right();
+	bottom = _trackPaths.at(0)->path().boundingRect().bottom();
+	top = _trackPaths.at(0)->path().boundingRect().top();
+	left = _trackPaths.at(0)->path().boundingRect().left();
+	right = _trackPaths.at(0)->path().boundingRect().right();
 
 	for (int i = 1; i < _trackPaths.size(); i++) {
-		bottom = qMax(bottom, _trackPaths.at(i)->boundingRect().bottom());
-		top = qMin(top, _trackPaths.at(i)->boundingRect().top());
-		right = qMax(right, _trackPaths.at(i)->boundingRect().right());
-		left = qMin(left, _trackPaths.at(i)->boundingRect().left());
+		bottom = qMax(bottom, _trackPaths.at(i)->path().boundingRect().bottom());
+		top = qMin(top, _trackPaths.at(i)->path().boundingRect().top());
+		right = qMax(right, _trackPaths.at(i)->path().boundingRect().right());
+		left = qMin(left, _trackPaths.at(i)->path().boundingRect().left());
 	}
 
 	QRectF br(QPointF(left, top), QPointF(right, bottom));
