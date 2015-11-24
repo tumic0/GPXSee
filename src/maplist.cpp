@@ -28,7 +28,7 @@ QList<Map*> MapList::load(const QString &fileName)
 		QByteArray ba2 = list[1].trimmed();
 
 		mapList.append(new Map(QString::fromUtf8(ba1.data(), ba1.size()),
-		  QString::fromAscii(ba2.data(), ba2.size())));
+		  QString::fromLatin1(ba2.data(), ba2.size())));
 
 		ln++;
 	}

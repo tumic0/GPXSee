@@ -6,11 +6,11 @@
 #include <QDebug>
 
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX)
 #define PLATFORM_STR "Linux"
-#elif Q_OS_WIN32
+#elif defined(Q_OS_WIN32)
 #define PLATFORM_STR "Windows"
-#elif Q_OS_MAC
+#elif defined(Q_OS_MAC)
 #define PLATFORM_STR "OS X"
 #else
 #define PLATFORM_STR "Unknown"

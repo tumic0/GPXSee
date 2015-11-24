@@ -1,9 +1,14 @@
 #include <cmath>
 #include "ll.h"
 
+// MSVC workarounds
 #ifndef M_PI
 	#define M_PI 3.14159265358979323846
 #endif // M_PI
+#if defined(_MSC_VER) && (_MSC_VER < 1800)
+	#define log2(n) (log(n)/log(2.0))
+#endif
+
 
 #define WGS84_RADIUS 6378137.0
 #define deg2rad(d) (((d)*M_PI)/180.0)
