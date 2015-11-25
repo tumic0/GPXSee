@@ -84,6 +84,7 @@ Section "QT libs" SEC_QT
   File "Qt5Gui.dll"
   File "Qt5Widgets.dll"
   File "Qt5PrintSupport.dll"
+  File "Qt5Network.dll"
   File "libGLESv2.dll"
   File /r "platforms"
  
