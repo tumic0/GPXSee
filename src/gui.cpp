@@ -21,8 +21,6 @@
 #include "filebrowser.h"
 #include "gui.h"
 
-#include <QDebug>
-
 
 static QString timeSpan(qreal time)
 {

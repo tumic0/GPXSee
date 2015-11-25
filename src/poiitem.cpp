@@ -2,10 +2,8 @@
 #include "config.h"
 #include "poiitem.h"
 
-#include <QDebug>
 
 #define POINT_SIZE  8
-
 
 POIItem::POIItem(const Entry &entry, QGraphicsItem *parent)
   : QGraphicsItem(parent)

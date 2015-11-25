@@ -1,7 +1,6 @@
 #include <QFile>
 #include "maplist.h"
 
-#include <QDebug>
 
 QList<Map*> MapList::load(const QString &fileName)
 {

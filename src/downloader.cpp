@@ -3,8 +3,6 @@
 #include "config.h"
 #include "downloader.h"
 
-#include <QDebug>
-
 
 #if defined(Q_OS_LINUX)
 #define PLATFORM_STR "Linux"
@@ -17,7 +15,6 @@
 #endif
 
 #define USER_AGENT APP_NAME"/"APP_VERSION" ("PLATFORM_STR"; Qt "QT_VERSION_STR")"
-
 
 Downloader::Downloader()
 {

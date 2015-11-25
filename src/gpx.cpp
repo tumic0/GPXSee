@@ -3,13 +3,10 @@
 #include "ll.h"
 #include "gpx.h"
 
-#include <QDebug>
-
 
 #define WINDOW_EF 3
 #define WINDOW_SE 11
 #define WINDOW_SF 11
-
 
 static bool lt(const QPointF &p1, const QPointF &p2)
 {

@@ -9,11 +9,8 @@
 #include "config.h"
 #include "graph.h"
 
-#include <QDebug>
-
 
 #define MARGIN 10.0
-
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {

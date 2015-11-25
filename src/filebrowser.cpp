@@ -2,8 +2,6 @@
 #include <QDir>
 #include "filebrowser.h"
 
-#include <QDebug>
-
 
 FileBrowser::FileBrowser(QObject *parent) : QObject(parent)
 {

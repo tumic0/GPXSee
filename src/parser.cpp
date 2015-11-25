@@ -1,7 +1,5 @@
 #include "parser.h"
 
-#include <QDebug>
-
 
 void Parser::handleExtensionData(QVector<TrackPoint> &data,
   QStringRef element, const QString &value)

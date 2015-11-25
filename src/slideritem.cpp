@@ -1,7 +1,6 @@
 #include <QPainter>
 #include "slideritem.h"
 
-#include <QDebug>
 
 #define SIZE        10
 

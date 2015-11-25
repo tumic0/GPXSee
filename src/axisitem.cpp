@@ -3,13 +3,11 @@
 #include "config.h"
 #include "axisitem.h"
 
-#include <QDebug>
 
 #define TICK        6
 #define PADDING     6
 #define XTICKS      15
 #define YTICKS      10
-
 
 struct Label {
 	double min;

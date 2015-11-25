@@ -2,6 +2,7 @@
 #include "config.h"
 #include "elevationgraph.h"
 
+
 ElevationGraph::ElevationGraph(QWidget *parent) : Graph(parent)
 {
 	_ascent = 0;

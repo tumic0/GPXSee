@@ -1,10 +1,10 @@
 #include "colorshop.h"
 
+
 #define HUE_INIT		0.1f
 #define HUE_INCREMENT	0.62f
 #define SATURATION		0.99f
 #define VALUE			0.99f
-
 
 static unsigned hsv2rgb(float h, float s, float v)
 {

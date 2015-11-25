@@ -4,8 +4,6 @@
 #include "ll.h"
 #include "map.h"
 
-#include <QDebug>
-
 
 Map::Map(const QString &name, const QString &url)
 {

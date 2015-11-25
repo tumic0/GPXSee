@@ -3,18 +3,14 @@
 #include <QGraphicsScene>
 #include <QPainterPath>
 #include <QWheelEvent>
-#include <QGraphicsEllipseItem>
 #include "poiitem.h"
 #include "markeritem.h"
 #include "ll.h"
 #include "track.h"
 
-#include <QDebug>
-
 
 #define MARGIN 10.0
 #define TRACK_WIDTH 3
-
 
 Track::Track(QWidget *parent)
 	: QGraphicsView(parent)

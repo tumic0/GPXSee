@@ -1,6 +1,7 @@
 #include <QPainter>
 #include "markeritem.h"
 
+
 #define SIZE 8
 
 MarkerItem::MarkerItem(QGraphicsItem *parent) : QGraphicsItem(parent)

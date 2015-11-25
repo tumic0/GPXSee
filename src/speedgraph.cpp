@@ -1,8 +1,6 @@
 #include "config.h"
 #include "speedgraph.h"
 
-#include <QDebug>
-
 
 SpeedGraph::SpeedGraph(QWidget *parent) : Graph(parent)
 {
