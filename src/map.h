@@ -5,9 +5,6 @@
 #include "downloader.h"
 
 
-#define TILES_DIR "tiles"
-#define LIST_FILE "list.txt"
-
 class Tile
 {
 public:
@@ -23,6 +20,7 @@ private:
 	QPoint _xy;
 	QPixmap _pixmap;
 };
+
 
 class Map : public QObject
 {

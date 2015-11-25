@@ -2,6 +2,7 @@
 #include <QDir>
 #include "downloader.h"
 #include "ll.h"
+#include "config.h"
 #include "map.h"
 
 

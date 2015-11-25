@@ -73,8 +73,7 @@ GUI::GUI()
 
 void GUI::loadMaps()
 {
-	_maps = MapList::load(QString("%1/"TILES_DIR"/"LIST_FILE)
-	  .arg(QDir::homePath()));
+	_maps = MapList::load(QString("%1/"MAP_LIST_FILE).arg(QDir::homePath()));
 }
 
 void GUI::createMapActions()

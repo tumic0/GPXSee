@@ -8,6 +8,7 @@
 #define FONT_FAMILY    "Arial"
 #define FONT_SIZE      12
 
-#define THIN_SPACE     QString::fromUtf8("\xE2\x80\x89")
+#define TILES_DIR      "tiles"
+#define MAP_LIST_FILE  TILES_DIR"/list.txt"
 
 #endif /* CONFIG_H */

@@ -10,6 +10,8 @@
 #include "colorshop.h"
 
 
+#define THIN_SPACE     QString::fromUtf8("\xE2\x80\x89")
+
 class SliderItem;
 class SliderInfoItem;
 class InfoItem;
