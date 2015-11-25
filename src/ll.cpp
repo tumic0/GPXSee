@@ -58,5 +58,13 @@ QPointF tile2mercator(const QPoint &tile, int z)
 
 int scale2zoom(qreal scale)
 {
-	return (int)log2(360.0/(scale * (qreal)TILE_SIZE));
+	int zoom;
+
+	zoom = (int)log2(360.0/(scale * (qreal)TILE_SIZE));
+
+	if (zoom < ZOOM_MIN)
+		return ZOOM_MIN;
+	if (zoom > ZOOM_MAX)
+		return ZOOM_MAX;
+	return zoom;
 }

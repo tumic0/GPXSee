@@ -4,6 +4,8 @@
 #include <QPointF>
 
 #define TILE_SIZE 256
+#define ZOOM_MAX 18
+#define ZOOM_MIN 3
 
 QPointF ll2mercator(const QPointF &ll);
 qreal llDistance(const QPointF &p1, const QPointF &p2);

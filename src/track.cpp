@@ -14,8 +14,6 @@
 
 #define MARGIN 10.0
 #define TRACK_WIDTH 3
-#define ZOOM_MAX 19
-#define ZOOM_MIN 0
 
 
 Track::Track(QWidget *parent)
@@ -23,8 +21,10 @@ Track::Track(QWidget *parent)
 {
 	_scene = new QGraphicsScene(this);
 	setScene(_scene);
-	setResizeAnchor(QGraphicsView::AnchorViewCenter);
 	setCacheMode(QGraphicsView::CacheBackground);
+	setDragMode(QGraphicsView::ScrollHandDrag);
+	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	_zoom = -1;
 	_scale = 1.0;
@@ -120,10 +120,20 @@ void Track::rescale(qreal scale)
 		_trackPaths.at(i)->setPen(pen);
 	}
 
-	QHash<Entry, POIItem*>::const_iterator it;
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+	QHash<Entry, POIItem*>::const_iterator it, jt;
+	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
 		it.value()->setPos(QPointF(it.value()->entry().coordinates.x()
 		  * 1.0/scale, -it.value()->entry().coordinates.y() * 1.0/scale));
+		it.value()->show();
+	}
+
+	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
+		for (jt = _pois.constBegin(); jt != _pois.constEnd(); jt++) {
+			if (it != jt && it.value()->isVisible() && jt.value()->isVisible()
+			  && it.value()->collidesWithItem(jt.value()))
+				jt.value()->hide();
+		}
+	}
 
 	_scale = scale;
 }
@@ -175,11 +185,15 @@ void Track::redraw()
 
 void Track::wheelEvent(QWheelEvent *event)
 {
+	QPointF pos = mapToScene(event->pos());
+	qreal scale = _scale;
+
 	_zoom = (event->delta() > 0) ?
 		qMin(_zoom + 1, ZOOM_MAX) : qMax(_zoom - 1, ZOOM_MIN);
 
 	rescale(mapScale());
 	_scene->setSceneRect(_scene->itemsBoundingRect());
+	centerOn(pos * scale/_scale);
 	resetCachedContent();
 }
 
