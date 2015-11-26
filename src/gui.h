@@ -45,7 +45,7 @@ private slots:
 	void graphChanged(int);
 
 private:
-	void loadMaps();
+	void loadFiles();
 
 	void createMapActions();
 	void createActions();

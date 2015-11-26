@@ -8,6 +8,7 @@
 #define FONT_FAMILY    "Arial"
 #define FONT_SIZE      12
 
+#define POI_DIR        "POI"
 #define TILES_DIR      "tiles"
 #define MAP_LIST_FILE  TILES_DIR"/list.txt"
 

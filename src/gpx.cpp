@@ -87,14 +87,17 @@ bool GPX::loadFile(const QString &fileName)
 
 	_data.clear();
 	_error.clear();
+	_errorLine = 0;
 
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		_error = qPrintable(file.errorString());
 		return false;
 	}
 
-	if (!(ret = _parser.loadFile(&file, _data)))
+	if (!(ret = _parser.loadFile(&file, _data))) {
 		_error = _parser.errorString();
+		_errorLine = _parser.errorLine();
+	}
 	file.close();
 
 	return ret;

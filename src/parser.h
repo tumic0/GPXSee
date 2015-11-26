@@ -20,7 +20,8 @@ class Parser
 {
 public:
 	bool loadFile(QIODevice *device, QVector<TrackPoint> &data);
-	QString errorString() const;
+	QString errorString() const {return _reader.errorString();}
+	int errorLine() const {return _reader.lineNumber();}
 
 private:
 	bool parse(QVector<TrackPoint> &data);

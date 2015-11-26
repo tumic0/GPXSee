@@ -37,7 +37,7 @@ static QString timeSpan(qreal time)
 
 GUI::GUI()
 {
-	loadMaps();
+	loadFiles();
 
 	createActions();
 	createMenus();
@@ -71,9 +71,20 @@ GUI::GUI()
 	resize(600, 800);
 }
 
-void GUI::loadMaps()
+void GUI::loadFiles()
 {
+	// Maps
 	_maps = MapList::load(QString("%1/"MAP_LIST_FILE).arg(QDir::homePath()));
+
+	// POI files
+	QDir dir(QString("%1/"POI_DIR).arg(QDir::homePath()));
+	QFileInfoList list = dir.entryInfoList(QStringList(), QDir::Files);
+	for (int i = 0; i < list.size(); ++i) {
+		if (!_poi.loadFile(list.at(i).absoluteFilePath()))
+			fprintf(stderr, "Error loading POI file: %s: %s",
+			  qPrintable(list.at(i).absoluteFilePath()),
+			  qPrintable(_poi.errorString()));
+	}
 }
 
 void GUI::createMapActions()
@@ -346,8 +357,13 @@ bool GUI::loadFile(const QString &fileName)
 
 		return true;
 	} else {
-		QMessageBox::critical(this, tr("Error"), fileName + QString("\n\n")
-		  + tr("Error loading GPX file:\n%1").arg(gpx.errorString()));
+		QString error = fileName + QString("\n\n")
+		  + tr("Error loading GPX file:\n%1").arg(gpx.errorString())
+		  + QString("\n");
+		if (gpx.errorLine())
+			error.append(tr("Line: %1").arg(gpx.errorLine()));
+
+		QMessageBox::critical(this, tr("Error"), error);
 		return false;
 	}
 }
@@ -358,8 +374,11 @@ void GUI::openPOIFile()
 
 	if (!fileName.isEmpty()) {
 		if (!_poi.loadFile(fileName)) {
-			QMessageBox::critical(this, tr("Error"),
-			  tr("Error loading POI file:\n%1").arg(_poi.errorString()));
+			QString error = tr("Error loading POI file:\n%1")
+			  .arg(_poi.errorString()) + QString("\n");
+			if (_poi.errorLine())
+				error.append(tr("Line: %1").arg(_poi.errorLine()));
+			QMessageBox::critical(this, tr("Error"), error);
 		} else {
 			_showPOIAction->setChecked(true);
 			_track->loadPOI(_poi);
@@ -526,7 +545,6 @@ void GUI::graphChanged(int index)
 	else if (_trackGraphs->widget(index) == _speedGraph)
 		_speedGraph->setSliderPosition(_elevationGraph->sliderPosition());
 }
-
 
 void GUI::keyPressEvent(QKeyEvent *event)
 {

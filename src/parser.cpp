@@ -92,18 +92,10 @@ bool Parser::parse(QVector<TrackPoint> &data)
 		if (_reader.name() == "gpx")
 			gpx(data);
 		else
-			_reader.raiseError(QObject::tr("Not a GPX file."));
+			_reader.raiseError("Not a GPX file.");
 	}
 
 	return !_reader.error();
-}
-
-
-QString Parser::errorString() const
-{
-	return QObject::tr("%1\nLine %2")
-		.arg(_reader.errorString())
-		.arg(_reader.lineNumber());
 }
 
 bool Parser::loadFile(QIODevice *device, QVector<TrackPoint> &data)

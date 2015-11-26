@@ -1,13 +1,17 @@
 #include <QFile>
+#include <QFileInfo>
 #include "maplist.h"
 
 
 QList<Map*> MapList::load(const QString &fileName)
 {
-	QFile file(fileName);
 	QList<Map*> mapList;
-	int ln = 1;
+	QFileInfo fi(fileName);
 
+	if (!fi.exists())
+		return mapList;
+
+	QFile file(fileName);
 
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		fprintf(stderr, "Error opening map list file: %s: %s\n",
@@ -15,6 +19,7 @@ QList<Map*> MapList::load(const QString &fileName)
 		return mapList;
 	}
 
+	int ln = 1;
 	while (!file.atEnd()) {
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split('\t');

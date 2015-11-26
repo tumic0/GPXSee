@@ -28,16 +28,19 @@ class POI
 public:
 	bool loadFile(const QString &fileName);
 	QString errorString() const {return _error;}
+	int errorLine() const {return _errorLine;}
+
 	QVector<Entry> points(const QVector<QPointF> &path) const;
 
 	void clear();
 
 private:
-	typedef RTree<const Entry*, qreal, 2> POITree;
+	typedef RTree<size_t, qreal, 2> POITree;
 
 	POITree _tree;
 	QVector<Entry> _data;
 	QString _error;
+	int _errorLine;
 };
 
 #endif // POI_H
