@@ -125,6 +125,8 @@ void GUI::createActions()
 	connect(_exitAction, SIGNAL(triggered()), this, SLOT(close()));
 
 	// Help & About
+	_dataSourcesAction = new QAction(tr("Data sources"), this);
+	connect(_dataSourcesAction, SIGNAL(triggered()), this, SLOT(dataSources()));
 	_keysAction = new QAction(tr("Keyboard controls"), this);
 	connect(_keysAction, SIGNAL(triggered()), this, SLOT(keys()));
 	_aboutAction = new QAction(QIcon(QPixmap(APP_ICON)),
@@ -221,6 +223,7 @@ void GUI::createMenus()
 	_settingsMenu->addAction(_showGraphsAction);
 
 	_helpMenu = menuBar()->addMenu(tr("Help"));
+	_helpMenu->addAction(_dataSourcesAction);
 	_helpMenu->addAction(_keysAction);
 	_helpMenu->addSeparator();
 	_helpMenu->addAction(_aboutAction);
@@ -313,6 +316,34 @@ void GUI::keys()
 	  + QString("</td><td><i>BACKSPACE</i></td></tr><tr><td>")
 	  + tr("Append modifier") + QString("</td><td><i>SHIFT</i></td></tr>"
 	  "</table></div>"));
+
+	msgBox.exec();
+}
+
+void GUI::dataSources()
+{
+	QMessageBox msgBox(this);
+
+	msgBox.setWindowTitle(tr("Data sources"));
+	msgBox.setText(QString("<h3>") + tr("Data sources") + QString("</h3>"));
+	msgBox.setInformativeText(
+	  QString("<h4>") + tr("Map sources") + QString("</h4><p>")
+	  + tr("Map (tiles) source URLs are read on program startup from the "
+		"following file:")
+		+ QString("</p><p><code>") + QDir::homePath()
+		  + QString("/"MAP_LIST_FILE"</code></p><p>")
+		+ tr("The file format is one URL per line where the tile X and Y "
+		  "coordinates are replaced with $x and $y. The zoom level is "
+		  "replaced with $z. An example map file could look like:")
+		+ QString("</p><p><code>http://tile.server.com/map/$z/$x/$y.png<br/>"
+		  "http://mapserver.org/map/$z-$x-$y</code></p>")
+
+	  + QString("<h4>") + tr("POIs") + QString("</h4><p>")
+	  + tr("To make GPXSee load a POI file automatically on startup, add "
+		"the file to the following directory:")
+		+ QString("</p><p><code>") + QDir::homePath()
+		+ QString("/"POI_DIR"</code></p>")
+	);
 
 	msgBox.exec();
 }

@@ -30,6 +30,7 @@ public:
 private slots:
 	void about();
 	void keys();
+	void dataSources();
 	void saveFile();
 	void saveAs();
 	void openFile();
@@ -74,6 +75,7 @@ private:
 
 	QAction *_exitAction;
 	QAction *_keysAction;
+	QAction *_dataSourcesAction;
 	QAction *_aboutAction;
 	QAction *_aboutQtAction;
 	QAction *_saveFileAction;
