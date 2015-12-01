@@ -204,10 +204,10 @@ void GUI::createMenus()
 	_fileMenu->addAction(_reloadFileAction);
 	_fileMenu->addSeparator();
 	_fileMenu->addAction(_closeFileAction);
-#ifndef __APPLE__
+#ifndef Q_OS_MAC
 	_fileMenu->addSeparator();
 	_fileMenu->addAction(_exitAction);
-#endif // __APPLE__
+#endif // Q_OS_MAC
 
 	_mapMenu = menuBar()->addMenu(tr("Map"));
 	_mapMenu->addActions(_mapActions);
@@ -237,16 +237,16 @@ void GUI::createToolBars()
 	_fileToolBar->addAction(_saveFileAction);
 	_fileToolBar->addAction(_reloadFileAction);
 	_fileToolBar->addAction(_closeFileAction);
-#ifdef __APPLE__
+#ifdef Q_OS_MAC
 	_fileToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-#endif // __APPLE__
+#endif // Q_OS_MAC
 
 	_showToolBar = addToolBar(tr("Show"));
 	_showToolBar->addAction(_showPOIAction);
 	_showToolBar->addAction(_showMapAction);
-#ifdef __APPLE__
+#ifdef Q_OS_MAC
 	_showToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-#endif // __APPLE__
+#endif // Q_OS_MAC
 }
 
 void GUI::createTrackView()
