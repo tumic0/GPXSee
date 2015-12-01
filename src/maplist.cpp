@@ -19,8 +19,9 @@ QList<Map*> MapList::load(const QString &fileName)
 		return mapList;
 	}
 
-	int ln = 1;
+	int ln = 0;
 	while (!file.atEnd()) {
+		ln++;
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split('\t');
 		if (list.size() != 2) {
@@ -33,8 +34,6 @@ QList<Map*> MapList::load(const QString &fileName)
 
 		mapList.append(new Map(QString::fromUtf8(ba1.data(), ba1.size()),
 		  QString::fromLatin1(ba2.data(), ba2.size())));
-
-		ln++;
 	}
 
 	return mapList;
