@@ -332,11 +332,12 @@ void GUI::dataSources()
 		"following file:")
 		+ QString("</p><p><code>") + QDir::homePath()
 		  + QString("/"MAP_LIST_FILE"</code></p><p>")
-		+ tr("The file format is one URL per line where the tile X and Y "
-		  "coordinates are replaced with $x and $y. The zoom level is "
-		  "replaced with $z. An example map file could look like:")
-		+ QString("</p><p><code>http://tile.server.com/map/$z/$x/$y.png<br/>"
-		  "http://mapserver.org/map/$z-$x-$y</code></p>")
+		+ tr("The file format is one map entry per line, consisting of the map "
+		  "name and tiles URL delimited by a TAB character. The tile X and Y "
+		  "coordinates are replaced with $x and $y in the URL and the zoom "
+		  "level is replaced with $z. An example map file could look like:")
+		+ QString("</p><p><code>Map1	http://tile.server.com/map/$z/$x/$y.png"
+		  "<br/>Map2	http://mapserver.org/map/$z-$x-$y</code></p>")
 
 	  + QString("<h4>") + tr("POIs") + QString("</h4><p>")
 	  + tr("To make GPXSee load a POI file automatically on startup, add "

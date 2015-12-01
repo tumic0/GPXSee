@@ -57,7 +57,7 @@
         <translation>Program GPXSee je distribuován pod podmínkami licence GNU General Public License verze 3. Pro více informací navštivte stránky programu na adrese </translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="353"/>
+        <location filename="../src/gui.cpp" line="354"/>
         <source>Open file</source>
         <translation>Otevřít soubor</translation>
     </message>
@@ -67,7 +67,7 @@
         <translation>Uložit jako</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="404"/>
+        <location filename="../src/gui.cpp" line="405"/>
         <source>Open POI file</source>
         <translation>Otevřít POI soubor</translation>
     </message>
@@ -197,23 +197,28 @@
         <translation>URL mapových zdrojů (dlaždic) jsou načteny při startu programu z následujícího souboru:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="342"/>
+        <location filename="../src/gui.cpp" line="335"/>
+        <source>The file format is one map entry per line, consisting of the map name and tiles URL delimited by a TAB character. The tile X and Y coordinates are replaced with $x and $y in the URL and the zoom level is replaced with $z. An example map file could look like:</source>
+        <translation>Formát souboru je jeden mapový záznam na řádku, kde mapový záznam sestává ze jména mapy a URL dlaždic navzájem oddělených tabulátorem. Souřadnice dlaždice jsou v URL nahrazeny řetězci $x a $y, úroven přiblížení (zoom) pak řetězcem $z. Příklad:</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="343"/>
         <source>To make GPXSee load a POI file automatically on startup, add the file to the following directory:</source>
         <translation>POI soubory, které se mají automaticky nahrát při startu programu jsou načítány z následujícího adresáře:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="395"/>
-        <location filename="../src/gui.cpp" line="411"/>
+        <location filename="../src/gui.cpp" line="396"/>
+        <location filename="../src/gui.cpp" line="412"/>
         <source>Line: %1</source>
         <translation>Řádka: %1</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="463"/>
+        <location filename="../src/gui.cpp" line="464"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="465"/>
+        <location filename="../src/gui.cpp" line="466"/>
         <source>Minimum</source>
         <translation>Minimum</translation>
     </message>
@@ -234,69 +239,64 @@
         <translation>Mapové zdroje</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="335"/>
-        <source>The file format is one URL per line where the tile X and Y coordinates are replaced with $x and $y. The zoom level is replaced with $z. An example map file could look like:</source>
-        <translation>Formát souboru je jedno URL na řádku, kde souřadnice dlaždice jsou nahrazeny řetězci $x a $y. Úroveň přiblížení (zoom) je pak nahrazena řetězcem $z. Příklad:</translation>
-    </message>
-    <message>
-        <location filename="../src/gui.cpp" line="341"/>
+        <location filename="../src/gui.cpp" line="342"/>
         <source>POIs</source>
         <translation>POI body</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="456"/>
+        <location filename="../src/gui.cpp" line="457"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="458"/>
+        <location filename="../src/gui.cpp" line="459"/>
         <source>Time</source>
         <translation>Čas</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="459"/>
+        <location filename="../src/gui.cpp" line="460"/>
         <source>Ascent</source>
         <translation>Stoupání</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="460"/>
-        <location filename="../src/gui.cpp" line="462"/>
-        <location filename="../src/gui.cpp" line="464"/>
-        <location filename="../src/gui.cpp" line="466"/>
+        <location filename="../src/gui.cpp" line="461"/>
+        <location filename="../src/gui.cpp" line="463"/>
+        <location filename="../src/gui.cpp" line="465"/>
+        <location filename="../src/gui.cpp" line="467"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="461"/>
+        <location filename="../src/gui.cpp" line="462"/>
         <source>Descent</source>
         <translation>Klesání</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="557"/>
+        <location filename="../src/gui.cpp" line="558"/>
         <source>%1 tracks</source>
         <translation>Počet tras: %1</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="457"/>
-        <location filename="../src/gui.cpp" line="560"/>
+        <location filename="../src/gui.cpp" line="458"/>
+        <location filename="../src/gui.cpp" line="561"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="397"/>
-        <location filename="../src/gui.cpp" line="412"/>
+        <location filename="../src/gui.cpp" line="398"/>
+        <location filename="../src/gui.cpp" line="413"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="392"/>
+        <location filename="../src/gui.cpp" line="393"/>
         <source>Error loading GPX file:
 %1</source>
         <translation>Soubor GPX nelze otevřít:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="408"/>
+        <location filename="../src/gui.cpp" line="409"/>
         <source>Error loading POI file:
 %1</source>
         <translation>Soubor POI nelze otevřít:
