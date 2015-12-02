@@ -51,14 +51,29 @@ bool Downloader::saveToDisk(const QString &filename, QIODevice *data)
 
 void Downloader::downloadFinished(QNetworkReply *reply)
 {
+	QByteArray ct_key("Content-Type");
+	QByteArray ct_val;
 	QUrl url = reply->url();
 	if (reply->error()) {
 		fprintf(stderr, "Error downloading map tile: %s: %s\n",
 		  url.toEncoded().constData(), qPrintable(reply->errorString()));
 	} else {
 		QString filename = reply->request().attribute(QNetworkRequest::User)
-		  .toString();
-		saveToDisk(filename, reply);
+		  .toString();	
+
+		if(reply->hasRawHeader(ct_key)){
+			ct_val=reply->rawHeader(ct_key);
+			if(!strcmp(ct_val.data(),"image/png")){
+				filename.append(".png");
+				saveToDisk(filename, reply);
+			}else if(!strcmp(ct_val.data(),"image/jpeg")){
+				filename.append(".jpg");
+				saveToDisk(filename, reply);
+			}else{			
+				fprintf(stderr, "Error downloading map tile: %s: Unknown Content-Type: %s\n", 
+				  url.toEncoded().constData(),qPrintable(QString(ct_val)));
+			}
+		}
 	}
 
 	currentDownloads.removeAll(reply);

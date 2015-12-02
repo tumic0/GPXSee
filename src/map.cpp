@@ -28,14 +28,18 @@ void Map::loadTiles(QList<Tile> &list)
 
 	for (int i = 0; i < list.size(); ++i) {
 		Tile &t = list[i];
-		QString file = QString("%1/"TILES_DIR"/%2/%3-%4-%5.png")
+		
+		QString file_base = QString("%1/"TILES_DIR"/%2/%3-%4-%5")
 		  .arg(QDir::homePath()).arg(_name).arg(t.zoom()).arg(t.xy().rx())
 		  .arg(t.xy().ry());
-		QFileInfo fi(file);
 
-		if (fi.exists())
-			t.pixmap().load(file);
-		else {
+		QFileInfo fi_jpg(file_base + ".jpg");
+		QFileInfo fi_png(file_base + ".png");
+		if (fi_jpg.exists()) {
+			t.pixmap().load(file_base + ".jpg");
+		} else if (fi_png.exists()) {
+			t.pixmap().load(file_base + ".png");
+		} else {
 			t.pixmap() = QPixmap(TILE_SIZE, TILE_SIZE);
 			t.pixmap().fill();
 
@@ -43,7 +47,7 @@ void Map::loadTiles(QList<Tile> &list)
 			url.replace("$z", QString::number(t.zoom()));
 			url.replace("$x", QString::number(t.xy().x()));
 			url.replace("$y", QString::number(t.xy().y()));
-			dl.append(Download(url, file));
+			dl.append(Download(url, file_base));
 		}
 	}
 
