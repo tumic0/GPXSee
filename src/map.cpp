@@ -14,7 +14,10 @@ Map::Map(const QString &name, const QString &url)
 	connect(&Downloader::instance(), SIGNAL(finished()), this,
 	  SLOT(emitLoaded()));
 
-	QDir::home().mkpath(QString(TILES_DIR"/%1").arg(_name));
+	if (!QDir::home().mkpath(QString(TILES_DIR"/%1").arg(_name)))
+		fprintf(stderr, "Error creating tiles dir: %s\n",
+		  qPrintable(QDir::home().absolutePath() + QString("/"TILES_DIR"/%1")
+			.arg(_name)));
 }
 
 void Map::emitLoaded()
@@ -33,9 +36,11 @@ void Map::loadTiles(QList<Tile> &list)
 		  .arg(t.xy().ry());
 		QFileInfo fi(file);
 
-		if (fi.exists())
-			t.pixmap().load(file);
-		else {
+		if (fi.exists()) {
+			if (!t.pixmap().load(file))
+				fprintf(stderr, "Error loading map tile: %s\n",
+				  qPrintable(file));
+		} else {
 			t.pixmap() = QPixmap(TILE_SIZE, TILE_SIZE);
 			t.pixmap().fill();
 
