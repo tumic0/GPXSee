@@ -87,6 +87,7 @@ Section "QT libs" SEC_QT
   File "Qt5Network.dll"
   File "libGLESv2.dll"
   File /r "platforms"
+  File /r "imageformats"
  
 SectionEnd
 
