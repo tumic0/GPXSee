@@ -6,6 +6,7 @@
 #include <QNetworkReply>
 #include <QUrl>
 #include <QList>
+#include <QSet>
 
 
 class Download
@@ -45,8 +46,9 @@ private:
 	void doDownload(const Download &dl);
 	bool saveToDisk(const QString &filename, QIODevice *data);
 
-	QNetworkAccessManager manager;
-	QList<QNetworkReply *> currentDownloads;
+	QNetworkAccessManager _manager;
+	QList<QNetworkReply *> _currentDownloads;
+	QSet<QUrl> _errorDownloads;
 };
 
 #endif // DOWNLOADER_H
