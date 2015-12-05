@@ -41,6 +41,7 @@ private slots:
 	void redraw();
 
 private:
+	QRectF trackBoundingRect() const;
 	qreal trackScale() const;
 	qreal mapScale() const;
 	void rescale(qreal scale);

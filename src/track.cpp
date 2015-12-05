@@ -74,7 +74,30 @@ void Track::loadGPX(const GPX &gpx)
 
 	if (_trackPaths.size() > 1 && prevScale != _scale)
 		rescale(_scale);
-	_scene->setSceneRect(_scene->itemsBoundingRect());
+
+	QRectF br = trackBoundingRect();
+	QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	_scene->setSceneRect(ba);
+	centerOn(ba.center());
+}
+
+QRectF Track::trackBoundingRect() const
+{
+	qreal bottom, top, left, right;
+
+	bottom = _trackPaths.at(0)->sceneBoundingRect().bottom();
+	top = _trackPaths.at(0)->sceneBoundingRect().top();
+	left = _trackPaths.at(0)->sceneBoundingRect().left();
+	right = _trackPaths.at(0)->sceneBoundingRect().right();
+
+	for (int i = 1; i < _trackPaths.size(); i++) {
+		bottom = qMax(bottom, _trackPaths.at(i)->sceneBoundingRect().bottom());
+		top = qMin(top, _trackPaths.at(i)->sceneBoundingRect().top());
+		right = qMax(right, _trackPaths.at(i)->sceneBoundingRect().right());
+		left = qMin(left, _trackPaths.at(i)->sceneBoundingRect().left());
+	}
+
+	return QRectF(QPointF(left, top), QPointF(right, bottom));
 }
 
 qreal Track::trackScale() const
@@ -138,6 +161,9 @@ void Track::loadPOI(const POI &poi)
 {
 	QHash<Entry, POIItem*>::const_iterator it,jt;
 
+	if (!_tracks.size())
+		return;
+
 	for (int i = 0; i < _tracks.size(); i++) {
 		QVector<Entry> p = poi.points(_tracks.at(i));
 
@@ -162,8 +188,6 @@ void Track::loadPOI(const POI &poi)
 				jt.value()->hide();
 		}
 	}
-
-	_scene->setSceneRect(_scene->itemsBoundingRect());
 }
 
 void Track::setMap(Map *map)
@@ -188,8 +212,16 @@ void Track::wheelEvent(QWheelEvent *event)
 		qMin(_zoom + 1, ZOOM_MAX) : qMax(_zoom - 1, ZOOM_MIN);
 
 	rescale(mapScale());
-	_scene->setSceneRect(_scene->itemsBoundingRect());
-	centerOn(pos * scale/_scale);
+	QRectF br = trackBoundingRect();
+	QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	_scene->setSceneRect(ba);
+
+	if (br.width() < viewport()->size().width()
+	  && br.height() < viewport()->size().height())
+		centerOn(br.center());
+	else
+		centerOn(pos * scale/_scale);
+
 	resetCachedContent();
 }
 
@@ -210,7 +242,7 @@ void Track::setTrackLineWidth(qreal width)
 
 void Track::plot(QPainter *painter, const QRectF &target)
 {
-	QRectF orig = sceneRect();
+	QRectF orig = _scene->itemsBoundingRect();
 	QRectF adj;
 	qreal ratio, diff;
 
