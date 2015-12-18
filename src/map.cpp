@@ -14,10 +14,9 @@ Map::Map(const QString &name, const QString &url)
 	connect(&Downloader::instance(), SIGNAL(finished()), this,
 	  SLOT(emitLoaded()));
 
-	if (!QDir::home().mkpath(QString(TILES_DIR"/%1").arg(_name)))
-		fprintf(stderr, "Error creating tiles dir: %s\n",
-		  qPrintable(QDir::home().absolutePath() + QString("/"TILES_DIR"/%1")
-			.arg(_name)));
+	QString path = QString(TILES_DIR"/") + _name;
+	if (!QDir::home().mkpath(path))
+		fprintf(stderr, "Error creating tiles dir: %s\n", qPrintable(path));
 }
 
 void Map::emitLoaded()
