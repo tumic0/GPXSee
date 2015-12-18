@@ -12,6 +12,10 @@
 #define SHOW_MAP_ICON    ":/icons/applications-internet.png"
 #define QUIT_ICON        ":/icons/application-exit.png"
 #define RELOAD_FILE_ICON ":/icons/view-refresh.png"
+#define NEXT_FILE_ICON   ":/icons/arrow-right.png"
+#define PREV_FILE_ICON   ":/icons/arrow-left.png"
+#define LAST_FILE_ICON   ":/icons/arrow-right-double.png"
+#define FIRST_FILE_ICON  ":/icons/arrow-left-double.png"
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #define QT_ICON          ":/trolltech/qmessagebox/images/qtlogo-64.png"

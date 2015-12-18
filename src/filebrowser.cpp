@@ -41,6 +41,16 @@ void FileBrowser::setFilter(const QStringList &filter)
 		reloadDirectory(_files.last().canonicalPath());
 }
 
+bool FileBrowser::isLast()
+{
+	return (_files.size() > 0 && _index == _files.size() - 1);
+}
+
+bool FileBrowser::isFirst()
+{
+	return (_files.size() > 0 && _index == 0);
+}
+
 QString FileBrowser::next()
 {
 	if (_index < 0 || _index == _files.size() - 1)
@@ -55,6 +65,24 @@ QString FileBrowser::prev()
 		return QString();
 
 	return _files.at(--_index).absoluteFilePath();
+}
+
+QString FileBrowser::last()
+{
+	if (_files.empty())
+		return QString();
+
+	_index = _files.size() - 1;
+	return _files.last().absoluteFilePath();
+}
+
+QString FileBrowser::first()
+{
+	if (_files.empty())
+		return QString();
+
+	_index = 0;
+	return _files.first().absoluteFilePath();
 }
 
 void FileBrowser::reloadDirectory(const QString &path)

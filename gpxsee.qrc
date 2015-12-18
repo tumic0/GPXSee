@@ -9,6 +9,10 @@
         <file>icons/application-exit.png</file>
         <file>icons/applications-internet.png</file>
         <file>icons/view-refresh.png</file>
+        <file>icons/arrow-left.png</file>
+        <file>icons/arrow-right.png</file>
+        <file>icons/arrow-left-double.png</file>
+        <file>icons/arrow-right-double.png</file>
         <file>lang/gpxsee_cs.qm</file>
     </qresource>
 </RCC>

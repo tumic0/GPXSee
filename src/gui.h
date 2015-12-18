@@ -45,6 +45,11 @@ private slots:
 	void mapChanged(int);
 	void graphChanged(int);
 
+	void next();
+	void prev();
+	void last();
+	void first();
+
 private:
 	void loadFiles();
 
@@ -59,6 +64,7 @@ private:
 	bool loadFile(const QString &fileName);
 	void saveFile(const QString &fileName);
 	void updateStatusBarInfo();
+	void updateNavigationActions();
 
 	void keyPressEvent(QKeyEvent * event);
 
@@ -70,8 +76,10 @@ private:
 
 	QToolBar *_fileToolBar;
 	QToolBar *_showToolBar;
+	QToolBar *_navigationToolBar;
 	QTabWidget *_trackGraphs;
 	QActionGroup *_fileActionGroup;
+	QActionGroup *_navigationActionGroup;
 
 	QAction *_exitAction;
 	QAction *_keysAction;
@@ -88,6 +96,10 @@ private:
 	QAction *_showMapAction;
 	QAction *_showGraphsAction;
 	QAction *_showToolbarsAction;
+	QAction *_nextAction;
+	QAction *_prevAction;
+	QAction *_lastAction;
+	QAction *_firstAction;
 	QList<QAction*> _mapActions;
 
 	QLabel *_fileNameLabel;

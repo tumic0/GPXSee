@@ -118,6 +118,8 @@ void GUI::createActions()
 	_fileActionGroup->setExclusive(false);
 	_fileActionGroup->setEnabled(false);
 
+	_navigationActionGroup = new QActionGroup(this);
+	_navigationActionGroup->setEnabled(false);
 
 	// General actions
 	_exitAction = new QAction(QIcon(QPixmap(QUIT_ICON)), tr("Quit"), this);
@@ -191,6 +193,22 @@ void GUI::createActions()
 	_showToolbarsAction->setChecked(true);
 	connect(_showToolbarsAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showToolbars(bool)));
+
+	// Navigation actions
+	_nextAction = new QAction(QIcon(QPixmap(NEXT_FILE_ICON)), tr("Next"), this);
+	_nextAction->setActionGroup(_navigationActionGroup);
+	connect(_nextAction, SIGNAL(triggered()), this, SLOT(next()));
+	_prevAction = new QAction(QIcon(QPixmap(PREV_FILE_ICON)), tr("Previous"),
+	  this);
+	_prevAction->setActionGroup(_navigationActionGroup);
+	connect(_prevAction, SIGNAL(triggered()), this, SLOT(prev()));
+	_lastAction = new QAction(QIcon(QPixmap(LAST_FILE_ICON)), tr("Last"), this);
+	_lastAction->setActionGroup(_navigationActionGroup);
+	connect(_lastAction, SIGNAL(triggered()), this, SLOT(last()));
+	_firstAction = new QAction(QIcon(QPixmap(FIRST_FILE_ICON)), tr("First"),
+	  this);
+	_firstAction->setActionGroup(_navigationActionGroup);
+	connect(_firstAction, SIGNAL(triggered()), this, SLOT(first()));
 }
 
 void GUI::createMenus()
@@ -247,6 +265,12 @@ void GUI::createToolBars()
 #ifdef Q_OS_MAC
 	_showToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 #endif // Q_OS_MAC
+
+	_navigationToolBar = addToolBar(tr("Navigation"));
+	_navigationToolBar->addAction(_firstAction);
+	_navigationToolBar->addAction(_prevAction);
+	_navigationToolBar->addAction(_nextAction);
+	_navigationToolBar->addAction(_lastAction);
 }
 
 void GUI::createTrackView()
@@ -314,8 +338,10 @@ void GUI::keys()
 	  QString("<div><table width=\"300\"><tr><td>") + tr("Next file")
 	  + QString("</td><td><i>SPACE</i></td></tr><tr><td>") + tr("Previous file")
 	  + QString("</td><td><i>BACKSPACE</i></td></tr><tr><td>")
-	  + tr("Append modifier") + QString("</td><td><i>SHIFT</i></td></tr>"
-	  "</table></div>"));
+	  + tr("First file") + QString("</td><td><i>HOME</i></td></tr><tr><td>")
+	  + tr("Last file") + QString("</td><td><i>END</i></td></tr><tr><td></td>"
+	  "<td></td></tr><tr><td>") + tr("Append modifier")
+	  + QString("</td><td><i>SHIFT</i></td></tr></table></div>"));
 
 	msgBox.exec();
 }
@@ -368,6 +394,8 @@ bool GUI::openFile(const QString &fileName)
 		_browser->setCurrent(fileName);
 		updateStatusBarInfo();
 		_fileActionGroup->setEnabled(true);
+		_navigationActionGroup->setEnabled(true);
+		updateNavigationActions();
 		return true;
 	} else
 		return false;
@@ -506,6 +534,7 @@ void GUI::closeFile()
 	_files.clear();
 
 	_fileActionGroup->setEnabled(false);
+	_navigationActionGroup->setEnabled(false);
 	updateStatusBarInfo();
 }
 
@@ -537,9 +566,11 @@ void GUI::showToolbars(bool checked)
 		addToolBar(_showToolBar);
 		_fileToolBar->show();
 		_showToolBar->show();
+		_navigationToolBar->show();
 	} else {
 		removeToolBar(_fileToolBar);
 		removeToolBar(_showToolBar);
+		removeToolBar(_navigationToolBar);
 	}
 }
 
@@ -578,18 +609,97 @@ void GUI::graphChanged(int index)
 		_speedGraph->setSliderPosition(_elevationGraph->sliderPosition());
 }
 
+void GUI::updateNavigationActions()
+{
+	if (_browser->isLast()) {
+		_nextAction->setEnabled(false);
+		_lastAction->setEnabled(false);
+	} else {
+		_nextAction->setEnabled(true);
+		_lastAction->setEnabled(true);
+	}
+
+	if (_browser->isFirst()) {
+		_prevAction->setEnabled(false);
+		_firstAction->setEnabled(false);
+	} else {
+		_prevAction->setEnabled(true);
+		_firstAction->setEnabled(true);
+	}
+}
+
+void GUI::next()
+{
+	QString file = _browser->next();
+	if (file.isNull())
+		return;
+
+	closeFile();
+	openFile(file);
+
+	updateNavigationActions();
+}
+
+void GUI::prev()
+{
+	QString file = _browser->prev();
+	if (file.isNull())
+		return;
+
+	closeFile();
+	openFile(file);
+
+	updateNavigationActions();
+}
+
+void GUI::last()
+{
+	QString file = _browser->last();
+	if (file.isNull())
+		return;
+
+	closeFile();
+	openFile(file);
+
+	updateNavigationActions();
+}
+
+void GUI::first()
+{
+	QString file = _browser->first();
+	if (file.isNull())
+		return;
+
+	closeFile();
+	openFile(file);
+
+	updateNavigationActions();
+}
+
 void GUI::keyPressEvent(QKeyEvent *event)
 {
 	QString file;
 
-	if (event->key() == PREV_KEY)
-		file = _browser->prev();
-	if (event->key() == NEXT_KEY)
-		file = _browser->next();
+	switch (event->key()) {
+		case PREV_KEY:
+			file = _browser->prev();
+			break;
+		case NEXT_KEY:
+			file = _browser->next();
+			break;
+		case FIRST_KEY:
+			file = _browser->first();
+			break;
+		case LAST_KEY:
+			file = _browser->last();
+			break;
+	}
 
 	if (!file.isNull()) {
 		if (!(event->modifiers() & MODIFIER))
 			closeFile();
 		openFile(file);
 	}
+
+	updateNavigationActions();
 }

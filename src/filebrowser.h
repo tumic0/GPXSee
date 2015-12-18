@@ -20,6 +20,11 @@ public:
 
 	QString next();
 	QString prev();
+	QString last();
+	QString first();
+
+	bool isLast();
+	bool isFirst();
 
 private slots:
 	void reloadDirectory(const QString &path);
