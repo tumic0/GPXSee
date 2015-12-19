@@ -400,8 +400,10 @@ bool GUI::openFile(const QString &fileName)
 		_navigationActionGroup->setEnabled(true);
 		updateNavigationActions();
 		return true;
-	} else
+	} else {
+		updateNavigationActions();
 		return false;
+	}
 }
 
 bool GUI::loadFile(const QString &fileName)
@@ -537,7 +539,6 @@ void GUI::closeFile()
 	_files.clear();
 
 	_fileActionGroup->setEnabled(false);
-	_navigationActionGroup->setEnabled(false);
 	updateStatusBarInfo();
 }
 
@@ -640,8 +641,6 @@ void GUI::next()
 
 	closeFile();
 	openFile(file);
-
-	updateNavigationActions();
 }
 
 void GUI::prev()
@@ -652,8 +651,6 @@ void GUI::prev()
 
 	closeFile();
 	openFile(file);
-
-	updateNavigationActions();
 }
 
 void GUI::last()
@@ -664,8 +661,6 @@ void GUI::last()
 
 	closeFile();
 	openFile(file);
-
-	updateNavigationActions();
 }
 
 void GUI::first()
@@ -676,8 +671,6 @@ void GUI::first()
 
 	closeFile();
 	openFile(file);
-
-	updateNavigationActions();
 }
 
 void GUI::keyPressEvent(QKeyEvent *event)
@@ -704,6 +697,4 @@ void GUI::keyPressEvent(QKeyEvent *event)
 			closeFile();
 		openFile(file);
 	}
-
-	updateNavigationActions();
 }
