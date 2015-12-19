@@ -567,6 +567,7 @@ void GUI::showToolbars(bool checked)
 	if (checked) {
 		addToolBar(_fileToolBar);
 		addToolBar(_showToolBar);
+		addToolBar(_navigationToolBar);
 		_fileToolBar->show();
 		_showToolBar->show();
 		_navigationToolBar->show();
