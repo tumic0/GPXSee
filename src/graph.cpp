@@ -210,6 +210,10 @@ void Graph::resize(const QSizeF &size)
 	_slider->setPos(QPointF(sp * r.width(), r.bottom()));
 	_scene->addItem(_slider);
 
+	const QPainterPath &path = _graphs.at(0)->path();
+	QPointF p = path.pointAtPercent(sp);
+	_sliderInfo->setText(QString::number(-p.y() * _yScale, 'f', _precision));
+
 	r = _scene->itemsBoundingRect();
 	_info->setPos(r.topLeft() + QPointF(r.width()/2
 	  - _info->boundingRect().width()/2, -_info->boundingRect().height()));
