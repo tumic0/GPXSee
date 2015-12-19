@@ -27,7 +27,8 @@ HEADERS += src/config.h \
     src/filebrowser.h \
     src/map.h \
     src/maplist.h \
-    src/downloader.h
+    src/downloader.h \
+    src/units.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \

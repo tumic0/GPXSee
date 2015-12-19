@@ -46,3 +46,9 @@ QVariant SliderItem::itemChange(GraphicsItemChange change, const QVariant &value
 
 	return QGraphicsItem::itemChange(change, value);
 }
+
+void SliderItem::clear()
+{
+	_area = QRectF();
+	setPos(QPointF());
+}

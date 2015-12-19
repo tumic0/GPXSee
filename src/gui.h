@@ -50,6 +50,9 @@ private slots:
 	void last();
 	void first();
 
+	void setMetricUnits();
+	void setImperialUnits();
+
 private:
 	void loadFiles();
 
@@ -73,6 +76,7 @@ private:
 	QMenu *_poiMenu;
 	QMenu *_mapMenu;
 	QMenu *_settingsMenu;
+	QMenu *_unitsMenu;
 
 	QToolBar *_fileToolBar;
 	QToolBar *_showToolBar;
@@ -100,6 +104,8 @@ private:
 	QAction *_prevAction;
 	QAction *_lastAction;
 	QAction *_firstAction;
+	QAction *_metricUnitsAction;
+	QAction *_imperialUnitsAction;
 	QList<QAction*> _mapActions;
 
 	QLabel *_fileNameLabel;

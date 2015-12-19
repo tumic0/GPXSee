@@ -31,7 +31,7 @@ static QString timeSpan(qreal time)
 	s = time - (h * 3600) - (m * 60);
 
 	return QString("%1:%2:%3").arg(h).arg(m, 2, 10, QChar('0'))
-	  .arg(s,2, 10, QChar('0'));
+	  .arg(s, 2, 10, QChar('0'));
 }
 
 
@@ -193,6 +193,19 @@ void GUI::createActions()
 	_showToolbarsAction->setChecked(true);
 	connect(_showToolbarsAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showToolbars(bool)));
+	QActionGroup *ag = new QActionGroup(this);
+	ag->setExclusive(true);
+	_metricUnitsAction = new QAction(tr("Metric"), this);
+	_metricUnitsAction->setCheckable(true);
+	_metricUnitsAction->setActionGroup(ag);
+	_metricUnitsAction->setChecked(true);
+	connect(_metricUnitsAction, SIGNAL(triggered()), this,
+	  SLOT(setMetricUnits()));
+	_imperialUnitsAction = new QAction(tr("Imperial"), this);
+	_imperialUnitsAction->setCheckable(true);
+	_imperialUnitsAction->setActionGroup(ag);
+	connect(_imperialUnitsAction, SIGNAL(triggered()), this,
+	  SLOT(setImperialUnits()));
 
 	// Navigation actions
 	_nextAction = new QAction(QIcon(QPixmap(NEXT_FILE_ICON)), tr("Next"), this);
@@ -237,6 +250,10 @@ void GUI::createMenus()
 	_poiMenu->addAction(_showPOIAction);
 
 	_settingsMenu = menuBar()->addMenu(tr("Settings"));
+	_unitsMenu = _settingsMenu->addMenu(tr("Units"));
+	_unitsMenu->addAction(_metricUnitsAction);
+	_unitsMenu->addAction(_imperialUnitsAction);
+	_settingsMenu->addSeparator();
 	_settingsMenu->addAction(_showToolbarsAction);
 	_settingsMenu->addAction(_showGraphsAction);
 
@@ -487,17 +504,31 @@ void GUI::saveFile(const QString &fileName)
 
 	QGraphicsScene scene;
 	InfoItem info;
-	info.insert(tr("Distance"), QString::number(_distance / 1000, 'f', 1)
-	  + THIN_SPACE + tr("km"));
-	info.insert(tr("Time"), timeSpan(_time));
-	info.insert(tr("Ascent"), QString::number(_elevationGraph->ascent(), 'f', 0)
-	  + THIN_SPACE + tr("m"));
-	info.insert(tr("Descent"), QString::number(_elevationGraph->descent(), 'f',
-	  0) + THIN_SPACE + tr("m"));
-	info.insert(tr("Maximum"), QString::number(_elevationGraph->max(), 'f', 0)
-	  + THIN_SPACE + tr("m"));
-	info.insert(tr("Minimum"), QString::number(_elevationGraph->min(), 'f', 0)
-	  + THIN_SPACE + tr("m"));
+	if (_imperialUnitsAction->isChecked()) {
+		info.insert(tr("Distance"), QString::number(_distance * M2MI, 'f', 1)
+		  + THIN_SPACE + tr("mi"));
+		info.insert(tr("Time"), timeSpan(_time));
+		info.insert(tr("Ascent"), QString::number(_elevationGraph->ascent()
+		  * M2FT, 'f', 0) + THIN_SPACE + tr("ft"));
+		info.insert(tr("Descent"), QString::number(_elevationGraph->descent()
+		  * M2FT, 'f', 0) + THIN_SPACE + tr("ft"));
+		info.insert(tr("Maximum"), QString::number(_elevationGraph->max()
+		  * M2FT, 'f', 0) + THIN_SPACE + tr("ft"));
+		info.insert(tr("Minimum"), QString::number(_elevationGraph->min()
+		  * M2FT, 'f', 0) + THIN_SPACE + tr("ft"));
+	} else {
+		info.insert(tr("Distance"), QString::number(_distance * M2KM, 'f', 1)
+		  + THIN_SPACE + tr("km"));
+		info.insert(tr("Time"), timeSpan(_time));
+		info.insert(tr("Ascent"), QString::number(_elevationGraph->ascent(),
+		  'f', 0) + THIN_SPACE + tr("m"));
+		info.insert(tr("Descent"), QString::number(_elevationGraph->descent(),
+		  'f', 0) + THIN_SPACE + tr("m"));
+		info.insert(tr("Maximum"), QString::number(_elevationGraph->max(), 'f',
+		  0) + THIN_SPACE + tr("m"));
+		info.insert(tr("Minimum"), QString::number(_elevationGraph->min(), 'f',
+		  0) + THIN_SPACE + tr("m"));
+	}
 	scene.addItem(&info);
 	scene.render(&p, QRectF(0, 0, printer.width(), 200));
 
@@ -593,8 +624,12 @@ void GUI::updateStatusBarInfo()
 	else
 		_fileNameLabel->setText(tr("%1 tracks").arg(_files.size()));
 
-	_distanceLabel->setText(QString::number(_distance / 1000, 'f', 1)
-	  + " " + tr("km"));
+	if (_imperialUnitsAction->isChecked())
+		_distanceLabel->setText(QString::number(_distance * M2MI, 'f', 1)
+		  + " " + tr("mi"));
+	else
+		_distanceLabel->setText(QString::number(_distance * M2KM, 'f', 1)
+		  + " " + tr("km"));
 	_timeLabel->setText(timeSpan(_time));
 }
 
@@ -631,6 +666,20 @@ void GUI::updateNavigationActions()
 		_prevAction->setEnabled(true);
 		_firstAction->setEnabled(true);
 	}
+}
+
+void GUI::setMetricUnits()
+{
+	_elevationGraph->setUnits(Metric);
+	_speedGraph->setUnits(Metric);
+	updateStatusBarInfo();
+}
+
+void GUI::setImperialUnits()
+{
+	_elevationGraph->setUnits(Imperial);
+	_speedGraph->setUnits(Imperial);
+	updateStatusBarInfo();
 }
 
 void GUI::next()

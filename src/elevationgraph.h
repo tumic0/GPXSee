@@ -3,6 +3,7 @@
 
 #include "graph.h"
 #include "gpx.h"
+#include "units.h"
 
 class ElevationGraph : public Graph
 {
@@ -13,6 +14,7 @@ public:
 
 	void loadGPX(const GPX &gpx);
 	void clear();
+	void setUnits(enum Units units);
 
 	qreal ascent() const {return _ascent;}
 	qreal descent() const {return _descent;}
@@ -20,6 +22,8 @@ public:
 	qreal min() const {return _min;}
 
 private:
+	void addInfo();
+
 	qreal _ascent, _descent;
 	qreal _max, _min;
 };

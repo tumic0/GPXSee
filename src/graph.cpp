@@ -116,6 +116,16 @@ void Graph::setYUnits(const QString &units)
 	createYLabel();
 }
 
+void Graph::setXScale(qreal scale)
+{
+	_xScale = scale;
+}
+
+void Graph::setYScale(qreal scale)
+{
+	_yScale = scale;
+}
+
 void Graph::loadData(const QVector<QPointF> &data)
 {
 	QPainterPath path;
@@ -143,7 +153,13 @@ void Graph::loadData(const QVector<QPointF> &data)
 	if (_graphs.size() > 1)
 		_sliderInfo->hide();
 
-	resize(viewport()->size() - QSizeF(MARGIN, MARGIN));
+	redraw();
+}
+
+void Graph::redraw()
+{
+	if (!_graphs.isEmpty())
+		resize(viewport()->size() - QSizeF(MARGIN, MARGIN));
 }
 
 void Graph::resize(const QSizeF &size)
@@ -187,8 +203,11 @@ void Graph::resize(const QSizeF &size)
 	_scene->addItem(_xAxis);
 	_scene->addItem(_yAxis);
 
+	qreal sp = (_slider->pos().x() == _slider->area().left())
+		? 0 : (_slider->pos().x() - _slider->area().left())
+		  / _slider->area().width();
 	_slider->setArea(r);
-	_slider->setPos(r.bottomLeft());
+	_slider->setPos(QPointF(sp * r.width(), r.bottom()));
 	_scene->addItem(_slider);
 
 	r = _scene->itemsBoundingRect();
@@ -202,7 +221,7 @@ void Graph::resize(const QSizeF &size)
 void Graph::resizeEvent(QResizeEvent *)
 {
 	if (!_graphs.empty())
-		resize(viewport()->size() - QSizeF(MARGIN, MARGIN));
+		redraw();
 }
 
 void Graph::plot(QPainter *painter, const QRectF &target)
@@ -234,6 +253,7 @@ void Graph::clear()
 		_scene->removeItem(_info);
 	_sliderInfo->show();
 
+	_slider->clear();
 	_info->clear();
 	_scene->clear();
 	_graphs.clear();
@@ -284,4 +304,9 @@ void Graph::newSliderPosition(const QPointF &pos)
 void Graph::addInfo(const QString &key, const QString &value)
 {
 	_info->insert(key, value);
+}
+
+void Graph::clearInfo()
+{
+	_info->clear();
 }

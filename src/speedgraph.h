@@ -4,6 +4,7 @@
 #include <QList>
 #include "graph.h"
 #include "gpx.h"
+#include "units.h"
 
 class SpeedGraph : public Graph
 {
@@ -14,11 +15,14 @@ public:
 
 	void loadGPX(const GPX &gpx);
 	void clear();
+	void setUnits(enum Units units);
 
 	qreal avg() const;
 	qreal max() const {return _max;}
 
 private:
+	void addInfo();
+
 	qreal _max;
 	QList<QPointF> _avg;
 };

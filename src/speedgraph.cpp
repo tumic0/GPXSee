@@ -10,9 +10,17 @@ SpeedGraph::SpeedGraph(QWidget *parent) : Graph(parent)
 	Graph::setYLabel(tr("Speed"));
 	Graph::setXUnits(tr("km"));
 	Graph::setYUnits(tr("km/h"));
-	Graph::setXScale(0.001);
-	Graph::setYScale(3.6);
+	Graph::setXScale(M2KM);
+	Graph::setYScale(MS2KMH);
 	Graph::setPrecision(1);
+}
+
+void SpeedGraph::addInfo()
+{
+	Graph::addInfo(tr("Average"), QString::number(avg() * _yScale, 'f', 1)
+	  + THIN_SPACE + _yUnits);
+	Graph::addInfo(tr("Maximum"), QString::number(_max * _yScale,  'f', 1)
+	  + THIN_SPACE + _yUnits);
 }
 
 void SpeedGraph::loadGPX(const GPX &gpx)
@@ -31,13 +39,8 @@ void SpeedGraph::loadGPX(const GPX &gpx)
 		max = qMax(max, data.at(i).y());
 	_max = qMax(_max, max);
 
-
-	addInfo(tr("Average"), QString::number(avg() * _yScale, 'f', 1)
-	  + THIN_SPACE + _yUnits);
-	addInfo(tr("Maximum"), QString::number(_max * _yScale,  'f', 1)
-	  + THIN_SPACE + _yUnits);
-
-	Graph::loadData(data);
+	addInfo();
+	loadData(data);
 }
 
 qreal SpeedGraph::avg() const
@@ -59,4 +62,24 @@ void SpeedGraph::clear()
 	_avg.clear();
 
 	Graph::clear();
+}
+
+void SpeedGraph::setUnits(enum Units units)
+{
+	if (units == Metric) {
+		Graph::setXUnits(tr("km"));
+		Graph::setYUnits(tr("km/h"));
+		Graph::setXScale(M2KM);
+		Graph::setYScale(MS2KMH);
+	} else {
+		Graph::setXUnits(tr("mi"));
+		Graph::setYUnits(tr("mi/h"));
+		Graph::setXScale(M2MI);
+		Graph::setYScale(MS2MIH);
+	}
+
+	clearInfo();
+	addInfo();
+
+	redraw();
 }

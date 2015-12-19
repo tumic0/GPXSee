@@ -14,7 +14,19 @@ ElevationGraph::ElevationGraph(QWidget *parent) : Graph(parent)
 	Graph::setYLabel(tr("Elevation"));
 	Graph::setXUnits(tr("km"));
 	Graph::setYUnits(tr("m"));
-	Graph::setXScale(0.001);
+	Graph::setXScale(M2KM);
+}
+
+void ElevationGraph::addInfo()
+{
+	Graph::addInfo(tr("Ascent"), QString::number(_ascent * _yScale, 'f', 0)
+	  + THIN_SPACE + _yUnits);
+	Graph::addInfo(tr("Descent"), QString::number(_descent * _yScale, 'f', 0)
+	  + THIN_SPACE + _yUnits);
+	Graph::addInfo(tr("Maximum"), QString::number(_max * _yScale, 'f', 0)
+	  + THIN_SPACE + _yUnits);
+	Graph::addInfo(tr("Minimum"), QString::number(_min * _yScale, 'f', 0)
+	  + THIN_SPACE + _yUnits);
 }
 
 void ElevationGraph::loadGPX(const GPX &gpx)
@@ -49,16 +61,8 @@ void ElevationGraph::loadGPX(const GPX &gpx)
 	_max = qMax(_max, max);
 	_min = qMin(_min, min);
 
-	addInfo(tr("Ascent"), QString::number(_ascent, 'f', 0)
-	  + THIN_SPACE + _yUnits);
-	addInfo(tr("Descent"), QString::number(_descent, 'f', 0)
-	  + THIN_SPACE + _yUnits);
-	addInfo(tr("Maximum"), QString::number(_max, 'f', 0)
-	  + THIN_SPACE + _yUnits);
-	addInfo(tr("Minimum"), QString::number(_min, 'f', 0)
-	  + THIN_SPACE + _yUnits);
-
-	Graph::loadData(data);
+	addInfo();
+	loadData(data);
 }
 
 void ElevationGraph::clear()
@@ -69,4 +73,24 @@ void ElevationGraph::clear()
 	_min = FLT_MAX;
 
 	Graph::clear();
+}
+
+void ElevationGraph::setUnits(enum Units units)
+{
+	if (units == Metric) {
+		Graph::setXUnits(tr("km"));
+		Graph::setYUnits(tr("m"));
+		Graph::setXScale(M2KM);
+		Graph::setYScale(1);
+	} else {
+		Graph::setXUnits(tr("mi"));
+		Graph::setYUnits(tr("ft"));
+		Graph::setXScale(M2MI);
+		Graph::setYScale(M2FT);
+	}
+
+	clearInfo();
+	addInfo();
+
+	redraw();
 }

@@ -41,9 +41,11 @@ public:
 	void setYLabel(const QString &label);
 	void setXUnits(const QString &units);
 	void setYUnits(const QString &units);
-	void setXScale(qreal scale) {_xScale = scale;}
-	void setYScale(qreal scale) {_yScale = scale;}
+	void setXScale(qreal scale);
+	void setYScale(qreal scale);
 	void setPrecision(int p) {_precision = p;}
+
+	void redraw();
 
 	void plot(QPainter *painter, const QRectF &target);
 	void clear();
@@ -52,6 +54,7 @@ public:
 	void setSliderPosition(qreal pos);
 
 	void addInfo(const QString &key, const QString &value);
+	void clearInfo();
 
 signals:
 	void sliderPositionChanged(qreal);

@@ -17,6 +17,8 @@ public:
 	QRectF area() {return _area;}
 	void setArea(const QRectF &area) {_area = area;}
 
+	void clear();
+
 signals:
 	void positionChanged(const QPointF&);
 
