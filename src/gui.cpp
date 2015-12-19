@@ -271,6 +271,9 @@ void GUI::createToolBars()
 	_navigationToolBar->addAction(_prevAction);
 	_navigationToolBar->addAction(_nextAction);
 	_navigationToolBar->addAction(_lastAction);
+#ifdef Q_OS_MAC
+	_navigationToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+#endif // Q_OS_MAC
 }
 
 void GUI::createTrackView()
