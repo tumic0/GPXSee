@@ -205,6 +205,9 @@ void Track::redraw()
 
 void Track::wheelEvent(QWheelEvent *event)
 {
+	if (_tracks.isEmpty())
+		return;
+
 	QPointF pos = mapToScene(event->pos());
 	qreal scale = _scale;
 
