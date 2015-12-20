@@ -339,3 +339,26 @@ void Track::drawBackground(QPainter *painter, const QRectF &rect)
 		painter->drawPixmap(tp, t.pixmap());
 	}
 }
+
+void Track::resizeEvent(QResizeEvent *e)
+{
+	if (_tracks.isEmpty())
+		return;
+
+	QRectF br = trackBoundingRect();
+	QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+	if (ba.width() < e->size().width()) {
+		qreal diff = e->size().width() - ba.width();
+		ba.adjust(-diff/2, 0, diff/2, 0);
+	}
+	if (ba.height() < e->size().height()) {
+		qreal diff = e->size().height() - ba.height();
+		ba.adjust(0, -diff/2, 0, diff/2);
+	}
+
+	_scene->setSceneRect(ba);
+
+	centerOn(br.center());
+	resetCachedContent();
+}

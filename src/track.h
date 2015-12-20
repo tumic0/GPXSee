@@ -51,6 +51,7 @@ private:
 
 	void wheelEvent(QWheelEvent *event);
 	void drawBackground(QPainter *painter, const QRectF &rect);
+	void resizeEvent(QResizeEvent *e);
 
 	QGraphicsScene *_scene;
 	QList<QVector<QPointF> > _tracks;
