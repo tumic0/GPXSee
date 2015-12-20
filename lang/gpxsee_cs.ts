@@ -270,12 +270,28 @@
         <translation>Řádka: %1</translation>
     </message>
     <message>
+        <location filename="../src/gui.cpp" line="509"/>
+        <location filename="../src/gui.cpp" line="629"/>
+        <source>mi</source>
+        <translation>mi</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="512"/>
         <location filename="../src/gui.cpp" line="514"/>
+        <location filename="../src/gui.cpp" line="516"/>
+        <location filename="../src/gui.cpp" line="518"/>
+        <source>ft</source>
+        <translation>ft</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="515"/>
+        <location filename="../src/gui.cpp" line="527"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="516"/>
+        <location filename="../src/gui.cpp" line="517"/>
+        <location filename="../src/gui.cpp" line="529"/>
         <source>Minimum</source>
         <translation>Minimum</translation>
     </message>
@@ -306,41 +322,45 @@
         <translation>POI body</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="507"/>
+        <location filename="../src/gui.cpp" line="508"/>
+        <location filename="../src/gui.cpp" line="520"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="509"/>
+        <location filename="../src/gui.cpp" line="510"/>
+        <location filename="../src/gui.cpp" line="522"/>
         <source>Time</source>
         <translation>Čas</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="510"/>
+        <location filename="../src/gui.cpp" line="511"/>
+        <location filename="../src/gui.cpp" line="523"/>
         <source>Ascent</source>
         <translation>Stoupání</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="511"/>
-        <location filename="../src/gui.cpp" line="513"/>
-        <location filename="../src/gui.cpp" line="515"/>
-        <location filename="../src/gui.cpp" line="517"/>
+        <location filename="../src/gui.cpp" line="524"/>
+        <location filename="../src/gui.cpp" line="526"/>
+        <location filename="../src/gui.cpp" line="528"/>
+        <location filename="../src/gui.cpp" line="530"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="512"/>
+        <location filename="../src/gui.cpp" line="513"/>
+        <location filename="../src/gui.cpp" line="525"/>
         <source>Descent</source>
         <translation>Klesání</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="611"/>
+        <location filename="../src/gui.cpp" line="625"/>
         <source>%1 tracks</source>
         <translation>Počet tras: %1</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="508"/>
-        <location filename="../src/gui.cpp" line="614"/>
+        <location filename="../src/gui.cpp" line="521"/>
+        <location filename="../src/gui.cpp" line="632"/>
         <source>km</source>
         <translation>km</translation>
     </message>
@@ -379,33 +399,33 @@
     </message>
     <message>
         <location filename="../src/speedgraph.cpp" line="11"/>
-        <location filename="../src/speedgraph.cpp" line="67"/>
+        <location filename="../src/speedgraph.cpp" line="70"/>
         <source>km</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../src/speedgraph.cpp" line="12"/>
-        <location filename="../src/speedgraph.cpp" line="68"/>
+        <location filename="../src/speedgraph.cpp" line="71"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="35"/>
+        <location filename="../src/speedgraph.cpp" line="20"/>
         <source>Average</source>
         <translation>Průměr</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="37"/>
+        <location filename="../src/speedgraph.cpp" line="22"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="72"/>
+        <location filename="../src/speedgraph.cpp" line="75"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="73"/>
+        <location filename="../src/speedgraph.cpp" line="76"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
     </message>
