@@ -68,3 +68,9 @@ int scale2zoom(qreal scale)
 		return ZOOM_MAX;
 	return zoom;
 }
+
+qreal zoom2resolution(int zoom, qreal y)
+{
+	return (WGS84_RADIUS * 2 * M_PI / 256 * cos(2 * atan(exp(deg2rad(y)))
+	  - M_PI/2)) / pow(2.0, zoom);
+}

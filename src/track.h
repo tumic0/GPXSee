@@ -9,11 +9,13 @@
 #include "poi.h"
 #include "gpx.h"
 #include "map.h"
+#include "units.h"
 #include "colorshop.h"
 
 
 class POIItem;
 class MarkerItem;
+class ScaleItem;
 
 class Track : public QGraphicsView
 {
@@ -30,6 +32,7 @@ public:
 	void clear();
 
 	void setMap(Map *map);
+	void setUnits(enum Units units);
 
 	void plot(QPainter *painter, const QRectF &target);
 	enum QPrinter::Orientation orientation() const;
@@ -52,6 +55,7 @@ private:
 	void wheelEvent(QWheelEvent *event);
 	void drawBackground(QPainter *painter, const QRectF &rect);
 	void resizeEvent(QResizeEvent *e);
+	void paintEvent(QPaintEvent *e);
 
 	QGraphicsScene *_scene;
 	QList<QVector<QPointF> > _tracks;
@@ -59,6 +63,7 @@ private:
 	QList<MarkerItem*> _markers;
 	QHash<Entry, POIItem*> _pois;
 	Map *_map;
+	ScaleItem *_mapScale;
 
 	ColorShop _colorShop;
 	qreal _maxLen;

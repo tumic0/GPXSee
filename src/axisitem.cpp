@@ -1,6 +1,7 @@
 #include <cmath>
 #include <QPainter>
 #include "config.h"
+#include "nicenum.h"
 #include "axisitem.h"
 
 
@@ -14,38 +15,6 @@ struct Label {
 	double max;
 	double d;
 };
-
-static double niceNum(double x, int round)
-{
-	int expv;
-	double f;
-	double nf;
-
-	expv = floor(log10(x));
-	f = x / pow(10.0, expv);
-
-	if (round) {
-		if (f < 1.5)
-			nf = 1.0;
-		else if (f < 3.0)
-			nf = 2.0;
-		else if (f < 7.0)
-			nf = 5.0;
-		else
-			nf = 10.0;
-	} else {
-		if (f <= 1.0)
-			nf = 1.;
-		else if (f <= 2.0)
-			nf = 2.0;
-		else if (f <= 5.0)
-			nf = 5.0;
-		else
-			nf = 10.0;
-	}
-
-	return nf * pow(10.0, expv);
-}
 
 static struct Label label(double min, double max, int ticks)
 {
@@ -123,13 +92,14 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	QFont font;
 	font.setPixelSize(FONT_SIZE);
 	font.setFamily(FONT_FAMILY);
-	painter->setFont(font);
 	QFontMetrics fm(font);
 	QRect ts, ls;
 	struct Label l;
 	qreal range = _range.y() - _range.x();
 	qreal val;
 
+
+	painter->setFont(font);
 
 	ls = fm.tightBoundingRect(_label);
 

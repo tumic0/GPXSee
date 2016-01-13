@@ -5,8 +5,11 @@
 #include <QWheelEvent>
 #include "poiitem.h"
 #include "markeritem.h"
+#include "scaleitem.h"
 #include "ll.h"
 #include "track.h"
+
+#include <QDebug>
 
 
 #define MARGIN 10.0
@@ -21,6 +24,9 @@ Track::Track(QWidget *parent)
 	setDragMode(QGraphicsView::ScrollHandDrag);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+	_mapScale = new ScaleItem();
+	_mapScale->setZValue(2.0);
 
 	_zoom = -1;
 	_scale = 1.0;
@@ -79,6 +85,12 @@ void Track::loadGPX(const GPX &gpx)
 	QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);
 	_scene->setSceneRect(ba);
 	centerOn(ba.center());
+
+	if (_mapScale->scene() != _scene)
+		_scene->addItem(_mapScale);
+
+	_mapScale->setLatitude(track.at(track.size() / 2).y());
+	_mapScale->setZoom(_zoom);
 }
 
 QRectF Track::trackBoundingRect() const
@@ -198,6 +210,11 @@ void Track::setMap(Map *map)
 	resetCachedContent();
 }
 
+void Track::setUnits(enum Units units)
+{
+	_mapScale->setUnits(units);
+}
+
 void Track::redraw()
 {
 	resetCachedContent();
@@ -225,6 +242,8 @@ void Track::wheelEvent(QWheelEvent *event)
 	else
 		centerOn(pos * scale/_scale);
 
+	_mapScale->setZoom(_zoom);
+
 	resetCachedContent();
 }
 
@@ -245,6 +264,8 @@ void Track::setTrackLineWidth(qreal width)
 
 void Track::plot(QPainter *painter, const QRectF &target)
 {
+	_scene->removeItem(_mapScale);
+
 	QRectF orig = _scene->itemsBoundingRect();
 	QRectF adj;
 	qreal ratio, diff;
@@ -264,6 +285,8 @@ void Track::plot(QPainter *painter, const QRectF &target)
 	_scene->render(painter, target, adj, Qt::KeepAspectRatioByExpanding);
 	setTrackLineWidth(TRACK_WIDTH * _scale);
 	showMarkers(true);
+
+	_scene->addItem(_mapScale);
 }
 
 enum QPrinter::Orientation Track::orientation() const
@@ -286,6 +309,9 @@ void Track::clearPOI()
 
 void Track::clear()
 {
+	if (_mapScale->scene() == _scene)
+		_scene->removeItem(_mapScale);
+
 	_pois.clear();
 	_tracks.clear();
 	_trackPaths.clear();
@@ -361,4 +387,12 @@ void Track::resizeEvent(QResizeEvent *e)
 
 	centerOn(br.center());
 	resetCachedContent();
+}
+
+void Track::paintEvent(QPaintEvent *e)
+{
+	QPointF scenePos = mapToScene(rect().bottomLeft() + QPoint(10, -15));
+	_mapScale->setPos(scenePos);
+
+	QGraphicsView::paintEvent(e);
 }

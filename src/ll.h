@@ -12,5 +12,6 @@ qreal llDistance(const QPointF &p1, const QPointF &p2);
 QPoint mercator2tile(const QPointF &m, int zoom);
 QPointF tile2mercator(const QPoint &tile, int zoom);
 int scale2zoom(qreal scale);
+qreal zoom2resolution(int zoom, qreal y);
 
 #endif // LL_H

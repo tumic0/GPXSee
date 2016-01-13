@@ -670,6 +670,7 @@ void GUI::updateNavigationActions()
 
 void GUI::setMetricUnits()
 {
+	_track->setUnits(Metric);
 	_elevationGraph->setUnits(Metric);
 	_speedGraph->setUnits(Metric);
 	updateStatusBarInfo();
@@ -677,6 +678,7 @@ void GUI::setMetricUnits()
 
 void GUI::setImperialUnits()
 {
+	_track->setUnits(Imperial);
 	_elevationGraph->setUnits(Imperial);
 	_speedGraph->setUnits(Imperial);
 	updateStatusBarInfo();

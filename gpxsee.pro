@@ -28,7 +28,9 @@ HEADERS += src/config.h \
     src/map.h \
     src/maplist.h \
     src/downloader.h \
-    src/units.h
+    src/units.h \
+    src/scaleitem.h \
+    src/nicenum.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
@@ -49,7 +51,9 @@ SOURCES += src/main.cpp \
     src/filebrowser.cpp \
     src/map.cpp \
     src/maplist.cpp \
-    src/downloader.cpp
+    src/downloader.cpp \
+    src/scaleitem.cpp \
+    src/nicenum.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx:ICON = icons/gpxsee.icns
