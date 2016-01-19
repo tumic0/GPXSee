@@ -9,11 +9,11 @@
 #include "ll.h"
 #include "track.h"
 
-#include <QDebug>
 
-
-#define MARGIN 10.0
-#define TRACK_WIDTH 3
+#define MARGIN          10.0
+#define TRACK_WIDTH     3
+#define SCALE_OFFSET_X  7
+#define SCALE_OFFSET_Y  15
 
 Track::Track(QWidget *parent)
 	: QGraphicsView(parent)
@@ -391,7 +391,8 @@ void Track::resizeEvent(QResizeEvent *e)
 
 void Track::paintEvent(QPaintEvent *e)
 {
-	QPointF scenePos = mapToScene(rect().bottomLeft() + QPoint(10, -15));
+	QPointF scenePos = mapToScene(rect().bottomLeft() + QPoint(SCALE_OFFSET_X,
+	  -SCALE_OFFSET_Y));
 	_mapScale->setPos(scenePos);
 
 	QGraphicsView::paintEvent(e);
