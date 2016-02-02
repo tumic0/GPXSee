@@ -29,7 +29,7 @@ QRectF ScaleItem::boundingRect() const
 	es = fm.tightBoundingRect(QString::number(_length * SEGMENTS));
 	us = fm.tightBoundingRect(units());
 
-	return QRectF(-ss.width()/2, -(PADDING + ss.height() + fm.descent()),
+	return QRectF(-ss.width()/2, 0,
 	  _width * SEGMENTS + ss.width()/2 + qMax(us.width() + PADDING, es.width()/2),
 	  SCALE_HEIGHT + PADDING + ss.height() + 2*fm.descent());
 }
@@ -43,22 +43,23 @@ void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	font.setPixelSize(FONT_SIZE);
 	font.setFamily(FONT_FAMILY);
 	QFontMetrics fm(font);
-
+	QRect br;
 
 	painter->setFont(font);
 
 	for (int i = 0; i <= SEGMENTS; i++) {
 		QString label = QString::number(_length * i);
-		QRect br = fm.tightBoundingRect(label);
-		painter->drawText(_width * i - br.width()/2, -PADDING, label);
+		br = fm.tightBoundingRect(label);
+		painter->drawText(_width * i - br.width()/2, br.height(), label);
 	}
-	painter->drawText(_width * SEGMENTS + PADDING, SCALE_HEIGHT + fm.descent(),
-	  units());
+	painter->drawText(_width * SEGMENTS + PADDING, SCALE_HEIGHT + PADDING
+	  + br.height() + fm.descent(), units());
 
-	painter->drawRect(QRectF(0, 0, SEGMENTS * _width, SCALE_HEIGHT));
+	painter->drawRect(QRectF(0, br.height() + PADDING, SEGMENTS * _width,
+	  SCALE_HEIGHT));
 	for (int i = 0; i < SEGMENTS; i += 2)
-		painter->fillRect(QRectF(i * _width, 0, _width, SCALE_HEIGHT),
-		  Qt::black);
+		painter->fillRect(QRectF(i * _width, br.height() + PADDING, _width,
+		  SCALE_HEIGHT), Qt::black);
 
 /*
 	painter->setPen(Qt::red);

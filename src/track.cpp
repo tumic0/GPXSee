@@ -12,8 +12,7 @@
 
 #define MARGIN          10.0
 #define TRACK_WIDTH     3
-#define SCALE_OFFSET_X  7
-#define SCALE_OFFSET_Y  15
+#define SCALE_OFFSET    7
 
 Track::Track(QWidget *parent)
 	: QGraphicsView(parent)
@@ -247,12 +246,6 @@ void Track::wheelEvent(QWheelEvent *event)
 	resetCachedContent();
 }
 
-void Track::showMarkers(bool show)
-{
-	for (int i = 0; i < _markers.size(); i++)
-		_markers.at(i)->setVisible(show);
-}
-
 void Track::setTrackLineWidth(qreal width)
 {
 	for (int i = 0; i < _trackPaths.size(); i++) {
@@ -264,11 +257,13 @@ void Track::setTrackLineWidth(qreal width)
 
 void Track::plot(QPainter *painter, const QRectF &target)
 {
-	_scene->removeItem(_mapScale);
-
-	QRectF orig = _scene->itemsBoundingRect();
-	QRectF adj;
+	QRectF orig, adj;
 	qreal ratio, diff;
+
+	_scene->removeItem(_mapScale);
+	orig = _scene->itemsBoundingRect().adjusted(0, 0, 0,
+	  _mapScale->boundingRect().height());
+	_scene->addItem(_mapScale);
 
 	if (target.width()/target.height() > orig.width()/orig.height()) {
 		ratio = target.width()/target.height();
@@ -280,13 +275,13 @@ void Track::plot(QPainter *painter, const QRectF &target)
 		adj = orig.adjusted(0, -diff/2, 0, diff/2);
 	}
 
-	showMarkers(false);
-	setTrackLineWidth(0);
-	_scene->render(painter, target, adj, Qt::KeepAspectRatioByExpanding);
-	setTrackLineWidth(TRACK_WIDTH * _scale);
-	showMarkers(true);
+	_mapScale->setPos(adj.bottomRight()
+	  + QPoint(-_mapScale->boundingRect().width(),
+	  -_mapScale->boundingRect().height()));
 
-	_scene->addItem(_mapScale);
+	setTrackLineWidth(0);
+	_scene->render(painter, target, adj);
+	setTrackLineWidth(TRACK_WIDTH * _scale);
 }
 
 enum QPrinter::Orientation Track::orientation() const
@@ -391,8 +386,8 @@ void Track::resizeEvent(QResizeEvent *e)
 
 void Track::paintEvent(QPaintEvent *e)
 {
-	QPointF scenePos = mapToScene(rect().bottomLeft() + QPoint(SCALE_OFFSET_X,
-	  -SCALE_OFFSET_Y));
+	QPointF scenePos = mapToScene(rect().bottomLeft() + QPoint(SCALE_OFFSET,
+	  -(SCALE_OFFSET + _mapScale->boundingRect().height())));
 	_mapScale->setPos(scenePos);
 
 	QGraphicsView::paintEvent(e);
