@@ -170,12 +170,14 @@ void GUI::createActions()
 	_showPOIAction = new QAction(QIcon(QPixmap(SHOW_POI_ICON)),
 	  tr("Show POIs"), this);
 	_showPOIAction->setCheckable(true);
+	_showPOIAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
 	connect(_showPOIAction, SIGNAL(triggered(bool)), this, SLOT(showPOI(bool)));
 
 	// Map actions
 	_showMapAction = new QAction(QIcon(QPixmap(SHOW_MAP_ICON)), tr("Show map"),
 	  this);
 	_showMapAction->setCheckable(true);
+	_showMapAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
 	connect(_showMapAction, SIGNAL(triggered(bool)), this, SLOT(showMap(bool)));
 	if (_maps.empty())
 		_showMapAction->setEnabled(false);
@@ -186,6 +188,7 @@ void GUI::createActions()
 	_showGraphsAction = new QAction(tr("Show graphs"), this);
 	_showGraphsAction->setCheckable(true);
 	_showGraphsAction->setChecked(true);
+	_showGraphsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_G));
 	connect(_showGraphsAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showGraphs(bool)));
 	_showToolbarsAction = new QAction(tr("Show toolbars"), this);
