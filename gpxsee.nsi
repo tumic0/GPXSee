@@ -63,7 +63,7 @@ Section "GPXSee (required)" SEC_APP
   ; Write the uninstall keys for Windows
   WriteRegStr HKCU "${REGENTRY}" "DisplayName" "GPXSee"
   WriteRegStr HKCU "${REGENTRY}" "Publisher" "Martin Tuma"
-  WriteRegStr HKCU "${REGENTRY}" "DisplayVersion" "2.5"
+  WriteRegStr HKCU "${REGENTRY}" "DisplayVersion" "2.6"
   WriteRegStr HKCU "${REGENTRY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegDWORD HKCU "${REGENTRY}" "NoModify" 1
   WriteRegDWORD HKCU "${REGENTRY}" "NoRepair" 1
