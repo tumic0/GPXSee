@@ -21,9 +21,7 @@ Track::Track(QWidget *parent)
 	setScene(_scene);
 	setCacheMode(QGraphicsView::CacheBackground);
 	setDragMode(QGraphicsView::ScrollHandDrag);
-#ifdef Q_OS_MAC
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-#endif // Q_OS_MAC
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
