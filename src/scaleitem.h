@@ -9,7 +9,7 @@ class ScaleItem : public QGraphicsItem
 public:
 	ScaleItem(QGraphicsItem *parent = 0);
 
-	QRectF boundingRect() const;
+	QRectF boundingRect() const {return _boundingRect;}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
@@ -18,6 +18,7 @@ public:
 	void setUnits(enum Units units);
 
 private:
+	void updateBoundingRect();
 	void computeScale();
 	QString units() const;
 
@@ -27,6 +28,8 @@ private:
 	qreal _length;
 	Units _units;
 	bool _scale;
+
+	QRectF _boundingRect;
 };
 
 #endif // SCALEITEM_H

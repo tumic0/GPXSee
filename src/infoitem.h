@@ -9,14 +9,16 @@ class InfoItem : public QGraphicsItem
 public:
 	InfoItem(QGraphicsItem *parent = 0);
 
-	QRectF boundingRect() const;
+	QRectF boundingRect() const {return _boundingRect;}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
 	void insert(const QString &key, const QString &value);
-	void clear() {_list.clear();}
+	void clear();
 
 private:
+	void updateBoundingRect();
+
 	class KV {
 	public:
 		QString key;
@@ -29,6 +31,7 @@ private:
 	};
 
 	QList<KV> _list;
+	QRectF _boundingRect;
 };
 
 #endif // INFOITEM_H

@@ -17,11 +17,9 @@ ScaleItem::ScaleItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 	_units = Metric;
 	_zoom = ZOOM_MIN;
 	_lat = 0;
-
-	computeScale();
 }
 
-QRectF ScaleItem::boundingRect() const
+void ScaleItem::updateBoundingRect()
 {
 	QFont font;
 	font.setPixelSize(FONT_SIZE);
@@ -33,7 +31,7 @@ QRectF ScaleItem::boundingRect() const
 	es = fm.tightBoundingRect(QString::number(_length * SEGMENTS));
 	us = fm.tightBoundingRect(units());
 
-	return QRectF(-ss.width()/2, 0,
+	_boundingRect = QRectF(-ss.width()/2, 0,
 	  _width * SEGMENTS + ss.width()/2 + qMax(us.width() + PADDING, es.width()/2),
 	  SCALE_HEIGHT + PADDING + ss.height() + 2*fm.descent());
 }
@@ -110,6 +108,7 @@ void ScaleItem::setLatitude(qreal lat)
 {
 	_lat = lat;
 	computeScale();
+	updateBoundingRect();
 	prepareGeometryChange();
 }
 
@@ -117,6 +116,7 @@ void ScaleItem::setZoom(int z)
 {
 	_zoom = z;
 	computeScale();
+	updateBoundingRect();
 	prepareGeometryChange();
 }
 
@@ -124,5 +124,6 @@ void ScaleItem::setUnits(enum Units units)
 {
 	_units = units;
 	computeScale();
+	updateBoundingRect();
 	prepareGeometryChange();
 }

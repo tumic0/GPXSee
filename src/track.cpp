@@ -21,6 +21,9 @@ Track::Track(QWidget *parent)
 	setScene(_scene);
 	setCacheMode(QGraphicsView::CacheBackground);
 	setDragMode(QGraphicsView::ScrollHandDrag);
+#ifdef Q_OS_MAC
+	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+#endif // Q_OS_MAC
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -388,7 +391,8 @@ void Track::paintEvent(QPaintEvent *e)
 {
 	QPointF scenePos = mapToScene(rect().bottomLeft() + QPoint(SCALE_OFFSET,
 	  -(SCALE_OFFSET + _mapScale->boundingRect().height())));
-	_mapScale->setPos(scenePos);
+	if (_mapScale->pos() != scenePos)
+		_mapScale->setPos(scenePos);
 
 	QGraphicsView::paintEvent(e);
 }

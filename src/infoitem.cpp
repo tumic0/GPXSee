@@ -3,7 +3,6 @@
 #include "config.h"
 #include "infoitem.h"
 
-
 #define PADDING     10
 
 InfoItem::InfoItem(QGraphicsItem *parent) : QGraphicsItem(parent)
@@ -11,24 +10,21 @@ InfoItem::InfoItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 
 }
 
-QRectF InfoItem::boundingRect() const
+void InfoItem::updateBoundingRect()
 {
 	QFont font;
 	font.setPixelSize(FONT_SIZE);
 	font.setFamily(FONT_FAMILY);
 	QFontMetrics fm(font);
 	QList<KV>::const_iterator i;
-	int width = 0;
-
-	if (_list.isEmpty())
-		return QRectF();
+	qreal width = 0;
 
 	for (i = _list.constBegin(); i != _list.constEnd(); i++) {
 		width += fm.width(i->key + ": ");
 		width += fm.width(i->value) + ((i == _list.end() - 1) ? 0 : PADDING);
 	}
 
-	return QRectF(0, 0, width, fm.height());
+	_boundingRect = QRectF(0, 0, width, _list.isEmpty() ? 0 : fm.height());
 }
 
 void InfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -74,5 +70,13 @@ void InfoItem::insert(const QString &key, const QString &value)
 	else
 		_list[i] = kv;
 
+	updateBoundingRect();
+	prepareGeometryChange();
+}
+
+void InfoItem::clear()
+{
+	_list.clear();
+	updateBoundingRect();
 	prepareGeometryChange();
 }
