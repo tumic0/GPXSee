@@ -15,6 +15,10 @@
 ScaleItem::ScaleItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
 	_units = Metric;
+	_zoom = ZOOM_MIN;
+	_lat = 0;
+
+	computeScale();
 }
 
 QRectF ScaleItem::boundingRect() const
