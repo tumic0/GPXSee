@@ -7,7 +7,7 @@ double niceNum(double x, int round)
 	double f;
 	double nf;
 
-	expv = floor(log10(x));
+	expv = (int)floor(log10(x));
 	f = x / pow(10.0, expv);
 
 	if (round) {

@@ -74,11 +74,11 @@ GUI::GUI()
 void GUI::loadFiles()
 {
 	// Maps
-	_maps = MapList::load(QString("%1/"MAP_LIST_FILE).arg(QDir::homePath()));
+	_maps = MapList::load(QString("%1/" MAP_LIST_FILE).arg(QDir::homePath()));
 	_maps += MapList::load(":/maps.txt");
 
 	// POI files
-	QDir dir(QString("%1/"POI_DIR).arg(QDir::homePath()));
+	QDir dir(QString("%1/" POI_DIR).arg(QDir::homePath()));
 	QFileInfoList list = dir.entryInfoList(QStringList(), QDir::Files);
 	for (int i = 0; i < list.size(); ++i) {
 		if (!_poi.loadFile(list.at(i).absoluteFilePath()))
@@ -342,12 +342,12 @@ void GUI::about()
 	QMessageBox msgBox(this);
 
 	msgBox.setWindowTitle(tr("About GPXSee"));
-	msgBox.setText(QString("<h3>") + QString(APP_NAME" "APP_VERSION)
+	msgBox.setText(QString("<h3>") + QString(APP_NAME " " APP_VERSION)
 	  + QString("</h3><p>") + tr("GPX viewer and analyzer") + QString("<p/>"));
 	msgBox.setInformativeText(QString("<table width=\"300\"><tr><td>")
 	  + tr("GPXSee is distributed under the terms of the GNU General Public "
 	  "License version 3. For more info about GPXSee visit the project "
-	  "homepage at ") + QString("<a href=\""APP_HOMEPAGE"\">"APP_HOMEPAGE
+	  "homepage at ") + QString("<a href=\"" APP_HOMEPAGE "\">" APP_HOMEPAGE
 	  "</a>.</td></tr></table>"));
 
 	QIcon icon = msgBox.windowIcon();
@@ -386,7 +386,7 @@ void GUI::dataSources()
 	  + tr("Map (tiles) source URLs are read on program startup from the "
 		"following file:")
 		+ QString("</p><p><code>") + QDir::homePath()
-		  + QString("/"MAP_LIST_FILE"</code></p><p>")
+		  + QString("/" MAP_LIST_FILE "</code></p><p>")
 		+ tr("The file format is one map entry per line, consisting of the map "
 		  "name and tiles URL delimited by a TAB character. The tile X and Y "
 		  "coordinates are replaced with $x and $y in the URL and the zoom "
@@ -398,7 +398,7 @@ void GUI::dataSources()
 	  + tr("To make GPXSee load a POI file automatically on startup, add "
 		"the file to the following directory:")
 		+ QString("</p><p><code>") + QDir::homePath()
-		+ QString("/"POI_DIR"</code></p>")
+		+ QString("/" POI_DIR "</code></p>")
 	);
 
 	msgBox.exec();

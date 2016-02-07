@@ -30,7 +30,7 @@ void Map::loadTiles(QList<Tile> &list)
 
 	for (int i = 0; i < list.size(); ++i) {
 		Tile &t = list[i];
-		QString file = QString("%1/"TILES_DIR"/%2/%3-%4-%5")
+		QString file = QString("%1/" TILES_DIR "/%2/%3-%4-%5")
 		  .arg(QDir::homePath()).arg(_name).arg(t.zoom()).arg(t.xy().rx())
 		  .arg(t.xy().ry());
 		QFileInfo fi(file);
