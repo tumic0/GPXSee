@@ -14,5 +14,6 @@
         <file>icons/arrow-left-double.png</file>
         <file>icons/arrow-right-double.png</file>
         <file>lang/gpxsee_cs.qm</file>
+        <file>maps.txt</file>
     </qresource>
 </RCC>

@@ -75,6 +75,7 @@ void GUI::loadFiles()
 {
 	// Maps
 	_maps = MapList::load(QString("%1/"MAP_LIST_FILE).arg(QDir::homePath()));
+	_maps += MapList::load(":/maps.txt");
 
 	// POI files
 	QDir dir(QString("%1/"POI_DIR).arg(QDir::homePath()));
@@ -181,8 +182,10 @@ void GUI::createActions()
 	connect(_showMapAction, SIGNAL(triggered(bool)), this, SLOT(showMap(bool)));
 	if (_maps.empty())
 		_showMapAction->setEnabled(false);
-	else
+	else {
 		createMapActions();
+		_showMapAction->setChecked(true);
+	}
 
 	// Settings actions
 	_showGraphsAction = new QAction(tr("Show graphs"), this);
@@ -299,6 +302,9 @@ void GUI::createToolBars()
 void GUI::createTrackView()
 {
 	_track = new Track(this);
+
+	if (_showMapAction->isChecked())
+		_track->setMap(_currentMap);
 }
 
 void GUI::createTrackGraphs()

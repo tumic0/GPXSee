@@ -1,0 +1,2 @@
+OSM	http://tile.openstreetmap.org/$z/$x/$y.png
+Thunderforest	http://tile.thunderforest.com/outdoors/$z/$x/$y.png
