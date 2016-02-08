@@ -19,26 +19,26 @@ struct TrackPoint
 class Parser
 {
 public:
-	bool loadFile(QIODevice *device, QVector<TrackPoint> &data);
+	Parser() {_data = 0; _track = 0;}
+	bool loadFile(QIODevice *device, QList<QVector<TrackPoint> > *data);
 	QString errorString() const {return _reader.errorString();}
 	int errorLine() const {return _reader.lineNumber();}
 
 private:
-	bool parse(QVector<TrackPoint> &data);
-	void gpx(QVector<TrackPoint> &data);
-	void trek(QVector<TrackPoint> &data);
-	void trekPoints(QVector<TrackPoint> &data);
-	void extensions(QVector<TrackPoint> &data);
-	void trekPointData(QVector<TrackPoint> &data);
+	bool parse();
+	void gpx();
+	void track();
+	void trackPoints();
+	void extensions();
+	void trackPointData();
 
-	void handleTrekPointAttributes(QVector<TrackPoint> &data,
-	  const QXmlStreamAttributes &attr);
-	void handleTrekPointData(QVector<TrackPoint> &data, QStringRef element,
-	  const QString &value);
-	void handleExtensionData(QVector<TrackPoint> &data, QStringRef element,
-	  const QString &value);
+	void handleTrekPointAttributes(const QXmlStreamAttributes &attr);
+	void handleTrekPointData(QStringRef element, const QString &value);
+	void handleExtensionData(QStringRef element, const QString &value);
 
 	QXmlStreamReader _reader;
+	QList<QVector<TrackPoint> > *_data;
+	QVector<TrackPoint> *_track;
 };
 
 #endif // PARSER_H

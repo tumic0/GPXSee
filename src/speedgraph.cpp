@@ -25,22 +25,23 @@ void SpeedGraph::addInfo()
 
 void SpeedGraph::loadGPX(const GPX &gpx)
 {
-	QVector<QPointF> data;
-	qreal max = 0;
+	for (int i = 0; i < gpx.count(); i++) {
+		QVector<QPointF> data;
+		qreal max = 0;
 
+		gpx.speedGraph(i, data);
+		if (data.isEmpty())
+			return;
 
-	gpx.speedGraph(data);
-	if (data.isEmpty())
-		return;
+		_avg.append(QPointF(gpx.distance(i), gpx.distance(i) / gpx.time(i)));
 
-	_avg.append(QPointF(gpx.distance(), gpx.distance() / gpx.time()));
+		for (int i = 0; i < data.size(); i++)
+			max = qMax(max, data.at(i).y());
+		_max = qMax(_max, max);
 
-	for (int i = 0; i < data.size(); i++)
-		max = qMax(max, data.at(i).y());
-	_max = qMax(_max, max);
-
-	addInfo();
-	loadData(data);
+		addInfo();
+		loadData(data);
+	}
 }
 
 qreal SpeedGraph::avg() const

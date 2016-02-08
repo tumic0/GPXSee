@@ -31,38 +31,39 @@ void ElevationGraph::addInfo()
 
 void ElevationGraph::loadGPX(const GPX &gpx)
 {
-	QVector<QPointF> data;
-	qreal min, max, ascent = 0, descent = 0;
+	for (int i = 0; i < gpx.count(); i++) {
+		QVector<QPointF> data;
+		qreal min, max, ascent = 0, descent = 0;
 
+		gpx.elevationGraph(i, data);
+		if (data.isEmpty())
+			return;
 
-	gpx.elevationGraph(data);
-	if (data.isEmpty())
-		return;
+		min = max = data.at(0).y();
 
-	min = max = data.at(0).y();
+		for (int i = 1; i < data.size(); i++) {
+			qreal cur = data.at(i).y();
+			qreal prev = data.at(i-1).y();
 
-	for (int i = 1; i < data.size(); i++) {
-		qreal cur = data.at(i).y();
-		qreal prev = data.at(i-1).y();
+			if (cur > prev)
+				ascent += cur - prev;
+			if (cur < prev)
+				descent += prev - cur;
 
-		if (cur > prev)
-			ascent += cur - prev;
-		if (cur < prev)
-			descent += prev - cur;
+			if (cur > max)
+				max = cur;
+			if (cur < min)
+				min = cur;
+		}
 
-		if (cur > max)
-			max = cur;
-		if (cur < min)
-			min = cur;
+		_ascent += ascent;
+		_descent += descent;
+		_max = qMax(_max, max);
+		_min = qMin(_min, min);
+
+		addInfo();
+		loadData(data);
 	}
-
-	_ascent += ascent;
-	_descent += descent;
-	_max = qMax(_max, max);
-	_min = qMin(_min, min);
-
-	addInfo();
-	loadData(data);
 }
 
 void ElevationGraph::clear()

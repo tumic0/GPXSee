@@ -126,6 +126,7 @@ private:
 
 	qreal _distance;
 	qreal _time;
+	int _trackCount;
 };
 
 #endif // GUI_H

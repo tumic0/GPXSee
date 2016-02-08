@@ -67,6 +67,7 @@ GUI::GUI()
 
 	_distance = 0;
 	_time = 0;
+	_trackCount = 0;
 
 	resize(600, 800);
 }
@@ -443,8 +444,12 @@ bool GUI::loadFile(const QString &fileName)
 		if (_showPOIAction->isChecked())
 			_track->loadPOI(_poi);
 
-		_distance += gpx.distance();
-		_time += gpx.time();
+		for (int i = 0; i < gpx.count(); i++) {
+			_distance += gpx.distance(i);
+			_time += gpx.time(i);
+		}
+
+		_trackCount += gpx.count();
 
 		return true;
 	} else {
@@ -571,6 +576,7 @@ void GUI::closeFile()
 {
 	_distance = 0;
 	_time = 0;
+	_trackCount = 0;
 
 	_elevationGraph->clear();
 	_speedGraph->clear();
@@ -621,17 +627,15 @@ void GUI::showToolbars(bool checked)
 
 void GUI::updateStatusBarInfo()
 {
-	int files = _files.size();
-
-	if (files == 0) {
+	if (_files.count() == 0) {
 		_fileNameLabel->clear();
 		_distanceLabel->clear();
 		_timeLabel->clear();
 		return;
-	} else if (files == 1)
+	} else if (_files.count() == 1)
 		_fileNameLabel->setText(_files.at(0));
 	else
-		_fileNameLabel->setText(tr("%1 tracks").arg(_files.size()));
+		_fileNameLabel->setText(tr("%1 tracks").arg(_trackCount));
 
 	if (_imperialUnitsAction->isChecked())
 		_distanceLabel->setText(QString::number(_distance * M2MI, 'f', 1)

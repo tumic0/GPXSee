@@ -1,96 +1,95 @@
 #include "parser.h"
 
 
-void Parser::handleExtensionData(QVector<TrackPoint> &data,
-  QStringRef element, const QString &value)
+void Parser::handleExtensionData(QStringRef element, const QString &value)
 {
 	if (element == "speed")
-		data.last().speed = value.toDouble();
+		_track->last().speed = value.toDouble();
 }
 
-void Parser::handleTrekPointData(QVector<TrackPoint> &data,
-  QStringRef element, const QString &value)
+void Parser::handleTrekPointData(QStringRef element, const QString &value)
 {
 	if (element == "ele")
-		data.last().elevation = value.toLatin1().toDouble();
+		_track->last().elevation = value.toLatin1().toDouble();
 	if (element == "time")
-		data.last().timestamp = QDateTime::fromString(value.toLatin1(),
+		_track->last().timestamp = QDateTime::fromString(value.toLatin1(),
 		  Qt::ISODate);
 	if (element == "geoidheight")
-		data.last().geoidheight = value.toLatin1().toDouble();
+		_track->last().geoidheight = value.toLatin1().toDouble();
 }
 
-void Parser::handleTrekPointAttributes(QVector<TrackPoint> &data,
-  const QXmlStreamAttributes &attr)
+void Parser::handleTrekPointAttributes(const QXmlStreamAttributes &attr)
 {
-	data.last().coordinates.setY(attr.value("lat").toLatin1().toDouble());
-	data.last().coordinates.setX(attr.value("lon").toLatin1().toDouble());
+	_track->last().coordinates.setY(attr.value("lat").toLatin1().toDouble());
+	_track->last().coordinates.setX(attr.value("lon").toLatin1().toDouble());
 }
 
 
-void Parser::extensions(QVector<TrackPoint> &data)
+void Parser::extensions()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "speed")
-			handleExtensionData(data, _reader.name(), _reader.readElementText());
+			handleExtensionData(_reader.name(), _reader.readElementText());
 		else
 			_reader.skipCurrentElement();
 	}
 }
 
-void Parser::trekPointData(QVector<TrackPoint> &data)
+void Parser::trackPointData()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "ele" || _reader.name() == "time"
 		  || _reader.name() == "geoidheight")
-			handleTrekPointData(data, _reader.name(), _reader.readElementText());
+			handleTrekPointData(_reader.name(), _reader.readElementText());
 		else if (_reader.name() == "extensions")
-			extensions(data);
+			extensions();
 		else
 			_reader.skipCurrentElement();
 	}
 }
 
-void Parser::trekPoints(QVector<TrackPoint> &data)
+void Parser::trackPoints()
 {
 	QXmlStreamAttributes attr;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "trkpt") {
 			attr = _reader.attributes();
-			data.append(TrackPoint());
-			handleTrekPointAttributes(data, attr);
-			trekPointData(data);
+			_track->append(TrackPoint());
+			handleTrekPointAttributes(attr);
+			trackPointData();
 		} else
 			_reader.skipCurrentElement();
 	}
 }
 
-void Parser::trek(QVector<TrackPoint> &data)
+void Parser::track()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "trkseg") {
-			trekPoints(data);
+			trackPoints();
 		} else
 			_reader.skipCurrentElement();
 	}
 }
 
-void Parser::gpx(QVector<TrackPoint> &data)
+void Parser::gpx()
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "trk")
-			trek(data);
-		else
+		if (_reader.name() == "trk") {
+			_data->append(QVector<TrackPoint>());
+			_track = &_data->back();
+			track();
+		} else
 			_reader.skipCurrentElement();
 	}
 }
 
-bool Parser::parse(QVector<TrackPoint> &data)
+bool Parser::parse()
 {
 	if (_reader.readNextStartElement()) {
 		if (_reader.name() == "gpx")
-			gpx(data);
+			gpx();
 		else
 			_reader.raiseError("Not a GPX file.");
 	}
@@ -98,10 +97,11 @@ bool Parser::parse(QVector<TrackPoint> &data)
 	return !_reader.error();
 }
 
-bool Parser::loadFile(QIODevice *device, QVector<TrackPoint> &data)
+bool Parser::loadFile(QIODevice *device, QList<QVector<TrackPoint> > *data)
 {
 	_reader.clear();
 	_reader.setDevice(device);
+	_data = data;
 
-	return parse(data);
+	return parse();
 }

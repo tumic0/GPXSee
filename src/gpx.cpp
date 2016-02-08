@@ -94,7 +94,7 @@ bool GPX::loadFile(const QString &fileName)
 		return false;
 	}
 
-	if (!(ret = _parser.loadFile(&file, _data))) {
+	if (!(ret = _parser.loadFile(&file, &_data))) {
 		_error = _parser.errorString();
 		_errorLine = _parser.errorLine();
 	}
@@ -103,44 +103,46 @@ bool GPX::loadFile(const QString &fileName)
 	return ret;
 }
 
-void GPX::elevationGraph(QVector<QPointF> &graph) const
+void GPX::elevationGraph(int i, QVector<QPointF> &graph) const
 {
+	const QVector<TrackPoint> &data = _data.at(i);
 	qreal dist = 0;
 	QVector<QPointF> raw;
 
-	if (!_data.size())
+	if (!data.size())
 		return;
 
-	raw.append(QPointF(0, _data.at(0).elevation));
-	for (int i = 1; i < _data.size(); i++) {
-		dist += llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
-		raw.append(QPointF(dist,  _data.at(i).elevation
-		  - _data.at(i).geoidheight));
+	raw.append(QPointF(0, data.at(0).elevation));
+	for (int i = 1; i < data.size(); i++) {
+		dist += llDistance(data.at(i).coordinates, data.at(i-1).coordinates);
+		raw.append(QPointF(dist,  data.at(i).elevation
+		  - data.at(i).geoidheight));
 	}
 
 	graph = filter(raw, WINDOW_EF);
 }
 
-void GPX::speedGraph(QVector<QPointF> &graph) const
+void GPX::speedGraph(int i, QVector<QPointF> &graph) const
 {
+	const QVector<TrackPoint> &data = _data.at(i);
 	qreal dist = 0, v, ds, dt;
 	QVector<QPointF> raw;
 
-	if (!_data.size())
+	if (!data.size())
 		return;
 
 	raw.append(QPointF(0, 0));
-	for (int i = 1; i < _data.size(); i++) {
-		ds = llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
-		dt = _data.at(i-1).timestamp.msecsTo(_data.at(i).timestamp) / 1000.0;
+	for (int i = 1; i < data.size(); i++) {
+		ds = llDistance(data.at(i).coordinates, data.at(i-1).coordinates);
+		dt = data.at(i-1).timestamp.msecsTo(data.at(i).timestamp) / 1000.0;
 		dist += ds;
 
-		if (_data.at(i).speed < 0) {
+		if (data.at(i).speed < 0) {
 			if (dt == 0)
 				continue;
 			v = ds / dt;
 		} else
-			v = _data.at(i).speed;
+			v = data.at(i).speed;
 
 		raw.append(QPointF(dist, v));
 	}
@@ -148,35 +150,42 @@ void GPX::speedGraph(QVector<QPointF> &graph) const
 	graph = filter(eliminate(raw, WINDOW_SE), WINDOW_SF);
 }
 
-void GPX::track(QVector<QPointF> &track) const
+void GPX::track(int i, QVector<QPointF> &track) const
 {
-	for (int i = 0; i < _data.size(); i++)
-		track.append(ll2mercator(_data.at(i).coordinates));
+	const QVector<TrackPoint> &data = _data.at(i);
+
+	for (int i = 0; i < data.size(); i++)
+		track.append(ll2mercator(data.at(i).coordinates));
 }
 
-qreal GPX::distance() const
+qreal GPX::distance(int i) const
 {
+	const QVector<TrackPoint> &data = _data.at(i);
 	qreal dist = 0;
 
-	for (int i = 1; i < _data.size(); i++)
-		dist += llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
+	for (int i = 1; i < data.size(); i++)
+		dist += llDistance(data.at(i).coordinates, data.at(i-1).coordinates);
 
 	return dist;
 }
 
-qreal GPX::time() const
+qreal GPX::time(int i) const
 {
-	if (_data.size() < 2)
+	const QVector<TrackPoint> &data = _data.at(i);
+
+	if (data.size() < 2)
 		return 0;
 
-	return (_data.at(0).timestamp.msecsTo(_data.at(_data.size() - 1).timestamp)
+	return (data.at(0).timestamp.msecsTo(data.at(data.size() - 1).timestamp)
 	  / 1000.0);
 }
 
-QDateTime GPX::date() const
+QDateTime GPX::date(int i) const
 {
-	if (_data.size())
-		return _data.at(0).timestamp;
+	const QVector<TrackPoint> &data = _data.at(i);
+
+	if (data.size())
+		return data.at(0).timestamp;
 	else
 		return QDateTime();
 }

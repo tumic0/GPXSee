@@ -41,56 +41,58 @@ Track::~Track()
 
 void Track::loadGPX(const GPX &gpx)
 {
-	QVector<QPointF> track;
-	QPainterPath path;
-	QGraphicsPathItem *pi;
-	MarkerItem *mi;
-	QColor color = _colorShop.color();
-	qreal prevScale = _scale;
+	for (int i = 0; i < gpx.count(); i++) {
+		QVector<QPointF> track;
+		QPainterPath path;
+		QGraphicsPathItem *pi;
+		MarkerItem *mi;
+		QColor color = _colorShop.color();
+		qreal prevScale = _scale;
 
 
-	gpx.track(track);
+		gpx.track(i, track);
 
-	if (track.size() < 2)
-		return;
+		if (track.size() < 2)
+			continue;
 
-	_tracks.append(track);
+		_tracks.append(track);
 
-	path.moveTo(track.at(0).x(), -track.at(0).y());
-	for (int i = 1; i < track.size(); i++)
-		path.lineTo(track.at(i).x(), -track.at(i).y());
+		path.moveTo(track.at(0).x(), -track.at(0).y());
+		for (int i = 1; i < track.size(); i++)
+			path.lineTo(track.at(i).x(), -track.at(i).y());
 
-	_maxLen = qMax(path.length(), _maxLen);
+		_maxLen = qMax(path.length(), _maxLen);
 
 
-	pi = new QGraphicsPathItem(path);
-	_trackPaths.append(pi);
-	_zoom = scale2zoom(trackScale());
-	_scale = mapScale();
-	QBrush brush(color, Qt::SolidPattern);
-	QPen pen(brush, TRACK_WIDTH * _scale);
-	pi->setPen(pen);
-	pi->setScale(1.0/_scale);
-	_scene->addItem(pi);
+		pi = new QGraphicsPathItem(path);
+		_trackPaths.append(pi);
+		_zoom = scale2zoom(trackScale());
+		_scale = mapScale();
+		QBrush brush(color, Qt::SolidPattern);
+		QPen pen(brush, TRACK_WIDTH * _scale);
+		pi->setPen(pen);
+		pi->setScale(1.0/_scale);
+		_scene->addItem(pi);
 
-	mi = new MarkerItem(pi);
-	_markers.append(mi);
-	mi->setPos(pi->path().pointAtPercent(0));
-	mi->setScale(_scale);
+		mi = new MarkerItem(pi);
+		_markers.append(mi);
+		mi->setPos(pi->path().pointAtPercent(0));
+		mi->setScale(_scale);
 
-	if (_trackPaths.size() > 1 && prevScale != _scale)
-		rescale(_scale);
+		if (_trackPaths.size() > 1 && prevScale != _scale)
+			rescale(_scale);
 
-	QRectF br = trackBoundingRect();
-	QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);
-	_scene->setSceneRect(ba);
-	centerOn(ba.center());
+		QRectF br = trackBoundingRect();
+		QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);
+		_scene->setSceneRect(ba);
+		centerOn(ba.center());
 
-	if (_mapScale->scene() != _scene)
-		_scene->addItem(_mapScale);
+		if (_mapScale->scene() != _scene)
+			_scene->addItem(_mapScale);
 
-	_mapScale->setLatitude(track.at(track.size() / 2).y());
-	_mapScale->setZoom(_zoom);
+		_mapScale->setLatitude(track.at(track.size() / 2).y());
+		_mapScale->setZoom(_zoom);
+	}
 }
 
 QRectF Track::trackBoundingRect() const
