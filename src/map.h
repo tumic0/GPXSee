@@ -30,9 +30,9 @@ signals:
 	void loaded();
 
 public:
-	Map(const QString &name, const QString &url);
+	Map(const QString &name, const QString &url, QObject *parent = 0);
 
-	const QString &name() {return _name;}
+	const QString &name() const {return _name;}
 	void loadTiles(QList<Tile> &list);
 
 private slots:
