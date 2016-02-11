@@ -18,12 +18,24 @@ void Parser::handleTrekPointData(QStringRef element, const QString &value)
 		_track->last().geoidheight = value.toLatin1().toDouble();
 }
 
+void Parser::handleWayPointData(QStringRef element, const QString &value)
+{
+	if (element == "name")
+		_waypoints.last().setDescription(value);
+}
+
 void Parser::handleTrekPointAttributes(const QXmlStreamAttributes &attr)
 {
 	_track->last().coordinates.setY(attr.value("lat").toLatin1().toDouble());
 	_track->last().coordinates.setX(attr.value("lon").toLatin1().toDouble());
 }
 
+void Parser::handleWayPointAttributes(const QXmlStreamAttributes &attr)
+{
+	_waypoints.last().setCoordinates(QPointF(
+	  attr.value("lon").toLatin1().toDouble(),
+	  attr.value("lat").toLatin1().toDouble()));
+}
 
 void Parser::extensions()
 {
@@ -50,13 +62,10 @@ void Parser::trackPointData()
 
 void Parser::trackPoints()
 {
-	QXmlStreamAttributes attr;
-
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "trkpt") {
-			attr = _reader.attributes();
 			_track->append(TrackPoint());
-			handleTrekPointAttributes(attr);
+			handleTrekPointAttributes(_reader.attributes());
 			trackPointData();
 		} else
 			_reader.skipCurrentElement();
@@ -73,13 +82,27 @@ void Parser::track()
 	}
 }
 
+void Parser::wayPointData()
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "name")
+			handleWayPointData(_reader.name(), _reader.readElementText());
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
 void Parser::gpx()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "trk") {
-			_data->append(QVector<TrackPoint>());
-			_track = &_data->back();
+			_tracks.append(QVector<TrackPoint>());
+			_track = &_tracks.back();
 			track();
+		} else if (_reader.name() == "wpt") {
+			_waypoints.append(WayPoint());
+			handleWayPointAttributes(_reader.attributes());
+			wayPointData();
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -97,11 +120,10 @@ bool Parser::parse()
 	return !_reader.error();
 }
 
-bool Parser::loadFile(QIODevice *device, QList<QVector<TrackPoint> > *data)
+bool Parser::loadFile(QIODevice *device)
 {
 	_reader.clear();
 	_reader.setDevice(device);
-	_data = data;
 
 	return parse();
 }

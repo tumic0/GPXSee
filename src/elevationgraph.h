@@ -1,11 +1,11 @@
 #ifndef ELEVATIONGRAPH_H
 #define ELEVATIONGRAPH_H
 
-#include "graph.h"
+#include "graphview.h"
 #include "gpx.h"
 #include "units.h"
 
-class ElevationGraph : public Graph
+class ElevationGraph : public GraphView
 {
 	Q_OBJECT
 

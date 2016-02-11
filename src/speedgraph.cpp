@@ -2,38 +2,39 @@
 #include "speedgraph.h"
 
 
-SpeedGraph::SpeedGraph(QWidget *parent) : Graph(parent)
+SpeedGraph::SpeedGraph(QWidget *parent) : GraphView(parent)
 {
 	_max = 0;
 
-	Graph::setXLabel(tr("Distance"));
-	Graph::setYLabel(tr("Speed"));
-	Graph::setXUnits(tr("km"));
-	Graph::setYUnits(tr("km/h"));
-	Graph::setXScale(M2KM);
-	Graph::setYScale(MS2KMH);
-	Graph::setPrecision(1);
+	GraphView::setXLabel(tr("Distance"));
+	GraphView::setYLabel(tr("Speed"));
+	GraphView::setXUnits(tr("km"));
+	GraphView::setYUnits(tr("km/h"));
+	GraphView::setXScale(M2KM);
+	GraphView::setYScale(MS2KMH);
+	GraphView::setPrecision(1);
 }
 
 void SpeedGraph::addInfo()
 {
-	Graph::addInfo(tr("Average"), QString::number(avg() * _yScale, 'f', 1)
+	GraphView::addInfo(tr("Average"), QString::number(avg() * _yScale, 'f', 1)
 	  + THIN_SPACE + _yUnits);
-	Graph::addInfo(tr("Maximum"), QString::number(_max * _yScale,  'f', 1)
+	GraphView::addInfo(tr("Maximum"), QString::number(_max * _yScale,  'f', 1)
 	  + THIN_SPACE + _yUnits);
 }
 
 void SpeedGraph::loadGPX(const GPX &gpx)
 {
-	for (int i = 0; i < gpx.count(); i++) {
+	for (int i = 0; i < gpx.trackCount(); i++) {
 		QVector<QPointF> data;
 		qreal max = 0;
 
-		gpx.speedGraph(i, data);
+		gpx.track(i).speedGraph(data);
 		if (data.isEmpty())
 			return;
 
-		_avg.append(QPointF(gpx.distance(i), gpx.distance(i) / gpx.time(i)));
+		_avg.append(QPointF(gpx.track(i).distance(), gpx.track(i).distance()
+		  / gpx.track(i).time()));
 
 		for (int i = 0; i < data.size(); i++)
 			max = qMax(max, data.at(i).y());
@@ -62,21 +63,21 @@ void SpeedGraph::clear()
 	_max = 0;
 	_avg.clear();
 
-	Graph::clear();
+	GraphView::clear();
 }
 
 void SpeedGraph::setUnits(enum Units units)
 {
 	if (units == Metric) {
-		Graph::setXUnits(tr("km"));
-		Graph::setYUnits(tr("km/h"));
-		Graph::setXScale(M2KM);
-		Graph::setYScale(MS2KMH);
+		GraphView::setXUnits(tr("km"));
+		GraphView::setYUnits(tr("km/h"));
+		GraphView::setXScale(M2KM);
+		GraphView::setYScale(MS2KMH);
 	} else {
-		Graph::setXUnits(tr("mi"));
-		Graph::setYUnits(tr("mi/h"));
-		Graph::setXScale(M2MI);
-		Graph::setYScale(MS2MIH);
+		GraphView::setXUnits(tr("mi"));
+		GraphView::setYUnits(tr("mi/h"));
+		GraphView::setXScale(M2MI);
+		GraphView::setYScale(MS2MIH);
 	}
 
 	clearInfo();

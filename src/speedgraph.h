@@ -2,11 +2,11 @@
 #define SPEEDGRAPH_H
 
 #include <QList>
-#include "graph.h"
+#include "graphview.h"
 #include "gpx.h"
 #include "units.h"
 
-class SpeedGraph : public Graph
+class SpeedGraph : public GraphView
 {
 	Q_OBJECT
 

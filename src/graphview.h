@@ -1,5 +1,5 @@
-#ifndef GRAPH_H
-#define GRAPH_H
+#ifndef GRAPHVIEW_H
+#define GRAPHVIEW_H
 
 #include <QGraphicsView>
 #include <QGraphicsScene>
@@ -28,13 +28,13 @@ signals:
 	void mouseClicked(const QPointF &pos);
 };
 
-class Graph : public QGraphicsView
+class GraphView : public QGraphicsView
 {
 	Q_OBJECT
 
 public:
-	Graph(QWidget *parent = 0);
-	~Graph();
+	GraphView(QWidget *parent = 0);
+	~GraphView();
 
 	void loadData(const QVector<QPointF> &data);
 	void setXLabel(const QString &label);
@@ -89,4 +89,4 @@ private:
 	ColorShop _colorShop;
 };
 
-#endif // GRAPH_H
+#endif // GRAPHVIEW_H

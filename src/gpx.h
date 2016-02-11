@@ -5,28 +5,29 @@
 #include <QList>
 #include <QPointF>
 #include <QString>
+#include "waypoint.h"
+#include "track.h"
 #include "parser.h"
 
 class GPX
 {
 public:
+	GPX() : _parser(_tracks, _waypoints) {}
 	bool loadFile(const QString &fileName);
 	const QString &errorString() const {return _error;}
 	int errorLine() const {return _errorLine;}
 
-	int count() const {return _data.count();}
-	void elevationGraph(int i, QVector<QPointF> &graph) const;
-	void speedGraph(int i, QVector<QPointF> &graph) const;
-	void track(int i, QVector<QPointF> &track) const;
-	qreal distance(int i) const;
-	qreal time(int i) const;
-	QDateTime date(int i) const;
+	int trackCount() const {return _tracks.count();}
+	Track track(int i) const {return Track(_tracks.at(i));}
+	const QList<WayPoint> &waypoints() const {return _waypoints;}
 
 private:
 	Parser _parser;
-	QList<QVector<TrackPoint> > _data;
 	QString _error;
 	int _errorLine;
+
+	QList<QVector<TrackPoint> > _tracks;
+	QList<WayPoint> _waypoints;
 };
 
 #endif // GPX_H

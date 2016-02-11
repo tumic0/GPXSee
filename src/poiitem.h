@@ -7,8 +7,8 @@
 class POIItem : public QGraphicsItem
 {
 public:
-	POIItem(const Entry &entry, QGraphicsItem *parent = 0);
-	const Entry &entry() const {return _entry;}
+	POIItem(const WayPoint &entry, QGraphicsItem *parent = 0);
+	const WayPoint &entry() const {return _entry;}
 
 	QRectF boundingRect() const {return _boundingRect;}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -17,7 +17,7 @@ public:
 private:
 	void updateBoundingRect();
 
-	Entry _entry;
+	WayPoint _entry;
 	QRectF _boundingRect;
 };
 

@@ -2,6 +2,7 @@
 #include <QSet>
 #include <QList>
 #include "ll.h"
+#include "gpx.h"
 #include "poi.h"
 
 
@@ -9,12 +10,49 @@
 
 bool POI::loadFile(const QString &fileName)
 {
+	_error.clear();
+	_errorLine = 0;
+
+	if (loadCSVFile(fileName))
+		return true;
+	if (loadGPXFile(fileName))
+		return true;
+
+	return false;
+}
+
+bool POI::loadGPXFile(const QString &fileName)
+{
+	GPX gpx;
+	int cnt = _data.size();
+
+	if (gpx.loadFile(fileName)) {
+		for (int i = 0; i < gpx.waypoints().size(); i++)
+			_data.append(WayPoint(
+			  ll2mercator(gpx.waypoints().at(i).coordinates()),
+			  gpx.waypoints().at(i).description()));
+
+		for (int i = cnt; i < _data.size(); ++i) {
+			qreal c[2];
+			c[0] = _data.at(i).coordinates().x();
+			c[1] = _data.at(i).coordinates().y();
+			_tree.Insert(c, c, i);
+		}
+
+		return true;
+	} else {
+		_error = gpx.errorString();
+		_errorLine = gpx.errorLine();
+	}
+
+	return false;
+}
+
+bool POI::loadCSVFile(const QString &fileName)
+{
 	QFile file(fileName);
 	bool ret;
 	int ln = 1, cnt = _data.size();
-
-	_error.clear();
-	_errorLine = 0;
 
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		_error = qPrintable(file.errorString());
@@ -44,18 +82,15 @@ bool POI::loadFile(const QString &fileName)
 		}
 		QByteArray ba = list[2].trimmed();
 
-		Entry entry;
-		entry.description = QString::fromUtf8(ba.data(), ba.size());
-		entry.coordinates = ll2mercator(QPointF(lon, lat));
-
-		_data.append(entry);
+		_data.append(WayPoint(ll2mercator(QPointF(lon, lat)),
+		  QString::fromUtf8(ba.data(), ba.size())));
 		ln++;
 	}
 
 	for (int i = cnt; i < _data.size(); ++i) {
 		qreal c[2];
-		c[0] = _data.at(i).coordinates.x();
-		c[1] = _data.at(i).coordinates.y();
+		c[0] = _data.at(i).coordinates().x();
+		c[1] = _data.at(i).coordinates().y();
 		_tree.Insert(c, c, i);
 	}
 
@@ -70,9 +105,9 @@ static bool cb(size_t data, void* context)
 	return true;
 }
 
-QVector<Entry> POI::points(const QVector<QPointF> &path) const
+QVector<WayPoint> POI::points(const QVector<QPointF> &path) const
 {
-	QVector<Entry> ret;
+	QVector<WayPoint> ret;
 	QSet<int> set;
 	qreal min[2], max[2];
 

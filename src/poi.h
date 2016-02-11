@@ -4,23 +4,8 @@
 #include <QVector>
 #include <QPointF>
 #include <QString>
+#include "waypoint.h"
 #include "rtree.h"
-
-class Entry
-{
-public:
-	QPointF coordinates;
-	QString description;
-
-	bool operator==(const Entry &other) const
-	  {return this->description == other.description
-	  && this->coordinates == other.coordinates;}
-};
-
-inline uint qHash(const Entry &key)
-{
-	return ::qHash(key.description);
-}
 
 
 class POI
@@ -30,15 +15,18 @@ public:
 	QString errorString() const {return _error;}
 	int errorLine() const {return _errorLine;}
 
-	QVector<Entry> points(const QVector<QPointF> &path) const;
+	QVector<WayPoint> points(const QVector<QPointF> &path) const;
 
 	void clear();
 
 private:
 	typedef RTree<size_t, qreal, 2> POITree;
 
+	bool loadCSVFile(const QString &fileName);
+	bool loadGPXFile(const QString &fileName);
+
 	POITree _tree;
-	QVector<Entry> _data;
+	QVector<WayPoint> _data;
 	QString _error;
 	int _errorLine;
 };

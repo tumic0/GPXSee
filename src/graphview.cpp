@@ -3,11 +3,11 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QEvent>
 #include <QGraphicsSimpleTextItem>
+#include "config.h"
 #include "slideritem.h"
 #include "sliderinfoitem.h"
 #include "infoitem.h"
-#include "config.h"
-#include "graph.h"
+#include "graphview.h"
 
 
 #define MARGIN 10.0
@@ -21,7 +21,7 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *e)
 }
 
 
-Graph::Graph(QWidget *parent)
+GraphView::GraphView(QWidget *parent)
 	: QGraphicsView(parent)
 {
 	_scene = new Scene(this);
@@ -54,7 +54,7 @@ Graph::Graph(QWidget *parent)
 	_precision = 0;
 }
 
-Graph::~Graph()
+GraphView::~GraphView()
 {
 	if (_xAxis->scene() != _scene)
 		delete _xAxis;
@@ -70,7 +70,7 @@ Graph::~Graph()
 	delete _scene;
 }
 
-void Graph::updateBounds(const QPointF &point)
+void GraphView::updateBounds(const QPointF &point)
 {
 	if (point.x() < _xMin)
 		_xMin = point.x();
@@ -82,51 +82,51 @@ void Graph::updateBounds(const QPointF &point)
 		_yMax = point.y();
 }
 
-void Graph::createXLabel()
+void GraphView::createXLabel()
 {
 	_xAxis->setLabel(QString("%1 [%2]").arg(_xLabel).arg(_xUnits));
 }
 
-void Graph::createYLabel()
+void GraphView::createYLabel()
 {
 	_yAxis->setLabel(QString("%1 [%2]").arg(_yLabel).arg(_yUnits));
 }
 
-void Graph::setXLabel(const QString &label)
+void GraphView::setXLabel(const QString &label)
 {
 	_xLabel = label;
 	createXLabel();
 }
 
-void Graph::setYLabel(const QString &label)
+void GraphView::setYLabel(const QString &label)
 {
 	_yLabel = label;
 	createYLabel();
 }
 
-void Graph::setXUnits(const QString &units)
+void GraphView::setXUnits(const QString &units)
 {
 	_xUnits = units;
 	createXLabel();
 }
 
-void Graph::setYUnits(const QString &units)
+void GraphView::setYUnits(const QString &units)
 {
 	_yUnits = units;
 	createYLabel();
 }
 
-void Graph::setXScale(qreal scale)
+void GraphView::setXScale(qreal scale)
 {
 	_xScale = scale;
 }
 
-void Graph::setYScale(qreal scale)
+void GraphView::setYScale(qreal scale)
 {
 	_yScale = scale;
 }
 
-void Graph::loadData(const QVector<QPointF> &data)
+void GraphView::loadData(const QVector<QPointF> &data)
 {
 	QPainterPath path;
 	QGraphicsPathItem *pi;
@@ -156,13 +156,13 @@ void Graph::loadData(const QVector<QPointF> &data)
 	redraw();
 }
 
-void Graph::redraw()
+void GraphView::redraw()
 {
 	if (!_graphs.isEmpty())
 		resize(viewport()->size() - QSizeF(MARGIN, MARGIN));
 }
 
-void Graph::resize(const QSizeF &size)
+void GraphView::resize(const QSizeF &size)
 {
 	QRectF r;
 	QSizeF mx, my;
@@ -222,13 +222,13 @@ void Graph::resize(const QSizeF &size)
 	_scene->setSceneRect(_scene->itemsBoundingRect());
 }
 
-void Graph::resizeEvent(QResizeEvent *)
+void GraphView::resizeEvent(QResizeEvent *)
 {
 	if (!_graphs.empty())
 		redraw();
 }
 
-void Graph::plot(QPainter *painter, const QRectF &target)
+void GraphView::plot(QPainter *painter, const QRectF &target)
 {
 	qreal ratio = target.width() / target.height();
 	QSizeF orig = _scene->sceneRect().size();
@@ -243,7 +243,7 @@ void Graph::plot(QPainter *painter, const QRectF &target)
 	resize(orig);
 }
 
-void Graph::clear()
+void GraphView::clear()
 {
 	if (_xAxis->scene() == _scene)
 		_scene->removeItem(_xAxis);
@@ -271,7 +271,7 @@ void Graph::clear()
 	_scene->setSceneRect(0, 0, 0, 0);
 }
 
-void Graph::emitSliderPositionChanged(const QPointF &pos)
+void GraphView::emitSliderPositionChanged(const QPointF &pos)
 {
 	if (_graphs.isEmpty())
 		return;
@@ -287,17 +287,17 @@ void Graph::emitSliderPositionChanged(const QPointF &pos)
 	_sliderInfo->setText(QString::number(-p.y() * _yScale, 'f', _precision));
 }
 
-qreal Graph::sliderPosition() const
+qreal GraphView::sliderPosition() const
 {
 	return _slider->pos().x() / _slider->area().width();
 }
 
-void Graph::setSliderPosition(qreal pos)
+void GraphView::setSliderPosition(qreal pos)
 {
 	_slider->setPos(pos * _slider->area().width(), 0);
 }
 
-void Graph::newSliderPosition(const QPointF &pos)
+void GraphView::newSliderPosition(const QPointF &pos)
 {
 	if (_slider->area().contains(pos)) {
 		_slider->setPos(pos);
@@ -305,12 +305,12 @@ void Graph::newSliderPosition(const QPointF &pos)
 	}
 }
 
-void Graph::addInfo(const QString &key, const QString &value)
+void GraphView::addInfo(const QString &key, const QString &value)
 {
 	_info->insert(key, value);
 }
 
-void Graph::clearInfo()
+void GraphView::clearInfo()
 {
 	_info->clear();
 }

@@ -1,398 +1,155 @@
-#include <cmath>
-#include <QGraphicsView>
-#include <QGraphicsScene>
-#include <QPainterPath>
-#include <QWheelEvent>
-#include "poiitem.h"
-#include "markeritem.h"
-#include "scaleitem.h"
 #include "ll.h"
 #include "track.h"
 
+#define WINDOW_EF 3
+#define WINDOW_SE 11
+#define WINDOW_SF 11
 
-#define MARGIN          10.0
-#define TRACK_WIDTH     3
-#define SCALE_OFFSET    7
-
-Track::Track(QWidget *parent)
-	: QGraphicsView(parent)
+static bool lt(const QPointF &p1, const QPointF &p2)
 {
-	_scene = new QGraphicsScene(this);
-	setScene(_scene);
-	setCacheMode(QGraphicsView::CacheBackground);
-	setDragMode(QGraphicsView::ScrollHandDrag);
-	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-	_mapScale = new ScaleItem();
-	_mapScale->setZValue(2.0);
-
-	_zoom = -1;
-	_scale = 1.0;
-	_map = 0;
-	_maxLen = 0;
+	return p1.y() < p2.y();
 }
 
-Track::~Track()
+static qreal median(QVector<QPointF> v)
 {
-	delete _scene;
+	qSort(v.begin(), v.end(), lt);
+	return v.at(v.size() / 2).y();
 }
 
-void Track::loadGPX(const GPX &gpx)
+static qreal MAD(QVector<QPointF> v, qreal m)
 {
-	for (int i = 0; i < gpx.count(); i++) {
-		QVector<QPointF> track;
-		QPainterPath path;
-		QGraphicsPathItem *pi;
-		MarkerItem *mi;
-		QColor color = _colorShop.color();
-		qreal prevScale = _scale;
-
-
-		gpx.track(i, track);
-
-		if (track.size() < 2)
-			continue;
-
-		_tracks.append(track);
-
-		path.moveTo(track.at(0).x(), -track.at(0).y());
-		for (int i = 1; i < track.size(); i++)
-			path.lineTo(track.at(i).x(), -track.at(i).y());
-
-		_maxLen = qMax(path.length(), _maxLen);
-
-
-		pi = new QGraphicsPathItem(path);
-		_trackPaths.append(pi);
-		_zoom = scale2zoom(trackScale());
-		_scale = mapScale();
-		QBrush brush(color, Qt::SolidPattern);
-		QPen pen(brush, TRACK_WIDTH * _scale);
-		pi->setPen(pen);
-		pi->setScale(1.0/_scale);
-		_scene->addItem(pi);
-
-		mi = new MarkerItem(pi);
-		_markers.append(mi);
-		mi->setPos(pi->path().pointAtPercent(0));
-		mi->setScale(_scale);
-
-		if (_trackPaths.size() > 1 && prevScale != _scale)
-			rescale(_scale);
-
-		QRectF br = trackBoundingRect();
-		QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);
-		_scene->setSceneRect(ba);
-		centerOn(ba.center());
-
-		if (_mapScale->scene() != _scene)
-			_scene->addItem(_mapScale);
-
-		_mapScale->setLatitude(track.at(track.size() / 2).y());
-		_mapScale->setZoom(_zoom);
-	}
+	for (int i = 0; i < v.size(); i++)
+		v[i].setY(qAbs(v.at(i).y() - m));
+	qSort(v.begin(), v.end(), lt);
+	return v.at(v.size() / 2).y();
 }
 
-QRectF Track::trackBoundingRect() const
+static QVector<QPointF> eliminate(const QVector<QPointF> &v, int window)
 {
-	qreal bottom, top, left, right;
+	QList<int> rm;
+	QVector<QPointF> ret;
+	qreal m, M;
 
-	bottom = _trackPaths.at(0)->sceneBoundingRect().bottom();
-	top = _trackPaths.at(0)->sceneBoundingRect().top();
-	left = _trackPaths.at(0)->sceneBoundingRect().left();
-	right = _trackPaths.at(0)->sceneBoundingRect().right();
 
-	for (int i = 1; i < _trackPaths.size(); i++) {
-		bottom = qMax(bottom, _trackPaths.at(i)->sceneBoundingRect().bottom());
-		top = qMin(top, _trackPaths.at(i)->sceneBoundingRect().top());
-		right = qMax(right, _trackPaths.at(i)->sceneBoundingRect().right());
-		left = qMin(left, _trackPaths.at(i)->sceneBoundingRect().left());
+	if (v.size() < window)
+		return QVector<QPointF>(v);
+
+	for (int i = window/2; i < v.size() - window/2; i++) {
+		m = median(v.mid(i - window/2, window));
+		M = MAD(v.mid(i - window/2, window), m);
+		if (qAbs((0.6745 * (v.at(i).y() - m)) / M) > 3.5)
+			rm.append(i);
 	}
 
-	return QRectF(QPointF(left, top), QPointF(right, bottom));
-}
-
-qreal Track::trackScale() const
-{
-	qreal bottom, top, left, right;
-
-	bottom = _trackPaths.at(0)->path().boundingRect().bottom();
-	top = _trackPaths.at(0)->path().boundingRect().top();
-	left = _trackPaths.at(0)->path().boundingRect().left();
-	right = _trackPaths.at(0)->path().boundingRect().right();
-
-	for (int i = 1; i < _trackPaths.size(); i++) {
-		bottom = qMax(bottom, _trackPaths.at(i)->path().boundingRect().bottom());
-		top = qMin(top, _trackPaths.at(i)->path().boundingRect().top());
-		right = qMax(right, _trackPaths.at(i)->path().boundingRect().right());
-		left = qMin(left, _trackPaths.at(i)->path().boundingRect().left());
+	QList<int>::const_iterator it = rm.begin();
+	for (int i = 0; i < v.size(); i++) {
+		if (it == rm.end() || *it != i)
+			ret.append(v.at(i));
+		else
+			it++;
 	}
 
-	QRectF br(QPointF(left, top), QPointF(right, bottom));
-	QPointF sc(br.width() / (viewport()->width() - MARGIN/2),
-	  br.height() / (viewport()->height() - MARGIN/2));
-
-	return qMax(sc.x(), sc.y());
+	return ret;
 }
 
-qreal Track::mapScale() const
+static QVector<QPointF> filter(const QVector<QPointF> &v, int window)
 {
-	return ((360.0/(qreal)(1<<_zoom))/(qreal)TILE_SIZE);
+	qreal acc = 0;
+	QVector<QPointF> ret;
+
+	if (v.size() < window)
+		return QVector<QPointF>(v);
+
+	for (int i = 0; i < window; i++)
+		acc += v.at(i).y();
+	for (int i = 0; i <= window/2; i++)
+		ret.append(QPointF(v.at(i).x(), acc/window));
+
+	for (int i = window/2 + 1; i < v.size() - window/2; i++) {
+		acc += v.at(i + window/2).y() - v.at(i - (window/2 + 1)).y();
+		ret.append(QPointF(v.at(i).x(), acc/window));
+	}
+
+	for (int i = v.size() - window/2; i < v.size(); i++)
+		ret.append(QPointF(v.at(i).x(), acc/window));
+
+	return ret;
 }
 
-void Track::rescale(qreal scale)
+void Track::elevationGraph(QVector<QPointF> &graph) const
 {
-	for (int i = 0; i < _trackPaths.size(); i++) {
-		_markers.at(i)->setScale(scale);
-		_trackPaths.at(i)->setScale(1.0/scale);
+	qreal dist = 0;
+	QVector<QPointF> raw;
 
-		QPen pen(_trackPaths.at(i)->pen());
-		pen.setWidthF(TRACK_WIDTH * scale);
-		_trackPaths.at(i)->setPen(pen);
-	}
-
-	QHash<Entry, POIItem*>::const_iterator it, jt;
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
-		it.value()->setPos(QPointF(it.value()->entry().coordinates.x()
-		  * 1.0/scale, -it.value()->entry().coordinates.y() * 1.0/scale));
-		it.value()->show();
-	}
-
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
-		for (jt = _pois.constBegin(); jt != _pois.constEnd(); jt++) {
-			if (it != jt && it.value()->isVisible() && jt.value()->isVisible()
-			  && it.value()->collidesWithItem(jt.value()))
-				jt.value()->hide();
-		}
-	}
-
-	_scale = scale;
-}
-
-void Track::loadPOI(const POI &poi)
-{
-	QHash<Entry, POIItem*>::const_iterator it,jt;
-
-	if (!_tracks.size())
+	if (!_data.size())
 		return;
 
-	for (int i = 0; i < _tracks.size(); i++) {
-		QVector<Entry> p = poi.points(_tracks.at(i));
+	raw.append(QPointF(0, _data.at(0).elevation));
+	for (int i = 1; i < _data.size(); i++) {
+		dist += llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
+		raw.append(QPointF(dist,  _data.at(i).elevation
+		  - _data.at(i).geoidheight));
+	}
 
-		for (int i = 0; i < p.size(); i++) {
-			if (_pois.contains(p.at(i)))
+	graph = filter(raw, WINDOW_EF);
+}
+
+void Track::speedGraph(QVector<QPointF> &graph) const
+{
+	qreal dist = 0, v, ds, dt;
+	QVector<QPointF> raw;
+
+	if (!_data.size())
+		return;
+
+	raw.append(QPointF(0, 0));
+	for (int i = 1; i < _data.size(); i++) {
+		ds = llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
+		dt = _data.at(i-1).timestamp.msecsTo(_data.at(i).timestamp) / 1000.0;
+		dist += ds;
+
+		if (_data.at(i).speed < 0) {
+			if (dt == 0)
 				continue;
+			v = ds / dt;
+		} else
+			v = _data.at(i).speed;
 
-			POIItem *pi = new POIItem(p.at(i));
-			pi->setPos(p.at(i).coordinates.x() * 1.0/_scale,
-			  -p.at(i).coordinates.y() * 1.0/_scale);
-			pi->setZValue(1);
-			_scene->addItem(pi);
-
-			_pois.insert(p.at(i), pi);
-		}
+		raw.append(QPointF(dist, v));
 	}
 
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
-		for (jt = _pois.constBegin(); jt != _pois.constEnd(); jt++) {
-			if (it != jt && it.value()->isVisible() && jt.value()->isVisible()
-			  && it.value()->collidesWithItem(jt.value()))
-				jt.value()->hide();
-		}
-	}
+	graph = filter(eliminate(raw, WINDOW_SE), WINDOW_SF);
 }
 
-void Track::setMap(Map *map)
+void Track::track(QVector<QPointF> &track) const
 {
-	_map = map;
-	if (_map)
-		connect(_map, SIGNAL(loaded()), this, SLOT(redraw()));
-	resetCachedContent();
+	for (int i = 0; i < _data.size(); i++)
+		track.append(ll2mercator(_data.at(i).coordinates));
 }
 
-void Track::setUnits(enum Units units)
+qreal Track::distance() const
 {
-	_mapScale->setUnits(units);
+	qreal dist = 0;
+
+	for (int i = 1; i < _data.size(); i++)
+		dist += llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
+
+	return dist;
 }
 
-void Track::redraw()
+qreal Track::time() const
 {
-	resetCachedContent();
+	if (_data.size() < 2)
+		return 0;
+
+	return (_data.at(0).timestamp.msecsTo(_data.at(_data.size() - 1).timestamp)
+	  / 1000.0);
 }
 
-void Track::wheelEvent(QWheelEvent *event)
+QDateTime Track::date() const
 {
-	if (_tracks.isEmpty())
-		return;
-
-	QPointF pos = mapToScene(event->pos());
-	qreal scale = _scale;
-
-	_zoom = (event->delta() > 0) ?
-		qMin(_zoom + 1, ZOOM_MAX) : qMax(_zoom - 1, ZOOM_MIN);
-
-	rescale(mapScale());
-	QRectF br = trackBoundingRect();
-	QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);
-	_scene->setSceneRect(ba);
-
-	if (br.width() < viewport()->size().width()
-	  && br.height() < viewport()->size().height())
-		centerOn(br.center());
+	if (_data.size())
+		return _data.at(0).timestamp;
 	else
-		centerOn(pos * scale/_scale);
-
-	_mapScale->setZoom(_zoom);
-
-	resetCachedContent();
-}
-
-void Track::setTrackLineWidth(qreal width)
-{
-	for (int i = 0; i < _trackPaths.size(); i++) {
-		QPen pen(_trackPaths.at(i)->pen());
-		pen.setWidthF(width);
-		_trackPaths.at(i)->setPen(pen);
-	}
-}
-
-void Track::plot(QPainter *painter, const QRectF &target)
-{
-	QRectF orig, adj;
-	qreal ratio, diff;
-
-	_scene->removeItem(_mapScale);
-	orig = _scene->itemsBoundingRect().adjusted(0, 0, 0,
-	  _mapScale->boundingRect().height());
-	_scene->addItem(_mapScale);
-
-	if (target.width()/target.height() > orig.width()/orig.height()) {
-		ratio = target.width()/target.height();
-		diff = qAbs((orig.height() * ratio) - orig.width());
-		adj = orig.adjusted(-diff/2, 0, diff/2, 0);
-	} else {
-		ratio = target.height()/target.width();
-		diff = fabs((orig.width() * ratio) - orig.height());
-		adj = orig.adjusted(0, -diff/2, 0, diff/2);
-	}
-
-	_mapScale->setPos(adj.bottomRight()
-	  + QPoint(-_mapScale->boundingRect().width(),
-	  -_mapScale->boundingRect().height()));
-
-	setTrackLineWidth(0);
-	_scene->render(painter, target, adj);
-	setTrackLineWidth(TRACK_WIDTH * _scale);
-}
-
-enum QPrinter::Orientation Track::orientation() const
-{
-	return (sceneRect().width() > sceneRect().height())
-		? QPrinter::Landscape : QPrinter::Portrait;
-}
-
-void Track::clearPOI()
-{
-	QHash<Entry, POIItem*>::const_iterator it;
-
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
-		_scene->removeItem(it.value());
-		delete it.value();
-	}
-
-	_pois.clear();
-}
-
-void Track::clear()
-{
-	if (_mapScale->scene() == _scene)
-		_scene->removeItem(_mapScale);
-
-	_pois.clear();
-	_tracks.clear();
-	_trackPaths.clear();
-	_markers.clear();
-	_scene->clear();
-	_colorShop.reset();
-
-	_maxLen = 0;
-
-	_scene->setSceneRect(0, 0, 0, 0);
-}
-
-void Track::movePositionMarker(qreal val)
-{
-	for (int i = 0; i < _trackPaths.size(); i++) {
-		qreal f = _maxLen / _trackPaths.at(i)->path().length();
-		QPointF pos = _trackPaths.at(i)->path().pointAtPercent(qMin(val * f,
-		  1.0));
-		_markers.at(i)->setPos(pos);
-	}
-}
-
-void Track::drawBackground(QPainter *painter, const QRectF &rect)
-{
-	if (_tracks.isEmpty() || !_map) {
-		painter->fillRect(rect, Qt::white);
-		return;
-	}
-
-	painter->setWorldMatrixEnabled(false);
-
-	QRectF rr(rect.topLeft() * _scale, rect.size());
-	QPoint tile = mercator2tile(QPointF(rr.topLeft().x(), -rr.topLeft().y()),
-	  _zoom);
-	QPointF tm = tile2mercator(tile, _zoom);
-	QPoint tl = mapFromScene(QPointF(tm.x() / _scale, -tm.y() / _scale));
-
-	QList<Tile> tiles;
-	for (int i = 0; i <= rr.size().width() / TILE_SIZE + 1; i++) {
-		for (int j = 0; j <= rr.size().height() / TILE_SIZE + 1; j++) {
-			tiles.append(Tile(QPoint(tile.x() + i, tile.y() + j), _zoom));
-		}
-	}
-
-	_map->loadTiles(tiles);
-
-	for (int i = 0; i < tiles.count(); i++) {
-		Tile &t = tiles[i];
-		QPoint tp(tl.x() + (t.xy().rx() - tile.rx()) * TILE_SIZE,
-		  tl.y() + (t.xy().ry() - tile.ry()) * TILE_SIZE);
-		painter->drawPixmap(tp, t.pixmap());
-	}
-}
-
-void Track::resizeEvent(QResizeEvent *e)
-{
-	if (_tracks.isEmpty())
-		return;
-
-	QRectF br = trackBoundingRect();
-	QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-	if (ba.width() < e->size().width()) {
-		qreal diff = e->size().width() - ba.width();
-		ba.adjust(-diff/2, 0, diff/2, 0);
-	}
-	if (ba.height() < e->size().height()) {
-		qreal diff = e->size().height() - ba.height();
-		ba.adjust(0, -diff/2, 0, diff/2);
-	}
-
-	_scene->setSceneRect(ba);
-
-	centerOn(br.center());
-	resetCachedContent();
-}
-
-void Track::paintEvent(QPaintEvent *e)
-{
-	QPointF scenePos = mapToScene(rect().bottomLeft() + QPoint(SCALE_OFFSET,
-	  -(SCALE_OFFSET + _mapScale->boundingRect().height())));
-	if (_mapScale->pos() != scenePos)
-		_mapScale->setPos(scenePos);
-
-	QGraphicsView::paintEvent(e);
+		return QDateTime();
 }

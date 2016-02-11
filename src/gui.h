@@ -15,7 +15,7 @@
 class FileBrowser;
 class ElevationGraph;
 class SpeedGraph;
-class Track;
+class TrackView;
 class Map;
 
 class GUI : public QMainWindow
@@ -114,7 +114,7 @@ private:
 
 	ElevationGraph *_elevationGraph;
 	SpeedGraph *_speedGraph;
-	Track *_track;
+	TrackView *_track;
 
 	POI _poi;
 	QList<Map*> _maps;

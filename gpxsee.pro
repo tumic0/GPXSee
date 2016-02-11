@@ -8,8 +8,6 @@ HEADERS += src/config.h \
     src/icons.h \
     src/gui.h \
     src/gpx.h \
-    src/graph.h \
-    src/track.h \
     src/parser.h \
     src/poi.h \
     src/rtree.h \
@@ -30,12 +28,15 @@ HEADERS += src/config.h \
     src/downloader.h \
     src/units.h \
     src/scaleitem.h \
-    src/nicenum.h
+    src/nicenum.h \
+    src/waypoint.h \
+    src/trackview.h \
+    src/track.h \
+    src/graphview.h \
+    src/trackpoint.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
-    src/graph.cpp \
-    src/track.cpp \
     src/parser.cpp \
     src/poi.cpp \
     src/ll.cpp \
@@ -53,7 +54,10 @@ SOURCES += src/main.cpp \
     src/maplist.cpp \
     src/downloader.cpp \
     src/scaleitem.cpp \
-    src/nicenum.cpp
+    src/nicenum.cpp \
+    src/trackview.cpp \
+    src/track.cpp \
+    src/graphview.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx:ICON = icons/gpxsee.icns

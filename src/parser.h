@@ -2,25 +2,18 @@
 #define PARSER_H
 
 #include <QXmlStreamReader>
-#include <QDateTime>
-#include <QPointF>
+#include <QVector>
+#include <QList>
+#include "trackpoint.h"
+#include "waypoint.h"
 
-struct TrackPoint
-{
-	QPointF coordinates;
-	QDateTime timestamp;
-	qreal elevation;
-	qreal geoidheight;
-	qreal speed;
-
-	TrackPoint() {elevation = 0; geoidheight = 0; speed = -1;}
-};
 
 class Parser
 {
 public:
-	Parser() {_data = 0; _track = 0;}
-	bool loadFile(QIODevice *device, QList<QVector<TrackPoint> > *data);
+	Parser(QList<QVector<TrackPoint> > &tracks, QList<WayPoint> &waypoints)
+	  : _tracks(tracks), _waypoints(waypoints) {_track = 0;}
+	bool loadFile(QIODevice *device);
 	QString errorString() const {return _reader.errorString();}
 	int errorLine() const {return _reader.lineNumber();}
 
@@ -31,13 +24,17 @@ private:
 	void trackPoints();
 	void extensions();
 	void trackPointData();
+	void wayPointData();
 
+	void handleWayPointAttributes(const QXmlStreamAttributes &attr);
+	void handleWayPointData(QStringRef element, const QString &value);
 	void handleTrekPointAttributes(const QXmlStreamAttributes &attr);
 	void handleTrekPointData(QStringRef element, const QString &value);
 	void handleExtensionData(QStringRef element, const QString &value);
 
 	QXmlStreamReader _reader;
-	QList<QVector<TrackPoint> > *_data;
+	QList<QVector<TrackPoint> > &_tracks;
+	QList<WayPoint> &_waypoints;
 	QVector<TrackPoint> *_track;
 };
 

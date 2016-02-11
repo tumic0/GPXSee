@@ -3,39 +3,39 @@
 #include "elevationgraph.h"
 
 
-ElevationGraph::ElevationGraph(QWidget *parent) : Graph(parent)
+ElevationGraph::ElevationGraph(QWidget *parent) : GraphView(parent)
 {
 	_ascent = 0;
 	_descent = 0;
 	_max = -FLT_MAX;
 	_min = FLT_MAX;
 
-	Graph::setXLabel(tr("Distance"));
-	Graph::setYLabel(tr("Elevation"));
-	Graph::setXUnits(tr("km"));
-	Graph::setYUnits(tr("m"));
-	Graph::setXScale(M2KM);
+	GraphView::setXLabel(tr("Distance"));
+	GraphView::setYLabel(tr("Elevation"));
+	GraphView::setXUnits(tr("km"));
+	GraphView::setYUnits(tr("m"));
+	GraphView::setXScale(M2KM);
 }
 
 void ElevationGraph::addInfo()
 {
-	Graph::addInfo(tr("Ascent"), QString::number(_ascent * _yScale, 'f', 0)
+	GraphView::addInfo(tr("Ascent"), QString::number(_ascent * _yScale, 'f', 0)
 	  + THIN_SPACE + _yUnits);
-	Graph::addInfo(tr("Descent"), QString::number(_descent * _yScale, 'f', 0)
+	GraphView::addInfo(tr("Descent"), QString::number(_descent * _yScale, 'f', 0)
 	  + THIN_SPACE + _yUnits);
-	Graph::addInfo(tr("Maximum"), QString::number(_max * _yScale, 'f', 0)
+	GraphView::addInfo(tr("Maximum"), QString::number(_max * _yScale, 'f', 0)
 	  + THIN_SPACE + _yUnits);
-	Graph::addInfo(tr("Minimum"), QString::number(_min * _yScale, 'f', 0)
+	GraphView::addInfo(tr("Minimum"), QString::number(_min * _yScale, 'f', 0)
 	  + THIN_SPACE + _yUnits);
 }
 
 void ElevationGraph::loadGPX(const GPX &gpx)
 {
-	for (int i = 0; i < gpx.count(); i++) {
+	for (int i = 0; i < gpx.trackCount(); i++) {
 		QVector<QPointF> data;
 		qreal min, max, ascent = 0, descent = 0;
 
-		gpx.elevationGraph(i, data);
+		gpx.track(i).elevationGraph(data);
 		if (data.isEmpty())
 			return;
 
@@ -73,21 +73,21 @@ void ElevationGraph::clear()
 	_max = -FLT_MAX;
 	_min = FLT_MAX;
 
-	Graph::clear();
+	GraphView::clear();
 }
 
 void ElevationGraph::setUnits(enum Units units)
 {
 	if (units == Metric) {
-		Graph::setXUnits(tr("km"));
-		Graph::setYUnits(tr("m"));
-		Graph::setXScale(M2KM);
-		Graph::setYScale(1);
+		GraphView::setXUnits(tr("km"));
+		GraphView::setYUnits(tr("m"));
+		GraphView::setXScale(M2KM);
+		GraphView::setYScale(1);
 	} else {
-		Graph::setXUnits(tr("mi"));
-		Graph::setYUnits(tr("ft"));
-		Graph::setXScale(M2MI);
-		Graph::setYScale(M2FT);
+		GraphView::setXUnits(tr("mi"));
+		GraphView::setYUnits(tr("ft"));
+		GraphView::setXScale(M2MI);
+		GraphView::setYScale(M2FT);
 	}
 
 	clearInfo();

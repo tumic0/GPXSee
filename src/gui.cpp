@@ -16,7 +16,7 @@
 #include "maplist.h"
 #include "elevationgraph.h"
 #include "speedgraph.h"
-#include "track.h"
+#include "trackview.h"
 #include "infoitem.h"
 #include "filebrowser.h"
 #include "gui.h"
@@ -302,7 +302,7 @@ void GUI::createToolBars()
 
 void GUI::createTrackView()
 {
-	_track = new Track(this);
+	_track = new TrackView(this);
 
 	if (_showMapAction->isChecked())
 		_track->setMap(_currentMap);
@@ -444,12 +444,12 @@ bool GUI::loadFile(const QString &fileName)
 		if (_showPOIAction->isChecked())
 			_track->loadPOI(_poi);
 
-		for (int i = 0; i < gpx.count(); i++) {
-			_distance += gpx.distance(i);
-			_time += gpx.time(i);
+		for (int i = 0; i < gpx.trackCount(); i++) {
+			_distance += gpx.track(i).distance();
+			_time += gpx.track(i).time();
 		}
 
-		_trackCount += gpx.count();
+		_trackCount += gpx.trackCount();
 
 		return true;
 	} else {

@@ -5,7 +5,7 @@
 
 #define POINT_SIZE  8
 
-POIItem::POIItem(const Entry &entry, QGraphicsItem *parent)
+POIItem::POIItem(const WayPoint &entry, QGraphicsItem *parent)
   : QGraphicsItem(parent)
 {
 	_entry = entry;
@@ -18,7 +18,7 @@ void POIItem::updateBoundingRect()
 	font.setPixelSize(FONT_SIZE);
 	font.setFamily(FONT_FAMILY);
 	QFontMetrics fm(font);
-	QRect ts = fm.tightBoundingRect(_entry.description);
+	QRect ts = fm.tightBoundingRect(_entry.description());
 
 	_boundingRect = QRectF(0, 0, ts.width() + POINT_SIZE,
 	  ts.height() + fm.descent() + POINT_SIZE);
@@ -33,11 +33,11 @@ void POIItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	font.setPixelSize(FONT_SIZE);
 	font.setFamily(FONT_FAMILY);
 	QFontMetrics fm(font);
-	QRect ts = fm.tightBoundingRect(_entry.description);
+	QRect ts = fm.tightBoundingRect(_entry.description());
 
 	painter->setFont(font);
 	painter->drawText(POINT_SIZE - qMax(ts.x(), 0), POINT_SIZE + ts.height(),
-	  _entry.description);
+	  _entry.description());
 	painter->setBrush(Qt::SolidPattern);
 	painter->drawEllipse(0, 0, POINT_SIZE, POINT_SIZE);
 
