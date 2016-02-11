@@ -1,2 +1,3 @@
-OSM	http://tile.openstreetmap.org/$z/$x/$y.png
-Thunderforest	http://tile.thunderforest.com/outdoors/$z/$x/$y.png
+Thunderforest - Landscape	http://tile.thunderforest.com/landscape/$z/$x/$y.png
+Thunderforest - Outdoors	http://tile.thunderforest.com/outdoors/$z/$x/$y.png
+Open Street Map	http://tile.openstreetmap.org/$z/$x/$y.png
