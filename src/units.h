@@ -16,4 +16,6 @@ enum Units {
 #define MIINFT  5280 // 1 mi in ft
 #define KMINM   1000 // 1 km in m
 
+#define THIN_SPACE     QString::fromUtf8("\xE2\x80\x89")
+
 #endif // UNITS_H
