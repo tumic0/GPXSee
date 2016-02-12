@@ -6,7 +6,7 @@
 #include "map.h"
 
 
-Map::Map(const QString &name, const QString &url, QObject *parent)
+Map::Map(QObject *parent, const QString &name, const QString &url)
   : QObject(parent)
 {
 	_name = name;

@@ -4,7 +4,7 @@
 #include "maplist.h"
 
 
-QList<Map*> MapList::load(const QString &fileName)
+QList<Map*> MapList::load(QObject *parent, const QString &fileName)
 {
 	QList<Map*> mapList;
 	QFileInfo fi(fileName);
@@ -33,7 +33,7 @@ QList<Map*> MapList::load(const QString &fileName)
 		QByteArray ba1 = list[0].trimmed();
 		QByteArray ba2 = list[1].trimmed();
 
-		mapList.append(new Map(QString::fromUtf8(ba1.data(), ba1.size()),
+		mapList.append(new Map(parent, QString::fromUtf8(ba1.data(), ba1.size()),
 		  QString::fromLatin1(ba2.data(), ba2.size())));
 	}
 

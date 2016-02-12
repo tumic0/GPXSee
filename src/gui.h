@@ -23,7 +23,7 @@ class GUI : public QMainWindow
 	Q_OBJECT
 
 public:
-	GUI();
+	GUI(QWidget *parent = 0);
 
 	bool openFile(const QString &fileName);
 

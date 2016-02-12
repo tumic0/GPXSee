@@ -10,13 +10,30 @@
 
 bool POI::loadFile(const QString &fileName)
 {
+	QString error;
+	int errorLine;
+
 	_error.clear();
 	_errorLine = 0;
 
+
 	if (loadCSVFile(fileName))
 		return true;
+	else {
+		error = _error;
+		errorLine = _errorLine;
+	}
 	if (loadGPXFile(fileName))
 		return true;
+
+	fprintf(stderr, "Error loading POI file: %s:\n", qPrintable(fileName));
+	fprintf(stderr, "CSV: line %d: %s\n", errorLine, qPrintable(error));
+	fprintf(stderr, "GPX: line %d: %s\n", _errorLine, qPrintable(_error));
+
+	if (errorLine > _errorLine) {
+		_errorLine = errorLine;
+		_error = error;
+	}
 
 	return false;
 }

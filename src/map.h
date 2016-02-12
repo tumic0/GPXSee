@@ -28,7 +28,8 @@ signals:
 	void loaded();
 
 public:
-	Map(const QString &name, const QString &url, QObject *parent = 0);
+	Map(QObject *parent = 0, const QString &name = QString(),
+	  const QString &url = QString());
 
 	const QString &name() const {return _name;}
 	void loadTiles(QList<Tile> &list);

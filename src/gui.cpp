@@ -35,7 +35,7 @@ static QString timeSpan(qreal time)
 }
 
 
-GUI::GUI()
+GUI::GUI(QWidget *parent) : QMainWindow(parent)
 {
 	loadFiles();
 
@@ -75,18 +75,15 @@ GUI::GUI()
 void GUI::loadFiles()
 {
 	// Maps
-	_maps = MapList::load(QString("%1/" MAP_LIST_FILE).arg(QDir::homePath()));
-	_maps += MapList::load(":/maps.txt");
+	_maps = MapList::load(this, QString("%1/" MAP_LIST_FILE)
+	  .arg(QDir::homePath()));
+	_maps += MapList::load(this, ":/maps.txt");
 
 	// POI files
 	QDir dir(QString("%1/" POI_DIR).arg(QDir::homePath()));
 	QFileInfoList list = dir.entryInfoList(QStringList(), QDir::Files);
-	for (int i = 0; i < list.size(); ++i) {
-		if (!_poi.loadFile(list.at(i).absoluteFilePath()))
-			fprintf(stderr, "Error loading POI file: %s: %s",
-			  qPrintable(list.at(i).absoluteFilePath()),
-			  qPrintable(_poi.errorString()));
-	}
+	for (int i = 0; i < list.size(); ++i)
+		_poi.loadFile(list.at(i).absoluteFilePath());
 }
 
 void GUI::createMapActions()
@@ -407,7 +404,8 @@ void GUI::dataSources()
 
 void GUI::openFile()
 {
-	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open file"));
+	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open file"),
+	  QString(), tr("GPX files (*.gpx);;All files (*)"));
 	QStringList list = files;
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
@@ -466,7 +464,8 @@ bool GUI::loadFile(const QString &fileName)
 
 void GUI::openPOIFile()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open POI file"));
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open POI file"),
+	  QString(), tr("GPX files (*.gpx);;CSV files (*.csv);;All files (*)"));
 
 	if (!fileName.isEmpty()) {
 		if (!_poi.loadFile(fileName)) {
