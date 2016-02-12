@@ -6,12 +6,12 @@
 #include <QHash>
 #include <QList>
 #include <QPrinter>
-#include "poi.h"
-#include "gpx.h"
 #include "units.h"
 #include "colorshop.h"
+#include "waypoint.h"
 
-
+class GPX;
+class POI;
 class Map;
 class POIItem;
 class MarkerItem;

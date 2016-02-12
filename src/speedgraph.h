@@ -3,8 +3,9 @@
 
 #include <QList>
 #include "graphview.h"
-#include "gpx.h"
 #include "units.h"
+
+class GPX;
 
 class SpeedGraph : public GraphView
 {

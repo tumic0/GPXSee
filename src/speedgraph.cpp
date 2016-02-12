@@ -1,4 +1,5 @@
 #include "config.h"
+#include "gpx.h"
 #include "speedgraph.h"
 
 

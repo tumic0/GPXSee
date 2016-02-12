@@ -1,5 +1,6 @@
 #include <float.h>
 #include "config.h"
+#include "gpx.h"
 #include "elevationgraph.h"
 
 

@@ -2,8 +2,9 @@
 #define ELEVATIONGRAPH_H
 
 #include "graphview.h"
-#include "gpx.h"
 #include "units.h"
+
+class GPX;
 
 class ElevationGraph : public GraphView
 {
