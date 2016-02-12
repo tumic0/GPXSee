@@ -6,12 +6,12 @@
 #include <QVector>
 #include <QList>
 #include <QPointF>
-#include "axisitem.h"
 #include "colorshop.h"
 
 
 #define THIN_SPACE     QString::fromUtf8("\xE2\x80\x89")
 
+class AxisItem;
 class SliderItem;
 class SliderInfoItem;
 class InfoItem;

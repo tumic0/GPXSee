@@ -3,6 +3,7 @@
 #include <QGraphicsScene>
 #include <QPainterPath>
 #include <QWheelEvent>
+#include "map.h"
 #include "poiitem.h"
 #include "markeritem.h"
 #include "scaleitem.h"

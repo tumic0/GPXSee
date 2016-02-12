@@ -2,8 +2,6 @@
 #define MAP_H
 
 #include <QPixmap>
-#include "downloader.h"
-
 
 class Tile
 {

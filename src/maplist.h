@@ -2,8 +2,9 @@
 #define MAPLIST_H
 
 #include <QList>
-#include "map.h"
+#include <QString>
 
+class Map;
 
 class MapList
 {

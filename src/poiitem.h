@@ -2,7 +2,7 @@
 #define POIITEM_H
 
 #include <QGraphicsItem>
-#include "poi.h"
+#include "waypoint.h"
 
 class POIItem : public QGraphicsItem
 {

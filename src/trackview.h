@@ -8,11 +8,11 @@
 #include <QPrinter>
 #include "poi.h"
 #include "gpx.h"
-#include "map.h"
 #include "units.h"
 #include "colorshop.h"
 
 
+class Map;
 class POIItem;
 class MarkerItem;
 class ScaleItem;

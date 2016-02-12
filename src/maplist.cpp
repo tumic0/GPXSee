@@ -1,5 +1,6 @@
 #include <QFile>
 #include <QFileInfo>
+#include "map.h"
 #include "maplist.h"
 
 

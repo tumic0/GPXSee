@@ -4,6 +4,7 @@
 #include <QEvent>
 #include <QGraphicsSimpleTextItem>
 #include "config.h"
+#include "axisitem.h"
 #include "slideritem.h"
 #include "sliderinfoitem.h"
 #include "infoitem.h"
