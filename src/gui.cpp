@@ -519,28 +519,28 @@ void GUI::saveFile(const QString &fileName)
 	InfoItem info;
 	if (_imperialUnitsAction->isChecked()) {
 		info.insert(tr("Distance"), QString::number(_distance * M2MI, 'f', 1)
-		  + THIN_SPACE + tr("mi"));
+		  + UNIT_SPACE + tr("mi"));
 		info.insert(tr("Time"), timeSpan(_time));
 		info.insert(tr("Ascent"), QString::number(_elevationGraph->ascent()
-		  * M2FT, 'f', 0) + THIN_SPACE + tr("ft"));
+		  * M2FT, 'f', 0) + UNIT_SPACE + tr("ft"));
 		info.insert(tr("Descent"), QString::number(_elevationGraph->descent()
-		  * M2FT, 'f', 0) + THIN_SPACE + tr("ft"));
+		  * M2FT, 'f', 0) + UNIT_SPACE + tr("ft"));
 		info.insert(tr("Maximum"), QString::number(_elevationGraph->max()
-		  * M2FT, 'f', 0) + THIN_SPACE + tr("ft"));
+		  * M2FT, 'f', 0) + UNIT_SPACE + tr("ft"));
 		info.insert(tr("Minimum"), QString::number(_elevationGraph->min()
-		  * M2FT, 'f', 0) + THIN_SPACE + tr("ft"));
+		  * M2FT, 'f', 0) + UNIT_SPACE + tr("ft"));
 	} else {
 		info.insert(tr("Distance"), QString::number(_distance * M2KM, 'f', 1)
-		  + THIN_SPACE + tr("km"));
+		  + UNIT_SPACE + tr("km"));
 		info.insert(tr("Time"), timeSpan(_time));
 		info.insert(tr("Ascent"), QString::number(_elevationGraph->ascent(),
-		  'f', 0) + THIN_SPACE + tr("m"));
+		  'f', 0) + UNIT_SPACE + tr("m"));
 		info.insert(tr("Descent"), QString::number(_elevationGraph->descent(),
-		  'f', 0) + THIN_SPACE + tr("m"));
+		  'f', 0) + UNIT_SPACE + tr("m"));
 		info.insert(tr("Maximum"), QString::number(_elevationGraph->max(), 'f',
-		  0) + THIN_SPACE + tr("m"));
+		  0) + UNIT_SPACE + tr("m"));
 		info.insert(tr("Minimum"), QString::number(_elevationGraph->min(), 'f',
-		  0) + THIN_SPACE + tr("m"));
+		  0) + UNIT_SPACE + tr("m"));
 	}
 	scene.addItem(&info);
 	scene.render(&p, QRectF(0, 0, printer.width(), 200));

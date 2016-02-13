@@ -19,9 +19,9 @@ SpeedGraph::SpeedGraph(QWidget *parent) : GraphView(parent)
 void SpeedGraph::addInfo()
 {
 	GraphView::addInfo(tr("Average"), QString::number(avg() * _yScale, 'f', 1)
-	  + THIN_SPACE + _yUnits);
+	  + UNIT_SPACE + _yUnits);
 	GraphView::addInfo(tr("Maximum"), QString::number(_max * _yScale,  'f', 1)
-	  + THIN_SPACE + _yUnits);
+	  + UNIT_SPACE + _yUnits);
 }
 
 void SpeedGraph::loadGPX(const GPX &gpx)

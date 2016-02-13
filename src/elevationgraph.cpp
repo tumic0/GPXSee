@@ -21,13 +21,13 @@ ElevationGraph::ElevationGraph(QWidget *parent) : GraphView(parent)
 void ElevationGraph::addInfo()
 {
 	GraphView::addInfo(tr("Ascent"), QString::number(_ascent * _yScale, 'f', 0)
-	  + THIN_SPACE + _yUnits);
+	  + UNIT_SPACE + _yUnits);
 	GraphView::addInfo(tr("Descent"), QString::number(_descent * _yScale, 'f', 0)
-	  + THIN_SPACE + _yUnits);
+	  + UNIT_SPACE + _yUnits);
 	GraphView::addInfo(tr("Maximum"), QString::number(_max * _yScale, 'f', 0)
-	  + THIN_SPACE + _yUnits);
+	  + UNIT_SPACE + _yUnits);
 	GraphView::addInfo(tr("Minimum"), QString::number(_min * _yScale, 'f', 0)
-	  + THIN_SPACE + _yUnits);
+	  + UNIT_SPACE + _yUnits);
 }
 
 void ElevationGraph::loadGPX(const GPX &gpx)
