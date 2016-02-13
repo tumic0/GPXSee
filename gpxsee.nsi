@@ -1,5 +1,5 @@
-;Include Modern UI
 !include "MUI2.nsh"
+!include "x64.nsh"
 
 ; The name of the installer
 Name "GPXSee"
@@ -7,20 +7,21 @@ Name "GPXSee"
 ; The file to write
 OutFile "install.exe"
 
-RequestExecutionLevel user
+; Required execution level 
+RequestExecutionLevel admin
 
 ; The default installation directory
-InstallDir "$LOCALAPPDATA\GPXSee"
+InstallDir "$PROGRAMFILES\GPXSee"
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
-InstallDirRegKey HKCU "Software\GPXSee" "Install_Dir"
+InstallDirRegKey HKLM "Software\GPXSee" "Install_Dir"
 
 ; Registry key for uninstaller
 !define REGENTRY "Software\Microsoft\Windows\CurrentVersion\Uninstall\GPXSee" 
 
 ; Start menu page configuration
-!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU" 
+!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM" 
 !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\GPXSee" 
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "GPXSee" 
 
@@ -58,18 +59,19 @@ Section "GPXSee (required)" SEC_APP
   File "gpxsee.exe"
   
   ; Write the installation path into the registry
-  WriteRegStr HKCU SOFTWARE\GPXSee "Install_Dir" "$INSTDIR"
+  WriteRegStr HKLM SOFTWARE\GPXSee "Install_Dir" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
-  WriteRegStr HKCU "${REGENTRY}" "DisplayName" "GPXSee"
-  WriteRegStr HKCU "${REGENTRY}" "Publisher" "Martin Tuma"
-  WriteRegStr HKCU "${REGENTRY}" "DisplayVersion" "2.7"
-  WriteRegStr HKCU "${REGENTRY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
-  WriteRegDWORD HKCU "${REGENTRY}" "NoModify" 1
-  WriteRegDWORD HKCU "${REGENTRY}" "NoRepair" 1
+  WriteRegStr HKLM "${REGENTRY}" "DisplayName" "GPXSee"
+  WriteRegStr HKLM "${REGENTRY}" "Publisher" "Martin Tuma"
+  WriteRegStr HKLM "${REGENTRY}" "DisplayVersion" "2.7"
+  WriteRegStr HKLM "${REGENTRY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
+  WriteRegDWORD HKLM "${REGENTRY}" "NoModify" 1
+  WriteRegDWORD HKLM "${REGENTRY}" "NoRepair" 1
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
   ; Create start menu entry and add links
+  SetShellVarContext all
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application  
     CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
@@ -93,9 +95,23 @@ SectionEnd
 
 Section "MSVC runtime" SEC_MSVC
 
-  File "msvcr100.dll"
-  File "msvcp100.dll"
+  DetailPrint "Checking whether Visual C++ 2015 Redistributable is already installed..."
+  ${If} ${RunningX64}
+    ReadRegDword $R0 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Installed"
+  ${Else}
+    ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Installed"
+  ${EndIf}
 
+  StrCmp $R0 "1" 0 +3
+  DetailPrint "Visual C++ 2015 Redistributable is already installed, skipping install."
+  Goto done
+
+  DetailPrint "Installing Visual C++ 2015 Redistributable..."
+  SetOutPath $TEMP
+  File "VC_redist.x86.exe"
+  ExecWait '"$TEMP/VC_redist.x86.exe" /install /quiet /norestart'
+
+  done:
 SectionEnd
 
 ;--------------------------------
@@ -105,13 +121,14 @@ SectionEnd
 Section "Uninstall"
   
   ; Remove registry keys
-  DeleteRegKey HKCU "${REGENTRY}"
-  DeleteRegKey HKCU SOFTWARE\GPXSee
+  DeleteRegKey HKLM "${REGENTRY}"
+  DeleteRegKey HKLM SOFTWARE\GPXSee
 
   ; Remove directories used
   RMDir /r "$INSTDIR"
 
   ; Remove Start menu entries
+  SetShellVarContext all
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
   Delete "$SMPROGRAMS\$StartMenuFolder\*.*"
   RMDir "$SMPROGRAMS\$StartMenuFolder"  
@@ -126,7 +143,7 @@ SectionEnd
 LangString DESC_QT ${LANG_ENGLISH} \
   "QT Library. Unselct only if you have QT already installed!"
 LangString DESC_MSVC ${LANG_ENGLISH} \
-  "Visual C++ 2010 runtime components. Unselct only if you have the runtime already installed!"
+  "Visual C++ 2015 runtime components. Unselct only if you have the runtime already installed!"
 LangString DESC_APP ${LANG_ENGLISH} \
   "GPXSee application"
 
