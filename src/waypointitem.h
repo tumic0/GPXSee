@@ -1,13 +1,13 @@
-#ifndef POIITEM_H
-#define POIITEM_H
+#ifndef WAYPOINTITEM_H
+#define WAYPOINTITEM_H
 
 #include <QGraphicsItem>
 #include "waypoint.h"
 
-class POIItem : public QGraphicsItem
+class WayPointItem : public QGraphicsItem
 {
 public:
-	POIItem(const WayPoint &entry, QGraphicsItem *parent = 0);
+	WayPointItem(const WayPoint &entry, QGraphicsItem *parent = 0);
 	const WayPoint &entry() const {return _entry;}
 
 	QRectF boundingRect() const {return _boundingRect;}
@@ -21,4 +21,4 @@ private:
 	QRectF _boundingRect;
 };
 
-#endif // POIITEM_H
+#endif // WAYPOINTITEM_H

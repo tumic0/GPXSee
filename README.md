@@ -4,7 +4,7 @@ GPX viewer and analyzer.
 * User-definable map sources.
 * Track and elevation/speed graphs.
 * Support for multiple tracks in one view.
-* Support for POI files (Garmin CSV format).
+* Support for POI files.
 * Export to PDF.
 * Native GUI for Windows, Mac OS X and Linux.
 

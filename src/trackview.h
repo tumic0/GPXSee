@@ -13,7 +13,7 @@
 class GPX;
 class POI;
 class Map;
-class POIItem;
+class WayPointItem;
 class MarkerItem;
 class ScaleItem;
 
@@ -61,7 +61,7 @@ private:
 	QList<QVector<QPointF> > _tracks;
 	QList<QGraphicsPathItem*> _trackPaths;
 	QList<MarkerItem*> _markers;
-	QHash<WayPoint, POIItem*> _pois;
+	QHash<WayPoint, WayPointItem*> _pois;
 	Map *_map;
 	ScaleItem *_mapScale;
 

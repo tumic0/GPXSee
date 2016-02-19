@@ -6,8 +6,6 @@
 #include "poi.h"
 
 
-#define BOUNDING_RECT_SIZE 0.01
-
 bool POI::loadFile(const QString &fileName)
 {
 	QString error;
@@ -122,17 +120,17 @@ static bool cb(size_t data, void* context)
 	return true;
 }
 
-QVector<WayPoint> POI::points(const QVector<QPointF> &path) const
+QVector<WayPoint> POI::points(const QVector<QPointF> &path, qreal radius) const
 {
 	QVector<WayPoint> ret;
 	QSet<int> set;
 	qreal min[2], max[2];
 
 	for (int i = 0; i < path.count(); i++) {
-		min[0] = path.at(i).x() - BOUNDING_RECT_SIZE;
-		min[1] = path.at(i).y() - BOUNDING_RECT_SIZE;
-		max[0] = path.at(i).x() + BOUNDING_RECT_SIZE;
-		max[1] = path.at(i).y() + BOUNDING_RECT_SIZE;
+		min[0] = path.at(i).x() - radius;
+		min[1] = path.at(i).y() - radius;
+		max[0] = path.at(i).x() + radius;
+		max[1] = path.at(i).y() + radius;
 		_tree.Search(min, max, cb, &set);
 	}
 

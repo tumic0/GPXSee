@@ -6,7 +6,7 @@
 #include "poi.h"
 #include "gpx.h"
 #include "map.h"
-#include "poiitem.h"
+#include "waypointitem.h"
 #include "markeritem.h"
 #include "scaleitem.h"
 #include "ll.h"
@@ -156,7 +156,7 @@ void TrackView::rescale(qreal scale)
 		_trackPaths.at(i)->setPen(pen);
 	}
 
-	QHash<WayPoint, POIItem*>::const_iterator it, jt;
+	QHash<WayPoint, WayPointItem*>::const_iterator it, jt;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
 		it.value()->setPos(QPointF(it.value()->entry().coordinates().x()
 		  * 1.0/scale, -it.value()->entry().coordinates().y() * 1.0/scale));
@@ -176,7 +176,7 @@ void TrackView::rescale(qreal scale)
 
 void TrackView::loadPOI(const POI &poi)
 {
-	QHash<WayPoint, POIItem*>::const_iterator it,jt;
+	QHash<WayPoint, WayPointItem*>::const_iterator it,jt;
 
 	if (!_tracks.size())
 		return;
@@ -188,7 +188,7 @@ void TrackView::loadPOI(const POI &poi)
 			if (_pois.contains(p.at(i)))
 				continue;
 
-			POIItem *pi = new POIItem(p.at(i));
+			WayPointItem *pi = new WayPointItem(p.at(i));
 			pi->setPos(p.at(i).coordinates().x() * 1.0/_scale,
 			  -p.at(i).coordinates().y() * 1.0/_scale);
 			pi->setZValue(1);
@@ -298,7 +298,7 @@ enum QPrinter::Orientation TrackView::orientation() const
 
 void TrackView::clearPOI()
 {
-	QHash<WayPoint, POIItem*>::const_iterator it;
+	QHash<WayPoint, WayPointItem*>::const_iterator it;
 
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
 		_scene->removeItem(it.value());

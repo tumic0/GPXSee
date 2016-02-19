@@ -1,18 +1,18 @@
 #include <QPainter>
 #include "config.h"
-#include "poiitem.h"
+#include "waypointitem.h"
 
 
 #define POINT_SIZE  8
 
-POIItem::POIItem(const WayPoint &entry, QGraphicsItem *parent)
+WayPointItem::WayPointItem(const WayPoint &entry, QGraphicsItem *parent)
   : QGraphicsItem(parent)
 {
 	_entry = entry;
 	updateBoundingRect();
 }
 
-void POIItem::updateBoundingRect()
+void WayPointItem::updateBoundingRect()
 {
 	QFont font;
 	font.setPixelSize(FONT_SIZE);
@@ -24,7 +24,7 @@ void POIItem::updateBoundingRect()
 	  ts.height() + fm.descent() + POINT_SIZE);
 }
 
-void POIItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+void WayPointItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget)
 {
 	Q_UNUSED(option);
