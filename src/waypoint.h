@@ -5,11 +5,11 @@
 #include <QString>
 #include <QHash>
 
-class WayPoint
+class Waypoint
 {
 public:
-	WayPoint() {}
-	WayPoint(const QPointF &coordinates, const QString &description)
+	Waypoint() {}
+	Waypoint(const QPointF &coordinates, const QString &description)
 	  : _coordinates(coordinates), _description(description) {}
 
 	const QPointF &coordinates() const {return _coordinates;}
@@ -19,7 +19,7 @@ public:
 	void setDescription(const QString &description)
 	  {_description = description;}
 
-	bool operator==(const WayPoint &other) const
+	bool operator==(const Waypoint &other) const
 	  {return this->_description == other._description
 	  && this->_coordinates == other._coordinates;}
 
@@ -28,7 +28,7 @@ private:
 	QString _description;
 };
 
-inline uint qHash(const WayPoint &key)
+inline uint qHash(const Waypoint &key)
 {
 	return ::qHash(key.description());
 }

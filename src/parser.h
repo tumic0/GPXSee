@@ -11,7 +11,7 @@
 class Parser
 {
 public:
-	Parser(QList<QVector<TrackPoint> > &tracks, QList<WayPoint> &waypoints)
+	Parser(QList<QVector<Trackpoint> > &tracks, QList<Waypoint> &waypoints)
 	  : _tracks(tracks), _waypoints(waypoints) {_track = 0;}
 	bool loadFile(QIODevice *device);
 	QString errorString() const {return _reader.errorString();}
@@ -33,9 +33,9 @@ private:
 	void handleExtensionData(QStringRef element, const QString &value);
 
 	QXmlStreamReader _reader;
-	QList<QVector<TrackPoint> > &_tracks;
-	QList<WayPoint> &_waypoints;
-	QVector<TrackPoint> *_track;
+	QList<QVector<Trackpoint> > &_tracks;
+	QList<Waypoint> &_waypoints;
+	QVector<Trackpoint> *_track;
 };
 
 #endif // PARSER_H

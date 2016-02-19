@@ -156,7 +156,7 @@ void TrackView::rescale(qreal scale)
 		_trackPaths.at(i)->setPen(pen);
 	}
 
-	QHash<WayPoint, WayPointItem*>::const_iterator it, jt;
+	QHash<Waypoint, WaypointItem*>::const_iterator it, jt;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
 		it.value()->setPos(QPointF(it.value()->entry().coordinates().x()
 		  * 1.0/scale, -it.value()->entry().coordinates().y() * 1.0/scale));
@@ -176,19 +176,19 @@ void TrackView::rescale(qreal scale)
 
 void TrackView::loadPOI(const POI &poi)
 {
-	QHash<WayPoint, WayPointItem*>::const_iterator it,jt;
+	QHash<Waypoint, WaypointItem*>::const_iterator it,jt;
 
 	if (!_tracks.size())
 		return;
 
 	for (int i = 0; i < _tracks.size(); i++) {
-		QVector<WayPoint> p = poi.points(_tracks.at(i));
+		QVector<Waypoint> p = poi.points(_tracks.at(i));
 
 		for (int i = 0; i < p.size(); i++) {
 			if (_pois.contains(p.at(i)))
 				continue;
 
-			WayPointItem *pi = new WayPointItem(p.at(i));
+			WaypointItem *pi = new WaypointItem(p.at(i));
 			pi->setPos(p.at(i).coordinates().x() * 1.0/_scale,
 			  -p.at(i).coordinates().y() * 1.0/_scale);
 			pi->setZValue(1);
@@ -298,7 +298,7 @@ enum QPrinter::Orientation TrackView::orientation() const
 
 void TrackView::clearPOI()
 {
-	QHash<WayPoint, WayPointItem*>::const_iterator it;
+	QHash<Waypoint, WaypointItem*>::const_iterator it;
 
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
 		_scene->removeItem(it.value());

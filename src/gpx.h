@@ -19,15 +19,15 @@ public:
 
 	int trackCount() const {return _tracks.count();}
 	Track track(int i) const {return Track(_tracks.at(i));}
-	const QList<WayPoint> &waypoints() const {return _waypoints;}
+	const QList<Waypoint> &waypoints() const {return _waypoints;}
 
 private:
 	Parser _parser;
 	QString _error;
 	int _errorLine;
 
-	QList<QVector<TrackPoint> > _tracks;
-	QList<WayPoint> _waypoints;
+	QList<QVector<Trackpoint> > _tracks;
+	QList<Waypoint> _waypoints;
 };
 
 #endif // GPX_H

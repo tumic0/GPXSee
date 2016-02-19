@@ -15,7 +15,7 @@ public:
 	QString errorString() const {return _error;}
 	int errorLine() const {return _errorLine;}
 
-	QVector<WayPoint> points(const QVector<QPointF> &path,
+	QVector<Waypoint> points(const QVector<QPointF> &path,
 	  qreal radius = 0.01) const;
 
 	void clear();
@@ -27,7 +27,7 @@ private:
 	bool loadGPXFile(const QString &fileName);
 
 	POITree _tree;
-	QVector<WayPoint> _data;
+	QVector<Waypoint> _data;
 
 	QString _error;
 	int _errorLine;

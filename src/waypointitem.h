@@ -4,11 +4,11 @@
 #include <QGraphicsItem>
 #include "waypoint.h"
 
-class WayPointItem : public QGraphicsItem
+class WaypointItem : public QGraphicsItem
 {
 public:
-	WayPointItem(const WayPoint &entry, QGraphicsItem *parent = 0);
-	const WayPoint &entry() const {return _entry;}
+	WaypointItem(const Waypoint &entry, QGraphicsItem *parent = 0);
+	const Waypoint &entry() const {return _entry;}
 
 	QRectF boundingRect() const {return _boundingRect;}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -17,7 +17,7 @@ public:
 private:
 	void updateBoundingRect();
 
-	WayPoint _entry;
+	Waypoint _entry;
 	QRectF _boundingRect;
 };
 

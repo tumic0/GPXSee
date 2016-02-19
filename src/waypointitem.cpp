@@ -5,14 +5,14 @@
 
 #define POINT_SIZE  8
 
-WayPointItem::WayPointItem(const WayPoint &entry, QGraphicsItem *parent)
+WaypointItem::WaypointItem(const Waypoint &entry, QGraphicsItem *parent)
   : QGraphicsItem(parent)
 {
 	_entry = entry;
 	updateBoundingRect();
 }
 
-void WayPointItem::updateBoundingRect()
+void WaypointItem::updateBoundingRect()
 {
 	QFont font;
 	font.setPixelSize(FONT_SIZE);
@@ -24,7 +24,7 @@ void WayPointItem::updateBoundingRect()
 	  ts.height() + fm.descent() + POINT_SIZE);
 }
 
-void WayPointItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+void WaypointItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget)
 {
 	Q_UNUSED(option);

@@ -8,7 +8,7 @@
 class Track
 {
 public:
-	Track(const QVector<TrackPoint> &data) : _data(data) {}
+	Track(const QVector<Trackpoint> &data) : _data(data) {}
 
 	void elevationGraph(QVector<QPointF> &graph) const;
 	void speedGraph(QVector<QPointF> &graph) const;
@@ -18,7 +18,7 @@ public:
 	QDateTime date() const;
 
 private:
-	const QVector<TrackPoint> &_data;
+	const QVector<Trackpoint> &_data;
 };
 
 #endif // TRACK_H

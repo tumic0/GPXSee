@@ -64,7 +64,7 @@ void Parser::trackPoints()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "trkpt") {
-			_track->append(TrackPoint());
+			_track->append(Trackpoint());
 			handleTrekPointAttributes(_reader.attributes());
 			trackPointData();
 		} else
@@ -96,11 +96,11 @@ void Parser::gpx()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "trk") {
-			_tracks.append(QVector<TrackPoint>());
+			_tracks.append(QVector<Trackpoint>());
 			_track = &_tracks.back();
 			track();
 		} else if (_reader.name() == "wpt") {
-			_waypoints.append(WayPoint());
+			_waypoints.append(Waypoint());
 			handleWayPointAttributes(_reader.attributes());
 			wayPointData();
 		} else

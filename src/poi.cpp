@@ -43,7 +43,7 @@ bool POI::loadGPXFile(const QString &fileName)
 
 	if (gpx.loadFile(fileName)) {
 		for (int i = 0; i < gpx.waypoints().size(); i++)
-			_data.append(WayPoint(
+			_data.append(Waypoint(
 			  ll2mercator(gpx.waypoints().at(i).coordinates()),
 			  gpx.waypoints().at(i).description()));
 
@@ -97,7 +97,7 @@ bool POI::loadCSVFile(const QString &fileName)
 		}
 		QByteArray ba = list[2].trimmed();
 
-		_data.append(WayPoint(ll2mercator(QPointF(lon, lat)),
+		_data.append(Waypoint(ll2mercator(QPointF(lon, lat)),
 		  QString::fromUtf8(ba.data(), ba.size())));
 		ln++;
 	}
@@ -120,9 +120,9 @@ static bool cb(size_t data, void* context)
 	return true;
 }
 
-QVector<WayPoint> POI::points(const QVector<QPointF> &path, qreal radius) const
+QVector<Waypoint> POI::points(const QVector<QPointF> &path, qreal radius) const
 {
-	QVector<WayPoint> ret;
+	QVector<Waypoint> ret;
 	QSet<int> set;
 	qreal min[2], max[2];
 
