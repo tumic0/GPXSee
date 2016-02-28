@@ -1,12 +1,12 @@
-#ifndef COLORSHOP_H
-#define COLORSHOP_H
+#ifndef PALETTE_H
+#define PALETTE_H
 
 #include <QColor>
 
-class ColorShop
+class Palette
 {
 public:
-	ColorShop();
+	Palette();
 	QColor color();
 	void reset();
 
@@ -14,4 +14,4 @@ private:
 	float _hueState;
 };
 
-#endif // COLORSHOP_H
+#endif // PALLETE_H

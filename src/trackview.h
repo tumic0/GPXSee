@@ -7,7 +7,7 @@
 #include <QList>
 #include <QPrinter>
 #include "units.h"
-#include "colorshop.h"
+#include "palette.h"
 #include "waypoint.h"
 
 class GPX;
@@ -65,7 +65,7 @@ private:
 	Map *_map;
 	ScaleItem *_mapScale;
 
-	ColorShop _colorShop;
+	Palette _colorShop;
 	qreal _maxLen;
 
 	qreal _scale;

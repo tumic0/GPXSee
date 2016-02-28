@@ -13,7 +13,6 @@ HEADERS += src/config.h \
     src/rtree.h \
     src/ll.h \
     src/axisitem.h \
-    src/colorshop.h \
     src/keys.h \
     src/slideritem.h \
     src/markeritem.h \
@@ -33,7 +32,8 @@ HEADERS += src/config.h \
     src/track.h \
     src/graphview.h \
     src/trackpoint.h \
-    src/waypointitem.h
+    src/waypointitem.h \
+    src/palette.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
@@ -41,7 +41,6 @@ SOURCES += src/main.cpp \
     src/poi.cpp \
     src/ll.cpp \
     src/axisitem.cpp \
-    src/colorshop.cpp \
     src/slideritem.cpp \
     src/markeritem.cpp \
     src/infoitem.cpp \
@@ -57,7 +56,8 @@ SOURCES += src/main.cpp \
     src/trackview.cpp \
     src/track.cpp \
     src/graphview.cpp \
-    src/waypointitem.cpp
+    src/waypointitem.cpp \
+    src/palette.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx:ICON = icons/gpxsee.icns

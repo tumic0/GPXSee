@@ -1,4 +1,4 @@
-#include "colorshop.h"
+#include "palette.h"
 
 
 #define HUE_INIT		0.1f
@@ -43,12 +43,12 @@ static unsigned hsv2rgb(float h, float s, float v)
 	  + (unsigned)(b * 256);
 }
 
-ColorShop::ColorShop()
+Palette::Palette()
 {
 	_hueState = HUE_INIT;
 }
 
-QColor ColorShop::color()
+QColor Palette::color()
 {
 	_hueState += HUE_INCREMENT;
 	_hueState -= (int) _hueState;
@@ -56,7 +56,7 @@ QColor ColorShop::color()
 	return QColor(hsv2rgb(_hueState, SATURATION, VALUE));
 }
 
-void ColorShop::reset()
+void Palette::reset()
 {
 	_hueState = HUE_INIT;
 }

@@ -6,7 +6,7 @@
 #include <QVector>
 #include <QList>
 #include <QPointF>
-#include "colorshop.h"
+#include "palette.h"
 
 
 class AxisItem;
@@ -84,7 +84,7 @@ private:
 
 	QList<QGraphicsPathItem*> _graphs;
 	qreal _xMin, _xMax, _yMin, _yMax;
-	ColorShop _colorShop;
+	Palette _colorShop;
 };
 
 #endif // GRAPHVIEW_H
