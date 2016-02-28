@@ -27,6 +27,7 @@ TrackView::TrackView(QWidget *parent)
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	setRenderHints(QPainter::Antialiasing);
 
 	_mapScale = new ScaleItem();
 	_mapScale->setZValue(2.0);

@@ -46,6 +46,11 @@ void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	font.setFamily(FONT_FAMILY);
 	QFontMetrics fm(font);
 	QRect br;
+	bool aa;
+
+
+	if ((aa = painter->testRenderHint(QPainter::Antialiasing)))
+		painter->setRenderHint(QPainter::Antialiasing, false);
 
 	painter->setFont(font);
 
@@ -62,6 +67,9 @@ void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	for (int i = 0; i < SEGMENTS; i += 2)
 		painter->fillRect(QRectF(i * _width, br.height() + PADDING, _width,
 		  SCALE_HEIGHT), Qt::black);
+
+	if (aa)
+		painter->setRenderHint(QPainter::Antialiasing, true);
 
 /*
 	painter->setPen(Qt::red);
