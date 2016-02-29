@@ -552,6 +552,7 @@ void GUI::reloadFile()
 {
 	_distance = 0;
 	_time = 0;
+	_trackCount = 0;
 
 	_elevationGraph->clear();
 	_speedGraph->clear();
