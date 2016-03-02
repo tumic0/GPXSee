@@ -50,7 +50,7 @@ void TrackView::loadGPX(const GPX &gpx)
 		QPainterPath path;
 		QGraphicsPathItem *pi;
 		MarkerItem *mi;
-		QColor color = _colorShop.color();
+		QColor color = _palette.color();
 		qreal prevScale = _scale;
 
 
@@ -319,7 +319,7 @@ void TrackView::clear()
 	_trackPaths.clear();
 	_markers.clear();
 	_scene->clear();
-	_colorShop.reset();
+	_palette.reset();
 
 	_maxLen = 0;
 

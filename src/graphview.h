@@ -84,7 +84,7 @@ private:
 
 	QList<QGraphicsPathItem*> _graphs;
 	qreal _xMin, _xMax, _yMin, _yMax;
-	Palette _colorShop;
+	Palette _palette;
 };
 
 #endif // GRAPHVIEW_H

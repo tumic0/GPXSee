@@ -131,7 +131,7 @@ void GraphView::loadData(const QVector<QPointF> &data)
 {
 	QPainterPath path;
 	QGraphicsPathItem *pi;
-	QColor color = _colorShop.color();
+	QColor color = _palette.color();
 
 
 	if (data.size() < 2)
@@ -262,7 +262,7 @@ void GraphView::clear()
 	_info->clear();
 	_scene->clear();
 	_graphs.clear();
-	_colorShop.reset();
+	_palette.reset();
 
 	_xMax = -FLT_MAX;
 	_xMin = FLT_MAX;

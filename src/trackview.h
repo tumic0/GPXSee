@@ -65,7 +65,7 @@ private:
 	Map *_map;
 	ScaleItem *_mapScale;
 
-	Palette _colorShop;
+	Palette _palette;
 	qreal _maxLen;
 
 	qreal _scale;
