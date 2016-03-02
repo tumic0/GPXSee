@@ -12,7 +12,7 @@
 class GPX
 {
 public:
-	GPX() : _parser(_tracks, _waypoints) {}
+	GPX() : _parser(_tracks, _waypoints), _errorLine(0) {}
 	bool loadFile(const QString &fileName);
 	const QString &errorString() const {return _error;}
 	int errorLine() const {return _errorLine;}

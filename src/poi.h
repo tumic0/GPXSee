@@ -11,6 +11,7 @@
 class POI
 {
 public:
+	POI() : _errorLine(0) {}
 	bool loadFile(const QString &fileName);
 	QString errorString() const {return _error;}
 	int errorLine() const {return _errorLine;}
