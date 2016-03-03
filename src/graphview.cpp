@@ -131,7 +131,6 @@ void GraphView::loadData(const QVector<QPointF> &data)
 {
 	QPainterPath path;
 	QGraphicsPathItem *pi;
-	QColor color = _palette.color();
 
 
 	if (data.size() < 2)
@@ -145,7 +144,7 @@ void GraphView::loadData(const QVector<QPointF> &data)
 	}
 
 	pi = new QGraphicsPathItem(path);
-	QBrush brush(color, Qt::SolidPattern);
+	QBrush brush(_palette.color(), Qt::SolidPattern);
 	QPen pen(brush, 0);
 	pi->setPen(pen);
 	_scene->addItem(pi);

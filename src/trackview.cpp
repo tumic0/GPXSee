@@ -48,7 +48,6 @@ void TrackView::addTrack(const QVector<QPointF> &track)
 	QPainterPath path;
 	QGraphicsPathItem *pi;
 	MarkerItem *mi;
-	QColor color = _palette.color();
 
 
 	if (track.size() < 2)
@@ -67,7 +66,7 @@ void TrackView::addTrack(const QVector<QPointF> &track)
 	_trackPaths.append(pi);
 	_zoom = scale2zoom(trackScale());
 	_scale = mapScale();
-	QBrush brush(color, Qt::SolidPattern);
+	QBrush brush(_palette.color(), Qt::SolidPattern);
 	QPen pen(brush, TRACK_WIDTH * _scale);
 	pi->setPen(pen);
 	pi->setScale(1.0/_scale);
