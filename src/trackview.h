@@ -44,6 +44,7 @@ private slots:
 	void redraw();
 
 private:
+	void addTrack(const QVector<QPointF> &track);
 	QRectF trackBoundingRect() const;
 	qreal trackScale() const;
 	qreal mapScale() const;

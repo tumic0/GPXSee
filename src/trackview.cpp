@@ -33,7 +33,7 @@ TrackView::TrackView(QWidget *parent)
 	_mapScale->setZValue(2.0);
 
 	_zoom = -1;
-	_scale = 1.0;
+	_scale = -1.0;
 	_map = 0;
 	_maxLen = 0;
 }
@@ -43,65 +43,74 @@ TrackView::~TrackView()
 	delete _scene;
 }
 
+void TrackView::addTrack(const QVector<QPointF> &track)
+{
+	QPainterPath path;
+	QGraphicsPathItem *pi;
+	MarkerItem *mi;
+	QColor color = _palette.color();
+
+
+	if (track.size() < 2)
+		return;
+
+	_tracks.append(track);
+
+	path.moveTo(track.at(0).x(), -track.at(0).y());
+	for (int i = 1; i < track.size(); i++)
+		path.lineTo(track.at(i).x(), -track.at(i).y());
+
+	_maxLen = qMax(path.length(), _maxLen);
+
+
+	pi = new QGraphicsPathItem(path);
+	_trackPaths.append(pi);
+	_zoom = scale2zoom(trackScale());
+	_scale = mapScale();
+	QBrush brush(color, Qt::SolidPattern);
+	QPen pen(brush, TRACK_WIDTH * _scale);
+	pi->setPen(pen);
+	pi->setScale(1.0/_scale);
+	_scene->addItem(pi);
+
+	mi = new MarkerItem(pi);
+	_markers.append(mi);
+	mi->setPos(pi->path().pointAtPercent(0));
+	mi->setScale(_scale);
+}
+
 void TrackView::loadGPX(const GPX &gpx)
 {
+	qreal scale = _scale;
+
 	for (int i = 0; i < gpx.trackCount(); i++) {
 		QVector<QPointF> track;
-		QPainterPath path;
-		QGraphicsPathItem *pi;
-		MarkerItem *mi;
-		QColor color = _palette.color();
-		qreal prevScale = _scale;
-
-
 		gpx.track(i).track(track);
-
-		if (track.size() < 2)
-			continue;
-
-		_tracks.append(track);
-
-		path.moveTo(track.at(0).x(), -track.at(0).y());
-		for (int i = 1; i < track.size(); i++)
-			path.lineTo(track.at(i).x(), -track.at(i).y());
-
-		_maxLen = qMax(path.length(), _maxLen);
-
-
-		pi = new QGraphicsPathItem(path);
-		_trackPaths.append(pi);
-		_zoom = scale2zoom(trackScale());
-		_scale = mapScale();
-		QBrush brush(color, Qt::SolidPattern);
-		QPen pen(brush, TRACK_WIDTH * _scale);
-		pi->setPen(pen);
-		pi->setScale(1.0/_scale);
-		_scene->addItem(pi);
-
-		mi = new MarkerItem(pi);
-		_markers.append(mi);
-		mi->setPos(pi->path().pointAtPercent(0));
-		mi->setScale(_scale);
-
-		if (_trackPaths.size() > 1 && prevScale != _scale)
-			rescale(_scale);
-
-		QRectF br = trackBoundingRect();
-		QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);
-		_scene->setSceneRect(ba);
-		centerOn(ba.center());
-
-		if (_mapScale->scene() != _scene)
-			_scene->addItem(_mapScale);
-
-		_mapScale->setLatitude(track.at(track.size() / 2).y());
-		_mapScale->setZoom(_zoom);
+		addTrack(track);
 	}
+
+	if (_trackPaths.empty())
+		return;
+	if (_trackPaths.size() > 1 && scale != _scale)
+		rescale(_scale);
+
+	QRectF br = trackBoundingRect();
+	QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	_scene->setSceneRect(ba);
+	centerOn(ba.center());
+
+	_mapScale->setLatitude(-(br.center().ry() * _scale));
+	_mapScale->setZoom(_zoom);
+	if (_mapScale->scene() != _scene)
+		_scene->addItem(_mapScale);
 }
 
 QRectF TrackView::trackBoundingRect() const
 {
 	qreal bottom, top, left, right;
+
+	if (_trackPaths.empty())
+		return QRectF();
 
 	bottom = _trackPaths.at(0)->sceneBoundingRect().bottom();
 	top = _trackPaths.at(0)->sceneBoundingRect().top();
@@ -322,8 +331,10 @@ void TrackView::clear()
 	_palette.reset();
 
 	_maxLen = 0;
+	_zoom = -1;
+	_scale = -1.0;
 
-	_scene->setSceneRect(0, 0, 0, 0);
+	_scene->setSceneRect(QRectF());
 }
 
 void TrackView::movePositionMarker(qreal val)
