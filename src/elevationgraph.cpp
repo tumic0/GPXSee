@@ -38,7 +38,7 @@ void ElevationGraph::loadGPX(const GPX &gpx)
 
 		gpx.track(i).elevationGraph(data);
 		if (data.isEmpty())
-			return;
+			continue;
 
 		min = max = data.at(0).y();
 

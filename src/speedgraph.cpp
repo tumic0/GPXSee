@@ -32,7 +32,7 @@ void SpeedGraph::loadGPX(const GPX &gpx)
 
 		gpx.track(i).speedGraph(data);
 		if (data.isEmpty())
-			return;
+			continue;
 
 		_avg.append(QPointF(gpx.track(i).distance(), gpx.track(i).distance()
 		  / gpx.track(i).time()));
