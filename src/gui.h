@@ -59,8 +59,9 @@ private slots:
 private:
 	void loadFiles();
 
-	void createMapActions();
+	QAction *createPOIFileAction(int index);
 	void createPOIFilesActions();
+	void createMapActions();
 	void createActions();
 	void createMenus();
 	void createToolBars();

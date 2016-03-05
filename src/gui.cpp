@@ -120,19 +120,25 @@ void GUI::createPOIFilesActions()
 {
 	_poiFilesSM = new QSignalMapper(this);
 
-	for (int i = 0; i < _poi.files().count(); i++) {
-		QAction *a = new QAction(QFileInfo(_poi.files().at(i)).fileName(),
-		  this);
-		a->setCheckable(true);
-		a->setChecked(true);
-
-		_poiFilesSM->setMapping(a, i);
-		connect(a, SIGNAL(triggered()), _poiFilesSM, SLOT(map()));
-
-		_poiFilesActions.append(a);
-	}
+	for (int i = 0; i < _poi.files().count(); i++)
+		createPOIFileAction(i);
 
 	connect(_poiFilesSM, SIGNAL(mapped(int)), this, SLOT(poiFileChecked(int)));
+}
+
+QAction *GUI::createPOIFileAction(int index)
+{
+	QAction *a = new QAction(QFileInfo(_poi.files().at(index)).fileName(),
+	  this);
+	a->setCheckable(true);
+	a->setChecked(true);
+
+	_poiFilesSM->setMapping(a, index);
+	connect(a, SIGNAL(triggered()), _poiFilesSM, SLOT(map()));
+
+	_poiFilesActions.append(a);
+
+	return a;
 }
 
 void GUI::createActions()
@@ -511,14 +517,8 @@ void GUI::openPOIFile()
 		} else {
 			_showPOIAction->setChecked(true);
 			_track->loadPOI(_poi);
-
-			QAction *a = new QAction(QFileInfo(fileName).fileName(), this);
-			a->setCheckable(true);
-			a->setChecked(true);
-			_poiFilesSM->setMapping(a, _poi.files().count() - 1);
-			connect(a, SIGNAL(triggered()), _poiFilesSM, SLOT(map()));
-			_poiFilesActions.append(a);
-			_poiFilesMenu->addAction(a);
+			_poiFilesMenu->addAction(createPOIFileAction(
+			  _poi.files().indexOf(fileName)));
 		}
 	}
 }
