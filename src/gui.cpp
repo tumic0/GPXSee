@@ -694,10 +694,10 @@ void GUI::updateStatusBarInfo()
 
 	if (_imperialUnitsAction->isChecked())
 		_distanceLabel->setText(QString::number(_distance * M2MI, 'f', 1)
-		  + " " + tr("mi"));
+		  + UNIT_SPACE + tr("mi"));
 	else
 		_distanceLabel->setText(QString::number(_distance * M2KM, 'f', 1)
-		  + " " + tr("km"));
+		  + UNIT_SPACE + tr("km"));
 	_timeLabel->setText(timeSpan(_time));
 }
 
