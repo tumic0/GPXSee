@@ -2,16 +2,17 @@
 #define GUI_H
 
 #include <QMainWindow>
-#include <QMenu>
-#include <QToolBar>
-#include <QTabWidget>
-#include <QGraphicsView>
-#include <QActionGroup>
-#include <QAction>
-#include <QLabel>
+#include <QString>
+#include <QList>
 #include "poi.h"
 
-
+class QMenu;
+class QToolBar;
+class QTabWidget;
+class QActionGroup;
+class QAction;
+class QLabel;
+class QSignalMapper;
 class FileBrowser;
 class ElevationGraph;
 class SpeedGraph;
@@ -37,6 +38,7 @@ private slots:
 	void closeFile();
 	void reloadFile();
 	void openPOIFile();
+	void closePOIFiles();
 	void showPOI(bool checked);
 	void showMap(bool checked);
 	void showGraphs(bool checked);
@@ -44,6 +46,7 @@ private slots:
 
 	void mapChanged(int);
 	void graphChanged(int);
+	void poiFileChecked(int);
 
 	void next();
 	void prev();
@@ -57,6 +60,7 @@ private:
 	void loadFiles();
 
 	void createMapActions();
+	void createPOIFilesActions();
 	void createActions();
 	void createMenus();
 	void createToolBars();
@@ -77,6 +81,7 @@ private:
 	QMenu *_mapMenu;
 	QMenu *_settingsMenu;
 	QMenu *_unitsMenu;
+	QMenu *_poiFilesMenu;
 
 	QToolBar *_fileToolBar;
 	QToolBar *_showToolBar;
@@ -96,6 +101,7 @@ private:
 	QAction *_closeFileAction;
 	QAction *_reloadFileAction;
 	QAction *_openPOIAction;
+	QAction *_closePOIAction;
 	QAction *_showPOIAction;
 	QAction *_showMapAction;
 	QAction *_showGraphsAction;
@@ -107,6 +113,9 @@ private:
 	QAction *_metricUnitsAction;
 	QAction *_imperialUnitsAction;
 	QList<QAction*> _mapActions;
+	QList<QAction*> _poiFilesActions;
+
+	QSignalMapper *_poiFilesSM;
 
 	QLabel *_fileNameLabel;
 	QLabel *_distanceLabel;

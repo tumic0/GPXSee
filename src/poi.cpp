@@ -39,20 +39,27 @@ bool POI::loadFile(const QString &fileName)
 bool POI::loadGPXFile(const QString &fileName)
 {
 	GPX gpx;
-	int cnt = _data.size();
+	FileIndex index;
+
+	index.enabled = true;
+	index.start = _data.size();
 
 	if (gpx.loadFile(fileName)) {
 		for (int i = 0; i < gpx.waypoints().size(); i++)
 			_data.append(Waypoint(
 			  ll2mercator(gpx.waypoints().at(i).coordinates()),
 			  gpx.waypoints().at(i).description()));
+		index.end = _data.size() - 1;
 
-		for (int i = cnt; i < _data.size(); ++i) {
+		for (int i = index.start; i <= index.end; i++) {
 			qreal c[2];
 			c[0] = _data.at(i).coordinates().x();
 			c[1] = _data.at(i).coordinates().y();
 			_tree.Insert(c, c, i);
 		}
+
+		_files.append(fileName);
+		_indexes.append(index);
 
 		return true;
 	} else {
@@ -66,8 +73,12 @@ bool POI::loadGPXFile(const QString &fileName)
 bool POI::loadCSVFile(const QString &fileName)
 {
 	QFile file(fileName);
+	FileIndex index;
 	bool ret;
-	int ln = 1, cnt = _data.size();
+	int ln = 1;
+
+	index.enabled = true;
+	index.start = _data.size();
 
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		_error = qPrintable(file.errorString());
@@ -101,13 +112,17 @@ bool POI::loadCSVFile(const QString &fileName)
 		  QString::fromUtf8(ba.data(), ba.size())));
 		ln++;
 	}
+	index.end = _data.size() - 1;
 
-	for (int i = cnt; i < _data.size(); ++i) {
+	for (int i = index.start; i <= index.end; i++) {
 		qreal c[2];
 		c[0] = _data.at(i).coordinates().x();
 		c[1] = _data.at(i).coordinates().y();
 		_tree.Insert(c, c, i);
 	}
+
+	_files.append(fileName);
+	_indexes.append(index);
 
 	return true;
 }
@@ -143,8 +158,33 @@ QVector<Waypoint> POI::points(const QVector<QPointF> &path, qreal radius) const
 	return ret;
 }
 
+void POI::enableFile(const QString &fileName, bool enable)
+{
+	int i;
+
+	i = _files.indexOf(fileName);
+	Q_ASSERT(i >= 0);
+	_indexes[i].enabled = enable;
+
+	_tree.RemoveAll();
+	for (int i = 0; i < _indexes.count(); i++) {
+		FileIndex idx = _indexes.at(i);
+		if (!idx.enabled)
+			continue;
+
+		for (int j = idx.start; j <= idx.end; j++) {
+			qreal c[2];
+			c[0] = _data.at(j).coordinates().x();
+			c[1] = _data.at(j).coordinates().y();
+			_tree.Insert(c, c, j);
+		}
+	}
+}
+
 void POI::clear()
 {
 	_tree.RemoveAll();
 	_data.clear();
+	_files.clear();
+	_indexes.clear();
 }

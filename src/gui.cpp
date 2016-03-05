@@ -8,6 +8,12 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QSignalMapper>
+#include <QMenu>
+#include <QToolBar>
+#include <QTabWidget>
+#include <QActionGroup>
+#include <QAction>
+#include <QLabel>
 #include "config.h"
 #include "icons.h"
 #include "keys.h"
@@ -110,6 +116,25 @@ void GUI::createMapActions()
 	_currentMap = _maps.at(0);
 }
 
+void GUI::createPOIFilesActions()
+{
+	_poiFilesSM = new QSignalMapper(this);
+
+	for (int i = 0; i < _poi.files().count(); i++) {
+		QAction *a = new QAction(QFileInfo(_poi.files().at(i)).fileName(),
+		  this);
+		a->setCheckable(true);
+		a->setChecked(true);
+
+		_poiFilesSM->setMapping(a, i);
+		connect(a, SIGNAL(triggered()), _poiFilesSM, SLOT(map()));
+
+		_poiFilesActions.append(a);
+	}
+
+	connect(_poiFilesSM, SIGNAL(mapped(int)), this, SLOT(poiFileChecked(int)));
+}
+
 void GUI::createActions()
 {
 	// Action Groups
@@ -166,11 +191,15 @@ void GUI::createActions()
 	_openPOIAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)),
 	  tr("Load POI file"), this);
 	connect(_openPOIAction, SIGNAL(triggered()), this, SLOT(openPOIFile()));
+	_closePOIAction = new QAction(QIcon(QPixmap(CLOSE_FILE_ICON)),
+	  tr("Close POI files"), this);
+	connect(_closePOIAction, SIGNAL(triggered()), this, SLOT(closePOIFiles()));
 	_showPOIAction = new QAction(QIcon(QPixmap(SHOW_POI_ICON)),
 	  tr("Show POIs"), this);
 	_showPOIAction->setCheckable(true);
 	_showPOIAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
 	connect(_showPOIAction, SIGNAL(triggered(bool)), this, SLOT(showPOI(bool)));
+	createPOIFilesActions();
 
 	// Map actions
 	_showMapAction = new QAction(QIcon(QPixmap(SHOW_MAP_ICON)), tr("Show map"),
@@ -250,7 +279,12 @@ void GUI::createMenus()
 	_mapMenu->addAction(_showMapAction);
 
 	_poiMenu = menuBar()->addMenu(tr("POI"));
+	_poiFilesMenu = _poiMenu->addMenu(tr("POI files"));
+	_poiFilesMenu->addActions(_poiFilesActions);
+	_poiMenu->addSeparator();
 	_poiMenu->addAction(_openPOIAction);
+	_poiMenu->addAction(_closePOIAction);
+	_poiMenu->addSeparator();
 	_poiMenu->addAction(_showPOIAction);
 
 	_settingsMenu = menuBar()->addMenu(tr("Settings"));
@@ -477,8 +511,29 @@ void GUI::openPOIFile()
 		} else {
 			_showPOIAction->setChecked(true);
 			_track->loadPOI(_poi);
+
+			QAction *a = new QAction(QFileInfo(fileName).fileName(), this);
+			a->setCheckable(true);
+			a->setChecked(true);
+			_poiFilesSM->setMapping(a, _poi.files().count() - 1);
+			connect(a, SIGNAL(triggered()), _poiFilesSM, SLOT(map()));
+			_poiFilesActions.append(a);
+			_poiFilesMenu->addAction(a);
 		}
 	}
+}
+
+void GUI::closePOIFiles()
+{
+	_poiFilesMenu->clear();
+
+	for (int i = 0; i < _poiFilesActions.count(); i++)
+		delete _poiFilesActions[i];
+	_poiFilesActions.clear();
+
+	_track->clearPOI();
+
+	_poi.clear();
 }
 
 void GUI::saveAs()
@@ -652,6 +707,14 @@ void GUI::mapChanged(int index)
 
 	if (_showMapAction->isChecked())
 		_track->setMap(_currentMap);
+}
+
+void GUI::poiFileChecked(int index)
+{
+	_poi.enableFile(_poi.files().at(index),
+	  _poiFilesActions.at(index)->isChecked());
+	_track->clearPOI();
+	_track->loadPOI(_poi);
 }
 
 void GUI::graphChanged(int index)

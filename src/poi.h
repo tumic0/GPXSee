@@ -4,6 +4,7 @@
 #include <QVector>
 #include <QPointF>
 #include <QString>
+#include <QStringList>
 #include "waypoint.h"
 #include "rtree.h"
 
@@ -18,17 +19,25 @@ public:
 
 	QVector<Waypoint> points(const QVector<QPointF> &path,
 	  qreal radius = 0.01) const;
-
+	const QStringList &files() const {return _files;}
+	void enableFile(const QString &fileName, bool enable);
 	void clear();
 
 private:
 	typedef RTree<size_t, qreal, 2> POITree;
+	typedef struct {
+		int start;
+		int end;
+		bool enabled;
+	} FileIndex;
 
 	bool loadCSVFile(const QString &fileName);
 	bool loadGPXFile(const QString &fileName);
 
 	POITree _tree;
 	QVector<Waypoint> _data;
+	QStringList _files;
+	QList<FileIndex> _indexes;
 
 	QString _error;
 	int _errorLine;
