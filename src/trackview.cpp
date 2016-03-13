@@ -55,9 +55,9 @@ void TrackView::addTrack(const QVector<QPointF> &track)
 
 	_tracks.append(track);
 
-	path.moveTo(track.at(0).x(), -track.at(0).y());
+	path.moveTo(ll2mercator(QPointF(track.at(0).x(), -track.at(0).y())));
 	for (int i = 1; i < track.size(); i++)
-		path.lineTo(track.at(i).x(), -track.at(i).y());
+		path.lineTo(ll2mercator(QPointF(track.at(i).x(), -track.at(i).y())));
 
 	_maxLen = qMax(path.length(), _maxLen);
 
@@ -167,8 +167,7 @@ void TrackView::rescale(qreal scale)
 
 	QHash<Waypoint, WaypointItem*>::const_iterator it, jt;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
-		it.value()->setPos(QPointF(it.value()->entry().coordinates().x()
-		  * 1.0/scale, -it.value()->entry().coordinates().y() * 1.0/scale));
+		it.value()->setPos(it.value()->entry().coordinates() * 1.0/scale);
 		it.value()->show();
 	}
 
@@ -197,9 +196,11 @@ void TrackView::loadPOI(const POI &poi)
 			if (_pois.contains(p.at(i)))
 				continue;
 
-			WaypointItem *pi = new WaypointItem(p.at(i));
-			pi->setPos(p.at(i).coordinates().x() * 1.0/_scale,
-			  -p.at(i).coordinates().y() * 1.0/_scale);
+			WaypointItem *pi = new WaypointItem(
+			  Waypoint(ll2mercator(QPointF(p.at(i).coordinates().x(),
+			  -p.at(i).coordinates().y())), p.at(i).description()));
+
+			pi->setPos(pi->entry().coordinates() * 1.0/_scale);
 			pi->setZValue(1);
 			_scene->addItem(pi);
 

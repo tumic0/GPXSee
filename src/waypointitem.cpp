@@ -20,8 +20,8 @@ void WaypointItem::updateBoundingRect()
 	QFontMetrics fm(font);
 	QRect ts = fm.tightBoundingRect(_entry.description());
 
-	_boundingRect = QRectF(0, 0, ts.width() + POINT_SIZE,
-	  ts.height() + fm.descent() + POINT_SIZE);
+	_boundingRect = QRectF(-POINT_SIZE/2, -POINT_SIZE/2, ts.width()
+	  + POINT_SIZE, ts.height() + fm.descent() + POINT_SIZE);
 }
 
 void WaypointItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -36,10 +36,10 @@ void WaypointItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 	QRect ts = fm.tightBoundingRect(_entry.description());
 
 	painter->setFont(font);
-	painter->drawText(POINT_SIZE - qMax(ts.x(), 0), POINT_SIZE + ts.height(),
+	painter->drawText(POINT_SIZE/2 - qMax(ts.x(), 0), POINT_SIZE/2 + ts.height(),
 	  _entry.description());
 	painter->setBrush(Qt::SolidPattern);
-	painter->drawEllipse(0, 0, POINT_SIZE, POINT_SIZE);
+	painter->drawEllipse(-POINT_SIZE/2, -POINT_SIZE/2, POINT_SIZE, POINT_SIZE);
 
 /*
 	painter->setPen(Qt::red);

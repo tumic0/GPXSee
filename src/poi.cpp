@@ -46,8 +46,7 @@ bool POI::loadGPXFile(const QString &fileName)
 
 	if (gpx.loadFile(fileName)) {
 		for (int i = 0; i < gpx.waypoints().size(); i++)
-			_data.append(Waypoint(
-			  ll2mercator(gpx.waypoints().at(i).coordinates()),
+			_data.append(Waypoint(gpx.waypoints().at(i).coordinates(),
 			  gpx.waypoints().at(i).description()));
 		index.end = _data.size() - 1;
 
@@ -108,7 +107,7 @@ bool POI::loadCSVFile(const QString &fileName)
 		}
 		QByteArray ba = list[2].trimmed();
 
-		_data.append(Waypoint(ll2mercator(QPointF(lon, lat)),
+		_data.append(Waypoint(QPointF(lon, lat),
 		  QString::fromUtf8(ba.data(), ba.size())));
 		ln++;
 	}

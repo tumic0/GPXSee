@@ -124,7 +124,7 @@ void Track::speedGraph(QVector<QPointF> &graph) const
 void Track::track(QVector<QPointF> &track) const
 {
 	for (int i = 0; i < _data.size(); i++)
-		track.append(ll2mercator(_data.at(i).coordinates));
+		track.append(_data.at(i).coordinates);
 }
 
 qreal Track::distance() const
