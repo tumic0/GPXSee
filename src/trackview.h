@@ -45,9 +45,13 @@ private slots:
 
 private:
 	void addTrack(const QVector<QPointF> &track);
+	void addWaypoints(const QList<Waypoint> &waypoints);
+
 	QRectF trackBoundingRect() const;
+	QRectF waypointBoundingRect() const;
 	qreal trackScale() const;
-	qreal mapScale() const;
+	qreal waypointScale() const;
+	qreal mapScale(int zoom) const;
 	void rescale(qreal scale);
 
 	void showMarkers(bool show);
@@ -61,6 +65,7 @@ private:
 	QGraphicsScene *_scene;
 	QList<QVector<QPointF> > _tracks;
 	QList<QGraphicsPathItem*> _trackPaths;
+	QList<WaypointItem*> _waypoints;
 	QList<MarkerItem*> _markers;
 	QHash<Waypoint, WaypointItem*> _pois;
 	Map *_map;

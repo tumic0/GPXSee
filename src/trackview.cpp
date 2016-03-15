@@ -32,8 +32,8 @@ TrackView::TrackView(QWidget *parent)
 	_mapScale = new ScaleItem();
 	_mapScale->setZValue(2.0);
 
-	_zoom = -1;
-	_scale = -1.0;
+	_zoom = ZOOM_MAX;
+	_scale = mapScale(_zoom);
 	_map = 0;
 	_maxLen = 0;
 }
@@ -64,8 +64,8 @@ void TrackView::addTrack(const QVector<QPointF> &track)
 
 	pi = new QGraphicsPathItem(path);
 	_trackPaths.append(pi);
-	_zoom = scale2zoom(trackScale());
-	_scale = mapScale();
+	_zoom = qMin(_zoom, scale2zoom(trackScale()));
+	_scale = mapScale(_zoom);
 	QBrush brush(_palette.color(), Qt::SolidPattern);
 	QPen pen(brush, TRACK_WIDTH * _scale);
 	pi->setPen(pen);
@@ -78,9 +78,27 @@ void TrackView::addTrack(const QVector<QPointF> &track)
 	mi->setScale(_scale);
 }
 
+void TrackView::addWaypoints(const QList<Waypoint> &waypoints)
+{
+	for (int i = 0; i < waypoints.count(); i++) {
+		WaypointItem *wi = new WaypointItem(
+		  Waypoint(ll2mercator(QPointF(waypoints.at(i).coordinates().x(),
+		  -waypoints.at(i).coordinates().y())), waypoints.at(i).description()));
+
+		wi->setPos(wi->entry().coordinates() * 1.0/_scale);
+		wi->setZValue(1);
+		_scene->addItem(wi);
+
+		_waypoints.append(wi);
+	}
+
+	_zoom = qMin(_zoom, scale2zoom(waypointScale()));
+	_scale = mapScale(_zoom);
+}
+
 void TrackView::loadGPX(const GPX &gpx)
 {
-	qreal scale = _scale;
+	int zoom = _zoom;
 
 	for (int i = 0; i < gpx.trackCount(); i++) {
 		QVector<QPointF> track;
@@ -88,12 +106,16 @@ void TrackView::loadGPX(const GPX &gpx)
 		addTrack(track);
 	}
 
-	if (_trackPaths.empty())
+	addWaypoints(gpx.waypoints());
+
+	if (_trackPaths.empty() && _waypoints.empty())
 		return;
-	if (_trackPaths.size() > 1 && scale != _scale)
+
+	if ((_trackPaths.size() > 1 && _zoom < zoom)
+	  || (_waypoints.size() && _zoom < zoom))
 		rescale(_scale);
 
-	QRectF br = trackBoundingRect();
+	QRectF br = trackBoundingRect() | waypointBoundingRect();
 	QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);
 	_scene->setSceneRect(ba);
 	centerOn(ba.center());
@@ -126,9 +148,34 @@ QRectF TrackView::trackBoundingRect() const
 	return QRectF(QPointF(left, top), QPointF(right, bottom));
 }
 
+QRectF TrackView::waypointBoundingRect() const
+{
+	qreal bottom, top, left, right;
+
+	if (_waypoints.empty())
+		return QRectF();
+
+	bottom = _waypoints.at(0)->pos().y();
+	top = _waypoints.at(0)->pos().y();
+	left = _waypoints.at(0)->pos().x();
+	right = _waypoints.at(0)->pos().x();
+
+	for (int i = 1; i < _waypoints.size(); i++) {
+		bottom = qMax(bottom, _waypoints.at(i)->pos().y());
+		top = qMin(top, _waypoints.at(i)->pos().y());
+		right = qMax(right, _waypoints.at(i)->pos().x());
+		left = qMin(left, _waypoints.at(i)->pos().x());
+	}
+
+	return QRectF(QPointF(left, top), QPointF(right, bottom));
+}
+
 qreal TrackView::trackScale() const
 {
 	qreal bottom, top, left, right;
+
+	if (_trackPaths.empty())
+		return mapScale(ZOOM_MAX);
 
 	bottom = _trackPaths.at(0)->path().boundingRect().bottom();
 	top = _trackPaths.at(0)->path().boundingRect().top();
@@ -149,9 +196,35 @@ qreal TrackView::trackScale() const
 	return qMax(sc.x(), sc.y());
 }
 
-qreal TrackView::mapScale() const
+qreal TrackView::waypointScale() const
 {
-	return ((360.0/(qreal)(1<<_zoom))/(qreal)TILE_SIZE);
+	qreal bottom, top, left, right;
+
+	if (_waypoints.count() < 2)
+		return mapScale(ZOOM_MAX);
+
+	bottom = _waypoints.at(0)->entry().coordinates().y();
+	top = _waypoints.at(0)->entry().coordinates().y();
+	left = _waypoints.at(0)->entry().coordinates().x();
+	right = _waypoints.at(0)->entry().coordinates().x();
+
+	for (int i = 1; i < _waypoints.size(); i++) {
+		bottom = qMax(bottom, _waypoints.at(i)->entry().coordinates().y());
+		top = qMin(top, _waypoints.at(i)->entry().coordinates().y());
+		right = qMax(right, _waypoints.at(i)->entry().coordinates().x());
+		left = qMin(left, _waypoints.at(i)->entry().coordinates().x());
+	}
+
+	QRectF br(QPointF(left, top), QPointF(right, bottom));
+	QPointF sc(br.width() / (viewport()->width() - MARGIN/2),
+	  br.height() / (viewport()->height() - MARGIN/2));
+
+	return qMax(sc.x(), sc.y());
+}
+
+qreal TrackView::mapScale(int zoom) const
+{
+	return ((360.0/(qreal)(1<<zoom))/(qreal)TILE_SIZE);
 }
 
 void TrackView::rescale(qreal scale)
@@ -164,6 +237,10 @@ void TrackView::rescale(qreal scale)
 		pen.setWidthF(TRACK_WIDTH * scale);
 		_trackPaths.at(i)->setPen(pen);
 	}
+
+	for (int i = 0; i < _waypoints.size(); i++)
+		_waypoints.at(i)->setPos(_waypoints.at(i)->entry().coordinates()
+		  * 1.0/scale);
 
 	QHash<Waypoint, WaypointItem*>::const_iterator it, jt;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
@@ -237,7 +314,7 @@ void TrackView::redraw()
 
 void TrackView::wheelEvent(QWheelEvent *event)
 {
-	if (_tracks.isEmpty())
+	if (_tracks.isEmpty() && _waypoints.isEmpty())
 		return;
 
 	QPointF pos = mapToScene(event->pos());
@@ -246,8 +323,8 @@ void TrackView::wheelEvent(QWheelEvent *event)
 	_zoom = (event->delta() > 0) ?
 		qMin(_zoom + 1, ZOOM_MAX) : qMax(_zoom - 1, ZOOM_MIN);
 
-	rescale(mapScale());
-	QRectF br = trackBoundingRect();
+	rescale(mapScale(_zoom));
+	QRectF br = trackBoundingRect() | waypointBoundingRect();
 	QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);
 	_scene->setSceneRect(ba);
 
@@ -326,13 +403,14 @@ void TrackView::clear()
 	_pois.clear();
 	_tracks.clear();
 	_trackPaths.clear();
+	_waypoints.clear();
 	_markers.clear();
 	_scene->clear();
 	_palette.reset();
 
 	_maxLen = 0;
-	_zoom = -1;
-	_scale = -1.0;
+	_zoom = ZOOM_MAX;
+	_scale = mapScale(_zoom);
 
 	_scene->setSceneRect(QRectF());
 }
@@ -349,7 +427,7 @@ void TrackView::movePositionMarker(qreal val)
 
 void TrackView::drawBackground(QPainter *painter, const QRectF &rect)
 {
-	if (_tracks.isEmpty() || !_map) {
+	if ((_tracks.isEmpty() && _waypoints.isEmpty())|| !_map) {
 		painter->fillRect(rect, Qt::white);
 		return;
 	}
@@ -381,10 +459,10 @@ void TrackView::drawBackground(QPainter *painter, const QRectF &rect)
 
 void TrackView::resizeEvent(QResizeEvent *e)
 {
-	if (_tracks.isEmpty())
+	if (_tracks.isEmpty() && _waypoints.isEmpty())
 		return;
 
-	QRectF br = trackBoundingRect();
+	QRectF br = trackBoundingRect() | waypointBoundingRect();
 	QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
 	if (ba.width() < e->size().width()) {
