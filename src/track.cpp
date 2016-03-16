@@ -1,5 +1,7 @@
+#include <cmath>
 #include "ll.h"
 #include "track.h"
+
 
 #define WINDOW_EF 3
 #define WINDOW_SE 11
@@ -84,9 +86,13 @@ void Track::elevationGraph(QVector<QPointF> &graph) const
 	if (!_data.size())
 		return;
 
+	if (isnan(_data.at(0).elevation))
+		return;
 	raw.append(QPointF(0, _data.at(0).elevation));
 	for (int i = 1; i < _data.size(); i++) {
 		dist += llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
+		if (isnan(_data.at(i).elevation))
+			return;
 		raw.append(QPointF(dist,  _data.at(i).elevation
 		  - _data.at(i).geoidheight));
 	}
@@ -108,7 +114,7 @@ void Track::speedGraph(QVector<QPointF> &graph) const
 		dt = _data.at(i-1).timestamp.msecsTo(_data.at(i).timestamp) / 1000.0;
 		dist += ds;
 
-		if (_data.at(i).speed < 0) {
+		if (isnan(_data.at(i).speed)) {
 			if (dt == 0)
 				continue;
 			v = ds / dt;

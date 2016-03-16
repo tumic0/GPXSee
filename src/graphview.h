@@ -41,7 +41,8 @@ public:
 	void setYUnits(const QString &units);
 	void setXScale(qreal scale);
 	void setYScale(qreal scale);
-	void setPrecision(int p) {_precision = p;}
+	void setPrecision(int precision) {_precision = precision;}
+	void setMinRange(qreal range) {_minRange = range;}
 
 	void redraw();
 
@@ -64,6 +65,7 @@ protected:
 	QString _xUnits, _yUnits;
 	QString _xLabel, _yLabel;
 	int _precision;
+	qreal _minRange;
 
 private slots:
 	void emitSliderPositionChanged(const QPointF &pos);

@@ -3,6 +3,7 @@
 
 #include <QPointF>
 #include <QDateTime>
+#include <cmath>
 
 struct Trackpoint
 {
@@ -12,7 +13,7 @@ struct Trackpoint
 	qreal geoidheight;
 	qreal speed;
 
-	Trackpoint() {elevation = 0; geoidheight = 0; speed = -1;}
+	Trackpoint() {elevation = NAN; geoidheight = 0; speed = NAN;}
 };
 
 #endif // TRACKPOINT_H

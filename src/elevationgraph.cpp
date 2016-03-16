@@ -16,6 +16,7 @@ ElevationGraph::ElevationGraph(QWidget *parent) : GraphView(parent)
 	GraphView::setXUnits(tr("km"));
 	GraphView::setYUnits(tr("m"));
 	GraphView::setXScale(M2KM);
+	GraphView::setMinRange(50.0);
 }
 
 void ElevationGraph::addInfo()

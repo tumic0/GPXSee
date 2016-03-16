@@ -53,6 +53,7 @@ GraphView::GraphView(QWidget *parent)
 	_yScale = 1;
 
 	_precision = 0;
+	_minRange = 0.01;
 }
 
 GraphView::~GraphView()
@@ -166,8 +167,9 @@ void GraphView::resize(const QSizeF &size)
 {
 	QRectF r;
 	QSizeF mx, my;
+	QPointF rx, ry;
 	QTransform transform;
-	qreal xs, ys;
+	qreal xs, ys, diff;
 
 
 	if (_xAxis->scene() == _scene)
@@ -182,11 +184,21 @@ void GraphView::resize(const QSizeF &size)
 	for (int i = 0; i < _graphs.size(); i++)
 		_graphs.at(i)->resetTransform();
 
-	_xAxis->setRange(QPointF(_xMin * _xScale, _xMax * _xScale));
-	_yAxis->setRange(QPointF(_yMin * _yScale, _yMax * _yScale));
+	rx = QPointF(_xMin * _xScale, _xMax * _xScale);
+	ry = QPointF(_yMin * _yScale, _yMax * _yScale);
+	if ((diff = ry.y() - ry.x()) < _minRange)
+		ry = QPointF(ry.x() - (_minRange/2 - diff/2),
+		  ry.y() + (_minRange/2 - diff/2));
+	_xAxis->setRange(rx);
+	_yAxis->setRange(ry);
 	mx = _xAxis->margin();
 	my = _yAxis->margin();
+
 	r = _scene->itemsBoundingRect();
+	if (r.height() < _minRange)
+		r.adjust(0, -(_minRange/2 - r.height()/2), 0,
+		  _minRange/2 - r.height()/2);
+
 	xs = (size.width() - (my.width() + mx.width())) / r.width();
 	ys = (size.height() - (mx.height() + my.height())
 	  - _info->boundingRect().height()) / r.height();
@@ -196,6 +208,10 @@ void GraphView::resize(const QSizeF &size)
 		_graphs.at(i)->setTransform(transform);
 
 	r = _scene->itemsBoundingRect();
+	if (r.height() < _minRange * ys)
+		r.adjust(0, -(_minRange/2 * ys - r.height()/2), 0,
+		  (_minRange/2) * ys - r.height()/2);
+
 	_xAxis->setSize(r.width());
 	_yAxis->setSize(r.height());
 	_xAxis->setPos(r.bottomLeft());
@@ -280,9 +296,12 @@ void GraphView::emitSliderPositionChanged(const QPointF &pos)
 	emit sliderPositionChanged(val);
 
 	const QPainterPath &path = _graphs.at(0)->path();
+	QRectF br = path.boundingRect();
+	if (br.height() < _minRange)
+		br.adjust(0, -(_minRange/2 - br.height()/2), 0,
+		  _minRange/2 - br.height()/2);
 	QPointF p = path.pointAtPercent(val);
-	qreal r = (p.y() - path.boundingRect().bottom())
-	  / path.boundingRect().height();
+	qreal r = (p.y() - br.bottom()) / br.height();
 	_sliderInfo->setPos(QPointF(0, _slider->boundingRect().height() * r));
 	_sliderInfo->setText(QString::number(-p.y() * _yScale, 'f', _precision));
 }

@@ -7,7 +7,6 @@
 
 SliderInfoItem::SliderInfoItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
-
 }
 
 void SliderInfoItem::updateBoundingRect()
