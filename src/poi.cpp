@@ -141,10 +141,11 @@ QVector<Waypoint> POI::points(const QVector<QPointF> &path, qreal radius) const
 	qreal min[2], max[2];
 
 	for (int i = 0; i < path.count(); i++) {
-		min[0] = path.at(i).x() - radius;
-		min[1] = path.at(i).y() - radius;
-		max[0] = path.at(i).x() + radius;
-		max[1] = path.at(i).y() + radius;
+		const QPointF &p = path.at(i);
+		min[0] = p.x() - radius;
+		min[1] = p.y() - radius;
+		max[0] = p.x() + radius;
+		max[1] = p.y() + radius;
 		_tree.Search(min, max, cb, &set);
 	}
 

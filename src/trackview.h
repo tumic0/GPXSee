@@ -46,6 +46,7 @@ private slots:
 private:
 	void addTrack(const QVector<QPointF> &track);
 	void addWaypoints(const QList<Waypoint> &waypoints);
+	void addPOI(const QVector<Waypoint> &waypoints);
 
 	QRectF trackBoundingRect() const;
 	QRectF waypointBoundingRect() const;
@@ -63,11 +64,13 @@ private:
 	void paintEvent(QPaintEvent *e);
 
 	QGraphicsScene *_scene;
-	QList<QVector<QPointF> > _tracks;
-	QList<QGraphicsPathItem*> _trackPaths;
-	QList<WaypointItem*> _waypoints;
+	QList<QGraphicsPathItem*> _paths;
 	QList<MarkerItem*> _markers;
+	QList<WaypointItem*> _locations;
 	QHash<Waypoint, WaypointItem*> _pois;
+	QList<QVector<QPointF> > _tracks;
+	QVector<QPointF> _waypoints;
+
 	Map *_map;
 	ScaleItem *_mapScale;
 
