@@ -1,4 +1,3 @@
-#include <cmath>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QPainterPath>
