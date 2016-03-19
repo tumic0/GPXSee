@@ -713,8 +713,10 @@ void GUI::poiFileChecked(int index)
 {
 	_poi.enableFile(_poi.files().at(index),
 	  _poiFilesActions.at(index)->isChecked());
+
 	_track->clearPOI();
-	_track->loadPOI(_poi);
+	if (_showPOIAction->isChecked())
+		_track->loadPOI(_poi);
 }
 
 void GUI::graphChanged(int index)
