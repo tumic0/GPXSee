@@ -54,9 +54,12 @@ void TrackView::addTrack(const QVector<QPointF> &track)
 
 	_tracks.append(track);
 
-	path.moveTo(ll2mercator(QPointF(track.at(0).x(), -track.at(0).y())));
-	for (int i = 1; i < track.size(); i++)
-		path.lineTo(ll2mercator(QPointF(track.at(i).x(), -track.at(i).y())));
+	const QPointF &p = track.at(0);
+	path.moveTo(ll2mercator(QPointF(p.x(), -p.y())));
+	for (int i = 1; i < track.size(); i++) {
+		const QPointF &p = track.at(i);
+		path.lineTo(ll2mercator(QPointF(p.x(), -p.y())));
+	}
 
 	_maxLen = qMax(path.length(), _maxLen);
 
@@ -80,16 +83,17 @@ void TrackView::addTrack(const QVector<QPointF> &track)
 void TrackView::addWaypoints(const QList<Waypoint> &waypoints)
 {
 	for (int i = 0; i < waypoints.count(); i++) {
+		const Waypoint &w = waypoints.at(i);
 		WaypointItem *wi = new WaypointItem(
-		  Waypoint(ll2mercator(QPointF(waypoints.at(i).coordinates().x(),
-		  -waypoints.at(i).coordinates().y())), waypoints.at(i).description()));
+		  Waypoint(ll2mercator(QPointF(w.coordinates().x(),
+		    -w.coordinates().y())), w.description()));
 
 		wi->setPos(wi->entry().coordinates() * 1.0/_scale);
 		wi->setZValue(1);
 		_scene->addItem(wi);
 
 		_locations.append(wi);
-		_waypoints.append(waypoints.at(i).coordinates());
+		_waypoints.append(w.coordinates());
 	}
 
 	_zoom = qMin(_zoom, scale2zoom(waypointScale()));
@@ -246,18 +250,20 @@ void TrackView::rescale(qreal scale)
 void TrackView::addPOI(const QVector<Waypoint> &waypoints)
 {
 	for (int i = 0; i < waypoints.size(); i++) {
-		if (_pois.contains(waypoints.at(i)))
+		const Waypoint &w = waypoints.at(i);
+
+		if (_pois.contains(w))
 			continue;
 
 		WaypointItem *pi = new WaypointItem(
-		  Waypoint(ll2mercator(QPointF(waypoints.at(i).coordinates().x(),
-		  -waypoints.at(i).coordinates().y())), waypoints.at(i).description()));
+		  Waypoint(ll2mercator(QPointF(w.coordinates().x(),
+		  -w.coordinates().y())), w.description()));
 
 		pi->setPos(pi->entry().coordinates() * 1.0/_scale);
 		pi->setZValue(1);
 		_scene->addItem(pi);
 
-		_pois.insert(waypoints.at(i), pi);
+		_pois.insert(w, pi);
 	}
 }
 

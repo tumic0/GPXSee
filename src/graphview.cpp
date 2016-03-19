@@ -140,8 +140,9 @@ void GraphView::loadData(const QVector<QPointF> &data)
 	updateBounds(data.at(0));
 	path.moveTo(data.at(0).x(), -data.at(0).y());
 	for (int i = 1; i < data.size(); i++) {
-		path.lineTo(data.at(i).x(), -data.at(i).y());
-		updateBounds(data.at(i));
+		const QPointF &p = data.at(i);
+		path.lineTo(p.x(), -p.y());
+		updateBounds(p);
 	}
 
 	pi = new QGraphicsPathItem(path);

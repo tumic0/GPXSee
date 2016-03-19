@@ -46,14 +46,14 @@ bool POI::loadGPXFile(const QString &fileName)
 
 	if (gpx.loadFile(fileName)) {
 		for (int i = 0; i < gpx.waypoints().size(); i++)
-			_data.append(Waypoint(gpx.waypoints().at(i).coordinates(),
-			  gpx.waypoints().at(i).description()));
+			_data.append(gpx.waypoints().at(i));
 		index.end = _data.size() - 1;
 
 		for (int i = index.start; i <= index.end; i++) {
+			const QPointF &p = _data.at(i).coordinates();
 			qreal c[2];
-			c[0] = _data.at(i).coordinates().x();
-			c[1] = _data.at(i).coordinates().y();
+			c[0] = p.x();
+			c[1] = p.y();
 			_tree.Insert(c, c, i);
 		}
 
@@ -114,9 +114,10 @@ bool POI::loadCSVFile(const QString &fileName)
 	index.end = _data.size() - 1;
 
 	for (int i = index.start; i <= index.end; i++) {
+		const QPointF &p = _data.at(i).coordinates();
 		qreal c[2];
-		c[0] = _data.at(i).coordinates().x();
-		c[1] = _data.at(i).coordinates().y();
+		c[0] = p.x();
+		c[1] = p.y();
 		_tree.Insert(c, c, i);
 	}
 
@@ -173,9 +174,10 @@ void POI::enableFile(const QString &fileName, bool enable)
 			continue;
 
 		for (int j = idx.start; j <= idx.end; j++) {
+			const QPointF &p = _data.at(j).coordinates();
 			qreal c[2];
-			c[0] = _data.at(j).coordinates().x();
-			c[1] = _data.at(j).coordinates().y();
+			c[0] = p.x();
+			c[1] = p.y();
 			_tree.Insert(c, c, j);
 		}
 	}
