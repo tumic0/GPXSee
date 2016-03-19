@@ -18,7 +18,7 @@ public:
 	void setSize(qreal size);
 	void setLabel(const QString& label);
 
-	QSizeF margin();
+	QSizeF margin() const;
 
 private:
 	void updateBoundingRect();

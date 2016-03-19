@@ -14,7 +14,7 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-	QRectF area() {return _area;}
+	const QRectF &area() const {return _area;}
 	void setArea(const QRectF &area) {_area = area;}
 
 	void clear();

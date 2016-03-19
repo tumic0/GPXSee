@@ -41,12 +41,12 @@ void FileBrowser::setFilter(const QStringList &filter)
 		reloadDirectory(_files.last().canonicalPath());
 }
 
-bool FileBrowser::isLast()
+bool FileBrowser::isLast() const
 {
 	return (_files.size() > 0 && _index == _files.size() - 1);
 }
 
-bool FileBrowser::isFirst()
+bool FileBrowser::isFirst() const
 {
 	return (_files.size() > 0 && _index == 0);
 }

@@ -23,8 +23,8 @@ public:
 	QString last();
 	QString first();
 
-	bool isLast();
-	bool isFirst();
+	bool isLast() const;
+	bool isFirst() const;
 
 private slots:
 	void reloadDirectory(const QString &path);

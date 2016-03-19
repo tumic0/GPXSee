@@ -9,7 +9,7 @@ public:
 	Tile(const QPoint &xy, int zoom)
 		{_xy = xy; _zoom = zoom;}
 
-	int zoom() {return _zoom;}
+	int zoom() const {return _zoom;}
 	QPoint& xy() {return _xy;}
 	QPixmap& pixmap() {return _pixmap;}
 

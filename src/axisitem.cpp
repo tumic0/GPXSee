@@ -147,7 +147,7 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 */
 }
 
-QSizeF AxisItem::margin()
+QSizeF AxisItem::margin() const
 {
 	QFont font;
 	font.setPixelSize(FONT_SIZE);
