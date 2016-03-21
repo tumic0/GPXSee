@@ -22,6 +22,7 @@ private:
 	void gpx();
 	void track();
 	void trackPoints();
+	void tpExtension();
 	void extensions();
 	void trackPointData();
 	void wayPointData();

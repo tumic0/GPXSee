@@ -39,12 +39,24 @@ void Parser::handleWayPointAttributes(const QXmlStreamAttributes &attr)
 	  attr.value("lat").toLatin1().toDouble()));
 }
 
+void Parser::tpExtension()
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "hr")
+			handleExtensionData(_reader.name(), _reader.readElementText());
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
 void Parser::extensions()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "speed" || _reader.name() == "hr"
 		  || _reader.name() == "heartrate")
 			handleExtensionData(_reader.name(), _reader.readElementText());
+		else if (_reader.name() == "TrackPointExtension")
+			tpExtension();
 		else
 			_reader.skipCurrentElement();
 	}
