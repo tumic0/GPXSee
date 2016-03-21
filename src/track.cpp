@@ -6,6 +6,8 @@
 #define WINDOW_EF 3
 #define WINDOW_SE 11
 #define WINDOW_SF 11
+#define WINDOW_HE 7
+#define WINDOW_HF 5
 
 static bool lt(const QPointF &p1, const QPointF &p2)
 {
@@ -78,6 +80,18 @@ static QVector<QPointF> filter(const QVector<QPointF> &v, int window)
 	return ret;
 }
 
+Track::Track(const QVector<Trackpoint> &data) : _data(data)
+{
+	_distance = 0;
+
+	for (int i = 1; i < _data.count(); i++)
+		_dd.append(llDistance(_data.at(i).coordinates,
+		  _data.at(i-1).coordinates));
+
+	for (int i = 0; i < _dd.size(); i++)
+		_distance += _dd.at(i);
+}
+
 void Track::elevationGraph(QVector<QPointF> &graph) const
 {
 	qreal dist = 0;
@@ -86,12 +100,12 @@ void Track::elevationGraph(QVector<QPointF> &graph) const
 	if (!_data.size())
 		return;
 
-	if (isnan(_data.at(0).elevation))
+	if (std::isnan(_data.at(0).elevation))
 		return;
 	raw.append(QPointF(0, _data.at(0).elevation));
 	for (int i = 1; i < _data.size(); i++) {
-		dist += llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
-		if (isnan(_data.at(i).elevation))
+		dist += _dd.at(i-1);
+		if (std::isnan(_data.at(i).elevation))
 			return;
 		raw.append(QPointF(dist,  _data.at(i).elevation
 		  - _data.at(i).geoidheight));
@@ -110,11 +124,11 @@ void Track::speedGraph(QVector<QPointF> &graph) const
 
 	raw.append(QPointF(0, 0));
 	for (int i = 1; i < _data.size(); i++) {
-		ds = llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
+		ds = _dd.at(i-1);
 		dt = _data.at(i-1).timestamp.msecsTo(_data.at(i).timestamp) / 1000.0;
 		dist += ds;
 
-		if (isnan(_data.at(i).speed)) {
+		if (std::isnan(_data.at(i).speed)) {
 			if (dt == 0)
 				continue;
 			v = ds / dt;
@@ -127,20 +141,28 @@ void Track::speedGraph(QVector<QPointF> &graph) const
 	graph = filter(eliminate(raw, WINDOW_SE), WINDOW_SF);
 }
 
+void Track::heartRateGraph(QVector<QPointF> &graph) const
+{
+	qreal dist = 0;
+	QVector<QPointF> raw;
+
+	if (std::isnan(_data.at(0).heartRate))
+		return;
+	raw.append(QPointF(0, _data.at(0).heartRate));
+	for (int i = 1; i < _data.count(); i++) {
+		if (std::isnan(_data.at(i).heartRate))
+			return;
+		dist += _dd.at(i-1);
+		raw.append(QPointF(dist, _data.at(i).heartRate));
+	}
+
+	graph = filter(eliminate(raw, WINDOW_HE), WINDOW_HF);
+}
+
 void Track::track(QVector<QPointF> &track) const
 {
 	for (int i = 0; i < _data.size(); i++)
 		track.append(_data.at(i).coordinates);
-}
-
-qreal Track::distance() const
-{
-	qreal dist = 0;
-
-	for (int i = 1; i < _data.size(); i++)
-		dist += llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
-
-	return dist;
 }
 
 qreal Track::time() const

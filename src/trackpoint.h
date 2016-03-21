@@ -12,8 +12,14 @@ struct Trackpoint
 	qreal elevation;
 	qreal geoidheight;
 	qreal speed;
+	qreal heartRate;
 
-	Trackpoint() {elevation = NAN; geoidheight = 0; speed = NAN;}
+	Trackpoint() {
+		elevation = NAN;
+		geoidheight = 0;
+		speed = NAN;
+		heartRate = NAN;
+	}
 };
 
 #endif // TRACKPOINT_H

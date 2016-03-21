@@ -14,8 +14,10 @@ class QAction;
 class QLabel;
 class QSignalMapper;
 class FileBrowser;
+class GraphView;
 class ElevationGraph;
 class SpeedGraph;
+class HeartRateGraph;
 class TrackView;
 class Map;
 
@@ -124,6 +126,7 @@ private:
 
 	ElevationGraph *_elevationGraph;
 	SpeedGraph *_speedGraph;
+	HeartRateGraph *_heartRateGraph;
 	TrackView *_track;
 
 	POI _poi;
@@ -137,6 +140,9 @@ private:
 	qreal _distance;
 	qreal _time;
 	int _trackCount;
+
+	GraphView *_lastGraph;
+	qreal _lastSliderPos;
 };
 
 #endif // GUI_H

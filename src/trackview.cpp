@@ -34,7 +34,8 @@ TrackView::TrackView(QWidget *parent)
 	_zoom = ZOOM_MAX;
 	_scale = mapScale(_zoom);
 	_map = 0;
-	_maxLen = 0;
+	_maxPath = 0;
+	_maxDistance = 0;
 }
 
 TrackView::~TrackView()
@@ -61,8 +62,7 @@ void TrackView::addTrack(const QVector<QPointF> &track)
 		path.lineTo(ll2mercator(QPointF(p.x(), -p.y())));
 	}
 
-	_maxLen = qMax(path.length(), _maxLen);
-
+	_maxPath = qMax(path.length(), _maxPath);
 
 	pi = new QGraphicsPathItem(path);
 	_paths.append(pi);
@@ -108,6 +108,7 @@ void TrackView::loadGPX(const GPX &gpx)
 		QVector<QPointF> track;
 		gpx.track(i).track(track);
 		addTrack(track);
+		_maxDistance = qMax(gpx.track(i).distance(), _maxDistance);
 	}
 
 	addWaypoints(gpx.waypoints());
@@ -403,7 +404,8 @@ void TrackView::clear()
 	_tracks.clear();
 	_waypoints.clear();
 
-	_maxLen = 0;
+	_maxPath = 0;
+	_maxDistance = 0;
 	_zoom = ZOOM_MAX;
 	_scale = mapScale(_zoom);
 
@@ -412,11 +414,17 @@ void TrackView::clear()
 
 void TrackView::movePositionMarker(qreal val)
 {
+	qreal mp = val / _maxDistance;
+
 	for (int i = 0; i < _paths.size(); i++) {
-		qreal f = _maxLen / _paths.at(i)->path().length();
-		QPointF pos = _paths.at(i)->path().pointAtPercent(qMin(val * f,
-		  1.0));
-		_markers.at(i)->setPos(pos);
+		qreal f = _maxPath / _paths.at(i)->path().length();
+		if (mp * f > 1.0)
+			_markers.at(i)->setVisible(false);
+		else {
+			QPointF pos = _paths.at(i)->path().pointAtPercent(mp * f);
+			_markers.at(i)->setPos(pos);
+			_markers.at(i)->setVisible(true);
+		}
 	}
 }
 

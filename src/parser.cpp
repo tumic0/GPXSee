@@ -5,16 +5,18 @@ void Parser::handleExtensionData(QStringRef element, const QString &value)
 {
 	if (element == "speed")
 		_track->last().speed = value.toDouble();
+	else if (element == "hr" || element == "heartrate")
+		_track->last().heartRate = value.toDouble();
 }
 
 void Parser::handleTrekPointData(QStringRef element, const QString &value)
 {
 	if (element == "ele")
 		_track->last().elevation = value.toLatin1().toDouble();
-	if (element == "time")
+	else if (element == "time")
 		_track->last().timestamp = QDateTime::fromString(value.toLatin1(),
 		  Qt::ISODate);
-	if (element == "geoidheight")
+	else if (element == "geoidheight")
 		_track->last().geoidheight = value.toLatin1().toDouble();
 }
 
@@ -40,7 +42,8 @@ void Parser::handleWayPointAttributes(const QXmlStreamAttributes &attr)
 void Parser::extensions()
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "speed")
+		if (_reader.name() == "speed" || _reader.name() == "hr"
+		  || _reader.name() == "heartrate")
 			handleExtensionData(_reader.name(), _reader.readElementText());
 		else
 			_reader.skipCurrentElement();

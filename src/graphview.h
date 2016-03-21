@@ -55,6 +55,8 @@ public:
 	void addInfo(const QString &key, const QString &value);
 	void clearInfo();
 
+	void skipColor() {_palette.color();}
+
 signals:
 	void sliderPositionChanged(qreal);
 

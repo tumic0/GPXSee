@@ -75,7 +75,7 @@ private:
 	ScaleItem *_mapScale;
 
 	Palette _palette;
-	qreal _maxLen;
+	qreal _maxPath, _maxDistance;
 
 	qreal _scale;
 	int _zoom;

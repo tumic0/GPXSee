@@ -294,7 +294,7 @@ void GraphView::emitSliderPositionChanged(const QPointF &pos)
 		return;
 
 	qreal val = pos.x() / _slider->area().width();
-	emit sliderPositionChanged(val);
+	emit sliderPositionChanged(val * (_xMax - _xMin));
 
 	const QPainterPath &path = _graphs.at(0)->path();
 	QRectF br = path.boundingRect();
@@ -309,18 +309,27 @@ void GraphView::emitSliderPositionChanged(const QPointF &pos)
 
 qreal GraphView::sliderPosition() const
 {
-	return _slider->pos().x() / _slider->area().width();
+	if (!_slider->isVisible())
+		return -1;
+	else
+		return (_slider->pos().x() / _slider->area().width()) * (_xMax - _xMin);
 }
 
 void GraphView::setSliderPosition(qreal pos)
 {
-	_slider->setPos(pos * _slider->area().width(), 0);
+	if (pos > (_xMax - _xMin))
+		_slider->setVisible(false);
+	else {
+		_slider->setPos((pos / (_xMax - _xMin)) * _slider->area().width(), 0);
+		_slider->setVisible(true);
+	}
 }
 
 void GraphView::newSliderPosition(const QPointF &pos)
 {
 	if (_slider->area().contains(pos)) {
 		_slider->setPos(pos);
+		_slider->setVisible(true);
 		emitSliderPositionChanged(pos);
 	}
 }

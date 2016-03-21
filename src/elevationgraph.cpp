@@ -11,12 +11,12 @@ ElevationGraph::ElevationGraph(QWidget *parent) : GraphView(parent)
 	_max = -FLT_MAX;
 	_min = FLT_MAX;
 
-	GraphView::setXLabel(tr("Distance"));
-	GraphView::setYLabel(tr("Elevation"));
-	GraphView::setXUnits(tr("km"));
-	GraphView::setYUnits(tr("m"));
-	GraphView::setXScale(M2KM);
-	GraphView::setMinRange(50.0);
+	setXLabel(tr("Distance"));
+	setYLabel(tr("Elevation"));
+	setXUnits(tr("km"));
+	setYUnits(tr("m"));
+	setXScale(M2KM);
+	setMinRange(50.0);
 }
 
 void ElevationGraph::addInfo()
@@ -38,14 +38,16 @@ void ElevationGraph::loadGPX(const GPX &gpx)
 		qreal min, max, ascent = 0, descent = 0;
 
 		gpx.track(i).elevationGraph(data);
-		if (data.isEmpty())
+		if (data.count() < 2) {
+			skipColor();
 			continue;
+		}
 
 		min = max = data.at(0).y();
 
-		for (int i = 1; i < data.size(); i++) {
-			qreal cur = data.at(i).y();
-			qreal prev = data.at(i-1).y();
+		for (int j = 1; j < data.size(); j++) {
+			qreal cur = data.at(j).y();
+			qreal prev = data.at(j-1).y();
 
 			if (cur > prev)
 				ascent += cur - prev;
@@ -81,15 +83,15 @@ void ElevationGraph::clear()
 void ElevationGraph::setUnits(enum Units units)
 {
 	if (units == Metric) {
-		GraphView::setXUnits(tr("km"));
-		GraphView::setYUnits(tr("m"));
-		GraphView::setXScale(M2KM);
-		GraphView::setYScale(1);
+		setXUnits(tr("km"));
+		setYUnits(tr("m"));
+		setXScale(M2KM);
+		setYScale(1);
 	} else {
-		GraphView::setXUnits(tr("mi"));
-		GraphView::setYUnits(tr("ft"));
-		GraphView::setXScale(M2MI);
-		GraphView::setYScale(M2FT);
+		setXUnits(tr("mi"));
+		setYUnits(tr("ft"));
+		setXScale(M2MI);
+		setYScale(M2FT);
 	}
 
 	clearInfo();

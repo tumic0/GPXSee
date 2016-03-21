@@ -22,6 +22,7 @@
 #include "maplist.h"
 #include "elevationgraph.h"
 #include "speedgraph.h"
+#include "heartrategraph.h"
 #include "trackview.h"
 #include "infoitem.h"
 #include "filebrowser.h"
@@ -56,6 +57,8 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	  SLOT(movePositionMarker(qreal)));
 	connect(_speedGraph, SIGNAL(sliderPositionChanged(qreal)), _track,
 	  SLOT(movePositionMarker(qreal)));
+	connect(_heartRateGraph, SIGNAL(sliderPositionChanged(qreal)), _track,
+	  SLOT(movePositionMarker(qreal)));
 
 	_browser = new FileBrowser(this);
 	_browser->setFilter(QStringList("*.gpx"));
@@ -74,6 +77,9 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	_distance = 0;
 	_time = 0;
 	_trackCount = 0;
+
+	_lastGraph = static_cast<GraphView*>(_trackGraphs->currentWidget());
+	_lastSliderPos = _lastGraph->sliderPosition();
 
 	resize(600, 800);
 }
@@ -349,10 +355,12 @@ void GUI::createTrackGraphs()
 {
 	_elevationGraph = new ElevationGraph;
 	_speedGraph = new SpeedGraph;
+	_heartRateGraph = new HeartRateGraph;
 
 	_trackGraphs = new QTabWidget;
 	_trackGraphs->addTab(_elevationGraph, tr("Elevation"));
 	_trackGraphs->addTab(_speedGraph, tr("Speed"));
+	_trackGraphs->addTab(_heartRateGraph, tr("Heart rate"));
 	connect(_trackGraphs, SIGNAL(currentChanged(int)), this,
 	  SLOT(graphChanged(int)));
 
@@ -478,6 +486,7 @@ bool GUI::loadFile(const QString &fileName)
 	if (gpx.loadFile(fileName)) {
 		_elevationGraph->loadGPX(gpx);
 		_speedGraph->loadGPX(gpx);
+		_heartRateGraph->loadGPX(gpx);
 		_track->loadGPX(gpx);
 		if (_showPOIAction->isChecked())
 			_track->loadPOI(_poi);
@@ -611,6 +620,7 @@ void GUI::reloadFile()
 
 	_elevationGraph->clear();
 	_speedGraph->clear();
+	_heartRateGraph->clear();
 	_track->clear();
 
 	for (int i = 0; i < _files.size(); i++) {
@@ -635,6 +645,7 @@ void GUI::closeFile()
 
 	_elevationGraph->clear();
 	_speedGraph->clear();
+	_heartRateGraph->clear();
 	_track->clear();
 
 	_files.clear();
@@ -721,10 +732,11 @@ void GUI::poiFileChecked(int index)
 
 void GUI::graphChanged(int index)
 {
-	if (_trackGraphs->widget(index) == _elevationGraph)
-		_elevationGraph->setSliderPosition(_speedGraph->sliderPosition());
-	else if (_trackGraphs->widget(index) == _speedGraph)
-		_speedGraph->setSliderPosition(_elevationGraph->sliderPosition());
+	GraphView *tv = static_cast<GraphView*>(_trackGraphs->widget(index));
+	if (_lastGraph->sliderPosition() >= 0)
+		_lastSliderPos = _lastGraph->sliderPosition();
+	tv->setSliderPosition(_lastSliderPos);
+	_lastGraph = tv;
 }
 
 void GUI::updateNavigationActions()
@@ -751,6 +763,7 @@ void GUI::setMetricUnits()
 	_track->setUnits(Metric);
 	_elevationGraph->setUnits(Metric);
 	_speedGraph->setUnits(Metric);
+	_heartRateGraph->setUnits(Metric);
 	updateStatusBarInfo();
 }
 
@@ -759,6 +772,7 @@ void GUI::setImperialUnits()
 	_track->setUnits(Imperial);
 	_elevationGraph->setUnits(Imperial);
 	_speedGraph->setUnits(Imperial);
+	_heartRateGraph->setUnits(Imperial);
 	updateStatusBarInfo();
 }
 

@@ -1,43 +1,44 @@
-#include "config.h"
 #include "gpx.h"
-#include "speedgraph.h"
+#include "heartrategraph.h"
 
 
-SpeedGraph::SpeedGraph(QWidget *parent) : GraphView(parent)
+HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphView(parent)
 {
 	_max = 0;
 
 	setXLabel(tr("Distance"));
-	setYLabel(tr("Speed"));
+	setYLabel(tr("Heart rate"));
 	setXUnits(tr("km"));
-	setYUnits(tr("km/h"));
+	setYUnits(tr("1/min"));
 	setXScale(M2KM);
-	setYScale(MS2KMH);
-	setPrecision(1);
+	setPrecision(0);
 }
 
-void SpeedGraph::addInfo()
+void HeartRateGraph::addInfo()
 {
-	GraphView::addInfo(tr("Average"), QString::number(avg() * _yScale, 'f', 1)
+	GraphView::addInfo(tr("Average"), QString::number(avg() * _yScale, 'f', 0)
 	  + UNIT_SPACE + _yUnits);
-	GraphView::addInfo(tr("Maximum"), QString::number(_max * _yScale,  'f', 1)
+	GraphView::addInfo(tr("Maximum"), QString::number(_max * _yScale,  'f', 0)
 	  + UNIT_SPACE + _yUnits);
 }
 
-void SpeedGraph::loadGPX(const GPX &gpx)
+void HeartRateGraph::loadGPX(const GPX &gpx)
 {
 	for (int i = 0; i < gpx.trackCount(); i++) {
 		QVector<QPointF> data;
-		qreal max = 0;
+		qreal max = 0, sum = 0, w = 0;
 
-		gpx.track(i).speedGraph(data);
+		gpx.track(i).heartRateGraph(data);
 		if (data.count() < 2) {
 			skipColor();
 			continue;
 		}
 
-		_avg.append(QPointF(gpx.track(i).distance(), gpx.track(i).distance()
-		  / gpx.track(i).time()));
+		for (int j = 1; j < data.size(); j++) {
+			sum += data.at(j).y() * (data.at(j).x() - data.at(j-1).x());
+			w += data.at(j).x() - data.at(j-1).x();
+		}
+		_avg.append(QPointF(gpx.track(i).distance(), sum/w));
 
 		for (int j = 0; j < data.size(); j++)
 			max = qMax(max, data.at(j).y());
@@ -48,7 +49,7 @@ void SpeedGraph::loadGPX(const GPX &gpx)
 	}
 }
 
-qreal SpeedGraph::avg() const
+qreal HeartRateGraph::avg() const
 {
 	qreal sum = 0, w = 0;
 	QList<QPointF>::const_iterator it;
@@ -61,7 +62,7 @@ qreal SpeedGraph::avg() const
 	return (sum / w);
 }
 
-void SpeedGraph::clear()
+void HeartRateGraph::clear()
 {
 	_max = 0;
 	_avg.clear();
@@ -69,18 +70,14 @@ void SpeedGraph::clear()
 	GraphView::clear();
 }
 
-void SpeedGraph::setUnits(enum Units units)
+void HeartRateGraph::setUnits(enum Units units)
 {
 	if (units == Metric) {
 		setXUnits(tr("km"));
-		setYUnits(tr("km/h"));
 		setXScale(M2KM);
-		setYScale(MS2KMH);
 	} else {
 		setXUnits(tr("mi"));
-		setYUnits(tr("mi/h"));
 		setXScale(M2MI);
-		setYScale(MS2MIH);
 	}
 
 	clearInfo();
