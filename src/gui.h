@@ -71,6 +71,7 @@ private:
 	void createTrackView();
 	void createTrackGraphs();
 
+	bool openPOIFile(const QString &fileName);
 	bool loadFile(const QString &fileName);
 	void saveFile(const QString &fileName);
 	void updateStatusBarInfo();

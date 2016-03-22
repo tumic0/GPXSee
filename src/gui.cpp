@@ -513,22 +513,34 @@ bool GUI::loadFile(const QString &fileName)
 
 void GUI::openPOIFile()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open POI file"),
+	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open POI file"),
 	  QString(), tr("GPX files (*.gpx);;CSV files (*.csv);;All files (*)"));
+	QStringList list = files;
 
-	if (!fileName.isEmpty()) {
-		if (!_poi.loadFile(fileName)) {
-			QString error = tr("Error loading POI file:\n%1")
-			  .arg(_poi.errorString()) + QString("\n");
-			if (_poi.errorLine())
-				error.append(tr("Line: %1").arg(_poi.errorLine()));
-			QMessageBox::critical(this, tr("Error"), error);
-		} else {
-			_showPOIAction->setChecked(true);
-			_track->loadPOI(_poi);
-			_poiFilesMenu->addAction(createPOIFileAction(
-			  _poi.files().indexOf(fileName)));
-		}
+	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
+		openPOIFile(*it);
+}
+
+bool GUI::openPOIFile(const QString &fileName)
+{
+	if (fileName.isEmpty())
+		return false;
+
+	if (!_poi.loadFile(fileName)) {
+		QString error = tr("Error loading POI file:\n%1")
+		  .arg(_poi.errorString()) + QString("\n");
+		if (_poi.errorLine())
+			error.append(tr("Line: %1").arg(_poi.errorLine()));
+		QMessageBox::critical(this, tr("Error"), error);
+
+		return false;
+	} else {
+		_showPOIAction->setChecked(true);
+		_track->loadPOI(_poi);
+		_poiFilesMenu->addAction(createPOIFileAction(
+		  _poi.files().indexOf(fileName)));
+
+		return true;
 	}
 }
 
@@ -608,8 +620,6 @@ void GUI::saveFile(const QString &fileName)
 	}
 	scene.addItem(&info);
 	scene.render(&p, QRectF(0, 0, printer.width(), 200));
-
-	p.end();
 }
 
 void GUI::reloadFile()
