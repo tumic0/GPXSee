@@ -288,6 +288,37 @@ void GraphView::clear()
 	_scene->setSceneRect(0, 0, 0, 0);
 }
 
+static qreal yAtX(const QPainterPath &path, qreal x)
+{
+	int low = 0;
+	int high = path.elementCount() - 1;
+	int mid = 0;
+
+	while (low <= high) {
+		mid = low + ((high - low) / 2);
+		const QPainterPath::Element &e = path.elementAt(mid);
+		if (e.x > x)
+			high = mid - 1;
+		else if (e.x < x)
+			low = mid + 1;
+		else
+			return e.y;
+	}
+
+	QLineF l;
+	if (path.elementAt(mid).x < x) {
+		Q_ASSERT(mid >= 0 && mid+1 < path.elementCount());
+		l = QLineF(path.elementAt(mid).x, path.elementAt(mid).y,
+		  path.elementAt(mid+1).x, path.elementAt(mid+1).y);
+	} else {
+		Q_ASSERT(mid-1 >= 0 && mid < path.elementCount());
+		l = QLineF(path.elementAt(mid-1).x, path.elementAt(mid-1).y,
+		  path.elementAt(mid).x, path.elementAt(mid).y);
+	}
+
+	return l.pointAt((x - l.p1().x()) / (l.p2().x() - l.p1().x())).y();
+}
+
 void GraphView::emitSliderPositionChanged(const QPointF &pos)
 {
 	if (_graphs.isEmpty())
@@ -296,15 +327,19 @@ void GraphView::emitSliderPositionChanged(const QPointF &pos)
 	qreal val = pos.x() / _slider->area().width();
 	emit sliderPositionChanged(val * (_xMax - _xMin));
 
+	if (!_sliderInfo->isVisible())
+		return;
+
 	const QPainterPath &path = _graphs.at(0)->path();
 	QRectF br = path.boundingRect();
 	if (br.height() < _minRange)
 		br.adjust(0, -(_minRange/2 - br.height()/2), 0,
 		  _minRange/2 - br.height()/2);
-	QPointF p = path.pointAtPercent(val);
-	qreal r = (p.y() - br.bottom()) / br.height();
+
+	qreal y = yAtX(path, val * (_xMax - _xMin));
+	qreal r = (y - br.bottom()) / br.height();
 	_sliderInfo->setPos(QPointF(0, _slider->boundingRect().height() * r));
-	_sliderInfo->setText(QString::number(-p.y() * _yScale, 'f', _precision));
+	_sliderInfo->setText(QString::number(-y * _yScale, 'f', _precision));
 }
 
 qreal GraphView::sliderPosition() const
