@@ -77,7 +77,18 @@ void AxisItem::updateBoundingRect()
 		_size + es.width()/2 + ss.width()/2,
 		ls.height() + es.height() - fm.descent() + TICK + 2*PADDING);
 	} else {
-		_boundingRect = QRectF(-(ls.height() + es.width() + 2*PADDING
+		int mtw = 0;
+		QRect ts;
+		qreal val;
+
+		for (int i = 0; i < ((l.max - l.min) / l.d) + 1; i++) {
+			val = l.min + i * l.d;
+			QString str = QString::number(val);
+			ts = fm.tightBoundingRect(str);
+			mtw = qMax(ts.width(), mtw);
+		}
+
+		_boundingRect = QRectF(-(ls.height() + mtw + 2*PADDING
 		  - fm.descent() + TICK/2), -(_size + es.height()/2
 		  + fm.descent()), ls.height() -fm.descent() + es.width() + 2*PADDING
 		  + TICK, _size + es.height()/2 + fm.descent() + ss.height()/2);
@@ -124,6 +135,7 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 		painter->drawLine(0, 0, 0, -_size);
 
 		l = label(_range.x(), _range.y(), YTICKS);
+		int mtw = 0;
 		for (int i = 0; i < ((l.max - l.min) / l.d) + 1; i++) {
 			val = l.min + i * l.d;
 			QString str = QString::number(val);
@@ -131,13 +143,14 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 			painter->drawLine(TICK/2, -((_size/range) * (val - _range.x())),
 			  -TICK/2, -((_size/range) * (val - _range.x())));
 			ts = fm.tightBoundingRect(str);
+			mtw = qMax(ts.width(), mtw);
 			painter->drawText(-(ts.width() + PADDING + TICK/2), -((_size/range)
 			  * (val - _range.x())) + (ts.height()/2), str);
 		}
 
 		painter->rotate(-90);
-		painter->drawText(_size/2 - ls.width()/2, -(ts.width()
-		  + 2*PADDING + TICK/2), _label);
+		painter->drawText(_size/2 - ls.width()/2, -(mtw + 2*PADDING + TICK/2),
+		  _label);
 		painter->rotate(90);
 	}
 
@@ -165,7 +178,18 @@ QSizeF AxisItem::margin() const
 		return QSizeF(es.width()/2,
 		  ls.height() + es.height() - fm.descent() + TICK/2 + 2*PADDING);
 	} else {
-		return QSizeF(ls.height() -fm.descent() + es.width() + 2*PADDING
+		int mtw = 0;
+		QRect ts;
+		qreal val;
+
+		for (int i = 0; i < ((l.max - l.min) / l.d) + 1; i++) {
+			val = l.min + i * l.d;
+			QString str = QString::number(val);
+			ts = fm.tightBoundingRect(str);
+			mtw = qMax(ts.width(), mtw);
+		}
+
+		return QSizeF(ls.height() -fm.descent() + mtw + 2*PADDING
 		  + TICK/2, es.height()/2 + fm.descent());
 	}
 }
