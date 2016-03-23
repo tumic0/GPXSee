@@ -146,6 +146,9 @@ void Track::heartRateGraph(QVector<QPointF> &graph) const
 	qreal dist = 0;
 	QVector<QPointF> raw;
 
+	if (!_data.size())
+		return;
+
 	if (std::isnan(_data.at(0).heartRate))
 		return;
 	raw.append(QPointF(0, _data.at(0).heartRate));
