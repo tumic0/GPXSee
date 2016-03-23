@@ -50,8 +50,10 @@ void TrackView::addTrack(const QVector<QPointF> &track)
 	MarkerItem *mi;
 
 
-	if (track.size() < 2)
+	if (track.size() < 2) {
+		_palette.color();
 		return;
+	}
 
 	_tracks.append(track);
 
