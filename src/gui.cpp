@@ -80,6 +80,7 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 
 	_lastGraph = static_cast<GraphView*>(_trackGraphs->currentWidget());
 	_lastSliderPos = _lastGraph->sliderPosition();
+	updateGraphTabs();
 
 	resize(600, 800);
 }
@@ -346,6 +347,7 @@ void GUI::createToolBars()
 void GUI::createTrackView()
 {
 	_track = new TrackView(this);
+	_track->setEnabled(false);
 
 	if (_showMapAction->isChecked())
 		_track->setMap(_currentMap);
@@ -472,6 +474,7 @@ bool GUI::openFile(const QString &fileName)
 		_fileActionGroup->setEnabled(true);
 		_navigationActionGroup->setEnabled(true);
 		updateNavigationActions();
+		updateGraphTabs();
 		return true;
 	} else {
 		updateNavigationActions();
@@ -497,6 +500,7 @@ bool GUI::loadFile(const QString &fileName)
 		}
 
 		_trackCount += gpx.trackCount();
+		_track->setEnabled(true);
 
 		return true;
 	} else {
@@ -660,8 +664,10 @@ void GUI::closeFile()
 
 	_files.clear();
 
+	_track->setEnabled(false);
 	_fileActionGroup->setEnabled(false);
 	updateStatusBarInfo();
+	updateGraphTabs();
 }
 
 void GUI::showPOI(bool checked)
@@ -765,6 +771,15 @@ void GUI::updateNavigationActions()
 	} else {
 		_prevAction->setEnabled(true);
 		_firstAction->setEnabled(true);
+	}
+}
+
+void GUI::updateGraphTabs()
+{
+	GraphView *gv;
+	for (int i = 0; i < _trackGraphs->count(); i++) {
+		gv = static_cast<GraphView*>(_trackGraphs->widget(i));
+		_trackGraphs->setTabEnabled(i, gv->count());
 	}
 }
 

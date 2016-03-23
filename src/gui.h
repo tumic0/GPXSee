@@ -76,6 +76,7 @@ private:
 	void saveFile(const QString &fileName);
 	void updateStatusBarInfo();
 	void updateNavigationActions();
+	void updateGraphTabs();
 
 	void keyPressEvent(QKeyEvent * event);
 
