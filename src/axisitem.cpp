@@ -90,7 +90,7 @@ void AxisItem::updateBoundingRect()
 
 		_boundingRect = QRectF(-(ls.height() + mtw + 2*PADDING
 		  - fm.descent() + TICK/2), -(_size + es.height()/2
-		  + fm.descent()), ls.height() -fm.descent() + es.width() + 2*PADDING
+		  + fm.descent()), ls.height() -fm.descent() + mtw + 2*PADDING
 		  + TICK, _size + es.height()/2 + fm.descent() + ss.height()/2);
 	}
 }
