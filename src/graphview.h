@@ -44,24 +44,23 @@ public:
 	void setPrecision(int precision) {_precision = precision;}
 	void setMinRange(qreal range) {_minRange = range;}
 
-	void redraw();
-
 	void plot(QPainter *painter, const QRectF &target);
 	void clear();
 
 	qreal sliderPosition() const;
 	void setSliderPosition(qreal pos);
 
-	void addInfo(const QString &key, const QString &value);
-	void clearInfo();
-
-	void skipColor() {_palette.color();}
+	int count() const {return _graphs.count();}
 
 signals:
 	void sliderPositionChanged(qreal);
 
 protected:
 	void resizeEvent(QResizeEvent *);
+	void redraw();
+	void addInfo(const QString &key, const QString &value);
+	void clearInfo();
+	void skipColor() {_palette.color();}
 
 	qreal _xScale, _yScale;
 	QString _xUnits, _yUnits;
@@ -77,7 +76,7 @@ private:
 	void createXLabel();
 	void createYLabel();
 	void updateBounds(const QPointF &point);
-	void resize(const QSizeF &size);
+	void redraw(const QSizeF &size);
 
 	Scene *_scene;
 

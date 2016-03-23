@@ -161,10 +161,10 @@ void GraphView::loadData(const QVector<QPointF> &data)
 void GraphView::redraw()
 {
 	if (!_graphs.isEmpty())
-		resize(viewport()->size() - QSizeF(MARGIN, MARGIN));
+		redraw(viewport()->size() - QSizeF(MARGIN, MARGIN));
 }
 
-void GraphView::resize(const QSizeF &size)
+void GraphView::redraw(const QSizeF &size)
 {
 	QRectF r;
 	QSizeF mx, my;
@@ -220,6 +220,7 @@ void GraphView::resize(const QSizeF &size)
 	_scene->addItem(_xAxis);
 	_scene->addItem(_yAxis);
 
+
 	qreal sp = (_slider->pos().x() == _slider->area().left())
 		? 0 : (_slider->pos().x() - _slider->area().left())
 		  / _slider->area().width();
@@ -251,13 +252,13 @@ void GraphView::plot(QPainter *painter, const QRectF &target)
 	QSizeF orig = _scene->sceneRect().size();
 	QSizeF canvas = QSizeF(orig.height() * ratio, orig.height());
 
-	resize(canvas);
+	redraw(canvas);
 	_slider->hide();
 	_info->hide();
 	_scene->render(painter, target, QRectF());
 	_slider->show();
 	_info->show();
-	resize(orig);
+	redraw(orig);
 }
 
 void GraphView::clear()
@@ -352,6 +353,9 @@ qreal GraphView::sliderPosition() const
 
 void GraphView::setSliderPosition(qreal pos)
 {
+	if (_graphs.isEmpty())
+		return;
+
 	if (pos > (_xMax - _xMin))
 		_slider->setVisible(false);
 	else {
