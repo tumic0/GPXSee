@@ -37,7 +37,7 @@ private slots:
 	void saveFile();
 	void saveAs();
 	void openFile();
-	void closeFile();
+	void closeAll();
 	void reloadFile();
 	void openPOIFile();
 	void closePOIFiles();
@@ -60,6 +60,7 @@ private slots:
 
 private:
 	void loadFiles();
+	void closeFiles();
 
 	QAction *createPOIFileAction(int index);
 	void createPOIFilesActions();

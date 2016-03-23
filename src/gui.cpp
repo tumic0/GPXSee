@@ -161,7 +161,7 @@ void GUI::createActions()
 	// General actions
 	_exitAction = new QAction(QIcon(QPixmap(QUIT_ICON)), tr("Quit"), this);
 	_exitAction->setShortcut(QKeySequence::Quit);
-	connect(_exitAction, SIGNAL(triggered()), this, SLOT(close()));
+	connect(_exitAction, SIGNAL(triggered()), this, SLOT(closeAll()));
 
 	// Help & About
 	_dataSourcesAction = new QAction(tr("Data sources"), this);
@@ -193,7 +193,7 @@ void GUI::createActions()
 	  tr("Close"), this);
 	_closeFileAction->setShortcut(QKeySequence::Close);
 	_closeFileAction->setActionGroup(_fileActionGroup);
-	connect(_closeFileAction, SIGNAL(triggered()), this, SLOT(closeFile()));
+	connect(_closeFileAction, SIGNAL(triggered()), this, SLOT(closeAll()));
 	_reloadFileAction = new QAction(QIcon(QPixmap(RELOAD_FILE_ICON)),
 	  tr("Reload"), this);
 	_reloadFileAction->setShortcut(QKeySequence::Refresh);
@@ -464,22 +464,24 @@ void GUI::openFile()
 
 bool GUI::openFile(const QString &fileName)
 {
+	bool ret = true;
+
 	if (fileName.isEmpty() || _files.contains(fileName))
 		return false;
 
 	if (loadFile(fileName)) {
 		_files.append(fileName);
 		_browser->setCurrent(fileName);
-		updateStatusBarInfo();
 		_fileActionGroup->setEnabled(true);
 		_navigationActionGroup->setEnabled(true);
-		updateNavigationActions();
-		updateGraphTabs();
-		return true;
-	} else {
-		updateNavigationActions();
-		return false;
-	}
+	} else
+		ret = false;
+
+	updateNavigationActions();
+	updateStatusBarInfo();
+	updateGraphTabs();
+
+	return ret;
 }
 
 bool GUI::loadFile(const QString &fileName)
@@ -651,7 +653,7 @@ void GUI::reloadFile()
 		_browser->setCurrent(_files.last());
 }
 
-void GUI::closeFile()
+void GUI::closeFiles()
 {
 	_distance = 0;
 	_time = 0;
@@ -663,6 +665,11 @@ void GUI::closeFile()
 	_track->clear();
 
 	_files.clear();
+}
+
+void GUI::closeAll()
+{
+	closeFiles();
 
 	_track->setEnabled(false);
 	_fileActionGroup->setEnabled(false);
@@ -807,7 +814,7 @@ void GUI::next()
 	if (file.isNull())
 		return;
 
-	closeFile();
+	closeFiles();
 	openFile(file);
 }
 
@@ -817,7 +824,7 @@ void GUI::prev()
 	if (file.isNull())
 		return;
 
-	closeFile();
+	closeFiles();
 	openFile(file);
 }
 
@@ -827,7 +834,7 @@ void GUI::last()
 	if (file.isNull())
 		return;
 
-	closeFile();
+	closeFiles();
 	openFile(file);
 }
 
@@ -837,7 +844,7 @@ void GUI::first()
 	if (file.isNull())
 		return;
 
-	closeFile();
+	closeFiles();
 	openFile(file);
 }
 
@@ -862,7 +869,7 @@ void GUI::keyPressEvent(QKeyEvent *event)
 
 	if (!file.isNull()) {
 		if (!(event->modifiers() & MODIFIER))
-			closeFile();
+			closeFiles();
 		openFile(file);
 	}
 }
