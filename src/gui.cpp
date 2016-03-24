@@ -161,7 +161,7 @@ void GUI::createActions()
 	// General actions
 	_exitAction = new QAction(QIcon(QPixmap(QUIT_ICON)), tr("Quit"), this);
 	_exitAction->setShortcut(QKeySequence::Quit);
-	connect(_exitAction, SIGNAL(triggered()), this, SLOT(closeAll()));
+	connect(_exitAction, SIGNAL(triggered()), this, SLOT(close()));
 
 	// Help & About
 	_dataSourcesAction = new QAction(tr("Data sources"), this);
