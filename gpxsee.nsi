@@ -55,8 +55,9 @@ Section "GPXSee (required)" SEC_APP
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
   
-  ; Put file there
+  ; Put the files there
   File "gpxsee.exe"
+  File "maps.txt"
   
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\GPXSee "Install_Dir" "$INSTDIR"

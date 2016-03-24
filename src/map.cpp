@@ -15,7 +15,7 @@ Map::Map(QObject *parent, const QString &name, const QString &url)
 	connect(&Downloader::instance(), SIGNAL(finished()), this,
 	  SLOT(emitLoaded()));
 
-	QString path = QString(TILES_DIR"/") + _name;
+	QString path = TILES_DIR + QString("/") + _name;
 	if (!QDir::home().mkpath(path))
 		fprintf(stderr, "Error creating tiles dir: %s\n", qPrintable(path));
 }
@@ -31,9 +31,8 @@ void Map::loadTiles(QList<Tile> &list)
 
 	for (int i = 0; i < list.size(); ++i) {
 		Tile &t = list[i];
-		QString file = QString("%1/" TILES_DIR "/%2/%3-%4-%5")
-		  .arg(QDir::homePath()).arg(_name).arg(t.zoom()).arg(t.xy().rx())
-		  .arg(t.xy().ry());
+		QString file = TILES_DIR + QString("/%1/%2-%3-%4")
+		  .arg(_name).arg(t.zoom()).arg(t.xy().rx()).arg(t.xy().ry());
 		QFileInfo fi(file);
 
 		if (fi.exists()) {

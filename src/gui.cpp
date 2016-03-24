@@ -44,7 +44,8 @@ static QString timeSpan(qreal time)
 
 GUI::GUI(QWidget *parent) : QMainWindow(parent)
 {
-	loadFiles();
+	loadMaps();
+	loadPOIs();
 
 	createActions();
 	createMenus();
@@ -85,16 +86,19 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	resize(600, 800);
 }
 
-void GUI::loadFiles()
+void GUI::loadMaps()
 {
-	// Maps
-	_maps = MapList::load(this, QString("%1/" MAP_LIST_FILE)
-	  .arg(QDir::homePath()));
-	_maps += MapList::load(this, ":/maps.txt");
+	_maps = MapList::load(this, USER_MAP_FILE);
+	_maps += MapList::load(this, GLOBAL_MAP_FILE);
+}
 
-	// POI files
-	QDir dir(QString("%1/" POI_DIR).arg(QDir::homePath()));
-	QFileInfoList list = dir.entryInfoList(QStringList(), QDir::Files);
+void GUI::loadPOIs()
+{
+	QDir userDir(USER_POI_DIR);
+	QDir globalDir(GLOBAL_POI_DIR);
+
+	QFileInfoList list = userDir.entryInfoList(QStringList(), QDir::Files)
+	  + globalDir.entryInfoList(QStringList(), QDir::Files);
 	for (int i = 0; i < list.size(); ++i)
 		_poi.loadFile(list.at(i).absoluteFilePath());
 }
@@ -433,8 +437,7 @@ void GUI::dataSources()
 	  QString("<h4>") + tr("Map sources") + QString("</h4><p>")
 	  + tr("Map (tiles) source URLs are read on program startup from the "
 		"following file:")
-		+ QString("</p><p><code>") + QDir::homePath()
-		  + QString("/" MAP_LIST_FILE "</code></p><p>")
+		+ QString("</p><p><code>") + USER_MAP_FILE + QString("</code></p><p>")
 		+ tr("The file format is one map entry per line, consisting of the map "
 		  "name and tiles URL delimited by a TAB character. The tile X and Y "
 		  "coordinates are replaced with $x and $y in the URL and the zoom "
@@ -445,8 +448,7 @@ void GUI::dataSources()
 	  + QString("<h4>") + tr("POIs") + QString("</h4><p>")
 	  + tr("To make GPXSee load a POI file automatically on startup, add "
 		"the file to the following directory:")
-		+ QString("</p><p><code>") + QDir::homePath()
-		+ QString("/" POI_DIR "</code></p>")
+		+ QString("</p><p><code>") + USER_POI_DIR + QString("</code></p>")
 	);
 
 	msgBox.exec();

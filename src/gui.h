@@ -59,7 +59,8 @@ private slots:
 	void setImperialUnits();
 
 private:
-	void loadFiles();
+	void loadMaps();
+	void loadPOIs();
 	void closeFiles();
 
 	QAction *createPOIFileAction(int index);
