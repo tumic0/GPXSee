@@ -29,6 +29,13 @@
 #include "gui.h"
 
 
+#define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
+
+struct GraphTab {
+	GraphView *view;
+	QString label;
+};
+
 static QString timeSpan(qreal time)
 {
 	unsigned h, m, s;
@@ -79,8 +86,8 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	_time = 0;
 	_trackCount = 0;
 
-	_lastGraph = static_cast<GraphView*>(_trackGraphs->currentWidget());
-	_lastSliderPos = _lastGraph->sliderPosition();
+	_lastGraph = 0;
+	_lastSliderPos = -1.0;
 	updateGraphTabs();
 
 	resize(600, 800);
@@ -351,7 +358,6 @@ void GUI::createToolBars()
 void GUI::createTrackView()
 {
 	_track = new TrackView(this);
-	_track->setEnabled(false);
 
 	if (_showMapAction->isChecked())
 		_track->setMap(_currentMap);
@@ -364,9 +370,6 @@ void GUI::createTrackGraphs()
 	_heartRateGraph = new HeartRateGraph;
 
 	_trackGraphs = new QTabWidget;
-	_trackGraphs->addTab(_elevationGraph, tr("Elevation"));
-	_trackGraphs->addTab(_speedGraph, tr("Speed"));
-	_trackGraphs->addTab(_heartRateGraph, tr("Heart rate"));
 	connect(_trackGraphs, SIGNAL(currentChanged(int)), this,
 	  SLOT(graphChanged(int)));
 
@@ -494,6 +497,7 @@ bool GUI::loadFile(const QString &fileName)
 		_elevationGraph->loadGPX(gpx);
 		_speedGraph->loadGPX(gpx);
 		_heartRateGraph->loadGPX(gpx);
+		updateGraphTabs();
 		_track->loadGPX(gpx);
 		if (_showPOIAction->isChecked())
 			_track->loadPOI(_poi);
@@ -504,7 +508,6 @@ bool GUI::loadFile(const QString &fileName)
 		}
 
 		_trackCount += gpx.trackCount();
-		_track->setEnabled(true);
 
 		return true;
 	} else {
@@ -673,7 +676,6 @@ void GUI::closeAll()
 {
 	closeFiles();
 
-	_track->setEnabled(false);
 	_fileActionGroup->setEnabled(false);
 	updateStatusBarInfo();
 	updateGraphTabs();
@@ -757,10 +759,15 @@ void GUI::poiFileChecked(int index)
 
 void GUI::graphChanged(int index)
 {
+	if (index < 0)
+		return;
+
 	GraphView *tv = static_cast<GraphView*>(_trackGraphs->widget(index));
-	if (_lastGraph->sliderPosition() >= 0)
-		_lastSliderPos = _lastGraph->sliderPosition();
-	tv->setSliderPosition(_lastSliderPos);
+	if (_lastGraph) {
+		if (_lastGraph->sliderPosition() >= 0)
+			_lastSliderPos = _lastGraph->sliderPosition();
+		tv->setSliderPosition(_lastSliderPos);
+	}
 	_lastGraph = tv;
 }
 
@@ -785,11 +792,36 @@ void GUI::updateNavigationActions()
 
 void GUI::updateGraphTabs()
 {
+	struct GraphTab tabs[] = {
+	  {_elevationGraph, tr("Elevation")},
+	  {_speedGraph, tr("Speed")},
+	  {_heartRateGraph, tr("Heart rate")}
+	};
+	int index;
 	GraphView *gv;
-	for (int i = 0; i < _trackGraphs->count(); i++) {
-		gv = static_cast<GraphView*>(_trackGraphs->widget(i));
-		_trackGraphs->setTabEnabled(i, gv->count());
+
+	for (int i = 0; i < (int)ARRAY_SIZE(tabs); i++) {
+		gv = tabs[i].view;
+		if (!gv->count() && (index = _trackGraphs->indexOf(gv)) >= 0)
+			_trackGraphs->removeTab(index);
 	}
+
+	for (int i = 0; i < (int)ARRAY_SIZE(tabs); i++) {
+		gv = tabs[i].view;
+		if (gv->count() && _trackGraphs->indexOf(gv) < 0)
+			_trackGraphs->insertTab(i, gv, tabs[i].label);
+	}
+
+	for (int i = 0; i < (int)ARRAY_SIZE(tabs); i++) {
+		if (tabs[i].view->count()) {
+			_trackGraphs->setHidden(false);
+			_showGraphsAction->setEnabled(true);
+			return;
+		}
+	}
+
+	_trackGraphs->setHidden(true);
+	_showGraphsAction->setEnabled(false);
 }
 
 void GUI::setMetricUnits()
