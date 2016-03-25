@@ -482,8 +482,10 @@ bool GUI::openFile(const QString &fileName)
 		_browser->setCurrent(fileName);
 		_fileActionGroup->setEnabled(true);
 		_navigationActionGroup->setEnabled(true);
-	} else
+	} else {
+		_fileActionGroup->setEnabled(false);
 		ret = false;
+	}
 
 	updateNavigationActions();
 	updateStatusBarInfo();
