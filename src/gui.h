@@ -79,6 +79,7 @@ private:
 	void updateStatusBarInfo();
 	void updateNavigationActions();
 	void updateGraphTabs();
+	void updateTrackView();
 
 	void keyPressEvent(QKeyEvent * event);
 

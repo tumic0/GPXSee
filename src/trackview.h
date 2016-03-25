@@ -37,6 +37,9 @@ public:
 	void plot(QPainter *painter, const QRectF &target);
 	enum QPrinter::Orientation orientation() const;
 
+	int trackCount() const {return _paths.count();}
+	int waypointCount() const {return _locations.count();}
+
 public slots:
 	void movePositionMarker(qreal val);
 

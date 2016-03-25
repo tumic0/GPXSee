@@ -89,6 +89,7 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	_lastGraph = 0;
 	_lastSliderPos = -1.0;
 	updateGraphTabs();
+	updateTrackView();
 
 	resize(600, 800);
 }
@@ -390,6 +391,8 @@ void GUI::createStatusBar()
 	statusBar()->addPermanentWidget(_distanceLabel, 1);
 	statusBar()->addPermanentWidget(_timeLabel, 1);
 	statusBar()->setSizeGripEnabled(false);
+
+	updateStatusBarInfo();
 }
 
 void GUI::about()
@@ -485,6 +488,7 @@ bool GUI::openFile(const QString &fileName)
 	updateNavigationActions();
 	updateStatusBarInfo();
 	updateGraphTabs();
+	updateTrackView();
 
 	return ret;
 }
@@ -498,6 +502,7 @@ bool GUI::loadFile(const QString &fileName)
 		_speedGraph->loadGPX(gpx);
 		_heartRateGraph->loadGPX(gpx);
 		updateGraphTabs();
+		_track->setHidden(false);
 		_track->loadGPX(gpx);
 		if (_showPOIAction->isChecked())
 			_track->loadPOI(_poi);
@@ -652,6 +657,8 @@ void GUI::reloadFile()
 	}
 
 	updateStatusBarInfo();
+	updateGraphTabs();
+	updateTrackView();
 	if (_files.isEmpty())
 		_fileActionGroup->setEnabled(false);
 	else
@@ -679,6 +686,7 @@ void GUI::closeAll()
 	_fileActionGroup->setEnabled(false);
 	updateStatusBarInfo();
 	updateGraphTabs();
+	updateTrackView();
 }
 
 void GUI::showPOI(bool checked)
@@ -721,7 +729,7 @@ void GUI::showToolbars(bool checked)
 void GUI::updateStatusBarInfo()
 {
 	if (_files.count() == 0) {
-		_fileNameLabel->clear();
+		_fileNameLabel->setText(tr("No GPX files loaded"));
 		_distanceLabel->clear();
 		_timeLabel->clear();
 		return;
@@ -822,6 +830,11 @@ void GUI::updateGraphTabs()
 
 	_trackGraphs->setHidden(true);
 	_showGraphsAction->setEnabled(false);
+}
+
+void GUI::updateTrackView()
+{
+	_track->setHidden(!(_track->trackCount() + _track->waypointCount()));
 }
 
 void GUI::setMetricUnits()
