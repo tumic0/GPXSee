@@ -5,9 +5,9 @@
 
 #define WINDOW_EF 3
 #define WINDOW_SE 11
-#define WINDOW_SF 11
-#define WINDOW_HE 7
-#define WINDOW_HF 5
+#define WINDOW_SF 7
+#define WINDOW_HE 11
+#define WINDOW_HF 3
 
 static bool lt(const QPointF &p1, const QPointF &p2)
 {
