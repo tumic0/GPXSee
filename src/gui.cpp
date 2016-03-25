@@ -96,17 +96,23 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 
 void GUI::loadMaps()
 {
-	_maps = MapList::load(this, USER_MAP_FILE);
-	_maps += MapList::load(this, GLOBAL_MAP_FILE);
+	if (QFile::exists(USER_MAP_FILE))
+		_maps = MapList::load(this, USER_MAP_FILE);
+	else
+		_maps = MapList::load(this, GLOBAL_MAP_FILE);
 }
 
 void GUI::loadPOIs()
 {
+	QFileInfoList list;
 	QDir userDir(USER_POI_DIR);
 	QDir globalDir(GLOBAL_POI_DIR);
 
-	QFileInfoList list = userDir.entryInfoList(QStringList(), QDir::Files)
-	  + globalDir.entryInfoList(QStringList(), QDir::Files);
+	if (userDir.exists())
+		list = userDir.entryInfoList(QStringList(), QDir::Files);
+	else
+		list = globalDir.entryInfoList(QStringList(), QDir::Files);
+
 	for (int i = 0; i < list.size(); ++i)
 		_poi.loadFile(list.at(i).absoluteFilePath());
 }
