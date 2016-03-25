@@ -824,7 +824,8 @@ void GUI::updateGraphTabs()
 
 	for (int i = 0; i < (int)ARRAY_SIZE(tabs); i++) {
 		if (tabs[i].view->count()) {
-			_trackGraphs->setHidden(false);
+			if (_showGraphsAction->isChecked())
+				_trackGraphs->setHidden(false);
 			_showGraphsAction->setEnabled(true);
 			return;
 		}
