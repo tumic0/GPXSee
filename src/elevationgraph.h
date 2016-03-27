@@ -23,9 +23,12 @@ public:
 	qreal min() const {return bounds().top();}
 
 private:
+	void setXUnits();
+	void setYUnits();
 	void addInfo();
 
 	qreal _ascent, _descent;
+	enum Units _units;
 };
 
 #endif // ELEVATIONGRAPH_H

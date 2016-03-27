@@ -22,9 +22,12 @@ public:
 	qreal max() const {return bounds().bottom();}
 
 private:
+	void setXUnits();
+	void setYUnits();
 	void addInfo();
 
 	QList<QPointF> _avg;
+	enum Units _units;
 };
 
 #endif // SPEEDGRAPH_H

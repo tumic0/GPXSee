@@ -21,9 +21,11 @@ public:
 	qreal max() const {return bounds().bottom();}
 
 private:
+	void setXUnits();
 	void addInfo();
 
 	QList<QPointF> _avg;
+	enum Units _units;
 };
 
 #endif // HEARTRATEGRAPH_H

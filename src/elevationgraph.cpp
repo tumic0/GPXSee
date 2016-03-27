@@ -8,11 +8,12 @@ ElevationGraph::ElevationGraph(QWidget *parent) : GraphView(parent)
 	_ascent = 0;
 	_descent = 0;
 
+	_units = Metric;
+
+	setYUnits();
 	setXLabel(tr("Distance"));
 	setYLabel(tr("Elevation"));
-	setXUnits(tr("km"));
-	setYUnits(tr("m"));
-	setXScale(M2KM);
+
 	setMinYRange(50.0);
 }
 
@@ -58,6 +59,7 @@ void ElevationGraph::loadGPX(const GPX &gpx)
 		loadData(data);
 	}
 
+	setXUnits();
 	addInfo();
 }
 
@@ -69,19 +71,43 @@ void ElevationGraph::clear()
 	GraphView::clear();
 }
 
-void ElevationGraph::setUnits(enum Units units)
+void ElevationGraph::setXUnits()
 {
-	if (units == Metric) {
-		setXUnits(tr("km"));
-		setYUnits(tr("m"));
-		setXScale(M2KM);
+	if (_units == Metric) {
+		if (bounds().width() < KMINM) {
+			GraphView::setXUnits(tr("m"));
+			setXScale(1);
+		} else {
+			GraphView::setXUnits(tr("km"));
+			setXScale(M2KM);
+		}
+	} else {
+		if (bounds().width() < MIINM) {
+			GraphView::setXUnits(tr("ft"));
+			setXScale(M2FT);
+		} else {
+			GraphView::setXUnits(tr("mi"));
+			setXScale(M2MI);
+		}
+	}
+}
+
+void ElevationGraph::setYUnits()
+{
+	if (_units == Metric) {
+		GraphView::setYUnits(tr("m"));
 		setYScale(1);
 	} else {
-		setXUnits(tr("mi"));
-		setYUnits(tr("ft"));
-		setXScale(M2MI);
+		GraphView::setYUnits(tr("ft"));
 		setYScale(M2FT);
 	}
+}
+
+void ElevationGraph::setUnits(enum Units units)
+{
+	_units = units;
+	setXUnits();
+	setYUnits();
 
 	clearInfo();
 	addInfo();

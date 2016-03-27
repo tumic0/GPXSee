@@ -4,11 +4,11 @@
 
 HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphView(parent)
 {
+	_units = Metric;
+
 	setXLabel(tr("Distance"));
 	setYLabel(tr("Heart rate"));
-	setXUnits(tr("km"));
-	setYUnits(tr("1/min"));
-	setXScale(M2KM);
+
 	setSliderPrecision(0);
 }
 
@@ -43,6 +43,7 @@ void HeartRateGraph::loadGPX(const GPX &gpx)
 		loadData(data);
 	}
 
+	setXUnits();
 	addInfo();
 }
 
@@ -66,15 +67,31 @@ void HeartRateGraph::clear()
 	GraphView::clear();
 }
 
+void HeartRateGraph::setXUnits()
+{
+	if (_units == Metric) {
+		if (bounds().width() < KMINM) {
+			GraphView::setXUnits(tr("m"));
+			setXScale(1);
+		} else {
+			GraphView::setXUnits(tr("km"));
+			setXScale(M2KM);
+		}
+	} else {
+		if (bounds().width() < MIINM) {
+			GraphView::setXUnits(tr("ft"));
+			setXScale(M2FT);
+		} else {
+			GraphView::setXUnits(tr("mi"));
+			setXScale(M2MI);
+		}
+	}
+}
+
 void HeartRateGraph::setUnits(enum Units units)
 {
-	if (units == Metric) {
-		setXUnits(tr("km"));
-		setXScale(M2KM);
-	} else {
-		setXUnits(tr("mi"));
-		setXScale(M2MI);
-	}
+	_units = units;
+	setXUnits();
 
 	clearInfo();
 	addInfo();

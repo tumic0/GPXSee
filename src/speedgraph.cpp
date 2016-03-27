@@ -5,12 +5,12 @@
 
 SpeedGraph::SpeedGraph(QWidget *parent) : GraphView(parent)
 {
+	_units = Metric;
+
+	setYUnits();
 	setXLabel(tr("Distance"));
 	setYLabel(tr("Speed"));
-	setXUnits(tr("km"));
-	setYUnits(tr("km/h"));
-	setXScale(M2KM);
-	setYScale(MS2KMH);
+
 	setSliderPrecision(1);
 }
 
@@ -41,6 +41,7 @@ void SpeedGraph::loadGPX(const GPX &gpx)
 		loadData(data);
 	}
 
+	setXUnits();
 	addInfo();
 }
 
@@ -64,19 +65,43 @@ void SpeedGraph::clear()
 	GraphView::clear();
 }
 
-void SpeedGraph::setUnits(enum Units units)
+void SpeedGraph::setXUnits()
 {
-	if (units == Metric) {
-		setXUnits(tr("km"));
-		setYUnits(tr("km/h"));
-		setXScale(M2KM);
+	if (_units == Metric) {
+		if (bounds().width() < KMINM) {
+			GraphView::setXUnits(tr("m"));
+			setXScale(1);
+		} else {
+			GraphView::setXUnits(tr("km"));
+			setXScale(M2KM);
+		}
+	} else {
+		if (bounds().width() < MIINM) {
+			GraphView::setXUnits(tr("ft"));
+			setXScale(M2FT);
+		} else {
+			GraphView::setXUnits(tr("mi"));
+			setXScale(M2MI);
+		}
+	}
+}
+
+void SpeedGraph::setYUnits()
+{
+	if (_units == Metric) {
+		GraphView::setYUnits(tr("km/h"));
 		setYScale(MS2KMH);
 	} else {
-		setXUnits(tr("mi"));
-		setYUnits(tr("mi/h"));
-		setXScale(M2MI);
+		GraphView::setYUnits(tr("mi/h"));
 		setYScale(MS2MIH);
 	}
+}
+
+void SpeedGraph::setUnits(enum Units units)
+{
+	_units = units;
+	setXUnits();
+	setYUnits();
 
 	clearInfo();
 	addInfo();
