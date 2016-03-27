@@ -35,38 +35,44 @@ public:
 	~GraphView();
 
 	void loadData(const QVector<QPointF> &data);
+
+	void redraw();
+	void clear();
+
+	int count() const {return _graphs.count();}
+
+	const QString &xLabel() const {return _xLabel;}
+	const QString &yLabel() const {return _yLabel;}
+	const QString &xUnits() const {return _xUnits;}
+	const QString &yUnits() const {return _yUnits;}
+	qreal xScale() const {return _xScale;}
+	qreal yScale() const {return _yScale;}
+
 	void setXLabel(const QString &label);
 	void setYLabel(const QString &label);
 	void setXUnits(const QString &units);
 	void setYUnits(const QString &units);
 	void setXScale(qreal scale);
 	void setYScale(qreal scale);
-	void setPrecision(int precision) {_precision = precision;}
-	void setMinRange(qreal range) {_minRange = range;}
 
-	void plot(QPainter *painter, const QRectF &target);
-	void clear();
+	void setSliderPrecision(int precision) {_precision = precision;}
+	void setMinYRange(qreal range) {_minYRange = range;}
 
 	qreal sliderPosition() const;
 	void setSliderPosition(qreal pos);
 
-	int count() const {return _graphs.count();}
+	void plot(QPainter *painter, const QRectF &target);
 
 signals:
 	void sliderPositionChanged(qreal);
 
 protected:
+	const QRectF &bounds() const {return _bounds;}
 	void resizeEvent(QResizeEvent *);
-	void redraw();
+	void redraw(const QSizeF &size);
 	void addInfo(const QString &key, const QString &value);
 	void clearInfo();
 	void skipColor() {_palette.color();}
-
-	qreal _xScale, _yScale;
-	QString _xUnits, _yUnits;
-	QString _xLabel, _yLabel;
-	int _precision;
-	qreal _minRange;
 
 private slots:
 	void emitSliderPositionChanged(const QPointF &pos);
@@ -76,7 +82,12 @@ private:
 	void createXLabel();
 	void createYLabel();
 	void updateBounds(const QPointF &point);
-	void redraw(const QSizeF &size);
+
+	qreal _xScale, _yScale;
+	QString _xUnits, _yUnits;
+	QString _xLabel, _yLabel;
+	int _precision;
+	qreal _minYRange;
 
 	Scene *_scene;
 
@@ -86,7 +97,7 @@ private:
 	InfoItem *_info;
 
 	QList<QGraphicsPathItem*> _graphs;
-	qreal _xMin, _xMax, _yMin, _yMax;
+	QRectF _bounds;
 	Palette _palette;
 };
 

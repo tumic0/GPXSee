@@ -36,7 +36,7 @@ AxisItem::AxisItem(Type type, QGraphicsItem *parent) : QGraphicsItem(parent)
 	_size = 0;
 }
 
-void AxisItem::setRange(const QPointF &range)
+void AxisItem::setRange(const RangeF &range)
 {
 	_range = range;
 	updateBoundingRect();
@@ -67,7 +67,7 @@ void AxisItem::updateBoundingRect()
 	struct Label l;
 
 
-	l = label(_range.x(), _range.y(), (_type == X) ? XTICKS : YTICKS);
+	l = label(_range.min(), _range.max(), (_type == X) ? XTICKS : YTICKS);
 	es = fm.tightBoundingRect(QString::number(l.max));
 	ss = fm.tightBoundingRect(QString::number(l.min));
 	ls = fm.tightBoundingRect(_label);
@@ -106,7 +106,7 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	QFontMetrics fm(font);
 	QRect ts, ls;
 	struct Label l;
-	qreal range = _range.y() - _range.x();
+	qreal range = _range.size();
 	qreal val;
 
 
@@ -117,15 +117,15 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	if (_type == X) {
 		painter->drawLine(0, 0, _size, 0);
 
-		l = label(_range.x(), _range.y(), XTICKS);
+		l = label(_range.min(), _range.max(), XTICKS);
 		for (int i = 0; i < ((l.max - l.min) / l.d) + 1; i++) {
 			val = l.min + i * l.d;
 			QString str = QString::number(val);
 
-			painter->drawLine((_size/range) * (val - _range.x()), TICK/2,
-			  (_size/range) * (val - _range.x()), -TICK/2);
+			painter->drawLine((_size/range) * (val - _range.min()), TICK/2,
+			  (_size/range) * (val - _range.min()), -TICK/2);
 			ts = fm.tightBoundingRect(str);
-			painter->drawText(((_size/range) * (val - _range.x()))
+			painter->drawText(((_size/range) * (val - _range.min()))
 			  - (ts.width()/2), ts.height() + TICK/2 + PADDING, str);
 		}
 
@@ -134,18 +134,18 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	} else {
 		painter->drawLine(0, 0, 0, -_size);
 
-		l = label(_range.x(), _range.y(), YTICKS);
+		l = label(_range.min(), _range.max(), YTICKS);
 		int mtw = 0;
 		for (int i = 0; i < ((l.max - l.min) / l.d) + 1; i++) {
 			val = l.min + i * l.d;
 			QString str = QString::number(val);
 
-			painter->drawLine(TICK/2, -((_size/range) * (val - _range.x())),
-			  -TICK/2, -((_size/range) * (val - _range.x())));
+			painter->drawLine(TICK/2, -((_size/range) * (val - _range.min())),
+			  -TICK/2, -((_size/range) * (val - _range.min())));
 			ts = fm.tightBoundingRect(str);
 			mtw = qMax(ts.width(), mtw);
 			painter->drawText(-(ts.width() + PADDING + TICK/2), -((_size/range)
-			  * (val - _range.x())) + (ts.height()/2), str);
+			  * (val - _range.min())) + (ts.height()/2), str);
 		}
 
 		painter->rotate(-90);
@@ -169,7 +169,7 @@ QSizeF AxisItem::margin() const
 	struct Label l;
 
 
-	l = label(_range.x(), _range.y(), (_type == X) ? XTICKS : YTICKS);
+	l = label(_range.min(), _range.max(), (_type == X) ? XTICKS : YTICKS);
 	es = fm.tightBoundingRect(QString::number(l.max));
 	ss = fm.tightBoundingRect(QString::number(l.min));
 	ls = fm.tightBoundingRect(_label);

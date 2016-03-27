@@ -34,7 +34,8 @@ HEADERS += src/config.h \
     src/trackpoint.h \
     src/waypointitem.h \
     src/palette.h \
-    src/heartrategraph.h
+    src/heartrategraph.h \
+    src/range.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
@@ -59,7 +60,8 @@ SOURCES += src/main.cpp \
     src/graphview.cpp \
     src/waypointitem.cpp \
     src/palette.cpp \
-    src/heartrategraph.cpp
+    src/heartrategraph.cpp \
+    src/range.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx:ICON = icons/gpxsee.icns

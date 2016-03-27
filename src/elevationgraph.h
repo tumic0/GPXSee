@@ -19,14 +19,13 @@ public:
 
 	qreal ascent() const {return _ascent;}
 	qreal descent() const {return _descent;}
-	qreal max() const {return _max;}
-	qreal min() const {return _min;}
+	qreal max() const {return bounds().bottom();}
+	qreal min() const {return bounds().top();}
 
 private:
 	void addInfo();
 
 	qreal _ascent, _descent;
-	qreal _max, _min;
 };
 
 #endif // ELEVATIONGRAPH_H

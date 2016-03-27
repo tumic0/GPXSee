@@ -2,6 +2,7 @@
 #define AXISITEM_H
 
 #include <QGraphicsItem>
+#include "range.h"
 
 class AxisItem : public QGraphicsItem
 {
@@ -14,7 +15,7 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-	void setRange(const QPointF &range);
+	void setRange(const RangeF &range);
 	void setSize(qreal size);
 	void setLabel(const QString& label);
 
@@ -24,7 +25,7 @@ private:
 	void updateBoundingRect();
 
 	Type _type;
-	QPointF _range;
+	RangeF _range;
 	qreal _size;
 	QString _label;
 	QRectF _boundingRect;

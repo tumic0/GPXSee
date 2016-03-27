@@ -19,12 +19,11 @@ public:
 	void setUnits(enum Units units);
 
 	qreal avg() const;
-	qreal max() const {return _max;}
+	qreal max() const {return bounds().bottom();}
 
 private:
 	void addInfo();
 
-	qreal _max;
 	QList<QPointF> _avg;
 };
 

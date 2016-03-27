@@ -1,4 +1,3 @@
-#include <float.h>
 #include <QGraphicsView>
 #include <QGraphicsSceneMouseEvent>
 #include <QEvent>
@@ -44,16 +43,11 @@ GraphView::GraphView(QWidget *parent)
 	_sliderInfo = new SliderInfoItem(_slider);
 	_sliderInfo->setZValue(2.0);
 
-	_xMax = -FLT_MAX;
-	_xMin = FLT_MAX;
-	_yMax = -FLT_MAX;
-	_yMin = FLT_MAX;
-
 	_xScale = 1;
 	_yScale = 1;
 
 	_precision = 0;
-	_minRange = 0.01;
+	_minYRange = 0.01;
 }
 
 GraphView::~GraphView()
@@ -74,14 +68,14 @@ GraphView::~GraphView()
 
 void GraphView::updateBounds(const QPointF &point)
 {
-	if (point.x() < _xMin)
-		_xMin = point.x();
-	if (point.x() > _xMax)
-		_xMax = point.x();
-	if (point.y() < _yMin)
-		_yMin = point.y();
-	if (point.y() > _yMax)
-		_yMax = point.y();
+	if (point.x() < _bounds.left())
+		_bounds.setLeft(point.x());
+	if (point.x() > _bounds.right())
+		_bounds.setRight(point.x());
+	if (point.y() > _bounds.bottom())
+		_bounds.setBottom(point.y());
+	if (point.y() < _bounds.top())
+		_bounds.setTop(point.y());
 }
 
 void GraphView::createXLabel()
@@ -137,6 +131,9 @@ void GraphView::loadData(const QVector<QPointF> &data)
 	if (data.size() < 2)
 		return;
 
+	if (!_graphs.size())
+		_bounds.moveTo(data.at(0));
+
 	updateBounds(data.at(0));
 	path.moveTo(data.at(0).x(), -data.at(0).y());
 	for (int i = 1; i < data.size(); i++) {
@@ -154,8 +151,6 @@ void GraphView::loadData(const QVector<QPointF> &data)
 
 	if (_graphs.size() > 1)
 		_sliderInfo->hide();
-
-	redraw();
 }
 
 void GraphView::redraw()
@@ -168,9 +163,9 @@ void GraphView::redraw(const QSizeF &size)
 {
 	QRectF r;
 	QSizeF mx, my;
-	QPointF rx, ry;
+	RangeF rx, ry;
 	QTransform transform;
-	qreal xs, ys, diff;
+	qreal xs, ys;
 
 
 	if (_xAxis->scene() == _scene)
@@ -185,20 +180,20 @@ void GraphView::redraw(const QSizeF &size)
 	for (int i = 0; i < _graphs.size(); i++)
 		_graphs.at(i)->resetTransform();
 
-	rx = QPointF(_xMin * _xScale, _xMax * _xScale);
-	ry = QPointF(_yMin * _yScale, _yMax * _yScale);
-	if ((diff = ry.y() - ry.x()) < _minRange)
-		ry = QPointF(ry.x() - (_minRange/2 - diff/2),
-		  ry.y() + (_minRange/2 - diff/2));
+	rx = RangeF(_bounds.left() * _xScale, _bounds.right() * _xScale);
+	ry = RangeF(_bounds.top() * _yScale, _bounds.bottom() * _yScale);
+	if (ry.size() < _minYRange)
+		ry.resize(_minYRange);
+
 	_xAxis->setRange(rx);
 	_yAxis->setRange(ry);
 	mx = _xAxis->margin();
 	my = _yAxis->margin();
 
 	r = _scene->itemsBoundingRect();
-	if (r.height() < _minRange)
-		r.adjust(0, -(_minRange/2 - r.height()/2), 0,
-		  _minRange/2 - r.height()/2);
+	if (r.height() < _minYRange)
+		r.adjust(0, -(_minYRange/2 - r.height()/2), 0,
+		  _minYRange/2 - r.height()/2);
 
 	xs = (size.width() - (my.width() + mx.width())) / r.width();
 	ys = (size.height() - (mx.height() + my.height())
@@ -209,9 +204,9 @@ void GraphView::redraw(const QSizeF &size)
 		_graphs.at(i)->setTransform(transform);
 
 	r = _scene->itemsBoundingRect();
-	if (r.height() < _minRange * ys)
-		r.adjust(0, -(_minRange/2 * ys - r.height()/2), 0,
-		  (_minRange/2) * ys - r.height()/2);
+	if (r.height() < _minYRange * ys)
+		r.adjust(0, -(_minYRange/2 * ys - r.height()/2), 0,
+		  (_minYRange/2) * ys - r.height()/2);
 
 	_xAxis->setSize(r.width());
 	_yAxis->setSize(r.height());
@@ -281,10 +276,7 @@ void GraphView::clear()
 	_graphs.clear();
 	_palette.reset();
 
-	_xMax = -FLT_MAX;
-	_xMin = FLT_MAX;
-	_yMax = -FLT_MAX;
-	_yMin = FLT_MAX;
+	_bounds = QRectF();
 
 	_scene->setSceneRect(0, 0, 0, 0);
 }
@@ -326,18 +318,18 @@ void GraphView::emitSliderPositionChanged(const QPointF &pos)
 		return;
 
 	qreal val = pos.x() / _slider->area().width();
-	emit sliderPositionChanged(val * (_xMax - _xMin));
+	emit sliderPositionChanged(val * _bounds.width());
 
 	if (!_sliderInfo->isVisible())
 		return;
 
 	const QPainterPath &path = _graphs.at(0)->path();
 	QRectF br = path.boundingRect();
-	if (br.height() < _minRange)
-		br.adjust(0, -(_minRange/2 - br.height()/2), 0,
-		  _minRange/2 - br.height()/2);
+	if (br.height() < _minYRange)
+		br.adjust(0, -(_minYRange/2 - br.height()/2), 0,
+		  _minYRange/2 - br.height()/2);
 
-	qreal y = yAtX(path, val * (_xMax - _xMin));
+	qreal y = yAtX(path, val * _bounds.width());
 	qreal r = (y - br.bottom()) / br.height();
 	_sliderInfo->setPos(QPointF(0, _slider->boundingRect().height() * r));
 	_sliderInfo->setText(QString::number(-y * _yScale, 'f', _precision));
@@ -348,7 +340,7 @@ qreal GraphView::sliderPosition() const
 	if (!_slider->isVisible())
 		return -1;
 	else
-		return (_slider->pos().x() / _slider->area().width()) * (_xMax - _xMin);
+		return (_slider->pos().x() / _slider->area().width()) * _bounds.width();
 }
 
 void GraphView::setSliderPosition(qreal pos)
@@ -356,10 +348,10 @@ void GraphView::setSliderPosition(qreal pos)
 	if (_graphs.isEmpty())
 		return;
 
-	if (pos > (_xMax - _xMin))
+	if (pos > _bounds.right() || pos < _bounds.left())
 		_slider->setVisible(false);
 	else {
-		_slider->setPos((pos / (_xMax - _xMin)) * _slider->area().width(), 0);
+		_slider->setPos((pos / _bounds.width()) * _slider->area().width(), 0);
 		_slider->setVisible(true);
 	}
 }

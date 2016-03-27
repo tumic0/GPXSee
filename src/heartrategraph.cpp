@@ -4,29 +4,29 @@
 
 HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphView(parent)
 {
-	_max = 0;
-
 	setXLabel(tr("Distance"));
 	setYLabel(tr("Heart rate"));
 	setXUnits(tr("km"));
 	setYUnits(tr("1/min"));
 	setXScale(M2KM);
-	setPrecision(0);
+	setSliderPrecision(0);
 }
 
 void HeartRateGraph::addInfo()
 {
-	GraphView::addInfo(tr("Average"), QString::number(avg() * _yScale, 'f', 0)
-	  + UNIT_SPACE + _yUnits);
-	GraphView::addInfo(tr("Maximum"), QString::number(_max * _yScale,  'f', 0)
-	  + UNIT_SPACE + _yUnits);
+	GraphView::addInfo(tr("Average"), QString::number(avg() * yScale(), 'f', 0)
+	  + UNIT_SPACE + yUnits());
+	GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale(),  'f', 0)
+	  + UNIT_SPACE + yUnits());
+
+	redraw();
 }
 
 void HeartRateGraph::loadGPX(const GPX &gpx)
 {
 	for (int i = 0; i < gpx.trackCount(); i++) {
 		QVector<QPointF> data;
-		qreal max = 0, sum = 0, w = 0;
+		qreal sum = 0, w = 0;
 
 		gpx.track(i).heartRateGraph(data);
 		if (data.count() < 2) {
@@ -40,13 +40,10 @@ void HeartRateGraph::loadGPX(const GPX &gpx)
 		}
 		_avg.append(QPointF(gpx.track(i).distance(), sum/w));
 
-		for (int j = 0; j < data.size(); j++)
-			max = qMax(max, data.at(j).y());
-		_max = qMax(_max, max);
-
-		addInfo();
 		loadData(data);
 	}
+
+	addInfo();
 }
 
 qreal HeartRateGraph::avg() const
@@ -64,7 +61,6 @@ qreal HeartRateGraph::avg() const
 
 void HeartRateGraph::clear()
 {
-	_max = 0;
 	_avg.clear();
 
 	GraphView::clear();
@@ -82,6 +78,4 @@ void HeartRateGraph::setUnits(enum Units units)
 
 	clearInfo();
 	addInfo();
-
-	redraw();
 }
