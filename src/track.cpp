@@ -102,7 +102,7 @@ void Track::elevationGraph(QVector<QPointF> &graph) const
 
 	if (std::isnan(_data.at(0).elevation))
 		return;
-	raw.append(QPointF(0, _data.at(0).elevation));
+	raw.append(QPointF(0, _data.at(0).elevation - _data.at(0).geoidheight));
 	for (int i = 1; i < _data.size(); i++) {
 		dist += _dd.at(i-1);
 		if (std::isnan(_data.at(i).elevation))
