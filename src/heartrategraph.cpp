@@ -6,6 +6,7 @@ HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphView(parent)
 {
 	_units = Metric;
 
+	GraphView::setYUnits(tr("1/min"));
 	setXLabel(tr("Distance"));
 	setYLabel(tr("Heart rate"));
 
