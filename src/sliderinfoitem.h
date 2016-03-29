@@ -6,6 +6,8 @@
 class SliderInfoItem : public QGraphicsItem
 {
 public:
+	enum Side {Left, Right};
+
 	SliderInfoItem(QGraphicsItem *parent = 0);
 
 	QRectF boundingRect() const {return _boundingRect;}
@@ -13,10 +15,12 @@ public:
 	  QWidget *widget);
 
 	void setText(const QString &text);
+	void setSide(Side side);
 
 private:
 	void updateBoundingRect();
 
+	Side _side;
 	QString _text;
 	QRectF _boundingRect;
 };

@@ -27,6 +27,9 @@ GraphView::GraphView(QWidget *parent)
 	_scene = new Scene(this);
 	setScene(_scene);
 
+	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
 	_xAxis = new AxisItem(AxisItem::X);
 	_yAxis = new AxisItem(AxisItem::Y);
 
@@ -148,9 +151,6 @@ void GraphView::loadData(const QVector<QPointF> &data)
 	pi->setPen(pen);
 	_scene->addItem(pi);
 	_graphs.append(pi);
-
-	if (_graphs.size() > 1)
-		_sliderInfo->hide();
 }
 
 void GraphView::redraw()
@@ -223,9 +223,7 @@ void GraphView::redraw(const QSizeF &size)
 	_slider->setPos(QPointF(sp * r.width(), r.bottom()));
 	_scene->addItem(_slider);
 
-	const QPainterPath &path = _graphs.at(0)->path();
-	QPointF p = path.pointAtPercent(sp);
-	_sliderInfo->setText(QString::number(-p.y() * _yScale, 'f', _precision));
+	_sliderInfo->setVisible(_graphs.size() == 1);
 
 	r = _scene->itemsBoundingRect();
 	_info->setPos(r.topLeft() + QPointF(r.width()/2
@@ -262,13 +260,10 @@ void GraphView::clear()
 		_scene->removeItem(_xAxis);
 	if (_yAxis->scene() == _scene)
 		_scene->removeItem(_yAxis);
-
 	if (_slider->scene() == _scene)
 		_scene->removeItem(_slider);
-
 	if (_info->scene() == _scene)
 		_scene->removeItem(_info);
-	_sliderInfo->show();
 
 	_slider->clear();
 	_info->clear();
@@ -320,7 +315,7 @@ void GraphView::emitSliderPositionChanged(const QPointF &pos)
 	qreal val = pos.x() / _slider->area().width();
 	emit sliderPositionChanged(val * _bounds.width());
 
-	if (!_sliderInfo->isVisible())
+	if (_graphs.size() > 1)
 		return;
 
 	const QPainterPath &path = _graphs.at(0)->path();
@@ -331,6 +326,11 @@ void GraphView::emitSliderPositionChanged(const QPointF &pos)
 
 	qreal y = yAtX(path, val * _bounds.width());
 	qreal r = (y - br.bottom()) / br.height();
+
+	SliderInfoItem::Side s = (pos.x() + _sliderInfo->boundingRect().width()
+	  > _slider->area().right()) ? SliderInfoItem::Left : SliderInfoItem::Right;
+
+	_sliderInfo->setSide(s);
 	_sliderInfo->setPos(QPointF(0, _slider->boundingRect().height() * r));
 	_sliderInfo->setText(QString::number(-y * _yScale, 'f', _precision));
 }

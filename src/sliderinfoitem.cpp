@@ -7,6 +7,7 @@
 
 SliderInfoItem::SliderInfoItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
+	_side = Right;
 }
 
 void SliderInfoItem::updateBoundingRect()
@@ -16,7 +17,10 @@ void SliderInfoItem::updateBoundingRect()
 	font.setFamily(FONT_FAMILY);
 	QFontMetrics fm(font);
 
-	_boundingRect = QRectF(-SIZE/2, 0, fm.width(_text) + SIZE, fm.height());
+	_boundingRect = (_side == Right)
+		? QRectF(-SIZE/2, 0, fm.width(_text) + SIZE, fm.height())
+		: QRectF(-(fm.width(_text) + SIZE/2), 0, fm.width(_text) + SIZE,
+		  fm.height());
 }
 
 void SliderInfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
@@ -31,7 +35,11 @@ void SliderInfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 	painter->setFont(font);
 
 	painter->setPen(Qt::red);
-	painter->drawText(SIZE, fm.height() - fm.descent(), _text);
+	if (_side == Right)
+		painter->drawText(SIZE, fm.height() - fm.descent(), _text);
+	else
+		painter->drawText(-(fm.width(_text) + SIZE/2),
+		  fm.height() - fm.descent(), _text);
 	painter->drawLine(QPointF(-SIZE/2, 0), QPointF(SIZE/2, 0));
 
 	//painter->drawRect(boundingRect());
@@ -40,6 +48,16 @@ void SliderInfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 void SliderInfoItem::setText(const QString &text)
 {
 	_text = text;
+	updateBoundingRect();
+	prepareGeometryChange();
+}
+
+void SliderInfoItem::setSide(Side side)
+{
+	if (side == _side)
+		return;
+
+	_side = side;
 	updateBoundingRect();
 	prepareGeometryChange();
 }
