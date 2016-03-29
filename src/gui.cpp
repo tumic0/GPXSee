@@ -489,7 +489,8 @@ bool GUI::openFile(const QString &fileName)
 		_fileActionGroup->setEnabled(true);
 		_navigationActionGroup->setEnabled(true);
 	} else {
-		_fileActionGroup->setEnabled(false);
+		if (_files.isEmpty())
+			_fileActionGroup->setEnabled(false);
 		ret = false;
 	}
 
