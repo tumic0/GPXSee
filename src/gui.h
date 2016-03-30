@@ -58,6 +58,8 @@ private slots:
 	void setMetricUnits();
 	void setImperialUnits();
 
+	void sliderPositionChanged(qreal pos);
+
 private:
 	void loadMaps();
 	void loadPOIs();
@@ -146,8 +148,7 @@ private:
 	qreal _time;
 	int _trackCount;
 
-	GraphView *_lastGraph;
-	qreal _lastSliderPos;
+	qreal _sliderPos;
 };
 
 #endif // GUI_H

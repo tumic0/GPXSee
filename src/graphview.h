@@ -58,7 +58,7 @@ public:
 	void setSliderPrecision(int precision) {_precision = precision;}
 	void setMinYRange(qreal range) {_minYRange = range;}
 
-	qreal sliderPosition() const;
+	qreal sliderPosition() const {return _sliderPos;}
 	void setSliderPosition(qreal pos);
 
 	void plot(QPainter *painter, const QRectF &target);
@@ -82,12 +82,14 @@ private:
 	void createXLabel();
 	void createYLabel();
 	void updateBounds(const QPointF &point);
+	void updateSliderInfo();
 
 	qreal _xScale, _yScale;
 	QString _xUnits, _yUnits;
 	QString _xLabel, _yLabel;
 	int _precision;
 	qreal _minYRange;
+	qreal _sliderPos;
 
 	Scene *_scene;
 

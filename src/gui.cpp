@@ -61,12 +61,12 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	createTrackGraphs();
 	createStatusBar();
 
-	connect(_elevationGraph, SIGNAL(sliderPositionChanged(qreal)), _track,
-	  SLOT(movePositionMarker(qreal)));
-	connect(_speedGraph, SIGNAL(sliderPositionChanged(qreal)), _track,
-	  SLOT(movePositionMarker(qreal)));
-	connect(_heartRateGraph, SIGNAL(sliderPositionChanged(qreal)), _track,
-	  SLOT(movePositionMarker(qreal)));
+	connect(_elevationGraph, SIGNAL(sliderPositionChanged(qreal)), this,
+	  SLOT(sliderPositionChanged(qreal)));
+	connect(_speedGraph, SIGNAL(sliderPositionChanged(qreal)), this,
+	  SLOT(sliderPositionChanged(qreal)));
+	connect(_heartRateGraph, SIGNAL(sliderPositionChanged(qreal)), this,
+	  SLOT(sliderPositionChanged(qreal)));
 
 	_browser = new FileBrowser(this);
 	_browser->setFilter(QStringList("*.gpx"));
@@ -86,8 +86,8 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	_time = 0;
 	_trackCount = 0;
 
-	_lastGraph = 0;
-	_lastSliderPos = -1.0;
+	_sliderPos = 0;
+
 	updateGraphTabs();
 	updateTrackView();
 
@@ -515,6 +515,7 @@ bool GUI::loadFile(const QString &fileName)
 		_track->loadGPX(gpx);
 		if (_showPOIAction->isChecked())
 			_track->loadPOI(_poi);
+		_track->movePositionMarker(_sliderPos);
 
 		for (int i = 0; i < gpx.trackCount(); i++) {
 			_distance += gpx.track(i).distance();
@@ -680,6 +681,8 @@ void GUI::closeFiles()
 	_time = 0;
 	_trackCount = 0;
 
+	_sliderPos = 0;
+
 	_elevationGraph->clear();
 	_speedGraph->clear();
 	_heartRateGraph->clear();
@@ -783,18 +786,19 @@ void GUI::poiFileChecked(int index)
 		_track->loadPOI(_poi);
 }
 
+void GUI::sliderPositionChanged(qreal pos)
+{
+	_track->movePositionMarker(_sliderPos);
+	_sliderPos = pos;
+}
+
 void GUI::graphChanged(int index)
 {
 	if (index < 0)
 		return;
 
-	GraphView *tv = static_cast<GraphView*>(_trackGraphs->widget(index));
-	if (_lastGraph) {
-		if (_lastGraph->sliderPosition() >= 0)
-			_lastSliderPos = _lastGraph->sliderPosition();
-		tv->setSliderPosition(_lastSliderPos);
-	}
-	_lastGraph = tv;
+	GraphView *gv = static_cast<GraphView*>(_trackGraphs->widget(index));
+	gv->setSliderPosition(_sliderPos);
 }
 
 void GUI::updateNavigationActions()

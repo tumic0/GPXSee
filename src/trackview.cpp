@@ -420,7 +420,7 @@ void TrackView::movePositionMarker(qreal val)
 
 	for (int i = 0; i < _paths.size(); i++) {
 		qreal f = _maxPath / _paths.at(i)->path().length();
-		if (mp * f > 1.0)
+		if (mp * f < 0 || mp * f > 1.0)
 			_markers.at(i)->setVisible(false);
 		else {
 			QPointF pos = _paths.at(i)->path().pointAtPercent(mp * f);

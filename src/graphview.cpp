@@ -51,6 +51,8 @@ GraphView::GraphView(QWidget *parent)
 
 	_precision = 0;
 	_minYRange = 0.01;
+
+	_sliderPos = 0;
 }
 
 GraphView::~GraphView()
@@ -215,15 +217,12 @@ void GraphView::redraw(const QSizeF &size)
 	_scene->addItem(_xAxis);
 	_scene->addItem(_yAxis);
 
-
-	qreal sp = (_slider->pos().x() == _slider->area().left())
-		? 0 : (_slider->pos().x() - _slider->area().left())
-		  / _slider->area().width();
 	_slider->setArea(r);
-	_slider->setPos(QPointF(sp * r.width(), r.bottom()));
+	_slider->setPos((_sliderPos / _bounds.width()) * _slider->area().width(),
+	  r.bottom());
 	_scene->addItem(_slider);
 
-	_sliderInfo->setVisible(_graphs.size() == 1);
+	updateSliderInfo();
 
 	r = _scene->itemsBoundingRect();
 	_info->setPos(r.topLeft() + QPointF(r.width()/2
@@ -272,6 +271,7 @@ void GraphView::clear()
 	_palette.reset();
 
 	_bounds = QRectF();
+	_sliderPos = 0;
 
 	_scene->setSceneRect(0, 0, 0, 0);
 }
@@ -307,13 +307,9 @@ static qreal yAtX(const QPainterPath &path, qreal x)
 	return l.pointAt((x - l.p1().x()) / (l.p2().x() - l.p1().x())).y();
 }
 
-void GraphView::emitSliderPositionChanged(const QPointF &pos)
+void GraphView::updateSliderInfo()
 {
-	if (_graphs.isEmpty())
-		return;
-
-	qreal val = pos.x() / _slider->area().width();
-	emit sliderPositionChanged(val * _bounds.width());
+	_sliderInfo->setVisible(_graphs.size() == 1);
 
 	if (_graphs.size() > 1)
 		return;
@@ -324,10 +320,11 @@ void GraphView::emitSliderPositionChanged(const QPointF &pos)
 		br.adjust(0, -(_minYRange/2 - br.height()/2), 0,
 		  _minYRange/2 - br.height()/2);
 
-	qreal y = yAtX(path, val * _bounds.width());
+	qreal y = yAtX(path, _sliderPos);
 	qreal r = (y - br.bottom()) / br.height();
 
-	SliderInfoItem::Side s = (pos.x() + _sliderInfo->boundingRect().width()
+	qreal pos = (_sliderPos / _bounds.width()) * _slider->area().width();
+	SliderInfoItem::Side s = (pos + _sliderInfo->boundingRect().width()
 	  > _slider->area().right()) ? SliderInfoItem::Left : SliderInfoItem::Right;
 
 	_sliderInfo->setSide(s);
@@ -335,16 +332,21 @@ void GraphView::emitSliderPositionChanged(const QPointF &pos)
 	_sliderInfo->setText(QString::number(-y * _yScale, 'f', _precision));
 }
 
-qreal GraphView::sliderPosition() const
+void GraphView::emitSliderPositionChanged(const QPointF &pos)
 {
-	if (!_slider->isVisible())
-		return -1;
-	else
-		return (_slider->pos().x() / _slider->area().width()) * _bounds.width();
+	if (_graphs.isEmpty())
+		return;
+
+	_sliderPos = (pos.x() / _slider->area().width()) * _bounds.width();
+	emit sliderPositionChanged(_sliderPos);
+
+	updateSliderInfo();
 }
 
 void GraphView::setSliderPosition(qreal pos)
 {
+	_sliderPos = pos;
+
 	if (_graphs.isEmpty())
 		return;
 

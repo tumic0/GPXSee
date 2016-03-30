@@ -41,7 +41,7 @@ QVariant SliderItem::itemChange(GraphicsItemChange change, const QVariant &value
 		}
 	}
 
-	if (change == ItemPositionHasChanged)
+	if (change == ItemPositionHasChanged && scene())
 		emit positionChanged(value.toPointF());
 
 	return QGraphicsItem::itemChange(change, value);
