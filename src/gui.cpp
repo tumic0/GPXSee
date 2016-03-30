@@ -788,8 +788,8 @@ void GUI::poiFileChecked(int index)
 
 void GUI::sliderPositionChanged(qreal pos)
 {
-	_track->movePositionMarker(_sliderPos);
 	_sliderPos = pos;
+	_track->movePositionMarker(_sliderPos);
 }
 
 void GUI::graphChanged(int index)
