@@ -282,6 +282,9 @@ static qreal yAtX(const QPainterPath &path, qreal x)
 	int high = path.elementCount() - 1;
 	int mid = 0;
 
+	Q_ASSERT(high > low);
+	Q_ASSERT(x >= path.elementAt(low).x && x <= path.elementAt(high).x);
+
 	while (low <= high) {
 		mid = low + ((high - low) / 2);
 		const QPainterPath::Element &e = path.elementAt(mid);
@@ -294,15 +297,12 @@ static qreal yAtX(const QPainterPath &path, qreal x)
 	}
 
 	QLineF l;
-	if (path.elementAt(mid).x < x) {
-		Q_ASSERT(mid >= 0 && mid+1 < path.elementCount());
+	if (path.elementAt(mid).x < x)
 		l = QLineF(path.elementAt(mid).x, path.elementAt(mid).y,
 		  path.elementAt(mid+1).x, path.elementAt(mid+1).y);
-	} else {
-		Q_ASSERT(mid-1 >= 0 && mid < path.elementCount());
+	else
 		l = QLineF(path.elementAt(mid-1).x, path.elementAt(mid-1).y,
 		  path.elementAt(mid).x, path.elementAt(mid).y);
-	}
 
 	return l.pointAt((x - l.p1().x()) / (l.p2().x() - l.p1().x())).y();
 }
@@ -311,7 +311,7 @@ void GraphView::updateSliderInfo()
 {
 	_sliderInfo->setVisible(_graphs.size() == 1);
 
-	if (_graphs.size() > 1)
+	if (_graphs.size() != 1)
 		return;
 
 	const QPainterPath &path = _graphs.at(0)->path();
