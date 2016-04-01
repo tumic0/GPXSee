@@ -238,9 +238,13 @@ void GUI::createActions()
 	_showMapAction->setCheckable(true);
 	_showMapAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
 	connect(_showMapAction, SIGNAL(triggered(bool)), this, SLOT(showMap(bool)));
-	if (_maps.empty())
+	_clearMapCacheAction = new QAction(tr("Clear tile cache"), this);
+	connect(_clearMapCacheAction, SIGNAL(triggered()), this,
+	  SLOT(clearMapCache()));
+	if (_maps.empty()) {
 		_showMapAction->setEnabled(false);
-	else {
+		_clearMapCacheAction->setEnabled(false);
+	} else {
 		createMapActions();
 		_showMapAction->setChecked(true);
 	}
@@ -306,6 +310,8 @@ void GUI::createMenus()
 
 	_mapMenu = menuBar()->addMenu(tr("Map"));
 	_mapMenu->addActions(_mapActions);
+	_mapMenu->addSeparator();
+	_mapMenu->addAction(_clearMapCacheAction);
 	_mapMenu->addSeparator();
 	_mapMenu->addAction(_showMapAction);
 
@@ -736,6 +742,12 @@ void GUI::showToolbars(bool checked)
 		removeToolBar(_showToolBar);
 		removeToolBar(_navigationToolBar);
 	}
+}
+
+void GUI::clearMapCache()
+{
+	_currentMap->clearCache();
+	_track->redraw();
 }
 
 void GUI::updateStatusBarInfo()

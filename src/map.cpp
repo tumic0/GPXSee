@@ -5,6 +5,8 @@
 #include "config.h"
 #include "map.h"
 
+#include <QDebug>
+
 
 Map::Map(QObject *parent, const QString &name, const QString &url)
   : QObject(parent)
@@ -16,7 +18,7 @@ Map::Map(QObject *parent, const QString &name, const QString &url)
 	  SLOT(emitLoaded()));
 
 	QString path = TILES_DIR + QString("/") + _name;
-	if (!QDir::home().mkpath(path))
+	if (!QDir().mkpath(path))
 		fprintf(stderr, "Error creating tiles dir: %s\n", qPrintable(path));
 }
 
@@ -53,4 +55,14 @@ void Map::loadTiles(QList<Tile> &list)
 
 	if (!dl.empty())
 		Downloader::instance().get(dl);
+}
+
+void Map::clearCache()
+{
+	QString path = TILES_DIR + QString("/") + _name;
+	QDir dir = QDir(path);
+	QStringList list = dir.entryList();
+
+	for (int i = 0; i < list.count(); i++)
+		dir.remove(list.at(i));
 }

@@ -42,8 +42,6 @@ public:
 
 public slots:
 	void movePositionMarker(qreal val);
-
-private slots:
 	void redraw();
 
 private:

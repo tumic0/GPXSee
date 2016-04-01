@@ -45,6 +45,7 @@ private slots:
 	void showMap(bool checked);
 	void showGraphs(bool checked);
 	void showToolbars(bool checked);
+	void clearMapCache();
 
 	void mapChanged(int);
 	void graphChanged(int);
@@ -114,6 +115,7 @@ private:
 	QAction *_closePOIAction;
 	QAction *_showPOIAction;
 	QAction *_showMapAction;
+	QAction *_clearMapCacheAction;
 	QAction *_showGraphsAction;
 	QAction *_showToolbarsAction;
 	QAction *_nextAction;

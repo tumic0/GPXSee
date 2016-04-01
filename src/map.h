@@ -24,15 +24,16 @@ class Map : public QObject
 {
 	Q_OBJECT
 
-signals:
-	void loaded();
-
 public:
 	Map(QObject *parent = 0, const QString &name = QString(),
 	  const QString &url = QString());
 
 	const QString &name() const {return _name;}
 	void loadTiles(QList<Tile> &list);
+	void clearCache();
+
+signals:
+	void loaded();
 
 private slots:
 	void emitLoaded();
