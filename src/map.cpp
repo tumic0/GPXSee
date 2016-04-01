@@ -5,8 +5,6 @@
 #include "config.h"
 #include "map.h"
 
-#include <QDebug>
-
 
 Map::Map(QObject *parent, const QString &name, const QString &url)
   : QObject(parent)
