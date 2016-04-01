@@ -38,23 +38,23 @@ AxisItem::AxisItem(Type type, QGraphicsItem *parent) : QGraphicsItem(parent)
 
 void AxisItem::setRange(const RangeF &range)
 {
+	prepareGeometryChange();
 	_range = range;
 	updateBoundingRect();
-	prepareGeometryChange();
 }
 
 void AxisItem::setSize(qreal size)
 {
+	prepareGeometryChange();
 	_size = size;
 	updateBoundingRect();
-	prepareGeometryChange();
 }
 
 void AxisItem::setLabel(const QString& label)
 {
+	prepareGeometryChange();
 	_label = label;
 	updateBoundingRect();
-	prepareGeometryChange();
 }
 
 void AxisItem::updateBoundingRect()

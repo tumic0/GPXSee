@@ -47,9 +47,9 @@ void SliderInfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
 void SliderInfoItem::setText(const QString &text)
 {
+	prepareGeometryChange();
 	_text = text;
 	updateBoundingRect();
-	prepareGeometryChange();
 }
 
 void SliderInfoItem::setSide(Side side)
@@ -57,7 +57,7 @@ void SliderInfoItem::setSide(Side side)
 	if (side == _side)
 		return;
 
+	prepareGeometryChange();
 	_side = side;
 	updateBoundingRect();
-	prepareGeometryChange();
 }

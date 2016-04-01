@@ -65,18 +65,19 @@ void InfoItem::insert(const QString &key, const QString &value)
 	KV kv(key, value);
 	int i;
 
+	prepareGeometryChange();
+
 	if ((i = _list.indexOf(kv)) < 0)
 		_list.append(kv);
 	else
 		_list[i] = kv;
 
 	updateBoundingRect();
-	prepareGeometryChange();
 }
 
 void InfoItem::clear()
 {
+	prepareGeometryChange();
 	_list.clear();
 	updateBoundingRect();
-	prepareGeometryChange();
 }

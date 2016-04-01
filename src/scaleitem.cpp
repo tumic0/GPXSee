@@ -114,24 +114,24 @@ void ScaleItem::computeScale()
 
 void ScaleItem::setLatitude(qreal lat)
 {
+	prepareGeometryChange();
 	_lat = lat;
 	computeScale();
 	updateBoundingRect();
-	prepareGeometryChange();
 }
 
 void ScaleItem::setZoom(int z)
 {
+	prepareGeometryChange();
 	_zoom = z;
 	computeScale();
 	updateBoundingRect();
-	prepareGeometryChange();
 }
 
 void ScaleItem::setUnits(enum Units units)
 {
+	prepareGeometryChange();
 	_units = units;
 	computeScale();
 	updateBoundingRect();
-	prepareGeometryChange();
 }

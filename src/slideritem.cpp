@@ -52,3 +52,9 @@ void SliderItem::clear()
 	_area = QRectF();
 	setPos(QPointF());
 }
+
+void SliderItem::setArea(const QRectF &area)
+{
+	prepareGeometryChange();
+	_area = area;
+}

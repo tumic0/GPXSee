@@ -15,7 +15,7 @@ public:
 	  QWidget *widget);
 
 	const QRectF &area() const {return _area;}
-	void setArea(const QRectF &area) {_area = area;}
+	void setArea(const QRectF &area);
 
 	void clear();
 
