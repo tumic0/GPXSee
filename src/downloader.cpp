@@ -14,7 +14,8 @@
 #define PLATFORM_STR "Unknown"
 #endif
 
-#define USER_AGENT APP_NAME"/"APP_VERSION" ("PLATFORM_STR"; Qt "QT_VERSION_STR")"
+#define USER_AGENT \
+	APP_NAME "/" APP_VERSION " (" PLATFORM_STR "; Qt " QT_VERSION_STR ")"
 
 Downloader::Downloader()
 {
