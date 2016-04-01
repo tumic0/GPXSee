@@ -1,4 +1,3 @@
-#include <cmath>
 #include "ll.h"
 #include "track.h"
 
@@ -100,12 +99,12 @@ void Track::elevationGraph(QVector<QPointF> &graph) const
 	if (!_data.size())
 		return;
 
-	if (std::isnan(_data.at(0).elevation))
+	if (!_data.at(0).hasElevation())
 		return;
 	raw.append(QPointF(0, _data.at(0).elevation - _data.at(0).geoidheight));
 	for (int i = 1; i < _data.size(); i++) {
 		dist += _dd.at(i-1);
-		if (std::isnan(_data.at(i).elevation))
+		if (!_data.at(i).hasElevation())
 			return;
 		raw.append(QPointF(dist,  _data.at(i).elevation
 		  - _data.at(i).geoidheight));
@@ -128,7 +127,7 @@ void Track::speedGraph(QVector<QPointF> &graph) const
 		dt = _data.at(i-1).timestamp.msecsTo(_data.at(i).timestamp) / 1000.0;
 		dist += ds;
 
-		if (std::isnan(_data.at(i).speed)) {
+		if (!_data.at(i).hasSpeed()) {
 			if (dt == 0)
 				continue;
 			v = ds / dt;
@@ -149,11 +148,11 @@ void Track::heartRateGraph(QVector<QPointF> &graph) const
 	if (!_data.size())
 		return;
 
-	if (std::isnan(_data.at(0).heartRate))
+	if (!_data.at(0).hasHeartRate())
 		return;
 	raw.append(QPointF(0, _data.at(0).heartRate));
 	for (int i = 1; i < _data.count(); i++) {
-		if (std::isnan(_data.at(i).heartRate))
+		if (!_data.at(i).hasHeartRate())
 			return;
 		dist += _dd.at(i-1);
 		raw.append(QPointF(dist, _data.at(i).heartRate));
