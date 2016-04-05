@@ -55,6 +55,7 @@ private:
 	qreal waypointScale() const;
 	qreal mapScale(int zoom) const;
 	void rescale(qreal scale);
+	void rescale();
 
 	void showMarkers(bool show);
 	void setTrackLineWidth(qreal width);

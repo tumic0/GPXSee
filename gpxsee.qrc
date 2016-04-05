@@ -13,6 +13,7 @@
         <file>icons/arrow-right.png</file>
         <file>icons/arrow-left-double.png</file>
         <file>icons/arrow-right-double.png</file>
+        <file>icons/view-fullscreen.png</file>
         <file>lang/gpxsee_cs.qm</file>
     </qresource>
 </RCC>

@@ -308,6 +308,13 @@ void TrackView::redraw()
 	resetCachedContent();
 }
 
+void TrackView::rescale()
+{
+	_zoom = qMin(scale2zoom(trackScale()), scale2zoom(waypointScale()));
+	rescale(mapScale(_zoom));
+	_mapScale->setZoom(_zoom);
+}
+
 void TrackView::wheelEvent(QWheelEvent *event)
 {
 	if (_paths.isEmpty() && _locations.isEmpty())
@@ -466,6 +473,8 @@ void TrackView::resizeEvent(QResizeEvent *e)
 {
 	if (_paths.isEmpty() && _locations.isEmpty())
 		return;
+
+	rescale();
 
 	QRectF br = trackBoundingRect() | waypointBoundingRect();
 	QRectF ba = br.adjusted(-TILE_SIZE, -TILE_SIZE, TILE_SIZE, TILE_SIZE);

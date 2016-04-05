@@ -45,6 +45,7 @@ private slots:
 	void showMap(bool checked);
 	void showGraphs(bool checked);
 	void showToolbars(bool checked);
+	void showFullscreen(bool checked);
 	void clearMapCache();
 
 	void mapChanged(int);
@@ -115,6 +116,7 @@ private:
 	QAction *_closePOIAction;
 	QAction *_showPOIAction;
 	QAction *_showMapAction;
+	QAction *_fullscreenAction;
 	QAction *_clearMapCacheAction;
 	QAction *_showGraphsAction;
 	QAction *_showToolbarsAction;
@@ -151,6 +153,10 @@ private:
 	int _trackCount;
 
 	qreal _sliderPos;
+
+	int _frameStyle;
+	QMargins _contentsMargins;
+	bool _showGraphs;
 };
 
 #endif // GUI_H

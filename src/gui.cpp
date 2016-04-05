@@ -180,6 +180,7 @@ void GUI::createActions()
 	_exitAction = new QAction(QIcon(QPixmap(QUIT_ICON)), tr("Quit"), this);
 	_exitAction->setShortcut(QKeySequence::Quit);
 	connect(_exitAction, SIGNAL(triggered()), this, SLOT(close()));
+	addAction(_exitAction);
 
 	// Help & About
 	_dataSourcesAction = new QAction(tr("Data sources"), this);
@@ -197,26 +198,31 @@ void GUI::createActions()
 	  tr("Open"), this);
 	_openFileAction->setShortcut(QKeySequence::Open);
 	connect(_openFileAction, SIGNAL(triggered()), this, SLOT(openFile()));
+	addAction(_openFileAction);
 	_saveFileAction = new QAction(QIcon(QPixmap(SAVE_FILE_ICON)),
 	  tr("Save"), this);
 	_saveFileAction->setShortcut(QKeySequence::Save);
 	_saveFileAction->setActionGroup(_fileActionGroup);
 	connect(_saveFileAction, SIGNAL(triggered()), this, SLOT(saveFile()));
+	addAction(_saveFileAction);
 	_saveAsAction = new QAction(QIcon(QPixmap(SAVE_AS_ICON)),
 	  tr("Save as"), this);
 	_saveAsAction->setShortcut(QKeySequence::SaveAs);
 	_saveAsAction->setActionGroup(_fileActionGroup);
 	connect(_saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
+	addAction(_saveAsAction);
 	_closeFileAction = new QAction(QIcon(QPixmap(CLOSE_FILE_ICON)),
 	  tr("Close"), this);
 	_closeFileAction->setShortcut(QKeySequence::Close);
 	_closeFileAction->setActionGroup(_fileActionGroup);
 	connect(_closeFileAction, SIGNAL(triggered()), this, SLOT(closeAll()));
+	addAction(_closeFileAction);
 	_reloadFileAction = new QAction(QIcon(QPixmap(RELOAD_FILE_ICON)),
 	  tr("Reload"), this);
 	_reloadFileAction->setShortcut(QKeySequence::Refresh);
 	_reloadFileAction->setActionGroup(_fileActionGroup);
 	connect(_reloadFileAction, SIGNAL(triggered()), this, SLOT(reloadFile()));
+	addAction(_reloadFileAction);
 
 	// POI actions
 	_openPOIAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)),
@@ -230,6 +236,7 @@ void GUI::createActions()
 	_showPOIAction->setCheckable(true);
 	_showPOIAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
 	connect(_showPOIAction, SIGNAL(triggered(bool)), this, SLOT(showPOI(bool)));
+	addAction(_showPOIAction);
 	createPOIFilesActions();
 
 	// Map actions
@@ -238,6 +245,7 @@ void GUI::createActions()
 	_showMapAction->setCheckable(true);
 	_showMapAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
 	connect(_showMapAction, SIGNAL(triggered(bool)), this, SLOT(showMap(bool)));
+	addAction(_showMapAction);
 	_clearMapCacheAction = new QAction(tr("Clear tile cache"), this);
 	connect(_clearMapCacheAction, SIGNAL(triggered()), this,
 	  SLOT(clearMapCache()));
@@ -256,6 +264,7 @@ void GUI::createActions()
 	_showGraphsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_G));
 	connect(_showGraphsAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showGraphs(bool)));
+	addAction(_showGraphsAction);
 	_showToolbarsAction = new QAction(tr("Show toolbars"), this);
 	_showToolbarsAction->setCheckable(true);
 	_showToolbarsAction->setChecked(true);
@@ -274,6 +283,13 @@ void GUI::createActions()
 	_imperialUnitsAction->setActionGroup(ag);
 	connect(_imperialUnitsAction, SIGNAL(triggered()), this,
 	  SLOT(setImperialUnits()));
+	_fullscreenAction = new QAction(QIcon(QPixmap(FULLSCREEN_ICON)),
+	  tr("Fullscreen mode"), this);
+	_fullscreenAction->setCheckable(true);
+	_fullscreenAction->setShortcut(QKeySequence("F11"));
+	connect(_fullscreenAction, SIGNAL(triggered(bool)), this,
+	  SLOT(showFullscreen(bool)));
+	addAction(_fullscreenAction);
 
 	// Navigation actions
 	_nextAction = new QAction(QIcon(QPixmap(NEXT_FILE_ICON)), tr("Next"), this);
@@ -331,6 +347,8 @@ void GUI::createMenus()
 	_settingsMenu->addSeparator();
 	_settingsMenu->addAction(_showToolbarsAction);
 	_settingsMenu->addAction(_showGraphsAction);
+	_settingsMenu->addSeparator();
+	_settingsMenu->addAction(_fullscreenAction);
 
 	_helpMenu = menuBar()->addMenu(tr("Help"));
 	_helpMenu->addAction(_dataSourcesAction);
@@ -389,6 +407,7 @@ void GUI::createTrackGraphs()
 	_trackGraphs->setFixedHeight(200);
 	_trackGraphs->setSizePolicy(
 		QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed));
+	_trackGraphs->setDocumentMode(true);
 }
 
 void GUI::createStatusBar()
@@ -744,6 +763,37 @@ void GUI::showToolbars(bool checked)
 	}
 }
 
+void GUI::showFullscreen(bool checked)
+{
+	if (checked) {
+		_contentsMargins = centralWidget()->layout()->contentsMargins();
+		_frameStyle = _track->frameStyle();
+		_showGraphs = _showGraphsAction->isChecked();
+
+		statusBar()->hide();
+		menuBar()->hide();
+		showToolbars(false);
+		showGraphs(false);
+		_showGraphsAction->setChecked(false);
+		centralWidget()->layout()->setContentsMargins(QMargins());
+		_track->setFrameStyle(QFrame::NoFrame);
+
+		showFullScreen();
+	} else {
+		statusBar()->show();
+		menuBar()->show();
+		if (_showToolbarsAction->isChecked())
+			showToolbars(true);
+		_showGraphsAction->setChecked(_showGraphs);
+		if (_showGraphsAction->isEnabled())
+			showGraphs(_showGraphs);
+		centralWidget()->layout()->setContentsMargins(_contentsMargins);
+		_track->setFrameStyle(_frameStyle);
+
+		showNormal();
+	}
+}
+
 void GUI::clearMapCache()
 {
 	_currentMap->clearCache();
@@ -854,17 +904,14 @@ void GUI::updateGraphTabs()
 			_trackGraphs->insertTab(i, gv, tabs[i].label);
 	}
 
-	for (int i = 0; i < (int)ARRAY_SIZE(tabs); i++) {
-		if (tabs[i].view->count()) {
-			if (_showGraphsAction->isChecked())
-				_trackGraphs->setHidden(false);
-			_showGraphsAction->setEnabled(true);
-			return;
-		}
+	if (_trackGraphs->count()) {
+		if (_showGraphsAction->isChecked())
+			_trackGraphs->setHidden(false);
+		_showGraphsAction->setEnabled(true);
+	} else {
+		_trackGraphs->setHidden(true);
+		_showGraphsAction->setEnabled(false);
 	}
-
-	_trackGraphs->setHidden(true);
-	_showGraphsAction->setEnabled(false);
 }
 
 void GUI::updateTrackView()

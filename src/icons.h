@@ -16,6 +16,7 @@
 #define PREV_FILE_ICON   ":/icons/arrow-left.png"
 #define LAST_FILE_ICON   ":/icons/arrow-right-double.png"
 #define FIRST_FILE_ICON  ":/icons/arrow-left-double.png"
+#define FULLSCREEN_ICON  ":/icons/view-fullscreen.png"
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #define QT_ICON          ":/trolltech/qmessagebox/images/qtlogo-64.png"
