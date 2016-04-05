@@ -407,7 +407,9 @@ void GUI::createTrackGraphs()
 	_trackGraphs->setFixedHeight(200);
 	_trackGraphs->setSizePolicy(
 		QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed));
+#ifndef Q_OS_MAC
 	_trackGraphs->setDocumentMode(true);
+#endif // Q_OS_MAC
 }
 
 void GUI::createStatusBar()
