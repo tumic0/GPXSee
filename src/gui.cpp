@@ -255,6 +255,15 @@ void GUI::createActions()
 	} else {
 		createMapActions();
 		_showMapAction->setChecked(true);
+
+		_nextMapAction = new QAction(tr("Next map"), this);
+		_nextMapAction->setShortcut(QKeySequence::Forward);
+		connect(_nextMapAction, SIGNAL(triggered()), this, SLOT(nextMap()));
+		addAction(_nextMapAction);
+		_prevMapAction = new QAction(tr("Next map"), this);
+		_prevMapAction->setShortcut(QKeySequence::Back);
+		connect(_prevMapAction, SIGNAL(triggered()), this, SLOT(prevMap()));
+		addAction(_prevMapAction);
 	}
 
 	// Settings actions
@@ -455,13 +464,18 @@ void GUI::keys()
 	msgBox.setWindowTitle(tr("Keyboard controls"));
 	msgBox.setText(QString("<h3>") + tr("Keyboard controls") + QString("</h3>"));
 	msgBox.setInformativeText(
-	  QString("<div><table width=\"300\"><tr><td>") + tr("Next file")
+	  QString("<div><table width=\"350\"><tr><td>") + tr("Next file")
 	  + QString("</td><td><i>SPACE</i></td></tr><tr><td>") + tr("Previous file")
 	  + QString("</td><td><i>BACKSPACE</i></td></tr><tr><td>")
 	  + tr("First file") + QString("</td><td><i>HOME</i></td></tr><tr><td>")
-	  + tr("Last file") + QString("</td><td><i>END</i></td></tr><tr><td></td>"
-	  "<td></td></tr><tr><td>") + tr("Append modifier")
-	  + QString("</td><td><i>SHIFT</i></td></tr></table></div>"));
+	  + tr("Last file") + QString("</td><td><i>END</i></td></tr><tr><td>")
+	  + tr("Append modifier") + QString("</td><td><i>SHIFT</i></td></tr>"
+	  "<tr><td></td><td></td></tr><tr><td>")
+	  + tr("Next map") + QString("</td><td><i>")
+	  + _nextMapAction->shortcut().toString() + QString("</i></td></tr><tr><td>")
+	  + tr("Previous map") + QString("</td><td><i>")
+	  + _prevMapAction->shortcut().toString() + QString("</i></td></tr>"
+	  "</table></div>"));
 
 	msgBox.exec();
 }
@@ -838,6 +852,24 @@ void GUI::mapChanged(int index)
 
 	if (_showMapAction->isChecked())
 		_track->setMap(_currentMap);
+}
+
+void GUI::nextMap()
+{
+	if (_maps.count() < 2)
+		return;
+	int next = (_maps.indexOf(_currentMap) + 1) % _maps.count();
+	_mapActions.at(next)->setChecked(true);
+	mapChanged(next);
+}
+
+void GUI::prevMap()
+{
+	if (_maps.count() < 2)
+		return;
+	int prev = (_maps.indexOf(_currentMap) + _maps.count() - 1) % _maps.count();
+	_mapActions.at(prev)->setChecked(true);
+	mapChanged(prev);
 }
 
 void GUI::poiFileChecked(int index)

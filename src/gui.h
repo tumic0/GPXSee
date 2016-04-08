@@ -47,6 +47,8 @@ private slots:
 	void showToolbars(bool checked);
 	void showFullscreen(bool checked);
 	void clearMapCache();
+	void nextMap();
+	void prevMap();
 
 	void mapChanged(int);
 	void graphChanged(int);
@@ -126,6 +128,8 @@ private:
 	QAction *_firstAction;
 	QAction *_metricUnitsAction;
 	QAction *_imperialUnitsAction;
+	QAction *_nextMapAction;
+	QAction *_prevMapAction;
 	QList<QAction*> _mapActions;
 	QList<QAction*> _poiFilesActions;
 
