@@ -464,7 +464,7 @@ void GUI::keys()
 	msgBox.setWindowTitle(tr("Keyboard controls"));
 	msgBox.setText(QString("<h3>") + tr("Keyboard controls") + QString("</h3>"));
 	msgBox.setInformativeText(
-	  QString("<div><table width=\"350\"><tr><td>") + tr("Next file")
+	  QString("<div><table width=\"300\"><tr><td>") + tr("Next file")
 	  + QString("</td><td><i>SPACE</i></td></tr><tr><td>") + tr("Previous file")
 	  + QString("</td><td><i>BACKSPACE</i></td></tr><tr><td>")
 	  + tr("First file") + QString("</td><td><i>HOME</i></td></tr><tr><td>")
