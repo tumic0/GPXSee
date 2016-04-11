@@ -2,6 +2,9 @@
 #define CONFIG_H
 
 #include <QtGlobal>
+#include <QDir>
+#include <QApplication>
+#include <QString>
 
 #define APP_NAME        "GPXSee"
 #define APP_HOMEPAGE    "http://tumic.wz.cz/gpxsee"

@@ -178,7 +178,7 @@ void GUI::createActions()
 
 	// General actions
 	_exitAction = new QAction(QIcon(QPixmap(QUIT_ICON)), tr("Quit"), this);
-	_exitAction->setShortcut(QKeySequence::Quit);
+	_exitAction->setShortcut(QUIT_SHORTCUT);
 	connect(_exitAction, SIGNAL(triggered()), this, SLOT(close()));
 	addAction(_exitAction);
 
@@ -196,30 +196,30 @@ void GUI::createActions()
 	// File related actions
 	_openFileAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)),
 	  tr("Open"), this);
-	_openFileAction->setShortcut(QKeySequence::Open);
+	_openFileAction->setShortcut(OPEN_SHORTCUT);
 	connect(_openFileAction, SIGNAL(triggered()), this, SLOT(openFile()));
 	addAction(_openFileAction);
 	_saveFileAction = new QAction(QIcon(QPixmap(SAVE_FILE_ICON)),
 	  tr("Save"), this);
-	_saveFileAction->setShortcut(QKeySequence::Save);
+	_saveFileAction->setShortcut(SAVE_SHORTCUT);
 	_saveFileAction->setActionGroup(_fileActionGroup);
 	connect(_saveFileAction, SIGNAL(triggered()), this, SLOT(saveFile()));
 	addAction(_saveFileAction);
 	_saveAsAction = new QAction(QIcon(QPixmap(SAVE_AS_ICON)),
 	  tr("Save as"), this);
-	_saveAsAction->setShortcut(QKeySequence::SaveAs);
+	_saveAsAction->setShortcut(SAVE_AS_SHORTCUT);
 	_saveAsAction->setActionGroup(_fileActionGroup);
 	connect(_saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
 	addAction(_saveAsAction);
 	_closeFileAction = new QAction(QIcon(QPixmap(CLOSE_FILE_ICON)),
 	  tr("Close"), this);
-	_closeFileAction->setShortcut(QKeySequence::Close);
+	_closeFileAction->setShortcut(CLOSE_SHORTCUT);
 	_closeFileAction->setActionGroup(_fileActionGroup);
 	connect(_closeFileAction, SIGNAL(triggered()), this, SLOT(closeAll()));
 	addAction(_closeFileAction);
 	_reloadFileAction = new QAction(QIcon(QPixmap(RELOAD_FILE_ICON)),
 	  tr("Reload"), this);
-	_reloadFileAction->setShortcut(QKeySequence::Refresh);
+	_reloadFileAction->setShortcut(RELOAD_SHORTCUT);
 	_reloadFileAction->setActionGroup(_fileActionGroup);
 	connect(_reloadFileAction, SIGNAL(triggered()), this, SLOT(reloadFile()));
 	addAction(_reloadFileAction);
@@ -234,7 +234,7 @@ void GUI::createActions()
 	_showPOIAction = new QAction(QIcon(QPixmap(SHOW_POI_ICON)),
 	  tr("Show POIs"), this);
 	_showPOIAction->setCheckable(true);
-	_showPOIAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
+	_showPOIAction->setShortcut(SHOW_POI_SHORTCUT);
 	connect(_showPOIAction, SIGNAL(triggered(bool)), this, SLOT(showPOI(bool)));
 	addAction(_showPOIAction);
 	createPOIFilesActions();
@@ -243,7 +243,7 @@ void GUI::createActions()
 	_showMapAction = new QAction(QIcon(QPixmap(SHOW_MAP_ICON)), tr("Show map"),
 	  this);
 	_showMapAction->setCheckable(true);
-	_showMapAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+	_showMapAction->setShortcut(SHOW_MAP_SHORTCUT);
 	connect(_showMapAction, SIGNAL(triggered(bool)), this, SLOT(showMap(bool)));
 	addAction(_showMapAction);
 	_clearMapCacheAction = new QAction(tr("Clear tile cache"), this);
@@ -257,11 +257,11 @@ void GUI::createActions()
 		_showMapAction->setChecked(true);
 
 		_nextMapAction = new QAction(tr("Next map"), this);
-		_nextMapAction->setShortcut(QKeySequence::Forward);
+		_nextMapAction->setShortcut(NEXT_MAP_SHORTCUT);
 		connect(_nextMapAction, SIGNAL(triggered()), this, SLOT(nextMap()));
 		addAction(_nextMapAction);
 		_prevMapAction = new QAction(tr("Next map"), this);
-		_prevMapAction->setShortcut(QKeySequence::Back);
+		_prevMapAction->setShortcut(PREV_MAP_SHORTCUT);
 		connect(_prevMapAction, SIGNAL(triggered()), this, SLOT(prevMap()));
 		addAction(_prevMapAction);
 	}
@@ -270,7 +270,7 @@ void GUI::createActions()
 	_showGraphsAction = new QAction(tr("Show graphs"), this);
 	_showGraphsAction->setCheckable(true);
 	_showGraphsAction->setChecked(true);
-	_showGraphsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_G));
+	_showGraphsAction->setShortcut(SHOW_GRAPHS_SHORTCUT);
 	connect(_showGraphsAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showGraphs(bool)));
 	addAction(_showGraphsAction);
@@ -295,7 +295,7 @@ void GUI::createActions()
 	_fullscreenAction = new QAction(QIcon(QPixmap(FULLSCREEN_ICON)),
 	  tr("Fullscreen mode"), this);
 	_fullscreenAction->setCheckable(true);
-	_fullscreenAction->setShortcut(QKeySequence("F11"));
+	_fullscreenAction->setShortcut(FULLSCREEN_SHORTCUT);
 	connect(_fullscreenAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showFullscreen(bool)));
 	addAction(_fullscreenAction);
@@ -406,8 +406,11 @@ void GUI::createTrackView()
 void GUI::createTrackGraphs()
 {
 	_elevationGraph = new ElevationGraph;
+	_elevationGraph->setFrameShape(QFrame::NoFrame);
 	_speedGraph = new SpeedGraph;
+	_speedGraph->setFrameShape(QFrame::NoFrame);
 	_heartRateGraph = new HeartRateGraph;
+	_heartRateGraph->setFrameShape(QFrame::NoFrame);
 
 	_trackGraphs = new QTabWidget;
 	connect(_trackGraphs, SIGNAL(currentChanged(int)), this,
@@ -416,9 +419,6 @@ void GUI::createTrackGraphs()
 	_trackGraphs->setFixedHeight(200);
 	_trackGraphs->setSizePolicy(
 		QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed));
-#ifndef Q_OS_MAC
-	_trackGraphs->setDocumentMode(true);
-#endif // Q_OS_MAC
 }
 
 void GUI::createStatusBar()
@@ -1027,6 +1027,13 @@ void GUI::keyPressEvent(QKeyEvent *event)
 			break;
 		case LAST_KEY:
 			file = _browser->last();
+			break;
+
+		case Qt::Key_Escape:
+			if (_fullscreenAction->isChecked()) {
+				_fullscreenAction->setChecked(false);
+				showFullscreen(false);
+			}
 			break;
 	}
 
