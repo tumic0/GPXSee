@@ -26,6 +26,7 @@
 #include "trackview.h"
 #include "infoitem.h"
 #include "filebrowser.h"
+#include "cpuarch.h"
 #include "gui.h"
 
 
@@ -74,6 +75,10 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	QVBoxLayout *layout = new QVBoxLayout;
 	layout->addWidget(_track);
 	layout->addWidget(_trackGraphs);
+	layout->setContentsMargins(0, 0, 0, 0);
+#ifdef Q_OS_WIN32
+	layout->setSpacing(0);
+#endif // Q_OS_WIN32
 
 	QWidget *widget = new QWidget;
 	widget->setLayout(layout);
@@ -190,8 +195,6 @@ void GUI::createActions()
 	_aboutAction = new QAction(QIcon(QPixmap(APP_ICON)),
 	  tr("About GPXSee"), this);
 	connect(_aboutAction, SIGNAL(triggered()), this, SLOT(about()));
-	_aboutQtAction = new QAction(QIcon(QPixmap(QT_ICON)), tr("About Qt"), this);
-	connect(_aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
 	// File related actions
 	_openFileAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)),
@@ -364,7 +367,6 @@ void GUI::createMenus()
 	_helpMenu->addAction(_keysAction);
 	_helpMenu->addSeparator();
 	_helpMenu->addAction(_aboutAction);
-	_helpMenu->addAction(_aboutQtAction);
 }
 
 void GUI::createToolBars()
@@ -398,6 +400,9 @@ void GUI::createToolBars()
 void GUI::createTrackView()
 {
 	_track = new TrackView(this);
+#ifdef Q_OS_WIN32
+	_track->setFrameShape(QFrame::NoFrame);
+#endif // Q_OS_WIN32
 
 	if (_showMapAction->isChecked())
 		_track->setMap(_currentMap);
@@ -419,6 +424,9 @@ void GUI::createTrackGraphs()
 	_trackGraphs->setFixedHeight(200);
 	_trackGraphs->setSizePolicy(
 		QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed));
+#ifdef Q_OS_WIN32
+	_trackGraphs->setDocumentMode(true);
+#endif // Q_OS_WIN32
 }
 
 void GUI::createStatusBar()
@@ -442,8 +450,10 @@ void GUI::about()
 	QMessageBox msgBox(this);
 
 	msgBox.setWindowTitle(tr("About GPXSee"));
-	msgBox.setText(QString("<h3>") + QString(APP_NAME " " APP_VERSION)
-	  + QString("</h3><p>") + tr("GPX viewer and analyzer") + QString("<p/>"));
+	msgBox.setText(QString("<h2>") + QString(APP_NAME) + QString("</h2><p>")
+	  + QString("<p>") + tr("Version ") + APP_VERSION + QString(" (")
+	  + CPU_ARCH + QString(", Qt ") + QString(QT_VERSION_STR)
+	  + QString(")</p>"));
 	msgBox.setInformativeText(QString("<table width=\"300\"><tr><td>")
 	  + tr("GPXSee is distributed under the terms of the GNU General Public "
 	  "License version 3. For more info about GPXSee visit the project "
@@ -782,7 +792,6 @@ void GUI::showToolbars(bool checked)
 void GUI::showFullscreen(bool checked)
 {
 	if (checked) {
-		_contentsMargins = centralWidget()->layout()->contentsMargins();
 		_frameStyle = _track->frameStyle();
 		_showGraphs = _showGraphsAction->isChecked();
 
@@ -791,7 +800,6 @@ void GUI::showFullscreen(bool checked)
 		showToolbars(false);
 		showGraphs(false);
 		_showGraphsAction->setChecked(false);
-		centralWidget()->layout()->setContentsMargins(QMargins());
 		_track->setFrameStyle(QFrame::NoFrame);
 
 		showFullScreen();
@@ -803,7 +811,6 @@ void GUI::showFullscreen(bool checked)
 		_showGraphsAction->setChecked(_showGraphs);
 		if (_showGraphsAction->isEnabled())
 			showGraphs(_showGraphs);
-		centralWidget()->layout()->setContentsMargins(_contentsMargins);
 		_track->setFrameStyle(_frameStyle);
 
 		showNormal();

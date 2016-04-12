@@ -35,7 +35,8 @@ HEADERS += src/config.h \
     src/waypointitem.h \
     src/palette.h \
     src/heartrategraph.h \
-    src/range.h
+    src/range.h \
+    src/cpuarch.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \

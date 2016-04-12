@@ -159,7 +159,6 @@ private:
 	qreal _sliderPos;
 
 	int _frameStyle;
-	QMargins _contentsMargins;
 	bool _showGraphs;
 };
 
