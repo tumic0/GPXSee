@@ -125,6 +125,7 @@ SectionEnd
 Section "Uninstall"
   
   ; Remove registry keys
+  SetRegView 64
   DeleteRegKey HKLM "${REGENTRY}"
   DeleteRegKey HKLM SOFTWARE\GPXSee
 
