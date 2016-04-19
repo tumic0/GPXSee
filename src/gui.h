@@ -83,6 +83,7 @@ private:
 	bool loadFile(const QString &fileName);
 	void saveFile(const QString &fileName);
 	void updateStatusBarInfo();
+	void updateWindowTitle();
 	void updateNavigationActions();
 	void updateGraphTabs();
 	void updateTrackView();

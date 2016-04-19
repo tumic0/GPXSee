@@ -547,6 +547,7 @@ bool GUI::openFile(const QString &fileName)
 
 	updateNavigationActions();
 	updateStatusBarInfo();
+	updateWindowTitle();
 	updateGraphTabs();
 	updateTrackView();
 
@@ -718,6 +719,7 @@ void GUI::reloadFile()
 	}
 
 	updateStatusBarInfo();
+	updateWindowTitle();
 	updateGraphTabs();
 	updateTrackView();
 	if (_files.isEmpty())
@@ -748,6 +750,7 @@ void GUI::closeAll()
 
 	_fileActionGroup->setEnabled(false);
 	updateStatusBarInfo();
+	updateWindowTitle();
 	updateGraphTabs();
 	updateTrackView();
 }
@@ -851,6 +854,15 @@ void GUI::updateStatusBarInfo()
 			  + UNIT_SPACE + tr("km"));
 	}
 	_timeLabel->setText(timeSpan(_time));
+}
+
+void GUI::updateWindowTitle()
+{
+	if (_files.count() == 1)
+		setWindowTitle(QFileInfo(_files.at(0)).fileName()
+		  + QString(" - " APP_NAME));
+	else
+		setWindowTitle(APP_NAME);
 }
 
 void GUI::mapChanged(int index)
