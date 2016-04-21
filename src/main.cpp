@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	gui.show();
 
 	for (int i = 1; i < argc; i++)
-		gui.openFile(argv[i]);
+		gui.openFile(QString::fromLocal8Bit(argv[i]));
 
 	return app.exec();
 }
