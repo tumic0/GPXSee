@@ -91,6 +91,7 @@ private:
 	void keyPressEvent(QKeyEvent * event);
 	void closeEvent(QCloseEvent *event);
 
+	int mapIndex(const QString &name);
 	void readSettings();
 	void writeSettings();
 

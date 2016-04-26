@@ -142,9 +142,6 @@ void GUI::createMapActions()
 	}
 
 	connect(sm, SIGNAL(mapped(int)), this, SLOT(mapChanged(int)));
-
-	_mapActions.at(0)->setChecked(true);
-	_currentMap = _maps.at(0);
 }
 
 void GUI::createPOIFilesActions()
@@ -258,7 +255,6 @@ void GUI::createActions()
 		_clearMapCacheAction->setEnabled(false);
 	} else {
 		createMapActions();
-		_showMapAction->setChecked(true);
 
 		_nextMapAction = new QAction(tr("Next map"), this);
 		_nextMapAction->setShortcut(NEXT_MAP_SHORTCUT);
@@ -401,9 +397,6 @@ void GUI::createTrackView()
 #ifdef Q_OS_WIN32
 	_track->setFrameShape(QFrame::NoFrame);
 #endif // Q_OS_WIN32
-
-	if (_showMapAction->isChecked())
-		_track->setMap(_currentMap);
 }
 
 void GUI::createTrackGraphs()
@@ -1069,7 +1062,7 @@ void GUI::closeEvent(QCloseEvent *event)
 
 void GUI::writeSettings()
 {
-	QSettings settings(APP_VENDOR, APP_NAME);
+	QSettings settings(APP_NAME, APP_NAME);
 
 	settings.beginGroup("Window");
 	settings.setValue("size", size());
@@ -1082,11 +1075,20 @@ void GUI::writeSettings()
 	settings.setValue("toolbar", _showToolbarsAction->isChecked());
 	settings.setValue("graphs", _showGraphsAction->isChecked());
 	settings.endGroup();
+
+	settings.beginGroup("Map");
+	settings.setValue("map", _currentMap->name());
+	settings.setValue("show", _showMapAction->isChecked());
+	settings.endGroup();
+
+	settings.beginGroup("POI");
+	settings.setValue("show", _showPOIAction->isChecked());
+	settings.endGroup();
 }
 
 void GUI::readSettings()
 {
-	QSettings settings(APP_VENDOR, APP_NAME);
+	QSettings settings(APP_NAME, APP_NAME);
 
 	settings.beginGroup("Window");
 	resize(settings.value("size", QSize(600, 800)).toSize());
@@ -1094,20 +1096,47 @@ void GUI::readSettings()
 	settings.endGroup();
 
 	settings.beginGroup("Settings");
-	if (settings.value("units", Metric) == Imperial) {
+	if (settings.value("units", Metric).toInt() == Imperial) {
 		setImperialUnits();
 		_imperialUnitsAction->setChecked(true);
 	} else
 		_metricUnitsAction->setChecked(true);
-	if (settings.value("toolbar", true) == false) {
+	if (settings.value("toolbar", true).toBool() == false) {
 		showToolbars(false);
 		_showToolbarsAction->setChecked(false);
 	} else
 		_showToolbarsAction->setChecked(true);
-	if (settings.value("graphs", true) == false) {
+	if (settings.value("graphs", true).toBool() == false) {
 		showGraphs(false);
 		_showGraphsAction->setChecked(false);
 	} else
 		_showGraphsAction->setChecked(true);
 	settings.endGroup();
+
+	settings.beginGroup("Map");
+	if (settings.value("show", true).toBool() == true)
+		_showMapAction->setChecked(true);
+	if (_maps.count()) {
+		int index = mapIndex(settings.value("map").toString());
+		_mapActions.at(index)->setChecked(true);
+		_currentMap = _maps.at(index);
+		if (_showMapAction->isChecked())
+			_track->setMap(_currentMap);
+	} else
+		_currentMap = 0;
+	settings.endGroup();
+
+	settings.beginGroup("POI");
+	if (settings.value("show", false).toBool() == true)
+		_showPOIAction->setChecked(true);
+	settings.endGroup();
+}
+
+int GUI::mapIndex(const QString &name)
+{
+	for (int i = 0; i < _maps.count(); i++)
+		if (_maps.at(i)->name() == name)
+			return i;
+
+	return 0;
 }
