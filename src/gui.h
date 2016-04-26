@@ -89,6 +89,10 @@ private:
 	void updateTrackView();
 
 	void keyPressEvent(QKeyEvent * event);
+	void closeEvent(QCloseEvent *event);
+
+	void readSettings();
+	void writeSettings();
 
 	QMenu *_fileMenu;
 	QMenu *_helpMenu;

@@ -7,6 +7,7 @@
 #include <QString>
 
 #define APP_NAME        "GPXSee"
+#define APP_VENDOR      "Martin Tuma"
 #define APP_HOMEPAGE    "http://tumic.wz.cz/gpxsee"
 #define APP_VERSION     "2.12"
 

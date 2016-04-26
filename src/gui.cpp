@@ -1,4 +1,4 @@
-#include <QApplication>
+﻿#include <QApplication>
 #include <QVBoxLayout>
 #include <QMenuBar>
 #include <QStatusBar>
@@ -14,6 +14,7 @@
 #include <QActionGroup>
 #include <QAction>
 #include <QLabel>
+#include <QSettings>
 #include "config.h"
 #include "icons.h"
 #include "keys.h"
@@ -96,7 +97,7 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	updateGraphTabs();
 	updateTrackView();
 
-	resize(600, 800);
+	readSettings();
 }
 
 void GUI::loadMaps()
@@ -272,14 +273,12 @@ void GUI::createActions()
 	// Settings actions
 	_showGraphsAction = new QAction(tr("Show graphs"), this);
 	_showGraphsAction->setCheckable(true);
-	_showGraphsAction->setChecked(true);
 	_showGraphsAction->setShortcut(SHOW_GRAPHS_SHORTCUT);
 	connect(_showGraphsAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showGraphs(bool)));
 	addAction(_showGraphsAction);
 	_showToolbarsAction = new QAction(tr("Show toolbars"), this);
 	_showToolbarsAction->setCheckable(true);
-	_showToolbarsAction->setChecked(true);
 	connect(_showToolbarsAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showToolbars(bool)));
 	QActionGroup *ag = new QActionGroup(this);
@@ -287,7 +286,6 @@ void GUI::createActions()
 	_metricUnitsAction = new QAction(tr("Metric"), this);
 	_metricUnitsAction->setCheckable(true);
 	_metricUnitsAction->setActionGroup(ag);
-	_metricUnitsAction->setChecked(true);
 	connect(_metricUnitsAction, SIGNAL(triggered()), this,
 	  SLOT(setMetricUnits()));
 	_imperialUnitsAction = new QAction(tr("Imperial"), this);
@@ -1061,4 +1059,55 @@ void GUI::keyPressEvent(QKeyEvent *event)
 			closeFiles();
 		openFile(file);
 	}
+}
+
+void GUI::closeEvent(QCloseEvent *event)
+{
+	writeSettings();
+	event->accept();
+}
+
+void GUI::writeSettings()
+{
+	QSettings settings(APP_VENDOR, APP_NAME);
+
+	settings.beginGroup("Window");
+	settings.setValue("size", size());
+	settings.setValue("pos", pos());
+	settings.endGroup();
+
+	settings.beginGroup("Settings");
+	settings.setValue("units", _imperialUnitsAction->isChecked()
+	  ? Imperial : Metric);
+	settings.setValue("toolbar", _showToolbarsAction->isChecked());
+	settings.setValue("graphs", _showGraphsAction->isChecked());
+	settings.endGroup();
+}
+
+void GUI::readSettings()
+{
+	QSettings settings(APP_VENDOR, APP_NAME);
+
+	settings.beginGroup("Window");
+	resize(settings.value("size", QSize(600, 800)).toSize());
+	move(settings.value("pos", QPoint(10, 10)).toPoint());
+	settings.endGroup();
+
+	settings.beginGroup("Settings");
+	if (settings.value("units", Metric) == Imperial) {
+		setImperialUnits();
+		_imperialUnitsAction->setChecked(true);
+	} else
+		_metricUnitsAction->setChecked(true);
+	if (settings.value("toolbar", true) == false) {
+		showToolbars(false);
+		_showToolbarsAction->setChecked(false);
+	} else
+		_showToolbarsAction->setChecked(true);
+	if (settings.value("graphs", true) == false) {
+		showGraphs(false);
+		_showGraphsAction->setChecked(false);
+	} else
+		_showGraphsAction->setChecked(true);
+	settings.endGroup();
 }
