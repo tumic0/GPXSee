@@ -36,7 +36,8 @@ HEADERS += src/config.h \
     src/palette.h \
     src/heartrategraph.h \
     src/range.h \
-    src/cpuarch.h
+    src/cpuarch.h \
+    src/settings.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \

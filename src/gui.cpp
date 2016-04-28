@@ -18,6 +18,7 @@
 #include "config.h"
 #include "icons.h"
 #include "keys.h"
+#include "settings.h"
 #include "gpx.h"
 #include "map.h"
 #include "maplist.h"
@@ -159,7 +160,6 @@ QAction *GUI::createPOIFileAction(int index)
 	QAction *a = new QAction(QFileInfo(_poi.files().at(index)).fileName(),
 	  this);
 	a->setCheckable(true);
-	a->setChecked(true);
 
 	_poiFilesSM->setMapping(a, index);
 	connect(a, SIGNAL(triggered()), _poiFilesSM, SLOT(map()));
@@ -1064,25 +1064,36 @@ void GUI::writeSettings()
 {
 	QSettings settings(APP_NAME, APP_NAME);
 
-	settings.beginGroup("Window");
-	settings.setValue("size", size());
-	settings.setValue("pos", pos());
+	settings.beginGroup(WINDOW_SETTINGS_GROUP);
+	settings.setValue(WINDOW_SIZE_SETTING, size());
+	settings.setValue(WINDOW_POS_SETTING, pos());
 	settings.endGroup();
 
-	settings.beginGroup("Settings");
-	settings.setValue("units", _imperialUnitsAction->isChecked()
+	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
+	settings.setValue(UNITS_SETTING, _imperialUnitsAction->isChecked()
 	  ? Imperial : Metric);
-	settings.setValue("toolbar", _showToolbarsAction->isChecked());
-	settings.setValue("graphs", _showGraphsAction->isChecked());
+	settings.setValue(SHOW_TOOLBARS_SETTING, _showToolbarsAction->isChecked());
+	settings.setValue(SHOW_GRAPHS_SETTING, _showGraphsAction->isChecked());
 	settings.endGroup();
 
-	settings.beginGroup("Map");
-	settings.setValue("map", _currentMap->name());
-	settings.setValue("show", _showMapAction->isChecked());
+	settings.beginGroup(MAP_SETTINGS_GROUP);
+	if (_currentMap)
+		settings.setValue(CURRENT_MAP_SETTING, _currentMap->name());
+	settings.setValue(SHOW_MAP_SETTING, _showMapAction->isChecked());
 	settings.endGroup();
 
-	settings.beginGroup("POI");
-	settings.setValue("show", _showPOIAction->isChecked());
+	settings.beginGroup(POI_SETTINGS_GROUP);
+	settings.setValue(SHOW_POI_SETTING, _showPOIAction->isChecked());
+
+	settings.remove(DISABLED_POI_FILE_SETTINGS_PREFIX);
+	settings.beginWriteArray(DISABLED_POI_FILE_SETTINGS_PREFIX);
+	for (int i = 0, j = 0; i < _poiFilesActions.count(); i++) {
+		if (!_poiFilesActions.at(i)->isChecked()) {
+			settings.setArrayIndex(j++);
+			settings.setValue(DISABLED_POI_FILE_SETTING, _poi.files().at(i));
+		}
+	}
+	settings.endArray();
 	settings.endGroup();
 }
 
@@ -1090,34 +1101,34 @@ void GUI::readSettings()
 {
 	QSettings settings(APP_NAME, APP_NAME);
 
-	settings.beginGroup("Window");
-	resize(settings.value("size", QSize(600, 800)).toSize());
-	move(settings.value("pos", QPoint(10, 10)).toPoint());
+	settings.beginGroup(WINDOW_SETTINGS_GROUP);
+	resize(settings.value(WINDOW_SIZE_SETTING, QSize(600, 800)).toSize());
+	move(settings.value(WINDOW_POS_SETTING, QPoint(10, 10)).toPoint());
 	settings.endGroup();
 
-	settings.beginGroup("Settings");
-	if (settings.value("units", Metric).toInt() == Imperial) {
+	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
+	if (settings.value(UNITS_SETTING, Metric).toInt() == Imperial) {
 		setImperialUnits();
 		_imperialUnitsAction->setChecked(true);
 	} else
 		_metricUnitsAction->setChecked(true);
-	if (settings.value("toolbar", true).toBool() == false) {
+	if (settings.value(SHOW_TOOLBARS_SETTING, true).toBool() == false) {
 		showToolbars(false);
 		_showToolbarsAction->setChecked(false);
 	} else
 		_showToolbarsAction->setChecked(true);
-	if (settings.value("graphs", true).toBool() == false) {
+	if (settings.value(SHOW_GRAPHS_SETTING, true).toBool() == false) {
 		showGraphs(false);
 		_showGraphsAction->setChecked(false);
 	} else
 		_showGraphsAction->setChecked(true);
 	settings.endGroup();
 
-	settings.beginGroup("Map");
-	if (settings.value("show", true).toBool() == true)
+	settings.beginGroup(MAP_SETTINGS_GROUP);
+	if (settings.value(SHOW_MAP_SETTING, true).toBool() == true)
 		_showMapAction->setChecked(true);
 	if (_maps.count()) {
-		int index = mapIndex(settings.value("map").toString());
+		int index = mapIndex(settings.value(CURRENT_MAP_SETTING).toString());
 		_mapActions.at(index)->setChecked(true);
 		_currentMap = _maps.at(index);
 		if (_showMapAction->isChecked())
@@ -1126,9 +1137,22 @@ void GUI::readSettings()
 		_currentMap = 0;
 	settings.endGroup();
 
-	settings.beginGroup("POI");
-	if (settings.value("show", false).toBool() == true)
+	settings.beginGroup(POI_SETTINGS_GROUP);
+	if (settings.value(SHOW_POI_SETTING, false).toBool() == true)
 		_showPOIAction->setChecked(true);
+	for (int i = 0; i < _poiFilesActions.count(); i++)
+		_poiFilesActions.at(i)->setChecked(true);
+	int size = settings.beginReadArray(DISABLED_POI_FILE_SETTINGS_PREFIX);
+	for (int i = 0; i < size; i++) {
+		settings.setArrayIndex(i);
+		int index = _poi.files().indexOf(settings.value(
+		  DISABLED_POI_FILE_SETTING).toString());
+		if (index >= 0) {
+			_poi.enableFile(_poi.files().at(index), false);
+			_poiFilesActions.at(index)->setChecked(false);
+		}
+	}
+	settings.endArray();
 	settings.endGroup();
 }
 
