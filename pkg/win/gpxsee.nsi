@@ -11,7 +11,7 @@ OutFile "install.exe"
 RequestExecutionLevel admin
 
 ; The default installation directory
-InstallDir "$PROGRAMFILES64\GPXSee"
+InstallDir "$PROGRAMFILES\GPXSee"
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
@@ -46,14 +46,6 @@ Var StartMenuFolder
 ; Languages
 !insertmacro MUI_LANGUAGE "English"
 
-Function .onInit  
-  ${If} ${RunningX64}
-    SetRegView 64
-  ${Else}  
-    MessageBox MB_OK "The 64b version of GPXSee can not be run on 32b systems."  
-    Abort  
-  ${EndIf}
-FunctionEnd 
 
 ; The stuff to install
 Section "GPXSee (required)" SEC_APP
@@ -73,7 +65,7 @@ Section "GPXSee (required)" SEC_APP
   ; Write the uninstall keys for Windows
   WriteRegStr HKLM "${REGENTRY}" "DisplayName" "GPXSee"
   WriteRegStr HKLM "${REGENTRY}" "Publisher" "Martin Tuma"
-  WriteRegStr HKLM "${REGENTRY}" "DisplayVersion" "2.12"
+  WriteRegStr HKLM "${REGENTRY}" "DisplayVersion" "2.13"
   WriteRegStr HKLM "${REGENTRY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegDWORD HKLM "${REGENTRY}" "NoModify" 1
   WriteRegDWORD HKLM "${REGENTRY}" "NoRepair" 1
@@ -105,15 +97,20 @@ SectionEnd
 Section "MSVC runtime" SEC_MSVC
 
   DetailPrint "Checking whether Visual C++ 2015 Redistributable is already installed..."
-  ReadRegDword $R0 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Installed"
+  ${If} ${RunningX64}
+    ReadRegDword $R0 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Installed"
+  ${Else}
+    ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Installed"
+  ${EndIf}
+
   StrCmp $R0 "1" 0 +3
   DetailPrint "Visual C++ 2015 Redistributable is already installed, skipping install."
   Goto done
 
   DetailPrint "Installing Visual C++ 2015 Redistributable..."
   SetOutPath $TEMP
-  File "VC_redist.x64.exe"
-  ExecWait '"$TEMP/VC_redist.x64.exe" /install /quiet /norestart'
+  File "VC_redist.x86.exe"
+  ExecWait '"$TEMP/VC_redist.x86.exe" /install /quiet /norestart'
 
   done:
 SectionEnd
@@ -125,7 +122,6 @@ SectionEnd
 Section "Uninstall"
   
   ; Remove registry keys
-  SetRegView 64
   DeleteRegKey HKLM "${REGENTRY}"
   DeleteRegKey HKLM SOFTWARE\GPXSee
 
