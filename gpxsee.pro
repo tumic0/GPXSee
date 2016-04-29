@@ -68,5 +68,8 @@ SOURCES += src/main.cpp \
     src/app.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
-macx:ICON = icons/gpxsee.icns
+macx {
+    ICON = icons/gpxsee.icns
+    QMAKE_INFO_PLIST = Info.plist
+}
 win32:RC_FILE = gpxsee.rc
