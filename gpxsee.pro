@@ -1,4 +1,5 @@
 TARGET = GPXSee
+VERSION = 2.13
 QT += core \
     gui \
     network
@@ -72,4 +73,5 @@ macx {
     ICON = icons/gpxsee.icns
     QMAKE_INFO_PLIST = Info.plist
 }
-win32:RC_FILE = gpxsee.rc
+win32:RC_ICONS = icons/gpxsee.ico
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
