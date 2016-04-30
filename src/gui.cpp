@@ -86,6 +86,7 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	widget->setLayout(layout);
 	setCentralWidget(widget);
 
+	setWindowIcon(QIcon(QPixmap(APP_ICON)));
 	setWindowTitle(APP_NAME);
 	setUnifiedTitleAndToolBarOnMac(true);
 

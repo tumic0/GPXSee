@@ -3,7 +3,6 @@
 #include <QLocale>
 #include <QFileOpenEvent>
 #include "gui.h"
-#include "icons.h"
 #include "app.h"
 
 
@@ -30,7 +29,6 @@ App::~App()
 
 void App::run()
 {
-	_gui->setWindowIcon(QIcon(QPixmap(APP_ICON)));
 	_gui->show();
 
 	for (int i = 1; i < _argc; i++)
