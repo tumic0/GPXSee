@@ -72,6 +72,13 @@ TRANSLATIONS = lang/gpxsee_cs.ts
 macx {
     ICON = icons/gpxsee.icns
     QMAKE_INFO_PLIST = Info.plist
+    APP_RESOURCES.files = icons/gpx.icns \
+        pkg/maps.txt
+    APP_RESOURCES.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += APP_RESOURCES
 }
-win32:RC_ICONS = icons/gpxsee.ico
+win32 {
+    RC_ICONS = icons/gpxsee.ico \
+        icons/gpx.ico
+}
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
