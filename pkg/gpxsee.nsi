@@ -18,7 +18,9 @@ InstallDir "$PROGRAMFILES\GPXSee"
 InstallDirRegKey HKLM "Software\GPXSee" "Install_Dir"
 
 ; Registry key for uninstaller
-!define REGENTRY "Software\Microsoft\Windows\CurrentVersion\Uninstall\GPXSee" 
+!define REGENTRY "Software\Microsoft\Windows\CurrentVersion\Uninstall\GPXSee"
+; GPX file type registry entry
+!define REGGPX "GPXSee.gpx"
 
 ; Start menu page configuration
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM" 
@@ -79,6 +81,13 @@ Section "GPXSee (required)" SEC_APP
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\GPXSee.lnk" "$INSTDIR\gpxsee.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 
+  ; Associate .gpx files
+  WriteRegStr HKCR ".gpx" "" "${REGGPX}"
+  WriteRegStr HKCR "${REGGPX}" ""  "GPS Exchange Format"
+  WriteRegStr HKCR "${REGGPX}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,1"
+  WriteRegStr HKCR "${REGGPX}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
+  System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
+
 SectionEnd
 
 Section "QT libs" SEC_QT
@@ -132,7 +141,12 @@ Section "Uninstall"
   SetShellVarContext all
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
   Delete "$SMPROGRAMS\$StartMenuFolder\*.*"
-  RMDir "$SMPROGRAMS\$StartMenuFolder"  
+  RMDir "$SMPROGRAMS\$StartMenuFolder"
+
+  ; Remove GPX file association
+  DeleteRegKey HKCR "${REGGPX}"
+  DeleteRegKey HKCR ".gpx"
+  System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'  
 
 SectionEnd
 
