@@ -5,15 +5,15 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>CFBundleIconFile</key>
-	<string>gpxsee.icns</string>
+	<string>@ICON@</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.13</string>
+	<string>@SHORT_VERSION@</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleExecutable</key>
-	<string>GPXSee</string>
+	<string>@EXECUTABLE@</string>
 	<key>CFBundleIdentifier</key>
 	<string>cz.wz.tumic.GPXSee</string>
 
