@@ -3,9 +3,11 @@
 
 ; The name of the installer
 Name "GPXSee"
+; Program version
+!define VERSION "2.13"
 
 ; The file to write
-OutFile "install.exe"
+OutFile "GPXSee-${VERSION}.exe"
 
 ; Required execution level 
 RequestExecutionLevel admin
@@ -67,7 +69,7 @@ Section "GPXSee (required)" SEC_APP
   ; Write the uninstall keys for Windows
   WriteRegStr HKLM "${REGENTRY}" "DisplayName" "GPXSee"
   WriteRegStr HKLM "${REGENTRY}" "Publisher" "Martin Tuma"
-  WriteRegStr HKLM "${REGENTRY}" "DisplayVersion" "2.13"
+  WriteRegStr HKLM "${REGENTRY}" "DisplayVersion" "${VERSION}"
   WriteRegStr HKLM "${REGENTRY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegDWORD HKLM "${REGENTRY}" "NoModify" 1
   WriteRegDWORD HKLM "${REGENTRY}" "NoRepair" 1
