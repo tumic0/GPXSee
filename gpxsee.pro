@@ -39,7 +39,8 @@ HEADERS += src/config.h \
     src/range.h \
     src/cpuarch.h \
     src/settings.h \
-    src/app.h
+    src/app.h \
+    src/trackinfo.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
@@ -66,7 +67,8 @@ SOURCES += src/main.cpp \
     src/palette.cpp \
     src/heartrategraph.cpp \
     src/range.cpp \
-    src/app.cpp
+    src/app.cpp \
+    src/trackinfo.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {

@@ -40,7 +40,8 @@ TrackView::TrackView(QWidget *parent)
 
 TrackView::~TrackView()
 {
-	delete _scene;
+	if (_mapScale->scene() != _scene)
+		delete _mapScale;
 }
 
 void TrackView::addTrack(const QVector<QPointF> &track)

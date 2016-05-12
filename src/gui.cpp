@@ -26,7 +26,7 @@
 #include "speedgraph.h"
 #include "heartrategraph.h"
 #include "trackview.h"
-#include "infoitem.h"
+#include "trackinfo.h"
 #include "filebrowser.h"
 #include "cpuarch.h"
 #include "gui.h"
@@ -656,13 +656,7 @@ void GUI::saveFile(const QString &fileName)
 
 	QPainter p(&printer);
 
-	_track->plot(&p, QRectF(0, 300, printer.width(), (0.80 * printer.height())
-	  - 400));
-	_elevationGraph->plot(&p,  QRectF(0, 0.80 * printer.height(),
-	  printer.width(), printer.height() * 0.20));
-
-	QGraphicsScene scene;
-	InfoItem info;
+	TrackInfo info;
 	if (_imperialUnitsAction->isChecked()) {
 		info.insert(tr("Distance"), QString::number(_distance * M2MI, 'f', 1)
 		  + UNIT_SPACE + tr("mi"));
@@ -688,8 +682,12 @@ void GUI::saveFile(const QString &fileName)
 		info.insert(tr("Minimum"), QString::number(_elevationGraph->min(), 'f',
 		  0) + UNIT_SPACE + tr("m"));
 	}
-	scene.addItem(&info);
-	scene.render(&p, QRectF(0, 0, printer.width(), 200));
+
+	_track->plot(&p, QRectF(0, 300, printer.width(), (0.80 * printer.height())
+	  - 400));
+	_elevationGraph->plot(&p,  QRectF(0, 0.80 * printer.height(),
+	  printer.width(), printer.height() * 0.20));
+	info.plot(&p, QRectF(0, 0, printer.width(), 200));
 }
 
 void GUI::reloadFile()

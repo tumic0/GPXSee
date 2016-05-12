@@ -67,8 +67,6 @@ GraphView::~GraphView()
 
 	if (_info->scene() != _scene)
 		delete _info;
-
-	delete _scene;
 }
 
 void GraphView::updateBounds(const QPointF &point)
