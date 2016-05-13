@@ -27,6 +27,7 @@ class GUI : public QMainWindow
 
 public:
 	GUI(QWidget *parent = 0);
+	~GUI();
 
 	bool openFile(const QString &fileName);
 
@@ -65,6 +66,8 @@ private slots:
 	void sliderPositionChanged(qreal pos);
 
 private:
+	typedef QPair<GraphView *, QString> GraphTab;
+
 	void loadMaps();
 	void loadPOIs();
 	void closeFiles();
@@ -145,10 +148,11 @@ private:
 	QLabel *_distanceLabel;
 	QLabel *_timeLabel;
 
+	TrackView *_track;
 	ElevationGraph *_elevationGraph;
 	SpeedGraph *_speedGraph;
 	HeartRateGraph *_heartRateGraph;
-	TrackView *_track;
+	QList<GraphTab> _tabs;
 
 	POI _poi;
 	QList<Map*> _maps;

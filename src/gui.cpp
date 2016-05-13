@@ -32,13 +32,6 @@
 #include "gui.h"
 
 
-#define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
-
-struct GraphTab {
-	GraphView *view;
-	QString label;
-};
-
 static QString timeSpan(qreal time)
 {
 	unsigned h, m, s;
@@ -100,6 +93,14 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	updateTrackView();
 
 	readSettings();
+}
+
+GUI::~GUI()
+{
+	for (int i = 0; i < _tabs.size(); i++) {
+		if (_trackGraphs->indexOf(_tabs.at(i).first) < 0)
+			delete _tabs.at(i).first;
+	}
 }
 
 void GUI::loadMaps()
@@ -419,6 +420,10 @@ void GUI::createTrackGraphs()
 #ifdef Q_OS_WIN32
 	_trackGraphs->setDocumentMode(true);
 #endif // Q_OS_WIN32
+
+	_tabs.append(GraphTab(_elevationGraph, tr("Elevation")));
+	_tabs.append(GraphTab(_speedGraph, tr("Speed")));
+	_tabs.append(GraphTab(_heartRateGraph, tr("Heart rate")));
 }
 
 void GUI::createStatusBar()
@@ -927,24 +932,19 @@ void GUI::updateNavigationActions()
 
 void GUI::updateGraphTabs()
 {
-	struct GraphTab tabs[] = {
-	  {_elevationGraph, tr("Elevation")},
-	  {_speedGraph, tr("Speed")},
-	  {_heartRateGraph, tr("Heart rate")}
-	};
 	int index;
 	GraphView *gv;
 
-	for (int i = 0; i < (int)ARRAY_SIZE(tabs); i++) {
-		gv = tabs[i].view;
+	for (int i = 0; i < _tabs.size(); i++) {
+		gv = _tabs.at(i).first;
 		if (!gv->count() && (index = _trackGraphs->indexOf(gv)) >= 0)
 			_trackGraphs->removeTab(index);
 	}
 
-	for (int i = 0; i < (int)ARRAY_SIZE(tabs); i++) {
-		gv = tabs[i].view;
+	for (int i = 0; i < _tabs.size(); i++) {
+		gv = _tabs.at(i).first;
 		if (gv->count() && _trackGraphs->indexOf(gv) < 0)
-			_trackGraphs->insertTab(i, gv, tabs[i].label);
+			_trackGraphs->insertTab(i, gv, _tabs.at(i).second);
 	}
 
 	if (_trackGraphs->count()) {
