@@ -367,30 +367,27 @@ void GUI::createMenus()
 
 void GUI::createToolBars()
 {
+#ifdef Q_OS_MAC
+	setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+#else // Q_OS_MAC
+	setToolButtonStyle(Qt::ToolButtonFollowStyle);
+#endif // Q_OS_MAC
+
 	_fileToolBar = addToolBar(tr("File"));
 	_fileToolBar->addAction(_openFileAction);
 	_fileToolBar->addAction(_saveFileAction);
 	_fileToolBar->addAction(_reloadFileAction);
 	_fileToolBar->addAction(_closeFileAction);
-#ifdef Q_OS_MAC
-	_fileToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-#endif // Q_OS_MAC
 
 	_showToolBar = addToolBar(tr("Show"));
 	_showToolBar->addAction(_showPOIAction);
 	_showToolBar->addAction(_showMapAction);
-#ifdef Q_OS_MAC
-	_showToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-#endif // Q_OS_MAC
 
 	_navigationToolBar = addToolBar(tr("Navigation"));
 	_navigationToolBar->addAction(_firstAction);
 	_navigationToolBar->addAction(_prevAction);
 	_navigationToolBar->addAction(_nextAction);
 	_navigationToolBar->addAction(_lastAction);
-#ifdef Q_OS_MAC
-	_navigationToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-#endif // Q_OS_MAC
 }
 
 void GUI::createTrackView()
