@@ -357,10 +357,7 @@ void TrackView::plot(QPainter *painter, const QRectF &target)
 	QRectF orig, adj;
 	qreal ratio, diff;
 
-	_scene->removeItem(_mapScale);
-	orig = _scene->itemsBoundingRect().adjusted(0, 0, 0,
-	  _mapScale->boundingRect().height());
-	_scene->addItem(_mapScale);
+	orig = viewport()->rect();
 
 	if (target.width()/target.height() > orig.width()/orig.height()) {
 		ratio = target.width()/target.height();
@@ -368,17 +365,15 @@ void TrackView::plot(QPainter *painter, const QRectF &target)
 		adj = orig.adjusted(-diff/2, 0, diff/2, 0);
 	} else {
 		ratio = target.height()/target.width();
-		diff = fabs((orig.width() * ratio) - orig.height());
+		diff = qAbs((orig.width() * ratio) - orig.height());
 		adj = orig.adjusted(0, -diff/2, 0, diff/2);
 	}
 
-	_mapScale->setPos(adj.bottomRight()
+	_mapScale->setPos(mapToScene(QPointF(adj.bottomRight()
 	  + QPoint(-_mapScale->boundingRect().width(),
-	  -_mapScale->boundingRect().height()));
+	  -_mapScale->boundingRect().height())).toPoint()));
 
-	setTrackLineWidth(0);
-	_scene->render(painter, target, adj);
-	setTrackLineWidth(TRACK_WIDTH * _scale);
+	render(painter, target, adj.toRect());
 }
 
 enum QPrinter::Orientation TrackView::orientation() const
@@ -445,13 +440,12 @@ void TrackView::drawBackground(QPainter *painter, const QRectF &rect)
 		return;
 	}
 
-	painter->setWorldMatrixEnabled(false);
-
 	QRectF rr(rect.topLeft() * _scale, rect.size());
 	QPoint tile = mercator2tile(QPointF(rr.topLeft().x(), -rr.topLeft().y()),
 	  _zoom);
 	QPointF tm = tile2mercator(tile, _zoom);
-	QPoint tl = mapFromScene(QPointF(tm.x() / _scale, -tm.y() / _scale));
+	QPoint tl = mapToScene(mapFromScene(QPointF(tm.x() / _scale,
+	  -tm.y() / _scale))).toPoint();
 
 	QList<Tile> tiles;
 	for (int i = 0; i <= rr.size().width() / TILE_SIZE + 1; i++) {
