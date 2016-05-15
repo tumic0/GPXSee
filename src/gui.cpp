@@ -374,8 +374,6 @@ void GUI::createToolBars()
 {
 #ifdef Q_OS_MAC
 	setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-#else // Q_OS_MAC
-	setToolButtonStyle(Qt::ToolButtonFollowStyle);
 #endif // Q_OS_MAC
 
 	_fileToolBar = addToolBar(tr("File"));
