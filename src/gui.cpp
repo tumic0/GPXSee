@@ -4,6 +4,7 @@
 #include <QStatusBar>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QPrintDialog>
 #include <QPrinter>
 #include <QPainter>
 #include <QKeyEvent>
@@ -202,18 +203,21 @@ void GUI::createActions()
 	_openFileAction->setShortcut(OPEN_SHORTCUT);
 	connect(_openFileAction, SIGNAL(triggered()), this, SLOT(openFile()));
 	addAction(_openFileAction);
-	_saveFileAction = new QAction(QIcon(QPixmap(SAVE_FILE_ICON)),
-	  tr("Save"), this);
-	_saveFileAction->setShortcut(SAVE_SHORTCUT);
-	_saveFileAction->setActionGroup(_fileActionGroup);
-	connect(_saveFileAction, SIGNAL(triggered()), this, SLOT(saveFile()));
-	addAction(_saveFileAction);
-	_saveAsAction = new QAction(QIcon(QPixmap(SAVE_AS_ICON)),
-	  tr("Save as"), this);
-	_saveAsAction->setShortcut(SAVE_AS_SHORTCUT);
-	_saveAsAction->setActionGroup(_fileActionGroup);
-	connect(_saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
-	addAction(_saveAsAction);
+	_printFileAction = new QAction(QIcon(QPixmap(PRINT_FILE_ICON)),
+	  tr("Print"), this);
+	_printFileAction->setActionGroup(_fileActionGroup);
+	connect(_printFileAction, SIGNAL(triggered()), this, SLOT(printFile()));
+	addAction(_printFileAction);
+	_exportFileAction = new QAction(QIcon(QPixmap(EXPORT_FILE_ICON)),
+	  tr("Export"), this);
+	_exportFileAction->setShortcut(EXPORT_SHORTCUT);
+	_exportFileAction->setActionGroup(_fileActionGroup);
+	connect(_exportFileAction, SIGNAL(triggered()), this, SLOT(exportFile()));
+	addAction(_exportFileAction);
+	_exportAsAction = new QAction(QIcon(QPixmap(EXPORT_FILE_ICON)),
+	  tr("Export as"), this);
+	_exportAsAction->setActionGroup(_fileActionGroup);
+	connect(_exportAsAction, SIGNAL(triggered()), this, SLOT(exportAs()));
 	_closeFileAction = new QAction(QIcon(QPixmap(CLOSE_FILE_ICON)),
 	  tr("Close"), this);
 	_closeFileAction->setShortcut(CLOSE_SHORTCUT);
@@ -321,8 +325,9 @@ void GUI::createMenus()
 	_fileMenu = menuBar()->addMenu(tr("File"));
 	_fileMenu->addAction(_openFileAction);
 	_fileMenu->addSeparator();
-	_fileMenu->addAction(_saveFileAction);
-	_fileMenu->addAction(_saveAsAction);
+	_fileMenu->addAction(_printFileAction);
+	_fileMenu->addAction(_exportFileAction);
+	_fileMenu->addAction(_exportAsAction);
 	_fileMenu->addSeparator();
 	_fileMenu->addAction(_reloadFileAction);
 	_fileMenu->addSeparator();
@@ -375,9 +380,10 @@ void GUI::createToolBars()
 
 	_fileToolBar = addToolBar(tr("File"));
 	_fileToolBar->addAction(_openFileAction);
-	_fileToolBar->addAction(_saveFileAction);
 	_fileToolBar->addAction(_reloadFileAction);
 	_fileToolBar->addAction(_closeFileAction);
+	_fileToolBar->addAction(_exportFileAction);
+	_fileToolBar->addAction(_printFileAction);
 
 	_showToolBar = addToolBar(tr("Show"));
 	_showToolBar->addAction(_showPOIAction);
@@ -629,26 +635,35 @@ void GUI::closePOIFiles()
 	_poi.clear();
 }
 
-void GUI::saveAs()
+void GUI::printFile()
+{
+	QPrinter printer(QPrinter::HighResolution);
+	QPrintDialog printDialog(&printer, this);
+
+	if (printDialog.exec() == QDialog::Accepted)
+		plot(&printer);
+}
+
+void GUI::exportAs()
 {
 	QString fileName = QFileDialog::getSaveFileName(this, "Export to PDF",
 	  QString(), "*.pdf");
 
 	if (!fileName.isEmpty()) {
-		saveFile(fileName);
-		_saveFileName = fileName;
+		exportFile(fileName);
+		_exportFileName = fileName;
 	}
 }
 
-void GUI::saveFile()
+void GUI::exportFile()
 {
-	if (_saveFileName.isEmpty())
-		emit saveAs();
+	if (_exportFileName.isEmpty())
+		emit exportAs();
 	else
-		saveFile(_saveFileName);
+		exportFile(_exportFileName);
 }
 
-void GUI::saveFile(const QString &fileName)
+void GUI::exportFile(const QString &fileName)
 {
 	QPrinter printer(QPrinter::HighResolution);
 	printer.setPageSize(QPrinter::A4);
@@ -656,9 +671,15 @@ void GUI::saveFile(const QString &fileName)
 	printer.setOutputFormat(QPrinter::PdfFormat);
 	printer.setOutputFileName(fileName);
 
-	QPainter p(&printer);
+	plot(&printer);
+}
+
+void GUI::plot(QPrinter *printer)
+{
+	QPainter p(printer);
 
 	TrackInfo info;
+
 	if (_imperialUnitsAction->isChecked()) {
 		info.insert(tr("Distance"), QString::number(_distance * M2MI, 'f', 1)
 		  + UNIT_SPACE + tr("mi"));
@@ -685,11 +706,11 @@ void GUI::saveFile(const QString &fileName)
 		  0) + UNIT_SPACE + tr("m"));
 	}
 
-	_track->plot(&p, QRectF(0, 300, printer.width(), (0.80 * printer.height())
+	_track->plot(&p, QRectF(0, 300, printer->width(), (0.80 * printer->height())
 	  - 400));
-	_elevationGraph->plot(&p,  QRectF(0, 0.80 * printer.height(),
-	  printer.width(), printer.height() * 0.20));
-	info.plot(&p, QRectF(0, 0, printer.width(), 200));
+	_elevationGraph->plot(&p,  QRectF(0, 0.80 * printer->height(),
+	  printer->width(), printer->height() * 0.20));
+	info.plot(&p, QRectF(0, 0, printer->width(), 200));
 }
 
 void GUI::reloadFile()

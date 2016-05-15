@@ -12,10 +12,9 @@
 
 #define QUIT_SHORTCUT         QKeySequence::Quit
 #define OPEN_SHORTCUT         QKeySequence::Open
-#define SAVE_SHORTCUT         QKeySequence::Save
-#define SAVE_AS_SHORTCUT      QKeySequence::SaveAs
 #define CLOSE_SHORTCUT        QKeySequence::Close
 #define RELOAD_SHORTCUT       QKeySequence::Refresh
+#define EXPORT_SHORTCUT       QKeySequence(Qt::CTRL + Qt::Key_E)
 #define SHOW_POI_SHORTCUT     QKeySequence(Qt::CTRL + Qt::Key_P)
 #define SHOW_MAP_SHORTCUT     QKeySequence(Qt::CTRL + Qt::Key_M)
 #define NEXT_MAP_SHORTCUT     QKeySequence::Forward

@@ -2,8 +2,8 @@
     <qresource prefix="/">
         <file>icons/dialog-close.png</file>
         <file>icons/document-open.png</file>
-        <file>icons/document-save-as.png</file>
-        <file>icons/document-save.png</file>
+        <file>icons/document-print.png</file>
+        <file>icons/document-export.png</file>
         <file>icons/flag.png</file>
         <file>icons/gpxsee.png</file>
         <file>icons/application-exit.png</file>

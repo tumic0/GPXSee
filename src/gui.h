@@ -13,6 +13,7 @@ class QActionGroup;
 class QAction;
 class QLabel;
 class QSignalMapper;
+class QPrinter;
 class FileBrowser;
 class GraphView;
 class ElevationGraph;
@@ -35,8 +36,9 @@ private slots:
 	void about();
 	void keys();
 	void dataSources();
-	void saveFile();
-	void saveAs();
+	void printFile();
+	void exportFile();
+	void exportAs();
 	void openFile();
 	void closeAll();
 	void reloadFile();
@@ -71,6 +73,7 @@ private:
 	void loadMaps();
 	void loadPOIs();
 	void closeFiles();
+	void plot(QPrinter *printer);
 
 	QAction *createPOIFileAction(int index);
 	void createPOIFilesActions();
@@ -84,7 +87,7 @@ private:
 
 	bool openPOIFile(const QString &fileName);
 	bool loadFile(const QString &fileName);
-	void saveFile(const QString &fileName);
+	void exportFile(const QString &fileName);
 	void updateStatusBarInfo();
 	void updateWindowTitle();
 	void updateNavigationActions();
@@ -118,8 +121,9 @@ private:
 	QAction *_dataSourcesAction;
 	QAction *_aboutAction;
 	QAction *_aboutQtAction;
-	QAction *_saveFileAction;
-	QAction *_saveAsAction;
+	QAction *_printFileAction;
+	QAction *_exportFileAction;
+	QAction *_exportAsAction;
 	QAction *_openFileAction;
 	QAction *_closeFileAction;
 	QAction *_reloadFileAction;
@@ -159,7 +163,7 @@ private:
 
 	FileBrowser *_browser;
 	QList<QString> _files;
-	QString _saveFileName;
+	QString _exportFileName;
 	Map *_currentMap;
 
 	qreal _distance;
