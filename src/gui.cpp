@@ -380,7 +380,6 @@ void GUI::createToolBars()
 	_fileToolBar->addAction(_openFileAction);
 	_fileToolBar->addAction(_reloadFileAction);
 	_fileToolBar->addAction(_closeFileAction);
-	_fileToolBar->addAction(_exportFileAction);
 	_fileToolBar->addAction(_printFileAction);
 
 	_showToolBar = addToolBar(tr("Show"));
