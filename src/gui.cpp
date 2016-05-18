@@ -58,13 +58,6 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	createTrackGraphs();
 	createStatusBar();
 
-	connect(_elevationGraph, SIGNAL(sliderPositionChanged(qreal)), this,
-	  SLOT(sliderPositionChanged(qreal)));
-	connect(_speedGraph, SIGNAL(sliderPositionChanged(qreal)), this,
-	  SLOT(sliderPositionChanged(qreal)));
-	connect(_heartRateGraph, SIGNAL(sliderPositionChanged(qreal)), this,
-	  SLOT(sliderPositionChanged(qreal)));
-
 	_browser = new FileBrowser(this);
 	_browser->setFilter(QStringList("*.gpx"));
 
@@ -424,6 +417,13 @@ void GUI::createTrackGraphs()
 	_tabs.append(GraphTab(_elevationGraph, tr("Elevation")));
 	_tabs.append(GraphTab(_speedGraph, tr("Speed")));
 	_tabs.append(GraphTab(_heartRateGraph, tr("Heart rate")));
+
+	connect(_elevationGraph, SIGNAL(sliderPositionChanged(qreal)), this,
+	  SLOT(sliderPositionChanged(qreal)));
+	connect(_speedGraph, SIGNAL(sliderPositionChanged(qreal)), this,
+	  SLOT(sliderPositionChanged(qreal)));
+	connect(_heartRateGraph, SIGNAL(sliderPositionChanged(qreal)), this,
+	  SLOT(sliderPositionChanged(qreal)));
 }
 
 void GUI::createStatusBar()
@@ -643,7 +643,7 @@ void GUI::printFile()
 
 void GUI::exportAs()
 {
-	QString fileName = QFileDialog::getSaveFileName(this, "Export to PDF",
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Export to PDF"),
 	  QString(), "*.pdf");
 
 	if (!fileName.isEmpty()) {
