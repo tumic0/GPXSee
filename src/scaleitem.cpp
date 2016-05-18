@@ -67,14 +67,12 @@ void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	for (int i = 0; i < SEGMENTS; i += 2)
 		painter->fillRect(QRectF(i * _width, br.height() + PADDING, _width,
 		  SCALE_HEIGHT), Qt::black);
-
-	if (aa)
-		painter->setRenderHint(QPainter::Antialiasing, true);
-
 /*
 	painter->setPen(Qt::red);
 	painter->drawRect(boundingRect());
 */
+	if (aa)
+		painter->setRenderHint(QPainter::Antialiasing, true);
 }
 
 QString ScaleItem::units() const

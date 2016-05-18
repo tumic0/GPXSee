@@ -25,34 +25,100 @@ void Map::emitLoaded()
 	emit loaded();
 }
 
-void Map::loadTiles(QList<Tile> &list)
+void Map::loadTiles(QList<Tile> &list, bool block)
+{
+	if (block)
+		loadTilesSync(list);
+	else
+		loadTilesAsync(list);
+}
+
+void Map::loadTilesAsync(QList<Tile> &list)
 {
 	QList<Download> dl;
 
-	for (int i = 0; i < list.size(); ++i) {
+	for (int i = 0; i < list.size(); i++) {
 		Tile &t = list[i];
-		QString file = TILES_DIR + QString("/%1/%2-%3-%4")
-		  .arg(_name).arg(t.zoom()).arg(t.xy().rx()).arg(t.xy().ry());
+		QString file = tileFile(t);
 		QFileInfo fi(file);
 
-		if (fi.exists()) {
-			if (!t.pixmap().load(file))
-				fprintf(stderr, "Error loading map tile: %s\n",
-				  qPrintable(file));
-		} else {
-			t.pixmap() = QPixmap(TILE_SIZE, TILE_SIZE);
-			t.pixmap().fill();
-
-			QString url(_url);
-			url.replace("$z", QString::number(t.zoom()));
-			url.replace("$x", QString::number(t.xy().x()));
-			url.replace("$y", QString::number(t.xy().y()));
-			dl.append(Download(url, file));
+		if (!(fi.exists() && loadTileFile(t, file))) {
+			fillTile(t);
+			dl.append(Download(tileUrl(t), file));
 		}
 	}
 
 	if (!dl.empty())
 		Downloader::instance().get(dl);
+}
+
+void Map::loadTilesSync(QList<Tile> &list)
+{
+	QList<Download> dl;
+
+	for (int i = 0; i < list.size(); i++) {
+		Tile &t = list[i];
+		QString file = tileFile(t);
+		QFileInfo fi(file);
+
+		if (!(fi.exists() && loadTileFile(t, file)))
+			dl.append(Download(tileUrl(t), file));
+	}
+
+	if (dl.empty())
+		return;
+
+	QEventLoop wait;
+	connect(&Downloader::instance(), SIGNAL(finished()), &wait, SLOT(quit()));
+	if (Downloader::instance().get(dl))
+		wait.exec();
+
+	for (int i = 0; i < list.size(); i++) {
+		Tile &t = list[i];
+
+		if (t.pixmap().isNull()) {
+			QString file = tileFile(t);
+			QFileInfo fi(file);
+
+			if (!(fi.exists() && loadTileFile(t, file)))
+				fillTile(t);
+		}
+	}
+}
+
+void Map::fillTile(Tile &tile)
+{
+	tile.pixmap() = QPixmap(TILE_SIZE, TILE_SIZE);
+	tile.pixmap().fill();
+}
+
+bool Map::loadTileFile(Tile &tile, const QString &file)
+{
+	if (!tile.pixmap().load(file)) {
+		fprintf(stderr, "%s: error loading tile file\n", qPrintable(file));
+		return false;
+	}
+
+	return true;
+}
+
+QString Map::tileUrl(const Tile &tile)
+{
+	QString url(_url);
+
+	url.replace("$z", QString::number(tile.zoom()));
+	url.replace("$x", QString::number(tile.xy().x()));
+	url.replace("$y", QString::number(tile.xy().y()));
+
+	return url;
+}
+
+QString Map::tileFile(const Tile &tile)
+{
+	QString file = TILES_DIR + QString("/%1/%2-%3-%4").arg(_name)
+	  .arg(tile.zoom()).arg(tile.xy().x()).arg(tile.xy().y());
+
+	return file;
 }
 
 void Map::clearCache()

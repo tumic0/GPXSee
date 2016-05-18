@@ -36,6 +36,8 @@ TrackView::TrackView(QWidget *parent)
 	_map = 0;
 	_maxPath = 0;
 	_maxDistance = 0;
+
+	_plot = false;
 }
 
 TrackView::~TrackView()
@@ -295,7 +297,8 @@ void TrackView::setMap(Map *map)
 {
 	_map = map;
 	if (_map)
-		connect(_map, SIGNAL(loaded()), this, SLOT(redraw()));
+		connect(_map, SIGNAL(loaded()), this, SLOT(redraw()),
+		  Qt::UniqueConnection);
 	resetCachedContent();
 }
 
@@ -343,18 +346,9 @@ void TrackView::wheelEvent(QWheelEvent *event)
 	resetCachedContent();
 }
 
-void TrackView::setTrackLineWidth(qreal width)
-{
-	for (int i = 0; i < _paths.size(); i++) {
-		QPen pen(_paths.at(i)->pen());
-		pen.setWidthF(width);
-		_paths.at(i)->setPen(pen);
-	}
-}
-
 void TrackView::plot(QPainter *painter, const QRectF &target)
 {
-	QRectF orig, adj;
+	QRect orig, adj;
 	qreal ratio, diff;
 
 	orig = viewport()->rect();
@@ -369,11 +363,13 @@ void TrackView::plot(QPainter *painter, const QRectF &target)
 		adj = orig.adjusted(0, -diff/2, 0, diff/2);
 	}
 
-	_mapScale->setPos(mapToScene(QPointF(adj.bottomRight()
+	_mapScale->setPos(mapToScene(QPoint(adj.bottomRight()
 	  + QPoint(-_mapScale->boundingRect().width(),
-	  -_mapScale->boundingRect().height())).toPoint()));
+	  -_mapScale->boundingRect().height()))));
 
-	render(painter, target, adj.toRect());
+	_plot = true;
+	render(painter, target, adj);
+	_plot = false;
 }
 
 enum QPrinter::Orientation TrackView::orientation() const
@@ -435,7 +431,7 @@ void TrackView::movePositionMarker(qreal val)
 
 void TrackView::drawBackground(QPainter *painter, const QRectF &rect)
 {
-	if ((_paths.isEmpty() && _locations.isEmpty())|| !_map) {
+	if ((_paths.isEmpty() && _locations.isEmpty()) || !_map) {
 		painter->fillRect(rect, Qt::white);
 		return;
 	}
@@ -454,12 +450,12 @@ void TrackView::drawBackground(QPainter *painter, const QRectF &rect)
 		}
 	}
 
-	_map->loadTiles(tiles);
+	_map->loadTiles(tiles, _plot);
 
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];
-		QPoint tp(tl.x() + (t.xy().rx() - tile.rx()) * TILE_SIZE,
-		  tl.y() + (t.xy().ry() - tile.ry()) * TILE_SIZE);
+		QPoint tp(tl.x() + (t.xy().x() - tile.x()) * TILE_SIZE,
+		  tl.y() + (t.xy().y() - tile.y()) * TILE_SIZE);
 		painter->drawPixmap(tp, t.pixmap());
 	}
 }
@@ -493,7 +489,7 @@ void TrackView::paintEvent(QPaintEvent *e)
 {
 	QPointF scenePos = mapToScene(rect().bottomLeft() + QPoint(SCALE_OFFSET,
 	  -(SCALE_OFFSET + _mapScale->boundingRect().height())));
-	if (_mapScale->pos() != scenePos)
+	if (_mapScale->pos() != scenePos && !_plot)
 		_mapScale->setPos(scenePos);
 
 	QGraphicsView::paintEvent(e);

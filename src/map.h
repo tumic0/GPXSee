@@ -10,7 +10,7 @@ public:
 		{_xy = xy; _zoom = zoom;}
 
 	int zoom() const {return _zoom;}
-	QPoint& xy() {return _xy;}
+	const QPoint& xy() const {return _xy;}
 	QPixmap& pixmap() {return _pixmap;}
 
 private:
@@ -29,7 +29,7 @@ public:
 	  const QString &url = QString());
 
 	const QString &name() const {return _name;}
-	void loadTiles(QList<Tile> &list);
+	void loadTiles(QList<Tile> &list, bool block);
 	void clearCache();
 
 signals:
@@ -39,6 +39,14 @@ private slots:
 	void emitLoaded();
 
 private:
+	QString tileUrl(const Tile &tile);
+	QString tileFile(const Tile &tile);
+	bool loadTileFile(Tile &tile, const QString &file);
+	void fillTile(Tile &tile);
+
+	void loadTilesAsync(QList<Tile> &list);
+	void loadTilesSync(QList<Tile> &list);
+
 	QString _name;
 	QString _url;
 };

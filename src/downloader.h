@@ -30,7 +30,7 @@ class Downloader : public QObject
 public:
 	static Downloader& instance()
 		{static Downloader i; return i;}
-	void get(const QList<Download> &list);
+	bool get(const QList<Download> &list);
 
 signals:
 	void finished();
@@ -43,7 +43,7 @@ private:
 	Downloader(Downloader const&);
 	void operator=(Downloader const&);
 
-	void doDownload(const Download &dl);
+	bool doDownload(const Download &dl);
 	bool saveToDisk(const QString &filename, QIODevice *data);
 
 	QNetworkAccessManager _manager;

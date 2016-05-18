@@ -23,12 +23,12 @@ Downloader::Downloader()
 			SLOT(downloadFinished(QNetworkReply*)));
 }
 
-void Downloader::doDownload(const Download &dl)
+bool Downloader::doDownload(const Download &dl)
 {
 	QUrl url(dl.url());
 
 	if (_errorDownloads.contains(url))
-		return;
+		return false;
 
 	QNetworkRequest request(url);
 	request.setAttribute(QNetworkRequest::User, QVariant(dl.file()));
@@ -36,6 +36,8 @@ void Downloader::doDownload(const Download &dl)
 	QNetworkReply *reply = _manager.get(request);
 
 	_currentDownloads.append(reply);
+
+	return true;
 }
 
 bool Downloader::saveToDisk(const QString &filename, QIODevice *data)
@@ -74,8 +76,12 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 		emit finished();
 }
 
-void Downloader::get(const QList<Download> &list)
+bool Downloader::get(const QList<Download> &list)
 {
+	bool finishEmitted = false;
+
 	for (int i = 0; i < list.count(); i++)
-		doDownload(list.at(i));
+		finishEmitted |= doDownload(list.at(i));
+
+	return finishEmitted;
 }

@@ -57,9 +57,6 @@ private:
 	void rescale(qreal scale);
 	void rescale();
 
-	void showMarkers(bool show);
-	void setTrackLineWidth(qreal width);
-
 	void wheelEvent(QWheelEvent *event);
 	void drawBackground(QPainter *painter, const QRectF &rect);
 	void resizeEvent(QResizeEvent *e);
@@ -81,6 +78,8 @@ private:
 
 	qreal _scale;
 	int _zoom;
+
+	bool _plot;
 };
 
 #endif // TRACKVIEW_H
