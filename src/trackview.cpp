@@ -351,6 +351,7 @@ void TrackView::plot(QPainter *painter, const QRectF &target)
 	QRect orig, adj;
 	qreal ratio, diff;
 
+
 	orig = viewport()->rect();
 
 	if (target.width()/target.height() > orig.width()/orig.height()) {
@@ -363,13 +364,21 @@ void TrackView::plot(QPainter *painter, const QRectF &target)
 		adj = orig.adjusted(0, -diff/2, 0, diff/2);
 	}
 
-	_mapScale->setPos(mapToScene(QPoint(adj.bottomRight()
-	  + QPoint(-_mapScale->boundingRect().width(),
-	  -_mapScale->boundingRect().height()))));
 
+	setUpdatesEnabled(false);
 	_plot = true;
+
+	QPointF pos = _mapScale->pos();
+	_mapScale->setPos(mapToScene(QPoint(adj.bottomRight() + QPoint(
+	  -(SCALE_OFFSET + _mapScale->boundingRect().width()),
+	  -(SCALE_OFFSET + _mapScale->boundingRect().height())))));
+
 	render(painter, target, adj);
+
+	_mapScale->setPos(pos);
+
 	_plot = false;
+	setUpdatesEnabled(true);
 }
 
 enum QPrinter::Orientation TrackView::orientation() const
@@ -487,7 +496,8 @@ void TrackView::resizeEvent(QResizeEvent *e)
 
 void TrackView::paintEvent(QPaintEvent *e)
 {
-	QPointF scenePos = mapToScene(rect().bottomLeft() + QPoint(SCALE_OFFSET,
+	QPointF scenePos = mapToScene(rect().bottomRight() + QPoint(
+	  -(SCALE_OFFSET + _mapScale->boundingRect().width()),
 	  -(SCALE_OFFSET + _mapScale->boundingRect().height())));
 	if (_mapScale->pos() != scenePos && !_plot)
 		_mapScale->setPos(scenePos);

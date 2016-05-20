@@ -242,13 +242,15 @@ void GraphView::plot(QPainter *painter, const QRectF &target)
 	QSizeF orig = _scene->sceneRect().size();
 	QSizeF canvas = QSizeF(orig.height() * ratio, orig.height());
 
+	setUpdatesEnabled(false);
 	redraw(canvas);
 	_slider->hide();
-	_info->hide();
-	_scene->render(painter, target, QRectF());
+	_scene->removeItem(_info);
+	_scene->render(painter, target, _scene->itemsBoundingRect());
+	_scene->addItem(_info);
 	_slider->show();
-	_info->show();
 	redraw(orig);
+	setUpdatesEnabled(true);
 }
 
 void GraphView::clear()
