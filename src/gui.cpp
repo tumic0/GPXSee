@@ -703,11 +703,17 @@ void GUI::plot(QPrinter *printer)
 		  0) + UNIT_SPACE + tr("m"));
 	}
 
-	_track->plot(&p, QRectF(0, 300, printer->width(), (0.80 * printer->height())
-	  - 400));
-	_elevationGraph->plot(&p,  QRectF(0, 0.80 * printer->height(),
-	  printer->width(), printer->height() * 0.20));
-	info.plot(&p, QRectF(0, 0, printer->width(), 200));
+	if (_elevationGraph->count()) {
+		_track->plot(&p, QRectF(0, 300, printer->width(),
+		  (0.80 * printer->height()) - 400));
+		_elevationGraph->plot(&p,  QRectF(0, 0.80 * printer->height(),
+		  printer->width(), printer->height() * 0.20));
+		info.plot(&p, QRectF(0, 0, printer->width(), 200));
+	} else {
+		_track->plot(&p, QRectF(0, 300, printer->width(),
+		  printer->height() - 300));
+		info.plot(&p, QRectF(0, 0, printer->width(), 200));
+	}
 }
 
 void GUI::reloadFile()

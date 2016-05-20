@@ -354,7 +354,7 @@ void TrackView::plot(QPainter *painter, const QRectF &target)
 
 	orig = viewport()->rect();
 
-	if (target.width()/target.height() > orig.width()/orig.height()) {
+	if (target.width() > target.height()) {
 		ratio = target.width()/target.height();
 		diff = qAbs((orig.height() * ratio) - orig.width());
 		adj = orig.adjusted(-diff/2, 0, diff/2, 0);
@@ -363,7 +363,6 @@ void TrackView::plot(QPainter *painter, const QRectF &target)
 		diff = qAbs((orig.width() * ratio) - orig.height());
 		adj = orig.adjusted(0, -diff/2, 0, diff/2);
 	}
-
 
 	setUpdatesEnabled(false);
 	_plot = true;
