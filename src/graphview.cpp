@@ -249,7 +249,7 @@ void GraphView::plot(QPainter *painter, const QRectF &target)
 	_scene->render(painter, target, _scene->itemsBoundingRect());
 	_scene->addItem(_info);
 	_slider->show();
-	redraw(orig);
+	redraw();
 	setUpdatesEnabled(true);
 }
 
