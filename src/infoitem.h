@@ -15,6 +15,7 @@ public:
 
 	void insert(const QString &key, const QString &value);
 	void clear();
+	bool isEmpty() {return _list.isEmpty();}
 
 private:
 	void updateBoundingRect();

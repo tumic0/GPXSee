@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QString>
 #include <QList>
+#include <QDate>
 #include "poi.h"
 
 class QMenu;
@@ -69,6 +70,7 @@ private slots:
 
 private:
 	typedef QPair<GraphView *, QString> GraphTab;
+	typedef QPair<QDate, QDate> DateRange;
 
 	void loadMaps();
 	void loadPOIs();
@@ -166,9 +168,10 @@ private:
 	QString _exportFileName;
 	Map *_currentMap;
 
+	int _trackCount;
 	qreal _distance;
 	qreal _time;
-	int _trackCount;
+	DateRange _dateRange;
 
 	qreal _sliderPos;
 

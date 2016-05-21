@@ -16,3 +16,8 @@ void TrackInfo::plot(QPainter *painter, const QRectF &target)
 {
 	render(painter, target);
 }
+
+bool TrackInfo::isEmpty()
+{
+	return _info->isEmpty();
+}

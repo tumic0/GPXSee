@@ -1,7 +1,6 @@
 #include <QGraphicsView>
 #include <QGraphicsSceneMouseEvent>
 #include <QEvent>
-#include <QGraphicsSimpleTextItem>
 #include "config.h"
 #include "axisitem.h"
 #include "slideritem.h"
@@ -244,10 +243,9 @@ void GraphView::plot(QPainter *painter, const QRectF &target)
 
 	setUpdatesEnabled(false);
 	redraw(canvas);
-	_slider->hide();
-	_scene->removeItem(_info);
+	if (_slider->pos().x() == _slider->area().left())
+		_slider->hide();
 	_scene->render(painter, target, _scene->itemsBoundingRect());
-	_scene->addItem(_info);
 	_slider->show();
 	redraw();
 	setUpdatesEnabled(true);

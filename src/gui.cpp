@@ -33,6 +33,10 @@
 #include "gui.h"
 
 
+#define PLOT_INFO_HEIGHT 200
+#define PLOT_MARGIN 100
+#define PLOT_GRAPH_RATIO 0.2
+
 static QString timeSpan(qreal time)
 {
 	unsigned h, m, s;
@@ -44,7 +48,6 @@ static QString timeSpan(qreal time)
 	return QString("%1:%2:%3").arg(h).arg(m, 2, 10, QChar('0'))
 	  .arg(s, 2, 10, QChar('0'));
 }
-
 
 GUI::GUI(QWidget *parent) : QMainWindow(parent)
 {
@@ -569,6 +572,11 @@ bool GUI::loadFile(const QString &fileName)
 		for (int i = 0; i < gpx.trackCount(); i++) {
 			_distance += gpx.track(i).distance();
 			_time += gpx.track(i).time();
+			const QDate &date = gpx.track(i).date().date();
+			if (_dateRange.first.isNull() || _dateRange.first > date)
+				_dateRange.first = date;
+			if (_dateRange.second.isNull() || _dateRange.second < date)
+				_dateRange.second = date;
 		}
 
 		_trackCount += gpx.trackCount();
@@ -674,45 +682,53 @@ void GUI::exportFile(const QString &fileName)
 void GUI::plot(QPrinter *printer)
 {
 	QPainter p(printer);
-
 	TrackInfo info;
 
-	if (_imperialUnitsAction->isChecked()) {
-		info.insert(tr("Distance"), QString::number(_distance * M2MI, 'f', 1)
-		  + UNIT_SPACE + tr("mi"));
-		info.insert(tr("Time"), timeSpan(_time));
-		info.insert(tr("Ascent"), QString::number(_elevationGraph->ascent()
-		  * M2FT, 'f', 0) + UNIT_SPACE + tr("ft"));
-		info.insert(tr("Descent"), QString::number(_elevationGraph->descent()
-		  * M2FT, 'f', 0) + UNIT_SPACE + tr("ft"));
-		info.insert(tr("Maximum"), QString::number(_elevationGraph->max()
-		  * M2FT, 'f', 0) + UNIT_SPACE + tr("ft"));
-		info.insert(tr("Minimum"), QString::number(_elevationGraph->min()
-		  * M2FT, 'f', 0) + UNIT_SPACE + tr("ft"));
-	} else {
-		info.insert(tr("Distance"), QString::number(_distance * M2KM, 'f', 1)
-		  + UNIT_SPACE + tr("km"));
-		info.insert(tr("Time"), timeSpan(_time));
-		info.insert(tr("Ascent"), QString::number(_elevationGraph->ascent(),
-		  'f', 0) + UNIT_SPACE + tr("m"));
-		info.insert(tr("Descent"), QString::number(_elevationGraph->descent(),
-		  'f', 0) + UNIT_SPACE + tr("m"));
-		info.insert(tr("Maximum"), QString::number(_elevationGraph->max(), 'f',
-		  0) + UNIT_SPACE + tr("m"));
-		info.insert(tr("Minimum"), QString::number(_elevationGraph->min(), 'f',
-		  0) + UNIT_SPACE + tr("m"));
+	if (_dateRange.first.isValid()) {
+		if (_dateRange.first == _dateRange.second) {
+			QString format = QLocale::system().dateFormat(QLocale::LongFormat);
+			info.insert(tr("Date"), _dateRange.first.toString(format));
+		} else {
+			QString format = QLocale::system().dateFormat(QLocale::ShortFormat);
+			info.insert(tr("Date"), QString("%1 - %2")
+			  .arg(_dateRange.first.toString(format),
+			  _dateRange.second.toString(format)));
+		}
 	}
+	if (_distance > 0) {
+		if (_imperialUnitsAction->isChecked()) {
+			info.insert(tr("Distance"), QString::number(_distance * M2MI, 'f',
+			  1) + UNIT_SPACE + tr("mi"));
+		} else {
+			info.insert(tr("Distance"), QString::number(_distance * M2KM, 'f',
+			  1) + UNIT_SPACE + tr("km"));
+		}
+	}
+	if (_time > 0)
+		info.insert(tr("Time"), timeSpan(_time));
 
-	if (_elevationGraph->count()) {
-		_track->plot(&p, QRectF(0, 300, printer->width(),
-		  (0.80 * printer->height()) - 400));
-		_elevationGraph->plot(&p,  QRectF(0, 0.80 * printer->height(),
-		  printer->width(), printer->height() * 0.20));
-		info.plot(&p, QRectF(0, 0, printer->width(), 200));
+
+	if (info.isEmpty()) {
+		if (_trackGraphs->isVisible())
+			_track->plot(&p, QRectF(0, 0, printer->width(),
+			  ((1.0 - PLOT_GRAPH_RATIO) * printer->height())));
+		else
+			_track->plot(&p, QRectF(0, 0, printer->width(), printer->height()));
 	} else {
-		_track->plot(&p, QRectF(0, 300, printer->width(),
-		  printer->height() - 300));
-		info.plot(&p, QRectF(0, 0, printer->width(), 200));
+		info.plot(&p, QRectF(0, 0, printer->width(), PLOT_INFO_HEIGHT));
+		if (_trackGraphs->isVisible())
+			_track->plot(&p, QRectF(0, PLOT_INFO_HEIGHT + PLOT_MARGIN,
+			  printer->width(), ((1.0 - PLOT_GRAPH_RATIO) * printer->height())
+			  - (PLOT_INFO_HEIGHT + 2*PLOT_MARGIN)));
+		else
+			_track->plot(&p, QRectF(0, PLOT_INFO_HEIGHT + PLOT_MARGIN,
+			  printer->width(), printer->height()
+			  - (PLOT_INFO_HEIGHT + PLOT_MARGIN)));
+	}
+	if (_trackGraphs->isVisible()) {
+		GraphView *gv = static_cast<GraphView*>(_trackGraphs->currentWidget());
+		gv->plot(&p,  QRectF(0, (1.0 - PLOT_GRAPH_RATIO) * printer->height(),
+		  printer->width(), printer->height() * PLOT_GRAPH_RATIO));
 	}
 }
 
@@ -720,6 +736,7 @@ void GUI::reloadFile()
 {
 	_distance = 0;
 	_time = 0;
+	_dateRange = DateRange(QDate(), QDate());
 	_trackCount = 0;
 
 	_elevationGraph->clear();
@@ -748,6 +765,7 @@ void GUI::closeFiles()
 {
 	_distance = 0;
 	_time = 0;
+	_dateRange = DateRange(QDate(), QDate());
 	_trackCount = 0;
 
 	_sliderPos = 0;
@@ -1127,7 +1145,9 @@ void GUI::readSettings()
 	settings.endGroup();
 
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
-	if (settings.value(UNITS_SETTING, Metric).toInt() == Imperial) {
+	Units u = QLocale::system().measurementSystem() == QLocale::ImperialSystem
+	  ? Imperial : Metric;
+	if (settings.value(UNITS_SETTING, u).toInt() == Imperial) {
 		setImperialUnits();
 		_imperialUnitsAction->setChecked(true);
 	} else
