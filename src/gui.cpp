@@ -16,6 +16,7 @@
 #include <QAction>
 #include <QLabel>
 #include <QSettings>
+#include <QLocale>
 #include "config.h"
 #include "icons.h"
 #include "keys.h"
