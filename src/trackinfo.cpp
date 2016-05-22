@@ -29,7 +29,12 @@ void TrackInfo::plot(QPainter *painter, const QRectF &target)
 	render(painter, target, adj);
 }
 
-bool TrackInfo::isEmpty()
+bool TrackInfo::isEmpty() const
 {
 	return _info->isEmpty();
+}
+
+QSizeF TrackInfo::contentSize() const
+{
+	return sceneRect().size();
 }

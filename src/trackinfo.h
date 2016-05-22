@@ -14,7 +14,8 @@ public:
 
 	void insert(const QString &key, const QString &value);
 	void plot(QPainter *painter, const QRectF &target);
-	bool isEmpty();
+	bool isEmpty() const;
+	QSizeF contentSize() const;
 
 private:
 	InfoItem *_info;

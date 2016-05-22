@@ -7,6 +7,8 @@
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QPainter>
+#include <QPaintEngine>
+#include <QPaintDevice>
 #include <QKeyEvent>
 #include <QSignalMapper>
 #include <QMenu>
@@ -33,10 +35,6 @@
 #include "cpuarch.h"
 #include "gui.h"
 
-
-#define PLOT_INFO_HEIGHT 200
-#define PLOT_MARGIN 100
-#define PLOT_GRAPH_RATIO 0.2
 
 static QString timeSpan(qreal time)
 {
@@ -709,27 +707,36 @@ void GUI::plot(QPrinter *printer)
 		info.insert(tr("Time"), timeSpan(_time));
 
 
+	qreal ratio = p.paintEngine()->paintDevice()->logicalDpiX() / SCREEN_DPI;
+	qreal ih = info.contentSize().height() * ratio;
+	qreal mh = ih / 2;
+
+#define GRR(printer) \
+	(((printer)->width() > (printer)->height()) \
+	  ? 0.15 * ((qreal)((printer)->width()) / (qreal)((printer)->height())) \
+	  : 0.15)
+#define TRR(printer) \
+	(1.0 - GRR(printer))
+
 	if (info.isEmpty()) {
 		if (_trackGraphs->isVisible())
 			_track->plot(&p, QRectF(0, 0, printer->width(),
-			  ((1.0 - PLOT_GRAPH_RATIO) * printer->height())));
+			  (TRR(printer) * printer->height())));
 		else
 			_track->plot(&p, QRectF(0, 0, printer->width(), printer->height()));
 	} else {
-		info.plot(&p, QRectF(0, 0, printer->width(), PLOT_INFO_HEIGHT));
+		info.plot(&p, QRectF(0, 0, printer->width(), ih));
 		if (_trackGraphs->isVisible())
-			_track->plot(&p, QRectF(0, PLOT_INFO_HEIGHT + PLOT_MARGIN,
-			  printer->width(), ((1.0 - PLOT_GRAPH_RATIO) * printer->height())
-			  - (PLOT_INFO_HEIGHT + 2*PLOT_MARGIN)));
+			_track->plot(&p, QRectF(0, ih + mh, printer->width(),
+			  (TRR(printer) * printer->height()) - (ih + 2*mh)));
 		else
-			_track->plot(&p, QRectF(0, PLOT_INFO_HEIGHT + PLOT_MARGIN,
-			  printer->width(), printer->height()
-			  - (PLOT_INFO_HEIGHT + PLOT_MARGIN)));
+			_track->plot(&p, QRectF(0, ih + mh, printer->width(),
+			  printer->height() - (ih + mh)));
 	}
 	if (_trackGraphs->isVisible()) {
 		GraphView *gv = static_cast<GraphView*>(_trackGraphs->currentWidget());
-		gv->plot(&p,  QRectF(0, (1.0 - PLOT_GRAPH_RATIO) * printer->height(),
-		  printer->width(), printer->height() * PLOT_GRAPH_RATIO));
+		gv->plot(&p,  QRectF(0, TRR(printer) * printer->height(),
+		  printer->width(), printer->height() * GRR(printer)));
 	}
 }
 
