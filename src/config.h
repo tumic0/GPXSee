@@ -11,6 +11,7 @@
 
 #define FONT_FAMILY     "Arial"
 #define FONT_SIZE       12
+#define SCREEN_DPI      96.0
 
 #define MAP_FILE        QString("maps.txt")
 #define POI_DIR         QString("POI")

@@ -1,6 +1,8 @@
 #include <QGraphicsView>
 #include <QGraphicsSceneMouseEvent>
 #include <QEvent>
+#include <QPaintEngine>
+#include <QPaintDevice>
 #include "config.h"
 #include "axisitem.h"
 #include "slideritem.h"
@@ -237,15 +239,15 @@ void GraphView::resizeEvent(QResizeEvent *)
 
 void GraphView::plot(QPainter *painter, const QRectF &target)
 {
-	qreal ratio = target.width() / target.height();
-	QSizeF orig = _scene->sceneRect().size();
-	QSizeF canvas = QSizeF(orig.height() * ratio, orig.height());
+	qreal ratio = painter->paintEngine()->paintDevice()->logicalDpiX()
+	  / SCREEN_DPI;
+	QSizeF canvas = QSizeF(target.width() / ratio, target.height() / ratio);
 
 	setUpdatesEnabled(false);
 	redraw(canvas);
 	if (_slider->pos().x() == _slider->area().left())
 		_slider->hide();
-	_scene->render(painter, target, _scene->itemsBoundingRect());
+	_scene->render(painter, target);
 	_slider->show();
 	redraw();
 	setUpdatesEnabled(true);
