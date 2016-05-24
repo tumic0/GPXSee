@@ -39,7 +39,6 @@ private slots:
 	void dataSources();
 	void printFile();
 	void exportFile();
-	void exportAs();
 	void openFile();
 	void closeAll();
 	void reloadFile();
@@ -125,7 +124,6 @@ private:
 	QAction *_aboutQtAction;
 	QAction *_printFileAction;
 	QAction *_exportFileAction;
-	QAction *_exportAsAction;
 	QAction *_openFileAction;
 	QAction *_closeFileAction;
 	QAction *_reloadFileAction;
@@ -165,7 +163,6 @@ private:
 
 	FileBrowser *_browser;
 	QList<QString> _files;
-	QString _exportFileName;
 	Map *_currentMap;
 
 	int _trackCount;

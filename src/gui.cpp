@@ -33,6 +33,7 @@
 #include "trackinfo.h"
 #include "filebrowser.h"
 #include "cpuarch.h"
+#include "exportdialog.h"
 #include "gui.h"
 
 
@@ -204,15 +205,11 @@ void GUI::createActions()
 	connect(_printFileAction, SIGNAL(triggered()), this, SLOT(printFile()));
 	addAction(_printFileAction);
 	_exportFileAction = new QAction(QIcon(QPixmap(EXPORT_FILE_ICON)),
-	  tr("Export"), this);
+	  tr("Export to PDF"), this);
 	_exportFileAction->setShortcut(EXPORT_SHORTCUT);
 	_exportFileAction->setActionGroup(_fileActionGroup);
 	connect(_exportFileAction, SIGNAL(triggered()), this, SLOT(exportFile()));
 	addAction(_exportFileAction);
-	_exportAsAction = new QAction(QIcon(QPixmap(EXPORT_FILE_ICON)),
-	  tr("Export as"), this);
-	_exportAsAction->setActionGroup(_fileActionGroup);
-	connect(_exportAsAction, SIGNAL(triggered()), this, SLOT(exportAs()));
 	_closeFileAction = new QAction(QIcon(QPixmap(CLOSE_FILE_ICON)),
 	  tr("Close"), this);
 	_closeFileAction->setShortcut(CLOSE_SHORTCUT);
@@ -322,7 +319,6 @@ void GUI::createMenus()
 	_fileMenu->addSeparator();
 	_fileMenu->addAction(_printFileAction);
 	_fileMenu->addAction(_exportFileAction);
-	_fileMenu->addAction(_exportAsAction);
 	_fileMenu->addSeparator();
 	_fileMenu->addAction(_reloadFileAction);
 	_fileMenu->addSeparator();
@@ -642,46 +638,28 @@ void GUI::closePOIFiles()
 void GUI::printFile()
 {
 	QPrinter printer(QPrinter::HighResolution);
-	QPrintDialog printDialog(&printer, this);
+	QPrintDialog dialog(&printer, this);
 
-	if (printDialog.exec() == QDialog::Accepted)
+	if (dialog.exec() == QDialog::Accepted)
 		plot(&printer);
-}
-
-void GUI::exportAs()
-{
-	QString fileName = QFileDialog::getSaveFileName(this, tr("Export to PDF"),
-	  QString(), "*.pdf");
-
-	if (!fileName.isEmpty()) {
-		exportFile(fileName);
-		_exportFileName = fileName;
-	}
 }
 
 void GUI::exportFile()
 {
-	if (_exportFileName.isEmpty())
-		emit exportAs();
-	else
-		exportFile(_exportFileName);
-}
-
-void GUI::exportFile(const QString &fileName)
-{
 	QPrinter printer(QPrinter::HighResolution);
-	printer.setPageSize(QPrinter::A4);
 	printer.setOrientation(_track->orientation());
-	printer.setOutputFormat(QPrinter::PdfFormat);
-	printer.setOutputFileName(fileName);
+	ExportDialog dialog(&printer, this);
 
-	plot(&printer);
+	if (dialog.exec() == QDialog::Accepted)
+		plot(&printer);
 }
 
 void GUI::plot(QPrinter *printer)
 {
 	QPainter p(printer);
 	TrackInfo info;
+	qreal ih, gh, mh;
+
 
 	if (_dateRange.first.isValid()) {
 		if (_dateRange.first == _dateRange.second) {
@@ -707,37 +685,26 @@ void GUI::plot(QPrinter *printer)
 		info.insert(tr("Time"), timeSpan(_time));
 
 
-	qreal ratio = p.paintEngine()->paintDevice()->logicalDpiX() / SCREEN_DPI;
-	qreal ih = info.contentSize().height() * ratio;
-	qreal mh = ih / 2;
-
-#define GRR(printer) \
-	(((printer)->width() > (printer)->height()) \
-	  ? 0.15 * ((qreal)((printer)->width()) / (qreal)((printer)->height())) \
-	  : 0.15)
-#define TRR(printer) \
-	(1.0 - GRR(printer))
-
 	if (info.isEmpty()) {
-		if (_trackGraphs->isVisible())
-			_track->plot(&p, QRectF(0, 0, printer->width(),
-			  (TRR(printer) * printer->height())));
-		else
-			_track->plot(&p, QRectF(0, 0, printer->width(), printer->height()));
+		ih = 0;
+		mh = 0;
 	} else {
+		qreal r = p.paintEngine()->paintDevice()->logicalDpiX() / SCREEN_DPI;
+		ih = info.contentSize().height() * r;
+		mh = ih / 2;
 		info.plot(&p, QRectF(0, 0, printer->width(), ih));
-		if (_trackGraphs->isVisible())
-			_track->plot(&p, QRectF(0, ih + mh, printer->width(),
-			  (TRR(printer) * printer->height()) - (ih + 2*mh)));
-		else
-			_track->plot(&p, QRectF(0, ih + mh, printer->width(),
-			  printer->height() - (ih + mh)));
 	}
 	if (_trackGraphs->isVisible()) {
+		qreal r = (((qreal)(printer)->width()) / (qreal)(printer->height()));
+		gh = (printer->width() > printer->height())
+		  ? 0.15 * r * (printer->height() - ih - 2*mh)
+		  : 0.15 * (printer->height() - ih - 2*mh);
 		GraphView *gv = static_cast<GraphView*>(_trackGraphs->currentWidget());
-		gv->plot(&p,  QRectF(0, TRR(printer) * printer->height(),
-		  printer->width(), printer->height() * GRR(printer)));
-	}
+		gv->plot(&p,  QRectF(0, printer->height() - gh, printer->width(), gh));
+	} else
+		gh = 0;
+	_track->plot(&p, QRectF(0, ih + mh, printer->width(), printer->height()
+	  - (ih + 2*mh + gh)));
 }
 
 void GUI::reloadFile()
