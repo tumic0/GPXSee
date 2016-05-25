@@ -4,11 +4,11 @@
 #include <QFormLayout>
 #include <QGroupBox>
 #include <QComboBox>
+#include <QRadioButton>
 #include <QPushButton>
 #include <QFileInfo>
 #include <QDir>
 #include <QMessageBox>
-#include <QLocale>
 #include "fileselectwidget.h"
 #include "exportdialog.h"
 
@@ -22,33 +22,32 @@ ExportDialog::ExportDialog(QPrinter *printer, QWidget *parent)
 
 	_fileSelect = new FileSelectWidget();
 	_fileSelect->setFilter(tr("PDF files (*.pdf);;All files (*)"));
-	_fileSelect->setFile(QString("%1/export.pdf").arg(QDir::currentPath()));
+	_fileSelect->setFile(_printer->outputFileName());
 
 	_paperSize = new QComboBox();
-	_paperSize->addItem("A0", QPrinter::A0);
-	_paperSize->addItem("A1", QPrinter::A1);
-	_paperSize->addItem("A2", QPrinter::A2);
 	_paperSize->addItem("A3", QPrinter::A3);
 	_paperSize->addItem("A4", QPrinter::A4);
 	_paperSize->addItem("A5", QPrinter::A5);
-	_paperSize->addItem("A6", QPrinter::A6);
 	_paperSize->addItem("Tabloid", QPrinter::Tabloid);
 	_paperSize->addItem("Legal", QPrinter::Legal);
 	_paperSize->addItem("Letter", QPrinter::Letter);
-	index = (QLocale::system().measurementSystem() == QLocale::ImperialSystem)
-	  ? 9 /* Letter */ : 4 /* A4 */;
-	_paperSize->setCurrentIndex(index);
+	if ((index = _paperSize->findData(_printer->paperSize())) >= 0)
+		_paperSize->setCurrentIndex(index);
 
-	_orientation = new QComboBox();
-	_orientation->addItem(tr("Portrait"), QPrinter::Portrait);
-	_orientation->addItem(tr("Landscape"), QPrinter::Landscape);
-	index = _printer->orientation() == QPrinter::Portrait ? 0 : 1;
-	_orientation->setCurrentIndex(index);
+	_portrait = new QRadioButton(tr("Portrait"));
+	_landscape = new QRadioButton(tr("Landscape"));
+	QHBoxLayout *orientationLayout = new QHBoxLayout();
+	orientationLayout->addWidget(_portrait);
+	orientationLayout->addWidget(_landscape);
+	if (_printer->orientation() == QPrinter::Portrait)
+		_portrait->setChecked(true);
+	else
+		_landscape->setChecked(true);
 
-	QGroupBox *contentBox = new QGroupBox(tr("Export settings"));
+	QGroupBox *contentBox = new QGroupBox(tr("Settings"));
 	QFormLayout *contentLayout = new QFormLayout;
 	contentLayout->addRow(tr("Page size:"), _paperSize);
-	contentLayout->addRow(tr("Orientation"), _orientation);
+	contentLayout->addRow(tr("Orientation:"), orientationLayout);
 	contentLayout->addRow(tr("Output file:"), _fileSelect);
 	contentBox->setLayout(contentLayout);
 
@@ -73,24 +72,30 @@ ExportDialog::ExportDialog(QPrinter *printer, QWidget *parent)
 
 bool ExportDialog::checkFile()
 {
-	if (_fileSelect->file().isNull()) {
+	if (_fileSelect->file().isEmpty()) {
 		QMessageBox::warning(this, tr("Error"), tr("No output file selected."));
 		return false;
 	}
 
-	QFileInfo fi(_fileSelect->file());
+	QFile file(_fileSelect->file());
+	QFileInfo fi(file);
+	bool exists = fi.exists();
+	bool opened = false;
 
-	if (fi.isDir()) {
-		QMessageBox::warning(this, tr("Error"),
-		  tr("The output file is a directory."));
+	if (exists && fi.isDir()) {
+		QMessageBox::warning(this, tr("Error"), tr("%1 is a directory.")
+		  .arg(file.fileName()));
+		return false;
+	} else if ((exists && !fi.isWritable())
+	  || !(opened = file.open(QFile::Append))) {
+		QMessageBox::warning(this, tr("Error"), tr("%1 is not writable.")
+		  .arg(file.fileName()));
 		return false;
 	}
-
-	QFileInfo di(fi.path());
-	if (!di.isWritable()) {
-		QMessageBox::warning(this, tr("Error"),
-		  tr("The output file is not writable."));
-		return false;
+	if (opened) {
+		file.close();
+		if (!exists)
+			file.remove();
 	}
 
 	return true;
@@ -101,8 +106,8 @@ void ExportDialog::accept()
 	if (!checkFile())
 		return;
 
-	QPrinter::Orientation orientation = static_cast<QPrinter::Orientation>
-	  (_orientation->itemData(_orientation->currentIndex()).toInt());
+	QPrinter::Orientation orientation = _portrait->isChecked()
+	  ? QPrinter::Portrait : QPrinter::Landscape;
 	QPrinter::PaperSize paperSize = static_cast<QPrinter::PaperSize>
 	  (_paperSize->itemData(_paperSize->currentIndex()).toInt());
 

@@ -5,6 +5,7 @@
 
 class QPrinter;
 class QComboBox;
+class QRadioButton;
 class FileSelectWidget;
 
 class ExportDialog : public QDialog
@@ -24,7 +25,8 @@ private:
 
 	FileSelectWidget *_fileSelect;
 	QComboBox *_paperSize;
-	QComboBox *_orientation;
+	QRadioButton *_portrait;
+	QRadioButton *_landscape;
 };
 
 #endif // EXPORTDIALOG_H

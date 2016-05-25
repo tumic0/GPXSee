@@ -5,7 +5,6 @@
 #include <QVector>
 #include <QHash>
 #include <QList>
-#include <QPrinter>
 #include "units.h"
 #include "palette.h"
 #include "waypoint.h"
@@ -35,7 +34,6 @@ public:
 	void setUnits(enum Units units);
 
 	void plot(QPainter *painter, const QRectF &target);
-	enum QPrinter::Orientation orientation() const;
 
 	int trackCount() const {return _paths.count();}
 	int waypointCount() const {return _locations.count();}

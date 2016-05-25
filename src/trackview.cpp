@@ -380,12 +380,6 @@ void TrackView::plot(QPainter *painter, const QRectF &target)
 	setUpdatesEnabled(true);
 }
 
-enum QPrinter::Orientation TrackView::orientation() const
-{
-	return (sceneRect().width() > sceneRect().height())
-		? QPrinter::Landscape : QPrinter::Portrait;
-}
-
 void TrackView::clearPOI()
 {
 	QHash<Waypoint, WaypointItem*>::const_iterator it;

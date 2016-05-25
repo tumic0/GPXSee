@@ -5,6 +5,7 @@
 #include <QString>
 #include <QList>
 #include <QDate>
+#include <QPrinter>
 #include "poi.h"
 
 class QMenu;
@@ -174,6 +175,10 @@ private:
 
 	int _frameStyle;
 	bool _showGraphs;
+
+	QString _exportFileName;
+	QPrinter::PaperSize _exportPaperSize;
+	QPrinter::Orientation _exportOrientation;
 };
 
 #endif // GUI_H

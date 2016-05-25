@@ -13,7 +13,7 @@ class FileSelectWidget : public QWidget
 public:
 	FileSelectWidget(QWidget *parent = 0);
 
-	QString file() {return _edit->text().isEmpty() ? QString() : _edit->text();}
+	QString file() {return _edit->text();}
 	void setFile(const QString &file) {_edit->setText(file);}
 	void setFilter(const QString &filter) {_filter = filter;}
 

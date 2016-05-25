@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="cs_CZ">
+<TS version="2.0" language="cs_CZ">
 <context>
     <name>ElevationGraph</name>
     <message>
@@ -59,76 +59,76 @@
 <context>
     <name>ExportDialog</name>
     <message>
-        <location filename="../src/exportdialog.cpp" line="21"/>
+        <location filename="../src/exportdialog.cpp" line="20"/>
         <source>Export to PDF</source>
         <translation>Exportovat do PDF</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="24"/>
+        <location filename="../src/exportdialog.cpp" line="23"/>
         <source>PDF files (*.pdf);;All files (*)</source>
-        <translation>soubory PDF (*.pdf);;všechny soubory</translation>
+        <translation>Soubory PDF (*.pdf);;Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="43"/>
+        <location filename="../src/exportdialog.cpp" line="41"/>
         <source>Portrait</source>
         <translation>Na výšku</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="44"/>
+        <location filename="../src/exportdialog.cpp" line="42"/>
         <source>Landscape</source>
         <translation>Na šířku</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="48"/>
-        <source>Export settings</source>
-        <translation>Nastavení exportu</translation>
+        <location filename="../src/exportdialog.cpp" line="51"/>
+        <source>Settings</source>
+        <translation>Nastavení</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="50"/>
+        <location filename="../src/exportdialog.cpp" line="53"/>
         <source>Page size:</source>
         <translation>Velikost stránky:</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="51"/>
-        <source>Orientation</source>
-        <translation>Orientace</translation>
+        <location filename="../src/exportdialog.cpp" line="54"/>
+        <source>Orientation:</source>
+        <translation>Orientace:</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="52"/>
+        <location filename="../src/exportdialog.cpp" line="55"/>
         <source>Output file:</source>
         <translation>Výstupní soubor:</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="55"/>
+        <location filename="../src/exportdialog.cpp" line="58"/>
         <source>Export</source>
         <translation>Exportovat</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="59"/>
+        <location filename="../src/exportdialog.cpp" line="62"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="77"/>
-        <location filename="../src/exportdialog.cpp" line="84"/>
-        <location filename="../src/exportdialog.cpp" line="91"/>
+        <location filename="../src/exportdialog.cpp" line="80"/>
+        <location filename="../src/exportdialog.cpp" line="90"/>
+        <location filename="../src/exportdialog.cpp" line="95"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="77"/>
+        <location filename="../src/exportdialog.cpp" line="80"/>
         <source>No output file selected.</source>
         <translation>Nebyl zvolen žádný výstupní soubor.</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="85"/>
-        <source>The output file is a directory.</source>
-        <translation>Výstupní soubor je adresář.</translation>
+        <location filename="../src/exportdialog.cpp" line="90"/>
+        <source>%1 is a directory.</source>
+        <translation>%1 je adresář.</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="92"/>
-        <source>The output file is not writable.</source>
-        <translation>Výstupní soubor není zapisovatelný.</translation>
+        <location filename="../src/exportdialog.cpp" line="95"/>
+        <source>%1 is not writable.</source>
+        <translation>%1 nelze zapsat.</translation>
     </message>
 </context>
 <context>
@@ -210,14 +210,6 @@
         <location filename="../src/gui.cpp" line="203"/>
         <source>Print</source>
         <translation>Tisknout</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="vanished">Exportovat</translation>
-    </message>
-    <message>
-        <source>Export as</source>
-        <translation type="vanished">Exportovat jako</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="228"/>
@@ -410,7 +402,7 @@
     <message>
         <location filename="../src/gui.cpp" line="518"/>
         <source>GPX files (*.gpx);;All files (*)</source>
-        <translation>soubory GPX (*.gpx);;všechny soubory (*)</translation>
+        <translation>Soubory GPX (*.gpx);;Všechny soubory (*)</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="585"/>
@@ -421,7 +413,7 @@
     <message>
         <location filename="../src/gui.cpp" line="595"/>
         <source>GPX files (*.gpx);;CSV files (*.csv);;All files (*)</source>
-        <translation>soubory GPX (*.gpx);;soubory CSV (*.csv);;všechny soubory (*)</translation>
+        <translation>Soubory GPX (*.gpx);;Soubory CSV (*.csv);;Všechny soubory (*)</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="678"/>

@@ -5,7 +5,6 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QPrintDialog>
-#include <QPrinter>
 #include <QPainter>
 #include <QPaintEngine>
 #include <QPaintDevice>
@@ -90,6 +89,11 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	updateTrackView();
 
 	readSettings();
+
+	_exportPaperSize =  (QLocale::system().measurementSystem()
+	  == QLocale::ImperialSystem) ? QPrinter::Letter : QPrinter::A4;
+	_exportOrientation = QPrinter::Portrait;
+	_exportFileName =  QString("%1/export.pdf").arg(QDir::currentPath());
 }
 
 GUI::~GUI()
@@ -647,18 +651,24 @@ void GUI::printFile()
 void GUI::exportFile()
 {
 	QPrinter printer(QPrinter::HighResolution);
-	printer.setOrientation(_track->orientation());
+	printer.setOrientation(_exportOrientation);
+	printer.setOutputFileName(_exportFileName);
+	printer.setPaperSize(_exportPaperSize);
 	ExportDialog dialog(&printer, this);
 
-	if (dialog.exec() == QDialog::Accepted)
+	if (dialog.exec() == QDialog::Accepted) {
+		_exportFileName = printer.outputFileName();
+		_exportPaperSize = printer.paperSize();
+		_exportOrientation = printer.orientation();
 		plot(&printer);
+	}
 }
 
 void GUI::plot(QPrinter *printer)
 {
 	QPainter p(printer);
 	TrackInfo info;
-	qreal ih, gh, mh;
+	qreal ih, gh, mh, ratio;
 
 
 	if (_dateRange.first.isValid()) {
@@ -685,12 +695,12 @@ void GUI::plot(QPrinter *printer)
 		info.insert(tr("Time"), timeSpan(_time));
 
 
+	ratio = p.paintEngine()->paintDevice()->logicalDpiX() / SCREEN_DPI;
 	if (info.isEmpty()) {
 		ih = 0;
 		mh = 0;
 	} else {
-		qreal r = p.paintEngine()->paintDevice()->logicalDpiX() / SCREEN_DPI;
-		ih = info.contentSize().height() * r;
+		ih = info.contentSize().height() * ratio;
 		mh = ih / 2;
 		info.plot(&p, QRectF(0, 0, printer->width(), ih));
 	}
@@ -699,6 +709,7 @@ void GUI::plot(QPrinter *printer)
 		gh = (printer->width() > printer->height())
 		  ? 0.15 * r * (printer->height() - ih - 2*mh)
 		  : 0.15 * (printer->height() - ih - 2*mh);
+		gh = qMax(gh, ratio * 150);
 		GraphView *gv = static_cast<GraphView*>(_trackGraphs->currentWidget());
 		gv->plot(&p,  QRectF(0, printer->height() - gh, printer->width(), gh));
 	} else
