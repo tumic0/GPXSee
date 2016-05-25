@@ -654,6 +654,7 @@ void GUI::exportFile()
 	printer.setOrientation(_exportOrientation);
 	printer.setOutputFileName(_exportFileName);
 	printer.setPaperSize(_exportPaperSize);
+	printer.setCreator(QString(APP_NAME) + QString(" ") + QString(APP_VERSION));
 	ExportDialog dialog(&printer, this);
 
 	if (dialog.exec() == QDialog::Accepted) {
@@ -680,6 +681,7 @@ void GUI::plot(QPrinter *printer)
 			info.insert(tr("Date"), QString("%1 - %2")
 			  .arg(_dateRange.first.toString(format),
 			  _dateRange.second.toString(format)));
+			info.insert(tr("Track count"), QString::number(_trackCount));
 		}
 	}
 	if (_distance > 0) {
