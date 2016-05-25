@@ -19,6 +19,7 @@ ExportDialog::ExportDialog(QPrinter *printer, QWidget *parent)
 	int index;
 
 	setWindowTitle(tr("Export to PDF"));
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
 	_fileSelect = new FileSelectWidget();
 	_fileSelect->setFilter(tr("PDF files (*.pdf);;All files (*)"));
