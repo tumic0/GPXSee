@@ -42,7 +42,8 @@ HEADERS += src/config.h \
     src/app.h \
     src/trackinfo.h \
     src/exportdialog.h \
-    src/fileselectwidget.h
+    src/fileselectwidget.h \
+    src/margins.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \

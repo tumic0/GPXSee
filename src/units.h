@@ -12,13 +12,14 @@ enum Units {
 #define MS2KMH  3.600000000000  // m/s -> km/h
 #define MS2MIH  2.236936290000  // m/s -> mi/h
 #define FT2MI   0.000189393939  // ft -> mi
+#define MM2IN   0.039370100000  // mm -> in
 
 #define KMINM   1000     // 1 km in m
 #define MIINFT  5280     // 1 mi in ft
 #define MIINM   1609.344 // 1mi in m
 
 #ifdef Q_OS_WIN32
-#define UNIT_SPACE     " "
+#define UNIT_SPACE     QString(" ")
 #else // Q_OS_WIN32
 #define UNIT_SPACE     QString::fromUtf8("\xE2\x80\x89")
 #endif // Q_OS_WIN32

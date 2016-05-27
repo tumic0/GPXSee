@@ -7,6 +7,7 @@
 #include <QDate>
 #include <QPrinter>
 #include "poi.h"
+#include "margins.h"
 
 class QMenu;
 class QToolBar;
@@ -179,6 +180,7 @@ private:
 	QString _exportFileName;
 	QPrinter::PaperSize _exportPaperSize;
 	QPrinter::Orientation _exportOrientation;
+	MarginsF _exportMargins;
 };
 
 #endif // GUI_H

@@ -2,11 +2,12 @@
 #define EXPORTDIALOG_H
 
 #include <QDialog>
+#include <QPrinter>
 
-class QPrinter;
 class QComboBox;
 class QRadioButton;
 class FileSelectWidget;
+class QDoubleSpinBox;
 
 class ExportDialog : public QDialog
 {
@@ -23,10 +24,16 @@ private:
 
 	QPrinter *_printer;
 
+	QPrinter::Unit _units;
+
 	FileSelectWidget *_fileSelect;
 	QComboBox *_paperSize;
 	QRadioButton *_portrait;
 	QRadioButton *_landscape;
+	QDoubleSpinBox *_topMargin;
+	QDoubleSpinBox *_bottomMargin;
+	QDoubleSpinBox *_leftMargin;
+	QDoubleSpinBox *_rightMargin;
 };
 
 #endif // EXPORTDIALOG_H

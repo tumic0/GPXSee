@@ -1,15 +1,19 @@
-#include <QPrinter>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>
+#include <QGridLayout>
+#include <QDialogButtonBox>
 #include <QGroupBox>
 #include <QComboBox>
 #include <QRadioButton>
 #include <QPushButton>
 #include <QFileInfo>
-#include <QDir>
 #include <QMessageBox>
+#include <QTabWidget>
+#include <QDoubleSpinBox>
+#include <QLocale>
 #include "fileselectwidget.h"
+#include "units.h"
 #include "exportdialog.h"
 
 
@@ -18,8 +22,8 @@ ExportDialog::ExportDialog(QPrinter *printer, QWidget *parent)
 {
 	int index;
 
-	setWindowTitle(tr("Export to PDF"));
-	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+	_units = (QLocale::system().measurementSystem()
+	  == QLocale::ImperialSystem) ? QPrinter::Inch : QPrinter::Millimeter;
 
 	_fileSelect = new FileSelectWidget();
 	_fileSelect->setFilter(tr("PDF files (*.pdf);;All files (*)"));
@@ -45,30 +49,78 @@ ExportDialog::ExportDialog(QPrinter *printer, QWidget *parent)
 	else
 		_landscape->setChecked(true);
 
-	QGroupBox *contentBox = new QGroupBox(tr("Settings"));
-	QFormLayout *contentLayout = new QFormLayout;
-	contentLayout->addRow(tr("Page size:"), _paperSize);
-	contentLayout->addRow(tr("Orientation:"), orientationLayout);
-	contentLayout->addRow(tr("Output file:"), _fileSelect);
-	contentBox->setLayout(contentLayout);
+	qreal top, bottom, left, right;
 
-	QPushButton *exportButton = new QPushButton(tr("Export"));
-	exportButton->setAutoDefault(true);
-	exportButton->setDefault(true);
-	connect(exportButton, SIGNAL(clicked()), this, SLOT(accept()));
-	QPushButton *cancelButton = new QPushButton(tr("Cancel"));
-	connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+	_printer->getPageMargins(&left, &top, &right, &bottom, _units);
+	QString us = _units == QPrinter::Inch ? tr("in") : tr("mm");
+	_topMargin = new QDoubleSpinBox();
+	_bottomMargin = new QDoubleSpinBox();
+	_leftMargin = new QDoubleSpinBox();
+	_rightMargin = new QDoubleSpinBox();
+	_topMargin->setValue(top);
+	_topMargin->setSuffix(UNIT_SPACE + us);
+	_bottomMargin->setValue(bottom);
+	_bottomMargin->setSuffix(UNIT_SPACE + us);
+	_leftMargin->setValue(left);
+	_leftMargin->setSuffix(UNIT_SPACE + us);
+	_rightMargin->setValue(right);
+	_rightMargin->setSuffix(UNIT_SPACE + us);
+	if (_units == QPrinter::Inch) {
+		_topMargin->setSingleStep(0.1);
+		_bottomMargin->setSingleStep(0.1);
+		_leftMargin->setSingleStep(0.1);
+		_rightMargin->setSingleStep(0.1);
+	}
 
-	QHBoxLayout *buttonsLayout = new QHBoxLayout;
-	buttonsLayout->addStretch();
-	buttonsLayout->addWidget(exportButton);
-	buttonsLayout->addWidget(cancelButton);
+	QGridLayout *marginsLayout = new QGridLayout();
+	marginsLayout->addWidget(_topMargin, 0, 0, 1, 2, Qt::AlignCenter);
+	marginsLayout->addWidget(_leftMargin, 1, 0, 1, 1, Qt::AlignCenter);
+	marginsLayout->addWidget(_rightMargin, 1, 1, 1, 1, Qt::AlignCenter);
+	marginsLayout->addWidget(_bottomMargin, 2, 0, 1, 2, Qt::AlignCenter);
+
+#ifndef Q_OS_MAC
+	QGroupBox *pageSetupBox = new QGroupBox(tr("Page Setup"));
+#endif // Q_OS_MAC
+	QFormLayout *pageSetupLayout = new QFormLayout;
+	pageSetupLayout->addRow(tr("Page size:"), _paperSize);
+	pageSetupLayout->addRow(tr("Orientation:"), orientationLayout);
+	pageSetupLayout->addRow(tr("Margins:"), marginsLayout);
+#ifdef Q_OS_MAC
+	QFrame *line = new QFrame();
+	line->setFrameShape(QFrame::HLine);
+	line->setFrameShadow(QFrame::Sunken);
+	pageSetupLayout->addRow(line);
+	pageSetupLayout->addRow(tr("File:"), _fileSelect);
+#else // Q_OS_MAC
+	pageSetupBox->setLayout(pageSetupLayout);
+#endif // Q_OS_MAC
+
+#ifndef Q_OS_MAC
+	QGroupBox *outputFileBox = new QGroupBox(tr("Output file"));
+	QHBoxLayout *outputFileLayout = new QHBoxLayout();
+	outputFileLayout->addWidget(_fileSelect);
+	outputFileBox->setLayout(outputFileLayout);
+#endif // Q_OS_MAC
+
+	QDialogButtonBox *buttonBox = new QDialogButtonBox();
+	buttonBox->addButton(tr("Export"), QDialogButtonBox::AcceptRole);
+	buttonBox->addButton(QDialogButtonBox::Cancel);
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
 	QVBoxLayout *layout = new QVBoxLayout;
-	layout->addWidget(contentBox);
-	layout->addLayout(buttonsLayout);
+#ifdef Q_OS_MAC
+	layout->addLayout(pageSetupLayout);
+#else // Q_OS_MAC
+	layout->addWidget(pageSetupBox);
+	layout->addWidget(outputFileBox);
+#endif // Q_OS_MAC
+	layout->addWidget(buttonBox);
 
 	setLayout(layout);
+
+	setWindowTitle(tr("Export to PDF"));
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
 bool ExportDialog::checkFile()
@@ -116,6 +168,8 @@ void ExportDialog::accept()
 	_printer->setOutputFileName(_fileSelect->file());
 	_printer->setPaperSize(paperSize);
 	_printer->setOrientation(orientation);
+	_printer->setPageMargins(_leftMargin->value(), _topMargin->value(),
+	  _rightMargin->value(), _bottomMargin->value(), _units);
 
 	QDialog::accept();
 }

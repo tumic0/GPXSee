@@ -90,10 +90,11 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 
 	readSettings();
 
-	_exportPaperSize =  (QLocale::system().measurementSystem()
+	_exportPaperSize = (QLocale::system().measurementSystem()
 	  == QLocale::ImperialSystem) ? QPrinter::Letter : QPrinter::A4;
 	_exportOrientation = QPrinter::Portrait;
-	_exportFileName =  QString("%1/export.pdf").arg(QDir::currentPath());
+	_exportFileName = QString("%1/export.pdf").arg(QDir::currentPath());
+	_exportMargins = MarginsF(5.0, 5.0, 5.0, 5.0);
 }
 
 GUI::~GUI()
@@ -204,12 +205,12 @@ void GUI::createActions()
 	connect(_openFileAction, SIGNAL(triggered()), this, SLOT(openFile()));
 	addAction(_openFileAction);
 	_printFileAction = new QAction(QIcon(QPixmap(PRINT_FILE_ICON)),
-	  tr("Print"), this);
+	  tr("Print..."), this);
 	_printFileAction->setActionGroup(_fileActionGroup);
 	connect(_printFileAction, SIGNAL(triggered()), this, SLOT(printFile()));
 	addAction(_printFileAction);
 	_exportFileAction = new QAction(QIcon(QPixmap(EXPORT_FILE_ICON)),
-	  tr("Export to PDF"), this);
+	  tr("Export to PDF..."), this);
 	_exportFileAction->setShortcut(EXPORT_SHORTCUT);
 	_exportFileAction->setActionGroup(_fileActionGroup);
 	connect(_exportFileAction, SIGNAL(triggered()), this, SLOT(exportFile()));
@@ -651,16 +652,21 @@ void GUI::printFile()
 void GUI::exportFile()
 {
 	QPrinter printer(QPrinter::HighResolution);
+	printer.setCreator(QString(APP_NAME) + QString(" ") + QString(APP_VERSION));
 	printer.setOrientation(_exportOrientation);
 	printer.setOutputFileName(_exportFileName);
 	printer.setPaperSize(_exportPaperSize);
-	printer.setCreator(QString(APP_NAME) + QString(" ") + QString(APP_VERSION));
+	printer.setPageMargins(_exportMargins.left(), _exportMargins.top(),
+	  _exportMargins.right(), _exportMargins.bottom(), QPrinter::Millimeter);
 	ExportDialog dialog(&printer, this);
 
 	if (dialog.exec() == QDialog::Accepted) {
 		_exportFileName = printer.outputFileName();
 		_exportPaperSize = printer.paperSize();
 		_exportOrientation = printer.orientation();
+		printer.getPageMargins(&(_exportMargins.rleft()),
+		  &(_exportMargins.rtop()), &(_exportMargins.rright()),
+		  &(_exportMargins.rbottom()), QPrinter::Millimeter);
 		plot(&printer);
 	}
 }
@@ -681,7 +687,7 @@ void GUI::plot(QPrinter *printer)
 			info.insert(tr("Date"), QString("%1 - %2")
 			  .arg(_dateRange.first.toString(format),
 			  _dateRange.second.toString(format)));
-			info.insert(tr("Track count"), QString::number(_trackCount));
+			info.insert(tr("Tracks"), QString::number(_trackCount));
 		}
 	}
 	if (_distance > 0) {
