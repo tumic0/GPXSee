@@ -74,8 +74,8 @@ ExportDialog::ExportDialog(QPrinter *printer, QWidget *parent)
 
 	QGridLayout *marginsLayout = new QGridLayout();
 	marginsLayout->addWidget(_topMargin, 0, 0, 1, 2, Qt::AlignCenter);
-	marginsLayout->addWidget(_leftMargin, 1, 0, 1, 1, Qt::AlignCenter);
-	marginsLayout->addWidget(_rightMargin, 1, 1, 1, 1, Qt::AlignCenter);
+	marginsLayout->addWidget(_leftMargin, 1, 0, 1, 1, Qt::AlignRight);
+	marginsLayout->addWidget(_rightMargin, 1, 1, 1, 1, Qt::AlignLeft);
 	marginsLayout->addWidget(_bottomMargin, 2, 0, 1, 2, Qt::AlignCenter);
 
 #ifndef Q_OS_MAC
@@ -116,7 +116,6 @@ ExportDialog::ExportDialog(QPrinter *printer, QWidget *parent)
 	layout->addWidget(outputFileBox);
 #endif // Q_OS_MAC
 	layout->addWidget(buttonBox);
-
 	setLayout(layout);
 
 	setWindowTitle(tr("Export to PDF"));
