@@ -4,7 +4,7 @@
 ; The name of the installer
 Name "GPXSee"
 ; Program version
-!define VERSION "2.14"
+!define VERSION "2.15"
 
 ; The file to write
 OutFile "GPXSee-${VERSION}_x64.exe"
@@ -110,6 +110,7 @@ Section "QT libs" SEC_QT
   File "libGLESv2.dll"
   File /r "platforms"
   File /r "imageformats"
+  File /r "printsupport"
  
 SectionEnd
 
