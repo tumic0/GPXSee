@@ -738,6 +738,8 @@ void GUI::reloadFile()
 	_heartRateGraph->clear();
 	_track->clear();
 
+	_sliderPos = 0;
+
 	for (int i = 0; i < _files.size(); i++) {
 		if (!loadFile(_files.at(i))) {
 			_files.removeAt(i);
