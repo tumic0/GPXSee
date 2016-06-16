@@ -64,9 +64,16 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 		fprintf(stderr, "Error downloading map tile: %s: %s\n",
 		  url.toEncoded().constData(), qPrintable(reply->errorString()));
 	} else {
+		QUrl redirect = reply->attribute(
+		  QNetworkRequest::RedirectionTargetAttribute).toUrl();
 		QString filename = reply->request().attribute(QNetworkRequest::User)
 		  .toString();
-		saveToDisk(filename, reply);
+
+		if (!redirect.isEmpty()) {
+			Download dl(redirect, filename);
+			doDownload(dl);
+		} else
+			saveToDisk(filename, reply);
 	}
 
 	_currentDownloads.removeAll(reply);

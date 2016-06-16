@@ -42,10 +42,11 @@ void Map::loadTilesAsync(QList<Tile> &list)
 		QString file = tileFile(t);
 		QFileInfo fi(file);
 
-		if (!(fi.exists() && loadTileFile(t, file))) {
+		if (!fi.exists()) {
 			fillTile(t);
 			dl.append(Download(tileUrl(t), file));
-		}
+		} else
+			loadTileFile(t, file);
 	}
 
 	if (!dl.empty())
@@ -61,8 +62,10 @@ void Map::loadTilesSync(QList<Tile> &list)
 		QString file = tileFile(t);
 		QFileInfo fi(file);
 
-		if (!(fi.exists() && loadTileFile(t, file)))
+		if (!fi.exists())
 			dl.append(Download(tileUrl(t), file));
+		else
+			loadTileFile(t, file);
 	}
 
 	if (dl.empty())

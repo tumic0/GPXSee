@@ -12,13 +12,13 @@
 class Download
 {
 public:
-	Download(const QString &url, const QString &file)
+	Download(const QUrl &url, const QString &file)
 		{_url = url; _file = file;}
-	const QString& url() const {return _url;}
+	const QUrl& url() const {return _url;}
 	const QString& file() const {return _file;}
 
 private:
-	QString _url;
+	QUrl _url;
 	QString _file;
 };
 
