@@ -13,6 +13,7 @@ public:
 	void elevationGraph(QVector<QPointF> &graph) const;
 	void speedGraph(QVector<QPointF> &graph) const;
 	void heartRateGraph(QVector<QPointF> &graph) const;
+	void temperatureGraph(QVector<QPointF> &graph) const;
 	void track(QVector<QPointF> &track) const;
 	qreal distance() const {return _distance;}
 	qreal time() const;

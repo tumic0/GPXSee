@@ -43,7 +43,8 @@ HEADERS += src/config.h \
     src/trackinfo.h \
     src/exportdialog.h \
     src/fileselectwidget.h \
-    src/margins.h
+    src/margins.h \
+    src/temperaturegraph.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
@@ -73,7 +74,9 @@ SOURCES += src/main.cpp \
     src/app.cpp \
     src/trackinfo.cpp \
     src/exportdialog.cpp \
-    src/fileselectwidget.cpp
+    src/fileselectwidget.cpp \
+    src/temperaturegraph.cpp \
+    src/trackpoint.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {

@@ -47,13 +47,15 @@ public:
 	const QString &yUnits() const {return _yUnits;}
 	qreal xScale() const {return _xScale;}
 	qreal yScale() const {return _yScale;}
+	qreal yOffset() const {return _yOffset;}
 
 	void setXLabel(const QString &label);
 	void setYLabel(const QString &label);
 	void setXUnits(const QString &units);
 	void setYUnits(const QString &units);
-	void setXScale(qreal scale);
-	void setYScale(qreal scale);
+	void setXScale(qreal scale) {_xScale = scale;}
+	void setYScale(qreal scale) {_yScale = scale;}
+	void setYOffset(qreal offset) {_yOffset = offset;}
 
 	void setSliderPrecision(int precision) {_precision = precision;}
 	void setMinYRange(qreal range) {_minYRange = range;}
@@ -85,6 +87,7 @@ private:
 	void updateSliderInfo();
 
 	qreal _xScale, _yScale;
+	qreal _yOffset;
 	QString _xUnits, _yUnits;
 	QString _xLabel, _yLabel;
 	int _precision;

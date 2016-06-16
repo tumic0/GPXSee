@@ -7,6 +7,8 @@ void Parser::handleExtensionData(QStringRef element, const QString &value)
 		_track->last().speed = value.toDouble();
 	else if (element == "hr" || element == "heartrate")
 		_track->last().heartRate = value.toDouble();
+	else if (element == "atemp" || element == "temp")
+		_track->last().temperature = value.toDouble();
 }
 
 void Parser::handleTrekPointData(QStringRef element, const QString &value)
@@ -42,7 +44,7 @@ void Parser::handleWayPointAttributes(const QXmlStreamAttributes &attr)
 void Parser::tpExtension()
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "hr")
+		if (_reader.name() == "hr" || _reader.name() == "atemp")
 			handleExtensionData(_reader.name(), _reader.readElementText());
 		else
 			_reader.skipCurrentElement();
@@ -53,7 +55,7 @@ void Parser::extensions()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "speed" || _reader.name() == "hr"
-		  || _reader.name() == "heartrate")
+		  || _reader.name() == "heartrate" || _reader.name() == "temp")
 			handleExtensionData(_reader.name(), _reader.readElementText());
 		else if (_reader.name() == "TrackPointExtension")
 			tpExtension();

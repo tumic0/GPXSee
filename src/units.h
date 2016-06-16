@@ -18,6 +18,9 @@ enum Units {
 #define MIINFT  5280     // 1 mi in ft
 #define MIINM   1609.344 // 1mi in m
 
+#define C2FS    1.8 // Celsius to Farenheit - scale
+#define C2FO    32  // Celsius to Farenheit - offset
+
 #ifdef Q_OS_WIN32
 #define UNIT_SPACE     QString(" ")
 #else // Q_OS_WIN32

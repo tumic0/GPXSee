@@ -22,6 +22,7 @@ class GraphView;
 class ElevationGraph;
 class SpeedGraph;
 class HeartRateGraph;
+class TemperatureGraph;
 class TrackView;
 class Map;
 
@@ -158,6 +159,7 @@ private:
 	ElevationGraph *_elevationGraph;
 	SpeedGraph *_speedGraph;
 	HeartRateGraph *_heartRateGraph;
+	TemperatureGraph *_temperatureGraph;
 	QList<GraphTab> _tabs;
 
 	POI _poi;

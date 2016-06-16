@@ -28,6 +28,7 @@
 #include "elevationgraph.h"
 #include "speedgraph.h"
 #include "heartrategraph.h"
+#include "temperaturegraph.h"
 #include "trackview.h"
 #include "trackinfo.h"
 #include "filebrowser.h"
@@ -405,6 +406,8 @@ void GUI::createTrackGraphs()
 	_speedGraph->setFrameShape(QFrame::NoFrame);
 	_heartRateGraph = new HeartRateGraph;
 	_heartRateGraph->setFrameShape(QFrame::NoFrame);
+	_temperatureGraph = new TemperatureGraph;
+	_temperatureGraph->setFrameShape(QFrame::NoFrame);
 
 	_trackGraphs = new QTabWidget;
 	connect(_trackGraphs, SIGNAL(currentChanged(int)), this,
@@ -420,12 +423,15 @@ void GUI::createTrackGraphs()
 	_tabs.append(GraphTab(_elevationGraph, tr("Elevation")));
 	_tabs.append(GraphTab(_speedGraph, tr("Speed")));
 	_tabs.append(GraphTab(_heartRateGraph, tr("Heart rate")));
+	_tabs.append(GraphTab(_temperatureGraph, tr("Temperature")));
 
 	connect(_elevationGraph, SIGNAL(sliderPositionChanged(qreal)), this,
 	  SLOT(sliderPositionChanged(qreal)));
 	connect(_speedGraph, SIGNAL(sliderPositionChanged(qreal)), this,
 	  SLOT(sliderPositionChanged(qreal)));
 	connect(_heartRateGraph, SIGNAL(sliderPositionChanged(qreal)), this,
+	  SLOT(sliderPositionChanged(qreal)));
+	connect(_temperatureGraph, SIGNAL(sliderPositionChanged(qreal)), this,
 	  SLOT(sliderPositionChanged(qreal)));
 }
 
@@ -562,6 +568,7 @@ bool GUI::loadFile(const QString &fileName)
 		_elevationGraph->loadGPX(gpx);
 		_speedGraph->loadGPX(gpx);
 		_heartRateGraph->loadGPX(gpx);
+		_temperatureGraph->loadGPX(gpx);
 		updateGraphTabs();
 		_track->setHidden(false);
 		_track->loadGPX(gpx);
@@ -736,6 +743,7 @@ void GUI::reloadFile()
 	_elevationGraph->clear();
 	_speedGraph->clear();
 	_heartRateGraph->clear();
+	_temperatureGraph->clear();
 	_track->clear();
 
 	_sliderPos = 0;
@@ -769,6 +777,7 @@ void GUI::closeFiles()
 	_elevationGraph->clear();
 	_speedGraph->clear();
 	_heartRateGraph->clear();
+	_temperatureGraph->clear();
 	_track->clear();
 
 	_files.clear();
@@ -1003,6 +1012,7 @@ void GUI::setMetricUnits()
 	_elevationGraph->setUnits(Metric);
 	_speedGraph->setUnits(Metric);
 	_heartRateGraph->setUnits(Metric);
+	_temperatureGraph->setUnits(Metric);
 	updateStatusBarInfo();
 }
 
@@ -1012,6 +1022,7 @@ void GUI::setImperialUnits()
 	_elevationGraph->setUnits(Imperial);
 	_speedGraph->setUnits(Imperial);
 	_heartRateGraph->setUnits(Imperial);
+	_temperatureGraph->setUnits(Imperial);
 	updateStatusBarInfo();
 }
 

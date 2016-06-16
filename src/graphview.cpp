@@ -49,6 +49,7 @@ GraphView::GraphView(QWidget *parent)
 
 	_xScale = 1;
 	_yScale = 1;
+	_yOffset = 0;
 
 	_precision = 0;
 	_minYRange = 0.01;
@@ -116,16 +117,6 @@ void GraphView::setYUnits(const QString &units)
 	createYLabel();
 }
 
-void GraphView::setXScale(qreal scale)
-{
-	_xScale = scale;
-}
-
-void GraphView::setYScale(qreal scale)
-{
-	_yScale = scale;
-}
-
 void GraphView::loadData(const QVector<QPointF> &data)
 {
 	QPainterPath path;
@@ -182,7 +173,8 @@ void GraphView::redraw(const QSizeF &size)
 		_graphs.at(i)->resetTransform();
 
 	rx = RangeF(_bounds.left() * _xScale, _bounds.right() * _xScale);
-	ry = RangeF(_bounds.top() * _yScale, _bounds.bottom() * _yScale);
+	ry = RangeF(_bounds.top() * _yScale + _yOffset, _bounds.bottom() * _yScale
+	  + _yOffset);
 	if (ry.size() < _minYRange)
 		ry.resize(_minYRange);
 
@@ -217,6 +209,8 @@ void GraphView::redraw(const QSizeF &size)
 	_scene->addItem(_yAxis);
 
 	_slider->setArea(r);
+	if (_sliderPos > _bounds.right() || _sliderPos < _bounds.left())
+		_slider->setVisible(false);
 	_slider->setPos((_sliderPos / _bounds.width()) * _slider->area().width(),
 	  r.bottom());
 	_scene->addItem(_slider);
@@ -311,7 +305,7 @@ void GraphView::updateSliderInfo()
 {
 	_sliderInfo->setVisible(_graphs.size() == 1);
 
-	if (_graphs.size() != 1)
+	if (!_slider->isVisible())
 		return;
 
 	const QPainterPath &path = _graphs.at(0)->path();
@@ -329,7 +323,8 @@ void GraphView::updateSliderInfo()
 
 	_sliderInfo->setSide(s);
 	_sliderInfo->setPos(QPointF(0, _slider->boundingRect().height() * r));
-	_sliderInfo->setText(QString::number(-y * _yScale, 'f', _precision));
+	_sliderInfo->setText(QString::number(-y * _yScale + _yOffset, 'f',
+	  _precision));
 }
 
 void GraphView::emitSliderPositionChanged(const QPointF &pos)
