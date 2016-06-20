@@ -1,7 +1,8 @@
 #include "parser.h"
 
 
-void Parser::handleDataElement(Element element, const QString &value)
+void Parser::handleTrackpointData(TrackpointElement element,
+  const QString &value)
 {
 	switch (element) {
 	    case Elevation:
@@ -26,19 +27,19 @@ void Parser::handleDataElement(Element element, const QString &value)
 	}
 }
 
-void Parser::handleWayPointData(QStringRef element, const QString &value)
+void Parser::handleWaypointData(WaypointElement element, const QString &value)
 {
-	if (element == "name")
+	if (element == Name)
 		_waypoints.last().setDescription(value);
 }
 
-void Parser::handleTrekPointAttributes(const QXmlStreamAttributes &attr)
+void Parser::handleTrackpointAttributes(const QXmlStreamAttributes &attr)
 {
 	_track->last().coordinates.setY(attr.value("lat").toLatin1().toDouble());
 	_track->last().coordinates.setX(attr.value("lon").toLatin1().toDouble());
 }
 
-void Parser::handleWayPointAttributes(const QXmlStreamAttributes &attr)
+void Parser::handleWaypointAttributes(const QXmlStreamAttributes &attr)
 {
 	_waypoints.last().setCoordinates(QPointF(
 	  attr.value("lon").toLatin1().toDouble(),
@@ -49,9 +50,9 @@ void Parser::tpExtension()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "hr")
-			handleDataElement(HeartRate, _reader.readElementText());
+			handleTrackpointData(HeartRate, _reader.readElementText());
 		else if (_reader.name() == "atemp")
-			handleDataElement(Temperature, _reader.readElementText());
+			handleTrackpointData(Temperature, _reader.readElementText());
 		else
 			_reader.skipCurrentElement();
 	}
@@ -61,11 +62,11 @@ void Parser::extensions()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "speed")
-			handleDataElement(Speed, _reader.readElementText());
+			handleTrackpointData(Speed, _reader.readElementText());
 		else if (_reader.name() == "hr" || _reader.name() == "heartrate")
-			handleDataElement(HeartRate, _reader.readElementText());
+			handleTrackpointData(HeartRate, _reader.readElementText());
 		else if (_reader.name() == "temp")
-			handleDataElement(Temperature, _reader.readElementText());
+			handleTrackpointData(Temperature, _reader.readElementText());
 		else if (_reader.name() == "TrackPointExtension")
 			tpExtension();
 		else
@@ -73,15 +74,15 @@ void Parser::extensions()
 	}
 }
 
-void Parser::trackPointData()
+void Parser::trackpointData()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "ele")
-			handleDataElement(Elevation, _reader.readElementText());
+			handleTrackpointData(Elevation, _reader.readElementText());
 		else if (_reader.name() == "time")
-			handleDataElement(Time, _reader.readElementText());
+			handleTrackpointData(Time, _reader.readElementText());
 		else if (_reader.name() == "geoidheight")
-			handleDataElement(Geoidheight, _reader.readElementText());
+			handleTrackpointData(Geoidheight, _reader.readElementText());
 		else if (_reader.name() == "extensions")
 			extensions();
 		else
@@ -89,13 +90,13 @@ void Parser::trackPointData()
 	}
 }
 
-void Parser::trackPoints()
+void Parser::trackpoints()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "trkpt") {
 			_track->append(Trackpoint());
-			handleTrekPointAttributes(_reader.attributes());
-			trackPointData();
+			handleTrackpointAttributes(_reader.attributes());
+			trackpointData();
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -105,17 +106,17 @@ void Parser::track()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "trkseg") {
-			trackPoints();
+			trackpoints();
 		} else
 			_reader.skipCurrentElement();
 	}
 }
 
-void Parser::wayPointData()
+void Parser::waypointData()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "name")
-			handleWayPointData(_reader.name(), _reader.readElementText());
+			handleWaypointData(Name, _reader.readElementText());
 		else
 			_reader.skipCurrentElement();
 	}
@@ -130,8 +131,8 @@ void Parser::gpx()
 			track();
 		} else if (_reader.name() == "wpt") {
 			_waypoints.append(Waypoint());
-			handleWayPointAttributes(_reader.attributes());
-			wayPointData();
+			handleWaypointAttributes(_reader.attributes());
+			waypointData();
 		} else
 			_reader.skipCurrentElement();
 	}
