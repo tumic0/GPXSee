@@ -1,25 +1,29 @@
 #include "parser.h"
 
 
-void Parser::handleExtensionData(QStringRef element, const QString &value)
+void Parser::handleDataElement(Element element, const QString &value)
 {
-	if (element == "speed")
-		_track->last().speed = value.toDouble();
-	else if (element == "hr" || element == "heartrate")
-		_track->last().heartRate = value.toDouble();
-	else if (element == "atemp" || element == "temp")
-		_track->last().temperature = value.toDouble();
-}
-
-void Parser::handleTrekPointData(QStringRef element, const QString &value)
-{
-	if (element == "ele")
-		_track->last().elevation = value.toLatin1().toDouble();
-	else if (element == "time")
-		_track->last().timestamp = QDateTime::fromString(value.toLatin1(),
-		  Qt::ISODate);
-	else if (element == "geoidheight")
-		_track->last().geoidheight = value.toLatin1().toDouble();
+	switch (element) {
+	    case Elevation:
+		    _track->last().elevation = value.toLatin1().toDouble();
+		    break;
+	    case Time:
+		    _track->last().timestamp = QDateTime::fromString(value.toLatin1(),
+			  Qt::ISODate);
+		    break;
+	    case Geoidheight:
+		    _track->last().geoidheight = value.toLatin1().toDouble();
+		    break;
+	    case Speed:
+		    _track->last().speed = value.toDouble();
+		    break;
+	    case HeartRate:
+		    _track->last().heartRate = value.toDouble();
+		    break;
+	    case Temperature:
+		    _track->last().temperature = value.toDouble();
+		    break;
+	}
 }
 
 void Parser::handleWayPointData(QStringRef element, const QString &value)
@@ -44,8 +48,10 @@ void Parser::handleWayPointAttributes(const QXmlStreamAttributes &attr)
 void Parser::tpExtension()
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "hr" || _reader.name() == "atemp")
-			handleExtensionData(_reader.name(), _reader.readElementText());
+		if (_reader.name() == "hr")
+			handleDataElement(HeartRate, _reader.readElementText());
+		else if (_reader.name() == "atemp")
+			handleDataElement(Temperature, _reader.readElementText());
 		else
 			_reader.skipCurrentElement();
 	}
@@ -54,9 +60,12 @@ void Parser::tpExtension()
 void Parser::extensions()
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "speed" || _reader.name() == "hr"
-		  || _reader.name() == "heartrate" || _reader.name() == "temp")
-			handleExtensionData(_reader.name(), _reader.readElementText());
+		if (_reader.name() == "speed")
+			handleDataElement(Speed, _reader.readElementText());
+		else if (_reader.name() == "hr" || _reader.name() == "heartrate")
+			handleDataElement(HeartRate, _reader.readElementText());
+		else if (_reader.name() == "temp")
+			handleDataElement(Temperature, _reader.readElementText());
 		else if (_reader.name() == "TrackPointExtension")
 			tpExtension();
 		else
@@ -67,9 +76,12 @@ void Parser::extensions()
 void Parser::trackPointData()
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "ele" || _reader.name() == "time"
-		  || _reader.name() == "geoidheight")
-			handleTrekPointData(_reader.name(), _reader.readElementText());
+		if (_reader.name() == "ele")
+			handleDataElement(Elevation, _reader.readElementText());
+		else if (_reader.name() == "time")
+			handleDataElement(Time, _reader.readElementText());
+		else if (_reader.name() == "geoidheight")
+			handleDataElement(Geoidheight, _reader.readElementText());
 		else if (_reader.name() == "extensions")
 			extensions();
 		else

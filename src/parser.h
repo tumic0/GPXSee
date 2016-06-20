@@ -18,6 +18,10 @@ public:
 	int errorLine() const {return _reader.lineNumber();}
 
 private:
+	enum Element {
+		Elevation, Time, Geoidheight, Speed, HeartRate, Temperature
+	};
+
 	bool parse();
 	void gpx();
 	void track();
@@ -30,8 +34,7 @@ private:
 	void handleWayPointAttributes(const QXmlStreamAttributes &attr);
 	void handleWayPointData(QStringRef element, const QString &value);
 	void handleTrekPointAttributes(const QXmlStreamAttributes &attr);
-	void handleTrekPointData(QStringRef element, const QString &value);
-	void handleExtensionData(QStringRef element, const QString &value);
+	void handleDataElement(Element element, const QString &value);
 
 	QXmlStreamReader _reader;
 	QList<QVector<Trackpoint> > &_tracks;
