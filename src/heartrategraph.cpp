@@ -2,7 +2,7 @@
 #include "heartrategraph.h"
 
 
-HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphView(parent)
+HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphTab(parent)
 {
 	_units = Metric;
 

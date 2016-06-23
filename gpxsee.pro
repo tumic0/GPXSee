@@ -44,7 +44,8 @@ HEADERS += src/config.h \
     src/exportdialog.h \
     src/fileselectwidget.h \
     src/margins.h \
-    src/temperaturegraph.h
+    src/temperaturegraph.h \
+    src/graphtab.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \

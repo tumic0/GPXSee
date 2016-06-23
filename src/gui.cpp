@@ -34,6 +34,7 @@
 #include "filebrowser.h"
 #include "cpuarch.h"
 #include "exportdialog.h"
+#include "graphtab.h"
 #include "gui.h"
 
 
@@ -101,8 +102,8 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 GUI::~GUI()
 {
 	for (int i = 0; i < _tabs.size(); i++) {
-		if (_trackGraphs->indexOf(_tabs.at(i).first) < 0)
-			delete _tabs.at(i).first;
+		if (_trackGraphs->indexOf(_tabs.at(i)) < 0)
+			delete _tabs.at(i);
 	}
 }
 
@@ -400,15 +401,6 @@ void GUI::createTrackView()
 
 void GUI::createTrackGraphs()
 {
-	_elevationGraph = new ElevationGraph;
-	_elevationGraph->setFrameShape(QFrame::NoFrame);
-	_speedGraph = new SpeedGraph;
-	_speedGraph->setFrameShape(QFrame::NoFrame);
-	_heartRateGraph = new HeartRateGraph;
-	_heartRateGraph->setFrameShape(QFrame::NoFrame);
-	_temperatureGraph = new TemperatureGraph;
-	_temperatureGraph->setFrameShape(QFrame::NoFrame);
-
 	_trackGraphs = new QTabWidget;
 	connect(_trackGraphs, SIGNAL(currentChanged(int)), this,
 	  SLOT(graphChanged(int)));
@@ -420,19 +412,14 @@ void GUI::createTrackGraphs()
 	_trackGraphs->setDocumentMode(true);
 #endif // Q_OS_WIN32
 
-	_tabs.append(GraphTab(_elevationGraph, tr("Elevation")));
-	_tabs.append(GraphTab(_speedGraph, tr("Speed")));
-	_tabs.append(GraphTab(_heartRateGraph, tr("Heart rate")));
-	_tabs.append(GraphTab(_temperatureGraph, tr("Temperature")));
+	_tabs.append(new ElevationGraph);
+	_tabs.append(new SpeedGraph);
+	_tabs.append(new HeartRateGraph);
+	_tabs.append(new TemperatureGraph);
 
-	connect(_elevationGraph, SIGNAL(sliderPositionChanged(qreal)), this,
-	  SLOT(sliderPositionChanged(qreal)));
-	connect(_speedGraph, SIGNAL(sliderPositionChanged(qreal)), this,
-	  SLOT(sliderPositionChanged(qreal)));
-	connect(_heartRateGraph, SIGNAL(sliderPositionChanged(qreal)), this,
-	  SLOT(sliderPositionChanged(qreal)));
-	connect(_temperatureGraph, SIGNAL(sliderPositionChanged(qreal)), this,
-	  SLOT(sliderPositionChanged(qreal)));
+	for (int i = 0; i < _tabs.count(); i++)
+		connect(_tabs.at(i), SIGNAL(sliderPositionChanged(qreal)), this,
+		  SLOT(sliderPositionChanged(qreal)));
 }
 
 void GUI::createStatusBar()
@@ -565,10 +552,8 @@ bool GUI::loadFile(const QString &fileName)
 	GPX gpx;
 
 	if (gpx.loadFile(fileName)) {
-		_elevationGraph->loadGPX(gpx);
-		_speedGraph->loadGPX(gpx);
-		_heartRateGraph->loadGPX(gpx);
-		_temperatureGraph->loadGPX(gpx);
+		for (int i = 0; i < _tabs.count(); i++)
+			_tabs.at(i)->loadGPX(gpx);
 		updateGraphTabs();
 		_track->setHidden(false);
 		_track->loadGPX(gpx);
@@ -740,10 +725,8 @@ void GUI::reloadFile()
 	_dateRange = DateRange(QDate(), QDate());
 	_trackCount = 0;
 
-	_elevationGraph->clear();
-	_speedGraph->clear();
-	_heartRateGraph->clear();
-	_temperatureGraph->clear();
+	for (int i = 0; i < _tabs.count(); i++)
+		_tabs.at(i)->clear();
 	_track->clear();
 
 	_sliderPos = 0;
@@ -774,10 +757,8 @@ void GUI::closeFiles()
 
 	_sliderPos = 0;
 
-	_elevationGraph->clear();
-	_speedGraph->clear();
-	_heartRateGraph->clear();
-	_temperatureGraph->clear();
+	for (int i = 0; i < _tabs.count(); i++)
+		_tabs.at(i)->clear();
 	_track->clear();
 
 	_files.clear();
@@ -977,18 +958,18 @@ void GUI::updateNavigationActions()
 void GUI::updateGraphTabs()
 {
 	int index;
-	GraphView *gv;
+	GraphTab *tab;
 
 	for (int i = 0; i < _tabs.size(); i++) {
-		gv = _tabs.at(i).first;
-		if (!gv->count() && (index = _trackGraphs->indexOf(gv)) >= 0)
+		tab = _tabs.at(i);
+		if (!tab->count() && (index = _trackGraphs->indexOf(tab)) >= 0)
 			_trackGraphs->removeTab(index);
 	}
 
 	for (int i = 0; i < _tabs.size(); i++) {
-		gv = _tabs.at(i).first;
-		if (gv->count() && _trackGraphs->indexOf(gv) < 0)
-			_trackGraphs->insertTab(i, gv, _tabs.at(i).second);
+		tab = _tabs.at(i);
+		if (tab->count() && _trackGraphs->indexOf(tab) < 0)
+			_trackGraphs->insertTab(i, tab, _tabs.at(i)->label());
 	}
 
 	if (_trackGraphs->count()) {
@@ -1009,20 +990,16 @@ void GUI::updateTrackView()
 void GUI::setMetricUnits()
 {
 	_track->setUnits(Metric);
-	_elevationGraph->setUnits(Metric);
-	_speedGraph->setUnits(Metric);
-	_heartRateGraph->setUnits(Metric);
-	_temperatureGraph->setUnits(Metric);
+	for (int i = 0; i <_tabs.count(); i++)
+		_tabs.at(i)->setUnits(Metric);
 	updateStatusBarInfo();
 }
 
 void GUI::setImperialUnits()
 {
 	_track->setUnits(Imperial);
-	_elevationGraph->setUnits(Imperial);
-	_speedGraph->setUnits(Imperial);
-	_heartRateGraph->setUnits(Imperial);
-	_temperatureGraph->setUnits(Imperial);
+	for (int i = 0; i <_tabs.count(); i++)
+		_tabs.at(i)->setUnits(Imperial);
 	updateStatusBarInfo();
 }
 

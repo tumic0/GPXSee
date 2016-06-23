@@ -2,7 +2,7 @@
 #include "temperaturegraph.h"
 
 
-TemperatureGraph::TemperatureGraph(QWidget *parent) : GraphView(parent)
+TemperatureGraph::TemperatureGraph(QWidget *parent) : GraphTab(parent)
 {
 	_units = Metric;
 

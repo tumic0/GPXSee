@@ -3,7 +3,7 @@
 #include "speedgraph.h"
 
 
-SpeedGraph::SpeedGraph(QWidget *parent) : GraphView(parent)
+SpeedGraph::SpeedGraph(QWidget *parent) : GraphTab(parent)
 {
 	_units = Metric;
 

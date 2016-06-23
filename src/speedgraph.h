@@ -2,26 +2,25 @@
 #define SPEEDGRAPH_H
 
 #include <QList>
-#include "graphview.h"
-#include "units.h"
+#include "graphtab.h"
 
 class GPX;
 
-class SpeedGraph : public GraphView
+class SpeedGraph : public GraphTab
 {
 	Q_OBJECT
 
 public:
 	SpeedGraph(QWidget *parent = 0);
 
+	QString label() const {return tr("Speed");}
 	void loadGPX(const GPX &gpx);
 	void clear();
 	void setUnits(enum Units units);
 
+private:
 	qreal avg() const;
 	qreal max() const {return bounds().bottom();}
-
-private:
 	void setXUnits();
 	void setYUnits();
 	void addInfo();

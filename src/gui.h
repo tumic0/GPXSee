@@ -18,11 +18,7 @@ class QLabel;
 class QSignalMapper;
 class QPrinter;
 class FileBrowser;
-class GraphView;
-class ElevationGraph;
-class SpeedGraph;
-class HeartRateGraph;
-class TemperatureGraph;
+class GraphTab;
 class TrackView;
 class Map;
 
@@ -71,7 +67,6 @@ private slots:
 	void sliderPositionChanged(qreal pos);
 
 private:
-	typedef QPair<GraphView *, QString> GraphTab;
 	typedef QPair<QDate, QDate> DateRange;
 
 	void loadMaps();
@@ -156,11 +151,7 @@ private:
 	QLabel *_timeLabel;
 
 	TrackView *_track;
-	ElevationGraph *_elevationGraph;
-	SpeedGraph *_speedGraph;
-	HeartRateGraph *_heartRateGraph;
-	TemperatureGraph *_temperatureGraph;
-	QList<GraphTab> _tabs;
+	QList<GraphTab*> _tabs;
 
 	POI _poi;
 	QList<Map*> _maps;

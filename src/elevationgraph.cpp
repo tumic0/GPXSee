@@ -3,7 +3,7 @@
 #include "elevationgraph.h"
 
 
-ElevationGraph::ElevationGraph(QWidget *parent) : GraphView(parent)
+ElevationGraph::ElevationGraph(QWidget *parent) : GraphTab(parent)
 {
 	_ascent = 0;
 	_descent = 0;
