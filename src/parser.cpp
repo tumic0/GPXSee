@@ -5,25 +5,25 @@ void Parser::handleTrackpointData(TrackpointElement element,
   const QString &value)
 {
 	switch (element) {
-	    case Elevation:
-		    _track->last().elevation = value.toLatin1().toDouble();
-		    break;
-	    case Time:
-		    _track->last().timestamp = QDateTime::fromString(value.toLatin1(),
+		case Elevation:
+			_track->last().elevation = value.toLatin1().toDouble();
+			break;
+		case Time:
+			_track->last().timestamp = QDateTime::fromString(value.toLatin1(),
 			  Qt::ISODate);
-		    break;
-	    case Geoidheight:
-		    _track->last().geoidheight = value.toLatin1().toDouble();
-		    break;
-	    case Speed:
-		    _track->last().speed = value.toDouble();
-		    break;
-	    case HeartRate:
-		    _track->last().heartRate = value.toDouble();
-		    break;
-	    case Temperature:
-		    _track->last().temperature = value.toDouble();
-		    break;
+			break;
+		case Geoidheight:
+			_track->last().geoidheight = value.toLatin1().toDouble();
+			break;
+		case Speed:
+			_track->last().speed = value.toDouble();
+			break;
+		case HeartRate:
+			_track->last().heartRate = value.toDouble();
+			break;
+		case Temperature:
+			_track->last().temperature = value.toDouble();
+			break;
 	}
 }
 
