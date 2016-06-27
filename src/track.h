@@ -15,7 +15,7 @@ public:
 	void heartRateGraph(QVector<QPointF> &graph) const;
 	void temperatureGraph(QVector<QPointF> &graph) const;
 	void track(QVector<QPointF> &track) const;
-	qreal distance() const {return _distance;}
+	qreal distance() const {return _dd.last();}
 	qreal time() const;
 	QDateTime date() const;
 
