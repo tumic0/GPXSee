@@ -305,7 +305,7 @@ void GraphView::updateSliderInfo()
 {
 	_sliderInfo->setVisible(_graphs.size() == 1);
 
-	if (!_slider->isVisible())
+	if (!_sliderInfo->isVisible())
 		return;
 
 	const QPainterPath &path = _graphs.at(0)->path();
