@@ -319,16 +319,13 @@ void TrackView::rescale()
 	_mapScale->setZoom(_zoom);
 }
 
-void TrackView::wheelEvent(QWheelEvent *event)
+void TrackView::zoom(int z, const QPointF &pos)
 {
 	if (_paths.isEmpty() && _locations.isEmpty())
 		return;
 
-	QPointF pos = mapToScene(event->pos());
 	qreal scale = _scale;
-
-	_zoom = (event->delta() > 0) ?
-		qMin(_zoom + 1, ZOOM_MAX) : qMax(_zoom - 1, ZOOM_MIN);
+	_zoom = z;
 
 	rescale(mapScale(_zoom));
 	QRectF br = trackBoundingRect() | waypointBoundingRect();
@@ -344,6 +341,33 @@ void TrackView::wheelEvent(QWheelEvent *event)
 	_mapScale->setZoom(_zoom);
 
 	resetCachedContent();
+}
+
+void TrackView::wheelEvent(QWheelEvent *event)
+{
+	if (_paths.isEmpty() && _locations.isEmpty())
+		return;
+
+	QPointF pos = mapToScene(event->pos());
+	int z = (event->delta() > 0) ?
+		qMin(_zoom + 1, ZOOM_MAX) : qMax(_zoom - 1, ZOOM_MIN);
+
+	zoom(z, pos);
+}
+
+void TrackView::keyPressEvent(QKeyEvent *event)
+{
+	int z = -1;
+
+	if (event->matches(QKeySequence::ZoomIn))
+		z = qMin(_zoom + 1, ZOOM_MAX);
+	if (event->matches(QKeySequence::ZoomOut))
+		z = qMax(_zoom - 1, ZOOM_MIN);
+
+	if (z >= 0)
+		zoom(z, mapToScene(QRect(QPoint(), size()).center()));
+	else
+		QWidget::keyPressEvent(event);
 }
 
 void TrackView::plot(QPainter *painter, const QRectF &target)
