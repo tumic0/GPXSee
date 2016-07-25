@@ -22,7 +22,7 @@ private:
 		Elevation, Time, Geoidheight, Speed, HeartRate, Temperature
 	};
 	enum WaypointElement {
-		Name
+		Name, Description
 	};
 
 	bool parse();

@@ -27,7 +27,6 @@ HEADERS += src/config.h \
     src/downloader.h \
     src/units.h \
     src/scaleitem.h \
-    src/nicenum.h \
     src/waypoint.h \
     src/trackview.h \
     src/track.h \
@@ -45,7 +44,8 @@ HEADERS += src/config.h \
     src/fileselectwidget.h \
     src/margins.h \
     src/temperaturegraph.h \
-    src/graphtab.h
+    src/graphtab.h \
+    src/misc.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
@@ -64,7 +64,6 @@ SOURCES += src/main.cpp \
     src/maplist.cpp \
     src/downloader.cpp \
     src/scaleitem.cpp \
-    src/nicenum.cpp \
     src/trackview.cpp \
     src/track.cpp \
     src/graphview.cpp \
@@ -77,7 +76,8 @@ SOURCES += src/main.cpp \
     src/exportdialog.cpp \
     src/fileselectwidget.cpp \
     src/temperaturegraph.cpp \
-    src/trackpoint.cpp
+    src/trackpoint.cpp \
+    src/misc.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {

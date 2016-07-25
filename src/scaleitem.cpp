@@ -1,7 +1,7 @@
 #include <QPainter>
 #include "config.h"
 #include "ll.h"
-#include "nicenum.h"
+#include "misc.h"
 #include "scaleitem.h"
 
 

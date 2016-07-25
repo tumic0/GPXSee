@@ -1,7 +1,7 @@
 #include <cmath>
 #include <QPainter>
 #include "config.h"
-#include "nicenum.h"
+#include "misc.h"
 #include "axisitem.h"
 
 

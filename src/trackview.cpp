@@ -9,6 +9,7 @@
 #include "markeritem.h"
 #include "scaleitem.h"
 #include "ll.h"
+#include "misc.h"
 #include "trackview.h"
 
 
@@ -38,6 +39,7 @@ TrackView::TrackView(QWidget *parent)
 	_maxDistance = 0;
 
 	_plot = false;
+	_units = Metric;
 }
 
 TrackView::~TrackView()
@@ -46,7 +48,16 @@ TrackView::~TrackView()
 		delete _mapScale;
 }
 
-void TrackView::addTrack(const QVector<QPointF> &track)
+QString TrackView::toolTip(const TrackInfo &info)
+{
+	QString date = info.date.date().toString(Qt::SystemLocaleShortDate);
+
+	return "<b>" + tr("Date:") + "</b> " + date + "<br><b>" + tr("Distance:")
+	  + "</b> " + distance(info.distance, _units) + "<br><b>" + tr("Time:")
+	  + "</b> " + timeSpan(info.time);
+}
+
+void TrackView::addTrack(const QVector<QPointF> &track, const TrackInfo &info)
 {
 	QPainterPath path;
 	QGraphicsPathItem *pi;
@@ -71,12 +82,15 @@ void TrackView::addTrack(const QVector<QPointF> &track)
 
 	pi = new QGraphicsPathItem(path);
 	_paths.append(pi);
+	_info.append(info);
 	_zoom = qMin(_zoom, scale2zoom(trackScale()));
 	_scale = mapScale(_zoom);
 	QBrush brush(_palette.color(), Qt::SolidPattern);
 	QPen pen(brush, TRACK_WIDTH * _scale);
 	pi->setPen(pen);
 	pi->setScale(1.0/_scale);
+	pi->setToolTip(toolTip(info));
+	pi->setCursor(Qt::ArrowCursor);
 	_scene->addItem(pi);
 
 	mi = new MarkerItem(pi);
@@ -91,7 +105,7 @@ void TrackView::addWaypoints(const QList<Waypoint> &waypoints)
 		const Waypoint &w = waypoints.at(i);
 		WaypointItem *wi = new WaypointItem(
 		  Waypoint(ll2mercator(QPointF(w.coordinates().x(),
-		    -w.coordinates().y())), w.description()));
+			-w.coordinates().y())), w.name(), w.description()));
 
 		wi->setPos(wi->entry().coordinates() * 1.0/_scale);
 		wi->setZValue(1);
@@ -111,8 +125,10 @@ void TrackView::loadGPX(const GPX &gpx)
 
 	for (int i = 0; i < gpx.trackCount(); i++) {
 		QVector<QPointF> track;
+		TrackInfo info = {gpx.track(i).date(), gpx.track(i).distance(),
+		  gpx.track(i).time()};
 		gpx.track(i).track(track);
-		addTrack(track);
+		addTrack(track, info);
 		_maxDistance = qMax(gpx.track(i).distance(), _maxDistance);
 	}
 
@@ -263,7 +279,7 @@ void TrackView::addPOI(const QVector<Waypoint> &waypoints)
 
 		WaypointItem *pi = new WaypointItem(
 		  Waypoint(ll2mercator(QPointF(w.coordinates().x(),
-		  -w.coordinates().y())), w.description()));
+		  -w.coordinates().y())), w.name(), w.description()));
 
 		pi->setPos(pi->entry().coordinates() * 1.0/_scale);
 		pi->setZValue(1);
@@ -304,7 +320,12 @@ void TrackView::setMap(Map *map)
 
 void TrackView::setUnits(enum Units units)
 {
+	_units = units;
+
 	_mapScale->setUnits(units);
+
+	for (int i = 0; i < _info.count(); i++)
+		_paths[i]->setToolTip(toolTip(_info.at(i)));
 }
 
 void TrackView::redraw()
@@ -423,6 +444,7 @@ void TrackView::clear()
 
 	_pois.clear();
 	_paths.clear();
+	_info.clear();
 	_locations.clear();
 	_markers.clear();
 	_scene->clear();

@@ -29,8 +29,14 @@ void Parser::handleTrackpointData(TrackpointElement element,
 
 void Parser::handleWaypointData(WaypointElement element, const QString &value)
 {
-	if (element == Name)
-		_waypoints.last().setDescription(value);
+	switch (element) {
+		case Name:
+			_waypoints.last().setName(value);
+			break;
+		case Description:
+			_waypoints.last().setDescription(value);
+			break;
+	}
 }
 
 void Parser::handleTrackpointAttributes(const QXmlStreamAttributes &attr)
@@ -117,6 +123,8 @@ void Parser::waypointData()
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "name")
 			handleWaypointData(Name, _reader.readElementText());
+		else if (_reader.name() == "desc")
+			handleWaypointData(Description, _reader.readElementText());
 		else
 			_reader.skipCurrentElement();
 	}

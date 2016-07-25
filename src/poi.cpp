@@ -106,9 +106,14 @@ bool POI::loadCSVFile(const QString &fileName)
 			return false;
 		}
 		QByteArray ba = list[2].trimmed();
+		QString name = QString::fromUtf8(ba.data(), ba.size());
+		QString description;
+		if (list.size() > 3) {
+			ba = list[3].trimmed();
+			description = QString::fromUtf8(ba.data(), ba.size());
+		}
 
-		_data.append(Waypoint(QPointF(lon, lat),
-		  QString::fromUtf8(ba.data(), ba.size())));
+		_data.append(Waypoint(QPointF(lon, lat), name, description));
 		ln++;
 	}
 	index.end = _data.size() - 1;

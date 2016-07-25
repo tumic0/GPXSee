@@ -35,20 +35,9 @@
 #include "cpuarch.h"
 #include "exportdialog.h"
 #include "graphtab.h"
+#include "misc.h"
 #include "gui.h"
 
-
-static QString timeSpan(qreal time)
-{
-	unsigned h, m, s;
-
-	h = time / 3600;
-	m = (time - (h * 3600)) / 60;
-	s = time - (h * 3600) - (m * 60);
-
-	return QString("%1:%2:%3").arg(h).arg(m, 2, 10, QChar('0'))
-	  .arg(s, 2, 10, QChar('0'));
-}
 
 GUI::GUI(QWidget *parent) : QMainWindow(parent)
 {
@@ -858,21 +847,8 @@ void GUI::updateStatusBarInfo()
 	else
 		_fileNameLabel->setText(tr("%1 tracks").arg(_trackCount));
 
-	if (_imperialUnitsAction->isChecked()) {
-		if (_distance < MIINM)
-			_distanceLabel->setText(QString::number(_distance * M2FT, 'f', 0)
-			  + UNIT_SPACE + tr("ft"));
-		else
-			_distanceLabel->setText(QString::number(_distance * M2MI, 'f', 1)
-			  + UNIT_SPACE + tr("mi"));
-	} else {
-		if (_distance < KMINM)
-			_distanceLabel->setText(QString::number(_distance, 'f', 0)
-			  + UNIT_SPACE + tr("m"));
-		else
-			_distanceLabel->setText(QString::number(_distance * M2KM, 'f', 1)
-			  + UNIT_SPACE + tr("km"));
-	}
+	Units units = _imperialUnitsAction->isChecked() ? Imperial : Metric;
+	_distanceLabel->setText(distance(_distance, units));
 	_timeLabel->setText(timeSpan(_time));
 }
 
