@@ -564,6 +564,21 @@
         <source>m</source>
         <translation>m</translation>
     </message>
+    <message>
+        <location filename="../src/trackitem.cpp" line="14"/>
+        <source>Date:</source>
+        <translation>Datum:</translation>
+    </message>
+    <message>
+        <location filename="../src/trackitem.cpp" line="15"/>
+        <source>Distance:</source>
+        <translation>Vzdálenost:</translation>
+    </message>
+    <message>
+        <location filename="../src/trackitem.cpp" line="16"/>
+        <source>Time:</source>
+        <translation>Čas:</translation>
+    </message>
 </context>
 <context>
     <name>SpeedGraph</name>
@@ -676,24 +691,6 @@
         <location filename="../src/temperaturegraph.cpp" line="101"/>
         <source>F</source>
         <translation>F</translation>
-    </message>
-</context>
-<context>
-    <name>TrackView</name>
-    <message>
-        <location filename="../src/trackview.cpp" line="55"/>
-        <source>Date:</source>
-        <translation>Datum:</translation>
-    </message>
-    <message>
-        <location filename="../src/trackview.cpp" line="55"/>
-        <source>Distance:</source>
-        <translation>Vzdálenost:</translation>
-    </message>
-    <message>
-        <location filename="../src/trackview.cpp" line="56"/>
-        <source>Time:</source>
-        <translation>Cas:</translation>
     </message>
 </context>
 </TS>

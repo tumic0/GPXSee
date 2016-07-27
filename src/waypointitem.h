@@ -7,8 +7,8 @@
 class WaypointItem : public QGraphicsItem
 {
 public:
-	WaypointItem(const Waypoint &entry, QGraphicsItem *parent = 0);
-	const Waypoint &entry() const {return _entry;}
+	WaypointItem(const Waypoint &waypoint, QGraphicsItem *parent = 0);
+	const QPointF &coordinates() {return _coordinates;}
 
 	QRectF boundingRect() const {return _boundingRect;}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -17,7 +17,8 @@ public:
 private:
 	void updateBoundingRect();
 
-	Waypoint _entry;
+	QString _label;
+	QPointF _coordinates;
 	QRectF _boundingRect;
 };
 

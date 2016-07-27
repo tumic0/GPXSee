@@ -8,6 +8,10 @@
 #include "waypoint.h"
 #include "rtree.h"
 
+class QPainterPath;
+class WaypointItem;
+
+#define POI_RADIUS 0.01
 
 class POI
 {
@@ -17,8 +21,11 @@ public:
 	const QString &errorString() const {return _error;}
 	int errorLine() const {return _errorLine;}
 
-	QVector<Waypoint> points(const QVector<QPointF> &path,
-	  qreal radius = 0.01) const;
+	QVector<Waypoint> points(const QPainterPath &path,
+	  qreal radius = POI_RADIUS) const;
+	QVector<Waypoint> points(const QList<WaypointItem*> &list,
+	  qreal radius = POI_RADIUS) const;
+
 	const QStringList &files() const {return _files;}
 	void enableFile(const QString &fileName, bool enable);
 	void clear();

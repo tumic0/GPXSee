@@ -1,20 +1,35 @@
 #include <QPainter>
 #include "config.h"
+#include "ll.h"
+#include "misc.h"
 #include "waypointitem.h"
 
 
 #define POINT_SIZE  8
 
-WaypointItem::WaypointItem(const Waypoint &entry, QGraphicsItem *parent)
+static QString tt(const Waypoint &waypoint)
+{
+	QString date = waypoint.timestamp().toString(Qt::SystemLocaleShortDate);
+
+	return "<b>" + QObject::tr("Coordinates:") + "</b> "
+	  + coordinates(waypoint.coordinates()) + "<br><b>"
+	  + QObject::tr("Description:") + "</b> " + waypoint.description()
+	  + "<br><b>" + QObject::tr("Elevation:") + "</b> "
+	  + QString::number(waypoint.elevation() - waypoint.geoidHeight())
+	  + "<br><b>" + QObject::tr("Date:") + "</b> " + date;
+}
+
+WaypointItem::WaypointItem(const Waypoint &waypoint, QGraphicsItem *parent)
   : QGraphicsItem(parent)
 {
-	_entry = entry;
+	_label = waypoint.name();
+	_coordinates = ll2mercator(QPointF(waypoint.coordinates().x(),
+	  -waypoint.coordinates().y()));
+
 	updateBoundingRect();
 
-	if (!entry.description().isEmpty()) {
-		setToolTip(entry.description());
-		setCursor(Qt::ArrowCursor);
-	}
+	setToolTip(tt(waypoint));
+	setCursor(Qt::ArrowCursor);
 }
 
 void WaypointItem::updateBoundingRect()
@@ -23,7 +38,7 @@ void WaypointItem::updateBoundingRect()
 	font.setPixelSize(FONT_SIZE);
 	font.setFamily(FONT_FAMILY);
 	QFontMetrics fm(font);
-	QRect ts = fm.tightBoundingRect(_entry.name());
+	QRect ts = fm.tightBoundingRect(_label);
 
 	_boundingRect = QRectF(-POINT_SIZE/2, -POINT_SIZE/2, ts.width()
 	  + POINT_SIZE, ts.height() + fm.descent() + POINT_SIZE);
@@ -38,11 +53,11 @@ void WaypointItem::paint(QPainter *painter,
 	font.setPixelSize(FONT_SIZE);
 	font.setFamily(FONT_FAMILY);
 	QFontMetrics fm(font);
-	QRect ts = fm.tightBoundingRect(_entry.name());
+	QRect ts = fm.tightBoundingRect(_label);
 
 	painter->setFont(font);
 	painter->drawText(POINT_SIZE/2 - qMax(ts.x(), 0), POINT_SIZE/2 + ts.height(),
-	  _entry.name());
+	  _label);
 	painter->setBrush(Qt::SolidPattern);
 	painter->drawEllipse(-POINT_SIZE/2, -POINT_SIZE/2, POINT_SIZE, POINT_SIZE);
 

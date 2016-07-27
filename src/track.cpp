@@ -85,7 +85,8 @@ Track::Track(const QVector<Trackpoint> &data) : _data(data)
 
 	_dd.append(dist);
 	for (int i = 1; i < _data.count(); i++) {
-		dist += llDistance(_data.at(i).coordinates, _data.at(i-1).coordinates);
+		dist += llDistance(_data.at(i).coordinates(),
+		  _data.at(i-1).coordinates());
 		_dd.append(dist);
 	}
 }
@@ -99,8 +100,8 @@ void Track::elevationGraph(QVector<QPointF> &graph) const
 
 	for (int i = 0; i < _data.size(); i++)
 		if (_data.at(i).hasElevation())
-			raw.append(QPointF(_dd.at(i), _data.at(i).elevation
-			  - _data.at(i).geoidheight));
+			raw.append(QPointF(_dd.at(i), _data.at(i).elevation()
+			  - _data.at(i).geoidHeight()));
 
 	graph = filter(raw, WINDOW_EF);
 }
@@ -117,9 +118,10 @@ void Track::speedGraph(QVector<QPointF> &graph) const
 	raw.append(QPointF(0, 0));
 	for (int i = 1; i < _data.size(); i++) {
 		if (_data.at(i).hasSpeed())
-			v = _data.at(i).speed;
+			v = _data.at(i).speed();
 		else if (_data.at(i).hasTimestamp()) {
-			if (!(dt = _data.at(i-1).timestamp.msecsTo(_data.at(i).timestamp)))
+			dt = _data.at(i-1).timestamp().msecsTo(_data.at(i).timestamp());
+			if (!dt)
 				continue;
 			ds = _dd.at(i) - _dd.at(i-1);
 			v = ds / ((qreal)dt / 1000.0);
@@ -141,7 +143,7 @@ void Track::heartRateGraph(QVector<QPointF> &graph) const
 
 	for (int i = 0; i < _data.count(); i++)
 		if (_data.at(i).hasHeartRate())
-			raw.append(QPointF(_dd.at(i), _data.at(i).heartRate));
+			raw.append(QPointF(_dd.at(i), _data.at(i).heartRate()));
 
 	graph = filter(eliminate(raw, WINDOW_HE), WINDOW_HF);
 }
@@ -153,13 +155,13 @@ void Track::temperatureGraph(QVector<QPointF> &graph) const
 
 	for (int i = 0; i < _data.size(); i++)
 		if (_data.at(i).hasTemperature())
-			graph.append(QPointF(_dd.at(i), _data.at(i).temperature));
+			graph.append(QPointF(_dd.at(i), _data.at(i).temperature()));
 }
 
 void Track::track(QVector<QPointF> &track) const
 {
 	for (int i = 0; i < _data.size(); i++)
-		track.append(_data.at(i).coordinates);
+		track.append(_data.at(i).coordinates());
 }
 
 qreal Track::time() const
@@ -167,13 +169,14 @@ qreal Track::time() const
 	if (_data.size() < 2)
 		return 0;
 
-	return (_data.first().timestamp.msecsTo(_data.last().timestamp) / 1000.0);
+	return (_data.first().timestamp().msecsTo(_data.last().timestamp())
+	  / 1000.0);
 }
 
 QDateTime Track::date() const
 {
 	if (_data.size())
-		return _data.first().timestamp;
+		return _data.first().timestamp();
 	else
 		return QDateTime();
 }

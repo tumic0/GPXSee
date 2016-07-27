@@ -1,48 +1,58 @@
 #include "parser.h"
 
 
-void Parser::handleTrackpointData(TrackpointElement element,
-  const QString &value)
+void Parser::handleTrackpointData(DataType type, const QString &value)
 {
-	switch (element) {
+	switch (type) {
 		case Elevation:
-			_track->last().elevation = value.toLatin1().toDouble();
+			_track->last().setElevation(value.toLatin1().toDouble());
 			break;
 		case Time:
-			_track->last().timestamp = QDateTime::fromString(value.toLatin1(),
-			  Qt::ISODate);
+			_track->last().setTimestamp(QDateTime::fromString(value.toLatin1(),
+			  Qt::ISODate));
 			break;
 		case Geoidheight:
-			_track->last().geoidheight = value.toLatin1().toDouble();
+			_track->last().setGeoidHeight(value.toLatin1().toDouble());
 			break;
 		case Speed:
-			_track->last().speed = value.toDouble();
+			_track->last().setSpeed(value.toDouble());
 			break;
 		case HeartRate:
-			_track->last().heartRate = value.toDouble();
+			_track->last().setHeartRate(value.toDouble());
 			break;
 		case Temperature:
-			_track->last().temperature = value.toDouble();
+			_track->last().setTemperature(value.toDouble());
 			break;
 	}
 }
 
-void Parser::handleWaypointData(WaypointElement element, const QString &value)
+void Parser::handleWaypointData(DataType type, const QString &value)
 {
-	switch (element) {
+	switch (type) {
 		case Name:
 			_waypoints.last().setName(value);
 			break;
 		case Description:
 			_waypoints.last().setDescription(value);
 			break;
+	    case Time:
+		    _waypoints.last().setTimestamp(QDateTime::fromString(
+			  value.toLatin1(), Qt::ISODate));
+		    break;
+	    case Elevation:
+		    _waypoints.last().setElevation(value.toLatin1().toDouble());
+		    break;
+	    case Geoidheight:
+		    _waypoints.last().setGeoidHeight(value.toLatin1().toDouble());
+		    break;
 	}
 }
 
 void Parser::handleTrackpointAttributes(const QXmlStreamAttributes &attr)
 {
-	_track->last().coordinates.setY(attr.value("lat").toLatin1().toDouble());
-	_track->last().coordinates.setX(attr.value("lon").toLatin1().toDouble());
+	_track->last().setCoordinates(QPointF(
+	  attr.value("lon").toLatin1().toDouble(),
+	  attr.value("lat").toLatin1().toDouble()));
 }
 
 void Parser::handleWaypointAttributes(const QXmlStreamAttributes &attr)
@@ -125,6 +135,12 @@ void Parser::waypointData()
 			handleWaypointData(Name, _reader.readElementText());
 		else if (_reader.name() == "desc")
 			handleWaypointData(Description, _reader.readElementText());
+		else if (_reader.name() == "ele")
+			handleWaypointData(Elevation, _reader.readElementText());
+		else if (_reader.name() == "geoidheight")
+			handleWaypointData(Geoidheight, _reader.readElementText());
+		else if (_reader.name() == "time")
+			handleWaypointData(Time, _reader.readElementText());
 		else
 			_reader.skipCurrentElement();
 	}

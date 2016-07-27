@@ -64,3 +64,13 @@ QString distance(qreal value, Units units)
 			  + UNIT_SPACE + QObject::tr("km");
 	}
 }
+
+QString coordinates(const QPointF &value)
+{
+	QChar yH = (value.y() < 0) ? 'S' : 'N';
+	QChar xH = (value.x() < 0) ? 'W' : 'E';
+
+	return QString::number(qAbs(value.y()), 'f', 5) + QChar(0x00B0) + " " + yH
+	  + ", " + QString::number(qAbs(value.x()), 'f', 5) + QChar(0x00B0) + " "
+	  + xH ;
+}

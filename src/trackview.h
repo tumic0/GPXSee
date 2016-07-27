@@ -5,7 +5,6 @@
 #include <QVector>
 #include <QHash>
 #include <QList>
-#include <QDateTime>
 #include "units.h"
 #include "palette.h"
 #include "waypoint.h"
@@ -13,6 +12,8 @@
 class GPX;
 class POI;
 class Map;
+class Track;
+class TrackItem;
 class WaypointItem;
 class MarkerItem;
 class ScaleItem;
@@ -37,24 +38,16 @@ public:
 	void plot(QPainter *painter, const QRectF &target);
 
 	int trackCount() const {return _paths.count();}
-	int waypointCount() const {return _locations.count();}
+	int waypointCount() const {return _waypoints.count();}
 
 public slots:
 	void movePositionMarker(qreal val);
 	void redraw();
 
 private:
-	struct TrackInfo {
-		QDateTime date;
-		qreal distance;
-		qreal time;
-	};
-
-	void addTrack(const QVector<QPointF> &track, const TrackInfo &info);
+	void addTrack(const Track &track);
 	void addWaypoints(const QList<Waypoint> &waypoints);
 	void addPOI(const QVector<Waypoint> &waypoints);
-
-	QString toolTip(const TrackInfo &info);
 
 	QRectF trackBoundingRect() const;
 	QRectF waypointBoundingRect() const;
@@ -72,13 +65,10 @@ private:
 	void paintEvent(QPaintEvent *e);
 
 	QGraphicsScene *_scene;
-	QList<QGraphicsPathItem*> _paths;
-	QList<TrackInfo> _info;
+	QList<TrackItem*> _paths;
 	QList<MarkerItem*> _markers;
-	QList<WaypointItem*> _locations;
+	QList<WaypointItem*> _waypoints;
 	QHash<Waypoint, WaypointItem*> _pois;
-	QList<QVector<QPointF> > _tracks;
-	QVector<QPointF> _waypoints;
 
 	Map *_map;
 	ScaleItem *_mapScale;

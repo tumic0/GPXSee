@@ -19,6 +19,8 @@ public:
 	qreal time() const;
 	QDateTime date() const;
 
+	bool isNull() const {return (_data.count() < 2) ? true : false;}
+
 private:
 	const QVector<Trackpoint> &_data;
 	QVector<qreal> _dd;

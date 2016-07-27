@@ -2,19 +2,18 @@
 #include <QGraphicsScene>
 #include <QPainterPath>
 #include <QWheelEvent>
+#include "ll.h"
 #include "poi.h"
 #include "gpx.h"
 #include "map.h"
+#include "trackitem.h"
 #include "waypointitem.h"
 #include "markeritem.h"
 #include "scaleitem.h"
-#include "ll.h"
-#include "misc.h"
 #include "trackview.h"
 
 
 #define MARGIN          10.0
-#define TRACK_WIDTH     3
 #define SCALE_OFFSET    7
 
 TrackView::TrackView(QWidget *parent)
@@ -48,71 +47,41 @@ TrackView::~TrackView()
 		delete _mapScale;
 }
 
-QString TrackView::toolTip(const TrackInfo &info)
+void TrackView::addTrack(const Track &track)
 {
-	QString date = info.date.date().toString(Qt::SystemLocaleShortDate);
-
-	return "<b>" + tr("Date:") + "</b> " + date + "<br><b>" + tr("Distance:")
-	  + "</b> " + distance(info.distance, _units) + "<br><b>" + tr("Time:")
-	  + "</b> " + timeSpan(info.time);
-}
-
-void TrackView::addTrack(const QVector<QPointF> &track, const TrackInfo &info)
-{
-	QPainterPath path;
-	QGraphicsPathItem *pi;
-	MarkerItem *mi;
-
-
-	if (track.size() < 2) {
+	if (track.isNull()) {
 		_palette.color();
 		return;
 	}
 
-	_tracks.append(track);
-
-	const QPointF &p = track.at(0);
-	path.moveTo(ll2mercator(QPointF(p.x(), -p.y())));
-	for (int i = 1; i < track.size(); i++) {
-		const QPointF &p = track.at(i);
-		path.lineTo(ll2mercator(QPointF(p.x(), -p.y())));
-	}
-
-	_maxPath = qMax(path.length(), _maxPath);
-
-	pi = new QGraphicsPathItem(path);
+	TrackItem *pi = new TrackItem(track);
 	_paths.append(pi);
-	_info.append(info);
 	_zoom = qMin(_zoom, scale2zoom(trackScale()));
 	_scale = mapScale(_zoom);
-	QBrush brush(_palette.color(), Qt::SolidPattern);
-	QPen pen(brush, TRACK_WIDTH * _scale);
-	pi->setPen(pen);
 	pi->setScale(1.0/_scale);
-	pi->setToolTip(toolTip(info));
-	pi->setCursor(Qt::ArrowCursor);
+	pi->setColor(_palette.color());
 	_scene->addItem(pi);
 
-	mi = new MarkerItem(pi);
+	MarkerItem *mi = new MarkerItem(pi);
 	_markers.append(mi);
 	mi->setPos(pi->path().pointAtPercent(0));
 	mi->setScale(_scale);
+
+	_maxPath = qMax(pi->path().length(), _maxPath);
+	_maxDistance = qMax(track.distance(), _maxDistance);
 }
 
 void TrackView::addWaypoints(const QList<Waypoint> &waypoints)
 {
 	for (int i = 0; i < waypoints.count(); i++) {
 		const Waypoint &w = waypoints.at(i);
-		WaypointItem *wi = new WaypointItem(
-		  Waypoint(ll2mercator(QPointF(w.coordinates().x(),
-			-w.coordinates().y())), w.name(), w.description()));
 
-		wi->setPos(wi->entry().coordinates() * 1.0/_scale);
+		WaypointItem *wi = new WaypointItem(w);
+		wi->setPos(wi->coordinates() * 1.0/_scale);
 		wi->setZValue(1);
 		_scene->addItem(wi);
 
-		_locations.append(wi);
-		_waypoints.append(w.coordinates());
+		_waypoints.append(wi);
 	}
 
 	_zoom = qMin(_zoom, scale2zoom(waypointScale()));
@@ -123,22 +92,15 @@ void TrackView::loadGPX(const GPX &gpx)
 {
 	int zoom = _zoom;
 
-	for (int i = 0; i < gpx.trackCount(); i++) {
-		QVector<QPointF> track;
-		TrackInfo info = {gpx.track(i).date(), gpx.track(i).distance(),
-		  gpx.track(i).time()};
-		gpx.track(i).track(track);
-		addTrack(track, info);
-		_maxDistance = qMax(gpx.track(i).distance(), _maxDistance);
-	}
-
+	for (int i = 0; i < gpx.trackCount(); i++)
+		addTrack(gpx.track(i));
 	addWaypoints(gpx.waypoints());
 
-	if (_paths.empty() && _locations.empty())
+	if (_paths.empty() && _waypoints.empty())
 		return;
 
 	if ((_paths.size() > 1 && _zoom < zoom)
-	  || (_locations.size() && _zoom < zoom))
+	  || (_waypoints.size() && _zoom < zoom))
 		rescale(_scale);
 
 	QRectF br = trackBoundingRect() | waypointBoundingRect();
@@ -168,17 +130,17 @@ QRectF TrackView::waypointBoundingRect() const
 {
 	qreal bottom, top, left, right;
 
-	if (_locations.empty())
+	if (_waypoints.empty())
 		return QRectF();
 
-	const QPointF &p = _locations.at(0)->pos();
+	const QPointF &p = _waypoints.at(0)->pos();
 	bottom = p.y();
 	top = p.y();
 	left = p.x();
 	right = p.x();
 
-	for (int i = 1; i < _locations.size(); i++) {
-		const QPointF &p = _locations.at(i)->pos();
+	for (int i = 1; i < _waypoints.size(); i++) {
+		const QPointF &p = _waypoints.at(i)->pos();
 		bottom = qMax(bottom, p.y());
 		top = qMin(top, p.y());
 		right = qMax(right, p.x());
@@ -208,17 +170,17 @@ qreal TrackView::waypointScale() const
 {
 	qreal bottom, top, left, right;
 
-	if (_locations.size() < 2)
+	if (_waypoints.size() < 2)
 		return mapScale(ZOOM_MAX);
 
-	const QPointF &p = _locations.at(0)->entry().coordinates();
+	const QPointF &p = _waypoints.at(0)->coordinates();
 	bottom = p.y();
 	top = p.y();
 	left = p.x();
 	right = p.x();
 
-	for (int i = 1; i < _locations.size(); i++) {
-		const QPointF &p = _locations.at(i)->entry().coordinates();
+	for (int i = 1; i < _waypoints.size(); i++) {
+		const QPointF &p = _waypoints.at(i)->coordinates();
 		bottom = qMax(bottom, p.y());
 		top = qMin(top, p.y());
 		right = qMax(right, p.x());
@@ -242,19 +204,14 @@ void TrackView::rescale(qreal scale)
 	for (int i = 0; i < _paths.size(); i++) {
 		_markers.at(i)->setScale(scale);
 		_paths.at(i)->setScale(1.0/scale);
-
-		QPen pen(_paths.at(i)->pen());
-		pen.setWidthF(TRACK_WIDTH * scale);
-		_paths.at(i)->setPen(pen);
 	}
 
-	for (int i = 0; i < _locations.size(); i++)
-		_locations.at(i)->setPos(_locations.at(i)->entry().coordinates()
-		  * 1.0/scale);
+	for (int i = 0; i < _waypoints.size(); i++)
+		_waypoints.at(i)->setPos(_waypoints.at(i)->coordinates() * 1.0/scale);
 
 	QHash<Waypoint, WaypointItem*>::const_iterator it, jt;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
-		it.value()->setPos(it.value()->entry().coordinates() * 1.0/scale);
+		it.value()->setPos(it.value()->coordinates() * 1.0/scale);
 		it.value()->show();
 	}
 
@@ -277,11 +234,8 @@ void TrackView::addPOI(const QVector<Waypoint> &waypoints)
 		if (_pois.contains(w))
 			continue;
 
-		WaypointItem *pi = new WaypointItem(
-		  Waypoint(ll2mercator(QPointF(w.coordinates().x(),
-		  -w.coordinates().y())), w.name(), w.description()));
-
-		pi->setPos(pi->entry().coordinates() * 1.0/_scale);
+		WaypointItem *pi = new WaypointItem(w);
+		pi->setPos(pi->coordinates() * 1.0/_scale);
 		pi->setZValue(1);
 		_scene->addItem(pi);
 
@@ -293,11 +247,11 @@ void TrackView::loadPOI(const POI &poi)
 {
 	QHash<Waypoint, WaypointItem*>::const_iterator it,jt;
 
-	if (!_tracks.size() && !_waypoints.size())
+	if (!_paths.size() && !_waypoints.size())
 		return;
 
-	for (int i = 0; i < _tracks.size(); i++)
-		addPOI(poi.points(_tracks.at(i)));
+	for (int i = 0; i < _paths.size(); i++)
+		addPOI(poi.points(_paths.at(i)->path()));
 	addPOI(poi.points(_waypoints));
 
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
@@ -324,8 +278,8 @@ void TrackView::setUnits(enum Units units)
 
 	_mapScale->setUnits(units);
 
-	for (int i = 0; i < _info.count(); i++)
-		_paths[i]->setToolTip(toolTip(_info.at(i)));
+	for (int i = 0; i < _paths.count(); i++)
+		_paths[i]->setUnits(units);
 }
 
 void TrackView::redraw()
@@ -342,7 +296,7 @@ void TrackView::rescale()
 
 void TrackView::zoom(int z, const QPointF &pos)
 {
-	if (_paths.isEmpty() && _locations.isEmpty())
+	if (_paths.isEmpty() && _waypoints.isEmpty())
 		return;
 
 	qreal scale = _scale;
@@ -366,7 +320,7 @@ void TrackView::zoom(int z, const QPointF &pos)
 
 void TrackView::wheelEvent(QWheelEvent *event)
 {
-	if (_paths.isEmpty() && _locations.isEmpty())
+	if (_paths.isEmpty() && _waypoints.isEmpty())
 		return;
 
 	QPointF pos = mapToScene(event->pos());
@@ -444,14 +398,10 @@ void TrackView::clear()
 
 	_pois.clear();
 	_paths.clear();
-	_info.clear();
-	_locations.clear();
+	_waypoints.clear();
 	_markers.clear();
 	_scene->clear();
 	_palette.reset();
-
-	_tracks.clear();
-	_waypoints.clear();
 
 	_maxPath = 0;
 	_maxDistance = 0;
@@ -479,7 +429,7 @@ void TrackView::movePositionMarker(qreal val)
 
 void TrackView::drawBackground(QPainter *painter, const QRectF &rect)
 {
-	if ((_paths.isEmpty() && _locations.isEmpty()) || !_map) {
+	if ((_paths.isEmpty() && _waypoints.isEmpty()) || !_map) {
 		painter->fillRect(rect, Qt::white);
 		return;
 	}
@@ -510,7 +460,7 @@ void TrackView::drawBackground(QPainter *painter, const QRectF &rect)
 
 void TrackView::resizeEvent(QResizeEvent *e)
 {
-	if (_paths.isEmpty() && _locations.isEmpty())
+	if (_paths.isEmpty() && _waypoints.isEmpty())
 		return;
 
 	rescale();

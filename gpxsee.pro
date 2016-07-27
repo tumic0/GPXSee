@@ -45,7 +45,8 @@ HEADERS += src/config.h \
     src/margins.h \
     src/temperaturegraph.h \
     src/graphtab.h \
-    src/misc.h
+    src/misc.h \
+    src/trackitem.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
@@ -77,7 +78,9 @@ SOURCES += src/main.cpp \
     src/fileselectwidget.cpp \
     src/temperaturegraph.cpp \
     src/trackpoint.cpp \
-    src/misc.cpp
+    src/misc.cpp \
+    src/waypoint.cpp \
+    src/trackitem.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {

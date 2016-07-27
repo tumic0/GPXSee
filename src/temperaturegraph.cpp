@@ -94,11 +94,11 @@ void TemperatureGraph::setXUnits()
 void TemperatureGraph::setYUnits()
 {
 	if (_units == Metric) {
-		GraphView::setYUnits(QString::fromUtf8("\xC2\xB0") + tr("C"));
+		GraphView::setYUnits(QChar(0x00B0) + tr("C"));
 		setYScale(1);
 		setYOffset(0);
 	} else {
-		GraphView::setYUnits(QString::fromUtf8("\xC2\xB0") + tr("F"));
+		GraphView::setYUnits(QChar(0x00B0) + tr("F"));
 		setYScale(C2FS);
 		setYOffset(C2FO);
 	}
