@@ -77,7 +77,7 @@ void TrackView::addWaypoints(const QList<Waypoint> &waypoints)
 		const Waypoint &w = waypoints.at(i);
 
 		WaypointItem *wi = new WaypointItem(w);
-		wi->setPos(wi->coordinates() * 1.0/_scale);
+		wi->setScale(1.0/_scale);
 		wi->setZValue(1);
 		_scene->addItem(wi);
 
@@ -207,11 +207,11 @@ void TrackView::rescale(qreal scale)
 	}
 
 	for (int i = 0; i < _waypoints.size(); i++)
-		_waypoints.at(i)->setPos(_waypoints.at(i)->coordinates() * 1.0/scale);
+		_waypoints.at(i)->setScale(1.0/scale);
 
 	QHash<Waypoint, WaypointItem*>::const_iterator it, jt;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
-		it.value()->setPos(it.value()->coordinates() * 1.0/scale);
+		it.value()->setScale(1.0/scale);
 		it.value()->show();
 	}
 
@@ -235,7 +235,7 @@ void TrackView::addPOI(const QVector<Waypoint> &waypoints)
 			continue;
 
 		WaypointItem *pi = new WaypointItem(w);
-		pi->setPos(pi->coordinates() * 1.0/_scale);
+		pi->setScale(1.0/_scale);
 		pi->setZValue(1);
 		_scene->addItem(pi);
 
@@ -280,6 +280,13 @@ void TrackView::setUnits(enum Units units)
 
 	for (int i = 0; i < _paths.count(); i++)
 		_paths[i]->setUnits(units);
+
+	for (int i = 0; i < _waypoints.size(); i++)
+		_waypoints.at(i)->setUnits(units);
+
+	QHash<Waypoint, WaypointItem*>::const_iterator it;
+	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+		it.value()->setUnits(units);
 }
 
 void TrackView::redraw()

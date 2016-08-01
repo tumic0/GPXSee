@@ -2,6 +2,7 @@
 #include <QPen>
 #include "ll.h"
 #include "misc.h"
+#include "tooltip.h"
 #include "trackitem.h"
 
 
@@ -9,11 +10,15 @@
 
 QString TrackItem::toolTip()
 {
-	QString date = _date.date().toString(Qt::SystemLocaleShortDate);
+	ToolTip tt;
 
-	return "<b>" + QObject::tr("Date:") + "</b> " + date + "<br><b>"
-	  + QObject::tr("Distance:") + "</b> " + distance(_distance, _units)
-	  + "<br><b>" + QObject::tr("Time:") + "</b> " + timeSpan(_time);
+	tt.insert("Distance", ::distance(_distance, _units));
+	if  (_time > 0)
+		tt.insert("Time", ::timeSpan(_time));
+	if (!_date.isNull())
+		tt.insert("Date", _date.toString(Qt::SystemLocaleShortDate));
+
+	return tt.toString();
 }
 
 void TrackItem::updateShape()
@@ -23,7 +28,8 @@ void TrackItem::updateShape()
 	_shape = s.createStroke(path().simplified());
 }
 
-TrackItem::TrackItem(const Track &track)
+TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
+  : QGraphicsPathItem(parent)
 {
 	QVector<QPointF> t;
 	QPainterPath path;

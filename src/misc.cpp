@@ -65,6 +65,15 @@ QString distance(qreal value, Units units)
 	}
 }
 
+QString elevation(qreal value, Units units)
+{
+	if (units == Metric)
+		return QString::number(value, 'f', 0) + UNIT_SPACE + QObject::tr("m");
+	else
+		return QString::number(value * M2FT, 'f', 0) + UNIT_SPACE
+		  + QObject::tr("ft");
+}
+
 QString coordinates(const QPointF &value)
 {
 	QChar yH = (value.y() < 0) ? 'S' : 'N';

@@ -2,34 +2,45 @@
 #include "config.h"
 #include "ll.h"
 #include "misc.h"
+#include "tooltip.h"
 #include "waypointitem.h"
 
 
 #define POINT_SIZE  8
 
-static QString tt(const Waypoint &waypoint)
+QString WaypointItem::toolTip()
 {
-	QString date = waypoint.timestamp().toString(Qt::SystemLocaleShortDate);
+	ToolTip tt;
 
-	return "<b>" + QObject::tr("Coordinates:") + "</b> "
-	  + coordinates(waypoint.coordinates()) + "<br><b>"
-	  + QObject::tr("Description:") + "</b> " + waypoint.description()
-	  + "<br><b>" + QObject::tr("Elevation:") + "</b> "
-	  + QString::number(waypoint.elevation() - waypoint.geoidHeight())
-	  + "<br><b>" + QObject::tr("Date:") + "</b> " + date;
+	tt.insert("Coordinates", ::coordinates(_coordinates));
+	if (!std::isnan(_elevation))
+		tt.insert("Elevation", ::elevation(_elevation, _units));
+	if (!_date.isNull())
+		tt.insert("Date", _date.toString(Qt::SystemLocaleShortDate));
+	if (!_description.isNull())
+		tt.insert("Description", _description);
+
+	return tt.toString();
 }
 
 WaypointItem::WaypointItem(const Waypoint &waypoint, QGraphicsItem *parent)
   : QGraphicsItem(parent)
 {
+	_units = Metric;
+
 	_label = waypoint.name();
 	_coordinates = ll2mercator(QPointF(waypoint.coordinates().x(),
 	  -waypoint.coordinates().y()));
+	_elevation = waypoint.elevation() - waypoint.geoidHeight();
+	_description = waypoint.description();
+	_date = waypoint.timestamp();
 
 	updateBoundingRect();
 
-	setToolTip(tt(waypoint));
+	setToolTip(toolTip());
 	setCursor(Qt::ArrowCursor);
+
+	setPos(_coordinates);
 }
 
 void WaypointItem::updateBoundingRect()
@@ -66,4 +77,15 @@ void WaypointItem::paint(QPainter *painter,
 	painter->setBrush(Qt::NoBrush);
 	painter->drawRect(boundingRect());
 */
+}
+
+void WaypointItem::setScale(qreal scale)
+{
+	setPos(_coordinates * scale);
+}
+
+void WaypointItem::setUnits(enum Units units)
+{
+	_units = units;
+	setToolTip(toolTip());
 }

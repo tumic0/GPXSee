@@ -9,7 +9,7 @@
 class TrackItem : public QGraphicsPathItem
 {
 public:
-	TrackItem(const Track &track);
+	TrackItem(const Track &track, QGraphicsItem *parent = 0);
 
 	QPainterPath shape() const {return _shape;}
 	void setScale(qreal scale);

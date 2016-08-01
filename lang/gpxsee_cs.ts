@@ -548,6 +548,7 @@
     </message>
     <message>
         <location filename="../src/misc.cpp" line="54"/>
+        <location filename="../src/misc.cpp" line="74"/>
         <location filename="../src/scaleitem.cpp" line="81"/>
         <source>ft</source>
         <translation>ft</translation>
@@ -560,24 +561,10 @@
     </message>
     <message>
         <location filename="../src/misc.cpp" line="61"/>
+        <location filename="../src/misc.cpp" line="71"/>
         <location filename="../src/scaleitem.cpp" line="83"/>
         <source>m</source>
         <translation>m</translation>
-    </message>
-    <message>
-        <location filename="../src/trackitem.cpp" line="14"/>
-        <source>Date:</source>
-        <translation>Datum:</translation>
-    </message>
-    <message>
-        <location filename="../src/trackitem.cpp" line="15"/>
-        <source>Distance:</source>
-        <translation>Vzdálenost:</translation>
-    </message>
-    <message>
-        <location filename="../src/trackitem.cpp" line="16"/>
-        <source>Time:</source>
-        <translation>Čas:</translation>
     </message>
 </context>
 <context>

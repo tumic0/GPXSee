@@ -23,6 +23,8 @@ void Parser::handleTrackpointData(DataType type, const QString &value)
 		case Temperature:
 			_track->last().setTemperature(value.toDouble());
 			break;
+		default:
+			break;
 	}
 }
 
@@ -45,6 +47,8 @@ void Parser::handleWaypointData(DataType type, const QString &value)
 	    case Geoidheight:
 		    _waypoints.last().setGeoidHeight(value.toLatin1().toDouble());
 		    break;
+		default:
+			break;
 	}
 }
 
