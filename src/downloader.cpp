@@ -73,7 +73,8 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 			Download dl(redirect, filename);
 			doDownload(dl);
 		} else
-			saveToDisk(filename, reply);
+			if (!saveToDisk(filename, reply))
+				_errorDownloads.insert(url);
 	}
 
 	_currentDownloads.removeAll(reply);
