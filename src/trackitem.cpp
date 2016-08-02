@@ -60,7 +60,6 @@ TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
 
 	QBrush brush(Qt::SolidPattern);
 	QPen pen(brush, TRACK_WIDTH);
-	pen.setCosmetic(true);
 	setPen(pen);
 }
 
@@ -68,6 +67,10 @@ void TrackItem::setScale(qreal scale)
 {
 	QGraphicsPathItem::setScale(scale);
 	updateShape();
+
+	QPen p(pen());
+	p.setWidthF(TRACK_WIDTH * 1.0/scale);
+	setPen(p);
 }
 
 void TrackItem::setColor(const QColor &color)
