@@ -1,3 +1,4 @@
+#include <QApplication>
 #include <QCursor>
 #include <QPen>
 #include "ll.h"
@@ -12,11 +13,13 @@ QString TrackItem::toolTip()
 {
 	ToolTip tt;
 
-	tt.insert("Distance", ::distance(_distance, _units));
+	tt.insert(qApp->translate("TrackItem", "Distance"),
+	  ::distance(_distance, _units));
 	if  (_time > 0)
-		tt.insert("Time", ::timeSpan(_time));
+		tt.insert(qApp->translate("TrackItem", "Time"), ::timeSpan(_time));
 	if (!_date.isNull())
-		tt.insert("Date", _date.toString(Qt::SystemLocaleShortDate));
+		tt.insert(qApp->translate("TrackItem", "Date"),
+		  _date.toString(Qt::SystemLocaleShortDate));
 
 	return tt.toString();
 }

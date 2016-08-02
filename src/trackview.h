@@ -34,6 +34,7 @@ public:
 
 	void setMap(Map *map);
 	void setUnits(enum Units units);
+	void setPOIOverlap(bool overlap);
 
 	void plot(QPainter *painter, const QRectF &target);
 
@@ -57,6 +58,7 @@ private:
 	void rescale(qreal scale);
 	void rescale();
 	void zoom(int z, const QPointF &pos);
+	void checkPOIOverlap();
 
 	void wheelEvent(QWheelEvent *event);
 	void keyPressEvent(QKeyEvent *event);
@@ -80,6 +82,7 @@ private:
 	int _zoom;
 
 	Units _units;
+	bool _overlap;
 	bool _plot;
 };
 

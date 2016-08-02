@@ -39,6 +39,7 @@ TrackView::TrackView(QWidget *parent)
 
 	_plot = false;
 	_units = Metric;
+	_overlap = true;
 }
 
 TrackView::~TrackView()
@@ -199,6 +200,19 @@ qreal TrackView::mapScale(int zoom) const
 	return ((360.0/(qreal)(1<<zoom))/(qreal)TILE_SIZE);
 }
 
+void TrackView::checkPOIOverlap()
+{
+	QHash<Waypoint, WaypointItem*>::const_iterator it, jt;
+
+	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
+		for (jt = _pois.constBegin(); jt != _pois.constEnd(); jt++) {
+			if (it != jt && it.value()->isVisible() && jt.value()->isVisible()
+			  && it.value()->collidesWithItem(jt.value()))
+				jt.value()->hide();
+		}
+	}
+}
+
 void TrackView::rescale(qreal scale)
 {
 	for (int i = 0; i < _paths.size(); i++) {
@@ -209,19 +223,14 @@ void TrackView::rescale(qreal scale)
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setScale(1.0/scale);
 
-	QHash<Waypoint, WaypointItem*>::const_iterator it, jt;
+	QHash<Waypoint, WaypointItem*>::const_iterator it;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
 		it.value()->setScale(1.0/scale);
 		it.value()->show();
 	}
 
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
-		for (jt = _pois.constBegin(); jt != _pois.constEnd(); jt++) {
-			if (it != jt && it.value()->isVisible() && jt.value()->isVisible()
-			  && it.value()->collidesWithItem(jt.value()))
-				jt.value()->hide();
-		}
-	}
+	if (!_overlap)
+		checkPOIOverlap();
 
 	_scale = scale;
 }
@@ -245,8 +254,6 @@ void TrackView::addPOI(const QVector<Waypoint> &waypoints)
 
 void TrackView::loadPOI(const POI &poi)
 {
-	QHash<Waypoint, WaypointItem*>::const_iterator it,jt;
-
 	if (!_paths.size() && !_waypoints.size())
 		return;
 
@@ -254,13 +261,8 @@ void TrackView::loadPOI(const POI &poi)
 		addPOI(poi.points(_paths.at(i)->path()));
 	addPOI(poi.points(_waypoints));
 
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
-		for (jt = _pois.constBegin(); jt != _pois.constEnd(); jt++) {
-			if (it != jt && it.value()->isVisible() && jt.value()->isVisible()
-			  && it.value()->collidesWithItem(jt.value()))
-				jt.value()->hide();
-		}
-	}
+	if (!_overlap)
+		checkPOIOverlap();
 }
 
 void TrackView::setMap(Map *map)
@@ -432,6 +434,18 @@ void TrackView::movePositionMarker(qreal val)
 			_markers.at(i)->setVisible(true);
 		}
 	}
+}
+
+void TrackView::setPOIOverlap(bool overlap)
+{
+	_overlap = overlap;
+
+	if (_overlap) {
+		QHash<Waypoint, WaypointItem*>::const_iterator it;
+		for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+			it.value()->show();
+	} else
+		checkPOIOverlap();
 }
 
 void TrackView::drawBackground(QPainter *painter, const QRectF &rect)

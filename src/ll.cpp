@@ -35,6 +35,16 @@ QPointF ll2mercator(const QPointF &ll)
 	return m;
 }
 
+QPointF mercator2ll(const QPointF &m)
+{
+	QPointF ll;
+
+	ll.setX(m.x());
+	ll.setY(rad2deg(2 * atan(exp(deg2rad(m.y()))) - M_PI/2));
+
+	return ll;
+}
+
 QPoint mercator2tile(const QPointF &m, int z)
 {
 	QPoint tile;

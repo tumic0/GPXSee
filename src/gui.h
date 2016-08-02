@@ -43,6 +43,7 @@ private slots:
 	void reloadFile();
 	void openPOIFile();
 	void closePOIFiles();
+	void overlapPOIs(bool checked);
 	void showPOI(bool checked);
 	void showMap(bool checked);
 	void showGraphs(bool checked);
@@ -128,6 +129,7 @@ private:
 	QAction *_openPOIAction;
 	QAction *_closePOIAction;
 	QAction *_showPOIAction;
+	QAction *_overlapPOIAction;
 	QAction *_showMapAction;
 	QAction *_fullscreenAction;
 	QAction *_clearMapCacheAction;

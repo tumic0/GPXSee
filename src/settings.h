@@ -15,6 +15,7 @@
 #define SHOW_MAP_SETTING                  "show"
 
 #define POI_SETTINGS_GROUP	              "POI"
+#define OVERLAP_POI_SETTING               "overlap"
 #define SHOW_POI_SETTING                  "show"
 #define DISABLED_POI_FILE_SETTINGS_PREFIX "disabled"
 #define DISABLED_POI_FILE_SETTING         "file"

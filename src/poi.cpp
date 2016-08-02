@@ -52,10 +52,10 @@ bool POI::loadGPXFile(const QString &fileName)
 		index.end = _data.size() - 1;
 
 		for (int i = index.start; i <= index.end; i++) {
-			QPointF p = ll2mercator(_data.at(i).coordinates());
+			const QPointF &p = _data.at(i).coordinates();
 			qreal c[2];
 			c[0] = p.x();
-			c[1] = -p.y();
+			c[1] = p.y();
 			_tree.Insert(c, c, i);
 		}
 
@@ -124,10 +124,10 @@ bool POI::loadCSVFile(const QString &fileName)
 	index.end = _data.size() - 1;
 
 	for (int i = index.start; i <= index.end; i++) {
-		QPointF p = ll2mercator(_data.at(i).coordinates());
+		const QPointF &p = _data.at(i).coordinates();
 		qreal c[2];
 		c[0] = p.x();
-		c[1] = -p.y();
+		c[1] = p.y();
 		_tree.Insert(c, c, i);
 	}
 
@@ -152,11 +152,11 @@ QVector<Waypoint> POI::points(const QPainterPath &path, qreal radius) const
 	qreal min[2], max[2];
 
 	for (int i = 0; i < path.elementCount(); i++) {
-		const QPointF &p = path.elementAt(i);
+		QPointF p = mercator2ll(path.elementAt(i));
 		min[0] = p.x() - radius;
-		min[1] = p.y() - radius;
+		min[1] = -p.y() - radius;
 		max[0] = p.x() + radius;
-		max[1] = p.y() + radius;
+		max[1] = -p.y() + radius;
 		_tree.Search(min, max, cb, &set);
 	}
 
@@ -177,7 +177,7 @@ QVector<Waypoint> POI::points(const QList<WaypointItem*> &list, qreal radius)
 	qreal min[2], max[2];
 
 	for (int i = 0; i < list.count(); i++) {
-		const QPointF &p = list.at(i)->coordinates();
+		const QPointF &p = list.at(i)->waypoint().coordinates();
 		min[0] = p.x() - radius;
 		min[1] = p.y() - radius;
 		max[0] = p.x() + radius;

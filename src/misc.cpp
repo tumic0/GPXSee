@@ -1,6 +1,7 @@
 #include <cmath>
-#include <QObject>
+#include <QApplication>
 #include "misc.h"
+
 
 double niceNum(double x, int round)
 {
@@ -50,28 +51,29 @@ QString distance(qreal value, Units units)
 {
 	if (units == Imperial) {
 		if (value < MIINM)
-			return QString::number(value * M2FT, 'f', 0)
-			  + UNIT_SPACE + QObject::tr("ft");
+			return QString::number(value * M2FT, 'f', 0) + UNIT_SPACE
+			  + qApp->translate("Misc", "ft");
 		else
-			return QString::number(value * M2MI, 'f', 1)
-			  + UNIT_SPACE + QObject::tr("mi");
+			return QString::number(value * M2MI, 'f', 1) + UNIT_SPACE
+			  + qApp->translate("Misc", "mi");
 	} else {
 		if (value < KMINM)
 			return QString::number(value, 'f', 0) + UNIT_SPACE
-			  + QObject::tr("m");
+			  + qApp->translate("Misc", "m");
 		else
-			return QString::number(value * M2KM, 'f', 1)
-			  + UNIT_SPACE + QObject::tr("km");
+			return QString::number(value * M2KM, 'f', 1) + UNIT_SPACE
+			  + qApp->translate("Misc", "km");
 	}
 }
 
 QString elevation(qreal value, Units units)
 {
 	if (units == Metric)
-		return QString::number(value, 'f', 0) + UNIT_SPACE + QObject::tr("m");
+		return QString::number(value, 'f', 0) + UNIT_SPACE
+		  + qApp->translate("Misc", "m");
 	else
 		return QString::number(value * M2FT, 'f', 0) + UNIT_SPACE
-		  + QObject::tr("ft");
+		  + qApp->translate("Misc", "ft");
 }
 
 QString coordinates(const QPointF &value)
@@ -79,7 +81,6 @@ QString coordinates(const QPointF &value)
 	QChar yH = (value.y() < 0) ? 'S' : 'N';
 	QChar xH = (value.x() < 0) ? 'W' : 'E';
 
-	return QString::number(qAbs(value.y()), 'f', 5) + QChar(0x00B0) + " " + yH
-	  + ", " + QString::number(qAbs(value.x()), 'f', 5) + QChar(0x00B0) + " "
-	  + xH ;
+	return QString::number(qAbs(value.y()), 'f', 5) + yH + "," + QChar(0x00A0)
+	  + QString::number(qAbs(value.x()), 'f', 5) + xH;
 }

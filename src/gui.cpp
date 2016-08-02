@@ -226,6 +226,10 @@ void GUI::createActions()
 	_closePOIAction = new QAction(QIcon(QPixmap(CLOSE_FILE_ICON)),
 	  tr("Close POI files"), this);
 	connect(_closePOIAction, SIGNAL(triggered()), this, SLOT(closePOIFiles()));
+	_overlapPOIAction = new QAction(tr("Overlap POIs"), this);
+	_overlapPOIAction->setCheckable(true);
+	connect(_overlapPOIAction, SIGNAL(triggered(bool)), this,
+	  SLOT(overlapPOIs(bool)));
 	_showPOIAction = new QAction(QIcon(QPixmap(SHOW_POI_ICON)),
 	  tr("Show POIs"), this);
 	_showPOIAction->setCheckable(true);
@@ -337,6 +341,8 @@ void GUI::createMenus()
 	_poiMenu->addSeparator();
 	_poiMenu->addAction(_openPOIAction);
 	_poiMenu->addAction(_closePOIAction);
+	_poiMenu->addSeparator();
+	_poiMenu->addAction(_overlapPOIAction);
 	_poiMenu->addSeparator();
 	_poiMenu->addAction(_showPOIAction);
 
@@ -601,8 +607,9 @@ bool GUI::openPOIFile(const QString &fileName)
 	} else {
 		_showPOIAction->setChecked(true);
 		_track->loadPOI(_poi);
-		_poiFilesMenu->addAction(createPOIFileAction(
-		  _poi.files().indexOf(fileName)));
+		QAction *action = createPOIFileAction(_poi.files().indexOf(fileName));
+		action->setChecked(true);
+		_poiFilesMenu->addAction(action);
 
 		return true;
 	}
@@ -762,6 +769,11 @@ void GUI::closeAll()
 	updateWindowTitle();
 	updateGraphTabs();
 	updateTrackView();
+}
+
+void GUI::overlapPOIs(bool checked)
+{
+	_track->setPOIOverlap(checked);
 }
 
 void GUI::showPOI(bool checked)
@@ -1082,6 +1094,7 @@ void GUI::writeSettings()
 
 	settings.beginGroup(POI_SETTINGS_GROUP);
 	settings.setValue(SHOW_POI_SETTING, _showPOIAction->isChecked());
+	settings.setValue(OVERLAP_POI_SETTING, _overlapPOIAction->isChecked());
 
 	settings.remove(DISABLED_POI_FILE_SETTINGS_PREFIX);
 	settings.beginWriteArray(DISABLED_POI_FILE_SETTINGS_PREFIX);
@@ -1138,6 +1151,11 @@ void GUI::readSettings()
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);
+	if (settings.value(OVERLAP_POI_SETTING, true).toBool() == false) {
+		_track->setPOIOverlap(false);
+		_overlapPOIAction->setChecked(false);
+	} else
+		_overlapPOIAction->setChecked(true);
 	if (settings.value(SHOW_POI_SETTING, false).toBool() == true)
 		_showPOIAction->setChecked(true);
 	for (int i = 0; i < _poiFilesActions.count(); i++)
