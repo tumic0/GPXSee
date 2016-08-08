@@ -13,14 +13,12 @@ HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphTab(parent)
 	setSliderPrecision(0);
 }
 
-void HeartRateGraph::addInfo()
+void HeartRateGraph::setInfo()
 {
 	GraphView::addInfo(tr("Average"), QString::number(avg() * yScale(), 'f', 0)
 	  + UNIT_SPACE + yUnits());
 	GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale(),  'f', 0)
 	  + UNIT_SPACE + yUnits());
-
-	redraw();
 }
 
 void HeartRateGraph::loadGPX(const GPX &gpx)
@@ -44,8 +42,13 @@ void HeartRateGraph::loadGPX(const GPX &gpx)
 		loadData(data);
 	}
 
+	for (int i = 0; i < gpx.routeCount(); i++)
+		skipColor();
+
 	setXUnits();
-	addInfo();
+	setInfo();
+
+	redraw();
 }
 
 qreal HeartRateGraph::avg() const
@@ -92,8 +95,9 @@ void HeartRateGraph::setXUnits()
 void HeartRateGraph::setUnits(enum Units units)
 {
 	_units = units;
-	setXUnits();
 
-	clearInfo();
-	addInfo();
+	setXUnits();
+	setInfo();
+
+	redraw();
 }

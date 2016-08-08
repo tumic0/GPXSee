@@ -31,6 +31,8 @@ public:
 	void setElevation(qreal elevation) {_elevation = elevation;}
 	void setGeoidHeight(qreal geoidHeight) {_geoidHeight = geoidHeight;}
 
+	bool hasElevation() const {return !std::isnan(_elevation);}
+
 	bool operator==(const Waypoint &other) const
 	  {return this->_name == other._name
 	  && this->_coordinates == other._coordinates;}

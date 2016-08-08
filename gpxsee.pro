@@ -47,7 +47,9 @@ HEADERS += src/config.h \
     src/graphtab.h \
     src/misc.h \
     src/trackitem.h \
-    src/tooltip.h
+    src/tooltip.h \
+    src/route.h \
+    src/routeitem.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
@@ -82,7 +84,9 @@ SOURCES += src/main.cpp \
     src/misc.cpp \
     src/waypoint.cpp \
     src/trackitem.cpp \
-    src/tooltip.cpp
+    src/tooltip.cpp \
+    src/route.cpp \
+    src/routeitem.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {

@@ -52,9 +52,40 @@ void Parser::handleWaypointData(DataType type, const QString &value)
 	}
 }
 
+void Parser::handleRoutepointData(DataType type, const QString &value)
+{
+	switch (type) {
+		case Name:
+			_route->last().setName(value);
+			break;
+		case Description:
+			_route->last().setDescription(value);
+			break;
+		case Time:
+			_route->last().setTimestamp(QDateTime::fromString(
+			  value.toLatin1(), Qt::ISODate));
+			break;
+		case Elevation:
+			_route->last().setElevation(value.toLatin1().toDouble());
+			break;
+		case Geoidheight:
+			_route->last().setGeoidHeight(value.toLatin1().toDouble());
+			break;
+		default:
+			break;
+	}
+}
+
 void Parser::handleTrackpointAttributes(const QXmlStreamAttributes &attr)
 {
 	_track->last().setCoordinates(QPointF(
+	  attr.value("lon").toLatin1().toDouble(),
+	  attr.value("lat").toLatin1().toDouble()));
+}
+
+void Parser::handleRoutepointAttributes(const QXmlStreamAttributes &attr)
+{
+	_route->last().setCoordinates(QPointF(
 	  attr.value("lon").toLatin1().toDouble(),
 	  attr.value("lat").toLatin1().toDouble()));
 }
@@ -110,6 +141,20 @@ void Parser::trackpointData()
 	}
 }
 
+void Parser::routepointData()
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "name")
+			handleRoutepointData(Name, _reader.readElementText());
+		else if (_reader.name() == "ele")
+			handleRoutepointData(Elevation, _reader.readElementText());
+		else if (_reader.name() == "geoidheight")
+			handleRoutepointData(Geoidheight, _reader.readElementText());
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
 void Parser::trackpoints()
 {
 	while (_reader.readNextStartElement()) {
@@ -117,6 +162,18 @@ void Parser::trackpoints()
 			_track->append(Trackpoint());
 			handleTrackpointAttributes(_reader.attributes());
 			trackpointData();
+		} else
+			_reader.skipCurrentElement();
+	}
+}
+
+void Parser::routepoints()
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "rtept") {
+			_route->append(Waypoint());
+			handleRoutepointAttributes(_reader.attributes());
+			routepointData();
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -157,6 +214,10 @@ void Parser::gpx()
 			_tracks.append(QVector<Trackpoint>());
 			_track = &_tracks.back();
 			track();
+		} else if (_reader.name() == "rte") {
+			_routes.append(QVector<Waypoint>());
+			_route = &_routes.back();
+			routepoints();
 		} else if (_reader.name() == "wpt") {
 			_waypoints.append(Waypoint());
 			handleWaypointAttributes(_reader.attributes());

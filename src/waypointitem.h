@@ -15,6 +15,7 @@ public:
 
 	void setUnits(enum Units units);
 	void setScale(qreal scale);
+	void showLabel(bool show);
 
 	QRectF boundingRect() const {return _boundingRect;}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -28,6 +29,7 @@ private:
 	QPointF _coordinates;
 	Waypoint _waypoint;
 	Units _units;
+	bool _showLabel;
 };
 
 #endif // WAYPOINTITEM_H

@@ -23,7 +23,7 @@ private:
 	qreal max() const {return bounds().bottom();}
 	void setXUnits();
 	void setYUnits();
-	void addInfo();
+	void setInfo();
 
 	QList<QPointF> _avg;
 	enum Units _units;

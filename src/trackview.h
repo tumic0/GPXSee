@@ -13,9 +13,10 @@ class GPX;
 class POI;
 class Map;
 class Track;
+class Route;
 class TrackItem;
+class RouteItem;
 class WaypointItem;
-class MarkerItem;
 class ScaleItem;
 
 class TrackView : public QGraphicsView
@@ -34,25 +35,35 @@ public:
 
 	void setMap(Map *map);
 	void setUnits(enum Units units);
-	void setPOIOverlap(bool overlap);
 
 	void plot(QPainter *painter, const QRectF &target);
 
-	int trackCount() const {return _paths.count();}
+	int trackCount() const {return _tracks.count();}
+	int routeCount() const {return _routes.count();}
 	int waypointCount() const {return _waypoints.count();}
 
 public slots:
 	void movePositionMarker(qreal val);
 	void redraw();
 
+	void setPOIOverlap(bool overlap);
+	void showWaypointLabels(bool show);
+	void showPOILabels(bool show);
+	void showTracks(bool show);
+	void showRoutes(bool show);
+	void showWaypoints(bool show);
+
 private:
 	void addTrack(const Track &track);
+	void addRoute(const Route &route);
 	void addWaypoints(const QList<Waypoint> &waypoints);
 	void addPOI(const QVector<Waypoint> &waypoints);
 
 	QRectF trackBoundingRect() const;
+	QRectF routeBoundingRect() const;
 	QRectF waypointBoundingRect() const;
 	qreal trackScale() const;
+	qreal routeScale() const;
 	qreal waypointScale() const;
 	qreal mapScale(int zoom) const;
 	void rescale(qreal scale);
@@ -67,8 +78,8 @@ private:
 	void paintEvent(QPaintEvent *e);
 
 	QGraphicsScene *_scene;
-	QList<TrackItem*> _paths;
-	QList<MarkerItem*> _markers;
+	QList<TrackItem*> _tracks;
+	QList<RouteItem*> _routes;
 	QList<WaypointItem*> _waypoints;
 	QHash<Waypoint, WaypointItem*> _pois;
 
@@ -82,7 +93,14 @@ private:
 	int _zoom;
 
 	Units _units;
-	bool _overlap;
+
+	bool _showTracks;
+	bool _showRoutes;
+	bool _showWaypoints;
+	bool _showWaypointLabels;
+	bool _showPOILabels;
+	bool _overlapPOIs;
+
 	bool _plot;
 };
 

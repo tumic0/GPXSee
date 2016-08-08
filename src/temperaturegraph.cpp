@@ -13,7 +13,7 @@ TemperatureGraph::TemperatureGraph(QWidget *parent) : GraphTab(parent)
 	setSliderPrecision(1);
 }
 
-void TemperatureGraph::addInfo()
+void TemperatureGraph::setInfo()
 {
 	GraphView::addInfo(tr("Average"), QString::number(avg() * yScale()
 	  + yOffset(), 'f', 1) + UNIT_SPACE + yUnits());
@@ -21,8 +21,6 @@ void TemperatureGraph::addInfo()
 	  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
 	GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale()
 	  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
-
-	redraw();
 }
 
 void TemperatureGraph::loadGPX(const GPX &gpx)
@@ -46,8 +44,13 @@ void TemperatureGraph::loadGPX(const GPX &gpx)
 		loadData(data);
 	}
 
+	for (int i = 0; i < gpx.routeCount(); i++)
+		skipColor();
+
 	setXUnits();
-	addInfo();
+	setInfo();
+
+	redraw();
 }
 
 qreal TemperatureGraph::avg() const
@@ -107,9 +110,10 @@ void TemperatureGraph::setYUnits()
 void TemperatureGraph::setUnits(enum Units units)
 {
 	_units = units;
+
 	setXUnits();
 	setYUnits();
+	setInfo();
 
-	clearInfo();
-	addInfo();
+	redraw();
 }

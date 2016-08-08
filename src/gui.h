@@ -43,12 +43,12 @@ private slots:
 	void reloadFile();
 	void openPOIFile();
 	void closePOIFiles();
-	void overlapPOIs(bool checked);
 	void showPOI(bool checked);
 	void showMap(bool checked);
 	void showGraphs(bool checked);
 	void showToolbars(bool checked);
 	void showFullscreen(bool checked);
+	void showWaypointLabels(bool checked);
 	void clearMapCache();
 	void nextMap();
 	void prevMap();
@@ -94,28 +94,20 @@ private:
 	void updateGraphTabs();
 	void updateTrackView();
 
-	void keyPressEvent(QKeyEvent * event);
+	void keyPressEvent(QKeyEvent *event);
 	void closeEvent(QCloseEvent *event);
 
 	int mapIndex(const QString &name);
 	void readSettings();
 	void writeSettings();
 
-	QMenu *_fileMenu;
-	QMenu *_helpMenu;
-	QMenu *_poiMenu;
-	QMenu *_mapMenu;
-	QMenu *_settingsMenu;
-	QMenu *_unitsMenu;
-	QMenu *_poiFilesMenu;
-
 	QToolBar *_fileToolBar;
 	QToolBar *_showToolBar;
 	QToolBar *_navigationToolBar;
-	QTabWidget *_trackGraphs;
+	QMenu *_poiFilesMenu;
+
 	QActionGroup *_fileActionGroup;
 	QActionGroup *_navigationActionGroup;
-
 	QAction *_exitAction;
 	QAction *_keysAction;
 	QAction *_dataSourcesAction;
@@ -130,6 +122,7 @@ private:
 	QAction *_closePOIAction;
 	QAction *_showPOIAction;
 	QAction *_overlapPOIAction;
+	QAction *_showPOILabelsAction;
 	QAction *_showMapAction;
 	QAction *_fullscreenAction;
 	QAction *_clearMapCacheAction;
@@ -143,6 +136,10 @@ private:
 	QAction *_imperialUnitsAction;
 	QAction *_nextMapAction;
 	QAction *_prevMapAction;
+	QAction *_showTracksAction;
+	QAction *_showRoutesAction;
+	QAction *_showWaypointsAction;
+	QAction *_showWaypointLabelsAction;
 	QList<QAction*> _mapActions;
 	QList<QAction*> _poiFilesActions;
 
@@ -153,6 +150,7 @@ private:
 	QLabel *_timeLabel;
 
 	TrackView *_track;
+	QTabWidget *_trackGraphs;
 	QList<GraphTab*> _tabs;
 
 	POI _poi;

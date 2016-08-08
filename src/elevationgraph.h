@@ -25,7 +25,9 @@ private:
 
 	void setXUnits();
 	void setYUnits();
-	void addInfo();
+	void setInfo();
+
+	void loadPath(const QVector<QPointF> &data);
 
 	qreal _ascent, _descent;
 	enum Units _units;

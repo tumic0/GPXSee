@@ -24,7 +24,6 @@ public:
 private:
 	const QVector<Trackpoint> &_data;
 	QVector<qreal> _dd;
-	qreal _distance;
 };
 
 #endif // TRACK_H

@@ -44,12 +44,12 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	loadMaps();
 	loadPOIs();
 
-	createActions();
-	createMenus();
-	createToolBars();
 	createTrackView();
 	createTrackGraphs();
 	createStatusBar();
+	createActions();
+	createMenus();
+	createToolBars();
 
 	_browser = new FileBrowser(this);
 	_browser->setFilter(QStringList("*.gpx"));
@@ -189,7 +189,7 @@ void GUI::createActions()
 	  tr("About GPXSee"), this);
 	connect(_aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
-	// File related actions
+	// File actions
 	_openFileAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)),
 	  tr("Open"), this);
 	_openFileAction->setShortcut(OPEN_SHORTCUT);
@@ -228,8 +228,12 @@ void GUI::createActions()
 	connect(_closePOIAction, SIGNAL(triggered()), this, SLOT(closePOIFiles()));
 	_overlapPOIAction = new QAction(tr("Overlap POIs"), this);
 	_overlapPOIAction->setCheckable(true);
-	connect(_overlapPOIAction, SIGNAL(triggered(bool)), this,
-	  SLOT(overlapPOIs(bool)));
+	connect(_overlapPOIAction, SIGNAL(triggered(bool)), _track,
+	  SLOT(setPOIOverlap(bool)));
+	_showPOILabelsAction = new QAction(tr("Show POI labels"), this);
+	_showPOILabelsAction->setCheckable(true);
+	connect(_showPOILabelsAction, SIGNAL(triggered(bool)), _track,
+	  SLOT(showPOILabels(bool)));
 	_showPOIAction = new QAction(QIcon(QPixmap(SHOW_POI_ICON)),
 	  tr("Show POIs"), this);
 	_showPOIAction->setCheckable(true);
@@ -263,6 +267,24 @@ void GUI::createActions()
 		connect(_prevMapAction, SIGNAL(triggered()), this, SLOT(prevMap()));
 		addAction(_prevMapAction);
 	}
+
+	// Data actions
+	_showTracksAction = new QAction(tr("Show tracks"), this);
+	_showTracksAction->setCheckable(true);
+	connect(_showTracksAction, SIGNAL(triggered(bool)), _track,
+	  SLOT(showTracks(bool)));
+	_showRoutesAction = new QAction(tr("Show routes"), this);
+	_showRoutesAction->setCheckable(true);
+	connect(_showRoutesAction, SIGNAL(triggered(bool)), _track,
+	  SLOT(showRoutes(bool)));
+	_showWaypointsAction = new QAction(tr("Show waypoints"), this);
+	_showWaypointsAction->setCheckable(true);
+	connect(_showWaypointsAction, SIGNAL(triggered(bool)), _track,
+	  SLOT(showWaypoints(bool)));
+	_showWaypointLabelsAction = new QAction(tr("Show waypoint labels"), this);
+	_showWaypointLabelsAction->setCheckable(true);
+	connect(_showWaypointLabelsAction, SIGNAL(triggered(bool)), _track,
+	  SLOT(showWaypointLabels(bool)));
 
 	// Settings actions
 	_showGraphsAction = new QAction(tr("Show graphs"), this);
@@ -314,53 +336,62 @@ void GUI::createActions()
 
 void GUI::createMenus()
 {
-	_fileMenu = menuBar()->addMenu(tr("File"));
-	_fileMenu->addAction(_openFileAction);
-	_fileMenu->addSeparator();
-	_fileMenu->addAction(_printFileAction);
-	_fileMenu->addAction(_exportFileAction);
-	_fileMenu->addSeparator();
-	_fileMenu->addAction(_reloadFileAction);
-	_fileMenu->addSeparator();
-	_fileMenu->addAction(_closeFileAction);
+	QMenu *fileMenu = menuBar()->addMenu(tr("File"));
+	fileMenu->addAction(_openFileAction);
+	fileMenu->addSeparator();
+	fileMenu->addAction(_printFileAction);
+	fileMenu->addAction(_exportFileAction);
+	fileMenu->addSeparator();
+	fileMenu->addAction(_reloadFileAction);
+	fileMenu->addSeparator();
+	fileMenu->addAction(_closeFileAction);
 #ifndef Q_OS_MAC
-	_fileMenu->addSeparator();
-	_fileMenu->addAction(_exitAction);
+	fileMenu->addSeparator();
+	fileMenu->addAction(_exitAction);
 #endif // Q_OS_MAC
 
-	_mapMenu = menuBar()->addMenu(tr("Map"));
-	_mapMenu->addActions(_mapActions);
-	_mapMenu->addSeparator();
-	_mapMenu->addAction(_clearMapCacheAction);
-	_mapMenu->addSeparator();
-	_mapMenu->addAction(_showMapAction);
+	QMenu *mapMenu = menuBar()->addMenu(tr("Map"));
+	mapMenu->addActions(_mapActions);
+	mapMenu->addSeparator();
+	mapMenu->addAction(_clearMapCacheAction);
+	mapMenu->addSeparator();
+	mapMenu->addAction(_showMapAction);
 
-	_poiMenu = menuBar()->addMenu(tr("POI"));
-	_poiFilesMenu = _poiMenu->addMenu(tr("POI files"));
+	QMenu *poiMenu = menuBar()->addMenu(tr("POI"));
+	_poiFilesMenu = poiMenu->addMenu(tr("POI files"));
 	_poiFilesMenu->addActions(_poiFilesActions);
-	_poiMenu->addSeparator();
-	_poiMenu->addAction(_openPOIAction);
-	_poiMenu->addAction(_closePOIAction);
-	_poiMenu->addSeparator();
-	_poiMenu->addAction(_overlapPOIAction);
-	_poiMenu->addSeparator();
-	_poiMenu->addAction(_showPOIAction);
+	poiMenu->addSeparator();
+	poiMenu->addAction(_openPOIAction);
+	poiMenu->addAction(_closePOIAction);
+	poiMenu->addSeparator();
+	poiMenu->addAction(_showPOILabelsAction);
+	poiMenu->addAction(_overlapPOIAction);
+	poiMenu->addSeparator();
+	poiMenu->addAction(_showPOIAction);
 
-	_settingsMenu = menuBar()->addMenu(tr("Settings"));
-	_unitsMenu = _settingsMenu->addMenu(tr("Units"));
-	_unitsMenu->addAction(_metricUnitsAction);
-	_unitsMenu->addAction(_imperialUnitsAction);
-	_settingsMenu->addSeparator();
-	_settingsMenu->addAction(_showToolbarsAction);
-	_settingsMenu->addAction(_showGraphsAction);
-	_settingsMenu->addSeparator();
-	_settingsMenu->addAction(_fullscreenAction);
+	QMenu *dataMenu = menuBar()->addMenu(tr("Data"));
+	dataMenu->addAction(_showTracksAction);
+	dataMenu->addAction(_showRoutesAction);
+	dataMenu->addAction(_showWaypointsAction);
+	dataMenu->addSeparator();
+	QMenu *displayMenu = dataMenu->addMenu(tr("Rendering"));
+	displayMenu->addAction(_showWaypointLabelsAction);
 
-	_helpMenu = menuBar()->addMenu(tr("Help"));
-	_helpMenu->addAction(_dataSourcesAction);
-	_helpMenu->addAction(_keysAction);
-	_helpMenu->addSeparator();
-	_helpMenu->addAction(_aboutAction);
+	QMenu *settingsMenu = menuBar()->addMenu(tr("Settings"));
+	QMenu *unitsMenu = settingsMenu->addMenu(tr("Units"));
+	unitsMenu->addAction(_metricUnitsAction);
+	unitsMenu->addAction(_imperialUnitsAction);
+	settingsMenu->addSeparator();
+	settingsMenu->addAction(_showToolbarsAction);
+	settingsMenu->addAction(_showGraphsAction);
+	settingsMenu->addSeparator();
+	settingsMenu->addAction(_fullscreenAction);
+
+	QMenu *helpMenu = menuBar()->addMenu(tr("Help"));
+	helpMenu->addAction(_dataSourcesAction);
+	helpMenu->addAction(_keysAction);
+	helpMenu->addSeparator();
+	helpMenu->addAction(_aboutAction);
 }
 
 void GUI::createToolBars()
@@ -706,8 +737,8 @@ void GUI::plot(QPrinter *printer)
 		  ? 0.15 * r * (printer->height() - ih - 2*mh)
 		  : 0.15 * (printer->height() - ih - 2*mh);
 		gh = qMax(gh, ratio * 150);
-		GraphView *gv = static_cast<GraphView*>(_trackGraphs->currentWidget());
-		gv->plot(&p,  QRectF(0, printer->height() - gh, printer->width(), gh));
+		GraphTab *gt = static_cast<GraphTab*>(_trackGraphs->currentWidget());
+		gt->plot(&p,  QRectF(0, printer->height() - gh, printer->width(), gh));
 	} else
 		gh = 0;
 	_track->plot(&p, QRectF(0, ih + mh, printer->width(), printer->height()
@@ -769,11 +800,6 @@ void GUI::closeAll()
 	updateWindowTitle();
 	updateGraphTabs();
 	updateTrackView();
-}
-
-void GUI::overlapPOIs(bool checked)
-{
-	_track->setPOIOverlap(checked);
 }
 
 void GUI::showPOI(bool checked)
@@ -839,6 +865,11 @@ void GUI::showFullscreen(bool checked)
 
 		showNormal();
 	}
+}
+
+void GUI::showWaypointLabels(bool checked)
+{
+	_track->showWaypointLabels(checked);
 }
 
 void GUI::clearMapCache()
@@ -920,8 +951,8 @@ void GUI::graphChanged(int index)
 	if (index < 0)
 		return;
 
-	GraphView *gv = static_cast<GraphView*>(_trackGraphs->widget(index));
-	gv->setSliderPosition(_sliderPos);
+	GraphTab *gt = static_cast<GraphTab*>(_trackGraphs->widget(index));
+	gt->setSliderPosition(_sliderPos);
 }
 
 void GUI::updateNavigationActions()
@@ -972,7 +1003,8 @@ void GUI::updateGraphTabs()
 
 void GUI::updateTrackView()
 {
-	_track->setHidden(!(_track->trackCount() + _track->waypointCount()));
+	_track->setHidden(!(_track->trackCount() + _track->routeCount()
+	  + _track->waypointCount()));
 }
 
 void GUI::setMetricUnits()
@@ -1106,6 +1138,16 @@ void GUI::writeSettings()
 	}
 	settings.endArray();
 	settings.endGroup();
+
+	settings.beginGroup(DATA_SETTINGS_GROUP);
+	settings.setValue(SHOW_TRACKS_SETTING, _showTracksAction->isChecked());
+	settings.setValue(SHOW_ROUTES_SETTING, _showRoutesAction->isChecked());
+	settings.setValue(SHOW_WAYPOINTS_SETTING,
+	  _showWaypointsAction->isChecked());
+	settings.setValue(SHOW_WAYPOINT_LABELS_SETTING,
+	  _showWaypointLabelsAction->isChecked());
+
+	settings.endGroup();
 }
 
 void GUI::readSettings()
@@ -1125,15 +1167,13 @@ void GUI::readSettings()
 		_imperialUnitsAction->setChecked(true);
 	} else
 		_metricUnitsAction->setChecked(true);
-	if (settings.value(SHOW_TOOLBARS_SETTING, true).toBool() == false) {
+	if (settings.value(SHOW_TOOLBARS_SETTING, true).toBool() == false)
 		showToolbars(false);
-		_showToolbarsAction->setChecked(false);
-	} else
+	else
 		_showToolbarsAction->setChecked(true);
-	if (settings.value(SHOW_GRAPHS_SETTING, true).toBool() == false) {
+	if (settings.value(SHOW_GRAPHS_SETTING, true).toBool() == false)
 		showGraphs(false);
-		_showGraphsAction->setChecked(false);
-	} else
+	else
 		_showGraphsAction->setChecked(true);
 	settings.endGroup();
 
@@ -1151,11 +1191,14 @@ void GUI::readSettings()
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);
-	if (settings.value(OVERLAP_POI_SETTING, true).toBool() == false) {
+	if (settings.value(OVERLAP_POI_SETTING, true).toBool() == false)
 		_track->setPOIOverlap(false);
-		_overlapPOIAction->setChecked(false);
-	} else
+	else
 		_overlapPOIAction->setChecked(true);
+	if (settings.value(LABELS_POI_SETTING, true).toBool() == false)
+		_track->showPOILabels(false);
+	else
+		_showPOILabelsAction->setChecked(true);
 	if (settings.value(SHOW_POI_SETTING, false).toBool() == true)
 		_showPOIAction->setChecked(true);
 	for (int i = 0; i < _poiFilesActions.count(); i++)
@@ -1171,6 +1214,25 @@ void GUI::readSettings()
 		}
 	}
 	settings.endArray();
+	settings.endGroup();
+
+	settings.beginGroup(DATA_SETTINGS_GROUP);
+	if (settings.value(SHOW_TRACKS_SETTING, true).toBool() == false)
+		_track->showTracks(false);
+	else
+		_showTracksAction->setChecked(true);
+	if (settings.value(SHOW_ROUTES_SETTING, true).toBool() == false)
+		_track->showRoutes(false);
+	else
+		_showRoutesAction->setChecked(true);
+	if (settings.value(SHOW_WAYPOINTS_SETTING, true).toBool() == false)
+		_track->showWaypoints(false);
+	else
+		_showWaypointsAction->setChecked(true);
+	if (settings.value(SHOW_WAYPOINT_LABELS_SETTING, true).toBool() == false)
+		_track->showWaypointLabels(false);
+	else
+		_showWaypointLabelsAction->setChecked(true);
 	settings.endGroup();
 }
 

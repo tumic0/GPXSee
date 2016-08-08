@@ -13,6 +13,8 @@ QString WaypointItem::toolTip()
 {
 	ToolTip tt;
 
+	if (!_waypoint.name().isEmpty() && !_showLabel)
+		tt.insert(qApp->translate("WaypointItem", "Name"), _waypoint.name());
 	tt.insert(qApp->translate("WaypointItem", "Coordinates"),
 	  ::coordinates(_waypoint.coordinates()));
 	if (!std::isnan(_waypoint.elevation()))
@@ -32,6 +34,7 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, QGraphicsItem *parent)
   : QGraphicsItem(parent)
 {
 	_units = Metric;
+	_showLabel = true;
 
 	_waypoint = waypoint;
 	_coordinates = ll2mercator(QPointF(waypoint.coordinates().x(),
@@ -46,14 +49,18 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, QGraphicsItem *parent)
 
 void WaypointItem::updateBoundingRect()
 {
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	font.setFamily(FONT_FAMILY);
-	QFontMetrics fm(font);
-	QRect ts = fm.tightBoundingRect(_waypoint.name());
+	if (_showLabel) {
+		QFont font;
+		font.setPixelSize(FONT_SIZE);
+		font.setFamily(FONT_FAMILY);
+		QFontMetrics fm(font);
+		QRect ts = fm.tightBoundingRect(_waypoint.name());
 
-	_boundingRect = QRectF(-POINT_SIZE/2, -POINT_SIZE/2, ts.width()
-	  + POINT_SIZE, ts.height() + fm.descent() + POINT_SIZE);
+		_boundingRect = QRectF(-POINT_SIZE/2, -POINT_SIZE/2, ts.width()
+		  + POINT_SIZE, ts.height() + fm.descent() + POINT_SIZE);
+	} else
+		_boundingRect = QRectF(-POINT_SIZE/2, -POINT_SIZE/2, POINT_SIZE,
+		  POINT_SIZE);
 }
 
 void WaypointItem::paint(QPainter *painter,
@@ -61,15 +68,19 @@ void WaypointItem::paint(QPainter *painter,
 {
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	font.setFamily(FONT_FAMILY);
-	QFontMetrics fm(font);
-	QRect ts = fm.tightBoundingRect(_waypoint.name());
 
-	painter->setFont(font);
-	painter->drawText(POINT_SIZE/2 - qMax(ts.x(), 0), POINT_SIZE/2 + ts.height(),
-	  _waypoint.name());
+	if (_showLabel) {
+		QFont font;
+		font.setPixelSize(FONT_SIZE);
+		font.setFamily(FONT_FAMILY);
+		QFontMetrics fm(font);
+		QRect ts = fm.tightBoundingRect(_waypoint.name());
+
+		painter->setFont(font);
+		painter->drawText(POINT_SIZE/2 - qMax(ts.x(), 0), POINT_SIZE/2
+		  + ts.height(), _waypoint.name());
+	}
+
 	painter->setBrush(Qt::SolidPattern);
 	painter->drawEllipse(-POINT_SIZE/2, -POINT_SIZE/2, POINT_SIZE, POINT_SIZE);
 
@@ -88,5 +99,13 @@ void WaypointItem::setScale(qreal scale)
 void WaypointItem::setUnits(enum Units units)
 {
 	_units = units;
+	setToolTip(toolTip());
+}
+
+void WaypointItem::showLabel(bool show)
+{
+	prepareGeometryChange();
+	_showLabel = show;
+	updateBoundingRect();
 	setToolTip(toolTip());
 }
