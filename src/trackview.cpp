@@ -45,6 +45,7 @@ TrackView::TrackView(QWidget *parent)
 	_showWaypointLabels = true;
 	_showPOILabels = true;
 	_overlapPOIs = true;
+	_showRouteWaypoints = true;
 
 	_plot = false;
 }
@@ -89,6 +90,7 @@ void TrackView::addRoute(const Route &route)
 	ri->setScale(1.0/_scale);
 	ri->setColor(_palette.color());
 	ri->setVisible(_showRoutes);
+	ri->showWaypoints(_showRouteWaypoints);
 	_scene->addItem(ri);
 
 	_maxPath = qMax(ri->path().length(), _maxPath);
@@ -538,6 +540,14 @@ void TrackView::showWaypointLabels(bool show)
 
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->showLabel(show);
+}
+
+void TrackView::showRouteWaypoints(bool show)
+{
+	_showRouteWaypoints = show;
+
+	for (int i = 0; i < _routes.size(); i++)
+		_routes.at(i)->showWaypoints(show);
 }
 
 void TrackView::showPOILabels(bool show)

@@ -54,7 +54,6 @@ void RouteItem::setScale(qreal scale)
 
 	_pen.setWidthF(ROUTE_WIDTH * 1.0/scale);
 	QGraphicsItem::setScale(scale);
-	_marker->setScale(1.0/scale);
 
 	QList<QGraphicsItem *> childs =	childItems();
 	for (int i = 0; i < childs.count(); i++)
@@ -71,4 +70,12 @@ void RouteItem::moveMarker(qreal t)
 {
 	Q_ASSERT(t >= 0 && t <= 1.0);
 	_marker->setPos(_path.pointAtPercent(t));
+}
+
+void RouteItem::showWaypoints(bool show)
+{
+	QList<QGraphicsItem *> childs =	childItems();
+	for (int i = 0; i < childs.count(); i++)
+		if (childs.at(i) != _marker)
+			childs.at(i)->setVisible(show);
 }

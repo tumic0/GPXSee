@@ -140,6 +140,7 @@ private:
 	QAction *_showRoutesAction;
 	QAction *_showWaypointsAction;
 	QAction *_showWaypointLabelsAction;
+	QAction *_showRouteWaypointsAction;
 	QList<QAction*> _mapActions;
 	QList<QAction*> _poiFilesActions;
 

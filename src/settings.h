@@ -25,6 +25,7 @@
 #define SHOW_TRACKS_SETTING               "tracks"
 #define SHOW_ROUTES_SETTING               "routes"
 #define SHOW_WAYPOINTS_SETTING            "waypoints"
+#define SHOW_ROUTE_WAYPOINTS_SETTING      "routeWaypoints"
 #define SHOW_WAYPOINT_LABELS_SETTING      "waypointLabels"
 
 #endif // SETTINGS_H

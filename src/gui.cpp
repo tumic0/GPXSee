@@ -281,10 +281,14 @@ void GUI::createActions()
 	_showWaypointsAction->setCheckable(true);
 	connect(_showWaypointsAction, SIGNAL(triggered(bool)), _track,
 	  SLOT(showWaypoints(bool)));
-	_showWaypointLabelsAction = new QAction(tr("Show waypoint labels"), this);
+	_showWaypointLabelsAction = new QAction(tr("Waypoint labels"), this);
 	_showWaypointLabelsAction->setCheckable(true);
 	connect(_showWaypointLabelsAction, SIGNAL(triggered(bool)), _track,
 	  SLOT(showWaypointLabels(bool)));
+	_showRouteWaypointsAction = new QAction(tr("Route Waypoints"), this);
+	_showRouteWaypointsAction->setCheckable(true);
+	connect(_showRouteWaypointsAction, SIGNAL(triggered(bool)), _track,
+	  SLOT(showRouteWaypoints(bool)));
 
 	// Settings actions
 	_showGraphsAction = new QAction(tr("Show graphs"), this);
@@ -370,12 +374,13 @@ void GUI::createMenus()
 	poiMenu->addAction(_showPOIAction);
 
 	QMenu *dataMenu = menuBar()->addMenu(tr("Data"));
+	QMenu *displayMenu = dataMenu->addMenu(tr("Display"));
+	displayMenu->addAction(_showWaypointLabelsAction);
+	displayMenu->addAction(_showRouteWaypointsAction);
+	dataMenu->addSeparator();
 	dataMenu->addAction(_showTracksAction);
 	dataMenu->addAction(_showRoutesAction);
 	dataMenu->addAction(_showWaypointsAction);
-	dataMenu->addSeparator();
-	QMenu *displayMenu = dataMenu->addMenu(tr("Rendering"));
-	displayMenu->addAction(_showWaypointLabelsAction);
 
 	QMenu *settingsMenu = menuBar()->addMenu(tr("Settings"));
 	QMenu *unitsMenu = settingsMenu->addMenu(tr("Units"));
@@ -1146,6 +1151,8 @@ void GUI::writeSettings()
 	  _showWaypointsAction->isChecked());
 	settings.setValue(SHOW_WAYPOINT_LABELS_SETTING,
 	  _showWaypointLabelsAction->isChecked());
+	settings.setValue(SHOW_ROUTE_WAYPOINTS_SETTING,
+	  _showRouteWaypointsAction->isChecked());
 
 	settings.endGroup();
 }
@@ -1233,6 +1240,10 @@ void GUI::readSettings()
 		_track->showWaypointLabels(false);
 	else
 		_showWaypointLabelsAction->setChecked(true);
+	if (settings.value(SHOW_ROUTE_WAYPOINTS_SETTING, true).toBool() == false)
+		_track->showRouteWaypoints(false);
+	else
+		_showRouteWaypointsAction->setChecked(true);
 	settings.endGroup();
 }
 

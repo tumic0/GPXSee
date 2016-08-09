@@ -22,6 +22,8 @@ public:
 	void showMarker(bool show) {_marker->setVisible(show);}
 	void moveMarker(qreal t);
 
+	void showWaypoints(bool show);
+
 private:
 	QPainterPath _path;
 	QPen _pen;

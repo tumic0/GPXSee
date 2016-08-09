@@ -52,6 +52,7 @@ public slots:
 	void showTracks(bool show);
 	void showRoutes(bool show);
 	void showWaypoints(bool show);
+	void showRouteWaypoints(bool show);
 
 private:
 	void addTrack(const Track &track);
@@ -100,6 +101,7 @@ private:
 	bool _showWaypointLabels;
 	bool _showPOILabels;
 	bool _overlapPOIs;
+	bool _showRouteWaypoints;
 
 	bool _plot;
 };
