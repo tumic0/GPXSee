@@ -10,10 +10,11 @@ public:
 	Route(const QVector<Waypoint> &data);
 
 	const QVector<Waypoint> &route() const {return _data;}
-	void elevationGraph(QVector<QPointF> &graph) const;
-	qreal distance() const {return _dd.last();}
+	QVector<QPointF> elevation() const;
 
-	bool isNull() const {return (_data.count() < 2) ? true : false;}
+	qreal distance() const;
+
+	bool isNull() const {return _dd.isEmpty();}
 
 private:
 	const QVector<Waypoint> &_data;

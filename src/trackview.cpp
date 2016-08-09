@@ -91,6 +91,7 @@ void TrackView::addRoute(const Route &route)
 	ri->setColor(_palette.color());
 	ri->setVisible(_showRoutes);
 	ri->showWaypoints(_showRouteWaypoints);
+	ri->showWaypointLabels(_showWaypointLabels);
 	_scene->addItem(ri);
 
 	_maxPath = qMax(ri->path().length(), _maxPath);
@@ -120,10 +121,10 @@ void TrackView::loadGPX(const GPX &gpx)
 {
 	int zoom = _zoom;
 
-	for (int i = 0; i < gpx.trackCount(); i++)
-		addTrack(gpx.track(i));
-	for (int i = 0; i < gpx.routeCount(); i++)
-		addRoute(gpx.route(i));
+	for (int i = 0; i < gpx.tracks().count(); i++)
+		addTrack(*(gpx.tracks().at(i)));
+	for (int i = 0; i < gpx.routes().count(); i++)
+		addRoute(*(gpx.routes().at(i)));
 	addWaypoints(gpx.waypoints());
 
 	if (_tracks.empty() && _routes.empty() && _waypoints.empty())
@@ -540,6 +541,9 @@ void TrackView::showWaypointLabels(bool show)
 
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->showLabel(show);
+
+	for (int i = 0; i < _routes.size(); i++)
+		_routes.at(i)->showWaypointLabels(show);
 }
 
 void TrackView::showRouteWaypoints(bool show)

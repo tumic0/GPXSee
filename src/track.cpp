@@ -84,36 +84,35 @@ Track::Track(const QVector<Trackpoint> &data) : _data(data)
 	qreal dist = 0;
 
 	_dd.append(dist);
-	for (int i = 1; i < _data.count(); i++) {
-		dist += llDistance(_data.at(i).coordinates(),
-		  _data.at(i-1).coordinates());
+	for (int i = 1; i < data.count(); i++) {
+		dist += llDistance(data.at(i).coordinates(), data.at(i-1).coordinates());
 		_dd.append(dist);
 	}
 }
 
-void Track::elevationGraph(QVector<QPointF> &graph) const
+QVector<QPointF> Track::elevation() const
 {
 	QVector<QPointF> raw;
 
 	if (!_data.size())
-		return;
+		return raw;
 
 	for (int i = 0; i < _data.size(); i++)
 		if (_data.at(i).hasElevation())
 			raw.append(QPointF(_dd.at(i), _data.at(i).elevation()
 			  - _data.at(i).geoidHeight()));
 
-	graph = filter(raw, WINDOW_EF);
+	return filter(raw, WINDOW_EF);
 }
 
-void Track::speedGraph(QVector<QPointF> &graph) const
+QVector<QPointF> Track::speed() const
 {
 	qreal v, ds;
 	qint64 dt;
 	QVector<QPointF> raw;
 
 	if (!_data.size())
-		return;
+		return raw;
 
 	raw.append(QPointF(0, 0));
 	for (int i = 1; i < _data.size(); i++) {
@@ -131,52 +130,56 @@ void Track::speedGraph(QVector<QPointF> &graph) const
 		raw.append(QPointF(_dd.at(i), v));
 	}
 
-	graph = filter(eliminate(raw, WINDOW_SE), WINDOW_SF);
+	return filter(eliminate(raw, WINDOW_SE), WINDOW_SF);
 }
 
-void Track::heartRateGraph(QVector<QPointF> &graph) const
+QVector<QPointF> Track::heartRate() const
 {
 	QVector<QPointF> raw;
 
 	if (!_data.size())
-		return;
+		return raw;
 
 	for (int i = 0; i < _data.count(); i++)
 		if (_data.at(i).hasHeartRate())
 			raw.append(QPointF(_dd.at(i), _data.at(i).heartRate()));
 
-	graph = filter(eliminate(raw, WINDOW_HE), WINDOW_HF);
+	return filter(eliminate(raw, WINDOW_HE), WINDOW_HF);
 }
 
-void Track::temperatureGraph(QVector<QPointF> &graph) const
+QVector<QPointF> Track::temperature() const
 {
-	if (!_data.size())
-		return;
+	QVector<QPointF> graph;
 
 	for (int i = 0; i < _data.size(); i++)
 		if (_data.at(i).hasTemperature())
 			graph.append(QPointF(_dd.at(i), _data.at(i).temperature()));
+
+	return graph;
 }
 
-void Track::track(QVector<QPointF> &track) const
+QVector<QPointF> Track::track() const
 {
+	QVector<QPointF> graph;
+
 	for (int i = 0; i < _data.size(); i++)
-		track.append(_data.at(i).coordinates());
+		graph.append(_data.at(i).coordinates());
+
+	return graph;
+}
+
+qreal Track::distance() const
+{
+	return (_dd.isEmpty()) ? 0 : _dd.last();
 }
 
 qreal Track::time() const
 {
-	if (_data.size() < 2)
-		return 0;
-
-	return (_data.first().timestamp().msecsTo(_data.last().timestamp())
-	  / 1000.0);
+	return (_data.size() < 2) ? 0 :
+	  (_data.first().timestamp().msecsTo(_data.last().timestamp()) / 1000.0);
 }
 
 QDateTime Track::date() const
 {
-	if (_data.size())
-		return _data.first().timestamp();
-	else
-		return QDateTime();
+	return (_data.size()) ? _data.first().timestamp() : QDateTime();
 }

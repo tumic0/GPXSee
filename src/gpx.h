@@ -13,25 +13,28 @@
 class GPX
 {
 public:
-	GPX() : _parser(_tracks, _routes, _waypoints), _errorLine(0) {}
+	GPX();
+	~GPX();
+
 	bool loadFile(const QString &fileName);
 	const QString &errorString() const {return _error;}
 	int errorLine() const {return _errorLine;}
 
-	int trackCount() const {return _tracks.count();}
-	Track track(int i) const {return Track(_tracks.at(i));}
-	int routeCount() const {return _routes.count();}
-	Route route(int i) const {return Route(_routes.at(i));}
-	const QList<Waypoint> &waypoints() const {return _waypoints;}
+	const QList<Track*> &tracks() const {return _tracks;}
+	const QList<Route*> &routes() const {return _routes;}
+	const QList<Waypoint> &waypoints() const {return _waypoint_data;}
 
 private:
 	Parser _parser;
 	QString _error;
 	int _errorLine;
 
-	QList<QVector<Trackpoint> > _tracks;
-	QList<QVector<Waypoint> > _routes;
-	QList<Waypoint> _waypoints;
+	QList<Track*> _tracks;
+	QList<Route*> _routes;
+
+	QList<QVector<Trackpoint> > _track_data;
+	QList<QVector<Waypoint> > _route_data;
+	QList<Waypoint> _waypoint_data;
 };
 
 #endif // GPX_H

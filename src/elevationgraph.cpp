@@ -56,17 +56,10 @@ void ElevationGraph::loadPath(const QVector<QPointF> &data)
 
 void ElevationGraph::loadGPX(const GPX &gpx)
 {
-	for (int i = 0; i < gpx.trackCount(); i++) {
-		QVector<QPointF> data;
-		gpx.track(i).elevationGraph(data);
-		loadPath(data);
-	}
-
-	for (int i = 0; i < gpx.routeCount(); i++) {
-		QVector<QPointF> data;
-		gpx.route(i).elevationGraph(data);
-		loadPath(data);
-	}
+	for (int i = 0; i < gpx.tracks().count(); i++)
+		loadPath(gpx.tracks().at(i)->elevation());
+	for (int i = 0; i < gpx.routes().count(); i++)
+		loadPath(gpx.routes().at(i)->elevation());
 
 	setXUnits();
 	setInfo();

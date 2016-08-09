@@ -10,16 +10,17 @@ class Track
 public:
 	Track(const QVector<Trackpoint> &data);
 
-	void elevationGraph(QVector<QPointF> &graph) const;
-	void speedGraph(QVector<QPointF> &graph) const;
-	void heartRateGraph(QVector<QPointF> &graph) const;
-	void temperatureGraph(QVector<QPointF> &graph) const;
-	void track(QVector<QPointF> &track) const;
-	qreal distance() const {return _dd.last();}
+	QVector<QPointF> track() const;
+	QVector<QPointF> elevation() const;
+	QVector<QPointF> speed() const;
+	QVector<QPointF> heartRate() const;
+	QVector<QPointF> temperature() const;
+
+	qreal distance() const;
 	qreal time() const;
 	QDateTime date() const;
 
-	bool isNull() const {return (_data.count() < 2) ? true : false;}
+	bool isNull() const {return _dd.isEmpty();}
 
 private:
 	const QVector<Trackpoint> &_data;

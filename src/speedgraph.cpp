@@ -24,22 +24,20 @@ void SpeedGraph::setInfo()
 
 void SpeedGraph::loadGPX(const GPX &gpx)
 {
-	for (int i = 0; i < gpx.trackCount(); i++) {
-		QVector<QPointF> data;
-
-		gpx.track(i).speedGraph(data);
+	for (int i = 0; i < gpx.tracks().count(); i++) {
+		QVector<QPointF> data = gpx.tracks().at(i)->speed();
 		if (data.count() < 2) {
 			skipColor();
 			continue;
 		}
 
-		_avg.append(QPointF(gpx.track(i).distance(), gpx.track(i).distance()
-		  / gpx.track(i).time()));
+		_avg.append(QPointF(gpx.tracks().at(i)->distance(),
+		  gpx.tracks().at(i)->distance() / gpx.tracks().at(i)->time()));
 
 		loadData(data);
 	}
 
-	for (int i = 0; i < gpx.routeCount(); i++)
+	for (int i = 0; i < gpx.routes().count(); i++)
 		skipColor();
 
 	setXUnits();

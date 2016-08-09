@@ -162,6 +162,8 @@ private:
 	Map *_currentMap;
 
 	int _trackCount;
+	int _routeCount;
+	int _waypointCount;
 	qreal _distance;
 	qreal _time;
 	DateRange _dateRange;

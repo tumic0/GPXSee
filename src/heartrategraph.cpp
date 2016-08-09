@@ -23,11 +23,10 @@ void HeartRateGraph::setInfo()
 
 void HeartRateGraph::loadGPX(const GPX &gpx)
 {
-	for (int i = 0; i < gpx.trackCount(); i++) {
-		QVector<QPointF> data;
+	for (int i = 0; i < gpx.tracks().count(); i++) {
+		QVector<QPointF> data = gpx.tracks().at(i)->heartRate();
 		qreal sum = 0, w = 0;
 
-		gpx.track(i).heartRateGraph(data);
 		if (data.count() < 2) {
 			skipColor();
 			continue;
@@ -37,12 +36,12 @@ void HeartRateGraph::loadGPX(const GPX &gpx)
 			sum += data.at(j).y() * (data.at(j).x() - data.at(j-1).x());
 			w += data.at(j).x() - data.at(j-1).x();
 		}
-		_avg.append(QPointF(gpx.track(i).distance(), sum/w));
+		_avg.append(QPointF(gpx.tracks().at(i)->distance(), sum/w));
 
 		loadData(data);
 	}
 
-	for (int i = 0; i < gpx.routeCount(); i++)
+	for (int i = 0; i < gpx.routes().count(); i++)
 		skipColor();
 
 	setXUnits();

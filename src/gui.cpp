@@ -39,6 +39,8 @@
 #include "gui.h"
 
 
+#include <QElapsedTimer>
+
 GUI::GUI(QWidget *parent) : QMainWindow(parent)
 {
 	loadMaps();
@@ -73,6 +75,8 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	_distance = 0;
 	_time = 0;
 	_trackCount = 0;
+	_routeCount = 0;
+	_waypointCount = 0;
 
 	_sliderPos = 0;
 
@@ -269,15 +273,15 @@ void GUI::createActions()
 	}
 
 	// Data actions
-	_showTracksAction = new QAction(tr("Show tracks"), this);
+	_showTracksAction = new QAction(tr("Tracks"), this);
 	_showTracksAction->setCheckable(true);
 	connect(_showTracksAction, SIGNAL(triggered(bool)), _track,
 	  SLOT(showTracks(bool)));
-	_showRoutesAction = new QAction(tr("Show routes"), this);
+	_showRoutesAction = new QAction(tr("Routes"), this);
 	_showRoutesAction->setCheckable(true);
 	connect(_showRoutesAction, SIGNAL(triggered(bool)), _track,
 	  SLOT(showRoutes(bool)));
-	_showWaypointsAction = new QAction(tr("Show waypoints"), this);
+	_showWaypointsAction = new QAction(tr("Waypoints"), this);
 	_showWaypointsAction->setCheckable(true);
 	connect(_showWaypointsAction, SIGNAL(triggered(bool)), _track,
 	  SLOT(showWaypoints(bool)));
@@ -592,17 +596,22 @@ bool GUI::loadFile(const QString &fileName)
 			_track->loadPOI(_poi);
 		_track->movePositionMarker(_sliderPos);
 
-		for (int i = 0; i < gpx.trackCount(); i++) {
-			_distance += gpx.track(i).distance();
-			_time += gpx.track(i).time();
-			const QDate &date = gpx.track(i).date().date();
+		for (int i = 0; i < gpx.tracks().count(); i++) {
+			_distance += gpx.tracks().at(i)->distance();
+			_time += gpx.tracks().at(i)->time();
+			const QDate &date = gpx.tracks().at(i)->date().date();
 			if (_dateRange.first.isNull() || _dateRange.first > date)
 				_dateRange.first = date;
 			if (_dateRange.second.isNull() || _dateRange.second < date)
 				_dateRange.second = date;
 		}
+		_trackCount += gpx.tracks().count();
 
-		_trackCount += gpx.trackCount();
+		for (int i = 0; i < gpx.routes().count(); i++)
+			_distance += gpx.routes().at(i)->distance();
+		_routeCount += gpx.routes().count();
+
+		_waypointCount += gpx.waypoints().count();
 
 		return true;
 	} else {
@@ -700,6 +709,7 @@ void GUI::plot(QPrinter *printer)
 	QPainter p(printer);
 	TrackInfo info;
 	qreal ih, gh, mh, ratio;
+	Units units = _imperialUnitsAction->isChecked() ? Imperial : Metric;
 
 
 	if (_dateRange.first.isValid()) {
@@ -711,18 +721,18 @@ void GUI::plot(QPrinter *printer)
 			info.insert(tr("Date"), QString("%1 - %2")
 			  .arg(_dateRange.first.toString(format),
 			  _dateRange.second.toString(format)));
-			info.insert(tr("Tracks"), QString::number(_trackCount));
 		}
 	}
-	if (_distance > 0) {
-		if (_imperialUnitsAction->isChecked()) {
-			info.insert(tr("Distance"), QString::number(_distance * M2MI, 'f',
-			  1) + UNIT_SPACE + tr("mi"));
-		} else {
-			info.insert(tr("Distance"), QString::number(_distance * M2KM, 'f',
-			  1) + UNIT_SPACE + tr("km"));
-		}
-	}
+
+	if (_trackCount)
+		info.insert(tr("Tracks"), QString::number(_trackCount));
+	if (_routeCount)
+		info.insert(tr("Routes"), QString::number(_routeCount));
+	if (_waypointCount)
+		info.insert(tr("Waypoints"), QString::number(_waypointCount));
+
+	if (_distance > 0)
+		info.insert(tr("Distance"), ::distance(_distance, units));
 	if (_time > 0)
 		info.insert(tr("Time"), timeSpan(_time));
 
@@ -756,6 +766,8 @@ void GUI::reloadFile()
 	_time = 0;
 	_dateRange = DateRange(QDate(), QDate());
 	_trackCount = 0;
+	_routeCount = 0;
+	_waypointCount = 0;
 
 	for (int i = 0; i < _tabs.count(); i++)
 		_tabs.at(i)->clear();
@@ -786,6 +798,8 @@ void GUI::closeFiles()
 	_time = 0;
 	_dateRange = DateRange(QDate(), QDate());
 	_trackCount = 0;
+	_routeCount = 0;
+	_waypointCount = 0;
 
 	_sliderPos = 0;
 
@@ -893,7 +907,7 @@ void GUI::updateStatusBarInfo()
 	} else if (_files.count() == 1)
 		_fileNameLabel->setText(_files.at(0));
 	else
-		_fileNameLabel->setText(tr("%1 tracks").arg(_trackCount));
+		_fileNameLabel->setText(tr("%1 files").arg(_files.count()));
 
 	Units units = _imperialUnitsAction->isChecked() ? Imperial : Metric;
 	_distanceLabel->setText(distance(_distance, units));

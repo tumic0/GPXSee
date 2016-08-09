@@ -23,6 +23,7 @@ public:
 	void moveMarker(qreal t);
 
 	void showWaypoints(bool show);
+	void showWaypointLabels(bool show);
 
 private:
 	QPainterPath _path;

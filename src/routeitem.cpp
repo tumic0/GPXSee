@@ -79,3 +79,14 @@ void RouteItem::showWaypoints(bool show)
 		if (childs.at(i) != _marker)
 			childs.at(i)->setVisible(show);
 }
+
+void RouteItem::showWaypointLabels(bool show)
+{
+	QList<QGraphicsItem *> childs =	childItems();
+	for (int i = 0; i < childs.count(); i++) {
+		if (childs.at(i) != _marker) {
+			WaypointItem *wi = static_cast<WaypointItem*>(childs.at(i));
+			wi->showLabel(show);
+		}
+	}
+}
