@@ -78,9 +78,11 @@ void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 QString ScaleItem::units() const
 {
 	if (_units == Imperial)
-		return _scale ? QObject::tr("mi") : QObject::tr("ft");
+		return _scale ? qApp->translate("ScaleItem", "mi")
+		  : qApp->translate("ScaleItem", "ft");
 	else
-		return _scale ? QObject::tr("km") : QObject::tr("m");
+		return _scale ? qApp->translate("ScaleItem", "km")
+		  : qApp->translate("ScaleItem", "m");
 }
 
 void ScaleItem::computeScale()

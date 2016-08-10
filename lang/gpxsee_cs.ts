@@ -374,7 +374,7 @@
         <location filename="../src/gui.cpp" line="280"/>
         <location filename="../src/gui.cpp" line="730"/>
         <source>Routes</source>
-        <translation>Počet tras</translation>
+        <translation>Trasy</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="903"/>
@@ -467,7 +467,7 @@
         <location filename="../src/gui.cpp" line="276"/>
         <location filename="../src/gui.cpp" line="728"/>
         <source>Tracks</source>
-        <translation>Počet cest</translation>
+        <translation>Cesty</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="193"/>
@@ -596,24 +596,24 @@
     </message>
 </context>
 <context>
-    <name>QObject</name>
+    <name>ScaleItem</name>
     <message>
         <location filename="../src/scaleitem.cpp" line="81"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
     <message>
-        <location filename="../src/scaleitem.cpp" line="81"/>
+        <location filename="../src/scaleitem.cpp" line="82"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
     <message>
-        <location filename="../src/scaleitem.cpp" line="83"/>
+        <location filename="../src/scaleitem.cpp" line="84"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="../src/scaleitem.cpp" line="83"/>
+        <location filename="../src/scaleitem.cpp" line="85"/>
         <source>m</source>
         <translation>m</translation>
     </message>
