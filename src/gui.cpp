@@ -81,6 +81,7 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 
 	updateGraphTabs();
 	updateTrackView();
+	updateStatusBarInfo();
 
 	readSettings();
 
@@ -468,8 +469,6 @@ void GUI::createStatusBar()
 	statusBar()->addPermanentWidget(_distanceLabel, 1);
 	statusBar()->addPermanentWidget(_timeLabel, 1);
 	statusBar()->setSizeGripEnabled(false);
-
-	updateStatusBarInfo();
 }
 
 void GUI::about()
@@ -907,19 +906,25 @@ void GUI::clearMapCache()
 
 void GUI::updateStatusBarInfo()
 {
-	if (_files.count() == 0) {
+	if (_files.count() == 0)
 		_fileNameLabel->setText(tr("No GPX files loaded"));
-		_distanceLabel->clear();
-		_timeLabel->clear();
-		return;
-	} else if (_files.count() == 1)
+	else if (_files.count() == 1)
 		_fileNameLabel->setText(_files.at(0));
 	else
 		_fileNameLabel->setText(tr("%1 files").arg(_files.count()));
 
+	qreal d = distance();
 	Units units = _imperialUnitsAction->isChecked() ? Imperial : Metric;
-	_distanceLabel->setText(::distance(distance(), units));
-	_timeLabel->setText(::timeSpan(time()));
+	if (d > 0)
+		_distanceLabel->setText(::distance(distance(), units));
+	else
+		_distanceLabel->clear();
+
+	qreal t = time();
+	if (t > 0)
+		_timeLabel->setText(::timeSpan(time()));
+	else
+		_timeLabel->clear();
 }
 
 void GUI::updateWindowTitle()
