@@ -14,7 +14,7 @@ public:
 
 	qreal distance() const;
 
-	bool isNull() const {return _dd.isEmpty();}
+	bool isNull() const {return (_dd.count() < 2);}
 
 private:
 	const QVector<Waypoint> &_data;

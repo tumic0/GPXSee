@@ -12,7 +12,7 @@ RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
 {
 	WaypointItem *wi;
 
-	const QVector<Waypoint> &r = route.route();
+	QVector<Waypoint> r = route.route();
 	Q_ASSERT(r.count() >= 2);
 
 	wi = new WaypointItem(r.at(0));

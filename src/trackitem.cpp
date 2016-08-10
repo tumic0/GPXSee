@@ -28,13 +28,13 @@ void TrackItem::updateShape()
 {
 	QPainterPathStroker s;
 	s.setWidth(TRACK_WIDTH * 1.0/scale());
-	_shape = s.createStroke(_path.simplified());
+	_shape = s.createStroke(_path);
 }
 
 TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
   : QGraphicsItem(parent)
 {
-	const QVector<QPointF> &t = track.track();
+	QVector<QPointF> t = track.track();
 	Q_ASSERT(t.count() >= 2);
 
 	const QPointF &p = t.at(0);

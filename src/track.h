@@ -20,7 +20,7 @@ public:
 	qreal time() const;
 	QDateTime date() const;
 
-	bool isNull() const {return _dd.isEmpty();}
+	bool isNull() const {return (_dd.count() < 2);}
 
 private:
 	const QVector<Trackpoint> &_data;
