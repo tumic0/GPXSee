@@ -39,8 +39,6 @@
 #include "gui.h"
 
 
-#include <QElapsedTimer>
-
 GUI::GUI(QWidget *parent) : QMainWindow(parent)
 {
 	loadMaps();
@@ -72,11 +70,12 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	setWindowTitle(APP_NAME);
 	setUnifiedTitleAndToolBarOnMac(true);
 
-	_distance = 0;
-	_time = 0;
 	_trackCount = 0;
 	_routeCount = 0;
 	_waypointCount = 0;
+	_trackDistance = 0;
+	_routeDistance = 0;
+	_time = 0;
 
 	_sliderPos = 0;
 
@@ -275,11 +274,11 @@ void GUI::createActions()
 	// Data actions
 	_showTracksAction = new QAction(tr("Tracks"), this);
 	_showTracksAction->setCheckable(true);
-	connect(_showTracksAction, SIGNAL(triggered(bool)), _track,
+	connect(_showTracksAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showTracks(bool)));
 	_showRoutesAction = new QAction(tr("Routes"), this);
 	_showRoutesAction->setCheckable(true);
-	connect(_showRoutesAction, SIGNAL(triggered(bool)), _track,
+	connect(_showRoutesAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showRoutes(bool)));
 	_showWaypointsAction = new QAction(tr("Waypoints"), this);
 	_showWaypointsAction->setCheckable(true);
@@ -594,10 +593,9 @@ bool GUI::loadFile(const QString &fileName)
 		_track->loadGPX(gpx);
 		if (_showPOIAction->isChecked())
 			_track->loadPOI(_poi);
-		_track->movePositionMarker(_sliderPos);
 
 		for (int i = 0; i < gpx.tracks().count(); i++) {
-			_distance += gpx.tracks().at(i)->distance();
+			_trackDistance += gpx.tracks().at(i)->distance();
 			_time += gpx.tracks().at(i)->time();
 			const QDate &date = gpx.tracks().at(i)->date().date();
 			if (_dateRange.first.isNull() || _dateRange.first > date)
@@ -608,7 +606,7 @@ bool GUI::loadFile(const QString &fileName)
 		_trackCount += gpx.tracks().count();
 
 		for (int i = 0; i < gpx.routes().count(); i++)
-			_distance += gpx.routes().at(i)->distance();
+			_routeDistance += gpx.routes().at(i)->distance();
 		_routeCount += gpx.routes().count();
 
 		_waypointCount += gpx.waypoints().count();
@@ -710,7 +708,8 @@ void GUI::plot(QPrinter *printer)
 	TrackInfo info;
 	qreal ih, gh, mh, ratio;
 	Units units = _imperialUnitsAction->isChecked() ? Imperial : Metric;
-
+	qreal d = distance();
+	qreal t = time();
 
 	if (_dateRange.first.isValid()) {
 		if (_dateRange.first == _dateRange.second) {
@@ -731,10 +730,10 @@ void GUI::plot(QPrinter *printer)
 	if (_waypointCount > 2)
 		info.insert(tr("Waypoints"), QString::number(_waypointCount));
 
-	if (_distance > 0)
-		info.insert(tr("Distance"), ::distance(_distance, units));
-	if (_time > 0)
-		info.insert(tr("Time"), timeSpan(_time));
+	if (d > 0)
+		info.insert(tr("Distance"), ::distance(d, units));
+	if (t > 0)
+		info.insert(tr("Time"), ::timeSpan(t));
 
 
 	ratio = p.paintEngine()->paintDevice()->logicalDpiX() / SCREEN_DPI;
@@ -762,12 +761,13 @@ void GUI::plot(QPrinter *printer)
 
 void GUI::reloadFile()
 {
-	_distance = 0;
-	_time = 0;
-	_dateRange = DateRange(QDate(), QDate());
 	_trackCount = 0;
 	_routeCount = 0;
 	_waypointCount = 0;
+	_trackDistance = 0;
+	_routeDistance = 0;
+	_time = 0;
+	_dateRange = DateRange(QDate(), QDate());
 
 	for (int i = 0; i < _tabs.count(); i++)
 		_tabs.at(i)->clear();
@@ -794,12 +794,13 @@ void GUI::reloadFile()
 
 void GUI::closeFiles()
 {
-	_distance = 0;
-	_time = 0;
-	_dateRange = DateRange(QDate(), QDate());
 	_trackCount = 0;
 	_routeCount = 0;
 	_waypointCount = 0;
+	_trackDistance = 0;
+	_routeDistance = 0;
+	_time = 0;
+	_dateRange = DateRange(QDate(), QDate());
 
 	_sliderPos = 0;
 
@@ -886,9 +887,16 @@ void GUI::showFullscreen(bool checked)
 	}
 }
 
-void GUI::showWaypointLabels(bool checked)
+void GUI::showTracks(bool show)
 {
-	_track->showWaypointLabels(checked);
+	_track->showTracks(show);
+	updateStatusBarInfo();
+}
+
+void GUI::showRoutes(bool show)
+{
+	_track->showRoutes(show);
+	updateStatusBarInfo();
 }
 
 void GUI::clearMapCache()
@@ -910,8 +918,8 @@ void GUI::updateStatusBarInfo()
 		_fileNameLabel->setText(tr("%1 files").arg(_files.count()));
 
 	Units units = _imperialUnitsAction->isChecked() ? Imperial : Metric;
-	_distanceLabel->setText(distance(_distance, units));
-	_timeLabel->setText(timeSpan(_time));
+	_distanceLabel->setText(::distance(distance(), units));
+	_timeLabel->setText(::timeSpan(time()));
 }
 
 void GUI::updateWindowTitle()
@@ -1268,4 +1276,21 @@ int GUI::mapIndex(const QString &name)
 			return i;
 
 	return 0;
+}
+
+qreal GUI::distance()
+{
+	qreal dist = 0;
+
+	if (_showTracksAction->isChecked())
+		dist += _trackDistance;
+	if (_showRoutesAction->isChecked())
+		dist += _routeDistance;
+
+	return dist;
+}
+
+qreal GUI::time()
+{
+	return (_showTracksAction->isChecked()) ? _time : 0;
 }

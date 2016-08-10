@@ -48,7 +48,8 @@ private slots:
 	void showGraphs(bool checked);
 	void showToolbars(bool checked);
 	void showFullscreen(bool checked);
-	void showWaypointLabels(bool checked);
+	void showTracks(bool show);
+	void showRoutes(bool show);
 	void clearMapCache();
 	void nextMap();
 	void prevMap();
@@ -56,6 +57,8 @@ private slots:
 	void mapChanged(int);
 	void graphChanged(int);
 	void poiFileChecked(int);
+
+
 
 	void next();
 	void prev();
@@ -97,6 +100,8 @@ private:
 	void keyPressEvent(QKeyEvent *event);
 	void closeEvent(QCloseEvent *event);
 
+	qreal distance();
+	qreal time();
 	int mapIndex(const QString &name);
 	void readSettings();
 	void writeSettings();
@@ -164,7 +169,8 @@ private:
 	int _trackCount;
 	int _routeCount;
 	int _waypointCount;
-	qreal _distance;
+	qreal _trackDistance;
+	qreal _routeDistance;
 	qreal _time;
 	DateRange _dateRange;
 
