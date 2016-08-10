@@ -724,11 +724,11 @@ void GUI::plot(QPrinter *printer)
 		}
 	}
 
-	if (_trackCount)
+	if (_trackCount > 1)
 		info.insert(tr("Tracks"), QString::number(_trackCount));
-	if (_routeCount)
+	if (_routeCount > 1)
 		info.insert(tr("Routes"), QString::number(_routeCount));
-	if (_waypointCount)
+	if (_waypointCount > 2)
 		info.insert(tr("Waypoints"), QString::number(_waypointCount));
 
 	if (_distance > 0)
