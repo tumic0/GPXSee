@@ -34,8 +34,6 @@ TrackView::TrackView(QWidget *parent)
 	_zoom = ZOOM_MAX;
 	_scale = mapScale(_zoom);
 	_map = 0;
-	_maxPath = 0;
-	_maxDistance = 0;
 
 	_units = Metric;
 
@@ -48,6 +46,7 @@ TrackView::TrackView(QWidget *parent)
 	_showRouteWaypoints = true;
 
 	_plot = false;
+	_markerPos = 0;
 }
 
 TrackView::~TrackView()
@@ -70,10 +69,8 @@ void TrackView::addTrack(const Track &track)
 	ti->setScale(1.0/_scale);
 	ti->setColor(_palette.color());
 	ti->setVisible(_showTracks);
+	ti->moveMarker(_markerPos);
 	_scene->addItem(ti);
-
-	_maxPath = qMax(ti->path().length(), _maxPath);
-	_maxDistance = qMax(track.distance(), _maxDistance);
 }
 
 void TrackView::addRoute(const Route &route)
@@ -92,10 +89,8 @@ void TrackView::addRoute(const Route &route)
 	ri->setVisible(_showRoutes);
 	ri->showWaypoints(_showRouteWaypoints);
 	ri->showWaypointLabels(_showWaypointLabels);
+	ri->moveMarker(_markerPos);
 	_scene->addItem(ri);
-
-	_maxPath = qMax(ri->path().length(), _maxPath);
-	_maxDistance = qMax(route.distance(), _maxDistance);
 }
 
 void TrackView::addWaypoints(const QList<Waypoint> &waypoints)
@@ -478,37 +473,23 @@ void TrackView::clear()
 	_scene->clear();
 	_palette.reset();
 
-	_maxPath = 0;
-	_maxDistance = 0;
 	_zoom = ZOOM_MAX;
 	_scale = mapScale(_zoom);
 
 	_scene->setSceneRect(QRectF());
+
+	_markerPos = 0;
 }
 
 void TrackView::movePositionMarker(qreal val)
 {
-	qreal mp = val / _maxDistance;
+	_markerPos = val;
 
-	for (int i = 0; i < _tracks.size(); i++) {
-		qreal f = _maxPath / _tracks.at(i)->path().length();
-		if (mp * f < 0 || mp * f > 1.0)
-			_tracks.at(i)->showMarker(false);
-		else {
-			_tracks.at(i)->moveMarker(mp * f);
-			_tracks.at(i)->showMarker(true);
-		}
-	}
+	for (int i = 0; i < _tracks.size(); i++)
+		_tracks.at(i)->moveMarker(val);
 
-	for (int i = 0; i < _routes.size(); i++) {
-		qreal f = _maxPath / _routes.at(i)->path().length();
-		if (mp * f < 0 || mp * f > 1.0)
-			_routes.at(i)->showMarker(false);
-		else {
-			_routes.at(i)->moveMarker(mp * f);
-			_routes.at(i)->showMarker(true);
-		}
-	}
+	for (int i = 0; i < _routes.size(); i++)
+		_routes.at(i)->moveMarker(val);
 }
 
 void TrackView::showTracks(bool show)

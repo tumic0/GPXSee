@@ -99,8 +99,12 @@ void TrackItem::setUnits(enum Units units)
 	setToolTip(toolTip());
 }
 
-void TrackItem::moveMarker(qreal t)
+void TrackItem::moveMarker(qreal distance)
 {
-	Q_ASSERT(t >= 0 && t <= 1.0);
-	_marker->setPos(_path.pointAtPercent(t));
+	if (distance > _distance)
+		_marker->setVisible(false);
+	else {
+		_marker->setVisible(true);
+		_marker->setPos(_path.pointAtPercent(distance / _distance));
+	}
 }

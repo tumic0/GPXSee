@@ -26,6 +26,8 @@ RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
 		wi->setParentItem(this);
 	}
 
+	_distance = route.distance();
+
 	QBrush brush(Qt::SolidPattern);
 	_pen = QPen(brush, ROUTE_WIDTH, Qt::DotLine);
 
@@ -66,10 +68,14 @@ void RouteItem::setColor(const QColor &color)
 	update();
 }
 
-void RouteItem::moveMarker(qreal t)
+void RouteItem::moveMarker(qreal distance)
 {
-	Q_ASSERT(t >= 0 && t <= 1.0);
-	_marker->setPos(_path.pointAtPercent(t));
+	if (distance > _distance)
+		_marker->setVisible(false);
+	else {
+		_marker->setVisible(true);
+		_marker->setPos(_path.pointAtPercent(distance / _distance));
+	}
 }
 
 void RouteItem::showWaypoints(bool show)

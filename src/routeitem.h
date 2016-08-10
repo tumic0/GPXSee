@@ -20,7 +20,7 @@ public:
 	void setColor(const QColor &color);
 
 	void showMarker(bool show) {_marker->setVisible(show);}
-	void moveMarker(qreal t);
+	void moveMarker(qreal distance);
 
 	void showWaypoints(bool show);
 	void showWaypointLabels(bool show);
@@ -30,6 +30,8 @@ private:
 	QPen _pen;
 
 	MarkerItem *_marker;
+
+	qreal _distance;
 };
 
 #endif // ROUTEITEM_H

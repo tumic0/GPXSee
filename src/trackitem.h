@@ -25,7 +25,7 @@ public:
 	void setColor(const QColor &color);
 
 	void showMarker(bool show) {_marker->setVisible(show);}
-	void moveMarker(qreal t);
+	void moveMarker(qreal distance);
 
 private:
 	void updateShape();

@@ -88,7 +88,6 @@ private:
 	ScaleItem *_mapScale;
 
 	Palette _palette;
-	qreal _maxPath, _maxDistance;
 
 	qreal _scale;
 	int _zoom;
@@ -104,6 +103,7 @@ private:
 	bool _showRouteWaypoints;
 
 	bool _plot;
+	qreal _markerPos;
 };
 
 #endif // TRACKVIEW_H
