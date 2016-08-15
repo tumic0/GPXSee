@@ -158,16 +158,6 @@ QVector<QPointF> Track::temperature() const
 	return graph;
 }
 
-QVector<QPointF> Track::track() const
-{
-	QVector<QPointF> graph;
-
-	for (int i = 0; i < _data.size(); i++)
-		graph.append(_data.at(i).coordinates());
-
-	return graph;
-}
-
 qreal Track::distance() const
 {
 	return (_dd.isEmpty()) ? 0 : _dd.last();

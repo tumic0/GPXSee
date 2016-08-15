@@ -126,6 +126,7 @@ void TrackView::loadGPX(const GPX &gpx)
 		return;
 
 	if ((_tracks.size() > 1 && _zoom < zoom)
+	  || (_routes.size() > 1 && _zoom < zoom)
 	  || (_waypoints.size() && _zoom < zoom))
 		rescale(_scale);
 

@@ -10,7 +10,7 @@ class Track
 public:
 	Track(const QVector<Trackpoint> &data);
 
-	QVector<QPointF> track() const;
+	const QVector<Trackpoint> &track() const {return _data;}
 	QVector<QPointF> elevation() const;
 	QVector<QPointF> speed() const;
 	QVector<QPointF> heartRate() const;
