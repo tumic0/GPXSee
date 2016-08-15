@@ -116,3 +116,15 @@ void TemperatureGraph::setUnits(enum Units units)
 
 	redraw();
 }
+
+void TemperatureGraph::showTracks(bool show)
+{
+	if (show)
+		setInfo();
+	else
+		clearInfo();
+
+	showGraph(show);
+
+	redraw();
+}

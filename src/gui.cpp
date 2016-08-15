@@ -273,15 +273,15 @@ void GUI::createActions()
 	}
 
 	// Data actions
-	_showTracksAction = new QAction(tr("Tracks"), this);
+	_showTracksAction = new QAction(tr("Show tracks"), this);
 	_showTracksAction->setCheckable(true);
 	connect(_showTracksAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showTracks(bool)));
-	_showRoutesAction = new QAction(tr("Routes"), this);
+	_showRoutesAction = new QAction(tr("Show routes"), this);
 	_showRoutesAction->setCheckable(true);
 	connect(_showRoutesAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showRoutes(bool)));
-	_showWaypointsAction = new QAction(tr("Waypoints"), this);
+	_showWaypointsAction = new QAction(tr("Show waypoints"), this);
 	_showWaypointsAction->setCheckable(true);
 	connect(_showWaypointsAction, SIGNAL(triggered(bool)), _track,
 	  SLOT(showWaypoints(bool)));
@@ -289,7 +289,7 @@ void GUI::createActions()
 	_showWaypointLabelsAction->setCheckable(true);
 	connect(_showWaypointLabelsAction, SIGNAL(triggered(bool)), _track,
 	  SLOT(showWaypointLabels(bool)));
-	_showRouteWaypointsAction = new QAction(tr("Route Waypoints"), this);
+	_showRouteWaypointsAction = new QAction(tr("Route waypoints"), this);
 	_showRouteWaypointsAction->setCheckable(true);
 	connect(_showRouteWaypointsAction, SIGNAL(triggered(bool)), _track,
 	  SLOT(showRouteWaypoints(bool)));
@@ -889,12 +889,20 @@ void GUI::showFullscreen(bool checked)
 void GUI::showTracks(bool show)
 {
 	_track->showTracks(show);
+
+	for (int i = 0; i < _tabs.size(); i++)
+		_tabs.at(i)->showTracks(show);
+
 	updateStatusBarInfo();
 }
 
 void GUI::showRoutes(bool show)
 {
 	_track->showRoutes(show);
+
+	for (int i = 0; i < _tabs.size(); i++)
+		_tabs.at(i)->showRoutes(show);
+
 	updateStatusBarInfo();
 }
 
@@ -1251,13 +1259,17 @@ void GUI::readSettings()
 	settings.endGroup();
 
 	settings.beginGroup(DATA_SETTINGS_GROUP);
-	if (settings.value(SHOW_TRACKS_SETTING, true).toBool() == false)
+	if (settings.value(SHOW_TRACKS_SETTING, true).toBool() == false) {
 		_track->showTracks(false);
-	else
+		for (int i = 0; i < _tabs.count(); i++)
+			_tabs.at(i)->showTracks(false);
+	} else
 		_showTracksAction->setChecked(true);
-	if (settings.value(SHOW_ROUTES_SETTING, true).toBool() == false)
+	if (settings.value(SHOW_ROUTES_SETTING, true).toBool() == false) {
 		_track->showRoutes(false);
-	else
+		for (int i = 0; i < _tabs.count(); i++)
+			_tabs.at(i)->showRoutes(false);
+	} else
 		_showRoutesAction->setChecked(true);
 	if (settings.value(SHOW_WAYPOINTS_SETTING, true).toBool() == false)
 		_track->showWaypoints(false);

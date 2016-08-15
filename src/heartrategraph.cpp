@@ -100,3 +100,15 @@ void HeartRateGraph::setUnits(enum Units units)
 
 	redraw();
 }
+
+void HeartRateGraph::showTracks(bool show)
+{
+	if (show)
+		setInfo();
+	else
+		clearInfo();
+
+	showGraph(show);
+
+	redraw();
+}

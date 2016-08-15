@@ -18,6 +18,8 @@ public:
 	virtual void loadGPX(const GPX &gpx) = 0;
 	virtual void clear() = 0;
 	virtual void setUnits(enum Units units) = 0;
+	virtual void showTracks(bool show) = 0;
+	virtual void showRoutes(bool show) = 0;
 };
 
 #endif // GRAPHTAB_H

@@ -1,4 +1,3 @@
-#include <QGraphicsView>
 #include <QGraphicsSceneMouseEvent>
 #include <QEvent>
 #include <QPaintEngine>
@@ -8,6 +7,7 @@
 #include "slideritem.h"
 #include "sliderinfoitem.h"
 #include "infoitem.h"
+#include "graphitem.h"
 #include "graphview.h"
 
 
@@ -33,19 +33,16 @@ GraphView::GraphView(QWidget *parent)
 
 	_xAxis = new AxisItem(AxisItem::X);
 	_yAxis = new AxisItem(AxisItem::Y);
-
 	_slider = new SliderItem();
 	_slider->setZValue(2.0);
+	_sliderInfo = new SliderInfoItem(_slider);
+	_sliderInfo->setZValue(2.0);
+	_info = new InfoItem();
 
 	connect(_slider, SIGNAL(positionChanged(const QPointF&)), this,
 	  SLOT(emitSliderPositionChanged(const QPointF&)));
 	connect(_scene, SIGNAL(mouseClicked(const QPointF&)), this,
 	  SLOT(newSliderPosition(const QPointF&)));
-
-	_info = new InfoItem();
-
-	_sliderInfo = new SliderInfoItem(_slider);
-	_sliderInfo->setZValue(2.0);
 
 	_xScale = 1;
 	_yScale = 1;
@@ -63,10 +60,8 @@ GraphView::~GraphView()
 		delete _xAxis;
 	if (_yAxis->scene() != _scene)
 		delete _yAxis;
-
 	if (_slider->scene() != _scene)
 		delete _slider;
-
 	if (_info->scene() != _scene)
 		delete _info;
 }
@@ -117,10 +112,10 @@ void GraphView::setYUnits(const QString &units)
 	createYLabel();
 }
 
-void GraphView::loadData(const QVector<QPointF> &data)
+void GraphView::loadData(const QVector<QPointF> &data, int id)
 {
 	QPainterPath path;
-	QGraphicsPathItem *pi;
+	GraphItem *pi;
 
 
 	if (data.size() < 2)
@@ -137,12 +132,27 @@ void GraphView::loadData(const QVector<QPointF> &data)
 		updateBounds(p);
 	}
 
-	pi = new QGraphicsPathItem(path);
+	pi = new GraphItem(path);
 	QBrush brush(_palette.color(), Qt::SolidPattern);
 	QPen pen(brush, 0);
 	pi->setPen(pen);
+	pi->setId(id);
+	if (_hide.contains(id))
+		pi->hide();
 	_scene->addItem(pi);
 	_graphs.append(pi);
+}
+
+void GraphView::showGraph(bool show, int id)
+{
+	for (int i = 0; i < _graphs.count(); i++)
+		if (_graphs.at(i)->id() == id)
+			_graphs.at(i)->setVisible(show);
+
+	if (show)
+		_hide.remove(id);
+	else
+		_hide.insert(id);
 }
 
 void GraphView::redraw()
@@ -209,13 +219,8 @@ void GraphView::redraw(const QSizeF &size)
 	_scene->addItem(_yAxis);
 
 	_slider->setArea(r);
-	if (_sliderPos > _bounds.right() || _sliderPos < _bounds.left())
-		_slider->setVisible(false);
-	_slider->setPos((_sliderPos / _bounds.width()) * _slider->area().width(),
-	  r.bottom());
 	_scene->addItem(_slider);
-
-	updateSliderInfo();
+	updateSliderPosition();
 
 	r = _scene->itemsBoundingRect();
 	_info->setPos(r.topLeft() + QPointF(r.width()/2
@@ -301,6 +306,17 @@ static qreal yAtX(const QPainterPath &path, qreal x)
 	return l.pointAt((x - l.p1().x()) / (l.p2().x() - l.p1().x())).y();
 }
 
+void GraphView::updateSliderPosition()
+{
+	Q_ASSERT(_sliderPos <= _bounds.right() && _sliderPos >= _bounds.left());
+
+	_slider->setPos((_sliderPos / _bounds.width()) * _slider->area().width(),
+	  _slider->area().bottom());
+	//_slider->setVisible(false);
+
+	updateSliderInfo();
+}
+
 void GraphView::updateSliderInfo()
 {
 	_sliderInfo->setVisible(_graphs.size() == 1);
@@ -333,33 +349,26 @@ void GraphView::emitSliderPositionChanged(const QPointF &pos)
 		return;
 
 	_sliderPos = (pos.x() / _slider->area().width()) * _bounds.width();
-	emit sliderPositionChanged(_sliderPos);
 
-	updateSliderInfo();
+	updateSliderPosition();
+	emit sliderPositionChanged(_sliderPos);
 }
 
 void GraphView::setSliderPosition(qreal pos)
 {
-	_sliderPos = pos;
-
 	if (_graphs.isEmpty())
 		return;
 
-	if (pos > _bounds.right() || pos < _bounds.left())
-		_slider->setVisible(false);
-	else {
-		_slider->setPos((pos / _bounds.width()) * _slider->area().width(), 0);
-		_slider->setVisible(true);
-	}
+	_sliderPos = pos;
+
+	updateSliderPosition();
+	emit sliderPositionChanged(_sliderPos);
 }
 
 void GraphView::newSliderPosition(const QPointF &pos)
 {
-	if (_slider->area().contains(pos)) {
-		_slider->setPos(pos);
-		_slider->setVisible(true);
+	if (_slider->area().contains(pos))
 		emitSliderPositionChanged(pos);
-	}
 }
 
 void GraphView::addInfo(const QString &key, const QString &value)

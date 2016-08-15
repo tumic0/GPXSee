@@ -5,14 +5,15 @@
 #include <QGraphicsScene>
 #include <QVector>
 #include <QList>
+#include <QSet>
 #include <QPointF>
 #include "palette.h"
-
 
 class AxisItem;
 class SliderItem;
 class SliderInfoItem;
 class InfoItem;
+class GraphItem;
 
 class Scene : public QGraphicsScene
 {
@@ -34,12 +35,12 @@ public:
 	GraphView(QWidget *parent = 0);
 	~GraphView();
 
-	void loadData(const QVector<QPointF> &data);
-
+	void loadData(const QVector<QPointF> &data, int id = 0);
+	int count() const {return _graphs.count();}
 	void redraw();
 	void clear();
 
-	int count() const {return _graphs.count();}
+	void showGraph(bool show, int id = 0);
 
 	const QString &xLabel() const {return _xLabel;}
 	const QString &yLabel() const {return _yLabel;}
@@ -70,11 +71,11 @@ signals:
 
 protected:
 	const QRectF &bounds() const {return _bounds;}
-	void resizeEvent(QResizeEvent *);
 	void redraw(const QSizeF &size);
 	void addInfo(const QString &key, const QString &value);
 	void clearInfo();
 	void skipColor() {_palette.color();}
+	void resizeEvent(QResizeEvent *);
 
 private slots:
 	void emitSliderPositionChanged(const QPointF &pos);
@@ -84,6 +85,7 @@ private:
 	void createXLabel();
 	void createYLabel();
 	void updateBounds(const QPointF &point);
+	void updateSliderPosition();
 	void updateSliderInfo();
 
 	qreal _xScale, _yScale;
@@ -101,7 +103,9 @@ private:
 	SliderInfoItem *_sliderInfo;
 	InfoItem *_info;
 
-	QList<QGraphicsPathItem*> _graphs;
+	QList<GraphItem*> _graphs;
+	QSet<int> _hide;
+	bool _hideAll;
 	QRectF _bounds;
 	Palette _palette;
 };

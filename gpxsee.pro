@@ -49,7 +49,8 @@ HEADERS += src/config.h \
     src/trackitem.h \
     src/tooltip.h \
     src/route.h \
-    src/routeitem.h
+    src/routeitem.h \
+    src/graphitem.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \

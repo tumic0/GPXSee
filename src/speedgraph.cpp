@@ -108,3 +108,15 @@ void SpeedGraph::setUnits(enum Units units)
 
 	redraw();
 }
+
+void SpeedGraph::showTracks(bool show)
+{
+	if (show)
+		setInfo();
+	else
+		clearInfo();
+
+	showGraph(show);
+
+	redraw();
+}
