@@ -219,8 +219,8 @@ void GraphView::redraw(const QSizeF &size)
 	_scene->addItem(_yAxis);
 
 	_slider->setArea(r);
-	_scene->addItem(_slider);
 	updateSliderPosition();
+	_scene->addItem(_slider);
 
 	r = _scene->itemsBoundingRect();
 	_info->setPos(r.topLeft() + QPointF(r.width()/2
@@ -308,11 +308,14 @@ static qreal yAtX(const QPainterPath &path, qreal x)
 
 void GraphView::updateSliderPosition()
 {
-	Q_ASSERT(_sliderPos <= _bounds.right() && _sliderPos >= _bounds.left());
+	Q_ASSERT(_bounds.width() > 0);
 
-	_slider->setPos((_sliderPos / _bounds.width()) * _slider->area().width(),
-	  _slider->area().bottom());
-	//_slider->setVisible(false);
+	if (_sliderPos <= _bounds.right() && _sliderPos >= _bounds.left()) {
+		_slider->setPos((_sliderPos / _bounds.width()) * _slider->area().width(),
+		  _slider->area().bottom());
+		_slider->setVisible(true);
+	} else
+		_slider->setVisible(false);
 
 	updateSliderInfo();
 }
@@ -345,8 +348,7 @@ void GraphView::updateSliderInfo()
 
 void GraphView::emitSliderPositionChanged(const QPointF &pos)
 {
-	if (_graphs.isEmpty())
-		return;
+	Q_ASSERT(_slider->area().width() > 0);
 
 	_sliderPos = (pos.x() / _slider->area().width()) * _bounds.width();
 
@@ -360,9 +362,7 @@ void GraphView::setSliderPosition(qreal pos)
 		return;
 
 	_sliderPos = pos;
-
 	updateSliderPosition();
-	emit sliderPositionChanged(_sliderPos);
 }
 
 void GraphView::newSliderPosition(const QPointF &pos)
