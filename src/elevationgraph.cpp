@@ -130,7 +130,7 @@ void ElevationGraph::clear()
 	_trackMin = NAN;
 	_trackMax = NAN;
 	_routeMin = NAN;
-	_trackMax = NAN;
+	_routeMax = NAN;
 
 	GraphView::clear();
 }
