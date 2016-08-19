@@ -24,7 +24,7 @@ void SliderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 	painter->setPen(Qt::red);
 	painter->drawLine(0, 0, 0, -_area.height());
 
-	//painter->drawRect(boundingRect());
+//	painter->drawRect(boundingRect());
 }
 
 QVariant SliderItem::itemChange(GraphicsItemChange change, const QVariant &value)

@@ -28,7 +28,9 @@ private:
 	void setInfo();
 
 	QList<QPointF> _avg;
+
 	enum Units _units;
+	bool _showTracks;
 };
 
 #endif // TEMPERATUREGRAPH_H

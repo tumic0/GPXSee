@@ -5,6 +5,7 @@
 TemperatureGraph::TemperatureGraph(QWidget *parent) : GraphTab(parent)
 {
 	_units = Metric;
+	_showTracks = true;
 
 	setYUnits();
 	setXLabel(tr("Distance"));
@@ -15,12 +16,15 @@ TemperatureGraph::TemperatureGraph(QWidget *parent) : GraphTab(parent)
 
 void TemperatureGraph::setInfo()
 {
-	GraphView::addInfo(tr("Average"), QString::number(avg() * yScale()
-	  + yOffset(), 'f', 1) + UNIT_SPACE + yUnits());
-	GraphView::addInfo(tr("Minimum"), QString::number(min() * yScale()
-	  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
-	GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale()
-	  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
+	if (_showTracks) {
+		GraphView::addInfo(tr("Average"), QString::number(avg() * yScale()
+		  + yOffset(), 'f', 1) + UNIT_SPACE + yUnits());
+		GraphView::addInfo(tr("Minimum"), QString::number(min() * yScale()
+		  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
+		GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale()
+		  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
+	} else
+		clearInfo();
 }
 
 void TemperatureGraph::loadGPX(const GPX &gpx)
@@ -119,12 +123,11 @@ void TemperatureGraph::setUnits(enum Units units)
 
 void TemperatureGraph::showTracks(bool show)
 {
-	if (show)
-		setInfo();
-	else
-		clearInfo();
+	_showTracks = show;
 
+	setInfo();
 	showGraph(show);
+	setXUnits();
 
 	redraw();
 }

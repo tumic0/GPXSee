@@ -33,7 +33,6 @@ class GraphView : public QGraphicsView
 
 public:
 	GraphView(QWidget *parent = 0);
-	~GraphView();
 
 	void loadData(const QVector<QPointF> &data, int id = 0);
 	int count() const {return _graphs.count();}
@@ -84,9 +83,10 @@ private slots:
 private:
 	void createXLabel();
 	void createYLabel();
-	void updateBounds(const QPointF &point);
 	void updateSliderPosition();
 	void updateSliderInfo();
+	void updateBounds(const QPainterPath &path);
+	QRectF graphsBoundingRect() const;
 
 	qreal _xScale, _yScale;
 	qreal _yOffset;
@@ -104,8 +104,8 @@ private:
 	InfoItem *_info;
 
 	QList<GraphItem*> _graphs;
+	QList<GraphItem*> _visible;
 	QSet<int> _hide;
-	bool _hideAll;
 	QRectF _bounds;
 	Palette _palette;
 };

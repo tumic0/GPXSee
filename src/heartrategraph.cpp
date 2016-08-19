@@ -5,6 +5,7 @@
 HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphTab(parent)
 {
 	_units = Metric;
+	_showTracks = true;
 
 	GraphView::setYUnits(tr("1/min"));
 	setXLabel(tr("Distance"));
@@ -15,10 +16,13 @@ HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphTab(parent)
 
 void HeartRateGraph::setInfo()
 {
-	GraphView::addInfo(tr("Average"), QString::number(avg() * yScale(), 'f', 0)
-	  + UNIT_SPACE + yUnits());
-	GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale(),  'f', 0)
-	  + UNIT_SPACE + yUnits());
+	if (_showTracks) {
+		GraphView::addInfo(tr("Average"), QString::number(avg() * yScale(), 'f',
+		  0) + UNIT_SPACE + yUnits());
+		GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale(), 'f',
+		  0) + UNIT_SPACE + yUnits());
+	} else
+		clearInfo();
 }
 
 void HeartRateGraph::loadGPX(const GPX &gpx)
@@ -103,12 +107,11 @@ void HeartRateGraph::setUnits(enum Units units)
 
 void HeartRateGraph::showTracks(bool show)
 {
-	if (show)
-		setInfo();
-	else
-		clearInfo();
+	_showTracks = show;
 
+	setInfo();
 	showGraph(show);
+	setXUnits();
 
 	redraw();
 }

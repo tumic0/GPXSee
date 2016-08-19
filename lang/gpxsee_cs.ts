@@ -536,48 +536,48 @@
 <context>
     <name>HeartRateGraph</name>
     <message>
-        <location filename="../src/heartrategraph.cpp" line="10"/>
+        <location filename="../src/heartrategraph.cpp" line="11"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
     <message>
-        <location filename="../src/heartrategraph.cpp" line="11"/>
+        <location filename="../src/heartrategraph.cpp" line="12"/>
         <location filename="../src/heartrategraph.h" line="15"/>
         <source>Heart rate</source>
         <translation>Tep</translation>
     </message>
     <message>
-        <location filename="../src/heartrategraph.cpp" line="80"/>
+        <location filename="../src/heartrategraph.cpp" line="84"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="../src/heartrategraph.cpp" line="9"/>
+        <location filename="../src/heartrategraph.cpp" line="10"/>
         <source>1/min</source>
         <translation>1/min</translation>
     </message>
     <message>
-        <location filename="../src/heartrategraph.cpp" line="18"/>
+        <location filename="../src/heartrategraph.cpp" line="20"/>
         <source>Average</source>
         <translation>Průměr</translation>
     </message>
     <message>
-        <location filename="../src/heartrategraph.cpp" line="20"/>
+        <location filename="../src/heartrategraph.cpp" line="22"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/heartrategraph.cpp" line="77"/>
+        <location filename="../src/heartrategraph.cpp" line="81"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../src/heartrategraph.cpp" line="85"/>
+        <location filename="../src/heartrategraph.cpp" line="89"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
     <message>
-        <location filename="../src/heartrategraph.cpp" line="88"/>
+        <location filename="../src/heartrategraph.cpp" line="92"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
@@ -633,53 +633,53 @@
 <context>
     <name>SpeedGraph</name>
     <message>
-        <location filename="../src/speedgraph.cpp" line="11"/>
+        <location filename="../src/speedgraph.cpp" line="12"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="12"/>
+        <location filename="../src/speedgraph.cpp" line="13"/>
         <location filename="../src/speedgraph.h" line="16"/>
         <source>Speed</source>
         <translation>Rychlost</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="73"/>
+        <location filename="../src/speedgraph.cpp" line="77"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="76"/>
+        <location filename="../src/speedgraph.cpp" line="80"/>
         <source>km</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="81"/>
+        <location filename="../src/speedgraph.cpp" line="85"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="93"/>
+        <location filename="../src/speedgraph.cpp" line="97"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="19"/>
+        <location filename="../src/speedgraph.cpp" line="21"/>
         <source>Average</source>
         <translation>Průměr</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="21"/>
+        <location filename="../src/speedgraph.cpp" line="23"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="84"/>
+        <location filename="../src/speedgraph.cpp" line="88"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="96"/>
+        <location filename="../src/speedgraph.cpp" line="100"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
     </message>
@@ -687,58 +687,58 @@
 <context>
     <name>TemperatureGraph</name>
     <message>
-        <location filename="../src/temperaturegraph.cpp" line="10"/>
+        <location filename="../src/temperaturegraph.cpp" line="11"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
     <message>
-        <location filename="../src/temperaturegraph.cpp" line="11"/>
+        <location filename="../src/temperaturegraph.cpp" line="12"/>
         <location filename="../src/temperaturegraph.h" line="15"/>
         <source>Temperature</source>
         <translation>Teplota</translation>
     </message>
     <message>
-        <location filename="../src/temperaturegraph.cpp" line="18"/>
+        <location filename="../src/temperaturegraph.cpp" line="20"/>
         <source>Average</source>
         <translation>Průměr</translation>
     </message>
     <message>
-        <location filename="../src/temperaturegraph.cpp" line="20"/>
+        <location filename="../src/temperaturegraph.cpp" line="22"/>
         <source>Minimum</source>
         <translation>Minimum</translation>
     </message>
     <message>
-        <location filename="../src/temperaturegraph.cpp" line="22"/>
+        <location filename="../src/temperaturegraph.cpp" line="24"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/temperaturegraph.cpp" line="79"/>
+        <location filename="../src/temperaturegraph.cpp" line="83"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../src/temperaturegraph.cpp" line="82"/>
+        <location filename="../src/temperaturegraph.cpp" line="86"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="../src/temperaturegraph.cpp" line="87"/>
+        <location filename="../src/temperaturegraph.cpp" line="91"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
     <message>
-        <location filename="../src/temperaturegraph.cpp" line="90"/>
+        <location filename="../src/temperaturegraph.cpp" line="94"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
     <message>
-        <location filename="../src/temperaturegraph.cpp" line="99"/>
+        <location filename="../src/temperaturegraph.cpp" line="103"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../src/temperaturegraph.cpp" line="103"/>
+        <location filename="../src/temperaturegraph.cpp" line="107"/>
         <source>F</source>
         <translation>F</translation>
     </message>

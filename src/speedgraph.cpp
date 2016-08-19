@@ -6,6 +6,7 @@
 SpeedGraph::SpeedGraph(QWidget *parent) : GraphTab(parent)
 {
 	_units = Metric;
+	_showTracks = true;
 
 	setYUnits();
 	setXLabel(tr("Distance"));
@@ -16,10 +17,13 @@ SpeedGraph::SpeedGraph(QWidget *parent) : GraphTab(parent)
 
 void SpeedGraph::setInfo()
 {
-	GraphView::addInfo(tr("Average"), QString::number(avg() * yScale(), 'f', 1)
-	  + UNIT_SPACE + yUnits());
-	GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale(),  'f', 1)
-	  + UNIT_SPACE + yUnits());
+	if (_showTracks) {
+		GraphView::addInfo(tr("Average"), QString::number(avg() * yScale(), 'f',
+		  1) + UNIT_SPACE + yUnits());
+		GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale(), 'f',
+		  1) + UNIT_SPACE + yUnits());
+	} else
+		clearInfo();
 }
 
 void SpeedGraph::loadGPX(const GPX &gpx)
@@ -111,12 +115,11 @@ void SpeedGraph::setUnits(enum Units units)
 
 void SpeedGraph::showTracks(bool show)
 {
-	if (show)
-		setInfo();
-	else
-		clearInfo();
+	_showTracks = show;
 
+	setInfo();
 	showGraph(show);
+	setXUnits();
 
 	redraw();
 }

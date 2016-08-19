@@ -184,6 +184,7 @@ void ElevationGraph::showTracks(bool show)
 
 	setInfo();
 	showGraph(show, Track);
+	setXUnits();
 
 	redraw();
 }
@@ -194,6 +195,7 @@ void ElevationGraph::showRoutes(bool show)
 
 	setInfo();
 	showGraph(show, Route);
+	setXUnits();
 
 	redraw();
 }

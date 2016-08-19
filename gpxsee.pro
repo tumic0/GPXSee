@@ -87,7 +87,8 @@ SOURCES += src/main.cpp \
     src/trackitem.cpp \
     src/tooltip.cpp \
     src/route.cpp \
-    src/routeitem.cpp
+    src/routeitem.cpp \
+    src/graphitem.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {
