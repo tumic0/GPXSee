@@ -193,9 +193,9 @@ void ElevationGraph::showRoutes(bool show)
 {
 	_showRoutes = show;
 
-	setInfo();
 	showGraph(show, Route);
 	setXUnits();
+	setInfo();
 
 	redraw();
 }

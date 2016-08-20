@@ -117,9 +117,9 @@ void SpeedGraph::showTracks(bool show)
 {
 	_showTracks = show;
 
-	setInfo();
 	showGraph(show);
 	setXUnits();
+	setInfo();
 
 	redraw();
 }
