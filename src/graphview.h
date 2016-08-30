@@ -87,6 +87,8 @@ private:
 	void updateSliderInfo();
 	void updateBounds(const QPainterPath &path);
 	QRectF graphsBoundingRect() const;
+	void removeItem(QGraphicsItem *item);
+	void addItem(QGraphicsItem *item);
 
 	qreal _xScale, _yScale;
 	qreal _yOffset;

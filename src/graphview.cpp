@@ -13,6 +13,7 @@
 
 #define MARGIN 10.0
 
+
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
 	if (e->button() == Qt::LeftButton)
@@ -38,11 +39,6 @@ GraphView::GraphView(QWidget *parent)
 	_sliderInfo = new SliderInfoItem(_slider);
 	_sliderInfo->setZValue(2.0);
 	_info = new InfoItem();
-
-	_scene->addItem(_xAxis);
-	_scene->addItem(_yAxis);
-	_scene->addItem(_slider);
-	_scene->addItem(_info);
 
 	connect(_slider, SIGNAL(positionChanged(const QPointF&)), this,
 	  SLOT(emitSliderPositionChanged(const QPointF&)));
@@ -121,6 +117,18 @@ void GraphView::loadData(const QVector<QPointF> &data, int id)
 	}
 }
 
+void GraphView::removeItem(QGraphicsItem *item)
+{
+	if (item->scene() == _scene)
+		_scene->removeItem(item);
+}
+
+void GraphView::addItem(QGraphicsItem *item)
+{
+	if (item->scene() != _scene)
+		_scene->addItem(item);
+}
+
 void GraphView::showGraph(bool show, int id)
 {
 	if (show)
@@ -132,12 +140,10 @@ void GraphView::showGraph(bool show, int id)
 	_bounds = QRectF();
 	for (int i = 0; i < _graphs.count(); i++) {
 		GraphItem* gi = _graphs.at(i);
-		if (_hide.contains(gi->id())) {
-			if (gi->scene() == _scene)
-				_scene->removeItem(gi);
-		} else {
-			if (gi->scene() != _scene)
-				_scene->addItem(gi);
+		if (_hide.contains(gi->id()))
+			removeItem(gi);
+		else {
+			addItem(gi);
 			_visible.append(gi);
 			updateBounds(gi->path());
 		}
@@ -174,6 +180,20 @@ void GraphView::redraw(const QSizeF &size)
 	QTransform transform;
 	qreal xs, ys;
 
+
+	if (_visible.isEmpty()) {
+		removeItem(_xAxis);
+		removeItem(_yAxis);
+		removeItem(_slider);
+		removeItem(_info);
+		_scene->setSceneRect(QRectF());
+		return;
+	}
+
+	addItem(_xAxis);
+	addItem(_yAxis);
+	addItem(_slider);
+	addItem(_info);
 
 	rx = RangeF(_bounds.left() * _xScale, _bounds.right() * _xScale);
 	ry = RangeF(_bounds.top() * _yScale + _yOffset, _bounds.bottom() * _yScale
