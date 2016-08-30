@@ -608,6 +608,14 @@
     </message>
 </context>
 <context>
+    <name>RouteItem</name>
+    <message>
+        <location filename="../src/routeitem.cpp" line="17"/>
+        <source>Distance</source>
+        <translation>Vzdálenost</translation>
+    </message>
+</context>
+<context>
     <name>ScaleItem</name>
     <message>
         <location filename="../src/scaleitem.cpp" line="81"/>

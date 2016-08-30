@@ -33,6 +33,7 @@ class GraphView : public QGraphicsView
 
 public:
 	GraphView(QWidget *parent = 0);
+	~GraphView();
 
 	void loadData(const QVector<QPointF> &data, int id = 0);
 	int count() const {return _graphs.count();}

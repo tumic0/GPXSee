@@ -4,13 +4,16 @@
 #include <QGraphicsItem>
 #include "markeritem.h"
 #include "route.h"
+#include "units.h"
+
 
 class RouteItem : public QGraphicsItem
 {
 public:
 	RouteItem(const Route &route, QGraphicsItem *parent = 0);
 
-	QRectF boundingRect() const {return _path.boundingRect();}
+	QPainterPath shape() const {return _shape;}
+	QRectF boundingRect() const {return _shape.boundingRect();}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
@@ -18,6 +21,7 @@ public:
 
 	void setScale(qreal scale);
 	void setColor(const QColor &color);
+	void setUnits(enum Units units);
 
 	void showMarker(bool show) {_marker->setVisible(show);}
 	void moveMarker(qreal distance);
@@ -26,11 +30,16 @@ public:
 	void showWaypointLabels(bool show);
 
 private:
+	void updateShape();
+	QString toolTip();
+
 	QPainterPath _path;
+	QPainterPath _shape;
 	QPen _pen;
 
 	MarkerItem *_marker;
 
+	Units _units;
 	qreal _distance;
 };
 

@@ -146,10 +146,14 @@ void Parser::routepointData()
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "name")
 			handleRoutepointData(Name, _reader.readElementText());
+		else if (_reader.name() == "desc")
+			handleRoutepointData(Description, _reader.readElementText());
 		else if (_reader.name() == "ele")
 			handleRoutepointData(Elevation, _reader.readElementText());
 		else if (_reader.name() == "geoidheight")
 			handleRoutepointData(Geoidheight, _reader.readElementText());
+		else if (_reader.name() == "time")
+			handleRoutepointData(Time, _reader.readElementText());
 		else
 			_reader.skipCurrentElement();
 	}

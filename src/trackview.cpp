@@ -341,7 +341,8 @@ void TrackView::setUnits(enum Units units)
 
 	for (int i = 0; i < _tracks.count(); i++)
 		_tracks[i]->setUnits(units);
-
+	for (int i = 0; i < _routes.count(); i++)
+		_routes[i]->setUnits(units);
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setUnits(units);
 

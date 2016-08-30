@@ -1,11 +1,31 @@
+#include <QApplication>
 #include <QPainter>
 #include "ll.h"
+#include "misc.h"
 #include "waypoint.h"
 #include "waypointitem.h"
+#include "tooltip.h"
 #include "routeitem.h"
 
 
 #define ROUTE_WIDTH     3
+
+QString RouteItem::toolTip()
+{
+	ToolTip tt;
+
+	tt.insert(qApp->translate("RouteItem", "Distance"),
+	  ::distance(_distance, _units));
+
+	return tt.toString();
+}
+
+void RouteItem::updateShape()
+{
+	QPainterPathStroker s;
+	s.setWidth(ROUTE_WIDTH * 1.0/scale());
+	_shape = s.createStroke(_path);
+}
 
 RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
   : QGraphicsItem(parent)
@@ -26,7 +46,13 @@ RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
 		wi->setParentItem(this);
 	}
 
+	_units = Metric;
 	_distance = route.distance();
+
+	setToolTip(toolTip());
+	setCursor(Qt::ArrowCursor);
+
+	updateShape();
 
 	QBrush brush(Qt::SolidPattern);
 	_pen = QPen(brush, ROUTE_WIDTH, Qt::DotLine);
@@ -60,12 +86,20 @@ void RouteItem::setScale(qreal scale)
 	QList<QGraphicsItem *> childs =	childItems();
 	for (int i = 0; i < childs.count(); i++)
 		childs.at(i)->setScale(1.0/scale);
+
+	updateShape();
 }
 
 void RouteItem::setColor(const QColor &color)
 {
 	_pen.setColor(color);
 	update();
+}
+
+void RouteItem::setUnits(enum Units units)
+{
+	_units = units;
+	setToolTip(toolTip());
 }
 
 void RouteItem::moveMarker(qreal distance)
