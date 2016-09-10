@@ -30,6 +30,9 @@ public:
 	void showWaypointLabels(bool show);
 
 private:
+	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
 	void updateShape();
 	QString toolTip();
 

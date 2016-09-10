@@ -7,7 +7,8 @@
 #include "waypointitem.h"
 
 
-#define POINT_SIZE  8
+#define POINT_SIZE 8
+#define HOVER_SIZE 10
 
 QString WaypointItem::toolTip()
 {
@@ -35,6 +36,7 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, QGraphicsItem *parent)
 {
 	_units = Metric;
 	_showLabel = true;
+	_hover = false;
 
 	_waypoint = waypoint;
 	_coordinates = ll2mercator(QPointF(waypoint.coordinates().x(),
@@ -45,22 +47,27 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, QGraphicsItem *parent)
 	setPos(_coordinates);
 	setToolTip(toolTip());
 	setCursor(Qt::ArrowCursor);
+	setAcceptHoverEvents(true);
 }
 
 void WaypointItem::updateBoundingRect()
 {
+	qreal pointSize = _hover ? HOVER_SIZE : POINT_SIZE;
+
 	if (_showLabel) {
 		QFont font;
 		font.setPixelSize(FONT_SIZE);
 		font.setFamily(FONT_FAMILY);
+		if (_hover)
+			font.setBold(true);
 		QFontMetrics fm(font);
 		QRect ts = fm.tightBoundingRect(_waypoint.name());
 
-		_boundingRect = QRectF(-POINT_SIZE/2, -POINT_SIZE/2, ts.width()
-		  + POINT_SIZE, ts.height() + fm.descent() + POINT_SIZE);
+		_boundingRect = QRectF(-pointSize/2, -pointSize/2, ts.width()
+		  + pointSize, ts.height() + fm.descent() + pointSize);
 	} else
-		_boundingRect = QRectF(-POINT_SIZE/2, -POINT_SIZE/2, POINT_SIZE,
-		  POINT_SIZE);
+		_boundingRect = QRectF(-pointSize/2, -pointSize/2, pointSize,
+		  pointSize);
 }
 
 void WaypointItem::paint(QPainter *painter,
@@ -69,20 +76,24 @@ void WaypointItem::paint(QPainter *painter,
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 
+	qreal pointSize = _hover ? HOVER_SIZE : POINT_SIZE;
+
 	if (_showLabel) {
 		QFont font;
 		font.setPixelSize(FONT_SIZE);
 		font.setFamily(FONT_FAMILY);
+		if (_hover)
+			font.setBold(true);
 		QFontMetrics fm(font);
 		QRect ts = fm.tightBoundingRect(_waypoint.name());
 
 		painter->setFont(font);
-		painter->drawText(POINT_SIZE/2 - qMax(ts.x(), 0), POINT_SIZE/2
+		painter->drawText(pointSize/2 - qMax(ts.x(), 0), pointSize/2
 		  + ts.height(), _waypoint.name());
 	}
 
 	painter->setBrush(Qt::SolidPattern);
-	painter->drawEllipse(-POINT_SIZE/2, -POINT_SIZE/2, POINT_SIZE, POINT_SIZE);
+	painter->drawEllipse(-pointSize/2, -pointSize/2, pointSize, pointSize);
 
 /*
 	painter->setPen(Qt::red);
@@ -108,4 +119,24 @@ void WaypointItem::showLabel(bool show)
 	_showLabel = show;
 	updateBoundingRect();
 	setToolTip(toolTip());
+}
+
+void WaypointItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+	Q_UNUSED(event);
+
+	prepareGeometryChange();
+	_hover = true;
+	updateBoundingRect();
+	setZValue(1.0);
+}
+
+void WaypointItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+	Q_UNUSED(event);
+
+	prepareGeometryChange();
+	_hover = false;
+	updateBoundingRect();
+	setZValue(0);
 }

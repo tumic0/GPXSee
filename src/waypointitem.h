@@ -22,6 +22,9 @@ public:
 	  QWidget *widget);
 
 private:
+	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
 	void updateBoundingRect();
 	QString toolTip();
 
@@ -29,6 +32,8 @@ private:
 	QPointF _coordinates;
 	Waypoint _waypoint;
 	Units _units;
+
+	bool _hover;
 	bool _showLabel;
 };
 

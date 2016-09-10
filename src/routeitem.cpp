@@ -8,7 +8,8 @@
 #include "routeitem.h"
 
 
-#define ROUTE_WIDTH     3
+#define ROUTE_WIDTH 3
+#define HOVER_WIDTH 5
 
 QString RouteItem::toolTip()
 {
@@ -23,7 +24,7 @@ QString RouteItem::toolTip()
 void RouteItem::updateShape()
 {
 	QPainterPathStroker s;
-	s.setWidth(ROUTE_WIDTH * 1.0/scale());
+	s.setWidth(HOVER_WIDTH * 1.0/scale());
 	_shape = s.createStroke(_path);
 }
 
@@ -51,6 +52,7 @@ RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
 
 	setToolTip(toolTip());
 	setCursor(Qt::ArrowCursor);
+	setAcceptHoverEvents(true);
 
 	updateShape();
 
@@ -71,7 +73,9 @@ void RouteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	painter->drawPath(_path);
 
 /*
-	painter->setPen(Qt::red);
+	QPen p = QPen(Qt::red);
+	p.setWidthF(1.0/scale());
+	painter->setPen(p);
 	painter->drawRect(boundingRect());
 */
 }
@@ -129,4 +133,22 @@ void RouteItem::showWaypointLabels(bool show)
 			wi->showLabel(show);
 		}
 	}
+}
+
+void RouteItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+	Q_UNUSED(event);
+
+	_pen.setWidthF(HOVER_WIDTH * 1.0/scale());
+	setZValue(1.0);
+	update();
+}
+
+void RouteItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+	Q_UNUSED(event);
+
+	_pen.setWidthF(ROUTE_WIDTH * 1.0/scale());
+	setZValue(0);
+	update();
 }
