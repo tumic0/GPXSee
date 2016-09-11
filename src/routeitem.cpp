@@ -140,7 +140,7 @@ void RouteItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 	Q_UNUSED(event);
 
 	_pen.setWidthF(HOVER_WIDTH * 1.0/scale());
-	setZValue(1.0);
+	setZValue(3.0);
 	update();
 }
 
