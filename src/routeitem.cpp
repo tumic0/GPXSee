@@ -53,6 +53,7 @@ RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
 	setToolTip(toolTip());
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
+	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 
 	updateShape();
 

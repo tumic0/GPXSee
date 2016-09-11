@@ -13,8 +13,8 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-	void setLatitude(qreal lat);
 	void setZoom(int z);
+	void setZoom(int z, qreal lat);
 	void setUnits(enum Units units);
 
 private:

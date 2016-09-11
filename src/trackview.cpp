@@ -136,8 +136,7 @@ void TrackView::loadGPX(const GPX &gpx)
 	_scene->setSceneRect(ba);
 	centerOn(ba.center());
 
-	_mapScale->setLatitude(-(br.center().ry() * _scale));
-	_mapScale->setZoom(_zoom);
+	_mapScale->setZoom(_zoom, -(br.center().ry() * _scale));
 	if (_mapScale->scene() != _scene)
 		_scene->addItem(_mapScale);
 }

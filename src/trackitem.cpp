@@ -53,6 +53,7 @@ TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
 	setToolTip(toolTip());
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
+	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 
 	updateShape();
 

@@ -34,6 +34,8 @@ AxisItem::AxisItem(Type type, QGraphicsItem *parent) : QGraphicsItem(parent)
 {
 	_type = type;
 	_size = 0;
+
+	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
 
 void AxisItem::setRange(const RangeF &range)

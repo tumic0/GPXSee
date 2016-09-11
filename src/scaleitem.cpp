@@ -17,6 +17,8 @@ ScaleItem::ScaleItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 	_units = Metric;
 	_zoom = ZOOM_MIN;
 	_lat = 0;
+
+	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
 
 void ScaleItem::updateBoundingRect()
@@ -112,9 +114,10 @@ void ScaleItem::computeScale()
 	}
 }
 
-void ScaleItem::setLatitude(qreal lat)
+void ScaleItem::setZoom(int z, qreal lat)
 {
 	prepareGeometryChange();
+	_zoom = z;
 	_lat = lat;
 	computeScale();
 	updateBoundingRect();
