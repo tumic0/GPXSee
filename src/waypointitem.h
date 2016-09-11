@@ -17,7 +17,8 @@ public:
 	void setScale(qreal scale);
 	void showLabel(bool show);
 
-	QRectF boundingRect() const {return _boundingRect;}
+	QPainterPath shape() const {return _shape;}
+	QRectF boundingRect() const {return _shape.boundingRect();}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
@@ -25,10 +26,10 @@ private:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
-	void updateBoundingRect();
+	void updateShape();
 	QString toolTip();
 
-	QRectF _boundingRect;
+	QPainterPath _shape;
 	QPointF _coordinates;
 	Waypoint _waypoint;
 	Units _units;

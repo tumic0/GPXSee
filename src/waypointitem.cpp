@@ -42,7 +42,7 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, QGraphicsItem *parent)
 	_coordinates = ll2mercator(QPointF(waypoint.coordinates().x(),
 	  -waypoint.coordinates().y()));
 
-	updateBoundingRect();
+	updateShape();
 
 	setPos(_coordinates);
 	setToolTip(toolTip());
@@ -50,8 +50,9 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, QGraphicsItem *parent)
 	setAcceptHoverEvents(true);
 }
 
-void WaypointItem::updateBoundingRect()
+void WaypointItem::updateShape()
 {
+	QPainterPath p;
 	qreal pointSize = _hover ? HOVER_SIZE : POINT_SIZE;
 
 	if (_showLabel) {
@@ -63,11 +64,13 @@ void WaypointItem::updateBoundingRect()
 		QFontMetrics fm(font);
 		QRect ts = fm.tightBoundingRect(_waypoint.name());
 
-		_boundingRect = QRectF(-pointSize/2, -pointSize/2, ts.width()
-		  + pointSize, ts.height() + fm.descent() + pointSize);
+		p.addRect(-pointSize/2, -pointSize/2, pointSize, pointSize);
+		p.addRect(pointSize/2, pointSize/2,
+		  ts.width(), ts.height() + fm.descent());
 	} else
-		_boundingRect = QRectF(-pointSize/2, -pointSize/2, pointSize,
-		  pointSize);
+		p.addRect(-pointSize/2, -pointSize/2, pointSize, pointSize);
+
+	_shape = p;
 }
 
 void WaypointItem::paint(QPainter *painter,
@@ -98,7 +101,7 @@ void WaypointItem::paint(QPainter *painter,
 /*
 	painter->setPen(Qt::red);
 	painter->setBrush(Qt::NoBrush);
-	painter->drawRect(boundingRect());
+	painter->drawPath(_shape);
 */
 }
 
@@ -117,7 +120,7 @@ void WaypointItem::showLabel(bool show)
 {
 	prepareGeometryChange();
 	_showLabel = show;
-	updateBoundingRect();
+	updateShape();
 	setToolTip(toolTip());
 }
 
@@ -127,8 +130,8 @@ void WaypointItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 	prepareGeometryChange();
 	_hover = true;
-	updateBoundingRect();
-	setZValue(1.0);
+	updateShape();
+	setZValue(3.0);
 }
 
 void WaypointItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
@@ -137,6 +140,6 @@ void WaypointItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 	prepareGeometryChange();
 	_hover = false;
-	updateBoundingRect();
+	updateShape();
 	setZValue(0);
 }
