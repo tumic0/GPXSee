@@ -121,6 +121,7 @@ void ScaleItem::setZoom(int z, qreal lat)
 	_lat = lat;
 	computeScale();
 	updateBoundingRect();
+	update();
 }
 
 void ScaleItem::setZoom(int z)
@@ -129,6 +130,7 @@ void ScaleItem::setZoom(int z)
 	_zoom = z;
 	computeScale();
 	updateBoundingRect();
+	update();
 }
 
 void ScaleItem::setUnits(enum Units units)
@@ -137,4 +139,5 @@ void ScaleItem::setUnits(enum Units units)
 	_units = units;
 	computeScale();
 	updateBoundingRect();
+	update();
 }

@@ -43,6 +43,7 @@ void AxisItem::setRange(const RangeF &range)
 	prepareGeometryChange();
 	_range = range;
 	updateBoundingRect();
+	update();
 }
 
 void AxisItem::setSize(qreal size)
@@ -50,6 +51,7 @@ void AxisItem::setSize(qreal size)
 	prepareGeometryChange();
 	_size = size;
 	updateBoundingRect();
+	update();
 }
 
 void AxisItem::setLabel(const QString& label)
@@ -57,6 +59,7 @@ void AxisItem::setLabel(const QString& label)
 	prepareGeometryChange();
 	_label = label;
 	updateBoundingRect();
+	update();
 }
 
 void AxisItem::updateBoundingRect()
