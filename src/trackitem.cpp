@@ -8,7 +8,7 @@
 
 
 #define TRACK_WIDTH 3
-#define HOVER_WIDTH 5
+#define HOVER_WIDTH 4
 
 QString TrackItem::toolTip()
 {
