@@ -1,6 +1,5 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
-#include <QPainterPath>
 #include <QWheelEvent>
 #include "ll.h"
 #include "poi.h"
