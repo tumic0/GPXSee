@@ -18,7 +18,9 @@ ScaleItem::ScaleItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 	_zoom = ZOOM_MIN;
 	_lat = 0;
 
+#ifndef Q_OS_MAC
 	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
+#endif // Q_OS_MAC
 }
 
 void ScaleItem::updateBoundingRect()
@@ -33,9 +35,9 @@ void ScaleItem::updateBoundingRect()
 	es = fm.tightBoundingRect(QString::number(_length * SEGMENTS));
 	us = fm.tightBoundingRect(units());
 
-	_boundingRect = QRectF(-ss.width()/2, 0,
-	  _width * SEGMENTS + ss.width()/2 + qMax(us.width() + PADDING, es.width()/2),
-	  SCALE_HEIGHT + PADDING + ss.height() + 2*fm.descent());
+	_boundingRect = QRectF(-ss.width()/2, 0, _width * SEGMENTS + ss.width()/2
+	  + qMax(us.width() + PADDING, es.width()/2) + 1, SCALE_HEIGHT + PADDING
+	  + ss.height() + 2*fm.descent());
 }
 
 void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -69,10 +71,12 @@ void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	for (int i = 0; i < SEGMENTS; i += 2)
 		painter->fillRect(QRectF(i * _width, br.height() + PADDING, _width,
 		  SCALE_HEIGHT), Qt::black);
+
 /*
 	painter->setPen(Qt::red);
 	painter->drawRect(boundingRect());
 */
+
 	if (aa)
 		painter->setRenderHint(QPainter::Antialiasing, true);
 }

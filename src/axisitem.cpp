@@ -35,7 +35,9 @@ AxisItem::AxisItem(Type type, QGraphicsItem *parent) : QGraphicsItem(parent)
 	_type = type;
 	_size = 0;
 
+#ifndef Q_OS_MAC
 	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
+#endif // Q_OS_MAC
 }
 
 void AxisItem::setRange(const RangeF &range)
@@ -93,9 +95,8 @@ void AxisItem::updateBoundingRect()
 			mtw = qMax(ts.width(), mtw);
 		}
 
-		_boundingRect = QRectF(-(ls.height() + mtw + 2*PADDING
-		  - fm.descent() + TICK/2), -(_size + es.height()/2
-		  + fm.descent()), ls.height() -fm.descent() + mtw + 2*PADDING
+		_boundingRect = QRectF(-(ls.height() + mtw + 2*PADDING + TICK/2),
+		  -(_size + es.height()/2 + fm.descent()), ls.height() + mtw + 2*PADDING
 		  + TICK, _size + es.height()/2 + fm.descent() + ss.height()/2);
 	}
 }
