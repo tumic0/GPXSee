@@ -33,7 +33,9 @@ GraphView::GraphView(QWidget *parent)
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	_xAxis = new AxisItem(AxisItem::X);
+	_xAxis->setZValue(1.0);
 	_yAxis = new AxisItem(AxisItem::Y);
+	_yAxis->setZValue(1.0);
 	_slider = new SliderItem();
 	_slider->setZValue(2.0);
 	_sliderInfo = new SliderInfoItem(_slider);
