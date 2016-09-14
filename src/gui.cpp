@@ -18,6 +18,7 @@
 #include <QLabel>
 #include <QSettings>
 #include <QLocale>
+#include <QPixmapCache>
 #include "config.h"
 #include "icons.h"
 #include "keys.h"
@@ -90,6 +91,8 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	_exportOrientation = QPrinter::Portrait;
 	_exportFileName = QString("%1/export.pdf").arg(QDir::currentPath());
 	_exportMargins = MarginsF(5.0, 5.0, 5.0, 5.0);
+
+	QPixmapCache::setCacheLimit(65536);
 }
 
 GUI::~GUI()

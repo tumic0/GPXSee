@@ -26,6 +26,11 @@ void RouteItem::updateShape()
 	QPainterPathStroker s;
 	s.setWidth(HOVER_WIDTH * 1.0/scale());
 	_shape = s.createStroke(_path);
+
+	if (qMax(boundingRect().width(), boundingRect().height()) * scale() <= 768)
+		setCacheMode(QGraphicsItem::DeviceCoordinateCache);
+	else
+		setCacheMode(QGraphicsItem::NoCache);
 }
 
 RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
@@ -53,7 +58,6 @@ RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
 	setToolTip(toolTip());
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
-	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 
 	updateShape();
 
@@ -74,8 +78,7 @@ void RouteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	painter->drawPath(_path);
 
 /*
-	QPen p = QPen(Qt::red);
-	p.setWidthF(1.0/scale());
+	QPen p = QPen(QBrush(Qt::red), 0);
 	painter->setPen(p);
 	painter->drawRect(boundingRect());
 */
