@@ -173,6 +173,9 @@ QAction *GUI::createPOIFileAction(int index)
 
 void GUI::createActions()
 {
+	QActionGroup *ag;
+
+
 	// Action Groups
 	_fileActionGroup = new QActionGroup(this);
 	_fileActionGroup->setExclusive(false);
@@ -297,18 +300,35 @@ void GUI::createActions()
 	connect(_showRouteWaypointsAction, SIGNAL(triggered(bool)), _track,
 	  SLOT(showRouteWaypoints(bool)));
 
-	// Settings actions
-	_showGraphsAction = new QAction(tr("Show graphs"), this);
+	// Graph actions
+	_showGraphsAction = new QAction(QIcon(QPixmap(SHOW_GRAPHS_ICON)),
+	  tr("Show graphs"), this);
 	_showGraphsAction->setCheckable(true);
 	_showGraphsAction->setShortcut(SHOW_GRAPHS_SHORTCUT);
 	connect(_showGraphsAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showGraphs(bool)));
 	addAction(_showGraphsAction);
+	ag = new QActionGroup(this);
+	ag->setExclusive(true);
+	_distanceGraphAction = new QAction(tr("Distance"), this);
+	_distanceGraphAction->setCheckable(true);
+	_distanceGraphAction->setActionGroup(ag);
+	_distanceGraphAction->setShortcut(DISTANCE_GRAPH_SHORTCUT);
+	connect(_distanceGraphAction, SIGNAL(triggered()), this,
+	  SLOT(setDistanceGraph()));
+	_timeGraphAction = new QAction(tr("Time"), this);
+	_timeGraphAction->setCheckable(true);
+	_timeGraphAction->setActionGroup(ag);
+	_timeGraphAction->setShortcut(TIME_GRAPH_SHORTCUT);
+	connect(_timeGraphAction, SIGNAL(triggered()), this,
+	  SLOT(setTimeGraph()));
+
+	// Settings actions
 	_showToolbarsAction = new QAction(tr("Show toolbars"), this);
 	_showToolbarsAction->setCheckable(true);
 	connect(_showToolbarsAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showToolbars(bool)));
-	QActionGroup *ag = new QActionGroup(this);
+	ag = new QActionGroup(this);
 	ag->setExclusive(true);
 	_metricUnitsAction = new QAction(tr("Metric"), this);
 	_metricUnitsAction->setCheckable(true);
@@ -368,6 +388,12 @@ void GUI::createMenus()
 	mapMenu->addSeparator();
 	mapMenu->addAction(_showMapAction);
 
+	QMenu *graphMenu = menuBar()->addMenu(tr("Graph"));
+	graphMenu->addAction(_distanceGraphAction);
+	graphMenu->addAction(_timeGraphAction);
+	graphMenu->addSeparator();
+	graphMenu->addAction(_showGraphsAction);
+
 	QMenu *poiMenu = menuBar()->addMenu(tr("POI"));
 	_poiFilesMenu = poiMenu->addMenu(tr("POI files"));
 	_poiFilesMenu->addActions(_poiFilesActions);
@@ -395,7 +421,6 @@ void GUI::createMenus()
 	unitsMenu->addAction(_imperialUnitsAction);
 	settingsMenu->addSeparator();
 	settingsMenu->addAction(_showToolbarsAction);
-	settingsMenu->addAction(_showGraphsAction);
 	settingsMenu->addSeparator();
 	settingsMenu->addAction(_fullscreenAction);
 
@@ -421,6 +446,7 @@ void GUI::createToolBars()
 	_showToolBar = addToolBar(tr("Show"));
 	_showToolBar->addAction(_showPOIAction);
 	_showToolBar->addAction(_showMapAction);
+	_showToolBar->addAction(_showGraphsAction);
 
 	_navigationToolBar = addToolBar(tr("Navigation"));
 	_navigationToolBar->addAction(_firstAction);
@@ -586,13 +612,14 @@ bool GUI::openFile(const QString &fileName)
 bool GUI::loadFile(const QString &fileName)
 {
 	GPX gpx;
+	QList<PathItem*> paths;
 
 	if (gpx.loadFile(fileName)) {
+		paths = _track->loadGPX(gpx);
 		for (int i = 0; i < _tabs.count(); i++)
-			_tabs.at(i)->loadGPX(gpx);
+			_tabs.at(i)->loadGPX(gpx, paths);
 		updateGraphTabs();
 		_track->setHidden(false);
-		_track->loadGPX(gpx);
 		if (_showPOIAction->isChecked())
 			_track->loadPOI(_poi);
 
@@ -986,7 +1013,7 @@ void GUI::poiFileChecked(int index)
 void GUI::sliderPositionChanged(qreal pos)
 {
 	_sliderPos = pos;
-	_track->movePositionMarker(_sliderPos);
+	//_track->movePositionMarker(_sliderPos);
 }
 
 void GUI::graphChanged(int index)
@@ -1064,6 +1091,18 @@ void GUI::setImperialUnits()
 	for (int i = 0; i <_tabs.count(); i++)
 		_tabs.at(i)->setUnits(Imperial);
 	updateStatusBarInfo();
+}
+
+void GUI::setDistanceGraph()
+{
+	for (int i = 0; i <_tabs.count(); i++)
+		_tabs.at(i)->setGraphType(Graph::Distance);
+}
+
+void GUI::setTimeGraph()
+{
+	for (int i = 0; i <_tabs.count(); i++)
+		_tabs.at(i)->setGraphType(Graph::Time);
 }
 
 void GUI::next()
@@ -1158,13 +1197,18 @@ void GUI::writeSettings()
 	settings.setValue(UNITS_SETTING, _imperialUnitsAction->isChecked()
 	  ? Imperial : Metric);
 	settings.setValue(SHOW_TOOLBARS_SETTING, _showToolbarsAction->isChecked());
-	settings.setValue(SHOW_GRAPHS_SETTING, _showGraphsAction->isChecked());
 	settings.endGroup();
 
 	settings.beginGroup(MAP_SETTINGS_GROUP);
 	if (_currentMap)
 		settings.setValue(CURRENT_MAP_SETTING, _currentMap->name());
 	settings.setValue(SHOW_MAP_SETTING, _showMapAction->isChecked());
+	settings.endGroup();
+
+	settings.beginGroup(GRAPH_SETTINGS_GROUP);
+	settings.setValue(SHOW_GRAPHS_SETTING, _showGraphsAction->isChecked());
+	settings.setValue(GRAPH_TYPE_SETTING, _timeGraphAction->isChecked()
+	  ? Graph::Time : Graph::Distance);
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);
@@ -1216,10 +1260,6 @@ void GUI::readSettings()
 		showToolbars(false);
 	else
 		_showToolbarsAction->setChecked(true);
-	if (settings.value(SHOW_GRAPHS_SETTING, true).toBool() == false)
-		showGraphs(false);
-	else
-		_showGraphsAction->setChecked(true);
 	settings.endGroup();
 
 	settings.beginGroup(MAP_SETTINGS_GROUP);
@@ -1233,6 +1273,19 @@ void GUI::readSettings()
 			_track->setMap(_currentMap);
 	} else
 		_currentMap = 0;
+	settings.endGroup();
+
+	settings.beginGroup(GRAPH_SETTINGS_GROUP);
+	if (settings.value(SHOW_GRAPHS_SETTING, true).toBool() == false)
+		showGraphs(false);
+	else
+		_showGraphsAction->setChecked(true);
+	if (settings.value(GRAPH_TYPE_SETTING, Graph::Distance).toInt()
+	  == Graph::Time) {
+		setTimeGraph();
+		_timeGraphAction->setChecked(true);
+	} else
+		_distanceGraphAction->setChecked(true);
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);

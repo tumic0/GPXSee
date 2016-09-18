@@ -38,7 +38,7 @@ void TrackItem::updateShape()
 }
 
 TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
-  : QGraphicsItem(parent)
+  : PathItem(parent)
 {
 	const QVector<Trackpoint> &t = track.track();
 	Q_ASSERT(t.count() >= 2);

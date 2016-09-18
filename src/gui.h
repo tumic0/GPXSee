@@ -58,8 +58,6 @@ private slots:
 	void graphChanged(int);
 	void poiFileChecked(int);
 
-
-
 	void next();
 	void prev();
 	void last();
@@ -67,6 +65,8 @@ private slots:
 
 	void setMetricUnits();
 	void setImperialUnits();
+	void setDistanceGraph();
+	void setTimeGraph();
 
 	void sliderPositionChanged(qreal pos);
 
@@ -132,6 +132,8 @@ private:
 	QAction *_fullscreenAction;
 	QAction *_clearMapCacheAction;
 	QAction *_showGraphsAction;
+	QAction *_distanceGraphAction;
+	QAction *_timeGraphAction;
 	QAction *_showToolbarsAction;
 	QAction *_nextAction;
 	QAction *_prevAction;

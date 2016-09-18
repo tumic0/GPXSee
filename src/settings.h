@@ -8,7 +8,10 @@
 #define SETTINGS_SETTINGS_GROUP           "Settings"
 #define UNITS_SETTING                     "units"
 #define SHOW_TOOLBARS_SETTING             "toolbar"
-#define SHOW_GRAPHS_SETTING               "graphs"
+
+#define GRAPH_SETTINGS_GROUP              "Graph"
+#define SHOW_GRAPHS_SETTING               "show"
+#define GRAPH_TYPE_SETTING                "type"
 
 #define MAP_SETTINGS_GROUP                "Map"
 #define CURRENT_MAP_SETTING               "map"

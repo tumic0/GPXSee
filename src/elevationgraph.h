@@ -4,6 +4,8 @@
 #include "graphtab.h"
 
 class GPX;
+class Graph;
+class PathItem;
 
 class ElevationGraph : public GraphTab
 {
@@ -13,7 +15,7 @@ public:
 	ElevationGraph(QWidget *parent = 0);
 
 	QString label() const {return tr("Elevation");}
-	void loadGPX(const GPX &gpx);
+	void loadGPX(const GPX &gpx, const QList<PathItem *> &paths);
 	void clear();
 	void setUnits(enum Units units);
 	void showTracks(bool show);
@@ -27,11 +29,10 @@ private:
 	qreal ascent() const;
 	qreal descent() const;
 
-	void setXUnits();
 	void setYUnits();
 	void setInfo();
 
-	void loadPath(const QVector<QPointF> &data, Type type);
+	void loadGraph(const Graph &graph, Type type, PathItem *path);
 
 	qreal _trackAscent, _trackDescent;
 	qreal _routeAscent, _routeDescent;

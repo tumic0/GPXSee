@@ -1,14 +1,14 @@
 #ifndef SLIDERITEM_H
 #define SLIDERITEM_H
 
-#include <QGraphicsItem>
+#include <QGraphicsObject>
 
 class SliderItem : public QGraphicsObject
 {
 	Q_OBJECT
 
 public:
-	SliderItem(QGraphicsObject *parent = 0);
+	SliderItem(QGraphicsItem *parent = 0);
 
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,

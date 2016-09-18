@@ -14,6 +14,7 @@
         <file>icons/arrow-left-double.png</file>
         <file>icons/arrow-right-double.png</file>
         <file>icons/view-fullscreen.png</file>
+        <file>icons/office-chart-line-stacked.png</file>
         <file>lang/gpxsee_cs.qm</file>
     </qresource>
 </RCC>

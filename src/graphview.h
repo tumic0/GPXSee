@@ -8,12 +8,16 @@
 #include <QSet>
 #include <QPointF>
 #include "palette.h"
+#include "units.h"
+#include "graph.h"
+
 
 class AxisItem;
 class SliderItem;
 class SliderInfoItem;
 class InfoItem;
 class GraphItem;
+class PathItem;
 
 class Scene : public QGraphicsScene
 {
@@ -35,26 +39,21 @@ public:
 	GraphView(QWidget *parent = 0);
 	~GraphView();
 
-	void loadData(const QVector<QPointF> &data, int id = 0);
+	void loadGraph(const Graph &graph, PathItem *path, int id = 0);
 	int count() const {return _graphs.count();}
 	void redraw();
 	void clear();
 
 	void showGraph(bool show, int id = 0);
+	void setGraphType(Graph::Type type);
+	void setUnits(Units units);
 
-	const QString &xLabel() const {return _xLabel;}
 	const QString &yLabel() const {return _yLabel;}
-	const QString &xUnits() const {return _xUnits;}
 	const QString &yUnits() const {return _yUnits;}
-	qreal xScale() const {return _xScale;}
 	qreal yScale() const {return _yScale;}
 	qreal yOffset() const {return _yOffset;}
-
-	void setXLabel(const QString &label);
 	void setYLabel(const QString &label);
-	void setXUnits(const QString &units);
 	void setYUnits(const QString &units);
-	void setXScale(qreal scale) {_xScale = scale;}
 	void setYScale(qreal scale) {_yScale = scale;}
 	void setYOffset(qreal offset) {_yOffset = offset;}
 
@@ -82,11 +81,12 @@ private slots:
 	void newSliderPosition(const QPointF &pos);
 
 private:
+	void setXUnits();
 	void createXLabel();
 	void createYLabel();
 	void updateSliderPosition();
 	void updateSliderInfo();
-	void updateBounds(const QPainterPath &path);
+	void updateBounds(const QRectF &boundingRect);
 	QRectF graphsBoundingRect() const;
 	void removeItem(QGraphicsItem *item);
 	void addItem(QGraphicsItem *item);
@@ -111,6 +111,9 @@ private:
 	QSet<int> _hide;
 	QRectF _bounds;
 	Palette _palette;
+
+	Units _units;
+	Graph::Type _graphType;
 };
 
 #endif // GRAPHVIEW_H

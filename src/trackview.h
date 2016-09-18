@@ -18,6 +18,7 @@ class TrackItem;
 class RouteItem;
 class WaypointItem;
 class ScaleItem;
+class PathItem;
 
 class TrackView : public QGraphicsView
 {
@@ -27,7 +28,7 @@ public:
 	TrackView(QWidget *parent = 0);
 	~TrackView();
 
-	void loadGPX(const GPX &gpx);
+	QList<PathItem*> loadGPX(const GPX &gpx);
 
 	void loadPOI(const POI &poi);
 	void clearPOI();
@@ -43,7 +44,7 @@ public:
 	int waypointCount() const {return _waypoints.count();}
 
 public slots:
-	void movePositionMarker(qreal val);
+	//void movePositionMarker(qreal val);
 	void redraw();
 
 	void setPOIOverlap(bool overlap);
@@ -55,8 +56,8 @@ public slots:
 	void showRouteWaypoints(bool show);
 
 private:
-	void addTrack(const Track &track);
-	void addRoute(const Route &route);
+	PathItem *addTrack(const Track &track);
+	PathItem *addRoute(const Route &route);
 	void addWaypoints(const QList<Waypoint> &waypoints);
 	void addPOI(const QVector<Waypoint> &waypoints);
 
@@ -103,7 +104,7 @@ private:
 	bool _showRouteWaypoints;
 
 	bool _plot;
-	qreal _markerPos;
+	//qreal _markerPos;
 };
 
 #endif // TRACKVIEW_H

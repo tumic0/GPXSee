@@ -13,16 +13,15 @@ public:
 	HeartRateGraph(QWidget *parent = 0);
 
 	QString label() const {return tr("Heart rate");}
-	void loadGPX(const GPX &gpx);
+	void loadGPX(const GPX &gpx, const QList<PathItem *> &paths);
 	void clear();
-	void setUnits(enum Units units);
+	void setUnits(enum Units) {}
 	void showTracks(bool show);
 	void showRoutes(bool show) {Q_UNUSED(show);}
 
 private:
 	qreal avg() const;
 	qreal max() const {return bounds().bottom();}
-	void setXUnits();
 	void setInfo();
 
 	QList<QPointF> _avg;

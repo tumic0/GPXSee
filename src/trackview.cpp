@@ -45,7 +45,7 @@ TrackView::TrackView(QWidget *parent)
 	_showRouteWaypoints = true;
 
 	_plot = false;
-	_markerPos = 0;
+	//_markerPos = 0;
 }
 
 TrackView::~TrackView()
@@ -54,11 +54,11 @@ TrackView::~TrackView()
 		delete _mapScale;
 }
 
-void TrackView::addTrack(const Track &track)
+PathItem *TrackView::addTrack(const Track &track)
 {
 	if (track.isNull()) {
 		_palette.color();
-		return;
+		return 0;
 	}
 
 	TrackItem *ti = new TrackItem(track);
@@ -68,15 +68,17 @@ void TrackView::addTrack(const Track &track)
 	ti->setScale(1.0/_scale);
 	ti->setColor(_palette.color());
 	ti->setVisible(_showTracks);
-	ti->moveMarker(_markerPos);
+	//ti->moveMarker(_markerPos);
 	_scene->addItem(ti);
+
+	return ti;
 }
 
-void TrackView::addRoute(const Route &route)
+PathItem *TrackView::addRoute(const Route &route)
 {
 	if (route.isNull()) {
 		_palette.color();
-		return;
+		return 0;
 	}
 
 	RouteItem *ri = new RouteItem(route);
@@ -88,8 +90,10 @@ void TrackView::addRoute(const Route &route)
 	ri->setVisible(_showRoutes);
 	ri->showWaypoints(_showRouteWaypoints);
 	ri->showWaypointLabels(_showWaypointLabels);
-	ri->moveMarker(_markerPos);
+	//ri->moveMarker(_markerPos);
 	_scene->addItem(ri);
+
+	return ri;
 }
 
 void TrackView::addWaypoints(const QList<Waypoint> &waypoints)
@@ -111,18 +115,25 @@ void TrackView::addWaypoints(const QList<Waypoint> &waypoints)
 	_scale = mapScale(_zoom);
 }
 
-void TrackView::loadGPX(const GPX &gpx)
+QList<PathItem *> TrackView::loadGPX(const GPX &gpx)
 {
+	QList<PathItem *> paths;
+	PathItem *pi;
+
 	int zoom = _zoom;
 
-	for (int i = 0; i < gpx.tracks().count(); i++)
-		addTrack(*(gpx.tracks().at(i)));
-	for (int i = 0; i < gpx.routes().count(); i++)
-		addRoute(*(gpx.routes().at(i)));
+	for (int i = 0; i < gpx.tracks().count(); i++) {
+		if ((pi = addTrack(*(gpx.tracks().at(i)))))
+			paths.append(pi);
+	}
+	for (int i = 0; i < gpx.routes().count(); i++) {
+		if ((pi = addRoute(*(gpx.routes().at(i)))))
+			paths.append(pi);
+	}
 	addWaypoints(gpx.waypoints());
 
 	if (_tracks.empty() && _routes.empty() && _waypoints.empty())
-		return;
+		return paths;
 
 	if ((_tracks.size() > 1 && _zoom < zoom)
 	  || (_routes.size() > 1 && _zoom < zoom)
@@ -138,6 +149,8 @@ void TrackView::loadGPX(const GPX &gpx)
 	_mapScale->setZoom(_zoom, -(br.center().ry() * _scale));
 	if (_mapScale->scene() != _scene)
 		_scene->addItem(_mapScale);
+
+	return paths;
 }
 
 QRectF TrackView::trackBoundingRect() const
@@ -478,9 +491,10 @@ void TrackView::clear()
 
 	_scene->setSceneRect(QRectF());
 
-	_markerPos = 0;
+	//_markerPos = 0;
 }
 
+/*
 void TrackView::movePositionMarker(qreal val)
 {
 	_markerPos = val;
@@ -491,6 +505,7 @@ void TrackView::movePositionMarker(qreal val)
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->moveMarker(val);
 }
+*/
 
 void TrackView::showTracks(bool show)
 {

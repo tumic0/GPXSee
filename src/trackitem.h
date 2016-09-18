@@ -1,15 +1,18 @@
 #ifndef TRACKITEM_H
 #define TRACKITEM_H
 
-#include <QGraphicsItem>
 #include <QDateTime>
+#include <QPen>
+#include "pathitem.h"
 #include "units.h"
 #include "track.h"
 #include "markeritem.h"
 
 
-class TrackItem : public QGraphicsItem
+class TrackItem : public PathItem
 {
+	Q_OBJECT
+
 public:
 	TrackItem(const Track &track, QGraphicsItem *parent = 0);
 

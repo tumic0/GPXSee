@@ -14,7 +14,7 @@ public:
 	SpeedGraph(QWidget *parent = 0);
 
 	QString label() const {return tr("Speed");}
-	void loadGPX(const GPX &gpx);
+	void loadGPX(const GPX &gpx, const QList<PathItem *> &paths);
 	void clear();
 	void setUnits(enum Units units);
 	void showTracks(bool show);
@@ -23,7 +23,6 @@ public:
 private:
 	qreal avg() const;
 	qreal max() const {return bounds().bottom();}
-	void setXUnits();
 	void setYUnits();
 	void setInfo();
 

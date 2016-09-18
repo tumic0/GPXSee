@@ -34,7 +34,7 @@ void RouteItem::updateShape()
 }
 
 RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
-  : QGraphicsItem(parent)
+  : PathItem(parent)
 {
 	WaypointItem *wi;
 

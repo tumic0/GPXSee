@@ -3,6 +3,7 @@
 
 #include <QVector>
 #include "waypoint.h"
+#include "graph.h"
 
 class Route
 {
@@ -10,7 +11,7 @@ public:
 	Route(const QVector<Waypoint> &data);
 
 	const QVector<Waypoint> &route() const {return _data;}
-	QVector<QPointF> elevation() const;
+	Graph elevation() const;
 
 	qreal distance() const;
 

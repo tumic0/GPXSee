@@ -1,14 +1,17 @@
 #ifndef ROUTEITEM_H
 #define ROUTEITEM_H
 
-#include <QGraphicsItem>
+#include <QPen>
+#include "pathitem.h"
 #include "markeritem.h"
 #include "route.h"
 #include "units.h"
 
 
-class RouteItem : public QGraphicsItem
+class RouteItem : public PathItem
 {
+	Q_OBJECT
+
 public:
 	RouteItem(const Route &route, QGraphicsItem *parent = 0);
 

@@ -12,14 +12,15 @@ Route::Route(const QVector<Waypoint> &data) : _data(data)
 	}
 }
 
-QVector<QPointF> Route::elevation() const
+Graph Route::elevation() const
 {
-	QVector<QPointF> graph;
+	Graph graph;
 
 	for (int i = 0; i < _data.size(); i++)
 		if (_data.at(i).hasElevation())
-			graph.append(QPointF(_dd.at(i), _data.at(i).elevation()
-			  - _data.at(i).geoidHeight()));
+			graph.y.append(_data.at(i).elevation() - _data.at(i).geoidHeight());
+
+	graph.distance = _dd;
 
 	return graph;
 }

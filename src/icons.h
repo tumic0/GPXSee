@@ -8,6 +8,7 @@
 #define CLOSE_FILE_ICON  ":/icons/dialog-close.png"
 #define SHOW_POI_ICON    ":/icons/flag.png"
 #define SHOW_MAP_ICON    ":/icons/applications-internet.png"
+#define SHOW_GRAPHS_ICON ":/icons/office-chart-line-stacked.png"
 #define QUIT_ICON        ":/icons/application-exit.png"
 #define RELOAD_FILE_ICON ":/icons/view-refresh.png"
 #define NEXT_FILE_ICON   ":/icons/arrow-right.png"

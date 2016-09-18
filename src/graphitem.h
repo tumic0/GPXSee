@@ -1,20 +1,42 @@
 #ifndef GRAPHITEM_H
 #define GRAPHITEM_H
 
-#include <QGraphicsPathItem>
+#include <QGraphicsObject>
+#include <QPen>
+#include "graph.h"
 
-class GraphItem : public QGraphicsPathItem
+class GraphItem : public QGraphicsObject
 {
-public:
-	GraphItem(const QPainterPath &path, QGraphicsItem * parent = 0)
-	  : QGraphicsPathItem(path, parent) {_id = 0;}
+	Q_OBJECT
 
+public:
+	GraphItem(const Graph &graph, QGraphicsItem *parent = 0);
+
+	QRectF boundingRect() const
+	  {return (_type == Graph::Distance) ? _distancePath.boundingRect()
+	  : _timePath.boundingRect();}
+	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+	  QWidget *widget);
+
+	void setGraphType(Graph::Type type) {_type = type;}
 	int id() const {return _id;}
 	void setId(int id) {_id = id;}
 	void setColor(const QColor &color);
 
+	qreal yAtX(qreal x);
+	qreal distanceAtTime(qreal time);
+
+signals:
+	void sliderPositionChanged(qreal);
+
+public slots:
+	void emitSliderPositionChanged(qreal);
+
 private:
 	int _id;
+	QPen _pen;
+	QPainterPath _distancePath, _timePath;
+	Graph::Type _type;
 };
 
 #endif // GRAPHITEM_H

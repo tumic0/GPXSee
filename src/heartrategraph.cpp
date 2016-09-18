@@ -8,7 +8,6 @@ HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphTab(parent)
 	_showTracks = true;
 
 	GraphView::setYUnits(tr("1/min"));
-	setXLabel(tr("Distance"));
 	setYLabel(tr("Heart rate"));
 
 	setSliderPrecision(0);
@@ -25,30 +24,30 @@ void HeartRateGraph::setInfo()
 		clearInfo();
 }
 
-void HeartRateGraph::loadGPX(const GPX &gpx)
+void HeartRateGraph::loadGPX(const GPX &gpx, const QList<PathItem *> &paths)
 {
 	for (int i = 0; i < gpx.tracks().count(); i++) {
-		QVector<QPointF> data = gpx.tracks().at(i)->heartRate();
+		const Graph &graph = gpx.tracks().at(i)->heartRate();
 		qreal sum = 0, w = 0;
 
-		if (data.count() < 2) {
+		if (graph.y.count() < 2) {
 			skipColor();
 			continue;
 		}
 
-		for (int j = 1; j < data.size(); j++) {
-			sum += data.at(j).y() * (data.at(j).x() - data.at(j-1).x());
-			w += data.at(j).x() - data.at(j-1).x();
+		for (int j = 1; j < graph.y.size(); j++) {
+			qreal ds = graph.distance.at(j) - graph.distance.at(j-1);
+			sum += graph.y.at(j) * ds;
+			w += ds;
 		}
 		_avg.append(QPointF(gpx.tracks().at(i)->distance(), sum/w));
 
-		loadData(data);
+		GraphView::loadGraph(graph, paths.at(i));
 	}
 
 	for (int i = 0; i < gpx.routes().count(); i++)
 		skipColor();
 
-	setXUnits();
 	setInfo();
 
 	redraw();
@@ -74,43 +73,11 @@ void HeartRateGraph::clear()
 	GraphView::clear();
 }
 
-void HeartRateGraph::setXUnits()
-{
-	if (_units == Metric) {
-		if (bounds().width() < KMINM) {
-			GraphView::setXUnits(tr("m"));
-			setXScale(1);
-		} else {
-			GraphView::setXUnits(tr("km"));
-			setXScale(M2KM);
-		}
-	} else {
-		if (bounds().width() < MIINM) {
-			GraphView::setXUnits(tr("ft"));
-			setXScale(M2FT);
-		} else {
-			GraphView::setXUnits(tr("mi"));
-			setXScale(M2MI);
-		}
-	}
-}
-
-void HeartRateGraph::setUnits(enum Units units)
-{
-	_units = units;
-
-	setXUnits();
-	setInfo();
-
-	redraw();
-}
-
 void HeartRateGraph::showTracks(bool show)
 {
 	_showTracks = show;
 
 	showGraph(show);
-	setXUnits();
 	setInfo();
 
 	redraw();

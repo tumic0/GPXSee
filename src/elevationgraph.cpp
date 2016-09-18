@@ -45,7 +45,6 @@ ElevationGraph::ElevationGraph(QWidget *parent) : GraphTab(parent)
 	_units = Metric;
 
 	setYUnits();
-	setXLabel(tr("Distance"));
 	setYLabel(tr("Elevation"));
 
 	setMinYRange(50.0);
@@ -67,20 +66,20 @@ void ElevationGraph::setInfo()
 	}
 }
 
-void ElevationGraph::loadPath(const QVector<QPointF> &data, Type type)
+void ElevationGraph::loadGraph(const Graph &graph, Type type, PathItem *path)
 {
 	qreal ascent = 0, descent = 0;
 	qreal min, max;
 
-	if (data.count() < 2) {
+	if (graph.y.count() < 2) {
 		skipColor();
 		return;
 	}
 
-	max = min = data.at(0).y();
-	for (int j = 1; j < data.size(); j++) {
-		qreal cur = data.at(j).y();
-		qreal prev = data.at(j-1).y();
+	max = min = graph.y.at(0);
+	for (int j = 1; j < graph.y.size(); j++) {
+		qreal cur = graph.y.at(j);
+		qreal prev = graph.y.at(j-1);
 
 		if (cur > prev)
 			ascent += cur - prev;
@@ -105,17 +104,18 @@ void ElevationGraph::loadPath(const QVector<QPointF> &data, Type type)
 		_routeMin = nMin(_routeMin, min);
 	}
 
-	loadData(data, type);
+	GraphView::loadGraph(graph, path, type);
 }
 
-void ElevationGraph::loadGPX(const GPX &gpx)
+void ElevationGraph::loadGPX(const GPX &gpx, const QList<PathItem *> &paths)
 {
-	for (int i = 0; i < gpx.tracks().count(); i++)
-		loadPath(gpx.tracks().at(i)->elevation(), Track);
-	for (int i = 0; i < gpx.routes().count(); i++)
-		loadPath(gpx.routes().at(i)->elevation(), Route);
+	int p = 0;
 
-	setXUnits();
+	for (int i = 0; i < gpx.tracks().count(); i++)
+		loadGraph(gpx.tracks().at(i)->elevation(), Track, paths.at(p++));
+	for (int i = 0; i < gpx.routes().count(); i++)
+		loadGraph(gpx.routes().at(i)->elevation(), Route, paths.at(p++));
+
 	setInfo();
 
 	redraw();
@@ -135,27 +135,6 @@ void ElevationGraph::clear()
 	GraphView::clear();
 }
 
-void ElevationGraph::setXUnits()
-{
-	if (_units == Metric) {
-		if (bounds().width() < KMINM) {
-			GraphView::setXUnits(tr("m"));
-			setXScale(1);
-		} else {
-			GraphView::setXUnits(tr("km"));
-			setXScale(M2KM);
-		}
-	} else {
-		if (bounds().width() < MIINM) {
-			GraphView::setXUnits(tr("ft"));
-			setXScale(M2FT);
-		} else {
-			GraphView::setXUnits(tr("mi"));
-			setXScale(M2MI);
-		}
-	}
-}
-
 void ElevationGraph::setYUnits()
 {
 	if (_units == Metric) {
@@ -171,9 +150,9 @@ void ElevationGraph::setUnits(enum Units units)
 {
 	_units = units;
 
-	setXUnits();
 	setYUnits();
 	setInfo();
+	GraphView::setUnits(units);
 
 	redraw();
 }
@@ -184,7 +163,6 @@ void ElevationGraph::showTracks(bool show)
 
 	setInfo();
 	showGraph(show, Track);
-	setXUnits();
 
 	redraw();
 }
@@ -194,7 +172,6 @@ void ElevationGraph::showRoutes(bool show)
 	_showRoutes = show;
 
 	showGraph(show, Route);
-	setXUnits();
 	setInfo();
 
 	redraw();

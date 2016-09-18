@@ -8,7 +8,6 @@ TemperatureGraph::TemperatureGraph(QWidget *parent) : GraphTab(parent)
 	_showTracks = true;
 
 	setYUnits();
-	setXLabel(tr("Distance"));
 	setYLabel(tr("Temperature"));
 
 	setSliderPrecision(1);
@@ -27,30 +26,30 @@ void TemperatureGraph::setInfo()
 		clearInfo();
 }
 
-void TemperatureGraph::loadGPX(const GPX &gpx)
+void TemperatureGraph::loadGPX(const GPX &gpx, const QList<PathItem *> &paths)
 {
 	for (int i = 0; i < gpx.tracks().count(); i++) {
-		QVector<QPointF> data = gpx.tracks().at(i)->temperature();
+		const Graph &graph = gpx.tracks().at(i)->temperature();
 		qreal sum = 0, w = 0;
 
-		if (data.count() < 2) {
+		if (graph.y.count() < 2) {
 			skipColor();
 			continue;
 		}
 
-		for (int j = 1; j < data.size(); j++) {
-			sum += data.at(j).y() * (data.at(j).x() - data.at(j-1).x());
-			w += data.at(j).x() - data.at(j-1).x();
+		for (int j = 1; j < graph.y.size(); j++) {
+			qreal ds = graph.distance.at(j) - graph.distance.at(j-1);
+			sum += graph.y.at(j) * ds;
+			w += ds;
 		}
 		_avg.append(QPointF(gpx.tracks().at(i)->distance(), sum/w));
 
-		loadData(data);
+		GraphView::loadGraph(graph, paths.at(i));
 	}
 
 	for (int i = 0; i < gpx.routes().count(); i++)
 		skipColor();
 
-	setXUnits();
 	setInfo();
 
 	redraw();
@@ -76,27 +75,6 @@ void TemperatureGraph::clear()
 	GraphView::clear();
 }
 
-void TemperatureGraph::setXUnits()
-{
-	if (_units == Metric) {
-		if (bounds().width() < KMINM) {
-			GraphView::setXUnits(tr("m"));
-			setXScale(1);
-		} else {
-			GraphView::setXUnits(tr("km"));
-			setXScale(M2KM);
-		}
-	} else {
-		if (bounds().width() < MIINM) {
-			GraphView::setXUnits(tr("ft"));
-			setXScale(M2FT);
-		} else {
-			GraphView::setXUnits(tr("mi"));
-			setXScale(M2MI);
-		}
-	}
-}
-
 void TemperatureGraph::setYUnits()
 {
 	if (_units == Metric) {
@@ -114,9 +92,9 @@ void TemperatureGraph::setUnits(enum Units units)
 {
 	_units = units;
 
-	setXUnits();
 	setYUnits();
 	setInfo();
+	GraphView::setUnits(units);
 
 	redraw();
 }
@@ -126,7 +104,6 @@ void TemperatureGraph::showTracks(bool show)
 	_showTracks = show;
 
 	showGraph(show);
-	setXUnits();
 	setInfo();
 
 	redraw();

@@ -4,7 +4,7 @@
 
 #define SIZE        10
 
-SliderItem::SliderItem(QGraphicsObject *parent) : QGraphicsObject(parent)
+SliderItem::SliderItem(QGraphicsItem *parent) : QGraphicsObject(parent)
 {
 	setFlag(ItemIsMovable);
 	setFlag(ItemSendsGeometryChanges);

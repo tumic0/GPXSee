@@ -9,7 +9,6 @@ SpeedGraph::SpeedGraph(QWidget *parent) : GraphTab(parent)
 	_showTracks = true;
 
 	setYUnits();
-	setXLabel(tr("Distance"));
 	setYLabel(tr("Speed"));
 
 	setSliderPrecision(1);
@@ -26,11 +25,11 @@ void SpeedGraph::setInfo()
 		clearInfo();
 }
 
-void SpeedGraph::loadGPX(const GPX &gpx)
+void SpeedGraph::loadGPX(const GPX &gpx, const QList<PathItem *> &paths)
 {
 	for (int i = 0; i < gpx.tracks().count(); i++) {
-		QVector<QPointF> data = gpx.tracks().at(i)->speed();
-		if (data.count() < 2) {
+		const Graph &graph = gpx.tracks().at(i)->speed();
+		if (graph.y.count() < 2) {
 			skipColor();
 			continue;
 		}
@@ -38,13 +37,12 @@ void SpeedGraph::loadGPX(const GPX &gpx)
 		_avg.append(QPointF(gpx.tracks().at(i)->distance(),
 		  gpx.tracks().at(i)->distance() / gpx.tracks().at(i)->time()));
 
-		loadData(data);
+		GraphView::loadGraph(graph, paths.at(i));
 	}
 
 	for (int i = 0; i < gpx.routes().count(); i++)
 		skipColor();
 
-	setXUnits();
 	setInfo();
 
 	redraw();
@@ -70,27 +68,6 @@ void SpeedGraph::clear()
 	GraphView::clear();
 }
 
-void SpeedGraph::setXUnits()
-{
-	if (_units == Metric) {
-		if (bounds().width() < KMINM) {
-			GraphView::setXUnits(tr("m"));
-			setXScale(1);
-		} else {
-			GraphView::setXUnits(tr("km"));
-			setXScale(M2KM);
-		}
-	} else {
-		if (bounds().width() < MIINM) {
-			GraphView::setXUnits(tr("ft"));
-			setXScale(M2FT);
-		} else {
-			GraphView::setXUnits(tr("mi"));
-			setXScale(M2MI);
-		}
-	}
-}
-
 void SpeedGraph::setYUnits()
 {
 	if (_units == Metric) {
@@ -106,9 +83,9 @@ void SpeedGraph::setUnits(enum Units units)
 {
 	_units = units;
 
-	setXUnits();
 	setYUnits();
 	setInfo();
+	GraphView::setUnits(units);
 
 	redraw();
 }
@@ -118,7 +95,6 @@ void SpeedGraph::showTracks(bool show)
 	_showTracks = show;
 
 	showGraph(show);
-	setXUnits();
 	setInfo();
 
 	redraw();

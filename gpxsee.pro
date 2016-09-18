@@ -50,7 +50,9 @@ HEADERS += src/config.h \
     src/tooltip.h \
     src/route.h \
     src/routeitem.h \
-    src/graphitem.h
+    src/graphitem.h \
+    src/graph.h \
+    src/pathitem.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
