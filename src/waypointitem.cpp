@@ -131,7 +131,7 @@ void WaypointItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 	prepareGeometryChange();
 	_hover = true;
 	updateShape();
-	setZValue(3.0);
+	setZValue(zValue() + 1.0);
 }
 
 void WaypointItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
@@ -141,5 +141,5 @@ void WaypointItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 	prepareGeometryChange();
 	_hover = false;
 	updateShape();
-	setZValue(0);
+	setZValue(zValue() - 1.0);
 }

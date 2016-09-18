@@ -144,7 +144,7 @@ void RouteItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 	Q_UNUSED(event);
 
 	_pen.setWidthF(HOVER_WIDTH * 1.0/scale());
-	setZValue(3.0);
+	setZValue(zValue() + 1.0);
 	update();
 }
 
@@ -153,6 +153,6 @@ void RouteItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 	Q_UNUSED(event);
 
 	_pen.setWidthF(ROUTE_WIDTH * 1.0/scale());
-	setZValue(0);
+	setZValue(zValue() - 1.0);
 	update();
 }
