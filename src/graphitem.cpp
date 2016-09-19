@@ -33,21 +33,30 @@ static qreal yAtX(const QPainterPath &path, qreal x)
 	return l.pointAt((x - l.p1().x()) / (l.p2().x() - l.p1().x())).y();
 }
 
+static bool hasTime(const Graph &graph)
+{
+	for (int i = 0; i < graph.count(); i++)
+		if (std::isnan(graph.at(i).t()))
+			return false;
+
+	return true;
+}
+
 GraphItem::GraphItem(const Graph &graph, QGraphicsItem *parent)
   : QGraphicsObject(parent)
 {
 	_id = 0;
 	_pen = QPen(QBrush(Qt::SolidPattern), 0);
-	_type = Graph::Distance;
+	_type = Distance;
 
-	_distancePath.moveTo(graph.distance.first(), -graph.y.first());
-	for (int i = 1; i < graph.y.size(); i++)
-		_distancePath.lineTo(graph.distance.at(i), -graph.y.at(i));
+	_distancePath.moveTo(graph.first().s(), -graph.first().y());
+	for (int i = 1; i < graph.size(); i++)
+		_distancePath.lineTo(graph.at(i).s(), -graph.at(i).y());
 
-	if (!graph.time.isEmpty()) {
-		_timePath.moveTo(graph.time.first(), -graph.y.first());
-		for (int i = 1; i < graph.y.size(); i++)
-			_timePath.lineTo(graph.time.at(i), -graph.y.at(i));
+	if (hasTime(graph)) {
+		_timePath.moveTo(graph.first().t(), -graph.first().y());
+		for (int i = 1; i < graph.size(); i++)
+			_timePath.lineTo(graph.at(i).t(), -graph.at(i).y());
 	}
 }
 
@@ -58,7 +67,7 @@ void GraphItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	Q_UNUSED(widget);
 
 	painter->setPen(_pen);
-	painter->drawPath((_type == Graph::Distance) ? _distancePath : _timePath);
+	painter->drawPath((_type == Distance) ? _distancePath : _timePath);
 }
 
 void GraphItem::setColor(const QColor &color)
@@ -69,7 +78,7 @@ void GraphItem::setColor(const QColor &color)
 
 qreal GraphItem::yAtX(qreal x)
 {
-	return ::yAtX((_type == Graph::Distance) ? _distancePath : _timePath, x);
+	return ::yAtX((_type == Distance) ? _distancePath : _timePath, x);
 }
 
 qreal GraphItem::distanceAtTime(qreal time)
@@ -103,7 +112,7 @@ qreal GraphItem::distanceAtTime(qreal time)
 
 void GraphItem::emitSliderPositionChanged(qreal pos)
 {
-	if (_type == Graph::Time) {
+	if (_type == Time) {
 		if (!_timePath.isEmpty()) {
 			if (pos <= _timePath.elementAt(_timePath.elementCount() - 1).x)
 				emit sliderPositionChanged(distanceAtTime(pos));

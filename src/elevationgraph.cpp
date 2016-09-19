@@ -71,15 +71,15 @@ void ElevationGraph::loadGraph(const Graph &graph, Type type, PathItem *path)
 	qreal ascent = 0, descent = 0;
 	qreal min, max;
 
-	if (graph.y.count() < 2) {
+	if (graph.size() < 2) {
 		skipColor();
 		return;
 	}
 
-	max = min = graph.y.at(0);
-	for (int j = 1; j < graph.y.size(); j++) {
-		qreal cur = graph.y.at(j);
-		qreal prev = graph.y.at(j-1);
+	max = min = graph.at(0).y();
+	for (int j = 1; j < graph.size(); j++) {
+		qreal cur = graph.at(j).y();
+		qreal prev = graph.at(j-1).y();
 
 		if (cur > prev)
 			ascent += cur - prev;

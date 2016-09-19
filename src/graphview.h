@@ -45,7 +45,7 @@ public:
 	void clear();
 
 	void showGraph(bool show, int id = 0);
-	void setGraphType(Graph::Type type);
+	void setGraphType(GraphType type);
 	void setUnits(Units units);
 
 	const QString &yLabel() const {return _yLabel;}
@@ -113,7 +113,7 @@ private:
 	Palette _palette;
 
 	Units _units;
-	Graph::Type _graphType;
+	GraphType _graphType;
 };
 
 #endif // GRAPHVIEW_H

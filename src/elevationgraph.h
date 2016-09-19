@@ -4,7 +4,6 @@
 #include "graphtab.h"
 
 class GPX;
-class Graph;
 class PathItem;
 
 class ElevationGraph : public GraphTab

@@ -1096,13 +1096,13 @@ void GUI::setImperialUnits()
 void GUI::setDistanceGraph()
 {
 	for (int i = 0; i <_tabs.count(); i++)
-		_tabs.at(i)->setGraphType(Graph::Distance);
+		_tabs.at(i)->setGraphType(Distance);
 }
 
 void GUI::setTimeGraph()
 {
 	for (int i = 0; i <_tabs.count(); i++)
-		_tabs.at(i)->setGraphType(Graph::Time);
+		_tabs.at(i)->setGraphType(Time);
 }
 
 void GUI::next()
@@ -1208,7 +1208,7 @@ void GUI::writeSettings()
 	settings.beginGroup(GRAPH_SETTINGS_GROUP);
 	settings.setValue(SHOW_GRAPHS_SETTING, _showGraphsAction->isChecked());
 	settings.setValue(GRAPH_TYPE_SETTING, _timeGraphAction->isChecked()
-	  ? Graph::Time : Graph::Distance);
+	  ? Time : Distance);
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);
@@ -1280,8 +1280,7 @@ void GUI::readSettings()
 		showGraphs(false);
 	else
 		_showGraphsAction->setChecked(true);
-	if (settings.value(GRAPH_TYPE_SETTING, Graph::Distance).toInt()
-	  == Graph::Time) {
+	if (settings.value(GRAPH_TYPE_SETTING, Distance).toInt() == Time) {
 		setTimeGraph();
 		_timeGraphAction->setChecked(true);
 	} else

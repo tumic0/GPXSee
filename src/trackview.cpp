@@ -45,7 +45,6 @@ TrackView::TrackView(QWidget *parent)
 	_showRouteWaypoints = true;
 
 	_plot = false;
-	//_markerPos = 0;
 }
 
 TrackView::~TrackView()
@@ -68,7 +67,6 @@ PathItem *TrackView::addTrack(const Track &track)
 	ti->setScale(1.0/_scale);
 	ti->setColor(_palette.color());
 	ti->setVisible(_showTracks);
-	//ti->moveMarker(_markerPos);
 	_scene->addItem(ti);
 
 	return ti;
@@ -90,7 +88,6 @@ PathItem *TrackView::addRoute(const Route &route)
 	ri->setVisible(_showRoutes);
 	ri->showWaypoints(_showRouteWaypoints);
 	ri->showWaypointLabels(_showWaypointLabels);
-	//ri->moveMarker(_markerPos);
 	_scene->addItem(ri);
 
 	return ri;
@@ -490,22 +487,7 @@ void TrackView::clear()
 	_scale = mapScale(_zoom);
 
 	_scene->setSceneRect(QRectF());
-
-	//_markerPos = 0;
 }
-
-/*
-void TrackView::movePositionMarker(qreal val)
-{
-	_markerPos = val;
-
-	for (int i = 0; i < _tracks.size(); i++)
-		_tracks.at(i)->moveMarker(val);
-
-	for (int i = 0; i < _routes.size(); i++)
-		_routes.at(i)->moveMarker(val);
-}
-*/
 
 void TrackView::showTracks(bool show)
 {

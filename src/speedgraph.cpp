@@ -29,7 +29,7 @@ void SpeedGraph::loadGPX(const GPX &gpx, const QList<PathItem *> &paths)
 {
 	for (int i = 0; i < gpx.tracks().count(); i++) {
 		const Graph &graph = gpx.tracks().at(i)->speed();
-		if (graph.y.count() < 2) {
+		if (graph.size() < 2) {
 			skipColor();
 			continue;
 		}

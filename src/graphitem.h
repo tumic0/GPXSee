@@ -13,12 +13,12 @@ public:
 	GraphItem(const Graph &graph, QGraphicsItem *parent = 0);
 
 	QRectF boundingRect() const
-	  {return (_type == Graph::Distance) ? _distancePath.boundingRect()
+	  {return (_type == Distance) ? _distancePath.boundingRect()
 	  : _timePath.boundingRect();}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-	void setGraphType(Graph::Type type) {_type = type;}
+	void setGraphType(GraphType type) {_type = type;}
 	int id() const {return _id;}
 	void setId(int id) {_id = id;}
 	void setColor(const QColor &color);
@@ -36,7 +36,7 @@ private:
 	int _id;
 	QPen _pen;
 	QPainterPath _distancePath, _timePath;
-	Graph::Type _type;
+	GraphType _type;
 };
 
 #endif // GRAPHITEM_H

@@ -44,7 +44,6 @@ public:
 	int waypointCount() const {return _waypoints.count();}
 
 public slots:
-	//void movePositionMarker(qreal val);
 	void redraw();
 
 	void setPOIOverlap(bool overlap);
@@ -104,7 +103,6 @@ private:
 	bool _showRouteWaypoints;
 
 	bool _plot;
-	//qreal _markerPos;
 };
 
 #endif // TRACKVIEW_H

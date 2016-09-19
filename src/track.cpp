@@ -8,39 +8,40 @@
 #define WINDOW_HE 11
 #define WINDOW_HF 3
 
-static bool lt(qreal v1, qreal v2)
+
+static bool lt(const GraphPoint &v1, const GraphPoint &v2)
 {
-	return v1 < v2;
+	return v1.y() < v2.y();
 }
 
-static qreal median(QVector<qreal> v)
+static qreal median(QVector<GraphPoint> v)
 {
 	qSort(v.begin(), v.end(), lt);
-	return v.at(v.size() / 2);
+	return v.at(v.size() / 2).y();
 }
 
-static qreal MAD(QVector<qreal> v, qreal m)
+static qreal MAD(QVector<GraphPoint> v, qreal m)
 {
 	for (int i = 0; i < v.size(); i++)
-		v[i] = (qAbs(v.at(i) - m));
+		v[i].setY(qAbs(v.at(i).y() - m));
 	qSort(v.begin(), v.end(), lt);
-	return v.at(v.size() / 2);
+	return v.at(v.size() / 2).y();
 }
 
-static QVector<qreal> eliminate(const QVector<qreal> &v, int window)
+static QVector<GraphPoint> eliminate(const QVector<GraphPoint> &v, int window)
 {
 	QList<int> rm;
-	QVector<qreal> ret;
+	QVector<GraphPoint> ret;
 	qreal m, M;
 
 
 	if (v.size() < window)
-		return QVector<qreal>(v);
+		return QVector<GraphPoint>(v);
 
 	for (int i = window/2; i < v.size() - window/2; i++) {
 		m = median(v.mid(i - window/2, window));
 		M = MAD(v.mid(i - window/2, window), m);
-		if (qAbs((0.6745 * (v.at(i) - m)) / M) > 3.5)
+		if (qAbs((0.6745 * (v.at(i).y() - m)) / M) > 3.5)
 			rm.append(i);
 	}
 
@@ -55,26 +56,26 @@ static QVector<qreal> eliminate(const QVector<qreal> &v, int window)
 	return ret;
 }
 
-static QVector<qreal> filter(const QVector<qreal> &v, int window)
+static QVector<GraphPoint> filter(const QVector<GraphPoint> &v, int window)
 {
 	qreal acc = 0;
-	QVector<qreal> ret;
+	QVector<GraphPoint> ret;
 
 	if (v.size() < window)
-		return QVector<qreal>(v);
+		return QVector<GraphPoint>(v);
 
 	for (int i = 0; i < window; i++)
-		acc += v.at(i);
+		acc += v.at(i).y();
 	for (int i = 0; i <= window/2; i++)
-		ret.append(acc/window);
+		ret.append(GraphPoint(v.at(i).s(), v.at(i).t(), acc/window));
 
 	for (int i = window/2 + 1; i < v.size() - window/2; i++) {
-		acc += v.at(i + window/2) - v.at(i - (window/2 + 1));
-		ret.append(acc/window);
+		acc += v.at(i + window/2).y() - v.at(i - (window/2 + 1)).y();
+		ret.append(GraphPoint(v.at(i).s(), v.at(i).t(), acc/window));
 	}
 
 	for (int i = v.size() - window/2; i < v.size(); i++)
-		ret.append(acc/window);
+		ret.append(GraphPoint(v.at(i).s(), v.at(i).t(), acc/window));
 
 	return ret;
 }
@@ -82,112 +83,93 @@ static QVector<qreal> filter(const QVector<qreal> &v, int window)
 Track::Track(const QVector<Trackpoint> &data) : _data(data)
 {
 	qreal dist = 0;
-	qint64 time;
 
-	_dd.append(0);
-	_td.append(0);
+	_distance.append(0);
+	_time.append(0);
 	for (int i = 1; i < data.count(); i++) {
 		dist += llDistance(data.at(i).coordinates(), data.at(i-1).coordinates());
-		_dd.append(dist);
-		if (data.first().hasTimestamp() && data.at(i).hasTimestamp()) {
-			time = _data.first().timestamp().msecsTo(_data.at(i).timestamp());
-			_td.append((qreal)time / 1000.0);
-		}
-	}
+		_distance.append(dist);
 
-	if (_dd.size() != _td.size())
-		_td.clear();
+		if (data.first().hasTimestamp() && data.at(i).hasTimestamp())
+			_time.append(_data.first().timestamp().msecsTo(
+			  _data.at(i).timestamp()) / 1000.0);
+		else
+			_time.append(NAN);
+	}
 }
 
 Graph Track::elevation() const
 {
-	Graph ret;
-	QVector<qreal> raw;
-
+	QVector<GraphPoint> raw;
 
 	if (!_data.size())
-		return ret;
+		return raw;
 
 	for (int i = 0; i < _data.size(); i++)
 		if (_data.at(i).hasElevation())
-			raw.append(_data.at(i).elevation() - _data.at(i).geoidHeight());
+			raw.append(GraphPoint(_distance.at(i), _time.at(i),
+			  _data.at(i).elevation() - _data.at(i).geoidHeight()));
 
-	ret.y = filter(raw, WINDOW_EF);
-	ret.distance = _dd;
-	ret.time = _td;
-
-	return ret;
+	return filter(raw, WINDOW_EF);
 }
 
 Graph Track::speed() const
 {
-	Graph ret;
+	QVector<GraphPoint> raw;
 	qreal v, ds, dt;
-	QVector<qreal> raw;
-
 
 	if (!_data.size())
-		return ret;
+		return raw;
 
-	raw.append(0);
+	raw.append(GraphPoint(_distance.at(0), _time.at(0), 0));
 	for (int i = 1; i < _data.size(); i++) {
 		if (_data.at(i).hasSpeed())
 			v = _data.at(i).speed();
-		else if (_data.at(i).hasTimestamp()) {
-			dt = _td.at(i) - _td.at(i-1);
+		else if (_data.at(i).hasTimestamp() && _data.at(i-1).hasTimestamp()) {
+			dt = _time.at(i) - _time.at(i-1);
 			if (!dt)
 				continue;
-			ds = _dd.at(i) - _dd.at(i-1);
+			ds = _distance.at(i) - _distance.at(i-1);
 			v = ds / dt;
 		} else
 			continue;
 
-		raw.append(v);
+		raw.append(GraphPoint(_distance.at(i), _time.at(i), v));
 	}
 
-	ret.y = filter(eliminate(raw, WINDOW_SE), WINDOW_SF);
-	ret.distance = _dd;
-	ret.time = _td;
-
-	return ret;
+	return filter(eliminate(raw, WINDOW_SE), WINDOW_SF);
 }
 
 Graph Track::heartRate() const
 {
-	Graph ret;
-	QVector<qreal> raw;
+	QVector<GraphPoint> raw;
 
 	if (!_data.size())
-		return ret;
+		return raw;
 
 	for (int i = 0; i < _data.count(); i++)
 		if (_data.at(i).hasHeartRate())
-			raw.append(_data.at(i).heartRate());
+			raw.append(GraphPoint(_distance.at(i), _time.at(i),
+			  _data.at(i).heartRate()));
 
-	ret.y = filter(eliminate(raw, WINDOW_HE), WINDOW_HF);
-	ret.distance = _dd;
-	ret.time = _td;
-
-	return ret;
+	return filter(eliminate(raw, WINDOW_HE), WINDOW_HF);
 }
 
 Graph Track::temperature() const
 {
-	Graph ret;
+	QVector<GraphPoint> raw;
 
 	for (int i = 0; i < _data.size(); i++)
 		if (_data.at(i).hasTemperature())
-			ret.y.append(_data.at(i).temperature());
+			raw.append(GraphPoint(_distance.at(i), _time.at(i),
+			  _data.at(i).temperature()));
 
-	ret.distance = _dd;
-	ret.time = _td;
-
-	return ret;
+	return Graph(raw);
 }
 
 qreal Track::distance() const
 {
-	return (_dd.isEmpty()) ? 0 : _dd.last();
+	return (_distance.isEmpty()) ? 0 : _distance.last();
 }
 
 qreal Track::time() const

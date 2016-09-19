@@ -30,14 +30,14 @@ void HeartRateGraph::loadGPX(const GPX &gpx, const QList<PathItem *> &paths)
 		const Graph &graph = gpx.tracks().at(i)->heartRate();
 		qreal sum = 0, w = 0;
 
-		if (graph.y.count() < 2) {
+		if (graph.size() < 2) {
 			skipColor();
 			continue;
 		}
 
-		for (int j = 1; j < graph.y.size(); j++) {
-			qreal ds = graph.distance.at(j) - graph.distance.at(j-1);
-			sum += graph.y.at(j) * ds;
+		for (int j = 1; j < graph.size(); j++) {
+			qreal ds = graph.at(j).s() - graph.at(j-1).s();
+			sum += graph.at(j).y() * ds;
 			w += ds;
 		}
 		_avg.append(QPointF(gpx.tracks().at(i)->distance(), sum/w));

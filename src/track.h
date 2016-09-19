@@ -21,12 +21,12 @@ public:
 	qreal time() const;
 	QDateTime date() const;
 
-	bool isNull() const {return (_dd.count() < 2);}
+	bool isNull() const {return (_data.size() < 2);}
 
 private:
 	const QVector<Trackpoint> &_data;
-	QVector<qreal> _dd;
-	QVector<qreal> _td;
+	QVector<qreal> _distance;
+	QVector<qreal> _time;
 };
 
 #endif // TRACK_H

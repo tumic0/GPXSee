@@ -59,7 +59,7 @@ GraphView::GraphView(QWidget *parent)
 	_sliderPos = 0;
 
 	_units = Metric;
-	_graphType = Graph::Distance;
+	_graphType = Distance;
 
 	setGraphType(_graphType);
 	setUnits(_units);
@@ -105,7 +105,7 @@ void GraphView::setYUnits(const QString &units)
 
 void GraphView::setXUnits()
 {
-	if (_graphType == Graph::Distance) {
+	if (_graphType == Distance) {
 		if (_units == Metric) {
 			if (bounds().width() < KMINM) {
 				_xUnits = tr("m");
@@ -145,7 +145,7 @@ void GraphView::setUnits(Units units)
 	setXUnits();
 }
 
-void GraphView::setGraphType(Graph::Type type)
+void GraphView::setGraphType(GraphType type)
 {
 	_graphType = type;
 	_bounds = QRectF();
@@ -155,7 +155,7 @@ void GraphView::setGraphType(Graph::Type type)
 		updateBounds(_graphs.at(i)->boundingRect());
 	}
 
-	if (type == Graph::Distance)
+	if (type == Distance)
 		_xLabel = tr("Distance");
 	else
 		_xLabel = tr("Time");
@@ -166,7 +166,7 @@ void GraphView::setGraphType(Graph::Type type)
 
 void GraphView::loadGraph(const Graph &graph, PathItem *path, int id)
 {
-	if (graph.y.size() < 2)
+	if (graph.size() < 2)
 		return;
 
 	GraphItem *gi = new GraphItem(graph);
