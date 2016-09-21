@@ -1013,7 +1013,6 @@ void GUI::poiFileChecked(int index)
 void GUI::sliderPositionChanged(qreal pos)
 {
 	_sliderPos = pos;
-	//_track->movePositionMarker(_sliderPos);
 }
 
 void GUI::graphChanged(int index)
@@ -1077,32 +1076,22 @@ void GUI::updateTrackView()
 	  + _track->waypointCount()));
 }
 
-void GUI::setMetricUnits()
+void GUI::setUnits(Units units)
 {
-	_track->setUnits(Metric);
+	_track->setUnits(units);
 	for (int i = 0; i <_tabs.count(); i++)
-		_tabs.at(i)->setUnits(Metric);
+		_tabs.at(i)->setUnits(units);
 	updateStatusBarInfo();
 }
 
-void GUI::setImperialUnits()
+void GUI::setGraphType(GraphType type)
 {
-	_track->setUnits(Imperial);
-	for (int i = 0; i <_tabs.count(); i++)
-		_tabs.at(i)->setUnits(Imperial);
-	updateStatusBarInfo();
-}
+	_sliderPos = 0;
 
-void GUI::setDistanceGraph()
-{
-	for (int i = 0; i <_tabs.count(); i++)
-		_tabs.at(i)->setGraphType(Distance);
-}
-
-void GUI::setTimeGraph()
-{
-	for (int i = 0; i <_tabs.count(); i++)
-		_tabs.at(i)->setGraphType(Time);
+	for (int i = 0; i <_tabs.count(); i++) {
+		_tabs.at(i)->setGraphType(type);
+		_tabs.at(i)->setSliderPosition(0);
+	}
 }
 
 void GUI::next()

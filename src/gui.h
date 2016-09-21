@@ -6,6 +6,8 @@
 #include <QList>
 #include <QDate>
 #include <QPrinter>
+#include "units.h"
+#include "graph.h"
 #include "poi.h"
 #include "margins.h"
 
@@ -63,10 +65,10 @@ private slots:
 	void last();
 	void first();
 
-	void setMetricUnits();
-	void setImperialUnits();
-	void setDistanceGraph();
-	void setTimeGraph();
+	void setMetricUnits() {setUnits(Metric);}
+	void setImperialUnits() {setUnits(Imperial);}
+	void setDistanceGraph() {setGraphType(Distance);}
+	void setTimeGraph() {setGraphType(Time);}
 
 	void sliderPositionChanged(qreal pos);
 
@@ -97,14 +99,17 @@ private:
 	void updateGraphTabs();
 	void updateTrackView();
 
-	void keyPressEvent(QKeyEvent *event);
-	void closeEvent(QCloseEvent *event);
+	void setUnits(Units units);
+	void setGraphType(GraphType type);
 
 	qreal distance();
 	qreal time();
 	int mapIndex(const QString &name);
 	void readSettings();
 	void writeSettings();
+
+	void keyPressEvent(QKeyEvent *event);
+	void closeEvent(QCloseEvent *event);
 
 	QToolBar *_fileToolBar;
 	QToolBar *_showToolBar;
