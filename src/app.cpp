@@ -2,6 +2,7 @@
 #include <QTranslator>
 #include <QLocale>
 #include <QFileOpenEvent>
+#include <QNetworkProxyFactory>
 #include "gui.h"
 #include "app.h"
 
@@ -17,6 +18,8 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 #ifdef Q_OS_MAC
 	setAttribute(Qt::AA_DontShowIconsInMenus);
 #endif // Q_OS_MAC
+
+	QNetworkProxyFactory::setUseSystemConfiguration(true);
 
 	_gui = new GUI();
 }
