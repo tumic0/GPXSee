@@ -2,6 +2,9 @@
 #include "graphitem.h"
 
 
+#define GRAPH_WIDTH 1
+#define HOVER_WIDTH 2
+
 static qreal yAtX(const QPainterPath &path, qreal x)
 {
 	int low = 0;
@@ -46,8 +49,10 @@ GraphItem::GraphItem(const Graph &graph, QGraphicsItem *parent)
   : QGraphicsObject(parent)
 {
 	_id = 0;
-	_pen = QPen(QBrush(Qt::SolidPattern), 0);
 	_type = Distance;
+
+	_pen.setWidth(GRAPH_WIDTH);
+	_pen.setCosmetic(true);
 
 	_distancePath.moveTo(graph.first().s(), -graph.first().y());
 	for (int i = 1; i < graph.size(); i++)
@@ -68,12 +73,18 @@ void GraphItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 	painter->setPen(_pen);
 	painter->drawPath((_type == Distance) ? _distancePath : _timePath);
+
+/*
+	QPen p = QPen(QBrush(Qt::red), 0);
+	painter->setPen(p);
+	painter->drawRect(boundingRect());
+*/
 }
 
 void GraphItem::setColor(const QColor &color)
 {
-	QBrush brush(color, Qt::SolidPattern);
-	_pen.setBrush(brush);
+	_pen.setColor(color);
+	update();
 }
 
 qreal GraphItem::yAtX(qreal x)
@@ -124,4 +135,17 @@ void GraphItem::emitSliderPositionChanged(qreal pos)
 		      _distancePath.elementCount() - 1).x + 1);
 	} else
 		emit sliderPositionChanged(pos);
+}
+
+void GraphItem::selected(bool selected)
+{
+	if (selected) {
+		_pen.setWidth(HOVER_WIDTH);
+		setZValue(zValue() + 1.0);
+	} else {
+		_pen.setWidth(GRAPH_WIDTH);
+		setZValue(zValue() - 1.0);
+	}
+
+	update();
 }

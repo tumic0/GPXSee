@@ -124,6 +124,8 @@ void TrackItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 	_pen.setWidthF(HOVER_WIDTH * 1.0/scale());
 	setZValue(zValue() + 1.0);
 	update();
+
+	emit selected(true);
 }
 
 void TrackItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
@@ -133,4 +135,6 @@ void TrackItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 	_pen.setWidthF(TRACK_WIDTH * 1.0/scale());
 	setZValue(zValue() - 1.0);
 	update();
+
+	emit selected(false);
 }

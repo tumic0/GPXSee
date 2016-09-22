@@ -31,6 +31,7 @@ signals:
 
 public slots:
 	void emitSliderPositionChanged(qreal);
+	void selected(bool selected);
 
 private:
 	int _id;

@@ -14,6 +14,9 @@ public:
 
 public slots:
 	virtual void moveMarker(qreal distance) = 0;
+
+signals:
+	void selected(bool);
 };
 
 #endif // PATHITEM_H

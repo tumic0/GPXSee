@@ -178,6 +178,7 @@ void GraphView::loadGraph(const Graph &graph, PathItem *path, int id)
 	  SLOT(emitSliderPositionChanged(qreal)));
 	connect(gi, SIGNAL(sliderPositionChanged(qreal)), path,
 	  SLOT(moveMarker(qreal)));
+	connect(path, SIGNAL(selected(bool)), gi, SLOT(selected(bool)));
 
 	_graphs.append(gi);
 
