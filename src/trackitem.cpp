@@ -66,7 +66,6 @@ TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
 
 	_marker = new MarkerItem(this);
 	_marker->setPos(_path.pointAtPercent(0));
-	_marker->setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
 }
 
 void TrackItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -91,6 +90,7 @@ void TrackItem::setScale(qreal scale)
 
 	_pen.setWidthF(TRACK_WIDTH * 1.0/scale);
 	QGraphicsItem::setScale(scale);
+	_marker->setScale(1.0/scale);
 
 	updateShape();
 }

@@ -36,20 +36,16 @@ void RouteItem::updateShape()
 RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
   : PathItem(parent)
 {
-	WaypointItem *wi;
-
 	QVector<Waypoint> r = route.route();
 	Q_ASSERT(r.count() >= 2);
 
-	wi = new WaypointItem(r.at(0), this);
-	wi->setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
+	new WaypointItem(r.at(0), this);
 	const QPointF &p = r.at(0).coordinates();
 	_path.moveTo(ll2mercator(QPointF(p.x(), -p.y())));
 	for (int i = 1; i < r.size(); i++) {
 		const QPointF &p = r.at(i).coordinates();
 		_path.lineTo(ll2mercator(QPointF(p.x(), -p.y())));
-		wi = new WaypointItem(r.at(i), this);
-		wi->setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
+		new WaypointItem(r.at(i), this);
 	}
 
 	_units = Metric;
@@ -66,7 +62,6 @@ RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
 
 	_marker = new MarkerItem(this);
 	_marker->setPos(_path.pointAtPercent(0));
-	_marker->setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
 }
 
 void RouteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -92,6 +87,10 @@ void RouteItem::setScale(qreal scale)
 	_pen.setWidthF(ROUTE_WIDTH * 1.0/scale);
 	QGraphicsItem::setScale(scale);
 
+	QList<QGraphicsItem *> childs =	childItems();
+	for (int i = 0; i < childs.count(); i++)
+		childs.at(i)->setScale(1.0/scale);
+
 	updateShape();
 }
 
@@ -109,7 +108,8 @@ void RouteItem::setUnits(enum Units units)
 
 void RouteItem::moveMarker(qreal distance)
 {
-	if (distance > _distance)
+qDebug() << distance << _distance;
+    if (distance > _distance)
 		_marker->setVisible(false);
 	else {
 		_marker->setVisible(true);
