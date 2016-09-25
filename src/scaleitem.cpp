@@ -5,6 +5,7 @@
 #include "scaleitem.h"
 
 
+#define BORDER_WIDTH   1
 #define SCALE_WIDTH  132
 #define SCALE_HEIGHT 5
 #define SEGMENTS 3
@@ -50,6 +51,7 @@ void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	font.setFamily(FONT_FAMILY);
 	QFontMetrics fm(font);
 	QRect br;
+	QPen pen = QPen(Qt::black, BORDER_WIDTH);
 	bool aa;
 
 
@@ -57,6 +59,7 @@ void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 		painter->setRenderHint(QPainter::Antialiasing, false);
 
 	painter->setFont(font);
+	painter->setPen(pen);
 
 	for (int i = 0; i <= SEGMENTS; i++) {
 		QString label = QString::number(_length * i);

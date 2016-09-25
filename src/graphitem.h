@@ -18,7 +18,7 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-	void setGraphType(GraphType type) {_type = type;}
+	void setGraphType(GraphType type);
 	int id() const {return _id;}
 	void setId(int id) {_id = id;}
 	void setColor(const QColor &color);

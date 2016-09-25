@@ -51,7 +51,7 @@ GraphItem::GraphItem(const Graph &graph, QGraphicsItem *parent)
 	_id = 0;
 	_type = Distance;
 
-	_pen.setWidth(GRAPH_WIDTH);
+	_pen = QPen(Qt::black, GRAPH_WIDTH);
 	_pen.setCosmetic(true);
 
 	_distancePath.moveTo(graph.first().s(), -graph.first().y());
@@ -79,6 +79,12 @@ void GraphItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	painter->setPen(p);
 	painter->drawRect(boundingRect());
 */
+}
+
+void GraphItem::setGraphType(GraphType type)
+{
+	prepareGeometryChange();
+	_type = type;
 }
 
 void GraphItem::setColor(const QColor &color)

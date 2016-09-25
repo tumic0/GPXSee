@@ -5,6 +5,7 @@
 #include "axisitem.h"
 
 
+#define AXIS_WIDTH  1
 #define TICK        6
 #define PADDING     6
 #define XTICKS      15
@@ -114,9 +115,11 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	struct Label l;
 	qreal range = _range.size();
 	qreal val;
+	QPen pen = QPen(Qt::black, AXIS_WIDTH);
 
 
 	painter->setFont(font);
+	painter->setPen(pen);
 
 	ls = fm.tightBoundingRect(_label);
 
