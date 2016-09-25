@@ -83,7 +83,7 @@ void AxisItem::updateBoundingRect()
 	if (_type == X) {
 		_boundingRect = QRectF(-ss.width()/2, -TICK/2,
 		_size + es.width()/2 + ss.width()/2,
-		ls.height() + es.height() - fm.descent() + TICK + 2*PADDING);
+		ls.height() + es.height() - fm.descent() + TICK + 2*PADDING + 1);
 	} else {
 		int mtw = 0;
 		QRect ts;
