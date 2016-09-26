@@ -21,7 +21,7 @@ class QSignalMapper;
 class QPrinter;
 class FileBrowser;
 class GraphTab;
-class TrackView;
+class PathView;
 class Map;
 
 class GUI : public QMainWindow
@@ -162,7 +162,7 @@ private:
 	QLabel *_distanceLabel;
 	QLabel *_timeLabel;
 
-	TrackView *_track;
+	PathView *_pathView;
 	QTabWidget *_trackGraphs;
 	QList<GraphTab*> _tabs;
 

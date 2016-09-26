@@ -9,13 +9,13 @@
 #include "routeitem.h"
 #include "waypointitem.h"
 #include "scaleitem.h"
-#include "trackview.h"
+#include "pathview.h"
 
 
 #define MARGIN          10.0
 #define SCALE_OFFSET    7
 
-TrackView::TrackView(QWidget *parent)
+PathView::PathView(QWidget *parent)
 	: QGraphicsView(parent)
 {
 	_scene = new QGraphicsScene(this);
@@ -47,13 +47,13 @@ TrackView::TrackView(QWidget *parent)
 	_plot = false;
 }
 
-TrackView::~TrackView()
+PathView::~PathView()
 {
 	if (_mapScale->scene() != _scene)
 		delete _mapScale;
 }
 
-PathItem *TrackView::addTrack(const Track &track)
+PathItem *PathView::addTrack(const Track &track)
 {
 	if (track.isNull()) {
 		_palette.color();
@@ -72,7 +72,7 @@ PathItem *TrackView::addTrack(const Track &track)
 	return ti;
 }
 
-PathItem *TrackView::addRoute(const Route &route)
+PathItem *PathView::addRoute(const Route &route)
 {
 	if (route.isNull()) {
 		_palette.color();
@@ -93,7 +93,7 @@ PathItem *TrackView::addRoute(const Route &route)
 	return ri;
 }
 
-void TrackView::addWaypoints(const QList<Waypoint> &waypoints)
+void PathView::addWaypoints(const QList<Waypoint> &waypoints)
 {
 	for (int i = 0; i < waypoints.count(); i++) {
 		const Waypoint &w = waypoints.at(i);
@@ -112,7 +112,7 @@ void TrackView::addWaypoints(const QList<Waypoint> &waypoints)
 	_scale = mapScale(_zoom);
 }
 
-QList<PathItem *> TrackView::loadGPX(const GPX &gpx)
+QList<PathItem *> PathView::loadGPX(const GPX &gpx)
 {
 	QList<PathItem *> paths;
 	PathItem *pi;
@@ -149,7 +149,7 @@ QList<PathItem *> TrackView::loadGPX(const GPX &gpx)
 	return paths;
 }
 
-QRectF TrackView::trackBoundingRect() const
+QRectF PathView::trackBoundingRect() const
 {
 	if (_tracks.empty())
 		return QRectF();
@@ -161,7 +161,7 @@ QRectF TrackView::trackBoundingRect() const
 	return br;
 }
 
-QRectF TrackView::routeBoundingRect() const
+QRectF PathView::routeBoundingRect() const
 {
 	if (_routes.empty())
 		return QRectF();
@@ -173,7 +173,7 @@ QRectF TrackView::routeBoundingRect() const
 	return br;
 }
 
-QRectF TrackView::waypointBoundingRect() const
+QRectF PathView::waypointBoundingRect() const
 {
 	qreal bottom, top, left, right;
 
@@ -197,7 +197,7 @@ QRectF TrackView::waypointBoundingRect() const
 	return QRectF(QPointF(left, top), QPointF(right, bottom));
 }
 
-qreal TrackView::trackScale() const
+qreal PathView::trackScale() const
 {
 	if (_tracks.empty())
 		return mapScale(ZOOM_MAX);
@@ -213,7 +213,7 @@ qreal TrackView::trackScale() const
 	return qMax(sc.x(), sc.y());
 }
 
-qreal TrackView::routeScale() const
+qreal PathView::routeScale() const
 {
 	if (_routes.empty())
 		return mapScale(ZOOM_MAX);
@@ -229,7 +229,7 @@ qreal TrackView::routeScale() const
 	return qMax(sc.x(), sc.y());
 }
 
-qreal TrackView::waypointScale() const
+qreal PathView::waypointScale() const
 {
 	qreal bottom, top, left, right;
 
@@ -257,12 +257,12 @@ qreal TrackView::waypointScale() const
 	return qMax(sc.x(), sc.y());
 }
 
-qreal TrackView::mapScale(int zoom) const
+qreal PathView::mapScale(int zoom) const
 {
 	return ((360.0/(qreal)(1<<zoom))/(qreal)TILE_SIZE);
 }
 
-void TrackView::checkPOIOverlap()
+void PathView::checkPOIOverlap()
 {
 	QHash<Waypoint, WaypointItem*>::const_iterator it, jt;
 
@@ -275,7 +275,7 @@ void TrackView::checkPOIOverlap()
 	}
 }
 
-void TrackView::rescale(qreal scale)
+void PathView::rescale(qreal scale)
 {
 	for (int i = 0; i < _tracks.size(); i++)
 		_tracks.at(i)->setScale(1.0/scale);
@@ -298,7 +298,7 @@ void TrackView::rescale(qreal scale)
 	_scale = scale;
 }
 
-void TrackView::addPOI(const QVector<Waypoint> &waypoints)
+void PathView::addPOI(const QVector<Waypoint> &waypoints)
 {
 	for (int i = 0; i < waypoints.size(); i++) {
 		const Waypoint &w = waypoints.at(i);
@@ -316,7 +316,7 @@ void TrackView::addPOI(const QVector<Waypoint> &waypoints)
 	}
 }
 
-void TrackView::loadPOI(const POI &poi)
+void PathView::loadPOI(const POI &poi)
 {
 	if (!_tracks.size() && !_routes.size() && !_waypoints.size())
 		return;
@@ -331,7 +331,7 @@ void TrackView::loadPOI(const POI &poi)
 		checkPOIOverlap();
 }
 
-void TrackView::setMap(Map *map)
+void PathView::setMap(Map *map)
 {
 	_map = map;
 	if (_map)
@@ -340,7 +340,7 @@ void TrackView::setMap(Map *map)
 	resetCachedContent();
 }
 
-void TrackView::setUnits(enum Units units)
+void PathView::setUnits(enum Units units)
 {
 	_units = units;
 
@@ -358,12 +358,12 @@ void TrackView::setUnits(enum Units units)
 		it.value()->setUnits(units);
 }
 
-void TrackView::redraw()
+void PathView::redraw()
 {
 	resetCachedContent();
 }
 
-void TrackView::rescale()
+void PathView::rescale()
 {
 	_zoom = qMin(qMin(scale2zoom(trackScale()), scale2zoom(routeScale())),
 	  scale2zoom(waypointScale()));
@@ -372,7 +372,7 @@ void TrackView::rescale()
 	_mapScale->setZoom(_zoom);
 }
 
-void TrackView::zoom(int z, const QPointF &pos)
+void PathView::zoom(int z, const QPointF &pos)
 {
 	if (_tracks.isEmpty() && _routes.isEmpty() && _waypoints.isEmpty())
 		return;
@@ -397,7 +397,7 @@ void TrackView::zoom(int z, const QPointF &pos)
 	resetCachedContent();
 }
 
-void TrackView::wheelEvent(QWheelEvent *event)
+void PathView::wheelEvent(QWheelEvent *event)
 {
 	if (_tracks.isEmpty() && _routes.isEmpty() && _waypoints.isEmpty())
 		return;
@@ -409,7 +409,7 @@ void TrackView::wheelEvent(QWheelEvent *event)
 	zoom(z, pos);
 }
 
-void TrackView::keyPressEvent(QKeyEvent *event)
+void PathView::keyPressEvent(QKeyEvent *event)
 {
 	int z = -1;
 
@@ -424,7 +424,7 @@ void TrackView::keyPressEvent(QKeyEvent *event)
 		QWidget::keyPressEvent(event);
 }
 
-void TrackView::plot(QPainter *painter, const QRectF &target)
+void PathView::plot(QPainter *painter, const QRectF &target)
 {
 	QRect orig, adj;
 	qreal ratio, diff;
@@ -458,7 +458,7 @@ void TrackView::plot(QPainter *painter, const QRectF &target)
 	setUpdatesEnabled(true);
 }
 
-void TrackView::clearPOI()
+void PathView::clearPOI()
 {
 	QHash<Waypoint, WaypointItem*>::const_iterator it;
 
@@ -470,7 +470,7 @@ void TrackView::clearPOI()
 	_pois.clear();
 }
 
-void TrackView::clear()
+void PathView::clear()
 {
 	if (_mapScale->scene() == _scene)
 		_scene->removeItem(_mapScale);
@@ -488,7 +488,7 @@ void TrackView::clear()
 	_scene->setSceneRect(QRectF());
 }
 
-void TrackView::showTracks(bool show)
+void PathView::showTracks(bool show)
 {
 	_showTracks = show;
 
@@ -496,7 +496,7 @@ void TrackView::showTracks(bool show)
 		_tracks.at(i)->setVisible(show);
 }
 
-void TrackView::showRoutes(bool show)
+void PathView::showRoutes(bool show)
 {
 	_showRoutes = show;
 
@@ -504,7 +504,7 @@ void TrackView::showRoutes(bool show)
 		_routes.at(i)->setVisible(show);
 }
 
-void TrackView::showWaypoints(bool show)
+void PathView::showWaypoints(bool show)
 {
 	_showWaypoints = show;
 
@@ -512,7 +512,7 @@ void TrackView::showWaypoints(bool show)
 		_waypoints.at(i)->setVisible(show);
 }
 
-void TrackView::showWaypointLabels(bool show)
+void PathView::showWaypointLabels(bool show)
 {
 	_showWaypointLabels = show;
 
@@ -523,7 +523,7 @@ void TrackView::showWaypointLabels(bool show)
 		_routes.at(i)->showWaypointLabels(show);
 }
 
-void TrackView::showRouteWaypoints(bool show)
+void PathView::showRouteWaypoints(bool show)
 {
 	_showRouteWaypoints = show;
 
@@ -531,7 +531,7 @@ void TrackView::showRouteWaypoints(bool show)
 		_routes.at(i)->showWaypoints(show);
 }
 
-void TrackView::showPOILabels(bool show)
+void PathView::showPOILabels(bool show)
 {
 	_showPOILabels = show;
 
@@ -542,7 +542,7 @@ void TrackView::showPOILabels(bool show)
 	setPOIOverlap(_overlapPOIs);
 }
 
-void TrackView::setPOIOverlap(bool overlap)
+void PathView::setPOIOverlap(bool overlap)
 {
 	_overlapPOIs = overlap;
 
@@ -554,7 +554,7 @@ void TrackView::setPOIOverlap(bool overlap)
 		checkPOIOverlap();
 }
 
-void TrackView::drawBackground(QPainter *painter, const QRectF &rect)
+void PathView::drawBackground(QPainter *painter, const QRectF &rect)
 {
 	if ((_tracks.isEmpty() && _routes.isEmpty() && _waypoints.isEmpty())
 	  || !_map) {
@@ -586,7 +586,7 @@ void TrackView::drawBackground(QPainter *painter, const QRectF &rect)
 	}
 }
 
-void TrackView::resizeEvent(QResizeEvent *e)
+void PathView::resizeEvent(QResizeEvent *e)
 {
 	if (_tracks.isEmpty() && _routes.isEmpty() && _waypoints.isEmpty())
 		return;
@@ -612,7 +612,7 @@ void TrackView::resizeEvent(QResizeEvent *e)
 	resetCachedContent();
 }
 
-void TrackView::paintEvent(QPaintEvent *e)
+void PathView::paintEvent(QPaintEvent *e)
 {
 	QPointF scenePos = mapToScene(rect().bottomRight() + QPoint(
 	  -(SCALE_OFFSET + _mapScale->boundingRect().width()),

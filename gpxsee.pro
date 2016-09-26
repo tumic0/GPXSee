@@ -28,7 +28,6 @@ HEADERS += src/config.h \
     src/units.h \
     src/scaleitem.h \
     src/waypoint.h \
-    src/trackview.h \
     src/track.h \
     src/graphview.h \
     src/trackpoint.h \
@@ -52,7 +51,8 @@ HEADERS += src/config.h \
     src/routeitem.h \
     src/graphitem.h \
     src/graph.h \
-    src/pathitem.h
+    src/pathitem.h \
+    src/pathview.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
@@ -71,7 +71,6 @@ SOURCES += src/main.cpp \
     src/maplist.cpp \
     src/downloader.cpp \
     src/scaleitem.cpp \
-    src/trackview.cpp \
     src/track.cpp \
     src/graphview.cpp \
     src/waypointitem.cpp \
@@ -90,7 +89,9 @@ SOURCES += src/main.cpp \
     src/tooltip.cpp \
     src/route.cpp \
     src/routeitem.cpp \
-    src/graphitem.cpp
+    src/graphitem.cpp \
+    src/pathitem.cpp \
+    src/pathview.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {

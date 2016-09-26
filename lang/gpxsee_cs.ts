@@ -10,7 +10,7 @@
         <translation>Výška</translation>
     </message>
     <message>
-        <location filename="../src/elevationgraph.cpp" line="139"/>
+        <location filename="../src/elevationgraph.cpp" line="141"/>
         <source>m</source>
         <translation>m</translation>
     </message>
@@ -30,7 +30,7 @@
         <translation>Minimum</translation>
     </message>
     <message>
-        <location filename="../src/elevationgraph.cpp" line="142"/>
+        <location filename="../src/elevationgraph.cpp" line="144"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
@@ -156,7 +156,7 @@
         <translation>Otevřít soubor</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="657"/>
+        <location filename="../src/gui.cpp" line="658"/>
         <source>Open POI file</source>
         <translation>Otevřít POI soubor</translation>
     </message>
@@ -363,23 +363,23 @@
         <translation>Předchozí mapa</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="745"/>
-        <location filename="../src/gui.cpp" line="748"/>
+        <location filename="../src/gui.cpp" line="746"/>
+        <location filename="../src/gui.cpp" line="749"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="757"/>
+        <location filename="../src/gui.cpp" line="758"/>
         <source>Routes</source>
         <translation>Trasy</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="947"/>
+        <location filename="../src/gui.cpp" line="948"/>
         <source>No GPX files loaded</source>
         <translation>Nejsou načteny žádné GPX soubory</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="951"/>
+        <location filename="../src/gui.cpp" line="952"/>
         <source>%1 files</source>
         <translation>%1 souborů</translation>
     </message>
@@ -404,7 +404,7 @@
         <translation>Exportovat do PDF...</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="759"/>
+        <location filename="../src/gui.cpp" line="760"/>
         <source>Waypoints</source>
         <translation>Navigační body</translation>
     </message>
@@ -454,18 +454,18 @@
         <translation>Soubory GPX (*.gpx);;Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="648"/>
-        <location filename="../src/gui.cpp" line="674"/>
+        <location filename="../src/gui.cpp" line="649"/>
+        <location filename="../src/gui.cpp" line="675"/>
         <source>Line: %1</source>
         <translation>Řádka: %1</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="658"/>
+        <location filename="../src/gui.cpp" line="659"/>
         <source>GPX files (*.gpx);;CSV files (*.csv);;All files (*)</source>
         <translation>Soubory GPX (*.gpx);;Soubory CSV (*.csv);;Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="755"/>
+        <location filename="../src/gui.cpp" line="756"/>
         <source>Tracks</source>
         <translation>Cesty</translation>
     </message>
@@ -492,31 +492,31 @@
     </message>
     <message>
         <location filename="../src/gui.cpp" line="313"/>
-        <location filename="../src/gui.cpp" line="762"/>
+        <location filename="../src/gui.cpp" line="763"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="319"/>
-        <location filename="../src/gui.cpp" line="764"/>
+        <location filename="../src/gui.cpp" line="765"/>
         <source>Time</source>
         <translation>Čas</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="650"/>
-        <location filename="../src/gui.cpp" line="675"/>
+        <location filename="../src/gui.cpp" line="651"/>
+        <location filename="../src/gui.cpp" line="676"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="645"/>
+        <location filename="../src/gui.cpp" line="646"/>
         <source>Error loading GPX file:
 %1</source>
         <translation>Soubor GPX nelze otevřít:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="671"/>
+        <location filename="../src/gui.cpp" line="672"/>
         <source>Error loading POI file:
 %1</source>
         <translation>Soubor POI nelze otevřít:
@@ -526,47 +526,47 @@
 <context>
     <name>GraphView</name>
     <message>
-        <location filename="../src/graphview.cpp" line="110"/>
+        <location filename="../src/graphview.cpp" line="111"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../src/graphview.cpp" line="113"/>
+        <location filename="../src/graphview.cpp" line="114"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="../src/graphview.cpp" line="118"/>
+        <location filename="../src/graphview.cpp" line="119"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
     <message>
-        <location filename="../src/graphview.cpp" line="121"/>
+        <location filename="../src/graphview.cpp" line="122"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
     <message>
-        <location filename="../src/graphview.cpp" line="127"/>
+        <location filename="../src/graphview.cpp" line="128"/>
         <source>s</source>
         <translation>s</translation>
     </message>
     <message>
-        <location filename="../src/graphview.cpp" line="130"/>
+        <location filename="../src/graphview.cpp" line="131"/>
         <source>min</source>
         <translation>min</translation>
     </message>
     <message>
-        <location filename="../src/graphview.cpp" line="133"/>
+        <location filename="../src/graphview.cpp" line="134"/>
         <source>h</source>
         <translation>h</translation>
     </message>
     <message>
-        <location filename="../src/graphview.cpp" line="158"/>
+        <location filename="../src/graphview.cpp" line="160"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
     <message>
-        <location filename="../src/graphview.cpp" line="160"/>
+        <location filename="../src/graphview.cpp" line="162"/>
         <source>Time</source>
         <translation>Čas</translation>
     </message>
@@ -623,7 +623,7 @@
 <context>
     <name>RouteItem</name>
     <message>
-        <location filename="../src/routeitem.cpp" line="18"/>
+        <location filename="../src/routeitem.cpp" line="15"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
@@ -631,22 +631,22 @@
 <context>
     <name>ScaleItem</name>
     <message>
-        <location filename="../src/scaleitem.cpp" line="87"/>
+        <location filename="../src/scaleitem.cpp" line="90"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
     <message>
-        <location filename="../src/scaleitem.cpp" line="88"/>
+        <location filename="../src/scaleitem.cpp" line="91"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
     <message>
-        <location filename="../src/scaleitem.cpp" line="90"/>
+        <location filename="../src/scaleitem.cpp" line="93"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="../src/scaleitem.cpp" line="91"/>
+        <location filename="../src/scaleitem.cpp" line="94"/>
         <source>m</source>
         <translation>m</translation>
     </message>
@@ -717,17 +717,17 @@
 <context>
     <name>TrackItem</name>
     <message>
-        <location filename="../src/trackitem.cpp" line="17"/>
+        <location filename="../src/trackitem.cpp" line="14"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
     <message>
-        <location filename="../src/trackitem.cpp" line="20"/>
+        <location filename="../src/trackitem.cpp" line="17"/>
         <source>Time</source>
         <translation>Čas</translation>
     </message>
     <message>
-        <location filename="../src/trackitem.cpp" line="22"/>
+        <location filename="../src/trackitem.cpp" line="19"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>

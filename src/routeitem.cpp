@@ -8,9 +8,6 @@
 #include "routeitem.h"
 
 
-#define ROUTE_WIDTH 3
-#define HOVER_WIDTH 4
-
 QString RouteItem::toolTip()
 {
 	ToolTip tt;
@@ -19,18 +16,6 @@ QString RouteItem::toolTip()
 	  ::distance(_distance, _units));
 
 	return tt.toString();
-}
-
-void RouteItem::updateShape()
-{
-	QPainterPathStroker s;
-	s.setWidth(HOVER_WIDTH * 1.0/scale());
-	_shape = s.createStroke(_path);
-
-	if (qMax(boundingRect().width(), boundingRect().height()) * scale() <= 768)
-		setCacheMode(QGraphicsItem::DeviceCoordinateCache);
-	else
-		setCacheMode(QGraphicsItem::NoCache);
 }
 
 RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
@@ -48,72 +33,30 @@ RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
 		new WaypointItem(r.at(i), this);
 	}
 
-	_units = Metric;
-	_distance = route.distance();
-
-	setToolTip(toolTip());
-	setCursor(Qt::ArrowCursor);
-	setAcceptHoverEvents(true);
-
 	updateShape();
 
-	QBrush brush(Qt::SolidPattern);
-	_pen = QPen(brush, ROUTE_WIDTH, Qt::DotLine);
+	_distance = route.distance();
 
-	_marker = new MarkerItem(this);
 	_marker->setPos(_path.pointAtPercent(0));
-}
 
-void RouteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-	  QWidget *widget)
-{
-	Q_UNUSED(option);
-	Q_UNUSED(widget);
+	_pen.setStyle(Qt::DotLine);
 
-	painter->setPen(_pen);
-	painter->drawPath(_path);
-
-/*
-	QPen p = QPen(QBrush(Qt::red), 0);
-	painter->setPen(p);
-	painter->drawRect(boundingRect());
-*/
+	setToolTip(toolTip());
 }
 
 void RouteItem::setScale(qreal scale)
 {
-	prepareGeometryChange();
-
-	_pen.setWidthF(ROUTE_WIDTH * 1.0/scale);
-	QGraphicsItem::setScale(scale);
-
 	QList<QGraphicsItem *> childs =	childItems();
 	for (int i = 0; i < childs.count(); i++)
 		childs.at(i)->setScale(1.0/scale);
 
-	updateShape();
-}
-
-void RouteItem::setColor(const QColor &color)
-{
-	_pen.setColor(color);
-	update();
+	PathItem::setScale(scale);
 }
 
 void RouteItem::setUnits(enum Units units)
 {
-	_units = units;
+	PathItem::setUnits(units);
 	setToolTip(toolTip());
-}
-
-void RouteItem::moveMarker(qreal distance)
-{
-    if (distance > _distance)
-		_marker->setVisible(false);
-	else {
-		_marker->setVisible(true);
-		_marker->setPos(_path.pointAtPercent(distance / _distance));
-	}
 }
 
 void RouteItem::showWaypoints(bool show)
@@ -133,26 +76,4 @@ void RouteItem::showWaypointLabels(bool show)
 			wi->showLabel(show);
 		}
 	}
-}
-
-void RouteItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
-{
-	Q_UNUSED(event);
-
-	_pen.setWidthF(HOVER_WIDTH * 1.0/scale());
-	setZValue(zValue() + 1.0);
-	update();
-
-	emit selected(true);
-}
-
-void RouteItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
-{
-	Q_UNUSED(event);
-
-	_pen.setWidthF(ROUTE_WIDTH * 1.0/scale());
-	setZValue(zValue() - 1.0);
-	update();
-
-	emit selected(false);
 }

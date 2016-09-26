@@ -20,13 +20,13 @@ class WaypointItem;
 class ScaleItem;
 class PathItem;
 
-class TrackView : public QGraphicsView
+class PathView : public QGraphicsView
 {
 	Q_OBJECT
 
 public:
-	TrackView(QWidget *parent = 0);
-	~TrackView();
+	PathView(QWidget *parent = 0);
+	~PathView();
 
 	QList<PathItem*> loadGPX(const GPX &gpx);
 
