@@ -119,12 +119,15 @@ qreal GraphItem::distanceAtTime(qreal time)
 			return _distancePath.elementAt(mid).x;
 	}
 
+	QLineF l;
 	if (_timePath.elementAt(mid).x < time)
-		return ((_distancePath.elementAt(mid+1).x
-		  + _distancePath.elementAt(mid).x) / 2.0);
+		l = QLineF(_timePath.elementAt(mid).x, _distancePath.elementAt(mid).x,
+		  _timePath.elementAt(mid+1).x, _distancePath.elementAt(mid+1).x);
 	else
-		return ((_distancePath.elementAt(mid).x
-		  + _distancePath.elementAt(mid-1).x) / 2.0);
+		l = QLineF(_timePath.elementAt(mid-1).x, _distancePath.elementAt(mid-1).x,
+		  _timePath.elementAt(mid).x, _distancePath.elementAt(mid).x);
+
+	return l.pointAt((time - l.p1().x()) / (l.p2().x() - l.p1().x())).y();
 }
 
 void GraphItem::emitSliderPositionChanged(qreal pos)
