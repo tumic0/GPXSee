@@ -245,7 +245,7 @@ void GraphView::redraw(const QSizeF &size)
 	qreal xs, ys;
 
 
-	if (_visible.isEmpty()) {
+	if (_visible.isEmpty() || _bounds.isNull()) {
 		removeItem(_xAxis);
 		removeItem(_yAxis);
 		removeItem(_slider);
