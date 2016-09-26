@@ -69,7 +69,7 @@ signals:
 	void sliderPositionChanged(qreal);
 
 protected:
-	const QRectF &bounds() const {return _bounds;}
+	QRectF bounds() const;
 	void redraw(const QSizeF &size);
 	void addInfo(const QString &key, const QString &value);
 	void clearInfo();
@@ -86,8 +86,6 @@ private:
 	void createYLabel();
 	void updateSliderPosition();
 	void updateSliderInfo();
-	void updateBounds(const QRectF &boundingRect);
-	QRectF graphsBoundingRect() const;
 	void removeItem(QGraphicsItem *item);
 	void addItem(QGraphicsItem *item);
 

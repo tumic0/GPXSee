@@ -108,7 +108,6 @@ void RouteItem::setUnits(enum Units units)
 
 void RouteItem::moveMarker(qreal distance)
 {
-qDebug() << distance << _distance;
     if (distance > _distance)
 		_marker->setVisible(false);
 	else {
@@ -143,6 +142,8 @@ void RouteItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 	_pen.setWidthF(HOVER_WIDTH * 1.0/scale());
 	setZValue(zValue() + 1.0);
 	update();
+
+	emit selected(true);
 }
 
 void RouteItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
@@ -152,4 +153,6 @@ void RouteItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 	_pen.setWidthF(ROUTE_WIDTH * 1.0/scale());
 	setZValue(zValue() - 1.0);
 	update();
+
+	emit selected(false);
 }

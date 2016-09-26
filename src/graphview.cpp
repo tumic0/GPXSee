@@ -152,7 +152,8 @@ void GraphView::setGraphType(GraphType type)
 
 	for (int i = 0; i < _graphs.count(); i++) {
 		_graphs.at(i)->setGraphType(type);
-		updateBounds(_graphs.at(i)->boundingRect());
+		if (_graphs.at(i)->scene() == _scene)
+			_bounds |= _graphs.at(i)->boundingRect();
 	}
 
 	if (type == Distance)
@@ -185,7 +186,7 @@ void GraphView::loadGraph(const Graph &graph, PathItem *path, int id)
 	if (!_hide.contains(id)) {
 		_visible.append(gi);
 		_scene->addItem(gi);
-		updateBounds(gi->boundingRect());
+		_bounds |= gi->boundingRect();
 		setXUnits();
 	}
 }
@@ -218,7 +219,7 @@ void GraphView::showGraph(bool show, int id)
 		else {
 			addItem(gi);
 			_visible.append(gi);
-			updateBounds(gi->boundingRect());
+			_bounds |= gi->boundingRect();
 		}
 	}
 }
@@ -228,21 +229,11 @@ void GraphView::redraw()
 	redraw(viewport()->size() - QSizeF(MARGIN, MARGIN));
 }
 
-void GraphView::updateBounds(const QRectF &boundingRect)
+QRectF GraphView::bounds() const
 {
-	QRectF br(boundingRect);
+	QRectF br(_bounds);
 	br.moveTopLeft(QPointF(br.left(), -br.top() - br.height()));
-	_bounds |= br;
-}
-
-QRectF GraphView::graphsBoundingRect() const
-{
-	QRectF rect;
-
-	for (int i = 0; i < _visible.count(); i++)
-		rect |= _visible.at(i)->boundingRect();
-
-	return rect;
+	return br;
 }
 
 void GraphView::redraw(const QSizeF &size)
@@ -279,7 +270,7 @@ void GraphView::redraw(const QSizeF &size)
 	mx = _xAxis->margin();
 	my = _yAxis->margin();
 
-	r = graphsBoundingRect();
+	r = _bounds;
 	if (r.height() < _minYRange)
 		r.adjust(0, -(_minYRange/2 - r.height()/2), 0,
 		  _minYRange/2 - r.height()/2);

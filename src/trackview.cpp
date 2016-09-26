@@ -132,8 +132,7 @@ QList<PathItem *> TrackView::loadGPX(const GPX &gpx)
 	if (_tracks.empty() && _routes.empty() && _waypoints.empty())
 		return paths;
 
-	if ((_tracks.size() > 1 && _zoom < zoom)
-	  || (_routes.size() > 1 && _zoom < zoom)
+	if ((_tracks.size() + _routes.size() > 1 && _zoom < zoom)
 	  || (_waypoints.size() && _zoom < zoom))
 		rescale(_scale);
 
