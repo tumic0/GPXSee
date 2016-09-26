@@ -87,8 +87,8 @@ private:
 	void createMenus();
 	void createToolBars();
 	void createStatusBar();
-	void createTrackView();
-	void createTrackGraphs();
+	void createPathView();
+	void createGraphTabs();
 
 	bool openPOIFile(const QString &fileName);
 	bool loadFile(const QString &fileName);
@@ -163,7 +163,7 @@ private:
 	QLabel *_timeLabel;
 
 	PathView *_pathView;
-	QTabWidget *_trackGraphs;
+	QTabWidget *_graphTabWidget;
 	QList<GraphTab*> _tabs;
 
 	POI _poi;

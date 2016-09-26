@@ -45,8 +45,8 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	loadMaps();
 	loadPOIs();
 
-	createTrackView();
-	createTrackGraphs();
+	createPathView();
+	createGraphTabs();
 	createStatusBar();
 	createActions();
 	createMenus();
@@ -57,7 +57,7 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 
 	QVBoxLayout *layout = new QVBoxLayout;
 	layout->addWidget(_pathView);
-	layout->addWidget(_trackGraphs);
+	layout->addWidget(_graphTabWidget);
 	layout->setContentsMargins(0, 0, 0, 0);
 #ifdef Q_OS_WIN32
 	layout->setSpacing(0);
@@ -98,7 +98,7 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 GUI::~GUI()
 {
 	for (int i = 0; i < _tabs.size(); i++) {
-		if (_trackGraphs->indexOf(_tabs.at(i)) < 0)
+		if (_graphTabWidget->indexOf(_tabs.at(i)) < 0)
 			delete _tabs.at(i);
 	}
 }
@@ -455,25 +455,25 @@ void GUI::createToolBars()
 	_navigationToolBar->addAction(_lastAction);
 }
 
-void GUI::createTrackView()
+void GUI::createPathView()
 {
 	_pathView = new PathView(this);
 #ifdef Q_OS_WIN32
-	_track->setFrameShape(QFrame::NoFrame);
+	_pathView->setFrameShape(QFrame::NoFrame);
 #endif // Q_OS_WIN32
 }
 
-void GUI::createTrackGraphs()
+void GUI::createGraphTabs()
 {
-	_trackGraphs = new QTabWidget;
-	connect(_trackGraphs, SIGNAL(currentChanged(int)), this,
+	_graphTabWidget = new QTabWidget;
+	connect(_graphTabWidget, SIGNAL(currentChanged(int)), this,
 	  SLOT(graphChanged(int)));
 
-	_trackGraphs->setFixedHeight(200);
-	_trackGraphs->setSizePolicy(
+	_graphTabWidget->setFixedHeight(200);
+	_graphTabWidget->setSizePolicy(
 		QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed));
 #ifdef Q_OS_WIN32
-	_trackGraphs->setDocumentMode(true);
+	_graphTabWidget->setDocumentMode(true);
 #endif // Q_OS_WIN32
 
 	_tabs.append(new ElevationGraph);
@@ -774,13 +774,13 @@ void GUI::plot(QPrinter *printer)
 		mh = ih / 2;
 		info.plot(&p, QRectF(0, 0, printer->width(), ih));
 	}
-	if (_trackGraphs->isVisible()) {
+	if (_graphTabWidget->isVisible()) {
 		qreal r = (((qreal)(printer)->width()) / (qreal)(printer->height()));
 		gh = (printer->width() > printer->height())
 		  ? 0.15 * r * (printer->height() - ih - 2*mh)
 		  : 0.15 * (printer->height() - ih - 2*mh);
 		gh = qMax(gh, ratio * 150);
-		GraphTab *gt = static_cast<GraphTab*>(_trackGraphs->currentWidget());
+		GraphTab *gt = static_cast<GraphTab*>(_graphTabWidget->currentWidget());
 		gt->plot(&p,  QRectF(0, printer->height() - gh, printer->width(), gh));
 	} else
 		gh = 0;
@@ -869,7 +869,7 @@ void GUI::showMap(bool checked)
 
 void GUI::showGraphs(bool checked)
 {
-	_trackGraphs->setHidden(!checked);
+	_graphTabWidget->setHidden(!checked);
 }
 
 void GUI::showToolbars(bool checked)
@@ -1020,7 +1020,7 @@ void GUI::graphChanged(int index)
 	if (index < 0)
 		return;
 
-	GraphTab *gt = static_cast<GraphTab*>(_trackGraphs->widget(index));
+	GraphTab *gt = static_cast<GraphTab*>(_graphTabWidget->widget(index));
 	gt->setSliderPosition(_sliderPos);
 }
 
@@ -1050,22 +1050,22 @@ void GUI::updateGraphTabs()
 
 	for (int i = 0; i < _tabs.size(); i++) {
 		tab = _tabs.at(i);
-		if (!tab->count() && (index = _trackGraphs->indexOf(tab)) >= 0)
-			_trackGraphs->removeTab(index);
+		if (!tab->count() && (index = _graphTabWidget->indexOf(tab)) >= 0)
+			_graphTabWidget->removeTab(index);
 	}
 
 	for (int i = 0; i < _tabs.size(); i++) {
 		tab = _tabs.at(i);
-		if (tab->count() && _trackGraphs->indexOf(tab) < 0)
-			_trackGraphs->insertTab(i, tab, _tabs.at(i)->label());
+		if (tab->count() && _graphTabWidget->indexOf(tab) < 0)
+			_graphTabWidget->insertTab(i, tab, _tabs.at(i)->label());
 	}
 
-	if (_trackGraphs->count()) {
+	if (_graphTabWidget->count()) {
 		if (_showGraphsAction->isChecked())
-			_trackGraphs->setHidden(false);
+			_graphTabWidget->setHidden(false);
 		_showGraphsAction->setEnabled(true);
 	} else {
-		_trackGraphs->setHidden(true);
+		_graphTabWidget->setHidden(true);
 		_showGraphsAction->setEnabled(false);
 	}
 }
