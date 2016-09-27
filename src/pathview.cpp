@@ -115,18 +115,13 @@ void PathView::addWaypoints(const QList<Waypoint> &waypoints)
 QList<PathItem *> PathView::loadGPX(const GPX &gpx)
 {
 	QList<PathItem *> paths;
-	PathItem *pi;
-
 	int zoom = _zoom;
 
-	for (int i = 0; i < gpx.tracks().count(); i++) {
-		if ((pi = addTrack(*(gpx.tracks().at(i)))))
-			paths.append(pi);
-	}
-	for (int i = 0; i < gpx.routes().count(); i++) {
-		if ((pi = addRoute(*(gpx.routes().at(i)))))
-			paths.append(pi);
-	}
+
+	for (int i = 0; i < gpx.tracks().count(); i++)
+		paths.append(addTrack(*(gpx.tracks().at(i))));
+	for (int i = 0; i < gpx.routes().count(); i++)
+		paths.append(addRoute(*(gpx.routes().at(i))));
 	addWaypoints(gpx.waypoints());
 
 	if (_tracks.empty() && _routes.empty() && _waypoints.empty())
