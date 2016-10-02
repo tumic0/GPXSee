@@ -3,9 +3,6 @@
 
 #include "graphtab.h"
 
-class GPX;
-class PathItem;
-
 class ElevationGraph : public GraphTab
 {
 	Q_OBJECT

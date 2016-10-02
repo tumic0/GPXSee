@@ -3,8 +3,6 @@
 
 #include "graphtab.h"
 
-class GPX;
-
 class HeartRateGraph : public GraphTab
 {
 	Q_OBJECT

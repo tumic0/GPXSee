@@ -3,8 +3,6 @@
 
 #include "graphtab.h"
 
-class GPX;
-
 class TemperatureGraph : public GraphTab
 {
 	Q_OBJECT

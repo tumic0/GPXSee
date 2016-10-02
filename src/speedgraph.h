@@ -4,8 +4,6 @@
 #include <QList>
 #include "graphtab.h"
 
-class GPX;
-
 class SpeedGraph : public GraphTab
 {
 	Q_OBJECT
