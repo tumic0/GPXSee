@@ -26,6 +26,7 @@ PathView::PathView(QWidget *parent)
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setRenderHints(QPainter::Antialiasing);
+	setAcceptDrops(false);
 
 	_mapScale = new ScaleItem();
 	_mapScale->setZValue(2.0);

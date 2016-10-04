@@ -110,6 +110,8 @@ private:
 
 	void keyPressEvent(QKeyEvent *event);
 	void closeEvent(QCloseEvent *event);
+	void dragEnterEvent(QDragEnterEvent *event);
+	void dropEvent(QDropEvent *event);
 
 	QToolBar *_fileToolBar;
 	QToolBar *_showToolBar;

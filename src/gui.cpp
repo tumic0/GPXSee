@@ -18,6 +18,7 @@
 #include <QLabel>
 #include <QSettings>
 #include <QLocale>
+#include <QMimeData>
 #include <QPixmapCache>
 #include "config.h"
 #include "icons.h"
@@ -1171,6 +1172,28 @@ void GUI::closeEvent(QCloseEvent *event)
 {
 	writeSettings();
 	event->accept();
+}
+
+void GUI::dragEnterEvent(QDragEnterEvent *event)
+{
+	if (!event->mimeData()->hasUrls())
+		return;
+	if (event->proposedAction() != Qt::CopyAction)
+		return;
+
+	QList<QUrl> urls = event->mimeData()->urls();
+	for (int i = 0; i < urls.size(); i++)
+		if (!urls.at(i).isLocalFile())
+			return;
+
+	event->acceptProposedAction();
+}
+
+void GUI::dropEvent(QDropEvent *event)
+{
+	QList<QUrl> urls = event->mimeData()->urls();
+	for (int i = 0; i < urls.size(); i++)
+		openFile(urls.at(i).toLocalFile());
 }
 
 void GUI::writeSettings()
