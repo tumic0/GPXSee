@@ -93,6 +93,7 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	_exportFileName = QString("%1/export.pdf").arg(QDir::currentPath());
 	_exportMargins = MarginsF(5.0, 5.0, 5.0, 5.0);
 
+	setAcceptDrops(true);
 	QPixmapCache::setCacheLimit(65536);
 }
 
