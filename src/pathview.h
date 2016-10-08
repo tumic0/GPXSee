@@ -30,10 +30,7 @@ public:
 
 	QList<PathItem*> loadGPX(const GPX &gpx);
 
-	void loadPOI(const POI &poi);
-	void clearPOI();
-	void clear();
-
+	void setPOI(POI *poi);
 	void setMap(Map *map);
 	void setUnits(enum Units units);
 
@@ -43,9 +40,12 @@ public:
 	int routeCount() const {return _routes.count();}
 	int waypointCount() const {return _waypoints.count();}
 
+	void clear();
+
 public slots:
 	void redraw();
 
+	void showPOI(bool show);
 	void setPOIOverlap(bool overlap);
 	void showWaypointLabels(bool show);
 	void showPOILabels(bool show);
@@ -59,6 +59,8 @@ private:
 	PathItem *addRoute(const Route &route);
 	void addWaypoints(const QList<Waypoint> &waypoints);
 	void addPOI(const QVector<Waypoint> &waypoints);
+	void loadPOI();
+	void clearPOI();
 
 	QRectF trackBoundingRect() const;
 	QRectF routeBoundingRect() const;
@@ -70,7 +72,7 @@ private:
 	void rescale(qreal scale);
 	void rescale();
 	void zoom(int z, const QPointF &pos);
-	void checkPOIOverlap();
+	void updatePOIVisibility();
 
 	void wheelEvent(QWheelEvent *event);
 	void keyPressEvent(QKeyEvent *event);
@@ -79,13 +81,14 @@ private:
 	void paintEvent(QPaintEvent *e);
 
 	QGraphicsScene *_scene;
+	ScaleItem *_mapScale;
 	QList<TrackItem*> _tracks;
 	QList<RouteItem*> _routes;
 	QList<WaypointItem*> _waypoints;
 	QHash<Waypoint, WaypointItem*> _pois;
 
 	Map *_map;
-	ScaleItem *_mapScale;
+	POI *_poi;
 
 	Palette _palette;
 
@@ -98,6 +101,7 @@ private:
 	bool _showRoutes;
 	bool _showWaypoints;
 	bool _showWaypointLabels;
+	bool _showPOI;
 	bool _showPOILabels;
 	bool _overlapPOIs;
 	bool _showRouteWaypoints;

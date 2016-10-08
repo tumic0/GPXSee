@@ -34,6 +34,7 @@ PathView::PathView(QWidget *parent)
 	_zoom = ZOOM_MAX;
 	_scale = mapScale(_zoom);
 	_map = 0;
+	_poi = 0;
 
 	_units = Metric;
 
@@ -41,6 +42,7 @@ PathView::PathView(QWidget *parent)
 	_showRoutes = true;
 	_showWaypoints = true;
 	_showWaypointLabels = true;
+	_showPOI = true;
 	_showPOILabels = true;
 	_overlapPOIs = true;
 	_showRouteWaypoints = true;
@@ -70,6 +72,9 @@ PathItem *PathView::addTrack(const Track &track)
 	ti->setVisible(_showTracks);
 	_scene->addItem(ti);
 
+	if (_poi)
+		addPOI(_poi->points(ti));
+
 	return ti;
 }
 
@@ -91,6 +96,9 @@ PathItem *PathView::addRoute(const Route &route)
 	ri->showWaypointLabels(_showWaypointLabels);
 	_scene->addItem(ri);
 
+	if (_poi)
+		addPOI(_poi->points(ri));
+
 	return ri;
 }
 
@@ -108,6 +116,9 @@ void PathView::addWaypoints(const QList<Waypoint> &waypoints)
 
 		_waypoints.append(wi);
 	}
+
+	if (_poi)
+		addPOI(_poi->points(waypoints));
 
 	_zoom = qMin(_zoom, scale2zoom(waypointScale()));
 	_scale = mapScale(_zoom);
@@ -131,6 +142,8 @@ QList<PathItem *> PathView::loadGPX(const GPX &gpx)
 	if ((_tracks.size() + _routes.size() > 1 && _zoom < zoom)
 	  || (_waypoints.size() && _zoom < zoom))
 		rescale(_scale);
+	else
+		updatePOIVisibility();
 
 	QRectF br = trackBoundingRect() | routeBoundingRect()
 	  | waypointBoundingRect();
@@ -258,21 +271,31 @@ qreal PathView::mapScale(int zoom) const
 	return ((360.0/(qreal)(1<<zoom))/(qreal)TILE_SIZE);
 }
 
-void PathView::checkPOIOverlap()
+void PathView::updatePOIVisibility()
 {
 	QHash<Waypoint, WaypointItem*>::const_iterator it, jt;
 
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
-		for (jt = _pois.constBegin(); jt != _pois.constEnd(); jt++) {
-			if (it != jt && it.value()->isVisible() && jt.value()->isVisible()
-			  && it.value()->collidesWithItem(jt.value()))
-				jt.value()->hide();
+	if (!_showPOI)
+		return;
+
+	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+		it.value()->show();
+
+	if (!_overlapPOIs) {
+		for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
+			for (jt = _pois.constBegin(); jt != _pois.constEnd(); jt++) {
+				if (it.value()->isVisible() && jt.value()->isVisible()
+				  && it != jt && it.value()->collidesWithItem(jt.value()))
+					jt.value()->hide();
+			}
 		}
 	}
 }
 
 void PathView::rescale(qreal scale)
 {
+	_scale = scale;
+
 	for (int i = 0; i < _tracks.size(); i++)
 		_tracks.at(i)->setScale(1.0/scale);
 
@@ -283,15 +306,44 @@ void PathView::rescale(qreal scale)
 		_waypoints.at(i)->setScale(1.0/scale);
 
 	QHash<Waypoint, WaypointItem*>::const_iterator it;
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
+	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
 		it.value()->setScale(1.0/scale);
-		it.value()->show();
+
+	updatePOIVisibility();
+}
+
+void PathView::setPOI(POI *poi)
+{
+	_poi = poi;
+
+	clearPOI();
+	loadPOI();
+}
+
+void PathView::loadPOI()
+{
+	if (!_poi)
+		return;
+
+	for (int i = 0; i < _tracks.size(); i++)
+		addPOI(_poi->points(_tracks.at(i)));
+	for (int i = 0; i < _routes.size(); i++)
+		addPOI(_poi->points(_routes.at(i)));
+	addPOI(_poi->points(_waypoints));
+
+	updatePOIVisibility();
+}
+
+void PathView::clearPOI()
+{
+	QHash<Waypoint, WaypointItem*>::const_iterator it;
+
+	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
+		_scene->removeItem(it.value());
+		delete it.value();
 	}
 
-	if (!_overlapPOIs)
-		checkPOIOverlap();
-
-	_scale = scale;
+	_pois.clear();
 }
 
 void PathView::addPOI(const QVector<Waypoint> &waypoints)
@@ -306,25 +358,11 @@ void PathView::addPOI(const QVector<Waypoint> &waypoints)
 		pi->setScale(1.0/_scale);
 		pi->setZValue(1);
 		pi->showLabel(_showPOILabels);
+		pi->setVisible(_showPOI);
 		_scene->addItem(pi);
 
 		_pois.insert(w, pi);
 	}
-}
-
-void PathView::loadPOI(const POI &poi)
-{
-	if (!_tracks.size() && !_routes.size() && !_waypoints.size())
-		return;
-
-	for (int i = 0; i < _tracks.size(); i++)
-		addPOI(poi.points(_tracks.at(i)->path()));
-	for (int i = 0; i < _routes.size(); i++)
-		addPOI(poi.points(_routes.at(i)->path()));
-	addPOI(poi.points(_waypoints));
-
-	if (!_overlapPOIs)
-		checkPOIOverlap();
 }
 
 void PathView::setMap(Map *map)
@@ -454,18 +492,6 @@ void PathView::plot(QPainter *painter, const QRectF &target)
 	setUpdatesEnabled(true);
 }
 
-void PathView::clearPOI()
-{
-	QHash<Waypoint, WaypointItem*>::const_iterator it;
-
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
-		_scene->removeItem(it.value());
-		delete it.value();
-	}
-
-	_pois.clear();
-}
-
 void PathView::clear()
 {
 	if (_mapScale->scene() == _scene)
@@ -527,6 +553,17 @@ void PathView::showRouteWaypoints(bool show)
 		_routes.at(i)->showWaypoints(show);
 }
 
+void PathView::showPOI(bool show)
+{
+	_showPOI = show;
+
+	QHash<Waypoint, WaypointItem*>::const_iterator it;
+	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+		it.value()->setVisible(show);
+
+	updatePOIVisibility();
+}
+
 void PathView::showPOILabels(bool show)
 {
 	_showPOILabels = show;
@@ -535,19 +572,14 @@ void PathView::showPOILabels(bool show)
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
 		it.value()->showLabel(show);
 
-	setPOIOverlap(_overlapPOIs);
+	updatePOIVisibility();
 }
 
 void PathView::setPOIOverlap(bool overlap)
 {
 	_overlapPOIs = overlap;
 
-	if (_overlapPOIs) {
-		QHash<Waypoint, WaypointItem*>::const_iterator it;
-		for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
-			it.value()->show();
-	} else
-		checkPOIOverlap();
+	updatePOIVisibility();
 }
 
 void PathView::drawBackground(QPainter *painter, const QRectF &rect)

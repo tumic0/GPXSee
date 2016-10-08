@@ -1,7 +1,7 @@
 #include <QFile>
 #include <QSet>
 #include <QList>
-#include <QPainterPath>
+#include "pathitem.h"
 #include "waypointitem.h"
 #include "ll.h"
 #include "gpx.h"
@@ -145,14 +145,15 @@ static bool cb(size_t data, void* context)
 	return true;
 }
 
-QVector<Waypoint> POI::points(const QPainterPath &path, qreal radius) const
+QVector<Waypoint> POI::points(const PathItem *path, qreal radius) const
 {
 	QVector<Waypoint> ret;
 	QSet<int> set;
 	qreal min[2], max[2];
+	const QPainterPath &pp = path->path();
 
-	for (int i = 0; i < path.elementCount(); i++) {
-		QPointF p = mercator2ll(path.elementAt(i));
+	for (int i = 0; i < pp.elementCount(); i++) {
+		QPointF p = mercator2ll(pp.elementAt(i));
 		min[0] = p.x() - radius;
 		min[1] = -p.y() - radius;
 		max[0] = p.x() + radius;
@@ -178,6 +179,30 @@ QVector<Waypoint> POI::points(const QList<WaypointItem*> &list, qreal radius)
 
 	for (int i = 0; i < list.count(); i++) {
 		const QPointF &p = list.at(i)->waypoint().coordinates();
+		min[0] = p.x() - radius;
+		min[1] = p.y() - radius;
+		max[0] = p.x() + radius;
+		max[1] = p.y() + radius;
+		_tree.Search(min, max, cb, &set);
+	}
+
+	QSet<int>::const_iterator i = set.constBegin();
+	while (i != set.constEnd()) {
+		ret.append(_data.at(*i));
+		++i;
+	}
+
+	return ret;
+}
+
+QVector<Waypoint> POI::points(const QList<Waypoint> &list, qreal radius) const
+{
+	QVector<Waypoint> ret;
+	QSet<int> set;
+	qreal min[2], max[2];
+
+	for (int i = 0; i < list.count(); i++) {
+		const QPointF &p = list.at(i).coordinates();
 		min[0] = p.x() - radius;
 		min[1] = p.y() - radius;
 		max[0] = p.x() + radius;

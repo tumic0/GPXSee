@@ -250,7 +250,8 @@ void GUI::createActions()
 	  tr("Show POIs"), this);
 	_showPOIAction->setCheckable(true);
 	_showPOIAction->setShortcut(SHOW_POI_SHORTCUT);
-	connect(_showPOIAction, SIGNAL(triggered(bool)), this, SLOT(showPOI(bool)));
+	connect(_showPOIAction, SIGNAL(triggered(bool)), _pathView,
+	  SLOT(showPOI(bool)));
 	addAction(_showPOIAction);
 	createPOIFilesActions();
 
@@ -463,6 +464,8 @@ void GUI::createPathView()
 #ifdef Q_OS_WIN32
 	_pathView->setFrameShape(QFrame::NoFrame);
 #endif // Q_OS_WIN32
+
+	_pathView->setPOI(&_poi);
 }
 
 void GUI::createGraphTabs()
@@ -622,8 +625,6 @@ bool GUI::loadFile(const QString &fileName)
 			_tabs.at(i)->loadGPX(gpx, paths);
 		updateGraphTabs();
 		_pathView->setHidden(false);
-		if (_showPOIAction->isChecked())
-			_pathView->loadPOI(_poi);
 
 		for (int i = 0; i < gpx.tracks().count(); i++) {
 			_trackDistance += gpx.tracks().at(i)->distance();
@@ -679,8 +680,9 @@ bool GUI::openPOIFile(const QString &fileName)
 
 		return false;
 	} else {
+		_pathView->setPOI(&_poi);
+		_pathView->showPOI(true);
 		_showPOIAction->setChecked(true);
-		_pathView->loadPOI(_poi);
 		QAction *action = createPOIFileAction(_poi.files().indexOf(fileName));
 		action->setChecked(true);
 		_poiFilesMenu->addAction(action);
@@ -697,7 +699,7 @@ void GUI::closePOIFiles()
 		delete _poiFilesActions[i];
 	_poiFilesActions.clear();
 
-	_pathView->clearPOI();
+	_pathView->setPOI(0);
 
 	_poi.clear();
 }
@@ -853,14 +855,6 @@ void GUI::closeAll()
 	updateTrackView();
 }
 
-void GUI::showPOI(bool checked)
-{
-	if (checked)
-		_pathView->loadPOI(_poi);
-	else
-		_pathView->clearPOI();
-}
-
 void GUI::showMap(bool checked)
 {
 	if (checked)
@@ -1007,9 +1001,7 @@ void GUI::poiFileChecked(int index)
 	_poi.enableFile(_poi.files().at(index),
 	  _poiFilesActions.at(index)->isChecked());
 
-	_pathView->clearPOI();
-	if (_showPOIAction->isChecked())
-		_pathView->loadPOI(_poi);
+	_pathView->setPOI(&_poi);
 }
 
 void GUI::sliderPositionChanged(qreal pos)
@@ -1311,6 +1303,8 @@ void GUI::readSettings()
 		_showPOILabelsAction->setChecked(true);
 	if (settings.value(SHOW_POI_SETTING, false).toBool() == true)
 		_showPOIAction->setChecked(true);
+	else
+		_pathView->showPOI(false);
 	for (int i = 0; i < _poiFilesActions.count(); i++)
 		_poiFilesActions.at(i)->setChecked(true);
 	int size = settings.beginReadArray(DISABLED_POI_FILE_SETTINGS_PREFIX);
