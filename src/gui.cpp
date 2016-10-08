@@ -659,7 +659,9 @@ bool GUI::loadFile(const QString &fileName)
 void GUI::openPOIFile()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open POI file"),
-	  QString(), tr("GPX files (*.gpx);;CSV files (*.csv);;All files (*)"));
+	  QString(), tr("All POI files (*.gpx *.csv)") + ";;"
+	  + tr("GPX files (*.gpx)") + ";;" + tr("CSV files (*.csv)") + ";;"
+	  + tr("All files (*)"));
 	QStringList list = files;
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
