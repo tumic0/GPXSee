@@ -19,6 +19,7 @@
 #include <QSettings>
 #include <QLocale>
 #include <QMimeData>
+#include <QUrl>
 #include <QPixmapCache>
 #include "config.h"
 #include "icons.h"
