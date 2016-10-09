@@ -314,14 +314,25 @@ void PathView::rescale(qreal scale)
 
 void PathView::setPOI(POI *poi)
 {
+	if (_poi)
+		disconnect(_poi, SIGNAL(reloadRequired()), this, SLOT(updatePOI()));
+
 	_poi = poi;
 
-	clearPOI();
-	loadPOI();
+	if (_poi)
+		connect(_poi, SIGNAL(reloadRequired()), this, SLOT(updatePOI()));
 }
 
-void PathView::loadPOI()
+void PathView::updatePOI()
 {
+	QHash<Waypoint, WaypointItem*>::const_iterator it;
+
+	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
+		_scene->removeItem(it.value());
+		delete it.value();
+	}
+	_pois.clear();
+
 	if (!_poi)
 		return;
 
@@ -332,18 +343,6 @@ void PathView::loadPOI()
 	addPOI(_poi->points(_waypoints));
 
 	updatePOIVisibility();
-}
-
-void PathView::clearPOI()
-{
-	QHash<Waypoint, WaypointItem*>::const_iterator it;
-
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
-		_scene->removeItem(it.value());
-		delete it.value();
-	}
-
-	_pois.clear();
 }
 
 void PathView::addPOI(const QVector<Waypoint> &waypoints)

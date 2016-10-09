@@ -120,13 +120,15 @@ void GUI::loadPOIs()
 	QDir userDir(USER_POI_DIR);
 	QDir globalDir(GLOBAL_POI_DIR);
 
+	_poi = new POI(this);
+
 	if (userDir.exists())
 		list = userDir.entryInfoList(QStringList(), QDir::Files);
 	else
 		list = globalDir.entryInfoList(QStringList(), QDir::Files);
 
 	for (int i = 0; i < list.size(); ++i)
-		_poi.loadFile(list.at(i).absoluteFilePath());
+		_poi->loadFile(list.at(i).absoluteFilePath());
 }
 
 void GUI::createMapActions()
@@ -154,7 +156,7 @@ void GUI::createPOIFilesActions()
 {
 	_poiFilesSM = new QSignalMapper(this);
 
-	for (int i = 0; i < _poi.files().count(); i++)
+	for (int i = 0; i < _poi->files().count(); i++)
 		createPOIFileAction(i);
 
 	connect(_poiFilesSM, SIGNAL(mapped(int)), this, SLOT(poiFileChecked(int)));
@@ -162,7 +164,7 @@ void GUI::createPOIFilesActions()
 
 QAction *GUI::createPOIFileAction(int index)
 {
-	QAction *a = new QAction(QFileInfo(_poi.files().at(index)).fileName(),
+	QAction *a = new QAction(QFileInfo(_poi->files().at(index)).fileName(),
 	  this);
 	a->setCheckable(true);
 
@@ -466,7 +468,7 @@ void GUI::createPathView()
 	_pathView->setFrameShape(QFrame::NoFrame);
 #endif // Q_OS_WIN32
 
-	_pathView->setPOI(&_poi);
+	_pathView->setPOI(_poi);
 }
 
 void GUI::createGraphTabs()
@@ -674,19 +676,18 @@ bool GUI::openPOIFile(const QString &fileName)
 	if (fileName.isEmpty())
 		return false;
 
-	if (!_poi.loadFile(fileName)) {
+	if (!_poi->loadFile(fileName)) {
 		QString error = tr("Error loading POI file:\n%1")
-		  .arg(_poi.errorString()) + QString("\n");
-		if (_poi.errorLine())
-			error.append(tr("Line: %1").arg(_poi.errorLine()));
+		  .arg(_poi->errorString()) + QString("\n");
+		if (_poi->errorLine())
+			error.append(tr("Line: %1").arg(_poi->errorLine()));
 		QMessageBox::critical(this, tr("Error"), error);
 
 		return false;
 	} else {
-		_pathView->setPOI(&_poi);
 		_pathView->showPOI(true);
 		_showPOIAction->setChecked(true);
-		QAction *action = createPOIFileAction(_poi.files().indexOf(fileName));
+		QAction *action = createPOIFileAction(_poi->files().indexOf(fileName));
 		action->setChecked(true);
 		_poiFilesMenu->addAction(action);
 
@@ -702,9 +703,7 @@ void GUI::closePOIFiles()
 		delete _poiFilesActions[i];
 	_poiFilesActions.clear();
 
-	_pathView->setPOI(0);
-
-	_poi.clear();
+	_poi->clear();
 }
 
 void GUI::printFile()
@@ -1001,10 +1000,8 @@ void GUI::prevMap()
 
 void GUI::poiFileChecked(int index)
 {
-	_poi.enableFile(_poi.files().at(index),
+	_poi->enableFile(_poi->files().at(index),
 	  _poiFilesActions.at(index)->isChecked());
-
-	_pathView->setPOI(&_poi);
 }
 
 void GUI::sliderPositionChanged(qreal pos)
@@ -1228,7 +1225,7 @@ void GUI::writeSettings()
 	for (int i = 0, j = 0; i < _poiFilesActions.count(); i++) {
 		if (!_poiFilesActions.at(i)->isChecked()) {
 			settings.setArrayIndex(j++);
-			settings.setValue(DISABLED_POI_FILE_SETTING, _poi.files().at(i));
+			settings.setValue(DISABLED_POI_FILE_SETTING, _poi->files().at(i));
 		}
 	}
 	settings.endArray();
@@ -1313,10 +1310,10 @@ void GUI::readSettings()
 	int size = settings.beginReadArray(DISABLED_POI_FILE_SETTINGS_PREFIX);
 	for (int i = 0; i < size; i++) {
 		settings.setArrayIndex(i);
-		int index = _poi.files().indexOf(settings.value(
+		int index = _poi->files().indexOf(settings.value(
 		  DISABLED_POI_FILE_SETTING).toString());
 		if (index >= 0) {
-			_poi.enableFile(_poi.files().at(index), false);
+			_poi->enableFile(_poi->files().at(index), false);
 			_poiFilesActions.at(index)->setChecked(false);
 		}
 	}

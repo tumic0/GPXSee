@@ -54,6 +54,9 @@ public slots:
 	void showWaypoints(bool show);
 	void showRouteWaypoints(bool show);
 
+private slots:
+	void updatePOI();
+
 private:
 	PathItem *addTrack(const Track &track);
 	PathItem *addRoute(const Route &route);

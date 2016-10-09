@@ -11,26 +11,30 @@
 class PathItem;
 class WaypointItem;
 
-#define POI_RADIUS 0.01
-
-class POI
+class POI : public QObject
 {
+	Q_OBJECT
+
 public:
-	POI() : _errorLine(0) {}
+	POI(QObject *parent = 0);
+
 	bool loadFile(const QString &fileName);
 	const QString &errorString() const {return _error;}
 	int errorLine() const {return _errorLine;}
 
-	QVector<Waypoint> points(const PathItem *path,
-	  qreal radius = POI_RADIUS) const;
-	QVector<Waypoint> points(const QList<WaypointItem*> &list,
-	  qreal radius = POI_RADIUS) const;
-	QVector<Waypoint> points(const QList<Waypoint> &list,
-	  qreal radius = POI_RADIUS) const;
+	qreal radius() const {return _radius;}
+	void setRadius(qreal radius);
+
+	QVector<Waypoint> points(const PathItem *path) const;
+	QVector<Waypoint> points(const QList<WaypointItem*> &list) const;
+	QVector<Waypoint> points(const QList<Waypoint> &list) const;
 
 	const QStringList &files() const {return _files;}
 	void enableFile(const QString &fileName, bool enable);
 	void clear();
+
+signals:
+	void reloadRequired();
 
 private:
 	typedef RTree<size_t, qreal, 2> POITree;
@@ -47,6 +51,8 @@ private:
 	QVector<Waypoint> _data;
 	QStringList _files;
 	QList<FileIndex> _indexes;
+
+	qreal _radius;
 
 	QString _error;
 	int _errorLine;

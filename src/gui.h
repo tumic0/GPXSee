@@ -167,7 +167,7 @@ private:
 	QTabWidget *_graphTabWidget;
 	QList<GraphTab*> _tabs;
 
-	POI _poi;
+	POI *_poi;
 	QList<Map*> _maps;
 
 	FileBrowser *_browser;
