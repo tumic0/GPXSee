@@ -321,6 +321,8 @@ void PathView::setPOI(POI *poi)
 
 	if (_poi)
 		connect(_poi, SIGNAL(reloadRequired()), this, SLOT(updatePOI()));
+
+	updatePOI();
 }
 
 void PathView::updatePOI()
@@ -366,10 +368,14 @@ void PathView::addPOI(const QVector<Waypoint> &waypoints)
 
 void PathView::setMap(Map *map)
 {
-	_map = map;
 	if (_map)
-		connect(_map, SIGNAL(loaded()), this, SLOT(redraw()),
-		  Qt::UniqueConnection);
+		disconnect(_map, SIGNAL(loaded()), this, SLOT(redraw()));
+
+	_map = map;
+
+	if (_map)
+		connect(_map, SIGNAL(loaded()), this, SLOT(redraw()));
+
 	resetCachedContent();
 }
 
