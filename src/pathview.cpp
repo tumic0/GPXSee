@@ -315,12 +315,12 @@ void PathView::rescale(qreal scale)
 void PathView::setPOI(POI *poi)
 {
 	if (_poi)
-		disconnect(_poi, SIGNAL(reloadRequired()), this, SLOT(updatePOI()));
+		disconnect(_poi, SIGNAL(pointsChanged()), this, SLOT(updatePOI()));
 
 	_poi = poi;
 
 	if (_poi)
-		connect(_poi, SIGNAL(reloadRequired()), this, SLOT(updatePOI()));
+		connect(_poi, SIGNAL(pointsChanged()), this, SLOT(updatePOI()));
 
 	updatePOI();
 }

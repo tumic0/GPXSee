@@ -22,16 +22,15 @@ bool POI::loadFile(const QString &fileName)
 	_error.clear();
 	_errorLine = 0;
 
-
 	if (loadCSVFile(fileName)) {
-		emit reloadRequired();
+		emit pointsChanged();
 		return true;
 	} else {
 		error = _error;
 		errorLine = _errorLine;
 	}
 	if (loadGPXFile(fileName)) {
-		emit reloadRequired();
+		emit pointsChanged();
 		return true;
 	}
 
@@ -99,20 +98,20 @@ bool POI::loadCSVFile(const QString &fileName)
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split(',');
 		if (list.size() < 3) {
-			_error = "Parse error";
+			_error = "Parse error.";
 			_errorLine = ln;
 			return false;
 		}
 
 		qreal lat = list[0].trimmed().toDouble(&ret);
 		if (!ret) {
-			_error = "Invalid latitude";
+			_error = "Invalid latitude.";
 			_errorLine = ln;
 			return false;
 		}
 		qreal lon = list[1].trimmed().toDouble(&ret);
 		if (!ret) {
-			_error = "Invalid longitude";
+			_error = "Invalid longitude.";
 			_errorLine = ln;
 			return false;
 		}
@@ -251,7 +250,7 @@ void POI::enableFile(const QString &fileName, bool enable)
 		}
 	}
 
-	emit reloadRequired();
+	emit pointsChanged();
 }
 
 void POI::clear()
@@ -261,12 +260,12 @@ void POI::clear()
 	_files.clear();
 	_indexes.clear();
 
-	emit reloadRequired();
+	emit pointsChanged();
 }
 
 void POI::setRadius(qreal radius)
 {
 	_radius = radius;
 
-	emit reloadRequired();
+	emit pointsChanged();
 }

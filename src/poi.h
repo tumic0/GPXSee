@@ -34,7 +34,7 @@ public:
 	void clear();
 
 signals:
-	void reloadRequired();
+	void pointsChanged();
 
 private:
 	typedef RTree<size_t, qreal, 2> POITree;

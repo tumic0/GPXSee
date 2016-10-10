@@ -673,12 +673,13 @@ void GUI::openPOIFile()
 
 bool GUI::openPOIFile(const QString &fileName)
 {
-	if (fileName.isEmpty())
+	if (fileName.isEmpty() || _poi->files().contains(fileName))
 		return false;
 
 	if (!_poi->loadFile(fileName)) {
-		QString error = tr("Error loading POI file:\n%1")
-		  .arg(_poi->errorString()) + QString("\n");
+		QString error = fileName + QString("\n\n")
+		  + tr("Error loading POI file:\n%1").arg(_poi->errorString())
+		  + QString("\n");
 		if (_poi->errorLine())
 			error.append(tr("Line: %1").arg(_poi->errorLine()));
 		QMessageBox::critical(this, tr("Error"), error);
