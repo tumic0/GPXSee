@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QLineEdit>
 
-class QPushButton;
+class QToolButton;
 
 class FileSelectWidget : public QWidget
 {
@@ -22,7 +22,7 @@ private slots:
 
 private:
 	QLineEdit *_edit;
-	QPushButton *_button;
+	QToolButton *_button;
 
 	QString _filter;
 };

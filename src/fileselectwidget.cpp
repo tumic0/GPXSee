@@ -1,4 +1,4 @@
-#include <QPushButton>
+#include <QToolButton>
 #include <QFileDialog>
 #include <QHBoxLayout>
 #include <QFileInfo>
@@ -12,7 +12,8 @@ FileSelectWidget::FileSelectWidget(QWidget *parent) : QWidget(parent)
 	QFontMetrics fm(QApplication::font());
 	_edit = new QLineEdit();
 	_edit->setMinimumWidth(fm.boundingRect(QDir::homePath()).width());
-	_button = new QPushButton(tr("Browse..."));
+	_button = new QToolButton();
+	_button->setText("...");
 	connect(_button, SIGNAL(clicked()), this, SLOT(browse()));
 
 	QHBoxLayout *layout = new QHBoxLayout();
