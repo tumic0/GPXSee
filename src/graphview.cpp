@@ -153,7 +153,7 @@ void GraphView::setGraphType(GraphType type)
 	for (int i = 0; i < _graphs.count(); i++) {
 		_graphs.at(i)->setGraphType(type);
 		if (_graphs.at(i)->scene() == _scene)
-			_bounds |= _graphs.at(i)->boundingRect();
+			_bounds |= _graphs.at(i)->bounds();
 	}
 
 	if (type == Distance)
@@ -186,7 +186,7 @@ void GraphView::loadGraph(const Graph &graph, PathItem *path, int id)
 	if (!_hide.contains(id)) {
 		_visible.append(gi);
 		_scene->addItem(gi);
-		_bounds |= gi->boundingRect();
+		_bounds |= gi->bounds();
 		setXUnits();
 	}
 }
@@ -219,7 +219,7 @@ void GraphView::showGraph(bool show, int id)
 		else {
 			addItem(gi);
 			_visible.append(gi);
-			_bounds |= gi->boundingRect();
+			_bounds |= gi->bounds();
 		}
 	}
 }
@@ -241,8 +241,7 @@ void GraphView::redraw(const QSizeF &size)
 	QRectF r;
 	QSizeF mx, my;
 	RangeF rx, ry;
-	QTransform transform;
-	qreal xs, ys;
+	qreal sx, sy;
 
 
 	if (_visible.isEmpty() || _bounds.isNull()) {
@@ -275,20 +274,19 @@ void GraphView::redraw(const QSizeF &size)
 		r.adjust(0, -(_minYRange/2 - r.height()/2), 0,
 		  _minYRange/2 - r.height()/2);
 
-	xs = (size.width() - (my.width() + mx.width())) / r.width();
-	ys = (size.height() - (mx.height() + my.height())
+	sx = (size.width() - (my.width() + mx.width())) / r.width();
+	sy = (size.height() - (mx.height() + my.height())
 	  - _info->boundingRect().height()) / r.height();
-	transform.scale(xs, ys);
 
 	for (int i = 0; i < _visible.size(); i++)
-		_visible.at(i)->setTransform(transform);
+		_visible.at(i)->setScale(sx, sy);
 
-	QPointF p(r.left() * xs, r.top() * ys);
-	QSizeF s(r.width() * xs, r.height() * ys);
+	QPointF p(r.left() * sx, r.top() * sy);
+	QSizeF s(r.width() * sx, r.height() * sy);
 	r = QRectF(p, s);
-	if (r.height() < _minYRange * ys)
-		r.adjust(0, -(_minYRange/2 * ys - r.height()/2), 0,
-		  (_minYRange/2) * ys - r.height()/2);
+	if (r.height() < _minYRange * sy)
+		r.adjust(0, -(_minYRange/2 * sy - r.height()/2), 0,
+		  (_minYRange/2) * sy - r.height()/2);
 
 	_xAxis->setSize(r.width());
 	_yAxis->setSize(r.height());
@@ -368,7 +366,7 @@ void GraphView::updateSliderInfo()
 	if (!_sliderInfo->isVisible())
 		return;
 
-	QRectF br(_visible.first()->boundingRect());
+	QRectF br(_visible.first()->bounds());
 	if (br.height() < _minYRange)
 		br.adjust(0, -(_minYRange/2 - br.height()/2), 0,
 		  _minYRange/2 - br.height()/2);

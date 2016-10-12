@@ -13,10 +13,12 @@ public:
 	GraphItem(const Graph &graph, QGraphicsItem *parent = 0);
 
 	QRectF boundingRect() const
-	  {return (_type == Distance) ? _distancePath.boundingRect()
-	  : _timePath.boundingRect();}
+	  {return _path.boundingRect();}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
+
+	const QRectF &bounds() const {return _bounds;}
+	void setScale(qreal sx, qreal sy);
 
 	void setGraphType(GraphType type);
 	int id() const {return _id;}
@@ -34,10 +36,19 @@ public slots:
 	void selected(bool selected);
 
 private:
+	void updatePath();
+	void updateBounds();
+
 	int _id;
 	QPen _pen;
-	QPainterPath _distancePath, _timePath;
+
+	Graph _graph;
 	GraphType _type;
+	bool _time;
+
+	QPainterPath _path;
+	QRectF _bounds;
+	qreal _sx, _sy;
 };
 
 #endif // GRAPHITEM_H
