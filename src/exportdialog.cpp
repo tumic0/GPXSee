@@ -91,6 +91,7 @@ ExportDialog::ExportDialog(QPrinter *printer, QWidget *parent)
 	line->setFrameShadow(QFrame::Sunken);
 	pageSetupLayout->addRow(line);
 	pageSetupLayout->addRow(tr("File:"), _fileSelect);
+	pageSetupLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
 #else // Q_OS_MAC
 	pageSetupBox->setLayout(pageSetupLayout);
 #endif // Q_OS_MAC
