@@ -52,7 +52,8 @@ HEADERS += src/config.h \
     src/graphitem.h \
     src/graph.h \
     src/pathitem.h \
-    src/pathview.h
+    src/pathview.h \
+    src/griditem.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/gpx.cpp \
@@ -91,7 +92,8 @@ SOURCES += src/main.cpp \
     src/routeitem.cpp \
     src/graphitem.cpp \
     src/pathitem.cpp \
-    src/pathview.cpp
+    src/pathview.cpp \
+    src/griditem.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {

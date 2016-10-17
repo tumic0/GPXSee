@@ -20,6 +20,7 @@ public:
 	void setLabel(const QString& label);
 
 	QSizeF margin() const;
+	QList<qreal> ticks() const;
 
 private:
 	void updateBoundingRect();

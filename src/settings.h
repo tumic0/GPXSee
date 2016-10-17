@@ -12,6 +12,7 @@
 #define GRAPH_SETTINGS_GROUP              "Graph"
 #define SHOW_GRAPHS_SETTING               "show"
 #define GRAPH_TYPE_SETTING                "type"
+#define SHOW_GRAPH_GRIDS_SETTING          "grid"
 
 #define MAP_SETTINGS_GROUP                "Map"
 #define CURRENT_MAP_SETTING               "map"

@@ -45,10 +45,11 @@ private slots:
 	void reloadFile();
 	void openPOIFile();
 	void closePOIFiles();
-	void showMap(bool checked);
-	void showGraphs(bool checked);
-	void showToolbars(bool checked);
-	void showFullscreen(bool checked);
+	void showMap(bool show);
+	void showGraphs(bool show);
+	void showGraphGrids(bool show);
+	void showToolbars(bool show);
+	void showFullscreen(bool show);
 	void showTracks(bool show);
 	void showRoutes(bool show);
 	void clearMapCache();
@@ -138,6 +139,7 @@ private:
 	QAction *_fullscreenAction;
 	QAction *_clearMapCacheAction;
 	QAction *_showGraphsAction;
+	QAction *_showGraphGridAction;
 	QAction *_distanceGraphAction;
 	QAction *_timeGraphAction;
 	QAction *_showToolbarsAction;

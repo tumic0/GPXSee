@@ -118,6 +118,7 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	QPen pen = QPen(Qt::black, AXIS_WIDTH);
 
 
+	painter->setRenderHint(QPainter::Antialiasing, false);
 	painter->setFont(font);
 	painter->setPen(pen);
 
@@ -201,4 +202,17 @@ QSizeF AxisItem::margin() const
 		return QSizeF(ls.height() -fm.descent() + mtw + 2*PADDING
 		  + TICK/2, es.height()/2 + fm.descent());
 	}
+}
+
+QList<qreal> AxisItem::ticks() const
+{
+	struct Label l;
+	QList<qreal> list;
+
+	l = label(_range.min(), _range.max(), (_type == X) ? XTICKS : YTICKS);
+	for (int i = 0; i < ((l.max - l.min) / l.d) + 1; i++)
+		list.append(((_size/_range.size()) * ((l.min + i * l.d)
+		  - _range.min())));
+
+	return list;
 }

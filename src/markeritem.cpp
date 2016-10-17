@@ -19,18 +19,11 @@ void MarkerItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 {
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
-	bool aa;
 
-
-	if ((aa = painter->testRenderHint(QPainter::Antialiasing)))
-		painter->setRenderHint(QPainter::Antialiasing, false);
-
+	painter->setRenderHint(QPainter::Antialiasing, false);
 	painter->setPen(Qt::red);
 	painter->drawLine(-SIZE/2, 0, SIZE/2, 0);
 	painter->drawLine(0, -SIZE/2, 0, SIZE/2);
-
-	if (aa)
-		painter->setRenderHint(QPainter::Antialiasing, true);
 
 //	painter->drawRect(boundingRect());
 }

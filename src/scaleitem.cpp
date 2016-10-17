@@ -52,12 +52,9 @@ void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	QFontMetrics fm(font);
 	QRect br;
 	QPen pen = QPen(Qt::black, BORDER_WIDTH);
-	bool aa;
 
 
-	if ((aa = painter->testRenderHint(QPainter::Antialiasing)))
-		painter->setRenderHint(QPainter::Antialiasing, false);
-
+	painter->setRenderHint(QPainter::Antialiasing, false);
 	painter->setFont(font);
 	painter->setPen(pen);
 
@@ -79,9 +76,6 @@ void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	painter->setPen(Qt::red);
 	painter->drawRect(boundingRect());
 */
-
-	if (aa)
-		painter->setRenderHint(QPainter::Antialiasing, true);
 }
 
 QString ScaleItem::units() const

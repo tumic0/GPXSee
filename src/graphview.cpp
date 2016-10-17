@@ -7,6 +7,7 @@
 #include "slideritem.h"
 #include "sliderinfoitem.h"
 #include "infoitem.h"
+#include "griditem.h"
 #include "graph.h"
 #include "graphitem.h"
 #include "pathitem.h"
@@ -43,6 +44,7 @@ GraphView::GraphView(QWidget *parent)
 	_sliderInfo = new SliderInfoItem(_slider);
 	_sliderInfo->setZValue(2.0);
 	_info = new InfoItem();
+	_grid = new GridItem();
 
 	connect(_slider, SIGNAL(positionChanged(const QPointF&)), this,
 	  SLOT(emitSliderPositionChanged(const QPointF&)));
@@ -60,9 +62,7 @@ GraphView::GraphView(QWidget *parent)
 
 	_units = Metric;
 	_graphType = Distance;
-
-	setGraphType(_graphType);
-	setUnits(_units);
+	_xLabel = tr("Distance");
 }
 
 GraphView::~GraphView()
@@ -75,6 +75,8 @@ GraphView::~GraphView()
 		delete _slider;
 	if (_info->scene() != _scene)
 		delete _info;
+	if (_grid->scene() != _scene)
+		delete _grid;
 
 	for (int i = 0; i < _graphs.count(); i++)
 		if (_graphs.at(i)->scene() != _scene)
@@ -165,6 +167,11 @@ void GraphView::setGraphType(GraphType type)
 	redraw();
 }
 
+void GraphView::showGrid(bool show)
+{
+	_grid->setVisible(show);
+}
+
 void GraphView::loadGraph(const Graph &graph, PathItem *path, int id)
 {
 	if (graph.size() < 2)
@@ -249,6 +256,7 @@ void GraphView::redraw(const QSizeF &size)
 		removeItem(_yAxis);
 		removeItem(_slider);
 		removeItem(_info);
+		removeItem(_grid);
 		_scene->setSceneRect(QRectF());
 		return;
 	}
@@ -257,6 +265,7 @@ void GraphView::redraw(const QSizeF &size)
 	addItem(_yAxis);
 	addItem(_slider);
 	addItem(_info);
+	addItem(_grid);
 
 	rx = RangeF(bounds().left() * _xScale, bounds().right() * _xScale);
 	ry = RangeF(bounds().top() * _yScale + _yOffset, bounds().bottom() * _yScale
@@ -292,6 +301,10 @@ void GraphView::redraw(const QSizeF &size)
 	_yAxis->setSize(r.height());
 	_xAxis->setPos(r.bottomLeft());
 	_yAxis->setPos(r.bottomLeft());
+
+	_grid->setSize(r.size());
+	_grid->setTicks(_xAxis->ticks(), _yAxis->ticks());
+	_grid->setPos(r.bottomLeft());
 
 	_slider->setArea(r);
 	updateSliderPosition();

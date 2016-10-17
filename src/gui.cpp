@@ -322,12 +322,18 @@ void GUI::createActions()
 	_distanceGraphAction->setShortcut(DISTANCE_GRAPH_SHORTCUT);
 	connect(_distanceGraphAction, SIGNAL(triggered()), this,
 	  SLOT(setDistanceGraph()));
+	addAction(_distanceGraphAction);
 	_timeGraphAction = new QAction(tr("Time"), this);
 	_timeGraphAction->setCheckable(true);
 	_timeGraphAction->setActionGroup(ag);
 	_timeGraphAction->setShortcut(TIME_GRAPH_SHORTCUT);
 	connect(_timeGraphAction, SIGNAL(triggered()), this,
 	  SLOT(setTimeGraph()));
+	addAction(_timeGraphAction);
+	_showGraphGridAction = new QAction(tr("Show grid"), this);
+	_showGraphGridAction->setCheckable(true);
+	connect(_showGraphGridAction, SIGNAL(triggered(bool)), this,
+	  SLOT(showGraphGrids(bool)));
 
 	// Settings actions
 	_showToolbarsAction = new QAction(tr("Show toolbars"), this);
@@ -397,6 +403,8 @@ void GUI::createMenus()
 	QMenu *graphMenu = menuBar()->addMenu(tr("Graph"));
 	graphMenu->addAction(_distanceGraphAction);
 	graphMenu->addAction(_timeGraphAction);
+	graphMenu->addSeparator();
+	graphMenu->addAction(_showGraphGridAction);
 	graphMenu->addSeparator();
 	graphMenu->addAction(_showGraphsAction);
 
@@ -858,22 +866,22 @@ void GUI::closeAll()
 	updateTrackView();
 }
 
-void GUI::showMap(bool checked)
+void GUI::showMap(bool show)
 {
-	if (checked)
+	if (show)
 		_pathView->setMap(_currentMap);
 	else
 		_pathView->setMap(0);
 }
 
-void GUI::showGraphs(bool checked)
+void GUI::showGraphs(bool show)
 {
-	_graphTabWidget->setHidden(!checked);
+	_graphTabWidget->setHidden(!show);
 }
 
-void GUI::showToolbars(bool checked)
+void GUI::showToolbars(bool show)
 {
-	if (checked) {
+	if (show) {
 		addToolBar(_fileToolBar);
 		addToolBar(_showToolBar);
 		addToolBar(_navigationToolBar);
@@ -887,9 +895,9 @@ void GUI::showToolbars(bool checked)
 	}
 }
 
-void GUI::showFullscreen(bool checked)
+void GUI::showFullscreen(bool show)
 {
-	if (checked) {
+	if (show) {
 		_frameStyle = _pathView->frameStyle();
 		_showGraphs = _showGraphsAction->isChecked();
 
@@ -933,6 +941,12 @@ void GUI::showRoutes(bool show)
 		_tabs.at(i)->showRoutes(show);
 
 	updateStatusBarInfo();
+}
+
+void GUI::showGraphGrids(bool show)
+{
+	for (int i = 0; i < _tabs.size(); i++)
+		_tabs.at(i)->showGrid(show);
 }
 
 void GUI::clearMapCache()
@@ -1215,6 +1229,8 @@ void GUI::writeSettings()
 	settings.setValue(SHOW_GRAPHS_SETTING, _showGraphsAction->isChecked());
 	settings.setValue(GRAPH_TYPE_SETTING, _timeGraphAction->isChecked()
 	  ? Time : Distance);
+	settings.setValue(SHOW_GRAPH_GRIDS_SETTING,
+	  _showGraphGridAction->isChecked());
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);
@@ -1291,6 +1307,10 @@ void GUI::readSettings()
 		_timeGraphAction->setChecked(true);
 	} else
 		_distanceGraphAction->setChecked(true);
+	if (settings.value(SHOW_GRAPH_GRIDS_SETTING, true).toBool() == false)
+		showGraphGrids(false);
+	else
+		_showGraphGridAction->setChecked(true);
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);

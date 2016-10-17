@@ -40,6 +40,9 @@ void InfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	QList<KV>::const_iterator i;
 	int width = 0;
 
+
+	painter->setRenderHint(QPainter::Antialiasing, false);
+
 	for (i = _list.constBegin(); i != _list.constEnd(); i++) {
 		painter->drawText(width, fm.height() - fm.descent(), i->key + ": ");
 		width += fm.width(i->key + ": ");

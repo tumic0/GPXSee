@@ -21,6 +21,7 @@ void SliderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 
+	painter->setRenderHint(QPainter::Antialiasing, false);
 	painter->setPen(Qt::red);
 	painter->drawLine(0, 0, 0, -_area.height());
 

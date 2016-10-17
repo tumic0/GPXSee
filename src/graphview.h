@@ -18,6 +18,7 @@ class SliderInfoItem;
 class InfoItem;
 class GraphItem;
 class PathItem;
+class GridItem;
 
 class Scene : public QGraphicsScene
 {
@@ -47,6 +48,7 @@ public:
 	void showGraph(bool show, int id = 0);
 	void setGraphType(GraphType type);
 	void setUnits(Units units);
+	void showGrid(bool show);
 
 	const QString &yLabel() const {return _yLabel;}
 	const QString &yUnits() const {return _yUnits;}
@@ -103,6 +105,7 @@ private:
 	SliderItem *_slider;
 	SliderInfoItem *_sliderInfo;
 	InfoItem *_info;
+	GridItem *_grid;
 
 	QList<GraphItem*> _graphs;
 	QList<GraphItem*> _visible;
