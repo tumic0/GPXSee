@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="cs_CZ">
+<TS version="2.1" language="cs_CZ">
 <context>
     <name>ElevationGraph</name>
     <message>
@@ -397,10 +397,14 @@
         <source>No GPX files loaded</source>
         <translation>Nejsou načteny žádné GPX soubory</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../src/gui.cpp" line="965"/>
         <source>%1 files</source>
-        <translation>%1 souborů</translation>
+        <translation>
+            <numerusform>%1 soubor</numerusform>
+            <numerusform>%1 soubory</numerusform>
+            <numerusform>%1 souborů</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="548"/>
@@ -651,22 +655,22 @@
 <context>
     <name>ScaleItem</name>
     <message>
-        <location filename="../src/scaleitem.cpp" line="90"/>
+        <location filename="../src/scaleitem.cpp" line="84"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
     <message>
-        <location filename="../src/scaleitem.cpp" line="91"/>
+        <location filename="../src/scaleitem.cpp" line="85"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
     <message>
-        <location filename="../src/scaleitem.cpp" line="93"/>
+        <location filename="../src/scaleitem.cpp" line="87"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="../src/scaleitem.cpp" line="94"/>
+        <location filename="../src/scaleitem.cpp" line="88"/>
         <source>m</source>
         <translation>m</translation>
     </message>

@@ -962,7 +962,8 @@ void GUI::updateStatusBarInfo()
 	else if (_files.count() == 1)
 		_fileNameLabel->setText(_files.at(0));
 	else
-		_fileNameLabel->setText(tr("%1 files").arg(_files.count()));
+		_fileNameLabel->setText(tr("%1 files", "", _files.count())
+		  .arg(_files.count()));
 
 	qreal d = distance();
 	Units units = _imperialUnitsAction->isChecked() ? Imperial : Metric;
