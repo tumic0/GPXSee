@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QSplitter>
 #include <QVBoxLayout>
 #include <QMenuBar>
 #include <QStatusBar>
@@ -57,17 +58,15 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	_browser = new FileBrowser(this);
 	_browser->setFilter(QStringList("*.gpx"));
 
-	QVBoxLayout *layout = new QVBoxLayout;
-	layout->addWidget(_pathView);
-	layout->addWidget(_graphTabWidget);
-	layout->setContentsMargins(0, 0, 0, 0);
-#ifdef Q_OS_WIN32
-	layout->setSpacing(0);
-#endif // Q_OS_WIN32
-
-	QWidget *widget = new QWidget;
-	widget->setLayout(layout);
-	setCentralWidget(widget);
+	QSplitter *splitter = new QSplitter();
+	splitter->setOrientation(Qt::Vertical);
+	splitter->setChildrenCollapsible(false);
+	splitter->addWidget(_pathView);
+	splitter->addWidget(_graphTabWidget);
+	splitter->setContentsMargins(0, 0, 0, 0);
+	splitter->setStretchFactor(0, 255);
+	splitter->setStretchFactor(1, 1);
+	setCentralWidget(splitter);
 
 	setWindowIcon(QIcon(QPixmap(APP_ICON)));
 	setWindowTitle(APP_NAME);
@@ -472,6 +471,9 @@ void GUI::createToolBars()
 void GUI::createPathView()
 {
 	_pathView = new PathView(this);
+	_pathView->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,
+	  QSizePolicy::Expanding));
+	_pathView->setMinimumHeight(200);
 #ifdef Q_OS_WIN32
 	_pathView->setFrameShape(QFrame::NoFrame);
 #endif // Q_OS_WIN32
@@ -481,13 +483,13 @@ void GUI::createPathView()
 
 void GUI::createGraphTabs()
 {
-	_graphTabWidget = new QTabWidget;
+	_graphTabWidget = new QTabWidget();
 	connect(_graphTabWidget, SIGNAL(currentChanged(int)), this,
 	  SLOT(graphChanged(int)));
 
-	_graphTabWidget->setFixedHeight(200);
-	_graphTabWidget->setSizePolicy(
-		QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed));
+	_graphTabWidget->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,
+	  QSizePolicy::Preferred));
+	_graphTabWidget->setMinimumHeight(200);
 #ifdef Q_OS_WIN32
 	_graphTabWidget->setDocumentMode(true);
 #endif // Q_OS_WIN32
