@@ -19,7 +19,7 @@ public:
 	POI(QObject *parent = 0);
 
 	bool loadFile(const QString &fileName);
-	const QString &errorString() const {return _error;}
+	const QString &errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 
 	qreal radius() const {return _radius;}
@@ -44,9 +44,6 @@ private:
 		bool enabled;
 	} FileIndex;
 
-	bool loadCSVFile(const QString &fileName);
-	bool loadGPXFile(const QString &fileName);
-
 	POITree _tree;
 	QVector<Waypoint> _data;
 	QStringList _files;
@@ -54,7 +51,7 @@ private:
 
 	qreal _radius;
 
-	QString _error;
+	QString _errorString;
 	int _errorLine;
 };
 

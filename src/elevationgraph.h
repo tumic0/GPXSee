@@ -11,7 +11,7 @@ public:
 	ElevationGraph(QWidget *parent = 0);
 
 	QString label() const {return tr("Elevation");}
-	void loadGPX(const GPX &gpx, const QList<PathItem *> &paths);
+	void loadData(const Data &data, const QList<PathItem *> &paths);
 	void clear();
 	void setUnits(enum Units units);
 	void showTracks(bool show);

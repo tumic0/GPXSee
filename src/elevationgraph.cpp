@@ -1,6 +1,6 @@
 #include <cmath>
 #include "config.h"
-#include "gpx.h"
+#include "data.h"
 #include "elevationgraph.h"
 
 
@@ -107,14 +107,14 @@ void ElevationGraph::loadGraph(const Graph &graph, Type type, PathItem *path)
 	GraphView::loadGraph(graph, path, type);
 }
 
-void ElevationGraph::loadGPX(const GPX &gpx, const QList<PathItem *> &paths)
+void ElevationGraph::loadData(const Data &data, const QList<PathItem *> &paths)
 {
 	int p = 0;
 
-	for (int i = 0; i < gpx.tracks().count(); i++)
-		loadGraph(gpx.tracks().at(i)->elevation(), Track, paths.at(p++));
-	for (int i = 0; i < gpx.routes().count(); i++)
-		loadGraph(gpx.routes().at(i)->elevation(), Route, paths.at(p++));
+	for (int i = 0; i < data.tracks().count(); i++)
+		loadGraph(data.tracks().at(i)->elevation(), Track, paths.at(p++));
+	for (int i = 0; i < data.routes().count(); i++)
+		loadGraph(data.routes().at(i)->elevation(), Route, paths.at(p++));
 
 	setInfo();
 

@@ -1,18 +1,18 @@
-#include "parser.h"
+#include "gpxparser.h"
 
 
-void Parser::handleTrackpointData(DataType type, const QString &value)
+void GPXParser::handleTrackpointData(DataType type, const QString &value)
 {
 	switch (type) {
 		case Elevation:
-			_track->last().setElevation(value.toLatin1().toDouble());
+			_track->last().setElevation(value.toDouble());
 			break;
 		case Time:
-			_track->last().setTimestamp(QDateTime::fromString(value.toLatin1(),
+			_track->last().setTimestamp(QDateTime::fromString(value,
 			  Qt::ISODate));
 			break;
 		case Geoidheight:
-			_track->last().setGeoidHeight(value.toLatin1().toDouble());
+			_track->last().setGeoidHeight(value.toDouble());
 			break;
 		case Speed:
 			_track->last().setSpeed(value.toDouble());
@@ -28,7 +28,7 @@ void Parser::handleTrackpointData(DataType type, const QString &value)
 	}
 }
 
-void Parser::handleWaypointData(DataType type, const QString &value)
+void GPXParser::handleWaypointData(DataType type, const QString &value)
 {
 	switch (type) {
 		case Name:
@@ -37,22 +37,22 @@ void Parser::handleWaypointData(DataType type, const QString &value)
 		case Description:
 			_waypoints.last().setDescription(value);
 			break;
-	    case Time:
-		    _waypoints.last().setTimestamp(QDateTime::fromString(
-			  value.toLatin1(), Qt::ISODate));
-		    break;
-	    case Elevation:
-		    _waypoints.last().setElevation(value.toLatin1().toDouble());
-		    break;
-	    case Geoidheight:
-		    _waypoints.last().setGeoidHeight(value.toLatin1().toDouble());
-		    break;
+		case Time:
+			_waypoints.last().setTimestamp(QDateTime::fromString(value,
+			  Qt::ISODate));
+			break;
+		case Elevation:
+			_waypoints.last().setElevation(value.toDouble());
+			break;
+		case Geoidheight:
+			_waypoints.last().setGeoidHeight(value.toDouble());
+			break;
 		default:
 			break;
 	}
 }
 
-void Parser::handleRoutepointData(DataType type, const QString &value)
+void GPXParser::handleRoutepointData(DataType type, const QString &value)
 {
 	switch (type) {
 		case Name:
@@ -62,42 +62,42 @@ void Parser::handleRoutepointData(DataType type, const QString &value)
 			_route->last().setDescription(value);
 			break;
 		case Time:
-			_route->last().setTimestamp(QDateTime::fromString(
-			  value.toLatin1(), Qt::ISODate));
+			_route->last().setTimestamp(QDateTime::fromString(value,
+			  Qt::ISODate));
 			break;
 		case Elevation:
-			_route->last().setElevation(value.toLatin1().toDouble());
+			_route->last().setElevation(value.toDouble());
 			break;
 		case Geoidheight:
-			_route->last().setGeoidHeight(value.toLatin1().toDouble());
+			_route->last().setGeoidHeight(value.toDouble());
 			break;
 		default:
 			break;
 	}
 }
 
-void Parser::handleTrackpointAttributes(const QXmlStreamAttributes &attr)
+void GPXParser::handleTrackpointAttributes(const QXmlStreamAttributes &attr)
 {
 	_track->last().setCoordinates(QPointF(
-	  attr.value("lon").toLatin1().toDouble(),
-	  attr.value("lat").toLatin1().toDouble()));
+	  attr.value("lon").toDouble(),
+	  attr.value("lat").toDouble()));
 }
 
-void Parser::handleRoutepointAttributes(const QXmlStreamAttributes &attr)
+void GPXParser::handleRoutepointAttributes(const QXmlStreamAttributes &attr)
 {
 	_route->last().setCoordinates(QPointF(
-	  attr.value("lon").toLatin1().toDouble(),
-	  attr.value("lat").toLatin1().toDouble()));
+	  attr.value("lon").toDouble(),
+	  attr.value("lat").toDouble()));
 }
 
-void Parser::handleWaypointAttributes(const QXmlStreamAttributes &attr)
+void GPXParser::handleWaypointAttributes(const QXmlStreamAttributes &attr)
 {
 	_waypoints.last().setCoordinates(QPointF(
-	  attr.value("lon").toLatin1().toDouble(),
-	  attr.value("lat").toLatin1().toDouble()));
+	  attr.value("lon").toDouble(),
+	  attr.value("lat").toDouble()));
 }
 
-void Parser::tpExtension()
+void GPXParser::tpExtension()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "hr")
@@ -109,7 +109,7 @@ void Parser::tpExtension()
 	}
 }
 
-void Parser::extensions()
+void GPXParser::extensions()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "speed")
@@ -125,7 +125,7 @@ void Parser::extensions()
 	}
 }
 
-void Parser::trackpointData()
+void GPXParser::trackpointData()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "ele")
@@ -141,7 +141,7 @@ void Parser::trackpointData()
 	}
 }
 
-void Parser::routepointData()
+void GPXParser::routepointData()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "name")
@@ -159,41 +159,7 @@ void Parser::routepointData()
 	}
 }
 
-void Parser::trackpoints()
-{
-	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "trkpt") {
-			_track->append(Trackpoint());
-			handleTrackpointAttributes(_reader.attributes());
-			trackpointData();
-		} else
-			_reader.skipCurrentElement();
-	}
-}
-
-void Parser::routepoints()
-{
-	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "rtept") {
-			_route->append(Waypoint());
-			handleRoutepointAttributes(_reader.attributes());
-			routepointData();
-		} else
-			_reader.skipCurrentElement();
-	}
-}
-
-void Parser::track()
-{
-	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "trkseg") {
-			trackpoints();
-		} else
-			_reader.skipCurrentElement();
-	}
-}
-
-void Parser::waypointData()
+void GPXParser::waypointData()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "name")
@@ -211,7 +177,41 @@ void Parser::waypointData()
 	}
 }
 
-void Parser::gpx()
+void GPXParser::trackpoints()
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "trkpt") {
+			_track->append(Trackpoint());
+			handleTrackpointAttributes(_reader.attributes());
+			trackpointData();
+		} else
+			_reader.skipCurrentElement();
+	}
+}
+
+void GPXParser::routepoints()
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "rtept") {
+			_route->append(Waypoint());
+			handleRoutepointAttributes(_reader.attributes());
+			routepointData();
+		} else
+			_reader.skipCurrentElement();
+	}
+}
+
+void GPXParser::track()
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "trkseg") {
+			trackpoints();
+		} else
+			_reader.skipCurrentElement();
+	}
+}
+
+void GPXParser::gpx()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "trk") {
@@ -231,7 +231,7 @@ void Parser::gpx()
 	}
 }
 
-bool Parser::parse()
+bool GPXParser::parse()
 {
 	if (_reader.readNextStartElement()) {
 		if (_reader.name() == "gpx")
@@ -243,7 +243,7 @@ bool Parser::parse()
 	return !_reader.error();
 }
 
-bool Parser::loadFile(QIODevice *device)
+bool GPXParser::loadFile(QIODevice *device)
 {
 	_reader.clear();
 	_reader.setDevice(device);

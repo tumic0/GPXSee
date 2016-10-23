@@ -1,4 +1,4 @@
-#include "gpx.h"
+#include "data.h"
 #include "temperaturegraph.h"
 
 
@@ -26,10 +26,10 @@ void TemperatureGraph::setInfo()
 		clearInfo();
 }
 
-void TemperatureGraph::loadGPX(const GPX &gpx, const QList<PathItem *> &paths)
+void TemperatureGraph::loadData(const Data &data, const QList<PathItem *> &paths)
 {
-	for (int i = 0; i < gpx.tracks().count(); i++) {
-		const Graph &graph = gpx.tracks().at(i)->temperature();
+	for (int i = 0; i < data.tracks().count(); i++) {
+		const Graph &graph = data.tracks().at(i)->temperature();
 		qreal sum = 0, w = 0;
 
 		if (graph.size() < 2) {
@@ -42,12 +42,12 @@ void TemperatureGraph::loadGPX(const GPX &gpx, const QList<PathItem *> &paths)
 			sum += graph.at(j).y() * ds;
 			w += ds;
 		}
-		_avg.append(QPointF(gpx.tracks().at(i)->distance(), sum/w));
+		_avg.append(QPointF(data.tracks().at(i)->distance(), sum/w));
 
 		GraphView::loadGraph(graph, paths.at(i));
 	}
 
-	for (int i = 0; i < gpx.routes().count(); i++)
+	for (int i = 0; i < data.routes().count(); i++)
 		skipColor();
 
 	setInfo();

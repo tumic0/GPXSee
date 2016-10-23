@@ -11,7 +11,7 @@ public:
 	HeartRateGraph(QWidget *parent = 0);
 
 	QString label() const {return tr("Heart rate");}
-	void loadGPX(const GPX &gpx, const QList<PathItem *> &paths);
+	void loadData(const Data &data, const QList<PathItem *> &paths);
 	void clear();
 	void setUnits(enum Units) {}
 	void showTracks(bool show);

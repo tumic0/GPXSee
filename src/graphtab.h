@@ -5,7 +5,7 @@
 #include "graphview.h"
 #include "units.h"
 
-class GPX;
+class Data;
 class PathItem;
 
 class GraphTab : public GraphView
@@ -17,7 +17,7 @@ public:
 	  {setFrameShape(QFrame::NoFrame);}
 
 	virtual QString label() const = 0;
-	virtual void loadGPX(const GPX &gpx, const QList<PathItem *> &paths) = 0;
+	virtual void loadData(const Data &data, const QList<PathItem *> &paths) = 0;
 	virtual void clear() = 0;
 	virtual void setUnits(enum Units units) = 0;
 	virtual void showTracks(bool show) = 0;

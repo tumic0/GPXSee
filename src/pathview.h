@@ -9,7 +9,7 @@
 #include "palette.h"
 #include "waypoint.h"
 
-class GPX;
+class Data;
 class POI;
 class Map;
 class Track;
@@ -28,7 +28,7 @@ public:
 	PathView(QWidget *parent = 0);
 	~PathView();
 
-	QList<PathItem*> loadGPX(const GPX &gpx);
+	QList<PathItem*> loadData(const Data &data);
 
 	void setPOI(POI *poi);
 	void setMap(Map *map);

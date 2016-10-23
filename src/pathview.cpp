@@ -3,7 +3,7 @@
 #include <QWheelEvent>
 #include "ll.h"
 #include "poi.h"
-#include "gpx.h"
+#include "data.h"
 #include "map.h"
 #include "trackitem.h"
 #include "routeitem.h"
@@ -124,17 +124,17 @@ void PathView::addWaypoints(const QList<Waypoint> &waypoints)
 	_scale = mapScale(_zoom);
 }
 
-QList<PathItem *> PathView::loadGPX(const GPX &gpx)
+QList<PathItem *> PathView::loadData(const Data &data)
 {
 	QList<PathItem *> paths;
 	int zoom = _zoom;
 
 
-	for (int i = 0; i < gpx.tracks().count(); i++)
-		paths.append(addTrack(*(gpx.tracks().at(i))));
-	for (int i = 0; i < gpx.routes().count(); i++)
-		paths.append(addRoute(*(gpx.routes().at(i))));
-	addWaypoints(gpx.waypoints());
+	for (int i = 0; i < data.tracks().count(); i++)
+		paths.append(addTrack(*(data.tracks().at(i))));
+	for (int i = 0; i < data.routes().count(); i++)
+		paths.append(addRoute(*(data.routes().at(i))));
+	addWaypoints(data.waypoints());
 
 	if (_tracks.empty() && _routes.empty() && _waypoints.empty())
 		return paths;

@@ -1,5 +1,5 @@
-#ifndef GPX_H
-#define GPX_H
+#ifndef DATA_H
+#define DATA_H
 
 #include <QVector>
 #include <QList>
@@ -8,16 +8,17 @@
 #include "waypoint.h"
 #include "track.h"
 #include "route.h"
-#include "parser.h"
 
-class GPX
+class Parser;
+
+class Data
 {
 public:
-	GPX();
-	~GPX();
+	Data();
+	~Data();
 
 	bool loadFile(const QString &fileName);
-	const QString &errorString() const {return _error;}
+	const QString &errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 
 	const QList<Track*> &tracks() const {return _tracks;}
@@ -25,9 +26,9 @@ public:
 	const QList<Waypoint> &waypoints() const {return _waypoint_data;}
 
 private:
-	Parser _parser;
-	QString _error;
+	QString _errorString;
 	int _errorLine;
+	QList<Parser*> _parsers;
 
 	QList<Track*> _tracks;
 	QList<Route*> _routes;
@@ -37,4 +38,4 @@ private:
 	QList<Waypoint> _waypoint_data;
 };
 
-#endif // GPX_H
+#endif // DATA_H

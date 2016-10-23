@@ -26,7 +26,7 @@
 #include "icons.h"
 #include "keys.h"
 #include "settings.h"
-#include "gpx.h"
+#include "data.h"
 #include "map.h"
 #include "maplist.h"
 #include "elevationgraph.h"
@@ -55,8 +55,7 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	createMenus();
 	createToolBars();
 
-	_browser = new FileBrowser(this);
-	_browser->setFilter(QStringList("*.gpx"));
+	createBrowser();
 
 	QSplitter *splitter = new QSplitter();
 	splitter->setOrientation(Qt::Vertical);
@@ -103,6 +102,14 @@ GUI::~GUI()
 		if (_graphTabWidget->indexOf(_tabs.at(i)) < 0)
 			delete _tabs.at(i);
 	}
+}
+
+void GUI::createBrowser()
+{
+	QStringList filter;
+	filter << "*.gpx" << "*.tcx" << "*.csv";
+	_browser = new FileBrowser(this);
+	_browser->setFilter(filter);
 }
 
 void GUI::loadMaps()
@@ -593,7 +600,9 @@ void GUI::dataSources()
 void GUI::openFile()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open file"),
-	  QString(), tr("GPX files (*.gpx);;All files (*)"));
+	  QString(), tr("All supported files (*.gpx *.tcx *.csv)") + ";;"
+	  + tr("GPX files (*.gpx)") + ";;" + tr("TCX files (*.tcx)") + ";;"
+	  + tr("CSV files (*.csv)") + ";;" + tr("All files (*)"));
 	QStringList list = files;
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
@@ -629,40 +638,40 @@ bool GUI::openFile(const QString &fileName)
 
 bool GUI::loadFile(const QString &fileName)
 {
-	GPX gpx;
+	Data data;
 	QList<PathItem*> paths;
 
-	if (gpx.loadFile(fileName)) {
-		paths = _pathView->loadGPX(gpx);
+	if (data.loadFile(fileName)) {
+		paths = _pathView->loadData(data);
 		for (int i = 0; i < _tabs.count(); i++)
-			_tabs.at(i)->loadGPX(gpx, paths);
+			_tabs.at(i)->loadData(data, paths);
 		updateGraphTabs();
 		_pathView->setHidden(false);
 
-		for (int i = 0; i < gpx.tracks().count(); i++) {
-			_trackDistance += gpx.tracks().at(i)->distance();
-			_time += gpx.tracks().at(i)->time();
-			const QDate &date = gpx.tracks().at(i)->date().date();
+		for (int i = 0; i < data.tracks().count(); i++) {
+			_trackDistance += data.tracks().at(i)->distance();
+			_time += data.tracks().at(i)->time();
+			const QDate &date = data.tracks().at(i)->date().date();
 			if (_dateRange.first.isNull() || _dateRange.first > date)
 				_dateRange.first = date;
 			if (_dateRange.second.isNull() || _dateRange.second < date)
 				_dateRange.second = date;
 		}
-		_trackCount += gpx.tracks().count();
+		_trackCount += data.tracks().count();
 
-		for (int i = 0; i < gpx.routes().count(); i++)
-			_routeDistance += gpx.routes().at(i)->distance();
-		_routeCount += gpx.routes().count();
+		for (int i = 0; i < data.routes().count(); i++)
+			_routeDistance += data.routes().at(i)->distance();
+		_routeCount += data.routes().count();
 
-		_waypointCount += gpx.waypoints().count();
+		_waypointCount += data.waypoints().count();
 
 		return true;
 	} else {
 		QString error = fileName + QString("\n\n")
-		  + tr("Error loading GPX file:\n%1").arg(gpx.errorString())
+		  + tr("Error loading data file:\n%1").arg(data.errorString())
 		  + QString("\n");
-		if (gpx.errorLine())
-			error.append(tr("Line: %1").arg(gpx.errorLine()));
+		if (data.errorLine())
+			error.append(tr("Line: %1").arg(data.errorLine()));
 
 		QMessageBox::critical(this, tr("Error"), error);
 		return false;
@@ -672,9 +681,9 @@ bool GUI::loadFile(const QString &fileName)
 void GUI::openPOIFile()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open POI file"),
-	  QString(), tr("All POI files (*.gpx *.csv)") + ";;"
+	  QString(), tr("All supported files (*.gpx *.tcx *.csv)") + ";;"
 	  + tr("GPX files (*.gpx)") + ";;" + tr("CSV files (*.csv)") + ";;"
-	  + tr("All files (*)"));
+	  + tr("TCX files (*.tcx)") + ";;" + tr("All files (*)"));
 	QStringList list = files;
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)

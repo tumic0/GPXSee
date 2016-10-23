@@ -1,5 +1,5 @@
 #include "config.h"
-#include "gpx.h"
+#include "data.h"
 #include "speedgraph.h"
 
 
@@ -25,22 +25,22 @@ void SpeedGraph::setInfo()
 		clearInfo();
 }
 
-void SpeedGraph::loadGPX(const GPX &gpx, const QList<PathItem *> &paths)
+void SpeedGraph::loadData(const Data &data, const QList<PathItem *> &paths)
 {
-	for (int i = 0; i < gpx.tracks().count(); i++) {
-		const Graph &graph = gpx.tracks().at(i)->speed();
+	for (int i = 0; i < data.tracks().count(); i++) {
+		const Graph &graph = data.tracks().at(i)->speed();
 		if (graph.size() < 2) {
 			skipColor();
 			continue;
 		}
 
-		_avg.append(QPointF(gpx.tracks().at(i)->distance(),
-		  gpx.tracks().at(i)->distance() / gpx.tracks().at(i)->time()));
+		_avg.append(QPointF(data.tracks().at(i)->distance(),
+		  data.tracks().at(i)->distance() / data.tracks().at(i)->time()));
 
 		GraphView::loadGraph(graph, paths.at(i));
 	}
 
-	for (int i = 0; i < gpx.routes().count(); i++)
+	for (int i = 0; i < data.routes().count(); i++)
 		skipColor();
 
 	setInfo();

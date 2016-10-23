@@ -89,6 +89,7 @@ private:
 	void createStatusBar();
 	void createPathView();
 	void createGraphTabs();
+	void createBrowser();
 
 	bool openPOIFile(const QString &fileName);
 	bool loadFile(const QString &fileName);

@@ -8,8 +8,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += printsupport
 HEADERS += src/config.h \
     src/icons.h \
     src/gui.h \
-    src/gpx.h \
-    src/parser.h \
     src/poi.h \
     src/rtree.h \
     src/ll.h \
@@ -53,11 +51,14 @@ HEADERS += src/config.h \
     src/graph.h \
     src/pathitem.h \
     src/pathview.h \
-    src/griditem.h
+    src/griditem.h \
+    src/data.h \
+    src/gpxparser.h \
+    src/tcxparser.h \
+    src/parser.h \
+    src/csvparser.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
-    src/gpx.cpp \
-    src/parser.cpp \
     src/poi.cpp \
     src/ll.cpp \
     src/axisitem.cpp \
@@ -93,7 +94,11 @@ SOURCES += src/main.cpp \
     src/graphitem.cpp \
     src/pathitem.cpp \
     src/pathview.cpp \
-    src/griditem.cpp
+    src/griditem.cpp \
+    src/data.cpp \
+    src/gpxparser.cpp \
+    src/tcxparser.cpp \
+    src/csvparser.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {
