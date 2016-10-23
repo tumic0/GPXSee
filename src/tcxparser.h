@@ -29,9 +29,9 @@ private:
 	void lap();
 	void trackpoints();
 	void routepoints();
-	void trackpointData();
-	void routepointData();
-	void waypointData();
+	void trackpointData(Trackpoint &t);
+	void routepointData(Waypoint &w);
+	void waypointData(Waypoint &w);
 	Coordinates position();
 
 	QXmlStreamReader _reader;

@@ -13,13 +13,13 @@ Coordinates TCXParser::position()
 			if (!res || (val < -90.0 || val > 90.0))
 				_reader.raiseError("Invalid latitude.");
 			else
-				pos.setLat(_reader.readElementText().toDouble(&res));
+				pos.setLat(val);
 		} else if (_reader.name() == "LongitudeDegrees") {
 			val = _reader.readElementText().toDouble(&res);
 			if (!res || (val < -180.0 || val > 180.0))
 				_reader.raiseError("Invalid longitude.");
 			else
-				pos.setLon(_reader.readElementText().toDouble(&res));
+				pos.setLon(val);
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -27,53 +27,52 @@ Coordinates TCXParser::position()
 	return pos;
 }
 
-void TCXParser::trackpointData()
+void TCXParser::trackpointData(Trackpoint &t)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Position")
-			_track->last().setCoordinates(position());
+			t.setCoordinates(position());
 		else if (_reader.name() == "AltitudeMeters")
-			_track->last().setElevation(_reader.readElementText().toDouble());
+			t.setElevation(_reader.readElementText().toDouble());
 		else if (_reader.name() == "Time")
-			_track->last().setTimestamp(QDateTime::fromString(
-			  _reader.readElementText(), Qt::ISODate));
+			t.setTimestamp(QDateTime::fromString(_reader.readElementText(),
+			  Qt::ISODate));
 		else if (_reader.name() == "HeartRateBpm")
-			_track->last().setHeartRate(_reader.readElementText().toDouble());
+			t.setHeartRate(_reader.readElementText().toDouble());
 		else
 			_reader.skipCurrentElement();
 	}
 }
 
-void TCXParser::routepointData()
+void TCXParser::routepointData(Waypoint &w)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Position")
-			_route->last().setCoordinates(position());
+			w.setCoordinates(position());
 		else if (_reader.name() == "AltitudeMeters")
-			_route->last().setElevation(_reader.readElementText().toDouble());
+			w.setElevation(_reader.readElementText().toDouble());
 		else if (_reader.name() == "Time")
-			_route->last().setTimestamp(QDateTime::fromString(
-			  _reader.readElementText(), Qt::ISODate));
+			w.setTimestamp(QDateTime::fromString(_reader.readElementText(),
+			  Qt::ISODate));
 		else
 			_reader.skipCurrentElement();
 	}
 }
 
-void TCXParser::waypointData()
+void TCXParser::waypointData(Waypoint &w)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Position")
-			_waypoints.last().setCoordinates(position());
+			w.setCoordinates(position());
 		else if (_reader.name() == "Name")
-			_waypoints.last().setName(_reader.readElementText());
+			w.setName(_reader.readElementText());
 		else if (_reader.name() == "Notes")
-			_waypoints.last().setDescription(_reader.readElementText());
+			w.setDescription(_reader.readElementText());
 		else if (_reader.name() == "AltitudeMeters")
-			_waypoints.last().setElevation(
-			  _reader.readElementText().toDouble());
+			w.setElevation(_reader.readElementText().toDouble());
 		else if (_reader.name() == "Time")
-			_waypoints.last().setTimestamp(QDateTime::fromString(
-			  _reader.readElementText(), Qt::ISODate));
+			w.setTimestamp(QDateTime::fromString(_reader.readElementText(),
+			  Qt::ISODate));
 		else
 			_reader.skipCurrentElement();
 	}
@@ -83,8 +82,10 @@ void TCXParser::trackpoints()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Trackpoint") {
-			_track->append(Trackpoint());
-			trackpointData();
+			Trackpoint t;
+			trackpointData(t);
+			if (t.coordinates().isValid())
+				_track->append(t);
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -94,8 +95,10 @@ void TCXParser::routepoints()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Trackpoint") {
-			_route->append(Waypoint());
-			routepointData();
+			Waypoint w;
+			routepointData(w);
+			if (w.coordinates().isValid())
+				_route->append(w);
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -121,8 +124,10 @@ void TCXParser::course()
 			_route = &_routes.back();
 			routepoints();
 		} else if (_reader.name() == "CoursePoint") {
-			_waypoints.append(Waypoint());
-			waypointData();
+			Waypoint w;
+			waypointData(w);
+			if (w.coordinates().isValid())
+				_waypoints.append(w);
 		} else
 			_reader.skipCurrentElement();
 	}
