@@ -61,7 +61,7 @@ void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	for (int i = 0; i <= SEGMENTS; i++) {
 		QString label = QString::number(_length * i);
 		br = fm.tightBoundingRect(label);
-		painter->drawText(_width * i - br.width()/2, br.height(), label);
+		painter->drawText(_width * i - br.width()/2, br.height() + 1, label);
 	}
 	painter->drawText(_width * SEGMENTS + PADDING, SCALE_HEIGHT + PADDING
 	  + br.height() + fm.descent(), units());
