@@ -2,7 +2,7 @@
 #include "griditem.h"
 
 
-#define GRID_WIDTH 1
+#define GRID_WIDTH 0
 
 GridItem::GridItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
