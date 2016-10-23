@@ -1,6 +1,5 @@
 #include <QApplication>
 #include <QPainter>
-#include "ll.h"
 #include "misc.h"
 #include "waypoint.h"
 #include "waypointitem.h"
@@ -23,13 +22,14 @@ RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
 {
 	QVector<Waypoint> r = route.route();
 	Q_ASSERT(r.count() >= 2);
+	QPointF p;
 
 	new WaypointItem(r.at(0), this);
-	const QPointF &p = r.at(0).coordinates();
-	_path.moveTo(ll2mercator(QPointF(p.x(), -p.y())));
+	p = r.at(0).coordinates().toMercator();
+	_path.moveTo(QPointF(p.x(), -p.y()));
 	for (int i = 1; i < r.size(); i++) {
-		const QPointF &p = r.at(i).coordinates();
-		_path.lineTo(ll2mercator(QPointF(p.x(), -p.y())));
+		p = r.at(i).coordinates().toMercator();
+		_path.lineTo(QPointF(p.x(), -p.y()));
 		new WaypointItem(r.at(i), this);
 	}
 

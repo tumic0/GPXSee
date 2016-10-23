@@ -32,7 +32,7 @@ private:
 	void trackpointData();
 	void routepointData();
 	void waypointData();
-	QPointF position();
+	Coordinates position();
 
 	QXmlStreamReader _reader;
 	QVector<Trackpoint> *_track;

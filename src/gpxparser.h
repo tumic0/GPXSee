@@ -36,6 +36,8 @@ private:
 	void routepointData();
 	void waypointData();
 
+	Coordinates coordinates(const QXmlStreamAttributes &attr);
+
 	void handleWaypointAttributes(const QXmlStreamAttributes &attr);
 	void handleWaypointData(DataType type, const QString &value);
 	void handleTrackpointAttributes(const QXmlStreamAttributes &attr);

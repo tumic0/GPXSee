@@ -10,7 +10,6 @@ HEADERS += src/config.h \
     src/gui.h \
     src/poi.h \
     src/rtree.h \
-    src/ll.h \
     src/axisitem.h \
     src/keys.h \
     src/slideritem.h \
@@ -56,11 +55,14 @@ HEADERS += src/config.h \
     src/gpxparser.h \
     src/tcxparser.h \
     src/parser.h \
-    src/csvparser.h
+    src/csvparser.h \
+    src/coordinates.h \
+    src/tile.h \
+    src/rd.h \
+    src/wgs84.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
-    src/ll.cpp \
     src/axisitem.cpp \
     src/slideritem.cpp \
     src/markeritem.cpp \
@@ -98,7 +100,8 @@ SOURCES += src/main.cpp \
     src/data.cpp \
     src/gpxparser.cpp \
     src/tcxparser.cpp \
-    src/csvparser.cpp
+    src/csvparser.cpp \
+    src/coordinates.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {

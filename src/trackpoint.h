@@ -1,10 +1,10 @@
 #ifndef TRACKPOINT_H
 #define TRACKPOINT_H
 
-#include <QPointF>
 #include <QDateTime>
 #include <QDebug>
 #include <cmath>
+#include "coordinates.h"
 
 class Trackpoint
 {
@@ -13,9 +13,9 @@ public:
 		_elevation = NAN; _geoidHeight = 0; _speed = NAN; _heartRate = NAN;
 		_temperature = NAN;
 	}
-	Trackpoint(const QPointF &coordinates) {_coordinates = coordinates;}
+	Trackpoint(const Coordinates &coordinates) {_coordinates = coordinates;}
 
-	const QPointF &coordinates() const {return _coordinates;}
+	const Coordinates &coordinates() const {return _coordinates;}
 	const QDateTime &timestamp() const {return _timestamp;}
 	qreal elevation() const {return _elevation;}
 	qreal geoidHeight() const {return _geoidHeight;}
@@ -23,7 +23,7 @@ public:
 	qreal heartRate() const {return _heartRate;}
 	qreal temperature() const {return _temperature;}
 
-	void setCoordinates(const QPointF &coordinates)
+	void setCoordinates(const Coordinates &coordinates)
 	  {_coordinates = coordinates;}
 	void setTimestamp(const QDateTime &timestamp) {_timestamp = timestamp;}
 	void setElevation(qreal elevation) {_elevation = elevation;}
@@ -39,7 +39,7 @@ public:
 	bool hasTemperature() const {return !std::isnan(_temperature);}
 
 private:
-	QPointF _coordinates;
+	Coordinates _coordinates;
 	QDateTime _timestamp;
 	qreal _elevation;
 	qreal _geoidHeight;

@@ -1,28 +1,28 @@
 #ifndef WAYPOINT_H
 #define WAYPOINT_H
 
-#include <QPointF>
 #include <QString>
 #include <QDateTime>
 #include <QHash>
 #include <QDebug>
 #include <cmath>
+#include "coordinates.h"
 
 class Waypoint
 {
 public:
 	Waypoint() {_elevation = NAN; _geoidHeight = 0;}
-	Waypoint(const QPointF &coordinates)
+	Waypoint(const Coordinates &coordinates)
 	  : _coordinates(coordinates) {_elevation = NAN; _geoidHeight = 0;}
 
-	const QPointF &coordinates() const {return _coordinates;}
+	const Coordinates &coordinates() const {return _coordinates;}
 	const QString &name() const {return _name;}
 	const QString &description() const {return _description;}
 	const QDateTime &timestamp() const {return _timestamp;}
 	qreal elevation() const {return _elevation;}
 	qreal geoidHeight() const {return _geoidHeight;}
 
-	void setCoordinates(const QPointF &coordinates)
+	void setCoordinates(const Coordinates &coordinates)
 	  {_coordinates = coordinates;}
 	void setName(const QString &name) {_name = name;}
 	void setDescription(const QString &description)
@@ -38,7 +38,7 @@ public:
 	  && this->_coordinates == other._coordinates;}
 
 private:
-	QPointF _coordinates;
+	Coordinates _coordinates;
 	QString _name;
 	QString _description;
 	QDateTime _timestamp;

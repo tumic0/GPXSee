@@ -1,4 +1,3 @@
-#include "ll.h"
 #include "route.h"
 
 Route::Route(const QVector<Waypoint> &data) : _data(data)
@@ -7,7 +6,7 @@ Route::Route(const QVector<Waypoint> &data) : _data(data)
 
 	_distance.append(dist);
 	for (int i = 1; i < data.count(); i++) {
-		dist += llDistance(data.at(i).coordinates(), data.at(i-1).coordinates());
+		dist += data.at(i).coordinates().distanceTo(data.at(i-1).coordinates());
 		_distance.append(dist);
 	}
 }

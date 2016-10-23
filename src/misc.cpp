@@ -76,11 +76,11 @@ QString elevation(qreal value, Units units)
 		  + qApp->translate("Misc", "ft");
 }
 
-QString coordinates(const QPointF &value)
+QString coordinates(const Coordinates &value)
 {
-	QChar yH = (value.y() < 0) ? 'S' : 'N';
-	QChar xH = (value.x() < 0) ? 'W' : 'E';
+	QChar yH = (value.lat() < 0) ? 'S' : 'N';
+	QChar xH = (value.lon() < 0) ? 'W' : 'E';
 
-	return QString::number(qAbs(value.y()), 'f', 5) + yH + "," + QChar(0x00A0)
-	  + QString::number(qAbs(value.x()), 'f', 5) + xH;
+	return QString::number(qAbs(value.lat()), 'f', 5) + yH + "," + QChar(0x00A0)
+	  + QString::number(qAbs(value.lon()), 'f', 5) + xH;
 }

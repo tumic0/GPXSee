@@ -76,25 +76,38 @@ void GPXParser::handleRoutepointData(DataType type, const QString &value)
 	}
 }
 
+Coordinates GPXParser::coordinates(const QXmlStreamAttributes &attr)
+{
+	bool res;
+	qreal lon, lat;
+
+	lon = attr.value("lon").toDouble(&res);
+	if (!res || (lon < -180.0 || lon > 180.0)) {
+		_reader.raiseError("Invalid longitude.");
+		return Coordinates();
+	}
+	lat = attr.value("lat").toDouble(&res);
+	if (!res || (lat < -90.0 || lat > 90.0)) {
+		_reader.raiseError("Invalid latitude.");
+		return Coordinates();
+	}
+
+	return Coordinates(lon, lat);
+}
+
 void GPXParser::handleTrackpointAttributes(const QXmlStreamAttributes &attr)
 {
-	_track->last().setCoordinates(QPointF(
-	  attr.value("lon").toDouble(),
-	  attr.value("lat").toDouble()));
+	_track->last().setCoordinates(coordinates(attr));
 }
 
 void GPXParser::handleRoutepointAttributes(const QXmlStreamAttributes &attr)
 {
-	_route->last().setCoordinates(QPointF(
-	  attr.value("lon").toDouble(),
-	  attr.value("lat").toDouble()));
+	_route->last().setCoordinates(coordinates(attr));
 }
 
 void GPXParser::handleWaypointAttributes(const QXmlStreamAttributes &attr)
 {
-	_waypoints.last().setCoordinates(QPointF(
-	  attr.value("lon").toDouble(),
-	  attr.value("lat").toDouble()));
+	_waypoints.last().setCoordinates(coordinates(attr));
 }
 
 void GPXParser::tpExtension()

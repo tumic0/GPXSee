@@ -1,7 +1,6 @@
 #include <QFileInfo>
 #include <QDir>
 #include "downloader.h"
-#include "ll.h"
 #include "config.h"
 #include "map.h"
 
@@ -91,7 +90,7 @@ void Map::loadTilesSync(QList<Tile> &list)
 
 void Map::fillTile(Tile &tile)
 {
-	tile.pixmap() = QPixmap(TILE_SIZE, TILE_SIZE);
+	tile.pixmap() = QPixmap(Tile::size(), Tile::size());
 	tile.pixmap().fill();
 }
 

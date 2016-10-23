@@ -1,4 +1,3 @@
-#include "ll.h"
 #include "track.h"
 
 
@@ -87,7 +86,7 @@ Track::Track(const QVector<Trackpoint> &data) : _data(data)
 	_distance.append(0);
 	_time.append(0);
 	for (int i = 1; i < data.count(); i++) {
-		dist += llDistance(data.at(i).coordinates(), data.at(i-1).coordinates());
+		dist += data.at(i).coordinates().distanceTo(data.at(i-1).coordinates());
 		_distance.append(dist);
 
 		if (data.first().hasTimestamp() && data.at(i).hasTimestamp())

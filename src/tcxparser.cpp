@@ -1,16 +1,26 @@
 #include "tcxparser.h"
 
 
-QPointF TCXParser::position()
+Coordinates TCXParser::position()
 {
-	QPointF pos;
+	Coordinates pos;
+	qreal val;
+	bool res;
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "LatitudeDegrees")
-			pos.setY(_reader.readElementText().toDouble());
-		else if (_reader.name() == "LongitudeDegrees")
-			pos.setX(_reader.readElementText().toDouble());
-		else
+		if (_reader.name() == "LatitudeDegrees") {
+			val = _reader.readElementText().toDouble(&res);
+			if (!res || (val < -90.0 || val > 90.0))
+				_reader.raiseError("Invalid latitude.");
+			else
+				pos.setLat(_reader.readElementText().toDouble(&res));
+		} else if (_reader.name() == "LongitudeDegrees") {
+			val = _reader.readElementText().toDouble(&res);
+			if (!res || (val < -180.0 || val > 180.0))
+				_reader.raiseError("Invalid longitude.");
+			else
+				pos.setLon(_reader.readElementText().toDouble(&res));
+		} else
 			_reader.skipCurrentElement();
 	}
 

@@ -1,6 +1,5 @@
-﻿#include <QFile>
+#include <QFile>
 #include <QLineF>
-#include "ll.h"
 #include "gpxparser.h"
 #include "tcxparser.h"
 #include "csvparser.h"

@@ -1,7 +1,6 @@
 #include <QApplication>
 #include <QPainter>
 #include "config.h"
-#include "ll.h"
 #include "misc.h"
 #include "tooltip.h"
 #include "waypointitem.h"
@@ -39,8 +38,8 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, QGraphicsItem *parent)
 	_hover = false;
 
 	_waypoint = waypoint;
-	_coordinates = ll2mercator(QPointF(waypoint.coordinates().x(),
-	  -waypoint.coordinates().y()));
+	QPointF p = waypoint.coordinates().toMercator();
+	_coordinates = QPointF(p.x(), -p.y());
 
 	updateShape();
 

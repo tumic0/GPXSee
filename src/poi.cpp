@@ -3,7 +3,6 @@
 #include <QList>
 #include "pathitem.h"
 #include "waypointitem.h"
-#include "ll.h"
 #include "data.h"
 #include "poi.h"
 
@@ -36,10 +35,10 @@ bool POI::loadFile(const QString &fileName)
 	index.end = _data.size() - 1;
 
 	for (int i = index.start; i <= index.end; i++) {
-		const QPointF &p = _data.at(i).coordinates();
+		const Coordinates &p = _data.at(i).coordinates();
 		qreal c[2];
-		c[0] = p.x();
-		c[1] = p.y();
+		c[0] = p.lon();
+		c[1] = p.lat();
 		_tree.Insert(c, c, i);
 	}
 
@@ -67,11 +66,11 @@ QVector<Waypoint> POI::points(const PathItem *path) const
 	const QPainterPath &pp = path->path();
 
 	for (int i = 0; i < pp.elementCount(); i++) {
-		QPointF p = mercator2ll(pp.elementAt(i));
-		min[0] = p.x() - _radius;
-		min[1] = -p.y() - _radius;
-		max[0] = p.x() + _radius;
-		max[1] = -p.y() + _radius;
+		Coordinates p = Coordinates::fromMercator(pp.elementAt(i));
+		min[0] = p.lon() - _radius;
+		min[1] = -p.lat() - _radius;
+		max[0] = p.lon() + _radius;
+		max[1] = -p.lat() + _radius;
 		_tree.Search(min, max, cb, &set);
 	}
 
@@ -92,11 +91,11 @@ QVector<Waypoint> POI::points(const QList<WaypointItem*> &list)
 	qreal min[2], max[2];
 
 	for (int i = 0; i < list.count(); i++) {
-		const QPointF &p = list.at(i)->waypoint().coordinates();
-		min[0] = p.x() - _radius;
-		min[1] = p.y() - _radius;
-		max[0] = p.x() + _radius;
-		max[1] = p.y() + _radius;
+		const Coordinates &p = list.at(i)->waypoint().coordinates();
+		min[0] = p.lon() - _radius;
+		min[1] = p.lat() - _radius;
+		max[0] = p.lon() + _radius;
+		max[1] = p.lat() + _radius;
 		_tree.Search(min, max, cb, &set);
 	}
 
@@ -116,11 +115,11 @@ QVector<Waypoint> POI::points(const QList<Waypoint> &list) const
 	qreal min[2], max[2];
 
 	for (int i = 0; i < list.count(); i++) {
-		const QPointF &p = list.at(i).coordinates();
-		min[0] = p.x() - _radius;
-		min[1] = p.y() - _radius;
-		max[0] = p.x() + _radius;
-		max[1] = p.y() + _radius;
+		const Coordinates &p = list.at(i).coordinates();
+		min[0] = p.lon() - _radius;
+		min[1] = p.lat() - _radius;
+		max[0] = p.lon() + _radius;
+		max[1] = p.lat() + _radius;
 		_tree.Search(min, max, cb, &set);
 	}
 
@@ -148,10 +147,10 @@ void POI::enableFile(const QString &fileName, bool enable)
 			continue;
 
 		for (int j = idx.start; j <= idx.end; j++) {
-			const QPointF &p = _data.at(j).coordinates();
+			const Coordinates &p = _data.at(j).coordinates();
 			qreal c[2];
-			c[0] = p.x();
-			c[1] = p.y();
+			c[0] = p.lon();
+			c[1] = p.lat();
 			_tree.Insert(c, c, j);
 		}
 	}

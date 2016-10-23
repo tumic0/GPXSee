@@ -1,7 +1,6 @@
 #include <QApplication>
 #include <QCursor>
 #include <QPainter>
-#include "ll.h"
 #include "misc.h"
 #include "tooltip.h"
 #include "trackitem.h"
@@ -25,14 +24,15 @@ QString TrackItem::toolTip()
 TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
   : PathItem(parent)
 {
+	QPointF p;
 	const QVector<Trackpoint> &t = track.track();
 	Q_ASSERT(t.count() >= 2);
 
-	const QPointF &p = t.at(0).coordinates();
-	_path.moveTo(ll2mercator(QPointF(p.x(), -p.y())));
+	p = t.first().coordinates().toMercator();
+	_path.moveTo(QPointF(p.x(), -p.y()));
 	for (int i = 1; i < t.size(); i++) {
-		const QPointF &p = t.at(i).coordinates();
-		_path.lineTo(ll2mercator(QPointF(p.x(), -p.y())));
+		p = t.at(i).coordinates().toMercator();
+		_path.lineTo(QPointF(p.x(), -p.y()));
 	}
 
 	updateShape();

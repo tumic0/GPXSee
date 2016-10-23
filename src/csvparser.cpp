@@ -29,7 +29,7 @@ bool CSVParser::loadFile(QIODevice *device)
 			_errorLine = ln;
 			return false;
 		}
-		Waypoint wp(QPointF(lon, lat));
+		Waypoint wp(Coordinates(lon, lat));
 
 		QByteArray ba = list[2].trimmed();
 		QString name = QString::fromUtf8(ba.data(), ba.size());
