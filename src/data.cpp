@@ -3,6 +3,7 @@
 #include "gpxparser.h"
 #include "tcxparser.h"
 #include "csvparser.h"
+#include "kmlparser.h"
 #include "data.h"
 
 
@@ -10,6 +11,7 @@ Data::Data() : _errorLine(0)
 {
 	_parsers << new GPXParser(_track_data, _route_data, _waypoint_data);
 	_parsers << new TCXParser(_track_data, _route_data, _waypoint_data);
+	_parsers << new KMLParser(_track_data, _route_data, _waypoint_data);
 	_parsers << new CSVParser(_track_data, _route_data, _waypoint_data);
 }
 

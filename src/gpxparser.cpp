@@ -81,12 +81,20 @@ Coordinates GPXParser::coordinates(const QXmlStreamAttributes &attr)
 	bool res;
 	qreal lon, lat;
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+	lon = attr.value("lon").toString().toDouble(&res);
+#else // QT_VERSION < 5
 	lon = attr.value("lon").toDouble(&res);
+#endif // QT_VERSION < 5
 	if (!res || (lon < -180.0 || lon > 180.0)) {
 		_reader.raiseError("Invalid longitude.");
 		return Coordinates();
 	}
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+	lat = attr.value("lat").toString().toDouble(&res);
+#else // QT_VERSION < 5
 	lat = attr.value("lat").toDouble(&res);
+#endif // QT_VERSION < 5
 	if (!res || (lat < -90.0 || lat > 90.0)) {
 		_reader.raiseError("Invalid latitude.");
 		return Coordinates();

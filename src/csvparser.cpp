@@ -2,7 +2,7 @@
 
 bool CSVParser::loadFile(QIODevice *device)
 {
-	bool ret;
+	bool res;
 	int ln = 1;
 
 	_errorLine = 0;
@@ -17,14 +17,14 @@ bool CSVParser::loadFile(QIODevice *device)
 			return false;
 		}
 
-		qreal lat = list[0].trimmed().toDouble(&ret);
-		if (!ret) {
+		qreal lat = list[0].trimmed().toDouble(&res);
+		if (!res || (lat < -90.0 || lat > 90.0)) {
 			_errorString = "Invalid latitude.";
 			_errorLine = ln;
 			return false;
 		}
-		qreal lon = list[1].trimmed().toDouble(&ret);
-		if (!ret) {
+		qreal lon = list[1].trimmed().toDouble(&res);
+		if (!res || (lon < -180.0 || lon > 180.0)) {
 			_errorString = "Invalid longitude.";
 			_errorLine = ln;
 			return false;
