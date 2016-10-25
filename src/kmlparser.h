@@ -3,6 +3,7 @@
 
 #include <QXmlStreamReader>
 #include <QVector>
+#include <QDateTime>
 #include "parser.h"
 
 class KMLParser : public Parser
@@ -22,12 +23,16 @@ private:
 	bool parse();
 	void kml();
 	void document();
+	void folder();
 	void placemark();
-	void multiGeometry();
+	void multiGeometry(const QString &name, const QString &desc,
+	  const QDateTime timestamp);
 	void lineString();
-	void point();
+	void point(const QString &name, const QString &desc,
+	  const QDateTime timestamp);
 	bool pointCoordinates();
 	bool lineCoordinates();
+	QDateTime timeStamp();
 
 	QXmlStreamReader _reader;
 	QVector<Trackpoint> *_track;
