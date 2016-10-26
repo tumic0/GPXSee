@@ -17,7 +17,6 @@ public:
 	bool loadFile(QIODevice *device);
 	QString errorString() const {return _reader.errorString();}
 	int errorLine() const {return _reader.lineNumber();}
-	const char *name() const {return "TCX";}
 
 private:
 	bool parse();

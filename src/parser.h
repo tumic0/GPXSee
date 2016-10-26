@@ -19,7 +19,6 @@ public:
 	virtual bool loadFile(QIODevice *device) = 0;
 	virtual QString errorString() const = 0;
 	virtual int errorLine() const = 0;
-	virtual const char *name() const = 0;
 
 protected:
 	QList<QVector<Trackpoint> > &_tracks;

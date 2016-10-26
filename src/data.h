@@ -3,6 +3,7 @@
 
 #include <QVector>
 #include <QList>
+#include <QHash>
 #include <QPointF>
 #include <QString>
 #include "waypoint.h"
@@ -26,9 +27,11 @@ public:
 	const QList<Waypoint> &waypoints() const {return _waypoint_data;}
 
 private:
+	void createData();
+
 	QString _errorString;
 	int _errorLine;
-	QList<Parser*> _parsers;
+	QHash<QString, Parser*> _parsers;
 
 	QList<Track*> _tracks;
 	QList<Route*> _routes;

@@ -14,7 +14,6 @@ public:
 	bool loadFile(QIODevice *device);
 	QString errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
-	const char *name() const {return "CSV";}
 
 private:
 	QString _errorString;
