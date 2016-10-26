@@ -212,6 +212,8 @@ void KMLParser::folder()
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Placemark")
 			placemark();
+		else if (_reader.name() == "Folder")
+			folder();
 		else
 			_reader.skipCurrentElement();
 	}
