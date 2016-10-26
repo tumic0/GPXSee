@@ -236,6 +236,8 @@ void KMLParser::kml()
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Document")
 			document();
+		else if (_reader.name() == "Placemark")
+			placemark();
 		else
 			_reader.skipCurrentElement();
 	}
