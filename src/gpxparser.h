@@ -20,8 +20,7 @@ public:
 
 private:
 	enum DataType {
-		Name, Description, Elevation, Time, Geoidheight, Speed, HeartRate,
-		Temperature
+		Name, Description, Elevation, Time, Speed, HeartRate, Temperature
 	};
 
 	bool parse();
@@ -32,17 +31,13 @@ private:
 	void tpExtension();
 	void extensions();
 	void trackpointData();
-	void routepointData();
-	void waypointData();
+	void waypointData(Waypoint &waypoint);
+	qreal number();
+	QDateTime time();
+	Coordinates coordinates();
 
-	Coordinates coordinates(const QXmlStreamAttributes &attr);
-
-	void handleWaypointAttributes(const QXmlStreamAttributes &attr);
-	void handleWaypointData(DataType type, const QString &value);
-	void handleTrackpointAttributes(const QXmlStreamAttributes &attr);
-	void handleTrackpointData(DataType type, const QString &value);
-	void handleRoutepointAttributes(const QXmlStreamAttributes &attr);
-	void handleRoutepointData(DataType type, const QString &value);
+	void handleWaypointData(DataType type, Waypoint &waypoint);
+	void handleTrackpointData(DataType type);
 
 	QXmlStreamReader _reader;
 	QVector<Trackpoint> *_track;

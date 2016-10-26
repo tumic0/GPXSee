@@ -18,7 +18,7 @@ Graph Route::elevation() const
 	for (int i = 0; i < _data.size(); i++)
 		if (_data.at(i).hasElevation())
 			graph.append(GraphPoint(_distance.at(i), NAN,
-			  _data.at(i).elevation() - _data.at(i).geoidHeight()));
+			  _data.at(i).elevation()));
 
 	return graph;
 }

@@ -9,16 +9,14 @@
 class Trackpoint
 {
 public:
-	Trackpoint() {
-		_elevation = NAN; _geoidHeight = 0; _speed = NAN; _heartRate = NAN;
-		_temperature = NAN;
-	}
-	Trackpoint(const Coordinates &coordinates) {_coordinates = coordinates;}
+	Trackpoint()
+	  {_elevation = NAN; _speed = NAN; _heartRate = NAN; _temperature = NAN;}
+	Trackpoint(const Coordinates &coordinates) : _coordinates(coordinates)
+	  {_elevation = NAN; _speed = NAN; _heartRate = NAN; _temperature = NAN;}
 
 	const Coordinates &coordinates() const {return _coordinates;}
 	const QDateTime &timestamp() const {return _timestamp;}
 	qreal elevation() const {return _elevation;}
-	qreal geoidHeight() const {return _geoidHeight;}
 	qreal speed() const {return _speed;}
 	qreal heartRate() const {return _heartRate;}
 	qreal temperature() const {return _temperature;}
@@ -27,7 +25,6 @@ public:
 	  {_coordinates = coordinates;}
 	void setTimestamp(const QDateTime &timestamp) {_timestamp = timestamp;}
 	void setElevation(qreal elevation) {_elevation = elevation;}
-	void setGeoidHeight(qreal geoidHeight) {_geoidHeight = geoidHeight;}
 	void setSpeed(qreal speed) {_speed = speed;}
 	void setHeartRate(qreal heartRate) {_heartRate = heartRate;}
 	void setTemperature(qreal temperature) {_temperature = temperature;}
@@ -42,7 +39,6 @@ private:
 	Coordinates _coordinates;
 	QDateTime _timestamp;
 	qreal _elevation;
-	qreal _geoidHeight;
 	qreal _speed;
 	qreal _heartRate;
 	qreal _temperature;

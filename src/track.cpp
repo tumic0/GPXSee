@@ -107,7 +107,7 @@ Graph Track::elevation() const
 	for (int i = 0; i < _data.size(); i++)
 		if (_data.at(i).hasElevation())
 			raw.append(GraphPoint(_distance.at(i), _time.at(i),
-			  _data.at(i).elevation() - _data.at(i).geoidHeight()));
+			  _data.at(i).elevation()));
 
 	return filter(raw, WINDOW_EF);
 }

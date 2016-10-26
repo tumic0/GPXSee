@@ -11,16 +11,15 @@
 class Waypoint
 {
 public:
-	Waypoint() {_elevation = NAN; _geoidHeight = 0;}
-	Waypoint(const Coordinates &coordinates)
-	  : _coordinates(coordinates) {_elevation = NAN; _geoidHeight = 0;}
+	Waypoint() {_elevation = NAN;}
+	Waypoint(const Coordinates &coordinates) : _coordinates(coordinates)
+	  {_elevation = NAN;}
 
 	const Coordinates &coordinates() const {return _coordinates;}
 	const QString &name() const {return _name;}
 	const QString &description() const {return _description;}
 	const QDateTime &timestamp() const {return _timestamp;}
 	qreal elevation() const {return _elevation;}
-	qreal geoidHeight() const {return _geoidHeight;}
 
 	void setCoordinates(const Coordinates &coordinates)
 	  {_coordinates = coordinates;}
@@ -29,7 +28,6 @@ public:
 	  {_description = description;}
 	void setTimestamp(const QDateTime &timestamp) {_timestamp = timestamp;}
 	void setElevation(qreal elevation) {_elevation = elevation;}
-	void setGeoidHeight(qreal geoidHeight) {_geoidHeight = geoidHeight;}
 
 	bool hasElevation() const {return !std::isnan(_elevation);}
 
@@ -43,7 +41,6 @@ private:
 	QString _description;
 	QDateTime _timestamp;
 	qreal _elevation;
-	qreal _geoidHeight;
 };
 
 inline uint qHash(const Waypoint &key)

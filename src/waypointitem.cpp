@@ -19,7 +19,7 @@ QString WaypointItem::toolTip()
 	  ::coordinates(_waypoint.coordinates()));
 	if (!std::isnan(_waypoint.elevation()))
 		tt.insert(qApp->translate("WaypointItem", "Elevation"),
-		  ::elevation(_waypoint.elevation() - _waypoint.geoidHeight(), _units));
+		  ::elevation(_waypoint.elevation(), _units));
 	if (!_waypoint.timestamp().isNull())
 		tt.insert(qApp->translate("WaypointItem", "Date"),
 		  _waypoint.timestamp().toString(Qt::SystemLocaleShortDate));
