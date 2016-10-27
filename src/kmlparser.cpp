@@ -1,7 +1,29 @@
 #include "kmlparser.h"
 
 
-bool KMLParser::pointCoordinates()
+qreal KMLParser::number()
+{
+	bool res;
+	qreal ret = _reader.readElementText().toDouble(&res);
+	if (!res)
+		_reader.raiseError(QString("Invalid %1.").arg(
+		  _reader.name().toString()));
+
+	return ret;
+}
+
+QDateTime KMLParser::time()
+{
+	QDateTime d = QDateTime::fromString(_reader.readElementText(),
+	  Qt::ISODate);
+	if (!d.isValid())
+		_reader.raiseError(QString("Invalid %1.").arg(
+		  _reader.name().toString()));
+
+	return d;
+}
+
+bool KMLParser::pointCoordinates(Waypoint &waypoint)
 {
 	QString data = _reader.readElementText();
 	const QChar *sp, *ep, *cp, *vp;
@@ -30,12 +52,6 @@ bool KMLParser::pointCoordinates()
 			if (!res)
 				return false;
 
-			if (c == 2) {
-				Waypoint w(Coordinates(val[0], val[1]));
-				w.setElevation(val[2]);
-				_waypoints.append(w);
-			}
-
 			c++;
 			vp = cp + 1;
 		} else if (cp->isSpace() || cp->isNull()) {
@@ -50,10 +66,9 @@ bool KMLParser::pointCoordinates()
 			if (!res)
 				return false;
 
-			Waypoint w(Coordinates(val[0], val[1]));
+			waypoint.setCoordinates(Coordinates(val[0], val[1]));
 			if (c == 2)
-				w.setElevation(val[2]);
-			_waypoints.append(w);
+				waypoint.setElevation(val[2]);
 
 			while (cp->isSpace())
 				cp++;
@@ -64,7 +79,7 @@ bool KMLParser::pointCoordinates()
 	return true;
 }
 
-bool KMLParser::lineCoordinates()
+bool KMLParser::lineCoordinates(QVector<Waypoint> &route)
 {
 	QString data = _reader.readElementText();
 	const QChar *sp, *ep, *cp, *vp;
@@ -107,10 +122,9 @@ bool KMLParser::lineCoordinates()
 			if (!res)
 				return false;
 
-			Waypoint w(Coordinates(val[0], val[1]));
+			route.append(Waypoint(Coordinates(val[0], val[1])));
 			if (c == 2)
-				w.setElevation(val[2]);
-			_route->append(w);
+				route.last().setElevation(val[2]);
 
 			while (cp->isSpace())
 				cp++;
@@ -122,87 +136,56 @@ bool KMLParser::lineCoordinates()
  	return true;
 }
 
-QDateTime KMLParser::timeStamp()
-{
-	QDateTime date;
-
-	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "when") {
-			date = QDateTime::fromString(_reader.readElementText(),
-			  Qt::ISODate);
-		} else
-			_reader.skipCurrentElement();
-	}
-
-	return date;
-}
-
-void KMLParser::lineString()
+void KMLParser::timeStamp(Waypoint &waypoint)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "coordinates") {
-			_routes.append(QVector<Waypoint>());
-			_route = &_routes.back();
-			if (!lineCoordinates())
-				_reader.raiseError("Invalid coordinates.");
-		} else
-			_reader.skipCurrentElement();
-	}
-}
-
-void KMLParser::point(const QString &name, const QString &desc,
-  const QDateTime timestamp)
-{
-	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "coordinates") {
-			if (!pointCoordinates())
-				_reader.raiseError("Invalid coordinates.");
-			else {
-				Waypoint &w = _waypoints.last();
-				if (!name.isNull())
-					w.setName(name);
-				if (!desc.isNull())
-					w.setDescription(desc);
-				if (!timestamp.isNull())
-					w.setTimestamp(timestamp);
-			}
-		} else
-			_reader.skipCurrentElement();
-	}
-}
-
-void KMLParser::multiGeometry(const QString &name, const QString &desc,
-  const QDateTime timestamp)
-{
-	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Point")
-			point(name, desc, timestamp);
-		else if (_reader.name() == "LineString")
-			lineString();
+		if (_reader.name() == "when")
+			waypoint.setTimestamp(time());
 		else
+			_reader.skipCurrentElement();
+	}
+}
+
+void KMLParser::lineString(QVector<Waypoint> &route)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "coordinates") {
+			if (!lineCoordinates(route))
+				_reader.raiseError("Invalid coordinates.");
+		} else
+			_reader.skipCurrentElement();
+	}
+}
+
+void KMLParser::point(Waypoint &waypoint)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "coordinates") {
+			if (!pointCoordinates(waypoint))
+				_reader.raiseError("Invalid coordinates.");
+		} else
 			_reader.skipCurrentElement();
 	}
 }
 
 void KMLParser::placemark()
 {
-	QString name, desc;
-	QDateTime date;
+	Waypoint waypoint;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "name")
-			name = _reader.readElementText();
+			waypoint.setName(_reader.readElementText());
 		else if (_reader.name() == "description")
-			desc = _reader.readElementText();
+			waypoint.setDescription(_reader.readElementText());
 		else if (_reader.name() == "TimeStamp")
-			date = timeStamp();
-		else if (_reader.name() == "Point")
-			point(name, desc, date);
-		else if (_reader.name() == "LineString")
-			lineString();
-		else if (_reader.name() == "MultiGeometry")
-			multiGeometry(name, desc, date);
-		else
+			timeStamp(waypoint);
+		else if (_reader.name() == "Point") {
+			_waypoints.append(waypoint);
+			point(_waypoints.last());
+		} else if (_reader.name() == "LineString") {
+			_routes.append(QVector<Waypoint>());
+			lineString(_routes.back());
+		} else
 			_reader.skipCurrentElement();
 	}
 }

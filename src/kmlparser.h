@@ -2,7 +2,6 @@
 #define KMLPARSER_H
 
 #include <QXmlStreamReader>
-#include <QVector>
 #include <QDateTime>
 #include "parser.h"
 
@@ -11,7 +10,7 @@ class KMLParser : public Parser
 public:
 	KMLParser(QList<QVector<Trackpoint> > &tracks,
 	  QList<QVector<Waypoint> > &routes, QList<Waypoint> &waypoints)
-	  : Parser(tracks, routes, waypoints) {_track = 0; _route = 0;}
+	  : Parser(tracks, routes, waypoints) {}
 	~KMLParser() {}
 
 	bool loadFile(QIODevice *device);
@@ -24,18 +23,15 @@ private:
 	void document();
 	void folder();
 	void placemark();
-	void multiGeometry(const QString &name, const QString &desc,
-	  const QDateTime timestamp);
-	void lineString();
-	void point(const QString &name, const QString &desc,
-	  const QDateTime timestamp);
-	bool pointCoordinates();
-	bool lineCoordinates();
-	QDateTime timeStamp();
+	void lineString(QVector<Waypoint> &route);
+	void point(Waypoint &waypoint);
+	bool pointCoordinates(Waypoint &waypoint);
+	bool lineCoordinates(QVector<Waypoint> &route);
+	void timeStamp(Waypoint &waypoint);
+	qreal number();
+	QDateTime time();
 
 	QXmlStreamReader _reader;
-	QVector<Trackpoint> *_track;
-	QVector<Waypoint> *_route;
 };
 
 #endif // KMLPARSER_H
