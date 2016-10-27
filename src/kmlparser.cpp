@@ -79,7 +79,7 @@ bool KMLParser::pointCoordinates(Waypoint &waypoint)
 	return true;
 }
 
-bool KMLParser::lineCoordinates(QVector<Waypoint> &route)
+bool KMLParser::lineCoordinates(QVector<Trackpoint> &track)
 {
 	QString data = _reader.readElementText();
 	const QChar *sp, *ep, *cp, *vp;
@@ -122,9 +122,9 @@ bool KMLParser::lineCoordinates(QVector<Waypoint> &route)
 			if (!res)
 				return false;
 
-			route.append(Waypoint(Coordinates(val[0], val[1])));
+			track.append(Trackpoint(Coordinates(val[0], val[1])));
 			if (c == 2)
-				route.last().setElevation(val[2]);
+				track.last().setElevation(val[2]);
 
 			while (cp->isSpace())
 				cp++;
@@ -146,11 +146,11 @@ void KMLParser::timeStamp(Waypoint &waypoint)
 	}
 }
 
-void KMLParser::lineString(QVector<Waypoint> &route)
+void KMLParser::lineString(QVector<Trackpoint> &track)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "coordinates") {
-			if (!lineCoordinates(route))
+			if (!lineCoordinates(track))
 				_reader.raiseError("Invalid coordinates.");
 		} else
 			_reader.skipCurrentElement();
@@ -183,8 +183,8 @@ void KMLParser::placemark()
 			_waypoints.append(waypoint);
 			point(_waypoints.last());
 		} else if (_reader.name() == "LineString") {
-			_routes.append(QVector<Waypoint>());
-			lineString(_routes.back());
+			_tracks.append(QVector<Trackpoint>());
+			lineString(_tracks.last());
 		} else
 			_reader.skipCurrentElement();
 	}

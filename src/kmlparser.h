@@ -23,10 +23,10 @@ private:
 	void document();
 	void folder();
 	void placemark();
-	void lineString(QVector<Waypoint> &route);
+	void lineString(QVector<Trackpoint> &track);
 	void point(Waypoint &waypoint);
 	bool pointCoordinates(Waypoint &waypoint);
-	bool lineCoordinates(QVector<Waypoint> &route);
+	bool lineCoordinates(QVector<Trackpoint> &track);
 	void timeStamp(Waypoint &waypoint);
 	qreal number();
 	QDateTime time();
