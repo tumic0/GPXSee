@@ -26,9 +26,7 @@ private:
 	void activity();
 	void lap();
 	void trackpoints(QVector<Trackpoint> &track);
-	void routepoints(QVector<Waypoint> &route);
 	void trackpointData(Trackpoint &trackpoint);
-	void routepointData(Waypoint &waypoint);
 	void waypointData(Waypoint &waypoint);
 	Coordinates position();
 	qreal number();

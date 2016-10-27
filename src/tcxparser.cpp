@@ -65,20 +65,6 @@ void TCXParser::trackpointData(Trackpoint &trackpoint)
 	}
 }
 
-void TCXParser::routepointData(Waypoint &waypoint)
-{
-	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Position")
-			waypoint.setCoordinates(position());
-		else if (_reader.name() == "AltitudeMeters")
-			waypoint.setElevation(number());
-		else if (_reader.name() == "Time")
-			waypoint.setTimestamp(time());
-		else
-			_reader.skipCurrentElement();
-	}
-}
-
 void TCXParser::waypointData(Waypoint &waypoint)
 {
 	while (_reader.readNextStartElement()) {
@@ -108,17 +94,6 @@ void TCXParser::trackpoints(QVector<Trackpoint> &track)
 	}
 }
 
-void TCXParser::routepoints(QVector<Waypoint> &route)
-{
-	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Trackpoint") {
-			route.append(Waypoint());
-			routepointData(route.back());
-		} else
-			_reader.skipCurrentElement();
-	}
-}
-
 void TCXParser::lap()
 {
 	while (_reader.readNextStartElement()) {
@@ -134,8 +109,8 @@ void TCXParser::course()
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Track") {
-			_routes.append(QVector<Waypoint>());
-			routepoints(_routes.back());
+			_tracks.append(QVector<Trackpoint>());
+			trackpoints(_tracks.back());
 		} else if (_reader.name() == "CoursePoint") {
 			_waypoints.append(Waypoint());
 			waypointData(_waypoints.back());
