@@ -29,4 +29,6 @@ private:
 
 typedef QVector<GraphPoint> Graph;
 
+Q_DECLARE_TYPEINFO(GraphPoint, Q_PRIMITIVE_TYPE);
+
 #endif // GRAPH_H

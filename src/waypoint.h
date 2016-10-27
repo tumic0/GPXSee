@@ -50,4 +50,6 @@ inline uint qHash(const Waypoint &key)
 
 QDebug operator<<(QDebug dbg, const Waypoint &Waypoint);
 
+Q_DECLARE_TYPEINFO(Waypoint, Q_MOVABLE_TYPE);
+
 #endif // WAYPOINT_H

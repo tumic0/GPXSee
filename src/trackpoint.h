@@ -46,4 +46,6 @@ private:
 
 QDebug operator<<(QDebug dbg, const Trackpoint &trackpoint);
 
+Q_DECLARE_TYPEINFO(Trackpoint, Q_MOVABLE_TYPE);
+
 #endif // TRACKPOINT_H
