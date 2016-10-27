@@ -166,33 +166,33 @@ void GPXParser::waypointData(Waypoint &waypoint)
 		waypoint.setElevation(waypoint.elevation() - gh);
 }
 
-void GPXParser::trackpoints()
+void GPXParser::trackpoints(QVector<Trackpoint> &track)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "trkpt") {
-			_track->append(Trackpoint(coordinates()));
-			trackpointData(_track->last());
+			track.append(Trackpoint(coordinates()));
+			trackpointData(track.last());
 		} else
 			_reader.skipCurrentElement();
 	}
 }
 
-void GPXParser::routepoints()
+void GPXParser::routepoints(QVector<Waypoint> &route)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "rtept") {
-			_route->append(Waypoint(coordinates()));
-			waypointData(_route->last());
+			route.append(Waypoint(coordinates()));
+			waypointData(route.last());
 		} else
 			_reader.skipCurrentElement();
 	}
 }
 
-void GPXParser::track()
+void GPXParser::track(QVector<Trackpoint> &track)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "trkseg") {
-			trackpoints();
+			trackpoints(track);
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -203,12 +203,10 @@ void GPXParser::gpx()
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "trk") {
 			_tracks.append(QVector<Trackpoint>());
-			_track = &_tracks.back();
-			track();
+			track(_tracks.back());
 		} else if (_reader.name() == "rte") {
 			_routes.append(QVector<Waypoint>());
-			_route = &_routes.back();
-			routepoints();
+			routepoints(_routes.back());
 		} else if (_reader.name() == "wpt") {
 			_waypoints.append(Waypoint(coordinates()));
 			waypointData(_waypoints.last());
