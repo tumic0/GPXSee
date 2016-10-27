@@ -51,23 +51,23 @@ Coordinates GPXParser::coordinates()
 	return Coordinates(lon, lat);
 }
 
-void GPXParser::handleTrackpointData(DataType type)
+void GPXParser::handleTrackpointData(DataType type, Trackpoint &trackpoint)
 {
 	switch (type) {
 		case Elevation:
-			_track->last().setElevation(number());
+			trackpoint.setElevation(number());
 			break;
 		case Time:
-			_track->last().setTimestamp(time());
+			trackpoint.setTimestamp(time());
 			break;
 		case Speed:
-			_track->last().setSpeed(number());
+			trackpoint.setSpeed(number());
 			break;
 		case HeartRate:
-			_track->last().setHeartRate(number());
+			trackpoint.setHeartRate(number());
 			break;
 		case Temperature:
-			_track->last().setTemperature(number());
+			trackpoint.setTemperature(number());
 			break;
 		default:
 			break;
@@ -94,54 +94,53 @@ void GPXParser::handleWaypointData(DataType type, Waypoint &waypoint)
 	}
 }
 
-void GPXParser::tpExtension()
+void GPXParser::tpExtension(Trackpoint &trackpoint)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "hr")
-			handleTrackpointData(HeartRate);
+			handleTrackpointData(HeartRate, trackpoint);
 		else if (_reader.name() == "atemp")
-			handleTrackpointData(Temperature);
+			handleTrackpointData(Temperature, trackpoint);
 		else
 			_reader.skipCurrentElement();
 	}
 }
 
-void GPXParser::extensions()
+void GPXParser::extensions(Trackpoint &trackpoint)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "speed")
-			handleTrackpointData(Speed);
+			handleTrackpointData(Speed, trackpoint);
 		else if (_reader.name() == "hr" || _reader.name() == "heartrate")
-			handleTrackpointData(HeartRate);
+			handleTrackpointData(HeartRate, trackpoint);
 		else if (_reader.name() == "temp")
-			handleTrackpointData(Temperature);
+			handleTrackpointData(Temperature, trackpoint);
 		else if (_reader.name() == "TrackPointExtension")
-			tpExtension();
+			tpExtension(trackpoint);
 		else
 			_reader.skipCurrentElement();
 	}
 }
 
-void GPXParser::trackpointData()
+void GPXParser::trackpointData(Trackpoint &trackpoint)
 {
 	qreal gh = NAN;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "ele")
-			handleTrackpointData(Elevation);
+			handleTrackpointData(Elevation, trackpoint);
 		else if (_reader.name() == "time")
-			handleTrackpointData(Time);
+			handleTrackpointData(Time, trackpoint);
 		else if (_reader.name() == "geoidheight")
 			gh = number();
 		else if (_reader.name() == "extensions")
-			extensions();
+			extensions(trackpoint);
 		else
 			_reader.skipCurrentElement();
 	}
 
-	Trackpoint &t = _track->last();
-	if (!std::isnan(gh) && !std::isnan(t.elevation()))
-		t.setElevation(t.elevation() - gh);
+	if (!std::isnan(gh) && !std::isnan(trackpoint.elevation()))
+		trackpoint.setElevation(trackpoint.elevation() - gh);
 }
 
 void GPXParser::waypointData(Waypoint &waypoint)
@@ -172,7 +171,7 @@ void GPXParser::trackpoints()
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "trkpt") {
 			_track->append(Trackpoint(coordinates()));
-			trackpointData();
+			trackpointData(_track->last());
 		} else
 			_reader.skipCurrentElement();
 	}

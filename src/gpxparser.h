@@ -28,16 +28,16 @@ private:
 	void track();
 	void trackpoints();
 	void routepoints();
-	void tpExtension();
-	void extensions();
-	void trackpointData();
+	void tpExtension(Trackpoint &trackpoint);
+	void extensions(Trackpoint &trackpoint);
+	void trackpointData(Trackpoint &trackpoint);
 	void waypointData(Waypoint &waypoint);
 	qreal number();
 	QDateTime time();
 	Coordinates coordinates();
 
 	void handleWaypointData(DataType type, Waypoint &waypoint);
-	void handleTrackpointData(DataType type);
+	void handleTrackpointData(DataType type, Trackpoint &trackpoint);
 
 	QXmlStreamReader _reader;
 	QVector<Trackpoint> *_track;
