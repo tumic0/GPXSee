@@ -2,7 +2,6 @@
 #define TCXPARSER_H
 
 #include <QXmlStreamReader>
-#include <QVector>
 #include "parser.h"
 
 
@@ -11,7 +10,7 @@ class TCXParser : public Parser
 public:
 	TCXParser(QList<QVector<Trackpoint> > &tracks,
 	  QList<QVector<Waypoint> > &routes, QList<Waypoint> &waypoints)
-	  : Parser(tracks, routes, waypoints) {_track = 0; _route = 0;}
+	  : Parser(tracks, routes, waypoints) {}
 	~TCXParser() {}
 
 	bool loadFile(QIODevice *device);
@@ -26,16 +25,16 @@ private:
 	void course();
 	void activity();
 	void lap();
-	void trackpoints();
-	void routepoints();
-	void trackpointData(Trackpoint &t);
-	void routepointData(Waypoint &w);
-	void waypointData(Waypoint &w);
+	void trackpoints(QVector<Trackpoint> &track);
+	void routepoints(QVector<Waypoint> &route);
+	void trackpointData(Trackpoint &trackpoint);
+	void routepointData(Waypoint &waypoint);
+	void waypointData(Waypoint &waypoint);
 	Coordinates position();
+	qreal number();
+	QDateTime time();
 
 	QXmlStreamReader _reader;
-	QVector<Trackpoint> *_track;
-	QVector<Waypoint> *_route;
 };
 
 #endif // TCXPARSER_H

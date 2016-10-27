@@ -1,6 +1,28 @@
 #include "tcxparser.h"
 
 
+qreal TCXParser::number()
+{
+	bool res;
+	qreal ret = _reader.readElementText().toDouble(&res);
+	if (!res)
+		_reader.raiseError(QString("Invalid %1.").arg(
+		  _reader.name().toString()));
+
+	return ret;
+}
+
+QDateTime TCXParser::time()
+{
+	QDateTime d = QDateTime::fromString(_reader.readElementText(),
+	  Qt::ISODate);
+	if (!d.isValid())
+		_reader.raiseError(QString("Invalid %1.").arg(
+		  _reader.name().toString()));
+
+	return d;
+}
+
 Coordinates TCXParser::position()
 {
 	Coordinates pos;
@@ -11,13 +33,13 @@ Coordinates TCXParser::position()
 		if (_reader.name() == "LatitudeDegrees") {
 			val = _reader.readElementText().toDouble(&res);
 			if (!res || (val < -90.0 || val > 90.0))
-				_reader.raiseError("Invalid latitude.");
+				_reader.raiseError("Invalid LatitudeDegrees.");
 			else
 				pos.setLat(val);
 		} else if (_reader.name() == "LongitudeDegrees") {
 			val = _reader.readElementText().toDouble(&res);
 			if (!res || (val < -180.0 || val > 180.0))
-				_reader.raiseError("Invalid longitude.");
+				_reader.raiseError("Invalid LongitudeDegrees.");
 			else
 				pos.setLon(val);
 		} else
@@ -27,78 +49,71 @@ Coordinates TCXParser::position()
 	return pos;
 }
 
-void TCXParser::trackpointData(Trackpoint &t)
+void TCXParser::trackpointData(Trackpoint &trackpoint)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Position")
-			t.setCoordinates(position());
+			trackpoint.setCoordinates(position());
 		else if (_reader.name() == "AltitudeMeters")
-			t.setElevation(_reader.readElementText().toDouble());
+			trackpoint.setElevation(number());
 		else if (_reader.name() == "Time")
-			t.setTimestamp(QDateTime::fromString(_reader.readElementText(),
-			  Qt::ISODate));
+			trackpoint.setTimestamp(time());
 		else if (_reader.name() == "HeartRateBpm")
-			t.setHeartRate(_reader.readElementText().toDouble());
+			trackpoint.setHeartRate(number());
 		else
 			_reader.skipCurrentElement();
 	}
 }
 
-void TCXParser::routepointData(Waypoint &w)
+void TCXParser::routepointData(Waypoint &waypoint)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Position")
-			w.setCoordinates(position());
+			waypoint.setCoordinates(position());
 		else if (_reader.name() == "AltitudeMeters")
-			w.setElevation(_reader.readElementText().toDouble());
+			waypoint.setElevation(number());
 		else if (_reader.name() == "Time")
-			w.setTimestamp(QDateTime::fromString(_reader.readElementText(),
-			  Qt::ISODate));
+			waypoint.setTimestamp(time());
 		else
 			_reader.skipCurrentElement();
 	}
 }
 
-void TCXParser::waypointData(Waypoint &w)
+void TCXParser::waypointData(Waypoint &waypoint)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Position")
-			w.setCoordinates(position());
+			waypoint.setCoordinates(position());
 		else if (_reader.name() == "Name")
-			w.setName(_reader.readElementText());
+			waypoint.setName(_reader.readElementText());
 		else if (_reader.name() == "Notes")
-			w.setDescription(_reader.readElementText());
+			waypoint.setDescription(_reader.readElementText());
 		else if (_reader.name() == "AltitudeMeters")
-			w.setElevation(_reader.readElementText().toDouble());
+			waypoint.setElevation(number());
 		else if (_reader.name() == "Time")
-			w.setTimestamp(QDateTime::fromString(_reader.readElementText(),
-			  Qt::ISODate));
+			waypoint.setTimestamp(time());
 		else
 			_reader.skipCurrentElement();
 	}
 }
 
-void TCXParser::trackpoints()
+void TCXParser::trackpoints(QVector<Trackpoint> &track)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Trackpoint") {
-			Trackpoint t;
-			trackpointData(t);
-			if (t.coordinates().isValid())
-				_track->append(t);
+			track.append(Trackpoint());
+			trackpointData(track.back());
 		} else
 			_reader.skipCurrentElement();
 	}
 }
 
-void TCXParser::routepoints()
+void TCXParser::routepoints(QVector<Waypoint> &route)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Trackpoint") {
-			Waypoint w;
-			routepointData(w);
-			if (w.coordinates().isValid())
-				_route->append(w);
+			route.append(Waypoint());
+			routepointData(route.back());
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -109,8 +124,7 @@ void TCXParser::lap()
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Track") {
 			_tracks.append(QVector<Trackpoint>());
-			_track = &_tracks.back();
-			trackpoints();
+			trackpoints(_tracks.back());
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -121,13 +135,10 @@ void TCXParser::course()
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Track") {
 			_routes.append(QVector<Waypoint>());
-			_route = &_routes.back();
-			routepoints();
+			routepoints(_routes.back());
 		} else if (_reader.name() == "CoursePoint") {
-			Waypoint w;
-			waypointData(w);
-			if (w.coordinates().isValid())
-				_waypoints.append(w);
+			_waypoints.append(Waypoint());
+			waypointData(_waypoints.back());
 		} else
 			_reader.skipCurrentElement();
 	}

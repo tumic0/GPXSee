@@ -2,7 +2,6 @@
 #define GPXPARSER_H
 
 #include <QXmlStreamReader>
-#include <QVector>
 #include "parser.h"
 
 
