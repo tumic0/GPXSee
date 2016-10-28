@@ -81,7 +81,7 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	_sliderPos = 0;
 
 	updateGraphTabs();
-	updateTrackView();
+	updatePathView();
 	updateStatusBarInfo();
 
 	readSettings();
@@ -622,17 +622,17 @@ bool GUI::openFile(const QString &fileName)
 		_browser->setCurrent(fileName);
 		_fileActionGroup->setEnabled(true);
 		_navigationActionGroup->setEnabled(true);
+
+		updateNavigationActions();
+		updateStatusBarInfo();
+		updateWindowTitle();
+		updateGraphTabs();
+		updatePathView();
 	} else {
 		if (_files.isEmpty())
 			_fileActionGroup->setEnabled(false);
 		ret = false;
 	}
-
-	updateNavigationActions();
-	updateStatusBarInfo();
-	updateWindowTitle();
-	updateGraphTabs();
-	updateTrackView();
 
 	return ret;
 }
@@ -668,6 +668,12 @@ bool GUI::loadFile(const QString &fileName)
 
 		return true;
 	} else {
+		updateNavigationActions();
+		updateStatusBarInfo();
+		updateWindowTitle();
+		updateGraphTabs();
+		updatePathView();
+
 		QString error = fileName + QString("\n\n")
 		  + tr("Error loading data file:\n%1").arg(data.errorString())
 		  + QString("\n");
@@ -842,7 +848,7 @@ void GUI::reloadFile()
 	updateStatusBarInfo();
 	updateWindowTitle();
 	updateGraphTabs();
-	updateTrackView();
+	updatePathView();
 	if (_files.isEmpty())
 		_fileActionGroup->setEnabled(false);
 	else
@@ -876,7 +882,7 @@ void GUI::closeAll()
 	updateStatusBarInfo();
 	updateWindowTitle();
 	updateGraphTabs();
-	updateTrackView();
+	updatePathView();
 }
 
 void GUI::showMap(bool show)
@@ -1093,7 +1099,7 @@ void GUI::updateGraphTabs()
 	}
 }
 
-void GUI::updateTrackView()
+void GUI::updatePathView()
 {
 	_pathView->setHidden(!(_pathView->trackCount() + _pathView->routeCount()
 	  + _pathView->waypointCount()));

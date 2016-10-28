@@ -98,7 +98,7 @@ private:
 	void updateWindowTitle();
 	void updateNavigationActions();
 	void updateGraphTabs();
-	void updateTrackView();
+	void updatePathView();
 
 	void setUnits(Units units);
 	void setGraphType(GraphType type);
