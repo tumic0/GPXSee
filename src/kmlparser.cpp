@@ -23,6 +23,52 @@ QDateTime KMLParser::time()
 	return d;
 }
 
+bool KMLParser::coord(Trackpoint &trackpoint)
+{
+	QString data = _reader.readElementText();
+	const QChar *sp, *ep, *cp, *vp;
+	int c = 0;
+	qreal val[3];
+	bool res;
+
+
+	sp = data.constData();
+	ep = sp + data.size();
+
+	for (cp = sp; cp < ep; cp++)
+		if (!cp->isSpace())
+			break;
+
+	for (vp = cp; cp <= ep; cp++) {
+		if (cp->isSpace() || cp->isNull()) {
+			if (c > 2)
+				return false;
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+			val[c] = QString(vp, cp - vp).toDouble(&res);
+#else // QT_VERSION < 5
+			val[c] = QStringRef(&data, vp - sp, cp - vp).toDouble(&res);
+#endif // QT_VERSION < 5
+			if (!res)
+				return false;
+
+			if (c == 1) {
+				trackpoint.setCoordinates(Coordinates(val[0], val[1]));
+				if (!trackpoint.coordinates().isValid())
+					return false;
+			} else if (c == 2)
+				trackpoint.setElevation(val[2]);
+
+			while (cp->isSpace())
+				cp++;
+			vp = cp;
+			c++;
+		}
+	}
+
+	return true;
+}
+
 bool KMLParser::pointCoordinates(Waypoint &waypoint)
 {
 	QString data = _reader.readElementText();
@@ -67,6 +113,8 @@ bool KMLParser::pointCoordinates(Waypoint &waypoint)
 				return false;
 
 			waypoint.setCoordinates(Coordinates(val[0], val[1]));
+			if (!waypoint.coordinates().isValid())
+				return false;
 			if (c == 2)
 				waypoint.setElevation(val[2]);
 
@@ -123,6 +171,8 @@ bool KMLParser::lineCoordinates(TrackData &track)
 				return false;
 
 			track.append(Trackpoint(Coordinates(val[0], val[1])));
+			if (!track.last().coordinates().isValid())
+				return false;
 			if (c == 2)
 				track.last().setElevation(val[2]);
 
@@ -172,6 +222,32 @@ void KMLParser::point(Waypoint &waypoint)
 	}
 }
 
+void KMLParser::Track(TrackData &track)
+{
+	const char mismatchError[] = "gx:coord/when element count mismatch.";
+	int i = track.size();
+
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "when") {
+			track.append(Trackpoint());
+			track.last().setTimestamp(time());
+		} else if (_reader.name() == "coord") {
+			if (i == track.size()) {
+				_reader.raiseError(mismatchError);
+				return;
+			} else if (!coord(track[i])) {
+				_reader.raiseError("Invalid coordinates.");
+				return;
+			}
+			i++;
+		} else
+			_reader.skipCurrentElement();
+	}
+
+	if (i != track.size())
+		_reader.raiseError(mismatchError);
+}
+
 void KMLParser::placemark()
 {
 	QString name, desc;
@@ -197,6 +273,12 @@ void KMLParser::placemark()
 			track.setName(name);
 			track.setDescription(desc);
 			lineString(track);
+		} else if (_reader.name() == "Track") {
+			_tracks.append(TrackData());
+			TrackData &track = _tracks.last();
+			track.setName(name);
+			track.setDescription(desc);
+			Track(track);
 		} else
 			_reader.skipCurrentElement();
 	}

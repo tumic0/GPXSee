@@ -22,10 +22,12 @@ private:
 	void document();
 	void folder();
 	void placemark();
+	void Track(TrackData &track);
 	void lineString(TrackData &track);
 	void point(Waypoint &waypoint);
 	bool pointCoordinates(Waypoint &waypoint);
 	bool lineCoordinates(TrackData &track);
+	bool coord(Trackpoint &trackpoint);
 	QDateTime timeStamp();
 	qreal number();
 	QDateTime time();
