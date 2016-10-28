@@ -646,8 +646,6 @@ bool GUI::loadFile(const QString &fileName)
 		paths = _pathView->loadData(data);
 		for (int i = 0; i < _tabs.count(); i++)
 			_tabs.at(i)->loadData(data, paths);
-		updateGraphTabs();
-		_pathView->setHidden(false);
 
 		for (int i = 0; i < data.tracks().count(); i++) {
 			_trackDistance += data.tracks().at(i)->distance();
