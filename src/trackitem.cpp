@@ -10,6 +10,10 @@ QString TrackItem::toolTip()
 {
 	ToolTip tt;
 
+	if (!_name.isEmpty())
+		tt.insert(qApp->translate("TrackItem", "Name"), _name);
+	if (!_desc.isEmpty())
+		tt.insert(qApp->translate("TrackItem", "Description"), _desc);
 	tt.insert(qApp->translate("TrackItem", "Distance"),
 	  ::distance(_distance, _units));
 	if  (_time > 0)
@@ -25,7 +29,7 @@ TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
   : PathItem(parent)
 {
 	QPointF p;
-	const QVector<Trackpoint> &t = track.track();
+	const TrackData &t = track.track();
 	Q_ASSERT(t.count() >= 2);
 
 	p = t.first().coordinates().toMercator();
@@ -37,6 +41,8 @@ TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
 
 	updateShape();
 
+	_name = t.name();
+	_desc = t.description();
 	_date = track.date();
 	_distance = track.distance();
 	_time = track.time();

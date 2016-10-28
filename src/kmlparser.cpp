@@ -79,7 +79,7 @@ bool KMLParser::pointCoordinates(Waypoint &waypoint)
 	return true;
 }
 
-bool KMLParser::lineCoordinates(QVector<Trackpoint> &track)
+bool KMLParser::lineCoordinates(TrackData &track)
 {
 	QString data = _reader.readElementText();
 	const QChar *sp, *ep, *cp, *vp;
@@ -136,17 +136,21 @@ bool KMLParser::lineCoordinates(QVector<Trackpoint> &track)
  	return true;
 }
 
-void KMLParser::timeStamp(Waypoint &waypoint)
+QDateTime KMLParser::timeStamp()
 {
+	QDateTime ts;
+
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "when")
-			waypoint.setTimestamp(time());
+			ts = time();
 		else
 			_reader.skipCurrentElement();
 	}
+
+	return ts;
 }
 
-void KMLParser::lineString(QVector<Trackpoint> &track)
+void KMLParser::lineString(TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "coordinates") {
@@ -170,21 +174,29 @@ void KMLParser::point(Waypoint &waypoint)
 
 void KMLParser::placemark()
 {
-	Waypoint waypoint;
+	QString name, desc;
+	QDateTime timestamp;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "name")
-			waypoint.setName(_reader.readElementText());
+			name = _reader.readElementText();
 		else if (_reader.name() == "description")
-			waypoint.setDescription(_reader.readElementText());
+			desc = _reader.readElementText();
 		else if (_reader.name() == "TimeStamp")
-			timeStamp(waypoint);
+			timestamp = timeStamp();
 		else if (_reader.name() == "Point") {
-			_waypoints.append(waypoint);
-			point(_waypoints.last());
+			_waypoints.append(Waypoint());
+			Waypoint &waypoint = _waypoints.last();
+			waypoint.setName(name);
+			waypoint.setDescription(desc);
+			waypoint.setTimestamp(timestamp);
+			point(waypoint);
 		} else if (_reader.name() == "LineString") {
-			_tracks.append(QVector<Trackpoint>());
-			lineString(_tracks.last());
+			_tracks.append(TrackData());
+			TrackData &track = _tracks.last();
+			track.setName(name);
+			track.setDescription(desc);
+			lineString(track);
 		} else
 			_reader.skipCurrentElement();
 	}

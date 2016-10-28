@@ -8,9 +8,8 @@
 class GPXParser : public Parser
 {
 public:
-	GPXParser(QList<QVector<Trackpoint> > &tracks,
-	  QList<QVector<Waypoint> > &routes, QList<Waypoint> &waypoints)
-	  : Parser(tracks, routes, waypoints) {}
+	GPXParser(QList<TrackData> &tracks, QList<RouteData> &routes,
+	  QList<Waypoint> &waypoints) : Parser(tracks, routes, waypoints) {}
 	~GPXParser() {}
 
 	bool loadFile(QIODevice *device);
@@ -24,9 +23,9 @@ private:
 
 	bool parse();
 	void gpx();
-	void track(QVector<Trackpoint> &track);
-	void trackpoints(QVector<Trackpoint> &track);
-	void routepoints(QVector<Waypoint> &route);
+	void track(TrackData &track);
+	void trackpoints(TrackData &track);
+	void routepoints(RouteData &route);
 	void tpExtension(Trackpoint &trackpoint);
 	void extensions(Trackpoint &trackpoint);
 	void trackpointData(Trackpoint &trackpoint);

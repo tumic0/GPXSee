@@ -8,9 +8,8 @@
 class KMLParser : public Parser
 {
 public:
-	KMLParser(QList<QVector<Trackpoint> > &tracks,
-	  QList<QVector<Waypoint> > &routes, QList<Waypoint> &waypoints)
-	  : Parser(tracks, routes, waypoints) {}
+	KMLParser(QList<TrackData> &tracks, QList<RouteData> &routes,
+	  QList<Waypoint> &waypoints) : Parser(tracks, routes, waypoints) {}
 	~KMLParser() {}
 
 	bool loadFile(QIODevice *device);
@@ -23,11 +22,11 @@ private:
 	void document();
 	void folder();
 	void placemark();
-	void lineString(QVector<Trackpoint> &track);
+	void lineString(TrackData &track);
 	void point(Waypoint &waypoint);
 	bool pointCoordinates(Waypoint &waypoint);
-	bool lineCoordinates(QVector<Trackpoint> &track);
-	void timeStamp(Waypoint &waypoint);
+	bool lineCoordinates(TrackData &track);
+	QDateTime timeStamp();
 	qreal number();
 	QDateTime time();
 

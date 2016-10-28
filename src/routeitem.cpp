@@ -11,6 +11,10 @@ QString RouteItem::toolTip()
 {
 	ToolTip tt;
 
+	if (!_name.isEmpty())
+		tt.insert(qApp->translate("RouteItem", "Name"), _name);
+	if (!_desc.isEmpty())
+		tt.insert(qApp->translate("RouteItem", "Description"), _desc);
 	tt.insert(qApp->translate("RouteItem", "Distance"),
 	  ::distance(_distance, _units));
 
@@ -20,9 +24,12 @@ QString RouteItem::toolTip()
 RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
   : PathItem(parent)
 {
-	QVector<Waypoint> r = route.route();
+	const RouteData &r = route.route();
 	Q_ASSERT(r.count() >= 2);
 	QPointF p;
+
+	_name = r.name();
+	_desc = r.description();
 
 	new WaypointItem(r.at(0), this);
 	p = r.at(0).coordinates().toMercator();

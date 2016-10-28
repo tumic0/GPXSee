@@ -19,6 +19,8 @@ public:
 private:
 	QString toolTip();
 
+	QString _name;
+	QString _desc;
 	QDateTime _date;
 	qreal _time;
 };

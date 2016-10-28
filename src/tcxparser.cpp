@@ -83,7 +83,7 @@ void TCXParser::waypointData(Waypoint &waypoint)
 	}
 }
 
-void TCXParser::trackpoints(QVector<Trackpoint> &track)
+void TCXParser::trackpoints(TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Trackpoint") {
@@ -94,24 +94,26 @@ void TCXParser::trackpoints(QVector<Trackpoint> &track)
 	}
 }
 
-void TCXParser::lap()
+void TCXParser::lap(TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Track") {
-			_tracks.append(QVector<Trackpoint>());
-			trackpoints(_tracks.back());
-		} else
+		if (_reader.name() == "Track")
+			trackpoints(track);
+		else
 			_reader.skipCurrentElement();
 	}
 }
 
-void TCXParser::course()
+void TCXParser::course(TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Track") {
-			_tracks.append(QVector<Trackpoint>());
-			trackpoints(_tracks.back());
-		} else if (_reader.name() == "CoursePoint") {
+		if (_reader.name() == "Track")
+			trackpoints(track);
+		else if (_reader.name() == "Name")
+			track.setName(_reader.readElementText());
+		else if (_reader.name() == "Notes")
+			track.setDescription(_reader.readElementText());
+		else if (_reader.name() == "CoursePoint") {
 			_waypoints.append(Waypoint());
 			waypointData(_waypoints.back());
 		} else
@@ -119,11 +121,11 @@ void TCXParser::course()
 	}
 }
 
-void TCXParser::activity()
+void TCXParser::activity(TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Lap")
-			lap();
+			lap(track);
 		else
 			_reader.skipCurrentElement();
 	}
@@ -132,9 +134,10 @@ void TCXParser::activity()
 void TCXParser::courses()
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Course")
-			course();
-		else
+		if (_reader.name() == "Course") {
+			_tracks.append(TrackData());
+			course(_tracks.back());
+		} else
 			_reader.skipCurrentElement();
 	}
 }
@@ -142,9 +145,10 @@ void TCXParser::courses()
 void TCXParser::activities()
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Activity")
-			activity();
-		else
+		if (_reader.name() == "Activity") {
+			_tracks.append(TrackData());
+			activity(_tracks.back());
+		} else
 			_reader.skipCurrentElement();
 	}
 }

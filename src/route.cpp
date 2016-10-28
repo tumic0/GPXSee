@@ -1,6 +1,6 @@
 #include "route.h"
 
-Route::Route(const QVector<Waypoint> &data) : _data(data)
+Route::Route(const RouteData &data) : _data(data)
 {
 	qreal dist = 0;
 

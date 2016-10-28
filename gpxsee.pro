@@ -60,7 +60,9 @@ HEADERS += src/config.h \
     src/tile.h \
     src/rd.h \
     src/wgs84.h \
-    src/kmlparser.h
+    src/kmlparser.h \
+    src/trackdata.h \
+    src/routedata.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \

@@ -10,14 +10,14 @@
 
 Data::Data() : _errorLine(0)
 {
-	_parsers.insert("gpx", new GPXParser(_track_data, _route_data,
-	  _waypoint_data));
-	_parsers.insert("tcx", new TCXParser(_track_data, _route_data,
-	  _waypoint_data));
-	_parsers.insert("kml", new KMLParser(_track_data, _route_data,
-	  _waypoint_data));
-	_parsers.insert("csv", new CSVParser(_track_data, _route_data,
-	  _waypoint_data));
+	_parsers.insert("gpx", new GPXParser(_trackData, _routeData,
+	  _waypointData));
+	_parsers.insert("tcx", new TCXParser(_trackData, _routeData,
+	  _waypointData));
+	_parsers.insert("kml", new KMLParser(_trackData, _routeData,
+	  _waypointData));
+	_parsers.insert("csv", new CSVParser(_trackData, _routeData,
+	  _waypointData));
 }
 
 Data::~Data()
@@ -35,10 +35,10 @@ Data::~Data()
 
 void Data::createData()
 {
-	for (int i = 0; i < _track_data.count(); i++)
-		_tracks.append(new Track(_track_data.at(i)));
-	for (int i = 0; i < _route_data.count(); i++)
-		_routes.append(new Route(_route_data.at(i)));
+	for (int i = 0; i < _trackData.count(); i++)
+		_tracks.append(new Track(_trackData.at(i)));
+	for (int i = 0; i < _routeData.count(); i++)
+		_routes.append(new Route(_routeData.at(i)));
 }
 
 bool Data::loadFile(const QString &fileName)

@@ -9,8 +9,8 @@
 #include "waypoint.h"
 #include "track.h"
 #include "route.h"
+#include "parser.h"
 
-class Parser;
 
 class Data
 {
@@ -24,7 +24,7 @@ public:
 
 	const QList<Track*> &tracks() const {return _tracks;}
 	const QList<Route*> &routes() const {return _routes;}
-	const QList<Waypoint> &waypoints() const {return _waypoint_data;}
+	const QList<Waypoint> &waypoints() const {return _waypointData;}
 
 private:
 	void createData();
@@ -36,9 +36,9 @@ private:
 	QList<Track*> _tracks;
 	QList<Route*> _routes;
 
-	QList<QVector<Trackpoint> > _track_data;
-	QList<QVector<Waypoint> > _route_data;
-	QList<Waypoint> _waypoint_data;
+	QList<TrackData> _trackData;
+	QList<RouteData> _routeData;
+	QList<Waypoint> _waypointData;
 };
 
 #endif // DATA_H

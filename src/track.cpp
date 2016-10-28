@@ -79,7 +79,7 @@ static QVector<GraphPoint> filter(const QVector<GraphPoint> &v, int window)
 	return ret;
 }
 
-Track::Track(const QVector<Trackpoint> &data) : _data(data)
+Track::Track(const TrackData &data) : _data(data)
 {
 	qreal dist = 0;
 

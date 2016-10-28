@@ -8,9 +8,8 @@
 class TCXParser : public Parser
 {
 public:
-	TCXParser(QList<QVector<Trackpoint> > &tracks,
-	  QList<QVector<Waypoint> > &routes, QList<Waypoint> &waypoints)
-	  : Parser(tracks, routes, waypoints) {}
+	TCXParser(QList<TrackData> &tracks, QList<RouteData> &routes,
+	  QList<Waypoint> &waypoints) : Parser(tracks, routes, waypoints) {}
 	~TCXParser() {}
 
 	bool loadFile(QIODevice *device);
@@ -22,10 +21,10 @@ private:
 	void tcx();
 	void courses();
 	void activities();
-	void course();
-	void activity();
-	void lap();
-	void trackpoints(QVector<Trackpoint> &track);
+	void course(TrackData &track);
+	void activity(TrackData &track);
+	void lap(TrackData &track);
+	void trackpoints(TrackData &track);
 	void trackpointData(Trackpoint &trackpoint);
 	void waypointData(Waypoint &waypoint);
 	Coordinates position();

@@ -2,15 +2,15 @@
 #define ROUTE_H
 
 #include <QVector>
-#include "waypoint.h"
+#include "routedata.h"
 #include "graph.h"
 
 class Route
 {
 public:
-	Route(const QVector<Waypoint> &data);
+	Route(const RouteData &data);
 
-	const QVector<Waypoint> &route() const {return _data;}
+	const RouteData &route() const {return _data;}
 	Graph elevation() const;
 
 	qreal distance() const;
@@ -18,7 +18,7 @@ public:
 	bool isNull() const {return (_data.count() < 2);}
 
 private:
-	const QVector<Waypoint> &_data;
+	const RouteData &_data;
 	QVector<qreal> _distance;
 };
 

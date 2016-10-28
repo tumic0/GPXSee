@@ -20,6 +20,9 @@ public:
 
 private:
 	QString toolTip();
+
+	QString _name;
+	QString _desc;
 };
 
 #endif // ROUTEITEM_H

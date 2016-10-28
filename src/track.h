@@ -3,15 +3,16 @@
 
 #include <QVector>
 #include <QDateTime>
-#include "trackpoint.h"
+#include "trackdata.h"
 #include "graph.h"
+
 
 class Track
 {
 public:
-	Track(const QVector<Trackpoint> &data);
+	Track(const TrackData &data);
 
-	const QVector<Trackpoint> &track() const {return _data;}
+	const TrackData &track() const {return _data;}
 	Graph elevation() const;
 	Graph speed() const;
 	Graph heartRate() const;
@@ -24,7 +25,7 @@ public:
 	bool isNull() const {return (_data.size() < 2);}
 
 private:
-	const QVector<Trackpoint> &_data;
+	const TrackData &_data;
 	QVector<qreal> _distance;
 	QVector<qreal> _time;
 };

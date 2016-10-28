@@ -6,9 +6,9 @@
 class CSVParser : public Parser
 {
 public:
-	CSVParser(QList<QVector<Trackpoint> > &tracks,
-	  QList<QVector<Waypoint> > &routes, QList<Waypoint> &waypoints)
-	  : Parser(tracks, routes, waypoints) {_errorLine = 0;}
+	CSVParser(QList<TrackData> &tracks, QList<RouteData> &routes,
+	  QList<Waypoint> &waypoints) : Parser(tracks, routes, waypoints)
+	  {_errorLine = 0;}
 	~CSVParser() {}
 
 	bool loadFile(QIODevice *device);
