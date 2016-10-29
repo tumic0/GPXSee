@@ -2,11 +2,9 @@
 #define GRAPHVIEW_H
 
 #include <QGraphicsView>
-#include <QGraphicsScene>
 #include <QVector>
 #include <QList>
 #include <QSet>
-#include <QPointF>
 #include "palette.h"
 #include "units.h"
 #include "graph.h"
@@ -20,17 +18,6 @@ class GraphItem;
 class PathItem;
 class GridItem;
 
-class Scene : public QGraphicsScene
-{
-	Q_OBJECT
-
-public:
-	Scene(QObject *parent = 0) : QGraphicsScene(parent) {}
-	void mousePressEvent(QGraphicsSceneMouseEvent *e);
-
-signals:
-	void mouseClicked(const QPointF &pos);
-};
 
 class GraphView : public QGraphicsView
 {
@@ -76,7 +63,6 @@ protected:
 	void addInfo(const QString &key, const QString &value);
 	void clearInfo();
 	void skipColor() {_palette.color();}
-	void resizeEvent(QResizeEvent *);
 
 private slots:
 	void emitSliderPositionChanged(const QPointF &pos);
@@ -91,6 +77,9 @@ private:
 	void removeItem(QGraphicsItem *item);
 	void addItem(QGraphicsItem *item);
 
+	void resizeEvent(QResizeEvent *);
+	void mousePressEvent(QMouseEvent *);
+
 	qreal _xScale, _yScale;
 	qreal _yOffset;
 	QString _xUnits, _yUnits;
@@ -99,7 +88,7 @@ private:
 	qreal _minYRange;
 	qreal _sliderPos;
 
-	Scene *_scene;
+	QGraphicsScene *_scene;
 
 	AxisItem *_xAxis, *_yAxis;
 	SliderItem *_slider;

@@ -1,5 +1,6 @@
-#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsScene>
 #include <QEvent>
+#include <QMouseEvent>
 #include <QPaintEngine>
 #include <QPaintDevice>
 #include "config.h"
@@ -16,20 +17,10 @@
 
 #define MARGIN 10.0
 
-
-void Scene::mousePressEvent(QGraphicsSceneMouseEvent *e)
-{
-	if (e->button() == Qt::LeftButton)
-		emit mouseClicked(e->scenePos());
-
-	QGraphicsScene::mousePressEvent(e);
-}
-
-
 GraphView::GraphView(QWidget *parent)
 	: QGraphicsView(parent)
 {
-	_scene = new Scene(this);
+	_scene = new QGraphicsScene();
 	setScene(_scene);
 
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -48,8 +39,6 @@ GraphView::GraphView(QWidget *parent)
 
 	connect(_slider, SIGNAL(positionChanged(const QPointF&)), this,
 	  SLOT(emitSliderPositionChanged(const QPointF&)));
-	connect(_scene, SIGNAL(mouseClicked(const QPointF&)), this,
-	  SLOT(newSliderPosition(const QPointF&)));
 
 	_xScale = 1;
 	_yScale = 1;
@@ -320,6 +309,14 @@ void GraphView::redraw(const QSizeF &size)
 void GraphView::resizeEvent(QResizeEvent *)
 {
 	redraw();
+}
+
+void GraphView::mousePressEvent(QMouseEvent *e)
+{
+	if (e->button() == Qt::LeftButton)
+		newSliderPosition(mapToScene(e->pos()));
+
+	QGraphicsView::mousePressEvent(e);
 }
 
 void GraphView::plot(QPainter *painter, const QRectF &target)
