@@ -2,11 +2,6 @@
 #include "wgs84.h"
 #include "coordinates.h"
 
-bool Coordinates::isValid() const
-{
-	return (_lon >= -180.0 && _lon <= 180.0 && _lat >= -90.0 && _lat <= 90.0)
-	  ? true : false;
-}
 
 qreal Coordinates::distanceTo(const Coordinates &c) const
 {

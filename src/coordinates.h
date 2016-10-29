@@ -19,7 +19,12 @@ public:
 	qreal lon() const {return _lon;}
 	qreal lat() const {return _lat;}
 
-	bool isValid() const;
+	bool isNull() const
+		{return (std::isnan(_lon) || std::isnan(_lat)) ? true : false;}
+	bool isValid() const
+		{return (_lon >= -180.0 && _lon <= 180.0 && _lat >= -90.0
+		&& _lat <= 90.0) ? true : false;}
+
 	qreal distanceTo(const Coordinates &c) const;
 
 	QPointF toMercator() const;

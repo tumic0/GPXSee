@@ -235,10 +235,10 @@ bool GPXParser::parse()
 	return !_reader.error();
 }
 
-bool GPXParser::loadFile(QIODevice *device)
+bool GPXParser::loadFile(QFile *file)
 {
 	_reader.clear();
-	_reader.setDevice(device);
+	_reader.setDevice(file);
 
 	return parse();
 }

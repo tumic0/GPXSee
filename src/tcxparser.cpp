@@ -1,6 +1,13 @@
 #include "tcxparser.h"
 
 
+void TCXParser::warning(const char *text)
+{
+	QFile *file = static_cast<QFile *>(_reader.device());
+	fprintf(stderr, "%s:%lld: %s\n", qPrintable(file->fileName()),
+	  _reader.lineNumber(), text);
+}
+
 qreal TCXParser::number()
 {
 	bool res;
@@ -87,8 +94,12 @@ void TCXParser::trackpoints(TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Trackpoint") {
-			track.append(Trackpoint());
-			trackpointData(track.back());
+			Trackpoint t;
+			trackpointData(t);
+			if (!t.coordinates().isNull())
+				track.append(t);
+			else
+				warning("Missing Trackpoint coordinates");
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -114,8 +125,12 @@ void TCXParser::course(TrackData &track)
 		else if (_reader.name() == "Notes")
 			track.setDescription(_reader.readElementText());
 		else if (_reader.name() == "CoursePoint") {
-			_waypoints.append(Waypoint());
-			waypointData(_waypoints.back());
+			Waypoint w;
+			waypointData(w);
+			if (!w.coordinates().isNull())
+				_waypoints.append(w);
+			else
+				warning("Missing Trackpoint coordinates");
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -177,10 +192,10 @@ bool TCXParser::parse()
 	return !_reader.error();
 }
 
-bool TCXParser::loadFile(QIODevice *device)
+bool TCXParser::loadFile(QFile *file)
 {
 	_reader.clear();
-	_reader.setDevice(device);
+	_reader.setDevice(file);
 
 	return parse();
 }

@@ -1,6 +1,6 @@
 #include "csvparser.h"
 
-bool CSVParser::loadFile(QIODevice *device)
+bool CSVParser::loadFile(QFile *file)
 {
 	bool res;
 	int ln = 1;
@@ -8,8 +8,8 @@ bool CSVParser::loadFile(QIODevice *device)
 	_errorLine = 0;
 	_errorString.clear();
 
-	while (!device->atEnd()) {
-		QByteArray line = device->readLine();
+	while (!file->atEnd()) {
+		QByteArray line = file->readLine();
 		QList<QByteArray> list = line.split(',');
 		if (list.size() < 3) {
 			_errorString = "Parse error.";

@@ -12,7 +12,7 @@ public:
 	  QList<Waypoint> &waypoints) : Parser(tracks, routes, waypoints) {}
 	~KMLParser() {}
 
-	bool loadFile(QIODevice *device);
+	bool loadFile(QFile *file);
 	QString errorString() const {return _reader.errorString();}
 	int errorLine() const {return _reader.lineNumber();}
 

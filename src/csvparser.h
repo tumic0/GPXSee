@@ -11,7 +11,7 @@ public:
 	  {_errorLine = 0;}
 	~CSVParser() {}
 
-	bool loadFile(QIODevice *device);
+	bool loadFile(QFile *file);
 	QString errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 

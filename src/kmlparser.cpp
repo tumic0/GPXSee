@@ -220,6 +220,9 @@ void KMLParser::point(Waypoint &waypoint)
 		} else
 			_reader.skipCurrentElement();
 	}
+
+	if (waypoint.coordinates().isNull())
+		_reader.raiseError("Missing Point coordinates.");
 }
 
 void KMLParser::Track(TrackData &track)
@@ -332,10 +335,10 @@ bool KMLParser::parse()
 	return !_reader.error();
 }
 
-bool KMLParser::loadFile(QIODevice *device)
+bool KMLParser::loadFile(QFile *file)
 {
 	_reader.clear();
-	_reader.setDevice(device);
+	_reader.setDevice(file);
 
 	return parse();
 }

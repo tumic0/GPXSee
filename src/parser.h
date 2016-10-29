@@ -3,11 +3,11 @@
 
 #include <QString>
 #include <QList>
+#include <QFile>
 #include "trackdata.h"
 #include "routedata.h"
 #include "waypoint.h"
 
-class QIODevice;
 
 class Parser
 {
@@ -17,7 +17,7 @@ public:
 	  _waypoints(waypoints) {}
 	virtual ~Parser() {}
 
-	virtual bool loadFile(QIODevice *device) = 0;
+	virtual bool loadFile(QFile *file) = 0;
 	virtual QString errorString() const = 0;
 	virtual int errorLine() const = 0;
 
