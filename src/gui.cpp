@@ -672,13 +672,11 @@ bool GUI::loadFile(const QString &fileName)
 		updateGraphTabs();
 		updatePathView();
 
-		QString error = fileName + QString("\n\n")
-		  + tr("Error loading data file:\n%1").arg(data.errorString())
-		  + QString("\n");
+		QString error = tr("Error loading data file:") + "\n\n"
+		  + fileName + "\n\n" + data.errorString();
 		if (data.errorLine())
-			error.append(tr("Line: %1").arg(data.errorLine()));
-
-		QMessageBox::critical(this, tr("Error"), error);
+			error.append("\n" + tr("Line: %1").arg(data.errorLine()));
+		QMessageBox::critical(this, APP_NAME, error);
 		return false;
 	}
 }
@@ -702,12 +700,11 @@ bool GUI::openPOIFile(const QString &fileName)
 		return false;
 
 	if (!_poi->loadFile(fileName)) {
-		QString error = fileName + QString("\n\n")
-		  + tr("Error loading POI file:\n%1").arg(_poi->errorString())
-		  + QString("\n");
+		QString error = tr("Error loading POI file:") + "\n\n"
+		  + fileName + "\n\n" + _poi->errorString();
 		if (_poi->errorLine())
-			error.append(tr("Line: %1").arg(_poi->errorLine()));
-		QMessageBox::critical(this, tr("Error"), error);
+			error.append("\n" + tr("Line: %1").arg(_poi->errorLine()));
+		QMessageBox::critical(this, APP_NAME, error);
 
 		return false;
 	} else {
@@ -979,8 +976,7 @@ void GUI::updateStatusBarInfo()
 	else if (_files.count() == 1)
 		_fileNameLabel->setText(_files.at(0));
 	else
-		_fileNameLabel->setText(tr("%1 files", "", _files.count())
-		  .arg(_files.count()));
+		_fileNameLabel->setText(tr("%n files", "", _files.count()));
 
 	qreal d = distance();
 	Units units = _imperialUnitsAction->isChecked() ? Imperial : Metric;

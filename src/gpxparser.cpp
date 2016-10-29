@@ -6,7 +6,7 @@ qreal GPXParser::number()
 	bool res;
 	qreal ret = _reader.readElementText().toDouble(&res);
 	if (!res)
-		_reader.raiseError(QString("Invalid %1.").arg(
+		_reader.raiseError(QString("Invalid %1").arg(
 		  _reader.name().toString()));
 
 	return ret;
@@ -17,7 +17,7 @@ QDateTime GPXParser::time()
 	QDateTime d = QDateTime::fromString(_reader.readElementText(),
 	  Qt::ISODate);
 	if (!d.isValid())
-		_reader.raiseError(QString("Invalid %1.").arg(
+		_reader.raiseError(QString("Invalid %1").arg(
 		  _reader.name().toString()));
 
 	return d;
@@ -35,7 +35,7 @@ Coordinates GPXParser::coordinates()
 	lon = attr.value("lon").toDouble(&res);
 #endif // QT_VERSION < 5
 	if (!res || (lon < -180.0 || lon > 180.0)) {
-		_reader.raiseError("Invalid longitude.");
+		_reader.raiseError("Invalid longitude");
 		return Coordinates();
 	}
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
@@ -44,7 +44,7 @@ Coordinates GPXParser::coordinates()
 	lat = attr.value("lat").toDouble(&res);
 #endif // QT_VERSION < 5
 	if (!res || (lat < -90.0 || lat > 90.0)) {
-		_reader.raiseError("Invalid latitude.");
+		_reader.raiseError("Invalid latitude");
 		return Coordinates();
 	}
 
@@ -229,7 +229,7 @@ bool GPXParser::parse()
 		if (_reader.name() == "gpx")
 			gpx();
 		else
-			_reader.raiseError("Not a GPX file.");
+			_reader.raiseError("Not a GPX file");
 	}
 
 	return !_reader.error();

@@ -151,7 +151,7 @@
         <translation>Otevřít soubor</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="684"/>
+        <location filename="../src/gui.cpp" line="686"/>
         <source>Open POI file</source>
         <translation>Otevřít POI soubor</translation>
     </message>
@@ -364,70 +364,63 @@
     </message>
     <message>
         <location filename="../src/gui.cpp" line="603"/>
-        <location filename="../src/gui.cpp" line="685"/>
+        <location filename="../src/gui.cpp" line="687"/>
         <source>All supported files (*.gpx *.tcx *.kml *.csv)</source>
         <translation>Všechny podporované soubory (*.gpx *.tcx *.kml *.csv) </translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="604"/>
-        <location filename="../src/gui.cpp" line="686"/>
+        <location filename="../src/gui.cpp" line="688"/>
         <source>GPX files (*.gpx)</source>
         <translation>Soubory GPX (*.gpx)</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="604"/>
-        <location filename="../src/gui.cpp" line="687"/>
+        <location filename="../src/gui.cpp" line="689"/>
         <source>TCX files (*.tcx)</source>
         <translation>Soubory TCX (*.tcx)</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="605"/>
-        <location filename="../src/gui.cpp" line="687"/>
+        <location filename="../src/gui.cpp" line="689"/>
         <source>KML files (*.kml)</source>
         <translation>Soubory KML (*.kml)</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="672"/>
-        <source>Error loading data file:
-%1</source>
-        <translation>Datový soubor nelze otevřít:
-%1 </translation>
-    </message>
-    <message>
         <location filename="../src/gui.cpp" line="605"/>
-        <location filename="../src/gui.cpp" line="686"/>
+        <location filename="../src/gui.cpp" line="688"/>
         <source>CSV files (*.csv)</source>
         <translation>Soubory CSV (*.csv)</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="606"/>
-        <location filename="../src/gui.cpp" line="688"/>
+        <location filename="../src/gui.cpp" line="690"/>
         <source>All files (*)</source>
         <translation>Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="774"/>
-        <location filename="../src/gui.cpp" line="777"/>
+        <location filename="../src/gui.cpp" line="775"/>
+        <location filename="../src/gui.cpp" line="778"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="786"/>
+        <location filename="../src/gui.cpp" line="787"/>
         <source>Routes</source>
         <translation>Trasy</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="974"/>
+        <location filename="../src/gui.cpp" line="975"/>
         <source>No GPX files loaded</source>
         <translation>Nejsou načteny žádné GPX soubory</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/gui.cpp" line="978"/>
-        <source>%1 files</source>
+        <location filename="../src/gui.cpp" line="979"/>
+        <source>%n files</source>
         <translation>
-            <numerusform>%1 soubor</numerusform>
-            <numerusform>%1 soubory</numerusform>
-            <numerusform>%1 souborů</numerusform>
+            <numerusform>%n soubor</numerusform>
+            <numerusform>%n soubory</numerusform>
+            <numerusform>%n souborů</numerusform>
         </translation>
     </message>
     <message>
@@ -451,7 +444,7 @@
         <translation>Exportovat do PDF...</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="788"/>
+        <location filename="../src/gui.cpp" line="789"/>
         <source>Waypoints</source>
         <translation>Navigační body</translation>
     </message>
@@ -497,12 +490,22 @@
     </message>
     <message>
         <location filename="../src/gui.cpp" line="675"/>
-        <location filename="../src/gui.cpp" line="705"/>
+        <source>Error loading data file:</source>
+        <translation>Datový soubor nelze načíst:</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="678"/>
+        <location filename="../src/gui.cpp" line="706"/>
         <source>Line: %1</source>
         <translation>Řádka: %1</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="784"/>
+        <location filename="../src/gui.cpp" line="703"/>
+        <source>Error loading POI file:</source>
+        <translation>Soubor POI nelze načíst:</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="785"/>
         <source>Tracks</source>
         <translation>Cesty</translation>
     </message>
@@ -529,28 +532,15 @@
     </message>
     <message>
         <location filename="../src/gui.cpp" line="325"/>
-        <location filename="../src/gui.cpp" line="791"/>
+        <location filename="../src/gui.cpp" line="792"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="332"/>
-        <location filename="../src/gui.cpp" line="793"/>
+        <location filename="../src/gui.cpp" line="794"/>
         <source>Time</source>
         <translation>Čas</translation>
-    </message>
-    <message>
-        <location filename="../src/gui.cpp" line="677"/>
-        <location filename="../src/gui.cpp" line="706"/>
-        <source>Error</source>
-        <translation>Chyba</translation>
-    </message>
-    <message>
-        <location filename="../src/gui.cpp" line="702"/>
-        <source>Error loading POI file:
-%1</source>
-        <translation>Soubor POI nelze otevřít:
-%1</translation>
     </message>
 </context>
 <context>
@@ -654,7 +644,17 @@
 <context>
     <name>RouteItem</name>
     <message>
-        <location filename="../src/routeitem.cpp" line="14"/>
+        <location filename="../src/routeitem.cpp" line="15"/>
+        <source>Name</source>
+        <translation>Název</translation>
+    </message>
+    <message>
+        <location filename="../src/routeitem.cpp" line="17"/>
+        <source>Description</source>
+        <translation>Popis</translation>
+    </message>
+    <message>
+        <location filename="../src/routeitem.cpp" line="18"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
@@ -748,17 +748,27 @@
 <context>
     <name>TrackItem</name>
     <message>
-        <location filename="../src/trackitem.cpp" line="13"/>
+        <location filename="../src/trackitem.cpp" line="14"/>
+        <source>Name</source>
+        <translation>Název</translation>
+    </message>
+    <message>
+        <location filename="../src/trackitem.cpp" line="16"/>
+        <source>Description</source>
+        <translation>Popis</translation>
+    </message>
+    <message>
+        <location filename="../src/trackitem.cpp" line="17"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
     <message>
-        <location filename="../src/trackitem.cpp" line="16"/>
+        <location filename="../src/trackitem.cpp" line="20"/>
         <source>Time</source>
         <translation>Čas</translation>
     </message>
     <message>
-        <location filename="../src/trackitem.cpp" line="18"/>
+        <location filename="../src/trackitem.cpp" line="22"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>

@@ -6,7 +6,7 @@ qreal KMLParser::number()
 	bool res;
 	qreal ret = _reader.readElementText().toDouble(&res);
 	if (!res)
-		_reader.raiseError(QString("Invalid %1.").arg(
+		_reader.raiseError(QString("Invalid %1").arg(
 		  _reader.name().toString()));
 
 	return ret;
@@ -17,7 +17,7 @@ QDateTime KMLParser::time()
 	QDateTime d = QDateTime::fromString(_reader.readElementText(),
 	  Qt::ISODate);
 	if (!d.isValid())
-		_reader.raiseError(QString("Invalid %1.").arg(
+		_reader.raiseError(QString("Invalid %1").arg(
 		  _reader.name().toString()));
 
 	return d;
@@ -205,7 +205,7 @@ void KMLParser::lineString(TrackData &track)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "coordinates") {
 			if (!lineCoordinates(track))
-				_reader.raiseError("Invalid coordinates.");
+				_reader.raiseError("Invalid coordinates");
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -216,18 +216,18 @@ void KMLParser::point(Waypoint &waypoint)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "coordinates") {
 			if (!pointCoordinates(waypoint))
-				_reader.raiseError("Invalid coordinates.");
+				_reader.raiseError("Invalid coordinates");
 		} else
 			_reader.skipCurrentElement();
 	}
 
 	if (waypoint.coordinates().isNull())
-		_reader.raiseError("Missing Point coordinates.");
+		_reader.raiseError("Missing Point coordinates");
 }
 
 void KMLParser::Track(TrackData &track)
 {
-	const char mismatchError[] = "gx:coord/when element count mismatch.";
+	const char mismatchError[] = "gx:coord/when element count mismatch";
 	int i = track.size();
 
 	while (_reader.readNextStartElement()) {
@@ -239,7 +239,7 @@ void KMLParser::Track(TrackData &track)
 				_reader.raiseError(mismatchError);
 				return;
 			} else if (!coord(track[i])) {
-				_reader.raiseError("Invalid coordinates.");
+				_reader.raiseError("Invalid coordinates");
 				return;
 			}
 			i++;
@@ -329,7 +329,7 @@ bool KMLParser::parse()
 		if (_reader.name() == "kml")
 			kml();
 		else
-			_reader.raiseError("Not a KML file.");
+			_reader.raiseError("Not a KML file");
 	}
 
 	return !_reader.error();
