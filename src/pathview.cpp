@@ -447,10 +447,13 @@ void PathView::rescale()
 	_mapScale->setZoom(_zoom);
 }
 
-void PathView::zoom(int z, const QPointF &pos)
+void PathView::zoom(int z, const QPoint &pos)
 {
 	if (_tracks.isEmpty() && _routes.isEmpty() && _waypoints.isEmpty())
 		return;
+
+	QPoint offset = pos - viewport()->rect().center();
+	QPointF spos = mapToScene(pos);
 
 	qreal scale = _scale;
 	_zoom = z;
@@ -466,7 +469,7 @@ void PathView::zoom(int z, const QPointF &pos)
 	  && br.height() < viewport()->size().height())
 		centerOn(br.center());
 	else
-		centerOn(pos * scale/_scale);
+		centerOn((spos * (scale/_scale)) - offset);
 
 	_mapScale->setZoom(_zoom);
 
@@ -475,14 +478,21 @@ void PathView::zoom(int z, const QPointF &pos)
 
 void PathView::wheelEvent(QWheelEvent *event)
 {
-	if (_tracks.isEmpty() && _routes.isEmpty() && _waypoints.isEmpty())
-		return;
-
-	QPointF pos = mapToScene(event->pos());
 	int z = (event->delta() > 0) ?
 		qMin(_zoom + 1, ZOOM_MAX) : qMax(_zoom - 1, ZOOM_MIN);
 
-	zoom(z, pos);
+	zoom(z, event->pos());
+}
+
+void PathView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+	if (event->button() != Qt::LeftButton && event->button() != Qt::RightButton)
+		return;
+
+	int z = (event->button() == Qt::LeftButton) ?
+		qMin(_zoom + 1, ZOOM_MAX) : qMax(_zoom - 1, ZOOM_MIN);
+
+	zoom(z, event->pos());
 }
 
 void PathView::keyPressEvent(QKeyEvent *event)
@@ -495,7 +505,7 @@ void PathView::keyPressEvent(QKeyEvent *event)
 		z = qMax(_zoom - 1, ZOOM_MIN);
 
 	if (z >= 0)
-		zoom(z, mapToScene(QRect(QPoint(), size()).center()));
+		zoom(z, QRect(QPoint(), size()).center());
 	else
 		QWidget::keyPressEvent(event);
 }
@@ -656,7 +666,7 @@ void PathView::drawBackground(QPainter *painter, const QRectF &rect)
 	}
 }
 
-void PathView::resizeEvent(QResizeEvent *e)
+void PathView::resizeEvent(QResizeEvent *event)
 {
 	if (_tracks.isEmpty() && _routes.isEmpty() && _waypoints.isEmpty())
 		return;
@@ -668,12 +678,12 @@ void PathView::resizeEvent(QResizeEvent *e)
 	QRectF ba = br.adjusted(-Tile::size(), -Tile::size(), Tile::size(),
 	  Tile::size());
 
-	if (ba.width() < e->size().width()) {
-		qreal diff = e->size().width() - ba.width();
+	if (ba.width() < event->size().width()) {
+		qreal diff = event->size().width() - ba.width();
 		ba.adjust(-diff/2, 0, diff/2, 0);
 	}
-	if (ba.height() < e->size().height()) {
-		qreal diff = e->size().height() - ba.height();
+	if (ba.height() < event->size().height()) {
+		qreal diff = event->size().height() - ba.height();
 		ba.adjust(0, -diff/2, 0, diff/2);
 	}
 
@@ -683,7 +693,7 @@ void PathView::resizeEvent(QResizeEvent *e)
 	resetCachedContent();
 }
 
-void PathView::paintEvent(QPaintEvent *e)
+void PathView::paintEvent(QPaintEvent *event)
 {
 	QPointF scenePos = mapToScene(rect().bottomRight() + QPoint(
 	  -(SCALE_OFFSET + _mapScale->boundingRect().width()),
@@ -691,5 +701,5 @@ void PathView::paintEvent(QPaintEvent *e)
 	if (_mapScale->pos() != scenePos && !_plot)
 		_mapScale->setPos(scenePos);
 
-	QGraphicsView::paintEvent(e);
+	QGraphicsView::paintEvent(event);
 }

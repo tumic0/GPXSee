@@ -74,14 +74,15 @@ private:
 	qreal mapScale(int zoom) const;
 	void rescale(qreal scale);
 	void rescale();
-	void zoom(int z, const QPointF &pos);
+	void zoom(int z, const QPoint &pos);
 	void updatePOIVisibility();
 
+	void mouseDoubleClickEvent(QMouseEvent *event);
 	void wheelEvent(QWheelEvent *event);
 	void keyPressEvent(QKeyEvent *event);
 	void drawBackground(QPainter *painter, const QRectF &rect);
-	void resizeEvent(QResizeEvent *e);
-	void paintEvent(QPaintEvent *e);
+	void resizeEvent(QResizeEvent *event);
+	void paintEvent(QPaintEvent *event);
 
 	QGraphicsScene *_scene;
 	ScaleItem *_mapScale;
