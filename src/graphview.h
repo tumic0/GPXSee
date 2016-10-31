@@ -2,7 +2,6 @@
 #define GRAPHVIEW_H
 
 #include <QGraphicsView>
-#include <QVector>
 #include <QList>
 #include <QSet>
 #include "palette.h"
@@ -17,7 +16,6 @@ class InfoItem;
 class GraphItem;
 class PathItem;
 class GridItem;
-
 
 class GraphView : public QGraphicsView
 {

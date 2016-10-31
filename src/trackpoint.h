@@ -15,6 +15,7 @@ public:
 	  {_elevation = NAN; _speed = NAN; _heartRate = NAN; _temperature = NAN;}
 
 	const Coordinates &coordinates() const {return _coordinates;}
+	Coordinates &rcoordinates() {return _coordinates;}
 	const QDateTime &timestamp() const {return _timestamp;}
 	qreal elevation() const {return _elevation;}
 	qreal speed() const {return _speed;}

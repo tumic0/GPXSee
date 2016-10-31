@@ -107,7 +107,7 @@ GUI::~GUI()
 void GUI::createBrowser()
 {
 	QStringList filter;
-	filter << "*.gpx" << "*.tcx" << "*.kml" << "*.csv";
+	filter << "*.gpx" << "*.tcx" << "*.kml" << "*.fit" << "*.csv";
 	_browser = new FileBrowser(this);
 	_browser->setFilter(filter);
 }
@@ -600,10 +600,10 @@ void GUI::dataSources()
 void GUI::openFile()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open file"),
-	  QString(), tr("All supported files (*.gpx *.tcx *.kml *.csv)") + ";;"
+	  QString(), tr("Supported files (*.gpx *.tcx *.kml *.csv *.fit)") + ";;"
 	  + tr("GPX files (*.gpx)") + ";;" + tr("TCX files (*.tcx)") + ";;"
 	  + tr("CSV files (*.csv)") + ";;" + tr("KML files (*.kml)") + ";;"
-	  + tr("All files (*)"));
+	  + tr("FIT files (*.fit)") + ";;" + tr("All files (*)"));
 	QStringList list = files;
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
@@ -684,10 +684,10 @@ bool GUI::loadFile(const QString &fileName)
 void GUI::openPOIFile()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open POI file"),
-	  QString(), tr("All supported files (*.gpx *.tcx *.kml *.csv)") + ";;"
+	  QString(), tr("Supported files (*.gpx *.tcx *.kml *.csv *.fit)") + ";;"
 	  + tr("GPX files (*.gpx)") + ";;" + tr("CSV files (*.csv)") + ";;"
 	  + tr("TCX files (*.tcx)") + ";;" + tr("KML files (*.kml)") + ";;"
-	  + tr("All files (*)"));
+	  + tr("FIT files (*.fit)") + ";;" + tr("All files (*)"));
 	QStringList list = files;
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)

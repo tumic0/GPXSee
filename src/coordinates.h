@@ -12,8 +12,8 @@ public:
 	Coordinates(const Coordinates &c) {_lon = c._lon; _lat = c._lat;}
 	Coordinates(qreal lon, qreal lat) {_lon = lon; _lat = lat;}
 
-	qreal &rLon() {return _lon;}
-	qreal &rLat() {return _lat;}
+	qreal &rlon() {return _lon;}
+	qreal &rlat() {return _lat;}
 	void setLon(qreal lon) {_lon = lon;}
 	void setLat(qreal lat) {_lat = lat;}
 	qreal lon() const {return _lon;}

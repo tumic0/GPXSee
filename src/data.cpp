@@ -5,6 +5,7 @@
 #include "tcxparser.h"
 #include "csvparser.h"
 #include "kmlparser.h"
+#include "fitparser.h"
 #include "data.h"
 
 
@@ -15,6 +16,8 @@ Data::Data() : _errorLine(0)
 	_parsers.insert("tcx", new TCXParser(_trackData, _routeData,
 	  _waypointData));
 	_parsers.insert("kml", new KMLParser(_trackData, _routeData,
+	  _waypointData));
+	_parsers.insert("fit", new FITParser(_trackData, _routeData,
 	  _waypointData));
 	_parsers.insert("csv", new CSVParser(_trackData, _routeData,
 	  _waypointData));
@@ -50,7 +53,7 @@ bool Data::loadFile(const QString &fileName)
 	_errorString.clear();
 	_errorLine = 0;
 
-	if (!file.open(QFile::ReadOnly | QFile::Text)) {
+	if (!file.open(QFile::ReadOnly)) {
 		_errorString = qPrintable(file.errorString());
 		return false;
 	}
