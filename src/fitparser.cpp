@@ -176,12 +176,12 @@ bool FITParser::parseData(MessageDefinition *def, quint8 offset)
 				case 0:
 					if (val != 0x7fffffff)
 						trackpoint.rcoordinates().setLat(
-						  (val / (double)0x7fffffff) * 180);
+						  ((qint32)val / (double)0x7fffffff) * 180);
 					break;
 				case 1:
 					if (val != 0x7fffffff)
 						trackpoint.rcoordinates().setLon(
-						  (val / (double)0x7fffffff) * 180);
+						  ((qint32)val / (double)0x7fffffff) * 180);
 					break;
 				case 2:
 					if (val != 0xffff)
