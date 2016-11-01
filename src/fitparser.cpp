@@ -197,7 +197,7 @@ bool FITParser::parseData(MessageDefinition *def, quint8 offset)
 					break;
 				case 13:
 					if (val != 0x7f)
-						trackpoint.setTemperature(val);
+						trackpoint.setTemperature((qint8)val);
 					break;
 				default:
 					break;
@@ -259,7 +259,7 @@ bool FITParser::parseHeader()
 		return false;
 	}
 
-	_len = hdr.data_size;
+	_len = qFromLittleEndian(hdr.data_size);
 
 	if (hdr.header_size > 12)
 		if (!readData((char *)&crc, sizeof(crc)))
