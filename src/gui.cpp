@@ -104,6 +104,14 @@ GUI::~GUI()
 	}
 }
 
+const QString GUI::fileFormats() const
+{
+	return tr("Supported files (*.csv *.fit *.gpx *.kml *.tcx)") + ";;"
+	  + tr("CSV files (*.csv)") + ";;" + tr("FIT files (*.fit)") + ";;"
+	  + tr("GPX files (*.gpx)") + ";;" + tr("KML files (*.kml)") + ";;"
+	  + tr("TCX files (*.tcx)") + ";;" + tr("All files (*)");
+}
+
 void GUI::createBrowser()
 {
 	QStringList filter;
@@ -600,10 +608,7 @@ void GUI::dataSources()
 void GUI::openFile()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open file"),
-	  QString(), tr("Supported files (*.gpx *.tcx *.kml *.csv *.fit)") + ";;"
-	  + tr("GPX files (*.gpx)") + ";;" + tr("TCX files (*.tcx)") + ";;"
-	  + tr("CSV files (*.csv)") + ";;" + tr("KML files (*.kml)") + ";;"
-	  + tr("FIT files (*.fit)") + ";;" + tr("All files (*)"));
+	  QString(), fileFormats());
 	QStringList list = files;
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
@@ -684,10 +689,7 @@ bool GUI::loadFile(const QString &fileName)
 void GUI::openPOIFile()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open POI file"),
-	  QString(), tr("Supported files (*.gpx *.tcx *.kml *.csv *.fit)") + ";;"
-	  + tr("GPX files (*.gpx)") + ";;" + tr("CSV files (*.csv)") + ";;"
-	  + tr("TCX files (*.tcx)") + ";;" + tr("KML files (*.kml)") + ";;"
-	  + tr("FIT files (*.fit)") + ";;" + tr("All files (*)"));
+	  QString(), fileFormats());
 	QStringList list = files;
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
@@ -1392,7 +1394,7 @@ int GUI::mapIndex(const QString &name)
 	return 0;
 }
 
-qreal GUI::distance()
+qreal GUI::distance() const
 {
 	qreal dist = 0;
 
@@ -1404,7 +1406,7 @@ qreal GUI::distance()
 	return dist;
 }
 
-qreal GUI::time()
+qreal GUI::time() const
 {
 	return (_showTracksAction->isChecked()) ? _time : 0;
 }
