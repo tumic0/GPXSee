@@ -31,7 +31,7 @@ private:
 	qreal number();
 	QDateTime time();
 
-	void warning(const char *text);
+	void warning(const char *text) const;
 
 	QXmlStreamReader _reader;
 };

@@ -1,9 +1,9 @@
 #include "tcxparser.h"
 
 
-void TCXParser::warning(const char *text)
+void TCXParser::warning(const char *text) const
 {
-	QFile *file = static_cast<QFile *>(_reader.device());
+	const QFile *file = static_cast<QFile *>(_reader.device());
 	fprintf(stderr, "%s:%lld: %s\n", qPrintable(file->fileName()),
 	  _reader.lineNumber(), text);
 }
