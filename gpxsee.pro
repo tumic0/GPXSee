@@ -122,6 +122,9 @@ macx {
 }
 win32 {
     RC_ICONS = icons/gpxsee.ico \
-        icons/gpx.ico
+        icons/gpx.ico \
+        icons/tcx.ico \
+        icons/kml.ico \
+        icons/fit.ico
 }
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
