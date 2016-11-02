@@ -139,6 +139,31 @@
     </message>
 </context>
 <context>
+    <name>Format</name>
+    <message>
+        <location filename="../src/format.cpp" line="22"/>
+        <location filename="../src/format.cpp" line="43"/>
+        <source>ft</source>
+        <translation>ft</translation>
+    </message>
+    <message>
+        <location filename="../src/format.cpp" line="25"/>
+        <source>mi</source>
+        <translation>mi</translation>
+    </message>
+    <message>
+        <location filename="../src/format.cpp" line="29"/>
+        <location filename="../src/format.cpp" line="40"/>
+        <source>m</source>
+        <translation>m</translation>
+    </message>
+    <message>
+        <location filename="../src/format.cpp" line="32"/>
+        <source>km</source>
+        <translation>km</translation>
+    </message>
+</context>
+<context>
     <name>GUI</name>
     <message>
         <location filename="../src/gui.cpp" line="546"/>
@@ -616,31 +641,6 @@
     </message>
 </context>
 <context>
-    <name>Misc</name>
-    <message>
-        <location filename="../src/misc.cpp" line="55"/>
-        <location filename="../src/misc.cpp" line="76"/>
-        <source>ft</source>
-        <translation>ft</translation>
-    </message>
-    <message>
-        <location filename="../src/misc.cpp" line="58"/>
-        <source>mi</source>
-        <translation>mi</translation>
-    </message>
-    <message>
-        <location filename="../src/misc.cpp" line="62"/>
-        <location filename="../src/misc.cpp" line="73"/>
-        <source>m</source>
-        <translation>m</translation>
-    </message>
-    <message>
-        <location filename="../src/misc.cpp" line="65"/>
-        <source>km</source>
-        <translation>km</translation>
-    </message>
-</context>
-<context>
     <name>RouteItem</name>
     <message>
         <location filename="../src/routeitem.cpp" line="15"/>
@@ -767,7 +767,7 @@
         <translation>Čas</translation>
     </message>
     <message>
-        <location filename="../src/trackitem.cpp" line="22"/>
+        <location filename="../src/trackitem.cpp" line="23"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
