@@ -39,7 +39,7 @@
 #include "cpuarch.h"
 #include "exportdialog.h"
 #include "graphtab.h"
-#include "misc.h"
+#include "format.h"
 #include "gui.h"
 
 
@@ -791,9 +791,9 @@ void GUI::plot(QPrinter *printer)
 		info.insert(tr("Waypoints"), QString::number(_waypointCount));
 
 	if (d > 0)
-		info.insert(tr("Distance"), ::distance(d, units));
+		info.insert(tr("Distance"), Format::distance(d, units));
 	if (t > 0)
-		info.insert(tr("Time"), ::timeSpan(t));
+		info.insert(tr("Time"), Format::timeSpan(t));
 
 
 	ratio = p.paintEngine()->paintDevice()->logicalDpiX() / SCREEN_DPI;
@@ -983,13 +983,13 @@ void GUI::updateStatusBarInfo()
 	qreal d = distance();
 	Units units = _imperialUnitsAction->isChecked() ? Imperial : Metric;
 	if (d > 0)
-		_distanceLabel->setText(::distance(distance(), units));
+		_distanceLabel->setText(Format::distance(distance(), units));
 	else
 		_distanceLabel->clear();
 
 	qreal t = time();
 	if (t > 0)
-		_timeLabel->setText(::timeSpan(time()));
+		_timeLabel->setText(Format::timeSpan(time()));
 	else
 		_timeLabel->clear();
 }

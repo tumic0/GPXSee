@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QCursor>
 #include <QPainter>
-#include "misc.h"
+#include "format.h"
 #include "tooltip.h"
 #include "trackitem.h"
 
@@ -15,9 +15,10 @@ QString TrackItem::toolTip()
 	if (!_desc.isEmpty())
 		tt.insert(qApp->translate("TrackItem", "Description"), _desc);
 	tt.insert(qApp->translate("TrackItem", "Distance"),
-	  ::distance(_distance, _units));
+	  Format::distance(_distance, _units));
 	if  (_time > 0)
-		tt.insert(qApp->translate("TrackItem", "Time"), ::timeSpan(_time));
+		tt.insert(qApp->translate("TrackItem", "Time"),
+		  Format::timeSpan(_time));
 	if (!_date.isNull())
 		tt.insert(qApp->translate("TrackItem", "Date"),
 		  _date.toString(Qt::SystemLocaleShortDate));

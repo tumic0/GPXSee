@@ -63,7 +63,8 @@ HEADERS += src/config.h \
     src/kmlparser.h \
     src/trackdata.h \
     src/routedata.h \
-    src/fitparser.h
+    src/fitparser.h \
+    src/format.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -107,7 +108,8 @@ SOURCES += src/main.cpp \
     src/csvparser.cpp \
     src/coordinates.cpp \
     src/kmlparser.cpp \
-    src/fitparser.cpp
+    src/fitparser.cpp \
+    src/format.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {
