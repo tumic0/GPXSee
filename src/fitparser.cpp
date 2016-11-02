@@ -5,6 +5,9 @@
 
 const quint32 FIT_MAGIC = 0x5449462E; // .FIT
 
+#define RECORD_MESSAGE  20
+#define TIMESTAMP_FIELD 253
+
 
 FITParser::FITParser(QList<TrackData> &tracks, QList<RouteData> &routes,
   QList<Waypoint> &waypoints) : Parser(tracks, routes, waypoints)
@@ -12,11 +15,21 @@ FITParser::FITParser(QList<TrackData> &tracks, QList<RouteData> &routes,
 	memset(_defs, 0, sizeof(_defs));
 }
 
-FITParser::~FITParser()
+void FITParser::clearDefinitions()
 {
-	for (int i = 0; i < 16; i++)
-		if (_defs[i].fields)
+	for (int i = 0; i < 16; i++) {
+		if (_defs[i].fields) {
 			delete[] _defs[i].fields;
+			_defs[i].fields = 0;
+		}
+	}
+}
+
+void FITParser::warning(const char *text) const
+{
+	const QFile *file = static_cast<QFile *>(_device);
+	fprintf(stderr, "%s:%d: %s\n", qPrintable(file->fileName()),
+	  _len, text);
 }
 
 bool FITParser::readData(char *data, size_t size)
@@ -113,7 +126,7 @@ bool FITParser::parseDefinitionMessage(quint8 header)
 	return true;
 }
 
-bool FITParser::readField(Field* f, quint32 &val)
+bool FITParser::readField(Field *f, quint32 &val)
 {
 	quint8 v8 = (quint8)-1;
 	quint16 v16 = (quint16)-1;
@@ -162,6 +175,11 @@ bool FITParser::parseData(MessageDefinition *def, quint8 offset)
 	int i;
 
 
+	if (!def->fields) {
+		_errorString = "Undefined data message";
+		return false;
+	}
+
 	_endian = def->endian;
 
 	for (i = 0; i < def->num_fields; i++) {
@@ -169,9 +187,9 @@ bool FITParser::parseData(MessageDefinition *def, quint8 offset)
 		if (!readField(field, val))
 			return false;
 
-		if (field->id == 253)
+		if (field->id == TIMESTAMP_FIELD)
 			_timestamp = timestamp = val;
-		else if (def->global_id == 20) {
+		else if (def->global_id == RECORD_MESSAGE) {
 			switch (field->id) {
 				case 0:
 					if (val != 0x7fffffff)
@@ -206,9 +224,19 @@ bool FITParser::parseData(MessageDefinition *def, quint8 offset)
 		}
 	}
 
-	if (def->global_id == 20 && trackpoint.coordinates().isValid()) {
-		trackpoint.setTimestamp(QDateTime::fromTime_t(timestamp + 631065600));
-		_tracks.last().append(trackpoint);
+	if (def->global_id == RECORD_MESSAGE) {
+		if (trackpoint.coordinates().isValid()) {
+			trackpoint.setTimestamp(QDateTime::fromTime_t(timestamp
+			  + 631065600));
+			_tracks.last().append(trackpoint);
+		} else {
+			if (trackpoint.coordinates().isNull())
+				warning("Missing coordinates");
+			else {
+				_errorString = "Invalid coordinates";
+				return false;
+			}
+		}
 	}
 
 	return true;
@@ -216,7 +244,7 @@ bool FITParser::parseData(MessageDefinition *def, quint8 offset)
 
 bool FITParser::parseDataMessage(quint8 header)
 {
-	int local_id = header & 0x1f;
+	int local_id = header & 0xf;
 	MessageDefinition* def = &_defs[local_id];
 	return parseData(def, 0);
 }
@@ -234,6 +262,11 @@ bool FITParser::parseRecord()
 
 	if (!readValue(header))
 		return false;
+
+	if (header & 0x20) {
+		_errorString = "Developer data not supported";
+		return false;
+	}
 
 	if (header & 0x80)
 		return parseCompressedMessage(header);
@@ -261,7 +294,7 @@ bool FITParser::parseHeader()
 
 	_len = qFromLittleEndian(hdr.data_size);
 
-	if (hdr.header_size > 12)
+	if (hdr.header_size > sizeof(hdr))
 		if (!readData((char *)&crc, sizeof(crc)))
 			return false;
 
@@ -273,6 +306,7 @@ bool FITParser::loadFile(QFile *file)
 	_device = file;
 	_endian = 0;
 	_timestamp = 0;
+	bool ret = true;
 
 	if (!parseHeader())
 		return false;
@@ -280,8 +314,10 @@ bool FITParser::loadFile(QFile *file)
 	_tracks.append(TrackData());
 
 	while (_len)
-		if (!parseRecord())
-			return false;
+		if ((ret = parseRecord()) == false)
+			break;
 
-	return true;
+	clearDefinitions();
+
+	return ret;
 }

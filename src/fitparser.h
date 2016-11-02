@@ -8,7 +8,7 @@ class FITParser : public Parser
 public:
 	FITParser(QList<TrackData> &tracks, QList<RouteData> &routes,
 	  QList<Waypoint> &waypoints);
-	~FITParser();
+	~FITParser() {}
 
 	bool loadFile(QFile *file);
 	QString errorString() const {return _errorString;}
@@ -37,6 +37,9 @@ private:
 	} MessageDefinition;
 
 
+	void warning(const char *text) const;
+	void clearDefinitions();
+
 	bool readData(char *data, size_t size);
 	template<class T> bool readValue(T &val);
 	bool skipValue(size_t size);
@@ -48,7 +51,6 @@ private:
 	bool parseDataMessage(quint8 header);
 	bool parseData(MessageDefinition *def, quint8 offset);
 	bool readField(Field *f, quint32 &val);
-
 
 	QIODevice *_device;
 	QString _errorString;
