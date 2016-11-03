@@ -34,6 +34,8 @@ private:
 		quint16 globalId;
 		quint8 numFields;
 		Field *fields;
+		quint8 numDevFields;
+		Field *devFields;
 	} MessageDefinition;
 
 

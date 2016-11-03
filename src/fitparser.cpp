@@ -18,11 +18,13 @@ FITParser::FITParser(QList<TrackData> &tracks, QList<RouteData> &routes,
 void FITParser::clearDefinitions()
 {
 	for (int i = 0; i < 16; i++) {
-		if (_defs[i].fields) {
+		if (_defs[i].fields)
 			delete[] _defs[i].fields;
-			_defs[i].fields = 0;
-		}
+		if (_defs[i].devFields)
+			delete[] _defs[i].devFields;
 	}
+
+	memset(_defs, 0, sizeof(_defs));
 }
 
 void FITParser::warning(const char *text) const
@@ -91,6 +93,10 @@ bool FITParser::parseDefinitionMessage(quint8 header)
 		delete[] def->fields;
 		def->fields = 0;
 	}
+	if (def->devFields) {
+		delete[] def->devFields;
+		def->devFields = 0;
+	}
 
 	// reserved/unused
 	if (!readValue(i))
@@ -119,6 +125,20 @@ bool FITParser::parseDefinitionMessage(quint8 header)
 		if (!readData((char*)&(def->fields[i]), sizeof(def->fields[i])))
 			return false;
 		_len -= sizeof(def->fields[i]);
+	}
+
+	// developer definition records
+	if (header & 0x20) {
+		if (!readValue(def->numDevFields))
+			return false;
+
+		def->devFields = new Field[def->numDevFields];
+		for (i = 0; i < def->numDevFields; i++) {
+			if (!readData((char*)&(def->devFields[i]),
+			  sizeof(def->devFields[i])))
+				return false;
+			_len -= sizeof(def->devFields[i]);
+		}
 	}
 
 	return true;
@@ -173,7 +193,7 @@ bool FITParser::parseData(MessageDefinition *def, quint8 offset)
 	int i;
 
 
-	if (!def->fields) {
+	if (!def->fields && !def->devFields) {
 		_errorString = "Undefined data message";
 		return false;
 	}
@@ -222,6 +242,13 @@ bool FITParser::parseData(MessageDefinition *def, quint8 offset)
 		}
 	}
 
+	for (i = 0; i < def->numDevFields; i++) {
+		field = &def->devFields[i];
+		if (!readField(field, val))
+			return false;
+	}
+
+
 	if (def->globalId == RECORD_MESSAGE) {
 		if (trackpoint.coordinates().isValid()) {
 			trackpoint.setTimestamp(QDateTime::fromTime_t(timestamp
@@ -260,11 +287,6 @@ bool FITParser::parseRecord()
 
 	if (!readValue(header))
 		return false;
-
-	if (header & 0x20) {
-		_errorString = "Developer data not supported";
-		return false;
-	}
 
 	if (header & 0x80)
 		return parseCompressedMessage(header);
