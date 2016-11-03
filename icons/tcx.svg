@@ -24,20 +24,18 @@
   <defs
      id="defs3402" />
   <path
-     d="m131,10H43v164h124V46zv36h36"
+     d="m 128.23996,2.2548915 -95.377018,0 0,181.0580085 134.394868,0 0,-141.313567 z m 0,0 0,39.7444415 39.01785,0"
      id="path3392"
-     stroke-width="2"
-     stroke="#999"
-     fill="#FFF" />
+     style="fill:#ffffff;stroke:#999999;stroke-width:2.18774867" />
   <rect
      style="fill:#ffcc00;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect3426"
-     width="103.85964"
-     height="48.278511"
-     x="26.573463"
-     y="117.45065" />
+     width="120.3215"
+     height="49.84631"
+     x="16.573463"
+     y="124.9782" />
   <g
-     transform="matrix(0.77661337,0,0,0.75017446,22.425984,-37.061518)"
+     transform="matrix(0.89093793,0,0,0.84489692,3.5017807,-51.565424)"
      id="g3828">
     <g
        id="g3715">
@@ -137,12 +135,11 @@
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:40px;line-height:100%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     x="39.632851"
-     y="147.98595"
+     x="35.911289"
+     y="155.86783"
      id="text3921"
      transform="scale(0.9437456,1.0596076)"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:40px;line-height:100%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';text-align:start;writing-mode:lr-tb;text-anchor:start"
-       id="tspan5543"
-       x="39.632851"
-       y="147.98595">TCX</tspan></text>
+       y="155.86783"
+       x="35.911289"
+       id="tspan3429">TCX</tspan></text>
 </svg>
