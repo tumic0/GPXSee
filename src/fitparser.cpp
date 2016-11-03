@@ -87,8 +87,10 @@ bool FITParser::parseDefinitionMessage(quint8 header)
 	quint8 i;
 
 
-	if (def->fields)
+	if (def->fields) {
 		delete[] def->fields;
+		def->fields = 0;
+	}
 
 	// reserved/unused
 	if (!readValue(i))
@@ -110,10 +112,6 @@ bool FITParser::parseDefinitionMessage(quint8 header)
 	// number of records
 	if (!readValue(def->num_fields))
 		return false;
-	if (def->num_fields == 0) {
-		def->fields = 0;
-		return true;
-	}
 
 	// definition records
 	def->fields = new Field[def->num_fields];
