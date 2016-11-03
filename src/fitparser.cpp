@@ -106,16 +106,16 @@ bool FITParser::parseDefinitionMessage(quint8 header)
 	_endian = def->endian;
 
 	// global message number
-	if (!readValue(def->global_id))
+	if (!readValue(def->globalId))
 		return false;
 
 	// number of records
-	if (!readValue(def->num_fields))
+	if (!readValue(def->numFields))
 		return false;
 
 	// definition records
-	def->fields = new Field[def->num_fields];
-	for (i = 0; i < def->num_fields; i++) {
+	def->fields = new Field[def->numFields];
+	for (i = 0; i < def->numFields; i++) {
 		if (!readData((char*)&(def->fields[i]), sizeof(def->fields[i])))
 			return false;
 		_len -= sizeof(def->fields[i]);
@@ -180,14 +180,14 @@ bool FITParser::parseData(MessageDefinition *def, quint8 offset)
 
 	_endian = def->endian;
 
-	for (i = 0; i < def->num_fields; i++) {
+	for (i = 0; i < def->numFields; i++) {
 		field = &def->fields[i];
 		if (!readField(field, val))
 			return false;
 
 		if (field->id == TIMESTAMP_FIELD)
 			_timestamp = timestamp = val;
-		else if (def->global_id == RECORD_MESSAGE) {
+		else if (def->globalId == RECORD_MESSAGE) {
 			switch (field->id) {
 				case 0:
 					if (val != 0x7fffffff)
@@ -222,7 +222,7 @@ bool FITParser::parseData(MessageDefinition *def, quint8 offset)
 		}
 	}
 
-	if (def->global_id == RECORD_MESSAGE) {
+	if (def->globalId == RECORD_MESSAGE) {
 		if (trackpoint.coordinates().isValid()) {
 			trackpoint.setTimestamp(QDateTime::fromTime_t(timestamp
 			  + 631065600));
@@ -290,9 +290,9 @@ bool FITParser::parseHeader()
 		return false;
 	}
 
-	_len = qFromLittleEndian(hdr.data_size);
+	_len = qFromLittleEndian(hdr.dataSize);
 
-	if (hdr.header_size > sizeof(hdr))
+	if (hdr.headerSize > sizeof(hdr))
 		if (!readData((char *)&crc, sizeof(crc)))
 			return false;
 

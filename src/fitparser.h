@@ -16,10 +16,10 @@ public:
 
 private:
 	typedef struct {
-		quint8 header_size;
-		quint8 protocol_version;
-		quint16 profile_version;
-		quint32 data_size;
+		quint8 headerSize;
+		quint8 protocolVersion;
+		quint16 profileVersion;
+		quint32 dataSize;
 		quint32 magic;
 	} FileHeader;
 
@@ -31,8 +31,8 @@ private:
 
 	typedef struct {
 		quint8 endian;
-		quint16 global_id;
-		quint8 num_fields;
+		quint16 globalId;
+		quint8 numFields;
 		Field *fields;
 	} MessageDefinition;
 
