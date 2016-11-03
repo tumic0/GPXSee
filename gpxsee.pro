@@ -116,6 +116,9 @@ macx {
     ICON = icons/gpxsee.icns
     QMAKE_INFO_PLIST = Info.plist
     APP_RESOURCES.files = icons/gpx.icns \
+        icons/tcx.icns \
+        icons/kml.icns \
+        icons/fit.icns \
         pkg/maps.txt
     APP_RESOURCES.path = Contents/Resources
     QMAKE_BUNDLE_DATA += APP_RESOURCES
