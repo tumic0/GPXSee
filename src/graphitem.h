@@ -44,7 +44,6 @@ private:
 
 	Graph _graph;
 	GraphType _type;
-	bool _time;
 
 	QPainterPath _path;
 	QRectF _bounds;
