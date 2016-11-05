@@ -27,7 +27,22 @@ private:
 	qreal _y;
 };
 
-typedef QVector<GraphPoint> Graph;
+class Graph : public QVector<GraphPoint>
+{
+public:
+	Graph() : QVector<GraphPoint>() {_time = true;}
+	void append(const GraphPoint &p)
+	{
+		if (std::isnan(p.t()))
+			_time = false;
+		QVector<GraphPoint>::append(p);
+	}
+
+	bool hasTime() const {return _time;}
+
+private:
+	bool _time;
+};
 
 Q_DECLARE_TYPEINFO(GraphPoint, Q_PRIMITIVE_TYPE);
 

@@ -5,15 +5,6 @@
 #define GRAPH_WIDTH 1
 #define HOVER_WIDTH 2
 
-static bool hasTime(const Graph &graph)
-{
-	for (int i = 0; i < graph.count(); i++)
-		if (std::isnan(graph.at(i).t()))
-			return false;
-
-	return true;
-}
-
 GraphItem::GraphItem(const Graph &graph, QGraphicsItem *parent)
   : QGraphicsObject(parent)
 {
@@ -24,7 +15,7 @@ GraphItem::GraphItem(const Graph &graph, QGraphicsItem *parent)
 	_type = Distance;
 	_graph = graph;
 	_sx = 1.0; _sy = 1.0;
-	_time = hasTime(_graph);
+	_time = _graph.hasTime();
 
 	updatePath();
 	updateBounds();

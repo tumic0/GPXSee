@@ -64,7 +64,9 @@ HEADERS += src/config.h \
     src/trackdata.h \
     src/routedata.h \
     src/fitparser.h \
-    src/format.h
+    src/format.h \
+    src/path.h \
+    src/assert.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
