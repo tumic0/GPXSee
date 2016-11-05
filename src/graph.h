@@ -2,6 +2,7 @@
 #define GRAPH_H
 
 #include <QVector>
+#include <QDebug>
 #include <cmath>
 
 enum GraphType {Distance, Time};
@@ -27,6 +28,10 @@ private:
 	qreal _y;
 };
 
+Q_DECLARE_TYPEINFO(GraphPoint, Q_PRIMITIVE_TYPE);
+QDebug operator<<(QDebug dbg, const GraphPoint &graphpoint);
+
+
 class Graph : public QVector<GraphPoint>
 {
 public:
@@ -43,7 +48,5 @@ public:
 private:
 	bool _time;
 };
-
-Q_DECLARE_TYPEINFO(GraphPoint, Q_PRIMITIVE_TYPE);
 
 #endif // GRAPH_H

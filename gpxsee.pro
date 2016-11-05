@@ -111,7 +111,8 @@ SOURCES += src/main.cpp \
     src/coordinates.cpp \
     src/kmlparser.cpp \
     src/fitparser.cpp \
-    src/format.cpp
+    src/format.cpp \
+    src/graph.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {
