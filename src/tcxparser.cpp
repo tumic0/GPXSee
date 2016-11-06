@@ -56,6 +56,18 @@ Coordinates TCXParser::position()
 	return pos;
 }
 
+void TCXParser::extensions(Trackpoint &trackpoint)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "RunCadence")
+			trackpoint.setCadence(number());
+		else if (_reader.name() == "Watts")
+			trackpoint.setPower(number());
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
 void TCXParser::trackpointData(Trackpoint &trackpoint)
 {
 	while (_reader.readNextStartElement()) {
@@ -67,6 +79,10 @@ void TCXParser::trackpointData(Trackpoint &trackpoint)
 			trackpoint.setTimestamp(time());
 		else if (_reader.name() == "HeartRateBpm")
 			trackpoint.setHeartRate(number());
+		else if (_reader.name() == "Cadence")
+			trackpoint.setCadence(number());
+		else if (_reader.name() == "Extensions")
+			extensions(trackpoint);
 		else
 			_reader.skipCurrentElement();
 	}

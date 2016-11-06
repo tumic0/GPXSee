@@ -19,6 +19,8 @@ public:
 	Graph speed() const;
 	Graph heartRate() const;
 	Graph temperature() const;
+	Graph cadence() const;
+	Graph power() const;
 
 	qreal distance() const;
 	qreal time() const;

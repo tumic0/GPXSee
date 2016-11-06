@@ -33,6 +33,8 @@
 #include "speedgraph.h"
 #include "heartrategraph.h"
 #include "temperaturegraph.h"
+#include "cadencegraph.h"
+#include "powergraph.h"
 #include "pathview.h"
 #include "trackinfo.h"
 #include "filebrowser.h"
@@ -512,6 +514,8 @@ void GUI::createGraphTabs()
 	_tabs.append(new ElevationGraph);
 	_tabs.append(new SpeedGraph);
 	_tabs.append(new HeartRateGraph);
+	_tabs.append(new CadenceGraph);
+	_tabs.append(new PowerGraph);
 	_tabs.append(new TemperatureGraph);
 
 	for (int i = 0; i < _tabs.count(); i++)

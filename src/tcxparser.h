@@ -27,6 +27,7 @@ private:
 	void trackpoints(TrackData &track);
 	void trackpointData(Trackpoint &trackpoint);
 	void waypointData(Waypoint &waypoint);
+	void extensions(Trackpoint &trackpoint);
 	Coordinates position();
 	qreal number();
 	QDateTime time();

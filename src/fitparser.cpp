@@ -230,9 +230,17 @@ bool FITParser::parseData(MessageDefinition *def, quint8 offset)
 					if (val != 0xff)
 						trackpoint.setHeartRate(val);
 					break;
+				case 4:
+					if (val != 0xff)
+						trackpoint.setCadence(val);
+					break;
 				case 6:
 					if (val != 0xffff)
 						trackpoint.setSpeed(val / 1000.0f);
+					break;
+				case 7:
+					if (val != 0xffff)
+						trackpoint.setPower(val);
 					break;
 				case 13:
 					if (val != 0x7f)

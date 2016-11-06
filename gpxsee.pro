@@ -66,7 +66,9 @@ HEADERS += src/config.h \
     src/fitparser.h \
     src/format.h \
     src/path.h \
-    src/assert.h
+    src/assert.h \
+    src/cadencegraph.h \
+    src/powergraph.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -112,7 +114,9 @@ SOURCES += src/main.cpp \
     src/kmlparser.cpp \
     src/fitparser.cpp \
     src/format.cpp \
-    src/graph.cpp
+    src/graph.cpp \
+    src/cadencegraph.cpp \
+    src/powergraph.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {

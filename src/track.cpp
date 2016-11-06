@@ -6,6 +6,8 @@
 #define WINDOW_EF 3
 #define WINDOW_SF 7
 #define WINDOW_HF 3
+#define WINDOW_CF 3
+#define WINDOW_PF 3
 
 
 static qreal median(QVector<qreal> v)
@@ -114,14 +116,10 @@ Graph Track::elevation() const
 	if (!_data.size())
 		return raw;
 
-	for (int i = 0; i < _data.size(); i++) {
-		if (_outliers.contains(i))
-			continue;
-
-		if (_data.at(i).hasElevation())
+	for (int i = 0; i < _data.size(); i++)
+		if (_data.at(i).hasElevation() && !_outliers.contains(i))
 			raw.append(GraphPoint(_distance.at(i), _time.at(i),
 			  _data.at(i).elevation()));
-	}
 
 	return filter(raw, WINDOW_EF);
 }
@@ -135,12 +133,9 @@ Graph Track::speed() const
 		return raw;
 
 	for (int i = 0; i < _data.size(); i++) {
-		if (_outliers.contains(i))
-			continue;
-
-		if (_data.at(i).hasSpeed())
+		if (_data.at(i).hasSpeed() && !_outliers.contains(i))
 			v = _data.at(i).speed();
-		else if (!std::isnan(_speed.at(i)))
+		else if (!std::isnan(_speed.at(i)) && !_outliers.contains(i))
 			v = _speed.at(i);
 		else
 			continue;
@@ -158,14 +153,10 @@ Graph Track::heartRate() const
 	if (!_data.size())
 		return raw;
 
-	for (int i = 0; i < _data.count(); i++) {
-		if (_outliers.contains(i))
-			continue;
-
-		if (_data.at(i).hasHeartRate())
+	for (int i = 0; i < _data.count(); i++)
+		if (_data.at(i).hasHeartRate() && !_outliers.contains(i))
 			raw.append(GraphPoint(_distance.at(i), _time.at(i),
 			  _data.at(i).heartRate()));
-	}
 
 	return filter(raw, WINDOW_HF);
 }
@@ -174,16 +165,36 @@ Graph Track::temperature() const
 {
 	Graph raw;
 
-	for (int i = 0; i < _data.size(); i++) {
-		if (_outliers.contains(i))
-			continue;
-
-		if (_data.at(i).hasTemperature())
+	for (int i = 0; i < _data.size(); i++)
+		if (_data.at(i).hasTemperature() && !_outliers.contains(i))
 			raw.append(GraphPoint(_distance.at(i), _time.at(i),
 			  _data.at(i).temperature()));
-	}
 
-	return Graph(raw);
+	return raw;
+}
+
+Graph Track::cadence() const
+{
+	Graph raw;
+
+	for (int i = 0; i < _data.size(); i++)
+		if (_data.at(i).hasCadence() && !_outliers.contains(i))
+			raw.append(GraphPoint(_distance.at(i), _time.at(i),
+			  _data.at(i).cadence()));
+
+	return filter(raw, WINDOW_CF);
+}
+
+Graph Track::power() const
+{
+	Graph raw;
+
+	for (int i = 0; i < _data.size(); i++)
+		if (_data.at(i).hasPower() && !_outliers.contains(i))
+			raw.append(GraphPoint(_distance.at(i), _time.at(i),
+			  _data.at(i).power()));
+
+	return filter(raw, WINDOW_PF);
 }
 
 qreal Track::distance() const
@@ -206,12 +217,9 @@ Path Track::track() const
 {
 	Path ret;
 
-	for (int i = 0; i < _data.size(); i++) {
-		if (_outliers.contains(i))
-			continue;
-
-		ret.append(_data.at(i).coordinates());
-	}
+	for (int i = 0; i < _data.size(); i++)
+		if (!_outliers.contains(i))
+			ret.append(_data.at(i).coordinates());
 
 	return ret;
 }

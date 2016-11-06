@@ -17,10 +17,6 @@ public:
 	int errorLine() const {return _reader.lineNumber();}
 
 private:
-	enum DataType {
-		Name, Description, Elevation, Time, Speed, HeartRate, Temperature
-	};
-
 	bool parse();
 	void gpx();
 	void track(TrackData &track);
@@ -33,9 +29,6 @@ private:
 	qreal number();
 	QDateTime time();
 	Coordinates coordinates();
-
-	void handleWaypointData(DataType type, Waypoint &waypoint);
-	void handleTrackpointData(DataType type, Trackpoint &trackpoint);
 
 	QXmlStreamReader _reader;
 };
