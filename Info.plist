@@ -168,7 +168,7 @@
 					<string>fit</string>
 				</array>
 				<key>public.mime-type</key>
-				<string>application/octet-stream</string>
+				<string>application/vnd.ant.fit</string>
 			</dict>
 		</dict>
 	</array>
