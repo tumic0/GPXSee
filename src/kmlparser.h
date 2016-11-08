@@ -22,7 +22,9 @@ private:
 	void document();
 	void folder();
 	void placemark();
-	void Track(TrackData &track);
+	void multiGeometry(const QString &name, const QString &desc,
+	  const QDateTime timestamp);
+	void track(TrackData &track);
 	void lineString(TrackData &track);
 	void point(Waypoint &waypoint);
 	bool pointCoordinates(Waypoint &waypoint);

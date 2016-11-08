@@ -225,7 +225,7 @@ void KMLParser::point(Waypoint &waypoint)
 		_reader.raiseError("Missing Point coordinates");
 }
 
-void KMLParser::Track(TrackData &track)
+void KMLParser::track(TrackData &track)
 {
 	const char mismatchError[] = "gx:coord/when element count mismatch";
 	int i = track.size();
@@ -251,6 +251,28 @@ void KMLParser::Track(TrackData &track)
 		_reader.raiseError(mismatchError);
 }
 
+void KMLParser::multiGeometry(const QString &name, const QString &desc,
+  const QDateTime timestamp)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "Point") {
+			_waypoints.append(Waypoint());
+			Waypoint &w = _waypoints.last();
+			w.setName(name);
+			w.setDescription(desc);
+			w.setTimestamp(timestamp);
+			point(w);
+		} else if (_reader.name() == "LineString") {
+			_tracks.append(TrackData());
+			TrackData &t = _tracks.last();
+			t.setName(name);
+			t.setDescription(desc);
+			lineString(t);
+		} else
+			_reader.skipCurrentElement();
+	}
+}
+
 void KMLParser::placemark()
 {
 	QString name, desc;
@@ -263,25 +285,27 @@ void KMLParser::placemark()
 			desc = _reader.readElementText();
 		else if (_reader.name() == "TimeStamp")
 			timestamp = timeStamp();
+		else if (_reader.name() == "MultiGeometry")
+			multiGeometry(name, desc, timestamp);
 		else if (_reader.name() == "Point") {
 			_waypoints.append(Waypoint());
-			Waypoint &waypoint = _waypoints.last();
-			waypoint.setName(name);
-			waypoint.setDescription(desc);
-			waypoint.setTimestamp(timestamp);
-			point(waypoint);
+			Waypoint &w = _waypoints.last();
+			w.setName(name);
+			w.setDescription(desc);
+			w.setTimestamp(timestamp);
+			point(w);
 		} else if (_reader.name() == "LineString") {
 			_tracks.append(TrackData());
-			TrackData &track = _tracks.last();
-			track.setName(name);
-			track.setDescription(desc);
-			lineString(track);
+			TrackData &t = _tracks.last();
+			t.setName(name);
+			t.setDescription(desc);
+			lineString(t);
 		} else if (_reader.name() == "Track") {
 			_tracks.append(TrackData());
-			TrackData &track = _tracks.last();
-			track.setName(name);
-			track.setDescription(desc);
-			Track(track);
+			TrackData &t = _tracks.last();
+			t.setName(name);
+			t.setDescription(desc);
+			track(t);
 		} else
 			_reader.skipCurrentElement();
 	}
