@@ -1,13 +1,15 @@
 # GPXSee
-GPX viewer and analyzer.
+GPXSee is a Qt-based application for visualizing and analyzing GPX, TCX, FIT
+and KML files.
 
 * User-definable map sources.
-* Track and elevation/speed/heart rate graphs.
+* Elevation, speed, heart rate, cadence, power and temperature graphs.
 * Support for multiple tracks in one view.
 * Support for POI files.
-* Export to PDF.
+* Print/export to PDF.
 * Full-screen mode
 * Native GUI for Windows, Mac OS X and Linux.
+* Opens GPX, TCX, FIT, KML and Garmin CSV files.
 
 ![GPXSee - Linux](https://a.fsdn.com/con/app/proj/gpxsee/screenshots/linux.png)
 
