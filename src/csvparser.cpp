@@ -3,9 +3,8 @@
 bool CSVParser::loadFile(QFile *file)
 {
 	bool res;
-	int ln = 1;
 
-	_errorLine = 0;
+	_errorLine = 1;
 	_errorString.clear();
 
 	while (!file->atEnd()) {
@@ -13,20 +12,17 @@ bool CSVParser::loadFile(QFile *file)
 		QList<QByteArray> list = line.split(',');
 		if (list.size() < 3) {
 			_errorString = "Parse error";
-			_errorLine = ln;
 			return false;
 		}
 
 		qreal lat = list[0].trimmed().toDouble(&res);
 		if (!res || (lat < -90.0 || lat > 90.0)) {
 			_errorString = "Invalid latitude";
-			_errorLine = ln;
 			return false;
 		}
 		qreal lon = list[1].trimmed().toDouble(&res);
 		if (!res || (lon < -180.0 || lon > 180.0)) {
 			_errorString = "Invalid longitude";
-			_errorLine = ln;
 			return false;
 		}
 		Waypoint wp(Coordinates(lon, lat));
@@ -41,7 +37,7 @@ bool CSVParser::loadFile(QFile *file)
 		}
 
 		_waypoints.append(wp);
-		ln++;
+		_errorLine++;
 	}
 
 	return true;

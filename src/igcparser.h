@@ -18,8 +18,8 @@ public:
 	int errorLine() const {return _errorLine;}
 
 private:
-	bool readDate(const char *line);
-	bool readRecord(const char *line);
+	bool readHRecord(const char *line, qint64 len);
+	bool readBRecord(const char *line, qint64 len);
 
 	int _errorLine;
 	QString _errorString;

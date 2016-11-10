@@ -83,32 +83,48 @@ static bool readAltitude(const char *line, qreal &ele)
 	return true;
 }
 
-bool IGCParser::readDate(const char *line)
+static bool readARecord(const char *line, qint64 len)
 {
+	if (len < 9 || line[0] != 'A')
+		return false;
+
+	for (int i = 1; i < 7; i++)
+		if (!::isprint(line[i]))
+			return false;
+	return true;
+}
+
+bool IGCParser::readHRecord(const char *line, qint64 len)
+{
+	if (len < 10 || ::strncmp(line, "HFDTE", 5))
+		return true;
+
 	int d = str2int(line + 5, 2);
 	int m = str2int(line + 7, 2);
 	int y = str2int(line + 9, 2);
 
 	if (y < 0 || m < 0 || d < 0) {
-		_errorString = "Invalid date";
+		_errorString = "Invalid date header format";
 		return false;
 	}
 
 	_date = QDate(2000 + y, m, d);
+	if (!_date.isValid()) {
+		_errorString = "Invalid date";
+		return false;
+	}
 
 	return true;
 }
 
-bool IGCParser::readRecord(const char *line)
+bool IGCParser::readBRecord(const char *line, qint64 len)
 {
 	qreal lat, lon, ele;
 	QDateTime timestamp;
 
 
-	if (_date.isNull()) {
-		_errorString = "Date header missing";
+	if (len < 35)
 		return false;
-	}
 
 	int h = str2int(line + 1, 2);
 	int m = str2int(line + 3, 2);
@@ -157,44 +173,33 @@ bool IGCParser::loadFile(QFile *file)
 	_tracks.append(TrackData());
 	_time = QTime(0, 0);
 
-	// Read the initial A record
-	if ((len = file->readLine(line, sizeof(line))) < 0) {
-		_errorString = "I/O error";
-		return false;
-	} else {
-		if (len < 9 || len > (qint64)sizeof(line) - 1 || line[0] != 'A') {
-			_errorString = "Not a IGC file";
-			return false;
-		}
-		for (int i = 1; i < 7; i++) {
-			if (!::isprint(line[i])) {
-				_errorString = "Not a IGC file";
-				return false;
-			}
-		}
-	}
 
-	_errorLine++;
-
-	// Read header (H) records and data (B) records
 	while ((len = file->readLine(line, sizeof(line))) > 0) {
 		if (len < 0) {
 			_errorString = "I/O error";
 			return false;
-		}
-		if (len > (qint64)sizeof(line) - 1) {
+		} else if (len > (qint64)sizeof(line) - 1) {
 			_errorString = "Line limit exceeded";
 			return false;
 		}
 
-		if (line[0] == 'B') {
-			if (len > 35)
-				if (!readRecord(line))
+		if (_errorLine == 1) {
+			if (!readARecord(line, len)) {
+				_errorString = "Invalid/missing A record";
+				return false;
+			}
+		} else {
+			if (line[0] == 'H') {
+				if (!readHRecord(line, len))
 					return false;
-		} else if (line[0] == 'H') {
-			if (len > 10 && !::strncmp(line + 1, "FDTE", 4))
-				if (!readDate(line))
+			} else if (line[0] == 'B') {
+				if (_date.isNull()) {
+					_errorString = "Missing date header";
 					return false;
+				}
+				if (!readBRecord(line, len))
+					return false;
+			}
 		}
 
 		_errorLine++;
