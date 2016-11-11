@@ -26,6 +26,7 @@ PathItem::PathItem(QGraphicsItem *parent) : QGraphicsObject(parent)
 	_pen = QPen(brush, PATH_WIDTH);
 
 	_units = Metric;
+	_distance = 0;
 
 	_marker = new MarkerItem(this);
 

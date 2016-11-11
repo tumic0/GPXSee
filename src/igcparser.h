@@ -10,7 +10,8 @@ class IGCParser : public Parser
 {
 public:
 	IGCParser(QList<TrackData> &tracks, QList<RouteData> &routes,
-	  QList<Waypoint> &waypoints) : Parser(tracks, routes, waypoints) {}
+	  QList<Waypoint> &waypoints) : Parser(tracks, routes, waypoints)
+	  {_errorLine = 0;}
 	~IGCParser() {}
 
 	bool loadFile(QFile *file);

@@ -14,6 +14,11 @@ FITParser::FITParser(QList<TrackData> &tracks, QList<RouteData> &routes,
   QList<Waypoint> &waypoints) : Parser(tracks, routes, waypoints)
 {
 	memset(_defs, 0, sizeof(_defs));
+
+	_device = 0;
+	_endian = 0;
+	_timestamp = 0;
+	_len = 0;
 }
 
 void FITParser::clearDefinitions()
@@ -335,10 +340,11 @@ bool FITParser::parseHeader()
 
 bool FITParser::loadFile(QFile *file)
 {
+	bool ret = true;
+
 	_device = file;
 	_endian = 0;
 	_timestamp = 0;
-	bool ret = true;
 
 	if (!parseHeader())
 		return false;
