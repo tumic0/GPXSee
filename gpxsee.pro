@@ -1,5 +1,5 @@
 TARGET = GPXSee
-VERSION = 3.0
+VERSION = 3.1
 QT += core \
     gui \
     network
@@ -128,6 +128,7 @@ macx {
         icons/tcx.icns \
         icons/kml.icns \
         icons/fit.icns \
+        icons/igc.icns \
         pkg/maps.txt
     APP_RESOURCES.path = Contents/Resources
     QMAKE_BUNDLE_DATA += APP_RESOURCES
@@ -137,6 +138,7 @@ win32 {
         icons/gpx.ico \
         icons/tcx.ico \
         icons/kml.ico \
-        icons/fit.ico
+        icons/fit.ico \
+        icons/igc.ico
 }
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"

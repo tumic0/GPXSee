@@ -74,12 +74,28 @@
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
-				<string>application/octet-stream</string>
+				<string>application/vnd.ant.fit</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>fit.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Flexible and Interoperable Data Transfer</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>igc</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.fai.igc</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>igc.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Flight Recorder Data Format</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
@@ -169,6 +185,27 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.ant.fit</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.fai.igc</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.fai.org/gnss-recording-devices/igc-approved-flight-recorders</string>
+			<key>UTTypeDescription</key>
+			<string>Flight Recorder Data Format</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>igc</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.fai.igc</string>
 			</dict>
 		</dict>
 	</array>

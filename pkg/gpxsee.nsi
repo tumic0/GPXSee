@@ -4,7 +4,7 @@
 ; The name of the installer
 Name "GPXSee"
 ; Program version
-!define VERSION "3.0"
+!define VERSION "3.1"
 
 ; The file to write
 OutFile "GPXSee-${VERSION}.exe"
@@ -26,6 +26,7 @@ InstallDirRegKey HKLM "Software\GPXSee" "Install_Dir"
 !define REGTCX "GPXSee.tcx"
 !define REGKML "GPXSee.kml"
 !define REGFIT "GPXSee.fit"
+!define REGIGC "GPXSee.igc"
 
 ; Start menu page configuration
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM" 
@@ -107,7 +108,11 @@ Section "GPXSee (required)" SEC_APP
   WriteRegStr HKCR "${REGFIT}" ""  "Flexible and Interoperable Data Transfer"
   WriteRegStr HKCR "${REGFIT}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,4"
   WriteRegStr HKCR "${REGFIT}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
-
+  WriteRegStr HKCR ".igc" "" "${REGIGC}"
+  WriteRegStr HKCR "${REGIGC}" ""  "Flight Recorder Data Format"
+  WriteRegStr HKCR "${REGIGC}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,5"
+  WriteRegStr HKCR "${REGIGC}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
+  
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
 SectionEnd
@@ -175,6 +180,8 @@ Section "Uninstall"
   DeleteRegKey HKCR ".kml"
   DeleteRegKey HKCR "${REGFIT}"
   DeleteRegKey HKCR ".fit"
+  DeleteRegKey HKCR "${REGIGC}"
+  DeleteRegKey HKCR ".igc"
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'  
 
 SectionEnd
