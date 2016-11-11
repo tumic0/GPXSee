@@ -66,6 +66,7 @@ private:
 	void clearPOI();
 
 	qreal contentsScale() const;
+	QRectF contentsSceneRect() const;
 	void rescale(int zoom);
 	void rescale();
 	void zoom(int z, const QPoint &pos);
@@ -87,6 +88,7 @@ private:
 
 	int _zoom;
 	QRectF _tr, _rr, _wr;
+	QPointF _wp;
 
 	Map *_map;
 	POI *_poi;

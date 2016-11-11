@@ -180,10 +180,13 @@ void PathView::addWaypoints(const QList<Waypoint> &waypoints)
 		wi->setVisible(_showWaypoints);
 		_scene->addItem(wi);
 
-		if (!_wr.isNull())
+		if (_wr.isNull()) {
+			if (_wp.isNull())
+				_wp = wi->coordinates();
+			else
+				_wr = qrectf(_wp, wi->coordinates());
+		} else
 			unite(_wr, wi->coordinates());
-		else if (i > 1)
-			_wr = qrectf(_waypoints.last()->coordinates(), wi->coordinates());
 
 		_waypoints.append(wi);
 	}
@@ -215,14 +218,11 @@ QList<PathItem *> PathView::loadData(const Data &data)
 	else
 		updatePOIVisibility();
 
-	qreal scale = mapScale(_zoom);
-	QRectF br = scaled(_tr | _rr | _wr, 1.0/scale);
-	QRectF ba = br.adjusted(-Tile::size(), -Tile::size(), Tile::size(),
-	  Tile::size());
-	_scene->setSceneRect(ba);
-	centerOn(ba.center());
+	QRectF sr = contentsSceneRect();
+	_scene->setSceneRect(sr);
+	centerOn(sr.center());
 
-	_mapScale->setZoom(_zoom, -(br.center().ry() * mapScale(_zoom)));
+	_mapScale->setZoom(_zoom, -(sr.center().ry() * mapScale(_zoom)));
 	if (_mapScale->scene() != _scene)
 		_scene->addItem(_mapScale);
 
@@ -240,6 +240,19 @@ qreal PathView::contentsScale() const
 	  br.height() / (viewport()->height() - MARGIN/2));
 
 	return qMax(sc.x(), sc.y());
+}
+
+QRectF PathView::contentsSceneRect() const
+{
+	qreal scale = mapScale(_zoom);
+	QRectF br = scaled(_tr | _rr | _wr, 1.0/scale);
+
+	if (br.isNull())
+		return QRectF(QPointF(_wp.x() / scale - Tile::size()/2,
+		  _wp.y() /scale - Tile::size()/2), QSizeF(Tile::size(), Tile::size()));
+	else
+		return br.adjusted(-Tile::size(), -Tile::size(), Tile::size(),
+		  Tile::size());
 }
 
 void PathView::updatePOIVisibility()
@@ -395,17 +408,15 @@ void PathView::zoom(int z, const QPoint &pos)
 	_zoom = z;
 
 	rescale(_zoom);
-	qreal scale = mapScale(_zoom);
-	QRectF br = scaled(_tr | _rr | _wr, 1.0/scale);
-	QRectF ba = br.adjusted(-Tile::size(), -Tile::size(), Tile::size(),
-	  Tile::size());
-	_scene->setSceneRect(ba);
 
-	if (br.width() < viewport()->size().width()
-	  && br.height() < viewport()->size().height())
-		centerOn(br.center());
+	QRectF sr = contentsSceneRect();
+	_scene->setSceneRect(sr);
+
+	if (sr.width() < viewport()->size().width()
+	  && sr.height() < viewport()->size().height())
+		centerOn(sr.center());
 	else
-		centerOn((spos * (os/scale)) - offset);
+		centerOn((spos * (os/mapScale(_zoom))) - offset);
 
 	_mapScale->setZoom(_zoom);
 
@@ -494,6 +505,7 @@ void PathView::clear()
 
 	_zoom = ZOOM_MAX;
 	_tr = QRectF(); _rr = QRectF(); _wr = QRectF();
+	_wp = QPointF();
 
 	_scene->setSceneRect(QRectF());
 }
@@ -610,23 +622,20 @@ void PathView::resizeEvent(QResizeEvent *event)
 
 	rescale();
 
-	qreal scale = mapScale(_zoom);
-	QRectF br = scaled(_tr | _rr | _wr, 1.0/scale);
-	QRectF ba = br.adjusted(-Tile::size(), -Tile::size(), Tile::size(),
-	  Tile::size());
+	QRectF sr = contentsSceneRect();
 
-	if (ba.width() < event->size().width()) {
-		qreal diff = event->size().width() - ba.width();
-		ba.adjust(-diff/2, 0, diff/2, 0);
+	if (sr.width() < event->size().width()) {
+		qreal diff = event->size().width() - sr.width();
+		sr.adjust(-diff/2, 0, diff/2, 0);
 	}
-	if (ba.height() < event->size().height()) {
-		qreal diff = event->size().height() - ba.height();
-		ba.adjust(0, -diff/2, 0, diff/2);
+	if (sr.height() < event->size().height()) {
+		qreal diff = event->size().height() - sr.height();
+		sr.adjust(0, -diff/2, 0, diff/2);
 	}
 
-	_scene->setSceneRect(ba);
+	_scene->setSceneRect(sr);
+	centerOn(sr.center());
 
-	centerOn(br.center());
 	resetCachedContent();
 }
 
