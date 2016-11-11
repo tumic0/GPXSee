@@ -210,7 +210,9 @@ bool IGCParser::loadFile(QFile *file)
 	_errorLine = 1;
 	_errorString.clear();
 
-	while ((len = file->readLine(line, sizeof(line))) > 0) {
+	while (!file->atEnd()) {
+		len = file->readLine(line, sizeof(line));
+
 		if (len < 0) {
 			_errorString = "I/O error";
 			return false;
