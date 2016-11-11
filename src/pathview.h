@@ -65,14 +65,8 @@ private:
 	void loadPOI();
 	void clearPOI();
 
-	QRectF trackBoundingRect() const;
-	QRectF routeBoundingRect() const;
-	QRectF waypointBoundingRect() const;
-	qreal trackScale() const;
-	qreal routeScale() const;
-	qreal waypointScale() const;
-	qreal mapScale(int zoom) const;
-	void rescale(qreal scale);
+	qreal contentsScale() const;
+	void rescale(int zoom);
 	void rescale();
 	void zoom(int z, const QPoint &pos);
 	void updatePOIVisibility();
@@ -91,14 +85,12 @@ private:
 	QList<WaypointItem*> _waypoints;
 	QHash<Waypoint, WaypointItem*> _pois;
 
+	int _zoom;
+	QRectF _tr, _rr, _wr;
+
 	Map *_map;
 	POI *_poi;
-
 	Palette _palette;
-
-	qreal _scale;
-	int _zoom;
-
 	Units _units;
 
 	bool _showTracks;
