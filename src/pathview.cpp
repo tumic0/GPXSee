@@ -217,8 +217,8 @@ QList<PathItem *> PathView::loadData(const Data &data)
 
 	qreal scale = mapScale(_zoom);
 	QRectF br = scaled(_tr | _rr | _wr, 1.0/scale);
-	QRectF ba = br.adjusted(-Tile::size() * scale, -Tile::size() * scale,
-	  Tile::size() * scale, Tile::size() * scale);
+	QRectF ba = br.adjusted(-Tile::size(), -Tile::size(), Tile::size(),
+	  Tile::size());
 	_scene->setSceneRect(ba);
 	centerOn(ba.center());
 
@@ -397,8 +397,8 @@ void PathView::zoom(int z, const QPoint &pos)
 	rescale(_zoom);
 	qreal scale = mapScale(_zoom);
 	QRectF br = scaled(_tr | _rr | _wr, 1.0/scale);
-	QRectF ba = br.adjusted(-Tile::size() * scale, -Tile::size() * scale,
-	  Tile::size() * scale, Tile::size() * scale);
+	QRectF ba = br.adjusted(-Tile::size(), -Tile::size(), Tile::size(),
+	  Tile::size());
 	_scene->setSceneRect(ba);
 
 	if (br.width() < viewport()->size().width()
@@ -612,8 +612,8 @@ void PathView::resizeEvent(QResizeEvent *event)
 
 	qreal scale = mapScale(_zoom);
 	QRectF br = scaled(_tr | _rr | _wr, 1.0/scale);
-	QRectF ba = br.adjusted(-Tile::size() * scale, -Tile::size() * scale,
-	  Tile::size() * scale, Tile::size() * scale);
+	QRectF ba = br.adjusted(-Tile::size(), -Tile::size(), Tile::size(),
+	  Tile::size());
 
 	if (ba.width() < event->size().width()) {
 		qreal diff = event->size().width() - ba.width();
