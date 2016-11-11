@@ -20,6 +20,7 @@ public:
 private:
 	bool readHRecord(const char *line, qint64 len);
 	bool readBRecord(const char *line, qint64 len);
+	bool readCRecord(const char *line, qint64 len);
 
 	int _errorLine;
 	QString _errorString;
