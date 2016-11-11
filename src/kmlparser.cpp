@@ -87,7 +87,7 @@ bool KMLParser::pointCoordinates(Waypoint &waypoint)
 
 	for (vp = cp; cp <= ep; cp++) {
 		if (*cp == ',') {
-			if (c > 2)
+			if (c > 1)
 				return false;
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
@@ -145,7 +145,7 @@ bool KMLParser::lineCoordinates(TrackData &track)
 
 	for (vp = cp; cp <= ep; cp++) {
 		if (*cp == ',') {
-			if (c > 2)
+			if (c > 1)
 				return false;
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
