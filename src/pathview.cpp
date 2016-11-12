@@ -391,9 +391,12 @@ void PathView::redraw()
 
 void PathView::rescale()
 {
-	_zoom = scale2zoom(contentsScale());
-	rescale(_zoom);
-	_mapScale->setZoom(_zoom);
+	int zoom = scale2zoom(contentsScale());
+
+	if (zoom != _zoom) {
+		rescale(zoom);
+		_mapScale->setZoom(zoom);
+	}
 }
 
 void PathView::zoom(int z, const QPoint &pos)
