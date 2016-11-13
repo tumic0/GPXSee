@@ -30,13 +30,13 @@ TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
   : PathItem(parent)
 {
 	QPointF p;
-	QVector<Coordinates> t = track.track();
-	Q_ASSERT(t.count() >= 2);
+	const Path &path = track.path();
+	Q_ASSERT(path.count() >= 2);
 
-	p = t.first().toMercator();
+	p = path.first().toMercator();
 	_path.moveTo(QPointF(p.x(), -p.y()));
-	for (int i = 1; i < t.size(); i++) {
-		p = t.at(i).toMercator();
+	for (int i = 1; i < path.size(); i++) {
+		p = path.at(i).toMercator();
 		_path.lineTo(QPointF(p.x(), -p.y()));
 	}
 

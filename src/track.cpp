@@ -213,7 +213,7 @@ QDateTime Track::date() const
 	return (_data.size()) ? _data.first().timestamp() : QDateTime();
 }
 
-Path Track::track() const
+Path Track::path() const
 {
 	Path ret;
 
