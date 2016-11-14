@@ -4,13 +4,16 @@
 #include <QVector>
 #include "routedata.h"
 #include "graph.h"
+#include "path.h"
 
 class Route
 {
 public:
 	Route(const RouteData &data);
 
-	const RouteData &route() const {return _data;}
+	const RouteData &routeData() const {return _data;}
+	const QVector<qreal> &distanceData() const {return _distance;}
+
 	Graph elevation() const;
 
 	qreal distance() const;

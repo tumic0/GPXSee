@@ -16,7 +16,7 @@ QString RouteItem::toolTip()
 	if (!_desc.isEmpty())
 		tt.insert(qApp->translate("RouteItem", "Description"), _desc);
 	tt.insert(qApp->translate("RouteItem", "Distance"),
-	  Format::distance(_distance, _units));
+	  Format::distance(_distance.last(), _units));
 
 	return tt.toString();
 }
@@ -24,12 +24,13 @@ QString RouteItem::toolTip()
 RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
   : PathItem(parent)
 {
-	const RouteData &r = route.route();
+	const RouteData &r = route.routeData();
 	Q_ASSERT(r.count() >= 2);
 	QPointF p;
 
 	_name = r.name();
 	_desc = r.description();
+	_distance = route.distanceData();
 
 	new WaypointItem(r.at(0), this);
 	p = r.at(0).coordinates().toMercator();
@@ -41,8 +42,6 @@ RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
 	}
 
 	updateShape();
-
-	_distance = route.distance();
 
 	_marker->setPos(_path.pointAtPercent(0));
 

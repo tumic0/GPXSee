@@ -1,9 +1,9 @@
 #include "graph.h"
 
-QDebug operator<<(QDebug dbg, const GraphPoint &graphpoint)
+QDebug operator<<(QDebug dbg, const GraphPoint &point)
 {
-	dbg.nospace() << "GraphPoint(" << graphpoint.s() << ", "
-	  << graphpoint.t() << ", " << graphpoint.y() << ")";
+	dbg.nospace() << "GraphPoint(" << point.s() << ", " << point.t() << ", "
+	  << point.y() << ")";
 
 	return dbg.maybeSpace();
 }

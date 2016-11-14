@@ -118,7 +118,8 @@ SOURCES += src/main.cpp \
     src/graph.cpp \
     src/cadencegraph.cpp \
     src/powergraph.cpp \
-    src/igcparser.cpp
+    src/igcparser.cpp \
+    src/path.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {

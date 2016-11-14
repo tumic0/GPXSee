@@ -34,6 +34,7 @@ signals:
 protected:
 	void updateShape();
 
+	QVector<qreal> _distance;
 	QPainterPath _path;
 	QPainterPath _shape;
 	QPen _pen;
@@ -41,9 +42,10 @@ protected:
 	MarkerItem *_marker;
 
 	Units _units;
-	qreal _distance;
 
 private:
+	QPointF position(qreal distance) const;
+
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 };

@@ -219,7 +219,7 @@ Path Track::path() const
 
 	for (int i = 0; i < _data.size(); i++)
 		if (!_outliers.contains(i))
-			ret.append(_data.at(i).coordinates());
+			ret.append(PathPoint(_data.at(i).coordinates(), _distance.at(i)));
 
 	return ret;
 }

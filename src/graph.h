@@ -29,7 +29,7 @@ private:
 };
 
 Q_DECLARE_TYPEINFO(GraphPoint, Q_PRIMITIVE_TYPE);
-QDebug operator<<(QDebug dbg, const GraphPoint &graphpoint);
+QDebug operator<<(QDebug dbg, const GraphPoint &point);
 
 
 class Graph : public QVector<GraphPoint>

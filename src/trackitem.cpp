@@ -15,7 +15,7 @@ QString TrackItem::toolTip()
 	if (!_desc.isEmpty())
 		tt.insert(qApp->translate("TrackItem", "Description"), _desc);
 	tt.insert(qApp->translate("TrackItem", "Distance"),
-	  Format::distance(_distance, _units));
+	  Format::distance(_distance.last(), _units));
 	if  (_time > 0)
 		tt.insert(qApp->translate("TrackItem", "Time"),
 		  Format::timeSpan(_time));
@@ -33,11 +33,13 @@ TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
 	const Path &path = track.path();
 	Q_ASSERT(path.count() >= 2);
 
-	p = path.first().toMercator();
+	p = path.first().coordinates().toMercator();
 	_path.moveTo(QPointF(p.x(), -p.y()));
+	_distance.append(path.first().distance());
 	for (int i = 1; i < path.size(); i++) {
-		p = path.at(i).toMercator();
+		p = path.at(i).coordinates().toMercator();
 		_path.lineTo(QPointF(p.x(), -p.y()));
+		_distance.append(path.at(i).distance());
 	}
 
 	updateShape();
@@ -45,7 +47,6 @@ TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
 	_name = track.name();
 	_desc = track.description();
 	_date = track.date();
-	_distance = track.distance();
 	_time = track.time();
 
 	_marker->setPos(_path.pointAtPercent(0));
