@@ -37,6 +37,8 @@ TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
 	_path.moveTo(QPointF(p.x(), -p.y()));
 	_distance.append(path.first().distance());
 	for (int i = 1; i < path.size(); i++) {
+		if (path.at(i).coordinates() == path.at(i-1).coordinates())
+			continue;
 		p = path.at(i).coordinates().toMercator();
 		_path.lineTo(QPointF(p.x(), -p.y()));
 		_distance.append(path.at(i).distance());
@@ -49,7 +51,7 @@ TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
 	_date = track.date();
 	_time = track.time();
 
-	_marker->setPos(_path.pointAtPercent(0));
+	_marker->setPos(_path.elementAt(0));
 
 	setToolTip(toolTip());
 }

@@ -25,25 +25,32 @@ RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
   : PathItem(parent)
 {
 	const RouteData &r = route.routeData();
-	Q_ASSERT(r.count() >= 2);
+	const QVector<qreal> &d = route.distanceData();
 	QPointF p;
+
+
+	Q_ASSERT(r.count() >= 2);
+	Q_ASSERT(r.size() == d.size());
 
 	_name = r.name();
 	_desc = r.description();
-	_distance = route.distanceData();
 
-	new WaypointItem(r.at(0), this);
-	p = r.at(0).coordinates().toMercator();
+	new WaypointItem(r.first(), this);
+	p = r.first().coordinates().toMercator();
 	_path.moveTo(QPointF(p.x(), -p.y()));
+	_distance.append(d.first());
 	for (int i = 1; i < r.size(); i++) {
+		if (r.at(i).coordinates() == r.at(i-1).coordinates())
+			continue;
 		p = r.at(i).coordinates().toMercator();
 		_path.lineTo(QPointF(p.x(), -p.y()));
+		_distance.append(d.at(i));
 		new WaypointItem(r.at(i), this);
 	}
 
 	updateShape();
 
-	_marker->setPos(_path.pointAtPercent(0));
+	_marker->setPos(_path.elementAt(0));
 
 	_pen.setStyle(Qt::DotLine);
 

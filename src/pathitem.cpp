@@ -77,6 +77,8 @@ QPointF PathItem::position(qreal x) const
 	int high = _distance.count() - 1;
 	int mid = 0;
 
+
+	Q_ASSERT(_distance.count() == _path.elementCount());
 	Q_ASSERT(high > low);
 	Q_ASSERT(x >= _distance.at(low) && x <= _distance.at(high));
 
