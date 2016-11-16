@@ -69,7 +69,8 @@ HEADERS += src/config.h \
     src/assert.h \
     src/cadencegraph.h \
     src/powergraph.h \
-    src/igcparser.h
+    src/igcparser.h \
+    src/nmeaparser.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -119,7 +120,8 @@ SOURCES += src/main.cpp \
     src/cadencegraph.cpp \
     src/powergraph.cpp \
     src/igcparser.cpp \
-    src/path.cpp
+    src/path.cpp \
+    src/nmeaparser.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {

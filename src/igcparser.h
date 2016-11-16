@@ -19,9 +19,9 @@ public:
 	int errorLine() const {return _errorLine;}
 
 private:
-	bool readHRecord(const char *line, qint64 len);
-	bool readBRecord(const char *line, qint64 len);
-	bool readCRecord(const char *line, qint64 len);
+	bool readHRecord(const char *line, int len);
+	bool readBRecord(const char *line, int len);
+	bool readCRecord(const char *line, int len);
 
 	int _errorLine;
 	QString _errorString;

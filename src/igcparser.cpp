@@ -1,21 +1,7 @@
-#include <cctype>
 #include <cstring>
+#include "misc.h"
 #include "igcparser.h"
 
-
-static int str2int(const char *str, size_t len)
-{
-	int res = 0;
-
-	for (const char *sp = str; sp < str + len; sp++) {
-		if (::isdigit(*sp))
-			res = res * 10 + *sp - '0';
-		else
-			return -1;
-	}
-
-	return res;
-}
 
 static bool readLat(const char *data, qreal &lat)
 {
@@ -93,6 +79,8 @@ static bool readTimestamp(const char *data, QTime &time)
 		return false;
 
 	time = QTime(h, m, s);
+	if (!time.isValid())
+		return false;
 
 	return true;
 }
@@ -108,7 +96,7 @@ static bool readARecord(const char *line, qint64 len)
 	return true;
 }
 
-bool IGCParser::readHRecord(const char *line, qint64 len)
+bool IGCParser::readHRecord(const char *line, int len)
 {
 	if (len < 10 || ::strncmp(line, "HFDTE", 5))
 		return true;
@@ -131,7 +119,7 @@ bool IGCParser::readHRecord(const char *line, qint64 len)
 	return true;
 }
 
-bool IGCParser::readBRecord(const char *line, qint64 len)
+bool IGCParser::readBRecord(const char *line, int len)
 {
 	qreal lat, lon, ele;
 	QTime time;
@@ -172,7 +160,7 @@ bool IGCParser::readBRecord(const char *line, qint64 len)
 	return true;
 }
 
-bool IGCParser::readCRecord(const char *line, qint64 len)
+bool IGCParser::readCRecord(const char *line, int len)
 {
 	qreal lat, lon;
 

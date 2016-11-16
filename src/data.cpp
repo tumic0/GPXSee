@@ -7,6 +7,7 @@
 #include "kmlparser.h"
 #include "fitparser.h"
 #include "igcparser.h"
+#include "nmeaparser.h"
 #include "data.h"
 
 
@@ -23,6 +24,8 @@ Data::Data() : _errorLine(0)
 	_parsers.insert("csv", new CSVParser(_trackData, _routeData,
 	  _waypointData));
 	_parsers.insert("igc", new IGCParser(_trackData, _routeData,
+	  _waypointData));
+	_parsers.insert("nmea", new NMEAParser(_trackData, _routeData,
 	  _waypointData));
 }
 

@@ -108,17 +108,18 @@ GUI::~GUI()
 
 const QString GUI::fileFormats() const
 {
-	return tr("Supported files (*.csv *.fit *.gpx *.igc *.kml *.tcx)") + ";;"
-	  + tr("CSV files (*.csv)") + ";;" + tr("FIT files (*.fit)") + ";;"
+	return tr("Supported files (*.csv *.fit *.gpx *.igc *.kml *.nmea *.tcx)")
+	  + ";;" + tr("CSV files (*.csv)") + ";;" + tr("FIT files (*.fit)") + ";;"
 	  + tr("GPX files (*.gpx)") + ";;" + tr("IGC files (*.igc)") + ";;"
-	  + tr("KML files (*.kml)") + ";;" + tr("TCX files (*.tcx)") + ";;"
-	  + tr("All files (*)");
+	  + tr("KML files (*.kml)") + ";;" + tr("NMEA files (*.nmea)") + ";;"
+	  + tr("TCX files (*.tcx)") + ";;" + tr("All files (*)");
 }
 
 void GUI::createBrowser()
 {
 	QStringList filter;
-	filter << "*.gpx" << "*.tcx" << "*.kml" << "*.fit" << "*.csv" << "*.igc";
+	filter << "*.gpx" << "*.tcx" << "*.kml" << "*.fit" << "*.csv" << "*.igc"
+	  << "*.nmea";
 	_browser = new FileBrowser(this);
 	_browser->setFilter(filter);
 }
