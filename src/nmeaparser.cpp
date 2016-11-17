@@ -101,7 +101,7 @@ static bool readFloat(const char *data, int len, qreal &f)
 	return ok;
 }
 
-static bool validLine(const char  *line, int len)
+static bool validSentence(const char  *line, int len)
 {
 	const char *lp;
 
@@ -395,6 +395,7 @@ bool NMEAParser::loadFile(QFile *file)
 {
 	qint64 len;
 	char line[80 + 2 + 1 + 1];
+	bool nmea = false;
 
 
 	_errorLine = 1;
@@ -414,12 +415,14 @@ bool NMEAParser::loadFile(QFile *file)
 			return false;
 		}
 
-		if (!validLine(line, len)) {
-			fprintf(stderr, "%s:%d: Invalid NMEA sentence\n",
-			  qPrintable(file->fileName()), _errorLine);
+		if (!validSentence(line, len)) {
+			if (nmea)
+				fprintf(stderr, "%s:%d: Invalid NMEA sentence\n",
+				  qPrintable(file->fileName()), _errorLine);
 			_errorLine++;
 			continue;
-		}
+		} else
+			nmea = true;
 
 		if (!memcmp(line + 3, "RMC,", 4)) {
 			if (!readRMC(line + 7, len))
