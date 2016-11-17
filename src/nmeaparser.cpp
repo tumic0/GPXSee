@@ -5,17 +5,21 @@
 
 static bool readTime(const char *data, int len, QTime &time)
 {
-	int h, m, s ,ms;
+	int h, m, s, ms = 0;
 
-	if (len < 9)
+	if (len < 6)
 		return false;
 
 	h = str2int(data, 2);
 	m = str2int(data + 2, 2);
 	s = str2int(data + 4, 2);
-	ms = str2int(data + 7, len - 7);
-	if (h < 0 || m < 0 || s < 0 || ms < 0 || data[6] != '.')
+	if (h < 0 || m < 0 || s < 0)
 		return false;
+
+	if (len > 7 && data[6] == '.') {
+		if ((ms = str2int(data + 7, len - 7)) < 0)
+			return false;
+	}
 
 	time = QTime(h, m, s, ms);
 	if (!time.isValid())
@@ -95,6 +99,22 @@ static bool readFloat(const char *data, int len, qreal &f)
 	f = QString(QByteArray::fromRawData(data, len)).toFloat(&ok);
 
 	return ok;
+}
+
+static bool validLine(const char  *line, int len)
+{
+	const char *lp;
+
+	if (len < 10 || line[0] != '$')
+		return false;
+
+	for (lp = line + len - 1; lp > line; lp--)
+		if (!::isspace(*lp))
+			break;
+	if (*(lp-2) != '*' || !::isalnum(*(lp-1)) || !::isalnum(*(lp)))
+		return false;
+
+	return true;
 }
 
 bool NMEAParser::readRMC(const char *line, int len)
@@ -394,9 +414,11 @@ bool NMEAParser::loadFile(QFile *file)
 			return false;
 		}
 
-		if (len < 7 || line[0] != '$') {
-			_errorString = "Format error";
-			return false;
+		if (!validLine(line, len)) {
+			fprintf(stderr, "%s:%d: Invalid NMEA sentence\n",
+			  qPrintable(file->fileName()), _errorLine);
+			_errorLine++;
+			continue;
 		}
 
 		if (!memcmp(line + 3, "RMC,", 4)) {
@@ -414,6 +436,11 @@ bool NMEAParser::loadFile(QFile *file)
 		}
 
 		_errorLine++;
+	}
+
+	if (!_tracks.last().size() && !_waypoints.size()) {
+		_errorString = "No usable NMEA sentence found";
+		return false;
 	}
 
 	return true;
