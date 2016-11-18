@@ -99,6 +99,22 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>nmea</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.nmea.nmea</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>nmea.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>NMEA 0183 data</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
@@ -206,6 +222,27 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.fai.igc</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.nmea.nmea</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.nmea.org/content/nmea_standards/nmea_0183_v_410.asp</string>
+			<key>UTTypeDescription</key>
+			<string>NMEA 0183 data</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>nmea</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.nmea.nmea</string>
 			</dict>
 		</dict>
 	</array>
