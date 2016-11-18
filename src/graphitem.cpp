@@ -117,7 +117,7 @@ void GraphItem::emitSliderPositionChanged(qreal pos)
 {
 	if (_type == Time) {
 		if (_graph.hasTime()) {
-			if (pos <= _graph.last().t())
+			if (pos >= _graph.first().t() && pos <= _graph.last().t())
 				emit sliderPositionChanged(distanceAtTime(pos));
 			else
 				emit sliderPositionChanged(_graph.last().s() + 1);
