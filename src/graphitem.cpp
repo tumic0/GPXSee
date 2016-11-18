@@ -120,9 +120,9 @@ void GraphItem::emitSliderPositionChanged(qreal pos)
 			if (pos >= _graph.first().t() && pos <= _graph.last().t())
 				emit sliderPositionChanged(distanceAtTime(pos));
 			else
-				emit sliderPositionChanged(_graph.last().s() + 1);
+				emit sliderPositionChanged(NAN);
 		} else
-			emit sliderPositionChanged(_graph.last().s() + 1);
+			emit sliderPositionChanged(NAN);
 	} else
 		emit sliderPositionChanged(pos);
 }

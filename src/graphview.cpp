@@ -400,6 +400,8 @@ void GraphView::emitSliderPositionChanged(const QPointF &pos)
 		return;
 
 	_sliderPos = (pos.x() / _slider->area().width()) * bounds().width();
+	_sliderPos = qMax(_sliderPos, bounds().left());
+	_sliderPos = qMin(_sliderPos, bounds().right());
 	updateSliderPosition();
 
 	emit sliderPositionChanged(_sliderPos);

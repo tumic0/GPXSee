@@ -1,3 +1,4 @@
+#include <cmath>
 #include <QApplication>
 #include <QCursor>
 #include <QPainter>
@@ -108,12 +109,11 @@ QPointF PathItem::position(qreal x) const
 
 void PathItem::moveMarker(qreal distance)
 {
-	if (distance > _distance.last())
-		_marker->setVisible(false);
-	else {
+	if (distance >= _distance.first() && distance <= _distance.last()) {
 		_marker->setVisible(true);
 		_marker->setPos(position(distance));
-	}
+	} else
+		_marker->setVisible(false);
 }
 
 void PathItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
