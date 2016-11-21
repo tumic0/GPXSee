@@ -18,6 +18,15 @@ public:
 	int errorLine() const {return _errorLine;}
 
 private:
+	bool readEW(const char *data, int len, qreal &lon);
+	bool readLon(const char *data, int len, qreal &lon);
+	bool readNS(const char *data, int len, qreal &lat);
+	bool readLat(const char *data, int len, qreal &lat);
+	bool readDate(const char *data, int len, QDate &date);
+	bool readTime(const char *data, int len, QTime &time);
+	bool readAltitude(const char *data, int len, qreal &ele);
+	bool readGeoidHeight(const char *data, int len, qreal &gh);
+
 	bool readRMC(const char *line, int len);
 	bool readGGA(const char *line, int len);
 	bool readWPL(const char *line, int len);
@@ -27,6 +36,7 @@ private:
 	QString _errorString;
 
 	QDate _date;
+	QTime _time;
 	bool _GGA;
 };
 
