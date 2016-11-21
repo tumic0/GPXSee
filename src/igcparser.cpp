@@ -149,7 +149,7 @@ bool IGCParser::readBRecord(const char *line, int len)
 
 
 	if (time < _time)
-		_date.addDays(1);
+		_date = _date.addDays(1);
 	_time = time;
 
 	Trackpoint t(Coordinates(lon, lat));
