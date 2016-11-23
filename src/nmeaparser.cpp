@@ -7,10 +7,10 @@ static bool validSentence(const char  *line, int len)
 {
 	const char *lp;
 
-	if (len < 10 || line[0] != '$')
+	if (len < 12 || line[0] != '$')
 		return false;
 
-	for (lp = line + len - 1; lp > line; lp--)
+	for (lp = line + len - 1; lp > line + 3; lp--)
 		if (!::isspace(*lp))
 			break;
 	if (*(lp-2) != '*' || !::isalnum(*(lp-1)) || !::isalnum(*(lp)))
