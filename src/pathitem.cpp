@@ -11,11 +11,6 @@ void PathItem::updateShape()
 	QPainterPathStroker s;
 	s.setWidth((_width + 1) * 1.0/scale());
 	_shape = s.createStroke(_path);
-
-	if (qMax(boundingRect().width(), boundingRect().height()) * scale() <= 768)
-		setCacheMode(QGraphicsItem::DeviceCoordinateCache);
-	else
-		setCacheMode(QGraphicsItem::NoCache);
 }
 
 PathItem::PathItem(QGraphicsItem *parent) : QGraphicsObject(parent)
