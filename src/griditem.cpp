@@ -6,7 +6,9 @@
 
 GridItem::GridItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
-
+#ifndef Q_OS_MAC
+	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
+#endif // Q_OS_MAC
 }
 
 void GridItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
