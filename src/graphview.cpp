@@ -446,6 +446,8 @@ void GraphView::setPalette(const Palette &palette)
 
 void GraphView::setGraphWidth(int width)
 {
+	_width = width;
+
 	for (int i = 0; i < _graphs.count(); i++)
 		_graphs.at(i)->setWidth(width);
 }
