@@ -33,7 +33,7 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 	QGLFormat::setDefaultFormat(fmt);
 #else
 	QSurfaceFormat fmt;
-	fmt.setSamples(10);
+	fmt.setSamples(4);
 	QSurfaceFormat::setDefaultFormat(fmt);
 #endif
 
