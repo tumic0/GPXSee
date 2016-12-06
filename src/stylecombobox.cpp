@@ -3,6 +3,10 @@
 #include <QResizeEvent>
 #include "stylecombobox.h"
 
+
+#define MIN_LINE_LENGTH  50
+#define LINE_WIDTH_RATIO 7
+
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(*a))
 
 StyleComboBox::StyleComboBox(QWidget *parent) : QComboBox(parent)
@@ -11,7 +15,7 @@ StyleComboBox::StyleComboBox(QWidget *parent) : QComboBox(parent)
 	  Qt::DashDotLine, Qt::DashDotDotLine};
 
 	QSize is = iconSize();
-	setIconSize(QSize(sizeHint().width(), is.height()));
+	setIconSize(QSize(MIN_LINE_LENGTH, is.height()));
 	is = iconSize();
 
 	for (size_t i = 0; i < ARRAY_SIZE(styles); i++) {
@@ -19,7 +23,7 @@ StyleComboBox::StyleComboBox(QWidget *parent) : QComboBox(parent)
 		pm.fill(Qt::transparent);
 
 		QBrush brush(Qt::black);
-		QPen pen(brush, is.height() / 7, styles[i]);
+		QPen pen(brush, is.height() / LINE_WIDTH_RATIO, styles[i]);
 
 		QPainter painter(&pm);
 		painter.setPen(pen);
@@ -42,7 +46,8 @@ void StyleComboBox::setValue(Qt::PenStyle value)
 void StyleComboBox::resizeEvent(QResizeEvent *event)
 {
 	QSize is = iconSize();
-	setIconSize(QSize(event->size().width() - 30, is.height()));
+	setIconSize(QSize(qMax(event->size().width() - 40, MIN_LINE_LENGTH),
+	  is.height()));
 	is = iconSize();
 
 	for (int i = 0; i < count(); i++) {
@@ -50,7 +55,8 @@ void StyleComboBox::resizeEvent(QResizeEvent *event)
 		pm.fill(Qt::transparent);
 
 		QBrush brush(Qt::black);
-		QPen pen(brush, is.height() / 7, (Qt::PenStyle) itemData(i).toInt());
+		QPen pen(brush, is.height() / LINE_WIDTH_RATIO,
+		  (Qt::PenStyle) itemData(i).toInt());
 
 		QPainter painter(&pm);
 		painter.setPen(pen);
