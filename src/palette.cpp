@@ -36,3 +36,11 @@ void Palette::reset()
 {
 	_state = _h;
 }
+
+QDebug operator<<(QDebug dbg, const Palette &palette)
+{
+	dbg.nospace() << "Palette(" << palette.color() << ", " << palette.shift()
+	  << ")";
+
+	return dbg.maybeSpace();
+}

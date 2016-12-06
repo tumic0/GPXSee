@@ -2,13 +2,14 @@
 #define PALETTE_H
 
 #include <QColor>
+#include <QDebug>
 
 class Palette
 {
 public:
 	Palette(const QColor &color = Qt::blue, qreal shift = 0.62);
 
-	QColor color() const {return QColor::fromHsvF(_h, _s, _v, _a);}
+	QColor color() const {return QColor::fromHsvF(_h, _s, _v, _a).toRgb();}
 	qreal shift() const {return _shift;}
 	void setColor(const QColor &color);
 	void setShift(qreal shift);
@@ -26,5 +27,7 @@ private:
 	qreal _h, _s, _v, _a, _shift;
 	qreal _state;
 };
+
+QDebug operator<<(QDebug dbg, const Palette &palette);
 
 #endif // PALLETE_H

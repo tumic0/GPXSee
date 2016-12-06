@@ -70,6 +70,7 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	setWindowIcon(QIcon(QPixmap(APP_ICON)));
 	setWindowTitle(APP_NAME);
 	setUnifiedTitleAndToolBarOnMac(true);
+	setAcceptDrops(true);
 
 	_trackCount = 0;
 	_routeCount = 0;
@@ -85,8 +86,6 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	updateStatusBarInfo();
 
 	readSettings();
-
-	setAcceptDrops(true);
 }
 
 GUI::~GUI()
@@ -1271,7 +1270,9 @@ void GUI::writeSettings()
 	settings.endGroup();
 
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
-	settings.setValue(UNITS_SETTING, _imperialUnitsAction->isChecked()
+	if ((_imperialUnitsAction->isChecked() ? Imperial : Metric) !=
+	  UNITS_DEFAULT)
+		settings.setValue(UNITS_SETTING, _imperialUnitsAction->isChecked()
 	  ? Imperial : Metric);
 	if (_showToolbarsAction->isChecked() != SHOW_TOOLBARS_DEFAULT)
 		settings.setValue(SHOW_TOOLBARS_SETTING,
@@ -1302,15 +1303,17 @@ void GUI::writeSettings()
 	if (_overlapPOIAction->isChecked() != OVERLAP_POI_DEFAULT)
 		settings.setValue(OVERLAP_POI_SETTING, _overlapPOIAction->isChecked());
 
-	settings.remove(DISABLED_POI_FILE_SETTINGS_PREFIX);
-	settings.beginWriteArray(DISABLED_POI_FILE_SETTINGS_PREFIX);
-	for (int i = 0, j = 0; i < _poiFilesActions.count(); i++) {
+	int j = 0;
+	for (int i = 0; i < _poiFilesActions.count(); i++) {
 		if (!_poiFilesActions.at(i)->isChecked()) {
+			if (j == 0)
+				settings.beginWriteArray(DISABLED_POI_FILE_SETTINGS_PREFIX);
 			settings.setArrayIndex(j++);
 			settings.setValue(DISABLED_POI_FILE_SETTING, _poi->files().at(i));
 		}
 	}
-	settings.endArray();
+	if (j != 0)
+		settings.endArray();
 	settings.endGroup();
 
 	settings.beginGroup(DATA_SETTINGS_GROUP);
@@ -1513,16 +1516,35 @@ void GUI::readSettings()
 	  (int)TRACK_STYLE_DEFAULT).toInt();
 	_options.routeStyle = (Qt::PenStyle) settings.value(ROUTE_STYLE_SETTING,
 	  (int)ROUTE_STYLE_DEFAULT).toInt();
-	_options.graphWidth = settings.value(GRAPH_WIDTH_SETTING,
-	  GRAPH_WIDTH_DEFAULT).toInt();
 	_options.pathAntiAliasing = settings.value(PATH_AA_SETTING, PATH_AA_DEFAULT)
 	  .toBool();
+	_options.graphWidth = settings.value(GRAPH_WIDTH_SETTING,
+	  GRAPH_WIDTH_DEFAULT).toInt();
 	_options.graphAntiAliasing = settings.value(GRAPH_AA_SETTING,
 	  GRAPH_AA_DEFAULT).toBool();
 	_options.poiRadius = settings.value(POI_RADIUS_SETTING, POI_RADIUS_DEFAULT)
 	  .toInt();
 	_options.useOpenGL = settings.value(USE_OPENGL_SETTING, USE_OPENGL_DEFAULT)
 	  .toBool();
+
+	_pathView->setPalette(_options.palette);
+	_pathView->setTrackWidth(_options.trackWidth);
+	_pathView->setRouteWidth(_options.routeWidth);
+	_pathView->setTrackStyle(_options.trackStyle);
+	_pathView->setRouteStyle(_options.routeStyle);
+	_pathView->setRenderHint(QPainter::Antialiasing, _options.pathAntiAliasing);
+	if (_options.useOpenGL)
+		_pathView->useOpenGL(true);
+
+	for (int i = 0; i < _tabs.count(); i++) {
+		_tabs.at(i)->setPalette(_options.palette);
+		_tabs.at(i)->setGraphWidth(_options.graphWidth);
+		_tabs.at(i)->setRenderHint(QPainter::Antialiasing,
+		  _options.graphAntiAliasing);
+	}
+
+	_poi->setRadius(_options.poiRadius);
+
 	settings.endGroup();
 }
 

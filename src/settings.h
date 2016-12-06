@@ -1,6 +1,9 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#define IMPERIAL_UNITS() \
+	(QLocale::system().measurementSystem() == QLocale::ImperialSystem)
+
 #define WINDOW_SETTINGS_GROUP             "Window"
 #define WINDOW_SIZE_SETTING               "size"
 #define WINDOW_SIZE_DEFAULT               QSize(600, 800)
@@ -9,9 +12,7 @@
 
 #define SETTINGS_SETTINGS_GROUP           "Settings"
 #define UNITS_SETTING                     "units"
-#define UNITS_DEFAULT \
-	(QLocale::system().measurementSystem() == QLocale::ImperialSystem) \
-		? Imperial : Metric
+#define UNITS_DEFAULT                     (IMPERIAL_UNITS() ? Imperial : Metric)
 #define SHOW_TOOLBARS_SETTING             "toolbar"
 #define SHOW_TOOLBARS_DEFAULT             true
 
@@ -54,20 +55,19 @@
 #define PAPER_ORIENTATION_SETTING         "orientation"
 #define PAPER_ORIENTATION_DEFAULT         QPrinter::Portrait
 #define PAPER_SIZE_SETTING                "size"
-#define PAPER_SIZE_DEFAULT \
-	(QLocale::system().measurementSystem() == QLocale::ImperialSystem) \
-		? QPrinter::Letter : QPrinter::A4
+#define PAPER_SIZE_DEFAULT                (IMPERIAL_UNITS() ? QPrinter::Letter \
+                                            : QPrinter::A4)
 #define MARGIN_LEFT_SETTING               "marginLeft"
-#define MARGIN_LEFT_DEFAULT               5
+#define MARGIN_LEFT_DEFAULT               5 /* mm */
 #define MARGIN_TOP_SETTING                "marginTop"
-#define MARGIN_TOP_DEFAULT                5
+#define MARGIN_TOP_DEFAULT                5 /* mm */
 #define MARGIN_RIGHT_SETTING              "marginRight"
-#define MARGIN_RIGHT_DEFAULT              5
+#define MARGIN_RIGHT_DEFAULT              5 /* mm */
 #define MARGIN_BOTTOM_SETTING             "marginBottom"
-#define MARGIN_BOTTOM_DEFAULT             5
+#define MARGIN_BOTTOM_DEFAULT             5 /* mm */
 #define EXPORT_FILENAME_SETTING           "fileName"
-#define EXPORT_FILENAME_DEFAULT \
-  QString("%1/export.pdf").arg(QDir::currentPath())
+#define EXPORT_FILENAME_DEFAULT           QString("%1/export.pdf"). \
+                                            arg(QDir::currentPath())
 
 #define OPTIONS_SETTINGS_GROUP            "Options"
 #define PALETTE_COLOR_SETTING             "paletteColor"
@@ -89,7 +89,7 @@
 #define GRAPH_AA_SETTING                  "graphAntiAliasing"
 #define GRAPH_AA_DEFAULT                  false
 #define POI_RADIUS_SETTING                "poiRadius"
-#define POI_RADIUS_DEFAULT                1000
+#define POI_RADIUS_DEFAULT                1000 /* m */
 #define USE_OPENGL_SETTING                "useOpenGL"
 #define USE_OPENGL_DEFAULT                false
 
