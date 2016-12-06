@@ -9,7 +9,8 @@
 #include "units.h"
 #include "graph.h"
 #include "poi.h"
-#include "margins.h"
+#include "exportdialog.h"
+#include "optionsdialog.h"
 
 class QMenu;
 class QToolBar;
@@ -55,6 +56,7 @@ private slots:
 	void clearMapCache();
 	void nextMap();
 	void prevMap();
+	void openOptions();
 
 	void mapChanged(int);
 	void graphChanged(int);
@@ -159,6 +161,7 @@ private:
 	QAction *_showWaypointsAction;
 	QAction *_showWaypointLabelsAction;
 	QAction *_showRouteWaypointsAction;
+	QAction *_openOptionsAction;
 	QList<QAction*> _mapActions;
 	QList<QAction*> _poiFilesActions;
 
@@ -192,10 +195,8 @@ private:
 	int _frameStyle;
 	bool _showGraphs;
 
-	QString _exportFileName;
-	QPrinter::PaperSize _exportPaperSize;
-	QPrinter::Orientation _exportOrientation;
-	MarginsF _exportMargins;
+	Export _export;
+	Options _options;
 };
 
 #endif // GUI_H

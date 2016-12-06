@@ -35,6 +35,9 @@ public:
 	void setUnits(Units units);
 	void showGrid(bool show);
 
+	void setPalette(const Palette &palette);
+	void setGraphWidth(int width);
+
 	const QString &yLabel() const {return _yLabel;}
 	const QString &yUnits() const {return _yUnits;}
 	qreal yScale() const {return _yScale;}
@@ -60,7 +63,7 @@ protected:
 	void redraw(const QSizeF &size);
 	void addInfo(const QString &key, const QString &value);
 	void clearInfo();
-	void skipColor() {_palette.color();}
+	void skipColor() {_palette.nextColor();}
 
 private slots:
 	void emitSliderPositionChanged(const QPointF &pos);
@@ -99,6 +102,7 @@ private:
 	QSet<int> _hide;
 	QRectF _bounds;
 	Palette _palette;
+	int _width;
 
 	Units _units;
 	GraphType _graphType;

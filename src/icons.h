@@ -1,7 +1,9 @@
 #ifndef ICONS_H
 #define ICONS_H
 
-#define APP_ICON         ":/icons/gpxsee.png"
+#define APP_ICON          ":/icons/gpxsee.png"
+
+// Toolbar/menu icons
 #define OPEN_FILE_ICON   ":/icons/document-open.png"
 #define EXPORT_FILE_ICON ":/icons/document-export.png"
 #define PRINT_FILE_ICON  ":/icons/document-print.png"
@@ -16,5 +18,10 @@
 #define LAST_FILE_ICON   ":/icons/arrow-right-double.png"
 #define FIRST_FILE_ICON  ":/icons/arrow-left-double.png"
 #define FULLSCREEN_ICON  ":/icons/view-fullscreen.png"
+
+// Options dialog icons
+#define APPEARANCE_ICON  ":/icons/preferences-desktop-display.png"
+#define POI_ICON         ":/icons/flag_48.png"
+#define SYSTEM_ICON      ":/icons/system-run.png"
 
 #endif /* ICONS_H */

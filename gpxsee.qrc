@@ -15,6 +15,9 @@
         <file>icons/arrow-right-double.png</file>
         <file>icons/view-fullscreen.png</file>
         <file>icons/office-chart-line-stacked.png</file>
+        <file>icons/preferences-desktop-display.png</file>
+        <file>icons/flag_48.png</file>
+        <file>icons/system-run.png</file>
         <file>lang/gpxsee_cs.qm</file>
     </qresource>
 </RCC>

@@ -3,18 +3,26 @@
 
 #include <QDialog>
 #include <QPrinter>
+#include "margins.h"
 
 class QComboBox;
 class QRadioButton;
 class FileSelectWidget;
 class QDoubleSpinBox;
 
+struct Export {
+	QString fileName;
+	QPrinter::PaperSize paperSize;
+	QPrinter::Orientation orientation;
+	MarginsF margins;
+};
+
 class ExportDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
-	ExportDialog(QPrinter *printer, QWidget *parent = 0);
+	ExportDialog(Export *exp, QWidget *parent = 0);
 
 public slots:
 	void accept();
@@ -22,8 +30,7 @@ public slots:
 private:
 	bool checkFile();
 
-	QPrinter *_printer;
-
+	Export *_export;
 	QPrinter::Unit _units;
 
 	FileSelectWidget *_fileSelect;

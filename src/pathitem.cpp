@@ -6,13 +6,10 @@
 #include "pathitem.h"
 
 
-#define PATH_WIDTH  3
-#define HOVER_WIDTH 4
-
 void PathItem::updateShape()
 {
 	QPainterPathStroker s;
-	s.setWidth(HOVER_WIDTH * 1.0/scale());
+	s.setWidth((_width + 1) * 1.0/scale());
 	_shape = s.createStroke(_path);
 
 	if (qMax(boundingRect().width(), boundingRect().height()) * scale() <= 768)
@@ -23,8 +20,10 @@ void PathItem::updateShape()
 
 PathItem::PathItem(QGraphicsItem *parent) : QGraphicsObject(parent)
 {
+	_width = 3;
+
 	QBrush brush(Qt::SolidPattern);
-	_pen = QPen(brush, PATH_WIDTH);
+	_pen = QPen(brush, _width);
 
 	_units = Metric;
 
@@ -54,7 +53,7 @@ void PathItem::setScale(qreal scale)
 {
 	prepareGeometryChange();
 
-	_pen.setWidthF(PATH_WIDTH * 1.0/scale);
+	_pen.setWidthF(_width * 1.0/scale);
 	QGraphicsItem::setScale(scale);
 	_marker->setScale(1.0/scale);
 
@@ -64,6 +63,22 @@ void PathItem::setScale(qreal scale)
 void PathItem::setColor(const QColor &color)
 {
 	_pen.setColor(color);
+	update();
+}
+
+void PathItem::setWidth(int width)
+{
+	prepareGeometryChange();
+
+	_width = width;
+	_pen.setWidthF(_width * 1.0/scale());
+
+	updateShape();
+}
+
+void PathItem::setStyle(Qt::PenStyle style)
+{
+	_pen.setStyle(style);
 	update();
 }
 
@@ -120,7 +135,7 @@ void PathItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
 	Q_UNUSED(event);
 
-	_pen.setWidthF(HOVER_WIDTH * 1.0/scale());
+	_pen.setWidthF((_width + 1) * 1.0/scale());
 	setZValue(zValue() + 1.0);
 	update();
 
@@ -131,7 +146,7 @@ void PathItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
 	Q_UNUSED(event);
 
-	_pen.setWidthF(PATH_WIDTH * 1.0/scale());
+	_pen.setWidthF(_width * 1.0/scale());
 	setZValue(zValue() - 1.0);
 	update();
 

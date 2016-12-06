@@ -21,7 +21,6 @@
 #include <QLocale>
 #include <QMimeData>
 #include <QUrl>
-#include <QPixmapCache>
 #include "config.h"
 #include "icons.h"
 #include "keys.h"
@@ -39,7 +38,6 @@
 #include "trackinfo.h"
 #include "filebrowser.h"
 #include "cpuarch.h"
-#include "exportdialog.h"
 #include "graphtab.h"
 #include "format.h"
 #include "gui.h"
@@ -88,14 +86,7 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 
 	readSettings();
 
-	_exportPaperSize = (QLocale::system().measurementSystem()
-	  == QLocale::ImperialSystem) ? QPrinter::Letter : QPrinter::A4;
-	_exportOrientation = QPrinter::Portrait;
-	_exportFileName = QString("%1/export.pdf").arg(QDir::currentPath());
-	_exportMargins = MarginsF(5.0, 5.0, 5.0, 5.0);
-
 	setAcceptDrops(true);
-	QPixmapCache::setCacheLimit(65536);
 }
 
 GUI::~GUI()
@@ -197,7 +188,6 @@ QAction *GUI::createPOIFileAction(int index)
 void GUI::createActions()
 {
 	QActionGroup *ag;
-
 
 	// Action Groups
 	_fileActionGroup = new QActionGroup(this);
@@ -377,6 +367,9 @@ void GUI::createActions()
 	connect(_fullscreenAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showFullscreen(bool)));
 	addAction(_fullscreenAction);
+	_openOptionsAction = new QAction(tr("Options..."), this);
+	connect(_openOptionsAction, SIGNAL(triggered()), this,
+	  SLOT(openOptions()));
 
 	// Navigation actions
 	_nextAction = new QAction(QIcon(QPixmap(NEXT_FILE_ICON)), tr("Next"), this);
@@ -453,8 +446,9 @@ void GUI::createMenus()
 	unitsMenu->addAction(_imperialUnitsAction);
 	settingsMenu->addSeparator();
 	settingsMenu->addAction(_showToolbarsAction);
-	settingsMenu->addSeparator();
 	settingsMenu->addAction(_fullscreenAction);
+	settingsMenu->addSeparator();
+	settingsMenu->addAction(_openOptionsAction);
 
 	QMenu *helpMenu = menuBar()->addMenu(tr("Help"));
 	helpMenu->addAction(_dataSourcesAction);
@@ -746,26 +740,64 @@ void GUI::printFile()
 		plot(&printer);
 }
 
+void GUI::openOptions()
+{
+	Options options(_options);
+
+	OptionsDialog dialog(&options, this);
+	if (dialog.exec() != QDialog::Accepted)
+		return;
+
+	if (options.palette != _options.palette) {
+		_pathView->setPalette(options.palette);
+		for (int i = 0; i < _tabs.count(); i++)
+			_tabs.at(i)->setPalette(options.palette);
+	}
+	if (options.trackWidth != _options.trackWidth)
+		_pathView->setTrackWidth(options.trackWidth);
+	if (options.routeWidth != _options.routeWidth)
+		_pathView->setRouteWidth(options.routeWidth);
+	if (options.trackStyle != _options.trackStyle)
+		_pathView->setTrackStyle(options.trackStyle);
+	if (options.routeStyle != _options.routeStyle)
+		_pathView->setRouteStyle(options.routeStyle);
+	if (options.pathAntiAliasing != _options.pathAntiAliasing)
+		_pathView->setRenderHint(QPainter::Antialiasing,
+		  options.pathAntiAliasing);
+	if (options.graphWidth != _options.graphWidth)
+		for (int i = 0; i < _tabs.count(); i++)
+			_tabs.at(i)->setGraphWidth(options.graphWidth);
+	if (options.graphAntiAliasing != _options.graphAntiAliasing)
+		for (int i = 0; i < _tabs.count(); i++)
+			_tabs.at(i)->setRenderHint(QPainter::Antialiasing,
+			  options.graphAntiAliasing);
+
+	if (options.poiRadius != _options.poiRadius)
+		_poi->setRadius(options.poiRadius);
+
+	if (options.useOpenGL != _options.useOpenGL)
+		_pathView->useOpenGL(options.useOpenGL);
+
+	_options = options;
+}
+
 void GUI::exportFile()
 {
-	QPrinter printer(QPrinter::HighResolution);
-	printer.setCreator(QString(APP_NAME) + QString(" ") + QString(APP_VERSION));
-	printer.setOrientation(_exportOrientation);
-	printer.setOutputFileName(_exportFileName);
-	printer.setPaperSize(_exportPaperSize);
-	printer.setPageMargins(_exportMargins.left(), _exportMargins.top(),
-	  _exportMargins.right(), _exportMargins.bottom(), QPrinter::Millimeter);
-	ExportDialog dialog(&printer, this);
+	ExportDialog dialog(&_export, this);
+	if (dialog.exec() != QDialog::Accepted)
+		return;
 
-	if (dialog.exec() == QDialog::Accepted) {
-		_exportFileName = printer.outputFileName();
-		_exportPaperSize = printer.paperSize();
-		_exportOrientation = printer.orientation();
-		printer.getPageMargins(&(_exportMargins.rleft()),
-		  &(_exportMargins.rtop()), &(_exportMargins.rright()),
-		  &(_exportMargins.rbottom()), QPrinter::Millimeter);
-		plot(&printer);
-	}
+	QPrinter printer(QPrinter::HighResolution);
+	printer.setOutputFormat(QPrinter::PdfFormat);
+	printer.setCreator(QString(APP_NAME) + QString(" ")
+	  + QString(APP_VERSION));
+	printer.setOrientation(_export.orientation);
+	printer.setOutputFileName(_export.fileName);
+	printer.setPaperSize(_export.paperSize);
+	printer.setPageMargins(_export.margins.left(), _export.margins.top(),
+	  _export.margins.right(), _export.margins.bottom(), QPrinter::Millimeter);
+
+	plot(&printer);
 }
 
 void GUI::plot(QPrinter *printer)
@@ -1229,35 +1261,46 @@ void GUI::dropEvent(QDropEvent *event)
 void GUI::writeSettings()
 {
 	QSettings settings(APP_NAME, APP_NAME);
+	settings.clear();
 
 	settings.beginGroup(WINDOW_SETTINGS_GROUP);
-	settings.setValue(WINDOW_SIZE_SETTING, size());
-	settings.setValue(WINDOW_POS_SETTING, pos());
+	if (size() != WINDOW_SIZE_DEFAULT)
+		settings.setValue(WINDOW_SIZE_SETTING, size());
+	if (pos() != WINDOW_POS_DEFAULT)
+		settings.setValue(WINDOW_POS_SETTING, pos());
 	settings.endGroup();
 
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
 	settings.setValue(UNITS_SETTING, _imperialUnitsAction->isChecked()
 	  ? Imperial : Metric);
-	settings.setValue(SHOW_TOOLBARS_SETTING, _showToolbarsAction->isChecked());
+	if (_showToolbarsAction->isChecked() != SHOW_TOOLBARS_DEFAULT)
+		settings.setValue(SHOW_TOOLBARS_SETTING,
+		  _showToolbarsAction->isChecked());
 	settings.endGroup();
 
 	settings.beginGroup(MAP_SETTINGS_GROUP);
 	if (_currentMap)
 		settings.setValue(CURRENT_MAP_SETTING, _currentMap->name());
-	settings.setValue(SHOW_MAP_SETTING, _showMapAction->isChecked());
+	if (_showMapAction->isChecked() != SHOW_MAP_DEFAULT)
+		settings.setValue(SHOW_MAP_SETTING, _showMapAction->isChecked());
 	settings.endGroup();
 
 	settings.beginGroup(GRAPH_SETTINGS_GROUP);
-	settings.setValue(SHOW_GRAPHS_SETTING, _showGraphsAction->isChecked());
-	settings.setValue(GRAPH_TYPE_SETTING, _timeGraphAction->isChecked()
-	  ? Time : Distance);
-	settings.setValue(SHOW_GRAPH_GRIDS_SETTING,
-	  _showGraphGridAction->isChecked());
+	if (_showGraphsAction->isChecked() != SHOW_GRAPHS_DEFAULT)
+		settings.setValue(SHOW_GRAPHS_SETTING, _showGraphsAction->isChecked());
+	if ((_timeGraphAction->isChecked() ? Time : Distance) != GRAPH_TYPE_DEFAULT)
+		settings.setValue(GRAPH_TYPE_SETTING, _timeGraphAction->isChecked()
+		  ? Time : Distance);
+	if (_showGraphGridAction->isChecked() != SHOW_GRAPH_GRIDS_DEFAULT)
+		settings.setValue(SHOW_GRAPH_GRIDS_SETTING,
+		  _showGraphGridAction->isChecked());
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);
-	settings.setValue(SHOW_POI_SETTING, _showPOIAction->isChecked());
-	settings.setValue(OVERLAP_POI_SETTING, _overlapPOIAction->isChecked());
+	if (_showPOIAction->isChecked() != SHOW_POI_DEFAULT)
+		settings.setValue(SHOW_POI_SETTING, _showPOIAction->isChecked());
+	if (_overlapPOIAction->isChecked() != OVERLAP_POI_DEFAULT)
+		settings.setValue(OVERLAP_POI_SETTING, _overlapPOIAction->isChecked());
 
 	settings.remove(DISABLED_POI_FILE_SETTINGS_PREFIX);
 	settings.beginWriteArray(DISABLED_POI_FILE_SETTINGS_PREFIX);
@@ -1271,15 +1314,61 @@ void GUI::writeSettings()
 	settings.endGroup();
 
 	settings.beginGroup(DATA_SETTINGS_GROUP);
-	settings.setValue(SHOW_TRACKS_SETTING, _showTracksAction->isChecked());
-	settings.setValue(SHOW_ROUTES_SETTING, _showRoutesAction->isChecked());
-	settings.setValue(SHOW_WAYPOINTS_SETTING,
-	  _showWaypointsAction->isChecked());
-	settings.setValue(SHOW_WAYPOINT_LABELS_SETTING,
-	  _showWaypointLabelsAction->isChecked());
-	settings.setValue(SHOW_ROUTE_WAYPOINTS_SETTING,
-	  _showRouteWaypointsAction->isChecked());
+	if (_showTracksAction->isChecked() != SHOW_TRACKS_DEFAULT)
+		settings.setValue(SHOW_TRACKS_SETTING, _showTracksAction->isChecked());
+	if (_showRoutesAction->isChecked() != SHOW_ROUTES_DEFAULT)
+		settings.setValue(SHOW_ROUTES_SETTING, _showRoutesAction->isChecked());
+	if (_showWaypointsAction->isChecked() != SHOW_WAYPOINTS_DEFAULT)
+		settings.setValue(SHOW_WAYPOINTS_SETTING,
+		  _showWaypointsAction->isChecked());
+	if (_showWaypointLabelsAction->isChecked() != SHOW_WAYPOINT_LABELS_DEFAULT)
+		settings.setValue(SHOW_WAYPOINT_LABELS_SETTING,
+		  _showWaypointLabelsAction->isChecked());
+	if (_showRouteWaypointsAction->isChecked() != SHOW_ROUTE_WAYPOINTS_DEFAULT)
+		settings.setValue(SHOW_ROUTE_WAYPOINTS_SETTING,
+		  _showRouteWaypointsAction->isChecked());
+	settings.endGroup();
 
+	settings.beginGroup(EXPORT_SETTINGS_GROUP);
+	if (_export.orientation != PAPER_ORIENTATION_DEFAULT)
+		settings.setValue(PAPER_ORIENTATION_SETTING, _export.orientation);
+	if (_export.paperSize != PAPER_SIZE_DEFAULT)
+		settings.setValue(PAPER_SIZE_SETTING, _export.paperSize);
+	if (_export.margins.left() != MARGIN_LEFT_DEFAULT)
+		settings.setValue(MARGIN_LEFT_SETTING, _export.margins.left());
+	if (_export.margins.top() != MARGIN_TOP_DEFAULT)
+		settings.setValue(MARGIN_TOP_SETTING, _export.margins.top());
+	if (_export.margins.right() != MARGIN_RIGHT_DEFAULT)
+		settings.setValue(MARGIN_RIGHT_SETTING, _export.margins.right());
+	if (_export.margins.bottom() != MARGIN_BOTTOM_DEFAULT)
+		settings.setValue(MARGIN_BOTTOM_SETTING, _export.margins.bottom());
+	if (_export.fileName != EXPORT_FILENAME_DEFAULT)
+		settings.setValue(EXPORT_FILENAME_SETTING, _export.fileName);
+	settings.endGroup();
+
+	settings.beginGroup(OPTIONS_SETTINGS_GROUP);
+	if (_options.palette.color() != PALETTE_COLOR_DEFAULT)
+		settings.setValue(PALETTE_COLOR_SETTING, _options.palette.color());
+	if (_options.palette.shift() != PALETTE_SHIFT_DEFAULT)
+		settings.setValue(PALETTE_SHIFT_SETTING, _options.palette.shift());
+	if (_options.trackWidth != TRACK_WIDTH_DEFAULT)
+		settings.setValue(TRACK_WIDTH_SETTING, _options.trackWidth);
+	if (_options.routeWidth != ROUTE_WIDTH_DEFAULT)
+		settings.setValue(ROUTE_WIDTH_SETTING, _options.routeWidth);
+	if (_options.trackStyle != TRACK_STYLE_DEFAULT)
+		settings.setValue(TRACK_STYLE_SETTING, (int)_options.trackStyle);
+	if (_options.routeStyle != ROUTE_STYLE_DEFAULT)
+		settings.setValue(ROUTE_STYLE_SETTING, (int)_options.routeStyle);
+	if (_options.graphWidth != GRAPH_WIDTH_DEFAULT)
+		settings.setValue(GRAPH_WIDTH_SETTING, _options.graphWidth);
+	if (_options.pathAntiAliasing != PATH_AA_DEFAULT)
+		settings.setValue(PATH_AA_SETTING, _options.pathAntiAliasing);
+	if (_options.graphAntiAliasing != GRAPH_AA_DEFAULT)
+		settings.setValue(GRAPH_AA_SETTING, _options.graphAntiAliasing);
+	if (_options.poiRadius != POI_RADIUS_DEFAULT)
+		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
+	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
+		settings.setValue(USE_OPENGL_SETTING, _options.useOpenGL);
 	settings.endGroup();
 }
 
@@ -1288,26 +1377,24 @@ void GUI::readSettings()
 	QSettings settings(APP_NAME, APP_NAME);
 
 	settings.beginGroup(WINDOW_SETTINGS_GROUP);
-	resize(settings.value(WINDOW_SIZE_SETTING, QSize(600, 800)).toSize());
-	move(settings.value(WINDOW_POS_SETTING, QPoint(10, 10)).toPoint());
+	resize(settings.value(WINDOW_SIZE_SETTING, WINDOW_SIZE_DEFAULT).toSize());
+	move(settings.value(WINDOW_POS_SETTING, WINDOW_POS_DEFAULT).toPoint());
 	settings.endGroup();
 
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
-	Units u = QLocale::system().measurementSystem() == QLocale::ImperialSystem
-	  ? Imperial : Metric;
-	if (settings.value(UNITS_SETTING, u).toInt() == Imperial) {
+	if (settings.value(UNITS_SETTING, UNITS_DEFAULT).toInt() == Imperial) {
 		setImperialUnits();
 		_imperialUnitsAction->setChecked(true);
 	} else
 		_metricUnitsAction->setChecked(true);
-	if (settings.value(SHOW_TOOLBARS_SETTING, true).toBool() == false)
+	if (!settings.value(SHOW_TOOLBARS_SETTING, SHOW_TOOLBARS_DEFAULT).toBool())
 		showToolbars(false);
 	else
 		_showToolbarsAction->setChecked(true);
 	settings.endGroup();
 
 	settings.beginGroup(MAP_SETTINGS_GROUP);
-	if (settings.value(SHOW_MAP_SETTING, true).toBool() == true)
+	if (settings.value(SHOW_MAP_SETTING, SHOW_MAP_DEFAULT).toBool())
 		_showMapAction->setChecked(true);
 	if (_maps.count()) {
 		int index = mapIndex(settings.value(CURRENT_MAP_SETTING).toString());
@@ -1320,31 +1407,33 @@ void GUI::readSettings()
 	settings.endGroup();
 
 	settings.beginGroup(GRAPH_SETTINGS_GROUP);
-	if (settings.value(SHOW_GRAPHS_SETTING, true).toBool() == false)
+	if (!settings.value(SHOW_GRAPHS_SETTING, SHOW_GRAPHS_DEFAULT).toBool())
 		showGraphs(false);
 	else
 		_showGraphsAction->setChecked(true);
-	if (settings.value(GRAPH_TYPE_SETTING, Distance).toInt() == Time) {
+	if (settings.value(GRAPH_TYPE_SETTING, GRAPH_TYPE_DEFAULT).toInt()
+	  == Time) {
 		setTimeGraph();
 		_timeGraphAction->setChecked(true);
 	} else
 		_distanceGraphAction->setChecked(true);
-	if (settings.value(SHOW_GRAPH_GRIDS_SETTING, true).toBool() == false)
+	if (!settings.value(SHOW_GRAPH_GRIDS_SETTING, SHOW_GRAPH_GRIDS_DEFAULT)
+	  .toBool())
 		showGraphGrids(false);
 	else
 		_showGraphGridAction->setChecked(true);
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);
-	if (settings.value(OVERLAP_POI_SETTING, true).toBool() == false)
+	if (!settings.value(OVERLAP_POI_SETTING, OVERLAP_POI_DEFAULT).toBool())
 		_pathView->setPOIOverlap(false);
 	else
 		_overlapPOIAction->setChecked(true);
-	if (settings.value(LABELS_POI_SETTING, true).toBool() == false)
+	if (!settings.value(LABELS_POI_SETTING, LABELS_POI_DEFAULT).toBool())
 		_pathView->showPOILabels(false);
 	else
 		_showPOILabelsAction->setChecked(true);
-	if (settings.value(SHOW_POI_SETTING, false).toBool() == true)
+	if (settings.value(SHOW_POI_SETTING, SHOW_POI_DEFAULT).toBool())
 		_showPOIAction->setChecked(true);
 	else
 		_pathView->showPOI(false);
@@ -1364,30 +1453,76 @@ void GUI::readSettings()
 	settings.endGroup();
 
 	settings.beginGroup(DATA_SETTINGS_GROUP);
-	if (settings.value(SHOW_TRACKS_SETTING, true).toBool() == false) {
+	if (!settings.value(SHOW_TRACKS_SETTING, SHOW_TRACKS_DEFAULT).toBool()) {
 		_pathView->showTracks(false);
 		for (int i = 0; i < _tabs.count(); i++)
 			_tabs.at(i)->showTracks(false);
 	} else
 		_showTracksAction->setChecked(true);
-	if (settings.value(SHOW_ROUTES_SETTING, true).toBool() == false) {
+	if (!settings.value(SHOW_ROUTES_SETTING, SHOW_ROUTES_DEFAULT).toBool()) {
 		_pathView->showRoutes(false);
 		for (int i = 0; i < _tabs.count(); i++)
 			_tabs.at(i)->showRoutes(false);
 	} else
 		_showRoutesAction->setChecked(true);
-	if (settings.value(SHOW_WAYPOINTS_SETTING, true).toBool() == false)
+	if (!settings.value(SHOW_WAYPOINTS_SETTING, SHOW_WAYPOINTS_DEFAULT)
+	  .toBool())
 		_pathView->showWaypoints(false);
 	else
 		_showWaypointsAction->setChecked(true);
-	if (settings.value(SHOW_WAYPOINT_LABELS_SETTING, true).toBool() == false)
+	if (!settings.value(SHOW_WAYPOINT_LABELS_SETTING,
+	  SHOW_WAYPOINT_LABELS_DEFAULT).toBool())
 		_pathView->showWaypointLabels(false);
 	else
 		_showWaypointLabelsAction->setChecked(true);
-	if (settings.value(SHOW_ROUTE_WAYPOINTS_SETTING, true).toBool() == false)
+	if (!settings.value(SHOW_ROUTE_WAYPOINTS_SETTING,
+	  SHOW_ROUTE_WAYPOINTS_SETTING).toBool())
 		_pathView->showRouteWaypoints(false);
 	else
 		_showRouteWaypointsAction->setChecked(true);
+	settings.endGroup();
+
+	settings.beginGroup(EXPORT_SETTINGS_GROUP);
+	_export.orientation = (QPrinter::Orientation) settings.value(
+	  PAPER_ORIENTATION_SETTING, PAPER_ORIENTATION_DEFAULT).toInt();
+	_export.paperSize = (QPrinter::PaperSize) settings.value(PAPER_SIZE_SETTING,
+	  PAPER_SIZE_DEFAULT).toInt();
+	qreal ml = settings.value(MARGIN_LEFT_SETTING, MARGIN_LEFT_DEFAULT)
+	  .toReal();
+	qreal mt = settings.value(MARGIN_TOP_SETTING, MARGIN_TOP_DEFAULT).toReal();
+	qreal mr = settings.value(MARGIN_RIGHT_SETTING, MARGIN_RIGHT_DEFAULT)
+	  .toReal();
+	qreal mb = settings.value(MARGIN_BOTTOM_SETTING, MARGIN_BOTTOM_DEFAULT)
+	  .toReal();
+	_export.margins = MarginsF(ml, mt, mr, mb);
+	_export.fileName = settings.value(EXPORT_FILENAME_SETTING,
+	 EXPORT_FILENAME_DEFAULT).toString();
+	settings.endGroup();
+
+	settings.beginGroup(OPTIONS_SETTINGS_GROUP);
+	QColor pc = settings.value(PALETTE_COLOR_SETTING, PALETTE_COLOR_DEFAULT)
+	  .value<QColor>();
+	qreal ps = settings.value(PALETTE_SHIFT_SETTING, PALETTE_SHIFT_DEFAULT)
+	  .toDouble();
+	_options.palette = Palette(pc, ps);
+	_options.trackWidth = settings.value(TRACK_WIDTH_SETTING,
+	  TRACK_WIDTH_DEFAULT).toInt();
+	_options.routeWidth = settings.value(ROUTE_WIDTH_SETTING,
+	  ROUTE_WIDTH_DEFAULT).toInt();
+	_options.trackStyle = (Qt::PenStyle) settings.value(TRACK_STYLE_SETTING,
+	  (int)TRACK_STYLE_DEFAULT).toInt();
+	_options.routeStyle = (Qt::PenStyle) settings.value(ROUTE_STYLE_SETTING,
+	  (int)ROUTE_STYLE_DEFAULT).toInt();
+	_options.graphWidth = settings.value(GRAPH_WIDTH_SETTING,
+	  GRAPH_WIDTH_DEFAULT).toInt();
+	_options.pathAntiAliasing = settings.value(PATH_AA_SETTING, PATH_AA_DEFAULT)
+	  .toBool();
+	_options.graphAntiAliasing = settings.value(GRAPH_AA_SETTING,
+	  GRAPH_AA_DEFAULT).toBool();
+	_options.poiRadius = settings.value(POI_RADIUS_SETTING, POI_RADIUS_DEFAULT)
+	  .toInt();
+	_options.useOpenGL = settings.value(USE_OPENGL_SETTING, USE_OPENGL_DEFAULT)
+	  .toBool();
 	settings.endGroup();
 }
 

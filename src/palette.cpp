@@ -1,62 +1,38 @@
 #include "palette.h"
 
-
-#define HUE_INIT		0.1f
-#define HUE_INCREMENT	0.62f
-#define SATURATION		0.99f
-#define VALUE			0.99f
-
-static unsigned hsv2rgb(float h, float s, float v)
+Palette::Palette(const QColor &color, qreal shift)
 {
-	unsigned hi;
-	float r = 0, g = 0, b = 0, p, q, t, f;
+	_h = 0; _s = 0; _v = 0; _a = 1.0;
 
-	hi = (unsigned)(h * 6.0f);
-	f = h * 6.0f - hi;
-	p = v * (1.0f - s);
-	q = v * (1.0f - f * s);
-	t = v * (1.0f - (1.0f - f) * s);
+	setColor(color);
+	setShift(shift);
 
-	switch (hi) {
-		case 0:
-			r = v; g = t; b = p;
-			break;
-		case 1:
-			r = q; g = v; b = p;
-			break;
-		case 2:
-			r = p; g = v; b = t;
-			break;
-		case 3:
-			r = p; g = q; b = v;
-			break;
-		case 4:
-			r = t; g = p; b = v;
-			break;
-		case 5:
-			r = v; g = p; b = q;
-			break;
-	}
-
-	return ((unsigned)(r * 256) << 16)
-	  + ((unsigned)(g * 256) << 8)
-	  + (unsigned)(b * 256);
+	_state = _h;
 }
 
-Palette::Palette()
+void Palette::setColor(const QColor &color)
 {
-	_hueState = HUE_INIT;
+	if (color.isValid())
+		color.getHsvF(&_h, &_s, &_v, &_a);
 }
 
-QColor Palette::color()
+void Palette::setShift(qreal shift)
 {
-	_hueState += HUE_INCREMENT;
-	_hueState -= (int) _hueState;
+	if (shift >= 0 && shift <= 1.0)
+		_shift = shift;
+}
 
-	return QColor(hsv2rgb(_hueState, SATURATION, VALUE));
+QColor Palette::nextColor()
+{
+	QColor ret = QColor::fromHsvF(_state, _s, _v, _a);
+
+	_state += _shift;
+	_state -= (int) _state;
+
+	return ret;
 }
 
 void Palette::reset()
 {
-	_hueState = HUE_INIT;
+	_state = _h;
 }

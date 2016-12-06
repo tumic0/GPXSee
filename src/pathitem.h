@@ -24,6 +24,8 @@ public:
 	void setScale(qreal scale);
 	void setUnits(enum Units units);
 	void setColor(const QColor &color);
+	void setWidth(int width);
+	void setStyle(Qt::PenStyle style);
 
 public slots:
 	void moveMarker(qreal distance);
@@ -36,11 +38,7 @@ protected:
 
 	QVector<qreal> _distance;
 	QPainterPath _path;
-	QPainterPath _shape;
-	QPen _pen;
-
 	MarkerItem *_marker;
-
 	Units _units;
 
 private:
@@ -48,6 +46,10 @@ private:
 
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
+	int _width;
+	QPen _pen;
+	QPainterPath _shape;
 };
 
 #endif // PATHITEM_H

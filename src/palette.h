@@ -6,12 +6,25 @@
 class Palette
 {
 public:
-	Palette();
-	QColor color();
+	Palette(const QColor &color = Qt::blue, qreal shift = 0.62);
+
+	QColor color() const {return QColor::fromHsvF(_h, _s, _v, _a);}
+	qreal shift() const {return _shift;}
+	void setColor(const QColor &color);
+	void setShift(qreal shift);
+
+	QColor nextColor();
 	void reset();
 
+	bool operator==(const Palette &other) const
+	  {return (_h == other._h && _s == other._s && _v == other._v
+	  && _a == other._a && _shift == other._shift);}
+	bool operator!=(const Palette &other) const
+	  {return !(*this == other);}
+
 private:
-	float _hueState;
+	qreal _h, _s, _v, _a, _shift;
+	qreal _state;
 };
 
 #endif // PALLETE_H

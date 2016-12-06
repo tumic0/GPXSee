@@ -10,7 +10,7 @@
 POI::POI(QObject *parent) : QObject(parent)
 {
 	_errorLine = 0;
-	_radius = 0.01;
+	_radius = 1000;
 }
 
 bool POI::loadFile(const QString &fileName)
@@ -66,11 +66,15 @@ QVector<Waypoint> POI::points(const PathItem *path) const
 	const QPainterPath &pp = path->path();
 
 	for (int i = 0; i < pp.elementCount(); i++) {
-		Coordinates p = Coordinates::fromMercator(pp.elementAt(i));
-		min[0] = p.lon() - _radius;
-		min[1] = -p.lat() - _radius;
-		max[0] = p.lon() + _radius;
-		max[1] = -p.lat() + _radius;
+		const QPainterPath::Element &pe = pp.elementAt(i);
+		Coordinates p = Coordinates::fromMercator(QPointF(pe.x, -pe.y));
+
+		QPair<Coordinates, Coordinates> br = p.boundingRect(_radius);
+		min[0] = br.first.lon();
+		min[1] = br.first.lat();
+		max[0] = br.second.lon();
+		max[1] = br.second.lat();
+
 		_tree.Search(min, max, cb, &set);
 	}
 
@@ -92,10 +96,13 @@ QVector<Waypoint> POI::points(const QList<WaypointItem*> &list)
 
 	for (int i = 0; i < list.count(); i++) {
 		const Coordinates &p = list.at(i)->waypoint().coordinates();
-		min[0] = p.lon() - _radius;
-		min[1] = p.lat() - _radius;
-		max[0] = p.lon() + _radius;
-		max[1] = p.lat() + _radius;
+
+		QPair<Coordinates, Coordinates> br = p.boundingRect(_radius);
+		min[0] = br.first.lon();
+		min[1] = br.first.lat();
+		max[0] = br.second.lon();
+		max[1] = br.second.lat();
+
 		_tree.Search(min, max, cb, &set);
 	}
 
@@ -116,10 +123,13 @@ QVector<Waypoint> POI::points(const QList<Waypoint> &list) const
 
 	for (int i = 0; i < list.count(); i++) {
 		const Coordinates &p = list.at(i).coordinates();
-		min[0] = p.lon() - _radius;
-		min[1] = p.lat() - _radius;
-		max[0] = p.lon() + _radius;
-		max[1] = p.lat() + _radius;
+
+		QPair<Coordinates, Coordinates> br = p.boundingRect(_radius);
+		min[0] = br.first.lon();
+		min[1] = br.first.lat();
+		max[0] = br.second.lon();
+		max[1] = br.second.lat();
+
 		_tree.Search(min, max, cb, &set);
 	}
 
@@ -168,7 +178,7 @@ void POI::clear()
 	emit pointsChanged();
 }
 
-void POI::setRadius(qreal radius)
+void POI::setRadius(unsigned radius)
 {
 	_radius = radius;
 

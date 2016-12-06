@@ -24,6 +24,7 @@ public:
 	int id() const {return _id;}
 	void setId(int id) {_id = id;}
 	void setColor(const QColor &color);
+	void setWidth(int width);
 
 	qreal yAtX(qreal x);
 	qreal distanceAtTime(qreal time);
@@ -41,6 +42,7 @@ private:
 
 	int _id;
 	QPen _pen;
+	int _width;
 
 	Graph _graph;
 	GraphType _type;

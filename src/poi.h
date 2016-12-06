@@ -22,8 +22,8 @@ public:
 	const QString &errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 
-	qreal radius() const {return _radius;}
-	void setRadius(qreal radius);
+	unsigned radius() const {return _radius;}
+	void setRadius(unsigned radius);
 
 	QVector<Waypoint> points(const PathItem *path) const;
 	QVector<Waypoint> points(const QList<WaypointItem*> &list) const;
@@ -49,7 +49,7 @@ private:
 	QStringList _files;
 	QList<FileIndex> _indexes;
 
-	qreal _radius;
+	unsigned _radius;
 
 	QString _errorString;
 	int _errorLine;

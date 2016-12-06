@@ -17,17 +17,17 @@
 #include "exportdialog.h"
 
 
-ExportDialog::ExportDialog(QPrinter *printer, QWidget *parent)
-  : QDialog(parent), _printer(printer)
+ExportDialog::ExportDialog(Export *exp, QWidget *parent)
+  : QDialog(parent), _export(exp)
 {
 	int index;
 
-	_units = (QLocale::system().measurementSystem()
-	  == QLocale::ImperialSystem) ? QPrinter::Inch : QPrinter::Millimeter;
+	_units = QLocale::system().measurementSystem() == QLocale::ImperialSystem ?
+	  QPrinter::Inch : QPrinter::Millimeter;
 
 	_fileSelect = new FileSelectWidget();
 	_fileSelect->setFilter(tr("PDF files (*.pdf);;All files (*)"));
-	_fileSelect->setFile(_printer->outputFileName());
+	_fileSelect->setFile(_export->fileName);
 
 	_paperSize = new QComboBox();
 	_paperSize->addItem("A3", QPrinter::A3);
@@ -36,7 +36,7 @@ ExportDialog::ExportDialog(QPrinter *printer, QWidget *parent)
 	_paperSize->addItem("Tabloid", QPrinter::Tabloid);
 	_paperSize->addItem("Legal", QPrinter::Legal);
 	_paperSize->addItem("Letter", QPrinter::Letter);
-	if ((index = _paperSize->findData(_printer->paperSize())) >= 0)
+	if ((index = _paperSize->findData(_export->paperSize)) >= 0)
 		_paperSize->setCurrentIndex(index);
 
 	_portrait = new QRadioButton(tr("Portrait"));
@@ -44,32 +44,34 @@ ExportDialog::ExportDialog(QPrinter *printer, QWidget *parent)
 	QHBoxLayout *orientationLayout = new QHBoxLayout();
 	orientationLayout->addWidget(_portrait);
 	orientationLayout->addWidget(_landscape);
-	if (_printer->orientation() == QPrinter::Portrait)
+	if (_export->orientation == QPrinter::Portrait)
 		_portrait->setChecked(true);
 	else
 		_landscape->setChecked(true);
 
-	qreal top, bottom, left, right;
-
-	_printer->getPageMargins(&left, &top, &right, &bottom, _units);
-	QString us = _units == QPrinter::Inch ? tr("in") : tr("mm");
 	_topMargin = new QDoubleSpinBox();
 	_bottomMargin = new QDoubleSpinBox();
 	_leftMargin = new QDoubleSpinBox();
 	_rightMargin = new QDoubleSpinBox();
-	_topMargin->setValue(top);
+	QString us = (_units == QPrinter::Inch) ? tr("in") : tr("mm");
 	_topMargin->setSuffix(UNIT_SPACE + us);
-	_bottomMargin->setValue(bottom);
 	_bottomMargin->setSuffix(UNIT_SPACE + us);
-	_leftMargin->setValue(left);
 	_leftMargin->setSuffix(UNIT_SPACE + us);
-	_rightMargin->setValue(right);
 	_rightMargin->setSuffix(UNIT_SPACE + us);
 	if (_units == QPrinter::Inch) {
+		_topMargin->setValue(_export->margins.top() * MM2IN);
+		_bottomMargin->setValue(_export->margins.bottom() * MM2IN);
+		_leftMargin->setValue(_export->margins.left() * MM2IN);
+		_rightMargin->setValue(_export->margins.right() * MM2IN);
 		_topMargin->setSingleStep(0.1);
 		_bottomMargin->setSingleStep(0.1);
 		_leftMargin->setSingleStep(0.1);
 		_rightMargin->setSingleStep(0.1);
+	} else {
+		_topMargin->setValue(_export->margins.top());
+		_bottomMargin->setValue(_export->margins.bottom());
+		_leftMargin->setValue(_export->margins.left());
+		_rightMargin->setValue(_export->margins.right());
 	}
 
 	QGridLayout *marginsLayout = new QGridLayout();
@@ -164,12 +166,16 @@ void ExportDialog::accept()
 	QPrinter::PaperSize paperSize = static_cast<QPrinter::PaperSize>
 	  (_paperSize->itemData(_paperSize->currentIndex()).toInt());
 
-	_printer->setOutputFormat(QPrinter::PdfFormat);
-	_printer->setOutputFileName(_fileSelect->file());
-	_printer->setPaperSize(paperSize);
-	_printer->setOrientation(orientation);
-	_printer->setPageMargins(_leftMargin->value(), _topMargin->value(),
-	  _rightMargin->value(), _bottomMargin->value(), _units);
+	_export->fileName = _fileSelect->file();
+	_export->paperSize = paperSize;
+	_export->orientation = orientation;
+	if (_units == QPrinter::Inch)
+		_export->margins = MarginsF(_leftMargin->value() / MM2IN,
+		_topMargin->value() / MM2IN, _rightMargin->value() / MM2IN,
+		_bottomMargin->value() / MM2IN);
+	else
+		_export->margins = MarginsF(_leftMargin->value(), _topMargin->value(),
+		  _rightMargin->value(), _bottomMargin->value());
 
 	QDialog::accept();
 }

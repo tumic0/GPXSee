@@ -5,6 +5,7 @@ QT += core \
     network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 greaterThan(QT_MAJOR_VERSION, 4): QT += printsupport
+lessThan(QT_MAJOR_VERSION, 5) : QT += opengl
 HEADERS += src/config.h \
     src/icons.h \
     src/gui.h \
@@ -70,7 +71,10 @@ HEADERS += src/config.h \
     src/cadencegraph.h \
     src/powergraph.h \
     src/igcparser.h \
-    src/nmeaparser.h
+    src/nmeaparser.h \
+    src/optionsdialog.h \
+    src/colorbox.h \
+    src/stylecombobox.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -121,7 +125,10 @@ SOURCES += src/main.cpp \
     src/powergraph.cpp \
     src/igcparser.cpp \
     src/path.cpp \
-    src/nmeaparser.cpp
+    src/nmeaparser.cpp \
+    src/optionsdialog.cpp \
+    src/colorbox.cpp \
+    src/stylecombobox.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts
 macx {

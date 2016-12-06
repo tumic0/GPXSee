@@ -3,6 +3,12 @@
 #include <QLocale>
 #include <QFileOpenEvent>
 #include <QNetworkProxyFactory>
+#include <QPixmapCache>
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#include <QGLFormat>
+#else // QT 5
+#include <QSurfaceFormat>
+#endif // QT 5
 #include "gui.h"
 #include "app.h"
 
@@ -20,6 +26,18 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 #endif // Q_OS_MAC
 
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+	QGLFormat fmt;
+	fmt.setSamples(10);
+	QGLFormat::setDefaultFormat(fmt);
+#else
+	QSurfaceFormat fmt;
+	fmt.setSamples(10);
+	QSurfaceFormat::setDefaultFormat(fmt);
+#endif
+
+	QPixmapCache::setCacheLimit(65536);
 
 	_gui = new GUI();
 }

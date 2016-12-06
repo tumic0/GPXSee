@@ -2,19 +2,19 @@
 #include "graphitem.h"
 
 
-#define GRAPH_WIDTH 1
-#define HOVER_WIDTH 2
-
 GraphItem::GraphItem(const Graph &graph, QGraphicsItem *parent)
   : QGraphicsObject(parent)
 {
 	_id = 0;
+	_width = 1;
 
-	_pen = QPen(Qt::black, GRAPH_WIDTH);
+	_pen = QPen(Qt::black, _width);
 
 	_type = Distance;
 	_graph = graph;
 	_sx = 1.0; _sy = 1.0;
+
+	setZValue(1.0);
 
 	updatePath();
 	updateBounds();
@@ -49,6 +49,14 @@ void GraphItem::setColor(const QColor &color)
 {
 	_pen.setColor(color);
 	update();
+}
+
+void GraphItem::setWidth(int width)
+{
+	prepareGeometryChange();
+
+	_width = width;
+	_pen.setWidth(width);
 }
 
 qreal GraphItem::yAtX(qreal x)
@@ -130,10 +138,10 @@ void GraphItem::emitSliderPositionChanged(qreal pos)
 void GraphItem::selected(bool selected)
 {
 	if (selected) {
-		_pen.setWidth(HOVER_WIDTH);
+		_pen.setWidth(_width + 1);
 		setZValue(zValue() + 1.0);
 	} else {
-		_pen.setWidth(GRAPH_WIDTH);
+		_pen.setWidth(_width);
 		setZValue(zValue() - 1.0);
 	}
 

@@ -30,6 +30,7 @@ public:
 
 	QList<PathItem*> loadData(const Data &data);
 
+	void setPalette(const Palette &palette);
 	void setPOI(POI *poi);
 	void setMap(Map *map);
 	void setUnits(enum Units units);
@@ -42,6 +43,8 @@ public:
 
 	void clear();
 
+	void useOpenGL(bool use);
+
 public slots:
 	void redraw();
 
@@ -53,6 +56,10 @@ public slots:
 	void showRoutes(bool show);
 	void showWaypoints(bool show);
 	void showRouteWaypoints(bool show);
+	void setTrackWidth(int width);
+	void setRouteWidth(int width);
+	void setTrackStyle(Qt::PenStyle style);
+	void setRouteStyle(Qt::PenStyle style);
 
 private slots:
 	void updatePOI();
@@ -103,6 +110,10 @@ private:
 	bool _showPOILabels;
 	bool _overlapPOIs;
 	bool _showRouteWaypoints;
+	int _trackWidth;
+	int _routeWidth;
+	Qt::PenStyle _trackStyle;
+	Qt::PenStyle _routeStyle;
 
 	bool _plot;
 };

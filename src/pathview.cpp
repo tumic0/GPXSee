@@ -1,6 +1,12 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QWheelEvent>
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#include <QGLWidget>
+#else // QT 5
+#include <QOpenGLWidget>
+#endif // QT 5
+#include <QSysInfo>
 #include "rd.h"
 #include "poi.h"
 #include "data.h"
@@ -90,7 +96,7 @@ PathView::PathView(QWidget *parent)
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	setRenderHints(QPainter::Antialiasing);
+	setRenderHint(QPainter::Antialiasing, true);
 	setAcceptDrops(false);
 
 	_mapScale = new ScaleItem();
@@ -110,6 +116,10 @@ PathView::PathView(QWidget *parent)
 	_showPOILabels = true;
 	_overlapPOIs = true;
 	_showRouteWaypoints = true;
+	_trackWidth = 3;
+	_routeWidth = 3;
+	_trackStyle = Qt::SolidLine;
+	_routeStyle = Qt::DashLine;
 
 	_plot = false;
 }
@@ -123,7 +133,7 @@ PathView::~PathView()
 PathItem *PathView::addTrack(const Track &track)
 {
 	if (track.isNull()) {
-		_palette.color();
+		_palette.nextColor();
 		return 0;
 	}
 
@@ -132,7 +142,9 @@ PathItem *PathView::addTrack(const Track &track)
 	_tr |= ti->path().boundingRect();
 	_zoom = scale2zoom(contentsScale());
 	ti->setScale(1.0/mapScale(_zoom));
-	ti->setColor(_palette.color());
+	ti->setColor(_palette.nextColor());
+	ti->setWidth(_trackWidth);
+	ti->setStyle(_trackStyle);
 	ti->setVisible(_showTracks);
 	_scene->addItem(ti);
 
@@ -145,7 +157,7 @@ PathItem *PathView::addTrack(const Track &track)
 PathItem *PathView::addRoute(const Route &route)
 {
 	if (route.isNull()) {
-		_palette.color();
+		_palette.nextColor();
 		return 0;
 	}
 
@@ -154,7 +166,9 @@ PathItem *PathView::addRoute(const Route &route)
 	_rr |= ri->path().boundingRect();
 	_zoom = scale2zoom(contentsScale());
 	ri->setScale(1.0/mapScale(_zoom));
-	ri->setColor(_palette.color());
+	ri->setColor(_palette.nextColor());
+	ri->setWidth(_routeWidth);
+	ri->setStyle(_routeStyle);
 	ri->setVisible(_showRoutes);
 	ri->showWaypoints(_showRouteWaypoints);
 	ri->showWaypointLabels(_showWaypointLabels);
@@ -295,6 +309,17 @@ void PathView::rescale(int zoom)
 		it.value()->setScale(1.0/scale);
 
 	updatePOIVisibility();
+}
+
+void PathView::setPalette(const Palette &palette)
+{
+	_palette = palette;
+	_palette.reset();
+
+	for (int i = 0; i < _tracks.count(); i++)
+		_tracks.at(i)->setColor(_palette.nextColor());
+	for (int i = 0; i < _routes.count(); i++)
+		_routes.at(i)->setColor(_palette.nextColor());
 }
 
 void PathView::setPOI(POI *poi)
@@ -585,6 +610,38 @@ void PathView::setPOIOverlap(bool overlap)
 	updatePOIVisibility();
 }
 
+void PathView::setTrackWidth(int width)
+{
+	_trackWidth = width;
+
+	for (int i = 0; i < _tracks.count(); i++)
+		_tracks.at(i)->setWidth(width);
+}
+
+void PathView::setRouteWidth(int width)
+{
+	_routeWidth = width;
+
+	for (int i = 0; i < _routes.count(); i++)
+		_routes.at(i)->setWidth(width);
+}
+
+void PathView::setTrackStyle(Qt::PenStyle style)
+{
+	_trackStyle = style;
+
+	for (int i = 0; i < _tracks.count(); i++)
+		_tracks.at(i)->setStyle(style);
+}
+
+void PathView::setRouteStyle(Qt::PenStyle style)
+{
+	_routeStyle = style;
+
+	for (int i = 0; i < _routes.count(); i++)
+		_routes.at(i)->setStyle(style);
+}
+
 void PathView::drawBackground(QPainter *painter, const QRectF &rect)
 {
 	if ((_tracks.isEmpty() && _routes.isEmpty() && _waypoints.isEmpty())
@@ -651,4 +708,19 @@ void PathView::paintEvent(QPaintEvent *event)
 		_mapScale->setPos(scenePos);
 
 	QGraphicsView::paintEvent(event);
+}
+
+void PathView::useOpenGL(bool use)
+{
+	if (use) {
+#ifdef Q_OS_WIN32
+		if (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA)
+#endif // Q_OS_WIN32
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+		setViewport(new QGLWidget);
+#else // QT 5
+		setViewport(new QOpenGLWidget);
+#endif // QT 5
+	} else
+		setViewport(new QWidget);
 }

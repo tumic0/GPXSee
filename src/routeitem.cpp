@@ -52,8 +52,6 @@ RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
 
 	_marker->setPos(_path.elementAt(0));
 
-	_pen.setStyle(Qt::DotLine);
-
 	setToolTip(toolTip());
 }
 

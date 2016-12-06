@@ -32,9 +32,11 @@ void SliderInfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 	font.setPixelSize(FONT_SIZE);
 	font.setFamily(FONT_FAMILY);
 	QFontMetrics fm(font);
-	painter->setFont(font);
 
+	painter->setFont(font);
+	painter->setRenderHint(QPainter::Antialiasing, false);
 	painter->setPen(Qt::red);
+
 	if (_side == Right)
 		painter->drawText(SIZE, fm.height() - fm.descent(), _text);
 	else

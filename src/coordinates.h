@@ -26,6 +26,7 @@ public:
 		&& _lat <= 90.0) ? true : false;}
 
 	qreal distanceTo(const Coordinates &c) const;
+	QPair<Coordinates, Coordinates> boundingRect(qreal distance) const;
 
 	QPointF toMercator() const;
 	static Coordinates fromMercator(const QPointF &m);
