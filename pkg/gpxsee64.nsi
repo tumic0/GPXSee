@@ -4,7 +4,7 @@
 ; The name of the installer
 Name "GPXSee"
 ; Program version
-!define VERSION "3.2"
+!define VERSION "3.3"
 
 ; The file to write
 OutFile "GPXSee-${VERSION}_x64.exe"
@@ -138,6 +138,8 @@ Section "QT libs" SEC_QT
   File "Qt5PrintSupport.dll"
   File "Qt5Network.dll"
   File "libGLESv2.dll"
+  File "libEGL.dll"
+  File "D3DCompiler_47.dll"
   File /r "platforms"
   File /r "imageformats"
   File /r "printsupport"
