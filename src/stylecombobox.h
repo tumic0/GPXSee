@@ -11,9 +11,6 @@ public:
 	StyleComboBox(QWidget *parent = 0);
 
 	void setValue(Qt::PenStyle value);
-
-private:
-	void resizeEvent(QResizeEvent *event);
 };
 
 #endif // STYLECOMBOBOX_H

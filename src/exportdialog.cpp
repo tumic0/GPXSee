@@ -22,9 +22,6 @@ ExportDialog::ExportDialog(Export *exp, QWidget *parent)
 {
 	int index;
 
-	_units = QLocale::system().measurementSystem() == QLocale::ImperialSystem ?
-	  QPrinter::Inch : QPrinter::Millimeter;
-
 	_fileSelect = new FileSelectWidget();
 	_fileSelect->setFilter(tr("PDF files (*.pdf);;All files (*)"));
 	_fileSelect->setFile(_export->fileName);
@@ -53,12 +50,12 @@ ExportDialog::ExportDialog(Export *exp, QWidget *parent)
 	_bottomMargin = new QDoubleSpinBox();
 	_leftMargin = new QDoubleSpinBox();
 	_rightMargin = new QDoubleSpinBox();
-	QString us = (_units == QPrinter::Inch) ? tr("in") : tr("mm");
+	QString us = (_export->units == Imperial) ? tr("in") : tr("mm");
 	_topMargin->setSuffix(UNIT_SPACE + us);
 	_bottomMargin->setSuffix(UNIT_SPACE + us);
 	_leftMargin->setSuffix(UNIT_SPACE + us);
 	_rightMargin->setSuffix(UNIT_SPACE + us);
-	if (_units == QPrinter::Inch) {
+	if (_export->units == Imperial) {
 		_topMargin->setValue(_export->margins.top() * MM2IN);
 		_bottomMargin->setValue(_export->margins.bottom() * MM2IN);
 		_leftMargin->setValue(_export->margins.left() * MM2IN);
@@ -169,7 +166,7 @@ void ExportDialog::accept()
 	_export->fileName = _fileSelect->file();
 	_export->paperSize = paperSize;
 	_export->orientation = orientation;
-	if (_units == QPrinter::Inch)
+	if (_export->units == Imperial)
 		_export->margins = MarginsF(_leftMargin->value() / MM2IN,
 		_topMargin->value() / MM2IN, _rightMargin->value() / MM2IN,
 		_bottomMargin->value() / MM2IN);

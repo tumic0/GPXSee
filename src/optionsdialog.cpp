@@ -11,13 +11,13 @@
 #include <QComboBox>
 #include <QSysInfo>
 #include "config.h"
-#include "units.h"
 #include "icons.h"
 #include "colorbox.h"
 #include "stylecombobox.h"
 #include "optionsdialog.h"
 
 #define MENU_MARGIN 20
+#define MENU_ICON_SIZE 32
 
 
 QWidget *OptionsDialog::createAppearancePage()
@@ -43,33 +43,52 @@ QWidget *OptionsDialog::createAppearancePage()
 	_trackWidth->setMinimum(1);
 	_trackStyle = new StyleComboBox();
 	_trackStyle->setValue(_options->trackStyle);
-	QGroupBox *trackBox = new QGroupBox(tr("Tracks"));
 	QFormLayout *trackLayout = new QFormLayout();
-	trackLayout->addRow(tr("Line width:"), _trackWidth);
-	trackLayout->addRow(tr("Line style:"), _trackStyle);
+	trackLayout->addRow(tr("Track width:"), _trackWidth);
+	trackLayout->addRow(tr("Track style:"), _trackStyle);
+#ifndef Q_OS_MAC
+	QGroupBox *trackBox = new QGroupBox(tr("Tracks"));
 	trackBox->setLayout(trackLayout);
+#endif
 
 	_routeWidth = new QSpinBox();
 	_routeWidth->setValue(_options->routeWidth);
 	_routeWidth->setMinimum(1);
 	_routeStyle = new StyleComboBox();
 	_routeStyle->setValue(_options->routeStyle);
-	QGroupBox *routeBox = new QGroupBox(tr("Routes"));
 	QFormLayout *routeLayout = new QFormLayout();
-	routeLayout->addRow(tr("Line width:"), _routeWidth);
-	routeLayout->addRow(tr("Line style:"), _routeStyle);
+	routeLayout->addRow(tr("Route width:"), _routeWidth);
+	routeLayout->addRow(tr("Route style:"), _routeStyle);
+#ifndef Q_OS_MAC
+	QGroupBox *routeBox = new QGroupBox(tr("Routes"));
 	routeBox->setLayout(routeLayout);
+#endif // Q_OS_MAC
 
 	_pathAA = new QCheckBox(tr("Use anti-aliasing"));
 	_pathAA->setChecked(_options->pathAntiAliasing);
+	QFormLayout *pathAALayout = new QFormLayout();
+	pathAALayout->addWidget(_pathAA);
 
 	QWidget *pathTab = new QWidget();
 	QVBoxLayout *pathTabLayout = new QVBoxLayout();
+#ifdef Q_OS_MAC
+	QFrame *l1 = new QFrame();
+	l1->setFrameShape(QFrame::HLine);
+	l1->setFrameShadow(QFrame::Sunken);
+	QFrame *l2 = new QFrame();
+	l2->setFrameShape(QFrame::HLine);
+	l2->setFrameShadow(QFrame::Sunken);
+
+	pathTabLayout->addLayout(trackLayout);
+	pathTabLayout->addWidget(l1);
+	pathTabLayout->addLayout(routeLayout);
+	pathTabLayout->addWidget(l2);
+#else
 	pathTabLayout->addWidget(trackBox);
 	pathTabLayout->addWidget(routeBox);
-	pathTabLayout->addWidget(_pathAA);
+#endif
+	pathTabLayout->addLayout(pathAALayout);
 	pathTab->setLayout(pathTabLayout);
-
 
 	_graphWidth = new QSpinBox();
 	_graphWidth->setValue(_options->graphWidth);
@@ -79,11 +98,14 @@ QWidget *OptionsDialog::createAppearancePage()
 
 	_graphAA = new QCheckBox(tr("Use anti-aliasing"));
 	_graphAA->setChecked(_options->graphAntiAliasing);
+	QFormLayout *graphAALayout = new QFormLayout();
+	graphAALayout->addWidget(_graphAA);
+
 
 	QWidget *graphTab = new QWidget();
 	QVBoxLayout *graphTabLayout = new QVBoxLayout();
 	graphTabLayout->addLayout(graphLayout);
-	graphTabLayout->addWidget(_graphAA);
+	graphTabLayout->addLayout(graphAALayout);
 	graphTabLayout->addStretch();
 	graphTab->setLayout(graphTabLayout);
 
@@ -100,8 +122,13 @@ QWidget *OptionsDialog::createPOIPage()
 	_poiRadius = new QDoubleSpinBox();
 	_poiRadius->setSingleStep(1);
 	_poiRadius->setDecimals(1);
-	_poiRadius->setValue(_options->poiRadius / 1000);
-	_poiRadius->setSuffix(UNIT_SPACE + tr("km"));
+	if (_options->units == Imperial) {
+		_poiRadius->setValue(_options->poiRadius / MIINM);
+		_poiRadius->setSuffix(UNIT_SPACE + tr("mi"));
+	} else {
+		_poiRadius->setValue(_options->poiRadius / KMINM);
+		_poiRadius->setSuffix(UNIT_SPACE + tr("km"));
+	}
 
 	QFormLayout *poiLayout = new QFormLayout();
 	poiLayout->addRow(tr("POI radius:"), _poiRadius);
@@ -118,12 +145,16 @@ QWidget *OptionsDialog::createPOIPage()
 QWidget *OptionsDialog::createSystemPage()
 {
 	_useOpenGL = new QCheckBox(tr("Use OpenGL"));
+#if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
 #ifdef Q_OS_WIN32
-		if (QSysInfo::WindowsVersion < QSysInfo::WV_VISTA) {
-			_useOpenGL->setChecked(false);
-			_useOpenGL->setEnabled(false);
-		} else
+	if (QSysInfo::WindowsVersion < QSysInfo::WV_VISTA) {
 #endif // Q_OS_WIN32
+		_useOpenGL->setChecked(false);
+		_useOpenGL->setEnabled(false);
+#ifdef Q_OS_WIN32
+	} else
+#endif // Q_OS_WIN32
+#endif // Q_OS_WIN32 || Q_OS_MAC
 	_useOpenGL->setChecked(_options->useOpenGL);
 
 	QFormLayout *systemLayout = new QFormLayout();
@@ -147,6 +178,7 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
 	pages->addWidget(createSystemPage());
 
 	QListWidget *menu = new QListWidget();
+	menu->setIconSize(QSize(MENU_ICON_SIZE, MENU_ICON_SIZE));
 	new QListWidgetItem(QIcon(QPixmap(APPEARANCE_ICON)), tr("Appearance"),
 	  menu);
 	new QListWidgetItem(QIcon(QPixmap(POI_ICON)), tr("POI"), menu);
@@ -195,7 +227,10 @@ void OptionsDialog::accept()
 	_options->graphWidth = _graphWidth->value();
 	_options->graphAntiAliasing = _graphAA->isChecked();
 
-	_options->poiRadius = _poiRadius->value() * 1000;
+	if (_options->units == Imperial)
+		_options->poiRadius = _poiRadius->value() * MIINM;
+	else
+		_options->poiRadius = _poiRadius->value() * KMINM;
 
 	_options->useOpenGL = _useOpenGL->isChecked();
 

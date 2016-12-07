@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QPrinter>
 #include "margins.h"
+#include "units.h"
 
 class QComboBox;
 class QRadioButton;
@@ -15,6 +16,8 @@ struct Export {
 	QPrinter::PaperSize paperSize;
 	QPrinter::Orientation orientation;
 	MarginsF margins;
+
+	Units units;
 };
 
 class ExportDialog : public QDialog
@@ -31,7 +34,6 @@ private:
 	bool checkFile();
 
 	Export *_export;
-	QPrinter::Unit _units;
 
 	FileSelectWidget *_fileSelect;
 	QComboBox *_paperSize;

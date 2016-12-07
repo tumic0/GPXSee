@@ -4,7 +4,7 @@
 #include "stylecombobox.h"
 
 
-#define MIN_LINE_LENGTH  50
+#define MIN_LINE_LENGTH  60
 #define LINE_WIDTH_RATIO 7
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(*a))
@@ -40,28 +40,5 @@ void StyleComboBox::setValue(Qt::PenStyle value)
 			setCurrentIndex(i);
 			return;
 		}
-	}
-}
-
-void StyleComboBox::resizeEvent(QResizeEvent *event)
-{
-	QSize is = iconSize();
-	setIconSize(QSize(qMax(event->size().width() - 40, MIN_LINE_LENGTH),
-	  is.height()));
-	is = iconSize();
-
-	for (int i = 0; i < count(); i++) {
-		QPixmap pm(is);
-		pm.fill(Qt::transparent);
-
-		QBrush brush(Qt::black);
-		QPen pen(brush, is.height() / LINE_WIDTH_RATIO,
-		  (Qt::PenStyle) itemData(i).toInt());
-
-		QPainter painter(&pm);
-		painter.setPen(pen);
-		painter.drawLine(0, is.height() / 2, is.width(), is.height() / 2);
-
-		setItemIcon(i, QIcon(pm));
 	}
 }

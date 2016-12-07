@@ -1143,6 +1143,9 @@ void GUI::updatePathView()
 
 void GUI::setUnits(Units units)
 {
+	_export.units = units;
+	_options.units = units;
+
 	_pathView->setUnits(units);
 	for (int i = 0; i <_tabs.count(); i++)
 		_tabs.at(i)->setUnits(units);
@@ -1389,10 +1392,12 @@ void GUI::readSettings()
 
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
 	if (settings.value(UNITS_SETTING, UNITS_DEFAULT).toInt() == Imperial) {
-		setImperialUnits();
+		setUnits(Imperial);
 		_imperialUnitsAction->setChecked(true);
-	} else
+	} else {
+		setUnits(Metric);
 		_metricUnitsAction->setChecked(true);
+	}
 	if (!settings.value(SHOW_TOOLBARS_SETTING, SHOW_TOOLBARS_DEFAULT).toBool())
 		showToolbars(false);
 	else

@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "palette.h"
+#include "units.h"
 
 class ColorBox;
 class StyleComboBox;
@@ -25,6 +26,8 @@ struct Options {
 	int poiRadius;
 	// System
 	bool useOpenGL;
+
+	Units units;
 };
 
 class OptionsDialog : public QDialog

@@ -16,14 +16,14 @@ enum Units {
 #define H2S     0.000277777778  // h -> s
 #define MIN2S   0.016666666667  // min -> s
 
-#define KMINM   1000     // 1 km in m
-#define MIINFT  5280     // 1 mi in ft
+#define KMINM   1000.0   // 1 km in m
+#define MIINFT  5280.0   // 1 mi in ft
 #define MIINM   1609.344 // 1 mi in m
-#define MININS  60       // 1 min in s
-#define HINS    3600     // 1 hins
+#define MININS  60.0     // 1 min in s
+#define HINS    3600.0   // 1 hins
 
-#define C2FS    1.8 // Celsius to Farenheit - scale
-#define C2FO    32  // Celsius to Farenheit - offset
+#define C2FS    1.8  // Celsius to Farenheit - scale
+#define C2FO    32.0 // Celsius to Farenheit - offset
 
 #ifdef Q_OS_WIN32
 #define UNIT_SPACE     QString(" ")

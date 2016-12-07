@@ -89,7 +89,7 @@
 #define GRAPH_AA_SETTING                  "graphAntiAliasing"
 #define GRAPH_AA_DEFAULT                  false
 #define POI_RADIUS_SETTING                "poiRadius"
-#define POI_RADIUS_DEFAULT                1000 /* m */
+#define POI_RADIUS_DEFAULT                (IMPERIAL_UNITS() ? KMINM : MIINM)
 #define USE_OPENGL_SETTING                "useOpenGL"
 #define USE_OPENGL_DEFAULT                false
 
