@@ -11,7 +11,6 @@
 #include <QMessageBox>
 #include <QTabWidget>
 #include <QDoubleSpinBox>
-#include <QLocale>
 #include "fileselectwidget.h"
 #include "units.h"
 #include "exportdialog.h"
