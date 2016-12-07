@@ -55,6 +55,8 @@ public:
 
 	void plot(QPainter *painter, const QRectF &target);
 
+	void useOpenGL(bool use);
+
 signals:
 	void sliderPositionChanged(qreal);
 

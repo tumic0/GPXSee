@@ -7,7 +7,9 @@
 
 InfoItem::InfoItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
-
+#ifndef Q_OS_MAC
+	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
+#endif // Q_OS_MAC
 }
 
 void InfoItem::updateBoundingRect()

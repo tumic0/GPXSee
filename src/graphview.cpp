@@ -3,6 +3,12 @@
 #include <QMouseEvent>
 #include <QPaintEngine>
 #include <QPaintDevice>
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#include <QGLWidget>
+#else // QT 5
+#include <QOpenGLWidget>
+#endif // QT 5
+#include <QSysInfo>
 #include "config.h"
 #include "axisitem.h"
 #include "slideritem.h"
@@ -23,6 +29,8 @@ GraphView::GraphView(QWidget *parent)
 	_scene = new QGraphicsScene();
 	setScene(_scene);
 
+	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+	setRenderHint(QPainter::Antialiasing, true);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -450,4 +458,19 @@ void GraphView::setGraphWidth(int width)
 
 	for (int i = 0; i < _graphs.count(); i++)
 		_graphs.at(i)->setWidth(width);
+}
+
+void GraphView::useOpenGL(bool use)
+{
+	if (use) {
+#ifdef Q_OS_WIN32
+		if (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA)
+#endif // Q_OS_WIN32
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+		setViewport(new QGLWidget);
+#else // QT 5
+		setViewport(new QOpenGLWidget);
+#endif // QT 5
+	} else
+		setViewport(new QWidget);
 }

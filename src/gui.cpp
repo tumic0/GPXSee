@@ -774,8 +774,11 @@ void GUI::openOptions()
 	if (options.poiRadius != _options.poiRadius)
 		_poi->setRadius(options.poiRadius);
 
-	if (options.useOpenGL != _options.useOpenGL)
+	if (options.useOpenGL != _options.useOpenGL) {
 		_pathView->useOpenGL(options.useOpenGL);
+		for (int i = 0; i < _tabs.count(); i++)
+			_tabs.at(i)->useOpenGL(options.useOpenGL);
+	}
 
 	_options = options;
 }
@@ -1541,6 +1544,8 @@ void GUI::readSettings()
 		_tabs.at(i)->setGraphWidth(_options.graphWidth);
 		_tabs.at(i)->setRenderHint(QPainter::Antialiasing,
 		  _options.graphAntiAliasing);
+		if (_options.useOpenGL)
+			_tabs.at(i)->useOpenGL(true);
 	}
 
 	_poi->setRadius(_options.poiRadius);
