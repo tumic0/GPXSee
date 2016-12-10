@@ -4,7 +4,7 @@
 #include <QFileOpenEvent>
 #include <QNetworkProxyFactory>
 #include <QPixmapCache>
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
 #include <QGLFormat>
 #else // QT 5
 #include <QSurfaceFormat>
@@ -27,7 +27,7 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
 	QGLFormat fmt;
 	fmt.setSamples(10);
 	QGLFormat::setDefaultFormat(fmt);
