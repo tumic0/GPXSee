@@ -29,7 +29,7 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
 	QGLFormat fmt;
-	fmt.setSamples(10);
+	fmt.setSamples(4);
 	QGLFormat::setDefaultFormat(fmt);
 #else
 	QSurfaceFormat fmt;
