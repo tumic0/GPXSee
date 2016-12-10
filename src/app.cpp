@@ -6,9 +6,9 @@
 #include <QPixmapCache>
 #if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
 #include <QGLFormat>
-#else // QT 5
+#else // QT 5.4
 #include <QSurfaceFormat>
-#endif // QT 5
+#endif // QT 5.4
 #include "gui.h"
 #include "app.h"
 
@@ -31,11 +31,11 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 	QGLFormat fmt;
 	fmt.setSamples(4);
 	QGLFormat::setDefaultFormat(fmt);
-#else
+#else // QT 5.4
 	QSurfaceFormat fmt;
 	fmt.setSamples(4);
 	QSurfaceFormat::setDefaultFormat(fmt);
-#endif
+#endif // QT 5.4
 
 	QPixmapCache::setCacheLimit(65536);
 

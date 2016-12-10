@@ -718,9 +718,9 @@ void PathView::useOpenGL(bool use)
 #endif // Q_OS_WIN32
 #if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
 		setViewport(new QGLWidget);
-#else // QT 5
+#else // QT 5.4
 		setViewport(new QOpenGLWidget);
-#endif // QT 5
+#endif // QT 5.4
 	} else
 		setViewport(new QWidget);
 }
