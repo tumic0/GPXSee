@@ -3,9 +3,9 @@
 #include <QWheelEvent>
 #if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
 #include <QGLWidget>
-#else // QT 5
+#else // QT 5.4
 #include <QOpenGLWidget>
-#endif // QT 5
+#endif // QT 5.4
 #include <QSysInfo>
 #include "rd.h"
 #include "poi.h"
