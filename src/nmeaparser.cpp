@@ -313,7 +313,7 @@ bool NMEAParser::readGGA(const char *line, int len)
 						return false;
 					break;
 				case 3:
-					if (!readNS(vp, lp - vp, lon))
+					if (!readNS(vp, lp - vp, lat))
 						return false;
 					break;
 				case 4:
