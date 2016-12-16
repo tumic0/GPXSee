@@ -142,6 +142,46 @@ QWidget *OptionsDialog::createPOIPage()
 	return poiPage;
 }
 
+QWidget *OptionsDialog::createExportPage()
+{
+	_name = new QCheckBox(tr("Name"));
+	_name->setChecked(_options->printName);
+	_date = new QCheckBox(tr("Date"));
+	_date->setChecked(_options->printDate);
+	_distance = new QCheckBox(tr("Distance"));
+	_distance->setChecked(_options->printDistance);
+	_time = new QCheckBox(tr("Time"));
+	_time->setChecked(_options->printTime);
+	_itemCount = new QCheckBox(tr("Item count (>1)"));
+	_itemCount->setChecked(_options->printItemCount);
+
+	QFormLayout *headerTabLayout = new QFormLayout();
+	headerTabLayout->addWidget(_name);
+	headerTabLayout->addWidget(_date);
+	headerTabLayout->addWidget(_distance);
+	headerTabLayout->addWidget(_time);
+	headerTabLayout->addItem(new QSpacerItem(10, 10));
+	headerTabLayout->addWidget(_itemCount);
+	QWidget *headerTab = new QWidget();
+	headerTab->setLayout(headerTabLayout);
+
+
+	_separateGraphPage = new QCheckBox(tr("Separate graph page"));
+	_separateGraphPage->setChecked(_options->separateGraphPage);
+
+	QFormLayout *graphTabLayout = new QFormLayout();
+	graphTabLayout->addWidget(_separateGraphPage);
+	QWidget *graphTab = new QWidget();
+	graphTab->setLayout(graphTabLayout);
+
+
+	QTabWidget *exportPage = new QTabWidget();
+	exportPage->addTab(headerTab, tr("Header"));
+	exportPage->addTab(graphTab, tr("Graphs"));
+
+	return exportPage;
+}
+
 QWidget *OptionsDialog::createSystemPage()
 {
 	_useOpenGL = new QCheckBox(tr("Use OpenGL"));
@@ -175,6 +215,7 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
 	QStackedWidget *pages = new QStackedWidget();
 	pages->addWidget(createAppearancePage());
 	pages->addWidget(createPOIPage());
+	pages->addWidget(createExportPage());
 	pages->addWidget(createSystemPage());
 
 	QListWidget *menu = new QListWidget();
@@ -182,6 +223,8 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
 	new QListWidgetItem(QIcon(QPixmap(APPEARANCE_ICON)), tr("Appearance"),
 	  menu);
 	new QListWidgetItem(QIcon(QPixmap(POI_ICON)), tr("POI"), menu);
+	new QListWidgetItem(QIcon(QPixmap(PRINT_EXPORT_ICON)), tr("Print & Export"),
+	  menu);
 	new QListWidgetItem(QIcon(QPixmap(SYSTEM_ICON)), tr("System"), menu);
 
 	QHBoxLayout *contentLayout = new QHBoxLayout();
@@ -233,6 +276,13 @@ void OptionsDialog::accept()
 		_options->poiRadius = _poiRadius->value() * KMINM;
 
 	_options->useOpenGL = _useOpenGL->isChecked();
+
+	_options->printName = _name->isChecked();
+	_options->printDate = _date->isChecked();
+	_options->printDistance = _distance->isChecked();
+	_options->printTime = _time->isChecked();
+	_options->printItemCount = _itemCount->isChecked();
+	_options->separateGraphPage = _separateGraphPage->isChecked();
 
 	QDialog::accept();
 }

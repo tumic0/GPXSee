@@ -26,6 +26,13 @@ struct Options {
 	int poiRadius;
 	// System
 	bool useOpenGL;
+	// Print/Export
+	bool printName;
+	bool printDate;
+	bool printDistance;
+	bool printTime;
+	bool printItemCount;
+	bool separateGraphPage;
 
 	Units units;
 };
@@ -44,6 +51,7 @@ private:
 	QWidget *createAppearancePage();
 	QWidget *createPOIPage();
 	QWidget *createSystemPage();
+	QWidget *createExportPage();
 
 	Options *_options;
 
@@ -58,6 +66,12 @@ private:
 	QCheckBox *_graphAA;
 	QDoubleSpinBox *_poiRadius;
 	QCheckBox *_useOpenGL;
+	QCheckBox *_name;
+	QCheckBox *_date;
+	QCheckBox *_distance;
+	QCheckBox *_time;
+	QCheckBox *_itemCount;
+	QCheckBox *_separateGraphPage;
 };
 
 #endif // OPTIONSDIALOG_H

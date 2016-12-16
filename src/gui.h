@@ -189,6 +189,7 @@ private:
 	qreal _routeDistance;
 	qreal _time;
 	DateRange _dateRange;
+	QString _pathName;
 
 	qreal _sliderPos;
 

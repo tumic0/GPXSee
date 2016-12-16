@@ -668,6 +668,14 @@ bool GUI::loadFile(const QString &fileName)
 
 		_waypointCount += data.waypoints().count();
 
+		if (_pathName.isNull()) {
+			if (data.tracks().count() == 1 && !data.routes().count())
+				_pathName = data.tracks().first()->name();
+			else if (data.routes().count() == 1 && !data.tracks().count())
+				_pathName = data.routes().first()->routeData().name();
+		} else
+			_pathName = QString();
+
 		return true;
 	} else {
 		updateNavigationActions();
@@ -811,7 +819,19 @@ void GUI::plot(QPrinter *printer)
 	qreal d = distance();
 	qreal t = time();
 
-	if (_dateRange.first.isValid()) {
+	if (!_pathName.isNull() && _options.printName)
+		info.insert(tr("Name"), _pathName);
+
+	if (_options.printItemCount) {
+		if (_trackCount > 1)
+			info.insert(tr("Tracks"), QString::number(_trackCount));
+		if (_routeCount > 1)
+			info.insert(tr("Routes"), QString::number(_routeCount));
+		if (_waypointCount > 2)
+			info.insert(tr("Waypoints"), QString::number(_waypointCount));
+	}
+
+	if (_dateRange.first.isValid() && _options.printDate) {
 		if (_dateRange.first == _dateRange.second) {
 			QString format = QLocale::system().dateFormat(QLocale::LongFormat);
 			info.insert(tr("Date"), _dateRange.first.toString(format));
@@ -823,16 +843,9 @@ void GUI::plot(QPrinter *printer)
 		}
 	}
 
-	if (_trackCount > 1)
-		info.insert(tr("Tracks"), QString::number(_trackCount));
-	if (_routeCount > 1)
-		info.insert(tr("Routes"), QString::number(_routeCount));
-	if (_waypointCount > 2)
-		info.insert(tr("Waypoints"), QString::number(_waypointCount));
-
-	if (d > 0)
+	if (d > 0 && _options.printDistance)
 		info.insert(tr("Distance"), Format::distance(d, units));
-	if (t > 0)
+	if (t > 0 && _options.printTime)
 		info.insert(tr("Time"), Format::timeSpan(t));
 
 
@@ -845,7 +858,7 @@ void GUI::plot(QPrinter *printer)
 		mh = ih / 2;
 		info.plot(&p, QRectF(0, 0, printer->width(), ih));
 	}
-	if (_graphTabWidget->isVisible()) {
+	if (_graphTabWidget->isVisible() && !_options.separateGraphPage) {
 		qreal r = (((qreal)(printer)->width()) / (qreal)(printer->height()));
 		gh = (printer->width() > printer->height())
 		  ? 0.15 * r * (printer->height() - ih - 2*mh)
@@ -857,6 +870,27 @@ void GUI::plot(QPrinter *printer)
 		gh = 0;
 	_pathView->plot(&p, QRectF(0, ih + mh, printer->width(), printer->height()
 	  - (ih + 2*mh + gh)));
+
+	if (_graphTabWidget->isVisible() && _options.separateGraphPage) {
+		printer->newPage();
+
+		int cnt = 0;
+		for (int i = 0; i < _tabs.size(); i++)
+			if (_tabs.at(i)->count())
+				cnt++;
+
+		qreal sp = ratio * 20;
+		gh = qMin((printer->height() - ((cnt - 1) * sp))/(qreal)cnt,
+		  0.20 * printer->height());
+
+		qreal y = 0;
+		for (int i = 0; i < _tabs.size(); i++) {
+			if (_tabs.at(i)->count()) {
+				_tabs.at(i)->plot(&p,  QRectF(0, y, printer->width(), gh));
+				y += gh + sp;
+			}
+		}
+	}
 }
 
 void GUI::reloadFile()
@@ -868,6 +902,7 @@ void GUI::reloadFile()
 	_routeDistance = 0;
 	_time = 0;
 	_dateRange = DateRange(QDate(), QDate());
+	_pathName = QString();
 
 	for (int i = 0; i < _tabs.count(); i++)
 		_tabs.at(i)->clear();
@@ -901,6 +936,7 @@ void GUI::closeFiles()
 	_routeDistance = 0;
 	_time = 0;
 	_dateRange = DateRange(QDate(), QDate());
+	_pathName = QString();
 
 	_sliderPos = 0;
 
@@ -1378,6 +1414,19 @@ void GUI::writeSettings()
 		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
 	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
 		settings.setValue(USE_OPENGL_SETTING, _options.useOpenGL);
+	if (_options.printName != PRINT_NAME_DEFAULT)
+		settings.setValue(PRINT_NAME_SETTING, _options.printName);
+	if (_options.printDate != PRINT_DATE_DEFAULT)
+		settings.setValue(PRINT_DATE_SETTING, _options.printDate);
+	if (_options.printDistance != PRINT_DISTANCE_DEFAULT)
+		settings.setValue(PRINT_DISTANCE_SETTING, _options.printDistance);
+	if (_options.printTime != PRINT_TIME_DEFAULT)
+		settings.setValue(PRINT_TIME_SETTING, _options.printTime);
+	if (_options.printItemCount != PRINT_ITEM_COUNT_DEFAULT)
+		settings.setValue(PRINT_ITEM_COUNT_SETTING, _options.printItemCount);
+	if (_options.separateGraphPage != SEPARATE_GRAPH_PAGE_DEFAULT)
+		settings.setValue(SEPARATE_GRAPH_PAGE_SETTING,
+		  _options.separateGraphPage);
 	settings.endGroup();
 }
 
@@ -1534,6 +1583,18 @@ void GUI::readSettings()
 	  .toInt();
 	_options.useOpenGL = settings.value(USE_OPENGL_SETTING, USE_OPENGL_DEFAULT)
 	  .toBool();
+	_options.printName = settings.value(PRINT_NAME_SETTING, PRINT_NAME_DEFAULT)
+	  .toBool();
+	_options.printDate = settings.value(PRINT_DATE_SETTING, PRINT_DATE_DEFAULT)
+	  .toBool();
+	_options.printDistance = settings.value(PRINT_DISTANCE_SETTING,
+	  PRINT_DISTANCE_DEFAULT).toBool();
+	_options.printTime = settings.value(PRINT_TIME_SETTING, PRINT_TIME_DEFAULT)
+	  .toBool();
+	_options.printItemCount = settings.value(PRINT_ITEM_COUNT_SETTING,
+	  PRINT_ITEM_COUNT_DEFAULT).toBool();
+	_options.separateGraphPage = settings.value(SEPARATE_GRAPH_PAGE_SETTING,
+	  SEPARATE_GRAPH_PAGE_DEFAULT).toBool();
 
 	_pathView->setPalette(_options.palette);
 	_pathView->setTrackWidth(_options.trackWidth);

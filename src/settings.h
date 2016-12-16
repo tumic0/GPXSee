@@ -92,5 +92,17 @@
 #define POI_RADIUS_DEFAULT                (IMPERIAL_UNITS() ? MIINM : KMINM)
 #define USE_OPENGL_SETTING                "useOpenGL"
 #define USE_OPENGL_DEFAULT                false
+#define PRINT_NAME_SETTING                "printName"
+#define PRINT_NAME_DEFAULT                true
+#define PRINT_DATE_SETTING                "printDate"
+#define PRINT_DATE_DEFAULT                true
+#define PRINT_DISTANCE_SETTING            "printDistance"
+#define PRINT_DISTANCE_DEFAULT            true
+#define PRINT_TIME_SETTING                "printTime"
+#define PRINT_TIME_DEFAULT                true
+#define PRINT_ITEM_COUNT_SETTING          "printItemCount"
+#define PRINT_ITEM_COUNT_DEFAULT          true
+#define SEPARATE_GRAPH_PAGE_SETTING       "separateGraphPage"
+#define SEPARATE_GRAPH_PAGE_DEFAULT       false
 
 #endif // SETTINGS_H

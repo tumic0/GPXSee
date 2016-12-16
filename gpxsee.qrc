@@ -18,6 +18,7 @@
         <file>icons/preferences-desktop-display.png</file>
         <file>icons/flag_48.png</file>
         <file>icons/system-run.png</file>
+        <file>icons/document-print-preview.png</file>
         <file>lang/gpxsee_cs.qm</file>
     </qresource>
 </RCC>
