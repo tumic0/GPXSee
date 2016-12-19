@@ -185,16 +185,12 @@ QWidget *OptionsDialog::createExportPage()
 QWidget *OptionsDialog::createSystemPage()
 {
 	_useOpenGL = new QCheckBox(tr("Use OpenGL"));
-#if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
 #ifdef Q_OS_WIN32
 	if (QSysInfo::WindowsVersion < QSysInfo::WV_VISTA) {
-#endif // Q_OS_WIN32
 		_useOpenGL->setChecked(false);
 		_useOpenGL->setEnabled(false);
-#ifdef Q_OS_WIN32
 	} else
 #endif // Q_OS_WIN32
-#endif // Q_OS_WIN32 || Q_OS_MAC
 	_useOpenGL->setChecked(_options->useOpenGL);
 
 	QFormLayout *systemLayout = new QFormLayout();

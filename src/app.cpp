@@ -4,11 +4,7 @@
 #include <QFileOpenEvent>
 #include <QNetworkProxyFactory>
 #include <QPixmapCache>
-#if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
-#include <QGLFormat>
-#else // QT 5.4
-#include <QSurfaceFormat>
-#endif // QT 5.4
+#include "opengl.h"
 #include "gui.h"
 #include "app.h"
 
@@ -26,18 +22,8 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 #endif // Q_OS_MAC
 
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
-
-#if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
-	QGLFormat fmt;
-	fmt.setSamples(4);
-	QGLFormat::setDefaultFormat(fmt);
-#else // QT 5.4
-	QSurfaceFormat fmt;
-	fmt.setSamples(4);
-	QSurfaceFormat::setDefaultFormat(fmt);
-#endif // QT 5.4
-
 	QPixmapCache::setCacheLimit(65536);
+	OPENGL_SET_SAMPLES(4);
 
 	_gui = new GUI();
 }

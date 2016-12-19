@@ -1,12 +1,8 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QWheelEvent>
-#if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
-#include <QGLWidget>
-#else // QT 5.4
-#include <QOpenGLWidget>
-#endif // QT 5.4
 #include <QSysInfo>
+#include "opengl.h"
 #include "rd.h"
 #include "poi.h"
 #include "data.h"
@@ -716,11 +712,7 @@ void PathView::useOpenGL(bool use)
 #ifdef Q_OS_WIN32
 		if (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA)
 #endif // Q_OS_WIN32
-#if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
-		setViewport(new QGLWidget);
-#else // QT 5.4
-		setViewport(new QOpenGLWidget);
-#endif // QT 5.4
+	setViewport(new OPENGL_WIDGET);
 	} else
 		setViewport(new QWidget);
 }
