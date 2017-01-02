@@ -22,7 +22,7 @@
 GraphView::GraphView(QWidget *parent)
 	: QGraphicsView(parent)
 {
-	_scene = new QGraphicsScene();
+	_scene = new QGraphicsScene(this);
 	setScene(_scene);
 
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
