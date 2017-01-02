@@ -712,7 +712,7 @@ void PathView::useOpenGL(bool use)
 #ifdef Q_OS_WIN32
 		if (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA)
 #endif // Q_OS_WIN32
-	setViewport(new OPENGL_WIDGET);
+		setViewport(new OPENGL_WIDGET);
 	} else
 		setViewport(new QWidget);
 }

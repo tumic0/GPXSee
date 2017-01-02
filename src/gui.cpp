@@ -135,8 +135,15 @@ void GUI::loadPOIs()
 	else
 		list = globalDir.entryInfoList(QStringList(), QDir::Files);
 
-	for (int i = 0; i < list.size(); ++i)
-		_poi->loadFile(list.at(i).absoluteFilePath());
+	for (int i = 0; i < list.size(); ++i) {
+		if (!_poi->loadFile(list.at(i).absoluteFilePath())) {
+			fprintf(stderr, "Error loading POI file: %s: %s\n",
+			  qPrintable(list.at(i).fileName()),
+			  qPrintable(_poi->errorString()));
+			if (_poi->errorLine())
+				fprintf(stderr, "Line: %d\n", _poi->errorLine());
+		}
+	}
 }
 
 void GUI::createMapActions()
