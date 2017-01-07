@@ -16,7 +16,7 @@
 static qreal zoom2resolution(int zoom, qreal y)
 {
 	return (WGS84_RADIUS * 2 * M_PI / Tile::size()
-	  * cos(2 * atan(exp(deg2rad(y))) - M_PI/2)) / pow(2.0, zoom);
+	  * cos(2 * atan(exp(deg2rad(y))) - M_PI/2)) / (qreal)(1<<zoom);
 }
 
 ScaleItem::ScaleItem(QGraphicsItem *parent) : QGraphicsItem(parent)

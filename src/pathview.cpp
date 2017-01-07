@@ -23,8 +23,8 @@ static QPoint mercator2tile(const QPointF &m, int z)
 {
 	QPoint tile;
 
-	tile.setX((int)(floor((m.x() + 180.0) / 360.0 * pow(2.0, z))));
-	tile.setY((int)(floor((1.0 - (m.y() / 180.0)) / 2.0 * pow(2.0, z))));
+	tile.setX((int)(floor((m.x() + 180.0) / 360.0 * (1<<z))));
+	tile.setY((int)(floor((1.0 - (m.y() / 180.0)) / 2.0 * (1<<z))));
 
 	return tile;
 }
@@ -33,8 +33,8 @@ static QPointF tile2mercator(const QPoint &tile, int z)
 {
 	Coordinates m;
 
-	m.setLon(tile.x() / pow(2.0, z) * 360.0 - 180);
-	qreal n = M_PI - 2.0 * M_PI * tile.y() / pow(2.0, z);
+	m.setLon(tile.x() / (qreal)(1<<z) * 360.0 - 180.0);
+	qreal n = M_PI - 2.0 * M_PI * tile.y() / (qreal)(1<<z);
 	m.setLat(rad2deg(atan(0.5 * (exp(n) - exp(-n)))));
 
 	return m.toMercator();
