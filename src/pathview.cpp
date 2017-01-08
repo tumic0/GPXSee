@@ -184,21 +184,13 @@ void PathView::addWaypoints(const QList<Waypoint> &waypoints)
 		const Waypoint &w = waypoints.at(i);
 
 		WaypointItem *wi = new WaypointItem(w);
+		_waypoints.append(wi);
+		updateWaypointsBoundingRect(wi->coordinates());
 		wi->setScale(1.0/scale);
 		wi->setZValue(1);
 		wi->showLabel(_showWaypointLabels);
 		wi->setVisible(_showWaypoints);
 		_scene->addItem(wi);
-
-		if (_wr.isNull()) {
-			if (_wp.isNull())
-				_wp = wi->coordinates();
-			else
-				_wr = qrectf(_wp, wi->coordinates());
-		} else
-			unite(_wr, wi->coordinates());
-
-		_waypoints.append(wi);
 	}
 
 	if (_poi)
@@ -239,9 +231,24 @@ QList<PathItem *> PathView::loadData(const Data &data)
 	return paths;
 }
 
+void PathView::updateWaypointsBoundingRect(const QPointF &wp)
+{
+	if (_wr.isNull()) {
+		if (_wp.isNull())
+			_wp = wp;
+		else {
+			_wr = qrectf(_wp, wp);
+			_wp = QPointF();
+		}
+	} else
+		unite(_wr, wp);
+}
+
 qreal PathView::contentsScale() const
 {
 	QRectF br = _tr | _rr | _wr;
+	if (!br.isNull() && !_wp.isNull())
+		unite(br, _wp);
 
 	if (br.isNull())
 		return mapScale(ZOOM_MAX);
@@ -255,14 +262,16 @@ qreal PathView::contentsScale() const
 QRectF PathView::contentsSceneRect() const
 {
 	qreal scale = mapScale(_zoom);
-	QRectF br = scaled(_tr | _rr | _wr, 1.0/scale);
+	QRectF br = _tr | _rr | _wr;
+	if (!br.isNull() && !_wp.isNull())
+		unite(br, _wp);
 
 	if (br.isNull())
 		return QRectF(QPointF(_wp.x() / scale - Tile::size()/2,
 		  _wp.y() /scale - Tile::size()/2), QSizeF(Tile::size(), Tile::size()));
 	else
-		return br.adjusted(-Tile::size(), -Tile::size(), Tile::size(),
-		  Tile::size());
+		return scaled(br, 1.0/scale).adjusted(-Tile::size(), -Tile::size(),
+		  Tile::size(), Tile::size());
 }
 
 void PathView::updatePOIVisibility()

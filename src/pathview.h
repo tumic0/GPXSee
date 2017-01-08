@@ -78,6 +78,7 @@ private:
 	void rescale();
 	void zoom(int z, const QPoint &pos);
 	void updatePOIVisibility();
+	void updateWaypointsBoundingRect(const QPointF &wp);
 
 	void mouseDoubleClickEvent(QMouseEvent *event);
 	void wheelEvent(QWheelEvent *event);
