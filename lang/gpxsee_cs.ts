@@ -863,17 +863,17 @@
 <context>
     <name>RouteItem</name>
     <message>
-        <location filename="../src/routeitem.cpp" line="15"/>
+        <location filename="../src/routeitem.cpp" line="14"/>
         <source>Name</source>
         <translation>Název</translation>
     </message>
     <message>
-        <location filename="../src/routeitem.cpp" line="17"/>
+        <location filename="../src/routeitem.cpp" line="16"/>
         <source>Description</source>
         <translation>Popis</translation>
     </message>
     <message>
-        <location filename="../src/routeitem.cpp" line="18"/>
+        <location filename="../src/routeitem.cpp" line="17"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
@@ -967,27 +967,27 @@
 <context>
     <name>TrackItem</name>
     <message>
-        <location filename="../src/trackitem.cpp" line="14"/>
+        <location filename="../src/trackitem.cpp" line="13"/>
         <source>Name</source>
         <translation>Název</translation>
     </message>
     <message>
-        <location filename="../src/trackitem.cpp" line="16"/>
+        <location filename="../src/trackitem.cpp" line="15"/>
         <source>Description</source>
         <translation>Popis</translation>
     </message>
     <message>
-        <location filename="../src/trackitem.cpp" line="17"/>
+        <location filename="../src/trackitem.cpp" line="16"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
     <message>
-        <location filename="../src/trackitem.cpp" line="20"/>
+        <location filename="../src/trackitem.cpp" line="18"/>
         <source>Time</source>
         <translation>Čas</translation>
     </message>
     <message>
-        <location filename="../src/trackitem.cpp" line="23"/>
+        <location filename="../src/trackitem.cpp" line="20"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>

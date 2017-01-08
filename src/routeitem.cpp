@@ -1,4 +1,3 @@
-#include <QApplication>
 #include <QPainter>
 #include "format.h"
 #include "waypoint.h"
@@ -12,11 +11,10 @@ QString RouteItem::toolTip()
 	ToolTip tt;
 
 	if (!_name.isEmpty())
-		tt.insert(qApp->translate("RouteItem", "Name"), _name);
+		tt.insert(tr("Name"), _name);
 	if (!_desc.isEmpty())
-		tt.insert(qApp->translate("RouteItem", "Description"), _desc);
-	tt.insert(qApp->translate("RouteItem", "Distance"),
-	  Format::distance(_distance.last(), _units));
+		tt.insert(tr("Description"), _desc);
+	tt.insert(tr("Distance"), Format::distance(_distance.last(), _units));
 
 	return tt.toString();
 }
