@@ -1,4 +1,3 @@
-#include <QCursor>
 #include <QPainter>
 #include "format.h"
 #include "tooltip.h"

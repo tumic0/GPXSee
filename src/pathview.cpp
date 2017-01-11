@@ -31,13 +31,12 @@ static QPoint mercator2tile(const QPointF &m, int z)
 
 static QPointF tile2mercator(const QPoint &tile, int z)
 {
-	Coordinates m;
+	QPointF m;
 
-	m.setLon(tile.x() / (qreal)(1<<z) * 360.0 - 180.0);
-	qreal n = M_PI - 2.0 * M_PI * tile.y() / (qreal)(1<<z);
-	m.setLat(rad2deg(atan(0.5 * (exp(n) - exp(-n)))));
+	m.setX(((360.0 * tile.x()) / (qreal)(1<<z)) - 180.0);
+	m.setY((1.0 - (2.0 * tile.y()) / (qreal)(1<<z)) * 180.0);
 
-	return m.toMercator();
+	return m;
 }
 
 static int scale2zoom(qreal scale)
@@ -660,15 +659,13 @@ void PathView::drawBackground(QPainter *painter, const QRectF &rect)
 	QPoint tile = mercator2tile(QPointF(rr.topLeft().x(), -rr.topLeft().y()),
 	  _zoom);
 	QPointF tm = tile2mercator(tile, _zoom);
-	QPoint tl = mapToScene(mapFromScene(QPointF(tm.x() / scale,
-	  -tm.y() / scale))).toPoint();
+	QPoint tl = QPoint((int)(tm.x() / scale), (int)(-tm.y() / scale));
+
 
 	QList<Tile> tiles;
-	for (int i = 0; i <= rr.size().width() / Tile::size() + 1; i++) {
-		for (int j = 0; j <= rr.size().height() / Tile::size() + 1; j++) {
+	for (int i = 0; i <= rr.size().width() / Tile::size() + 1; i++)
+		for (int j = 0; j <= rr.size().height() / Tile::size() + 1; j++)
 			tiles.append(Tile(QPoint(tile.x() + i, tile.y() + j), _zoom));
-		}
-	}
 
 	_map->loadTiles(tiles, _plot);
 
