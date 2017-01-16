@@ -657,8 +657,9 @@ void PathView::drawBackground(QPainter *painter, const QRectF &rect)
 
 
 	QList<Tile> tiles;
-	for (int i = 0; i <= ceil(rr.size().width() / Tile::size()); i++)
-		for (int j = 0; j <= ceil(rr.size().height() / Tile::size()); j++)
+	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
+	for (int i = 0; i < ceil(s.width() / Tile::size()); i++)
+		for (int j = 0; j < ceil(s.height() / Tile::size()); j++)
 			tiles.append(Tile(QPoint(tile.x() + i, tile.y() + j), _zoom));
 
 	_map->loadTiles(tiles, _plot);
