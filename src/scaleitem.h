@@ -13,8 +13,7 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-	void setZoom(int z);
-	void setZoom(int z, qreal lat);
+	void setResolution(qreal res);
 	void setUnits(enum Units units);
 
 private:
@@ -22,8 +21,7 @@ private:
 	void computeScale();
 	QString units() const;
 
-	int _zoom;
-	qreal _lat;
+	qreal _res;
 	qreal _width;
 	qreal _length;
 	Units _units;

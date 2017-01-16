@@ -1,8 +1,5 @@
 #include <QPainter>
 #include "config.h"
-#include "rd.h"
-#include "wgs84.h"
-#include "tile.h"
 #include "misc.h"
 #include "scaleitem.h"
 
@@ -13,17 +10,11 @@
 #define SEGMENTS       3
 #define PADDING        4
 
-static qreal zoom2resolution(int zoom, qreal y)
-{
-	return (WGS84_RADIUS * 2 * M_PI / Tile::size()
-	  * cos(2.0 * atan(exp(deg2rad(y))) - M_PI/2)) / (qreal)(1<<zoom);
-}
 
 ScaleItem::ScaleItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
 	_units = Metric;
-	_zoom = 0;
-	_lat = 0;
+	_res = 1.0;
 
 #ifndef Q_OS_MAC
 	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
@@ -96,45 +87,33 @@ QString ScaleItem::units() const
 
 void ScaleItem::computeScale()
 {
-	qreal res = zoom2resolution(_zoom, _lat);
-
 	if (_units == Imperial) {
-		_length = niceNum((res * M2FT * SCALE_WIDTH) / SEGMENTS, 1);
+		_length = niceNum((_res * M2FT * SCALE_WIDTH) / SEGMENTS, 1);
 		if (_length >= MIINFT) {
-			_length = niceNum((res * M2FT * FT2MI * SCALE_WIDTH) / SEGMENTS, 1);
-			_width = (_length / (res * M2FT * FT2MI));
+			_length = niceNum((_res * M2FT * FT2MI * SCALE_WIDTH) / SEGMENTS, 1);
+			_width = (_length / (_res * M2FT * FT2MI));
 			_scale = true;
 		} else {
-			_width = (_length / (res * M2FT));
+			_width = (_length / (_res * M2FT));
 			_scale = false;
 		}
 	} else {
-		_length = niceNum((res * SCALE_WIDTH) / SEGMENTS, 1);
+		_length = niceNum((_res * SCALE_WIDTH) / SEGMENTS, 1);
 		if (_length >= KMINM) {
 			_length *= M2KM;
-			_width = (_length / (res * M2KM));
+			_width = (_length / (_res * M2KM));
 			_scale = true;
 		} else {
-			_width = (_length / res);
+			_width = (_length / _res);
 			_scale = false;
 		}
 	}
 }
 
-void ScaleItem::setZoom(int z, qreal lat)
+void ScaleItem::setResolution(qreal res)
 {
 	prepareGeometryChange();
-	_zoom = z;
-	_lat = lat;
-	computeScale();
-	updateBoundingRect();
-	update();
-}
-
-void ScaleItem::setZoom(int z)
-{
-	prepareGeometryChange();
-	_zoom = z;
+	_res = res;
 	computeScale();
 	updateBoundingRect();
 	update();

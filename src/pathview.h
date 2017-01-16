@@ -73,9 +73,8 @@ private:
 	void clearPOI();
 
 	qreal contentsScale() const;
-	QRectF contentsSceneRect() const;
+	QPointF contentsCenter() const;
 	void rescale(int zoom);
-	void rescale();
 	void zoom(int z, const QPoint &pos);
 	void updatePOIVisibility();
 	void updateWaypointsBoundingRect(const QPointF &wp);
@@ -86,6 +85,7 @@ private:
 	void drawBackground(QPainter *painter, const QRectF &rect);
 	void resizeEvent(QResizeEvent *event);
 	void paintEvent(QPaintEvent *event);
+	void scrollContentsBy(int dx, int dy);
 
 	QGraphicsScene *_scene;
 	ScaleItem *_mapScale;
@@ -97,6 +97,7 @@ private:
 	int _zoom;
 	QRectF _tr, _rr, _wr;
 	QPointF _wp;
+	qreal _res;
 
 	Map *_map;
 	POI *_poi;
