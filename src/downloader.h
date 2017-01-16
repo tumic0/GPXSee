@@ -39,11 +39,28 @@ private slots:
 	void downloadFinished(QNetworkReply *reply);
 
 private:
+	class Redirect
+	{
+	public:
+		Redirect() : _level(0) {}
+		Redirect(const QUrl &origin, int level) :
+		  _origin(origin), _level(level) {}
+
+		const QUrl &origin() const {return _origin;}
+		int level() const {return _level;}
+
+		bool isNull() const {return (_level == 0);}
+
+	private:
+		QUrl _origin;
+		int _level;
+	};
+
 	Downloader();
 	Downloader(Downloader const&);
 	void operator=(Downloader const&);
 
-	bool doDownload(const Download &dl, const QUrl &origin = QUrl());
+	bool doDownload(const Download &dl, const Redirect &redirect = Redirect());
 	bool saveToDisk(const QString &filename, QIODevice *data);
 
 	QNetworkAccessManager _manager;

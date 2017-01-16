@@ -17,8 +17,13 @@
 #define USER_AGENT \
 	APP_NAME "/" APP_VERSION " (" PLATFORM_STR "; Qt " QT_VERSION_STR ")"
 
-#define ATTR_FILE   QNetworkRequest::User
-#define ATTR_ORIGIN (QNetworkRequest::Attribute)(QNetworkRequest::User + 1)
+#define ATTR_REDIRECT QNetworkRequest::RedirectionTargetAttribute
+#define ATTR_FILE     QNetworkRequest::User
+#define ATTR_ORIGIN   (QNetworkRequest::Attribute)(QNetworkRequest::User + 1)
+#define ATTR_LEVEL    (QNetworkRequest::Attribute)(QNetworkRequest::User + 2)
+
+#define MAX_REDIRECT_LEVEL 5
+
 
 Downloader::Downloader()
 {
@@ -26,7 +31,7 @@ Downloader::Downloader()
 			SLOT(downloadFinished(QNetworkReply*)));
 }
 
-bool Downloader::doDownload(const Download &dl, const QUrl &origin)
+bool Downloader::doDownload(const Download &dl, const Redirect &redirect)
 {
 	QUrl url(dl.url());
 
@@ -37,8 +42,10 @@ bool Downloader::doDownload(const Download &dl, const QUrl &origin)
 
 	QNetworkRequest request(url);
 	request.setAttribute(ATTR_FILE, QVariant(dl.file()));
-	if (!origin.isEmpty())
-		request.setAttribute(ATTR_ORIGIN, QVariant(origin));
+	if (!redirect.isNull()) {
+		request.setAttribute(ATTR_ORIGIN, QVariant(redirect.origin()));
+		request.setAttribute(ATTR_LEVEL, QVariant(redirect.level()));
+	}
 	request.setRawHeader("User-Agent", USER_AGENT);
 	QNetworkReply *reply = _manager.get(request);
 
@@ -80,15 +87,23 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 			  qPrintable(reply->errorString()));
 		}
 	} else {
-		QUrl redirect = reply->attribute(
-		  QNetworkRequest::RedirectionTargetAttribute).toUrl();
+		QUrl location = reply->attribute(ATTR_REDIRECT).toUrl();
 		QString filename = reply->request().attribute(ATTR_FILE)
 		  .toString();
 
-		if (!redirect.isEmpty()) {
+		if (!location.isEmpty()) {
 			QUrl origin = reply->request().attribute(ATTR_ORIGIN).toUrl();
-			Download dl(redirect, filename);
-			doDownload(dl, origin.isEmpty() ? url : origin);
+			int level = reply->request().attribute(ATTR_LEVEL).toInt();
+
+			if (level >= MAX_REDIRECT_LEVEL)
+				fprintf(stderr, "Error downloading map tile: %s: "
+				  "redirect level limit reached\n",
+				  origin.toEncoded().constData());
+			else {
+				Redirect redirect(origin.isEmpty() ? url : origin, level++);
+				Download dl(location, filename);
+				doDownload(dl, redirect);
+			}
 		} else
 			if (!saveToDisk(filename, reply))
 				_errorDownloads.insert(url);
