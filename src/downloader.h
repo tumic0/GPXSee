@@ -5,7 +5,7 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QUrl>
-#include <QList>
+#include <QMap>
 #include <QSet>
 
 
@@ -43,11 +43,11 @@ private:
 	Downloader(Downloader const&);
 	void operator=(Downloader const&);
 
-	bool doDownload(const Download &dl);
+	bool doDownload(const Download &dl, const QUrl &origin = QUrl());
 	bool saveToDisk(const QString &filename, QIODevice *data);
 
 	QNetworkAccessManager _manager;
-	QList<QNetworkReply *> _currentDownloads;
+	QMap<QUrl, QNetworkReply *> _currentDownloads;
 	QSet<QUrl> _errorDownloads;
 };
 
