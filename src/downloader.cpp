@@ -95,12 +95,17 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 			QUrl origin = reply->request().attribute(ATTR_ORIGIN).toUrl();
 			int level = reply->request().attribute(ATTR_LEVEL).toInt();
 
-			if (level >= MAX_REDIRECT_LEVEL)
+			if (location == url) {
+				_errorDownloads.insert(url);
+				fprintf(stderr, "Error downloading map tile: %s: "
+				  "redirect loop\n", url.toEncoded().constData());
+			} else if (level >= MAX_REDIRECT_LEVEL) {
+				_errorDownloads.insert(origin);
 				fprintf(stderr, "Error downloading map tile: %s: "
 				  "redirect level limit reached\n",
 				  origin.toEncoded().constData());
-			else {
-				Redirect redirect(origin.isEmpty() ? url : origin, level++);
+			} else {
+				Redirect redirect(origin.isEmpty() ? url : origin, level + 1);
 				Download dl(location, filename);
 				doDownload(dl, redirect);
 			}
