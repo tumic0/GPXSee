@@ -57,6 +57,11 @@ qreal mapScale(int zoom)
 	return ((360.0/(qreal)(1<<zoom))/(qreal)Tile::size());
 }
 
+static QRectF mapBounds()
+{
+	return QRectF(QPointF(-180, -180), QSizeF(360, 360));
+}
+
 static qreal zoom2resolution(int zoom, qreal y)
 {
 	return (WGS84_RADIUS * 2 * M_PI / Tile::size()
@@ -119,6 +124,8 @@ PathView::PathView(QWidget *parent)
 	_routeStyle = Qt::DashLine;
 
 	_plot = false;
+
+	_scene->setSceneRect(scaled(mapBounds(), 1.0 / mapScale(_zoom)));
 }
 
 PathView::~PathView()
@@ -219,11 +226,8 @@ QList<PathItem *> PathView::loadData(const Data &data)
 
 	if (_zoom < zoom)
 		rescale(_zoom);
-	else {
-		_scene->setSceneRect(scaled(QRectF(QPointF(-180, -180),
-		  QSizeF(360, 360)), 1.0 / mapScale(_zoom)));
+	else
 		updatePOIVisibility();
-	}
 
 	QPointF center = contentsCenter();
 	centerOn(center);
@@ -304,8 +308,7 @@ void PathView::rescale(int zoom)
 	_zoom = zoom;
 	qreal scale = mapScale(zoom);
 
-	_scene->setSceneRect(scaled(QRectF(QPointF(-180, -180), QSizeF(360, 360)),
-	  1.0 / scale));
+	_scene->setSceneRect(scaled(mapBounds(), 1.0 / scale));
 
 	for (int i = 0; i < _tracks.size(); i++)
 		_tracks.at(i)->setScale(1.0/scale);
