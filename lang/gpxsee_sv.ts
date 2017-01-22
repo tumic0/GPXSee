@@ -478,7 +478,6 @@
         <translation>
             <numerusform>%n soubor</numerusform>
             <numerusform>%n soubory</numerusform>
-            <numerusform>%n souborů</numerusform>
         </translation>
     </message>
     <message>
@@ -881,22 +880,22 @@
 <context>
     <name>ScaleItem</name>
     <message>
-        <location filename="../src/scaleitem.cpp" line="90"/>
+        <location filename="../src/scaleitem.cpp" line="81"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
     <message>
-        <location filename="../src/scaleitem.cpp" line="91"/>
+        <location filename="../src/scaleitem.cpp" line="82"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
     <message>
-        <location filename="../src/scaleitem.cpp" line="93"/>
+        <location filename="../src/scaleitem.cpp" line="84"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="../src/scaleitem.cpp" line="94"/>
+        <location filename="../src/scaleitem.cpp" line="85"/>
         <source>m</source>
         <translation>m</translation>
     </message>
@@ -967,27 +966,27 @@
 <context>
     <name>TrackItem</name>
     <message>
-        <location filename="../src/trackitem.cpp" line="13"/>
+        <location filename="../src/trackitem.cpp" line="12"/>
         <source>Name</source>
         <translation>Namn</translation>
     </message>
     <message>
-        <location filename="../src/trackitem.cpp" line="15"/>
+        <location filename="../src/trackitem.cpp" line="14"/>
         <source>Description</source>
         <translation>Beskrivning</translation>
     </message>
     <message>
-        <location filename="../src/trackitem.cpp" line="16"/>
+        <location filename="../src/trackitem.cpp" line="15"/>
         <source>Distance</source>
         <translation>Avstånd</translation>
     </message>
     <message>
-        <location filename="../src/trackitem.cpp" line="18"/>
+        <location filename="../src/trackitem.cpp" line="17"/>
         <source>Time</source>
         <translation>Tid</translation>
     </message>
     <message>
-        <location filename="../src/trackitem.cpp" line="20"/>
+        <location filename="../src/trackitem.cpp" line="19"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
