@@ -536,7 +536,7 @@ void PathView::clear()
 	_tr = QRectF(); _rr = QRectF(); _wr = QRectF();
 	_wp = QPointF();
 
-	_scene->setSceneRect(QRectF());
+	_scene->setSceneRect(scaled(mapBounds(), 1.0 / mapScale(_zoom)));
 }
 
 void PathView::showTracks(bool show)
