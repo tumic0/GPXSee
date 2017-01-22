@@ -132,7 +132,8 @@ SOURCES += src/main.cpp \
     src/colorbox.cpp \
     src/stylecombobox.cpp
 RESOURCES += gpxsee.qrc
-TRANSLATIONS = lang/gpxsee_cs.ts
+TRANSLATIONS = lang/gpxsee_cs.ts \
+    lang/gpxsee_sv.ts
 macx {
     ICON = icons/gpxsee.icns
     QMAKE_INFO_PLIST = Info.plist
