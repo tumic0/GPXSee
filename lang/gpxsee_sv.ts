@@ -431,6 +431,14 @@
         <source>Previous map</source>
         <translation>Föregående karta</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../src/gui.cpp" line="1064"/>
+        <source>%n files</source>
+        <translation>
+            <numerusform>%n filer</numerusform>
+            <numerusform>%n filer</numerusform>
+        </translation>
+    </message>
     <message>
         <location filename="../src/gui.cpp" line="103"/>
         <source>GPX files (*.gpx)</source>
@@ -471,14 +479,6 @@
         <location filename="../src/gui.cpp" line="1060"/>
         <source>No GPX files loaded</source>
         <translation>Inga GPX-filer inlästa</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../src/gui.cpp" line="1064"/>
-        <source>%n files</source>
-        <translation>
-            <numerusform>%n soubor</numerusform>
-            <numerusform>%n soubory</numerusform>
-        </translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="571"/>
