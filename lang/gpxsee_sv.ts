@@ -434,7 +434,7 @@
     <message>
         <location filename="../src/gui.cpp" line="1060"/>
         <source>No files loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Inga filer inlästa</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/gui.cpp" line="1064"/>
