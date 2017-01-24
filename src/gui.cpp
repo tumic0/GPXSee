@@ -1057,7 +1057,7 @@ void GUI::clearMapCache()
 void GUI::updateStatusBarInfo()
 {
 	if (_files.count() == 0)
-		_fileNameLabel->setText(tr("No GPX files loaded"));
+		_fileNameLabel->setText(tr("No files loaded"));
 	else if (_files.count() == 1)
 		_fileNameLabel->setText(_files.at(0));
 	else

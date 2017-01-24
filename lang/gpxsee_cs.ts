@@ -282,7 +282,7 @@
     <message>
         <location filename="../src/gui.cpp" line="262"/>
         <source>Show POI labels</source>
-        <translation>Zobrazovat názvy POI</translation>
+        <translation>Zobrazit názvy POI</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="267"/>
@@ -329,7 +329,7 @@
     <message>
         <location filename="../src/gui.cpp" line="325"/>
         <source>Show graphs</source>
-        <translation>Zobrazovat grafy</translation>
+        <translation>Zobrazit grafy</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="347"/>
@@ -432,6 +432,11 @@
         <translation>Předchozí mapa</translation>
     </message>
     <message>
+        <location filename="../src/gui.cpp" line="1060"/>
+        <source>No files loaded</source>
+        <translation>Nejsou načteny žádné soubory</translation>
+    </message>
+    <message>
         <location filename="../src/gui.cpp" line="103"/>
         <source>GPX files (*.gpx)</source>
         <translation>Soubory GPX (*.gpx)</translation>
@@ -466,11 +471,6 @@
         <location filename="../src/gui.cpp" line="836"/>
         <source>Routes</source>
         <translation>Trasy</translation>
-    </message>
-    <message>
-        <location filename="../src/gui.cpp" line="1060"/>
-        <source>No GPX files loaded</source>
-        <translation>Nejsou načteny žádné GPX soubory</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/gui.cpp" line="1064"/>

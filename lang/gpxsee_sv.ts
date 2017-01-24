@@ -431,6 +431,11 @@
         <source>Previous map</source>
         <translation>Föregående karta</translation>
     </message>
+    <message>
+        <location filename="../src/gui.cpp" line="1060"/>
+        <source>No files loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
         <location filename="../src/gui.cpp" line="1064"/>
         <source>%n files</source>
@@ -474,11 +479,6 @@
         <location filename="../src/gui.cpp" line="836"/>
         <source>Routes</source>
         <translation>Rutter</translation>
-    </message>
-    <message>
-        <location filename="../src/gui.cpp" line="1060"/>
-        <source>No GPX files loaded</source>
-        <translation>Inga GPX-filer inlästa</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="571"/>
