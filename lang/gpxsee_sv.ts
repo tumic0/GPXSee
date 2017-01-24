@@ -324,7 +324,7 @@
     <message>
         <location filename="../src/gui.cpp" line="314"/>
         <source>Waypoint labels</source>
-        <translation>Vägpunktnamn</translation>
+        <translation>Vägpunktsnamn</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="325"/>
@@ -548,7 +548,7 @@
     <message>
         <location filename="../src/gui.cpp" line="606"/>
         <source>To make GPXSee load a POI file automatically on startup, add the file to the following directory:</source>
-        <translation>För att GPXSee skall läsa in en POI-fdil automatiskt vid programstart, läggs filen i följande mapp:</translation>
+        <translation>För att GPXSee skall läsa in en POI-fil automatiskt vid programstart, läggs filen i följande mapp:</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="694"/>
@@ -713,7 +713,7 @@
     <message>
         <location filename="../src/optionsdialog.cpp" line="60"/>
         <source>Route width:</source>
-        <translation>Rutttjocklek:</translation>
+        <translation>Ruttjocklek:</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="61"/>
