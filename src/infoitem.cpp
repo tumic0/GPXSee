@@ -78,6 +78,7 @@ void InfoItem::insert(const QString &key, const QString &value)
 		_list[i] = kv;
 
 	updateBoundingRect();
+	update();
 }
 
 void InfoItem::clear()
