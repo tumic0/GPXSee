@@ -100,6 +100,8 @@
 #define PRINT_DISTANCE_DEFAULT            true
 #define PRINT_TIME_SETTING                "printTime"
 #define PRINT_TIME_DEFAULT                true
+#define PRINT_MOVING_TIME_SETTING         "printMovingTime"
+#define PRINT_MOVING_TIME_DEFAULT         false
 #define PRINT_ITEM_COUNT_SETTING          "printItemCount"
 #define PRINT_ITEM_COUNT_DEFAULT          true
 #define SEPARATE_GRAPH_PAGE_SETTING       "separateGraphPage"

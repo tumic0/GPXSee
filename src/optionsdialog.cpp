@@ -152,6 +152,8 @@ QWidget *OptionsDialog::createExportPage()
 	_distance->setChecked(_options->printDistance);
 	_time = new QCheckBox(tr("Time"));
 	_time->setChecked(_options->printTime);
+	_movingTime = new QCheckBox(tr("Moving Time"));
+	_movingTime->setChecked(_options->printMovingTime);
 	_itemCount = new QCheckBox(tr("Item count (>1)"));
 	_itemCount->setChecked(_options->printItemCount);
 
@@ -160,6 +162,7 @@ QWidget *OptionsDialog::createExportPage()
 	headerTabLayout->addWidget(_date);
 	headerTabLayout->addWidget(_distance);
 	headerTabLayout->addWidget(_time);
+	headerTabLayout->addWidget(_movingTime);
 	headerTabLayout->addItem(new QSpacerItem(10, 10));
 	headerTabLayout->addWidget(_itemCount);
 	QWidget *headerTab = new QWidget();
@@ -277,6 +280,7 @@ void OptionsDialog::accept()
 	_options->printDate = _date->isChecked();
 	_options->printDistance = _distance->isChecked();
 	_options->printTime = _time->isChecked();
+	_options->printMovingTime = _movingTime->isChecked();
 	_options->printItemCount = _itemCount->isChecked();
 	_options->separateGraphPage = _separateGraphPage->isChecked();
 

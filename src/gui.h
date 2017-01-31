@@ -102,11 +102,13 @@ private:
 	void updateGraphTabs();
 	void updatePathView();
 
+	Units units() const;
 	void setUnits(Units units);
 	void setGraphType(GraphType type);
 
 	qreal distance() const;
 	qreal time() const;
+	qreal movingTime() const;
 	int mapIndex(const QString &name);
 	void readSettings();
 	void writeSettings();
@@ -188,6 +190,7 @@ private:
 	qreal _trackDistance;
 	qreal _routeDistance;
 	qreal _time;
+	qreal _movingTime;
 	DateRange _dateRange;
 	QString _pathName;
 

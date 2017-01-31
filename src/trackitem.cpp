@@ -15,6 +15,8 @@ QString TrackItem::toolTip()
 	tt.insert(tr("Distance"), Format::distance(_distance.last(), _units));
 	if  (_time > 0)
 		tt.insert(tr("Time"), Format::timeSpan(_time));
+	if  (_movingTime > 0)
+		tt.insert(tr("Moving Time"), Format::timeSpan(_movingTime));
 	if (!_date.isNull())
 		tt.insert(tr("Date"), _date.toString(Qt::SystemLocaleShortDate));
 
@@ -45,6 +47,7 @@ TrackItem::TrackItem(const Track &track, QGraphicsItem *parent)
 	_desc = track.description();
 	_date = track.date();
 	_time = track.time();
+	_movingTime = track.movingTime();
 
 	_marker->setPos(_path.elementAt(0));
 

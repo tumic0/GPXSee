@@ -23,6 +23,7 @@ private:
 	QString _desc;
 	QDateTime _date;
 	qreal _time;
+	qreal _movingTime;
 };
 
 #endif // TRACKITEM_H

@@ -31,6 +31,7 @@ struct Options {
 	bool printDate;
 	bool printDistance;
 	bool printTime;
+	bool printMovingTime;
 	bool printItemCount;
 	bool separateGraphPage;
 
@@ -70,6 +71,7 @@ private:
 	QCheckBox *_date;
 	QCheckBox *_distance;
 	QCheckBox *_time;
+	QCheckBox *_movingTime;
 	QCheckBox *_itemCount;
 	QCheckBox *_separateGraphPage;
 };

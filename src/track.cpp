@@ -9,6 +9,9 @@
 #define WINDOW_CF 3
 #define WINDOW_PF 3
 
+#define PAUSE_SPEED     0.5
+#define PAUSE_TIME_DIFF 10
+
 
 static qreal median(QVector<qreal> v)
 {
@@ -43,29 +46,30 @@ static QSet<int> eliminate(const QVector<qreal> &v, int window)
 	return rm;
 }
 
-static Graph filter(const Graph &v, int window)
+static Graph filter(const Graph &g, int window)
 {
 	qreal acc = 0;
 	Graph ret;
 
-	if (v.size() < window)
+	if (g.size() < window)
 		return ret;
 
 	for (int i = 0; i < window; i++)
-		acc += v.at(i).y();
+		acc += g.at(i).y();
 	for (int i = 0; i <= window/2; i++)
-		ret.append(GraphPoint(v.at(i).s(), v.at(i).t(), acc/window));
+		ret.append(GraphPoint(g.at(i).s(), g.at(i).t(), acc/window));
 
-	for (int i = window/2 + 1; i < v.size() - window/2; i++) {
-		acc += v.at(i + window/2).y() - v.at(i - (window/2 + 1)).y();
-		ret.append(GraphPoint(v.at(i).s(), v.at(i).t(), acc/window));
+	for (int i = window/2 + 1; i < g.size() - window/2; i++) {
+		acc += g.at(i + window/2).y() - g.at(i - (window/2 + 1)).y();
+		ret.append(GraphPoint(g.at(i).s(), g.at(i).t(), acc/window));
 	}
 
-	for (int i = v.size() - window/2; i < v.size(); i++)
-		ret.append(GraphPoint(v.at(i).s(), v.at(i).t(), acc/window));
+	for (int i = g.size() - window/2; i < g.size(); i++)
+		ret.append(GraphPoint(g.at(i).s(), g.at(i).t(), acc/window));
 
 	return ret;
 }
+
 
 Track::Track(const TrackData &data) : _data(data)
 {
@@ -98,13 +102,28 @@ Track::Track(const TrackData &data) : _data(data)
 		}
 	}
 
+	_pause = 0;
+	for (int i = 1; i < data.count(); i++) {
+		if (_time.at(i) > _time.at(i-1) + PAUSE_TIME_DIFF
+		  && _speed.at(i) < PAUSE_SPEED) {
+			_pause += _time.at(i) - _time.at(i-1);
+			_stop.insert(i-1);
+			_stop.insert(i);
+		}
+	}
+
 	_outliers = eliminate(_speed, WINDOW_OE);
+
+	QSet<int>::const_iterator it;
+	for (it = _stop.constBegin(); it != _stop.constEnd(); ++it)
+		_outliers.remove(*it);
 
 	total = 0;
 	for (int i = 0; i < _data.size(); i++) {
 		if (_outliers.contains(i))
 			continue;
-		total += _distance.at(i);
+		if (!discardStopPoint(i))
+			total += _distance.at(i);
 		_distance[i] = total;
 	}
 }
@@ -112,9 +131,6 @@ Track::Track(const TrackData &data) : _data(data)
 Graph Track::elevation() const
 {
 	Graph raw;
-
-	if (!_data.size())
-		return raw;
 
 	for (int i = 0; i < _data.size(); i++)
 		if (_data.at(i).hasElevation() && !_outliers.contains(i))
@@ -126,14 +142,16 @@ Graph Track::elevation() const
 
 Graph Track::speed() const
 {
-	Graph raw;
+	Graph raw, filtered;
 	qreal v;
-
-	if (!_data.size())
-		return raw;
+	QSet<int> stop;
 
 	for (int i = 0; i < _data.size(); i++) {
-		if (_data.at(i).hasSpeed() && !_outliers.contains(i))
+		if (_stop.contains(i) && (!std::isnan(_speed.at(i))
+		  || _data.at(i).hasSpeed())) {
+			v = 0;
+			stop.insert(raw.size());
+		} else if (_data.at(i).hasSpeed() && !_outliers.contains(i))
 			v = _data.at(i).speed();
 		else if (!std::isnan(_speed.at(i)) && !_outliers.contains(i))
 			v = _speed.at(i);
@@ -143,15 +161,18 @@ Graph Track::speed() const
 		raw.append(GraphPoint(_distance.at(i), _time.at(i), v));
 	}
 
-	return filter(raw, WINDOW_SF);
+	filtered = filter(raw, WINDOW_SF);
+
+	QSet<int>::const_iterator it;
+	for (it = stop.constBegin(); it != stop.constEnd(); ++it)
+		filtered[*it].setY(0);
+
+	return filtered;
 }
 
 Graph Track::heartRate() const
 {
 	Graph raw;
-
-	if (!_data.size())
-		return raw;
 
 	for (int i = 0; i < _data.count(); i++)
 		if (_data.at(i).hasHeartRate() && !_outliers.contains(i))
@@ -175,26 +196,56 @@ Graph Track::temperature() const
 
 Graph Track::cadence() const
 {
-	Graph raw;
+	Graph raw, filtered;
+	QSet<int> stop;
+	qreal c;
 
-	for (int i = 0; i < _data.size(); i++)
-		if (_data.at(i).hasCadence() && !_outliers.contains(i))
-			raw.append(GraphPoint(_distance.at(i), _time.at(i),
-			  _data.at(i).cadence()));
+	for (int i = 0; i < _data.size(); i++) {
+		if (_data.at(i).hasCadence() && _stop.contains(i)) {
+			c = 0;
+			stop.insert(raw.size());
+		} else if (_data.at(i).hasCadence() && !_outliers.contains(i))
+			c = _data.at(i).cadence();
+		else
+			continue;
 
-	return filter(raw, WINDOW_CF);
+		raw.append(GraphPoint(_distance.at(i), _time.at(i), c));
+	}
+
+	filtered = filter(raw, WINDOW_CF);
+
+	QSet<int>::const_iterator it;
+	for (it = stop.constBegin(); it != stop.constEnd(); ++it)
+		filtered[*it].setY(0);
+
+	return filtered;
 }
 
 Graph Track::power() const
 {
-	Graph raw;
+	Graph raw, filtered;
+	QSet<int> stop;
+	qreal p;
 
-	for (int i = 0; i < _data.size(); i++)
-		if (_data.at(i).hasPower() && !_outliers.contains(i))
-			raw.append(GraphPoint(_distance.at(i), _time.at(i),
-			  _data.at(i).power()));
+	for (int i = 0; i < _data.size(); i++) {
+		if (_data.at(i).hasPower() && _stop.contains(i)) {
+			p = 0;
+			stop.insert(raw.size());
+		} else if (_data.at(i).hasPower() && !_outliers.contains(i))
+			p = _data.at(i).power();
+		else
+			continue;
 
-	return filter(raw, WINDOW_PF);
+		raw.append(GraphPoint(_distance.at(i), _time.at(i), p));
+	}
+
+	filtered = filter(raw, WINDOW_PF);
+
+	QSet<int>::const_iterator it;
+	for (it = stop.constBegin(); it != stop.constEnd(); ++it)
+		filtered[*it].setY(0);
+
+	return filtered;
 }
 
 qreal Track::distance() const
@@ -208,6 +259,11 @@ qreal Track::time() const
 	  (_data.first().timestamp().msecsTo(_data.last().timestamp()) / 1000.0);
 }
 
+qreal Track::movingTime() const
+{
+	return (time() - _pause);
+}
+
 QDateTime Track::date() const
 {
 	return (_data.size()) ? _data.first().timestamp() : QDateTime();
@@ -218,8 +274,14 @@ Path Track::path() const
 	Path ret;
 
 	for (int i = 0; i < _data.size(); i++)
-		if (!_outliers.contains(i))
+		if (!_outliers.contains(i) && !discardStopPoint(i))
 			ret.append(PathPoint(_data.at(i).coordinates(), _distance.at(i)));
 
 	return ret;
+}
+
+bool Track::discardStopPoint(int i) const
+{
+	return (_stop.contains(i) && i > 0 && _stop.contains(i-1)
+	  && i < _data.size() - 1 && _stop.contains(i+1));
 }

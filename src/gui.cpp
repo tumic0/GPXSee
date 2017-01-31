@@ -78,6 +78,7 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 	_trackDistance = 0;
 	_routeDistance = 0;
 	_time = 0;
+	_movingTime = 0;
 
 	_sliderPos = 0;
 
@@ -661,6 +662,7 @@ bool GUI::loadFile(const QString &fileName)
 		for (int i = 0; i < data.tracks().count(); i++) {
 			_trackDistance += data.tracks().at(i)->distance();
 			_time += data.tracks().at(i)->time();
+			_movingTime += data.tracks().at(i)->movingTime();
 			const QDate &date = data.tracks().at(i)->date().date();
 			if (_dateRange.first.isNull() || _dateRange.first > date)
 				_dateRange.first = date;
@@ -822,9 +824,9 @@ void GUI::plot(QPrinter *printer)
 	QPainter p(printer);
 	TrackInfo info;
 	qreal ih, gh, mh, ratio;
-	Units units = _imperialUnitsAction->isChecked() ? Imperial : Metric;
 	qreal d = distance();
 	qreal t = time();
+	qreal tm = movingTime();
 
 	if (!_pathName.isNull() && _options.printName)
 		info.insert(tr("Name"), _pathName);
@@ -851,9 +853,11 @@ void GUI::plot(QPrinter *printer)
 	}
 
 	if (d > 0 && _options.printDistance)
-		info.insert(tr("Distance"), Format::distance(d, units));
+		info.insert(tr("Distance"), Format::distance(d, units()));
 	if (t > 0 && _options.printTime)
 		info.insert(tr("Time"), Format::timeSpan(t));
+	if (tm > 0 && _options.printMovingTime)
+		info.insert(tr("Moving Time"), Format::timeSpan(tm));
 
 
 	ratio = p.paintEngine()->paintDevice()->logicalDpiX() / SCREEN_DPI;
@@ -908,6 +912,7 @@ void GUI::reloadFile()
 	_trackDistance = 0;
 	_routeDistance = 0;
 	_time = 0;
+	_movingTime = 0;
 	_dateRange = DateRange(QDate(), QDate());
 	_pathName = QString();
 
@@ -942,6 +947,7 @@ void GUI::closeFiles()
 	_trackDistance = 0;
 	_routeDistance = 0;
 	_time = 0;
+	_movingTime = 0;
 	_dateRange = DateRange(QDate(), QDate());
 	_pathName = QString();
 
@@ -1063,18 +1069,20 @@ void GUI::updateStatusBarInfo()
 	else
 		_fileNameLabel->setText(tr("%n files", "", _files.count()));
 
-	qreal d = distance();
-	Units units = _imperialUnitsAction->isChecked() ? Imperial : Metric;
-	if (d > 0)
-		_distanceLabel->setText(Format::distance(distance(), units));
+	if (distance() > 0)
+		_distanceLabel->setText(Format::distance(distance(), units()));
 	else
 		_distanceLabel->clear();
 
-	qreal t = time();
-	if (t > 0)
+	if (time() > 0)
 		_timeLabel->setText(Format::timeSpan(time()));
 	else
 		_timeLabel->clear();
+
+	if (movingTime() > 0)
+		_timeLabel->setToolTip(Format::timeSpan(movingTime()));
+	else
+		_timeLabel->setToolTip(QString());
 }
 
 void GUI::updateWindowTitle()
@@ -1429,6 +1437,8 @@ void GUI::writeSettings()
 		settings.setValue(PRINT_DISTANCE_SETTING, _options.printDistance);
 	if (_options.printTime != PRINT_TIME_DEFAULT)
 		settings.setValue(PRINT_TIME_SETTING, _options.printTime);
+	if (_options.printMovingTime != PRINT_MOVING_TIME_DEFAULT)
+		settings.setValue(PRINT_MOVING_TIME_SETTING, _options.printMovingTime);
 	if (_options.printItemCount != PRINT_ITEM_COUNT_DEFAULT)
 		settings.setValue(PRINT_ITEM_COUNT_SETTING, _options.printItemCount);
 	if (_options.separateGraphPage != SEPARATE_GRAPH_PAGE_DEFAULT)
@@ -1598,6 +1608,8 @@ void GUI::readSettings()
 	  PRINT_DISTANCE_DEFAULT).toBool();
 	_options.printTime = settings.value(PRINT_TIME_SETTING, PRINT_TIME_DEFAULT)
 	  .toBool();
+	_options.printMovingTime = settings.value(PRINT_MOVING_TIME_SETTING,
+	  PRINT_MOVING_TIME_DEFAULT).toBool();
 	_options.printItemCount = settings.value(PRINT_ITEM_COUNT_SETTING,
 	  PRINT_ITEM_COUNT_DEFAULT).toBool();
 	_options.separateGraphPage = settings.value(SEPARATE_GRAPH_PAGE_SETTING,
@@ -1635,6 +1647,11 @@ int GUI::mapIndex(const QString &name)
 	return 0;
 }
 
+Units GUI::units() const
+{
+	return _imperialUnitsAction->isChecked() ? Imperial : Metric;
+}
+
 qreal GUI::distance() const
 {
 	qreal dist = 0;
@@ -1650,4 +1667,9 @@ qreal GUI::distance() const
 qreal GUI::time() const
 {
 	return (_showTracksAction->isChecked()) ? _time : 0;
+}
+
+qreal GUI::movingTime() const
+{
+	return (_showTracksAction->isChecked()) ? _movingTime : 0;
 }
