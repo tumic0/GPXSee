@@ -64,6 +64,7 @@ QPair<Coordinates, Coordinates> Coordinates::boundingRect(qreal distance) const
 		maxLon = MAX_LON;
 	}
 
-	return QPair<Coordinates, Coordinates>(Coordinates(rad2deg(minLon),
-	  rad2deg(minLat)), Coordinates(rad2deg(maxLon), rad2deg(maxLat)));
+	return QPair<Coordinates, Coordinates>(Coordinates(rad2deg(qMin(minLon,
+	  maxLon)), rad2deg(qMin(minLat, maxLat))), Coordinates(rad2deg(qMax(minLon,
+	  maxLon)), rad2deg(qMax(minLat, maxLat))));
 }
