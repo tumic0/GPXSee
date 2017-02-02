@@ -545,15 +545,13 @@ void GUI::about()
 	QMessageBox msgBox(this);
 
 	msgBox.setWindowTitle(tr("About GPXSee"));
-	msgBox.setText(QString("<h2>") + QString(APP_NAME) + QString("</h2><p>")
-	  + QString("<p>") + tr("Version ") + APP_VERSION + QString(" (")
-	  + CPU_ARCH + QString(", Qt ") + QString(QT_VERSION_STR)
-	  + QString(")</p>"));
-	msgBox.setInformativeText(QString("<table width=\"300\"><tr><td>")
+	msgBox.setText("<h2>" + QString(APP_NAME) + "</h2><p><p>" + tr("Version ")
+	  + APP_VERSION + " (" + CPU_ARCH + ", Qt " + QT_VERSION_STR + ")</p>");
+	msgBox.setInformativeText("<table width=\"300\"><tr><td>"
 	  + tr("GPXSee is distributed under the terms of the GNU General Public "
 	  "License version 3. For more info about GPXSee visit the project "
-	  "homepage at ") + QString("<a href=\"" APP_HOMEPAGE "\">" APP_HOMEPAGE
-	  "</a>.</td></tr></table>"));
+	  "homepage at ") + "<a href=\"" + APP_HOMEPAGE + "\">" + APP_HOMEPAGE
+	  + "</a>.</td></tr></table>");
 
 	QIcon icon = msgBox.windowIcon();
 	QSize size = icon.actualSize(QSize(64, 64));
@@ -567,20 +565,20 @@ void GUI::keys()
 	QMessageBox msgBox(this);
 
 	msgBox.setWindowTitle(tr("Keyboard controls"));
-	msgBox.setText(QString("<h3>") + tr("Keyboard controls") + QString("</h3>"));
+	msgBox.setText("<h3>" + tr("Keyboard controls") + "</h3>");
 	msgBox.setInformativeText(
-	  QString("<div><table width=\"300\"><tr><td>") + tr("Next file")
-	  + QString("</td><td><i>SPACE</i></td></tr><tr><td>") + tr("Previous file")
-	  + QString("</td><td><i>BACKSPACE</i></td></tr><tr><td>")
-	  + tr("First file") + QString("</td><td><i>HOME</i></td></tr><tr><td>")
-	  + tr("Last file") + QString("</td><td><i>END</i></td></tr><tr><td>")
-	  + tr("Append modifier") + QString("</td><td><i>SHIFT</i></td></tr>"
-	  "<tr><td></td><td></td></tr><tr><td>")
-	  + tr("Next map") + QString("</td><td><i>")
-	  + _nextMapAction->shortcut().toString() + QString("</i></td></tr><tr><td>")
-	  + tr("Previous map") + QString("</td><td><i>")
-	  + _prevMapAction->shortcut().toString() + QString("</i></td></tr>"
-	  "</table></div>"));
+	  "<div><table width=\"300\"><tr><td>" + tr("Next file")
+	  + "</td><td><i>" + QKeySequence(NEXT_KEY).toString()
+	  + "</i></td></tr><tr><td>" + tr("Previous file")
+	  + "</td><td><i>" + QKeySequence(PREV_KEY).toString()
+	  + "</i></td></tr><tr><td>" + tr("First file") + "</td><td><i>"
+	  + QKeySequence(FIRST_KEY).toString() + "</i></td></tr><tr><td>"
+	  + tr("Last file") + "</td><td><i>" + QKeySequence(LAST_KEY).toString()
+	  + "</i></td></tr><tr><td>" + tr("Append modifier")
+	  + "</td><td><i>SHIFT</i></td></tr><tr><td></td><td></td></tr><tr><td>"
+	  + tr("Next map") + "</td><td><i>" + NEXT_MAP_SHORTCUT.toString()
+	  + "</i></td></tr><tr><td>" + tr("Previous map") + "</td><td><i>"
+	  + PREV_MAP_SHORTCUT.toString() + "</i></td></tr></table></div>");
 
 	msgBox.exec();
 }
@@ -590,23 +588,23 @@ void GUI::dataSources()
 	QMessageBox msgBox(this);
 
 	msgBox.setWindowTitle(tr("Data sources"));
-	msgBox.setText(QString("<h3>") + tr("Data sources") + QString("</h3>"));
+	msgBox.setText("<h3>" + tr("Data sources") + "</h3>");
 	msgBox.setInformativeText(
-	  QString("<h4>") + tr("Map sources") + QString("</h4><p>")
+	  "<h4>" + tr("Map sources") + "</h4><p>"
 	  + tr("Map (tiles) source URLs are read on program startup from the "
 		"following file:")
-		+ QString("</p><p><code>") + USER_MAP_FILE + QString("</code></p><p>")
+		+ "</p><p><code>" + USER_MAP_FILE + "</code></p><p>"
 		+ tr("The file format is one map entry per line, consisting of the map "
 		  "name and tiles URL delimited by a TAB character. The tile X and Y "
 		  "coordinates are replaced with $x and $y in the URL and the zoom "
 		  "level is replaced with $z. An example map file could look like:")
-		+ QString("</p><p><code>Map1	http://tile.server.com/map/$z/$x/$y.png"
-		  "<br/>Map2	http://mapserver.org/map/$z-$x-$y</code></p>")
+		+ "</p><p><code>Map1	http://tile.server.com/map/$z/$x/$y.png"
+		  "<br/>Map2	http://mapserver.org/map/$z-$x-$y</code></p>"
 
-	  + QString("<h4>") + tr("POIs") + QString("</h4><p>")
+	  + "<h4>" + tr("POIs") + "</h4><p>"
 	  + tr("To make GPXSee load a POI file automatically on startup, add "
 		"the file to the following directory:")
-		+ QString("</p><p><code>") + USER_POI_DIR + QString("</code></p>")
+		+ "</p><p><code>" + USER_POI_DIR + "</code></p>"
 	);
 
 	msgBox.exec();
@@ -1088,8 +1086,7 @@ void GUI::updateStatusBarInfo()
 void GUI::updateWindowTitle()
 {
 	if (_files.count() == 1)
-		setWindowTitle(QFileInfo(_files.at(0)).fileName()
-		  + QString(" - " APP_NAME));
+		setWindowTitle(QFileInfo(_files.at(0)).fileName() + " - " + APP_NAME);
 	else
 		setWindowTitle(APP_NAME);
 }

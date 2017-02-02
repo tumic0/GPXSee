@@ -10,15 +10,15 @@
 #define LAST_KEY                Qt::Key_End
 #define MODIFIER                Qt::ShiftModifier
 
-#define QUIT_SHORTCUT           QKeySequence::Quit
-#define OPEN_SHORTCUT           QKeySequence::Open
-#define CLOSE_SHORTCUT          QKeySequence::Close
-#define RELOAD_SHORTCUT         QKeySequence::Refresh
+#define QUIT_SHORTCUT           QKeySequence(QKeySequence::Quit)
+#define OPEN_SHORTCUT           QKeySequence(QKeySequence::Open)
+#define CLOSE_SHORTCUT          QKeySequence(QKeySequence::Close)
+#define RELOAD_SHORTCUT         QKeySequence(QKeySequence::Refresh)
 #define EXPORT_SHORTCUT         QKeySequence(Qt::CTRL + Qt::Key_E)
 #define SHOW_POI_SHORTCUT       QKeySequence(Qt::CTRL + Qt::Key_P)
 #define SHOW_MAP_SHORTCUT       QKeySequence(Qt::CTRL + Qt::Key_M)
-#define NEXT_MAP_SHORTCUT       QKeySequence::Forward
-#define PREV_MAP_SHORTCUT       QKeySequence::Back
+#define NEXT_MAP_SHORTCUT       QKeySequence(QKeySequence::Forward)
+#define PREV_MAP_SHORTCUT       QKeySequence(QKeySequence::Back)
 #define SHOW_GRAPHS_SHORTCUT    QKeySequence(Qt::CTRL + Qt::Key_G)
 #define DISTANCE_GRAPH_SHORTCUT QKeySequence(Qt::CTRL + Qt::Key_D)
 #define TIME_GRAPH_SHORTCUT     QKeySequence(Qt::CTRL + Qt::Key_T)
