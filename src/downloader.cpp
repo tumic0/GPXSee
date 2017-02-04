@@ -1,5 +1,7 @@
 #include <QFile>
 #include <QFileInfo>
+#include <QSslSocket>
+#include <QSslConfiguration>
 #include "config.h"
 #include "downloader.h"
 
@@ -46,6 +48,12 @@ bool Downloader::doDownload(const Download &dl, const Redirect &redirect)
 		request.setAttribute(ATTR_ORIGIN, QVariant(redirect.origin()));
 		request.setAttribute(ATTR_LEVEL, QVariant(redirect.level()));
 	}
+	if (url.toString().startsWith("https://"))
+        {
+            QSslConfiguration configSsl = QSslConfiguration::defaultConfiguration();
+            configSsl.setProtocol(QSsl::AnyProtocol);
+            request.setSslConfiguration(configSsl);
+        }
 	request.setRawHeader("User-Agent", USER_AGENT);
 	QNetworkReply *reply = _manager.get(request);
 
