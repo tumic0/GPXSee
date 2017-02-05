@@ -18,6 +18,7 @@ class QTabWidget;
 class QActionGroup;
 class QAction;
 class QLabel;
+class FlipLabel;
 class QSignalMapper;
 class QPrinter;
 class FileBrowser;
@@ -171,7 +172,7 @@ private:
 
 	QLabel *_fileNameLabel;
 	QLabel *_distanceLabel;
-	QLabel *_timeLabel;
+	FlipLabel *_timeLabel;
 
 	PathView *_pathView;
 	QTabWidget *_graphTabWidget;

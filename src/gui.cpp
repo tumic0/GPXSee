@@ -40,6 +40,7 @@
 #include "cpuarch.h"
 #include "graphtab.h"
 #include "format.h"
+#include "fliplabel.h"
 #include "gui.h"
 
 
@@ -530,7 +531,7 @@ void GUI::createStatusBar()
 {
 	_fileNameLabel = new QLabel();
 	_distanceLabel = new QLabel();
-	_timeLabel = new QLabel();
+	_timeLabel = new FlipLabel();
 	_distanceLabel->setAlignment(Qt::AlignHCenter);
 	_timeLabel->setAlignment(Qt::AlignHCenter);
 
@@ -1072,15 +1073,12 @@ void GUI::updateStatusBarInfo()
 	else
 		_distanceLabel->clear();
 
-	if (time() > 0)
-		_timeLabel->setText(Format::timeSpan(time()));
-	else
+	if (time() > 0) {
+		_timeLabel->addItem(tr("Total time"), Format::timeSpan(time()));
+		_timeLabel->addItem(tr("Moving time"), Format::timeSpan(movingTime())
+		  + "<sub>M</sub>");
+	} else
 		_timeLabel->clear();
-
-	if (movingTime() > 0)
-		_timeLabel->setToolTip(Format::timeSpan(movingTime()));
-	else
-		_timeLabel->setToolTip(QString());
 }
 
 void GUI::updateWindowTitle()
