@@ -1074,8 +1074,8 @@ void GUI::updateStatusBarInfo()
 		_distanceLabel->clear();
 
 	if (time() > 0) {
-		_timeLabel->addItem(tr("Total time"), Format::timeSpan(time()));
-		_timeLabel->addItem(tr("Moving time"), Format::timeSpan(movingTime())
+		_timeLabel->addItem(tr("Total Time"), Format::timeSpan(time()));
+		_timeLabel->addItem(tr("Moving Time"), Format::timeSpan(movingTime())
 		  + "<sub>M</sub>");
 	} else
 		_timeLabel->clear();
