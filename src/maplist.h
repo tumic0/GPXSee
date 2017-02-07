@@ -6,12 +6,16 @@
 #include <QObject>
 
 class Map;
+class Downloader;
 
 class MapList
 {
 public:
-	static QList<Map*> load(QObject *parent = 0,
-	  const QString &fileName = QString());
+	MapList(Downloader *downloader) : _downloader(downloader) {}
+	QList<Map*> load(const QString &fileName, QObject *parent = 0);
+
+private:
+	Downloader *_downloader;
 };
 
 #endif // MAPLIST_H

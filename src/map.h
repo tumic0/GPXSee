@@ -3,13 +3,15 @@
 
 #include "tile.h"
 
+class Downloader;
+
 class Map : public QObject
 {
 	Q_OBJECT
 
 public:
-	Map(QObject *parent = 0, const QString &name = QString(),
-	  const QString &url = QString());
+	Map(const QString &name, const QString &url, Downloader *downloader,
+	  QObject *parent = 0);
 
 	const QString &name() const {return _name;}
 	void loadTiles(QList<Tile> &list, bool block);
@@ -29,6 +31,8 @@ private:
 
 	void loadTilesAsync(QList<Tile> &list);
 	void loadTilesSync(QList<Tile> &list);
+
+	Downloader *_downloader;
 
 	QString _name;
 	QString _url;

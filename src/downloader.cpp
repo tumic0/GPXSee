@@ -1,5 +1,7 @@
 #include <QFile>
 #include <QFileInfo>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 #include "config.h"
 #include "downloader.h"
 
@@ -25,7 +27,7 @@
 #define MAX_REDIRECT_LEVEL 5
 
 
-Downloader::Downloader()
+Downloader::Downloader(QObject *parent) : QObject(parent)
 {
 	connect(&_manager, SIGNAL(finished(QNetworkReply*)),
 			SLOT(downloadFinished(QNetworkReply*)));

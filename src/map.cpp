@@ -5,14 +5,16 @@
 #include "map.h"
 
 
-Map::Map(QObject *parent, const QString &name, const QString &url)
-  : QObject(parent)
+Map::Map(const QString &name, const QString &url, Downloader *downloader,
+  QObject *parent) : QObject(parent)
 {
 	_name = name;
 	_url = url;
 
-	connect(&Downloader::instance(), SIGNAL(finished()), this,
-	  SLOT(emitLoaded()));
+	_downloader = downloader;
+
+
+	connect(_downloader, SIGNAL(finished()), this, SLOT(emitLoaded()));
 
 	QString path = TILES_DIR + QString("/") + _name;
 	if (!QDir().mkpath(path))
@@ -49,7 +51,7 @@ void Map::loadTilesAsync(QList<Tile> &list)
 	}
 
 	if (!dl.empty())
-		Downloader::instance().get(dl);
+		_downloader->get(dl);
 }
 
 void Map::loadTilesSync(QList<Tile> &list)
@@ -71,8 +73,8 @@ void Map::loadTilesSync(QList<Tile> &list)
 		return;
 
 	QEventLoop wait;
-	connect(&Downloader::instance(), SIGNAL(finished()), &wait, SLOT(quit()));
-	if (Downloader::instance().get(dl))
+	connect(_downloader, SIGNAL(finished()), &wait, SLOT(quit()));
+	if (_downloader->get(dl))
 		wait.exec();
 
 	for (int i = 0; i < list.size(); i++) {

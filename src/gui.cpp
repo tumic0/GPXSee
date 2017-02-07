@@ -36,6 +36,7 @@
 #include "powergraph.h"
 #include "pathview.h"
 #include "trackinfo.h"
+#include "downloader.h"
 #include "filebrowser.h"
 #include "cpuarch.h"
 #include "graphtab.h"
@@ -118,10 +119,12 @@ void GUI::createBrowser()
 
 void GUI::loadMaps()
 {
+	MapList ml(new Downloader(this));
+
 	if (QFile::exists(USER_MAP_FILE))
-		_maps = MapList::load(this, USER_MAP_FILE);
+		_maps = ml.load(USER_MAP_FILE, this);
 	else
-		_maps = MapList::load(this, GLOBAL_MAP_FILE);
+		_maps = ml.load(GLOBAL_MAP_FILE, this);
 }
 
 void GUI::loadPOIs()
