@@ -1091,12 +1091,18 @@ void GUI::updateStatusBarInfo()
 		_distanceLabel->clear();
 
 	if (time() > 0) {
-		if (_movingTimeAction->isChecked())
-			_timeLabel->setText(Format::timeSpan(movingTime()));
-		else
+		if (_movingTimeAction->isChecked()) {
+			_timeLabel->setText(Format::timeSpan(movingTime())
+			  + "<sub>M</sub>");
+			_timeLabel->setToolTip(Format::timeSpan(time()));
+		} else {
 			_timeLabel->setText(Format::timeSpan(time()));
-	} else
+			_timeLabel->setToolTip(Format::timeSpan(movingTime()));
+		}
+	} else {
 		_timeLabel->clear();
+		_timeLabel->setToolTip(QString());
+	}
 }
 
 void GUI::updateWindowTitle()
