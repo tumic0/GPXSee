@@ -15,7 +15,6 @@ public:
 	void clear();
 	void setUnits(enum Units units);
 	void showTracks(bool show);
-	void showRoutes(bool show) {Q_UNUSED(show);}
 
 private:
 	qreal avg() const;

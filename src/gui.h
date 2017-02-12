@@ -7,6 +7,7 @@
 #include <QDate>
 #include <QPrinter>
 #include "units.h"
+#include "timetype.h"
 #include "graph.h"
 #include "poi.h"
 #include "exportdialog.h"
@@ -18,7 +19,6 @@ class QTabWidget;
 class QActionGroup;
 class QAction;
 class QLabel;
-class FlipLabel;
 class QSignalMapper;
 class QPrinter;
 class FileBrowser;
@@ -68,6 +68,8 @@ private slots:
 	void last();
 	void first();
 
+	void setTotalTime() {setTimeType(Total);}
+	void setMovingTime() {setTimeType(Moving);}
 	void setMetricUnits() {setUnits(Metric);}
 	void setImperialUnits() {setUnits(Imperial);}
 	void setDistanceGraph() {setGraphType(Distance);}
@@ -103,7 +105,9 @@ private:
 	void updateGraphTabs();
 	void updatePathView();
 
+	TimeType timeType() const;
 	Units units() const;
+	void setTimeType(TimeType type);
 	void setUnits(Units units);
 	void setGraphType(GraphType type);
 
@@ -157,6 +161,8 @@ private:
 	QAction *_firstAction;
 	QAction *_metricUnitsAction;
 	QAction *_imperialUnitsAction;
+	QAction *_totalTimeAction;
+	QAction *_movingTimeAction;
 	QAction *_nextMapAction;
 	QAction *_prevMapAction;
 	QAction *_showTracksAction;
@@ -172,7 +178,7 @@ private:
 
 	QLabel *_fileNameLabel;
 	QLabel *_distanceLabel;
-	FlipLabel *_timeLabel;
+	QLabel *_timeLabel;
 
 	PathView *_pathView;
 	QTabWidget *_graphTabWidget;

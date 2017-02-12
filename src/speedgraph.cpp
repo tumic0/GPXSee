@@ -36,6 +36,8 @@ void SpeedGraph::loadData(const Data &data, const QList<PathItem *> &paths)
 
 		_avg.append(QPointF(data.tracks().at(i)->distance(),
 		  data.tracks().at(i)->distance() / data.tracks().at(i)->time()));
+		_avgM.append(QPointF(data.tracks().at(i)->distance(),
+		  data.tracks().at(i)->distance() / data.tracks().at(i)->movingTime()));
 
 		GraphView::loadGraph(graph, paths.at(i));
 	}
@@ -52,8 +54,9 @@ qreal SpeedGraph::avg() const
 {
 	qreal sum = 0, w = 0;
 	QList<QPointF>::const_iterator it;
+	const QList<QPointF> &list = (_timeType == Moving) ? _avgM : _avg;
 
-	for (it = _avg.begin(); it != _avg.end(); it++) {
+	for (it = list.begin(); it != list.end(); it++) {
 		sum += it->y() * it->x();
 		w += it->x();
 	}
@@ -64,6 +67,7 @@ qreal SpeedGraph::avg() const
 void SpeedGraph::clear()
 {
 	_avg.clear();
+	_avgM.clear();
 
 	GraphView::clear();
 }
@@ -87,6 +91,14 @@ void SpeedGraph::setUnits(enum Units units)
 	setInfo();
 	GraphView::setUnits(units);
 
+	redraw();
+}
+
+void SpeedGraph::setTimeType(enum TimeType type)
+{
+	_timeType = type;
+
+	setInfo();
 	redraw();
 }
 

@@ -77,7 +77,7 @@ HEADERS += src/config.h \
     src/colorbox.h \
     src/stylecombobox.h \
     src/opengl.h \
-    src/fliplabel.h
+    src/timetype.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -131,8 +131,7 @@ SOURCES += src/main.cpp \
     src/nmeaparser.cpp \
     src/optionsdialog.cpp \
     src/colorbox.cpp \
-    src/stylecombobox.cpp \
-    src/fliplabel.cpp
+    src/stylecombobox.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts

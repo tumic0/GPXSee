@@ -11,6 +11,8 @@
 #define WINDOW_POS_DEFAULT                QPoint(10, 10)
 
 #define SETTINGS_SETTINGS_GROUP           "Settings"
+#define TIME_TYPE_SETTING                 "timeType"
+#define TIME_TYPE_DEFAULT                 Total
 #define UNITS_SETTING                     "units"
 #define UNITS_DEFAULT                     (IMPERIAL_UNITS() ? Imperial : Metric)
 #define SHOW_TOOLBARS_SETTING             "toolbar"

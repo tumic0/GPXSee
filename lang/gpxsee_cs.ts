@@ -190,55 +190,55 @@
 <context>
     <name>GUI</name>
     <message>
-        <location filename="../src/gui.cpp" line="552"/>
+        <location filename="../src/gui.cpp" line="569"/>
         <source>GPXSee is distributed under the terms of the GNU General Public License version 3. For more info about GPXSee visit the project homepage at </source>
         <translation>Program GPXSee je distribuován pod podmínkami licence GNU General Public License verze 3. Pro více informací navštivte stránky programu na adrese </translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="616"/>
+        <location filename="../src/gui.cpp" line="633"/>
         <source>Open file</source>
         <translation>Otevřít soubor</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="706"/>
+        <location filename="../src/gui.cpp" line="723"/>
         <source>Open POI file</source>
         <translation>Otevřít POI soubor</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="225"/>
+        <location filename="../src/gui.cpp" line="227"/>
         <source>Open</source>
         <translation>Otevřít</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="209"/>
+        <location filename="../src/gui.cpp" line="211"/>
         <source>Quit</source>
         <translation>Ukončit</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="217"/>
-        <location filename="../src/gui.cpp" line="568"/>
-        <location filename="../src/gui.cpp" line="569"/>
+        <location filename="../src/gui.cpp" line="219"/>
+        <location filename="../src/gui.cpp" line="585"/>
+        <location filename="../src/gui.cpp" line="586"/>
         <source>Keyboard controls</source>
         <translation>Ovládací klávesy</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="241"/>
+        <location filename="../src/gui.cpp" line="243"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="247"/>
+        <location filename="../src/gui.cpp" line="249"/>
         <source>Reload</source>
         <translation>Znovu načíst</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="480"/>
+        <location filename="../src/gui.cpp" line="497"/>
         <source>Show</source>
         <translation>Zobrazit</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="401"/>
-        <location filename="../src/gui.cpp" line="474"/>
+        <location filename="../src/gui.cpp" line="415"/>
+        <location filename="../src/gui.cpp" line="491"/>
         <source>File</source>
         <translation>Soubor</translation>
     </message>
@@ -258,194 +258,194 @@
         <translation>Soubory NMEA (*.nmea)</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="215"/>
-        <location filename="../src/gui.cpp" line="591"/>
-        <location filename="../src/gui.cpp" line="592"/>
+        <location filename="../src/gui.cpp" line="217"/>
+        <location filename="../src/gui.cpp" line="608"/>
+        <location filename="../src/gui.cpp" line="609"/>
         <source>Data sources</source>
         <translation>Zdroje dat</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="255"/>
+        <location filename="../src/gui.cpp" line="257"/>
         <source>Load POI file</source>
         <translation>Nahrát POI soubor</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="258"/>
+        <location filename="../src/gui.cpp" line="260"/>
         <source>Close POI files</source>
         <translation>Zavřit POI soubory</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="260"/>
+        <location filename="../src/gui.cpp" line="262"/>
         <source>Overlap POIs</source>
         <translation>Překrývat POI</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="264"/>
+        <location filename="../src/gui.cpp" line="266"/>
         <source>Show POI labels</source>
         <translation>Zobrazit názvy POI</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="269"/>
+        <location filename="../src/gui.cpp" line="271"/>
         <source>Show POIs</source>
         <translation>Zobrazit POI</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="278"/>
+        <location filename="../src/gui.cpp" line="280"/>
         <source>Show map</source>
         <translation>Zobrazit mapu</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="284"/>
+        <location filename="../src/gui.cpp" line="286"/>
         <source>Clear tile cache</source>
         <translation>Vymazat mezipaměť dlaždic</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="293"/>
-        <location filename="../src/gui.cpp" line="297"/>
-        <location filename="../src/gui.cpp" line="580"/>
+        <location filename="../src/gui.cpp" line="295"/>
+        <location filename="../src/gui.cpp" line="299"/>
+        <location filename="../src/gui.cpp" line="597"/>
         <source>Next map</source>
         <translation>Následující mapa</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="304"/>
+        <location filename="../src/gui.cpp" line="306"/>
         <source>Show tracks</source>
         <translation>Zobrazit cesty</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="308"/>
+        <location filename="../src/gui.cpp" line="310"/>
         <source>Show routes</source>
         <translation>Zobrazit trasy</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="312"/>
+        <location filename="../src/gui.cpp" line="314"/>
         <source>Show waypoints</source>
         <translation>Zobrazit navigační body</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="316"/>
+        <location filename="../src/gui.cpp" line="318"/>
         <source>Waypoint labels</source>
         <translation>Názvy navigačních bodů</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="327"/>
+        <location filename="../src/gui.cpp" line="329"/>
         <source>Show graphs</source>
         <translation>Zobrazit grafy</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="349"/>
+        <location filename="../src/gui.cpp" line="351"/>
         <source>Show grid</source>
         <translation>Zobrazit mřížku</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="355"/>
+        <location filename="../src/gui.cpp" line="357"/>
         <source>Show toolbars</source>
         <translation>Zobrazovat nástrojové lišty</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="361"/>
+        <location filename="../src/gui.cpp" line="363"/>
+        <source>Total time</source>
+        <translation>Celkový čas</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="368"/>
+        <location filename="../src/gui.cpp" line="876"/>
+        <source>Moving time</source>
+        <translation>Čistý čas</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="375"/>
         <source>Metric</source>
         <translation>Metrické</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="366"/>
+        <location filename="../src/gui.cpp" line="380"/>
         <source>Imperial</source>
         <translation>Imperiální</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="372"/>
+        <location filename="../src/gui.cpp" line="386"/>
         <source>Fullscreen mode</source>
         <translation>Celoobrazovkový režim</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="378"/>
+        <location filename="../src/gui.cpp" line="392"/>
         <source>Options...</source>
         <translation>Nastavení...</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="383"/>
+        <location filename="../src/gui.cpp" line="397"/>
         <source>Next</source>
         <translation>Následující</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="386"/>
+        <location filename="../src/gui.cpp" line="400"/>
         <source>Previous</source>
         <translation>Předchozí</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="390"/>
+        <location filename="../src/gui.cpp" line="404"/>
         <source>Last</source>
         <translation>Poslední</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="393"/>
+        <location filename="../src/gui.cpp" line="407"/>
         <source>First</source>
         <translation>První</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="415"/>
+        <location filename="../src/gui.cpp" line="429"/>
         <source>Map</source>
         <translation>Mapa</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="422"/>
+        <location filename="../src/gui.cpp" line="436"/>
         <source>Graph</source>
         <translation>Graf</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="430"/>
+        <location filename="../src/gui.cpp" line="444"/>
         <source>POI</source>
         <translation>POI</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="431"/>
+        <location filename="../src/gui.cpp" line="445"/>
         <source>POI files</source>
         <translation>POI soubory</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="442"/>
+        <location filename="../src/gui.cpp" line="456"/>
         <source>Data</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="443"/>
+        <location filename="../src/gui.cpp" line="457"/>
         <source>Display</source>
         <translation>Zobrazit</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="451"/>
+        <location filename="../src/gui.cpp" line="465"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="452"/>
+        <location filename="../src/gui.cpp" line="469"/>
         <source>Units</source>
         <translation>Jednotky</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="461"/>
+        <location filename="../src/gui.cpp" line="478"/>
         <source>Help</source>
         <translation>Nápověda</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="581"/>
+        <location filename="../src/gui.cpp" line="598"/>
         <source>Previous map</source>
         <translation>Předchozí mapa</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="859"/>
-        <location filename="../src/gui.cpp" line="1078"/>
-        <source>Moving Time</source>
-        <translation>Čistý čas</translation>
-    </message>
-    <message>
-        <location filename="../src/gui.cpp" line="1065"/>
+        <location filename="../src/gui.cpp" line="1082"/>
         <source>No files loaded</source>
         <translation>Nejsou načteny žádné soubory</translation>
-    </message>
-    <message>
-        <location filename="../src/gui.cpp" line="1077"/>
-        <source>Total Time</source>
-        <translation>Celkový čas</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="105"/>
@@ -473,18 +473,18 @@
         <translation>Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="845"/>
-        <location filename="../src/gui.cpp" line="848"/>
+        <location filename="../src/gui.cpp" line="862"/>
+        <location filename="../src/gui.cpp" line="865"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="837"/>
+        <location filename="../src/gui.cpp" line="854"/>
         <source>Routes</source>
         <translation>Trasy</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/gui.cpp" line="1069"/>
+        <location filename="../src/gui.cpp" line="1086"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n soubor</numerusform>
@@ -493,32 +493,32 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="571"/>
+        <location filename="../src/gui.cpp" line="588"/>
         <source>Next file</source>
         <translation>Následující soubor</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="549"/>
+        <location filename="../src/gui.cpp" line="566"/>
         <source>Version </source>
         <translation>Verze </translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="230"/>
+        <location filename="../src/gui.cpp" line="232"/>
         <source>Print...</source>
         <translation>Tisknout...</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="235"/>
+        <location filename="../src/gui.cpp" line="237"/>
         <source>Export to PDF...</source>
         <translation>Exportovat do PDF...</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="839"/>
+        <location filename="../src/gui.cpp" line="856"/>
         <source>Waypoints</source>
         <translation>Navigační body</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="573"/>
+        <location filename="../src/gui.cpp" line="590"/>
         <source>Previous file</source>
         <translation>Předchozí soubor</translation>
     </message>
@@ -528,96 +528,97 @@
         <translation>Podporované soubory (*.csv *.fit *.gpx *.igc *.kml *.nmea *.tcx)</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="320"/>
+        <location filename="../src/gui.cpp" line="322"/>
         <source>Route waypoints</source>
         <translation>Body tras</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="575"/>
+        <location filename="../src/gui.cpp" line="592"/>
         <source>First file</source>
         <translation>První soubor</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="577"/>
+        <location filename="../src/gui.cpp" line="594"/>
         <source>Last file</source>
         <translation>Poslední soubor</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="578"/>
+        <location filename="../src/gui.cpp" line="595"/>
         <source>Append modifier</source>
         <translation>Modifikátor nahradit/přidat</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="595"/>
+        <location filename="../src/gui.cpp" line="612"/>
         <source>Map (tiles) source URLs are read on program startup from the following file:</source>
         <translation>URL mapových zdrojů (dlaždic) jsou načteny při startu programu z následujícího souboru:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="598"/>
+        <location filename="../src/gui.cpp" line="615"/>
         <source>The file format is one map entry per line, consisting of the map name and tiles URL delimited by a TAB character. The tile X and Y coordinates are replaced with $x and $y in the URL and the zoom level is replaced with $z. An example map file could look like:</source>
         <translation>Formát souboru je jeden mapový záznam na řádku, kde mapový záznam sestává ze jména mapy a URL dlaždic navzájem oddělených tabulátorem. Souřadnice dlaždice jsou v URL nahrazeny řetězci $x a $y, úroven přiblížení (zoom) pak řetězcem $z. Příklad:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="606"/>
+        <location filename="../src/gui.cpp" line="623"/>
         <source>To make GPXSee load a POI file automatically on startup, add the file to the following directory:</source>
         <translation>POI soubory, které se mají automaticky nahrát při startu programu jsou načítány z následujícího adresáře:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="695"/>
+        <location filename="../src/gui.cpp" line="712"/>
         <source>Error loading data file:</source>
         <translation>Datový soubor nelze načíst:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="698"/>
-        <location filename="../src/gui.cpp" line="723"/>
+        <location filename="../src/gui.cpp" line="715"/>
+        <location filename="../src/gui.cpp" line="740"/>
         <source>Line: %1</source>
         <translation>Řádka: %1</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="720"/>
+        <location filename="../src/gui.cpp" line="737"/>
         <source>Error loading POI file:</source>
         <translation>Soubor POI nelze načíst:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="831"/>
+        <location filename="../src/gui.cpp" line="848"/>
         <source>Name</source>
         <translation>Název</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="835"/>
+        <location filename="../src/gui.cpp" line="852"/>
         <source>Tracks</source>
         <translation>Cesty</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="220"/>
-        <location filename="../src/gui.cpp" line="548"/>
+        <location filename="../src/gui.cpp" line="222"/>
+        <location filename="../src/gui.cpp" line="565"/>
         <source>About GPXSee</source>
         <translation>O aplikaci GPXSee</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="485"/>
+        <location filename="../src/gui.cpp" line="502"/>
         <source>Navigation</source>
         <translation>Navigace</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="594"/>
+        <location filename="../src/gui.cpp" line="611"/>
         <source>Map sources</source>
         <translation>Mapové zdroje</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="605"/>
+        <location filename="../src/gui.cpp" line="622"/>
         <source>POIs</source>
         <translation>POI body</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="335"/>
-        <location filename="../src/gui.cpp" line="855"/>
+        <location filename="../src/gui.cpp" line="337"/>
+        <location filename="../src/gui.cpp" line="872"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="342"/>
-        <location filename="../src/gui.cpp" line="857"/>
+        <location filename="../src/gui.cpp" line="344"/>
+        <location filename="../src/gui.cpp" line="466"/>
+        <location filename="../src/gui.cpp" line="874"/>
         <source>Time</source>
         <translation>Čas</translation>
     </message>
@@ -807,7 +808,7 @@
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="155"/>
-        <source>Moving Time</source>
+        <source>Moving time</source>
         <translation>Čistý čas</translation>
     </message>
     <message>
@@ -926,7 +927,7 @@
         <translation>Rychlost</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="74"/>
+        <location filename="../src/speedgraph.cpp" line="78"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
@@ -941,7 +942,7 @@
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="77"/>
+        <location filename="../src/speedgraph.cpp" line="81"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
     </message>
@@ -999,12 +1000,12 @@
     </message>
     <message>
         <location filename="../src/trackitem.cpp" line="17"/>
-        <source>Time</source>
-        <translation>Čas</translation>
+        <source>Total time</source>
+        <translation>Celkový čas</translation>
     </message>
     <message>
         <location filename="../src/trackitem.cpp" line="19"/>
-        <source>Moving Time</source>
+        <source>Moving time</source>
         <translation>Čistý čas</translation>
     </message>
     <message>

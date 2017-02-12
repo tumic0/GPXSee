@@ -15,8 +15,8 @@ public:
 	void loadData(const Data &data, const QList<PathItem *> &paths);
 	void clear();
 	void setUnits(enum Units units);
+	void setTimeType(enum TimeType type);
 	void showTracks(bool show);
-	void showRoutes(bool show) {Q_UNUSED(show);}
 
 private:
 	qreal avg() const;
@@ -25,8 +25,10 @@ private:
 	void setInfo();
 
 	QList<QPointF> _avg;
+	QList<QPointF> _avgM;
 
 	enum Units _units;
+	enum TimeType _timeType;
 	bool _showTracks;
 };
 

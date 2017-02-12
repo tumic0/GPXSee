@@ -41,7 +41,6 @@
 #include "cpuarch.h"
 #include "graphtab.h"
 #include "format.h"
-#include "fliplabel.h"
 #include "gui.h"
 
 
@@ -361,6 +360,18 @@ void GUI::createActions()
 	  SLOT(showToolbars(bool)));
 	ag = new QActionGroup(this);
 	ag->setExclusive(true);
+	_totalTimeAction = new QAction(tr("Total time"), this);
+	_totalTimeAction->setCheckable(true);
+	_totalTimeAction->setActionGroup(ag);
+	connect(_totalTimeAction, SIGNAL(triggered()), this,
+	  SLOT(setTotalTime()));
+	_movingTimeAction = new QAction(tr("Moving time"), this);
+	_movingTimeAction->setCheckable(true);
+	_movingTimeAction->setActionGroup(ag);
+	connect(_movingTimeAction, SIGNAL(triggered()), this,
+	  SLOT(setMovingTime()));
+	ag = new QActionGroup(this);
+	ag->setExclusive(true);
 	_metricUnitsAction = new QAction(tr("Metric"), this);
 	_metricUnitsAction->setCheckable(true);
 	_metricUnitsAction->setActionGroup(ag);
@@ -452,6 +463,9 @@ void GUI::createMenus()
 	dataMenu->addAction(_showWaypointsAction);
 
 	QMenu *settingsMenu = menuBar()->addMenu(tr("Settings"));
+	QMenu *timeMenu = settingsMenu->addMenu(tr("Time"));
+	timeMenu->addAction(_totalTimeAction);
+	timeMenu->addAction(_movingTimeAction);
 	QMenu *unitsMenu = settingsMenu->addMenu(tr("Units"));
 	unitsMenu->addAction(_metricUnitsAction);
 	unitsMenu->addAction(_imperialUnitsAction);
@@ -534,7 +548,7 @@ void GUI::createStatusBar()
 {
 	_fileNameLabel = new QLabel();
 	_distanceLabel = new QLabel();
-	_timeLabel = new FlipLabel();
+	_timeLabel = new QLabel();
 	_distanceLabel->setAlignment(Qt::AlignHCenter);
 	_timeLabel->setAlignment(Qt::AlignHCenter);
 
@@ -859,7 +873,7 @@ void GUI::plot(QPrinter *printer)
 	if (t > 0 && _options.printTime)
 		info.insert(tr("Time"), Format::timeSpan(t));
 	if (tm > 0 && _options.printMovingTime)
-		info.insert(tr("Moving Time"), Format::timeSpan(tm));
+		info.insert(tr("Moving time"), Format::timeSpan(tm));
 
 
 	ratio = p.paintEngine()->paintDevice()->logicalDpiX() / SCREEN_DPI;
@@ -1077,9 +1091,10 @@ void GUI::updateStatusBarInfo()
 		_distanceLabel->clear();
 
 	if (time() > 0) {
-		_timeLabel->addItem(tr("Total Time"), Format::timeSpan(time()));
-		_timeLabel->addItem(tr("Moving Time"), Format::timeSpan(movingTime())
-		  + "<sub>M</sub>");
+		if (_movingTimeAction->isChecked())
+			_timeLabel->setText(Format::timeSpan(movingTime()));
+		else
+			_timeLabel->setText(Format::timeSpan(time()));
 	} else
 		_timeLabel->clear();
 }
@@ -1188,6 +1203,14 @@ void GUI::updatePathView()
 {
 	_pathView->setHidden(!(_pathView->trackCount() + _pathView->routeCount()
 	  + _pathView->waypointCount()));
+}
+
+void GUI::setTimeType(TimeType type)
+{
+	for (int i = 0; i <_tabs.count(); i++)
+		_tabs.at(i)->setTimeType(type);
+
+	updateStatusBarInfo();
 }
 
 void GUI::setUnits(Units units)
@@ -1325,6 +1348,10 @@ void GUI::writeSettings()
 	settings.endGroup();
 
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
+	if ((_movingTimeAction->isChecked() ? Moving : Total) !=
+	  TIME_TYPE_DEFAULT)
+		settings.setValue(TIME_TYPE_SETTING, _movingTimeAction->isChecked()
+	  ? Moving : Total);
 	if ((_imperialUnitsAction->isChecked() ? Imperial : Metric) !=
 	  UNITS_DEFAULT)
 		settings.setValue(UNITS_SETTING, _imperialUnitsAction->isChecked()
@@ -1455,6 +1482,14 @@ void GUI::readSettings()
 	settings.endGroup();
 
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
+	if (settings.value(TIME_TYPE_SETTING, TIME_TYPE_DEFAULT).toInt()
+	  == Moving) {
+		setTimeType(Moving);
+		_movingTimeAction->setChecked(true);
+	} else {
+		setTimeType(Total);
+		_totalTimeAction->setChecked(true);
+	}
 	if (settings.value(UNITS_SETTING, UNITS_DEFAULT).toInt() == Imperial) {
 		setUnits(Imperial);
 		_imperialUnitsAction->setChecked(true);

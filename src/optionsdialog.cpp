@@ -152,7 +152,7 @@ QWidget *OptionsDialog::createExportPage()
 	_distance->setChecked(_options->printDistance);
 	_time = new QCheckBox(tr("Time"));
 	_time->setChecked(_options->printTime);
-	_movingTime = new QCheckBox(tr("Moving Time"));
+	_movingTime = new QCheckBox(tr("Moving time"));
 	_movingTime->setChecked(_options->printMovingTime);
 	_itemCount = new QCheckBox(tr("Item count (>1)"));
 	_itemCount->setChecked(_options->printItemCount);

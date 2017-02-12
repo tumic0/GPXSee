@@ -14,9 +14,9 @@ QString TrackItem::toolTip()
 		tt.insert(tr("Description"), _desc);
 	tt.insert(tr("Distance"), Format::distance(_distance.last(), _units));
 	if  (_time > 0)
-		tt.insert(tr("Time"), Format::timeSpan(_time));
+		tt.insert(tr("Total time"), Format::timeSpan(_time));
 	if  (_movingTime > 0)
-		tt.insert(tr("Moving Time"), Format::timeSpan(_movingTime));
+		tt.insert(tr("Moving time"), Format::timeSpan(_movingTime));
 	if (!_date.isNull())
 		tt.insert(tr("Date"), _date.toString(Qt::SystemLocaleShortDate));
 
