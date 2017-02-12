@@ -1,5 +1,6 @@
 !include "MUI2.nsh"
 !include "x64.nsh"
+!include "WinVer.nsh"
 
 ; The name of the installer
 Name "GPXSee"
@@ -55,9 +56,15 @@ Var StartMenuFolder
 ; Languages
 !insertmacro MUI_LANGUAGE "English"
 
+Function .onInit
+  ${IfNot} ${AtLeastWin7}
+    MessageBox MB_OK "GPXSee can only be installed on Windows 7 or later."
+    Abort
+  ${EndIf}
+FunctionEnd 
 
 ; The stuff to install
-Section "GPXSee (required)" SEC_APP
+Section "GPXSee" SEC_APP
 
   SectionIn RO
   
@@ -122,16 +129,15 @@ Section "GPXSee (required)" SEC_APP
 
 SectionEnd
 
-Section "QT libs" SEC_QT
+Section "QT framework" SEC_QT
+
+  SectionIn RO
 
   File "Qt5Core.dll"
   File "Qt5Gui.dll"
   File "Qt5Widgets.dll"
   File "Qt5PrintSupport.dll"
   File "Qt5Network.dll"
-  File "libGLESv2.dll"
-  File "libEGL.dll"
-  File "D3DCompiler_47.dll"
   File /r "platforms"
   File /r "imageformats"
   File /r "printsupport"
@@ -139,6 +145,8 @@ Section "QT libs" SEC_QT
 SectionEnd
 
 Section "MSVC runtime" SEC_MSVC
+
+  SectionIn RO
 
   DetailPrint "Checking whether Visual C++ 2015 Redistributable is already installed..."
   ${If} ${RunningX64}
@@ -157,6 +165,21 @@ Section "MSVC runtime" SEC_MSVC
   ExecWait '"$TEMP/VC_redist.x86.exe" /install /quiet /norestart'
 
   done:
+SectionEnd
+
+Section "OpenSSL" SEC_OPENSSL
+
+  File "libeay32.dll"
+  File "ssleay32.dll"
+
+SectionEnd
+
+Section "ANGLE" SEC_ANGLE
+
+  File "libGLESv2.dll"
+  File "libEGL.dll"
+  File "D3DCompiler_47.dll"
+
 SectionEnd
 
 ;--------------------------------
@@ -201,15 +224,21 @@ SectionEnd
 
 ;Language strings
 LangString DESC_QT ${LANG_ENGLISH} \
-  "QT Library. Unselct only if you have QT already installed!"
+  "QT cross-platform application framework."
 LangString DESC_MSVC ${LANG_ENGLISH} \
-  "Visual C++ 2015 runtime components. Unselct only if you have the runtime already installed!"
+  "Visual C++ 2015 runtime components. If already installed, will be skipped."
+LangString DESC_OPENSSL ${LANG_ENGLISH} \
+  "OpenSSL library. Required for HTTPS to work."
+LangString DESC_ANGLE ${LANG_ENGLISH} \
+  "ANGLE (OpenGL via Direct3D). Enables OpenGL on systems without native OpenGL drivers."
 LangString DESC_APP ${LANG_ENGLISH} \
   "GPXSee application"
 
 ;Assign language strings to sections
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_QT} $(DESC_QT)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_OPENSSL} $(DESC_OPENSSL)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_ANGLE} $(DESC_ANGLE)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_MSVC} $(DESC_MSVC) 
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_APP} $(DESC_APP)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
