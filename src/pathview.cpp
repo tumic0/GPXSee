@@ -1,7 +1,6 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QWheelEvent>
-#include <QSysInfo>
 #include "opengl.h"
 #include "rd.h"
 #include "wgs84.h"
@@ -721,11 +720,8 @@ void PathView::scrollContentsBy(int dx, int dy)
 
 void PathView::useOpenGL(bool use)
 {
-	if (use) {
-#ifdef Q_OS_WIN32
-		if (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA)
-#endif // Q_OS_WIN32
+	if (use)
 		setViewport(new OPENGL_WIDGET);
-	} else
+	else
 		setViewport(new QWidget);
 }
