@@ -163,6 +163,7 @@ Section "MSVC runtime" SEC_MSVC
   SetOutPath $TEMP
   File "VC_redist.x86.exe"
   ExecWait '"$TEMP/VC_redist.x86.exe" /install /quiet /norestart'
+  SetOutPath $INSTDIR
 
   done:
 SectionEnd
