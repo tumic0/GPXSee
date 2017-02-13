@@ -344,13 +344,13 @@
     <message>
         <location filename="../src/gui.cpp" line="363"/>
         <source>Total time</source>
-        <translation type="unfinished"></translation>
+        <translation>Total tid</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="368"/>
         <location filename="../src/gui.cpp" line="876"/>
         <source>Moving time</source>
-        <translation type="unfinished"></translation>
+        <translation>Förflyttningstid</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="375"/>
@@ -808,7 +808,7 @@
     <message>
         <location filename="../src/optionsdialog.cpp" line="155"/>
         <source>Moving time</source>
-        <translation type="unfinished"></translation>
+        <translation>Förflyttningstid</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="157"/>
@@ -1000,12 +1000,12 @@
     <message>
         <location filename="../src/trackitem.cpp" line="17"/>
         <source>Total time</source>
-        <translation type="unfinished"></translation>
+        <translation>Total tid</translation>
     </message>
     <message>
         <location filename="../src/trackitem.cpp" line="19"/>
         <source>Moving time</source>
-        <translation type="unfinished"></translation>
+        <translation>Förflyttningstid</translation>
     </message>
     <message>
         <location filename="../src/trackitem.cpp" line="21"/>
