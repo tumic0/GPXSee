@@ -6,6 +6,7 @@
 SpeedGraph::SpeedGraph(QWidget *parent) : GraphTab(parent)
 {
 	_units = Metric;
+	_timeType = Total;
 	_showTracks = true;
 
 	setYUnits();
