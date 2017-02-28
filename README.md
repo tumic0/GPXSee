@@ -12,7 +12,7 @@ KML, FIT, IGC and NMEA files.
 * Native GUI for Windows, Mac OS X and Linux.
 * Opens GPX, TCX, FIT, KML, IGC, NMEA and Garmin CSV files.
 
-![GPXSee - Linux](https://a.fsdn.com/con/app/proj/gpxsee/screenshots/linux.png)
+![GPXSee - Linux](https://a.fsdn.com/con/app/proj/gpxsee/screenshots/linux2.png)
 
 ## Build
 ### Linux/OS X
