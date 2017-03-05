@@ -29,8 +29,8 @@ nmake release
 ```
 
 ## Binaries
-* Windows & OS X builds: http://sourceforge.net/projects/gpxsee
-* Linux packages: http://software.opensuse.org/download.html?project=home%3Atumic%3AGPXSee&package=gpxsee
+* [Windows & OS X builds] (http://sourceforge.net/projects/gpxsee)
+* [Linux packages] (http://software.opensuse.org/download.html?project=home%3Atumic%3AGPXSee&package=gpxsee)
 
 ## Homepage
 GPXSee homepage: http://tumic.wz.cz/gpxsee
