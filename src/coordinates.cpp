@@ -27,17 +27,12 @@ Coordinates Coordinates::fromMercator(const QPointF &m)
 	return Coordinates(m.x(), rad2deg(2 * atan(exp(deg2rad(m.y()))) - M_PI/2));
 }
 
-bool operator==(const Coordinates &c1, const Coordinates &c2)
-{
-	return (c1.lat() == c2.lat() && c1.lon() == c2.lon());
-}
-
 QDebug operator<<(QDebug dbg, const Coordinates &coordinates)
 {
 	dbg.nospace() << "Coordinates(" << coordinates.lon() << ", "
 	  << coordinates.lat() << ")";
 
-	return dbg.maybeSpace();
+	return dbg.space();
 }
 
 QPair<Coordinates, Coordinates> Coordinates::boundingRect(qreal distance) const

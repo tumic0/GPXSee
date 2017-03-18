@@ -4,7 +4,7 @@
 void TCXParser::warning(const char *text) const
 {
 	const QFile *file = static_cast<QFile *>(_reader.device());
-	fprintf(stderr, "%s:%lld: %s\n", qPrintable(file->fileName()),
+	qWarning("%s:%lld: %s\n", qPrintable(file->fileName()),
 	  _reader.lineNumber(), text);
 }
 

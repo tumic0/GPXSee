@@ -3,19 +3,14 @@
 
 #include <QList>
 #include <QString>
-#include <QObject>
 
+class QObject;
 class Map;
-class Downloader;
 
 class MapList
 {
 public:
-	MapList(Downloader *downloader) : _downloader(downloader) {}
-	QList<Map*> load(const QString &fileName, QObject *parent = 0);
-
-private:
-	Downloader *_downloader;
+	static QList<Map*> load(const QString &fileName, QObject *parent = 0);
 };
 
 #endif // MAPLIST_H

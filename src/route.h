@@ -11,12 +11,16 @@ class Route
 public:
 	Route(const RouteData &data);
 
-	const RouteData &routeData() const {return _data;}
-	const QVector<qreal> &distanceData() const {return _distance;}
+	Path path() const;
+
+	const QVector<Waypoint> &waypoints() const {return _data;}
 
 	Graph elevation() const;
 
 	qreal distance() const;
+
+	const QString &name() const {return _data.name();}
+	const QString &description() const {return _data.description();}
 
 	bool isNull() const {return (_data.count() < 2);}
 

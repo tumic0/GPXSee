@@ -61,7 +61,7 @@ bool Downloader::saveToDisk(const QString &filename, QIODevice *data)
 	QFile file(filename);
 
 	if (!file.open(QIODevice::WriteOnly)) {
-		fprintf(stderr, "Error writing map tile: %s: %s\n",
+		qWarning("Error writing map tile: %s: %s\n",
 		  qPrintable(filename), qPrintable(file.errorString()));
 		return false;
 	}
@@ -80,11 +80,11 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 		QUrl origin = reply->request().attribute(ATTR_ORIGIN).toUrl();
 		if (origin.isEmpty()) {
 			_errorDownloads.insert(url);
-			fprintf(stderr, "Error downloading map tile: %s: %s\n",
+			qWarning("Error downloading map tile: %s: %s\n",
 			  url.toEncoded().constData(), qPrintable(reply->errorString()));
 		} else {
 			_errorDownloads.insert(origin);
-			fprintf(stderr, "Error downloading map tile: %s -> %s: %s\n",
+			qWarning("Error downloading map tile: %s -> %s: %s\n",
 			  origin.toEncoded().constData(), url.toEncoded().constData(),
 			  qPrintable(reply->errorString()));
 		}
@@ -99,11 +99,11 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 
 			if (location == url) {
 				_errorDownloads.insert(url);
-				fprintf(stderr, "Error downloading map tile: %s: "
+				qWarning("Error downloading map tile: %s: "
 				  "redirect loop\n", url.toEncoded().constData());
 			} else if (level >= MAX_REDIRECT_LEVEL) {
 				_errorDownloads.insert(origin);
-				fprintf(stderr, "Error downloading map tile: %s: "
+				qWarning("Error downloading map tile: %s: "
 				  "redirect level limit reached\n",
 				  origin.toEncoded().constData());
 			} else {

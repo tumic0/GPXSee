@@ -15,6 +15,7 @@ public:
 	Track(const TrackData &data);
 
 	Path path() const;
+
 	Graph elevation() const;
 	Graph speed() const;
 	Graph heartRate() const;

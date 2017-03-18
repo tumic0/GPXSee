@@ -1,41 +1,42 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "tile.h"
+#include <QObject>
+#include <QString>
+#include <QRectF>
 
-class Downloader;
+class QPainter;
+class Coordinates;
 
 class Map : public QObject
 {
 	Q_OBJECT
 
 public:
-	Map(const QString &name, const QString &url, Downloader *downloader,
-	  QObject *parent = 0);
+	Map(QObject *parent = 0) : QObject(parent) {}
 
-	const QString &name() const {return _name;}
-	void loadTiles(QList<Tile> &list, bool block);
-	void clearCache();
+	virtual const QString &name() const = 0;
+
+	virtual QRectF bounds() const = 0;
+	virtual qreal resolution(const QPointF &p) const = 0;
+
+	virtual qreal zoom() const = 0;
+	virtual qreal zoomFit(const QSize &size, const QRectF &br) = 0;
+	virtual qreal zoomIn() = 0;
+	virtual qreal zoomOut() = 0;
+
+	virtual QPointF ll2xy(const Coordinates &c) const = 0;
+	virtual Coordinates xy2ll(const QPointF &p) const = 0;
+
+	virtual void draw(QPainter *painter, const QRectF &rect) = 0;
+
+	virtual void setBlockingMode(bool block) {Q_UNUSED(block);}
+	virtual void clearCache() {}
+	virtual void load() {}
+	virtual void unload() {}
 
 signals:
 	void loaded();
-
-private slots:
-	void emitLoaded();
-
-private:
-	QString tileUrl(const Tile &tile);
-	QString tileFile(const Tile &tile);
-	bool loadTileFile(Tile &tile, const QString &file);
-	void fillTile(Tile &tile);
-
-	void loadTilesAsync(QList<Tile> &list);
-	void loadTilesSync(QList<Tile> &list);
-
-	Downloader *_downloader;
-
-	QString _name;
-	QString _url;
 };
 
 #endif // MAP_H

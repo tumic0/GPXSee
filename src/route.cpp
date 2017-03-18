@@ -11,6 +11,16 @@ Route::Route(const RouteData &data) : _data(data)
 	}
 }
 
+Path Route::path() const
+{
+	Path ret;
+
+	for (int i = 0; i < _data.size(); i++)
+		ret.append(PathPoint(_data.at(i).coordinates(), _distance.at(i)));
+
+	return ret;
+}
+
 Graph Route::elevation() const
 {
 	Graph graph;

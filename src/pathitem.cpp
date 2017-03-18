@@ -3,29 +3,47 @@
 #include <QCursor>
 #include <QPainter>
 #include "tooltip.h"
+#include "map.h"
+#include "misc.h"
 #include "pathitem.h"
 
+
+PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
+  : QGraphicsObject(parent)
+{
+	Q_ASSERT(path.count() >= 2);
+	_path = path;
+	_map = map;
+
+	updatePainterPath(map);
+	updateShape();
+
+	_width = 3;
+	QBrush brush(Qt::SolidPattern);
+	_pen = QPen(brush, _width);
+
+	_marker = new MarkerItem(this);
+	_marker->setPos(position(_path.at(0).distance()));
+	_md = _path.at(0).distance();
+
+	setCursor(Qt::ArrowCursor);
+	setAcceptHoverEvents(true);
+}
 
 void PathItem::updateShape()
 {
 	QPainterPathStroker s;
 	s.setWidth((_width + 1) * 1.0/scale());
-	_shape = s.createStroke(_path);
+	_shape = s.createStroke(_painterPath);
 }
 
-PathItem::PathItem(QGraphicsItem *parent) : QGraphicsObject(parent)
+void PathItem::updatePainterPath(Map *map)
 {
-	_width = 3;
+	_painterPath = QPainterPath();
 
-	QBrush brush(Qt::SolidPattern);
-	_pen = QPen(brush, _width);
-
-	_units = Metric;
-
-	_marker = new MarkerItem(this);
-
-	setCursor(Qt::ArrowCursor);
-	setAcceptHoverEvents(true);
+	_painterPath.moveTo(map->ll2xy(_path.first().coordinates()));
+	for (int i = 1; i < _path.size(); i++)
+		_painterPath.lineTo(map->ll2xy(_path.at(i).coordinates()));
 }
 
 void PathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -35,7 +53,7 @@ void PathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	Q_UNUSED(widget);
 
 	painter->setPen(_pen);
-	painter->drawPath(_path);
+	painter->drawPath(_painterPath);
 
 /*
 	QPen p = QPen(QBrush(Qt::red), 0);
@@ -44,15 +62,15 @@ void PathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 */
 }
 
-void PathItem::setScale(qreal scale)
+void PathItem::setMap(Map *map)
 {
+	_map = map;
 	prepareGeometryChange();
 
-	_pen.setWidthF(_width * 1.0/scale);
-	QGraphicsItem::setScale(scale);
-	_marker->setScale(1.0/scale);
-
+	updatePainterPath(map);
 	updateShape();
+
+	_marker->setPos(position(_md));
 }
 
 void PathItem::setColor(const QColor &color)
@@ -77,41 +95,36 @@ void PathItem::setStyle(Qt::PenStyle style)
 	update();
 }
 
-void PathItem::setUnits(enum Units units)
-{
-	_units = units;
-}
-
 QPointF PathItem::position(qreal x) const
 {
 	int low = 0;
-	int high = _distance.count() - 1;
+	int high = _path.count() - 1;
 	int mid = 0;
 
-
-	Q_ASSERT(_distance.count() == _path.elementCount());
 	Q_ASSERT(high > low);
-	Q_ASSERT(x >= _distance.at(low) && x <= _distance.at(high));
+	Q_ASSERT(x >= _path.at(low).distance() && x <= _path.at(high).distance());
 
 	while (low <= high) {
 		mid = low + ((high - low) / 2);
-		qreal val = _distance.at(mid);
+		qreal val = _path.at(mid).distance();
 		if (val > x)
 			high = mid - 1;
 		else if (val < x)
 			low = mid + 1;
 		else
-			return _path.elementAt(mid);
+			return _map->ll2xy(_path.at(mid).coordinates());
 	}
 
 	QLineF l;
 	qreal p1, p2;
-	if (_distance.at(mid) < x) {
-		l = QLineF(_path.elementAt(mid), _path.elementAt(mid+1));
-		p1 = _distance.at(mid); p2 = _distance.at(mid+1);
+	if (_path.at(mid).distance() < x) {
+		l = QLineF(_map->ll2xy(_path.at(mid).coordinates()),
+		  _map->ll2xy(_path.at(mid+1).coordinates()));
+		p1 = _path.at(mid).distance(); p2 = _path.at(mid+1).distance();
 	} else {
-		l = QLineF(_path.elementAt(mid-1), _path.elementAt(mid));
-		p1 = _distance.at(mid-1); p2 = _distance.at(mid);
+		l = QLineF(_map->ll2xy(_path.at(mid-1).coordinates()),
+		  _map->ll2xy(_path.at(mid).coordinates()));
+		p1 = _path.at(mid-1).distance(); p2 = _path.at(mid).distance();
 	}
 
 	return l.pointAt((x - p1) / (p2 - p1));
@@ -119,9 +132,11 @@ QPointF PathItem::position(qreal x) const
 
 void PathItem::moveMarker(qreal distance)
 {
-	if (distance >= _distance.first() && distance <= _distance.last()) {
+	if (distance >= _path.first().distance()
+	  && distance <= _path.last().distance()) {
 		_marker->setVisible(true);
 		_marker->setPos(position(distance));
+		_md = distance;
 	} else
 		_marker->setVisible(false);
 }

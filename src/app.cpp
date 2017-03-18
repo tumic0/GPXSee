@@ -6,23 +6,26 @@
 #include <QPixmapCache>
 #include "opengl.h"
 #include "gui.h"
+#include "onlinemap.h"
+#include "downloader.h"
 #include "app.h"
 
 
 App::App(int &argc, char **argv) : QApplication(argc, argv),
   _argc(argc), _argv(argv)
 {
-	_translator = new QTranslator();
+	QTranslator *translator = new QTranslator(this);
 
 	QString locale = QLocale::system().name();
-	_translator->load(QString(":/lang/gpxsee_") + locale);
-	installTranslator(_translator);
+	translator->load(QString(":/lang/gpxsee_") + locale);
+	installTranslator(translator);
 #ifdef Q_OS_MAC
 	setAttribute(Qt::AA_DontShowIconsInMenus);
 #endif // Q_OS_MAC
 
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
 	QPixmapCache::setCacheLimit(65536);
+	OnlineMap::setDownloader(new Downloader(this));
 	OPENGL_SET_SAMPLES(4);
 
 	_gui = new GUI();
@@ -31,7 +34,6 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 App::~App()
 {
 	delete _gui;
-	delete _translator;
 }
 
 void App::run()

@@ -2,6 +2,7 @@
 #define PATH_H
 
 #include <QVector>
+#include <QRectF>
 #include "coordinates.h"
 
 class PathPoint
@@ -23,6 +24,11 @@ private:
 Q_DECLARE_TYPEINFO(PathPoint, Q_PRIMITIVE_TYPE);
 QDebug operator<<(QDebug dbg, const PathPoint &point);
 
-typedef QVector<PathPoint> Path;
+
+class Path : public QVector<PathPoint>
+{
+public:
+	QRectF boundingRect() const;
+};
 
 #endif // PATH_H

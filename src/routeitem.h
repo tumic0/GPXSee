@@ -3,23 +3,26 @@
 
 #include "pathitem.h"
 #include "route.h"
+#include "units.h"
 
+class Map;
 
 class RouteItem : public PathItem
 {
 	Q_OBJECT
 
 public:
-	RouteItem(const Route &route, QGraphicsItem *parent = 0);
+	RouteItem(const Route &route, Map *map, QGraphicsItem *parent = 0);
 
-	void setUnits(enum Units units);
-	void setScale(qreal scale);
+	//void setScale(qreal scale);
+	void setMap(Map *map);
 
+	void setUnits(Units units);
 	void showWaypoints(bool show);
 	void showWaypointLabels(bool show);
 
 private:
-	QString toolTip();
+	QString toolTip(Units units);
 
 	QString _name;
 	QString _desc;

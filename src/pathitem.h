@@ -4,28 +4,32 @@
 #include <QGraphicsObject>
 #include <QPen>
 #include "markeritem.h"
-#include "units.h"
+#include "path.h"
 
+
+class Map;
 
 class PathItem : public QGraphicsObject
 {
 	Q_OBJECT
 
 public:
-	PathItem(QGraphicsItem *parent = 0);
+	PathItem(const Path &path, Map *map, QGraphicsItem *parent = 0);
 
 	QPainterPath shape() const {return _shape;}
 	QRectF boundingRect() const {return _shape.boundingRect();}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-	const QPainterPath &path() const {return _path;}
-	void showMarker(bool show) {_marker->setVisible(show);}
-	void setScale(qreal scale);
-	void setUnits(enum Units units);
+	const Path &path() const {return _path;}
+
+	void setMap(Map *map);
+
 	void setColor(const QColor &color);
 	void setWidth(int width);
 	void setStyle(Qt::PenStyle style);
+
+	void showMarker(bool show) {_marker->setVisible(show);}
 
 public slots:
 	void moveMarker(qreal distance);
@@ -34,22 +38,24 @@ signals:
 	void selected(bool);
 
 protected:
-	void updateShape();
-
-	QVector<qreal> _distance;
-	QPainterPath _path;
+	Path _path;
 	MarkerItem *_marker;
-	Units _units;
 
 private:
 	QPointF position(qreal distance) const;
+	void updatePainterPath(Map *map);
+	void updateShape();
 
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
+	Map *_map;
+	qreal _md;
+
 	int _width;
 	QPen _pen;
 	QPainterPath _shape;
+	QPainterPath _painterPath;
 };
 
 #endif // PATHITEM_H

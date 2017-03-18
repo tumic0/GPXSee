@@ -3,10 +3,11 @@
 #include "waypoint.h"
 #include "waypointitem.h"
 #include "tooltip.h"
+#include "map.h"
 #include "routeitem.h"
 
 
-QString RouteItem::toolTip()
+QString RouteItem::toolTip(Units units)
 {
 	ToolTip tt;
 
@@ -14,58 +15,41 @@ QString RouteItem::toolTip()
 		tt.insert(tr("Name"), _name);
 	if (!_desc.isEmpty())
 		tt.insert(tr("Description"), _desc);
-	tt.insert(tr("Distance"), Format::distance(_distance.last(), _units));
+	tt.insert(tr("Distance"), Format::distance(_path.last().distance(), units));
 
 	return tt.toString();
 }
 
-RouteItem::RouteItem(const Route &route, QGraphicsItem *parent)
-  : PathItem(parent)
+RouteItem::RouteItem(const Route &route, Map *map, QGraphicsItem *parent)
+  : PathItem(route.path(), map, parent)
 {
-	const RouteData &r = route.routeData();
-	const QVector<qreal> &d = route.distanceData();
-	QPointF p;
+	const QVector<Waypoint> &waypoints = route.waypoints();
 
+	for (int i = 0; i < waypoints.size(); i++)
+		new WaypointItem(waypoints.at(i), map, this);
 
-	Q_ASSERT(r.count() >= 2);
-	Q_ASSERT(r.size() == d.size());
+	_name = route.name();
+	_desc = route.description();
 
-	_name = r.name();
-	_desc = r.description();
-
-	new WaypointItem(r.first(), this);
-	p = r.first().coordinates().toMercator();
-	_path.moveTo(QPointF(p.x(), -p.y()));
-	_distance.append(d.first());
-	for (int i = 1; i < r.size(); i++) {
-		if (r.at(i).coordinates() == r.at(i-1).coordinates())
-			continue;
-		p = r.at(i).coordinates().toMercator();
-		_path.lineTo(QPointF(p.x(), -p.y()));
-		_distance.append(d.at(i));
-		new WaypointItem(r.at(i), this);
-	}
-
-	updateShape();
-
-	_marker->setPos(_path.elementAt(0));
-
-	setToolTip(toolTip());
+	setToolTip(toolTip(Metric));
 }
 
-void RouteItem::setScale(qreal scale)
+void RouteItem::setMap(Map *map)
 {
 	QList<QGraphicsItem *> childs =	childItems();
-	for (int i = 0; i < childs.count(); i++)
-		childs.at(i)->setScale(1.0/scale);
+	for (int i = 0; i < childs.count(); i++) {
+		if (childs.at(i) != _marker) {
+			WaypointItem *wi = static_cast<WaypointItem*>(childs.at(i));
+			wi->setMap(map);
+		}
+	}
 
-	PathItem::setScale(scale);
+	PathItem::setMap(map);
 }
 
 void RouteItem::setUnits(enum Units units)
 {
-	PathItem::setUnits(units);
-	setToolTip(toolTip());
+	setToolTip(toolTip(units));
 }
 
 void RouteItem::showWaypoints(bool show)

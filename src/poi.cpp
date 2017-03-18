@@ -58,18 +58,15 @@ static bool cb(size_t data, void* context)
 	return true;
 }
 
-QVector<Waypoint> POI::points(const PathItem *path) const
+QVector<Waypoint> POI::points(const Path &path) const
 {
 	QVector<Waypoint> ret;
 	QSet<int> set;
 	qreal min[2], max[2];
-	const QPainterPath &pp = path->path();
 
-	for (int i = 0; i < pp.elementCount(); i++) {
-		const QPainterPath::Element &pe = pp.elementAt(i);
-		Coordinates p = Coordinates::fromMercator(QPointF(pe.x, -pe.y));
-
-		QPair<Coordinates, Coordinates> br = p.boundingRect(_radius);
+	for (int i = 0; i < path.count(); i++) {
+		const Coordinates &c = path.at(i).coordinates();
+		QPair<Coordinates, Coordinates> br = c.boundingRect(_radius);
 		min[0] = br.first.lon();
 		min[1] = br.first.lat();
 		max[0] = br.second.lon();

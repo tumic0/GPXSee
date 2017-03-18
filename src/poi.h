@@ -7,8 +7,8 @@
 #include <QStringList>
 #include "waypoint.h"
 #include "rtree.h"
+#include "path.h"
 
-class PathItem;
 class WaypointItem;
 
 class POI : public QObject
@@ -25,7 +25,7 @@ public:
 	unsigned radius() const {return _radius;}
 	void setRadius(unsigned radius);
 
-	QVector<Waypoint> points(const PathItem *path) const;
+	QVector<Waypoint> points(const Path &path) const;
 	QVector<Waypoint> points(const QList<WaypointItem*> &list) const;
 	QVector<Waypoint> points(const QList<Waypoint> &list) const;
 

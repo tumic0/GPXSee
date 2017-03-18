@@ -31,7 +31,7 @@ class GUI : public QMainWindow
 	Q_OBJECT
 
 public:
-	GUI(QWidget *parent = 0);
+	GUI();
 	~GUI();
 
 	bool openFile(const QString &fileName);
@@ -47,7 +47,6 @@ private slots:
 	void reloadFile();
 	void openPOIFile();
 	void closePOIFiles();
-	void showMap(bool show);
 	void showGraphs(bool show);
 	void showGraphGrids(bool show);
 	void showToolbars(bool show);
@@ -189,8 +188,8 @@ private:
 
 	FileBrowser *_browser;
 	QList<QString> _files;
-	Map *_currentMap;
 
+	Map *_map;
 	int _trackCount;
 	int _routeCount;
 	int _waypointCount;

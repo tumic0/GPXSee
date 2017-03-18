@@ -14,6 +14,7 @@
 #define SCREEN_DPI      96.0
 
 #define MAP_FILE        QString("maps.txt")
+#define MAP_DIR         QString("maps")
 #define POI_DIR         QString("POI")
 
 #if defined(Q_OS_WIN32)
@@ -28,8 +29,10 @@
 #define GLOBAL_DIR      QString("/usr/share/gpxsee")
 #endif
 
+#define USER_MAP_DIR    USER_DIR + QString("/") + MAP_DIR
 #define USER_MAP_FILE   USER_DIR + QString("/") + MAP_FILE
 #define USER_POI_DIR    USER_DIR + QString("/") + POI_DIR
+#define GLOBAL_MAP_DIR  GLOBAL_DIR + QString("/") + MAP_DIR
 #define GLOBAL_MAP_FILE GLOBAL_DIR + QString("/") + MAP_FILE
 #define GLOBAL_POI_DIR  GLOBAL_DIR + QString("/") + POI_DIR
 #define TILES_DIR       USER_DIR + QString("/tiles")

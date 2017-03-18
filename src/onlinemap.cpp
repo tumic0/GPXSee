@@ -1,0 +1,255 @@
+#include <QFileInfo>
+#include <QDir>
+#include <QPainter>
+#include "downloader.h"
+#include "config.h"
+#include "rd.h"
+#include "wgs84.h"
+#include "misc.h"
+#include "coordinates.h"
+#include "onlinemap.h"
+
+
+#define ZOOM_MAX      18
+#define ZOOM_MIN      3
+
+static QPoint mercator2tile(const QPointF &m, int z)
+{
+	QPoint tile;
+
+	tile.setX((int)(floor((m.x() + 180.0) / 360.0 * (1<<z))));
+	tile.setY((int)(floor((1.0 - (m.y() / 180.0)) / 2.0 * (1<<z))));
+
+	return tile;
+}
+
+static QPointF tile2mercator(const QPoint &tile, int z)
+{
+	QPointF m;
+
+	m.setX(((360.0 * tile.x()) / (qreal)(1<<z)) - 180.0);
+	m.setY((1.0 - (2.0 * tile.y()) / (qreal)(1<<z)) * 180.0);
+
+	return m;
+}
+
+static int scale2zoom(qreal scale)
+{
+	int zoom = (int)log2(360.0/(scale * (qreal)Tile::size()));
+
+	if (zoom < ZOOM_MIN)
+		return ZOOM_MIN;
+	if (zoom > ZOOM_MAX)
+		return ZOOM_MAX;
+
+	return zoom;
+}
+
+
+Downloader *OnlineMap::downloader;
+
+OnlineMap::OnlineMap(const QString &name, const QString &url, QObject *parent)
+  : Map(parent)
+{
+	_name = name;
+	_url = url;
+	downloader = downloader;
+	_block = false;
+	_scale = ((360.0/(qreal)(1<<ZOOM_MAX))/(qreal)Tile::size());
+
+	connect(downloader, SIGNAL(finished()), this, SLOT(emitLoaded()));
+
+	QString path = TILES_DIR + QString("/") + name;
+	if (!QDir().mkpath(path))
+		qWarning("Error creating tiles dir: %s\n", qPrintable(path));
+}
+
+void OnlineMap::emitLoaded()
+{
+	emit loaded();
+}
+
+void OnlineMap::loadTilesAsync(QList<Tile> &list)
+{
+	QList<Download> dl;
+
+	for (int i = 0; i < list.size(); i++) {
+		Tile &t = list[i];
+		QString file = tileFile(t);
+		QFileInfo fi(file);
+
+		if (!fi.exists()) {
+			fillTile(t);
+			dl.append(Download(tileUrl(t), file));
+		} else
+			loadTileFile(t, file);
+	}
+
+	if (!dl.empty())
+		downloader->get(dl);
+}
+
+void OnlineMap::loadTilesSync(QList<Tile> &list)
+{
+	QList<Download> dl;
+
+	for (int i = 0; i < list.size(); i++) {
+		Tile &t = list[i];
+		QString file = tileFile(t);
+		QFileInfo fi(file);
+
+		if (!fi.exists())
+			dl.append(Download(tileUrl(t), file));
+		else
+			loadTileFile(t, file);
+	}
+
+	if (dl.empty())
+		return;
+
+	QEventLoop wait;
+	connect(downloader, SIGNAL(finished()), &wait, SLOT(quit()));
+	if (downloader->get(dl))
+		wait.exec();
+
+	for (int i = 0; i < list.size(); i++) {
+		Tile &t = list[i];
+
+		if (t.pixmap().isNull()) {
+			QString file = tileFile(t);
+			QFileInfo fi(file);
+
+			if (!(fi.exists() && loadTileFile(t, file)))
+				fillTile(t);
+		}
+	}
+}
+
+void OnlineMap::fillTile(Tile &tile)
+{
+	tile.pixmap() = QPixmap(Tile::size(), Tile::size());
+	tile.pixmap().fill();
+}
+
+bool OnlineMap::loadTileFile(Tile &tile, const QString &file)
+{
+	if (!tile.pixmap().load(file)) {
+		qWarning("%s: error loading tile file\n", qPrintable(file));
+		return false;
+	}
+
+	return true;
+}
+
+QString OnlineMap::tileUrl(const Tile &tile)
+{
+	QString url(_url);
+
+	url.replace("$z", QString::number(tile.zoom()));
+	url.replace("$x", QString::number(tile.xy().x()));
+	url.replace("$y", QString::number(tile.xy().y()));
+
+	return url;
+}
+
+QString OnlineMap::tileFile(const Tile &tile)
+{
+	QString file = TILES_DIR + QString("/%1/%2-%3-%4").arg(name())
+	  .arg(tile.zoom()).arg(tile.xy().x()).arg(tile.xy().y());
+
+	return file;
+}
+
+void OnlineMap::clearCache()
+{
+	QString path = TILES_DIR + QString("/") + name();
+	QDir dir = QDir(path);
+	QStringList list = dir.entryList();
+
+	for (int i = 0; i < list.count(); i++)
+		dir.remove(list.at(i));
+}
+
+QRectF OnlineMap::bounds() const
+{
+	return scaled(QRectF(QPointF(-180, -180), QSizeF(360, 360)), 1.0/_scale);
+}
+
+qreal OnlineMap::zoomFit(const QSize &size, const QRectF &br)
+{
+	if (br.isNull())
+		_scale = ((360.0/(qreal)(1<<ZOOM_MAX))/(qreal)Tile::size());
+	else {
+		Coordinates topLeft(br.topLeft());
+		Coordinates bottomRight(br.bottomRight());
+		QRectF tbr(topLeft.toMercator(), bottomRight.toMercator());
+
+		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
+
+		_scale = ((360.0/(qreal)(1<<scale2zoom(qMax(sc.x(), sc.y()))))
+		  / (qreal)Tile::size());
+	}
+
+	return _scale;
+}
+
+qreal OnlineMap::resolution(const QPointF &p) const
+{
+	return (WGS84_RADIUS * 2 * M_PI * _scale / 360.0
+	  * cos(2.0 * atan(exp(deg2rad(-p.y() * _scale))) - M_PI/2));
+}
+
+qreal OnlineMap::zoomIn()
+{
+	int zoom = qMin(scale2zoom(_scale) + 1, ZOOM_MAX);
+	_scale = ((360.0/(qreal)(1<<zoom))/(qreal)Tile::size());
+	return _scale;
+}
+
+qreal OnlineMap::zoomOut()
+{
+	int zoom = qMax(scale2zoom(_scale) - 1, ZOOM_MIN);
+	_scale = ((360.0/(qreal)(1<<zoom))/(qreal)Tile::size());
+	return _scale;
+}
+
+void OnlineMap::draw(QPainter *painter, const QRectF &rect)
+{
+	int zoom = scale2zoom(_scale);
+
+	QPoint tile = mercator2tile(QPointF(rect.topLeft().x() * _scale,
+	  -rect.topLeft().y() * _scale), zoom);
+	QPointF tm = tile2mercator(tile, zoom);
+	QPoint tl = QPoint((int)(tm.x() / _scale), (int)(-tm.y() / _scale));
+
+
+	QList<Tile> tiles;
+	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
+	for (int i = 0; i < ceil(s.width() / Tile::size()); i++)
+		for (int j = 0; j < ceil(s.height() / Tile::size()); j++)
+			tiles.append(Tile(QPoint(tile.x() + i, tile.y() + j), zoom));
+
+	if (_block)
+		loadTilesSync(tiles);
+	else
+		loadTilesAsync(tiles);
+
+	for (int i = 0; i < tiles.count(); i++) {
+		Tile &t = tiles[i];
+		QPoint tp(tl.x() + (t.xy().x() - tile.x()) * Tile::size(),
+		  tl.y() + (t.xy().y() - tile.y()) * Tile::size());
+		painter->drawPixmap(tp, t.pixmap());
+	}
+}
+
+QPointF OnlineMap::ll2xy(const Coordinates &c) const
+{
+	QPointF m = c.toMercator();
+	return QPointF(m.x() / _scale, m.y() / -_scale);
+}
+
+Coordinates OnlineMap::xy2ll(const QPointF &p) const
+{
+	QPointF m(p.x() * _scale, -p.y() * _scale);
+	return Coordinates::fromMercator(m);
+}

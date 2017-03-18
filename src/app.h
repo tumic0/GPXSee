@@ -4,7 +4,6 @@
 #include <QApplication>
 
 class GUI;
-class QTranslator;
 
 class App : QApplication
 {
@@ -22,7 +21,6 @@ private:
 	int &_argc;
 	char **_argv;
 	GUI *_gui;
-	QTranslator *_translator;
 };
 
 #endif // APP_H

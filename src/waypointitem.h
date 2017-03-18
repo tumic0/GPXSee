@@ -5,16 +5,17 @@
 #include "waypoint.h"
 #include "units.h"
 
+class Map;
+
 class WaypointItem : public QGraphicsItem
 {
 public:
-	WaypointItem(const Waypoint &waypoint, QGraphicsItem *parent = 0);
+	WaypointItem(const Waypoint &waypoint, Map *map, QGraphicsItem *parent = 0);
 
 	const Waypoint &waypoint() const {return _waypoint;}
-	const QPointF &coordinates() const {return _coordinates;}
 
-	void setUnits(enum Units units);
-	void setScale(qreal scale);
+	void setMap(Map *map);
+	void setUnits(Units units);
 	void showLabel(bool show);
 
 	QPainterPath shape() const {return _shape;}
@@ -27,12 +28,10 @@ private:
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 	void updateShape();
-	QString toolTip();
+	QString toolTip(Units units);
 
 	QPainterPath _shape;
-	QPointF _coordinates;
 	Waypoint _waypoint;
-	Units _units;
 
 	bool _hover;
 	bool _showLabel;

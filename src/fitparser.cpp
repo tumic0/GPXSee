@@ -36,8 +36,7 @@ void FITParser::clearDefinitions()
 void FITParser::warning(const char *text) const
 {
 	const QFile *file = static_cast<QFile *>(_device);
-	fprintf(stderr, "%s:%d: %s\n", qPrintable(file->fileName()),
-	  _len, text);
+	qWarning("%s:%d: %s\n", qPrintable(file->fileName()), _len, text);
 }
 
 bool FITParser::readData(char *data, size_t size)

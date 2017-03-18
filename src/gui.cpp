@@ -28,6 +28,8 @@
 #include "data.h"
 #include "map.h"
 #include "maplist.h"
+#include "mapdir.h"
+#include "emptymap.h"
 #include "elevationgraph.h"
 #include "speedgraph.h"
 #include "heartrategraph.h"
@@ -36,7 +38,6 @@
 #include "powergraph.h"
 #include "pathview.h"
 #include "trackinfo.h"
-#include "downloader.h"
 #include "filebrowser.h"
 #include "cpuarch.h"
 #include "graphtab.h"
@@ -44,7 +45,7 @@
 #include "gui.h"
 
 
-GUI::GUI(QWidget *parent) : QMainWindow(parent)
+GUI::GUI()
 {
 	loadMaps();
 	loadPOIs();
@@ -118,12 +119,21 @@ void GUI::createBrowser()
 
 void GUI::loadMaps()
 {
-	MapList ml(new Downloader(this));
+	QList<Map*> online, offline;
 
 	if (QFile::exists(USER_MAP_FILE))
-		_maps = ml.load(USER_MAP_FILE, this);
+		online = MapList::load(USER_MAP_FILE, this);
 	else
-		_maps = ml.load(GLOBAL_MAP_FILE, this);
+		online = MapList::load(GLOBAL_MAP_FILE, this);
+
+	if (QFile::exists(USER_MAP_DIR))
+		offline = MapDir::load(USER_MAP_DIR, this);
+	else
+		offline = MapDir::load(GLOBAL_MAP_DIR, this);
+
+	_maps = online + offline;
+
+	_map = _maps.isEmpty() ? new EmptyMap(this) : _maps.first();
 }
 
 void GUI::loadPOIs()
@@ -141,11 +151,11 @@ void GUI::loadPOIs()
 
 	for (int i = 0; i < list.size(); ++i) {
 		if (!_poi->loadFile(list.at(i).absoluteFilePath())) {
-			fprintf(stderr, "Error loading POI file: %s: %s\n",
+			qWarning("Error loading POI file: %s: %s\n",
 			  qPrintable(list.at(i).fileName()),
 			  qPrintable(_poi->errorString()));
 			if (_poi->errorLine())
-				fprintf(stderr, "Line: %d\n", _poi->errorLine());
+				qWarning("Line: %d\n", _poi->errorLine());
 		}
 	}
 }
@@ -281,7 +291,8 @@ void GUI::createActions()
 	  this);
 	_showMapAction->setCheckable(true);
 	_showMapAction->setShortcut(SHOW_MAP_SHORTCUT);
-	connect(_showMapAction, SIGNAL(triggered(bool)), this, SLOT(showMap(bool)));
+	connect(_showMapAction, SIGNAL(triggered(bool)), _pathView,
+	  SLOT(showMap(bool)));
 	addAction(_showMapAction);
 	_clearMapCacheAction = new QAction(tr("Clear tile cache"), this);
 	connect(_clearMapCacheAction, SIGNAL(triggered()), this,
@@ -508,15 +519,13 @@ void GUI::createToolBars()
 
 void GUI::createPathView()
 {
-	_pathView = new PathView(this);
+	_pathView = new PathView(_map, _poi, this);
 	_pathView->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,
 	  QSizePolicy::Expanding));
 	_pathView->setMinimumHeight(200);
 #ifdef Q_OS_WIN32
 	_pathView->setFrameShape(QFrame::NoFrame);
 #endif // Q_OS_WIN32
-
-	_pathView->setPOI(_poi);
 }
 
 void GUI::createGraphTabs()
@@ -697,7 +706,7 @@ bool GUI::loadFile(const QString &fileName)
 			if (data.tracks().count() == 1 && !data.routes().count())
 				_pathName = data.tracks().first()->name();
 			else if (data.routes().count() == 1 && !data.tracks().count())
-				_pathName = data.routes().first()->routeData().name();
+				_pathName = data.routes().first()->name();
 		} else
 			_pathName = QString();
 
@@ -987,14 +996,6 @@ void GUI::closeAll()
 	updatePathView();
 }
 
-void GUI::showMap(bool show)
-{
-	if (show)
-		_pathView->setMap(_currentMap);
-	else
-		_pathView->setMap(0);
-}
-
 void GUI::showGraphs(bool show)
 {
 	_graphTabWidget->setHidden(!show);
@@ -1072,7 +1073,7 @@ void GUI::showGraphGrids(bool show)
 
 void GUI::clearMapCache()
 {
-	_currentMap->clearCache();
+	_map->clearCache();
 	_pathView->redraw();
 }
 
@@ -1097,7 +1098,8 @@ void GUI::updateStatusBarInfo()
 			_timeLabel->setToolTip(Format::timeSpan(time()));
 		} else {
 			_timeLabel->setText(Format::timeSpan(time()));
-			_timeLabel->setToolTip(Format::timeSpan(movingTime()));
+			_timeLabel->setToolTip(Format::timeSpan(movingTime())
+			  + "<sub>M</sub>");
 		}
 	} else {
 		_timeLabel->clear();
@@ -1115,17 +1117,16 @@ void GUI::updateWindowTitle()
 
 void GUI::mapChanged(int index)
 {
-	_currentMap = _maps.at(index);
-
-	if (_showMapAction->isChecked())
-		_pathView->setMap(_currentMap);
+	_map = _maps.at(index);
+	_pathView->setMap(_map);
 }
 
 void GUI::nextMap()
 {
 	if (_maps.count() < 2)
 		return;
-	int next = (_maps.indexOf(_currentMap) + 1) % _maps.count();
+
+	int next = (_maps.indexOf(_map) + 1) % _maps.count();
 	_mapActions.at(next)->setChecked(true);
 	mapChanged(next);
 }
@@ -1134,7 +1135,8 @@ void GUI::prevMap()
 {
 	if (_maps.count() < 2)
 		return;
-	int prev = (_maps.indexOf(_currentMap) + _maps.count() - 1) % _maps.count();
+
+	int prev = (_maps.indexOf(_map) + _maps.count() - 1) % _maps.count();
 	_mapActions.at(prev)->setChecked(true);
 	mapChanged(prev);
 }
@@ -1368,8 +1370,7 @@ void GUI::writeSettings()
 	settings.endGroup();
 
 	settings.beginGroup(MAP_SETTINGS_GROUP);
-	if (_currentMap)
-		settings.setValue(CURRENT_MAP_SETTING, _currentMap->name());
+	settings.setValue(CURRENT_MAP_SETTING, _map->name());
 	if (_showMapAction->isChecked() != SHOW_MAP_DEFAULT)
 		settings.setValue(SHOW_MAP_SETTING, _showMapAction->isChecked());
 	settings.endGroup();
@@ -1515,11 +1516,9 @@ void GUI::readSettings()
 	if (_maps.count()) {
 		int index = mapIndex(settings.value(CURRENT_MAP_SETTING).toString());
 		_mapActions.at(index)->setChecked(true);
-		_currentMap = _maps.at(index);
-		if (_showMapAction->isChecked())
-			_pathView->setMap(_currentMap);
-	} else
-		_currentMap = 0;
+		_map = _maps.at(index);
+		_pathView->setMap(_map);
+	}
 	settings.endGroup();
 
 	settings.beginGroup(GRAPH_SETTINGS_GROUP);

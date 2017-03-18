@@ -1,5 +1,5 @@
 TARGET = GPXSee
-VERSION = 3.10
+VERSION = 4.0
 QT += core \
     gui \
     network
@@ -22,6 +22,7 @@ HEADERS += src/config.h \
     src/sliderinfoitem.h \
     src/filebrowser.h \
     src/map.h \
+    src/onlinemap.h \
     src/maplist.h \
     src/downloader.h \
     src/units.h \
@@ -77,7 +78,11 @@ HEADERS += src/config.h \
     src/colorbox.h \
     src/stylecombobox.h \
     src/opengl.h \
-    src/timetype.h
+    src/timetype.h \
+    src/emptymap.h \
+    src/ozimap.h \
+    src/mapdir.h \
+    src/matrix.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -89,7 +94,7 @@ SOURCES += src/main.cpp \
     src/speedgraph.cpp \
     src/sliderinfoitem.cpp \
     src/filebrowser.cpp \
-    src/map.cpp \
+    src/onlinemap.cpp \
     src/maplist.cpp \
     src/downloader.cpp \
     src/scaleitem.cpp \
@@ -131,7 +136,11 @@ SOURCES += src/main.cpp \
     src/nmeaparser.cpp \
     src/optionsdialog.cpp \
     src/colorbox.cpp \
-    src/stylecombobox.cpp
+    src/stylecombobox.cpp \
+    src/emptymap.cpp \
+    src/ozimap.cpp \
+    src/mapdir.cpp \
+    src/matrix.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts

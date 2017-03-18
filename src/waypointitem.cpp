@@ -3,23 +3,24 @@
 #include "config.h"
 #include "format.h"
 #include "tooltip.h"
+#include "map.h"
 #include "waypointitem.h"
 
 
 #define POINT_SIZE 8
 #define HOVER_SIZE 10
 
-QString WaypointItem::toolTip()
+QString WaypointItem::toolTip(Units units)
 {
 	ToolTip tt;
 
-	if (!_waypoint.name().isEmpty() && !_showLabel)
+	if (!_waypoint.name().isEmpty())
 		tt.insert(qApp->translate("WaypointItem", "Name"), _waypoint.name());
 	tt.insert(qApp->translate("WaypointItem", "Coordinates"),
 	  Format::coordinates(_waypoint.coordinates()));
 	if (!std::isnan(_waypoint.elevation()))
 		tt.insert(qApp->translate("WaypointItem", "Elevation"),
-		  Format::elevation(_waypoint.elevation(), _units));
+		  Format::elevation(_waypoint.elevation(), units));
 	if (!_waypoint.timestamp().isNull())
 		tt.insert(qApp->translate("WaypointItem", "Date"),
 		  _waypoint.timestamp().toString(Qt::SystemLocaleShortDate));
@@ -30,23 +31,24 @@ QString WaypointItem::toolTip()
 	return tt.toString();
 }
 
-WaypointItem::WaypointItem(const Waypoint &waypoint, QGraphicsItem *parent)
-  : QGraphicsItem(parent)
+WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
+  QGraphicsItem *parent) : QGraphicsItem(parent)
 {
-	_units = Metric;
+	_waypoint = waypoint;
 	_showLabel = true;
 	_hover = false;
 
-	_waypoint = waypoint;
-	QPointF p = waypoint.coordinates().toMercator();
-	_coordinates = QPointF(p.x(), -p.y());
-
 	updateShape();
 
-	setPos(_coordinates);
-	setToolTip(toolTip());
+	setPos(map->ll2xy(waypoint.coordinates()));
+	setToolTip(toolTip(Metric));
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
+}
+
+void WaypointItem::setMap(Map *map)
+{
+	setPos(map->ll2xy(_waypoint.coordinates()));
 }
 
 void WaypointItem::updateShape()
@@ -104,15 +106,17 @@ void WaypointItem::paint(QPainter *painter,
 */
 }
 
+/*
 void WaypointItem::setScale(qreal scale)
 {
-	setPos(_coordinates * scale);
+	QPointF p = _map->ll2xy(_waypoint.coordinates());
+	setPos(QPointF(p.x(), -p.y()) * scale);
 }
+*/
 
 void WaypointItem::setUnits(enum Units units)
 {
-	_units = units;
-	setToolTip(toolTip());
+	setToolTip(toolTip(units));
 }
 
 void WaypointItem::showLabel(bool show)
@@ -120,7 +124,6 @@ void WaypointItem::showLabel(bool show)
 	prepareGeometryChange();
 	_showLabel = show;
 	updateShape();
-	setToolTip(toolTip());
 }
 
 void WaypointItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
