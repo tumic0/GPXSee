@@ -28,9 +28,12 @@ int OziMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points)
 				return ln;
 		} else if (ln == 3)
 			_imgPath = line.trimmed();
-		else if (ln >= 10 && ln < 40) {
+		else {
 			QList<QByteArray> list = line.split(',');
-			if (list.count() == 17 && !list.at(2).trimmed().isEmpty()) {
+			QString key(list.at(0).trimmed());
+
+			if (key.startsWith("Point") && list.count() == 17
+			  && !list.at(2).trimmed().isEmpty()) {
 				int x = list.at(2).trimmed().toInt(&res);
 				if (!res)
 					return ln;
@@ -56,10 +59,7 @@ int OziMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points)
 					lond = -lond;
 				points.append(QPair<QPoint, Coordinates>(QPoint(x, y),
 				  Coordinates(lond + lonm/60.0, latd + latm/60.0)));
-			}
-		} else {
-			QList<QByteArray> list = line.split(',');
-			if (list.at(0).trimmed() == "IWH") {
+			} else if (key == "IWH") {
 				int w = list.at(2).trimmed().toInt(&res);
 				if (!res)
 					return ln;
@@ -87,9 +87,10 @@ bool OziMap::computeTransformation(const QList<ReferencePoint> &points)
 		for (size_t k = 0; k < c.h(); k++) {
 			for (int i = 0; i < points.size(); i++) {
 				double f[3], t[2];
+				QPointF p = points.at(i).second.toMercator();
 
-				f[0] = points.at(i).second.lon();
-				f[1] = points.at(i).second.lat();
+				f[0] = p.x();
+				f[1] = p.y();
 				f[2] = 1.0;
 				t[0] = points.at(i).first.x();
 				t[1] = points.at(i).first.y();
@@ -102,9 +103,10 @@ bool OziMap::computeTransformation(const QList<ReferencePoint> &points)
 	Q.zeroize();
 	for (int qi = 0; qi < points.size(); qi++) {
 		double v[3];
+		QPointF p = points.at(qi).second.toMercator();
 
-		v[0] = points.at(qi).second.lon();
-		v[1] = points.at(qi).second.lat();
+		v[0] = p.x();
+		v[1] = p.y();
 		v[2] = 1.0;
 		for (size_t i = 0; i < Q.h(); i++)
 			for (size_t j = 0; j < Q.w(); j++)
@@ -174,8 +176,8 @@ bool OziMap::getTileInfo(QDir &set)
 
 	QImage tile(_tileName.arg("0", "0"));
 	if (tile.isNull()) {
-		qWarning("%s: %s: invalid image", qPrintable(_name),
-		  qPrintable(_tileName.arg("0", "0")));
+		qWarning("%s: error retrieving tile size: %s: invalid image",
+		  qPrintable(_name), qPrintable(_tileName.arg("0", "0")));
 		  return false;
 	}
 	_tileSize = tile.size();
@@ -324,10 +326,10 @@ void OziMap::draw(QPainter *painter, const QRectF &rect)
 
 QPointF OziMap::ll2xy(const Coordinates &c) const
 {
-	return _transform.map(QPointF(c.lon(), c.lat()));
+	return _transform.map(c.toMercator());
 }
 
 Coordinates OziMap::xy2ll(const QPointF &p) const
 {
-	return _transform.inverted().map(p);
+	return Coordinates::fromMercator(_transform.inverted().map(p));
 }
