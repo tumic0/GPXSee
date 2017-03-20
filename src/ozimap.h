@@ -7,6 +7,7 @@
 #include "coordinates.h"
 
 class QIODevice;
+class QDir;
 
 class OziMap : public Map
 {
@@ -41,6 +42,7 @@ private:
 	int parseMapFile(QIODevice &device, QList<ReferencePoint> &points);
 	bool computeTransformation(const QList<ReferencePoint> &points);
 	bool computeResolution(QList<ReferencePoint> &points);
+	bool getTileInfo(QDir &set);
 
 	QString _name;
 	QString _imgPath;
@@ -48,8 +50,11 @@ private:
 	QTransform _transform;
 	qreal _resolution;
 
-	bool _valid;
 	QImage *_img;
+	QSize _tileSize;
+	QString _tileName;
+
+	bool _valid;
 };
 
 #endif // OZIMAP_H

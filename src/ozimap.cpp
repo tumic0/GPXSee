@@ -26,9 +26,7 @@ int OziMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points)
 		if (ln == 1) {
 			if (line.trimmed() != "OziExplorer Map Data File Version 2.2")
 				return ln;
-		} else if (ln == 2)
-			_name = line.trimmed();
-		else if (ln == 3)
+		} else if (ln == 3)
 			_imgPath = line.trimmed();
 		else if (ln >= 10 && ln < 40) {
 			QList<QByteArray> list = line.split(',');
@@ -152,6 +150,39 @@ bool OziMap::computeResolution(QList<ReferencePoint> &points)
 	return true;
 }
 
+bool OziMap::getTileInfo(QDir &set)
+{
+	QFileInfoList tiles = set.entryInfoList(QDir::Files);
+
+	if (tiles.isEmpty()) {
+		qWarning("%s: empty tile set", qPrintable(_name));
+		return false;
+	}
+
+	for (int i = 0; i < tiles.size(); i++) {
+		if (tiles.at(i).fileName().contains("_0_0.")) {
+			_tileName = QString(tiles.at(i).fileName())
+			  .replace("_0_0.", "_%1_%2.");
+			break;
+		}
+	}
+	if (_tileName.isNull()) {
+		qWarning("%s: invalid tile names", qPrintable(_name));
+		return false;
+	}
+	_tileName = set.absolutePath() + "/" + _tileName;
+
+	QImage tile(_tileName.arg("0", "0"));
+	if (tile.isNull()) {
+		qWarning("%s: %s: invalid image", qPrintable(_name),
+		  qPrintable(_tileName.arg("0", "0")));
+		  return false;
+	}
+	_tileSize = tile.size();
+
+	return true;
+}
+
 OziMap::OziMap(const QString &path, QObject *parent) : Map(parent)
 {
 	int errorLine;
@@ -186,18 +217,25 @@ OziMap::OziMap(const QString &path, QObject *parent) : Map(parent)
 	}
 	computeResolution(points);
 
-	QFileInfo ii(_imgPath);
-	if (ii.isRelative())
-		_imgPath = fi.absoluteFilePath() + "/" + _imgPath;
-	ii = QFileInfo(_imgPath);
-	if (!ii.exists()) {
-		qWarning("%s: %s: no such image", qPrintable(_name),
-		  qPrintable(ii.absoluteFilePath()));
-		return;
-	}
-	if (_size.isNull()) {
+	if (!_size.isValid()) {
 		qWarning("%s: missing or invalid image size (IWH)", qPrintable(_name));
 		return;
+	}
+
+	QDir set(fi.absoluteFilePath() + "/" + "set");
+	if (set.exists()) {
+		if (!getTileInfo(set))
+			return;
+	} else {
+		QFileInfo ii(_imgPath);
+		if (ii.isRelative())
+			_imgPath = fi.absoluteFilePath() + "/" + _imgPath;
+		ii = QFileInfo(_imgPath);
+		if (!ii.exists()) {
+			qWarning("%s: %s: no such image", qPrintable(_name),
+			  qPrintable(ii.absoluteFilePath()));
+			return;
+		}
 	}
 
 	_img = 0;
@@ -206,7 +244,8 @@ OziMap::OziMap(const QString &path, QObject *parent) : Map(parent)
 
 void OziMap::load()
 {
-	Q_ASSERT(_img == 0);
+	if (_tileSize.isValid())
+		return;
 
 	_img = new QImage(_imgPath);
 	if (_img->isNull())
@@ -215,10 +254,8 @@ void OziMap::load()
 
 void OziMap::unload()
 {
-	Q_ASSERT(_img != 0);
-
-	delete _img;
-	_img = 0;
+	if (_img)
+		delete _img;
 }
 
 QRectF OziMap::bounds() const
@@ -253,11 +290,36 @@ qreal OziMap::zoomOut()
 
 void OziMap::draw(QPainter *painter, const QRectF &rect)
 {
-	Q_ASSERT(_img != 0);
+	if (_tileSize.isValid()) {
+		QPoint tl = QPoint((int)floor(rect.left() / (qreal)_tileSize.width())
+		  * _tileSize.width(), (int)floor(rect.top() / _tileSize.height())
+		  * _tileSize.height());
 
-	QPoint p = rect.topLeft().toPoint();
-	QImage crop = _img->copy(QRect(p, rect.size().toSize()));
-	painter->drawImage(rect.topLeft(), crop);
+		QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
+		for (int i = 0; i < ceil(s.width() / _tileSize.width()); i++) {
+			for (int j = 0; j < ceil(s.height() / _tileSize.height()); j++) {
+				int x = tl.x() + i * _tileSize.width();
+				int y = tl.y() + j * _tileSize.height();
+				QPixmap pixmap(_tileName.arg(QString::number(x),
+				  QString::number(y)));
+				if (pixmap.isNull()) {
+					qWarning("%s: error loading tile image", qPrintable(
+					  _tileName.arg(QString::number(x), QString::number(y))));
+					painter->fillRect(QRectF(QPoint(x, y), _tileSize),
+					  Qt::white);
+				} else
+					painter->drawPixmap(QPoint(x, y), pixmap);
+			}
+		}
+	} else {
+		if (_img->isNull())
+			painter->fillRect(rect, Qt::white);
+		else {
+			QPoint p = rect.topLeft().toPoint();
+			QImage crop = _img->copy(QRect(p, rect.size().toSize()));
+			painter->drawImage(rect.topLeft(), crop);
+		}
+	}
 }
 
 QPointF OziMap::ll2xy(const Coordinates &c) const
