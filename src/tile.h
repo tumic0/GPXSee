@@ -14,8 +14,6 @@ public:
 	const QPoint& xy() const {return _xy;}
 	QPixmap& pixmap() {return _pixmap;}
 
-	static int size() {return 256;}
-
 private:
 	int _zoom;
 	QPoint _xy;
