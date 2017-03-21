@@ -13,6 +13,7 @@ public:
 	QStringList files() const {return _index.keys();}
 	QByteArray file(const QString &name);
 
+	QString fileName() const {return _file.fileName();}
 	bool isOpen() const {return _file.isOpen();}
 
 private:

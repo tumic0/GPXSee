@@ -4,6 +4,7 @@
 #include <QMap>
 #include <QDir>
 #include <QBuffer>
+#include <QPixmapCache>
 #include "misc.h"
 #include "rd.h"
 #include "wgs84.h"
@@ -348,8 +349,12 @@ void OziMap::draw(QPainter *painter, const QRectF &rect)
 				QPixmap pixmap;
 
 				if (_tar.isOpen()) {
-					QByteArray ba = _tar.file(tileName);
-					pixmap = QPixmap::fromImage(QImage::fromData(ba));
+					QString key = _tar.fileName() + "/" + tileName;
+					if (!QPixmapCache::find(key, &pixmap)) {
+						QByteArray ba = _tar.file(tileName);
+						pixmap = QPixmap::fromImage(QImage::fromData(ba));
+						QPixmapCache::insert(key, pixmap);
+					}
 				} else
 					pixmap = QPixmap(tileName);
 
