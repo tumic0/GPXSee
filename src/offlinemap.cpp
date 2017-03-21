@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QBuffer>
 #include <QImage>
+#include <QImageReader>
 #include <QPixmapCache>
 #include "misc.h"
 #include "rd.h"
@@ -160,10 +161,11 @@ bool OfflineMap::getImageInfo(const QString &path)
 	QFileInfo ii(_imgPath);
 	if (ii.isRelative())
 		_imgPath = path + "/" + _imgPath;
-	ii = QFileInfo(_imgPath);
 
-	if (!ii.exists()) {
-		qWarning("%s: %s: no such image", qPrintable(_name),
+	QImageReader img(_imgPath);
+	_size = img.size();
+	if (!_size.isValid()) {
+		qWarning("%s: %s: error reading map image", qPrintable(_name),
 		  qPrintable(ii.absoluteFilePath()));
 		return false;
 	}
@@ -173,6 +175,11 @@ bool OfflineMap::getImageInfo(const QString &path)
 
 bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
 {
+	if (!_size.isValid()) {
+		qWarning("%s: missing total image size (IWH)", qPrintable(_name));
+		return false;
+	}
+
 	if (tiles.isEmpty()) {
 		qWarning("%s: empty tile set", qPrintable(_name));
 		return false;
@@ -183,26 +190,18 @@ bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
 		if (tiles.at(i).contains(rx)) {
 			_tileName = QString(tiles.at(i)).replace(rx, "_%1_%2.");
 
-			QImage tile;
 			if (_tar.isOpen()) {
 				QByteArray ba = _tar.file(tiles.at(i));
-				tile = QImage::fromData(ba);
+				QBuffer buffer(&ba);
+				_tileSize = QImageReader(&buffer).size();
 			} else {
 				_tileName = path + "/" + _tileName;
-				tile = QImage(path + "/" + tiles.at(i));
+				_tileSize = QImageReader(path + "/" + tiles.at(i)).size();
 			}
-			if (tile.isNull()) {
+			if (!_tileSize.isValid()) {
 				qWarning("%s: error retrieving tile size: %s: invalid image",
 				  qPrintable(_name), qPrintable(QFileInfo(tiles.at(i))
 				  .fileName()));
-				return false;
-			}
-
-			_tileSize = tile.size();
-
-			if (!_size.isValid()) {
-				qWarning("%s: missing or invalid image size (IWH)",
-				  qPrintable(_name));
 				return false;
 			}
 
@@ -293,11 +292,8 @@ void OfflineMap::load()
 		return;
 
 	_img = new QImage(_imgPath);
-	if (!_img->isNull()) {
-		if (!_size.isValid())
-			_size = _img->size();
-	} else
-		qWarning("%s: error loading map image", qPrintable(_name));
+	if (_img->isNull())
+		qWarning("%s: error loading map image", qPrintable(_imgPath));
 }
 
 void OfflineMap::unload()
