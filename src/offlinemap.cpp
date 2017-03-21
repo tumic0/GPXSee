@@ -10,10 +10,10 @@
 #include "wgs84.h"
 #include "coordinates.h"
 #include "matrix.h"
-#include "ozimap.h"
+#include "offlinemap.h"
 
 
-int OziMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points)
+int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points)
 {
 	bool res;
 	int ln = 1;
@@ -78,7 +78,7 @@ int OziMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points)
 	return 0;
 }
 
-bool OziMap::computeTransformation(const QList<ReferencePoint> &points)
+bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
 {
 	if (points.count() < 2)
 		return false;
@@ -125,7 +125,7 @@ bool OziMap::computeTransformation(const QList<ReferencePoint> &points)
 	return true;
 }
 
-bool OziMap::computeResolution(QList<ReferencePoint> &points)
+bool OfflineMap::computeResolution(QList<ReferencePoint> &points)
 {
 	if (points.count() < 2)
 		return false;
@@ -154,7 +154,7 @@ bool OziMap::computeResolution(QList<ReferencePoint> &points)
 	return true;
 }
 
-bool OziMap::getTileName(const QStringList &tiles)
+bool OfflineMap::getTileName(const QStringList &tiles)
 {
 	if (tiles.isEmpty()) {
 		qWarning("%s: empty tile set", qPrintable(_name));
@@ -175,7 +175,7 @@ bool OziMap::getTileName(const QStringList &tiles)
 	return true;
 }
 
-bool OziMap::getTileSize()
+bool OfflineMap::getTileSize()
 {
 	QString tileName(_tileName.arg(QString::number(0), QString::number(0)));
 	QImage tile;
@@ -197,7 +197,7 @@ bool OziMap::getTileSize()
 	return true;
 }
 
-OziMap::OziMap(const QString &path, QObject *parent) : Map(parent)
+OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 {
 	int errorLine = -2;
 	QList<ReferencePoint> points;
@@ -286,7 +286,7 @@ OziMap::OziMap(const QString &path, QObject *parent) : Map(parent)
 	_valid = true;
 }
 
-void OziMap::load()
+void OfflineMap::load()
 {
 	if (_tileSize.isValid())
 		return;
@@ -296,18 +296,18 @@ void OziMap::load()
 		qWarning("%s: error loading map image", qPrintable(_name));
 }
 
-void OziMap::unload()
+void OfflineMap::unload()
 {
 	if (_img)
 		delete _img;
 }
 
-QRectF OziMap::bounds() const
+QRectF OfflineMap::bounds() const
 {
 	return QRectF(QPointF(0, 0), _size);
 }
 
-qreal OziMap::zoomFit(const QSize &size, const QRectF &br)
+qreal OfflineMap::zoomFit(const QSize &size, const QRectF &br)
 {
 	Q_UNUSED(size);
 	Q_UNUSED(br);
@@ -315,24 +315,24 @@ qreal OziMap::zoomFit(const QSize &size, const QRectF &br)
 	return 1.0;
 }
 
-qreal OziMap::resolution(const QPointF &p) const
+qreal OfflineMap::resolution(const QPointF &p) const
 {
 	Q_UNUSED(p);
 
 	return _resolution;
 }
 
-qreal OziMap::zoomIn()
+qreal OfflineMap::zoomIn()
 {
 	return 1.0;
 }
 
-qreal OziMap::zoomOut()
+qreal OfflineMap::zoomOut()
 {
 	return 1.0;
 }
 
-void OziMap::draw(QPainter *painter, const QRectF &rect)
+void OfflineMap::draw(QPainter *painter, const QRectF &rect)
 {
 	if (_tileSize.isValid()) {
 		QPoint tl = QPoint((int)floor(rect.left() / (qreal)_tileSize.width())
@@ -378,12 +378,12 @@ void OziMap::draw(QPainter *painter, const QRectF &rect)
 	}
 }
 
-QPointF OziMap::ll2xy(const Coordinates &c) const
+QPointF OfflineMap::ll2xy(const Coordinates &c) const
 {
 	return _transform.map(c.toMercator());
 }
 
-Coordinates OziMap::xy2ll(const QPointF &p) const
+Coordinates OfflineMap::xy2ll(const QPointF &p) const
 {
 	return Coordinates::fromMercator(_transform.inverted().map(p));
 }

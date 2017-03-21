@@ -80,7 +80,7 @@ HEADERS += src/config.h \
     src/opengl.h \
     src/timetype.h \
     src/emptymap.h \
-    src/ozimap.h \
+    src/offlinemap.h \
     src/mapdir.h \
     src/matrix.h \
     src/tar.h
@@ -139,7 +139,7 @@ SOURCES += src/main.cpp \
     src/colorbox.cpp \
     src/stylecombobox.cpp \
     src/emptymap.cpp \
-    src/ozimap.cpp \
+    src/offlinemap.cpp \
     src/mapdir.cpp \
     src/matrix.cpp \
     src/tar.cpp

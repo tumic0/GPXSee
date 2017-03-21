@@ -1,5 +1,5 @@
-#ifndef OZIMAP_H
-#define OZIMAP_H
+#ifndef OFFLINEMAP_H
+#define OFFLINEMAP_H
 
 #include <QImage>
 #include <QTransform>
@@ -10,12 +10,12 @@
 class QIODevice;
 class QDir;
 
-class OziMap : public Map
+class OfflineMap : public Map
 {
 	Q_OBJECT
 
 public:
-	OziMap(const QString &path, QObject *parent = 0);
+	OfflineMap(const QString &path, QObject *parent = 0);
 
 	const QString &name() const {return _name;}
 
@@ -47,17 +47,17 @@ private:
 	bool getTileSize();
 
 	QString _name;
-	QString _imgPath;
 	QSize _size;
 	QTransform _transform;
 	qreal _resolution;
 
 	Tar _tar;
 	QImage *_img;
+	QString _imgPath;
 	QSize _tileSize;
 	QString _tileName;
 
 	bool _valid;
 };
 
-#endif // OZIMAP_H
+#endif // OFFLINEMAP_H

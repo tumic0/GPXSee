@@ -2,7 +2,7 @@
 #include "mapdir.h"
 
 #include <QDebug>
-#include "ozimap.h"
+#include "offlinemap.h"
 
 QList<Map*> MapDir::load(const QString &path, QObject *parent)
 {
@@ -21,7 +21,7 @@ QList<Map*> MapDir::load(const QString &path, QObject *parent)
 	QFileInfoList list = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
 	for (int i = 0; i < list.size(); i++) {
 		QFileInfo fileInfo = list.at(i);
-		OziMap *map = new OziMap(fileInfo.absoluteFilePath(), parent);
+		OfflineMap *map = new OfflineMap(fileInfo.absoluteFilePath(), parent);
 		if (map->isValid())
 			maps.append(map);
 		else
