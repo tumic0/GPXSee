@@ -4,6 +4,7 @@
 #include <QMap>
 #include <QDir>
 #include <QBuffer>
+#include <QImage>
 #include <QPixmapCache>
 #include "misc.h"
 #include "rd.h"
@@ -154,47 +155,64 @@ bool OfflineMap::computeResolution(QList<ReferencePoint> &points)
 	return true;
 }
 
-bool OfflineMap::getTileName(const QStringList &tiles)
+bool OfflineMap::getImageInfo(const QString &path)
 {
-	if (tiles.isEmpty()) {
-		qWarning("%s: empty tile set", qPrintable(_name));
-		return false;
-	}
+	QFileInfo ii(_imgPath);
+	if (ii.isRelative())
+		_imgPath = path + "/" + _imgPath;
+	ii = QFileInfo(_imgPath);
 
-	for (int i = 0; i < tiles.size(); i++) {
-		if (tiles.at(i).contains("_0_0.")) {
-			_tileName = QString(tiles.at(i)).replace("_0_0.", "_%1_%2.");
-			break;
-		}
-	}
-	if (_tileName.isNull()) {
-		qWarning("%s: invalid tile names", qPrintable(_name));
+	if (!ii.exists()) {
+		qWarning("%s: %s: no such image", qPrintable(_name),
+		  qPrintable(ii.absoluteFilePath()));
 		return false;
 	}
 
 	return true;
 }
 
-bool OfflineMap::getTileSize()
+bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
 {
-	QString tileName(_tileName.arg(QString::number(0), QString::number(0)));
-	QImage tile;
-
-	if (_tar.isOpen()) {
-		QByteArray ba = _tar.file(tileName);
-		tile = QImage::fromData(ba);
-	} else
-		tile = QImage(tileName);
-
-	if (tile.isNull()) {
-		qWarning("%s: error retrieving tile size: %s: invalid image",
-		  qPrintable(_name), qPrintable(QFileInfo(tileName).fileName()));
-		  return false;
+	if (tiles.isEmpty()) {
+		qWarning("%s: empty tile set", qPrintable(_name));
+		return false;
 	}
 
-	_tileSize = tile.size();
+	QRegExp rx("_[0-9]+_[0-9]+\\.");
+	for (int i = 0; i < tiles.size(); i++) {
+		if (tiles.at(i).contains(rx)) {
+			_tileName = QString(tiles.at(i)).replace(rx, "_%1_%2.");
 
-	return true;
+			QImage tile;
+			if (_tar.isOpen()) {
+				QByteArray ba = _tar.file(tiles.at(i));
+				tile = QImage::fromData(ba);
+			} else {
+				_tileName = path + "/" + _tileName;
+				tile = QImage(path + "/" + tiles.at(i));
+			}
+			if (tile.isNull()) {
+				qWarning("%s: error retrieving tile size: %s: invalid image",
+				  qPrintable(_name), qPrintable(QFileInfo(tiles.at(i))
+				  .fileName()));
+				return false;
+			}
+
+			_tileSize = tile.size();
+
+			if (!_size.isValid()) {
+				qWarning("%s: missing or invalid image size (IWH)",
+				  qPrintable(_name));
+				return false;
+			}
+
+			return true;
+		}
+	}
+
+	qWarning("%s: invalid tile names", qPrintable(_name));
+
+	return false;
 }
 
 OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
@@ -213,7 +231,7 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 	for (int i = 0; i < mapFiles.count(); i++) {
 		const QString &fileName = mapFiles.at(i).fileName();
 		if (fileName.endsWith(".tar")) {
-			if (!_tar.load(mapFiles.at(0).absoluteFilePath())) {
+			if (!_tar.load(mapFiles.at(i).absoluteFilePath())) {
 				qWarning("%s: %s: error loading tar file", qPrintable(_name),
 				  qPrintable(fileName));
 				return;
@@ -251,34 +269,17 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 	}
 	computeResolution(points);
 
-	if (!_size.isValid()) {
-		qWarning("%s: missing or invalid image size (IWH)", qPrintable(_name));
-		return;
-	}
-
 	if (_tar.isOpen()) {
-		if (!getTileName(_tar.files()))
-			return;
-		if (!getTileSize())
+		if (!getTileInfo(_tar.files()))
 			return;
 	} else {
 		QDir set(fi.absoluteFilePath() + "/" + "set");
 		if (set.exists()) {
-			if (!getTileName(set.entryList()))
-				return;
-			_tileName = set.absolutePath() + "/" + _tileName;
-			if (!getTileSize())
+			if (!getTileInfo(set.entryList(), set.absolutePath()))
 				return;
 		} else {
-			QFileInfo ii(_imgPath);
-			if (ii.isRelative())
-				_imgPath = fi.absoluteFilePath() + "/" + _imgPath;
-			ii = QFileInfo(_imgPath);
-			if (!ii.exists()) {
-				qWarning("%s: %s: no such image", qPrintable(_name),
-				  qPrintable(ii.absoluteFilePath()));
+			if (!getImageInfo(fi.absoluteFilePath()))
 				return;
-			}
 		}
 	}
 
@@ -292,7 +293,10 @@ void OfflineMap::load()
 		return;
 
 	_img = new QImage(_imgPath);
-	if (_img->isNull())
+	if (!_img->isNull()) {
+		if (!_size.isValid())
+			_size = _img->size();
+	} else
 		qWarning("%s: error loading map image", qPrintable(_name));
 }
 

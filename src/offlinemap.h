@@ -1,14 +1,13 @@
 #ifndef OFFLINEMAP_H
 #define OFFLINEMAP_H
 
-#include <QImage>
 #include <QTransform>
 #include "map.h"
 #include "tar.h"
 #include "coordinates.h"
 
 class QIODevice;
-class QDir;
+class QImage;
 
 class OfflineMap : public Map
 {
@@ -43,8 +42,8 @@ private:
 	int parseMapFile(QIODevice &device, QList<ReferencePoint> &points);
 	bool computeTransformation(const QList<ReferencePoint> &points);
 	bool computeResolution(QList<ReferencePoint> &points);
-	bool getTileName(const QStringList &tiles);
-	bool getTileSize();
+	bool getTileInfo(const QStringList &tiles, const QString &path = QString());
+	bool getImageInfo(const QString &path);
 
 	QString _name;
 	QSize _size;
