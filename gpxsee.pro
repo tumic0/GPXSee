@@ -82,7 +82,8 @@ HEADERS += src/config.h \
     src/emptymap.h \
     src/ozimap.h \
     src/mapdir.h \
-    src/matrix.h
+    src/matrix.h \
+    src/tar.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -140,7 +141,8 @@ SOURCES += src/main.cpp \
     src/emptymap.cpp \
     src/ozimap.cpp \
     src/mapdir.cpp \
-    src/matrix.cpp
+    src/matrix.cpp \
+    src/tar.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts

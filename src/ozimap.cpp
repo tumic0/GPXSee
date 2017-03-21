@@ -3,6 +3,7 @@
 #include <QFileInfo>
 #include <QMap>
 #include <QDir>
+#include <QBuffer>
 #include "misc.h"
 #include "rd.h"
 #include "wgs84.h"
@@ -152,19 +153,16 @@ bool OziMap::computeResolution(QList<ReferencePoint> &points)
 	return true;
 }
 
-bool OziMap::getTileInfo(QDir &set)
+bool OziMap::getTileName(const QStringList &tiles)
 {
-	QFileInfoList tiles = set.entryInfoList(QDir::Files);
-
 	if (tiles.isEmpty()) {
 		qWarning("%s: empty tile set", qPrintable(_name));
 		return false;
 	}
 
 	for (int i = 0; i < tiles.size(); i++) {
-		if (tiles.at(i).fileName().contains("_0_0.")) {
-			_tileName = QString(tiles.at(i).fileName())
-			  .replace("_0_0.", "_%1_%2.");
+		if (tiles.at(i).contains("_0_0.")) {
+			_tileName = QString(tiles.at(i)).replace("_0_0.", "_%1_%2.");
 			break;
 		}
 	}
@@ -172,14 +170,27 @@ bool OziMap::getTileInfo(QDir &set)
 		qWarning("%s: invalid tile names", qPrintable(_name));
 		return false;
 	}
-	_tileName = set.absolutePath() + "/" + _tileName;
 
-	QImage tile(_tileName.arg("0", "0"));
+	return true;
+}
+
+bool OziMap::getTileSize()
+{
+	QString tileName(_tileName.arg(QString::number(0), QString::number(0)));
+	QImage tile;
+
+	if (_tar.isOpen()) {
+		QByteArray ba = _tar.file(tileName);
+		tile = QImage::fromData(ba);
+	} else
+		tile = QImage(tileName);
+
 	if (tile.isNull()) {
 		qWarning("%s: error retrieving tile size: %s: invalid image",
-		  qPrintable(_name), qPrintable(_tileName.arg("0", "0")));
+		  qPrintable(_name), qPrintable(QFileInfo(tileName).fileName()));
 		  return false;
 	}
+
 	_tileSize = tile.size();
 
 	return true;
@@ -187,25 +198,45 @@ bool OziMap::getTileInfo(QDir &set)
 
 OziMap::OziMap(const QString &path, QObject *parent) : Map(parent)
 {
-	int errorLine;
+	int errorLine = -2;
 	QList<ReferencePoint> points;
 
 
 	_valid = false;
 
 	QFileInfo fi(path);
-	_name = fi.baseName();
+	_name = fi.fileName();
 
 	QDir dir(path);
-	QFileInfoList list = dir.entryInfoList(QStringList("*.map"), QDir::Files);
-	if (!list.count()) {
-		qWarning("%s: map file not found", qPrintable(_name));
-		return;
+	QFileInfoList mapFiles = dir.entryInfoList(QDir::Files);
+	for (int i = 0; i < mapFiles.count(); i++) {
+		const QString &fileName = mapFiles.at(i).fileName();
+		if (fileName.endsWith(".tar")) {
+			if (!_tar.load(mapFiles.at(0).absoluteFilePath())) {
+				qWarning("%s: %s: error loading tar file", qPrintable(_name),
+				  qPrintable(fileName));
+				return;
+			}
+			QStringList tarFiles = _tar.files();
+			for (int j = 0; j < tarFiles.size(); j++) {
+				if (tarFiles.at(j).endsWith(".map")) {
+					QByteArray ba = _tar.file(tarFiles.at(j));
+					QBuffer buffer(&ba);
+					errorLine = parseMapFile(buffer, points);
+					break;
+				}
+			}
+			break;
+		} else if (fileName.endsWith(".map")) {
+			QFile mapFile(mapFiles.at(i).absoluteFilePath());
+			errorLine = parseMapFile(mapFile, points);
+			break;
+		}
 	}
-
-	QFile mapFile(list[0].absoluteFilePath());
-	if ((errorLine = parseMapFile(mapFile, points))) {
-		if (errorLine < 0)
+	if (errorLine) {
+		if (errorLine == -2)
+			qWarning("%s: no map file found", qPrintable(_name));
+		else if (errorLine == -1)
 			qWarning("%s: error opening map file", qPrintable(_name));
 		else
 			qWarning("%s: map file parse error on line: %d", qPrintable(_name),
@@ -224,19 +255,29 @@ OziMap::OziMap(const QString &path, QObject *parent) : Map(parent)
 		return;
 	}
 
-	QDir set(fi.absoluteFilePath() + "/" + "set");
-	if (set.exists()) {
-		if (!getTileInfo(set))
+	if (_tar.isOpen()) {
+		if (!getTileName(_tar.files()))
+			return;
+		if (!getTileSize())
 			return;
 	} else {
-		QFileInfo ii(_imgPath);
-		if (ii.isRelative())
-			_imgPath = fi.absoluteFilePath() + "/" + _imgPath;
-		ii = QFileInfo(_imgPath);
-		if (!ii.exists()) {
-			qWarning("%s: %s: no such image", qPrintable(_name),
-			  qPrintable(ii.absoluteFilePath()));
-			return;
+		QDir set(fi.absoluteFilePath() + "/" + "set");
+		if (set.exists()) {
+			if (!getTileName(set.entryList()))
+				return;
+			_tileName = set.absolutePath() + "/" + _tileName;
+			if (!getTileSize())
+				return;
+		} else {
+			QFileInfo ii(_imgPath);
+			if (ii.isRelative())
+				_imgPath = fi.absoluteFilePath() + "/" + _imgPath;
+			ii = QFileInfo(_imgPath);
+			if (!ii.exists()) {
+				qWarning("%s: %s: no such image", qPrintable(_name),
+				  qPrintable(ii.absoluteFilePath()));
+				return;
+			}
 		}
 	}
 
@@ -302,8 +343,16 @@ void OziMap::draw(QPainter *painter, const QRectF &rect)
 			for (int j = 0; j < ceil(s.height() / _tileSize.height()); j++) {
 				int x = tl.x() + i * _tileSize.width();
 				int y = tl.y() + j * _tileSize.height();
-				QPixmap pixmap(_tileName.arg(QString::number(x),
+				QString tileName(_tileName.arg(QString::number(x),
 				  QString::number(y)));
+				QPixmap pixmap;
+
+				if (_tar.isOpen()) {
+					QByteArray ba = _tar.file(tileName);
+					pixmap = QPixmap::fromImage(QImage::fromData(ba));
+				} else
+					pixmap = QPixmap(tileName);
+
 				if (pixmap.isNull()) {
 					qWarning("%s: error loading tile image", qPrintable(
 					  _tileName.arg(QString::number(x), QString::number(y))));

@@ -4,6 +4,7 @@
 #include <QImage>
 #include <QTransform>
 #include "map.h"
+#include "tar.h"
 #include "coordinates.h"
 
 class QIODevice;
@@ -42,7 +43,8 @@ private:
 	int parseMapFile(QIODevice &device, QList<ReferencePoint> &points);
 	bool computeTransformation(const QList<ReferencePoint> &points);
 	bool computeResolution(QList<ReferencePoint> &points);
-	bool getTileInfo(QDir &set);
+	bool getTileName(const QStringList &tiles);
+	bool getTileSize();
 
 	QString _name;
 	QString _imgPath;
@@ -50,6 +52,7 @@ private:
 	QTransform _transform;
 	qreal _resolution;
 
+	Tar _tar;
 	QImage *_img;
 	QSize _tileSize;
 	QString _tileName;
