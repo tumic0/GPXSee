@@ -83,7 +83,8 @@ HEADERS += src/config.h \
     src/offlinemap.h \
     src/mapdir.h \
     src/matrix.h \
-    src/tar.h
+    src/tar.h \
+    src/atlas.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -142,7 +143,8 @@ SOURCES += src/main.cpp \
     src/offlinemap.cpp \
     src/mapdir.cpp \
     src/matrix.cpp \
-    src/tar.cpp
+    src/tar.cpp \
+    src/atlas.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts

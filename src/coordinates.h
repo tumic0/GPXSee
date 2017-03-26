@@ -32,6 +32,8 @@ public:
 	QPointF toMercator() const;
 	static Coordinates fromMercator(const QPointF &m);
 
+	QPointF toPointF() const {return QPointF(_lon, _lat);}
+
 private:
 	qreal _lat, _lon;
 };

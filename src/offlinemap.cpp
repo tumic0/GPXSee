@@ -353,7 +353,8 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect)
 					if (!QPixmapCache::find(key, &pixmap)) {
 						QByteArray ba = _tar.file(tileName);
 						pixmap = QPixmap::fromImage(QImage::fromData(ba));
-						QPixmapCache::insert(key, pixmap);
+						if (!pixmap.isNull())
+							QPixmapCache::insert(key, pixmap);
 					}
 				} else
 					pixmap = QPixmap(tileName);

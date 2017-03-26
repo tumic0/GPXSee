@@ -26,7 +26,7 @@ struct Header
 	char devmajor[8];             /* 329 */
 	char devminor[8];             /* 337 */
 	char prefix[155];             /* 345 */
-								  /* 500 */
+	                              /* 500 */
 };
 
 static quint64 number(const char* data, size_t size)
@@ -65,7 +65,8 @@ bool Tar::load(const QString &path)
 QByteArray Tar::file(const QString &name)
 {
 	QMap<QString, Tar::Info>::const_iterator it = _index.find(name);
-	Q_ASSERT(it != _index.end());
+	if (it == _index.end())
+		return QByteArray();
 
 	if (_file.seek(it.value().offset()))
 		return _file.read(it.value().size());
