@@ -45,18 +45,23 @@ static quint64 number(const char* data, size_t size)
 
 bool Tar::load(const QString &path)
 {
-	struct Header hdr;
+	char buffer[BLOCKSIZE];
+	struct Header *hdr = (struct Header*)&buffer;
 	quint64 size;
+	qint64 ret;
 
 	_file.setFileName(path);
 	if (!_file.open(QIODevice::ReadOnly))
 		return false;
 
-	while (_file.read((char*)&hdr, BLOCKSIZE)) {
-		size = number(hdr.size, sizeof(hdr.size));
+	while ((ret = _file.read(buffer, BLOCKSIZE)) > 0) {
+		if (ret < BLOCKSIZE)
+			return false;
+		size = number(hdr->size, sizeof(hdr->size));
 		if (size)
-			_index.insert(hdr.name, Info(size, _file.pos()));
-		_file.seek(_file.pos() + BLOCKCOUNT(size) * BLOCKSIZE);
+			_index.insert(hdr->name, Info(size, _file.pos()));
+		if (!_file.seek(_file.pos() + BLOCKCOUNT(size) * BLOCKSIZE))
+			return false;
 	}
 
 	return true;
