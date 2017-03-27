@@ -72,7 +72,7 @@ PathView::PathView(Map *map, POI *poi, QWidget *parent)
 
 	_plot = false;
 
-	setSceneRect(_map->bounds());
+	_scene->setSceneRect(_map->bounds());
 	_res = _map->resolution(_scene->sceneRect().center());
 }
 
@@ -231,7 +231,8 @@ void PathView::updatePOIVisibility()
 
 void PathView::rescale()
 {
-	setSceneRect(_map->bounds());
+	_scene->setSceneRect(_map->bounds());
+	resetCachedContent();
 
 	for (int i = 0; i < _tracks.size(); i++)
 		_tracks.at(i)->setMap(_map);
@@ -268,7 +269,7 @@ void PathView::setMap(Map *map)
 	connect(_map, SIGNAL(loaded()), this, SLOT(redraw()));
 
 	mapScale();
-	setSceneRect(_map->bounds());
+	_scene->setSceneRect(_map->bounds());
 
 	for (int i = 0; i < _tracks.size(); i++)
 		_tracks.at(i)->setMap(map);
@@ -367,8 +368,6 @@ void PathView::zoom(const QPoint &pos, const Coordinates &c)
 
 	_res = _map->resolution(center);
 	_mapScale->setResolution(_res);
-
-	resetCachedContent();
 }
 
 void PathView::wheelEvent(QWheelEvent *event)
@@ -428,7 +427,7 @@ void PathView::plot(QPainter *painter, const QRectF &target)
 	orig = viewport()->rect();
 
 	if (orig.height() * (target.width() / target.height()) - orig.width() < 0) {
-		ratio = target.height()/target.width();
+		ratio = target.height() / target.width();
 		diff = (orig.width() * ratio) - orig.height();
 		adj = orig.adjusted(0, -diff/2, 0, diff/2);
 	} else {
@@ -469,9 +468,6 @@ void PathView::clear()
 
 	_tr = QRectF(); _rr = QRectF(); _wr = QRectF();
 	_wp = QPointF();
-
-	setSceneRect(_map->bounds());
-	_res = _map->resolution(_scene->sceneRect().center());
 }
 
 void PathView::showTracks(bool show)
@@ -594,8 +590,6 @@ void PathView::drawBackground(QPainter *painter, const QRectF &rect)
 
 void PathView::resizeEvent(QResizeEvent *event)
 {
-	Q_UNUSED(event);
-
 	qreal scale = _map->zoom();
 	if (mapScale() != scale)
 		rescale();
@@ -606,7 +600,7 @@ void PathView::resizeEvent(QResizeEvent *event)
 	_res = _map->resolution(center);
 	_mapScale->setResolution(_res);
 
-	resetCachedContent();
+	QGraphicsView::resizeEvent(event);
 }
 
 void PathView::paintEvent(QPaintEvent *event)
