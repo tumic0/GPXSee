@@ -35,13 +35,12 @@ bool Atlas::isAtlas(const QFileInfoList &files)
 	for (int i = 0; i < files.count(); i++) {
 		const QString &fileName = files.at(i).fileName();
 		if (fileName.endsWith(".tar")) {
-			Tar tar;
-			if (!tar.load(files.at(i).absoluteFilePath())) {
+			if (!_tar.load(files.at(i).absoluteFilePath())) {
 				qWarning("%s: %s: error loading tar file", qPrintable(_name),
 				  qPrintable(fileName));
 				return false;
 			}
-			QStringList tarFiles = tar.files();
+			QStringList tarFiles = _tar.files();
 			for (int j = 0; j < tarFiles.size(); j++)
 				if (tarFiles.at(j).endsWith(".tba"))
 					return true;
@@ -126,7 +125,11 @@ Atlas::Atlas(const QString &path, QObject *parent) : Map(parent)
 		QFileInfoList maps = zdir.entryInfoList(QDir::Dirs
 		  | QDir::NoDotAndDotDot);
 		for (int i = 0; i < maps.count(); i++) {
-			OfflineMap *map = new OfflineMap(maps.at(i).absoluteFilePath());
+			OfflineMap *map;
+			if (_tar.isOpen())
+				map = new OfflineMap(_tar, maps.at(i).absoluteFilePath(), this);
+			else
+				map = new OfflineMap(maps.at(i).absoluteFilePath(), this);
 			if (map->isValid())
 				_maps.append(map);
 		}
@@ -252,6 +255,8 @@ void Atlas::draw(QPainter *painter, const QRectF &rect)
 			QRectF ir = rect.intersected(_bounds.at(i).second);
 			const QPointF offset = _bounds.at(i).second.topLeft();
 			QRectF pr = QRectF(ir.topLeft() - offset, ir.size());
+
+			map->load();
 
 			painter->translate(offset);
 			map->draw(painter, pr);

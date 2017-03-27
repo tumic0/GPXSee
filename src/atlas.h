@@ -38,6 +38,7 @@ private:
 	QString _name;
 	bool _valid;
 
+	Tar _tar;
 	QList<OfflineMap*> _maps;
 	QVector<QPair<int, int> > _zooms;
 	QVector<QPair<QRectF, QRectF> > _bounds;

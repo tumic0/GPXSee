@@ -15,6 +15,7 @@ class OfflineMap : public Map
 
 public:
 	OfflineMap(const QString &path, QObject *parent = 0);
+	OfflineMap(Tar &tar, const QString &path, QObject *parent = 0);
 
 	const QString &name() const {return _name;}
 
@@ -40,6 +41,7 @@ private:
 	typedef QPair<QPoint, Coordinates> ReferencePoint;
 
 	int parseMapFile(QIODevice &device, QList<ReferencePoint> &points);
+	bool mapLoaded(int res);
 	bool computeTransformation(const QList<ReferencePoint> &points);
 	bool computeResolution(QList<ReferencePoint> &points);
 	bool getTileInfo(const QStringList &tiles, const QString &path = QString());
@@ -51,6 +53,7 @@ private:
 	qreal _resolution;
 
 	Tar _tar;
+	QString _tarPath;
 	QImage *_img;
 	QString _imgPath;
 	QSize _tileSize;

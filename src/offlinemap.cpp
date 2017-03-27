@@ -82,8 +82,11 @@ int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points)
 
 bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
 {
-	if (points.count() < 2)
+	if (points.count() < 2) {
+		qWarning("%s: insufficient number of reference points",
+		  qPrintable(_name));
 		return false;
+	}
 
 	Matrix c(3, 2);
 	c.zeroize();
@@ -118,8 +121,10 @@ bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
 	}
 
 	Matrix M = Q.augemented(c);
-	if (!M.eliminate())
+	if (!M.eliminate()) {
+		qWarning("%s: singular transformation matrix", qPrintable(_name));
 		return false;
+	}
 
 	_transform = QTransform(M.m(0,3), M.m(1,3), M.m(0,4), M.m(1,4),
 	  M.m(2,3), M.m(2,4));
@@ -129,8 +134,7 @@ bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
 
 bool OfflineMap::computeResolution(QList<ReferencePoint> &points)
 {
-	if (points.count() < 2)
-		return false;
+	Q_ASSERT(points.count() >= 2);
 
 	int maxLon = 0, minLon = 0, maxLat = 0, minLat = 0;
 	qreal dLon, pLon, dLat, pLat;
@@ -173,7 +177,8 @@ bool OfflineMap::getImageInfo(const QString &path)
 	return true;
 }
 
-bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
+bool OfflineMap::getTileInfo(const QStringList &tiles,
+  const QString &path)
 {
 	if (!_size.isValid()) {
 		qWarning("%s: missing total image size (IWH)", qPrintable(_name));
@@ -190,7 +195,7 @@ bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
 		if (tiles.at(i).contains(rx)) {
 			_tileName = QString(tiles.at(i)).replace(rx, "_%1_%2.");
 
-			if (_tar.isOpen()) {
+			if (path.isNull()) {
 				QByteArray ba = _tar.file(tiles.at(i));
 				QBuffer buffer(&ba);
 				_tileSize = QImageReader(&buffer).size();
@@ -214,11 +219,26 @@ bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
 	return false;
 }
 
+bool OfflineMap::mapLoaded(int res)
+{
+	if (res) {
+		if (res == -2)
+			qWarning("%s: no map file found", qPrintable(_name));
+		else if (res == -1)
+			qWarning("%s: error opening map file", qPrintable(_name));
+		else
+			qWarning("%s: map file parse error on line: %d", qPrintable(_name),
+			  res);
+		return false;
+	}
+
+	return true;
+}
+
 OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 {
 	int errorLine = -2;
 	QList<ReferencePoint> points;
-
 
 	_valid = false;
 
@@ -241,6 +261,7 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 					QByteArray ba = _tar.file(tarFiles.at(j));
 					QBuffer buffer(&ba);
 					errorLine = parseMapFile(buffer, points);
+					_imgPath = QString();
 					break;
 				}
 			}
@@ -251,21 +272,11 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 			break;
 		}
 	}
-	if (errorLine) {
-		if (errorLine == -2)
-			qWarning("%s: no map file found", qPrintable(_name));
-		else if (errorLine == -1)
-			qWarning("%s: error opening map file", qPrintable(_name));
-		else
-			qWarning("%s: map file parse error on line: %d", qPrintable(_name),
-			  errorLine);
+	if (!mapLoaded(errorLine))
 		return;
-	}
 
-	if (!computeTransformation(points)) {
-		qWarning("%s: error computing map transformation", qPrintable(_name));
+	if (!computeTransformation(points))
 		return;
-	}
 	computeResolution(points);
 
 	if (_tar.isOpen()) {
@@ -274,8 +285,9 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 	} else {
 		QDir set(fi.absoluteFilePath() + "/" + "set");
 		if (set.exists()) {
-			if (!getTileInfo(set.entryList(), set.absolutePath()))
+			if (!getTileInfo(set.entryList(), set.canonicalPath()))
 				return;
+			_imgPath = QString();
 		} else {
 			if (!getImageInfo(fi.absoluteFilePath()))
 				return;
@@ -286,20 +298,73 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 	_valid = true;
 }
 
-void OfflineMap::load()
+OfflineMap::OfflineMap(Tar &tar, const QString &path, QObject *parent)
+  : Map(parent)
 {
-	if (_tileSize.isValid())
+	int errorLine = -2;
+	QList<ReferencePoint> points;
+
+	_valid = false;
+
+	QFileInfo fi(path);
+	_name = fi.fileName();
+
+	QFileInfo li(fi.absoluteDir().dirName());
+	QString prefix = li.fileName() + "/" + fi.fileName() + "/";
+	QStringList tarFiles = tar.files();
+	for (int j = 0; j < tarFiles.size(); j++) {
+		if (tarFiles.at(j).startsWith(prefix)) {
+			QByteArray ba = tar.file(tarFiles.at(j));
+			QBuffer buffer(&ba);
+			errorLine = parseMapFile(buffer, points);
+			break;
+		}
+	}
+	if (!mapLoaded(errorLine))
 		return;
 
-	_img = new QImage(_imgPath);
-	if (_img->isNull())
-		qWarning("%s: error loading map image", qPrintable(_imgPath));
+	if (!computeTransformation(points))
+		return;
+	computeResolution(points);
+
+	QDir dir(path);
+	QFileInfoList mapFiles = dir.entryInfoList(QDir::Files);
+	for (int i = 0; i < mapFiles.count(); i++) {
+		const QString &fileName = mapFiles.at(i).absoluteFilePath();
+		if (fileName.endsWith(".tar"))
+			_tarPath = fileName;
+	}
+
+	_imgPath = QString();
+	_img = 0;
+	_valid = true;
+}
+
+void OfflineMap::load()
+{
+	if (!_tarPath.isNull() && !_tileSize.isValid()) {
+		if (!_tar.load(_tarPath)) {
+			qWarning("%s: %s: error loading tar file", qPrintable(_name),
+			  qPrintable(_tarPath));
+			return;
+		}
+		getTileInfo(_tar.files());
+		return;
+	}
+
+	if (!_img && !_imgPath.isNull()) {
+		_img = new QImage(_imgPath);
+		if (_img->isNull())
+			qWarning("%s: error loading map image", qPrintable(_imgPath));
+	}
 }
 
 void OfflineMap::unload()
 {
-	if (_img)
+	if (_img) {
 		delete _img;
+		_img = 0;
+	}
 }
 
 QRectF OfflineMap::bounds() const
@@ -369,7 +434,7 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect)
 			}
 		}
 	} else {
-		if (_img->isNull())
+		if (!_img || _img->isNull())
 			painter->fillRect(rect, Qt::white);
 		else {
 			QPoint p = rect.topLeft().toPoint();
