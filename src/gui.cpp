@@ -617,16 +617,24 @@ void GUI::dataSources()
 	msgBox.setWindowTitle(tr("Data sources"));
 	msgBox.setText("<h3>" + tr("Data sources") + "</h3>");
 	msgBox.setInformativeText(
-	  "<h4>" + tr("Map sources") + "</h4><p>"
-	  + tr("Map (tiles) source URLs are read on program startup from the "
+	  "<h4>" + tr("Online maps") + "</h4><p>"
+	  + tr("Online map URLs are read on program startup from the "
 		"following file:")
-		+ "</p><p><code>" + USER_MAP_FILE + "</code></p><p>"
-		+ tr("The file format is one map entry per line, consisting of the map "
-		  "name and tiles URL delimited by a TAB character. The tile X and Y "
-		  "coordinates are replaced with $x and $y in the URL and the zoom "
-		  "level is replaced with $z. An example map file could look like:")
-		+ "</p><p><code>Map1	http://tile.server.com/map/$z/$x/$y.png"
+	  + "</p><p><code>" + USER_MAP_FILE + "</code></p><p>"
+	  + tr("The file format is one map entry per line, consisting of the map "
+		"name and tiles URL delimited by a TAB character. The tile X and Y "
+		"coordinates are replaced with $x and $y in the URL and the zoom "
+		"level is replaced with $z. An example map file could look like:")
+	  + "</p><p><code>Map1	http://tile.server.com/map/$z/$x/$y.png"
 		  "<br/>Map2	http://mapserver.org/map/$z-$x-$y</code></p>"
+
+	  + "<h4>" + tr("Ofline maps") + "</h4><p>"
+	  + tr("Offline maps are loaded on program startup from the following "
+		"directory:")
+	  + "</p><p><code>" + USER_MAP_DIR + "</code></p><p>"
+	  + tr("The expected structure is one map/atlas in a separate subdirectory."
+		" Supported map formats are OziMap image-based maps and tiled TrekBuddy"
+		" maps/atlases (tared and non-tared).") + "</p>"
 
 	  + "<h4>" + tr("POIs") + "</h4><p>"
 	  + tr("To make GPXSee load a POI file automatically on startup, add "
