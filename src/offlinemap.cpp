@@ -177,14 +177,8 @@ bool OfflineMap::getImageInfo(const QString &path)
 	return true;
 }
 
-bool OfflineMap::getTileInfo(const QStringList &tiles,
-  const QString &path)
+bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
 {
-	if (!_size.isValid()) {
-		qWarning("%s: missing total image size (IWH)", qPrintable(_name));
-		return false;
-	}
-
 	if (tiles.isEmpty()) {
 		qWarning("%s: empty tile set", qPrintable(_name));
 		return false;
@@ -235,6 +229,15 @@ bool OfflineMap::mapLoaded(int res)
 	return true;
 }
 
+bool OfflineMap::totalSizeSet()
+{
+	if (!_size.isValid()) {
+		qWarning("%s: missing total image size (IWH)", qPrintable(_name));
+		return false;
+	} else
+		return true;
+}
+
 OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 {
 	int errorLine = -2;
@@ -280,11 +283,15 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 	computeResolution(points);
 
 	if (_tar.isOpen()) {
+		if (!totalSizeSet())
+			return;
 		if (!getTileInfo(_tar.files()))
 			return;
 	} else {
 		QDir set(fi.absoluteFilePath() + "/" + "set");
 		if (set.exists()) {
+			if (!totalSizeSet())
+				return;
 			if (!getTileInfo(set.entryList(), set.canonicalPath()))
 				return;
 			_imgPath = QString();
@@ -322,7 +329,8 @@ OfflineMap::OfflineMap(Tar &tar, const QString &path, QObject *parent)
 	}
 	if (!mapLoaded(errorLine))
 		return;
-
+	if (!totalSizeSet())
+		return;
 	if (!computeTransformation(points))
 		return;
 	computeResolution(points);

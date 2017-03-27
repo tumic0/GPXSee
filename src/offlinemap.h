@@ -42,6 +42,7 @@ private:
 
 	int parseMapFile(QIODevice &device, QList<ReferencePoint> &points);
 	bool mapLoaded(int res);
+	bool totalSizeSet();
 	bool computeTransformation(const QList<ReferencePoint> &points);
 	bool computeResolution(QList<ReferencePoint> &points);
 	bool getTileInfo(const QStringList &tiles, const QString &path = QString());
