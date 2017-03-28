@@ -17,16 +17,6 @@ qreal Coordinates::distanceTo(const Coordinates &c) const
 	return (WGS84_RADIUS * (2.0 * atan2(sqrt(a), sqrt(1.0 - a))));
 }
 
-QPointF Coordinates::toMercator() const
-{
-	return QPointF(_lon, rad2deg(log(tan(M_PI/4.0 + deg2rad(_lat)/2.0))));
-}
-
-Coordinates Coordinates::fromMercator(const QPointF &m)
-{
-	return Coordinates(m.x(), rad2deg(2 * atan(exp(deg2rad(m.y()))) - M_PI/2));
-}
-
 QDebug operator<<(QDebug dbg, const Coordinates &coordinates)
 {
 	dbg.nospace() << "Coordinates(" << coordinates.lon() << ", "

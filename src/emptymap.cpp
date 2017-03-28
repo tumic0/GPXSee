@@ -4,6 +4,7 @@
 #include "rd.h"
 #include "wgs84.h"
 #include "coordinates.h"
+#include "mercator.h"
 #include "emptymap.h"
 
 
@@ -27,7 +28,7 @@ qreal EmptyMap::zoomFit(const QSize &size, const QRectF &br)
 	else {
 		Coordinates topLeft(br.topLeft());
 		Coordinates bottomRight(br.bottomRight());
-		QRectF tbr(topLeft.toMercator(), bottomRight.toMercator());
+		QRectF tbr(Mercator().ll2xy(topLeft), Mercator().ll2xy(bottomRight));
 
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
 
@@ -65,12 +66,12 @@ void EmptyMap::draw(QPainter *painter, const QRectF &rect)
 
 QPointF EmptyMap::ll2xy(const Coordinates &c) const
 {
-	QPointF m = c.toMercator();
+	QPointF m = Mercator().ll2xy(c);
 	return QPointF(m.x() / _scale, m.y() / -_scale);
 }
 
 Coordinates EmptyMap::xy2ll(const QPointF &p) const
 {
 	QPointF m(p.x() * _scale, -p.y() * _scale);
-	return Coordinates::fromMercator(m);
+	return Mercator().xy2ll(m);
 }

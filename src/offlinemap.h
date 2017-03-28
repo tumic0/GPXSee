@@ -8,6 +8,7 @@
 
 class QIODevice;
 class QImage;
+class Projection;
 
 class OfflineMap : public Map
 {
@@ -16,6 +17,7 @@ class OfflineMap : public Map
 public:
 	OfflineMap(const QString &path, QObject *parent = 0);
 	OfflineMap(Tar &tar, const QString &path, QObject *parent = 0);
+	~OfflineMap();
 
 	const QString &name() const {return _name;}
 
@@ -40,9 +42,11 @@ public:
 private:
 	typedef QPair<QPoint, Coordinates> ReferencePoint;
 
-	int parseMapFile(QIODevice &device, QList<ReferencePoint> &points);
+	int parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
+	  QString &projection, double params[8]);
 	bool mapLoaded(int res);
 	bool totalSizeSet();
+	bool createProjection(const QString &projection, double params[8]);
 	bool computeTransformation(const QList<ReferencePoint> &points);
 	bool computeResolution(QList<ReferencePoint> &points);
 	bool getTileInfo(const QStringList &tiles, const QString &path = QString());
@@ -50,6 +54,7 @@ private:
 
 	QString _name;
 	QSize _size;
+	Projection *_projection;
 	QTransform _transform;
 	qreal _resolution;
 

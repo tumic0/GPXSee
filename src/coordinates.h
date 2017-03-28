@@ -11,7 +11,9 @@ public:
 	Coordinates() {_lon = NAN; _lat = NAN;}
 	Coordinates(const Coordinates &c) {_lon = c._lon; _lat = c._lat;}
 	Coordinates(qreal lon, qreal lat) {_lon = lon; _lat = lat;}
+
 	Coordinates(const QPointF &p) {_lon = p.x(), _lat = p.y();}
+	QPointF toPointF() const {return QPointF(_lon, _lat);}
 
 	qreal &rlon() {return _lon;}
 	qreal &rlat() {return _lat;}
@@ -28,11 +30,6 @@ public:
 
 	qreal distanceTo(const Coordinates &c) const;
 	QPair<Coordinates, Coordinates> boundingRect(qreal distance) const;
-
-	QPointF toMercator() const;
-	static Coordinates fromMercator(const QPointF &m);
-
-	QPointF toPointF() const {return QPointF(_lon, _lat);}
 
 private:
 	qreal _lat, _lon;

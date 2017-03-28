@@ -12,10 +12,13 @@
 #include "wgs84.h"
 #include "coordinates.h"
 #include "matrix.h"
+#include "mercator.h"
+#include "transversemercator.h"
 #include "offlinemap.h"
 
 
-int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points)
+int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
+  QString &projection, double params[8])
 {
 	bool res;
 	int ln = 1;
@@ -71,6 +74,15 @@ int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points)
 				if (!res)
 					return ln;
 				_size = QSize(w, h);
+			} else if (key == "Map Projection") {
+				projection = list.at(1);
+			} else if (key == "Projection Setup") {
+				if (list.count() < 9)
+					return ln;
+				for (int i = 1; i < 9; i++) {
+					params[i-1] = 0;
+					params[i-1] = list.at(i).trimmed().toFloat(&res);
+				}
 			}
 		}
 
@@ -78,6 +90,22 @@ int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points)
 	}
 
 	return 0;
+}
+
+bool OfflineMap::createProjection(const QString &projection, double params[8])
+{
+	if (projection == "Mercator") {
+		_projection = new Mercator();
+		return true;
+	} else if (projection == "Transverse Mercator") {
+		_projection = new TransverseMercator(params[1], params[2], params[3],
+		  params[4]);
+		return true;
+	}
+
+	qWarning("%s: %s: unsupported map projection", qPrintable(_name),
+	  qPrintable(projection));
+	return false;
 }
 
 bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
@@ -94,7 +122,7 @@ bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
 		for (size_t k = 0; k < c.h(); k++) {
 			for (int i = 0; i < points.size(); i++) {
 				double f[3], t[2];
-				QPointF p = points.at(i).second.toMercator();
+				QPointF p = _projection->ll2xy(points.at(i).second);
 
 				f[0] = p.x();
 				f[1] = p.y();
@@ -110,7 +138,7 @@ bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
 	Q.zeroize();
 	for (int qi = 0; qi < points.size(); qi++) {
 		double v[3];
-		QPointF p = points.at(qi).second.toMercator();
+		QPointF p = _projection->ll2xy(points.at(qi).second);
 
 		v[0] = p.x();
 		v[1] = p.y();
@@ -242,8 +270,13 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 {
 	int errorLine = -2;
 	QList<ReferencePoint> points;
+	QString proj;
+	double params[8];
+
 
 	_valid = false;
+	_img = 0;
+	_projection = 0;
 
 	QFileInfo fi(path);
 	_name = fi.fileName();
@@ -263,7 +296,7 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 				if (tarFiles.at(j).endsWith(".map")) {
 					QByteArray ba = _tar.file(tarFiles.at(j));
 					QBuffer buffer(&ba);
-					errorLine = parseMapFile(buffer, points);
+					errorLine = parseMapFile(buffer, points, proj, params);
 					_imgPath = QString();
 					break;
 				}
@@ -271,13 +304,15 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 			break;
 		} else if (fileName.endsWith(".map")) {
 			QFile mapFile(mapFiles.at(i).absoluteFilePath());
-			errorLine = parseMapFile(mapFile, points);
+			errorLine = parseMapFile(mapFile, points, proj, params);
 			break;
 		}
 	}
 	if (!mapLoaded(errorLine))
 		return;
 
+	if (!createProjection(proj, params))
+		return;
 	if (!computeTransformation(points))
 		return;
 	computeResolution(points);
@@ -301,7 +336,6 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 		}
 	}
 
-	_img = 0;
 	_valid = true;
 }
 
@@ -310,8 +344,13 @@ OfflineMap::OfflineMap(Tar &tar, const QString &path, QObject *parent)
 {
 	int errorLine = -2;
 	QList<ReferencePoint> points;
+	QString proj;
+	double params[8];
+
 
 	_valid = false;
+	_img = 0;
+	_projection = 0;
 
 	QFileInfo fi(path);
 	_name = fi.fileName();
@@ -323,11 +362,14 @@ OfflineMap::OfflineMap(Tar &tar, const QString &path, QObject *parent)
 		if (tarFiles.at(j).startsWith(prefix)) {
 			QByteArray ba = tar.file(tarFiles.at(j));
 			QBuffer buffer(&ba);
-			errorLine = parseMapFile(buffer, points);
+			errorLine = parseMapFile(buffer, points, proj, params);
 			break;
 		}
 	}
 	if (!mapLoaded(errorLine))
+		return;
+
+	if (!createProjection(proj, params))
 		return;
 	if (!totalSizeSet())
 		return;
@@ -344,8 +386,15 @@ OfflineMap::OfflineMap(Tar &tar, const QString &path, QObject *parent)
 	}
 
 	_imgPath = QString();
-	_img = 0;
 	_valid = true;
+}
+
+OfflineMap::~OfflineMap()
+{
+	if (_img)
+		delete _img;
+	if (_projection)
+		delete _projection;
 }
 
 void OfflineMap::load()
@@ -454,10 +503,10 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect)
 
 QPointF OfflineMap::ll2xy(const Coordinates &c) const
 {
-	return _transform.map(c.toMercator());
+	return _transform.map(_projection->ll2xy(c));
 }
 
 Coordinates OfflineMap::xy2ll(const QPointF &p) const
 {
-	return Coordinates::fromMercator(_transform.inverted().map(p));
+	return _projection->xy2ll(_transform.inverted().map(p));
 }

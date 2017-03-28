@@ -84,7 +84,10 @@ HEADERS += src/config.h \
     src/mapdir.h \
     src/matrix.h \
     src/tar.h \
-    src/atlas.h
+    src/atlas.h \
+    src/projection.h \
+    src/mercator.h \
+    src/transversemercator.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -144,7 +147,9 @@ SOURCES += src/main.cpp \
     src/mapdir.cpp \
     src/matrix.cpp \
     src/tar.cpp \
-    src/atlas.cpp
+    src/atlas.cpp \
+    src/mercator.cpp \
+    src/transversemercator.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts
