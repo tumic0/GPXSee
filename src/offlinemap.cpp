@@ -12,6 +12,7 @@
 #include "wgs84.h"
 #include "coordinates.h"
 #include "matrix.h"
+#include "latlon.h"
 #include "mercator.h"
 #include "transversemercator.h"
 #include "offlinemap.h"
@@ -31,7 +32,7 @@ int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
 		QByteArray line = device.readLine();
 
 		if (ln == 1) {
-			if (line.trimmed() != "OziExplorer Map Data File Version 2.2")
+			if (!line.trimmed().startsWith("OziExplorer Map Data File"))
 				return ln;
 		} else if (ln == 3)
 			_imgPath = line.trimmed();
@@ -100,6 +101,9 @@ bool OfflineMap::createProjection(const QString &projection, double params[8])
 	} else if (projection == "Transverse Mercator") {
 		_projection = new TransverseMercator(params[1], params[2], params[3],
 		  params[4]);
+		return true;
+	} else if (projection == "Latitude/Longitude") {
+		_projection = new LatLon();
 		return true;
 	}
 
