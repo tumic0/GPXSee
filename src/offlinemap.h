@@ -38,6 +38,8 @@ public:
 	void unload();
 
 	bool isValid() {return _valid;}
+	QPointF xy2pp(const QPointF &p) const;
+	QPointF pp2xy(const QPointF &p) const;
 
 private:
 	typedef QPair<QPoint, Coordinates> ReferencePoint;

@@ -7,8 +7,8 @@
 
 #define ZOOM_THRESHOLD 0.9
 
-#define TL(m) ((m)->xy2ll((m)->bounds().topLeft()))
-#define BR(m) ((m)->xy2ll((m)->bounds().bottomRight()))
+#define TL(m) ((m)->xy2pp((m)->bounds().topLeft()))
+#define BR(m) ((m)->xy2pp((m)->bounds().bottomRight()))
 
 static bool resCmp(const OfflineMap *m1, const OfflineMap *m2)
 {
@@ -22,12 +22,12 @@ static bool resCmp(const OfflineMap *m1, const OfflineMap *m2)
 
 static bool lonCmp(const OfflineMap *m1, const OfflineMap *m2)
 {
-	return TL(m1).lon() < TL(m2).lon();
+	return TL(m1).x() < TL(m2).x();
 }
 
 static bool latCmp(const OfflineMap *m1, const OfflineMap *m2)
 {
-	return TL(m1).lat() > TL(m2).lat();
+	return TL(m1).y() > TL(m2).y();
 }
 
 bool Atlas::isAtlas(const QFileInfoList &files)
@@ -83,28 +83,25 @@ void Atlas::computeBounds()
 		qSort(m.begin(), m.end(), lonCmp);
 		offsets[_maps.indexOf(m.first())].setX(w);
 		for (int i = 1; i < m.size(); i++) {
-			if (TL(m.at(i)).lon() > TL(m.at(i-1)).lon()) {
-				w += m.at(i-1)->ll2xy(Coordinates(TL(m.at(i)).lon(),
-				  TL(m.at(i-1)).lat())).x() - m.at(i-1)->bounds().left();
-				offsets[_maps.indexOf(m.at(i))].setX(round(w));
+			if (TL(m.at(i)).x() > TL(m.at(i-1)).x()) {
+				w += round(m.at(i-1)->pp2xy(TL(m.at(i))).x());
+				offsets[_maps.indexOf(m.at(i))].setX(w);
 			}
 		}
 
 		qSort(m.begin(), m.end(), latCmp);
 		offsets[_maps.indexOf(m.first())].setY(h);
 		for (int i = 1; i < m.size(); i++) {
-			if (TL(m.at(i)).lat() < TL(m.at(i-1)).lat()) {
-				h += m.at(i-1)->ll2xy(Coordinates(TL(m.at(i-1)).lon(),
-				  TL(m.at(i)).lat())).y() - m.at(i-1)->bounds().top();
-				offsets[_maps.indexOf(m.at(i))].setY(round(h));
+			if (TL(m.at(i)).y() < TL(m.at(i-1)).y()) {
+				h += round(m.at(i-1)->pp2xy(TL(m.at(i))).y());
+				offsets[_maps.indexOf(m.at(i))].setY(h);
 			}
 		}
 	}
 
 	for (int i = 0; i < _maps.count(); i++)
-		_bounds.append(QPair<QRectF, QRectF>(QRectF(TL(_maps.at(i)).toPointF(),
-		  BR(_maps.at(i)).toPointF()), QRectF(offsets.at(i),
-		  _maps.at(i)->bounds().size())));
+		_bounds.append(QPair<QRectF, QRectF>(QRectF(TL(_maps.at(i)),
+		  BR(_maps.at(i))), QRectF(offsets.at(i), _maps.at(i)->bounds().size())));
 }
 
 Atlas::Atlas(const QString &path, QObject *parent) : Map(parent)
@@ -165,7 +162,7 @@ qreal Atlas::resolution(const QPointF &p) const
 	int idx = _zooms.at(_zoom).first;
 
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
-		if (_bounds.at(i).second.contains(p)) {
+		if (_bounds.at(i).second.contains(_maps.at(i)->xy2pp(p))) {
 			idx = i;
 			break;
 		}
@@ -185,7 +182,8 @@ qreal Atlas::zoomFit(const QSize &size, const QRectF &br)
 
 	for (int z = 0; z < _zooms.count(); z++) {
 		for (int i = _zooms.at(z).first; i <= _zooms.at(z).second; i++) {
-			if (_bounds.at(i).first.contains(br.center()))
+			if (_bounds.at(i).first.contains(_maps.at(i)->xy2pp(
+			  _maps.at(i)->ll2xy(br.center()))))
 				continue;
 
 			QRect sbr = QRectF(_maps.at(i)->ll2xy(br.topLeft()),
@@ -220,7 +218,8 @@ QPointF Atlas::ll2xy(const Coordinates &c) const
 	int idx = _zooms.at(_zoom).first;
 
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
-		if (_bounds.at(i).first.contains(c.lon(), c.lat())) {
+		if (_bounds.at(i).first.contains(_maps.at(i)->xy2pp(
+		  _maps.at(i)->ll2xy(c)))) {
 			idx = i;
 			break;
 		}
@@ -235,7 +234,7 @@ Coordinates Atlas::xy2ll(const QPointF &p) const
 	int idx = _zooms.at(_zoom).first;
 
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
-		if (_bounds.at(i).second.contains(p)) {
+		if (_bounds.at(i).second.contains(_maps.at(i)->xy2pp(p))) {
 			idx = i;
 			break;
 		}
