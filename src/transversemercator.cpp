@@ -3,6 +3,15 @@
 #include "wgs84.h"
 #include "transversemercator.h"
 
+
+TransverseMercator::TransverseMercator()
+{
+	_centralMeridian = 0;
+	_scale = 1.0;
+	_falseEasting = 0;
+	_falseNorthing = 0;
+}
+
 TransverseMercator::TransverseMercator(double centralMeridian, double scale,
   double falseEasting, double falseNorthing)
 {

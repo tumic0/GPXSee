@@ -128,6 +128,12 @@ int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
 bool OfflineMap::createProjection(const QString &projection,
   const ProjectionSetup &setup, QList<ReferencePoint> &points)
 {
+	if (points.count() < 2) {
+		qWarning("%s: insufficient number of reference points",
+		  qPrintable(_name));
+		return false;
+	}
+
 	if (projection == "Mercator")
 		_projection = new Mercator();
 	else if (projection == "Transverse Mercator")
@@ -135,9 +141,16 @@ bool OfflineMap::createProjection(const QString &projection,
 		  setup.falseEasting, setup.falseNorthing);
 	else if (projection == "Latitude/Longitude")
 		_projection = new LatLon();
-	else if (projection == "(UTM) Universal Transverse Mercator")
-		_projection = new UTM(setup.zone);
-	else {
+	else if (projection == "(UTM) Universal Transverse Mercator") {
+		if (setup.zone)
+			_projection = new UTM(setup.zone);
+		else if (!points.first().ll.isNull())
+			_projection = new UTM(points.first().ll);
+		else {
+			qWarning("%s: Can not determine UTM zone", qPrintable(_name));
+			return false;
+		}
+	} else {
 		qWarning("%s: %s: unsupported map projection", qPrintable(_name),
 		  qPrintable(projection));
 		return false;
@@ -152,11 +165,7 @@ bool OfflineMap::createProjection(const QString &projection,
 
 bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
 {
-	if (points.count() < 2) {
-		qWarning("%s: insufficient number of reference points",
-		  qPrintable(_name));
-		return false;
-	}
+	Q_ASSERT(points.count() >= 2);
 
 	Matrix c(3, 2);
 	c.zeroize();

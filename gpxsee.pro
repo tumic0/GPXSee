@@ -151,7 +151,8 @@ SOURCES += src/main.cpp \
     src/tar.cpp \
     src/atlas.cpp \
     src/mercator.cpp \
-    src/transversemercator.cpp
+    src/transversemercator.cpp \
+    src/utm.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts

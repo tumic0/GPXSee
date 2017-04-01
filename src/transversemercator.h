@@ -6,6 +6,7 @@
 class TransverseMercator : public Projection
 {
 public:
+	TransverseMercator();
 	TransverseMercator(double centralMeridian, double scale,
 	  double falseEasting, double falseNorthing);
 
