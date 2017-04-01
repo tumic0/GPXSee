@@ -373,6 +373,12 @@ void PathView::zoom(const QPoint &pos, const Coordinates &c)
 void PathView::wheelEvent(QWheelEvent *event)
 {
 	qreal os, ns;
+	static int deg = 0;
+
+	deg += event->delta() / 8;
+	if (qAbs(deg) < 15)
+		return;
+	deg = 0;
 
 	os = _map->zoom();
 	Coordinates c = _map->xy2ll(mapToScene(event->pos()));
