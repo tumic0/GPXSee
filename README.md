@@ -3,7 +3,8 @@ GPXSee is a Qt-based GPS log file viewer and analyzer that supports GPX, TCX,
 KML, FIT, IGC and NMEA files.
 
 ## Features
-* User-definable map sources.
+* User-definable online maps.
+* Offline maps (OziExplorer image-based maps and tiled TrekBuddy maps/atlases)
 * Elevation, speed, heart rate, cadence, power and temperature graphs.
 * Support for multiple tracks in one view.
 * Support for POI files.
