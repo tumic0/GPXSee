@@ -143,6 +143,12 @@ Atlas::Atlas(const QString &path, QObject *parent) : Map(parent)
 	_valid = true;
 }
 
+Atlas::~Atlas()
+{
+	for (int i = 0; i < _maps.size(); i++)
+		delete _maps.at(i);
+}
+
 QRectF Atlas::bounds() const
 {
 	QSizeF s(0, 0);

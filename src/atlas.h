@@ -12,6 +12,7 @@ class Atlas : public Map
 
 public:
 	Atlas(const QString &path, QObject *parent = 0);
+	~Atlas();
 
 	const QString &name() const {return _name;}
 
