@@ -44,13 +44,26 @@ public:
 	QPointF pp2xy(const QPointF &p) const;
 
 private:
-	typedef QPair<QPoint, Coordinates> ReferencePoint;
+	typedef struct {
+		QPoint xy;
+		Coordinates ll;
+		QPointF pp;
+	} ReferencePoint;
+
+	typedef struct {
+		double centralMeridian;
+		double scale;
+		double falseEasting;
+		double falseNorthing;
+		int zone;
+	} ProjectionSetup;
 
 	int parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
-	  QString &projection, double params[8]);
+	  QString &projection, ProjectionSetup &setup);
 	bool mapLoaded(int res);
 	bool totalSizeSet();
-	bool createProjection(const QString &projection, double params[8]);
+	bool createProjection(const QString &projection,
+	  const ProjectionSetup &setup, QList<ReferencePoint> &points);
 	bool computeTransformation(const QList<ReferencePoint> &points);
 	bool computeResolution(QList<ReferencePoint> &points);
 	bool getTileInfo(const QStringList &tiles, const QString &path = QString());

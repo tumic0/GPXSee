@@ -88,7 +88,8 @@ HEADERS += src/config.h \
     src/projection.h \
     src/mercator.h \
     src/transversemercator.h \
-    src/latlon.h
+    src/latlon.h \
+    src/utm.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
