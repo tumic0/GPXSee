@@ -45,7 +45,6 @@ OnlineMap::OnlineMap(const QString &name, const QString &url, QObject *parent)
 {
 	_name = name;
 	_url = url;
-	downloader = downloader;
 	_block = false;
 	_scale = ((360.0/(qreal)(1<<ZOOM_MAX))/(qreal)TILE_SIZE);
 
