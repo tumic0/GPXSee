@@ -515,6 +515,11 @@ Coordinates OfflineMap::xy2ll(const QPointF &p) const
 	return _projection->xy2ll(_transform.inverted().map(p));
 }
 
+QPointF OfflineMap::ll2pp(const Coordinates &c) const
+{
+	return _projection->ll2xy(c);
+}
+
 QPointF OfflineMap::xy2pp(const QPointF &p) const
 {
 	return _transform.inverted().map(p);

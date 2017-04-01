@@ -38,6 +38,8 @@ public:
 	void unload();
 
 	bool isValid() {return _valid;}
+
+	QPointF ll2pp(const Coordinates &c) const;
 	QPointF xy2pp(const QPointF &p) const;
 	QPointF pp2xy(const QPointF &p) const;
 

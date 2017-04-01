@@ -31,6 +31,7 @@ public:
 	bool isValid() {return _valid;}
 
 private:
+	void draw(QPainter *painter, const QRectF &rect, int mapIndex);
 	bool isAtlas(const QFileInfoList &files);
 	void computeZooms();
 	void computeBounds();

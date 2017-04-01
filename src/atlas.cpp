@@ -20,12 +20,12 @@ static bool resCmp(const OfflineMap *m1, const OfflineMap *m2)
 	return r1 > r2;
 }
 
-static bool lonCmp(const OfflineMap *m1, const OfflineMap *m2)
+static bool xCmp(const OfflineMap *m1, const OfflineMap *m2)
 {
 	return TL(m1).x() < TL(m2).x();
 }
 
-static bool latCmp(const OfflineMap *m1, const OfflineMap *m2)
+static bool yCmp(const OfflineMap *m1, const OfflineMap *m2)
 {
 	return TL(m1).y() > TL(m2).y();
 }
@@ -80,7 +80,7 @@ void Atlas::computeBounds()
 		for (int i = _zooms.at(z).first; i <= _zooms.at(z).second; i++)
 			m.append(_maps.at(i));
 
-		qSort(m.begin(), m.end(), lonCmp);
+		qSort(m.begin(), m.end(), xCmp);
 		offsets[_maps.indexOf(m.first())].setX(w);
 		for (int i = 1; i < m.size(); i++) {
 			if (TL(m.at(i)).x() > TL(m.at(i-1)).x()) {
@@ -89,7 +89,7 @@ void Atlas::computeBounds()
 			}
 		}
 
-		qSort(m.begin(), m.end(), latCmp);
+		qSort(m.begin(), m.end(), yCmp);
 		offsets[_maps.indexOf(m.first())].setY(h);
 		for (int i = 1; i < m.size(); i++) {
 			if (TL(m.at(i)).y() < TL(m.at(i-1)).y()) {
@@ -182,8 +182,7 @@ qreal Atlas::zoomFit(const QSize &size, const QRectF &br)
 
 	for (int z = 0; z < _zooms.count(); z++) {
 		for (int i = _zooms.at(z).first; i <= _zooms.at(z).second; i++) {
-			if (_bounds.at(i).first.contains(_maps.at(i)->xy2pp(
-			  _maps.at(i)->ll2xy(br.center()))))
+			if (_bounds.at(i).first.contains(_maps.at(i)->ll2pp(br.center())))
 				continue;
 
 			QRect sbr = QRectF(_maps.at(i)->ll2xy(br.topLeft()),
@@ -218,8 +217,7 @@ QPointF Atlas::ll2xy(const Coordinates &c) const
 	int idx = _zooms.at(_zoom).first;
 
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
-		if (_bounds.at(i).first.contains(_maps.at(i)->xy2pp(
-		  _maps.at(i)->ll2xy(c)))) {
+		if (_bounds.at(i).first.contains(_maps.at(i)->ll2pp(c))) {
 			idx = i;
 			break;
 		}
@@ -246,20 +244,33 @@ Coordinates Atlas::xy2ll(const QPointF &p) const
 
 void Atlas::draw(QPainter *painter, const QRectF &rect)
 {
-	painter->fillRect(rect, Qt::white);
-
+	// All in one map
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
-		if (rect.intersects(_bounds.at(i).second)) {
-			OfflineMap *map = _maps.at(i);
-			QRectF ir = rect.intersected(_bounds.at(i).second);
-			const QPointF offset = _bounds.at(i).second.topLeft();
-			QRectF pr = QRectF(ir.topLeft() - offset, ir.size());
-
-			map->load();
-
-			painter->translate(offset);
-			map->draw(painter, pr);
-			painter->translate(-offset);
+		QRectF ir = rect.intersected(_bounds.at(i).second);
+		if (ir == rect) {
+			draw(painter, rect, i);
+			return;
 		}
 	}
+
+	// Multiple maps
+	painter->fillRect(rect, Qt::white);
+	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
+		QRectF ir = rect.intersected(_bounds.at(i).second);
+		if (!ir.isNull())
+			draw(painter, ir, i);
+	}
+}
+
+void Atlas::draw(QPainter *painter, const QRectF &rect, int mapIndex)
+{
+	OfflineMap *map = _maps.at(mapIndex);
+	const QPointF offset = _bounds.at(mapIndex).second.topLeft();
+	QRectF pr = QRectF(rect.topLeft() - offset, rect.size());
+
+	map->load();
+
+	painter->translate(offset);
+	map->draw(painter, pr);
+	painter->translate(-offset);
 }
