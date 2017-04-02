@@ -51,10 +51,13 @@ private:
 	} ReferencePoint;
 
 	typedef struct {
+		double centralParallel;
 		double centralMeridian;
 		double scale;
 		double falseEasting;
 		double falseNorthing;
+		double standardParallel1;
+		double standardParallel2;
 		int zone;
 	} ProjectionSetup;
 

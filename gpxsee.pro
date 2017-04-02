@@ -89,7 +89,8 @@ HEADERS += src/config.h \
     src/mercator.h \
     src/transversemercator.h \
     src/latlon.h \
-    src/utm.h
+    src/utm.h \
+    src/lambertconic.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -152,7 +153,8 @@ SOURCES += src/main.cpp \
     src/atlas.cpp \
     src/mercator.cpp \
     src/transversemercator.cpp \
-    src/utm.cpp
+    src/utm.cpp \
+    src/lambertconic.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts

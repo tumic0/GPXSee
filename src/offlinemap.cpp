@@ -16,6 +16,7 @@
 #include "mercator.h"
 #include "transversemercator.h"
 #include "utm.h"
+#include "lambertconic.h"
 #include "offlinemap.h"
 
 
@@ -104,18 +105,27 @@ int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
 			} else if (key == "Projection Setup") {
 				if (list.count() < 8)
 					return ln;
+				setup.centralParallel = list.at(1).trimmed().toFloat(&res);
+				if (!res)
+					setup.centralParallel = 0;
 				setup.centralMeridian = list.at(2).trimmed().toFloat(&res);
 				if (!res)
 					setup.centralMeridian = 0;
 				setup.scale = list.at(3).trimmed().toFloat(&res);
 				if (!res)
-					setup.scale = 0;
+					setup.scale = 1.0;
 				setup.falseEasting = list.at(4).trimmed().toFloat(&res);
 				if (!res)
 					setup.falseEasting = 0;
 				setup.falseNorthing = list.at(5).trimmed().toFloat(&res);
 				if (!res)
 					setup.falseNorthing = 0;
+				setup.standardParallel1 = list.at(6).trimmed().toFloat(&res);
+				if (!res)
+					setup.standardParallel1 = 0;
+				setup.standardParallel2 = list.at(7).trimmed().toFloat(&res);
+				if (!res)
+					setup.standardParallel2 = 0;
 			}
 		}
 
@@ -141,6 +151,10 @@ bool OfflineMap::createProjection(const QString &projection,
 		  setup.falseEasting, setup.falseNorthing);
 	else if (projection == "Latitude/Longitude")
 		_projection = new LatLon();
+	else if (projection == "Lambert Conformal Conic")
+		_projection = new LambertConic(setup.standardParallel1,
+		  setup.standardParallel2, setup.centralParallel, setup.centralMeridian,
+		  setup.scale, setup.falseEasting, setup.falseNorthing);
 	else if (projection == "(UTM) Universal Transverse Mercator") {
 		if (setup.zone)
 			_projection = new UTM(setup.zone);
