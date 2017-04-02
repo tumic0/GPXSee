@@ -107,6 +107,7 @@ void Atlas::computeBounds()
 Atlas::Atlas(const QString &path, QObject *parent) : Map(parent)
 {
 	_valid = false;
+	_zoom = 0;
 
 	QFileInfo fi(path);
 	_name = fi.fileName();
@@ -139,7 +140,6 @@ Atlas::Atlas(const QString &path, QObject *parent) : Map(parent)
 	computeZooms();
 	computeBounds();
 
-	_zoom = 0;
 	_valid = true;
 }
 

@@ -328,6 +328,7 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 	_valid = false;
 	_img = 0;
 	_projection = 0;
+	_resolution = 0;
 
 	QFileInfo fi(path);
 	_name = fi.fileName();
