@@ -6,7 +6,6 @@
 class TransverseMercator : public Projection
 {
 public:
-	TransverseMercator();
 	TransverseMercator(double centralMeridian, double scale,
 	  double falseEasting, double falseNorthing);
 
@@ -18,6 +17,12 @@ private:
 	double _scale;
 	double _falseEasting;
 	double _falseNorthing;
+
+	double _rectifyingRadius;
+	double _A, _B, _C, _D;
+	double _beta1, _beta2, _beta3, _beta4;
+	double _delta1, _delta2, _delta3, _delta4;
+	double _AStar, _BStar, _CStar, _DStar;
 };
 
 #endif // TRANSVERSEMERCATOR_H

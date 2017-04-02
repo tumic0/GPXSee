@@ -1,6 +1,6 @@
 #include "utm.h"
 
-UTM::UTM(const Coordinates &c)
+UTM::UTM(const Coordinates &c) : _tm(0, 1.0, 0, 0)
 {
 	int zone = int((c.lon() + 180)/6) + 1;
 
