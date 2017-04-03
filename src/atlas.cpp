@@ -83,19 +83,15 @@ void Atlas::computeBounds()
 		qSort(m.begin(), m.end(), xCmp);
 		offsets[_maps.indexOf(m.first())].setX(w);
 		for (int i = 1; i < m.size(); i++) {
-			if (TL(m.at(i)).x() > TL(m.at(i-1)).x()) {
-				w += round(m.at(i-1)->pp2xy(TL(m.at(i))).x());
-				offsets[_maps.indexOf(m.at(i))].setX(w);
-			}
+			w += round(m.at(i-1)->pp2xy(TL(m.at(i))).x());
+			offsets[_maps.indexOf(m.at(i))].setX(w);
 		}
 
 		qSort(m.begin(), m.end(), yCmp);
 		offsets[_maps.indexOf(m.first())].setY(h);
 		for (int i = 1; i < m.size(); i++) {
-			if (TL(m.at(i)).y() < TL(m.at(i-1)).y()) {
-				h += round(m.at(i-1)->pp2xy(TL(m.at(i))).y());
-				offsets[_maps.indexOf(m.at(i))].setY(h);
-			}
+			h += round(m.at(i-1)->pp2xy(TL(m.at(i))).y());
+			offsets[_maps.indexOf(m.at(i))].setY(h);
 		}
 	}
 
