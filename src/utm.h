@@ -7,8 +7,7 @@
 class UTM : public Projection
 {
 public:
-	UTM(int zone) : _tm((qAbs(zone) - 1)*6 - 180 + 3, 0.9996, 500000,
-	  zone < 0 ? 10000000 : 0) {}
+	UTM(int zone);
 	UTM(const Coordinates &c);
 
 	virtual QPointF ll2xy(const Coordinates &c) const

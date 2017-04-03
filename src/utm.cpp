@@ -1,6 +1,12 @@
+#include "ellipsoid.h"
 #include "utm.h"
 
-UTM::UTM(const Coordinates &c) : _tm(0, 1.0, 0, 0)
+UTM::UTM(int zone) : _tm(Ellipsoid(), (qAbs(zone) - 1)*6 - 180 + 3, 0.9996,
+  500000, zone < 0 ? 10000000 : 0)
+{
+}
+
+UTM::UTM(const Coordinates &c) : _tm(Ellipsoid(), 0, 0, 0, 0)
 {
 	int zone = int((c.lon() + 180)/6) + 1;
 
@@ -18,5 +24,6 @@ UTM::UTM(const Coordinates &c) : _tm(0, 1.0, 0, 0)
 	}
 	double cm = (zone - 1)*6 - 180 + 3;
 
-	_tm = TransverseMercator(cm, 0.9996, 500000, (c.lat() < 0) ? 10000000 : 0);
+	_tm = TransverseMercator(Ellipsoid(), cm, 0.9996, 500000,
+	  (c.lat() < 0) ? 10000000 : 0);
 }

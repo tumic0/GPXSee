@@ -1,20 +1,22 @@
 #include <cmath>
 #include "rd.h"
-#include "wgs84.h"
+#include "ellipsoid.h"
 #include "transversemercator.h"
 
 
-TransverseMercator::TransverseMercator(double centralMeridian, double scale,
-  double falseEasting, double falseNorthing)
+TransverseMercator::TransverseMercator(const Ellipsoid &ellipsoid,
+  double centralMeridian, double scale, double falseEasting,
+  double falseNorthing)
 {
 	_centralMeridian = centralMeridian;
 	_scale = scale;
 	_falseEasting = falseEasting;
 	_falseNorthing = falseNorthing;
 
-	const double e2 = WGS84_FLATTENING * (2 - WGS84_FLATTENING);
-	const double n = WGS84_FLATTENING / (2 - WGS84_FLATTENING);
-	_rectifyingRadius = WGS84_RADIUS / (1 + n)
+
+	const double e2 = ellipsoid.flattening() * (2 - ellipsoid.flattening());
+	const double n = ellipsoid.flattening() / (2 - ellipsoid.flattening());
+	_rectifyingRadius = ellipsoid.radius() / (1 + n)
 	  * (1 + 0.25*pow(n, 2) + 0.015625*pow(n, 4));
 
 	_A = e2;

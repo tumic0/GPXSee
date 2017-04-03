@@ -62,10 +62,10 @@ private:
 	} ProjectionSetup;
 
 	int parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
-	  QString &projection, ProjectionSetup &setup);
+	  QString &projection, ProjectionSetup &setup, QString &datum);
 	bool mapLoaded(int res);
 	bool totalSizeSet();
-	bool createProjection(const QString &projection,
+	bool createProjection(const QString &datum, const QString &projection,
 	  const ProjectionSetup &setup, QList<ReferencePoint> &points);
 	bool computeTransformation(const QList<ReferencePoint> &points);
 	bool computeResolution(QList<ReferencePoint> &points);

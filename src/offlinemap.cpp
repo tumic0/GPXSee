@@ -12,6 +12,7 @@
 #include "wgs84.h"
 #include "coordinates.h"
 #include "matrix.h"
+#include "ellipsoid.h"
 #include "latlon.h"
 #include "mercator.h"
 #include "transversemercator.h"
@@ -21,7 +22,7 @@
 
 
 int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
-  QString &projection, ProjectionSetup &setup)
+  QString &projection, ProjectionSetup &setup, QString &datum)
 {
 	bool res;
 	int ln = 1;
@@ -38,6 +39,8 @@ int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
 				return ln;
 		} else if (ln == 3)
 			_imgPath = line.trimmed();
+		else if (ln == 5)
+			datum = line.split(',').at(0).trimmed();
 		else {
 			QList<QByteArray> list = line.split(',');
 			QString key(list.at(0).trimmed());
@@ -135,8 +138,9 @@ int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
 	return 0;
 }
 
-bool OfflineMap::createProjection(const QString &projection,
-  const ProjectionSetup &setup, QList<ReferencePoint> &points)
+bool OfflineMap::createProjection(const QString &datum,
+  const QString &projection, const ProjectionSetup &setup,
+  QList<ReferencePoint> &points)
 {
 	if (points.count() < 2) {
 		qWarning("%s: insufficient number of reference points",
@@ -147,12 +151,13 @@ bool OfflineMap::createProjection(const QString &projection,
 	if (projection == "Mercator")
 		_projection = new Mercator();
 	else if (projection == "Transverse Mercator")
-		_projection = new TransverseMercator(setup.centralMeridian, setup.scale,
-		  setup.falseEasting, setup.falseNorthing);
+		_projection = new TransverseMercator(Ellipsoid(datum),
+		  setup.centralMeridian, setup.scale, setup.falseEasting,
+		  setup.falseNorthing);
 	else if (projection == "Latitude/Longitude")
 		_projection = new LatLon();
 	else if (projection == "Lambert Conformal Conic")
-		_projection = new LambertConic(setup.standardParallel1,
+		_projection = new LambertConic(Ellipsoid(datum), setup.standardParallel1,
 		  setup.standardParallel2, setup.centralParallel, setup.centralMeridian,
 		  setup.scale, setup.falseEasting, setup.falseNorthing);
 	else if (projection == "(UTM) Universal Transverse Mercator") {
@@ -335,7 +340,7 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 {
 	int errorLine = -2;
 	QList<ReferencePoint> points;
-	QString proj;
+	QString proj, datum;
 	ProjectionSetup setup;
 
 
@@ -362,7 +367,7 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 				if (tarFiles.at(j).endsWith(".map")) {
 					QByteArray ba = _tar.file(tarFiles.at(j));
 					QBuffer buffer(&ba);
-					errorLine = parseMapFile(buffer, points, proj, setup);
+					errorLine = parseMapFile(buffer, points, proj, setup, datum);
 					_imgPath = QString();
 					break;
 				}
@@ -370,14 +375,14 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 			break;
 		} else if (fileName.endsWith(".map")) {
 			QFile mapFile(mapFiles.at(i).absoluteFilePath());
-			errorLine = parseMapFile(mapFile, points, proj, setup);
+			errorLine = parseMapFile(mapFile, points, proj, setup, datum);
 			break;
 		}
 	}
 	if (!mapLoaded(errorLine))
 		return;
 
-	if (!createProjection(proj, setup, points))
+	if (!createProjection(datum, proj, setup, points))
 		return;
 	if (!computeTransformation(points))
 		return;
@@ -410,7 +415,7 @@ OfflineMap::OfflineMap(Tar &tar, const QString &path, QObject *parent)
 {
 	int errorLine = -2;
 	QList<ReferencePoint> points;
-	QString proj;
+	QString proj, datum;
 	ProjectionSetup setup;
 
 
@@ -428,14 +433,14 @@ OfflineMap::OfflineMap(Tar &tar, const QString &path, QObject *parent)
 		if (tarFiles.at(j).startsWith(prefix)) {
 			QByteArray ba = tar.file(tarFiles.at(j));
 			QBuffer buffer(&ba);
-			errorLine = parseMapFile(buffer, points, proj, setup);
+			errorLine = parseMapFile(buffer, points, proj, setup, datum);
 			break;
 		}
 	}
 	if (!mapLoaded(errorLine))
 		return;
 
-	if (!createProjection(proj, setup, points))
+	if (!createProjection(datum, proj, setup, points))
 		return;
 	if (!totalSizeSet())
 		return;
