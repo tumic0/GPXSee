@@ -226,6 +226,7 @@ bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
 
 	_transform = QTransform(M.m(0,3), M.m(0,4), M.m(1,3), M.m(1,4), M.m(2,3),
 	  M.m(2,4));
+	_inverted = _transform.inverted();
 
 	return true;
 }
@@ -570,29 +571,4 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect)
 			painter->drawImage(rect.topLeft(), crop);
 		}
 	}
-}
-
-QPointF OfflineMap::ll2xy(const Coordinates &c) const
-{
-	return _transform.map(_projection->ll2xy(c));
-}
-
-Coordinates OfflineMap::xy2ll(const QPointF &p) const
-{
-	return _projection->xy2ll(_transform.inverted().map(p));
-}
-
-QPointF OfflineMap::ll2pp(const Coordinates &c) const
-{
-	return _projection->ll2xy(c);
-}
-
-QPointF OfflineMap::xy2pp(const QPointF &p) const
-{
-	return _transform.inverted().map(p);
-}
-
-QPointF OfflineMap::pp2xy(const QPointF &p) const
-{
-	return _transform.map(p);
 }

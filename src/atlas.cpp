@@ -30,17 +30,17 @@ static bool yCmp(const OfflineMap *m1, const OfflineMap *m2)
 	return TL(m1).y() > TL(m2).y();
 }
 
-bool Atlas::isAtlas(const QFileInfoList &files)
+bool Atlas::isAtlas(Tar &tar, const QFileInfoList &files)
 {
 	for (int i = 0; i < files.count(); i++) {
 		const QString &fileName = files.at(i).fileName();
 		if (fileName.endsWith(".tar")) {
-			if (!_tar.load(files.at(i).absoluteFilePath())) {
+			if (!tar.load(files.at(i).absoluteFilePath())) {
 				qWarning("%s: %s: error loading tar file", qPrintable(_name),
 				  qPrintable(fileName));
 				return false;
 			}
-			QStringList tarFiles = _tar.files();
+			QStringList tarFiles = tar.files();
 			for (int j = 0; j < tarFiles.size(); j++)
 				if (tarFiles.at(j).endsWith(".tba"))
 					return true;
@@ -102,6 +102,8 @@ void Atlas::computeBounds()
 
 Atlas::Atlas(const QString &path, QObject *parent) : Map(parent)
 {
+	Tar tar;
+
 	_valid = false;
 	_zoom = 0;
 
@@ -110,7 +112,7 @@ Atlas::Atlas(const QString &path, QObject *parent) : Map(parent)
 
 	QDir dir(path);
 	QFileInfoList files = dir.entryInfoList(QDir::Files);
-	if (!isAtlas(files))
+	if (!isAtlas(tar, files))
 		return;
 
 	QFileInfoList layers = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
@@ -120,8 +122,8 @@ Atlas::Atlas(const QString &path, QObject *parent) : Map(parent)
 		  | QDir::NoDotAndDotDot);
 		for (int i = 0; i < maps.count(); i++) {
 			OfflineMap *map;
-			if (_tar.isOpen())
-				map = new OfflineMap(_tar, maps.at(i).absoluteFilePath(), this);
+			if (tar.isOpen())
+				map = new OfflineMap(tar, maps.at(i).absoluteFilePath(), this);
 			else
 				map = new OfflineMap(maps.at(i).absoluteFilePath(), this);
 			if (map->isValid())

@@ -5,10 +5,11 @@
 #include "map.h"
 #include "tar.h"
 #include "coordinates.h"
+#include "projection.h"
+
 
 class QIODevice;
 class QImage;
-class Projection;
 
 class OfflineMap : public Map
 {
@@ -29,8 +30,10 @@ public:
 	qreal zoomIn();
 	qreal zoomOut();
 
-	QPointF ll2xy(const Coordinates &c) const;
-	Coordinates xy2ll(const QPointF &p) const;
+	QPointF ll2xy(const Coordinates &c) const
+	  {return _transform.map(_projection->ll2xy(c));}
+	Coordinates xy2ll(const QPointF &p) const
+	  {return _projection->xy2ll(_inverted.map(p));}
 
 	void draw(QPainter *painter, const QRectF &rect);
 
@@ -39,9 +42,12 @@ public:
 
 	bool isValid() {return _valid;}
 
-	QPointF ll2pp(const Coordinates &c) const;
-	QPointF xy2pp(const QPointF &p) const;
-	QPointF pp2xy(const QPointF &p) const;
+	QPointF ll2pp(const Coordinates &c) const
+	  {return _projection->ll2xy(c);}
+	QPointF xy2pp(const QPointF &p) const
+	  {return _inverted.map(p);}
+	QPointF pp2xy(const QPointF &p) const
+	  {return _transform.map(p);}
 
 private:
 	typedef struct {
@@ -75,7 +81,7 @@ private:
 	QString _name;
 	QSize _size;
 	Projection *_projection;
-	QTransform _transform;
+	QTransform _transform, _inverted;
 	qreal _resolution;
 
 	Tar _tar;

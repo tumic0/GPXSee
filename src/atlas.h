@@ -33,14 +33,13 @@ public:
 
 private:
 	void draw(QPainter *painter, const QRectF &rect, int mapIndex);
-	bool isAtlas(const QFileInfoList &files);
+	bool isAtlas(Tar &tar, const QFileInfoList &files);
 	void computeZooms();
 	void computeBounds();
 
 	QString _name;
 	bool _valid;
 
-	Tar _tar;
 	QList<OfflineMap*> _maps;
 	QVector<QPair<int, int> > _zooms;
 	QVector<QPair<QRectF, QRectF> > _bounds;
