@@ -10,6 +10,9 @@
 #define LAST_KEY                Qt::Key_End
 #define MODIFIER                Qt::ShiftModifier
 
+#define ZOOM_IN                 QKeySequence::ZoomIn
+#define ZOOM_OUT                QKeySequence::ZoomOut
+
 #define QUIT_SHORTCUT           QKeySequence(QKeySequence::Quit)
 #define OPEN_SHORTCUT           QKeySequence(QKeySequence::Open)
 #define CLOSE_SHORTCUT          QKeySequence(QKeySequence::Close)
@@ -22,6 +25,7 @@
 #define SHOW_GRAPHS_SHORTCUT    QKeySequence(Qt::CTRL + Qt::Key_G)
 #define DISTANCE_GRAPH_SHORTCUT QKeySequence(Qt::CTRL + Qt::Key_D)
 #define TIME_GRAPH_SHORTCUT     QKeySequence(Qt::CTRL + Qt::Key_T)
+
 #ifdef Q_OS_MAC
 #define FULLSCREEN_SHORTCUT     QKeySequence(Qt::META + Qt::CTRL + Qt::Key_F)
 #else // Q_OS_MAC

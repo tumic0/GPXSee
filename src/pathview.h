@@ -76,7 +76,9 @@ private:
 	qreal mapScale() const;
 	QPointF contentCenter() const;
 	void rescale();
-	void zoom(const QPoint &pos, const Coordinates &c);
+	void zoom(int zoom, const QPoint &pos, const Coordinates &c);
+	void digitalZoom(int zoom);
+	void resetDigitalZoom();
 	void updatePOIVisibility();
 	void updateWaypointsBoundingRect(const QPointF &wp);
 
@@ -118,6 +120,7 @@ private:
 	Qt::PenStyle _trackStyle;
 	Qt::PenStyle _routeStyle;
 
+	int _digitalZoom;
 	bool _plot;
 };
 

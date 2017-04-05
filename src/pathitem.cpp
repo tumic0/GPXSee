@@ -24,6 +24,7 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 
 	_marker = new MarkerItem(this);
 	_marker->setPos(position(_path.at(0).distance()));
+	_marker->setFlag(QGraphicsItem::ItemIgnoresTransformations);
 	_md = _path.at(0).distance();
 
 	setCursor(Qt::ArrowCursor);
@@ -79,7 +80,7 @@ void PathItem::setColor(const QColor &color)
 	update();
 }
 
-void PathItem::setWidth(int width)
+void PathItem::setWidth(qreal width)
 {
 	prepareGeometryChange();
 

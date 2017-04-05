@@ -26,7 +26,7 @@ public:
 	void setMap(Map *map);
 
 	void setColor(const QColor &color);
-	void setWidth(int width);
+	void setWidth(qreal width);
 	void setStyle(Qt::PenStyle style);
 
 	void showMarker(bool show) {_marker->setVisible(show);}
@@ -52,7 +52,7 @@ private:
 	Map *_map;
 	qreal _md;
 
-	int _width;
+	qreal _width;
 	QPen _pen;
 	QPainterPath _shape;
 	QPainterPath _painterPath;

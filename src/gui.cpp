@@ -594,18 +594,24 @@ void GUI::keys()
 	msgBox.setWindowTitle(tr("Keyboard controls"));
 	msgBox.setText("<h3>" + tr("Keyboard controls") + "</h3>");
 	msgBox.setInformativeText(
-	  "<div><table width=\"300\"><tr><td>" + tr("Next file")
-	  + "</td><td><i>" + QKeySequence(NEXT_KEY).toString()
+	  "<style>td {padding-right: 1.5em;}</style><div><table><tr><td>"
+	  + tr("Next file") + "</td><td><i>" + QKeySequence(NEXT_KEY).toString()
 	  + "</i></td></tr><tr><td>" + tr("Previous file")
 	  + "</td><td><i>" + QKeySequence(PREV_KEY).toString()
 	  + "</i></td></tr><tr><td>" + tr("First file") + "</td><td><i>"
 	  + QKeySequence(FIRST_KEY).toString() + "</i></td></tr><tr><td>"
 	  + tr("Last file") + "</td><td><i>" + QKeySequence(LAST_KEY).toString()
-	  + "</i></td></tr><tr><td>" + tr("Append modifier")
-	  + "</td><td><i>SHIFT</i></td></tr><tr><td></td><td></td></tr><tr><td>"
-	  + tr("Next map") + "</td><td><i>" + NEXT_MAP_SHORTCUT.toString()
-	  + "</i></td></tr><tr><td>" + tr("Previous map") + "</td><td><i>"
-	  + PREV_MAP_SHORTCUT.toString() + "</i></td></tr></table></div>");
+	  + "</i></td></tr><tr><td>" + tr("Append file")
+	  + "</td><td><i>" + QKeySequence(MODIFIER).toString() + tr("Next/Previous")
+	  + "</i></td></tr><tr><td></td><td></td></tr><tr><td>" + tr("Next map")
+	  + "</td><td><i>" + NEXT_MAP_SHORTCUT.toString() + "</i></td></tr><tr><td>"
+	  + tr("Previous map") + "</td><td><i>" + PREV_MAP_SHORTCUT.toString()
+	  + "</i></td></tr><tr><td></td><td></td></tr><tr><td>" + tr("Zoom in")
+	  + "</td><td><i>" + QKeySequence(ZOOM_IN).toString()
+	  + "</i></td></tr><tr><td>" + tr("Zoom out") + "</td><td><i>"
+	  + QKeySequence(ZOOM_OUT).toString() + "</i></td></tr><tr><td>"
+	  + tr("Digital zoom") + "</td><td><i>" + QKeySequence(MODIFIER).toString()
+	  + tr("Zoom") + "</i></td></tr></table></div>");
 
 	msgBox.exec();
 }
@@ -1321,6 +1327,8 @@ void GUI::keyPressEvent(QKeyEvent *event)
 			closeFiles();
 		openFile(file);
 	}
+
+	QMainWindow::keyPressEvent(event);
 }
 
 void GUI::closeEvent(QCloseEvent *event)
