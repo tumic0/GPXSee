@@ -1318,6 +1318,7 @@ void GUI::keyPressEvent(QKeyEvent *event)
 			if (_fullscreenAction->isChecked()) {
 				_fullscreenAction->setChecked(false);
 				showFullscreen(false);
+				return;
 			}
 			break;
 	}
@@ -1326,6 +1327,7 @@ void GUI::keyPressEvent(QKeyEvent *event)
 		if (!(event->modifiers() & MODIFIER))
 			closeFiles();
 		openFile(file);
+		return;
 	}
 
 	QMainWindow::keyPressEvent(event);

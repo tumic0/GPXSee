@@ -457,10 +457,10 @@ void PathView::keyPressEvent(QKeyEvent *event)
 		z = 1;
 	else if (event->matches(ZOOM_OUT))
 		z = -1;
-	else {
-		if (_digitalZoom && event->key() == Qt::Key_Escape )
-			resetDigitalZoom();
-
+	else if (_digitalZoom && event->key() == Qt::Key_Escape) {
+		resetDigitalZoom();
+		return;
+	} else {
 		QGraphicsView::keyPressEvent(event);
 		return;
 	}
