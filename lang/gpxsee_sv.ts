@@ -440,12 +440,12 @@
     <message>
         <location filename="../src/gui.cpp" line="604"/>
         <source>Append file</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till fil</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="605"/>
         <source>Next/Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Nästa/Föregående</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="608"/>
@@ -455,42 +455,47 @@
     <message>
         <location filename="../src/gui.cpp" line="609"/>
         <source>Zoom in</source>
-        <translation type="unfinished"></translation>
+        <translation>Zooma in</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="611"/>
         <source>Zoom out</source>
-        <translation type="unfinished"></translation>
+        <translation>Zooma ut</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="613"/>
         <source>Digital zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Digital zoom</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="614"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="626"/>
         <source>Online maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Online-kartor</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="627"/>
         <source>Online map URLs are read on program startup from the following file:</source>
-        <translation type="unfinished"></translation>
+        <translation>Online-kartors URL:er, läses från följande fil vid programstart:</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="637"/>
+        <source>Offline maps</source>
+        <translation>Offline-kartor</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="638"/>
         <source>Offline maps are loaded on program startup from the following directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Offline-kartor läses in från följande mapp vid programstart:</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="641"/>
         <source>The expected structure is one map/atlas in a separate subdirectory. Supported map formats are OziMap image-based maps and tiled TrekBuddy maps/atlases (tared and non-tared).</source>
-        <translation type="unfinished"></translation>
+        <translation>Den förväntade strukturen är en karta/atlas i en separat undermapp. Kartformat som stöds är OziMap bildbaserade kartor och rutindelade TrekBuddy-kartor/-kartsamlingar (tarerade och icke tarerade).</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="1097"/>
