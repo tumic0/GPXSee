@@ -634,7 +634,7 @@ void GUI::dataSources()
 	  + "</p><p><code>Map1	http://tile.server.com/map/$z/$x/$y.png"
 		  "<br/>Map2	http://mapserver.org/map/$z-$x-$y</code></p>"
 
-	  + "<h4>" + tr("Ofline maps") + "</h4><p>"
+	  + "<h4>" + tr("Offline maps") + "</h4><p>"
 	  + tr("Offline maps are loaded on program startup from the following "
 		"directory:")
 	  + "</p><p><code>" + USER_MAP_DIR + "</code></p><p>"
