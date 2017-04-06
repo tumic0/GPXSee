@@ -468,7 +468,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="613"/>
+        <location filename="../src/gui.cpp" line="614"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
@@ -480,11 +480,6 @@
     <message>
         <location filename="../src/gui.cpp" line="627"/>
         <source>Online map URLs are read on program startup from the following file:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/gui.cpp" line="637"/>
-        <source>Ofline maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -547,7 +542,7 @@
         <translation>Rutter</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="597"/>
+        <location filename="../src/gui.cpp" line="598"/>
         <source>Next file</source>
         <translation>Nästa fil</translation>
     </message>
@@ -600,6 +595,11 @@
         <location filename="../src/gui.cpp" line="630"/>
         <source>The file format is one map entry per line, consisting of the map name and tiles URL delimited by a TAB character. The tile X and Y coordinates are replaced with $x and $y in the URL and the zoom level is replaced with $z. An example map file could look like:</source>
         <translation>Filformatet är en kartpost per rad, bestående av kartnamn och kartrutans URL, avgränsade med ett TAB-tecken. Kartrutans X- och Y-koordinater ersätts med $x och $y i URL:en och zoomnivån ersätts med $z. Exempel på en kartfil kan se ut så här:</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="637"/>
+        <source>Offline maps</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="646"/>

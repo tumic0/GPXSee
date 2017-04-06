@@ -445,7 +445,7 @@
     <message>
         <location filename="../src/gui.cpp" line="605"/>
         <source>Next/Previous</source>
-        <translation type="unfinished">Následující/Předchozí</translation>
+        <translation>Následující/Předchozí</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="608"/>
@@ -468,7 +468,7 @@
         <translation>Digitální zoom</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="613"/>
+        <location filename="../src/gui.cpp" line="614"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
@@ -481,11 +481,6 @@
         <location filename="../src/gui.cpp" line="627"/>
         <source>Online map URLs are read on program startup from the following file:</source>
         <translation>URL online map jsou načteny při startu programu z následujícího souboru:</translation>
-    </message>
-    <message>
-        <location filename="../src/gui.cpp" line="637"/>
-        <source>Ofline maps</source>
-        <translation>Offline mapy</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="638"/>
@@ -548,7 +543,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="597"/>
+        <location filename="../src/gui.cpp" line="598"/>
         <source>Next file</source>
         <translation>Následující soubor</translation>
     </message>
@@ -601,6 +596,11 @@
         <location filename="../src/gui.cpp" line="630"/>
         <source>The file format is one map entry per line, consisting of the map name and tiles URL delimited by a TAB character. The tile X and Y coordinates are replaced with $x and $y in the URL and the zoom level is replaced with $z. An example map file could look like:</source>
         <translation>Formát souboru je jeden mapový záznam na řádku, kde mapový záznam sestává ze jména mapy a URL dlaždic navzájem oddělených tabulátorem. Souřadnice dlaždice jsou v URL nahrazeny řetězci $x a $y, úroven přiblížení (zoom) pak řetězcem $z. Příklad:</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="637"/>
+        <source>Offline maps</source>
+        <translation>Offline mapy</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="646"/>
