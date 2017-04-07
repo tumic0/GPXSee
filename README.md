@@ -16,22 +16,18 @@ KML, FIT, IGC and NMEA files.
 ![GPXSee - Linux](https://a.fsdn.com/con/app/proj/gpxsee/screenshots/linux2.png)
 
 ## Build
-### Linux/OS X
 ```shell
 lrelease gpxsee.pro
 qmake gpxsee.pro
 make
 ```
-### Windows
-```shell
-lrelease gpxsee.pro
-qmake gpxsee.pro
-nmake release
-```
 
-## Binaries
+## Download
 * [Windows & OS X builds](http://sourceforge.net/projects/gpxsee)
 * [Linux packages](http://software.opensuse.org/download.html?project=home%3Atumic%3AGPXSee&package=gpxsee)
+
+## Changelog
+[Changelog](https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes)
 
 ## Homepage
 GPXSee homepage: http://tumic.wz.cz/gpxsee
