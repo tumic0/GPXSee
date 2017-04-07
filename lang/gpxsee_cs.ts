@@ -489,8 +489,8 @@
     </message>
     <message>
         <location filename="../src/gui.cpp" line="641"/>
-        <source>The expected structure is one map/atlas in a separate subdirectory. Supported map formats are OziMap image-based maps and tiled TrekBuddy maps/atlases (tared and non-tared).</source>
-        <translation>Očekávaná struktura je jedna mapa/atlas v samostatném podadresáři. Podporované mapové formáty jsou OziMap mapy a TrekBuddy mapy/atlasy (včetně tar varianty).</translation>
+        <source>The expected structure is one map/atlas in a separate subdirectory. Supported map formats are OziExplorer image-based maps and tiled TrekBuddy maps/atlases (tared and non-tared).</source>
+        <translation>Očekávaná struktura je jedna mapa/atlas v samostatném podadresáři. Podporované mapové formáty jsou OziExplorer mapy a TrekBuddy mapy/atlasy (včetně tar varianty).</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="1097"/>

@@ -639,8 +639,8 @@ void GUI::dataSources()
 		"directory:")
 	  + "</p><p><code>" + USER_MAP_DIR + "</code></p><p>"
 	  + tr("The expected structure is one map/atlas in a separate subdirectory."
-		" Supported map formats are OziMap image-based maps and tiled TrekBuddy"
-		" maps/atlases (tared and non-tared).") + "</p>"
+		" Supported map formats are OziExplorer image-based maps and tiled"
+		" TrekBuddy maps/atlases (tared and non-tared).") + "</p>"
 
 	  + "<h4>" + tr("POIs") + "</h4><p>"
 	  + tr("To make GPXSee load a POI file automatically on startup, add "
