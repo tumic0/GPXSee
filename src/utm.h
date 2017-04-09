@@ -7,8 +7,8 @@
 class UTM : public Projection
 {
 public:
-	UTM(int zone);
-	UTM(const Coordinates &c);
+	UTM(const Ellipsoid &ellipsoid, int zone);
+	UTM(const Ellipsoid &ellipsoid, const Coordinates &c);
 
 	virtual QPointF ll2xy(const Coordinates &c) const
 	  {return _tm.ll2xy(c);}

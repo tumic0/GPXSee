@@ -21,6 +21,18 @@
 #include "offlinemap.h"
 
 
+struct {const char *name; Ellipsoid::Name ellipsoid;} static datums[] = {
+	{"S42", Ellipsoid::Krassowsky1940},
+	{"Pulkovo 1942", Ellipsoid::Krassowsky1940},
+	{"European 1950", Ellipsoid::International1924},
+	{"European 1979", Ellipsoid::International1924},
+	{"NZGD1949", Ellipsoid::International1924},
+	{"NAD27", Ellipsoid::Clarke1866},
+	{"NAD83", Ellipsoid::GRS80},
+	{"WGS 72", Ellipsoid::WGS72},
+	{"South American 1969", Ellipsoid::GRS67}
+};
+
 int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
   QString &projection, ProjectionSetup &setup, QString &datum)
 {
@@ -108,12 +120,12 @@ int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
 			} else if (key == "Projection Setup") {
 				if (list.count() < 8)
 					return ln;
-				setup.centralParallel = list.at(1).trimmed().toFloat(&res);
+				setup.latitudeOrigin = list.at(1).trimmed().toFloat(&res);
 				if (!res)
-					setup.centralParallel = 0;
-				setup.centralMeridian = list.at(2).trimmed().toFloat(&res);
+					setup.latitudeOrigin = 0;
+				setup.longitudeOrigin = list.at(2).trimmed().toFloat(&res);
 				if (!res)
-					setup.centralMeridian = 0;
+					setup.longitudeOrigin = 0;
 				setup.scale = list.at(3).trimmed().toFloat(&res);
 				if (!res)
 					setup.scale = 1.0;
@@ -142,29 +154,39 @@ bool OfflineMap::createProjection(const QString &datum,
   const QString &projection, const ProjectionSetup &setup,
   QList<ReferencePoint> &points)
 {
+	Ellipsoid::Name ellipsoid = Ellipsoid::WGS84;
+
 	if (points.count() < 2) {
 		qWarning("%s: insufficient number of reference points",
 		  qPrintable(_name));
 		return false;
 	}
 
+	for (size_t i = 0; i < ARRAY_SIZE(datums); i++) {
+		if (datum.startsWith(datums[i].name)) {
+			ellipsoid = datums[i].ellipsoid;
+			break;
+		}
+	}
+
 	if (projection == "Mercator")
 		_projection = new Mercator();
 	else if (projection == "Transverse Mercator")
-		_projection = new TransverseMercator(Ellipsoid(datum),
-		  setup.centralMeridian, setup.scale, setup.falseEasting,
+		_projection = new TransverseMercator(Ellipsoid(ellipsoid),
+		  setup.longitudeOrigin, setup.scale, setup.falseEasting,
 		  setup.falseNorthing);
 	else if (projection == "Latitude/Longitude")
 		_projection = new LatLon();
 	else if (projection == "Lambert Conformal Conic")
-		_projection = new LambertConic(Ellipsoid(datum), setup.standardParallel1,
-		  setup.standardParallel2, setup.centralParallel, setup.centralMeridian,
-		  setup.scale, setup.falseEasting, setup.falseNorthing);
+		_projection = new LambertConic(Ellipsoid(ellipsoid),
+		  setup.standardParallel1, setup.standardParallel2,
+		  setup.latitudeOrigin, setup.longitudeOrigin, setup.scale,
+		  setup.falseEasting, setup.falseNorthing);
 	else if (projection == "(UTM) Universal Transverse Mercator") {
 		if (setup.zone)
-			_projection = new UTM(setup.zone);
+			_projection = new UTM(Ellipsoid(ellipsoid), setup.zone);
 		else if (!points.first().ll.isNull())
-			_projection = new UTM(points.first().ll);
+			_projection = new UTM(Ellipsoid(ellipsoid), points.first().ll);
 		else {
 			qWarning("%s: Can not determine UTM zone", qPrintable(_name));
 			return false;
@@ -494,36 +516,6 @@ void OfflineMap::unload()
 		delete _img;
 		_img = 0;
 	}
-}
-
-QRectF OfflineMap::bounds() const
-{
-	return QRectF(QPointF(0, 0), _size);
-}
-
-qreal OfflineMap::zoomFit(const QSize &size, const QRectF &br)
-{
-	Q_UNUSED(size);
-	Q_UNUSED(br);
-
-	return 1.0;
-}
-
-qreal OfflineMap::resolution(const QPointF &p) const
-{
-	Q_UNUSED(p);
-
-	return _resolution;
-}
-
-qreal OfflineMap::zoomIn()
-{
-	return 1.0;
-}
-
-qreal OfflineMap::zoomOut()
-{
-	return 1.0;
 }
 
 void OfflineMap::draw(QPainter *painter, const QRectF &rect)

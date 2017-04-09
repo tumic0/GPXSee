@@ -8,7 +8,7 @@ class LambertConic : public Projection
 {
 public:
 	LambertConic(const Ellipsoid &ellipsoid, double standardParallel1,
-	  double standardParallel2, double centralParallel, double centralMeridian,
+	  double standardParallel2, double latitudeOrigin, double longitudeOrigin,
 	  double scale, double falseEasting, double falseNorthing);
 
 	virtual QPointF ll2xy(const Coordinates &c) const;

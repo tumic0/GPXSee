@@ -22,13 +22,13 @@ public:
 
 	const QString &name() const {return _name;}
 
-	QRectF bounds() const;
-	qreal resolution(const QPointF &p) const;
+	QRectF bounds() const {return QRectF(QPointF(0, 0), _size);}
+	qreal resolution(const QPointF &) const {return _resolution;}
 
 	qreal zoom() const {return 1.0;}
-	qreal zoomFit(const QSize &size, const QRectF &br);
-	qreal zoomIn();
-	qreal zoomOut();
+	qreal zoomFit(const QSize &, const QRectF &) {return 1.0;}
+	qreal zoomIn() {return 1.0;}
+	qreal zoomOut() {return 1.0;}
 
 	QPointF ll2xy(const Coordinates &c) const
 	  {return _transform.map(_projection->ll2xy(c));}
@@ -57,8 +57,8 @@ private:
 	} ReferencePoint;
 
 	typedef struct {
-		double centralParallel;
-		double centralMeridian;
+		double latitudeOrigin;
+		double longitudeOrigin;
 		double scale;
 		double falseEasting;
 		double falseNorthing;

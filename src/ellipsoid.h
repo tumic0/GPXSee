@@ -1,20 +1,24 @@
 #ifndef ELLIPSOID_H
 #define ELLIPSOID_H
 
-class QString;
-
 class Ellipsoid
 {
 public:
+	enum Name {
+		Clarke1866,
+		GRS80,
+		International1924,
+		Krassowsky1940,
+		WGS84,
+		WGS72,
+		GRS67
+	};
+
 	Ellipsoid();
-	Ellipsoid(const QString &datum);
+	Ellipsoid(Name name);
 
 	double radius() const {return _radius;}
 	double flattening() const {return _flattening;}
-
-	double q(double b) const;
-	double iq(double q) const;
-	double nradius(double phi) const;
 
 private:
 	double _radius;
