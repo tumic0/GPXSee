@@ -521,6 +521,8 @@ void PathView::clear()
 
 	_digitalZoom = 0;
 	resetTransform();
+
+	resetCachedContent();
 }
 
 void PathView::showTracks(bool show)
