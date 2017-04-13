@@ -154,14 +154,13 @@ bool OfflineMap::createProjection(const QString &datum,
   const QString &projection, const ProjectionSetup &setup,
   QList<ReferencePoint> &points)
 {
-	Ellipsoid::Name ellipsoid = Ellipsoid::WGS84;
-
 	if (points.count() < 2) {
 		qWarning("%s: insufficient number of reference points",
 		  qPrintable(_name));
 		return false;
 	}
 
+	Ellipsoid::Name ellipsoid = Ellipsoid::WGS84;
 	for (size_t i = 0; i < ARRAY_SIZE(datums); i++) {
 		if (datum.startsWith(datums[i].name)) {
 			ellipsoid = datums[i].ellipsoid;
@@ -284,8 +283,25 @@ bool OfflineMap::computeResolution(QList<ReferencePoint> &points)
 bool OfflineMap::getImageInfo(const QString &path)
 {
 	QFileInfo ii(_imgPath);
+
 	if (ii.isRelative())
-		_imgPath = path + "/" + _imgPath;
+		ii.setFile(path + "/" + _imgPath);
+
+	if (!ii.exists()) {
+		int last = _imgPath.lastIndexOf('\\');
+		if (last >= 0 && last < _imgPath.length() - 1) {
+			QStringRef fn(&_imgPath, last + 1, _imgPath.length() - last - 1);
+			ii.setFile(path + "/" + fn.toString());
+		}
+	}
+
+	if (ii.exists())
+		_imgPath = ii.absoluteFilePath();
+	else {
+		qWarning("%s: %s: No such image file", qPrintable(_name),
+		  qPrintable(_imgPath));
+		return false;
+	}
 
 	QImageReader img(_imgPath);
 	_size = img.size();
