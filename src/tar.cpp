@@ -55,13 +55,17 @@ bool Tar::load(const QString &path)
 		return false;
 
 	while ((ret = _file.read(buffer, BLOCKSIZE)) > 0) {
-		if (ret < BLOCKSIZE)
+		if (ret < BLOCKSIZE) {
+			_file.close();
 			return false;
+		}
 		size = number(hdr->size, sizeof(hdr->size));
 		if (size)
 			_index.insert(hdr->name, Info(size, _file.pos()));
-		if (!_file.seek(_file.pos() + BLOCKCOUNT(size) * BLOCKSIZE))
+		if (!_file.seek(_file.pos() + BLOCKCOUNT(size) * BLOCKSIZE)) {
+			_file.close();
 			return false;
+		}
 	}
 
 	return true;
@@ -73,6 +77,7 @@ QByteArray Tar::file(const QString &name)
 	if (it == _index.end())
 		return QByteArray();
 
+	Q_ASSERT(_file.isOpen());
 	if (_file.seek(it.value().offset()))
 		return _file.read(it.value().size());
 	else

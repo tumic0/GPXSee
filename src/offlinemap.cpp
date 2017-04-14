@@ -18,6 +18,7 @@
 #include "transversemercator.h"
 #include "utm.h"
 #include "lambertconic.h"
+#include "ozf.h"
 #include "offlinemap.h"
 
 
@@ -303,11 +304,16 @@ bool OfflineMap::getImageInfo(const QString &path)
 		return false;
 	}
 
-	QImageReader img(_imgPath);
-	_size = img.size();
+	if (_imgPath.endsWith("ozf2")) {
+		_ozf.load(_imgPath);
+		_size = _ozf.size();
+	} else {
+		QImageReader img(_imgPath);
+		_size = img.size();
+	}
 	if (!_size.isValid()) {
 		qWarning("%s: %s: error reading map image", qPrintable(_name),
-		  qPrintable(ii.absoluteFilePath()));
+		  qPrintable(_imgPath));
 		return false;
 	}
 
@@ -519,7 +525,7 @@ void OfflineMap::load()
 		return;
 	}
 
-	if (!_img && !_imgPath.isNull()) {
+	if (!_img && !_imgPath.isNull() && !_ozf.isOpen()) {
 		_img = new QImage(_imgPath);
 		if (_img->isNull())
 			qWarning("%s: error loading map image", qPrintable(_imgPath));
@@ -568,6 +574,31 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect)
 					  Qt::white);
 				} else
 					painter->drawPixmap(QPoint(x, y), pixmap);
+			}
+		}
+	} else if (_ozf.isOpen()) {
+		QPoint tl = QPoint((int)floor(rect.left()
+		  / (qreal)_ozf.tileSize().width()) * _ozf.tileSize().width(),
+		  (int)floor(rect.top() / _ozf.tileSize().height())
+		  * _ozf.tileSize().height());
+
+		QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
+		for (int i = 0; i < ceil(s.width() / _ozf.tileSize().width()); i++) {
+			for (int j = 0; j < ceil(s.height() / _ozf.tileSize().height());
+			  j++) {
+				int x = tl.x() + i * _ozf.tileSize().width();
+				int y = tl.y() + j * _ozf.tileSize().height();
+
+				QPixmap pixmap;
+				QString key = _ozf.fileName() + "/" + QString::number(x)
+				  + "_" + QString::number(y);
+				if (!QPixmapCache::find(key, &pixmap)) {
+					pixmap = _ozf.tile(x, y);
+					if (!pixmap.isNull())
+						QPixmapCache::insert(key, pixmap);
+				}
+
+				painter->drawPixmap(QPoint(x, y), pixmap);
 			}
 		}
 	} else {

@@ -4,6 +4,7 @@
 #include <QTransform>
 #include "map.h"
 #include "tar.h"
+#include "ozf.h"
 #include "coordinates.h"
 #include "projection.h"
 
@@ -84,6 +85,7 @@ private:
 	QTransform _transform, _inverted;
 	qreal _resolution;
 
+	OZF _ozf;
 	Tar _tar;
 	QString _tarPath;
 	QImage *_img;

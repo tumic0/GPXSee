@@ -91,7 +91,8 @@ HEADERS += src/config.h \
     src/latlon.h \
     src/utm.h \
     src/lambertconic.h \
-    src/ellipsoid.h
+    src/ellipsoid.h \
+    src/ozf.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -156,7 +157,8 @@ SOURCES += src/main.cpp \
     src/transversemercator.cpp \
     src/utm.cpp \
     src/lambertconic.cpp \
-    src/ellipsoid.cpp
+    src/ellipsoid.cpp \
+    src/ozf.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts
