@@ -50,6 +50,10 @@ bool Tar::load(const QString &path)
 	quint64 size;
 	qint64 ret;
 
+	if (_file.isOpen())
+		_file.close();
+	_index.clear();
+
 	_file.setFileName(path);
 	if (!_file.open(QIODevice::ReadOnly))
 		return false;

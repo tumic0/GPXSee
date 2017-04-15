@@ -90,6 +90,9 @@ bool OZF::readTileTable()
 
 bool OZF::load(const QString &path)
 {
+	if (_file.isOpen())
+		_file.close();
+
 	_file.setFileName(path);
 	if (!_file.open(QIODevice::ReadOnly))
 		return false;
