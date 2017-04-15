@@ -4,7 +4,7 @@ KML, FIT, IGC and NMEA files.
 
 ## Features
 * User-definable online maps.
-* Offline maps (image-based OziExplorer maps and tiled TrekBuddy maps/atlases).
+* Offline maps (OziExplorer maps and TrekBuddy maps/atlases).
 * Elevation, speed, heart rate, cadence, power and temperature graphs.
 * Support for multiple tracks in one view.
 * Support for POI files.
