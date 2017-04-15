@@ -305,8 +305,8 @@ bool OfflineMap::getImageInfo(const QString &path)
 	}
 
 	if (_imgPath.endsWith("ozf2")) {
-		if (_ozf.load(_imgPath))
-			_size = _ozf.size();
+		_ozf.load(_imgPath);
+		_size = _ozf.size();
 	} else {
 		QImageReader img(_imgPath);
 		_size = img.size();

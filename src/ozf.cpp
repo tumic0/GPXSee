@@ -26,17 +26,12 @@ bool OZF::readHeaders()
 	quint16 magic;
 	quint32 separator;
 
-	if (!readValue(magic) || magic != OZF2_MAGIC) {
-		qWarning("%s: not a OZF2 file", qPrintable(_file.fileName()));
-		_file.close();
+	if (!readValue(magic) || magic != OZF2_MAGIC)
 		return false;
-	}
 
 	if (!_file.seek(_file.pos() + 52))
 		return false;
-	if (!readValue(separator))
-		return false;
-	if (separator != OZF2_SEPARATOR)
+	if (!readValue(separator) || separator != OZF2_SEPARATOR)
 		return false;
 
 	return true;
@@ -81,9 +76,8 @@ bool OZF::readTileTable()
 		quint32 b = (bgr0 & 0x000000FF);
 		quint32 g = (bgr0 & 0x0000FF00) >> 8;
 		quint32 r = (bgr0 & 0x00FF0000) >> 16;
-		quint32 argb = 0xFF000000 | r << 16 | g << 8 | b;
 
-		_palette[i] = argb;
+		_palette[i] = 0xFF000000 | r << 16 | g << 8 | b;
 	}
 
 	_tiles = QVector<quint32>(_dim.width() * _dim.height() + 1);
@@ -101,12 +95,15 @@ bool OZF::load(const QString &path)
 		return false;
 
 	if (!readHeaders()) {
+		qWarning("%s: not a OZF2 file", qPrintable(_file.fileName()));
 		_file.close();
 		return false;
 	}
 
 	if (!readTileTable()) {
+		qWarning("%s: file format error", qPrintable(_file.fileName()));
 		_file.close();
+		_size = QSize();
 		return false;
 	}
 
