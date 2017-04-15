@@ -113,33 +113,26 @@ bool OZF::load(const QString &path)
 	return true;
 }
 
-QPixmap OZF::blankTile()
-{
-	QPixmap p(tileSize());
-	p.fill();
-	return p;
-}
-
 QPixmap OZF::tile(int x, int y)
 {
 	Q_ASSERT(_file.isOpen());
 
 	int i = (y/tileSize().height()) * _dim.width() + (x/tileSize().width());
 	if (i >= _tiles.size() - 1 || i < 0)
-		return blankTile();
+		return QPixmap();
 
 	int size = _tiles.at(i+1) - _tiles.at(i);
 	if (!_file.seek(_tiles.at(i)))
-		return blankTile();
+		return QPixmap();
 
 	QByteArray ba = _file.read(size);
 	if (ba.size() != size)
-		return blankTile();
+		return QPixmap();
 	quint32 bes = qToBigEndian(tileSize().width() * tileSize().height());
 	ba.prepend(QByteArray((char*)&bes, sizeof(bes)));
 	QByteArray uba = qUncompress(ba);
 	if (uba.size() != tileSize().width() * tileSize().height())
-		return blankTile();
+		return QPixmap();
 
 	QImage img((const uchar*)uba.constData(), tileSize().width(),
 	  tileSize().height(), QImage::Format_Indexed8);

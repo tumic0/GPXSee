@@ -79,6 +79,10 @@ private:
 	bool getTileInfo(const QStringList &tiles, const QString &path = QString());
 	bool getImageInfo(const QString &path);
 
+	void drawTiled(QPainter *painter, const QRectF &rect);
+	void drawOZF(QPainter *painter, const QRectF &rect);
+	void drawImage(QPainter *painter, const QRectF &rect);
+
 	QString _name;
 	QSize _size;
 	Projection *_projection;

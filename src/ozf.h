@@ -24,7 +24,6 @@ private:
 	template<class T> bool readValue(T &val);
 	bool readHeaders();
 	bool readTileTable();
-	QPixmap blankTile();
 
 	QSize _size;
 	QSize _dim;

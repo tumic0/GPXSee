@@ -305,8 +305,8 @@ bool OfflineMap::getImageInfo(const QString &path)
 	}
 
 	if (_imgPath.endsWith("ozf2")) {
-		_ozf.load(_imgPath);
-		_size = _ozf.size();
+		if (_ozf.load(_imgPath))
+			_size = _ozf.size();
 	} else {
 		QImageReader img(_imgPath);
 		_size = img.size();
@@ -540,74 +540,100 @@ void OfflineMap::unload()
 	}
 }
 
-void OfflineMap::draw(QPainter *painter, const QRectF &rect)
+void OfflineMap::drawTiled(QPainter *painter, const QRectF &rect)
 {
-	if (_tileSize.isValid()) {
-		QPoint tl = QPoint((int)floor(rect.left() / (qreal)_tileSize.width())
-		  * _tileSize.width(), (int)floor(rect.top() / _tileSize.height())
-		  * _tileSize.height());
+	QPoint tl = QPoint((int)floor(rect.left() / (qreal)_tileSize.width())
+	  * _tileSize.width(), (int)floor(rect.top() / _tileSize.height())
+	  * _tileSize.height());
 
-		QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
-		for (int i = 0; i < ceil(s.width() / _tileSize.width()); i++) {
-			for (int j = 0; j < ceil(s.height() / _tileSize.height()); j++) {
-				int x = tl.x() + i * _tileSize.width();
-				int y = tl.y() + j * _tileSize.height();
-				QString tileName(_tileName.arg(QString::number(x),
-				  QString::number(y)));
-				QPixmap pixmap;
+	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
+	for (int i = 0; i < ceil(s.width() / _tileSize.width()); i++) {
+		for (int j = 0; j < ceil(s.height() / _tileSize.height()); j++) {
+			int x = tl.x() + i * _tileSize.width();
+			int y = tl.y() + j * _tileSize.height();
 
-				if (_tar.isOpen()) {
-					QString key = _tar.fileName() + "/" + tileName;
-					if (!QPixmapCache::find(key, &pixmap)) {
-						QByteArray ba = _tar.file(tileName);
-						pixmap = QPixmap::fromImage(QImage::fromData(ba));
-						if (!pixmap.isNull())
-							QPixmapCache::insert(key, pixmap);
-					}
-				} else
-					pixmap = QPixmap(tileName);
-
-				if (pixmap.isNull()) {
-					qWarning("%s: error loading tile image", qPrintable(
-					  _tileName.arg(QString::number(x), QString::number(y))));
-					painter->fillRect(QRectF(QPoint(x, y), _tileSize),
-					  Qt::white);
-				} else
-					painter->drawPixmap(QPoint(x, y), pixmap);
+			if (!QRectF(QPointF(x, y), _ozf.tileSize()).intersects(bounds())) {
+				painter->fillRect(QRectF(QPoint(x, y), _tileSize), Qt::white);
+				continue;
 			}
-		}
-	} else if (_ozf.isOpen()) {
-		QPoint tl = QPoint((int)floor(rect.left()
-		  / (qreal)_ozf.tileSize().width()) * _ozf.tileSize().width(),
-		  (int)floor(rect.top() / _ozf.tileSize().height())
-		  * _ozf.tileSize().height());
 
-		QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
-		for (int i = 0; i < ceil(s.width() / _ozf.tileSize().width()); i++) {
-			for (int j = 0; j < ceil(s.height() / _ozf.tileSize().height());
-			  j++) {
-				int x = tl.x() + i * _ozf.tileSize().width();
-				int y = tl.y() + j * _ozf.tileSize().height();
+			QString tileName(_tileName.arg(QString::number(x),
+			  QString::number(y)));
+			QPixmap pixmap;
 
-				QPixmap pixmap;
-				QString key = _ozf.fileName() + "/" + QString::number(x)
-				  + "_" + QString::number(y);
+			if (_tar.isOpen()) {
+				QString key = _tar.fileName() + "/" + tileName;
 				if (!QPixmapCache::find(key, &pixmap)) {
-					pixmap = _ozf.tile(x, y);
+					QByteArray ba = _tar.file(tileName);
+					pixmap = QPixmap::fromImage(QImage::fromData(ba));
 					if (!pixmap.isNull())
 						QPixmapCache::insert(key, pixmap);
 				}
+			} else
+				pixmap = QPixmap(tileName);
 
+			if (pixmap.isNull()) {
+				qWarning("%s: error loading tile image", qPrintable(
+				  _tileName.arg(QString::number(x), QString::number(y))));
+				painter->fillRect(QRectF(QPoint(x, y), _tileSize), Qt::white);
+			} else
 				painter->drawPixmap(QPoint(x, y), pixmap);
-			}
-		}
-	} else {
-		if (!_img || _img->isNull())
-			painter->fillRect(rect, Qt::white);
-		else {
-			QPoint p = rect.topLeft().toPoint();
-			QImage crop = _img->copy(QRect(p, rect.size().toSize()));
-			painter->drawImage(rect.topLeft(), crop);
 		}
 	}
+}
+
+void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect)
+{
+	QPoint tl = QPoint((int)floor(rect.left() / _ozf.tileSize().width())
+	  * _ozf.tileSize().width(), (int)floor(rect.top()
+	  / _ozf.tileSize().height()) * _ozf.tileSize().height());
+
+	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
+	for (int i = 0; i < ceil(s.width() / _ozf.tileSize().width()); i++) {
+		for (int j = 0; j < ceil(s.height() / _ozf.tileSize().height()); j++) {
+			int x = tl.x() + i * _ozf.tileSize().width();
+			int y = tl.y() + j * _ozf.tileSize().height();
+
+			if (!QRectF(QPointF(x, y), _ozf.tileSize()).intersects(bounds())) {
+				painter->fillRect(QRectF(QPoint(x, y), _tileSize), Qt::white);
+				continue;
+			}
+
+			QPixmap pixmap;
+			QString key = _ozf.fileName() + "/" + QString::number(x)
+			  + "_" + QString::number(y);
+			if (!QPixmapCache::find(key, &pixmap)) {
+				pixmap = _ozf.tile(x, y);
+				if (!pixmap.isNull())
+					QPixmapCache::insert(key, pixmap);
+			}
+
+			if (pixmap.isNull()) {
+				qWarning("%s: error loading tile image", qPrintable(key));
+				painter->fillRect(QRectF(QPoint(x, y), _tileSize), Qt::white);
+			} else
+				painter->drawPixmap(QPoint(x, y), pixmap);
+		}
+	}
+}
+
+void OfflineMap::drawImage(QPainter *painter, const QRectF &rect)
+{
+	if (!_img || _img->isNull())
+		painter->fillRect(rect, Qt::white);
+	else {
+		QPoint p = rect.topLeft().toPoint();
+		QImage crop = _img->copy(QRect(p, rect.size().toSize()));
+		painter->drawImage(rect.topLeft(), crop);
+	}
+}
+
+void OfflineMap::draw(QPainter *painter, const QRectF &rect)
+{
+	if (_ozf.isOpen())
+		drawOZF(painter, rect);
+	else if (_tileSize.isValid())
+		drawTiled(painter, rect);
+	else
+		drawImage(painter, rect);
 }
