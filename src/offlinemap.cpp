@@ -336,6 +336,7 @@ bool OfflineMap::getImageInfo(const QString &path)
 	  || _imgPath.endsWith("ozf4", Qt::CaseInsensitive)) {
 		qWarning("%s: %s: obfuscated image files are not supported",
 		  qPrintable(_name), qPrintable(_imgPath));
+		return false;
 	} else if (_imgPath.endsWith("ozf2", Qt::CaseInsensitive)) {
 		_ozf.load(_imgPath);
 		_size = _ozf.size();
