@@ -173,7 +173,9 @@ macx {
         icons/fit.icns \
         icons/igc.icns \
         icons/nmea.icns \
-        pkg/maps.txt
+        pkg/maps.txt \
+        pkg/ellipsoids.csv \
+        pkg/datums.csv
     APP_RESOURCES.path = Contents/Resources
     QMAKE_BUNDLE_DATA += APP_RESOURCES
 }

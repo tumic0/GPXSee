@@ -82,6 +82,8 @@ Section "GPXSee" SEC_APP
   ; Put the files there
   File "gpxsee.exe"
   File "maps.txt"
+  File "ellipsoids.csv"
+  File "datums.csv"
 
   ; Create start menu entry and add links
   SetShellVarContext all
