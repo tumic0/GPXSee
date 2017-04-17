@@ -223,6 +223,9 @@ bool OfflineMap::createProjection(const QString &datum,
 				points[i].ll = _projection->xy2ll(points.at(i).pp);
 			else
 				points[i].ll = toWGS84(_projection->xy2ll(points.at(i).pp), d);
+		} else {
+			if (!d.isWGS84())
+				points[i].ll = toWGS84(points[i].ll, d);
 		}
 	}
 
