@@ -21,5 +21,6 @@
         <file>icons/document-print-preview.png</file>
         <file>lang/gpxsee_cs.qm</file>
         <file>lang/gpxsee_sv.qm</file>
+        <file>lang/gpxsee_de.qm</file>
     </qresource>
 </RCC>

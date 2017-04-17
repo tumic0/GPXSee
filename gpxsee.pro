@@ -163,7 +163,8 @@ SOURCES += src/main.cpp \
     src/datum.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
-    lang/gpxsee_sv.ts
+    lang/gpxsee_sv.ts \
+    lang/gpxsee_de.ts
 macx {
     ICON = icons/gpxsee.icns
     QMAKE_INFO_PLIST = Info.plist
