@@ -332,7 +332,11 @@ bool OfflineMap::getImageInfo(const QString &path)
 		return false;
 	}
 
-	if (_imgPath.endsWith("ozf2")) {
+	if (_imgPath.endsWith("ozf3", Qt::CaseInsensitive)
+	  || _imgPath.endsWith("ozf4", Qt::CaseInsensitive)) {
+		qWarning("%s: %s: obfuscated image files are not supported",
+		  qPrintable(_name), qPrintable(_imgPath));
+	} else if (_imgPath.endsWith("ozf2", Qt::CaseInsensitive)) {
 		_ozf.load(_imgPath);
 		_size = _ozf.size();
 	} else {
