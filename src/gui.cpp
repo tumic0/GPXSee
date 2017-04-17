@@ -123,6 +123,7 @@ void GUI::createBrowser()
 void GUI::loadDatums()
 {
 	QString ef, df;
+	bool ok = false;
 
 	if (QFile::exists(USER_ELLIPSOID_FILE))
 		ef = USER_ELLIPSOID_FILE;
@@ -154,9 +155,13 @@ void GUI::loadDatums()
 				else
 					qWarning("%s: %s", qPrintable(ef), qPrintable(
 					  Datum::errorString()));
-			}
+			} else
+				ok = true;
 		}
 	}
+
+	if (!ok)
+		qWarning("Maps based on a datum different from WGS84 won't work.");
 }
 
 void GUI::loadMaps()
