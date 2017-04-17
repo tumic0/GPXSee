@@ -1,42 +1,62 @@
-#include <cmath>
-#include <QString>
-#include "wgs84.h"
+#include <QFile>
 #include "ellipsoid.h"
 
+QMap<int, Ellipsoid> Ellipsoid::_ellipsoids;
+QString Ellipsoid::_errorString;
+int Ellipsoid::_errorLine = 0;
 
-#define INTERNATIONAL_RADIUS     6378388.0
-#define INTERNATIONAL_FLATTENING (1.0/297.0)
-#define KRASSOVSKY_RADIUS        6378245.0
-#define KRASSOVSKY_FLATTENING    (1.0/298.3)
-#define CLARKE1866_RADIUS        6378206.4
-#define CLARKE1866_FLATTENING    (1.0/294.9786982)
-#define GRS80_RADIUS             6378137.0
-#define GRS80_FLATTENING         (1.0/298.257222101)
-#define WGS72_RADIUS             6378135.0
-#define WGS72_FLATTENING         (1.0/298.26)
-#define GRS67_RADIUS             6378160.0
-#define GRS67_FLATTENING         (1.0/298.25)
-
-
-// Must be in Ellipsoid::Name order!
-struct {double radius; double flattening;} static ellipsoids[] = {
-	{CLARKE1866_RADIUS, CLARKE1866_FLATTENING},
-	{GRS80_RADIUS, GRS80_FLATTENING},
-	{INTERNATIONAL_RADIUS, INTERNATIONAL_FLATTENING},
-	{KRASSOVSKY_RADIUS, KRASSOVSKY_FLATTENING},
-	{WGS84_RADIUS, WGS84_FLATTENING},
-	{WGS72_RADIUS, WGS72_FLATTENING},
-	{GRS67_RADIUS, GRS67_FLATTENING}
-};
-
-Ellipsoid::Ellipsoid()
+Ellipsoid Ellipsoid::ellipsoid(int id)
 {
-	_radius = WGS84_RADIUS;
-	_flattening = WGS84_FLATTENING;
+	QMap<int, Ellipsoid>::const_iterator it = _ellipsoids.find(id);
+
+	if (it == _ellipsoids.end())
+		return Ellipsoid();
+
+	return it.value();
 }
 
-Ellipsoid::Ellipsoid(Name name)
+bool Ellipsoid::loadList(const QString &path)
 {
-	_radius = ellipsoids[name].radius;
-	_flattening = ellipsoids[name].flattening;
+	QFile file(path);
+	bool res;
+
+	if (!file.open(QFile::ReadOnly)) {
+		_errorString = qPrintable(file.errorString());
+		return false;
+	}
+
+	_errorLine = 1;
+	_errorString.clear();
+
+	while (!file.atEnd()) {
+		QByteArray line = file.readLine();
+		QList<QByteArray> list = line.split(',');
+		if (list.size() != 4) {
+			_errorString = "Format error";
+			return false;
+		}
+
+		int id = list[0].trimmed().toInt(&res);
+		if (!res) {
+			_errorString = "Invalid ellipsoid id";
+			return false;
+		}
+		double radius = list[2].trimmed().toDouble(&res);
+		if (!res) {
+			_errorString = "Invalid ellipsoid radius";
+			return false;
+		}
+		double flattening = list[3].trimmed().toDouble(&res);
+		if (!res) {
+			_errorString = "Invalid ellipsoid flattening";
+			return false;
+		}
+
+		Ellipsoid e(radius, 1.0/flattening);
+		_ellipsoids.insert(id, e);
+
+		_errorLine++;
+	}
+
+	return true;
 }

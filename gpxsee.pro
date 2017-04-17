@@ -92,7 +92,8 @@ HEADERS += src/config.h \
     src/utm.h \
     src/lambertconic.h \
     src/ellipsoid.h \
-    src/ozf.h
+    src/ozf.h \
+    src/datum.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -158,7 +159,8 @@ SOURCES += src/main.cpp \
     src/utm.cpp \
     src/lambertconic.cpp \
     src/ellipsoid.cpp \
-    src/ozf.cpp
+    src/ozf.cpp \
+    src/datum.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts

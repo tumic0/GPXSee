@@ -26,6 +26,8 @@
 #include "keys.h"
 #include "settings.h"
 #include "data.h"
+#include "ellipsoid.h"
+#include "datum.h"
 #include "map.h"
 #include "maplist.h"
 #include "mapdir.h"
@@ -47,6 +49,7 @@
 
 GUI::GUI()
 {
+	loadDatums();
 	loadMaps();
 	loadPOIs();
 
@@ -115,6 +118,45 @@ void GUI::createBrowser()
 	  << "*.nmea";
 	_browser = new FileBrowser(this);
 	_browser->setFilter(filter);
+}
+
+void GUI::loadDatums()
+{
+	QString ef, df;
+
+	if (QFile::exists(USER_ELLIPSOID_FILE))
+		ef = USER_ELLIPSOID_FILE;
+	else if (QFile::exists(GLOBAL_ELLIPSOID_FILE))
+		ef = GLOBAL_ELLIPSOID_FILE;
+	else
+		qWarning("No ellipsoids file found.");
+
+	if (QFile::exists(USER_DATUM_FILE))
+		df = USER_DATUM_FILE;
+	else if (QFile::exists(GLOBAL_DATUM_FILE))
+		df = GLOBAL_DATUM_FILE;
+	else
+		qWarning("No datums file found.");
+
+	if (!ef.isNull() && !df.isNull()) {
+		if (!Ellipsoid::loadList(ef)) {
+			if (Ellipsoid::errorLine())
+				qWarning("%s: parse error on line %d: %s", qPrintable(ef),
+				  Ellipsoid::errorLine(), qPrintable(Ellipsoid::errorString()));
+			else
+				qWarning("%s: %s", qPrintable(ef), qPrintable(
+				  Ellipsoid::errorString()));
+		} else {
+			if (!Datum::loadList(df)) {
+				if (Datum::errorLine())
+					qWarning("%s: parse error on line %d: %s", qPrintable(ef),
+					  Datum::errorLine(), qPrintable(Datum::errorString()));
+				else
+					qWarning("%s: %s", qPrintable(ef), qPrintable(
+					  Datum::errorString()));
+			}
+		}
+	}
 }
 
 void GUI::loadMaps()

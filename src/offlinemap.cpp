@@ -12,7 +12,7 @@
 #include "wgs84.h"
 #include "coordinates.h"
 #include "matrix.h"
-#include "ellipsoid.h"
+#include "datum.h"
 #include "latlon.h"
 #include "mercator.h"
 #include "transversemercator.h"
@@ -22,17 +22,39 @@
 #include "offlinemap.h"
 
 
-struct {const char *name; Ellipsoid::Name ellipsoid;} static datums[] = {
-	{"S42", Ellipsoid::Krassowsky1940},
-	{"Pulkovo 1942", Ellipsoid::Krassowsky1940},
-	{"European 1950", Ellipsoid::International1924},
-	{"European 1979", Ellipsoid::International1924},
-	{"NZGD1949", Ellipsoid::International1924},
-	{"NAD27", Ellipsoid::Clarke1866},
-	{"NAD83", Ellipsoid::GRS80},
-	{"WGS 72", Ellipsoid::WGS72},
-	{"South American 1969", Ellipsoid::GRS67}
-};
+// Abridged Molodensky transformation
+static Coordinates toWGS84(Coordinates c, const Datum &datum)
+{
+	Ellipsoid WGS84(WGS84_RADIUS, WGS84_FLATTENING);
+
+	double dX = datum.dx();
+	double dY = datum.dy();
+	double dZ = datum.dz();
+
+	double slat = sin(deg2rad(c.lat()));
+	double clat = cos(deg2rad(c.lat()));
+	double slon = sin(deg2rad(c.lon()));
+	double clon = cos(deg2rad(c.lon()));
+	double ssqlat = slat * slat;
+
+	double from_f = datum.ellipsoid().flattening();
+	double df = WGS84.flattening() - from_f;
+	double from_a = datum.ellipsoid().radius();
+	double da = WGS84.radius() - from_a;
+	double from_esq = datum.ellipsoid().flattening()
+	  * (2.0 - datum.ellipsoid().flattening());
+	double adb = 1.0 / (1.0 - from_f);
+	double rn = from_a / sqrt(1 - from_esq * ssqlat);
+	double rm = from_a * (1 - from_esq) / pow((1 - from_esq * ssqlat), 1.5);
+	double from_h = 0.0; // we're flat!
+
+	double dlat = (-dX * slat * clon - dY * slat * slon + dZ * clat + da * rn
+	  * from_esq * slat * clat / from_a + +df * (rm * adb + rn / adb) * slat
+	  * clat) / (rm + from_h);
+	double dlon = (-dX * slon + dY * clon) / ((rn + from_h) * clat);
+
+	return Coordinates(c.lon() + rad2deg(dlon), c.lat() + rad2deg(dlat));
+}
 
 int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
   QString &projection, ProjectionSetup &setup, QString &datum)
@@ -161,32 +183,30 @@ bool OfflineMap::createProjection(const QString &datum,
 		return false;
 	}
 
-	Ellipsoid::Name ellipsoid = Ellipsoid::WGS84;
-	for (size_t i = 0; i < ARRAY_SIZE(datums); i++) {
-		if (datum.startsWith(datums[i].name)) {
-			ellipsoid = datums[i].ellipsoid;
-			break;
-		}
+	Datum d = Datum::datum(datum);
+	if (d.isNull()) {
+		qWarning("%s: %s: unknown datum", qPrintable(_name), qPrintable(datum));
+		return false;
 	}
 
 	if (projection == "Mercator")
 		_projection = new Mercator();
 	else if (projection == "Transverse Mercator")
-		_projection = new TransverseMercator(Ellipsoid(ellipsoid),
+		_projection = new TransverseMercator(d.ellipsoid(),
 		  setup.longitudeOrigin, setup.scale, setup.falseEasting,
 		  setup.falseNorthing);
 	else if (projection == "Latitude/Longitude")
 		_projection = new LatLon();
 	else if (projection == "Lambert Conformal Conic")
-		_projection = new LambertConic(Ellipsoid(ellipsoid),
+		_projection = new LambertConic(d.ellipsoid(),
 		  setup.standardParallel1, setup.standardParallel2,
 		  setup.latitudeOrigin, setup.longitudeOrigin, setup.scale,
 		  setup.falseEasting, setup.falseNorthing);
 	else if (projection == "(UTM) Universal Transverse Mercator") {
 		if (setup.zone)
-			_projection = new UTM(Ellipsoid(ellipsoid), setup.zone);
+			_projection = new UTM(d.ellipsoid(), setup.zone);
 		else if (!points.first().ll.isNull())
-			_projection = new UTM(Ellipsoid(ellipsoid), points.first().ll);
+			_projection = new UTM(d.ellipsoid(), points.first().ll);
 		else {
 			qWarning("%s: Can not determine UTM zone", qPrintable(_name));
 			return false;
@@ -197,9 +217,14 @@ bool OfflineMap::createProjection(const QString &datum,
 		return false;
 	}
 
-	for (int i = 0; i < points.size(); i++)
-		if (points.at(i).ll.isNull())
-			points[i].ll = _projection->xy2ll(points.at(i).pp);
+	for (int i = 0; i < points.size(); i++) {
+		if (points.at(i).ll.isNull()) {
+			if (d.isWGS84())
+				points[i].ll = _projection->xy2ll(points.at(i).pp);
+			else
+				points[i].ll = toWGS84(_projection->xy2ll(points.at(i).pp), d);
+		}
+	}
 
 	return true;
 }

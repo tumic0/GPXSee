@@ -79,6 +79,7 @@ private slots:
 private:
 	typedef QPair<QDate, QDate> DateRange;
 
+	void loadDatums();
 	void loadMaps();
 	void loadPOIs();
 	void closeFiles();
