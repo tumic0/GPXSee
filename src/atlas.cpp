@@ -186,7 +186,7 @@ qreal Atlas::zoomFit(const QSize &size, const QRectF &br)
 
 	for (int z = 0; z < _zooms.count(); z++) {
 		for (int i = _zooms.at(z).first; i <= _zooms.at(z).second; i++) {
-			if (_bounds.at(i).first.contains(_maps.at(i)->ll2pp(br.center())))
+			if (!_bounds.at(i).first.contains(_maps.at(i)->ll2pp(br.center())))
 				continue;
 
 			QRect sbr = QRectF(_maps.at(i)->ll2xy(br.topLeft()),
