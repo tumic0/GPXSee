@@ -102,6 +102,19 @@ GUI::~GUI()
 	}
 }
 
+const QString GUI::getLastUsedTrackDirectory()
+{
+	if (!_lastOpenDirectory.exists()) {
+		_lastOpenDirectory = QDir(QDir::homePath());
+	}
+	return _lastOpenDirectory.absolutePath();
+}
+
+void GUI::setLastUsedTrackDirectory(const QString& directoryName)
+{
+	_lastOpenDirectory = QDir(QDir(directoryName).absolutePath());
+}
+
 const QString GUI::fileFormats() const
 {
 	return tr("Supported files (*.csv *.fit *.gpx *.igc *.kml *.nmea *.tcx)")
@@ -700,12 +713,18 @@ void GUI::dataSources()
 
 void GUI::openFile()
 {
-	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open file"),
-	  QString(), fileFormats());
+	QStringList files = QFileDialog::getOpenFileNames(this,
+													  tr("Open file"),
+													  getLastUsedTrackDirectory(),
+													  fileFormats());
 	QStringList list = files;
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
 		openFile(*it);
+
+	if (!list.empty()) {
+		setLastUsedTrackDirectory(QFileInfo(list.first()).absolutePath());
+	}
 }
 
 bool GUI::openFile(const QString &fileName)
@@ -1542,6 +1561,11 @@ void GUI::writeSettings()
 		settings.setValue(SEPARATE_GRAPH_PAGE_SETTING,
 		  _options.separateGraphPage);
 	settings.endGroup();
+
+	settings.beginGroup(PRIVATE_SETTINGS_GROUP);
+	if (getLastUsedTrackDirectory() != LAST_USED_DIRECTORY_DEFAULT)
+		settings.setValue(LAST_USED_DIRECTORY_SETTING, getLastUsedTrackDirectory());
+	settings.endGroup();
 }
 
 void GUI::readSettings()
@@ -1737,7 +1761,11 @@ void GUI::readSettings()
 	}
 
 	_poi->setRadius(_options.poiRadius);
+	settings.endGroup();
 
+	settings.beginGroup(PRIVATE_SETTINGS_GROUP);
+	setLastUsedTrackDirectory(settings.value(LAST_USED_DIRECTORY_SETTING,
+	  LAST_USED_DIRECTORY_DEFAULT).toString());
 	settings.endGroup();
 }
 

@@ -6,6 +6,7 @@
 #include <QList>
 #include <QDate>
 #include <QPrinter>
+#include <QDir>
 #include "units.h"
 #include "timetype.h"
 #include "graph.h"
@@ -118,6 +119,8 @@ private:
 	void readSettings();
 	void writeSettings();
 
+	const QString getLastUsedTrackDirectory();
+	void setLastUsedTrackDirectory(const QString& directoryName);
 	const QString fileFormats() const;
 
 	void keyPressEvent(QKeyEvent *event);
@@ -175,6 +178,8 @@ private:
 	QList<QAction*> _poiFilesActions;
 
 	QSignalMapper *_poiFilesSM;
+
+	QDir _lastOpenDirectory;
 
 	QLabel *_fileNameLabel;
 	QLabel *_distanceLabel;
