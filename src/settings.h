@@ -109,4 +109,8 @@
 #define SEPARATE_GRAPH_PAGE_SETTING       "separateGraphPage"
 #define SEPARATE_GRAPH_PAGE_DEFAULT       false
 
+#define PRIVATE_SETTINGS_GROUP            "Private"
+#define LAST_USED_DIRECTORY_SETTING       "lastUsedTrackDirectory"
+#define LAST_USED_DIRECTORY_DEFAULT       QDir(QDir::homePath()).absolutePath()
+
 #endif // SETTINGS_H
