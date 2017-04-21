@@ -296,6 +296,7 @@
     </message>
     <message>
         <location filename="../src/gui.cpp" line="370"/>
+        <location filename="../src/gui.cpp" line="1165"/>
         <source>Load map</source>
         <translation>Nahrát mapu</translation>
     </message>
@@ -498,21 +499,6 @@
         <translation>Očekávaná struktura je jedna mapa/atlas v samostatném podadresáři. Podporované mapové formáty jsou OziExplorer mapy a TrekBuddy mapy/atlasy (včetně tar varianty).</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="1165"/>
-        <source>Load Map/Atlas</source>
-        <translation>Nahrát mapu/atlas</translation>
-    </message>
-    <message>
-        <location filename="../src/gui.cpp" line="1166"/>
-        <source>Map/Atlas files (*.map *.tba *.tar)</source>
-        <translation>Mapové soubory (*.map *.tba *.tar)</translation>
-    </message>
-    <message>
-        <location filename="../src/gui.cpp" line="1183"/>
-        <source>Error loading map/atlas:</source>
-        <translation>Mapu/Atlas nelze načíst:</translation>
-    </message>
-    <message>
         <location filename="../src/gui.cpp" line="1198"/>
         <source>No files loaded</source>
         <translation>Nejsou načteny žádné soubory</translation>
@@ -552,6 +538,16 @@
         <location filename="../src/gui.cpp" line="952"/>
         <source>Routes</source>
         <translation>Trasy</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="1166"/>
+        <source>Map files (*.map *.tba *.tar)</source>
+        <translation>Mapové soubory (*.map *.tba *.tar)</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="1183"/>
+        <source>Error loading map:</source>
+        <translation>Mapu nelze načíst:</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/gui.cpp" line="1202"/>

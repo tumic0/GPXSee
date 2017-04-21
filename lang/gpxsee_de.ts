@@ -296,8 +296,9 @@
     </message>
     <message>
         <location filename="../src/gui.cpp" line="370"/>
+        <location filename="../src/gui.cpp" line="1165"/>
         <source>Load map</source>
-        <translation type="unfinished"></translation>
+        <translation>Karte laden</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="373"/>
@@ -503,19 +504,14 @@
         <translation>Die erwartete Struktur ist eine Karte/ein Atlas pro Unterverzeichnis. Unterstützte Kartenformate sind bildbasierte OziExplorer Karten  und tile-basierte TrekBuddy Karten/Atlanten (mit oder ohne tar Kompression).</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="1165"/>
-        <source>Load Map/Atlas</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/gui.cpp" line="1166"/>
-        <source>Map/Atlas files (*.map *.tba *.tar)</source>
-        <translation type="unfinished"></translation>
+        <source>Map files (*.map *.tba *.tar)</source>
+        <translation>Karten-Dateien (*.map *.tba *.tar)</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="1183"/>
-        <source>Error loading map/atlas:</source>
-        <translation type="unfinished"></translation>
+        <source>Error loading map:</source>
+        <translation>Fehler beim Laden der Karte-Datei:</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="1198"/>

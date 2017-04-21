@@ -1162,8 +1162,8 @@ void GUI::showGraphGrids(bool show)
 
 void GUI::loadMap()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Load Map/Atlas"),
-	  QString(), tr("Map/Atlas files (*.map *.tba *.tar)"));
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Load map"),
+	  QString(), tr("Map files (*.map *.tba *.tar)"));
 
 	if (fileName.isEmpty())
 		return;
@@ -1180,7 +1180,7 @@ void GUI::loadMap()
 		_clearMapCacheAction->setEnabled(true);
 		a->activate(QAction::Trigger);
 	} else {
-		QString error = tr("Error loading map/atlas:") + "\n\n"
+		QString error = tr("Error loading map:") + "\n\n"
 		  + fileName + "\n\n" + _ml->errorString();
 		QMessageBox::critical(this, APP_NAME, error);
 	}

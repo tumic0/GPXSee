@@ -296,6 +296,7 @@
     </message>
     <message>
         <location filename="../src/gui.cpp" line="370"/>
+        <location filename="../src/gui.cpp" line="1165"/>
         <source>Load map</source>
         <translation type="unfinished"></translation>
     </message>
@@ -503,18 +504,13 @@
         <translation>Den förväntade strukturen är en karta/atlas i en separat undermapp. Kartformat som stöds är OziExplorer bildbaserade kartor och rutindelade TrekBuddy-kartor/-kartsamlingar (tarerade och icke tarerade).</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="1165"/>
-        <source>Load Map/Atlas</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/gui.cpp" line="1166"/>
-        <source>Map/Atlas files (*.map *.tba *.tar)</source>
+        <source>Map files (*.map *.tba *.tar)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="1183"/>
-        <source>Error loading map/atlas:</source>
+        <source>Error loading map:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
