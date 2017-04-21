@@ -17,8 +17,8 @@ class OfflineMap : public Map
 	Q_OBJECT
 
 public:
-	OfflineMap(const QString &path, QObject *parent = 0);
-	OfflineMap(Tar &tar, const QString &path, QObject *parent = 0);
+	OfflineMap(const QString &fileName, QObject *parent = 0);
+	OfflineMap(const QString &fileName, Tar &tar, QObject *parent = 0);
 	~OfflineMap();
 
 	const QString &name() const {return _name;}
@@ -41,7 +41,8 @@ public:
 	void load();
 	void unload();
 
-	bool isValid() {return _valid;}
+	bool isValid() const {return _valid;}
+	const QString &errorString() const {return _errorString;}
 
 	QPointF ll2pp(const Coordinates &c) const
 	  {return _projection->ll2xy(c);}
@@ -68,9 +69,10 @@ private:
 		int zone;
 	} ProjectionSetup;
 
-	int parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
+	int parse(QIODevice &device, QList<ReferencePoint> &points,
 	  QString &projection, ProjectionSetup &setup, QString &datum);
-	bool mapLoaded(int res);
+	bool parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
+	  QString &projection, ProjectionSetup &setup, QString &datum);
 	bool totalSizeSet();
 	bool createProjection(const QString &datum, const QString &projection,
 	  const ProjectionSetup &setup, QList<ReferencePoint> &points);
@@ -84,6 +86,9 @@ private:
 	void drawImage(QPainter *painter, const QRectF &rect);
 
 	QString _name;
+	bool _valid;
+	QString _errorString;
+
 	QSize _size;
 	Projection *_projection;
 	QTransform _transform, _inverted;
@@ -96,8 +101,6 @@ private:
 	QString _imgPath;
 	QSize _tileSize;
 	QString _tileName;
-
-	bool _valid;
 };
 
 #endif // OFFLINEMAP_H

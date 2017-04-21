@@ -13,6 +13,7 @@
 #include "exportdialog.h"
 #include "optionsdialog.h"
 
+
 class QMenu;
 class QToolBar;
 class QTabWidget;
@@ -25,6 +26,7 @@ class FileBrowser;
 class GraphTab;
 class PathView;
 class Map;
+class MapList;
 
 class GUI : public QMainWindow
 {
@@ -53,6 +55,7 @@ private slots:
 	void showFullscreen(bool show);
 	void showTracks(bool show);
 	void showRoutes(bool show);
+	void loadMap();
 	void clearMapCache();
 	void nextMap();
 	void prevMap();
@@ -129,9 +132,11 @@ private:
 	QToolBar *_showToolBar;
 	QToolBar *_navigationToolBar;
 	QMenu *_poiFilesMenu;
+	QMenu *_mapMenu;
 
 	QActionGroup *_fileActionGroup;
 	QActionGroup *_navigationActionGroup;
+	QActionGroup *_mapsActionGroup;
 	QAction *_exitAction;
 	QAction *_keysAction;
 	QAction *_dataSourcesAction;
@@ -149,6 +154,7 @@ private:
 	QAction *_showPOILabelsAction;
 	QAction *_showMapAction;
 	QAction *_fullscreenAction;
+	QAction *_loadMapAction;
 	QAction *_clearMapCacheAction;
 	QAction *_showGraphsAction;
 	QAction *_showGraphGridAction;
@@ -171,10 +177,12 @@ private:
 	QAction *_showWaypointLabelsAction;
 	QAction *_showRouteWaypointsAction;
 	QAction *_openOptionsAction;
+	QAction *_mapsEnd;
 	QList<QAction*> _mapActions;
 	QList<QAction*> _poiFilesActions;
 
-	QSignalMapper *_poiFilesSM;
+	QSignalMapper *_poiFilesSignalMapper;
+	QSignalMapper *_mapsSignalMapper;
 
 	QLabel *_fileNameLabel;
 	QLabel *_distanceLabel;
@@ -185,7 +193,7 @@ private:
 	QList<GraphTab*> _tabs;
 
 	POI *_poi;
-	QList<Map*> _maps;
+	MapList *_ml;
 
 	FileBrowser *_browser;
 	QList<QString> _files;

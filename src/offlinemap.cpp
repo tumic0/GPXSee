@@ -46,7 +46,7 @@ static Coordinates toWGS84(Coordinates c, const Datum &datum)
 	double adb = 1.0 / (1.0 - from_f);
 	double rn = from_a / sqrt(1 - from_esq * ssqlat);
 	double rm = from_a * (1 - from_esq) / pow((1 - from_esq * ssqlat), 1.5);
-	double from_h = 0.0; // we're flat!
+	double from_h = 0.0;
 
 	double dlat = (-dX * slat * clon - dY * slat * slon + dZ * clat + da * rn
 	  * from_esq * slat * clat / from_a + +df * (rm * adb + rn / adb) * slat
@@ -56,15 +56,12 @@ static Coordinates toWGS84(Coordinates c, const Datum &datum)
 	return Coordinates(c.lon() + rad2deg(dlon), c.lat() + rad2deg(dlat));
 }
 
-int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
+
+int OfflineMap::parse(QIODevice &device, QList<ReferencePoint> &points,
   QString &projection, ProjectionSetup &setup, QString &datum)
 {
 	bool res;
 	int ln = 1;
-
-
-	if (!device.open(QIODevice::ReadOnly))
-		return -1;
 
 	while (!device.atEnd()) {
 		QByteArray line = device.readLine();
@@ -72,7 +69,9 @@ int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
 		if (ln == 1) {
 			if (!line.trimmed().startsWith("OziExplorer Map Data File"))
 				return ln;
-		} else if (ln == 3)
+		} else if (ln == 2)
+			_name = line.trimmed();
+		else if (ln == 3)
 			_imgPath = line.trimmed();
 		else if (ln == 5)
 			datum = line.split(',').at(0).trimmed();
@@ -173,19 +172,37 @@ int OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
 	return 0;
 }
 
+bool OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
+  QString &projection, ProjectionSetup &setup, QString &datum)
+{
+	int el;
+
+	if (!device.open(QIODevice::ReadOnly)) {
+		_errorString = QString("Error opening map file: %1")
+		  .arg(device.errorString());
+		return false;
+	}
+
+	if ((el = parse(device, points, projection, setup, datum))) {
+		_errorString = QString("Map file parse error on line %1").arg(el);
+		return false;
+	}
+
+	return true;
+}
+
 bool OfflineMap::createProjection(const QString &datum,
   const QString &projection, const ProjectionSetup &setup,
   QList<ReferencePoint> &points)
 {
 	if (points.count() < 2) {
-		qWarning("%s: insufficient number of reference points",
-		  qPrintable(_name));
+		_errorString = "Insufficient number of reference points";
 		return false;
 	}
 
 	Datum d = Datum::datum(datum);
 	if (d.isNull()) {
-		qWarning("%s: %s: unknown datum", qPrintable(_name), qPrintable(datum));
+		_errorString = QString("%1: Unknown datum").arg(datum);
 		return false;
 	}
 
@@ -208,12 +225,11 @@ bool OfflineMap::createProjection(const QString &datum,
 		else if (!points.first().ll.isNull())
 			_projection = new UTM(d.ellipsoid(), points.first().ll);
 		else {
-			qWarning("%s: Can not determine UTM zone", qPrintable(_name));
+			_errorString = "Can not determine UTM zone";
 			return false;
 		}
 	} else {
-		qWarning("%s: %s: unsupported map projection", qPrintable(_name),
-		  qPrintable(projection));
+		_errorString = QString("%1: Unknown map projection").arg(projection);
 		return false;
 	}
 
@@ -270,7 +286,7 @@ bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
 
 	Matrix M = Q.augemented(c);
 	if (!M.eliminate()) {
-		qWarning("%s: singular transformation matrix", qPrintable(_name));
+		_errorString = "Singular transformation matrix";
 		return false;
 	}
 
@@ -327,17 +343,15 @@ bool OfflineMap::getImageInfo(const QString &path)
 	if (ii.exists())
 		_imgPath = ii.absoluteFilePath();
 	else {
-		qWarning("%s: %s: No such image file", qPrintable(_name),
-		  qPrintable(_imgPath));
+		_errorString = QString("%1: No such image file").arg(_imgPath);
 		return false;
 	}
 
-	if (_imgPath.endsWith("ozf3", Qt::CaseInsensitive)
-	  || _imgPath.endsWith("ozf4", Qt::CaseInsensitive)) {
-		qWarning("%s: %s: obfuscated image files are not supported",
-		  qPrintable(_name), qPrintable(_imgPath));
+	if (_imgPath.endsWith("ozf3") || _imgPath.endsWith("ozf4")) {
+		_errorString = QString("%1: Obfuscated image files not supported")
+		  .arg(QFileInfo(_imgPath).fileName());
 		return false;
-	} else if (_imgPath.endsWith("ozf2", Qt::CaseInsensitive)) {
+	} else if (_imgPath.endsWith("ozf2")) {
 		_ozf.load(_imgPath);
 		_size = _ozf.size();
 	} else {
@@ -345,8 +359,8 @@ bool OfflineMap::getImageInfo(const QString &path)
 		_size = img.size();
 	}
 	if (!_size.isValid()) {
-		qWarning("%s: %s: error reading map image", qPrintable(_name),
-		  qPrintable(_imgPath));
+		_errorString = QString("%1: Error reading map image")
+		  .arg(QFileInfo(_imgPath).fileName());
 		return false;
 	}
 
@@ -356,7 +370,7 @@ bool OfflineMap::getImageInfo(const QString &path)
 bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
 {
 	if (tiles.isEmpty()) {
-		qWarning("%s: empty tile set", qPrintable(_name));
+		_errorString = "Empty tile set.";
 		return false;
 	}
 
@@ -374,9 +388,8 @@ bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
 				_tileSize = QImageReader(path + "/" + tiles.at(i)).size();
 			}
 			if (!_tileSize.isValid()) {
-				qWarning("%s: error retrieving tile size: %s: invalid image",
-				  qPrintable(_name), qPrintable(QFileInfo(tiles.at(i))
-				  .fileName()));
+				_errorString = QString("Error retrieving tile size: "
+				  "%1: Invalid image").arg(QFileInfo(tiles.at(i)).fileName());
 				return false;
 			}
 
@@ -384,42 +397,26 @@ bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
 		}
 	}
 
-	qWarning("%s: invalid tile names", qPrintable(_name));
-
+	_errorString = "Invalid tile names";
 	return false;
-}
-
-bool OfflineMap::mapLoaded(int res)
-{
-	if (res) {
-		if (res == -2)
-			qWarning("%s: no map file found", qPrintable(_name));
-		else if (res == -1)
-			qWarning("%s: error opening map file", qPrintable(_name));
-		else
-			qWarning("%s: map file parse error on line: %d", qPrintable(_name),
-			  res);
-		return false;
-	}
-
-	return true;
 }
 
 bool OfflineMap::totalSizeSet()
 {
 	if (!_size.isValid()) {
-		qWarning("%s: missing total image size (IWH)", qPrintable(_name));
+		_errorString = "Missing total image size (IWH)";
 		return false;
 	} else
 		return true;
 }
 
-OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
+OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
+  : Map(parent)
 {
-	int errorLine = -2;
 	QList<ReferencePoint> points;
 	QString proj, datum;
 	ProjectionSetup setup;
+	QFileInfo fi(fileName);
 
 
 	_valid = false;
@@ -427,38 +424,29 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 	_projection = 0;
 	_resolution = 0;
 
-	QFileInfo fi(path);
-	_name = fi.fileName();
-
-	QDir dir(path);
-	QFileInfoList mapFiles = dir.entryInfoList(QDir::Files);
-	for (int i = 0; i < mapFiles.count(); i++) {
-		const QString &fileName = mapFiles.at(i).fileName();
-		if (fileName.endsWith(".tar")) {
-			if (!_tar.load(mapFiles.at(i).absoluteFilePath())) {
-				qWarning("%s: %s: error loading tar file", qPrintable(_name),
-				  qPrintable(fileName));
-				return;
-			}
-			QStringList tarFiles = _tar.files();
-			for (int j = 0; j < tarFiles.size(); j++) {
-				if (tarFiles.at(j).endsWith(".map")) {
-					QByteArray ba = _tar.file(tarFiles.at(j));
-					QBuffer buffer(&ba);
-					errorLine = parseMapFile(buffer, points, proj, setup, datum);
-					_imgPath = QString();
-					break;
-				}
-			}
-			break;
-		} else if (fileName.endsWith(".map")) {
-			QFile mapFile(mapFiles.at(i).absoluteFilePath());
-			errorLine = parseMapFile(mapFile, points, proj, setup, datum);
-			break;
+	if (fi.suffix() == "tar") {
+		if (!_tar.load(fileName)) {
+			_errorString = "Error reading tar file";
+			return;
 		}
-	}
-	if (!mapLoaded(errorLine))
+
+		QString mapFileName = fi.completeBaseName() + ".map";
+		QByteArray ba = _tar.file(mapFileName);
+		if (ba.isNull()) {
+			_errorString = "Map file not found";
+			return;
+		}
+		QBuffer mapFile(&ba);
+		if (!parseMapFile(mapFile, points, proj, setup, datum))
+			return;
+	} else if (fi.suffix() =="map") {
+		QFile mapFile(fileName);
+		if (!parseMapFile(mapFile, points, proj, setup, datum))
+			return;
+	} else {
+		_errorString = "Not a map file";
 		return;
+	}
 
 	if (!createProjection(datum, proj, setup, points))
 		return;
@@ -471,16 +459,17 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 			return;
 		if (!getTileInfo(_tar.files()))
 			return;
+		_imgPath = QString();
 	} else {
-		QDir set(fi.absoluteFilePath() + "/" + "set");
+		QDir set(fi.absolutePath() + "/" + "set");
 		if (set.exists()) {
 			if (!totalSizeSet())
 				return;
-			if (!getTileInfo(set.entryList(), set.canonicalPath()))
+			if (!getTileInfo(set.entryList(), set.absolutePath()))
 				return;
 			_imgPath = QString();
 		} else {
-			if (!getImageInfo(fi.absoluteFilePath()))
+			if (!getImageInfo(fi.absolutePath()))
 				return;
 		}
 	}
@@ -488,36 +477,31 @@ OfflineMap::OfflineMap(const QString &path, QObject *parent) : Map(parent)
 	_valid = true;
 }
 
-OfflineMap::OfflineMap(Tar &tar, const QString &path, QObject *parent)
+OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
   : Map(parent)
 {
-	int errorLine = -2;
 	QList<ReferencePoint> points;
 	QString proj, datum;
 	ProjectionSetup setup;
-
+	QFileInfo fi(fileName);
 
 	_valid = false;
 	_img = 0;
 	_projection = 0;
 
-	QFileInfo fi(path);
-	_name = fi.fileName();
-
-	QFileInfo li(fi.absoluteDir().dirName());
-	QString prefix = li.fileName() + "/" + fi.fileName() + "/";
-	QStringList tarFiles = tar.files();
-	for (int j = 0; j < tarFiles.size(); j++) {
-		if (tarFiles.at(j).startsWith(prefix)) {
-			QByteArray ba = tar.file(tarFiles.at(j));
-			QBuffer buffer(&ba);
-			errorLine = parseMapFile(buffer, points, proj, setup, datum);
-			break;
-		}
-	}
-	if (!mapLoaded(errorLine))
+	QFileInfo map(fi.absolutePath());
+	QFileInfo layer(map.absolutePath());
+	QString mapFile = layer.fileName() + "/" + map.fileName() + "/"
+	  + fi.fileName();
+	QByteArray ba = tar.file(mapFile);
+	if (ba.isNull()) {
+		_errorString = "Map file not found";
 		return;
+	}
+	QBuffer buffer(&ba);
 
+	if (!parseMapFile(buffer, points, proj, setup, datum))
+		return;
 	if (!createProjection(datum, proj, setup, points))
 		return;
 	if (!totalSizeSet())
@@ -526,14 +510,8 @@ OfflineMap::OfflineMap(Tar &tar, const QString &path, QObject *parent)
 		return;
 	computeResolution(points);
 
-	QDir dir(path);
-	QFileInfoList mapFiles = dir.entryInfoList(QDir::Files);
-	for (int i = 0; i < mapFiles.count(); i++) {
-		const QString &fileName = mapFiles.at(i).absoluteFilePath();
-		if (fileName.endsWith(".tar"))
-			_tarPath = fileName;
-	}
 
+	_tarPath = fi.absolutePath() + "/" + fi.completeBaseName() + ".tar";
 	_imgPath = QString();
 	_valid = true;
 }
@@ -550,8 +528,7 @@ void OfflineMap::load()
 {
 	if (!_tarPath.isNull() && !_tileSize.isValid()) {
 		if (!_tar.load(_tarPath)) {
-			qWarning("%s: %s: error loading tar file", qPrintable(_name),
-			  qPrintable(_tarPath));
+			qWarning("%s: error loading tar file", qPrintable(_tarPath));
 			return;
 		}
 		getTileInfo(_tar.files());

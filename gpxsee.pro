@@ -23,7 +23,6 @@ HEADERS += src/config.h \
     src/filebrowser.h \
     src/map.h \
     src/onlinemap.h \
-    src/maplist.h \
     src/downloader.h \
     src/units.h \
     src/scaleitem.h \
@@ -81,7 +80,6 @@ HEADERS += src/config.h \
     src/timetype.h \
     src/emptymap.h \
     src/offlinemap.h \
-    src/mapdir.h \
     src/matrix.h \
     src/tar.h \
     src/atlas.h \
@@ -93,7 +91,8 @@ HEADERS += src/config.h \
     src/lambertconic.h \
     src/ellipsoid.h \
     src/ozf.h \
-    src/datum.h
+    src/datum.h \
+    src/maplist.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -106,7 +105,6 @@ SOURCES += src/main.cpp \
     src/sliderinfoitem.cpp \
     src/filebrowser.cpp \
     src/onlinemap.cpp \
-    src/maplist.cpp \
     src/downloader.cpp \
     src/scaleitem.cpp \
     src/track.cpp \
@@ -150,7 +148,6 @@ SOURCES += src/main.cpp \
     src/stylecombobox.cpp \
     src/emptymap.cpp \
     src/offlinemap.cpp \
-    src/mapdir.cpp \
     src/matrix.cpp \
     src/tar.cpp \
     src/atlas.cpp \
@@ -160,7 +157,8 @@ SOURCES += src/main.cpp \
     src/lambertconic.cpp \
     src/ellipsoid.cpp \
     src/ozf.cpp \
-    src/datum.cpp
+    src/datum.cpp \
+    src/maplist.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \

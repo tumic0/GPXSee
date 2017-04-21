@@ -30,25 +30,35 @@ static bool yCmp(const OfflineMap *m1, const OfflineMap *m2)
 	return TL(m1).y() > TL(m2).y();
 }
 
-bool Atlas::isAtlas(Tar &tar, const QFileInfoList &files)
+bool Atlas::isAtlas(Tar &tar, const QString &path)
 {
-	for (int i = 0; i < files.count(); i++) {
-		const QString &fileName = files.at(i).fileName();
-		if (fileName.endsWith(".tar")) {
-			if (!tar.load(files.at(i).absoluteFilePath())) {
-				qWarning("%s: %s: error loading tar file", qPrintable(_name),
-				  qPrintable(fileName));
-				return false;
-			}
-			QStringList tarFiles = tar.files();
-			for (int j = 0; j < tarFiles.size(); j++)
-				if (tarFiles.at(j).endsWith(".tba"))
-					return true;
-		} else if (fileName.endsWith(".tba"))
-			return true;
+	QFileInfo fi(path);
+	QByteArray ba;
+
+
+	if (fi.suffix() == "tar") {
+		if (!tar.load(path)) {
+			_errorString = "Error reading tar file";
+			return false;
+		}
+		QString tbaFileName = fi.completeBaseName() + ".tba";
+		ba = tar.file(tbaFileName);
+	} else if (fi.suffix() == "tba") {
+		QFile tbaFile(path);
+		if (!tbaFile.open(QIODevice::ReadOnly)) {
+			_errorString = QString("Error opening tba file: %1")
+			  .arg(tbaFile.errorString());
+			return false;
+		}
+		ba = tbaFile.readAll();
 	}
 
-	return false;
+	if (ba.startsWith("Atlas 1.0"))
+		return true;
+	else {
+		_errorString = "Missing or invalid tba file";
+		return false;
+	}
 }
 
 void Atlas::computeZooms()
@@ -100,38 +110,45 @@ void Atlas::computeBounds()
 		  BR(_maps.at(i))), QRectF(offsets.at(i), _maps.at(i)->bounds().size())));
 }
 
-Atlas::Atlas(const QString &path, QObject *parent) : Map(parent)
+Atlas::Atlas(const QString &fileName, QObject *parent) : Map(parent)
 {
 	Tar tar;
+	QFileInfo fi(fileName);
 
 	_valid = false;
 	_zoom = 0;
+	_name = fi.dir().dirName();
 
-	QFileInfo fi(path);
-	_name = fi.fileName();
-
-	QDir dir(path);
-	QFileInfoList files = dir.entryInfoList(QDir::Files);
-	if (!isAtlas(tar, files))
+	if (!isAtlas(tar, fileName))
 		return;
 
+	QDir dir(fi.absolutePath());
 	QFileInfoList layers = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
 	for (int n = 0; n < layers.count(); n++) {
 		QDir zdir(layers.at(n).absoluteFilePath());
 		QFileInfoList maps = zdir.entryInfoList(QDir::Dirs
 		  | QDir::NoDotAndDotDot);
 		for (int i = 0; i < maps.count(); i++) {
+			QString mapFile = maps.at(i).absoluteFilePath() + "/"
+			  + maps.at(i).fileName() + ".map";
+
 			OfflineMap *map;
 			if (tar.isOpen())
-				map = new OfflineMap(tar, maps.at(i).absoluteFilePath(), this);
+				map = new OfflineMap(mapFile, tar, this);
 			else
-				map = new OfflineMap(maps.at(i).absoluteFilePath(), this);
+				map = new OfflineMap(mapFile, this);
+
 			if (map->isValid())
 				_maps.append(map);
+			else {
+				_errorString = QString("Error loading map: %1: %2")
+				  .arg(mapFile, map->errorString());
+				return;
+			}
 		}
 	}
 	if (_maps.isEmpty()) {
-		qWarning("%s: No usable maps available", qPrintable(_name));
+		_errorString = "No maps found in atlas";
 		return;
 	}
 
