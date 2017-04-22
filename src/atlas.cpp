@@ -295,3 +295,9 @@ void Atlas::draw(QPainter *painter, const QRectF &rect, int mapIndex)
 	map->draw(painter, pr);
 	painter->translate(-offset);
 }
+
+void Atlas::unload()
+{
+	for (int i = 0; i < _maps.count(); i++)
+		_maps.at(i)->unload();
+}

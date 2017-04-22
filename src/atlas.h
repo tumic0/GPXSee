@@ -29,6 +29,8 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect);
 
+	void unload();
+
 	bool isValid() const {return _valid;}
 	const QString &errorString() const {return _errorString;}
 
