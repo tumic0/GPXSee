@@ -34,16 +34,16 @@ bool Atlas::isAtlas(Tar &tar, const QString &path)
 {
 	QFileInfo fi(path);
 	QByteArray ba;
+	QString suffix = fi.suffix().toLower();
 
-
-	if (fi.suffix() == "tar") {
+	if (suffix == "tar") {
 		if (!tar.load(path)) {
 			_errorString = "Error reading tar file";
 			return false;
 		}
 		QString tbaFileName = fi.completeBaseName() + ".tba";
 		ba = tar.file(tbaFileName);
-	} else if (fi.suffix() == "tba") {
+	} else if (suffix == "tba") {
 		QFile tbaFile(path);
 		if (!tbaFile.open(QIODevice::ReadOnly)) {
 			_errorString = QString("Error opening tba file: %1")

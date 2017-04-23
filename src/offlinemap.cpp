@@ -417,6 +417,7 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 	QString proj, datum;
 	ProjectionSetup setup;
 	QFileInfo fi(fileName);
+	QString suffix = fi.suffix().toLower();
 
 
 	_valid = false;
@@ -424,7 +425,7 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 	_projection = 0;
 	_resolution = 0;
 
-	if (fi.suffix() == "tar") {
+	if (suffix == "tar") {
 		if (!_tar.load(fileName)) {
 			_errorString = "Error reading tar file";
 			return;
@@ -439,7 +440,7 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 		QBuffer mapFile(&ba);
 		if (!parseMapFile(mapFile, points, proj, setup, datum))
 			return;
-	} else if (fi.suffix() =="map") {
+	} else if (suffix =="map") {
 		QFile mapFile(fileName);
 		if (!parseMapFile(mapFile, points, proj, setup, datum))
 			return;
