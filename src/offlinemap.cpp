@@ -370,11 +370,6 @@ bool OfflineMap::getImageInfo(const QString &path)
 
 bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
 {
-	if (tiles.isEmpty()) {
-		_errorString = "Empty tile set.";
-		return false;
-	}
-
 	QRegExp rx("_[0-9]+_[0-9]+\\.");
 	for (int i = 0; i < tiles.size(); i++) {
 		if (tiles.at(i).contains(rx)) {
@@ -398,7 +393,7 @@ bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
 		}
 	}
 
-	_errorString = "Invalid tile names";
+	_errorString = "Invalid/missing tile set";
 	return false;
 }
 
@@ -533,7 +528,8 @@ void OfflineMap::load()
 			qWarning("%s: error loading tar file", qPrintable(_tarPath));
 			return;
 		}
-		getTileInfo(_tar.files());
+		if (!getTileInfo(_tar.files()))
+			qWarning("%s: %s", qPrintable(_tarPath), qPrintable(_errorString));
 		return;
 	}
 
