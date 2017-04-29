@@ -235,16 +235,29 @@ qreal Atlas::zoomOut()
 
 QPointF Atlas::ll2xy(const Coordinates &c) const
 {
-	int idx = _zooms.at(_zoom).first;
+	static int idx = -1;
+	static int zoom = -1;
+	QPointF pp;
 
-	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
-		if (_bounds.at(i).first.contains(_maps.at(i)->ll2pp(c))) {
-			idx = i;
-			break;
+	if (zoom != _zoom) {
+		idx = -1;
+		zoom = _zoom;
+	}
+
+	if (idx >= 0)
+		pp = _maps.at(idx)->ll2pp(c);
+	if (idx < 0 || !_bounds.at(idx).first.contains(pp)) {
+		idx = _zooms.at(zoom).first;
+		for (int i = _zooms.at(zoom).first; i <= _zooms.at(zoom).second; i++) {
+			pp = _maps.at(i)->ll2pp(c);
+			if (_bounds.at(i).first.contains(pp)) {
+				idx = i;
+				break;
+			}
 		}
 	}
 
-	QPointF p = _maps.at(idx)->ll2xy(c);
+	QPointF p = _maps.at(idx)->pp2xy(pp);
 	return p + _bounds.at(idx).second.topLeft();
 }
 
