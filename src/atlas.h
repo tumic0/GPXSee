@@ -24,8 +24,8 @@ public:
 	qreal zoomIn();
 	qreal zoomOut();
 
-	QPointF ll2xy(const Coordinates &c) const;
-	Coordinates xy2ll(const QPointF &p) const;
+	QPointF ll2xy(const Coordinates &c);
+	Coordinates xy2ll(const QPointF &p);
 
 	void draw(QPainter *painter, const QRectF &rect);
 
@@ -48,6 +48,8 @@ private:
 	QVector<QPair<int, int> > _zooms;
 	QVector<QPair<QRectF, QRectF> > _bounds;
 	int _zoom;
+
+	int _ci, _cz;
 };
 
 #endif // ATLAS_H

@@ -232,13 +232,13 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect)
 	}
 }
 
-QPointF OnlineMap::ll2xy(const Coordinates &c) const
+QPointF OnlineMap::ll2xy(const Coordinates &c)
 {
 	QPointF m = Mercator().ll2xy(c);
 	return QPointF(m.x() / _scale, m.y() / -_scale);
 }
 
-Coordinates OnlineMap::xy2ll(const QPointF &p) const
+Coordinates OnlineMap::xy2ll(const QPointF &p)
 {
 	QPointF m(p.x() * _scale, -p.y() * _scale);
 	return Mercator().xy2ll(m);

@@ -118,6 +118,7 @@ Atlas::Atlas(const QString &fileName, QObject *parent) : Map(parent)
 	_valid = false;
 	_zoom = 0;
 	_name = fi.dir().dirName();
+	_ci = -1; _cz = -1;
 
 	if (!isAtlas(tar, fileName))
 		return;
@@ -233,35 +234,33 @@ qreal Atlas::zoomOut()
 	return _zoom;
 }
 
-QPointF Atlas::ll2xy(const Coordinates &c) const
+QPointF Atlas::ll2xy(const Coordinates &c)
 {
-	static int idx = -1;
-	static int zoom = -1;
 	QPointF pp;
 
-	if (zoom != _zoom) {
-		idx = -1;
-		zoom = _zoom;
+	if (_cz != _zoom) {
+		_ci = -1;
+		_cz = _zoom;
 	}
 
-	if (idx >= 0)
-		pp = _maps.at(idx)->ll2pp(c);
-	if (idx < 0 || !_bounds.at(idx).first.contains(pp)) {
-		idx = _zooms.at(zoom).first;
-		for (int i = _zooms.at(zoom).first; i <= _zooms.at(zoom).second; i++) {
+	if (_ci >= 0)
+		pp = _maps.at(_ci)->ll2pp(c);
+	if (_ci < 0 || !_bounds.at(_ci).first.contains(pp)) {
+		_ci = _zooms.at(_zoom).first;
+		for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
 			pp = _maps.at(i)->ll2pp(c);
 			if (_bounds.at(i).first.contains(pp)) {
-				idx = i;
+				_ci = i;
 				break;
 			}
 		}
 	}
 
-	QPointF p = _maps.at(idx)->pp2xy(pp);
-	return p + _bounds.at(idx).second.topLeft();
+	QPointF p = _maps.at(_ci)->pp2xy(pp);
+	return p + _bounds.at(_ci).second.topLeft();
 }
 
-Coordinates Atlas::xy2ll(const QPointF &p) const
+Coordinates Atlas::xy2ll(const QPointF &p)
 {
 	int idx = _zooms.at(_zoom).first;
 

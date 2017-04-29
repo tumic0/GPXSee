@@ -31,9 +31,9 @@ public:
 	qreal zoomIn() {return 1.0;}
 	qreal zoomOut() {return 1.0;}
 
-	QPointF ll2xy(const Coordinates &c) const
+	QPointF ll2xy(const Coordinates &c)
 	  {return _transform.map(_projection->ll2xy(c));}
-	Coordinates xy2ll(const QPointF &p) const
+	Coordinates xy2ll(const QPointF &p)
 	  {return _projection->xy2ll(_inverted.map(p));}
 
 	void draw(QPainter *painter, const QRectF &rect);

@@ -25,8 +25,8 @@ public:
 	virtual qreal zoomIn() = 0;
 	virtual qreal zoomOut() = 0;
 
-	virtual QPointF ll2xy(const Coordinates &c) const = 0;
-	virtual Coordinates xy2ll(const QPointF &p) const = 0;
+	virtual QPointF ll2xy(const Coordinates &c) = 0;
+	virtual Coordinates xy2ll(const QPointF &p) = 0;
 
 	virtual void draw(QPainter *painter, const QRectF &rect) = 0;
 

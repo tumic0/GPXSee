@@ -64,13 +64,13 @@ void EmptyMap::draw(QPainter *painter, const QRectF &rect)
 	painter->fillRect(rect, Qt::white);
 }
 
-QPointF EmptyMap::ll2xy(const Coordinates &c) const
+QPointF EmptyMap::ll2xy(const Coordinates &c)
 {
 	QPointF m = Mercator().ll2xy(c);
 	return QPointF(m.x() / _scale, m.y() / -_scale);
 }
 
-Coordinates EmptyMap::xy2ll(const QPointF &p) const
+Coordinates EmptyMap::xy2ll(const QPointF &p)
 {
 	QPointF m(p.x() * _scale, -p.y() * _scale);
 	return Mercator().xy2ll(m);
