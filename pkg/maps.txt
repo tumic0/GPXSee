@@ -1,3 +1,4 @@
 Open Topo Map	https://a.tile.opentopomap.org/$z/$x/$y.png
-Thunderforest	http://tile.thunderforest.com/outdoors/$z/$x/$y.png
 Open Street Map	http://tile.openstreetmap.org/$z/$x/$y.png
+USGS Topo	https://navigator.er.usgs.gov/tiles/tcr.cgi/$z/$x/$y.png
+USGS Imagery	https://navigator.er.usgs.gov/tiles/aerial_Imagery.cgi/$z/$x/$y
