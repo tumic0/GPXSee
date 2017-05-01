@@ -1,5 +1,5 @@
 TARGET = GPXSee
-VERSION = 4.5
+VERSION = 4.6
 QT += core \
     gui \
     network
