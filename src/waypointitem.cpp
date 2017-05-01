@@ -3,7 +3,6 @@
 #include "config.h"
 #include "format.h"
 #include "tooltip.h"
-#include "map.h"
 #include "waypointitem.h"
 
 
@@ -44,11 +43,6 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
 	setToolTip(toolTip(Metric));
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
-}
-
-void WaypointItem::setMap(Map *map)
-{
-	setPos(map->ll2xy(_waypoint.coordinates()));
 }
 
 void WaypointItem::updateShape()
@@ -105,14 +99,6 @@ void WaypointItem::paint(QPainter *painter,
 	painter->drawPath(_shape);
 */
 }
-
-/*
-void WaypointItem::setScale(qreal scale)
-{
-	QPointF p = _map->ll2xy(_waypoint.coordinates());
-	setPos(QPointF(p.x(), -p.y()) * scale);
-}
-*/
 
 void WaypointItem::setUnits(enum Units units)
 {

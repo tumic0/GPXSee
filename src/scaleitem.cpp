@@ -1,3 +1,4 @@
+#include <cmath>
 #include <QPainter>
 #include "config.h"
 #include "misc.h"
@@ -15,6 +16,7 @@ ScaleItem::ScaleItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
 	_units = Metric;
 	_res = 1.0;
+	_digitalZoom = 0;
 
 #ifndef Q_OS_MAC
 	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
@@ -87,24 +89,26 @@ QString ScaleItem::units() const
 
 void ScaleItem::computeScale()
 {
+	qreal res = _res * pow(2, -_digitalZoom);
+
 	if (_units == Imperial) {
-		_length = niceNum((_res * M2FT * SCALE_WIDTH) / SEGMENTS, 1);
+		_length = niceNum((res * M2FT * SCALE_WIDTH) / SEGMENTS, 1);
 		if (_length >= MIINFT) {
-			_length = niceNum((_res * M2FT * FT2MI * SCALE_WIDTH) / SEGMENTS, 1);
-			_width = (_length / (_res * M2FT * FT2MI));
+			_length = niceNum((res * M2FT * FT2MI * SCALE_WIDTH) / SEGMENTS, 1);
+			_width = (_length / (res * M2FT * FT2MI));
 			_scale = true;
 		} else {
-			_width = (_length / (_res * M2FT));
+			_width = (_length / (res * M2FT));
 			_scale = false;
 		}
 	} else {
-		_length = niceNum((_res * SCALE_WIDTH) / SEGMENTS, 1);
+		_length = niceNum((res * SCALE_WIDTH) / SEGMENTS, 1);
 		if (_length >= KMINM) {
 			_length *= M2KM;
-			_width = (_length / (_res * M2KM));
+			_width = (_length / (res * M2KM));
 			_scale = true;
 		} else {
-			_width = (_length / _res);
+			_width = (_length / res);
 			_scale = false;
 		}
 	}
@@ -126,4 +130,15 @@ void ScaleItem::setUnits(enum Units units)
 	computeScale();
 	updateBoundingRect();
 	update();
+}
+
+void ScaleItem::setDigitalZoom(int zoom)
+{
+	prepareGeometryChange();
+	_digitalZoom = zoom;
+	computeScale();
+	updateBoundingRect();
+	update();
+
+	setScale(pow(2, -_digitalZoom));
 }

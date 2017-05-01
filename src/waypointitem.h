@@ -1,11 +1,11 @@
 #ifndef WAYPOINTITEM_H
 #define WAYPOINTITEM_H
 
+#include <cmath>
 #include <QGraphicsItem>
 #include "waypoint.h"
 #include "units.h"
-
-class Map;
+#include "map.h"
 
 class WaypointItem : public QGraphicsItem
 {
@@ -14,9 +14,10 @@ public:
 
 	const Waypoint &waypoint() const {return _waypoint;}
 
-	void setMap(Map *map);
+	void setMap(Map *map) {setPos(map->ll2xy(_waypoint.coordinates()));}
 	void setUnits(Units units);
 	void showLabel(bool show);
+	void setDigitalZoom(int zoom) {setScale(pow(2, -zoom));}
 
 	QPainterPath shape() const {return _shape;}
 	QRectF boundingRect() const {return _shape.boundingRect();}

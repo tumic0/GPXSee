@@ -12,20 +12,21 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
   : QGraphicsObject(parent)
 {
 	Q_ASSERT(path.count() >= 2);
+
 	_path = path;
 	_map = map;
-
-	updatePainterPath(map);
-	updateShape();
+	_digitalZoom = 0;
 
 	_width = 3;
 	QBrush brush(Qt::SolidPattern);
 	_pen = QPen(brush, _width);
 
+	updatePainterPath(map);
+	updateShape();
+
 	_marker = new MarkerItem(this);
 	_marker->setPos(position(_path.at(0).distance()));
-	_marker->setFlag(QGraphicsItem::ItemIgnoresTransformations);
-	_md = _path.at(0).distance();
+	_markerDistance = _path.at(0).distance();
 
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
@@ -34,7 +35,7 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 void PathItem::updateShape()
 {
 	QPainterPathStroker s;
-	s.setWidth((_width + 1) * 1.0/scale());
+	s.setWidth((_width + 1) * pow(2, -_digitalZoom));
 	_shape = s.createStroke(_painterPath);
 }
 
@@ -71,7 +72,7 @@ void PathItem::setMap(Map *map)
 	updatePainterPath(map);
 	updateShape();
 
-	_marker->setPos(position(_md));
+	_marker->setPos(position(_markerDistance));
 }
 
 void PathItem::setColor(const QColor &color)
@@ -85,7 +86,7 @@ void PathItem::setWidth(qreal width)
 	prepareGeometryChange();
 
 	_width = width;
-	_pen.setWidthF(_width * 1.0/scale());
+	_pen.setWidthF(_width * pow(2, -_digitalZoom));
 
 	updateShape();
 }
@@ -94,6 +95,17 @@ void PathItem::setStyle(Qt::PenStyle style)
 {
 	_pen.setStyle(style);
 	update();
+}
+
+void PathItem::setDigitalZoom(int zoom)
+{
+	prepareGeometryChange();
+
+	_digitalZoom = zoom;
+	_pen.setWidthF(_width * pow(2, -_digitalZoom));
+	_marker->setScale(pow(2, -_digitalZoom));
+
+	updateShape();
 }
 
 QPointF PathItem::position(qreal x) const
@@ -137,7 +149,7 @@ void PathItem::moveMarker(qreal distance)
 	  && distance <= _path.last().distance()) {
 		_marker->setVisible(true);
 		_marker->setPos(position(distance));
-		_md = distance;
+		_markerDistance = distance;
 	} else
 		_marker->setVisible(false);
 }
@@ -146,7 +158,7 @@ void PathItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
 	Q_UNUSED(event);
 
-	_pen.setWidthF((_width + 1) * 1.0/scale());
+	_pen.setWidthF((_width + 1) * pow(2, -_digitalZoom));
 	setZValue(zValue() + 1.0);
 	update();
 
@@ -157,7 +169,7 @@ void PathItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
 	Q_UNUSED(event);
 
-	_pen.setWidthF(_width * 1.0/scale());
+	_pen.setWidthF(_width * pow(2, -_digitalZoom));
 	setZValue(zValue() - 1.0);
 	update();
 
