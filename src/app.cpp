@@ -3,7 +3,6 @@
 #include <QLocale>
 #include <QFileOpenEvent>
 #include <QNetworkProxyFactory>
-#include <QPixmapCache>
 #include "opengl.h"
 #include "gui.h"
 #include "onlinemap.h"
@@ -24,7 +23,6 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 #endif // Q_OS_MAC
 
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
-	QPixmapCache::setCacheLimit(65536);
 	OnlineMap::setDownloader(new Downloader(this));
 	OPENGL_SET_SAMPLES(4);
 

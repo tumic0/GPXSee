@@ -21,6 +21,7 @@
 #include <QLocale>
 #include <QMimeData>
 #include <QUrl>
+#include <QPixmapCache>
 #include "config.h"
 #include "icons.h"
 #include "keys.h"
@@ -714,8 +715,8 @@ void GUI::dataSources()
 		"directory:")
 	  + "</p><p><code>" + USER_MAP_DIR + "</code></p><p>"
 	  + tr("The expected structure is one map/atlas in a separate subdirectory."
-		" Supported map formats are OziExplorer image-based maps and tiled"
-		" TrekBuddy maps/atlases (tared and non-tared).") + "</p>"
+		" Supported map formats are OziExplorer maps and TrekBuddy maps/atlases"
+		" (tared and non-tared).") + "</p>"
 
 	  + "<h4>" + tr("POIs") + "</h4><p>"
 	  + tr("To make GPXSee load a POI file automatically on startup, add "
@@ -910,6 +911,8 @@ void GUI::openOptions()
 		for (int i = 0; i < _tabs.count(); i++)
 			_tabs.at(i)->useOpenGL(options.useOpenGL);
 	}
+	if (options.pixmapCache != _options.pixmapCache)
+		QPixmapCache::setCacheLimit(options.pixmapCache);
 
 	_options = options;
 }
@@ -1581,6 +1584,8 @@ void GUI::writeSettings()
 		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
 	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
 		settings.setValue(USE_OPENGL_SETTING, _options.useOpenGL);
+	if (_options.pixmapCache != PIXMAP_CACHE_DEFAULT)
+		settings.setValue(PIXMAP_CACHE_SETTING, _options.pixmapCache);
 	if (_options.printName != PRINT_NAME_DEFAULT)
 		settings.setValue(PRINT_NAME_SETTING, _options.printName);
 	if (_options.printDate != PRINT_DATE_DEFAULT)
@@ -1758,6 +1763,8 @@ void GUI::readSettings()
 	  .toInt();
 	_options.useOpenGL = settings.value(USE_OPENGL_SETTING, USE_OPENGL_DEFAULT)
 	  .toBool();
+	_options.pixmapCache = settings.value(PIXMAP_CACHE_SETTING,
+	  PIXMAP_CACHE_DEFAULT).toInt();
 	_options.printName = settings.value(PRINT_NAME_SETTING, PRINT_NAME_DEFAULT)
 	  .toBool();
 	_options.printDate = settings.value(PRINT_DATE_SETTING, PRINT_DATE_DEFAULT)
@@ -1792,6 +1799,8 @@ void GUI::readSettings()
 	}
 
 	_poi->setRadius(_options.poiRadius);
+
+	QPixmapCache::setCacheLimit(_options.pixmapCache * 1024);
 
 	settings.endGroup();
 }

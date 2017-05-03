@@ -196,11 +196,24 @@ QWidget *OptionsDialog::createSystemPage()
 #endif // Q_OS_WIN32
 	_useOpenGL->setChecked(_options->useOpenGL);
 
-	QFormLayout *systemLayout = new QFormLayout();
-	systemLayout->addWidget(_useOpenGL);
+	_pixmapCache = new QSpinBox();
+	_pixmapCache->setMinimum(16);
+	_pixmapCache->setMaximum(1024);
+	_pixmapCache->setSuffix(UNIT_SPACE + tr("MB"));
+	_pixmapCache->setValue(_options->pixmapCache);
+
+	QFormLayout *cacheLayout = new QFormLayout();
+	cacheLayout->addRow(tr("Image cache size:"), _pixmapCache);
+
+	QFormLayout *openGLLayout = new QFormLayout();
+	openGLLayout->addWidget(_useOpenGL);
 
 	QWidget *systemTab = new QWidget();
-	systemTab->setLayout(systemLayout);
+	QVBoxLayout *systemTabLayout = new QVBoxLayout();
+	systemTabLayout->addLayout(cacheLayout);
+	systemTabLayout->addLayout(openGLLayout);
+	systemTabLayout->addStretch();
+	systemTab->setLayout(systemTabLayout);
 
 	QTabWidget *systemPage = new QTabWidget();
 	systemPage->addTab(systemTab, tr("System"));
@@ -275,6 +288,7 @@ void OptionsDialog::accept()
 		_options->poiRadius = _poiRadius->value() * KMINM;
 
 	_options->useOpenGL = _useOpenGL->isChecked();
+	_options->pixmapCache = _pixmapCache->value();
 
 	_options->printName = _name->isChecked();
 	_options->printDate = _date->isChecked();

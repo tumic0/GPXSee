@@ -94,6 +94,8 @@
 #define POI_RADIUS_DEFAULT                (IMPERIAL_UNITS() ? MIINM : KMINM)
 #define USE_OPENGL_SETTING                "useOpenGL"
 #define USE_OPENGL_DEFAULT                false
+#define PIXMAP_CACHE_SETTING              "pixmapCache"
+#define PIXMAP_CACHE_DEFAULT              64
 #define PRINT_NAME_SETTING                "printName"
 #define PRINT_NAME_DEFAULT                true
 #define PRINT_DATE_SETTING                "printDate"

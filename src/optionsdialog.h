@@ -26,6 +26,7 @@ struct Options {
 	int poiRadius;
 	// System
 	bool useOpenGL;
+	int pixmapCache;
 	// Print/Export
 	bool printName;
 	bool printDate;
@@ -66,6 +67,7 @@ private:
 	QSpinBox *_graphWidth;
 	QCheckBox *_graphAA;
 	QDoubleSpinBox *_poiRadius;
+	QSpinBox *_pixmapCache;
 	QCheckBox *_useOpenGL;
 	QCheckBox *_name;
 	QCheckBox *_date;
