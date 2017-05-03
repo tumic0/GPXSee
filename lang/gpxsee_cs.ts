@@ -895,7 +895,7 @@
     <message>
         <location filename="../src/optionsdialog.cpp" line="206"/>
         <source>Image cache size:</source>
-        <translation>Mezipamět obrázků:</translation>
+        <translation>Mezipaměť obrázků:</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="219"/>
