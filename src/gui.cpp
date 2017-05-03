@@ -912,7 +912,7 @@ void GUI::openOptions()
 			_tabs.at(i)->useOpenGL(options.useOpenGL);
 	}
 	if (options.pixmapCache != _options.pixmapCache)
-		QPixmapCache::setCacheLimit(options.pixmapCache);
+		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
 
 	_options = options;
 }
