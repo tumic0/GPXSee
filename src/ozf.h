@@ -11,6 +11,8 @@
 class OZF
 {
 public:
+	OZF() : _decrypt(false), _key(0) {}
+
 	bool load(const QString &path);
 
 	QString fileName() const {return _file.fileName();}
@@ -22,8 +24,13 @@ public:
 
 private:
 	template<class T> bool readValue(T &val);
+	bool read(void *data, size_t size);
+	bool readKey();
 	bool readHeaders();
 	bool readTileTable();
+
+	bool _decrypt;
+	quint8 _key;
 
 	QSize _size;
 	QSize _dim;
