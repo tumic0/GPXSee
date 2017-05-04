@@ -18,6 +18,7 @@
 #include "transversemercator.h"
 #include "utm.h"
 #include "lambertconic.h"
+#include "albersequal.h"
 #include "ozf.h"
 #include "offlinemap.h"
 
@@ -25,8 +26,6 @@
 // Abridged Molodensky transformation
 static Coordinates toWGS84(Coordinates c, const Datum &datum)
 {
-	Ellipsoid WGS84(WGS84_RADIUS, WGS84_FLATTENING);
-
 	double dX = datum.dx();
 	double dY = datum.dy();
 	double dZ = datum.dz();
@@ -38,9 +37,9 @@ static Coordinates toWGS84(Coordinates c, const Datum &datum)
 	double ssqlat = slat * slat;
 
 	double from_f = datum.ellipsoid().flattening();
-	double df = WGS84.flattening() - from_f;
+	double df = WGS84_FLATTENING - from_f;
 	double from_a = datum.ellipsoid().radius();
-	double da = WGS84.radius() - from_a;
+	double da = WGS84_RADIUS - from_a;
 	double from_esq = datum.ellipsoid().flattening()
 	  * (2.0 - datum.ellipsoid().flattening());
 	double adb = 1.0 / (1.0 - from_f);
@@ -218,6 +217,10 @@ bool OfflineMap::createProjection(const QString &datum,
 		_projection = new LambertConic(d.ellipsoid(),
 		  setup.standardParallel1, setup.standardParallel2,
 		  setup.latitudeOrigin, setup.longitudeOrigin, setup.scale,
+		  setup.falseEasting, setup.falseNorthing);
+	else if (projection == "Albers Equal Area")
+		_projection = new AlbersEqual(d.ellipsoid(), setup.standardParallel1,
+		  setup.standardParallel2, setup.latitudeOrigin, setup.longitudeOrigin,
 		  setup.falseEasting, setup.falseNorthing);
 	else if (projection == "(UTM) Universal Transverse Mercator") {
 		if (setup.zone)

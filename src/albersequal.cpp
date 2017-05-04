@@ -1,0 +1,190 @@
+#include "ellipsoid.h"
+#include "rd.h"
+#include "albersequal.h"
+
+
+#ifndef M_PI_2
+	#define M_PI_2 1.57079632679489661923
+#endif // M_PI_2
+
+#define ONE_MINUS_SQR(x) (1.0 - (x) * (x))
+#define ALBERS_Q(slat, one_minus_sqr_es_sin, es_sin) \
+	(_one_minus_es2 * ((slat) / (one_minus_sqr_es_sin) - \
+	(1 / (_two_es)) * log((1 - (es_sin)) / (1 + (es_sin)))))
+#define ALBERS_M(clat, one_minus_sqr_es_sin) \
+	((clat) / sqrt(one_minus_sqr_es_sin))
+
+
+AlbersEqual::AlbersEqual(const Ellipsoid &ellipsoid, double standardParallel1,
+  double standardParallel2, double latitudeOrigin, double longitudeOrigin,
+  double falseEasting, double falseNorthing)
+{
+	double sin_lat, sin_lat1, sin_lat2, cos_lat1, cos_lat2;
+	double m1, m2, sqr_m1, sqr_m2;
+	double q0, q1, q2;
+	double es_sin, es_sin1, es_sin2;
+	double one_minus_sqr_es_sin1, one_minus_sqr_es_sin2;
+	double nq0;
+	double sp1, sp2;
+
+
+	_e = ellipsoid;
+	_latitudeOrigin = deg2rad(latitudeOrigin);
+	_longitudeOrigin = deg2rad(longitudeOrigin);
+	_falseEasting = falseEasting;
+	_falseNorthing = falseNorthing;
+
+	sp1 = deg2rad(standardParallel1);
+	sp2 = deg2rad(standardParallel2);
+
+	if (_latitudeOrigin > M_PI)
+		_latitudeOrigin -= M_PI * 2.0;
+
+	_es2 = 2 * _e.flattening() - _e.flattening() * _e.flattening();
+	_es = sqrt(_es2);
+	_one_minus_es2 = 1 - _es2;
+	_two_es = 2 * _es;
+
+	sin_lat = sin(_latitudeOrigin);
+	es_sin = _es * sin_lat;
+	q0 = ALBERS_Q(sin_lat, ONE_MINUS_SQR(es_sin), es_sin);
+
+	sin_lat1 = sin(sp1);
+	cos_lat1 = cos(sp1);
+	es_sin1 = _es * sin_lat1;
+	one_minus_sqr_es_sin1 = ONE_MINUS_SQR(es_sin1);
+	m1 = ALBERS_M(cos_lat1, one_minus_sqr_es_sin1);
+	q1 = ALBERS_Q(sin_lat1, one_minus_sqr_es_sin1, es_sin1);
+
+	sqr_m1 = m1 * m1;
+	if (fabs(sp1 - sp2) > 1.0e-10) {
+		sin_lat2 = sin(sp2);
+		cos_lat2 = cos(sp2);
+		es_sin2 = _es * sin_lat2;
+		one_minus_sqr_es_sin2 = ONE_MINUS_SQR(es_sin2);
+		m2 = ALBERS_M(cos_lat2, one_minus_sqr_es_sin2);
+		q2 = ALBERS_Q(sin_lat2, one_minus_sqr_es_sin2, es_sin2);
+		sqr_m2 = m2 * m2;
+		_n = (sqr_m1 - sqr_m2) / (q2 - q1);
+	} else
+		_n = sin_lat1;
+
+	_C = sqr_m1 + _n * q1;
+	_a_over_n = _e.radius() / _n;
+	nq0 = _n * q0;
+	_rho0 = (_C < nq0) ? 0 : _a_over_n * sqrt(_C - nq0);
+}
+
+QPointF AlbersEqual::ll2xy(const Coordinates &c) const
+{
+	double dlam;
+	double sin_lat;
+	double es_sin;
+	double q;
+	double rho;
+	double theta;
+	double nq;
+
+
+	dlam = deg2rad(c.lon()) - _longitudeOrigin;
+	if (dlam > M_PI)
+		dlam -= 2.0 * M_PI;
+	if (dlam < -M_PI)
+		dlam += 2.0 * M_PI;
+
+	sin_lat = sin(deg2rad(c.lat()));
+	es_sin = _es * sin_lat;
+	q = ALBERS_Q(sin_lat, ONE_MINUS_SQR(es_sin), es_sin);
+	nq = _n * q;
+	rho = (_C < nq) ? 0 : _a_over_n * sqrt(_C - nq);
+	theta = _n * dlam;
+
+	return QPointF(rho * sin(theta) + _falseEasting,
+	  _rho0 - rho * cos(theta) + _falseNorthing);
+}
+
+Coordinates AlbersEqual::xy2ll(const QPointF &p) const
+{
+	double dy, dx;
+	double rho0_minus_dy;
+	double q, qc, q_over_2;
+	double rho, rho_n;
+	double phi, delta_phi = 1.0;
+	double sin_phi;
+	double es_sin, one_minus_sqr_es_sin;
+	double theta = 0.0;
+	int count = 30;
+	double tolerance = 4.85e-10;
+	double lat, lon;
+
+
+	dy = p.y() - _falseNorthing;
+	dx = p.x() - _falseEasting;
+
+	rho0_minus_dy = _rho0 - dy;
+	rho = sqrt(dx * dx + rho0_minus_dy * rho0_minus_dy);
+
+	if (_n < 0) {
+		rho *= -1.0;
+		dy *= -1.0;
+		dx *= -1.0;
+		rho0_minus_dy *= -1.0;
+	}
+
+	if (rho != 0.0)
+		theta = atan2(dx, rho0_minus_dy);
+	rho_n = rho * _n;
+	q = (_C - (rho_n * rho_n) / (_e.radius() * _e.radius())) / _n;
+	qc = 1 - ((_one_minus_es2) / (_two_es)) * log((1.0 - _es) / (1.0 + _es));
+	if (fabs(fabs(qc) - fabs(q)) > 1.0e-6) {
+		q_over_2 = q / 2.0;
+		if (q_over_2 > 1.0)
+			lat = M_PI_2;
+		else if (q_over_2 < -1.0)
+			lat = -M_PI_2;
+		else {
+			phi = asin(q_over_2);
+			if (_es < 1.0e-10)
+				lat = phi;
+			else  {
+				while ((fabs(delta_phi) > tolerance) && count) {
+					sin_phi = sin(phi);
+					es_sin = _es * sin_phi;
+					one_minus_sqr_es_sin = ONE_MINUS_SQR(es_sin);
+					delta_phi = (one_minus_sqr_es_sin * one_minus_sqr_es_sin)
+					  / (2.0 * cos(phi)) * (q / (_one_minus_es2) - sin_phi
+					  / one_minus_sqr_es_sin + (log((1.0 - es_sin)
+					  / (1.0 + es_sin)) / (_two_es)));
+					phi += delta_phi;
+					count --;
+				}
+
+				lat = phi;
+			}
+
+			if (lat > M_PI_2)
+				lat = M_PI_2;
+			else if (lat < -M_PI_2)
+				lat = -M_PI_2;
+		}
+	} else {
+		if (q >= 0.0)
+			lat = M_PI_2;
+		else
+			lat = -M_PI_2;
+	}
+
+	lon = _longitudeOrigin + theta / _n;
+
+	if (lon > M_PI)
+		lon -= M_PI * 2;
+	if (lon < -M_PI)
+		lon += M_PI * 2;
+
+	if (lon > M_PI)
+		lon = M_PI;
+	else if (lon < -M_PI)
+		lon = -M_PI;
+
+	return Coordinates(rad2deg(lon), rad2deg(lat));
+}

@@ -92,7 +92,8 @@ HEADERS += src/config.h \
     src/ellipsoid.h \
     src/ozf.h \
     src/datum.h \
-    src/maplist.h
+    src/maplist.h \
+    src/albersequal.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -158,7 +159,8 @@ SOURCES += src/main.cpp \
     src/ellipsoid.cpp \
     src/ozf.cpp \
     src/datum.cpp \
-    src/maplist.cpp
+    src/maplist.cpp \
+    src/albersequal.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \
