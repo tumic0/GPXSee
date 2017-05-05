@@ -100,14 +100,18 @@ int OfflineMap::parse(QIODevice &device, QList<ReferencePoint> &points,
 				qreal lonm = list.at(10).trimmed().toFloat(&res);
 				if (!res)
 					ll = false;
-				if (ll && list.at(8).trimmed() == "S")
+				if (ll && list.at(8).trimmed() == "S") {
 					latd = -latd;
-				if (ll && list.at(11).trimmed() == "W")
+					latm = -latm;
+				}
+				if (ll && list.at(11).trimmed() == "W") {
 					lond = -lond;
+					lonm = -lonm;
+				}
 
-				int zone = list.at(13).trimmed().toInt(&res);
+				setup.zone = list.at(13).trimmed().toInt(&res);
 				if (!res)
-					zone = 0;
+					setup.zone = 0;
 				qreal ppx = list.at(14).trimmed().toFloat(&res);
 				if (!res)
 					pp = false;
@@ -115,7 +119,7 @@ int OfflineMap::parse(QIODevice &device, QList<ReferencePoint> &points,
 				if (!res)
 					pp = false;
 				if (list.at(16).trimmed() == "S")
-					zone = -zone;
+					setup.zone = -setup.zone;
 
 				ReferencePoint p;
 				p.xy = QPoint(x, y);
@@ -127,7 +131,6 @@ int OfflineMap::parse(QIODevice &device, QList<ReferencePoint> &points,
 						return ln;
 				} else if (pp) {
 					p.pp = QPointF(ppx, ppy);
-					setup.zone = zone;
 					points.append(p);
 				} else
 					return ln;
@@ -242,7 +245,10 @@ bool OfflineMap::createProjection(const QString &datum,
 			_errorString = "Can not determine UTM zone";
 			return false;
 		}
-	} else {
+	} else if (projection == "(NZTM2) New Zealand TM 2000")
+		_projection = new TransverseMercator(d.ellipsoid(), 173.0, 0.9996,
+		  1600000, 10000000);
+	else {
 		_errorString = QString("%1: Unknown map projection").arg(projection);
 		return false;
 	}
