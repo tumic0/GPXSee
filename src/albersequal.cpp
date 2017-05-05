@@ -37,9 +37,6 @@ AlbersEqual::AlbersEqual(const Ellipsoid &ellipsoid, double standardParallel1,
 	sp1 = deg2rad(standardParallel1);
 	sp2 = deg2rad(standardParallel2);
 
-	if (_latitudeOrigin > M_PI)
-		_latitudeOrigin -= M_PI * 2.0;
-
 	_es2 = 2 * _e.flattening() - _e.flattening() * _e.flattening();
 	_es = sqrt(_es2);
 	_one_minus_es2 = 1 - _es2;
