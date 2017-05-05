@@ -121,7 +121,10 @@ int OfflineMap::parse(QIODevice &device, QList<ReferencePoint> &points,
 				p.xy = QPoint(x, y);
 				if (ll) {
 					p.ll = Coordinates(lond + lonm/60.0, latd + latm/60.0);
-					points.append(p);
+					if (p.ll.isValid())
+						points.append(p);
+					else
+						return ln;
 				} else if (pp) {
 					p.pp = QPointF(ppx, ppy);
 					setup.zone = zone;
@@ -202,6 +205,14 @@ bool OfflineMap::createProjection(const QString &datum,
 	Datum d = Datum::datum(datum);
 	if (d.isNull()) {
 		_errorString = QString("%1: Unknown datum").arg(datum);
+		return false;
+	}
+
+	if (setup.latitudeOrigin < -90.0 || setup.latitudeOrigin > 90.0
+	  || setup.longitudeOrigin < -180.0 || setup.longitudeOrigin > 180.0
+	  || setup.standardParallel1 < -90 || setup.standardParallel1 > 90
+	  || setup.standardParallel2 < -90 || setup.standardParallel2 > 90) {
+		_errorString = "Invalid projection setup";
 		return false;
 	}
 
