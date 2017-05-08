@@ -248,6 +248,15 @@ bool OfflineMap::createProjection(const QString &datum,
 	} else if (projection == "(NZTM2) New Zealand TM 2000")
 		_projection = new TransverseMercator(d.ellipsoid(), 0, 173.0, 0.9996,
 		  1600000, 10000000);
+	else if (projection == "(BNG) British National Grid")
+		_projection = new TransverseMercator(d.ellipsoid(), 49, -2, 0.999601,
+		  400000, -100000);
+	else if (projection == "(IG) Irish Grid")
+		_projection = new TransverseMercator(d.ellipsoid(), 53.5, -8, 1.000035,
+		  200000, 250000);
+	else if (projection == "(SG) Swedish Grid")
+		_projection = new TransverseMercator(d.ellipsoid(), 0, 15.808278, 1,
+		  1500000, 0);
 	else {
 		_errorString = QString("%1: Unknown map projection").arg(projection);
 		return false;
