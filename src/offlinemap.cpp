@@ -223,8 +223,8 @@ bool OfflineMap::createProjection(const QString &datum,
 		_projection = new Mercator();
 	else if (projection == "Transverse Mercator")
 		_projection = new TransverseMercator(d.ellipsoid(),
-		  setup.longitudeOrigin, setup.scale, setup.falseEasting,
-		  setup.falseNorthing);
+		  setup.latitudeOrigin, setup.longitudeOrigin, setup.scale,
+		  setup.falseEasting, setup.falseNorthing);
 	else if (projection == "Latitude/Longitude")
 		_projection = new LatLon();
 	else if (projection == "Lambert Conformal Conic")
@@ -246,7 +246,7 @@ bool OfflineMap::createProjection(const QString &datum,
 			return false;
 		}
 	} else if (projection == "(NZTM2) New Zealand TM 2000")
-		_projection = new TransverseMercator(d.ellipsoid(), 173.0, 0.9996,
+		_projection = new TransverseMercator(d.ellipsoid(), 0, 173.0, 0.9996,
 		  1600000, 10000000);
 	else {
 		_errorString = QString("%1: Unknown map projection").arg(projection);

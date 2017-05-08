@@ -4,90 +4,210 @@
 #include "transversemercator.h"
 
 
+#define SPHSN(lat) \
+	((double)(_e.radius() / sqrt(1.e0 - _es * pow(sin(lat), 2))))
+#define SPHTMD(lat) \
+	((double)(_ap * lat - _bp * sin(2.e0 * lat) + _cp * sin(4.e0 * lat) \
+	  - _dp * sin(6.e0 * lat) + _ep * sin(8.e0 * lat)))
+#define DENOM(lat) \
+	((double)(sqrt(1.e0 - _es * pow(sin(lat),2))))
+#define SPHSR(lat) \
+	((double)(_e.radius() * (1.e0 - _es) / pow(DENOM(lat), 3)))
+
+
 TransverseMercator::TransverseMercator(const Ellipsoid &ellipsoid,
-  double centralMeridian, double scale, double falseEasting,
-  double falseNorthing)
+  double latitudeOrigin, double longitudeOrigin, double scale,
+  double falseEasting, double falseNorthing)
 {
-	_centralMeridian = centralMeridian;
+	double tn, tn2, tn3, tn4, tn5;
+	double b;
+
+
+	_e = ellipsoid;
+	_longitudeOrigin = deg2rad(longitudeOrigin);
+	_latitudeOrigin = deg2rad(latitudeOrigin);
 	_scale = scale;
 	_falseEasting = falseEasting;
 	_falseNorthing = falseNorthing;
 
+	_es = 2 * _e.flattening() - _e.flattening() * _e.flattening();
+	_ebs = (1 / (1 - _es)) - 1;
 
-	const double e2 = ellipsoid.flattening() * (2 - ellipsoid.flattening());
-	const double n = ellipsoid.flattening() / (2 - ellipsoid.flattening());
-	_rectifyingRadius = ellipsoid.radius() / (1 + n)
-	  * (1 + 0.25*pow(n, 2) + 0.015625*pow(n, 4));
+	b = _e.radius() * (1 - _e.flattening());
 
-	_A = e2;
-	_B = (5 * pow(e2, 2) - pow(e2, 3)) / 6.0;
-	_C = (104 * pow(e2, 3) - 45 * pow(e2, 4)) / 120.0;
-	_D = (1237 * pow(e2, 4)) / 1260.0;
+	tn = (_e.radius() - b) / (_e.radius() + b);
+	tn2 = tn * tn;
+	tn3 = tn2 * tn;
+	tn4 = tn3 * tn;
+	tn5 = tn4 * tn;
 
-	_beta1 = 1/2.0 * n - 2/3.0 * pow(n, 2) + 5/16.0 * pow(n, 3) + 41/180.0
-	  * pow(n, 4);
-	_beta2 = 13/48.0 * pow(n, 2) - 3/5.0 * pow(n, 3) + 557/1440.0 * pow(n, 4);
-	_beta3 = 61/240.0 * pow(n, 3) - 103/140.0 * pow(n, 4);
-	_beta4 = 49561/161280.0 * pow(n, 4);
-
-	_delta1 = 1/2.0 * n - 2/3.0 * pow(n, 2) + 37/96.0 * pow(n, 3) - 1/360.0
-	  * pow(n, 4);
-	_delta2 = 1/48.0 * pow(n, 2) + 1/15.0 * pow(n, 3) - 437/1440.0 * pow(n, 4);
-	_delta3 = 17/480.0 * pow(n, 3) - 37/840.0 * pow(n, 4);
-	_delta4 = 4397/161280.0 * pow(n, 4);
-
-	_AStar = e2 + pow(e2, 2) + pow(e2, 3) + pow(e2, 4);
-	_BStar = (7 * pow(e2, 2) + 17 * pow(e2, 3) + 30 * pow(e2, 4)) / -6;
-	_CStar = (224 * pow(e2, 3) + 889 * pow(e2, 4)) / 120;
-	_DStar = (4279 * pow(e2, 4)) / -1260;
+	_ap = _e.radius() * (1.e0 - tn + 5.e0 * (tn2 - tn3) / 4.e0 + 81.e0
+	  * (tn4 - tn5) / 64.e0);
+	_bp = 3.e0 * _e.radius() * (tn - tn2 + 7.e0 * (tn3 - tn4) / 8.e0 + 55.e0
+	  * tn5 / 64.e0 ) / 2.e0;
+	_cp = 15.e0 * _e.radius() * (tn2 - tn3 + 3.e0 * (tn4 - tn5 ) / 4.e0) / 16.0;
+	_dp = 35.e0 * _e.radius() * (tn3 - tn4 + 11.e0 * tn5 / 16.e0) / 48.e0;
+	_ep = 315.e0 * _e.radius() * (tn4 - tn5) / 512.e0;
 }
 
 QPointF TransverseMercator::ll2xy(const Coordinates &c) const
 {
-	QPointF p;
+	double rl;
+	double cl, c2, c3, c5, c7;
+	double dlam;
+	double eta, eta2, eta3, eta4;
+	double sl, sn;
+	double t, tan2, tan3, tan4, tan5, tan6;
+	double t1, t2, t3, t4, t5, t6, t7, t8, t9;
+	double tmd, tmdo;
+	double x, y;
 
-	double phi = deg2rad(c.lat());
-	double lambda = deg2rad(c.lon());
-	double lambda0 = deg2rad(_centralMeridian);
 
-	double deltaLambda = lambda - lambda0;
+	dlam = deg2rad(c.lon()) - _longitudeOrigin;
 
-	double phiStar = phi - sin(phi) * cos(phi) * (_A + _B*pow(sin(phi), 2)
-	  + _C*pow(sin(phi), 4) + _D*pow(sin(phi), 6));
+	if (dlam > M_PI)
+		dlam -= (2 * M_PI);
+	if (dlam < -M_PI)
+		dlam += (2 * M_PI);
+	if (fabs(dlam) < 2.e-10)
+		dlam = 0.0;
 
-	double xiPrim = atan(tan(phiStar) / cos(deltaLambda));
-	double etaPrim = atanh(cos(phiStar) * sin(deltaLambda));
+	rl = deg2rad(c.lat());
+	sl = sin(rl);
+	cl = cos(rl);
+	c2 = cl * cl;
+	c3 = c2 * cl;
+	c5 = c3 * c2;
+	c7 = c5 * c2;
+	t = sl / cl;
+	tan2 = t * t;
+	tan3 = tan2 * t;
+	tan4 = tan3 * t;
+	tan5 = tan4 * t;
+	tan6 = tan5 * t;
+	eta = _ebs * c2;
+	eta2 = eta * eta;
+	eta3 = eta2 * eta;
+	eta4 = eta3 * eta;
 
-	p.ry() = _falseNorthing + _scale * _rectifyingRadius * (xiPrim + _beta1
-	  * sin(2*xiPrim) * cosh(2*etaPrim) + _beta2 * sin(4*xiPrim)
-	  * cosh(4*etaPrim) + _beta3 * sin(6*xiPrim) * cosh(6*etaPrim) + _beta4
-	  * sin(8*xiPrim) * cosh(8*etaPrim));
-	p.rx() = _falseEasting + _scale * _rectifyingRadius * (etaPrim + _beta1
-	  * cos(2*xiPrim) * sinh(2*etaPrim) + _beta2 * cos(4*xiPrim)
-	  * sinh(4*etaPrim) + _beta3 * cos(6*xiPrim) * sinh(6*etaPrim) + _beta4
-	  * cos(8*xiPrim) * sinh(8*etaPrim));
+	sn = SPHSN(rl);
+	tmd = SPHTMD(rl);
+	tmdo = SPHTMD (_latitudeOrigin);
 
-	return p;
+
+	t1 = (tmd - tmdo) * _scale;
+	t2 = sn * sl * cl * _scale / 2.e0;
+	t3 = sn * sl * c3 * _scale * (5.e0 - tan2 + 9.e0 * eta + 4.e0 * eta2)
+	  / 24.e0;
+	t4 = sn * sl * c5 * _scale * (61.e0 - 58.e0 * tan2 + tan4 + 270.e0 * eta
+	  - 330.e0 * tan2 * eta + 445.e0 * eta2 + 324.e0 * eta3 - 680.e0 * tan2
+	  * eta2 + 88.e0 * eta4 - 600.e0 * tan2 * eta3 - 192.e0 * tan2 * eta4)
+	  / 720.e0;
+	t5 = sn * sl * c7 * _scale * (1385.e0 - 3111.e0 * tan2 + 543.e0 * tan4
+	  - tan6) / 40320.e0;
+
+	y = _falseNorthing + t1 + pow(dlam, 2.e0) * t2 + pow(dlam, 4.e0) * t3
+	  + pow(dlam, 6.e0) * t4 + pow(dlam, 8.e0) * t5;
+
+
+	t6 = sn * cl * _scale;
+	t7 = sn * c3 * _scale * (1.e0 - tan2 + eta) /6.e0;
+	t8 = sn * c5 * _scale * (5.e0 - 18.e0 * tan2 + tan4 + 14.e0 * eta - 58.e0
+	  * tan2 * eta + 13.e0 * eta2 + 4.e0 * eta3 - 64.e0 * tan2 * eta2 - 24.e0
+	  * tan2 * eta3) / 120.e0;
+	t9 = sn * c7 * _scale * (61.e0 - 479.e0 * tan2 + 179.e0 * tan4 - tan6)
+	  / 5040.e0;
+
+	x = _falseEasting + dlam * t6 + pow(dlam, 3.e0) * t7 + pow(dlam, 5.e0)
+	  * t8 + pow(dlam, 7.e0) * t9;
+
+	return QPointF(x, y);
 }
 
 Coordinates TransverseMercator::xy2ll(const QPointF &p) const
 {
-	double xi = (p.y() - _falseNorthing) / (_scale * _rectifyingRadius);
-	double eta = (p.x() - _falseEasting) / (_scale * _rectifyingRadius);
+	double cl;
+	double de;
+	double dlam;
+	double eta, eta2, eta3, eta4;
+	double ftphi;
+	double sn;
+	double sr;
+	double t, tan2, tan4;
+	double t10, t11, t12, t13, t14, t15, t16, t17;
+	double tmd, tmdo;
+	double lat, lon;
 
-	double xiPrim = xi - _delta1 * sin(2*xi) * cosh(2*eta) - _delta2 * sin(4*xi)
-	  * cosh(4*eta) - _delta3 * sin(6*xi) * cosh(6*eta) - _delta4 * sin(8*xi)
-	  * cosh(8*eta);
-	double etaPrim = eta - _delta1 * cos(2*xi) * sinh(2*eta) - _delta2
-	  * cos(4*xi) * sinh(4*eta) - _delta3 * cos(6*xi) * sinh(6*eta) - _delta4
-	  * cos(8*xi) * sinh(8*eta);
 
-	double phiStar = asin(sin(xiPrim) / cosh(etaPrim));
-	double deltaLambda = atan(sinh(etaPrim) / cos(xiPrim));
+	tmdo = SPHTMD(_latitudeOrigin);
+	tmd = tmdo + (p.y() - _falseNorthing) / _scale;
 
-	double phi = phiStar + sin(phiStar) * cos(phiStar) * (_AStar + _BStar
-	  * pow(sin(phiStar), 2) + _CStar * pow(sin(phiStar), 4) + _DStar
-	  * pow(sin(phiStar), 6));
+	sr = SPHSR(0.e0);
+	ftphi = tmd / sr;
 
-	return Coordinates(_centralMeridian + rad2deg(deltaLambda), rad2deg(phi));
+	for (int i = 0; i < 5 ; i++) {
+		t10 = SPHTMD(ftphi);
+		sr = SPHSR(ftphi);
+		ftphi = ftphi + (tmd - t10) / sr;
+	}
+
+	sr = SPHSR(ftphi);
+	sn = SPHSN(ftphi);
+
+    cl = cos(ftphi);
+
+    t = tan(ftphi);
+    tan2 = t * t;
+    tan4 = tan2 * tan2;
+    eta = _ebs * pow(cl, 2);
+    eta2 = eta * eta;
+    eta3 = eta2 * eta;
+    eta4 = eta3 * eta;
+    de = p.x() - _falseEasting;
+	if (fabs(de) < 0.0001)
+		de = 0.0;
+
+	t10 = t / (2.e0 * sr * sn * pow(_scale, 2));
+	t11 = t * (5.e0  + 3.e0 * tan2 + eta - 4.e0 * pow(eta, 2) - 9.e0 * tan2
+	  * eta) / (24.e0 * sr * pow(sn, 3) * pow(_scale, 4));
+	t12 = t * (61.e0 + 90.e0 * tan2 + 46.e0 * eta + 45.E0 * tan4 - 252.e0 * tan2
+	  * eta - 3.e0 * eta2 + 100.e0 * eta3 - 66.e0 * tan2 * eta2 - 90.e0 * tan4
+	  * eta + 88.e0 * eta4 + 225.e0 * tan4 * eta2 + 84.e0 * tan2 * eta3 - 192.e0
+	  * tan2 * eta4) / (720.e0 * sr * pow(sn, 5) * pow(_scale, 6));
+	t13 = t * (1385.e0 + 3633.e0 * tan2 + 4095.e0 * tan4 + 1575.e0 * pow(t,6))
+	  / (40320.e0 * sr * pow(sn, 7) * pow(_scale, 8));
+	lat = ftphi - pow(de, 2) * t10 + pow(de, 4) * t11 - pow(de, 6) * t12
+	  + pow(de, 8) * t13;
+
+	t14 = 1.e0 / (sn * cl * _scale);
+	t15 = (1.e0 + 2.e0 * tan2 + eta) / (6.e0 * pow(sn, 3) * cl * pow(_scale, 3));
+	t16 = (5.e0 + 6.e0 * eta + 28.e0 * tan2 - 3.e0 * eta2 + 8.e0 * tan2 * eta
+	  + 24.e0 * tan4 - 4.e0 * eta3 + 4.e0 * tan2 * eta2 + 24.e0 * tan2 * eta3)
+	  / (120.e0 * pow(sn, 5) * cl * pow(_scale, 5));
+	t17 = (61.e0 +  662.e0 * tan2 + 1320.e0 * tan4 + 720.e0 * pow(t,6))
+	  / (5040.e0 * pow(sn, 7) * cl * pow(_scale, 7));
+
+	dlam = de * t14 - pow(de, 3) * t15 + pow(de, 5) * t16 - pow(de, 7) * t17;
+
+	lon = _longitudeOrigin + dlam;
+	while (lat > deg2rad(90.0)) {
+		lat = M_PI - lat;
+		lon += M_PI;
+		if (lon > M_PI)
+			lon -= (2 * M_PI);
+	}
+
+	while (lat < deg2rad(-90.0)) {
+		lat = - (lat + M_PI);
+		lon += M_PI;
+		if (lon > M_PI)
+			lon -= (2 * M_PI);
+	}
+
+	if (lon > (2 * M_PI))
+		lon -= (2 * M_PI);
+	if (lon < -M_PI)
+		lon += (2 * M_PI);
+
+	return Coordinates(rad2deg(lon), rad2deg(lat));
 }
