@@ -98,6 +98,7 @@ PathItem *PathView::addTrack(const Track &track)
 	ti->setColor(_palette.nextColor());
 	ti->setWidth(_trackWidth);
 	ti->setStyle(_trackStyle);
+	ti->setUnits(_units);
 	ti->setVisible(_showTracks);
 	ti->setDigitalZoom(_digitalZoom);
 	_scene->addItem(ti);
@@ -120,6 +121,7 @@ PathItem *PathView::addRoute(const Route &route)
 	ri->setColor(_palette.nextColor());
 	ri->setWidth(_routeWidth);
 	ri->setStyle(_routeStyle);
+	ri->setUnits(_units);
 	ri->setVisible(_showRoutes);
 	ri->showWaypoints(_showRouteWaypoints);
 	ri->showWaypointLabels(_showWaypointLabels);
@@ -142,6 +144,7 @@ void PathView::addWaypoints(const QList<Waypoint> &waypoints)
 		updateWaypointsBoundingRect(QPointF(c.lon(), c.lat()));
 		wi->setZValue(1);
 		wi->showLabel(_showWaypointLabels);
+		wi->setUnits(_units);
 		wi->setVisible(_showWaypoints);
 		wi->setDigitalZoom(_digitalZoom);
 		_scene->addItem(wi);
