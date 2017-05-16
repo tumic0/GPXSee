@@ -205,11 +205,6 @@
         <translation>Otevřít POI soubor</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="311"/>
-        <source>Open</source>
-        <translation>Otevřít</translation>
-    </message>
-    <message>
         <location filename="../src/gui.cpp" line="295"/>
         <source>Quit</source>
         <translation>Ukončit</translation>
@@ -265,11 +260,6 @@
         <translation>Zdroje dat</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="341"/>
-        <source>Load POI file</source>
-        <translation>Nahrát POI soubor</translation>
-    </message>
-    <message>
         <location filename="../src/gui.cpp" line="344"/>
         <source>Close POI files</source>
         <translation>Zavřit POI soubory</translation>
@@ -295,15 +285,24 @@
         <translation>Zobrazit mapu</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="371"/>
-        <location filename="../src/gui.cpp" line="1168"/>
-        <source>Load map</source>
-        <translation>Nahrát mapu</translation>
-    </message>
-    <message>
         <location filename="../src/gui.cpp" line="374"/>
         <source>Clear tile cache</source>
         <translation>Vymazat mezipaměť dlaždic</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="311"/>
+        <source>Open...</source>
+        <translation>Otevřít...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="341"/>
+        <source>Load POI file...</source>
+        <translation>Nahrát POI soubor...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="372"/>
+        <source>Load map...</source>
+        <translation>Nahrát mapu...</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="378"/>
@@ -492,6 +491,11 @@
         <location filename="../src/gui.cpp" line="714"/>
         <source>Offline maps are loaded on program startup from the following directory:</source>
         <translation>Offline mapy jsou načítány při startu aplikace z následujícího adresáře:</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="1168"/>
+        <source>Open map file</source>
+        <translation>Otevřít mapový soubor</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="1201"/>

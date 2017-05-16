@@ -205,11 +205,6 @@
         <translation>Öppna POI-fil</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="311"/>
-        <source>Open</source>
-        <translation>Öppna</translation>
-    </message>
-    <message>
         <location filename="../src/gui.cpp" line="295"/>
         <source>Quit</source>
         <translation>Avsluta</translation>
@@ -265,11 +260,6 @@
         <translation>Datakällor</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="341"/>
-        <source>Load POI file</source>
-        <translation>Läs in POI-fil</translation>
-    </message>
-    <message>
         <location filename="../src/gui.cpp" line="344"/>
         <source>Close POI files</source>
         <translation>Stäng POI-filer</translation>
@@ -295,15 +285,24 @@
         <translation>Visa karta</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="371"/>
-        <location filename="../src/gui.cpp" line="1168"/>
-        <source>Load map</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/gui.cpp" line="374"/>
         <source>Clear tile cache</source>
         <translation>Rensa kart-cache</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="311"/>
+        <source>Open...</source>
+        <translation>Öppna...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="341"/>
+        <source>Load POI file...</source>
+        <translation>Läs in POI-fil...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="372"/>
+        <source>Load map...</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="378"/>
@@ -497,6 +496,11 @@
         <location filename="../src/gui.cpp" line="714"/>
         <source>Offline maps are loaded on program startup from the following directory:</source>
         <translation>Offline-kartor läses in från följande mapp vid programstart:</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="1168"/>
+        <source>Open map file</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="1169"/>

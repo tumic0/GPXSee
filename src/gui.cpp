@@ -308,7 +308,7 @@ void GUI::createActions()
 
 	// File actions
 	_openFileAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)),
-	  tr("Open"), this);
+	  tr("Open..."), this);
 	_openFileAction->setShortcut(OPEN_SHORTCUT);
 	connect(_openFileAction, SIGNAL(triggered()), this, SLOT(openFile()));
 	addAction(_openFileAction);
@@ -338,7 +338,7 @@ void GUI::createActions()
 
 	// POI actions
 	_openPOIAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)),
-	  tr("Load POI file"), this);
+	  tr("Load POI file..."), this);
 	connect(_openPOIAction, SIGNAL(triggered()), this, SLOT(openPOIFile()));
 	_closePOIAction = new QAction(QIcon(QPixmap(CLOSE_FILE_ICON)),
 	  tr("Close POI files"), this);
@@ -368,8 +368,8 @@ void GUI::createActions()
 	connect(_showMapAction, SIGNAL(triggered(bool)), _pathView,
 	  SLOT(showMap(bool)));
 	addAction(_showMapAction);
-	_loadMapAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)), tr("Load map"),
-	  this);
+	_loadMapAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)),
+	  tr("Load map..."), this);
 	connect(_loadMapAction, SIGNAL(triggered()), this, SLOT(loadMap()));
 	_clearMapCacheAction = new QAction(tr("Clear tile cache"), this);
 	connect(_clearMapCacheAction, SIGNAL(triggered()), this,
@@ -1165,7 +1165,7 @@ void GUI::showGraphGrids(bool show)
 
 void GUI::loadMap()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Load map"),
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open map file"),
 	  QString(), tr("Map files (*.map *.tba *.tar)"));
 
 	if (fileName.isEmpty())

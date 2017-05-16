@@ -205,11 +205,6 @@
         <translation>POI Datei öffnen</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="311"/>
-        <source>Open</source>
-        <translation>Öffnen</translation>
-    </message>
-    <message>
         <location filename="../src/gui.cpp" line="295"/>
         <source>Quit</source>
         <translation>Beenden</translation>
@@ -265,11 +260,6 @@
         <translation>Datenquellen</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="341"/>
-        <source>Load POI file</source>
-        <translation>POI-Datei laden</translation>
-    </message>
-    <message>
         <location filename="../src/gui.cpp" line="344"/>
         <source>Close POI files</source>
         <translation>POI-Datei schließen</translation>
@@ -295,15 +285,24 @@
         <translation>Karte anzeigen</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="371"/>
-        <location filename="../src/gui.cpp" line="1168"/>
-        <source>Load map</source>
-        <translation>Karte laden</translation>
-    </message>
-    <message>
         <location filename="../src/gui.cpp" line="374"/>
         <source>Clear tile cache</source>
         <translation>Tile-Cache bereinigen</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="311"/>
+        <source>Open...</source>
+        <translation>Öffnen...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="341"/>
+        <source>Load POI file...</source>
+        <translation>POI-Datei laden...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="372"/>
+        <source>Load map...</source>
+        <translation>Karte laden...</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="378"/>
@@ -497,6 +496,11 @@
         <location filename="../src/gui.cpp" line="714"/>
         <source>Offline maps are loaded on program startup from the following directory:</source>
         <translation>Offlinekarten werden zu Programmstart aus dem folgenden Verzeichnis geladen:</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="1168"/>
+        <source>Open map file</source>
+        <translation>Karte Datei öffnen</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="1169"/>
