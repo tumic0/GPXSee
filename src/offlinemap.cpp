@@ -26,14 +26,13 @@
 // Abridged Molodensky transformation
 static Coordinates toWGS84(Coordinates c, const Datum &datum)
 {
-	double dX = datum.dx();
-	double dY = datum.dy();
-	double dZ = datum.dz();
+	double rlat = deg2rad(c.lat());
+	double rlon = deg2rad(c.lon());
 
-	double slat = sin(deg2rad(c.lat()));
-	double clat = cos(deg2rad(c.lat()));
-	double slon = sin(deg2rad(c.lon()));
-	double clon = cos(deg2rad(c.lon()));
+	double slat = sin(rlat);
+	double clat = cos(rlat);
+	double slon = sin(rlon);
+	double clon = cos(rlon);
 	double ssqlat = slat * slat;
 
 	double from_f = datum.ellipsoid().flattening();
@@ -47,10 +46,11 @@ static Coordinates toWGS84(Coordinates c, const Datum &datum)
 	double rm = from_a * (1 - from_esq) / pow((1 - from_esq * ssqlat), 1.5);
 	double from_h = 0.0;
 
-	double dlat = (-dX * slat * clon - dY * slat * slon + dZ * clat + da * rn
-	  * from_esq * slat * clat / from_a + +df * (rm * adb + rn / adb) * slat
-	  * clat) / (rm + from_h);
-	double dlon = (-dX * slon + dY * clon) / ((rn + from_h) * clat);
+	double dlat = (-datum.dx() * slat * clon - datum.dy() * slat * slon
+	  + datum.dz() * clat + da * rn * from_esq * slat * clat / from_a + df
+	  * (rm * adb + rn / adb) * slat * clat) / (rm + from_h);
+	double dlon = (-datum.dx() * slon + datum.dy() * clon) / ((rn + from_h)
+	  * clat);
 
 	return Coordinates(c.lon() + rad2deg(dlon), c.lat() + rad2deg(dlat));
 }
