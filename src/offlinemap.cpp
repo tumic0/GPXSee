@@ -279,7 +279,7 @@ bool OfflineMap::createProjection(const QString &datum,
 
 bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
 {
-	Q_ASSERT(points.count() >= 2);
+	Q_ASSERT(points.size() >= 2);
 
 	Matrix c(3, 2);
 	c.zeroize();

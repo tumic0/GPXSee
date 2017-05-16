@@ -166,7 +166,6 @@ Coordinates AlbersEqual::xy2ll(const QPointF &p) const
 
 	if (_n < 0) {
 		rho *= -1.0;
-		dy *= -1.0;
 		dx *= -1.0;
 		rho0_minus_dy *= -1.0;
 	}
