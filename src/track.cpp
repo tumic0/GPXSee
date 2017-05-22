@@ -49,24 +49,26 @@ static QSet<int> eliminate(const QVector<qreal> &v, int window)
 
 static Graph filter(const Graph &g, int window)
 {
-	qreal acc = 0;
-	Graph ret;
-
 	if (g.size() < window)
-		return ret;
+		return Graph();
+	if (window < 2)
+		return Graph(g);
+
+	qreal acc = 0;
+	Graph ret(g.size());
 
 	for (int i = 0; i < window; i++)
 		acc += g.at(i).y();
 	for (int i = 0; i <= window/2; i++)
-		ret.append(GraphPoint(g.at(i).s(), g.at(i).t(), acc/window));
+		ret[i] = GraphPoint(g.at(i).s(), g.at(i).t(), acc/window);
 
 	for (int i = window/2 + 1; i < g.size() - window/2; i++) {
 		acc += g.at(i + window/2).y() - g.at(i - (window/2 + 1)).y();
-		ret.append(GraphPoint(g.at(i).s(), g.at(i).t(), acc/window));
+		ret[i] = GraphPoint(g.at(i).s(), g.at(i).t(), acc/window);
 	}
 
 	for (int i = g.size() - window/2; i < g.size(); i++)
-		ret.append(GraphPoint(g.at(i).s(), g.at(i).t(), acc/window));
+		ret[i] = GraphPoint(g.at(i).s(), g.at(i).t(), acc/window);
 
 	return ret;
 }
