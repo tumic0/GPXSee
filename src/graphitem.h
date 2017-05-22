@@ -50,6 +50,8 @@ private:
 	QPainterPath _path;
 	QRectF _bounds;
 	qreal _sx, _sy;
+
+	bool _time;
 };
 
 #endif // GRAPHITEM_H

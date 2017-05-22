@@ -14,6 +14,14 @@ GraphItem::GraphItem(const Graph &graph, QGraphicsItem *parent)
 	_graph = graph;
 	_sx = 1.0; _sy = 1.0;
 
+	_time = true;
+	for (int i = 0; i < _graph.size(); i++) {
+		if (std::isnan(_graph.at(i).t())) {
+			_time = false;
+			break;
+		}
+	}
+
 	setZValue(1.0);
 
 	updatePath();
@@ -124,7 +132,7 @@ qreal GraphItem::distanceAtTime(qreal time)
 void GraphItem::emitSliderPositionChanged(qreal pos)
 {
 	if (_type == Time) {
-		if (_graph.hasTime()) {
+		if (_time) {
 			if (pos >= _graph.first().t() && pos <= _graph.last().t())
 				emit sliderPositionChanged(distanceAtTime(pos));
 			else
@@ -163,7 +171,7 @@ void GraphItem::updatePath()
 {
 	_path = QPainterPath();
 
-	if (_type == Time && !_graph.hasTime())
+	if (_type == Time && !_time)
 		return;
 
 	_path.moveTo(_graph.first().x(_type) * _sx, -_graph.first().y() * _sy);
@@ -173,7 +181,7 @@ void GraphItem::updatePath()
 
 void GraphItem::updateBounds()
 {
-	if (_type == Time && !_graph.hasTime()) {
+	if (_type == Time && !_time) {
 		_bounds = QRectF();
 		return;
 	}

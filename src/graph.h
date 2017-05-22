@@ -31,22 +31,6 @@ private:
 Q_DECLARE_TYPEINFO(GraphPoint, Q_PRIMITIVE_TYPE);
 QDebug operator<<(QDebug dbg, const GraphPoint &point);
 
-
-class Graph : public QVector<GraphPoint>
-{
-public:
-	Graph() : QVector<GraphPoint>() {_time = true;}
-	void append(const GraphPoint &p)
-	{
-		if (std::isnan(p.t()))
-			_time = false;
-		QVector<GraphPoint>::append(p);
-	}
-
-	bool hasTime() const {return _time;}
-
-private:
-	bool _time;
-};
+typedef QVector<GraphPoint> Graph;
 
 #endif // GRAPH_H
