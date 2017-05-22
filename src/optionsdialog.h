@@ -22,6 +22,15 @@ struct Options {
 	int graphWidth;
 	bool pathAntiAliasing;
 	bool graphAntiAliasing;
+	// Data
+	int elevationFilter;
+	int speedFilter;
+	int heartRateFilter;
+	int cadenceFilter;
+	int powerFilter;
+	bool outlierEliminate;
+	qreal pauseSpeed;
+	int pauseInterval;
 	// POI
 	int poiRadius;
 	// System
@@ -51,12 +60,14 @@ public slots:
 
 private:
 	QWidget *createAppearancePage();
+	QWidget *createDataPage();
 	QWidget *createPOIPage();
 	QWidget *createSystemPage();
 	QWidget *createExportPage();
 
 	Options *_options;
 
+	// Appearance
 	ColorBox *_baseColor;
 	QDoubleSpinBox *_colorOffset;
 	QSpinBox *_trackWidth;
@@ -66,9 +77,21 @@ private:
 	QCheckBox *_pathAA;
 	QSpinBox *_graphWidth;
 	QCheckBox *_graphAA;
+	// Data
+	QSpinBox *_elevationFilter;
+	QSpinBox *_speedFilter;
+	QSpinBox *_heartRateFilter;
+	QSpinBox *_cadenceFilter;
+	QSpinBox *_powerFilter;
+	QCheckBox *_outlierEliminate;
+	QDoubleSpinBox *_pauseSpeed;
+	QSpinBox *_pauseInterval;
+	// POI
 	QDoubleSpinBox *_poiRadius;
+	// System
 	QSpinBox *_pixmapCache;
 	QCheckBox *_useOpenGL;
+	// Print/Export
 	QCheckBox *_name;
 	QCheckBox *_date;
 	QCheckBox *_distance;

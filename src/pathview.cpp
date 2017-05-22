@@ -2,6 +2,7 @@
 #include <QGraphicsScene>
 #include <QWheelEvent>
 #include <QApplication>
+#include <QPixmapCache>
 #include "opengl.h"
 #include "misc.h"
 #include "poi.h"
@@ -301,6 +302,7 @@ void PathView::setMap(Map *map)
 	_mapScale->setResolution(_res);
 
 	resetCachedContent();
+	QPixmapCache::clear();
 }
 
 void PathView::setPOI(POI *poi)
@@ -542,6 +544,7 @@ void PathView::clear()
 
 	resetDigitalZoom();
 	resetCachedContent();
+	QPixmapCache::clear();
 }
 
 void PathView::showTracks(bool show)

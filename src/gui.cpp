@@ -874,6 +874,7 @@ void GUI::printFile()
 void GUI::openOptions()
 {
 	Options options(_options);
+	bool reload = false;
 
 	OptionsDialog dialog(&options, this);
 	if (dialog.exec() != QDialog::Accepted)
@@ -903,6 +904,39 @@ void GUI::openOptions()
 			_tabs.at(i)->setRenderHint(QPainter::Antialiasing,
 			  options.graphAntiAliasing);
 
+	if (options.elevationFilter != _options.elevationFilter) {
+		Track::setElevationFilter(options.elevationFilter);
+		reload = true;
+	}
+	if (options.speedFilter != _options.speedFilter) {
+		Track::setSpeedFilter(options.speedFilter);
+		reload = true;
+	}
+	if (options.heartRateFilter != _options.heartRateFilter) {
+		Track::setHeartRateFilter(options.heartRateFilter);
+		reload = true;
+	}
+	if (options.cadenceFilter != _options.cadenceFilter) {
+		Track::setCadenceFilter(options.cadenceFilter);
+		reload = true;
+	}
+	if (options.powerFilter != _options.powerFilter) {
+		Track::setPowerFilter(options.powerFilter);
+		reload = true;
+	}
+	if (options.outlierEliminate != _options.outlierEliminate) {
+		Track::setOutlierElimination(options.outlierEliminate);
+		reload = true;
+	}
+	if (options.pauseSpeed != _options.pauseSpeed) {
+		Track::setPauseSpeed(options.pauseSpeed);
+		reload = true;
+	}
+	if (options.pauseInterval != _options.pauseInterval) {
+		Track::setPauseInterval(options.pauseInterval);
+		reload = true;
+	}
+
 	if (options.poiRadius != _options.poiRadius)
 		_poi->setRadius(options.poiRadius);
 
@@ -913,6 +947,9 @@ void GUI::openOptions()
 	}
 	if (options.pixmapCache != _options.pixmapCache)
 		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
+
+	if (reload)
+		reloadFile();
 
 	_options = options;
 }
@@ -1580,6 +1617,22 @@ void GUI::writeSettings()
 		settings.setValue(PATH_AA_SETTING, _options.pathAntiAliasing);
 	if (_options.graphAntiAliasing != GRAPH_AA_DEFAULT)
 		settings.setValue(GRAPH_AA_SETTING, _options.graphAntiAliasing);
+	if (_options.elevationFilter != ELEVATION_FILTER_DEFAULT)
+		settings.setValue(ELEVATION_FILTER_SETTING, _options.elevationFilter);
+	if (_options.speedFilter != SPEED_FILTER_DEFAULT)
+		settings.setValue(SPEED_FILTER_SETTING, _options.speedFilter);
+	if (_options.heartRateFilter != HEARTRATE_FILTER_DEFAULT)
+		settings.setValue(HEARTRATE_FILTER_SETTING, _options.heartRateFilter);
+	if (_options.cadenceFilter != CADENCE_FILTER_DEFAULT)
+		settings.setValue(CADENCE_FILTER_SETTING, _options.cadenceFilter);
+	if (_options.powerFilter != POWER_FILTER_DEFAULT)
+		settings.setValue(POWER_FILTER_SETTING, _options.powerFilter);
+	if (_options.outlierEliminate != OUTLIER_ELIMINATE_DEFAULT)
+		settings.setValue(OUTLIER_ELIMINATE_SETTING, _options.outlierEliminate);
+	if (_options.pauseSpeed != PAUSE_SPEED_DEFAULT)
+		settings.setValue(PAUSE_SPEED_SETTING, _options.pauseSpeed);
+	if (_options.pauseInterval != PAUSE_INTERVAL_DEFAULT)
+		settings.setValue(PAUSE_INTERVAL_SETTING, _options.pauseInterval);
 	if (_options.poiRadius != POI_RADIUS_DEFAULT)
 		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
 	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
@@ -1759,6 +1812,22 @@ void GUI::readSettings()
 	  GRAPH_WIDTH_DEFAULT).toInt();
 	_options.graphAntiAliasing = settings.value(GRAPH_AA_SETTING,
 	  GRAPH_AA_DEFAULT).toBool();
+	_options.elevationFilter = settings.value(ELEVATION_FILTER_SETTING,
+	  ELEVATION_FILTER_DEFAULT).toInt();
+	_options.speedFilter = settings.value(SPEED_FILTER_SETTING,
+	  SPEED_FILTER_DEFAULT).toInt();
+	_options.heartRateFilter = settings.value(HEARTRATE_FILTER_SETTING,
+	  HEARTRATE_FILTER_DEFAULT).toInt();
+	_options.cadenceFilter = settings.value(CADENCE_FILTER_SETTING,
+	  CADENCE_FILTER_DEFAULT).toInt();
+	_options.powerFilter = settings.value(POWER_FILTER_SETTING,
+	  POWER_FILTER_DEFAULT).toInt();
+	_options.outlierEliminate = settings.value(OUTLIER_ELIMINATE_SETTING,
+	  OUTLIER_ELIMINATE_DEFAULT).toBool();
+	_options.pauseSpeed = settings.value(PAUSE_SPEED_SETTING,
+	  PAUSE_SPEED_DEFAULT).toFloat();
+	_options.pauseInterval = settings.value(PAUSE_INTERVAL_SETTING,
+	  PAUSE_INTERVAL_DEFAULT).toInt();
 	_options.poiRadius = settings.value(POI_RADIUS_SETTING, POI_RADIUS_DEFAULT)
 	  .toInt();
 	_options.useOpenGL = settings.value(USE_OPENGL_SETTING, USE_OPENGL_DEFAULT)
@@ -1797,6 +1866,15 @@ void GUI::readSettings()
 		if (_options.useOpenGL)
 			_tabs.at(i)->useOpenGL(true);
 	}
+
+	Track::setElevationFilter(_options.elevationFilter);
+	Track::setSpeedFilter(_options.speedFilter);
+	Track::setHeartRateFilter(_options.heartRateFilter);
+	Track::setCadenceFilter(_options.cadenceFilter);
+	Track::setPowerFilter(_options.powerFilter);
+	Track::setOutlierElimination(_options.outlierEliminate);
+	Track::setPauseSpeed(_options.pauseSpeed);
+	Track::setPauseInterval(_options.pauseInterval);
 
 	_poi->setRadius(_options.poiRadius);
 

@@ -117,6 +117,77 @@ QWidget *OptionsDialog::createAppearancePage()
 	return appearancePage;
 }
 
+QWidget *OptionsDialog::createDataPage()
+{
+	QString filterToolTip = tr("Moving average window size");
+
+	_elevationFilter = new QSpinBox();
+	_elevationFilter->setValue(_options->elevationFilter);
+	_elevationFilter->setToolTip(filterToolTip);
+	_speedFilter = new QSpinBox();
+	_speedFilter->setValue(_options->speedFilter);
+	_speedFilter->setToolTip(filterToolTip);
+	_heartRateFilter = new QSpinBox();
+	_heartRateFilter->setValue(_options->heartRateFilter);
+	_heartRateFilter->setToolTip(filterToolTip);
+	_cadenceFilter = new QSpinBox();
+	_cadenceFilter->setValue(_options->cadenceFilter);
+	_cadenceFilter->setToolTip(filterToolTip);
+	_powerFilter = new QSpinBox();
+	_powerFilter->setValue(_options->powerFilter);
+	_powerFilter->setToolTip(filterToolTip);
+
+	QFormLayout *filterLayout = new QFormLayout();
+	filterLayout->addRow(tr("Elevation:"), _elevationFilter);
+	filterLayout->addRow(tr("Speed:"), _speedFilter);
+	filterLayout->addRow(tr("Heart rate:"), _heartRateFilter);
+	filterLayout->addRow(tr("Cadence:"), _cadenceFilter);
+	filterLayout->addRow(tr("Power:"), _powerFilter);
+
+	_outlierEliminate = new QCheckBox(tr("Outlier elimination"));
+	_outlierEliminate->setChecked(_options->outlierEliminate);
+
+	QFormLayout *outlierLayout = new QFormLayout();
+	outlierLayout->addWidget(_outlierEliminate);
+
+	QWidget *filterTab = new QWidget();
+	QVBoxLayout *filterTabLayout = new QVBoxLayout();
+	filterTabLayout->addLayout(filterLayout);
+	filterTabLayout->addLayout(outlierLayout);
+	filterTabLayout->addStretch();
+	filterTab->setLayout(filterTabLayout);
+
+	_pauseSpeed = new QDoubleSpinBox();
+	_pauseSpeed->setDecimals(1);
+	_pauseSpeed->setSingleStep(0.1);
+	_pauseSpeed->setMinimum(0.1);
+	if (_options->units == Imperial) {
+		_pauseSpeed->setValue(_options->pauseSpeed * MS2MIH);
+		_pauseSpeed->setSuffix(UNIT_SPACE + tr("mi/h"));
+	} else {
+		_pauseSpeed->setValue(_options->pauseSpeed * MS2KMH);
+		_pauseSpeed->setSuffix(UNIT_SPACE + tr("km/h"));
+	}
+	_pauseInterval = new QSpinBox();
+	_pauseInterval->setMinimum(1);
+	_pauseInterval->setSuffix(UNIT_SPACE + tr("s"));
+	_pauseInterval->setValue(_options->pauseInterval);
+
+	QFormLayout *pauseLayout = new QFormLayout();
+	pauseLayout->addRow(tr("Minimal speed:"), _pauseSpeed);
+	pauseLayout->addRow(tr("Minimal duration:"), _pauseInterval);
+
+	QWidget *pauseTab = new QWidget();
+	pauseTab->setLayout(pauseLayout);
+
+
+	QTabWidget *filterPage = new QTabWidget();
+	filterPage->addTab(filterTab, tr("Filtering"));
+	filterPage->addTab(pauseTab, tr("Pause detection"));
+
+	return filterPage;
+}
+
 QWidget *OptionsDialog::createPOIPage()
 {
 	_poiRadius = new QDoubleSpinBox();
@@ -226,6 +297,7 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
 {
 	QStackedWidget *pages = new QStackedWidget();
 	pages->addWidget(createAppearancePage());
+	pages->addWidget(createDataPage());
 	pages->addWidget(createPOIPage());
 	pages->addWidget(createExportPage());
 	pages->addWidget(createSystemPage());
@@ -234,6 +306,7 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
 	menu->setIconSize(QSize(MENU_ICON_SIZE, MENU_ICON_SIZE));
 	new QListWidgetItem(QIcon(QPixmap(APPEARANCE_ICON)), tr("Appearance"),
 	  menu);
+	new QListWidgetItem(QIcon(QPixmap(DATA_ICON)), tr("Data"), menu);
 	new QListWidgetItem(QIcon(QPixmap(POI_ICON)), tr("POI"), menu);
 	new QListWidgetItem(QIcon(QPixmap(PRINT_EXPORT_ICON)), tr("Print & Export"),
 	  menu);
@@ -282,10 +355,18 @@ void OptionsDialog::accept()
 	_options->graphWidth = _graphWidth->value();
 	_options->graphAntiAliasing = _graphAA->isChecked();
 
-	if (_options->units == Imperial)
-		_options->poiRadius = _poiRadius->value() * MIINM;
-	else
-		_options->poiRadius = _poiRadius->value() * KMINM;
+	_options->elevationFilter = _elevationFilter->value();
+	_options->speedFilter = _speedFilter->value();
+	_options->heartRateFilter = _heartRateFilter->value();
+	_options->cadenceFilter = _cadenceFilter->value();
+	_options->powerFilter = _powerFilter->value();
+	_options->outlierEliminate = _outlierEliminate->isChecked();
+	_options->pauseSpeed = (_options->units == Imperial)
+		? _pauseSpeed->value() / MS2MIH : _pauseSpeed->value() / MS2KMH;
+	_options->pauseInterval = _pauseInterval->value();
+
+	_options->poiRadius = (_options->units == Imperial)
+		? _poiRadius->value() * MIINM :  _poiRadius->value() * KMINM;
 
 	_options->useOpenGL = _useOpenGL->isChecked();
 	_options->pixmapCache = _pixmapCache->value();

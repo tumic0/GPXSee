@@ -90,12 +90,28 @@
 #define PATH_AA_DEFAULT                   true
 #define GRAPH_AA_SETTING                  "graphAntiAliasing"
 #define GRAPH_AA_DEFAULT                  false
+#define ELEVATION_FILTER_SETTING          "elevationFilter"
+#define ELEVATION_FILTER_DEFAULT          3
+#define SPEED_FILTER_SETTING              "speedFilter"
+#define SPEED_FILTER_DEFAULT              7
+#define HEARTRATE_FILTER_SETTING          "heartrateFilter"
+#define HEARTRATE_FILTER_DEFAULT          3
+#define CADENCE_FILTER_SETTING            "cadenceFilter"
+#define CADENCE_FILTER_DEFAULT            3
+#define POWER_FILTER_SETTING              "powerFilter"
+#define POWER_FILTER_DEFAULT              3
+#define OUTLIER_ELIMINATE_SETTING         "outlierEliminate"
+#define OUTLIER_ELIMINATE_DEFAULT         true
+#define PAUSE_SPEED_SETTING               "pauseSpeed"
+#define PAUSE_SPEED_DEFAULT               0.5 /* m/s */
+#define PAUSE_INTERVAL_SETTING            "pauseInterval"
+#define PAUSE_INTERVAL_DEFAULT            10 /* s */
 #define POI_RADIUS_SETTING                "poiRadius"
 #define POI_RADIUS_DEFAULT                (IMPERIAL_UNITS() ? MIINM : KMINM)
 #define USE_OPENGL_SETTING                "useOpenGL"
 #define USE_OPENGL_DEFAULT                false
 #define PIXMAP_CACHE_SETTING              "pixmapCache"
-#define PIXMAP_CACHE_DEFAULT              64
+#define PIXMAP_CACHE_DEFAULT              64 /* MB */
 #define PRINT_NAME_SETTING                "printName"
 #define PRINT_NAME_DEFAULT                true
 #define PRINT_DATE_SETTING                "printDate"

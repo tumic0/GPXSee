@@ -33,6 +33,16 @@ public:
 
 	bool isNull() const {return (_data.size() < 2);}
 
+	static void setElevationFilter(int window) {_elevationWindow = window;}
+	static void setSpeedFilter(int window) {_speedWindow = window;}
+	static void setHeartRateFilter(int window) {_heartRateWindow = window;}
+	static void setCadenceFilter(int window) {_cadenceWindow = window;}
+	static void setPowerFilter(int window) {_powerWindow = window;}
+	static void setPauseSpeed(qreal speed) {_pauseSpeed = speed;}
+	static void setPauseInterval(int interval) {_pauseInterval = interval;}
+	static void setOutlierElimination(bool eliminate)
+	  {_outlierEliminate = eliminate;}
+
 private:
 	bool discardStopPoint(int i) const;
 
@@ -46,6 +56,17 @@ private:
 	QSet<int> _stop;
 
 	qreal _pause;
+
+	static bool _outlierEliminate;
+
+	static int _elevationWindow;
+	static int _speedWindow;
+	static int _heartRateWindow;
+	static int _cadenceWindow;
+	static int _powerWindow;
+
+	static qreal _pauseSpeed;
+	static int _pauseInterval;
 };
 
 #endif // TRACK_H

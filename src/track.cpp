@@ -1,16 +1,17 @@
 #include "track.h"
 
+#define OUTLIER_WINDOW 31
 
-#define WINDOW_OE 31
+int Track::_elevationWindow = 3;
+int Track::_speedWindow = 7;
+int Track::_heartRateWindow = 3;
+int Track::_cadenceWindow = 3;
+int Track::_powerWindow = 3;
 
-#define WINDOW_EF 3
-#define WINDOW_SF 7
-#define WINDOW_HF 3
-#define WINDOW_CF 3
-#define WINDOW_PF 3
+qreal Track::_pauseSpeed = 0.5;
+int Track::_pauseInterval = 10;
 
-#define PAUSE_SPEED     0.5
-#define PAUSE_TIME_DIFF 10
+bool Track::_outlierEliminate = true;
 
 
 static qreal median(QVector<qreal> v)
@@ -104,15 +105,16 @@ Track::Track(const TrackData &data) : _data(data)
 
 	_pause = 0;
 	for (int i = 1; i < data.count(); i++) {
-		if (_time.at(i) > _time.at(i-1) + PAUSE_TIME_DIFF
-		  && _speed.at(i) < PAUSE_SPEED) {
+		if (_time.at(i) > _time.at(i-1) + _pauseInterval
+		  && _speed.at(i) < _pauseSpeed) {
 			_pause += _time.at(i) - _time.at(i-1);
 			_stop.insert(i-1);
 			_stop.insert(i);
 		}
 	}
 
-	_outliers = eliminate(_speed, WINDOW_OE);
+	if (_outlierEliminate)
+		_outliers = eliminate(_speed, OUTLIER_WINDOW);
 
 	QSet<int>::const_iterator it;
 	for (it = _stop.constBegin(); it != _stop.constEnd(); ++it)
@@ -137,7 +139,7 @@ Graph Track::elevation() const
 			raw.append(GraphPoint(_distance.at(i), _time.at(i),
 			  _data.at(i).elevation()));
 
-	return filter(raw, WINDOW_EF);
+	return filter(raw, _elevationWindow);
 }
 
 Graph Track::speed() const
@@ -161,7 +163,7 @@ Graph Track::speed() const
 		raw.append(GraphPoint(_distance.at(i), _time.at(i), v));
 	}
 
-	filtered = filter(raw, WINDOW_SF);
+	filtered = filter(raw, _speedWindow);
 
 	QSet<int>::const_iterator it;
 	for (it = stop.constBegin(); it != stop.constEnd(); ++it)
@@ -179,7 +181,7 @@ Graph Track::heartRate() const
 			raw.append(GraphPoint(_distance.at(i), _time.at(i),
 			  _data.at(i).heartRate()));
 
-	return filter(raw, WINDOW_HF);
+	return filter(raw, _heartRateWindow);
 }
 
 Graph Track::temperature() const
@@ -212,7 +214,7 @@ Graph Track::cadence() const
 		raw.append(GraphPoint(_distance.at(i), _time.at(i), c));
 	}
 
-	filtered = filter(raw, WINDOW_CF);
+	filtered = filter(raw, _cadenceWindow);
 
 	QSet<int>::const_iterator it;
 	for (it = stop.constBegin(); it != stop.constEnd(); ++it)
@@ -239,7 +241,7 @@ Graph Track::power() const
 		raw.append(GraphPoint(_distance.at(i), _time.at(i), p));
 	}
 
-	filtered = filter(raw, WINDOW_PF);
+	filtered = filter(raw, _powerWindow);
 
 	QSet<int>::const_iterator it;
 	for (it = stop.constBegin(); it != stop.constEnd(); ++it)

@@ -10,7 +10,7 @@
 #define CLOSE_FILE_ICON   ":/icons/dialog-close.png"
 #define SHOW_POI_ICON     ":/icons/flag.png"
 #define SHOW_MAP_ICON     ":/icons/applications-internet.png"
-#define SHOW_GRAPHS_ICON  ":/icons/office-chart-line-stacked.png"
+#define SHOW_GRAPHS_ICON  ":/icons/office-chart-line.png"
 #define QUIT_ICON         ":/icons/application-exit.png"
 #define RELOAD_FILE_ICON  ":/icons/view-refresh.png"
 #define NEXT_FILE_ICON    ":/icons/arrow-right.png"
@@ -24,5 +24,6 @@
 #define POI_ICON          ":/icons/flag_48.png"
 #define SYSTEM_ICON       ":/icons/system-run.png"
 #define PRINT_EXPORT_ICON ":/icons/document-print-preview.png"
+#define DATA_ICON         ":/icons/view-filter.png"
 
 #endif /* ICONS_H */
