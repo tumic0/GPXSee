@@ -7,6 +7,7 @@
 
 class ColorBox;
 class StyleComboBox;
+class OddSpinBox;
 class QSpinBox;
 class QDoubleSpinBox;
 class QComboBox;
@@ -78,11 +79,11 @@ private:
 	QSpinBox *_graphWidth;
 	QCheckBox *_graphAA;
 	// Data
-	QSpinBox *_elevationFilter;
-	QSpinBox *_speedFilter;
-	QSpinBox *_heartRateFilter;
-	QSpinBox *_cadenceFilter;
-	QSpinBox *_powerFilter;
+	OddSpinBox *_elevationFilter;
+	OddSpinBox *_speedFilter;
+	OddSpinBox *_heartRateFilter;
+	OddSpinBox *_cadenceFilter;
+	OddSpinBox *_powerFilter;
 	QCheckBox *_outlierEliminate;
 	QDoubleSpinBox *_pauseSpeed;
 	QSpinBox *_pauseInterval;

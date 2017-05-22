@@ -14,6 +14,7 @@
 #include "icons.h"
 #include "colorbox.h"
 #include "stylecombobox.h"
+#include "oddspinbox.h"
 #include "optionsdialog.h"
 
 #define MENU_MARGIN 20
@@ -122,19 +123,19 @@ QWidget *OptionsDialog::createDataPage()
 {
 	QString filterToolTip = tr("Moving average window size");
 
-	_elevationFilter = new QSpinBox();
+	_elevationFilter = new OddSpinBox();
 	_elevationFilter->setValue(_options->elevationFilter);
 	_elevationFilter->setToolTip(filterToolTip);
-	_speedFilter = new QSpinBox();
+	_speedFilter = new OddSpinBox();
 	_speedFilter->setValue(_options->speedFilter);
 	_speedFilter->setToolTip(filterToolTip);
-	_heartRateFilter = new QSpinBox();
+	_heartRateFilter = new OddSpinBox();
 	_heartRateFilter->setValue(_options->heartRateFilter);
 	_heartRateFilter->setToolTip(filterToolTip);
-	_cadenceFilter = new QSpinBox();
+	_cadenceFilter = new OddSpinBox();
 	_cadenceFilter->setValue(_options->cadenceFilter);
 	_cadenceFilter->setToolTip(filterToolTip);
-	_powerFilter = new QSpinBox();
+	_powerFilter = new OddSpinBox();
 	_powerFilter->setValue(_options->powerFilter);
 	_powerFilter->setToolTip(filterToolTip);
 
