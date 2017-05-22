@@ -107,7 +107,7 @@
 #define PAUSE_INTERVAL_SETTING            "pauseInterval"
 #define PAUSE_INTERVAL_DEFAULT            10 /* s */
 #define POI_RADIUS_SETTING                "poiRadius"
-#define POI_RADIUS_DEFAULT                (IMPERIAL_UNITS() ? MIINM : KMINM)
+#define POI_RADIUS_DEFAULT                (int)(IMPERIAL_UNITS() ? MIINM : KMINM)
 #define USE_OPENGL_SETTING                "useOpenGL"
 #define USE_OPENGL_DEFAULT                false
 #define PIXMAP_CACHE_SETTING              "pixmapCache"
