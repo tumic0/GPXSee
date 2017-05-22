@@ -1,7 +1,5 @@
 #include "oddspinbox.h"
 
-#include <QDebug>
-
 OddSpinBox::OddSpinBox(QWidget *parent) : QSpinBox(parent)
 {
 	setSingleStep(2);
