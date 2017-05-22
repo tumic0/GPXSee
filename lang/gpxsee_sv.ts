@@ -799,200 +799,210 @@
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="67"/>
-        <location filename="../src/optionsdialog.cpp" line="99"/>
+        <location filename="../src/optionsdialog.cpp" line="100"/>
         <source>Use anti-aliasing</source>
         <translation>Använd kantutjämning</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="97"/>
+        <location filename="../src/optionsdialog.cpp" line="98"/>
         <source>Line width:</source>
         <translation>Linjetjocklek:</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="113"/>
+        <location filename="../src/optionsdialog.cpp" line="114"/>
         <source>Colors</source>
         <translation>Färger</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="114"/>
+        <location filename="../src/optionsdialog.cpp" line="115"/>
         <source>Paths</source>
         <translation>Sökvägar</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="115"/>
-        <location filename="../src/optionsdialog.cpp" line="254"/>
+        <location filename="../src/optionsdialog.cpp" line="116"/>
+        <location filename="../src/optionsdialog.cpp" line="260"/>
         <source>Graphs</source>
         <translation>Diagram</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="122"/>
+        <location filename="../src/optionsdialog.cpp" line="123"/>
         <source>Moving average window size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="141"/>
+        <location filename="../src/optionsdialog.cpp" line="142"/>
         <source>Elevation:</source>
         <translation>Höjd:</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="142"/>
+        <location filename="../src/optionsdialog.cpp" line="143"/>
         <source>Speed:</source>
         <translation>Hastighet:</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="143"/>
+        <location filename="../src/optionsdialog.cpp" line="144"/>
         <source>Heart rate:</source>
         <translation>Hjärtfrekvens:</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="144"/>
+        <location filename="../src/optionsdialog.cpp" line="145"/>
         <source>Cadence:</source>
         <translation>Stegfrekvens:</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="145"/>
+        <location filename="../src/optionsdialog.cpp" line="146"/>
         <source>Power:</source>
         <translation>Kraft:</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="147"/>
+        <source>Smoothing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/optionsdialog.cpp" line="150"/>
+        <source>Eliminate GPS outliers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/optionsdialog.cpp" line="155"/>
         <source>Outlier elimination</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="166"/>
+        <location filename="../src/optionsdialog.cpp" line="172"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="169"/>
+        <location filename="../src/optionsdialog.cpp" line="175"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="173"/>
+        <location filename="../src/optionsdialog.cpp" line="179"/>
         <source>s</source>
         <translation>sek</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="177"/>
+        <location filename="../src/optionsdialog.cpp" line="183"/>
         <source>Minimal speed:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="178"/>
+        <location filename="../src/optionsdialog.cpp" line="184"/>
         <source>Minimal duration:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="185"/>
+        <location filename="../src/optionsdialog.cpp" line="191"/>
         <source>Filtering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="186"/>
+        <location filename="../src/optionsdialog.cpp" line="192"/>
         <source>Pause detection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="198"/>
+        <location filename="../src/optionsdialog.cpp" line="204"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="201"/>
+        <location filename="../src/optionsdialog.cpp" line="207"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="205"/>
+        <location filename="../src/optionsdialog.cpp" line="211"/>
         <source>POI radius:</source>
         <translation>POI-radie:</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="211"/>
-        <location filename="../src/optionsdialog.cpp" line="310"/>
+        <location filename="../src/optionsdialog.cpp" line="217"/>
+        <location filename="../src/optionsdialog.cpp" line="316"/>
         <source>POI</source>
         <translation>POI</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="218"/>
+        <location filename="../src/optionsdialog.cpp" line="224"/>
         <source>Name</source>
         <translation>Namn</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="220"/>
+        <location filename="../src/optionsdialog.cpp" line="226"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="222"/>
+        <location filename="../src/optionsdialog.cpp" line="228"/>
         <source>Distance</source>
         <translation>Avstånd</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="224"/>
+        <location filename="../src/optionsdialog.cpp" line="230"/>
         <source>Time</source>
         <translation>Tid</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="226"/>
+        <location filename="../src/optionsdialog.cpp" line="232"/>
         <source>Moving time</source>
         <translation>Förflyttningstid</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="228"/>
+        <location filename="../src/optionsdialog.cpp" line="234"/>
         <source>Item count (&gt;1)</source>
         <translation>Objektantal (&gt;1)</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="243"/>
+        <location filename="../src/optionsdialog.cpp" line="249"/>
         <source>Separate graph page</source>
         <translation>Separat diagramsida</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="253"/>
+        <location filename="../src/optionsdialog.cpp" line="259"/>
         <source>Header</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="261"/>
+        <location filename="../src/optionsdialog.cpp" line="267"/>
         <source>Use OpenGL</source>
         <translation>Använd OpenGL</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="273"/>
+        <location filename="../src/optionsdialog.cpp" line="279"/>
         <source>MB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="277"/>
+        <location filename="../src/optionsdialog.cpp" line="283"/>
         <source>Image cache size:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="290"/>
-        <location filename="../src/optionsdialog.cpp" line="313"/>
+        <location filename="../src/optionsdialog.cpp" line="296"/>
+        <location filename="../src/optionsdialog.cpp" line="319"/>
         <source>System</source>
         <translation>System</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="307"/>
+        <location filename="../src/optionsdialog.cpp" line="313"/>
         <source>Appearance</source>
         <translation>Utseende</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="309"/>
+        <location filename="../src/optionsdialog.cpp" line="315"/>
         <source>Data</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="311"/>
+        <location filename="../src/optionsdialog.cpp" line="317"/>
         <source>Print &amp; Export</source>
         <translation>Utskrift &amp; Export</translation>
     </message>
     <message>
-        <location filename="../src/optionsdialog.cpp" line="340"/>
+        <location filename="../src/optionsdialog.cpp" line="346"/>
         <source>Options</source>
         <translation>Alternativ</translation>
     </message>

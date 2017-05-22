@@ -88,6 +88,7 @@ QWidget *OptionsDialog::createAppearancePage()
 	pathTabLayout->addWidget(routeBox);
 #endif
 	pathTabLayout->addLayout(pathAALayout);
+	pathTabLayout->addStretch();
 	pathTab->setLayout(pathTabLayout);
 
 	_graphWidth = new QSpinBox();
@@ -137,25 +138,30 @@ QWidget *OptionsDialog::createDataPage()
 	_powerFilter->setValue(_options->powerFilter);
 	_powerFilter->setToolTip(filterToolTip);
 
-	QFormLayout *filterLayout = new QFormLayout();
-	filterLayout->addRow(tr("Elevation:"), _elevationFilter);
-	filterLayout->addRow(tr("Speed:"), _speedFilter);
-	filterLayout->addRow(tr("Heart rate:"), _heartRateFilter);
-	filterLayout->addRow(tr("Cadence:"), _cadenceFilter);
-	filterLayout->addRow(tr("Power:"), _powerFilter);
+	QFormLayout *smoothLayout = new QFormLayout();
+	smoothLayout->addRow(tr("Elevation:"), _elevationFilter);
+	smoothLayout->addRow(tr("Speed:"), _speedFilter);
+	smoothLayout->addRow(tr("Heart rate:"), _heartRateFilter);
+	smoothLayout->addRow(tr("Cadence:"), _cadenceFilter);
+	smoothLayout->addRow(tr("Power:"), _powerFilter);
+	QGroupBox *smoothBox = new QGroupBox(tr("Smoothing"));
+	smoothBox->setLayout(smoothLayout);
 
-	_outlierEliminate = new QCheckBox(tr("Outlier elimination"));
+	_outlierEliminate = new QCheckBox(tr("Eliminate GPS outliers"));
 	_outlierEliminate->setChecked(_options->outlierEliminate);
 
 	QFormLayout *outlierLayout = new QFormLayout();
 	outlierLayout->addWidget(_outlierEliminate);
+	QGroupBox *outlierBox = new QGroupBox(tr("Outlier elimination"));
+	outlierBox->setLayout(outlierLayout);
 
 	QWidget *filterTab = new QWidget();
 	QVBoxLayout *filterTabLayout = new QVBoxLayout();
-	filterTabLayout->addLayout(filterLayout);
-	filterTabLayout->addLayout(outlierLayout);
+	filterTabLayout->addWidget(outlierBox);
+	filterTabLayout->addWidget(smoothBox);
 	filterTabLayout->addStretch();
 	filterTab->setLayout(filterTabLayout);
+
 
 	_pauseSpeed = new QDoubleSpinBox();
 	_pauseSpeed->setDecimals(1);
