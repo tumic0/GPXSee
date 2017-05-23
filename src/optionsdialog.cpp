@@ -174,8 +174,8 @@ QWidget *OptionsDialog::createDataPage()
 	filterTabLayout->addWidget(line);
 	filterTabLayout->addLayout(outlierLayout);
 #else // Q_OS_MAC
-	filterTabLayout->addWidget(outlierBox);
 	filterTabLayout->addWidget(smoothBox);
+	filterTabLayout->addWidget(outlierBox);
 #endif // Q_OS_MAC
 	filterTabLayout->addStretch();
 	filterTab->setLayout(filterTabLayout);
