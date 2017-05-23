@@ -262,7 +262,8 @@ void GUI::createPOIFilesActions()
 	for (int i = 0; i < _poi->files().count(); i++)
 		createPOIFileAction(i);
 
-	connect(_poiFilesSignalMapper, SIGNAL(mapped(int)), this, SLOT(poiFileChecked(int)));
+	connect(_poiFilesSignalMapper, SIGNAL(mapped(int)), this,
+	  SLOT(poiFileChecked(int)));
 }
 
 QAction *GUI::createPOIFileAction(int index)
