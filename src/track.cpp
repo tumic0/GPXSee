@@ -3,7 +3,7 @@
 #define OUTLIER_WINDOW 31
 
 int Track::_elevationWindow = 3;
-int Track::_speedWindow = 7;
+int Track::_speedWindow = 5;
 int Track::_heartRateWindow = 3;
 int Track::_cadenceWindow = 3;
 int Track::_powerWindow = 3;

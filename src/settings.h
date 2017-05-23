@@ -93,7 +93,7 @@
 #define ELEVATION_FILTER_SETTING          "elevationFilter"
 #define ELEVATION_FILTER_DEFAULT          3
 #define SPEED_FILTER_SETTING              "speedFilter"
-#define SPEED_FILTER_DEFAULT              7
+#define SPEED_FILTER_DEFAULT              5
 #define HEARTRATE_FILTER_SETTING          "heartrateFilter"
 #define HEARTRATE_FILTER_DEFAULT          3
 #define CADENCE_FILTER_SETTING            "cadenceFilter"
