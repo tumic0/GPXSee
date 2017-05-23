@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="sv">
+<TS version="2.0" language="sv">
 <context>
     <name>CadenceGraph</name>
     <message>
@@ -302,7 +302,7 @@
     <message>
         <location filename="../src/gui.cpp" line="373"/>
         <source>Load map...</source>
-        <translation type="unfinished"></translation>
+        <translation>Läs in karta...</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="379"/>
@@ -500,17 +500,17 @@
     <message>
         <location filename="../src/gui.cpp" line="1206"/>
         <source>Open map file</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna kartfil</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="1207"/>
         <source>Map files (*.map *.tba *.tar)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartfiler (*.map *.tba *.tar)</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="1224"/>
         <source>Error loading map:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel vid inläsning av karta:</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="1239"/>
@@ -827,7 +827,7 @@
     <message>
         <location filename="../src/optionsdialog.cpp" line="125"/>
         <source>Moving average window size</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyttar vanlig fönsterstorlek</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="144"/>
@@ -857,22 +857,22 @@
     <message>
         <location filename="../src/optionsdialog.cpp" line="150"/>
         <source>Smoothing</source>
-        <translation type="unfinished"></translation>
+        <translation>Utjämning</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="154"/>
         <source>Eliminate GPS outliers</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminera GPS-extremvärden</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="160"/>
         <source>Outlier elimination</source>
-        <translation type="unfinished"></translation>
+        <translation>Extremvärdeseliminering</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="167"/>
         <source>Smoothing:</source>
-        <translation type="unfinished"></translation>
+        <translation>Utjämning:</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="190"/>
@@ -892,22 +892,22 @@
     <message>
         <location filename="../src/optionsdialog.cpp" line="201"/>
         <source>Minimal speed:</source>
-        <translation type="unfinished"></translation>
+        <translation>Minsta hastighet:</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="202"/>
         <source>Minimal duration:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kortast varaktighet:</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="209"/>
         <source>Filtering</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtrerar</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="210"/>
         <source>Pause detection</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa identifiering</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="222"/>
@@ -978,12 +978,12 @@
     <message>
         <location filename="../src/optionsdialog.cpp" line="297"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="301"/>
         <source>Image cache size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Cashe-storlek för bilder:</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="314"/>
