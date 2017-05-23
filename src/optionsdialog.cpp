@@ -9,6 +9,7 @@
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QLabel>
 #include <QSysInfo>
 #include "config.h"
 #include "icons.h"
@@ -84,10 +85,10 @@ QWidget *OptionsDialog::createAppearancePage()
 	pathTabLayout->addWidget(l1);
 	pathTabLayout->addLayout(routeLayout);
 	pathTabLayout->addWidget(l2);
-#else
+#else // Q_OS_MAC
 	pathTabLayout->addWidget(trackBox);
 	pathTabLayout->addWidget(routeBox);
-#endif
+#endif // Q_OS_MAC
 	pathTabLayout->addLayout(pathAALayout);
 	pathTabLayout->addStretch();
 	pathTab->setLayout(pathTabLayout);
@@ -145,21 +146,37 @@ QWidget *OptionsDialog::createDataPage()
 	smoothLayout->addRow(tr("Heart rate:"), _heartRateFilter);
 	smoothLayout->addRow(tr("Cadence:"), _cadenceFilter);
 	smoothLayout->addRow(tr("Power:"), _powerFilter);
+#ifndef Q_OS_MAC
 	QGroupBox *smoothBox = new QGroupBox(tr("Smoothing"));
 	smoothBox->setLayout(smoothLayout);
+#endif // Q_OS_MAC
 
 	_outlierEliminate = new QCheckBox(tr("Eliminate GPS outliers"));
 	_outlierEliminate->setChecked(_options->outlierEliminate);
 
 	QFormLayout *outlierLayout = new QFormLayout();
 	outlierLayout->addWidget(_outlierEliminate);
+#ifndef Q_OS_MAC
 	QGroupBox *outlierBox = new QGroupBox(tr("Outlier elimination"));
 	outlierBox->setLayout(outlierLayout);
+#endif // Q_OS_MAC
 
 	QWidget *filterTab = new QWidget();
 	QVBoxLayout *filterTabLayout = new QVBoxLayout();
+#ifdef Q_OS_MAC
+	QLabel *label = new QLabel(tr("Smoothing:"));
+	QFrame *line = new QFrame();
+	line->setFrameShape(QFrame::HLine);
+	line->setFrameShadow(QFrame::Sunken);
+
+	filterTabLayout->addWidget(label);
+	filterTabLayout->addLayout(smoothLayout);
+	filterTabLayout->addWidget(line);
+	filterTabLayout->addLayout(outlierLayout);
+#else // Q_OS_MAC
 	filterTabLayout->addWidget(outlierBox);
 	filterTabLayout->addWidget(smoothBox);
+#endif // Q_OS_MAC
 	filterTabLayout->addStretch();
 	filterTab->setLayout(filterTabLayout);
 
