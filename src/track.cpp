@@ -1,6 +1,6 @@
 #include "track.h"
 
-#define OUTLIER_WINDOW 31
+#define OUTLIER_WINDOW 21
 
 int Track::_elevationWindow = 3;
 int Track::_speedWindow = 5;
