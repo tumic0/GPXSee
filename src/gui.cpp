@@ -295,6 +295,7 @@ void GUI::createActions()
 	// General actions
 	_exitAction = new QAction(QIcon(QPixmap(QUIT_ICON)), tr("Quit"), this);
 	_exitAction->setShortcut(QUIT_SHORTCUT);
+	_exitAction->setMenuRole(QAction::QuitRole);
 	connect(_exitAction, SIGNAL(triggered()), this, SLOT(close()));
 	addAction(_exitAction);
 
@@ -305,6 +306,7 @@ void GUI::createActions()
 	connect(_keysAction, SIGNAL(triggered()), this, SLOT(keys()));
 	_aboutAction = new QAction(QIcon(QPixmap(APP_ICON)),
 	  tr("About GPXSee"), this);
+	_aboutAction->setMenuRole(QAction::AboutRole);
 	connect(_aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
 	// File actions
@@ -477,6 +479,7 @@ void GUI::createActions()
 	  SLOT(showFullscreen(bool)));
 	addAction(_fullscreenAction);
 	_openOptionsAction = new QAction(tr("Options..."), this);
+	_openOptionsAction->setMenuRole(QAction::PreferencesRole);
 	connect(_openOptionsAction, SIGNAL(triggered()), this,
 	  SLOT(openOptions()));
 
