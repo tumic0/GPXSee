@@ -9,6 +9,8 @@ Name "GPXSee"
 
 ; The file to write
 OutFile "GPXSee-${VERSION}.exe"
+; Compression method
+SetCompressor /SOLID lzma
 
 ; Required execution level 
 RequestExecutionLevel admin
