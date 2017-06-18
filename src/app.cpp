@@ -20,8 +20,8 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 	installTranslator(gpxsee);
 
 	QTranslator *qt = new QTranslator(this);
-	qt->load(QLocale::system(), "qt", "_",
-	QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+	qt->load(QLocale::system(), "qt", "_", QLibraryInfo::location(
+	  QLibraryInfo::TranslationsPath));
 	installTranslator(qt);
 
 #ifdef Q_OS_MAC
