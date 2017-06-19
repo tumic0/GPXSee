@@ -176,7 +176,7 @@ Section "MSVC runtime" SEC_MSVC
   DetailPrint "Installing Visual C++ 2015 Redistributable..."
   SetOutPath $TEMP
   File "vcredist_x64.exe"
-  ExecWait '"$TEMP/vcredist_x64.exe" /install /quiet /norestart'
+  ExecWait '"$TEMP\vcredist_x64.exe" /install /quiet /norestart'
   SetOutPath $INSTDIR
 
   done:
