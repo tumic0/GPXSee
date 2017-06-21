@@ -7,7 +7,7 @@
 #include <QString>
 
 #define APP_NAME        "GPXSee"
-#define APP_HOMEPAGE    "http://tumic.wz.cz/gpxsee"
+#define APP_HOMEPAGE    "http://www.gpxsee.org"
 
 #define FONT_FAMILY     "Arial"
 #define FONT_SIZE       12

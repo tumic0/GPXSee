@@ -30,4 +30,4 @@ make
 [Changelog](https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes)
 
 ## Homepage
-GPXSee homepage: http://tumic.wz.cz/gpxsee
+GPXSee homepage: http://www.gpxsee.org
