@@ -1,0 +1,8 @@
+#prev {
+	background-image:none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='css/images/prev.png', sizingMethod='image');
+}
+#next {
+	background-image:none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='css/images/next.png', sizingMethod='image');
+}

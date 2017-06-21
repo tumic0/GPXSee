@@ -1,0 +1,283 @@
+* {
+	margin:0;
+	padding:0;
+	outline:0;
+}
+body {
+	font-size:14px;
+	line-height:18px;
+	font-family:Arial, sans-serif;
+	color:#3d3d3d;
+	background:#333;
+}
+a {
+	color:#0252aa;
+	text-decoration:none;
+	cursor:pointer;
+}
+a:hover {
+	color:#000;
+}
+a img {
+	border:0;
+}
+input, textarea, select {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	border:0;
+}
+textarea {
+	overflow:hidden;
+}
+.cl {
+	display:block;
+	height:0;
+	font-size:0;
+	line-height:0;
+	text-indent:-4000px;
+	clear:both;
+}
+.notext {
+	font-size:0;
+	line-height:0;
+	text-indent:-4000px;
+}
+.left, .alignleft {
+	float:left;
+	display:inline;
+}
+.right, .alignright {
+	float:right;
+	display:inline;
+}
+.last {
+	margin-right:0 !important;
+}
+.shell {
+	width:980px;
+	background:#fff url(images/shell-t.gif) no-repeat 0 top;
+	margin:16px auto 0;
+}
+.shell-b {
+	background:url(images/shell-b.gif) no-repeat 0 bottom;
+}
+img.logo {
+	float:left;
+	margin: 17px 5px 10px 10px;
+}
+h1.logo {
+	float:left;
+	display:inline;
+	margin:39px 0 0 0;
+}
+h1.logo a {
+	font-size:38px;
+	font-weight:normal;
+	color:#000;
+}
+h1.logo a span {
+	color:#ed1c24;
+}
+#navigation {
+	float:left;
+	display:inline;
+	margin:42px 0 0 90px;
+}
+#navigation ul {
+	list-style-type:none;
+}
+#navigation ul li {
+	float:left;
+	display:inline;
+	margin-right:60px;
+}
+#navigation ul li a {
+	font-size:15px;
+	text-transform:uppercase;
+	color:#000;
+}
+#navigation ul li a:hover, #navigation ul li a.active {
+	font-weight:bold;
+	color:#ed1c24;
+	text-decoration:none;
+}
+#slider {
+	position:relative;
+	width:980px;
+	height:350px;
+	background-color:#000;
+	margin-top:10px;
+}
+.slider-content {
+	position:relative;
+	width:825px;
+	height:350px;
+	margin:0 0 0 81px;
+	overflow:hidden;
+}
+.slider-content ul {
+	list-style-type:none;
+	position:relative;
+	overflow:hidden;
+}
+.slider-content ul li, .jcarousel-clip {
+	position:relative;
+	width:825px;
+	height:400px;
+}
+.slider-content ul li .left-side {
+	float:left;
+	display:inline;
+	width:250px;
+	padding-top:25px;
+}
+.slider-content ul li .right-side {
+	float:left;
+	display:inline;
+	width:500px;
+	padding-top:67px;
+	margin-left:53px;
+}
+.slider-content ul li .right-side p {
+	line-height:19px;
+	color:#808080;
+}
+.slider-content ul li .buttons {
+	margin-top:35px;
+}
+.slider-content ul li .buttons a {
+	color:#FFFFFF;
+	padding:8px 12px;
+	font-size:15px;
+	line-height:25px;
+	border-radius:0.25em;
+	cursor:pointer;
+	margin-right: 5px;
+}
+.slider-content ul li .buttons .download-btn {
+	background-color: #279f43;
+	border: 1px solid #279f43;
+}
+.slider-content ul li .buttons .github-btn {
+	background-color: #3665af;
+	border: 1px solid #3665af;
+}
+#prev, #next {
+	position:absolute;
+	top:146px;
+	width:18px;
+	height:27px;
+	display:block;
+	background:url(images/prev.png) no-repeat 0 0;
+	font-size:0;
+	line-height:0;
+	text-indent:-4000px;
+}
+#prev {
+	left:33px;
+}
+#next {
+	right:33px;
+	background:url(images/next.png) no-repeat 0 0;
+}
+#main {
+	padding:29px 20px 18px 32px;
+	height:100%;
+}
+#content {
+	float:left;
+	display:inline;
+	width:660px;
+	margin-bottom:38px;
+}
+#sidebar {
+	float:right;
+	display:inline;
+	width:243px;
+}
+#content h2 {
+	font-size:22px;
+	line-height:22px;
+	color:#ed1c24;
+	margin:15px 0 15px 0;
+}
+#content h3 {
+	margin-bottom:8px;
+	margin-top:8px;
+}
+#content ul {
+	margin-left:30px;
+}
+#content p {
+margin: .5em 0 .5em 0
+}
+#content pre {
+    font-size: 10pt;
+    text-align: left;
+    background-color: #F0F0F0;
+    border: 1px solid #ADADAD;
+    padding: .5em;
+}
+.latest-news {
+}
+.latest-news h3 {
+	font-size:18px;
+	color:#000;
+	font-weight:normal;
+	margin-bottom:21px;
+}
+.latest-news .news-item {
+	margin-bottom:20px;
+}
+.latest-news .news-item .date {
+	font-size:10px;
+	line-height:12px;
+	color:#fd3801;
+	margin-bottom:2px;
+}
+.latest-news .news-item h4 {
+	font-size:12px;
+}
+.latest-news ul {
+	margin-left:20px;
+	font-size:12px;
+}
+.footer {
+	font-size:10px;
+	padding-top:15px;
+}
+.footer .shell {
+	background:none;
+	margin:0 auto;
+	padding:0 30px;
+}
+.footer, .footer a {
+	color:#858585;
+	text-decoration:none;
+}
+.footer p {
+	margin:0;
+	padding:0;
+	line-height:normal;
+}
+.footer .lf {
+	float:left;
+}
+.footer .rf {
+	float:right;
+}
+
+.gallery-top {
+	height:10px;
+}
+.gallery-bottom {
+	height:50px;
+}
+.gallery-main {
+	background-color:#000000;
+	padding:20px 0;
+}
+
+#gallery {
+	margin: 0 50px 0 50px;
+}
