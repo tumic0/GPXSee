@@ -26,10 +26,10 @@ public:
 	QRectF bounds() const {return QRectF(QPointF(0, 0), _size);}
 	qreal resolution(const QPointF &) const {return _resolution;}
 
-	qreal zoom() const {return 1.0;}
-	qreal zoomFit(const QSize &, const QRectF &) {return 1.0;}
-	qreal zoomIn() {return 1.0;}
-	qreal zoomOut() {return 1.0;}
+	qreal zoom() const {return 0;}
+	qreal zoomFit(const QSize &, const QRectF &) {return 0;}
+	qreal zoomIn() {return 0;}
+	qreal zoomOut() {return 0;}
 
 	QPointF ll2xy(const Coordinates &c)
 	  {return _transform.map(_projection->ll2xy(c));}
