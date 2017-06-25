@@ -110,8 +110,6 @@ bool Tar::loadTmi(const QString &path)
 		ln++;
 	}
 
-	file.close();
-
 	return true;
 }
 
