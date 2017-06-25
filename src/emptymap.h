@@ -17,6 +17,7 @@ public:
 
 	qreal zoom() const {return _scale;}
 	qreal zoomFit(const QSize &size, const QRectF &br);
+	qreal zoomFit(qreal resolution, const Coordinates &c);
 	qreal zoomIn();
 	qreal zoomOut();
 

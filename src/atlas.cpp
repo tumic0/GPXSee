@@ -227,6 +227,26 @@ qreal Atlas::zoomFit(const QSize &size, const QRectF &br)
 	return _zoom;
 }
 
+qreal Atlas::zoomFit(qreal resolution, const Coordinates &c)
+{
+	_zoom = 0;
+
+	for (int z = 0; z < _zooms.count(); z++) {
+		for (int i = _zooms.at(z).first; i <= _zooms.at(z).second; i++) {
+			if (!_bounds.at(i).first.contains(_maps.at(i)->ll2pp(c)))
+				continue;
+
+			if (_maps.at(i)->resolution(_maps.at(i)->ll2xy(c)) < resolution)
+				return _zoom;
+
+			_zoom = z;
+			break;
+		}
+	}
+
+	return _zoom;
+}
+
 qreal Atlas::zoomIn()
 {
 	_zoom = qMin(_zoom + 1, _zooms.size() - 1);

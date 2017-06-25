@@ -22,6 +22,7 @@ public:
 
 	virtual qreal zoom() const = 0;
 	virtual qreal zoomFit(const QSize &size, const QRectF &br) = 0;
+	virtual qreal zoomFit(qreal resolution, const Coordinates &c) = 0;
 	virtual qreal zoomIn() = 0;
 	virtual qreal zoomOut() = 0;
 

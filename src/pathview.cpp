@@ -8,7 +8,6 @@
 #include "poi.h"
 #include "data.h"
 #include "map.h"
-#include "emptymap.h"
 #include "trackitem.h"
 #include "routeitem.h"
 #include "waypointitem.h"
@@ -16,10 +15,11 @@
 #include "keys.h"
 #include "pathview.h"
 
-#define MAX_ZOOM      1
-#define MIN_ZOOM      -3
-#define MARGIN        10.0
-#define SCALE_OFFSET  7
+
+#define MAX_DIGITAL_ZOOM 1
+#define MIN_DIGITAL_ZOOM -3
+#define MARGIN           10.0
+#define SCALE_OFFSET     7
 
 static void unite(QRectF &rect, const QPointF &p)
 {
@@ -271,6 +271,10 @@ void PathView::setPalette(const Palette &palette)
 
 void PathView::setMap(Map *map)
 {
+	QPointF pos = mapToScene(QRect(QPoint(), viewport()->size()).center());
+	Coordinates center = _map->xy2ll(pos);
+	qreal resolution = _map->resolution(pos);
+
 	_map->unload();
 	disconnect(_map, SIGNAL(loaded()), this, SLOT(redraw()));
 
@@ -280,7 +284,7 @@ void PathView::setMap(Map *map)
 
 	resetDigitalZoom();
 
-	mapScale();
+	_map->zoomFit(resolution, center);
 	_scene->setSceneRect(_map->bounds());
 
 	for (int i = 0; i < _tracks.size(); i++)
@@ -295,10 +299,9 @@ void PathView::setMap(Map *map)
 		it.value()->setMap(_map);
 	updatePOIVisibility();
 
-	QPointF center = contentCenter();
-	centerOn(center);
+	centerOn(_map->ll2xy(center));
 
-	_res = _map->resolution(center);
+	_res = _map->resolution(_map->ll2xy(center));
 	_mapScale->setResolution(_res);
 
 	resetCachedContent();
@@ -420,8 +423,8 @@ void PathView::zoom(int zoom, const QPoint &pos, const Coordinates &c)
 
 	if (_digitalZoom) {
 		if (((_digitalZoom > 0 && zoom > 0) && (!shift || _digitalZoom
-		  >= MAX_ZOOM)) || ((_digitalZoom < 0 && zoom < 0) && (!shift
-		  || _digitalZoom <= MIN_ZOOM)))
+		  >= MAX_DIGITAL_ZOOM)) || ((_digitalZoom < 0 && zoom < 0) && (!shift
+		  || _digitalZoom <= MIN_DIGITAL_ZOOM)))
 			return;
 
 		digitalZoom(zoom);

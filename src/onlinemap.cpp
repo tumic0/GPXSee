@@ -27,19 +27,12 @@ static QPoint mercator2tile(const QPointF &m, int z)
 
 static qreal zoom2scale(int zoom)
 {
-	return ((360.0/(qreal)(1<<zoom))/(qreal)TILE_SIZE);
+	return (360.0/(qreal)((1<<zoom) * TILE_SIZE));
 }
 
 static int scale2zoom(qreal scale)
 {
-	int zoom = (int)log2(360.0/(scale * (qreal)TILE_SIZE));
-
-	if (zoom < ZOOM_MIN)
-		return ZOOM_MIN;
-	if (zoom > ZOOM_MAX)
-		return ZOOM_MAX;
-
-	return zoom;
+	return (int)log2(360.0/(scale * (qreal)TILE_SIZE));
 }
 
 
@@ -181,8 +174,26 @@ qreal OnlineMap::zoomFit(const QSize &size, const QRectF &br)
 		Coordinates bottomRight(br.bottomRight());
 		QRectF tbr(Mercator().ll2xy(topLeft), Mercator().ll2xy(bottomRight));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
+
 		_zoom = scale2zoom(qMax(sc.x(), sc.y()));
+		if (_zoom < ZOOM_MIN)
+			_zoom = ZOOM_MIN;
+		if (_zoom > ZOOM_MAX)
+			_zoom = ZOOM_MAX;
 	}
+
+	return _zoom;
+}
+
+qreal OnlineMap::zoomFit(qreal resolution, const Coordinates &c)
+{
+	_zoom = (int)(log2((WGS84_RADIUS * 2 * M_PI * cos(deg2rad(c.lat())))
+	  / resolution) - log2(TILE_SIZE));
+
+	if (_zoom < ZOOM_MIN)
+		_zoom = ZOOM_MIN;
+	if (_zoom > ZOOM_MAX)
+		_zoom = ZOOM_MAX;
 
 	return _zoom;
 }

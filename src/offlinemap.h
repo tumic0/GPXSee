@@ -28,6 +28,7 @@ public:
 
 	qreal zoom() const {return 0;}
 	qreal zoomFit(const QSize &, const QRectF &) {return 0;}
+	qreal zoomFit(qreal, const Coordinates &) {return 0;}
 	qreal zoomIn() {return 0;}
 	qreal zoomOut() {return 0;}
 

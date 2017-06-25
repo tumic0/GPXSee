@@ -41,6 +41,17 @@ qreal EmptyMap::zoomFit(const QSize &size, const QRectF &br)
 	return _scale;
 }
 
+qreal EmptyMap::zoomFit(qreal resolution, const Coordinates &c)
+{
+	_scale = (360.0 * resolution) / (WGS84_RADIUS * 2 * M_PI
+	  * cos(deg2rad(c.lat())));
+
+	_scale = qMax(_scale, SCALE_MAX);
+	_scale = qMin(_scale, SCALE_MIN);
+
+	return _scale;
+}
+
 qreal EmptyMap::resolution(const QPointF &p) const
 {
 	return (WGS84_RADIUS * 2 * M_PI * _scale / 360.0
