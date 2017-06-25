@@ -18,7 +18,7 @@ public:
 	QRectF bounds() const;
 	qreal resolution(const QPointF &p) const;
 
-	qreal zoom() const {return _scale;}
+	qreal zoom() const {return _zoom;}
 	qreal zoomFit(const QSize &size, const QRectF &br);
 	qreal zoomIn();
 	qreal zoomOut();
@@ -45,7 +45,7 @@ private:
 	void loadTilesAsync(QList<Tile> &list);
 	void loadTilesSync(QList<Tile> &list);
 
-	qreal _scale;
+	int _zoom;
 	QString _name;
 	QString _url;
 	bool _block;

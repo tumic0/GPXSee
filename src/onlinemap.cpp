@@ -25,6 +25,11 @@ static QPoint mercator2tile(const QPointF &m, int z)
 	return tile;
 }
 
+static qreal zoom2scale(int zoom)
+{
+	return ((360.0/(qreal)(1<<zoom))/(qreal)TILE_SIZE);
+}
+
 static int scale2zoom(qreal scale)
 {
 	int zoom = (int)log2(360.0/(scale * (qreal)TILE_SIZE));
@@ -46,7 +51,7 @@ OnlineMap::OnlineMap(const QString &name, const QString &url, QObject *parent)
 	_name = name;
 	_url = url;
 	_block = false;
-	_scale = ((360.0/(qreal)(1<<ZOOM_MAX))/(qreal)TILE_SIZE);
+	_zoom = ZOOM_MAX;
 
 	connect(downloader, SIGNAL(finished()), this, SLOT(emitLoaded()));
 
@@ -163,53 +168,51 @@ void OnlineMap::clearCache()
 
 QRectF OnlineMap::bounds() const
 {
-	return scaled(QRectF(QPointF(-180, -180), QSizeF(360, 360)), 1.0/_scale);
+	return scaled(QRectF(QPointF(-180, -180), QSizeF(360, 360)),
+	  1.0/zoom2scale(_zoom));
 }
 
 qreal OnlineMap::zoomFit(const QSize &size, const QRectF &br)
 {
 	if (br.isNull())
-		_scale = ((360.0/(qreal)(1<<ZOOM_MAX))/(qreal)TILE_SIZE);
+		_zoom = ZOOM_MAX;
 	else {
 		Coordinates topLeft(br.topLeft());
 		Coordinates bottomRight(br.bottomRight());
 		QRectF tbr(Mercator().ll2xy(topLeft), Mercator().ll2xy(bottomRight));
-
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
-
-		_scale = ((360.0/(qreal)(1<<scale2zoom(qMax(sc.x(), sc.y()))))
-		  / (qreal)TILE_SIZE);
+		_zoom = scale2zoom(qMax(sc.x(), sc.y()));
 	}
 
-	return _scale;
+	return _zoom;
 }
 
 qreal OnlineMap::resolution(const QPointF &p) const
 {
-	return (WGS84_RADIUS * 2 * M_PI * _scale / 360.0
-	  * cos(2.0 * atan(exp(deg2rad(-p.y() * _scale))) - M_PI/2));
+	qreal scale = zoom2scale(_zoom);
+
+	return (WGS84_RADIUS * 2 * M_PI * scale / 360.0
+	  * cos(2.0 * atan(exp(deg2rad(-p.y() * scale))) - M_PI/2));
 }
 
 qreal OnlineMap::zoomIn()
 {
-	int zoom = qMin(scale2zoom(_scale) + 1, ZOOM_MAX);
-	_scale = ((360.0/(qreal)(1<<zoom))/(qreal)TILE_SIZE);
-	return _scale;
+	_zoom = qMin(_zoom + 1, ZOOM_MAX);
+	return _zoom;
 }
 
 qreal OnlineMap::zoomOut()
 {
-	int zoom = qMax(scale2zoom(_scale) - 1, ZOOM_MIN);
-	_scale = ((360.0/(qreal)(1<<zoom))/(qreal)TILE_SIZE);
-	return _scale;
+	_zoom = qMax(_zoom - 1, ZOOM_MIN);
+	return _zoom;
 }
 
 void OnlineMap::draw(QPainter *painter, const QRectF &rect)
 {
-	int zoom = scale2zoom(_scale);
+	qreal scale = zoom2scale(_zoom);
 
-	QPoint tile = mercator2tile(QPointF(rect.topLeft().x() * _scale,
-	  -rect.topLeft().y() * _scale), zoom);
+	QPoint tile = mercator2tile(QPointF(rect.topLeft().x() * scale,
+	  -rect.topLeft().y() * scale), _zoom);
 	QPoint tl = QPoint((int)floor(rect.left() / (qreal)TILE_SIZE)
 	  * TILE_SIZE, (int)floor(rect.top() / TILE_SIZE) * TILE_SIZE);
 
@@ -217,7 +220,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect)
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	for (int i = 0; i < ceil(s.width() / TILE_SIZE); i++)
 		for (int j = 0; j < ceil(s.height() / TILE_SIZE); j++)
-			tiles.append(Tile(QPoint(tile.x() + i, tile.y() + j), zoom));
+			tiles.append(Tile(QPoint(tile.x() + i, tile.y() + j), _zoom));
 
 	if (_block)
 		loadTilesSync(tiles);
@@ -234,12 +237,14 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect)
 
 QPointF OnlineMap::ll2xy(const Coordinates &c)
 {
+	qreal scale = zoom2scale(_zoom);
 	QPointF m = Mercator().ll2xy(c);
-	return QPointF(m.x() / _scale, m.y() / -_scale);
+	return QPointF(m.x() / scale, m.y() / -scale);
 }
 
 Coordinates OnlineMap::xy2ll(const QPointF &p)
 {
-	QPointF m(p.x() * _scale, -p.y() * _scale);
+	qreal scale = zoom2scale(_zoom);
+	QPointF m(p.x() * scale, -p.y() * scale);
 	return Mercator().xy2ll(m);
 }
