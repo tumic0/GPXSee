@@ -73,12 +73,14 @@ bool Tar::loadTar()
 	while ((ret = _file.read(buffer, BLOCKSIZE)) > 0) {
 		if (ret < BLOCKSIZE) {
 			_file.close();
+			_index.clear();
 			return false;
 		}
 		size = number(hdr->size, sizeof(hdr->size));
 		_index.insert(hdr->name, _file.pos() / BLOCKSIZE - 1);
 		if (!_file.seek(_file.pos() + BLOCKCOUNT(size) * BLOCKSIZE)) {
 			_file.close();
+			_index.clear();
 			return false;
 		}
 	}
