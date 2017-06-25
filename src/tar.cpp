@@ -1,5 +1,6 @@
 #include <cctype>
 #include <QFile>
+#include <QFileInfo>
 #include "tar.h"
 
 
@@ -29,7 +30,7 @@ struct Header
 	                              /* 500 */
 };
 
-static quint64 number(const char* data, size_t size)
+static quint64 number(const char* data, size_t size, int base = 8)
 {
 	const char *sp;
 	quint64 val = 0;
@@ -38,18 +39,13 @@ static quint64 number(const char* data, size_t size)
 		if (isdigit(*sp))
 			break;
 	for (; sp < data + size && isdigit(*sp); sp++)
-		val = val * 8 + *sp - '0';
+		val = val * base + *sp - '0';
 
 	return val;
 }
 
 bool Tar::load(const QString &path)
 {
-	char buffer[BLOCKSIZE];
-	struct Header *hdr = (struct Header*)&buffer;
-	quint64 size;
-	qint64 ret;
-
 	if (_file.isOpen())
 		_file.close();
 	_index.clear();
@@ -58,14 +54,29 @@ bool Tar::load(const QString &path)
 	if (!_file.open(QIODevice::ReadOnly))
 		return false;
 
+	QFileInfo fi(path);
+	QString tmiPath = fi.path() + "/" + fi.completeBaseName() + ".tmi";
+
+	if (loadTmi(tmiPath))
+		return true;
+	else
+		return loadTar();
+}
+
+bool Tar::loadTar()
+{
+	char buffer[BLOCKSIZE];
+	struct Header *hdr = (struct Header*)&buffer;
+	quint64 size;
+	qint64 ret;
+
 	while ((ret = _file.read(buffer, BLOCKSIZE)) > 0) {
 		if (ret < BLOCKSIZE) {
 			_file.close();
 			return false;
 		}
 		size = number(hdr->size, sizeof(hdr->size));
-		if (size)
-			_index.insert(hdr->name, Info(size, _file.pos()));
+		_index.insert(hdr->name, _file.pos() / BLOCKSIZE - 1);
 		if (!_file.seek(_file.pos() + BLOCKCOUNT(size) * BLOCKSIZE)) {
 			_file.close();
 			return false;
@@ -75,15 +86,51 @@ bool Tar::load(const QString &path)
 	return true;
 }
 
+bool Tar::loadTmi(const QString &path)
+{
+	quint64 block;
+	int ln = 1;
+
+	QFile file(path);
+	if (!file.open(QIODevice::ReadOnly))
+		return false;
+
+	while (!file.atEnd()) {
+		QByteArray line = file.readLine();
+		int pos = line.indexOf(':');
+		if (line.size() < 10 || pos < 7 || !line.startsWith("block")) {
+			qWarning("%s:%d: syntax error\n", qPrintable(path), ln);
+			_index.clear();
+			return false;
+		}
+		block = number(line.constData() + 6, line.size() - 6, 10);
+		QString file(line.mid(pos + 1).trimmed());
+
+		_index.insert(file, block);
+		ln++;
+	}
+
+	file.close();
+
+	return true;
+}
+
 QByteArray Tar::file(const QString &name)
 {
-	QMap<QString, Tar::Info>::const_iterator it = _index.find(name);
+	char buffer[BLOCKSIZE];
+	struct Header *hdr = (struct Header*)&buffer;
+	quint64 size;
+
+	QMap<QString, quint64>::const_iterator it = _index.find(name);
 	if (it == _index.end())
 		return QByteArray();
 
 	Q_ASSERT(_file.isOpen());
-	if (_file.seek(it.value().offset()))
-		return _file.read(it.value().size());
-	else
+	if (_file.seek(it.value() * BLOCKSIZE)) {
+		if (_file.read(buffer, BLOCKSIZE) < BLOCKSIZE)
+			return QByteArray();
+		size = number(hdr->size, sizeof(hdr->size));
+		return _file.read(size);
+	} else
 		return QByteArray();
 }

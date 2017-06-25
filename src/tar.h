@@ -17,20 +17,11 @@ public:
 	bool isOpen() const {return _file.isOpen();}
 
 private:
-	class Info
-	{
-	public:
-		Info(quint64 size, quint64 offset) : _size(size),  _offset(offset) {}
-		quint64 size() const {return _size;}
-		quint64 offset() const {return _offset;}
-
-	private:
-		quint64 _size;
-		quint64 _offset;
-	};
+	bool loadTar();
+	bool loadTmi(const QString &path);
 
 	QFile _file;
-	QMap<QString, Info> _index;
+	QMap<QString, quint64> _index;
 };
 
 #endif // TAR_H
