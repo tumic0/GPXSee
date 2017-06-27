@@ -271,7 +271,7 @@ void PathView::setPalette(const Palette &palette)
 
 void PathView::setMap(Map *map)
 {
-	QPointF pos = mapToScene(QRect(QPoint(), viewport()->size()).center());
+	QPointF pos = mapToScene(viewport()->rect().center());
 	Coordinates center = _map->xy2ll(pos);
 	qreal resolution = _map->resolution(pos);
 
@@ -299,9 +299,10 @@ void PathView::setMap(Map *map)
 		it.value()->setMap(_map);
 	updatePOIVisibility();
 
-	centerOn(_map->ll2xy(center));
+	pos = _map->ll2xy(center);
+	centerOn(pos);
 
-	_res = _map->resolution(_map->ll2xy(center));
+	_res = _map->resolution(pos);
 	_mapScale->setResolution(_res);
 
 	resetCachedContent();
@@ -476,7 +477,7 @@ void PathView::keyPressEvent(QKeyEvent *event)
 {
 	int z;
 
-	QPoint pos = QRect(QPoint(), viewport()->size()).center();
+	QPoint pos = viewport()->rect().center();
 	Coordinates c = _map->xy2ll(mapToScene(pos));
 
 	if (event->matches(ZOOM_IN))
