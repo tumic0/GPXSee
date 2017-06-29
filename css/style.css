@@ -235,6 +235,10 @@ margin: .5em 0 .5em 0
 	color:#fd3801;
 	margin-bottom:2px;
 }
+#changelog-link {
+	text-align:right;
+	margin-right:20px;
+}
 .latest-news .news-item h4 {
 	font-size:12px;
 }
