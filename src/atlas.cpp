@@ -1,6 +1,7 @@
 #include <QDir>
 #include <QtAlgorithms>
 #include <QPainter>
+#include "rectc.h"
 #include "tar.h"
 #include "atlas.h"
 
@@ -198,7 +199,7 @@ qreal Atlas::zoom() const
 	return _zoom;
 }
 
-qreal Atlas::zoomFit(const QSize &size, const QRectF &br)
+qreal Atlas::zoomFit(const QSize &size, const RectC &br)
 {
 	_zoom = 0;
 

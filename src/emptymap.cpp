@@ -1,5 +1,6 @@
 #include <QtGlobal>
 #include <QPainter>
+#include "rectc.h"
 #include "misc.h"
 #include "rd.h"
 #include "wgs84.h"
@@ -21,17 +22,14 @@ QRectF EmptyMap::bounds() const
 	return scaled(QRectF(QPointF(-180, -180), QSizeF(360, 360)), 1.0/_scale);
 }
 
-qreal EmptyMap::zoomFit(const QSize &size, const QRectF &br)
+qreal EmptyMap::zoomFit(const QSize &size, const RectC &br)
 {
 	if (br.isNull())
 		_scale = SCALE_MAX;
 	else {
-		Coordinates topLeft(br.topLeft());
-		Coordinates bottomRight(br.bottomRight());
-		QRectF tbr(Mercator().ll2xy(topLeft), Mercator().ll2xy(bottomRight));
-
+		QRectF tbr(Mercator().ll2xy(br.topLeft()),
+		  Mercator().ll2xy(br.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
-
 		_scale = qMax(sc.x(), sc.y());
 	}
 

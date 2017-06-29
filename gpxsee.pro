@@ -94,7 +94,8 @@ HEADERS += src/config.h \
     src/datum.h \
     src/maplist.h \
     src/albersequal.h \
-    src/oddspinbox.h
+    src/oddspinbox.h \
+    src/rectc.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -162,7 +163,8 @@ SOURCES += src/main.cpp \
     src/datum.cpp \
     src/maplist.cpp \
     src/albersequal.cpp \
-    src/oddspinbox.cpp
+    src/oddspinbox.cpp \
+    src/rectc.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \

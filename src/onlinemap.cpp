@@ -1,6 +1,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QPainter>
+#include "rectc.h"
 #include "downloader.h"
 #include "config.h"
 #include "rd.h"
@@ -165,14 +166,13 @@ QRectF OnlineMap::bounds() const
 	  1.0/zoom2scale(_zoom));
 }
 
-qreal OnlineMap::zoomFit(const QSize &size, const QRectF &br)
+qreal OnlineMap::zoomFit(const QSize &size, const RectC &br)
 {
 	if (br.isNull())
 		_zoom = ZOOM_MAX;
 	else {
-		Coordinates topLeft(br.topLeft());
-		Coordinates bottomRight(br.bottomRight());
-		QRectF tbr(Mercator().ll2xy(topLeft), Mercator().ll2xy(bottomRight));
+		QRectF tbr(Mercator().ll2xy(br.topLeft()),
+		  Mercator().ll2xy(br.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
 
 		_zoom = scale2zoom(qMax(sc.x(), sc.y()));

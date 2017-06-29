@@ -21,18 +21,6 @@
 #define MARGIN           10.0
 #define SCALE_OFFSET     7
 
-static void unite(QRectF &rect, const QPointF &p)
-{
-	if (p.x() < rect.left())
-		rect.setLeft(p.x());
-	if (p.x() > rect.right())
-		rect.setRight(p.x());
-	if (p.y() > rect.bottom())
-		rect.setBottom(p.y());
-	if (p.y() < rect.top())
-		rect.setTop(p.y());
-}
-
 PathView::PathView(Map *map, POI *poi, QWidget *parent)
 	: QGraphicsView(parent)
 {
@@ -141,8 +129,7 @@ void PathView::addWaypoints(const QList<Waypoint> &waypoints)
 
 		WaypointItem *wi = new WaypointItem(w, _map);
 		_waypoints.append(wi);
-		Coordinates c = wi->waypoint().coordinates();
-		updateWaypointsBoundingRect(QPointF(c.lon(), c.lat()));
+		updateWaypointsBoundingRect(wi->waypoint().coordinates());
 		wi->setZValue(1);
 		wi->showLabel(_showWaypointLabels);
 		wi->setUnits(_units);
@@ -184,33 +171,33 @@ QList<PathItem *> PathView::loadData(const Data &data)
 	return paths;
 }
 
-void PathView::updateWaypointsBoundingRect(const QPointF &wp)
+void PathView::updateWaypointsBoundingRect(const Coordinates &wp)
 {
 	if (_wr.isNull()) {
 		if (_wp.isNull())
 			_wp = wp;
 		else {
-			_wr = QRectF(_wp, wp).normalized();
-			_wp = QPointF();
+			_wr = RectC(_wp, wp).normalized();
+			_wp = Coordinates();
 		}
 	} else
-		unite(_wr, wp);
+		_wr.unite(wp);
 }
 
 qreal PathView::mapScale() const
 {
-	QRectF br = _tr | _rr | _wr;
+	RectC br = _tr | _rr | _wr;
 	if (!br.isNull() && !_wp.isNull())
-		unite(br, _wp);
+		br.unite(_wp);
 
 	return _map->zoomFit(viewport()->size() - QSize(MARGIN/2, MARGIN/2), br);
 }
 
 QPointF PathView::contentCenter() const
 {
-	QRectF br = _tr | _rr | _wr;
+	RectC br = _tr | _rr | _wr;
 	if (!br.isNull() && !_wp.isNull())
-		unite(br, _wp);
+		br.unite(_wp);
 
 	if (br.isNull())
 		return _map->ll2xy(_wp);
@@ -543,8 +530,8 @@ void PathView::clear()
 	_scene->clear();
 	_palette.reset();
 
-	_tr = QRectF(); _rr = QRectF(); _wr = QRectF();
-	_wp = QPointF();
+	_tr = RectC(); _rr = RectC(); _wr = RectC();
+	_wp = Coordinates();
 
 	resetDigitalZoom();
 	resetCachedContent();

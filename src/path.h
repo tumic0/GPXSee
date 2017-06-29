@@ -4,6 +4,7 @@
 #include <QVector>
 #include <QRectF>
 #include "coordinates.h"
+#include "rectc.h"
 
 class PathPoint
 {
@@ -28,7 +29,7 @@ QDebug operator<<(QDebug dbg, const PathPoint &point);
 class Path : public QVector<PathPoint>
 {
 public:
-	QRectF boundingRect() const;
+	RectC boundingRect() const;
 };
 
 #endif // PATH_H

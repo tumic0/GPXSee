@@ -8,6 +8,7 @@
 #include "units.h"
 #include "palette.h"
 #include "waypoint.h"
+#include "rectc.h"
 
 class Data;
 class POI;
@@ -80,7 +81,7 @@ private:
 	void digitalZoom(int zoom);
 	void resetDigitalZoom();
 	void updatePOIVisibility();
-	void updateWaypointsBoundingRect(const QPointF &wp);
+	void updateWaypointsBoundingRect(const Coordinates &wp);
 
 	void mouseDoubleClickEvent(QMouseEvent *event);
 	void wheelEvent(QWheelEvent *event);
@@ -97,8 +98,8 @@ private:
 	QList<WaypointItem*> _waypoints;
 	QHash<Waypoint, WaypointItem*> _pois;
 
-	QRectF _tr, _rr, _wr;
-	QPointF _wp;
+	RectC _tr, _rr, _wr;
+	Coordinates _wp;
 	qreal _res;
 
 	Map *_map;
