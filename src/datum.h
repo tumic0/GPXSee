@@ -3,6 +3,7 @@
 
 #include <QMap>
 #include "ellipsoid.h"
+#include "coordinates.h"
 
 class Datum
 {
@@ -17,8 +18,8 @@ public:
 	double dz() const {return _dz;}
 
 	bool isNull() const {return _ellipsoid.isNull();}
-	bool isWGS84() const
-	  {return _ellipsoid.isWGS84() && _dx == 0 && _dy == 0 && _dz == 0;}
+
+	Coordinates toWGS84(const Coordinates &c) const;
 
 	static bool loadList(const QString &path);
 	static const QString &errorString() {return _errorString;}

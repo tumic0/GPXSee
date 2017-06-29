@@ -3,7 +3,6 @@
 
 #include <QString>
 #include <QMap>
-#include "wgs84.h"
 
 class Ellipsoid
 {
@@ -16,8 +15,6 @@ public:
 	double flattening() const {return _flattening;}
 
 	bool isNull() const {return _radius < 0 || _flattening < 0;}
-	bool isWGS84() const
-	  {return _radius == WGS84_RADIUS && _flattening == WGS84_FLATTENING;}
 
 	static bool loadList(const QString &path);
 	static const QString &errorString() {return _errorString;}

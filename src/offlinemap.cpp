@@ -23,39 +23,6 @@
 #include "offlinemap.h"
 
 
-// Abridged Molodensky transformation
-static Coordinates toWGS84(Coordinates c, const Datum &datum)
-{
-	double rlat = deg2rad(c.lat());
-	double rlon = deg2rad(c.lon());
-
-	double slat = sin(rlat);
-	double clat = cos(rlat);
-	double slon = sin(rlon);
-	double clon = cos(rlon);
-	double ssqlat = slat * slat;
-
-	double from_f = datum.ellipsoid().flattening();
-	double df = WGS84_FLATTENING - from_f;
-	double from_a = datum.ellipsoid().radius();
-	double da = WGS84_RADIUS - from_a;
-	double from_esq = datum.ellipsoid().flattening()
-	  * (2.0 - datum.ellipsoid().flattening());
-	double adb = 1.0 / (1.0 - from_f);
-	double rn = from_a / sqrt(1 - from_esq * ssqlat);
-	double rm = from_a * (1 - from_esq) / pow((1 - from_esq * ssqlat), 1.5);
-	double from_h = 0.0;
-
-	double dlat = (-datum.dx() * slat * clon - datum.dy() * slat * slon
-	  + datum.dz() * clat + da * rn * from_esq * slat * clat / from_a + df
-	  * (rm * adb + rn / adb) * slat * clat) / (rm + from_h);
-	double dlon = (-datum.dx() * slon + datum.dy() * clon) / ((rn + from_h)
-	  * clat);
-
-	return Coordinates(c.lon() + rad2deg(dlon), c.lat() + rad2deg(dlat));
-}
-
-
 int OfflineMap::parse(QIODevice &device, QList<ReferencePoint> &points,
   QString &projection, ProjectionSetup &setup, QString &datum)
 {
@@ -263,15 +230,10 @@ bool OfflineMap::createProjection(const QString &datum,
 	}
 
 	for (int i = 0; i < points.size(); i++) {
-		if (points.at(i).ll.isNull()) {
-			if (d.isWGS84())
-				points[i].ll = _projection->xy2ll(points.at(i).pp);
-			else
-				points[i].ll = toWGS84(_projection->xy2ll(points.at(i).pp), d);
-		} else {
-			if (!d.isWGS84())
-				points[i].ll = toWGS84(points[i].ll, d);
-		}
+		if (points.at(i).ll.isNull())
+			points[i].ll = d.toWGS84(_projection->xy2ll(points.at(i).pp));
+		else
+			points[i].ll = d.toWGS84(points[i].ll);
 	}
 
 	return true;
