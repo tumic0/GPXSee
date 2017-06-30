@@ -112,7 +112,7 @@ void TCXParser::trackpoints(TrackData &track)
 		if (_reader.name() == "Trackpoint") {
 			Trackpoint t;
 			trackpointData(t);
-			if (!t.coordinates().isNull())
+			if (t.coordinates().isValid())
 				track.append(t);
 			else
 				warning("Missing Trackpoint coordinates");
@@ -143,7 +143,7 @@ void TCXParser::course(TrackData &track)
 		else if (_reader.name() == "CoursePoint") {
 			Waypoint w;
 			waypointData(w);
-			if (!w.coordinates().isNull())
+			if (w.coordinates().isValid())
 				_waypoints.append(w);
 			else
 				warning("Missing Trackpoint coordinates");
