@@ -13,7 +13,9 @@ public:
 	  : _tl(topLeft), _br(bottomRight) {}
 
 	bool isNull() const
-	  {return _tl.isNull() || _br.isNull() || _tl == _br;}
+	  {return _tl.isNull() && _br.isNull();}
+	bool isValid() const
+	  {return !(_tl.isNull() || _br.isNull() || _tl == _br);}
 
 	Coordinates topLeft() const {return _tl;}
 	Coordinates bottomRight() const {return _br;}
@@ -25,8 +27,6 @@ public:
 	qreal height() const {return  _br.lat() - _tl.lat();}
 
 	QSizeF size() const {return QSizeF(width(), height());}
-
-	RectC normalized() const;
 
 	RectC operator|(const RectC &r) const;
 	RectC &operator|=(const RectC &r) {*this = *this | r; return *this;}

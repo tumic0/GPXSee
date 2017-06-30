@@ -24,7 +24,7 @@ QRectF EmptyMap::bounds() const
 
 qreal EmptyMap::zoomFit(const QSize &size, const RectC &br)
 {
-	if (br.isNull())
+	if (!br.isValid())
 		_scale = SCALE_MAX;
 	else {
 		QRectF tbr(Mercator().ll2xy(br.topLeft()),

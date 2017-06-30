@@ -203,7 +203,7 @@ qreal Atlas::zoomFit(const QSize &size, const RectC &br)
 {
 	_zoom = 0;
 
-	if (br.isNull()) {
+	if (!br.isValid()) {
 		_zoom = _zooms.size() - 1;
 		return _zoom;
 	}

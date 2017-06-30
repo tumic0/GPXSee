@@ -99,7 +99,6 @@ private:
 	QHash<Waypoint, WaypointItem*> _pois;
 
 	RectC _tr, _rr, _wr;
-	Coordinates _wp;
 	qreal _res;
 
 	Map *_map;

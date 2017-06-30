@@ -173,22 +173,15 @@ QList<PathItem *> PathView::loadData(const Data &data)
 
 void PathView::updateWaypointsBoundingRect(const Coordinates &wp)
 {
-	if (_wr.isNull()) {
-		if (_wp.isNull())
-			_wp = wp;
-		else {
-			_wr = RectC(_wp, wp).normalized();
-			_wp = Coordinates();
-		}
-	} else
+	if (_wr.isNull())
+		_wr = RectC(wp, wp);
+	else
 		_wr.unite(wp);
 }
 
 qreal PathView::mapScale() const
 {
 	RectC br = _tr | _rr | _wr;
-	if (!br.isNull() && !_wp.isNull())
-		br.unite(_wp);
 
 	return _map->zoomFit(viewport()->size() - QSize(MARGIN/2, MARGIN/2), br);
 }
@@ -196,13 +189,8 @@ qreal PathView::mapScale() const
 QPointF PathView::contentCenter() const
 {
 	RectC br = _tr | _rr | _wr;
-	if (!br.isNull() && !_wp.isNull())
-		br.unite(_wp);
 
-	if (br.isNull())
-		return _map->ll2xy(_wp);
-	else
-		return _map->ll2xy(br.center());
+	return _map->ll2xy(br.center());
 }
 
 void PathView::updatePOIVisibility()
@@ -530,8 +518,9 @@ void PathView::clear()
 	_scene->clear();
 	_palette.reset();
 
-	_tr = RectC(); _rr = RectC(); _wr = RectC();
-	_wp = Coordinates();
+	_tr = RectC();
+	_rr = RectC();
+	_wr = RectC();
 
 	resetDigitalZoom();
 	resetCachedContent();

@@ -168,7 +168,7 @@ QRectF OnlineMap::bounds() const
 
 qreal OnlineMap::zoomFit(const QSize &size, const RectC &br)
 {
-	if (br.isNull())
+	if (!br.isValid())
 		_zoom = ZOOM_MAX;
 	else {
 		QRectF tbr(Mercator().ll2xy(br.topLeft()),
