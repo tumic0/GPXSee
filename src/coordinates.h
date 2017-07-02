@@ -22,8 +22,8 @@ public:
 	bool isNull() const
 	  {return std::isnan(_lon) && std::isnan(_lat);}
 	bool isValid() const
-	  {return (!std::isnan(_lon) && !std::isnan(_lat)
-		&& _lon >= -180.0 && _lon <= 180.0 && _lat >= -90.0 && _lat <= 90.0);}
+	  {return (_lon >= -180.0 && _lon <= 180.0
+	    && _lat >= -90.0 && _lat <= 90.0);}
 
 	qreal distanceTo(const Coordinates &c) const;
 	QPair<Coordinates, Coordinates> boundingRect(qreal distance) const;
