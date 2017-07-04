@@ -278,6 +278,6 @@ margin: .5em 0 .5em 0
 	font-family:monospace;
 }
 .config-files .os {
-	padding-right:30px;
+	width:100px;
 	font-style:italic;
 }
