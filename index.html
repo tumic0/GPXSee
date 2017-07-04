@@ -97,18 +97,30 @@
           easily override the default map list with your own list either by editing the
           global map list file:</p>
 
-<pre>
-C:\Program Files\GPXSee\maps.txt                      # Windows
-/usr/share/gpxsee/maps.txt                            # Linux
-/Applications/GPXSee.app/Contents/Resources/maps.txt  # OS X
-</pre>
-
+          <table class="config-files">
+            <tr>
+              <td class="os">Windows:</td>
+              <td class="file">C:\Program Files\GPXSee\maps.txt</td>
+            </tr><tr>
+              <td class="os">Linux:</td>
+              <td class="file">/usr/share/gpxsee/maps.txt</td>
+            </tr><tr>
+              <td class="os">OS X:</td>
+              <td class="file">/Applications/GPXSee.app/Contents/Resources/maps.txt</td>
+            </tr>  
+          </table>
+          
           <p>or by overriding it with a user map list file:</p>
 
-<pre>
-%HOMEPATH%\GPXSee\maps.txt  # Windows
-$HOME/.gpxsee/maps.txt      # OS X &amp; Linux
-</pre>
+          <table class="config-files">
+            <tr>
+              <td class="os">Windows:</td>
+              <td class="file">%HOMEPATH%\GPXSee\maps.txt</td>
+            </tr><tr>
+              <td class="os">OS X, Linux:</td>
+              <td class="file">$HOME/.gpxsee/maps.txt</td>
+            </tr>
+          </table>
 
           <p>The file format is one map entry per line, consisting of the map name and
           tiles URL delimited by a TAB character. The tile X and Y coordinates are

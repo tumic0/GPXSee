@@ -271,17 +271,13 @@ margin: .5em 0 .5em 0
 	float:right;
 }
 
-.gallery-top {
-	height:10px;
+.config-files {
+	margin-left: 10px;
 }
-.gallery-bottom {
-	height:50px;
+.config-files .file {
+	font-family:monospace;
 }
-.gallery-main {
-	background-color:#000000;
-	padding:20px 0;
-}
-
-#gallery {
-	margin: 0 50px 0 50px;
+.config-files .os {
+	padding-right:30px;
+	font-style:italic;
 }

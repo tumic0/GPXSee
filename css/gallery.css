@@ -1,3 +1,18 @@
+.gallery-top {
+	height:10px;
+}
+.gallery-bottom {
+	height:50px;
+}
+.gallery-main {
+	background-color:#000000;
+	padding:20px 0;
+}
+
+#gallery {
+	margin: 0 50px 0 50px;
+}
+
 ul.rig {
 	list-style: none;
 	font-size: 0px;
