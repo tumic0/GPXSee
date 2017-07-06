@@ -95,7 +95,8 @@ HEADERS += src/config.h \
     src/maplist.h \
     src/albersequal.h \
     src/oddspinbox.h \
-    src/rectc.h
+    src/rectc.h \
+    src/searchpointer.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \

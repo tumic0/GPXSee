@@ -9,6 +9,7 @@
 #include "palette.h"
 #include "waypoint.h"
 #include "rectc.h"
+#include "searchpointer.h"
 
 class Data;
 class POI;
@@ -96,7 +97,7 @@ private:
 	QList<TrackItem*> _tracks;
 	QList<RouteItem*> _routes;
 	QList<WaypointItem*> _waypoints;
-	QHash<Waypoint, WaypointItem*> _pois;
+	QHash<SearchPointer<Waypoint>, WaypointItem*> _pois;
 
 	RectC _tr, _rr, _wr;
 	qreal _res;

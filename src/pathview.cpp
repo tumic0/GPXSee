@@ -22,7 +22,7 @@
 #define SCALE_OFFSET     7
 
 PathView::PathView(Map *map, POI *poi, QWidget *parent)
-	: QGraphicsView(parent)
+: QGraphicsView(parent)
 {
 	Q_ASSERT(map != 0);
 	Q_ASSERT(poi != 0);
@@ -195,7 +195,7 @@ QPointF PathView::contentCenter() const
 
 void PathView::updatePOIVisibility()
 {
-	QHash<Waypoint, WaypointItem*>::const_iterator it, jt;
+	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it, jt;
 
 	if (!_showPOI)
 		return;
@@ -226,7 +226,7 @@ void PathView::rescale()
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setMap(_map);
 
-	QHash<Waypoint, WaypointItem*>::const_iterator it;
+	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
 		it.value()->setMap(_map);
 
@@ -269,7 +269,7 @@ void PathView::setMap(Map *map)
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setMap(map);
 
-	QHash<Waypoint, WaypointItem*>::const_iterator it;
+	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
 		it.value()->setMap(_map);
 	updatePOIVisibility();
@@ -296,7 +296,7 @@ void PathView::setPOI(POI *poi)
 
 void PathView::updatePOI()
 {
-	QHash<Waypoint, WaypointItem*>::const_iterator it;
+	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
 
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
 		_scene->removeItem(it.value());
@@ -318,7 +318,7 @@ void PathView::addPOI(const QVector<Waypoint> &waypoints)
 	for (int i = 0; i < waypoints.size(); i++) {
 		const Waypoint &w = waypoints.at(i);
 
-		if (_pois.contains(w))
+		if (_pois.contains(SearchPointer<Waypoint>(&w)))
 			continue;
 
 		WaypointItem *pi = new WaypointItem(w, _map);
@@ -328,7 +328,7 @@ void PathView::addPOI(const QVector<Waypoint> &waypoints)
 		pi->setDigitalZoom(_digitalZoom);
 		_scene->addItem(pi);
 
-		_pois.insert(w, pi);
+		_pois.insert(SearchPointer<Waypoint>(&(pi->waypoint())), pi);
 	}
 }
 
@@ -345,7 +345,7 @@ void PathView::setUnits(enum Units units)
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setUnits(units);
 
-	QHash<Waypoint, WaypointItem*>::const_iterator it;
+	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
 		it.value()->setUnits(units);
 }
@@ -357,7 +357,7 @@ void PathView::redraw()
 
 void PathView::resetDigitalZoom()
 {
-	QHash<Waypoint, WaypointItem*>::const_iterator it;
+	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
 
 	_digitalZoom = 0;
 	resetTransform();
@@ -376,7 +376,7 @@ void PathView::resetDigitalZoom()
 
 void PathView::digitalZoom(int zoom)
 {
-	QHash<Waypoint, WaypointItem*>::const_iterator it;
+	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
 
 	_digitalZoom += zoom;
 	scale(pow(2, zoom), pow(2, zoom));
@@ -580,7 +580,7 @@ void PathView::showPOI(bool show)
 {
 	_showPOI = show;
 
-	QHash<Waypoint, WaypointItem*>::const_iterator it;
+	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
 		it.value()->setVisible(show);
 
@@ -591,7 +591,7 @@ void PathView::showPOILabels(bool show)
 {
 	_showPOILabels = show;
 
-	QHash<Waypoint, WaypointItem*>::const_iterator it;
+	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
 		it.value()->showLabel(show);
 
