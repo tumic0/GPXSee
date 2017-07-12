@@ -411,7 +411,7 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 	_valid = false;
 	_img = 0;
 	_projection = 0;
-	_resolution = 0;
+	_resolution = 0.0;
 
 	if (suffix == "tar") {
 		if (!_tar.load(fileName)) {
@@ -477,6 +477,7 @@ OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
 	_valid = false;
 	_img = 0;
 	_projection = 0;
+	_resolution = 0.0;
 
 	QFileInfo map(fi.absolutePath());
 	QFileInfo layer(map.absolutePath());
