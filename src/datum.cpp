@@ -9,7 +9,7 @@ static QMap<QString, Datum> WGS84()
 {
 	QMap<QString, Datum> map;
 	map.insert("WGS 84", Datum(Ellipsoid(WGS84_RADIUS, WGS84_FLATTENING),
-	  0, 0, 0));
+	  0.0, 0.0, 0.0));
 	return map;
 }
 
