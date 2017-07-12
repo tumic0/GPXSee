@@ -8,7 +8,7 @@
 class Datum
 {
 public:
-	Datum() : _ellipsoid(Ellipsoid()), _dx(0), _dy(0), _dz(0) {}
+	Datum() : _ellipsoid(Ellipsoid()), _dx(0.0), _dy(0.0), _dz(0.0) {}
 	Datum(const Ellipsoid &ellipsoid, double dx, double dy, double dz)
 	  : _ellipsoid(ellipsoid), _dx(dx), _dy(dy), _dz(dz) {}
 
@@ -17,7 +17,8 @@ public:
 	double dy() const {return _dy;}
 	double dz() const {return _dz;}
 
-	bool isNull() const {return _ellipsoid.isNull();}
+	bool isNull() const
+	  {return (_ellipsoid.isNull() && _dx == 0.0 && _dy == 0.0 && _dz == 0.0);}
 
 	Coordinates toWGS84(const Coordinates &c) const;
 

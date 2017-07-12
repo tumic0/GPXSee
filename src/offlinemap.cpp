@@ -180,8 +180,8 @@ bool OfflineMap::createProjection(const QString &datum,
 
 	if (setup.latitudeOrigin < -90.0 || setup.latitudeOrigin > 90.0
 	  || setup.longitudeOrigin < -180.0 || setup.longitudeOrigin > 180.0
-	  || setup.standardParallel1 < -90 || setup.standardParallel1 > 90
-	  || setup.standardParallel2 < -90 || setup.standardParallel2 > 90) {
+	  || setup.standardParallel1 < -90.0 || setup.standardParallel1 > 90.0
+	  || setup.standardParallel2 < -90.0 || setup.standardParallel2 > 90.0) {
 		_errorString = "Invalid projection setup";
 		return false;
 	}

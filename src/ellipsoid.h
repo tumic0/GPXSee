@@ -7,14 +7,14 @@
 class Ellipsoid
 {
 public:
-	Ellipsoid() : _radius(-1.0), _flattening(-1.0) {}
+	Ellipsoid() : _radius(0.0), _flattening(0.0) {}
 	Ellipsoid(double radius, double flattening)
 	  : _radius(radius), _flattening(flattening) {}
 
 	double radius() const {return _radius;}
 	double flattening() const {return _flattening;}
 
-	bool isNull() const {return _radius < 0 || _flattening < 0;}
+	bool isNull() const {return (_radius == 0.0 && _flattening == 0.0);}
 
 	static bool loadList(const QString &path);
 	static const QString &errorString() {return _errorString;}
