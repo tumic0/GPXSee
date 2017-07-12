@@ -89,7 +89,7 @@ Coordinates Datum::toWGS84(const Coordinates &c) const
 {
 	if (_ellipsoid.radius() == WGS84_RADIUS
 	  && _ellipsoid.flattening() == WGS84_FLATTENING
-	  && _dx == 0 && _dy == 0 && _dz == 0)
+	  && _dx == 0.0 && _dy == 0.0 && _dz == 0.0)
 		return c;
 
 	double rlat = deg2rad(c.lat());
