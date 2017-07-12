@@ -197,16 +197,16 @@ Coordinates TransverseMercator::xy2ll(const QPointF &p) const
 	sr = SPHSR(ftphi);
 	sn = SPHSN(ftphi);
 
-    cl = cos(ftphi);
+	cl = cos(ftphi);
 
-    t = tan(ftphi);
-    tan2 = t * t;
-    tan4 = tan2 * tan2;
-    eta = _ebs * pow(cl, 2);
-    eta2 = eta * eta;
-    eta3 = eta2 * eta;
-    eta4 = eta3 * eta;
-    de = p.x() - _falseEasting;
+	t = tan(ftphi);
+	tan2 = t * t;
+	tan4 = tan2 * tan2;
+	eta = _ebs * pow(cl, 2);
+	eta2 = eta * eta;
+	eta3 = eta2 * eta;
+	eta4 = eta3 * eta;
+	de = p.x() - _falseEasting;
 	if (fabs(de) < 0.0001)
 		de = 0.0;
 
