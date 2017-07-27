@@ -6,16 +6,19 @@
 #include <QHash>
 #include <QPointF>
 #include <QString>
+#include <QStringList>
 #include "waypoint.h"
 #include "track.h"
 #include "route.h"
 #include "parser.h"
 
 
-class Data
+class Data : public QObject
 {
+	Q_OBJECT
+
 public:
-	Data();
+	Data(QObject *parent = 0) : QObject(parent), _errorLine(0) {}
 	~Data();
 
 	bool loadFile(const QString &fileName);
@@ -24,21 +27,25 @@ public:
 
 	const QList<Track*> &tracks() const {return _tracks;}
 	const QList<Route*> &routes() const {return _routes;}
-	const QList<Waypoint> &waypoints() const {return _waypointData;}
+	const QList<Waypoint> &waypoints() const {return _waypoints;}
+
+	static QString formats();
+	static QStringList filter();
 
 private:
-	void createData();
+	void processData();
 
 	QString _errorString;
 	int _errorLine;
-	QHash<QString, Parser*> _parsers;
 
 	QList<Track*> _tracks;
 	QList<Route*> _routes;
+	QList<Waypoint> _waypoints;
 
 	QList<TrackData> _trackData;
 	QList<RouteData> _routeData;
-	QList<Waypoint> _waypointData;
+
+	static QHash<QString, Parser*> _parsers;
 };
 
 #endif // DATA_H

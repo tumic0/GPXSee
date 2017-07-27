@@ -8,17 +8,16 @@
 class GPXParser : public Parser
 {
 public:
-	GPXParser(QList<TrackData> &tracks, QList<RouteData> &routes,
-	  QList<Waypoint> &waypoints) : Parser(tracks, routes, waypoints) {}
 	~GPXParser() {}
 
-	bool loadFile(QFile *file);
+	bool parse(QFile *file, QList<TrackData> &tracks,
+	  QList<RouteData> &routes, QList<Waypoint> &waypoints);
 	QString errorString() const {return _reader.errorString();}
 	int errorLine() const {return _reader.lineNumber();}
 
 private:
-	bool parse();
-	void gpx();
+	void gpx(QList<TrackData> &tracks, QList<RouteData> &routes,
+	  QList<Waypoint> &waypoints);
 	void track(TrackData &track);
 	void trackpoints(TrackData &track);
 	void routepoints(RouteData &route);

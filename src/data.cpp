@@ -11,38 +11,32 @@
 #include "data.h"
 
 
-Data::Data() : _errorLine(0)
+static QHash<QString, Parser*> parsers()
 {
-	_parsers.insert("gpx", new GPXParser(_trackData, _routeData,
-	  _waypointData));
-	_parsers.insert("tcx", new TCXParser(_trackData, _routeData,
-	  _waypointData));
-	_parsers.insert("kml", new KMLParser(_trackData, _routeData,
-	  _waypointData));
-	_parsers.insert("fit", new FITParser(_trackData, _routeData,
-	  _waypointData));
-	_parsers.insert("csv", new CSVParser(_trackData, _routeData,
-	  _waypointData));
-	_parsers.insert("igc", new IGCParser(_trackData, _routeData,
-	  _waypointData));
-	_parsers.insert("nmea", new NMEAParser(_trackData, _routeData,
-	  _waypointData));
+	QHash<QString, Parser*> hash;
+
+	hash.insert("gpx", new GPXParser());
+	hash.insert("tcx", new TCXParser());
+	hash.insert("kml", new KMLParser());
+	hash.insert("fit", new FITParser());
+	hash.insert("csv", new CSVParser());
+	hash.insert("igc", new IGCParser());
+	hash.insert("nmea", new NMEAParser());
+
+	return hash;
 }
+
+QHash<QString, Parser*> Data::_parsers = parsers();
 
 Data::~Data()
 {
-	QHash<QString, Parser*>::iterator it;
-
-	for (it = _parsers.begin(); it != _parsers.end(); it++)
-		delete it.value();
-
 	for (int i = 0; i < _tracks.count(); i++)
 		delete _tracks.at(i);
 	for (int i = 0; i < _routes.count(); i++)
 		delete _routes.at(i);
 }
 
-void Data::createData()
+void Data::processData()
 {
 	for (int i = 0; i < _trackData.count(); i++)
 		_tracks.append(new Track(_trackData.at(i)));
@@ -66,8 +60,8 @@ bool Data::loadFile(const QString &fileName)
 
 	QHash<QString, Parser*>::iterator it;
 	if ((it = _parsers.find(fi.suffix().toLower())) != _parsers.end()) {
-		if (it.value()->loadFile(&file)) {
-			createData();
+		if (it.value()->parse(&file, _trackData, _routeData, _waypoints)) {
+			processData();
 			return true;
 		}
 
@@ -75,8 +69,8 @@ bool Data::loadFile(const QString &fileName)
 		_errorString = it.value()->errorString();
 	} else {
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
-			if (it.value()->loadFile(&file)) {
-				createData();
+			if (it.value()->parse(&file, _trackData, _routeData, _waypoints)) {
+				processData();
 				return true;
 			}
 			file.reset();
@@ -92,4 +86,24 @@ bool Data::loadFile(const QString &fileName)
 	}
 
 	return false;
+}
+
+QString Data::formats()
+{
+	return tr("Supported files (*.csv *.fit *.gpx *.igc *.kml *.nmea *.tcx)")
+	  + ";;" + tr("CSV files (*.csv)") + ";;" + tr("FIT files (*.fit)") + ";;"
+	  + tr("GPX files (*.gpx)") + ";;" + tr("IGC files (*.igc)") + ";;"
+	  + tr("KML files (*.kml)") + ";;" + tr("NMEA files (*.nmea)") + ";;"
+	  + tr("TCX files (*.tcx)") + ";;" + tr("All files (*)");
+}
+
+QStringList Data::filter()
+{
+	QStringList filter;
+	QHash<QString, Parser*>::iterator it;
+
+	for (it = _parsers.begin(); it != _parsers.end(); it++)
+		filter << QString("*.%1").arg(it.key());
+
+	return filter;
 }

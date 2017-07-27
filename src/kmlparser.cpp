@@ -251,20 +251,21 @@ void KMLParser::track(TrackData &track)
 		_reader.raiseError(mismatchError);
 }
 
-void KMLParser::multiGeometry(const QString &name, const QString &desc,
+void KMLParser::multiGeometry(QList<TrackData> &tracks,
+  QList<Waypoint> &waypoints, const QString &name, const QString &desc,
   const QDateTime timestamp)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Point") {
-			_waypoints.append(Waypoint());
-			Waypoint &w = _waypoints.last();
+			waypoints.append(Waypoint());
+			Waypoint &w = waypoints.last();
 			w.setName(name);
 			w.setDescription(desc);
 			w.setTimestamp(timestamp);
 			point(w);
 		} else if (_reader.name() == "LineString") {
-			_tracks.append(TrackData());
-			TrackData &t = _tracks.last();
+			tracks.append(TrackData());
+			TrackData &t = tracks.last();
 			t.setName(name);
 			t.setDescription(desc);
 			lineString(t);
@@ -273,7 +274,7 @@ void KMLParser::multiGeometry(const QString &name, const QString &desc,
 	}
 }
 
-void KMLParser::placemark()
+void KMLParser::placemark(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 {
 	QString name, desc;
 	QDateTime timestamp;
@@ -286,23 +287,23 @@ void KMLParser::placemark()
 		else if (_reader.name() == "TimeStamp")
 			timestamp = timeStamp();
 		else if (_reader.name() == "MultiGeometry")
-			multiGeometry(name, desc, timestamp);
+			multiGeometry(tracks, waypoints, name, desc, timestamp);
 		else if (_reader.name() == "Point") {
-			_waypoints.append(Waypoint());
-			Waypoint &w = _waypoints.last();
+			waypoints.append(Waypoint());
+			Waypoint &w = waypoints.last();
 			w.setName(name);
 			w.setDescription(desc);
 			w.setTimestamp(timestamp);
 			point(w);
 		} else if (_reader.name() == "LineString") {
-			_tracks.append(TrackData());
-			TrackData &t = _tracks.last();
+			tracks.append(TrackData());
+			TrackData &t = tracks.last();
 			t.setName(name);
 			t.setDescription(desc);
 			lineString(t);
 		} else if (_reader.name() == "Track") {
-			_tracks.append(TrackData());
-			TrackData &t = _tracks.last();
+			tracks.append(TrackData());
+			TrackData &t = tracks.last();
 			t.setName(name);
 			t.setDescription(desc);
 			track(t);
@@ -311,58 +312,56 @@ void KMLParser::placemark()
 	}
 }
 
-void KMLParser::folder()
+void KMLParser::folder(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Placemark")
-			placemark();
+			placemark(tracks, waypoints);
 		else if (_reader.name() == "Folder")
-			folder();
+			folder(tracks, waypoints);
 		else
 			_reader.skipCurrentElement();
 	}
 }
 
-void KMLParser::document()
+void KMLParser::document(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Placemark")
-			placemark();
+			placemark(tracks, waypoints);
 		else if (_reader.name() == "Folder")
-			folder();
+			folder(tracks, waypoints);
 		else
 			_reader.skipCurrentElement();
 	}
 }
 
-void KMLParser::kml()
+void KMLParser::kml(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Document")
-			document();
+			document(tracks, waypoints);
 		else if (_reader.name() == "Placemark")
-			placemark();
+			placemark(tracks, waypoints);
 		else
 			_reader.skipCurrentElement();
 	}
 }
 
-bool KMLParser::parse()
+bool KMLParser::parse(QFile *file, QList<TrackData> &tracks,
+  QList<RouteData> &routes, QList<Waypoint> &waypoints)
 {
+	Q_UNUSED(routes);
+
+	_reader.clear();
+	_reader.setDevice(file);
+
 	if (_reader.readNextStartElement()) {
 		if (_reader.name() == "kml")
-			kml();
+			kml(tracks, waypoints);
 		else
 			_reader.raiseError("Not a KML file");
 	}
 
 	return !_reader.error();
-}
-
-bool KMLParser::loadFile(QFile *file)
-{
-	_reader.clear();
-	_reader.setDevice(file);
-
-	return parse();
 }

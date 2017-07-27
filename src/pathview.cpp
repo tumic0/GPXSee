@@ -22,7 +22,7 @@
 #define SCALE_OFFSET     7
 
 PathView::PathView(Map *map, POI *poi, QWidget *parent)
-: QGraphicsView(parent)
+  : QGraphicsView(parent)
 {
 	Q_ASSERT(map != 0);
 	Q_ASSERT(poi != 0);

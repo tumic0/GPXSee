@@ -6,26 +6,25 @@
 #include "maplist.h"
 
 
-bool MapList::loadListEntry(const QByteArray &line)
+Map *MapList::loadListEntry(const QByteArray &line)
 {
 	QList<QByteArray> list = line.split('\t');
 	if (list.size() != 2)
-		return false;
+		return 0;
 
 	QByteArray ba1 = list[0].trimmed();
 	QByteArray ba2 = list[1].trimmed();
 	if (ba1.isEmpty() || ba2.isEmpty())
-		return false;
+		return 0;
 
-	_maps.append(new OnlineMap(QString::fromUtf8(ba1.data(), ba1.size()),
-	  QString::fromLatin1(ba2.data(), ba2.size()), this));
-
-	return true;
+	return new OnlineMap(QString::fromUtf8(ba1.data(), ba1.size()),
+	  QString::fromLatin1(ba2.data(), ba2.size()), this);
 }
 
 bool MapList::loadList(const QString &path)
 {
 	QFile file(path);
+	QList<Map*> maps;
 
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		_errorString = file.errorString();
@@ -36,65 +35,102 @@ bool MapList::loadList(const QString &path)
 	while (!file.atEnd()) {
 		ln++;
 		QByteArray line = file.readLine();
+		Map *map = loadListEntry(line);
 
-		if (!loadListEntry(line)) {
+		if (map)
+			maps.append(map);
+		else {
+			for (int i = 0; i < maps.count(); i++)
+				delete maps.at(i);
 			_errorString = QString("Invalid map list entry on line %1.")
 			  .arg(QString::number(ln));
 			return false;
 		}
 	}
 
+	_maps += maps;
+
 	return true;
 }
 
 bool MapList::loadMap(const QString &path)
 {
+	OfflineMap *map = new OfflineMap(path, this);
+	if (map->isValid()) {
+		_maps.append(map);
+		return true;
+	} else {
+		_errorString = map->errorString();
+		delete map;
+		return false;
+	}
+}
+
+bool MapList::loadTba(const QString &path)
+{
+	Atlas *atlas = new Atlas(path, this);
+	if (atlas->isValid()) {
+		_maps.append(atlas);
+		return true;
+	} else {
+		_errorString = atlas->errorString();
+		delete atlas;
+		return false;
+	}
+}
+
+bool MapList::loadTar(const QString &path)
+{
+	Atlas *atlas = new Atlas(path, this);
+	if (atlas->isValid()) {
+		_maps.append(atlas);
+		return true;
+	} else {
+		_errorString = atlas->errorString();
+		delete atlas;
+		OfflineMap *map = new OfflineMap(path, this);
+		if (map->isValid()) {
+			_maps.append(map);
+			return true;
+		} else {
+			qWarning("%s: %s", qPrintable(path), qPrintable(_errorString));
+			qWarning("%s: %s", qPrintable(path),
+			  qPrintable(map->errorString()));
+			_errorString = "Not a map/atlas file";
+			delete map;
+			return false;
+		}
+	}
+}
+
+bool MapList::loadFile(const QString &path)
+{
 	QFileInfo fi(path);
 	QString suffix = fi.suffix().toLower();
 
-	if (suffix == "map") {
-		OfflineMap *om = new OfflineMap(path, this);
-		if (om->isValid()) {
-			_maps.append(om);
-			return true;
-		} else {
-			_errorString = om->errorString();
-			delete om;
-			return false;
-		}
-	} else if (suffix == "tba") {
-		Atlas *atlas = new Atlas(path, this);
-		if (atlas->isValid()) {
-			_maps.append(atlas);
-			return true;
-		} else {
-			_errorString = atlas->errorString();
-			delete atlas;
-			return false;
-		}
-	} else if (suffix == "tar") {
-		Atlas *atlas = new Atlas(path, this);
-		if (atlas->isValid()) {
-			_maps.append(atlas);
-			return true;
-		} else {
-			_errorString = atlas->errorString();
-			delete atlas;
-			OfflineMap *om = new OfflineMap(path, this);
-			if (om->isValid()) {
-				_maps.append(om);
-				return true;
-			} else {
-				qWarning("%s: %s", qPrintable(path), qPrintable(_errorString));
-				qWarning("%s: %s", qPrintable(path),
-				  qPrintable(om->errorString()));
-				_errorString = "Not a map/atlas file";
-				delete om;
-				return false;
-			}
-		}
-	} else {
+	if (suffix == "txt")
+		return loadList(path);
+	else if (suffix == "map")
+		return loadMap(path);
+	else if (suffix == "tba")
+		return loadTba(path);
+	else if (suffix == "tar")
+		return loadTar(path);
+	else {
 		_errorString = "Not a map/atlas file";
 		return false;
 	}
+}
+
+QString MapList::formats()
+{
+	return tr("Map files (*.map *.tba *.tar)") + ";;"
+	  + tr("URL list files (*.txt)");
+}
+
+QStringList MapList::filter()
+{
+	QStringList filter;
+	filter << "*.map" << "*.tba" << "*.tar" << "*.txt";
+	return filter;
 }

@@ -167,39 +167,36 @@ void GPXParser::track(TrackData &track)
 	}
 }
 
-void GPXParser::gpx()
+void GPXParser::gpx(QList<TrackData> &tracks, QList<RouteData> &routes,
+  QList<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "trk") {
-			_tracks.append(TrackData());
-			track(_tracks.back());
+			tracks.append(TrackData());
+			track(tracks.back());
 		} else if (_reader.name() == "rte") {
-			_routes.append(RouteData());
-			routepoints(_routes.back());
+			routes.append(RouteData());
+			routepoints(routes.back());
 		} else if (_reader.name() == "wpt") {
-			_waypoints.append(Waypoint(coordinates()));
-			waypointData(_waypoints.last());
+			waypoints.append(Waypoint(coordinates()));
+			waypointData(waypoints.last());
 		} else
 			_reader.skipCurrentElement();
 	}
 }
 
-bool GPXParser::parse()
+bool GPXParser::parse(QFile *file, QList<TrackData> &tracks,
+  QList<RouteData> &routes, QList<Waypoint> &waypoints)
 {
+	_reader.clear();
+	_reader.setDevice(file);
+
 	if (_reader.readNextStartElement()) {
 		if (_reader.name() == "gpx")
-			gpx();
+			gpx(tracks, routes, waypoints);
 		else
 			_reader.raiseError("Not a GPX file");
 	}
 
 	return !_reader.error();
-}
-
-bool GPXParser::loadFile(QFile *file)
-{
-	_reader.clear();
-	_reader.setDevice(file);
-
-	return parse();
 }

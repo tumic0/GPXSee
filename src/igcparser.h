@@ -9,19 +9,18 @@
 class IGCParser : public Parser
 {
 public:
-	IGCParser(QList<TrackData> &tracks, QList<RouteData> &routes,
-	  QList<Waypoint> &waypoints) : Parser(tracks, routes, waypoints)
-	  {_errorLine = 0;}
+	IGCParser() : _errorLine(0) {}
 	~IGCParser() {}
 
-	bool loadFile(QFile *file);
+	bool parse(QFile *file, QList<TrackData> &tracks,
+	  QList<RouteData> &routes, QList<Waypoint> &waypoints);
 	QString errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 
 private:
 	bool readHRecord(const char *line, int len);
-	bool readBRecord(const char *line, int len);
-	bool readCRecord(const char *line, int len);
+	bool readBRecord(TrackData &track, const char *line, int len);
+	bool readCRecord(RouteData &route, const char *line, int len);
 
 	int _errorLine;
 	QString _errorString;

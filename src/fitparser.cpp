@@ -10,8 +10,7 @@ const quint32 FIT_MAGIC = 0x5449462E; // .FIT
 #define TIMESTAMP_FIELD 253
 
 
-FITParser::FITParser(QList<TrackData> &tracks, QList<RouteData> &routes,
-  QList<Waypoint> &waypoints) : Parser(tracks, routes, waypoints)
+FITParser::FITParser()
 {
 	memset(_defs, 0, sizeof(_defs));
 
@@ -191,7 +190,8 @@ bool FITParser::readField(Field *f, quint32 &val)
 	return ret;
 }
 
-bool FITParser::parseData(MessageDefinition *def, quint8 offset)
+bool FITParser::parseData(TrackData &track, MessageDefinition *def,
+  quint8 offset)
 {
 	Field *field;
 	quint32 timestamp = _timestamp + offset;
@@ -268,7 +268,7 @@ bool FITParser::parseData(MessageDefinition *def, quint8 offset)
 		if (trackpoint.coordinates().isValid()) {
 			trackpoint.setTimestamp(QDateTime::fromTime_t(timestamp
 			  + 631065600));
-			_tracks.last().append(trackpoint);
+			track.append(trackpoint);
 		} else {
 			if (trackpoint.coordinates().isNull())
 				warning("Missing coordinates");
@@ -282,21 +282,21 @@ bool FITParser::parseData(MessageDefinition *def, quint8 offset)
 	return true;
 }
 
-bool FITParser::parseDataMessage(quint8 header)
+bool FITParser::parseDataMessage(TrackData &track, quint8 header)
 {
 	int local_id = header & 0xf;
 	MessageDefinition* def = &_defs[local_id];
-	return parseData(def, 0);
+	return parseData(track, def, 0);
 }
 
-bool FITParser::parseCompressedMessage(quint8 header)
+bool FITParser::parseCompressedMessage(TrackData &track, quint8 header)
 {
 	int local_id = (header >> 5) & 3;
 	MessageDefinition* def = &_defs[local_id];
-	return parseData(def, header & 0x1f);
+	return parseData(track, def, header & 0x1f);
 }
 
-bool FITParser::parseRecord()
+bool FITParser::parseRecord(TrackData &track)
 {
 	quint8 header;
 
@@ -304,11 +304,11 @@ bool FITParser::parseRecord()
 		return false;
 
 	if (header & 0x80)
-		return parseCompressedMessage(header);
+		return parseCompressedMessage(track, header);
 	else if (header & 0x40)
 		return parseDefinitionMessage(header);
 	else
-		return parseDataMessage(header);
+		return parseDataMessage(track, header);
 }
 
 bool FITParser::parseHeader()
@@ -337,8 +337,11 @@ bool FITParser::parseHeader()
 	return true;
 }
 
-bool FITParser::loadFile(QFile *file)
+bool FITParser::parse(QFile *file, QList<TrackData> &tracks,
+  QList<RouteData> &routes, QList<Waypoint> &waypoints)
 {
+	Q_UNUSED(routes);
+	Q_UNUSED(waypoints);
 	bool ret = true;
 
 	_device = file;
@@ -348,10 +351,11 @@ bool FITParser::loadFile(QFile *file)
 	if (!parseHeader())
 		return false;
 
-	_tracks.append(TrackData());
+	tracks.append(TrackData());
+	TrackData &track = tracks.last();
 
 	while (_len)
-		if ((ret = parseRecord()) == false)
+		if ((ret = parseRecord(track)) == false)
 			break;
 
 	clearDefinitions();

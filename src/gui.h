@@ -121,8 +121,6 @@ private:
 	void readSettings();
 	void writeSettings();
 
-	const QString fileFormats() const;
-
 	void keyPressEvent(QKeyEvent *event);
 	void closeEvent(QCloseEvent *event);
 	void dragEnterEvent(QDragEnterEvent *event);

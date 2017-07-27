@@ -120,7 +120,7 @@ bool IGCParser::readHRecord(const char *line, int len)
 	return true;
 }
 
-bool IGCParser::readBRecord(const char *line, int len)
+bool IGCParser::readBRecord(TrackData &track, const char *line, int len)
 {
 	qreal lat, lon, ele;
 	QTime time;
@@ -156,12 +156,12 @@ bool IGCParser::readBRecord(const char *line, int len)
 	Trackpoint t(Coordinates(lon, lat));
 	t.setTimestamp(QDateTime(_date, _time, Qt::UTC));
 	t.setElevation(ele);
-	_tracks.last().append(t);
+	track.append(t);
 
 	return true;
 }
 
-bool IGCParser::readCRecord(const char *line, int len)
+bool IGCParser::readCRecord(RouteData &route, const char *line, int len)
 {
 	qreal lat, lon;
 
@@ -183,14 +183,16 @@ bool IGCParser::readCRecord(const char *line, int len)
 
 		Waypoint w(Coordinates(lon, lat));
 		w.setName(QString(ba.trimmed()));
-		_routes.last().append(w);
+		route.append(w);
 	}
 
 	return true;
 }
 
-bool IGCParser::loadFile(QFile *file)
+bool IGCParser::parse(QFile *file, QList<TrackData> &tracks,
+  QList<RouteData> &routes, QList<Waypoint> &waypoints)
 {
+	Q_UNUSED(waypoints);
 	qint64 len;
 	char line[76 + 2 + 1 + 1];
 	bool route = false, track = false;
@@ -221,11 +223,11 @@ bool IGCParser::loadFile(QFile *file)
 					return false;
 			} else if (line[0] == 'C') {
 				if (route) {
-					if (!readCRecord(line, len))
+					if (!readCRecord(routes.last() ,line, len))
 						return false;
 				} else {
 					route = true;
-					_routes.append(RouteData());
+					routes.append(RouteData());
 				}
 			} else if (line[0] == 'B') {
 				if (_date.isNull()) {
@@ -233,11 +235,11 @@ bool IGCParser::loadFile(QFile *file)
 					return false;
 				}
 				if (!track) {
-					_tracks.append(TrackData());
+					tracks.append(TrackData());
 					_time = QTime(0, 0);
 					track = true;
 				}
-				if (!readBRecord(line, len))
+				if (!readBRecord(tracks.last(), line, len))
 					return false;
 			}
 		}

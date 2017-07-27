@@ -6,12 +6,11 @@
 class CSVParser : public Parser
 {
 public:
-	CSVParser(QList<TrackData> &tracks, QList<RouteData> &routes,
-	  QList<Waypoint> &waypoints) : Parser(tracks, routes, waypoints)
-	  {_errorLine = 0;}
+	CSVParser() : _errorLine(0) {}
 	~CSVParser() {}
 
-	bool loadFile(QFile *file);
+	bool parse(QFile *file, QList<TrackData> &track, QList<RouteData> &routes,
+	  QList<Waypoint> &waypoints);
 	QString errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 

@@ -1,7 +1,10 @@
 #include "csvparser.h"
 
-bool CSVParser::loadFile(QFile *file)
+bool CSVParser::parse(QFile *file, QList<TrackData> &track,
+  QList<RouteData> &routes, QList<Waypoint> &waypoints)
 {
+	Q_UNUSED(track);
+	Q_UNUSED(routes);
 	bool res;
 
 	_errorLine = 1;
@@ -36,7 +39,7 @@ bool CSVParser::loadFile(QFile *file)
 			wp.setDescription(QString::fromUtf8(ba.data(), ba.size()));
 		}
 
-		_waypoints.append(wp);
+		waypoints.append(wp);
 		_errorLine++;
 	}
 

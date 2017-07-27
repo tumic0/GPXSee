@@ -102,24 +102,6 @@ GUI::~GUI()
 	}
 }
 
-const QString GUI::fileFormats() const
-{
-	return tr("Supported files (*.csv *.fit *.gpx *.igc *.kml *.nmea *.tcx)")
-	  + ";;" + tr("CSV files (*.csv)") + ";;" + tr("FIT files (*.fit)") + ";;"
-	  + tr("GPX files (*.gpx)") + ";;" + tr("IGC files (*.igc)") + ";;"
-	  + tr("KML files (*.kml)") + ";;" + tr("NMEA files (*.nmea)") + ";;"
-	  + tr("TCX files (*.tcx)") + ";;" + tr("All files (*)");
-}
-
-void GUI::createBrowser()
-{
-	QStringList filter;
-	filter << "*.gpx" << "*.tcx" << "*.kml" << "*.fit" << "*.csv" << "*.igc"
-	  << "*.nmea";
-	_browser = new FileBrowser(this);
-	_browser->setFilter(filter);
-}
-
 void GUI::loadDatums()
 {
 	QString ef, df;
@@ -175,7 +157,7 @@ void GUI::loadMaps()
 	else if (QFile::exists(GLOBAL_MAP_FILE))
 		online = GLOBAL_MAP_FILE;
 
-	if (!online.isNull() && !_ml->loadList(online))
+	if (!online.isNull() && !_ml->loadFile(online))
 		qWarning("%s: %s", qPrintable(online), qPrintable(_ml->errorString()));
 
 
@@ -187,12 +169,10 @@ void GUI::loadMaps()
 	if (!offline.isNull()) {
 		QDir md(offline);
 		QFileInfoList ml = md.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
-		QStringList filters;
-		filters << "*.map" << "*.tba" << "*.tar";
 
 		for (int i = 0; i < ml.size(); i++) {
 			QDir dir(ml.at(i).absoluteFilePath());
-			QFileInfoList fl = dir.entryInfoList(filters, QDir::Files);
+			QFileInfoList fl = dir.entryInfoList(MapList::filter(), QDir::Files);
 
 			if (fl.isEmpty())
 				qWarning("%s: no map/atlas file found",
@@ -201,7 +181,7 @@ void GUI::loadMaps()
 				qWarning("%s: ambiguous directory content",
 				  qPrintable(ml.at(i).absoluteFilePath()));
 			else
-				if (!_ml->loadMap(fl.first().absoluteFilePath()))
+				if (!_ml->loadFile(fl.first().absoluteFilePath()))
 					qWarning("%s: %s", qPrintable(fl.first().absoluteFilePath()),
 					  qPrintable(_ml->errorString()));
 		}
@@ -232,6 +212,12 @@ void GUI::loadPOIs()
 				qWarning("Line: %d\n", _poi->errorLine());
 		}
 	}
+}
+
+void GUI::createBrowser()
+{
+	_browser = new FileBrowser(this);
+	_browser->setFilter(Data::filter());
 }
 
 void GUI::createMapActions()
@@ -736,7 +722,7 @@ void GUI::dataSources()
 void GUI::openFile()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open file"),
-	  QString(), fileFormats());
+	  QString(), Data::formats());
 	QStringList list = files;
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
@@ -826,7 +812,7 @@ bool GUI::loadFile(const QString &fileName)
 void GUI::openPOIFile()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open POI file"),
-	  QString(), fileFormats());
+	  QString(), Data::formats());
 	QStringList list = files;
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
@@ -1209,22 +1195,25 @@ void GUI::showGraphGrids(bool show)
 void GUI::loadMap()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open map file"),
-	  QString(), tr("Map files (*.map *.tba *.tar)"));
+	  QString(), MapList::formats());
 
 	if (fileName.isEmpty())
 		return;
 
-	if (_ml->loadMap(fileName)) {
-		QAction *a = new QAction(_ml->maps().last()->name(), this);
-		a->setCheckable(true);
-		a->setActionGroup(_mapsActionGroup);
-		_mapsSignalMapper->setMapping(a, _ml->maps().size() - 1);
-		connect(a, SIGNAL(triggered()), _mapsSignalMapper, SLOT(map()));
-		_mapActions.append(a);
-		_mapMenu->insertAction(_mapsEnd, a);
+	int count = _ml->maps().count();
+	if (_ml->loadFile(fileName)) {
+		for (int i = count; i < _ml->maps().count(); i++) {
+			QAction *a = new QAction(_ml->maps().at(i)->name(), this);
+			a->setCheckable(true);
+			a->setActionGroup(_mapsActionGroup);
+			_mapsSignalMapper->setMapping(a, i);
+			connect(a, SIGNAL(triggered()), _mapsSignalMapper, SLOT(map()));
+			_mapActions.append(a);
+			_mapMenu->insertAction(_mapsEnd, a);
+		}
 		_showMapAction->setEnabled(true);
 		_clearMapCacheAction->setEnabled(true);
-		a->activate(QAction::Trigger);
+		_mapActions.last()->activate(QAction::Trigger);
 	} else {
 		QString error = tr("Error loading map:") + "\n\n"
 		  + fileName + "\n\n" + _ml->errorString();
