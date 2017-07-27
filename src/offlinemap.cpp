@@ -102,6 +102,8 @@ int OfflineMap::parse(QIODevice &device, QList<ReferencePoint> &points,
 				} else
 					return ln;
 			} else if (key == "IWH") {
+				if (list.count() < 4)
+					return ln;
 				int w = list.at(2).trimmed().toInt(&res);
 				if (!res)
 					return ln;
@@ -110,6 +112,8 @@ int OfflineMap::parse(QIODevice &device, QList<ReferencePoint> &points,
 					return ln;
 				_size = QSize(w, h);
 			} else if (key == "Map Projection") {
+				if (list.count() < 2)
+					return ln;
 				projection = list.at(1);
 			} else if (key == "Projection Setup") {
 				if (list.count() < 8)
