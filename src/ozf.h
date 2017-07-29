@@ -22,6 +22,8 @@ public:
 	QSize tileSize() const {return QSize(64, 64);}
 	QPixmap tile(int x, int y);
 
+	static bool isOZF(const QString &path);
+
 private:
 	template<class T> bool readValue(T &val);
 	bool read(void *data, size_t size);

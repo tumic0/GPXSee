@@ -232,3 +232,19 @@ QPixmap OZF::tile(int x, int y)
 
 	return QPixmap::fromImage(img.mirrored());
 }
+
+bool OZF::isOZF(const QString &path)
+{
+	QFile file(path);
+	quint16 magic;
+
+	if (!file.open(QIODevice::ReadOnly))
+		return false;
+	if (file.read((char*)&magic, sizeof(magic)) < (qint64)sizeof(magic))
+		return false;
+
+	if (magic == OZF2_MAGIC || magic == OZF3_MAGIC)
+		return true;
+
+	return false;
+}

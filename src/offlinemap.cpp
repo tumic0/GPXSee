@@ -342,13 +342,7 @@ bool OfflineMap::getImageInfo(const QString &path)
 		return false;
 	}
 
-	QString suffix = ii.suffix().toLower();
-	if (suffix == "ozf4" || suffix == "ozfx4") {
-		_errorString = QString("%1: OZF4 image files not supported")
-		  .arg(QFileInfo(_imgPath).fileName());
-		return false;
-	} else if (suffix == "ozf2" || suffix == "ozfx2" || suffix == "ozf3"
-	  || suffix == "ozfx3") {
+	if (OZF::isOZF(_imgPath)) {
 		_ozf.load(_imgPath);
 		_size = _ozf.size();
 	} else {
