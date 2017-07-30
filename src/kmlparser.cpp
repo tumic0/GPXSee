@@ -295,7 +295,8 @@ void KMLParser::placemark(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 			w.setDescription(desc);
 			w.setTimestamp(timestamp);
 			point(w);
-		} else if (_reader.name() == "LineString") {
+		} else if (_reader.name() == "LineString"
+		  || _reader.name() == "LinearRing") {
 			tracks.append(TrackData());
 			TrackData &t = tracks.last();
 			t.setName(name);
