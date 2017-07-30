@@ -243,6 +243,7 @@ bool OZF::isOZF(const QString &path)
 	if (file.read((char*)&magic, sizeof(magic)) < (qint64)sizeof(magic))
 		return false;
 
+	magic = qFromLittleEndian(magic);
 	if (magic == OZF2_MAGIC || magic == OZF3_MAGIC)
 		return true;
 
