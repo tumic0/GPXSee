@@ -85,23 +85,21 @@ void Atlas::computeBounds()
 		offsets.append(QPointF());
 
 	for (int z = 0; z < _zooms.count(); z++) {
-		qreal w = 0, h = 0;
-
 		QList<OfflineMap*> m;
 		for (int i = _zooms.at(z).first; i <= _zooms.at(z).second; i++)
 			m.append(_maps.at(i));
 
 		qSort(m.begin(), m.end(), xCmp);
-		offsets[_maps.indexOf(m.first())].setX(w);
+		offsets[_maps.indexOf(m.first())].setX(0);
 		for (int i = 1; i < m.size(); i++) {
-			w += round(m.at(i-1)->pp2xy(TL(m.at(i))).x());
+			qreal w = round(m.first()->pp2xy(TL(m.at(i))).x());
 			offsets[_maps.indexOf(m.at(i))].setX(w);
 		}
 
 		qSort(m.begin(), m.end(), yCmp);
-		offsets[_maps.indexOf(m.first())].setY(h);
+		offsets[_maps.indexOf(m.first())].setY(0);
 		for (int i = 1; i < m.size(); i++) {
-			h += round(m.at(i-1)->pp2xy(TL(m.at(i))).y());
+			qreal h = round(m.first()->pp2xy(TL(m.at(i))).y());
 			offsets[_maps.indexOf(m.at(i))].setY(h);
 		}
 	}
