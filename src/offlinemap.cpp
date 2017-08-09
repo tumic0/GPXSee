@@ -622,7 +622,7 @@ void OfflineMap::drawImage(QPainter *painter, const QRectF &rect)
 		painter->fillRect(rect, Qt::white);
 	else {
 		QRect r(rect.toRect());
-		painter->drawImage(rect.left(), rect.top(), *_img, r.left(), r.top(),
+		painter->drawImage(r.left(), r.top(), *_img, r.left(), r.top(),
 		  r.width(), r.height());
 	}
 }
