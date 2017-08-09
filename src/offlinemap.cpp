@@ -621,9 +621,9 @@ void OfflineMap::drawImage(QPainter *painter, const QRectF &rect)
 	if (!_img || _img->isNull())
 		painter->fillRect(rect, Qt::white);
 	else {
-		QPoint p = rect.topLeft().toPoint();
-		QImage crop = _img->copy(QRect(p, rect.size().toSize()));
-		painter->drawImage(rect.topLeft(), crop);
+		QRect r(rect.topLeft().toPoint(), rect.size().toSize());
+		painter->drawImage(rect.left(), rect.top(), *_img, r.left(), r.top(),
+		  r.width(), r.height());
 	}
 }
 
