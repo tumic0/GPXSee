@@ -132,7 +132,7 @@ bool OZF::readTileTable()
 	quint16 x, y;
 
 
-	if (!_file.seek(_file.size() - 4))
+	if (!_file.seek(_file.size() - sizeof(offset)))
 		return false;
 	// table offset
 	if (!readValue(offset))
