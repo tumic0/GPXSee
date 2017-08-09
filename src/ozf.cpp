@@ -215,13 +215,15 @@ QPixmap OZF::tile(int x, int y)
 	if (!_file.seek(_tiles.at(i)))
 		return QPixmap();
 
-	QByteArray ba = _file.read(size);
-	if (ba.size() != size)
+	quint32 bes = qToBigEndian(tileSize().width() * tileSize().height());
+	QByteArray ba;
+	ba.resize(sizeof(bes) + size);
+	*(ba.data()) = bes;
+
+	if (_file.read(ba.data() + sizeof(bes), size) != size)
 		return QPixmap();
 	if (_decrypt)
-		decrypt(ba.data(), qMin(16, ba.size()), _key);
-	quint32 bes = qToBigEndian(tileSize().width() * tileSize().height());
-	ba.prepend(QByteArray((char*)&bes, sizeof(bes)));
+		decrypt(ba.data() + sizeof(bes), qMin(16, size), _key);
 	QByteArray uba = qUncompress(ba);
 	if (uba.size() != tileSize().width() * tileSize().height())
 		return QPixmap();
