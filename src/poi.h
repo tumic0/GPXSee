@@ -38,11 +38,11 @@ signals:
 
 private:
 	typedef RTree<size_t, qreal, 2> POITree;
-	typedef struct {
+	struct FileIndex {
 		int start;
 		int end;
 		bool enabled;
-	} FileIndex;
+	};
 
 	POITree _tree;
 	QVector<Waypoint> _data;

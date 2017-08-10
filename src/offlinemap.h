@@ -53,13 +53,13 @@ public:
 	  {return _transform.map(p);}
 
 private:
-	typedef struct {
+	struct ReferencePoint {
 		QPoint xy;
 		Coordinates ll;
 		QPointF pp;
-	} ReferencePoint;
+	};
 
-	typedef struct {
+	struct ProjectionSetup {
 		double latitudeOrigin;
 		double longitudeOrigin;
 		double scale;
@@ -68,7 +68,7 @@ private:
 		double standardParallel1;
 		double standardParallel2;
 		int zone;
-	} ProjectionSetup;
+	};
 
 	int parse(QIODevice &device, QList<ReferencePoint> &points,
 	  QString &projection, ProjectionSetup &setup, QString &datum);

@@ -15,28 +15,28 @@ public:
 	int errorLine() const {return 0;}
 
 private:
-	typedef struct {
+	struct FileHeader {
 		quint8 headerSize;
 		quint8 protocolVersion;
 		quint16 profileVersion;
 		quint32 dataSize;
 		quint32 magic;
-	} FileHeader;
+	};
 
-	typedef struct {
+	struct Field {
 		quint8 id;
 		quint8 size;
 		quint8 type;
-	} Field;
+	};
 
-	typedef struct {
+	struct MessageDefinition {
 		quint8 endian;
 		quint16 globalId;
 		quint8 numFields;
 		Field *fields;
 		quint8 numDevFields;
 		Field *devFields;
-	} MessageDefinition;
+	};
 
 
 	void warning(const char *text) const;
