@@ -5,7 +5,6 @@
 
 #define OZF2_MAGIC  0x7778
 #define OZF3_MAGIC  0x7780
-#define SEPARATOR   0x77777777
 
 static const quint8 XKEY[] =
 {
@@ -39,21 +38,22 @@ template<class T> bool OZF::readValue(T &val)
 	return true;
 }
 
-bool OZF::read(void *data, size_t size)
+bool OZF::read(void *data, size_t size, size_t decryptSize)
 {
 	if (_file.read((char*)data, size) < (qint64)size)
 		return false;
 
 	if (_decrypt)
-		decrypt(data, size, _key);
+		decrypt(data, decryptSize ? qMin(decryptSize, size) : size, _key);
 
 	return true;
 }
 
-bool OZF::readKey()
+bool OZF::initOZF3()
 {
 	quint8 randomNumber, initial;
 	quint32 keyblock;
+	quint8 h1[8];
 
 
 	if (!_file.seek(14))
@@ -66,7 +66,15 @@ bool OZF::readKey()
 	if (!readValue(initial))
 		return false;
 
-	_decrypt = true; _key = initial;
+	_decrypt = true;
+	_key = initial;
+
+	if (!_file.seek(0))
+		return false;
+	if (!read(h1, sizeof(h1)))
+		return false;
+	_tileSize = *(h1 + 6);
+
 	if (!_file.seek(15 + randomNumber))
 		return false;
 	if (!readValue(keyblock))
@@ -104,21 +112,28 @@ bool OZF::readKey()
 	return true;
 }
 
+bool OZF::initOZF2()
+{
+	if (!_file.seek(6))
+		return false;
+	if (!readValue(_tileSize))
+		return false;
+
+	return true;
+}
+
 bool OZF::readHeaders()
 {
 	quint16 magic;
-	quint32 separator;
 
 	if (!readValue(magic))
 		return false;
 
 	if (magic == OZF2_MAGIC) {
-		if (!_file.seek(_file.pos() + 52))
-			return false;
-		if (!readValue(separator) || separator != SEPARATOR)
+		if (!initOZF2())
 			return false;
 	} else if (magic == OZF3_MAGIC) {
-		if (!readKey())
+		if (!initOZF3())
 			return false;
 	} else
 		return false;
@@ -128,52 +143,58 @@ bool OZF::readHeaders()
 
 bool OZF::readTileTable()
 {
-	quint32 offset, bgr0, w, h;
+	quint32 tableOffset, headerOffset, bgr0, w, h;
 	quint16 x, y;
+	int zooms;
 
 
-	if (!_file.seek(_file.size() - sizeof(offset)))
+	if (!_file.seek(_file.size() - sizeof(tableOffset)))
 		return false;
-	// table offset
-	if (!readValue(offset))
+	if (!readValue(tableOffset))
 		return false;
-	if (!_file.seek(offset))
-		return false;
-	// tiles offset (zoom level 0)
-	if (!readValue(offset))
-		return false;
-	if (!_file.seek(offset))
-		return false;
+	zooms = (_file.size() - tableOffset - sizeof(quint32)) / sizeof(quint32);
 
-	if (!readValue(w))
-		return false;
-	if (!readValue(h))
-		return false;
-	if (!readValue(x))
-		return false;
-	if (!readValue(y))
-		return false;
-
-	_size = QSize(w, h);
-	_dim = QSize(x, y);
-
-	_palette = QVector<quint32>(256);
-	if (!read(&(_palette[0]), sizeof(quint32) * 256))
-		return false;
-	for (int i = 0; i < _palette.size(); i++) {
-		bgr0 = qFromLittleEndian(_palette.at(i));
-
-		quint32 b = (bgr0 & 0x000000FF);
-		quint32 g = (bgr0 & 0x0000FF00) >> 8;
-		quint32 r = (bgr0 & 0x00FF0000) >> 16;
-
-		_palette[i] = 0xFF000000 | r << 16 | g << 8 | b;
-	}
-
-	_tiles = QVector<quint32>(_dim.width() * _dim.height() + 1);
-	for (int i = 0; i < _tiles.size(); i++)
-		if (!readValue(_tiles[i]))
+	for (int i = 0; i < zooms - 2; i++) {
+		if (!_file.seek(tableOffset + i * sizeof(quint32)))
 			return false;
+		if (!readValue(headerOffset))
+			return false;
+		if (!_file.seek(headerOffset))
+			return false;
+
+		if (!readValue(w))
+			return false;
+		if (!readValue(h))
+			return false;
+		if (!readValue(x))
+			return false;
+		if (!readValue(y))
+			return false;
+
+		Zoom zoom;
+		zoom.size = QSize(w, h);
+		zoom.dim = QSize(x, y);
+
+		zoom.palette = QVector<quint32>(256);
+		if (!read(&(zoom.palette[0]), sizeof(quint32) * 256))
+			return false;
+		for (int i = 0; i < zoom.palette.size(); i++) {
+			bgr0 = qFromLittleEndian(zoom.palette.at(i));
+
+			quint32 b = (bgr0 & 0x000000FF);
+			quint32 g = (bgr0 & 0x0000FF00) >> 8;
+			quint32 r = (bgr0 & 0x00FF0000) >> 16;
+
+			zoom.palette[i] = 0xFF000000 | r << 16 | g << 8 | b;
+		}
+
+		zoom.tiles = QVector<quint32>(zoom.dim.width() * zoom.dim.height() + 1);
+		for (int i = 0; i < zoom.tiles.size(); i++)
+			if (!readValue(zoom.tiles[i]))
+				return false;
+
+		_zooms.append(zoom);
+	}
 
 	return true;
 }
@@ -196,23 +217,25 @@ bool OZF::load(const QString &path)
 	if (!readTileTable()) {
 		qWarning("%s: file format error", qPrintable(_file.fileName()));
 		_file.close();
-		_size = QSize();
 		return false;
 	}
 
 	return true;
 }
 
-QPixmap OZF::tile(int x, int y)
+QPixmap OZF::tile(int zoom, int x, int y)
 {
 	Q_ASSERT(_file.isOpen());
+	Q_ASSERT(0 <= zoom && zoom < _zooms.count());
 
-	int i = (y/tileSize().height()) * _dim.width() + (x/tileSize().width());
-	if (i >= _tiles.size() - 1 || i < 0)
+	const Zoom &z = _zooms.at(zoom);
+
+	int i = (y/tileSize().height()) * z.dim.width() + (x/tileSize().width());
+	if (i >= z.tiles.size() - 1 || i < 0)
 		return QPixmap();
 
-	int size = _tiles.at(i+1) - _tiles.at(i);
-	if (!_file.seek(_tiles.at(i)))
+	int size = z.tiles.at(i+1) - z.tiles.at(i);
+	if (!_file.seek(z.tiles.at(i)))
 		return QPixmap();
 
 	quint32 bes = qToBigEndian(tileSize().width() * tileSize().height());
@@ -220,19 +243,25 @@ QPixmap OZF::tile(int x, int y)
 	ba.resize(sizeof(bes) + size);
 	*(ba.data()) = bes;
 
-	if (_file.read(ba.data() + sizeof(bes), size) != size)
+	if (!read(ba.data() + sizeof(bes), size, 16))
 		return QPixmap();
-	if (_decrypt)
-		decrypt(ba.data() + sizeof(bes), qMin(16, size), _key);
 	QByteArray uba = qUncompress(ba);
 	if (uba.size() != tileSize().width() * tileSize().height())
 		return QPixmap();
 
 	QImage img((const uchar*)uba.constData(), tileSize().width(),
 	  tileSize().height(), QImage::Format_Indexed8);
-	img.setColorTable(_palette);
+	img.setColorTable(z.palette);
 
 	return QPixmap::fromImage(img.mirrored());
+}
+
+QSize OZF::size(int zoom) const
+{
+	Q_ASSERT(_file.isOpen());
+	Q_ASSERT(0 <= zoom && zoom < _zooms.count());
+
+	return _zooms.at(zoom).size;
 }
 
 bool OZF::isOZF(const QString &path)

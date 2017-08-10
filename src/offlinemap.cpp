@@ -20,6 +20,7 @@
 #include "lambertconic.h"
 #include "albersequal.h"
 #include "ozf.h"
+#include "rectc.h"
 #include "offlinemap.h"
 
 
@@ -343,16 +344,19 @@ bool OfflineMap::getImageInfo(const QString &path)
 	}
 
 	if (OZF::isOZF(_imgPath)) {
-		_ozf.load(_imgPath);
-		_size = _ozf.size();
+		if (!_ozf.load(_imgPath)) {
+			_errorString = QString("%1: Error loading OZF file")
+			  .arg(QFileInfo(_imgPath).fileName());
+			return false;
+		}
 	} else {
 		QImageReader img(_imgPath);
 		_size = img.size();
-	}
-	if (!_size.isValid()) {
-		_errorString = QString("%1: Error reading map image")
-		  .arg(QFileInfo(_imgPath).fileName());
-		return false;
+		if (!_size.isValid()) {
+			_errorString = QString("%1: Error reading map image")
+			  .arg(QFileInfo(_imgPath).fileName());
+			return false;
+		}
 	}
 
 	return true;
@@ -410,6 +414,8 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 	_img = 0;
 	_projection = 0;
 	_resolution = 0.0;
+	_zoom = 0;
+	_scale = QPointF(1.0, 1.0);
 
 	if (suffix == "tar") {
 		if (!_tar.load(fileName)) {
@@ -476,6 +482,8 @@ OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
 	_img = 0;
 	_projection = 0;
 	_resolution = 0.0;
+	_zoom = 0;
+	_scale = QPointF(1.0, 1.0);
 
 	QFileInfo map(fi.absolutePath());
 	QFileInfo layer(map.absolutePath());
@@ -551,7 +559,7 @@ void OfflineMap::drawTiled(QPainter *painter, const QRectF &rect)
 			int x = tl.x() + i * _tileSize.width();
 			int y = tl.y() + j * _tileSize.height();
 
-			if (!QRectF(QPointF(x, y), _ozf.tileSize()).intersects(bounds())) {
+			if (!QRectF(QPointF(x, y), _tileSize).intersects(bounds())) {
 				painter->fillRect(QRectF(QPoint(x, y), _tileSize), Qt::white);
 				continue;
 			}
@@ -594,22 +602,24 @@ void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect)
 			int y = tl.y() + j * _ozf.tileSize().height();
 
 			if (!QRectF(QPointF(x, y), _ozf.tileSize()).intersects(bounds())) {
-				painter->fillRect(QRectF(QPoint(x, y), _tileSize), Qt::white);
+				painter->fillRect(QRectF(QPoint(x, y), _ozf.tileSize()),
+				  Qt::white);
 				continue;
 			}
 
 			QPixmap pixmap;
-			QString key = _ozf.fileName() + "/" + QString::number(x)
-			  + "_" + QString::number(y);
+			QString key = _ozf.fileName() + "/" + QString::number(_zoom) + "_"
+			  + QString::number(x) + "_" + QString::number(y);
 			if (!QPixmapCache::find(key, &pixmap)) {
-				pixmap = _ozf.tile(x, y);
+				pixmap = _ozf.tile(_zoom, x, y);
 				if (!pixmap.isNull())
 					QPixmapCache::insert(key, pixmap);
 			}
 
 			if (pixmap.isNull()) {
 				qWarning("%s: error loading tile image", qPrintable(key));
-				painter->fillRect(QRectF(QPoint(x, y), _tileSize), Qt::white);
+				painter->fillRect(QRectF(QPoint(x, y), _ozf.tileSize()),
+				  Qt::white);
 			} else
 				painter->drawPixmap(QPoint(x, y), pixmap);
 		}
@@ -635,4 +645,102 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect)
 		drawTiled(painter, rect);
 	else
 		drawImage(painter, rect);
+}
+
+QPointF OfflineMap::ll2xy(const Coordinates &c)
+{
+	if (_ozf.isOpen()) {
+		QPointF p(_transform.map(_projection->ll2xy(c)));
+		return QPointF(p.x() * _scale.x(), p.y() * _scale.y());
+	} else
+		return _transform.map(_projection->ll2xy(c));
+}
+
+Coordinates OfflineMap::xy2ll(const QPointF &p)
+{
+	if (_ozf.isOpen()) {
+		return _projection->xy2ll(_inverted.map(QPointF(p.x() / _scale.x(),
+		  p.y() / _scale.y())));
+	} else
+		return _projection->xy2ll(_inverted.map(p));
+}
+
+QRectF OfflineMap::bounds() const
+{
+	if (_ozf.isOpen())
+		return QRectF(QPointF(0, 0), _ozf.size(_zoom));
+	else
+		return QRectF(QPointF(0, 0), _size);
+}
+
+qreal OfflineMap::resolution(const QPointF &p) const
+{
+	Q_UNUSED(p);
+
+	if (_ozf.isOpen())
+		return _resolution / ((_scale.x() + _scale.y()) / 2.0);
+	else
+		return _resolution;
+}
+
+qreal OfflineMap::zoomFit(const QSize &size, const RectC &br)
+{
+	if (_ozf.isOpen()) {
+		if (!br.isValid())
+			rescale(0);
+		else {
+			QRect sbr(QRectF(_transform.map(_projection->ll2xy(br.topLeft())),
+			  _transform.map(_projection->ll2xy(br.bottomRight())))
+			  .toRect().normalized());
+
+			for (int i = 0; i < _ozf.zooms(); i++) {
+				rescale(i);
+				if (sbr.size().width() * _scale.x() <= size.width()
+				  && sbr.size().height() * _scale.y() <= size.height())
+					break;
+			}
+		}
+	}
+
+	return _zoom;
+}
+
+qreal OfflineMap::zoomFit(qreal resolution, const Coordinates &c)
+{
+	Q_UNUSED(c);
+
+	if (_ozf.isOpen()) {
+		for (int i = 0; i < _ozf.zooms(); i++) {
+			rescale(i);
+			qreal sr = _resolution / ((_scale.x() + _scale.y()) / 2.0);
+			if (sr >= resolution)
+				break;
+		}
+	}
+
+	return _zoom;
+}
+
+qreal OfflineMap::zoomIn()
+{
+	if (_ozf.isOpen())
+		rescale(qMax(_zoom - 1, 0));
+
+	return _zoom;
+}
+
+qreal OfflineMap::zoomOut()
+{
+	if (_ozf.isOpen())
+		rescale(qMin(_zoom + 1, _ozf.zooms() - 1));
+
+	return _zoom;
+}
+
+void OfflineMap::rescale(int zoom)
+{
+	_zoom = zoom;
+	_scale = QPointF(
+	  (qreal)_ozf.size(_zoom).width() / (qreal)_ozf.size(0).width(),
+	  (qreal)_ozf.size(_zoom).height() / (qreal)_ozf.size(0).height());
 }

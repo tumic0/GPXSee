@@ -4,6 +4,7 @@
 #include <QString>
 #include <QSize>
 #include <QColor>
+#include <QList>
 #include <QVector>
 #include <QFile>
 #include <QPixmap>
@@ -18,27 +19,32 @@ public:
 	QString fileName() const {return _file.fileName();}
 	bool isOpen() const {return _file.isOpen();}
 
-	QSize size() const {return _size;}
-	QSize tileSize() const {return QSize(64, 64);}
-	QPixmap tile(int x, int y);
+	int zooms() const {return _zooms.size();}
+	QSize size(int zoom) const;
+	QSize tileSize() const {return QSize(_tileSize, _tileSize);}
+	QPixmap tile(int zoom, int x, int y);
 
 	static bool isOZF(const QString &path);
 
 private:
+	struct Zoom {
+		QSize size;
+		QSize dim;
+		QVector<QRgb> palette;
+		QVector<quint32> tiles;
+	};
+
 	template<class T> bool readValue(T &val);
-	bool read(void *data, size_t size);
-	bool readKey();
+	bool read(void *data, size_t size, size_t decryptSize = 0);
+	bool initOZF3();
+	bool initOZF2();
 	bool readHeaders();
 	bool readTileTable();
 
+	quint16 _tileSize;
 	bool _decrypt;
 	quint8 _key;
-
-	QSize _size;
-	QSize _dim;
-	QVector<QRgb> _palette;
-	QVector<quint32> _tiles;
-
+	QList<Zoom> _zooms;
 	QFile _file;
 };
 
