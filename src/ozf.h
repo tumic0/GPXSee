@@ -12,7 +12,7 @@
 class OZF
 {
 public:
-	OZF() : _decrypt(false), _key(0) {}
+	OZF() : _tileSize(0), _decrypt(false), _key(0) {}
 
 	bool load(const QString &path);
 
