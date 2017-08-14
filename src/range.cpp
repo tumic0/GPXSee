@@ -10,6 +10,8 @@ void RangeF::resize(qreal size)
 
 QDebug operator<<(QDebug dbg, const RangeF &range)
 {
+	const bool ais = dbg.autoInsertSpaces();
 	dbg.nospace() << "RangeF(" << range.min() << ", " << range.max() << ")";
+	dbg.setAutoInsertSpaces(ais);
 	return dbg.maybeSpace();
 }

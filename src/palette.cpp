@@ -39,8 +39,9 @@ void Palette::reset()
 
 QDebug operator<<(QDebug dbg, const Palette &palette)
 {
+	const bool ais = dbg.autoInsertSpaces();
 	dbg.nospace() << "Palette(" << palette.color() << ", " << palette.shift()
 	  << ")";
-
+	dbg.setAutoInsertSpaces(ais);
 	return dbg.maybeSpace();
 }

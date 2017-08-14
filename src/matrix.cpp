@@ -115,3 +115,20 @@ void Matrix::zeroize()
 	for (size_t i = 0; i < _h * _w; i++)
 		_m[i] = 0;
 }
+
+QDebug operator<<(QDebug dbg, const Matrix &matrix)
+{
+	const bool ais = dbg.autoInsertSpaces();
+
+	dbg.nospace() << "Matrix(" << endl;
+	for (size_t i = 0; i < matrix.h(); i++) {
+		for (size_t j = 0; j < matrix.w(); j++)
+			dbg << "\t" << matrix.m(i, j);
+		dbg << endl;
+	}
+	dbg << ")";
+
+	dbg.setAutoInsertSpaces(ais);
+
+	return dbg.maybeSpace();
+}

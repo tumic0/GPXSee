@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <cfloat>
+#include <QDebug>
 
 class Matrix {
 public:
@@ -29,5 +30,7 @@ private:
 	size_t _h;
 	size_t _w;
 };
+
+QDebug operator<<(QDebug dbg, const Matrix &matrix);
 
 #endif // MATRIX_H
