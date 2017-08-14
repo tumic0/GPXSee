@@ -248,20 +248,44 @@ bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
 {
 	Q_ASSERT(points.size() >= 2);
 
+	// translate + scale
+	if (points.size() == 2) {
+		if (points.at(0).xy.x() == points.at(1).xy.x()
+		  || points.at(0).xy.y() == points.at(1).xy.y()) {
+			_errorString = "Invalid reference points tuple";
+			return false;
+		}
+
+		QPointF p0(_projection->ll2xy(points.at(0).ll));
+		QPointF p1(_projection->ll2xy(points.at(1).ll));
+
+		qreal dX, dY, lat0, lon0;
+		dX = (p0.x() - p1.x()) / (points.at(0).xy.x() - points.at(1).xy.x());
+		dY = (p1.y() - p0.y()) / (points.at(1).xy.y() - points.at(0).xy.y());
+		lat0 = p0.y() - points.at(0).xy.y() * dY;
+		lon0 = p1.x() - points.at(1).xy.x() * dX;
+
+		_transform = QTransform(1.0/dX, 0, 0, 1.0/dY, -lon0/dX, -lat0/dY);
+		_inverted = _transform.inverted();
+
+		return true;
+	}
+
+	// full affine transformation (least squares method)
 	Matrix c(3, 2);
 	c.zeroize();
-	for (size_t j = 0; j < c.w(); j++) {
-		for (size_t k = 0; k < c.h(); k++) {
-			for (int i = 0; i < points.size(); i++) {
+	for (size_t i = 0; i < c.h(); i++) {
+		for (size_t j = 0; j < c.w(); j++) {
+			for (int k = 0; k < points.size(); k++) {
 				double f[3], t[2];
-				QPointF p = _projection->ll2xy(points.at(i).ll);
+				QPointF p = _projection->ll2xy(points.at(k).ll);
 
 				f[0] = p.x();
 				f[1] = p.y();
 				f[2] = 1.0;
-				t[0] = points.at(i).xy.x();
-				t[1] = points.at(i).xy.y();
-				c.m(k,j) += f[k] * t[j];
+				t[0] = points.at(k).xy.x();
+				t[1] = points.at(k).xy.y();
+				c.m(i,j) += f[i] * t[j];
 			}
 		}
 	}
