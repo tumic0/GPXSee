@@ -1,0 +1,9 @@
+language: c++
+
+install:
+  - sudo apt-get install libqt4-dev
+
+script:
+  - lrelease gpxsee.pro
+  - qmake gpxsee.pro
+  - make
