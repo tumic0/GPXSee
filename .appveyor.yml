@@ -1,0 +1,38 @@
+version: 4.11.{build}
+configuration: Release
+platform: Any CPU
+environment:
+  NSISDIR: C:\Program Files (x86)\NSIS
+  matrix:
+  - QTDIR: C:\Qt\5.9\msvc2015
+    PLATFORM: x86
+    NSI: gpxsee.nsi
+    OPENSSLDIR: C:\OpenSSL-Win32\bin
+  - QTDIR: C:\Qt\5.9\msvc2015_64
+    PLATFORM: x86_amd64
+    NSI: gpxsee64.nsi
+    OPENSSLDIR: C:\OpenSSL-Win64\bin
+install:
+- cmd: >-
+    set PATH=%QTDIR%\bin;%NSISDIR%;%PATH%
+    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %PLATFORM%
+build_script:
+- cmd: >-
+    lrelease gpxsee.pro
+    qmake gpxsee.pro
+    nmake release
+
+    md installer
+    copy release\GPXSee.exe installer
+    windeployqt --no-svg --release installer\GPXSee.exe
+    copy pkg\%NSI% installer
+    copy pkg\datums.csv installer
+    copy pkg\ellipsoids.csv installer
+    copy pkg\maps.txt installer
+    copy licence.txt installer
+    copy %OPENSSLDIR%\libeay32.dll installer
+    copy %OPENSSLDIR%\ssleay32.dll installer
+
+    makensis.exe installer\%NSI%
+artifacts:
+- path: installer\GPXSee-*.exe
