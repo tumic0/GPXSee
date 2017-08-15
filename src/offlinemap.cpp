@@ -244,34 +244,31 @@ bool OfflineMap::createProjection(const QString &datum,
 	return true;
 }
 
-bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
+bool OfflineMap::simpleTransformation(const QList<ReferencePoint> &points)
 {
-	Q_ASSERT(points.size() >= 2);
-
-	// translate + scale
-	if (points.size() == 2) {
-		if (points.at(0).xy.x() == points.at(1).xy.x()
-		  || points.at(0).xy.y() == points.at(1).xy.y()) {
-			_errorString = "Invalid reference points tuple";
-			return false;
-		}
-
-		QPointF p0(_projection->ll2xy(points.at(0).ll));
-		QPointF p1(_projection->ll2xy(points.at(1).ll));
-
-		qreal dX, dY, lat0, lon0;
-		dX = (p0.x() - p1.x()) / (points.at(0).xy.x() - points.at(1).xy.x());
-		dY = (p1.y() - p0.y()) / (points.at(1).xy.y() - points.at(0).xy.y());
-		lat0 = p0.y() - points.at(0).xy.y() * dY;
-		lon0 = p1.x() - points.at(1).xy.x() * dX;
-
-		_transform = QTransform(1.0/dX, 0, 0, 1.0/dY, -lon0/dX, -lat0/dY);
-		_inverted = _transform.inverted();
-
-		return true;
+	if (points.at(0).xy.x() == points.at(1).xy.x()
+	  || points.at(0).xy.y() == points.at(1).xy.y()) {
+		_errorString = "Invalid reference points tuple";
+		return false;
 	}
 
-	// full affine transformation (least squares method)
+	QPointF p0(_projection->ll2xy(points.at(0).ll));
+	QPointF p1(_projection->ll2xy(points.at(1).ll));
+
+	qreal dX, dY, lat0, lon0;
+	dX = (p0.x() - p1.x()) / (points.at(0).xy.x() - points.at(1).xy.x());
+	dY = (p1.y() - p0.y()) / (points.at(1).xy.y() - points.at(0).xy.y());
+	lat0 = p0.y() - points.at(0).xy.y() * dY;
+	lon0 = p1.x() - points.at(1).xy.x() * dX;
+
+	_transform = QTransform(1.0/dX, 0, 0, 1.0/dY, -lon0/dX, -lat0/dY);
+	_inverted = _transform.inverted();
+
+	return true;
+}
+
+bool OfflineMap::affineTransformation(const QList<ReferencePoint> &points)
+{
 	Matrix c(3, 2);
 	c.zeroize();
 	for (size_t i = 0; i < c.h(); i++) {
@@ -315,6 +312,16 @@ bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
 	_inverted = _transform.inverted();
 
 	return true;
+}
+
+bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
+{
+	Q_ASSERT(points.size() >= 2);
+
+	if (points.size() == 2)
+		return simpleTransformation(points);
+	else
+		return affineTransformation(points);
 }
 
 bool OfflineMap::computeResolution(QList<ReferencePoint> &points)

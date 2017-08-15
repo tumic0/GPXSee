@@ -75,6 +75,8 @@ private:
 	bool totalSizeSet();
 	bool createProjection(const QString &datum, const QString &projection,
 	  const ProjectionSetup &setup, QList<ReferencePoint> &points);
+	bool simpleTransformation(const QList<ReferencePoint> &points);
+	bool affineTransformation(const QList<ReferencePoint> &points);
 	bool computeTransformation(const QList<ReferencePoint> &points);
 	bool computeResolution(QList<ReferencePoint> &points);
 	bool getTileInfo(const QStringList &tiles, const QString &path = QString());
