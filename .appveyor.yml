@@ -15,23 +15,37 @@ environment:
 install:
 - cmd: >-
     set PATH=%QTDIR%\bin;%NSISDIR%;%PATH%
+
     call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %PLATFORM%
 build_script:
 - cmd: >-
     lrelease gpxsee.pro
+
     qmake gpxsee.pro
+
     nmake release
 
+
     md installer
+
     copy release\GPXSee.exe installer
+
     windeployqt --no-svg --release installer\GPXSee.exe
+
     copy pkg\%NSI% installer
+
     copy pkg\datums.csv installer
+
     copy pkg\ellipsoids.csv installer
+
     copy pkg\maps.txt installer
+
     copy licence.txt installer
+
     copy %OPENSSLDIR%\libeay32.dll installer
+
     copy %OPENSSLDIR%\ssleay32.dll installer
+
 
     makensis.exe installer\%NSI%
 artifacts:
