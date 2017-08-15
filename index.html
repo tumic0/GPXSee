@@ -89,7 +89,7 @@
 
           <a name="maps"></a>
           <h2>Maps</h2>
-        
+
           <h3>Online maps</h3>
           <p>GPXSee supports most <a href="https://en.wikipedia.org/wiki/Web_Mercator">Web Mercator</a>
           based online maps out there, but the list of maps distributed with the official
@@ -109,7 +109,7 @@
               <td class="file">/Applications/GPXSee.app/Contents/Resources/maps.txt</td>
             </tr>  
           </table>
-          
+
           <p>or by overriding it with a user map list file:</p>
 
           <table class="config-files">
@@ -136,7 +136,7 @@ Map2	http://mapserver.org/map/$z-$x-$y
           <p>OziExplorer maps and TrekBuddy maps/atlases are supported by GPXSee. You may
           easily create offline atlases from online map services by using
           <a href="http://mobac.sourceforge.net/">Mobile Atlas Creator (MOBAC)</a>.</p>
-            
+
           <p>Offline maps are loaded on program startup from the <code>maps</code>
           directory in the same locations as the <code>maps.txt</code> file. The expected
           structure is one map/atlas in a separate subdirectory. Supported map formats are
@@ -159,7 +159,7 @@ Map2	http://mapserver.org/map/$z-$x-$y
 
           <h2>Download</h2>
           <a name="download"></a>
-          
+
           <ul>
             <li><a href="https://sourceforge.net/projects/gpxsee/files/Source/">Sources</a></li>
             <li><a href="https://sourceforge.net/projects/gpxsee/files/Windows/">Windows installer</a></li>
@@ -169,10 +169,19 @@ Map2	http://mapserver.org/map/$z-$x-$y
           </ul>
 
       </div>
-      
+
       <div id="sidebar">
         <div class="latest-news">
           <h3>Releases</h3>
+          <div class="news-item">
+            <p class="date">Aug 15 2017</p>
+            <h4>Version 4.10</h4>
+            <ul>
+              <li>Added support for OZF zoom levels.</li>
+              <li>Added support for maps with only 2 reference points.</li>
+              <li>Various map loading/displaying improvements.</li>
+            </ul>
+          </div>
           <div class="news-item">
             <p class="date">Jul 11 2017</p>
             <h4>Version 4.9</h4>
@@ -189,7 +198,7 @@ Map2	http://mapserver.org/map/$z-$x-$y
               <li>Added data filtering settings.</li>
               <li>Fixed broken units handling in track info tooltips.</li>
             </ul>
-          </div>         
+          </div>
           <div class="news-item">
             <p class="date">May  9 2017</p>
             <h4>Version 4.7</h4>
@@ -210,6 +219,7 @@ Map2	http://mapserver.org/map/$z-$x-$y
               <li>Improved path projection performance when an atlas is used.</li>
             </ul>
           </div>
+<!--
           <div class="news-item">
             <p class="date">April 23 2017</p>
             <h4>Version 4.5</h4>
@@ -219,6 +229,7 @@ Map2	http://mapserver.org/map/$z-$x-$y
               <li>Fixed various minor offline map loading issues.</li>
             </ul>
           </div>
+-->
         </div>
         <div id="changelog-link">
           <a href="https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes">Full changelog</a>
