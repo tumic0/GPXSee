@@ -14,9 +14,7 @@ RectC Path::boundingRect() const
 
 QDebug operator<<(QDebug dbg, const PathPoint &point)
 {
-	const bool ais = dbg.autoInsertSpaces();
 	dbg.nospace() << "PathPoint(" << point.distance() << ", "
 	  << point.coordinates() << ")";
-	dbg.setAutoInsertSpaces(ais);
-	return dbg.maybeSpace();
+	return dbg.space();
 }

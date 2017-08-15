@@ -19,11 +19,9 @@ qreal Coordinates::distanceTo(const Coordinates &c) const
 
 QDebug operator<<(QDebug dbg, const Coordinates &coordinates)
 {
-	const bool ais = dbg.autoInsertSpaces();
 	dbg.nospace() << "Coordinates(" << coordinates.lon() << ", "
 	  << coordinates.lat() << ")";
-	dbg.setAutoInsertSpaces(ais);
-	return dbg.maybeSpace();
+	return dbg.space();
 }
 
 QPair<Coordinates, Coordinates> Coordinates::boundingRect(qreal distance) const

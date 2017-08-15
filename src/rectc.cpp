@@ -58,8 +58,6 @@ void RectC::unite(const Coordinates &c)
 
 QDebug operator<<(QDebug dbg, const RectC &rect)
 {
-	const bool ais = dbg.autoInsertSpaces();
 	dbg.nospace() << "RectC(" << rect.topLeft() << ", " << rect.size() << ")";
-	dbg.setAutoInsertSpaces(ais);
-	return dbg.maybeSpace();
+	return dbg.space();
 }
