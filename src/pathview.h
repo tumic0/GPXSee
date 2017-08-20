@@ -75,7 +75,7 @@ private:
 	void loadPOI();
 	void clearPOI();
 
-	qreal mapScale() const;
+	qreal mapZoom() const;
 	QPointF contentCenter() const;
 	void rescale();
 	void zoom(int zoom, const QPoint &pos, const Coordinates &c);

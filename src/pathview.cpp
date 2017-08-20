@@ -144,7 +144,7 @@ void PathView::addWaypoints(const QList<Waypoint> &waypoints)
 QList<PathItem *> PathView::loadData(const Data &data)
 {
 	QList<PathItem *> paths;
-	qreal scale = _map->zoom();
+	qreal zoom = _map->zoom();
 
 	for (int i = 0; i < data.tracks().count(); i++)
 		paths.append(addTrack(*(data.tracks().at(i))));
@@ -155,7 +155,7 @@ QList<PathItem *> PathView::loadData(const Data &data)
 	if (_tracks.empty() && _routes.empty() && _waypoints.empty())
 		return paths;
 
-	if (mapScale() != scale)
+	if (mapZoom() != zoom)
 		rescale();
 	else
 		updatePOIVisibility();
@@ -179,11 +179,11 @@ void PathView::updateWaypointsBoundingRect(const Coordinates &wp)
 		_wr.unite(wp);
 }
 
-qreal PathView::mapScale() const
+qreal PathView::mapZoom() const
 {
 	RectC br = _tr | _rr | _wr;
 
-	return _map->zoomFit(viewport()->size() - QSize(MARGIN/2, MARGIN/2), br);
+	return _map->zoomFit(viewport()->size() - QSize(2*MARGIN, 2*MARGIN), br);
 }
 
 QPointF PathView::contentCenter() const
@@ -647,8 +647,8 @@ void PathView::drawBackground(QPainter *painter, const QRectF &rect)
 
 void PathView::resizeEvent(QResizeEvent *event)
 {
-	qreal scale = _map->zoom();
-	if (mapScale() != scale)
+	qreal zoom = _map->zoom();
+	if (mapZoom() != zoom)
 		rescale();
 
 	QPointF center = contentCenter();
