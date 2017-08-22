@@ -181,7 +181,7 @@ bool OZF::readTileTable()
 		_zooms.append(zoom);
 	}
 
-	return true;
+	return _zooms.isEmpty() ? false : true;
 }
 
 bool OZF::load(const QString &path)
