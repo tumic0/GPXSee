@@ -229,6 +229,18 @@ bool OfflineMap::createProjection(const QString &datum,
 	else if (projection == "(SG) Swedish Grid")
 		_projection = new TransverseMercator(d.ellipsoid(), 0, 15.808278, 1,
 		  1500000, 0);
+	else if (projection == "(I) France Zone I")
+		_projection = new LambertConic(d.ellipsoid(), 48.598523, 50.395912,
+		  49.5, 2.337229, 0.99987734, 600000, 1200000);
+	else if (projection == "(II) France Zone II")
+		_projection = new LambertConic(d.ellipsoid(), 45.898919, 47.696014,
+		  46.8, 2.337229, 0.99987742, 600000, 2200000);
+	else if (projection == "(III) France Zone III")
+		_projection = new LambertConic(d.ellipsoid(), 43.199291, 44.996094,
+		  44.1, 2.337229, 0.99987750, 600000, 3200000);
+	else if (projection == "(IV) France Zone IV")
+		_projection = new LambertConic(d.ellipsoid(), 41.560388, 42.767663,
+		  42.165, 2.337229, 0.99994471, 234.358, 4185861.369);
 	else {
 		_errorString = QString("%1: Unknown map projection").arg(projection);
 		return false;
