@@ -1,3 +1,4 @@
+#include <cstring>
 #include <QtEndian>
 #include <QFile>
 #include "ozf.h"
@@ -52,8 +53,8 @@ bool OZF::read(void *data, size_t size, size_t decryptSize)
 bool OZF::initOZF3()
 {
 	quint8 randomNumber, initial;
-	quint32 keyblock;
 	quint8 h1[8];
+	quint8 h2[16], h2d[16];
 
 
 	if (!_file.seek(14))
@@ -75,41 +76,23 @@ bool OZF::initOZF3()
 		return false;
 	_tileSize = *(h1 + 6);
 
-	if (!_file.seek(15 + randomNumber))
+	if (!_file.seek(15 + randomNumber + 4))
 		return false;
-	if (!readValue(keyblock))
+	if (_file.read((char*)h2, sizeof(h2)) != (qint64)sizeof(h2))
 		return false;
 
-	switch (keyblock & 0xFF) {
-		case 0xf1:
-			initial += 0x8a;
-			break;
-		case 0x18:
-		case 0x54:
-			initial += 0xa0;
-			break;
-		case 0x56:
-			initial += 0xb9;
-			break;
-		case 0x43:
-			initial += 0x6a;
-			break;
-		case 0x83:
-			initial += 0xa4;
-			break;
-		case 0xc5:
-			initial += 0x7e;
-			break;
-		case 0x38:
-			initial += 0xc1;
-			break;
-		default:
-			break;
+	for (int i = 0; i < 256; i++) {
+		memcpy(h2d, h2, sizeof(h2d));
+		decrypt(h2d, sizeof(h2d), (quint8)i);
+
+		if ((quint32)*h2d == 40 && (quint16)*(h2d + 12) == 1
+		  && (quint16)*(h2d + 14) == 8) {
+			_key = (quint8)i;
+			return true;
+		}
 	}
 
-	_key = initial;
-
-	return true;
+	return false;
 }
 
 bool OZF::initOZF2()
@@ -135,8 +118,10 @@ bool OZF::readHeaders()
 	} else if (magic == OZF3_MAGIC) {
 		if (!initOZF3())
 			return false;
-	} else
+	} else {
+		qWarning("%s: not a OZF2/OZF3 file", qPrintable(_file.fileName()));
 		return false;
+	}
 
 	return true;
 }
@@ -209,13 +194,13 @@ bool OZF::load(const QString &path)
 		return false;
 
 	if (!readHeaders()) {
-		qWarning("%s: not a OZF2/OZF3 file", qPrintable(_file.fileName()));
+		qWarning("%s: Invalid header", qPrintable(_file.fileName()));
 		_file.close();
 		return false;
 	}
 
 	if (!readTileTable()) {
-		qWarning("%s: file format error", qPrintable(_file.fileName()));
+		qWarning("%s: Invalid tile table", qPrintable(_file.fileName()));
 		_file.close();
 		return false;
 	}
