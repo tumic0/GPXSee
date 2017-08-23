@@ -241,6 +241,12 @@ bool OfflineMap::createProjection(const QString &datum,
 	else if (projection == "(IV) France Zone IV")
 		_projection = new LambertConic(d.ellipsoid(), 41.560388, 42.767663,
 		  42.165, 2.337229, 1 /*0.99994471*/, 234.358, 4185861.369);
+	else if (projection == "(VICGRID) Victoria Australia")
+		_projection = new LambertConic(d.ellipsoid(), -36, -38, -37, 145, 1,
+		  2500000, 4500000);
+	else if (projection == "(VG94) VICGRID94 Victoria Australia")
+		_projection = new LambertConic(d.ellipsoid(), -36, -38, -37, 145, 1,
+		  2500000, 2500000);
 	else {
 		_errorString = QString("%1: Unknown map projection").arg(projection);
 		return false;
