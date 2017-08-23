@@ -75,7 +75,7 @@ Coordinates LambertConic::xy2ll(const QPointF &p) const
 	double dx = p.x() - _fe;
 	double dy = p.y() - _fn - _R0;
 	double R = sqrt(dx * dx + dy * dy);
-	double q = _q0 - log(R / _R0) / _n;
+	double q = _q0 - log(fabs(R / _R0)) / _n;
 
 	return Coordinates(rad2deg(deg2rad(_cm) + dl / _n), rad2deg(iq(_e, q)));
 }
