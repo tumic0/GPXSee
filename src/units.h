@@ -25,10 +25,6 @@ enum Units {
 #define C2FS    1.8  // Celsius to Farenheit - scale
 #define C2FO    32.0 // Celsius to Farenheit - offset
 
-#ifdef Q_OS_WIN32
-#define UNIT_SPACE     QString(" ")
-#else // Q_OS_WIN32
 #define UNIT_SPACE     QString::fromUtf8("\xE2\x80\x89")
-#endif // Q_OS_WIN32
 
 #endif // UNITS_H
