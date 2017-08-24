@@ -46,6 +46,7 @@ PathView::PathView(Map *map, POI *poi, QWidget *parent)
 	connect(_poi, SIGNAL(pointsChanged()), this, SLOT(updatePOI()));
 
 	_units = Metric;
+	_opacity = 1.0;
 
 	_showMap = true;
 	_showTracks = true;
@@ -637,11 +638,21 @@ void PathView::setRouteStyle(Qt::PenStyle style)
 		_routes.at(i)->setStyle(style);
 }
 
+void PathView::setMapOpacity(int opacity)
+{
+	_opacity = opacity / 100.0;
+	resetCachedContent();
+}
+
 void PathView::drawBackground(QPainter *painter, const QRectF &rect)
 {
-	if (_showMap)
+	if (_showMap) {
+		if (_opacity < 1.0) {
+			painter->fillRect(rect, Qt::white);
+			painter->setOpacity(_opacity);
+		}
 		_map->draw(painter, rect);
-	else
+	} else
 		painter->fillRect(rect, Qt::white);
 }
 

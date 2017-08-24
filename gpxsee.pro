@@ -96,7 +96,8 @@ HEADERS += src/config.h \
     src/albersequal.h \
     src/oddspinbox.h \
     src/rectc.h \
-    src/searchpointer.h
+    src/searchpointer.h \
+    src/percentslider.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -165,7 +166,8 @@ SOURCES += src/main.cpp \
     src/maplist.cpp \
     src/albersequal.cpp \
     src/oddspinbox.cpp \
-    src/rectc.cpp
+    src/rectc.cpp \
+    src/percentslider.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \

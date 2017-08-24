@@ -16,11 +16,12 @@
 #include "colorbox.h"
 #include "stylecombobox.h"
 #include "oddspinbox.h"
+#include "percentslider.h"
 #include "optionsdialog.h"
+
 
 #define MENU_MARGIN 20
 #define MENU_ICON_SIZE 32
-
 
 QWidget *OptionsDialog::createAppearancePage()
 {
@@ -31,14 +32,39 @@ QWidget *OptionsDialog::createAppearancePage()
 	_colorOffset->setMaximum(1.0);
 	_colorOffset->setSingleStep(0.01);
 	_colorOffset->setValue(_options->palette.shift());
-
 	QFormLayout *paletteLayout = new QFormLayout();
 	paletteLayout->addRow(tr("Base color:"), _baseColor);
 	paletteLayout->addRow(tr("Palette shift:"), _colorOffset);
+#ifndef Q_OS_MAC
+	QGroupBox *pathsBox = new QGroupBox(tr("Paths"));
+	pathsBox->setLayout(paletteLayout);
+#endif
+
+	_mapOpacity = new PercentSlider();
+	_mapOpacity->setValue(_options->mapOpacity);
+	QFormLayout *mapLayout = new QFormLayout();
+	mapLayout->addRow(tr("Map opacity:"), _mapOpacity);
+#ifndef Q_OS_MAC
+	QGroupBox *mapBox = new QGroupBox(tr("Map"));
+	mapBox->setLayout(mapLayout);
+#endif
 
 	QWidget *colorTab = new QWidget();
-	colorTab->setLayout(paletteLayout);
+	QVBoxLayout *colorTabLayout = new QVBoxLayout();
+#ifdef Q_OS_MAC
+	QFrame *l0 = new QFrame();
+	l0->setFrameShape(QFrame::HLine);
+	l0->setFrameShadow(QFrame::Sunken);
 
+	colorTabLayout->addLayout(paletteLayout);
+	colorTabLayout->addWidget(l0);
+	colorTabLayout->addLayout(mapLayout);
+#else // Q_OS_MAC
+	colorTabLayout->addWidget(pathsBox);
+	colorTabLayout->addWidget(mapBox);
+#endif // O_OS_MAC
+	colorTabLayout->addStretch();
+	colorTab->setLayout(colorTabLayout);
 
 	_trackWidth = new QSpinBox();
 	_trackWidth->setValue(_options->trackWidth);
@@ -369,6 +395,7 @@ void OptionsDialog::accept()
 {
 	_options->palette.setColor(_baseColor->color());
 	_options->palette.setShift(_colorOffset->value());
+	_options->mapOpacity = _mapOpacity->value();
 	_options->trackWidth = _trackWidth->value();
 	_options->trackStyle = (Qt::PenStyle) _trackStyle->itemData(
 	  _trackStyle->currentIndex()).toInt();

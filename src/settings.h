@@ -76,6 +76,8 @@
 #define PALETTE_COLOR_DEFAULT             QColor(Qt::blue)
 #define PALETTE_SHIFT_SETTING             "paletteShift"
 #define PALETTE_SHIFT_DEFAULT             0.62
+#define MAP_OPACITY_SETTING               "mapOpacity"
+#define MAP_OPACITY_DEFAULT               100
 #define TRACK_WIDTH_SETTING               "trackWidth"
 #define TRACK_WIDTH_DEFAULT               3
 #define ROUTE_WIDTH_SETTING               "routeWidth"

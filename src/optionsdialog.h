@@ -12,10 +12,12 @@ class QSpinBox;
 class QDoubleSpinBox;
 class QComboBox;
 class QCheckBox;
+class PercentSlider;
 
 struct Options {
 	// Appearance
 	Palette palette;
+	int mapOpacity;
 	int trackWidth;
 	int routeWidth;
 	Qt::PenStyle trackStyle;
@@ -71,6 +73,7 @@ private:
 	// Appearance
 	ColorBox *_baseColor;
 	QDoubleSpinBox *_colorOffset;
+	PercentSlider *_mapOpacity;
 	QSpinBox *_trackWidth;
 	StyleComboBox *_trackStyle;
 	QSpinBox *_routeWidth;

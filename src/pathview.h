@@ -63,6 +63,7 @@ public slots:
 	void setRouteWidth(int width);
 	void setTrackStyle(Qt::PenStyle style);
 	void setRouteStyle(Qt::PenStyle style);
+	void setMapOpacity(int opacity);
 
 private slots:
 	void updatePOI();
@@ -106,6 +107,7 @@ private:
 	POI *_poi;
 	Palette _palette;
 	Units _units;
+	qreal _opacity;
 
 	bool _showMap;
 	bool _showTracks;
