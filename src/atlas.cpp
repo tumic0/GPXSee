@@ -303,8 +303,7 @@ void Atlas::draw(QPainter *painter, const QRectF &rect)
 {
 	// All in one map
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
-		QRectF ir = rect.intersected(_bounds.at(i).second);
-		if (ir == rect) {
+		if (_bounds.at(i).second.contains(rect)) {
 			draw(painter, rect, i);
 			return;
 		}
