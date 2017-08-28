@@ -958,6 +958,7 @@ void GUI::exportFile()
 	printer.setOutputFormat(QPrinter::PdfFormat);
 	printer.setCreator(QString(APP_NAME) + QString(" ")
 	  + QString(APP_VERSION));
+	printer.setResolution(_export.resolution);
 	printer.setOrientation(_export.orientation);
 	printer.setOutputFileName(_export.fileName);
 	printer.setPaperSize(_export.paperSize);
@@ -1581,6 +1582,8 @@ void GUI::writeSettings()
 	settings.beginGroup(EXPORT_SETTINGS_GROUP);
 	if (_export.orientation != PAPER_ORIENTATION_DEFAULT)
 		settings.setValue(PAPER_ORIENTATION_SETTING, _export.orientation);
+	if (_export.resolution != RESOLUTION_DEFAULT)
+		settings.setValue(RESOLUTION_SETTING, _export.resolution);
 	if (_export.paperSize != PAPER_SIZE_DEFAULT)
 		settings.setValue(PAPER_SIZE_SETTING, _export.paperSize);
 	if (_export.margins.left() != MARGIN_LEFT_DEFAULT)
@@ -1779,6 +1782,8 @@ void GUI::readSettings()
 	settings.beginGroup(EXPORT_SETTINGS_GROUP);
 	_export.orientation = (QPrinter::Orientation) settings.value(
 	  PAPER_ORIENTATION_SETTING, PAPER_ORIENTATION_DEFAULT).toInt();
+	_export.resolution = settings.value(RESOLUTION_SETTING, RESOLUTION_DEFAULT)
+	  .toInt();
 	_export.paperSize = (QPrinter::PaperSize) settings.value(PAPER_SIZE_SETTING,
 	  PAPER_SIZE_DEFAULT).toInt();
 	qreal ml = settings.value(MARGIN_LEFT_SETTING, MARGIN_LEFT_DEFAULT)

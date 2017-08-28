@@ -16,6 +16,7 @@ struct Export {
 	QPrinter::PaperSize paperSize;
 	QPrinter::Orientation orientation;
 	MarginsF margins;
+	int resolution;
 
 	Units units;
 };
@@ -37,6 +38,7 @@ private:
 
 	FileSelectWidget *_fileSelect;
 	QComboBox *_paperSize;
+	QComboBox *_resolution;
 	QRadioButton *_portrait;
 	QRadioButton *_landscape;
 	QDoubleSpinBox *_topMargin;

@@ -70,6 +70,8 @@
 #define EXPORT_FILENAME_SETTING           "fileName"
 #define EXPORT_FILENAME_DEFAULT           QString("%1/export.pdf"). \
                                             arg(QDir::currentPath())
+#define RESOLUTION_SETTING                "resolution"
+#define RESOLUTION_DEFAULT                600
 
 #define OPTIONS_SETTINGS_GROUP            "Options"
 #define PALETTE_COLOR_SETTING             "paletteColor"
