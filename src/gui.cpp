@@ -854,15 +854,6 @@ void GUI::closePOIFiles()
 	_poi->clear();
 }
 
-void GUI::printFile()
-{
-	QPrinter printer(QPrinter::HighResolution);
-	QPrintDialog dialog(&printer, this);
-
-	if (dialog.exec() == QDialog::Accepted)
-		plot(&printer);
-}
-
 void GUI::openOptions()
 {
 	Options options(_options);
@@ -948,6 +939,15 @@ void GUI::openOptions()
 	_options = options;
 }
 
+void GUI::printFile()
+{
+	QPrinter printer(QPrinter::HighResolution);
+	QPrintDialog dialog(&printer, this);
+
+	if (dialog.exec() == QDialog::Accepted)
+		plot(&printer);
+}
+
 void GUI::exportFile()
 {
 	ExportDialog dialog(&_export, this);
@@ -1028,7 +1028,7 @@ void GUI::plot(QPrinter *printer)
 	} else
 		gh = 0;
 	_pathView->plot(&p, QRectF(0, ih + mh, printer->width(), printer->height()
-	  - (ih + 2*mh + gh)));
+	  - (ih + 2*mh + gh)), _options.hiresPrint);
 
 	if (_graphTabWidget->isVisible() && _options.separateGraphPage) {
 		printer->newPage();
@@ -1638,6 +1638,8 @@ void GUI::writeSettings()
 		settings.setValue(USE_OPENGL_SETTING, _options.useOpenGL);
 	if (_options.pixmapCache != PIXMAP_CACHE_DEFAULT)
 		settings.setValue(PIXMAP_CACHE_SETTING, _options.pixmapCache);
+	if (_options.hiresPrint != HIRES_PRINT_DEFAULT)
+		settings.setValue(HIRES_PRINT_SETTING, _options.hiresPrint);
 	if (_options.printName != PRINT_NAME_DEFAULT)
 		settings.setValue(PRINT_NAME_SETTING, _options.printName);
 	if (_options.printDate != PRINT_DATE_DEFAULT)
@@ -1835,6 +1837,8 @@ void GUI::readSettings()
 	  .toBool();
 	_options.pixmapCache = settings.value(PIXMAP_CACHE_SETTING,
 	  PIXMAP_CACHE_DEFAULT).toInt();
+	_options.hiresPrint = settings.value(HIRES_PRINT_SETTING,
+	  HIRES_PRINT_DEFAULT).toBool();
 	_options.printName = settings.value(PRINT_NAME_SETTING, PRINT_NAME_DEFAULT)
 	  .toBool();
 	_options.printDate = settings.value(PRINT_DATE_SETTING, PRINT_DATE_DEFAULT)

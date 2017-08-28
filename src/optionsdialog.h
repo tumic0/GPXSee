@@ -12,6 +12,7 @@ class QSpinBox;
 class QDoubleSpinBox;
 class QComboBox;
 class QCheckBox;
+class QRadioButton;
 class PercentSlider;
 
 struct Options {
@@ -40,6 +41,7 @@ struct Options {
 	bool useOpenGL;
 	int pixmapCache;
 	// Print/Export
+	bool hiresPrint;
 	bool printName;
 	bool printDate;
 	bool printDistance;
@@ -96,6 +98,8 @@ private:
 	QSpinBox *_pixmapCache;
 	QCheckBox *_useOpenGL;
 	// Print/Export
+	QRadioButton *_wysiwyg;
+	QRadioButton *_hires;
 	QCheckBox *_name;
 	QCheckBox *_date;
 	QCheckBox *_distance;

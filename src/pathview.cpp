@@ -3,6 +3,7 @@
 #include <QWheelEvent>
 #include <QApplication>
 #include <QPixmapCache>
+#include "config.h"
 #include "opengl.h"
 #include "misc.h"
 #include "poi.h"
@@ -471,11 +472,15 @@ void PathView::keyPressEvent(QKeyEvent *event)
 	zoom(z, pos, c);
 }
 
-void PathView::plot(QPainter *painter, const QRectF &target)
+void PathView::plot(QPainter *painter, const QRectF &target, bool hires)
 {
 	QRect orig, adj;
-	qreal ratio, diff;
+	qreal ratio, diff, origRes;
+	QPointF origScene;
+	Coordinates origLL;
 
+
+	setUpdatesEnabled(false);
 
 	orig = viewport()->rect();
 
@@ -489,7 +494,20 @@ void PathView::plot(QPainter *painter, const QRectF &target)
 		adj = orig.adjusted(-diff/2, 0, diff/2, 0);
 	}
 
-	setUpdatesEnabled(false);
+	if (hires) {
+		origScene = mapToScene(orig.center());
+		origLL = _map->xy2ll(origScene);
+		origRes = _map->resolution(origScene);
+
+		qreal r = painter->device()->logicalDpiX() / SCREEN_DPI;
+		adj.setSize(QSize(adj.width() * r, adj.height() * r));
+		_map->zoomFit(adj.size(), _tr | _rr | _wr);
+		rescale();
+		QPointF center = contentCenter();
+		centerOn(center);
+		adj.moveCenter(mapFromScene(center));
+	}
+
 	_plot = true;
 	_map->setBlockingMode(true);
 
@@ -504,6 +522,13 @@ void PathView::plot(QPainter *painter, const QRectF &target)
 
 	_map->setBlockingMode(false);
 	_plot = false;
+
+	if (hires) {
+		_map->zoomFit(origRes, origLL);
+		rescale();
+		centerOn(origScene);
+	}
+
 	setUpdatesEnabled(true);
 }
 
