@@ -3,7 +3,6 @@
 #include <QWheelEvent>
 #include <QApplication>
 #include <QPixmapCache>
-#include "config.h"
 #include "opengl.h"
 #include "misc.h"
 #include "poi.h"
@@ -499,7 +498,8 @@ void PathView::plot(QPainter *painter, const QRectF &target, bool hires)
 		origLL = _map->xy2ll(origScene);
 		origRes = _map->resolution(origScene);
 
-		qreal r = painter->device()->logicalDpiX() / SCREEN_DPI;
+		qreal r = painter->device()->logicalDpiX()
+		  / (qreal)metric(QPaintDevice::PdmDpiX);
 		adj.setSize(QSize(adj.width() * r, adj.height() * r));
 		_map->zoomFit(adj.size(), _tr | _rr | _wr);
 		rescale();
