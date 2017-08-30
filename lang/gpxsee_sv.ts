@@ -162,7 +162,7 @@
     <message>
         <location filename="../src/exportdialog.cpp" line="91"/>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Upplösning:</translation>
     </message>
     <message>
         <location filename="../src/exportdialog.cpp" line="93"/>
@@ -1015,7 +1015,7 @@
     <message>
         <location filename="../src/optionsdialog.cpp" line="334"/>
         <source>Print mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Utskriftsläge</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="335"/>
