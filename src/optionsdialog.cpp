@@ -267,7 +267,7 @@ QWidget *OptionsDialog::createPOIPage()
 QWidget *OptionsDialog::createExportPage()
 {
 	_wysiwyg = new QRadioButton(tr("WYSIWYG"));
-	_hires = new QRadioButton(tr("Hi-Resolution"));
+	_hires = new QRadioButton(tr("High-Resolution"));
 	if (_options->hiresPrint)
 		_hires->setChecked(true);
 	else
@@ -275,8 +275,8 @@ QWidget *OptionsDialog::createExportPage()
 	QLabel *lw = new QLabel(tr("The printed area is approximately the display"
 	  " area. The map zoom level does not change."));
 	QLabel *lh = new QLabel(tr("The zoom level will be changed so that"
-	  " the content still fits to the printed area and the map resolution is as"
-	  " close as possible to the printer resolution."));
+	  " the whole content (tracks/waypoints) fits to the printed area and"
+	  " the map resolution is as close as possible to the print resolution."));
 	QFont f = lw->font();
 	f.setPointSize(f.pointSize() - 1);
 	lw->setWordWrap(true);
