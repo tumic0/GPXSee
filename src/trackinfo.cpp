@@ -16,10 +16,8 @@ void TrackInfo::insert(const QString &key, const QString &value)
 	_info->insert(key, value);
 }
 
-void TrackInfo::plot(QPainter *painter, const QRectF &target)
+void TrackInfo::plot(QPainter *painter, const QRectF &target, qreal ratio)
 {
-	qreal ratio = painter->paintEngine()->paintDevice()->logicalDpiX()
-	  / SCREEN_DPI;
 	QSizeF canvas = QSizeF(target.width() / ratio, target.height() / ratio);
 	QSizeF diff = QSizeF(qAbs(canvas.width() - sceneRect().width()),
 	  qAbs(canvas.height() - sceneRect().height()));

@@ -498,9 +498,11 @@ void PathView::plot(QPainter *painter, const QRectF &target, bool hires)
 		origLL = _map->xy2ll(origScene);
 		origRes = _map->resolution(origScene);
 
-		qreal r = painter->device()->logicalDpiX()
-		  / (qreal)metric(QPaintDevice::PdmDpiX);
-		adj.setSize(QSize(adj.width() * r, adj.height() * r));
+		QPointF scale(painter->device()->logicalDpiX()
+		  / (qreal)metric(QPaintDevice::PdmDpiX),
+		  painter->device()->logicalDpiY()
+		  / (qreal)metric(QPaintDevice::PdmDpiY));
+		adj.setSize(QSize(adj.width() * scale.x(), adj.height() * scale.y()));
 		_map->zoomFit(adj.size(), _tr | _rr | _wr);
 		rescale();
 		QPointF center = contentCenter();

@@ -53,7 +53,7 @@ public:
 	qreal sliderPosition() const {return _sliderPos;}
 	void setSliderPosition(qreal pos);
 
-	void plot(QPainter *painter, const QRectF &target);
+	void plot(QPainter *painter, const QRectF &target, qreal ratio);
 
 	void useOpenGL(bool use);
 

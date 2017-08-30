@@ -1008,15 +1008,15 @@ void GUI::plot(QPrinter *printer)
 	if (tm > 0 && _options.printMovingTime)
 		info.insert(tr("Moving time"), Format::timeSpan(tm));
 
-
-	ratio = p.paintEngine()->paintDevice()->logicalDpiX() / SCREEN_DPI;
+	qreal fsr = 96.0 / (qMax(printer->width(), printer->height()) / 3392.0);
+	ratio = p.paintEngine()->paintDevice()->logicalDpiX() / fsr;
 	if (info.isEmpty()) {
 		ih = 0;
 		mh = 0;
 	} else {
 		ih = info.contentSize().height() * ratio;
 		mh = ih / 2;
-		info.plot(&p, QRectF(0, 0, printer->width(), ih));
+		info.plot(&p, QRectF(0, 0, printer->width(), ih), ratio);
 	}
 	if (_graphTabWidget->isVisible() && !_options.separateGraphPage) {
 		qreal r = (((qreal)(printer)->width()) / (qreal)(printer->height()));
@@ -1025,7 +1025,8 @@ void GUI::plot(QPrinter *printer)
 		  : 0.15 * (printer->height() - ih - 2*mh);
 		gh = qMax(gh, ratio * 150);
 		GraphTab *gt = static_cast<GraphTab*>(_graphTabWidget->currentWidget());
-		gt->plot(&p,  QRectF(0, printer->height() - gh, printer->width(), gh));
+		gt->plot(&p,  QRectF(0, printer->height() - gh, printer->width(), gh),
+		  ratio);
 	} else
 		gh = 0;
 	_pathView->plot(&p, QRectF(0, ih + mh, printer->width(), printer->height()
@@ -1046,7 +1047,8 @@ void GUI::plot(QPrinter *printer)
 		qreal y = 0;
 		for (int i = 0; i < _tabs.size(); i++) {
 			if (_tabs.at(i)->count()) {
-				_tabs.at(i)->plot(&p,  QRectF(0, y, printer->width(), gh));
+				_tabs.at(i)->plot(&p,  QRectF(0, y, printer->width(), gh),
+				  ratio);
 				y += gh + sp;
 			}
 		}

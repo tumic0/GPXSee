@@ -10,8 +10,7 @@
 #define APP_HOMEPAGE    "http://www.gpxsee.org"
 
 #define FONT_FAMILY     "Arial"
-#define FONT_SIZE       12
-#define SCREEN_DPI      96.0
+#define FONT_SIZE       12 // px
 
 #define ELLIPSOID_FILE  QString("ellipsoids.csv")
 #define DATUM_FILE      QString("datums.csv")

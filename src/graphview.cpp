@@ -326,10 +326,8 @@ void GraphView::mousePressEvent(QMouseEvent *e)
 	QGraphicsView::mousePressEvent(e);
 }
 
-void GraphView::plot(QPainter *painter, const QRectF &target)
+void GraphView::plot(QPainter *painter, const QRectF &target, qreal ratio)
 {
-	qreal ratio = painter->paintEngine()->paintDevice()->logicalDpiX()
-	  / SCREEN_DPI;
 	QSizeF canvas = QSizeF(target.width() / ratio, target.height() / ratio);
 
 	setUpdatesEnabled(false);
