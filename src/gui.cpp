@@ -1008,7 +1008,8 @@ void GUI::plot(QPrinter *printer)
 	if (tm > 0 && _options.printMovingTime)
 		info.insert(tr("Moving time"), Format::timeSpan(tm));
 
-	qreal fsr = 96.0 / (qMax(printer->width(), printer->height()) / 3392.0);
+	qreal fsr = 1085.0 / (qMax(printer->width(), printer->height())
+	  / (qreal)printer->resolution());
 	ratio = p.paintEngine()->paintDevice()->logicalDpiX() / fsr;
 	if (info.isEmpty()) {
 		ih = 0;
