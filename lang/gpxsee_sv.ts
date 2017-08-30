@@ -162,7 +162,7 @@
     <message>
         <location filename="../src/exportdialog.cpp" line="91"/>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Upplösning:</translation>
     </message>
     <message>
         <location filename="../src/exportdialog.cpp" line="93"/>
@@ -768,7 +768,7 @@
     <message>
         <location filename="../src/maplist.cpp" line="128"/>
         <source>URL list files (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation>URL-listfiler (*.txt)</translation>
     </message>
 </context>
 <context>
@@ -838,7 +838,7 @@
     <message>
         <location filename="../src/optionsdialog.cpp" line="47"/>
         <source>Map opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartopacitet</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="49"/>
@@ -960,22 +960,22 @@
     <message>
         <location filename="../src/optionsdialog.cpp" line="269"/>
         <source>WYSIWYG</source>
-        <translation type="unfinished"></translation>
+        <translation>WYSIWYG</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="270"/>
         <source>High-Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Högupplösning</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="275"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det utskrivna området är ungefär detsamma som synligt område på skärmen. Kartans zoomnivå ändras inte.</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="277"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoomnivån kommer att ändras så att hela innehållet (spår/vägpunkter) passar utskriftsområdet och kartresolutionen är så nära som möjligt till utskriftsupplösningen.</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="299"/>
@@ -1015,7 +1015,7 @@
     <message>
         <location filename="../src/optionsdialog.cpp" line="334"/>
         <source>Print mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Utskriftsläge</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="335"/>
