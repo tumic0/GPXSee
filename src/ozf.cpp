@@ -137,7 +137,8 @@ bool OZF::readTileTable()
 		return false;
 	if (!readValue(tableOffset))
 		return false;
-	zooms = (_file.size() - tableOffset - sizeof(quint32)) / sizeof(quint32);
+	zooms = (int)((_file.size() - tableOffset - sizeof(quint32))
+	  / sizeof(quint32));
 
 	for (int i = 0; i < zooms - 2; i++) {
 		if (!_file.seek(tableOffset + i * sizeof(quint32)))
