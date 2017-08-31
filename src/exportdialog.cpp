@@ -26,9 +26,15 @@ ExportDialog::ExportDialog(Export *exp, QWidget *parent)
 	_fileSelect->setFile(_export->fileName);
 
 	_paperSize = new QComboBox();
+	_paperSize->addItem("A2", QPrinter::A2);
 	_paperSize->addItem("A3", QPrinter::A3);
 	_paperSize->addItem("A4", QPrinter::A4);
 	_paperSize->addItem("A5", QPrinter::A5);
+	_paperSize->addItem("A6", QPrinter::A6);
+	_paperSize->addItem("B3", QPrinter::B3);
+	_paperSize->addItem("B4", QPrinter::B4);
+	_paperSize->addItem("B5", QPrinter::B5);
+	_paperSize->addItem("B6", QPrinter::B6);
 	_paperSize->addItem("Tabloid", QPrinter::Tabloid);
 	_paperSize->addItem("Legal", QPrinter::Legal);
 	_paperSize->addItem("Letter", QPrinter::Letter);
