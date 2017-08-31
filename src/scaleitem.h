@@ -15,7 +15,7 @@ public:
 
 	void setResolution(qreal res);
 	void setUnits(enum Units units);
-	void setDigitalZoom(int zoom);
+	void setDigitalZoom(qreal zoom);
 
 private:
 	void updateBoundingRect();
@@ -28,7 +28,7 @@ private:
 	Units _units;
 	bool _scale;
 
-	int _digitalZoom;
+	qreal _digitalZoom;
 
 	QRectF _boundingRect;
 };

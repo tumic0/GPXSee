@@ -13,7 +13,7 @@ public:
 	TrackInfo(QObject *parent = 0);
 
 	void insert(const QString &key, const QString &value);
-	void plot(QPainter *painter, const QRectF &target, qreal ratio);
+	void plot(QPainter *painter, const QRectF &target, qreal scale);
 	bool isEmpty() const;
 	QSizeF contentSize() const;
 

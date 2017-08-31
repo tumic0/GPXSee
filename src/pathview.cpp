@@ -475,13 +475,16 @@ void PathView::plot(QPainter *painter, const QRectF &target, bool hires)
 {
 	QRect orig, adj;
 	qreal ratio, diff, origRes;
-	QPointF origScene;
+	QPointF origScene, origPos;
 	Coordinates origLL;
 
 
 	setUpdatesEnabled(false);
+	_plot = true;
+	_map->setBlockingMode(true);
 
 	orig = viewport()->rect();
+	origPos = _mapScale->pos();
 
 	if (orig.height() * (target.width() / target.height()) - orig.width() < 0) {
 		ratio = target.height() / target.width();
@@ -493,44 +496,49 @@ void PathView::plot(QPainter *painter, const QRectF &target, bool hires)
 		adj = orig.adjusted(-diff/2, 0, diff/2, 0);
 	}
 
+	// Adjust the view for printing
 	if (hires) {
 		origScene = mapToScene(orig.center());
 		origLL = _map->xy2ll(origScene);
 		origRes = _map->resolution(origScene);
 
-		QPointF scale(painter->device()->logicalDpiX()
+		QPointF s(painter->device()->logicalDpiX()
 		  / (qreal)metric(QPaintDevice::PdmDpiX),
 		  painter->device()->logicalDpiY()
 		  / (qreal)metric(QPaintDevice::PdmDpiY));
-		adj.setSize(QSize(adj.width() * scale.x(), adj.height() * scale.y()));
+		adj = QRect(0, 0, adj.width() * s.x(), adj.height() * s.y());
 		_map->zoomFit(adj.size(), _tr | _rr | _wr);
 		rescale();
 		QPointF center = contentCenter();
 		centerOn(center);
 		adj.moveCenter(mapFromScene(center));
+
+		_mapScale->setResolution(_map->resolution(_map->ll2xy(origLL)));
+		_mapScale->setDigitalZoom(-log2(s.x()));
+		_mapScale->setPos(mapToScene(QPoint(adj.bottomRight() + QPoint(
+		  -(SCALE_OFFSET + _mapScale->boundingRect().width()) * s.x(),
+		  -(SCALE_OFFSET + _mapScale->boundingRect().height()) * s.x()))));
+	} else {
+		_mapScale->setPos(mapToScene(QPoint(adj.bottomRight() + QPoint(
+		  -(SCALE_OFFSET + _mapScale->boundingRect().width()),
+		  -(SCALE_OFFSET + _mapScale->boundingRect().height())))));
 	}
 
-	_plot = true;
-	_map->setBlockingMode(true);
-
-	QPointF pos = _mapScale->pos();
-	_mapScale->setPos(mapToScene(QPoint(adj.bottomRight() + QPoint(
-	  -(SCALE_OFFSET + _mapScale->boundingRect().width()),
-	  -(SCALE_OFFSET + _mapScale->boundingRect().height())))));
-
+	// Print the view
 	render(painter, target, adj);
 
-	_mapScale->setPos(pos);
-
-	_map->setBlockingMode(false);
-	_plot = false;
-
+	// Revert view changes to display mode
 	if (hires) {
 		_map->zoomFit(origRes, origLL);
 		rescale();
 		centerOn(origScene);
+		_mapScale->setDigitalZoom(0);
+		_mapScale->setResolution(origRes);
 	}
+	_mapScale->setPos(origPos);
 
+	_map->setBlockingMode(false);
+	_plot = false;
 	setUpdatesEnabled(true);
 }
 

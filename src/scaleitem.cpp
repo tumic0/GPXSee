@@ -132,7 +132,7 @@ void ScaleItem::setUnits(enum Units units)
 	update();
 }
 
-void ScaleItem::setDigitalZoom(int zoom)
+void ScaleItem::setDigitalZoom(qreal zoom)
 {
 	prepareGeometryChange();
 	_digitalZoom = zoom;
