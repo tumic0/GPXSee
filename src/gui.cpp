@@ -1024,7 +1024,6 @@ void GUI::plot(QPrinter *printer)
 		gh = (printer->width() > printer->height())
 		  ? 0.15 * r * (printer->height() - ih - 2*mh)
 		  : 0.15 * (printer->height() - ih - 2*mh);
-		gh = qMax(gh, ratio * 150);
 		GraphTab *gt = static_cast<GraphTab*>(_graphTabWidget->currentWidget());
 		gt->plot(&p,  QRectF(0, printer->height() - gh, printer->width(), gh),
 		  ratio);
