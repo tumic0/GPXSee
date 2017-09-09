@@ -1030,7 +1030,7 @@ void GUI::plot(QPrinter *printer)
 	} else
 		gh = 0;
 	_pathView->plot(&p, QRectF(0, ih + mh, printer->width(), printer->height()
-	  - (ih + 2*mh + gh)), _options.hiresPrint);
+	  - (ih + 2*mh + gh)), ratio, _options.hiresPrint);
 
 	if (_graphTabWidget->isVisible() && _options.separateGraphPage) {
 		printer->newPage();

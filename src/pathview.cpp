@@ -471,18 +471,21 @@ void PathView::keyPressEvent(QKeyEvent *event)
 	zoom(z, pos, c);
 }
 
-void PathView::plot(QPainter *painter, const QRectF &target, bool hires)
+void PathView::plot(QPainter *painter, const QRectF &target, qreal scale,
+  bool hires)
 {
 	QRect orig, adj;
-	qreal ratio, diff, origRes;
+	qreal ratio, diff, origRes, q;
 	QPointF origScene, origPos;
 	Coordinates origLL;
 
 
+	// Enter plot mode
 	setUpdatesEnabled(false);
 	_plot = true;
 	_map->setBlockingMode(true);
 
+	// Compute sizes & ratios
 	orig = viewport()->rect();
 	origPos = _mapScale->pos();
 
@@ -495,6 +498,7 @@ void PathView::plot(QPainter *painter, const QRectF &target, bool hires)
 		diff = (orig.height() * ratio) - orig.width();
 		adj = orig.adjusted(-diff/2, 0, diff/2, 0);
 	}
+	q = (target.width() / scale) / adj.width();
 
 	// Adjust the view for printing
 	if (hires) {
@@ -514,14 +518,15 @@ void PathView::plot(QPainter *painter, const QRectF &target, bool hires)
 		adj.moveCenter(mapFromScene(center));
 
 		_mapScale->setResolution(_map->resolution(_map->ll2xy(origLL)));
-		_mapScale->setDigitalZoom(-log2(s.x()));
+		_mapScale->setDigitalZoom(-log2(s.x() / q));
 		_mapScale->setPos(mapToScene(QPoint(adj.bottomRight() + QPoint(
-		  -(SCALE_OFFSET + _mapScale->boundingRect().width()) * s.x(),
-		  -(SCALE_OFFSET + _mapScale->boundingRect().height()) * s.x()))));
+		  -(SCALE_OFFSET + _mapScale->boundingRect().width()) * (s.x() / q),
+		  -(SCALE_OFFSET + _mapScale->boundingRect().height()) * (s.x() / q)))));
 	} else {
+		_mapScale->setDigitalZoom(-log2(1.0 / q));
 		_mapScale->setPos(mapToScene(QPoint(adj.bottomRight() + QPoint(
-		  -(SCALE_OFFSET + _mapScale->boundingRect().width()),
-		  -(SCALE_OFFSET + _mapScale->boundingRect().height())))));
+		  -(SCALE_OFFSET + _mapScale->boundingRect().width()) / q ,
+		  -(SCALE_OFFSET + _mapScale->boundingRect().height()) / q))));
 	}
 
 	// Print the view
@@ -532,11 +537,12 @@ void PathView::plot(QPainter *painter, const QRectF &target, bool hires)
 		_map->zoomFit(origRes, origLL);
 		rescale();
 		centerOn(origScene);
-		_mapScale->setDigitalZoom(0);
 		_mapScale->setResolution(origRes);
 	}
+	_mapScale->setDigitalZoom(0);
 	_mapScale->setPos(origPos);
 
+	// Exit plot mode
 	_map->setBlockingMode(false);
 	_plot = false;
 	setUpdatesEnabled(true);

@@ -37,7 +37,7 @@ public:
 	void setMap(Map *map);
 	void setUnits(enum Units units);
 
-	void plot(QPainter *painter, const QRectF &target, bool hires);
+	void plot(QPainter *painter, const QRectF &target, qreal scale, bool hires);
 
 	int trackCount() const {return _tracks.count();}
 	int routeCount() const {return _routes.count();}
