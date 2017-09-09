@@ -64,6 +64,7 @@ public slots:
 	void setTrackStyle(Qt::PenStyle style);
 	void setRouteStyle(Qt::PenStyle style);
 	void setMapOpacity(int opacity);
+	void setBlendColor(const QColor &color);
 
 private slots:
 	void updatePOI();
@@ -108,6 +109,7 @@ private:
 	Palette _palette;
 	Units _units;
 	qreal _opacity;
+	QColor _blendColor;
 
 	bool _showMap;
 	bool _showTracks;

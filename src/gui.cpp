@@ -871,6 +871,8 @@ void GUI::openOptions()
 	}
 	if (options.mapOpacity != _options.mapOpacity)
 		_pathView->setMapOpacity(options.mapOpacity);
+	if (options.blendColor != _options.blendColor)
+		_pathView->setBlendColor(options.blendColor);
 	if (options.trackWidth != _options.trackWidth)
 		_pathView->setTrackWidth(options.trackWidth);
 	if (options.routeWidth != _options.routeWidth)
@@ -1608,6 +1610,8 @@ void GUI::writeSettings()
 		settings.setValue(PALETTE_SHIFT_SETTING, _options.palette.shift());
 	if (_options.mapOpacity != MAP_OPACITY_DEFAULT)
 		settings.setValue(MAP_OPACITY_SETTING, _options.mapOpacity);
+	if (_options.blendColor != BLEND_COLOR_DEFAULT)
+		settings.setValue(BLEND_COLOR_SETTING, _options.blendColor);
 	if (_options.trackWidth != TRACK_WIDTH_DEFAULT)
 		settings.setValue(TRACK_WIDTH_SETTING, _options.trackWidth);
 	if (_options.routeWidth != ROUTE_WIDTH_DEFAULT)
@@ -1809,6 +1813,8 @@ void GUI::readSettings()
 	_options.palette = Palette(pc, ps);
 	_options.mapOpacity = settings.value(MAP_OPACITY_SETTING,
 	  MAP_OPACITY_DEFAULT).toInt();
+	_options.blendColor = settings.value(BLEND_COLOR_SETTING,
+	  BLEND_COLOR_DEFAULT).value<QColor>();
 	_options.trackWidth = settings.value(TRACK_WIDTH_SETTING,
 	  TRACK_WIDTH_DEFAULT).toInt();
 	_options.routeWidth = settings.value(ROUTE_WIDTH_SETTING,
@@ -1864,6 +1870,7 @@ void GUI::readSettings()
 
 	_pathView->setPalette(_options.palette);
 	_pathView->setMapOpacity(_options.mapOpacity);
+	_pathView->setBlendColor(_options.blendColor);
 	_pathView->setTrackWidth(_options.trackWidth);
 	_pathView->setRouteWidth(_options.routeWidth);
 	_pathView->setTrackStyle(_options.trackStyle);

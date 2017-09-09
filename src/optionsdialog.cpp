@@ -37,35 +37,9 @@ QWidget *OptionsDialog::createAppearancePage()
 	paletteLayout->addRow(tr("Base color:"), _baseColor);
 	paletteLayout->addRow(tr("Palette shift:"), _colorOffset);
 #ifndef Q_OS_MAC
-	QGroupBox *pathsBox = new QGroupBox(tr("Paths"));
-	pathsBox->setLayout(paletteLayout);
+	QGroupBox *colorBox = new QGroupBox(tr("Colors"));
+	colorBox->setLayout(paletteLayout);
 #endif
-
-	_mapOpacity = new PercentSlider();
-	_mapOpacity->setValue(_options->mapOpacity);
-	QFormLayout *mapLayout = new QFormLayout();
-	mapLayout->addRow(tr("Map opacity:"), _mapOpacity);
-#ifndef Q_OS_MAC
-	QGroupBox *mapBox = new QGroupBox(tr("Map"));
-	mapBox->setLayout(mapLayout);
-#endif
-
-	QWidget *colorTab = new QWidget();
-	QVBoxLayout *colorTabLayout = new QVBoxLayout();
-#ifdef Q_OS_MAC
-	QFrame *l0 = new QFrame();
-	l0->setFrameShape(QFrame::HLine);
-	l0->setFrameShadow(QFrame::Sunken);
-
-	colorTabLayout->addLayout(paletteLayout);
-	colorTabLayout->addWidget(l0);
-	colorTabLayout->addLayout(mapLayout);
-#else // Q_OS_MAC
-	colorTabLayout->addWidget(pathsBox);
-	colorTabLayout->addWidget(mapBox);
-#endif // O_OS_MAC
-	colorTabLayout->addStretch();
-	colorTab->setLayout(colorTabLayout);
 
 	_trackWidth = new QSpinBox();
 	_trackWidth->setValue(_options->trackWidth);
@@ -101,6 +75,9 @@ QWidget *OptionsDialog::createAppearancePage()
 	QWidget *pathTab = new QWidget();
 	QVBoxLayout *pathTabLayout = new QVBoxLayout();
 #ifdef Q_OS_MAC
+	QFrame *l0 = new QFrame();
+	l0->setFrameShape(QFrame::HLine);
+	l0->setFrameShadow(QFrame::Sunken);
 	QFrame *l1 = new QFrame();
 	l1->setFrameShape(QFrame::HLine);
 	l1->setFrameShadow(QFrame::Sunken);
@@ -108,11 +85,14 @@ QWidget *OptionsDialog::createAppearancePage()
 	l2->setFrameShape(QFrame::HLine);
 	l2->setFrameShadow(QFrame::Sunken);
 
+	pathTabLayout->addLayout(paletteLayout);
+	pathTabLayout->addWidget(l0);
 	pathTabLayout->addLayout(trackLayout);
 	pathTabLayout->addWidget(l1);
 	pathTabLayout->addLayout(routeLayout);
 	pathTabLayout->addWidget(l2);
 #else // Q_OS_MAC
+	pathTabLayout->addWidget(colorBox);
 	pathTabLayout->addWidget(trackBox);
 	pathTabLayout->addWidget(routeBox);
 #endif // Q_OS_MAC
@@ -139,10 +119,28 @@ QWidget *OptionsDialog::createAppearancePage()
 	graphTabLayout->addStretch();
 	graphTab->setLayout(graphTabLayout);
 
+
+	_mapOpacity = new PercentSlider();
+	_mapOpacity->setValue(_options->mapOpacity);
+	_blendColor = new ColorBox();
+	_blendColor->setColor(_options->blendColor);
+	QFormLayout *mapLayout = new QFormLayout();
+	mapLayout->addRow(tr("Background color:"), _blendColor);
+	mapLayout->addRow(tr("Map opacity:"), _mapOpacity);
+
+
+	QWidget *mapTab = new QWidget();
+	QVBoxLayout *mapTabLayout = new QVBoxLayout();
+	mapTabLayout->addLayout(mapLayout);
+	mapTabLayout->addStretch();
+	mapTab->setLayout(mapTabLayout);
+
+
+
 	QTabWidget *appearancePage = new QTabWidget();
-	appearancePage->addTab(colorTab, tr("Colors"));
 	appearancePage->addTab(pathTab, tr("Paths"));
 	appearancePage->addTab(graphTab, tr("Graphs"));
+	appearancePage->addTab(mapTab, tr("Map"));
 
 	return appearancePage;
 }
@@ -428,6 +426,7 @@ void OptionsDialog::accept()
 	_options->palette.setColor(_baseColor->color());
 	_options->palette.setShift(_colorOffset->value());
 	_options->mapOpacity = _mapOpacity->value();
+	_options->blendColor = _blendColor->color();
 	_options->trackWidth = _trackWidth->value();
 	_options->trackStyle = (Qt::PenStyle) _trackStyle->itemData(
 	  _trackStyle->currentIndex()).toInt();

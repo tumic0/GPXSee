@@ -47,6 +47,7 @@ PathView::PathView(Map *map, POI *poi, QWidget *parent)
 
 	_units = Metric;
 	_opacity = 1.0;
+	_blendColor = Qt::white;
 
 	_showMap = true;
 	_showTracks = true;
@@ -685,11 +686,17 @@ void PathView::setMapOpacity(int opacity)
 	resetCachedContent();
 }
 
+void PathView::setBlendColor(const QColor &color)
+{
+	_blendColor = color;
+	resetCachedContent();
+}
+
 void PathView::drawBackground(QPainter *painter, const QRectF &rect)
 {
 	if (_showMap) {
 		if (_opacity < 1.0) {
-			painter->fillRect(rect, Qt::white);
+			painter->fillRect(rect, _blendColor);
 			painter->setOpacity(_opacity);
 		}
 		_map->draw(painter, rect);

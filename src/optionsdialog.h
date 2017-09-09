@@ -19,6 +19,7 @@ struct Options {
 	// Appearance
 	Palette palette;
 	int mapOpacity;
+	QColor blendColor;
 	int trackWidth;
 	int routeWidth;
 	Qt::PenStyle trackStyle;
@@ -76,6 +77,7 @@ private:
 	ColorBox *_baseColor;
 	QDoubleSpinBox *_colorOffset;
 	PercentSlider *_mapOpacity;
+	ColorBox *_blendColor;
 	QSpinBox *_trackWidth;
 	StyleComboBox *_trackStyle;
 	QSpinBox *_routeWidth;
