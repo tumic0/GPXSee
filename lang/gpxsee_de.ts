@@ -115,7 +115,7 @@
 <context>
     <name>ExportDialog</name>
     <message>
-        <location filename="../src/exportdialog.cpp" line="128"/>
+        <location filename="../src/exportdialog.cpp" line="134"/>
         <source>Export to PDF</source>
         <translation>PDF Export</translation>
     </message>
@@ -125,84 +125,84 @@
         <translation>PDF-Dateien (*.pdf);;Alle Dateien (*)</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="45"/>
+        <location filename="../src/exportdialog.cpp" line="51"/>
         <source>Portrait</source>
         <translation>Hochformat</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="46"/>
+        <location filename="../src/exportdialog.cpp" line="52"/>
         <source>Landscape</source>
         <translation>Querformat</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="90"/>
+        <location filename="../src/exportdialog.cpp" line="96"/>
         <source>Page size:</source>
         <translation>Seitengröße:</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="92"/>
+        <location filename="../src/exportdialog.cpp" line="98"/>
         <source>Orientation:</source>
         <translation>Orientierung:</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="87"/>
+        <location filename="../src/exportdialog.cpp" line="93"/>
         <source>Page Setup</source>
         <translation>Seiten Setup</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="59"/>
+        <location filename="../src/exportdialog.cpp" line="65"/>
         <source>in</source>
         <translation>in</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="59"/>
+        <location filename="../src/exportdialog.cpp" line="65"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="91"/>
+        <location filename="../src/exportdialog.cpp" line="97"/>
         <source>Resolution:</source>
         <translation>Druckauflösung:</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="93"/>
+        <location filename="../src/exportdialog.cpp" line="99"/>
         <source>Margins:</source>
         <translation>Ränder:</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="99"/>
+        <location filename="../src/exportdialog.cpp" line="105"/>
         <source>File:</source>
         <translation>Ausgabedatei:</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="106"/>
+        <location filename="../src/exportdialog.cpp" line="112"/>
         <source>Output file</source>
         <translation>Ausgabedatei</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="113"/>
+        <location filename="../src/exportdialog.cpp" line="119"/>
         <source>Export</source>
         <translation>Export</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="135"/>
-        <location filename="../src/exportdialog.cpp" line="145"/>
-        <location filename="../src/exportdialog.cpp" line="150"/>
+        <location filename="../src/exportdialog.cpp" line="141"/>
+        <location filename="../src/exportdialog.cpp" line="151"/>
+        <location filename="../src/exportdialog.cpp" line="156"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="135"/>
+        <location filename="../src/exportdialog.cpp" line="141"/>
         <source>No output file selected.</source>
         <translation>Keine Ausgabedatei ausgewählt.</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="145"/>
+        <location filename="../src/exportdialog.cpp" line="151"/>
         <source>%1 is a directory.</source>
         <translation>%1 ist ein Verzeichniss.</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="150"/>
+        <location filename="../src/exportdialog.cpp" line="156"/>
         <source>%1 is not writable.</source>
         <translation>%1 ist nich schreibbar.</translation>
     </message>
@@ -248,12 +248,12 @@
         <translation>GPXSee wird unter der GNU General Public License version 3 vertrieben. Mehr Informationen zu GPXSee auf der Homepage </translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="724"/>
+        <location filename="../src/gui.cpp" line="725"/>
         <source>Open file</source>
         <translation>Datei öffnen</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="814"/>
+        <location filename="../src/gui.cpp" line="815"/>
         <source>Open POI file</source>
         <translation>POI Datei öffnen</translation>
     </message>
@@ -391,7 +391,7 @@
     </message>
     <message>
         <location filename="../src/gui.cpp" line="443"/>
-        <location filename="../src/gui.cpp" line="1009"/>
+        <location filename="../src/gui.cpp" line="1010"/>
         <source>Moving time</source>
         <translation>Bewegungszeit</translation>
     </message>
@@ -526,32 +526,37 @@
         <translation>Onlinekarten URLs werden zu Programmstart aus der folgenden Datei gelesen:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="705"/>
+        <location filename="../src/gui.cpp" line="698"/>
+        <source>The file format is one map entry per line, consisting of the map name, tiles URL and an optional maximal zoom level delimited by a TAB character. The tile X and Y coordinates are replaced with $x and $y in the URL and the zoom level is replaced with $z. An example map file could look like:</source>
+        <translation>Das Dateiformat ist eine Karte pro Linie. Jede Linie besteht aus dem Kartenname, der Tiles URL und wahlweise dem maximalen Zoomlevel getrennt durch ein TAB Zeichen. X und Y Koordinate einer Tile werden in der URL durch $x und $y ersetzt und das Zoomlevel durch $z. Ein Beispiel einer Kartendatei könnte so aussehen:</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="706"/>
         <source>Offline maps</source>
         <translation>Offlinekarten</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="706"/>
+        <location filename="../src/gui.cpp" line="707"/>
         <source>Offline maps are loaded on program startup from the following directory:</source>
         <translation>Offlinekarten werden zu Programmstart aus dem folgenden Verzeichnis geladen:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="1202"/>
+        <location filename="../src/gui.cpp" line="1203"/>
         <source>Open map file</source>
         <translation>Karte Datei öffnen</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="1223"/>
+        <location filename="../src/gui.cpp" line="1224"/>
         <source>Error loading map:</source>
         <translation>Fehler beim Laden der Karte-Datei:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="1238"/>
+        <location filename="../src/gui.cpp" line="1239"/>
         <source>No files loaded</source>
         <translation>Keine Dateien geladen</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/gui.cpp" line="1242"/>
+        <location filename="../src/gui.cpp" line="1243"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n Datei</numerusform>
@@ -559,13 +564,13 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="995"/>
-        <location filename="../src/gui.cpp" line="998"/>
+        <location filename="../src/gui.cpp" line="996"/>
+        <location filename="../src/gui.cpp" line="999"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="987"/>
+        <location filename="../src/gui.cpp" line="988"/>
         <source>Routes</source>
         <translation>Routen</translation>
     </message>
@@ -590,7 +595,7 @@
         <translation>Als PDF exportieren...</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="989"/>
+        <location filename="../src/gui.cpp" line="990"/>
         <source>Waypoints</source>
         <translation>Wegpunkte</translation>
     </message>
@@ -615,43 +620,42 @@
         <translation>Letzte Datei</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="698"/>
         <source>The file format is one map entry per line, consisting of the map name and tiles URL delimited by a TAB character. The tile X and Y coordinates are replaced with $x and $y in the URL and the zoom level is replaced with $z. An example map file could look like:</source>
-        <translation>Das Dateiformat ist eine Karte pro Linie. Jede Linie besteht aus dem Kartenname und die durch ein TAB Zeichen getrennte Tiles URL. X und Y Koordinate einer Tile werden in der URL durch $x und $y ersetzt und das Zoomlevel durch $z. Ein Beispiel einer Kartendatei könnte so aussehen:</translation>
+        <translation type="vanished">Das Dateiformat ist eine Karte pro Linie. Jede Linie besteht aus dem Kartenname und die durch ein TAB Zeichen getrennte Tiles URL. X und Y Koordinate einer Tile werden in der URL durch $x und $y ersetzt und das Zoomlevel durch $z. Ein Beispiel einer Kartendatei könnte so aussehen:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="709"/>
+        <location filename="../src/gui.cpp" line="710"/>
         <source>The expected structure is one map/atlas in a separate subdirectory. Supported map formats are OziExplorer maps and TrekBuddy maps/atlases (tared and non-tared).</source>
         <translation>Die erwartete Struktur ist eine Karte/ein Atlas pro Unterverzeichnis. Unterstützte Kartenformate sind OziExplorer Karten und TrekBuddy Karten/Atlanten (mit oder ohne tar Kompression).</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="714"/>
+        <location filename="../src/gui.cpp" line="715"/>
         <source>To make GPXSee load a POI file automatically on startup, add the file to the following directory:</source>
         <translation>Damit GPXSee zu Programmstart automatisch eine POI-Datei lädt, fügen Sie diese zu folgendem Verzeichnis hinzu:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="803"/>
+        <location filename="../src/gui.cpp" line="804"/>
         <source>Error loading data file:</source>
         <translation>Fehler beim Laden der Datei:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="806"/>
-        <location filename="../src/gui.cpp" line="831"/>
+        <location filename="../src/gui.cpp" line="807"/>
+        <location filename="../src/gui.cpp" line="832"/>
         <source>Line: %1</source>
         <translation>Linie: %1</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="828"/>
+        <location filename="../src/gui.cpp" line="829"/>
         <source>Error loading POI file:</source>
         <translation>Fehler beim Laden der POI-Datei:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="981"/>
+        <location filename="../src/gui.cpp" line="982"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="985"/>
+        <location filename="../src/gui.cpp" line="986"/>
         <source>Tracks</source>
         <translation>Strecken</translation>
     </message>
@@ -667,20 +671,20 @@
         <translation>Navigation</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="713"/>
+        <location filename="../src/gui.cpp" line="714"/>
         <source>POIs</source>
         <translation>POIs</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="412"/>
-        <location filename="../src/gui.cpp" line="1005"/>
+        <location filename="../src/gui.cpp" line="1006"/>
         <source>Distance</source>
         <translation>Distanz</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="419"/>
         <location filename="../src/gui.cpp" line="543"/>
-        <location filename="../src/gui.cpp" line="1007"/>
+        <location filename="../src/gui.cpp" line="1008"/>
         <source>Time</source>
         <translation>Zeit</translation>
     </message>
@@ -761,12 +765,12 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/maplist.cpp" line="127"/>
+        <location filename="../src/maplist.cpp" line="141"/>
         <source>Map files (*.map *.tba *.tar)</source>
         <translation>Karten-Dateien (*.map *.tba *.tar)</translation>
     </message>
     <message>
-        <location filename="../src/maplist.cpp" line="128"/>
+        <location filename="../src/maplist.cpp" line="142"/>
         <source>URL list files (*.txt)</source>
         <translation>URL-Liste Dateien (*.txt)</translation>
     </message>

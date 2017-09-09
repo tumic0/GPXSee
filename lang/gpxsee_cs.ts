@@ -115,7 +115,7 @@
 <context>
     <name>ExportDialog</name>
     <message>
-        <location filename="../src/exportdialog.cpp" line="128"/>
+        <location filename="../src/exportdialog.cpp" line="134"/>
         <source>Export to PDF</source>
         <translation>Exportovat do PDF</translation>
     </message>
@@ -125,84 +125,84 @@
         <translation>Soubory PDF (*.pdf);;Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="45"/>
+        <location filename="../src/exportdialog.cpp" line="51"/>
         <source>Portrait</source>
         <translation>Na výšku</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="46"/>
+        <location filename="../src/exportdialog.cpp" line="52"/>
         <source>Landscape</source>
         <translation>Na šířku</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="90"/>
+        <location filename="../src/exportdialog.cpp" line="96"/>
         <source>Page size:</source>
         <translation>Velikost stránky:</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="92"/>
+        <location filename="../src/exportdialog.cpp" line="98"/>
         <source>Orientation:</source>
         <translation>Orientace:</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="87"/>
+        <location filename="../src/exportdialog.cpp" line="93"/>
         <source>Page Setup</source>
         <translation>Nastavení stránky</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="59"/>
+        <location filename="../src/exportdialog.cpp" line="65"/>
         <source>in</source>
         <translation>in</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="59"/>
+        <location filename="../src/exportdialog.cpp" line="65"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="91"/>
+        <location filename="../src/exportdialog.cpp" line="97"/>
         <source>Resolution:</source>
         <translation>Rozlišení:</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="93"/>
+        <location filename="../src/exportdialog.cpp" line="99"/>
         <source>Margins:</source>
         <translation>Okraje:</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="99"/>
+        <location filename="../src/exportdialog.cpp" line="105"/>
         <source>File:</source>
         <translation>Soubor:</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="106"/>
+        <location filename="../src/exportdialog.cpp" line="112"/>
         <source>Output file</source>
         <translation>Výstupní soubor</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="113"/>
+        <location filename="../src/exportdialog.cpp" line="119"/>
         <source>Export</source>
         <translation>Exportovat</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="135"/>
-        <location filename="../src/exportdialog.cpp" line="145"/>
-        <location filename="../src/exportdialog.cpp" line="150"/>
+        <location filename="../src/exportdialog.cpp" line="141"/>
+        <location filename="../src/exportdialog.cpp" line="151"/>
+        <location filename="../src/exportdialog.cpp" line="156"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="135"/>
+        <location filename="../src/exportdialog.cpp" line="141"/>
         <source>No output file selected.</source>
         <translation>Nebyl zvolen žádný výstupní soubor.</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="145"/>
+        <location filename="../src/exportdialog.cpp" line="151"/>
         <source>%1 is a directory.</source>
         <translation>%1 je adresář.</translation>
     </message>
     <message>
-        <location filename="../src/exportdialog.cpp" line="150"/>
+        <location filename="../src/exportdialog.cpp" line="156"/>
         <source>%1 is not writable.</source>
         <translation>%1 nelze zapsat.</translation>
     </message>
@@ -248,12 +248,12 @@
         <translation>Program GPXSee je distribuován pod podmínkami licence GNU General Public License verze 3. Pro více informací navštivte stránky programu na adrese </translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="724"/>
+        <location filename="../src/gui.cpp" line="725"/>
         <source>Open file</source>
         <translation>Otevřít soubor</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="814"/>
+        <location filename="../src/gui.cpp" line="815"/>
         <source>Open POI file</source>
         <translation>Otevřít POI soubor</translation>
     </message>
@@ -391,7 +391,7 @@
     </message>
     <message>
         <location filename="../src/gui.cpp" line="443"/>
-        <location filename="../src/gui.cpp" line="1009"/>
+        <location filename="../src/gui.cpp" line="1010"/>
         <source>Moving time</source>
         <translation>Čistý čas</translation>
     </message>
@@ -526,38 +526,43 @@
         <translation>URL online map jsou načteny při startu programu z následujícího souboru:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="706"/>
+        <location filename="../src/gui.cpp" line="698"/>
+        <source>The file format is one map entry per line, consisting of the map name, tiles URL and an optional maximal zoom level delimited by a TAB character. The tile X and Y coordinates are replaced with $x and $y in the URL and the zoom level is replaced with $z. An example map file could look like:</source>
+        <translation>Formát souboru je jeden mapový záznam na řádku, kde mapový záznam sestává ze jména mapy, URL dlaždic a volitelně maximálního zoomu navzájem oddělených tabulátorem. Souřadnice dlaždice jsou v URL nahrazeny řetězci $x a $y, zoom pak řetězcem $z. Příklad:</translation>
+    </message>
+    <message>
+        <location filename="../src/gui.cpp" line="707"/>
         <source>Offline maps are loaded on program startup from the following directory:</source>
         <translation>Offline mapy jsou načítány při startu aplikace z následujícího adresáře:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="1202"/>
+        <location filename="../src/gui.cpp" line="1203"/>
         <source>Open map file</source>
         <translation>Otevřít mapový soubor</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="1238"/>
+        <location filename="../src/gui.cpp" line="1239"/>
         <source>No files loaded</source>
         <translation>Nejsou načteny žádné soubory</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="995"/>
-        <location filename="../src/gui.cpp" line="998"/>
+        <location filename="../src/gui.cpp" line="996"/>
+        <location filename="../src/gui.cpp" line="999"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="987"/>
+        <location filename="../src/gui.cpp" line="988"/>
         <source>Routes</source>
         <translation>Trasy</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="1223"/>
+        <location filename="../src/gui.cpp" line="1224"/>
         <source>Error loading map:</source>
         <translation>Mapu nelze načíst:</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/gui.cpp" line="1242"/>
+        <location filename="../src/gui.cpp" line="1243"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n soubor</numerusform>
@@ -586,7 +591,7 @@
         <translation>Exportovat do PDF...</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="989"/>
+        <location filename="../src/gui.cpp" line="990"/>
         <source>Waypoints</source>
         <translation>Navigační body</translation>
     </message>
@@ -611,48 +616,47 @@
         <translation>Poslední soubor</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="698"/>
         <source>The file format is one map entry per line, consisting of the map name and tiles URL delimited by a TAB character. The tile X and Y coordinates are replaced with $x and $y in the URL and the zoom level is replaced with $z. An example map file could look like:</source>
-        <translation>Formát souboru je jeden mapový záznam na řádku, kde mapový záznam sestává ze jména mapy a URL dlaždic navzájem oddělených tabulátorem. Souřadnice dlaždice jsou v URL nahrazeny řetězci $x a $y, úroven přiblížení (zoom) pak řetězcem $z. Příklad:</translation>
+        <translation type="vanished">Formát souboru je jeden mapový záznam na řádku, kde mapový záznam sestává ze jména mapy a URL dlaždic navzájem oddělených tabulátorem. Souřadnice dlaždice jsou v URL nahrazeny řetězci $x a $y, úroven přiblížení (zoom) pak řetězcem $z. Příklad:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="705"/>
+        <location filename="../src/gui.cpp" line="706"/>
         <source>Offline maps</source>
         <translation>Offline mapy</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="709"/>
+        <location filename="../src/gui.cpp" line="710"/>
         <source>The expected structure is one map/atlas in a separate subdirectory. Supported map formats are OziExplorer maps and TrekBuddy maps/atlases (tared and non-tared).</source>
         <translation>Očekávaná struktura je jedna mapa/atlas v samostatném podadresáři. Podporované mapové formáty jsou OziExplorer mapy a TrekBuddy mapy/atlasy (včetně tar varianty).</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="714"/>
+        <location filename="../src/gui.cpp" line="715"/>
         <source>To make GPXSee load a POI file automatically on startup, add the file to the following directory:</source>
         <translation>POI soubory, které se mají automaticky nahrát při startu programu jsou načítány z následujícího adresáře:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="803"/>
+        <location filename="../src/gui.cpp" line="804"/>
         <source>Error loading data file:</source>
         <translation>Datový soubor nelze načíst:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="806"/>
-        <location filename="../src/gui.cpp" line="831"/>
+        <location filename="../src/gui.cpp" line="807"/>
+        <location filename="../src/gui.cpp" line="832"/>
         <source>Line: %1</source>
         <translation>Řádka: %1</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="828"/>
+        <location filename="../src/gui.cpp" line="829"/>
         <source>Error loading POI file:</source>
         <translation>Soubor POI nelze načíst:</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="981"/>
+        <location filename="../src/gui.cpp" line="982"/>
         <source>Name</source>
         <translation>Název</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="985"/>
+        <location filename="../src/gui.cpp" line="986"/>
         <source>Tracks</source>
         <translation>Cesty</translation>
     </message>
@@ -668,20 +672,20 @@
         <translation>Navigace</translation>
     </message>
     <message>
-        <location filename="../src/gui.cpp" line="713"/>
+        <location filename="../src/gui.cpp" line="714"/>
         <source>POIs</source>
         <translation>POI body</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="412"/>
-        <location filename="../src/gui.cpp" line="1005"/>
+        <location filename="../src/gui.cpp" line="1006"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="419"/>
         <location filename="../src/gui.cpp" line="543"/>
-        <location filename="../src/gui.cpp" line="1007"/>
+        <location filename="../src/gui.cpp" line="1008"/>
         <source>Time</source>
         <translation>Čas</translation>
     </message>
@@ -762,12 +766,12 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/maplist.cpp" line="127"/>
+        <location filename="../src/maplist.cpp" line="141"/>
         <source>Map files (*.map *.tba *.tar)</source>
         <translation>Mapové soubory (*.map *.tba *.tar)</translation>
     </message>
     <message>
-        <location filename="../src/maplist.cpp" line="128"/>
+        <location filename="../src/maplist.cpp" line="142"/>
         <source>URL list files (*.txt)</source>
         <translation>Seznamy URL (*.txt)</translation>
     </message>
