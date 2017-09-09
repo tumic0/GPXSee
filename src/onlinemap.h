@@ -3,6 +3,7 @@
 
 #include "map.h"
 #include "tile.h"
+#include "range.h"
 
 class Downloader;
 
@@ -11,7 +12,8 @@ class OnlineMap : public Map
 	Q_OBJECT
 
 public:
-	OnlineMap(const QString &name, const QString &url, QObject *parent = 0);
+	OnlineMap(const QString &name, const QString &url, const Range &zooms,
+	  QObject *parent = 0);
 
 	const QString &name() const {return _name;}
 
@@ -39,13 +41,13 @@ private slots:
 	void emitLoaded();
 
 private:
-	QString tileUrl(const Tile &tile);
-	QString tileFile(const Tile &tile);
-	bool loadTileFile(Tile &tile, const QString &file);
-	void fillTile(Tile &tile);
+	QString tileUrl(const Tile &tile) const;
+	QString tileFile(const Tile &tile) const;
 	void loadTilesAsync(QList<Tile> &list);
 	void loadTilesSync(QList<Tile> &list);
+	int limitZoom(int zoom) const;
 
+	Range _zooms;
 	int _zoom;
 	QString _name;
 	QString _url;

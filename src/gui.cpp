@@ -696,10 +696,11 @@ void GUI::dataSources()
 		"following file:")
 	  + "</p><p><code>" + USER_MAP_FILE + "</code></p><p>"
 	  + tr("The file format is one map entry per line, consisting of the map "
-		"name and tiles URL delimited by a TAB character. The tile X and Y "
-		"coordinates are replaced with $x and $y in the URL and the zoom "
-		"level is replaced with $z. An example map file could look like:")
-	  + "</p><p><code>Map1	http://tile.server.com/map/$z/$x/$y.png"
+		"name, tiles URL and an optional maximal zoom level delimited by "
+	    "a TAB character. The tile X and Y coordinates are replaced with $x "
+	    "and $y in the URL and the zoom level is replaced with $z. An example "
+	    "map file could look like:")
+	  + "</p><p><code>Map1	http://tile.server.com/map/$z/$x/$y.png	15"
 		  "<br/>Map2	http://mapserver.org/map/$z-$x-$y</code></p>"
 
 	  + "<h4>" + tr("Offline maps") + "</h4><p>"

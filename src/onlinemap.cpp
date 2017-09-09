@@ -12,8 +12,6 @@
 #include "onlinemap.h"
 
 
-#define ZOOM_MAX      18
-#define ZOOM_MIN      3
 #define TILE_SIZE     256
 
 static QPoint mercator2tile(const QPointF &m, int z)
@@ -36,16 +34,33 @@ static int scale2zoom(qreal scale)
 	return (int)log2(360.0/(scale * (qreal)TILE_SIZE));
 }
 
+static void fillTile(Tile &tile)
+{
+	tile.pixmap() = QPixmap(TILE_SIZE, TILE_SIZE);
+	tile.pixmap().fill();
+}
+
+static bool loadTileFile(Tile &tile, const QString &file)
+{
+	if (!tile.pixmap().load(file)) {
+		qWarning("%s: error loading tile file\n", qPrintable(file));
+		return false;
+	}
+
+	return true;
+}
+
 
 Downloader *OnlineMap::downloader;
 
-OnlineMap::OnlineMap(const QString &name, const QString &url, QObject *parent)
-  : Map(parent)
+OnlineMap::OnlineMap(const QString &name, const QString &url,
+  const Range &zooms, QObject *parent) : Map(parent)
 {
 	_name = name;
 	_url = url;
 	_block = false;
-	_zoom = ZOOM_MAX;
+	_zooms = zooms;
+	_zoom = zooms.max();
 
 	connect(downloader, SIGNAL(finished()), this, SLOT(emitLoaded()));
 
@@ -115,23 +130,7 @@ void OnlineMap::loadTilesSync(QList<Tile> &list)
 	}
 }
 
-void OnlineMap::fillTile(Tile &tile)
-{
-	tile.pixmap() = QPixmap(TILE_SIZE, TILE_SIZE);
-	tile.pixmap().fill();
-}
-
-bool OnlineMap::loadTileFile(Tile &tile, const QString &file)
-{
-	if (!tile.pixmap().load(file)) {
-		qWarning("%s: error loading tile file\n", qPrintable(file));
-		return false;
-	}
-
-	return true;
-}
-
-QString OnlineMap::tileUrl(const Tile &tile)
+QString OnlineMap::tileUrl(const Tile &tile) const
 {
 	QString url(_url);
 
@@ -142,7 +141,7 @@ QString OnlineMap::tileUrl(const Tile &tile)
 	return url;
 }
 
-QString OnlineMap::tileFile(const Tile &tile)
+QString OnlineMap::tileFile(const Tile &tile) const
 {
 	QString file = TILES_DIR + QString("/%1/%2-%3-%4").arg(name())
 	  .arg(tile.zoom()).arg(tile.xy().x()).arg(tile.xy().y());
@@ -166,20 +165,26 @@ QRectF OnlineMap::bounds() const
 	  1.0/zoom2scale(_zoom));
 }
 
+int OnlineMap::limitZoom(int zoom) const
+{
+	if (zoom < _zooms.min())
+		return _zooms.min();
+	if (zoom > _zooms.max())
+		return _zooms.max();
+
+	return zoom;
+}
+
 qreal OnlineMap::zoomFit(const QSize &size, const RectC &br)
 {
 	if (!br.isValid())
-		_zoom = ZOOM_MAX;
+		_zoom = _zooms.max();
 	else {
 		QRectF tbr(Mercator().ll2xy(br.topLeft()),
 		  Mercator().ll2xy(br.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
 
-		_zoom = scale2zoom(qMax(sc.x(), sc.y()));
-		if (_zoom < ZOOM_MIN)
-			_zoom = ZOOM_MIN;
-		if (_zoom > ZOOM_MAX)
-			_zoom = ZOOM_MAX;
+		_zoom = limitZoom(scale2zoom(qMax(sc.x(), sc.y())));
 	}
 
 	return _zoom;
@@ -187,13 +192,8 @@ qreal OnlineMap::zoomFit(const QSize &size, const RectC &br)
 
 qreal OnlineMap::zoomFit(qreal resolution, const Coordinates &c)
 {
-	_zoom = (int)(log2((WGS84_RADIUS * 2 * M_PI * cos(deg2rad(c.lat())))
-	  / resolution) - log2(TILE_SIZE));
-
-	if (_zoom < ZOOM_MIN)
-		_zoom = ZOOM_MIN;
-	if (_zoom > ZOOM_MAX)
-		_zoom = ZOOM_MAX;
+	_zoom = limitZoom((int)(log2((WGS84_RADIUS * 2 * M_PI
+	  * cos(deg2rad(c.lat()))) / resolution) - log2(TILE_SIZE)));
 
 	return _zoom;
 }
@@ -208,13 +208,13 @@ qreal OnlineMap::resolution(const QPointF &p) const
 
 qreal OnlineMap::zoomIn()
 {
-	_zoom = qMin(_zoom + 1, ZOOM_MAX);
+	_zoom = qMin(_zoom + 1, _zooms.max());
 	return _zoom;
 }
 
 qreal OnlineMap::zoomOut()
 {
-	_zoom = qMax(_zoom - 1, ZOOM_MIN);
+	_zoom = qMax(_zoom - 1, _zooms.min());
 	return _zoom;
 }
 

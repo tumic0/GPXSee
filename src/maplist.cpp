@@ -1,24 +1,38 @@
 #include <QFileInfo>
 #include <QDir>
+#include "range.h"
 #include "atlas.h"
 #include "offlinemap.h"
 #include "onlinemap.h"
 #include "maplist.h"
 
 
+#define ZOOM_MAX 18
+#define ZOOM_MIN  2
+
 Map *MapList::loadListEntry(const QByteArray &line)
 {
+	int max;
+
 	QList<QByteArray> list = line.split('\t');
-	if (list.size() != 2)
+	if (list.size() < 2)
 		return 0;
 
-	QByteArray ba1 = list[0].trimmed();
-	QByteArray ba2 = list[1].trimmed();
+	QByteArray ba1 = list.at(0).trimmed();
+	QByteArray ba2 = list.at(1).trimmed();
 	if (ba1.isEmpty() || ba2.isEmpty())
 		return 0;
 
+	if (list.size() == 3) {
+		bool ok;
+		max = QString(list.at(2).trimmed()).toInt(&ok);
+		if (!ok)
+			return 0;
+	} else
+		max = ZOOM_MAX;
+
 	return new OnlineMap(QString::fromUtf8(ba1.data(), ba1.size()),
-	  QString::fromLatin1(ba2.data(), ba2.size()), this);
+	  QString::fromLatin1(ba2.data(), ba2.size()), Range(ZOOM_MIN, max), this);
 }
 
 bool MapList::loadList(const QString &path)

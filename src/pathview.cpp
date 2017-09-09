@@ -16,7 +16,7 @@
 #include "pathview.h"
 
 
-#define MAX_DIGITAL_ZOOM 1
+#define MAX_DIGITAL_ZOOM 2
 #define MIN_DIGITAL_ZOOM -3
 #define MARGIN           10.0
 #define SCALE_OFFSET     7
