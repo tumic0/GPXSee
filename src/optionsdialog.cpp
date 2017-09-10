@@ -24,8 +24,20 @@
 #define MENU_MARGIN 20
 #define MENU_ICON_SIZE 32
 
+#ifdef Q_OS_MAC
+static QFrame *line()
+{
+	QFrame *l = new QFrame();
+	l->setFrameShape(QFrame::HLine);
+	l->setFrameShadow(QFrame::Sunken);
+
+	return l;
+}
+#endif
+
 QWidget *OptionsDialog::createAppearancePage()
 {
+	// Paths
 	_baseColor = new ColorBox();
 	_baseColor->setColor(_options->palette.color());
 	_colorOffset = new QDoubleSpinBox();
@@ -75,22 +87,12 @@ QWidget *OptionsDialog::createAppearancePage()
 	QWidget *pathTab = new QWidget();
 	QVBoxLayout *pathTabLayout = new QVBoxLayout();
 #ifdef Q_OS_MAC
-	QFrame *l0 = new QFrame();
-	l0->setFrameShape(QFrame::HLine);
-	l0->setFrameShadow(QFrame::Sunken);
-	QFrame *l1 = new QFrame();
-	l1->setFrameShape(QFrame::HLine);
-	l1->setFrameShadow(QFrame::Sunken);
-	QFrame *l2 = new QFrame();
-	l2->setFrameShape(QFrame::HLine);
-	l2->setFrameShadow(QFrame::Sunken);
-
 	pathTabLayout->addLayout(paletteLayout);
-	pathTabLayout->addWidget(l0);
+	pathTabLayout->addWidget(line());
 	pathTabLayout->addLayout(trackLayout);
-	pathTabLayout->addWidget(l1);
+	pathTabLayout->addWidget(line());
 	pathTabLayout->addLayout(routeLayout);
-	pathTabLayout->addWidget(l2);
+	pathTabLayout->addWidget(line());
 #else // Q_OS_MAC
 	pathTabLayout->addWidget(colorBox);
 	pathTabLayout->addWidget(trackBox);
@@ -100,6 +102,47 @@ QWidget *OptionsDialog::createAppearancePage()
 	pathTabLayout->addStretch();
 	pathTab->setLayout(pathTabLayout);
 
+
+	// Waypoints
+	_waypointSize = new QSpinBox();
+	_waypointSize->setValue(_options->waypointSize);
+	_waypointColor = new ColorBox();
+	_waypointColor->setColor(_options->waypointColor);
+	QFormLayout *waypointLayout = new QFormLayout();
+	waypointLayout->addRow(tr("Waypoint color:"), _waypointColor);
+	waypointLayout->addRow(tr("Waypoint size:"), _waypointSize);
+#ifndef Q_OS_MAC
+	QGroupBox *waypointBox = new QGroupBox(tr("Waypoints"));
+	waypointBox->setLayout(waypointLayout);
+#endif // Q_OS_MAC
+
+	_poiSize = new QSpinBox();
+	_poiSize->setValue(_options->poiSize);
+	_poiColor = new ColorBox();
+	_poiColor->setColor(_options->poiColor);
+	QFormLayout *poiLayout = new QFormLayout();
+	poiLayout->addRow(tr("POI color:"), _poiColor);
+	poiLayout->addRow(tr("POI size:"), _poiSize);
+#ifndef Q_OS_MAC
+	QGroupBox *poiBox = new QGroupBox(tr("POIs"));
+	poiBox->setLayout(poiLayout);
+#endif // Q_OS_MAC
+
+	QWidget *pointTab = new QWidget();
+	QVBoxLayout *pointTabLayout = new QVBoxLayout();
+#ifdef Q_OS_MAC
+	pointTabLayout->addLayout(waypointLayout);
+	pathTabLayout->addWidget(line());
+	pathTabLayout->addLayout(poiLayout);
+#else // Q_OS_MAC
+	pointTabLayout->addWidget(waypointBox);
+	pointTabLayout->addWidget(poiBox);
+#endif // Q_OS_MAC
+	pointTabLayout->addStretch();
+	pointTab->setLayout(pointTabLayout);
+
+
+	// Graphs
 	_graphWidth = new QSpinBox();
 	_graphWidth->setValue(_options->graphWidth);
 	_graphWidth->setMinimum(1);
@@ -111,7 +154,6 @@ QWidget *OptionsDialog::createAppearancePage()
 	QFormLayout *graphAALayout = new QFormLayout();
 	graphAALayout->addWidget(_graphAA);
 
-
 	QWidget *graphTab = new QWidget();
 	QVBoxLayout *graphTabLayout = new QVBoxLayout();
 	graphTabLayout->addLayout(graphLayout);
@@ -120,6 +162,7 @@ QWidget *OptionsDialog::createAppearancePage()
 	graphTab->setLayout(graphTabLayout);
 
 
+	// Map
 	_mapOpacity = new PercentSlider();
 	_mapOpacity->setValue(_options->mapOpacity);
 	_blendColor = new ColorBox();
@@ -128,7 +171,6 @@ QWidget *OptionsDialog::createAppearancePage()
 	mapLayout->addRow(tr("Background color:"), _blendColor);
 	mapLayout->addRow(tr("Map opacity:"), _mapOpacity);
 
-
 	QWidget *mapTab = new QWidget();
 	QVBoxLayout *mapTabLayout = new QVBoxLayout();
 	mapTabLayout->addLayout(mapLayout);
@@ -136,9 +178,9 @@ QWidget *OptionsDialog::createAppearancePage()
 	mapTab->setLayout(mapTabLayout);
 
 
-
 	QTabWidget *appearancePage = new QTabWidget();
 	appearancePage->addTab(pathTab, tr("Paths"));
+	appearancePage->addTab(pointTab, tr("Points"));
 	appearancePage->addTab(graphTab, tr("Graphs"));
 	appearancePage->addTab(mapTab, tr("Map"));
 
@@ -189,14 +231,9 @@ QWidget *OptionsDialog::createDataPage()
 	QWidget *filterTab = new QWidget();
 	QVBoxLayout *filterTabLayout = new QVBoxLayout();
 #ifdef Q_OS_MAC
-	QLabel *label = new QLabel(tr("Smoothing:"));
-	QFrame *line = new QFrame();
-	line->setFrameShape(QFrame::HLine);
-	line->setFrameShadow(QFrame::Sunken);
-
-	filterTabLayout->addWidget(label);
+	filterTabLayout->addWidget(new QLabel(tr("Smoothing:")));
 	filterTabLayout->addLayout(smoothLayout);
-	filterTabLayout->addWidget(line);
+	filterTabLayout->addWidget(line());
 	filterTabLayout->addLayout(outlierLayout);
 #else // Q_OS_MAC
 	filterTabLayout->addWidget(smoothBox);
@@ -339,12 +376,6 @@ QWidget *OptionsDialog::createExportPage()
 QWidget *OptionsDialog::createSystemPage()
 {
 	_useOpenGL = new QCheckBox(tr("Use OpenGL"));
-#ifdef Q_OS_WIN32
-	if (QSysInfo::WindowsVersion < QSysInfo::WV_VISTA) {
-		_useOpenGL->setChecked(false);
-		_useOpenGL->setEnabled(false);
-	} else
-#endif // Q_OS_WIN32
 	_useOpenGL->setChecked(_options->useOpenGL);
 
 	_pixmapCache = new QSpinBox();
@@ -434,6 +465,10 @@ void OptionsDialog::accept()
 	_options->routeStyle = (Qt::PenStyle) _routeStyle->itemData(
 	  _routeStyle->currentIndex()).toInt();
 	_options->pathAntiAliasing = _pathAA->isChecked();
+	_options->waypointSize = _waypointSize->value();
+	_options->waypointColor = _waypointColor->color();
+	_options->poiSize = _poiSize->value();
+	_options->poiColor = _poiColor->color();
 	_options->graphWidth = _graphWidth->value();
 	_options->graphAntiAliasing = _graphAA->isChecked();
 

@@ -6,8 +6,10 @@
 #include "waypointitem.h"
 
 
-#define POINT_SIZE 8
-#define HOVER_SIZE 10
+#define HS(size) \
+	((int)((qreal)size * 1.2))
+#define FS(size) \
+	((int)((qreal)size * 1.41))
 
 QString WaypointItem::toolTip(Units units)
 {
@@ -36,6 +38,8 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
 	_waypoint = waypoint;
 	_showLabel = true;
 	_hover = false;
+	_size = 8;
+	_color = Qt::black;
 
 	updateShape();
 
@@ -48,11 +52,11 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
 void WaypointItem::updateShape()
 {
 	QPainterPath p;
-	qreal pointSize = _hover ? HOVER_SIZE : POINT_SIZE;
+	qreal pointSize = _hover ? HS(_size) : _size;
 
 	if (_showLabel) {
 		QFont font;
-		font.setPixelSize(FONT_SIZE);
+		font.setPixelSize(FS(_size));
 		font.setFamily(FONT_FAMILY);
 		if (_hover)
 			font.setBold(true);
@@ -74,11 +78,13 @@ void WaypointItem::paint(QPainter *painter,
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 
-	qreal pointSize = _hover ? HOVER_SIZE : POINT_SIZE;
+	qreal pointSize = _hover ? HS(_size) : _size;
+
+	painter->setPen(_color);
 
 	if (_showLabel) {
 		QFont font;
-		font.setPixelSize(FONT_SIZE);
+		font.setPixelSize(FS(_size));
 		font.setFamily(FONT_FAMILY);
 		if (_hover)
 			font.setBold(true);
@@ -90,7 +96,7 @@ void WaypointItem::paint(QPainter *painter,
 		  + ts.height(), _waypoint.name());
 	}
 
-	painter->setBrush(Qt::SolidPattern);
+	painter->setBrush(QBrush(_color, Qt::SolidPattern));
 	painter->drawEllipse(-pointSize/2, -pointSize/2, pointSize, pointSize);
 
 /*
@@ -98,6 +104,19 @@ void WaypointItem::paint(QPainter *painter,
 	painter->setBrush(Qt::NoBrush);
 	painter->drawPath(_shape);
 */
+}
+
+void WaypointItem::setSize(int size)
+{
+	prepareGeometryChange();
+	_size = size;
+	updateShape();
+}
+
+void WaypointItem::setColor(const QColor &color)
+{
+	_color = color;
+	update();
 }
 
 void WaypointItem::setUnits(enum Units units)

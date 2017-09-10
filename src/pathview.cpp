@@ -62,6 +62,10 @@ PathView::PathView(Map *map, POI *poi, QWidget *parent)
 	_routeWidth = 3;
 	_trackStyle = Qt::SolidLine;
 	_routeStyle = Qt::DashLine;
+	_waypointSize = 8;
+	_waypointColor = Qt::black;
+	_poiSize = 8;
+	_poiColor = Qt::black;
 
 	_plot = false;
 	_digitalZoom = 0;
@@ -133,6 +137,8 @@ void PathView::addWaypoints(const QList<Waypoint> &waypoints)
 		_waypoints.append(wi);
 		updateWaypointsBoundingRect(wi->waypoint().coordinates());
 		wi->setZValue(1);
+		wi->setSize(_waypointSize);
+		wi->setColor(_waypointColor);
 		wi->showLabel(_showWaypointLabels);
 		wi->setUnits(_units);
 		wi->setVisible(_showWaypoints);
@@ -325,6 +331,8 @@ void PathView::addPOI(const QVector<Waypoint> &waypoints)
 
 		WaypointItem *pi = new WaypointItem(w, _map);
 		pi->setZValue(1);
+		pi->setSize(_poiSize);
+		pi->setColor(_poiColor);
 		pi->showLabel(_showPOILabels);
 		pi->setVisible(_showPOI);
 		pi->setDigitalZoom(_digitalZoom);
@@ -678,6 +686,42 @@ void PathView::setRouteStyle(Qt::PenStyle style)
 
 	for (int i = 0; i < _routes.count(); i++)
 		_routes.at(i)->setStyle(style);
+}
+
+void PathView::setWaypointSize(int size)
+{
+	_waypointSize = size;
+
+	for (int i = 0; i < _waypoints.size(); i++)
+		_waypoints.at(i)->setSize(size);
+}
+
+void PathView::setWaypointColor(const QColor &color)
+{
+	_waypointColor = color;
+
+	for (int i = 0; i < _waypoints.size(); i++)
+		_waypoints.at(i)->setColor(color);
+}
+
+void PathView::setPOISize(int size)
+{
+	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
+
+	_poiSize = size;
+
+	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+		it.value()->setSize(size);
+}
+
+void PathView::setPOIColor(const QColor &color)
+{
+	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
+
+	_poiColor = color;
+
+	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+		it.value()->setColor(color);
 }
 
 void PathView::setMapOpacity(int opacity)

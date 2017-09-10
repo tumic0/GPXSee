@@ -90,6 +90,14 @@
 #define TRACK_STYLE_DEFAULT               Qt::SolidLine
 #define ROUTE_STYLE_SETTING               "routeStyle"
 #define ROUTE_STYLE_DEFAULT               Qt::DotLine
+#define WAYPOINT_SIZE_SETTING             "waypointSize"
+#define WAYPOINT_SIZE_DEFAULT             8
+#define WAYPOINT_COLOR_SETTING            "waypointColor"
+#define WAYPOINT_COLOR_DEFAULT            QColor(Qt::black)
+#define POI_SIZE_SETTING                  "poiSize"
+#define POI_SIZE_DEFAULT                  8
+#define POI_COLOR_SETTING                 "poiColor"
+#define POI_COLOR_DEFAULT                 QColor(Qt::black)
 #define GRAPH_WIDTH_SETTING               "graphWidth"
 #define GRAPH_WIDTH_DEFAULT               1
 #define PATH_AA_SETTING                   "pathAntiAliasing"

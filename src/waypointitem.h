@@ -16,6 +16,8 @@ public:
 
 	void setMap(Map *map) {setPos(map->ll2xy(_waypoint.coordinates()));}
 	void setUnits(Units units);
+	void setSize(int size);
+	void setColor(const QColor &color);
 	void showLabel(bool show);
 	void setDigitalZoom(int zoom) {setScale(pow(2, -zoom));}
 
@@ -34,6 +36,8 @@ private:
 	QPainterPath _shape;
 	Waypoint _waypoint;
 
+	QColor _color;
+	int _size;
 	bool _hover;
 	bool _showLabel;
 };

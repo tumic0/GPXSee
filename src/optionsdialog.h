@@ -18,15 +18,19 @@ class PercentSlider;
 struct Options {
 	// Appearance
 	Palette palette;
-	int mapOpacity;
-	QColor blendColor;
 	int trackWidth;
 	int routeWidth;
 	Qt::PenStyle trackStyle;
 	Qt::PenStyle routeStyle;
+	QColor waypointColor;
+	QColor poiColor;
+	int waypointSize;
+	int poiSize;
 	int graphWidth;
 	bool pathAntiAliasing;
 	bool graphAntiAliasing;
+	int mapOpacity;
+	QColor blendColor;
 	// Data
 	int elevationFilter;
 	int speedFilter;
@@ -83,6 +87,10 @@ private:
 	QSpinBox *_routeWidth;
 	StyleComboBox *_routeStyle;
 	QCheckBox *_pathAA;
+	QSpinBox *_waypointSize;
+	ColorBox *_waypointColor;
+	QSpinBox *_poiSize;
+	ColorBox *_poiColor;
 	QSpinBox *_graphWidth;
 	QCheckBox *_graphAA;
 	// Data

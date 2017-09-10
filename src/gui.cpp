@@ -881,6 +881,14 @@ void GUI::openOptions()
 		_pathView->setTrackStyle(options.trackStyle);
 	if (options.routeStyle != _options.routeStyle)
 		_pathView->setRouteStyle(options.routeStyle);
+	if (options.waypointSize != _options.waypointSize)
+		_pathView->setWaypointSize(options.waypointSize);
+	if (options.waypointColor != _options.waypointColor)
+		_pathView->setWaypointColor(options.waypointColor);
+	if (options.poiSize != _options.poiSize)
+		_pathView->setPOISize(options.poiSize);
+	if (options.poiColor != _options.poiColor)
+		_pathView->setPOIColor(options.poiColor);
 	if (options.pathAntiAliasing != _options.pathAntiAliasing)
 		_pathView->setRenderHint(QPainter::Antialiasing,
 		  options.pathAntiAliasing);
@@ -1620,6 +1628,14 @@ void GUI::writeSettings()
 		settings.setValue(TRACK_STYLE_SETTING, (int)_options.trackStyle);
 	if (_options.routeStyle != ROUTE_STYLE_DEFAULT)
 		settings.setValue(ROUTE_STYLE_SETTING, (int)_options.routeStyle);
+	if (_options.waypointSize != WAYPOINT_SIZE_DEFAULT)
+		settings.setValue(WAYPOINT_SIZE_SETTING, _options.waypointSize);
+	if (_options.waypointColor != WAYPOINT_COLOR_DEFAULT)
+		settings.setValue(WAYPOINT_COLOR_SETTING, _options.waypointColor);
+	if (_options.poiSize != POI_SIZE_DEFAULT)
+		settings.setValue(POI_SIZE_SETTING, _options.poiSize);
+	if (_options.poiColor != POI_COLOR_DEFAULT)
+		settings.setValue(POI_COLOR_SETTING, _options.poiColor);
 	if (_options.graphWidth != GRAPH_WIDTH_DEFAULT)
 		settings.setValue(GRAPH_WIDTH_SETTING, _options.graphWidth);
 	if (_options.pathAntiAliasing != PATH_AA_DEFAULT)
@@ -1825,6 +1841,14 @@ void GUI::readSettings()
 	  (int)ROUTE_STYLE_DEFAULT).toInt();
 	_options.pathAntiAliasing = settings.value(PATH_AA_SETTING, PATH_AA_DEFAULT)
 	  .toBool();
+	_options.waypointSize = settings.value(WAYPOINT_SIZE_SETTING,
+	  WAYPOINT_SIZE_DEFAULT).toInt();
+	_options.waypointColor = settings.value(WAYPOINT_COLOR_SETTING,
+	  WAYPOINT_COLOR_DEFAULT).value<QColor>();
+	_options.poiSize = settings.value(POI_SIZE_SETTING, POI_SIZE_DEFAULT)
+	  .toInt();
+	_options.poiColor = settings.value(POI_COLOR_SETTING, POI_COLOR_DEFAULT)
+	  .value<QColor>();
 	_options.graphWidth = settings.value(GRAPH_WIDTH_SETTING,
 	  GRAPH_WIDTH_DEFAULT).toInt();
 	_options.graphAntiAliasing = settings.value(GRAPH_AA_SETTING,
@@ -1875,6 +1899,10 @@ void GUI::readSettings()
 	_pathView->setRouteWidth(_options.routeWidth);
 	_pathView->setTrackStyle(_options.trackStyle);
 	_pathView->setRouteStyle(_options.routeStyle);
+	_pathView->setWaypointSize(_options.waypointSize);
+	_pathView->setWaypointColor(_options.waypointColor);
+	_pathView->setPOISize(_options.poiSize);
+	_pathView->setPOIColor(_options.poiColor);
 	_pathView->setRenderHint(QPainter::Antialiasing, _options.pathAntiAliasing);
 	if (_options.useOpenGL)
 		_pathView->useOpenGL(true);

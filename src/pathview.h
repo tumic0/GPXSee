@@ -63,6 +63,10 @@ public slots:
 	void setRouteWidth(int width);
 	void setTrackStyle(Qt::PenStyle style);
 	void setRouteStyle(Qt::PenStyle style);
+	void setWaypointSize(int size);
+	void setWaypointColor(const QColor &color);
+	void setPOISize(int size);
+	void setPOIColor(const QColor &color);
 	void setMapOpacity(int opacity);
 	void setBlendColor(const QColor &color);
 
@@ -108,9 +112,9 @@ private:
 	POI *_poi;
 	Palette _palette;
 	Units _units;
+
 	qreal _opacity;
 	QColor _blendColor;
-
 	bool _showMap;
 	bool _showTracks;
 	bool _showRoutes;
@@ -124,6 +128,10 @@ private:
 	int _routeWidth;
 	Qt::PenStyle _trackStyle;
 	Qt::PenStyle _routeStyle;
+	int _waypointSize;
+	int _poiSize;
+	QColor _waypointColor;
+	QColor _poiColor;
 
 	int _digitalZoom;
 	bool _plot;
