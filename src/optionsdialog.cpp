@@ -132,8 +132,8 @@ QWidget *OptionsDialog::createAppearancePage()
 	QVBoxLayout *pointTabLayout = new QVBoxLayout();
 #ifdef Q_OS_MAC
 	pointTabLayout->addLayout(waypointLayout);
-	pathTabLayout->addWidget(line());
-	pathTabLayout->addLayout(poiLayout);
+	pointTabLayout->addWidget(line());
+	pointTabLayout->addLayout(poiLayout);
 #else // Q_OS_MAC
 	pointTabLayout->addWidget(waypointBox);
 	pointTabLayout->addWidget(poiBox);
