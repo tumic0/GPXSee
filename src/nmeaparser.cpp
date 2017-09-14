@@ -507,16 +507,16 @@ bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
 
 		if (validSentence(line, len)) {
 			if (!memcmp(line + 3, "RMC,", 4)) {
-				if (!readRMC(track, line + 7, len))
+				if (!readRMC(track, line + 7, len - 7))
 					return false;
 			} else if (!memcmp(line + 3, "GGA,", 4)) {
-				if (!readGGA(track, line + 7, len))
+				if (!readGGA(track, line + 7, len - 7))
 					return false;
 			} else if (!memcmp(line + 3, "WPL,", 4)) {
-				if (!readWPL(waypoints, line + 7, len))
+				if (!readWPL(waypoints, line + 7, len - 7))
 					return false;
 			} else if (!memcmp(line + 3, "ZDA,", 4)) {
-				if (!readZDA(line + 7, len))
+				if (!readZDA(line + 7, len - 7))
 					return false;
 			}
 		}
