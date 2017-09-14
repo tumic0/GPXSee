@@ -26,6 +26,7 @@ private:
 	void trackpointData(Trackpoint &trackpoint);
 	void waypointData(Waypoint &waypoint);
 	void extensions(Trackpoint &trackpoint);
+	void heartRateBpm(Trackpoint &trackpoint);
 	Coordinates position();
 	qreal number();
 	QDateTime time();

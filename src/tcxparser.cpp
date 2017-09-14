@@ -56,6 +56,16 @@ Coordinates TCXParser::position()
 	return pos;
 }
 
+void TCXParser::heartRateBpm(Trackpoint &trackpoint)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "Value")
+			trackpoint.setHeartRate(number());
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
 void TCXParser::extensions(Trackpoint &trackpoint)
 {
 	while (_reader.readNextStartElement()) {
@@ -78,7 +88,7 @@ void TCXParser::trackpointData(Trackpoint &trackpoint)
 		else if (_reader.name() == "Time")
 			trackpoint.setTimestamp(time());
 		else if (_reader.name() == "HeartRateBpm")
-			trackpoint.setHeartRate(number());
+			heartRateBpm(trackpoint);
 		else if (_reader.name() == "Cadence")
 			trackpoint.setCadence(number());
 		else if (_reader.name() == "Extensions")
