@@ -13,7 +13,6 @@ public:
 	QString label() const {return tr("Cadence");}
 	void loadData(const Data &data, const QList<PathItem *> &paths);
 	void clear();
-	void setUnits(enum Units) {}
 	void showTracks(bool show);
 	void showRoutes(bool show) {Q_UNUSED(show);}
 
