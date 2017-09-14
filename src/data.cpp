@@ -11,20 +11,29 @@
 #include "data.h"
 
 
+static GPXParser gpx;
+static TCXParser tcx;
+static KMLParser kml;
+static FITParser fit;
+static CSVParser csv;
+static IGCParser igc;
+static NMEAParser nmea;
+
 static QHash<QString, Parser*> parsers()
 {
 	QHash<QString, Parser*> hash;
 
-	hash.insert("gpx", new GPXParser());
-	hash.insert("tcx", new TCXParser());
-	hash.insert("kml", new KMLParser());
-	hash.insert("fit", new FITParser());
-	hash.insert("csv", new CSVParser());
-	hash.insert("igc", new IGCParser());
-	hash.insert("nmea", new NMEAParser());
+        hash.insert("gpx", &gpx);
+        hash.insert("tcx", &tcx);
+        hash.insert("kml", &kml);
+        hash.insert("fit", &fit);
+        hash.insert("csv", &csv);
+        hash.insert("igc", &igc);
+        hash.insert("nmea", &nmea);
 
 	return hash;
 }
+
 
 QHash<QString, Parser*> Data::_parsers = parsers();
 
