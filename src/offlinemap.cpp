@@ -609,7 +609,8 @@ void OfflineMap::drawTiled(QPainter *painter, const QRectF &rect)
 			int y = tl.y() + j * _tileSize.height();
 
 			if (!QRectF(QPointF(x, y), _tileSize).intersects(bounds())) {
-				painter->fillRect(QRectF(QPoint(x, y), _tileSize), Qt::white);
+				painter->fillRect(QRectF(QPoint(x, y), _tileSize),
+				  _backgroundColor);
 				continue;
 			}
 
@@ -631,7 +632,8 @@ void OfflineMap::drawTiled(QPainter *painter, const QRectF &rect)
 			if (pixmap.isNull()) {
 				qWarning("%s: error loading tile image", qPrintable(
 				  _tileName.arg(QString::number(x), QString::number(y))));
-				painter->fillRect(QRectF(QPoint(x, y), _tileSize), Qt::white);
+				painter->fillRect(QRectF(QPoint(x, y), _tileSize),
+				  _backgroundColor);
 			} else
 				painter->drawPixmap(QPoint(x, y), pixmap);
 		}
@@ -652,7 +654,7 @@ void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect)
 
 			if (!QRectF(QPointF(x, y), _ozf.tileSize()).intersects(bounds())) {
 				painter->fillRect(QRectF(QPoint(x, y), _ozf.tileSize()),
-				  Qt::white);
+				  _backgroundColor);
 				continue;
 			}
 
@@ -668,7 +670,7 @@ void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect)
 			if (pixmap.isNull()) {
 				qWarning("%s: error loading tile image", qPrintable(key));
 				painter->fillRect(QRectF(QPoint(x, y), _ozf.tileSize()),
-				  Qt::white);
+				  _backgroundColor);
 			} else
 				painter->drawPixmap(QPoint(x, y), pixmap);
 		}
@@ -678,7 +680,7 @@ void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect)
 void OfflineMap::drawImage(QPainter *painter, const QRectF &rect)
 {
 	if (!_img || _img->isNull())
-		painter->fillRect(rect, Qt::white);
+		painter->fillRect(rect, _backgroundColor);
 	else {
 		QRect r(rect.toRect());
 		painter->drawImage(r.left(), r.top(), *_img, r.left(), r.top(),

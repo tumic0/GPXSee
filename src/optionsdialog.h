@@ -30,7 +30,7 @@ struct Options {
 	bool pathAntiAliasing;
 	bool graphAntiAliasing;
 	int mapOpacity;
-	QColor blendColor;
+	QColor backgroundColor;
 	// Data
 	int elevationFilter;
 	int speedFilter;
@@ -81,7 +81,7 @@ private:
 	ColorBox *_baseColor;
 	QDoubleSpinBox *_colorOffset;
 	PercentSlider *_mapOpacity;
-	ColorBox *_blendColor;
+	ColorBox *_backgroundColor;
 	QSpinBox *_trackWidth;
 	StyleComboBox *_trackStyle;
 	QSpinBox *_routeWidth;

@@ -41,6 +41,7 @@ private slots:
 	void emitLoaded();
 
 private:
+	void fillTile(Tile &tile);
 	QString tileUrl(const Tile &tile) const;
 	QString tileFile(const Tile &tile) const;
 	void loadTilesAsync(QList<Tile> &list);

@@ -47,7 +47,7 @@ PathView::PathView(Map *map, POI *poi, QWidget *parent)
 
 	_units = Metric;
 	_opacity = 1.0;
-	_blendColor = Qt::white;
+	_backgroundColor = Qt::white;
 
 	_showMap = true;
 	_showTracks = true;
@@ -70,6 +70,7 @@ PathView::PathView(Map *map, POI *poi, QWidget *parent)
 	_plot = false;
 	_digitalZoom = 0;
 
+	_map->setBackgroundColor(_backgroundColor);
 	_scene->setSceneRect(_map->bounds());
 	_res = _map->resolution(_scene->sceneRect().center());
 }
@@ -730,9 +731,10 @@ void PathView::setMapOpacity(int opacity)
 	resetCachedContent();
 }
 
-void PathView::setBlendColor(const QColor &color)
+void PathView::setBackgroundColor(const QColor &color)
 {
-	_blendColor = color;
+	_backgroundColor = color;
+	_map->setBackgroundColor(color);
 	resetCachedContent();
 }
 
@@ -740,12 +742,12 @@ void PathView::drawBackground(QPainter *painter, const QRectF &rect)
 {
 	if (_showMap) {
 		if (_opacity < 1.0) {
-			painter->fillRect(rect, _blendColor);
+			painter->fillRect(rect, _backgroundColor);
 			painter->setOpacity(_opacity);
 		}
 		_map->draw(painter, rect);
 	} else
-		painter->fillRect(rect, Qt::white);
+		painter->fillRect(rect, _backgroundColor);
 }
 
 void PathView::resizeEvent(QResizeEvent *event)
@@ -793,4 +795,9 @@ void PathView::useOpenGL(bool use)
 		setViewport(new OPENGL_WIDGET);
 	else
 		setViewport(new QWidget);
+}
+
+void PathView::useAntiAliasing(bool use)
+{
+	setRenderHint(QPainter::Antialiasing, use);
 }

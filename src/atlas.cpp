@@ -310,7 +310,7 @@ void Atlas::draw(QPainter *painter, const QRectF &rect)
 	}
 
 	// Multiple maps
-	painter->fillRect(rect, Qt::white);
+	painter->fillRect(rect, _backgroundColor);
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
 		QRectF ir = rect.intersected(_bounds.at(i).second);
 		if (!ir.isNull())

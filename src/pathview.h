@@ -45,7 +45,18 @@ public:
 
 	void clear();
 
+	void setTrackWidth(int width);
+	void setRouteWidth(int width);
+	void setTrackStyle(Qt::PenStyle style);
+	void setRouteStyle(Qt::PenStyle style);
+	void setWaypointSize(int size);
+	void setWaypointColor(const QColor &color);
+	void setPOISize(int size);
+	void setPOIColor(const QColor &color);
+	void setMapOpacity(int opacity);
+	void setBackgroundColor(const QColor &color);
 	void useOpenGL(bool use);
+	void useAntiAliasing(bool use);
 
 public slots:
 	void redraw();
@@ -59,16 +70,6 @@ public slots:
 	void showRoutes(bool show);
 	void showWaypoints(bool show);
 	void showRouteWaypoints(bool show);
-	void setTrackWidth(int width);
-	void setRouteWidth(int width);
-	void setTrackStyle(Qt::PenStyle style);
-	void setRouteStyle(Qt::PenStyle style);
-	void setWaypointSize(int size);
-	void setWaypointColor(const QColor &color);
-	void setPOISize(int size);
-	void setPOIColor(const QColor &color);
-	void setMapOpacity(int opacity);
-	void setBlendColor(const QColor &color);
 
 private slots:
 	void updatePOI();
@@ -114,7 +115,7 @@ private:
 	Units _units;
 
 	qreal _opacity;
-	QColor _blendColor;
+	QColor _backgroundColor;
 	bool _showMap;
 	bool _showTracks;
 	bool _showRoutes;

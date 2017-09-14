@@ -34,12 +34,6 @@ static int scale2zoom(qreal scale)
 	return (int)log2(360.0/(scale * (qreal)TILE_SIZE));
 }
 
-static void fillTile(Tile &tile)
-{
-	tile.pixmap() = QPixmap(TILE_SIZE, TILE_SIZE);
-	tile.pixmap().fill();
-}
-
 static bool loadTileFile(Tile &tile, const QString &file)
 {
 	if (!tile.pixmap().load(file)) {
@@ -67,6 +61,12 @@ OnlineMap::OnlineMap(const QString &name, const QString &url,
 	QString path = TILES_DIR + QString("/") + name;
 	if (!QDir().mkpath(path))
 		qWarning("Error creating tiles dir: %s\n", qPrintable(path));
+}
+
+void OnlineMap::fillTile(Tile &tile)
+{
+	tile.pixmap() = QPixmap(TILE_SIZE, TILE_SIZE);
+	tile.pixmap().fill(_backgroundColor);
 }
 
 void OnlineMap::emitLoaded()

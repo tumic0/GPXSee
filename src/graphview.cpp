@@ -461,3 +461,8 @@ void GraphView::useOpenGL(bool use)
 	else
 		setViewport(new QWidget);
 }
+
+void GraphView::useAntiAliasing(bool use)
+{
+	setRenderHint(QPainter::Antialiasing, use);
+}

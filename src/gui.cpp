@@ -857,6 +857,19 @@ void GUI::closePOIFiles()
 
 void GUI::openOptions()
 {
+#define SET_VIEW_OPTION(option, action) \
+	if (options.option != _options.option) \
+		_pathView->action(options.option)
+#define SET_TAB_OPTION(option, action) \
+	if (options.option != _options.option) \
+		for (int i = 0; i < _tabs.count(); i++) \
+			_tabs.at(i)->action(options.option)
+#define SET_TRACK_OPTION(option, action) \
+	if (options.option != _options.option) { \
+		Track::action(options.option); \
+		reload = true; \
+	}
+
 	Options options(_options);
 	bool reload = false;
 
@@ -864,83 +877,36 @@ void GUI::openOptions()
 	if (dialog.exec() != QDialog::Accepted)
 		return;
 
-	if (options.palette != _options.palette) {
-		_pathView->setPalette(options.palette);
-		for (int i = 0; i < _tabs.count(); i++)
-			_tabs.at(i)->setPalette(options.palette);
-	}
-	if (options.mapOpacity != _options.mapOpacity)
-		_pathView->setMapOpacity(options.mapOpacity);
-	if (options.blendColor != _options.blendColor)
-		_pathView->setBlendColor(options.blendColor);
-	if (options.trackWidth != _options.trackWidth)
-		_pathView->setTrackWidth(options.trackWidth);
-	if (options.routeWidth != _options.routeWidth)
-		_pathView->setRouteWidth(options.routeWidth);
-	if (options.trackStyle != _options.trackStyle)
-		_pathView->setTrackStyle(options.trackStyle);
-	if (options.routeStyle != _options.routeStyle)
-		_pathView->setRouteStyle(options.routeStyle);
-	if (options.waypointSize != _options.waypointSize)
-		_pathView->setWaypointSize(options.waypointSize);
-	if (options.waypointColor != _options.waypointColor)
-		_pathView->setWaypointColor(options.waypointColor);
-	if (options.poiSize != _options.poiSize)
-		_pathView->setPOISize(options.poiSize);
-	if (options.poiColor != _options.poiColor)
-		_pathView->setPOIColor(options.poiColor);
-	if (options.pathAntiAliasing != _options.pathAntiAliasing)
-		_pathView->setRenderHint(QPainter::Antialiasing,
-		  options.pathAntiAliasing);
-	if (options.graphWidth != _options.graphWidth)
-		for (int i = 0; i < _tabs.count(); i++)
-			_tabs.at(i)->setGraphWidth(options.graphWidth);
-	if (options.graphAntiAliasing != _options.graphAntiAliasing)
-		for (int i = 0; i < _tabs.count(); i++)
-			_tabs.at(i)->setRenderHint(QPainter::Antialiasing,
-			  options.graphAntiAliasing);
+	SET_VIEW_OPTION(palette, setPalette);
+	SET_VIEW_OPTION(mapOpacity, setMapOpacity);
+	SET_VIEW_OPTION(backgroundColor, setBackgroundColor);
+	SET_VIEW_OPTION(trackWidth, setTrackWidth);
+	SET_VIEW_OPTION(routeWidth, setRouteWidth);
+	SET_VIEW_OPTION(trackStyle, setTrackStyle);
+	SET_VIEW_OPTION(routeStyle, setRouteStyle);
+	SET_VIEW_OPTION(waypointSize, setWaypointSize);
+	SET_VIEW_OPTION(waypointColor, setWaypointColor);
+	SET_VIEW_OPTION(poiSize, setPOISize);
+	SET_VIEW_OPTION(poiColor, setPOIColor);
+	SET_VIEW_OPTION(pathAntiAliasing, useAntiAliasing);
+	SET_VIEW_OPTION(useOpenGL, useOpenGL);
 
-	if (options.elevationFilter != _options.elevationFilter) {
-		Track::setElevationFilter(options.elevationFilter);
-		reload = true;
-	}
-	if (options.speedFilter != _options.speedFilter) {
-		Track::setSpeedFilter(options.speedFilter);
-		reload = true;
-	}
-	if (options.heartRateFilter != _options.heartRateFilter) {
-		Track::setHeartRateFilter(options.heartRateFilter);
-		reload = true;
-	}
-	if (options.cadenceFilter != _options.cadenceFilter) {
-		Track::setCadenceFilter(options.cadenceFilter);
-		reload = true;
-	}
-	if (options.powerFilter != _options.powerFilter) {
-		Track::setPowerFilter(options.powerFilter);
-		reload = true;
-	}
-	if (options.outlierEliminate != _options.outlierEliminate) {
-		Track::setOutlierElimination(options.outlierEliminate);
-		reload = true;
-	}
-	if (options.pauseSpeed != _options.pauseSpeed) {
-		Track::setPauseSpeed(options.pauseSpeed);
-		reload = true;
-	}
-	if (options.pauseInterval != _options.pauseInterval) {
-		Track::setPauseInterval(options.pauseInterval);
-		reload = true;
-	}
+	SET_TAB_OPTION(palette, setPalette);
+	SET_TAB_OPTION(graphWidth, setGraphWidth);
+	SET_TAB_OPTION(graphAntiAliasing, useAntiAliasing);
+	SET_TAB_OPTION(useOpenGL, useOpenGL);
+
+	SET_TRACK_OPTION(elevationFilter, setElevationFilter);
+	SET_TRACK_OPTION(speedFilter, setSpeedFilter);
+	SET_TRACK_OPTION(heartRateFilter, setHeartRateFilter);
+	SET_TRACK_OPTION(cadenceFilter, setCadenceFilter);
+	SET_TRACK_OPTION(powerFilter, setPowerFilter);
+	SET_TRACK_OPTION(outlierEliminate, setOutlierElimination);
+	SET_TRACK_OPTION(pauseSpeed, setPauseSpeed);
+	SET_TRACK_OPTION(pauseInterval, setPauseInterval);
 
 	if (options.poiRadius != _options.poiRadius)
 		_poi->setRadius(options.poiRadius);
-
-	if (options.useOpenGL != _options.useOpenGL) {
-		_pathView->useOpenGL(options.useOpenGL);
-		for (int i = 0; i < _tabs.count(); i++)
-			_tabs.at(i)->useOpenGL(options.useOpenGL);
-	}
 	if (options.pixmapCache != _options.pixmapCache)
 		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
 
@@ -1618,8 +1584,8 @@ void GUI::writeSettings()
 		settings.setValue(PALETTE_SHIFT_SETTING, _options.palette.shift());
 	if (_options.mapOpacity != MAP_OPACITY_DEFAULT)
 		settings.setValue(MAP_OPACITY_SETTING, _options.mapOpacity);
-	if (_options.blendColor != BLEND_COLOR_DEFAULT)
-		settings.setValue(BLEND_COLOR_SETTING, _options.blendColor);
+	if (_options.backgroundColor != BACKGROUND_COLOR_DEFAULT)
+		settings.setValue(BACKGROUND_COLOR_SETTING, _options.backgroundColor);
 	if (_options.trackWidth != TRACK_WIDTH_DEFAULT)
 		settings.setValue(TRACK_WIDTH_SETTING, _options.trackWidth);
 	if (_options.routeWidth != ROUTE_WIDTH_DEFAULT)
@@ -1829,8 +1795,8 @@ void GUI::readSettings()
 	_options.palette = Palette(pc, ps);
 	_options.mapOpacity = settings.value(MAP_OPACITY_SETTING,
 	  MAP_OPACITY_DEFAULT).toInt();
-	_options.blendColor = settings.value(BLEND_COLOR_SETTING,
-	  BLEND_COLOR_DEFAULT).value<QColor>();
+	_options.backgroundColor = settings.value(BACKGROUND_COLOR_SETTING,
+	  BACKGROUND_COLOR_DEFAULT).value<QColor>();
 	_options.trackWidth = settings.value(TRACK_WIDTH_SETTING,
 	  TRACK_WIDTH_DEFAULT).toInt();
 	_options.routeWidth = settings.value(ROUTE_WIDTH_SETTING,
@@ -1894,7 +1860,7 @@ void GUI::readSettings()
 
 	_pathView->setPalette(_options.palette);
 	_pathView->setMapOpacity(_options.mapOpacity);
-	_pathView->setBlendColor(_options.blendColor);
+	_pathView->setBackgroundColor(_options.backgroundColor);
 	_pathView->setTrackWidth(_options.trackWidth);
 	_pathView->setRouteWidth(_options.routeWidth);
 	_pathView->setTrackStyle(_options.trackStyle);

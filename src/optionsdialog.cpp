@@ -51,7 +51,7 @@ QWidget *OptionsDialog::createAppearancePage()
 #ifndef Q_OS_MAC
 	QGroupBox *colorBox = new QGroupBox(tr("Colors"));
 	colorBox->setLayout(paletteLayout);
-#endif
+#endif // Q_OS_MAC
 
 	_trackWidth = new QSpinBox();
 	_trackWidth->setValue(_options->trackWidth);
@@ -59,12 +59,15 @@ QWidget *OptionsDialog::createAppearancePage()
 	_trackStyle = new StyleComboBox();
 	_trackStyle->setValue(_options->trackStyle);
 	QFormLayout *trackLayout = new QFormLayout();
+#ifdef Q_OS_MAC
 	trackLayout->addRow(tr("Track width:"), _trackWidth);
 	trackLayout->addRow(tr("Track style:"), _trackStyle);
-#ifndef Q_OS_MAC
+#else // Q_OS_MAC
+	trackLayout->addRow(tr("Width:"), _trackWidth);
+	trackLayout->addRow(tr("Style:"), _trackStyle);
 	QGroupBox *trackBox = new QGroupBox(tr("Tracks"));
 	trackBox->setLayout(trackLayout);
-#endif
+#endif // Q_OS_MAC
 
 	_routeWidth = new QSpinBox();
 	_routeWidth->setValue(_options->routeWidth);
@@ -72,9 +75,12 @@ QWidget *OptionsDialog::createAppearancePage()
 	_routeStyle = new StyleComboBox();
 	_routeStyle->setValue(_options->routeStyle);
 	QFormLayout *routeLayout = new QFormLayout();
+#ifdef Q_OS_MAC
 	routeLayout->addRow(tr("Route width:"), _routeWidth);
 	routeLayout->addRow(tr("Route style:"), _routeStyle);
-#ifndef Q_OS_MAC
+#else // Q_OS_MAC
+	routeLayout->addRow(tr("Width:"), _routeWidth);
+	routeLayout->addRow(tr("Style:"), _routeStyle);
 	QGroupBox *routeBox = new QGroupBox(tr("Routes"));
 	routeBox->setLayout(routeLayout);
 #endif // Q_OS_MAC
@@ -105,25 +111,33 @@ QWidget *OptionsDialog::createAppearancePage()
 
 	// Waypoints
 	_waypointSize = new QSpinBox();
+	_waypointSize->setMinimum(1);
 	_waypointSize->setValue(_options->waypointSize);
 	_waypointColor = new ColorBox();
 	_waypointColor->setColor(_options->waypointColor);
 	QFormLayout *waypointLayout = new QFormLayout();
+#ifdef Q_OS_MAC
 	waypointLayout->addRow(tr("Waypoint color:"), _waypointColor);
 	waypointLayout->addRow(tr("Waypoint size:"), _waypointSize);
-#ifndef Q_OS_MAC
+#else // Q_OS_MAC
+	waypointLayout->addRow(tr("Color:"), _waypointColor);
+	waypointLayout->addRow(tr("Size:"), _waypointSize);
 	QGroupBox *waypointBox = new QGroupBox(tr("Waypoints"));
 	waypointBox->setLayout(waypointLayout);
 #endif // Q_OS_MAC
 
 	_poiSize = new QSpinBox();
+	_poiSize->setMinimum(1);
 	_poiSize->setValue(_options->poiSize);
 	_poiColor = new ColorBox();
 	_poiColor->setColor(_options->poiColor);
 	QFormLayout *poiLayout = new QFormLayout();
+#ifdef Q_OS_MAC
 	poiLayout->addRow(tr("POI color:"), _poiColor);
 	poiLayout->addRow(tr("POI size:"), _poiSize);
-#ifndef Q_OS_MAC
+#else // Q_OS_MAC
+	poiLayout->addRow(tr("Color:"), _poiColor);
+	poiLayout->addRow(tr("Size:"), _poiSize);
 	QGroupBox *poiBox = new QGroupBox(tr("POIs"));
 	poiBox->setLayout(poiLayout);
 #endif // Q_OS_MAC
@@ -165,10 +179,10 @@ QWidget *OptionsDialog::createAppearancePage()
 	// Map
 	_mapOpacity = new PercentSlider();
 	_mapOpacity->setValue(_options->mapOpacity);
-	_blendColor = new ColorBox();
-	_blendColor->setColor(_options->blendColor);
+	_backgroundColor = new ColorBox();
+	_backgroundColor->setColor(_options->backgroundColor);
 	QFormLayout *mapLayout = new QFormLayout();
-	mapLayout->addRow(tr("Background color:"), _blendColor);
+	mapLayout->addRow(tr("Background color:"), _backgroundColor);
 	mapLayout->addRow(tr("Map opacity:"), _mapOpacity);
 
 	QWidget *mapTab = new QWidget();
@@ -457,7 +471,7 @@ void OptionsDialog::accept()
 	_options->palette.setColor(_baseColor->color());
 	_options->palette.setShift(_colorOffset->value());
 	_options->mapOpacity = _mapOpacity->value();
-	_options->blendColor = _blendColor->color();
+	_options->backgroundColor = _backgroundColor->color();
 	_options->trackWidth = _trackWidth->value();
 	_options->trackStyle = (Qt::PenStyle) _trackStyle->itemData(
 	  _trackStyle->currentIndex()).toInt();
@@ -478,12 +492,16 @@ void OptionsDialog::accept()
 	_options->cadenceFilter = _cadenceFilter->value();
 	_options->powerFilter = _powerFilter->value();
 	_options->outlierEliminate = _outlierEliminate->isChecked();
-	_options->pauseSpeed = (_options->units == Imperial)
+	qreal pauseSpeed = (_options->units == Imperial)
 		? _pauseSpeed->value() / MS2MIH : _pauseSpeed->value() / MS2KMH;
+	if (qAbs(pauseSpeed - _options->pauseSpeed) > 0.01)
+		_options->pauseSpeed = pauseSpeed;
 	_options->pauseInterval = _pauseInterval->value();
 
-	_options->poiRadius = (_options->units == Imperial)
+	qreal poiRadius = (_options->units == Imperial)
 		? _poiRadius->value() * MIINM :  _poiRadius->value() * KMINM;
+	if (qAbs(poiRadius - _options->poiRadius) > 0.01)
+		_options->poiRadius = poiRadius;
 
 	_options->useOpenGL = _useOpenGL->isChecked();
 	_options->pixmapCache = _pixmapCache->value();

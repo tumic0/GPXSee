@@ -80,8 +80,8 @@
 #define PALETTE_SHIFT_DEFAULT             0.62
 #define MAP_OPACITY_SETTING               "mapOpacity"
 #define MAP_OPACITY_DEFAULT               100
-#define BLEND_COLOR_SETTING               "blendColor"
-#define BLEND_COLOR_DEFAULT               QColor(Qt::white)
+#define BACKGROUND_COLOR_SETTING          "backgroundColor"
+#define BACKGROUND_COLOR_DEFAULT          QColor(Qt::white)
 #define TRACK_WIDTH_SETTING               "trackWidth"
 #define TRACK_WIDTH_DEFAULT               3
 #define ROUTE_WIDTH_SETTING               "routeWidth"
