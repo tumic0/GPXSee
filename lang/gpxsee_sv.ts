@@ -528,7 +528,7 @@
     <message>
         <location filename="../src/gui.cpp" line="698"/>
         <source>The file format is one map entry per line, consisting of the map name, tiles URL and an optional maximal zoom level delimited by a TAB character. The tile X and Y coordinates are replaced with $x and $y in the URL and the zoom level is replaced with $z. An example map file could look like:</source>
-        <translation type="unfinished"></translation>
+        <translation>Filformatet är en kartpost per rad, bestående av kartans namn, webbadress och maximal zoomnivå om tillämpligt, Kartrutans X- och Y-koordinater ersätts med $x och $y, i webbadressen och zoomnivån ersätts med $z. Ett exempel på en kartfil kan se ut så här:</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="706"/>
@@ -836,7 +836,7 @@
     <message>
         <location filename="../src/optionsdialog.cpp" line="185"/>
         <source>Background color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bakgrundsfärg:</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="196"/>
@@ -863,50 +863,50 @@
         <location filename="../src/optionsdialog.cpp" line="66"/>
         <location filename="../src/optionsdialog.cpp" line="82"/>
         <source>Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bredd:</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="67"/>
         <location filename="../src/optionsdialog.cpp" line="83"/>
         <source>Style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stil:</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="120"/>
         <source>Waypoint color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Navigeringspunktsfärg:</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="121"/>
         <source>Waypoint size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Navigeringspunktsstorlek:</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="123"/>
         <location filename="../src/optionsdialog.cpp" line="139"/>
         <source>Color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Färg:</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="124"/>
         <location filename="../src/optionsdialog.cpp" line="140"/>
         <source>Size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Storlek:</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="125"/>
         <source>Waypoints</source>
-        <translation>Vägpunkter</translation>
+        <translation>Navigeringspunkter</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="136"/>
         <source>POI color:</source>
-        <translation type="unfinished"></translation>
+        <translation>POI-färg</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="137"/>
         <source>POI size:</source>
-        <translation type="unfinished"></translation>
+        <translation>POI-storlek</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="141"/>
@@ -916,7 +916,7 @@
     <message>
         <location filename="../src/optionsdialog.cpp" line="197"/>
         <source>Points</source>
-        <translation type="unfinished"></translation>
+        <translation>Punkter</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="206"/>
@@ -1087,7 +1087,7 @@
     <message>
         <location filename="../src/optionsdialog.cpp" line="384"/>
         <source>Header</source>
-        <translation></translation>
+        <translation>Rubrik</translation>
     </message>
     <message>
         <location filename="../src/optionsdialog.cpp" line="392"/>
