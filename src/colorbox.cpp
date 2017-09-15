@@ -9,6 +9,8 @@
 ColorBox::ColorBox(QWidget *parent) : QWidget(parent)
 {
 	_color = Qt::red;
+	_alpha = true;
+
 	setSizePolicy(QSizePolicy::QSizePolicy::Minimum, QSizePolicy::Fixed);
 }
 
@@ -51,9 +53,9 @@ void ColorBox::mousePressEvent(QMouseEvent *event)
 {
 	if (event->button() != Qt::LeftButton)
 		return;
-
-	QColor color = QColorDialog::getColor(_color, this, QString(),
-	  QColorDialog::ShowAlphaChannel);
+	QColorDialog::ColorDialogOptions options = _alpha
+	  ? QColorDialog::ShowAlphaChannel : (QColorDialog::ColorDialogOptions)0;
+	QColor color = QColorDialog::getColor(_color, this, QString(), options);
 	if (color.isValid()) {
 		_color = color;
 		update();

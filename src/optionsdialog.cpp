@@ -181,6 +181,7 @@ QWidget *OptionsDialog::createAppearancePage()
 	_mapOpacity->setValue(_options->mapOpacity);
 	_backgroundColor = new ColorBox();
 	_backgroundColor->setColor(_options->backgroundColor);
+	_backgroundColor->enableAlphaChannel(false);
 	QFormLayout *mapLayout = new QFormLayout();
 	mapLayout->addRow(tr("Background color:"), _backgroundColor);
 	mapLayout->addRow(tr("Map opacity:"), _mapOpacity);

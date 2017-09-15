@@ -12,6 +12,7 @@ public:
 
 	const QColor &color() const {return _color;}
 	void setColor(const QColor &color);
+	void enableAlphaChannel(bool enable) {_alpha = enable;}
 
 	QSize sizeHint() const;
 
@@ -24,6 +25,7 @@ protected:
 
 private:
 	QColor _color;
+	bool _alpha;
 };
 
 #endif // COLORBOX_H
