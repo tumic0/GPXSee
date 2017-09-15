@@ -123,13 +123,14 @@
             </tr>
           </table>
 
-          <p>The file format is one map entry per line, consisting of the map name and
-          tiles URL delimited by a TAB character. The tile X and Y coordinates are
-          replaced with <code>$x</code> and <code>$y</code> in the URL and the zoom
-          level is replaced with <code>$z</code>. An example map file could look like:</p>
+          <p>The file format is one map entry per line, consisting of the map name,
+          tiles URL and an optional maximal zoom level delimited by a TAB character.
+          The tile X and Y coordinates are replaced with <code>$x</code> and
+          <code>$y</code> in the URL and the zoom level is replaced with
+          <code>$z</code>. An example map file could look like:</p>
 
 <pre>
-Map1	http://tile.server.com/map/$z/$x/$y.png
+Map1	http://tile.server.com/map/$z/$x/$y.png	15
 Map2	http://mapserver.org/map/$z-$x-$y
 </pre>
 
