@@ -28,7 +28,6 @@ class PathView : public QGraphicsView
 
 public:
 	PathView(Map *map, POI *poi, QWidget *parent = 0);
-	~PathView();
 
 	QList<PathItem*> loadData(const Data &data);
 
@@ -85,6 +84,7 @@ private:
 	qreal mapZoom() const;
 	QPointF contentCenter() const;
 	void rescale();
+	void centerOn(const QPointF &pos);
 	void zoom(int zoom, const QPoint &pos, const Coordinates &c);
 	void digitalZoom(int zoom);
 	void resetDigitalZoom();

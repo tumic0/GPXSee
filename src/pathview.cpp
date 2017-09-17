@@ -3,6 +3,7 @@
 #include <QWheelEvent>
 #include <QApplication>
 #include <QPixmapCache>
+#include <QScrollBar>
 #include "opengl.h"
 #include "misc.h"
 #include "poi.h"
@@ -39,6 +40,7 @@ PathView::PathView(Map *map, POI *poi, QWidget *parent)
 
 	_mapScale = new ScaleItem();
 	_mapScale->setZValue(2.0);
+	_scene->addItem(_mapScale);
 
 	_map = map;
 	_poi = poi;
@@ -72,13 +74,26 @@ PathView::PathView(Map *map, POI *poi, QWidget *parent)
 
 	_map->setBackgroundColor(_backgroundColor);
 	_scene->setSceneRect(_map->bounds());
-	_res = _map->resolution(_scene->sceneRect().center());
+
+	centerOn(_scene->sceneRect().center());
 }
 
-PathView::~PathView()
+void PathView::centerOn(const QPointF &pos)
 {
-	if (_mapScale->scene() != _scene)
-		delete _mapScale;
+	QGraphicsView::centerOn(pos);
+
+	/* Fix the offset caused by QGraphicsView::centerOn() approximation */
+	QPointF center = mapToScene(viewport()->rect().center());
+	QPoint offset((int)(pos.x() - center.x()), (int)(pos.y() - center.y()));
+	if (qAbs(offset.x()) == 1)
+		horizontalScrollBar()->setValue(horizontalScrollBar()->value()
+		  + offset.x());
+	if (qAbs(offset.y()) == 1)
+		verticalScrollBar()->setValue(verticalScrollBar()->value()
+		  + offset.y());
+
+	_res = _map->resolution(pos);
+	_mapScale->setResolution(_res);
 }
 
 PathItem *PathView::addTrack(const Track &track)
@@ -169,13 +184,7 @@ QList<PathItem *> PathView::loadData(const Data &data)
 	else
 		updatePOIVisibility();
 
-	QPointF center = contentCenter();
-	centerOn(center);
-
-	_res = _map->resolution(center);
-	_mapScale->setResolution(_res);
-	if (_mapScale->scene() != _scene)
-		_scene->addItem(_mapScale);
+	centerOn(contentCenter());
 
 	return paths;
 }
@@ -283,11 +292,7 @@ void PathView::setMap(Map *map)
 		it.value()->setMap(_map);
 	updatePOIVisibility();
 
-	pos = _map->ll2xy(center);
-	centerOn(pos);
-
-	_res = _map->resolution(pos);
-	_mapScale->setResolution(_res);
+	centerOn(_map->ll2xy(center));
 
 	resetCachedContent();
 	QPixmapCache::clear();
@@ -421,15 +426,8 @@ void PathView::zoom(int zoom, const QPoint &pos, const Coordinates &c)
 		ns = (zoom > 0) ? _map->zoomIn() : _map->zoomOut();
 
 		if (ns != os) {
-			QPoint offset = pos - viewport()->rect().center();
-
 			rescale();
-
-			QPointF center = _map->ll2xy(c) - offset;
-			centerOn(center);
-
-			_res = _map->resolution(center);
-			_mapScale->setResolution(_res);
+			centerOn(_map->ll2xy(c) - (pos - viewport()->rect().center()));
 		} else {
 			if (shift)
 				digitalZoom(zoom);
@@ -523,11 +521,11 @@ void PathView::plot(QPainter *painter, const QRectF &target, qreal scale,
 		adj = QRect(0, 0, adj.width() * s.x(), adj.height() * s.y());
 		_map->zoomFit(adj.size(), _tr | _rr | _wr);
 		rescale();
+
 		QPointF center = contentCenter();
 		centerOn(center);
 		adj.moveCenter(mapFromScene(center));
 
-		_mapScale->setResolution(_map->resolution(_map->ll2xy(origLL)));
 		_mapScale->setDigitalZoom(-log2(s.x() / q));
 		_mapScale->setPos(mapToScene(QPoint(adj.bottomRight() + QPoint(
 		  -(SCALE_OFFSET + _mapScale->boundingRect().width()) * (s.x() / q),
@@ -547,7 +545,6 @@ void PathView::plot(QPainter *painter, const QRectF &target, qreal scale,
 		_map->zoomFit(origRes, origLL);
 		rescale();
 		centerOn(origScene);
-		_mapScale->setResolution(origRes);
 	}
 	_mapScale->setDigitalZoom(0);
 	_mapScale->setPos(origPos);
@@ -560,14 +557,15 @@ void PathView::plot(QPainter *painter, const QRectF &target, qreal scale,
 
 void PathView::clear()
 {
-	if (_mapScale->scene() == _scene)
-		_scene->removeItem(_mapScale);
-
 	_pois.clear();
 	_tracks.clear();
 	_routes.clear();
 	_waypoints.clear();
+
+	_scene->removeItem(_mapScale);
 	_scene->clear();
+	_scene->addItem(_mapScale);
+
 	_palette.reset();
 
 	_tr = RectC();
@@ -756,11 +754,7 @@ void PathView::resizeEvent(QResizeEvent *event)
 	if (mapZoom() != zoom)
 		rescale();
 
-	QPointF center = contentCenter();
-	centerOn(center);
-
-	_res = _map->resolution(center);
-	_mapScale->setResolution(_res);
+	centerOn(contentCenter());
 
 	QGraphicsView::resizeEvent(event);
 }
