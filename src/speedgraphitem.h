@@ -5,6 +5,8 @@
 
 class SpeedGraphItem : public GraphItem
 {
+	Q_OBJECT
+
 public:
 	SpeedGraphItem(const Graph &graph, qreal movingTime,
 	  QGraphicsItem *parent = 0);

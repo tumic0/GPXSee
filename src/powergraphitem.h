@@ -5,6 +5,8 @@
 
 class PowerGraphItem : public GraphItem
 {
+	Q_OBJECT
+
 public:
 	PowerGraphItem(const Graph &graph, QGraphicsItem *parent = 0);
 

@@ -5,6 +5,8 @@
 
 class CadenceGraphItem : public GraphItem
 {
+	Q_OBJECT
+
 public:
 	CadenceGraphItem(const Graph &graph, QGraphicsItem *parent = 0);
 

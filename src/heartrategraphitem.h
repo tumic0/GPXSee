@@ -5,6 +5,8 @@
 
 class HeartRateGraphItem : public GraphItem
 {
+	Q_OBJECT
+
 public:
 	HeartRateGraphItem(const Graph &graph, QGraphicsItem *parent = 0);
 

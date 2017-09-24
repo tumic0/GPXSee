@@ -5,6 +5,8 @@
 
 class TemperatureGraphItem : public GraphItem
 {
+	Q_OBJECT
+
 public:
 	TemperatureGraphItem(const Graph &graph, QGraphicsItem *parent = 0);
 

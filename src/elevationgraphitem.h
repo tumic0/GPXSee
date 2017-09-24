@@ -5,6 +5,8 @@
 
 class ElevationGraphItem : public GraphItem
 {
+	Q_OBJECT
+
 public:
 	ElevationGraphItem(const Graph &graph, QGraphicsItem *parent = 0);
 
