@@ -25,7 +25,17 @@ GraphItem::GraphItem(const Graph &graph, QGraphicsItem *parent)
 	setZValue(1.0);
 
 	updatePath();
+	updateShape();
 	updateBounds();
+
+	setAcceptHoverEvents(true);
+}
+
+void GraphItem::updateShape()
+{
+	QPainterPathStroker s;
+	s.setWidth(_width + 1);
+	_shape = s.createStroke(_path);
 }
 
 void GraphItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -50,6 +60,7 @@ void GraphItem::setGraphType(GraphType type)
 
 	_type = type;
 	updatePath();
+	updateShape();
 	updateBounds();
 }
 
@@ -65,6 +76,8 @@ void GraphItem::setWidth(int width)
 
 	_width = width;
 	_pen.setWidth(width);
+
+	updateShape();
 }
 
 qreal GraphItem::yAtX(qreal x)
@@ -143,9 +156,9 @@ void GraphItem::emitSliderPositionChanged(qreal pos)
 		emit sliderPositionChanged(pos);
 }
 
-void GraphItem::selected(bool selected)
+void GraphItem::hover(bool hover)
 {
-	if (selected) {
+	if (hover) {
 		_pen.setWidth(_width + 1);
 		setZValue(zValue() + 1.0);
 	} else {
@@ -165,6 +178,7 @@ void GraphItem::setScale(qreal sx, qreal sy)
 
 	_sx = sx; _sy = sy;
 	updatePath();
+	updateShape();
 }
 
 void GraphItem::updatePath()
@@ -198,4 +212,26 @@ void GraphItem::updateBounds()
 	}
 
 	_bounds = QRectF(QPointF(left, top), QPointF(right, bottom));
+}
+
+void GraphItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+	Q_UNUSED(event);
+
+	_pen.setWidthF(_width + 1);
+	setZValue(zValue() + 1.0);
+	update();
+
+	emit selected(true);
+}
+
+void GraphItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+	Q_UNUSED(event);
+
+	_pen.setWidthF(_width);
+	setZValue(zValue() - 1.0);
+	update();
+
+	emit selected(false);
 }

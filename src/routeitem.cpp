@@ -7,7 +7,7 @@
 #include "routeitem.h"
 
 
-QString RouteItem::toolTip(Units units)
+QString RouteItem::toolTip(Units units) const
 {
 	ToolTip tt;
 

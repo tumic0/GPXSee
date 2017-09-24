@@ -139,6 +139,10 @@ void GraphView::setXUnits()
 void GraphView::setUnits(Units units)
 {
 	_units = units;
+
+	for (int i = 0; i < _graphs.count(); i++)
+		_graphs.at(i)->setUnits(units);
+
 	setXUnits();
 }
 
@@ -167,29 +171,27 @@ void GraphView::showGrid(bool show)
 	_grid->setVisible(show);
 }
 
-void GraphView::loadGraph(const Graph &graph, PathItem *path, int id)
+void GraphView::addGraph(GraphItem *graph, PathItem *path, int id)
 {
-	if (graph.size() < 2)
-		return;
+	graph->setUnits(_units);
+	graph->setGraphType(_graphType);
+	graph->setId(id);
+	graph->setColor(_palette.nextColor());
+	graph->setWidth(_width);
 
-	GraphItem *gi = new GraphItem(graph);
-	gi->setGraphType(_graphType);
-	gi->setId(id);
-	gi->setColor(_palette.nextColor());
-	gi->setWidth(_width);
-
-	connect(this, SIGNAL(sliderPositionChanged(qreal)), gi,
+	connect(this, SIGNAL(sliderPositionChanged(qreal)), graph,
 	  SLOT(emitSliderPositionChanged(qreal)));
-	connect(gi, SIGNAL(sliderPositionChanged(qreal)), path,
+	connect(graph, SIGNAL(sliderPositionChanged(qreal)), path,
 	  SLOT(moveMarker(qreal)));
-	connect(path, SIGNAL(selected(bool)), gi, SLOT(selected(bool)));
+	connect(path, SIGNAL(selected(bool)), graph, SLOT(hover(bool)));
+	connect(graph, SIGNAL(selected(bool)), path, SLOT(hover(bool)));
 
-	_graphs.append(gi);
+	_graphs.append(graph);
 
 	if (!_hide.contains(id)) {
-		_visible.append(gi);
-		_scene->addItem(gi);
-		_bounds |= gi->bounds();
+		_visible.append(graph);
+		_scene->addItem(graph);
+		_bounds |= graph->bounds();
 		setXUnits();
 	}
 }

@@ -32,6 +32,7 @@ public:
 
 public slots:
 	void moveMarker(qreal distance);
+	void hover(bool hover);
 
 signals:
 	void selected(bool);

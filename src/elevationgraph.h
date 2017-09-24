@@ -35,7 +35,6 @@ private:
 	qreal _trackMax, _routeMax;
 	qreal _trackMin, _routeMin;
 
-	enum Units _units;
 	bool _showTracks, _showRoutes;
 };
 

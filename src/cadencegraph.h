@@ -23,7 +23,6 @@ private:
 
 	QList<QPointF> _avg;
 
-	enum Units _units;
 	bool _showTracks;
 };
 

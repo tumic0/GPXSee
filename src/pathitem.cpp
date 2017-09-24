@@ -154,6 +154,19 @@ void PathItem::moveMarker(qreal distance)
 		_marker->setVisible(false);
 }
 
+void PathItem::hover(bool hover)
+{
+	if (hover) {
+		_pen.setWidth(_width + 1);
+		setZValue(zValue() + 1.0);
+	} else {
+		_pen.setWidth(_width);
+		setZValue(zValue() - 1.0);
+	}
+
+	update();
+}
+
 void PathItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
 	Q_UNUSED(event);

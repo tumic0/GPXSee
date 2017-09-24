@@ -4,9 +4,9 @@
 #include <QGraphicsView>
 #include <QList>
 #include <QSet>
+#include "graph.h"
 #include "palette.h"
 #include "units.h"
-#include "graph.h"
 
 
 class AxisItem;
@@ -25,7 +25,7 @@ public:
 	GraphView(QWidget *parent = 0);
 	~GraphView();
 
-	void loadGraph(const Graph &graph, PathItem *path, int id = 0);
+	void addGraph(GraphItem *graph, PathItem *path, int id = 0);
 	int count() const {return _graphs.count();}
 	void redraw();
 	void clear();
@@ -68,6 +68,9 @@ protected:
 	void clearInfo();
 	void skipColor() {_palette.nextColor();}
 
+	Units _units;
+	GraphType _graphType;
+
 private slots:
 	void emitSliderPositionChanged(const QPointF &pos);
 	void newSliderPosition(const QPointF &pos);
@@ -106,9 +109,6 @@ private:
 	QRectF _bounds;
 	Palette _palette;
 	int _width;
-
-	Units _units;
-	GraphType _graphType;
 };
 
 #endif // GRAPHVIEW_H

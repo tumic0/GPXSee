@@ -3,6 +3,7 @@
 
 #include <QGraphicsObject>
 #include <QPen>
+#include "units.h"
 #include "graph.h"
 
 class GraphItem : public QGraphicsObject
@@ -12,8 +13,8 @@ class GraphItem : public QGraphicsObject
 public:
 	GraphItem(const Graph &graph, QGraphicsItem *parent = 0);
 
-	QRectF boundingRect() const
-	  {return _path.boundingRect();}
+	QPainterPath shape() const {return _shape;}
+	QRectF boundingRect() const {return _shape.boundingRect();}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
@@ -29,15 +30,22 @@ public:
 	qreal yAtX(qreal x);
 	qreal distanceAtTime(qreal time);
 
+	virtual void setUnits(Units units) {Q_UNUSED(units);}
+
 signals:
 	void sliderPositionChanged(qreal);
+	void selected(bool);
 
 public slots:
 	void emitSliderPositionChanged(qreal);
-	void selected(bool selected);
+	void hover(bool hover);
 
 private:
+	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
 	void updatePath();
+	void updateShape();
 	void updateBounds();
 
 	int _id;
@@ -48,6 +56,7 @@ private:
 	GraphType _type;
 
 	QPainterPath _path;
+	QPainterPath _shape;
 	QRectF _bounds;
 	qreal _sx, _sy;
 

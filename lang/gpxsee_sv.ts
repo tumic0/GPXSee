@@ -26,6 +26,25 @@
     </message>
 </context>
 <context>
+    <name>CadenceGraphItem</name>
+    <message>
+        <location filename="../src/cadencegraphitem.cpp" line="20"/>
+        <source>Maximum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/cadencegraphitem.cpp" line="21"/>
+        <location filename="../src/cadencegraphitem.cpp" line="23"/>
+        <source>1/min</source>
+        <translation>1/min</translation>
+    </message>
+    <message>
+        <location filename="../src/cadencegraphitem.cpp" line="22"/>
+        <source>Average</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Data</name>
     <message>
         <location filename="../src/data.cpp" line="102"/>
@@ -82,34 +101,67 @@
         <translation>Höjd</translation>
     </message>
     <message>
-        <location filename="../src/elevationgraph.cpp" line="141"/>
+        <location filename="../src/elevationgraph.cpp" line="122"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../src/elevationgraph.cpp" line="58"/>
+        <location filename="../src/elevationgraph.cpp" line="57"/>
         <source>Ascent</source>
         <translation>Stigning</translation>
     </message>
     <message>
-        <location filename="../src/elevationgraph.cpp" line="60"/>
+        <location filename="../src/elevationgraph.cpp" line="59"/>
         <source>Descent</source>
         <translation>Nedstigning</translation>
     </message>
     <message>
-        <location filename="../src/elevationgraph.cpp" line="64"/>
+        <location filename="../src/elevationgraph.cpp" line="63"/>
         <source>Minimum</source>
         <translation>Minimum</translation>
     </message>
     <message>
-        <location filename="../src/elevationgraph.cpp" line="144"/>
+        <location filename="../src/elevationgraph.cpp" line="125"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
     <message>
-        <location filename="../src/elevationgraph.cpp" line="62"/>
+        <location filename="../src/elevationgraph.cpp" line="61"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
+    </message>
+</context>
+<context>
+    <name>ElevationGraphItem</name>
+    <message>
+        <location filename="../src/elevationgraphitem.cpp" line="26"/>
+        <source>m</source>
+        <translation>m</translation>
+    </message>
+    <message>
+        <location filename="../src/elevationgraphitem.cpp" line="26"/>
+        <source>ft</source>
+        <translation>ft</translation>
+    </message>
+    <message>
+        <location filename="../src/elevationgraphitem.cpp" line="28"/>
+        <source>Ascent</source>
+        <translation>Stigning</translation>
+    </message>
+    <message>
+        <location filename="../src/elevationgraphitem.cpp" line="30"/>
+        <source>Descent</source>
+        <translation>Nedstigning</translation>
+    </message>
+    <message>
+        <location filename="../src/elevationgraphitem.cpp" line="32"/>
+        <source>Maximum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/elevationgraphitem.cpp" line="34"/>
+        <source>Minimum</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -724,12 +776,12 @@
     </message>
     <message>
         <location filename="../src/graphview.cpp" line="60"/>
-        <location filename="../src/graphview.cpp" line="157"/>
+        <location filename="../src/graphview.cpp" line="161"/>
         <source>Distance</source>
         <translation>Avstånd</translation>
     </message>
     <message>
-        <location filename="../src/graphview.cpp" line="159"/>
+        <location filename="../src/graphview.cpp" line="163"/>
         <source>Time</source>
         <translation>Tid</translation>
     </message>
@@ -756,6 +808,25 @@
         <location filename="../src/heartrategraph.cpp" line="21"/>
         <source>Maximum</source>
         <translation>Max</translation>
+    </message>
+</context>
+<context>
+    <name>HeartRateGraphItem</name>
+    <message>
+        <location filename="../src/heartrategraphitem.cpp" line="20"/>
+        <source>Maximum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/heartrategraphitem.cpp" line="21"/>
+        <location filename="../src/heartrategraphitem.cpp" line="23"/>
+        <source>1/min</source>
+        <translation>1/min</translation>
+    </message>
+    <message>
+        <location filename="../src/heartrategraphitem.cpp" line="22"/>
+        <source>Average</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1152,6 +1223,25 @@
     </message>
 </context>
 <context>
+    <name>PowerGraphItem</name>
+    <message>
+        <location filename="../src/powergraphitem.cpp" line="20"/>
+        <source>Maximum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/powergraphitem.cpp" line="21"/>
+        <location filename="../src/powergraphitem.cpp" line="23"/>
+        <source>1/min</source>
+        <translation>1/min</translation>
+    </message>
+    <message>
+        <location filename="../src/powergraphitem.cpp" line="22"/>
+        <source>Average</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RouteItem</name>
     <message>
         <location filename="../src/routeitem.cpp" line="15"/>
@@ -1195,30 +1285,58 @@
 <context>
     <name>SpeedGraph</name>
     <message>
-        <location filename="../src/speedgraph.cpp" line="13"/>
+        <location filename="../src/speedgraph.cpp" line="14"/>
         <location filename="../src/speedgraph.h" line="14"/>
         <source>Speed</source>
         <translation>Hastighet</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="79"/>
+        <location filename="../src/speedgraph.cpp" line="81"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="21"/>
+        <location filename="../src/speedgraph.cpp" line="22"/>
         <source>Average</source>
         <translation>Medel</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="23"/>
+        <location filename="../src/speedgraph.cpp" line="24"/>
         <source>Maximum</source>
         <translation>Max</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="82"/>
+        <location filename="../src/speedgraph.cpp" line="84"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
+    </message>
+</context>
+<context>
+    <name>SpeedGraphItem</name>
+    <message>
+        <location filename="../src/speedgraphitem.cpp" line="17"/>
+        <source>km/h</source>
+        <translation>km/h</translation>
+    </message>
+    <message>
+        <location filename="../src/speedgraphitem.cpp" line="17"/>
+        <source>mi/h</source>
+        <translation>mi/h</translation>
+    </message>
+    <message>
+        <location filename="../src/speedgraphitem.cpp" line="19"/>
+        <source>Maximum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/speedgraphitem.cpp" line="21"/>
+        <source>Average</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/speedgraphitem.cpp" line="23"/>
+        <source>Moving average</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1245,14 +1363,42 @@
         <translation>Max</translation>
     </message>
     <message>
-        <location filename="../src/temperaturegraph.cpp" line="81"/>
+        <location filename="../src/temperaturegraph.cpp" line="76"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../src/temperaturegraph.cpp" line="85"/>
+        <location filename="../src/temperaturegraph.cpp" line="80"/>
         <source>F</source>
         <translation>F</translation>
+    </message>
+</context>
+<context>
+    <name>TemperatureGraphItem</name>
+    <message>
+        <location filename="../src/temperaturegraphitem.cpp" line="22"/>
+        <source>C</source>
+        <translation>C</translation>
+    </message>
+    <message>
+        <location filename="../src/temperaturegraphitem.cpp" line="22"/>
+        <source>F</source>
+        <translation>F</translation>
+    </message>
+    <message>
+        <location filename="../src/temperaturegraphitem.cpp" line="24"/>
+        <source>Average</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/temperaturegraphitem.cpp" line="26"/>
+        <source>Maximum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/temperaturegraphitem.cpp" line="28"/>
+        <source>Minimum</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

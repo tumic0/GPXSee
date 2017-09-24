@@ -97,7 +97,13 @@ HEADERS += src/config.h \
     src/oddspinbox.h \
     src/rectc.h \
     src/searchpointer.h \
-    src/percentslider.h
+    src/percentslider.h \
+    src/elevationgraphitem.h \
+    src/speedgraphitem.h \
+    src/heartrategraphitem.h \
+    src/temperaturegraphitem.h \
+    src/cadencegraphitem.h \
+    src/powergraphitem.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -167,7 +173,13 @@ SOURCES += src/main.cpp \
     src/albersequal.cpp \
     src/oddspinbox.cpp \
     src/rectc.cpp \
-    src/percentslider.cpp
+    src/percentslider.cpp \
+    src/elevationgraphitem.cpp \
+    src/speedgraphitem.cpp \
+    src/heartrategraphitem.cpp \
+    src/temperaturegraphitem.cpp \
+    src/cadencegraphitem.cpp \
+    src/powergraphitem.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \

@@ -19,7 +19,7 @@ public:
 	void setUnits(Units units);
 
 private:
-	QString toolTip(Units units);
+	QString toolTip(Units units) const;
 
 	QString _name;
 	QString _desc;

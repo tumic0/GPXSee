@@ -5,7 +5,7 @@
 #include "trackitem.h"
 
 
-QString TrackItem::toolTip(Units units)
+QString TrackItem::toolTip(Units units) const
 {
 	ToolTip tt;
 

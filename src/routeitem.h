@@ -14,7 +14,6 @@ class RouteItem : public PathItem
 public:
 	RouteItem(const Route &route, Map *map, QGraphicsItem *parent = 0);
 
-	//void setScale(qreal scale);
 	void setMap(Map *map);
 
 	void setUnits(Units units);
@@ -22,7 +21,7 @@ public:
 	void showWaypointLabels(bool show);
 
 private:
-	QString toolTip(Units units);
+	QString toolTip(Units units) const;
 
 	QString _name;
 	QString _desc;
