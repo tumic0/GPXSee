@@ -1291,7 +1291,7 @@
         <translation>Geschwindigkeit</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="81"/>
+        <location filename="../src/speedgraph.cpp" line="82"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
@@ -1306,7 +1306,7 @@
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/speedgraph.cpp" line="84"/>
+        <location filename="../src/speedgraph.cpp" line="85"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
     </message>
@@ -1314,29 +1314,24 @@
 <context>
     <name>SpeedGraphItem</name>
     <message>
-        <location filename="../src/speedgraphitem.cpp" line="17"/>
+        <location filename="../src/speedgraphitem.cpp" line="20"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
     <message>
-        <location filename="../src/speedgraphitem.cpp" line="17"/>
+        <location filename="../src/speedgraphitem.cpp" line="20"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
     </message>
     <message>
-        <location filename="../src/speedgraphitem.cpp" line="19"/>
+        <location filename="../src/speedgraphitem.cpp" line="22"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/speedgraphitem.cpp" line="21"/>
+        <location filename="../src/speedgraphitem.cpp" line="24"/>
         <source>Average</source>
         <translation>Durchschnitt</translation>
-    </message>
-    <message>
-        <location filename="../src/speedgraphitem.cpp" line="23"/>
-        <source>Moving average</source>
-        <translation>Bewegungsdurchschnitt</translation>
     </message>
 </context>
 <context>

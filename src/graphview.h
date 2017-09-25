@@ -68,6 +68,7 @@ protected:
 	void clearInfo();
 	void skipColor() {_palette.nextColor();}
 
+	QList<GraphItem*> _graphs;
 	Units _units;
 	GraphType _graphType;
 
@@ -103,7 +104,6 @@ private:
 	InfoItem *_info;
 	GridItem *_grid;
 
-	QList<GraphItem*> _graphs;
 	QList<GraphItem*> _visible;
 	QSet<int> _hide;
 	QRectF _bounds;

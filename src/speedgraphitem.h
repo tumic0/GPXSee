@@ -1,6 +1,7 @@
 #ifndef SPEEDGRAPHITEM_H
 #define SPEEDGRAPHITEM_H
 
+#include "timetype.h"
 #include "graphitem.h"
 
 class SpeedGraphItem : public GraphItem
@@ -16,11 +17,15 @@ public:
 	qreal mavg() const {return _mavg;}
 
 	void setUnits(Units units);
+	void setTimeType(TimeType type);
 
 private:
-	QString toolTip(Units units) const;
+	QString toolTip() const;
 
 	qreal _avg, _mavg;
+
+	Units _units;
+	TimeType _timeType;
 };
 
 #endif // SPEEDGRAPHITEM_H

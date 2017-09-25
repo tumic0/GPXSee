@@ -39,6 +39,7 @@ void SpeedGraph::loadData(const Data &data, const QList<PathItem *> &paths)
 		}
 
 		SpeedGraphItem *gi = new SpeedGraphItem(graph, track->movingTime());
+		gi->setTimeType(_timeType);
 		GraphView::addGraph(gi, paths.at(i));
 
 		_avg.append(QPointF(track->distance(), gi->avg()));
@@ -99,6 +100,9 @@ void SpeedGraph::setUnits(enum Units units)
 void SpeedGraph::setTimeType(enum TimeType type)
 {
 	_timeType = type;
+
+	for (int i = 0; i < _graphs.size(); i++)
+		static_cast<SpeedGraphItem*>(_graphs.at(i))->setTimeType(type);
 
 	setInfo();
 	redraw();
