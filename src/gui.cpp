@@ -412,14 +412,12 @@ void GUI::createActions()
 	_distanceGraphAction = new QAction(tr("Distance"), this);
 	_distanceGraphAction->setCheckable(true);
 	_distanceGraphAction->setActionGroup(ag);
-	_distanceGraphAction->setShortcut(DISTANCE_GRAPH_SHORTCUT);
 	connect(_distanceGraphAction, SIGNAL(triggered()), this,
 	  SLOT(setDistanceGraph()));
 	addAction(_distanceGraphAction);
 	_timeGraphAction = new QAction(tr("Time"), this);
 	_timeGraphAction->setCheckable(true);
 	_timeGraphAction->setActionGroup(ag);
-	_timeGraphAction->setShortcut(TIME_GRAPH_SHORTCUT);
 	connect(_timeGraphAction, SIGNAL(triggered()), this,
 	  SLOT(setTimeGraph()));
 	addAction(_timeGraphAction);
@@ -671,7 +669,12 @@ void GUI::keys()
 	  + tr("Last file") + "</td><td><i>" + QKeySequence(LAST_KEY).toString()
 	  + "</i></td></tr><tr><td>" + tr("Append file")
 	  + "</td><td><i>" + QKeySequence(MODIFIER).toString() + tr("Next/Previous")
-	  + "</i></td></tr><tr><td></td><td></td></tr><tr><td>" + tr("Next map")
+	  + "</i></td></tr><tr><td></td><td></td></tr><tr><td>"
+	  + tr("Toggle graph type") + "</td><td><i>"
+	  + QKeySequence(TOGGLE_GRAPH_TYPE_KEY).toString() + "</i></td></tr><tr><td>"
+	  + tr("Toggle time type") + "</td><td><i>"
+	  + QKeySequence(TOGGLE_TIME_TYPE_KEY).toString()
+	  + "<tr><td></td><td></td></tr><tr><td>" + tr("Next map")
 	  + "</td><td><i>" + NEXT_MAP_SHORTCUT.toString() + "</i></td></tr><tr><td>"
 	  + tr("Previous map") + "</td><td><i>" + PREV_MAP_SHORTCUT.toString()
 	  + "</i></td></tr><tr><td></td><td></td></tr><tr><td>" + tr("Zoom in")
@@ -1431,6 +1434,19 @@ void GUI::keyPressEvent(QKeyEvent *event)
 			break;
 		case LAST_KEY:
 			file = _browser->last();
+			break;
+
+		case TOGGLE_GRAPH_TYPE_KEY:
+			if (_timeGraphAction->isChecked())
+				_distanceGraphAction->activate(QAction::Trigger);
+			else
+				_timeGraphAction->activate(QAction::Trigger);
+			break;
+		case TOGGLE_TIME_TYPE_KEY:
+			if (_movingTimeAction->isChecked())
+				_totalTimeAction->activate(QAction::Trigger);
+			else
+				_movingTimeAction->activate(QAction::Trigger);
 			break;
 
 		case Qt::Key_Escape:
