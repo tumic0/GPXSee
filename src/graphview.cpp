@@ -13,6 +13,7 @@
 #include "graph.h"
 #include "graphitem.h"
 #include "pathitem.h"
+#include "format.h"
 #include "graphview.h"
 
 
@@ -169,6 +170,11 @@ void GraphView::setGraphType(GraphType type)
 void GraphView::showGrid(bool show)
 {
 	_grid->setVisible(show);
+}
+
+void GraphView::showSliderInfo(bool show)
+{
+	_sliderInfo->setVisible(show);
 }
 
 void GraphView::addGraph(GraphItem *graph, PathItem *path, int id)
@@ -374,22 +380,25 @@ void GraphView::updateSliderPosition()
 		_slider->setVisible(false);
 	}
 
-	updateSliderInfo();
+	if (_slider->isVisible())
+		updateSliderInfo();
 }
 
 void GraphView::updateSliderInfo()
 {
-	_sliderInfo->setVisible(_visible.count() == 1);
-	if (!_sliderInfo->isVisible())
-		return;
+	qreal r, y;
 
-	QRectF br(_visible.first()->bounds());
-	if (br.height() < _minYRange)
-		br.adjust(0, -(_minYRange/2 - br.height()/2), 0,
-		  _minYRange/2 - br.height()/2);
+	if (_visible.count() > 1)
+		r = 0;
+	else {
+		QRectF br(_visible.first()->bounds());
+		if (br.height() < _minYRange)
+			br.adjust(0, -(_minYRange/2 - br.height()/2), 0,
+			  _minYRange/2 - br.height()/2);
 
-	qreal y = _visible.first()->yAtX(_sliderPos);
-	qreal r = (y - br.bottom()) / br.height();
+		y = _visible.first()->yAtX(_sliderPos);
+		r = (y - br.bottom()) / br.height();
+	}
 
 	qreal pos = (_sliderPos / bounds().width()) * _slider->area().width();
 	SliderInfoItem::Side s = (pos + _sliderInfo->boundingRect().width()
@@ -397,8 +406,11 @@ void GraphView::updateSliderInfo()
 
 	_sliderInfo->setSide(s);
 	_sliderInfo->setPos(QPointF(0, _slider->boundingRect().height() * r));
-	_sliderInfo->setText(QString::number(-y * _yScale + _yOffset, 'f',
-	  _precision));
+	_sliderInfo->setText(_graphType == Time ? Format::timeSpan(_sliderPos,
+	  bounds().width() > 3600) : QString::number(_sliderPos * _xScale, 'f', 1)
+	  + UNIT_SPACE + _xUnits, (_visible.count() > 1) ? QString()
+	  : QString::number(-y * _yScale + _yOffset, 'f', _precision) + UNIT_SPACE
+	  + _yUnits);
 }
 
 void GraphView::emitSliderPositionChanged(const QPointF &pos)

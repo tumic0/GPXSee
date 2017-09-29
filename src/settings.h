@@ -25,6 +25,8 @@
 #define GRAPH_TYPE_DEFAULT                Distance
 #define SHOW_GRAPH_GRIDS_SETTING          "grid"
 #define SHOW_GRAPH_GRIDS_DEFAULT          true
+#define SHOW_GRAPH_SLIDER_INFO_SETTING    "sliderInfo"
+#define SHOW_GRAPH_SLIDER_INFO_DEFAULT    true
 
 #define MAP_SETTINGS_GROUP                "Map"
 #define CURRENT_MAP_SETTING               "map"

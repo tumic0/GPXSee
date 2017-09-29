@@ -8,7 +8,7 @@ class Coordinates;
 
 namespace Format
 {
-	QString timeSpan(qreal time);
+	QString timeSpan(qreal time, bool full = true);
 	QString distance(qreal value, Units units);
 	QString elevation(qreal value, Units units);
 	QString coordinates(const Coordinates &value);

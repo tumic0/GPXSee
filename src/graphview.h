@@ -34,6 +34,7 @@ public:
 	void setGraphType(GraphType type);
 	void setUnits(Units units);
 	void showGrid(bool show);
+	void showSliderInfo(bool show);
 
 	void setPalette(const Palette &palette);
 	void setGraphWidth(int width);

@@ -2,7 +2,7 @@
 #include "coordinates.h"
 #include "format.h"
 
-QString Format::timeSpan(qreal time)
+QString Format::timeSpan(qreal time, bool full)
 {
 	unsigned h, m, s;
 
@@ -10,8 +10,12 @@ QString Format::timeSpan(qreal time)
 	m = (time - (h * 3600)) / 60;
 	s = time - (h * 3600) - (m * 60);
 
-	return QString("%1:%2:%3").arg(h).arg(m, 2, 10, QChar('0'))
-	  .arg(s, 2, 10, QChar('0'));
+	if (full || h)
+		return QString("%1:%2:%3").arg(h, 2, 10, QChar('0'))
+		  .arg(m, 2, 10, QChar('0')).arg(s, 2, 10, QChar('0'));
+	else
+		return QString("%1:%2").arg(m, 2, 10, QChar('0'))
+		  .arg(s, 2, 10, QChar('0'));
 }
 
 QString Format::distance(qreal value, Units units)

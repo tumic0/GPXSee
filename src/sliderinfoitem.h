@@ -14,14 +14,14 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-	void setText(const QString &text);
+	void setText(const QString &x, const QString &y);
 	void setSide(Side side);
 
 private:
 	void updateBoundingRect();
 
 	Side _side;
-	QString _text;
+	QString _x, _y;
 	QRectF _boundingRect;
 };
 

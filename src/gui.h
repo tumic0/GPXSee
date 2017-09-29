@@ -51,6 +51,7 @@ private slots:
 	void closePOIFiles();
 	void showGraphs(bool show);
 	void showGraphGrids(bool show);
+	void showGraphSliderInfo(bool show);
 	void showToolbars(bool show);
 	void showFullscreen(bool show);
 	void showTracks(bool show);
@@ -156,6 +157,7 @@ private:
 	QAction *_clearMapCacheAction;
 	QAction *_showGraphsAction;
 	QAction *_showGraphGridAction;
+	QAction *_showGraphSliderInfoAction;
 	QAction *_distanceGraphAction;
 	QAction *_timeGraphAction;
 	QAction *_showToolbarsAction;

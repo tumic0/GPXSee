@@ -425,6 +425,10 @@ void GUI::createActions()
 	_showGraphGridAction->setCheckable(true);
 	connect(_showGraphGridAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showGraphGrids(bool)));
+	_showGraphSliderInfoAction = new QAction(tr("Show slider info"), this);
+	_showGraphSliderInfoAction->setCheckable(true);
+	connect(_showGraphSliderInfoAction, SIGNAL(triggered(bool)), this,
+	  SLOT(showGraphSliderInfo(bool)));
 
 	// Settings actions
 	_showToolbarsAction = new QAction(tr("Show toolbars"), this);
@@ -513,6 +517,7 @@ void GUI::createMenus()
 	graphMenu->addAction(_timeGraphAction);
 	graphMenu->addSeparator();
 	graphMenu->addAction(_showGraphGridAction);
+	graphMenu->addAction(_showGraphSliderInfoAction);
 	graphMenu->addSeparator();
 	graphMenu->addAction(_showGraphsAction);
 
@@ -1177,6 +1182,12 @@ void GUI::showGraphGrids(bool show)
 		_tabs.at(i)->showGrid(show);
 }
 
+void GUI::showGraphSliderInfo(bool show)
+{
+	for (int i = 0; i < _tabs.size(); i++)
+		_tabs.at(i)->showSliderInfo(show);
+}
+
 void GUI::loadMap()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open map file"),
@@ -1537,6 +1548,10 @@ void GUI::writeSettings()
 	if (_showGraphGridAction->isChecked() != SHOW_GRAPH_GRIDS_DEFAULT)
 		settings.setValue(SHOW_GRAPH_GRIDS_SETTING,
 		  _showGraphGridAction->isChecked());
+	if (_showGraphSliderInfoAction->isChecked()
+	  != SHOW_GRAPH_SLIDER_INFO_DEFAULT)
+		settings.setValue(SHOW_GRAPH_SLIDER_INFO_SETTING,
+		  _showGraphSliderInfoAction->isChecked());
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);
@@ -1724,6 +1739,11 @@ void GUI::readSettings()
 		showGraphGrids(false);
 	else
 		_showGraphGridAction->setChecked(true);
+	if (!settings.value(SHOW_GRAPH_SLIDER_INFO_SETTING,
+	  SHOW_GRAPH_SLIDER_INFO_DEFAULT).toBool())
+		showGraphSliderInfo(false);
+	else
+		_showGraphSliderInfoAction->setChecked(true);
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);
