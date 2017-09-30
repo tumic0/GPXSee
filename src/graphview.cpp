@@ -388,9 +388,10 @@ void GraphView::updateSliderInfo()
 {
 	qreal r, y;
 
-	if (_visible.count() > 1)
+	if (_visible.count() > 1) {
 		r = 0;
-	else {
+		y = 0;
+	} else {
 		QRectF br(_visible.first()->bounds());
 		if (br.height() < _minYRange)
 			br.adjust(0, -(_minYRange/2 - br.height()/2), 0,
