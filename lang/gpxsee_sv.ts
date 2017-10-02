@@ -22,7 +22,7 @@
     <message>
         <location filename="../src/cadencegraph.cpp" line="21"/>
         <source>Maximum</source>
-        <translation>Maximal</translation>
+        <translation>Maximum</translation>
     </message>
 </context>
 <context>
@@ -30,7 +30,7 @@
     <message>
         <location filename="../src/cadencegraphitem.cpp" line="20"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximum</translation>
     </message>
     <message>
         <location filename="../src/cadencegraphitem.cpp" line="21"/>
@@ -41,7 +41,7 @@
     <message>
         <location filename="../src/cadencegraphitem.cpp" line="22"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Medel</translation>
     </message>
 </context>
 <context>
@@ -156,12 +156,12 @@
     <message>
         <location filename="../src/elevationgraphitem.cpp" line="32"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximum</translation>
     </message>
     <message>
         <location filename="../src/elevationgraphitem.cpp" line="34"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimum</translation>
     </message>
 </context>
 <context>
@@ -434,7 +434,7 @@
     <message>
         <location filename="../src/gui.cpp" line="428"/>
         <source>Show slider info</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa reglageinfo</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="434"/>
@@ -550,12 +550,12 @@
     <message>
         <location filename="../src/gui.cpp" line="678"/>
         <source>Toggle graph type</source>
-        <translation type="unfinished"></translation>
+        <translation>Växla diagramtyp</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="680"/>
         <source>Toggle time type</source>
-        <translation type="unfinished"></translation>
+        <translation>Växla tidstyp</translation>
     </message>
     <message>
         <location filename="../src/gui.cpp" line="684"/>
@@ -830,7 +830,7 @@
     <message>
         <location filename="../src/heartrategraphitem.cpp" line="20"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximum</translation>
     </message>
     <message>
         <location filename="../src/heartrategraphitem.cpp" line="21"/>
@@ -841,7 +841,7 @@
     <message>
         <location filename="../src/heartrategraphitem.cpp" line="22"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Medel</translation>
     </message>
 </context>
 <context>
@@ -1242,7 +1242,7 @@
     <message>
         <location filename="../src/powergraphitem.cpp" line="20"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximum</translation>
     </message>
     <message>
         <location filename="../src/powergraphitem.cpp" line="21"/>
@@ -1253,7 +1253,7 @@
     <message>
         <location filename="../src/powergraphitem.cpp" line="22"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Medel</translation>
     </message>
 </context>
 <context>
@@ -1341,12 +1341,12 @@
     <message>
         <location filename="../src/speedgraphitem.cpp" line="22"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximum</translation>
     </message>
     <message>
         <location filename="../src/speedgraphitem.cpp" line="24"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Medel</translation>
     </message>
 </context>
 <context>
@@ -1398,17 +1398,17 @@
     <message>
         <location filename="../src/temperaturegraphitem.cpp" line="24"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Medel</translation>
     </message>
     <message>
         <location filename="../src/temperaturegraphitem.cpp" line="26"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximum</translation>
     </message>
     <message>
         <location filename="../src/temperaturegraphitem.cpp" line="28"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimum</translation>
     </message>
 </context>
 <context>
