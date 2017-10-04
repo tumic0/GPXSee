@@ -361,7 +361,7 @@ void GUI::createActions()
 	  tr("Load map..."), this);
 	connect(_loadMapAction, SIGNAL(triggered()), this, SLOT(loadMap()));
 	_clearMapCacheAction = new QAction(tr("Clear tile cache"), this);
-	connect(_clearMapCacheAction, SIGNAL(triggered()), this,
+	connect(_clearMapCacheAction, SIGNAL(triggered()), _pathView,
 	  SLOT(clearMapCache()));
 	createMapActions();
 	_nextMapAction = new QAction(tr("Next map"), this);
@@ -1022,7 +1022,7 @@ void GUI::plot(QPrinter *printer)
 
 		int cnt = 0;
 		for (int i = 0; i < _tabs.size(); i++)
-			if (_tabs.at(i)->count())
+			if (!_tabs.at(i)->isEmpty())
 				cnt++;
 
 		qreal sp = ratio * 20;
@@ -1031,7 +1031,7 @@ void GUI::plot(QPrinter *printer)
 
 		qreal y = 0;
 		for (int i = 0; i < _tabs.size(); i++) {
-			if (_tabs.at(i)->count()) {
+			if (!_tabs.at(i)->isEmpty()) {
 				_tabs.at(i)->plot(&p,  QRectF(0, y, printer->width(), gh),
 				  ratio);
 				y += gh + sp;
@@ -1217,12 +1217,6 @@ void GUI::loadMap()
 	}
 }
 
-void GUI::clearMapCache()
-{
-	_map->clearCache();
-	_pathView->redraw();
-}
-
 void GUI::updateStatusBarInfo()
 {
 	if (_files.count() == 0)
@@ -1334,13 +1328,13 @@ void GUI::updateGraphTabs()
 
 	for (int i = 0; i < _tabs.size(); i++) {
 		tab = _tabs.at(i);
-		if (!tab->count() && (index = _graphTabWidget->indexOf(tab)) >= 0)
+		if (tab->isEmpty() && (index = _graphTabWidget->indexOf(tab)) >= 0)
 			_graphTabWidget->removeTab(index);
 	}
 
 	for (int i = 0; i < _tabs.size(); i++) {
 		tab = _tabs.at(i);
-		if (tab->count() && _graphTabWidget->indexOf(tab) < 0)
+		if (!tab->isEmpty() && _graphTabWidget->indexOf(tab) < 0)
 			_graphTabWidget->insertTab(i, tab, _tabs.at(i)->label());
 	}
 

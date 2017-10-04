@@ -1,8 +1,8 @@
 #include "tooltip.h"
 #include "powergraphitem.h"
 
-PowerGraphItem::PowerGraphItem(const Graph &graph, QGraphicsItem *parent)
-  : GraphItem(graph, parent)
+PowerGraphItem::PowerGraphItem(const Graph &graph, GraphType type,
+  QGraphicsItem *parent) : GraphItem(graph, type, parent)
 {
 	qreal sum = 0;
 

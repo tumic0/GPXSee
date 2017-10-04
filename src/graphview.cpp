@@ -145,6 +145,8 @@ void GraphView::setUnits(Units units)
 		_graphs.at(i)->setUnits(units);
 
 	setXUnits();
+
+	redraw();
 }
 
 void GraphView::setGraphType(GraphType type)
@@ -180,7 +182,6 @@ void GraphView::showSliderInfo(bool show)
 void GraphView::addGraph(GraphItem *graph, PathItem *path, int id)
 {
 	graph->setUnits(_units);
-	graph->setGraphType(_graphType);
 	graph->setId(id);
 	graph->setColor(_palette.nextColor());
 	graph->setWidth(_width);
@@ -235,16 +236,16 @@ void GraphView::showGraph(bool show, int id)
 	}
 }
 
-void GraphView::redraw()
-{
-	redraw(viewport()->size() - QSizeF(MARGIN, MARGIN));
-}
-
 QRectF GraphView::bounds() const
 {
 	QRectF br(_bounds);
 	br.moveTopLeft(QPointF(br.left(), -br.top() - br.height()));
 	return br;
+}
+
+void GraphView::redraw()
+{
+	redraw(viewport()->size() - QSizeF(MARGIN, MARGIN));
 }
 
 void GraphView::redraw(const QSizeF &size)
@@ -467,6 +468,8 @@ void GraphView::setGraphWidth(int width)
 
 	for (int i = 0; i < _graphs.count(); i++)
 		_graphs.at(i)->setWidth(width);
+
+	redraw();
 }
 
 void GraphView::useOpenGL(bool use)

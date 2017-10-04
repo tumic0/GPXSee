@@ -20,7 +20,7 @@ private:
 	qreal avg() const;
 	qreal min() const {return bounds().top();}
 	qreal max() const {return bounds().bottom();}
-	void setYUnits();
+	void setYUnits(Units units);
 	void setInfo();
 
 	QList<QPointF> _avg;

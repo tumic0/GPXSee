@@ -1,8 +1,8 @@
 #include "tooltip.h"
 #include "cadencegraphitem.h"
 
-CadenceGraphItem::CadenceGraphItem(const Graph &graph, QGraphicsItem *parent)
-  : GraphItem(graph, parent)
+CadenceGraphItem::CadenceGraphItem(const Graph &graph, GraphType type,
+  QGraphicsItem *parent) : GraphItem(graph, type, parent)
 {
 	qreal sum = 0;
 

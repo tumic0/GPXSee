@@ -21,7 +21,7 @@ public:
 private:
 	qreal avg() const;
 	qreal max() const {return bounds().bottom();}
-	void setYUnits();
+	void setYUnits(Units units);
 	void setInfo();
 
 	QList<QPointF> _avg;

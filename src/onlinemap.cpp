@@ -56,11 +56,19 @@ OnlineMap::OnlineMap(const QString &name, const QString &url,
 	_zooms = zooms;
 	_zoom = zooms.max();
 
-	connect(downloader, SIGNAL(finished()), this, SLOT(emitLoaded()));
-
 	QString path = TILES_DIR + QString("/") + name;
 	if (!QDir().mkpath(path))
 		qWarning("Error creating tiles dir: %s\n", qPrintable(path));
+}
+
+void OnlineMap::load()
+{
+	connect(downloader, SIGNAL(finished()), this, SLOT(emitLoaded()));
+}
+
+void OnlineMap::unload()
+{
+	disconnect(downloader, SIGNAL(finished()), this, SLOT(emitLoaded()));
 }
 
 void OnlineMap::fillTile(Tile &tile)

@@ -37,6 +37,9 @@ public:
 	static void setDownloader(Downloader *downloader)
 	  {OnlineMap::downloader = downloader;}
 
+	void load();
+	void unload();
+
 private slots:
 	void emitLoaded();
 

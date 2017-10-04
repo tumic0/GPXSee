@@ -44,7 +44,7 @@ ElevationGraph::ElevationGraph(QWidget *parent) : GraphTab(parent)
 	_showRoutes = true;
 	_showTracks = true;
 
-	setYUnits();
+	setYUnits(Metric);
 	setYLabel(tr("Elevation"));
 	setMinYRange(50.0);
 }
@@ -72,7 +72,7 @@ void ElevationGraph::loadGraph(const Graph &graph, Type type, PathItem *path)
 		return;
 	}
 
-	ElevationGraphItem *gi = new ElevationGraphItem(graph);
+	ElevationGraphItem *gi = new ElevationGraphItem(graph, _graphType);
 	GraphView::addGraph(gi, path, type);
 
 	if (type == Track) {
@@ -116,9 +116,9 @@ void ElevationGraph::clear()
 	GraphView::clear();
 }
 
-void ElevationGraph::setYUnits()
+void ElevationGraph::setYUnits(Units units)
 {
-	if (_units == Metric) {
+	if (units == Metric) {
 		GraphView::setYUnits(tr("m"));
 		setYScale(1);
 	} else {
@@ -127,14 +127,12 @@ void ElevationGraph::setYUnits()
 	}
 }
 
-void ElevationGraph::setUnits(enum Units units)
+void ElevationGraph::setUnits(Units units)
 {
-	GraphView::setUnits(units);
-
-	setYUnits();
+	setYUnits(units);
 	setInfo();
 
-	redraw();
+	GraphView::setUnits(units);
 }
 
 void ElevationGraph::showTracks(bool show)

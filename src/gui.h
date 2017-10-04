@@ -57,7 +57,6 @@ private slots:
 	void showTracks(bool show);
 	void showRoutes(bool show);
 	void loadMap();
-	void clearMapCache();
 	void nextMap();
 	void prevMap();
 	void openOptions();

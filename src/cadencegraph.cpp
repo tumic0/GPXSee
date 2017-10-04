@@ -34,7 +34,7 @@ void CadenceGraph::loadData(const Data &data, const QList<PathItem *> &paths)
 			continue;
 		}
 
-		CadenceGraphItem *gi = new CadenceGraphItem(graph);
+		CadenceGraphItem *gi = new CadenceGraphItem(graph, _graphType);
 		GraphView::addGraph(gi, paths.at(i));
 
 		_avg.append(QPointF(data.tracks().at(i)->distance(), gi->avg()));

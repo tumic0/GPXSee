@@ -66,8 +66,9 @@ void PathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 void PathItem::setMap(Map *map)
 {
-	_map = map;
 	prepareGeometryChange();
+
+	_map = map;
 
 	updatePainterPath(map);
 	updateShape();
@@ -77,12 +78,18 @@ void PathItem::setMap(Map *map)
 
 void PathItem::setColor(const QColor &color)
 {
+	if (_pen.color() == color)
+		return;
+
 	_pen.setColor(color);
 	update();
 }
 
 void PathItem::setWidth(qreal width)
 {
+	if (_width == width)
+		return;
+
 	prepareGeometryChange();
 
 	_width = width;
@@ -93,12 +100,18 @@ void PathItem::setWidth(qreal width)
 
 void PathItem::setStyle(Qt::PenStyle style)
 {
+	if (_pen.style() == style)
+		return;
+
 	_pen.setStyle(style);
 	update();
 }
 
 void PathItem::setDigitalZoom(int zoom)
 {
+	if (_digitalZoom == zoom)
+		return;
+
 	prepareGeometryChange();
 
 	_digitalZoom = zoom;

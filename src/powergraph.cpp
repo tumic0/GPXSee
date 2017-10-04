@@ -34,7 +34,7 @@ void PowerGraph::loadData(const Data &data, const QList<PathItem *> &paths)
 			continue;
 		}
 
-		PowerGraphItem *gi = new PowerGraphItem(graph);
+		PowerGraphItem *gi = new PowerGraphItem(graph, _graphType);
 		GraphView::addGraph(gi, paths.at(i));
 
 		_avg.append(QPointF(data.tracks().at(i)->distance(), gi->avg()));

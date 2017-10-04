@@ -58,8 +58,6 @@ public:
 	void useAntiAliasing(bool use);
 
 public slots:
-	void redraw();
-
 	void showMap(bool show);
 	void showPOI(bool show);
 	void setPOIOverlap(bool overlap);
@@ -69,9 +67,11 @@ public slots:
 	void showRoutes(bool show);
 	void showWaypoints(bool show);
 	void showRouteWaypoints(bool show);
+	void clearMapCache();
 
 private slots:
 	void updatePOI();
+	void reloadMap();
 
 private:
 	PathItem *addTrack(const Track &track);

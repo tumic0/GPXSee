@@ -10,7 +10,7 @@ SpeedGraph::SpeedGraph(QWidget *parent) : GraphTab(parent)
 	_timeType = Total;
 	_showTracks = true;
 
-	setYUnits();
+	setYUnits(Metric);
 	setYLabel(tr("Speed"));
 
 	setSliderPrecision(1);
@@ -38,7 +38,8 @@ void SpeedGraph::loadData(const Data &data, const QList<PathItem *> &paths)
 			continue;
 		}
 
-		SpeedGraphItem *gi = new SpeedGraphItem(graph, track->movingTime());
+		SpeedGraphItem *gi = new SpeedGraphItem(graph, _graphType,
+		  track->movingTime());
 		gi->setTimeType(_timeType);
 		GraphView::addGraph(gi, paths.at(i));
 
@@ -76,9 +77,9 @@ void SpeedGraph::clear()
 	GraphView::clear();
 }
 
-void SpeedGraph::setYUnits()
+void SpeedGraph::setYUnits(Units units)
 {
-	if (_units == Metric) {
+	if (units == Metric) {
 		GraphView::setYUnits(tr("km/h"));
 		setYScale(MS2KMH);
 	} else {
@@ -87,14 +88,12 @@ void SpeedGraph::setYUnits()
 	}
 }
 
-void SpeedGraph::setUnits(enum Units units)
+void SpeedGraph::setUnits(Units units)
 {
-	GraphView::setUnits(units);
-
-	setYUnits();
+	setYUnits(units);
 	setInfo();
 
-	redraw();
+	GraphView::setUnits(units);
 }
 
 void SpeedGraph::setTimeType(enum TimeType type)

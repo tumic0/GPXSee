@@ -7,7 +7,7 @@ TemperatureGraph::TemperatureGraph(QWidget *parent) : GraphTab(parent)
 {
 	_showTracks = true;
 
-	setYUnits();
+	setYUnits(Metric);
 	setYLabel(tr("Temperature"));
 
 	setSliderPrecision(1);
@@ -36,7 +36,7 @@ void TemperatureGraph::loadData(const Data &data, const QList<PathItem *> &paths
 			continue;
 		}
 
-		TemperatureGraphItem *gi = new TemperatureGraphItem(graph);
+		TemperatureGraphItem *gi = new TemperatureGraphItem(graph, _graphType);
 		GraphView::addGraph(gi, paths.at(i));
 
 		_avg.append(QPointF(data.tracks().at(i)->distance(), gi->avg()));
@@ -70,9 +70,9 @@ void TemperatureGraph::clear()
 	GraphView::clear();
 }
 
-void TemperatureGraph::setYUnits()
+void TemperatureGraph::setYUnits(Units units)
 {
-	if (_units == Metric) {
+	if (units == Metric) {
 		GraphView::setYUnits(QChar(0x00B0) + tr("C"));
 		setYScale(1);
 		setYOffset(0);
@@ -83,14 +83,12 @@ void TemperatureGraph::setYUnits()
 	}
 }
 
-void TemperatureGraph::setUnits(enum Units units)
+void TemperatureGraph::setUnits(Units units)
 {
-	GraphView::setUnits(units);
-
-	setYUnits();
+	setYUnits(units);
 	setInfo();
 
-	redraw();
+	GraphView::setUnits(units);
 }
 
 void TemperatureGraph::showTracks(bool show)

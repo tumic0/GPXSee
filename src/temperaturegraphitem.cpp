@@ -1,8 +1,8 @@
 #include "tooltip.h"
 #include "temperaturegraphitem.h"
 
-TemperatureGraphItem::TemperatureGraphItem(const Graph &graph,
-  QGraphicsItem *parent) : GraphItem(graph, parent)
+TemperatureGraphItem::TemperatureGraphItem(const Graph &graph, GraphType type,
+  QGraphicsItem *parent) : GraphItem(graph, type, parent)
 {
 	qreal sum = 0;
 

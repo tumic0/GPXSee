@@ -34,7 +34,7 @@ void HeartRateGraph::loadData(const Data &data, const QList<PathItem *> &paths)
 			continue;
 		}
 
-		HeartRateGraphItem *gi = new HeartRateGraphItem(graph);
+		HeartRateGraphItem *gi = new HeartRateGraphItem(graph, _graphType);
 		GraphView::addGraph(gi, paths.at(i));
 
 		_avg.append(QPointF(data.tracks().at(i)->distance(), gi->avg()));

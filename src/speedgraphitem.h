@@ -9,7 +9,7 @@ class SpeedGraphItem : public GraphItem
 	Q_OBJECT
 
 public:
-	SpeedGraphItem(const Graph &graph, qreal movingTime,
+	SpeedGraphItem(const Graph &graph, GraphType type, qreal movingTime,
 	  QGraphicsItem *parent = 0);
 
 	qreal max() const {return -bounds().top();}

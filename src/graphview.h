@@ -25,19 +25,29 @@ public:
 	GraphView(QWidget *parent = 0);
 	~GraphView();
 
-	void addGraph(GraphItem *graph, PathItem *path, int id = 0);
-	int count() const {return _graphs.count();}
-	void redraw();
+	bool isEmpty() const {return _graphs.isEmpty();}
 	void clear();
+
+	void plot(QPainter *painter, const QRectF &target, qreal scale);
+
+	void setPalette(const Palette &palette);
+	void setGraphWidth(int width);
+	void showGrid(bool show);
+	void showSliderInfo(bool show);
+	void useOpenGL(bool use);
+	void useAntiAliasing(bool use);
+
+	void setSliderPosition(qreal pos);
+
+signals:
+	void sliderPositionChanged(qreal);
+
+protected:
+	void addGraph(GraphItem *graph, PathItem *path, int id = 0);
 
 	void showGraph(bool show, int id = 0);
 	void setGraphType(GraphType type);
 	void setUnits(Units units);
-	void showGrid(bool show);
-	void showSliderInfo(bool show);
-
-	void setPalette(const Palette &palette);
-	void setGraphWidth(int width);
 
 	const QString &yLabel() const {return _yLabel;}
 	const QString &yUnits() const {return _yUnits;}
@@ -51,26 +61,14 @@ public:
 	void setSliderPrecision(int precision) {_precision = precision;}
 	void setMinYRange(qreal range) {_minYRange = range;}
 
-	qreal sliderPosition() const {return _sliderPos;}
-	void setSliderPosition(qreal pos);
-
-	void plot(QPainter *painter, const QRectF &target, qreal scale);
-
-	void useOpenGL(bool use);
-	void useAntiAliasing(bool use);
-
-signals:
-	void sliderPositionChanged(qreal);
-
-protected:
 	QRectF bounds() const;
+	void redraw();
 	void redraw(const QSizeF &size);
 	void addInfo(const QString &key, const QString &value);
 	void clearInfo();
 	void skipColor() {_palette.nextColor();}
 
 	QList<GraphItem*> _graphs;
-	Units _units;
 	GraphType _graphType;
 
 private slots:
@@ -89,6 +87,7 @@ private:
 	void resizeEvent(QResizeEvent *);
 	void mousePressEvent(QMouseEvent *);
 
+	Units _units;
 	qreal _xScale, _yScale;
 	qreal _yOffset;
 	QString _xUnits, _yUnits;

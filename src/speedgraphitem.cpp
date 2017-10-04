@@ -1,8 +1,8 @@
 #include "tooltip.h"
 #include "speedgraphitem.h"
 
-SpeedGraphItem::SpeedGraphItem(const Graph &graph, qreal movingTime,
-  QGraphicsItem *parent) : GraphItem(graph, parent)
+SpeedGraphItem::SpeedGraphItem(const Graph &graph, GraphType type,
+  qreal movingTime, QGraphicsItem *parent) : GraphItem(graph, type, parent)
 {
 	_units = Metric;
 	_timeType = Total;

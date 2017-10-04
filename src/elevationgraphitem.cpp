@@ -1,8 +1,8 @@
 #include "tooltip.h"
 #include "elevationgraphitem.h"
 
-ElevationGraphItem::ElevationGraphItem(const Graph &graph, QGraphicsItem *parent)
-  : GraphItem(graph, parent)
+ElevationGraphItem::ElevationGraphItem(const Graph &graph, GraphType type,
+  QGraphicsItem *parent) : GraphItem(graph, type, parent)
 {
 	_ascent = _descent = 0;
 

@@ -1,8 +1,8 @@
 #include "tooltip.h"
 #include "heartrategraphitem.h"
 
-HeartRateGraphItem::HeartRateGraphItem(const Graph &graph, QGraphicsItem *parent)
-  : GraphItem(graph, parent)
+HeartRateGraphItem::HeartRateGraphItem(const Graph &graph, GraphType type,
+  QGraphicsItem *parent) : GraphItem(graph, type, parent)
 {
 	qreal sum = 0;
 

@@ -44,7 +44,7 @@ PathView::PathView(Map *map, POI *poi, QWidget *parent)
 
 	_map = map;
 	_poi = poi;
-	connect(_map, SIGNAL(loaded()), this, SLOT(redraw()));
+	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 	connect(_poi, SIGNAL(pointsChanged()), this, SLOT(updatePOI()));
 
 	_units = Metric;
@@ -269,11 +269,11 @@ void PathView::setMap(Map *map)
 	qreal resolution = _map->resolution(pos);
 
 	_map->unload();
-	disconnect(_map, SIGNAL(loaded()), this, SLOT(redraw()));
+	disconnect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
 	_map = map;
 	_map->load();
-	connect(_map, SIGNAL(loaded()), this, SLOT(redraw()));
+	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
 	resetDigitalZoom();
 
@@ -366,8 +366,9 @@ void PathView::setUnits(enum Units units)
 		it.value()->setUnits(units);
 }
 
-void PathView::redraw()
+void PathView::clearMapCache()
 {
+	_map->clearCache();
 	resetCachedContent();
 }
 
@@ -794,4 +795,9 @@ void PathView::useOpenGL(bool use)
 void PathView::useAntiAliasing(bool use)
 {
 	setRenderHint(QPainter::Antialiasing, use);
+}
+
+void PathView::reloadMap()
+{
+	resetCachedContent();
 }

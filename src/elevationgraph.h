@@ -25,7 +25,7 @@ private:
 	qreal ascent() const;
 	qreal descent() const;
 
-	void setYUnits();
+	void setYUnits(Units units);
 	void setInfo();
 
 	void loadGraph(const Graph &graph, Type type, PathItem *path);

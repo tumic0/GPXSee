@@ -2,7 +2,7 @@
 #include "graphitem.h"
 
 
-GraphItem::GraphItem(const Graph &graph, QGraphicsItem *parent)
+GraphItem::GraphItem(const Graph &graph, GraphType type, QGraphicsItem *parent)
   : QGraphicsObject(parent)
 {
 	_id = 0;
@@ -10,7 +10,7 @@ GraphItem::GraphItem(const Graph &graph, QGraphicsItem *parent)
 
 	_pen = QPen(Qt::black, _width);
 
-	_type = Distance;
+	_type = type;
 	_graph = graph;
 	_sx = 1.0; _sy = 1.0;
 
@@ -56,6 +56,9 @@ void GraphItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 void GraphItem::setGraphType(GraphType type)
 {
+	if (type == _type)
+		return;
+
 	prepareGeometryChange();
 
 	_type = type;
@@ -66,12 +69,18 @@ void GraphItem::setGraphType(GraphType type)
 
 void GraphItem::setColor(const QColor &color)
 {
+	if (_pen.color() == color)
+		return;
+
 	_pen.setColor(color);
 	update();
 }
 
 void GraphItem::setWidth(int width)
 {
+	if (width == _width)
+		return;
+
 	prepareGeometryChange();
 
 	_width = width;
