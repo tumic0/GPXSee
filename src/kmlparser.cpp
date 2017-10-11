@@ -251,6 +251,16 @@ void KMLParser::track(TrackData &track)
 		_reader.raiseError(mismatchError);
 }
 
+void KMLParser::multiTrack(TrackData &t)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "Track")
+			track(t);
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
 void KMLParser::multiGeometry(QList<TrackData> &tracks,
   QList<Waypoint> &waypoints, const QString &name, const QString &desc,
   const QDateTime timestamp)
@@ -308,6 +318,12 @@ void KMLParser::placemark(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 			t.setName(name);
 			t.setDescription(desc);
 			track(t);
+		} else if (_reader.name() == "MultiTrack") {
+			tracks.append(TrackData());
+			TrackData &t = tracks.last();
+			t.setName(name);
+			t.setDescription(desc);
+			multiTrack(t);
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -344,6 +360,8 @@ void KMLParser::kml(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 			document(tracks, waypoints);
 		else if (_reader.name() == "Placemark")
 			placemark(tracks, waypoints);
+		else if (_reader.name() == "Folder")
+			folder(tracks, waypoints);
 		else
 			_reader.skipCurrentElement();
 	}

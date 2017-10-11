@@ -23,6 +23,7 @@ private:
 	void multiGeometry(QList<TrackData> &tracks, QList<Waypoint> &waypoints,
 	  const QString &name, const QString &desc, const QDateTime timestamp);
 	void track(TrackData &track);
+	void multiTrack(TrackData &t);
 	void lineString(TrackData &track);
 	void point(Waypoint &waypoint);
 	bool pointCoordinates(Waypoint &waypoint);
