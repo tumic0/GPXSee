@@ -187,7 +187,7 @@ void GUI::loadMaps()
 		}
 	}
 
-	_map = _ml->maps().isEmpty() ? new EmptyMap(this) : _ml->maps().first();
+	_map = new EmptyMap(this);
 }
 
 void GUI::loadPOIs()
@@ -1711,9 +1711,7 @@ void GUI::readSettings()
 		_showMapAction->setChecked(true);
 	if (_ml->maps().count()) {
 		int index = mapIndex(settings.value(CURRENT_MAP_SETTING).toString());
-		_mapActions.at(index)->setChecked(true);
-		_map = _ml->maps().at(index);
-		_pathView->setMap(_map);
+		_mapActions.at(index)->trigger();
 	}
 	settings.endGroup();
 

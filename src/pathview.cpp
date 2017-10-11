@@ -43,8 +43,10 @@ PathView::PathView(Map *map, POI *poi, QWidget *parent)
 	_scene->addItem(_mapScale);
 
 	_map = map;
-	_poi = poi;
+	_map->load();
 	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
+
+	_poi = poi;
 	connect(_poi, SIGNAL(pointsChanged()), this, SLOT(updatePOI()));
 
 	_units = Metric;
