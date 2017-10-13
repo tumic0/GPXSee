@@ -35,7 +35,6 @@ private:
 	void cadence(TrackData &track, int start);
 	void speed(TrackData &track, int start);
 	void temperature(TrackData &track, int start);
-	qreal value();
 	QDateTime timeStamp();
 	qreal number();
 	QDateTime time();

@@ -225,17 +225,6 @@ void KMLParser::point(Waypoint &waypoint)
 		_reader.raiseError("Missing Point coordinates");
 }
 
-qreal KMLParser::value()
-{
-	bool res;
-	qreal val = _reader.readElementText().toDouble(&res);
-
-	if (!res)
-		_reader.raiseError("Invalid value");
-
-	return val;
-}
-
 void KMLParser::heartRate(TrackData &track, int start)
 {
 	int i = start;
@@ -244,7 +233,7 @@ void KMLParser::heartRate(TrackData &track, int start)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "value") {
 			if (i < track.size())
-				track[i++].setCadence(value());
+				track[i++].setHeartRate(number());
 			else {
 				_reader.raiseError(error);
 				return;
@@ -265,7 +254,7 @@ void KMLParser::cadence(TrackData &track, int start)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "value") {
 			if (i < track.size())
-				track[i++].setCadence(value());
+				track[i++].setCadence(number());
 			else {
 				_reader.raiseError(error);
 				return;
@@ -286,7 +275,7 @@ void KMLParser::speed(TrackData &track, int start)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "value") {
 			if (i < track.size())
-				track[i++].setSpeed(value());
+				track[i++].setSpeed(number());
 			else {
 				_reader.raiseError(error);
 				return;
@@ -307,7 +296,7 @@ void KMLParser::temperature(TrackData &track, int start)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "value") {
 			if (i < track.size())
-				track[i++].setTemperature(value());
+				track[i++].setTemperature(number());
 			else {
 				_reader.raiseError(error);
 				return;
