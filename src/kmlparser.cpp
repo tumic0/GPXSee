@@ -225,10 +225,138 @@ void KMLParser::point(Waypoint &waypoint)
 		_reader.raiseError("Missing Point coordinates");
 }
 
+qreal KMLParser::value()
+{
+	bool res;
+	qreal val = _reader.readElementText().toDouble(&res);
+
+	if (!res)
+		_reader.raiseError("Invalid value");
+
+	return val;
+}
+
+void KMLParser::heartRate(TrackData &track, int start)
+{
+	int i = start;
+	const char error[] = "Heartrate data count mismatch";
+
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "value") {
+			if (i < track.size())
+				track[i++].setCadence(value());
+			else {
+				_reader.raiseError(error);
+				return;
+			}
+		} else
+			_reader.skipCurrentElement();
+	}
+
+	if (i != track.size())
+		_reader.raiseError(error);
+}
+
+void KMLParser::cadence(TrackData &track, int start)
+{
+	int i = start;
+	const char error[] = "Cadence data count mismatch";
+
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "value") {
+			if (i < track.size())
+				track[i++].setCadence(value());
+			else {
+				_reader.raiseError(error);
+				return;
+			}
+		} else
+			_reader.skipCurrentElement();
+	}
+
+	if (i != track.size())
+		_reader.raiseError(error);
+}
+
+void KMLParser::speed(TrackData &track, int start)
+{
+	int i = start;
+	const char error[] = "Speed data count mismatch";
+
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "value") {
+			if (i < track.size())
+				track[i++].setSpeed(value());
+			else {
+				_reader.raiseError(error);
+				return;
+			}
+		} else
+			_reader.skipCurrentElement();
+	}
+
+	if (i != track.size())
+		_reader.raiseError(error);
+}
+
+void KMLParser::temperature(TrackData &track, int start)
+{
+	int i = start;
+	const char error[] = "Temperature data count mismatch";
+
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "value") {
+			if (i < track.size())
+				track[i++].setTemperature(value());
+			else {
+				_reader.raiseError(error);
+				return;
+			}
+		} else
+			_reader.skipCurrentElement();
+	}
+
+	if (i != track.size())
+		_reader.raiseError(error);
+}
+
+void KMLParser::schemaData(TrackData &track, int start)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "SimpleArrayData") {
+			QXmlStreamAttributes attr = _reader.attributes();
+			QStringRef name = attr.value("name");
+
+			if (name == "Heartrate")
+				heartRate(track, start);
+			else if (name == "Cadence")
+				cadence(track, start);
+			else if (name == "Speed")
+				speed(track, start);
+			else if (name == "Temperature")
+				temperature(track, start);
+			else
+				_reader.skipCurrentElement();
+		} else
+			_reader.skipCurrentElement();
+	}
+}
+
+void KMLParser::extendedData(TrackData &track, int start)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "SchemaData")
+			schemaData(track, start);
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
 void KMLParser::track(TrackData &track)
 {
-	const char mismatchError[] = "gx:coord/when element count mismatch";
-	int i = track.size();
+	const char error[] = "gx:coord/when element count mismatch";
+	int first = track.size();
+	int i = first;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "when") {
@@ -236,19 +364,21 @@ void KMLParser::track(TrackData &track)
 			track.last().setTimestamp(time());
 		} else if (_reader.name() == "coord") {
 			if (i == track.size()) {
-				_reader.raiseError(mismatchError);
+				_reader.raiseError(error);
 				return;
 			} else if (!coord(track[i])) {
 				_reader.raiseError("Invalid coordinates");
 				return;
 			}
 			i++;
-		} else
+		} else if (_reader.name() == "ExtendedData")
+			extendedData(track, first);
+		else
 			_reader.skipCurrentElement();
 	}
 
 	if (i != track.size())
-		_reader.raiseError(mismatchError);
+		_reader.raiseError(error);
 }
 
 void KMLParser::multiTrack(TrackData &t)

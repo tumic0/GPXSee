@@ -29,6 +29,13 @@ private:
 	bool pointCoordinates(Waypoint &waypoint);
 	bool lineCoordinates(TrackData &track);
 	bool coord(Trackpoint &trackpoint);
+	void extendedData(TrackData &track, int start);
+	void schemaData(TrackData &track, int start);
+	void heartRate(TrackData &track, int start);
+	void cadence(TrackData &track, int start);
+	void speed(TrackData &track, int start);
+	void temperature(TrackData &track, int start);
+	qreal value();
 	QDateTime timeStamp();
 	qreal number();
 	QDateTime time();
