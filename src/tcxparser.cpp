@@ -183,13 +183,36 @@ void TCXParser::courses(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 	}
 }
 
-void TCXParser::activities(QList<TrackData> &tracks)
+void TCXParser::sport(QList<TrackData> &tracks)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "Activity") {
 			tracks.append(TrackData());
 			activity(tracks.back());
 		} else
+			_reader.skipCurrentElement();
+	}
+}
+
+void TCXParser::multiSportSession(QList<TrackData> &tracks)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "FirstSport" || _reader.name() == "NextSport")
+			sport(tracks);
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
+void TCXParser::activities(QList<TrackData> &tracks)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "Activity") {
+			tracks.append(TrackData());
+			activity(tracks.back());
+		} else if (_reader.name() == "MultiSportSession")
+			multiSportSession(tracks);
+		else
 			_reader.skipCurrentElement();
 	}
 }

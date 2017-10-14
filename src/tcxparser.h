@@ -19,6 +19,8 @@ private:
 	void tcx(QList<TrackData> &tracks, QList<Waypoint> &waypoints);
 	void courses(QList<TrackData> &tracks, QList<Waypoint> &waypoints);
 	void activities(QList<TrackData> &tracks);
+	void multiSportSession(QList<TrackData> &tracks);
+	void sport(QList<TrackData> &tracks);
 	void course(QList<Waypoint> &waypoints, TrackData &track);
 	void activity(TrackData &track);
 	void lap(TrackData &track);
