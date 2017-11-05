@@ -1,3 +1,4 @@
+#include <QBrush>
 #include "routeitemsmodel.h"
 #include "format.h"
 
@@ -38,6 +39,27 @@ QVariant RouteItemsModel::data(const QModelIndex &index, int role) const
 			// TODO: Use global preferences for units
 			return Format::distance(r->distance(), Units::Metric);
 		}
+	} else if(role == Qt::BackgroundRole) {
+		if (index.row()%2 == 0) {
+			QBrush greyBrush(Qt::lightGray);
+			return greyBrush;
+		}
 	}
+
+	return QVariant();
+}
+
+QVariant RouteItemsModel::headerData(int section, Qt::Orientation orientation, int role) const {
+	if (role == Qt::DisplayRole) {
+		if (orientation == Qt::Horizontal) {
+			switch (section) {
+			case ROUTE_NAME:
+				return tr("Name");
+			case ROUTE_DISTANCE:
+				return tr("Distance");
+			}
+		}
+	}
+
 	return QVariant();
 }

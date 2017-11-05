@@ -1,3 +1,4 @@
+#include <QBrush>
 #include "trackitemsmodel.h"
 #include "format.h"
 
@@ -33,6 +34,26 @@ QVariant TrackItemsModel::data(const QModelIndex &index, int role) const {
 			// TODO: Use global preferences for units
 			return Format::distance(t->distance(), Units::Metric);
 		}
+	} else if(role == Qt::BackgroundRole) {
+		if (index.row()%2 == 0) {
+			QBrush greyBrush(Qt::lightGray);
+			return greyBrush;
+		}
 	}
+	return QVariant();
+}
+
+QVariant TrackItemsModel::headerData(int section, Qt::Orientation orientation, int role) const {
+	if (role == Qt::DisplayRole) {
+		if (orientation == Qt::Horizontal) {
+			switch (section) {
+			case TRACK_NAME:
+				return tr("Name");
+			case TRACK_DISTANCE:
+				return tr("Distance");
+			}
+		}
+	}
+
 	return QVariant();
 }

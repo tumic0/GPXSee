@@ -1,3 +1,4 @@
+#include <QBrush>
 #include "waypointitemsmodel.h"
 
 void WaypointItemsModel::append(const Waypoint &w)
@@ -41,6 +42,24 @@ QVariant WaypointItemsModel::data(const QModelIndex &index, int role) const
 		case WAYPOINT_NAME:
 			return w.name();
 		}
+	} else if(role == Qt::BackgroundRole) {
+		if (index.row()%2 == 0) {
+			QBrush greyBrush(Qt::lightGray);
+			return greyBrush;
+		}
 	}
+	return QVariant();
+}
+
+QVariant WaypointItemsModel::headerData(int section, Qt::Orientation orientation, int role) const {
+	if (role == Qt::DisplayRole) {
+		if (orientation == Qt::Horizontal) {
+			switch (section) {
+			case WAYPOINT_NAME:
+				return tr("Name");
+			}
+		}
+	}
+
 	return QVariant();
 }
