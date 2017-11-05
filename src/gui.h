@@ -44,6 +44,7 @@ private slots:
 	void dataSources();
 	void printFile();
 	void exportFile();
+    void exportImageFile();
 	void openFile();
 	void closeAll();
 	void reloadFile();
@@ -101,8 +102,8 @@ private:
 
 	bool openPOIFile(const QString &fileName);
 	bool loadFile(const QString &fileName);
-	void exportFile(const QString &fileName);
-	void updateStatusBarInfo();
+    void exportFile(const QString &fileName);
+    void updateStatusBarInfo();
 	void updateWindowTitle();
 	void updateNavigationActions();
 	void updateGraphTabs();
@@ -142,6 +143,7 @@ private:
 	QAction *_aboutQtAction;
 	QAction *_printFileAction;
 	QAction *_exportFileAction;
+    QAction *_exportImageFileAction;
 	QAction *_openFileAction;
 	QAction *_closeFileAction;
 	QAction *_reloadFileAction;

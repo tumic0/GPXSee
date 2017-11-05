@@ -22,6 +22,7 @@
 #include <QMimeData>
 #include <QUrl>
 #include <QPixmapCache>
+#include <QImageWriter>
 #include "config.h"
 #include "icons.h"
 #include "keys.h"
@@ -312,6 +313,12 @@ void GUI::createActions()
 	_exportFileAction->setActionGroup(_fileActionGroup);
 	connect(_exportFileAction, SIGNAL(triggered()), this, SLOT(exportFile()));
 	addAction(_exportFileAction);
+
+    _exportImageFileAction = new QAction(tr("Export as Image..."), this);
+    _exportImageFileAction->setActionGroup(_fileActionGroup);
+    connect(_exportImageFileAction, SIGNAL(triggered()), this, SLOT(exportImageFile()));
+    addAction(_exportImageFileAction);
+
 	_closeFileAction = new QAction(QIcon(QPixmap(CLOSE_FILE_ICON)),
 	  tr("Close"), this);
 	_closeFileAction->setShortcut(CLOSE_SHORTCUT);
@@ -494,8 +501,9 @@ void GUI::createMenus()
 	fileMenu->addAction(_openFileAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(_printFileAction);
-	fileMenu->addAction(_exportFileAction);
-	fileMenu->addSeparator();
+    fileMenu->addAction(_exportFileAction);
+    fileMenu->addAction(_exportImageFileAction);
+    fileMenu->addSeparator();
 	fileMenu->addAction(_reloadFileAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(_closeFileAction);
@@ -815,7 +823,7 @@ bool GUI::loadFile(const QString &fileName)
 			error.append("\n" + tr("Line: %1").arg(data.errorLine()));
 		QMessageBox::critical(this, APP_NAME, error);
 		return false;
-	}
+    }
 }
 
 void GUI::openPOIFile()
@@ -951,6 +959,36 @@ void GUI::exportFile()
 	  _export.margins.right(), _export.margins.bottom(), QPrinter::Millimeter);
 
 	plot(&printer);
+}
+
+void GUI::exportImageFile()
+{
+    // TODO: As ExportDialog, choose resolution and format
+    QString filter = tr("Images") + "(";
+    QList<QByteArray> supportedFormats = QImageWriter::supportedImageFormats();
+    foreach(const QByteArray& b, supportedFormats) {
+        filter += "*." + b.toLower() + " ";
+    }
+    filter += ")";
+
+    QString exportFileName = QFileDialog::getSaveFileName(this, tr("Save map as"), QString(), filter);
+    if (!exportFileName.isEmpty()) {
+        bool haveExtension = false;
+        foreach(const QByteArray& b, supportedFormats) {
+            haveExtension = haveExtension || exportFileName.endsWith(b.toUpper()) || exportFileName.endsWith(b.toLower());
+        }
+        if (!haveExtension) {
+            exportFileName += ".png";
+        }
+
+        QImage img(_pathView->width(), _pathView->height(), QImage::Format_RGB32);
+        QPainter p;
+        p.begin(&img);
+        _pathView->plot(&p, QRectF(0, 0, img.width(), img.height()),
+                        1, _options.hiresPrint);
+        p.end();
+        img.save(exportFileName);
+    }
 }
 
 void GUI::plot(QPrinter *printer)
