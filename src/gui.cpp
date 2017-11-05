@@ -307,10 +307,10 @@ void GUI::createActions()
 	connect(_exportFileAction, SIGNAL(triggered()), this, SLOT(exportFile()));
 	addAction(_exportFileAction);
 
-    _exportImageFileAction = new QAction(tr("Export as Image..."), this);
-    _exportImageFileAction->setActionGroup(_fileActionGroup);
-    connect(_exportImageFileAction, SIGNAL(triggered()), this, SLOT(exportImageFile()));
-    addAction(_exportImageFileAction);
+	_exportImageFileAction = new QAction(tr("Export as Image..."), this);
+	_exportImageFileAction->setActionGroup(_fileActionGroup);
+	connect(_exportImageFileAction, SIGNAL(triggered()), this, SLOT(exportImageFile()));
+	addAction(_exportImageFileAction);
 
 	_closeFileAction = new QAction(QIcon(QPixmap(CLOSE_FILE_ICON)),
 	  tr("Close"), this);
@@ -494,9 +494,9 @@ void GUI::createMenus()
 	fileMenu->addAction(_openFileAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(_printFileAction);
-    fileMenu->addAction(_exportFileAction);
-    fileMenu->addAction(_exportImageFileAction);
-    fileMenu->addSeparator();
+	fileMenu->addAction(_exportFileAction);
+	fileMenu->addAction(_exportImageFileAction);
+	fileMenu->addSeparator();
 	fileMenu->addAction(_reloadFileAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(_closeFileAction);
@@ -770,16 +770,16 @@ bool GUI::loadFile(const QString &fileName)
 {
 	QList<PathItem*> paths;
 
-    if (_data.loadFile(fileName)) {
-        paths = _pathView->loadData(_data);
+	if (_data.loadFile(fileName)) {
+		paths = _pathView->loadData(_data);
 		for (int i = 0; i < _tabs.count(); i++)
-            _tabs.at(i)->loadData(_data, paths);
+			_tabs.at(i)->loadData(_data, paths);
 
 		if (_pathName.isNull()) {
-            if (_data.tracks().count() == 1 && !_data.routes().count())
-                _pathName = _data.tracks().first()->name();
-            else if (_data.routes().count() == 1 && !_data.tracks().count())
-                _pathName = _data.routes().first()->name();
+			if (_data.tracks().count() == 1 && !_data.routes().count())
+				_pathName = _data.tracks().first()->name();
+			else if (_data.routes().count() == 1 && !_data.tracks().count())
+				_pathName = _data.routes().first()->name();
 		} else
 			_pathName = QString();
 
@@ -792,12 +792,12 @@ bool GUI::loadFile(const QString &fileName)
 		updatePathView();
 
 		QString error = tr("Error loading data file:") + "\n\n"
-          + fileName + "\n\n" + _data.errorString();
-        if (_data.errorLine())
-            error.append("\n" + tr("Line: %1").arg(_data.errorLine()));
+		        + fileName + "\n\n" + _data.errorString();
+		if (_data.errorLine())
+			error.append("\n" + tr("Line: %1").arg(_data.errorLine()));
 		QMessageBox::critical(this, APP_NAME, error);
 		return false;
-    }
+	}
 }
 
 void GUI::openPOIFile()
@@ -937,32 +937,32 @@ void GUI::exportFile()
 
 void GUI::exportImageFile()
 {
-    // TODO: As ExportDialog, choose resolution and format
-    QString filter = tr("Images") + "(";
-    QList<QByteArray> supportedFormats = QImageWriter::supportedImageFormats();
-    foreach(const QByteArray& b, supportedFormats) {
-        filter += "*." + b.toLower() + " ";
-    }
-    filter += ")";
+	// TODO: As ExportDialog, choose resolution and format
+	QString filter = tr("Images") + "(";
+	QList<QByteArray> supportedFormats = QImageWriter::supportedImageFormats();
+	foreach(const QByteArray& b, supportedFormats) {
+		filter += "*." + b.toLower() + " ";
+	}
+	filter += ")";
 
-    QString exportFileName = QFileDialog::getSaveFileName(this, tr("Save map as"), QString(), filter);
-    if (!exportFileName.isEmpty()) {
-        bool haveExtension = false;
-        foreach(const QByteArray& b, supportedFormats) {
-            haveExtension = haveExtension || exportFileName.endsWith(b.toUpper()) || exportFileName.endsWith(b.toLower());
-        }
-        if (!haveExtension) {
-            exportFileName += ".png";
-        }
+	QString exportFileName = QFileDialog::getSaveFileName(this, tr("Save map as"), QString(), filter);
+	if (!exportFileName.isEmpty()) {
+		bool haveExtension = false;
+		foreach(const QByteArray& b, supportedFormats) {
+			haveExtension = haveExtension || exportFileName.endsWith(b.toUpper()) || exportFileName.endsWith(b.toLower());
+		}
+		if (!haveExtension) {
+			exportFileName += ".png";
+		}
 
-        QImage img(_pathView->width(), _pathView->height(), QImage::Format_RGB32);
-        QPainter p;
-        p.begin(&img);
-        _pathView->plot(&p, QRectF(0, 0, img.width(), img.height()),
-                        1, _options.hiresPrint);
-        p.end();
-        img.save(exportFileName);
-    }
+		QImage img(_pathView->width(), _pathView->height(), QImage::Format_RGB32);
+		QPainter p;
+		p.begin(&img);
+		_pathView->plot(&p, QRectF(0, 0, img.width(), img.height()),
+		                1, _options.hiresPrint);
+		p.end();
+		img.save(exportFileName);
+	}
 }
 
 void GUI::plot(QPrinter *printer)
@@ -978,24 +978,24 @@ void GUI::plot(QPrinter *printer)
 		info.insert(tr("Name"), _pathName);
 
 	if (_options.printItemCount) {
-        if (_data.tracks().count() > 1)
-            info.insert(tr("Tracks"), QString::number(_data.tracks().count()));
-        if (_data.routes().count() > 1)
-            info.insert(tr("Routes"), QString::number(_data.routes().count()));
-        if (_data.waypoints().count() > 2)
-            info.insert(tr("Waypoints"), QString::number(_data.waypoints().count()));
+		if (_data.tracks().count() > 1)
+			info.insert(tr("Tracks"), QString::number(_data.tracks().count()));
+		if (_data.routes().count() > 1)
+			info.insert(tr("Routes"), QString::number(_data.routes().count()));
+		if (_data.waypoints().count() > 2)
+			info.insert(tr("Waypoints"), QString::number(_data.waypoints().count()));
 	}
 
-    Data::DateRange dateRange = _data.getTracksDateRange();
-    if (dateRange.first.isValid() && _options.printDate) {
-        if (dateRange.first == dateRange.second) {
+	Data::DateRange dateRange = _data.getTracksDateRange();
+	if (dateRange.first.isValid() && _options.printDate) {
+		if (dateRange.first == dateRange.second) {
 			QString format = QLocale::system().dateFormat(QLocale::LongFormat);
-            info.insert(tr("Date"), dateRange.first.toString(format));
+			info.insert(tr("Date"), dateRange.first.toString(format));
 		} else {
 			QString format = QLocale::system().dateFormat(QLocale::ShortFormat);
 			info.insert(tr("Date"), QString("%1 - %2")
-              .arg(dateRange.first.toString(format),
-              dateRange.second.toString(format)));
+			            .arg(dateRange.first.toString(format),
+			                 dateRange.second.toString(format)));
 		}
 	}
 
@@ -1055,7 +1055,7 @@ void GUI::plot(QPrinter *printer)
 
 void GUI::reloadFile()
 {
-    _data.clear();
+	_data.clear();
 
 	_pathName = QString();
 
@@ -1084,7 +1084,7 @@ void GUI::reloadFile()
 
 void GUI::closeFiles()
 {
-    _data.clear();
+	_data.clear();
 	_pathName = QString();
 
 	_sliderPos = 0;
@@ -1945,19 +1945,19 @@ qreal GUI::distance() const
 	qreal dist = 0;
 
 	if (_showTracksAction->isChecked())
-        dist += _data.getTracksTotalDistrance();
+		dist += _data.getTracksTotalDistrance();
 	if (_showRoutesAction->isChecked())
-        dist += _data.getRoutesTotalDistrance();
+		dist += _data.getRoutesTotalDistrance();
 
-    return dist;
+	return dist;
 }
 
 qreal GUI::time() const
 {
-    return (_showTracksAction->isChecked()) ? _data.getTracksTotalTime() : 0;
+	return (_showTracksAction->isChecked()) ? _data.getTracksTotalTime() : 0;
 }
 
 qreal GUI::movingTime() const
 {
-    return (_showTracksAction->isChecked()) ? _data.getTracksTotalMovingTime() : 0;
+	return (_showTracksAction->isChecked()) ? _data.getTracksTotalMovingTime() : 0;
 }
