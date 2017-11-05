@@ -13,6 +13,7 @@
 #include "exportdialog.h"
 #include "optionsdialog.h"
 #include "data.h"
+#include "datalistview.h"
 
 class QMenu;
 class QToolBar;
@@ -27,7 +28,6 @@ class GraphTab;
 class PathView;
 class Map;
 class MapList;
-//class Data;
 
 class GUI : public QMainWindow
 {
@@ -96,6 +96,7 @@ private:
 	void createMenus();
 	void createToolBars();
 	void createStatusBar();
+	void createDataListView();
 	void createPathView();
 	void createGraphTabs();
 	void createBrowser();
@@ -107,6 +108,7 @@ private:
 	void updateWindowTitle();
 	void updateNavigationActions();
 	void updateGraphTabs();
+	void updateDataListView();
 	void updatePathView();
 
 	TimeType timeType() const;
@@ -210,6 +212,7 @@ private:
 
 	Export _export;
 	Options _options;
+	DataListView *_dataListView;
 };
 
 #endif // GUI_H

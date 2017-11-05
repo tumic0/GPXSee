@@ -61,18 +61,27 @@ GUI::GUI()
 	createActions();
 	createMenus();
 	createToolBars();
+	createDataListView();
 
 	createBrowser();
 
-	QSplitter *splitter = new QSplitter();
-	splitter->setOrientation(Qt::Vertical);
-	splitter->setChildrenCollapsible(false);
-	splitter->addWidget(_pathView);
-	splitter->addWidget(_graphTabWidget);
-	splitter->setContentsMargins(0, 0, 0, 0);
-	splitter->setStretchFactor(0, 255);
-	splitter->setStretchFactor(1, 1);
-	setCentralWidget(splitter);
+	QSplitter *splitterMapGraph = new QSplitter();
+	splitterMapGraph->setOrientation(Qt::Vertical);
+	splitterMapGraph->setChildrenCollapsible(false);
+	splitterMapGraph->addWidget(_pathView);
+	splitterMapGraph->addWidget(_graphTabWidget);
+	splitterMapGraph->setContentsMargins(0, 0, 0, 0);
+	splitterMapGraph->setStretchFactor(0, 255);
+	splitterMapGraph->setStretchFactor(1, 1);
+
+	QSplitter *splitterListGraphics = new QSplitter();
+	splitterListGraphics->setOrientation(Qt::Horizontal);
+	splitterListGraphics->setChildrenCollapsible(false);
+	splitterListGraphics->addWidget(_dataListView);
+	splitterListGraphics->addWidget(splitterMapGraph);
+	splitterListGraphics->setStretchFactor(1, 5);
+
+	setCentralWidget(splitterListGraphics);
 
 	setWindowIcon(QIcon(QPixmap(APP_ICON)));
 	setWindowTitle(APP_NAME);
@@ -83,6 +92,7 @@ GUI::GUI()
 
 	updateGraphTabs();
 	updatePathView();
+	updateDataListView();
 	updateStatusBarInfo();
 
 	readSettings();
@@ -587,6 +597,11 @@ void GUI::createToolBars()
 	_navigationToolBar->addAction(_lastAction);
 }
 
+void GUI::createDataListView()
+{
+	_dataListView = new DataListView(_data, this);
+}
+
 void GUI::createPathView()
 {
 	_pathView = new PathView(_map, _poi, this);
@@ -757,6 +772,7 @@ bool GUI::openFile(const QString &fileName)
 		updateWindowTitle();
 		updateGraphTabs();
 		updatePathView();
+		updateDataListView();
 	} else {
 		if (_files.isEmpty())
 			_fileActionGroup->setEnabled(false);
@@ -790,6 +806,7 @@ bool GUI::loadFile(const QString &fileName)
 		updateWindowTitle();
 		updateGraphTabs();
 		updatePathView();
+		updateDataListView();
 
 		QString error = tr("Error loading data file:") + "\n\n"
 		        + fileName + "\n\n" + _data.errorString();
@@ -1076,6 +1093,8 @@ void GUI::reloadFile()
 	updateWindowTitle();
 	updateGraphTabs();
 	updatePathView();
+	updateDataListView();
+
 	if (_files.isEmpty())
 		_fileActionGroup->setEnabled(false);
 	else
@@ -1105,6 +1124,7 @@ void GUI::closeAll()
 	updateWindowTitle();
 	updateGraphTabs();
 	updatePathView();
+	updateDataListView();
 }
 
 void GUI::showGraphs(bool show)
@@ -1346,6 +1366,12 @@ void GUI::updateGraphTabs()
 		_graphTabWidget->setHidden(true);
 		_showGraphsAction->setEnabled(false);
 	}
+}
+
+void GUI::updateDataListView()
+{
+	_dataListView->setHidden(!(_pathView->trackCount() + _pathView->routeCount()
+	  + _pathView->waypointCount()));
 }
 
 void GUI::updatePathView()

@@ -103,7 +103,11 @@ HEADERS += src/config.h \
     src/heartrategraphitem.h \
     src/temperaturegraphitem.h \
     src/cadencegraphitem.h \
-    src/powergraphitem.h
+    src/powergraphitem.h \
+    src/datalistview.h \
+    src/trackitemsmodel.h \
+    src/routeitemsmodel.h \
+    src/waypointitemsmodel.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -179,7 +183,11 @@ SOURCES += src/main.cpp \
     src/heartrategraphitem.cpp \
     src/temperaturegraphitem.cpp \
     src/cadencegraphitem.cpp \
-    src/powergraphitem.cpp
+    src/powergraphitem.cpp \
+    src/datalistview.cpp \
+    src/trackitemsmodel.cpp \
+    src/routeitemsmodel.cpp \
+    src/waypointitemsmodel.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \

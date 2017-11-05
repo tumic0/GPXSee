@@ -59,6 +59,8 @@ Data::~Data()
 
 void Data::processData()
 {
+	// TODO: Update only added data
+	_tracks.clear();
 	foreach (const TrackData &t, _trackData) {
 		Track *track = new Track(t);
 		_tracks.append(track);
@@ -73,6 +75,7 @@ void Data::processData()
 			_trackDateRange.second = date;
 	}
 
+	_routes.clear();
 	foreach (const RouteData &r, _routeData) {
 		Route *route = new Route(r);
 		_routes.append(route);
@@ -94,12 +97,10 @@ bool Data::loadFile(const QString &fileName)
 	}
 
 	QHash<QString, Parser*>::iterator it;;
-	QList<Waypoint> loadedWaypoints;
 
 	if ((it = _parsers.find(fi.suffix().toLower())) != _parsers.end()) {
-		if (it.value()->parse(&file, _trackData, _routeData, loadedWaypoints)) {
+		if (it.value()->parse(&file, _trackData, _routeData, _waypoints)) {
 			processData();
-			_waypoints.append(loadedWaypoints);
 			return true;
 		}
 
@@ -107,9 +108,8 @@ bool Data::loadFile(const QString &fileName)
 		_errorString = it.value()->errorString();
 	} else {
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
-			if (it.value()->parse(&file, _trackData, _routeData, loadedWaypoints)) {
+			if (it.value()->parse(&file, _trackData, _routeData, _waypoints)) {
 				processData();
-				_waypoints.append(loadedWaypoints);
 				return true;
 			}
 			file.reset();
