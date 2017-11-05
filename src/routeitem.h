@@ -3,7 +3,6 @@
 
 #include "pathitem.h"
 #include "route.h"
-#include "units.h"
 
 class Map;
 
@@ -16,15 +15,11 @@ public:
 
 	void setMap(Map *map);
 
-	void setUnits(Units units);
 	void showWaypoints(bool show);
 	void showWaypointLabels(bool show);
 
 private:
 	QString toolTip(Units units) const;
-
-	QString _name;
-	QString _desc;
 };
 
 #endif // ROUTEITEM_H

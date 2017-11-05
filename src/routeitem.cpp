@@ -47,11 +47,6 @@ void RouteItem::setMap(Map *map)
 	PathItem::setMap(map);
 }
 
-void RouteItem::setUnits(enum Units units)
-{
-	setToolTip(toolTip(units));
-}
-
 void RouteItem::showWaypoints(bool show)
 {
 	QList<QGraphicsItem *> childs =	childItems();

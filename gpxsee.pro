@@ -63,8 +63,6 @@ HEADERS += src/config.h \
     src/rd.h \
     src/wgs84.h \
     src/kmlparser.h \
-    src/trackdata.h \
-    src/routedata.h \
     src/fitparser.h \
     src/format.h \
     src/path.h \
@@ -107,7 +105,8 @@ HEADERS += src/config.h \
     src/datalistview.h \
     src/trackitemsmodel.h \
     src/routeitemsmodel.h \
-    src/waypointitemsmodel.h
+    src/waypointitemsmodel.h \
+    src/geodata.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \

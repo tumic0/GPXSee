@@ -4,8 +4,8 @@
 #include <QString>
 #include <QList>
 #include <QFile>
-#include "trackdata.h"
-#include "routedata.h"
+#include "route.h"
+#include "track.h"
 #include "waypoint.h"
 
 

@@ -5,6 +5,7 @@
 #include <QPen>
 #include "markeritem.h"
 #include "path.h"
+#include "units.h"
 
 
 class Map;
@@ -24,6 +25,7 @@ public:
 	const Path &path() const {return _path;}
 
 	void setMap(Map *map);
+	void setUnits(Units units);
 
 	void setColor(const QColor &color);
 	void setWidth(qreal width);
@@ -41,7 +43,12 @@ protected:
 	Path _path;
 	MarkerItem *_marker;
 
+	QString _name;
+	QString _desc;
+
 private:
+	virtual QString toolTip(Units units) const = 0;
+
 	QPointF position(qreal distance) const;
 	void updatePainterPath(Map *map);
 	void updateShape();

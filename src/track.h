@@ -4,10 +4,12 @@
 #include <QVector>
 #include <QSet>
 #include <QDateTime>
-#include "trackdata.h"
 #include "graph.h"
 #include "path.h"
+#include "geodata.h"
+#include "trackpoint.h"
 
+typedef GeoData<Trackpoint> TrackData;
 
 class Track
 {

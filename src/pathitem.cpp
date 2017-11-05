@@ -76,6 +76,11 @@ void PathItem::setMap(Map *map)
 	_marker->setPos(position(_markerDistance));
 }
 
+void PathItem::setUnits(enum Units units)
+{
+	setToolTip(toolTip(units));
+}
+
 void PathItem::setColor(const QColor &color)
 {
 	if (_pen.color() == color)

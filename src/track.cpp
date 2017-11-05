@@ -1,4 +1,5 @@
 #include "track.h"
+#include "trackpoint.h"
 
 #define OUTLIER_WINDOW 21
 

@@ -35,8 +35,3 @@ TrackItem::TrackItem(const Track &track, Map *map, QGraphicsItem *parent)
 
 	setToolTip(toolTip(Metric));
 }
-
-void TrackItem::setUnits(Units units)
-{
-	setToolTip(toolTip(units));
-}

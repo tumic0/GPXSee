@@ -1,4 +1,5 @@
 #include "route.h"
+#include "waypoint.h"
 
 Route::Route(const RouteData &data) : _data(data)
 {

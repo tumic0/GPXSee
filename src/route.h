@@ -2,9 +2,12 @@
 #define ROUTE_H
 
 #include <QVector>
-#include "routedata.h"
+#include "geodata.h"
 #include "graph.h"
 #include "path.h"
+#include "waypoint.h"
+
+typedef GeoData<Waypoint> RouteData;
 
 class Route
 {
@@ -28,5 +31,7 @@ private:
 	const RouteData &_data;
 	QVector<qreal> _distance;
 };
+
+
 
 #endif // ROUTE_H
