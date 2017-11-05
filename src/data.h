@@ -44,7 +44,7 @@ public:
 
 private:
 
-	void processData(QList<TrackData> &trackData, QList<RouteData> &routeData, QList<Waypoint> &waypoints);
+	void processData();
 
 	QString _errorString;
 	int _errorLine;

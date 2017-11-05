@@ -57,9 +57,9 @@ Data::~Data()
     }
 }
 
-void Data::processData(QList<TrackData> &trackData, QList<RouteData> &routeData, QList<Waypoint> &waypoints)
+void Data::processData()
 {
-	foreach (const TrackData &t, trackData) {
+	foreach (const TrackData &t, _trackData) {
 		Track *track = new Track(t);
 		_tracks.append(track);
 		_trackDistance += track->distance();
@@ -72,16 +72,12 @@ void Data::processData(QList<TrackData> &trackData, QList<RouteData> &routeData,
 		if (_trackDateRange.second.isNull() || _trackDateRange.second < date)
 			_trackDateRange.second = date;
 	}
-	_trackData.append(trackData);
 
-	foreach (const RouteData &r, routeData) {
+	foreach (const RouteData &r, _routeData) {
 		Route *route = new Route(r);
 		_routes.append(route);
 		_routeDistance += route->distance();
 	}
-	_routeData.append(routeData);
-
-	_waypoints.append(waypoints);
 }
 
 bool Data::loadFile(const QString &fileName)
@@ -97,14 +93,13 @@ bool Data::loadFile(const QString &fileName)
 		return false;
 	}
 
-	QHash<QString, Parser*>::iterator it;
-	QList<TrackData> loadedTracksData;
-	QList<RouteData> loadedRoutesData;
+	QHash<QString, Parser*>::iterator it;;
 	QList<Waypoint> loadedWaypoints;
 
 	if ((it = _parsers.find(fi.suffix().toLower())) != _parsers.end()) {
-		if (it.value()->parse(&file, loadedTracksData, loadedRoutesData, loadedWaypoints)) {
-			processData(loadedTracksData, loadedRoutesData, loadedWaypoints);
+		if (it.value()->parse(&file, _trackData, _routeData, loadedWaypoints)) {
+			processData();
+			_waypoints.append(loadedWaypoints);
 			return true;
 		}
 
@@ -112,8 +107,9 @@ bool Data::loadFile(const QString &fileName)
 		_errorString = it.value()->errorString();
 	} else {
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
-			if (it.value()->parse(&file, loadedTracksData, loadedRoutesData, loadedWaypoints)) {
-				processData(loadedTracksData, loadedRoutesData, loadedWaypoints);
+			if (it.value()->parse(&file, _trackData, _routeData, loadedWaypoints)) {
+				processData();
+				_waypoints.append(loadedWaypoints);
 				return true;
 			}
 			file.reset();
@@ -152,7 +148,7 @@ void Data::clear()
 
 QString Data::formats()
 {
-    return tr("Supported files (*.csv *.fit *.gpx *.igc *.kml *.nmea *.tcx)")
+	return tr("Supported files (*.csv *.fit *.gpx *.igc *.kml *.nmea *.tcx)")
             + ";;" + tr("CSV files (*.csv)") + ";;" + tr("FIT files (*.fit)") + ";;"
             + tr("GPX files (*.gpx)") + ";;" + tr("IGC files (*.igc)") + ";;"
             + tr("KML files (*.kml)") + ";;" + tr("NMEA files (*.nmea)") + ";;"
