@@ -1,6 +1,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QLineF>
+#include <QDate>
 #include "gpxparser.h"
 #include "tcxparser.h"
 #include "csvparser.h"
@@ -9,7 +10,6 @@
 #include "igcparser.h"
 #include "nmeaparser.h"
 #include "data.h"
-
 
 static GPXParser gpx;
 static TCXParser tcx;
@@ -37,27 +37,57 @@ static QHash<QString, Parser*> parsers()
 
 QHash<QString, Parser*> Data::_parsers = parsers();
 
+Data::Data(QObject *parent)
+    : QObject(parent)
+    , _errorLine(0)
+    , _trackDistance(0)
+    , _trackTime(0)
+    , _trackMovingTime(0)
+    , _trackDateRange(QDate(), QDate())
+    , _routeDistance(0)
+{}
+
 Data::~Data()
 {
-	for (int i = 0; i < _tracks.count(); i++)
-		delete _tracks.at(i);
-	for (int i = 0; i < _routes.count(); i++)
+    for (int i = 0; i < _tracks.count(); i++) {
+        delete _tracks.at(i);
+    }
+    for (int i = 0; i < _routes.count(); i++) {
 		delete _routes.at(i);
+    }
 }
 
-void Data::processData()
+void Data::processData(QList<TrackData> &trackData, QList<RouteData> &routeData, QList<Waypoint> &waypoints)
 {
-	for (int i = 0; i < _trackData.count(); i++)
-		_tracks.append(new Track(_trackData.at(i)));
-	for (int i = 0; i < _routeData.count(); i++)
-		_routes.append(new Route(_routeData.at(i)));
+    foreach (const TrackData &t, trackData) {
+        Track *track = new Track(t);
+        _tracks.append(track);
+        _trackDistance += track->distance();
+        _trackTime += track->time();
+        _trackMovingTime += track->movingTime();
+
+        const QDate &date = track->date().date();
+        if (_trackDateRange.first.isNull() || _trackDateRange.first > date)
+            _trackDateRange.first = date;
+        if (_trackDateRange.second.isNull() || _trackDateRange.second < date)
+            _trackDateRange.second = date;
+    }
+    _trackData.append(trackData);
+
+    foreach (const RouteData &r, routeData) {
+        Route *route = new Route(r);
+        _routes.append(route);
+        _routeDistance += route->distance();
+    }
+    _routeData.append(routeData);
+
+    _waypoints.append(waypoints);
 }
 
 bool Data::loadFile(const QString &fileName)
 {
 	QFile file(fileName);
 	QFileInfo fi(fileName);
-
 
 	_errorString.clear();
 	_errorLine = 0;
@@ -68,9 +98,13 @@ bool Data::loadFile(const QString &fileName)
 	}
 
 	QHash<QString, Parser*>::iterator it;
+    QList<TrackData> loadedTracksData;
+    QList<RouteData> loadedRoutesData;
+    QList<Waypoint> loadedWaypoints;
+
 	if ((it = _parsers.find(fi.suffix().toLower())) != _parsers.end()) {
-		if (it.value()->parse(&file, _trackData, _routeData, _waypoints)) {
-			processData();
+        if (it.value()->parse(&file, loadedTracksData, loadedRoutesData, loadedWaypoints)) {
+            processData(loadedTracksData, loadedRoutesData, loadedWaypoints);
 			return true;
 		}
 
@@ -78,10 +112,10 @@ bool Data::loadFile(const QString &fileName)
 		_errorString = it.value()->errorString();
 	} else {
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
-			if (it.value()->parse(&file, _trackData, _routeData, _waypoints)) {
-				processData();
+            if (it.value()->parse(&file, loadedTracksData, loadedRoutesData, loadedWaypoints)) {
+                processData(loadedTracksData, loadedRoutesData, loadedWaypoints);
 				return true;
-			}
+            }
 			file.reset();
 		}
 
@@ -94,15 +128,34 @@ bool Data::loadFile(const QString &fileName)
 		_errorString = "Unknown format";
 	}
 
-	return false;
+    return false;
+}
+
+void Data::clear()
+{
+    for (int i = 0; i < _tracks.count(); i++)
+        delete _tracks.at(i);
+    _tracks.clear();
+    _trackData.clear();
+
+    for (int i = 0; i < _routes.count(); i++)
+        delete _routes.at(i);
+    _routes.clear();
+    _routeData.clear();
+
+    _trackDistance = 0;
+    _trackTime = 0;
+    _trackMovingTime = 0;
+    _trackDateRange = DateRange(QDate(), QDate());
+    _routeDistance = 0;
 }
 
 QString Data::formats()
 {
-	return tr("Supported files (*.csv *.fit *.gpx *.igc *.kml *.nmea *.tcx)")
-	  + ";;" + tr("CSV files (*.csv)") + ";;" + tr("FIT files (*.fit)") + ";;"
-	  + tr("GPX files (*.gpx)") + ";;" + tr("IGC files (*.igc)") + ";;"
-	  + tr("KML files (*.kml)") + ";;" + tr("NMEA files (*.nmea)") + ";;"
+    return tr("Supported files (*.csv *.fit *.gpx *.igc *.kml *.nmea *.tcx)")
+            + ";;" + tr("CSV files (*.csv)") + ";;" + tr("FIT files (*.fit)") + ";;"
+            + tr("GPX files (*.gpx)") + ";;" + tr("IGC files (*.igc)") + ";;"
+            + tr("KML files (*.kml)") + ";;" + tr("NMEA files (*.nmea)") + ";;"
 	  + tr("TCX files (*.tcx)") + ";;" + tr("All files (*)");
 }
 

@@ -49,6 +49,7 @@
 
 
 GUI::GUI()
+    : _data(this)
 {
 	loadDatums();
 	loadMaps();
@@ -77,14 +78,6 @@ GUI::GUI()
 	setWindowTitle(APP_NAME);
 	setUnifiedTitleAndToolBarOnMac(true);
 	setAcceptDrops(true);
-
-	_trackCount = 0;
-	_routeCount = 0;
-	_waypointCount = 0;
-	_trackDistance = 0;
-	_routeDistance = 0;
-	_time = 0;
-	_movingTime = 0;
 
 	_sliderPos = 0;
 
@@ -775,37 +768,18 @@ bool GUI::openFile(const QString &fileName)
 
 bool GUI::loadFile(const QString &fileName)
 {
-	Data data;
 	QList<PathItem*> paths;
 
-	if (data.loadFile(fileName)) {
-		paths = _pathView->loadData(data);
+    if (_data.loadFile(fileName)) {
+        paths = _pathView->loadData(_data);
 		for (int i = 0; i < _tabs.count(); i++)
-			_tabs.at(i)->loadData(data, paths);
-
-		for (int i = 0; i < data.tracks().count(); i++) {
-			_trackDistance += data.tracks().at(i)->distance();
-			_time += data.tracks().at(i)->time();
-			_movingTime += data.tracks().at(i)->movingTime();
-			const QDate &date = data.tracks().at(i)->date().date();
-			if (_dateRange.first.isNull() || _dateRange.first > date)
-				_dateRange.first = date;
-			if (_dateRange.second.isNull() || _dateRange.second < date)
-				_dateRange.second = date;
-		}
-		_trackCount += data.tracks().count();
-
-		for (int i = 0; i < data.routes().count(); i++)
-			_routeDistance += data.routes().at(i)->distance();
-		_routeCount += data.routes().count();
-
-		_waypointCount += data.waypoints().count();
+            _tabs.at(i)->loadData(_data, paths);
 
 		if (_pathName.isNull()) {
-			if (data.tracks().count() == 1 && !data.routes().count())
-				_pathName = data.tracks().first()->name();
-			else if (data.routes().count() == 1 && !data.tracks().count())
-				_pathName = data.routes().first()->name();
+            if (_data.tracks().count() == 1 && !_data.routes().count())
+                _pathName = _data.tracks().first()->name();
+            else if (_data.routes().count() == 1 && !_data.tracks().count())
+                _pathName = _data.routes().first()->name();
 		} else
 			_pathName = QString();
 
@@ -818,9 +792,9 @@ bool GUI::loadFile(const QString &fileName)
 		updatePathView();
 
 		QString error = tr("Error loading data file:") + "\n\n"
-		  + fileName + "\n\n" + data.errorString();
-		if (data.errorLine())
-			error.append("\n" + tr("Line: %1").arg(data.errorLine()));
+          + fileName + "\n\n" + _data.errorString();
+        if (_data.errorLine())
+            error.append("\n" + tr("Line: %1").arg(_data.errorLine()));
 		QMessageBox::critical(this, APP_NAME, error);
 		return false;
     }
@@ -1004,23 +978,24 @@ void GUI::plot(QPrinter *printer)
 		info.insert(tr("Name"), _pathName);
 
 	if (_options.printItemCount) {
-		if (_trackCount > 1)
-			info.insert(tr("Tracks"), QString::number(_trackCount));
-		if (_routeCount > 1)
-			info.insert(tr("Routes"), QString::number(_routeCount));
-		if (_waypointCount > 2)
-			info.insert(tr("Waypoints"), QString::number(_waypointCount));
+        if (_data.tracks().count() > 1)
+            info.insert(tr("Tracks"), QString::number(_data.tracks().count()));
+        if (_data.routes().count() > 1)
+            info.insert(tr("Routes"), QString::number(_data.routes().count()));
+        if (_data.waypoints().count() > 2)
+            info.insert(tr("Waypoints"), QString::number(_data.waypoints().count()));
 	}
 
-	if (_dateRange.first.isValid() && _options.printDate) {
-		if (_dateRange.first == _dateRange.second) {
+    Data::DateRange dateRange = _data.getTracksDateRange();
+    if (dateRange.first.isValid() && _options.printDate) {
+        if (dateRange.first == dateRange.second) {
 			QString format = QLocale::system().dateFormat(QLocale::LongFormat);
-			info.insert(tr("Date"), _dateRange.first.toString(format));
+            info.insert(tr("Date"), dateRange.first.toString(format));
 		} else {
 			QString format = QLocale::system().dateFormat(QLocale::ShortFormat);
 			info.insert(tr("Date"), QString("%1 - %2")
-			  .arg(_dateRange.first.toString(format),
-			  _dateRange.second.toString(format)));
+              .arg(dateRange.first.toString(format),
+              dateRange.second.toString(format)));
 		}
 	}
 
@@ -1080,14 +1055,8 @@ void GUI::plot(QPrinter *printer)
 
 void GUI::reloadFile()
 {
-	_trackCount = 0;
-	_routeCount = 0;
-	_waypointCount = 0;
-	_trackDistance = 0;
-	_routeDistance = 0;
-	_time = 0;
-	_movingTime = 0;
-	_dateRange = DateRange(QDate(), QDate());
+    _data.clear();
+
 	_pathName = QString();
 
 	for (int i = 0; i < _tabs.count(); i++)
@@ -1115,14 +1084,7 @@ void GUI::reloadFile()
 
 void GUI::closeFiles()
 {
-	_trackCount = 0;
-	_routeCount = 0;
-	_waypointCount = 0;
-	_trackDistance = 0;
-	_routeDistance = 0;
-	_time = 0;
-	_movingTime = 0;
-	_dateRange = DateRange(QDate(), QDate());
+    _data.clear();
 	_pathName = QString();
 
 	_sliderPos = 0;
@@ -1983,19 +1945,19 @@ qreal GUI::distance() const
 	qreal dist = 0;
 
 	if (_showTracksAction->isChecked())
-		dist += _trackDistance;
+        dist += _data.getTracksTotalDistrance();
 	if (_showRoutesAction->isChecked())
-		dist += _routeDistance;
+        dist += _data.getRoutesTotalDistrance();
 
-	return dist;
+    return dist;
 }
 
 qreal GUI::time() const
 {
-	return (_showTracksAction->isChecked()) ? _time : 0;
+    return (_showTracksAction->isChecked()) ? _data.getTracksTotalTime() : 0;
 }
 
 qreal GUI::movingTime() const
 {
-	return (_showTracksAction->isChecked()) ? _movingTime : 0;
+    return (_showTracksAction->isChecked()) ? _data.getTracksTotalMovingTime() : 0;
 }

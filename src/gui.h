@@ -12,7 +12,7 @@
 #include "poi.h"
 #include "exportdialog.h"
 #include "optionsdialog.h"
-
+#include "data.h"
 
 class QMenu;
 class QToolBar;
@@ -27,6 +27,7 @@ class GraphTab;
 class PathView;
 class Map;
 class MapList;
+//class Data;
 
 class GUI : public QMainWindow
 {
@@ -81,7 +82,6 @@ private slots:
 	void sliderPositionChanged(qreal pos);
 
 private:
-	typedef QPair<QDate, QDate> DateRange;
 
 	void loadDatums();
 	void loadMaps();
@@ -200,14 +200,7 @@ private:
 	QList<QString> _files;
 
 	Map *_map;
-	int _trackCount;
-	int _routeCount;
-	int _waypointCount;
-	qreal _trackDistance;
-	qreal _routeDistance;
-	qreal _time;
-	qreal _movingTime;
-	DateRange _dateRange;
+    Data _data;
 	QString _pathName;
 
 	qreal _sliderPos;
