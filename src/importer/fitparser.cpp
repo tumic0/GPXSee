@@ -1,6 +1,6 @@
 #include <cstring>
 #include <QtEndian>
-#include "assert.h"
+#include "staticassert.h"
 #include "fitparser.h"
 
 
