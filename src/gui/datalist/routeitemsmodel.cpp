@@ -36,10 +36,8 @@ QVariant RouteItemsModel::data(const QModelIndex &index, int role) const
 			return Format::distance(r.distance(), _units);
 		}
 	} else if(role == Qt::BackgroundRole) {
-		if (index.row()%2 == 0) {
-			QBrush greyBrush(Qt::lightGray);
-			return greyBrush;
-		}
+		QBrush color = _routeItems.at(index.row())->color();
+		return color;
 	}
 
 	return QVariant();
@@ -72,7 +70,10 @@ void RouteItemsModel::addRouteItem(const Route &r, RouteItem *routeItem)
 void RouteItemsModel::setUnits(Units units)
 {
 	_units = units;
-	// TODO: Perform update of distance column
+
+	QModelIndex startColumn = this->index(0, ROUTE_DISTANCE);
+	QModelIndex endColumn = this->index(rowCount(), ROUTE_DISTANCE);
+	emit QAbstractItemModel::dataChanged(startColumn, endColumn, {Qt::DisplayRole});
 }
 
 void RouteItemsModel::clear()

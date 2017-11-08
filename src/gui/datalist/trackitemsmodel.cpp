@@ -33,11 +33,10 @@ QVariant TrackItemsModel::data(const QModelIndex &index, int role) const {
 			return Format::distance(t.distance(), _units);
 		}
 	} else if(role == Qt::BackgroundRole) {
-		if (index.row()%2 == 0) {
-			QBrush greyBrush(Qt::lightGray);
-			return greyBrush;
-		}
+		QBrush color = _trackItems.at(index.row())->color();
+		return color;
 	}
+
 	return QVariant();
 }
 
@@ -68,7 +67,10 @@ void TrackItemsModel::addTrackItem(const Track &t, TrackItem *trackItem)
 void TrackItemsModel::setUnits(Units units)
 {
 	_units = units;
-	// TODO: Perform update of distance column
+
+	QModelIndex startColumn = this->index(0, TRACK_DISTANCE);
+	QModelIndex endColumn = this->index(rowCount(), TRACK_DISTANCE);
+	emit QAbstractItemModel::dataChanged(startColumn, endColumn, {Qt::DisplayRole});
 }
 
 void TrackItemsModel::clear()
