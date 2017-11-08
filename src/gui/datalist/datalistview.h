@@ -3,7 +3,7 @@
 
 #include <QTabWidget>
 #include <QTableView>
-#include "track.h"
+#include "geoitems/geoitems.h"
 
 class Data;
 
@@ -11,7 +11,7 @@ class DataListView : public QTabWidget
 {
 	Q_OBJECT
 public:
-	explicit DataListView(Data& data, QWidget *parent = nullptr);
+	explicit DataListView(GeoItems &geoItems, QWidget *parent = nullptr);
 signals:
 
 public slots:

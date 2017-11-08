@@ -13,7 +13,7 @@
 #include "exportdialog.h"
 #include "optionsdialog.h"
 #include "data.h"
-#include "datalistview.h"
+#include "datalist/datalistview.h"
 #include "geoitems/geoitems.h"
 
 class QMenu;

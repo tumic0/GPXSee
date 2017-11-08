@@ -96,27 +96,24 @@ HEADERS +=                                      \
     src/geodata/geodata.h                       \
     src/geodata/path.h                          \
     src/geodata/route.h                         \
-    src/geodata/routeitemsmodel.h               \
     src/geodata/track.h                         \
     src/geodata/trackinfo.h                     \
-    src/geodata/trackitemsmodel.h               \
     src/geodata/trackpoint.h                    \
     src/geodata/waypoint.h                      \
-    src/geodata/waypointitemsmodel.h            \
+    src/geodata/graph.h                         \
     src/geodata/data.h                          \
+
 
 SOURCES +=                                      \
     src/geodata/coordinates.cpp                 \
     src/geodata/format.cpp                      \
     src/geodata/path.cpp                        \
     src/geodata/route.cpp                       \
-    src/geodata/routeitemsmodel.cpp             \
     src/geodata/track.cpp                       \
     src/geodata/trackinfo.cpp                   \
-    src/geodata/trackitemsmodel.cpp             \
     src/geodata/trackpoint.cpp                  \
     src/geodata/waypoint.cpp                    \
-    src/geodata/waypointitemsmodel.cpp          \
+    src/geodata/graph.cpp                       \
     src/geodata/data.cpp                        \
 
 # Importers
@@ -149,22 +146,21 @@ HEADERS +=                                      \
     src/gui/tooltip.h                           \
     src/gui/axisitem.h                          \
     src/gui/pathview.h                          \
-    src/gui/graph.h                             \
-    src/gui/graphtab.h                          \
-    src/gui/graphitem.h                         \
-    src/gui/graphview.h                         \
-    src/gui/powergraph.h                        \
-    src/gui/powergraphitem.h                    \
-    src/gui/elevationgraph.h                    \
-    src/gui/elevationgraphitem.h                \
-    src/gui/temperaturegraph.h                  \
-    src/gui/temperaturegraphitem.h              \
-    src/gui/speedgraph.h                        \
-    src/gui/speedgraphitem.h                    \
-    src/gui/cadencegraph.h                      \
-    src/gui/cadencegraphitem.h                  \
-    src/gui/heartrategraph.h                    \
-    src/gui/heartrategraphitem.h                \
+    src/gui/graph/graphtab.h                    \
+    src/gui/graph/graphitem.h                   \
+    src/gui/graph/graphview.h                   \
+    src/gui/graph/powergraph.h                  \
+    src/gui/graph/powergraphitem.h              \
+    src/gui/graph/elevationgraph.h              \
+    src/gui/graph/elevationgraphitem.h          \
+    src/gui/graph/temperaturegraph.h            \
+    src/gui/graph/temperaturegraphitem.h        \
+    src/gui/graph/speedgraph.h                  \
+    src/gui/graph/speedgraphitem.h              \
+    src/gui/graph/cadencegraph.h                \
+    src/gui/graph/cadencegraphitem.h            \
+    src/gui/graph/heartrategraph.h              \
+    src/gui/graph/heartrategraphitem.h          \
     src/gui/optionsdialog.h                     \
     src/gui/colorbox.h                          \
     src/gui/griditem.h                          \
@@ -177,7 +173,6 @@ HEADERS +=                                      \
     src/gui/sliderinfoitem.h                    \
     src/gui/slideritem.h                        \
     src/gui/stylecombobox.h                     \
-    src/gui/datalistview.h                      \
     src/gui/icons.h                             \
     src/gui/geoitems/geoitems.h                 \
     src/gui/geoitems/pathitem.h                 \
@@ -196,21 +191,20 @@ SOURCES +=                                      \
     src/gui/tooltip.cpp                         \
     src/gui/axisitem.cpp                        \
     src/gui/pathview.cpp                        \
-    src/gui/graph.cpp                           \
-    src/gui/graphitem.cpp                       \
-    src/gui/graphview.cpp                       \
-    src/gui/powergraph.cpp                      \
-    src/gui/powergraphitem.cpp                  \
-    src/gui/elevationgraph.cpp                  \
-    src/gui/elevationgraphitem.cpp              \
-    src/gui/temperaturegraph.cpp                \
-    src/gui/temperaturegraphitem.cpp            \
-    src/gui/speedgraph.cpp                      \
-    src/gui/speedgraphitem.cpp                  \
-    src/gui/cadencegraph.cpp                    \
-    src/gui/cadencegraphitem.cpp                \
-    src/gui/heartrategraph.cpp                  \
-    src/gui/heartrategraphitem.cpp              \
+    src/gui/graph/graphitem.cpp                 \
+    src/gui/graph/graphview.cpp                 \
+    src/gui/graph/powergraph.cpp                \
+    src/gui/graph/powergraphitem.cpp            \
+    src/gui/graph/elevationgraph.cpp            \
+    src/gui/graph/elevationgraphitem.cpp        \
+    src/gui/graph/temperaturegraph.cpp          \
+    src/gui/graph/temperaturegraphitem.cpp      \
+    src/gui/graph/speedgraph.cpp                \
+    src/gui/graph/speedgraphitem.cpp            \
+    src/gui/graph/cadencegraph.cpp              \
+    src/gui/graph/cadencegraphitem.cpp          \
+    src/gui/graph/heartrategraph.cpp            \
+    src/gui/graph/heartrategraphitem.cpp        \
     src/gui/optionsdialog.cpp                   \
     src/gui/colorbox.cpp                        \
     src/gui/griditem.cpp                        \
@@ -221,13 +215,25 @@ SOURCES +=                                      \
     src/gui/sliderinfoitem.cpp                  \
     src/gui/slideritem.cpp                      \
     src/gui/stylecombobox.cpp                   \
-    src/gui/datalistview.cpp                    \
     src/gui/geoitems/geoitems.cpp               \
     src/gui/geoitems/pathitem.cpp               \
     src/gui/geoitems/routeitem.cpp              \
     src/gui/geoitems/waypointitem.cpp           \
     src/gui/geoitems/trackitem.cpp              \
     src/gui/geoitems/poi.cpp                    \
+
+# GUI - Datalist
+HEADERS +=                                      \
+    src/gui/datalist/datalistview.h             \
+    src/gui/datalist/waypointitemsmodel.h       \
+    src/gui/datalist/trackitemsmodel.h          \
+    src/gui/datalist/routeitemsmodel.h          \
+
+SOURCES +=                                      \
+    src/gui/datalist/datalistview.cpp           \
+    src/gui/datalist/waypointitemsmodel.cpp     \
+    src/gui/datalist/trackitemsmodel.cpp        \
+    src/gui/datalist/routeitemsmodel.cpp        \
 
 # Main
 SOURCES += src/main.cpp \

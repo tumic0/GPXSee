@@ -3,9 +3,10 @@
 
 #include <QAbstractTableModel>
 #include <QList>
-#include "waypoint.h"
+#include "geoitems/geoitems.h"
+#include "geoitems/waypointitem.h"
 
-class WaypointItemsModel : public QAbstractTableModel, public QList<Waypoint> {
+class WaypointItemsModel : public QAbstractTableModel{
 	Q_OBJECT
 
 	enum Columns {
@@ -13,10 +14,7 @@ class WaypointItemsModel : public QAbstractTableModel, public QList<Waypoint> {
 		N_COLUMNS
 	};
 public:
-	virtual void append(Waypoint const &w);
-	virtual void append(const QList<Waypoint> &w);
-
-	virtual void clear();
+	WaypointItemsModel(GeoItems &geoItems, QObject *parent = Q_NULLPTR);
 
 	int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -25,6 +23,13 @@ public:
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
 	QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+
+private slots:
+	void addWaypointItem(const Waypoint &w, WaypointItem *waypointItem);
+	void clear();
+
+private:
+	QList<WaypointItem*> _waypointItems;
 };
 
 

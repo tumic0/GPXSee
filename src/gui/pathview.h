@@ -62,7 +62,6 @@ public slots:
 private slots:
 	void updatePOI();
 	void reloadMap();
-
 	void addTrackItem(const Track &t, TrackItem *track);
 	void addRouteItem(const Route &r, RouteItem *route);
 	void addWaypointItem(const Waypoint &w, WaypointItem *waypoints);

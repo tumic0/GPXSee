@@ -33,17 +33,19 @@
 #include "map.h"
 #include "maplist.h"
 #include "emptymap.h"
-#include "elevationgraph.h"
-#include "speedgraph.h"
-#include "heartrategraph.h"
-#include "temperaturegraph.h"
-#include "cadencegraph.h"
-#include "powergraph.h"
+
+#include "graph/elevationgraph.h"
+#include "graph/speedgraph.h"
+#include "graph/heartrategraph.h"
+#include "graph/temperaturegraph.h"
+#include "graph/cadencegraph.h"
+#include "graph/powergraph.h"
+#include "graph/graphtab.h"
+
 #include "pathview.h"
 #include "trackinfo.h"
 #include "filebrowser.h"
 #include "cpuarch.h"
-#include "graphtab.h"
 #include "format.h"
 #include "gui.h"
 
@@ -601,7 +603,7 @@ void GUI::createToolBars()
 
 void GUI::createDataListView()
 {
-	_dataListView = new DataListView(_data, this);
+	_dataListView = new DataListView(_geoItems, this);
 }
 
 void GUI::createPathView()

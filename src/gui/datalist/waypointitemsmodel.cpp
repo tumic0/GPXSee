@@ -1,31 +1,19 @@
 #include <QBrush>
 #include "waypointitemsmodel.h"
 
-void WaypointItemsModel::append(const Waypoint &w)
+WaypointItemsModel::WaypointItemsModel(GeoItems &geoItems, QObject *parent)
+	: QAbstractTableModel(parent)
 {
-	QAbstractTableModel::beginInsertRows(QModelIndex(), rowCount(), rowCount());
-	QList<Waypoint>::append(w);
-	QAbstractTableModel::endInsertRows();
-}
-
-void WaypointItemsModel::append(const QList<Waypoint> &w)
-{
-	QAbstractTableModel::beginInsertRows(QModelIndex(), rowCount(), rowCount() + w.count() - 1);
-	QList<Waypoint>::append(w);
-	QAbstractTableModel::endInsertRows();
-}
-
-void WaypointItemsModel::clear()
-{
-	QAbstractTableModel::beginRemoveRows(QModelIndex(), 0, rowCount()-1);
-	QList::clear();
-	QAbstractTableModel::endRemoveRows();
+	QObject::connect(&geoItems, SIGNAL(addedWaypointItem(Waypoint,WaypointItem*)),
+					 this, SLOT(addWaypointItem(Waypoint,WaypointItem*)));
+	QObject::connect(&geoItems, SIGNAL(cleared()),
+					 this, SLOT(clear()));
 }
 
 int WaypointItemsModel::rowCount(const QModelIndex &parent) const
 {
 	Q_UNUSED(parent);
-	return QList::count();
+	return _waypointItems.count();
 }
 
 int WaypointItemsModel::columnCount(const QModelIndex &parent) const
@@ -37,7 +25,7 @@ int WaypointItemsModel::columnCount(const QModelIndex &parent) const
 QVariant WaypointItemsModel::data(const QModelIndex &index, int role) const
 {
 	if (role == Qt::DisplayRole) {
-		Waypoint w = at(index.row());
+		const Waypoint &w = _waypointItems.at(index.row())->waypoint();
 		switch(index.column()) {
 		case WAYPOINT_NAME:
 			return w.name();
@@ -62,4 +50,18 @@ QVariant WaypointItemsModel::headerData(int section, Qt::Orientation orientation
 	}
 
 	return QVariant();
+}
+
+void WaypointItemsModel::addWaypointItem(const Waypoint &w, WaypointItem *waypointItem)
+{
+	QAbstractTableModel::beginInsertRows(QModelIndex(), rowCount(), rowCount());
+	_waypointItems.append(waypointItem);
+	QAbstractTableModel::endInsertRows();
+}
+
+void WaypointItemsModel::clear()
+{
+	QAbstractTableModel::beginRemoveRows(QModelIndex(), 0, rowCount()-1);
+	_waypointItems.clear();
+	QAbstractTableModel::endRemoveRows();
 }

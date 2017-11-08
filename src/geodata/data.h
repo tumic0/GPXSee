@@ -12,9 +12,6 @@
 #include "track.h"
 #include "route.h"
 #include "parser.h"
-#include "trackitemsmodel.h"
-#include "routeitemsmodel.h"
-#include "waypointitemsmodel.h"
 
 class Data : public QObject
 {
@@ -34,10 +31,6 @@ public:
 	const QList<Track*> &tracks() const {return _tracks;}
 	const QList<Route*> &routes() const {return _routes;}
 	const QList<Waypoint> &waypoints() const {return _waypoints;}
-
-	TrackItemsModel *trackItemsModel() {return &_tracks;}
-	RouteItemsModel *routeItemsModel() {return &_routes;}
-	WaypointItemsModel *waypointItemsModel() {return &_waypoints;}
 
 	qreal getTracksTotalDistrance() const {return _trackDistance;}
 	qreal getTracksTotalTime() const {return _trackTime;}
@@ -61,9 +54,9 @@ private:
 	QString _errorString;
 	int _errorLine;
 
-	TrackItemsModel _tracks;
-	RouteItemsModel _routes;
-	WaypointItemsModel _waypoints;
+	QList<Track*> _tracks;
+	QList<Route*> _routes;
+	QList<Waypoint> _waypoints;
 
 	QList<TrackData> _trackData;
 	QList<RouteData> _routeData;

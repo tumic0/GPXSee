@@ -14,10 +14,11 @@ class TrackItem : public PathItem
 
 public:
 	TrackItem(const Track &track, Map *map, QGraphicsItem *parent = 0);
-
+	const Track &track() { return _track; }
 private:
 	QString toolTip(Units units) const;
 
+	const Track &_track;
 	QDateTime _date;
 	qreal _time;
 	qreal _movingTime;

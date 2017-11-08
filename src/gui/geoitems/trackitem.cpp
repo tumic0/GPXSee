@@ -26,6 +26,7 @@ QString TrackItem::toolTip(Units units) const
 
 TrackItem::TrackItem(const Track &track, Map *map, QGraphicsItem *parent)
   : PathItem(track.path(), map, parent)
+  , _track(track)
 {
 	_name = track.name();
 	_desc = track.description();

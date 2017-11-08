@@ -13,12 +13,14 @@ class RouteItem : public PathItem
 public:
 	RouteItem(const Route &route, Map *map, QGraphicsItem *parent = 0);
 
+	const Route &route() { return _route; }
 	void setMap(Map *map);
 
 	void showWaypoints(bool show);
 	void showWaypointLabels(bool show);
 
 private:
+	const Route &_route;
 	QString toolTip(Units units) const;
 };
 
