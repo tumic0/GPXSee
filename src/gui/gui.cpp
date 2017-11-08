@@ -23,6 +23,8 @@
 #include <QUrl>
 #include <QPixmapCache>
 #include <QImageWriter>
+#include <QProgressDialog>
+
 #include "config.h"
 #include "icons.h"
 #include "keys.h"
@@ -752,10 +754,26 @@ void GUI::openFile()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open file"),
 	  QString(), Data::formats());
-	QStringList list = files;
 
-	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
-		openFile(*it);
+	QProgressDialog progress(this);
+	progress.setLabelText(tr("Loading..."));
+	progress.setRange(0, files.count());
+	progress.setModal(true);
+	progress.show();
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+
+	int i = 0;
+	foreach (const QString &file, files) {
+		qApp->processEvents();
+		if (progress.wasCanceled()) {
+			break;
+		}
+		progress.setLabelText(tr("Loading %1").arg(file));
+		openFile(file);
+		progress.setValue(++i);
+	}
+
+	QApplication::restoreOverrideCursor();
 }
 
 bool GUI::openFile(const QString &fileName)
@@ -1079,12 +1097,24 @@ void GUI::reloadFile()
 
 	_sliderPos = 0;
 
-	for (int i = 0; i < _files.size(); i++) {
+	QProgressDialog progress(this);
+	progress.setLabelText(tr("Loading..."));
+	progress.setRange(0, _files.count());
+	progress.setModal(true);
+	progress.show();
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+
+	for (int i = 0; i < _files.size() && !progress.wasCanceled(); i++) {
+		progress.setValue(i);
+		progress.setLabelText(tr("Loading %1").arg(_files.at(i)));
 		if (!loadFile(_files.at(i))) {
 			_files.removeAt(i);
 			i--;
 		}
+		qApp->processEvents();
 	}
+
+	QApplication::restoreOverrideCursor();
 
 	updateStatusBarInfo();
 	updateWindowTitle();
