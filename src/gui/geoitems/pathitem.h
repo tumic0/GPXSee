@@ -27,7 +27,7 @@ public:
 	void setMap(Map *map);
 	void setUnits(Units units);
 
-	void setColor(const QColor &color);
+	QColor color() { return _pen.color(); }
 	void setWidth(qreal width);
 	void setStyle(Qt::PenStyle style);
 	void setDigitalZoom(int zoom);
@@ -35,9 +35,11 @@ public:
 public slots:
 	void moveMarker(qreal distance);
 	void hover(bool hover);
+	void setColor(const QColor &color);
 
 signals:
 	void selected(bool);
+	void colorChanged(const QColor &color);
 
 protected:
 	Path _path;

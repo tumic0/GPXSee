@@ -3,7 +3,7 @@
 #include "temperaturegraph.h"
 
 
-TemperatureGraph::TemperatureGraph(QWidget *parent) : GraphTab(parent)
+TemperatureGraph::TemperatureGraph(GeoItems &geoItems, QWidget *parent) : GraphTab(geoItems, parent)
 {
 	_showTracks = true;
 
@@ -24,30 +24,6 @@ void TemperatureGraph::setInfo()
 		  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
 	} else
 		clearInfo();
-}
-
-void TemperatureGraph::loadData(const Data &data, const QList<PathItem *> &paths)
-{
-	for (int i = 0; i < data.tracks().count(); i++) {
-		const Graph &graph = data.tracks().at(i)->temperature();
-
-		if (graph.size() < 2) {
-			skipColor();
-			continue;
-		}
-
-		TemperatureGraphItem *gi = new TemperatureGraphItem(graph, _graphType);
-		GraphView::addGraph(gi, paths.at(i));
-
-		_avg.append(QPointF(data.tracks().at(i)->distance(), gi->avg()));
-	}
-
-	for (int i = 0; i < data.routes().count(); i++)
-		skipColor();
-
-	setInfo();
-
-	redraw();
 }
 
 qreal TemperatureGraph::avg() const
@@ -99,4 +75,19 @@ void TemperatureGraph::showTracks(bool show)
 	setInfo();
 
 	redraw();
+}
+
+void TemperatureGraph::addTrack(const Track &track, TrackItem *item)
+{
+	const Graph &graph = track.temperature();
+
+	if (graph.size() >= 2) {
+		TemperatureGraphItem *gi = new TemperatureGraphItem(graph, _graphType);
+		GraphView::addGraph(gi, item);
+
+		_avg.append(QPointF(track.distance(), gi->avg()));
+
+		setInfo();
+		redraw();
+	}
 }

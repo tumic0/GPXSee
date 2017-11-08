@@ -50,6 +50,7 @@
 
 GUI::GUI()
     : _data(this)
+	, _geoItems(NULL, &_data, this)
 {
 	loadDatums();
 	loadMaps();
@@ -192,6 +193,7 @@ void GUI::loadMaps()
 	}
 
 	_map = new EmptyMap(this);
+	_geoItems.setMap(_map);
 }
 
 void GUI::loadPOIs()
@@ -398,15 +400,15 @@ void GUI::createActions()
 	  SLOT(showRoutes(bool)));
 	_showWaypointsAction = new QAction(tr("Show waypoints"), this);
 	_showWaypointsAction->setCheckable(true);
-	connect(_showWaypointsAction, SIGNAL(triggered(bool)), _pathView,
+	connect(_showWaypointsAction, SIGNAL(triggered(bool)), &_geoItems,
 	  SLOT(showWaypoints(bool)));
 	_showWaypointLabelsAction = new QAction(tr("Waypoint labels"), this);
 	_showWaypointLabelsAction->setCheckable(true);
-	connect(_showWaypointLabelsAction, SIGNAL(triggered(bool)), _pathView,
+	connect(_showWaypointLabelsAction, SIGNAL(triggered(bool)), &_geoItems,
 	  SLOT(showWaypointLabels(bool)));
 	_showRouteWaypointsAction = new QAction(tr("Route waypoints"), this);
 	_showRouteWaypointsAction->setCheckable(true);
-	connect(_showRouteWaypointsAction, SIGNAL(triggered(bool)), _pathView,
+	connect(_showRouteWaypointsAction, SIGNAL(triggered(bool)), &_geoItems,
 	  SLOT(showRouteWaypoints(bool)));
 
 	// Graph actions
@@ -604,7 +606,7 @@ void GUI::createDataListView()
 
 void GUI::createPathView()
 {
-	_pathView = new PathView(_map, _poi, this);
+	_pathView = new PathView(_geoItems, _map, _poi, this);
 	_pathView->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,
 	  QSizePolicy::Expanding));
 	_pathView->setMinimumHeight(200);
@@ -626,12 +628,12 @@ void GUI::createGraphTabs()
 	_graphTabWidget->setDocumentMode(true);
 #endif // Q_OS_WIN32
 
-	_tabs.append(new ElevationGraph);
-	_tabs.append(new SpeedGraph);
-	_tabs.append(new HeartRateGraph);
-	_tabs.append(new CadenceGraph);
-	_tabs.append(new PowerGraph);
-	_tabs.append(new TemperatureGraph);
+	_tabs.append(new ElevationGraph(_geoItems));
+	_tabs.append(new SpeedGraph(_geoItems));
+	_tabs.append(new HeartRateGraph(_geoItems));
+	_tabs.append(new CadenceGraph(_geoItems));
+	_tabs.append(new PowerGraph(_geoItems));
+	_tabs.append(new TemperatureGraph(_geoItems));
 
 	for (int i = 0; i < _tabs.count(); i++)
 		connect(_tabs.at(i), SIGNAL(sliderPositionChanged(qreal)), this,
@@ -784,13 +786,7 @@ bool GUI::openFile(const QString &fileName)
 
 bool GUI::loadFile(const QString &fileName)
 {
-	QList<PathItem*> paths;
-
 	if (_data.loadFile(fileName)) {
-		paths = _pathView->loadData(_data);
-		for (int i = 0; i < _tabs.count(); i++)
-			_tabs.at(i)->loadData(_data, paths);
-
 		if (_pathName.isNull()) {
 			if (_data.tracks().count() == 1 && !_data.routes().count())
 				_pathName = _data.tracks().first()->name();
@@ -864,6 +860,9 @@ void GUI::closePOIFiles()
 
 void GUI::openOptions()
 {
+#define SET_ITEMS_OPTION(option, action) \
+	if (options.option != _options.option) \
+		_geoItems.action(options.option)
 #define SET_VIEW_OPTION(option, action) \
 	if (options.option != _options.option) \
 		_pathView->action(options.option)
@@ -884,21 +883,21 @@ void GUI::openOptions()
 	if (dialog.exec() != QDialog::Accepted)
 		return;
 
-	SET_VIEW_OPTION(palette, setPalette);
-	SET_VIEW_OPTION(mapOpacity, setMapOpacity);
-	SET_VIEW_OPTION(backgroundColor, setBackgroundColor);
-	SET_VIEW_OPTION(trackWidth, setTrackWidth);
-	SET_VIEW_OPTION(routeWidth, setRouteWidth);
-	SET_VIEW_OPTION(trackStyle, setTrackStyle);
-	SET_VIEW_OPTION(routeStyle, setRouteStyle);
-	SET_VIEW_OPTION(waypointSize, setWaypointSize);
-	SET_VIEW_OPTION(waypointColor, setWaypointColor);
+	SET_ITEMS_OPTION(palette, setPalette);
+	SET_ITEMS_OPTION(trackWidth, setTrackWidth);
+	SET_ITEMS_OPTION(routeWidth, setRouteWidth);
+	SET_ITEMS_OPTION(trackStyle, setTrackStyle);
+	SET_ITEMS_OPTION(routeStyle, setRouteStyle);
+	SET_ITEMS_OPTION(waypointSize, setWaypointSize);
+	SET_ITEMS_OPTION(waypointColor, setWaypointColor);
 	SET_VIEW_OPTION(poiSize, setPOISize);
 	SET_VIEW_OPTION(poiColor, setPOIColor);
+
+	SET_VIEW_OPTION(mapOpacity, setMapOpacity);
+	SET_VIEW_OPTION(backgroundColor, setBackgroundColor);
 	SET_VIEW_OPTION(pathAntiAliasing, useAntiAliasing);
 	SET_VIEW_OPTION(useOpenGL, useOpenGL);
 
-	SET_TAB_OPTION(palette, setPalette);
 	SET_TAB_OPTION(graphWidth, setGraphWidth);
 	SET_TAB_OPTION(graphAntiAliasing, useAntiAliasing);
 	SET_TAB_OPTION(useOpenGL, useOpenGL);
@@ -1076,10 +1075,6 @@ void GUI::reloadFile()
 
 	_pathName = QString();
 
-	for (int i = 0; i < _tabs.count(); i++)
-		_tabs.at(i)->clear();
-	_pathView->clear();
-
 	_sliderPos = 0;
 
 	for (int i = 0; i < _files.size(); i++) {
@@ -1107,10 +1102,6 @@ void GUI::closeFiles()
 	_pathName = QString();
 
 	_sliderPos = 0;
-
-	for (int i = 0; i < _tabs.count(); i++)
-		_tabs.at(i)->clear();
-	_pathView->clear();
 
 	_files.clear();
 }
@@ -1178,20 +1169,14 @@ void GUI::showFullscreen(bool show)
 
 void GUI::showTracks(bool show)
 {
-	_pathView->showTracks(show);
-
-	for (int i = 0; i < _tabs.size(); i++)
-		_tabs.at(i)->showTracks(show);
+	_geoItems.showTracks(show);
 
 	updateStatusBarInfo();
 }
 
 void GUI::showRoutes(bool show)
 {
-	_pathView->showRoutes(show);
-
-	for (int i = 0; i < _tabs.size(); i++)
-		_tabs.at(i)->showRoutes(show);
+	_geoItems.showRoutes(show);
 
 	updateStatusBarInfo();
 }
@@ -1278,6 +1263,7 @@ void GUI::updateWindowTitle()
 void GUI::mapChanged(int index)
 {
 	_map = _ml->maps().at(index);
+	_geoItems.setMap(_map);
 	_pathView->setMap(_map);
 }
 
@@ -1370,14 +1356,14 @@ void GUI::updateGraphTabs()
 
 void GUI::updateDataListView()
 {
-	_dataListView->setHidden(!(_pathView->trackCount() + _pathView->routeCount()
-	  + _pathView->waypointCount()));
+	_dataListView->setHidden(!(_geoItems.trackCount() + _geoItems.routeCount()
+	  + _geoItems.waypointCount()));
 }
 
 void GUI::updatePathView()
 {
-	_pathView->setHidden(!(_pathView->trackCount() + _pathView->routeCount()
-	  + _pathView->waypointCount()));
+	_pathView->setHidden(!(_geoItems.trackCount() + _geoItems.routeCount()
+	  + _geoItems.waypointCount()));
 }
 
 void GUI::setTimeType(TimeType type)
@@ -1794,30 +1780,28 @@ void GUI::readSettings()
 
 	settings.beginGroup(DATA_SETTINGS_GROUP);
 	if (!settings.value(SHOW_TRACKS_SETTING, SHOW_TRACKS_DEFAULT).toBool()) {
-		_pathView->showTracks(false);
-		for (int i = 0; i < _tabs.count(); i++)
-			_tabs.at(i)->showTracks(false);
+		_geoItems.showTracks(false);
 	} else
 		_showTracksAction->setChecked(true);
 	if (!settings.value(SHOW_ROUTES_SETTING, SHOW_ROUTES_DEFAULT).toBool()) {
-		_pathView->showRoutes(false);
+		_geoItems.showRoutes(false);
 		for (int i = 0; i < _tabs.count(); i++)
 			_tabs.at(i)->showRoutes(false);
 	} else
 		_showRoutesAction->setChecked(true);
 	if (!settings.value(SHOW_WAYPOINTS_SETTING, SHOW_WAYPOINTS_DEFAULT)
 	  .toBool())
-		_pathView->showWaypoints(false);
+		_geoItems.showWaypoints(false);
 	else
 		_showWaypointsAction->setChecked(true);
 	if (!settings.value(SHOW_WAYPOINT_LABELS_SETTING,
 	  SHOW_WAYPOINT_LABELS_DEFAULT).toBool())
-		_pathView->showWaypointLabels(false);
+		_geoItems.showWaypointLabels(false);
 	else
 		_showWaypointLabelsAction->setChecked(true);
 	if (!settings.value(SHOW_ROUTE_WAYPOINTS_SETTING,
 	  SHOW_ROUTE_WAYPOINTS_SETTING).toBool())
-		_pathView->showRouteWaypoints(false);
+		_geoItems.showRouteWaypoints(false);
 	else
 		_showRouteWaypointsAction->setChecked(true);
 	settings.endGroup();
@@ -1912,15 +1896,15 @@ void GUI::readSettings()
 	_options.separateGraphPage = settings.value(SEPARATE_GRAPH_PAGE_SETTING,
 	  SEPARATE_GRAPH_PAGE_DEFAULT).toBool();
 
-	_pathView->setPalette(_options.palette);
+	_geoItems.setPalette(_options.palette);
 	_pathView->setMapOpacity(_options.mapOpacity);
 	_pathView->setBackgroundColor(_options.backgroundColor);
-	_pathView->setTrackWidth(_options.trackWidth);
-	_pathView->setRouteWidth(_options.routeWidth);
-	_pathView->setTrackStyle(_options.trackStyle);
-	_pathView->setRouteStyle(_options.routeStyle);
-	_pathView->setWaypointSize(_options.waypointSize);
-	_pathView->setWaypointColor(_options.waypointColor);
+	_geoItems.setTrackWidth(_options.trackWidth);
+	_geoItems.setRouteWidth(_options.routeWidth);
+	_geoItems.setTrackStyle(_options.trackStyle);
+	_geoItems.setRouteStyle(_options.routeStyle);
+	_geoItems.setWaypointSize(_options.waypointSize);
+	_geoItems.setWaypointColor(_options.waypointColor);
 	_pathView->setPOISize(_options.poiSize);
 	_pathView->setPOIColor(_options.poiColor);
 	_pathView->setRenderHint(QPainter::Antialiasing, _options.pathAntiAliasing);
@@ -1928,7 +1912,6 @@ void GUI::readSettings()
 		_pathView->useOpenGL(true);
 
 	for (int i = 0; i < _tabs.count(); i++) {
-		_tabs.at(i)->setPalette(_options.palette);
 		_tabs.at(i)->setGraphWidth(_options.graphWidth);
 		_tabs.at(i)->setRenderHint(QPainter::Antialiasing,
 		  _options.graphAntiAliasing);

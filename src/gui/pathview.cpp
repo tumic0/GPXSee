@@ -6,12 +6,12 @@
 #include <QScrollBar>
 #include "opengl.h"
 #include "misc.h"
-#include "poi.h"
 #include "data.h"
 #include "map.h"
-#include "trackitem.h"
-#include "routeitem.h"
-#include "waypointitem.h"
+#include "geoitems/poi.h"
+#include "geoitems/trackitem.h"
+#include "geoitems/routeitem.h"
+#include "geoitems/waypointitem.h"
 #include "scaleitem.h"
 #include "keys.h"
 #include "pathview.h"
@@ -22,8 +22,9 @@
 #define MARGIN           10.0
 #define SCALE_OFFSET     7
 
-PathView::PathView(Map *map, POI *poi, QWidget *parent)
+PathView::PathView(GeoItems &geoItems, Map *map, POI *poi, QWidget *parent)
   : QGraphicsView(parent)
+  , _geoItems(geoItems)
 {
 	Q_ASSERT(map != 0);
 	Q_ASSERT(poi != 0);
@@ -54,25 +55,25 @@ PathView::PathView(Map *map, POI *poi, QWidget *parent)
 	_backgroundColor = Qt::white;
 
 	_showMap = true;
-	_showTracks = true;
-	_showRoutes = true;
-	_showWaypoints = true;
-	_showWaypointLabels = true;
 	_showPOI = true;
 	_showPOILabels = true;
 	_overlapPOIs = true;
-	_showRouteWaypoints = true;
-	_trackWidth = 3;
-	_routeWidth = 3;
-	_trackStyle = Qt::SolidLine;
-	_routeStyle = Qt::DashLine;
-	_waypointSize = 8;
-	_waypointColor = Qt::black;
 	_poiSize = 8;
 	_poiColor = Qt::black;
 
 	_plot = false;
 	_digitalZoom = 0;
+
+	QObject::connect(&_geoItems, SIGNAL(addedTrackItem(Track, TrackItem*)),
+					 this, SLOT(addTrackItem(Track, TrackItem*)));
+	QObject::connect(&_geoItems, SIGNAL(addedRouteItem(Route, RouteItem*)),
+					 this, SLOT(addRouteItem(Route, RouteItem*)));
+	QObject::connect(&_geoItems, SIGNAL(addedWaypointItem(Waypoint, WaypointItem*)),
+					 this, SLOT(addWaypointItem(Waypoint, WaypointItem*)));
+	QObject::connect(&_geoItems, SIGNAL(cleared()),
+					 this, SLOT(clear()));
+	QObject::connect(this, SIGNAL(digitalZoomChanged(int)),
+					 &_geoItems, SLOT(setDigitalZoom(int)));
 
 	_map->setBackgroundColor(_backgroundColor);
 	_scene->setSceneRect(_map->bounds());
@@ -98,97 +99,51 @@ void PathView::centerOn(const QPointF &pos)
 	_mapScale->setResolution(_res);
 }
 
-PathItem *PathView::addTrack(const Track &track)
+void PathView::addTrackItem(const Track &t, TrackItem *ti)
 {
-	if (track.isNull()) {
-		_palette.nextColor();
-		return 0;
-	}
+	Q_UNUSED(t)
 
-	TrackItem *ti = new TrackItem(track, _map);
-	_tracks.append(ti);
 	_tr |= ti->path().boundingRect();
-	ti->setColor(_palette.nextColor());
-	ti->setWidth(_trackWidth);
-	ti->setStyle(_trackStyle);
-	ti->setUnits(_units);
-	ti->setVisible(_showTracks);
-	ti->setDigitalZoom(_digitalZoom);
 	_scene->addItem(ti);
-
 	addPOI(_poi->points(ti->path()));
 
-	return ti;
+	rescale();
+	//if (mapZoom() != _map->zoom())
+	//	rescale();
+	//else
+	//	updatePOIVisibility();
+
+	centerOn(contentCenter());
 }
 
-PathItem *PathView::addRoute(const Route &route)
+void PathView::addRouteItem(const Route &r, RouteItem *ri)
 {
-	if (route.isNull()) {
-		_palette.nextColor();
-		return 0;
-	}
+	Q_UNUSED(r)
 
-	RouteItem *ri = new RouteItem(route, _map);
-	_routes.append(ri);
 	_rr |= ri->path().boundingRect();
-	ri->setColor(_palette.nextColor());
-	ri->setWidth(_routeWidth);
-	ri->setStyle(_routeStyle);
-	ri->setUnits(_units);
-	ri->setVisible(_showRoutes);
-	ri->showWaypoints(_showRouteWaypoints);
-	ri->showWaypointLabels(_showWaypointLabels);
-	ri->setDigitalZoom(_digitalZoom);
 	_scene->addItem(ri);
-
 	addPOI(_poi->points(ri->path()));
 
-	return ri;
-}
-
-void PathView::addWaypoints(const QList<Waypoint> &waypoints)
-{
-	for (int i = 0; i < waypoints.count(); i++) {
-		const Waypoint &w = waypoints.at(i);
-
-		WaypointItem *wi = new WaypointItem(w, _map);
-		_waypoints.append(wi);
-		updateWaypointsBoundingRect(wi->waypoint().coordinates());
-		wi->setZValue(1);
-		wi->setSize(_waypointSize);
-		wi->setColor(_waypointColor);
-		wi->showLabel(_showWaypointLabels);
-		wi->setUnits(_units);
-		wi->setVisible(_showWaypoints);
-		wi->setDigitalZoom(_digitalZoom);
-		_scene->addItem(wi);
-	}
-
-	addPOI(_poi->points(waypoints));
-}
-
-QList<PathItem *> PathView::loadData(const Data &data)
-{
-	QList<PathItem *> paths;
-	qreal zoom = _map->zoom();
-
-	for (int i = 0; i < data.tracks().count(); i++)
-		paths.append(addTrack(*(data.tracks().at(i))));
-	for (int i = 0; i < data.routes().count(); i++)
-		paths.append(addRoute(*(data.routes().at(i))));
-	addWaypoints(data.waypoints());
-
-	if (_tracks.empty() && _routes.empty() && _waypoints.empty())
-		return paths;
-
-	if (mapZoom() != zoom)
+	if (mapZoom() != _map->zoom())
 		rescale();
 	else
 		updatePOIVisibility();
 
 	centerOn(contentCenter());
+}
 
-	return paths;
+void PathView::addWaypointItem(const Waypoint &w, WaypointItem *wi)
+{
+	updateWaypointsBoundingRect(wi->waypoint().coordinates());
+	_scene->addItem(wi);
+	addPOI(_poi->points(w));
+
+	if (mapZoom() != _map->zoom())
+		rescale();
+	else
+		updatePOIVisibility();
+
+	centerOn(contentCenter());
 }
 
 void PathView::updateWaypointsBoundingRect(const Coordinates &wp)
@@ -239,29 +194,13 @@ void PathView::rescale()
 	_scene->setSceneRect(_map->bounds());
 	resetCachedContent();
 
-	for (int i = 0; i < _tracks.size(); i++)
-		_tracks.at(i)->setMap(_map);
-	for (int i = 0; i < _routes.size(); i++)
-		_routes.at(i)->setMap(_map);
-	for (int i = 0; i < _waypoints.size(); i++)
-		_waypoints.at(i)->setMap(_map);
+	_geoItems.setMap(_map);
 
 	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
 		it.value()->setMap(_map);
 
 	updatePOIVisibility();
-}
-
-void PathView::setPalette(const Palette &palette)
-{
-	_palette = palette;
-	_palette.reset();
-
-	for (int i = 0; i < _tracks.count(); i++)
-		_tracks.at(i)->setColor(_palette.nextColor());
-	for (int i = 0; i < _routes.count(); i++)
-		_routes.at(i)->setColor(_palette.nextColor());
 }
 
 void PathView::setMap(Map *map)
@@ -282,12 +221,7 @@ void PathView::setMap(Map *map)
 	_map->zoomFit(resolution, center);
 	_scene->setSceneRect(_map->bounds());
 
-	for (int i = 0; i < _tracks.size(); i++)
-		_tracks.at(i)->setMap(map);
-	for (int i = 0; i < _routes.size(); i++)
-		_routes.at(i)->setMap(map);
-	for (int i = 0; i < _waypoints.size(); i++)
-		_waypoints.at(i)->setMap(map);
+	_geoItems.setMap(_map);
 
 	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
@@ -320,10 +254,6 @@ void PathView::updatePOI()
 	}
 	_pois.clear();
 
-	for (int i = 0; i < _tracks.size(); i++)
-		addPOI(_poi->points(_tracks.at(i)->path()));
-	for (int i = 0; i < _routes.size(); i++)
-		addPOI(_poi->points(_routes.at(i)->path()));
 	addPOI(_poi->points(_waypoints));
 
 	updatePOIVisibility();
@@ -356,10 +286,6 @@ void PathView::setUnits(enum Units units)
 
 	_mapScale->setUnits(units);
 
-	for (int i = 0; i < _tracks.count(); i++)
-		_tracks[i]->setUnits(units);
-	for (int i = 0; i < _routes.count(); i++)
-		_routes[i]->setUnits(units);
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setUnits(units);
 
@@ -381,16 +307,13 @@ void PathView::resetDigitalZoom()
 	_digitalZoom = 0;
 	resetTransform();
 
-	for (int i = 0; i < _tracks.size(); i++)
-		_tracks.at(i)->setDigitalZoom(0);
-	for (int i = 0; i < _routes.size(); i++)
-		_routes.at(i)->setDigitalZoom(0);
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setDigitalZoom(0);
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
 		it.value()->setDigitalZoom(0);
 
 	_mapScale->setDigitalZoom(0);
+	emit digitalZoomChanged(_digitalZoom);
 }
 
 void PathView::digitalZoom(int zoom)
@@ -400,16 +323,13 @@ void PathView::digitalZoom(int zoom)
 	_digitalZoom += zoom;
 	scale(pow(2, zoom), pow(2, zoom));
 
-	for (int i = 0; i < _tracks.size(); i++)
-		_tracks.at(i)->setDigitalZoom(_digitalZoom);
-	for (int i = 0; i < _routes.size(); i++)
-		_routes.at(i)->setDigitalZoom(_digitalZoom);
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setDigitalZoom(_digitalZoom);
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
 		it.value()->setDigitalZoom(_digitalZoom);
 
 	_mapScale->setDigitalZoom(_digitalZoom);
+	emit digitalZoomChanged(_digitalZoom);
 }
 
 void PathView::zoom(int zoom, const QPoint &pos, const Coordinates &c)
@@ -561,15 +481,11 @@ void PathView::plot(QPainter *painter, const QRectF &target, qreal scale,
 void PathView::clear()
 {
 	_pois.clear();
-	_tracks.clear();
-	_routes.clear();
 	_waypoints.clear();
 
 	_scene->removeItem(_mapScale);
 	_scene->clear();
 	_scene->addItem(_mapScale);
-
-	_palette.reset();
 
 	_tr = RectC();
 	_rr = RectC();
@@ -580,48 +496,7 @@ void PathView::clear()
 	QPixmapCache::clear();
 }
 
-void PathView::showTracks(bool show)
-{
-	_showTracks = show;
 
-	for (int i = 0; i < _tracks.count(); i++)
-		_tracks.at(i)->setVisible(show);
-}
-
-void PathView::showRoutes(bool show)
-{
-	_showRoutes = show;
-
-	for (int i = 0; i < _routes.count(); i++)
-		_routes.at(i)->setVisible(show);
-}
-
-void PathView::showWaypoints(bool show)
-{
-	_showWaypoints = show;
-
-	for (int i = 0; i < _waypoints.count(); i++)
-		_waypoints.at(i)->setVisible(show);
-}
-
-void PathView::showWaypointLabels(bool show)
-{
-	_showWaypointLabels = show;
-
-	for (int i = 0; i < _waypoints.size(); i++)
-		_waypoints.at(i)->showLabel(show);
-
-	for (int i = 0; i < _routes.size(); i++)
-		_routes.at(i)->showWaypointLabels(show);
-}
-
-void PathView::showRouteWaypoints(bool show)
-{
-	_showRouteWaypoints = show;
-
-	for (int i = 0; i < _routes.size(); i++)
-		_routes.at(i)->showWaypoints(show);
-}
 
 void PathView::showMap(bool show)
 {
@@ -656,54 +531,6 @@ void PathView::setPOIOverlap(bool overlap)
 	_overlapPOIs = overlap;
 
 	updatePOIVisibility();
-}
-
-void PathView::setTrackWidth(int width)
-{
-	_trackWidth = width;
-
-	for (int i = 0; i < _tracks.count(); i++)
-		_tracks.at(i)->setWidth(width);
-}
-
-void PathView::setRouteWidth(int width)
-{
-	_routeWidth = width;
-
-	for (int i = 0; i < _routes.count(); i++)
-		_routes.at(i)->setWidth(width);
-}
-
-void PathView::setTrackStyle(Qt::PenStyle style)
-{
-	_trackStyle = style;
-
-	for (int i = 0; i < _tracks.count(); i++)
-		_tracks.at(i)->setStyle(style);
-}
-
-void PathView::setRouteStyle(Qt::PenStyle style)
-{
-	_routeStyle = style;
-
-	for (int i = 0; i < _routes.count(); i++)
-		_routes.at(i)->setStyle(style);
-}
-
-void PathView::setWaypointSize(int size)
-{
-	_waypointSize = size;
-
-	for (int i = 0; i < _waypoints.size(); i++)
-		_waypoints.at(i)->setSize(size);
-}
-
-void PathView::setWaypointColor(const QColor &color)
-{
-	_waypointColor = color;
-
-	for (int i = 0; i < _waypoints.size(); i++)
-		_waypoints.at(i)->setColor(color);
 }
 
 void PathView::setPOISize(int size)

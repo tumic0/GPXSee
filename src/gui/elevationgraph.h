@@ -8,7 +8,7 @@ class ElevationGraph : public GraphTab
 	Q_OBJECT
 
 public:
-	ElevationGraph(QWidget *parent = 0);
+	ElevationGraph(GeoItems &geoItems, QWidget *parent = 0);
 
 	QString label() const {return tr("Elevation");}
 	void loadData(const Data &data, const QList<PathItem *> &paths);
@@ -17,8 +17,12 @@ public:
 	void showTracks(bool show);
 	void showRoutes(bool show);
 
+public slots:
+	virtual void addTrack(const Track &track, TrackItem *item);
+	virtual void addRoute(const Route &route, RouteItem *item);
+
 private:
-	enum Type {Track, Route};
+	enum Type {TRACK_TYPE, ROUTE_TYPE};
 
 	qreal max() const;
 	qreal min() const;

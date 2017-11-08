@@ -95,18 +95,13 @@ HEADERS +=                                      \
     src/geodata/format.h                        \
     src/geodata/geodata.h                       \
     src/geodata/path.h                          \
-    src/geodata/pathitem.h                      \
-    src/geodata/poi.h                           \
     src/geodata/route.h                         \
-    src/geodata/routeitem.h                     \
     src/geodata/routeitemsmodel.h               \
     src/geodata/track.h                         \
     src/geodata/trackinfo.h                     \
-    src/geodata/trackitem.h                     \
     src/geodata/trackitemsmodel.h               \
     src/geodata/trackpoint.h                    \
     src/geodata/waypoint.h                      \
-    src/geodata/waypointitem.h                  \
     src/geodata/waypointitemsmodel.h            \
     src/geodata/data.h                          \
 
@@ -114,18 +109,13 @@ SOURCES +=                                      \
     src/geodata/coordinates.cpp                 \
     src/geodata/format.cpp                      \
     src/geodata/path.cpp                        \
-    src/geodata/pathitem.cpp                    \
-    src/geodata/poi.cpp                         \
     src/geodata/route.cpp                       \
-    src/geodata/routeitem.cpp                   \
     src/geodata/routeitemsmodel.cpp             \
     src/geodata/track.cpp                       \
     src/geodata/trackinfo.cpp                   \
-    src/geodata/trackitem.cpp                   \
     src/geodata/trackitemsmodel.cpp             \
     src/geodata/trackpoint.cpp                  \
     src/geodata/waypoint.cpp                    \
-    src/geodata/waypointitem.cpp                \
     src/geodata/waypointitemsmodel.cpp          \
     src/geodata/data.cpp                        \
 
@@ -189,6 +179,13 @@ HEADERS +=                                      \
     src/gui/stylecombobox.h                     \
     src/gui/datalistview.h                      \
     src/gui/icons.h                             \
+    src/gui/geoitems/geoitems.h                 \
+    src/gui/geoitems/pathitem.h                 \
+    src/gui/geoitems/routeitem.h                \
+    src/gui/geoitems/waypointitem.h             \
+    src/gui/geoitems/trackitem.h                \
+    src/gui/geoitems/poi.h                      \
+
 
 SOURCES +=                                      \
     src/gui/gui.cpp                             \
@@ -225,6 +222,12 @@ SOURCES +=                                      \
     src/gui/slideritem.cpp                      \
     src/gui/stylecombobox.cpp                   \
     src/gui/datalistview.cpp                    \
+    src/gui/geoitems/geoitems.cpp               \
+    src/gui/geoitems/pathitem.cpp               \
+    src/gui/geoitems/routeitem.cpp              \
+    src/gui/geoitems/waypointitem.cpp           \
+    src/gui/geoitems/trackitem.cpp              \
+    src/gui/geoitems/poi.cpp                    \
 
 # Main
 SOURCES += src/main.cpp \

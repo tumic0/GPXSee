@@ -139,6 +139,31 @@ QVector<Waypoint> POI::points(const QList<Waypoint> &list) const
 	return ret;
 }
 
+QVector<Waypoint> POI::points(const Waypoint &waypoint) const
+{
+	QVector<Waypoint> ret;
+	QSet<int> set;
+	qreal min[2], max[2];
+
+	const Coordinates &p = waypoint.coordinates();
+
+	QPair<Coordinates, Coordinates> br = p.boundingRect(_radius);
+	min[0] = br.first.lon();
+	min[1] = br.first.lat();
+	max[0] = br.second.lon();
+	max[1] = br.second.lat();
+
+	_tree.Search(min, max, cb, &set);
+
+	QSet<int>::const_iterator i = set.constBegin();
+	while (i != set.constEnd()) {
+		ret.append(_data.at(*i));
+		++i;
+	}
+
+	return ret;
+}
+
 void POI::enableFile(const QString &fileName, bool enable)
 {
 	int i;

@@ -30,7 +30,8 @@ static qreal nMax(qreal a, qreal b)
 		return NAN;
 }
 
-ElevationGraph::ElevationGraph(QWidget *parent) : GraphTab(parent)
+ElevationGraph::ElevationGraph(GeoItems &geoItems, QWidget *parent)
+	: GraphTab(geoItems, parent)
 {
 	_trackAscent = 0;
 	_routeAscent = 0;
@@ -68,14 +69,13 @@ void ElevationGraph::setInfo()
 void ElevationGraph::loadGraph(const Graph &graph, Type type, PathItem *path)
 {
 	if (graph.size() < 2) {
-		skipColor();
 		return;
 	}
 
 	ElevationGraphItem *gi = new ElevationGraphItem(graph, _graphType);
 	GraphView::addGraph(gi, path, type);
 
-	if (type == Track) {
+	if (type == TRACK_TYPE) {
 		_trackAscent += gi->ascent();
 		_trackDescent += gi->descent();
 		_trackMax = nMax(_trackMax, gi->max());
@@ -93,9 +93,9 @@ void ElevationGraph::loadData(const Data &data, const QList<PathItem *> &paths)
 	int p = 0;
 
 	for (int i = 0; i < data.tracks().count(); i++)
-		loadGraph(data.tracks().at(i)->elevation(), Track, paths.at(p++));
+		loadGraph(data.tracks().at(i)->elevation(), TRACK_TYPE, paths.at(p++));
 	for (int i = 0; i < data.routes().count(); i++)
-		loadGraph(data.routes().at(i)->elevation(), Route, paths.at(p++));
+		loadGraph(data.routes().at(i)->elevation(), ROUTE_TYPE, paths.at(p++));
 
 	setInfo();
 
@@ -140,7 +140,7 @@ void ElevationGraph::showTracks(bool show)
 	_showTracks = show;
 
 	setInfo();
-	showGraph(show, Track);
+	showGraph(show, TRACK_TYPE);
 
 	redraw();
 }
@@ -149,10 +149,30 @@ void ElevationGraph::showRoutes(bool show)
 {
 	_showRoutes = show;
 
-	showGraph(show, Route);
+	showGraph(show, ROUTE_TYPE);
 	setInfo();
 
 	redraw();
+}
+
+void ElevationGraph::addTrack(const Track &track, TrackItem *item)
+{
+	Graph graph = track.elevation();
+
+	if (graph.size() >= 2) {
+		loadGraph(graph, TRACK_TYPE, item);
+		redraw();
+	}
+}
+
+void ElevationGraph::addRoute(const Route &route, RouteItem *item)
+{
+	Graph graph = route.elevation();
+
+	if (graph.size() >= 2) {
+		loadGraph(graph, ROUTE_TYPE, item);
+		redraw();
+	}
 }
 
 qreal ElevationGraph::ascent() const

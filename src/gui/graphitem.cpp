@@ -67,15 +67,6 @@ void GraphItem::setGraphType(GraphType type)
 	updateBounds();
 }
 
-void GraphItem::setColor(const QColor &color)
-{
-	if (_pen.color() == color)
-		return;
-
-	_pen.setColor(color);
-	update();
-}
-
 void GraphItem::setWidth(int width)
 {
 	if (width == _width)
@@ -175,6 +166,15 @@ void GraphItem::hover(bool hover)
 		setZValue(zValue() - 1.0);
 	}
 
+	update();
+}
+
+void GraphItem::setColor(const QColor &color)
+{
+	if (_pen.color() == color)
+		return;
+
+	_pen.setColor(color);
 	update();
 }
 

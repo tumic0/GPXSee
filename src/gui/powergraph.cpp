@@ -3,7 +3,8 @@
 #include "powergraph.h"
 
 
-PowerGraph::PowerGraph(QWidget *parent) : GraphTab(parent)
+PowerGraph::PowerGraph(GeoItems &geoItems, QWidget *parent)
+	: GraphTab(geoItems, parent)
 {
 	_showTracks = true;
 
@@ -22,30 +23,6 @@ void PowerGraph::setInfo()
 		  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
 	} else
 		clearInfo();
-}
-
-void PowerGraph::loadData(const Data &data, const QList<PathItem *> &paths)
-{
-	for (int i = 0; i < data.tracks().count(); i++) {
-		const Graph &graph = data.tracks().at(i)->power();
-
-		if (graph.size() < 2) {
-			skipColor();
-			continue;
-		}
-
-		PowerGraphItem *gi = new PowerGraphItem(graph, _graphType);
-		GraphView::addGraph(gi, paths.at(i));
-
-		_avg.append(QPointF(data.tracks().at(i)->distance(), gi->avg()));
-	}
-
-	for (int i = 0; i < data.routes().count(); i++)
-		skipColor();
-
-	setInfo();
-
-	redraw();
 }
 
 qreal PowerGraph::avg() const
@@ -76,4 +53,19 @@ void PowerGraph::showTracks(bool show)
 	setInfo();
 
 	redraw();
+}
+
+void PowerGraph::addTrack(const Track &track, TrackItem *item)
+{
+	const Graph &graph = track.power();
+
+	if (graph.size() >= 2) {
+		PowerGraphItem *gi = new PowerGraphItem(graph, _graphType);
+		GraphView::addGraph(gi, item);
+
+		_avg.append(QPointF(track.distance(), gi->avg()));
+
+		setInfo();
+		redraw();
+	}
 }

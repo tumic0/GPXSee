@@ -9,11 +9,12 @@
 #include "units.h"
 #include "timetype.h"
 #include "graph.h"
-#include "poi.h"
+#include "geoitems/poi.h"
 #include "exportdialog.h"
 #include "optionsdialog.h"
 #include "data.h"
 #include "datalistview.h"
+#include "geoitems/geoitems.h"
 
 class QMenu;
 class QToolBar;
@@ -203,6 +204,7 @@ private:
 
 	Map *_map;
 	Data _data;
+	GeoItems _geoItems;
 	QString _pathName;
 
 	qreal _sliderPos;

@@ -5,7 +5,8 @@
 #include "speedgraph.h"
 
 
-SpeedGraph::SpeedGraph(QWidget *parent) : GraphTab(parent)
+SpeedGraph::SpeedGraph(GeoItems &geoItems, QWidget *parent)
+	: GraphTab(geoItems, parent)
 {
 	_timeType = Total;
 	_showTracks = true;
@@ -25,34 +26,6 @@ void SpeedGraph::setInfo()
 		  1) + UNIT_SPACE + yUnits());
 	} else
 		clearInfo();
-}
-
-void SpeedGraph::loadData(const Data &data, const QList<PathItem *> &paths)
-{
-	for (int i = 0; i < data.tracks().count(); i++) {
-		const Track *track = data.tracks().at(i);
-		const Graph &graph = track->speed();
-
-		if (graph.size() < 2) {
-			skipColor();
-			continue;
-		}
-
-		SpeedGraphItem *gi = new SpeedGraphItem(graph, _graphType,
-		  track->movingTime());
-		gi->setTimeType(_timeType);
-		GraphView::addGraph(gi, paths.at(i));
-
-		_avg.append(QPointF(track->distance(), gi->avg()));
-		_mavg.append(QPointF(track->distance(), gi->mavg()));
-	}
-
-	for (int i = 0; i < data.routes().count(); i++)
-		skipColor();
-
-	setInfo();
-
-	redraw();
 }
 
 qreal SpeedGraph::avg() const
@@ -115,4 +88,22 @@ void SpeedGraph::showTracks(bool show)
 	setInfo();
 
 	redraw();
+}
+
+void SpeedGraph::addTrack(const Track &track, TrackItem *item)
+{
+	const Graph &graph = track.speed();
+
+	if (graph.size() >= 2) {
+		SpeedGraphItem *gi = new SpeedGraphItem(graph, _graphType,
+												track.movingTime());
+		gi->setTimeType(_timeType);
+		GraphView::addGraph(gi, item);
+
+		_avg.append(QPointF(track.distance(), gi->avg()));
+		_mavg.append(QPointF(track.distance(), gi->mavg()));
+
+		setInfo();
+		redraw();
+	}
 }

@@ -59,10 +59,8 @@ Data::~Data()
 
 void Data::processData()
 {
-	// TODO: Update only added data
-	_tracks.clear();
-	foreach (const TrackData &t, _trackData) {
-		Track *track = new Track(t);
+	for (int i = _tracks.count(); i < _trackData.count(); i++) {
+		Track *track = new Track(_trackData[i]);
 		_tracks.append(track);
 		_trackDistance += track->distance();
 		_trackTime += track->time();
@@ -73,13 +71,14 @@ void Data::processData()
 			_trackDateRange.first = date;
 		if (_trackDateRange.second.isNull() || _trackDateRange.second < date)
 			_trackDateRange.second = date;
+		emit addedTrack(*track);
 	}
 
-	_routes.clear();
-	foreach (const RouteData &r, _routeData) {
-		Route *route = new Route(r);
+	for (int i = _routes.count(); i < _routeData.count(); i++) {
+		Route *route = new Route(_routeData[i]);
 		_routes.append(route);
 		_routeDistance += route->distance();
+		emit addedRoute(*route);
 	}
 }
 
@@ -144,6 +143,8 @@ void Data::clear()
 	_trackMovingTime = 0;
 	_trackDateRange = DateRange(QDate(), QDate());
 	_routeDistance = 0;
+
+	emit cleared();
 }
 
 QString Data::formats()

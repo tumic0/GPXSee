@@ -12,7 +12,7 @@
 #include "griditem.h"
 #include "graph.h"
 #include "graphitem.h"
-#include "pathitem.h"
+#include "geoitems/pathitem.h"
 #include "format.h"
 #include "graphview.h"
 
@@ -183,15 +183,21 @@ void GraphView::addGraph(GraphItem *graph, PathItem *path, int id)
 {
 	graph->setUnits(_units);
 	graph->setId(id);
-	graph->setColor(_palette.nextColor());
+	graph->setColor(path->color());
 	graph->setWidth(_width);
 
-	connect(this, SIGNAL(sliderPositionChanged(qreal)), graph,
-	  SLOT(emitSliderPositionChanged(qreal)));
-	connect(graph, SIGNAL(sliderPositionChanged(qreal)), path,
-	  SLOT(moveMarker(qreal)));
-	connect(path, SIGNAL(selected(bool)), graph, SLOT(hover(bool)));
-	connect(graph, SIGNAL(selected(bool)), path, SLOT(hover(bool)));
+	connect(this, SIGNAL(sliderPositionChanged(qreal)),
+			graph, SLOT(emitSliderPositionChanged(qreal)));
+
+	connect(graph, SIGNAL(sliderPositionChanged(qreal)),
+			path, SLOT(moveMarker(qreal)));
+	connect(graph, SIGNAL(selected(bool)),
+			path, SLOT(hover(bool)));
+
+	connect(path, SIGNAL(selected(bool)),
+			graph, SLOT(hover(bool)));
+	connect(path, SIGNAL(colorChanged(QColor)),
+			graph, SLOT(setColor(QColor)));
 
 	_graphs.append(graph);
 
@@ -359,7 +365,6 @@ void GraphView::clear()
 
 	_graphs.clear();
 	_visible.clear();
-	_palette.reset();
 
 	_bounds = QRectF();
 	_sliderPos = 0;
@@ -451,15 +456,6 @@ void GraphView::addInfo(const QString &key, const QString &value)
 void GraphView::clearInfo()
 {
 	_info->clear();
-}
-
-void GraphView::setPalette(const Palette &palette)
-{
-	_palette = palette;
-	_palette.reset();
-
-	for (int i = 0; i < _graphs.count(); i++)
-		_graphs.at(i)->setColor(_palette.nextColor());
 }
 
 void GraphView::setGraphWidth(int width)

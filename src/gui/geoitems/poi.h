@@ -28,6 +28,8 @@ public:
 	QVector<Waypoint> points(const Path &path) const;
 	QVector<Waypoint> points(const QList<WaypointItem*> &list) const;
 	QVector<Waypoint> points(const QList<Waypoint> &list) const;
+	QVector<Waypoint> points(const Waypoint &waypoint) const;
+
 
 	const QStringList &files() const {return _files;}
 	void enableFile(const QString &fileName, bool enable);

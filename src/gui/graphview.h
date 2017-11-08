@@ -5,7 +5,6 @@
 #include <QList>
 #include <QSet>
 #include "graph.h"
-#include "palette.h"
 #include "units.h"
 
 
@@ -30,7 +29,6 @@ public:
 
 	void plot(QPainter *painter, const QRectF &target, qreal scale);
 
-	void setPalette(const Palette &palette);
 	void setGraphWidth(int width);
 	void showGrid(bool show);
 	void showSliderInfo(bool show);
@@ -66,7 +64,6 @@ protected:
 	void redraw(const QSizeF &size);
 	void addInfo(const QString &key, const QString &value);
 	void clearInfo();
-	void skipColor() {_palette.nextColor();}
 
 	QList<GraphItem*> _graphs;
 	GraphType _graphType;
@@ -107,7 +104,6 @@ private:
 	QList<GraphItem*> _visible;
 	QSet<int> _hide;
 	QRectF _bounds;
-	Palette _palette;
 	int _width;
 };
 

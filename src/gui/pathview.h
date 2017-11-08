@@ -10,6 +10,7 @@
 #include "waypoint.h"
 #include "rectc.h"
 #include "searchpointer.h"
+#include "geoitems/geoitems.h"
 
 class Data;
 class POI;
@@ -27,22 +28,15 @@ class PathView : public QGraphicsView
 	Q_OBJECT
 
 public:
-	PathView(Map *map, POI *poi, QWidget *parent = 0);
+	PathView(GeoItems &geoItems, Map *map, POI *poi, QWidget *parent = 0);
 
-	QList<PathItem*> loadData(const Data &data);
-
-	void setPalette(const Palette &palette);
 	void setPOI(POI *poi);
 	void setMap(Map *map);
 	void setUnits(enum Units units);
 
 	void plot(QPainter *painter, const QRectF &target, qreal scale, bool hires);
 
-	int trackCount() const {return _tracks.count();}
-	int routeCount() const {return _routes.count();}
 	int waypointCount() const {return _waypoints.count();}
-
-	void clear();
 
 	void setTrackWidth(int width);
 	void setRouteWidth(int width);
@@ -56,27 +50,26 @@ public:
 	void setBackgroundColor(const QColor &color);
 	void useOpenGL(bool use);
 	void useAntiAliasing(bool use);
+signals:
+	void digitalZoomChanged(int zoom);
 
 public slots:
 	void showMap(bool show);
 	void showPOI(bool show);
 	void setPOIOverlap(bool overlap);
-	void showWaypointLabels(bool show);
 	void showPOILabels(bool show);
-	void showTracks(bool show);
-	void showRoutes(bool show);
-	void showWaypoints(bool show);
-	void showRouteWaypoints(bool show);
 	void clearMapCache();
 
 private slots:
 	void updatePOI();
 	void reloadMap();
 
+	void addTrackItem(const Track &t, TrackItem *track);
+	void addRouteItem(const Route &r, RouteItem *route);
+	void addWaypointItem(const Waypoint &w, WaypointItem *waypoints);
+	void clear();
+
 private:
-	PathItem *addTrack(const Track &track);
-	PathItem *addRoute(const Route &route);
-	void addWaypoints(const QList<Waypoint> &waypoints);
 	void addPOI(const QVector<Waypoint> &waypoints);
 	void loadPOI();
 	void clearPOI();
@@ -101,37 +94,26 @@ private:
 
 	QGraphicsScene *_scene;
 	ScaleItem *_mapScale;
-	QList<TrackItem*> _tracks;
-	QList<RouteItem*> _routes;
 	QList<WaypointItem*> _waypoints;
 	QHash<SearchPointer<Waypoint>, WaypointItem*> _pois;
+
+	GeoItems &_geoItems;
 
 	RectC _tr, _rr, _wr;
 	qreal _res;
 
 	Map *_map;
 	POI *_poi;
-	Palette _palette;
 	Units _units;
 
 	qreal _opacity;
 	QColor _backgroundColor;
 	bool _showMap;
-	bool _showTracks;
-	bool _showRoutes;
-	bool _showWaypoints;
-	bool _showWaypointLabels;
 	bool _showPOI;
 	bool _showPOILabels;
 	bool _overlapPOIs;
 	bool _showRouteWaypoints;
-	int _trackWidth;
-	int _routeWidth;
-	Qt::PenStyle _trackStyle;
-	Qt::PenStyle _routeStyle;
-	int _waypointSize;
 	int _poiSize;
-	QColor _waypointColor;
 	QColor _poiColor;
 
 	int _digitalZoom;

@@ -3,7 +3,8 @@
 #include "heartrategraph.h"
 
 
-HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphTab(parent)
+HeartRateGraph::HeartRateGraph(GeoItems &geoItems, QWidget *parent)
+	: GraphTab(geoItems, parent)
 {
 	_showTracks = true;
 
@@ -22,30 +23,6 @@ void HeartRateGraph::setInfo()
 		  0) + UNIT_SPACE + yUnits());
 	} else
 		clearInfo();
-}
-
-void HeartRateGraph::loadData(const Data &data, const QList<PathItem *> &paths)
-{
-	for (int i = 0; i < data.tracks().count(); i++) {
-		const Graph &graph = data.tracks().at(i)->heartRate();
-
-		if (graph.size() < 2) {
-			skipColor();
-			continue;
-		}
-
-		HeartRateGraphItem *gi = new HeartRateGraphItem(graph, _graphType);
-		GraphView::addGraph(gi, paths.at(i));
-
-		_avg.append(QPointF(data.tracks().at(i)->distance(), gi->avg()));
-	}
-
-	for (int i = 0; i < data.routes().count(); i++)
-		skipColor();
-
-	setInfo();
-
-	redraw();
 }
 
 qreal HeartRateGraph::avg() const
@@ -76,4 +53,19 @@ void HeartRateGraph::showTracks(bool show)
 	setInfo();
 
 	redraw();
+}
+
+void HeartRateGraph::addTrack(const Track &track, TrackItem *item)
+{
+	const Graph &graph = track.heartRate();
+
+	if (graph.size() >= 2) {
+		HeartRateGraphItem *gi = new HeartRateGraphItem(graph, _graphType);
+		GraphView::addGraph(gi, item);
+
+		_avg.append(QPointF(track.distance(), gi->avg()));
+
+		setInfo();
+		redraw();
+	}
 }

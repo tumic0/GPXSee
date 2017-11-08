@@ -81,15 +81,6 @@ void PathItem::setUnits(enum Units units)
 	setToolTip(toolTip(units));
 }
 
-void PathItem::setColor(const QColor &color)
-{
-	if (_pen.color() == color)
-		return;
-
-	_pen.setColor(color);
-	update();
-}
-
 void PathItem::setWidth(qreal width)
 {
 	if (_width == width)
@@ -183,6 +174,17 @@ void PathItem::hover(bool hover)
 	}
 
 	update();
+}
+
+void PathItem::setColor(const QColor &color)
+{
+	if (_pen.color() == color)
+		return;
+
+	_pen.setColor(color);
+	update();
+
+	emit colorChanged(color);
 }
 
 void PathItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)

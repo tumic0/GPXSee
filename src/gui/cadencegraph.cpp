@@ -3,7 +3,8 @@
 #include "cadencegraph.h"
 
 
-CadenceGraph::CadenceGraph(QWidget *parent) : GraphTab(parent)
+CadenceGraph::CadenceGraph(GeoItems &geoItems, QWidget *parent)
+	: GraphTab(geoItems, parent)
 {
 	_showTracks = true;
 
@@ -22,30 +23,6 @@ void CadenceGraph::setInfo()
 		  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
 	} else
 		clearInfo();
-}
-
-void CadenceGraph::loadData(const Data &data, const QList<PathItem *> &paths)
-{
-	for (int i = 0; i < data.tracks().count(); i++) {
-		const Graph &graph = data.tracks().at(i)->cadence();
-
-		if (graph.size() < 2) {
-			skipColor();
-			continue;
-		}
-
-		CadenceGraphItem *gi = new CadenceGraphItem(graph, _graphType);
-		GraphView::addGraph(gi, paths.at(i));
-
-		_avg.append(QPointF(data.tracks().at(i)->distance(), gi->avg()));
-	}
-
-	for (int i = 0; i < data.routes().count(); i++)
-		skipColor();
-
-	setInfo();
-
-	redraw();
 }
 
 qreal CadenceGraph::avg() const
@@ -76,4 +53,18 @@ void CadenceGraph::showTracks(bool show)
 	setInfo();
 
 	redraw();
+}
+
+void CadenceGraph::addTrack(const Track &track, TrackItem *item)
+{
+	const Graph &graph = track.cadence();
+
+	if (graph.size() >= 2) {
+		CadenceGraphItem *gi = new CadenceGraphItem(graph, _graphType);
+		GraphView::addGraph(gi, (PathItem*)item);
+
+		_avg.append(QPointF(track.distance(), gi->avg()));
+
+		redraw();
+	}
 }

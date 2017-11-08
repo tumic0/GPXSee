@@ -24,7 +24,6 @@ public:
 	void setGraphType(GraphType type);
 	int id() const {return _id;}
 	void setId(int id) {_id = id;}
-	void setColor(const QColor &color);
 	void setWidth(int width);
 	virtual void setUnits(Units units) {Q_UNUSED(units);}
 
@@ -40,6 +39,7 @@ signals:
 public slots:
 	void emitSliderPositionChanged(qreal);
 	void hover(bool hover);
+	void setColor(const QColor &color);
 
 private:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
