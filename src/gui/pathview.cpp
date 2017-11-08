@@ -50,7 +50,6 @@ PathView::PathView(GeoItems &geoItems, Map *map, POI *poi, QWidget *parent)
 	_poi = poi;
 	connect(_poi, SIGNAL(pointsChanged()), this, SLOT(updatePOI()));
 
-	_units = Metric;
 	_opacity = 1.0;
 	_backgroundColor = Qt::white;
 
@@ -72,6 +71,8 @@ PathView::PathView(GeoItems &geoItems, Map *map, POI *poi, QWidget *parent)
 					 this, SLOT(addWaypointItem(Waypoint, WaypointItem*)));
 	QObject::connect(&_geoItems, SIGNAL(cleared()),
 					 this, SLOT(clear()));
+	QObject::connect(&_geoItems, SIGNAL(unitsChanged(Units)),
+					 this, SLOT(setUnits(Units)));
 	QObject::connect(this, SIGNAL(digitalZoomChanged(int)),
 					 &_geoItems, SLOT(setDigitalZoom(int)));
 
@@ -280,20 +281,6 @@ void PathView::addPOI(const QVector<Waypoint> &waypoints)
 	}
 }
 
-void PathView::setUnits(enum Units units)
-{
-	_units = units;
-
-	_mapScale->setUnits(units);
-
-	for (int i = 0; i < _waypoints.size(); i++)
-		_waypoints.at(i)->setUnits(units);
-
-	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
-		it.value()->setUnits(units);
-}
-
 void PathView::clearMapCache()
 {
 	_map->clearCache();
@@ -496,7 +483,17 @@ void PathView::clear()
 	QPixmapCache::clear();
 }
 
+void PathView::setUnits(enum Units units)
+{
+	_mapScale->setUnits(units);
 
+	for (int i = 0; i < _waypoints.size(); i++)
+		_waypoints.at(i)->setUnits(units);
+
+	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
+	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+		it.value()->setUnits(units);
+}
 
 void PathView::showMap(bool show)
 {

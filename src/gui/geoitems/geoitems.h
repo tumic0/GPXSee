@@ -8,7 +8,9 @@
 #include "routeitem.h"
 #include "trackitem.h"
 #include "waypointitem.h"
+#include "poi.h"
 #include "palette.h"
+#include "searchpointer.h"
 
 class GeoItems : public QObject
 {
@@ -17,16 +19,6 @@ class GeoItems : public QObject
 public:
 	GeoItems(Map *map, const Data *data, QObject *parent = 0);
 	virtual ~GeoItems();
-
-	void setPalette(const Palette &palette);
-	void setMap(Map *map);
-	void setUnits(enum Units units);
-	void setTrackWidth(int width);
-	void setRouteWidth(int width);
-	void setTrackStyle(Qt::PenStyle style);
-	void setRouteStyle(Qt::PenStyle style);
-	void setWaypointSize(int size);
-	void setWaypointColor(const QColor &color);
 
 	int getDigitalZoom() {return _digitalZoom;}
 
@@ -40,6 +32,7 @@ signals:
 	void addedRouteItem(const Route& r, RouteItem *ri);
 	void addedWaypointItem(const Waypoint &w, WaypointItem *wi);
 	void cleared();
+	void unitsChanged(enum Units units);
 
 public slots:
 	void setDigitalZoom(int zoom);
@@ -48,6 +41,15 @@ public slots:
 	void showWaypoints(bool show);
 	void showWaypointLabels(bool show);
 	void showRouteWaypoints(bool show);
+	void setPalette(const Palette &palette);
+	void setMap(Map *map);
+	void setUnits(enum Units units);
+	void setTrackWidth(int width);
+	void setRouteWidth(int width);
+	void setTrackStyle(Qt::PenStyle style);
+	void setRouteStyle(Qt::PenStyle style);
+	void setWaypointSize(int size);
+	void setWaypointColor(const QColor &color);
 
 private slots:
 	void addTrack(const Track &t);
@@ -56,10 +58,16 @@ private slots:
 	void clear();
 
 private:
+	void addPOI(const QVector<Waypoint> &waypoints);
+
 	Map *_map;
 	QList<TrackItem*> _tracks;
 	QList<RouteItem*> _routes;
 	QList<WaypointItem*> _waypoints;
+
+	// TEMP
+	QHash<SearchPointer<Waypoint>, WaypointItem*> _pois;
+	POI *_poi;
 
 	// Styling
 	Palette _palette;

@@ -29,10 +29,11 @@ public:
 						 this, SLOT(addRoute(Route,RouteItem*)));
 		QObject::connect(&_geoItems, SIGNAL(cleared()),
 						 this, SLOT(clear()));
+		QObject::connect(&_geoItems, SIGNAL(unitsChanged(Units)),
+						 this, SLOT(setUnits(Units)));
 	}
 
 	virtual QString label() const = 0;
-	virtual void setUnits(enum Units units) {GraphView::setUnits(units);}
 	virtual void setGraphType(GraphType type) {GraphView::setGraphType(type);}
 	virtual void setTimeType(enum TimeType type) {Q_UNUSED(type)}
 	virtual void showTracks(bool show) {Q_UNUSED(show)}
@@ -44,6 +45,7 @@ public slots:
 
 private slots:
 	virtual void clear() {GraphView::clear();}
+	virtual void setUnits(enum Units units) {GraphView::setUnits(units);}
 
 private:
 	GeoItems &_geoItems;

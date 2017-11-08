@@ -1379,9 +1379,8 @@ void GUI::setUnits(Units units)
 	_export.units = units;
 	_options.units = units;
 
-	_pathView->setUnits(units);
-	for (int i = 0; i <_tabs.count(); i++)
-		_tabs.at(i)->setUnits(units);
+	_geoItems.setUnits(units);
+
 	updateStatusBarInfo();
 }
 

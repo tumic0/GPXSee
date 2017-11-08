@@ -59,14 +59,6 @@ void TemperatureGraph::setYUnits(Units units)
 	}
 }
 
-void TemperatureGraph::setUnits(Units units)
-{
-	setYUnits(units);
-	setInfo();
-
-	GraphView::setUnits(units);
-}
-
 void TemperatureGraph::showTracks(bool show)
 {
 	_showTracks = show;
@@ -90,4 +82,12 @@ void TemperatureGraph::addTrack(const Track &track, TrackItem *item)
 		setInfo();
 		redraw();
 	}
+}
+
+void TemperatureGraph::setUnits(Units units)
+{
+	setYUnits(units);
+	setInfo();
+
+	GraphView::setUnits(units);
 }

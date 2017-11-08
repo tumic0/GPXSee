@@ -13,13 +13,15 @@ public:
 	QString label() const {return tr("Elevation");}
 	void loadData(const Data &data, const QList<PathItem *> &paths);
 	void clear();
-	void setUnits(enum Units units);
 	void showTracks(bool show);
 	void showRoutes(bool show);
 
 public slots:
 	virtual void addTrack(const Track &track, TrackItem *item);
 	virtual void addRoute(const Route &route, RouteItem *item);
+
+private slots:
+	virtual void setUnits(enum Units units);
 
 private:
 	enum Type {TRACK_TYPE, ROUTE_TYPE};

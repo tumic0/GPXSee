@@ -12,7 +12,6 @@ public:
 
 	QString label() const {return tr("Temperature");}
 	void clear();
-	void setUnits(enum Units units);
 	void showTracks(bool show);
 
 public slots:
@@ -21,6 +20,9 @@ public slots:
 		Q_UNUSED(track)
 		Q_UNUSED(item)
 	}
+
+private slots:
+	virtual void setUnits(enum Units units);
 
 private:
 	qreal avg() const;

@@ -127,14 +127,6 @@ void ElevationGraph::setYUnits(Units units)
 	}
 }
 
-void ElevationGraph::setUnits(Units units)
-{
-	setYUnits(units);
-	setInfo();
-
-	GraphView::setUnits(units);
-}
-
 void ElevationGraph::showTracks(bool show)
 {
 	_showTracks = show;
@@ -173,6 +165,14 @@ void ElevationGraph::addRoute(const Route &route, RouteItem *item)
 		loadGraph(graph, ROUTE_TYPE, item);
 		redraw();
 	}
+}
+
+void ElevationGraph::setUnits(Units units)
+{
+	setYUnits(units);
+	setInfo();
+
+	GraphView::setUnits(units);
 }
 
 qreal ElevationGraph::ascent() const

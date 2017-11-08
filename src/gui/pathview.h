@@ -32,7 +32,6 @@ public:
 
 	void setPOI(POI *poi);
 	void setMap(Map *map);
-	void setUnits(enum Units units);
 
 	void plot(QPainter *painter, const QRectF &target, qreal scale, bool hires);
 
@@ -68,6 +67,7 @@ private slots:
 	void addRouteItem(const Route &r, RouteItem *route);
 	void addWaypointItem(const Waypoint &w, WaypointItem *waypoints);
 	void clear();
+	void setUnits(enum Units units);
 
 private:
 	void addPOI(const QVector<Waypoint> &waypoints);
@@ -104,7 +104,6 @@ private:
 
 	Map *_map;
 	POI *_poi;
-	Units _units;
 
 	qreal _opacity;
 	QColor _backgroundColor;
