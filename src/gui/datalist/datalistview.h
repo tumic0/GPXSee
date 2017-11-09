@@ -11,7 +11,7 @@ class DataListView : public QTabWidget
 {
 	Q_OBJECT
 public:
-	explicit DataListView(GeoItems &geoItems, QWidget *parent = nullptr);
+	explicit DataListView(GeoItems &geoItems, QWidget *parent = 0);
 signals:
 
 public slots:
