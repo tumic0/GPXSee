@@ -90,7 +90,7 @@ GUI::GUI()
 
 	setWindowIcon(QIcon(QPixmap(APP_ICON)));
 	setWindowTitle(APP_NAME);
-	setUnifiedTitleAndToolBarOnMac(true);
+	//setUnifiedTitleAndToolBarOnMac(true);
 	setAcceptDrops(true);
 
 	_sliderPos = 0;
