@@ -73,7 +73,7 @@ void TrackItemsModel::setUnits(Units units)
 	//QVector<int> roles;
 	//roles.append(Qt::DisplayRole);
 	//emit QAbstractItemModel::dataChanged(startColumn, endColumn, roles);
-	emit QAbstractItemModel::dataChanged(startColumn, endColumn, roles);
+	emit QAbstractItemModel::dataChanged(startColumn, endColumn);
 }
 
 void TrackItemsModel::clear()
