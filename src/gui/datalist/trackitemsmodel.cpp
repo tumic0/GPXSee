@@ -70,7 +70,9 @@ void TrackItemsModel::setUnits(Units units)
 
 	QModelIndex startColumn = this->index(0, TRACK_DISTANCE);
 	QModelIndex endColumn = this->index(rowCount(), TRACK_DISTANCE);
-	emit QAbstractItemModel::dataChanged(startColumn, endColumn, {Qt::DisplayRole});
+	QVector<int> roles;
+	roles.append(Qt::DisplayRole);
+	emit QAbstractItemModel::dataChanged(startColumn, endColumn, roles);
 }
 
 void TrackItemsModel::clear()

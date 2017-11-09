@@ -73,7 +73,9 @@ void RouteItemsModel::setUnits(Units units)
 
 	QModelIndex startColumn = this->index(0, ROUTE_DISTANCE);
 	QModelIndex endColumn = this->index(rowCount(), ROUTE_DISTANCE);
-	emit QAbstractItemModel::dataChanged(startColumn, endColumn, {Qt::DisplayRole});
+	QVector<int> roles;
+	roles.append(Qt::DisplayRole);
+	emit QAbstractItemModel::dataChanged(startColumn, endColumn, roles);
 }
 
 void RouteItemsModel::clear()
