@@ -96,10 +96,14 @@ bool Data::loadFile(const QString &fileName)
 	}
 
 	QHash<QString, Parser*>::iterator it;;
+	int wpCurrCount = _waypoints.count();
 
 	if ((it = _parsers.find(fi.suffix().toLower())) != _parsers.end()) {
 		if (it.value()->parse(&file, _trackData, _routeData, _waypoints)) {
 			processData();
+			for (int i = wpCurrCount; i < _waypoints.count(); i++) {
+				emit addedWaypoint(_waypoints.at(i));
+			}
 			return true;
 		}
 
@@ -109,6 +113,9 @@ bool Data::loadFile(const QString &fileName)
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
 			if (it.value()->parse(&file, _trackData, _routeData, _waypoints)) {
 				processData();
+				for (int i = wpCurrCount; i < _waypoints.count(); i++) {
+					emit addedWaypoint(_waypoints.at(i));
+				}
 				return true;
 			}
 			file.reset();

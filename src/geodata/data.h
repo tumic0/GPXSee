@@ -44,7 +44,7 @@ public:
 signals:
 	void addedTrack(const Track &t);
 	void addedRoute(const Route &r);
-	//void addedWaypoint(Waypoint* w);
+	void addedWaypoint(const Waypoint& w);
 	void cleared();
 
 private:

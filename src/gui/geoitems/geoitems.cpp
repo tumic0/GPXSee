@@ -27,6 +27,8 @@ GeoItems::GeoItems(Map *map, const Data *data, QObject *parent)
 					 this, SLOT(addTrack(Track)));
 	QObject::connect(data, SIGNAL(addedRoute(Route)),
 					 this, SLOT(addRoute(Route)));
+	QObject::connect(data, SIGNAL(addedWaypoint(Waypoint)),
+					 this, SLOT(addWaypoint(Waypoint)));
 	QObject::connect(data, SIGNAL(cleared()),
 					 this, SLOT(clear()));
 }
