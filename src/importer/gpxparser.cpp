@@ -83,6 +83,31 @@ void GPXParser::extensions(Trackpoint &trackpoint)
 	}
 }
 
+void GPXParser::extensions(RouteData &route)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "RoutePointExtension") {
+			while (_reader.readNextStartElement()) {
+				/*
+				if (_reader.namespaceUri() == "http://www.garmin.com/xmlschemas/GpxExtensions/v3") {
+					std::cout << "Garmin" << std::endl;
+				}
+				*/
+				if (_reader.name() == "rpt") {
+					qreal lat = _reader.attributes().value("lat").toString().toDouble();
+					qreal lon = _reader.attributes().value("lon").toString().toDouble();
+					route.append(Waypoint(Coordinates(lon, lat)));
+					_reader.skipCurrentElement();
+				} else {
+					_reader.skipCurrentElement();
+				}
+			}
+		} else {
+			_reader.skipCurrentElement();
+		}
+	}
+}
+
 void GPXParser::trackpointData(Trackpoint &trackpoint)
 {
 	qreal gh = NAN;
@@ -127,6 +152,31 @@ void GPXParser::waypointData(Waypoint &waypoint)
 		waypoint.setElevation(waypoint.elevation() - gh);
 }
 
+void GPXParser::waypointData(Waypoint &waypoint, RouteData &route)
+{
+	qreal gh = NAN;
+
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == "name")
+			waypoint.setName(_reader.readElementText());
+		else if (_reader.name() == "desc")
+			waypoint.setDescription(_reader.readElementText());
+		else if (_reader.name() == "ele")
+			waypoint.setElevation(number());
+		else if (_reader.name() == "geoidheight")
+			gh = number();
+		else if (_reader.name() == "time")
+			waypoint.setTimestamp(time());
+		else if (_reader.name() == "extensions")
+			extensions(route);
+		else
+			_reader.skipCurrentElement();
+	}
+
+	if (!std::isnan(gh) && !std::isnan(waypoint.elevation()))
+		waypoint.setElevation(waypoint.elevation() - gh);
+}
+
 void GPXParser::trackpoints(TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
@@ -143,13 +193,14 @@ void GPXParser::routepoints(RouteData &route)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "rtept") {
 			route.append(Waypoint(coordinates()));
-			waypointData(route.last());
+			waypointData(route.last(), route);
 		} else if (_reader.name() == "name")
 			route.setName(_reader.readElementText());
 		else if (_reader.name() == "desc")
 			route.setDescription(_reader.readElementText());
-		else
+		else {
 			_reader.skipCurrentElement();
+		}
 	}
 }
 
@@ -190,7 +241,7 @@ bool GPXParser::parse(QFile *file, QList<TrackData> &tracks,
 {
 	_reader.clear();
 	_reader.setDevice(file);
-
+	_reader.setNamespaceProcessing(true);
 	if (_reader.readNextStartElement()) {
 		if (_reader.name() == "gpx")
 			gpx(tracks, routes, waypoints);

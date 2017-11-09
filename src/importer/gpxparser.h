@@ -23,8 +23,10 @@ private:
 	void routepoints(RouteData &route);
 	void tpExtension(Trackpoint &trackpoint);
 	void extensions(Trackpoint &trackpoint);
+	void extensions(RouteData &route);
 	void trackpointData(Trackpoint &trackpoint);
 	void waypointData(Waypoint &waypoint);
+	void waypointData(Waypoint &waypoint, RouteData &route);
 	qreal number();
 	QDateTime time();
 	Coordinates coordinates();

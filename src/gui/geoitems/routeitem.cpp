@@ -26,8 +26,18 @@ RouteItem::RouteItem(const Route &route, Map *map, QGraphicsItem *parent)
 {
 	const QVector<Waypoint> &waypoints = route.waypoints();
 
+	/*
 	for (int i = 0; i < waypoints.size(); i++)
 		new WaypointItem(waypoints.at(i), map, this);
+	*/
+
+	// TODO: Better implementation
+	// separation of route waypoints and route path
+	foreach (const Waypoint &w, waypoints) {
+		if (!w.name().isNull()) {
+			new WaypointItem(w, map, this);
+		}
+	}
 
 	_name = route.name();
 	_desc = route.description();
