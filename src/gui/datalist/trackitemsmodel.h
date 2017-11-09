@@ -16,15 +16,15 @@ class TrackItemsModel : public QAbstractTableModel {
 		N_COLUMNS
 	};
 public:
-	TrackItemsModel(GeoItems &geoItems, QObject *parent = Q_NULLPTR);
+	TrackItemsModel(GeoItems &geoItems, QObject *parent = 0);
 
-	int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
-	int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+	int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-	QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
 private slots:
 	void addTrackItem(const Track &t, TrackItem *trackItem);
