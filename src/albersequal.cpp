@@ -41,7 +41,6 @@ Defense.
 
 */
 
-#include "ellipsoid.h"
 #include "rd.h"
 #include "albersequal.h"
 

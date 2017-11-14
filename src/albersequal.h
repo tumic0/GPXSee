@@ -1,9 +1,8 @@
 #ifndef ALBERSEQUAL_H
 #define ALBERSEQUAL_H
 
+#include "ellipsoid.h"
 #include "projection.h"
-
-class Ellipsoid;
 
 class AlbersEqual : public Projection
 {
