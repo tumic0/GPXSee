@@ -19,6 +19,7 @@
 #include "utm.h"
 #include "lambertconic.h"
 #include "albersequal.h"
+#include "azimuthalequalarea.h"
 #include "ozf.h"
 #include "rectc.h"
 #include "offlinemap.h"
@@ -208,6 +209,9 @@ bool OfflineMap::createProjection(const QString &datum,
 		_projection = new AlbersEqual(d.ellipsoid(), setup.standardParallel1,
 		  setup.standardParallel2, setup.latitudeOrigin, setup.longitudeOrigin,
 		  setup.falseEasting, setup.falseNorthing);
+	else if (projection == "(A)Lambert Azimuthual Equal Area")
+		_projection = new AzimuthalEqualArea(d.ellipsoid(), setup.latitudeOrigin,
+		  setup.longitudeOrigin, setup.falseEasting, setup.falseNorthing);
 	else if (projection == "(UTM) Universal Transverse Mercator") {
 		if (setup.zone)
 			_projection = new UTM(d.ellipsoid(), setup.zone);
