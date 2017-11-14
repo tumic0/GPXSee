@@ -42,14 +42,14 @@ Defense.
 */
 
 #include "rd.h"
-#include "azimuthalequalarea.h"
+#include "lambertazimuthal.h"
 
 
 #ifndef M_PI_2
 	#define M_PI_2 1.57079632679489661923
 #endif // M_PI_2
 
-AzimuthalEqualArea::AzimuthalEqualArea(const Ellipsoid &ellipsoid,
+LambertAzimuthal::LambertAzimuthal(const Ellipsoid &ellipsoid,
   double latitudeOrigin, double longitudeOrigin, double falseEasting,
   double falseNorthing)
 {
@@ -74,7 +74,7 @@ AzimuthalEqualArea::AzimuthalEqualArea(const Ellipsoid &ellipsoid,
 	_falseEasting = falseEasting;
 }
 
-QPointF AzimuthalEqualArea::ll2xy(const Coordinates &c) const
+QPointF LambertAzimuthal::ll2xy(const Coordinates &c) const
 {
 	double dlam;
 	double k_prime;
@@ -143,7 +143,7 @@ QPointF AzimuthalEqualArea::ll2xy(const Coordinates &c) const
 	return p;
 }
 
-Coordinates AzimuthalEqualArea::xy2ll(const QPointF &p) const
+Coordinates LambertAzimuthal::xy2ll(const QPointF &p) const
 {
 	double dx, dy;
 	double rho;

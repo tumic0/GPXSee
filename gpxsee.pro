@@ -104,7 +104,7 @@ HEADERS += src/config.h \
     src/temperaturegraphitem.h \
     src/cadencegraphitem.h \
     src/powergraphitem.h \
-    src/azimuthalequalarea.h
+    src/lambertazimuthal.h
 SOURCES += src/main.cpp \
     src/gui.cpp \
     src/poi.cpp \
@@ -181,7 +181,7 @@ SOURCES += src/main.cpp \
     src/temperaturegraphitem.cpp \
     src/cadencegraphitem.cpp \
     src/powergraphitem.cpp \
-    src/azimuthalequalarea.cpp
+    src/lambertazimuthal.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \

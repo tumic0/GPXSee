@@ -1,13 +1,13 @@
-#ifndef AZIMUTHALEQUALAREA_H
-#define AZIMUTHALEQUALAREA_H
+#ifndef LAMBERTAZIMUTHAL_H
+#define LAMBERTAZIMUTHAL_H
 
 #include "ellipsoid.h"
 #include "projection.h"
 
-class AzimuthalEqualArea : public Projection
+class LambertAzimuthal : public Projection
 {
 public:
-	AzimuthalEqualArea(const Ellipsoid &ellipsoid, double latitudeOrigin,
+	LambertAzimuthal(const Ellipsoid &ellipsoid, double latitudeOrigin,
 	  double longitudeOrigin, double falseEasting, double falseNorthing);
 
 	virtual QPointF ll2xy(const Coordinates &c) const;
@@ -27,4 +27,4 @@ private:
 	double _falseEasting;
 };
 
-#endif // AZIMUTHALEQUALAREA_H
+#endif // LAMBERTAZIMUTHAL_H
