@@ -3,6 +3,7 @@
 
 #include <QPixmap>
 #include <QPoint>
+#include <QDebug>
 
 class Tile
 {
@@ -19,5 +20,11 @@ private:
 	QPoint _xy;
 	QPixmap _pixmap;
 };
+
+inline QDebug operator<<(QDebug dbg, const Tile &tile)
+{
+	dbg.nospace() << "Tile(" << tile.zoom() << ", " << tile.xy() << ")";
+	return dbg.maybeSpace();
+}
 
 #endif // TILE_H
