@@ -42,7 +42,7 @@ LambertConic::LambertConic(const Ellipsoid &ellipsoid, double standardParallel1,
   double standardParallel2, double latitudeOrigin, double longitudeOrigin,
   double scale, double falseEasting, double falseNorthing) : _e(ellipsoid)
 {
-	_cm = longitudeOrigin;
+	_cm = deg2rad(longitudeOrigin);
 	_fe = falseEasting;
 	_fn = falseNorthing;
 
@@ -63,7 +63,7 @@ LambertConic::LambertConic(const Ellipsoid &ellipsoid, double standardParallel1,
 
 QPointF LambertConic::ll2xy(const Coordinates &c) const
 {
-	double dl = _n * (deg2rad(c.lon()) - deg2rad(_cm));
+	double dl = _n * (deg2rad(c.lon()) - _cm);
 	double R = _R0 * exp(_n * (_q0 - q(_e, deg2rad(c.lat()))));
 
 	return QPointF(_fe + R * sin(dl), _fn + _R0 - R * cos(dl));
@@ -77,5 +77,5 @@ Coordinates LambertConic::xy2ll(const QPointF &p) const
 	double R = sqrt(dx * dx + dy * dy);
 	double q = _q0 - log(fabs(R / _R0)) / _n;
 
-	return Coordinates(rad2deg(deg2rad(_cm) + dl / _n), rad2deg(iq(_e, q)));
+	return Coordinates(rad2deg(_cm + dl / _n), rad2deg(iq(_e, q)));
 }
