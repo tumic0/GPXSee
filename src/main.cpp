@@ -1,4 +1,4 @@
-#include "app.h"
+#include "GUI/app.h"
 
 int main(int argc, char *argv[])
 {
