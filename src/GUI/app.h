@@ -18,6 +18,8 @@ protected:
 	bool event(QEvent *event);
 
 private:
+	void loadDatums();
+
 	int &_argc;
 	char **_argv;
 	GUI *_gui;
