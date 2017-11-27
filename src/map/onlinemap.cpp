@@ -199,8 +199,8 @@ qreal OnlineMap::zoomFit(const QSize &size, const RectC &br)
 
 qreal OnlineMap::zoomFit(qreal resolution, const Coordinates &c)
 {
-	_zoom = limitZoom((int)(log2((WGS84_RADIUS * 2 * M_PI
-	  * cos(deg2rad(c.lat()))) / resolution) - log2(TILE_SIZE)));
+	_zoom = limitZoom((int)log2((WGS84_RADIUS * 2.0 * M_PI
+	  * cos(deg2rad(c.lat()))) / (resolution * TILE_SIZE)));
 
 	return _zoom;
 }
@@ -209,7 +209,7 @@ qreal OnlineMap::resolution(const QPointF &p) const
 {
 	qreal scale = zoom2scale(_zoom);
 
-	return (WGS84_RADIUS * 2 * M_PI * scale / 360.0
+	return (WGS84_RADIUS * 2.0 * M_PI * scale / 360.0
 	  * cos(2.0 * atan(exp(deg2rad(-p.y() * scale))) - M_PI/2));
 }
 
