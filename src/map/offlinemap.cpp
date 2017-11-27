@@ -286,9 +286,9 @@ bool OfflineMap::computeResolution(QList<ReferencePoint> &points)
 			minLon = i;
 		if (points.at(i).ll.lon() > points.at(maxLon).ll.lon())
 			maxLon = i;
-		if (points.at(i).ll.lat() < points.at(minLat).ll.lon())
+		if (points.at(i).ll.lat() < points.at(minLat).ll.lat())
 			minLat = i;
-		if (points.at(i).ll.lat() > points.at(maxLat).ll.lon())
+		if (points.at(i).ll.lat() > points.at(maxLat).ll.lat())
 			maxLat = i;
 	}
 
