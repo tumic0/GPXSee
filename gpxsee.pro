@@ -43,7 +43,6 @@ HEADERS += src/config.h \
     src/GUI/routeitem.h \
     src/GUI/graphitem.h \
     src/GUI/pathitem.h \
-    src/GUI/pathview.h \
     src/GUI/griditem.h \
     src/GUI/format.h \
     src/GUI/cadencegraph.h \
@@ -65,6 +64,7 @@ HEADERS += src/config.h \
     src/GUI/nicenum.h \
     src/GUI/cpuarch.h \
     src/GUI/searchpointer.h \
+    src/GUI/mapview.h \
     src/map/projection.h \
     src/map/ellipsoid.h \
     src/map/datum.h \
@@ -135,7 +135,6 @@ SOURCES += src/main.cpp \
     src/GUI/routeitem.cpp \
     src/GUI/graphitem.cpp \
     src/GUI/pathitem.cpp \
-    src/GUI/pathview.cpp \
     src/GUI/griditem.cpp \
     src/GUI/format.cpp \
     src/GUI/cadencegraph.cpp \
@@ -152,6 +151,7 @@ SOURCES += src/main.cpp \
     src/GUI/cadencegraphitem.cpp \
     src/GUI/powergraphitem.cpp \
     src/GUI/nicenum.cpp \
+    src/GUI/mapview.cpp \
     src/map/maplist.cpp \
     src/map/onlinemap.cpp \
     src/map/downloader.cpp \

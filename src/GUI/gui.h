@@ -23,7 +23,7 @@ class QSignalMapper;
 class QPrinter;
 class FileBrowser;
 class GraphTab;
-class PathView;
+class MapView;
 class Map;
 class MapList;
 
@@ -93,7 +93,7 @@ private:
 	void createMenus();
 	void createToolBars();
 	void createStatusBar();
-	void createPathView();
+	void createMapView();
 	void createGraphTabs();
 	void createBrowser();
 
@@ -104,7 +104,7 @@ private:
 	void updateWindowTitle();
 	void updateNavigationActions();
 	void updateGraphTabs();
-	void updatePathView();
+	void updateMapView();
 
 	TimeType timeType() const;
 	Units units() const;
@@ -185,17 +185,17 @@ private:
 	QLabel *_distanceLabel;
 	QLabel *_timeLabel;
 
-	PathView *_pathView;
+	MapView *_mapView;
 	QTabWidget *_graphTabWidget;
 	QList<GraphTab*> _tabs;
 
 	POI *_poi;
 	MapList *_ml;
+	Map *_map;
 
 	FileBrowser *_browser;
 	QList<QString> _files;
 
-	Map *_map;
 	int _trackCount;
 	int _routeCount;
 	int _waypointCount;

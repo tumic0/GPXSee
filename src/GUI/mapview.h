@@ -1,5 +1,5 @@
-#ifndef TRACKVIEW_H
-#define TRACKVIEW_H
+#ifndef MAPVIEW_H
+#define MAPVIEW_H
 
 #include <QGraphicsView>
 #include <QVector>
@@ -22,12 +22,12 @@ class WaypointItem;
 class ScaleItem;
 class PathItem;
 
-class PathView : public QGraphicsView
+class MapView : public QGraphicsView
 {
 	Q_OBJECT
 
 public:
-	PathView(Map *map, POI *poi, QWidget *parent = 0);
+	MapView(Map *map, POI *poi, QWidget *parent = 0);
 
 	QList<PathItem*> loadData(const Data &data);
 
@@ -37,10 +37,6 @@ public:
 	void setUnits(enum Units units);
 
 	void plot(QPainter *painter, const QRectF &target, qreal scale, bool hires);
-
-	int trackCount() const {return _tracks.count();}
-	int routeCount() const {return _routes.count();}
-	int waypointCount() const {return _waypoints.count();}
 
 	void clear();
 
@@ -138,4 +134,4 @@ private:
 	bool _plot;
 };
 
-#endif // TRACKVIEW_H
+#endif // MAPVIEW_H
