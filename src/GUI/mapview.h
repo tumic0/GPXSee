@@ -85,7 +85,6 @@ private:
 	void digitalZoom(int zoom);
 	void resetDigitalZoom();
 	void updatePOIVisibility();
-	void updateWaypointsBoundingRect(const Coordinates &wp);
 
 	void mouseDoubleClickEvent(QMouseEvent *event);
 	void wheelEvent(QWheelEvent *event);

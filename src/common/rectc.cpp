@@ -46,14 +46,19 @@ RectC RectC::operator|(const RectC &r) const
 
 void RectC::unite(const Coordinates &c)
 {
-	if (c.lon() < _tl.lon())
-		_tl.setLon(c.lon());
-	if (c.lon() > _br.lon())
-		_br.setLon(c.lon());
-	if (c.lat() > _br.lat())
-		_br.setLat(c.lat());
-	if (c.lat() < _tl.lat())
-		_tl.setLat(c.lat());
+	if (isNull()) {
+		_tl = c;
+		_br = c;
+	} else {
+		if (c.lon() < _tl.lon())
+			_tl.setLon(c.lon());
+		if (c.lon() > _br.lon())
+			_br.setLon(c.lon());
+		if (c.lat() > _br.lat())
+			_br.setLat(c.lat());
+		if (c.lat() < _tl.lat())
+			_tl.setLat(c.lat());
+	}
 }
 
 QDebug operator<<(QDebug dbg, const RectC &rect)

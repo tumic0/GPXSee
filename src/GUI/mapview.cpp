@@ -154,7 +154,7 @@ void MapView::addWaypoints(const QList<Waypoint> &waypoints)
 
 		WaypointItem *wi = new WaypointItem(w, _map);
 		_waypoints.append(wi);
-		updateWaypointsBoundingRect(wi->waypoint().coordinates());
+		_wr.unite(wi->waypoint().coordinates());
 		wi->setZValue(1);
 		wi->setSize(_waypointSize);
 		wi->setColor(_waypointColor);
@@ -193,33 +193,20 @@ QList<PathItem *> MapView::loadData(const Data &data)
 	return paths;
 }
 
-void MapView::updateWaypointsBoundingRect(const Coordinates &wp)
-{
-	if (_wr.isNull())
-		_wr = RectC(wp, wp);
-	else
-		_wr.unite(wp);
-}
-
 qreal MapView::mapZoom() const
 {
-	RectC br;
+	RectC br = _tr | _rr | _wr;
 
-	if (_tracks.isEmpty() && _routes.isEmpty() && _waypoints.isEmpty())
-		br = RectC(_map->xy2ll(sceneRect().topLeft()),
-		  _map->xy2ll(sceneRect().bottomRight()));
-	else
-		br = _tr | _rr | _wr;
-
-	return _map->zoomFit(viewport()->size() - QSize(2*MARGIN, 2*MARGIN), br);
+	return _map->zoomFit(viewport()->size() - QSize(2*MARGIN, 2*MARGIN),
+	  br.isNull() ? RectC(_map->xy2ll(sceneRect().topLeft()),
+	  _map->xy2ll(sceneRect().bottomRight())) : br);
 }
 
 QPointF MapView::contentCenter() const
 {
-	if (_tracks.isEmpty() && _routes.isEmpty() && _waypoints.isEmpty())
-		return sceneRect().center();
-	else
-		return _map->ll2xy((_tr | _rr | _wr).center());
+	RectC br = _tr | _rr | _wr;
+
+	return br.isNull() ? sceneRect().center() : _map->ll2xy(br.center());
 }
 
 void MapView::updatePOIVisibility()
