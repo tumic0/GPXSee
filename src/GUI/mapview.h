@@ -83,7 +83,6 @@ private:
 	void centerOn(const QPointF &pos);
 	void zoom(int zoom, const QPoint &pos, const Coordinates &c);
 	void digitalZoom(int zoom);
-	void resetDigitalZoom();
 	void updatePOIVisibility();
 
 	void mouseDoubleClickEvent(QMouseEvent *event);

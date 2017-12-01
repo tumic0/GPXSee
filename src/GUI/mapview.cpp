@@ -273,7 +273,7 @@ void MapView::setMap(Map *map)
 	_map->load();
 	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
-	resetDigitalZoom();
+	digitalZoom(0);
 
 	_map->zoomFit(resolution, center);
 	_scene->setSceneRect(_map->bounds());
@@ -374,31 +374,17 @@ void MapView::clearMapCache()
 	resetCachedContent();
 }
 
-void MapView::resetDigitalZoom()
-{
-	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
-
-	_digitalZoom = 0;
-	resetTransform();
-
-	for (int i = 0; i < _tracks.size(); i++)
-		_tracks.at(i)->setDigitalZoom(0);
-	for (int i = 0; i < _routes.size(); i++)
-		_routes.at(i)->setDigitalZoom(0);
-	for (int i = 0; i < _waypoints.size(); i++)
-		_waypoints.at(i)->setDigitalZoom(0);
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
-		it.value()->setDigitalZoom(0);
-
-	_mapScale->setDigitalZoom(0);
-}
-
 void MapView::digitalZoom(int zoom)
 {
 	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
 
-	_digitalZoom += zoom;
-	scale(pow(2, zoom), pow(2, zoom));
+	if (zoom) {
+		_digitalZoom += zoom;
+		scale(pow(2, zoom), pow(2, zoom));
+	} else {
+		_digitalZoom = 0;
+		resetTransform();
+	}
 
 	for (int i = 0; i < _tracks.size(); i++)
 		_tracks.at(i)->setDigitalZoom(_digitalZoom);
@@ -472,7 +458,7 @@ void MapView::keyPressEvent(QKeyEvent *event)
 	else if (event->matches(ZOOM_OUT))
 		z = -1;
 	else if (_digitalZoom && event->key() == Qt::Key_Escape) {
-		resetDigitalZoom();
+		digitalZoom(0);
 		return;
 	} else {
 		QGraphicsView::keyPressEvent(event);
@@ -575,7 +561,7 @@ void MapView::clear()
 	_rr = RectC();
 	_wr = RectC();
 
-	resetDigitalZoom();
+	digitalZoom(0);
 	resetCachedContent();
 	QPixmapCache::clear();
 }
