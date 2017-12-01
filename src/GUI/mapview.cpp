@@ -203,18 +203,23 @@ void MapView::updateWaypointsBoundingRect(const Coordinates &wp)
 
 qreal MapView::mapZoom() const
 {
-	RectC br = _tr | _rr | _wr;
+	RectC br;
 
-	return _map->zoomFit(viewport()->size() - QSize(2*MARGIN, 2*MARGIN),
-	  br.isValid() ? br : RectC(_map->xy2ll(sceneRect().topLeft()),
-	  _map->xy2ll(sceneRect().bottomRight())));
+	if (_tracks.isEmpty() && _routes.isEmpty() && _waypoints.isEmpty())
+		br = RectC(_map->xy2ll(sceneRect().topLeft()),
+		  _map->xy2ll(sceneRect().bottomRight()));
+	else
+		br = _tr | _rr | _wr;
+
+	return _map->zoomFit(viewport()->size() - QSize(2*MARGIN, 2*MARGIN), br);
 }
 
 QPointF MapView::contentCenter() const
 {
-	RectC br = _tr | _rr | _wr;
-
-	return br.isValid() ? _map->ll2xy(br.center()) : sceneRect().center();
+	if (_tracks.isEmpty() && _routes.isEmpty() && _waypoints.isEmpty())
+		return sceneRect().center();
+	else
+		return _map->ll2xy((_tr | _rr | _wr).center());
 }
 
 void MapView::updatePOIVisibility()
