@@ -181,9 +181,12 @@ void GraphView::showSliderInfo(bool show)
 
 void GraphView::addGraph(GraphItem *graph, PathItem *path, int id)
 {
+	QColor color(_palette.nextColor());
+	color.setAlpha(255);
+
 	graph->setUnits(_units);
 	graph->setId(id);
-	graph->setColor(_palette.nextColor());
+	graph->setColor(color);
 	graph->setWidth(_width);
 
 	connect(this, SIGNAL(sliderPositionChanged(qreal)), graph,
@@ -458,8 +461,11 @@ void GraphView::setPalette(const Palette &palette)
 	_palette = palette;
 	_palette.reset();
 
-	for (int i = 0; i < _graphs.count(); i++)
-		_graphs.at(i)->setColor(_palette.nextColor());
+	for (int i = 0; i < _graphs.count(); i++) {
+		QColor color(_palette.nextColor());
+		color.setAlpha(255);
+		_graphs.at(i)->setColor(color);
+	}
 }
 
 void GraphView::setGraphWidth(int width)
