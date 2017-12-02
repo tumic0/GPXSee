@@ -2,7 +2,7 @@
 #define ATLAS_H
 
 #include <QFileInfoList>
-#include "map/map.h"
+#include "map.h"
 #include "offlinemap.h"
 
 

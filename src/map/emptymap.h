@@ -1,7 +1,7 @@
 #ifndef EMPTYMAP_H
 #define EMPTYMAP_H
 
-#include "map/map.h"
+#include "map.h"
 
 class EmptyMap : public Map
 {
