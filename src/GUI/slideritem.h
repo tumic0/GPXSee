@@ -3,6 +3,8 @@
 
 #include <QGraphicsObject>
 
+class QColor;
+
 class SliderItem : public QGraphicsObject
 {
 	Q_OBJECT
@@ -17,6 +19,8 @@ public:
 	const QRectF &area() const {return _area;}
 	void setArea(const QRectF &area);
 
+	void setColor(const QColor &color);
+
 	void clear();
 
 signals:
@@ -27,6 +31,7 @@ protected:
 
 private:
 	QRectF _area;
+	QColor _color;
 };
 
 #endif // SLIDERITEM_H

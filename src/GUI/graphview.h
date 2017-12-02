@@ -38,6 +38,7 @@ public:
 	void useAntiAliasing(bool use);
 
 	void setSliderPosition(qreal pos);
+	void setSliderColor(const QColor &color);
 
 signals:
 	void sliderPositionChanged(qreal);

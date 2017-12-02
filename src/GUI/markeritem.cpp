@@ -7,7 +7,7 @@
 
 MarkerItem::MarkerItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
-
+	_color = Qt::red;
 }
 
 QRectF MarkerItem::boundingRect() const
@@ -22,9 +22,15 @@ void MarkerItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 	Q_UNUSED(widget);
 
 	painter->setRenderHint(QPainter::Antialiasing, false);
-	painter->setPen(QPen(Qt::red, WIDTH));
+	painter->setPen(QPen(_color, WIDTH));
 	painter->drawLine(-SIZE/2, 0, SIZE/2, 0);
 	painter->drawLine(0, -SIZE/2, 0, SIZE/2);
 
 //	painter->drawRect(boundingRect());
+}
+
+void MarkerItem::setColor(const QColor &color)
+{
+	_color = color;
+	update();
 }

@@ -490,3 +490,9 @@ void GraphView::useAntiAliasing(bool use)
 {
 	setRenderHint(QPainter::Antialiasing, use);
 }
+
+void GraphView::setSliderColor(const QColor &color)
+{
+	_slider->setColor(color);
+	_sliderInfo->setColor(color);
+}

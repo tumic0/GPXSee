@@ -27,6 +27,7 @@ struct Options {
 	int waypointSize;
 	int poiSize;
 	int graphWidth;
+	QColor sliderColor;
 	bool pathAntiAliasing;
 	bool graphAntiAliasing;
 	int mapOpacity;
@@ -92,6 +93,7 @@ private:
 	QSpinBox *_poiSize;
 	ColorBox *_poiColor;
 	QSpinBox *_graphWidth;
+	ColorBox *_sliderColor;
 	QCheckBox *_graphAA;
 	// Data
 	OddSpinBox *_elevationFilter;

@@ -16,6 +16,7 @@ public:
 
 	void setText(const QString &x, const QString &y);
 	void setSide(Side side);
+	void setColor(const QColor &color);
 
 private:
 	void updateBoundingRect();
@@ -23,6 +24,7 @@ private:
 	Side _side;
 	QString _x, _y;
 	QRectF _boundingRect;
+	QColor _color;
 };
 
 #endif // SLIDERINFOITEM_H

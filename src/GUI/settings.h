@@ -144,5 +144,7 @@
 #define PRINT_ITEM_COUNT_DEFAULT          true
 #define SEPARATE_GRAPH_PAGE_SETTING       "separateGraphPage"
 #define SEPARATE_GRAPH_PAGE_DEFAULT       false
+#define SLIDER_COLOR_SETTING              "sliderColor"
+#define SLIDER_COLOR_DEFAULT              QColor(Qt::red)
 
 #endif // SETTINGS_H

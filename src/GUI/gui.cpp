@@ -850,11 +850,13 @@ void GUI::openOptions()
 	SET_VIEW_OPTION(poiColor, setPOIColor);
 	SET_VIEW_OPTION(pathAntiAliasing, useAntiAliasing);
 	SET_VIEW_OPTION(useOpenGL, useOpenGL);
+	SET_VIEW_OPTION(sliderColor, setMarkerColor);
 
 	SET_TAB_OPTION(palette, setPalette);
 	SET_TAB_OPTION(graphWidth, setGraphWidth);
 	SET_TAB_OPTION(graphAntiAliasing, useAntiAliasing);
 	SET_TAB_OPTION(useOpenGL, useOpenGL);
+	SET_TAB_OPTION(sliderColor, setSliderColor);
 
 	SET_TRACK_OPTION(elevationFilter, setElevationFilter);
 	SET_TRACK_OPTION(speedFilter, setSpeedFilter);
@@ -1627,6 +1629,8 @@ void GUI::writeSettings()
 	if (_options.separateGraphPage != SEPARATE_GRAPH_PAGE_DEFAULT)
 		settings.setValue(SEPARATE_GRAPH_PAGE_SETTING,
 		  _options.separateGraphPage);
+	if (_options.sliderColor != SLIDER_COLOR_DEFAULT)
+		settings.setValue(SLIDER_COLOR_SETTING, _options.sliderColor);
 	settings.endGroup();
 }
 
@@ -1840,6 +1844,8 @@ void GUI::readSettings()
 	  PRINT_ITEM_COUNT_DEFAULT).toBool();
 	_options.separateGraphPage = settings.value(SEPARATE_GRAPH_PAGE_SETTING,
 	  SEPARATE_GRAPH_PAGE_DEFAULT).toBool();
+	_options.sliderColor = settings.value(SLIDER_COLOR_SETTING,
+	  SLIDER_COLOR_DEFAULT).value<QColor>();
 
 	_mapView->setPalette(_options.palette);
 	_mapView->setMapOpacity(_options.mapOpacity);
@@ -1853,6 +1859,7 @@ void GUI::readSettings()
 	_mapView->setPOISize(_options.poiSize);
 	_mapView->setPOIColor(_options.poiColor);
 	_mapView->setRenderHint(QPainter::Antialiasing, _options.pathAntiAliasing);
+	_mapView->setMarkerColor(_options.sliderColor);
 	if (_options.useOpenGL)
 		_mapView->useOpenGL(true);
 
@@ -1861,6 +1868,7 @@ void GUI::readSettings()
 		_tabs.at(i)->setGraphWidth(_options.graphWidth);
 		_tabs.at(i)->setRenderHint(QPainter::Antialiasing,
 		  _options.graphAntiAliasing);
+		_tabs.at(i)->setSliderColor(_options.sliderColor);
 		if (_options.useOpenGL)
 			_tabs.at(i)->useOpenGL(true);
 	}

@@ -8,6 +8,8 @@ SliderItem::SliderItem(QGraphicsItem *parent) : QGraphicsObject(parent)
 {
 	setFlag(ItemIsMovable);
 	setFlag(ItemSendsGeometryChanges);
+
+	_color = Qt::red;
 }
 
 QRectF SliderItem::boundingRect() const
@@ -22,7 +24,7 @@ void SliderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 	Q_UNUSED(widget);
 
 	painter->setRenderHint(QPainter::Antialiasing, false);
-	painter->setPen(Qt::red);
+	painter->setPen(_color);
 	painter->drawLine(0, 0, 0, -_area.height());
 
 //	painter->drawRect(boundingRect());
@@ -58,4 +60,10 @@ void SliderItem::setArea(const QRectF &area)
 {
 	prepareGeometryChange();
 	_area = area;
+}
+
+void SliderItem::setColor(const QColor &color)
+{
+	_color = color;
+	update();
 }

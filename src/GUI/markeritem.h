@@ -2,6 +2,7 @@
 #define MARKERITEM_H
 
 #include <QGraphicsItem>
+#include <QColor>
 
 class MarkerItem : public QGraphicsItem
 {
@@ -11,6 +12,11 @@ public:
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
+
+	void setColor(const QColor &color);
+
+private:
+	QColor _color;
 };
 
 #endif // MARKERITEM_H

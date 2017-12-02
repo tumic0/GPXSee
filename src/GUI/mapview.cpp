@@ -51,6 +51,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_units = Metric;
 	_opacity = 1.0;
 	_backgroundColor = Qt::white;
+	_markerColor = Qt::red;
 
 	_showMap = true;
 	_showTracks = true;
@@ -113,6 +114,7 @@ PathItem *MapView::addTrack(const Track &track)
 	ti->setUnits(_units);
 	ti->setVisible(_showTracks);
 	ti->setDigitalZoom(_digitalZoom);
+	ti->setMarkerColor(_markerColor);
 	_scene->addItem(ti);
 
 	if (_showTracks)
@@ -139,6 +141,7 @@ PathItem *MapView::addRoute(const Route &route)
 	ri->showWaypoints(_showRouteWaypoints);
 	ri->showWaypointLabels(_showWaypointLabels);
 	ri->setDigitalZoom(_digitalZoom);
+	ri->setMarkerColor(_markerColor);
 	_scene->addItem(ri);
 
 	if (_showRoutes)
@@ -789,6 +792,16 @@ void MapView::useOpenGL(bool use)
 void MapView::useAntiAliasing(bool use)
 {
 	setRenderHint(QPainter::Antialiasing, use);
+}
+
+void MapView::setMarkerColor(const QColor &color)
+{
+	_markerColor = color;
+
+	for (int i = 0; i < _tracks.size(); i++)
+		_tracks.at(i)->setMarkerColor(color);
+	for (int i = 0; i < _routes.size(); i++)
+		_routes.at(i)->setMarkerColor(color);
 }
 
 void MapView::reloadMap()

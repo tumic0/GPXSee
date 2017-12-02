@@ -28,6 +28,7 @@ public:
 	void setWidth(qreal width);
 	void setStyle(Qt::PenStyle style);
 	void setDigitalZoom(int zoom);
+	void setMarkerColor(const QColor &color);
 
 public slots:
 	void moveMarker(qreal distance);

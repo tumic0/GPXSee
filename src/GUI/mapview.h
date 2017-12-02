@@ -52,6 +52,7 @@ public:
 	void setBackgroundColor(const QColor &color);
 	void useOpenGL(bool use);
 	void useAntiAliasing(bool use);
+	void setMarkerColor(const QColor &color);
 
 public slots:
 	void showMap(bool show);
@@ -127,6 +128,7 @@ private:
 	int _poiSize;
 	QColor _waypointColor;
 	QColor _poiColor;
+	QColor _markerColor;
 
 	int _digitalZoom;
 	bool _plot;

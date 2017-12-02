@@ -167,6 +167,11 @@ void PathItem::moveMarker(qreal distance)
 		_marker->setVisible(false);
 }
 
+void PathItem::setMarkerColor(const QColor &color)
+{
+	_marker->setColor(color);
+}
+
 void PathItem::hover(bool hover)
 {
 	if (hover) {

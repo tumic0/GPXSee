@@ -8,6 +8,7 @@
 SliderInfoItem::SliderInfoItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
 	_side = Right;
+	_color = Qt::red;
 }
 
 void SliderInfoItem::updateBoundingRect()
@@ -58,7 +59,7 @@ void SliderInfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
 	painter->setFont(font);
 	painter->setRenderHint(QPainter::Antialiasing, false);
-	painter->setPen(Qt::red);
+	painter->setPen(_color);
 
 	if (_side == Right) {
 		painter->drawText(SIZE, -fm.descent()/2, _y);
@@ -87,4 +88,10 @@ void SliderInfoItem::setSide(Side side)
 	prepareGeometryChange();
 	_side = side;
 	updateBoundingRect();
+}
+
+void SliderInfoItem::setColor(const QColor &color)
+{
+	_color = color;
+	update();
 }

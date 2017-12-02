@@ -157,11 +157,15 @@ QWidget *OptionsDialog::createAppearancePage()
 
 
 	// Graphs
+	_sliderColor = new ColorBox();
+	_sliderColor->setColor(_options->sliderColor);
 	_graphWidth = new QSpinBox();
 	_graphWidth->setValue(_options->graphWidth);
 	_graphWidth->setMinimum(1);
+
 	QFormLayout *graphLayout = new QFormLayout();
 	graphLayout->addRow(tr("Line width:"), _graphWidth);
+	graphLayout->addRow(tr("Slider color:"), _sliderColor);
 
 	_graphAA = new QCheckBox(tr("Use anti-aliasing"));
 	_graphAA->setChecked(_options->graphAntiAliasing);
@@ -485,6 +489,7 @@ void OptionsDialog::accept()
 	_options->poiSize = _poiSize->value();
 	_options->poiColor = _poiColor->color();
 	_options->graphWidth = _graphWidth->value();
+	_options->sliderColor = _sliderColor->color();
 	_options->graphAntiAliasing = _graphAA->isChecked();
 
 	_options->elevationFilter = _elevationFilter->value();
