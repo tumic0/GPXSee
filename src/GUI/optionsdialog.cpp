@@ -35,6 +35,26 @@ static QFrame *line()
 }
 #endif
 
+QWidget *OptionsDialog::createGeneralPage()
+{
+	_alwaysShowMap = new QCheckBox(tr("Display map when no files are loaded"));
+	_alwaysShowMap->setChecked(_options->alwaysShowMap);
+
+	QFormLayout *showMapLayout = new QFormLayout();
+	showMapLayout->addWidget(_alwaysShowMap);
+
+	QWidget *generalTab = new QWidget();
+	QVBoxLayout *generalTabLayout = new QVBoxLayout();
+	generalTabLayout->addLayout(showMapLayout);
+	generalTabLayout->addStretch();
+	generalTab->setLayout(generalTabLayout);
+
+	QTabWidget *generalPage = new QTabWidget();
+	generalPage->addTab(generalTab, tr("General"));
+
+	return generalPage;
+}
+
 QWidget *OptionsDialog::createAppearancePage()
 {
 	// Paths
@@ -426,6 +446,7 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
   : QDialog(parent), _options(options)
 {
 	QStackedWidget *pages = new QStackedWidget();
+	pages->addWidget(createGeneralPage());
 	pages->addWidget(createAppearancePage());
 	pages->addWidget(createDataPage());
 	pages->addWidget(createPOIPage());
@@ -434,6 +455,7 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
 
 	QListWidget *menu = new QListWidget();
 	menu->setIconSize(QSize(MENU_ICON_SIZE, MENU_ICON_SIZE));
+	new QListWidgetItem(QIcon(QPixmap(APP_ICON)), tr("General"), menu);
 	new QListWidgetItem(QIcon(QPixmap(APPEARANCE_ICON)), tr("Appearance"),
 	  menu);
 	new QListWidgetItem(QIcon(QPixmap(DATA_ICON)), tr("Data"), menu);
@@ -473,6 +495,8 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
 
 void OptionsDialog::accept()
 {
+	_options->alwaysShowMap = _alwaysShowMap->isChecked();
+
 	_options->palette.setColor(_baseColor->color());
 	_options->palette.setShift(_colorOffset->value());
 	_options->mapOpacity = _mapOpacity->value();

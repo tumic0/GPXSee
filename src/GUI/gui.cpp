@@ -83,11 +83,11 @@ GUI::GUI()
 
 	_sliderPos = 0;
 
+	readSettings();
+
 	updateGraphTabs();
 	updateMapView();
 	updateStatusBarInfo();
-
-	readSettings();
 }
 
 GUI::~GUI()
@@ -876,6 +876,8 @@ void GUI::openOptions()
 		reloadFile();
 
 	_options = options;
+
+	updateMapView();
 }
 
 void GUI::printFile()
@@ -1308,7 +1310,10 @@ void GUI::updateGraphTabs()
 
 void GUI::updateMapView()
 {
-	_mapView->setHidden(!(_trackCount + _routeCount + _waypointCount));
+	if (_options.alwaysShowMap)
+		_mapView->setHidden(false);
+	else
+		_mapView->setHidden(!(_trackCount + _routeCount + _waypointCount));
 }
 
 void GUI::setTimeType(TimeType type)
@@ -1631,6 +1636,8 @@ void GUI::writeSettings()
 		  _options.separateGraphPage);
 	if (_options.sliderColor != SLIDER_COLOR_DEFAULT)
 		settings.setValue(SLIDER_COLOR_SETTING, _options.sliderColor);
+	if (_options.alwaysShowMap != ALWAYS_SHOW_MAP_DEFAULT)
+		settings.setValue(ALWAYS_SHOW_MAP_SETTING, _options.alwaysShowMap);
 	settings.endGroup();
 }
 
@@ -1846,6 +1853,8 @@ void GUI::readSettings()
 	  SEPARATE_GRAPH_PAGE_DEFAULT).toBool();
 	_options.sliderColor = settings.value(SLIDER_COLOR_SETTING,
 	  SLIDER_COLOR_DEFAULT).value<QColor>();
+	_options.alwaysShowMap = settings.value(ALWAYS_SHOW_MAP_SETTING,
+	  ALWAYS_SHOW_MAP_DEFAULT).toBool();
 
 	_mapView->setPalette(_options.palette);
 	_mapView->setMapOpacity(_options.mapOpacity);

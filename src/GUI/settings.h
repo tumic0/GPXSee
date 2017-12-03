@@ -146,5 +146,7 @@
 #define SEPARATE_GRAPH_PAGE_DEFAULT       false
 #define SLIDER_COLOR_SETTING              "sliderColor"
 #define SLIDER_COLOR_DEFAULT              QColor(Qt::red)
+#define ALWAYS_SHOW_MAP_SETTING           "alwaysShowMap"
+#define ALWAYS_SHOW_MAP_DEFAULT           true
 
 #endif // SETTINGS_H

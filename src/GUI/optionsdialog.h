@@ -16,6 +16,8 @@ class QRadioButton;
 class PercentSlider;
 
 struct Options {
+	// General
+	bool alwaysShowMap;
 	// Appearance
 	Palette palette;
 	int trackWidth;
@@ -70,6 +72,7 @@ public slots:
 	void accept();
 
 private:
+	QWidget *createGeneralPage();
 	QWidget *createAppearancePage();
 	QWidget *createDataPage();
 	QWidget *createPOIPage();
@@ -78,6 +81,8 @@ private:
 
 	Options *_options;
 
+	// General
+	QCheckBox *_alwaysShowMap;
 	// Appearance
 	ColorBox *_baseColor;
 	QDoubleSpinBox *_colorOffset;
