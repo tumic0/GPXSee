@@ -540,12 +540,6 @@ void OfflineMap::drawTiled(QPainter *painter, const QRectF &rect)
 			int x = tl.x() + i * _tileSize.width();
 			int y = tl.y() + j * _tileSize.height();
 
-			if (!QRectF(QPointF(x, y), _tileSize).intersects(bounds())) {
-				painter->fillRect(QRectF(QPoint(x, y), _tileSize),
-				  _backgroundColor);
-				continue;
-			}
-
 			QString tileName(_tileName.arg(QString::number(x),
 			  QString::number(y)));
 			QPixmap pixmap;
@@ -583,12 +577,6 @@ void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect)
 		for (int j = 0; j < ceil(s.height() / _ozf.tileSize().height()); j++) {
 			int x = tl.x() + i * _ozf.tileSize().width();
 			int y = tl.y() + j * _ozf.tileSize().height();
-
-			if (!QRectF(QPointF(x, y), _ozf.tileSize()).intersects(bounds())) {
-				painter->fillRect(QRectF(QPoint(x, y), _ozf.tileSize()),
-				  _backgroundColor);
-				continue;
-			}
 
 			QPixmap pixmap;
 			QString key = _ozf.fileName() + "/" + QString::number(_zoom) + "_"
