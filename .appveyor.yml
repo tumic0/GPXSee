@@ -1,4 +1,4 @@
-version: 4.16.{build}
+version: 4.17.{build}
 configuration: Release
 platform: Any CPU
 environment:
