@@ -228,18 +228,14 @@ qreal OnlineMap::zoomOut()
 void OnlineMap::draw(QPainter *painter, const QRectF &rect)
 {
 	qreal scale = zoom2scale(_zoom);
-	QRectF ir = rect.intersected(bounds());
 
-	if (ir != rect)
-		painter->fillRect(rect, _backgroundColor);
-
-	QPoint tile = mercator2tile(QPointF(ir.topLeft().x() * scale,
-	  -ir.topLeft().y() * scale), _zoom);
-	QPoint tl = QPoint((int)floor(ir.left() / (qreal)TILE_SIZE)
-	  * TILE_SIZE, (int)floor(ir.top() / TILE_SIZE) * TILE_SIZE);
+	QPoint tile = mercator2tile(QPointF(rect.topLeft().x() * scale,
+	  -rect.topLeft().y() * scale), _zoom);
+	QPoint tl = QPoint((int)floor(rect.left() / (qreal)TILE_SIZE)
+	  * TILE_SIZE, (int)floor(rect.top() / TILE_SIZE) * TILE_SIZE);
 
 	QList<Tile> tiles;
-	QSizeF s(ir.right() - tl.x(), ir.bottom() - tl.y());
+	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	for (int i = 0; i < ceil(s.width() / TILE_SIZE); i++)
 		for (int j = 0; j < ceil(s.height() / TILE_SIZE); j++)
 			tiles.append(Tile(QPoint(tile.x() + i, tile.y() + j), _zoom));
