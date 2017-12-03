@@ -567,7 +567,6 @@ void MapView::clear()
 
 	digitalZoom(0);
 	resetCachedContent();
-	QPixmapCache::clear();
 }
 
 void MapView::showTracks(bool show)
