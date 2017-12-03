@@ -622,12 +622,17 @@ void OfflineMap::drawImage(QPainter *painter, const QRectF &rect)
 
 void OfflineMap::draw(QPainter *painter, const QRectF &rect)
 {
+	QRectF ir = rect.intersected(bounds());
+
+	if (ir != rect)
+		painter->fillRect(rect, _backgroundColor);
+
 	if (_ozf.isOpen())
-		drawOZF(painter, rect);
+		drawOZF(painter, ir);
 	else if (_tileSize.isValid())
-		drawTiled(painter, rect);
+		drawTiled(painter, ir);
 	else
-		drawImage(painter, rect);
+		drawImage(painter, ir);
 }
 
 QPointF OfflineMap::ll2xy(const Coordinates &c)

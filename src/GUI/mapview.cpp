@@ -274,6 +274,7 @@ void MapView::setMap(Map *map)
 
 	_map = map;
 	_map->load();
+	_map->setBackgroundColor(_backgroundColor);
 	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
 	digitalZoom(0);
