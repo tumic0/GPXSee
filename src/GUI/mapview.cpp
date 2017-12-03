@@ -566,7 +566,6 @@ void MapView::clear()
 	_wr = RectC();
 
 	digitalZoom(0);
-	resetCachedContent();
 }
 
 void MapView::showTracks(bool show)
