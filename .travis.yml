@@ -13,6 +13,7 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libqt4-dev; fi
 
 script:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then PATH=/usr/local/opt/qt/bin/:${PATH}; fi
   - lrelease gpxsee.pro
   - qmake gpxsee.pro
   - make
