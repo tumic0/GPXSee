@@ -37,8 +37,10 @@ static QFrame *line()
 
 QWidget *OptionsDialog::createGeneralPage()
 {
-	_alwaysShowMap = new QCheckBox(tr("Display map when no files are loaded"));
+	_alwaysShowMap = new QCheckBox(tr("Always show the map"));
 	_alwaysShowMap->setChecked(_options->alwaysShowMap);
+	_alwaysShowMap->setToolTip("<p>" +
+	  tr("Show the map even when no files are loaded.") + "</p>");
 
 	QFormLayout *showMapLayout = new QFormLayout();
 	showMapLayout->addWidget(_alwaysShowMap);
