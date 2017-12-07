@@ -750,13 +750,13 @@ void MapView::drawBackground(QPainter *painter, const QRectF &rect)
 
 void MapView::resizeEvent(QResizeEvent *event)
 {
+	QGraphicsView::resizeEvent(event);
+
 	qreal zoom = _map->zoom();
 	if (mapZoom() != zoom)
 		rescale();
 
 	centerOn(contentCenter());
-
-	QGraphicsView::resizeEvent(event);
 }
 
 void MapView::paintEvent(QPaintEvent *event)
