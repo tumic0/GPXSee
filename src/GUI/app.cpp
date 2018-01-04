@@ -97,7 +97,7 @@ void App::loadDatums()
 					qWarning("%s: parse error on line %d: %s", qPrintable(df),
 					  Datum::errorLine(), qPrintable(Datum::errorString()));
 				else
-					qWarning("%s: %s", qPrintable(ef), qPrintable(
+					qWarning("%s: %s", qPrintable(df), qPrintable(
 					  Datum::errorString()));
 			} else
 				ok = true;
