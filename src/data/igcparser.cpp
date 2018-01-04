@@ -87,7 +87,7 @@ static bool readTimestamp(const char *data, QTime &time)
 
 static bool readARecord(const char *line, qint64 len)
 {
-	if (len < 6 || line[0] != 'A')
+	if (len < 7 || line[0] != 'A')
 		return false;
 
 	for (int i = 1; i < 7; i++)
