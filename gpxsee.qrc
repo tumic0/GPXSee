@@ -20,8 +20,8 @@
         <file>icons/system-run.png</file>
         <file>icons/document-print-preview.png</file>
         <file>icons/view-filter.png</file>
-        <file>lang/gpxsee_cs.qm</file>
-        <file>lang/gpxsee_sv.qm</file>
-        <file>lang/gpxsee_de.qm</file>
+        <file>lang/gpxsee_cs.ts</file>
+        <file>lang/gpxsee_sv.ts</file>
+        <file>lang/gpxsee_de.ts</file>
     </qresource>
 </RCC>
