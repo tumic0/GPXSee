@@ -52,14 +52,15 @@ static bool readAltitude(const char *data, qreal &ele)
 	if (!(data[0] == 'A' || data[0] == 'V'))
 		return false;
 
-	if (data[1] == '-')
-		p = str2int(data + 2, 4);
-	else
-		p = str2int(data + 1, 5);
-
-	int g = str2int(data + 6, 5);
-	if (p < 0 || g < 0)
-		return false;
+    //verify this: if (data[1] == '-')
+    //verify this: 	p = str2int(data + 2, 4);
+    //verify this: else
+    //verify this: 	p = str2int(data + 1, 5);
+    //verify this:
+    //verify this: int g = str2int(data + 6, 5);
+    //verify this: if (p < 0 || g < 0)
+    //verify this:	return false;
+    int g = str2int(data + 6, 5);
 
 	if (data[0] == 'A')
 		ele = (qreal)g;
