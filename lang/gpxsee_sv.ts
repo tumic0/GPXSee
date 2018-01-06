@@ -918,12 +918,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="40"/>
         <source>Always show the map</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa alltid kartan</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="43"/>
         <source>Show the map even when no files are loaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa kartan även utan inlästa filer.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="212"/>
@@ -955,7 +955,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="55"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="460"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allmänt</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="88"/>
@@ -1014,7 +1014,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="190"/>
         <source>Slider color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Skjutreglagefärg:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="224"/>
