@@ -47,22 +47,22 @@ static bool readLon(const char *data, qreal &lon)
 
 static bool readAltitude(const char *data, qreal &ele)
 {
-	int p;
+	int ga;
 
 	if (!(data[0] == 'A' || data[0] == 'V'))
 		return false;
 
-	if (data[1] == '-')
-		p = str2int(data + 2, 4);
-	else
-		p = str2int(data + 1, 5);
-
-	int g = str2int(data + 6, 5);
-	if (p < 0 || g < 0)
-		return false;
+	if (data[6] == '-') {
+		if ((ga = str2int(data + 7, 4)) < 0)
+			return false;
+		ga = -ga;
+	} else {
+		if ((ga = str2int(data + 6, 5)) < 0)
+			return false;
+	}
 
 	if (data[0] == 'A')
-		ele = (qreal)g;
+		ele = (qreal)ga;
 	else
 		ele = NAN;
 
