@@ -1679,12 +1679,6 @@ void GUI::readSettings()
 		setUnits(Imperial);
 		_imperialUnitsAction->setChecked(true);
     }
-
-    if (settings.value(UNITS_SETTING, UNITS_DEFAULT).toInt() == Nautical) {
-        setUnits(Nautical);
-        _nauticalUnitsAction->setChecked(true);
-    }
-
     else if (settings.value(UNITS_SETTING, UNITS_DEFAULT).toInt() == Nautical) {
         setUnits(Nautical);
         _nauticalUnitsAction->setChecked(true);
