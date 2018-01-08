@@ -321,6 +321,15 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 			_errorString = QString("%1+%2: unknown GCS+projection combination")
 			  .arg(kv.value(GeographicTypeGeoKey).SHORT)
 			  .arg(kv.value(ProjectionGeoKey).SHORT);
+	} else if (IS_SET(kv, GeogGeodeticDatumGeoKey)
+	  && IS_SET(kv, ProjectionGeoKey)) {
+		pcs = PCS(kv.value(GeogGeodeticDatumGeoKey).SHORT - 2000,
+		  kv.value(ProjectionGeoKey).SHORT);
+		if (pcs.isNull())
+			_errorString =
+			  QString("%1+%2: unknown geodetic datum+projection combination")
+			  .arg(kv.value(GeogGeodeticDatumGeoKey).SHORT)
+			  .arg(kv.value(ProjectionGeoKey).SHORT);
 	} else {
 		Datum d = datum(kv);
 		if (d.isNull())
