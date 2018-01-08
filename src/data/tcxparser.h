@@ -8,8 +8,6 @@
 class TCXParser : public Parser
 {
 public:
-	~TCXParser() {}
-
 	bool parse(QFile *file, QList<TrackData> &tracks,
 	  QList<RouteData> &routes, QList<Waypoint> &waypoints);
 	QString errorString() const {return _reader.errorString();}

@@ -80,7 +80,7 @@ bool MapList::loadMap(const QString &path)
 	}
 }
 
-bool MapList::loadTba(const QString &path)
+bool MapList::loadAtlas(const QString &path)
 {
 	Atlas *atlas = new Atlas(path, this);
 	if (atlas->isValid()) {
@@ -124,10 +124,10 @@ bool MapList::loadFile(const QString &path)
 
 	if (suffix == "txt")
 		return loadList(path);
-	else if (suffix == "map")
+	else if (suffix == "map" || suffix == "tif" || suffix == "tiff")
 		return loadMap(path);
 	else if (suffix == "tba")
-		return loadTba(path);
+		return loadAtlas(path);
 	else if (suffix == "tar")
 		return loadTar(path);
 	else {
@@ -138,13 +138,13 @@ bool MapList::loadFile(const QString &path)
 
 QString MapList::formats()
 {
-	return tr("Map files (*.map *.tba *.tar)") + ";;"
+	return tr("Map files (*.map *.tba *.tar *.tif *.tiff)") + ";;"
 	  + tr("URL list files (*.txt)");
 }
 
 QStringList MapList::filter()
 {
 	QStringList filter;
-	filter << "*.map" << "*.tba" << "*.tar" << "*.txt";
+	filter << "*.map" << "*.tba" << "*.tar" << "*.txt" << "*.tif" << "*.tiff";
 	return filter;
 }

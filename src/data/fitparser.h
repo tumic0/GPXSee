@@ -7,7 +7,6 @@ class FITParser : public Parser
 {
 public:
 	FITParser();
-	~FITParser() {}
 
 	bool parse(QFile *file, QList<TrackData> &tracks, QList<RouteData> &routes,
 	  QList<Waypoint> &waypoints);

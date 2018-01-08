@@ -5,7 +5,7 @@
 ; The name of the installer
 Name "GPXSee"
 ; Program version
-!define VERSION "4.17"
+!define VERSION "5.0"
 
 ; The file to write
 OutFile "GPXSee-${VERSION}.exe"
@@ -86,6 +86,7 @@ Section "GPXSee" SEC_APP
   File "maps.txt"
   File "ellipsoids.csv"
   File "datums.csv"
+  File "pcs.csv"
 
   ; Create start menu entry and add links
   SetShellVarContext all

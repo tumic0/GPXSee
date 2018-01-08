@@ -1,10 +1,10 @@
 #include "ellipsoid.h"
 #include "utm.h"
 
-UTM::UTM(const Ellipsoid &ellipsoid, int zone)
-  : _tm(ellipsoid, 0, (qAbs(zone) - 1)*6 - 180 + 3, 0.9996, 500000,
-  zone < 0 ? 10000000 : 0)
+Projection::Setup UTM::setup(int zone)
 {
+	return Projection::Setup(0, (qAbs(zone) - 1)*6 - 180 + 3, 0.9996, 500000,
+	  zone < 0 ? 10000000 : 0, 0, 0);
 }
 
 int UTM::zone(const Coordinates &c)

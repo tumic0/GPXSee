@@ -8,6 +8,7 @@
 #include "map/downloader.h"
 #include "map/ellipsoid.h"
 #include "map/datum.h"
+#include "map/pcs.h"
 #include "opengl.h"
 #include "gui.h"
 #include "config.h"
@@ -35,6 +36,7 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 	OnlineMap::setDownloader(new Downloader(this));
 	OPENGL_SET_SAMPLES(4);
 	loadDatums();
+	loadPCSs();
 
 	_gui = new GUI();
 }
@@ -106,4 +108,27 @@ void App::loadDatums()
 
 	if (!ok)
 		qWarning("Maps based on a datum different from WGS84 won't work.");
+}
+
+void App::loadPCSs()
+{
+	QString file;
+
+	if (QFile::exists(USER_PCS_FILE))
+		file = USER_PCS_FILE;
+	else if (QFile::exists(GLOBAL_PCS_FILE))
+		file = GLOBAL_PCS_FILE;
+	else {
+		qWarning("No PCS file found.");
+		return;
+	}
+
+	if (!PCS::loadList(file)) {
+		if (PCS::errorLine())
+			qWarning("%s: parse error on line %d: %s", qPrintable(file),
+			  PCS::errorLine(), qPrintable(PCS::errorString()));
+		else
+			qWarning("%s: %s", qPrintable(file), qPrintable(
+			  Datum::errorString()));
+	}
 }

@@ -566,6 +566,9 @@ void MapView::clear()
 	_wr = RectC();
 
 	digitalZoom(0);
+
+	// If not reset, causes huge redraw areas (and system memory exhaustion)
+	resetCachedContent();
 }
 
 void MapView::showTracks(bool show)

@@ -9,7 +9,6 @@ class NMEAParser : public Parser
 {
 public:
 	NMEAParser() : _errorLine(0), _GGA(false) {}
-	~NMEAParser() {}
 
 	bool parse(QFile *file, QList<TrackData> &tracks,
 	  QList<RouteData> &routes, QList<Waypoint> &waypoints);

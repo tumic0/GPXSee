@@ -14,8 +14,6 @@ public:
 	virtual Coordinates xy2ll(const QPointF &p) const;
 
 private:
-	Ellipsoid _e;
-
 	double _ra;
 	double _sinLatOrigin;
 	double _cosLatOrigin;
