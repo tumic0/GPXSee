@@ -1,24 +1,26 @@
 #include <QFile>
+#include <QDebug>
 #include "ellipsoid.h"
 
 QMap<int, Ellipsoid> Ellipsoid::_ellipsoids;
 QString Ellipsoid::_errorString;
 int Ellipsoid::_errorLine = 0;
 
-Ellipsoid Ellipsoid::ellipsoid(int id)
+Ellipsoid::Ellipsoid(int id)
 {
 	QMap<int, Ellipsoid>::const_iterator it = _ellipsoids.find(id);
 
 	if (it == _ellipsoids.end())
-		return Ellipsoid();
-
-	return it.value();
+		*this = Ellipsoid();
+	else
+		*this = it.value();
 }
 
 bool Ellipsoid::loadList(const QString &path)
 {
 	QFile file(path);
 	bool res;
+
 
 	if (!file.open(QFile::ReadOnly)) {
 		_errorString = qPrintable(file.errorString());
@@ -36,7 +38,7 @@ bool Ellipsoid::loadList(const QString &path)
 			return false;
 		}
 
-		int id = list[0].trimmed().toInt(&res);
+		int id = list[1].trimmed().toInt(&res);
 		if (!res) {
 			_errorString = "Invalid ellipsoid id";
 			return false;
@@ -59,4 +61,11 @@ bool Ellipsoid::loadList(const QString &path)
 	}
 
 	return true;
+}
+
+QDebug operator<<(QDebug dbg, const Ellipsoid &ellipsoid)
+{
+	dbg.nospace() << "Ellipsoid(" << ellipsoid.radius() << ", "
+	  << 1.0 / ellipsoid.flattening() << ")";
+	return dbg.space();
 }

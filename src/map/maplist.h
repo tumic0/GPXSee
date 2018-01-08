@@ -25,7 +25,7 @@ private:
 
 	bool loadList(const QString &path);
 	bool loadMap(const QString &path);
-	bool loadTba(const QString &path);
+	bool loadAtlas(const QString &path);
 	bool loadTar(const QString &path);
 
 	QList<Map*> _maps;

@@ -54,13 +54,13 @@ LambertAzimuthal::LambertAzimuthal(const Ellipsoid &ellipsoid,
 {
 	double es2, es4, es6;
 
-	_e = ellipsoid;
-	es2 = 2 * _e.flattening() - _e.flattening() * _e.flattening();
+	es2 = 2 * ellipsoid.flattening() - ellipsoid.flattening()
+	  * ellipsoid.flattening();
 
 	es4 = es2 * es2;
 	es6 = es4 * es2;
-	_ra = _e.radius() * (1.0 - es2 / 6.0 - 17.0 * es4 / 360.0 - 67.0 * es6
-	  / 3024.0);
+	_ra = ellipsoid.radius() * (1.0 - es2 / 6.0 - 17.0 * es4 / 360.0 - 67.0
+	  * es6 / 3024.0);
 	_latOrigin = deg2rad(latitudeOrigin);
 	_sinLatOrigin = sin(_latOrigin);
 	_cosLatOrigin = cos(_latOrigin);

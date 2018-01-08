@@ -19,6 +19,7 @@ protected:
 
 private:
 	void loadDatums();
+	void loadPCSs();
 
 	int &_argc;
 	char **_argv;
