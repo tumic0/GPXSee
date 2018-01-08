@@ -23,5 +23,6 @@
         <file>lang/gpxsee_cs.qm</file>
         <file>lang/gpxsee_sv.qm</file>
         <file>lang/gpxsee_de.qm</file>
+        <file>lang/gpxsee_ru.qm</file>
     </qresource>
 </RCC>
