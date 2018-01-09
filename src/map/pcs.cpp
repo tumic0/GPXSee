@@ -1,3 +1,4 @@
+#include <QFile>
 #include "pcs.h"
 
 
