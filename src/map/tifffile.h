@@ -18,7 +18,6 @@ public:
 		if (QFile::read((char*)&data, sizeof(T)) < (qint64)sizeof(T))
 			return false;
 
-		if (sizeof(T) > 4) {
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
 			if (_be)
 				val = data;
@@ -33,13 +32,6 @@ public:
 			} else
 				val = data;
 #endif
-		} else if (sizeof(T) > 1) {
-			if (_be)
-				val = qFromBigEndian(data);
-			else
-				val = qFromLittleEndian(data);
-		} else
-			val = data;
 
 	return true;
 }
