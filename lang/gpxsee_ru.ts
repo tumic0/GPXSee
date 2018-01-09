@@ -695,7 +695,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="675"/>
         <source>To make GPXSee load a POI file automatically on startup, add the file to the following directory:</source>
-        <translation>Для того, чтобы GPXSee загружал файл с точками POI автоматически при старте, добавьте файл в следующюю директорию:</translation>
+        <translation>Для того, чтобы GPXSee загружал файл с точками POI автоматически при старте, добавьте файл в следующую директорию:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="764"/>
@@ -929,7 +929,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="212"/>
         <source>Background color:</source>
-        <translation>Цвет фона</translation>
+        <translation>Цвет фона:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="223"/>
@@ -1040,7 +1040,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="254"/>
         <source>Heart rate:</source>
-        <translation>Частота сердечных сокращений</translation>
+        <translation>Частота сердечных сокращений:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="255"/>
@@ -1206,7 +1206,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="429"/>
         <source>Image cache size:</source>
-        <translation>Размер кеша изображений:</translation>
+        <translation>Размер кэша изображений:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="442"/>
