@@ -162,8 +162,7 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 			_errorString = gt.errorString();
 			return;
 		} else {
-			_name = gt.name();
-			_size = gt.size();
+			_name = fi.fileName();
 			_imgPath = fileName;
 			_datum = gt.datum();
 			_projection = gt.projection();
@@ -173,9 +172,6 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 		_errorString = "Not a map file";
 		return;
 	}
-
-	_inverted = _transform.inverted();
-	computeResolution();
 
 	if (_tar.isOpen()) {
 		if (!totalSizeSet())
@@ -196,6 +192,9 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 				return;
 		}
 	}
+
+	_inverted = _transform.inverted();
+	computeResolution();
 
 	_valid = true;
 }

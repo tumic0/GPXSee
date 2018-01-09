@@ -74,17 +74,6 @@ bool GeoTIFF::readEntry(TIFFFile &file, Ctx &ctx)
 		return false;
 
 	switch (tag) {
-		case ImageWidth:
-			if (!(type == TIFF_SHORT || type == TIFF_LONG))
-				return false;
-			_size.setWidth(offset);
-			break;
-		case ImageHeight:
-			if (!(type == TIFF_SHORT || type == TIFF_LONG))
-				return false;
-			_size.setHeight(offset);
-			break;
-
 		case ModelPixelScaleTag:
 			if (type != TIFF_DOUBLE || count != 3)
 				return false;
@@ -397,10 +386,6 @@ bool GeoTIFF::load(const QString &path)
 		}
 	}
 
-	if (!_size.isValid()) {
-		_errorString = "Invalid/missing image size";
-		return false;
-	}
 	if (!ctx.keys) {
 		_errorString = "Not a GeoTIFF file";
 		return false;
@@ -458,9 +443,6 @@ bool GeoTIFF::load(const QString &path)
 		_errorString = "Incomplete/missing model transformation info";
 		return false;
 	}
-
-	QFileInfo fi(path);
-	_name = fi.fileName();
 
 	return true;
 }

@@ -20,9 +20,6 @@ public:
 	Projection *projection() const {return _projection;}
 	const QTransform &transform() const {return _transform;}
 
-	const QString name() const {return _name;}
-	const QSize &size() const {return _size;}
-
 	const QString &errorString() const {return _errorString;}
 
 private:
@@ -60,8 +57,6 @@ private:
 	QTransform _transform;
 	Datum _datum;
 	Projection *_projection;
-	QSize _size;
-	QString _name;
 
 	QString _errorString;
 };
