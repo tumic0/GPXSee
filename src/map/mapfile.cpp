@@ -176,16 +176,16 @@ bool MapFile::createProjection(const QString &name,
 	else if (name == "(A)Lambert Azimuthual Equal Area")
 		_projection = Projection::projection(_datum, 9820, setup);
 	else if (name == "(UTM) Universal Transverse Mercator") {
-		Projection::Setup s;
+		int zone;
 		if (points.first().zone)
-			s = UTM::setup(points.first().zone);
+			zone = points.first().zone;
 		else if (!points.first().ll.isNull())
-			s = UTM::setup(UTM::zone(points.first().ll));
+			zone = UTM::zone(points.first().ll);
 		else {
 			_errorString = "Can not determine UTM zone";
 			return 0;
 		}
-		_projection = Projection::projection(_datum, 9807, s);
+		_projection = Projection::projection(_datum, 9807, UTM::setup(zone));
 	} else if (name == "(NZTM2) New Zealand TM 2000")
 		_projection = Projection::projection(_datum, 9807, Projection::Setup(
 		  0, 173.0, 0.9996, 1600000, 10000000, NAN, NAN));
