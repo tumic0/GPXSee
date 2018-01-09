@@ -32,6 +32,8 @@ public:
 private:
 	class Entry;
 
+	static void error(const QString &str);
+
 	Datum _datum;
 	Projection::Method _method;
 	Projection::Setup _setup;

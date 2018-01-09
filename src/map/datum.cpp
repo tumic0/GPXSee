@@ -103,13 +103,19 @@ Datum::Datum(const QString &name)
 	*this = Datum();
 }
 
+void Datum::error(const QString &str)
+{
+	_errorString = str;
+	_datums = WGS84();
+}
+
 bool Datum::loadList(const QString &path)
 {
 	QFile file(path);
 	bool res;
 
 	if (!file.open(QFile::ReadOnly)) {
-		_errorString = qPrintable(file.errorString());
+		error(file.errorString());
 		return false;
 	}
 
@@ -120,7 +126,7 @@ bool Datum::loadList(const QString &path)
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split(',');
 		if (list.size() != 6) {
-			_errorString = "Format error";
+			error("Format error");
 			return false;
 		}
 
@@ -129,34 +135,34 @@ bool Datum::loadList(const QString &path)
 		if (!f1.isEmpty()) {
 			id = f1.toInt(&res);
 			if (!res) {
-				_errorString = "Invalid datum id";
+				error("Invalid datum id");
 				return false;
 			}
 		}
 		int eid = list[2].trimmed().toInt(&res);
 		if (!res) {
-			_errorString = "Invalid ellipsoid id";
+			error("Invalid ellipsoid id");
 			return false;
 		}
 		double dx = list[3].trimmed().toDouble(&res);
 		if (!res) {
-			_errorString = "Invalid dx";
+			error("Invalid dx");
 			return false;
 		}
 		double dy = list[4].trimmed().toDouble(&res);
 		if (!res) {
-			_errorString = "Invalid dy";
+			error("Invalid dy");
 			return false;
 		}
 		double dz = list[5].trimmed().toDouble(&res);
 		if (!res) {
-			_errorString = "Invalid dz";
+			error("Invalid dz");
 			return false;
 		}
 
 		Ellipsoid e(eid);
 		if (e.isNull()) {
-			_errorString = "Unknown ellipsoid ID";
+			error("Unknown ellipsoid ID");
 			return false;
 		}
 

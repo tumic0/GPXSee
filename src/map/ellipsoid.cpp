@@ -16,6 +16,12 @@ Ellipsoid::Ellipsoid(int id)
 		*this = it.value();
 }
 
+void Ellipsoid::error(const QString &str)
+{
+	_errorString = str;
+	_ellipsoids.clear();
+}
+
 bool Ellipsoid::loadList(const QString &path)
 {
 	QFile file(path);
@@ -23,7 +29,7 @@ bool Ellipsoid::loadList(const QString &path)
 
 
 	if (!file.open(QFile::ReadOnly)) {
-		_errorString = qPrintable(file.errorString());
+		error(file.errorString());
 		return false;
 	}
 
@@ -34,23 +40,23 @@ bool Ellipsoid::loadList(const QString &path)
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split(',');
 		if (list.size() != 4) {
-			_errorString = "Format error";
+			error("Format error");
 			return false;
 		}
 
 		int id = list[1].trimmed().toInt(&res);
 		if (!res) {
-			_errorString = "Invalid ellipsoid id";
+			error("Invalid ellipsoid id");
 			return false;
 		}
 		double radius = list[2].trimmed().toDouble(&res);
 		if (!res) {
-			_errorString = "Invalid ellipsoid radius";
+			error("Invalid ellipsoid radius");
 			return false;
 		}
 		double flattening = list[3].trimmed().toDouble(&res);
 		if (!res) {
-			_errorString = "Invalid ellipsoid flattening";
+			error("Invalid ellipsoid flattening");
 			return false;
 		}
 

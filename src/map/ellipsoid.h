@@ -25,6 +25,8 @@ public:
 	static int errorLine() {return _errorLine;}
 
 private:
+	static void error(const QString &str);
+
 	double _radius;
 	double _flattening;
 

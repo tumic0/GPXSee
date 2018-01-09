@@ -58,6 +58,12 @@ PCS::PCS(int gcs, int proj)
 	*this = PCS();
 }
 
+void PCS::error(const QString &str)
+{
+	_errorString = str;
+	_pcss.clear();
+}
+
 bool PCS::loadList(const QString &path)
 {
 	QFile file(path);
@@ -66,7 +72,7 @@ bool PCS::loadList(const QString &path)
 
 
 	if (!file.open(QFile::ReadOnly)) {
-		_errorString = qPrintable(file.errorString());
+		error(file.errorString());
 		return false;
 	}
 
@@ -77,7 +83,7 @@ bool PCS::loadList(const QString &path)
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split(',');
 		if (list.size() != 12) {
-			_errorString = "Format error";
+			error("Format error");
 			return false;
 		}
 
@@ -94,19 +100,19 @@ bool PCS::loadList(const QString &path)
 
 		for (int i = 1; i < 12; i++) {
 			if (!res[i]) {
-				_errorString = "Parse error";
+				error("Parse error");
 				return false;
 			}
 		}
 
 		Datum datum(gcs);
 		if (datum.isNull()) {
-			_errorString = "Unknown datum";
+			error("Unknown datum");
 			return false;
 		}
 		Projection::Method method(transform);
 		if (method.isNull()) {
-			_errorString = "Unknown coordinates transformation method";
+			error("Unknown coordinates transformation method");
 			return false;
 		}
 

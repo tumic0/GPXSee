@@ -36,6 +36,7 @@ private:
 	class Entry;
 
 	static QList<Entry> WGS84();
+	static void error(const QString &str);
 
 	Ellipsoid _ellipsoid;
 	double _dx, _dy, _dz;
