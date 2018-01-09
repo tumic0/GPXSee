@@ -197,7 +197,8 @@ RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \
     lang/gpxsee_de.ts \
-    lang/gpxsee_ru.ts
+    lang/gpxsee_ru.ts \
+    lang/gpxsee_fi.ts
 macx {
     ICON = icons/gpxsee.icns
     QMAKE_INFO_PLIST = Info.plist
