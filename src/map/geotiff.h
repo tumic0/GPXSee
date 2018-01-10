@@ -40,14 +40,15 @@ private:
 		  values(0) {}
 	};
 
-	bool readEntry(TIFFFile &file, Ctx &ctx);
-	bool readIFD(TIFFFile &file, quint32 &offset, Ctx &ctx);
-	bool readScale(TIFFFile &file, quint32 offset, QPointF &scale);
+	bool readEntry(TIFFFile &file, Ctx &ctx) const;
+	bool readIFD(TIFFFile &file, quint32 &offset, Ctx &ctx) const;
+	bool readScale(TIFFFile &file, quint32 offset, QPointF &scale) const;
 	bool readTiepoints(TIFFFile &file, quint32 offset, quint32 count,
-	  QList<ReferencePoint> &points);
-	bool readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv);
+	  QList<ReferencePoint> &points) const;
+	bool readMatrix(TIFFFile &file, quint32 offset, double matrix[16]) const;
+	bool readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv) const;
 	bool readGeoValue(TIFFFile &file, quint32 offset, quint16 index,
-	  double &val);
+	  double &val) const;
 
 	Datum datum(QMap<quint16, Value> &kv);
 	Projection::Method method(QMap<quint16, Value> &kv);

@@ -58,7 +58,7 @@ typedef struct {
 } KeyEntry;
 
 
-bool GeoTIFF::readEntry(TIFFFile &file, Ctx &ctx)
+bool GeoTIFF::readEntry(TIFFFile &file, Ctx &ctx) const
 {
 	quint16 tag;
 	quint16 type;
@@ -105,7 +105,7 @@ bool GeoTIFF::readEntry(TIFFFile &file, Ctx &ctx)
 	return true;
 }
 
-bool GeoTIFF::readIFD(TIFFFile &file, quint32 &offset, Ctx &ctx)
+bool GeoTIFF::readIFD(TIFFFile &file, quint32 &offset, Ctx &ctx) const
 {
 	quint16 count;
 
@@ -124,7 +124,7 @@ bool GeoTIFF::readIFD(TIFFFile &file, quint32 &offset, Ctx &ctx)
 	return true;
 }
 
-bool GeoTIFF::readScale(TIFFFile &file, quint32 offset, QPointF &scale)
+bool GeoTIFF::readScale(TIFFFile &file, quint32 offset, QPointF &scale) const
 {
 	if (!file.seek(offset))
 		return false;
@@ -138,7 +138,7 @@ bool GeoTIFF::readScale(TIFFFile &file, quint32 offset, QPointF &scale)
 }
 
 bool GeoTIFF::readTiepoints(TIFFFile &file, quint32 offset, quint32 count,
-  QList<ReferencePoint> &points)
+  QList<ReferencePoint> &points) const
 {
 	double z, pz;
 	QPointF xy, pp;
@@ -170,7 +170,19 @@ bool GeoTIFF::readTiepoints(TIFFFile &file, quint32 offset, quint32 count,
 	return true;
 }
 
-bool GeoTIFF::readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv)
+bool GeoTIFF::readMatrix(TIFFFile &file, quint32 offset, double matrix[16]) const
+{
+	if (!file.seek(offset))
+		return false;
+
+	for (int i = 0; i < 16; i++)
+		if (!file.readValue(matrix[i]))
+			return false;
+
+	return true;
+}
+
+bool GeoTIFF::readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv) const
 {
 	Header header;
 	KeyEntry entry;
@@ -233,7 +245,7 @@ bool GeoTIFF::readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv)
 }
 
 bool GeoTIFF::readGeoValue(TIFFFile &file, quint32 offset, quint16 index,
-  double &val)
+  double &val) const
 {
 	qint64 pos = file.pos();
 
@@ -419,17 +431,18 @@ bool GeoTIFF::load(const QString &path)
 				return false;
 			break;
 		case ModelTypeGeocentric:
-			_errorString = "TODO ModelTypeGeocentric";
+			_errorString = "Geocentric models are not supported";
 			return false;
 		default:
 			_errorString = "Unknown/missing model type";
 			return false;
 	}
 
-	if (ctx.scale && ctx.tiepoints)
-		_transform = QTransform(scale.x(), 0, 0, -scale.y(),
-		  points.first().pp.x(), points.first().pp.y()).inverted();
-	else if (ctx.tiepointCount > 1) {
+	if (ctx.scale && ctx.tiepoints) {
+		const ReferencePoint &p = points.first();
+		_transform = QTransform(scale.x(), 0, 0, -scale.y(), p.pp.x() - p.xy.x()
+		  / scale.x(), p.pp.y() + p.xy.x() / scale.y()).inverted();
+	} else if (ctx.tiepointCount > 1) {
 		Transform t(points);
 		if (t.isNull()) {
 			_errorString = t.errorString();
@@ -437,8 +450,16 @@ bool GeoTIFF::load(const QString &path)
 		}
 		_transform = t.transform();
 	} else if (ctx.matrix) {
-		_errorString = "TODO ModelTransformationTag";
-		return false;
+		double m[16];
+		if (!readMatrix(file, ctx.matrix, m)) {
+			_errorString = "Error reading transformation matrix";
+			return false;
+		}
+		if (m[2] != 0.0 || m[6] != 0.0 || m[8] != 0.0 || m[9] != 0.0
+		  || m[10] != 0.0 || m[11] != 0.0) {
+			_errorString = "Not a baseline transformation matrix";
+		}
+		_transform = QTransform(m[0], m[1], m[4], m[5], m[3], m[7]).inverted();
 	} else {
 		_errorString = "Incomplete/missing model transformation info";
 		return false;
