@@ -3,7 +3,9 @@
 
 #include <QTransform>
 #include "common/coordinates.h"
+#include "datum.h"
 #include "projection.h"
+#include "transform.h"
 #include "map.h"
 #include "tar.h"
 #include "ozf.h"
@@ -50,40 +52,23 @@ public:
 	  {return _transform.map(p);}
 
 private:
-	struct ReferencePoint {
-		QPoint xy;
-		Coordinates ll;
-		QPointF pp;
-	};
-
-	int parse(QIODevice &device, QList<ReferencePoint> &points,
-	  QString &projection, Projection::Setup &setup, QString &datum);
-	bool parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
-	  QString &projection, Projection::Setup &setup, QString &datum);
-	bool totalSizeSet();
-	bool createProjection(const QString &datum, const QString &projection,
-	  const Projection::Setup &setup, QList<ReferencePoint> &points);
-	bool simpleTransformation(const QList<ReferencePoint> &points);
-	bool affineTransformation(const QList<ReferencePoint> &points);
-	bool computeTransformation(const QList<ReferencePoint> &points);
-	bool computeResolution(QList<ReferencePoint> &points);
 	bool getTileInfo(const QStringList &tiles, const QString &path = QString());
 	bool getImageInfo(const QString &path);
+	bool totalSizeSet();
 
 	void drawTiled(QPainter *painter, const QRectF &rect);
 	void drawOZF(QPainter *painter, const QRectF &rect);
 	void drawImage(QPainter *painter, const QRectF &rect);
 
+	void computeResolution();
 	void rescale(int zoom);
 
 	QString _name;
-	bool _valid;
-	QString _errorString;
 
 	QSize _size;
+	Datum _datum;
 	Projection *_projection;
 	QTransform _transform, _inverted;
-	qreal _resolution;
 
 	OZF _ozf;
 	Tar _tar;
@@ -94,7 +79,11 @@ private:
 	QString _tileName;
 
 	int _zoom;
+	qreal _resolution;
 	QPointF _scale;
+
+	bool _valid;
+	QString _errorString;
 };
 
 #endif // OFFLINEMAP_H

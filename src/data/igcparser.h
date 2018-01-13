@@ -10,7 +10,6 @@ class IGCParser : public Parser
 {
 public:
 	IGCParser() : _errorLine(0) {}
-	~IGCParser() {}
 
 	bool parse(QFile *file, QList<TrackData> &tracks,
 	  QList<RouteData> &routes, QList<Waypoint> &waypoints);

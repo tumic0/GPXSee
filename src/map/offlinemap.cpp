@@ -9,297 +9,20 @@
 #include <QPixmapCache>
 #include "common/coordinates.h"
 #include "common/rectc.h"
-#include "datum.h"
-#include "utm.h"
-#include "matrix.h"
-#include "ozf.h"
+#include "mapfile.h"
+#include "geotiff.h"
 #include "offlinemap.h"
 
 
-int OfflineMap::parse(QIODevice &device, QList<ReferencePoint> &points,
-  QString &projection, Projection::Setup &setup, QString &datum)
+void OfflineMap::computeResolution()
 {
-	bool res;
-	int ln = 1;
+	Coordinates tl = xy2ll((bounds().topLeft()));
+	Coordinates br = xy2ll(bounds().bottomRight());
 
-	while (!device.atEnd()) {
-		QByteArray line = device.readLine();
+	qreal ds = tl.distanceTo(br);
+	qreal ps = QLineF(bounds().topLeft(), bounds().bottomRight()).length();
 
-		if (ln == 1) {
-			if (!line.trimmed().startsWith("OziExplorer Map Data File"))
-				return ln;
-		} else if (ln == 2)
-			_name = line.trimmed();
-		else if (ln == 3)
-			_imgPath = line.trimmed();
-		else if (ln == 5)
-			datum = line.split(',').at(0).trimmed();
-		else {
-			QList<QByteArray> list = line.split(',');
-			QString key(list.at(0).trimmed());
-			bool ll = true; bool pp = true;
-
-			if (key.startsWith("Point") && list.count() == 17
-			  && !list.at(2).trimmed().isEmpty()) {
-				int x = list.at(2).trimmed().toInt(&res);
-				if (!res)
-					return ln;
-				int y = list.at(3).trimmed().toInt(&res);
-				if (!res)
-					return ln;
-
-				int latd = list.at(6).trimmed().toInt(&res);
-				if (!res)
-					ll = false;
-				qreal latm = list.at(7).trimmed().toFloat(&res);
-				if (!res)
-					ll = false;
-				int lond = list.at(9).trimmed().toInt(&res);
-				if (!res)
-					ll = false;
-				qreal lonm = list.at(10).trimmed().toFloat(&res);
-				if (!res)
-					ll = false;
-				if (ll && list.at(8).trimmed() == "S") {
-					latd = -latd;
-					latm = -latm;
-				}
-				if (ll && list.at(11).trimmed() == "W") {
-					lond = -lond;
-					lonm = -lonm;
-				}
-
-				setup.zone = list.at(13).trimmed().toInt(&res);
-				if (!res)
-					setup.zone = 0;
-				qreal ppx = list.at(14).trimmed().toFloat(&res);
-				if (!res)
-					pp = false;
-				qreal ppy = list.at(15).trimmed().toFloat(&res);
-				if (!res)
-					pp = false;
-				if (list.at(16).trimmed() == "S")
-					setup.zone = -setup.zone;
-
-				ReferencePoint p;
-				p.xy = QPoint(x, y);
-				if (ll) {
-					p.ll = Coordinates(lond + lonm/60.0, latd + latm/60.0);
-					if (p.ll.isValid())
-						points.append(p);
-					else
-						return ln;
-				} else if (pp) {
-					p.pp = QPointF(ppx, ppy);
-					points.append(p);
-				} else
-					return ln;
-			} else if (key == "IWH") {
-				if (list.count() < 4)
-					return ln;
-				int w = list.at(2).trimmed().toInt(&res);
-				if (!res)
-					return ln;
-				int h = list.at(3).trimmed().toInt(&res);
-				if (!res)
-					return ln;
-				_size = QSize(w, h);
-			} else if (key == "Map Projection") {
-				if (list.count() < 2)
-					return ln;
-				projection = list.at(1);
-			} else if (key == "Projection Setup") {
-				if (list.count() < 8)
-					return ln;
-				setup.latitudeOrigin = list.at(1).trimmed().toFloat(&res);
-				if (!res)
-					setup.latitudeOrigin = 0;
-				setup.longitudeOrigin = list.at(2).trimmed().toFloat(&res);
-				if (!res)
-					setup.longitudeOrigin = 0;
-				setup.scale = list.at(3).trimmed().toFloat(&res);
-				if (!res)
-					setup.scale = 1.0;
-				setup.falseEasting = list.at(4).trimmed().toFloat(&res);
-				if (!res)
-					setup.falseEasting = 0;
-				setup.falseNorthing = list.at(5).trimmed().toFloat(&res);
-				if (!res)
-					setup.falseNorthing = 0;
-				setup.standardParallel1 = list.at(6).trimmed().toFloat(&res);
-				if (!res)
-					setup.standardParallel1 = 0;
-				setup.standardParallel2 = list.at(7).trimmed().toFloat(&res);
-				if (!res)
-					setup.standardParallel2 = 0;
-			}
-		}
-
-		ln++;
-	}
-
-	if (!setup.zone && !points.first().ll.isNull())
-		setup.zone = UTM::zone(points.first().ll);
-
-	return 0;
-}
-
-bool OfflineMap::parseMapFile(QIODevice &device, QList<ReferencePoint> &points,
-  QString &projection, Projection::Setup &setup, QString &datum)
-{
-	int el;
-
-	if (!device.open(QIODevice::ReadOnly)) {
-		_errorString = QString("Error opening map file: %1")
-		  .arg(device.errorString());
-		return false;
-	}
-
-	if ((el = parse(device, points, projection, setup, datum))) {
-		_errorString = QString("Map file parse error on line %1").arg(el);
-		return false;
-	}
-
-	return true;
-}
-
-bool OfflineMap::createProjection(const QString &datum,
-  const QString &projection, const Projection::Setup &setup,
-  QList<ReferencePoint> &points)
-{
-	if (points.count() < 2) {
-		_errorString = "Insufficient number of reference points";
-		return false;
-	}
-
-	Datum d = Datum::datum(datum);
-	if (d.isNull()) {
-		_errorString = QString("%1: Unknown datum").arg(datum);
-		return false;
-	}
-
-	_projection = Projection::projection(projection, d.ellipsoid(), setup);
-	if (!_projection) {
-		_errorString = Projection::errorString();
-		return false;
-	}
-
-	for (int i = 0; i < points.size(); i++) {
-		if (points.at(i).ll.isNull())
-			points[i].ll = d.toWGS84(_projection->xy2ll(points.at(i).pp));
-		else
-			points[i].ll = d.toWGS84(points[i].ll);
-	}
-
-	return true;
-}
-
-bool OfflineMap::simpleTransformation(const QList<ReferencePoint> &points)
-{
-	if (points.at(0).xy.x() == points.at(1).xy.x()
-	  || points.at(0).xy.y() == points.at(1).xy.y()) {
-		_errorString = "Invalid reference points tuple";
-		return false;
-	}
-
-	QPointF p0(_projection->ll2xy(points.at(0).ll));
-	QPointF p1(_projection->ll2xy(points.at(1).ll));
-
-	qreal dX, dY, lat0, lon0;
-	dX = (p0.x() - p1.x()) / (points.at(0).xy.x() - points.at(1).xy.x());
-	dY = (p1.y() - p0.y()) / (points.at(1).xy.y() - points.at(0).xy.y());
-	lat0 = p0.y() - points.at(0).xy.y() * dY;
-	lon0 = p1.x() - points.at(1).xy.x() * dX;
-
-	_transform = QTransform(1.0/dX, 0, 0, 1.0/dY, -lon0/dX, -lat0/dY);
-	_inverted = _transform.inverted();
-
-	return true;
-}
-
-bool OfflineMap::affineTransformation(const QList<ReferencePoint> &points)
-{
-	Matrix c(3, 2);
-	c.zeroize();
-	for (size_t i = 0; i < c.h(); i++) {
-		for (size_t j = 0; j < c.w(); j++) {
-			for (int k = 0; k < points.size(); k++) {
-				double f[3], t[2];
-				QPointF p = _projection->ll2xy(points.at(k).ll);
-
-				f[0] = p.x();
-				f[1] = p.y();
-				f[2] = 1.0;
-				t[0] = points.at(k).xy.x();
-				t[1] = points.at(k).xy.y();
-				c.m(i,j) += f[i] * t[j];
-			}
-		}
-	}
-
-	Matrix Q(3, 3);
-	Q.zeroize();
-	for (int qi = 0; qi < points.size(); qi++) {
-		double v[3];
-		QPointF p = _projection->ll2xy(points.at(qi).ll);
-
-		v[0] = p.x();
-		v[1] = p.y();
-		v[2] = 1.0;
-		for (size_t i = 0; i < Q.h(); i++)
-			for (size_t j = 0; j < Q.w(); j++)
-				Q.m(i,j) += v[i] * v[j];
-	}
-
-	Matrix M = Q.augemented(c);
-	if (!M.eliminate()) {
-		_errorString = "Singular transformation matrix";
-		return false;
-	}
-
-	_transform = QTransform(M.m(0,3), M.m(0,4), M.m(1,3), M.m(1,4), M.m(2,3),
-	  M.m(2,4));
-	_inverted = _transform.inverted();
-
-	return true;
-}
-
-bool OfflineMap::computeTransformation(const QList<ReferencePoint> &points)
-{
-	Q_ASSERT(points.size() >= 2);
-
-	if (points.size() == 2)
-		return simpleTransformation(points);
-	else
-		return affineTransformation(points);
-}
-
-bool OfflineMap::computeResolution(QList<ReferencePoint> &points)
-{
-	Q_ASSERT(points.count() >= 2);
-
-	int maxLon = 0, minLon = 0, maxLat = 0, minLat = 0;
-	qreal dLon, pLon, dLat, pLat;
-
-	for (int i = 1; i < points.size(); i++) {
-		if (points.at(i).ll.lon() < points.at(minLon).ll.lon())
-			minLon = i;
-		if (points.at(i).ll.lon() > points.at(maxLon).ll.lon())
-			maxLon = i;
-		if (points.at(i).ll.lat() < points.at(minLat).ll.lat())
-			minLat = i;
-		if (points.at(i).ll.lat() > points.at(maxLat).ll.lat())
-			maxLat = i;
-	}
-
-	dLon = points.at(minLon).ll.distanceTo(points.at(maxLon).ll);
-	pLon = QLineF(points.at(minLon).xy, points.at(maxLon).xy).length();
-	dLat = points.at(minLat).ll.distanceTo(points.at(maxLat).ll);
-	pLat = QLineF(points.at(minLat).xy, points.at(maxLat).xy).length();
-
-	_resolution = (dLon/pLon + dLat/pLat) / 2.0;
-
-	return true;
+	_resolution = ds/ps;
 }
 
 bool OfflineMap::getImageInfo(const QString &path)
@@ -384,12 +107,8 @@ bool OfflineMap::totalSizeSet()
 OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
   : Map(parent)
 {
-	QList<ReferencePoint> points;
-	QString proj, datum;
-	Projection::Setup setup;
 	QFileInfo fi(fileName);
 	QString suffix = fi.suffix().toLower();
-
 
 	_valid = false;
 	_img = 0;
@@ -411,22 +130,48 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 			return;
 		}
 		QBuffer mapFile(&ba);
-		if (!parseMapFile(mapFile, points, proj, setup, datum))
+		MapFile mf;
+		if (!mf.load(mapFile)) {
+			_errorString = mf.errorString();
 			return;
-	} else if (suffix =="map") {
+		} else {
+			_name = mf.name();
+			_size = mf.size();
+			_imgPath = mf.image();
+			_datum = mf.datum();
+			_projection = mf.projection();
+			_transform = mf.transform();
+		}
+	} else if (suffix == "map") {
+		MapFile mf;
 		QFile mapFile(fileName);
-		if (!parseMapFile(mapFile, points, proj, setup, datum))
+		if (!mf.load(mapFile)) {
+			_errorString = mf.errorString();
 			return;
+		} else {
+			_name = mf.name();
+			_size = mf.size();
+			_imgPath = mf.image();
+			_datum = mf.datum();
+			_projection = mf.projection();
+			_transform = mf.transform();
+		}
+	} else if (suffix == "tif" || suffix == "tiff") {
+		GeoTIFF gt;
+		if (!gt.load(fileName)) {
+			_errorString = gt.errorString();
+			return;
+		} else {
+			_name = fi.fileName();
+			_imgPath = fileName;
+			_datum = gt.datum();
+			_projection = gt.projection();
+			_transform = gt.transform();
+		}
 	} else {
 		_errorString = "Not a map file";
 		return;
 	}
-
-	if (!createProjection(datum, proj, setup, points))
-		return;
-	if (!computeTransformation(points))
-		return;
-	computeResolution(points);
 
 	if (_tar.isOpen()) {
 		if (!totalSizeSet())
@@ -448,16 +193,17 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 		}
 	}
 
+	_inverted = _transform.inverted();
+	computeResolution();
+
 	_valid = true;
 }
 
 OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
   : Map(parent)
 {
-	QList<ReferencePoint> points;
-	QString proj, datum;
-	Projection::Setup setup;
 	QFileInfo fi(fileName);
+	MapFile mf;
 
 	_valid = false;
 	_img = 0;
@@ -477,28 +223,28 @@ OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
 	}
 	QBuffer buffer(&ba);
 
-	if (!parseMapFile(buffer, points, proj, setup, datum))
+	if (!mf.load(buffer)) {
+		_errorString = mf.errorString();
 		return;
-	if (!createProjection(datum, proj, setup, points))
-		return;
-	if (!totalSizeSet())
-		return;
-	if (!computeTransformation(points))
-		return;
-	computeResolution(points);
+	}
 
+	_name = mf.name();
+	_size = mf.size();
+	_datum = mf.datum();
+	_projection = mf.projection();
+	_transform = mf.transform();
+
+	_inverted = _transform.inverted();
+	computeResolution();
 
 	_tarPath = fi.absolutePath() + "/" + fi.completeBaseName() + ".tar";
-	_imgPath = QString();
 	_valid = true;
 }
 
 OfflineMap::~OfflineMap()
 {
-	if (_img)
-		delete _img;
-	if (_projection)
-		delete _projection;
+	delete _img;
+	delete _projection;
 }
 
 void OfflineMap::load()
@@ -522,10 +268,8 @@ void OfflineMap::load()
 
 void OfflineMap::unload()
 {
-	if (_img) {
-		delete _img;
-		_img = 0;
-	}
+	delete _img;
+	_img = 0;
 }
 
 void OfflineMap::drawTiled(QPainter *painter, const QRectF &rect)
@@ -599,13 +343,9 @@ void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect)
 
 void OfflineMap::drawImage(QPainter *painter, const QRectF &rect)
 {
-	if (!_img || _img->isNull())
-		painter->fillRect(rect, _backgroundColor);
-	else {
-		QRect r(rect.toRect());
-		painter->drawImage(r.left(), r.top(), *_img, r.left(), r.top(),
-		  r.width(), r.height());
-	}
+	QRect r(rect.toRect());
+	painter->drawImage(r.left(), r.top(), *_img, r.left(), r.top(),
+	  r.width(), r.height());
 }
 
 void OfflineMap::draw(QPainter *painter, const QRectF &rect)
@@ -614,26 +354,28 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect)
 		drawOZF(painter, rect);
 	else if (_tileSize.isValid())
 		drawTiled(painter, rect);
-	else
+	else if (_img && !_img->isNull())
 		drawImage(painter, rect);
+	else
+		painter->fillRect(rect, _backgroundColor);
 }
 
 QPointF OfflineMap::ll2xy(const Coordinates &c)
 {
 	if (_ozf.isOpen()) {
-		QPointF p(_transform.map(_projection->ll2xy(c)));
+		QPointF p(_transform.map(_projection->ll2xy(_datum.fromWGS84(c))));
 		return QPointF(p.x() * _scale.x(), p.y() * _scale.y());
 	} else
-		return _transform.map(_projection->ll2xy(c));
+		return _transform.map(_projection->ll2xy(_datum.fromWGS84(c)));
 }
 
 Coordinates OfflineMap::xy2ll(const QPointF &p)
 {
 	if (_ozf.isOpen()) {
-		return _projection->xy2ll(_inverted.map(QPointF(p.x() / _scale.x(),
-		  p.y() / _scale.y())));
+		return _datum.toWGS84(_projection->xy2ll(_inverted.map(QPointF(p.x()
+		  / _scale.x(), p.y() / _scale.y()))));
 	} else
-		return _projection->xy2ll(_inverted.map(p));
+		return _datum.toWGS84(_projection->xy2ll(_inverted.map(p)));
 }
 
 QRectF OfflineMap::bounds() const

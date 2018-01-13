@@ -1,5 +1,5 @@
 TARGET = GPXSee
-VERSION = 4.18
+VERSION = 5.0
 QT += core \
     gui \
     network
@@ -87,6 +87,11 @@ HEADERS += src/config.h \
     src/map/atlas.h \
     src/map/matrix.h \
     src/map/misc.h \
+    src/map/geotiff.h \
+    src/map/pcs.h \
+    src/map/transform.h \
+    src/map/mapfile.h \
+    src/map/tifffile.h \
     src/data/graph.h \
     src/data/poi.h \
     src/data/waypoint.h \
@@ -163,13 +168,17 @@ SOURCES += src/main.cpp \
     src/map/matrix.cpp \
     src/map/ellipsoid.cpp \
     src/map/datum.cpp \
-    src/map/projection.cpp \
     src/map/mercator.cpp \
     src/map/transversemercator.cpp \
     src/map/utm.cpp \
     src/map/lambertconic.cpp \
     src/map/albersequal.cpp \
     src/map/lambertazimuthal.cpp \
+    src/map/geotiff.cpp \
+    src/map/pcs.cpp \
+    src/map/transform.cpp \
+    src/map/mapfile.cpp \
+    src/map/tifffile.cpp \
     src/data/data.cpp \
     src/data/poi.cpp \
     src/data/track.cpp \
@@ -182,11 +191,14 @@ SOURCES += src/main.cpp \
     src/data/fitparser.cpp \
     src/data/igcparser.cpp \
     src/data/nmeaparser.cpp \
-    src/data/str2int.cpp
+    src/data/str2int.cpp \
+    src/map/projection.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \
-    lang/gpxsee_de.ts
+    lang/gpxsee_de.ts \
+    lang/gpxsee_ru.ts \
+    lang/gpxsee_fi.ts
 macx {
     ICON = icons/gpxsee.icns
     QMAKE_INFO_PLIST = Info.plist
@@ -198,7 +210,8 @@ macx {
         icons/nmea.icns \
         pkg/maps.txt \
         pkg/ellipsoids.csv \
-        pkg/datums.csv
+        pkg/datums.csv \
+        pkg/pcs.csv
     APP_RESOURCES.path = Contents/Resources
     QMAKE_BUNDLE_DATA += APP_RESOURCES
 }

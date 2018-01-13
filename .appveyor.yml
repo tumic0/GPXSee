@@ -1,4 +1,4 @@
-version: 4.18.{build}
+version: 5.0.{build}
 configuration: Release
 platform: Any CPU
 environment:
@@ -34,10 +34,12 @@ build_script:
 
     copy pkg\%NSI% installer
 
-    copy pkg\datums.csv installer
-
     copy pkg\ellipsoids.csv installer
 
+    copy pkg\datums.csv installer
+
+    copy pkg\pcs.csv installer
+    
     copy pkg\maps.txt installer
 
     copy licence.txt installer
