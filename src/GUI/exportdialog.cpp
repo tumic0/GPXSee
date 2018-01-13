@@ -62,8 +62,8 @@ ExportDialog::ExportDialog(Export *exp, QWidget *parent)
 	_bottomMargin = new QDoubleSpinBox();
 	_leftMargin = new QDoubleSpinBox();
 	_rightMargin = new QDoubleSpinBox();
-	QString us = (_export->units == Imperial) ? tr("in") : tr("mm");
-	_topMargin->setSuffix(UNIT_SPACE + us);
+    QString us = (_export->units == Metric) ? tr("mm") : tr("in");  // in is used for Nautical and Imperial
+    _topMargin->setSuffix(UNIT_SPACE + us);
 	_bottomMargin->setSuffix(UNIT_SPACE + us);
 	_leftMargin->setSuffix(UNIT_SPACE + us);
 	_rightMargin->setSuffix(UNIT_SPACE + us);
@@ -76,7 +76,18 @@ ExportDialog::ExportDialog(Export *exp, QWidget *parent)
 		_bottomMargin->setSingleStep(0.1);
 		_leftMargin->setSingleStep(0.1);
 		_rightMargin->setSingleStep(0.1);
-	} else {
+    }
+    else if (_export->units == Nautical) {
+        _topMargin->setValue(_export->margins.top() * MM2IN);
+        _bottomMargin->setValue(_export->margins.bottom() * MM2IN);
+        _leftMargin->setValue(_export->margins.left() * MM2IN);
+        _rightMargin->setValue(_export->margins.right() * MM2IN);
+        _topMargin->setSingleStep(0.1);
+        _bottomMargin->setSingleStep(0.1);
+        _leftMargin->setSingleStep(0.1);
+        _rightMargin->setSingleStep(0.1);
+    }
+    else {
 		_topMargin->setValue(_export->margins.top());
 		_bottomMargin->setValue(_export->margins.bottom());
 		_leftMargin->setValue(_export->margins.left());
@@ -185,7 +196,11 @@ void ExportDialog::accept()
 		_export->margins = MarginsF(_leftMargin->value() / MM2IN,
 		_topMargin->value() / MM2IN, _rightMargin->value() / MM2IN,
 		_bottomMargin->value() / MM2IN);
-	else
+    else if (_export->units == Nautical)
+        _export->margins = MarginsF(_leftMargin->value() / MM2IN,
+        _topMargin->value() / MM2IN, _rightMargin->value() / MM2IN,
+        _bottomMargin->value() / MM2IN);
+    else
 		_export->margins = MarginsF(_leftMargin->value(), _topMargin->value(),
 		  _rightMargin->value(), _bottomMargin->value());
 

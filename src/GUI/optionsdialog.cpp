@@ -291,7 +291,12 @@ QWidget *OptionsDialog::createDataPage()
 	if (_options->units == Imperial) {
 		_pauseSpeed->setValue(_options->pauseSpeed * MS2MIH);
 		_pauseSpeed->setSuffix(UNIT_SPACE + tr("mi/h"));
-	} else {
+    }
+    if (_options->units == Nautical) {
+        _pauseSpeed->setValue(_options->pauseSpeed * MS2KTS);
+        _pauseSpeed->setSuffix(UNIT_SPACE + tr("kts"));
+    }
+    else {
 		_pauseSpeed->setValue(_options->pauseSpeed * MS2KMH);
 		_pauseSpeed->setSuffix(UNIT_SPACE + tr("km/h"));
 	}
@@ -323,7 +328,12 @@ QWidget *OptionsDialog::createPOIPage()
 	if (_options->units == Imperial) {
 		_poiRadius->setValue(_options->poiRadius / MIINM);
 		_poiRadius->setSuffix(UNIT_SPACE + tr("mi"));
-	} else {
+    }
+    else if (_options->units == Nautical) {
+        _poiRadius->setValue(_options->poiRadius / NMINM);
+        _poiRadius->setSuffix(UNIT_SPACE + tr("nm"));
+    }
+    else {
 		_poiRadius->setValue(_options->poiRadius / KMINM);
 		_poiRadius->setSuffix(UNIT_SPACE + tr("km"));
 	}
@@ -524,16 +534,20 @@ void OptionsDialog::accept()
 	_options->cadenceFilter = _cadenceFilter->value();
 	_options->powerFilter = _powerFilter->value();
 	_options->outlierEliminate = _outlierEliminate->isChecked();
-	qreal pauseSpeed = (_options->units == Imperial)
-		? _pauseSpeed->value() / MS2MIH : _pauseSpeed->value() / MS2KMH;
-	if (qAbs(pauseSpeed - _options->pauseSpeed) > 0.01)
+
+    qreal pauseSpeed;
+    if (_options->units == Imperial) pauseSpeed = _pauseSpeed->value() / MS2MIH;
+    else if (_options->units == Nautical) pauseSpeed = _pauseSpeed->value() / MS2KTS;
+    else pauseSpeed = _pauseSpeed->value() / MS2KMH;
+
+    if (qAbs(pauseSpeed - _options->pauseSpeed) > 0.01)
 		_options->pauseSpeed = pauseSpeed;
 	_options->pauseInterval = _pauseInterval->value();
 
-	qreal poiRadius = (_options->units == Imperial)
-		? _poiRadius->value() * MIINM :  _poiRadius->value() * KMINM;
-	if (qAbs(poiRadius - _options->poiRadius) > 0.01)
-		_options->poiRadius = poiRadius;
+    qreal poiRadius;
+    if (_options->units == Imperial) poiRadius = _poiRadius->value() * MIINM;
+    else if (_options->units == Nautical) poiRadius = _poiRadius->value() * NMINM;
+    else poiRadius = _poiRadius->value() * KMINM;
 
 	_options->useOpenGL = _useOpenGL->isChecked();
 	_options->pixmapCache = _pixmapCache->value();

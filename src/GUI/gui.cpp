@@ -401,16 +401,26 @@ void GUI::createActions()
 	  SLOT(setMovingTime()));
 	ag = new QActionGroup(this);
 	ag->setExclusive(true);
-	_metricUnitsAction = new QAction(tr("Metric"), this);
+
+    // Units
+    // Slot for Metric
+    _metricUnitsAction = new QAction(tr("Metric"), this);
 	_metricUnitsAction->setCheckable(true);
 	_metricUnitsAction->setActionGroup(ag);
-	connect(_metricUnitsAction, SIGNAL(triggered()), this,
-	  SLOT(setMetricUnits()));
-	_imperialUnitsAction = new QAction(tr("Imperial"), this);
+    connect(_metricUnitsAction, SIGNAL(triggered()), this, SLOT(setMetricUnits()));
+
+    // Slot for Imperial
+    _imperialUnitsAction = new QAction(tr("Imperial"), this);
 	_imperialUnitsAction->setCheckable(true);
 	_imperialUnitsAction->setActionGroup(ag);
-	connect(_imperialUnitsAction, SIGNAL(triggered()), this,
-	  SLOT(setImperialUnits()));
+    connect(_imperialUnitsAction, SIGNAL(triggered()), this, SLOT(setImperialUnits()));
+
+    // Slot for Nautical
+    _nauticalUnitsAction = new QAction(tr("Nautical"), this);
+    _nauticalUnitsAction->setCheckable(true);
+    _nauticalUnitsAction->setActionGroup(ag);
+    connect(_nauticalUnitsAction, SIGNAL(triggered()), this, SLOT(setNauticalUnits()));
+
 	_fullscreenAction = new QAction(QIcon(QPixmap(FULLSCREEN_ICON)),
 	  tr("Fullscreen mode"), this);
 	_fullscreenAction->setCheckable(true);
@@ -501,7 +511,8 @@ void GUI::createMenus()
 	QMenu *unitsMenu = settingsMenu->addMenu(tr("Units"));
 	unitsMenu->addAction(_metricUnitsAction);
 	unitsMenu->addAction(_imperialUnitsAction);
-	settingsMenu->addSeparator();
+    unitsMenu->addAction(_nauticalUnitsAction);
+    settingsMenu->addSeparator();
 	settingsMenu->addAction(_showToolbarsAction);
 	settingsMenu->addAction(_fullscreenAction);
 	settingsMenu->addSeparator();
@@ -1480,11 +1491,16 @@ void GUI::writeSettings()
 	  TIME_TYPE_DEFAULT)
 		settings.setValue(TIME_TYPE_SETTING, _movingTimeAction->isChecked()
 	  ? Moving : Total);
-	if ((_imperialUnitsAction->isChecked() ? Imperial : Metric) !=
-	  UNITS_DEFAULT)
-		settings.setValue(UNITS_SETTING, _imperialUnitsAction->isChecked()
-	  ? Imperial : Metric);
-	if (_showToolbarsAction->isChecked() != SHOW_TOOLBARS_DEFAULT)
+
+    /*if ((_imperialUnitsAction->isChecked() ? Imperial : Metric) !=
+      UNITS_DEFAULT)
+        settings.setValue(UNITS_SETTING, _imperialUnitsAction->isChecked()
+      ? Imperial : Metric); */
+    if (_metricUnitsAction->isChecked())   settings.setValue(UNITS_SETTING, Metric);
+    else if (_imperialUnitsAction->isChecked()) settings.setValue(UNITS_SETTING, Imperial);
+    else if (_nauticalUnitsAction->isChecked()) settings.setValue(UNITS_SETTING, Nautical);
+
+    if (_showToolbarsAction->isChecked() != SHOW_TOOLBARS_DEFAULT)
 		settings.setValue(SHOW_TOOLBARS_SETTING,
 		  _showToolbarsAction->isChecked());
 	settings.endGroup();
@@ -1662,7 +1678,12 @@ void GUI::readSettings()
 	if (settings.value(UNITS_SETTING, UNITS_DEFAULT).toInt() == Imperial) {
 		setUnits(Imperial);
 		_imperialUnitsAction->setChecked(true);
-	} else {
+    }
+    else if (settings.value(UNITS_SETTING, UNITS_DEFAULT).toInt() == Nautical) {
+        setUnits(Nautical);
+        _nauticalUnitsAction->setChecked(true);
+    }
+    else {
 		setUnits(Metric);
 		_metricUnitsAction->setChecked(true);
 	}
@@ -1907,9 +1928,14 @@ int GUI::mapIndex(const QString &name)
 	return 0;
 }
 
+//
+// Determine which unit is selected
+//
 Units GUI::units() const
 {
-	return _imperialUnitsAction->isChecked() ? Imperial : Metric;
+    if ( _imperialUnitsAction->isChecked() ) return Imperial;
+    else if ( _nauticalUnitsAction->isChecked() ) return Nautical;
+    return Metric;
 }
 
 qreal GUI::distance() const
