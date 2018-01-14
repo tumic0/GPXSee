@@ -97,10 +97,17 @@ bool MapList::loadAtlas(const QString &path)
 
 bool MapList::loadFile(const QString &path, bool *atlas)
 {
+	QFileInfo fi(path);
+	QString suffix = fi.suffix().toLower();
+
 	if (Atlas::isAtlas(path)) {
 		if (atlas)
 			*atlas = true;
 		return loadAtlas(path);
+	} else if (suffix == "txt") {
+		if (atlas)
+			*atlas = false;
+		return loadList(path);
 	} else {
 		if (atlas)
 			*atlas = false;
