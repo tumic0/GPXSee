@@ -291,7 +291,7 @@ Projection::Method GeoTIFF::method(QMap<quint16, Value> &kv)
 
 	if (!IS_SET(kv, ProjCoordTransGeoKey)) {
 		_errorString = "Missing coordinate transformation method";
-		return false;
+		return Projection::Method();
 	}
 
 	quint16 index = kv.value(ProjCoordTransGeoKey).SHORT;
@@ -299,7 +299,7 @@ Projection::Method GeoTIFF::method(QMap<quint16, Value> &kv)
 
 	if (!epsg) {
 		_errorString = QString("Unknown coordinate transformation method");
-		return false;
+		return Projection::Method();
 	}
 
 	return Projection::Method(epsg);
