@@ -101,17 +101,7 @@ GUI::~GUI()
 void GUI::loadMaps()
 {
 	_ml = new MapList(this);
-
-	QString offline, online;
-
-	if (QFile::exists(USER_MAP_FILE))
-		online = USER_MAP_FILE;
-	else if (QFile::exists(GLOBAL_MAP_FILE))
-		online = GLOBAL_MAP_FILE;
-
-	if (!online.isNull() && !_ml->loadFile(online))
-		qWarning("%s: %s", qPrintable(online), qPrintable(_ml->errorString()));
-
+	QString offline;
 
 	if (QFile::exists(USER_MAP_DIR))
 		offline = USER_MAP_DIR;
@@ -119,23 +109,10 @@ void GUI::loadMaps()
 		offline = GLOBAL_MAP_DIR;
 
 	if (!offline.isNull()) {
-		QDir md(offline);
-		QFileInfoList ml = md.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
-
-		for (int i = 0; i < ml.size(); i++) {
-			QDir dir(ml.at(i).absoluteFilePath());
-			QFileInfoList fl = dir.entryInfoList(MapList::filter(), QDir::Files);
-
-			if (fl.isEmpty())
-				qWarning("%s: no map/atlas file found",
-				  qPrintable(ml.at(i).absoluteFilePath()));
-			else if (fl.size() > 1)
-				qWarning("%s: ambiguous directory content",
-				  qPrintable(ml.at(i).absoluteFilePath()));
-			else
-				if (!_ml->loadFile(fl.first().absoluteFilePath()))
-					qWarning("%s: %s", qPrintable(fl.first().absoluteFilePath()),
-					  qPrintable(_ml->errorString()));
+		if (!_ml->loadDir(offline)) {
+			qWarning("Error reading map dir: %s",
+			  qPrintable(_ml->errorString()));
+			_ml->clear();
 		}
 	}
 

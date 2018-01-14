@@ -5,6 +5,8 @@
 #include <QString>
 #include "map.h"
 
+class Tar;
+
 class MapList : public QObject
 {
 	Q_OBJECT
@@ -12,7 +14,9 @@ class MapList : public QObject
 public:
 	MapList(QObject *parent = 0) : QObject(parent) {}
 
-	bool loadFile(const QString &path);
+	bool loadFile(const QString &path, bool *atlas = 0);
+	bool loadDir(const QString &path);
+	void clear();
 
 	const QList<Map*> &maps() const {return _maps;}
 	const QString &errorString() const {return _errorString;}
@@ -26,7 +30,6 @@ private:
 	bool loadList(const QString &path);
 	bool loadMap(const QString &path);
 	bool loadAtlas(const QString &path);
-	bool loadTar(const QString &path);
 
 	QList<Map*> _maps;
 	QString _errorString;

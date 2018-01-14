@@ -35,9 +35,10 @@ public:
 	bool isValid() const {return _valid;}
 	const QString &errorString() const {return _errorString;}
 
+	static bool isAtlas(const QString &path);
+
 private:
 	void draw(QPainter *painter, const QRectF &rect, int mapIndex);
-	bool isAtlas(Tar &tar, const QString &path);
 	void computeZooms();
 	void computeBounds();
 

@@ -31,37 +31,6 @@ static bool yCmp(const OfflineMap *m1, const OfflineMap *m2)
 	return TL(m1).y() > TL(m2).y();
 }
 
-bool Atlas::isAtlas(Tar &tar, const QString &path)
-{
-	QFileInfo fi(path);
-	QByteArray ba;
-	QString suffix = fi.suffix().toLower();
-
-	if (suffix == "tar") {
-		if (!tar.load(path)) {
-			_errorString = "Error reading tar file";
-			return false;
-		}
-		QString tbaFileName = fi.completeBaseName() + ".tba";
-		ba = tar.file(tbaFileName);
-	} else if (suffix == "tba") {
-		QFile tbaFile(path);
-		if (!tbaFile.open(QIODevice::ReadOnly)) {
-			_errorString = QString("Error opening tba file: %1")
-			  .arg(tbaFile.errorString());
-			return false;
-		}
-		ba = tbaFile.readAll();
-	}
-
-	if (ba.startsWith("Atlas 1.0"))
-		return true;
-	else {
-		_errorString = "Missing or invalid tba file";
-		return false;
-	}
-}
-
 void Atlas::computeZooms()
 {
 	qSort(_maps.begin(), _maps.end(), resCmp);
@@ -111,16 +80,38 @@ void Atlas::computeBounds()
 
 Atlas::Atlas(const QString &fileName, QObject *parent) : Map(parent)
 {
-	Tar tar;
 	QFileInfo fi(fileName);
+	QByteArray ba;
+	QString suffix = fi.suffix().toLower();
+	Tar tar;
 
 	_valid = false;
 	_zoom = 0;
 	_name = fi.dir().dirName();
 	_ci = -1; _cz = -1;
 
-	if (!isAtlas(tar, fileName))
+
+	if (suffix == "tar") {
+		if (!tar.load(fileName)) {
+			_errorString = "Error reading tar file";
+			return;
+		}
+		QString tbaFileName = fi.completeBaseName() + ".tba";
+		ba = tar.file(tbaFileName);
+	} else if (suffix == "tba") {
+		QFile tbaFile(fileName);
+		if (!tbaFile.open(QIODevice::ReadOnly)) {
+			_errorString = QString("Error opening tba file: %1")
+			  .arg(tbaFile.errorString());
+			return;
+		}
+		ba = tbaFile.readAll();
+	}
+	if (!ba.startsWith("Atlas 1.0")) {
+		_errorString = "Missing or invalid tba file";
 		return;
+	}
+
 
 	QDir dir(fi.absolutePath());
 	QFileInfoList layers = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
@@ -335,4 +326,21 @@ void Atlas::unload()
 {
 	for (int i = 0; i < _maps.count(); i++)
 		_maps.at(i)->unload();
+}
+
+bool Atlas::isAtlas(const QString &path)
+{
+	QFileInfo fi(path);
+	QString suffix = fi.suffix().toLower();
+	Tar tar;
+
+	if (suffix == "tar") {
+		if (!tar.load(path))
+			return false;
+		QString tbaFileName = fi.completeBaseName() + ".tba";
+		return tar.contains(tbaFileName);
+	} else if (suffix == "tba")
+		return true;
+
+	return false;
 }

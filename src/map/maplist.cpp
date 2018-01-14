@@ -70,6 +70,7 @@ bool MapList::loadList(const QString &path)
 bool MapList::loadMap(const QString &path)
 {
 	OfflineMap *map = new OfflineMap(path, this);
+
 	if (map->isValid()) {
 		_maps.append(map);
 		return true;
@@ -83,6 +84,7 @@ bool MapList::loadMap(const QString &path)
 bool MapList::loadAtlas(const QString &path)
 {
 	Atlas *atlas = new Atlas(path, this);
+
 	if (atlas->isValid()) {
 		_maps.append(atlas);
 		return true;
@@ -93,47 +95,53 @@ bool MapList::loadAtlas(const QString &path)
 	}
 }
 
-bool MapList::loadTar(const QString &path)
+bool MapList::loadFile(const QString &path, bool *atlas)
 {
-	Atlas *atlas = new Atlas(path, this);
-	if (atlas->isValid()) {
-		_maps.append(atlas);
-		return true;
+	if (Atlas::isAtlas(path)) {
+		if (atlas)
+			*atlas = true;
+		return loadAtlas(path);
 	} else {
-		_errorString = atlas->errorString();
-		delete atlas;
-		OfflineMap *map = new OfflineMap(path, this);
-		if (map->isValid()) {
-			_maps.append(map);
-			return true;
-		} else {
-			qWarning("%s: %s", qPrintable(path), qPrintable(_errorString));
-			qWarning("%s: %s", qPrintable(path),
-			  qPrintable(map->errorString()));
-			_errorString = "Not a map/atlas file";
-			delete map;
-			return false;
+		if (atlas)
+			*atlas = false;
+		return loadMap(path);
+	}
+}
+
+bool MapList::loadDir(const QString &path)
+{
+	QDir md(path);
+	md.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+	md.setSorting(QDir::DirsLast);
+	QFileInfoList ml = md.entryInfoList();
+	bool atlas;
+
+	for (int i = 0; i < ml.size(); i++) {
+		const QFileInfo &fi = ml.at(i);
+		QString suffix = fi.suffix().toLower();
+
+		if (fi.isDir() && fi.fileName() != "set") {
+			if (!loadDir(fi.absoluteFilePath()))
+				return false;
+		} else if (filter().contains("*." + suffix)) {
+			if (!loadFile(fi.absoluteFilePath(), &atlas)) {
+				_errorString.prepend(QString("%1: ")
+				  .arg(fi.canonicalFilePath()));
+				return false;
+			}
+			if (atlas)
+				break;
 		}
 	}
+
+	return true;
 }
 
-bool MapList::loadFile(const QString &path)
+void MapList::clear()
 {
-	QFileInfo fi(path);
-	QString suffix = fi.suffix().toLower();
-
-	if (suffix == "txt")
-		return loadList(path);
-	else if (suffix == "map" || suffix == "tif" || suffix == "tiff")
-		return loadMap(path);
-	else if (suffix == "tba")
-		return loadAtlas(path);
-	else if (suffix == "tar")
-		return loadTar(path);
-	else {
-		_errorString = "Not a map/atlas file";
-		return false;
-	}
+	for (int i = 0; i < _maps.count(); i++)
+		delete _maps.at(i);
+	_maps.clear();
 }
 
 QString MapList::formats()

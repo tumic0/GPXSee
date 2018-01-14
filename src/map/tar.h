@@ -12,6 +12,7 @@ public:
 
 	QStringList files() const {return _index.keys();}
 	QByteArray file(const QString &name);
+	bool contains(const QString &name) const {return _index.contains(name);}
 
 	QString fileName() const {return _file.fileName();}
 	bool isOpen() const {return _file.isOpen();}
