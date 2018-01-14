@@ -35,13 +35,11 @@
 #define USER_DATUM_FILE        USER_DIR + QString("/") + DATUM_FILE
 #define USER_PCS_FILE          USER_DIR + QString("/") + PCS_FILE
 #define USER_MAP_DIR           USER_DIR + QString("/") + MAP_DIR
-#define USER_MAP_FILE          USER_DIR + QString("/") + MAP_FILE
 #define USER_POI_DIR           USER_DIR + QString("/") + POI_DIR
 #define GLOBAL_ELLIPSOID_FILE  GLOBAL_DIR + QString("/") + ELLIPSOID_FILE
 #define GLOBAL_DATUM_FILE      GLOBAL_DIR + QString("/") + DATUM_FILE
 #define GLOBAL_PCS_FILE        GLOBAL_DIR + QString("/") + PCS_FILE
 #define GLOBAL_MAP_DIR         GLOBAL_DIR + QString("/") + MAP_DIR
-#define GLOBAL_MAP_FILE        GLOBAL_DIR + QString("/") + MAP_FILE
 #define GLOBAL_POI_DIR         GLOBAL_DIR + QString("/") + POI_DIR
 #define TILES_DIR              USER_DIR + QString("/tiles")
 
