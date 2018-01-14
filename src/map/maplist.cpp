@@ -153,8 +153,9 @@ void MapList::clear()
 
 QString MapList::formats()
 {
-	return tr("Map files (*.map *.tba *.tar *.tif *.tiff)") + ";;"
-	  + tr("URL list files (*.txt)");
+	return tr("Supported files (*.txt *.map *.tba *.tar *.tif *.tiff)") + ";;"
+	  + tr("Offline maps (*.map *.tba *.tar *.tif *.tiff)") + ";;"
+	  + tr("Online map lists (*.txt)");
 }
 
 QStringList MapList::filter()
