@@ -114,7 +114,8 @@ HEADERS += src/config.h \
     src/data/str2int.h \
     src/map/gcs.h \
     src/map/angularunits.h \
-    src/map/primemeridian.h
+    src/map/primemeridian.h \
+    src/map/linearunits.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -198,7 +199,8 @@ SOURCES += src/main.cpp \
     src/map/projection.cpp \
     src/map/gcs.cpp \
     src/map/angularunits.cpp \
-    src/map/primemeridian.cpp
+    src/map/primemeridian.cpp \
+    src/map/linearunits.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \

@@ -1,4 +1,5 @@
 #include <QFile>
+#include "angularunits.h"
 #include "pcs.h"
 
 
@@ -17,15 +18,72 @@ private:
 
 QList<PCS::Entry> PCS::_pcss;
 
-static double parameter(const QString &str, bool *res)
+static bool parameter(int key, double val, int units, Projection::Setup &setup)
 {
-	QString field = str.trimmed();
-	if (field.isEmpty()) {
-		*res = true;
-		return NAN;
+	switch (key) {
+		case 8801:
+		case 8821:
+			{AngularUnits au(units);
+			if (au.isNull())
+				return false;
+			setup.setLongitudeOrigin(au.toDegrees(val));}
+			return true;
+		case 8802:
+		case 8822:
+			{AngularUnits au(units);
+			if (au.isNull())
+				return false;
+			setup.setLatitudeOrigin(au.toDegrees(val));}
+			return true;
+		case 8805:
+			setup.setScale(val);
+			return true;
+		case 8806:
+		case 8826:
+			{LinearUnits lu(units);
+			if (lu.isNull())
+				return false;
+			setup.setFalseEasting(lu.toMeters(val));}
+			return true;
+		case 8807:
+		case 8827:
+			{LinearUnits lu(units);
+			if (lu.isNull())
+				return false;
+			setup.setFalseNorthing(lu.toMeters(val));}
+			return true;
+		case 8823:
+			{AngularUnits au(units);
+			if (au.isNull())
+				return false;
+			setup.setStandardParallel1(au.toDegrees(val));}
+			return true;
+		case 8824:
+			{AngularUnits au(units);
+			if (au.isNull())
+				return false;
+			setup.setStandardParallel2(au.toDegrees(val));}
+			return true;
+		default:
+			return true;
+	}
+}
+
+static int projectionSetup(const QList<QByteArray> &list,
+  Projection::Setup &setup)
+{
+	bool res;
+
+	for (int i = 6; i < 27; i += 3) {
+		int key = list[i].trimmed().toInt(&res);
+		double val = list[i+1].trimmed().toDouble(&res);
+		int un = list[i+2].trimmed().toInt(&res);
+
+		if (!parameter(key, val, un, setup))
+			return (i - 6)/3;
 	}
 
-	return field.toDouble(res);
+	return 0;
 }
 
 
@@ -51,7 +109,8 @@ void PCS::loadList(const QString &path)
 {
 	QFile file(path);
 	bool res;
-	int ln = 0;
+	int ln = 0, pn;
+	const GCS *gcs;
 
 	if (!file.open(QFile::ReadOnly)) {
 		qWarning("Error opening PCS file: %s: %s", qPrintable(path),
@@ -64,7 +123,7 @@ void PCS::loadList(const QString &path)
 
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split(',');
-		if (list.size() != 12) {
+		if (list.size() != 27) {
 			qWarning("%s: %d: Format error", qPrintable(path), ln);
 			continue;
 		}
@@ -74,7 +133,7 @@ void PCS::loadList(const QString &path)
 			qWarning("%s: %d: Invalid PCS code", qPrintable(path), ln);
 			continue;
 		}
-		int gcs = list[2].trimmed().toInt(&res);
+		int gcsid = list[2].trimmed().toInt(&res);
 		if (!res) {
 			qWarning("%s: %d: Invalid GCS code", qPrintable(path), ln);
 			continue;
@@ -84,58 +143,42 @@ void PCS::loadList(const QString &path)
 			qWarning("%s: %d: Invalid projection code", qPrintable(path), ln);
 			continue;
 		}
-		int transform = list[4].trimmed().toInt(&res);
+		int units = list[4].trimmed().toInt(&res);
+		if (!res) {
+			qWarning("%s: %d: Invalid linear units code", qPrintable(path), ln);
+			continue;
+		}
+		int transform = list[5].trimmed().toInt(&res);
 		if (!res) {
 			qWarning("%s: %d: Invalid coordinate transformation code",
 			  qPrintable(path), ln);
 			continue;
 		}
-		double lat0 = parameter(list[5], &res);
-		if (!res) {
-			qWarning("%s: %d: Invalid latitude origin", qPrintable(path), ln);
-			continue;
-		}
-		double lon0 = parameter(list[6], &res);
-		if (!res) {
-			qWarning("%s: %d: Invalid longitude origin", qPrintable(path), ln);
-			continue;
-		}
-		double scale = parameter(list[7], &res);
-		if (!res) {
-			qWarning("%s: %d: Invalid scale", qPrintable(path), ln);
-			continue;
-		}
-		double fe = parameter(list[8], &res);
-		if (!res) {
-			qWarning("%s: %d: Invalid false easting", qPrintable(path), ln);
-			continue;
-		}
-		double fn = parameter(list[9], &res);
-		if (!res) {
-			qWarning("%s: %d: Invalid false northing", qPrintable(path), ln);
-			continue;
-		}
-		double sp1 = parameter(list[10], &res);
-		if (!res) {
-			qWarning("%s: %d: Invalid standard parallel #1", qPrintable(path),
-			  ln);
-			continue;
-		}
-		double sp2 = parameter(list[11], &res);
-		if (!res) {
-			qWarning("%s: %d: Invalid standard parallel #2", qPrintable(path),
-			  ln);
+
+		Projection::Setup setup;
+		if ((pn = projectionSetup(list, setup))) {
+			qWarning("%s: %d: Invalid projection parameter #%d",
+			  qPrintable(path), ln, pn);
 			continue;
 		}
 
-		_pcss.append(Entry(id, proj, PCS(GCS::gcs(gcs), transform,
-		  Projection::Setup(lat0, lon0, scale, fe, fn, sp1, sp2))));
+		if (!(gcs = GCS::gcs(gcsid))) {
+			qWarning("%s: %d: Unknown GCS code", qPrintable(path), ln);
+			continue;
+		}
+
+		PCS pcs(gcs, transform, setup, units);
+		if (!pcs.isValid())
+			qWarning("%s: %d: Unknown coordinate transformation/linear units code",
+			  qPrintable(path), ln);
+		else
+			_pcss.append(Entry(id, proj, pcs));
 	}
 }
 
 QDebug operator<<(QDebug dbg, const PCS &pcs)
 {
-	dbg.nospace() << "PCS(" << *pcs.gcs() << ", " << pcs.method()
-	  << ", " << pcs.setup() << ")";
+	dbg.nospace() << "PCS(" << *pcs.gcs() << ", " << pcs.method() << ", "
+	  << pcs.units() << ", " << pcs.setup() << ")";
 	return dbg.maybeSpace();
 }

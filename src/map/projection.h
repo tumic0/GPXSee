@@ -30,6 +30,14 @@ public:
 		double standardParallel1() const {return _standardParallel1;}
 		double standardParallel2() const {return _standardParallel2;}
 
+		void setLatitudeOrigin(double val) {_latitudeOrigin = val;}
+		void setLongitudeOrigin(double val) {_longitudeOrigin = val;}
+		void setScale(double val) {_scale = val;}
+		void setFalseEasting(double val) {_falseEasting = val;}
+		void setFalseNorthing(double val) {_falseNorthing = val;}
+		void setStandardParallel1(double val) {_standardParallel1 = val;}
+		void setStandardParallel2(double val) {_standardParallel2 = val;}
+
 		bool isNull() const {return std::isnan(_latitudeOrigin)
 		  && std::isnan(_longitudeOrigin) && std::isnan(_scale)
 		  && std::isnan(_falseEasting) && std::isnan(_falseNorthing)
@@ -52,6 +60,7 @@ public:
 
 		int id() const {return _id;}
 		bool isNull() const {return (_id == 0);}
+		bool isValid() const {return !isNull();}
 	private:
 		int _id;
 	};
