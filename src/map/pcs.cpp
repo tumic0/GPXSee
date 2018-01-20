@@ -26,14 +26,14 @@ static bool parameter(int key, double val, int units, Projection::Setup &setup)
 			{AngularUnits au(units);
 			if (au.isNull())
 				return false;
-			setup.setLongitudeOrigin(au.toDegrees(val));}
+			setup.setLatitudeOrigin(au.toDegrees(val));}
 			return true;
 		case 8802:
 		case 8822:
 			{AngularUnits au(units);
 			if (au.isNull())
 				return false;
-			setup.setLatitudeOrigin(au.toDegrees(val));}
+			setup.setLongitudeOrigin(au.toDegrees(val));}
 			return true;
 		case 8805:
 			setup.setScale(val);
