@@ -92,7 +92,7 @@ Section "GPXSee" SEC_APP
   File "gpxsee.exe"
   File "maps.txt"
   File "ellipsoids.csv"
-  File "datums.csv"
+  File "gcs.csv"
   File "pcs.csv"
   
   ; Create start menu entry and add links

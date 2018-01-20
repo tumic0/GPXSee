@@ -48,18 +48,18 @@ Defense.
 	#define M_PI_2 1.57079632679489661923
 #endif // M_PI_2
 
-LambertAzimuthal::LambertAzimuthal(const Ellipsoid &ellipsoid,
+LambertAzimuthal::LambertAzimuthal(const Ellipsoid *ellipsoid,
   double latitudeOrigin, double longitudeOrigin, double falseEasting,
   double falseNorthing)
 {
 	double es2, es4, es6;
 
-	es2 = 2 * ellipsoid.flattening() - ellipsoid.flattening()
-	  * ellipsoid.flattening();
+	es2 = 2 * ellipsoid->flattening() - ellipsoid->flattening()
+	  * ellipsoid->flattening();
 
 	es4 = es2 * es2;
 	es6 = es4 * es2;
-	_ra = ellipsoid.radius() * (1.0 - es2 / 6.0 - 17.0 * es4 / 360.0 - 67.0
+	_ra = ellipsoid->radius() * (1.0 - es2 / 6.0 - 17.0 * es4 / 360.0 - 67.0
 	  * es6 / 3024.0);
 	_latOrigin = deg2rad(latitudeOrigin);
 	_sinLatOrigin = sin(_latOrigin);

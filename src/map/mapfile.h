@@ -3,7 +3,7 @@
 
 #include <QIODevice>
 #include <QTransform>
-#include "datum.h"
+#include "gcs.h"
 #include "transform.h"
 #include "projection.h"
 
@@ -12,7 +12,7 @@ class MapFile
 public:
 	bool load(QIODevice &file);
 
-	const Datum &datum() const {return _datum;}
+	const GCS *gcs() const {return _gcs;}
 	Projection *projection() const {return _projection;}
 	const QTransform &transform() const {return _transform;}
 
@@ -42,9 +42,9 @@ private:
 	QString _image;
 	QSize _size;
 
-	Datum _datum;
-	QTransform _transform;
+	const GCS *_gcs;
 	Projection *_projection;
+	QTransform _transform;
 
 	QString _errorString;
 };

@@ -4,24 +4,18 @@
 
 class PCS::Entry {
 public:
-	Entry(int id, int gcs, int proj, const PCS &pcs)
-	  : _id(id), _gcs(gcs), _proj(proj), _pcs(pcs) {}
+	Entry(int id, int proj, const PCS &pcs) : _id(id), _proj(proj), _pcs(pcs) {}
 
 	int id() const {return _id;}
-	int gcs() const {return _gcs;}
 	int proj() const {return _proj;}
 	const PCS &pcs() const {return _pcs;}
 
 private:
-	int _id;
-	int _gcs;
-	int _proj;
+	int _id, _proj;
 	PCS _pcs;
 };
 
 QList<PCS::Entry> PCS::_pcss;
-QString PCS::_errorString;
-int PCS::_errorLine;
 
 static double parameter(const QString &str, bool *res)
 {
@@ -34,99 +28,114 @@ static double parameter(const QString &str, bool *res)
 	return field.toDouble(res);
 }
 
-PCS::PCS(int id)
-{
-	for (int i = 0; i < _pcss.size(); i++) {
-		if (_pcss.at(i).id() == id) {
-			*this = _pcss.at(i).pcs();
-			return;
-		}
-	}
 
-	*this = PCS();
+const PCS *PCS::pcs(int id)
+{
+	for (int i = 0; i < _pcss.size(); i++)
+		if (_pcss.at(i).id() == id)
+			return &(_pcss.at(i).pcs());
+
+	return 0;
 }
 
-PCS::PCS(int gcs, int proj)
+const PCS *PCS::pcs(const GCS *gcs, int proj)
 {
-	for (int i = 0; i < _pcss.size(); i++) {
-		if (_pcss.at(i).gcs() == gcs && _pcss.at(i).proj() == proj) {
-			*this = _pcss.at(i).pcs();
-			return;
-		}
-	}
+	for (int i = 0; i < _pcss.size(); i++)
+		if (_pcss.at(i).proj() == proj && *(_pcss.at(i).pcs().gcs()) == *gcs)
+			return &(_pcss.at(i).pcs());
 
-	*this = PCS();
+	return 0;
 }
 
-void PCS::error(const QString &str)
-{
-	_errorString = str;
-	_pcss.clear();
-}
-
-bool PCS::loadList(const QString &path)
+void PCS::loadList(const QString &path)
 {
 	QFile file(path);
-	bool res[12];
-	int id, gcs, proj, transform;
-
+	bool res;
+	int ln = 0;
 
 	if (!file.open(QFile::ReadOnly)) {
-		error(file.errorString());
-		return false;
+		qWarning("Error opening PCS file: %s: %s", qPrintable(path),
+		  qPrintable(file.errorString()));
+		return;
 	}
 
-	_errorLine = 1;
-	_errorString.clear();
-
 	while (!file.atEnd()) {
+		ln++;
+
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split(',');
 		if (list.size() != 12) {
-			error("Format error");
-			return false;
+			qWarning("%s: %d: Format error", qPrintable(path), ln);
+			continue;
 		}
 
-		id = list[1].trimmed().toInt(&res[1]);;
-		gcs = list[2].trimmed().toInt(&res[2]);
-		proj = list[3].trimmed().toInt(&res[3]);
-		transform = list[4].trimmed().toInt(&res[4]);
-
-		Projection::Setup setup(
-		  parameter(list[5], &res[5]), parameter(list[6], &res[6]),
-		  parameter(list[7], &res[7]), parameter(list[8], &res[8]),
-		  parameter(list[9], &res[9]), parameter(list[10], &res[10]),
-		  parameter(list[11], &res[11]));
-
-		for (int i = 1; i < 12; i++) {
-			if (!res[i]) {
-				error("Parse error");
-				return false;
-			}
+		int id = list[1].trimmed().toInt(&res);
+		if (!res) {
+			qWarning("%s: %d: Invalid PCS code", qPrintable(path), ln);
+			continue;
+		}
+		int gcs = list[2].trimmed().toInt(&res);
+		if (!res) {
+			qWarning("%s: %d: Invalid GCS code", qPrintable(path), ln);
+			continue;
+		}
+		int proj = list[3].trimmed().toInt(&res);
+		if (!res) {
+			qWarning("%s: %d: Invalid projection code", qPrintable(path), ln);
+			continue;
+		}
+		int transform = list[4].trimmed().toInt(&res);
+		if (!res) {
+			qWarning("%s: %d: Invalid coordinate transformation code",
+			  qPrintable(path), ln);
+			continue;
+		}
+		double lat0 = parameter(list[5], &res);
+		if (!res) {
+			qWarning("%s: %d: Invalid latitude origin", qPrintable(path), ln);
+			continue;
+		}
+		double lon0 = parameter(list[6], &res);
+		if (!res) {
+			qWarning("%s: %d: Invalid longitude origin", qPrintable(path), ln);
+			continue;
+		}
+		double scale = parameter(list[7], &res);
+		if (!res) {
+			qWarning("%s: %d: Invalid scale", qPrintable(path), ln);
+			continue;
+		}
+		double fe = parameter(list[8], &res);
+		if (!res) {
+			qWarning("%s: %d: Invalid false easting", qPrintable(path), ln);
+			continue;
+		}
+		double fn = parameter(list[9], &res);
+		if (!res) {
+			qWarning("%s: %d: Invalid false northing", qPrintable(path), ln);
+			continue;
+		}
+		double sp1 = parameter(list[10], &res);
+		if (!res) {
+			qWarning("%s: %d: Invalid standard parallel #1", qPrintable(path),
+			  ln);
+			continue;
+		}
+		double sp2 = parameter(list[11], &res);
+		if (!res) {
+			qWarning("%s: %d: Invalid standard parallel #2", qPrintable(path),
+			  ln);
+			continue;
 		}
 
-		Datum datum(gcs);
-		if (datum.isNull()) {
-			error("Unknown datum");
-			return false;
-		}
-		Projection::Method method(transform);
-		if (method.isNull()) {
-			error("Unknown coordinates transformation method");
-			return false;
-		}
-
-		_pcss.append(Entry(id, gcs, proj, PCS(datum, method, setup)));
-
-		_errorLine++;
+		_pcss.append(Entry(id, proj, PCS(GCS::gcs(gcs), transform,
+		  Projection::Setup(lat0, lon0, scale, fe, fn, sp1, sp2))));
 	}
-
-	return true;
 }
 
 QDebug operator<<(QDebug dbg, const PCS &pcs)
 {
-	dbg.nospace() << "PCS(" << pcs.datum() << ", " << pcs.method()
+	dbg.nospace() << "PCS(" << *pcs.gcs() << ", " << pcs.method()
 	  << ", " << pcs.setup() << ")";
-	return dbg.space();
+	return dbg.maybeSpace();
 }

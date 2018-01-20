@@ -1,77 +1,74 @@
 #include <QFile>
 #include <QDebug>
+#include "common/wgs84.h"
 #include "ellipsoid.h"
 
-QMap<int, Ellipsoid> Ellipsoid::_ellipsoids;
-QString Ellipsoid::_errorString;
-int Ellipsoid::_errorLine = 0;
+QMap<int, Ellipsoid> Ellipsoid::_ellipsoids = WGS84();
 
-Ellipsoid::Ellipsoid(int id)
+QMap<int, Ellipsoid> Ellipsoid::WGS84()
+{
+	QMap<int, Ellipsoid> map;
+	map.insert(7030, Ellipsoid(WGS84_RADIUS, WGS84_FLATTENING));
+	return map;
+}
+
+const Ellipsoid *Ellipsoid::ellipsoid(int id)
 {
 	QMap<int, Ellipsoid>::const_iterator it = _ellipsoids.find(id);
 
 	if (it == _ellipsoids.end())
-		*this = Ellipsoid();
+		return 0;
 	else
-		*this = it.value();
+		return &(it.value());
 }
 
-void Ellipsoid::error(const QString &str)
-{
-	_errorString = str;
-	_ellipsoids.clear();
-}
-
-bool Ellipsoid::loadList(const QString &path)
+void Ellipsoid::loadList(const QString &path)
 {
 	QFile file(path);
 	bool res;
+	int ln = 0;
 
 
 	if (!file.open(QFile::ReadOnly)) {
-		error(file.errorString());
-		return false;
+		qWarning("Error opening ellipsoids file: %s: %s", qPrintable(path),
+		  qPrintable(file.errorString()));
+		return;
 	}
 
-	_errorLine = 1;
-	_errorString.clear();
-
 	while (!file.atEnd()) {
+		ln++;
+
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split(',');
 		if (list.size() != 4) {
-			error("Format error");
-			return false;
+			qWarning("%s: %d: Format error", qPrintable(path), ln);
+			continue;
 		}
 
 		int id = list[1].trimmed().toInt(&res);
 		if (!res) {
-			error("Invalid ellipsoid id");
-			return false;
+			qWarning("%s: %d: Invalid ellipsoid code", qPrintable(path), ln);
+			continue;
 		}
 		double radius = list[2].trimmed().toDouble(&res);
 		if (!res) {
-			error("Invalid ellipsoid radius");
-			return false;
+			qWarning("%s: %d: Invalid radius", qPrintable(path), ln);
+			continue;
 		}
 		double flattening = list[3].trimmed().toDouble(&res);
 		if (!res) {
-			error("Invalid ellipsoid flattening");
-			return false;
+			qWarning("%s: %d: Invalid flattening", qPrintable(path), ln);
+			continue;
 		}
 
 		Ellipsoid e(radius, 1.0/flattening);
 		_ellipsoids.insert(id, e);
-
-		_errorLine++;
 	}
-
-	return true;
 }
 
 QDebug operator<<(QDebug dbg, const Ellipsoid &ellipsoid)
 {
 	dbg.nospace() << "Ellipsoid(" << ellipsoid.radius() << ", "
 	  << 1.0 / ellipsoid.flattening() << ")";
-	return dbg.space();
+	return dbg.maybeSpace();
 }

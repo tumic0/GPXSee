@@ -21,7 +21,8 @@
 #define GTRasterTypeGeoKey         1025
 #define GeographicTypeGeoKey       2048
 #define GeogGeodeticDatumGeoKey    2050
-#define GeogEllipsoidGeoKey        2056
+#define GeogPrimeMeridianGeoKey    2051
+#define GeogAngularUnitsGeoKey     2054
 #define ProjectedCSTypeGeoKey      3072
 #define ProjectionGeoKey           3074
 #define ProjCoordTransGeoKey       3075
@@ -218,7 +219,8 @@ bool GeoTIFF::readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv) const
 			case GTRasterTypeGeoKey:
 			case GeogGeodeticDatumGeoKey:
 			case ProjectionGeoKey:
-			case GeogEllipsoidGeoKey:
+			case GeogPrimeMeridianGeoKey:
+			case GeogAngularUnitsGeoKey:
 				if (entry.TIFFTagLocation != 0 || entry.Count != 1)
 					return false;
 				value.SHORT = entry.ValueOffset;
@@ -260,80 +262,84 @@ bool GeoTIFF::readGeoValue(TIFFFile &file, quint32 offset, quint16 index,
 	return true;
 }
 
-Datum GeoTIFF::datum(QMap<quint16, Value> &kv)
+const GCS *GeoTIFF::gcs(QMap<quint16, Value> &kv)
 {
-	Datum datum;
+	const GCS *gcs;
 
 	if (IS_SET(kv, GeographicTypeGeoKey)) {
-		datum = Datum(kv.value(GeographicTypeGeoKey).SHORT);
-		if (datum.isNull())
+		if (!(gcs = GCS::gcs(kv.value(GeographicTypeGeoKey).SHORT)))
 			_errorString = QString("%1: unknown GCS")
 			  .arg(kv.value(GeographicTypeGeoKey).SHORT);
 	} else if (IS_SET(kv, GeogGeodeticDatumGeoKey)) {
-		datum = Datum(kv.value(GeogGeodeticDatumGeoKey).SHORT - 2000);
-		if (datum.isNull())
-			_errorString = QString("%1: unknown geodetic datum")
-			  .arg(kv.value(GeogGeodeticDatumGeoKey).SHORT);
-	} else if (IS_SET(kv, GeogEllipsoidGeoKey)
-	  && kv.value(GeogEllipsoidGeoKey).SHORT == 7019) {
-		datum = Datum(4326);
-	} else
-		_errorString = "Missing datum";
+		int pm = IS_SET(kv, GeogPrimeMeridianGeoKey)
+		  ? kv.value(GeogPrimeMeridianGeoKey).SHORT : 8901;
+		int au = IS_SET(kv, GeogAngularUnitsGeoKey)
+		  ? kv.value(GeogAngularUnitsGeoKey).SHORT : 9122;
 
-	return datum;
+		if (!(gcs = GCS::gcs(kv.value(GeogGeodeticDatumGeoKey).SHORT, pm, au)))
+			_errorString = QString("%1+%2: unknown geodetic datum + prime"
+			  " meridian combination")
+			  .arg(kv.value(GeogGeodeticDatumGeoKey).SHORT)
+			  .arg(kv.value(GeogPrimeMeridianGeoKey).SHORT);
+	} else
+		_errorString = "Can not determine GCS";
+
+	return gcs;
 }
 
 Projection::Method GeoTIFF::method(QMap<quint16, Value> &kv)
 {
-	int epsg;
-	int table[] = {0, 9807, 0, 0, 0, 0, 0, 1024, 9801, 9802, 9820,
-	  9822};
-
 	if (!IS_SET(kv, ProjCoordTransGeoKey)) {
 		_errorString = "Missing coordinate transformation method";
 		return Projection::Method();
 	}
 
-	quint16 index = kv.value(ProjCoordTransGeoKey).SHORT;
-	epsg = (index >= ARRAY_SIZE(table)) ? 0 : table[index];
-
-	if (!epsg) {
-		_errorString = QString("Unknown coordinate transformation method");
-		return Projection::Method();
+	switch (kv.value(ProjCoordTransGeoKey).SHORT) {
+		case 1:
+			return Projection::Method(9807);
+		case 7:
+			return Projection::Method(1024);
+		case 8:
+			return Projection::Method(9801);
+		case 9:
+			return Projection::Method(9802);
+		case 10:
+			return Projection::Method(9820);
+		case 11:
+			return Projection::Method(9822);
+		default:
+			_errorString = QString("%1: unknown coordinate transformation method")
+			  .arg(kv.value(ProjCoordTransGeoKey).SHORT);
+			return Projection::Method();
 	}
-
-	return Projection::Method(epsg);
 }
 
 bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 {
-	PCS pcs;
-
 	if (IS_SET(kv, ProjectedCSTypeGeoKey)) {
-		pcs = PCS(kv.value(ProjectedCSTypeGeoKey).SHORT);
-		if (pcs.isNull())
+		const PCS *pcs;
+		if (!(pcs = PCS::pcs(kv.value(ProjectedCSTypeGeoKey).SHORT))) {
 			_errorString = QString("%1: unknown PCS")
 			  .arg(kv.value(ProjectedCSTypeGeoKey).SHORT);
-	} else if (IS_SET(kv, GeographicTypeGeoKey)
-	  && IS_SET(kv, ProjectionGeoKey)) {
-		pcs = PCS(kv.value(GeographicTypeGeoKey).SHORT,
-		  kv.value(ProjectionGeoKey).SHORT);
-		if (pcs.isNull())
-			_errorString = QString("%1+%2: unknown GCS+projection combination")
+			return false;
+		}
+		_gcs = pcs->gcs();
+		_projection = Projection::projection(_gcs->datum(), pcs->method(),
+		  pcs->setup());
+	} else if (IS_SET(kv, ProjectionGeoKey)) {
+		if (!(_gcs = gcs(kv)))
+			return false;
+		const PCS *pcs;
+		if (!(pcs = PCS::pcs(_gcs, kv.value(ProjectionGeoKey).SHORT))) {
+			_errorString = QString("%1: unknown projection code")
 			  .arg(kv.value(GeographicTypeGeoKey).SHORT)
 			  .arg(kv.value(ProjectionGeoKey).SHORT);
-	} else if (IS_SET(kv, GeogGeodeticDatumGeoKey)
-	  && IS_SET(kv, ProjectionGeoKey)) {
-		pcs = PCS(kv.value(GeogGeodeticDatumGeoKey).SHORT - 2000,
-		  kv.value(ProjectionGeoKey).SHORT);
-		if (pcs.isNull())
-			_errorString =
-			  QString("%1+%2: unknown geodetic datum+projection combination")
-			  .arg(kv.value(GeogGeodeticDatumGeoKey).SHORT)
-			  .arg(kv.value(ProjectionGeoKey).SHORT);
+			return false;
+		}
+		_projection = Projection::projection(_gcs->datum(), pcs->method(),
+		  pcs->setup());
 	} else {
-		Datum d = datum(kv);
-		if (d.isNull())
+		if (!(_gcs = gcs(kv)))
 			return false;
 		Projection::Method m = method(kv);
 		if (m.isNull())
@@ -348,24 +354,18 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 		  kv.value(ProjStdParallel1GeoKey).DOUBLE,
 		  kv.value(ProjStdParallel2GeoKey).DOUBLE
 		);
-
-		pcs = PCS(d, m, setup);
+		_projection = Projection::projection(_gcs->datum(), m, setup);
 	}
-
-	_datum = pcs.datum();
-	_projection = Projection::projection(pcs.datum(), pcs.method(),
-	  pcs.setup());
 
 	return true;
 }
 
 bool GeoTIFF::geographicModel(QMap<quint16, Value> &kv)
 {
-	_datum = datum(kv);
-	if (_datum.isNull())
+	if (!(_gcs = gcs(kv)))
 		return false;
 
-	_projection = new LatLon();
+	_projection = new LatLon(_gcs->angularUnits());
 
 	return true;
 }

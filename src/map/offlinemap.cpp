@@ -138,7 +138,7 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 			_name = mf.name();
 			_size = mf.size();
 			_imgPath = mf.image();
-			_datum = mf.datum();
+			_gcs = mf.gcs();
 			_projection = mf.projection();
 			_transform = mf.transform();
 		}
@@ -152,7 +152,7 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 			_name = mf.name();
 			_size = mf.size();
 			_imgPath = mf.image();
-			_datum = mf.datum();
+			_gcs = mf.gcs();
 			_projection = mf.projection();
 			_transform = mf.transform();
 		}
@@ -164,7 +164,7 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 		} else {
 			_name = fi.fileName();
 			_imgPath = fileName;
-			_datum = gt.datum();
+			_gcs = gt.gcs();
 			_projection = gt.projection();
 			_transform = gt.transform();
 		}
@@ -230,7 +230,7 @@ OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
 
 	_name = mf.name();
 	_size = mf.size();
-	_datum = mf.datum();
+	_gcs = mf.gcs();
 	_projection = mf.projection();
 	_transform = mf.transform();
 
@@ -363,19 +363,19 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect)
 QPointF OfflineMap::ll2xy(const Coordinates &c)
 {
 	if (_ozf.isOpen()) {
-		QPointF p(_transform.map(_projection->ll2xy(_datum.fromWGS84(c))));
+		QPointF p(_transform.map(_projection->ll2xy(_gcs->fromWGS84(c))));
 		return QPointF(p.x() * _scale.x(), p.y() * _scale.y());
 	} else
-		return _transform.map(_projection->ll2xy(_datum.fromWGS84(c)));
+		return _transform.map(_projection->ll2xy(_gcs->fromWGS84(c)));
 }
 
 Coordinates OfflineMap::xy2ll(const QPointF &p)
 {
 	if (_ozf.isOpen()) {
-		return _datum.toWGS84(_projection->xy2ll(_inverted.map(QPointF(p.x()
+		return _gcs->toWGS84(_projection->xy2ll(_inverted.map(QPointF(p.x()
 		  / _scale.x(), p.y() / _scale.y()))));
 	} else
-		return _datum.toWGS84(_projection->xy2ll(_inverted.map(p)));
+		return _gcs->toWGS84(_projection->xy2ll(_inverted.map(p)));
 }
 
 QRectF OfflineMap::bounds() const

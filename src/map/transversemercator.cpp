@@ -47,17 +47,17 @@ Defense.
 
 
 #define SPHSN(lat) \
-	((double)(_e.radius() / sqrt(1.e0 - _es * pow(sin(lat), 2))))
+	((double)(_e->radius() / sqrt(1.e0 - _es * pow(sin(lat), 2))))
 #define SPHTMD(lat) \
 	((double)(_ap * lat - _bp * sin(2.e0 * lat) + _cp * sin(4.e0 * lat) \
 	  - _dp * sin(6.e0 * lat) + _ep * sin(8.e0 * lat)))
 #define DENOM(lat) \
 	((double)(sqrt(1.e0 - _es * pow(sin(lat),2))))
 #define SPHSR(lat) \
-	((double)(_e.radius() * (1.e0 - _es) / pow(DENOM(lat), 3)))
+	((double)(_e->radius() * (1.e0 - _es) / pow(DENOM(lat), 3)))
 
 
-TransverseMercator::TransverseMercator(const Ellipsoid &ellipsoid,
+TransverseMercator::TransverseMercator(const Ellipsoid *ellipsoid,
   double latitudeOrigin, double longitudeOrigin, double scale,
   double falseEasting, double falseNorthing)
 {
@@ -72,24 +72,24 @@ TransverseMercator::TransverseMercator(const Ellipsoid &ellipsoid,
 	_falseEasting = falseEasting;
 	_falseNorthing = falseNorthing;
 
-	_es = 2 * _e.flattening() - _e.flattening() * _e.flattening();
+	_es = 2 * _e->flattening() - _e->flattening() * _e->flattening();
 	_ebs = (1 / (1 - _es)) - 1;
 
-	b = _e.radius() * (1 - _e.flattening());
+	b = _e->radius() * (1 - _e->flattening());
 
-	tn = (_e.radius() - b) / (_e.radius() + b);
+	tn = (_e->radius() - b) / (_e->radius() + b);
 	tn2 = tn * tn;
 	tn3 = tn2 * tn;
 	tn4 = tn3 * tn;
 	tn5 = tn4 * tn;
 
-	_ap = _e.radius() * (1.e0 - tn + 5.e0 * (tn2 - tn3) / 4.e0 + 81.e0
+	_ap = _e->radius() * (1.e0 - tn + 5.e0 * (tn2 - tn3) / 4.e0 + 81.e0
 	  * (tn4 - tn5) / 64.e0);
-	_bp = 3.e0 * _e.radius() * (tn - tn2 + 7.e0 * (tn3 - tn4) / 8.e0 + 55.e0
+	_bp = 3.e0 * _e->radius() * (tn - tn2 + 7.e0 * (tn3 - tn4) / 8.e0 + 55.e0
 	  * tn5 / 64.e0 ) / 2.e0;
-	_cp = 15.e0 * _e.radius() * (tn2 - tn3 + 3.e0 * (tn4 - tn5 ) / 4.e0) / 16.0;
-	_dp = 35.e0 * _e.radius() * (tn3 - tn4 + 11.e0 * tn5 / 16.e0) / 48.e0;
-	_ep = 315.e0 * _e.radius() * (tn4 - tn5) / 512.e0;
+	_cp = 15.e0 * _e->radius() * (tn2 - tn3 + 3.e0 * (tn4 - tn5 ) / 4.e0) / 16.0;
+	_dp = 35.e0 * _e->radius() * (tn3 - tn4 + 11.e0 * tn5 / 16.e0) / 48.e0;
+	_ep = 315.e0 * _e->radius() * (tn4 - tn5) / 512.e0;
 }
 
 QPointF TransverseMercator::ll2xy(const Coordinates &c) const

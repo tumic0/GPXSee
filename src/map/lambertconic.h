@@ -8,7 +8,7 @@ class LambertConic1 : public Projection
 {
 public:
 	LambertConic1() {}
-	LambertConic1(const Ellipsoid &ellipsoid, double latitudeOrigin,
+	LambertConic1(const Ellipsoid *ellipsoid, double latitudeOrigin,
 	  double longitudeOrigin, double scale, double falseEasting,
 	  double falseNorthing);
 
@@ -31,7 +31,7 @@ private:
 class LambertConic2 : public Projection
 {
 public:
-	LambertConic2(const Ellipsoid &ellipsoid, double standardParallel1,
+	LambertConic2(const Ellipsoid *ellipsoid, double standardParallel1,
 	  double standardParallel2, double latitudeOrigin, double longitudeOrigin,
 	   double falseEasting, double falseNorthing);
 

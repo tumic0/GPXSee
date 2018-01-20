@@ -3,7 +3,7 @@
 
 #include <QTransform>
 #include "common/coordinates.h"
-#include "datum.h"
+#include "gcs.h"
 #include "projection.h"
 #include "transform.h"
 #include "map.h"
@@ -66,7 +66,7 @@ private:
 	QString _name;
 
 	QSize _size;
-	Datum _datum;
+	const GCS *_gcs;
 	Projection *_projection;
 	QTransform _transform, _inverted;
 

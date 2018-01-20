@@ -7,7 +7,7 @@
 class LambertAzimuthal : public Projection
 {
 public:
-	LambertAzimuthal(const Ellipsoid &ellipsoid, double latitudeOrigin,
+	LambertAzimuthal(const Ellipsoid *ellipsoid, double latitudeOrigin,
 	  double longitudeOrigin, double falseEasting, double falseNorthing);
 
 	virtual QPointF ll2xy(const Coordinates &c) const;

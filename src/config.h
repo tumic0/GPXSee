@@ -13,7 +13,7 @@
 #define FONT_SIZE       12 // px
 
 #define ELLIPSOID_FILE  QString("ellipsoids.csv")
-#define DATUM_FILE      QString("datums.csv")
+#define GCS_FILE        QString("gcs.csv")
 #define PCS_FILE        QString("pcs.csv")
 #define MAP_FILE        QString("maps.txt")
 #define MAP_DIR         QString("maps")
@@ -32,12 +32,12 @@
 #endif
 
 #define USER_ELLIPSOID_FILE    USER_DIR + QString("/") + ELLIPSOID_FILE
-#define USER_DATUM_FILE        USER_DIR + QString("/") + DATUM_FILE
+#define USER_GCS_FILE          USER_DIR + QString("/") + GCS_FILE
 #define USER_PCS_FILE          USER_DIR + QString("/") + PCS_FILE
 #define USER_MAP_DIR           USER_DIR + QString("/") + MAP_DIR
 #define USER_POI_DIR           USER_DIR + QString("/") + POI_DIR
 #define GLOBAL_ELLIPSOID_FILE  GLOBAL_DIR + QString("/") + ELLIPSOID_FILE
-#define GLOBAL_DATUM_FILE      GLOBAL_DIR + QString("/") + DATUM_FILE
+#define GLOBAL_GCS_FILE        GLOBAL_DIR + QString("/") + GCS_FILE
 #define GLOBAL_PCS_FILE        GLOBAL_DIR + QString("/") + PCS_FILE
 #define GLOBAL_MAP_DIR         GLOBAL_DIR + QString("/") + MAP_DIR
 #define GLOBAL_POI_DIR         GLOBAL_DIR + QString("/") + POI_DIR

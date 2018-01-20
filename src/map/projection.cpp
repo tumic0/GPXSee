@@ -27,7 +27,7 @@ Projection::Method::Method(int id)
 Projection *Projection::projection(const Datum &datum, const Method &method,
   const Setup &setup)
 {
-	const Ellipsoid &ellipsoid = datum.ellipsoid();
+	const Ellipsoid *ellipsoid = datum.ellipsoid();
 
 	switch (method.id()) {
 		case 9807:
@@ -66,11 +66,11 @@ QDebug operator<<(QDebug dbg, const Projection::Setup &setup)
 	  << setup.longitudeOrigin() << ", " << setup.scale() << ", "
 	  << setup.falseEasting() << ", " << setup.falseNorthing() << ", "
 	  << setup.standardParallel1() << ", " << setup.standardParallel2() << ")";
-	return dbg.space();
+	return dbg.maybeSpace();
 }
 
 QDebug operator<<(QDebug dbg, const Projection::Method &method)
 {
 	dbg.nospace() << "Method(" << method.id() << ")";
-	return dbg.space();
+	return dbg.maybeSpace();
 }

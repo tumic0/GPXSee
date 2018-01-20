@@ -4,7 +4,7 @@
 #include <QTransform>
 #include <QFile>
 #include <QMap>
-#include "datum.h"
+#include "gcs.h"
 #include "projection.h"
 #include "tifffile.h"
 #include "transform.h"
@@ -16,7 +16,7 @@ public:
 
 	bool load(const QString &path);
 
-	const Datum &datum() const {return _datum;}
+	const GCS *gcs() const {return _gcs;}
 	Projection *projection() const {return _projection;}
 	const QTransform &transform() const {return _transform;}
 
@@ -50,13 +50,13 @@ private:
 	bool readGeoValue(TIFFFile &file, quint32 offset, quint16 index,
 	  double &val) const;
 
-	Datum datum(QMap<quint16, Value> &kv);
+	const GCS *gcs(QMap<quint16, Value> &kv);
 	Projection::Method method(QMap<quint16, Value> &kv);
 	bool geographicModel(QMap<quint16, Value> &kv);
 	bool projectedModel(QMap<quint16, Value> &kv);
 
 	QTransform _transform;
-	Datum _datum;
+	const GCS *_gcs;
 	Projection *_projection;
 
 	QString _errorString;

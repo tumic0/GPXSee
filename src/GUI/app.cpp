@@ -7,7 +7,7 @@
 #include "map/onlinemap.h"
 #include "map/downloader.h"
 #include "map/ellipsoid.h"
-#include "map/datum.h"
+#include "map/gcs.h"
 #include "map/pcs.h"
 #include "opengl.h"
 #include "gui.h"
@@ -69,7 +69,6 @@ bool App::event(QEvent *event)
 void App::loadDatums()
 {
 	QString ef, df;
-	bool ok = false;
 
 	if (QFile::exists(USER_ELLIPSOID_FILE))
 		ef = USER_ELLIPSOID_FILE;
@@ -78,35 +77,17 @@ void App::loadDatums()
 	else
 		qWarning("No ellipsoids file found.");
 
-	if (QFile::exists(USER_DATUM_FILE))
-		df = USER_DATUM_FILE;
-	else if (QFile::exists(GLOBAL_DATUM_FILE))
-		df = GLOBAL_DATUM_FILE;
+	if (QFile::exists(USER_GCS_FILE))
+		df = USER_GCS_FILE;
+	else if (QFile::exists(GLOBAL_GCS_FILE))
+		df = GLOBAL_GCS_FILE;
 	else
 		qWarning("No datums file found.");
 
 	if (!ef.isNull() && !df.isNull()) {
-		if (!Ellipsoid::loadList(ef)) {
-			if (Ellipsoid::errorLine())
-				qWarning("%s: parse error on line %d: %s", qPrintable(ef),
-				  Ellipsoid::errorLine(), qPrintable(Ellipsoid::errorString()));
-			else
-				qWarning("%s: %s", qPrintable(ef), qPrintable(
-				  Ellipsoid::errorString()));
-		} else {
-			if (!Datum::loadList(df)) {
-				if (Datum::errorLine())
-					qWarning("%s: parse error on line %d: %s", qPrintable(df),
-					  Datum::errorLine(), qPrintable(Datum::errorString()));
-				else
-					qWarning("%s: %s", qPrintable(df), qPrintable(
-					  Datum::errorString()));
-			} else
-				ok = true;
-		}
-	}
-
-	if (!ok)
+		Ellipsoid::loadList(ef);
+		GCS::loadList(df);
+	} else
 		qWarning("Maps based on a datum different from WGS84 won't work.");
 }
 
@@ -123,12 +104,5 @@ void App::loadPCSs()
 		return;
 	}
 
-	if (!PCS::loadList(file)) {
-		if (PCS::errorLine())
-			qWarning("%s: parse error on line %d: %s", qPrintable(file),
-			  PCS::errorLine(), qPrintable(PCS::errorString()));
-		else
-			qWarning("%s: %s", qPrintable(file), qPrintable(
-			  Datum::errorString()));
-	}
+	PCS::loadList(file);
 }

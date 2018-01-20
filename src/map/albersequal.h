@@ -7,7 +7,7 @@
 class AlbersEqual : public Projection
 {
 public:
-	AlbersEqual(const Ellipsoid &ellipsoid, double standardParallel1,
+	AlbersEqual(const Ellipsoid *ellipsoid, double standardParallel1,
 	  double standardParallel2, double latitudeOrigin, double longitudeOrigin,
 	  double falseEasting, double falseNorthing);
 
@@ -15,7 +15,7 @@ public:
 	virtual Coordinates xy2ll(const QPointF &p) const;
 
 private:
-	Ellipsoid _e;
+	const Ellipsoid *_e;
 
 	double _latitudeOrigin;
 	double _longitudeOrigin;

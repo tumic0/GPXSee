@@ -30,6 +30,11 @@ public:
 		double standardParallel1() const {return _standardParallel1;}
 		double standardParallel2() const {return _standardParallel2;}
 
+		bool isNull() const {return std::isnan(_latitudeOrigin)
+		  && std::isnan(_longitudeOrigin) && std::isnan(_scale)
+		  && std::isnan(_falseEasting) && std::isnan(_falseNorthing)
+		  && std::isnan(_standardParallel1) && std::isnan(_standardParallel2);}
+
 	private:
 		double _latitudeOrigin;
 		double _longitudeOrigin;

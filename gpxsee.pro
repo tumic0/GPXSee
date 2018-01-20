@@ -111,7 +111,10 @@ HEADERS += src/config.h \
     src/data/fitparser.h \
     src/data/igcparser.h \
     src/data/nmeaparser.h \
-    src/data/str2int.h
+    src/data/str2int.h \
+    src/map/gcs.h \
+    src/map/angularunits.h \
+    src/map/primemeridian.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -192,7 +195,10 @@ SOURCES += src/main.cpp \
     src/data/igcparser.cpp \
     src/data/nmeaparser.cpp \
     src/data/str2int.cpp \
-    src/map/projection.cpp
+    src/map/projection.cpp \
+    src/map/gcs.cpp \
+    src/map/angularunits.cpp \
+    src/map/primemeridian.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \
@@ -210,7 +216,7 @@ macx {
         icons/nmea.icns \
         pkg/maps.txt \
         pkg/ellipsoids.csv \
-        pkg/datums.csv \
+        pkg/gcs.csv \
         pkg/pcs.csv
     APP_RESOURCES.path = Contents/Resources
     QMAKE_BUNDLE_DATA += APP_RESOURCES

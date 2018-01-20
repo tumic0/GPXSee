@@ -36,10 +36,10 @@ build_script:
 
     copy pkg\ellipsoids.csv installer
 
-    copy pkg\datums.csv installer
+    copy pkg\gcs.csv installer
 
     copy pkg\pcs.csv installer
-    
+
     copy pkg\maps.txt installer
 
     copy licence.txt installer

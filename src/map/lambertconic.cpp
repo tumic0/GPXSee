@@ -58,7 +58,7 @@ Defense.
 	(tan(M_PI_4 - lat / 2) / pow((1.0 - essin) / (1.0 + essin), es_over_2))
 
 
-LambertConic1::LambertConic1(const Ellipsoid &ellipsoid, double latitudeOrigin,
+LambertConic1::LambertConic1(const Ellipsoid *ellipsoid, double latitudeOrigin,
   double longitudeOrigin, double scale, double falseEasting,
   double falseNorthing)
 {
@@ -76,8 +76,8 @@ LambertConic1::LambertConic1(const Ellipsoid &ellipsoid, double latitudeOrigin,
 	_falseEasting = falseEasting;
 	_falseNorthing = falseNorthing;
 
-	es2 = 2.0 * ellipsoid.flattening() - ellipsoid.flattening()
-	  * ellipsoid.flattening();
+	es2 = 2.0 * ellipsoid->flattening() - ellipsoid->flattening()
+	  * ellipsoid->flattening();
 	_es = sqrt(es2);
 	_es_over_2 = _es / 2.0;
 
@@ -87,7 +87,7 @@ LambertConic1::LambertConic1(const Ellipsoid &ellipsoid, double latitudeOrigin,
 	m0 = LAMBERT_m(cos(lat_orig), es_sin);
 	_t0 = LAMBERT1_t(lat_orig, es_sin, _es_over_2);
 
-	_rho0 = ellipsoid.radius() * scale * m0 / _n;
+	_rho0 = ellipsoid->radius() * scale * m0 / _n;
 
 	_rho_olat = _rho0;
 }
@@ -202,7 +202,7 @@ Coordinates LambertConic1::xy2ll(const QPointF &p) const
 	return Coordinates(rad2deg(lon), rad2deg(lat));
 }
 
-LambertConic2::LambertConic2(const Ellipsoid &ellipsoid,
+LambertConic2::LambertConic2(const Ellipsoid *ellipsoid,
   double standardParallel1, double standardParallel2, double latitudeOrigin,
   double longitudeOrigin, double falseEasting, double falseNorthing)
 {
@@ -226,8 +226,8 @@ LambertConic2::LambertConic2(const Ellipsoid &ellipsoid,
 	sp2 = deg2rad(standardParallel2);
 
 	if (fabs(sp1 - sp2) > 1.0e-10) {
-		es2 = 2 * ellipsoid.flattening() - ellipsoid.flattening()
-		  * ellipsoid.flattening();
+		es2 = 2 * ellipsoid->flattening() - ellipsoid->flattening()
+		  * ellipsoid->flattening();
 		es = sqrt(es2);
 		es_over_2 = es / 2.0;
 
@@ -252,7 +252,7 @@ LambertConic2::LambertConic2(const Ellipsoid &ellipsoid,
 
 		k0 = (m1 / m0) * (pow(t0 / t1, n));
 
-		const_value = ((ellipsoid.radius() * m2) / (n * pow(t2, n)));
+		const_value = ((ellipsoid->radius() * m2) / (n * pow(t2, n)));
 
 		falseNorthing += (const_value * pow(t_olat, n)) - (const_value
 		  * pow(t0, n));

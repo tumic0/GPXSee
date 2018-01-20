@@ -7,7 +7,7 @@
 class TransverseMercator : public Projection
 {
 public:
-	TransverseMercator(const Ellipsoid &ellipsoid, double latitudeOrigin,
+	TransverseMercator(const Ellipsoid *ellipsoid, double latitudeOrigin,
 	  double longitudeOrigin, double scale, double falseEasting,
 	  double falseNorthing);
 
@@ -15,7 +15,7 @@ public:
 	virtual Coordinates xy2ll(const QPointF &p) const;
 
 private:
-	Ellipsoid _e;
+	const Ellipsoid *_e;
 	double _longitudeOrigin;
 	double _latitudeOrigin;
 	double _scale;
