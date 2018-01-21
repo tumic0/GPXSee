@@ -7,19 +7,20 @@
 class AngularUnits
 {
 public:
-	AngularUnits() : _f(NAN) {}
+	AngularUnits() : _code(0), _f(NAN) {}
 	AngularUnits(int code);
 
 	bool isNull() const {return std::isnan(_f);}
 	bool isValid() const {return !std::isnan(_f);}
 
-	double toDegrees(double val) const {return val * _f;}
-	double fromDegrees(double val) const {return val / _f;}
+	double toDegrees(double val) const;
+	double fromDegrees(double val) const;
 
 	friend bool operator==(const AngularUnits &au1, const AngularUnits &au2);
 	friend QDebug operator<<(QDebug dbg, const AngularUnits &au);
 
 private:
+	int _code;
 	double _f;
 };
 
