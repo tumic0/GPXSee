@@ -65,22 +65,28 @@ static bool parameter(int key, double val, int units, Projection::Setup &setup)
 			setup.setStandardParallel2(au.toDegrees(val));}
 			return true;
 		default:
-			return true;
+			return false;
 	}
 }
 
 static int projectionSetup(const QList<QByteArray> &list,
   Projection::Setup &setup)
 {
-	bool res;
+	bool r1, r2, r3;
 
 	for (int i = 6; i < 27; i += 3) {
-		int key = list[i].trimmed().toInt(&res);
-		double val = list[i+1].trimmed().toDouble(&res);
-		int un = list[i+2].trimmed().toInt(&res);
+		QString ks = list[i].trimmed();
+		if (ks.isEmpty())
+			break;
+
+		int key = ks.toInt(&r1);
+		double val = list[i+1].trimmed().toDouble(&r2);
+		int un = list[i+2].trimmed().toInt(&r3);
+		if (!r1 || !r2 || !r3)
+			return (i - 6)/3 + 1;
 
 		if (!parameter(key, val, un, setup))
-			return (i - 6)/3;
+			return (i - 6)/3 + 1;
 	}
 
 	return 0;
