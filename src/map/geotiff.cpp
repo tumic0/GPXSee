@@ -26,6 +26,7 @@
 #define ProjectedCSTypeGeoKey      3072
 #define ProjectionGeoKey           3074
 #define ProjCoordTransGeoKey       3075
+#define ProjLinearUnitsGeoKey      3076
 #define ProjStdParallel1GeoKey     3078
 #define ProjStdParallel2GeoKey     3079
 #define ProjNatOriginLongGeoKey    3080
@@ -212,15 +213,16 @@ bool GeoTIFF::readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv) const
 			return false;
 
 		switch (entry.KeyID) {
-			case GeographicTypeGeoKey:
-			case ProjectedCSTypeGeoKey:
-			case ProjCoordTransGeoKey:
 			case GTModelTypeGeoKey:
 			case GTRasterTypeGeoKey:
+			case GeographicTypeGeoKey:
 			case GeogGeodeticDatumGeoKey:
-			case ProjectionGeoKey:
 			case GeogPrimeMeridianGeoKey:
 			case GeogAngularUnitsGeoKey:
+			case ProjectedCSTypeGeoKey:
+			case ProjectionGeoKey:
+			case ProjCoordTransGeoKey:
+			case ProjLinearUnitsGeoKey:
 				if (entry.TIFFTagLocation != 0 || entry.Count != 1)
 					return false;
 				value.SHORT = entry.ValueOffset;
@@ -274,7 +276,7 @@ const GCS *GeoTIFF::gcs(QMap<quint16, Value> &kv)
 		int pm = IS_SET(kv, GeogPrimeMeridianGeoKey)
 		  ? kv.value(GeogPrimeMeridianGeoKey).SHORT : 8901;
 		int au = IS_SET(kv, GeogAngularUnitsGeoKey)
-		  ? kv.value(GeogAngularUnitsGeoKey).SHORT : 9122;
+		  ? kv.value(GeogAngularUnitsGeoKey).SHORT : 9102;
 
 		if (!(gcs = GCS::gcs(kv.value(GeogGeodeticDatumGeoKey).SHORT, pm, au)))
 			_errorString = QString("%1+%2: unknown geodetic datum + prime"
@@ -345,14 +347,24 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 		if (m.isNull())
 			return false;
 
+		AngularUnits au(IS_SET(kv, GeogAngularUnitsGeoKey)
+		  ? kv.value(GeogAngularUnitsGeoKey).SHORT : 9102);
+		LinearUnits lu(IS_SET(kv, ProjLinearUnitsGeoKey)
+		  ? kv.value(ProjLinearUnitsGeoKey).SHORT : 9001);
+		if (lu.isNull()) {
+			_errorString = QString("%1: unknown projection linear units code")
+			  .arg(kv.value(ProjLinearUnitsGeoKey).SHORT);
+			return false;
+		}
+
 		Projection::Setup setup(
-		  kv.value(ProjNatOriginLatGeoKey).DOUBLE,
-		  kv.value(ProjNatOriginLongGeoKey).DOUBLE,
+		  au.toDegrees(kv.value(ProjNatOriginLatGeoKey).DOUBLE),
+		  au.toDegrees(kv.value(ProjNatOriginLongGeoKey).DOUBLE),
 		  kv.value(ProjScaleAtNatOriginGeoKey).DOUBLE,
-		  kv.value(ProjFalseEastingGeoKey).DOUBLE,
-		  kv.value(ProjFalseNorthingGeoKey).DOUBLE,
-		  kv.value(ProjStdParallel1GeoKey).DOUBLE,
-		  kv.value(ProjStdParallel2GeoKey).DOUBLE
+		  lu.toMeters(kv.value(ProjFalseEastingGeoKey).DOUBLE),
+		  lu.toMeters(kv.value(ProjFalseNorthingGeoKey).DOUBLE),
+		  au.toDegrees(kv.value(ProjStdParallel1GeoKey).DOUBLE),
+		  au.toDegrees(kv.value(ProjStdParallel2GeoKey).DOUBLE)
 		);
 		_projection = Projection::projection(_gcs->datum(), m, setup);
 	}
