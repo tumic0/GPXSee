@@ -161,6 +161,20 @@ void PCS::loadList(const QString &path)
 			continue;
 		}
 
+		if (LinearUnits(units).isNull()) {
+			qWarning("%s: %d: Unknown linear units code", qPrintable(path), ln);
+			continue;
+		}
+		if (Projection::Method(transform).isNull()) {
+			qWarning("%s: %d: Unknown coordinate transformation code",
+			  qPrintable(path), ln);
+			continue;
+		}
+		if (!(gcs = GCS::gcs(gcsid))) {
+			qWarning("%s: %d: Unknown GCS code", qPrintable(path), ln);
+			continue;
+		}
+
 		Projection::Setup setup;
 		if ((pn = projectionSetup(list, setup))) {
 			qWarning("%s: %d: Invalid projection parameter #%d",
@@ -168,17 +182,8 @@ void PCS::loadList(const QString &path)
 			continue;
 		}
 
-		if (!(gcs = GCS::gcs(gcsid))) {
-			qWarning("%s: %d: Unknown GCS code", qPrintable(path), ln);
-			continue;
-		}
-
 		PCS pcs(gcs, transform, setup, units);
-		if (!pcs.isValid())
-			qWarning("%s: %d: Unknown coordinate transformation/linear units code",
-			  qPrintable(path), ln);
-		else
-			_pcss.append(Entry(id, proj, pcs));
+		_pcss.append(Entry(id, proj, pcs));
 	}
 }
 
@@ -186,5 +191,5 @@ QDebug operator<<(QDebug dbg, const PCS &pcs)
 {
 	dbg.nospace() << "PCS(" << *pcs.gcs() << ", " << pcs.method() << ", "
 	  << pcs.units() << ", " << pcs.setup() << ")";
-	return dbg.maybeSpace();
+	return dbg.space();
 }
