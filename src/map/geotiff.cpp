@@ -266,7 +266,7 @@ bool GeoTIFF::readGeoValue(TIFFFile &file, quint32 offset, quint16 index,
 
 const GCS *GeoTIFF::gcs(QMap<quint16, Value> &kv)
 {
-	const GCS *gcs;
+	const GCS *gcs = 0;
 
 	if (IS_SET(kv, GeographicTypeGeoKey)) {
 		if (!(gcs = GCS::gcs(kv.value(GeographicTypeGeoKey).SHORT)))
