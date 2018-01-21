@@ -14,6 +14,7 @@ HEADERS += src/config.h \
     src/common/range.h \
     src/common/rectc.h \
     src/common/wgs84.h \
+    src/common/str2int.h \
     src/GUI/app.h \
     src/GUI/icons.h \
     src/GUI/gui.h \
@@ -111,7 +112,6 @@ HEADERS += src/config.h \
     src/data/fitparser.h \
     src/data/igcparser.h \
     src/data/nmeaparser.h \
-    src/data/str2int.h \
     src/map/gcs.h \
     src/map/angularunits.h \
     src/map/primemeridian.h \
@@ -120,6 +120,7 @@ SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
     src/common/range.cpp \
+    src/common/str2int.cpp \
     src/GUI/app.cpp \
     src/GUI/gui.cpp \
     src/GUI/axisitem.cpp \
@@ -195,7 +196,6 @@ SOURCES += src/main.cpp \
     src/data/fitparser.cpp \
     src/data/igcparser.cpp \
     src/data/nmeaparser.cpp \
-    src/data/str2int.cpp \
     src/map/projection.cpp \
     src/map/gcs.cpp \
     src/map/angularunits.cpp \

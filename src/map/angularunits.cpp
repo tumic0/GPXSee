@@ -1,5 +1,5 @@
 #include "common/coordinates.h"
-#include "data/str2int.h"
+#include "common/str2int.h"
 #include "angularunits.h"
 
 static double sDMS2deg(double val)
