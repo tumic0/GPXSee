@@ -76,5 +76,5 @@ Transform::Transform(const QList<ReferencePoint> &points)
 QDebug operator<<(QDebug dbg, const ReferencePoint &p)
 {
 	dbg.nospace() << "ReferencePoint(" << p.xy << ", " << p.pp << ")";
-	return dbg.maybeSpace();
+	return dbg.space();
 }

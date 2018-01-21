@@ -187,5 +187,5 @@ QDebug operator<<(QDebug dbg, const GCS &gcs)
 {
 	dbg.nospace() << "GCS(" << gcs.datum() << ", " << gcs.primeMeridian()
 	  << ", " << gcs.angularUnits() << ")";
-	return dbg.maybeSpace();
+	return dbg.space();
 }

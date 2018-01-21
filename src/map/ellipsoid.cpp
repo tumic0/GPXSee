@@ -70,5 +70,5 @@ QDebug operator<<(QDebug dbg, const Ellipsoid &ellipsoid)
 {
 	dbg.nospace() << "Ellipsoid(" << ellipsoid.radius() << ", "
 	  << 1.0 / ellipsoid.flattening() << ")";
-	return dbg.maybeSpace();
+	return dbg.space();
 }

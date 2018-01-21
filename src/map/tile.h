@@ -24,7 +24,7 @@ private:
 inline QDebug operator<<(QDebug dbg, const Tile &tile)
 {
 	dbg.nospace() << "Tile(" << tile.zoom() << ", " << tile.xy() << ")";
-	return dbg.maybeSpace();
+	return dbg.space();
 }
 
 #endif // TILE_H

@@ -23,5 +23,5 @@ LinearUnits::LinearUnits(int code)
 QDebug operator<<(QDebug dbg, const LinearUnits &lu)
 {
 	dbg.nospace() << "LinearUnits(" << lu._f << ")";
-	return dbg.maybeSpace();
+	return dbg.space();
 }

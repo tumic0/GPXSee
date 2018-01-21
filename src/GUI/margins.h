@@ -25,6 +25,11 @@ private:
 	qreal _left, _top, _right, _bottom;
 };
 
-QDebug operator<<(QDebug dbg, const MarginsF &margins);
+inline QDebug operator<<(QDebug dbg, const MarginsF &margins)
+{
+	dbg.nospace() << "MarginsF(" << margins.left() << ", " << margins.top()
+	  << ", " << margins.right() << margins.bottom() << ")";
+	return dbg.space();
+}
 
 #endif // MARGINS_H

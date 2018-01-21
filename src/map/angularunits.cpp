@@ -37,5 +37,5 @@ AngularUnits::AngularUnits(int code)
 QDebug operator<<(QDebug dbg, const AngularUnits &au)
 {
 	dbg.nospace() << "AngularUnits(" << deg2rad(au._f) << ")";
-	return dbg.maybeSpace();
+	return dbg.space();
 }

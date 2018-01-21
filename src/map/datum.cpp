@@ -61,7 +61,7 @@ Coordinates Datum::fromWGS84(const Coordinates &c) const
 
 QDebug operator<<(QDebug dbg, const Datum &datum)
 {
-	dbg.nospace() << "Datum(" << *datum.ellipsoid() << ", " << datum.dx() << ", "
-	  << datum.dy() << ", " << datum.dz() << ")";
-	return dbg.maybeSpace();
+	dbg.nospace() << "Datum(" << *datum.ellipsoid() << ", " << datum.dx()
+	  << ", " << datum.dy() << ", " << datum.dz() << ")";
+	return dbg.space();
 }

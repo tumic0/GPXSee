@@ -66,11 +66,11 @@ QDebug operator<<(QDebug dbg, const Projection::Setup &setup)
 	  << setup.longitudeOrigin() << ", " << setup.scale() << ", "
 	  << setup.falseEasting() << ", " << setup.falseNorthing() << ", "
 	  << setup.standardParallel1() << ", " << setup.standardParallel2() << ")";
-	return dbg.maybeSpace();
+	return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, const Projection::Method &method)
 {
 	dbg.nospace() << "Method(" << method.id() << ")";
-	return dbg.maybeSpace();
+	return dbg.space();
 }
