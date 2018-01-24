@@ -2,15 +2,17 @@
 #define LAMBERTCONIC_H
 
 #include "ellipsoid.h"
-#include "projection.h"
+#include "ct.h"
 
-class LambertConic1 : public Projection
+class LambertConic1 : public CT
 {
 public:
 	LambertConic1() {}
 	LambertConic1(const Ellipsoid *ellipsoid, double latitudeOrigin,
 	  double longitudeOrigin, double scale, double falseEasting,
 	  double falseNorthing);
+
+	virtual CT *clone() const {return new LambertConic1(*this);}
 
 	virtual QPointF ll2xy(const Coordinates &c) const;
 	virtual Coordinates xy2ll(const QPointF &p) const;
@@ -28,12 +30,14 @@ private:
 	double _rho_olat;
 };
 
-class LambertConic2 : public Projection
+class LambertConic2 : public CT
 {
 public:
 	LambertConic2(const Ellipsoid *ellipsoid, double standardParallel1,
 	  double standardParallel2, double latitudeOrigin, double longitudeOrigin,
 	   double falseEasting, double falseNorthing);
+
+	virtual CT *clone() const {return new LambertConic2(*this);}
 
 	virtual QPointF ll2xy(const Coordinates &c) const;
 	virtual Coordinates xy2ll(const QPointF &p) const;

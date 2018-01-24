@@ -46,7 +46,8 @@ static Coordinates molodensky(const Coordinates &c, const Datum &from,
 Datum::Datum(const Ellipsoid *ellipsoid, double dx, double dy,
   double dz) : _ellipsoid(ellipsoid), _dx(dx), _dy(dy), _dz(dz)
 {
-	_WGS84 = (*this == WGS84) ? true : false;
+	_WGS84 = (*_ellipsoid == *WGS84.ellipsoid() && _dx == WGS84.dx()
+	  && _dy == WGS84.dy() && _dz == WGS84.dz()) ? true : false;
 }
 
 Coordinates Datum::toWGS84(const Coordinates &c) const

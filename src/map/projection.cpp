@@ -4,6 +4,8 @@
 #include "lambertconic.h"
 #include "albersequal.h"
 #include "lambertazimuthal.h"
+#include "latlon.h"
+#include "gcs.h"
 #include "projection.h"
 
 
@@ -24,40 +26,83 @@ Projection::Method::Method(int id)
 	}
 }
 
-Projection *Projection::projection(const Datum &datum, const Method &method,
-  const Setup &setup)
+Projection::Projection(const GCS *gcs, const Method &method, const Setup &setup,
+  const LinearUnits &units) : _gcs(gcs), _units(units)
 {
-	const Ellipsoid *ellipsoid = datum.ellipsoid();
+	const Ellipsoid *ellipsoid = _gcs->datum().ellipsoid();
 
 	switch (method.id()) {
 		case 9807:
-			return new TransverseMercator(ellipsoid, setup.latitudeOrigin(),
+			_ct = new TransverseMercator(ellipsoid, setup.latitudeOrigin(),
 			  setup.longitudeOrigin(), setup.scale(), setup.falseEasting(),
 			  setup.falseNorthing());
+			break;
 		case 1024:
 		case 9841:
-			return new Mercator();
+			_ct = new Mercator();
+			break;
 		case 9802:
-			return new LambertConic2(ellipsoid, setup.standardParallel1(),
+			_ct = new LambertConic2(ellipsoid, setup.standardParallel1(),
 			  setup.standardParallel2(), setup.latitudeOrigin(),
 			  setup.longitudeOrigin(), setup.falseEasting(),
 			  setup.falseNorthing());
+			break;
 		case 9801:
-			return new LambertConic1(ellipsoid, setup.latitudeOrigin(),
+			_ct = new LambertConic1(ellipsoid, setup.latitudeOrigin(),
 			  setup.longitudeOrigin(), setup.scale(), setup.falseEasting(),
 			  setup.falseNorthing());
+			break;
 		case 9820:
-			return new LambertAzimuthal(ellipsoid, setup.latitudeOrigin(),
+			_ct = new LambertAzimuthal(ellipsoid, setup.latitudeOrigin(),
 			  setup.longitudeOrigin(), setup.falseEasting(),
 			  setup.falseNorthing());
+			break;
 		case 9822:
-			return new AlbersEqual(ellipsoid, setup.standardParallel1(),
+			_ct = new AlbersEqual(ellipsoid, setup.standardParallel1(),
 			  setup.standardParallel2(), setup.latitudeOrigin(),
 			  setup.longitudeOrigin(), setup.falseEasting(),
 			  setup.falseNorthing());
+			break;
 		default:
-			return 0;
+			_ct = 0;
 	}
+}
+
+Projection::Projection(const GCS *gcs) : _gcs(gcs)
+{
+	_ct = new LatLon(gcs->angularUnits());
+	_units = LinearUnits(9001);
+}
+
+Projection::Projection(const Projection &p)
+{
+	_gcs = p._gcs;
+	_units = p._units;
+	_ct = p._ct->clone();
+}
+
+Projection::~Projection()
+{
+	delete _ct;
+}
+
+Projection &Projection::operator=(const Projection &p)
+{
+	_gcs = p._gcs;
+	_units = p._units;
+	_ct = p._ct->clone();
+
+	return *this;
+}
+
+QPointF Projection::ll2xy(const Coordinates &c) const
+{
+	return _units.fromMeters(_ct->ll2xy(_gcs->fromWGS84(c)));
+}
+
+Coordinates Projection::xy2ll(const QPointF &p) const
+{
+	return _gcs->toWGS84(_ct->xy2ll(_units.toMeters(p)));
 }
 
 QDebug operator<<(QDebug dbg, const Projection::Setup &setup)

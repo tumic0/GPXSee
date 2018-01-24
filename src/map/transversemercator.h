@@ -1,15 +1,17 @@
 #ifndef TRANSVERSEMERCATOR_H
 #define TRANSVERSEMERCATOR_H
 
-#include "projection.h"
+#include "ct.h"
 #include "ellipsoid.h"
 
-class TransverseMercator : public Projection
+class TransverseMercator : public CT
 {
 public:
 	TransverseMercator(const Ellipsoid *ellipsoid, double latitudeOrigin,
 	  double longitudeOrigin, double scale, double falseEasting,
 	  double falseNorthing);
+
+	virtual CT *clone() const {return new TransverseMercator(*this);}
 
 	virtual QPointF ll2xy(const Coordinates &c) const;
 	virtual Coordinates xy2ll(const QPointF &p) const;

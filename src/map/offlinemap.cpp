@@ -112,7 +112,6 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 
 	_valid = false;
 	_img = 0;
-	_projection = 0;
 	_resolution = 0.0;
 	_zoom = 0;
 	_scale = QPointF(1.0, 1.0);
@@ -138,7 +137,6 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 			_name = mf.name();
 			_size = mf.size();
 			_imgPath = mf.image();
-			_gcs = mf.gcs();
 			_projection = mf.projection();
 			_transform = mf.transform();
 		}
@@ -152,7 +150,6 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 			_name = mf.name();
 			_size = mf.size();
 			_imgPath = mf.image();
-			_gcs = mf.gcs();
 			_projection = mf.projection();
 			_transform = mf.transform();
 		}
@@ -164,7 +161,6 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 		} else {
 			_name = fi.fileName();
 			_imgPath = fileName;
-			_gcs = gt.gcs();
 			_projection = gt.projection();
 			_transform = gt.transform();
 		}
@@ -207,7 +203,6 @@ OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
 
 	_valid = false;
 	_img = 0;
-	_projection = 0;
 	_resolution = 0.0;
 	_zoom = 0;
 	_scale = QPointF(1.0, 1.0);
@@ -230,7 +225,6 @@ OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
 
 	_name = mf.name();
 	_size = mf.size();
-	_gcs = mf.gcs();
 	_projection = mf.projection();
 	_transform = mf.transform();
 
@@ -244,7 +238,6 @@ OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
 OfflineMap::~OfflineMap()
 {
 	delete _img;
-	delete _projection;
 }
 
 void OfflineMap::load()
@@ -363,19 +356,19 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect)
 QPointF OfflineMap::ll2xy(const Coordinates &c)
 {
 	if (_ozf.isOpen()) {
-		QPointF p(_transform.map(_projection->ll2xy(_gcs->fromWGS84(c))));
+		QPointF p(_transform.map(_projection.ll2xy(c)));
 		return QPointF(p.x() * _scale.x(), p.y() * _scale.y());
 	} else
-		return _transform.map(_projection->ll2xy(_gcs->fromWGS84(c)));
+		return _transform.map(_projection.ll2xy(c));
 }
 
 Coordinates OfflineMap::xy2ll(const QPointF &p)
 {
 	if (_ozf.isOpen()) {
-		return _gcs->toWGS84(_projection->xy2ll(_inverted.map(QPointF(p.x()
-		  / _scale.x(), p.y() / _scale.y()))));
+		return _projection.xy2ll(_inverted.map(QPointF(p.x() / _scale.x(),
+		  p.y() / _scale.y())));
 	} else
-		return _gcs->toWGS84(_projection->xy2ll(_inverted.map(p)));
+		return _projection.xy2ll(_inverted.map(p));
 }
 
 QRectF OfflineMap::bounds() const
@@ -402,8 +395,8 @@ qreal OfflineMap::zoomFit(const QSize &size, const RectC &br)
 		if (!br.isValid())
 			rescale(0);
 		else {
-			QRect sbr(QRectF(_transform.map(_projection->ll2xy(br.topLeft())),
-			  _transform.map(_projection->ll2xy(br.bottomRight())))
+			QRect sbr(QRectF(_transform.map(_projection.ll2xy(br.topLeft())),
+			  _transform.map(_projection.ll2xy(br.bottomRight())))
 			  .toRect().normalized());
 
 			for (int i = 0; i < _ozf.zooms(); i++) {

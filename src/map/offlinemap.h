@@ -2,10 +2,9 @@
 #define OFFLINEMAP_H
 
 #include <QTransform>
-#include "common/coordinates.h"
-#include "gcs.h"
 #include "projection.h"
 #include "transform.h"
+#include "linearunits.h"
 #include "map.h"
 #include "tar.h"
 #include "ozf.h"
@@ -45,7 +44,7 @@ public:
 	const QString &errorString() const {return _errorString;}
 
 	QPointF ll2pp(const Coordinates &c) const
-	  {return _projection->ll2xy(c);}
+	  {return _projection.ll2xy(c);}
 	QPointF xy2pp(const QPointF &p) const
 	  {return _inverted.map(p);}
 	QPointF pp2xy(const QPointF &p) const
@@ -65,9 +64,7 @@ private:
 
 	QString _name;
 
-	QSize _size;
-	const GCS *_gcs;
-	Projection *_projection;
+	Projection _projection;
 	QTransform _transform, _inverted;
 
 	OZF _ozf;
@@ -77,6 +74,7 @@ private:
 	QString _imgPath;
 	QSize _tileSize;
 	QString _tileName;
+	QSize _size;
 
 	int _zoom;
 	qreal _resolution;

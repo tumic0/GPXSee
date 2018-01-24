@@ -4,8 +4,11 @@
 #include <QPointF>
 #include <QDebug>
 #include "common/coordinates.h"
+#include "linearunits.h"
 
-class Datum;
+class GCS;
+class CT;
+class AngularUnits;
 
 class Projection {
 public:
@@ -65,13 +68,22 @@ public:
 		int _id;
 	};
 
-	virtual ~Projection() {}
+	Projection() : _gcs(0), _ct(0) {}
+	Projection(const Projection &p);
+	Projection(const GCS *gcs, const Method &method, const Setup &setup,
+	  const LinearUnits &units);
+	Projection(const GCS *gcs);
+	~Projection();
 
-	virtual QPointF ll2xy(const Coordinates &c) const = 0;
-	virtual Coordinates xy2ll(const QPointF &p) const = 0;
+	Projection &operator=(const Projection &p);
 
-	static Projection *projection(const Datum &datum, const Method &method,
-	  const Setup &setup);
+	QPointF ll2xy(const Coordinates &c) const;
+	Coordinates xy2ll(const QPointF &p) const;
+
+private:
+	const GCS * _gcs;
+	CT *_ct;
+	LinearUnits _units;
 };
 
 QDebug operator<<(QDebug dbg, const Projection::Setup &setup);

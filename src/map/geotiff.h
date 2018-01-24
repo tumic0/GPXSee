@@ -8,19 +8,16 @@
 #include "projection.h"
 #include "tifffile.h"
 #include "transform.h"
+#include "linearunits.h"
 
 class GeoTIFF
 {
 public:
-	GeoTIFF() : _projection(0) {}
-
 	bool load(const QString &path);
-
-	const GCS *gcs() const {return _gcs;}
-	Projection *projection() const {return _projection;}
-	const QTransform &transform() const {return _transform;}
-
 	const QString &errorString() const {return _errorString;}
+
+	const Projection &projection() const {return _projection;}
+	const QTransform &transform() const {return _transform;}
 
 private:
 	union Value {
@@ -56,8 +53,7 @@ private:
 	bool projectedModel(QMap<quint16, Value> &kv);
 
 	QTransform _transform;
-	const GCS *_gcs;
-	Projection *_projection;
+	Projection _projection;
 
 	QString _errorString;
 };

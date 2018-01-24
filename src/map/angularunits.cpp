@@ -5,14 +5,14 @@
 static double sDMS2deg(double val)
 {
 	double angle;
-	char *decimal;
-	char str[13];
+	const char *decimal;
 
 	if (val < -999.9 || val > 999.9)
 		return NAN;
 
-	sprintf(str, "%.7f", qAbs(val));
-	decimal = strchr(str,'.');
+	QString qstr(QString::number(qAbs(val), 'f', 7));
+	const char *str = qstr.toLatin1().constData();
+	decimal = strrchr(str, '.');
 	int deg = str2int(str, decimal - str);
 	int min = str2int(decimal + 1, 2);
 	int sec = str2int(decimal + 3, 2);

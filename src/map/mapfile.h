@@ -11,16 +11,14 @@ class MapFile
 {
 public:
 	bool load(QIODevice &file);
+	const QString &errorString() const {return _errorString;}
 
-	const GCS *gcs() const {return _gcs;}
-	Projection *projection() const {return _projection;}
+	const Projection &projection() const {return _projection;}
 	const QTransform &transform() const {return _transform;}
 
 	const QString &name() const {return _name;}
 	const QString &image() const {return _image;}
 	const QSize &size() const {return _size;}
-
-	const QString &errorString() const {return _errorString;}
 
 private:
 	struct CalibrationPoint {
@@ -33,8 +31,8 @@ private:
 	  QString &projection, Projection::Setup &setup, QString &datum);
 	bool parseMapFile(QIODevice &device, QList<CalibrationPoint> &points,
 	  QString &projection, Projection::Setup &setup, QString &datum);
-	bool createDatum(const QString &datum);
-	bool createProjection(const QString &projection,
+	const GCS *createGCS(const QString &datum);
+	bool createProjection(const GCS *gcs, const QString &projection,
 	  const Projection::Setup &setup, QList<CalibrationPoint> &points);
 	bool computeTransformation(QList<CalibrationPoint> &points);
 
@@ -42,8 +40,7 @@ private:
 	QString _image;
 	QSize _size;
 
-	const GCS *_gcs;
-	Projection *_projection;
+	Projection _projection;
 	QTransform _transform;
 
 	QString _errorString;

@@ -2,14 +2,16 @@
 #define ALBERSEQUAL_H
 
 #include "ellipsoid.h"
-#include "projection.h"
+#include "ct.h"
 
-class AlbersEqual : public Projection
+class AlbersEqual : public CT
 {
 public:
 	AlbersEqual(const Ellipsoid *ellipsoid, double standardParallel1,
 	  double standardParallel2, double latitudeOrigin, double longitudeOrigin,
 	  double falseEasting, double falseNorthing);
+
+	virtual CT *clone() const {return new AlbersEqual(*this);}
 
 	virtual QPointF ll2xy(const Coordinates &c) const;
 	virtual Coordinates xy2ll(const QPointF &p) const;

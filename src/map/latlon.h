@@ -1,13 +1,15 @@
 #ifndef LATLON_H
 #define LATLON_H
 
-#include "projection.h"
+#include "ct.h"
 #include "angularunits.h"
 
-class LatLon : public Projection
+class LatLon : public CT
 {
 public:
 	LatLon(const AngularUnits &au) : _au(au) {}
+
+	virtual CT *clone() const {return new LatLon(*this);}
 
 	virtual QPointF ll2xy(const Coordinates &c) const
 	  {return QPointF(_au.fromDegrees(c.lon()), _au.fromDegrees(c.lat()));}

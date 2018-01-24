@@ -115,7 +115,8 @@ HEADERS += src/config.h \
     src/map/gcs.h \
     src/map/angularunits.h \
     src/map/primemeridian.h \
-    src/map/linearunits.h
+    src/map/linearunits.h \
+    src/map/ct.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \

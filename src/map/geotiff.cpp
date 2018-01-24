@@ -325,25 +325,26 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 			  .arg(kv.value(ProjectedCSTypeGeoKey).SHORT);
 			return false;
 		}
-		_gcs = pcs->gcs();
-		_projection = Projection::projection(_gcs->datum(), pcs->method(),
-		  pcs->setup());
+		_projection = Projection(pcs->gcs(), pcs->method(), pcs->setup(),
+		  pcs->units());
 	} else if (IS_SET(kv, ProjectionGeoKey)) {
-		if (!(_gcs = gcs(kv)))
+		const GCS *g = gcs(kv);
+		if (!g)
 			return false;
-		const PCS *pcs;
-		if (!(pcs = PCS::pcs(_gcs, kv.value(ProjectionGeoKey).SHORT))) {
+		const PCS *pcs = PCS::pcs(g, kv.value(ProjectionGeoKey).SHORT);
+		if (!pcs) {
 			_errorString = QString("%1: unknown projection code")
 			  .arg(kv.value(GeographicTypeGeoKey).SHORT)
 			  .arg(kv.value(ProjectionGeoKey).SHORT);
 			return false;
 		}
-		_projection = Projection::projection(_gcs->datum(), pcs->method(),
-		  pcs->setup());
+		_projection = Projection(pcs->gcs(), pcs->method(), pcs->setup(),
+		  pcs->units());
 	} else {
-		if (!(_gcs = gcs(kv)))
+		const GCS *g = gcs(kv);
+		if (!g)
 			return false;
-		Projection::Method m = method(kv);
+		Projection::Method m(method(kv));
 		if (m.isNull())
 			return false;
 
@@ -366,7 +367,8 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 		  au.toDegrees(kv.value(ProjStdParallel1GeoKey).DOUBLE),
 		  au.toDegrees(kv.value(ProjStdParallel2GeoKey).DOUBLE)
 		);
-		_projection = Projection::projection(_gcs->datum(), m, setup);
+
+		_projection = Projection(g, m, setup, lu);
 	}
 
 	return true;
@@ -374,10 +376,11 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 
 bool GeoTIFF::geographicModel(QMap<quint16, Value> &kv)
 {
-	if (!(_gcs = gcs(kv)))
+	const GCS *g = gcs(kv);
+	if (!g)
 		return false;
 
-	_projection = new LatLon(_gcs->angularUnits());
+	_projection = Projection(g);
 
 	return true;
 }

@@ -1,4 +1,3 @@
-#include "latlon.h"
 #include "utm.h"
 #include "gcs.h"
 #include "mapfile.h"
@@ -150,31 +149,31 @@ bool MapFile::parseMapFile(QIODevice &device, QList<CalibrationPoint> &points,
 	return true;
 }
 
-bool MapFile::createDatum(const QString &datum)
+const GCS *MapFile::createGCS(const QString &datum)
 {
-	if (!(_gcs = GCS::gcs(datum))) {
-		_errorString = QString("%1: Unknown datum").arg(datum);
-		return false;
-	}
+	const GCS *gcs;
 
-	return true;
+	if (!(gcs = GCS::gcs(datum)))
+		_errorString = QString("%1: Unknown datum").arg(datum);
+
+	return gcs;
 }
 
-bool MapFile::createProjection(const QString &name,
+bool MapFile::createProjection(const GCS *gcs, const QString &name,
   const Projection::Setup &setup, QList<CalibrationPoint> &points)
 {
 	if (name == "Mercator")
-		_projection = Projection::projection(_gcs->datum(), 1024, setup);
+		_projection = Projection(gcs, 1024, setup, 9001);
 	else if (name == "Transverse Mercator")
-		_projection = Projection::projection(_gcs->datum(), 9807, setup);
+		_projection = Projection(gcs, 9807, setup, 9001);
 	else if (name == "Latitude/Longitude")
-		_projection = new LatLon(9102);
+		_projection = Projection(gcs);
 	else if (name == "Lambert Conformal Conic")
-		_projection = Projection::projection(_gcs->datum(), 9802, setup);
+		_projection = Projection(gcs, 9802, setup, 9001);
 	else if (name == "Albers Equal Area")
-		_projection = Projection::projection(_gcs->datum(), 9822, setup);
+		_projection = Projection(gcs, 9822, setup, 9001);
 	else if (name == "(A)Lambert Azimuthual Equal Area")
-		_projection = Projection::projection(_gcs->datum(), 9820, setup);
+		_projection = Projection(gcs, 9820, setup, 9001);
 	else if (name == "(UTM) Universal Transverse Mercator") {
 		int zone;
 		if (points.first().zone)
@@ -183,44 +182,39 @@ bool MapFile::createProjection(const QString &name,
 			zone = UTM::zone(points.first().ll);
 		else {
 			_errorString = "Can not determine UTM zone";
-			return 0;
+			return false;
 		}
-		_projection = Projection::projection(_gcs->datum(), 9807,
-		  UTM::setup(zone));
+		_projection = Projection(gcs, 9807, UTM::setup(zone), 9001);
 	} else if (name == "(NZTM2) New Zealand TM 2000")
-		_projection = Projection::projection(_gcs->datum(), 9807,
-		  Projection::Setup(0, 173.0, 0.9996, 1600000, 10000000, NAN, NAN));
+		_projection = Projection(gcs, 9807, Projection::Setup(0, 173.0, 0.9996,
+		  1600000, 10000000, NAN, NAN), 9001);
 	else if (name == "(BNG) British National Grid")
-		_projection = Projection::projection(_gcs->datum(), 9807,
-		  Projection::Setup(49, -2, 0.999601, 400000, -100000, NAN, NAN));
+		_projection = Projection(gcs, 9807, Projection::Setup(49, -2, 0.999601,
+		  400000, -100000, NAN, NAN), 9001);
 	else if (name == "(IG) Irish Grid")
-		_projection = Projection::projection(_gcs->datum(), 9807,
-		  Projection::Setup(53.5, -8, 1.000035, 200000, 250000, NAN, NAN));
+		_projection = Projection(gcs, 9807, Projection::Setup(53.5, -8,
+		  1.000035, 200000, 250000, NAN, NAN), 9001);
 	else if (name == "(SG) Swedish Grid")
-		_projection = Projection::projection(_gcs->datum(), 9807,
-		  Projection::Setup(0, 15.808278, 1, 1500000, 0, NAN, NAN));
+		_projection = Projection(gcs, 9807, Projection::Setup(0, 15.808278, 1,
+		  1500000, 0, NAN, NAN), 9001);
 	else if (name == "(I) France Zone I")
-		_projection = Projection::projection(_gcs->datum(), 9802,
-		  Projection::Setup(49.5, 2.337229, NAN, 600000, 1200000, 48.598523,
-		  50.395912));
+		_projection = Projection(gcs, 9802, Projection::Setup(49.5, 2.337229,
+		  NAN, 600000, 1200000, 48.598523, 50.395912), 9001);
 	else if (name == "(II) France Zone II")
-		_projection = Projection::projection(_gcs->datum(), 9802,
-		  Projection::Setup(46.8, 2.337229, NAN, 600000, 2200000, 45.898919,
-		  47.696014));
+		_projection = Projection(gcs, 9802, Projection::Setup(46.8, 2.337229,
+		  NAN, 600000, 2200000, 45.898919, 47.696014), 9001);
 	else if (name == "(III) France Zone III")
-		_projection = Projection::projection(_gcs->datum(), 9802,
-		  Projection::Setup(44.1, 2.337229, NAN, 600000, 3200000, 43.199291,
-		  44.996094));
+		_projection = Projection(gcs, 9802, Projection::Setup(44.1, 2.337229,
+		  NAN, 600000, 3200000, 43.199291, 44.996094), 9001);
 	else if (name == "(IV) France Zone IV")
-		_projection = Projection::projection(_gcs->datum(), 9802,
-		  Projection::Setup(42.165, 2.337229, NAN, 234.358, 4185861.369,
-		  41.560388, 42.767663));
+		_projection = Projection(gcs, 9802, Projection::Setup(42.165, 2.337229,
+		  NAN, 234.358, 4185861.369, 41.560388, 42.767663), 9001);
 	else if (name == "(VICGRID) Victoria Australia")
-		_projection = Projection::projection(_gcs->datum(), 9802,
-		  Projection::Setup(-37, 145, NAN, 2500000, 4500000, -36, -38));
+		_projection = Projection(gcs, 9802, Projection::Setup(-37, 145, NAN,
+		  2500000, 4500000, -36, -38), 9001);
 	else if (name == "(VG94) VICGRID94 Victoria Australia")
-		_projection = Projection::projection(_gcs->datum(), 9802,
-		  Projection::Setup(-37, 145, NAN, 2500000, 2500000, -36, -38));
+		_projection = Projection(gcs, 9802, Projection::Setup(-37, 145, NAN,
+		  2500000, 2500000, -36, -38), 9001);
 	else {
 		_errorString = QString("%1: Unknown map projection").arg(name);
 		return false;
@@ -235,7 +229,7 @@ bool MapFile::computeTransformation(QList<CalibrationPoint> &points)
 
 	for (int i = 0; i < points.size(); i++) {
 		if (points.at(i).rp.pp.isNull())
-			points[i].rp.pp = _projection->ll2xy(points.at(i).ll);
+			points[i].rp.pp = _projection.ll2xy(points.at(i).ll);
 
 		rp.append(points.at(i).rp);
 	}
@@ -254,14 +248,15 @@ bool MapFile::computeTransformation(QList<CalibrationPoint> &points)
 bool MapFile::load(QIODevice &file)
 {
 	QList<CalibrationPoint> points;
-	QString projection, datum;
+	QString ct, datum;
 	Projection::Setup setup;
+	const GCS *gcs;
 
-	if (!parseMapFile(file, points, projection, setup, datum))
+	if (!parseMapFile(file, points, ct, setup, datum))
 		return false;
-	if (!createDatum(datum))
+	if (!(gcs = createGCS(datum)))
 		return false;
-	if (!createProjection(projection, setup, points))
+	if (!createProjection(gcs, ct, setup, points))
 		return false;
 	if (!computeTransformation(points))
 		return false;
