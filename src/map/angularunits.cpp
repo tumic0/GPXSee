@@ -7,9 +7,6 @@ static double sDMS2deg(double val)
 	double angle;
 	const char *decimal;
 
-	if (val < -999.9 || val > 999.9)
-		return NAN;
-
 	QString qstr(QString::number(qAbs(val), 'f', 7));
 	const char *str = qstr.toLatin1().constData();
 	decimal = strrchr(str, '.');
@@ -18,19 +15,14 @@ static double sDMS2deg(double val)
 	int sec = str2int(decimal + 3, 2);
 	int f = str2int(decimal + 5, 3);
 
-	angle = deg + (double)min/60.0 + (double)sec/3600.0
-	  + ((double)f/1000.0)/3600.0;
+	angle = deg + min/60.0 + sec/3600.0 + (f/1000.0)/3600.0;
 
 	return (val < 0) ? -angle : angle;
 }
 
 static double deg2sDMS(double val)
 {
-	char str[13];
 	double aval = qAbs(val);
-
-	if (val < -999.9 || val > 999.9)
-		return NAN;
 
 	int deg = aval;
 	double r1 = aval - deg;
@@ -42,8 +34,10 @@ static double deg2sDMS(double val)
 	double r3 = r2 - (sec / 3600.0);
 	int f = (int)(r3 * 3600.0 * 1000.0);
 
-	sprintf(str, "%u.%02u%02u%03u", deg, min, sec, f);
-	return (val < 0) ? -atof(str) : atof(str);
+	QString str(QString("%1.%2%3%4").arg(deg).arg(min, 2, 10, QChar('0'))
+	  .arg(sec, 2, 10, QChar('0')).arg(f, 3, 10, QChar('0')));
+
+	return (val < 0) ? -str.toDouble() : str.toDouble();
 }
 
 AngularUnits::AngularUnits(int code) : _code(code)
