@@ -1,6 +1,7 @@
 #ifndef ONLINEMAP_H
 #define ONLINEMAP_H
 
+#include "common/coordinates.h"
 #include "common/range.h"
 #include "map.h"
 #include "tile.h"
@@ -26,8 +27,10 @@ public:
 	qreal zoomIn();
 	qreal zoomOut();
 
-	QPointF ll2xy(const Coordinates &c);
-	Coordinates xy2ll(const QPointF &p);
+	QPointF ll2xy(const Coordinates &c)
+		{return static_cast<const OnlineMap &>(*this).ll2xy(c);}
+	Coordinates xy2ll(const QPointF &p)
+		{return static_cast<const OnlineMap &>(*this).xy2ll(p);}
 
 	void draw(QPainter *painter, const QRectF &rect);
 
@@ -44,6 +47,9 @@ private slots:
 	void emitLoaded();
 
 private:
+	QPointF ll2xy(const Coordinates &c) const;
+	Coordinates xy2ll(const QPointF &p) const;
+
 	void fillTile(Tile &tile);
 	QString tileUrl(const Tile &tile) const;
 	QString tileFile(const Tile &tile) const;

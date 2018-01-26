@@ -18,7 +18,7 @@ EmptyMap::EmptyMap(QObject *parent) : Map(parent)
 
 QRectF EmptyMap::bounds() const
 {
-	return scaled(QRectF(QPointF(-180, -180), QSizeF(360, 360)), 1.0/_scale);
+	return QRectF(ll2xy(Coordinates(-180, 85)), ll2xy(Coordinates(180, -85)));
 }
 
 qreal EmptyMap::zoomFit(const QSize &size, const RectC &br)
@@ -72,13 +72,13 @@ void EmptyMap::draw(QPainter *painter, const QRectF &rect)
 	painter->fillRect(rect, _backgroundColor);
 }
 
-QPointF EmptyMap::ll2xy(const Coordinates &c)
+QPointF EmptyMap::ll2xy(const Coordinates &c) const
 {
 	QPointF m = Mercator().ll2xy(c);
 	return QPointF(m.x() / _scale, m.y() / -_scale);
 }
 
-Coordinates EmptyMap::xy2ll(const QPointF &p)
+Coordinates EmptyMap::xy2ll(const QPointF &p) const
 {
 	QPointF m(p.x() * _scale, -p.y() * _scale);
 	return Mercator().xy2ll(m);

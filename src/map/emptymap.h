@@ -1,6 +1,7 @@
 #ifndef EMPTYMAP_H
 #define EMPTYMAP_H
 
+#include "common/coordinates.h"
 #include "map.h"
 
 class EmptyMap : public Map
@@ -21,12 +22,17 @@ public:
 	qreal zoomIn();
 	qreal zoomOut();
 
-	QPointF ll2xy(const Coordinates &c);
-	Coordinates xy2ll(const QPointF &p);
+	QPointF ll2xy(const Coordinates &c)
+		{return static_cast<const EmptyMap &>(*this).ll2xy(c);}
+	Coordinates xy2ll(const QPointF &p)
+		{return static_cast<const EmptyMap &>(*this).xy2ll(p);}
 
 	void draw(QPainter *painter, const QRectF &rect);
 
 private:
+	QPointF ll2xy(const Coordinates &c) const;
+	Coordinates xy2ll(const QPointF &p) const;
+
 	QString _name;
 	qreal _scale;
 };

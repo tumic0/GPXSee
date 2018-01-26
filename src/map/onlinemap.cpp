@@ -168,8 +168,7 @@ void OnlineMap::clearCache()
 
 QRectF OnlineMap::bounds() const
 {
-	return scaled(QRectF(QPointF(-180, -180), QSizeF(360, 360)),
-	  1.0/zoom2scale(_zoom));
+	return QRectF(ll2xy(Coordinates(-180, 85)), ll2xy(Coordinates(180, -85)));
 }
 
 int OnlineMap::limitZoom(int zoom) const
@@ -253,14 +252,14 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect)
 	}
 }
 
-QPointF OnlineMap::ll2xy(const Coordinates &c)
+QPointF OnlineMap::ll2xy(const Coordinates &c) const
 {
 	qreal scale = zoom2scale(_zoom);
 	QPointF m = Mercator().ll2xy(c);
 	return QPointF(m.x() / scale, m.y() / -scale);
 }
 
-Coordinates OnlineMap::xy2ll(const QPointF &p)
+Coordinates OnlineMap::xy2ll(const QPointF &p) const
 {
 	qreal scale = zoom2scale(_zoom);
 	QPointF m(p.x() * scale, -p.y() * scale);
