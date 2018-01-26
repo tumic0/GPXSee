@@ -87,7 +87,6 @@ HEADERS += src/config.h \
     src/map/ozf.h \
     src/map/atlas.h \
     src/map/matrix.h \
-    src/map/misc.h \
     src/map/geotiff.h \
     src/map/pcs.h \
     src/map/transform.h \

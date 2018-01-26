@@ -7,7 +7,6 @@
 #include "mercator.h"
 #include "downloader.h"
 #include "config.h"
-#include "misc.h"
 #include "onlinemap.h"
 
 

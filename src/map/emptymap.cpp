@@ -4,7 +4,6 @@
 #include "common/rectc.h"
 #include "common/wgs84.h"
 #include "mercator.h"
-#include "misc.h"
 #include "emptymap.h"
 
 
