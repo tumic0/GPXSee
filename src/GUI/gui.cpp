@@ -108,13 +108,8 @@ void GUI::loadMaps()
 	else if (QFile::exists(GLOBAL_MAP_DIR))
 		offline = GLOBAL_MAP_DIR;
 
-	if (!offline.isNull()) {
-		if (!_ml->loadDir(offline)) {
-			qWarning("Error reading map dir: %s",
-			  qPrintable(_ml->errorString()));
-			_ml->clear();
-		}
-	}
+	if (!offline.isNull() && !_ml->loadDir(offline))
+		qWarning(qPrintable(_ml->errorString()));
 
 	_map = new EmptyMap(this);
 }

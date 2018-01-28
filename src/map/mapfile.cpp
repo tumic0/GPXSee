@@ -127,7 +127,7 @@ int MapFile::parse(QIODevice &device, QList<CalibrationPoint> &points,
 		ln++;
 	}
 
-	return 0;
+	return (ln == 1) ? 1 : 0;
 }
 
 bool MapFile::parseMapFile(QIODevice &device, QList<CalibrationPoint> &points,
@@ -136,13 +136,13 @@ bool MapFile::parseMapFile(QIODevice &device, QList<CalibrationPoint> &points,
 	int el;
 
 	if (!device.open(QIODevice::ReadOnly)) {
-		_errorString = QString("Error opening map file: %1")
+		_errorString = QString("Error opening file: %1")
 		  .arg(device.errorString());
 		return false;
 	}
 
 	if ((el = parse(device, points, projection, setup, datum))) {
-		_errorString = QString("Map file parse error on line %1").arg(el);
+		_errorString = QString("Parse error on line %1").arg(el);
 		return false;
 	}
 

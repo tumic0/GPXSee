@@ -14,7 +14,7 @@ class MapList : public QObject
 public:
 	MapList(QObject *parent = 0) : QObject(parent) {}
 
-	bool loadFile(const QString &path, bool *atlas = 0);
+	bool loadFile(const QString &path);
 	bool loadDir(const QString &path);
 	void clear();
 
@@ -25,11 +25,13 @@ public:
 	static QStringList filter();
 
 private:
+	bool loadFile(const QString &path, bool *atlas, bool dir);
+
 	Map *loadListEntry(const QByteArray &line);
 
-	bool loadList(const QString &path);
-	bool loadMap(const QString &path);
-	bool loadAtlas(const QString &path);
+	bool loadList(const QString &path, bool dir);
+	bool loadMap(const QString &path, bool dir);
+	bool loadAtlas(const QString &path, bool dir);
 
 	QList<Map*> _maps;
 	QString _errorString;

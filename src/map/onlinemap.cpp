@@ -46,13 +46,11 @@ static bool loadTileFile(Tile &tile, const QString &file)
 Downloader *OnlineMap::downloader;
 
 OnlineMap::OnlineMap(const QString &name, const QString &url,
-  const Range &zooms, QObject *parent) : Map(parent)
+  const Range &zooms, const RectC &bounds, QObject *parent)
+  : Map(parent), _name(name), _url(url), _zooms(zooms), _bounds(bounds)
 {
-	_name = name;
-	_url = url;
 	_block = false;
-	_zooms = zooms;
-	_zoom = zooms.max();
+	_zoom = _zooms.max();
 
 	QString path = TILES_DIR + QString("/") + name;
 	if (!QDir().mkpath(path))
@@ -167,7 +165,7 @@ void OnlineMap::clearCache()
 
 QRectF OnlineMap::bounds() const
 {
-	return QRectF(ll2xy(Coordinates(-180, 85)), ll2xy(Coordinates(180, -85)));
+	return QRectF(ll2xy(_bounds.topLeft()), ll2xy(_bounds.bottomRight()));
 }
 
 int OnlineMap::limitZoom(int zoom) const

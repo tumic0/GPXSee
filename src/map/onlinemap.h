@@ -3,6 +3,7 @@
 
 #include "common/coordinates.h"
 #include "common/range.h"
+#include "common/rectc.h"
 #include "map.h"
 #include "tile.h"
 
@@ -14,7 +15,7 @@ class OnlineMap : public Map
 
 public:
 	OnlineMap(const QString &name, const QString &url, const Range &zooms,
-	  QObject *parent = 0);
+	  const RectC &bounds, QObject *parent = 0);
 
 	const QString &name() const {return _name;}
 
@@ -57,10 +58,11 @@ private:
 	void loadTilesSync(QList<Tile> &list);
 	int limitZoom(int zoom) const;
 
-	Range _zooms;
-	int _zoom;
 	QString _name;
 	QString _url;
+	Range _zooms;
+	RectC _bounds;
+	int _zoom;
 	bool _block;
 
 	static Downloader *downloader;
