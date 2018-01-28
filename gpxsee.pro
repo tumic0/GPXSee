@@ -116,7 +116,7 @@ HEADERS += src/config.h \
     src/map/primemeridian.h \
     src/map/linearunits.h \
     src/map/ct.h \
-    src/map/omd.h
+    src/map/mapsource.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -202,7 +202,7 @@ SOURCES += src/main.cpp \
     src/map/angularunits.cpp \
     src/map/primemeridian.cpp \
     src/map/linearunits.cpp \
-    src/map/omd.cpp
+    src/map/mapsource.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \
@@ -218,7 +218,7 @@ macx {
         icons/fit.icns \
         icons/igc.icns \
         icons/nmea.icns \
-        pkg/maps.xml \
+        pkg/maps \
         pkg/ellipsoids.csv \
         pkg/gcs.csv \
         pkg/pcs.csv

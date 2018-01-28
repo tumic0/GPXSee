@@ -29,7 +29,7 @@ private:
 
 	Map *loadListEntry(const QByteArray &line);
 
-	bool loadList(const QString &path, bool dir);
+	bool loadSource(const QString &path, bool dir);
 	bool loadMap(const QString &path, bool dir);
 	bool loadAtlas(const QString &path, bool dir);
 

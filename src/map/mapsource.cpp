@@ -1,7 +1,7 @@
 #include <QFile>
 #include <QXmlStreamReader>
 #include "onlinemap.h"
-#include "omd.h"
+#include "mapsource.h"
 
 
 #define ZOOM_MAX       19
@@ -11,7 +11,7 @@
 #define BOUNDS_RIGHT   180
 #define BOUNDS_BOTTOM  -85.0511
 
-Range OMD::zooms(QXmlStreamReader &reader)
+Range MapSource::zooms(QXmlStreamReader &reader)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
 	int min, max;
@@ -51,7 +51,7 @@ Range OMD::zooms(QXmlStreamReader &reader)
 	return Range(min, max);
 }
 
-RectC OMD::bounds(QXmlStreamReader &reader)
+RectC MapSource::bounds(QXmlStreamReader &reader)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
 	double top, left, bottom, right;
@@ -121,7 +121,7 @@ RectC OMD::bounds(QXmlStreamReader &reader)
 	return RectC(Coordinates(left, top), Coordinates(right, bottom));
 }
 
-void OMD::map(QXmlStreamReader &reader)
+void MapSource::map(QXmlStreamReader &reader)
 {
 	QString name, url;
 	Range z(ZOOM_MIN, ZOOM_MAX);
@@ -143,20 +143,10 @@ void OMD::map(QXmlStreamReader &reader)
 			reader.skipCurrentElement();
 	}
 
-	_maps.append(new OnlineMap(name, url, z, b));
+	_map = new OnlineMap(name, url, z, b);
 }
 
-void OMD::omd(QXmlStreamReader &reader)
-{
-	while (reader.readNextStartElement()) {
-		if (reader.name() == "map")
-			map(reader);
-		else
-			reader.skipCurrentElement();
-	}
-}
-
-bool OMD::loadFile(const QString &path)
+bool MapSource::loadFile(const QString &path)
 {
 	QFile file(path);
 	QXmlStreamReader reader;
@@ -169,10 +159,10 @@ bool OMD::loadFile(const QString &path)
 	reader.setDevice(&file);
 
 	if (reader.readNextStartElement()) {
-		if (reader.name() == "omd")
-			omd(reader);
+		if (reader.name() == "map")
+			map(reader);
 		else
-			reader.raiseError("Not an online map definitions file");
+			reader.raiseError("Not an online map source file");
 	}
 
 	if (reader.error())
@@ -182,9 +172,8 @@ bool OMD::loadFile(const QString &path)
 	return !reader.error();
 }
 
-OMD::~OMD()
-{
-	for (int i = 0; i < _maps.size(); i++)
-		if (!_maps.at(i)->parent())
-			delete _maps.at(i);
+MapSource::~MapSource()
+{		
+	if (_map && !_map->parent())
+		delete _map;
 }

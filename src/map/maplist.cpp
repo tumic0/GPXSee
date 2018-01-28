@@ -4,25 +4,26 @@
 #include "atlas.h"
 #include "offlinemap.h"
 #include "onlinemap.h"
-#include "omd.h"
+#include "mapsource.h"
 #include "maplist.h"
 
 
-bool MapList::loadList(const QString &path, bool dir)
+bool MapList::loadSource(const QString &path, bool dir)
 {
-	OMD omd;
+	MapSource ms;
+	Map *map;
 
-	if (!omd.loadFile(path)) {
+	if (!ms.loadFile(path)) {
 		if (dir)
-			_errorString += path + ": " + omd.errorString() + "\n";
+			_errorString += path + ": " + ms.errorString() + "\n";
 		else
-			_errorString = omd.errorString();
+			_errorString = ms.errorString();
 		return false;
 	}
 
-	_maps += omd.maps();
-	for (int i = 0; i < omd.maps().size(); i++)
-		omd.maps()[i]->setParent(this);
+	map = ms.map();
+	map->setParent(this);
+	_maps.append(map);
 
 	return true;
 }
@@ -71,7 +72,7 @@ bool MapList::loadFile(const QString &path, bool *atlas, bool dir)
 		return loadAtlas(path, dir);
 	} else if (suffix == "xml") {
 		*atlas = false;
-		return loadList(path, dir);
+		return loadSource(path, dir);
 	} else {
 		*atlas = false;
 		return loadMap(path, dir);
@@ -123,7 +124,7 @@ QString MapList::formats()
 	  + tr("OziExplorer maps (*.map)") + ";;"
 	  + tr("TrekBuddy maps/atlases (*.tar *.tba)") + ";;"
 	  + tr("GeoTIFF images (*.tif *.tiff)") + ";;"
-	  + tr("Online map definitions (*.xml)");
+	  + tr("Online map sources (*.xml)");
 }
 
 QStringList MapList::filter()

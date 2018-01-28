@@ -90,7 +90,7 @@ Section "GPXSee" SEC_APP
   
   ; Put the files there
   File "gpxsee.exe"
-  File "maps.xml"
+  File /r "maps"
   File "ellipsoids.csv"
   File "gcs.csv"
   File "pcs.csv"

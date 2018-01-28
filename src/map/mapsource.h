@@ -1,5 +1,5 @@
-#ifndef OMD_H
-#define OMD_H
+#ifndef MAPSOURCE_H
+#define MAPSOURCE_H
 
 #include <QList>
 #include "common/range.h"
@@ -8,24 +8,24 @@
 class Map;
 class QXmlStreamReader;
 
-class OMD
+class MapSource
 {
 public:
-	~OMD();
+	MapSource() : _map(0) {}
+	~MapSource();
 
 	bool loadFile(const QString &path);
 	const QString &errorString() const {return _errorString;}
 
-	const QList<Map*> &maps() const {return _maps;}
+	Map* map() const {return _map;}
 
 private:
 	RectC bounds(QXmlStreamReader &reader);
 	Range zooms(QXmlStreamReader &reader);
 	void map(QXmlStreamReader &reader);
-	void omd(QXmlStreamReader &reader);
 
 	QString _errorString;
-	QList<Map*> _maps;
+	Map* _map;
 };
 
-#endif // OMD_H
+#endif // MAPSOURCE_H

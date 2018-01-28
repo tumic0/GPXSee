@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+	<name>USGS Imagery</name>
+	<url>https://navigator.er.usgs.gov/tiles/aerial_Imagery.cgi/$z/$x/$y</url>
+	<zoom min="2" max="15"/>
+</map>

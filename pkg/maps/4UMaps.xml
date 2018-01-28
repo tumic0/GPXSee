@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+	<name>4UMaps</name>
+	<url>http://4umaps.eu/$z/$x/$y.png</url>
+	<zoom min="2" max="15"/>
+	<bounds bottom="-65"/>
+</map>
