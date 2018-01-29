@@ -661,8 +661,6 @@ void GUI::openFile()
 
 bool GUI::openFile(const QString &fileName)
 {
-	bool ret = true;
-
 	if (fileName.isEmpty() || _files.contains(fileName))
 		return false;
 
@@ -677,13 +675,14 @@ bool GUI::openFile(const QString &fileName)
 		updateWindowTitle();
 		updateGraphTabs();
 		updateMapView();
+
+		return true;
 	} else {
 		if (_files.isEmpty())
 			_fileActionGroup->setEnabled(false);
-		ret = false;
-	}
 
-	return ret;
+		return false;
+	}
 }
 
 bool GUI::loadFile(const QString &fileName)
@@ -1117,30 +1116,38 @@ void GUI::showGraphSliderInfo(bool show)
 
 void GUI::loadMap()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open map file"),
+	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open map file"),
 	  QString(), MapList::formats());
+	QStringList list = files;
 
+	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
+		loadMap(*it);
+}
+
+bool GUI::loadMap(const QString &fileName)
+{
 	if (fileName.isEmpty())
-		return;
+		return false;
 
-	int count = _ml->maps().count();
 	if (_ml->loadFile(fileName)) {
-		for (int i = count; i < _ml->maps().count(); i++) {
-			QAction *a = new QAction(_ml->maps().at(i)->name(), this);
-			a->setCheckable(true);
-			a->setActionGroup(_mapsActionGroup);
-			_mapsSignalMapper->setMapping(a, i);
-			connect(a, SIGNAL(triggered()), _mapsSignalMapper, SLOT(map()));
-			_mapActions.append(a);
-			_mapMenu->insertAction(_mapsEnd, a);
-		}
+		QAction *a = new QAction(_ml->maps().last()->name(), this);
+		a->setCheckable(true);
+		a->setActionGroup(_mapsActionGroup);
+		_mapsSignalMapper->setMapping(a, _ml->maps().size() - 1);
+		connect(a, SIGNAL(triggered()), _mapsSignalMapper, SLOT(map()));
+		_mapActions.append(a);
+		_mapMenu->insertAction(_mapsEnd, a);
 		_showMapAction->setEnabled(true);
 		_clearMapCacheAction->setEnabled(true);
 		_mapActions.last()->activate(QAction::Trigger);
+
+		return true;
 	} else {
 		QString error = tr("Error loading map:") + "\n\n"
 		  + fileName + "\n\n" + _ml->errorString();
 		QMessageBox::critical(this, APP_NAME, error);
+
+		return false;
 	}
 }
 

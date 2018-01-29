@@ -99,6 +99,7 @@ private:
 
 	bool openPOIFile(const QString &fileName);
 	bool loadFile(const QString &fileName);
+	bool loadMap(const QString &fileName);
 	void exportFile(const QString &fileName);
 	void updateStatusBarInfo();
 	void updateWindowTitle();
