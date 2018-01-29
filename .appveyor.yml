@@ -40,7 +40,7 @@ build_script:
 
     copy pkg\pcs.csv installer
 
-    xcopy pkg\maps installer\ /s/h/e/k/f/c
+    xcopy pkg\maps installer\maps /i
 
     copy licence.txt installer
 
