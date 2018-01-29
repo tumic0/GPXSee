@@ -82,6 +82,9 @@ bool MapList::loadFile(const QString &path, bool *atlas, bool dir)
 bool MapList::loadFile(const QString &path)
 {
 	bool atlas;
+
+	_errorString.clear();
+
 	return loadFile(path, &atlas, false);
 }
 
@@ -92,6 +95,8 @@ bool MapList::loadDir(const QString &path)
 	md.setSorting(QDir::DirsLast);
 	QFileInfoList ml = md.entryInfoList();
 	bool atlas, ret = true;
+
+	_errorString.clear();
 
 	for (int i = 0; i < ml.size(); i++) {
 		const QFileInfo &fi = ml.at(i);

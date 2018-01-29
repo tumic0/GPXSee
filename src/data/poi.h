@@ -18,7 +18,8 @@ class POI : public QObject
 public:
 	POI(QObject *parent = 0);
 
-	bool loadFile(const QString &fileName);
+	bool loadFile(const QString &path);
+	bool loadDir(const QString &path);
 	const QString &errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 
@@ -42,6 +43,8 @@ private:
 		int end;
 		bool enabled;
 	};
+
+	bool loadFile(const QString &path, bool dir);
 
 	POITree _tree;
 	QVector<Waypoint> _data;

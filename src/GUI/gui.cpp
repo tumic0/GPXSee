@@ -101,14 +101,14 @@ GUI::~GUI()
 void GUI::loadMaps()
 {
 	_ml = new MapList(this);
-	QString offline;
+	QString dir;
 
 	if (QFile::exists(USER_MAP_DIR))
-		offline = USER_MAP_DIR;
+		dir = USER_MAP_DIR;
 	else if (QFile::exists(GLOBAL_MAP_DIR))
-		offline = GLOBAL_MAP_DIR;
+		dir = GLOBAL_MAP_DIR;
 
-	if (!offline.isNull() && !_ml->loadDir(offline))
+	if (!dir.isNull() && !_ml->loadDir(dir))
 		qWarning(qPrintable(_ml->errorString()));
 
 	_map = new EmptyMap(this);
@@ -116,26 +116,16 @@ void GUI::loadMaps()
 
 void GUI::loadPOIs()
 {
-	QFileInfoList list;
-	QDir userDir(USER_POI_DIR);
-	QDir globalDir(GLOBAL_POI_DIR);
-
 	_poi = new POI(this);
+	QString dir;
 
-	if (userDir.exists())
-		list = userDir.entryInfoList(QStringList(), QDir::Files);
-	else
-		list = globalDir.entryInfoList(QStringList(), QDir::Files);
+	if (QFile::exists(USER_POI_DIR))
+		dir = USER_POI_DIR;
+	else if (QFile::exists(GLOBAL_POI_DIR))
+		dir = GLOBAL_POI_DIR;
 
-	for (int i = 0; i < list.size(); ++i) {
-		if (!_poi->loadFile(list.at(i).absoluteFilePath())) {
-			qWarning("Error loading POI file: %s: %s\n",
-			  qPrintable(list.at(i).fileName()),
-			  qPrintable(_poi->errorString()));
-			if (_poi->errorLine())
-				qWarning("Line: %d\n", _poi->errorLine());
-		}
-	}
+	if (!dir.isNull() && !_poi->loadDir(dir))
+		qWarning(qPrintable(_poi->errorString()));
 }
 
 void GUI::createBrowser()

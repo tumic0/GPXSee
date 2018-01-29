@@ -1,4 +1,5 @@
 #include <QFile>
+#include <QDir>
 #include "data.h"
 #include "poi.h"
 
@@ -9,20 +10,25 @@ POI::POI(QObject *parent) : QObject(parent)
 	_radius = 1000;
 }
 
-bool POI::loadFile(const QString &fileName)
+bool POI::loadFile(const QString &path, bool dir)
 {
 	Data data;
 	FileIndex index;
 
-	_errorString.clear();
-	_errorLine = 0;
-
 	index.enabled = true;
 	index.start = _data.size();
 
-	if (!data.loadFile(fileName)) {
-		_errorString = data.errorString();
-		_errorLine = data.errorLine();
+	if (!data.loadFile(path)) {
+		if (dir) {
+			if (data.errorLine())
+				_errorString += QString("%1:%2: %3\n").arg(path)
+				  .arg(data.errorLine()).arg(data.errorString());
+			else
+				_errorString += path + ": " + data.errorString() + "\n";
+		} else {
+			_errorString = data.errorString();
+			_errorLine = data.errorLine();
+		}
 		return false;
 	}
 
@@ -38,12 +44,45 @@ bool POI::loadFile(const QString &fileName)
 		_tree.Insert(c, c, i);
 	}
 
-	_files.append(fileName);
+	_files.append(path);
 	_indexes.append(index);
 
 	emit pointsChanged();
 
 	return true;
+}
+
+bool POI::loadFile(const QString &path)
+{
+	_errorString.clear();
+	_errorLine = 0;
+
+	return loadFile(path, false);
+}
+
+bool POI::loadDir(const QString &path)
+{
+	QDir md(path);
+	md.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+	QFileInfoList fl = md.entryInfoList();
+	bool ret = true;
+
+	_errorString.clear();
+	_errorLine = 0;
+
+	for (int i = 0; i < fl.size(); i++) {
+		const QFileInfo &fi = fl.at(i);
+
+		if (fi.isDir()) {
+			if (!loadDir(fi.absoluteFilePath()))
+				ret = false;
+		} else {
+			if (!loadFile(fi.absoluteFilePath(), true))
+				ret = false;
+		}
+	}
+
+	return ret;
 }
 
 static bool cb(size_t data, void* context)

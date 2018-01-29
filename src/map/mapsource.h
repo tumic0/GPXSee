@@ -25,7 +25,7 @@ private:
 	void map(QXmlStreamReader &reader);
 
 	QString _errorString;
-	Map* _map;
+	Map *_map;
 };
 
 #endif // MAPSOURCE_H
