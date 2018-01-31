@@ -74,7 +74,7 @@ static int projectionSetup(const QList<QByteArray> &list,
 {
 	bool r1, r2, r3;
 
-	for (int i = 6; i < 27; i += 3) {
+	for (int i = 6; i < 24; i += 3) {
 		QString ks = list[i].trimmed();
 		if (ks.isEmpty())
 			break;
@@ -129,7 +129,7 @@ void PCS::loadList(const QString &path)
 
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split(',');
-		if (list.size() != 27) {
+		if (list.size() != 24) {
 			qWarning("%s: %d: Format error", qPrintable(path), ln);
 			continue;
 		}
