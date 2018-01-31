@@ -11,21 +11,15 @@ class QXmlStreamReader;
 class MapSource
 {
 public:
-	MapSource() : _map(0) {}
-	~MapSource();
-
-	bool loadFile(const QString &path);
+	bool loadFile(const QString &path, Map **map);
 	const QString &errorString() const {return _errorString;}
-
-	Map* map() const {return _map;}
 
 private:
 	RectC bounds(QXmlStreamReader &reader);
 	Range zooms(QXmlStreamReader &reader);
-	void map(QXmlStreamReader &reader);
+	void map(QXmlStreamReader &reader, Map **map);
 
 	QString _errorString;
-	Map *_map;
 };
 
 #endif // MAPSOURCE_H

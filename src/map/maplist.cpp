@@ -13,7 +13,7 @@ bool MapList::loadSource(const QString &path, bool dir)
 	MapSource ms;
 	Map *map;
 
-	if (!ms.loadFile(path)) {
+	if (!ms.loadFile(path, &map)) {
 		if (dir)
 			_errorString += path + ": " + ms.errorString() + "\n";
 		else
@@ -21,7 +21,6 @@ bool MapList::loadSource(const QString &path, bool dir)
 		return false;
 	}
 
-	map = ms.map();
 	map->setParent(this);
 	_maps.append(map);
 

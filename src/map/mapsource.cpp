@@ -121,7 +121,7 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 	return RectC(Coordinates(left, top), Coordinates(right, bottom));
 }
 
-void MapSource::map(QXmlStreamReader &reader)
+void MapSource::map(QXmlStreamReader &reader, Map **map)
 {
 	QString name, url;
 	Range z(ZOOM_MIN, ZOOM_MAX);
@@ -143,10 +143,10 @@ void MapSource::map(QXmlStreamReader &reader)
 			reader.skipCurrentElement();
 	}
 
-	_map = new OnlineMap(name, url, z, b);
+	*map = reader.error() ? 0 : new OnlineMap(name, url, z, b);
 }
 
-bool MapSource::loadFile(const QString &path)
+bool MapSource::loadFile(const QString &path, Map **map)
 {
 	QFile file(path);
 	QXmlStreamReader reader;
@@ -160,20 +160,13 @@ bool MapSource::loadFile(const QString &path)
 
 	if (reader.readNextStartElement()) {
 		if (reader.name() == "map")
-			map(reader);
+			MapSource::map(reader, map);
 		else
 			reader.raiseError("Not an online map source file");
 	}
 
-	if (reader.error())
-		_errorString = QString("%1: %2").arg(reader.lineNumber())
-		  .arg(reader.errorString());
+	_errorString = reader.error() ? QString("%1: %2").arg(reader.lineNumber())
+	  .arg(reader.errorString()) : QString();
 
 	return !reader.error();
-}
-
-MapSource::~MapSource()
-{		
-	if (_map && !_map->parent())
-		delete _map;
 }
