@@ -613,17 +613,17 @@ void GUI::paths()
 	msgBox.setWindowTitle(tr("Paths"));
 	msgBox.setText("<h3>" + tr("Paths") + "</h3>");
 	msgBox.setInformativeText(
-	  "<style>td {white-space: pre; padding-right: 1.5em;}</style>"
-	  "<div><table><tr><td>" + tr("Map directory") + "</td><td><code>"
-	  + GLOBAL_MAP_DIR + "</code></td></tr><tr><td>" + tr("POI directory")
+	  "<style>td {white-space: pre; padding-right: 1em;}</style>"
+	  "<div><table><tr><td>" + tr("Map directory:") + "</td><td><code>"
+	  + GLOBAL_MAP_DIR + "</code></td></tr><tr><td>" + tr("POI directory:")
 	  + "</td><td><code>" + GLOBAL_POI_DIR + "</code></td></tr><tr><td>"
-	  + tr("GCS file") + "</td><td><code>" + GLOBAL_GCS_FILE
-	  + "</code></td></tr><tr><td>" + tr("PCS file") + "</td><td><code>"
-	  + GLOBAL_PCS_FILE + "</code></td></tr><tr><td>" + tr("Ellipsoids file")
+	  + tr("GCS file:") + "</td><td><code>" + GLOBAL_GCS_FILE
+	  + "</code></td></tr><tr><td>" + tr("PCS file:") + "</td><td><code>"
+	  + GLOBAL_PCS_FILE + "</code></td></tr><tr><td>" + tr("Ellipsoids file:")
 	  + "</td><td><code>" + GLOBAL_ELLIPSOID_FILE
-	  + "</code></td></tr>" + "<tr><td></td><td></td></tr><tr><td>"
-	  + tr("User directory") + "</td><td><code>" + USER_DIR
-	  + "</td></tr></table></div>"
+	  + "</code></td></tr>" + "<tr><td></td><td></td></tr></table></div>"
+	  "<div><table><tr><td>" + tr("User override directory:")
+	  + "</td><td><code>" + USER_DIR + "</td></tr></table></div>"
 	);
 
 	msgBox.exec();
