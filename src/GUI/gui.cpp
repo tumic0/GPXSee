@@ -200,8 +200,8 @@ void GUI::createActions()
 	addAction(_exitAction);
 
 	// Help & About
-	_dataSourcesAction = new QAction(tr("Data sources"), this);
-	connect(_dataSourcesAction, SIGNAL(triggered()), this, SLOT(dataSources()));
+	_pathsAction = new QAction(tr("Paths"), this);
+	connect(_pathsAction, SIGNAL(triggered()), this, SLOT(paths()));
 	_keysAction = new QAction(tr("Keyboard controls"), this);
 	connect(_keysAction, SIGNAL(triggered()), this, SLOT(keys()));
 	_aboutAction = new QAction(QIcon(QPixmap(APP_ICON)),
@@ -470,7 +470,7 @@ void GUI::createMenus()
 	settingsMenu->addAction(_openOptionsAction);
 
 	QMenu *helpMenu = menuBar()->addMenu(tr("Help"));
-	helpMenu->addAction(_dataSourcesAction);
+	helpMenu->addAction(_pathsAction);
 	helpMenu->addAction(_keysAction);
 	helpMenu->addSeparator();
 	helpMenu->addAction(_aboutAction);
@@ -606,34 +606,24 @@ void GUI::keys()
 	msgBox.exec();
 }
 
-void GUI::dataSources()
+void GUI::paths()
 {
 	QMessageBox msgBox(this);
 
-	msgBox.setWindowTitle(tr("Data sources"));
-	msgBox.setText("<h3>" + tr("Maps") + "</h3>");
+	msgBox.setWindowTitle(tr("Paths"));
+	msgBox.setText("<h3>" + tr("Paths") + "</h3>");
 	msgBox.setInformativeText(
-	  + "<p>" + tr("Maps are loaded on program startup from the following "
-		"directory:")
-	  + "</p><p><code>" + USER_MAP_DIR + "</code></p>"
-
-	  + "<h4>" + tr("Online maps") + "</h4><p>"
-	  + tr("The online map list file format is one map entry per line, "
-	    "consisting of the map name, tiles URL and an optional maximal zoom "
-	    "level delimited by a TAB character. The tile X and Y coordinates are "
-	    "replaced with $x and $y in the URL and the zoom level is replaced "
-	    "with $z. An example online map list file could look like:")
-	  + "</p><p><code>Map1	http://tile.server.com/map/$z/$x/$y.png	15"
-		  "<br/>Map2	http://mapserver.org/map/$z-$x-$y</code></p>"
-
-	  + "<h4>" + tr("Offline maps") + "</h4><p>"
-		" Supported map formats are OziExplorer maps, TrekBuddy maps/atlases "
-		" (tared and non-tared) and GeoTIFF images." + "</p>"
-
-	  + "<h3>" + tr("POIs") + "</h3><p>"
-	  + tr("To make GPXSee load a POI file automatically on startup, add "
-		"the file to the following directory:")
-		+ "</p><p><code>" + USER_POI_DIR + "</code></p>"
+	  "<style>td {white-space: pre; padding-right: 1.5em;}</style>"
+	  "<div><table><tr><td>" + tr("Map directory") + "</td><td><code>"
+	  + GLOBAL_MAP_DIR + "</code></td></tr><tr><td>" + tr("POI directory")
+	  + "</td><td><code>" + GLOBAL_POI_DIR + "</code></td></tr><tr><td>"
+	  + tr("GCS file") + "</td><td><code>" + GLOBAL_GCS_FILE
+	  + "</code></td></tr><tr><td>" + tr("PCS file") + "</td><td><code>"
+	  + GLOBAL_PCS_FILE + "</code></td></tr><tr><td>" + tr("Ellipsoids file")
+	  + "</td><td><code>" + GLOBAL_ELLIPSOID_FILE
+	  + "</code></td></tr>" + "<tr><td></td><td></td></tr><tr><td>"
+	  + tr("User directory") + "</td><td><code>" + USER_DIR
+	  + "</td></tr></table></div>"
 	);
 
 	msgBox.exec();

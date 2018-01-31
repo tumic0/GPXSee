@@ -40,7 +40,7 @@ public:
 private slots:
 	void about();
 	void keys();
-	void dataSources();
+	void paths();
 	void printFile();
 	void exportFile();
 	void openFile();
@@ -136,7 +136,7 @@ private:
 	QActionGroup *_mapsActionGroup;
 	QAction *_exitAction;
 	QAction *_keysAction;
-	QAction *_dataSourcesAction;
+	QAction *_pathsAction;
 	QAction *_aboutAction;
 	QAction *_aboutQtAction;
 	QAction *_printFileAction;
