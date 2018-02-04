@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+
+	<mime-type type="application/gpx+xml">
+		<comment>GPS Exchange Format</comment>
+		<sub-class-of type="application/xml"/>
+		<generic-icon name="application-xml"/>
+		<glob pattern="*.gpx"/>
+	</mime-type>
+
+	<mime-type type="application/tcx+xml">
+		<comment>Training Center XML</comment>
+		<sub-class-of type="application/xml"/>
+		<generic-icon name="application-xml"/>
+		<glob pattern="*.tcx"/>
+	</mime-type>
+
+	<mime-type type="application/kml+xml">
+		<comment>Keyhole Markup Language</comment>
+		<sub-class-of type="application/xml"/>
+		<generic-icon name="application-xml"/>
+		<glob pattern="*.kml"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.ant.fit">
+		<comment>Flexible and Interoperable Data Transfer</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application-octet-stream"/>
+		<glob pattern="*.fit"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.fai.igc">
+		<comment>Flight Recorder Data Format</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text-plain"/>
+		<glob pattern="*.igc"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.nmea.nmea">
+		<comment>NMEA 0183 data</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text-plain"/>
+		<glob pattern="*.nmea"/>
+	</mime-type>
+
+</mime-info>
