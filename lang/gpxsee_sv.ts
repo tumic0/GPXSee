@@ -302,32 +302,32 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="617"/>
         <source>Map directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartmapp:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="618"/>
         <source>POI directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>POI-mapp:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="620"/>
         <source>GCS file:</source>
-        <translation type="unfinished"></translation>
+        <translation>GCS-fil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="621"/>
         <source>PCS file:</source>
-        <translation type="unfinished"></translation>
+        <translation>PCS-fil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="622"/>
         <source>Ellipsoids file:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ellipsoids-fil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="625"/>
         <source>User override directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarspecificerad mapp:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="634"/>
@@ -844,22 +844,22 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="129"/>
         <source>OziExplorer maps</source>
-        <translation type="unfinished"></translation>
+        <translation>OziExplorer-kartor</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="130"/>
         <source>TrekBuddy maps/atlases</source>
-        <translation type="unfinished"></translation>
+        <translation>TrekBuddy-kartor/-atlaser</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="131"/>
         <source>GeoTIFF images</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoTIFF-bilder</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="132"/>
         <source>Online map sources</source>
-        <translation type="unfinished"></translation>
+        <translation>Online-kartkällor</translation>
     </message>
 </context>
 <context>
