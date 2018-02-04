@@ -99,11 +99,12 @@ bool Data::loadFile(const QString &fileName)
 
 QString Data::formats()
 {
-	return tr("Supported files (*.csv *.fit *.gpx *.igc *.kml *.nmea *.tcx)")
-	  + ";;" + tr("CSV files (*.csv)") + ";;" + tr("FIT files (*.fit)") + ";;"
-	  + tr("GPX files (*.gpx)") + ";;" + tr("IGC files (*.igc)") + ";;"
-	  + tr("KML files (*.kml)") + ";;" + tr("NMEA files (*.nmea)") + ";;"
-	  + tr("TCX files (*.tcx)") + ";;" + tr("All files (*)");
+	return
+	  tr("Supported files") + " (*.csv *.fit *.gpx *.igc *.kml *.nmea *.tcx);;"
+	  + tr("CSV files") + " (*.csv);;" + tr("FIT files") + " (*.fit);;"
+	  + tr("GPX files") + " (*.gpx);;" + tr("IGC files") + " (*.igc);;"
+	  + tr("KML files") + " (*.kml);;" + tr("NMEA files") + " (*.nmea);;"
+	  + tr("TCX files") + " (*.tcx);;" + tr("All files") + "(*)";
 }
 
 QStringList Data::filter()

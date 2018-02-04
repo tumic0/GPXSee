@@ -124,11 +124,12 @@ void MapList::clear()
 
 QString MapList::formats()
 {
-	return tr("Supported files (*.map *.tar *.tba *.tif *.tiff *.xml)") + ";;"
-	  + tr("OziExplorer maps (*.map)") + ";;"
-	  + tr("TrekBuddy maps/atlases (*.tar *.tba)") + ";;"
-	  + tr("GeoTIFF images (*.tif *.tiff)") + ";;"
-	  + tr("Online map sources (*.xml)");
+	return
+	  tr("Supported files") + " (*.map *.tar *.tba *.tif *.tiff *.xml);;"
+	  + tr("OziExplorer maps") + " (*.map);;"
+	  + tr("TrekBuddy maps/atlases") + " (*.tar *.tba);;"
+	  + tr("GeoTIFF images") + " (*.tif *.tiff);;"
+	  + tr("Online map sources") + " (*.xml)";
 }
 
 QStringList MapList::filter()

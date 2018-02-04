@@ -47,49 +47,49 @@
 <context>
     <name>Data</name>
     <message>
-        <location filename="../src/data/data.cpp" line="102"/>
-        <source>Supported files (*.csv *.fit *.gpx *.igc *.kml *.nmea *.tcx)</source>
-        <translation>Filer som stöds (*.csv *.fit *.gpx *.igc *.kml *.nmea *.tcx)</translation>
-    </message>
-    <message>
         <location filename="../src/data/data.cpp" line="103"/>
-        <source>CSV files (*.csv)</source>
-        <translation>CSV-filer (*.csv)</translation>
-    </message>
-    <message>
-        <location filename="../src/data/data.cpp" line="103"/>
-        <source>FIT files (*.fit)</source>
-        <translation>FIT-filer (*.fit)</translation>
+        <source>Supported files</source>
+        <translation>Filer som stöds</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="104"/>
-        <source>GPX files (*.gpx)</source>
-        <translation>GPX-filer (*.gpx)</translation>
+        <source>CSV files</source>
+        <translation>CSV-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="104"/>
-        <source>IGC files (*.igc)</source>
-        <translation>IGC-filer (*.igc)</translation>
+        <source>FIT files</source>
+        <translation>FIT-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="105"/>
-        <source>KML files (*.kml)</source>
-        <translation>KML-filer (*.kml)</translation>
+        <source>GPX files</source>
+        <translation>GPX-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="105"/>
-        <source>NMEA files (*.nmea)</source>
-        <translation>NMEA-filer (*.nmea)</translation>
+        <source>IGC files</source>
+        <translation>IGC-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="106"/>
-        <source>TCX files (*.tcx)</source>
-        <translation>TCX-filer (*.tcx)</translation>
+        <source>KML files</source>
+        <translation>KML-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="106"/>
-        <source>All files (*)</source>
-        <translation>Alla filer (*)</translation>
+        <source>NMEA files</source>
+        <translation>NMEA-filer</translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="107"/>
+        <source>TCX files</source>
+        <translation>TCX-filer</translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="107"/>
+        <source>All files</source>
+        <translation>Alla filer</translation>
     </message>
 </context>
 <context>
@@ -295,335 +295,340 @@
 <context>
     <name>GUI</name>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="600"/>
+        <location filename="../src/GUI/gui.cpp" line="562"/>
         <source>GPXSee is distributed under the terms of the GNU General Public License version 3. For more info about GPXSee visit the project homepage at </source>
         <translation>GPXSee distribueras under vilkoren för GNU General Public License version 3. För mer info om GPXSee, besök hemsidan på </translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="685"/>
+        <location filename="../src/GUI/gui.cpp" line="617"/>
+        <source>Map directory:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="618"/>
+        <source>POI directory:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="620"/>
+        <source>GCS file:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="621"/>
+        <source>PCS file:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="622"/>
+        <source>Ellipsoids file:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="625"/>
+        <source>User override directory:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="634"/>
         <source>Open file</source>
         <translation>Öppna fil</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="775"/>
+        <location filename="../src/GUI/gui.cpp" line="723"/>
         <source>Open POI file</source>
         <translation>Öppna POI-fil</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="234"/>
+        <location filename="../src/GUI/gui.cpp" line="196"/>
         <source>Quit</source>
         <translation>Avsluta</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="243"/>
-        <location filename="../src/GUI/gui.cpp" line="617"/>
-        <location filename="../src/GUI/gui.cpp" line="618"/>
+        <location filename="../src/GUI/gui.cpp" line="205"/>
+        <location filename="../src/GUI/gui.cpp" line="579"/>
+        <location filename="../src/GUI/gui.cpp" line="580"/>
         <source>Keyboard controls</source>
         <translation>Snabbtangenter</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="268"/>
+        <location filename="../src/GUI/gui.cpp" line="230"/>
         <source>Close</source>
         <translation>Stäng</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="274"/>
+        <location filename="../src/GUI/gui.cpp" line="236"/>
         <source>Reload</source>
         <translation>Uppdatera</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="529"/>
+        <location filename="../src/GUI/gui.cpp" line="491"/>
         <source>Show</source>
         <translation>Visa</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="445"/>
-        <location filename="../src/GUI/gui.cpp" line="523"/>
+        <location filename="../src/GUI/gui.cpp" line="407"/>
+        <location filename="../src/GUI/gui.cpp" line="485"/>
         <source>File</source>
         <translation>Arkiv</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="241"/>
-        <location filename="../src/GUI/gui.cpp" line="651"/>
-        <location filename="../src/GUI/gui.cpp" line="652"/>
-        <source>Data sources</source>
-        <translation>Datakällor</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/gui.cpp" line="285"/>
+        <location filename="../src/GUI/gui.cpp" line="247"/>
         <source>Close POI files</source>
         <translation>Stäng POI-filer</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="287"/>
+        <location filename="../src/GUI/gui.cpp" line="249"/>
         <source>Overlap POIs</source>
         <translation>Överlappa POI:er</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="291"/>
+        <location filename="../src/GUI/gui.cpp" line="253"/>
         <source>Show POI labels</source>
         <translation>Visa POI-namn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="296"/>
+        <location filename="../src/GUI/gui.cpp" line="258"/>
         <source>Show POIs</source>
         <translation>Visa POI:er</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="305"/>
+        <location filename="../src/GUI/gui.cpp" line="267"/>
         <source>Show map</source>
         <translation>Visa karta</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="315"/>
+        <location filename="../src/GUI/gui.cpp" line="277"/>
         <source>Clear tile cache</source>
         <translation>Rensa kart-cache</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="252"/>
+        <location filename="../src/GUI/gui.cpp" line="214"/>
         <source>Open...</source>
         <translation>Öppna...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="282"/>
+        <location filename="../src/GUI/gui.cpp" line="203"/>
+        <location filename="../src/GUI/gui.cpp" line="613"/>
+        <location filename="../src/GUI/gui.cpp" line="614"/>
+        <source>Paths</source>
+        <translation type="unfinished">Sökvägar</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="244"/>
         <source>Load POI file...</source>
         <translation>Läs in POI-fil...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="313"/>
+        <location filename="../src/GUI/gui.cpp" line="275"/>
         <source>Load map...</source>
         <translation>Läs in karta...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="319"/>
-        <location filename="../src/GUI/gui.cpp" line="323"/>
-        <location filename="../src/GUI/gui.cpp" line="634"/>
+        <location filename="../src/GUI/gui.cpp" line="281"/>
+        <location filename="../src/GUI/gui.cpp" line="285"/>
+        <location filename="../src/GUI/gui.cpp" line="596"/>
         <source>Next map</source>
         <translation>Nästa karta</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="333"/>
+        <location filename="../src/GUI/gui.cpp" line="295"/>
         <source>Show tracks</source>
         <translation>Visa spår</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="337"/>
+        <location filename="../src/GUI/gui.cpp" line="299"/>
         <source>Show routes</source>
         <translation>Visa rutter</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="341"/>
+        <location filename="../src/GUI/gui.cpp" line="303"/>
         <source>Show waypoints</source>
         <translation>Visa vägpunkter</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="345"/>
+        <location filename="../src/GUI/gui.cpp" line="307"/>
         <source>Waypoint labels</source>
         <translation>Vägpunktsnamn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="356"/>
+        <location filename="../src/GUI/gui.cpp" line="318"/>
         <source>Show graphs</source>
         <translation>Visa diagram</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="376"/>
+        <location filename="../src/GUI/gui.cpp" line="338"/>
         <source>Show grid</source>
         <translation>Visa stödlinjer</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="380"/>
+        <location filename="../src/GUI/gui.cpp" line="342"/>
         <source>Show slider info</source>
         <translation>Visa reglageinfo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="386"/>
+        <location filename="../src/GUI/gui.cpp" line="348"/>
         <source>Show toolbars</source>
         <translation>Visa verktygsfält</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="392"/>
+        <location filename="../src/GUI/gui.cpp" line="354"/>
         <source>Total time</source>
         <translation>Total tid</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="397"/>
-        <location filename="../src/GUI/gui.cpp" line="950"/>
+        <location filename="../src/GUI/gui.cpp" line="359"/>
+        <location filename="../src/GUI/gui.cpp" line="898"/>
         <source>Moving time</source>
         <translation>Förflyttningstid</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="404"/>
+        <location filename="../src/GUI/gui.cpp" line="366"/>
         <source>Metric</source>
         <translation>Meter</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="409"/>
+        <location filename="../src/GUI/gui.cpp" line="371"/>
         <source>Imperial</source>
         <translation>Imperial</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="415"/>
+        <location filename="../src/GUI/gui.cpp" line="377"/>
         <source>Fullscreen mode</source>
         <translation>Helskärmsläge</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="421"/>
+        <location filename="../src/GUI/gui.cpp" line="383"/>
         <source>Options...</source>
         <translation>Alternativ...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="427"/>
+        <location filename="../src/GUI/gui.cpp" line="389"/>
         <source>Next</source>
         <translation>Nästa</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="430"/>
+        <location filename="../src/GUI/gui.cpp" line="392"/>
         <source>Previous</source>
         <translation>Föregående</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="434"/>
+        <location filename="../src/GUI/gui.cpp" line="396"/>
         <source>Last</source>
         <translation>Sista</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="437"/>
+        <location filename="../src/GUI/gui.cpp" line="399"/>
         <source>First</source>
         <translation>Första</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="459"/>
+        <location filename="../src/GUI/gui.cpp" line="421"/>
         <source>Map</source>
         <translation>Karta</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="467"/>
+        <location filename="../src/GUI/gui.cpp" line="429"/>
         <source>Graph</source>
         <translation>Diagram</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="476"/>
+        <location filename="../src/GUI/gui.cpp" line="438"/>
         <source>POI</source>
         <translation>POI</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="477"/>
+        <location filename="../src/GUI/gui.cpp" line="439"/>
         <source>POI files</source>
         <translation>POI-filer</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="488"/>
+        <location filename="../src/GUI/gui.cpp" line="450"/>
         <source>Data</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="489"/>
+        <location filename="../src/GUI/gui.cpp" line="451"/>
         <source>Display</source>
         <translation>Visa</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="497"/>
+        <location filename="../src/GUI/gui.cpp" line="459"/>
         <source>Settings</source>
         <translation>Inställningar</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="501"/>
+        <location filename="../src/GUI/gui.cpp" line="463"/>
         <source>Units</source>
         <translation>Enhet</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="510"/>
+        <location filename="../src/GUI/gui.cpp" line="472"/>
         <source>Help</source>
         <translation>Hjälp</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="627"/>
+        <location filename="../src/GUI/gui.cpp" line="589"/>
         <source>Append file</source>
         <translation>Lägg till fil</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="628"/>
+        <location filename="../src/GUI/gui.cpp" line="590"/>
         <source>Next/Previous</source>
         <translation>Nästa/Föregående</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="630"/>
+        <location filename="../src/GUI/gui.cpp" line="592"/>
         <source>Toggle graph type</source>
         <translation>Växla diagramtyp</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="632"/>
+        <location filename="../src/GUI/gui.cpp" line="594"/>
         <source>Toggle time type</source>
         <translation>Växla tidstyp</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="636"/>
+        <location filename="../src/GUI/gui.cpp" line="598"/>
         <source>Previous map</source>
         <translation>Föregående karta</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="637"/>
+        <location filename="../src/GUI/gui.cpp" line="599"/>
         <source>Zoom in</source>
         <translation>Zooma in</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="639"/>
+        <location filename="../src/GUI/gui.cpp" line="601"/>
         <source>Zoom out</source>
         <translation>Zooma ut</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="641"/>
+        <location filename="../src/GUI/gui.cpp" line="603"/>
         <source>Digital zoom</source>
         <translation>Digital zoom</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="642"/>
+        <location filename="../src/GUI/gui.cpp" line="604"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="654"/>
-        <source>Online maps</source>
-        <translation>Online-kartor</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/gui.cpp" line="655"/>
-        <source>Online map URLs are read on program startup from the following file:</source>
-        <translation>Online-kartors URL:er, läses från följande fil vid programstart:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/gui.cpp" line="658"/>
-        <source>The file format is one map entry per line, consisting of the map name, tiles URL and an optional maximal zoom level delimited by a TAB character. The tile X and Y coordinates are replaced with $x and $y in the URL and the zoom level is replaced with $z. An example map file could look like:</source>
-        <translation>Filformatet är en kartpost per rad, bestående av kartans namn, webbadress och maximal zoomnivå om tillämpligt, Kartrutans X- och Y-koordinater ersätts med $x och $y, i webbadressen och zoomnivån ersätts med $z. Ett exempel på en kartfil kan se ut så här:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/gui.cpp" line="666"/>
-        <source>Offline maps</source>
-        <translation>Offline-kartor</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/gui.cpp" line="667"/>
-        <source>Offline maps are loaded on program startup from the following directory:</source>
-        <translation>Offline-kartor läses in från följande mapp vid programstart:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/gui.cpp" line="1151"/>
+        <location filename="../src/GUI/gui.cpp" line="1099"/>
         <source>Open map file</source>
         <translation>Öppna kartfil</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1172"/>
+        <location filename="../src/GUI/gui.cpp" line="1126"/>
         <source>Error loading map:</source>
         <translation>Fel vid inläsning av karta:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1181"/>
+        <location filename="../src/GUI/gui.cpp" line="1137"/>
         <source>No files loaded</source>
         <translation>Inga filer inlästa</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1185"/>
+        <location filename="../src/GUI/gui.cpp" line="1141"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n filer</numerusform>
@@ -631,123 +636,108 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="936"/>
-        <location filename="../src/GUI/gui.cpp" line="939"/>
+        <location filename="../src/GUI/gui.cpp" line="884"/>
+        <location filename="../src/GUI/gui.cpp" line="887"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="928"/>
+        <location filename="../src/GUI/gui.cpp" line="876"/>
         <source>Routes</source>
         <translation>Rutter</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="621"/>
+        <location filename="../src/GUI/gui.cpp" line="583"/>
         <source>Next file</source>
         <translation>Nästa fil</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="597"/>
+        <location filename="../src/GUI/gui.cpp" line="559"/>
         <source>Version </source>
         <translation>Version </translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="257"/>
+        <location filename="../src/GUI/gui.cpp" line="219"/>
         <source>Print...</source>
         <translation>Skriv ut...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="262"/>
+        <location filename="../src/GUI/gui.cpp" line="224"/>
         <source>Export to PDF...</source>
         <translation>Exportera till PDF...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="930"/>
+        <location filename="../src/GUI/gui.cpp" line="878"/>
         <source>Waypoints</source>
         <translation>Vägpunkter</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="622"/>
+        <location filename="../src/GUI/gui.cpp" line="584"/>
         <source>Previous file</source>
         <translation>Föregående fil</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="349"/>
+        <location filename="../src/GUI/gui.cpp" line="311"/>
         <source>Route waypoints</source>
         <translation>Ruttvägpunkter</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="624"/>
+        <location filename="../src/GUI/gui.cpp" line="586"/>
         <source>First file</source>
         <translation>Första filen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="626"/>
+        <location filename="../src/GUI/gui.cpp" line="588"/>
         <source>Last file</source>
         <translation>Sista filen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="670"/>
-        <source>The expected structure is one map/atlas in a separate subdirectory. Supported map formats are OziExplorer maps and TrekBuddy maps/atlases (tared and non-tared).</source>
-        <translation>Den förväntade strukturen är en karta/atlas i en separat undermapp. Kartformat som stöds är OziExplorer kartor och TrekBuddy-kartor/-kartsamlingar (tarerade och icke tarerade).</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/gui.cpp" line="675"/>
-        <source>To make GPXSee load a POI file automatically on startup, add the file to the following directory:</source>
-        <translation>För att GPXSee skall läsa in en POI-fil automatiskt vid programstart, läggs filen i följande mapp:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/gui.cpp" line="764"/>
+        <location filename="../src/GUI/gui.cpp" line="712"/>
         <source>Error loading data file:</source>
         <translation>Fel vid inläsning av datafil:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="767"/>
-        <location filename="../src/GUI/gui.cpp" line="792"/>
+        <location filename="../src/GUI/gui.cpp" line="715"/>
+        <location filename="../src/GUI/gui.cpp" line="740"/>
         <source>Line: %1</source>
         <translation>Rad: %1</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="789"/>
+        <location filename="../src/GUI/gui.cpp" line="737"/>
         <source>Error loading POI file:</source>
         <translation>Fel vid inläsning av POI-fil:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="922"/>
+        <location filename="../src/GUI/gui.cpp" line="870"/>
         <source>Name</source>
         <translation>Namn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="926"/>
+        <location filename="../src/GUI/gui.cpp" line="874"/>
         <source>Tracks</source>
         <translation>Spår</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="246"/>
-        <location filename="../src/GUI/gui.cpp" line="596"/>
+        <location filename="../src/GUI/gui.cpp" line="208"/>
+        <location filename="../src/GUI/gui.cpp" line="558"/>
         <source>About GPXSee</source>
         <translation>Om GPXSee</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="534"/>
+        <location filename="../src/GUI/gui.cpp" line="496"/>
         <source>Navigation</source>
         <translation>Navigation</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="674"/>
-        <source>POIs</source>
-        <translation>POI:er</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/gui.cpp" line="364"/>
-        <location filename="../src/GUI/gui.cpp" line="946"/>
+        <location filename="../src/GUI/gui.cpp" line="326"/>
+        <location filename="../src/GUI/gui.cpp" line="894"/>
         <source>Distance</source>
         <translation>Avstånd</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="370"/>
-        <location filename="../src/GUI/gui.cpp" line="498"/>
-        <location filename="../src/GUI/gui.cpp" line="948"/>
+        <location filename="../src/GUI/gui.cpp" line="332"/>
+        <location filename="../src/GUI/gui.cpp" line="460"/>
+        <location filename="../src/GUI/gui.cpp" line="896"/>
         <source>Time</source>
         <translation>Tid</translation>
     </message>
@@ -847,14 +837,29 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="141"/>
-        <source>Map files (*.map *.tba *.tar)</source>
-        <translation>Kartfiler (*.map *.tba *.tar)</translation>
+        <location filename="../src/map/maplist.cpp" line="128"/>
+        <source>Supported files</source>
+        <translation>Filer som stöds</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="142"/>
-        <source>URL list files (*.txt)</source>
-        <translation>URL-listfiler (*.txt)</translation>
+        <location filename="../src/map/maplist.cpp" line="129"/>
+        <source>OziExplorer maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="130"/>
+        <source>TrekBuddy maps/atlases</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="131"/>
+        <source>GeoTIFF images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="132"/>
+        <source>Online map sources</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
