@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=GPXSee
 Comment=GPS log file viewer and analyzer
+Comment[cz]=Prohlížeč a analyzátor GPS logů
 Comment[fi]=Ohjelma GPS-lokien katseluun ja analysointiin
 Comment[ru]=Программа для просмотра и анализа GPS логов
 Exec=gpxsee %F
