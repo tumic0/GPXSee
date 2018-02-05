@@ -1,0 +1,13 @@
+# C++ objects and libs
+*.o
+
+# Qt-es
+/.qmake.stash
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+Makefile*
+*.qm
+
+# Binary
+GPXSee
