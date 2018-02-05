@@ -14,7 +14,8 @@
 #define TIME_TYPE_SETTING                 "timeType"
 #define TIME_TYPE_DEFAULT                 Total
 #define UNITS_SETTING                     "units"
-#define UNITS_DEFAULT                     (IMPERIAL_UNITS() ? Imperial : Metric)
+// #define UNITS_DEFAULT                     (IMPERIAL_UNITS() ? Imperial : Metric)
+#define UNITS_DEFAULT                     Metric
 #define SHOW_TOOLBARS_SETTING             "toolbar"
 #define SHOW_TOOLBARS_DEFAULT             true
 
