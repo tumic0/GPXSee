@@ -382,7 +382,7 @@
         <location filename="../src/GUI/gui.cpp" line="613"/>
         <location filename="../src/GUI/gui.cpp" line="614"/>
         <source>Paths</source>
-        <translation type="unfinished">Треки</translation>
+        <translation>Пути</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="244"/>
@@ -601,32 +601,32 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="617"/>
         <source>Map directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Директория с картами:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="618"/>
         <source>POI directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Директория с POI:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="620"/>
         <source>GCS file:</source>
-        <translation type="unfinished"></translation>
+        <translation>GCS файл:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="621"/>
         <source>PCS file:</source>
-        <translation type="unfinished"></translation>
+        <translation>PCS файл:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="622"/>
         <source>Ellipsoids file:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ellipsoids файл:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="625"/>
         <source>User override directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог пользовательских настроек:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="876"/>
@@ -845,22 +845,22 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="129"/>
         <source>OziExplorer maps</source>
-        <translation type="unfinished"></translation>
+        <translation>OziExplorer карты</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="130"/>
         <source>TrekBuddy maps/atlases</source>
-        <translation type="unfinished"></translation>
+        <translation>TrekBuddy карты/атласы</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="131"/>
         <source>GeoTIFF images</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoTIFF изображения</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="132"/>
         <source>Online map sources</source>
-        <translation type="unfinished"></translation>
+        <translation>Источники онлайн карт</translation>
     </message>
 </context>
 <context>
