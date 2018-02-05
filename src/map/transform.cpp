@@ -6,7 +6,7 @@ void Transform::simple(const QList<ReferencePoint> &points)
 {
 	if (points.at(0).xy.x() == points.at(1).xy.x()
 	  || points.at(0).xy.y() == points.at(1).xy.y()) {
-		_errorString = "Invalid reference points tuple";
+		_errorString = tr("Invalid reference points tuple");
 		return;
 	}
 
@@ -55,7 +55,7 @@ void Transform::affine(const QList<ReferencePoint> &points)
 
 	Matrix M = Q.augemented(c);
 	if (!M.eliminate()) {
-		_errorString = "Singular transformation matrix";
+		_errorString = tr("Singular transformation matrix");
 		return;
 	}
 
@@ -66,7 +66,7 @@ void Transform::affine(const QList<ReferencePoint> &points)
 Transform::Transform(const QList<ReferencePoint> &points)
 {
 	if (points.count() < 2)
-		_errorString = "Insufficient number of reference points";
+		_errorString = tr("Insufficient number of reference points");
 	else if (points.size() == 2)
 		simple(points);
 	else

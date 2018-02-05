@@ -6,7 +6,7 @@ qreal KMLParser::number()
 	bool res;
 	qreal ret = _reader.readElementText().toDouble(&res);
 	if (!res)
-		_reader.raiseError(QString("Invalid %1").arg(
+		_reader.raiseError(tr("Invalid %1").arg(
 		  _reader.name().toString()));
 
 	return ret;
@@ -17,7 +17,7 @@ QDateTime KMLParser::time()
 	QDateTime d = QDateTime::fromString(_reader.readElementText(),
 	  Qt::ISODate);
 	if (!d.isValid())
-		_reader.raiseError(QString("Invalid %1").arg(
+		_reader.raiseError(tr("Invalid %1").arg(
 		  _reader.name().toString()));
 
 	return d;
@@ -205,7 +205,7 @@ void KMLParser::lineString(TrackData &track)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "coordinates") {
 			if (!lineCoordinates(track))
-				_reader.raiseError("Invalid coordinates");
+				_reader.raiseError(tr("Invalid coordinates"));
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -216,19 +216,19 @@ void KMLParser::point(Waypoint &waypoint)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "coordinates") {
 			if (!pointCoordinates(waypoint))
-				_reader.raiseError("Invalid coordinates");
+				_reader.raiseError(tr("Invalid coordinates"));
 		} else
 			_reader.skipCurrentElement();
 	}
 
 	if (waypoint.coordinates().isNull())
-		_reader.raiseError("Missing Point coordinates");
+		_reader.raiseError(tr("Missing Point coordinates"));
 }
 
 void KMLParser::heartRate(TrackData &track, int start)
 {
 	int i = start;
-	const char error[] = "Heartrate data count mismatch";
+	QString error = tr("Heartrate data count mismatch");
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "value") {
@@ -249,7 +249,7 @@ void KMLParser::heartRate(TrackData &track, int start)
 void KMLParser::cadence(TrackData &track, int start)
 {
 	int i = start;
-	const char error[] = "Cadence data count mismatch";
+	QString error = tr("Cadence data count mismatch");
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "value") {
@@ -270,7 +270,7 @@ void KMLParser::cadence(TrackData &track, int start)
 void KMLParser::speed(TrackData &track, int start)
 {
 	int i = start;
-	const char error[] = "Speed data count mismatch";
+	QString error = tr("Speed data count mismatch");
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "value") {
@@ -291,7 +291,7 @@ void KMLParser::speed(TrackData &track, int start)
 void KMLParser::temperature(TrackData &track, int start)
 {
 	int i = start;
-	const char error[] = "Temperature data count mismatch";
+	QString error = tr("Temperature data count mismatch");
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == "value") {
@@ -343,7 +343,7 @@ void KMLParser::extendedData(TrackData &track, int start)
 
 void KMLParser::track(TrackData &track)
 {
-	const char error[] = "gx:coord/when element count mismatch";
+	QString error = tr("gx:coord/when element count mismatch");
 	int first = track.size();
 	int i = first;
 
@@ -356,7 +356,7 @@ void KMLParser::track(TrackData &track)
 				_reader.raiseError(error);
 				return;
 			} else if (!coord(track[i])) {
-				_reader.raiseError("Invalid coordinates");
+				_reader.raiseError(tr("Invalid coordinates"));
 				return;
 			}
 			i++;
@@ -498,7 +498,7 @@ bool KMLParser::parse(QFile *file, QList<TrackData> &tracks,
 		if (_reader.name() == "kml")
 			kml(tracks, waypoints);
 		else
-			_reader.raiseError("Not a KML file");
+			_reader.raiseError(tr("Not a KML file"));
 	}
 
 	return !_reader.error();

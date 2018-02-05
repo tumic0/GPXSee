@@ -1,12 +1,15 @@
 #ifndef TCXPARSER_H
 #define TCXPARSER_H
 
+#include <QCoreApplication>
 #include <QXmlStreamReader>
 #include "parser.h"
 
 
 class TCXParser : public Parser
 {
+	Q_DECLARE_TR_FUNCTIONS(TCXParser)
+
 public:
 	bool parse(QFile *file, QList<TrackData> &tracks,
 	  QList<RouteData> &routes, QList<Waypoint> &waypoints);

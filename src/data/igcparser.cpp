@@ -106,14 +106,14 @@ bool IGCParser::readHRecord(const char *line, int len)
 	int y = str2int(line + 9, 2);
 
 	if (y < 0 || m < 0 || d < 0) {
-		_errorString = "Invalid date header format";
+		_errorString = tr("Invalid date header format");
 		return false;
 	}
 
 	_date = QDate(y + 2000 < QDate::currentDate().year() ? 2000 + y : 1900 + y,
 	  m, d);
 	if (!_date.isValid()) {
-		_errorString = "Invalid date";
+		_errorString = tr("Invalid date");
 		return false;
 	}
 
@@ -130,21 +130,21 @@ bool IGCParser::readBRecord(TrackData &track, const char *line, int len)
 		return false;
 
 	if (!readTimestamp(line + 1, time)) {
-		_errorString = "Invalid timestamp";
+		_errorString = tr("Invalid timestamp");
 		return false;
 	}
 
 	if (!readLat(line + 7, lat)) {
-		_errorString = "Invalid latitude";
+		_errorString = tr("Invalid latitude");
 		return false;
 	}
 	if (!readLon(line + 15, lon)) {
-		_errorString = "Invalid longitude";
+		_errorString = tr("Invalid longitude");
 		return false;
 	}
 
 	if (!readAltitude(line + 24, ele)) {
-		_errorString = "Invalid altitude";
+		_errorString = tr("Invalid altitude");
 		return false;
 	}
 
@@ -170,11 +170,11 @@ bool IGCParser::readCRecord(RouteData &route, const char *line, int len)
 		return false;
 
 	if (!readLat(line + 1, lat)) {
-		_errorString = "Invalid latitude";
+		_errorString = tr("Invalid latitude");
 		return false;
 	}
 	if (!readLon(line + 9, lon)) {
-		_errorString = "Invalid longitude";
+		_errorString = tr("Invalid longitude");
 		return false;
 	}
 
@@ -205,16 +205,16 @@ bool IGCParser::parse(QFile *file, QList<TrackData> &tracks,
 		len = file->readLine(line, sizeof(line));
 
 		if (len < 0) {
-			_errorString = "I/O error";
+			_errorString = tr("I/O error");
 			return false;
 		} else if (len > (qint64)sizeof(line) - 1) {
-			_errorString = "Line limit exceeded";
+			_errorString = tr("Line limit exceeded");
 			return false;
 		}
 
 		if (_errorLine == 1) {
 			if (!readARecord(line, len)) {
-				_errorString = "Invalid/missing A record";
+				_errorString = tr("Invalid/missing A record");
 				return false;
 			}
 		} else {
@@ -231,7 +231,7 @@ bool IGCParser::parse(QFile *file, QList<TrackData> &tracks,
 				}
 			} else if (line[0] == 'B') {
 				if (_date.isNull()) {
-					_errorString = "Missing date header";
+					_errorString = tr("Missing date header");
 					return false;
 				}
 				if (!track) {

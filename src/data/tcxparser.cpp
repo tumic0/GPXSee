@@ -13,7 +13,7 @@ qreal TCXParser::number()
 	bool res;
 	qreal ret = _reader.readElementText().toDouble(&res);
 	if (!res)
-		_reader.raiseError(QString("Invalid %1").arg(
+		_reader.raiseError(tr("Invalid %1").arg(
 		  _reader.name().toString()));
 
 	return ret;
@@ -24,7 +24,7 @@ QDateTime TCXParser::time()
 	QDateTime d = QDateTime::fromString(_reader.readElementText(),
 	  Qt::ISODate);
 	if (!d.isValid())
-		_reader.raiseError(QString("Invalid %1").arg(
+		_reader.raiseError(tr("Invalid %1").arg(
 		  _reader.name().toString()));
 
 	return d;
@@ -40,13 +40,13 @@ Coordinates TCXParser::position()
 		if (_reader.name() == "LatitudeDegrees") {
 			val = _reader.readElementText().toDouble(&res);
 			if (!res || (val < -90.0 || val > 90.0))
-				_reader.raiseError("Invalid LatitudeDegrees");
+				_reader.raiseError(tr("Invalid LatitudeDegrees"));
 			else
 				pos.setLat(val);
 		} else if (_reader.name() == "LongitudeDegrees") {
 			val = _reader.readElementText().toDouble(&res);
 			if (!res || (val < -180.0 || val > 180.0))
-				_reader.raiseError("Invalid LongitudeDegrees");
+				_reader.raiseError(tr("Invalid LongitudeDegrees"));
 			else
 				pos.setLon(val);
 		} else
@@ -241,7 +241,7 @@ bool TCXParser::parse(QFile *file, QList<TrackData> &tracks,
 		if (_reader.name() == "TrainingCenterDatabase")
 			tcx(tracks, waypoints);
 		else
-			_reader.raiseError("Not a TCX file");
+			_reader.raiseError(tr("Not a TCX file"));
 	}
 
 	return !_reader.error();

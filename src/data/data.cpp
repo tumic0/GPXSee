@@ -91,7 +91,7 @@ bool Data::loadFile(const QString &fileName)
 			  it.value()->errorLine(), qPrintable(it.value()->errorString()));
 
 		_errorLine = 0;
-		_errorString = "Unknown format";
+		_errorString = tr("Unknown format");
 	}
 
 	return false;

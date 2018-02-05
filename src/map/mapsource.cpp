@@ -24,7 +24,7 @@ Range MapSource::zooms(QXmlStreamReader &reader)
 		min = attr.value("min").toInt(&res);
 #endif // QT_VERSION < 5
 		if (!res || (min < ZOOM_MIN || min > ZOOM_MAX)) {
-			reader.raiseError("Invalid minimal zoom level");
+			reader.raiseError(tr("Invalid minimal zoom level"));
 			return Range();
 		}
 	} else
@@ -37,14 +37,14 @@ Range MapSource::zooms(QXmlStreamReader &reader)
 		max = attr.value("max").toInt(&res);
 #endif // QT_VERSION < 5
 		if (!res || (max < ZOOM_MIN || max > ZOOM_MAX)) {
-			reader.raiseError("Invalid maximal zoom level");
+			reader.raiseError(tr("Invalid maximal zoom level"));
 			return Range();
 		}
 	} else
 		max = ZOOM_MAX;
 
 	if (min > max || max < min) {
-		reader.raiseError("Invalid maximal/minimal zoom level combination");
+		reader.raiseError(tr("Invalid maximal/minimal zoom level combination"));
 		return Range();
 	}
 
@@ -64,7 +64,7 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 		top = attr.value("top").toDouble(&res);
 #endif // QT_VERSION < 5
 		if (!res || (top < BOUNDS_BOTTOM || top > BOUNDS_TOP)) {
-			reader.raiseError("Invalid bounds top value");
+			reader.raiseError(tr("Invalid bounds top value"));
 			return RectC();
 		}
 	} else
@@ -77,7 +77,7 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 		bottom = attr.value("bottom").toDouble(&res);
 #endif // QT_VERSION < 5
 		if (!res || (bottom < BOUNDS_BOTTOM || bottom > BOUNDS_TOP)) {
-			reader.raiseError("Invalid bounds bottom value");
+			reader.raiseError(tr("Invalid bounds bottom value"));
 			return RectC();
 		}
 	} else
@@ -90,7 +90,7 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 		left = attr.value("left").toDouble(&res);
 #endif // QT_VERSION < 5
 		if (!res || (left < BOUNDS_LEFT || left > BOUNDS_RIGHT)) {
-			reader.raiseError("Invalid bounds left value");
+			reader.raiseError(tr("Invalid bounds left value"));
 			return RectC();
 		}
 	} else
@@ -103,18 +103,18 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 		right = attr.value("right").toDouble(&res);
 #endif // QT_VERSION < 5
 		if (!res || (right < BOUNDS_LEFT || right > BOUNDS_RIGHT)) {
-			reader.raiseError("Invalid bounds right value");
+			reader.raiseError(tr("Invalid bounds right value"));
 			return RectC();
 		}
 	} else
 		right = BOUNDS_RIGHT;
 
 	if (bottom > top || top < bottom) {
-		reader.raiseError("Invalid bottom/top bounds combination");
+		reader.raiseError(tr("Invalid bottom/top bounds combination"));
 		return RectC();
 	}
 	if (left > right || right < left) {
-		reader.raiseError("Invalid left/right bounds combination");
+		reader.raiseError(tr("Invalid left/right bounds combination"));
 		return RectC();
 	}
 
@@ -162,7 +162,7 @@ bool MapSource::loadFile(const QString &path, Map **map)
 		if (reader.name() == "map")
 			MapSource::map(reader, map);
 		else
-			reader.raiseError("Not an online map source file");
+			reader.raiseError(tr("Not an online map source file"));
 	}
 
 	_errorString = reader.error() ? QString("%1: %2").arg(reader.lineNumber())

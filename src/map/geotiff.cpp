@@ -270,7 +270,7 @@ const GCS *GeoTIFF::gcs(QMap<quint16, Value> &kv)
 
 	if (IS_SET(kv, GeographicTypeGeoKey)) {
 		if (!(gcs = GCS::gcs(kv.value(GeographicTypeGeoKey).SHORT)))
-			_errorString = QString("%1: unknown GCS")
+			_errorString = tr("%1: unknown GCS")
 			  .arg(kv.value(GeographicTypeGeoKey).SHORT);
 	} else if (IS_SET(kv, GeogGeodeticDatumGeoKey)) {
 		int pm = IS_SET(kv, GeogPrimeMeridianGeoKey)
@@ -279,12 +279,12 @@ const GCS *GeoTIFF::gcs(QMap<quint16, Value> &kv)
 		  ? kv.value(GeogAngularUnitsGeoKey).SHORT : 9102;
 
 		if (!(gcs = GCS::gcs(kv.value(GeogGeodeticDatumGeoKey).SHORT, pm, au)))
-			_errorString = QString("%1+%2: unknown geodetic datum + prime"
+			_errorString = tr("%1+%2: unknown geodetic datum + prime"
 			  " meridian combination")
 			  .arg(kv.value(GeogGeodeticDatumGeoKey).SHORT)
 			  .arg(kv.value(GeogPrimeMeridianGeoKey).SHORT);
 	} else
-		_errorString = "Can not determine GCS";
+		_errorString = tr("Can not determine GCS");
 
 	return gcs;
 }
@@ -292,7 +292,7 @@ const GCS *GeoTIFF::gcs(QMap<quint16, Value> &kv)
 Projection::Method GeoTIFF::method(QMap<quint16, Value> &kv)
 {
 	if (!IS_SET(kv, ProjCoordTransGeoKey)) {
-		_errorString = "Missing coordinate transformation method";
+		_errorString = tr("Missing coordinate transformation method");
 		return Projection::Method();
 	}
 
@@ -310,7 +310,7 @@ Projection::Method GeoTIFF::method(QMap<quint16, Value> &kv)
 		case 11:
 			return Projection::Method(9822);
 		default:
-			_errorString = QString("%1: unknown coordinate transformation method")
+			_errorString = tr("%1: unknown coordinate transformation method")
 			  .arg(kv.value(ProjCoordTransGeoKey).SHORT);
 			return Projection::Method();
 	}
@@ -321,7 +321,7 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 	if (IS_SET(kv, ProjectedCSTypeGeoKey)) {
 		const PCS *pcs;
 		if (!(pcs = PCS::pcs(kv.value(ProjectedCSTypeGeoKey).SHORT))) {
-			_errorString = QString("%1: unknown PCS")
+			_errorString = tr("%1: unknown PCS")
 			  .arg(kv.value(ProjectedCSTypeGeoKey).SHORT);
 			return false;
 		}
@@ -333,7 +333,7 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 			return false;
 		const PCS *pcs = PCS::pcs(g, kv.value(ProjectionGeoKey).SHORT);
 		if (!pcs) {
-			_errorString = QString("%1: unknown projection code")
+			_errorString = tr("%1: unknown projection code")
 			  .arg(kv.value(GeographicTypeGeoKey).SHORT)
 			  .arg(kv.value(ProjectionGeoKey).SHORT);
 			return false;
@@ -353,7 +353,7 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 		LinearUnits lu(IS_SET(kv, ProjLinearUnitsGeoKey)
 		  ? kv.value(ProjLinearUnitsGeoKey).SHORT : 9001);
 		if (lu.isNull()) {
-			_errorString = QString("%1: unknown projection linear units code")
+			_errorString = tr("%1: unknown projection linear units code")
 			  .arg(kv.value(ProjLinearUnitsGeoKey).SHORT);
 			return false;
 		}
@@ -397,42 +397,42 @@ bool GeoTIFF::load(const QString &path)
 
 	file.setFileName(path);
 	if (!file.open(QIODevice::ReadOnly)) {
-		_errorString = QString("Error opening TIFF file: %1")
+		_errorString = tr("Error opening TIFF file: %1")
 		  .arg(file.errorString());
 		return false;
 	}
 	if (!file.readHeader(ifd)) {
-		_errorString = "Invalid TIFF header";
+		_errorString = tr("Invalid TIFF header");
 		return false;
 	}
 
 	while (ifd) {
 		if (!readIFD(file, ifd, ctx)) {
-			_errorString = "Invalid IFD";
+			_errorString = tr("Invalid IFD");
 			return false;
 		}
 	}
 
 	if (!ctx.keys) {
-		_errorString = "Not a GeoTIFF file";
+		_errorString = tr("Not a GeoTIFF file");
 		return false;
 	}
 
 	if (ctx.scale) {
 		if (!readScale(file, ctx.scale, scale)) {
-			_errorString = "Error reading model pixel scale";
+			_errorString = tr("Error reading model pixel scale");
 			return false;
 		}
 	}
 	if (ctx.tiepoints) {
 		if (!readTiepoints(file, ctx.tiepoints, ctx.tiepointCount, points)) {
-			_errorString = "Error reading raster->model tiepoint pairs";
+			_errorString = tr("Error reading raster->model tiepoint pairs");
 			return false;
 		}
 	}
 
 	if (!readKeys(file, ctx, kv)) {
-		_errorString = "Error reading Geo key/value";
+		_errorString = tr("Error reading Geo key/value");
 		return false;
 	}
 
@@ -446,10 +446,10 @@ bool GeoTIFF::load(const QString &path)
 				return false;
 			break;
 		case ModelTypeGeocentric:
-			_errorString = "Geocentric models are not supported";
+			_errorString = tr("Geocentric models are not supported");
 			return false;
 		default:
-			_errorString = "Unknown/missing model type";
+			_errorString = tr("Unknown/missing model type");
 			return false;
 	}
 
@@ -467,16 +467,16 @@ bool GeoTIFF::load(const QString &path)
 	} else if (ctx.matrix) {
 		double m[16];
 		if (!readMatrix(file, ctx.matrix, m)) {
-			_errorString = "Error reading transformation matrix";
+			_errorString = tr("Error reading transformation matrix");
 			return false;
 		}
 		if (m[2] != 0.0 || m[6] != 0.0 || m[8] != 0.0 || m[9] != 0.0
 		  || m[10] != 0.0 || m[11] != 0.0) {
-			_errorString = "Not a baseline transformation matrix";
+			_errorString = tr("Not a baseline transformation matrix");
 		}
 		_transform = QTransform(m[0], m[1], m[4], m[5], m[3], m[7]).inverted();
 	} else {
-		_errorString = "Incomplete/missing model transformation info";
+		_errorString = tr("Incomplete/missing model transformation info");
 		return false;
 	}
 
