@@ -30,7 +30,7 @@
         <ul>
           <li><a href="index.html" class="active">Home</a></li>
           <li><a href="gallery.html">Screenshots</a></li>
-          <li><a href="index.html#maps">Maps</a></li>
+          <li><a href="doc.html">Documentation</a></li>
           <li><a href="index.html#download">Download</a></li>
         </ul>
       </div>
@@ -86,7 +86,7 @@
           <h3>Key features</h3>
           <ul>
             <li>User-definable online maps.</li>
-            <li>Offline maps (OziExplorer maps and TrekBuddy maps/atlases).</li>
+            <li>Offline maps (OziExplorer maps, TrekBuddy maps/atlases, GeoTIFF images).</li>
             <li>Elevation, speed, heart rate, cadence, power and temperature graphs.</li>
             <li>Support for multiple tracks in one view.</li>
             <li>Support for POI files.</li>
@@ -97,87 +97,31 @@
             <li><b>Free software</b> (GPLv3 open-source license).</li>
           </ul>
 
-          <a name="maps"></a>
-          <h2>Maps</h2>
+          <p>GPXSee is designed as a small (no dependencies except of Qt), fast
+          and uncomplicated GPS data/map viewer, not a full featured GIS software.
+          However, the spectrum of supported data files/map sources is relatively
+          rich, see the <i>Documentation</i> section for details.</p>
 
-          <h3>Online maps</h3>
-          <p>GPXSee supports most tile server based online maps out there, but the
-          <a href="https://github.com/tumic0/GPXSee/blob/master/pkg/maps.txt">list
-          of maps</a> distributed with the official packages is limited to those
-          that are "freely distributable". You may however easily change the default
-          map list with your own list either by editing the global map list file:</p>
-
-          <table class="config-files">
-            <tr>
-              <td class="os">Windows:</td>
-              <td class="file">C:\Program Files\GPXSee\maps.txt</td>
-            </tr><tr>
-              <td class="os">Linux:</td>
-              <td class="file">/usr/share/gpxsee/maps.txt</td>
-            </tr><tr>
-              <td class="os">OS X:</td>
-              <td class="file">/Applications/GPXSee.app/Contents/Resources/maps.txt</td>
-            </tr>  
-          </table>
-
-          <p>or by overriding it with a user map list file:</p>
-
-          <table class="config-files">
-            <tr>
-              <td class="os">Windows:</td>
-              <td class="file">%HOMEPATH%\GPXSee\maps.txt</td>
-            </tr><tr>
-              <td class="os">OS X, Linux:</td>
-              <td class="file">$HOME/.gpxsee/maps.txt</td>
-            </tr>
-          </table>
-
-          <p>The file format is one map entry per line, consisting of the map name,
-          tiles URL and an optional maximal zoom level delimited by a TAB character.
-          The tile X and Y coordinates are replaced with <code>$x</code> and
-          <code>$y</code> in the URL and the zoom level is replaced with
-          <code>$z</code>. An example map file could look like:</p>
-
-<pre>
-Map1	http://tile.server.com/map/$z/$x/$y.png	15
-Map2	http://mapserver.org/map/$z-$x-$y
-</pre>
-
-          <h3>Offline maps</h3>
-          <p>OziExplorer maps and TrekBuddy maps/atlases are supported by GPXSee. You may
-          easily create offline atlases from online map services by using
-          <a href="http://mobac.sourceforge.net/">Mobile Atlas Creator (MOBAC)</a>.</p>
-
-          <p>Offline maps are loaded on program startup from the <code>maps</code>
-          directory in the same locations as the <code>maps.txt</code> file. The expected
-          structure is one map/atlas in a separate subdirectory. Supported map formats are
-          OziExplorer maps and TrekBuddy maps/atlases (tared and non-tared).
-          Supported map projections are Web Mercator, Transverse Mercator, UTM,
-          Lambert Conformal Conic, Albers Equal Area, Lambert Azimuthal Equal Area and
-          Latitude/Longitude. For list of supported datums see the <code>datums.csv</code>
-          and <code>ellipsoids.csv</code> configuration files (can be modified or
-          overridden by user files like the map list/map dir).</p>
-
-          <h2>POI files</h2>
-          <p>All of the supported formats with waypoints capability - GPX, KML, TCX, NMEA
-          and <a href="http://www.poi-factory.com/garmin-csv-file-format">Garmin CSV</a>
-          - can be loaded either as data files or as POI files. When a file is opened as
-          a POI file, only waypoints reasonable near the tracks/waypoints of the loaded
-          data files are displayed.</p>
-
-          <p>To make GPXSee load a POI file automatically on startup, add the file to the
-          <code>POI</code> directory in one of the configuration paths.</p>
-
-          <h2>Download</h2>
-          <a name="download"></a>
+          <h2 id="download">Download</h2>
+          <p>Additionally to the source codes, GPXSee is available as a Windows
+          installer and an OS X dmg from the project's Sourceforge page and in
+          form of various Linux packages from the project's openSUSE Build Service
+          page. Some linux distributions (e.g. openSUSE or Fedora) also provide
+          GPXSee in their official repositories.</p>
 
           <ul>
-            <li><a href="https://sourceforge.net/projects/gpxsee/files/Source/">Sources</a></li>
+            <li><a href="https://github.com/tumic0/GPXSee">Sources</a></li>
             <li><a href="https://sourceforge.net/projects/gpxsee/files/Windows/">Windows installer</a></li>
             <li><a href="https://sourceforge.net/projects/gpxsee/files/Mac%20OS%20X/">Mac OS X bundle</a></li>
             <li><a href="https://software.opensuse.org/download.html?project=home%3Atumic%3AGPXSee&amp;package=gpxsee">
                 Linux repos/packages</a></li>
           </ul>
+
+          <h2 id="bugreports">Reporting bugs</h2>
+          <p>If you have found some bug in GPXSee, please report it using the
+          <a href="https://github.com/tumic0/GPXSee/issues">GitHub issue tracker</a>.
+          Bugs that are not reported can not be fixed! If you are missing some
+          feature in GPXSee, you may also use the tracker to request it.</p>
 
       </div>
 

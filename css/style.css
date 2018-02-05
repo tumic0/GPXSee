@@ -104,7 +104,7 @@ h1.logo a span {
 #slider {
 	position:relative;
 	width:980px;
-	height:350px;
+	/*height:350px;*/
 	background-color:#000;
 	margin-top:10px;
 }
