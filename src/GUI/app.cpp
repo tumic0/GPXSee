@@ -19,8 +19,7 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
   _argc(argc), _argv(argv)
 {
 	QTranslator *gpxsee = new QTranslator(this);
-	QString locale = QLocale::system().name();
-	gpxsee->load(QString(":/lang/gpxsee_") + locale);
+	gpxsee->load(QLocale::system(), "gpxsee", "_", LOCALE_DIR);
 	installTranslator(gpxsee);
 
 	QTranslator *qt = new QTranslator(this);

@@ -20,10 +20,5 @@
         <file>icons/system-run.png</file>
         <file>icons/document-print-preview.png</file>
         <file>icons/view-filter.png</file>
-        <file>lang/gpxsee_cs.qm</file>
-        <file>lang/gpxsee_sv.qm</file>
-        <file>lang/gpxsee_de.qm</file>
-        <file>lang/gpxsee_ru.qm</file>
-        <file>lang/gpxsee_fi.qm</file>
     </qresource>
 </RCC>
