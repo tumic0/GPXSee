@@ -42,7 +42,7 @@ build_script:
 
     xcopy pkg\maps installer\maps /i
     
-    xcopy lang installer\locale /i
+    xcopy lang\*.qm installer\locale /sy
 
     copy licence.txt installer
 
