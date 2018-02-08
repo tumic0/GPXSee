@@ -36,7 +36,7 @@ bool NMEAParser::readAltitude(const char *data, int len, qreal &ele)
 	}
 
 	if (!readFloat(data, len, ele)) {
-		_errorString = "Invalid altitude";
+		_errorString = tr("Invalid altitude");
 		return false;
 	}
 
@@ -51,7 +51,7 @@ bool NMEAParser::readGeoidHeight(const char *data, int len, qreal &gh)
 	}
 
 	if (!readFloat(data, len, gh)) {
-		_errorString = "Invalid geoid height";
+		_errorString = tr("Invalid geoid height");
 		return false;
 	}
 
@@ -89,7 +89,7 @@ bool NMEAParser::readTime(const char *data, int len, QTime &time)
 	return true;
 
 error:
-	_errorString = "Invalid time";
+	_errorString = tr("Invalid time");
 	return false;
 }
 
@@ -123,7 +123,7 @@ bool NMEAParser::readDate(const char *data, int len, QDate &date)
 	return true;
 
 error:
-	_errorString = "Invalid date";
+	_errorString = tr("Invalid date");
 	return false;
 }
 
@@ -155,7 +155,7 @@ bool NMEAParser::readLat(const char *data, int len, qreal &lat)
 	return true;
 
 error:
-	_errorString = "Invalid ltitude";
+	_errorString = tr("Invalid altitude");
 	return false;
 }
 
@@ -167,7 +167,7 @@ bool NMEAParser::readNS(const char *data, int len, qreal &lat)
 	}
 
 	if (len != 1 || !(*data == 'N' || *data == 'S')) {
-		_errorString = "Invalid N/S value";
+		_errorString = tr("Invalid N/S value");
 		return false;
 	}
 
@@ -205,7 +205,7 @@ bool NMEAParser::readLon(const char *data, int len, qreal &lon)
 	return true;
 
 error:
-	_errorString = "Invalid longitude";
+	_errorString = tr("Invalid longitude");
 	return false;
 }
 
@@ -217,7 +217,7 @@ bool NMEAParser::readEW(const char *data, int len, qreal &lon)
 	}
 
 	if (len != 1 || !(*data == 'E' || *data == 'W')) {
-		_errorString = "Invalid E/W value";
+		_errorString = tr("Invalid E/W value");
 		return false;
 	}
 
@@ -275,7 +275,7 @@ bool NMEAParser::readRMC(TrackData &track, const char *line, int len)
 	}
 
 	if (col < 9) {
-		_errorString = "Invalid RMC sentence";
+		_errorString = tr("Invalid RMC sentence");
 		return false;
 	}
 
@@ -331,7 +331,7 @@ bool NMEAParser::readGGA(TrackData &track, const char *line, int len)
 					break;
 				case 10:
 					if ((lp - vp) && !((lp - vp) == 1 && *vp == 'M')) {
-						_errorString = "Invalid altitude units";
+						_errorString = tr("Invalid altitude units");
 						return false;
 					}
 					break;
@@ -341,7 +341,7 @@ bool NMEAParser::readGGA(TrackData &track, const char *line, int len)
 					break;
 				case 12:
 					if ((lp - vp) && !((lp - vp) == 1 && *vp == 'M')) {
-						_errorString = "Invalid geoid height units";
+						_errorString = tr("Invalid geoid height units");
 						return false;
 					}
 					break;
@@ -353,7 +353,7 @@ bool NMEAParser::readGGA(TrackData &track, const char *line, int len)
 	}
 
 	if (col < 12) {
-		_errorString = "Invalid GGA sentence";
+		_errorString = tr("Invalid GGA sentence");
 		return false;
 	}
 
@@ -409,7 +409,7 @@ bool NMEAParser::readWPL(QList<Waypoint> &waypoints, const char *line, int len)
 	}
 
 	if (col < 4) {
-		_errorString = "Invalid WPL sentence";
+		_errorString = tr("Invalid WPL sentence");
 		return false;
 	}
 
@@ -436,7 +436,7 @@ bool NMEAParser::readZDA(const char *line, int len)
 					if (!(lp - vp))
 						return true;
 					if ((d = str2int(vp, lp - vp)) < 0) {
-						_errorString = "Invalid day";
+						_errorString = tr("Invalid day");
 						return false;
 					}
 					break;
@@ -444,7 +444,7 @@ bool NMEAParser::readZDA(const char *line, int len)
 					if (!(lp - vp))
 						return true;
 					if ((m = str2int(vp, lp - vp)) < 0) {
-						_errorString = "Invalid month";
+						_errorString = tr("Invalid month");
 						return false;
 					}
 					break;
@@ -452,7 +452,7 @@ bool NMEAParser::readZDA(const char *line, int len)
 					if (!(lp - vp))
 						return true;
 					if ((y = str2int(vp, lp - vp)) < 0) {
-						_errorString = "Invalid year";
+						_errorString = tr("Invalid year");
 						return false;
 					}
 					break;
@@ -464,13 +464,13 @@ bool NMEAParser::readZDA(const char *line, int len)
 	}
 
 	if (col < 4) {
-		_errorString = "Invalid ZDA sentence";
+		_errorString = tr("Invalid ZDA sentence");
 		return false;
 	}
 
 	_date = QDate(y, m, d);
 	if (!_date.isValid()) {
-		_errorString = "Invalid date";
+		_errorString = tr("Invalid date");
 		return false;
 	}
 
@@ -498,10 +498,10 @@ bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
 		len = file->readLine(line, sizeof(line));
 
 		if (len < 0) {
-			_errorString = "I/O error";
+			_errorString = tr("I/O error");
 			return false;
 		} else if (len > (qint64)sizeof(line) - 1) {
-			_errorString = "Line limit exceeded";
+			_errorString = tr("Line limit exceeded");
 			return false;
 		}
 
@@ -525,7 +525,7 @@ bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
 	}
 
 	if (!tracks.last().size() && !waypoints.size()) {
-		_errorString = "No usable NMEA sentence found";
+		_errorString = tr("No usable NMEA sentence found");
 		return false;
 	}
 

@@ -1,12 +1,15 @@
 #ifndef GPXPARSER_H
 #define GPXPARSER_H
 
+#include <QCoreApplication>
 #include <QXmlStreamReader>
 #include "parser.h"
 
 
 class GPXParser : public Parser
 {
+	Q_DECLARE_TR_FUNCTIONS(GPXParser)
+
 public:
 	bool parse(QFile *file, QList<TrackData> &tracks,
 	  QList<RouteData> &routes, QList<Waypoint> &waypoints);

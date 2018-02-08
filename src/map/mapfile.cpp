@@ -136,13 +136,13 @@ bool MapFile::parseMapFile(QIODevice &device, QList<CalibrationPoint> &points,
 	int el;
 
 	if (!device.open(QIODevice::ReadOnly)) {
-		_errorString = QString("Error opening file: %1")
+		_errorString = tr("Error opening file: %1")
 		  .arg(device.errorString());
 		return false;
 	}
 
 	if ((el = parse(device, points, projection, setup, datum))) {
-		_errorString = QString("Parse error on line %1").arg(el);
+		_errorString = tr("Parse error on line %1").arg(el);
 		return false;
 	}
 
@@ -154,7 +154,7 @@ const GCS *MapFile::createGCS(const QString &datum)
 	const GCS *gcs;
 
 	if (!(gcs = GCS::gcs(datum)))
-		_errorString = QString("%1: Unknown datum").arg(datum);
+		_errorString = tr("%1: Unknown datum").arg(datum);
 
 	return gcs;
 }
@@ -181,7 +181,7 @@ bool MapFile::createProjection(const GCS *gcs, const QString &name,
 		else if (!points.first().ll.isNull())
 			zone = UTM::zone(points.first().ll);
 		else {
-			_errorString = "Can not determine UTM zone";
+			_errorString = tr("Can not determine UTM zone");
 			return false;
 		}
 		_projection = Projection(gcs, 9807, UTM::setup(zone), 9001);
@@ -216,7 +216,7 @@ bool MapFile::createProjection(const GCS *gcs, const QString &name,
 		_projection = Projection(gcs, 9802, Projection::Setup(-37, 145, NAN,
 		  2500000, 2500000, -36, -38), 9001);
 	else {
-		_errorString = QString("%1: Unknown map projection").arg(name);
+		_errorString = tr("%1: Unknown map projection").arg(name);
 		return false;
 	}
 

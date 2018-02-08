@@ -1,10 +1,13 @@
 #ifndef FITPARSER_H
 #define FITPARSER_H
 
+#include <QCoreApplication>
 #include "parser.h"
 
 class FITParser : public Parser
 {
+	Q_DECLARE_TR_FUNCTIONS(FITParser)
+
 public:
 	FITParser();
 

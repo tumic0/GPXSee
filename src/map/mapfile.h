@@ -1,6 +1,7 @@
 #ifndef MAPFILE_H
 #define MAPFILE_H
 
+#include <QCoreApplication>
 #include <QIODevice>
 #include <QTransform>
 #include "gcs.h"
@@ -9,6 +10,8 @@
 
 class MapFile
 {
+	Q_DECLARE_TR_FUNCTIONS(MapFile)
+
 public:
 	bool load(QIODevice &file);
 	const QString &errorString() const {return _errorString;}

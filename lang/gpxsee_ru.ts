@@ -2,6 +2,52 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru">
 <context>
+    <name>Atlas</name>
+    <message>
+        <location filename="../src/map/atlas.cpp" line="96"/>
+        <source>Error reading tar file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/atlas.cpp" line="104"/>
+        <source>Error opening tba file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/atlas.cpp" line="111"/>
+        <source>Missing or invalid tba file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/atlas.cpp" line="135"/>
+        <source>Error loading map: %1: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/atlas.cpp" line="142"/>
+        <source>No maps found in atlas</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>CSVParser</name>
+    <message>
+        <location filename="../src/data/csvparser.cpp" line="17"/>
+        <source>Parse error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/csvparser.cpp" line="23"/>
+        <source>Invalid latitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/csvparser.cpp" line="28"/>
+        <source>Invalid longitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CadenceGraph</name>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="10"/>
@@ -46,6 +92,11 @@
 </context>
 <context>
     <name>Data</name>
+    <message>
+        <location filename="../src/data/data.cpp" line="94"/>
+        <source>Unknown format</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../src/data/data.cpp" line="103"/>
         <source>Supported files</source>
@@ -260,6 +311,40 @@
     </message>
 </context>
 <context>
+    <name>FITParser</name>
+    <message>
+        <location filename="../src/data/fitparser.cpp" line="47"/>
+        <location filename="../src/data/fitparser.cpp" line="323"/>
+        <source>I/O error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/fitparser.cpp" line="50"/>
+        <source>Premature end of data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/fitparser.cpp" line="113"/>
+        <source>Bad endian field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/fitparser.cpp" line="204"/>
+        <source>Undefined data message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/fitparser.cpp" line="276"/>
+        <source>Invalid coordinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/fitparser.cpp" line="327"/>
+        <source>Not a FIT file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FileSelectWidget</name>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="38"/>
@@ -290,6 +375,30 @@
         <location filename="../src/GUI/format.cpp" line="36"/>
         <source>km</source>
         <translation>км</translation>
+    </message>
+</context>
+<context>
+    <name>GPXParser</name>
+    <message>
+        <location filename="../src/data/gpxparser.cpp" line="9"/>
+        <location filename="../src/data/gpxparser.cpp" line="20"/>
+        <source>Invalid %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/gpxparser.cpp" line="38"/>
+        <source>Invalid longitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/gpxparser.cpp" line="47"/>
+        <source>Invalid latitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/gpxparser.cpp" line="198"/>
+        <source>Not a GPX file</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -744,6 +853,109 @@
     </message>
 </context>
 <context>
+    <name>GeoTIFF</name>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="273"/>
+        <source>%1: unknown GCS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="282"/>
+        <source>%1+%2: unknown geodetic datum + prime meridian combination</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="287"/>
+        <source>Can not determine GCS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="295"/>
+        <source>Missing coordinate transformation method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="313"/>
+        <source>%1: unknown coordinate transformation method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="324"/>
+        <source>%1: unknown PCS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="336"/>
+        <source>%1: unknown projection code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="356"/>
+        <source>%1: unknown projection linear units code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="400"/>
+        <source>Error opening TIFF file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="405"/>
+        <source>Invalid TIFF header</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="411"/>
+        <source>Invalid IFD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="417"/>
+        <source>Not a GeoTIFF file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="423"/>
+        <source>Error reading model pixel scale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="429"/>
+        <source>Error reading raster-&gt;model tiepoint pairs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="435"/>
+        <source>Error reading Geo key/value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="449"/>
+        <source>Geocentric models are not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="452"/>
+        <source>Unknown/missing model type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="470"/>
+        <source>Error reading transformation matrix</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="475"/>
+        <source>Not a baseline transformation matrix</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/geotiff.cpp" line="479"/>
+        <source>Incomplete/missing model transformation info</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>GraphView</name>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="109"/>
@@ -836,6 +1048,140 @@
     </message>
 </context>
 <context>
+    <name>IGCParser</name>
+    <message>
+        <location filename="../src/data/igcparser.cpp" line="109"/>
+        <source>Invalid date header format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/igcparser.cpp" line="116"/>
+        <source>Invalid date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/igcparser.cpp" line="133"/>
+        <source>Invalid timestamp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/igcparser.cpp" line="138"/>
+        <location filename="../src/data/igcparser.cpp" line="173"/>
+        <source>Invalid latitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/igcparser.cpp" line="142"/>
+        <location filename="../src/data/igcparser.cpp" line="177"/>
+        <source>Invalid longitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/igcparser.cpp" line="147"/>
+        <source>Invalid altitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/igcparser.cpp" line="208"/>
+        <source>I/O error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/igcparser.cpp" line="211"/>
+        <source>Line limit exceeded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/igcparser.cpp" line="217"/>
+        <source>Invalid/missing A record</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/igcparser.cpp" line="234"/>
+        <source>Missing date header</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KMLParser</name>
+    <message>
+        <location filename="../src/data/kmlparser.cpp" line="9"/>
+        <location filename="../src/data/kmlparser.cpp" line="20"/>
+        <source>Invalid %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/kmlparser.cpp" line="208"/>
+        <location filename="../src/data/kmlparser.cpp" line="219"/>
+        <location filename="../src/data/kmlparser.cpp" line="359"/>
+        <source>Invalid coordinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/kmlparser.cpp" line="225"/>
+        <source>Missing Point coordinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/kmlparser.cpp" line="231"/>
+        <source>Heartrate data count mismatch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/kmlparser.cpp" line="252"/>
+        <source>Cadence data count mismatch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/kmlparser.cpp" line="273"/>
+        <source>Speed data count mismatch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/kmlparser.cpp" line="294"/>
+        <source>Temperature data count mismatch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/kmlparser.cpp" line="346"/>
+        <source>gx:coord/when element count mismatch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/kmlparser.cpp" line="501"/>
+        <source>Not a KML file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MapFile</name>
+    <message>
+        <location filename="../src/map/mapfile.cpp" line="139"/>
+        <source>Error opening file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/mapfile.cpp" line="145"/>
+        <source>Parse error on line %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/mapfile.cpp" line="157"/>
+        <source>%1: Unknown datum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/mapfile.cpp" line="184"/>
+        <source>Can not determine UTM zone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/mapfile.cpp" line="219"/>
+        <source>%1: Unknown map projection</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MapList</name>
     <message>
         <location filename="../src/map/maplist.cpp" line="128"/>
@@ -861,6 +1207,208 @@
         <location filename="../src/map/maplist.cpp" line="132"/>
         <source>Online map sources</source>
         <translation>Источники онлайн карт</translation>
+    </message>
+</context>
+<context>
+    <name>MapSource</name>
+    <message>
+        <location filename="../src/map/mapsource.cpp" line="27"/>
+        <source>Invalid minimal zoom level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/mapsource.cpp" line="40"/>
+        <source>Invalid maximal zoom level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/mapsource.cpp" line="47"/>
+        <source>Invalid maximal/minimal zoom level combination</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/mapsource.cpp" line="67"/>
+        <source>Invalid bounds top value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/mapsource.cpp" line="80"/>
+        <source>Invalid bounds bottom value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/mapsource.cpp" line="93"/>
+        <source>Invalid bounds left value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/mapsource.cpp" line="106"/>
+        <source>Invalid bounds right value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/mapsource.cpp" line="113"/>
+        <source>Invalid bottom/top bounds combination</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/mapsource.cpp" line="117"/>
+        <source>Invalid left/right bounds combination</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/mapsource.cpp" line="165"/>
+        <source>Not an online map source file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NMEAParser</name>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="39"/>
+        <location filename="../src/data/nmeaparser.cpp" line="158"/>
+        <source>Invalid altitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="54"/>
+        <source>Invalid geoid height</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="92"/>
+        <source>Invalid time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="126"/>
+        <location filename="../src/data/nmeaparser.cpp" line="473"/>
+        <source>Invalid date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="170"/>
+        <source>Invalid N/S value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="208"/>
+        <source>Invalid longitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="220"/>
+        <source>Invalid E/W value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="278"/>
+        <source>Invalid RMC sentence</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="334"/>
+        <source>Invalid altitude units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="344"/>
+        <source>Invalid geoid height units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="356"/>
+        <source>Invalid GGA sentence</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="412"/>
+        <source>Invalid WPL sentence</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="439"/>
+        <source>Invalid day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="447"/>
+        <source>Invalid month</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="455"/>
+        <source>Invalid year</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="467"/>
+        <source>Invalid ZDA sentence</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="501"/>
+        <source>I/O error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="504"/>
+        <source>Line limit exceeded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/nmeaparser.cpp" line="528"/>
+        <source>No usable NMEA sentence found</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>OfflineMap</name>
+    <message>
+        <location filename="../src/map/offlinemap.cpp" line="46"/>
+        <source>%1: No such image file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/offlinemap.cpp" line="52"/>
+        <source>%1: Error loading OZF file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/offlinemap.cpp" line="60"/>
+        <source>%1: Error reading map image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/offlinemap.cpp" line="85"/>
+        <source>Error retrieving tile size: %1: Invalid image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/offlinemap.cpp" line="94"/>
+        <source>Invalid/missing tile set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/offlinemap.cpp" line="101"/>
+        <source>Missing total image size (IWH)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/offlinemap.cpp" line="121"/>
+        <source>Error reading tar file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/offlinemap.cpp" line="128"/>
+        <location filename="../src/map/offlinemap.cpp" line="216"/>
+        <source>Map file not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/offlinemap.cpp" line="168"/>
+        <source>Not a map file</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1377,6 +1925,30 @@
     </message>
 </context>
 <context>
+    <name>TCXParser</name>
+    <message>
+        <location filename="../src/data/tcxparser.cpp" line="16"/>
+        <location filename="../src/data/tcxparser.cpp" line="27"/>
+        <source>Invalid %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/tcxparser.cpp" line="43"/>
+        <source>Invalid LatitudeDegrees</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/tcxparser.cpp" line="49"/>
+        <source>Invalid LongitudeDegrees</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/tcxparser.cpp" line="244"/>
+        <source>Not a TCX file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TemperatureGraph</name>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="11"/>
@@ -1469,6 +2041,24 @@
         <location filename="../src/GUI/trackitem.cpp" line="22"/>
         <source>Date</source>
         <translation>Дата</translation>
+    </message>
+</context>
+<context>
+    <name>Transform</name>
+    <message>
+        <location filename="../src/map/transform.cpp" line="9"/>
+        <source>Invalid reference points tuple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/transform.cpp" line="58"/>
+        <source>Singular transformation matrix</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/transform.cpp" line="69"/>
+        <source>Insufficient number of reference points</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

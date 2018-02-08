@@ -43,13 +43,13 @@ bool OfflineMap::getImageInfo(const QString &path)
 	if (ii.exists())
 		_imgPath = ii.absoluteFilePath();
 	else {
-		_errorString = QString("%1: No such image file").arg(_imgPath);
+		_errorString = tr("%1: No such image file").arg(_imgPath);
 		return false;
 	}
 
 	if (OZF::isOZF(_imgPath)) {
 		if (!_ozf.load(_imgPath)) {
-			_errorString = QString("%1: Error loading OZF file")
+			_errorString = tr("%1: Error loading OZF file")
 			  .arg(QFileInfo(_imgPath).fileName());
 			return false;
 		}
@@ -57,7 +57,7 @@ bool OfflineMap::getImageInfo(const QString &path)
 		QImageReader img(_imgPath);
 		_size = img.size();
 		if (!_size.isValid()) {
-			_errorString = QString("%1: Error reading map image")
+			_errorString = tr("%1: Error reading map image")
 			  .arg(QFileInfo(_imgPath).fileName());
 			return false;
 		}
@@ -82,7 +82,7 @@ bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
 				_tileSize = QImageReader(path + "/" + tiles.at(i)).size();
 			}
 			if (!_tileSize.isValid()) {
-				_errorString = QString("Error retrieving tile size: "
+				_errorString = tr("Error retrieving tile size: "
 				  "%1: Invalid image").arg(QFileInfo(tiles.at(i)).fileName());
 				return false;
 			}
@@ -91,14 +91,14 @@ bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
 		}
 	}
 
-	_errorString = "Invalid/missing tile set";
+	_errorString = tr("Invalid/missing tile set");
 	return false;
 }
 
 bool OfflineMap::totalSizeSet()
 {
 	if (!_size.isValid()) {
-		_errorString = "Missing total image size (IWH)";
+		_errorString = tr("Missing total image size (IWH)");
 		return false;
 	} else
 		return true;
@@ -118,14 +118,14 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 
 	if (suffix == "tar") {
 		if (!_tar.load(fileName)) {
-			_errorString = "Error reading tar file";
+			_errorString = tr("Error reading tar file");
 			return;
 		}
 
 		QString mapFileName = fi.completeBaseName() + ".map";
 		QByteArray ba = _tar.file(mapFileName);
 		if (ba.isNull()) {
-			_errorString = "Map file not found";
+			_errorString = tr("Map file not found");
 			return;
 		}
 		QBuffer mapFile(&ba);
@@ -165,7 +165,7 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 			_transform = gt.transform();
 		}
 	} else {
-		_errorString = "Not a map file";
+		_errorString = tr("Not a map file");
 		return;
 	}
 
@@ -213,7 +213,7 @@ OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
 	  + fi.fileName();
 	QByteArray ba = tar.file(mapFile);
 	if (ba.isNull()) {
-		_errorString = "Map file not found";
+		_errorString = tr("Map file not found");
 		return;
 	}
 	QBuffer buffer(&ba);

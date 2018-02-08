@@ -1,12 +1,15 @@
 #ifndef KMLPARSER_H
 #define KMLPARSER_H
 
+#include <QCoreApplication>
 #include <QXmlStreamReader>
 #include <QDateTime>
 #include "parser.h"
 
 class KMLParser : public Parser
 {
+	Q_DECLARE_TR_FUNCTIONS(KMLParser)
+
 public:
 	bool parse(QFile *file, QList<TrackData> &tracks,
 	  QList<RouteData> &routes, QList<Waypoint> &waypoints);

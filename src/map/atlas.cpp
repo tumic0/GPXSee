@@ -93,7 +93,7 @@ Atlas::Atlas(const QString &fileName, QObject *parent) : Map(parent)
 
 	if (suffix == "tar") {
 		if (!tar.load(fileName)) {
-			_errorString = "Error reading tar file";
+			_errorString = tr("Error reading tar file");
 			return;
 		}
 		QString tbaFileName = fi.completeBaseName() + ".tba";
@@ -101,14 +101,14 @@ Atlas::Atlas(const QString &fileName, QObject *parent) : Map(parent)
 	} else if (suffix == "tba") {
 		QFile tbaFile(fileName);
 		if (!tbaFile.open(QIODevice::ReadOnly)) {
-			_errorString = QString("Error opening tba file: %1")
+			_errorString = tr("Error opening tba file: %1")
 			  .arg(tbaFile.errorString());
 			return;
 		}
 		ba = tbaFile.readAll();
 	}
 	if (!ba.startsWith("Atlas 1.0")) {
-		_errorString = "Missing or invalid tba file";
+		_errorString = tr("Missing or invalid tba file");
 		return;
 	}
 
@@ -132,14 +132,14 @@ Atlas::Atlas(const QString &fileName, QObject *parent) : Map(parent)
 			if (map->isValid())
 				_maps.append(map);
 			else {
-				_errorString = QString("Error loading map: %1: %2")
+				_errorString = tr("Error loading map: %1: %2")
 				  .arg(mapFile, map->errorString());
 				return;
 			}
 		}
 	}
 	if (_maps.isEmpty()) {
-		_errorString = "No maps found in atlas";
+		_errorString = tr("No maps found in atlas");
 		return;
 	}
 

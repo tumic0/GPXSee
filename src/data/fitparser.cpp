@@ -44,10 +44,10 @@ bool FITParser::readData(char *data, size_t size)
 
 	n = _device->read(data, size);
 	if (n < 0) {
-		_errorString = "I/O error";
+		_errorString = tr("I/O error");
 		return false;
 	} else if ((size_t)n < size) {
-		_errorString = "Premature end of data";
+		_errorString = tr("Premature end of data");
 		return false;
 	}
 
@@ -110,7 +110,7 @@ bool FITParser::parseDefinitionMessage(quint8 header)
 	if (!readValue(def->endian))
 		return false;
 	if (def->endian > 1) {
-		_errorString = "Bad endian field";
+		_errorString = tr("Bad endian field");
 		return false;
 	}
 	_endian = def->endian;
@@ -201,7 +201,7 @@ bool FITParser::parseData(TrackData &track, MessageDefinition *def,
 
 
 	if (!def->fields && !def->devFields) {
-		_errorString = "Undefined data message";
+		_errorString = tr("Undefined data message");
 		return false;
 	}
 
@@ -273,7 +273,7 @@ bool FITParser::parseData(TrackData &track, MessageDefinition *def,
 			if (trackpoint.coordinates().isNull())
 				warning("Missing coordinates");
 			else {
-				_errorString = "Invalid coordinates";
+				_errorString = tr("Invalid coordinates");
 				return false;
 			}
 		}
@@ -320,11 +320,11 @@ bool FITParser::parseHeader()
 	STATIC_ASSERT(sizeof(hdr) == 12);
 	len = _device->read((char*)&hdr, sizeof(hdr));
 	if (len < 0) {
-		_errorString = "I/O error";
+		_errorString = tr("I/O error");
 		return false;
 	} else if ((size_t)len < sizeof(hdr)
 	  || hdr.magic != qToLittleEndian(FIT_MAGIC)) {
-		_errorString = "Not a FIT file";
+		_errorString = tr("Not a FIT file");
 		return false;
 	}
 

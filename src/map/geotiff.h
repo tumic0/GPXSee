@@ -1,6 +1,7 @@
 #ifndef GEOTIFF_H
 #define GEOTIFF_H
 
+#include <QCoreApplication>
 #include <QTransform>
 #include <QFile>
 #include <QMap>
@@ -12,6 +13,8 @@
 
 class GeoTIFF
 {
+	Q_DECLARE_TR_FUNCTIONS(GeoTIFF)
+
 public:
 	bool load(const QString &path);
 	const QString &errorString() const {return _errorString;}

@@ -1,6 +1,7 @@
 #ifndef IGCPARSER_H
 #define IGCPARSER_H
 
+#include <QCoreApplication>
 #include <QDate>
 #include <QTime>
 #include "parser.h"
@@ -8,6 +9,8 @@
 
 class IGCParser : public Parser
 {
+	Q_DECLARE_TR_FUNCTIONS(IGCParser)
+
 public:
 	IGCParser() : _errorLine(0) {}
 

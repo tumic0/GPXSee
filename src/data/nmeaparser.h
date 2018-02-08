@@ -1,12 +1,15 @@
 #ifndef NMEAPARSER_H
 #define NMEAPARSER_H
 
+#include <QCoreApplication>
 #include <QDate>
 #include "parser.h"
 
 
 class NMEAParser : public Parser
 {
+	Q_DECLARE_TR_FUNCTIONS(NMEAParser)
+
 public:
 	NMEAParser() : _errorLine(0), _GGA(false) {}
 

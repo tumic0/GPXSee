@@ -1,6 +1,7 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
+#include <QCoreApplication>
 #include <QTransform>
 #include <QList>
 #include "common/coordinates.h"
@@ -12,6 +13,8 @@ struct ReferencePoint {
 
 class Transform
 {
+	Q_DECLARE_TR_FUNCTIONS(Transform)
+
 public:
 	Transform(const QList<ReferencePoint> &points);
 
