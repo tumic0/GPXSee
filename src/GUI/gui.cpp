@@ -109,7 +109,7 @@ void GUI::loadMaps()
 		dir = GLOBAL_MAP_DIR;
 
 	if (!dir.isNull() && !_ml->loadDir(dir))
-		qWarning(qPrintable(_ml->errorString()));
+		qWarning("%s", qPrintable(_ml->errorString()));
 
 	_map = new EmptyMap(this);
 }
@@ -125,7 +125,7 @@ void GUI::loadPOIs()
 		dir = GLOBAL_POI_DIR;
 
 	if (!dir.isNull() && !_poi->loadDir(dir))
-		qWarning(qPrintable(_poi->errorString()));
+		qWarning("%s", qPrintable(_poi->errorString()));
 }
 
 void GUI::createBrowser()
