@@ -201,7 +201,7 @@ SectionGroup "Localization" SEC_LOCALE
     CreateDirectory "$INSTDIR\locale"
     File /oname=locale\gpxsee_cs.qm locale\gpxsee_cs.qm
   SectionEnd
-  Section "Finish"
+  Section "Finnish"
     CreateDirectory "$INSTDIR\locale"
     File /oname=locale\gpxsee_fi.qm locale\gpxsee_fi.qm
   SectionEnd
