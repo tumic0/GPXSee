@@ -41,6 +41,8 @@ build_script:
     copy pkg\pcs.csv installer
 
     xcopy pkg\maps installer\maps /i
+    
+    xcopy lang installer\locale /i
 
     copy licence.txt installer
 
