@@ -201,13 +201,17 @@ SectionGroup "Localization" SEC_LOCALE
     CreateDirectory "$INSTDIR\locale"
     File /oname=locale\gpxsee_cs.qm locale\gpxsee_cs.qm
   SectionEnd
-  Section "German"
-    CreateDirectory "$INSTDIR\locale"
-    File /oname=locale\gpxsee_de.qm locale\gpxsee_de.qm
-  SectionEnd
   Section "Finish"
     CreateDirectory "$INSTDIR\locale"
     File /oname=locale\gpxsee_fi.qm locale\gpxsee_fi.qm
+  SectionEnd
+  Section "French"
+    CreateDirectory "$INSTDIR\locale"
+    File /oname=locale\gpxsee_fr.qm locale\gpxsee_fr.qm
+  SectionEnd
+  Section "German"
+    CreateDirectory "$INSTDIR\locale"
+    File /oname=locale\gpxsee_de.qm locale\gpxsee_de.qm
   SectionEnd
   Section "Russian"
     CreateDirectory "$INSTDIR\locale" 
