@@ -208,22 +208,29 @@ TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \
     lang/gpxsee_de.ts \
     lang/gpxsee_ru.ts \
-    lang/gpxsee_fi.ts
+    lang/gpxsee_fi.ts \
+    lang/gpxsee_fr.ts
 macx {
     ICON = icons/gpxsee.icns
     QMAKE_INFO_PLIST = Info.plist
-    APP_RESOURCES.files = icons/gpx.icns \
+    LOCALE.path = Contents/Resources/locale
+    LOCALE.files = lang/gpxsee_cs.qm \
+        lang/gpxsee_de.qm \
+        lang/gpxsee_fi.qm \
+        lang/gpxsee_fr.qm \
+        lang/gpxsee_ru.qm \
+        lang/gpxsee_sv.qm
+    APP_RESOURCES.files = pkg/maps \
         icons/tcx.icns \
         icons/kml.icns \
         icons/fit.icns \
         icons/igc.icns \
         icons/nmea.icns \
-        pkg/maps \
         pkg/ellipsoids.csv \
         pkg/gcs.csv \
         pkg/pcs.csv
     APP_RESOURCES.path = Contents/Resources
-    QMAKE_BUNDLE_DATA += APP_RESOURCES
+    QMAKE_BUNDLE_DATA += APP_RESOURCES LOCALE
 }
 win32 {
     RC_ICONS = icons/gpxsee.ico \

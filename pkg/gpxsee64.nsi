@@ -198,6 +198,33 @@ Section "ANGLE" SEC_ANGLE
 
 SectionEnd
 
+SectionGroup "Localization" SEC_LOCALE
+  Section "Czech"
+    CreateDirectory "$INSTDIR\locale"
+    File /oname=locale\gpxsee_cs.qm locale\gpxsee_cs.qm
+  SectionEnd
+  Section "Finnish"
+    CreateDirectory "$INSTDIR\locale"
+    File /oname=locale\gpxsee_fi.qm locale\gpxsee_fi.qm
+  SectionEnd
+  Section "French"
+    CreateDirectory "$INSTDIR\locale"
+    File /oname=locale\gpxsee_fr.qm locale\gpxsee_fr.qm
+  SectionEnd
+  Section "German"
+    CreateDirectory "$INSTDIR\locale"
+    File /oname=locale\gpxsee_de.qm locale\gpxsee_de.qm
+  SectionEnd
+  Section "Russian"
+    CreateDirectory "$INSTDIR\locale" 
+    File /oname=locale\gpxsee_ru.qm locale\gpxsee_ru.qm
+  SectionEnd
+  Section "Swedish"
+    CreateDirectory "$INSTDIR\locale" 
+    File /oname=locale\gpxsee_sv.qm locale\gpxsee_sv.qm
+  SectionEnd
+SectionGroupEnd
+
 ;--------------------------------
 
 ; Uninstaller
@@ -250,6 +277,8 @@ LangString DESC_ANGLE ${LANG_ENGLISH} \
   "ANGLE (OpenGL via Direct3D). Enables OpenGL on systems without native OpenGL drivers."
 LangString DESC_APP ${LANG_ENGLISH} \
   "GPXSee application"
+LangString DESC_LOCALE ${LANG_ENGLISH} \
+  "Localization"
 
 ;Assign language strings to sections
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
@@ -258,4 +287,5 @@ LangString DESC_APP ${LANG_ENGLISH} \
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_ANGLE} $(DESC_ANGLE)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_MSVC} $(DESC_MSVC) 
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_APP} $(DESC_APP)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_LOCALE} $(DESC_LOCALE)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
