@@ -256,7 +256,7 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="156"/>
         <source>%1 is not writable.</source>
-        <translation>%1 n'est pas inscriptible.</translation>
+        <translation>%1 n&apos;est pas inscriptible.</translation>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="562"/>
         <source>GPXSee is distributed under the terms of the GNU General Public License version 3. For more info about GPXSee visit the project homepage at </source>
-        <translation>GPXSee est distribué selon les termes de la licence publique générale GNU (version 3). Pour plus d'information sur GPXSee, visiter le site du projet sur </translation>
+        <translation>GPXSee est distribué selon les termes de la licence publique générale GNU (version 3). Pour plus d&apos;information sur GPXSee, visiter le site du projet sur </translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="617"/>
@@ -327,7 +327,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="625"/>
         <source>User override directory:</source>
-        <translation>Dossier de l'utilisateur :</translation>
+        <translation>Dossier de l&apos;utilisateur :</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="634"/>
@@ -412,7 +412,7 @@
         <location filename="../src/GUI/gui.cpp" line="613"/>
         <location filename="../src/GUI/gui.cpp" line="614"/>
         <source>Paths</source>
-        <translation>Chemin d'accès</translation>
+        <translation>Chemin d&apos;accès</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="244"/>
@@ -469,7 +469,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="348"/>
         <source>Show toolbars</source>
-        <translation>Afficher la barre d'outils</translation>
+        <translation>Afficher la barre d&apos;outils</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="354"/>
@@ -560,7 +560,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="463"/>
         <source>Units</source>
-        <translation>Système d'unités</translation>
+        <translation>Système d&apos;unités</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
@@ -908,7 +908,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="110"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="192"/>
         <source>Use anti-aliasing</source>
-        <translation>Utiliser l'anticrénelage</translation>
+        <translation>Utiliser l&apos;anticrénelage</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="189"/>
@@ -933,7 +933,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="212"/>
         <source>Background color:</source>
-        <translation>Couleur d'arrière plan :</translation>
+        <translation>Couleur d&apos;arrière plan :</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="223"/>
@@ -1145,12 +1145,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="351"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
-        <translation>La zone d'impression est presque celle affichée. L'échelle reste la même.</translation>
+        <translation>La zone d&apos;impression est presque celle affichée. L&apos;échelle reste la même.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="353"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
-        <translation>L'échelle est ajustée pour que tout le contenu (traces et points de jalonnement) rentre dans la zone d'impression tout en gardant proches les résolutions d'impression et de carte.</translation>
+        <translation>L&apos;échelle est ajustée pour que tout le contenu (traces et points de jalonnement) rentre dans la zone d&apos;impression tout en gardant proches les résolutions d&apos;impression et de carte.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="375"/>
@@ -1180,7 +1180,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="385"/>
         <source>Item count (&gt;1)</source>
-        <translation>Nombre d'éléments (&gt;1)</translation>
+        <translation>Nombre d&apos;éléments (&gt;1)</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="400"/>
@@ -1190,7 +1190,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="410"/>
         <source>Print mode</source>
-        <translation>Mode d'impression</translation>
+        <translation>Mode d&apos;impression</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="411"/>
@@ -1499,4 +1499,3 @@
     </message>
 </context>
 </TS>
-
