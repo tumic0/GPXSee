@@ -41,6 +41,6 @@
 #define GLOBAL_MAP_DIR         GLOBAL_DIR + QString("/") + MAP_DIR
 #define GLOBAL_POI_DIR         GLOBAL_DIR + QString("/") + POI_DIR
 #define TILES_DIR              USER_DIR + QString("/tiles")
-#define TRANSLATIONS_DIR       GLOBAL_DIR + QString("/locale")
+#define TRANSLATIONS_DIR       GLOBAL_DIR + QString("/translations")
 
 #endif /* CONFIG_H */
