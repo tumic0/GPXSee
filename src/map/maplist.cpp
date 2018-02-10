@@ -78,16 +78,7 @@ bool MapList::loadFile(const QString &path, bool *atlas, bool dir)
 	}
 }
 
-bool MapList::loadFile(const QString &path)
-{
-	bool atlas;
-
-	_errorString.clear();
-
-	return loadFile(path, &atlas, false);
-}
-
-bool MapList::loadDir(const QString &path)
+bool MapList::loadDirR(const QString &path)
 {
 	QDir md(path);
 	md.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
@@ -95,14 +86,12 @@ bool MapList::loadDir(const QString &path)
 	QFileInfoList ml = md.entryInfoList();
 	bool atlas, ret = true;
 
-	_errorString.clear();
-
 	for (int i = 0; i < ml.size(); i++) {
 		const QFileInfo &fi = ml.at(i);
 		QString suffix = fi.suffix().toLower();
 
 		if (fi.isDir() && fi.fileName() != "set") {
-			if (!loadDir(fi.absoluteFilePath()))
+			if (!loadDirR(fi.absoluteFilePath()))
 				ret = false;
 		} else if (filter().contains("*." + suffix)) {
 			if (!loadFile(fi.absoluteFilePath(), &atlas, true))
@@ -113,6 +102,20 @@ bool MapList::loadDir(const QString &path)
 	}
 
 	return ret;
+}
+
+bool MapList::loadFile(const QString &path)
+{
+	bool atlas;
+
+	_errorString.clear();
+	return loadFile(path, &atlas, false);
+}
+
+bool MapList::loadDir(const QString &path)
+{
+	_errorString.clear();
+	return loadDirR(path);
 }
 
 void MapList::clear()
