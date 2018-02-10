@@ -212,7 +212,7 @@ TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_fr.ts
 macx {
     ICON = icons/gpxsee.icns
-    QMAKE_INFO_PLIST = Info.plist
+    QMAKE_INFO_PLIST = pkg/Info.plist
     LOCALE.path = Contents/Resources/translations
     LOCALE.files = lang/gpxsee_cs.qm \
         lang/gpxsee_de.qm \
