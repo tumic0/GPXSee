@@ -220,6 +220,8 @@ macx {
         lang/gpxsee_fr.qm \
         lang/gpxsee_ru.qm \
         lang/gpxsee_sv.qm
+    CSV.path = Contents/Resources
+    CSV.files = pkg/csv
     MAPS.path = Contents/Resources
     MAPS.files = pkg/maps
     ICONS.path = Contents/Resources/icons
@@ -228,10 +230,6 @@ macx {
         icons/fit.icns \
         icons/igc.icns \
         icons/nmea.icns
-    CSV.path = Contents/Resources
-    CSV.files = pkg/ellipsoids.csv \
-        pkg/gcs.csv \
-        pkg/pcs.csv
     QMAKE_BUNDLE_DATA += LOCALE MAPS ICONS CSV
 }
 win32 {

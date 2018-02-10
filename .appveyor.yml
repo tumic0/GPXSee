@@ -34,11 +34,7 @@ build_script:
 
     copy pkg\%NSI% installer
 
-    copy pkg\ellipsoids.csv installer
-
-    copy pkg\gcs.csv installer
-
-    copy pkg\pcs.csv installer
+    copy pkg\csv installer /i
 
     xcopy pkg\maps installer\maps /i
 

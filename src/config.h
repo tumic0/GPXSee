@@ -12,9 +12,9 @@
 #define FONT_FAMILY     "Arial"
 #define FONT_SIZE       12 // px
 
-#define ELLIPSOID_FILE  QString("ellipsoids.csv")
-#define GCS_FILE        QString("gcs.csv")
-#define PCS_FILE        QString("pcs.csv")
+#define ELLIPSOID_FILE  QString("csv/ellipsoids.csv")
+#define GCS_FILE        QString("csv/gcs.csv")
+#define PCS_FILE        QString("csv/pcs.csv")
 #define MAP_DIR         QString("maps")
 #define POI_DIR         QString("POI")
 
