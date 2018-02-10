@@ -615,15 +615,17 @@ void GUI::paths()
 	msgBox.setInformativeText(
 	  "<style>td {white-space: pre; padding-right: 1em;}</style>"
 	  "<div><table><tr><td>" + tr("Map directory:") + "</td><td><code>"
-	  + GLOBAL_MAP_DIR + "</code></td></tr><tr><td>" + tr("POI directory:")
-	  + "</td><td><code>" + GLOBAL_POI_DIR + "</code></td></tr><tr><td>"
-	  + tr("GCS file:") + "</td><td><code>" + GLOBAL_GCS_FILE
+	  + QDir::cleanPath(GLOBAL_MAP_DIR) + "</code></td></tr><tr><td>"
+	  + tr("POI directory:") + "</td><td><code>"
+	  + QDir::cleanPath(GLOBAL_POI_DIR) + "</code></td></tr><tr><td>"
+	  + tr("GCS file:") + "</td><td><code>" + QDir::cleanPath(GLOBAL_GCS_FILE)
 	  + "</code></td></tr><tr><td>" + tr("PCS file:") + "</td><td><code>"
-	  + GLOBAL_PCS_FILE + "</code></td></tr><tr><td>" + tr("Ellipsoids file:")
-	  + "</td><td><code>" + GLOBAL_ELLIPSOID_FILE
-	  + "</code></td></tr>" + "<tr><td></td><td></td></tr></table></div>"
-	  "<div><table><tr><td>" + tr("User override directory:")
-	  + "</td><td><code>" + USER_DIR + "</td></tr></table></div>"
+	  + QDir::cleanPath(GLOBAL_PCS_FILE) + "</code></td></tr><tr><td>"
+	  + tr("Ellipsoids file:") + "</td><td><code>"
+	  + QDir::cleanPath(GLOBAL_ELLIPSOID_FILE) + "</code></td></tr>"
+	  + "<tr><td></td><td></td></tr></table></div><div><table><tr><td>"
+	  + tr("User override directory:") + "</td><td><code>"
+	  + QDir::cleanPath(USER_DIR) + "</td></tr></table></div>"
 	);
 
 	msgBox.exec();
