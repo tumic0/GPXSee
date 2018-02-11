@@ -74,6 +74,7 @@ private slots:
 	void setMovingTime() {setTimeType(Moving);}
 	void setMetricUnits() {setUnits(Metric);}
 	void setImperialUnits() {setUnits(Imperial);}
+	void setNauticalUnits() {setUnits(Nautical);}
 	void setDistanceGraph() {setGraphType(Distance);}
 	void setTimeGraph() {setGraphType(Time);}
 	void setDecimalDegrees() {setCoordinatesFormat(DecimalDegrees);}
@@ -170,6 +171,7 @@ private:
 	QAction *_firstAction;
 	QAction *_metricUnitsAction;
 	QAction *_imperialUnitsAction;
+	QAction *_nauticalUnitsAction;
 	QAction *_decimalDegreesAction;
 	QAction *_degreesMinutesAction;
 	QAction *_DMSAction;

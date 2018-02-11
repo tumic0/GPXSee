@@ -53,6 +53,13 @@ QString Format::distance(qreal value, Units units)
 		else
 			return QString::number(value * M2MI, 'f', 1) + UNIT_SPACE
 			  + qApp->translate("Format", "mi");
+	} else if (units == Nautical) {
+		if (value < NMIINM)
+			return QString::number(value * M2FT, 'f', 0) + UNIT_SPACE
+			  + qApp->translate("Format", "ft");
+		else
+			return QString::number(value * M2NMI, 'f', 1) + UNIT_SPACE
+			  + qApp->translate("Format", "nmi");
 	} else {
 		if (value < KMINM)
 			return QString::number(value, 'f', 0) + UNIT_SPACE

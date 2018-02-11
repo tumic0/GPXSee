@@ -104,21 +104,29 @@ void GraphView::setYUnits(const QString &units)
 void GraphView::setXUnits()
 {
 	if (_graphType == Distance) {
-		if (_units == Metric) {
-			if (bounds().width() < KMINM) {
-				_xUnits = tr("m");
-				_xScale = 1;
-			} else {
-				_xUnits = tr("km");
-				_xScale = M2KM;
-			}
-		} else {
+		if (_units == Imperial) {
 			if (bounds().width() < MIINM) {
 				_xUnits = tr("ft");
 				_xScale = M2FT;
 			} else {
 				_xUnits = tr("mi");
 				_xScale = M2MI;
+			}
+		} else if (_units == Nautical) {
+			if (bounds().width() < NMIINM) {
+				_xUnits = tr("ft");
+				_xScale = M2FT;
+			} else {
+				_xUnits = tr("nmi");
+				_xScale = M2NMI;
+			}
+		} else {
+			if (bounds().width() < KMINM) {
+				_xUnits = tr("m");
+				_xScale = 1;
+			} else {
+				_xUnits = tr("km");
+				_xScale = M2KM;
 			}
 		}
 	} else {

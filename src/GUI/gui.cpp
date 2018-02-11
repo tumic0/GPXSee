@@ -372,6 +372,11 @@ void GUI::createActions()
 	_imperialUnitsAction->setActionGroup(ag);
 	connect(_imperialUnitsAction, SIGNAL(triggered()), this,
 	  SLOT(setImperialUnits()));
+	_nauticalUnitsAction = new QAction(tr("Nautical"), this);
+	_nauticalUnitsAction->setCheckable(true);
+	_nauticalUnitsAction->setActionGroup(ag);
+	connect(_nauticalUnitsAction, SIGNAL(triggered()), this,
+	  SLOT(setNauticalUnits()));
 	ag = new QActionGroup(this);
 	ag->setExclusive(true);
 	_decimalDegreesAction = new QAction(tr("Decimal degrees (DD)"), this);
@@ -479,6 +484,7 @@ void GUI::createMenus()
 	QMenu *unitsMenu = settingsMenu->addMenu(tr("Units"));
 	unitsMenu->addAction(_metricUnitsAction);
 	unitsMenu->addAction(_imperialUnitsAction);
+	unitsMenu->addAction(_nauticalUnitsAction);
 	QMenu *coordinatesMenu = settingsMenu->addMenu(tr("Coordinates format"));
 	coordinatesMenu->addAction(_decimalDegreesAction);
 	coordinatesMenu->addAction(_degreesMinutesAction);
@@ -1463,10 +1469,10 @@ void GUI::writeSettings()
 	  TIME_TYPE_DEFAULT)
 		settings.setValue(TIME_TYPE_SETTING, _movingTimeAction->isChecked()
 		  ? Moving : Total);
-	if ((_imperialUnitsAction->isChecked() ? Imperial : Metric) !=
-	  UNITS_DEFAULT)
-		settings.setValue(UNITS_SETTING, _imperialUnitsAction->isChecked()
-		  ? Imperial : Metric);
+	Units units = _imperialUnitsAction->isChecked() ? Imperial
+	  : _nauticalUnitsAction->isChecked() ? Nautical : Metric;
+	if (units != UNITS_DEFAULT)
+		settings.setValue(UNITS_SETTING, units);
 	CoordinatesFormat format = _DMSAction->isChecked() ? DMS
 	  : _degreesMinutesAction->isChecked() ? DegreesMinutes : DecimalDegrees;
 	if (format != COORDINATES_DEFAULT)
@@ -1630,6 +1636,7 @@ void GUI::writeSettings()
 
 void GUI::readSettings()
 {
+	int value;
 	QSettings settings(APP_NAME, APP_NAME);
 
 	settings.beginGroup(WINDOW_SETTINGS_GROUP);
@@ -1644,15 +1651,18 @@ void GUI::readSettings()
 	else
 		_totalTimeAction->activate(QAction::Trigger);
 
-	if (settings.value(UNITS_SETTING, UNITS_DEFAULT).toInt() == Imperial)
+	value = settings.value(UNITS_SETTING, UNITS_DEFAULT).toInt();
+	if (value == Imperial)
 		_imperialUnitsAction->activate(QAction::Trigger);
+	else if (value == Nautical)
+		_nauticalUnitsAction->activate(QAction::Trigger);
 	else
 		_metricUnitsAction->activate(QAction::Trigger);
 
-	if (settings.value(COORDINATES_SETTING, COORDINATES_DEFAULT).toInt() == DMS)
+	value = settings.value(COORDINATES_SETTING, COORDINATES_DEFAULT).toInt();
+	if (value == DMS)
 		_DMSAction->activate(QAction::Trigger);
-	else if (settings.value(COORDINATES_SETTING, COORDINATES_DEFAULT).toInt()
-	  == DegreesMinutes)
+	else if (value == DegreesMinutes)
 		_degreesMinutesAction->activate(QAction::Trigger);
 	else
 		_decimalDegreesAction->activate(QAction::Trigger);
@@ -1900,7 +1910,8 @@ int GUI::mapIndex(const QString &name)
 
 Units GUI::units() const
 {
-	return _imperialUnitsAction->isChecked() ? Imperial : Metric;
+	return _imperialUnitsAction->isChecked() ? Imperial
+	  : _nauticalUnitsAction->isChecked() ? Nautical : Metric;
 }
 
 qreal GUI::distance() const

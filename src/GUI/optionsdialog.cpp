@@ -291,6 +291,9 @@ QWidget *OptionsDialog::createDataPage()
 	if (_options->units == Imperial) {
 		_pauseSpeed->setValue(_options->pauseSpeed * MS2MIH);
 		_pauseSpeed->setSuffix(UNIT_SPACE + tr("mi/h"));
+	} else if (_options->units == Nautical) {
+		_pauseSpeed->setValue(_options->pauseSpeed * MS2KN);
+		_pauseSpeed->setSuffix(UNIT_SPACE + tr("kn"));
 	} else {
 		_pauseSpeed->setValue(_options->pauseSpeed * MS2KMH);
 		_pauseSpeed->setSuffix(UNIT_SPACE + tr("km/h"));
@@ -323,6 +326,9 @@ QWidget *OptionsDialog::createPOIPage()
 	if (_options->units == Imperial) {
 		_poiRadius->setValue(_options->poiRadius / MIINM);
 		_poiRadius->setSuffix(UNIT_SPACE + tr("mi"));
+	} else if (_options->units == Nautical) {
+		_poiRadius->setValue(_options->poiRadius / NMIINM);
+		_poiRadius->setSuffix(UNIT_SPACE + tr("nmi"));
 	} else {
 		_poiRadius->setValue(_options->poiRadius / KMINM);
 		_poiRadius->setSuffix(UNIT_SPACE + tr("km"));
@@ -525,13 +531,15 @@ void OptionsDialog::accept()
 	_options->powerFilter = _powerFilter->value();
 	_options->outlierEliminate = _outlierEliminate->isChecked();
 	qreal pauseSpeed = (_options->units == Imperial)
-		? _pauseSpeed->value() / MS2MIH : _pauseSpeed->value() / MS2KMH;
+		? _pauseSpeed->value() / MS2MIH : (_options->units == Nautical)
+		? _pauseSpeed->value() / MS2KN : _pauseSpeed->value() / MS2KMH;
 	if (qAbs(pauseSpeed - _options->pauseSpeed) > 0.01)
 		_options->pauseSpeed = pauseSpeed;
 	_options->pauseInterval = _pauseInterval->value();
 
 	qreal poiRadius = (_options->units == Imperial)
-		? _poiRadius->value() * MIINM :  _poiRadius->value() * KMINM;
+		? _poiRadius->value() * MIINM : (_options->units == Nautical)
+		? _poiRadius->value() * NMIINM : _poiRadius->value() * KMINM;
 	if (qAbs(poiRadius - _options->poiRadius) > 0.01)
 		_options->poiRadius = poiRadius;
 

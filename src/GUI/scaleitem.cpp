@@ -82,6 +82,9 @@ QString ScaleItem::units() const
 	if (_units == Imperial)
 		return _scale ? qApp->translate("ScaleItem", "mi")
 		  : qApp->translate("ScaleItem", "ft");
+	else if (_units == Nautical)
+		return _scale ? qApp->translate("ScaleItem", "nmi")
+		  : qApp->translate("ScaleItem", "ft");
 	else
 		return _scale ? qApp->translate("ScaleItem", "km")
 		  : qApp->translate("ScaleItem", "m");
@@ -94,8 +97,18 @@ void ScaleItem::computeScale()
 	if (_units == Imperial) {
 		_length = niceNum((res * M2FT * SCALE_WIDTH) / SEGMENTS, 1);
 		if (_length >= MIINFT) {
-			_length = niceNum((res * M2FT * FT2MI * SCALE_WIDTH) / SEGMENTS, 1);
-			_width = (_length / (res * M2FT * FT2MI));
+			_length = niceNum((res * M2MI * SCALE_WIDTH) / SEGMENTS, 1);
+			_width = (_length / (res * M2MI));
+			_scale = true;
+		} else {
+			_width = (_length / (res * M2FT));
+			_scale = false;
+		}
+	} else if (_units == Nautical) {
+		_length = niceNum((res * M2FT * SCALE_WIDTH) / SEGMENTS, 1);
+		if (_length >= NMIINFT) {
+			_length = niceNum((res * M2NMI * SCALE_WIDTH) / SEGMENTS, 1);
+			_width = (_length / (res * M2NMI));
 			_scale = true;
 		} else {
 			_width = (_length / (res * M2FT));
