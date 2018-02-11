@@ -1467,10 +1467,10 @@ void GUI::writeSettings()
 	  UNITS_DEFAULT)
 		settings.setValue(UNITS_SETTING, _imperialUnitsAction->isChecked()
 		  ? Imperial : Metric);
-	CoordinatesFormat ct = _DMSAction->isChecked() ? DMS
+	CoordinatesFormat format = _DMSAction->isChecked() ? DMS
 	  : _degreesMinutesAction->isChecked() ? DegreesMinutes : DecimalDegrees;
-	if (ct != COORDINATES_DEFAULT)
-		settings.setValue(COORDINATES_SETTING, ct);
+	if (format != COORDINATES_DEFAULT)
+		settings.setValue(COORDINATES_SETTING, format);
 	if (_showToolbarsAction->isChecked() != SHOW_TOOLBARS_DEFAULT)
 		settings.setValue(SHOW_TOOLBARS_SETTING,
 		  _showToolbarsAction->isChecked());

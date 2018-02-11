@@ -10,14 +10,14 @@
 #define FS(size) \
 	((int)((qreal)size * 1.41))
 
-QString WaypointItem::toolTip(Units units, CoordinatesFormat ct)
+QString WaypointItem::toolTip(Units units, CoordinatesFormat format)
 {
 	ToolTip tt;
 
 	if (!_waypoint.name().isEmpty())
 		tt.insert(qApp->translate("WaypointItem", "Name"), _waypoint.name());
 	tt.insert(qApp->translate("WaypointItem", "Coordinates"),
-	  Format::coordinates(_waypoint.coordinates(), ct));
+	  Format::coordinates(_waypoint.coordinates(), format));
 	if (!std::isnan(_waypoint.elevation()))
 		tt.insert(qApp->translate("WaypointItem", "Elevation"),
 		  Format::elevation(_waypoint.elevation(), units));
@@ -124,9 +124,9 @@ void WaypointItem::setColor(const QColor &color)
 	update();
 }
 
-void WaypointItem::setToolTipFormat(Units units, CoordinatesFormat ct)
+void WaypointItem::setToolTipFormat(Units units, CoordinatesFormat format)
 {
-	setToolTip(toolTip(units, ct));
+	setToolTip(toolTip(units, format));
 }
 
 void WaypointItem::showLabel(bool show)

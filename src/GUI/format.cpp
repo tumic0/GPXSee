@@ -17,7 +17,7 @@ static QString deg2DMS(double val)
 	  .arg(sec, 4, 'f', 1, QChar('0'));
 }
 
-static QString deg2DM(double val)
+static QString deg2DMM(double val)
 {
 	int deg = val;
 	double r1 = val - deg;
@@ -80,8 +80,8 @@ QString Format::coordinates(const Coordinates &value, CoordinatesFormat type)
 
 	switch (type) {
 		case DegreesMinutes:
-			return deg2DM(qAbs(value.lat())) + yH + "," + QChar(0x00A0)
-			  + deg2DM(qAbs(value.lon())) + xH;
+			return deg2DMM(qAbs(value.lat())) + yH + "," + QChar(0x00A0)
+			  + deg2DMM(qAbs(value.lon())) + xH;
 			break;
 		case DMS:
 			return deg2DMS(qAbs(value.lat())) + yH + "," + QChar(0x00A0)
