@@ -49,6 +49,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	connect(_poi, SIGNAL(pointsChanged()), this, SLOT(updatePOI()));
 
 	_units = Metric;
+	_coordinatesFormat = DecimalDegrees;
 	_opacity = 1.0;
 	_backgroundColor = Qt::white;
 	_markerColor = Qt::red;
@@ -137,6 +138,7 @@ PathItem *MapView::addRoute(const Route &route)
 	ri->setWidth(_routeWidth);
 	ri->setStyle(_routeStyle);
 	ri->setUnits(_units);
+	ri->setCoordinatesFormat(_coordinatesFormat);
 	ri->setVisible(_showRoutes);
 	ri->showWaypoints(_showRouteWaypoints);
 	ri->showWaypointLabels(_showWaypointLabels);
@@ -162,7 +164,7 @@ void MapView::addWaypoints(const QList<Waypoint> &waypoints)
 		wi->setSize(_waypointSize);
 		wi->setColor(_waypointColor);
 		wi->showLabel(_showWaypointLabels);
-		wi->setUnits(_units);
+		wi->setToolTipFormat(_units, _coordinatesFormat);
 		wi->setVisible(_showWaypoints);
 		wi->setDigitalZoom(_digitalZoom);
 		_scene->addItem(wi);
@@ -348,28 +350,49 @@ void MapView::addPOI(const QList<Waypoint> &waypoints)
 		pi->showLabel(_showPOILabels);
 		pi->setVisible(_showPOI);
 		pi->setDigitalZoom(_digitalZoom);
+		pi->setToolTipFormat(_units, _coordinatesFormat);
 		_scene->addItem(pi);
 
 		_pois.insert(SearchPointer<Waypoint>(&(pi->waypoint())), pi);
 	}
 }
 
-void MapView::setUnits(enum Units units)
+void MapView::setUnits(Units units)
 {
+	if (_units == units)
+		return;
+
 	_units = units;
 
-	_mapScale->setUnits(units);
+	_mapScale->setUnits(_units);
 
 	for (int i = 0; i < _tracks.count(); i++)
-		_tracks[i]->setUnits(units);
+		_tracks[i]->setUnits(_units);
 	for (int i = 0; i < _routes.count(); i++)
-		_routes[i]->setUnits(units);
+		_routes[i]->setUnits(_units);
 	for (int i = 0; i < _waypoints.size(); i++)
-		_waypoints.at(i)->setUnits(units);
+		_waypoints.at(i)->setToolTipFormat(_units, _coordinatesFormat);
 
 	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
-		it.value()->setUnits(units);
+		it.value()->setToolTipFormat(_units, _coordinatesFormat);
+}
+
+void MapView::setCoordinatesFormat(CoordinatesFormat format)
+{
+	if (_coordinatesFormat == format)
+		return;
+
+	_coordinatesFormat = format;
+
+	for (int i = 0; i < _waypoints.count(); i++)
+		_waypoints.at(i)->setToolTipFormat(_units, _coordinatesFormat);
+	for (int i = 0; i < _routes.count(); i++)
+		_routes[i]->setCoordinatesFormat(_coordinatesFormat);
+
+	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
+	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+		it.value()->setToolTipFormat(_units, _coordinatesFormat);
 }
 
 void MapView::clearMapCache()

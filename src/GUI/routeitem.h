@@ -4,6 +4,7 @@
 #include "data/route.h"
 #include "pathitem.h"
 #include "units.h"
+#include "format.h"
 
 class Map;
 
@@ -17,6 +18,7 @@ public:
 	void setMap(Map *map);
 
 	void setUnits(Units units);
+	void setCoordinatesFormat(CoordinatesFormat format);
 	void showWaypoints(bool show);
 	void showWaypointLabels(bool show);
 
@@ -25,6 +27,8 @@ private:
 
 	QString _name;
 	QString _desc;
+	Units _units;
+	CoordinatesFormat _coordinatesFormat;
 };
 
 #endif // ROUTEITEM_H

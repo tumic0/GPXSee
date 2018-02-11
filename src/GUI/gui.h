@@ -10,6 +10,7 @@
 #include "data/poi.h"
 #include "units.h"
 #include "timetype.h"
+#include "format.h"
 #include "exportdialog.h"
 #include "optionsdialog.h"
 
@@ -75,6 +76,9 @@ private slots:
 	void setImperialUnits() {setUnits(Imperial);}
 	void setDistanceGraph() {setGraphType(Distance);}
 	void setTimeGraph() {setGraphType(Time);}
+	void setDecimalDegrees() {setCoordinatesFormat(DecimalDegrees);}
+	void setDegreesMinutes() {setCoordinatesFormat(DegreesMinutes);}
+	void setDMS() {setCoordinatesFormat(DMS);}
 
 	void sliderPositionChanged(qreal pos);
 
@@ -111,6 +115,7 @@ private:
 	Units units() const;
 	void setTimeType(TimeType type);
 	void setUnits(Units units);
+	void setCoordinatesFormat(CoordinatesFormat format);
 	void setGraphType(GraphType type);
 
 	qreal distance() const;
@@ -165,6 +170,9 @@ private:
 	QAction *_firstAction;
 	QAction *_metricUnitsAction;
 	QAction *_imperialUnitsAction;
+	QAction *_decimalDegreesAction;
+	QAction *_degreesMinutesAction;
+	QAction *_DMSAction;
 	QAction *_totalTimeAction;
 	QAction *_movingTimeAction;
 	QAction *_nextMapAction;

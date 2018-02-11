@@ -40,7 +40,6 @@
 #include "filebrowser.h"
 #include "cpuarch.h"
 #include "graphtab.h"
-#include "format.h"
 #include "gui.h"
 
 
@@ -373,6 +372,23 @@ void GUI::createActions()
 	_imperialUnitsAction->setActionGroup(ag);
 	connect(_imperialUnitsAction, SIGNAL(triggered()), this,
 	  SLOT(setImperialUnits()));
+	ag = new QActionGroup(this);
+	ag->setExclusive(true);
+	_decimalDegreesAction = new QAction(tr("Decimal degrees (DD)"), this);
+	_decimalDegreesAction->setCheckable(true);
+	_decimalDegreesAction->setActionGroup(ag);
+	connect(_decimalDegreesAction, SIGNAL(triggered()), this,
+	  SLOT(setDecimalDegrees()));
+	_degreesMinutesAction = new QAction(tr("Degrees and decimal minutes (DMM)"),
+	  this);
+	_degreesMinutesAction->setCheckable(true);
+	_degreesMinutesAction->setActionGroup(ag);
+	connect(_degreesMinutesAction, SIGNAL(triggered()), this,
+	  SLOT(setDegreesMinutes()));
+	_DMSAction = new QAction(tr("Degrees, minutes, seconds (DMS)"), this);
+	_DMSAction->setCheckable(true);
+	_DMSAction->setActionGroup(ag);
+	connect(_DMSAction, SIGNAL(triggered()), this, SLOT(setDMS()));
 	_fullscreenAction = new QAction(QIcon(QPixmap(FULLSCREEN_ICON)),
 	  tr("Fullscreen mode"), this);
 	_fullscreenAction->setCheckable(true);
@@ -463,6 +479,10 @@ void GUI::createMenus()
 	QMenu *unitsMenu = settingsMenu->addMenu(tr("Units"));
 	unitsMenu->addAction(_metricUnitsAction);
 	unitsMenu->addAction(_imperialUnitsAction);
+	QMenu *coordinatesMenu = settingsMenu->addMenu(tr("Coordinates format"));
+	coordinatesMenu->addAction(_decimalDegreesAction);
+	coordinatesMenu->addAction(_degreesMinutesAction);
+	coordinatesMenu->addAction(_DMSAction);
 	settingsMenu->addSeparator();
 	settingsMenu->addAction(_showToolbarsAction);
 	settingsMenu->addAction(_fullscreenAction);
@@ -1293,6 +1313,11 @@ void GUI::setUnits(Units units)
 	updateStatusBarInfo();
 }
 
+void GUI::setCoordinatesFormat(CoordinatesFormat format)
+{
+	_mapView->setCoordinatesFormat(format);
+}
+
 void GUI::setGraphType(GraphType type)
 {
 	_sliderPos = 0;
@@ -1437,11 +1462,15 @@ void GUI::writeSettings()
 	if ((_movingTimeAction->isChecked() ? Moving : Total) !=
 	  TIME_TYPE_DEFAULT)
 		settings.setValue(TIME_TYPE_SETTING, _movingTimeAction->isChecked()
-	  ? Moving : Total);
+		  ? Moving : Total);
 	if ((_imperialUnitsAction->isChecked() ? Imperial : Metric) !=
 	  UNITS_DEFAULT)
 		settings.setValue(UNITS_SETTING, _imperialUnitsAction->isChecked()
-	  ? Imperial : Metric);
+		  ? Imperial : Metric);
+	CoordinatesFormat ct = _DMSAction->isChecked() ? DMS
+	  : _degreesMinutesAction->isChecked() ? DegreesMinutes : DecimalDegrees;
+	if (ct != COORDINATES_DEFAULT)
+		settings.setValue(COORDINATES_SETTING, ct);
 	if (_showToolbarsAction->isChecked() != SHOW_TOOLBARS_DEFAULT)
 		settings.setValue(SHOW_TOOLBARS_SETTING,
 		  _showToolbarsAction->isChecked());
@@ -1610,20 +1639,24 @@ void GUI::readSettings()
 
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
 	if (settings.value(TIME_TYPE_SETTING, TIME_TYPE_DEFAULT).toInt()
-	  == Moving) {
-		setTimeType(Moving);
-		_movingTimeAction->setChecked(true);
-	} else {
-		setTimeType(Total);
-		_totalTimeAction->setChecked(true);
-	}
-	if (settings.value(UNITS_SETTING, UNITS_DEFAULT).toInt() == Imperial) {
-		setUnits(Imperial);
-		_imperialUnitsAction->setChecked(true);
-	} else {
-		setUnits(Metric);
-		_metricUnitsAction->setChecked(true);
-	}
+	  == Moving)
+		_movingTimeAction->activate(QAction::Trigger);
+	else
+		_totalTimeAction->activate(QAction::Trigger);
+
+	if (settings.value(UNITS_SETTING, UNITS_DEFAULT).toInt() == Imperial)
+		_imperialUnitsAction->activate(QAction::Trigger);
+	else
+		_metricUnitsAction->activate(QAction::Trigger);
+
+	if (settings.value(COORDINATES_SETTING, COORDINATES_DEFAULT).toInt() == DMS)
+		_DMSAction->activate(QAction::Trigger);
+	else if (settings.value(COORDINATES_SETTING, COORDINATES_DEFAULT).toInt()
+	  == DegreesMinutes)
+		_degreesMinutesAction->activate(QAction::Trigger);
+	else
+		_decimalDegreesAction->activate(QAction::Trigger);
+
 	if (!settings.value(SHOW_TOOLBARS_SETTING, SHOW_TOOLBARS_DEFAULT).toBool())
 		showToolbars(false);
 	else

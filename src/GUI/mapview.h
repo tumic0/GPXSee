@@ -9,6 +9,7 @@
 #include "data/waypoint.h"
 #include "searchpointer.h"
 #include "units.h"
+#include "format.h"
 #include "palette.h"
 
 class Data;
@@ -34,12 +35,13 @@ public:
 	void setPalette(const Palette &palette);
 	void setPOI(POI *poi);
 	void setMap(Map *map);
-	void setUnits(enum Units units);
 
 	void plot(QPainter *painter, const QRectF &target, qreal scale, bool hires);
 
 	void clear();
 
+	void setUnits(Units units);
+	void setMarkerColor(const QColor &color);
 	void setTrackWidth(int width);
 	void setRouteWidth(int width);
 	void setTrackStyle(Qt::PenStyle style);
@@ -52,7 +54,6 @@ public:
 	void setBackgroundColor(const QColor &color);
 	void useOpenGL(bool use);
 	void useAntiAliasing(bool use);
-	void setMarkerColor(const QColor &color);
 
 public slots:
 	void showMap(bool show);
@@ -65,6 +66,7 @@ public slots:
 	void showWaypoints(bool show);
 	void showRouteWaypoints(bool show);
 	void clearMapCache();
+	void setCoordinatesFormat(CoordinatesFormat format);
 
 private slots:
 	void updatePOI();
@@ -108,6 +110,7 @@ private:
 	POI *_poi;
 	Palette _palette;
 	Units _units;
+	CoordinatesFormat _coordinatesFormat;
 
 	qreal _opacity;
 	QColor _backgroundColor;

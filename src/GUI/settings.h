@@ -15,6 +15,8 @@
 #define TIME_TYPE_DEFAULT                 Total
 #define UNITS_SETTING                     "units"
 #define UNITS_DEFAULT                     (IMPERIAL_UNITS() ? Imperial : Metric)
+#define COORDINATES_SETTING               "coordinates"
+#define COORDINATES_DEFAULT               DecimalDegrees
 #define SHOW_TOOLBARS_SETTING             "toolbar"
 #define SHOW_TOOLBARS_DEFAULT             true
 
