@@ -43,11 +43,12 @@ static Coordinates molodensky(const Coordinates &c, const Datum &from,
 	return Coordinates(c.lon() + rad2deg(dlon), c.lat() + rad2deg(dlat));
 }
 
-Datum::Datum(const Ellipsoid *ellipsoid, double dx, double dy,
-  double dz) : _ellipsoid(ellipsoid), _dx(dx), _dy(dy), _dz(dz)
+Datum::Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz)
+  : _ellipsoid(ellipsoid), _dx(dx), _dy(dy), _dz(dz)
 {
-	_WGS84 = (*_ellipsoid == *WGS84.ellipsoid() && _dx == WGS84.dx()
-	  && _dy == WGS84.dy() && _dz == WGS84.dz()) ? true : false;
+	_WGS84 = (_ellipsoid->radius() == WGS84_RADIUS
+	  && _ellipsoid->flattening() == WGS84_FLATTENING && _dx == 0.0
+	  && _dy == 0.0 && _dz == 0.0) ? true : false;
 }
 
 Coordinates Datum::toWGS84(const Coordinates &c) const
