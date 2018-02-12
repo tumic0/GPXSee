@@ -123,7 +123,7 @@
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="125"/>
         <source>ft</source>
-        <translation>ft</translation>
+        <translation>фт</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="61"/>
@@ -141,7 +141,7 @@
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="26"/>
         <source>ft</source>
-        <translation>ft</translation>
+        <translation>фт</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="28"/>
@@ -274,17 +274,17 @@
         <location filename="../src/GUI/format.cpp" line="59"/>
         <location filename="../src/GUI/format.cpp" line="80"/>
         <source>ft</source>
-        <translation>ft</translation>
+        <translation>фт</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="55"/>
         <source>mi</source>
-        <translation>mi</translation>
+        <translation>мл</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="62"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>мор. мл</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="66"/>
@@ -471,22 +471,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="375"/>
         <source>Nautical</source>
-        <translation type="unfinished"></translation>
+        <translation>Морские</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="382"/>
         <source>Decimal degrees (DD)</source>
-        <translation type="unfinished"></translation>
+        <translation>Десятичные градусы (DD)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="387"/>
         <source>Degrees and decimal minutes (DMM)</source>
-        <translation type="unfinished"></translation>
+        <translation>Градусы, десятичные минуты (DMM)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="393"/>
         <source>Degrees, minutes, seconds (DMS)</source>
-        <translation type="unfinished"></translation>
+        <translation>Градусы, минуты, секунды (DMS)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="398"/>
@@ -561,7 +561,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="488"/>
         <source>Coordinates format</source>
-        <translation type="unfinished"></translation>
+        <translation>Формат координат</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="498"/>
@@ -790,17 +790,17 @@
         <location filename="../src/GUI/graphview.cpp" line="109"/>
         <location filename="../src/GUI/graphview.cpp" line="117"/>
         <source>ft</source>
-        <translation>фут</translation>
+        <translation>фт</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="112"/>
         <source>mi</source>
-        <translation>миля</translation>
+        <translation>мл</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="120"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>мор. мл</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="134"/>
@@ -1117,12 +1117,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="293"/>
         <source>mi/h</source>
-        <translation>mph</translation>
+        <translation>мл/ч</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="296"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>уз</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="299"/>
@@ -1157,12 +1157,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="328"/>
         <source>mi</source>
-        <translation>миля</translation>
+        <translation>мл</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="331"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>мор. мл</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="334"/>
@@ -1353,18 +1353,18 @@
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="83"/>
         <source>mi</source>
-        <translation>миля</translation>
+        <translation>мл</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="84"/>
         <location filename="../src/GUI/scaleitem.cpp" line="87"/>
         <source>ft</source>
-        <translation>фут</translation>
+        <translation>фт</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="86"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>мор. мл</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="89"/>
@@ -1403,12 +1403,12 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="83"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>уз</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="86"/>
         <source>mi/h</source>
-        <translation>mph</translation>
+        <translation>мл/ч</translation>
     </message>
 </context>
 <context>
@@ -1421,12 +1421,12 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="21"/>
         <source>mi/h</source>
-        <translation>mph</translation>
+        <translation>мл/ч</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="22"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>уз</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
