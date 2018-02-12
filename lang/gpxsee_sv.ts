@@ -17,7 +17,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="19"/>
         <source>Average</source>
-        <translation>Genomsnittlig</translation>
+        <translation>Medel</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="21"/>
@@ -284,7 +284,7 @@
     <message>
         <location filename="../src/GUI/format.cpp" line="62"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="66"/>
@@ -501,22 +501,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="375"/>
         <source>Nautical</source>
-        <translation type="unfinished"></translation>
+        <translation>Nautiska</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="382"/>
         <source>Decimal degrees (DD)</source>
-        <translation type="unfinished"></translation>
+        <translation>Decimala grader (DD)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="387"/>
         <source>Degrees and decimal minutes (DMM)</source>
-        <translation type="unfinished"></translation>
+        <translation>Grader och decimala minuter (DMM)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="393"/>
         <source>Degrees, minutes, seconds (DMS)</source>
-        <translation type="unfinished"></translation>
+        <translation>Grader, minuter, sekunder (DMS)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="398"/>
@@ -591,7 +591,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="488"/>
         <source>Coordinates format</source>
-        <translation type="unfinished"></translation>
+        <translation>Koordinatformat</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="498"/>
@@ -799,7 +799,7 @@
     <message>
         <location filename="../src/GUI/graphview.cpp" line="120"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="134"/>
@@ -1121,7 +1121,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="296"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>knop</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="299"/>
@@ -1161,7 +1161,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="331"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="334"/>
@@ -1363,7 +1363,7 @@
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="86"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="89"/>
@@ -1402,7 +1402,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="83"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>knop</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="86"/>
@@ -1425,7 +1425,7 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="22"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>knop</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
