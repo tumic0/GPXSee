@@ -23,7 +23,7 @@ enum Units {
 #define MIINFT  5280.0      // 1 mi in ft
 #define NMIINFT 6076.11549  // 1 nm in ft
 #define MIINM   1609.344    // 1 mi in m
-#define NMIINM  1852        // 1 nmi in m
+#define NMIINM  1852.0      // 1 nmi in m
 #define MININS  60.0        // 1 min in s
 #define HINS    3600.0      // 1 hins
 
