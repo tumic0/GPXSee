@@ -61,9 +61,11 @@ Coordinates Datum::fromWGS84(const Coordinates &c) const
 	return _WGS84 ? c : molodensky(c, WGS84, *this);
 }
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Datum &datum)
 {
 	dbg.nospace() << "Datum(" << *datum.ellipsoid() << ", " << datum.dx()
 	  << ", " << datum.dy() << ", " << datum.dz() << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG

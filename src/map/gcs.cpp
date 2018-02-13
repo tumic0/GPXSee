@@ -183,9 +183,11 @@ Coordinates GCS::fromWGS84(const Coordinates &c) const
 	return Coordinates(_primeMeridian.fromGreenwich(ds.lon()), ds.lat());
 }
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const GCS &gcs)
 {
 	dbg.nospace() << "GCS(" << gcs.datum() << ", " << gcs.primeMeridian()
 	  << ", " << gcs.angularUnits() << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG

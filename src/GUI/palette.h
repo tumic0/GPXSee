@@ -28,6 +28,8 @@ private:
 	qreal _state;
 };
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Palette &palette);
+#endif // QT_NO_DEBUG
 
 #endif // PALLETE_H

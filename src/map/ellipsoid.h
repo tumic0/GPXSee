@@ -35,6 +35,8 @@ private:
 inline bool operator==(const Ellipsoid &e1, const Ellipsoid &e2)
   {return (e1.radius() == e2.radius() && e1.flattening() == e2.flattening());}
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Ellipsoid &ellipsoid);
+#endif // QT_NO_DEBUG
 
 #endif // ELLIPSOID_H

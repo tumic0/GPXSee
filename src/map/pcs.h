@@ -43,6 +43,8 @@ private:
 	static GCS _nullGCS;
 };
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const PCS &pcs);
+#endif // QT_NO_DEBUG
 
 #endif // PCS_H

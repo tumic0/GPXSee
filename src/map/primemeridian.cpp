@@ -66,8 +66,10 @@ double PrimeMeridian::fromGreenwich(double val) const
 	return shift(val, -_pm);
 }
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const PrimeMeridian &pm)
 {
 	dbg.nospace() << "PrimeMeridian(" << pm._pm << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG

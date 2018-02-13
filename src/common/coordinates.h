@@ -43,6 +43,8 @@ inline bool operator==(const Coordinates &c1, const Coordinates &c2)
 inline bool operator!=(const Coordinates &c1, const Coordinates &c2)
   {return !(c1 == c2);}
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Coordinates &c);
+#endif // QT_NO_DEBUG
 
 #endif // COORDINATES_H

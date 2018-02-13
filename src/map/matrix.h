@@ -31,6 +31,8 @@ private:
 	size_t _w;
 };
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Matrix &matrix);
+#endif // QT_NO_DEBUG
 
 #endif // MATRIX_H

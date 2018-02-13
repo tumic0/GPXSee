@@ -187,9 +187,11 @@ void PCS::loadList(const QString &path)
 	}
 }
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const PCS &pcs)
 {
 	dbg.nospace() << "PCS(" << *pcs.gcs() << ", " << pcs.method() << ", "
 	  << pcs.units() << ", " << pcs.setup() << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG

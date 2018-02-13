@@ -105,6 +105,7 @@ Coordinates Projection::xy2ll(const QPointF &p) const
 	return _gcs->toWGS84(_ct->xy2ll(_units.toMeters(p)));
 }
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Projection::Setup &setup)
 {
 	dbg.nospace() << "Setup(" << setup.latitudeOrigin() << ", "
@@ -119,3 +120,4 @@ QDebug operator<<(QDebug dbg, const Projection::Method &method)
 	dbg.nospace() << "Method(" << method.id() << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG
