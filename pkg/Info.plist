@@ -29,7 +29,7 @@
 				<string>application/gpx+xml</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>gpx.icns</string>
+			<string>icons/gpx.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>GPS Exchange Format</string>
 			<key>CFBundleTypeRole</key>
@@ -45,7 +45,7 @@
 				<string>application/tcx+xml</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>tcx.icns</string>
+			<string>icons/tcx.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Training Center XML</string>
 			<key>CFBundleTypeRole</key>
@@ -61,7 +61,7 @@
 				<string>application/vnd.google-earth.kml+xml</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>kml.icns</string>
+			<string>icons/kml.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Keyhole Markup Language</string>
 			<key>CFBundleTypeRole</key>
@@ -77,7 +77,7 @@
 				<string>application/vnd.ant.fit</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>fit.icns</string>
+			<string>icons/fit.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Flexible and Interoperable Data Transfer</string>
 			<key>CFBundleTypeRole</key>
@@ -93,7 +93,7 @@
 				<string>application/vnd.fai.igc</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>igc.icns</string>
+			<string>icons/igc.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Flight Recorder Data Format</string>
 			<key>CFBundleTypeRole</key>
@@ -109,7 +109,7 @@
 				<string>application/vnd.nmea.nmea</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>nmea.icns</string>
+			<string>icons/nmea.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>NMEA 0183 data</string>
 			<key>CFBundleTypeRole</key>

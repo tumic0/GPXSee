@@ -1,5 +1,5 @@
 TARGET = GPXSee
-VERSION = 5.0
+VERSION = 5.1
 QT += core \
     gui \
     network
@@ -212,25 +212,25 @@ TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_fr.ts
 macx {
     ICON = icons/gpxsee.icns
-    QMAKE_INFO_PLIST = Info.plist
-    LOCALE.path = Contents/Resources/locale
+    QMAKE_INFO_PLIST = pkg/Info.plist
+    LOCALE.path = Contents/Resources/translations
     LOCALE.files = lang/gpxsee_cs.qm \
         lang/gpxsee_de.qm \
         lang/gpxsee_fi.qm \
         lang/gpxsee_fr.qm \
         lang/gpxsee_ru.qm \
         lang/gpxsee_sv.qm
-    APP_RESOURCES.files = pkg/maps \
-        icons/tcx.icns \
+    CSV.path = Contents/Resources
+    CSV.files = pkg/csv
+    MAPS.path = Contents/Resources
+    MAPS.files = pkg/maps
+    ICONS.path = Contents/Resources/icons
+    ICONS.files = icons/tcx.icns \
         icons/kml.icns \
         icons/fit.icns \
         icons/igc.icns \
-        icons/nmea.icns \
-        pkg/ellipsoids.csv \
-        pkg/gcs.csv \
-        pkg/pcs.csv
-    APP_RESOURCES.path = Contents/Resources
-    QMAKE_BUNDLE_DATA += APP_RESOURCES LOCALE
+        icons/nmea.icns
+    QMAKE_BUNDLE_DATA += LOCALE MAPS ICONS CSV
 }
 win32 {
     RC_ICONS = icons/gpxsee.ico \

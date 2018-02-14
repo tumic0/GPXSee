@@ -8,6 +8,7 @@ void RangeF::resize(qreal size)
 	_max += adj;
 }
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Range &range)
 {
 	dbg.nospace() << "Range(" << range.min() << ", " << range.max() << ")";
@@ -19,3 +20,4 @@ QDebug operator<<(QDebug dbg, const RangeF &range)
 	dbg.nospace() << "RangeF(" << range.min() << ", " << range.max() << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG

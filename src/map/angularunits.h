@@ -17,8 +17,9 @@ public:
 	double fromDegrees(double val) const;
 
 	friend bool operator==(const AngularUnits &au1, const AngularUnits &au2);
+#ifndef QT_NO_DEBUG
 	friend QDebug operator<<(QDebug dbg, const AngularUnits &au);
-
+#endif // QT_NO_DEBUG
 private:
 	int _code;
 	double _f;
@@ -27,6 +28,8 @@ private:
 inline bool operator==(const AngularUnits &au1, const AngularUnits &au2)
   {return (au1._f == au2._f);}
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const AngularUnits &au);
+#endif // QT_NO_DEBUG
 
 #endif // ANGULARUNITS_H

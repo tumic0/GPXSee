@@ -116,6 +116,7 @@ void Matrix::zeroize()
 		_m[i] = 0;
 }
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Matrix &matrix)
 {
 	dbg.nospace() << "Matrix(" << endl;
@@ -128,3 +129,4 @@ QDebug operator<<(QDebug dbg, const Matrix &matrix)
 
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG

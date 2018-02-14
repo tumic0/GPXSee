@@ -20,8 +20,10 @@ LinearUnits::LinearUnits(int code)
 	}
 }
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const LinearUnits &lu)
 {
 	dbg.nospace() << "LinearUnits(" << lu._f << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG

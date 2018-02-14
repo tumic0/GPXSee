@@ -34,7 +34,9 @@ private:
 	qreal _min, _max;
 };
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Range &range);
 QDebug operator<<(QDebug dbg, const RangeF &range);
+#endif // QT_NO_DEBUG
 
 #endif // RANGE_H

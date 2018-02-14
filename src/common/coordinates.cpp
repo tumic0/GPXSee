@@ -16,12 +16,6 @@ qreal Coordinates::distanceTo(const Coordinates &c) const
 	return (WGS84_RADIUS * (2.0 * atan2(sqrt(a), sqrt(1.0 - a))));
 }
 
-QDebug operator<<(QDebug dbg, const Coordinates &c)
-{
-	dbg.nospace() << "Coordinates(" << c.lon() << ", " << c.lat() << ")";
-	return dbg.space();
-}
-
 QPair<Coordinates, Coordinates> Coordinates::boundingRect(qreal distance) const
 {
 	qreal radDist = distance / WGS84_RADIUS;
@@ -50,3 +44,11 @@ QPair<Coordinates, Coordinates> Coordinates::boundingRect(qreal distance) const
 	  maxLon)), rad2deg(qMin(minLat, maxLat))), Coordinates(rad2deg(qMax(minLon,
 	  maxLon)), rad2deg(qMax(minLat, maxLat))));
 }
+
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const Coordinates &c)
+{
+	dbg.nospace() << "Coordinates(" << c.lon() << ", " << c.lat() << ")";
+	return dbg.space();
+}
+#endif // QT_NO_DEBUG

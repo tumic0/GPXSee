@@ -21,10 +21,12 @@ private:
 	QPixmap _pixmap;
 };
 
+#ifndef QT_NO_DEBUG
 inline QDebug operator<<(QDebug dbg, const Tile &tile)
 {
 	dbg.nospace() << "Tile(" << tile.zoom() << ", " << tile.xy() << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG
 
 #endif // TILE_H

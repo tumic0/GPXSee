@@ -37,6 +37,8 @@ private:
 	Coordinates _tl, _br;
 };
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const RectC &rect);
+#endif // QT_NO_DEBUG
 
 #endif // RECTC_H

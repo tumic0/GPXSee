@@ -30,12 +30,14 @@ private:
 
 Q_DECLARE_TYPEINFO(GraphPoint, Q_PRIMITIVE_TYPE);
 
+#ifndef QT_NO_DEBUG
 inline QDebug operator<<(QDebug dbg, const GraphPoint &point)
 {
 	dbg.nospace() << "GraphPoint(" << point.s() << ", " << point.t() << ", "
 	  << point.y() << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG
 
 typedef QVector<GraphPoint> Graph;
 

@@ -13,9 +13,11 @@ RectC Path::boundingRect() const
 	return ret;
 }
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const PathPoint &point)
 {
 	dbg.nospace() << "PathPoint(" << point.distance() << ", "
 	  << point.coordinates() << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG

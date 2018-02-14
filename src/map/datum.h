@@ -39,6 +39,8 @@ inline bool operator==(const Datum &d1, const Datum &d2)
   {return (d1.ellipsoid() == d2.ellipsoid() && d1.dx() == d2.dx()
     && d1.dy() == d2.dy() && d1.dz() == d2.dz());}
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Datum &datum);
+#endif // QT_NO_DEBUG
 
 #endif // DATUM_H

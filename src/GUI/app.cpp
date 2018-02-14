@@ -19,12 +19,16 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
   _argc(argc), _argv(argv)
 {
 	QTranslator *gpxsee = new QTranslator(this);
-	gpxsee->load(QLocale::system(), "gpxsee", "_", LOCALE_DIR);
+	gpxsee->load(QLocale::system(), "gpxsee", "_", TRANSLATIONS_DIR);
 	installTranslator(gpxsee);
 
 	QTranslator *qt = new QTranslator(this);
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_MAC)
+	qt->load(QLocale::system(), "qt", "_", TRANSLATIONS_DIR);
+#else // Q_OS_WINDOWS || Q_OS_MAC
 	qt->load(QLocale::system(), "qt", "_", QLibraryInfo::location(
 	  QLibraryInfo::TranslationsPath));
+#endif // Q_OS_WINDOWS || Q_OS_MAC
 	installTranslator(qt);
 
 #ifdef Q_OS_MAC

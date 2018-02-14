@@ -62,12 +62,17 @@ ExportDialog::ExportDialog(Export *exp, QWidget *parent)
 	_bottomMargin = new QDoubleSpinBox();
 	_leftMargin = new QDoubleSpinBox();
 	_rightMargin = new QDoubleSpinBox();
-	QString us = (_export->units == Imperial) ? tr("in") : tr("mm");
+	QString us = (_export->units == Metric) ? tr("mm") : tr("in");
 	_topMargin->setSuffix(UNIT_SPACE + us);
 	_bottomMargin->setSuffix(UNIT_SPACE + us);
 	_leftMargin->setSuffix(UNIT_SPACE + us);
 	_rightMargin->setSuffix(UNIT_SPACE + us);
-	if (_export->units == Imperial) {
+	if (_export->units == Metric) {
+		_topMargin->setValue(_export->margins.top());
+		_bottomMargin->setValue(_export->margins.bottom());
+		_leftMargin->setValue(_export->margins.left());
+		_rightMargin->setValue(_export->margins.right());
+	} else {
 		_topMargin->setValue(_export->margins.top() * MM2IN);
 		_bottomMargin->setValue(_export->margins.bottom() * MM2IN);
 		_leftMargin->setValue(_export->margins.left() * MM2IN);
@@ -76,11 +81,6 @@ ExportDialog::ExportDialog(Export *exp, QWidget *parent)
 		_bottomMargin->setSingleStep(0.1);
 		_leftMargin->setSingleStep(0.1);
 		_rightMargin->setSingleStep(0.1);
-	} else {
-		_topMargin->setValue(_export->margins.top());
-		_bottomMargin->setValue(_export->margins.bottom());
-		_leftMargin->setValue(_export->margins.left());
-		_rightMargin->setValue(_export->margins.right());
 	}
 
 	QGridLayout *marginsLayout = new QGridLayout();

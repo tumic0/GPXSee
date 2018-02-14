@@ -23,7 +23,9 @@ private:
 };
 
 Q_DECLARE_TYPEINFO(PathPoint, Q_PRIMITIVE_TYPE);
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const PathPoint &point);
+#endif // QT_NO_DEBUG
 
 
 class Path : public QVector<PathPoint>

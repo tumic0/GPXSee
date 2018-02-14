@@ -73,8 +73,10 @@ Transform::Transform(const QList<ReferencePoint> &points)
 		affine(points);
 }
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const ReferencePoint &p)
 {
 	dbg.nospace() << "ReferencePoint(" << p.xy << ", " << p.pp << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG

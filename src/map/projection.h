@@ -86,7 +86,9 @@ private:
 	LinearUnits _units;
 };
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Projection::Setup &setup);
 QDebug operator<<(QDebug dbg, const Projection::Method &method);
+#endif // QT_NO_DEBUG
 
 #endif // PROJECTION_H

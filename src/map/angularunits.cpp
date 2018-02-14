@@ -83,8 +83,10 @@ double AngularUnits::fromDegrees(double val) const
 	return (_code == 9110) ? deg2sDMS(val) : val / _f;
 }
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const AngularUnits &au)
 {
 	dbg.nospace() << "AngularUnits(" << deg2rad(au._f) << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG

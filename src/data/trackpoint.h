@@ -57,6 +57,7 @@ private:
 
 Q_DECLARE_TYPEINFO(Trackpoint, Q_MOVABLE_TYPE);
 
+#ifndef QT_NO_DEBUG
 inline QDebug operator<<(QDebug dbg, const Trackpoint &trackpoint)
 {
 	dbg.nospace() << "Trackpoint(" << trackpoint.coordinates() << ", "
@@ -65,5 +66,6 @@ inline QDebug operator<<(QDebug dbg, const Trackpoint &trackpoint)
 	  << trackpoint.temperature() << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG
 
 #endif // TRACKPOINT_H

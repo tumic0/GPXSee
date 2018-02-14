@@ -79,12 +79,15 @@ void SpeedGraph::clear()
 
 void SpeedGraph::setYUnits(Units units)
 {
-	if (units == Metric) {
-		GraphView::setYUnits(tr("km/h"));
-		setYScale(MS2KMH);
-	} else {
+	if (units == Nautical) {
+		GraphView::setYUnits(tr("kn"));
+		setYScale(MS2KN);
+	} else if (units == Imperial) {
 		GraphView::setYUnits(tr("mi/h"));
 		setYScale(MS2MIH);
+	} else {
+		GraphView::setYUnits(tr("km/h"));
+		setYScale(MS2KMH);
 	}
 }
 

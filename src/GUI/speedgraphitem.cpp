@@ -16,8 +16,10 @@ SpeedGraphItem::SpeedGraphItem(const Graph &graph, GraphType type,
 QString SpeedGraphItem::toolTip() const
 {
 	ToolTip tt;
-	qreal scale = (_units == Metric) ? MS2KMH : MS2MIH;
-	QString su = (_units == Metric) ? tr("km/h") : tr("mi/h");
+	qreal scale = (_units == Imperial) ? MS2MIH : (_units == Nautical)
+	  ? MS2KN : MS2KMH;
+	QString su = (_units == Imperial) ? tr("mi/h") : (_units == Nautical)
+	  ? tr("kn") : tr("km/h");
 
 	tt.insert(tr("Maximum"), QString::number(max() * scale, 'f', 1)
 	  + UNIT_SPACE + su);

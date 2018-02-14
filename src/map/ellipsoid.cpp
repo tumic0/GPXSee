@@ -66,9 +66,11 @@ void Ellipsoid::loadList(const QString &path)
 	}
 }
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Ellipsoid &ellipsoid)
 {
 	dbg.nospace() << "Ellipsoid(" << ellipsoid.radius() << ", "
 	  << 1.0 / ellipsoid.flattening() << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG

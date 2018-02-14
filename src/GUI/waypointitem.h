@@ -6,6 +6,7 @@
 #include "data/waypoint.h"
 #include "map/map.h"
 #include "units.h"
+#include "format.h"
 
 class WaypointItem : public QGraphicsItem
 {
@@ -15,7 +16,7 @@ public:
 	const Waypoint &waypoint() const {return _waypoint;}
 
 	void setMap(Map *map) {setPos(map->ll2xy(_waypoint.coordinates()));}
-	void setUnits(Units units);
+	void setToolTipFormat(Units units, CoordinatesFormat format);
 	void setSize(int size);
 	void setColor(const QColor &color);
 	void showLabel(bool show);
@@ -31,7 +32,7 @@ private:
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 	void updateShape();
-	QString toolTip(Units units);
+	QString toolTip(Units units, CoordinatesFormat format);
 
 	QPainterPath _shape;
 	Waypoint _waypoint;

@@ -1,7 +1,6 @@
 #include <QApplication>
 #include <QPainter>
 #include "config.h"
-#include "format.h"
 #include "tooltip.h"
 #include "waypointitem.h"
 
@@ -11,14 +10,14 @@
 #define FS(size) \
 	((int)((qreal)size * 1.41))
 
-QString WaypointItem::toolTip(Units units)
+QString WaypointItem::toolTip(Units units, CoordinatesFormat format)
 {
 	ToolTip tt;
 
 	if (!_waypoint.name().isEmpty())
 		tt.insert(qApp->translate("WaypointItem", "Name"), _waypoint.name());
 	tt.insert(qApp->translate("WaypointItem", "Coordinates"),
-	  Format::coordinates(_waypoint.coordinates()));
+	  Format::coordinates(_waypoint.coordinates(), format));
 	if (!std::isnan(_waypoint.elevation()))
 		tt.insert(qApp->translate("WaypointItem", "Elevation"),
 		  Format::elevation(_waypoint.elevation(), units));
@@ -44,7 +43,7 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
 	updateShape();
 
 	setPos(map->ll2xy(waypoint.coordinates()));
-	setToolTip(toolTip(Metric));
+	setToolTip(toolTip(Metric, DecimalDegrees));
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
 }
@@ -108,6 +107,9 @@ void WaypointItem::paint(QPainter *painter,
 
 void WaypointItem::setSize(int size)
 {
+	if (_size == size)
+		return;
+
 	prepareGeometryChange();
 	_size = size;
 	updateShape();
@@ -115,17 +117,23 @@ void WaypointItem::setSize(int size)
 
 void WaypointItem::setColor(const QColor &color)
 {
+	if (_color == color)
+		return;
+
 	_color = color;
 	update();
 }
 
-void WaypointItem::setUnits(enum Units units)
+void WaypointItem::setToolTipFormat(Units units, CoordinatesFormat format)
 {
-	setToolTip(toolTip(units));
+	setToolTip(toolTip(units, format));
 }
 
 void WaypointItem::showLabel(bool show)
 {
+	if (_showLabel == show)
+		return;
+
 	prepareGeometryChange();
 	_showLabel = show;
 	updateShape();

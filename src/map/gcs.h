@@ -50,6 +50,8 @@ inline bool operator==(const GCS &gcs1, const GCS &gcs2)
 	&& gcs1.primeMeridian() == gcs2.primeMeridian()
 	&& gcs1.angularUnits() == gcs2.angularUnits());}
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const GCS &gcs);
+#endif // QT_NO_DEBUG
 
 #endif // GCS_H

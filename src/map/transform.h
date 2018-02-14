@@ -27,6 +27,8 @@ private:
 	QString _errorString;
 };
 
+#ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const ReferencePoint &p);
+#endif // QT_NO_DEBUG
 
 #endif // TRANSFORM_H

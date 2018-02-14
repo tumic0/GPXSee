@@ -48,12 +48,14 @@ inline uint qHash(const Waypoint &key)
 	return ::qHash(key.name());
 }
 
+#ifndef QT_NO_DEBUG
 inline QDebug operator<<(QDebug dbg, const Waypoint &waypoint)
 {
 	dbg.nospace() << "Waypoint(" << waypoint.coordinates() << ", "
 	  << waypoint.name() << ", " << waypoint.description() << ")";
 	return dbg.space();
 }
+#endif // QT_NO_DEBUG
 
 Q_DECLARE_TYPEINFO(Waypoint, Q_MOVABLE_TYPE);
 
