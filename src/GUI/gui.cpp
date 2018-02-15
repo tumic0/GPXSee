@@ -1147,7 +1147,7 @@ bool GUI::loadMap(const QString &fileName)
 		_mapMenu->insertAction(_mapsEnd, a);
 		_showMapAction->setEnabled(true);
 		_clearMapCacheAction->setEnabled(true);
-		_mapActions.last()->activate(QAction::Trigger);
+		_mapActions.last()->trigger();
 
 		return true;
 	} else {
@@ -1394,15 +1394,15 @@ void GUI::keyPressEvent(QKeyEvent *event)
 
 		case TOGGLE_GRAPH_TYPE_KEY:
 			if (_timeGraphAction->isChecked())
-				_distanceGraphAction->activate(QAction::Trigger);
+				_distanceGraphAction->trigger();
 			else
-				_timeGraphAction->activate(QAction::Trigger);
+				_timeGraphAction->trigger();
 			break;
 		case TOGGLE_TIME_TYPE_KEY:
 			if (_movingTimeAction->isChecked())
-				_totalTimeAction->activate(QAction::Trigger);
+				_totalTimeAction->trigger();
 			else
-				_movingTimeAction->activate(QAction::Trigger);
+				_movingTimeAction->trigger();
 			break;
 
 		case Qt::Key_Escape:
@@ -1647,25 +1647,25 @@ void GUI::readSettings()
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
 	if (settings.value(TIME_TYPE_SETTING, TIME_TYPE_DEFAULT).toInt()
 	  == Moving)
-		_movingTimeAction->activate(QAction::Trigger);
+		_movingTimeAction->trigger();
 	else
-		_totalTimeAction->activate(QAction::Trigger);
+		_totalTimeAction->trigger();
 
 	value = settings.value(UNITS_SETTING, UNITS_DEFAULT).toInt();
 	if (value == Imperial)
-		_imperialUnitsAction->activate(QAction::Trigger);
+		_imperialUnitsAction->trigger();
 	else if (value == Nautical)
-		_nauticalUnitsAction->activate(QAction::Trigger);
+		_nauticalUnitsAction->trigger();
 	else
-		_metricUnitsAction->activate(QAction::Trigger);
+		_metricUnitsAction->trigger();
 
 	value = settings.value(COORDINATES_SETTING, COORDINATES_DEFAULT).toInt();
 	if (value == DMS)
-		_DMSAction->activate(QAction::Trigger);
+		_DMSAction->trigger();
 	else if (value == DegreesMinutes)
-		_degreesMinutesAction->activate(QAction::Trigger);
+		_degreesMinutesAction->trigger();
 	else
-		_decimalDegreesAction->activate(QAction::Trigger);
+		_decimalDegreesAction->trigger();
 
 	if (!settings.value(SHOW_TOOLBARS_SETTING, SHOW_TOOLBARS_DEFAULT).toBool())
 		showToolbars(false);
@@ -1676,6 +1676,8 @@ void GUI::readSettings()
 	settings.beginGroup(MAP_SETTINGS_GROUP);
 	if (settings.value(SHOW_MAP_SETTING, SHOW_MAP_DEFAULT).toBool())
 		_showMapAction->setChecked(true);
+	else
+		_mapView->showMap(false);
 	if (_ml->maps().count()) {
 		int index = mapIndex(settings.value(CURRENT_MAP_SETTING).toString());
 		_mapActions.at(index)->trigger();
