@@ -49,9 +49,7 @@ static QSet<int> eliminate(const QVector<qreal> &v, int window)
 
 static Graph filter(const Graph &g, int window)
 {
-	if (g.size() < window)
-		return Graph();
-	if (window < 2)
+	if (g.size() < window || window < 2)
 		return Graph(g);
 
 	qreal acc = 0;
