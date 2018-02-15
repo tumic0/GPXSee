@@ -81,11 +81,12 @@ Track::Track(const TrackData &data) : _data(data)
 	_distance.append(0);
 	_speed.append(0);
 
-	for (int i = 1; i < data.count(); i++) {
-		ds = data.at(i).coordinates().distanceTo(data.at(i-1).coordinates());
+	for (int i = 1; i < _data.count(); i++) {
+		ds = _data.at(i).coordinates().distanceTo(_data.at(i-1).coordinates());
 		_distance.append(ds);
 
-		if (data.first().hasTimestamp() && data.at(i).hasTimestamp())
+		if (_data.first().hasTimestamp() && _data.at(i).hasTimestamp()
+		  && _data.at(i).timestamp() > _data.at(i-1).timestamp())
 			_time.append(_data.first().timestamp().msecsTo(
 			  _data.at(i).timestamp()) / 1000.0);
 		else
@@ -104,7 +105,7 @@ Track::Track(const TrackData &data) : _data(data)
 	}
 
 	_pause = 0;
-	for (int i = 1; i < data.count(); i++) {
+	for (int i = 1; i < _data.count(); i++) {
 		if (_time.at(i) > _time.at(i-1) + _pauseInterval
 		  && _speed.at(i) < _pauseSpeed) {
 			_pause += _time.at(i) - _time.at(i-1);
