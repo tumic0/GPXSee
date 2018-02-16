@@ -4,4 +4,5 @@
 	<url>https://navigator.er.usgs.gov/tiles/aerial_Imagery.cgi/$z/$x/$y</url>
 	<zoom min="2" max="15"/>
 	<bounds bottom="0" top="74"/>
+	<copyright>Map services and data available from U.S. Geological Survey, National Geospatial Program.</copyright>
 </map>

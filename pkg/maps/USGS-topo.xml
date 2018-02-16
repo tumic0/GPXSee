@@ -3,4 +3,5 @@
 	<name>USGS Topo</name>
 	<url>https://navigator.er.usgs.gov/tiles/tcr.cgi/$z/$x/$y.png</url>
 	<zoom min="2" max="15"/>
+	<copyright>Map services and data available from U.S. Geological Survey, National Geospatial Program.</copyright>
 </map>

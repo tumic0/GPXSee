@@ -2,4 +2,5 @@
 <map>
 	<name>Open Street Map</name>
 	<url>http://tile.openstreetmap.org/$z/$x/$y.png</url>
+	<copyright>Map data: © OpenStreetMap contributors (ODbL) | Rendering: © OpenStreetMap (CC-BY-SA)</copyright>
 </map>
