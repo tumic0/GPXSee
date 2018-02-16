@@ -3,12 +3,22 @@
 #include "common/coordinates.h"
 #include "common/rectc.h"
 #include "common/wgs84.h"
-#include "mercator.h"
 #include "emptymap.h"
 
 
 #define SCALE_MIN 0.5
 #define SCALE_MAX 1.0E-6
+
+static QPointF ll2m(const Coordinates &c)
+{
+	return QPointF(c.lon(), rad2deg(log(tan(M_PI/4.0 + deg2rad(c.lat())/2.0))));
+}
+
+static Coordinates m2ll(const QPointF &p)
+{
+	return Coordinates(p.x(), rad2deg(2 * atan(exp(deg2rad(p.y()))) - M_PI/2));
+}
+
 
 EmptyMap::EmptyMap(QObject *parent) : Map(parent)
 {
@@ -25,8 +35,7 @@ qreal EmptyMap::zoomFit(const QSize &size, const RectC &br)
 	if (!br.isValid())
 		_scale = SCALE_MAX;
 	else {
-		QRectF tbr(Mercator().ll2xy(br.topLeft()),
-		  Mercator().ll2xy(br.bottomRight()));
+		QRectF tbr(ll2m(br.topLeft()), ll2m(br.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
 		_scale = qMax(sc.x(), sc.y());
 	}
@@ -73,12 +82,12 @@ void EmptyMap::draw(QPainter *painter, const QRectF &rect)
 
 QPointF EmptyMap::ll2xy(const Coordinates &c) const
 {
-	QPointF m = Mercator().ll2xy(c);
+	QPointF m = ll2m(c);
 	return QPointF(m.x() / _scale, m.y() / -_scale);
 }
 
 Coordinates EmptyMap::xy2ll(const QPointF &p) const
 {
 	QPointF m(p.x() * _scale, -p.y() * _scale);
-	return Mercator().xy2ll(m);
+	return m2ll(QPointF(p.x() * _scale, -p.y() * _scale));
 }
