@@ -25,14 +25,14 @@
 		</ul>
 	</description>
 
-​	<screenshots>
-​		<screenshot type="default">
-​			<image>http://www.gpxsee.org/gallery/lin1.png</image>
-​		</screenshot>
-​		<screenshot>
-​			<image>http://www.gpxsee.org/gallery/lin2.png</image>
-​		</screenshot>
-​	</screenshots>
+	<screenshots>
+		<screenshot type="default">
+			<image>http://www.gpxsee.org/gallery/lin1.png</image>
+		</screenshot>
+		<screenshot>
+			<image>http://www.gpxsee.org/gallery/lin2.png</image>
+		</screenshot>
+	</screenshots>
 
 	<categories>
 		<category>Graphics</category>
