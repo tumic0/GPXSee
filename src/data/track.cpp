@@ -75,28 +75,32 @@ static Graph filter(const Graph &g, int window)
 Track::Track(const TrackData &data) : _data(data)
 {
 	qreal dt, ds, total;
+	int last;
 
 
 	_time.append(0);
 	_distance.append(0);
 	_speed.append(0);
 
+	last = 0;
+
 	for (int i = 1; i < _data.count(); i++) {
 		ds = _data.at(i).coordinates().distanceTo(_data.at(i-1).coordinates());
 		_distance.append(ds);
 
 		if (_data.first().hasTimestamp() && _data.at(i).hasTimestamp()
-		  && _data.at(i).timestamp() > _data.at(i-1).timestamp())
+		  && _data.at(i).timestamp() > _data.at(last).timestamp()) {
 			_time.append(_data.first().timestamp().msecsTo(
 			  _data.at(i).timestamp()) / 1000.0);
-		else
+			last = i;
+		} else
 			_time.append(NAN);
 
 		if (std::isnan(_time.at(i)) || std::isnan(_time.at(i-1)))
 			_speed.append(NAN);
 		else {
 			dt = _time.at(i) - _time.at(i-1);
-			if (!dt) {
+			if (dt < 1e-3) {
 				_speed.append(_speed.at(i-1));
 				continue;
 			}
