@@ -5,9 +5,7 @@
 #include "common/range.h"
 #include "common/rectc.h"
 #include "map.h"
-#include "tile.h"
-
-class Downloader;
+#include "tileloader.h"
 
 class OnlineMap : public Map
 {
@@ -36,10 +34,7 @@ public:
 	void draw(QPainter *painter, const QRectF &rect);
 
 	void setBlockingMode(bool block) {_block = block;}
-	void clearCache();
-
-	static void setDownloader(Downloader *downloader)
-	  {OnlineMap::downloader = downloader;}
+	void clearCache() {_tileLoader.clearCache();}
 
 	void load();
 	void unload();
@@ -50,22 +45,14 @@ private slots:
 private:
 	QPointF ll2xy(const Coordinates &c) const;
 	Coordinates xy2ll(const QPointF &p) const;
-
-	void fillTile(Tile &tile);
-	QString tileUrl(const Tile &tile) const;
-	QString tileFile(const Tile &tile) const;
-	void loadTilesAsync(QList<Tile> &list);
-	void loadTilesSync(QList<Tile> &list);
 	int limitZoom(int zoom) const;
 
+	TileLoader _tileLoader;
 	QString _name;
-	QString _url;
 	Range _zooms;
 	RectC _bounds;
 	int _zoom;
 	bool _block;
-
-	static Downloader *downloader;
 };
 
 #endif // ONLINEMAP_H

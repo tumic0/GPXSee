@@ -33,7 +33,7 @@ public:
 	void unload();
 
 	bool isValid() const {return _valid;}
-	const QString &errorString() const {return _errorString;}
+	QString errorString() const {return _errorString;}
 
 	static bool isAtlas(const QString &path);
 

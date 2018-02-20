@@ -1,6 +1,7 @@
 #include <QFile>
 #include <QXmlStreamReader>
 #include "onlinemap.h"
+#include "wmtsmap.h"
 #include "mapsource.h"
 
 
@@ -121,12 +122,16 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 	return RectC(Coordinates(left, top), Coordinates(right, bottom));
 }
 
-void MapSource::map(QXmlStreamReader &reader, Map **map)
+Map *MapSource::map(QXmlStreamReader &reader)
 {
-	QString name, url;
+	QString name, url, format, layer, style, tileMatrixSet;
 	Range z(ZOOM_MIN, ZOOM_MAX);
 	RectC b(Coordinates(BOUNDS_LEFT, BOUNDS_TOP),
 	  Coordinates(BOUNDS_RIGHT, BOUNDS_BOTTOM));
+
+	const QXmlStreamAttributes &attr = reader.attributes();
+	bool wmts = (attr.hasAttribute("type") && attr.value("type") == "WMTS")
+	 ? true : false;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "name")
@@ -139,34 +144,53 @@ void MapSource::map(QXmlStreamReader &reader, Map **map)
 		} else if (reader.name() == "bounds") {
 			b = bounds(reader);
 			reader.skipCurrentElement();
-		} else
+		} else if (reader.name() == "format")
+			format = reader.readElementText();
+		else if (reader.name() == "layer")
+			layer = reader.readElementText();
+		else if (reader.name() == "style")
+			style = reader.readElementText();
+		else if (reader.name() == "tilematrixset")
+			tileMatrixSet = reader.readElementText();
+		else
 			reader.skipCurrentElement();
 	}
 
-	*map = reader.error() ? 0 : new OnlineMap(name, url, z, b);
+	if (reader.error())
+		return 0;
+	else if (wmts)
+		return new WMTSMap(name, url, format, layer, style, tileMatrixSet);
+	else
+		return new OnlineMap(name, url, z, b);
 }
 
-bool MapSource::loadFile(const QString &path, Map **map)
+Map *MapSource::loadFile(const QString &path)
 {
 	QFile file(path);
 	QXmlStreamReader reader;
+	Map *map = 0;
 
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		_errorString = file.errorString();
-		return false;
+		return map;
 	}
 
 	reader.setDevice(&file);
 
 	if (reader.readNextStartElement()) {
 		if (reader.name() == "map")
-			MapSource::map(reader, map);
+			map = MapSource::map(reader);
 		else
 			reader.raiseError("Not an online map source file");
 	}
 
-	_errorString = reader.error() ? QString("%1: %2").arg(reader.lineNumber())
-	  .arg(reader.errorString()) : QString();
+	if (!map)
+		_errorString = QString("%1: %2").arg(reader.lineNumber())
+		  .arg(reader.errorString());
+	else if (!map->isValid()) {
+		_errorString = map->errorString();
+		delete map; map = 0;
+	}
 
-	return !reader.error();
+	return map;
 }

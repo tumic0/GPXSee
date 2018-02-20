@@ -40,6 +40,9 @@ public:
 
 	void setBackgroundColor(const QColor &color) {_backgroundColor = color;}
 
+	virtual bool isValid() const {return true;}
+	virtual QString errorString() const {return QString();}
+
 signals:
 	void loaded();
 

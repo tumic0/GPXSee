@@ -116,7 +116,10 @@ HEADERS += src/config.h \
     src/map/primemeridian.h \
     src/map/linearunits.h \
     src/map/ct.h \
-    src/map/mapsource.h
+    src/map/mapsource.h \
+    src/map/tileloader.h \
+    src/map/wmtsmap.h \
+    src/map/wmts.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -202,7 +205,10 @@ SOURCES += src/main.cpp \
     src/map/angularunits.cpp \
     src/map/primemeridian.cpp \
     src/map/linearunits.cpp \
-    src/map/mapsource.cpp
+    src/map/mapsource.cpp \
+    src/map/tileloader.cpp \
+    src/map/wmtsmap.cpp \
+    src/map/wmts.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \

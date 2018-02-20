@@ -13,7 +13,7 @@ bool MapList::loadSource(const QString &path, bool dir)
 	MapSource ms;
 	Map *map;
 
-	if (!ms.loadFile(path, &map)) {
+	if (!(map = ms.loadFile(path))) {
 		if (dir)
 			_errorString += path + ": " + ms.errorString() + "\n";
 		else

@@ -77,8 +77,13 @@ public:
 
 	Projection &operator=(const Projection &p);
 
+	bool isNull() const {return (_gcs == 0 && _ct == 0 && _units.isNull());}
+	bool isValid() const {return (_gcs == 0 || _ct == 0 || _units.isNull());}
+
 	QPointF ll2xy(const Coordinates &c) const;
 	Coordinates xy2ll(const QPointF &p) const;
+
+	const LinearUnits &units() const {return _units;}
 
 private:
 	const GCS * _gcs;

@@ -4,7 +4,8 @@
 #include <QFileOpenEvent>
 #include <QNetworkProxyFactory>
 #include <QLibraryInfo>
-#include "map/onlinemap.h"
+#include "map/wmts.h"
+#include "map/tileloader.h"
 #include "map/downloader.h"
 #include "map/ellipsoid.h"
 #include "map/gcs.h"
@@ -36,7 +37,9 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 #endif // Q_OS_MAC
 
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
-	OnlineMap::setDownloader(new Downloader(this));
+	Downloader *dl = new Downloader(this);
+	TileLoader::setDownloader(dl);
+	WMTS::setDownloader(dl);
 	OPENGL_SET_SAMPLES(4);
 	loadDatums();
 	loadPCSs();

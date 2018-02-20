@@ -41,7 +41,7 @@ public:
 	void unload();
 
 	bool isValid() const {return _valid;}
-	const QString &errorString() const {return _errorString;}
+	QString errorString() const {return _errorString;}
 
 	QPointF ll2pp(const Coordinates &c) const
 	  {return _projection.ll2xy(c);}

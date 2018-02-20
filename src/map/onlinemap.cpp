@@ -1,5 +1,3 @@
-#include <QFileInfo>
-#include <QDir>
 #include <QPainter>
 #include "common/coordinates.h"
 #include "common/rectc.h"
@@ -41,135 +39,31 @@ static int scale2zoom(qreal scale)
 	return (int)log2(360.0/(scale * (qreal)TILE_SIZE));
 }
 
-static bool loadTileFile(Tile &tile, const QString &file)
-{
-	if (!tile.pixmap().load(file)) {
-		qWarning("%s: error loading tile file\n", qPrintable(file));
-		return false;
-	}
-
-	return true;
-}
-
-
-Downloader *OnlineMap::downloader;
 
 OnlineMap::OnlineMap(const QString &name, const QString &url,
   const Range &zooms, const RectC &bounds, QObject *parent)
-  : Map(parent), _name(name), _url(url), _zooms(zooms), _bounds(bounds)
+  : Map(parent), _name(name), _zooms(zooms), _bounds(bounds)
 {
 	_block = false;
 	_zoom = _zooms.max();
-
-	QString path = TILES_DIR + QString("/") + name;
-	if (!QDir().mkpath(path))
-		qWarning("Error creating tiles dir: %s\n", qPrintable(path));
+	_tileLoader = TileLoader(url, TILES_DIR + "/" + name);
 }
 
 void OnlineMap::load()
 {
-	connect(downloader, SIGNAL(finished()), this, SLOT(emitLoaded()));
+	connect(TileLoader::downloader(), SIGNAL(finished()), this,
+	  SLOT(emitLoaded()));
 }
 
 void OnlineMap::unload()
 {
-	disconnect(downloader, SIGNAL(finished()), this, SLOT(emitLoaded()));
-}
-
-void OnlineMap::fillTile(Tile &tile)
-{
-	tile.pixmap() = QPixmap(TILE_SIZE, TILE_SIZE);
-	tile.pixmap().fill(_backgroundColor);
+	disconnect(TileLoader::downloader(), SIGNAL(finished()), this,
+	  SLOT(emitLoaded()));
 }
 
 void OnlineMap::emitLoaded()
 {
 	emit loaded();
-}
-
-void OnlineMap::loadTilesAsync(QList<Tile> &list)
-{
-	QList<Download> dl;
-
-	for (int i = 0; i < list.size(); i++) {
-		Tile &t = list[i];
-		QString file = tileFile(t);
-		QFileInfo fi(file);
-
-		if (!fi.exists()) {
-			fillTile(t);
-			dl.append(Download(tileUrl(t), file));
-		} else
-			loadTileFile(t, file);
-	}
-
-	if (!dl.empty())
-		downloader->get(dl);
-}
-
-void OnlineMap::loadTilesSync(QList<Tile> &list)
-{
-	QList<Download> dl;
-
-	for (int i = 0; i < list.size(); i++) {
-		Tile &t = list[i];
-		QString file = tileFile(t);
-		QFileInfo fi(file);
-
-		if (!fi.exists())
-			dl.append(Download(tileUrl(t), file));
-		else
-			loadTileFile(t, file);
-	}
-
-	if (dl.empty())
-		return;
-
-	QEventLoop wait;
-	connect(downloader, SIGNAL(finished()), &wait, SLOT(quit()));
-	if (downloader->get(dl))
-		wait.exec();
-
-	for (int i = 0; i < list.size(); i++) {
-		Tile &t = list[i];
-
-		if (t.pixmap().isNull()) {
-			QString file = tileFile(t);
-			QFileInfo fi(file);
-
-			if (!(fi.exists() && loadTileFile(t, file)))
-				fillTile(t);
-		}
-	}
-}
-
-QString OnlineMap::tileUrl(const Tile &tile) const
-{
-	QString url(_url);
-
-	url.replace("$z", QString::number(tile.zoom()));
-	url.replace("$x", QString::number(tile.xy().x()));
-	url.replace("$y", QString::number(tile.xy().y()));
-
-	return url;
-}
-
-QString OnlineMap::tileFile(const Tile &tile) const
-{
-	QString file = TILES_DIR + QString("/%1/%2-%3-%4").arg(name())
-	  .arg(tile.zoom()).arg(tile.xy().x()).arg(tile.xy().y());
-
-	return file;
-}
-
-void OnlineMap::clearCache()
-{
-	QString path = TILES_DIR + QString("/") + name();
-	QDir dir = QDir(path);
-	QStringList list = dir.entryList();
-
-	for (int i = 0; i < list.count(); i++)
-		dir.remove(list.at(i));
 }
 
 QRectF OnlineMap::bounds() const
@@ -245,15 +139,19 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect)
 			tiles.append(Tile(QPoint(tile.x() + i, tile.y() + j), _zoom));
 
 	if (_block)
-		loadTilesSync(tiles);
+		_tileLoader.loadTilesSync(tiles);
 	else
-		loadTilesAsync(tiles);
+		_tileLoader.loadTilesAsync(tiles);
 
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];
 		QPoint tp(tl.x() + (t.xy().x() - tile.x()) * TILE_SIZE,
 		  tl.y() + (t.xy().y() - tile.y()) * TILE_SIZE);
-		painter->drawPixmap(tp, t.pixmap());
+		if (t.pixmap().isNull())
+			painter->fillRect(QRect(tp, QSize(TILE_SIZE, TILE_SIZE)),
+			  _backgroundColor);
+		else
+			painter->drawPixmap(tp, t.pixmap());
 	}
 }
 
