@@ -3,6 +3,7 @@
 #include <QFileInfo>
 #include <QEventLoop>
 #include <QTextStream>
+#include <QStringList>
 #include "downloader.h"
 #include "pcs.h"
 #include "wmts.h"
