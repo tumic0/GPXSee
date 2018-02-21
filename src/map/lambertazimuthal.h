@@ -16,15 +16,10 @@ public:
 	virtual Coordinates xy2ll(const QPointF &p) const;
 
 private:
-	double _ra;
-	double _sinLatOrigin;
-	double _cosLatOrigin;
-	double _absLatOrigin;
-
-	double _latOrigin;
-	double _lonOrigin;
+	double _lon0;
 	double _falseNorthing;
 	double _falseEasting;
+	double _a, _es, _es2, _qP, _beta0, _Rq, _D;
 };
 
 #endif // LAMBERTAZIMUTHAL_H
