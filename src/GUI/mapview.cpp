@@ -761,17 +761,14 @@ void MapView::setBackgroundColor(const QColor &color)
 
 void MapView::drawBackground(QPainter *painter, const QRectF &rect)
 {
+	painter->fillRect(rect, _backgroundColor);
+
 	if (_showMap) {
 		QRectF ir = rect.intersected(_map->bounds());
-
-		if (_opacity < 1.0 || ir != rect)
-			painter->fillRect(rect, _backgroundColor);
 		if (_opacity < 1.0)
 			painter->setOpacity(_opacity);
-
 		_map->draw(painter, ir);
-	} else
-		painter->fillRect(rect, _backgroundColor);
+	}
 }
 
 void MapView::resizeEvent(QResizeEvent *event)
