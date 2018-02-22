@@ -1,9 +1,5 @@
 #include "lambertazimuthal.h"
 
-#ifndef M_PI_2
-	#define M_PI_2 1.57079632679489661923
-#endif // M_PI_2
-
 #define sin2(x) (sin(x) * sin(x))
 #define sqr(x) ((x) * (x))
 
@@ -54,8 +50,8 @@ QPointF LambertAzimuthal::ll2xy(const Coordinates &c) const
 
 Coordinates LambertAzimuthal::xy2ll(const QPointF &p) const
 {
-	double e4 = _es2 * _es2;
-	double e6 = _es2 * e4;
+	double es4 = _es2 * _es2;
+	double es6 = _es2 * es4;
 
 	double rho = sqrt(sqr((p.x() - _falseEasting) / _D) + sqr(_D * (p.y()
 	  - _falseNorthing)));
@@ -66,9 +62,9 @@ Coordinates LambertAzimuthal::xy2ll(const QPointF &p) const
 	double lon = _lon0 + atan((p.x() - _falseEasting) * sin(C) / (_D * rho
 	  * cos(_beta0) * cos(C) - sqr(_D) * (p.y() - _falseNorthing) * sin(_beta0)
 	  * sin(C)));
-	double lat = betaS + ((_es2/3.0 + 31.0*e4/180.0 + 517.0*e6/5040.0)
-	  * sin(2.0*betaS)) + ((23.0*e4/360.0 + 251.0*e6/3780.0) * sin(4.0*betaS))
-	  + ((761.0*e6/45360.0)*sin(6.0*betaS));
+	double lat = betaS + ((_es2/3.0 + 31.0*es4/180.0 + 517.0*es6/5040.0)
+	  * sin(2.0*betaS)) + ((23.0*es4/360.0 + 251.0*es6/3780.0) * sin(4.0*betaS))
+	  + ((761.0*es6/45360.0)*sin(6.0*betaS));
 
 	return Coordinates(rad2deg(lon), rad2deg(lat));
 }
