@@ -655,7 +655,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="498"/>
         <source>&amp;Help</source>
-        <translation type="unfinished">N&amp;ápověda</translation>
+        <translation>N&amp;ápověda</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="643"/>
