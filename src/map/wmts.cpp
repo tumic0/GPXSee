@@ -15,7 +15,10 @@ bool WMTS::createProjection(const QString &crs)
 {
 	QStringList list(crs.split(':'));
 	QString authority, code;
+	bool res;
+	int epsg;
 	const PCS *pcs;
+	const GCS *gcs;
 
 	switch (list.size()) {
 		case 2:
@@ -32,12 +35,19 @@ bool WMTS::createProjection(const QString &crs)
 
 	if (authority != "EPSG")
 		return false;
-	if (!(pcs = PCS::pcs(code.toInt())))
+	epsg = code.toInt(&res);
+	if (!res)
 		return false;
 
-	_projection = Projection(pcs->gcs(), pcs->method(), pcs->setup(),
-	  pcs->units());
-	return true;
+	if ((pcs = PCS::pcs(epsg))) {
+		_projection = Projection(pcs->gcs(), pcs->method(), pcs->setup(),
+		  pcs->units());
+		return true;
+	} else if ((gcs = GCS::gcs(epsg))) {
+		_projection = Projection(gcs);
+		return true;
+	} else
+		return false;
 }
 
 void WMTS::tileMatrix(QXmlStreamReader &reader)

@@ -27,7 +27,7 @@ Projection::Method::Method(int id)
 }
 
 Projection::Projection(const GCS *gcs, const Method &method, const Setup &setup,
-  const LinearUnits &units) : _gcs(gcs), _units(units)
+  const LinearUnits &units) : _gcs(gcs), _units(units), _geographic(false)
 {
 	const Ellipsoid *ellipsoid = _gcs->datum().ellipsoid();
 
@@ -68,7 +68,7 @@ Projection::Projection(const GCS *gcs, const Method &method, const Setup &setup,
 	}
 }
 
-Projection::Projection(const GCS *gcs) : _gcs(gcs)
+Projection::Projection(const GCS *gcs) : _gcs(gcs), _geographic(true)
 {
 	_ct = new LatLon(gcs->angularUnits());
 	_units = LinearUnits(9001);
@@ -79,6 +79,7 @@ Projection::Projection(const Projection &p)
 	_gcs = p._gcs;
 	_units = p._units;
 	_ct = p._ct->clone();
+	_geographic = p._geographic;
 }
 
 Projection::~Projection()
@@ -91,6 +92,7 @@ Projection &Projection::operator=(const Projection &p)
 	_gcs = p._gcs;
 	_units = p._units;
 	_ct = p._ct->clone();
+	_geographic = p._geographic;
 
 	return *this;
 }

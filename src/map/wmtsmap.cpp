@@ -1,5 +1,6 @@
 #include <QPainter>
 #include "common/rectc.h"
+#include "common/wgs84.h"
 #include "config.h"
 #include "transform.h"
 #include "wmts.h"
@@ -47,6 +48,8 @@ void WMTSMap::updateTransform()
 	ReferencePoint tl, br;
 
 	qreal pixelSpan = sd2res(z.scaleDenominator);
+	if (_projection.isGeographic())
+		pixelSpan /= deg2rad(WGS84_RADIUS);
 	QPointF tileSpan(z.tile.width() * pixelSpan, z.tile.height() * pixelSpan);
 	QPointF bottomRight(z.topLeft.x() + tileSpan.x() * z.matrix.width(),
 	  z.topLeft.y() - tileSpan.y() * z.matrix.height());
@@ -115,6 +118,8 @@ qreal WMTSMap::zoomFit(const QSize &size, const RectC &br)
 		  _projection.ll2xy(br.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
 		qreal resolution = qMax(qAbs(sc.x()), qAbs(sc.y()));
+		if (_projection.isGeographic())
+			resolution *= deg2rad(WGS84_RADIUS);
 
 		for (int i = 0; i < _zooms.size(); i++) {
 			if (sd2res(_zooms.at(i).scaleDenominator) < resolution)

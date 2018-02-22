@@ -25,7 +25,6 @@ public:
 	Coordinates toWGS84(const Coordinates &c) const;
 	Coordinates fromWGS84(const Coordinates &c) const;
 
-
 	static const GCS *gcs(int id);
 	static const GCS *gcs(int geodeticDatum, int primeMeridian,
 	  int angularUnits);

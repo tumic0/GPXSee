@@ -68,7 +68,7 @@ public:
 		int _id;
 	};
 
-	Projection() : _gcs(0), _ct(0) {}
+	Projection() : _gcs(0), _ct(0), _geographic(false) {}
 	Projection(const Projection &p);
 	Projection(const GCS *gcs, const Method &method, const Setup &setup,
 	  const LinearUnits &units);
@@ -79,6 +79,7 @@ public:
 
 	bool isNull() const {return (_gcs == 0 && _ct == 0 && _units.isNull());}
 	bool isValid() const {return (_gcs == 0 || _ct == 0 || _units.isNull());}
+	bool isGeographic() const {return _geographic;}
 
 	QPointF ll2xy(const Coordinates &c) const;
 	Coordinates xy2ll(const QPointF &p) const;
@@ -89,6 +90,7 @@ private:
 	const GCS * _gcs;
 	CT *_ct;
 	LinearUnits _units;
+	bool _geographic;
 };
 
 #ifndef QT_NO_DEBUG
