@@ -373,7 +373,6 @@
         <translation>Visa</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="428"/>
         <location filename="../src/GUI/gui.cpp" line="511"/>
         <source>File</source>
         <translation>Arkiv</translation>
@@ -549,19 +548,16 @@
         <translation>Första</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="442"/>
         <source>Map</source>
-        <translation>Karta</translation>
+        <translation type="vanished">Karta</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="450"/>
         <source>Graph</source>
-        <translation>Diagram</translation>
+        <translation type="vanished">Diagram</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="459"/>
         <source>POI</source>
-        <translation>POI</translation>
+        <translation type="vanished">POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="460"/>
@@ -569,9 +565,8 @@
         <translation>POI-filer</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>Data</source>
-        <translation>Data</translation>
+        <translation type="vanished">Data</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
@@ -579,9 +574,8 @@
         <translation>Visa</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="480"/>
         <source>Settings</source>
-        <translation>Inställningar</translation>
+        <translation type="vanished">Inställningar</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="484"/>
@@ -594,9 +588,8 @@
         <translation>Koordinatformat</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="498"/>
         <source>Help</source>
-        <translation>Hjälp</translation>
+        <translation type="vanished">Hjälp</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="615"/>
@@ -711,6 +704,41 @@
         <location filename="../src/GUI/gui.cpp" line="310"/>
         <source>Route waypoints</source>
         <translation>Ruttvägpunkter</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="428"/>
+        <source>&amp;File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="442"/>
+        <source>&amp;Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="450"/>
+        <source>&amp;Graph</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="459"/>
+        <source>&amp;POI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="471"/>
+        <source>&amp;Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="480"/>
+        <source>&amp;Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="498"/>
+        <source>&amp;Help</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="612"/>

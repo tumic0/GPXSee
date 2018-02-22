@@ -284,7 +284,7 @@
     <message>
         <location filename="../src/GUI/format.cpp" line="62"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="66"/>
@@ -373,7 +373,6 @@
         <translation>Ansicht</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="428"/>
         <location filename="../src/GUI/gui.cpp" line="511"/>
         <source>File</source>
         <translation>Datei</translation>
@@ -501,22 +500,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="375"/>
         <source>Nautical</source>
-        <translation type="unfinished"></translation>
+        <translation>Nautisch</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="382"/>
         <source>Decimal degrees (DD)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dezimalgrad (DD)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="387"/>
         <source>Degrees and decimal minutes (DMM)</source>
-        <translation type="unfinished"></translation>
+        <translation>Grad und Dezimalminuten (DMM)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="393"/>
         <source>Degrees, minutes, seconds (DMS)</source>
-        <translation type="unfinished"></translation>
+        <translation>Grad, Minuten, Sekunden (DMS)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="398"/>
@@ -549,19 +548,16 @@
         <translation>Erste</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="442"/>
         <source>Map</source>
-        <translation>Karte</translation>
+        <translation type="vanished">Karte</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="450"/>
         <source>Graph</source>
-        <translation>Graph</translation>
+        <translation type="vanished">Graph</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="459"/>
         <source>POI</source>
-        <translation>POI</translation>
+        <translation type="vanished">POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="460"/>
@@ -569,9 +565,8 @@
         <translation>POI-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>Data</source>
-        <translation>Daten</translation>
+        <translation type="vanished">Daten</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
@@ -579,9 +574,8 @@
         <translation>Anzeige</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="480"/>
         <source>Settings</source>
-        <translation>Einstellungen</translation>
+        <translation type="vanished">Einstellungen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="484"/>
@@ -591,12 +585,11 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="488"/>
         <source>Coordinates format</source>
-        <translation type="unfinished"></translation>
+        <translation>Koordinatenformate</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="498"/>
         <source>Help</source>
-        <translation>Hilfe</translation>
+        <translation type="vanished">Hilfe</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="615"/>
@@ -713,6 +706,41 @@
         <translation>Routen Wegpunkte</translation>
     </message>
     <message>
+        <location filename="../src/GUI/gui.cpp" line="428"/>
+        <source>&amp;File</source>
+        <translation>&amp;Datei</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="442"/>
+        <source>&amp;Map</source>
+        <translation>&amp;Map</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="450"/>
+        <source>&amp;Graph</source>
+        <translation>&amp;Graph</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="459"/>
+        <source>&amp;POI</source>
+        <translation>&amp;POI</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="471"/>
+        <source>&amp;Data</source>
+        <translation>D&amp;ata</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="480"/>
+        <source>&amp;Settings</source>
+        <translation>&amp;Einstellungen</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="498"/>
+        <source>&amp;Help</source>
+        <translation>&amp;Hilfe</translation>
+    </message>
+    <message>
         <location filename="../src/GUI/gui.cpp" line="612"/>
         <source>First file</source>
         <translation>Erste Datei</translation>
@@ -799,7 +827,7 @@
     <message>
         <location filename="../src/GUI/graphview.cpp" line="120"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="134"/>
@@ -1121,7 +1149,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="296"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="299"/>
@@ -1161,7 +1189,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="331"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="334"/>
@@ -1363,7 +1391,7 @@
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="86"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="89"/>
@@ -1402,7 +1430,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="83"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="86"/>
@@ -1425,7 +1453,7 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="22"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>

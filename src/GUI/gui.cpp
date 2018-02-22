@@ -425,7 +425,7 @@ void GUI::createActions()
 
 void GUI::createMenus()
 {
-	QMenu *fileMenu = menuBar()->addMenu(tr("File"));
+	QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 	fileMenu->addAction(_openFileAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(_printFileAction);
@@ -439,7 +439,7 @@ void GUI::createMenus()
 	fileMenu->addAction(_exitAction);
 #endif // Q_OS_MAC
 
-	_mapMenu = menuBar()->addMenu(tr("Map"));
+	_mapMenu = menuBar()->addMenu(tr("&Map"));
 	_mapMenu->addActions(_mapActions);
 	_mapsEnd = _mapMenu->addSeparator();
 	_mapMenu->addAction(_loadMapAction);
@@ -447,7 +447,7 @@ void GUI::createMenus()
 	_mapMenu->addSeparator();
 	_mapMenu->addAction(_showMapAction);
 
-	QMenu *graphMenu = menuBar()->addMenu(tr("Graph"));
+	QMenu *graphMenu = menuBar()->addMenu(tr("&Graph"));
 	graphMenu->addAction(_distanceGraphAction);
 	graphMenu->addAction(_timeGraphAction);
 	graphMenu->addSeparator();
@@ -456,7 +456,7 @@ void GUI::createMenus()
 	graphMenu->addSeparator();
 	graphMenu->addAction(_showGraphsAction);
 
-	QMenu *poiMenu = menuBar()->addMenu(tr("POI"));
+	QMenu *poiMenu = menuBar()->addMenu(tr("&POI"));
 	_poiFilesMenu = poiMenu->addMenu(tr("POI files"));
 	_poiFilesMenu->addActions(_poiFilesActions);
 	poiMenu->addSeparator();
@@ -468,7 +468,7 @@ void GUI::createMenus()
 	poiMenu->addSeparator();
 	poiMenu->addAction(_showPOIAction);
 
-	QMenu *dataMenu = menuBar()->addMenu(tr("Data"));
+	QMenu *dataMenu = menuBar()->addMenu(tr("&Data"));
 	QMenu *displayMenu = dataMenu->addMenu(tr("Display"));
 	displayMenu->addAction(_showWaypointLabelsAction);
 	displayMenu->addAction(_showRouteWaypointsAction);
@@ -477,7 +477,7 @@ void GUI::createMenus()
 	dataMenu->addAction(_showRoutesAction);
 	dataMenu->addAction(_showWaypointsAction);
 
-	QMenu *settingsMenu = menuBar()->addMenu(tr("Settings"));
+	QMenu *settingsMenu = menuBar()->addMenu(tr("&Settings"));
 	QMenu *timeMenu = settingsMenu->addMenu(tr("Time"));
 	timeMenu->addAction(_totalTimeAction);
 	timeMenu->addAction(_movingTimeAction);
@@ -495,7 +495,7 @@ void GUI::createMenus()
 	settingsMenu->addSeparator();
 	settingsMenu->addAction(_openOptionsAction);
 
-	QMenu *helpMenu = menuBar()->addMenu(tr("Help"));
+	QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
 	helpMenu->addAction(_pathsAction);
 	helpMenu->addAction(_keysAction);
 	helpMenu->addSeparator();

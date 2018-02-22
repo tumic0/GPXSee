@@ -343,7 +343,6 @@
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="428"/>
         <location filename="../src/GUI/gui.cpp" line="511"/>
         <source>File</source>
         <translation>Файл</translation>
@@ -519,19 +518,16 @@
         <translation>Первый</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="442"/>
         <source>Map</source>
-        <translation>Карты</translation>
+        <translation type="vanished">Карты</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="450"/>
         <source>Graph</source>
-        <translation>График</translation>
+        <translation type="vanished">График</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="459"/>
         <source>POI</source>
-        <translation>Точки POI</translation>
+        <translation type="vanished">Точки POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="460"/>
@@ -539,9 +535,8 @@
         <translation>Файлы с точками POI</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>Data</source>
-        <translation>Данные</translation>
+        <translation type="vanished">Данные</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
@@ -549,9 +544,8 @@
         <translation>Отображать</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="480"/>
         <source>Settings</source>
-        <translation>Параметры</translation>
+        <translation type="vanished">Параметры</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="484"/>
@@ -564,9 +558,8 @@
         <translation>Формат координат</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="498"/>
         <source>Help</source>
-        <translation>Справка</translation>
+        <translation type="vanished">Справка</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="615"/>
@@ -628,6 +621,41 @@
         <location filename="../src/GUI/gui.cpp" line="915"/>
         <source>Date</source>
         <translation>Дата</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="428"/>
+        <source>&amp;File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="442"/>
+        <source>&amp;Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="450"/>
+        <source>&amp;Graph</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="459"/>
+        <source>&amp;POI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="471"/>
+        <source>&amp;Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="480"/>
+        <source>&amp;Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="498"/>
+        <source>&amp;Help</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="643"/>

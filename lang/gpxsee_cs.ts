@@ -343,7 +343,6 @@
         <translation>Zobrazit</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="428"/>
         <location filename="../src/GUI/gui.cpp" line="511"/>
         <source>File</source>
         <translation>Soubor</translation>
@@ -519,19 +518,16 @@
         <translation>První</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="442"/>
         <source>Map</source>
-        <translation>Mapa</translation>
+        <translation type="vanished">Mapa</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="450"/>
         <source>Graph</source>
-        <translation>Graf</translation>
+        <translation type="vanished">Graf</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="459"/>
         <source>POI</source>
-        <translation>POI</translation>
+        <translation type="vanished">POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="460"/>
@@ -539,9 +535,8 @@
         <translation>POI soubory</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>Data</source>
-        <translation>Data</translation>
+        <translation type="vanished">Data</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
@@ -549,9 +544,8 @@
         <translation>Zobrazit</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="480"/>
         <source>Settings</source>
-        <translation>Nastavení</translation>
+        <translation type="vanished">Nastavení</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="484"/>
@@ -564,9 +558,8 @@
         <translation>Formát souřadnic</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="498"/>
         <source>Help</source>
-        <translation>Nápověda</translation>
+        <translation type="vanished">Nápověda</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="615"/>
@@ -628,6 +621,41 @@
         <location filename="../src/GUI/gui.cpp" line="915"/>
         <source>Date</source>
         <translation>Datum</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="428"/>
+        <source>&amp;File</source>
+        <translation>&amp;Soubor</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="442"/>
+        <source>&amp;Map</source>
+        <translation>&amp;Mapa</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="450"/>
+        <source>&amp;Graph</source>
+        <translation>&amp;Graf</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="459"/>
+        <source>&amp;POI</source>
+        <translation>&amp;POI</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="471"/>
+        <source>&amp;Data</source>
+        <translation>&amp;Data</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="480"/>
+        <source>&amp;Settings</source>
+        <translation>&amp;Nastavení</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="498"/>
+        <source>&amp;Help</source>
+        <translation type="unfinished">N&amp;ápověda</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="643"/>
