@@ -518,34 +518,14 @@
         <translation>Ensimmäinen</translation>
     </message>
     <message>
-        <source>Map</source>
-        <translation type="vanished">Kartat</translation>
-    </message>
-    <message>
-        <source>Graph</source>
-        <translation type="vanished">Kaaviokuva</translation>
-    </message>
-    <message>
-        <source>POI</source>
-        <translation type="vanished">POI</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="460"/>
         <source>POI files</source>
         <translation>POI-tiedostot</translation>
     </message>
     <message>
-        <source>Data</source>
-        <translation type="vanished">Tiedot</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
         <source>Display</source>
         <translation>Näytä</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Asetukset</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="484"/>
@@ -556,10 +536,6 @@
         <location filename="../src/GUI/gui.cpp" line="488"/>
         <source>Coordinates format</source>
         <translation>Koordinaattien muoto</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Ohje</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="615"/>
@@ -625,37 +601,37 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="428"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Tiedosto</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="442"/>
         <source>&amp;Map</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kartat</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="450"/>
         <source>&amp;Graph</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaa&amp;viokuva</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="459"/>
         <source>&amp;POI</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>&amp;Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Tie&amp;dot</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Asetukset</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="498"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ohje</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="643"/>
