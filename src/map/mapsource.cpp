@@ -124,7 +124,8 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 
 Map *MapSource::map(QXmlStreamReader &reader)
 {
-	QString name, url, format, layer, style, set;
+	QString name, url, layer, style, set;
+	QString format("image/png");
 	bool invert = false;
 	Range z(ZOOM_MIN, ZOOM_MAX);
 	RectC b(Coordinates(BOUNDS_LEFT, BOUNDS_TOP),
