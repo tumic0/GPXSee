@@ -2,6 +2,7 @@
 #define WMTS_H
 
 #include <QSize>
+#include <QRect>
 #include <QSet>
 #include <QList>
 #include <QHash>
