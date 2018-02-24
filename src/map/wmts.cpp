@@ -4,6 +4,7 @@
 #include <QEventLoop>
 #include <QTextStream>
 #include <QStringList>
+#include <QtAlgorithms>
 #include "downloader.h"
 #include "pcs.h"
 #include "wmts.h"
@@ -52,12 +53,11 @@ bool WMTS::createProjection(const QString &crs)
 
 void WMTS::tileMatrix(QXmlStreamReader &reader)
 {
-	int id;
 	Zoom zoom;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Identifier")
-			id = reader.readElementText().toInt();
+			zoom.id = reader.readElementText();
 		else if (reader.name() == "ScaleDenominator")
 			zoom.scaleDenominator = reader.readElementText().toDouble();
 		else if (reader.name() == "TopLeftCorner") {
@@ -75,7 +75,8 @@ void WMTS::tileMatrix(QXmlStreamReader &reader)
 			reader.skipCurrentElement();
 	}
 
-	Zoom &z = _zooms[id];
+	Zoom &z = _zooms[zoom.id];
+	z.id = zoom.id;
 	z.matrix = zoom.matrix;
 	z.scaleDenominator = zoom.scaleDenominator;
 	z.tile = zoom.tile;
@@ -101,12 +102,12 @@ void WMTS::tileMatrixSet(QXmlStreamReader &reader, const QString &set)
 
 void WMTS::tileMatrixLimits(QXmlStreamReader &reader)
 {
-	int id;
+	QString id;
 	QRect limits;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "TileMatrix")
-			id = reader.readElementText().toInt();
+			id = reader.readElementText();
 		else if (reader.name() == "MinTileRow")
 			limits.setTop(reader.readElementText().toInt());
 		else if (reader.name() == "MaxTileRow")
@@ -251,6 +252,13 @@ bool WMTS::load(const QString &file, const QString &url, const QString &layer,
 	}
 
 	return true;
+}
+
+QList<WMTS::Zoom> WMTS::zooms() const
+{
+	QList<Zoom> z(_zooms.values());
+	qSort(z);
+	return z;
 }
 
 #ifndef QT_NO_DEBUG

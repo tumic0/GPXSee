@@ -108,9 +108,14 @@ void WMTSMap::emitLoaded()
 QRectF WMTSMap::bounds() const
 {
 	const WMTS::Zoom &z = _zooms.at(_zoom);
-	return QRectF(QPointF(z.limits.left() * z.tile.width(), z.limits.top()
-	  * z.tile.height()), QSize(z.tile.width() * z.limits.width(),
-	  z.tile.height() * z.limits.height()));
+
+	if (z.limits.isNull())
+		return QRectF(QPointF(0, 0), QSize(z.tile.width() * z.matrix.width(),
+		  z.tile.height() * z.matrix.height()));
+	else
+		return QRectF(QPointF(z.limits.left() * z.tile.width(), z.limits.top()
+		  * z.tile.height()), QSize(z.tile.width() * z.limits.width(),
+		  z.tile.height() * z.limits.height()));
 }
 
 qreal WMTSMap::zoomFit(const QSize &size, const RectC &br)
@@ -184,7 +189,7 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect)
 	QList<Tile> tiles;
 	for (int i = tl.x(); i < br.x(); i++)
 		for (int j = tl.y(); j < br.y(); j++)
-			tiles.append(Tile(QPoint(i, j), _zoom));
+			tiles.append(Tile(QPoint(i, j), z.id));
 
 	if (_block)
 		_tileLoader.loadTilesSync(tiles);

@@ -8,15 +8,15 @@
 class Tile
 {
 public:
-	Tile(const QPoint &xy, int zoom)
+	Tile(const QPoint &xy, const QVariant &zoom)
 		{_xy = xy; _zoom = zoom;}
 
-	int zoom() const {return _zoom;}
+	QVariant zoom() const {return _zoom;}
 	const QPoint& xy() const {return _xy;}
 	QPixmap& pixmap() {return _pixmap;}
 
 private:
-	int _zoom;
+	QVariant _zoom;
 	QPoint _xy;
 	QPixmap _pixmap;
 };

@@ -90,7 +90,7 @@ QString TileLoader::tileUrl(const Tile &tile) const
 {
 	QString url(_url);
 
-	url.replace("$z", QString::number(tile.zoom()));
+	url.replace("$z", tile.zoom().toString());
 	url.replace("$x", QString::number(tile.xy().x()));
 	url.replace("$y", QString::number(tile.xy().y()));
 
@@ -99,7 +99,7 @@ QString TileLoader::tileUrl(const Tile &tile) const
 
 QString TileLoader::tileFile(const Tile &tile) const
 {
-	QString file = _dir + QString("/%1-%2-%3").arg(tile.zoom())
+	QString file = _dir + QString("/%1-%2-%3").arg(tile.zoom().toString())
 	  .arg(tile.xy().x()).arg(tile.xy().y());
 
 	return file;

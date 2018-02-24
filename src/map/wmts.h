@@ -3,6 +3,7 @@
 
 #include <QSize>
 #include <QMap>
+#include <QList>
 #include "projection.h"
 
 class QXmlStreamReader;
@@ -12,18 +13,22 @@ class WMTS
 {
 public:
 	struct Zoom {
+		QString id;
 		qreal scaleDenominator;
 		QPointF topLeft;
 		QSize tile;
 		QSize matrix;
 		QRect limits;
+
+		bool operator<(const Zoom &other) const
+			{return this->scaleDenominator > other.scaleDenominator;}
 	};
 
 	bool load(const QString &path, const QString &url, const QString &layer,
 	  const QString &set);
 	const QString &errorString() const {return _errorString;}
 
-	const QList<Zoom> zooms() const {return _zooms.values();}
+	QList<Zoom> zooms() const;
 	const Projection &projection() const {return _projection;}
 
 	static Downloader *downloader() {return _downloader;}
@@ -48,7 +53,7 @@ private:
 	  const QString &set);
 	bool getCapabilities(const QString &url, const QString &file);
 
-	QMap<int, Zoom> _zooms;
+	QMap<QString, Zoom> _zooms;
 	Projection _projection;
 
 	QString _errorString;
