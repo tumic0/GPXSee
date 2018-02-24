@@ -52,10 +52,13 @@ bool WMTS::createProjection(const QString &crs)
 
 void WMTS::tileMatrix(QXmlStreamReader &reader)
 {
+	int id;
 	Zoom zoom;
 
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "ScaleDenominator")
+		if (reader.name() == "Identifier")
+			id = reader.readElementText().toInt();
+		else if (reader.name() == "ScaleDenominator")
 			zoom.scaleDenominator = reader.readElementText().toDouble();
 		else if (reader.name() == "TopLeftCorner") {
 			QString str = reader.readElementText();
@@ -72,7 +75,11 @@ void WMTS::tileMatrix(QXmlStreamReader &reader)
 			reader.skipCurrentElement();
 	}
 
-	_zooms.append(zoom);
+	Zoom &z = _zooms[id];
+	z.matrix = zoom.matrix;
+	z.scaleDenominator = zoom.scaleDenominator;
+	z.tile = zoom.tile;
+	z.topLeft = zoom.topLeft;
 }
 
 void WMTS::tileMatrixSet(QXmlStreamReader &reader, const QString &set)
@@ -92,27 +99,94 @@ void WMTS::tileMatrixSet(QXmlStreamReader &reader, const QString &set)
 	}
 }
 
-void WMTS::contents(QXmlStreamReader &reader, const QString &set)
+void WMTS::tileMatrixLimits(QXmlStreamReader &reader)
+{
+	int id;
+	QRect limits;
+
+	while (reader.readNextStartElement()) {
+		if (reader.name() == "TileMatrix")
+			id = reader.readElementText().toInt();
+		else if (reader.name() == "MinTileRow")
+			limits.setTop(reader.readElementText().toInt());
+		else if (reader.name() == "MaxTileRow")
+			limits.setBottom(reader.readElementText().toInt());
+		else if (reader.name() == "MinTileCol")
+			limits.setLeft(reader.readElementText().toInt());
+		else if (reader.name() == "MaxTileCol")
+			limits.setRight(reader.readElementText().toInt());
+		else
+			reader.skipCurrentElement();
+	}
+
+	_zooms[id].limits = limits;
+}
+
+void WMTS::tileMatrixSetLimits(QXmlStreamReader &reader)
+{
+	while (reader.readNextStartElement()) {
+		if (reader.name() == "TileMatrixLimits")
+			tileMatrixLimits(reader);
+		else
+			reader.skipCurrentElement();
+	}
+}
+
+void WMTS::tileMatrixSetLink(QXmlStreamReader &reader, const QString &set)
+{
+	QString id;
+
+	while (reader.readNextStartElement()) {
+		if (reader.name() == "TileMatrixSet")
+			id = reader.readElementText();
+		else if (reader.name() == "TileMatrixSetLimits" && id == set)
+			tileMatrixSetLimits(reader);
+		else
+			reader.skipCurrentElement();
+	}
+}
+
+void WMTS::layer(QXmlStreamReader &reader, const QString &layer,
+  const QString &set)
+{
+	QString id;
+
+	while (reader.readNextStartElement()) {
+		if (reader.name() == "Identifier")
+			id = reader.readElementText();
+		else if (reader.name() == "TileMatrixSetLink" && id == layer)
+			tileMatrixSetLink(reader, set);
+		else
+			reader.skipCurrentElement();
+	}
+}
+
+void WMTS::contents(QXmlStreamReader &reader, const QString &layer,
+  const QString &set)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "TileMatrixSet")
 			tileMatrixSet(reader, set);
+		else if (reader.name() == "Layer")
+			WMTS::layer(reader, layer, set);
 		else
 			reader.skipCurrentElement();
 	}
 }
 
-void WMTS::capabilities(QXmlStreamReader &reader, const QString &set)
+void WMTS::capabilities(QXmlStreamReader &reader, const QString &layer,
+  const QString &set)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Contents")
-			contents(reader, set);
+			contents(reader, layer, set);
 		else
 			reader.skipCurrentElement();
 	}
 }
 
-bool WMTS::parseCapabilities(const QString &path, const QString &tileMatrixSet)
+bool WMTS::parseCapabilities(const QString &path, const QString &layer,
+  const QString &set)
 {
 	QFile file(path);
 	QXmlStreamReader reader;
@@ -126,7 +200,7 @@ bool WMTS::parseCapabilities(const QString &path, const QString &tileMatrixSet)
 
 	if (reader.readNextStartElement()) {
 		if (reader.name() == "Capabilities")
-			capabilities(reader, tileMatrixSet);
+			capabilities(reader, layer, set);
 		else
 			reader.raiseError("Not a Capabilities XML file");
 	}
@@ -158,13 +232,13 @@ bool WMTS::getCapabilities(const QString &url, const QString &file)
 	}
 }
 
-bool WMTS::load(const QString &file, const QString &url,
-  const QString &tileMatrixSet)
+bool WMTS::load(const QString &file, const QString &url, const QString &layer,
+  const QString &set)
 {
 	if (!QFileInfo(file).exists())
 		if (!getCapabilities(url, file))
 			return false;
-	if (!parseCapabilities(file, tileMatrixSet))
+	if (!parseCapabilities(file, layer, set))
 		return false;
 
 	if (_projection.isNull()) {
@@ -178,3 +252,12 @@ bool WMTS::load(const QString &file, const QString &url,
 
 	return true;
 }
+
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const WMTS::Zoom &zoom)
+{
+	dbg.nospace() << "Zoom(" << zoom.scaleDenominator << ", " << zoom.topLeft
+	  << ", " << zoom.tile << ", " << zoom.matrix << ", " << zoom.limits << ")";
+	return dbg.space();
+}
+#endif // QT_NO_DEBUG

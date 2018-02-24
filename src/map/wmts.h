@@ -2,7 +2,7 @@
 #define WMTS_H
 
 #include <QSize>
-#include <QList>
+#include <QMap>
 #include "projection.h"
 
 class QXmlStreamReader;
@@ -16,14 +16,15 @@ public:
 		QPointF topLeft;
 		QSize tile;
 		QSize matrix;
+		QRect limits;
 	};
 
-	bool load(const QString &path, const QString &url,
-	  const QString &tileMatrixSet);
+	bool load(const QString &path, const QString &url, const QString &layer,
+	  const QString &set);
 	const QString &errorString() const {return _errorString;}
 
-	const QList<Zoom> &zooms() {return _zooms;}
-	const Projection &projection() {return _projection;}
+	const QList<Zoom> zooms() const {return _zooms.values();}
+	const Projection &projection() const {return _projection;}
 
 	static Downloader *downloader() {return _downloader;}
 	static void setDownloader(Downloader *downloader)
@@ -32,19 +33,31 @@ public:
 private:
 	bool createProjection(const QString &crs);
 
+	void tileMatrixLimits(QXmlStreamReader &reader);
 	void tileMatrix(QXmlStreamReader &reader);
+	void tileMatrixSetLimits(QXmlStreamReader &reader);
 	void tileMatrixSet(QXmlStreamReader &reader, const QString &set);
-	void contents(QXmlStreamReader &reader, const QString &set);
-	void capabilities(QXmlStreamReader &reader, const QString &set);
-	bool parseCapabilities(const QString &path, const QString &tileMatrixSet);
+	void tileMatrixSetLink(QXmlStreamReader &reader, const QString &set);
+	void layer(QXmlStreamReader &reader, const QString &layer,
+	  const QString &set);
+	void contents(QXmlStreamReader &reader, const QString &layer,
+	  const QString &set);
+	void capabilities(QXmlStreamReader &reader, const QString &layer,
+	  const QString &set);
+	bool parseCapabilities(const QString &path, const QString &layer,
+	  const QString &set);
 	bool getCapabilities(const QString &url, const QString &file);
 
-	QList<Zoom> _zooms;
+	QMap<int, Zoom> _zooms;
 	Projection _projection;
 
 	QString _errorString;
 
 	static Downloader *_downloader;
 };
+
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const WMTS::Zoom &zoom);
+#endif // QT_NO_DEBUG
 
 #endif // WMTS_H

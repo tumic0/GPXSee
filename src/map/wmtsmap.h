@@ -14,8 +14,8 @@ class WMTSMap : public Map
 
 public:
 	WMTSMap(const QString &name, const QString &url, const QString &format,
-	  const QString &layer, const QString &style, const QString &tileMatrixSet,
-	  QObject *parent = 0);
+	  const QString &layer, const QString &style, const QString &set,
+	  bool invertAxis, QObject *parent = 0);
 
 	const QString &name() const {return _name;}
 
@@ -54,9 +54,10 @@ private:
 	QPointF ll2xy(const Coordinates &c) const;
 	Coordinates xy2ll(const QPointF &p) const;
 
-	QString _name, _url, _tileMatrixSet;
+	QString _name, _url, _layer, _set;
 	TileLoader _tileLoader;
 	QList<WMTS::Zoom> _zooms;
+	bool _invertAxis;
 	Projection _projection;
 	QTransform _transform, _inverted;
 	int _zoom;

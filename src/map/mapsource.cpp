@@ -124,7 +124,8 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 
 Map *MapSource::map(QXmlStreamReader &reader)
 {
-	QString name, url, format, layer, style, tileMatrixSet;
+	QString name, url, format, layer, style, set;
+	bool invert = false;
 	Range z(ZOOM_MIN, ZOOM_MAX);
 	RectC b(Coordinates(BOUNDS_LEFT, BOUNDS_TOP),
 	  Coordinates(BOUNDS_RIGHT, BOUNDS_BOTTOM));
@@ -150,8 +151,10 @@ Map *MapSource::map(QXmlStreamReader &reader)
 			layer = reader.readElementText();
 		else if (reader.name() == "style")
 			style = reader.readElementText();
-		else if (reader.name() == "tilematrixset")
-			tileMatrixSet = reader.readElementText();
+		else if (reader.name() == "set")
+			set = reader.readElementText();
+		else if (reader.name() == "axis")
+			invert = (reader.readElementText() == "yx") ? true : false;
 		else
 			reader.skipCurrentElement();
 	}
@@ -159,7 +162,7 @@ Map *MapSource::map(QXmlStreamReader &reader)
 	if (reader.error())
 		return 0;
 	else if (wmts)
-		return new WMTSMap(name, url, format, layer, style, tileMatrixSet);
+		return new WMTSMap(name, url, format, layer, style, set, invert);
 	else
 		return new OnlineMap(name, url, z, b);
 }
