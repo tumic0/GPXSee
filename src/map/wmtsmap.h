@@ -56,6 +56,7 @@ private:
 
 	QString _name, _url, _layer, _set;
 	TileLoader _tileLoader;
+	RectC _bounds;
 	QList<WMTS::Zoom> _zooms;
 	bool _invertAxis;
 	Projection _projection;

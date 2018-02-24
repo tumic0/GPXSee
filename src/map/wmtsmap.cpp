@@ -29,6 +29,7 @@ WMTSMap::WMTSMap(const QString &name, const QString &url, const QString &format,
 		_errorString = wmts.errorString();
 		return;
 	}
+	_bounds = wmts.bounds();
 	_zooms = wmts.zooms();
 	_projection = wmts.projection();
 
@@ -108,14 +109,18 @@ void WMTSMap::emitLoaded()
 QRectF WMTSMap::bounds() const
 {
 	const WMTS::Zoom &z = _zooms.at(_zoom);
+	QRectF tileBounds, bounds;
 
-	if (z.limits.isNull())
-		return QRectF(QPointF(0, 0), QSize(z.tile.width() * z.matrix.width(),
-		  z.tile.height() * z.matrix.height()));
-	else
-		return QRectF(QPointF(z.limits.left() * z.tile.width(), z.limits.top()
-		  * z.tile.height()), QSize(z.tile.width() * z.limits.width(),
-		  z.tile.height() * z.limits.height()));
+	tileBounds = (z.limits.isNull()) ?
+	  QRectF(QPointF(0, 0), QSize(z.tile.width() * z.matrix.width(),
+	  z.tile.height() * z.matrix.height())) : QRectF(QPointF(z.limits.left()
+	  * z.tile.width(), z.limits.top() * z.tile.height()), QSize(z.tile.width()
+	  * z.limits.width(), z.tile.height() * z.limits.height()));
+
+	bounds = _bounds.isValid() ? QRectF(ll2xy(_bounds.topLeft()),
+	  ll2xy(_bounds.bottomRight())) : QRectF();
+
+	return _bounds.isValid() ? tileBounds.intersected(bounds) : tileBounds;
 }
 
 qreal WMTSMap::zoomFit(const QSize &size, const RectC &br)
