@@ -34,19 +34,26 @@ bool WMTS::createProjection(const QString &crs)
 			return false;
 	}
 
-	if (authority != "EPSG")
-		return false;
-	epsg = code.toInt(&res);
-	if (!res)
-		return false;
+	if (authority == "EPSG") {
+		epsg = code.toInt(&res);
+		if (!res)
+			return false;
 
-	if ((pcs = PCS::pcs(epsg))) {
-		_projection = Projection(pcs->gcs(), pcs->method(), pcs->setup(),
-		  pcs->units());
-		return true;
-	} else if ((gcs = GCS::gcs(epsg))) {
-		_projection = Projection(gcs);
-		return true;
+		if ((pcs = PCS::pcs(epsg))) {
+			_projection = Projection(pcs->gcs(), pcs->method(), pcs->setup(),
+			  pcs->units());
+			return true;
+		} else if ((gcs = GCS::gcs(epsg))) {
+			_projection = Projection(gcs);
+			return true;
+		} else
+			return false;
+	} else if (authority == "OGC") {
+		if (code == "CRS84") {
+			_projection = Projection(GCS::gcs(4326));
+			return true;
+		} else
+			return false;
 	} else
 		return false;
 }
