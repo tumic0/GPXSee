@@ -20,8 +20,12 @@ public:
 		QSize matrix;
 		QRect limits;
 
+		Zoom() : scaleDenominator(0) {}
 		bool operator<(const Zoom &other) const
 			{return this->scaleDenominator > other.scaleDenominator;}
+		bool isValid() const
+			{return scaleDenominator > 0 && !id.isEmpty() && tile.isValid()
+			  && matrix.isValid();}
 	};
 
 	bool load(const QString &path, const QString &url, const QString &layer,

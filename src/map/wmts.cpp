@@ -243,6 +243,8 @@ bool WMTS::getCapabilities(const QString &url, const QString &file)
 bool WMTS::load(const QString &file, const QString &url, const QString &layer,
   const QString &set)
 {
+	QMap<QString, Zoom>::const_iterator it;
+
 	if (!QFileInfo(file).exists())
 		if (!getCapabilities(url, file))
 			return false;
@@ -256,6 +258,12 @@ bool WMTS::load(const QString &file, const QString &url, const QString &layer,
 	if (_zooms.isEmpty()) {
 		_errorString = "No tile matrix found";
 		return false;
+	}
+	for (it = _zooms.constBegin(); it != _zooms.constEnd(); ++it) {
+		if (!it->isValid()) {
+			_errorString = it->id + ": invalid tile matrix definition";
+			return false;
+		}
 	}
 
 	return true;
