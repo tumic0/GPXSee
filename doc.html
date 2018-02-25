@@ -98,6 +98,7 @@
           may contain an arbitrary directory structure.</p>
 
           <h3 id="online">Online maps</h3>
+          <h4 id="TS">OSM/Google tiles</h4>
           <p>GPXSee supports most tile server based online maps out there, but the
           <a href="https://github.com/tumic0/GPXSee/tree/master/pkg/maps">list
           of maps</a> distributed with the official packages is limited to those
@@ -124,6 +125,52 @@
           <p>The bounds are WGS84 latitude/longitude values in degrees. If omitted, the
           default zoom range is &lt;0,&nbsp;19&gt; and the default bounds are
           &lt;-85.0511,&nbsp;85.0511&gt; and &lt;-180,&nbsp;180&gt;.</p>
+
+          <h4 id="WMTS">WMTS</h4>
+          <p>WMTS maps are distinguished by setting the <i>type</i> attribute of the
+          <i>map</i> element to <code>WMTS</code>. Both the KVP and REST access methods
+          are supported.</p>
+
+          <p>For KVP, the <i>url</i> element represents the WMTS base URL and three
+          additional elements are required - <i>layer</i>, <i>style</i> and <i>set</i>
+          (TileMatrixSet in WMTS). An optional <i>format</i> element may be specified
+          defining the desired image format. If not set, <code>image/png</code> is
+          used.</p>
+
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;map type="WMTS"&gt;
+	&lt;name&gt;CUZK&lt;/name&gt;
+	&lt;url&gt;http://geoportal.cuzk.cz/WMTS_ZM_900913/WMTService.aspx&lt;/url&gt;
+	&lt;format&gt;image/png&lt;/format&gt;
+	&lt;layer&gt;zm&lt;/layer&gt;
+	&lt;style&gt;default&lt;/style&gt;
+	&lt;set axis="yx"&gt;ogc:1.0:globalcrs84pixel&lt;/set&gt;
+&lt;/map&gt;
+</pre>
+
+          <p>For REST access, the <i>url</i> element's <i>type</i> attribute must be set
+          to <code>REST</code>. The URL then represents the URL of the capabilities XML
+          document. The three mandatory elements - <i>layer</i>, <i>style</i> and
+          <i>set</i> - must be present like in the KVP case. Defining the format has no
+          relevance for the REST access method.</p>
+
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;map type="WMTS"&gt;
+	&lt;name&gt;Wien - Ortho&lt;/name&gt;
+	&lt;url type="REST"&gt;http://maps1.wien.gv.at/wmts/1.0.0/WMTSCapabilities.xml&lt;/url&gt;
+	&lt;layer&gt;lb&lt;/layer&gt;
+	&lt;style&gt;farbe&lt;/style&gt;
+	&lt;set&gt;google3857&lt;/set&gt;
+&lt;/map&gt;
+</pre>
+          <p>There is one more important attribute - the <i>axis</i> attribute of the
+          <i>set</i> element. It specifies the axis order for the CRS used for the
+          tile matrix set. Technically the order should be obtainable from the CRS definition,
+          but in praxis many servers use the wrong order. This is why GPXSee uses <b>x,y
+          (lon,lat) as default</b> and if the set uses the reverse order, the <i>axis</i>
+          attribute must be set to <code>yx</code> in the map definition.</p>
 
           <h3 id="offline">Offline maps</h3>
           <p>OziExplorer maps, TrekBuddy maps/atlases and GeoTIFF images are supported by
