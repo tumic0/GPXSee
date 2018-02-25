@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de">
+<TS version="2.1" language="fr">
 <context>
     <name>CadenceGraph</name>
     <message>
@@ -284,7 +284,7 @@
     <message>
         <location filename="../src/GUI/format.cpp" line="62"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="66"/>
@@ -548,34 +548,14 @@
         <translation>Premier</translation>
     </message>
     <message>
-        <source>Map</source>
-        <translation type="vanished">Carte</translation>
-    </message>
-    <message>
-        <source>Graph</source>
-        <translation type="vanished">Graphe</translation>
-    </message>
-    <message>
-        <source>POI</source>
-        <translation type="vanished">POI</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="460"/>
         <source>POI files</source>
         <translation>Fichiers POI</translation>
     </message>
     <message>
-        <source>Data</source>
-        <translation type="vanished">Données</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
         <source>Display</source>
         <translation>Affichage</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Paramètres</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="484"/>
@@ -586,10 +566,6 @@
         <location filename="../src/GUI/gui.cpp" line="488"/>
         <source>Coordinates format</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Aide</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="615"/>
@@ -708,37 +684,37 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="428"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fichier</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="442"/>
         <source>&amp;Map</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Carte</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="450"/>
         <source>&amp;Graph</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Graphe</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="459"/>
         <source>&amp;POI</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>&amp;Data</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Données</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Pa&amp;ramètres</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="498"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aide</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="612"/>
@@ -827,7 +803,7 @@
     <message>
         <location filename="../src/GUI/graphview.cpp" line="120"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="134"/>
@@ -1189,7 +1165,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="331"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="334"/>
@@ -1391,7 +1367,7 @@
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="86"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="89"/>

@@ -417,7 +417,7 @@
         <location filename="../src/GUI/gui.cpp" line="639"/>
         <location filename="../src/GUI/gui.cpp" line="640"/>
         <source>Paths</source>
-        <translation type="unfinished">Sökvägar</translation>
+        <translation>Sökvägar</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="243"/>
@@ -548,34 +548,14 @@
         <translation>Första</translation>
     </message>
     <message>
-        <source>Map</source>
-        <translation type="vanished">Karta</translation>
-    </message>
-    <message>
-        <source>Graph</source>
-        <translation type="vanished">Diagram</translation>
-    </message>
-    <message>
-        <source>POI</source>
-        <translation type="vanished">POI</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="460"/>
         <source>POI files</source>
         <translation>POI-filer</translation>
     </message>
     <message>
-        <source>Data</source>
-        <translation type="vanished">Data</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
         <source>Display</source>
         <translation>Visa</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Inställningar</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="484"/>
@@ -586,10 +566,6 @@
         <location filename="../src/GUI/gui.cpp" line="488"/>
         <source>Coordinates format</source>
         <translation>Koordinatformat</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Hjälp</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="615"/>

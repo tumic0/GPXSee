@@ -518,34 +518,14 @@
         <translation>První</translation>
     </message>
     <message>
-        <source>Map</source>
-        <translation type="vanished">Mapa</translation>
-    </message>
-    <message>
-        <source>Graph</source>
-        <translation type="vanished">Graf</translation>
-    </message>
-    <message>
-        <source>POI</source>
-        <translation type="vanished">POI</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="460"/>
         <source>POI files</source>
         <translation>POI soubory</translation>
     </message>
     <message>
-        <source>Data</source>
-        <translation type="vanished">Data</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
         <source>Display</source>
         <translation>Zobrazit</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Nastavení</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="484"/>
@@ -556,10 +536,6 @@
         <location filename="../src/GUI/gui.cpp" line="488"/>
         <source>Coordinates format</source>
         <translation>Formát souřadnic</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Nápověda</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="615"/>

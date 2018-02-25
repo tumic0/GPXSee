@@ -548,34 +548,14 @@
         <translation>Erste</translation>
     </message>
     <message>
-        <source>Map</source>
-        <translation type="vanished">Karte</translation>
-    </message>
-    <message>
-        <source>Graph</source>
-        <translation type="vanished">Graph</translation>
-    </message>
-    <message>
-        <source>POI</source>
-        <translation type="vanished">POI</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="460"/>
         <source>POI files</source>
         <translation>POI-Dateien</translation>
     </message>
     <message>
-        <source>Data</source>
-        <translation type="vanished">Daten</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
         <source>Display</source>
         <translation>Anzeige</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Einstellungen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="484"/>
@@ -586,10 +566,6 @@
         <location filename="../src/GUI/gui.cpp" line="488"/>
         <source>Coordinates format</source>
         <translation>Koordinatenformate</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Hilfe</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="615"/>
