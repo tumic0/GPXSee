@@ -41,12 +41,21 @@ static int scale2zoom(qreal scale)
 
 
 OnlineMap::OnlineMap(const QString &name, const QString &url,
-  const Range &zooms, const RectC &bounds, QObject *parent)
-  : Map(parent), _name(name), _zooms(zooms), _bounds(bounds)
+  const Range &zooms, const RectC &bounds, QObject *parent) :
+  Map(parent), _name(name), _zooms(zooms), _bounds(bounds),
+  _block(false), _valid(false)
 {
-	_block = false;
+	QString dir(TILES_DIR + "/" + _name);
+
 	_zoom = _zooms.max();
-	_tileLoader = TileLoader(url, TILES_DIR + "/" + name);
+	_tileLoader = TileLoader(url, dir);
+
+	if (!QDir().mkpath(dir)) {
+		_errorString = "Error creating tiles dir";
+		return;
+	}
+
+	_valid = true;
 }
 
 void OnlineMap::load()

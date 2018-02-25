@@ -39,6 +39,9 @@ public:
 	void load();
 	void unload();
 
+	bool isValid() const {return _valid;}
+	QString errorString() const {return _errorString;}
+
 private slots:
 	void emitLoaded();
 
@@ -53,6 +56,9 @@ private:
 	RectC _bounds;
 	int _zoom;
 	bool _block;
+
+	bool _valid;
+	QString _errorString;
 };
 
 #endif // ONLINEMAP_H

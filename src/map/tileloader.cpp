@@ -17,13 +17,6 @@ static bool loadTileFile(Tile &tile, const QString &file)
 
 Downloader *TileLoader::_downloader = 0;
 
-TileLoader::TileLoader(const QString &url, const QString &dir)
-  : _url(url), _dir(dir)
-{
-	if (!QDir().mkpath(_dir))
-		qWarning("Error creating tiles dir: %s\n", qPrintable(_dir));
-}
-
 void TileLoader::loadTilesAsync(QList<Tile> &list)
 {
 	QList<Download> dl;

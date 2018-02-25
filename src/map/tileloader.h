@@ -9,7 +9,8 @@ class TileLoader
 {
 public:
 	TileLoader() {}
-	TileLoader(const QString &url, const QString &dir);
+	TileLoader(const QString &url, const QString &dir)
+	  : _url(url), _dir(dir) {}
 
 	void loadTilesAsync(QList<Tile> &list);
 	void loadTilesSync(QList<Tile> &list);

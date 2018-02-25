@@ -126,21 +126,20 @@ Map *MapSource::map(QXmlStreamReader &reader)
 {
 	QString name, url, layer, style, set;
 	QString format("image/png");
-	bool invert = false;
+	bool wmts, rest = false, invertAxis = false;
 	Range z(ZOOM_MIN, ZOOM_MAX);
 	RectC b(Coordinates(BOUNDS_LEFT, BOUNDS_TOP),
 	  Coordinates(BOUNDS_RIGHT, BOUNDS_BOTTOM));
 
-	const QXmlStreamAttributes &attr = reader.attributes();
-	bool wmts = (attr.hasAttribute("type") && attr.value("type") == "WMTS")
-	 ? true : false;
+	wmts = (reader.attributes().value("type") == "WMTS") ? true : false;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "name")
 			name = reader.readElementText();
-		else if (reader.name() == "url")
+		else if (reader.name() == "url") {
+			rest = (reader.attributes().value("type") == "REST") ? true : false;
 			url = reader.readElementText();
-		else if (reader.name() == "zoom") {
+		} else if (reader.name() == "zoom") {
 			z = zooms(reader);
 			reader.skipCurrentElement();
 		} else if (reader.name() == "bounds") {
@@ -155,7 +154,7 @@ Map *MapSource::map(QXmlStreamReader &reader)
 		else if (reader.name() == "set")
 			set = reader.readElementText();
 		else if (reader.name() == "axis")
-			invert = (reader.readElementText() == "yx") ? true : false;
+			invertAxis = (reader.readElementText() == "yx") ? true : false;
 		else
 			reader.skipCurrentElement();
 	}
@@ -163,7 +162,8 @@ Map *MapSource::map(QXmlStreamReader &reader)
 	if (reader.error())
 		return 0;
 	else if (wmts)
-		return new WMTSMap(name, url, format, layer, style, set, invert);
+		return new WMTSMap(name, WMTS::Setup(url, layer, set, style, format,
+		  rest), invertAxis);
 	else
 		return new OnlineMap(name, url, z, b);
 }

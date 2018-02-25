@@ -15,6 +15,20 @@ class Downloader;
 class WMTS
 {
 public:
+	struct Setup {
+		QString url;
+		QString layer;
+		QString set;
+		QString style;
+		QString format;
+		bool rest;
+
+		Setup(const QString &url, const QString &layer, const QString &set,
+		  const QString &style, const QString &format, bool rest) :
+		  url(url), layer(layer), set(set), style(style), format(format),
+		  rest(rest) {}
+	};
+
 	struct Zoom {
 		QString id;
 		qreal scaleDenominator;
@@ -32,13 +46,13 @@ public:
 		  {return scaleDenominator > other.scaleDenominator;}
 	};
 
-	bool load(const QString &path, const QString &url, const QString &layer,
-	  const QString &set);
+	bool load(const QString &path, const Setup &setup);
 	const QString &errorString() const {return _errorString;}
 
 	const RectC &bounds() const {return _bounds;}
 	QList<Zoom> zooms() const;
 	const Projection &projection() const {return _projection;}
+	QString tileUrl() const {return _tileUrl;}
 
 	static Downloader *downloader() {return _downloader;}
 	static void setDownloader(Downloader *downloader)
@@ -94,6 +108,7 @@ private:
 	QSet<MatrixLimits> _limits;
 	RectC _bounds;
 	Projection _projection;
+	QString _tileUrl;
 
 	QString _errorString;
 
@@ -114,6 +129,7 @@ inline uint qHash(const WMTS::MatrixLimits &key)
 }
 
 #ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const WMTS::Setup &setup);
 QDebug operator<<(QDebug dbg, const WMTS::Zoom &zoom);
 #endif // QT_NO_DEBUG
 

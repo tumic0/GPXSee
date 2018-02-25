@@ -194,6 +194,7 @@ void WMTS::layer(QXmlStreamReader &reader, const QString &layer,
 {
 	QString id;
 	RectC bounds;
+	QString tpl;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Identifier")
@@ -202,12 +203,19 @@ void WMTS::layer(QXmlStreamReader &reader, const QString &layer,
 			tileMatrixSetLink(reader, set);
 		else if (reader.name() == "WGS84BoundingBox")
 			bounds = wgs84BoundingBox(reader);
-		else
+		else if (reader.name() == "ResourceURL") {
+			const QXmlStreamAttributes &attr = reader.attributes();
+			if (attr.value("resourceType") == "tile")
+				tpl = attr.value("template").toString();
+			reader.skipCurrentElement();
+		} else
 			reader.skipCurrentElement();
 	}
 
-	if (id == layer)
+	if (id == layer) {
 		_bounds = bounds;
+		_tileUrl = tpl;
+	}
 }
 
 void WMTS::contents(QXmlStreamReader &reader, const QString &layer,
@@ -264,9 +272,7 @@ bool WMTS::getCapabilities(const QString &url, const QString &file)
 {
 	QList<Download> dl;
 
-	QString capabilitiesUrl = QString("%1?service=WMTS&Version=1.0.0"
-	  "&request=GetCapabilities").arg(url);
-	dl.append(Download(capabilitiesUrl, file));
+	dl.append(Download(url, file));
 
 	QEventLoop wait;
 	QObject::connect(_downloader, SIGNAL(finished()), &wait, SLOT(quit()));
@@ -281,16 +287,30 @@ bool WMTS::getCapabilities(const QString &url, const QString &file)
 	}
 }
 
-bool WMTS::load(const QString &file, const QString &url, const QString &layer,
-  const QString &set)
+bool WMTS::load(const QString &file, const WMTS::Setup &setup)
 {
-	QMap<QString, Zoom>::const_iterator it;
+	QString capaUrl = setup.rest ? setup.url :
+	  QString("%1?service=WMTS&Version=1.0.0&request=GetCapabilities")
+	  .arg(setup.url);
 
 	if (!QFileInfo(file).exists())
-		if (!getCapabilities(url, file))
+		if (!getCapabilities(capaUrl, file))
 			return false;
-	if (!parseCapabilities(file, layer, set))
+	if (!parseCapabilities(file, setup.layer, setup.set))
 		return false;
+
+	if (!setup.rest)
+		_tileUrl = QString("%1?service=WMTS&Version=1.0.0&request=GetTile"
+		  "&Format=%2&Layer=%3&Style=%4&TileMatrixSet=%5&TileMatrix=$z"
+		  "&TileRow=$y&TileCol=$x").arg(setup.url).arg(setup.format)
+		  .arg(setup.layer).arg(setup.style).arg(setup.set);
+	else {
+		_tileUrl.replace("{Style}", setup.style);
+		_tileUrl.replace("{TileMatrixSet}", setup.set);
+		_tileUrl.replace("{TileMatrix}", "$z");
+		_tileUrl.replace("{TileRow}", "$y");
+		_tileUrl.replace("{TileCol}", "$x");
+	}
 
 	if (_matrixes.isEmpty()) {
 		_errorString = "No usable tile matrix found";
@@ -298,6 +318,10 @@ bool WMTS::load(const QString &file, const QString &url, const QString &layer,
 	}
 	if (_projection.isNull()) {
 		_errorString = "Missing CRS definition";
+		return false;
+	}
+	if (_tileUrl.isNull()) {
+		_errorString = "Missing tile URL";
 		return false;
 	}
 
@@ -325,6 +349,14 @@ QList<WMTS::Zoom> WMTS::zooms() const
 }
 
 #ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const WMTS::Setup &setup)
+{
+	dbg.nospace() << "Setup(" << setup.url << ", " << setup.layer << ", "
+	  << setup.set << ", " << setup.style << ", " << setup.format << ", "
+	  << setup.rest << ")";
+	return dbg.space();
+}
+
 QDebug operator<<(QDebug dbg, const WMTS::Zoom &zoom)
 {
 	dbg.nospace() << "Zoom(" << zoom.id << ", " << zoom.scaleDenominator << ", "

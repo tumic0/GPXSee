@@ -9,30 +9,27 @@
 
 #define CAPABILITIES_FILE "capabilities.xml"
 
-WMTSMap::WMTSMap(const QString &name, const QString &url, const QString &format,
-  const QString &layer, const QString &style, const QString &set,
-  bool invertAxis, QObject *parent) :
-	Map(parent), _name(name), _url(url), _layer(layer), _set(set),
-	_invertAxis(invertAxis), _zoom(0), _valid(false)
+WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, bool invertAxis,
+  QObject *parent) : Map(parent), _name(name), _setup(setup),
+  _invertAxis(invertAxis), _zoom(0), _valid(false)
 {
 	QString dir(TILES_DIR + "/" + _name);
 	QString file = dir + "/" + CAPABILITIES_FILE;
 
-	QString tileUrl = QString("%1?service=WMTS&Version=1.0.0&request=GetTile"
-	  "&Format=%2&Layer=%3&Style=%4&TileMatrixSet=%5&TileMatrix=$z&TileRow=$y"
-	  "&TileCol=$x").arg(_url).arg(format).arg(layer).arg(style)
-	  .arg(_set);
-	_tileLoader = TileLoader(tileUrl, dir);
+	if (!QDir().mkpath(dir)) {
+		_errorString = "Error creating tiles dir";
+		return;
+	}
 
 	WMTS wmts;
-	if (!wmts.load(file, _url, _layer, _set)) {
+	if (!wmts.load(file, _setup)) {
 		_errorString = wmts.errorString();
 		return;
 	}
 	_bounds = wmts.bounds();
 	_zooms = wmts.zooms();
 	_projection = wmts.projection();
-
+	_tileLoader = TileLoader(wmts.tileUrl(), dir);
 	updateTransform();
 
 	_block = false;
@@ -91,10 +88,12 @@ void WMTSMap::clearCache()
 	_tileLoader.clearCache();
 
 	WMTS wmts;
-	if (!wmts.load(file, _url, _layer, _set))
+	if (!wmts.load(file, _setup))
 		return;
+	_bounds = wmts.bounds();
 	_zooms = wmts.zooms();
 	_projection = wmts.projection();
+	_tileLoader = TileLoader(wmts.tileUrl(), dir);
 
 	if (_zoom >= _zooms.size())
 		_zoom = _zooms.size() - 1;
