@@ -121,8 +121,6 @@ QRectF WMTSMap::bounds() const
 
 qreal WMTSMap::zoomFit(const QSize &size, const RectC &br)
 {
-	_zoom = 0;
-
 	if (br.isValid()) {
 		QRectF tbr(_projection.ll2xy(br.topLeft()),
 		  _projection.ll2xy(br.bottomRight()));
@@ -131,12 +129,14 @@ qreal WMTSMap::zoomFit(const QSize &size, const RectC &br)
 		if (_projection.isGeographic())
 			resolution *= deg2rad(WGS84_RADIUS);
 
+		_zoom = 0;
 		for (int i = 0; i < _zooms.size(); i++) {
 			if (sd2res(_zooms.at(i).scaleDenominator) < resolution)
 				break;
 			_zoom = i;
 		}
-	}
+	} else
+		_zoom = _zooms.size() - 1;
 
 	updateTransform();
 	return _zoom;
