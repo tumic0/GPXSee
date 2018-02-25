@@ -9,9 +9,8 @@
 
 #define CAPABILITIES_FILE "capabilities.xml"
 
-WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, bool invertAxis,
-  QObject *parent) : Map(parent), _name(name), _setup(setup),
-  _invertAxis(invertAxis), _zoom(0), _valid(false)
+WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent)
+  : Map(parent), _name(name), _setup(setup), _zoom(0), _valid(false)
 {
 	QString dir(TILES_DIR + "/" + _name);
 	QString file = dir + "/" + CAPABILITIES_FILE;
@@ -50,13 +49,11 @@ void WMTSMap::updateTransform()
 	if (_projection.isGeographic())
 		pixelSpan /= deg2rad(WGS84_RADIUS);
 	QPointF tileSpan(z.tile.width() * pixelSpan, z.tile.height() * pixelSpan);
-	QPointF topLeft = _invertAxis
-	  ? QPointF(z.topLeft.y(), z.topLeft.x()) : z.topLeft;
-	QPointF bottomRight(topLeft.x() + tileSpan.x() * z.matrix.width(),
-	  topLeft.y() - tileSpan.y() * z.matrix.height());
+	QPointF bottomRight(z.topLeft.x() + tileSpan.x() * z.matrix.width(),
+	  z.topLeft.y() - tileSpan.y() * z.matrix.height());
 
 	tl.xy = QPoint(0, 0);
-	tl.pp = topLeft;
+	tl.pp = z.topLeft;
 	br.xy = QPoint(z.tile.width() * z.matrix.width(),
 	  z.tile.height() * z.matrix.height());
 	br.pp = bottomRight;

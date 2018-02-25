@@ -126,10 +126,10 @@ Map *MapSource::map(QXmlStreamReader &reader)
 {
 	QString name, url, layer, style, set;
 	QString format("image/png");
-	bool wmts, rest = false, invertAxis = false;
+	bool wmts, rest = false, yx = false;
 	Range z(ZOOM_MIN, ZOOM_MAX);
-	RectC b(Coordinates(BOUNDS_LEFT, BOUNDS_TOP),
-	  Coordinates(BOUNDS_RIGHT, BOUNDS_BOTTOM));
+	RectC b(Coordinates(BOUNDS_LEFT, BOUNDS_TOP), Coordinates(BOUNDS_RIGHT,
+	  BOUNDS_BOTTOM));
 
 	wmts = (reader.attributes().value("type") == "WMTS") ? true : false;
 
@@ -151,11 +151,10 @@ Map *MapSource::map(QXmlStreamReader &reader)
 			layer = reader.readElementText();
 		else if (reader.name() == "style")
 			style = reader.readElementText();
-		else if (reader.name() == "set")
+		else if (reader.name() == "set") {
+			yx = (reader.attributes().value("axis") == "yx") ? true : false;
 			set = reader.readElementText();
-		else if (reader.name() == "axis")
-			invertAxis = (reader.readElementText() == "yx") ? true : false;
-		else
+		} else
 			reader.skipCurrentElement();
 	}
 
@@ -163,7 +162,7 @@ Map *MapSource::map(QXmlStreamReader &reader)
 		return 0;
 	else if (wmts)
 		return new WMTSMap(name, WMTS::Setup(url, layer, set, style, format,
-		  rest), invertAxis);
+		  rest, yx));
 	else
 		return new OnlineMap(name, url, z, b);
 }

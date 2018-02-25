@@ -58,7 +58,7 @@ bool WMTS::createProjection(const QString &crs)
 		return false;
 }
 
-WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader)
+WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader, bool yx)
 {
 	TileMatrix matrix;
 
@@ -69,7 +69,11 @@ WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader)
 			matrix.scaleDenominator = reader.readElementText().toDouble();
 		else if (reader.name() == "TopLeftCorner") {
 			QString str = reader.readElementText();
-			QTextStream(&str) >> matrix.topLeft.rx() >> matrix.topLeft.ry();
+			QTextStream ts(&str);
+			if (yx)
+				ts >> matrix.topLeft.ry() >> matrix.topLeft.rx();
+			else
+				ts >> matrix.topLeft.rx() >> matrix.topLeft.ry();
 		} else if (reader.name() == "TileWidth")
 			matrix.tile.setWidth(reader.readElementText().toInt());
 		else if (reader.name() == "TileHeight")
@@ -88,7 +92,7 @@ WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader)
 	return matrix;
 }
 
-void WMTS::tileMatrixSet(QXmlStreamReader &reader, const QString &set)
+void WMTS::tileMatrixSet(QXmlStreamReader &reader, const QString &set, bool yx)
 {
 	QString id, crs;
 	QSet<TileMatrix> matrixes;
@@ -99,7 +103,7 @@ void WMTS::tileMatrixSet(QXmlStreamReader &reader, const QString &set)
 		else if (reader.name() == "SupportedCRS")
 			crs = reader.readElementText();
 		else if (reader.name() == "TileMatrix")
-			matrixes.insert(tileMatrix(reader));
+			matrixes.insert(tileMatrix(reader, yx));
 		else
 			reader.skipCurrentElement();
 	}
@@ -219,11 +223,11 @@ void WMTS::layer(QXmlStreamReader &reader, const QString &layer,
 }
 
 void WMTS::contents(QXmlStreamReader &reader, const QString &layer,
-  const QString &set)
+  const QString &set, bool yx)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "TileMatrixSet")
-			tileMatrixSet(reader, set);
+			tileMatrixSet(reader, set, yx);
 		else if (reader.name() == "Layer")
 			WMTS::layer(reader, layer, set);
 		else
@@ -232,18 +236,18 @@ void WMTS::contents(QXmlStreamReader &reader, const QString &layer,
 }
 
 void WMTS::capabilities(QXmlStreamReader &reader, const QString &layer,
-  const QString &set)
+  const QString &set, bool yx)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Contents")
-			contents(reader, layer, set);
+			contents(reader, layer, set, yx);
 		else
 			reader.skipCurrentElement();
 	}
 }
 
 bool WMTS::parseCapabilities(const QString &path, const QString &layer,
-  const QString &set)
+  const QString &set, bool yx)
 {
 	QFile file(path);
 	QXmlStreamReader reader;
@@ -257,7 +261,7 @@ bool WMTS::parseCapabilities(const QString &path, const QString &layer,
 
 	if (reader.readNextStartElement()) {
 		if (reader.name() == "Capabilities")
-			capabilities(reader, layer, set);
+			capabilities(reader, layer, set, yx);
 		else
 			reader.raiseError("Not a Capabilities XML file");
 	}
@@ -296,7 +300,7 @@ bool WMTS::load(const QString &file, const WMTS::Setup &setup)
 	if (!QFileInfo(file).exists())
 		if (!getCapabilities(capaUrl, file))
 			return false;
-	if (!parseCapabilities(file, setup.layer, setup.set))
+	if (!parseCapabilities(file, setup.layer, setup.set, setup.yx))
 		return false;
 
 	if (!setup.rest)

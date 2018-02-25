@@ -13,8 +13,7 @@ class WMTSMap : public Map
 	Q_OBJECT
 
 public:
-	WMTSMap(const QString &name, const WMTS::Setup &setup, bool invertAxis,
-	  QObject *parent = 0);
+	WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent = 0);
 
 	const QString &name() const {return _name;}
 
@@ -58,7 +57,6 @@ private:
 	TileLoader _tileLoader;
 	RectC _bounds;
 	QList<WMTS::Zoom> _zooms;
-	bool _invertAxis;
 	Projection _projection;
 	QTransform _transform, _inverted;
 	int _zoom;

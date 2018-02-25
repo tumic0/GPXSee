@@ -22,11 +22,12 @@ public:
 		QString style;
 		QString format;
 		bool rest;
+		bool yx;
 
 		Setup(const QString &url, const QString &layer, const QString &set,
-		  const QString &style, const QString &format, bool rest) :
+		  const QString &style, const QString &format, bool rest, bool yx) :
 		  url(url), layer(layer), set(set), style(style), format(format),
-		  rest(rest) {}
+		  rest(rest), yx(yx) {}
 	};
 
 	struct Zoom {
@@ -90,18 +91,18 @@ private:
 
 	RectC wgs84BoundingBox(QXmlStreamReader &reader);
 	MatrixLimits tileMatrixLimits(QXmlStreamReader &reader);
-	TileMatrix tileMatrix(QXmlStreamReader &reader);
+	TileMatrix tileMatrix(QXmlStreamReader &reader, bool yx);
 	QSet<MatrixLimits> tileMatrixSetLimits(QXmlStreamReader &reader);
-	void tileMatrixSet(QXmlStreamReader &reader, const QString &set);
+	void tileMatrixSet(QXmlStreamReader &reader, const QString &set, bool yx);
 	void tileMatrixSetLink(QXmlStreamReader &reader, const QString &set);
 	void layer(QXmlStreamReader &reader, const QString &layer,
 	  const QString &set);
 	void contents(QXmlStreamReader &reader, const QString &layer,
-	  const QString &set);
+	  const QString &set, bool yx);
 	void capabilities(QXmlStreamReader &reader, const QString &layer,
-	  const QString &set);
+	  const QString &set, bool yx);
 	bool parseCapabilities(const QString &path, const QString &layer,
-	  const QString &set);
+	  const QString &set, bool yx);
 	bool getCapabilities(const QString &url, const QString &file);
 
 	QSet<TileMatrix> _matrixes;
