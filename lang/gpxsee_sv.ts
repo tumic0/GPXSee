@@ -704,7 +704,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>&amp;Data</source>
-        <translation>&amp;Data</translation>
+        <translation>Da&amp;ta</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
