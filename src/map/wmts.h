@@ -6,10 +6,10 @@
 #include <QSet>
 #include <QList>
 #include <QHash>
+#include <QXmlStreamReader>
 #include "common/rectc.h"
 #include "projection.h"
 
-class QXmlStreamReader;
 class Downloader;
 
 class WMTS
@@ -87,27 +87,37 @@ private:
 		  {return !id.isEmpty() && rect.isValid();}
 	};
 
-	bool createProjection();
+	struct CTX {
+		const Setup &setup;
+		QXmlStreamReader reader;
+
+		QString crs;
+		bool layer;
+		bool style;
+		bool format;
+		bool set;
+
+		CTX(const Setup &setup) : setup(setup), layer(false), style(false),
+		  format(false), set(false) {}
+	};
+
 	RectC wgs84BoundingBox(QXmlStreamReader &reader);
 	MatrixLimits tileMatrixLimits(QXmlStreamReader &reader);
 	TileMatrix tileMatrix(QXmlStreamReader &reader, bool yx);
 	QSet<MatrixLimits> tileMatrixSetLimits(QXmlStreamReader &reader);
-	void tileMatrixSet(QXmlStreamReader &reader, const QString &set, bool yx);
-	void tileMatrixSetLink(QXmlStreamReader &reader, const QString &set);
-	void layer(QXmlStreamReader &reader, const QString &layer,
-	  const QString &set);
-	void contents(QXmlStreamReader &reader, const QString &layer,
-	  const QString &set, bool yx);
-	void capabilities(QXmlStreamReader &reader, const QString &layer,
-	  const QString &set, bool yx);
-	bool parseCapabilities(const QString &path, const QString &layer,
-	  const QString &set, bool yx);
+	QString style(QXmlStreamReader &reader);
+	void tileMatrixSet(CTX &ctx);
+	void tileMatrixSetLink(CTX &ctx);
+	void layer(CTX &ctx);
+	void contents(CTX &ctx);
+	void capabilities(CTX &ctx);
+	bool parseCapabilities(const QString &path, const Setup &setup);
 	bool getCapabilities(const QString &url, const QString &file);
+	bool createProjection(const QString &crs);
 
 	QSet<TileMatrix> _matrixes;
 	QSet<MatrixLimits> _limits;
 	RectC _bounds;
-	QString _crs;
 	Projection _projection;
 	QString _tileUrl;
 

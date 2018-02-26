@@ -12,9 +12,9 @@
 
 Downloader *WMTS::_downloader = 0;
 
-bool WMTS::createProjection()
+bool WMTS::createProjection(const QString &crs)
 {
-	QStringList list(_crs.split(':'));
+	QStringList list(crs.split(':'));
 	QString authority, code;
 	bool res;
 	int epsg;
@@ -92,24 +92,24 @@ WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader, bool yx)
 	return matrix;
 }
 
-void WMTS::tileMatrixSet(QXmlStreamReader &reader, const QString &set, bool yx)
+void WMTS::tileMatrixSet(CTX &ctx)
 {
 	QString id, crs;
 	QSet<TileMatrix> matrixes;
 
-	while (reader.readNextStartElement()) {
-		if (reader.name() == "Identifier")
-			id = reader.readElementText();
-		else if (reader.name() == "SupportedCRS")
-			crs = reader.readElementText();
-		else if (reader.name() == "TileMatrix")
-			matrixes.insert(tileMatrix(reader, yx));
+	while (ctx.reader.readNextStartElement()) {
+		if (ctx.reader.name() == "Identifier")
+			id = ctx.reader.readElementText();
+		else if (ctx.reader.name() == "SupportedCRS")
+			crs = ctx.reader.readElementText();
+		else if (ctx.reader.name() == "TileMatrix")
+			matrixes.insert(tileMatrix(ctx.reader, ctx.setup.yx));
 		else
-			reader.skipCurrentElement();
+			ctx.reader.skipCurrentElement();
 	}
 
-	if (id == set) {
-		_crs = crs;
+	if (id == ctx.setup.set) {
+		ctx.crs = crs;
 		_matrixes = matrixes;
 	}
 }
@@ -153,22 +153,24 @@ QSet<WMTS::MatrixLimits> WMTS::tileMatrixSetLimits(QXmlStreamReader &reader)
 	return limits;
 }
 
-void WMTS::tileMatrixSetLink(QXmlStreamReader &reader, const QString &set)
+void WMTS::tileMatrixSetLink(CTX &ctx)
 {
 	QString id;
 	QSet<MatrixLimits> limits;
 
-	while (reader.readNextStartElement()) {
-		if (reader.name() == "TileMatrixSet")
-			id = reader.readElementText();
-		else if (reader.name() == "TileMatrixSetLimits")
-			limits = tileMatrixSetLimits(reader);
+	while (ctx.reader.readNextStartElement()) {
+		if (ctx.reader.name() == "TileMatrixSet")
+			id = ctx.reader.readElementText();
+		else if (ctx.reader.name() == "TileMatrixSetLimits")
+			limits = tileMatrixSetLimits(ctx.reader);
 		else
-			reader.skipCurrentElement();
+			ctx.reader.skipCurrentElement();
 	}
 
-	if (id == set)
+	if (id == ctx.setup.set) {
+		ctx.set = true;
 		_limits = limits;
+	}
 }
 
 RectC WMTS::wgs84BoundingBox(QXmlStreamReader &reader)
@@ -189,83 +191,137 @@ RectC WMTS::wgs84BoundingBox(QXmlStreamReader &reader)
 	return RectC(topLeft, bottomRight);
 }
 
-void WMTS::layer(QXmlStreamReader &reader, const QString &layer,
-  const QString &set)
+QString WMTS::style(QXmlStreamReader &reader)
 {
 	QString id;
-	RectC bounds;
-	QString tpl;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Identifier")
 			id = reader.readElementText();
-		else if (reader.name() == "TileMatrixSetLink")
-			tileMatrixSetLink(reader, set);
-		else if (reader.name() == "WGS84BoundingBox")
-			bounds = wgs84BoundingBox(reader);
-		else if (reader.name() == "ResourceURL") {
-			const QXmlStreamAttributes &attr = reader.attributes();
+		else
+			reader.skipCurrentElement();
+	}
+
+	return id;
+}
+
+void WMTS::layer(CTX &ctx)
+{
+	QString id, tpl;
+	RectC bounds;
+	QStringList formats, styles;
+
+	while (ctx.reader.readNextStartElement()) {
+		if (ctx.reader.name() == "Identifier")
+			id = ctx.reader.readElementText();
+		else if (ctx.reader.name() == "TileMatrixSetLink")
+			tileMatrixSetLink(ctx);
+		else if (ctx.reader.name() == "WGS84BoundingBox")
+			bounds = wgs84BoundingBox(ctx.reader);
+		else if (ctx.reader.name() == "ResourceURL") {
+			const QXmlStreamAttributes &attr = ctx.reader.attributes();
 			if (attr.value("resourceType") == "tile")
 				tpl = attr.value("template").toString();
-			reader.skipCurrentElement();
-		} else
-			reader.skipCurrentElement();
+			ctx.reader.skipCurrentElement();
+		} else if (ctx.reader.name() == "Style")
+			styles.append(style(ctx.reader));
+		else if (ctx.reader.name() == "Format")
+			formats.append(ctx.reader.readElementText());
+		else
+			ctx.reader.skipCurrentElement();
 	}
 
-	if (id == layer) {
+	if (id == ctx.setup.layer) {
+		ctx.layer = true;
 		_bounds = bounds;
-		_tileUrl = tpl;
+		if (ctx.setup.rest)
+			_tileUrl = tpl;
+		if (styles.contains(ctx.setup.style))
+			ctx.style = true;
+		if (formats.contains(ctx.setup.format))
+			ctx.format = true;
 	}
 }
 
-void WMTS::contents(QXmlStreamReader &reader, const QString &layer,
-  const QString &set, bool yx)
+void WMTS::contents(CTX &ctx)
 {
-	while (reader.readNextStartElement()) {
-		if (reader.name() == "TileMatrixSet")
-			tileMatrixSet(reader, set, yx);
-		else if (reader.name() == "Layer")
-			WMTS::layer(reader, layer, set);
+	while (ctx.reader.readNextStartElement()) {
+		if (ctx.reader.name() == "TileMatrixSet")
+			tileMatrixSet(ctx);
+		else if (ctx.reader.name() == "Layer")
+			layer(ctx);
 		else
-			reader.skipCurrentElement();
+			ctx.reader.skipCurrentElement();
 	}
 }
 
-void WMTS::capabilities(QXmlStreamReader &reader, const QString &layer,
-  const QString &set, bool yx)
+void WMTS::capabilities(CTX &ctx)
 {
-	while (reader.readNextStartElement()) {
-		if (reader.name() == "Contents")
-			contents(reader, layer, set, yx);
+	while (ctx.reader.readNextStartElement()) {
+		if (ctx.reader.name() == "Contents")
+			contents(ctx);
 		else
-			reader.skipCurrentElement();
+			ctx.reader.skipCurrentElement();
 	}
 }
 
-bool WMTS::parseCapabilities(const QString &path, const QString &layer,
-  const QString &set, bool yx)
+bool WMTS::parseCapabilities(const QString &path, const Setup &setup)
 {
 	QFile file(path);
-	QXmlStreamReader reader;
+	CTX ctx(setup);
 
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		_errorString = file.errorString();
 		return false;
 	}
 
-	reader.setDevice(&file);
-
-	if (reader.readNextStartElement()) {
-		if (reader.name() == "Capabilities")
-			capabilities(reader, layer, set, yx);
+	ctx.reader.setDevice(&file);
+	if (ctx.reader.readNextStartElement()) {
+		if (ctx.reader.name() == "Capabilities")
+			capabilities(ctx);
 		else
-			reader.raiseError("Not a Capabilities XML file");
+			ctx.reader.raiseError("Not a Capabilities XML file");
+	}
+	if (ctx.reader.error()) {
+		_errorString = QString("%1:%2: %3").arg(path).arg(
+		  ctx.reader.lineNumber()).arg(ctx.reader.errorString());
+		return false;
 	}
 
-	_errorString = reader.error() ? QString("%1:%2: %3").arg(path)
-	  .arg(reader.lineNumber()).arg(reader.errorString()) : QString();
+	if (!ctx.layer) {
+		_errorString = ctx.setup.layer + ": layer not provided";
+		return false;
+	}
+	if (!ctx.style) {
+		_errorString = ctx.setup.style + ": style not provided";
+		return false;
+	}
+	if (!ctx.setup.rest && !ctx.format) {
+		_errorString = ctx.setup.format + ": format not provided";
+		return false;
+	}
+	if (!ctx.set) {
+		_errorString = ctx.setup.set + ": set not provided";
+		return false;
+	}
+	if (ctx.crs.isNull()) {
+		_errorString = "Missing CRS definition";
+		return false;
+	}
+	if (!createProjection(ctx.crs)) {
+		_errorString = ctx.crs + ": unknown CRS";
+		return false;
+	}
+	if (_matrixes.isEmpty()) {
+		_errorString = "No usable tile matrix found";
+		return false;
+	}
+	if (ctx.setup.rest && _tileUrl.isNull()) {
+		_errorString = "Missing tile URL template";
+		return false;
+	}
 
-	return reader.error() ? false : true;
+	return true;
 }
 
 bool WMTS::getCapabilities(const QString &url, const QString &file)
@@ -296,7 +352,7 @@ bool WMTS::load(const QString &file, const WMTS::Setup &setup)
 	if (!QFileInfo(file).exists())
 		if (!getCapabilities(capaUrl, file))
 			return false;
-	if (!parseCapabilities(file, setup.layer, setup.set, setup.yx))
+	if (!parseCapabilities(file, setup))
 		return false;
 
 	if (!setup.rest)
@@ -310,23 +366,6 @@ bool WMTS::load(const QString &file, const WMTS::Setup &setup)
 		_tileUrl.replace("{TileMatrix}", "$z");
 		_tileUrl.replace("{TileRow}", "$y");
 		_tileUrl.replace("{TileCol}", "$x");
-	}
-
-	if (_crs.isNull()) {
-		_errorString = "Missing CRS definition";
-		return false;
-	}
-	if (!createProjection()) {
-		_errorString = _crs + ": unknown CRS";
-		return false;
-	}
-	if (_matrixes.isEmpty()) {
-		_errorString = "No usable tile matrix found";
-		return false;
-	}
-	if (_tileUrl.isNull()) {
-		_errorString = "Missing tile URL";
-		return false;
 	}
 
 	return true;
