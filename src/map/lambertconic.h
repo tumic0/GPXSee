@@ -1,8 +1,9 @@
 #ifndef LAMBERTCONIC_H
 #define LAMBERTCONIC_H
 
-#include "ellipsoid.h"
 #include "ct.h"
+
+class Ellipsoid;
 
 class LambertConic1 : public CT
 {

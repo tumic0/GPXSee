@@ -1,8 +1,9 @@
 #ifndef LAMBERTAZIMUTHAL_H
 #define LAMBERTAZIMUTHAL_H
 
-#include "ellipsoid.h"
 #include "ct.h"
+
+class Ellipsoid;
 
 class LambertAzimuthal : public CT
 {

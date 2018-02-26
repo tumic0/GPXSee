@@ -42,6 +42,7 @@ Defense.
 */
 
 #include <cmath>
+#include "ellipsoid.h"
 #include "lambertconic.h"
 
 #ifndef M_PI_2

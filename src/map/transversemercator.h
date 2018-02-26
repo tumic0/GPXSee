@@ -2,7 +2,8 @@
 #define TRANSVERSEMERCATOR_H
 
 #include "ct.h"
-#include "ellipsoid.h"
+
+class Ellipsoid;
 
 class TransverseMercator : public CT
 {
