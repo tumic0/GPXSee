@@ -12,9 +12,9 @@
 
 Downloader *WMTS::_downloader = 0;
 
-bool WMTS::createProjection(const QString &crs)
+bool WMTS::createProjection()
 {
-	QStringList list(crs.split(':'));
+	QStringList list(_crs.split(':'));
 	QString authority, code;
 	bool res;
 	int epsg;
@@ -109,12 +109,8 @@ void WMTS::tileMatrixSet(QXmlStreamReader &reader, const QString &set, bool yx)
 	}
 
 	if (id == set) {
-		if (!createProjection(crs)) {
-			reader.raiseError("Invalid/unknown CRS");
-			return;
-		}
-
-		_matrixes.unite(matrixes);
+		_crs = crs;
+		_matrixes = matrixes;
 	}
 }
 
@@ -172,7 +168,7 @@ void WMTS::tileMatrixSetLink(QXmlStreamReader &reader, const QString &set)
 	}
 
 	if (id == set)
-		_limits.unite(limits);
+		_limits = limits;
 }
 
 RectC WMTS::wgs84BoundingBox(QXmlStreamReader &reader)
@@ -316,12 +312,16 @@ bool WMTS::load(const QString &file, const WMTS::Setup &setup)
 		_tileUrl.replace("{TileCol}", "$x");
 	}
 
-	if (_matrixes.isEmpty()) {
-		_errorString = "No usable tile matrix found";
+	if (_crs.isNull()) {
+		_errorString = "Missing CRS definition";
 		return false;
 	}
-	if (_projection.isNull()) {
-		_errorString = "Missing CRS definition";
+	if (!createProjection()) {
+		_errorString = _crs + ": unknown CRS";
+		return false;
+	}
+	if (_matrixes.isEmpty()) {
+		_errorString = "No usable tile matrix found";
 		return false;
 	}
 	if (_tileUrl.isNull()) {

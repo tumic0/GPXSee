@@ -87,8 +87,7 @@ private:
 		  {return !id.isEmpty() && rect.isValid();}
 	};
 
-	bool createProjection(const QString &crs);
-
+	bool createProjection();
 	RectC wgs84BoundingBox(QXmlStreamReader &reader);
 	MatrixLimits tileMatrixLimits(QXmlStreamReader &reader);
 	TileMatrix tileMatrix(QXmlStreamReader &reader, bool yx);
@@ -108,6 +107,7 @@ private:
 	QSet<TileMatrix> _matrixes;
 	QSet<MatrixLimits> _limits;
 	RectC _bounds;
+	QString _crs;
 	Projection _projection;
 	QString _tileUrl;
 
