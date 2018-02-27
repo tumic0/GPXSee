@@ -4,7 +4,6 @@
 #include "wmtsmap.h"
 #include "mapsource.h"
 
-
 #define ZOOM_MAX       19
 #define ZOOM_MIN       0
 #define BOUNDS_LEFT    -180
@@ -12,7 +11,12 @@
 #define BOUNDS_RIGHT   180
 #define BOUNDS_BOTTOM  -85.0511
 
-Range MapSource::zooms(QXmlStreamReader &reader)
+MapSource::TMSConfig::TMSConfig()
+  : zooms(ZOOM_MIN, ZOOM_MAX), bounds(Coordinates(BOUNDS_LEFT, BOUNDS_TOP),
+  Coordinates(BOUNDS_RIGHT, BOUNDS_BOTTOM)) {}
+
+
+void MapSource::zooms(QXmlStreamReader &reader, Range &val)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
 	int min, max;
@@ -26,7 +30,7 @@ Range MapSource::zooms(QXmlStreamReader &reader)
 #endif // QT_VERSION < 5
 		if (!res || (min < ZOOM_MIN || min > ZOOM_MAX)) {
 			reader.raiseError("Invalid minimal zoom level");
-			return Range();
+			return;
 		}
 	} else
 		min = ZOOM_MIN;
@@ -39,20 +43,17 @@ Range MapSource::zooms(QXmlStreamReader &reader)
 #endif // QT_VERSION < 5
 		if (!res || (max < ZOOM_MIN || max > ZOOM_MAX)) {
 			reader.raiseError("Invalid maximal zoom level");
-			return Range();
+			return;
 		}
 	} else
 		max = ZOOM_MAX;
 
-	if (min > max || max < min) {
+	val = Range(min, max);
+	if (!val.isValid())
 		reader.raiseError("Invalid maximal/minimal zoom level combination");
-		return Range();
-	}
-
-	return Range(min, max);
 }
 
-RectC MapSource::bounds(QXmlStreamReader &reader)
+void MapSource::bounds(QXmlStreamReader &reader, RectC &val)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
 	double top, left, bottom, right;
@@ -66,7 +67,7 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 #endif // QT_VERSION < 5
 		if (!res || (top < BOUNDS_BOTTOM || top > BOUNDS_TOP)) {
 			reader.raiseError("Invalid bounds top value");
-			return RectC();
+			return;
 		}
 	} else
 		top = BOUNDS_TOP;
@@ -79,7 +80,7 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 #endif // QT_VERSION < 5
 		if (!res || (bottom < BOUNDS_BOTTOM || bottom > BOUNDS_TOP)) {
 			reader.raiseError("Invalid bounds bottom value");
-			return RectC();
+			return;
 		}
 	} else
 		bottom = BOUNDS_BOTTOM;
@@ -92,7 +93,7 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 #endif // QT_VERSION < 5
 		if (!res || (left < BOUNDS_LEFT || left > BOUNDS_RIGHT)) {
 			reader.raiseError("Invalid bounds left value");
-			return RectC();
+			return;
 		}
 	} else
 		left = BOUNDS_LEFT;
@@ -105,95 +106,138 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 #endif // QT_VERSION < 5
 		if (!res || (right < BOUNDS_LEFT || right > BOUNDS_RIGHT)) {
 			reader.raiseError("Invalid bounds right value");
-			return RectC();
+			return;
 		}
 	} else
 		right = BOUNDS_RIGHT;
 
 	if (bottom > top || top < bottom) {
 		reader.raiseError("Invalid bottom/top bounds combination");
-		return RectC();
+		return;
 	}
 	if (left > right || right < left) {
 		reader.raiseError("Invalid left/right bounds combination");
-		return RectC();
+		return;
 	}
 
-	return RectC(Coordinates(left, top), Coordinates(right, bottom));
+	val = RectC(Coordinates(left, top), Coordinates(right, bottom));
 }
 
-Map *MapSource::map(QXmlStreamReader &reader)
+void MapSource::map(QXmlStreamReader &reader, Config &config)
 {
-	QString name, url, layer, style, set;
-	QString format("image/png");
-	bool wmts, rest = false, yx = false;
-	Range z(ZOOM_MIN, ZOOM_MAX);
-	RectC b(Coordinates(BOUNDS_LEFT, BOUNDS_TOP), Coordinates(BOUNDS_RIGHT,
-	  BOUNDS_BOTTOM));
-
-	wmts = (reader.attributes().value("type") == "WMTS") ? true : false;
+	config.type = (reader.attributes().value("type") == "WMTS") ? WMTS : TMS;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "name")
-			name = reader.readElementText();
+			config.name = reader.readElementText();
 		else if (reader.name() == "url") {
-			rest = (reader.attributes().value("type") == "REST") ? true : false;
-			url = reader.readElementText();
+			if (config.type == WMTS)
+				config.wmts.rest = (reader.attributes().value("type") == "REST")
+				  ? true : false;
+			config.url = reader.readElementText();
 		} else if (reader.name() == "zoom") {
-			z = zooms(reader);
+			if (config.type == TMS)
+				zooms(reader, config.tms.zooms);
+			else
+				reader.raiseError("Illegal zoom element");
 			reader.skipCurrentElement();
 		} else if (reader.name() == "bounds") {
-			b = bounds(reader);
+			if (config.type == TMS)
+				bounds(reader, config.tms.bounds);
+			else
+				reader.raiseError("Illegal bounds element");
 			reader.skipCurrentElement();
-		} else if (reader.name() == "format")
-			format = reader.readElementText();
-		else if (reader.name() == "layer")
-			layer = reader.readElementText();
+		} else if (reader.name() == "format") {
+			if (config.type == WMTS)
+				config.wmts.format = reader.readElementText();
+			else
+				reader.raiseError("Illegal format element");
+		} else if (reader.name() == "layer")
+			if (config.type == WMTS)
+				config.wmts.layer = reader.readElementText();
+			else
+				reader.raiseError("Illegal layer element");
 		else if (reader.name() == "style")
-			style = reader.readElementText();
+			if (config.type == WMTS)
+				config.wmts.style = reader.readElementText();
+			else
+				reader.raiseError("Illegal style element");
 		else if (reader.name() == "set") {
-			yx = (reader.attributes().value("axis") == "yx") ? true : false;
-			set = reader.readElementText();
+			if (config.type == WMTS) {
+				config.wmts.yx = (reader.attributes().value("axis") == "yx")
+				  ? true : false;
+				config.wmts.set = reader.readElementText();
+			} else
+				reader.raiseError("Illegal set element");
 		} else
 			reader.skipCurrentElement();
 	}
-
-	if (reader.error())
-		return 0;
-	else if (wmts)
-		return new WMTSMap(name, WMTS::Setup(url, layer, set, style, format,
-		  rest, yx));
-	else
-		return new OnlineMap(name, url, z, b);
 }
 
 Map *MapSource::loadFile(const QString &path)
 {
 	QFile file(path);
 	QXmlStreamReader reader;
-	Map *map = 0;
+	Config config;
 
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		_errorString = file.errorString();
-		return map;
+		return 0;
 	}
 
 	reader.setDevice(&file);
-
 	if (reader.readNextStartElement()) {
 		if (reader.name() == "map")
-			map = MapSource::map(reader);
+			map(reader, config);
 		else
 			reader.raiseError("Not an online map source file");
 	}
-
-	if (!map)
+	if (reader.error()) {
 		_errorString = QString("%1: %2").arg(reader.lineNumber())
 		  .arg(reader.errorString());
-	else if (!map->isValid()) {
-		_errorString = map->errorString();
-		delete map; map = 0;
+		return 0;
 	}
 
-	return map;
+	if (config.name.isEmpty()) {
+		_errorString = "Missing name definition";
+		return 0;
+	}
+	if (config.url.isEmpty()) {
+		_errorString = "Missing URL definition";
+		return 0;
+	}
+	if (config.type == WMTS) {
+		if (config.wmts.layer.isEmpty()) {
+			_errorString = "Missing layer definition";
+			return 0;
+		}
+		if (config.wmts.style.isEmpty()) {
+			_errorString = "Missing style definiton";
+			return 0;
+		}
+		if (config.wmts.set.isEmpty()) {
+			_errorString = "Missing set definiton";
+			return 0;
+		}
+		if (config.wmts.format.isEmpty()) {
+			_errorString = "Missing format definition";
+			return 0;
+		}
+	}
+
+	Map *m;
+	if (config.type == WMTS)
+		m = new WMTSMap(config.name, WMTS::Setup(config.url, config.wmts.layer,
+		  config.wmts.set, config.wmts.style, config.wmts.format,
+		  config.wmts.rest, config.wmts.yx));
+	else
+		m = new OnlineMap(config.name, config.url, config.tms.zooms,
+		  config.tms.bounds);
+	if (!m->isValid()) {
+		_errorString = m->errorString();
+		delete m;
+		return 0;
+	}
+
+	return m;
 }

@@ -14,6 +14,8 @@ public:
 	int max() const {return _max;}
 	int size() const {return (_max - _min);}
 
+	bool isValid() const {return size() >= 0;}
+
 private:
 	int _min, _max;
 };
@@ -27,6 +29,8 @@ public:
 	qreal min() const {return _min;}
 	qreal max() const {return _max;}
 	qreal size() const {return (_max - _min);}
+
+	bool isValid() const {return size() >= 0;}
 
 	void resize(qreal size);
 

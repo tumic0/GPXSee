@@ -15,9 +15,42 @@ public:
 	const QString &errorString() const {return _errorString;}
 
 private:
-	RectC bounds(QXmlStreamReader &reader);
-	Range zooms(QXmlStreamReader &reader);
-	Map *map(QXmlStreamReader &reader);
+	enum Type {
+		TMS,
+		WMTS
+	};
+
+	struct TMSConfig {
+		Range zooms;
+		RectC bounds;
+
+		TMSConfig();
+	};
+
+	struct WMTSConfig {
+		QString layer;
+		QString style;
+		QString set;
+		QString format;
+		bool rest;
+		bool yx;
+
+		WMTSConfig() : format("image/png"), rest(false), yx(false) {}
+	};
+
+	struct Config {
+		QString name;
+		QString url;
+		Type type;
+		WMTSConfig wmts;
+		TMSConfig tms;
+
+		Config() : type(TMS) {}
+	};
+
+	void bounds(QXmlStreamReader &reader, RectC &val);
+	void zooms(QXmlStreamReader &reader, Range &val);
+	void map(QXmlStreamReader &reader, Config &config);
 
 	QString _errorString;
 };
