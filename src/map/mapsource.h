@@ -48,8 +48,8 @@ private:
 		Config() : type(TMS) {}
 	};
 
-	void bounds(QXmlStreamReader &reader, RectC &val);
-	void zooms(QXmlStreamReader &reader, Range &val);
+	RectC bounds(QXmlStreamReader &reader);
+	Range zooms(QXmlStreamReader &reader);
 	void map(QXmlStreamReader &reader, Config &config);
 
 	QString _errorString;

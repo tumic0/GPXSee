@@ -5,6 +5,7 @@
 #include <QTextStream>
 #include <QStringList>
 #include <QtAlgorithms>
+#include <QXmlStreamReader>
 #include "downloader.h"
 #include "pcs.h"
 #include "wmts.h"
@@ -92,20 +93,20 @@ WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader, bool yx)
 	return matrix;
 }
 
-void WMTS::tileMatrixSet(CTX &ctx)
+void WMTS::tileMatrixSet(QXmlStreamReader &reader, CTX &ctx)
 {
 	QString id, crs;
 	QSet<TileMatrix> matrixes;
 
-	while (ctx.reader.readNextStartElement()) {
-		if (ctx.reader.name() == "Identifier")
-			id = ctx.reader.readElementText();
-		else if (ctx.reader.name() == "SupportedCRS")
-			crs = ctx.reader.readElementText();
-		else if (ctx.reader.name() == "TileMatrix")
-			matrixes.insert(tileMatrix(ctx.reader, ctx.setup.yx));
+	while (reader.readNextStartElement()) {
+		if (reader.name() == "Identifier")
+			id = reader.readElementText();
+		else if (reader.name() == "SupportedCRS")
+			crs = reader.readElementText();
+		else if (reader.name() == "TileMatrix")
+			matrixes.insert(tileMatrix(reader, ctx.setup.yx));
 		else
-			ctx.reader.skipCurrentElement();
+			reader.skipCurrentElement();
 	}
 
 	if (id == ctx.setup.set) {
@@ -153,18 +154,18 @@ QSet<WMTS::MatrixLimits> WMTS::tileMatrixSetLimits(QXmlStreamReader &reader)
 	return limits;
 }
 
-void WMTS::tileMatrixSetLink(CTX &ctx)
+void WMTS::tileMatrixSetLink(QXmlStreamReader &reader, CTX &ctx)
 {
 	QString id;
 	QSet<MatrixLimits> limits;
 
-	while (ctx.reader.readNextStartElement()) {
-		if (ctx.reader.name() == "TileMatrixSet")
-			id = ctx.reader.readElementText();
-		else if (ctx.reader.name() == "TileMatrixSetLimits")
-			limits = tileMatrixSetLimits(ctx.reader);
+	while (reader.readNextStartElement()) {
+		if (reader.name() == "TileMatrixSet")
+			id = reader.readElementText();
+		else if (reader.name() == "TileMatrixSetLimits")
+			limits = tileMatrixSetLimits(reader);
 		else
-			ctx.reader.skipCurrentElement();
+			reader.skipCurrentElement();
 	}
 
 	if (id == ctx.setup.set) {
@@ -205,30 +206,30 @@ QString WMTS::style(QXmlStreamReader &reader)
 	return id;
 }
 
-void WMTS::layer(CTX &ctx)
+void WMTS::layer(QXmlStreamReader &reader, CTX &ctx)
 {
 	QString id, tpl;
 	RectC bounds;
 	QStringList formats, styles;
 
-	while (ctx.reader.readNextStartElement()) {
-		if (ctx.reader.name() == "Identifier")
-			id = ctx.reader.readElementText();
-		else if (ctx.reader.name() == "TileMatrixSetLink")
-			tileMatrixSetLink(ctx);
-		else if (ctx.reader.name() == "WGS84BoundingBox")
-			bounds = wgs84BoundingBox(ctx.reader);
-		else if (ctx.reader.name() == "ResourceURL") {
-			const QXmlStreamAttributes &attr = ctx.reader.attributes();
+	while (reader.readNextStartElement()) {
+		if (reader.name() == "Identifier")
+			id = reader.readElementText();
+		else if (reader.name() == "TileMatrixSetLink")
+			tileMatrixSetLink(reader, ctx);
+		else if (reader.name() == "WGS84BoundingBox")
+			bounds = wgs84BoundingBox(reader);
+		else if (reader.name() == "ResourceURL") {
+			const QXmlStreamAttributes &attr = reader.attributes();
 			if (attr.value("resourceType") == "tile")
 				tpl = attr.value("template").toString();
-			ctx.reader.skipCurrentElement();
-		} else if (ctx.reader.name() == "Style")
-			styles.append(style(ctx.reader));
-		else if (ctx.reader.name() == "Format")
-			formats.append(ctx.reader.readElementText());
+			reader.skipCurrentElement();
+		} else if (reader.name() == "Style")
+			styles.append(style(reader));
+		else if (reader.name() == "Format")
+			formats.append(reader.readElementText());
 		else
-			ctx.reader.skipCurrentElement();
+			reader.skipCurrentElement();
 	}
 
 	if (id == ctx.setup.layer) {
@@ -243,25 +244,25 @@ void WMTS::layer(CTX &ctx)
 	}
 }
 
-void WMTS::contents(CTX &ctx)
+void WMTS::contents(QXmlStreamReader &reader, CTX &ctx)
 {
-	while (ctx.reader.readNextStartElement()) {
-		if (ctx.reader.name() == "TileMatrixSet")
-			tileMatrixSet(ctx);
-		else if (ctx.reader.name() == "Layer")
-			layer(ctx);
+	while (reader.readNextStartElement()) {
+		if (reader.name() == "TileMatrixSet")
+			tileMatrixSet(reader, ctx);
+		else if (reader.name() == "Layer")
+			layer(reader, ctx);
 		else
-			ctx.reader.skipCurrentElement();
+			reader.skipCurrentElement();
 	}
 }
 
-void WMTS::capabilities(CTX &ctx)
+void WMTS::capabilities(QXmlStreamReader &reader, CTX &ctx)
 {
-	while (ctx.reader.readNextStartElement()) {
-		if (ctx.reader.name() == "Contents")
-			contents(ctx);
+	while (reader.readNextStartElement()) {
+		if (reader.name() == "Contents")
+			contents(reader, ctx);
 		else
-			ctx.reader.skipCurrentElement();
+			reader.skipCurrentElement();
 	}
 }
 
@@ -269,22 +270,23 @@ bool WMTS::parseCapabilities(const QString &path, const Setup &setup)
 {
 	QFile file(path);
 	CTX ctx(setup);
+	QXmlStreamReader reader;
 
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		_errorString = file.errorString();
 		return false;
 	}
 
-	ctx.reader.setDevice(&file);
-	if (ctx.reader.readNextStartElement()) {
-		if (ctx.reader.name() == "Capabilities")
-			capabilities(ctx);
+	reader.setDevice(&file);
+	if (reader.readNextStartElement()) {
+		if (reader.name() == "Capabilities")
+			capabilities(reader, ctx);
 		else
-			ctx.reader.raiseError("Not a Capabilities XML file");
+			reader.raiseError("Not a Capabilities XML file");
 	}
-	if (ctx.reader.error()) {
-		_errorString = QString("%1:%2: %3").arg(path).arg(
-		  ctx.reader.lineNumber()).arg(ctx.reader.errorString());
+	if (reader.error()) {
+		_errorString = QString("%1:%2: %3").arg(path).arg(reader.lineNumber())
+		  .arg(reader.errorString());
 		return false;
 	}
 

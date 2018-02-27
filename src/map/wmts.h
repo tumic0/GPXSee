@@ -6,11 +6,11 @@
 #include <QSet>
 #include <QList>
 #include <QHash>
-#include <QXmlStreamReader>
 #include "common/rectc.h"
 #include "projection.h"
 
 class Downloader;
+class QXmlStreamReader;
 
 class WMTS
 {
@@ -89,8 +89,6 @@ private:
 
 	struct CTX {
 		const Setup &setup;
-		QXmlStreamReader reader;
-
 		QString crs;
 		bool layer;
 		bool style;
@@ -106,11 +104,11 @@ private:
 	TileMatrix tileMatrix(QXmlStreamReader &reader, bool yx);
 	QSet<MatrixLimits> tileMatrixSetLimits(QXmlStreamReader &reader);
 	QString style(QXmlStreamReader &reader);
-	void tileMatrixSet(CTX &ctx);
-	void tileMatrixSetLink(CTX &ctx);
-	void layer(CTX &ctx);
-	void contents(CTX &ctx);
-	void capabilities(CTX &ctx);
+	void tileMatrixSet(QXmlStreamReader &reader, CTX &ctx);
+	void tileMatrixSetLink(QXmlStreamReader &reader, CTX &ctx);
+	void layer(QXmlStreamReader &reader, CTX &ctx);
+	void contents(QXmlStreamReader &reader, CTX &ctx);
+	void capabilities(QXmlStreamReader &reader, CTX &ctx);
 	bool parseCapabilities(const QString &path, const Setup &setup);
 	bool getCapabilities(const QString &url, const QString &file);
 	bool createProjection(const QString &crs);

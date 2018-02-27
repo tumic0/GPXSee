@@ -16,7 +16,7 @@ MapSource::TMSConfig::TMSConfig()
   Coordinates(BOUNDS_RIGHT, BOUNDS_BOTTOM)) {}
 
 
-void MapSource::zooms(QXmlStreamReader &reader, Range &val)
+Range MapSource::zooms(QXmlStreamReader &reader)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
 	int min, max;
@@ -30,7 +30,7 @@ void MapSource::zooms(QXmlStreamReader &reader, Range &val)
 #endif // QT_VERSION < 5
 		if (!res || (min < ZOOM_MIN || min > ZOOM_MAX)) {
 			reader.raiseError("Invalid minimal zoom level");
-			return;
+			return Range();
 		}
 	} else
 		min = ZOOM_MIN;
@@ -43,17 +43,20 @@ void MapSource::zooms(QXmlStreamReader &reader, Range &val)
 #endif // QT_VERSION < 5
 		if (!res || (max < ZOOM_MIN || max > ZOOM_MAX)) {
 			reader.raiseError("Invalid maximal zoom level");
-			return;
+			return Range();
 		}
 	} else
 		max = ZOOM_MAX;
 
-	val = Range(min, max);
-	if (!val.isValid())
+	if (min > max) {
 		reader.raiseError("Invalid maximal/minimal zoom level combination");
+		return Range();
+	}
+
+	return Range(min, max);
 }
 
-void MapSource::bounds(QXmlStreamReader &reader, RectC &val)
+RectC MapSource::bounds(QXmlStreamReader &reader)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
 	double top, left, bottom, right;
@@ -67,7 +70,7 @@ void MapSource::bounds(QXmlStreamReader &reader, RectC &val)
 #endif // QT_VERSION < 5
 		if (!res || (top < BOUNDS_BOTTOM || top > BOUNDS_TOP)) {
 			reader.raiseError("Invalid bounds top value");
-			return;
+			return RectC();
 		}
 	} else
 		top = BOUNDS_TOP;
@@ -80,7 +83,7 @@ void MapSource::bounds(QXmlStreamReader &reader, RectC &val)
 #endif // QT_VERSION < 5
 		if (!res || (bottom < BOUNDS_BOTTOM || bottom > BOUNDS_TOP)) {
 			reader.raiseError("Invalid bounds bottom value");
-			return;
+			return RectC();
 		}
 	} else
 		bottom = BOUNDS_BOTTOM;
@@ -93,7 +96,7 @@ void MapSource::bounds(QXmlStreamReader &reader, RectC &val)
 #endif // QT_VERSION < 5
 		if (!res || (left < BOUNDS_LEFT || left > BOUNDS_RIGHT)) {
 			reader.raiseError("Invalid bounds left value");
-			return;
+			return RectC();
 		}
 	} else
 		left = BOUNDS_LEFT;
@@ -106,21 +109,21 @@ void MapSource::bounds(QXmlStreamReader &reader, RectC &val)
 #endif // QT_VERSION < 5
 		if (!res || (right < BOUNDS_LEFT || right > BOUNDS_RIGHT)) {
 			reader.raiseError("Invalid bounds right value");
-			return;
+			return RectC();
 		}
 	} else
 		right = BOUNDS_RIGHT;
 
-	if (bottom > top || top < bottom) {
+	if (bottom >= top) {
 		reader.raiseError("Invalid bottom/top bounds combination");
-		return;
+		return RectC();
 	}
-	if (left > right || right < left) {
+	if (left >= right) {
 		reader.raiseError("Invalid left/right bounds combination");
-		return;
+		return RectC();
 	}
 
-	val = RectC(Coordinates(left, top), Coordinates(right, bottom));
+	return RectC(Coordinates(left, top), Coordinates(right, bottom));
 }
 
 void MapSource::map(QXmlStreamReader &reader, Config &config)
@@ -131,44 +134,25 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 		if (reader.name() == "name")
 			config.name = reader.readElementText();
 		else if (reader.name() == "url") {
-			if (config.type == WMTS)
-				config.wmts.rest = (reader.attributes().value("type") == "REST")
-				  ? true : false;
+			config.wmts.rest = (reader.attributes().value("type") == "REST")
+			  ? true : false;
 			config.url = reader.readElementText();
 		} else if (reader.name() == "zoom") {
-			if (config.type == TMS)
-				zooms(reader, config.tms.zooms);
-			else
-				reader.raiseError("Illegal zoom element");
+			config.tms.zooms = zooms(reader);
 			reader.skipCurrentElement();
 		} else if (reader.name() == "bounds") {
-			if (config.type == TMS)
-				bounds(reader, config.tms.bounds);
-			else
-				reader.raiseError("Illegal bounds element");
+			config.tms.bounds = bounds(reader);
 			reader.skipCurrentElement();
 		} else if (reader.name() == "format") {
-			if (config.type == WMTS)
-				config.wmts.format = reader.readElementText();
-			else
-				reader.raiseError("Illegal format element");
+			config.wmts.format = reader.readElementText();
 		} else if (reader.name() == "layer")
-			if (config.type == WMTS)
-				config.wmts.layer = reader.readElementText();
-			else
-				reader.raiseError("Illegal layer element");
+			config.wmts.layer = reader.readElementText();
 		else if (reader.name() == "style")
-			if (config.type == WMTS)
-				config.wmts.style = reader.readElementText();
-			else
-				reader.raiseError("Illegal style element");
+			config.wmts.style = reader.readElementText();
 		else if (reader.name() == "set") {
-			if (config.type == WMTS) {
-				config.wmts.yx = (reader.attributes().value("axis") == "yx")
-				  ? true : false;
-				config.wmts.set = reader.readElementText();
-			} else
-				reader.raiseError("Illegal set element");
+			config.wmts.yx = (reader.attributes().value("axis") == "yx")
+			  ? true : false;
+			config.wmts.set = reader.readElementText();
 		} else
 			reader.skipCurrentElement();
 	}
