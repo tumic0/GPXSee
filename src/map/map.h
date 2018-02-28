@@ -20,13 +20,12 @@ public:
 	virtual const QString &name() const = 0;
 
 	virtual QRectF bounds() const = 0;
-	virtual qreal resolution(const QPointF &p) const = 0;
+	virtual qreal resolution(const QRectF &rect) const = 0;
 
-	virtual qreal zoom() const = 0;
-	virtual qreal zoomFit(const QSize &size, const RectC &br) = 0;
-	virtual qreal zoomFit(qreal resolution, const Coordinates &c) = 0;
-	virtual qreal zoomIn() = 0;
-	virtual qreal zoomOut() = 0;
+	virtual int zoom() const = 0;
+	virtual int zoomFit(const QSize &size, const RectC &br) = 0;
+	virtual int zoomIn() = 0;
+	virtual int zoomOut() = 0;
 
 	virtual QPointF ll2xy(const Coordinates &c) = 0;
 	virtual Coordinates xy2ll(const QPointF &p) = 0;

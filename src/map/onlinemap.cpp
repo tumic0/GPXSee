@@ -90,7 +90,7 @@ int OnlineMap::limitZoom(int zoom) const
 	return zoom;
 }
 
-qreal OnlineMap::zoomFit(const QSize &size, const RectC &br)
+int OnlineMap::zoomFit(const QSize &size, const RectC &br)
 {
 	if (!br.isValid())
 		_zoom = _zooms.max();
@@ -104,29 +104,21 @@ qreal OnlineMap::zoomFit(const QSize &size, const RectC &br)
 	return _zoom;
 }
 
-qreal OnlineMap::zoomFit(qreal resolution, const Coordinates &c)
-{
-	_zoom = limitZoom((int)log2((WGS84_RADIUS * 2.0 * M_PI
-	  * cos(deg2rad(c.lat()))) / (resolution * TILE_SIZE)));
-
-	return _zoom;
-}
-
-qreal OnlineMap::resolution(const QPointF &p) const
+qreal OnlineMap::resolution(const QRectF &rect) const
 {
 	qreal scale = zoom2scale(_zoom);
 
 	return (WGS84_RADIUS * 2.0 * M_PI * scale / 360.0
-	  * cos(2.0 * atan(exp(deg2rad(-p.y() * scale))) - M_PI/2));
+	  * cos(2.0 * atan(exp(deg2rad(-rect.center().y() * scale))) - M_PI/2));
 }
 
-qreal OnlineMap::zoomIn()
+int OnlineMap::zoomIn()
 {
 	_zoom = qMin(_zoom + 1, _zooms.max());
 	return _zoom;
 }
 
-qreal OnlineMap::zoomOut()
+int OnlineMap::zoomOut()
 {
 	_zoom = qMax(_zoom - 1, _zooms.min());
 	return _zoom;

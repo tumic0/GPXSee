@@ -119,7 +119,7 @@ QRectF WMTSMap::bounds() const
 	return _bounds.isValid() ? tileBounds.intersected(bounds) : tileBounds;
 }
 
-qreal WMTSMap::zoomFit(const QSize &size, const RectC &br)
+int WMTSMap::zoomFit(const QSize &size, const RectC &br)
 {
 	if (br.isValid()) {
 		QRectF tbr(_projection.ll2xy(br.topLeft()),
@@ -142,37 +142,25 @@ qreal WMTSMap::zoomFit(const QSize &size, const RectC &br)
 	return _zoom;
 }
 
-qreal WMTSMap::zoomFit(qreal resolution, const Coordinates &c)
+qreal WMTSMap::resolution(const QRectF &rect) const
 {
-	Q_UNUSED(c);
+	Coordinates tl = xy2ll((rect.topLeft()));
+	Coordinates br = xy2ll(rect.bottomRight());
 
-	_zoom = 0;
+	qreal ds = tl.distanceTo(br);
+	qreal ps = QLineF(rect.topLeft(), rect.bottomRight()).length();
 
-	for (int i = 0; i < _zooms.size(); i++) {
-		if (sd2res(_zooms.at(i).scaleDenominator) < resolution)
-			break;
-		_zoom = i;
-	}
-
-	updateTransform();
-	return _zoom;
+	return ds/ps;
 }
 
-qreal WMTSMap::resolution(const QPointF &p) const
-{
-	Q_UNUSED(p);
-
-	return sd2res(_zooms.at(_zoom).scaleDenominator);
-}
-
-qreal WMTSMap::zoomIn()
+int WMTSMap::zoomIn()
 {
 	_zoom = qMin(_zoom + 1, _zooms.size() - 1);
 	updateTransform();
 	return _zoom;
 }
 
-qreal WMTSMap::zoomOut()
+int WMTSMap::zoomOut()
 {
 	_zoom = qMax(_zoom - 1, 0);
 	updateTransform();

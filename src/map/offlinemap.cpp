@@ -14,17 +14,6 @@
 #include "offlinemap.h"
 
 
-void OfflineMap::computeResolution()
-{
-	Coordinates tl = xy2ll((bounds().topLeft()));
-	Coordinates br = xy2ll(bounds().bottomRight());
-
-	qreal ds = tl.distanceTo(br);
-	qreal ps = QLineF(bounds().topLeft(), bounds().bottomRight()).length();
-
-	_resolution = ds/ps;
-}
-
 bool OfflineMap::getImageInfo(const QString &path)
 {
 	QFileInfo ii(_imgPath);
@@ -112,7 +101,6 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 
 	_valid = false;
 	_img = 0;
-	_resolution = 0.0;
 	_zoom = 0;
 	_scale = QPointF(1.0, 1.0);
 
@@ -190,7 +178,6 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 	}
 
 	_inverted = _transform.inverted();
-	computeResolution();
 
 	_valid = true;
 }
@@ -203,7 +190,6 @@ OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
 
 	_valid = false;
 	_img = 0;
-	_resolution = 0.0;
 	_zoom = 0;
 	_scale = QPointF(1.0, 1.0);
 
@@ -227,9 +213,7 @@ OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
 	_size = mf.size();
 	_projection = mf.projection();
 	_transform = mf.transform();
-
 	_inverted = _transform.inverted();
-	computeResolution();
 
 	_tarPath = fi.absolutePath() + "/" + fi.completeBaseName() + ".tar";
 	_valid = true;
@@ -353,7 +337,7 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect)
 		painter->fillRect(rect, _backgroundColor);
 }
 
-QPointF OfflineMap::ll2xy(const Coordinates &c)
+QPointF OfflineMap::ll2xy(const Coordinates &c) const
 {
 	if (_ozf.isOpen()) {
 		QPointF p(_transform.map(_projection.ll2xy(c)));
@@ -362,7 +346,7 @@ QPointF OfflineMap::ll2xy(const Coordinates &c)
 		return _transform.map(_projection.ll2xy(c));
 }
 
-Coordinates OfflineMap::xy2ll(const QPointF &p)
+Coordinates OfflineMap::xy2ll(const QPointF &p) const
 {
 	if (_ozf.isOpen()) {
 		return _projection.xy2ll(_inverted.map(QPointF(p.x() / _scale.x(),
@@ -379,17 +363,18 @@ QRectF OfflineMap::bounds() const
 		return QRectF(QPointF(0, 0), _size);
 }
 
-qreal OfflineMap::resolution(const QPointF &p) const
+qreal OfflineMap::resolution(const QRectF &rect) const
 {
-	Q_UNUSED(p);
+	Coordinates tl = xy2ll((rect.topLeft()));
+	Coordinates br = xy2ll(rect.bottomRight());
 
-	if (_ozf.isOpen())
-		return _resolution / ((_scale.x() + _scale.y()) / 2.0);
-	else
-		return _resolution;
+	qreal ds = tl.distanceTo(br);
+	qreal ps = QLineF(rect.topLeft(), rect.bottomRight()).length();
+
+	return ds/ps;
 }
 
-qreal OfflineMap::zoomFit(const QSize &size, const RectC &br)
+int OfflineMap::zoomFit(const QSize &size, const RectC &br)
 {
 	if (_ozf.isOpen()) {
 		if (!br.isValid())
@@ -411,23 +396,7 @@ qreal OfflineMap::zoomFit(const QSize &size, const RectC &br)
 	return _zoom;
 }
 
-qreal OfflineMap::zoomFit(qreal resolution, const Coordinates &c)
-{
-	Q_UNUSED(c);
-
-	if (_ozf.isOpen()) {
-		for (int i = 0; i < _ozf.zooms(); i++) {
-			rescale(i);
-			qreal sr = _resolution / ((_scale.x() + _scale.y()) / 2.0);
-			if (sr >= resolution)
-				break;
-		}
-	}
-
-	return _zoom;
-}
-
-qreal OfflineMap::zoomIn()
+int OfflineMap::zoomIn()
 {
 	if (_ozf.isOpen())
 		rescale(qMax(_zoom - 1, 0));
@@ -435,7 +404,7 @@ qreal OfflineMap::zoomIn()
 	return _zoom;
 }
 
-qreal OfflineMap::zoomOut()
+int OfflineMap::zoomOut()
 {
 	if (_ozf.isOpen())
 		rescale(qMin(_zoom + 1, _ozf.zooms() - 1));

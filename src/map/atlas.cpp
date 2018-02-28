@@ -15,8 +15,8 @@ static bool resCmp(const OfflineMap *m1, const OfflineMap *m2)
 {
 	qreal r1, r2;
 
-	r1 = m1->resolution(m1->bounds().center());
-	r2 = m2->resolution(m2->bounds().center());
+	r1 = m1->resolution(m1->bounds());
+	r2 = m2->resolution(m2->bounds());
 
 	return r1 > r2;
 }
@@ -37,8 +37,8 @@ void Atlas::computeZooms()
 
 	_zooms.append(QPair<int, int>(0, _maps.count() - 1));
 	for (int i = 1; i < _maps.count(); i++) {
-		qreal last = _maps.at(i-1)->resolution(_maps.at(i)->bounds().center());
-		qreal cur = _maps.at(i)->resolution(_maps.at(i)->bounds().center());
+		qreal last = _maps.at(i-1)->resolution(_maps.at(i)->bounds());
+		qreal cur = _maps.at(i)->resolution(_maps.at(i)->bounds());
 		if (cur < last * ZOOM_THRESHOLD) {
 			_zooms.last().second = i-1;
 			_zooms.append(QPair<int, int>(i, _maps.count() - 1));
@@ -169,26 +169,21 @@ QRectF Atlas::bounds() const
 	return QRectF(QPointF(0, 0), s);
 }
 
-qreal Atlas::resolution(const QPointF &p) const
+qreal Atlas::resolution(const QRectF &rect) const
 {
 	int idx = _zooms.at(_zoom).first;
 
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
-		if (_bounds.at(i).second.contains(_maps.at(i)->xy2pp(p))) {
+		if (_bounds.at(i).second.contains(_maps.at(i)->xy2pp(rect.center()))) {
 			idx = i;
 			break;
 		}
 	}
 
-	return _maps.at(idx)->resolution(p);
+	return _maps.at(idx)->resolution(rect);
 }
 
-qreal Atlas::zoom() const
-{
-	return _zoom;
-}
-
-qreal Atlas::zoomFit(const QSize &size, const RectC &br)
+int Atlas::zoomFit(const QSize &size, const RectC &br)
 {
 	_zoom = 0;
 
@@ -217,33 +212,13 @@ qreal Atlas::zoomFit(const QSize &size, const RectC &br)
 	return _zoom;
 }
 
-qreal Atlas::zoomFit(qreal resolution, const Coordinates &c)
-{
-	_zoom = 0;
-
-	for (int z = 0; z < _zooms.count(); z++) {
-		for (int i = _zooms.at(z).first; i <= _zooms.at(z).second; i++) {
-			if (!_bounds.at(i).first.contains(_maps.at(i)->ll2pp(c)))
-				continue;
-
-			if (_maps.at(i)->resolution(_maps.at(i)->ll2xy(c)) < resolution)
-				return _zoom;
-
-			_zoom = z;
-			break;
-		}
-	}
-
-	return _zoom;
-}
-
-qreal Atlas::zoomIn()
+int Atlas::zoomIn()
 {
 	_zoom = qMin(_zoom + 1, _zooms.size() - 1);
 	return _zoom;
 }
 
-qreal Atlas::zoomOut()
+int Atlas::zoomOut()
 {
 	_zoom = qMax(_zoom - 1, 0);
 	return _zoom;

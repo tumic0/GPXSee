@@ -24,16 +24,17 @@ public:
 	const QString &name() const {return _name;}
 
 	QRectF bounds() const;
-	qreal resolution(const QPointF &p) const;
+	qreal resolution(const QRectF &rect) const;
 
-	qreal zoom() const {return _zoom;}
-	qreal zoomFit(const QSize &size, const RectC &br);
-	qreal zoomFit(qreal resolution, const Coordinates &c);
-	qreal zoomIn();
-	qreal zoomOut();
+	int zoom() const {return _zoom;}
+	int zoomFit(const QSize &size, const RectC &br);
+	int zoomIn();
+	int zoomOut();
 
-	QPointF ll2xy(const Coordinates &c);
-	Coordinates xy2ll(const QPointF &p);
+	QPointF ll2xy(const Coordinates &c)
+		{return static_cast<const OfflineMap &>(*this).ll2xy(c);}
+	Coordinates xy2ll(const QPointF &p)
+		{return static_cast<const OfflineMap &>(*this).xy2ll(p);}
 
 	void draw(QPainter *painter, const QRectF &rect);
 
@@ -51,6 +52,9 @@ public:
 	  {return _transform.map(p);}
 
 private:
+	QPointF ll2xy(const Coordinates &c) const;
+	Coordinates xy2ll(const QPointF &p) const;
+
 	bool getTileInfo(const QStringList &tiles, const QString &path = QString());
 	bool getImageInfo(const QString &path);
 	bool totalSizeSet();
@@ -59,7 +63,6 @@ private:
 	void drawOZF(QPainter *painter, const QRectF &rect);
 	void drawImage(QPainter *painter, const QRectF &rect);
 
-	void computeResolution();
 	void rescale(int zoom);
 
 	QString _name;
@@ -77,7 +80,6 @@ private:
 	QSize _size;
 
 	int _zoom;
-	qreal _resolution;
 	QPointF _scale;
 
 	bool _valid;

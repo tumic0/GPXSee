@@ -17,13 +17,12 @@ public:
 	const QString &name() const {return _name;}
 
 	QRectF bounds() const;
-	qreal resolution(const QPointF &p) const;
+	qreal resolution(const QRectF &rect) const;
 
-	qreal zoom() const;
-	qreal zoomFit(const QSize &size, const RectC &br);
-	qreal zoomFit(qreal resolution, const Coordinates &c);
-	qreal zoomIn();
-	qreal zoomOut();
+	int zoom() const {return _zoom;}
+	int zoomFit(const QSize &size, const RectC &br);
+	int zoomIn();
+	int zoomOut();
 
 	QPointF ll2xy(const Coordinates &c);
 	Coordinates xy2ll(const QPointF &p);

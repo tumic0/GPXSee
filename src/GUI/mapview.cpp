@@ -95,7 +95,8 @@ void MapView::centerOn(const QPointF &pos)
 		verticalScrollBar()->setValue(verticalScrollBar()->value()
 		  + offset.y());
 
-	_res = _map->resolution(pos);
+	QRectF vr(mapToScene(viewport()->rect()).boundingRect());
+	_res = _map->resolution(vr);
 	_mapScale->setResolution(_res);
 }
 
@@ -267,9 +268,8 @@ void MapView::setPalette(const Palette &palette)
 
 void MapView::setMap(Map *map)
 {
-	QPointF pos = mapToScene(viewport()->rect().center());
-	Coordinates center = _map->xy2ll(pos);
-	qreal resolution = _map->resolution(pos);
+	QRectF vr(mapToScene(viewport()->rect()).boundingRect());
+	RectC cr(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
 
 	_map->unload();
 	disconnect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
@@ -281,7 +281,7 @@ void MapView::setMap(Map *map)
 
 	digitalZoom(0);
 
-	_map->zoomFit(resolution, center);
+	_map->zoomFit(viewport()->rect().size(), cr);
 	_scene->setSceneRect(_map->bounds());
 
 	for (int i = 0; i < _tracks.size(); i++)
@@ -296,7 +296,7 @@ void MapView::setMap(Map *map)
 		it.value()->setMap(_map);
 	updatePOIVisibility();
 
-	centerOn(_map->ll2xy(center));
+	centerOn(_map->ll2xy(cr.center()));
 
 	resetCachedContent();
 	QPixmapCache::clear();
@@ -499,9 +499,9 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
   bool hires)
 {
 	QRect orig, adj;
-	qreal ratio, diff, origRes, q;
+	qreal ratio, diff, q;
 	QPointF origScene, origPos;
-	Coordinates origLL;
+	RectC origC;
 
 
 	// Enter plot mode
@@ -526,9 +526,9 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 
 	// Adjust the view for printing
 	if (hires) {
-		origScene = mapToScene(orig.center());
-		origLL = _map->xy2ll(origScene);
-		origRes = _map->resolution(origScene);
+		QRectF vr(mapToScene(orig).boundingRect());
+		origC = RectC(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
+		origScene = vr.center();
 
 		QPointF s(painter->device()->logicalDpiX()
 		  / (qreal)metric(QPaintDevice::PdmDpiX),
@@ -558,7 +558,7 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 
 	// Revert view changes to display mode
 	if (hires) {
-		_map->zoomFit(origRes, origLL);
+		_map->zoomFit(orig.size(), origC);
 		rescale();
 		centerOn(origScene);
 	}
@@ -797,8 +797,8 @@ void MapView::scrollContentsBy(int dx, int dy)
 {
 	QGraphicsView::scrollContentsBy(dx, dy);
 
-	QPointF center = mapToScene(viewport()->rect().center());
-	qreal res = _map->resolution(center);
+	QRectF sr(mapToScene(viewport()->rect()).boundingRect());
+	qreal res = _map->resolution(sr);
 
 	if (qMax(res, _res) / qMin(res, _res) > 1.1) {
 		_mapScale->setResolution(res);
