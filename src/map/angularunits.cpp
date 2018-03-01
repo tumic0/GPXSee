@@ -8,7 +8,8 @@ static double sDMS2deg(double val)
 	const char *decimal;
 
 	QString qstr(QString::number(qAbs(val), 'f', 7));
-	const char *str = qstr.toLatin1().constData();
+	QByteArray ba = qstr.toLatin1();
+	const char *str = ba.constData();
 	decimal = strrchr(str, '.');
 	int deg = str2int(str, decimal - str);
 	int min = str2int(decimal + 1, 2);
