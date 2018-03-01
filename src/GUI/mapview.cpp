@@ -76,6 +76,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_digitalZoom = 0;
 
 	_map->setBackgroundColor(_backgroundColor);
+	_res = _map->resolution(_map->bounds());
 	_scene->setSceneRect(_map->bounds());
 
 	centerOn(_scene->sceneRect().center());
