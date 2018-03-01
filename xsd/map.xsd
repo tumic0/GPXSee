@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:simpleType name="mapType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="TMS"/>
+			<xs:enumeration value="WMTS"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="axisOrderType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="xy"/>
+			<xs:enumeration value="yx"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="map">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="url" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="zoom" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:attribute name="min" type="xs:nonNegativeInteger"/>
+						<xs:attribute name="max" type="xs:nonNegativeInteger"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="bounds" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:attribute name="top" type="xs:decimal"/>
+						<xs:attribute name="bottom" type="xs:decimal"/>
+						<xs:attribute name="left" type="xs:decimal"/>
+						<xs:attribute name="right" type="xs:decimal"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="format" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="layer" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="style" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="set" minOccurs="0" maxOccurs="1">
+					<xs:complexType mixed="true">
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="axis" type="axisOrderType"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:all>
+			<xs:attribute name="type" type="mapType" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema> 
