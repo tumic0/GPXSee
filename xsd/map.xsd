@@ -20,6 +20,7 @@
 			<xs:all>
 				<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
 				<xs:element name="url" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="copyright" type="xs:string" minOccurs="0" maxOccurs="1"/>
 				<xs:element name="zoom" minOccurs="0" maxOccurs="1">
 					<xs:complexType>
 						<xs:attribute name="min" type="xs:nonNegativeInteger"/>
