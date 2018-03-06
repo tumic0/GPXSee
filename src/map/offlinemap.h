@@ -3,13 +3,10 @@
 
 #include <QTransform>
 #include "projection.h"
-#include "transform.h"
-#include "linearunits.h"
 #include "map.h"
 #include "tar.h"
 #include "ozf.h"
 
-class QIODevice;
 class QImage;
 
 class OfflineMap : public Map

@@ -1,7 +1,7 @@
 #include <QFileInfo>
 #include <QtEndian>
 #include "pcs.h"
-#include "latlon.h"
+#include "tifffile.h"
 #include "geotiff.h"
 
 

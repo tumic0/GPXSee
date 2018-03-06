@@ -1,10 +1,9 @@
 #ifndef ATLAS_H
 #define ATLAS_H
 
-#include <QFileInfoList>
 #include "map.h"
-#include "offlinemap.h"
 
+class OfflineMap;
 
 class Atlas : public Map
 {

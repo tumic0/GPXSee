@@ -2,6 +2,7 @@
 #include <QtAlgorithms>
 #include <QPainter>
 #include "common/rectc.h"
+#include "offlinemap.h"
 #include "tar.h"
 #include "atlas.h"
 

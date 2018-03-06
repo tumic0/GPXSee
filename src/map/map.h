@@ -5,9 +5,9 @@
 #include <QString>
 #include <QRectF>
 #include <QColor>
+#include "common/coordinates.h"
 
 class QPainter;
-class Coordinates;
 class RectC;
 
 class Map : public QObject
@@ -15,7 +15,7 @@ class Map : public QObject
 	Q_OBJECT
 
 public:
-	Map(QObject *parent = 0) : QObject(parent) {_backgroundColor = Qt::white;}
+	Map(QObject *parent = 0) : QObject(parent), _backgroundColor(Qt::white) {}
 
 	virtual const QString &name() const = 0;
 

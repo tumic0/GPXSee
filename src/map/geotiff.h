@@ -1,14 +1,14 @@
 #ifndef GEOTIFF_H
 #define GEOTIFF_H
 
-#include <QTransform>
-#include <QFile>
 #include <QMap>
-#include "gcs.h"
-#include "projection.h"
-#include "tifffile.h"
+#include <QList>
+#include <QTransform>
 #include "transform.h"
-#include "linearunits.h"
+#include "projection.h"
+
+class TIFFFile;
+class GCS;
 
 class GeoTIFF
 {

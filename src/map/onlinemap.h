@@ -1,7 +1,6 @@
 #ifndef ONLINEMAP_H
 #define ONLINEMAP_H
 
-#include "common/coordinates.h"
 #include "common/range.h"
 #include "common/rectc.h"
 #include "map.h"

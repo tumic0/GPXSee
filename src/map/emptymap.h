@@ -1,7 +1,6 @@
 #ifndef EMPTYMAP_H
 #define EMPTYMAP_H
 
-#include "common/coordinates.h"
 #include "map.h"
 
 class EmptyMap : public Map

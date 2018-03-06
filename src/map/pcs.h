@@ -40,7 +40,6 @@ private:
 	LinearUnits _units;
 
 	static QList<Entry> _pcss;
-	static GCS _nullGCS;
 };
 
 #ifndef QT_NO_DEBUG

@@ -7,7 +7,7 @@
 class TIFFFile : public QFile
 {
 public:
-	TIFFFile() : QFile(), _be(false) {}
+	TIFFFile() : _be(false) {}
 	TIFFFile(const QString &path) : QFile(path), _be(false) {}
 
 	bool readHeader(quint32 &ifd);
