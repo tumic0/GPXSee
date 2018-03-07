@@ -16,6 +16,7 @@ class GraphTab : public GraphView
 public:
 	GraphTab(QWidget *parent = 0) : GraphView(parent)
 	  {setFrameShape(QFrame::NoFrame);}
+	virtual ~GraphTab() {}
 
 	virtual QString label() const = 0;
 	virtual void loadData(const Data &data, const QList<PathItem *> &paths) = 0;

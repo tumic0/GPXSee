@@ -16,6 +16,7 @@ class Map : public QObject
 
 public:
 	Map(QObject *parent = 0) : QObject(parent), _backgroundColor(Qt::white) {}
+	virtual ~Map() {}
 
 	virtual const QString &name() const = 0;
 

@@ -12,6 +12,7 @@ class GraphItem : public QGraphicsObject
 
 public:
 	GraphItem(const Graph &graph, GraphType type, QGraphicsItem *parent = 0);
+	virtual ~GraphItem() {}
 
 	QPainterPath shape() const {return _shape;}
 	QRectF boundingRect() const {return _shape.boundingRect();}
