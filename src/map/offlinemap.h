@@ -4,9 +4,9 @@
 #include <QTransform>
 #include "projection.h"
 #include "map.h"
-#include "tar.h"
-#include "ozf.h"
 
+class Tar;
+class OZF;
 class QImage;
 
 class OfflineMap : public Map
@@ -49,6 +49,13 @@ public:
 	  {return _transform.map(p);}
 
 private:
+	struct ImageInfo {
+		QSize size;
+		QString path;
+
+		bool isValid() const {return size.isValid() && !path.isEmpty();}
+	};
+
 	QPointF ll2xy(const Coordinates &c) const;
 	Coordinates xy2ll(const QPointF &p) const;
 
@@ -67,14 +74,10 @@ private:
 	Projection _projection;
 	QTransform _transform, _inverted;
 
-	OZF _ozf;
-	Tar _tar;
-	QString _tarPath;
 	QImage *_img;
-	QString _imgPath;
-	QSize _tileSize;
-	QString _tileName;
-	QSize _size;
+	Tar *_tar;
+	OZF *_ozf;
+	ImageInfo _map, _tile;
 
 	int _zoom;
 	QPointF _scale;

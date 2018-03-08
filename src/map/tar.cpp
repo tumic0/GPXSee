@@ -44,17 +44,12 @@ static quint64 number(const char* data, size_t size, int base = 8)
 	return val;
 }
 
-bool Tar::load(const QString &path)
+bool Tar::open()
 {
-	if (_file.isOpen())
-		_file.close();
-	_index.clear();
-
-	_file.setFileName(path);
 	if (!_file.open(QIODevice::ReadOnly))
 		return false;
 
-	QFileInfo fi(path);
+	QFileInfo fi(_file.fileName());
 	QString tmiPath = fi.path() + "/" + fi.completeBaseName() + ".tmi";
 
 	if (loadTmi(tmiPath))

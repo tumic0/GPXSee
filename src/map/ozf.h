@@ -12,15 +12,17 @@
 class OZF
 {
 public:
-	OZF() : _tileSize(0), _decrypt(false), _key(0) {}
+	OZF(const QString &name) : _tileSize(0), _decrypt(false), _key(0),
+	  _file(name) {}
 
-	bool load(const QString &path);
+	bool open();
 
 	QString fileName() const {return _file.fileName();}
 	bool isOpen() const {return _file.isOpen();}
 
 	int zooms() const {return _zooms.size();}
 	QSize size(int zoom) const;
+	QPointF scale(int zoom) const;
 	QSize tileSize() const {return QSize(_tileSize, _tileSize);}
 	QPixmap tile(int zoom, int x, int y);
 

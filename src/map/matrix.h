@@ -5,7 +5,8 @@
 #include <cfloat>
 #include <QDebug>
 
-class Matrix {
+class Matrix
+{
 public:
 	Matrix() {_h = 0; _w = 0; _m = 0;}
 	Matrix(size_t h, size_t w);

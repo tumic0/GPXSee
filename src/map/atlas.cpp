@@ -84,16 +84,16 @@ Atlas::Atlas(const QString &fileName, QObject *parent) : Map(parent)
 	QFileInfo fi(fileName);
 	QByteArray ba;
 	QString suffix = fi.suffix().toLower();
-	Tar tar;
+	Tar tar(fileName);
+
 
 	_valid = false;
 	_zoom = 0;
 	_name = fi.dir().dirName();
 	_ci = -1; _cz = -1;
 
-
 	if (suffix == "tar") {
-		if (!tar.load(fileName)) {
+		if (!tar.open()) {
 			_errorString = "Error reading tar file";
 			return;
 		}
@@ -112,7 +112,6 @@ Atlas::Atlas(const QString &fileName, QObject *parent) : Map(parent)
 		_errorString = "Missing or invalid tba file";
 		return;
 	}
-
 
 	QDir dir(fi.absolutePath());
 	QFileInfoList layers = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
@@ -148,12 +147,6 @@ Atlas::Atlas(const QString &fileName, QObject *parent) : Map(parent)
 	computeBounds();
 
 	_valid = true;
-}
-
-Atlas::~Atlas()
-{
-	for (int i = 0; i < _maps.size(); i++)
-		delete _maps.at(i);
 }
 
 QRectF Atlas::bounds() const
@@ -308,10 +301,10 @@ bool Atlas::isAtlas(const QString &path)
 {
 	QFileInfo fi(path);
 	QString suffix = fi.suffix().toLower();
-	Tar tar;
+	Tar tar(path);
 
 	if (suffix == "tar") {
-		if (!tar.load(path))
+		if (!tar.open())
 			return false;
 		QString tbaFileName = fi.completeBaseName() + ".tba";
 		return tar.contains(tbaFileName);

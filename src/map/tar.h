@@ -8,7 +8,9 @@
 class Tar
 {
 public:
-	bool load(const QString &path);
+	Tar(const QString &name) : _file(name) {}
+
+	bool open();
 
 	QStringList files() const {return _index.keys();}
 	QByteArray file(const QString &name);

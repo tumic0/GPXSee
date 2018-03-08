@@ -185,12 +185,8 @@ bool OZF::readTileTable()
 	return _zooms.isEmpty() ? false : true;
 }
 
-bool OZF::load(const QString &path)
+bool OZF::open()
 {
-	if (_file.isOpen())
-		_file.close();
-
-	_file.setFileName(path);
 	if (!_file.open(QIODevice::ReadOnly))
 		return false;
 
@@ -248,6 +244,12 @@ QSize OZF::size(int zoom) const
 	Q_ASSERT(0 <= zoom && zoom < _zooms.count());
 
 	return _zooms.at(zoom).size;
+}
+
+QPointF OZF::scale(int zoom) const
+{
+	return QPointF((qreal)size(zoom).width() / (qreal)size(0).width(),
+	  (qreal)size(zoom).height() / (qreal)size(0).height());
 }
 
 bool OZF::isOZF(const QString &path)
