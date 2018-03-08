@@ -15,7 +15,7 @@
 #include "offlinemap.h"
 
 
-bool OfflineMap::getImageInfo(const QString &path)
+bool OfflineMap::setImageInfo(const QString &path)
 {
 	QFileInfo ii(_map.path);
 
@@ -58,8 +58,13 @@ bool OfflineMap::getImageInfo(const QString &path)
 	return true;
 }
 
-bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
+bool OfflineMap::setTileInfo(const QStringList &tiles, const QString &path)
 {
+	if (!_map.size.isValid()) {
+		_errorString = "Missing total image size (IWH)";
+		return false;
+	}
+
 	QRegExp rx("_[0-9]+_[0-9]+\\.");
 	for (int i = 0; i < tiles.size(); i++) {
 		if (tiles.at(i).contains(rx)) {
@@ -79,21 +84,13 @@ bool OfflineMap::getTileInfo(const QStringList &tiles, const QString &path)
 				return false;
 			}
 
+			_map.path = QString();
 			return true;
 		}
 	}
 
 	_errorString = "Invalid/missing tile set";
 	return false;
-}
-
-bool OfflineMap::totalSizeSet()
-{
-	if (!_map.size.isValid()) {
-		_errorString = "Missing total image size (IWH)";
-		return false;
-	} else
-		return true;
 }
 
 OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
@@ -158,21 +155,15 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 	}
 
 	if (_tar) {
-		if (!totalSizeSet())
+		if (!setTileInfo(_tar->files()))
 			return;
-		if (!getTileInfo(_tar->files()))
-			return;
-		_map.path = QString();
 	} else {
 		QDir set(fi.absolutePath() + "/" + "set");
 		if (set.exists()) {
-			if (!totalSizeSet())
+			if (!setTileInfo(set.entryList(), set.absolutePath()))
 				return;
-			if (!getTileInfo(set.entryList(), set.absolutePath()))
-				return;
-			_map.path = QString();
 		} else {
-			if (!getImageInfo(fi.absolutePath()))
+			if (!setImageInfo(fi.absolutePath()))
 				return;
 		}
 	}
@@ -230,7 +221,7 @@ void OfflineMap::load()
 			  qPrintable(_tar->fileName()));
 			return;
 		}
-		if (!getTileInfo(_tar->files()))
+		if (!setTileInfo(_tar->files()))
 			qWarning("%s: %s", qPrintable(_tar->fileName()),
 			  qPrintable(_errorString));
 		return;
@@ -249,7 +240,7 @@ void OfflineMap::unload()
 	_img = 0;
 }
 
-void OfflineMap::drawTiled(QPainter *painter, const QRectF &rect)
+void OfflineMap::drawTiled(QPainter *painter, const QRectF &rect) const
 {
 	QPoint tl = QPoint((int)floor(rect.left() / (qreal)_tile.size.width())
 	  * _tile.size.width(), (int)floor(rect.top() / _tile.size.height())
@@ -287,7 +278,7 @@ void OfflineMap::drawTiled(QPainter *painter, const QRectF &rect)
 	}
 }
 
-void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect)
+void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect) const
 {
 	QPoint tl = QPoint((int)floor(rect.left() / _ozf->tileSize().width())
 	  * _ozf->tileSize().width(), (int)floor(rect.top()
@@ -318,7 +309,7 @@ void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect)
 	}
 }
 
-void OfflineMap::drawImage(QPainter *painter, const QRectF &rect)
+void OfflineMap::drawImage(QPainter *painter, const QRectF &rect) const
 {
 	QRect r(rect.toRect());
 	painter->drawImage(r.left(), r.top(), *_img, r.left(), r.top(),

@@ -59,13 +59,12 @@ private:
 	QPointF ll2xy(const Coordinates &c) const;
 	Coordinates xy2ll(const QPointF &p) const;
 
-	bool getTileInfo(const QStringList &tiles, const QString &path = QString());
-	bool getImageInfo(const QString &path);
-	bool totalSizeSet();
+	bool setTileInfo(const QStringList &tiles, const QString &path = QString());
+	bool setImageInfo(const QString &path);
 
-	void drawTiled(QPainter *painter, const QRectF &rect);
-	void drawOZF(QPainter *painter, const QRectF &rect);
-	void drawImage(QPainter *painter, const QRectF &rect);
+	void drawTiled(QPainter *painter, const QRectF &rect) const;
+	void drawOZF(QPainter *painter, const QRectF &rect) const;
+	void drawImage(QPainter *painter, const QRectF &rect) const;
 
 	void rescale(int zoom);
 
