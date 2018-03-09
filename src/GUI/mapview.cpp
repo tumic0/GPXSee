@@ -85,17 +85,6 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 void MapView::centerOn(const QPointF &pos)
 {
 	QGraphicsView::centerOn(pos);
-
-	/* Fix the offset caused by QGraphicsView::centerOn() approximation */
-	QPointF center = mapToScene(viewport()->rect().center());
-	QPoint offset((int)(pos.x() - center.x()), (int)(pos.y() - center.y()));
-	if (qAbs(offset.x()) == 1)
-		horizontalScrollBar()->setValue(horizontalScrollBar()->value()
-		  + offset.x());
-	if (qAbs(offset.y()) == 1)
-		verticalScrollBar()->setValue(verticalScrollBar()->value()
-		  + offset.y());
-
 	QRectF vr(mapToScene(viewport()->rect()).boundingRect());
 	_res = _map->resolution(vr);
 	_mapScale->setResolution(_res);
