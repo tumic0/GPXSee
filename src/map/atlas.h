@@ -40,15 +40,15 @@ private:
 	void computeBounds();
 
 	QString _name;
-	bool _valid;
-	QString _errorString;
 
 	QList<OfflineMap*> _maps;
 	QVector<QPair<int, int> > _zooms;
 	QVector<QPair<QRectF, QRectF> > _bounds;
 	int _zoom;
+	int _mapIndex;
 
-	int _ci, _cz;
+	bool _valid;
+	QString _errorString;
 };
 
 #endif // ATLAS_H
