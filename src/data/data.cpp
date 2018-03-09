@@ -23,13 +23,13 @@ static QHash<QString, Parser*> parsers()
 {
 	QHash<QString, Parser*> hash;
 
-        hash.insert("gpx", &gpx);
-        hash.insert("tcx", &tcx);
-        hash.insert("kml", &kml);
-        hash.insert("fit", &fit);
-        hash.insert("csv", &csv);
-        hash.insert("igc", &igc);
-        hash.insert("nmea", &nmea);
+	hash.insert("gpx", &gpx);
+	hash.insert("tcx", &tcx);
+	hash.insert("kml", &kml);
+	hash.insert("fit", &fit);
+	hash.insert("csv", &csv);
+	hash.insert("igc", &igc);
+	hash.insert("nmea", &nmea);
 
 	return hash;
 }

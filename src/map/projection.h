@@ -87,8 +87,8 @@ public:
 	const LinearUnits &units() const {return _units;}
 
 private:
-	const GCS * _gcs;
-	CT *_ct;
+	const GCS *_gcs;
+	const CT *_ct;
 	LinearUnits _units;
 	bool _geographic;
 };

@@ -3,11 +3,10 @@
 
 #include "projection.h"
 
-class UTM
+namespace UTM
 {
-public:
-	static int zone(const Coordinates &c);
-	static Projection::Setup setup(int zone);
-};
+	int zone(const Coordinates &c);
+	Projection::Setup setup(int zone);
+}
 
 #endif // UTM_H
