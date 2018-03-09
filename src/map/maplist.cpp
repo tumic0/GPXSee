@@ -1,6 +1,5 @@
 #include <QFileInfo>
 #include <QDir>
-#include "common/range.h"
 #include "atlas.h"
 #include "offlinemap.h"
 #include "onlinemap.h"

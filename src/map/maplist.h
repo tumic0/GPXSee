@@ -3,9 +3,8 @@
 
 #include <QObject>
 #include <QString>
-#include "map.h"
 
-class Tar;
+class Map;
 
 class MapList : public QObject
 {
