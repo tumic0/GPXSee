@@ -258,7 +258,8 @@ void MapView::setPalette(const Palette &palette)
 
 void MapView::setMap(Map *map)
 {
-	QRectF vr(mapToScene(viewport()->rect()).boundingRect());
+	QRectF vr(mapToScene(viewport()->rect()).boundingRect()
+	  .intersected(_map->bounds()));
 	RectC cr(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
 
 	_map->unload();
