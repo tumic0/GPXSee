@@ -1,3 +1,4 @@
+#include <QIODevice>
 #include "utm.h"
 #include "gcs.h"
 #include "mapfile.h"
