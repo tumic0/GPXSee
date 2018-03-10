@@ -168,7 +168,7 @@ void MapView::addWaypoints(const QList<Waypoint> &waypoints)
 QList<PathItem *> MapView::loadData(const Data &data)
 {
 	QList<PathItem *> paths;
-	qreal zoom = _map->zoom();
+	int zoom = _map->zoom();
 
 	for (int i = 0; i < data.tracks().count(); i++)
 		paths.append(addTrack(*(data.tracks().at(i))));
@@ -189,7 +189,7 @@ QList<PathItem *> MapView::loadData(const Data &data)
 	return paths;
 }
 
-qreal MapView::mapZoom() const
+int MapView::mapZoom() const
 {
 	RectC br = _tr | _rr | _wr;
 
@@ -765,7 +765,7 @@ void MapView::resizeEvent(QResizeEvent *event)
 {
 	QGraphicsView::resizeEvent(event);
 
-	qreal zoom = _map->zoom();
+	int zoom = _map->zoom();
 	if (mapZoom() != zoom)
 		rescale();
 

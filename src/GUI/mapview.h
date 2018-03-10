@@ -80,7 +80,7 @@ private:
 	void loadPOI();
 	void clearPOI();
 
-	qreal mapZoom() const;
+	int mapZoom() const;
 	QPointF contentCenter() const;
 	void rescale();
 	void centerOn(const QPointF &pos);
