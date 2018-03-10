@@ -21,13 +21,14 @@ public:
 private:
 	qreal avg() const;
 	qreal max() const {return bounds().bottom();}
-	void setYUnits(Units units);
+	void setYUnits();
 	void setInfo();
 
 	QList<QPointF> _avg;
 	QList<QPointF> _mavg;
 
-	enum TimeType _timeType;
+	Units _units;
+	TimeType _timeType;
 	bool _showTracks;
 };
 

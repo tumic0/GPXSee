@@ -1,16 +1,18 @@
 #include "data/data.h"
 #include "config.h"
 #include "tooltip.h"
+#include "format.h"
 #include "speedgraphitem.h"
 #include "speedgraph.h"
 
 
 SpeedGraph::SpeedGraph(QWidget *parent) : GraphTab(parent)
 {
+	_units = Metric;
 	_timeType = Total;
 	_showTracks = true;
 
-	setYUnits(Metric);
+	setYUnits();
 	setYLabel(tr("Speed"));
 
 	setSliderPrecision(1);
@@ -19,10 +21,15 @@ SpeedGraph::SpeedGraph(QWidget *parent) : GraphTab(parent)
 void SpeedGraph::setInfo()
 {
 	if (_showTracks) {
+		QString pace = Format::timeSpan((3600.0 / (avg() * yScale())), false);
+		QString pu = (_units == Metric) ? tr("min/km") : (_units == Imperial) ?
+		  tr("min/mi") : tr("min/nmi");
+
 		GraphView::addInfo(tr("Average"), QString::number(avg() * yScale(), 'f',
 		  1) + UNIT_SPACE + yUnits());
 		GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale(), 'f',
 		  1) + UNIT_SPACE + yUnits());
+		GraphView::addInfo(tr("Pace"), pace + UNIT_SPACE + pu);
 	} else
 		clearInfo();
 }
@@ -77,12 +84,12 @@ void SpeedGraph::clear()
 	GraphView::clear();
 }
 
-void SpeedGraph::setYUnits(Units units)
+void SpeedGraph::setYUnits()
 {
-	if (units == Nautical) {
+	if (_units == Nautical) {
 		GraphView::setYUnits(tr("kn"));
 		setYScale(MS2KN);
-	} else if (units == Imperial) {
+	} else if (_units == Imperial) {
 		GraphView::setYUnits(tr("mi/h"));
 		setYScale(MS2MIH);
 	} else {
@@ -93,7 +100,9 @@ void SpeedGraph::setYUnits(Units units)
 
 void SpeedGraph::setUnits(Units units)
 {
-	setYUnits(units);
+	_units = units;
+
+	setYUnits();
 	setInfo();
 
 	GraphView::setUnits(units);
