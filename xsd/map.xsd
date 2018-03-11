@@ -8,6 +8,13 @@
 		</xs:restriction>
 	</xs:simpleType>
 
+	<xs:simpleType name="urlType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="REST"/>
+			<xs:enumeration value="KVP"/>
+		</xs:restriction>
+	</xs:simpleType>
+
 	<xs:simpleType name="axisOrderType">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="xy"/>
@@ -17,9 +24,17 @@
 
 	<xs:element name="map">
 		<xs:complexType>
-			<xs:all>
+			<xs:sequence>
 				<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
-				<xs:element name="url" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="url" minOccurs="1" maxOccurs="1">
+					<xs:complexType mixed="true">
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="type" type="urlType"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
 				<xs:element name="copyright" type="xs:string" minOccurs="0" maxOccurs="1"/>
 				<xs:element name="zoom" minOccurs="0" maxOccurs="1">
 					<xs:complexType>
@@ -47,7 +62,16 @@
 						</xs:simpleContent>
 					</xs:complexType>
 				</xs:element>
-			</xs:all>
+				<xs:element name="dimension" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType mixed="true">
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:string"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
 			<xs:attribute name="type" type="mapType" use="optional"/>
 		</xs:complexType>
 	</xs:element>
