@@ -878,27 +878,27 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="131"/>
+        <location filename="../src/map/maplist.cpp" line="130"/>
         <source>Supported files</source>
         <translation>Unterstütze Dateien</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="132"/>
+        <location filename="../src/map/maplist.cpp" line="131"/>
         <source>OziExplorer maps</source>
         <translation>OziExplorer Karten</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="133"/>
+        <location filename="../src/map/maplist.cpp" line="132"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>TrekBuddy Karten/Atlanten</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="134"/>
+        <location filename="../src/map/maplist.cpp" line="133"/>
         <source>GeoTIFF images</source>
         <translation>GeoTIFF Bilder</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="135"/>
+        <location filename="../src/map/maplist.cpp" line="134"/>
         <source>Online map sources</source>
         <translation>Online-Kartenquellen</translation>
     </message>
@@ -1383,33 +1383,53 @@
 <context>
     <name>SpeedGraph</name>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="14"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="16"/>
         <location filename="../src/GUI/speedgraph.h" line="14"/>
         <source>Speed</source>
         <translation>Geschwindigkeit</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="89"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="96"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="22"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="28"/>
         <source>Average</source>
         <translation>Durchschnitt</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="24"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="25"/>
+        <source>min/km</source>
+        <translation>min/km</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/speedgraph.cpp" line="26"/>
+        <source>min/mi</source>
+        <translation>min/mi</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/speedgraph.cpp" line="26"/>
+        <source>min/nmi</source>
+        <translation>min/nmi</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/speedgraph.cpp" line="30"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="83"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="32"/>
+        <source>Pace</source>
+        <translation>Tempo</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/speedgraph.cpp" line="90"/>
         <source>kn</source>
         <translation>kn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="86"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="93"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
     </message>
@@ -1417,29 +1437,49 @@
 <context>
     <name>SpeedGraphItem</name>
     <message>
-        <location filename="../src/GUI/speedgraphitem.cpp" line="22"/>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="23"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraphitem.cpp" line="21"/>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="22"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraphitem.cpp" line="22"/>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="23"/>
         <source>kn</source>
         <translation>kn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="26"/>
+        <source>min/km</source>
+        <translation>min/km</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="27"/>
+        <source>min/mi</source>
+        <translation>min/mi</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="27"/>
+        <source>min/nmi</source>
+        <translation>min/nmi</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="29"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraphitem.cpp" line="26"/>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="31"/>
         <source>Average</source>
         <translation>Durchschnitt</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="33"/>
+        <source>Pace</source>
+        <translation>Tempo</translation>
     </message>
 </context>
 <context>
