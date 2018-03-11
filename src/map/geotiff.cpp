@@ -23,6 +23,7 @@
 #define GeogGeodeticDatumGeoKey      2050
 #define GeogPrimeMeridianGeoKey      2051
 #define GeogAngularUnitsGeoKey       2054
+#define GeogEllipsoidGeoKey          2056
 #define ProjectedCSTypeGeoKey        3072
 #define ProjectionGeoKey             3074
 #define ProjCoordTransGeoKey         3075
@@ -241,6 +242,7 @@ bool GeoTIFF::readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv) const
 			case ProjectionGeoKey:
 			case ProjCoordTransGeoKey:
 			case ProjLinearUnitsGeoKey:
+			case GeogEllipsoidGeoKey:
 				if (entry.TIFFTagLocation != 0 || entry.Count != 1)
 					return false;
 				value.SHORT = entry.ValueOffset;
@@ -295,13 +297,19 @@ const GCS *GeoTIFF::gcs(QMap<quint16, Value> &kv)
 		if (!(gcs = GCS::gcs(kv.value(GeographicTypeGeoKey).SHORT)))
 			_errorString = QString("%1: unknown GCS")
 			  .arg(kv.value(GeographicTypeGeoKey).SHORT);
-	} else if (IS_SET(kv, GeogGeodeticDatumGeoKey)) {
+	} else if (IS_SET(kv, GeogGeodeticDatumGeoKey)
+	  || kv.value(GeogEllipsoidGeoKey).SHORT == 7019) {
 		int pm = IS_SET(kv, GeogPrimeMeridianGeoKey)
 		  ? kv.value(GeogPrimeMeridianGeoKey).SHORT : 8901;
 		int au = IS_SET(kv, GeogAngularUnitsGeoKey)
 		  ? kv.value(GeogAngularUnitsGeoKey).SHORT : 9102;
 
-		if (!(gcs = GCS::gcs(kv.value(GeogGeodeticDatumGeoKey).SHORT, pm, au)))
+		/* If only the ellipsoid is defined and it is GRS80, handle such
+		   definition as a WGS84 geodetic datum. */
+		int gd = IS_SET(kv, GeogGeodeticDatumGeoKey)
+		  ? kv.value(GeogGeodeticDatumGeoKey).SHORT : 6326;
+
+		if (!(gcs = GCS::gcs(gd, pm, au)))
 			_errorString = QString("%1+%2: unknown geodetic datum + prime"
 			  " meridian combination")
 			  .arg(kv.value(GeogGeodeticDatumGeoKey).SHORT)
