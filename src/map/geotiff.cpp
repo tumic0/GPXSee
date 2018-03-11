@@ -14,8 +14,6 @@
 #define ModelTransformationTag       34264
 #define GeoKeyDirectoryTag           34735
 #define GeoDoubleParamsTag           34736
-#define ImageWidth                   256
-#define ImageHeight                  257
 
 #define GTModelTypeGeoKey            1024
 #define GTRasterTypeGeoKey           1025
