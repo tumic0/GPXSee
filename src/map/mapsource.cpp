@@ -153,6 +153,13 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 			config.wmts.yx = (reader.attributes().value("axis") == "yx")
 			  ? true : false;
 			config.wmts.set = reader.readElementText();
+		} else if (reader.name() == "dimension") {
+			QXmlStreamAttributes attr = reader.attributes();
+			if (!attr.hasAttribute("id"))
+				reader.raiseError("Missing dimension id");
+			else
+				config.wmts.dimensions.append(QPair<QString, QString>(
+				  attr.value("id").toString(), reader.readElementText()));
 		} else
 			reader.skipCurrentElement();
 	}
@@ -213,7 +220,7 @@ Map *MapSource::loadFile(const QString &path)
 	if (config.type == WMTS)
 		m = new WMTSMap(config.name, WMTS::Setup(config.url, config.wmts.layer,
 		  config.wmts.set, config.wmts.style, config.wmts.format,
-		  config.wmts.rest, config.wmts.yx));
+		  config.wmts.rest, config.wmts.yx, config.wmts.dimensions));
 	else
 		m = new OnlineMap(config.name, config.url, config.tms.zooms,
 		  config.tms.bounds);

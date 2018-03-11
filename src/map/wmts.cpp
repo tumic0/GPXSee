@@ -357,17 +357,25 @@ bool WMTS::load(const QString &file, const WMTS::Setup &setup)
 	if (!parseCapabilities(file, setup))
 		return false;
 
-	if (!setup.rest)
+	if (!setup.rest) {
 		_tileUrl = QString("%1?service=WMTS&Version=1.0.0&request=GetTile"
 		  "&Format=%2&Layer=%3&Style=%4&TileMatrixSet=%5&TileMatrix=$z"
 		  "&TileRow=$y&TileCol=$x").arg(setup.url).arg(setup.format)
 		  .arg(setup.layer).arg(setup.style).arg(setup.set);
-	else {
+		for (int i = 0; i < setup.dimensions.size(); i++) {
+			const QPair<QString, QString> &dim = setup.dimensions.at(i);
+			_tileUrl.append(QString("&%1=%2").arg(dim.first).arg(dim.second));
+		}
+	} else {
 		_tileUrl.replace("{Style}", setup.style);
 		_tileUrl.replace("{TileMatrixSet}", setup.set);
 		_tileUrl.replace("{TileMatrix}", "$z");
 		_tileUrl.replace("{TileRow}", "$y");
 		_tileUrl.replace("{TileCol}", "$x");
+		for (int i = 0; i < setup.dimensions.size(); i++) {
+			const QPair<QString, QString> &dim = setup.dimensions.at(i);
+			_tileUrl.replace(QString("{%1}").arg(dim.first), dim.second);
+		}
 	}
 
 	return true;

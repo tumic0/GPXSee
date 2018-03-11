@@ -34,6 +34,7 @@ private:
 		QString format;
 		bool rest;
 		bool yx;
+		QList<QPair<QString, QString> > dimensions;
 
 		WMTSConfig() : format("image/png"), rest(false), yx(false) {}
 	};

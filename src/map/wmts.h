@@ -23,11 +23,13 @@ public:
 		QString format;
 		bool rest;
 		bool yx;
+		QList<QPair<QString, QString> > dimensions;
 
 		Setup(const QString &url, const QString &layer, const QString &set,
-		  const QString &style, const QString &format, bool rest, bool yx) :
+		  const QString &style, const QString &format, bool rest, bool yx,
+		  const QList<QPair<QString, QString> > &dimensions) :
 		  url(url), layer(layer), set(set), style(style), format(format),
-		  rest(rest), yx(yx) {}
+		  rest(rest), yx(yx), dimensions(dimensions) {}
 	};
 
 	struct Zoom {
