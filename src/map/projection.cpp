@@ -16,6 +16,7 @@ Projection::Method::Method(int id)
 		case 9801:
 		case 9802:
 		case 9807:
+		case 9815:
 		case 9820:
 		case 9822:
 		case 9841:
@@ -32,14 +33,15 @@ Projection::Projection(const GCS *gcs, const Method &method, const Setup &setup,
 	const Ellipsoid *ellipsoid = _gcs->datum().ellipsoid();
 
 	switch (method.id()) {
-		case 9807:
-			_ct = new TransverseMercator(ellipsoid, setup.latitudeOrigin(),
-			  setup.longitudeOrigin(), setup.scale(), setup.falseEasting(),
-			  setup.falseNorthing());
-			break;
 		case 1024:
 		case 9841:
 			_ct = new Mercator();
+			break;
+		case 9801:
+		case 9815: // Oblique mercator aproximation using LCC1
+			_ct = new LambertConic1(ellipsoid, setup.latitudeOrigin(),
+			  setup.longitudeOrigin(), setup.scale(), setup.falseEasting(),
+			  setup.falseNorthing());
 			break;
 		case 9802:
 			_ct = new LambertConic2(ellipsoid, setup.standardParallel1(),
@@ -47,8 +49,8 @@ Projection::Projection(const GCS *gcs, const Method &method, const Setup &setup,
 			  setup.longitudeOrigin(), setup.falseEasting(),
 			  setup.falseNorthing());
 			break;
-		case 9801:
-			_ct = new LambertConic1(ellipsoid, setup.latitudeOrigin(),
+		case 9807:
+			_ct = new TransverseMercator(ellipsoid, setup.latitudeOrigin(),
 			  setup.longitudeOrigin(), setup.scale(), setup.falseEasting(),
 			  setup.falseNorthing());
 			break;
@@ -66,6 +68,8 @@ Projection::Projection(const GCS *gcs, const Method &method, const Setup &setup,
 		default:
 			_ct = 0;
 	}
+
+	Q_ASSERT(_ct != 0);
 }
 
 Projection::Projection(const GCS *gcs) : _gcs(gcs), _geographic(true)

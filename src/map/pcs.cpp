@@ -22,6 +22,7 @@ static bool parameter(int key, double val, int units, Projection::Setup &setup)
 {
 	switch (key) {
 		case 8801:
+		case 8811:
 		case 8821:
 			{AngularUnits au(units);
 			if (au.isNull())
@@ -29,6 +30,7 @@ static bool parameter(int key, double val, int units, Projection::Setup &setup)
 			setup.setLatitudeOrigin(au.toDegrees(val));}
 			return true;
 		case 8802:
+		case 8812:
 		case 8822:
 			{AngularUnits au(units);
 			if (au.isNull())
@@ -36,9 +38,11 @@ static bool parameter(int key, double val, int units, Projection::Setup &setup)
 			setup.setLongitudeOrigin(au.toDegrees(val));}
 			return true;
 		case 8805:
+		case 8815:
 			setup.setScale(val);
 			return true;
 		case 8806:
+		case 8816:
 		case 8826:
 			{LinearUnits lu(units);
 			if (lu.isNull())
@@ -46,18 +50,21 @@ static bool parameter(int key, double val, int units, Projection::Setup &setup)
 			setup.setFalseEasting(lu.toMeters(val));}
 			return true;
 		case 8807:
+		case 8817:
 		case 8827:
 			{LinearUnits lu(units);
 			if (lu.isNull())
 				return false;
 			setup.setFalseNorthing(lu.toMeters(val));}
 			return true;
+		case 8813:
 		case 8823:
 			{AngularUnits au(units);
 			if (au.isNull())
 				return false;
 			setup.setStandardParallel1(au.toDegrees(val));}
 			return true;
+		case 8814:
 		case 8824:
 			{AngularUnits au(units);
 			if (au.isNull())
@@ -74,7 +81,7 @@ static int projectionSetup(const QList<QByteArray> &list,
 {
 	bool r1, r2, r3;
 
-	for (int i = 6; i < 24; i += 3) {
+	for (int i = 6; i < 27; i += 3) {
 		QString ks = list[i].trimmed();
 		if (ks.isEmpty())
 			break;
@@ -129,7 +136,7 @@ void PCS::loadList(const QString &path)
 
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split(',');
-		if (list.size() != 24) {
+		if (list.size() != 27) {
 			qWarning("%s: %d: Format error", qPrintable(path), ln);
 			continue;
 		}

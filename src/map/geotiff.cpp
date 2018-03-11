@@ -9,38 +9,56 @@
 #define TIFF_SHORT  3
 #define TIFF_LONG   4
 
-#define ModelPixelScaleTag         33550
-#define ModelTiepointTag           33922
-#define ModelTransformationTag     34264
-#define GeoKeyDirectoryTag         34735
-#define GeoDoubleParamsTag         34736
-#define ImageWidth                 256
-#define ImageHeight                257
+#define ModelPixelScaleTag           33550
+#define ModelTiepointTag             33922
+#define ModelTransformationTag       34264
+#define GeoKeyDirectoryTag           34735
+#define GeoDoubleParamsTag           34736
+#define ImageWidth                   256
+#define ImageHeight                  257
 
-#define GTModelTypeGeoKey          1024
-#define GTRasterTypeGeoKey         1025
-#define GeographicTypeGeoKey       2048
-#define GeogGeodeticDatumGeoKey    2050
-#define GeogPrimeMeridianGeoKey    2051
-#define GeogAngularUnitsGeoKey     2054
-#define ProjectedCSTypeGeoKey      3072
-#define ProjectionGeoKey           3074
-#define ProjCoordTransGeoKey       3075
-#define ProjLinearUnitsGeoKey      3076
-#define ProjStdParallel1GeoKey     3078
-#define ProjStdParallel2GeoKey     3079
-#define ProjNatOriginLongGeoKey    3080
-#define ProjNatOriginLatGeoKey     3081
-#define ProjFalseEastingGeoKey     3082
-#define ProjFalseNorthingGeoKey    3083
-#define ProjScaleAtNatOriginGeoKey 3092
+#define GTModelTypeGeoKey            1024
+#define GTRasterTypeGeoKey           1025
+#define GeographicTypeGeoKey         2048
+#define GeogGeodeticDatumGeoKey      2050
+#define GeogPrimeMeridianGeoKey      2051
+#define GeogAngularUnitsGeoKey       2054
+#define ProjectedCSTypeGeoKey        3072
+#define ProjectionGeoKey             3074
+#define ProjCoordTransGeoKey         3075
+#define ProjLinearUnitsGeoKey        3076
+#define ProjStdParallel1GeoKey       3078
+#define ProjStdParallel2GeoKey       3079
+#define ProjNatOriginLongGeoKey      3080
+#define ProjNatOriginLatGeoKey       3081
+#define ProjFalseEastingGeoKey       3082
+#define ProjFalseNorthingGeoKey      3083
+#define ProjCenterLongGeoKey         3088
+#define ProjCenterLatGeoKey          3089
+#define ProjScaleAtNatOriginGeoKey   3092
+#define ProjScaleAtCenterGeoKey      3093
+#define ProjAzimuthAngleGeoKey       3094
+#define ProjRectifiedGridAngleGeoKey 3096
 
-#define ModelTypeProjected         1
-#define ModelTypeGeographic        2
-#define ModelTypeGeocentric        3
+#define ModelTypeProjected           1
+#define ModelTypeGeographic          2
+#define ModelTypeGeocentric          3
+
+#define CT_TransverseMercator        1
+#define CT_ObliqueMercator           3
+#define CT_Mercator                  7
+#define CT_LambertConfConic_2SP      8
+#define CT_LambertConfConic_1SP      9
+#define CT_LambertAzimEqualArea      10
+#define CT_AlbersEqualArea           11
+
 
 #define IS_SET(map, key) \
 	((map).contains(key) && (map).value(key).SHORT != 32767)
+#define TO_M(lu, val) \
+	(std::isnan(val) ? val : (lu).toMeters(val))
+#define TO_DEG(au, val) \
+	(std::isnan(val) ? val : (au).toDegrees(val))
 
 #define ARRAY_SIZE(a) \
 	(sizeof(a) / sizeof(*a))
@@ -235,6 +253,11 @@ bool GeoTIFF::readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv) const
 			case ProjFalseNorthingGeoKey:
 			case ProjStdParallel1GeoKey:
 			case ProjStdParallel2GeoKey:
+			case ProjCenterLongGeoKey:
+			case ProjCenterLatGeoKey:
+			case ProjScaleAtCenterGeoKey:
+			case ProjAzimuthAngleGeoKey:
+			case ProjRectifiedGridAngleGeoKey:
 				if (!readGeoValue(file, ctx.values, entry.ValueOffset,
 				  value.DOUBLE))
 					return false;
@@ -297,17 +320,19 @@ Projection::Method GeoTIFF::method(QMap<quint16, Value> &kv)
 	}
 
 	switch (kv.value(ProjCoordTransGeoKey).SHORT) {
-		case 1:
+		case CT_TransverseMercator:
 			return Projection::Method(9807);
-		case 7:
+		case CT_ObliqueMercator:
+			return Projection::Method(9815);
+		case CT_Mercator:
 			return Projection::Method(1024);
-		case 8:
-			return Projection::Method(9801);
-		case 9:
+		case CT_LambertConfConic_2SP:
 			return Projection::Method(9802);
-		case 10:
+		case CT_LambertConfConic_1SP:
+			return Projection::Method(9801);
+		case CT_LambertAzimEqualArea:
 			return Projection::Method(9820);
-		case 11:
+		case CT_AlbersEqualArea:
 			return Projection::Method(9822);
 		default:
 			_errorString = QString("%1: unknown coordinate transformation method")
@@ -341,6 +366,8 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 		_projection = Projection(pcs->gcs(), pcs->method(), pcs->setup(),
 		  pcs->units());
 	} else {
+		double lat0, lon0, scale, fe, fn, sp1, sp2;
+
 		const GCS *g = gcs(kv);
 		if (!g)
 			return false;
@@ -358,15 +385,47 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 			return false;
 		}
 
-		Projection::Setup setup(
-		  au.toDegrees(kv.value(ProjNatOriginLatGeoKey).DOUBLE),
-		  au.toDegrees(kv.value(ProjNatOriginLongGeoKey).DOUBLE),
-		  kv.value(ProjScaleAtNatOriginGeoKey).DOUBLE,
-		  lu.toMeters(kv.value(ProjFalseEastingGeoKey).DOUBLE),
-		  lu.toMeters(kv.value(ProjFalseNorthingGeoKey).DOUBLE),
-		  au.toDegrees(kv.value(ProjStdParallel1GeoKey).DOUBLE),
-		  au.toDegrees(kv.value(ProjStdParallel2GeoKey).DOUBLE)
-		);
+		if (kv.contains(ProjNatOriginLatGeoKey))
+			lat0 = kv.value(ProjNatOriginLatGeoKey).DOUBLE;
+		else if (kv.contains(ProjCenterLatGeoKey))
+			lat0 = kv.value(ProjCenterLatGeoKey).DOUBLE;
+		else
+			lat0 = NAN;
+		if (kv.contains(ProjNatOriginLongGeoKey))
+			lon0 = kv.value(ProjNatOriginLongGeoKey).DOUBLE;
+		else if (kv.contains(ProjCenterLongGeoKey))
+			lon0 = kv.value(ProjCenterLongGeoKey).DOUBLE;
+		else
+			lon0 = NAN;
+		if (kv.contains(ProjScaleAtNatOriginGeoKey))
+			scale = kv.value(ProjScaleAtNatOriginGeoKey).DOUBLE;
+		else if (kv.contains(ProjScaleAtCenterGeoKey))
+			scale = kv.value(ProjScaleAtCenterGeoKey).DOUBLE;
+		else
+			scale = NAN;
+		if (kv.contains(ProjStdParallel1GeoKey))
+			sp1 = kv.value(ProjStdParallel1GeoKey).DOUBLE;
+		else if (kv.contains(ProjAzimuthAngleGeoKey))
+			sp1 = kv.value(ProjAzimuthAngleGeoKey).DOUBLE;
+		else
+			sp1 = NAN;
+		if (kv.contains(ProjStdParallel2GeoKey))
+			sp2 = kv.value(ProjStdParallel2GeoKey).DOUBLE;
+		else if (kv.contains(ProjRectifiedGridAngleGeoKey))
+			sp2 = kv.value(ProjRectifiedGridAngleGeoKey).DOUBLE;
+		else
+			sp2 = NAN;
+		if (kv.contains(ProjFalseNorthingGeoKey))
+			fn = kv.value(ProjFalseNorthingGeoKey).DOUBLE;
+		else
+			fn = NAN;
+		if (kv.contains(ProjFalseEastingGeoKey))
+			fe = kv.value(ProjFalseEastingGeoKey).DOUBLE;
+		else
+			fe = NAN;
+
+		Projection::Setup setup(TO_DEG(au, lat0), TO_DEG(au, lon0), scale,
+		  TO_M(lu, fe), TO_M(lu, fn), TO_DEG(au, sp1), TO_DEG(au, sp2));
 
 		_projection = Projection(g, m, setup, lu);
 	}
