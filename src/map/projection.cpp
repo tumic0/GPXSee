@@ -68,8 +68,6 @@ Projection::Projection(const GCS *gcs, const Method &method, const Setup &setup,
 		default:
 			_ct = 0;
 	}
-
-	Q_ASSERT(_ct != 0);
 }
 
 Projection::Projection(const GCS *gcs) : _gcs(gcs), _geographic(true)
@@ -82,7 +80,7 @@ Projection::Projection(const Projection &p)
 {
 	_gcs = p._gcs;
 	_units = p._units;
-	_ct = p._ct->clone();
+	_ct = p._ct ? p._ct->clone() : 0;
 	_geographic = p._geographic;
 }
 
@@ -95,7 +93,7 @@ Projection &Projection::operator=(const Projection &p)
 {
 	_gcs = p._gcs;
 	_units = p._units;
-	_ct = p._ct->clone();
+	_ct = p._ct ? p._ct->clone() : 0;
 	_geographic = p._geographic;
 
 	return *this;
@@ -103,12 +101,14 @@ Projection &Projection::operator=(const Projection &p)
 
 QPointF Projection::ll2xy(const Coordinates &c) const
 {
-	return _units.fromMeters(_ct->ll2xy(_gcs->fromWGS84(c)));
+	return isValid()
+	  ? _units.fromMeters(_ct->ll2xy(_gcs->fromWGS84(c))) : QPointF();
 }
 
 Coordinates Projection::xy2ll(const QPointF &p) const
 {
-	return _gcs->toWGS84(_ct->xy2ll(_units.toMeters(p)));
+	return isValid()
+	  ? _gcs->toWGS84(_ct->xy2ll(_units.toMeters(p))) : Coordinates();
 }
 
 #ifndef QT_NO_DEBUG

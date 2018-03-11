@@ -78,7 +78,7 @@ public:
 	Projection &operator=(const Projection &p);
 
 	bool isNull() const {return (_gcs == 0 && _ct == 0 && _units.isNull());}
-	bool isValid() const {return (_gcs == 0 || _ct == 0 || _units.isNull());}
+	bool isValid() const {return !(_gcs == 0 || _ct == 0 || _units.isNull());}
 	bool isGeographic() const {return _geographic;}
 
 	QPointF ll2xy(const Coordinates &c) const;
