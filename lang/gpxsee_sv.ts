@@ -1401,17 +1401,17 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="25"/>
         <source>min/km</source>
-        <translation type="unfinished"></translation>
+        <translation>min/km</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="26"/>
         <source>min/mi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="26"/>
         <source>min/nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="30"/>
@@ -1421,7 +1421,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="32"/>
         <source>Pace</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="90"/>
@@ -1454,17 +1454,17 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="26"/>
         <source>min/km</source>
-        <translation type="unfinished"></translation>
+        <translation>min/km</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="27"/>
         <source>min/mi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="27"/>
         <source>min/nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="29"/>
@@ -1479,7 +1479,7 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="33"/>
         <source>Pace</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempo</translation>
     </message>
 </context>
 <context>
