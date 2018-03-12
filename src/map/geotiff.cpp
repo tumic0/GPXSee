@@ -296,14 +296,15 @@ const GCS *GeoTIFF::gcs(QMap<quint16, Value> &kv)
 			_errorString = QString("%1: unknown GCS")
 			  .arg(kv.value(GeographicTypeGeoKey).SHORT);
 	} else if (IS_SET(kv, GeogGeodeticDatumGeoKey)
-	  || kv.value(GeogEllipsoidGeoKey).SHORT == 7019) {
+	  || kv.value(GeogEllipsoidGeoKey).SHORT == 7019
+	  || kv.value(GeogEllipsoidGeoKey).SHORT == 7030) {
 		int pm = IS_SET(kv, GeogPrimeMeridianGeoKey)
 		  ? kv.value(GeogPrimeMeridianGeoKey).SHORT : 8901;
 		int au = IS_SET(kv, GeogAngularUnitsGeoKey)
 		  ? kv.value(GeogAngularUnitsGeoKey).SHORT : 9102;
 
-		/* If only the ellipsoid is defined and it is GRS80, handle such
-		   definition as a WGS84 geodetic datum. */
+		// If only the ellipsoid is defined and it is GRS80 or WGS84, handle
+		// such definition as a WGS84 geodetic datum.
 		int gd = IS_SET(kv, GeogGeodeticDatumGeoKey)
 		  ? kv.value(GeogGeodeticDatumGeoKey).SHORT : 6326;
 
