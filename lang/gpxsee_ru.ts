@@ -1402,17 +1402,17 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="25"/>
         <source>min/km</source>
-        <translation type="unfinished"></translation>
+        <translation>мин/км</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="26"/>
         <source>min/mi</source>
-        <translation type="unfinished"></translation>
+        <translation>мин/мл</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="26"/>
         <source>min/nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>мин/мор.мл</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="30"/>
@@ -1422,7 +1422,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="32"/>
         <source>Pace</source>
-        <translation type="unfinished"></translation>
+        <translation>Темп</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="90"/>
@@ -1455,17 +1455,17 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="26"/>
         <source>min/km</source>
-        <translation type="unfinished"></translation>
+        <translation>мин/км</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="27"/>
         <source>min/mi</source>
-        <translation type="unfinished"></translation>
+        <translation>мин/мл</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="27"/>
         <source>min/nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>мин/мор.мл</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="29"/>
@@ -1480,7 +1480,7 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="33"/>
         <source>Pace</source>
-        <translation type="unfinished"></translation>
+        <translation>Темп</translation>
     </message>
 </context>
 <context>
