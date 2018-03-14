@@ -22,6 +22,7 @@
 #define GeogPrimeMeridianGeoKey      2051
 #define GeogAngularUnitsGeoKey       2054
 #define GeogEllipsoidGeoKey          2056
+#define GeogAzimuthUnitsGeoKey       2060
 #define ProjectedCSTypeGeoKey        3072
 #define ProjectionGeoKey             3074
 #define ProjCoordTransGeoKey         3075
@@ -54,13 +55,7 @@
 
 #define IS_SET(map, key) \
 	((map).contains(key) && (map).value(key).SHORT != 32767)
-#define TO_M(lu, val) \
-	(std::isnan(val) ? val : (lu).toMeters(val))
-#define TO_DEG(au, val) \
-	(std::isnan(val) ? val : (au).toDegrees(val))
 
-#define ARRAY_SIZE(a) \
-	(sizeof(a) / sizeof(*a))
 
 typedef struct {
 	quint16 KeyDirectoryVersion;
@@ -236,6 +231,7 @@ bool GeoTIFF::readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv) const
 			case GeogGeodeticDatumGeoKey:
 			case GeogPrimeMeridianGeoKey:
 			case GeogAngularUnitsGeoKey:
+			case GeogAzimuthUnitsGeoKey:
 			case ProjectedCSTypeGeoKey:
 			case ProjectionGeoKey:
 			case ProjCoordTransGeoKey:
@@ -384,6 +380,8 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 
 		AngularUnits au(IS_SET(kv, GeogAngularUnitsGeoKey)
 		  ? kv.value(GeogAngularUnitsGeoKey).SHORT : 9102);
+		AngularUnits zu(IS_SET(kv, GeogAzimuthUnitsGeoKey)
+		  ? kv.value(GeogAzimuthUnitsGeoKey).SHORT : 9102);
 		LinearUnits lu(IS_SET(kv, ProjLinearUnitsGeoKey)
 		  ? kv.value(ProjLinearUnitsGeoKey).SHORT : 9001);
 		if (lu.isNull()) {
@@ -393,15 +391,15 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 		}
 
 		if (kv.contains(ProjNatOriginLatGeoKey))
-			lat0 = kv.value(ProjNatOriginLatGeoKey).DOUBLE;
+			lat0 = au.toDegrees(kv.value(ProjNatOriginLatGeoKey).DOUBLE);
 		else if (kv.contains(ProjCenterLatGeoKey))
-			lat0 = kv.value(ProjCenterLatGeoKey).DOUBLE;
+			lat0 = au.toDegrees(kv.value(ProjCenterLatGeoKey).DOUBLE);
 		else
 			lat0 = NAN;
 		if (kv.contains(ProjNatOriginLongGeoKey))
-			lon0 = kv.value(ProjNatOriginLongGeoKey).DOUBLE;
+			lon0 = au.toDegrees(kv.value(ProjNatOriginLongGeoKey).DOUBLE);
 		else if (kv.contains(ProjCenterLongGeoKey))
-			lon0 = kv.value(ProjCenterLongGeoKey).DOUBLE;
+			lon0 = au.toDegrees(kv.value(ProjCenterLongGeoKey).DOUBLE);
 		else
 			lon0 = NAN;
 		if (kv.contains(ProjScaleAtNatOriginGeoKey))
@@ -411,28 +409,27 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 		else
 			scale = NAN;
 		if (kv.contains(ProjStdParallel1GeoKey))
-			sp1 = kv.value(ProjStdParallel1GeoKey).DOUBLE;
+			sp1 = au.toDegrees(kv.value(ProjStdParallel1GeoKey).DOUBLE);
 		else if (kv.contains(ProjAzimuthAngleGeoKey))
-			sp1 = kv.value(ProjAzimuthAngleGeoKey).DOUBLE;
+			sp1 = zu.toDegrees(kv.value(ProjAzimuthAngleGeoKey).DOUBLE);
 		else
 			sp1 = NAN;
 		if (kv.contains(ProjStdParallel2GeoKey))
-			sp2 = kv.value(ProjStdParallel2GeoKey).DOUBLE;
+			sp2 = au.toDegrees(kv.value(ProjStdParallel2GeoKey).DOUBLE);
 		else if (kv.contains(ProjRectifiedGridAngleGeoKey))
-			sp2 = kv.value(ProjRectifiedGridAngleGeoKey).DOUBLE;
+			sp2 = au.toDegrees(kv.value(ProjRectifiedGridAngleGeoKey).DOUBLE);
 		else
 			sp2 = NAN;
 		if (kv.contains(ProjFalseNorthingGeoKey))
-			fn = kv.value(ProjFalseNorthingGeoKey).DOUBLE;
+			fn = lu.toMeters(kv.value(ProjFalseNorthingGeoKey).DOUBLE);
 		else
 			fn = NAN;
 		if (kv.contains(ProjFalseEastingGeoKey))
-			fe = kv.value(ProjFalseEastingGeoKey).DOUBLE;
+			fe = lu.toMeters(kv.value(ProjFalseEastingGeoKey).DOUBLE);
 		else
 			fe = NAN;
 
-		Projection::Setup setup(TO_DEG(au, lat0), TO_DEG(au, lon0), scale,
-		  TO_M(lu, fe), TO_M(lu, fn), TO_DEG(au, sp1), TO_DEG(au, sp2));
+		Projection::Setup setup(lat0, lon0, scale, fe, fn, sp1, sp2);
 
 		_projection = Projection(g, m, setup, lu);
 	}
