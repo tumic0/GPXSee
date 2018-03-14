@@ -2,6 +2,7 @@
 #include <QFileInfo>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QBasicTimer>
 #include "config.h"
 #include "downloader.h"
 
@@ -25,12 +26,41 @@
 #define ATTR_LEVEL    (QNetworkRequest::Attribute)(QNetworkRequest::User + 2)
 
 #define MAX_REDIRECT_LEVEL 5
+#define TIMEOUT            30 /* s */
 
+
+class ReplyTimeout : public QObject
+{
+public:
+	static void set(QNetworkReply *reply, int timeout)
+	{
+		Q_ASSERT(reply);
+		new ReplyTimeout(reply, timeout);
+	}
+
+private:
+	ReplyTimeout(QNetworkReply *reply, int timeout) : QObject(reply)
+	{
+		_timer.start(timeout * 1000, this);
+	}
+
+	void timerEvent(QTimerEvent *ev)
+	{
+		if (!_timer.isActive() || ev->timerId() != _timer.timerId())
+			return;
+		QNetworkReply *reply = static_cast<QNetworkReply*>(parent());
+		if (reply->isRunning())
+			reply->close();
+		_timer.stop();
+	}
+
+	QBasicTimer _timer;
+};
 
 Downloader::Downloader(QObject *parent) : QObject(parent)
 {
 	connect(&_manager, SIGNAL(finished(QNetworkReply*)),
-			SLOT(downloadFinished(QNetworkReply*)));
+	  SLOT(downloadFinished(QNetworkReply*)));
 }
 
 bool Downloader::doDownload(const Download &dl, const Redirect &redirect)
@@ -49,9 +79,13 @@ bool Downloader::doDownload(const Download &dl, const Redirect &redirect)
 		request.setAttribute(ATTR_LEVEL, QVariant(redirect.level()));
 	}
 	request.setRawHeader("User-Agent", USER_AGENT);
-	QNetworkReply *reply = _manager.get(request);
 
-	_currentDownloads.insert(url, reply);
+	QNetworkReply *reply = _manager.get(request);
+	if (reply) {
+		_currentDownloads.insert(url, reply);
+		ReplyTimeout::set(reply, TIMEOUT);
+	} else
+		return false;
 
 	return true;
 }

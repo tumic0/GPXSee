@@ -3,7 +3,8 @@
 
 #include <QString>
 #include "tile.h"
-#include "downloader.h"
+
+class Downloader;
 
 class TileLoader
 {

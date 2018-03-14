@@ -3,6 +3,7 @@
 #include "common/wgs84.h"
 #include "config.h"
 #include "transform.h"
+#include "downloader.h"
 #include "wmts.h"
 #include "wmtsmap.h"
 

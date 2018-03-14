@@ -7,7 +7,6 @@
 #include <QMap>
 #include <QSet>
 
-
 class QNetworkReply;
 
 class Download
