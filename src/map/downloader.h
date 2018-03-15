@@ -4,7 +4,6 @@
 #include <QNetworkAccessManager>
 #include <QUrl>
 #include <QList>
-#include <QMap>
 #include <QSet>
 
 class QNetworkReply;
@@ -31,6 +30,7 @@ public:
 	Downloader(QObject *parent = 0);
 
 	bool get(const QList<Download> &list);
+	void clearErrors() {_errorDownloads.clear();}
 
 signals:
 	void finished();
@@ -39,28 +39,14 @@ private slots:
 	void downloadFinished(QNetworkReply *reply);
 
 private:
-	class Redirect
-	{
-	public:
-		Redirect() : _level(0) {}
-		Redirect(const QUrl &origin, int level) :
-		  _origin(origin), _level(level) {}
+	class Redirect;
+	class ReplyTimeout;
 
-		const QUrl &origin() const {return _origin;}
-		int level() const {return _level;}
-
-		bool isNull() const {return (_level == 0);}
-
-	private:
-		QUrl _origin;
-		int _level;
-	};
-
-	bool doDownload(const Download &dl, const Redirect &redirect = Redirect());
+	bool doDownload(const Download &dl, const Redirect *redirect = 0);
 	bool saveToDisk(const QString &filename, QIODevice *data);
 
 	QNetworkAccessManager _manager;
-	QMap<QUrl, QNetworkReply *> _currentDownloads;
+	QSet<QUrl> _currentDownloads;
 	QSet<QUrl> _errorDownloads;
 };
 

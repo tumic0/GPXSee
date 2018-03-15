@@ -29,10 +29,10 @@
 #define TIMEOUT            30 /* s */
 
 
-class ReplyTimeout : public QObject
+class Downloader::ReplyTimeout : public QObject
 {
 public:
-	static void set(QNetworkReply *reply, int timeout)
+	static void setTimeout(QNetworkReply *reply, int timeout)
 	{
 		Q_ASSERT(reply);
 		new ReplyTimeout(reply, timeout);
@@ -57,13 +57,29 @@ private:
 	QBasicTimer _timer;
 };
 
+class Downloader::Redirect
+{
+public:
+	Redirect() : _level(0) {}
+	Redirect(const QUrl &origin, int level) :
+	  _origin(origin), _level(level) {}
+
+	const QUrl &origin() const {return _origin;}
+	int level() const {return _level;}
+
+private:
+	QUrl _origin;
+	int _level;
+};
+
+
 Downloader::Downloader(QObject *parent) : QObject(parent)
 {
 	connect(&_manager, SIGNAL(finished(QNetworkReply*)),
 	  SLOT(downloadFinished(QNetworkReply*)));
 }
 
-bool Downloader::doDownload(const Download &dl, const Redirect &redirect)
+bool Downloader::doDownload(const Download &dl, const Redirect *redirect)
 {
 	QUrl url(dl.url());
 
@@ -74,16 +90,16 @@ bool Downloader::doDownload(const Download &dl, const Redirect &redirect)
 
 	QNetworkRequest request(url);
 	request.setAttribute(ATTR_FILE, QVariant(dl.file()));
-	if (!redirect.isNull()) {
-		request.setAttribute(ATTR_ORIGIN, QVariant(redirect.origin()));
-		request.setAttribute(ATTR_LEVEL, QVariant(redirect.level()));
+	if (redirect) {
+		request.setAttribute(ATTR_ORIGIN, QVariant(redirect->origin()));
+		request.setAttribute(ATTR_LEVEL, QVariant(redirect->level()));
 	}
 	request.setRawHeader("User-Agent", USER_AGENT);
 
 	QNetworkReply *reply = _manager.get(request);
 	if (reply) {
-		_currentDownloads.insert(url, reply);
-		ReplyTimeout::set(reply, TIMEOUT);
+		_currentDownloads.insert(url);
+		ReplyTimeout::setTimeout(reply, TIMEOUT);
 	} else
 		return false;
 
@@ -143,14 +159,14 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 			} else {
 				Redirect redirect(origin.isEmpty() ? url : origin, level + 1);
 				Download dl(location, filename);
-				doDownload(dl, redirect);
+				doDownload(dl, &redirect);
 			}
 		} else
 			if (!saveToDisk(filename, reply))
 				_errorDownloads.insert(url);
 	}
 
-	_currentDownloads.remove(url);
+	Q_ASSERT(_currentDownloads.remove(url));
 	reply->deleteLater();
 
 	if (_currentDownloads.isEmpty())

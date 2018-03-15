@@ -77,6 +77,8 @@ void TileLoader::clearCache()
 
 	for (int i = 0; i < list.count(); i++)
 		dir.remove(list.at(i));
+
+	_downloader->clearErrors();
 }
 
 QString TileLoader::tileUrl(const Tile &tile) const
