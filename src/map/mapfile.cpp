@@ -216,6 +216,9 @@ bool MapFile::createProjection(const GCS *gcs, const QString &name,
 	else if (name == "(VG94) VICGRID94 Victoria Australia")
 		_projection = Projection(gcs, 9802, Projection::Setup(-37, 145, NAN,
 		  2500000, 2500000, -36, -38), 9001);
+	else if (name == "(SUI) Swiss Grid")
+		_projection = Projection(gcs, 9815, Projection::Setup(46.570866,
+		  7.26225, 1.0, 600000, 200000, 90.0, 90.0), 9001);
 	else {
 		_errorString = QString("%1: Unknown map projection").arg(name);
 		return false;
