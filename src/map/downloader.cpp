@@ -166,7 +166,7 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 				_errorDownloads.insert(url);
 	}
 
-	Q_ASSERT(_currentDownloads.remove(url));
+	_currentDownloads.remove(url);
 	reply->deleteLater();
 
 	if (_currentDownloads.isEmpty())
