@@ -18,13 +18,12 @@ public:
 	virtual Coordinates xy2ll(const QPointF &p) const;
 
 private:
-	const Ellipsoid *_e;
-
 	double _latitudeOrigin;
 	double _longitudeOrigin;
 	double _falseEasting;
 	double _falseNorthing;
 
+	double _a2;
 	double _rho0;
 	double _C;
 	double _n;

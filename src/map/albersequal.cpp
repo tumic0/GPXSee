@@ -70,7 +70,6 @@ AlbersEqual::AlbersEqual(const Ellipsoid *ellipsoid, double standardParallel1,
 	double sp1, sp2;
 
 
-	_e = ellipsoid;
 	_latitudeOrigin = deg2rad(latitudeOrigin);
 	_longitudeOrigin = deg2rad(longitudeOrigin);
 	_falseEasting = falseEasting;
@@ -79,7 +78,9 @@ AlbersEqual::AlbersEqual(const Ellipsoid *ellipsoid, double standardParallel1,
 	sp1 = deg2rad(standardParallel1);
 	sp2 = deg2rad(standardParallel2);
 
-	_es2 = 2 * _e->flattening() - _e->flattening() * _e->flattening();
+	_a2 = ellipsoid->radius() * ellipsoid->radius();
+	_es2 = 2 * ellipsoid->flattening() - ellipsoid->flattening()
+	  * ellipsoid->flattening();
 	_es = sqrt(_es2);
 	_one_minus_es2 = 1 - _es2;
 	_two_es = 2 * _es;
@@ -109,7 +110,7 @@ AlbersEqual::AlbersEqual(const Ellipsoid *ellipsoid, double standardParallel1,
 		_n = sin_lat1;
 
 	_C = sqr_m1 + _n * q1;
-	_a_over_n = _e->radius() / _n;
+	_a_over_n = ellipsoid->radius() / _n;
 	nq0 = _n * q0;
 	_rho0 = (_C < nq0) ? 0 : _a_over_n * sqrt(_C - nq0);
 }
@@ -172,7 +173,7 @@ Coordinates AlbersEqual::xy2ll(const QPointF &p) const
 	if (rho != 0.0)
 		theta = atan2(dx, rho0_minus_dy);
 	rho_n = rho * _n;
-	q = (_C - (rho_n * rho_n) / (_e->radius() * _e->radius())) / _n;
+	q = (_C - (rho_n * rho_n) / _a2) / _n;
 	qc = 1 - ((_one_minus_es2) / (_two_es)) * log((1.0 - _es) / (1.0 + _es));
 	if (fabs(fabs(qc) - fabs(q)) > 1.0e-6) {
 		q_over_2 = q / 2.0;
