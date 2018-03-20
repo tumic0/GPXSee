@@ -73,10 +73,10 @@ QString Format::distance(qreal value, Units units)
 QString Format::elevation(qreal value, Units units)
 {
 	if (units == Metric)
-		return QString::number(value, 'f', 0) + UNIT_SPACE
+		return QString::number(qRound(value)) + UNIT_SPACE
 		  + qApp->translate("Format", "m");
 	else
-		return QString::number(value * M2FT, 'f', 0) + UNIT_SPACE
+		return QString::number(qRound(value * M2FT)) + UNIT_SPACE
 		  + qApp->translate("Format", "ft");
 }
 
