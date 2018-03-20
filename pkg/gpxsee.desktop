@@ -4,6 +4,7 @@ Comment=GPS log file viewer and analyzer
 Comment[cz]=Prohlížeč a analyzátor GPS logů
 Comment[fi]=Ohjelma GPS-lokien katseluun ja analysointiin
 Comment[ru]=Программа для просмотра и анализа GPS логов
+Comment[sv]=GPS-loggfilsläsare och analysator
 Exec=gpxsee %F
 Icon=gpxsee
 Terminal=false
