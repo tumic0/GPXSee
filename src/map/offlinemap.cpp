@@ -113,9 +113,9 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 			_errorString = "Map file not found";
 			return;
 		}
-		QBuffer mapFile(&ba);
-		MapFile mf;
-		if (!mf.load(mapFile)) {
+		QBuffer buffer(&ba);
+		MapFile mf(buffer);
+		if (!mf.isValid()) {
 			_errorString = mf.errorString();
 			return;
 		} else {
@@ -126,9 +126,9 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 			_transform = mf.transform();
 		}
 	} else if (suffix == "map") {
-		MapFile mf;
-		QFile mapFile(fileName);
-		if (!mf.load(mapFile)) {
+		QFile file(fileName);
+		MapFile mf(file);
+		if (!mf.isValid()) {
 			_errorString = mf.errorString();
 			return;
 		} else {
@@ -177,21 +177,19 @@ OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
   : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _valid(false)
 {
 	QFileInfo fi(fileName);
-	MapFile mf;
-
-
 	QFileInfo map(fi.absolutePath());
 	QFileInfo layer(map.absolutePath());
 	QString mapFile = layer.fileName() + "/" + map.fileName() + "/"
 	  + fi.fileName();
+
 	QByteArray ba = tar.file(mapFile);
 	if (ba.isNull()) {
 		_errorString = "Map file not found";
 		return;
 	}
 	QBuffer buffer(&ba);
-
-	if (!mf.load(buffer)) {
+	MapFile mf(buffer);
+	if (!mf.isValid()) {
 		_errorString = mf.errorString();
 		return;
 	}

@@ -128,7 +128,7 @@ int MapFile::parse(QIODevice &device, QList<CalibrationPoint> &points,
 		ln++;
 	}
 
-	return (ln == 1) ? 1 : 0;
+	return (ln < 9) ? ln : 0;
 }
 
 bool MapFile::parseMapFile(QIODevice &device, QList<CalibrationPoint> &points,
@@ -249,7 +249,7 @@ bool MapFile::computeTransformation(QList<CalibrationPoint> &points)
 	return true;
 }
 
-bool MapFile::load(QIODevice &file)
+MapFile::MapFile(QIODevice &file)
 {
 	QList<CalibrationPoint> points;
 	QString ct, datum;
@@ -257,13 +257,11 @@ bool MapFile::load(QIODevice &file)
 	const GCS *gcs;
 
 	if (!parseMapFile(file, points, ct, setup, datum))
-		return false;
+		return;
 	if (!(gcs = createGCS(datum)))
-		return false;
+		return;
 	if (!createProjection(gcs, ct, setup, points))
-		return false;
+		return;
 	if (!computeTransformation(points))
-		return false;
-
-	return true;
+		_image = QString();
 }

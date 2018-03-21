@@ -11,7 +11,9 @@ class QIODevice;
 class MapFile
 {
 public:
-	bool load(QIODevice &file);
+	MapFile(QIODevice &file);
+
+	bool isValid() const {return !_image.isNull() && _projection.isValid();}
 	const QString &errorString() const {return _errorString;}
 
 	const Projection &projection() const {return _projection;}
