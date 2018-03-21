@@ -2,11 +2,11 @@
 #define MAPFILE_H
 
 #include <QTransform>
-#include "gcs.h"
 #include "transform.h"
 #include "projection.h"
 
 class QIODevice;
+class GCS;
 
 class MapFile
 {
