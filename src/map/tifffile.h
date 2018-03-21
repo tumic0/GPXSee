@@ -33,8 +33,8 @@ public:
 				val = data;
 #endif
 
-	return true;
-}
+		return true;
+	}
 
 private:
 	bool _be;
