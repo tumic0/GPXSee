@@ -448,7 +448,7 @@ bool GeoTIFF::geographicModel(QMap<quint16, Value> &kv)
 	return true;
 }
 
-bool GeoTIFF::load(const QString &path)
+GeoTIFF::GeoTIFF(const QString &path)
 {
 	quint32 ifd;
 	QList<ReferencePoint> points;
@@ -462,86 +462,76 @@ bool GeoTIFF::load(const QString &path)
 	if (!file.open(QIODevice::ReadOnly)) {
 		_errorString = QString("Error opening TIFF file: %1")
 		  .arg(file.errorString());
-		return false;
+		return;
 	}
 	if (!file.readHeader(ifd)) {
 		_errorString = "Invalid TIFF header";
-		return false;
+		return;
 	}
 
 	while (ifd) {
 		if (!readIFD(file, ifd, ctx)) {
 			_errorString = "Invalid IFD";
-			return false;
+			return;
 		}
 	}
 
 	if (!ctx.keys) {
 		_errorString = "Not a GeoTIFF file";
-		return false;
+		return;
 	}
 
 	if (ctx.scale) {
 		if (!readScale(file, ctx.scale, scale)) {
 			_errorString = "Error reading model pixel scale";
-			return false;
+			return;
 		}
 	}
 	if (ctx.tiepoints) {
 		if (!readTiepoints(file, ctx.tiepoints, ctx.tiepointCount, points)) {
 			_errorString = "Error reading raster->model tiepoint pairs";
-			return false;
+			return;
 		}
 	}
 
 	if (!readKeys(file, ctx, kv)) {
 		_errorString = "Error reading Geo key/value";
-		return false;
+		return;
 	}
 
 	switch (kv.value(GTModelTypeGeoKey).SHORT) {
 		case ModelTypeProjected:
 			if (!projectedModel(kv))
-				return false;
+				return;
 			break;
 		case ModelTypeGeographic:
 			if (!geographicModel(kv))
-				return false;
+				return;
 			break;
 		case ModelTypeGeocentric:
 			_errorString = "Geocentric models are not supported";
-			return false;
+			return;
 		default:
 			_errorString = "Unknown/missing model type";
-			return false;
+			return;
 	}
 
-	if (ctx.scale && ctx.tiepoints) {
-		const ReferencePoint &p = points.first();
-		_transform = QTransform(scale.x(), 0, 0, -scale.y(), p.pp.x() - p.xy.x()
-		  / scale.x(), p.pp.y() + p.xy.x() / scale.y()).inverted();
-	} else if (ctx.tiepointCount > 1) {
-		Transform t(points);
-		if (t.isNull()) {
-			_errorString = t.errorString();
-			return false;
-		}
-		_transform = t.transform();
-	} else if (ctx.matrix) {
+	if (ctx.scale && ctx.tiepoints)
+		_transform = Transform(points.first(), scale);
+	else if (ctx.tiepointCount > 1)
+		_transform = Transform(points);
+	else if (ctx.matrix) {
 		double m[16];
 		if (!readMatrix(file, ctx.matrix, m)) {
 			_errorString = "Error reading transformation matrix";
-			return false;
+			return;
 		}
-		if (m[2] != 0.0 || m[6] != 0.0 || m[8] != 0.0 || m[9] != 0.0
-		  || m[10] != 0.0 || m[11] != 0.0) {
-			_errorString = "Not a baseline transformation matrix";
-		}
-		_transform = QTransform(m[0], m[1], m[4], m[5], m[3], m[7]).inverted();
+		_transform = Transform(m);
 	} else {
 		_errorString = "Incomplete/missing model transformation info";
-		return false;
+		return;
 	}
 
-	return true;
+	if (!_transform.isValid())
+		_errorString = _transform.errorString();
 }

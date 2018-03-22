@@ -1,7 +1,7 @@
 #ifndef OFFLINEMAP_H
 #define OFFLINEMAP_H
 
-#include <QTransform>
+#include "transform.h"
 #include "projection.h"
 #include "map.h"
 
@@ -24,7 +24,7 @@ public:
 	qreal resolution(const QRectF &rect) const;
 
 	int zoom() const {return _zoom;}
-	int zoomFit(const QSize &size, const RectC &br);
+	int zoomFit(const QSize &size, const RectC &rect);
 	int zoomIn();
 	int zoomOut();
 
@@ -44,9 +44,9 @@ public:
 	QPointF ll2pp(const Coordinates &c) const
 	  {return _projection.ll2xy(c);}
 	QPointF xy2pp(const QPointF &p) const
-	  {return _inverted.map(p);}
+	  {return _transform.img2proj(p);}
 	QPointF pp2xy(const QPointF &p) const
-	  {return _transform.map(p);}
+	  {return _transform.proj2img(p);}
 
 private:
 	struct ImageInfo {
@@ -69,15 +69,12 @@ private:
 	void rescale(int zoom);
 
 	QString _name;
-
 	Projection _projection;
-	QTransform _transform, _inverted;
-
+	Transform _transform;
 	QImage *_img;
 	Tar *_tar;
 	OZF *_ozf;
 	ImageInfo _map, _tile;
-
 	int _zoom;
 	QPointF _scale;
 

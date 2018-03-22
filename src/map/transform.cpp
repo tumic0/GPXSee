@@ -2,6 +2,9 @@
 #include "matrix.h"
 #include "transform.h"
 
+
+#define NULL_QTRANSFORM 0,0,0,0,0,0,0,0,0
+
 void Transform::simple(const QList<ReferencePoint> &points)
 {
 	if (points.at(0).xy.x() == points.at(1).xy.x()
@@ -18,7 +21,8 @@ void Transform::simple(const QList<ReferencePoint> &points)
 	dX = points.at(1).xy.x() - points.at(1).pp.x() * sX;
 	dY = points.at(0).xy.y() - points.at(0).pp.y() * sY;
 
-	_transform = QTransform(sX, 0, 0, sY, dX, dY);
+	_proj2img = QTransform(sX, 0, 0, sY, dX, dY);
+	_img2proj = _proj2img.inverted();
 }
 
 void Transform::affine(const QList<ReferencePoint> &points)
@@ -59,8 +63,15 @@ void Transform::affine(const QList<ReferencePoint> &points)
 		return;
 	}
 
-	_transform = QTransform(M.m(0,3), M.m(0,4), M.m(1,3), M.m(1,4), M.m(2,3),
+	_proj2img = QTransform(M.m(0,3), M.m(0,4), M.m(1,3), M.m(1,4), M.m(2,3),
 	  M.m(2,4));
+	_img2proj = _proj2img.inverted();
+}
+
+
+Transform::Transform()
+  : _proj2img(NULL_QTRANSFORM), _img2proj(NULL_QTRANSFORM)
+{
 }
 
 Transform::Transform(const QList<ReferencePoint> &points)
@@ -71,6 +82,29 @@ Transform::Transform(const QList<ReferencePoint> &points)
 		simple(points);
 	else
 		affine(points);
+}
+
+Transform::Transform(const ReferencePoint &p, const QPointF &scale)
+  : _proj2img(NULL_QTRANSFORM), _img2proj(NULL_QTRANSFORM)
+{
+	if (scale.x() == 0.0 || scale.y() == 0.0) {
+		_errorString = "Invalid scale factor";
+		return;
+	}
+
+	_img2proj = QTransform(scale.x(), 0, 0, -scale.y(), p.pp.x() - p.xy.x()
+	  / scale.x(), p.pp.y() + p.xy.x() / scale.y());
+	_proj2img = _img2proj.inverted();
+}
+
+Transform::Transform(double m[16])
+  : _proj2img(NULL_QTRANSFORM), _img2proj(NULL_QTRANSFORM)
+{
+	_img2proj = QTransform(m[0], m[1], m[4], m[5], m[3], m[7]);
+	if (!_img2proj.isInvertible())
+		_errorString = "Singular transformation matrix";
+	else
+		_proj2img = _img2proj.inverted();
 }
 
 #ifndef QT_NO_DEBUG

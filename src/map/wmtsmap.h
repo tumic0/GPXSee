@@ -1,7 +1,7 @@
 #ifndef WMTSMAP_H
 #define WMTSMAP_H
 
-#include <QTransform>
+#include "transform.h"
 #include "projection.h"
 #include "map.h"
 #include "wmts.h"
@@ -57,7 +57,7 @@ private:
 	RectC _bounds;
 	QList<WMTS::Zoom> _zooms;
 	Projection _projection;
-	QTransform _transform, _inverted;
+	Transform _transform;
 	int _zoom;
 	bool _block;
 

@@ -238,13 +238,11 @@ bool MapFile::computeTransformation(QList<CalibrationPoint> &points)
 		rp.append(points.at(i).rp);
 	}
 
-	Transform t(rp);
-	if (t.isNull()) {
-		_errorString = t.errorString();
+	_transform = Transform(rp);
+	if (!_transform.isValid()) {
+		_errorString = _transform.errorString();
 		return false;
 	}
-
-	_transform = t.transform();
 
 	return true;
 }
@@ -263,5 +261,5 @@ MapFile::MapFile(QIODevice &file)
 	if (!createProjection(gcs, ct, setup, points))
 		return;
 	if (!computeTransformation(points))
-		_image = QString();
+		return;
 }

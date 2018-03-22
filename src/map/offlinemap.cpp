@@ -139,8 +139,8 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 			_transform = mf.transform();
 		}
 	} else if (suffix == "tif" || suffix == "tiff") {
-		GeoTIFF gt;
-		if (!gt.load(fileName)) {
+		GeoTIFF gt(fileName);
+		if (!gt.isValid()) {
 			_errorString = gt.errorString();
 			return;
 		} else {
@@ -167,8 +167,6 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 				return;
 		}
 	}
-
-	_inverted = _transform.inverted();
 
 	_valid = true;
 }
@@ -198,7 +196,6 @@ OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
 	_map.size = mf.size();
 	_projection = mf.projection();
 	_transform = mf.transform();
-	_inverted = _transform.inverted();
 	_tar = new Tar(fi.absolutePath() + "/" + fi.completeBaseName() + ".tar");
 
 	_valid = true;
@@ -328,28 +325,23 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect)
 
 QPointF OfflineMap::ll2xy(const Coordinates &c) const
 {
-	if (_ozf) {
-		QPointF p(_transform.map(_projection.ll2xy(c)));
-		return QPointF(p.x() * _scale.x(), p.y() * _scale.y());
-	} else
-		return _transform.map(_projection.ll2xy(c));
+	QPointF p(_transform.proj2img(_projection.ll2xy(c)));
+	return _ozf ? QPointF(p.x() * _scale.x(), p.y() * _scale.y()) : p;
 }
 
 Coordinates OfflineMap::xy2ll(const QPointF &p) const
 {
-	if (_ozf) {
-		return _projection.xy2ll(_inverted.map(QPointF(p.x() / _scale.x(),
-		  p.y() / _scale.y())));
-	} else
-		return _projection.xy2ll(_inverted.map(p));
+	return _ozf
+	  ? _projection.xy2ll(_transform.img2proj(QPointF(p.x() / _scale.x(),
+		p.y() / _scale.y())))
+	  : _projection.xy2ll(_transform.img2proj(p));
 }
 
 QRectF OfflineMap::bounds() const
 {
-	if (_ozf)
-		return QRectF(QPointF(0, 0), _ozf->size(_zoom));
-	else
-		return QRectF(QPointF(0, 0), _map.size);
+	return _ozf
+	  ? QRectF(QPointF(0, 0), _ozf->size(_zoom))
+	  : QRectF(QPointF(0, 0), _map.size);
 }
 
 qreal OfflineMap::resolution(const QRectF &rect) const
@@ -363,22 +355,23 @@ qreal OfflineMap::resolution(const QRectF &rect) const
 	return ds/ps;
 }
 
-int OfflineMap::zoomFit(const QSize &size, const RectC &br)
+int OfflineMap::zoomFit(const QSize &size, const RectC &rect)
 {
-	if (_ozf) {
-		if (!br.isValid())
-			rescale(0);
-		else {
-			QRect sbr(QRectF(_transform.map(_projection.ll2xy(br.topLeft())),
-			  _transform.map(_projection.ll2xy(br.bottomRight())))
-			  .toRect().normalized());
+	if (!_ozf)
+		return _zoom;
 
-			for (int i = 0; i < _ozf->zooms(); i++) {
-				rescale(i);
-				if (sbr.size().width() * _scale.x() <= size.width()
-				  && sbr.size().height() * _scale.y() <= size.height())
-					break;
-			}
+	if (!rect.isValid())
+		rescale(0);
+	else {
+		QPointF tl(_transform.proj2img(_projection.ll2xy(rect.topLeft())));
+		QPointF br(_transform.proj2img(_projection.ll2xy(rect.bottomRight())));
+		QRect sbr(QRectF(tl, br).toRect().normalized());
+
+		for (int i = 0; i < _ozf->zooms(); i++) {
+			rescale(i);
+			if (sbr.size().width() * _scale.x() <= size.width()
+			  && sbr.size().height() * _scale.y() <= size.height())
+				break;
 		}
 	}
 

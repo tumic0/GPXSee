@@ -3,7 +3,7 @@
 
 #include <QTransform>
 #include <QList>
-#include "common/coordinates.h"
+#include <QDebug>
 
 struct ReferencePoint {
 	QPoint xy;
@@ -13,17 +13,23 @@ struct ReferencePoint {
 class Transform
 {
 public:
+	Transform();
 	Transform(const QList<ReferencePoint> &points);
+	Transform(const ReferencePoint &p, const QPointF &scale);
+	Transform(double m[16]);
 
-	bool isNull() {return _transform.type() == QTransform::TxNone;}
+	QPointF proj2img(const QPointF &p) const {return _proj2img.map(p);}
+	QPointF img2proj(const QPointF &p) const {return _img2proj.map(p);}
+
+	bool isValid() const
+	  {return _proj2img.isInvertible() && _img2proj.isInvertible();}
 	const QString &errorString() const {return _errorString;}
-	const QTransform &transform() const {return _transform;}
 
 private:
 	void simple(const QList<ReferencePoint> &points);
 	void affine(const QList<ReferencePoint> &points);
 
-	QTransform _transform;
+	QTransform _proj2img, _img2proj;
 	QString _errorString;
 };
 

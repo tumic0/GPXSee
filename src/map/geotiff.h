@@ -3,7 +3,6 @@
 
 #include <QMap>
 #include <QList>
-#include <QTransform>
 #include "transform.h"
 #include "projection.h"
 
@@ -13,11 +12,13 @@ class GCS;
 class GeoTIFF
 {
 public:
-	bool load(const QString &path);
+	GeoTIFF(const QString &path);
+
+	bool isValid() const {return _projection.isValid() && _transform.isValid();}
 	const QString &errorString() const {return _errorString;}
 
 	const Projection &projection() const {return _projection;}
-	const QTransform &transform() const {return _transform;}
+	const Transform &transform() const {return _transform;}
 
 private:
 	union Value {
@@ -52,7 +53,7 @@ private:
 	bool geographicModel(QMap<quint16, Value> &kv);
 	bool projectedModel(QMap<quint16, Value> &kv);
 
-	QTransform _transform;
+	Transform _transform;
 	Projection _projection;
 
 	QString _errorString;

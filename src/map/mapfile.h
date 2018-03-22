@@ -1,7 +1,6 @@
 #ifndef MAPFILE_H
 #define MAPFILE_H
 
-#include <QTransform>
 #include "transform.h"
 #include "projection.h"
 
@@ -13,11 +12,12 @@ class MapFile
 public:
 	MapFile(QIODevice &file);
 
-	bool isValid() const {return !_image.isNull() && _projection.isValid();}
+	bool isValid() const
+	  {return !_image.isNull() && _projection.isValid() && _transform.isValid();}
 	const QString &errorString() const {return _errorString;}
 
 	const Projection &projection() const {return _projection;}
-	const QTransform &transform() const {return _transform;}
+	const Transform &transform() const {return _transform;}
 
 	const QString &name() const {return _name;}
 	const QString &image() const {return _image;}
@@ -44,7 +44,7 @@ private:
 	QSize _size;
 
 	Projection _projection;
-	QTransform _transform;
+	Transform _transform;
 
 	QString _errorString;
 };
