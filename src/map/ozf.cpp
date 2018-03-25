@@ -223,7 +223,7 @@ QPixmap OZF::tile(int zoom, int x, int y)
 	quint32 bes = qToBigEndian(tileSize().width() * tileSize().height());
 	QByteArray ba;
 	ba.resize(sizeof(bes) + size);
-	*(ba.data()) = bes;
+	memcpy(ba.data(), &bes, sizeof(bes));
 
 	if (!read(ba.data() + sizeof(bes), size, 16))
 		return QPixmap();
