@@ -224,6 +224,8 @@ private:
 
 	Export _export;
 	Options _options;
+
+	QString _dataDir, _mapDir, _poiDir;
 };
 
 #endif // GUI_H

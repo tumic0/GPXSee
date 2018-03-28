@@ -82,6 +82,10 @@ GUI::GUI()
 
 	_sliderPos = 0;
 
+	_dataDir = QDir::homePath();
+	_mapDir = QDir::homePath();
+	_poiDir = QDir::homePath();
+
 	readSettings();
 
 	updateGraphTabs();
@@ -660,11 +664,13 @@ void GUI::paths()
 void GUI::openFile()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open file"),
-	  QString(), Data::formats());
+	  _dataDir, Data::formats());
 	QStringList list = files;
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
 		openFile(*it);
+	if (!list.isEmpty())
+		_dataDir = QFileInfo(list.first()).path();
 }
 
 bool GUI::openFile(const QString &fileName)
@@ -749,11 +755,13 @@ bool GUI::loadFile(const QString &fileName)
 void GUI::openPOIFile()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open POI file"),
-	  QString(), Data::formats());
+	  _poiDir, Data::formats());
 	QStringList list = files;
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
 		openPOIFile(*it);
+	if (!list.isEmpty())
+		_poiDir = QFileInfo(list.first()).path();
 }
 
 bool GUI::openPOIFile(const QString &fileName)
@@ -1125,11 +1133,13 @@ void GUI::showGraphSliderInfo(bool show)
 void GUI::loadMap()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open map file"),
-	  QString(), MapList::formats());
+	  _mapDir, MapList::formats());
 	QStringList list = files;
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
 		loadMap(*it);
+	if (!list.isEmpty())
+		_mapDir = QFileInfo(list.first()).path();
 }
 
 bool GUI::loadMap(const QString &fileName)
