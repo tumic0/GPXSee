@@ -116,8 +116,8 @@ QByteArray Tar::file(const QString &name)
 	struct Header *hdr = (struct Header*)&buffer;
 	quint64 size;
 
-	QMap<QString, quint64>::const_iterator it = _index.find(name);
-	if (it == _index.end())
+	QMap<QString, quint64>::const_iterator it(_index.find(name));
+	if (it == _index.constEnd())
 		return QByteArray();
 
 	Q_ASSERT(_file.isOpen());

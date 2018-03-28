@@ -23,7 +23,7 @@ void InfoItem::updateBoundingRect()
 
 	for (i = _list.constBegin(); i != _list.constEnd(); i++) {
 		width += fm.width(i->key + ": ");
-		width += fm.width(i->value) + ((i == _list.end() - 1) ? 0 : PADDING);
+		width += fm.width(i->value) + ((i == _list.constEnd() - 1) ? 0 : PADDING);
 	}
 
 	_boundingRect = QRectF(0, 0, width, _list.isEmpty() ? 0 : fm.height());
@@ -49,8 +49,8 @@ void InfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 		painter->drawText(width, fm.height() - fm.descent(), i->key + ": ");
 		width += fm.width(i->key + ": ");
 		painter->drawText(width, fm.height() - fm.descent(), i->value);
-		width += fm.width(i->value) + ((i == _list.end() - 1) ? 0 : PADDING);
-		if (i != _list.end() - 1) {
+		width += fm.width(i->value) + ((i == _list.constEnd() - 1) ? 0 : PADDING);
+		if (i != _list.constEnd() - 1) {
 			painter->save();
 			painter->setPen(Qt::gray);
 			painter->drawLine(width - PADDING/2, fm.descent(),

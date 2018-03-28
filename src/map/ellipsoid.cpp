@@ -14,9 +14,9 @@ QMap<int, Ellipsoid> Ellipsoid::WGS84()
 
 const Ellipsoid *Ellipsoid::ellipsoid(int id)
 {
-	QMap<int, Ellipsoid>::const_iterator it = _ellipsoids.find(id);
+	QMap<int, Ellipsoid>::const_iterator it(_ellipsoids.find(id));
 
-	if (it == _ellipsoids.end())
+	if (it == _ellipsoids.constEnd())
 		return 0;
 	else
 		return &(it.value());

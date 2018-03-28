@@ -15,7 +15,6 @@ class Coordinates
 {
 public:
 	Coordinates() {_lon = NAN; _lat = NAN;}
-	Coordinates(const Coordinates &c) {_lon = c._lon; _lat = c._lat;}
 	Coordinates(qreal lon, qreal lat) {_lon = lon; _lat = lat;}
 
 	qreal &rlon() {return _lon;}

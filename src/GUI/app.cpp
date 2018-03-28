@@ -24,12 +24,12 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 	installTranslator(gpxsee);
 
 	QTranslator *qt = new QTranslator(this);
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_MAC)
+#if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
 	qt->load(QLocale::system(), "qt", "_", TRANSLATIONS_DIR);
-#else // Q_OS_WINDOWS || Q_OS_MAC
+#else // Q_OS_WIN32 || Q_OS_MAC
 	qt->load(QLocale::system(), "qt", "_", QLibraryInfo::location(
 	  QLibraryInfo::TranslationsPath));
-#endif // Q_OS_WINDOWS || Q_OS_MAC
+#endif // Q_OS_WIN32 || Q_OS_MAC
 	installTranslator(qt);
 
 #ifdef Q_OS_MAC
