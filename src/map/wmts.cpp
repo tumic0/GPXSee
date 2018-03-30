@@ -8,56 +8,11 @@
 #include <QXmlStreamReader>
 #include "downloader.h"
 #include "pcs.h"
+#include "crs.h"
 #include "wmts.h"
 
 
 Downloader *WMTS::_downloader = 0;
-
-bool WMTS::createProjection(const QString &crs)
-{
-	QStringList list(crs.split(':'));
-	QString authority, code;
-	bool res;
-	int epsg;
-	const PCS *pcs;
-	const GCS *gcs;
-
-	switch (list.size()) {
-		case 2:
-			authority = list.at(0);
-			code = list.at(1);
-			break;
-		case 7:
-			authority = list.at(4);
-			code = list.at(6);
-			break;
-		default:
-			return false;
-	}
-
-	if (authority == "EPSG") {
-		epsg = code.toInt(&res);
-		if (!res)
-			return false;
-
-		if ((pcs = PCS::pcs(epsg))) {
-			_projection = Projection(pcs->gcs(), pcs->method(), pcs->setup(),
-			  pcs->units());
-			return true;
-		} else if ((gcs = GCS::gcs(epsg))) {
-			_projection = Projection(gcs);
-			return true;
-		} else
-			return false;
-	} else if (authority == "OGC") {
-		if (code == "CRS84") {
-			_projection = Projection(GCS::gcs(4326));
-			return true;
-		} else
-			return false;
-	} else
-		return false;
-}
 
 WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader, bool yx)
 {
@@ -104,12 +59,12 @@ void WMTS::tileMatrixSet(QXmlStreamReader &reader, CTX &ctx)
 		else if (reader.name() == "SupportedCRS")
 			crs = reader.readElementText();
 		else if (reader.name() == "TileMatrix")
-			matrixes.insert(tileMatrix(reader, ctx.setup.yx));
+			matrixes.insert(tileMatrix(reader, ctx.setup.yx()));
 		else
 			reader.skipCurrentElement();
 	}
 
-	if (id == ctx.setup.set) {
+	if (id == ctx.setup.set()) {
 		ctx.crs = crs;
 		_matrixes = matrixes;
 	}
@@ -168,7 +123,7 @@ void WMTS::tileMatrixSetLink(QXmlStreamReader &reader, CTX &ctx)
 			reader.skipCurrentElement();
 	}
 
-	if (id == ctx.setup.set) {
+	if (id == ctx.setup.set()) {
 		ctx.set = true;
 		_limits = limits;
 	}
@@ -232,14 +187,14 @@ void WMTS::layer(QXmlStreamReader &reader, CTX &ctx)
 			reader.skipCurrentElement();
 	}
 
-	if (id == ctx.setup.layer) {
+	if (id == ctx.setup.layer()) {
 		ctx.layer = true;
 		_bounds = bounds;
-		if (ctx.setup.rest)
+		if (ctx.setup.rest())
 			_tileUrl = tpl;
-		if (styles.contains(ctx.setup.style))
+		if (styles.contains(ctx.setup.style()))
 			ctx.style = true;
-		if (formats.contains(ctx.setup.format))
+		if (formats.contains(ctx.setup.format()))
 			ctx.format = true;
 	}
 }
@@ -291,26 +246,27 @@ bool WMTS::parseCapabilities(const QString &path, const Setup &setup)
 	}
 
 	if (!ctx.layer) {
-		_errorString = ctx.setup.layer + ": layer not provided";
+		_errorString = ctx.setup.layer() + ": layer not provided";
 		return false;
 	}
 	if (!ctx.style) {
-		_errorString = ctx.setup.style + ": style not provided";
+		_errorString = ctx.setup.style() + ": style not provided";
 		return false;
 	}
-	if (!ctx.setup.rest && !ctx.format) {
-		_errorString = ctx.setup.format + ": format not provided";
+	if (!ctx.setup.rest() && !ctx.format) {
+		_errorString = ctx.setup.format() + ": format not provided";
 		return false;
 	}
 	if (!ctx.set) {
-		_errorString = ctx.setup.set + ": set not provided";
+		_errorString = ctx.setup.set() + ": set not provided";
 		return false;
 	}
 	if (ctx.crs.isNull()) {
 		_errorString = "Missing CRS definition";
 		return false;
 	}
-	if (!createProjection(ctx.crs)) {
+	_projection = CRS::projection(ctx.crs);
+	if (_projection.isNull()) {
 		_errorString = ctx.crs + ": unknown CRS";
 		return false;
 	}
@@ -318,7 +274,7 @@ bool WMTS::parseCapabilities(const QString &path, const Setup &setup)
 		_errorString = "No usable tile matrix found";
 		return false;
 	}
-	if (ctx.setup.rest && _tileUrl.isNull()) {
+	if (ctx.setup.rest() && _tileUrl.isNull()) {
 		_errorString = "Missing tile URL template";
 		return false;
 	}
@@ -345,41 +301,41 @@ bool WMTS::getCapabilities(const QString &url, const QString &file)
 	}
 }
 
-bool WMTS::load(const QString &file, const WMTS::Setup &setup)
+WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
 {
-	QString capaUrl = setup.rest ? setup.url :
+	QString capaUrl = setup.rest() ? setup.url() :
 	  QString("%1?service=WMTS&Version=1.0.0&request=GetCapabilities")
-	  .arg(setup.url);
+	  .arg(setup.url());
 
 	if (!QFileInfo(file).exists())
 		if (!getCapabilities(capaUrl, file))
-			return false;
+			return;
 	if (!parseCapabilities(file, setup))
-		return false;
+		return;
 
-	if (!setup.rest) {
+	if (!setup.rest()) {
 		_tileUrl = QString("%1?service=WMTS&Version=1.0.0&request=GetTile"
 		  "&Format=%2&Layer=%3&Style=%4&TileMatrixSet=%5&TileMatrix=$z"
-		  "&TileRow=$y&TileCol=$x").arg(setup.url).arg(setup.format)
-		  .arg(setup.layer).arg(setup.style).arg(setup.set);
-		for (int i = 0; i < setup.dimensions.size(); i++) {
-			const QPair<QString, QString> &dim = setup.dimensions.at(i);
+		  "&TileRow=$y&TileCol=$x").arg(setup.url()).arg(setup.format())
+		  .arg(setup.layer()).arg(setup.style()).arg(setup.set());
+		for (int i = 0; i < setup.dimensions().size(); i++) {
+			const QPair<QString, QString> &dim = setup.dimensions().at(i);
 			_tileUrl.append(QString("&%1=%2").arg(dim.first).arg(dim.second));
 		}
 	} else {
-		_tileUrl.replace("{Style}", setup.style, Qt::CaseInsensitive);
-		_tileUrl.replace("{TileMatrixSet}", setup.set, Qt::CaseInsensitive);
+		_tileUrl.replace("{Style}", setup.style(), Qt::CaseInsensitive);
+		_tileUrl.replace("{TileMatrixSet}", setup.set(), Qt::CaseInsensitive);
 		_tileUrl.replace("{TileMatrix}", "$z", Qt::CaseInsensitive);
 		_tileUrl.replace("{TileRow}", "$y", Qt::CaseInsensitive);
 		_tileUrl.replace("{TileCol}", "$x", Qt::CaseInsensitive);
-		for (int i = 0; i < setup.dimensions.size(); i++) {
-			const QPair<QString, QString> &dim = setup.dimensions.at(i);
+		for (int i = 0; i < setup.dimensions().size(); i++) {
+			const QPair<QString, QString> &dim = setup.dimensions().at(i);
 			_tileUrl.replace(QString("{%1}").arg(dim.first), dim.second,
 			  Qt::CaseInsensitive);
 		}
 	}
 
-	return true;
+	_valid = true;
 }
 
 QList<WMTS::Zoom> WMTS::zooms() const
@@ -405,17 +361,17 @@ QList<WMTS::Zoom> WMTS::zooms() const
 #ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const WMTS::Setup &setup)
 {
-	dbg.nospace() << "Setup(" << setup.url << ", " << setup.layer << ", "
-	  << setup.set << ", " << setup.style << ", " << setup.format << ", "
-	  << setup.rest << ")";
+	dbg.nospace() << "Setup(" << setup.url() << ", " << setup.layer() << ", "
+	  << setup.set() << ", " << setup.style() << ", " << setup.format() << ", "
+	  << setup.rest() << ")";
 	return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, const WMTS::Zoom &zoom)
 {
-	dbg.nospace() << "Zoom(" << zoom.id << ", " << zoom.scaleDenominator << ", "
-	  << zoom.topLeft << ", " << zoom.tile << ", " << zoom.matrix << ", "
-	  << zoom.limits << ")";
+	dbg.nospace() << "Zoom(" << zoom.id() << ", " << zoom.scaleDenominator()
+	  << ", " << zoom.topLeft() << ", " << zoom.tile() << ", " << zoom.matrix()
+	  << ", " << zoom.limits() << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG

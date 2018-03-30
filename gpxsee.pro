@@ -119,7 +119,10 @@ HEADERS += src/config.h \
     src/map/mapsource.h \
     src/map/tileloader.h \
     src/map/wmtsmap.h \
-    src/map/wmts.h
+    src/map/wmts.h \
+    src/map/wmsmap.h \
+    src/map/wms.h \
+    src/map/crs.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -208,7 +211,10 @@ SOURCES += src/main.cpp \
     src/map/mapsource.cpp \
     src/map/tileloader.cpp \
     src/map/wmtsmap.cpp \
-    src/map/wmts.cpp
+    src/map/wmts.cpp \
+    src/map/wmsmap.cpp \
+    src/map/wms.cpp \
+    src/map/crs.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \

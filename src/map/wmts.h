@@ -15,49 +15,73 @@ class QXmlStreamReader;
 class WMTS
 {
 public:
-	struct Setup {
-		QString url;
-		QString layer;
-		QString set;
-		QString style;
-		QString format;
-		bool rest;
-		bool yx;
-		QList<QPair<QString, QString> > dimensions;
-
+	class Setup
+	{
+	public:
 		Setup(const QString &url, const QString &layer, const QString &set,
 		  const QString &style, const QString &format, bool rest, bool yx,
 		  const QList<QPair<QString, QString> > &dimensions) :
-		  url(url), layer(layer), set(set), style(style), format(format),
-		  rest(rest), yx(yx), dimensions(dimensions) {}
+		  _url(url), _layer(layer), _set(set), _style(style), _format(format),
+		  _rest(rest), _yx(yx), _dimensions(dimensions) {}
+
+		const QString &url() const {return _url;}
+		const QString &layer() const {return _layer;}
+		const QString &set() const {return _set;}
+		const QString &style() const {return _style;}
+		const QString &format() const {return _format;}
+		bool rest() const {return _rest;}
+		bool yx() const {return _yx;}
+		const QList<QPair<QString, QString> > &dimensions() const
+		  {return _dimensions;}
+
+	private:
+		QString _url;
+		QString _layer;
+		QString _set;
+		QString _style;
+		QString _format;
+		bool _rest;
+		bool _yx;
+		QList<QPair<QString, QString> > _dimensions;
 	};
 
-	struct Zoom {
-		QString id;
-		qreal scaleDenominator;
-		QPointF topLeft;
-		QSize tile;
-		QSize matrix;
-		QRect limits;
-
-		Zoom() {}
+	class Zoom
+	{
+	public:
 		Zoom(const QString &id, qreal scaleDenominator, const QPointF &topLeft,
 		  const QSize &tile, const QSize &matrix, const QRect &limits) :
-		  id(id), scaleDenominator(scaleDenominator), topLeft(topLeft),
-		  tile(tile), matrix(matrix), limits(limits) {}
+		  _id(id), _scaleDenominator(scaleDenominator), _topLeft(topLeft),
+		  _tile(tile), _matrix(matrix), _limits(limits) {}
 		bool operator<(const Zoom &other) const
-		  {return scaleDenominator > other.scaleDenominator;}
+		  {return _scaleDenominator > other._scaleDenominator;}
+
+		const QString &id() const {return _id;}
+		qreal scaleDenominator() const {return _scaleDenominator;}
+		const QPointF &topLeft() const {return _topLeft;}
+		const QSize &tile() const {return _tile;}
+		const QSize &matrix() const {return _matrix;}
+		const QRect &limits() const {return _limits;}
+
+	private:
+		QString _id;
+		qreal _scaleDenominator;
+		QPointF _topLeft;
+		QSize _tile;
+		QSize _matrix;
+		QRect _limits;
 	};
 
-	bool load(const QString &path, const Setup &setup);
-	const QString &errorString() const {return _errorString;}
+
+	WMTS(const QString &path, const Setup &setup);
 
 	const RectC &bounds() const {return _bounds;}
 	QList<Zoom> zooms() const;
 	const Projection &projection() const {return _projection;}
-	QString tileUrl() const {return _tileUrl;}
+	const QString &tileUrl() const {return _tileUrl;}
 
-	static Downloader *downloader() {return _downloader;}
+	bool isValid() const {return _valid;}
+	const QString &errorString() const {return _errorString;}
+
 	static void setDownloader(Downloader *downloader)
 	  {_downloader = downloader;}
 
@@ -113,7 +137,6 @@ private:
 	void capabilities(QXmlStreamReader &reader, CTX &ctx);
 	bool parseCapabilities(const QString &path, const Setup &setup);
 	bool getCapabilities(const QString &url, const QString &file);
-	bool createProjection(const QString &crs);
 
 	QSet<TileMatrix> _matrixes;
 	QSet<MatrixLimits> _limits;
@@ -121,6 +144,7 @@ private:
 	Projection _projection;
 	QString _tileUrl;
 
+	bool _valid;
 	QString _errorString;
 
 	static Downloader *_downloader;

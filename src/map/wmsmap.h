@@ -1,19 +1,19 @@
-#ifndef WMTSMAP_H
-#define WMTSMAP_H
+#ifndef WMSMAP_H
+#define WMSMAP_H
 
 #include "transform.h"
 #include "projection.h"
 #include "map.h"
-#include "wmts.h"
+#include "wms.h"
 #include "tileloader.h"
 
 
-class WMTSMap : public Map
+class WMSMap : public Map
 {
 	Q_OBJECT
 
 public:
-	WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent = 0);
+	WMSMap(const QString &name, const WMS::Setup &setup, QObject *parent = 0);
 
 	const QString &name() const {return _name;}
 
@@ -26,9 +26,9 @@ public:
 	int zoomOut();
 
 	QPointF ll2xy(const Coordinates &c)
-		{return static_cast<const WMTSMap &>(*this).ll2xy(c);}
+		{return static_cast<const WMSMap &>(*this).ll2xy(c);}
 	Coordinates xy2ll(const QPointF &p)
-		{return static_cast<const WMTSMap &>(*this).xy2ll(p);}
+		{return static_cast<const WMSMap &>(*this).xy2ll(p);}
 
 	void draw(QPainter *painter, const QRectF &rect);
 
@@ -45,26 +45,29 @@ private slots:
 	void emitLoaded();
 
 private:
-	bool loadWMTS();
+	QString tileUrl() const;
 	qreal sd2res(qreal scaleDenominator) const;
 	QString tilesDir() const;
+	void computeZooms(const RangeF &scaleDenominator);
 	void updateTransform();
+	bool loadWMS();
 
 	QPointF ll2xy(const Coordinates &c) const;
 	Coordinates xy2ll(const QPointF &p) const;
 
 	QString _name;
-	WMTS::Setup _setup;
+
+	WMS::Setup _setup;
 	TileLoader _tileLoader;
-	RectC _bounds;
-	QList<WMTS::Zoom> _zooms;
 	Projection _projection;
 	Transform _transform;
+	QVector<qreal> _zooms;
 	int _zoom;
+	QRectF _boundingBox;
 	bool _block;
 
 	bool _valid;
 	QString _errorString;
 };
 
-#endif // WMTSMAP_H
+#endif // WMSMAP_H

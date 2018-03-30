@@ -2,6 +2,7 @@
 #include <QXmlStreamReader>
 #include "onlinemap.h"
 #include "wmtsmap.h"
+#include "wmsmap.h"
 #include "mapsource.h"
 
 #define ZOOM_MAX       19
@@ -11,9 +12,10 @@
 #define BOUNDS_RIGHT   180
 #define BOUNDS_BOTTOM  -85.0511
 
-MapSource::TMSConfig::TMSConfig()
-  : zooms(ZOOM_MIN, ZOOM_MAX), bounds(Coordinates(BOUNDS_LEFT, BOUNDS_TOP),
-  Coordinates(BOUNDS_RIGHT, BOUNDS_BOTTOM)) {}
+
+MapSource::Config::Config() : type(TMS), zooms(ZOOM_MIN, ZOOM_MAX),
+  bounds(Coordinates(BOUNDS_LEFT, BOUNDS_TOP), Coordinates(BOUNDS_RIGHT,
+  BOUNDS_BOTTOM)), format("image/png"), rest(false), yx(false) {}
 
 
 Range MapSource::zooms(QXmlStreamReader &reader)
@@ -23,11 +25,7 @@ Range MapSource::zooms(QXmlStreamReader &reader)
 	bool res;
 
 	if (attr.hasAttribute("min")) {
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 		min = attr.value("min").toString().toInt(&res);
-#else // QT_VERSION < 5
-		min = attr.value("min").toInt(&res);
-#endif // QT_VERSION < 5
 		if (!res || (min < ZOOM_MIN || min > ZOOM_MAX)) {
 			reader.raiseError("Invalid minimal zoom level");
 			return Range();
@@ -36,11 +34,7 @@ Range MapSource::zooms(QXmlStreamReader &reader)
 		min = ZOOM_MIN;
 
 	if (attr.hasAttribute("max")) {
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 		max = attr.value("max").toString().toInt(&res);
-#else // QT_VERSION < 5
-		max = attr.value("max").toInt(&res);
-#endif // QT_VERSION < 5
 		if (!res || (max < ZOOM_MIN || max > ZOOM_MAX)) {
 			reader.raiseError("Invalid maximal zoom level");
 			return Range();
@@ -63,11 +57,7 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 	bool res;
 
 	if (attr.hasAttribute("top")) {
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 		top = attr.value("top").toString().toDouble(&res);
-#else // QT_VERSION < 5
-		top = attr.value("top").toDouble(&res);
-#endif // QT_VERSION < 5
 		if (!res || (top < BOUNDS_BOTTOM || top > BOUNDS_TOP)) {
 			reader.raiseError("Invalid bounds top value");
 			return RectC();
@@ -76,11 +66,7 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 		top = BOUNDS_TOP;
 
 	if (attr.hasAttribute("bottom")) {
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 		bottom = attr.value("bottom").toString().toDouble(&res);
-#else // QT_VERSION < 5
-		bottom = attr.value("bottom").toDouble(&res);
-#endif // QT_VERSION < 5
 		if (!res || (bottom < BOUNDS_BOTTOM || bottom > BOUNDS_TOP)) {
 			reader.raiseError("Invalid bounds bottom value");
 			return RectC();
@@ -89,11 +75,7 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 		bottom = BOUNDS_BOTTOM;
 
 	if (attr.hasAttribute("left")) {
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 		left = attr.value("left").toString().toDouble(&res);
-#else // QT_VERSION < 5
-		left = attr.value("left").toDouble(&res);
-#endif // QT_VERSION < 5
 		if (!res || (left < BOUNDS_LEFT || left > BOUNDS_RIGHT)) {
 			reader.raiseError("Invalid bounds left value");
 			return RectC();
@@ -102,11 +84,7 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 		left = BOUNDS_LEFT;
 
 	if (attr.hasAttribute("right")) {
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 		right = attr.value("right").toString().toDouble(&res);
-#else // QT_VERSION < 5
-		right = attr.value("right").toDouble(&res);
-#endif // QT_VERSION < 5
 		if (!res || (right < BOUNDS_LEFT || right > BOUNDS_RIGHT)) {
 			reader.raiseError("Invalid bounds right value");
 			return RectC();
@@ -128,38 +106,44 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 
 void MapSource::map(QXmlStreamReader &reader, Config &config)
 {
-	config.type = (reader.attributes().value("type") == "WMTS") ? WMTS : TMS;
+	const QXmlStreamAttributes &attr = reader.attributes();
+	config.type = (attr.value("type") == "WMTS") ? WMTS
+	  : (attr.value("type") == "WMS") ? WMS : TMS;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "name")
 			config.name = reader.readElementText();
 		else if (reader.name() == "url") {
-			config.wmts.rest = (reader.attributes().value("type") == "REST")
+			config.rest = (reader.attributes().value("type") == "REST")
 			  ? true : false;
 			config.url = reader.readElementText();
 		} else if (reader.name() == "zoom") {
-			config.tms.zooms = zooms(reader);
+			config.zooms = zooms(reader);
 			reader.skipCurrentElement();
 		} else if (reader.name() == "bounds") {
-			config.tms.bounds = bounds(reader);
+			config.bounds = bounds(reader);
 			reader.skipCurrentElement();
 		} else if (reader.name() == "format") {
-			config.wmts.format = reader.readElementText();
+			config.format = reader.readElementText();
 		} else if (reader.name() == "layer")
-			config.wmts.layer = reader.readElementText();
+			config.layer = reader.readElementText();
 		else if (reader.name() == "style")
-			config.wmts.style = reader.readElementText();
+			config.style = reader.readElementText();
 		else if (reader.name() == "set") {
-			config.wmts.yx = (reader.attributes().value("axis") == "yx")
+			config.yx = (reader.attributes().value("axis") == "yx")
 			  ? true : false;
-			config.wmts.set = reader.readElementText();
+			config.set = reader.readElementText();
 		} else if (reader.name() == "dimension") {
 			QXmlStreamAttributes attr = reader.attributes();
 			if (!attr.hasAttribute("id"))
 				reader.raiseError("Missing dimension id");
 			else
-				config.wmts.dimensions.append(QPair<QString, QString>(
+				config.dimensions.append(QPair<QString, QString>(
 				  attr.value("id").toString(), reader.readElementText()));
+		} else if (reader.name() == "crs") {
+			config.yx = (reader.attributes().value("axis") == "yx")
+			  ? true : false;
+			config.crs = reader.readElementText();
 		} else
 			reader.skipCurrentElement();
 	}
@@ -170,6 +154,8 @@ Map *MapSource::loadFile(const QString &path)
 	QFile file(path);
 	QXmlStreamReader reader;
 	Config config;
+	Map *m;
+
 
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		_errorString = file.errorString();
@@ -197,33 +183,43 @@ Map *MapSource::loadFile(const QString &path)
 		_errorString = "Missing URL definition";
 		return 0;
 	}
-	if (config.type == WMTS) {
-		if (config.wmts.layer.isEmpty()) {
+	if (config.type == WMTS || config.type == WMS) {
+		if (config.layer.isEmpty()) {
 			_errorString = "Missing layer definition";
 			return 0;
 		}
-		if (config.wmts.style.isEmpty()) {
+		if (config.style.isEmpty()) {
 			_errorString = "Missing style definiton";
 			return 0;
 		}
-		if (config.wmts.set.isEmpty()) {
-			_errorString = "Missing set definiton";
-			return 0;
-		}
-		if (config.wmts.format.isEmpty()) {
+		if (config.format.isEmpty()) {
 			_errorString = "Missing format definition";
 			return 0;
 		}
 	}
+	if (config.type == WMTS) {
+		if (config.set.isEmpty()) {
+			_errorString = "Missing set definiton";
+			return 0;
+		}
+	}
+	if (config.type == WMS) {
+		if (config.crs.isEmpty()) {
+			_errorString = "Missing CRS definiton";
+			return 0;
+		}
+	}
 
-	Map *m;
 	if (config.type == WMTS)
-		m = new WMTSMap(config.name, WMTS::Setup(config.url, config.wmts.layer,
-		  config.wmts.set, config.wmts.style, config.wmts.format,
-		  config.wmts.rest, config.wmts.yx, config.wmts.dimensions));
+		m = new WMTSMap(config.name, WMTS::Setup(config.url, config.layer,
+		  config.set, config.style, config.format, config.rest, config.yx,
+		  config.dimensions));
+	else if (config.type == WMS)
+		m = new WMSMap(config.name, WMS::Setup(config.url, config.layer,
+		  config.style, config.format, config.crs, config.yx));
 	else
-		m = new OnlineMap(config.name, config.url, config.tms.zooms,
-		  config.tms.bounds);
+		m = new OnlineMap(config.name, config.url, config.zooms, config.bounds);
+
 	if (!m->isValid()) {
 		_errorString = m->errorString();
 		delete m;

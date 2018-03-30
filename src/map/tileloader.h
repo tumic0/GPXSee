@@ -22,7 +22,6 @@ public:
 	  {_downloader = downloader;}
 
 private:
-	void fillTile(Tile &tile);
 	QString tileUrl(const Tile &tile) const;
 	QString tileFile(const Tile &tile) const;
 

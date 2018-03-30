@@ -5,6 +5,7 @@
 #include <QNetworkProxyFactory>
 #include <QLibraryInfo>
 #include "map/wmts.h"
+#include "map/wms.h"
 #include "map/tileloader.h"
 #include "map/downloader.h"
 #include "map/ellipsoid.h"
@@ -40,6 +41,7 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 	Downloader *dl = new Downloader(this);
 	TileLoader::setDownloader(dl);
 	WMTS::setDownloader(dl);
+	WMS::setDownloader(dl);
 	OPENGL_SET_SAMPLES(4);
 	loadDatums();
 	loadPCSs();

@@ -85,9 +85,18 @@ QString TileLoader::tileUrl(const Tile &tile) const
 {
 	QString url(_url);
 
-	url.replace("$z", tile.zoom().toString());
-	url.replace("$x", QString::number(tile.xy().x()));
-	url.replace("$y", QString::number(tile.xy().y()));
+	if (!tile.bbox().isNull()) {
+		QString bbox = QString("%1,%2,%3,%4").arg(
+		  QString::number(tile.bbox().left(), 'f', 6),
+		  QString::number(tile.bbox().bottom(), 'f', 6),
+		  QString::number(tile.bbox().right(), 'f', 6),
+		  QString::number(tile.bbox().top(), 'f', 6));
+		url.replace("$bbox", bbox);
+	} else {
+		url.replace("$z", tile.zoom().toString());
+		url.replace("$x", QString::number(tile.xy().x()));
+		url.replace("$y", QString::number(tile.xy().y()));
+	}
 
 	return url;
 }

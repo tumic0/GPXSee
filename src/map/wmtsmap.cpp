@@ -10,30 +10,50 @@
 
 #define CAPABILITIES_FILE "capabilities.xml"
 
-WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent)
-  : Map(parent), _name(name), _setup(setup), _zoom(0), _valid(false)
+bool WMTSMap::loadWMTS()
 {
-	QString dir(TILES_DIR + "/" + _name);
-	QString file = dir + "/" + CAPABILITIES_FILE;
+	QString file = tilesDir() + "/" + CAPABILITIES_FILE;
 
-	if (!QDir().mkpath(dir)) {
+	WMTS wmts(file, _setup);
+	if (!wmts.isValid()) {
+		_errorString = wmts.errorString();
+		return false;
+	}
+
+	_bounds = wmts.bounds();
+	_zooms = wmts.zooms();
+	_projection = wmts.projection();
+	_tileLoader = TileLoader(wmts.tileUrl(), tilesDir());
+
+	updateTransform();
+
+	return true;
+}
+
+WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent)
+  : Map(parent), _name(name), _setup(setup), _zoom(0), _block(false),
+  _valid(false)
+{
+	if (!QDir().mkpath(tilesDir())) {
 		_errorString = "Error creating tiles dir";
 		return;
 	}
 
-	WMTS wmts;
-	if (!wmts.load(file, _setup)) {
-		_errorString = wmts.errorString();
-		return;
-	}
-	_bounds = wmts.bounds();
-	_zooms = wmts.zooms();
-	_projection = wmts.projection();
-	_tileLoader = TileLoader(wmts.tileUrl(), dir);
-	updateTransform();
+	_valid = loadWMTS();
+}
 
-	_block = false;
-	_valid = true;
+void WMTSMap::clearCache()
+{
+	_tileLoader.clearCache();
+	_zoom = 0;
+
+	if (!loadWMTS())
+		qWarning("%s: %s\n", qPrintable(_name), qPrintable(_errorString));
+}
+
+QString WMTSMap::tilesDir() const
+{
+	return QString(TILES_DIR + "/" + _name);
 }
 
 qreal WMTSMap::sd2res(qreal scaleDenominator) const
@@ -46,17 +66,17 @@ void WMTSMap::updateTransform()
 	const WMTS::Zoom &z = _zooms.at(_zoom);
 	ReferencePoint tl, br;
 
-	qreal pixelSpan = sd2res(z.scaleDenominator);
+	qreal pixelSpan = sd2res(z.scaleDenominator());
 	if (_projection.isGeographic())
 		pixelSpan /= deg2rad(WGS84_RADIUS);
-	QPointF tileSpan(z.tile.width() * pixelSpan, z.tile.height() * pixelSpan);
-	QPointF bottomRight(z.topLeft.x() + tileSpan.x() * z.matrix.width(),
-	  z.topLeft.y() - tileSpan.y() * z.matrix.height());
+	QPointF tileSpan(z.tile().width() * pixelSpan, z.tile().height() * pixelSpan);
+	QPointF bottomRight(z.topLeft().x() + tileSpan.x() * z.matrix().width(),
+	  z.topLeft().y() - tileSpan.y() * z.matrix().height());
 
 	tl.xy = QPoint(0, 0);
-	tl.pp = z.topLeft;
-	br.xy = QPoint(z.tile.width() * z.matrix.width(),
-	  z.tile.height() * z.matrix.height());
+	tl.pp = z.topLeft();
+	br.xy = QPoint(z.tile().width() * z.matrix().width(),
+	  z.tile().height() * z.matrix().height());
 	br.pp = bottomRight;
 
 	QList<ReferencePoint> points;
@@ -76,26 +96,6 @@ void WMTSMap::unload()
 	  SLOT(emitLoaded()));
 }
 
-void WMTSMap::clearCache()
-{
-	QString dir(TILES_DIR + "/" + _name);
-	QString file = dir + "/" + CAPABILITIES_FILE;
-
-	_tileLoader.clearCache();
-
-	WMTS wmts;
-	if (!wmts.load(file, _setup))
-		return;
-	_bounds = wmts.bounds();
-	_zooms = wmts.zooms();
-	_projection = wmts.projection();
-	_tileLoader = TileLoader(wmts.tileUrl(), dir);
-
-	if (_zoom >= _zooms.size())
-		_zoom = _zooms.size() - 1;
-	updateTransform();
-}
-
 void WMTSMap::emitLoaded()
 {
 	emit loaded();
@@ -106,11 +106,12 @@ QRectF WMTSMap::bounds() const
 	const WMTS::Zoom &z = _zooms.at(_zoom);
 	QRectF tileBounds, bounds;
 
-	tileBounds = (z.limits.isNull()) ?
-	  QRectF(QPointF(0, 0), QSize(z.tile.width() * z.matrix.width(),
-	  z.tile.height() * z.matrix.height())) : QRectF(QPointF(z.limits.left()
-	  * z.tile.width(), z.limits.top() * z.tile.height()), QSize(z.tile.width()
-	  * z.limits.width(), z.tile.height() * z.limits.height()));
+	tileBounds = (z.limits().isNull()) ?
+	  QRectF(QPointF(0, 0), QSize(z.tile().width() * z.matrix().width(),
+	  z.tile().height() * z.matrix().height()))
+	  : QRectF(QPointF(z.limits().left() * z.tile().width(), z.limits().top()
+	  * z.tile().height()), QSize(z.tile().width() * z.limits().width(),
+	  z.tile().height() * z.limits().height()));
 
 	bounds = _bounds.isValid() ? QRectF(ll2xy(_bounds.topLeft()),
 	  ll2xy(_bounds.bottomRight())) : QRectF();
@@ -130,7 +131,7 @@ int WMTSMap::zoomFit(const QSize &size, const RectC &br)
 
 		_zoom = 0;
 		for (int i = 0; i < _zooms.size(); i++) {
-			if (sd2res(_zooms.at(i).scaleDenominator) < resolution)
+			if (sd2res(_zooms.at(i).scaleDenominator()) < resolution)
 				break;
 			_zoom = i;
 		}
@@ -169,15 +170,15 @@ int WMTSMap::zoomOut()
 void WMTSMap::draw(QPainter *painter, const QRectF &rect)
 {
 	const WMTS::Zoom &z = _zooms.at(_zoom);
-	QPoint tl = QPoint((int)floor(rect.left() / (qreal)z.tile.width()),
-	  (int)floor(rect.top() / (qreal)z.tile.height()));
-	QPoint br = QPoint((int)ceil(rect.right() / (qreal)z.tile.width()),
-	  (int)ceil(rect.bottom() / (qreal)z.tile.height()));
+	QPoint tl = QPoint((int)floor(rect.left() / (qreal)z.tile().width()),
+	  (int)floor(rect.top() / (qreal)z.tile().height()));
+	QPoint br = QPoint((int)ceil(rect.right() / (qreal)z.tile().width()),
+	  (int)ceil(rect.bottom() / (qreal)z.tile().height()));
 
 	QList<Tile> tiles;
 	for (int i = tl.x(); i < br.x(); i++)
 		for (int j = tl.y(); j < br.y(); j++)
-			tiles.append(Tile(QPoint(i, j), z.id));
+			tiles.append(Tile(QPoint(i, j), z.id()));
 
 	if (_block)
 		_tileLoader.loadTilesSync(tiles);
@@ -186,9 +187,9 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect)
 
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];
-		QPoint tp(t.xy().x() * z.tile.width(), t.xy().y() * z.tile.height());
+		QPoint tp(t.xy().x() * z.tile().width(), t.xy().y() * z.tile().height());
 		if (t.pixmap().isNull())
-			painter->fillRect(QRect(tp, z.tile), _backgroundColor);
+			painter->fillRect(QRect(tp, z.tile()), _backgroundColor);
 		else
 			painter->drawPixmap(tp, t.pixmap());
 	}

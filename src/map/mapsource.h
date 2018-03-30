@@ -17,36 +17,26 @@ public:
 private:
 	enum Type {
 		TMS,
-		WMTS
+		WMTS,
+		WMS
 	};
 
-	struct TMSConfig {
+	struct Config {
+		Type type;
+		QString name;
+		QString url;
 		Range zooms;
 		RectC bounds;
-
-		TMSConfig();
-	};
-
-	struct WMTSConfig {
 		QString layer;
 		QString style;
 		QString set;
 		QString format;
+		QString crs;
 		bool rest;
 		bool yx;
 		QList<QPair<QString, QString> > dimensions;
 
-		WMTSConfig() : format("image/png"), rest(false), yx(false) {}
-	};
-
-	struct Config {
-		QString name;
-		QString url;
-		Type type;
-		WMTSConfig wmts;
-		TMSConfig tms;
-
-		Config() : type(TMS) {}
+		Config();
 	};
 
 	RectC bounds(QXmlStreamReader &reader);

@@ -16,6 +16,9 @@ public:
 
 	bool isValid() const {return size() >= 0;}
 
+	void setMin(int min) {_min = min;}
+	void setMax(int max) {_max = max;}
+
 private:
 	int _min, _max;
 };
@@ -31,6 +34,9 @@ public:
 	qreal size() const {return (_max - _min);}
 
 	bool isValid() const {return size() >= 0;}
+
+	void setMin(qreal min) {_min = min;}
+	void setMax(qreal max) {_max = max;}
 
 	void resize(qreal size);
 

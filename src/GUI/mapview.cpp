@@ -179,7 +179,7 @@ QList<PathItem *> MapView::loadData(const Data &data)
 	if (_tracks.empty() && _routes.empty() && _waypoints.empty())
 		return paths;
 
-	if (mapZoom() != zoom)
+	if (fitMapZoom() != zoom)
 		rescale();
 	else
 		updatePOIVisibility();
@@ -189,7 +189,7 @@ QList<PathItem *> MapView::loadData(const Data &data)
 	return paths;
 }
 
-int MapView::mapZoom() const
+int MapView::fitMapZoom() const
 {
 	RectC br = _tr | _rr | _wr;
 
@@ -389,7 +389,10 @@ void MapView::setCoordinatesFormat(CoordinatesFormat format)
 void MapView::clearMapCache()
 {
 	_map->clearCache();
-	resetCachedContent();
+
+	fitMapZoom();
+	rescale();
+	centerOn(contentCenter());
 }
 
 void MapView::digitalZoom(int zoom)
@@ -767,7 +770,7 @@ void MapView::resizeEvent(QResizeEvent *event)
 	QGraphicsView::resizeEvent(event);
 
 	int zoom = _map->zoom();
-	if (mapZoom() != zoom)
+	if (fitMapZoom() != zoom)
 		rescale();
 
 	centerOn(contentCenter());
