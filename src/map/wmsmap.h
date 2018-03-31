@@ -45,7 +45,7 @@ private slots:
 	void emitLoaded();
 
 private:
-	QString tileUrl() const;
+	QString tileUrl(const QString &version) const;
 	qreal sd2res(qreal scaleDenominator) const;
 	QString tilesDir() const;
 	void computeZooms(const RangeF &scaleDenominator);
@@ -64,6 +64,7 @@ private:
 	QVector<qreal> _zooms;
 	int _zoom;
 	QRectF _boundingBox;
+	bool _yx;
 	bool _block;
 
 	bool _valid;

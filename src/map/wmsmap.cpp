@@ -15,11 +15,15 @@ qreal WMSMap::sd2res(qreal scaleDenominator) const
 	return scaleDenominator * 0.28e-3 * _projection.units().fromMeters(1.0);
 }
 
-QString WMSMap::tileUrl() const
+QString WMSMap::tileUrl(const QString &version) const
 {
-	return QString("%1?version=1.3.0&request=GetMap&CRS=%2&bbox=$bbox"
-	  "&width=%3&height=%4&layers=%5&styles=%6&format=%7&transparent=true")
-	  .arg(_setup.url(), _setup.crs(), QString::number(TILE_SIZE),
+	QString crs = version >= "1.3.0"
+	  ? QString("CRS=%1").arg(_setup.crs())
+	  : QString("SRS=%1").arg(_setup.crs());
+
+	return QString("%1?version=%2&request=GetMap&%3&bbox=$bbox"
+	  "&width=%4&height=%5&layers=%6&styles=%7&format=%8&transparent=true")
+	  .arg(_setup.url(), version, crs, QString::number(TILE_SIZE),
 	  QString::number(TILE_SIZE), _setup.layer(), _setup.style(),
 	  _setup.format());
 }
@@ -74,9 +78,12 @@ bool WMSMap::loadWMS()
 		return false;
 	}
 
+	_yx = (_setup.yx() && wms.version() >= "1.3.0") ? true : false;
 	_projection = wms.projection();
-	_boundingBox = wms.boundingBox();
-	_tileLoader = TileLoader(tileUrl(), tilesDir());
+	_boundingBox = _yx ? QRectF(QPointF(wms.boundingBox().bottom(),
+	  wms.boundingBox().right()), QPointF(wms.boundingBox().top(),
+	  wms.boundingBox().left())) : wms.boundingBox();
+	_tileLoader = TileLoader(tileUrl(wms.version()), tilesDir());
 
 	computeZooms(wms.scaleDenominator());
 	updateTransform();
@@ -205,7 +212,7 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect)
 			  j * TILE_SIZE)));
 			QPointF tbr(_transform.img2proj(QPointF(i * TILE_SIZE + TILE_SIZE
 			  - 1, j * TILE_SIZE + TILE_SIZE - 1)));
-			QRectF bbox = _setup.yx()
+			QRectF bbox = _yx
 			  ? QRectF(QPointF(tbr.y(), tbr.x()), QPointF(ttl.y(), ttl.x()))
 			  : QRectF(ttl, tbr);
 

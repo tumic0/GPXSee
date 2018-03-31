@@ -67,18 +67,11 @@ void WMS::layer(QXmlStreamReader &reader, CTX &ctx,
 		else if (reader.name() == "BoundingBox") {
 			QXmlStreamAttributes attr = reader.attributes();
 			if (attr.value("CRS") == ctx.setup.crs()) {
-				if (ctx.setup.yx())
-					boundingBox = QRectF(QPointF(
-					  attr.value("miny").toString().toDouble(),
-					  attr.value("maxx").toString().toDouble()),
-					  QPointF(attr.value("maxy").toString().toDouble(),
-					  attr.value("minx").toString().toDouble()));
-				else
-					boundingBox = QRectF(QPointF(
-					  attr.value("minx").toString().toDouble(),
-					  attr.value("maxy").toString().toDouble()),
-					  QPointF(attr.value("maxx").toString().toDouble(),
-					  attr.value("miny").toString().toDouble()));
+				boundingBox = QRectF(QPointF(
+				  attr.value("minx").toString().toDouble(),
+				  attr.value("maxy").toString().toDouble()),
+				  QPointF(attr.value("maxx").toString().toDouble(),
+				  attr.value("miny").toString().toDouble()));
 			}
 			reader.skipCurrentElement();
 		} else if (reader.name() == "Layer")
@@ -113,6 +106,8 @@ void WMS::capability(QXmlStreamReader &reader, CTX &ctx)
 
 void WMS::capabilities(QXmlStreamReader &reader, CTX &ctx)
 {
+	_version = reader.attributes().value("version").toString();
+
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Capability")
 			capability(reader, ctx);

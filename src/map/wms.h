@@ -42,6 +42,7 @@ public:
 	const Projection &projection() const {return _projection;}
 	const RangeF &scaleDenominator() const {return _scaleDenominator;}
 	const QRectF &boundingBox() const {return _boundingBox;}
+	const QString &version() const {return _version;}
 
 	bool isValid() const {return _valid;}
 	const QString &errorString() const {return _errorString;}
@@ -76,6 +77,7 @@ private:
 	Projection _projection;
 	RangeF _scaleDenominator;
 	QRectF _boundingBox;
+	QString _version;
 
 	bool _valid;
 	QString _errorString;
