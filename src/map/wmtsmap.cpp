@@ -23,7 +23,8 @@ bool WMTSMap::loadWMTS()
 	_bounds = wmts.bounds();
 	_zooms = wmts.zooms();
 	_projection = wmts.projection();
-	_tileLoader = TileLoader(wmts.tileUrl(), tilesDir());
+	_tileLoader = TileLoader(wmts.tileUrl(), tilesDir(),
+	  _setup.authorization());
 
 	updateTransform();
 

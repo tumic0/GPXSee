@@ -4,6 +4,7 @@
 #include <QList>
 #include "common/range.h"
 #include "common/rectc.h"
+#include "downloader.h"
 
 class Map;
 class QXmlStreamReader;
@@ -35,6 +36,7 @@ private:
 		bool rest;
 		bool yx;
 		QList<QPair<QString, QString> > dimensions;
+		Authorization authorization;
 
 		Config();
 	};

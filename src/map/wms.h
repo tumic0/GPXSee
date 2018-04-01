@@ -4,10 +4,11 @@
 #include <QString>
 #include <QRectF>
 #include "common/range.h"
+#include "common/rectc.h"
 #include "projection.h"
+#include "downloader.h"
 
 class QXmlStreamReader;
-class Downloader;
 
 class WMS
 {
@@ -16,11 +17,13 @@ public:
 	{
 	public:
 		Setup(const QString &url, const QString &layer, const QString &style,
-		  const QString &format, const QString &crs, bool yx)
+		  const QString &format, const QString &crs, bool yx,
+		  const Authorization &authorization = Authorization())
 		  : _url(url), _layer(layer), _style(style), _format(format), _crs(crs),
-		  _yx(yx) {}
+		  _yx(yx), _authorization(authorization) {}
 
 		const QString &url() const {return _url;}
+		const Authorization &authorization() const {return _authorization;}
 		const QString &layer() const {return _layer;}
 		const QString &style() const {return _style;}
 		const QString &format() const {return _format;}
@@ -34,6 +37,7 @@ public:
 		QString _format;
 		QString _crs;
 		bool _yx;
+		Authorization _authorization;
 	};
 
 
@@ -41,7 +45,7 @@ public:
 
 	const Projection &projection() const {return _projection;}
 	const RangeF &scaleDenominator() const {return _scaleDenominator;}
-	const QRectF &boundingBox() const {return _boundingBox;}
+	const RectC &boundingBox() const {return _boundingBox;}
 	const QString &version() const {return _version;}
 
 	bool isValid() const {return _valid;}
@@ -54,7 +58,7 @@ private:
 	struct CTX {
 		const Setup &setup;
 		RangeF scaleDenominator;
-		QRectF boundingBox;
+		RectC boundingBox;
 		bool layer;
 		bool style;
 		bool format;
@@ -64,19 +68,22 @@ private:
 		  format(false), crs(false) {}
 	};
 
+	RectC geographicBoundingBox(QXmlStreamReader &reader);
 	QString style(QXmlStreamReader &reader);
 	void getMap(QXmlStreamReader &reader, CTX &ctx);
 	void request(QXmlStreamReader &reader, CTX &ctx);
 	void layer(QXmlStreamReader &reader, CTX &ctx, const QList<QString> &pCRSs,
-	  const QList<QString> &pStyles);
+	  const QList<QString> &pStyles, RangeF &pScaleDenominator,
+	  RectC &pBoundingBox);
 	void capability(QXmlStreamReader &reader, CTX &ctx);
 	void capabilities(QXmlStreamReader &reader, CTX &ctx);
 	bool parseCapabilities(const QString &path, const Setup &setup);
-	bool getCapabilities(const QString &url, const QString &file);
+	bool getCapabilities(const QString &url, const QString &file,
+	  const Authorization &authorization);
 
 	Projection _projection;
 	RangeF _scaleDenominator;
-	QRectF _boundingBox;
+	RectC _boundingBox;
 	QString _version;
 
 	bool _valid;

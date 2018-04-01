@@ -80,10 +80,10 @@ bool WMSMap::loadWMS()
 
 	_yx = (_setup.yx() && wms.version() >= "1.3.0") ? true : false;
 	_projection = wms.projection();
-	_boundingBox = _yx ? QRectF(QPointF(wms.boundingBox().bottom(),
-	  wms.boundingBox().right()), QPointF(wms.boundingBox().top(),
-	  wms.boundingBox().left())) : wms.boundingBox();
-	_tileLoader = TileLoader(tileUrl(wms.version()), tilesDir());
+	_boundingBox = QRectF(_projection.ll2xy(wms.boundingBox().topLeft()),
+	  _projection.ll2xy(wms.boundingBox().bottomRight()));
+	_tileLoader = TileLoader(tileUrl(wms.version()), tilesDir(),
+	  _setup.authorization());
 
 	computeZooms(wms.scaleDenominator());
 	updateTransform();

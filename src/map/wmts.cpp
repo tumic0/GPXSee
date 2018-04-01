@@ -282,7 +282,8 @@ bool WMTS::parseCapabilities(const QString &path, const Setup &setup)
 	return true;
 }
 
-bool WMTS::getCapabilities(const QString &url, const QString &file)
+bool WMTS::getCapabilities(const QString &url, const QString &file,
+  const Authorization &authorization)
 {
 	QList<Download> dl;
 
@@ -290,7 +291,7 @@ bool WMTS::getCapabilities(const QString &url, const QString &file)
 
 	QEventLoop wait;
 	QObject::connect(_downloader, SIGNAL(finished()), &wait, SLOT(quit()));
-	if (_downloader->get(dl))
+	if (_downloader->get(dl, authorization))
 		wait.exec();
 
 	if (QFileInfo(file).exists())
@@ -308,7 +309,7 @@ WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
 	  .arg(setup.url());
 
 	if (!QFileInfo(file).exists())
-		if (!getCapabilities(capaUrl, file))
+		if (!getCapabilities(capaUrl, file, setup.authorization()))
 			return;
 	if (!parseCapabilities(file, setup))
 		return;

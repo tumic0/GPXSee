@@ -33,7 +33,7 @@ void TileLoader::loadTilesAsync(QList<Tile> &list)
 	}
 
 	if (!dl.empty())
-		_downloader->get(dl);
+		_downloader->get(dl, _authorization);
 }
 
 void TileLoader::loadTilesSync(QList<Tile> &list)
@@ -56,7 +56,7 @@ void TileLoader::loadTilesSync(QList<Tile> &list)
 
 	QEventLoop wait;
 	QObject::connect(_downloader, SIGNAL(finished()), &wait, SLOT(quit()));
-	if (_downloader->get(dl))
+	if (_downloader->get(dl, _authorization))
 		wait.exec();
 
 	for (int i = 0; i < list.size(); i++) {

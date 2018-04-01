@@ -29,6 +29,13 @@
 #define TIMEOUT            30 /* s */
 
 
+Authorization::Authorization(const QString &username, const QString &password)
+{
+	QString concatenated = username + ":" + password;
+	QByteArray data = concatenated.toLocal8Bit().toBase64();
+	_header = "Basic " + data;
+}
+
 class Downloader::ReplyTimeout : public QObject
 {
 public:
@@ -79,7 +86,8 @@ Downloader::Downloader(QObject *parent) : QObject(parent)
 	  SLOT(downloadFinished(QNetworkReply*)));
 }
 
-bool Downloader::doDownload(const Download &dl, const Redirect *redirect)
+bool Downloader::doDownload(const Download &dl,
+  const QByteArray &authorization, const Redirect *redirect)
 {
 	QUrl url(dl.url());
 
@@ -95,6 +103,8 @@ bool Downloader::doDownload(const Download &dl, const Redirect *redirect)
 		request.setAttribute(ATTR_LEVEL, QVariant(redirect->level()));
 	}
 	request.setRawHeader("User-Agent", USER_AGENT);
+	if (!authorization.isNull())
+		request.setRawHeader("Authorization", authorization);
 
 	QNetworkReply *reply = _manager.get(request);
 	if (reply) {
@@ -159,7 +169,8 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 			} else {
 				Redirect redirect(origin.isEmpty() ? url : origin, level + 1);
 				Download dl(location, filename);
-				doDownload(dl, &redirect);
+				doDownload(dl, reply->request().rawHeader("Authorization"),
+				  &redirect);
 			}
 		} else
 			if (!saveToDisk(filename, reply))
@@ -173,12 +184,13 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 		emit finished();
 }
 
-bool Downloader::get(const QList<Download> &list)
+bool Downloader::get(const QList<Download> &list,
+  const Authorization &authorization)
 {
 	bool finishEmitted = false;
 
 	for (int i = 0; i < list.count(); i++)
-		finishEmitted |= doDownload(list.at(i));
+		finishEmitted |= doDownload(list.at(i), authorization.header());
 
 	return finishEmitted;
 }

@@ -1,4 +1,4 @@
-#ifndef DOWNLOADER_H
+﻿#ifndef DOWNLOADER_H
 #define DOWNLOADER_H
 
 #include <QNetworkAccessManager>
@@ -11,8 +11,8 @@ class QNetworkReply;
 class Download
 {
 public:
-	Download(const QUrl &url, const QString &file)
-		{_url = url; _file = file;}
+	Download(const QUrl &url, const QString &file) : _url(url), _file(file) {}
+
 	const QUrl& url() const {return _url;}
 	const QString& file() const {return _file;}
 
@@ -21,6 +21,17 @@ private:
 	QString _file;
 };
 
+class Authorization
+{
+public:
+	Authorization() {}
+	Authorization(const QString &username, const QString &password);
+
+	const QByteArray &header() const {return _header;}
+
+private:
+	QByteArray _header;
+};
 
 class Downloader : public QObject
 {
@@ -29,7 +40,8 @@ class Downloader : public QObject
 public:
 	Downloader(QObject *parent = 0);
 
-	bool get(const QList<Download> &list);
+	bool get(const QList<Download> &list, const Authorization &authorization
+	  = Authorization());
 	void clearErrors() {_errorDownloads.clear();}
 
 signals:
@@ -42,7 +54,8 @@ private:
 	class Redirect;
 	class ReplyTimeout;
 
-	bool doDownload(const Download &dl, const Redirect *redirect = 0);
+	bool doDownload(const Download &dl, const QByteArray &authorization,
+	  const Redirect *redirect = 0);
 	bool saveToDisk(const QString &filename, QIODevice *data);
 
 	QNetworkAccessManager _manager;

@@ -8,8 +8,8 @@
 #include <QHash>
 #include "common/rectc.h"
 #include "projection.h"
+#include "downloader.h"
 
-class Downloader;
 class QXmlStreamReader;
 
 class WMTS
@@ -20,11 +20,14 @@ public:
 	public:
 		Setup(const QString &url, const QString &layer, const QString &set,
 		  const QString &style, const QString &format, bool rest, bool yx,
-		  const QList<QPair<QString, QString> > &dimensions) :
+		  const QList<QPair<QString, QString> > &dimensions,
+		  const Authorization &authorization = Authorization()) :
 		  _url(url), _layer(layer), _set(set), _style(style), _format(format),
-		  _rest(rest), _yx(yx), _dimensions(dimensions) {}
+		  _rest(rest), _yx(yx), _dimensions(dimensions),
+		  _authorization(authorization) {}
 
 		const QString &url() const {return _url;}
+		const Authorization &authorization() const {return _authorization;}
 		const QString &layer() const {return _layer;}
 		const QString &set() const {return _set;}
 		const QString &style() const {return _style;}
@@ -43,6 +46,7 @@ public:
 		bool _rest;
 		bool _yx;
 		QList<QPair<QString, QString> > _dimensions;
+		Authorization _authorization;
 	};
 
 	class Zoom
@@ -136,7 +140,8 @@ private:
 	void contents(QXmlStreamReader &reader, CTX &ctx);
 	void capabilities(QXmlStreamReader &reader, CTX &ctx);
 	bool parseCapabilities(const QString &path, const Setup &setup);
-	bool getCapabilities(const QString &url, const QString &file);
+	bool getCapabilities(const QString &url, const QString &file,
+	  const Authorization &authorization);
 
 	QSet<TileMatrix> _matrixes;
 	QSet<MatrixLimits> _limits;

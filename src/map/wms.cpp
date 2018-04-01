@@ -43,20 +43,40 @@ QString WMS::style(QXmlStreamReader &reader)
 	return name;
 }
 
+RectC WMS::geographicBoundingBox(QXmlStreamReader &reader)
+{
+	qreal left, top, right, bottom;
+
+	while (reader.readNextStartElement()) {
+		if (reader.name() == "westBoundLongitude")
+			left = reader.readElementText().toDouble();
+		else if (reader.name() == "eastBoundLongitude")
+			right = reader.readElementText().toDouble();
+		else if (reader.name() == "northBoundLatitude")
+			top = reader.readElementText().toDouble();
+		else if (reader.name() == "southBoundLatitude")
+			bottom = reader.readElementText().toDouble();
+		else
+			reader.skipCurrentElement();
+	}
+
+	return RectC(Coordinates(left, top), Coordinates(right, bottom));
+}
+
 void WMS::layer(QXmlStreamReader &reader, CTX &ctx,
-  const QList<QString> &pCRSs, const QList<QString> &pStyles)
+  const QList<QString> &pCRSs, const QList<QString> &pStyles,
+  RangeF &pScaleDenominator, RectC &pBoundingBox)
 {
 	QString name;
 	QList<QString> CRSs(pCRSs);
 	QList<QString> styles(pStyles);
-	RangeF scaleDenominator(2132.729583849784, 559082264.0287178);
-	QRectF boundingBox;
-
+	RangeF scaleDenominator(pScaleDenominator);
+	RectC boundingBox(pBoundingBox);
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Name")
 			name = reader.readElementText();
-		else if (reader.name() == "CRS")
+		else if (reader.name() == "CRS" || reader.name() == "SRS")
 			CRSs.append(reader.readElementText());
 		else if (reader.name() == "Style")
 			styles.append(style(reader));
@@ -64,18 +84,18 @@ void WMS::layer(QXmlStreamReader &reader, CTX &ctx,
 			scaleDenominator.setMin(reader.readElementText().toDouble());
 		else if (reader.name() == "MaxScaleDenominator")
 			scaleDenominator.setMax(reader.readElementText().toDouble());
-		else if (reader.name() == "BoundingBox") {
+		else if (reader.name() == "LatLonBoundingBox") {
 			QXmlStreamAttributes attr = reader.attributes();
-			if (attr.value("CRS") == ctx.setup.crs()) {
-				boundingBox = QRectF(QPointF(
-				  attr.value("minx").toString().toDouble(),
-				  attr.value("maxy").toString().toDouble()),
-				  QPointF(attr.value("maxx").toString().toDouble(),
-				  attr.value("miny").toString().toDouble()));
-			}
+			boundingBox = RectC(Coordinates(
+			  attr.value("minx").toString().toDouble(),
+			  attr.value("maxy").toString().toDouble()),
+			  Coordinates(attr.value("maxx").toString().toDouble(),
+			  attr.value("miny").toString().toDouble()));
 			reader.skipCurrentElement();
-		} else if (reader.name() == "Layer")
-			layer(reader, ctx, CRSs, styles);
+		} else if (reader.name() == "EX_GeographicBoundingBox")
+			boundingBox = geographicBoundingBox(reader);
+		else if (reader.name() == "Layer")
+			layer(reader, ctx, CRSs, styles, scaleDenominator, boundingBox);
 		else
 			reader.skipCurrentElement();
 	}
@@ -93,10 +113,12 @@ void WMS::capability(QXmlStreamReader &reader, CTX &ctx)
 {
 	QList<QString> CRSs;
 	QList<QString> styles;
+	RangeF scaleDenominator(2132.729583849784, 559082264.0287178);
+	RectC boundingBox;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Layer")
-			layer(reader, ctx, CRSs, styles);
+			layer(reader, ctx, CRSs, styles, scaleDenominator, boundingBox);
 		else if (reader.name() == "Request")
 			request(reader, ctx);
 		else
@@ -129,10 +151,11 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 
 	reader.setDevice(&file);
 	if (reader.readNextStartElement()) {
-		if (reader.name() == "WMS_Capabilities")
+		if (reader.name() == "WMS_Capabilities"
+		  || reader.name() == "WMT_MS_Capabilities")
 			capabilities(reader, ctx);
 		else
-			reader.raiseError("Not a WMS_Capabilities XML file");
+			reader.raiseError("Not a WMS Capabilities XML file");
 	}
 	if (reader.error()) {
 		_errorString = QString("%1:%2: %3").arg(path).arg(reader.lineNumber())
@@ -176,7 +199,8 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 	return true;
 }
 
-bool WMS::getCapabilities(const QString &url, const QString &file)
+bool WMS::getCapabilities(const QString &url, const QString &file,
+  const Authorization &authorization)
 {
 	QList<Download> dl;
 
@@ -184,7 +208,7 @@ bool WMS::getCapabilities(const QString &url, const QString &file)
 
 	QEventLoop wait;
 	QObject::connect(_downloader, SIGNAL(finished()), &wait, SLOT(quit()));
-	if (_downloader->get(dl))
+	if (_downloader->get(dl, authorization))
 		wait.exec();
 
 	if (QFileInfo(file).exists())
@@ -201,7 +225,7 @@ WMS::WMS(const QString &file, const WMS::Setup &setup) : _valid(false)
 	  .arg(setup.url());
 
 	if (!QFileInfo(file).exists())
-		if (!getCapabilities(capaUrl, file))
+		if (!getCapabilities(capaUrl, file, setup.authorization()))
 			return;
 	if (!parseCapabilities(file, setup))
 		return;

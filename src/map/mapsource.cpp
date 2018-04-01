@@ -144,6 +144,12 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 			config.yx = (reader.attributes().value("axis") == "yx")
 			  ? true : false;
 			config.crs = reader.readElementText();
+		} else if (reader.name() == "authorization") {
+			QXmlStreamAttributes attr = reader.attributes();
+			config.authorization = Authorization(
+			  attr.value("username").toString(),
+			  attr.value("password").toString());
+			reader.skipCurrentElement();
 		} else
 			reader.skipCurrentElement();
 	}
@@ -213,10 +219,11 @@ Map *MapSource::loadFile(const QString &path)
 	if (config.type == WMTS)
 		m = new WMTSMap(config.name, WMTS::Setup(config.url, config.layer,
 		  config.set, config.style, config.format, config.rest, config.yx,
-		  config.dimensions));
+		  config.dimensions, config.authorization));
 	else if (config.type == WMS)
 		m = new WMSMap(config.name, WMS::Setup(config.url, config.layer,
-		  config.style, config.format, config.crs, config.yx));
+		  config.style, config.format, config.crs, config.yx,
+		  config.authorization));
 	else
 		m = new OnlineMap(config.name, config.url, config.zooms, config.bounds);
 

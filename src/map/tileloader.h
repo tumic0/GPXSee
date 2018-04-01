@@ -3,15 +3,15 @@
 
 #include <QString>
 #include "tile.h"
-
-class Downloader;
+#include "downloader.h"
 
 class TileLoader
 {
 public:
 	TileLoader() {}
-	TileLoader(const QString &url, const QString &dir)
-	  : _url(url), _dir(dir) {}
+	TileLoader(const QString &url, const QString &dir,
+	  const Authorization &authorization = Authorization())
+	  : _url(url), _dir(dir), _authorization(authorization) {}
 
 	void loadTilesAsync(QList<Tile> &list);
 	void loadTilesSync(QList<Tile> &list);
@@ -27,6 +27,7 @@ private:
 
 	QString _url;
 	QString _dir;
+	Authorization _authorization;
 
 	static Downloader *_downloader;
 };
