@@ -167,7 +167,7 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 		_errorString = ctx.setup.layer() + ": layer not provided";
 		return false;
 	}
-	if (!ctx.style) {
+	if (!ctx.style && ctx.setup.style() != "default") {
 		_errorString = ctx.setup.style() + ": style not provided";
 		return false;
 	}
