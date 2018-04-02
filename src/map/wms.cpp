@@ -17,11 +17,8 @@ WMS::CTX::CTX(const Setup &setup) : setup(setup), formatSupported(false)
 	if (ll.size() != sl.size())
 		return;
 
-	for (int i = 0; i < ll.size(); i++) {
+	for (int i = 0; i < ll.size(); i++)
 		layers.append(Layer(ll.at(i), sl.at(i)));
-		if (sl.at(i) == "default")
-			layers[i].hasStyle = true;
-	}
 }
 
 void WMS::getMap(QXmlStreamReader &reader, CTX &ctx)
@@ -99,11 +96,11 @@ void WMS::layer(QXmlStreamReader &reader, CTX &ctx,
 			styles.append(style(reader));
 		else if (reader.name() == "MinScaleDenominator") {
 			double sd = reader.readElementText().toDouble();
-			if (!std::isnan(sd))
+			if (sd > 0)
 				scaleDenominator.setMin(sd);
 		} else if (reader.name() == "MaxScaleDenominator") {
 			double sd = reader.readElementText().toDouble();
-			if (!std::isnan(sd))
+			if (sd > 0)
 				scaleDenominator.setMax(sd);
 		} else if (reader.name() == "LatLonBoundingBox") {
 			QXmlStreamAttributes attr = reader.attributes();
@@ -137,6 +134,8 @@ void WMS::capability(QXmlStreamReader &reader, CTX &ctx)
 	QList<QString> styles;
 	RangeF scaleDenominator(2132.729583849784, 559082264.0287178);
 	RectC boundingBox;
+
+	styles.append("default");
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Layer")
