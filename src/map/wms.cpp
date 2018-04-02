@@ -96,11 +96,15 @@ void WMS::layer(QXmlStreamReader &reader, CTX &ctx,
 			CRSs.append(reader.readElementText());
 		else if (reader.name() == "Style")
 			styles.append(style(reader));
-		else if (reader.name() == "MinScaleDenominator")
-			scaleDenominator.setMin(reader.readElementText().toDouble());
-		else if (reader.name() == "MaxScaleDenominator")
-			scaleDenominator.setMax(reader.readElementText().toDouble());
-		else if (reader.name() == "LatLonBoundingBox") {
+		else if (reader.name() == "MinScaleDenominator") {
+			double sd = reader.readElementText().toDouble();
+			if (!std::isnan(sd))
+				scaleDenominator.setMin(sd);
+		} else if (reader.name() == "MaxScaleDenominator") {
+			double sd = reader.readElementText().toDouble();
+			if (!std::isnan(sd))
+				scaleDenominator.setMax(sd);
+		} else if (reader.name() == "LatLonBoundingBox") {
 			QXmlStreamAttributes attr = reader.attributes();
 			boundingBox = RectC(Coordinates(
 			  attr.value("minx").toString().toDouble(),
@@ -208,13 +212,14 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 			  + layer.name;
 			return false;
 		}
-		if (!layer.scaleDenominator.isValid()) {
-			_errorString = "Invalid scale denominator range for layer"
+		if (!layer.scaleDenominator.isValid()
+		  || layer.scaleDenominator.isNull()) {
+			_errorString = "Invalid scale denominator range for layer "
 			  + layer.name;
 			return false;
 		}
 		if (!layer.boundingBox.isValid()) {
-			_errorString = "Invalid/missing bounding box for layer"
+			_errorString = "Invalid/missing bounding box for layer "
 			  + layer.name;
 			return false;
 		}
@@ -226,10 +231,21 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 		return false;
 	}
 
-	for (int i = 0; i < ctx.layers.size(); i++)
-		_boundingBox |= ctx.layers.at(i).boundingBox;
-	for (int i = 0; i < ctx.layers.size(); i++)
-		_scaleDenominator |= ctx.layers.first().scaleDenominator;
+	_boundingBox = ctx.layers.first().boundingBox;
+	for (int i = 1; i < ctx.layers.size(); i++)
+		_boundingBox &= ctx.layers.at(i).boundingBox;
+	if (_boundingBox.isNull()) {
+		_errorString = "Empty layers bounding box join";
+		return false;
+	}
+
+	_scaleDenominator = ctx.layers.first().scaleDenominator;
+	for (int i = 1; i < ctx.layers.size(); i++)
+		_scaleDenominator &= ctx.layers.at(i).scaleDenominator;
+	if (_scaleDenominator.isNull()) {
+		_errorString = "Empty layers scale denominator range join";
+		return false;
+	}
 
 	return true;
 }

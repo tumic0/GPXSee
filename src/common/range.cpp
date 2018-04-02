@@ -8,13 +8,13 @@ void RangeF::resize(qreal size)
 	_max += adj;
 }
 
-RangeF RangeF::operator|(const RangeF &r) const
+RangeF RangeF::operator&(const RangeF &r) const
 {
-	if (isNull())
-		return r;
-	if (r.isNull())
-		return *this;
-	return RangeF(qMax(this->_min, r._min), qMin(this->_max, r._max));
+	if (isNull() || r.isNull())
+		return RangeF();
+
+	RangeF tmp(qMax(this->_min, r._min), qMin(this->_max, r._max));
+	return tmp.isValid() ? tmp : RangeF();
 }
 
 #ifndef QT_NO_DEBUG

@@ -30,6 +30,8 @@ public:
 
 	RectC operator|(const RectC &r) const;
 	RectC &operator|=(const RectC &r) {*this = *this | r; return *this;}
+	RectC operator&(const RectC &r) const;
+	RectC &operator&=(const RectC &r) {*this = *this & r; return *this;}
 
 	void unite(const Coordinates &c);
 
