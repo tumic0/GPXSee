@@ -1,6 +1,7 @@
 #include <QFileInfo>
 #include <QEventLoop>
 #include <QXmlStreamReader>
+#include <QStringList>
 #include "downloader.h"
 #include "crs.h"
 #include "wms.h"
