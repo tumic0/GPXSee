@@ -55,17 +55,28 @@ public:
 	  {_downloader = downloader;}
 
 private:
-	struct CTX {
-		const Setup &setup;
+	struct Layer {
+		QString name;
+		QString style;
 		RangeF scaleDenominator;
 		RectC boundingBox;
-		bool layer;
-		bool style;
-		bool format;
-		bool crs;
+		bool isDefined;
+		bool hasStyle;
+		bool hasCRS;
 
-		CTX(const Setup &setup) : setup(setup), layer(false), style(false),
-		  format(false), crs(false) {}
+		Layer(const QString &name, const QString &style = "default")
+		  : name(name), style(style), isDefined(false), hasStyle(false),
+		  hasCRS(false) {}
+		bool operator==(const Layer &other) const
+		  {return this->name == other.name;}
+	};
+
+	struct CTX {
+		const Setup &setup;
+		QList<Layer> layers;
+		bool formatSupported;
+
+		CTX(const Setup &setup);
 	};
 
 	RectC geographicBoundingBox(QXmlStreamReader &reader);

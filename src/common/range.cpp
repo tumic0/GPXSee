@@ -8,6 +8,15 @@ void RangeF::resize(qreal size)
 	_max += adj;
 }
 
+RangeF RangeF::operator|(const RangeF &r) const
+{
+	if (isNull())
+		return r;
+	if (r.isNull())
+		return *this;
+	return RangeF(qMax(this->_min, r._min), qMin(this->_max, r._max));
+}
+
 #ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Range &range)
 {

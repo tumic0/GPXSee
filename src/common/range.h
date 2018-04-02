@@ -29,10 +29,14 @@ public:
 	RangeF() {_min = 0; _max = 0;}
 	RangeF(qreal min, qreal max) {_min = min, _max = max;}
 
+	RangeF operator|(const RangeF &r) const;
+	RangeF &operator|=(const RangeF &r) {*this = *this | r; return *this;}
+
 	qreal min() const {return _min;}
 	qreal max() const {return _max;}
 	qreal size() const {return (_max - _min);}
 
+	bool isNull() const {return _min == 0 && _max == 0;}
 	bool isValid() const {return size() >= 0;}
 
 	void setMin(qreal min) {_min = min;}

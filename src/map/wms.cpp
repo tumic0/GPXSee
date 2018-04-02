@@ -8,12 +8,27 @@
 
 Downloader *WMS::_downloader = 0;
 
+WMS::CTX::CTX(const Setup &setup) : setup(setup), formatSupported(false)
+{
+	QStringList ll = setup.layer().split(',');
+	QStringList sl = setup.style().split(',');
+
+	if (ll.size() != sl.size())
+		return;
+
+	for (int i = 0; i < ll.size(); i++) {
+		layers.append(Layer(ll.at(i), sl.at(i)));
+		if (sl.at(i) == "default")
+			layers[i].hasStyle = true;
+	}
+}
+
 void WMS::getMap(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Format") {
 			if (reader.readElementText() == ctx.setup.format())
-				ctx.format = true;
+				ctx.formatSupported = true;
 		} else
 			reader.skipCurrentElement();
 	}
@@ -72,6 +87,7 @@ void WMS::layer(QXmlStreamReader &reader, CTX &ctx,
 	QList<QString> styles(pStyles);
 	RangeF scaleDenominator(pScaleDenominator);
 	RectC boundingBox(pBoundingBox);
+	int index;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Name")
@@ -100,12 +116,13 @@ void WMS::layer(QXmlStreamReader &reader, CTX &ctx,
 			reader.skipCurrentElement();
 	}
 
-	if (name == ctx.setup.layer()) {
-		ctx.scaleDenominator = scaleDenominator;
-		ctx.boundingBox = boundingBox;
-		ctx.layer = true;
-		ctx.style = styles.contains(ctx.setup.style());
-		ctx.crs = CRSs.contains(ctx.setup.crs());
+	if ((index = ctx.layers.indexOf(name)) >= 0) {
+		Layer &layer = ctx.layers[index];
+		layer.scaleDenominator = scaleDenominator;
+		layer.boundingBox = boundingBox;
+		layer.isDefined = true;
+		layer.hasStyle = styles.contains(layer.style);
+		layer.hasCRS = CRSs.contains(ctx.setup.crs());
 	}
 }
 
@@ -144,6 +161,12 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 	CTX ctx(setup);
 	QXmlStreamReader reader;
 
+
+	if (ctx.layers.isEmpty()) {
+		_errorString = "Invalid layers definition";
+		return false;
+	}
+
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		_errorString = file.errorString();
 		return false;
@@ -163,38 +186,50 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 		return false;
 	}
 
-	if (!ctx.layer) {
-		_errorString = ctx.setup.layer() + ": layer not provided";
-		return false;
-	}
-	if (!ctx.style && ctx.setup.style() != "default") {
-		_errorString = ctx.setup.style() + ": style not provided";
-		return false;
-	}
-	if (!ctx.format) {
+	if (!ctx.formatSupported) {
 		_errorString = ctx.setup.format() + ": format not provided";
 		return false;
 	}
-	if (!ctx.crs) {
-		_errorString = ctx.setup.crs() + ": CRS not provided";
-		return false;
+
+	for (int i = 0; i < ctx.layers.size(); i++) {
+		const Layer &layer = ctx.layers.at(i);
+
+		if (!layer.isDefined) {
+			_errorString = ctx.setup.layer() + ": layer not provided";
+			return false;
+		}
+		if (!layer.hasStyle) {
+			_errorString = ctx.setup.style() + ": style not provided for layer "
+			  + layer.name;
+			return false;
+		}
+		if (!layer.hasCRS) {
+			_errorString = ctx.setup.crs() + ": CRS not provided for layer "
+			  + layer.name;
+			return false;
+		}
+		if (!layer.scaleDenominator.isValid()) {
+			_errorString = "Invalid scale denominator range for layer"
+			  + layer.name;
+			return false;
+		}
+		if (!layer.boundingBox.isValid()) {
+			_errorString = "Invalid/missing bounding box for layer"
+			  + layer.name;
+			return false;
+		}
 	}
+
 	_projection = CRS::projection(ctx.setup.crs());
 	if (_projection.isNull()) {
 		_errorString = ctx.setup.crs() + ": unknown CRS";
 		return false;
 	}
-	if (!ctx.scaleDenominator.isValid()) {
-		_errorString = "Invalid scale denominator range";
-		return false;
-	}
-	if (ctx.boundingBox.isNull()) {
-		_errorString = "Missing bounding box";
-		return false;
-	}
 
-	_boundingBox = ctx.boundingBox;
-	_scaleDenominator = ctx.scaleDenominator;
+	for (int i = 0; i < ctx.layers.size(); i++)
+		_boundingBox |= ctx.layers.at(i).boundingBox;
+	for (int i = 0; i < ctx.layers.size(); i++)
+		_scaleDenominator |= ctx.layers.first().scaleDenominator;
 
 	return true;
 }
