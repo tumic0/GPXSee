@@ -92,6 +92,28 @@ RectC RectC::operator&(const RectC &r) const
 	return tmp;
 }
 
+RectC RectC::normalized() const
+{
+	RectC r;
+
+	if (_br.lon() < _tl.lon()) {
+		r._tl.setLon(_br.lon());
+		r._br.setLon(_tl.lon());
+	} else {
+		r._tl.setLon(_tl.lon());
+		r._br.setLon(_br.lon());
+	}
+	if (_br.lat() < _tl.lat()) {
+		r._tl.setLat(_br.lat());
+		r._br.setLat(_tl.lat());
+	} else {
+		r._tl.setLat(_tl.lat());
+		r._br.setLat(_br.lat());
+	}
+
+	return r;
+}
+
 void RectC::unite(const Coordinates &c)
 {
 	if (isNull()) {

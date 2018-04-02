@@ -34,6 +34,7 @@ public:
 	RectC &operator&=(const RectC &r) {*this = *this & r; return *this;}
 
 	void unite(const Coordinates &c);
+	RectC normalized() const;
 
 private:
 	Coordinates _tl, _br;

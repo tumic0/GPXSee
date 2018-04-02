@@ -80,8 +80,10 @@ bool WMSMap::loadWMS()
 
 	_yx = (_setup.yx() && wms.version() >= "1.3.0") ? true : false;
 	_projection = wms.projection();
-	_boundingBox = QRectF(_projection.ll2xy(wms.boundingBox().topLeft()),
-	  _projection.ll2xy(wms.boundingBox().bottomRight()));
+	RectC bb = wms.boundingBox().normalized();
+	_boundingBox = QRectF(_projection.ll2xy(Coordinates(bb.topLeft().lon(),
+	  bb.bottomRight().lat())), _projection.ll2xy(Coordinates(
+	  bb.bottomRight().lon(), bb.topLeft().lat())));
 	_tileLoader = TileLoader(tileUrl(wms.version()), tilesDir(),
 	  _setup.authorization());
 
