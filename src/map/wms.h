@@ -64,7 +64,7 @@ private:
 		bool hasStyle;
 		bool hasCRS;
 
-		Layer(const QString &name, const QString &style = "default")
+		Layer(const QString &name, const QString &style = QString())
 		  : name(name), style(style), isDefined(false), hasStyle(false),
 		  hasCRS(false) {}
 		bool operator==(const Layer &other) const

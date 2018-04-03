@@ -12,13 +12,18 @@ Downloader *WMS::_downloader = 0;
 WMS::CTX::CTX(const Setup &setup) : setup(setup), formatSupported(false)
 {
 	QStringList ll = setup.layer().split(',');
-	QStringList sl = setup.style().split(',');
 
-	if (ll.size() != sl.size())
-		return;
+	if (setup.style().isEmpty()) {
+		for (int i = 0; i < ll.size(); i++)
+			layers.append(Layer(ll.at(i)));
+	} else {
+		QStringList sl = setup.style().split(',');
+		if (ll.size() != sl.size())
+			return;
 
-	for (int i = 0; i < ll.size(); i++)
-		layers.append(Layer(ll.at(i), sl.at(i)));
+		for (int i = 0; i < ll.size(); i++)
+			layers.append(Layer(ll.at(i), sl.at(i)));
+	}
 }
 
 void WMS::getMap(QXmlStreamReader &reader, CTX &ctx)
@@ -123,7 +128,7 @@ void WMS::layer(QXmlStreamReader &reader, CTX &ctx,
 		layer.scaleDenominator = scaleDenominator;
 		layer.boundingBox = boundingBox;
 		layer.isDefined = true;
-		layer.hasStyle = styles.contains(layer.style);
+		layer.hasStyle = styles.contains(layer.style) || layer.style.isEmpty();
 		layer.hasCRS = CRSs.contains(ctx.setup.crs());
 	}
 }
@@ -134,8 +139,6 @@ void WMS::capability(QXmlStreamReader &reader, CTX &ctx)
 	QList<QString> styles;
 	RangeF scaleDenominator(2132.729583849784, 559082264.0287178);
 	RectC boundingBox;
-
-	styles.append("default");
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Layer")
@@ -167,7 +170,7 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 
 
 	if (ctx.layers.isEmpty()) {
-		_errorString = "Invalid layers definition";
+		_errorString = "Invalid layers/styles list definition";
 		return false;
 	}
 

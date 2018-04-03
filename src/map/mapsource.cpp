@@ -15,8 +15,7 @@
 
 MapSource::Config::Config() : type(TMS), zooms(ZOOM_MIN, ZOOM_MAX),
   bounds(Coordinates(BOUNDS_LEFT, BOUNDS_TOP), Coordinates(BOUNDS_RIGHT,
-  BOUNDS_BOTTOM)), style("default"), format("image/png"), rest(false),
-  yx(false) {}
+  BOUNDS_BOTTOM)), format("image/png"), rest(false), yx(false) {}
 
 
 Range MapSource::zooms(QXmlStreamReader &reader)
@@ -193,10 +192,6 @@ Map *MapSource::loadFile(const QString &path)
 	if (config.type == WMTS || config.type == WMS) {
 		if (config.layer.isEmpty()) {
 			_errorString = "Missing layer definition";
-			return 0;
-		}
-		if (config.style.isEmpty()) {
-			_errorString = "Missing style definiton";
 			return 0;
 		}
 		if (config.format.isEmpty()) {

@@ -120,13 +120,13 @@ private:
 	struct CTX {
 		const Setup &setup;
 		QString crs;
-		bool layer;
-		bool style;
-		bool format;
-		bool set;
+		bool hasLayer;
+		bool hasStyle;
+		bool hasFormat;
+		bool hasSet;
 
-		CTX(const Setup &setup) : setup(setup), layer(false), style(false),
-		  format(false), set(false) {}
+		CTX(const Setup &setup) : setup(setup), hasLayer(false), hasStyle(false),
+		  hasFormat(false), hasSet(false) {}
 	};
 
 	RectC wgs84BoundingBox(QXmlStreamReader &reader);

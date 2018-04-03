@@ -124,7 +124,7 @@ void WMTS::tileMatrixSetLink(QXmlStreamReader &reader, CTX &ctx)
 	}
 
 	if (id == ctx.setup.set()) {
-		ctx.set = true;
+		ctx.hasSet = true;
 		_limits = limits;
 	}
 }
@@ -188,14 +188,14 @@ void WMTS::layer(QXmlStreamReader &reader, CTX &ctx)
 	}
 
 	if (id == ctx.setup.layer()) {
-		ctx.layer = true;
+		ctx.hasLayer = true;
 		_bounds = bounds;
 		if (ctx.setup.rest())
 			_tileUrl = tpl;
-		if (styles.contains(ctx.setup.style()))
-			ctx.style = true;
+		if (styles.contains(ctx.setup.style()) || ctx.setup.style().isEmpty())
+			ctx.hasStyle = true;
 		if (formats.contains(ctx.setup.format()))
-			ctx.format = true;
+			ctx.hasFormat = true;
 	}
 }
 
@@ -245,19 +245,19 @@ bool WMTS::parseCapabilities(const QString &path, const Setup &setup)
 		return false;
 	}
 
-	if (!ctx.layer) {
+	if (!ctx.hasLayer) {
 		_errorString = ctx.setup.layer() + ": layer not provided";
 		return false;
 	}
-	if (!ctx.style) {
+	if (!ctx.hasStyle) {
 		_errorString = ctx.setup.style() + ": style not provided";
 		return false;
 	}
-	if (!ctx.setup.rest() && !ctx.format) {
+	if (!ctx.setup.rest() && !ctx.hasFormat) {
 		_errorString = ctx.setup.format() + ": format not provided";
 		return false;
 	}
-	if (!ctx.set) {
+	if (!ctx.hasSet) {
 		_errorString = ctx.setup.set() + ": set not provided";
 		return false;
 	}
@@ -314,17 +314,18 @@ WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
 	if (!parseCapabilities(file, setup))
 		return;
 
+	QString style = setup.style().isEmpty() ? "default" : setup.style();
 	if (!setup.rest()) {
 		_tileUrl = QString("%1?service=WMTS&Version=1.0.0&request=GetTile"
 		  "&Format=%2&Layer=%3&Style=%4&TileMatrixSet=%5&TileMatrix=$z"
-		  "&TileRow=$y&TileCol=$x").arg(setup.url()).arg(setup.format())
-		  .arg(setup.layer()).arg(setup.style()).arg(setup.set());
+		  "&TileRow=$y&TileCol=$x").arg(setup.url(), setup.format(),
+		  setup.layer(), style, setup.set());
 		for (int i = 0; i < setup.dimensions().size(); i++) {
 			const QPair<QString, QString> &dim = setup.dimensions().at(i);
-			_tileUrl.append(QString("&%1=%2").arg(dim.first).arg(dim.second));
+			_tileUrl.append(QString("&%1=%2").arg(dim.first, dim.second));
 		}
 	} else {
-		_tileUrl.replace("{Style}", setup.style(), Qt::CaseInsensitive);
+		_tileUrl.replace("{Style}", style, Qt::CaseInsensitive);
 		_tileUrl.replace("{TileMatrixSet}", setup.set(), Qt::CaseInsensitive);
 		_tileUrl.replace("{TileMatrix}", "$z", Qt::CaseInsensitive);
 		_tileUrl.replace("{TileRow}", "$y", Qt::CaseInsensitive);
@@ -350,8 +351,8 @@ QList<WMTS::Zoom> WMTS::zooms() const
 			zooms.append(Zoom(mi->id, mi->scaleDenominator, mi->topLeft,
 			  mi->tile, mi->matrix, QRect()));
 		else
-			zooms.append(Zoom(Zoom(mi->id, mi->scaleDenominator, mi->topLeft,
-			  mi->tile, mi->matrix, li->rect)));
+			zooms.append(Zoom(mi->id, mi->scaleDenominator, mi->topLeft,
+			  mi->tile, mi->matrix, li->rect));
 	}
 
 	qSort(zooms);
