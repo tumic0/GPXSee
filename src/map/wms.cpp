@@ -202,11 +202,11 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 		const Layer &layer = ctx.layers.at(i);
 
 		if (!layer.isDefined) {
-			_errorString = ctx.setup.layer() + ": layer not provided";
+			_errorString = layer.name + ": layer not provided";
 			return false;
 		}
 		if (!layer.hasStyle) {
-			_errorString = ctx.setup.style() + ": style not provided for layer "
+			_errorString = layer.style + ": style not provided for layer "
 			  + layer.name;
 			return false;
 		}
