@@ -137,7 +137,7 @@ void WMS::capability(QXmlStreamReader &reader, CTX &ctx)
 {
 	QList<QString> CRSs;
 	QList<QString> styles;
-	RangeF scaleDenominator(2132.729583849784, 559082264.0287178);
+	RangeF scaleDenominator(133.295598991, 559082264.0287178);
 	RectC boundingBox;
 
 	while (reader.readNextStartElement()) {
