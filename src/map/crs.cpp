@@ -30,15 +30,14 @@ Projection CRS::projection(const QString &crs)
 			return Projection();
 
 		if ((pcs = PCS::pcs(epsg)))
-			return Projection(pcs->gcs(), pcs->method(), pcs->setup(),
-			  pcs->units());
+			return Projection(pcs);
 		else if ((gcs = GCS::gcs(epsg)))
 			return Projection(gcs);
 		else
 			return Projection();
 	} else if (authority == "OGC") {
 		if (code == "CRS84")
-			return Projection(GCS::gcs(4326));
+			return Projection(GCS::gcs(4326), AxisOrder::XY);
 		else
 			return Projection();
 	} else

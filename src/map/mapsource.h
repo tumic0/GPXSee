@@ -5,6 +5,7 @@
 #include "common/range.h"
 #include "common/rectc.h"
 #include "downloader.h"
+#include "axisorder.h"
 
 class Map;
 class QXmlStreamReader;
@@ -33,8 +34,8 @@ private:
 		QString set;
 		QString format;
 		QString crs;
+		AxisOrder axisOrder;
 		bool rest;
-		bool yx;
 		QList<QPair<QString, QString> > dimensions;
 		Authorization authorization;
 

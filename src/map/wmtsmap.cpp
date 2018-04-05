@@ -26,14 +26,19 @@ bool WMTSMap::loadWMTS()
 	_tileLoader = TileLoader(wmts.tileUrl(), tilesDir(),
 	  _setup.authorization());
 
+	if (_setup.axisOrder() == Unknown)
+		_axisOrder = _projection.axisOrder();
+	else
+		_axisOrder = _setup.axisOrder();
+
 	updateTransform();
 
 	return true;
 }
 
 WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent)
-  : Map(parent), _name(name), _setup(setup), _zoom(0), _block(false),
-  _valid(false)
+  : Map(parent), _name(name), _setup(setup), _zoom(0), _axisOrder(Unknown),
+	_block(false), _valid(false)
 {
 	if (!QDir().mkpath(tilesDir())) {
 		_errorString = "Error creating tiles dir";
@@ -67,15 +72,18 @@ void WMTSMap::updateTransform()
 	const WMTS::Zoom &z = _zooms.at(_zoom);
 	ReferencePoint tl, br;
 
+	QPointF topLeft = (_axisOrder == YX)
+	  ? QPointF(z.topLeft().y(), z.topLeft().x()) : z.topLeft();
+
 	qreal pixelSpan = sd2res(z.scaleDenominator());
 	if (_projection.isGeographic())
 		pixelSpan /= deg2rad(WGS84_RADIUS);
 	QPointF tileSpan(z.tile().width() * pixelSpan, z.tile().height() * pixelSpan);
-	QPointF bottomRight(z.topLeft().x() + tileSpan.x() * z.matrix().width(),
-	  z.topLeft().y() - tileSpan.y() * z.matrix().height());
+	QPointF bottomRight(topLeft.x() + tileSpan.x() * z.matrix().width(),
+	  topLeft.y() - tileSpan.y() * z.matrix().height());
 
 	tl.xy = QPoint(0, 0);
-	tl.pp = z.topLeft();
+	tl.pp = topLeft;
 	br.xy = QPoint(z.tile().width() * z.matrix().width(),
 	  z.tile().height() * z.matrix().height());
 	br.pp = bottomRight;

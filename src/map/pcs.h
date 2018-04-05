@@ -5,6 +5,7 @@
 #include <QList>
 #include "gcs.h"
 #include "linearunits.h"
+#include "coordinatesystem.h"
 #include "projection.h"
 
 class PCS
@@ -12,18 +13,20 @@ class PCS
 public:
 	PCS() : _gcs(0) {}
 	PCS(const GCS *gcs, const Projection::Method &method,
-	  const Projection::Setup &setup, const LinearUnits &units)
-	  : _gcs(gcs), _method(method), _setup(setup), _units(units) {}
+	  const Projection::Setup &setup, const LinearUnits &units,
+	  const CoordinateSystem &cs = CoordinateSystem())
+	  : _gcs(gcs), _method(method), _setup(setup), _units(units), _cs(cs) {}
 	PCS(const GCS *gcs, int proj);
 
 	const GCS *gcs() const {return _gcs;}
 	const Projection::Method &method() const {return _method;}
 	const Projection::Setup &setup() const {return _setup;}
 	const LinearUnits &units() const {return _units;}
+	const CoordinateSystem &coordinateSystem() const {return _cs;}
 
 	bool isNull() const
 	  {return (_gcs->isNull() && _units.isNull() && _method.isNull()
-	    && _setup.isNull());}
+		&& _setup.isNull());}
 	bool isValid() const
 	  {return (_gcs->isValid() && _units.isValid() && _method.isValid());}
 
@@ -38,6 +41,7 @@ private:
 	Projection::Method _method;
 	Projection::Setup _setup;
 	LinearUnits _units;
+	CoordinateSystem _cs;
 
 	static QList<Entry> _pcss;
 };

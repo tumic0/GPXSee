@@ -92,62 +92,62 @@ void GCS::loadList(const QString &path)
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split(',');
 		if (list.size() < 10) {
-			qWarning("%s: %d: Format error", qPrintable(path), ln);
+			qWarning("%s:%d: Format error", qPrintable(path), ln);
 			continue;
 		}
 
 		int id = parameter(list[1], &res);
 		if (!res) {
-			qWarning("%s: %d: Invalid GCS code", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid GCS code", qPrintable(path), ln);
 			continue;
 		}
 		int gd = parameter(list[2], &res);
 		if (!res) {
-			qWarning("%s: %d: Invalid geodetic datum code", qPrintable(path),
+			qWarning("%s:%d: Invalid geodetic datum code", qPrintable(path),
 			  ln);
 			continue;
 		}
 		int au = list[3].trimmed().toInt(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid angular units code", qPrintable(path),
+			qWarning("%s:%d: Invalid angular units code", qPrintable(path),
 			  ln);
 			continue;
 		}
 		int el = list[4].trimmed().toInt(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid ellipsoid code", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid ellipsoid code", qPrintable(path), ln);
 			continue;
 		}
 		int pm = list[5].trimmed().toInt(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid prime meridian code", qPrintable(path),
+			qWarning("%s:%d: Invalid prime meridian code", qPrintable(path),
 			  ln);
 			continue;
 		}
 		int ct = list[6].trimmed().toInt(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid coordinates transformation code",
+			qWarning("%s:%d: Invalid coordinates transformation code",
 			  qPrintable(path), ln);
 			continue;
 		}
 		double dx = list[7].trimmed().toDouble(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid dx", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid dx", qPrintable(path), ln);
 			continue;
 		}
 		double dy = list[8].trimmed().toDouble(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid dy", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid dy", qPrintable(path), ln);
 			continue;
 		}
 		double dz = list[9].trimmed().toDouble(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid dz", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid dz", qPrintable(path), ln);
 			continue;
 		}
 
 		if (!(e = Ellipsoid::ellipsoid(el))) {
-			qWarning("%s: %d: Unknown ellipsoid code", qPrintable(path), ln);
+			qWarning("%s:%d: Unknown ellipsoid code", qPrintable(path), ln);
 			continue;
 		}
 
@@ -157,7 +157,7 @@ void GCS::loadList(const QString &path)
 				datum = Datum(e, dx, dy, dz);
 				break;
 			default:
-				qWarning("%s: %d: Unknown coordinates transformation method",
+				qWarning("%s:%d: Unknown coordinates transformation method",
 				  qPrintable(path), ln);
 				continue;
 		}
@@ -166,7 +166,7 @@ void GCS::loadList(const QString &path)
 		if (gcs.isValid())
 			_gcss.append(Entry(id, gd, list[0].trimmed(), gcs));
 		else
-			qWarning("%s: %d: Unknown prime meridian/angular units code",
+			qWarning("%s:%d: Unknown prime meridian/angular units code",
 			  qPrintable(path), ln);
 	}
 }

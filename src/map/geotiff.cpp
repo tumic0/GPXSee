@@ -353,8 +353,7 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 			  .arg(kv.value(ProjectedCSTypeGeoKey).SHORT);
 			return false;
 		}
-		_projection = Projection(pcs->gcs(), pcs->method(), pcs->setup(),
-		  pcs->units());
+		_projection = Projection(pcs);
 	} else if (IS_SET(kv, ProjectionGeoKey)) {
 		const GCS *g = gcs(kv);
 		if (!g)
@@ -366,8 +365,7 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 			  .arg(kv.value(ProjectionGeoKey).SHORT);
 			return false;
 		}
-		_projection = Projection(pcs->gcs(), pcs->method(), pcs->setup(),
-		  pcs->units());
+		_projection = Projection(pcs);
 	} else {
 		double lat0, lon0, scale, fe, fn, sp1, sp2;
 
@@ -430,8 +428,8 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 			fe = NAN;
 
 		Projection::Setup setup(lat0, lon0, scale, fe, fn, sp1, sp2);
-
-		_projection = Projection(g, m, setup, lu);
+		PCS pcs(g, m, setup, lu, CoordinateSystem());
+		_projection = Projection(&pcs);
 	}
 
 	return true;

@@ -7,6 +7,7 @@
 #include "common/rectc.h"
 #include "projection.h"
 #include "downloader.h"
+#include "axisorder.h"
 
 class QXmlStreamReader;
 
@@ -17,10 +18,10 @@ public:
 	{
 	public:
 		Setup(const QString &url, const QString &layer, const QString &style,
-		  const QString &format, const QString &crs, bool yx,
+		  const QString &format, const QString &crs, AxisOrder axisOrder,
 		  const Authorization &authorization = Authorization())
 		  : _url(url), _layer(layer), _style(style), _format(format), _crs(crs),
-		  _yx(yx), _authorization(authorization) {}
+		  _axisOrder(axisOrder), _authorization(authorization) {}
 
 		const QString &url() const {return _url;}
 		const Authorization &authorization() const {return _authorization;}
@@ -28,7 +29,7 @@ public:
 		const QString &style() const {return _style;}
 		const QString &format() const {return _format;}
 		const QString &crs() const {return _crs;}
-		bool yx() const {return _yx;}
+		AxisOrder axisOrder() const {return _axisOrder;}
 
 	private:
 		QString _url;
@@ -36,7 +37,7 @@ public:
 		QString _style;
 		QString _format;
 		QString _crs;
-		bool _yx;
+		AxisOrder _axisOrder;
 		Authorization _authorization;
 	};
 

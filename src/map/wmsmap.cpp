@@ -78,7 +78,6 @@ bool WMSMap::loadWMS()
 		return false;
 	}
 
-	_yx = (_setup.yx() && wms.version() >= "1.3.0") ? true : false;
 	_projection = wms.projection();
 	RectC bb = wms.boundingBox().normalized();
 	_boundingBox = QRectF(_projection.ll2xy(Coordinates(bb.topLeft().lon(),
@@ -87,6 +86,14 @@ bool WMSMap::loadWMS()
 	_tileLoader = TileLoader(tileUrl(wms.version()), tilesDir(),
 	  _setup.authorization());
 
+	if (wms.version() >= "1.3.0") {
+		if (_setup.axisOrder() == Unknown)
+			_axisOrder = _projection.axisOrder();
+		else
+			_axisOrder = _setup.axisOrder();
+	} else
+		_axisOrder = XY;
+
 	computeZooms(wms.scaleDenominator());
 	updateTransform();
 
@@ -94,8 +101,8 @@ bool WMSMap::loadWMS()
 }
 
 WMSMap::WMSMap(const QString &name, const WMS::Setup &setup, QObject *parent)
-  : Map(parent), _name(name), _setup(setup), _zoom(0), _block(false),
-  _valid(false)
+  : Map(parent), _name(name), _setup(setup), _zoom(0), _axisOrder(Unknown),
+  _block(false), _valid(false)
 {
 	if (!QDir().mkpath(tilesDir())) {
 		_errorString = "Error creating tiles dir";
@@ -214,7 +221,7 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect)
 			  j * TILE_SIZE)));
 			QPointF tbr(_transform.img2proj(QPointF(i * TILE_SIZE + TILE_SIZE
 			  - 1, j * TILE_SIZE + TILE_SIZE - 1)));
-			QRectF bbox = _yx
+			QRectF bbox = (_axisOrder == YX)
 			  ? QRectF(QPointF(tbr.y(), tbr.x()), QPointF(ttl.y(), ttl.x()))
 			  : QRectF(ttl, tbr);
 

@@ -81,7 +81,7 @@ static int projectionSetup(const QList<QByteArray> &list,
 {
 	bool r1, r2, r3;
 
-	for (int i = 6; i < 27; i += 3) {
+	for (int i = 7; i < 28; i += 3) {
 		QString ks = list[i].trimmed();
 		if (ks.isEmpty())
 			break;
@@ -90,10 +90,10 @@ static int projectionSetup(const QList<QByteArray> &list,
 		double val = list[i+1].trimmed().toDouble(&r2);
 		int un = list[i+2].trimmed().toInt(&r3);
 		if (!r1 || !r2 || !r3)
-			return (i - 6)/3 + 1;
+			return (i - 7)/3 + 1;
 
 		if (!parameter(key, val, un, setup))
-			return (i - 6)/3 + 1;
+			return (i - 7)/3 + 1;
 	}
 
 	return 0;
@@ -136,49 +136,60 @@ void PCS::loadList(const QString &path)
 
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split(',');
-		if (list.size() != 27) {
-			qWarning("%s: %d: Format error", qPrintable(path), ln);
+		if (list.size() != 28) {
+			qWarning("%s:%d: Format error", qPrintable(path), ln);
 			continue;
 		}
 
 		int id = list[1].trimmed().toInt(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid PCS code", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid PCS code", qPrintable(path), ln);
 			continue;
 		}
 		int gcsid = list[2].trimmed().toInt(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid GCS code", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid GCS code", qPrintable(path), ln);
 			continue;
 		}
 		int proj = list[3].trimmed().toInt(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid projection code", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid projection code", qPrintable(path), ln);
 			continue;
 		}
 		int units = list[4].trimmed().toInt(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid linear units code", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid linear units code", qPrintable(path), ln);
 			continue;
 		}
 		int transform = list[5].trimmed().toInt(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid coordinate transformation code",
+			qWarning("%s:%d: Invalid coordinate transformation code",
+			  qPrintable(path), ln);
+			continue;
+		}
+		int cs = list[6].trimmed().toInt(&res);
+		if (!res) {
+			qWarning("%s:%d: Invalid coordinate system code",
 			  qPrintable(path), ln);
 			continue;
 		}
 
-		if (LinearUnits(units).isNull()) {
-			qWarning("%s: %d: Unknown linear units code", qPrintable(path), ln);
+		if (!LinearUnits(units).isValid()) {
+			qWarning("%s:%d: Unknown linear units code", qPrintable(path), ln);
 			continue;
 		}
-		if (Projection::Method(transform).isNull()) {
-			qWarning("%s: %d: Unknown coordinate transformation code",
+		if (!Projection::Method(transform).isValid()) {
+			qWarning("%s:%d: Unknown coordinate transformation code",
 			  qPrintable(path), ln);
 			continue;
 		}
+		if (!CoordinateSystem(cs).isValid()) {
+			qWarning("%s:%d: Unknown coordinate system code", qPrintable(path),
+			  ln);
+			continue;
+		}
 		if (!(gcs = GCS::gcs(gcsid))) {
-			qWarning("%s: %d: Unknown GCS code", qPrintable(path), ln);
+			qWarning("%s:%d: Unknown GCS code", qPrintable(path), ln);
 			continue;
 		}
 
@@ -189,7 +200,7 @@ void PCS::loadList(const QString &path)
 			continue;
 		}
 
-		PCS pcs(gcs, transform, setup, units);
+		PCS pcs(gcs, transform, setup, units, cs);
 		_pcss.append(Entry(id, proj, pcs));
 	}
 }

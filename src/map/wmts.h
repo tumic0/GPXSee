@@ -9,6 +9,7 @@
 #include "common/rectc.h"
 #include "projection.h"
 #include "downloader.h"
+#include "axisorder.h"
 
 class QXmlStreamReader;
 
@@ -19,11 +20,11 @@ public:
 	{
 	public:
 		Setup(const QString &url, const QString &layer, const QString &set,
-		  const QString &style, const QString &format, bool rest, bool yx,
-		  const QList<QPair<QString, QString> > &dimensions,
+		  const QString &style, const QString &format, bool rest,
+		  AxisOrder axisOrder, const QList<QPair<QString, QString> > &dimensions,
 		  const Authorization &authorization = Authorization()) :
 		  _url(url), _layer(layer), _set(set), _style(style), _format(format),
-		  _rest(rest), _yx(yx), _dimensions(dimensions),
+		  _rest(rest), _axisOrder(axisOrder), _dimensions(dimensions),
 		  _authorization(authorization) {}
 
 		const QString &url() const {return _url;}
@@ -33,7 +34,7 @@ public:
 		const QString &style() const {return _style;}
 		const QString &format() const {return _format;}
 		bool rest() const {return _rest;}
-		bool yx() const {return _yx;}
+		AxisOrder axisOrder() const {return _axisOrder;}
 		const QList<QPair<QString, QString> > &dimensions() const
 		  {return _dimensions;}
 
@@ -44,7 +45,7 @@ public:
 		QString _style;
 		QString _format;
 		bool _rest;
-		bool _yx;
+		AxisOrder _axisOrder;
 		QList<QPair<QString, QString> > _dimensions;
 		Authorization _authorization;
 	};
@@ -131,7 +132,7 @@ private:
 
 	RectC wgs84BoundingBox(QXmlStreamReader &reader);
 	MatrixLimits tileMatrixLimits(QXmlStreamReader &reader);
-	TileMatrix tileMatrix(QXmlStreamReader &reader, bool yx);
+	TileMatrix tileMatrix(QXmlStreamReader &reader);
 	QSet<MatrixLimits> tileMatrixSetLimits(QXmlStreamReader &reader);
 	QString style(QXmlStreamReader &reader);
 	void tileMatrixSet(QXmlStreamReader &reader, CTX &ctx);

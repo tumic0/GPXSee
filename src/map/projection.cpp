@@ -6,6 +6,7 @@
 #include "lambertazimuthal.h"
 #include "latlon.h"
 #include "gcs.h"
+#include "pcs.h"
 #include "projection.h"
 
 
@@ -27,12 +28,13 @@ Projection::Method::Method(int id)
 	}
 }
 
-Projection::Projection(const GCS *gcs, const Method &method, const Setup &setup,
-  const LinearUnits &units) : _gcs(gcs), _units(units), _geographic(false)
+Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
+  _geographic(false)
 {
 	const Ellipsoid *ellipsoid = _gcs->datum().ellipsoid();
+	const Projection::Setup &setup = pcs->setup();
 
-	switch (method.id()) {
+	switch (pcs->method().id()) {
 		case 1024:
 		case 9841:
 			_ct = new Mercator();
@@ -68,9 +70,12 @@ Projection::Projection(const GCS *gcs, const Method &method, const Setup &setup,
 		default:
 			_ct = 0;
 	}
+
+	_axisOrder = pcs->coordinateSystem().axisOrder();
 }
 
-Projection::Projection(const GCS *gcs) : _gcs(gcs), _geographic(true)
+Projection::Projection(const GCS *gcs, AxisOrder axisOrder)
+  : _gcs(gcs), _axisOrder(axisOrder), _geographic(true)
 {
 	_ct = new LatLon(gcs->angularUnits());
 	_units = LinearUnits(9001);
@@ -82,6 +87,7 @@ Projection::Projection(const Projection &p)
 	_units = p._units;
 	_ct = p._ct ? p._ct->clone() : 0;
 	_geographic = p._geographic;
+	_axisOrder = p._axisOrder;
 }
 
 Projection::~Projection()
@@ -95,6 +101,7 @@ Projection &Projection::operator=(const Projection &p)
 	_units = p._units;
 	_ct = p._ct ? p._ct->clone() : 0;
 	_geographic = p._geographic;
+	_axisOrder = p._axisOrder;
 
 	return *this;
 }

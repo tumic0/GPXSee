@@ -15,8 +15,19 @@
 
 MapSource::Config::Config() : type(TMS), zooms(ZOOM_MIN, ZOOM_MAX),
   bounds(Coordinates(BOUNDS_LEFT, BOUNDS_TOP), Coordinates(BOUNDS_RIGHT,
-  BOUNDS_BOTTOM)), format("image/png"), rest(false), yx(false) {}
+  BOUNDS_BOTTOM)), format("image/png"), axisOrder(Unknown), rest(false) {}
 
+
+static AxisOrder axisOrder(QXmlStreamReader &reader)
+{
+	QXmlStreamAttributes attr = reader.attributes();
+	if (attr.value("axis") == "yx")
+		return AxisOrder::YX;
+	else if (attr.value("axis") == "xy")
+		return AxisOrder::XY;
+	else
+		return AxisOrder::Unknown;
+}
 
 Range MapSource::zooms(QXmlStreamReader &reader)
 {
@@ -123,15 +134,14 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 		} else if (reader.name() == "bounds") {
 			config.bounds = bounds(reader);
 			reader.skipCurrentElement();
-		} else if (reader.name() == "format") {
+		} else if (reader.name() == "format")
 			config.format = reader.readElementText();
-		} else if (reader.name() == "layer")
+		else if (reader.name() == "layer")
 			config.layer = reader.readElementText();
 		else if (reader.name() == "style")
 			config.style = reader.readElementText();
 		else if (reader.name() == "set") {
-			config.yx = (reader.attributes().value("axis") == "yx")
-			  ? true : false;
+			config.axisOrder = axisOrder(reader);
 			config.set = reader.readElementText();
 		} else if (reader.name() == "dimension") {
 			QXmlStreamAttributes attr = reader.attributes();
@@ -141,8 +151,7 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 				config.dimensions.append(QPair<QString, QString>(
 				  attr.value("id").toString(), reader.readElementText()));
 		} else if (reader.name() == "crs") {
-			config.yx = (reader.attributes().value("axis") == "yx")
-			  ? true : false;
+			config.axisOrder = axisOrder(reader);
 			config.crs = reader.readElementText();
 		} else if (reader.name() == "authorization") {
 			QXmlStreamAttributes attr = reader.attributes();
@@ -214,11 +223,11 @@ Map *MapSource::loadFile(const QString &path)
 
 	if (config.type == WMTS)
 		m = new WMTSMap(config.name, WMTS::Setup(config.url, config.layer,
-		  config.set, config.style, config.format, config.rest, config.yx,
+		  config.set, config.style, config.format, config.rest, config.axisOrder,
 		  config.dimensions, config.authorization));
 	else if (config.type == WMS)
 		m = new WMSMap(config.name, WMS::Setup(config.url, config.layer,
-		  config.style, config.format, config.crs, config.yx,
+		  config.style, config.format, config.crs, config.axisOrder,
 		  config.authorization));
 	else
 		m = new OnlineMap(config.name, config.url, config.zooms, config.bounds);

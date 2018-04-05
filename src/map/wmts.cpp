@@ -14,7 +14,7 @@
 
 Downloader *WMTS::_downloader = 0;
 
-WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader, bool yx)
+WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader)
 {
 	TileMatrix matrix;
 
@@ -26,10 +26,7 @@ WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader, bool yx)
 		else if (reader.name() == "TopLeftCorner") {
 			QString str = reader.readElementText();
 			QTextStream ts(&str);
-			if (yx)
-				ts >> matrix.topLeft.ry() >> matrix.topLeft.rx();
-			else
-				ts >> matrix.topLeft.rx() >> matrix.topLeft.ry();
+			ts >> matrix.topLeft.rx() >> matrix.topLeft.ry();
 		} else if (reader.name() == "TileWidth")
 			matrix.tile.setWidth(reader.readElementText().toInt());
 		else if (reader.name() == "TileHeight")
@@ -59,7 +56,7 @@ void WMTS::tileMatrixSet(QXmlStreamReader &reader, CTX &ctx)
 		else if (reader.name() == "SupportedCRS")
 			crs = reader.readElementText();
 		else if (reader.name() == "TileMatrix")
-			matrixes.insert(tileMatrix(reader, ctx.setup.yx()));
+			matrixes.insert(tileMatrix(reader));
 		else
 			reader.skipCurrentElement();
 	}

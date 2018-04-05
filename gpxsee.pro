@@ -122,7 +122,9 @@ HEADERS += src/config.h \
     src/map/wmts.h \
     src/map/wmsmap.h \
     src/map/wms.h \
-    src/map/crs.h
+    src/map/crs.h \
+    src/map/coordinatesystem.h \
+    src/map/axisorder.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -214,7 +216,8 @@ SOURCES += src/main.cpp \
     src/map/wmts.cpp \
     src/map/wmsmap.cpp \
     src/map/wms.cpp \
-    src/map/crs.cpp
+    src/map/crs.cpp \
+    src/map/coordinatesystem.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \
