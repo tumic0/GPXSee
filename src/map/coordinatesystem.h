@@ -1,11 +1,11 @@
 #ifndef COORDINATESYSTEM_H
 #define COORDINATESYSTEM_H
 
-#include "axisorder.h"
-
 class CoordinateSystem
 {
 public:
+	enum AxisOrder {Unknown, XY, YX};
+
 	CoordinateSystem() : _axisOrder(Unknown) {}
 	CoordinateSystem(int code);
 

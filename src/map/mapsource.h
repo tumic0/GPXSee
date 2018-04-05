@@ -5,7 +5,7 @@
 #include "common/range.h"
 #include "common/rectc.h"
 #include "downloader.h"
-#include "axisorder.h"
+#include "coordinatesystem.h"
 
 class Map;
 class QXmlStreamReader;
@@ -34,7 +34,7 @@ private:
 		QString set;
 		QString format;
 		QString crs;
-		AxisOrder axisOrder;
+		CoordinateSystem::AxisOrder axisOrder;
 		bool rest;
 		QList<QPair<QString, QString> > dimensions;
 		Authorization authorization;

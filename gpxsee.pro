@@ -123,8 +123,7 @@ HEADERS += src/config.h \
     src/map/wmsmap.h \
     src/map/wms.h \
     src/map/crs.h \
-    src/map/coordinatesystem.h \
-    src/map/axisorder.h
+    src/map/coordinatesystem.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \

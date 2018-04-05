@@ -74,7 +74,7 @@ Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
 	_axisOrder = pcs->coordinateSystem().axisOrder();
 }
 
-Projection::Projection(const GCS *gcs, AxisOrder axisOrder)
+Projection::Projection(const GCS *gcs, CoordinateSystem::AxisOrder axisOrder)
   : _gcs(gcs), _axisOrder(axisOrder), _geographic(true)
 {
 	_ct = new LatLon(gcs->angularUnits());

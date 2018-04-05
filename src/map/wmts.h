@@ -9,7 +9,7 @@
 #include "common/rectc.h"
 #include "projection.h"
 #include "downloader.h"
-#include "axisorder.h"
+#include "coordinatesystem.h"
 
 class QXmlStreamReader;
 
@@ -21,7 +21,8 @@ public:
 	public:
 		Setup(const QString &url, const QString &layer, const QString &set,
 		  const QString &style, const QString &format, bool rest,
-		  AxisOrder axisOrder, const QList<QPair<QString, QString> > &dimensions,
+		  CoordinateSystem::AxisOrder axisOrder,
+		  const QList<QPair<QString, QString> > &dimensions,
 		  const Authorization &authorization = Authorization()) :
 		  _url(url), _layer(layer), _set(set), _style(style), _format(format),
 		  _rest(rest), _axisOrder(axisOrder), _dimensions(dimensions),
@@ -34,7 +35,7 @@ public:
 		const QString &style() const {return _style;}
 		const QString &format() const {return _format;}
 		bool rest() const {return _rest;}
-		AxisOrder axisOrder() const {return _axisOrder;}
+		CoordinateSystem::AxisOrder axisOrder() const {return _axisOrder;}
 		const QList<QPair<QString, QString> > &dimensions() const
 		  {return _dimensions;}
 
@@ -45,7 +46,7 @@ public:
 		QString _style;
 		QString _format;
 		bool _rest;
-		AxisOrder _axisOrder;
+		CoordinateSystem::AxisOrder _axisOrder;
 		QList<QPair<QString, QString> > _dimensions;
 		Authorization _authorization;
 	};

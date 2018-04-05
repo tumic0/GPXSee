@@ -64,7 +64,7 @@ private:
 	QVector<qreal> _zooms;
 	int _zoom;
 	QRectF _boundingBox;
-	AxisOrder _axisOrder;
+	CoordinateSystem::AxisOrder _axisOrder;
 	bool _block;
 
 	bool _valid;

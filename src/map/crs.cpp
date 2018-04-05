@@ -37,7 +37,7 @@ Projection CRS::projection(const QString &crs)
 			return Projection();
 	} else if (authority == "OGC") {
 		if (code == "CRS84")
-			return Projection(GCS::gcs(4326), AxisOrder::XY);
+			return Projection(GCS::gcs(4326), CoordinateSystem::XY);
 		else
 			return Projection();
 	} else

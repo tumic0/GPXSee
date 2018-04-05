@@ -61,7 +61,7 @@ private:
 	Projection _projection;
 	Transform _transform;
 	int _zoom;
-	AxisOrder _axisOrder;
+	CoordinateSystem::AxisOrder _axisOrder;
 	bool _block;
 
 	bool _valid;

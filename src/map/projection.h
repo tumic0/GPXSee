@@ -5,7 +5,7 @@
 #include <QDebug>
 #include "common/coordinates.h"
 #include "linearunits.h"
-#include "axisorder.h"
+#include "coordinatesystem.h"
 
 class GCS;
 class PCS;
@@ -73,7 +73,8 @@ public:
 	Projection() : _gcs(0), _ct(0), _geographic(false) {}
 	Projection(const Projection &p);
 	Projection(const PCS *pcs);
-	Projection(const GCS *gcs, AxisOrder axisOrder = YX);
+	Projection(const GCS *gcs, CoordinateSystem::AxisOrder axisOrder
+	  = CoordinateSystem::YX);
 	~Projection();
 
 	Projection &operator=(const Projection &p);
@@ -86,13 +87,13 @@ public:
 	Coordinates xy2ll(const QPointF &p) const;
 
 	const LinearUnits &units() const {return _units;}
-	AxisOrder axisOrder() const {return _axisOrder;}
+	CoordinateSystem::AxisOrder axisOrder() const {return _axisOrder;}
 
 private:
 	const GCS *_gcs;
 	const CT *_ct;
 	LinearUnits _units;
-	AxisOrder _axisOrder;
+	CoordinateSystem::AxisOrder _axisOrder;
 	bool _geographic;
 };
 

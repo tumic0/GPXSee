@@ -26,7 +26,7 @@ bool WMTSMap::loadWMTS()
 	_tileLoader = TileLoader(wmts.tileUrl(), tilesDir(),
 	  _setup.authorization());
 
-	if (_setup.axisOrder() == Unknown)
+	if (_setup.axisOrder() == CoordinateSystem::Unknown)
 		_axisOrder = _projection.axisOrder();
 	else
 		_axisOrder = _setup.axisOrder();
@@ -37,8 +37,8 @@ bool WMTSMap::loadWMTS()
 }
 
 WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent)
-  : Map(parent), _name(name), _setup(setup), _zoom(0), _axisOrder(Unknown),
-	_block(false), _valid(false)
+  : Map(parent), _name(name), _setup(setup), _zoom(0), _block(false),
+  _valid(false)
 {
 	if (!QDir().mkpath(tilesDir())) {
 		_errorString = "Error creating tiles dir";
@@ -72,7 +72,7 @@ void WMTSMap::updateTransform()
 	const WMTS::Zoom &z = _zooms.at(_zoom);
 	ReferencePoint tl, br;
 
-	QPointF topLeft = (_axisOrder == YX)
+	QPointF topLeft = (_axisOrder == CoordinateSystem::YX)
 	  ? QPointF(z.topLeft().y(), z.topLeft().x()) : z.topLeft();
 
 	qreal pixelSpan = sd2res(z.scaleDenominator());

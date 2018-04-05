@@ -15,18 +15,19 @@
 
 MapSource::Config::Config() : type(TMS), zooms(ZOOM_MIN, ZOOM_MAX),
   bounds(Coordinates(BOUNDS_LEFT, BOUNDS_TOP), Coordinates(BOUNDS_RIGHT,
-  BOUNDS_BOTTOM)), format("image/png"), axisOrder(Unknown), rest(false) {}
+  BOUNDS_BOTTOM)), format("image/png"), axisOrder(CoordinateSystem::Unknown),
+  rest(false) {}
 
 
-static AxisOrder axisOrder(QXmlStreamReader &reader)
+static CoordinateSystem::AxisOrder axisOrder(QXmlStreamReader &reader)
 {
 	QXmlStreamAttributes attr = reader.attributes();
 	if (attr.value("axis") == "yx")
-		return AxisOrder::YX;
+		return CoordinateSystem::YX;
 	else if (attr.value("axis") == "xy")
-		return AxisOrder::XY;
+		return CoordinateSystem::XY;
 	else
-		return AxisOrder::Unknown;
+		return CoordinateSystem::Unknown;
 }
 
 Range MapSource::zooms(QXmlStreamReader &reader)
