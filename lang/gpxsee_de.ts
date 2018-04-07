@@ -704,7 +704,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>&amp;Data</source>
-        <translation>D&amp;ata</translation>
+        <translation>&amp;Data</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
@@ -1165,7 +1165,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="331"/>
         <source>nmi</source>
-        <translation>kn</translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="334"/>
