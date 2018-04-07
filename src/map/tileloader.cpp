@@ -64,7 +64,7 @@ void TileLoader::loadTilesSync(QList<Tile> &list)
 
 		if (t.pixmap().isNull()) {
 			QString file = tileFile(t);
-			if (QFileInfo::exists(file))
+			if (QFileInfo(file).exists())
 				loadTileFile(t, file);
 		}
 	}
