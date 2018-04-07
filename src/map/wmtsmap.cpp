@@ -26,10 +26,10 @@ bool WMTSMap::loadWMTS()
 	_tileLoader = TileLoader(wmts.tileUrl(), tilesDir(),
 	  _setup.authorization());
 
-	if (_setup.axisOrder() == CoordinateSystem::Unknown)
-		_axisOrder = _projection.axisOrder();
+	if (_setup.coordinateSystem().axisOrder() == CoordinateSystem::Unknown)
+		_cs = _projection.coordinateSystem();
 	else
-		_axisOrder = _setup.axisOrder();
+		_cs = _setup.coordinateSystem();
 
 	updateTransform();
 
@@ -72,7 +72,7 @@ void WMTSMap::updateTransform()
 	const WMTS::Zoom &z = _zooms.at(_zoom);
 	ReferencePoint tl, br;
 
-	QPointF topLeft = (_axisOrder == CoordinateSystem::YX)
+	QPointF topLeft = (_cs.axisOrder() == CoordinateSystem::YX)
 	  ? QPointF(z.topLeft().y(), z.topLeft().x()) : z.topLeft();
 
 	qreal pixelSpan = sd2res(z.scaleDenominator());

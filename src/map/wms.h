@@ -19,10 +19,10 @@ public:
 	public:
 		Setup(const QString &url, const QString &layer, const QString &style,
 		  const QString &format, const QString &crs,
-		  CoordinateSystem::AxisOrder axisOrder,
-		  const Authorization &authorization = Authorization())
-		  : _url(url), _layer(layer), _style(style), _format(format), _crs(crs),
-		  _axisOrder(axisOrder), _authorization(authorization) {}
+		  const CoordinateSystem &cs, const Authorization &authorization
+		  = Authorization())
+			: _url(url), _layer(layer), _style(style), _format(format),
+			  _crs(crs), _cs(cs), _authorization(authorization) {}
 
 		const QString &url() const {return _url;}
 		const Authorization &authorization() const {return _authorization;}
@@ -30,7 +30,7 @@ public:
 		const QString &style() const {return _style;}
 		const QString &format() const {return _format;}
 		const QString &crs() const {return _crs;}
-		CoordinateSystem::AxisOrder axisOrder() const {return _axisOrder;}
+		const CoordinateSystem &coordinateSystem() const {return _cs;}
 
 	private:
 		QString _url;
@@ -38,7 +38,7 @@ public:
 		QString _style;
 		QString _format;
 		QString _crs;
-		CoordinateSystem::AxisOrder _axisOrder;
+		CoordinateSystem _cs;
 		Authorization _authorization;
 	};
 

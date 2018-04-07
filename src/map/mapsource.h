@@ -34,7 +34,7 @@ private:
 		QString set;
 		QString format;
 		QString crs;
-		CoordinateSystem::AxisOrder axisOrder;
+		CoordinateSystem coordinateSystem;
 		bool rest;
 		QList<QPair<QString, QString> > dimensions;
 		Authorization authorization;

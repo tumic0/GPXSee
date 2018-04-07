@@ -21,12 +21,12 @@ public:
 	public:
 		Setup(const QString &url, const QString &layer, const QString &set,
 		  const QString &style, const QString &format, bool rest,
-		  CoordinateSystem::AxisOrder axisOrder,
+		  const CoordinateSystem &cs,
 		  const QList<QPair<QString, QString> > &dimensions,
-		  const Authorization &authorization = Authorization()) :
-		  _url(url), _layer(layer), _set(set), _style(style), _format(format),
-		  _rest(rest), _axisOrder(axisOrder), _dimensions(dimensions),
-		  _authorization(authorization) {}
+		  const Authorization &authorization = Authorization())
+			: _url(url), _layer(layer), _set(set), _style(style),
+			  _format(format), _rest(rest), _cs(cs), _dimensions(dimensions),
+			  _authorization(authorization) {}
 
 		const QString &url() const {return _url;}
 		const Authorization &authorization() const {return _authorization;}
@@ -35,7 +35,7 @@ public:
 		const QString &style() const {return _style;}
 		const QString &format() const {return _format;}
 		bool rest() const {return _rest;}
-		CoordinateSystem::AxisOrder axisOrder() const {return _axisOrder;}
+		const CoordinateSystem &coordinateSystem() const {return _cs;}
 		const QList<QPair<QString, QString> > &dimensions() const
 		  {return _dimensions;}
 
@@ -46,7 +46,7 @@ public:
 		QString _style;
 		QString _format;
 		bool _rest;
-		CoordinateSystem::AxisOrder _axisOrder;
+		CoordinateSystem _cs;
 		QList<QPair<QString, QString> > _dimensions;
 		Authorization _authorization;
 	};

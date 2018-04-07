@@ -60,8 +60,8 @@ private:
 	QList<WMTS::Zoom> _zooms;
 	Projection _projection;
 	Transform _transform;
+	CoordinateSystem _cs;
 	int _zoom;
-	CoordinateSystem::AxisOrder _axisOrder;
 	bool _block;
 
 	bool _valid;

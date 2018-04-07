@@ -33,3 +33,24 @@ CoordinateSystem::CoordinateSystem(int code)
 			break;
 	}
 }
+
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const CoordinateSystem &cs)
+{
+	QString ao;
+
+	switch (cs.axisOrder()) {
+		case CoordinateSystem::XY:
+			ao = "XY";
+			break;
+		case CoordinateSystem::YX:
+			ao = "YX";
+			break;
+		default:
+			ao = "Unknown";
+	}
+
+	dbg.nospace() << "CoordinateSystem(" << ao << ")";
+	return dbg.space();
+}
+#endif // QT_NO_DEBUG

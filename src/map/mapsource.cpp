@@ -15,11 +15,10 @@
 
 MapSource::Config::Config() : type(TMS), zooms(ZOOM_MIN, ZOOM_MAX),
   bounds(Coordinates(BOUNDS_LEFT, BOUNDS_TOP), Coordinates(BOUNDS_RIGHT,
-  BOUNDS_BOTTOM)), format("image/png"), axisOrder(CoordinateSystem::Unknown),
-  rest(false) {}
+  BOUNDS_BOTTOM)), format("image/png"), rest(false) {}
 
 
-static CoordinateSystem::AxisOrder axisOrder(QXmlStreamReader &reader)
+static CoordinateSystem coordinateSystem(QXmlStreamReader &reader)
 {
 	QXmlStreamAttributes attr = reader.attributes();
 	if (attr.value("axis") == "yx")
@@ -142,7 +141,7 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 		else if (reader.name() == "style")
 			config.style = reader.readElementText();
 		else if (reader.name() == "set") {
-			config.axisOrder = axisOrder(reader);
+			config.coordinateSystem = coordinateSystem(reader);
 			config.set = reader.readElementText();
 		} else if (reader.name() == "dimension") {
 			QXmlStreamAttributes attr = reader.attributes();
@@ -152,7 +151,7 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 				config.dimensions.append(QPair<QString, QString>(
 				  attr.value("id").toString(), reader.readElementText()));
 		} else if (reader.name() == "crs") {
-			config.axisOrder = axisOrder(reader);
+			config.coordinateSystem = coordinateSystem(reader);
 			config.crs = reader.readElementText();
 		} else if (reader.name() == "authorization") {
 			QXmlStreamAttributes attr = reader.attributes();
@@ -224,11 +223,11 @@ Map *MapSource::loadFile(const QString &path)
 
 	if (config.type == WMTS)
 		m = new WMTSMap(config.name, WMTS::Setup(config.url, config.layer,
-		  config.set, config.style, config.format, config.rest, config.axisOrder,
-		  config.dimensions, config.authorization));
+		  config.set, config.style, config.format, config.rest,
+		  config.coordinateSystem, config.dimensions, config.authorization));
 	else if (config.type == WMS)
 		m = new WMSMap(config.name, WMS::Setup(config.url, config.layer,
-		  config.style, config.format, config.crs, config.axisOrder,
+		  config.style, config.format, config.crs, config.coordinateSystem,
 		  config.authorization));
 	else
 		m = new OnlineMap(config.name, config.url, config.zooms, config.bounds);

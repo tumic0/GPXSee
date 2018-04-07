@@ -87,12 +87,12 @@ bool WMSMap::loadWMS()
 	  _setup.authorization());
 
 	if (wms.version() >= "1.3.0") {
-		if (_setup.axisOrder() == CoordinateSystem::Unknown)
-			_axisOrder = _projection.axisOrder();
+		if (_setup.coordinateSystem().axisOrder() == CoordinateSystem::Unknown)
+			_cs = _projection.coordinateSystem();
 		else
-			_axisOrder = _setup.axisOrder();
+			_cs = _setup.coordinateSystem();
 	} else
-		_axisOrder = CoordinateSystem::XY;
+		_cs = CoordinateSystem::XY;
 
 	computeZooms(wms.scaleDenominator());
 	updateTransform();
@@ -221,7 +221,7 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect)
 			  j * TILE_SIZE)));
 			QPointF tbr(_transform.img2proj(QPointF(i * TILE_SIZE + TILE_SIZE
 			  - 1, j * TILE_SIZE + TILE_SIZE - 1)));
-			QRectF bbox = (_axisOrder == CoordinateSystem::YX)
+			QRectF bbox = (_cs.axisOrder() == CoordinateSystem::YX)
 			  ? QRectF(QPointF(tbr.y(), tbr.x()), QPointF(ttl.y(), ttl.x()))
 			  : QRectF(ttl, tbr);
 

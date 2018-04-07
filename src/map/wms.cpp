@@ -63,7 +63,7 @@ QString WMS::style(QXmlStreamReader &reader)
 
 RectC WMS::geographicBoundingBox(QXmlStreamReader &reader)
 {
-	qreal left, top, right, bottom;
+	qreal left = NAN, top = NAN, right = NAN, bottom = NAN;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "westBoundLongitude")
@@ -265,7 +265,7 @@ bool WMS::getCapabilities(const QString &url, const QString &file,
 	if (_downloader->get(dl, authorization))
 		wait.exec();
 
-	if (QFileInfo(file).exists())
+	if (QFileInfo::exists(file))
 		return true;
 	else {
 		_errorString = "Error downloading capabilities XML file";
@@ -278,7 +278,7 @@ WMS::WMS(const QString &file, const WMS::Setup &setup) : _valid(false)
 	QString capaUrl = QString("%1?service=WMS&request=GetCapabilities")
 	  .arg(setup.url());
 
-	if (!QFileInfo(file).exists())
+	if (!QFileInfo::exists(file))
 		if (!getCapabilities(capaUrl, file, setup.authorization()))
 			return;
 	if (!parseCapabilities(file, setup))

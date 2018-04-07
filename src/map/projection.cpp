@@ -29,7 +29,7 @@ Projection::Method::Method(int id)
 }
 
 Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
-  _geographic(false)
+	_cs(pcs->coordinateSystem()), _geographic(false)
 {
 	const Ellipsoid *ellipsoid = _gcs->datum().ellipsoid();
 	const Projection::Setup &setup = pcs->setup();
@@ -70,15 +70,12 @@ Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
 		default:
 			_ct = 0;
 	}
-
-	_axisOrder = pcs->coordinateSystem().axisOrder();
 }
 
-Projection::Projection(const GCS *gcs, CoordinateSystem::AxisOrder axisOrder)
-  : _gcs(gcs), _axisOrder(axisOrder), _geographic(true)
+Projection::Projection(const GCS *gcs, const CoordinateSystem &cs)
+  : _gcs(gcs), _units(LinearUnits(9001)), _cs(cs), _geographic(true)
 {
 	_ct = new LatLon(gcs->angularUnits());
-	_units = LinearUnits(9001);
 }
 
 Projection::Projection(const Projection &p)
@@ -87,7 +84,7 @@ Projection::Projection(const Projection &p)
 	_units = p._units;
 	_ct = p._ct ? p._ct->clone() : 0;
 	_geographic = p._geographic;
-	_axisOrder = p._axisOrder;
+	_cs = p._cs;
 }
 
 Projection::~Projection()
@@ -101,7 +98,7 @@ Projection &Projection::operator=(const Projection &p)
 	_units = p._units;
 	_ct = p._ct ? p._ct->clone() : 0;
 	_geographic = p._geographic;
-	_axisOrder = p._axisOrder;
+	_cs = p._cs;
 
 	return *this;
 }

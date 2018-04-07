@@ -61,10 +61,10 @@ private:
 	TileLoader _tileLoader;
 	Projection _projection;
 	Transform _transform;
+	CoordinateSystem _cs;
 	QVector<qreal> _zooms;
-	int _zoom;
 	QRectF _boundingBox;
-	CoordinateSystem::AxisOrder _axisOrder;
+	int _zoom;
 	bool _block;
 
 	bool _valid;
