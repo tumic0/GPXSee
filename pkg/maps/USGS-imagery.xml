@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map>
+<map xmlns="http://www.gpxsee.org/map/1">
 	<name>USGS Imagery</name>
 	<url>https://navigator.er.usgs.gov/tiles/aerial_Imagery.cgi/$z/$x/$y</url>
+	<copyright>Map services and data available from U.S. Geological Survey, National Geospatial Program.</copyright>
 	<zoom min="2" max="15"/>
 	<bounds bottom="0" top="74"/>
-	<copyright>Map services and data available from U.S. Geological Survey, National Geospatial Program.</copyright>
 </map>

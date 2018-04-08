@@ -18,7 +18,7 @@ public:
 
 private:
 	enum Type {
-		TMS,
+		OSM,
 		WMTS,
 		WMS
 	};

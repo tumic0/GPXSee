@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map>
+<map xmlns="http://www.gpxsee.org/map/1">
 	<name>Open Topo Map</name>
 	<url>https://a.tile.opentopomap.org/$z/$x/$y.png</url>
-	<zoom max="17"/>
 	<copyright>Map data: © OpenStreetMap contributors (ODbL), SRTM | Rendering: © OpenTopoMap (CC-BY-SA)</copyright>
+	<zoom max="17"/>
 </map>

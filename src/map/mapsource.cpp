@@ -13,7 +13,7 @@
 #define BOUNDS_BOTTOM  -85.0511
 
 
-MapSource::Config::Config() : type(TMS), zooms(ZOOM_MIN, ZOOM_MAX),
+MapSource::Config::Config() : type(OSM), zooms(ZOOM_MIN, ZOOM_MAX),
   bounds(Coordinates(BOUNDS_LEFT, BOUNDS_TOP), Coordinates(BOUNDS_RIGHT,
   BOUNDS_BOTTOM)), format("image/png"), rest(false) {}
 
@@ -119,7 +119,7 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
 	config.type = (attr.value("type") == "WMTS") ? WMTS
-	  : (attr.value("type") == "WMS") ? WMS : TMS;
+	  : (attr.value("type") == "WMS") ? WMS : OSM;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "name")
