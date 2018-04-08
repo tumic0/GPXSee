@@ -3,8 +3,9 @@
 
 	<xs:simpleType name="mapType">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="TMS"/>
+			<xs:enumeration value="OSM"/>
 			<xs:enumeration value="WMTS"/>
+			<xs:enumeration value="WMS"/>
 		</xs:restriction>
 	</xs:simpleType>
 
@@ -53,6 +54,15 @@
 				<xs:element name="format" type="xs:string" minOccurs="0" maxOccurs="1"/>
 				<xs:element name="layer" type="xs:string" minOccurs="0" maxOccurs="1"/>
 				<xs:element name="style" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="crs" minOccurs="0" maxOccurs="1">
+					<xs:complexType mixed="true">
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="axis" type="axisOrderType"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
 				<xs:element name="set" minOccurs="0" maxOccurs="1">
 					<xs:complexType mixed="true">
 						<xs:simpleContent>
@@ -66,13 +76,21 @@
 					<xs:complexType mixed="true">
 						<xs:simpleContent>
 							<xs:extension base="xs:string">
-								<xs:attribute name="id" type="xs:string"/>
+								<xs:attribute name="id" type="xs:string" use="required"/>
 							</xs:extension>
 						</xs:simpleContent>
 					</xs:complexType>
 				</xs:element>
+				<xs:element name="authorization" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:attribute name="username" type="xs:string" use="required"/>
+						<xs:attribute name="password" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
 			</xs:sequence>
+
 			<xs:attribute name="type" type="mapType" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 </xs:schema> 
