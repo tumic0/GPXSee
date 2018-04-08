@@ -19,10 +19,12 @@ public:
 	public:
 		Setup(const QString &url, const QString &layer, const QString &style,
 		  const QString &format, const QString &crs,
-		  const CoordinateSystem &cs, const Authorization &authorization
-		  = Authorization())
+		  const CoordinateSystem &cs,
+		  const QList<QPair<QString, QString> > &dimensions,
+		  const Authorization &authorization = Authorization())
 			: _url(url), _layer(layer), _style(style), _format(format),
-			  _crs(crs), _cs(cs), _authorization(authorization) {}
+			  _crs(crs), _cs(cs), _dimensions(dimensions),
+			  _authorization(authorization) {}
 
 		const QString &url() const {return _url;}
 		const Authorization &authorization() const {return _authorization;}
@@ -31,6 +33,8 @@ public:
 		const QString &format() const {return _format;}
 		const QString &crs() const {return _crs;}
 		const CoordinateSystem &coordinateSystem() const {return _cs;}
+		const QList<QPair<QString, QString> > &dimensions() const
+		  {return _dimensions;}
 
 	private:
 		QString _url;
@@ -39,6 +43,7 @@ public:
 		QString _format;
 		QString _crs;
 		CoordinateSystem _cs;
+		QList<QPair<QString, QString> > _dimensions;
 		Authorization _authorization;
 	};
 

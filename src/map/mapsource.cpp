@@ -228,7 +228,7 @@ Map *MapSource::loadFile(const QString &path)
 	else if (config.type == WMS)
 		m = new WMSMap(config.name, WMS::Setup(config.url, config.layer,
 		  config.style, config.format, config.crs, config.coordinateSystem,
-		  config.authorization));
+		  config.dimensions, config.authorization));
 	else
 		m = new OnlineMap(config.name, config.url, config.zooms, config.bounds);
 

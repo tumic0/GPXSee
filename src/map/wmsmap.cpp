@@ -17,15 +17,25 @@ qreal WMSMap::sd2res(qreal scaleDenominator) const
 
 QString WMSMap::tileUrl(const QString &version) const
 {
-	QString crs = version >= "1.3.0"
-	  ? QString("CRS=%1").arg(_setup.crs())
-	  : QString("SRS=%1").arg(_setup.crs());
+	QString url;
 
-	return QString("%1?version=%2&request=GetMap&%3&bbox=$bbox"
-	  "&width=%4&height=%5&layers=%6&styles=%7&format=%8&transparent=true")
-	  .arg(_setup.url(), version, crs, QString::number(TILE_SIZE),
+	url = QString("%1?version=%2&request=GetMap&bbox=$bbox"
+	  "&width=%3&height=%4&layers=%5&styles=%6&format=%7&transparent=true")
+	  .arg(_setup.url(), version, QString::number(TILE_SIZE),
 	  QString::number(TILE_SIZE), _setup.layer(), _setup.style(),
 	  _setup.format());
+
+	if (version >= "1.3.0")
+		url.append(QString("&CRS=%1").arg(_setup.crs()));
+	else
+		url.append(QString("&SRS=%1").arg(_setup.crs()));
+
+	for (int i = 0; i < _setup.dimensions().size(); i++) {
+		const QPair<QString, QString> &dim = _setup.dimensions().at(i);
+		url.append(QString("&%1=%2").arg(dim.first, dim.second));
+	}
+
+	return url;
 }
 
 QString WMSMap::tilesDir() const
