@@ -19,7 +19,7 @@
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="axisOrderType">
+	<xs:simpleType name="axisOrder">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="xy"/>
 			<xs:enumeration value="yx"/>
@@ -61,7 +61,7 @@
 					<xs:complexType mixed="true">
 						<xs:simpleContent>
 							<xs:extension base="xs:string">
-								<xs:attribute name="axis" type="axisOrderType"/>
+								<xs:attribute name="axis" type="axisOrder"/>
 							</xs:extension>
 						</xs:simpleContent>
 					</xs:complexType>
@@ -70,7 +70,7 @@
 					<xs:complexType mixed="true">
 						<xs:simpleContent>
 							<xs:extension base="xs:string">
-								<xs:attribute name="axis" type="axisOrderType"/>
+								<xs:attribute name="axis" type="axisOrder"/>
 							</xs:extension>
 						</xs:simpleContent>
 					</xs:complexType>
