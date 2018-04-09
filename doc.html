@@ -186,13 +186,18 @@
           case of the <i>set</i> element, you may specify the <i>axis</i> attribute to
           override the default axis order.</p>
 
+          <p>It is possible to combine multiple WMS layers together in one map. To do so,
+          use a comma separated list of WMS layers as the <i>layer</i> element content and
+          a corresponding comma separated list as the <i>style</i> element content (can be
+          omitted if all styles are the default style).</p>
+
 <pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;map xmlns="http://www.gpxsee.org/map/1" type="WMS"&gt;
-  &lt;name&gt;CUZK-WMS&lt;/name&gt;
-  &lt;url&gt;http://geoportal.cuzk.cz/WMS_ZM50_PUB/WMService.aspx&lt;/url&gt;
-  &lt;layer&gt;GR_ZM50&lt;/layer&gt;
-  &lt;crs&gt;EPSG:3035&lt;/crs&gt;
+  &lt;name&gt;Katastr nemovitostí&lt;/name&gt;
+  &lt;url&gt;http://services.cuzk.cz/wms/wms.asp&lt;/url&gt;
+  &lt;layer&gt;polygony_parcel,polygony_budov,polygony_k_u&lt;/layer&gt;
+  &lt;crs axis="yx"&gt;EPSG:3034&lt;/crs&gt;
 &lt;/map&gt;
 </pre>
 
