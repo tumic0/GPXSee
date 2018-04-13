@@ -1,12 +1,12 @@
-#ifndef CSVPARSER_H
-#define CSVPARSER_H
+#ifndef WPTPARSER_H
+#define WPTPARSER_H
 
 #include "parser.h"
 
-class CSVParser : public Parser
+class WPTParser : public Parser
 {
 public:
-	CSVParser() : _errorLine(0) {}
+	WPTParser() : _errorLine(0) {}
 
 	bool parse(QFile *file, QList<TrackData> &tracks, QList<RouteData> &routes,
 	  QList<Waypoint> &waypoints);
@@ -18,4 +18,4 @@ private:
 	int _errorLine;
 };
 
-#endif // CSVPARSER_H
+#endif // WPTPARSER_H

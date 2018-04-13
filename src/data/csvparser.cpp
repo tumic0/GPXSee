@@ -1,9 +1,9 @@
 #include "csvparser.h"
 
-bool CSVParser::parse(QFile *file, QList<TrackData> &track,
+bool CSVParser::parse(QFile *file, QList<TrackData> &tracks,
   QList<RouteData> &routes, QList<Waypoint> &waypoints)
 {
-	Q_UNUSED(track);
+	Q_UNUSED(tracks);
 	Q_UNUSED(routes);
 	bool res;
 

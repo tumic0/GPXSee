@@ -1,12 +1,12 @@
-#ifndef CSVPARSER_H
-#define CSVPARSER_H
+#ifndef PLTPARSER_H
+#define PLTPARSER_H
 
 #include "parser.h"
 
-class CSVParser : public Parser
+class PLTParser : public Parser
 {
 public:
-	CSVParser() : _errorLine(0) {}
+	PLTParser() : _errorLine(0) {}
 
 	bool parse(QFile *file, QList<TrackData> &tracks, QList<RouteData> &routes,
 	  QList<Waypoint> &waypoints);
@@ -18,4 +18,4 @@ private:
 	int _errorLine;
 };
 
-#endif // CSVPARSER_H
+#endif // PLTPARSER_H
