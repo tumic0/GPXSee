@@ -62,7 +62,7 @@ QString WMTSMap::tilesDir() const
 	return QString(TILES_DIR + "/" + _name);
 }
 
-qreal WMTSMap::sd2res(qreal scaleDenominator) const
+double WMTSMap::sd2res(double scaleDenominator) const
 {
 	return scaleDenominator * 0.28e-3 * _projection.units().fromMeters(1.0);
 }
@@ -75,7 +75,7 @@ void WMTSMap::updateTransform()
 	QPointF topLeft = (_cs.axisOrder() == CoordinateSystem::YX)
 	  ? QPointF(z.topLeft().y(), z.topLeft().x()) : z.topLeft();
 
-	qreal pixelSpan = sd2res(z.scaleDenominator());
+	double pixelSpan = sd2res(z.scaleDenominator());
 	if (_projection.isGeographic())
 		pixelSpan /= deg2rad(WGS84_RADIUS);
 	QPointF tileSpan(z.tile().width() * pixelSpan, z.tile().height() * pixelSpan);

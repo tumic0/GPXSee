@@ -10,7 +10,7 @@
 #define CAPABILITIES_FILE "capabilities.xml"
 #define TILE_SIZE 256
 
-qreal WMSMap::sd2res(qreal scaleDenominator) const
+double WMSMap::sd2res(double scaleDenominator) const
 {
 	return scaleDenominator * 0.28e-3 * _projection.units().fromMeters(1.0);
 }
@@ -48,9 +48,9 @@ void WMSMap::computeZooms(const RangeF &scaleDenominator)
 	_zooms.clear();
 
 	if (scaleDenominator.size() > 0) {
-		qreal ld = log2(scaleDenominator.max()) - log2(scaleDenominator.min());
+		double ld = log2(scaleDenominator.max()) - log2(scaleDenominator.min());
 		int cld = ceil(ld);
-		qreal step = ld / (qreal)cld;
+		double step = ld / (qreal)cld;
 		qreal lmax = log2(scaleDenominator.max());
 		for (int i = 0; i <= cld; i++)
 			_zooms.append(pow(2.0, lmax - i * step));
@@ -60,10 +60,10 @@ void WMSMap::computeZooms(const RangeF &scaleDenominator)
 
 void WMSMap::updateTransform()
 {
-	qreal scaleDenominator = _zooms.at(_zoom);
+	double scaleDenominator = _zooms.at(_zoom);
 	ReferencePoint tl, br;
 
-	qreal pixelSpan = sd2res(scaleDenominator);
+	double pixelSpan = sd2res(scaleDenominator);
 	if (_projection.isGeographic())
 		pixelSpan /= deg2rad(WGS84_RADIUS);
 
@@ -150,7 +150,7 @@ void WMSMap::emitLoaded()
 
 QRectF WMSMap::bounds() const
 {
-	qreal pixelSpan = sd2res(_zooms.at(_zoom));
+	double pixelSpan = sd2res(_zooms.at(_zoom));
 	if (_projection.isGeographic())
 		pixelSpan /= deg2rad(WGS84_RADIUS);
 	QSizeF size(_boundingBox.width() / pixelSpan, -_boundingBox.height()
@@ -176,7 +176,7 @@ int WMSMap::zoomFit(const QSize &size, const RectC &br)
 		QRectF tbr(_projection.ll2xy(br.topLeft()),
 		  _projection.ll2xy(br.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
-		qreal resolution = qMax(qAbs(sc.x()), qAbs(sc.y()));
+		double resolution = qMax(qAbs(sc.x()), qAbs(sc.y()));
 		if (_projection.isGeographic())
 			resolution *= deg2rad(WGS84_RADIUS);
 

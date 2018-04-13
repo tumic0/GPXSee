@@ -46,7 +46,7 @@ private slots:
 
 private:
 	bool loadWMTS();
-	qreal sd2res(qreal scaleDenominator) const;
+	double sd2res(double scaleDenominator) const;
 	QString tilesDir() const;
 	void updateTransform();
 

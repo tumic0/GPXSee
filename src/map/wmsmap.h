@@ -46,7 +46,7 @@ private slots:
 
 private:
 	QString tileUrl(const QString &version) const;
-	qreal sd2res(qreal scaleDenominator) const;
+	double sd2res(double scaleDenominator) const;
 	QString tilesDir() const;
 	void computeZooms(const RangeF &scaleDenominator);
 	void updateTransform();
@@ -62,7 +62,7 @@ private:
 	Projection _projection;
 	Transform _transform;
 	CoordinateSystem _cs;
-	QVector<qreal> _zooms;
+	QVector<double> _zooms;
 	QRectF _boundingBox;
 	int _zoom;
 	bool _block;

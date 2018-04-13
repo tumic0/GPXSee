@@ -63,7 +63,7 @@ QString WMS::style(QXmlStreamReader &reader)
 
 RectC WMS::geographicBoundingBox(QXmlStreamReader &reader)
 {
-	qreal left = NAN, top = NAN, right = NAN, bottom = NAN;
+	double left = NAN, top = NAN, right = NAN, bottom = NAN;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "westBoundLongitude")

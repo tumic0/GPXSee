@@ -1,4 +1,40 @@
+#include "wgs84.h"
 #include "rectc.h"
+
+#define MIN_LAT deg2rad(-90.0)
+#define MAX_LAT deg2rad(90.0)
+#define MIN_LON deg2rad(-180.0)
+#define MAX_LON deg2rad(180.0)
+
+RectC::RectC(const Coordinates &center, double radius)
+{
+	double radDist = radius / WGS84_RADIUS;
+	double radLon = deg2rad(center.lon());
+	double radlat = deg2rad(center.lat());
+
+	double minLat = radlat - radDist;
+	double maxLat = radlat + radDist;
+
+	double minLon, maxLon;
+	if (minLat > MIN_LAT && maxLat < MAX_LAT) {
+		double deltaLon = asin(sin(radDist) / cos(radlat));
+		minLon = radLon - deltaLon;
+		if (minLon < MIN_LON)
+			minLon += 2.0 * M_PI;
+		maxLon = radLon + deltaLon;
+		if (maxLon > MAX_LON)
+			maxLon -= 2.0 * M_PI;
+	} else {
+		// a pole is within the distance
+		minLat = qMax(minLat, MIN_LAT);
+		maxLat = qMin(maxLat, MAX_LAT);
+		minLon = MIN_LON;
+		maxLon = MAX_LON;
+	}
+
+	_tl = Coordinates(rad2deg(minLon), rad2deg(maxLat));
+	_br = Coordinates(rad2deg(maxLon), rad2deg(minLat));
+}
 
 RectC RectC::operator|(const RectC &r) const
 {
@@ -134,7 +170,8 @@ void RectC::unite(const Coordinates &c)
 #ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const RectC &rect)
 {
-	dbg.nospace() << "RectC(" << rect.topLeft() << ", " << rect.size() << ")";
+	dbg.nospace() << "RectC(" << rect.topLeft() << ", " << rect.bottomRight()
+	  << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG

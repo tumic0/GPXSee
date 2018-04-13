@@ -54,7 +54,7 @@ public:
 	class Zoom
 	{
 	public:
-		Zoom(const QString &id, qreal scaleDenominator, const QPointF &topLeft,
+		Zoom(const QString &id, double scaleDenominator, const QPointF &topLeft,
 		  const QSize &tile, const QSize &matrix, const QRect &limits) :
 		  _id(id), _scaleDenominator(scaleDenominator), _topLeft(topLeft),
 		  _tile(tile), _matrix(matrix), _limits(limits) {}
@@ -62,7 +62,7 @@ public:
 		  {return _scaleDenominator > other._scaleDenominator;}
 
 		const QString &id() const {return _id;}
-		qreal scaleDenominator() const {return _scaleDenominator;}
+		double scaleDenominator() const {return _scaleDenominator;}
 		const QPointF &topLeft() const {return _topLeft;}
 		const QSize &tile() const {return _tile;}
 		const QSize &matrix() const {return _matrix;}
@@ -70,7 +70,7 @@ public:
 
 	private:
 		QString _id;
-		qreal _scaleDenominator;
+		double _scaleDenominator;
 		QPointF _topLeft;
 		QSize _tile;
 		QSize _matrix;
@@ -94,7 +94,7 @@ public:
 private:
 	struct TileMatrix {
 		QString id;
-		qreal scaleDenominator;
+		double scaleDenominator;
 		QPointF topLeft;
 		QSize tile;
 		QSize matrix;

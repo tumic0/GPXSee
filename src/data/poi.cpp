@@ -1,5 +1,6 @@
 #include <QFile>
 #include <QDir>
+#include "common/rectc.h"
 #include "data.h"
 #include "poi.h"
 
@@ -101,12 +102,11 @@ QList<Waypoint> POI::points(const Path &path) const
 	QSet<int>::const_iterator it;
 
 	for (int i = 0; i < path.count(); i++) {
-		const Coordinates &c = path.at(i).coordinates();
-		QPair<Coordinates, Coordinates> br = c.boundingRect(_radius);
-		min[0] = br.first.lon();
-		min[1] = br.first.lat();
-		max[0] = br.second.lon();
-		max[1] = br.second.lat();
+		RectC br(path.at(i).coordinates(), _radius);
+		min[0] = br.topLeft().lon();
+		min[1] = br.bottomRight().lat();
+		max[0] = br.bottomRight().lon();
+		max[1] = br.topLeft().lat();
 
 		_tree.Search(min, max, cb, &set);
 	}
@@ -124,13 +124,11 @@ QList<Waypoint> POI::points(const Waypoint &point) const
 	qreal min[2], max[2];
 	QSet<int>::const_iterator it;
 
-	const Coordinates &c = point.coordinates();
-
-	QPair<Coordinates, Coordinates> br = c.boundingRect(_radius);
-	min[0] = br.first.lon();
-	min[1] = br.first.lat();
-	max[0] = br.second.lon();
-	max[1] = br.second.lat();
+	RectC br(point.coordinates(), _radius);
+	min[0] = br.topLeft().lon();
+	min[1] = br.bottomRight().lat();
+	max[0] = br.bottomRight().lon();
+	max[1] = br.topLeft().lat();
 
 	_tree.Search(min, max, cb, &set);
 
