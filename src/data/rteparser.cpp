@@ -68,17 +68,21 @@ bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
 				if (!name.isEmpty())
 					wp.setName(name);
 				if (list.size() >= 8) {
-					double date = list.at(7).trimmed().toDouble(&res);
-					if (!res) {
-						_errorString = "Invalid date";
-						return false;
+					QByteArray field(list.at(7).trimmed());
+					if (!field.isEmpty()) {
+						double date = field.toDouble(&res);
+						if (!res) {
+							_errorString = "Invalid date";
+							return false;
+						}
+						wp.setTimestamp(QDateTime::fromMSecsSinceEpoch(
+						  Date::delphi2unixMS(date)));
 					}
-					wp.setTimestamp(QDateTime::fromMSecsSinceEpoch(
-					  Date::delphi2unixMS(date)));
 				}
 				if (list.size() >= 14) {
 					QString desc(list.at(13).trimmed().replace('\xD1', ','));
-					wp.setDescription(desc);
+					if (!desc.isEmpty())
+						wp.setDescription(desc);
 				}
 
 				routes.last().append(wp);

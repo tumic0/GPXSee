@@ -51,26 +51,33 @@ bool WPTParser::parse(QFile *file, QList<TrackData> &tracks,
 			if (!name.isEmpty())
 				wp.setName(name);
 			if (list.size() >= 5) {
-				double date = list.at(4).trimmed().toDouble(&res);
-				if (!res) {
-					_errorString = "Invalid date";
-					return false;
+				QByteArray field(list.at(4).trimmed());
+				if (!field.isEmpty()) {
+					double date = field.toDouble(&res);
+					if (!res) {
+						_errorString = "Invalid date";
+						return false;
+					}
+					wp.setTimestamp(QDateTime::fromMSecsSinceEpoch(
+					  Date::delphi2unixMS(date)));
 				}
-				wp.setTimestamp(QDateTime::fromMSecsSinceEpoch(
-				  Date::delphi2unixMS(date)));
 			}
 			if (list.size() >= 11) {
 				QString desc(list.at(10).trimmed().replace('\xD1', ','));
 				if (!desc.isEmpty())
 					wp.setDescription(desc);
-			} if (list.size() >= 15) {
-				double elevation = list.at(14).trimmed().toDouble(&res);
-				if (!res) {
-					_errorString = "Invalid elevation";
-					return false;
+			}
+			if (list.size() >= 15) {
+				QByteArray field(list.at(14).trimmed());
+				if (!field.isEmpty()) {
+					double elevation = list.at(14).trimmed().toDouble(&res);
+					if (!res) {
+						_errorString = "Invalid elevation";
+						return false;
+					}
+					if (elevation != -777)
+						wp.setElevation(elevation * 0.3048);
 				}
-				if (elevation != -777)
-					wp.setElevation(elevation * 0.3048);
 			}
 
 			waypoints.append(wp);

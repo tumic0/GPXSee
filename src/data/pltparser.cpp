@@ -55,22 +55,28 @@ bool PLTParser::parse(QFile *file, QList<TrackData> &tracks,
 			Trackpoint tp(gcs->toWGS84(Coordinates(lon, lat)));
 
 			if (list.size() >= 4) {
-				double elevation = list.at(3).trimmed().toDouble(&res);
-				if (!res) {
-					_errorString = "Invalid elevation";
-					return false;
+				QByteArray field(list.at(3).trimmed());
+				if (!field.isEmpty()) {
+					double elevation = field.toDouble(&res);
+					if (!res) {
+						_errorString = "Invalid elevation";
+						return false;
+					}
+					if (elevation != -777)
+						tp.setElevation(elevation * 0.3048);
 				}
-				if (elevation != -777)
-					tp.setElevation(elevation * 0.3048);
 			}
 			if (list.size() >= 5) {
-				double date = list.at(4).trimmed().toDouble(&res);
-				if (!res) {
-					_errorString = "Invalid date";
-					return false;
+				QByteArray field(list.at(4).trimmed());
+				if (!field.isEmpty()) {
+					double date = field.toDouble(&res);
+					if (!res) {
+						_errorString = "Invalid date";
+						return false;
+					}
+					tp.setTimestamp(QDateTime::fromMSecsSinceEpoch(
+					  Date::delphi2unixMS(date)));
 				}
-				tp.setTimestamp(QDateTime::fromMSecsSinceEpoch(
-				  Date::delphi2unixMS(date)));
 			}
 
 			track.append(tp);
