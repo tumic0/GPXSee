@@ -246,7 +246,8 @@ macx {
     MAPS.path = Contents/Resources
     MAPS.files = pkg/maps
     ICONS.path = Contents/Resources/icons
-    ICONS.files = icons/tcx.icns \
+    ICONS.files = icons/gpx.icns \
+        icons/tcx.icns \
         icons/kml.icns \
         icons/fit.icns \
         icons/igc.icns \
