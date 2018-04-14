@@ -24,5 +24,5 @@ for e in $EXTENSIONS; do
 	convert -density 400 -background none -resize '1024x1024' "$1.svg" "$ICONSET/icon_512x512@2x.png"
 
 	iconutil -c icns -o $1.icns "$ICONSET"
-#	rm -R "$ICONSET" $1.svg
+	rm -R "$ICONSET" $1.svg
 done
