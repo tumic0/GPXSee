@@ -12,6 +12,6 @@
   </g>
   <g transform="translate(16.573463,124.9782)">
     <rect y="0" x="0" id="textrect" height="50" width="120" style="fill:$COLOR;fill-opacity:1;stroke:none;"/>
-    <text y="25" x="60" dominant-baseline="central" text-anchor="middle" style="fill:#FFFFFF;font-family:Arial,sans-serif;font-weight:bold;font-size:36px">$EXTENSION</text>
+    <text y="28" x="60" dominant-baseline="central" text-anchor="middle" style="fill:#FFFFFF;font-family:Arial,sans-serif;font-weight:bold;font-size:39px">$EXTENSION</text>
   </g>
 </svg>
