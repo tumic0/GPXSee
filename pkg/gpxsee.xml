@@ -43,4 +43,24 @@
 		<glob pattern="*.nmea"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.oziexplorer.plt">
+		<comment>OziExplorer Track Point File</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text-plain"/>
+		<glob pattern="*.plt"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.oziexplorer.rte">
+		<comment>OziExplorer Route File</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text-plain"/>
+		<glob pattern="*.rte"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.oziexplorer.wpt">
+		<comment>OziExplorer Waypoint File</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text-plain"/>
+		<glob pattern="*.wpt"/>
+	</mime-type>
 </mime-info>

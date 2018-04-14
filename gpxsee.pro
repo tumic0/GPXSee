@@ -250,7 +250,10 @@ macx {
         icons/kml.icns \
         icons/fit.icns \
         icons/igc.icns \
-        icons/nmea.icns
+        icons/nmea.icns \
+        icons/plt.icns \
+        icons/rte.icns \
+        icons/wpt.icns
     QMAKE_BUNDLE_DATA += LOCALE MAPS ICONS CSV
 }
 win32 {
@@ -260,6 +263,9 @@ win32 {
         icons/kml.ico \
         icons/fit.ico \
         icons/igc.ico \
-        icons/nmea.ico
+        icons/nmea.ico \
+        icons/plt.ico \
+        icons/rte.ico \
+        icons/wpt.ico
 }
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"

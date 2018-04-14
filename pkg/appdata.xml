@@ -12,7 +12,7 @@
 
 		<p>Features:</p>
 		<ul>
-			<li>User-definable online maps.</li>
+			<li>User-definable online maps (OSM/Google tiles, WMTS, WMS).</li>
 			<li>Offline maps (OziExplorer maps, TrekBuddy maps/atlases, GeoTIFF
 				images).</li>
 			<li>Elevation, speed, heart rate, cadence, power and temperature
@@ -21,7 +21,8 @@
 			<li>Support for POI files.</li>
 			<li>Print/export to PDF.</li>
 			<li>Full-screen mode.</li>
-			<li>Opens GPX, TCX, FIT, KML, IGC, NMEA and Garmin CSV files.</li>
+			<li>Opens GPX, TCX, FIT, KML, IGC, NMEA, OziExplorer (PLT, WPT, RTE)
+				and Garmin CSV files.</li>
 		</ul>
 	</description>
 
@@ -54,5 +55,8 @@
 		<mimetype>application/vnd.google-earth.kml+xml</mimetype>
 		<mimetype>application/vnd.fai.igc</mimetype>
 		<mimetype>application/vnd.nmea.nmea</mimetype>
+		<mimetype>application/vnd.oziexplorer.plt</mimetype>
+		<mimetype>application/vnd.oziexplorer.rte</mimetype>
+		<mimetype>application/vnd.oziexplorer.wpt</mimetype>
 	</mimetypes>
 </component>

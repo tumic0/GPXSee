@@ -115,6 +115,54 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>plt</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.oziexplorer.plt</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/plt.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>OziExplorer Track Point File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>rte</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.oziexplorer.rte</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/rte.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>OziExplorer Route File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>wpt</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.oziexplorer.wpt</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/wpt.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>OziExplorer Waypoint File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
@@ -243,6 +291,69 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.nmea.nmea</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.oziexplorer3.plt</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.oziexplorer3.com/eng/help/fileformats.html</string>
+			<key>UTTypeDescription</key>
+			<string>OziExplorer Track Point File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>plt</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.oziexplorer.plt</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.oziexplorer3.plt</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.oziexplorer3.com/eng/help/fileformats.html</string>
+			<key>UTTypeDescription</key>
+			<string>OziExplorer Route File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>rte</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.oziexplorer.rte</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.oziexplorer3.plt</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.oziexplorer3.com/eng/help/fileformats.html</string>
+			<key>UTTypeDescription</key>
+			<string>OziExplorer Waypoint File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>wpt</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.oziexplorer.wpt</string>
 			</dict>
 		</dict>
 	</array>

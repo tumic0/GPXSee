@@ -12,7 +12,7 @@ OutFile "GPXSee-${VERSION}_x64.exe"
 ; Compression method
 SetCompressor /SOLID lzma
 
-; Required execution level 
+; Required execution level
 RequestExecutionLevel admin
 
 ; The default installation directory
@@ -26,7 +26,7 @@ VIAddVersionKey "ProductName" "GPXSee"
 VIAddVersionKey "LegalCopyright" "GPXSee project"
 VIAddVersionKey "FileDescription" "GPXSee installer (x64)"
 
-; Registry key to check for directory (so if you install again, it will 
+; Registry key to check for directory (so if you install again, it will
 ; overwrite the old one automatically)
 InstallDirRegKey HKLM "Software\GPXSee" "Install_Dir"
 
@@ -39,11 +39,14 @@ InstallDirRegKey HKLM "Software\GPXSee" "Install_Dir"
 !define REGFIT "GPXSee.fit"
 !define REGIGC "GPXSee.igc"
 !define REGNMEA "GPXSee.nmea"
+!define REGPLT "GPXSee.plt"
+!define REGRTE "GPXSee.rte"
+!define REGWPT "GPXSee.wpt"
 
 ; Start menu page configuration
-!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM" 
-!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\GPXSee" 
-!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "GPXSee" 
+!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\GPXSee"
+!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "GPXSee"
 
 Var StartMenuFolder
 
@@ -71,31 +74,31 @@ Function .onInit
     MessageBox MB_OK "GPXSee can only be installed on Windows 7 or later."
     Abort
   ${EndIf}
-  
+
   ${If} ${RunningX64}
     SetRegView 64
-  ${Else}  
-    MessageBox MB_OK "The 64b version of GPXSee can not be run on 32b systems."  
-    Abort  
+  ${Else}
+    MessageBox MB_OK "The 64b version of GPXSee can not be run on 32b systems."
+    Abort
   ${EndIf}
-FunctionEnd 
+FunctionEnd
 
 ; The stuff to install
 Section "GPXSee" SEC_APP
 
   SectionIn RO
-  
-  ; Set output path to the installation directory.
+
+  ; Set output path to the installation directory
   SetOutPath $INSTDIR
-  
+
   ; Put the files there
   File "gpxsee.exe"
   File /r "maps"
   File /r "csv"
-  
+
   ; Create start menu entry and add links
   SetShellVarContext all
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application  
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\GPXSee.lnk" "$INSTDIR\gpxsee.exe"
@@ -103,7 +106,7 @@ Section "GPXSee" SEC_APP
 
   ; Create the uninstaller
   WriteUninstaller "$INSTDIR\uninstall.exe"
-  
+
   ; Write the installation path into the registry
   DetailPrint "Registering application..."
   WriteRegStr HKLM SOFTWARE\GPXSee "Install_Dir" "$INSTDIR"
@@ -142,7 +145,19 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKCR "${REGNMEA}" ""  "NMEA 0183 data"
   WriteRegStr HKCR "${REGNMEA}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,6"
   WriteRegStr HKCR "${REGNMEA}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
-  
+  WriteRegStr HKCR ".plt" "" "${REGPLT}"
+  WriteRegStr HKCR "${REGPLT}" ""  "OziExplorer Track Point File"
+  WriteRegStr HKCR "${REGPLT}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,7"
+  WriteRegStr HKCR "${REGPLT}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
+  WriteRegStr HKCR ".rte" "" "${REGRTE}"
+  WriteRegStr HKCR "${REGRTE}" ""  "OziExplorer Route File"
+  WriteRegStr HKCR "${REGRTE}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,8"
+  WriteRegStr HKCR "${REGRTE}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
+  WriteRegStr HKCR ".wpt" "" "${REGWPT}"
+  WriteRegStr HKCR "${REGWPT}" ""  "OziExplorer Waypoint File"
+  WriteRegStr HKCR "${REGWPT}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,9"
+  WriteRegStr HKCR "${REGWPT}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
+
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
 SectionEnd
@@ -159,7 +174,7 @@ Section "QT framework" SEC_QT
   File /r "platforms"
   File /r "imageformats"
   File /r "printsupport"
- 
+
 SectionEnd
 
 Section "MSVC runtime" SEC_MSVC
@@ -233,7 +248,7 @@ SectionGroupEnd
 ; Uninstaller
 
 Section "Uninstall"
-  
+
   ; Remove registry keys
   SetRegView 64
   DeleteRegKey HKLM "${REGENTRY}"
@@ -247,7 +262,7 @@ Section "Uninstall"
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
   Delete "$SMPROGRAMS\$StartMenuFolder\*.*"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
-  
+
   ; Remove File associations
   DeleteRegKey HKCR "${REGGPX}"
   DeleteRegKey HKCR ".gpx"
@@ -261,6 +276,12 @@ Section "Uninstall"
   DeleteRegKey HKCR ".igc"
   DeleteRegKey HKCR "${REGNMEA}"
   DeleteRegKey HKCR ".nmea"
+  DeleteRegKey HKCR "${REGPLT}"
+  DeleteRegKey HKCR ".plt"
+  DeleteRegKey HKCR "${REGRTE}"
+  DeleteRegKey HKCR ".rte"
+  DeleteRegKey HKCR "${REGWPT}"
+  DeleteRegKey HKCR ".wpt"
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
 SectionEnd

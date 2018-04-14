@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" height="185" width="185">
+  <path id="envelope" style="fill:#ffffff;stroke:#999999;stroke-width:2.18774867" d="m 128.23996,2.2548915 -95.377018,0 0,181.0580085 134.394868,0 0,-141.313567 z m 0,0 0,39.7444415 39.01785,0" />
+  <g id="logo" transform="matrix(0.89093793,0,0,0.84489692,3.5017807,-51.565424)">
+    <polyline style="fill:none;fill-opacity:0;stroke:#000000;stroke-width:4" points="62.3563,178.566 73.5,125.854 96,151.875 113,90.875 136.5,172.375 148.831,160.03 "/>
+    <circle style="fill:#000000" cx="113" cy="90.875" r="8"/>
+    <circle style="fill:#000000" cx="73.5" cy="125.854" r="8"/>
+    <circle style="fill:#000000" cx="136.5" cy="172.375" r="8"/>
+    <circle style="fill:#000000" cx="60.700001" cy="186.39999" r="8"/>
+    <circle style="fill:#000000" cx="154.5" cy="154.354" r="8"/>
+    <circle style="fill:#000000" cx="96" cy="151.875" r="8"/>
+  </g>
+  <g transform="translate(16.573463,124.9782)">
+    <rect y="0" x="0" id="textrect" height="50" width="120" style="fill:$COLOR;fill-opacity:1;stroke:none;"/>
+    <text y="25" x="60" dominant-baseline="central" text-anchor="middle" style="fill:#FFFFFF;font-family:Arial,sans-serif;font-weight:bold;font-size:36px">$EXTENSION</text>
+  </g>
+</svg>
