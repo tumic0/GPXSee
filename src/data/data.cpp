@@ -114,9 +114,8 @@ QString Data::formats()
 	  + tr("CSV files") + " (*.csv);;" + tr("FIT files") + " (*.fit);;"
 	  + tr("GPX files") + " (*.gpx);;" + tr("IGC files") + " (*.igc);;"
 	  + tr("KML files") + " (*.kml);;" + tr("NMEA files") + " (*.nmea);;"
-	  + tr("PLT files") + " (*.plt);;" + tr("RTE files") + " (*.rte);;"
-	  + tr("TCX files") + " (*.tcx);;" + tr("WPT files") + " (*.wpt);;"
-	  + tr("All files") + " (*)";
+	  + tr("OziExplorer files") + " (*.plt *.rte *.wpt);;"
+	  + tr("TCX files") + " (*.tcx);;" + tr("All files") + " (*)";
 }
 
 QStringList Data::filter()
