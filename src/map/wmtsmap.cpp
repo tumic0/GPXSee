@@ -200,7 +200,7 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect)
 
 QPointF WMTSMap::ll2xy(const Coordinates &c) const
 {
-	return _transform.proj2img(_projection.ll2xy(c).toPointF());
+	return _transform.proj2img(_projection.ll2xy(c));
 }
 
 Coordinates WMTSMap::xy2ll(const QPointF &p) const

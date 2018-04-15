@@ -41,11 +41,11 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	QPointF ll2pp(const Coordinates &c) const
-	  {return _projection.ll2xy(c).toPointF();}
-	QPointF xy2pp(const QPointF &p) const
+	PointD ll2pp(const Coordinates &c) const
+	  {return _projection.ll2xy(c);}
+	PointD xy2pp(const QPointF &p) const
 	  {return _transform.img2proj(p);}
-	QPointF pp2xy(const QPointF &p) const
+	QPointF pp2xy(const PointD &p) const
 	  {return _transform.proj2img(p);}
 
 private:

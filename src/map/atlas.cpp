@@ -75,8 +75,9 @@ void Atlas::computeBounds()
 	}
 
 	for (int i = 0; i < _maps.count(); i++)
-		_bounds.append(QPair<QRectF, QRectF>(QRectF(TL(_maps.at(i)),
-		  BR(_maps.at(i))), QRectF(offsets.at(i), _maps.at(i)->bounds().size())));
+		_bounds.append(QPair<QRectF, QRectF>(QRectF(TL(_maps.at(i)).toPointF(),
+		  BR(_maps.at(i)).toPointF()), QRectF(offsets.at(i),
+		  _maps.at(i)->bounds().size())));
 }
 
 Atlas::Atlas(const QString &fileName, QObject *parent)
@@ -166,7 +167,8 @@ qreal Atlas::resolution(const QRectF &rect) const
 	int idx = _zooms.at(_zoom).first;
 
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
-		if (_bounds.at(i).second.contains(_maps.at(i)->xy2pp(rect.center()))) {
+		if (_bounds.at(i).second.contains(_maps.at(i)->xy2pp(rect.center())
+		  .toPointF())) {
 			idx = i;
 			break;
 		}
@@ -187,7 +189,8 @@ int Atlas::zoomFit(const QSize &size, const RectC &br)
 
 	for (int z = 0; z < _zooms.count(); z++) {
 		for (int i = _zooms.at(z).first; i <= _zooms.at(z).second; i++) {
-			if (!_bounds.at(i).first.contains(_maps.at(i)->ll2pp(br.center())))
+			if (!_bounds.at(i).first.contains(_maps.at(i)->ll2pp(br.center())
+			  .toPointF()))
 				continue;
 
 			QRect sbr = QRectF(_maps.at(i)->ll2xy(br.topLeft()),
@@ -226,11 +229,11 @@ QPointF Atlas::ll2xy(const Coordinates &c)
 	QPointF pp;
 
 	if (_mapIndex >= 0)
-		pp = _maps.at(_mapIndex)->ll2pp(c);
+		pp = _maps.at(_mapIndex)->ll2pp(c).toPointF();
 	if (_mapIndex < 0 || !_bounds.at(_mapIndex).first.contains(pp)) {
 		_mapIndex = _zooms.at(_zoom).first;
 		for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
-			pp = _maps.at(i)->ll2pp(c);
+			pp = _maps.at(i)->ll2pp(c).toPointF();
 			if (_bounds.at(i).first.contains(pp)) {
 				_mapIndex = i;
 				break;
@@ -247,7 +250,7 @@ Coordinates Atlas::xy2ll(const QPointF &p)
 	int idx = _zooms.at(_zoom).first;
 
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
-		if (_bounds.at(i).second.contains(_maps.at(i)->xy2pp(p))) {
+		if (_bounds.at(i).second.contains(_maps.at(i)->xy2pp(p).toPointF())) {
 			idx = i;
 			break;
 		}

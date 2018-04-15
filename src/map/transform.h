@@ -30,8 +30,10 @@ public:
 	Transform(const ReferencePoint &p, const PointD &scale);
 	Transform(double matrix[16]);
 
-	QPointF proj2img(const QPointF &p) const {return _proj2img.map(p);}
-	QPointF img2proj(const QPointF &p) const {return _img2proj.map(p);}
+	QPointF proj2img(const PointD &p) const
+	  {return _proj2img.map(p.toPointF());}
+	PointD img2proj(const QPointF &p) const
+	  {return _img2proj.map(p);}
 
 	bool isValid() const
 	  {return _proj2img.isInvertible() && _img2proj.isInvertible();}

@@ -202,7 +202,7 @@ int WMSMap::zoomOut()
 
 QPointF WMSMap::ll2xy(const Coordinates &c) const
 {
-	return _transform.proj2img(_projection.ll2xy(c).toPointF());
+	return _transform.proj2img(_projection.ll2xy(c));
 }
 
 Coordinates WMSMap::xy2ll(const QPointF &p) const
@@ -220,13 +220,13 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect)
 	QList<Tile> tiles;
 	for (int i = tl.x(); i < br.x(); i++) {
 		for (int j = tl.y(); j < br.y(); j++) {
-			QPointF ttl(_transform.img2proj(QPointF(i * TILE_SIZE,
+			PointD ttl(_transform.img2proj(QPointF(i * TILE_SIZE,
 			  j * TILE_SIZE)));
-			QPointF tbr(_transform.img2proj(QPointF(i * TILE_SIZE + TILE_SIZE
+			PointD tbr(_transform.img2proj(QPointF(i * TILE_SIZE + TILE_SIZE
 			  - 1, j * TILE_SIZE + TILE_SIZE - 1)));
 			QRectF bbox = (_cs.axisOrder() == CoordinateSystem::YX)
 			  ? QRectF(QPointF(tbr.y(), tbr.x()), QPointF(ttl.y(), ttl.x()))
-			  : QRectF(ttl, tbr);
+			  : QRectF(ttl.toPointF(), tbr.toPointF());
 
 			tiles.append(Tile(QPoint(i, j), _zoom, bbox));
 		}
