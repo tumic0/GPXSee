@@ -124,10 +124,7 @@ HEADERS += src/config.h \
     src/map/wms.h \
     src/map/crs.h \
     src/map/coordinatesystem.h \
-    src/data/pltparser.h \
-    src/data/date.h \
-    src/data/wptparser.h \
-    src/data/rteparser.h
+    src/data/oziparsers.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -221,9 +218,7 @@ SOURCES += src/main.cpp \
     src/map/wms.cpp \
     src/map/crs.cpp \
     src/map/coordinatesystem.cpp \
-    src/data/pltparser.cpp \
-    src/data/wptparser.cpp \
-    src/data/rteparser.cpp
+    src/data/oziparsers.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \

@@ -8,9 +8,7 @@
 #include "fitparser.h"
 #include "igcparser.h"
 #include "nmeaparser.h"
-#include "pltparser.h"
-#include "wptparser.h"
-#include "rteparser.h"
+#include "oziparsers.h"
 #include "data.h"
 
 
