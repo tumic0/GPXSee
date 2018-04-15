@@ -47,47 +47,52 @@
 <context>
     <name>Data</name>
     <message>
-        <location filename="../src/data/data.cpp" line="103"/>
+        <location filename="../src/data/data.cpp" line="112"/>
         <source>Supported files</source>
         <translation>Filer som stöds</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="104"/>
+        <location filename="../src/data/data.cpp" line="114"/>
         <source>CSV files</source>
         <translation>CSV-filer</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="104"/>
+        <location filename="../src/data/data.cpp" line="114"/>
         <source>FIT files</source>
         <translation>FIT-filer</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="105"/>
+        <location filename="../src/data/data.cpp" line="115"/>
         <source>GPX files</source>
         <translation>GPX-filer</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="105"/>
+        <location filename="../src/data/data.cpp" line="115"/>
         <source>IGC files</source>
         <translation>IGC-filer</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="106"/>
+        <location filename="../src/data/data.cpp" line="116"/>
         <source>KML files</source>
         <translation>KML-filer</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="106"/>
+        <location filename="../src/data/data.cpp" line="116"/>
         <source>NMEA files</source>
         <translation>NMEA-filer</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="107"/>
+        <location filename="../src/data/data.cpp" line="117"/>
+        <source>OziExplorer files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="118"/>
         <source>TCX files</source>
         <translation>TCX-filer</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="107"/>
+        <location filename="../src/data/data.cpp" line="118"/>
         <source>All files</source>
         <translation>Alla filer</translation>
     </message>
