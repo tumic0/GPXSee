@@ -325,7 +325,7 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect)
 
 QPointF OfflineMap::ll2xy(const Coordinates &c) const
 {
-	QPointF p(_transform.proj2img(_projection.ll2xy(c)));
+	QPointF p(_transform.proj2img(_projection.ll2xy(c).toPointF()));
 	return _ozf ? QPointF(p.x() * _scale.x(), p.y() * _scale.y()) : p;
 }
 
@@ -363,8 +363,10 @@ int OfflineMap::zoomFit(const QSize &size, const RectC &rect)
 	if (!rect.isValid())
 		rescale(0);
 	else {
-		QPointF tl(_transform.proj2img(_projection.ll2xy(rect.topLeft())));
-		QPointF br(_transform.proj2img(_projection.ll2xy(rect.bottomRight())));
+		QPointF tl(_transform.proj2img(_projection.ll2xy(rect.topLeft())
+		  .toPointF()));
+		QPointF br(_transform.proj2img(_projection.ll2xy(rect.bottomRight())
+		  .toPointF()));
 		QRect sbr(QRectF(tl, br).toRect().normalized());
 
 		for (int i = 0; i < _ozf->zooms(); i++) {

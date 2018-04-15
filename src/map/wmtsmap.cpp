@@ -70,27 +70,21 @@ double WMTSMap::sd2res(double scaleDenominator) const
 void WMTSMap::updateTransform()
 {
 	const WMTS::Zoom &z = _zooms.at(_zoom);
-	ReferencePoint tl, br;
 
-	QPointF topLeft = (_cs.axisOrder() == CoordinateSystem::YX)
-	  ? QPointF(z.topLeft().y(), z.topLeft().x()) : z.topLeft();
+	PointD topLeft = (_cs.axisOrder() == CoordinateSystem::YX)
+	  ? PointD(z.topLeft().y(), z.topLeft().x()) : z.topLeft();
 
 	double pixelSpan = sd2res(z.scaleDenominator());
 	if (_projection.isGeographic())
 		pixelSpan /= deg2rad(WGS84_RADIUS);
-	QPointF tileSpan(z.tile().width() * pixelSpan, z.tile().height() * pixelSpan);
-	QPointF bottomRight(topLeft.x() + tileSpan.x() * z.matrix().width(),
+	PointD tileSpan(z.tile().width() * pixelSpan, z.tile().height() * pixelSpan);
+	PointD bottomRight(topLeft.x() + tileSpan.x() * z.matrix().width(),
 	  topLeft.y() - tileSpan.y() * z.matrix().height());
 
-	tl.xy = QPoint(0, 0);
-	tl.pp = topLeft;
-	br.xy = QPoint(z.tile().width() * z.matrix().width(),
-	  z.tile().height() * z.matrix().height());
-	br.pp = bottomRight;
-
-	QList<ReferencePoint> points;
-	points << tl << br;
-	_transform = Transform(points);
+	ReferencePoint tl(PointD(0, 0), topLeft);
+	ReferencePoint br(PointD(z.tile().width() * z.matrix().width(),
+	  z.tile().height() * z.matrix().height()), bottomRight);
+	_transform = Transform(tl, br);
 }
 
 void WMTSMap::load()
@@ -131,8 +125,8 @@ QRectF WMTSMap::bounds() const
 int WMTSMap::zoomFit(const QSize &size, const RectC &br)
 {
 	if (br.isValid()) {
-		QRectF tbr(_projection.ll2xy(br.topLeft()),
-		  _projection.ll2xy(br.bottomRight()));
+		QRectF tbr(_projection.ll2xy(br.topLeft()).toPointF(),
+		  _projection.ll2xy(br.bottomRight()).toPointF());
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
 		qreal resolution = qMax(qAbs(sc.x()), qAbs(sc.y()));
 		if (_projection.isGeographic())
@@ -206,7 +200,7 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect)
 
 QPointF WMTSMap::ll2xy(const Coordinates &c) const
 {
-	return _transform.proj2img(_projection.ll2xy(c));
+	return _transform.proj2img(_projection.ll2xy(c).toPointF());
 }
 
 Coordinates WMTSMap::xy2ll(const QPointF &p) const

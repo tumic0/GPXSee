@@ -61,21 +61,14 @@ void WMSMap::computeZooms(const RangeF &scaleDenominator)
 void WMSMap::updateTransform()
 {
 	double scaleDenominator = _zooms.at(_zoom);
-	ReferencePoint tl, br;
-
 	double pixelSpan = sd2res(scaleDenominator);
 	if (_projection.isGeographic())
 		pixelSpan /= deg2rad(WGS84_RADIUS);
 
-	tl.xy = QPoint(0, 0);
-	tl.pp = _boundingBox.topLeft();
-	br.xy = QPoint(_boundingBox.width() / pixelSpan, -_boundingBox.height()
-	  / pixelSpan);
-	br.pp = _boundingBox.bottomRight();
-
-	QList<ReferencePoint> points;
-	points << tl << br;
-	_transform = Transform(points);
+	ReferencePoint tl(PointD(0, 0), _boundingBox.topLeft());
+	ReferencePoint br(PointD(_boundingBox.width() / pixelSpan,
+	  -_boundingBox.height() / pixelSpan), _boundingBox.bottomRight());
+	_transform = Transform(tl, br);
 }
 
 bool WMSMap::loadWMS()
@@ -91,8 +84,8 @@ bool WMSMap::loadWMS()
 	_projection = wms.projection();
 	RectC bb = wms.boundingBox().normalized();
 	_boundingBox = QRectF(_projection.ll2xy(Coordinates(bb.topLeft().lon(),
-	  bb.bottomRight().lat())), _projection.ll2xy(Coordinates(
-	  bb.bottomRight().lon(), bb.topLeft().lat())));
+	  bb.bottomRight().lat())).toPointF(), _projection.ll2xy(Coordinates(
+	  bb.bottomRight().lon(), bb.topLeft().lat())).toPointF());
 	_tileLoader = TileLoader(tileUrl(wms.version()), tilesDir(),
 	  _setup.authorization());
 
@@ -173,8 +166,8 @@ qreal WMSMap::resolution(const QRectF &rect) const
 int WMSMap::zoomFit(const QSize &size, const RectC &br)
 {
 	if (br.isValid()) {
-		QRectF tbr(_projection.ll2xy(br.topLeft()),
-		  _projection.ll2xy(br.bottomRight()));
+		QRectF tbr(_projection.ll2xy(br.topLeft()).toPointF(),
+		  _projection.ll2xy(br.bottomRight()).toPointF());
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
 		double resolution = qMax(qAbs(sc.x()), qAbs(sc.y()));
 		if (_projection.isGeographic())
@@ -209,7 +202,7 @@ int WMSMap::zoomOut()
 
 QPointF WMSMap::ll2xy(const Coordinates &c) const
 {
-	return _transform.proj2img(_projection.ll2xy(c));
+	return _transform.proj2img(_projection.ll2xy(c).toPointF());
 }
 
 Coordinates WMSMap::xy2ll(const QPointF &p) const

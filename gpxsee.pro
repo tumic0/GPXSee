@@ -92,6 +92,20 @@ HEADERS += src/config.h \
     src/map/transform.h \
     src/map/mapfile.h \
     src/map/tifffile.h \
+    src/map/gcs.h \
+    src/map/angularunits.h \
+    src/map/primemeridian.h \
+    src/map/linearunits.h \
+    src/map/ct.h \
+    src/map/mapsource.h \
+    src/map/tileloader.h \
+    src/map/wmtsmap.h \
+    src/map/wmts.h \
+    src/map/wmsmap.h \
+    src/map/wms.h \
+    src/map/crs.h \
+    src/map/coordinatesystem.h \
+    src/map/point.h \
     src/data/graph.h \
     src/data/poi.h \
     src/data/waypoint.h \
@@ -111,19 +125,6 @@ HEADERS += src/config.h \
     src/data/fitparser.h \
     src/data/igcparser.h \
     src/data/nmeaparser.h \
-    src/map/gcs.h \
-    src/map/angularunits.h \
-    src/map/primemeridian.h \
-    src/map/linearunits.h \
-    src/map/ct.h \
-    src/map/mapsource.h \
-    src/map/tileloader.h \
-    src/map/wmtsmap.h \
-    src/map/wmts.h \
-    src/map/wmsmap.h \
-    src/map/wms.h \
-    src/map/crs.h \
-    src/map/coordinatesystem.h \
     src/data/oziparsers.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
@@ -193,18 +194,6 @@ SOURCES += src/main.cpp \
     src/map/transform.cpp \
     src/map/mapfile.cpp \
     src/map/tifffile.cpp \
-    src/data/data.cpp \
-    src/data/poi.cpp \
-    src/data/track.cpp \
-    src/data/route.cpp \
-    src/data/path.cpp \
-    src/data/gpxparser.cpp \
-    src/data/tcxparser.cpp \
-    src/data/csvparser.cpp \
-    src/data/kmlparser.cpp \
-    src/data/fitparser.cpp \
-    src/data/igcparser.cpp \
-    src/data/nmeaparser.cpp \
     src/map/projection.cpp \
     src/map/gcs.cpp \
     src/map/angularunits.cpp \
@@ -218,6 +207,18 @@ SOURCES += src/main.cpp \
     src/map/wms.cpp \
     src/map/crs.cpp \
     src/map/coordinatesystem.cpp \
+    src/data/data.cpp \
+    src/data/poi.cpp \
+    src/data/track.cpp \
+    src/data/route.cpp \
+    src/data/path.cpp \
+    src/data/gpxparser.cpp \
+    src/data/tcxparser.cpp \
+    src/data/csvparser.cpp \
+    src/data/kmlparser.cpp \
+    src/data/fitparser.cpp \
+    src/data/igcparser.cpp \
+    src/data/nmeaparser.cpp \
     src/data/oziparsers.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \

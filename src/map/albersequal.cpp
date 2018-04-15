@@ -115,7 +115,7 @@ AlbersEqual::AlbersEqual(const Ellipsoid *ellipsoid, double standardParallel1,
 	_rho0 = (_C < nq0) ? 0 : _a_over_n * sqrt(_C - nq0);
 }
 
-QPointF AlbersEqual::ll2xy(const Coordinates &c) const
+PointD AlbersEqual::ll2xy(const Coordinates &c) const
 {
 	double dlam;
 	double sin_lat;
@@ -139,11 +139,11 @@ QPointF AlbersEqual::ll2xy(const Coordinates &c) const
 	rho = (_C < nq) ? 0 : _a_over_n * sqrt(_C - nq);
 	theta = _n * dlam;
 
-	return QPointF(rho * sin(theta) + _falseEasting,
+	return PointD(rho * sin(theta) + _falseEasting,
 	  _rho0 - rho * cos(theta) + _falseNorthing);
 }
 
-Coordinates AlbersEqual::xy2ll(const QPointF &p) const
+Coordinates AlbersEqual::xy2ll(const PointD &p) const
 {
 	double dy, dx;
 	double rho0_minus_dy;

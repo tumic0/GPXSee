@@ -93,7 +93,7 @@ LambertConic1::LambertConic1(const Ellipsoid *ellipsoid, double latitudeOrigin,
 	_rho_olat = _rho0;
 }
 
-QPointF LambertConic1::ll2xy(const Coordinates &c) const
+PointD LambertConic1::ll2xy(const Coordinates &c) const
 {
 	double t;
 	double rho;
@@ -117,11 +117,11 @@ QPointF LambertConic1::ll2xy(const Coordinates &c) const
 
 	theta = _n * dlam;
 
-	return QPointF(rho * sin(theta) + _falseEasting, _rho_olat - rho
+	return PointD(rho * sin(theta) + _falseEasting, _rho_olat - rho
 	  * cos(theta) + _falseNorthing);
 }
 
-Coordinates LambertConic1::xy2ll(const QPointF &p) const
+Coordinates LambertConic1::xy2ll(const PointD &p) const
 {
 	double dx;
 	double dy;
@@ -266,12 +266,12 @@ LambertConic2::LambertConic2(const Ellipsoid *ellipsoid,
 	  falseEasting, falseNorthing);
 }
 
-QPointF LambertConic2::ll2xy(const Coordinates &c) const
+PointD LambertConic2::ll2xy(const Coordinates &c) const
 {
 	return _lc1.ll2xy(c);
 }
 
-Coordinates LambertConic2::xy2ll(const QPointF &p) const
+Coordinates LambertConic2::xy2ll(const PointD &p) const
 {
 	return _lc1.xy2ll(p);
 }

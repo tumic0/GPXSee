@@ -3,7 +3,7 @@
 
 #include <cmath>
 #include <QDebug>
-#include <QPointF>
+#include "point.h"
 
 class LinearUnits
 {
@@ -15,11 +15,11 @@ public:
 	bool isValid() const {return !std::isnan(_f);}
 
 	double toMeters(double val) const {return val * _f;}
-	QPointF toMeters(const QPointF &p) const
-	  {return QPointF(p.x() * _f, p.y() * _f);}
+	PointD toMeters(const PointD &p) const
+	  {return PointD(p.x() * _f, p.y() * _f);}
 	double fromMeters(double val) const {return val / _f;}
-	QPointF fromMeters(const QPointF &p) const
-	  {return QPointF(p.x() / _f, p.y() /_f);}
+	PointD fromMeters(const PointD &p) const
+	  {return PointD(p.x() / _f, p.y() /_f);}
 
 	friend bool operator==(const LinearUnits &lu1, const LinearUnits &lu2);
 #ifndef QT_NO_DEBUG

@@ -40,7 +40,7 @@ private:
 
 	bool readEntry(TIFFFile &file, Ctx &ctx) const;
 	bool readIFD(TIFFFile &file, quint32 &offset, Ctx &ctx) const;
-	bool readScale(TIFFFile &file, quint32 offset, QPointF &scale) const;
+	bool readScale(TIFFFile &file, quint32 offset, PointD &scale) const;
 	bool readTiepoints(TIFFFile &file, quint32 offset, quint32 count,
 	  QList<ReferencePoint> &points) const;
 	bool readMatrix(TIFFFile &file, quint32 offset, double matrix[16]) const;

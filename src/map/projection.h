@@ -1,9 +1,9 @@
 #ifndef PROJECTION_H
 #define PROJECTION_H
 
-#include <QPointF>
 #include <QDebug>
 #include "common/coordinates.h"
+#include "point.h"
 #include "linearunits.h"
 #include "coordinatesystem.h"
 
@@ -83,8 +83,8 @@ public:
 	bool isValid() const {return !(_gcs == 0 || _ct == 0 || _units.isNull());}
 	bool isGeographic() const {return _geographic;}
 
-	QPointF ll2xy(const Coordinates &c) const;
-	Coordinates xy2ll(const QPointF &p) const;
+	PointD ll2xy(const Coordinates &c) const;
+	Coordinates xy2ll(const PointD &p) const;
 
 	const LinearUnits &units() const {return _units;}
 	const CoordinateSystem &coordinateSystem() const {return _cs;}

@@ -13,8 +13,8 @@ public:
 
 	virtual CT *clone() const {return new LambertAzimuthal(*this);}
 
-	virtual QPointF ll2xy(const Coordinates &c) const;
-	virtual Coordinates xy2ll(const QPointF &p) const;
+	virtual PointD ll2xy(const Coordinates &c) const;
+	virtual Coordinates xy2ll(const PointD &p) const;
 
 private:
 	double _lon0;

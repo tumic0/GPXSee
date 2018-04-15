@@ -103,13 +103,13 @@ Projection &Projection::operator=(const Projection &p)
 	return *this;
 }
 
-QPointF Projection::ll2xy(const Coordinates &c) const
+PointD Projection::ll2xy(const Coordinates &c) const
 {
 	return isValid()
-	  ? _units.fromMeters(_ct->ll2xy(_gcs->fromWGS84(c))) : QPointF();
+	  ? _units.fromMeters(_ct->ll2xy(_gcs->fromWGS84(c))) : PointD();
 }
 
-Coordinates Projection::xy2ll(const QPointF &p) const
+Coordinates Projection::xy2ll(const PointD &p) const
 {
 	return isValid()
 	  ? _gcs->toWGS84(_ct->xy2ll(_units.toMeters(p))) : Coordinates();

@@ -31,7 +31,7 @@ LambertAzimuthal::LambertAzimuthal(const Ellipsoid *ellipsoid,
 	_D = _a * (cos(lat0) / sqrt(1.0 - _es2 * sin2(lat0))) / (_Rq * cos(_beta0));
 }
 
-QPointF LambertAzimuthal::ll2xy(const Coordinates &c) const
+PointD LambertAzimuthal::ll2xy(const Coordinates &c) const
 {
 	double lon = deg2rad(c.lon());
 	double lat = deg2rad(c.lat());
@@ -47,10 +47,10 @@ QPointF LambertAzimuthal::ll2xy(const Coordinates &c) const
 	double y = _falseNorthing + (B / _D) * ((cos(_beta0) * sin(beta))
 	  - (sin(_beta0) * cos(beta) * cos(lon - _lon0)));
 
-	return QPointF(x, y);
+	return PointD(x, y);
 }
 
-Coordinates LambertAzimuthal::xy2ll(const QPointF &p) const
+Coordinates LambertAzimuthal::xy2ll(const PointD &p) const
 {
 	double es4 = _es2 * _es2;
 	double es6 = _es2 * es4;

@@ -138,7 +138,7 @@ bool GeoTIFF::readIFD(TIFFFile &file, quint32 &offset, Ctx &ctx) const
 	return true;
 }
 
-bool GeoTIFF::readScale(TIFFFile &file, quint32 offset, QPointF &scale) const
+bool GeoTIFF::readScale(TIFFFile &file, quint32 offset, PointD &scale) const
 {
 	if (!file.seek(offset))
 		return false;
@@ -155,7 +155,7 @@ bool GeoTIFF::readTiepoints(TIFFFile &file, quint32 offset, quint32 count,
   QList<ReferencePoint> &points) const
 {
 	double z, pz;
-	QPointF xy, pp;
+	PointD xy, pp;
 
 	if (!file.seek(offset))
 		return false;
@@ -175,10 +175,7 @@ bool GeoTIFF::readTiepoints(TIFFFile &file, quint32 offset, quint32 count,
 		if (!file.readValue(pz))
 			return false;
 
-		ReferencePoint p;
-		p.xy = xy.toPoint();
-		p.pp = pp;
-		points.append(p);
+		points.append(ReferencePoint(xy, pp));
 	}
 
 	return true;
@@ -450,7 +447,7 @@ GeoTIFF::GeoTIFF(const QString &path)
 {
 	quint32 ifd;
 	QList<ReferencePoint> points;
-	QPointF scale;
+	PointD scale;
 	QMap<quint16, Value> kv;
 	Ctx ctx;
 	TIFFFile file;
@@ -519,12 +516,12 @@ GeoTIFF::GeoTIFF(const QString &path)
 	else if (ctx.tiepointCount > 1)
 		_transform = Transform(points);
 	else if (ctx.matrix) {
-		double m[16];
-		if (!readMatrix(file, ctx.matrix, m)) {
+		double matrix[16];
+		if (!readMatrix(file, ctx.matrix, matrix)) {
 			_errorString = "Error reading transformation matrix";
 			return;
 		}
-		_transform = Transform(m);
+		_transform = Transform(matrix);
 	} else {
 		_errorString = "Incomplete/missing model transformation info";
 		return;
