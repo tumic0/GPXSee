@@ -60,15 +60,17 @@ void WMSMap::computeZooms(const RangeF &scaleDenominator)
 
 void WMSMap::updateTransform()
 {
-	double scaleDenominator = _zooms.at(_zoom);
-	double pixelSpan = sd2res(scaleDenominator);
+	double pixelSpan = sd2res(_zooms.at(_zoom));
 	if (_projection.isGeographic())
 		pixelSpan /= deg2rad(WGS84_RADIUS);
+	double sx = (_br.x() - _tl.x()) / pixelSpan;
+	double sy = (_tl.y() - _br.y()) / pixelSpan;
 
-	ReferencePoint tl(PointD(0, 0), _boundingBox.topLeft());
-	ReferencePoint br(PointD(_boundingBox.width() / pixelSpan,
-	  -_boundingBox.height() / pixelSpan), _boundingBox.bottomRight());
+	ReferencePoint tl(PointD(0, 0), _tl);
+	ReferencePoint br(PointD(sx, sy), _br);
 	_transform = Transform(tl, br);
+
+	_bounds = QRectF(QPointF(0, 0), QSizeF(sx, sy));
 }
 
 bool WMSMap::loadWMS()
@@ -82,10 +84,8 @@ bool WMSMap::loadWMS()
 	}
 
 	_projection = wms.projection();
-	RectC bb = wms.boundingBox().normalized();
-	_boundingBox = QRectF(_projection.ll2xy(Coordinates(bb.topLeft().lon(),
-	  bb.bottomRight().lat())).toPointF(), _projection.ll2xy(Coordinates(
-	  bb.bottomRight().lon(), bb.topLeft().lat())).toPointF());
+	_tl = _projection.ll2xy(wms.boundingBox().topLeft());
+	_br = _projection.ll2xy(wms.boundingBox().bottomRight());
 	_tileLoader = TileLoader(tileUrl(wms.version()), tilesDir(),
 	  _setup.authorization());
 
@@ -141,17 +141,6 @@ void WMSMap::emitLoaded()
 	emit loaded();
 }
 
-QRectF WMSMap::bounds() const
-{
-	double pixelSpan = sd2res(_zooms.at(_zoom));
-	if (_projection.isGeographic())
-		pixelSpan /= deg2rad(WGS84_RADIUS);
-	QSizeF size(_boundingBox.width() / pixelSpan, -_boundingBox.height()
-	  / pixelSpan);
-
-	return QRectF(QPointF(0, 0), size);
-}
-
 qreal WMSMap::resolution(const QRectF &rect) const
 {
 	Coordinates tl = xy2ll((rect.topLeft()));
@@ -163,12 +152,13 @@ qreal WMSMap::resolution(const QRectF &rect) const
 	return ds/ps;
 }
 
-int WMSMap::zoomFit(const QSize &size, const RectC &br)
+int WMSMap::zoomFit(const QSize &size, const RectC &rect)
 {
-	if (br.isValid()) {
-		QRectF tbr(_projection.ll2xy(br.topLeft()).toPointF(),
-		  _projection.ll2xy(br.bottomRight()).toPointF());
-		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
+	if (rect.isValid()) {
+		PointD tl(_projection.ll2xy(rect.topLeft()));
+		PointD br(_projection.ll2xy(rect.bottomRight()));
+		PointD sc((br.x() - tl.x()) / size.width(), (tl.y() - br.y())
+		  / size.height());
 		double resolution = qMax(qAbs(sc.x()), qAbs(sc.y()));
 		if (_projection.isGeographic())
 			resolution *= deg2rad(WGS84_RADIUS);

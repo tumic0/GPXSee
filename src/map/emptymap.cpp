@@ -51,15 +51,15 @@ QRectF EmptyMap::bounds() const
 	return QRectF(ll2xy(Coordinates(-180, 85)), ll2xy(Coordinates(180, -85)));
 }
 
-int EmptyMap::zoomFit(const QSize &size, const RectC &br)
+int EmptyMap::zoomFit(const QSize &size, const RectC &rect)
 {
-	if (!br.isValid())
+	if (!rect.isValid())
 		_zoom = ZOOM_MAX;
 	else {
-		QRectF tbr(ll2m(br.topLeft()), ll2m(br.bottomRight()));
+		QRectF tbr(ll2m(rect.topLeft()), ll2m(rect.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
 
-		_zoom = limitZoom(scale2zoom(qMax(sc.x(), sc.y())));
+		_zoom = limitZoom(scale2zoom(qMax(sc.x(), -sc.y())));
 	}
 
 	return _zoom;

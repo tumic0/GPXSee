@@ -28,8 +28,7 @@ public:
 	RectC operator&(const RectC &r) const;
 	RectC &operator&=(const RectC &r) {*this = *this & r; return *this;}
 
-	void unite(const Coordinates &c);
-	RectC normalized() const;
+	RectC united(const Coordinates &c) const;
 
 private:
 	Coordinates _tl, _br;

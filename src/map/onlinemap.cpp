@@ -42,8 +42,8 @@ static int scale2zoom(qreal scale)
 
 OnlineMap::OnlineMap(const QString &name, const QString &url,
   const Range &zooms, const RectC &bounds, QObject *parent) :
-  Map(parent), _name(name), _zooms(zooms), _bounds(bounds),
-  _block(false), _valid(false)
+  Map(parent), _name(name), _zooms(zooms), _bounds(bounds), _block(false),
+  _valid(false)
 {
 	QString dir(TILES_DIR + "/" + _name);
 
@@ -90,15 +90,14 @@ int OnlineMap::limitZoom(int zoom) const
 	return zoom;
 }
 
-int OnlineMap::zoomFit(const QSize &size, const RectC &br)
+int OnlineMap::zoomFit(const QSize &size, const RectC &rect)
 {
-	if (!br.isValid())
+	if (!rect.isValid())
 		_zoom = _zooms.max();
 	else {
-		QRectF tbr(ll2m(br.topLeft()), ll2m(br.bottomRight()));
+		QRectF tbr(ll2m(rect.topLeft()), ll2m(rect.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
-
-		_zoom = limitZoom(scale2zoom(qMax(sc.x(), sc.y())));
+		_zoom = limitZoom(scale2zoom(qMax(sc.x(), -sc.y())));
 	}
 
 	return _zoom;

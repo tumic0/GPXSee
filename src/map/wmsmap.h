@@ -17,11 +17,11 @@ public:
 
 	const QString &name() const {return _name;}
 
-	QRectF bounds() const;
+	QRectF bounds() const {return _bounds;}
 	qreal resolution(const QRectF &rect) const;
 
 	int zoom() const {return _zoom;}
-	int zoomFit(const QSize &size, const RectC &br);
+	int zoomFit(const QSize &size, const RectC &rect);
 	int zoomIn();
 	int zoomOut();
 
@@ -63,7 +63,8 @@ private:
 	Transform _transform;
 	CoordinateSystem _cs;
 	QVector<double> _zooms;
-	QRectF _boundingBox;
+	PointD _tl, _br;
+	QRectF _bounds;
 	int _zoom;
 	bool _block;
 

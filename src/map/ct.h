@@ -2,7 +2,7 @@
 #define CT_H
 
 #include "common/coordinates.h"
-#include "point.h"
+#include "pointd.h"
 
 class CT {
 public:

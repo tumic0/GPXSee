@@ -3,7 +3,7 @@
 
 #include <QDebug>
 #include "common/coordinates.h"
-#include "point.h"
+#include "pointd.h"
 #include "linearunits.h"
 #include "coordinatesystem.h"
 

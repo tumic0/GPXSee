@@ -3,7 +3,7 @@
 
 #include <cmath>
 #include <QDebug>
-#include "point.h"
+#include "pointd.h"
 
 class LinearUnits
 {

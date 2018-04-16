@@ -8,7 +8,7 @@ RectC Path::boundingRect() const
 		return ret;
 
 	for (int i = 0; i < size(); i++)
-		ret.unite(at(i).coordinates());
+		ret = ret.united(at(i).coordinates());
 
 	return ret;
 }

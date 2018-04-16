@@ -105,7 +105,7 @@ HEADERS += src/config.h \
     src/map/wms.h \
     src/map/crs.h \
     src/map/coordinatesystem.h \
-    src/map/point.h \
+    src/map/pointd.h \
     src/data/graph.h \
     src/data/poi.h \
     src/data/waypoint.h \

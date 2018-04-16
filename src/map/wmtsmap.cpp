@@ -122,13 +122,14 @@ QRectF WMTSMap::bounds() const
 	return _bounds.isValid() ? tileBounds.intersected(bounds) : tileBounds;
 }
 
-int WMTSMap::zoomFit(const QSize &size, const RectC &br)
+int WMTSMap::zoomFit(const QSize &size, const RectC &rect)
 {
-	if (br.isValid()) {
-		QRectF tbr(_projection.ll2xy(br.topLeft()).toPointF(),
-		  _projection.ll2xy(br.bottomRight()).toPointF());
-		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
-		qreal resolution = qMax(qAbs(sc.x()), qAbs(sc.y()));
+	if (rect.isValid()) {
+		PointD tl(_projection.ll2xy(rect.topLeft()));
+		PointD br(_projection.ll2xy(rect.bottomRight()));
+		PointD sc((br.x() - tl.x()) / size.width(), (tl.y() - br.y())
+		  / size.height());
+		double resolution = qMax(qAbs(sc.x()), qAbs(sc.y()));
 		if (_projection.isGeographic())
 			resolution *= deg2rad(WGS84_RADIUS);
 

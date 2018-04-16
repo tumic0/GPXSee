@@ -5,7 +5,8 @@
 #include <QPointF>
 #include <QDebug>
 
-class PointD {
+class PointD
+{
 public:
 	PointD() : _x(NAN), _y(NAN) {}
 	PointD(double x, double y) : _x(x), _y(y) {}

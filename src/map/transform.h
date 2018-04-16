@@ -4,7 +4,7 @@
 #include <QTransform>
 #include <QList>
 #include <QDebug>
-#include "point.h"
+#include "pointd.h"
 
 class ReferencePoint
 {

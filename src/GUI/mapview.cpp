@@ -150,7 +150,7 @@ void MapView::addWaypoints(const QList<Waypoint> &waypoints)
 
 		WaypointItem *wi = new WaypointItem(w, _map);
 		_waypoints.append(wi);
-		_wr.unite(wi->waypoint().coordinates());
+		_wr = _wr.united(wi->waypoint().coordinates());
 		wi->setZValue(1);
 		wi->setSize(_waypointSize);
 		wi->setColor(_waypointColor);
