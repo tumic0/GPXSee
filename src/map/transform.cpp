@@ -71,6 +71,7 @@ Transform::Transform()
 }
 
 Transform::Transform(const QList<ReferencePoint> &points)
+  : _proj2img(NULL_QTRANSFORM), _img2proj(NULL_QTRANSFORM)
 {
 	if (points.count() < 2)
 		_errorString = "Insufficient number of reference points";
@@ -81,6 +82,7 @@ Transform::Transform(const QList<ReferencePoint> &points)
 }
 
 Transform::Transform(const ReferencePoint &p1, const ReferencePoint &p2)
+  : _proj2img(NULL_QTRANSFORM), _img2proj(NULL_QTRANSFORM)
 {
 	simple(p1, p2);
 }
