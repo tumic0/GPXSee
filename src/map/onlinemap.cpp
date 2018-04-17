@@ -8,6 +8,7 @@
 
 
 #define TILE_SIZE     256
+#define EPSILON       1e-6
 
 static QPointF ll2m(const Coordinates &c)
 {
@@ -36,7 +37,7 @@ static qreal zoom2scale(int zoom)
 
 static int scale2zoom(qreal scale)
 {
-	return (int)log2(360.0/(scale * (qreal)TILE_SIZE));
+	return (int)(log2(360.0/(scale * (qreal)TILE_SIZE)) + EPSILON);
 }
 
 
