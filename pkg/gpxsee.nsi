@@ -230,6 +230,11 @@ SectionGroup "Localization" SEC_LOCALIZATION
     File /oname=translations\gpxsee_de.qm translations\gpxsee_de.qm
     File /oname=translations\qt_de.qm translations\qt_de.qm
   SectionEnd
+  Section "Polish"
+    CreateDirectory "$INSTDIR\translations"
+    File /oname=translations\gpxsee_pl.qm translations\gpxsee_pl.qm
+    File /oname=translations\qt_pl.qm translations\qt_pl.qm
+  SectionEnd
   Section "Russian"
     CreateDirectory "$INSTDIR\translations" 
     File /oname=translations\gpxsee_ru.qm translations\gpxsee_ru.qm
