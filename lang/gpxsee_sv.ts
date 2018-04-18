@@ -1155,7 +1155,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="315"/>
         <source>Filtering</source>
-        <translation>Filtrering/translation>
+        <translation>Filtrering</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="316"/>
