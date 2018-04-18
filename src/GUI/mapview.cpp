@@ -287,10 +287,9 @@ void MapView::setMap(Map *map)
 		it.value()->setMap(_map);
 	updatePOIVisibility();
 
-	QPointF oc = vr.center();
-	QPointF nc = _map->ll2xy(cr.center());
-	if (qAbs(oc.x() - nc.x()) >= 1.0 || qAbs(oc.y() - nc.y()) >= 1.0)
-		centerOn(nc);
+	QPointF nc = QRectF(_map->ll2xy(cr.topLeft()),
+	  _map->ll2xy(cr.bottomRight())).center();
+	centerOn(nc);
 
 	resetCachedContent();
 	QPixmapCache::clear();
