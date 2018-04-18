@@ -84,7 +84,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="117"/>
         <source>OziExplorer files</source>
-        <translation type="unfinished"></translation>
+        <translation>OziExplorer-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="118"/>
@@ -1155,7 +1155,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="315"/>
         <source>Filtering</source>
-        <translation>Filtrerar</translation>
+        <translation>Filtrering</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="316"/>
