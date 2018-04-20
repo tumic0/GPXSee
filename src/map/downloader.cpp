@@ -91,9 +91,14 @@ bool Downloader::doDownload(const Download &dl,
 {
 	QUrl url(dl.url());
 
+	if (!url.isValid() || !(url.scheme() == "http" || url.scheme() == "https")) {
+		qWarning("%s: Invalid URL\n", qPrintable(url.toString()));
+		return false;
+	}
+
 	if (_errorDownloads.contains(url))
 		return false;
-	if (_currentDownloads.contains(url))
+	if (_currentDownloads.contains(url) && !redirect)
 		return false;
 
 	QNetworkRequest request(url);
@@ -107,10 +112,12 @@ bool Downloader::doDownload(const Download &dl,
 		request.setRawHeader("Authorization", authorization);
 
 	QNetworkReply *reply = _manager.get(request);
-	if (reply) {
+	if (reply && reply->isRunning()) {
 		_currentDownloads.insert(url);
 		ReplyTimeout::setTimeout(reply, TIMEOUT);
-	} else
+	} else if (reply)
+		downloadFinished(reply);
+	else
 		return false;
 
 	return true;
@@ -157,20 +164,25 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 			QUrl origin = reply->request().attribute(ATTR_ORIGIN).toUrl();
 			int level = reply->request().attribute(ATTR_LEVEL).toInt();
 
-			if (location == url) {
-				_errorDownloads.insert(url);
-				qWarning("Error downloading file: %s: "
-				  "redirect loop\n", url.toEncoded().constData());
-			} else if (level >= MAX_REDIRECT_LEVEL) {
+			if (level >= MAX_REDIRECT_LEVEL) {
 				_errorDownloads.insert(origin);
 				qWarning("Error downloading file: %s: "
-				  "redirect level limit reached\n",
+				  "redirect level limit reached (redirect loop?)\n",
 				  origin.toEncoded().constData());
 			} else {
+				QUrl redirectUrl;
+				if (location.isRelative()) {
+					QString path = QDir::isAbsolutePath(location.path())
+					  ? location.path() : "/" + location.path();
+					redirectUrl = QUrl(url.scheme() + "://" + url.host() + path);
+				} else
+					redirectUrl = location;
+
 				Redirect redirect(origin.isEmpty() ? url : origin, level + 1);
-				Download dl(location, filename);
-				doDownload(dl, reply->request().rawHeader("Authorization"),
-				  &redirect);
+				Download dl(redirectUrl, filename);
+				if (!doDownload(dl, reply->request().rawHeader("Authorization"),
+				  &redirect))
+					_errorDownloads.insert(origin.isEmpty() ? url : origin);
 			}
 		} else
 			if (!saveToDisk(filename, reply))
