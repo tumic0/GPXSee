@@ -88,9 +88,6 @@ public:
 	bool isValid() const {return _valid;}
 	const QString &errorString() const {return _errorString;}
 
-	static void setDownloader(Downloader *downloader)
-	  {_downloader = downloader;}
-
 private:
 	struct TileMatrix {
 		QString id;
@@ -153,8 +150,6 @@ private:
 
 	bool _valid;
 	QString _errorString;
-
-	static Downloader *_downloader;
 
 	friend uint qHash(const WMTS::TileMatrix &key);
 	friend uint qHash(const WMTS::MatrixLimits &key);

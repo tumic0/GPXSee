@@ -49,7 +49,11 @@ OnlineMap::OnlineMap(const QString &name, const QString &url,
 	QString dir(TILES_DIR + "/" + _name);
 
 	_zoom = _zooms.max();
-	_tileLoader = TileLoader(url, dir);
+
+	_tileLoader = new TileLoader(this);
+	_tileLoader->setUrl(url);
+	_tileLoader->setDir(dir);
+	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(loaded()));
 
 	if (!QDir().mkpath(dir)) {
 		_errorString = "Error creating tiles dir";
@@ -57,23 +61,6 @@ OnlineMap::OnlineMap(const QString &name, const QString &url,
 	}
 
 	_valid = true;
-}
-
-void OnlineMap::load()
-{
-	connect(TileLoader::downloader(), SIGNAL(finished()), this,
-	  SLOT(emitLoaded()));
-}
-
-void OnlineMap::unload()
-{
-	disconnect(TileLoader::downloader(), SIGNAL(finished()), this,
-	  SLOT(emitLoaded()));
-}
-
-void OnlineMap::emitLoaded()
-{
-	emit loaded();
 }
 
 QRectF OnlineMap::bounds() const
@@ -140,9 +127,9 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect)
 			tiles.append(Tile(QPoint(tile.x() + i, tile.y() + j), _zoom));
 
 	if (_block)
-		_tileLoader.loadTilesSync(tiles);
+		_tileLoader->loadTilesSync(tiles);
 	else
-		_tileLoader.loadTilesAsync(tiles);
+		_tileLoader->loadTilesAsync(tiles);
 
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];

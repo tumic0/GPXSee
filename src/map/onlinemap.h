@@ -32,23 +32,17 @@ public:
 	void draw(QPainter *painter, const QRectF &rect);
 
 	void setBlockingMode(bool block) {_block = block;}
-	void clearCache() {_tileLoader.clearCache();}
-
-	void load();
-	void unload();
+	void clearCache() {_tileLoader->clearCache();}
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
-
-private slots:
-	void emitLoaded();
 
 private:
 	QPointF ll2xy(const Coordinates &c) const;
 	Coordinates xy2ll(const QPointF &p) const;
 	int limitZoom(int zoom) const;
 
-	TileLoader _tileLoader;
+	TileLoader *_tileLoader;
 	QString _name;
 	Range _zooms;
 	RectC _bounds;

@@ -58,9 +58,6 @@ public:
 	bool isValid() const {return _valid;}
 	const QString &errorString() const {return _errorString;}
 
-	static void setDownloader(Downloader *downloader)
-	  {_downloader = downloader;}
-
 private:
 	struct Layer {
 		QString name;

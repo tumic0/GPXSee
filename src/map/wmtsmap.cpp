@@ -23,8 +23,8 @@ bool WMTSMap::loadWMTS()
 	_bounds = wmts.bounds();
 	_zooms = wmts.zooms();
 	_projection = wmts.projection();
-	_tileLoader = TileLoader(wmts.tileUrl(), tilesDir(),
-	  _setup.authorization());
+	_tileLoader->setUrl(wmts.tileUrl());
+	_tileLoader->setAuthorization(_setup.authorization());
 
 	if (_setup.coordinateSystem().axisOrder() == CoordinateSystem::Unknown)
 		_cs = _projection.coordinateSystem();
@@ -45,12 +45,16 @@ WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent)
 		return;
 	}
 
+	_tileLoader = new TileLoader(this);
+	_tileLoader->setDir(tilesDir());
+	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(loaded()));
+
 	_valid = loadWMTS();
 }
 
 void WMTSMap::clearCache()
 {
-	_tileLoader.clearCache();
+	_tileLoader->clearCache();
 	_zoom = 0;
 
 	if (!loadWMTS())
@@ -85,23 +89,6 @@ void WMTSMap::updateTransform()
 	ReferencePoint br(PointD(z.tile().width() * z.matrix().width(),
 	  z.tile().height() * z.matrix().height()), bottomRight);
 	_transform = Transform(tl, br);
-}
-
-void WMTSMap::load()
-{
-	connect(TileLoader::downloader(), SIGNAL(finished()), this,
-	  SLOT(emitLoaded()));
-}
-
-void WMTSMap::unload()
-{
-	disconnect(TileLoader::downloader(), SIGNAL(finished()), this,
-	  SLOT(emitLoaded()));
-}
-
-void WMTSMap::emitLoaded()
-{
-	emit loaded();
 }
 
 QRectF WMTSMap::bounds() const
@@ -185,9 +172,9 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect)
 			tiles.append(Tile(QPoint(i, j), z.id()));
 
 	if (_block)
-		_tileLoader.loadTilesSync(tiles);
+		_tileLoader->loadTilesSync(tiles);
 	else
-		_tileLoader.loadTilesAsync(tiles);
+		_tileLoader->loadTilesAsync(tiles);
 
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];

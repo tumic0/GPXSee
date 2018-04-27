@@ -26,7 +26,6 @@
 #define ATTR_LEVEL    (QNetworkRequest::Attribute)(QNetworkRequest::User + 2)
 
 #define MAX_REDIRECT_LEVEL 5
-#define TIMEOUT            30 /* s */
 
 
 Authorization::Authorization(const QString &username, const QString &password)
@@ -80,11 +79,8 @@ private:
 };
 
 
-Downloader::Downloader(QObject *parent) : QObject(parent)
-{
-	connect(&_manager, SIGNAL(finished(QNetworkReply*)),
-	  SLOT(downloadFinished(QNetworkReply*)));
-}
+QNetworkAccessManager *Downloader::_manager = 0;
+int Downloader::_timeout = 30;
 
 bool Downloader::doDownload(const Download &dl,
   const QByteArray &authorization, const Redirect *redirect)
@@ -111,16 +107,22 @@ bool Downloader::doDownload(const Download &dl,
 	if (!authorization.isNull())
 		request.setRawHeader("Authorization", authorization);
 
-	QNetworkReply *reply = _manager.get(request);
+	QNetworkReply *reply = _manager->get(request);
 	if (reply && reply->isRunning()) {
 		_currentDownloads.insert(url);
-		ReplyTimeout::setTimeout(reply, TIMEOUT);
+		ReplyTimeout::setTimeout(reply, _timeout);
+		connect(reply, SIGNAL(finished()), this, SLOT(emitFinished()));
 	} else if (reply)
 		downloadFinished(reply);
 	else
 		return false;
 
 	return true;
+}
+
+void Downloader::emitFinished()
+{
+	downloadFinished(static_cast<QNetworkReply*>(sender()));
 }
 
 bool Downloader::saveToDisk(const QString &filename, QIODevice *data)
@@ -184,9 +186,10 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 				  &redirect))
 					_errorDownloads.insert(origin.isEmpty() ? url : origin);
 			}
-		} else
+		} else {
 			if (!saveToDisk(filename, reply))
 				_errorDownloads.insert(url);
+		}
 	}
 
 	_currentDownloads.remove(url);

@@ -431,16 +431,23 @@ QWidget *OptionsDialog::createSystemPage()
 	_pixmapCache->setSuffix(UNIT_SPACE + tr("MB"));
 	_pixmapCache->setValue(_options->pixmapCache);
 
-	QFormLayout *cacheLayout = new QFormLayout();
-	cacheLayout->addRow(tr("Image cache size:"), _pixmapCache);
+	_connectionTimeout = new QSpinBox();
+	_connectionTimeout->setMinimum(30);
+	_connectionTimeout->setMaximum(120);
+	_connectionTimeout->setSuffix(UNIT_SPACE + tr("s"));
+	_connectionTimeout->setValue(_options->connectionTimeout);
 
-	QFormLayout *openGLLayout = new QFormLayout();
-	openGLLayout->addWidget(_useOpenGL);
+	QFormLayout *formLayout = new QFormLayout();
+	formLayout->addRow(tr("Image cache size:"), _pixmapCache);
+	formLayout->addRow(tr("Connection timeout:"), _connectionTimeout);
+
+	QFormLayout *checkboxLayout = new QFormLayout();
+	checkboxLayout->addWidget(_useOpenGL);
 
 	QWidget *systemTab = new QWidget();
 	QVBoxLayout *systemTabLayout = new QVBoxLayout();
-	systemTabLayout->addLayout(cacheLayout);
-	systemTabLayout->addLayout(openGLLayout);
+	systemTabLayout->addLayout(formLayout);
+	systemTabLayout->addLayout(checkboxLayout);
 	systemTabLayout->addStretch();
 	systemTab->setLayout(systemTabLayout);
 
@@ -545,6 +552,7 @@ void OptionsDialog::accept()
 
 	_options->useOpenGL = _useOpenGL->isChecked();
 	_options->pixmapCache = _pixmapCache->value();
+	_options->connectionTimeout = _connectionTimeout->value();
 
 	_options->hiresPrint = _hires->isChecked();
 	_options->printName = _name->isChecked();

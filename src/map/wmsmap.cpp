@@ -86,8 +86,8 @@ bool WMSMap::loadWMS()
 	_projection = wms.projection();
 	_tl = _projection.ll2xy(wms.boundingBox().topLeft());
 	_br = _projection.ll2xy(wms.boundingBox().bottomRight());
-	_tileLoader = TileLoader(tileUrl(wms.version()), tilesDir(),
-	  _setup.authorization());
+	_tileLoader->setUrl(tileUrl(wms.version()));
+	_tileLoader->setAuthorization(_setup.authorization());
 
 	if (wms.version() >= "1.3.0") {
 		if (_setup.coordinateSystem().axisOrder() == CoordinateSystem::Unknown)
@@ -112,33 +112,20 @@ WMSMap::WMSMap(const QString &name, const WMS::Setup &setup, QObject *parent)
 		return;
 	}
 
+	_tileLoader = new TileLoader(this);
+	_tileLoader->setDir(tilesDir());
+	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(loaded()));
+
 	_valid = loadWMS();
 }
 
 void WMSMap::clearCache()
 {
-	_tileLoader.clearCache();
+	_tileLoader->clearCache();
 	_zoom = 0;
 
 	if (!loadWMS())
 		qWarning("%s: %s\n", qPrintable(_name), qPrintable(_errorString));
-}
-
-void WMSMap::load()
-{
-	connect(TileLoader::downloader(), SIGNAL(finished()), this,
-	  SLOT(emitLoaded()));
-}
-
-void WMSMap::unload()
-{
-	disconnect(TileLoader::downloader(), SIGNAL(finished()), this,
-	  SLOT(emitLoaded()));
-}
-
-void WMSMap::emitLoaded()
-{
-	emit loaded();
 }
 
 qreal WMSMap::resolution(const QRectF &rect) const
@@ -223,9 +210,9 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect)
 	}
 
 	if (_block)
-		_tileLoader.loadTilesSync(tiles);
+		_tileLoader->loadTilesSync(tiles);
 	else
-		_tileLoader.loadTilesAsync(tiles);
+		_tileLoader->loadTilesAsync(tiles);
 
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];

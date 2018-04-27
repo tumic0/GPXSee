@@ -25,6 +25,7 @@
 #include "data/data.h"
 #include "map/maplist.h"
 #include "map/emptymap.h"
+#include "map/downloader.h"
 #include "config.h"
 #include "icons.h"
 #include "keys.h"
@@ -855,6 +856,8 @@ void GUI::openOptions()
 		_poi->setRadius(options.poiRadius);
 	if (options.pixmapCache != _options.pixmapCache)
 		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
+	if (options.connectionTimeout != _options.connectionTimeout)
+		Downloader::setTimeout(options.connectionTimeout);
 
 	if (reload)
 		reloadFile();
@@ -1620,6 +1623,8 @@ void GUI::writeSettings()
 		settings.setValue(USE_OPENGL_SETTING, _options.useOpenGL);
 	if (_options.pixmapCache != PIXMAP_CACHE_DEFAULT)
 		settings.setValue(PIXMAP_CACHE_SETTING, _options.pixmapCache);
+	if (_options.connectionTimeout != CONNECTION_TIMEOUT_DEFAULT)
+		settings.setValue(CONNECTION_TIMEOUT_SETTING, _options.connectionTimeout);
 	if (_options.hiresPrint != HIRES_PRINT_DEFAULT)
 		settings.setValue(HIRES_PRINT_SETTING, _options.hiresPrint);
 	if (_options.printName != PRINT_NAME_DEFAULT)
@@ -1848,6 +1853,8 @@ void GUI::readSettings()
 	  .toBool();
 	_options.pixmapCache = settings.value(PIXMAP_CACHE_SETTING,
 	  PIXMAP_CACHE_DEFAULT).toInt();
+	_options.connectionTimeout = settings.value(CONNECTION_TIMEOUT_SETTING,
+	  CONNECTION_TIMEOUT_DEFAULT).toInt();
 	_options.hiresPrint = settings.value(HIRES_PRINT_SETTING,
 	  HIRES_PRINT_DEFAULT).toBool();
 	_options.printName = settings.value(PRINT_NAME_SETTING, PRINT_NAME_DEFAULT)
@@ -1907,6 +1914,7 @@ void GUI::readSettings()
 	_poi->setRadius(_options.poiRadius);
 
 	QPixmapCache::setCacheLimit(_options.pixmapCache * 1024);
+	Downloader::setTimeout(_options.connectionTimeout);
 
 	settings.endGroup();
 }

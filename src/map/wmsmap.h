@@ -35,14 +35,8 @@ public:
 	void setBlockingMode(bool block) {_block = block;}
 	void clearCache();
 
-	void load();
-	void unload();
-
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
-
-private slots:
-	void emitLoaded();
 
 private:
 	QString tileUrl(const QString &version) const;
@@ -58,7 +52,7 @@ private:
 	QString _name;
 
 	WMS::Setup _setup;
-	TileLoader _tileLoader;
+	TileLoader *_tileLoader;
 	Projection _projection;
 	Transform _transform;
 	CoordinateSystem _cs;

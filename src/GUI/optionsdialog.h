@@ -48,6 +48,7 @@ struct Options {
 	// System
 	bool useOpenGL;
 	int pixmapCache;
+	int connectionTimeout;
 	// Print/Export
 	bool hiresPrint;
 	bool printName;
@@ -113,6 +114,7 @@ private:
 	QDoubleSpinBox *_poiRadius;
 	// System
 	QSpinBox *_pixmapCache;
+	QSpinBox *_connectionTimeout;
 	QCheckBox *_useOpenGL;
 	// Print/Export
 	QRadioButton *_wysiwyg;

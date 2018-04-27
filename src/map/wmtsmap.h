@@ -35,14 +35,8 @@ public:
 	void setBlockingMode(bool block) {_block = block;}
 	void clearCache();
 
-	void load();
-	void unload();
-
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
-
-private slots:
-	void emitLoaded();
 
 private:
 	bool loadWMTS();
@@ -55,7 +49,7 @@ private:
 
 	QString _name;
 	WMTS::Setup _setup;
-	TileLoader _tileLoader;
+	TileLoader *_tileLoader;
 	RectC _bounds;
 	QList<WMTS::Zoom> _zooms;
 	Projection _projection;

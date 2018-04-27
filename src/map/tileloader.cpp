@@ -15,7 +15,11 @@ static bool loadTileFile(Tile &tile, const QString &file)
 	return true;
 }
 
-Downloader *TileLoader::_downloader = 0;
+TileLoader::TileLoader(QObject *parent) : QObject(parent)
+{
+	_downloader = new Downloader(this);
+	connect(_downloader, SIGNAL(finished()), this, SIGNAL(finished()));
+}
 
 void TileLoader::loadTilesAsync(QList<Tile> &list)
 {
