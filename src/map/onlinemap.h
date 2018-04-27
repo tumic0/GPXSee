@@ -12,7 +12,8 @@ class OnlineMap : public Map
 
 public:
 	OnlineMap(const QString &name, const QString &url, const Range &zooms,
-	  const RectC &bounds, QObject *parent = 0);
+	  const RectC &bounds, const Authorization &authorization,
+	  QObject *parent = 0);
 
 	const QString &name() const {return _name;}
 
