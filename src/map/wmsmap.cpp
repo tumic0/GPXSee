@@ -87,7 +87,6 @@ bool WMSMap::loadWMS()
 	_tl = _projection.ll2xy(wms.boundingBox().topLeft());
 	_br = _projection.ll2xy(wms.boundingBox().bottomRight());
 	_tileLoader->setUrl(tileUrl(wms.version()));
-	_tileLoader->setAuthorization(_setup.authorization());
 
 	if (wms.version() >= "1.3.0") {
 		if (_setup.coordinateSystem().axisOrder() == CoordinateSystem::Unknown)
@@ -114,6 +113,7 @@ WMSMap::WMSMap(const QString &name, const WMS::Setup &setup, QObject *parent)
 
 	_tileLoader = new TileLoader(this);
 	_tileLoader->setDir(tilesDir());
+	_tileLoader->setAuthorization(_setup.authorization());
 	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(loaded()));
 
 	_valid = loadWMS();

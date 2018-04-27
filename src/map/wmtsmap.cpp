@@ -24,7 +24,6 @@ bool WMTSMap::loadWMTS()
 	_zooms = wmts.zooms();
 	_projection = wmts.projection();
 	_tileLoader->setUrl(wmts.tileUrl());
-	_tileLoader->setAuthorization(_setup.authorization());
 
 	if (_setup.coordinateSystem().axisOrder() == CoordinateSystem::Unknown)
 		_cs = _projection.coordinateSystem();
@@ -47,6 +46,7 @@ WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent)
 
 	_tileLoader = new TileLoader(this);
 	_tileLoader->setDir(tilesDir());
+	_tileLoader->setAuthorization(_setup.authorization());
 	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(loaded()));
 
 	_valid = loadWMTS();
