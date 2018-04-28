@@ -2,11 +2,12 @@
 #define DOWNLOADER_H
 
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QUrl>
 #include <QList>
 #include <QSet>
+#include <QHash>
 
-class QNetworkReply;
 
 class Download
 {
@@ -59,12 +60,13 @@ private:
 	class Redirect;
 	class ReplyTimeout;
 
+	void insertError(const QUrl &url, QNetworkReply::NetworkError error);
 	bool doDownload(const Download &dl, const QByteArray &authorization,
 	  const Redirect *redirect = 0);
 	bool saveToDisk(const QString &filename, QIODevice *data);
 
 	QSet<QUrl> _currentDownloads;
-	QSet<QUrl> _errorDownloads;
+	QHash<QUrl, int> _errorDownloads;
 
 	static int _timeout;
 	static QNetworkAccessManager *_manager;
