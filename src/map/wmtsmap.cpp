@@ -143,6 +143,12 @@ qreal WMTSMap::resolution(const QRectF &rect) const
 	return ds/ps;
 }
 
+void WMTSMap::setZoom(int zoom)
+{
+	_zoom = zoom;
+	updateTransform();
+}
+
 int WMTSMap::zoomIn()
 {
 	_zoom = qMin(_zoom + 1, _zooms.size() - 1);

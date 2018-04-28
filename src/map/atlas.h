@@ -18,6 +18,7 @@ public:
 	qreal resolution(const QRectF &rect) const;
 
 	int zoom() const {return _zoom;}
+	void setZoom(int zoom);
 	int zoomFit(const QSize &size, const RectC &br);
 	int zoomIn();
 	int zoomOut();

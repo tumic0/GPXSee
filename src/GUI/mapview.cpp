@@ -497,7 +497,7 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	QRect orig, adj;
 	qreal ratio, diff, q;
 	QPointF origScene, origPos;
-	RectC origC;
+	int zoom;
 
 
 	// Enter plot mode
@@ -521,8 +521,8 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 
 	// Adjust the view for printing
 	if (hires) {
+		zoom = _map->zoom();
 		QRectF vr(mapToScene(orig).boundingRect());
-		origC = RectC(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
 		origScene = vr.center();
 
 		QPointF s(painter->device()->logicalDpiX()
@@ -553,11 +553,11 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 
 	// Revert view changes to display mode
 	if (hires) {
-		_map->zoomFit(orig.size(), origC);
+		_map->setZoom(zoom);
 		rescale();
 		centerOn(origScene);
 	}
-	_mapScale->setDigitalZoom(0);
+	_mapScale->setDigitalZoom(_digitalZoom);
 	_mapScale->setPos(origPos);
 
 	// Exit plot mode

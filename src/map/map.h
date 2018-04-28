@@ -24,6 +24,7 @@ public:
 	virtual qreal resolution(const QRectF &rect) const = 0;
 
 	virtual int zoom() const = 0;
+	virtual void setZoom(int zoom) = 0;
 	virtual int zoomFit(const QSize &size, const RectC &rect) = 0;
 	virtual int zoomIn() = 0;
 	virtual int zoomOut() = 0;

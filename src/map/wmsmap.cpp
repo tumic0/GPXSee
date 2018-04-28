@@ -163,6 +163,12 @@ int WMSMap::zoomFit(const QSize &size, const RectC &rect)
 	return _zoom;
 }
 
+void WMSMap::setZoom(int zoom)
+{
+	_zoom = zoom;
+	updateTransform();
+}
+
 int WMSMap::zoomIn()
 {
 	_zoom = qMin(_zoom + 1, _zooms.size() - 1);

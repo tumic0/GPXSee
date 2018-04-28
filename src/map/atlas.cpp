@@ -208,6 +208,12 @@ int Atlas::zoomFit(const QSize &size, const RectC &br)
 	return _zoom;
 }
 
+void Atlas::setZoom(int zoom)
+{
+	_mapIndex = -1;
+	_zoom = zoom;
+}
+
 int Atlas::zoomIn()
 {
 	_zoom = qMin(_zoom + 1, _zooms.size() - 1);
