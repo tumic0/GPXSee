@@ -37,10 +37,10 @@ public:
 	virtual void load() {}
 	virtual void unload() {}
 
-	void setBackgroundColor(const QColor &color) {_backgroundColor = color;}
-
 	virtual bool isValid() const {return true;}
 	virtual QString errorString() const {return QString();}
+
+	void setBackgroundColor(const QColor &color) {_backgroundColor = color;}
 
 signals:
 	void loaded();
