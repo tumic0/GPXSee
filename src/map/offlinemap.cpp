@@ -311,8 +311,10 @@ void OfflineMap::drawImage(QPainter *painter, const QRectF &rect) const
 	  r.width(), r.height());
 }
 
-void OfflineMap::draw(QPainter *painter, const QRectF &rect)
+void OfflineMap::draw(QPainter *painter, const QRectF &rect, bool block)
 {
+	Q_UNUSED(block);
+
 	if (_ozf)
 		drawOZF(painter, rect);
 	else if (_tile.isValid())

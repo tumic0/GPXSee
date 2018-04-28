@@ -25,7 +25,7 @@ public:
 	QPointF ll2xy(const Coordinates &c);
 	Coordinates xy2ll(const QPointF &p);
 
-	void draw(QPainter *painter, const QRectF &rect);
+	void draw(QPainter *painter, const QRectF &rect, bool block);
 
 	void unload();
 

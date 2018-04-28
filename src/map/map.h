@@ -31,9 +31,8 @@ public:
 	virtual QPointF ll2xy(const Coordinates &c) = 0;
 	virtual Coordinates xy2ll(const QPointF &p) = 0;
 
-	virtual void draw(QPainter *painter, const QRectF &rect) = 0;
+	virtual void draw(QPainter *painter, const QRectF &rect, bool block) = 0;
 
-	virtual void setBlockingMode(bool block) {Q_UNUSED(block);}
 	virtual void clearCache() {}
 	virtual void load() {}
 	virtual void unload() {}

@@ -85,8 +85,9 @@ int EmptyMap::zoomOut()
 	return _zoom;
 }
 
-void EmptyMap::draw(QPainter *painter, const QRectF &rect)
+void EmptyMap::draw(QPainter *painter, const QRectF &rect, bool block)
 {
+	Q_UNUSED(block);
 	painter->fillRect(rect, _backgroundColor);
 }
 

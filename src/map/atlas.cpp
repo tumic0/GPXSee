@@ -260,8 +260,10 @@ Coordinates Atlas::xy2ll(const QPointF &p)
 	return _maps.at(idx)->xy2ll(p2);
 }
 
-void Atlas::draw(QPainter *painter, const QRectF &rect)
+void Atlas::draw(QPainter *painter, const QRectF &rect, bool block)
 {
+	Q_UNUSED(block);
+
 	// All in one map
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).second; i++) {
 		if (_bounds.at(i).second.contains(rect)) {
@@ -288,7 +290,7 @@ void Atlas::draw(QPainter *painter, const QRectF &rect, int mapIndex)
 	map->load();
 
 	painter->translate(offset);
-	map->draw(painter, pr);
+	map->draw(painter, pr, true);
 	painter->translate(-offset);
 }
 

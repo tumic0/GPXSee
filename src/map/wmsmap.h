@@ -30,9 +30,8 @@ public:
 	Coordinates xy2ll(const QPointF &p)
 		{return static_cast<const WMSMap &>(*this).xy2ll(p);}
 
-	void draw(QPainter *painter, const QRectF &rect);
+	void draw(QPainter *painter, const QRectF &rect, bool block);
 
-	void setBlockingMode(bool block) {_block = block;}
 	void clearCache();
 
 	bool isValid() const {return _valid;}
@@ -60,7 +59,6 @@ private:
 	PointD _tl, _br;
 	QRectF _bounds;
 	int _zoom;
-	bool _block;
 
 	bool _valid;
 	QString _errorString;

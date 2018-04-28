@@ -36,8 +36,7 @@ bool WMTSMap::loadWMTS()
 }
 
 WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent)
-  : Map(parent), _name(name), _setup(setup), _zoom(0), _block(false),
-  _valid(false)
+  : Map(parent), _name(name), _setup(setup), _zoom(0), _valid(false)
 {
 	if (!QDir().mkpath(tilesDir())) {
 		_errorString = "Error creating tiles dir";
@@ -158,7 +157,7 @@ int WMTSMap::zoomOut()
 	return _zoom;
 }
 
-void WMTSMap::draw(QPainter *painter, const QRectF &rect)
+void WMTSMap::draw(QPainter *painter, const QRectF &rect, bool block)
 {
 	const WMTS::Zoom &z = _zooms.at(_zoom);
 	QPoint tl = QPoint((int)floor(rect.left() / (qreal)z.tile().width()),
@@ -171,7 +170,7 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect)
 		for (int j = tl.y(); j < br.y(); j++)
 			tiles.append(Tile(QPoint(i, j), z.id()));
 
-	if (_block)
+	if (block)
 		_tileLoader->loadTilesSync(tiles);
 	else
 		_tileLoader->loadTilesAsync(tiles);

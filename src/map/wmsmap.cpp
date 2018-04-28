@@ -103,8 +103,7 @@ bool WMSMap::loadWMS()
 }
 
 WMSMap::WMSMap(const QString &name, const WMS::Setup &setup, QObject *parent)
-  : Map(parent), _name(name), _setup(setup), _zoom(0), _block(false),
-  _valid(false)
+  : Map(parent), _name(name), _setup(setup), _zoom(0), _valid(false)
 {
 	if (!QDir().mkpath(tilesDir())) {
 		_errorString = "Error creating tiles dir";
@@ -187,7 +186,7 @@ Coordinates WMSMap::xy2ll(const QPointF &p) const
 	return _projection.xy2ll(_transform.img2proj(p));
 }
 
-void WMSMap::draw(QPainter *painter, const QRectF &rect)
+void WMSMap::draw(QPainter *painter, const QRectF &rect, bool block)
 {
 	QPoint tl = QPoint((int)floor(rect.left() / (qreal)TILE_SIZE),
 	  (int)floor(rect.top() / (qreal)TILE_SIZE));
@@ -209,7 +208,7 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect)
 		}
 	}
 
-	if (_block)
+	if (block)
 		_tileLoader->loadTilesSync(tiles);
 	else
 		_tileLoader->loadTilesAsync(tiles);

@@ -30,9 +30,8 @@ public:
 	Coordinates xy2ll(const QPointF &p)
 		{return static_cast<const OnlineMap &>(*this).xy2ll(p);}
 
-	void draw(QPainter *painter, const QRectF &rect);
+	void draw(QPainter *painter, const QRectF &rect, bool block);
 
-	void setBlockingMode(bool block) {_block = block;}
 	void clearCache() {_tileLoader->clearCache();}
 
 	bool isValid() const {return _valid;}
@@ -48,7 +47,6 @@ private:
 	Range _zooms;
 	RectC _bounds;
 	int _zoom;
-	bool _block;
 
 	bool _valid;
 	QString _errorString;

@@ -503,7 +503,6 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	// Enter plot mode
 	setUpdatesEnabled(false);
 	_plot = true;
-	_map->setBlockingMode(true);
 
 	// Compute sizes & ratios
 	orig = viewport()->rect();
@@ -562,7 +561,6 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	_mapScale->setPos(origPos);
 
 	// Exit plot mode
-	_map->setBlockingMode(false);
 	_plot = false;
 	setUpdatesEnabled(true);
 }
@@ -763,7 +761,7 @@ void MapView::drawBackground(QPainter *painter, const QRectF &rect)
 		QRectF ir = rect.intersected(_map->bounds());
 		if (_opacity < 1.0)
 			painter->setOpacity(_opacity);
-		_map->draw(painter, ir);
+		_map->draw(painter, ir, _plot);
 	}
 }
 

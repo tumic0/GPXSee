@@ -44,7 +44,7 @@ static int scale2zoom(qreal scale)
 OnlineMap::OnlineMap(const QString &name, const QString &url,
   const Range &zooms, const RectC &bounds, const Authorization &authorization,
   QObject *parent) : Map(parent), _name(name), _zooms(zooms), _bounds(bounds),
-  _block(false), _valid(false)
+  _valid(false)
 {
 	QString dir(TILES_DIR + "/" + _name);
 
@@ -112,7 +112,7 @@ int OnlineMap::zoomOut()
 	return _zoom;
 }
 
-void OnlineMap::draw(QPainter *painter, const QRectF &rect)
+void OnlineMap::draw(QPainter *painter, const QRectF &rect, bool block)
 {
 	qreal scale = zoom2scale(_zoom);
 
@@ -127,7 +127,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect)
 		for (int j = 0; j < ceil(s.height() / TILE_SIZE); j++)
 			tiles.append(Tile(QPoint(tile.x() + i, tile.y() + j), _zoom));
 
-	if (_block)
+	if (block)
 		_tileLoader->loadTilesSync(tiles);
 	else
 		_tileLoader->loadTilesAsync(tiles);
