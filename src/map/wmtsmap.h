@@ -5,8 +5,8 @@
 #include "projection.h"
 #include "map.h"
 #include "wmts.h"
-#include "tileloader.h"
 
+class TileLoader;
 
 class WMTSMap : public Map
 {

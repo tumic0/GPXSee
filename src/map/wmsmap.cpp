@@ -4,6 +4,7 @@
 #include "common/rectc.h"
 #include "config.h"
 #include "downloader.h"
+#include "tileloader.h"
 #include "wmsmap.h"
 
 

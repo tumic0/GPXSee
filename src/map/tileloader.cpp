@@ -1,7 +1,6 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QEventLoop>
-#include "downloader.h"
 #include "tileloader.h"
 
 
