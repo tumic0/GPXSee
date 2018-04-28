@@ -537,12 +537,12 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 		centerOn(center);
 		adj.moveCenter(mapFromScene(center));
 
-		_mapScale->setDigitalZoom(-log2(s.x() / q));
+		_mapScale->setDigitalZoom(_digitalZoom - log2(s.x() / q));
 		_mapScale->setPos(mapToScene(QPoint(adj.bottomRight() + QPoint(
 		  -(SCALE_OFFSET + _mapScale->boundingRect().width()) * (s.x() / q),
 		  -(SCALE_OFFSET + _mapScale->boundingRect().height()) * (s.x() / q)))));
 	} else {
-		_mapScale->setDigitalZoom(-log2(1.0 / q));
+		_mapScale->setDigitalZoom(_digitalZoom - log2(1.0 / q));
 		_mapScale->setPos(mapToScene(QPoint(adj.bottomRight() + QPoint(
 		  -(SCALE_OFFSET + _mapScale->boundingRect().width()) / q ,
 		  -(SCALE_OFFSET + _mapScale->boundingRect().height()) / q))));
