@@ -4,22 +4,23 @@
 #include <QPixmap>
 #include <QPoint>
 #include <QDebug>
+#include "rectd.h"
 
 class Tile
 {
 public:
-	Tile(const QPoint &xy, const QVariant &zoom, const QRectF &bbox = QRectF())
+	Tile(const QPoint &xy, const QVariant &zoom, const RectD &bbox = RectD())
 		{_xy = xy; _zoom = zoom; _bbox = bbox;}
 
 	const QVariant &zoom() const {return _zoom;}
 	const QPoint &xy() const {return _xy;}
-	const QRectF &bbox() const {return _bbox;}
+	const RectD &bbox() const {return _bbox;}
 	QPixmap& pixmap() {return _pixmap;}
 
 private:
 	QVariant _zoom;
 	QPoint _xy;
-	QRectF _bbox;
+	RectD _bbox;
 	QPixmap _pixmap;
 };
 

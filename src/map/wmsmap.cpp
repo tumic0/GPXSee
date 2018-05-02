@@ -64,14 +64,12 @@ void WMSMap::updateTransform()
 	double pixelSpan = sd2res(_zooms.at(_zoom));
 	if (_projection.isGeographic())
 		pixelSpan /= deg2rad(WGS84_RADIUS);
-	double sx = (_br.x() - _tl.x()) / pixelSpan;
-	double sy = (_tl.y() - _br.y()) / pixelSpan;
+	double sx = _bbox.width() / pixelSpan;
+	double sy = _bbox.height() / pixelSpan;
 
-	ReferencePoint tl(PointD(0, 0), _tl);
-	ReferencePoint br(PointD(sx, sy), _br);
+	ReferencePoint tl(PointD(0, 0), _bbox.topLeft());
+	ReferencePoint br(PointD(sx, sy), _bbox.bottomRight());
 	_transform = Transform(tl, br);
-
-	_bounds = QRectF(QPointF(0, 0), QSizeF(sx, sy));
 }
 
 bool WMSMap::loadWMS()
@@ -85,8 +83,8 @@ bool WMSMap::loadWMS()
 	}
 
 	_projection = wms.projection();
-	_tl = _projection.ll2xy(wms.boundingBox().topLeft());
-	_br = _projection.ll2xy(wms.boundingBox().bottomRight());
+	_bbox = RectD(_projection.ll2xy(wms.boundingBox().topLeft()),
+	  _projection.ll2xy(wms.boundingBox().bottomRight()));
 	_tileLoader->setUrl(tileUrl(wms.version()));
 
 	if (wms.version() >= "1.3.0") {
@@ -126,6 +124,12 @@ void WMSMap::clearCache()
 
 	if (!loadWMS())
 		qWarning("%s: %s\n", qPrintable(_name), qPrintable(_errorString));
+}
+
+QRectF WMSMap::bounds() const
+{
+	return QRectF(_transform.proj2img(_bbox.topLeft()),
+	  _transform.proj2img(_bbox.bottomRight()));
 }
 
 qreal WMSMap::resolution(const QRectF &rect) const
@@ -207,9 +211,9 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, bool block)
 			  j * TILE_SIZE)));
 			PointD tbr(_transform.img2proj(QPointF(i * TILE_SIZE + TILE_SIZE
 			  - 1, j * TILE_SIZE + TILE_SIZE - 1)));
-			QRectF bbox = (_cs.axisOrder() == CoordinateSystem::YX)
-			  ? QRectF(QPointF(tbr.y(), tbr.x()), QPointF(ttl.y(), ttl.x()))
-			  : QRectF(ttl.toPointF(), tbr.toPointF());
+			RectD bbox = (_cs.axisOrder() == CoordinateSystem::YX)
+			  ? RectD(PointD(tbr.y(), tbr.x()), PointD(ttl.y(), ttl.x()))
+			  : RectD(ttl, tbr);
 
 			tiles.append(Tile(QPoint(i, j), _zoom, bbox));
 		}

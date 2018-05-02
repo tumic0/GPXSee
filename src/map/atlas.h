@@ -2,6 +2,7 @@
 #define ATLAS_H
 
 #include "map.h"
+#include "rectd.h"
 
 class OfflineMap;
 
@@ -36,6 +37,22 @@ public:
 	static bool isAtlas(const QString &path);
 
 private:
+	struct Zoom {
+		int first;
+		int last;
+
+		Zoom() : first(-1), last(-1) {}
+		Zoom(int first, int last) : first(first), last(last) {}
+	};
+
+	struct Bounds {
+		RectD pp;
+		QRectF xy;
+
+		Bounds() {}
+		Bounds(const RectD &pp, const QRectF &xy) : pp(pp), xy(xy) {}
+	};
+
 	void draw(QPainter *painter, const QRectF &rect, int mapIndex);
 	void computeZooms();
 	void computeBounds();
@@ -43,8 +60,8 @@ private:
 	QString _name;
 
 	QList<OfflineMap*> _maps;
-	QVector<QPair<int, int> > _zooms;
-	QVector<QPair<QRectF, QRectF> > _bounds;
+	QVector<Zoom> _zooms;
+	QVector<Bounds> _bounds;
 	int _zoom;
 	int _mapIndex;
 

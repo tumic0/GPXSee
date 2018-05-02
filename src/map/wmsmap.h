@@ -5,6 +5,7 @@
 #include "projection.h"
 #include "map.h"
 #include "wms.h"
+#include "rectd.h"
 
 class TileLoader;
 
@@ -17,7 +18,7 @@ public:
 
 	const QString &name() const {return _name;}
 
-	QRectF bounds() const {return _bounds;}
+	QRectF bounds() const;
 	qreal resolution(const QRectF &rect) const;
 
 	int zoom() const {return _zoom;}
@@ -57,8 +58,7 @@ private:
 	Transform _transform;
 	CoordinateSystem _cs;
 	QVector<double> _zooms;
-	PointD _tl, _br;
-	QRectF _bounds;
+	RectD _bbox;
 	int _zoom;
 
 	bool _valid;

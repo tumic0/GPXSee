@@ -125,7 +125,8 @@ HEADERS += src/config.h \
     src/data/fitparser.h \
     src/data/igcparser.h \
     src/data/nmeaparser.h \
-    src/data/oziparsers.h
+    src/data/oziparsers.h \
+    src/map/rectd.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
