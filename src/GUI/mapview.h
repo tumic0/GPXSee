@@ -84,7 +84,7 @@ private:
 	QPointF contentCenter() const;
 	void rescale();
 	void centerOn(const QPointF &pos);
-	void zoom(int zoom, const QPoint &pos, const Coordinates &c);
+	void zoom(int zoom, const QPoint &pos);
 	void digitalZoom(int zoom);
 	void updatePOIVisibility();
 

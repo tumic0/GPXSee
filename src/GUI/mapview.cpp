@@ -421,7 +421,7 @@ void MapView::digitalZoom(int zoom)
 	_mapScale->setDigitalZoom(_digitalZoom);
 }
 
-void MapView::zoom(int zoom, const QPoint &pos, const Coordinates &c)
+void MapView::zoom(int zoom, const QPoint &pos)
 {
 	bool shift = QApplication::keyboardModifiers() & Qt::ShiftModifier;
 
@@ -433,9 +433,9 @@ void MapView::zoom(int zoom, const QPoint &pos, const Coordinates &c)
 
 		digitalZoom(zoom);
 	} else {
-		qreal os, ns;
-		os = _map->zoom();
-		ns = (zoom > 0) ? _map->zoomIn() : _map->zoomOut();
+		Coordinates c = _map->xy2ll(mapToScene(pos));
+		qreal os = _map->zoom();
+		qreal ns = (zoom > 0) ? _map->zoomIn() : _map->zoomOut();
 
 		if (ns != os) {
 			rescale();
@@ -456,8 +456,7 @@ void MapView::wheelEvent(QWheelEvent *event)
 		return;
 	deg = 0;
 
-	Coordinates c = _map->xy2ll(mapToScene(event->pos()));
-	zoom((event->delta() > 0) ? 1 : -1, event->pos(), c);
+	zoom((event->delta() > 0) ? 1 : -1, event->pos());
 }
 
 void MapView::mouseDoubleClickEvent(QMouseEvent *event)
@@ -465,8 +464,7 @@ void MapView::mouseDoubleClickEvent(QMouseEvent *event)
 	if (event->button() != Qt::LeftButton && event->button() != Qt::RightButton)
 		return;
 
-	Coordinates c = _map->xy2ll(mapToScene(event->pos()));
-	zoom((event->button() == Qt::LeftButton) ? 1 : -1, event->pos(), c);
+	zoom((event->button() == Qt::LeftButton) ? 1 : -1, event->pos());
 }
 
 void MapView::keyPressEvent(QKeyEvent *event)
@@ -474,7 +472,6 @@ void MapView::keyPressEvent(QKeyEvent *event)
 	int z;
 
 	QPoint pos = viewport()->rect().center();
-	Coordinates c = _map->xy2ll(mapToScene(pos));
 
 	if (event->matches(ZOOM_IN))
 		z = 1;
@@ -488,7 +485,7 @@ void MapView::keyPressEvent(QKeyEvent *event)
 		return;
 	}
 
-	zoom(z, pos, c);
+	zoom(z, pos);
 }
 
 void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
