@@ -11,7 +11,7 @@ public:
 	TemperatureGraph(QWidget *parent = 0);
 
 	QString label() const {return tr("Temperature");}
-	void loadData(const Data &data, const QList<PathItem *> &paths);
+	QList<GraphItem*> loadData(const Data &data);
 	void clear();
 	void setUnits(enum Units units);
 	void showTracks(bool show);

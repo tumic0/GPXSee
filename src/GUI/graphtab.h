@@ -7,7 +7,7 @@
 #include "timetype.h"
 
 class Data;
-class PathItem;
+class GraphItem;
 
 class GraphTab : public GraphView
 {
@@ -19,7 +19,7 @@ public:
 	virtual ~GraphTab() {}
 
 	virtual QString label() const = 0;
-	virtual void loadData(const Data &data, const QList<PathItem *> &paths) = 0;
+	virtual QList<GraphItem*> loadData(const Data &data) = 0;
 	virtual void clear() {GraphView::clear();}
 	virtual void setUnits(enum Units units) {GraphView::setUnits(units);}
 	virtual void setGraphType(GraphType type) {GraphView::setGraphType(type);}

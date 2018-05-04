@@ -44,7 +44,7 @@ signals:
 	void sliderPositionChanged(qreal);
 
 protected:
-	void addGraph(GraphItem *graph, PathItem *path, int id = 0);
+	void addGraph(GraphItem *graph, int id = 0);
 
 	void showGraph(bool show, int id = 0);
 	void setGraphType(GraphType type);

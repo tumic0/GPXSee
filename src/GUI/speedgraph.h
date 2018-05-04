@@ -12,7 +12,7 @@ public:
 	SpeedGraph(QWidget *parent = 0);
 
 	QString label() const {return tr("Speed");}
-	void loadData(const Data &data, const QList<PathItem *> &paths);
+	QList<GraphItem*> loadData(const Data &data);
 	void clear();
 	void setUnits(Units units);
 	void setTimeType(TimeType type);

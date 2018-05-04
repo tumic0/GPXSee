@@ -26,28 +26,34 @@ void TemperatureGraph::setInfo()
 		clearInfo();
 }
 
-void TemperatureGraph::loadData(const Data &data, const QList<PathItem *> &paths)
+QList<GraphItem*> TemperatureGraph::loadData(const Data &data)
 {
+	QList<GraphItem*> graphs;
+
 	for (int i = 0; i < data.tracks().count(); i++) {
 		const Graph &graph = data.tracks().at(i)->temperature();
 
 		if (graph.size() < 2) {
 			skipColor();
-			continue;
+			graphs.append(0);
+		} else {
+			TemperatureGraphItem *gi = new TemperatureGraphItem(graph,
+			  _graphType);
+			GraphView::addGraph(gi);
+			_avg.append(QPointF(data.tracks().at(i)->distance(), gi->avg()));
+			graphs.append(gi);
 		}
-
-		TemperatureGraphItem *gi = new TemperatureGraphItem(graph, _graphType);
-		GraphView::addGraph(gi, paths.at(i));
-
-		_avg.append(QPointF(data.tracks().at(i)->distance(), gi->avg()));
 	}
 
-	for (int i = 0; i < data.routes().count(); i++)
+	for (int i = 0; i < data.routes().count(); i++) {
 		skipColor();
+		graphs.append(0);
+	}
 
 	setInfo();
-
 	redraw();
+
+	return graphs;
 }
 
 qreal TemperatureGraph::avg() const

@@ -65,15 +65,15 @@ void ElevationGraph::setInfo()
 	}
 }
 
-void ElevationGraph::loadGraph(const Graph &graph, Type type, PathItem *path)
+GraphItem *ElevationGraph::loadGraph(const Graph &graph, Type type)
 {
 	if (graph.size() < 2) {
 		skipColor();
-		return;
+		return 0;
 	}
 
 	ElevationGraphItem *gi = new ElevationGraphItem(graph, _graphType);
-	GraphView::addGraph(gi, path, type);
+	GraphView::addGraph(gi, type);
 
 	if (type == Track) {
 		_trackAscent += gi->ascent();
@@ -86,20 +86,23 @@ void ElevationGraph::loadGraph(const Graph &graph, Type type, PathItem *path)
 		_routeMax = nMax(_routeMax, gi->max());
 		_routeMin = nMin(_routeMin, gi->min());
 	}
+
+	return gi;
 }
 
-void ElevationGraph::loadData(const Data &data, const QList<PathItem *> &paths)
+QList<GraphItem*> ElevationGraph::loadData(const Data &data)
 {
-	int p = 0;
+	QList<GraphItem*> graphs;
 
 	for (int i = 0; i < data.tracks().count(); i++)
-		loadGraph(data.tracks().at(i)->elevation(), Track, paths.at(p++));
+		graphs.append(loadGraph(data.tracks().at(i)->elevation(), Track));
 	for (int i = 0; i < data.routes().count(); i++)
-		loadGraph(data.routes().at(i)->elevation(), Route, paths.at(p++));
+		graphs.append(loadGraph(data.routes().at(i)->elevation(), Route));
 
 	setInfo();
-
 	redraw();
+
+	return graphs;
 }
 
 void ElevationGraph::clear()
