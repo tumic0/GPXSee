@@ -190,6 +190,7 @@ bool GPXParser::parse(QFile *file, QList<TrackData> &tracks,
 {
 	_reader.clear();
 	_reader.setDevice(file);
+	_reader.setNamespaceProcessing(false);
 
 	if (_reader.readNextStartElement()) {
 		if (_reader.name() == "gpx")
