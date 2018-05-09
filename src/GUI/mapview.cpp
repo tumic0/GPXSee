@@ -473,9 +473,9 @@ void MapView::keyPressEvent(QKeyEvent *event)
 
 	QPoint pos = viewport()->rect().center();
 
-	if (event->matches(ZOOM_IN))
+	if (event->key() == ZOOM_IN)
 		z = 1;
-	else if (event->matches(ZOOM_OUT))
+	else if (event->key() == ZOOM_OUT)
 		z = -1;
 	else if (_digitalZoom && event->key() == Qt::Key_Escape) {
 		digitalZoom(0);

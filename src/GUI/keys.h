@@ -9,10 +9,8 @@
 #define FIRST_KEY               Qt::Key_Home
 #define LAST_KEY                Qt::Key_End
 #define MODIFIER                Qt::ShiftModifier
-
-#define ZOOM_IN                 QKeySequence::ZoomIn
-#define ZOOM_OUT                QKeySequence::ZoomOut
-
+#define ZOOM_IN                 Qt::Key_Plus
+#define ZOOM_OUT                Qt::Key_Minus
 #define TOGGLE_GRAPH_TYPE_KEY   Qt::Key_X
 #define TOGGLE_TIME_TYPE_KEY    Qt::Key_T
 
