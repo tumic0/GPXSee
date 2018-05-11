@@ -126,7 +126,8 @@ HEADERS += src/config.h \
     src/data/igcparser.h \
     src/data/nmeaparser.h \
     src/data/oziparsers.h \
-    src/map/rectd.h
+    src/map/rectd.h \
+    src/map/geocentric.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -220,7 +221,8 @@ SOURCES += src/main.cpp \
     src/data/fitparser.cpp \
     src/data/igcparser.cpp \
     src/data/nmeaparser.cpp \
-    src/data/oziparsers.cpp
+    src/data/oziparsers.cpp \
+    src/map/geocentric.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \
