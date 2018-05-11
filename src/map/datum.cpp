@@ -3,8 +3,8 @@
 #include "datum.h"
 
 
-#define as2rad(x) ((x) * 4.84814e-6)
-#define rad2as(x) ((x) * 206265.0)
+#define as2rad(x) ((x) * (M_PI/648000.0))
+#define rad2as(x) ((x) * (648000.0/M_PI))
 
 static Ellipsoid WGS84e = Ellipsoid(WGS84_RADIUS, WGS84_FLATTENING);
 static Datum WGS84 = Datum(&WGS84e, 0.0, 0.0, 0.0);
