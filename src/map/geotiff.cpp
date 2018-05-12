@@ -33,6 +33,7 @@
 #define ProjNatOriginLatGeoKey       3081
 #define ProjFalseEastingGeoKey       3082
 #define ProjFalseNorthingGeoKey      3083
+#define ProjFalseOriginLatGeoKey     3085
 #define ProjCenterLongGeoKey         3088
 #define ProjCenterLatGeoKey          3089
 #define ProjScaleAtNatOriginGeoKey   3092
@@ -251,6 +252,7 @@ bool GeoTIFF::readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv) const
 			case ProjScaleAtCenterGeoKey:
 			case ProjAzimuthAngleGeoKey:
 			case ProjRectifiedGridAngleGeoKey:
+			case ProjFalseOriginLatGeoKey:
 				if (!readGeoValue(file, ctx.values, entry.ValueOffset,
 				  value.DOUBLE))
 					return false;
@@ -389,6 +391,8 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 			lat0 = au.toDegrees(kv.value(ProjNatOriginLatGeoKey).DOUBLE);
 		else if (kv.contains(ProjCenterLatGeoKey))
 			lat0 = au.toDegrees(kv.value(ProjCenterLatGeoKey).DOUBLE);
+		else if (kv.contains(ProjFalseOriginLatGeoKey))
+			lat0 = au.toDegrees(kv.value(ProjFalseOriginLatGeoKey).DOUBLE);
 		else
 			lat0 = NAN;
 		if (kv.contains(ProjNatOriginLongGeoKey))
