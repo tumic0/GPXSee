@@ -331,7 +331,7 @@ Projection::Method GeoTIFF::method(QMap<quint16, Value> &kv)
 		case CT_ObliqueMercator:
 			return Projection::Method(9815);
 		case CT_Mercator:
-			return Projection::Method(9804);
+			return Projection::Method(9805);
 		case CT_LambertConfConic_2SP:
 			return Projection::Method(9802);
 		case CT_LambertConfConic_1SP:
