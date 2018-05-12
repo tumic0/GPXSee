@@ -1,4 +1,3 @@
-#include <cmath>
 #include "common/wgs84.h"
 #include "datum.h"
 

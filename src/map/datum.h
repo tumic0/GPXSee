@@ -2,7 +2,6 @@
 #define DATUM_H
 
 #include <cmath>
-#include <QList>
 #include <QDebug>
 #include "common/coordinates.h"
 #include "ellipsoid.h"
@@ -11,8 +10,8 @@
 class Datum
 {
 public:
-	Datum() : _ellipsoid(0), _transformation(None), _dx(NAN), _dy(NAN), _dz(NAN),
-	  _rx(NAN), _ry(NAN), _rz(NAN), _ds(NAN) {}
+	Datum() : _ellipsoid(0), _transformation(None), _dx(NAN), _dy(NAN),
+	  _dz(NAN), _rx(NAN), _ry(NAN), _rz(NAN), _ds(NAN) {}
 	Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz,
 	  double rx, double ry, double rz, double ds);
 	Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz);
