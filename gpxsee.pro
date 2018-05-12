@@ -69,7 +69,7 @@ HEADERS += src/config.h \
     src/map/projection.h \
     src/map/ellipsoid.h \
     src/map/datum.h \
-    src/map/mercator.h \
+    src/map/webmercator.h \
     src/map/transversemercator.h \
     src/map/latlon.h \
     src/map/utm.h \
@@ -185,7 +185,7 @@ SOURCES += src/main.cpp \
     src/map/matrix.cpp \
     src/map/ellipsoid.cpp \
     src/map/datum.cpp \
-    src/map/mercator.cpp \
+    src/map/webmercator.cpp \
     src/map/transversemercator.cpp \
     src/map/utm.cpp \
     src/map/lambertconic.cpp \

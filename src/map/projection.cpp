@@ -1,5 +1,5 @@
 #include "datum.h"
-#include "mercator.h"
+#include "webmercator.h"
 #include "transversemercator.h"
 #include "lambertconic.h"
 #include "albersequal.h"
@@ -37,7 +37,7 @@ Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
 	switch (pcs->method().id()) {
 		case 1024:
 		case 9841:
-			_ct = new Mercator();
+			_ct = new WebMercator();
 			break;
 		case 9801:
 		case 9815: // Oblique mercator aproximation using LCC1
