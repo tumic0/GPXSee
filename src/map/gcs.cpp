@@ -33,6 +33,18 @@ static int parameter(const QString &str, bool *res)
 	return field.toInt(res);
 }
 
+static double parameterd(const QString &str, bool *res)
+{
+	QString field = str.trimmed();
+	if (field.isEmpty()) {
+		*res = true;
+		return NAN;
+	}
+
+	return field.toDouble(res);
+}
+
+
 QList<GCS::Entry> GCS::_gcss = WGS84();
 
 QList<GCS::Entry> GCS::WGS84()
@@ -78,7 +90,6 @@ void GCS::loadList(const QString &path)
 	bool res;
 	int ln = 0;
 	const Ellipsoid *e;
-	double ds, rx, ry, rz;
 
 
 	if (!file.open(QFile::ReadOnly)) {
@@ -92,7 +103,7 @@ void GCS::loadList(const QString &path)
 
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split(',');
-		if (list.size() < 10) {
+		if (list.size() != 14) {
 			qWarning("%s:%d: Format error", qPrintable(path), ln);
 			continue;
 		}
@@ -146,32 +157,25 @@ void GCS::loadList(const QString &path)
 			qWarning("%s:%d: Invalid dz", qPrintable(path), ln);
 			continue;
 		}
-		if (list.size() == 14) {
-			rx = list[10].trimmed().toDouble(&res);
-			if (!res) {
-				qWarning("%s:%d: Invalid rx", qPrintable(path), ln);
-				continue;
-			}
-			ry = list[11].trimmed().toDouble(&res);
-			if (!res) {
-				qWarning("%s:%d: Invalid ry", qPrintable(path), ln);
-				continue;
-			}
-			rz = list[12].trimmed().toDouble(&res);
-			if (!res) {
-				qWarning("%s:%d: Invalid rz", qPrintable(path), ln);
-				continue;
-			}
-			ds = list[13].trimmed().toDouble(&res);
-			if (!res) {
-				qWarning("%s:%d: Invalid ds", qPrintable(path), ln);
-				continue;
-			}
-		} else {
-			rx = NAN;
-			ry = NAN;
-			rz = NAN;
-			ds = NAN;
+		double rx = parameterd(list[10], &res);
+		if (!res) {
+			qWarning("%s:%d: Invalid rx", qPrintable(path), ln);
+			continue;
+		}
+		double ry = parameterd(list[11], &res);
+		if (!res) {
+			qWarning("%s:%d: Invalid ry", qPrintable(path), ln);
+			continue;
+		}
+		double rz = parameterd(list[12], &res);
+		if (!res) {
+			qWarning("%s:%d: Invalid rz", qPrintable(path), ln);
+			continue;
+		}
+		double ds = parameterd(list[13], &res);
+		if (!res) {
+			qWarning("%s:%d: Invalid ds", qPrintable(path), ln);
+			continue;
 		}
 
 		if (!(e = Ellipsoid::ellipsoid(el))) {
