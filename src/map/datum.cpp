@@ -9,7 +9,6 @@
 static Ellipsoid WGS84e = Ellipsoid(WGS84_RADIUS, WGS84_FLATTENING);
 static Datum WGS84 = Datum(&WGS84e, 0.0, 0.0, 0.0);
 
-// Abridged Molodensky transformation
 static Coordinates molodensky(const Coordinates &c, const Datum &from,
   const Datum &to)
 {
@@ -46,7 +45,6 @@ static Coordinates molodensky(const Coordinates &c, const Datum &from,
 
 	return Coordinates(c.lon() + rad2deg(dlon), c.lat() + rad2deg(dlat));
 }
-
 
 Point3D Datum::helmert(const Point3D &p) const
 {
@@ -95,9 +93,9 @@ Datum::Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz,
 	if (_ellipsoid->radius() == WGS84_RADIUS && _ellipsoid->flattening()
 	  == WGS84_FLATTENING && _dx == 0.0 && _dy == 0.0 && _dz == 0.0
 	  && _rx == 0.0 && _ry == 0.0 && _rz == 0.0 && _ds == 0.0)
-		_shift = None;
+		_transformation = None;
 	else
-		_shift = Helmert;
+		_transformation = Helmert;
 }
 
 Datum::Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz)
@@ -106,14 +104,14 @@ Datum::Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz)
 {
 	if (_ellipsoid->radius() == WGS84_RADIUS && _ellipsoid->flattening()
 	  == WGS84_FLATTENING && _dx == 0.0 && _dy == 0.0 && _dz == 0.0)
-		_shift = None;
+		_transformation = None;
 	else
-		_shift = Molodensky;
+		_transformation = Molodensky;
 }
 
 Coordinates Datum::toWGS84(const Coordinates &c) const
 {
-	switch (_shift) {
+	switch (_transformation) {
 		case Helmert:
 			return Geocentric::toGeodetic(helmert(Geocentric::fromGeodetic(c,
 			  *this)), WGS84);
@@ -126,7 +124,7 @@ Coordinates Datum::toWGS84(const Coordinates &c) const
 
 Coordinates Datum::fromWGS84(const Coordinates &c) const
 {
-	switch (_shift) {
+	switch (_transformation) {
 		case Helmert:
 			return Geocentric::toGeodetic(helmertr(Geocentric::fromGeodetic(c,
 			  WGS84)), *this);

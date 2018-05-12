@@ -11,7 +11,7 @@
 class Datum
 {
 public:
-	Datum() : _ellipsoid(0), _shift(None), _dx(NAN), _dy(NAN), _dz(NAN),
+	Datum() : _ellipsoid(0), _transformation(None), _dx(NAN), _dy(NAN), _dz(NAN),
 	  _rx(NAN), _ry(NAN), _rz(NAN), _ds(NAN) {}
 	Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz,
 	  double rx, double ry, double rz, double ds);
@@ -37,7 +37,7 @@ public:
 	Coordinates fromWGS84(const Coordinates &c) const;
 
 private:
-	enum ShiftType {
+	enum TransformationType {
 		None,
 		Molodensky,
 		Helmert
@@ -47,7 +47,7 @@ private:
 	Point3D helmertr(const Point3D &p) const;
 
 	const Ellipsoid *_ellipsoid;
-	ShiftType _shift;
+	TransformationType _transformation;
 	double _dx, _dy, _dz, _rx, _ry, _rz, _ds;
 };
 
