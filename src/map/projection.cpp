@@ -17,7 +17,7 @@ Projection::Method::Method(int id)
 		case 1024:
 		case 9801:
 		case 9802:
-		case 9805:
+		case 9804:
 		case 9807:
 		case 9815:
 		case 9820:
@@ -51,7 +51,7 @@ Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
 			  setup.longitudeOrigin(), setup.falseEasting(),
 			  setup.falseNorthing());
 			break;
-		case 9805:
+		case 9804:
 			_ct = new Mercator(ellipsoid, setup.latitudeOrigin(),
 			  setup.longitudeOrigin(), setup.falseEasting(),
 			  setup.falseNorthing());
