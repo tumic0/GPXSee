@@ -89,7 +89,7 @@ Track::Track(const TrackData &data) : _data(data)
 		_distance.append(ds);
 
 		if (_data.first().hasTimestamp() && _data.at(i).hasTimestamp()
-		  && _data.at(i).timestamp() > _data.at(last).timestamp()) {
+		  && _data.at(i).timestamp() >= _data.at(last).timestamp()) {
 			_time.append(_data.first().timestamp().msecsTo(
 			  _data.at(i).timestamp()) / 1000.0);
 			last = i;
