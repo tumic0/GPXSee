@@ -271,5 +271,6 @@ win32 {
         icons/plt.ico \
         icons/rte.ico \
         icons/wpt.ico
+    DEFINES += _USE_MATH_DEFINES
 }
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"

@@ -45,9 +45,6 @@ Defense.
 #include "geocentric.h"
 
 
-#ifndef M_PI_2
-	#define M_PI_2 1.57079632679489661923
-#endif // M_PI_2
 #define AD_C 1.0026000
 
 Point3D Geocentric::fromGeodetic(const Coordinates &c, const Datum &datum)
@@ -63,7 +60,7 @@ Point3D Geocentric::fromGeodetic(const Coordinates &c, const Datum &datum)
 	double Rn = e->radius() / (sqrt(1.0 - e2 * slat2));
 
 	if (lon > M_PI)
-		lon -= (2 * M_PI);
+		lon -= M_2_PI;
 
 	return Point3D(Rn * clat * cos(lon), Rn * clat * sin(lon),
 	  (Rn * (1 - e2)) * slat);

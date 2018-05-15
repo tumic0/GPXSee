@@ -45,12 +45,6 @@ Defense.
 #include "ellipsoid.h"
 #include "lambertconic.h"
 
-#ifndef M_PI_2
-	#define M_PI_2 1.57079632679489661923
-#endif // M_PI_2
-#ifndef M_PI_4
-	#define M_PI_4 0.785398163397448309616
-#endif /* M_PI_4 */
 
 #define LAMBERT_m(clat, essin) (clat / sqrt(1.0 - essin * essin))
 #define LAMBERT2_t(lat, essin, es_over_2) \
@@ -72,7 +66,7 @@ LambertConic1::LambertConic1(const Ellipsoid *ellipsoid, double latitudeOrigin,
 	lat_orig = deg2rad(latitudeOrigin);
 	_longitudeOrigin = deg2rad(longitudeOrigin);
 	if (_longitudeOrigin > M_PI)
-		_longitudeOrigin -= 2 * M_PI;
+		_longitudeOrigin -= M_2_PI;
 
 	_falseEasting = falseEasting;
 	_falseNorthing = falseNorthing;
@@ -111,9 +105,9 @@ PointD LambertConic1::ll2xy(const Coordinates &c) const
 	dlam = deg2rad(c.lon()) - _longitudeOrigin;
 
 	if (dlam > M_PI)
-		dlam -= 2 * M_PI;
+		dlam -= M_2_PI;
 	if (dlam < -M_PI)
-		dlam += 2 * M_PI;
+		dlam += M_2_PI;
 
 	theta = _n * dlam;
 
@@ -177,13 +171,13 @@ Coordinates LambertConic1::xy2ll(const PointD &p) const
 			if (lon - M_PI < 3.5e-6)
 				lon = M_PI;
 			else
-				lon -= 2 * M_PI;
+				lon -= M_2_PI;
 		}
 		if (lon < -M_PI) {
 			if (fabs(lon + M_PI) < 3.5e-6)
 				lon = -M_PI;
 			else
-				lon += 2 * M_PI;
+				lon += M_2_PI;
 		}
 
 		if (fabs(lon) < 2.0e-7)
