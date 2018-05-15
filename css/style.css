@@ -209,14 +209,15 @@ h1.logo a span {
 	margin-left:30px;
 }
 #content p {
-margin: .5em 0 .5em 0
+	margin: .5em 0 .5em 0;
+	text-align: justify;
 }
 #content pre {
-    font-size: 10pt;
-    text-align: left;
-    background-color: #F0F0F0;
-    border: 1px solid #ADADAD;
-    padding: .5em;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #F0F0F0;
+	border: 1px solid #ADADAD;
+	padding: .5em;
 }
 .latest-news {
 }
