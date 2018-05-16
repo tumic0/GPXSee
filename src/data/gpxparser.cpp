@@ -54,11 +54,9 @@ Coordinates GPXParser::coordinates()
 void GPXParser::rpExtension(TrackData *autoRoute)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "rpt") {
+		if (_reader.name() == "rpt")
 			autoRoute->append(Trackpoint(coordinates()));
-			trackpointData(autoRoute->last());
-		} else
-			_reader.skipCurrentElement();
+		_reader.skipCurrentElement();
 	}
 }
 
