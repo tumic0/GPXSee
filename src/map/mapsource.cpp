@@ -230,7 +230,8 @@ Map *MapSource::loadFile(const QString &path)
 		  config.style, config.format, config.crs, config.coordinateSystem,
 		  config.dimensions, config.authorization));
 	else
-		m = new OnlineMap(config.name, config.url, config.zooms, config.bounds);
+		m = new OnlineMap(config.name, config.url, config.zooms, config.bounds,
+		  config.authorization);
 
 	if (!m->isValid()) {
 		_errorString = m->errorString();

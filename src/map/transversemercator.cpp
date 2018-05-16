@@ -109,9 +109,9 @@ PointD TransverseMercator::ll2xy(const Coordinates &c) const
 	dlam = deg2rad(c.lon()) - _longitudeOrigin;
 
 	if (dlam > M_PI)
-		dlam -= (2 * M_PI);
+		dlam -= M_2_PI;
 	if (dlam < -M_PI)
-		dlam += (2 * M_PI);
+		dlam += M_2_PI;
 	if (fabs(dlam) < 2.e-10)
 		dlam = 0.0;
 
@@ -237,20 +237,20 @@ Coordinates TransverseMercator::xy2ll(const PointD &p) const
 		lat = M_PI - lat;
 		lon += M_PI;
 		if (lon > M_PI)
-			lon -= (2 * M_PI);
+			lon -= M_2_PI;
 	}
 
 	while (lat < deg2rad(-90.0)) {
 		lat = - (lat + M_PI);
 		lon += M_PI;
 		if (lon > M_PI)
-			lon -= (2 * M_PI);
+			lon -= M_2_PI;
 	}
 
-	if (lon > (2 * M_PI))
-		lon -= (2 * M_PI);
+	if (lon > M_2_PI)
+		lon -= M_2_PI;
 	if (lon < -M_PI)
-		lon += (2 * M_PI);
+		lon += M_2_PI;
 
 	return Coordinates(rad2deg(lon), rad2deg(lat));
 }

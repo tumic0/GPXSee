@@ -41,82 +41,75 @@ Defense.
 
 */
 
-#include "ellipsoid.h"
-#include "mercator.h"
+#include "datum.h"
+#include "geocentric.h"
 
-Mercator::Mercator(const Ellipsoid *ellipsoid, double latitudeOrigin,
-  double longitudeOrigin, double falseEasting, double falseNorthing)
+
+#define AD_C 1.0026000
+
+Point3D Geocentric::fromGeodetic(const Coordinates &c, const Datum &datum)
 {
-	double es2;
-	double es3;
-	double es4;
-	double sin_olat;
+	const Ellipsoid *e = datum.ellipsoid();
+	double e2 = 2.0 * e->flattening() - e->flattening() * e->flattening();
 
-	_a = ellipsoid->radius();
-	_latitudeOrigin = deg2rad(latitudeOrigin);
-	_longitudeOrigin = deg2rad(longitudeOrigin);
-	if (_longitudeOrigin > M_PI)
-		_longitudeOrigin -= M_2_PI;
-	_falseNorthing = falseNorthing;
-	_falseEasting = falseEasting;
-	_es = 2 * ellipsoid->flattening() - ellipsoid->flattening()
-	  * ellipsoid->flattening();
-	_e = sqrt(_es);
-	sin_olat = sin(_latitudeOrigin);
-	_scaleFactor = 1.0 / (sqrt(1.e0 - _es * sin_olat * sin_olat)
-	  / cos(_latitudeOrigin));
-	es2 = _es * _es;
-	es3 = es2 * _es;
-	es4 = es3 * _es;
-	_ab = _es / 2.e0 + 5.e0 * es2 / 24.e0 + es3 / 12.e0 + 13.e0 * es4 / 360.e0;
-	_bb = 7.e0 * es2 / 48.e0 + 29.e0 * es3 / 240.e0 + 811.e0 * es4 / 11520.e0;
-	_cb = 7.e0 * es3 / 120.e0 + 81.e0 * es4 / 1120.e0;
-	_db = 4279.e0 * es4 / 161280.e0;
-}
-
-PointD Mercator::ll2xy(const Coordinates &c) const
-{
-	double lon = deg2rad(c.lon());
 	double lat = deg2rad(c.lat());
-	double ctanz2;
-	double e_x_sinlat;
-	double delta_lon;
-	double tan_temp;
-	double pow_temp;
+	double lon = deg2rad(c.lon());
+	double slat = sin(lat);
+	double slat2 = slat * slat;
+	double clat = cos(lat);
+	double Rn = e->radius() / (sqrt(1.0 - e2 * slat2));
 
 	if (lon > M_PI)
 		lon -= M_2_PI;
-	e_x_sinlat = _e * sin(lat);
-	tan_temp = tan(M_PI_4 + lat / 2.e0);
-	pow_temp = pow((1.e0 - e_x_sinlat) / (1.e0 + e_x_sinlat), _e / 2.e0);
-	ctanz2 = tan_temp * pow_temp;
-	delta_lon = lon - _longitudeOrigin;
-	if (delta_lon > M_PI)
-	  delta_lon -= M_2_PI;
-	if (delta_lon < -M_PI)
-	  delta_lon += M_2_PI;
 
-	return PointD(_scaleFactor * _a * delta_lon + _falseEasting,
-	  _scaleFactor * _a * log(ctanz2) + _falseNorthing);
+	return Point3D(Rn * clat * cos(lon), Rn * clat * sin(lon),
+	  (Rn * (1 - e2)) * slat);
 }
 
-Coordinates Mercator::xy2ll(const PointD &p) const
+Coordinates Geocentric::toGeodetic(const Point3D &p, const Datum &datum)
 {
-	double dx;
-	double dy;
-	double xphi;
+	const Ellipsoid *e = datum.ellipsoid();
+	double b = e->radius() * (1.0 - e->flattening());
+	double e2 = 2.0 * e->flattening() - e->flattening() * e->flattening();
+	double ep2 = (1.0 / (1.0 - e2)) - 1.0;
+
+	bool pole = false;
 	double lat, lon;
 
-	dy = p.y() - _falseNorthing;
-	dx = p.x() - _falseEasting;
-	lon = _longitudeOrigin + dx / (_scaleFactor * _a);
-	xphi = M_PI_2 - 2.e0 * atan(1.e0 / exp(dy / (_scaleFactor * _a)));
-	lat = xphi + _ab * sin(2.e0 * xphi) + _bb * sin(4.e0 * xphi)
-	  + _cb * sin(6.e0 * xphi) + _db * sin(8.e0 * xphi);
-	if (lon > M_PI)
-		lon -= M_2_PI;
-	if (lon < -M_PI)
-		lon += M_2_PI;
+
+	if (p.x() == 0.0) {
+		if (p.y() > 0)
+			lon = M_PI_2;
+		else if (p.y() < 0)
+			lon = -M_PI_2;
+		else {
+			pole = true;
+			lon = 0.0;
+			if (p.z() > 0.0)
+				lat = M_PI_2;
+			else if (p.z() < 0.0)
+				lat = -M_PI_2;
+			else
+				return Coordinates(rad2deg(lon), rad2deg(M_PI_2));
+		}
+	} else
+		lon = atan2(p.y(), p.x());
+
+	double W2 = p.x()*p.x() + p.y()*p.y();
+	double W = sqrt(W2);
+	double T0 = p.z() * AD_C;
+	double S0 = sqrt(T0 * T0 + W2);
+	double Sin_B0 = T0 / S0;
+	double Cos_B0 = W / S0;
+	double Sin3_B0 = Sin_B0 * Sin_B0 * Sin_B0;
+	double T1 = p.z() + b * ep2 * Sin3_B0;
+	double Sum = W - e->radius() * e2 * Cos_B0 * Cos_B0 * Cos_B0;
+	double S1 = sqrt(T1*T1 + Sum * Sum);
+	double Sin_p1 = T1 / S1;
+	double Cos_p1 = Sum / S1;
+
+	if (!pole)
+		lat = atan(Sin_p1 / Cos_p1);
 
 	return Coordinates(rad2deg(lon), rad2deg(lat));
 }

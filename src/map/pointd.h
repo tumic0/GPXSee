@@ -19,7 +19,7 @@ public:
 
 	bool isNull() const {return std::isnan(_x) && std::isnan(_y);}
 
-	QPointF toPointF() const {return QPointF(_x, _y);}
+	QPointF toPointF() const {return QPointF((qreal)_x, (qreal)_y);}
 
 private:
 	double _x, _y;

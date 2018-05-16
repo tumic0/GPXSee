@@ -5,8 +5,8 @@
 #include "projection.h"
 #include "map.h"
 #include "wmts.h"
-#include "tileloader.h"
 
+class TileLoader;
 
 class WMTSMap : public Map
 {
@@ -21,6 +21,7 @@ public:
 	qreal resolution(const QRectF &rect) const;
 
 	int zoom() const {return _zoom;}
+	void setZoom(int zoom);
 	int zoomFit(const QSize &size, const RectC &rect);
 	int zoomIn();
 	int zoomOut();
@@ -30,19 +31,12 @@ public:
 	Coordinates xy2ll(const QPointF &p)
 		{return static_cast<const WMTSMap &>(*this).xy2ll(p);}
 
-	void draw(QPainter *painter, const QRectF &rect);
+	void draw(QPainter *painter, const QRectF &rect, bool block);
 
-	void setBlockingMode(bool block) {_block = block;}
 	void clearCache();
-
-	void load();
-	void unload();
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
-
-private slots:
-	void emitLoaded();
 
 private:
 	bool loadWMTS();
@@ -55,14 +49,13 @@ private:
 
 	QString _name;
 	WMTS::Setup _setup;
-	TileLoader _tileLoader;
+	TileLoader *_tileLoader;
 	RectC _bounds;
 	QList<WMTS::Zoom> _zooms;
 	Projection _projection;
 	Transform _transform;
 	CoordinateSystem _cs;
 	int _zoom;
-	bool _block;
 
 	bool _valid;
 	QString _errorString;

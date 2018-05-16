@@ -5,8 +5,9 @@
 #include "projection.h"
 #include "map.h"
 #include "wms.h"
-#include "tileloader.h"
+#include "rectd.h"
 
+class TileLoader;
 
 class WMSMap : public Map
 {
@@ -17,10 +18,11 @@ public:
 
 	const QString &name() const {return _name;}
 
-	QRectF bounds() const {return _bounds;}
+	QRectF bounds() const;
 	qreal resolution(const QRectF &rect) const;
 
 	int zoom() const {return _zoom;}
+	void setZoom(int zoom);
 	int zoomFit(const QSize &size, const RectC &rect);
 	int zoomIn();
 	int zoomOut();
@@ -30,19 +32,12 @@ public:
 	Coordinates xy2ll(const QPointF &p)
 		{return static_cast<const WMSMap &>(*this).xy2ll(p);}
 
-	void draw(QPainter *painter, const QRectF &rect);
+	void draw(QPainter *painter, const QRectF &rect, bool block);
 
-	void setBlockingMode(bool block) {_block = block;}
 	void clearCache();
-
-	void load();
-	void unload();
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
-
-private slots:
-	void emitLoaded();
 
 private:
 	QString tileUrl(const QString &version) const;
@@ -58,15 +53,13 @@ private:
 	QString _name;
 
 	WMS::Setup _setup;
-	TileLoader _tileLoader;
+	TileLoader *_tileLoader;
 	Projection _projection;
 	Transform _transform;
 	CoordinateSystem _cs;
 	QVector<double> _zooms;
-	PointD _tl, _br;
-	QRectF _bounds;
+	RectD _bbox;
 	int _zoom;
-	bool _block;
 
 	bool _valid;
 	QString _errorString;

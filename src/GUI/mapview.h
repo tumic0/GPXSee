@@ -22,6 +22,7 @@ class RouteItem;
 class WaypointItem;
 class ScaleItem;
 class PathItem;
+class GraphItem;
 
 class MapView : public QGraphicsView
 {
@@ -30,7 +31,7 @@ class MapView : public QGraphicsView
 public:
 	MapView(Map *map, POI *poi, QWidget *parent = 0);
 
-	QList<PathItem*> loadData(const Data &data);
+	QList<PathItem *> loadData(const Data &data);
 
 	void setPalette(const Palette &palette);
 	void setPOI(POI *poi);
@@ -84,7 +85,7 @@ private:
 	QPointF contentCenter() const;
 	void rescale();
 	void centerOn(const QPointF &pos);
-	void zoom(int zoom, const QPoint &pos, const Coordinates &c);
+	void zoom(int zoom, const QPoint &pos);
 	void digitalZoom(int zoom);
 	void updatePOIVisibility();
 

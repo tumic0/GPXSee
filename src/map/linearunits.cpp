@@ -15,6 +15,15 @@ LinearUnits::LinearUnits(int code)
 		case 9040:
 			_f = 36.0 /	39.370147;
 			break;
+		case 9041:
+			_f = 12.0 / 39.370147;
+			break;
+		case 9042:
+			_f = 792.0 / 39.370147;
+			break;
+		case 9094:
+			_f = 6378300.0 / 20926201.0;
+			break;
 		default:
 			_f = NAN;
 	}

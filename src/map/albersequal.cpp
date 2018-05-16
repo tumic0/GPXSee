@@ -45,10 +45,6 @@ Defense.
 #include "albersequal.h"
 
 
-#ifndef M_PI_2
-	#define M_PI_2 1.57079632679489661923
-#endif // M_PI_2
-
 #define ONE_MINUS_SQR(x) (1.0 - (x) * (x))
 #define ALBERS_Q(slat, one_minus_sqr_es_sin, es_sin) \
 	(_one_minus_es2 * ((slat) / (one_minus_sqr_es_sin) - \
@@ -128,9 +124,9 @@ PointD AlbersEqual::ll2xy(const Coordinates &c) const
 
 	dlam = deg2rad(c.lon()) - _longitudeOrigin;
 	if (dlam > M_PI)
-		dlam -= 2.0 * M_PI;
+		dlam -= M_2_PI;
 	if (dlam < -M_PI)
-		dlam += 2.0 * M_PI;
+		dlam += M_2_PI;
 
 	sin_lat = sin(deg2rad(c.lat()));
 	es_sin = _es * sin_lat;
@@ -216,9 +212,9 @@ Coordinates AlbersEqual::xy2ll(const PointD &p) const
 	lon = _longitudeOrigin + theta / _n;
 
 	if (lon > M_PI)
-		lon -= M_PI * 2;
+		lon -= M_2_PI;
 	if (lon < -M_PI)
-		lon += M_PI * 2;
+		lon += M_2_PI;
 
 	if (lon > M_PI)
 		lon = M_PI;

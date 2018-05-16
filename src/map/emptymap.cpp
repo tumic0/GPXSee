@@ -12,12 +12,12 @@
 
 static QPointF ll2m(const Coordinates &c)
 {
-	return QPointF(c.lon(), rad2deg(log(tan(M_PI/4.0 + deg2rad(c.lat())/2.0))));
+	return QPointF(c.lon(), rad2deg(log(tan(M_PI_4 + deg2rad(c.lat())/2.0))));
 }
 
 static Coordinates m2ll(const QPointF &p)
 {
-	return Coordinates(p.x(), rad2deg(2 * atan(exp(deg2rad(p.y()))) - M_PI/2));
+	return Coordinates(p.x(), rad2deg(2.0 * atan(exp(deg2rad(p.y()))) - M_PI_2));
 }
 
 static qreal zoom2scale(int zoom)
@@ -85,8 +85,9 @@ int EmptyMap::zoomOut()
 	return _zoom;
 }
 
-void EmptyMap::draw(QPainter *painter, const QRectF &rect)
+void EmptyMap::draw(QPainter *painter, const QRectF &rect, bool block)
 {
+	Q_UNUSED(block);
 	painter->fillRect(rect, _backgroundColor);
 }
 

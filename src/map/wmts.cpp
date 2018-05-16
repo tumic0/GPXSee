@@ -12,8 +12,6 @@
 #include "wmts.h"
 
 
-Downloader *WMTS::_downloader = 0;
-
 WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader)
 {
 	TileMatrix matrix;
@@ -263,7 +261,7 @@ bool WMTS::parseCapabilities(const QString &path, const Setup &setup)
 		return false;
 	}
 	_projection = CRS::projection(ctx.crs);
-	if (_projection.isNull()) {
+	if (!_projection.isValid()) {
 		_errorString = ctx.crs + ": unknown CRS";
 		return false;
 	}
@@ -282,13 +280,14 @@ bool WMTS::parseCapabilities(const QString &path, const Setup &setup)
 bool WMTS::getCapabilities(const QString &url, const QString &file,
   const Authorization &authorization)
 {
+	Downloader d;
 	QList<Download> dl;
 
 	dl.append(Download(url, file));
 
 	QEventLoop wait;
-	QObject::connect(_downloader, SIGNAL(finished()), &wait, SLOT(quit()));
-	if (_downloader->get(dl, authorization))
+	QObject::connect(&d, SIGNAL(finished()), &wait, SLOT(quit()));
+	if (d.get(dl, authorization))
 		wait.exec();
 
 	if (QFileInfo(file).exists())

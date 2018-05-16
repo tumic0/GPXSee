@@ -42,9 +42,9 @@ ExportDialog::ExportDialog(Export *exp, QWidget *parent)
 		_paperSize->setCurrentIndex(index);
 
 	_resolution = new QComboBox();
+	_resolution->addItem("150 DPI", 150);
 	_resolution->addItem("300 DPI", 300);
 	_resolution->addItem("600 DPI", 600);
-	_resolution->addItem("1200 DPI", 1200);
 	if ((index = _resolution->findData(_export->resolution)) >= 0)
 		_resolution->setCurrentIndex(index);
 

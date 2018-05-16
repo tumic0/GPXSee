@@ -3,10 +3,8 @@
 #include <QLocale>
 #include <QFileOpenEvent>
 #include <QNetworkProxyFactory>
+#include <QNetworkAccessManager>
 #include <QLibraryInfo>
-#include "map/wmts.h"
-#include "map/wms.h"
-#include "map/tileloader.h"
 #include "map/downloader.h"
 #include "map/ellipsoid.h"
 #include "map/gcs.h"
@@ -38,10 +36,7 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 #endif // Q_OS_MAC
 
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
-	Downloader *dl = new Downloader(this);
-	TileLoader::setDownloader(dl);
-	WMTS::setDownloader(dl);
-	WMS::setDownloader(dl);
+	Downloader::setNetworkAccessManager(new QNetworkAccessManager(this));
 	OPENGL_SET_SAMPLES(4);
 	loadDatums();
 	loadPCSs();

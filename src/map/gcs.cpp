@@ -33,6 +33,18 @@ static int parameter(const QString &str, bool *res)
 	return field.toInt(res);
 }
 
+static double parameterd(const QString &str, bool *res)
+{
+	QString field = str.trimmed();
+	if (field.isEmpty()) {
+		*res = true;
+		return NAN;
+	}
+
+	return field.toDouble(res);
+}
+
+
 QList<GCS::Entry> GCS::_gcss = WGS84();
 
 QList<GCS::Entry> GCS::WGS84()
@@ -91,7 +103,7 @@ void GCS::loadList(const QString &path)
 
 		QByteArray line = file.readLine();
 		QList<QByteArray> list = line.split(',');
-		if (list.size() < 10) {
+		if (list.size() != 14) {
 			qWarning("%s:%d: Format error", qPrintable(path), ln);
 			continue;
 		}
@@ -145,6 +157,26 @@ void GCS::loadList(const QString &path)
 			qWarning("%s:%d: Invalid dz", qPrintable(path), ln);
 			continue;
 		}
+		double rx = parameterd(list[10], &res);
+		if (!res) {
+			qWarning("%s:%d: Invalid rx", qPrintable(path), ln);
+			continue;
+		}
+		double ry = parameterd(list[11], &res);
+		if (!res) {
+			qWarning("%s:%d: Invalid ry", qPrintable(path), ln);
+			continue;
+		}
+		double rz = parameterd(list[12], &res);
+		if (!res) {
+			qWarning("%s:%d: Invalid rz", qPrintable(path), ln);
+			continue;
+		}
+		double ds = parameterd(list[13], &res);
+		if (!res) {
+			qWarning("%s:%d: Invalid ds", qPrintable(path), ln);
+			continue;
+		}
 
 		if (!(e = Ellipsoid::ellipsoid(el))) {
 			qWarning("%s:%d: Unknown ellipsoid code", qPrintable(path), ln);
@@ -156,10 +188,21 @@ void GCS::loadList(const QString &path)
 			case 9603:
 				datum = Datum(e, dx, dy, dz);
 				break;
+			case 9606:
+				datum = Datum(e, dx, dy, dz, -rx, -ry, -rz, ds);
+				break;
+			case 9607:
+				datum = Datum(e, dx, dy, dz, rx, ry, rz, ds);
+				break;
 			default:
 				qWarning("%s:%d: Unknown coordinates transformation method",
 				  qPrintable(path), ln);
 				continue;
+		}
+		if (!datum.isValid()) {
+			qWarning("%s:%d: Invalid coordinates transformation parameters",
+			  qPrintable(path), ln);
+			continue;
 		}
 
 		GCS gcs(datum, pm, au);

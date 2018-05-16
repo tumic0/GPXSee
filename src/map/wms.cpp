@@ -7,8 +7,6 @@
 #include "wms.h"
 
 
-Downloader *WMS::_downloader = 0;
-
 WMS::CTX::CTX(const Setup &setup) : setup(setup), formatSupported(false)
 {
 	QStringList ll = setup.layer().split(',');
@@ -229,7 +227,7 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 	}
 
 	_projection = CRS::projection(ctx.setup.crs());
-	if (_projection.isNull()) {
+	if (!_projection.isValid()) {
 		_errorString = ctx.setup.crs() + ": unknown CRS";
 		return false;
 	}
@@ -256,13 +254,14 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 bool WMS::getCapabilities(const QString &url, const QString &file,
   const Authorization &authorization)
 {
+	Downloader d;
 	QList<Download> dl;
 
 	dl.append(Download(url, file));
 
 	QEventLoop wait;
-	QObject::connect(_downloader, SIGNAL(finished()), &wait, SLOT(quit()));
-	if (_downloader->get(dl, authorization))
+	QObject::connect(&d, SIGNAL(finished()), &wait, SLOT(quit()));
+	if (d.get(dl, authorization))
 		wait.exec();
 
 	if (QFileInfo(file).exists())

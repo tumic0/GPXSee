@@ -12,7 +12,8 @@ class OnlineMap : public Map
 
 public:
 	OnlineMap(const QString &name, const QString &url, const Range &zooms,
-	  const RectC &bounds, QObject *parent = 0);
+	  const RectC &bounds, const Authorization &authorization,
+	  QObject *parent = 0);
 
 	const QString &name() const {return _name;}
 
@@ -20,6 +21,7 @@ public:
 	qreal resolution(const QRectF &rect) const;
 
 	int zoom() const {return _zoom;}
+	void setZoom(int zoom) {_zoom = zoom;}
 	int zoomFit(const QSize &size, const RectC &rect);
 	int zoomIn();
 	int zoomOut();
@@ -29,31 +31,23 @@ public:
 	Coordinates xy2ll(const QPointF &p)
 		{return static_cast<const OnlineMap &>(*this).xy2ll(p);}
 
-	void draw(QPainter *painter, const QRectF &rect);
+	void draw(QPainter *painter, const QRectF &rect, bool block);
 
-	void setBlockingMode(bool block) {_block = block;}
-	void clearCache() {_tileLoader.clearCache();}
-
-	void load();
-	void unload();
+	void clearCache() {_tileLoader->clearCache();}
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
-
-private slots:
-	void emitLoaded();
 
 private:
 	QPointF ll2xy(const Coordinates &c) const;
 	Coordinates xy2ll(const QPointF &p) const;
 	int limitZoom(int zoom) const;
 
-	TileLoader _tileLoader;
+	TileLoader *_tileLoader;
 	QString _name;
 	Range _zooms;
 	RectC _bounds;
 	int _zoom;
-	bool _block;
 
 	bool _valid;
 	QString _errorString;

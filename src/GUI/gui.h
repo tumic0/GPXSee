@@ -20,6 +20,7 @@ class QTabWidget;
 class QActionGroup;
 class QAction;
 class QLabel;
+class QSplitter;
 class QSignalMapper;
 class QPrinter;
 class FileBrowser;
@@ -109,8 +110,8 @@ private:
 	void updateStatusBarInfo();
 	void updateWindowTitle();
 	void updateNavigationActions();
-	void updateGraphTabs();
-	void updateMapView();
+	bool updateGraphTabs();
+	bool updateMapView();
 
 	TimeType timeType() const;
 	Units units() const;
@@ -196,6 +197,7 @@ private:
 	QLabel *_distanceLabel;
 	QLabel *_timeLabel;
 
+	QSplitter *_splitter;
 	MapView *_mapView;
 	QTabWidget *_graphTabWidget;
 	QList<GraphTab*> _tabs;

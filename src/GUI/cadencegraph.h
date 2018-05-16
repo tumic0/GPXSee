@@ -11,7 +11,7 @@ public:
 	CadenceGraph(QWidget *parent = 0);
 
 	QString label() const {return tr("Cadence");}
-	void loadData(const Data &data, const QList<PathItem *> &paths);
+	QList<GraphItem*> loadData(const Data &data);
 	void clear();
 	void showTracks(bool show);
 	void showRoutes(bool show) {Q_UNUSED(show);}

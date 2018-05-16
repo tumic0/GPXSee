@@ -1,5 +1,6 @@
 #include "datum.h"
 #include "mercator.h"
+#include "webmercator.h"
 #include "transversemercator.h"
 #include "lambertconic.h"
 #include "albersequal.h"
@@ -16,11 +17,11 @@ Projection::Method::Method(int id)
 		case 1024:
 		case 9801:
 		case 9802:
+		case 9804:
 		case 9807:
 		case 9815:
 		case 9820:
 		case 9822:
-		case 9841:
 			_id = id;
 			break;
 		default:
@@ -36,8 +37,7 @@ Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
 
 	switch (pcs->method().id()) {
 		case 1024:
-		case 9841:
-			_ct = new Mercator();
+			_ct = new WebMercator();
 			break;
 		case 9801:
 		case 9815: // Oblique mercator aproximation using LCC1
@@ -48,6 +48,11 @@ Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
 		case 9802:
 			_ct = new LambertConic2(ellipsoid, setup.standardParallel1(),
 			  setup.standardParallel2(), setup.latitudeOrigin(),
+			  setup.longitudeOrigin(), setup.falseEasting(),
+			  setup.falseNorthing());
+			break;
+		case 9804:
+			_ct = new Mercator(ellipsoid, setup.latitudeOrigin(),
 			  setup.longitudeOrigin(), setup.falseEasting(),
 			  setup.falseNorthing());
 			break;
@@ -105,14 +110,14 @@ Projection &Projection::operator=(const Projection &p)
 
 PointD Projection::ll2xy(const Coordinates &c) const
 {
-	return isValid()
-	  ? _units.fromMeters(_ct->ll2xy(_gcs->fromWGS84(c))) : PointD();
+	Q_ASSERT(isValid());
+	return _units.fromMeters(_ct->ll2xy(_gcs->fromWGS84(c)));
 }
 
 Coordinates Projection::xy2ll(const PointD &p) const
 {
-	return isValid()
-	  ? _gcs->toWGS84(_ct->xy2ll(_units.toMeters(p))) : Coordinates();
+	Q_ASSERT(isValid());
+	return _gcs->toWGS84(_ct->xy2ll(_units.toMeters(p)));
 }
 
 #ifndef QT_NO_DEBUG

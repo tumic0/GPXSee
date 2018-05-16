@@ -24,28 +24,33 @@ void PowerGraph::setInfo()
 		clearInfo();
 }
 
-void PowerGraph::loadData(const Data &data, const QList<PathItem *> &paths)
+QList<GraphItem*> PowerGraph::loadData(const Data &data)
 {
+	QList<GraphItem*> graphs;
+
 	for (int i = 0; i < data.tracks().count(); i++) {
 		const Graph &graph = data.tracks().at(i)->power();
 
 		if (graph.size() < 2) {
 			skipColor();
-			continue;
+			graphs.append(0);
+		} else {
+			PowerGraphItem *gi = new PowerGraphItem(graph, _graphType);
+			GraphView::addGraph(gi);
+			_avg.append(QPointF(data.tracks().at(i)->distance(), gi->avg()));
+			graphs.append(gi);
 		}
-
-		PowerGraphItem *gi = new PowerGraphItem(graph, _graphType);
-		GraphView::addGraph(gi, paths.at(i));
-
-		_avg.append(QPointF(data.tracks().at(i)->distance(), gi->avg()));
 	}
 
-	for (int i = 0; i < data.routes().count(); i++)
+	for (int i = 0; i < data.routes().count(); i++) {
 		skipColor();
+		graphs.append(0);
+	}
 
 	setInfo();
-
 	redraw();
+
+	return graphs;
 }
 
 qreal PowerGraph::avg() const

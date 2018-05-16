@@ -11,7 +11,7 @@ public:
 	ElevationGraph(QWidget *parent = 0);
 
 	QString label() const {return tr("Elevation");}
-	void loadData(const Data &data, const QList<PathItem *> &paths);
+	QList<GraphItem*> loadData(const Data &data);
 	void clear();
 	void setUnits(enum Units units);
 	void showTracks(bool show);
@@ -28,7 +28,7 @@ private:
 	void setYUnits(Units units);
 	void setInfo();
 
-	void loadGraph(const Graph &graph, Type type, PathItem *path);
+	GraphItem *loadGraph(const Graph &graph, Type type);
 
 	qreal _trackAscent, _trackDescent;
 	qreal _routeAscent, _routeDescent;

@@ -1,5 +1,5 @@
 TARGET = GPXSee
-VERSION = 5.9
+VERSION = 5.11
 QT += core \
     gui \
     network
@@ -69,7 +69,7 @@ HEADERS += src/config.h \
     src/map/projection.h \
     src/map/ellipsoid.h \
     src/map/datum.h \
-    src/map/mercator.h \
+    src/map/webmercator.h \
     src/map/transversemercator.h \
     src/map/latlon.h \
     src/map/utm.h \
@@ -125,7 +125,10 @@ HEADERS += src/config.h \
     src/data/fitparser.h \
     src/data/igcparser.h \
     src/data/nmeaparser.h \
-    src/data/oziparsers.h
+    src/data/oziparsers.h \
+    src/map/rectd.h \
+    src/map/geocentric.h \
+    src/map/mercator.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -183,7 +186,7 @@ SOURCES += src/main.cpp \
     src/map/matrix.cpp \
     src/map/ellipsoid.cpp \
     src/map/datum.cpp \
-    src/map/mercator.cpp \
+    src/map/webmercator.cpp \
     src/map/transversemercator.cpp \
     src/map/utm.cpp \
     src/map/lambertconic.cpp \
@@ -219,7 +222,9 @@ SOURCES += src/main.cpp \
     src/data/fitparser.cpp \
     src/data/igcparser.cpp \
     src/data/nmeaparser.cpp \
-    src/data/oziparsers.cpp
+    src/data/oziparsers.cpp \
+    src/map/geocentric.cpp \
+    src/map/mercator.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \
@@ -266,5 +271,6 @@ win32 {
         icons/plt.ico \
         icons/rte.ico \
         icons/wpt.ico
+    DEFINES += _USE_MATH_DEFINES
 }
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"

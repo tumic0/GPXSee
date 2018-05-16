@@ -7,6 +7,9 @@ CoordinateSystem::CoordinateSystem(int code)
 		case 1035:
 		case 1039:
 		case 4400:
+		case 4402:
+		case 4404:
+		case 4405:
 		case 4409:
 		case 4463:
 		case 4464:

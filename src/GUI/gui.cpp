@@ -25,6 +25,7 @@
 #include "data/data.h"
 #include "map/maplist.h"
 #include "map/emptymap.h"
+#include "map/downloader.h"
 #include "config.h"
 #include "icons.h"
 #include "keys.h"
@@ -40,6 +41,8 @@
 #include "filebrowser.h"
 #include "cpuarch.h"
 #include "graphtab.h"
+#include "graphitem.h"
+#include "pathitem.h"
 #include "gui.h"
 
 
@@ -57,15 +60,15 @@ GUI::GUI()
 
 	createBrowser();
 
-	QSplitter *splitter = new QSplitter();
-	splitter->setOrientation(Qt::Vertical);
-	splitter->setChildrenCollapsible(false);
-	splitter->addWidget(_mapView);
-	splitter->addWidget(_graphTabWidget);
-	splitter->setContentsMargins(0, 0, 0, 0);
-	splitter->setStretchFactor(0, 255);
-	splitter->setStretchFactor(1, 1);
-	setCentralWidget(splitter);
+	_splitter = new QSplitter();
+	_splitter->setOrientation(Qt::Vertical);
+	_splitter->setChildrenCollapsible(false);
+	_splitter->addWidget(_mapView);
+	_splitter->addWidget(_graphTabWidget);
+	_splitter->setContentsMargins(0, 0, 0, 0);
+	_splitter->setStretchFactor(0, 255);
+	_splitter->setStretchFactor(1, 1);
+	setCentralWidget(_splitter);
 
 	setWindowIcon(QIcon(QPixmap(APP_ICON)));
 	setWindowTitle(APP_NAME);
@@ -687,8 +690,6 @@ bool GUI::openFile(const QString &fileName)
 		updateNavigationActions();
 		updateStatusBarInfo();
 		updateWindowTitle();
-		updateGraphTabs();
-		updateMapView();
 
 		return true;
 	} else {
@@ -702,13 +703,10 @@ bool GUI::openFile(const QString &fileName)
 bool GUI::loadFile(const QString &fileName)
 {
 	Data data;
+	QList<QList<GraphItem*> > graphs;
 	QList<PathItem*> paths;
 
 	if (data.loadFile(fileName)) {
-		paths = _mapView->loadData(data);
-		for (int i = 0; i < _tabs.count(); i++)
-			_tabs.at(i)->loadData(data, paths);
-
 		for (int i = 0; i < data.tracks().count(); i++) {
 			_trackDistance += data.tracks().at(i)->distance();
 			_time += data.tracks().at(i)->time();
@@ -734,6 +732,25 @@ bool GUI::loadFile(const QString &fileName)
 				_pathName = data.routes().first()->name();
 		} else
 			_pathName = QString();
+
+		for (int i = 0; i < _tabs.count(); i++)
+			graphs.append(_tabs.at(i)->loadData(data));
+		if (updateGraphTabs() | updateMapView())
+			_splitter->refresh();
+		paths = _mapView->loadData(data);
+
+		for (int i = 0; i < paths.count(); i++) {
+			const PathItem *pi = paths.at(i);
+			for (int j = 0; j < graphs.count(); j++) {
+				const GraphItem *gi = graphs.at(j).at(i);
+				if (!gi)
+					continue;
+				connect(gi, SIGNAL(sliderPositionChanged(qreal)), pi,
+				  SLOT(moveMarker(qreal)));
+				connect(pi, SIGNAL(selected(bool)), gi, SLOT(hover(bool)));
+				connect(gi, SIGNAL(selected(bool)), pi, SLOT(hover(bool)));
+			}
+		}
 
 		return true;
 	} else {
@@ -855,6 +872,8 @@ void GUI::openOptions()
 		_poi->setRadius(options.poiRadius);
 	if (options.pixmapCache != _options.pixmapCache)
 		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
+	if (options.connectionTimeout != _options.connectionTimeout)
+		Downloader::setTimeout(options.connectionTimeout);
 
 	if (reload)
 		reloadFile();
@@ -1007,8 +1026,6 @@ void GUI::reloadFile()
 
 	updateStatusBarInfo();
 	updateWindowTitle();
-	updateGraphTabs();
-	updateMapView();
 	if (_files.isEmpty())
 		_fileActionGroup->setEnabled(false);
 	else
@@ -1273,10 +1290,11 @@ void GUI::updateNavigationActions()
 	}
 }
 
-void GUI::updateGraphTabs()
+bool GUI::updateGraphTabs()
 {
 	int index;
 	GraphTab *tab;
+	bool hidden = _graphTabWidget->isHidden();
 
 	for (int i = 0; i < _tabs.size(); i++) {
 		tab = _tabs.at(i);
@@ -1300,14 +1318,20 @@ void GUI::updateGraphTabs()
 		_graphTabWidget->setHidden(true);
 		_showGraphsAction->setEnabled(false);
 	}
+
+	return (hidden != _graphTabWidget->isHidden());
 }
 
-void GUI::updateMapView()
+bool GUI::updateMapView()
 {
+	bool hidden = _mapView->isHidden();
+
 	if (_options.alwaysShowMap)
 		_mapView->setHidden(false);
 	else
 		_mapView->setHidden(!(_trackCount + _routeCount + _waypointCount));
+
+	return (hidden != _mapView->isHidden());
 }
 
 void GUI::setTimeType(TimeType type)
@@ -1620,6 +1644,8 @@ void GUI::writeSettings()
 		settings.setValue(USE_OPENGL_SETTING, _options.useOpenGL);
 	if (_options.pixmapCache != PIXMAP_CACHE_DEFAULT)
 		settings.setValue(PIXMAP_CACHE_SETTING, _options.pixmapCache);
+	if (_options.connectionTimeout != CONNECTION_TIMEOUT_DEFAULT)
+		settings.setValue(CONNECTION_TIMEOUT_SETTING, _options.connectionTimeout);
 	if (_options.hiresPrint != HIRES_PRINT_DEFAULT)
 		settings.setValue(HIRES_PRINT_SETTING, _options.hiresPrint);
 	if (_options.printName != PRINT_NAME_DEFAULT)
@@ -1848,6 +1874,8 @@ void GUI::readSettings()
 	  .toBool();
 	_options.pixmapCache = settings.value(PIXMAP_CACHE_SETTING,
 	  PIXMAP_CACHE_DEFAULT).toInt();
+	_options.connectionTimeout = settings.value(CONNECTION_TIMEOUT_SETTING,
+	  CONNECTION_TIMEOUT_DEFAULT).toInt();
 	_options.hiresPrint = settings.value(HIRES_PRINT_SETTING,
 	  HIRES_PRINT_DEFAULT).toBool();
 	_options.printName = settings.value(PRINT_NAME_SETTING, PRINT_NAME_DEFAULT)
@@ -1907,6 +1935,7 @@ void GUI::readSettings()
 	_poi->setRadius(_options.poiRadius);
 
 	QPixmapCache::setCacheLimit(_options.pixmapCache * 1024);
+	Downloader::setTimeout(_options.connectionTimeout);
 
 	settings.endGroup();
 }

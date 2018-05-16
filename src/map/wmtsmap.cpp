@@ -3,7 +3,7 @@
 #include "common/wgs84.h"
 #include "config.h"
 #include "transform.h"
-#include "downloader.h"
+#include "tileloader.h"
 #include "wmts.h"
 #include "wmtsmap.h"
 
@@ -23,8 +23,7 @@ bool WMTSMap::loadWMTS()
 	_bounds = wmts.bounds();
 	_zooms = wmts.zooms();
 	_projection = wmts.projection();
-	_tileLoader = TileLoader(wmts.tileUrl(), tilesDir(),
-	  _setup.authorization());
+	_tileLoader->setUrl(wmts.tileUrl());
 
 	if (_setup.coordinateSystem().axisOrder() == CoordinateSystem::Unknown)
 		_cs = _projection.coordinateSystem();
@@ -37,20 +36,24 @@ bool WMTSMap::loadWMTS()
 }
 
 WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent)
-  : Map(parent), _name(name), _setup(setup), _zoom(0), _block(false),
-  _valid(false)
+  : Map(parent), _name(name), _setup(setup), _zoom(0), _valid(false)
 {
 	if (!QDir().mkpath(tilesDir())) {
 		_errorString = "Error creating tiles dir";
 		return;
 	}
 
+	_tileLoader = new TileLoader(this);
+	_tileLoader->setDir(tilesDir());
+	_tileLoader->setAuthorization(_setup.authorization());
+	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(loaded()));
+
 	_valid = loadWMTS();
 }
 
 void WMTSMap::clearCache()
 {
-	_tileLoader.clearCache();
+	_tileLoader->clearCache();
 	_zoom = 0;
 
 	if (!loadWMTS())
@@ -85,23 +88,6 @@ void WMTSMap::updateTransform()
 	ReferencePoint br(PointD(z.tile().width() * z.matrix().width(),
 	  z.tile().height() * z.matrix().height()), bottomRight);
 	_transform = Transform(tl, br);
-}
-
-void WMTSMap::load()
-{
-	connect(TileLoader::downloader(), SIGNAL(finished()), this,
-	  SLOT(emitLoaded()));
-}
-
-void WMTSMap::unload()
-{
-	disconnect(TileLoader::downloader(), SIGNAL(finished()), this,
-	  SLOT(emitLoaded()));
-}
-
-void WMTSMap::emitLoaded()
-{
-	emit loaded();
 }
 
 QRectF WMTSMap::bounds() const
@@ -157,6 +143,12 @@ qreal WMTSMap::resolution(const QRectF &rect) const
 	return ds/ps;
 }
 
+void WMTSMap::setZoom(int zoom)
+{
+	_zoom = zoom;
+	updateTransform();
+}
+
 int WMTSMap::zoomIn()
 {
 	_zoom = qMin(_zoom + 1, _zooms.size() - 1);
@@ -171,7 +163,7 @@ int WMTSMap::zoomOut()
 	return _zoom;
 }
 
-void WMTSMap::draw(QPainter *painter, const QRectF &rect)
+void WMTSMap::draw(QPainter *painter, const QRectF &rect, bool block)
 {
 	const WMTS::Zoom &z = _zooms.at(_zoom);
 	QPoint tl = QPoint((int)floor(rect.left() / (qreal)z.tile().width()),
@@ -184,10 +176,10 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect)
 		for (int j = tl.y(); j < br.y(); j++)
 			tiles.append(Tile(QPoint(i, j), z.id()));
 
-	if (_block)
-		_tileLoader.loadTilesSync(tiles);
+	if (block)
+		_tileLoader->loadTilesSync(tiles);
 	else
-		_tileLoader.loadTilesAsync(tiles);
+		_tileLoader->loadTilesAsync(tiles);
 
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];

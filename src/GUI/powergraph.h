@@ -11,7 +11,7 @@ public:
 	PowerGraph(QWidget *parent = 0);
 
 	QString label() const {return tr("Power");}
-	void loadData(const Data &data, const QList<PathItem *> &paths);
+	QList<GraphItem*> loadData(const Data &data);
 	void clear();
 	void showTracks(bool show);
 
