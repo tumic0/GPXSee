@@ -110,14 +110,14 @@ Projection &Projection::operator=(const Projection &p)
 
 PointD Projection::ll2xy(const Coordinates &c) const
 {
-	return isValid()
-	  ? _units.fromMeters(_ct->ll2xy(_gcs->fromWGS84(c))) : PointD();
+	Q_ASSERT(isValid());
+	return _units.fromMeters(_ct->ll2xy(_gcs->fromWGS84(c)));
 }
 
 Coordinates Projection::xy2ll(const PointD &p) const
 {
-	return isValid()
-	  ? _gcs->toWGS84(_ct->xy2ll(_units.toMeters(p))) : Coordinates();
+	Q_ASSERT(isValid());
+	return _gcs->toWGS84(_ct->xy2ll(_units.toMeters(p)));
 }
 
 #ifndef QT_NO_DEBUG

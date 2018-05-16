@@ -261,7 +261,7 @@ bool WMTS::parseCapabilities(const QString &path, const Setup &setup)
 		return false;
 	}
 	_projection = CRS::projection(ctx.crs);
-	if (_projection.isNull()) {
+	if (!_projection.isValid()) {
 		_errorString = ctx.crs + ": unknown CRS";
 		return false;
 	}

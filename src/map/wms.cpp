@@ -227,7 +227,7 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 	}
 
 	_projection = CRS::projection(ctx.setup.crs());
-	if (_projection.isNull()) {
+	if (!_projection.isValid()) {
 		_errorString = ctx.setup.crs() + ": unknown CRS";
 		return false;
 	}

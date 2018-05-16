@@ -12,6 +12,7 @@ public:
 	CoordinateSystem(AxisOrder axisOrder) : _axisOrder(axisOrder) {}
 	CoordinateSystem(int code);
 
+	bool isNull() const {return (_axisOrder == Unknown);}
 	bool isValid() const {return (_axisOrder != Unknown);}
 
 	AxisOrder axisOrder() const {return _axisOrder;}

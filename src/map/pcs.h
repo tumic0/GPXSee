@@ -25,10 +25,11 @@ public:
 	const CoordinateSystem &coordinateSystem() const {return _cs;}
 
 	bool isNull() const
-	  {return (_gcs->isNull() && _units.isNull() && _method.isNull()
-		&& _setup.isNull());}
+	  {return (!_gcs && _units.isNull() && _method.isNull() && _setup.isNull()
+	  && _cs.isNull());}
 	bool isValid() const
-	  {return (_gcs->isValid() && _units.isValid() && _method.isValid());}
+	  {return (_gcs && _gcs->isValid() && _units.isValid()
+	  && _method.isValid() && _cs.isValid());}
 
 	static void loadList(const QString &path);
 	static const PCS *pcs(int id);
