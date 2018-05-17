@@ -198,7 +198,7 @@ LambertConic2::LambertConic2(const Ellipsoid *ellipsoid,
   double standardParallel1, double standardParallel2, double latitudeOrigin,
   double longitudeOrigin, double falseEasting, double falseNorthing)
 {
-	double es, es_over_2, es2, es_sin;
+	double e, e_over_2, e_sin;
 	double lat0;
 	double k0;
 	double t0;
@@ -218,29 +218,27 @@ LambertConic2::LambertConic2(const Ellipsoid *ellipsoid,
 	sp2 = deg2rad(standardParallel2);
 
 	if (fabs(sp1 - sp2) > 1.0e-10) {
-		es2 = 2 * ellipsoid->flattening() - ellipsoid->flattening()
-		  * ellipsoid->flattening();
-		es = sqrt(es2);
-		es_over_2 = es / 2.0;
+		e = sqrt(ellipsoid->es());
+		e_over_2 = e / 2.0;
 
-		es_sin = es * sin(lat_orig);
-		t_olat = LAMBERT2_t(lat_orig, es_sin, es_over_2);
+		e_sin = e * sin(lat_orig);
+		t_olat = LAMBERT2_t(lat_orig, e_sin, e_over_2);
 
-		es_sin = es * sin(sp1);
-		m1 = LAMBERT_m(cos(sp1), es_sin);
-		t1 = LAMBERT2_t(sp1, es_sin, es_over_2);
+		e_sin = e * sin(sp1);
+		m1 = LAMBERT_m(cos(sp1), e_sin);
+		t1 = LAMBERT2_t(sp1, e_sin, e_over_2);
 
-		es_sin = es * sin(sp2);
-		m2 = LAMBERT_m(cos(sp2), es_sin);
-		t2 = LAMBERT2_t(sp2, es_sin, es_over_2);
+		e_sin = e * sin(sp2);
+		m2 = LAMBERT_m(cos(sp2), e_sin);
+		t2 = LAMBERT2_t(sp2, e_sin, e_over_2);
 
 		n = log(m1 / m2) / log(t1 / t2);
 
 		lat0 = asin(n);
 
-		es_sin = es * sin(lat0);
-		m0 = LAMBERT_m(cos(lat0), es_sin);
-		t0 = LAMBERT2_t(lat0, es_sin, es_over_2);
+		e_sin = e * sin(lat0);
+		m0 = LAMBERT_m(cos(lat0), e_sin);
+		t0 = LAMBERT2_t(lat0, e_sin, e_over_2);
 
 		k0 = (m1 / m0) * (pow(t0 / t1, n));
 
