@@ -7,6 +7,9 @@
 
 InfoItem::InfoItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
+	_font.setPixelSize(FONT_SIZE);
+	_font.setFamily(FONT_FAMILY);
+
 #ifndef Q_OS_MAC
 	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 #endif // Q_OS_MAC
@@ -14,16 +17,14 @@ InfoItem::InfoItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 
 void InfoItem::updateBoundingRect()
 {
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	font.setFamily(FONT_FAMILY);
-	QFontMetrics fm(font);
-	QList<KV>::const_iterator i;
+	QFontMetrics fm(_font);
 	qreal width = 0;
 
-	for (i = _list.constBegin(); i != _list.constEnd(); i++) {
+	for (QList<KV>::const_iterator i = _list.constBegin();
+	  i != _list.constEnd(); i++) {
 		width += fm.width(i->key + ": ");
-		width += fm.width(i->value) + ((i == _list.constEnd() - 1) ? 0 : PADDING);
+		width += fm.width(i->value) + ((i == _list.constEnd() - 1)
+		  ? 0 : PADDING);
 	}
 
 	_boundingRect = QRectF(0, 0, width, _list.isEmpty() ? 0 : fm.height());
@@ -34,22 +35,19 @@ void InfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 {
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	font.setFamily(FONT_FAMILY);
-	painter->setFont(font);
-	QFontMetrics fm(font);
-	QList<KV>::const_iterator i;
+	QFontMetrics fm(_font);
 	int width = 0;
 
-
+	painter->setFont(_font);
 	painter->setRenderHint(QPainter::Antialiasing, false);
 
-	for (i = _list.constBegin(); i != _list.constEnd(); i++) {
+	for (QList<KV>::const_iterator i = _list.constBegin();
+	  i != _list.constEnd(); i++) {
 		painter->drawText(width, fm.height() - fm.descent(), i->key + ": ");
 		width += fm.width(i->key + ": ");
 		painter->drawText(width, fm.height() - fm.descent(), i->value);
-		width += fm.width(i->value) + ((i == _list.constEnd() - 1) ? 0 : PADDING);
+		width += fm.width(i->value) + ((i == _list.constEnd() - 1)
+		  ? 0 : PADDING);
 		if (i != _list.constEnd() - 1) {
 			painter->save();
 			painter->setPen(Qt::gray);

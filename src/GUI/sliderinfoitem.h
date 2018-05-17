@@ -25,6 +25,7 @@ private:
 	QString _x, _y;
 	QRectF _boundingRect;
 	QColor _color;
+	QFont _font;
 };
 
 #endif // SLIDERINFOITEM_H

@@ -33,6 +33,7 @@ private:
 
 	QList<KV> _list;
 	QRectF _boundingRect;
+	QFont _font;
 };
 
 #endif // INFOITEM_H

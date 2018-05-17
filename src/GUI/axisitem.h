@@ -30,6 +30,7 @@ private:
 	qreal _size;
 	QString _label;
 	QRectF _boundingRect;
+	QFont _font;
 };
 
 #endif // AXISITEM_H

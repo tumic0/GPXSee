@@ -27,10 +27,9 @@ private:
 	qreal _length;
 	Units _units;
 	bool _scale;
-
 	qreal _digitalZoom;
-
 	QRectF _boundingRect;
+	QFont _font;
 };
 
 #endif // SCALEITEM_H

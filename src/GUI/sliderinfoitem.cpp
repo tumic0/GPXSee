@@ -9,14 +9,14 @@ SliderInfoItem::SliderInfoItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
 	_side = Right;
 	_color = Qt::red;
+
+	_font.setPixelSize(FONT_SIZE);
+	_font.setFamily(FONT_FAMILY);
 }
 
 void SliderInfoItem::updateBoundingRect()
 {
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	font.setFamily(FONT_FAMILY);
-	QFontMetrics fm(font);
+	QFontMetrics fm(_font);
 
 	qreal width = qMax(fm.width(_x), fm.width(_y));
 	qreal height = 2 * fm.height() - 2*fm.descent();
@@ -31,10 +31,7 @@ void SliderInfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 {
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	font.setFamily(FONT_FAMILY);
-	QFontMetrics fm(font);
+	QFontMetrics fm(_font);
 	QRectF rx, ry;
 
 
@@ -57,7 +54,7 @@ void SliderInfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 	painter->drawRect(rx);
 	painter->setBrush(Qt::NoBrush);
 
-	painter->setFont(font);
+	painter->setFont(_font);
 	painter->setRenderHint(QPainter::Antialiasing, false);
 	painter->setPen(_color);
 

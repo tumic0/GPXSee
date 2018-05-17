@@ -36,6 +36,9 @@ AxisItem::AxisItem(Type type, QGraphicsItem *parent) : QGraphicsItem(parent)
 	_type = type;
 	_size = 0;
 
+	_font.setPixelSize(FONT_SIZE);
+	_font.setFamily(FONT_FAMILY);
+
 #ifndef Q_OS_MAC
 	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 #endif // Q_OS_MAC
@@ -67,10 +70,7 @@ void AxisItem::setLabel(const QString& label)
 
 void AxisItem::updateBoundingRect()
 {
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	font.setFamily(FONT_FAMILY);
-	QFontMetrics fm(font);
+	QFontMetrics fm(_font);
 	QRect ss, es, ls;
 	struct Label l;
 
@@ -107,29 +107,22 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 {
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	font.setFamily(FONT_FAMILY);
-	QFontMetrics fm(font);
-	QRect ts, ls;
-	struct Label l;
+	QFontMetrics fm(_font);
+	QRect ls(fm.tightBoundingRect(_label));
 	qreal range = _range.size();
-	qreal val;
-	QPen pen = QPen(Qt::black, AXIS_WIDTH);
+	QRect ts;
 
 
 	painter->setRenderHint(QPainter::Antialiasing, false);
-	painter->setFont(font);
-	painter->setPen(pen);
-
-	ls = fm.tightBoundingRect(_label);
+	painter->setFont(_font);
+	painter->setPen(QPen(Qt::black, AXIS_WIDTH));
 
 	if (_type == X) {
 		painter->drawLine(0, 0, _size, 0);
 
-		l = label(_range.min(), _range.max(), XTICKS);
+		Label l = label(_range.min(), _range.max(), XTICKS);
 		for (int i = 0; i < ((l.max - l.min) / l.d) + 1; i++) {
-			val = l.min + i * l.d;
+			qreal val = l.min + i * l.d;
 			QString str = QString::number(val);
 
 			painter->drawLine((_size/range) * (val - _range.min()), TICK/2,
@@ -144,10 +137,10 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	} else {
 		painter->drawLine(0, 0, 0, -_size);
 
-		l = label(_range.min(), _range.max(), YTICKS);
+		Label l = label(_range.min(), _range.max(), YTICKS);
 		int mtw = 0;
 		for (int i = 0; i < ((l.max - l.min) / l.d) + 1; i++) {
-			val = l.min + i * l.d;
+			qreal val = l.min + i * l.d;
 			QString str = QString::number(val);
 
 			painter->drawLine(TICK/2, -((_size/range) * (val - _range.min())),

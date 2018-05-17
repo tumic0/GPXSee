@@ -18,6 +18,9 @@ ScaleItem::ScaleItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 	_res = 1.0;
 	_digitalZoom = 0;
 
+	_font.setPixelSize(FONT_SIZE);
+	_font.setFamily(FONT_FAMILY);
+
 #ifndef Q_OS_MAC
 	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 #endif // Q_OS_MAC
@@ -25,10 +28,7 @@ ScaleItem::ScaleItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 
 void ScaleItem::updateBoundingRect()
 {
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	font.setFamily(FONT_FAMILY);
-	QFontMetrics fm(font);
+	QFontMetrics fm(_font);
 	QRect ss, es, us;
 
 	ss = fm.tightBoundingRect(QString::number(0));
@@ -45,17 +45,13 @@ void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 {
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	font.setFamily(FONT_FAMILY);
-	QFontMetrics fm(font);
+	QFontMetrics fm(_font);
 	QRect br;
-	QPen pen = QPen(Qt::black, BORDER_WIDTH);
 
 
 	painter->setRenderHint(QPainter::Antialiasing, false);
-	painter->setFont(font);
-	painter->setPen(pen);
+	painter->setFont(_font);
+	painter->setPen(QPen(Qt::black, BORDER_WIDTH));
 
 	for (int i = 0; i <= SEGMENTS; i++) {
 		QString label = QString::number(_length * i);
