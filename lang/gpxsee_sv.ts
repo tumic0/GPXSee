@@ -1272,7 +1272,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="442"/>
         <source>Connection timeout:</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningens tidsgräns:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="455"/>
