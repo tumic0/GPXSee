@@ -20,7 +20,7 @@ private:
 	double _lon0;
 	double _falseNorthing;
 	double _falseEasting;
-	double _a, _es, _es2, _qP, _beta0, _Rq, _D;
+	double _a, _e, _es, _qP, _beta0, _Rq, _D;
 };
 
 #endif // LAMBERTAZIMUTHAL_H

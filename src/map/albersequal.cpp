@@ -46,11 +46,11 @@ Defense.
 
 
 #define ONE_MINUS_SQR(x) (1.0 - (x) * (x))
-#define ALBERS_Q(slat, one_minus_sqr_es_sin, es_sin) \
-	(_one_minus_es2 * ((slat) / (one_minus_sqr_es_sin) - \
-	(1 / (_two_es)) * log((1 - (es_sin)) / (1 + (es_sin)))))
-#define ALBERS_M(clat, one_minus_sqr_es_sin) \
-	((clat) / sqrt(one_minus_sqr_es_sin))
+#define ALBERS_Q(slat, one_minus_sqr_e_sin, es_sin) \
+	(_one_minus_es * ((slat) / (one_minus_sqr_e_sin) - \
+	(1 / (_two_e)) * log((1 - (es_sin)) / (1 + (es_sin)))))
+#define ALBERS_M(clat, one_minus_sqr_e_sin) \
+	((clat) / sqrt(one_minus_sqr_e_sin))
 
 
 AlbersEqual::AlbersEqual(const Ellipsoid *ellipsoid, double standardParallel1,
@@ -60,8 +60,8 @@ AlbersEqual::AlbersEqual(const Ellipsoid *ellipsoid, double standardParallel1,
 	double sin_lat, sin_lat1, sin_lat2, cos_lat1, cos_lat2;
 	double m1, m2, sqr_m1, sqr_m2;
 	double q0, q1, q2;
-	double es_sin, es_sin1, es_sin2;
-	double one_minus_sqr_es_sin1, one_minus_sqr_es_sin2;
+	double e_sin, e_sin1, e_sin2;
+	double one_minus_sqr_e_sin1, one_minus_sqr_e_sin2;
 	double nq0;
 	double sp1, sp2;
 
@@ -75,31 +75,30 @@ AlbersEqual::AlbersEqual(const Ellipsoid *ellipsoid, double standardParallel1,
 	sp2 = deg2rad(standardParallel2);
 
 	_a2 = ellipsoid->radius() * ellipsoid->radius();
-	_es2 = 2 * ellipsoid->flattening() - ellipsoid->flattening()
-	  * ellipsoid->flattening();
-	_es = sqrt(_es2);
-	_one_minus_es2 = 1 - _es2;
-	_two_es = 2 * _es;
+	_es = ellipsoid->es();
+	_e = sqrt(_es);
+	_one_minus_es = 1 - _es;
+	_two_e = 2 * _e;
 
 	sin_lat = sin(_latitudeOrigin);
-	es_sin = _es * sin_lat;
-	q0 = ALBERS_Q(sin_lat, ONE_MINUS_SQR(es_sin), es_sin);
+	e_sin = _e * sin_lat;
+	q0 = ALBERS_Q(sin_lat, ONE_MINUS_SQR(e_sin), e_sin);
 
 	sin_lat1 = sin(sp1);
 	cos_lat1 = cos(sp1);
-	es_sin1 = _es * sin_lat1;
-	one_minus_sqr_es_sin1 = ONE_MINUS_SQR(es_sin1);
-	m1 = ALBERS_M(cos_lat1, one_minus_sqr_es_sin1);
-	q1 = ALBERS_Q(sin_lat1, one_minus_sqr_es_sin1, es_sin1);
+	e_sin1 = _e * sin_lat1;
+	one_minus_sqr_e_sin1 = ONE_MINUS_SQR(e_sin1);
+	m1 = ALBERS_M(cos_lat1, one_minus_sqr_e_sin1);
+	q1 = ALBERS_Q(sin_lat1, one_minus_sqr_e_sin1, e_sin1);
 
 	sqr_m1 = m1 * m1;
 	if (fabs(sp1 - sp2) > 1.0e-10) {
 		sin_lat2 = sin(sp2);
 		cos_lat2 = cos(sp2);
-		es_sin2 = _es * sin_lat2;
-		one_minus_sqr_es_sin2 = ONE_MINUS_SQR(es_sin2);
-		m2 = ALBERS_M(cos_lat2, one_minus_sqr_es_sin2);
-		q2 = ALBERS_Q(sin_lat2, one_minus_sqr_es_sin2, es_sin2);
+		e_sin2 = _e * sin_lat2;
+		one_minus_sqr_e_sin2 = ONE_MINUS_SQR(e_sin2);
+		m2 = ALBERS_M(cos_lat2, one_minus_sqr_e_sin2);
+		q2 = ALBERS_Q(sin_lat2, one_minus_sqr_e_sin2, e_sin2);
 		sqr_m2 = m2 * m2;
 		_n = (sqr_m1 - sqr_m2) / (q2 - q1);
 	} else
@@ -115,7 +114,7 @@ PointD AlbersEqual::ll2xy(const Coordinates &c) const
 {
 	double dlam;
 	double sin_lat;
-	double es_sin;
+	double e_sin;
 	double q;
 	double rho;
 	double theta;
@@ -129,8 +128,8 @@ PointD AlbersEqual::ll2xy(const Coordinates &c) const
 		dlam += M_2_PI;
 
 	sin_lat = sin(deg2rad(c.lat()));
-	es_sin = _es * sin_lat;
-	q = ALBERS_Q(sin_lat, ONE_MINUS_SQR(es_sin), es_sin);
+	e_sin = _e * sin_lat;
+	q = ALBERS_Q(sin_lat, ONE_MINUS_SQR(e_sin), e_sin);
 	nq = _n * q;
 	rho = (_C < nq) ? 0 : _a_over_n * sqrt(_C - nq);
 	theta = _n * dlam;
@@ -147,7 +146,7 @@ Coordinates AlbersEqual::xy2ll(const PointD &p) const
 	double rho, rho_n;
 	double phi, delta_phi = 1.0;
 	double sin_phi;
-	double es_sin, one_minus_sqr_es_sin;
+	double e_sin, one_minus_sqr_e_sin;
 	double theta = 0.0;
 	int count = 30;
 	double tolerance = 4.85e-10;
@@ -170,7 +169,7 @@ Coordinates AlbersEqual::xy2ll(const PointD &p) const
 		theta = atan2(dx, rho0_minus_dy);
 	rho_n = rho * _n;
 	q = (_C - (rho_n * rho_n) / _a2) / _n;
-	qc = 1 - ((_one_minus_es2) / (_two_es)) * log((1.0 - _es) / (1.0 + _es));
+	qc = 1 - ((_one_minus_es) / (_two_e)) * log((1.0 - _e) / (1.0 + _e));
 	if (fabs(fabs(qc) - fabs(q)) > 1.0e-6) {
 		q_over_2 = q / 2.0;
 		if (q_over_2 > 1.0)
@@ -179,17 +178,17 @@ Coordinates AlbersEqual::xy2ll(const PointD &p) const
 			lat = -M_PI_2;
 		else {
 			phi = asin(q_over_2);
-			if (_es < 1.0e-10)
+			if (_e < 1.0e-10)
 				lat = phi;
 			else  {
 				while ((fabs(delta_phi) > tolerance) && count) {
 					sin_phi = sin(phi);
-					es_sin = _es * sin_phi;
-					one_minus_sqr_es_sin = ONE_MINUS_SQR(es_sin);
-					delta_phi = (one_minus_sqr_es_sin * one_minus_sqr_es_sin)
-					  / (2.0 * cos(phi)) * (q / (_one_minus_es2) - sin_phi
-					  / one_minus_sqr_es_sin + (log((1.0 - es_sin)
-					  / (1.0 + es_sin)) / (_two_es)));
+					e_sin = _e * sin_phi;
+					one_minus_sqr_e_sin = ONE_MINUS_SQR(e_sin);
+					delta_phi = (one_minus_sqr_e_sin * one_minus_sqr_e_sin)
+					  / (2.0 * cos(phi)) * (q / (_one_minus_es) - sin_phi
+					  / one_minus_sqr_e_sin + (log((1.0 - e_sin)
+					  / (1.0 + e_sin)) / (_two_e)));
 					phi += delta_phi;
 					count --;
 				}

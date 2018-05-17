@@ -17,7 +17,7 @@ public:
 	virtual Coordinates xy2ll(const PointD &p) const;
 
 private:
-	double _a, _es, _e;
+	double _a, _e;
 	double _latitudeOrigin;
 	double _longitudeOrigin;
 	double _falseNorthing;

@@ -9,12 +9,13 @@
 class Ellipsoid
 {
 public:
-	Ellipsoid() : _radius(NAN), _flattening(NAN) {}
-	Ellipsoid(double radius, double flattening)
-	  : _radius(radius), _flattening(flattening) {}
+	Ellipsoid() : _radius(NAN), _flattening(NAN), _es(NAN), _b(NAN) {}
+	Ellipsoid(double radius, double flattening);
 
 	double radius() const {return _radius;}
 	double flattening() const {return _flattening;}
+	double es() const {return _es;}
+	double b() const {return _b;}
 
 	bool isNull() const
 	  {return (std::isnan(_radius) && std::isnan(_flattening));}
@@ -27,6 +28,7 @@ public:
 private:
 	double _radius;
 	double _flattening;
+	double _es, _b;
 
 	static QMap<int, Ellipsoid> WGS84();
 	static QMap<int, Ellipsoid> _ellipsoids;

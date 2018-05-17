@@ -27,11 +27,11 @@ private:
 	double _rho0;
 	double _C;
 	double _n;
+	double _e;
 	double _es;
-	double _es2;
 	double _a_over_n;
-	double _one_minus_es2;
-	double _two_es;
+	double _one_minus_es;
+	double _two_e;
 };
 
 #endif // ALBERSEQUAL_H

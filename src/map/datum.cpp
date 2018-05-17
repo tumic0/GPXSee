@@ -113,7 +113,7 @@ Coordinates Datum::toWGS84(const Coordinates &c) const
 	switch (_transformation) {
 		case Helmert:
 			return Geocentric::toGeodetic(helmert(Geocentric::fromGeodetic(c,
-			  *this)), WGS84);
+			  ellipsoid())), WGS84.ellipsoid());
 		case Molodensky:
 			return molodensky(c, *this, WGS84);
 		default:
@@ -126,7 +126,7 @@ Coordinates Datum::fromWGS84(const Coordinates &c) const
 	switch (_transformation) {
 		case Helmert:
 			return Geocentric::toGeodetic(helmertr(Geocentric::fromGeodetic(c,
-			  WGS84)), *this);
+			  WGS84.ellipsoid())), ellipsoid());
 		case Molodensky:
 			return molodensky(c, WGS84, *this);
 		default:

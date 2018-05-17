@@ -72,11 +72,9 @@ TransverseMercator::TransverseMercator(const Ellipsoid *ellipsoid,
 	_falseEasting = falseEasting;
 	_falseNorthing = falseNorthing;
 
-	_es = 2 * ellipsoid->flattening() - ellipsoid->flattening()
-	  * ellipsoid->flattening();
+	_es = ellipsoid->es();
 	_ebs = (1 / (1 - _es)) - 1;
-
-	b = _a * (1 - ellipsoid->flattening());
+	b = ellipsoid->b();
 
 	tn = (_a - b) / (_a + b);
 	tn2 = tn * tn;
