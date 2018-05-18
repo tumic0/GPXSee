@@ -70,6 +70,7 @@ Ellipsoid::Ellipsoid(double radius, double flattening)
   : _radius(radius), _flattening(flattening)
 {
 	_es = 2.0 * flattening - flattening * flattening;
+	_e2s = (1.0 / (1.0 - _es)) - 1.0;
 	_b = radius * (1.0 - flattening);
 }
 

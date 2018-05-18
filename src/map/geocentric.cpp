@@ -65,7 +65,6 @@ Point3D Geocentric::fromGeodetic(const Coordinates &c, const Ellipsoid *e)
 
 Coordinates Geocentric::toGeodetic(const Point3D &p, const Ellipsoid *e)
 {
-	double ep2 = (1.0 / (1.0 - e->es())) - 1.0;
 	bool pole = false;
 	double lat, lon;
 
@@ -94,7 +93,7 @@ Coordinates Geocentric::toGeodetic(const Point3D &p, const Ellipsoid *e)
 	double Sin_B0 = T0 / S0;
 	double Cos_B0 = W / S0;
 	double Sin3_B0 = Sin_B0 * Sin_B0 * Sin_B0;
-	double T1 = p.z() + e->b() * ep2 * Sin3_B0;
+	double T1 = p.z() + e->b() * e->e2s() * Sin3_B0;
 	double Sum = W - e->radius() * e->es() * Cos_B0 * Cos_B0 * Cos_B0;
 	double S1 = sqrt(T1*T1 + Sum * Sum);
 	double Sin_p1 = T1 / S1;

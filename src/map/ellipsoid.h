@@ -15,6 +15,7 @@ public:
 	double radius() const {return _radius;}
 	double flattening() const {return _flattening;}
 	double es() const {return _es;}
+	double e2s() const {return _e2s;}
 	double b() const {return _b;}
 
 	bool isNull() const
@@ -28,7 +29,7 @@ public:
 private:
 	double _radius;
 	double _flattening;
-	double _es, _b;
+	double _es, _e2s, _b;
 
 	static QMap<int, Ellipsoid> WGS84();
 	static QMap<int, Ellipsoid> _ellipsoids;
