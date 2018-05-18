@@ -14,13 +14,17 @@ public:
 	  QWidget *widget);
 
 	void setResolution(qreal res);
-	void setUnits(enum Units units);
+	void setUnits(Units units);
 	void setDigitalZoom(qreal zoom);
 
 private:
-	void updateBoundingRect();
+	struct Tick {
+		double value;
+		QRect boundingBox;
+	};
+
 	void computeScale();
-	QString units() const;
+	void updateCache();
 
 	qreal _res;
 	qreal _width;
@@ -30,6 +34,9 @@ private:
 	qreal _digitalZoom;
 	QRectF _boundingRect;
 	QFont _font;
+	QVector<Tick> _ticks;
+	QRect _unitsBB;
+	QString _unitsStr;
 };
 
 #endif // SCALEITEM_H
