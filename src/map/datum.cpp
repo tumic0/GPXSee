@@ -34,13 +34,12 @@ static Coordinates molodensky(const Coordinates &c, const Datum &from,
 	double adb = 1.0 / (1.0 - from_f);
 	double rn = from_a / sqrt(1 - from_esq * ssqlat);
 	double rm = from_a * (1 - from_esq) / pow((1 - from_esq * ssqlat), 1.5);
-	double from_h = 0.0;
 
 	double dlat = (-dx * slat * clon - dy * slat * slon + dz * clat + da
 	  * rn * from_esq * slat * clat / from_a + df * (rm * adb + rn / adb) * slat
-	  * clat) / (rm + from_h);
+	  * clat) / rm;
 
-	double dlon = (-dx * slon + dy * clon) / ((rn + from_h) * clat);
+	double dlon = (-dx * slon + dy * clon) / (rn * clat);
 
 	return Coordinates(c.lon() + rad2deg(dlon), c.lat() + rad2deg(dlat));
 }
