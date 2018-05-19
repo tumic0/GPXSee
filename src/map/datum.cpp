@@ -4,6 +4,8 @@
 
 #define as2rad(x) ((x) * (M_PI/648000.0))
 #define rad2as(x) ((x) * (648000.0/M_PI))
+#define ds2scale(x) (1.0 + (x) * 1e-6)
+#define scale2ds(x) (((x) - 1.0) / 1e-6)
 
 static Ellipsoid WGS84e = Ellipsoid(WGS84_RADIUS, WGS84_FLATTENING);
 static Datum WGS84 = Datum(&WGS84e, 0.0, 0.0, 0.0);
@@ -46,45 +48,25 @@ static Coordinates molodensky(const Coordinates &c, const Datum &from,
 
 Point3D Datum::helmert(const Point3D &p) const
 {
-	double R00 = 1;
-	double R01 = _rz;
-	double R02 = -_ry;
-	double R10 = -_rz;
-	double R11 = 1;
-	double R12 = _rx;
-	double R20 = _ry;
-	double R21 = -_rx;
-	double R22 = 1;
-
-	return Point3D(_scale * (R00 * p.x() + R01 * p.y() + R02 * p.z()) + _dx,
-	  _scale * (R10 * p.x() + R11 * p.y() + R12 * p.z()) + _dy,
-	  _scale * (R20 * p.x() + R21 * p.y() + R22 * p.z()) + _dz);
+	return Point3D(_scale * (p.x() + _rz * p.y() -_ry * p.z()) + _dx,
+	  _scale * (-_rz * p.x() + p.y() + _rx * p.z()) + _dy,
+	  _scale * (_ry * p.x() -_rx * p.y() + p.z()) + _dz);
 }
 
 Point3D Datum::helmertr(const Point3D &p) const
 {
-	double R00 = 1;
-	double R01 = _rz;
-	double R02 = -_ry;
-	double R10 = -_rz;
-	double R11 = 1;
-	double R12 = _rx;
-	double R20 = _ry;
-	double R21 = -_rx;
-	double R22 = 1;
-
 	double x = (p.x() - _dx) / _scale;
 	double y = (p.y() - _dy) / _scale;
 	double z = (p.z() - _dz) / _scale;
 
-	return Point3D(R00 * x + R10 * y + R20 * z, R01 * x + R11 * y + R21 * z,
-	  R02 * x + R12 * y + R22 * z);
+	return Point3D(x -_rz * y + _ry * z, _rz * x + y + -_rx * z, -_ry * x + _rx
+	  * y + z);
 }
 
 Datum::Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz,
   double rx, double ry, double rz, double ds)
   : _ellipsoid(ellipsoid), _dx(dx), _dy(dy), _dz(dz), _rx(as2rad(rx)),
-  _ry(as2rad(ry)), _rz(as2rad(rz)), _scale(1.0 + ds * 1e-6)
+  _ry(as2rad(ry)), _rz(as2rad(rz)), _scale(ds2scale(ds))
 {
 	if (_ellipsoid->radius() == WGS84_RADIUS && _ellipsoid->flattening()
 	  == WGS84_FLATTENING && _dx == 0.0 && _dy == 0.0 && _dz == 0.0
@@ -137,7 +119,7 @@ QDebug operator<<(QDebug dbg, const Datum &datum)
 	dbg.nospace() << "Datum(" << *datum.ellipsoid() << ", " << datum.dx()
 	  << ", " << datum.dy() << ", " << datum.dz() << ", " << rad2as(datum.rx())
 	  << ", " << rad2as(datum.ry()) << ", " << rad2as(datum.rz()) << ", "
-	  << (datum.scale() - 1.0) / 1e-6 << ")";
+	  << scale2ds(datum.scale()) << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG
