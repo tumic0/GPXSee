@@ -46,7 +46,6 @@ static Coordinates molodensky(const Coordinates &c, const Datum &from,
 
 Point3D Datum::helmert(const Point3D &p) const
 {
-	double scale = 1 + _ds * 1e-6;
 	double R00 = 1;
 	double R01 = _rz;
 	double R02 = -_ry;
@@ -57,14 +56,13 @@ Point3D Datum::helmert(const Point3D &p) const
 	double R21 = -_rx;
 	double R22 = 1;
 
-	return Point3D(scale * (R00 * p.x() + R01 * p.y() + R02 * p.z()) + _dx,
-	  scale * (R10 * p.x() + R11 * p.y() + R12 * p.z()) + _dy,
-	  scale * (R20 * p.x() + R21 * p.y() + R22 * p.z()) + _dz);
+	return Point3D(_scale * (R00 * p.x() + R01 * p.y() + R02 * p.z()) + _dx,
+	  _scale * (R10 * p.x() + R11 * p.y() + R12 * p.z()) + _dy,
+	  _scale * (R20 * p.x() + R21 * p.y() + R22 * p.z()) + _dz);
 }
 
 Point3D Datum::helmertr(const Point3D &p) const
 {
-	double scale = 1 + _ds * 1e-6;
 	double R00 = 1;
 	double R01 = _rz;
 	double R02 = -_ry;
@@ -75,9 +73,9 @@ Point3D Datum::helmertr(const Point3D &p) const
 	double R21 = -_rx;
 	double R22 = 1;
 
-	double x = (p.x() - _dx) / scale;
-	double y = (p.y() - _dy) / scale;
-	double z = (p.z() - _dz) / scale;
+	double x = (p.x() - _dx) / _scale;
+	double y = (p.y() - _dy) / _scale;
+	double z = (p.z() - _dz) / _scale;
 
 	return Point3D(R00 * x + R10 * y + R20 * z, R01 * x + R11 * y + R21 * z,
 	  R02 * x + R12 * y + R22 * z);
@@ -86,11 +84,11 @@ Point3D Datum::helmertr(const Point3D &p) const
 Datum::Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz,
   double rx, double ry, double rz, double ds)
   : _ellipsoid(ellipsoid), _dx(dx), _dy(dy), _dz(dz), _rx(as2rad(rx)),
-  _ry(as2rad(ry)), _rz(as2rad(rz)), _ds(ds)
+  _ry(as2rad(ry)), _rz(as2rad(rz)), _scale(1.0 + ds * 1e-6)
 {
 	if (_ellipsoid->radius() == WGS84_RADIUS && _ellipsoid->flattening()
 	  == WGS84_FLATTENING && _dx == 0.0 && _dy == 0.0 && _dz == 0.0
-	  && _rx == 0.0 && _ry == 0.0 && _rz == 0.0 && _ds == 0.0)
+	  && _rx == 0.0 && _ry == 0.0 && _rz == 0.0 && ds == 0.0)
 		_transformation = None;
 	else
 		_transformation = Helmert;
@@ -98,7 +96,7 @@ Datum::Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz,
 
 Datum::Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz)
   : _ellipsoid(ellipsoid), _dx(dx), _dy(dy), _dz(dz), _rx(0.0), _ry(0.0),
-  _rz(0.0), _ds(0.0)
+  _rz(0.0), _scale(1.0)
 {
 	if (_ellipsoid->radius() == WGS84_RADIUS && _ellipsoid->flattening()
 	  == WGS84_FLATTENING && _dx == 0.0 && _dy == 0.0 && _dz == 0.0)
@@ -139,7 +137,7 @@ QDebug operator<<(QDebug dbg, const Datum &datum)
 	dbg.nospace() << "Datum(" << *datum.ellipsoid() << ", " << datum.dx()
 	  << ", " << datum.dy() << ", " << datum.dz() << ", " << rad2as(datum.rx())
 	  << ", " << rad2as(datum.ry()) << ", " << rad2as(datum.rz()) << ", "
-	  << datum.ds() << ")";
+	  << (datum.scale() - 1.0) / 1e-6 << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG
