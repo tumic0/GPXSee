@@ -1,5 +1,3 @@
-#include <QFileInfo>
-#include <QtEndian>
 #include "pcs.h"
 #include "tifffile.h"
 #include "geotiff.h"
