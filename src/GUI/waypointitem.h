@@ -31,16 +31,16 @@ private:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
-	void updateShape();
+	void updateCache();
 	QString toolTip(Units units, CoordinatesFormat format);
 
-	QPainterPath _shape;
 	Waypoint _waypoint;
-
+	QPainterPath _shape;
 	QColor _color;
 	int _size;
-	bool _hover;
 	bool _showLabel;
+	QFont _font;
+	QRect _labelBB;
 };
 
 #endif // WAYPOINTITEM_H

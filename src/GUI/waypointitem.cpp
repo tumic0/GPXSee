@@ -36,11 +36,13 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
 {
 	_waypoint = waypoint;
 	_showLabel = true;
-	_hover = false;
 	_size = 8;
 	_color = Qt::black;
 
-	updateShape();
+	_font.setPixelSize(FS(_size));
+	_font.setFamily(FONT_FAMILY);
+
+	updateCache();
 
 	setPos(map->ll2xy(waypoint.coordinates()));
 	setToolTip(toolTip(Metric, DecimalDegrees));
@@ -48,23 +50,18 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
 	setAcceptHoverEvents(true);
 }
 
-void WaypointItem::updateShape()
+void WaypointItem::updateCache()
 {
 	QPainterPath p;
-	qreal pointSize = _hover ? HS(_size) : _size;
+	qreal pointSize = _font.bold() ? HS(_size) : _size;
 
 	if (_showLabel) {
-		QFont font;
-		font.setPixelSize(FS(_size));
-		font.setFamily(FONT_FAMILY);
-		if (_hover)
-			font.setBold(true);
-		QFontMetrics fm(font);
-		QRect ts = fm.tightBoundingRect(_waypoint.name());
+		QFontMetrics fm(_font);
+		_labelBB = fm.tightBoundingRect(_waypoint.name());
 
 		p.addRect(-pointSize/2, -pointSize/2, pointSize, pointSize);
-		p.addRect(pointSize/2, pointSize/2,
-		  ts.width(), ts.height() + fm.descent());
+		p.addRect(pointSize/2, pointSize/2, _labelBB.width(), _labelBB.height()
+		  + fm.descent());
 	} else
 		p.addRect(-pointSize/2, -pointSize/2, pointSize, pointSize);
 
@@ -76,23 +73,14 @@ void WaypointItem::paint(QPainter *painter,
 {
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
-
-	qreal pointSize = _hover ? HS(_size) : _size;
+	qreal pointSize = _font.bold() ? HS(_size) : _size;
 
 	painter->setPen(_color);
 
 	if (_showLabel) {
-		QFont font;
-		font.setPixelSize(FS(_size));
-		font.setFamily(FONT_FAMILY);
-		if (_hover)
-			font.setBold(true);
-		QFontMetrics fm(font);
-		QRect ts = fm.tightBoundingRect(_waypoint.name());
-
-		painter->setFont(font);
-		painter->drawText(pointSize/2 - qMax(ts.x(), 0), pointSize/2
-		  + ts.height(), _waypoint.name());
+		painter->setFont(_font);
+		painter->drawText(pointSize/2 - qMax(_labelBB.x(), 0), pointSize/2
+		  + _labelBB.height(), _waypoint.name());
 	}
 
 	painter->setBrush(QBrush(_color, Qt::SolidPattern));
@@ -112,7 +100,8 @@ void WaypointItem::setSize(int size)
 
 	prepareGeometryChange();
 	_size = size;
-	updateShape();
+	_font.setPixelSize(FS(_size));
+	updateCache();
 }
 
 void WaypointItem::setColor(const QColor &color)
@@ -136,7 +125,7 @@ void WaypointItem::showLabel(bool show)
 
 	prepareGeometryChange();
 	_showLabel = show;
-	updateShape();
+	updateCache();
 }
 
 void WaypointItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -144,8 +133,8 @@ void WaypointItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 	Q_UNUSED(event);
 
 	prepareGeometryChange();
-	_hover = true;
-	updateShape();
+	_font.setBold(true);
+	updateCache();
 	setZValue(zValue() + 1.0);
 }
 
@@ -154,7 +143,7 @@ void WaypointItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 	Q_UNUSED(event);
 
 	prepareGeometryChange();
-	_hover = false;
-	updateShape();
+	_font.setBold(false);
+	updateCache();
 	setZValue(zValue() - 1.0);
 }
