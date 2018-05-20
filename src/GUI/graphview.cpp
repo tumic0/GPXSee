@@ -308,6 +308,7 @@ void GraphView::redraw(const QSizeF &size)
 	if (r.height() < _minYRange * sy)
 		r.adjust(0, -(_minYRange/2 * sy - r.height()/2), 0,
 		  (_minYRange/2) * sy - r.height()/2);
+	r = r.toRect();
 
 	_xAxis->setSize(r.width());
 	_yAxis->setSize(r.height());
