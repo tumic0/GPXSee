@@ -15,7 +15,7 @@ class Map : public QObject
 	Q_OBJECT
 
 public:
-	Map(QObject *parent = 0) : QObject(parent), _backgroundColor(Qt::white) {}
+	Map(QObject *parent = 0) : QObject(parent) {}
 	virtual ~Map() {}
 
 	virtual const QString &name() const = 0;
@@ -41,13 +41,8 @@ public:
 	virtual bool isValid() const {return true;}
 	virtual QString errorString() const {return QString();}
 
-	void setBackgroundColor(const QColor &color) {_backgroundColor = color;}
-
 signals:
 	void loaded();
-
-protected:
-	QColor _backgroundColor;
 };
 
 #endif // MAP_H

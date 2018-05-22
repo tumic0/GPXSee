@@ -227,10 +227,7 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, bool block)
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];
 		QPoint tp(t.xy().x() * TILE_SIZE, t.xy().y() * TILE_SIZE);
-		if (t.pixmap().isNull())
-			painter->fillRect(QRect(tp, QSize(TILE_SIZE, TILE_SIZE)),
-			  _backgroundColor);
-		else
+		if (!t.pixmap().isNull())
 			painter->drawPixmap(tp, t.pixmap());
 	}
 }

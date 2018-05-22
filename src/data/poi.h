@@ -5,7 +5,7 @@
 #include <QPointF>
 #include <QString>
 #include <QStringList>
-#include "rtree.h"
+#include "common/rtree.h"
 #include "waypoint.h"
 #include "path.h"
 

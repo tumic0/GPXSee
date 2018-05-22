@@ -184,9 +184,7 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect, bool block)
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];
 		QPoint tp(t.xy().x() * z.tile().width(), t.xy().y() * z.tile().height());
-		if (t.pixmap().isNull())
-			painter->fillRect(QRect(tp, z.tile()), _backgroundColor);
-		else
+		if (!t.pixmap().isNull())
 			painter->drawPixmap(tp, t.pixmap());
 	}
 }

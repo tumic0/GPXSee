@@ -87,8 +87,9 @@ int EmptyMap::zoomOut()
 
 void EmptyMap::draw(QPainter *painter, const QRectF &rect, bool block)
 {
+	Q_UNUSED(painter);
+	Q_UNUSED(rect);
 	Q_UNUSED(block);
-	painter->fillRect(rect, _backgroundColor);
 }
 
 QPointF EmptyMap::ll2xy(const Coordinates &c) const

@@ -75,7 +75,6 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_plot = false;
 	_digitalZoom = 0;
 
-	_map->setBackgroundColor(_backgroundColor);
 	_res = _map->resolution(_map->bounds());
 	_scene->setSceneRect(_map->bounds());
 
@@ -267,7 +266,6 @@ void MapView::setMap(Map *map)
 
 	_map = map;
 	_map->load();
-	_map->setBackgroundColor(_backgroundColor);
 	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
 	digitalZoom(0);
@@ -746,7 +744,6 @@ void MapView::setMapOpacity(int opacity)
 void MapView::setBackgroundColor(const QColor &color)
 {
 	_backgroundColor = color;
-	_map->setBackgroundColor(color);
 	resetCachedContent();
 }
 

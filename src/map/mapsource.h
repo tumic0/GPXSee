@@ -13,8 +13,7 @@ class QXmlStreamReader;
 class MapSource
 {
 public:
-	Map *loadFile(const QString &path);
-	const QString &errorString() const {return _errorString;}
+	static Map *loadMap(const QString &path, QString &errorString);
 
 private:
 	enum Type {
@@ -42,11 +41,9 @@ private:
 		Config();
 	};
 
-	RectC bounds(QXmlStreamReader &reader);
-	Range zooms(QXmlStreamReader &reader);
-	void map(QXmlStreamReader &reader, Config &config);
-
-	QString _errorString;
+	static RectC bounds(QXmlStreamReader &reader);
+	static Range zooms(QXmlStreamReader &reader);
+	static void map(QXmlStreamReader &reader, Config &config);
 };
 
 #endif // MAPSOURCE_H

@@ -262,12 +262,10 @@ void OfflineMap::drawTiled(QPainter *painter, const QRectF &rect) const
 			} else
 				pixmap = QPixmap(tileName);
 
-			if (pixmap.isNull()) {
+			if (pixmap.isNull())
 				qWarning("%s: error loading tile image", qPrintable(
 				  _tile.path.arg(QString::number(x), QString::number(y))));
-				painter->fillRect(QRectF(QPoint(x, y), _tile.size),
-				  _backgroundColor);
-			} else
+			else
 				painter->drawPixmap(QPoint(x, y), pixmap);
 		}
 	}
@@ -294,11 +292,9 @@ void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect) const
 					QPixmapCache::insert(key, pixmap);
 			}
 
-			if (pixmap.isNull()) {
+			if (pixmap.isNull())
 				qWarning("%s: error loading tile image", qPrintable(key));
-				painter->fillRect(QRectF(QPoint(x, y), _ozf->tileSize()),
-				  _backgroundColor);
-			} else
+			else
 				painter->drawPixmap(QPoint(x, y), pixmap);
 		}
 	}
@@ -321,8 +317,6 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect, bool block)
 		drawTiled(painter, rect);
 	else if (_img && !_img->isNull())
 		drawImage(painter, rect);
-	else
-		painter->fillRect(rect, _backgroundColor);
 }
 
 QPointF OfflineMap::ll2xy(const Coordinates &c) const

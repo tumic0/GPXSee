@@ -164,20 +164,18 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 	}
 }
 
-Map *MapSource::loadFile(const QString &path)
+Map *MapSource::loadMap(const QString &path, QString &errorString)
 {
-	QFile file(path);
-	QXmlStreamReader reader;
 	Config config;
-	Map *m;
+	QFile file(path);
 
 
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
-		_errorString = file.errorString();
+		errorString = file.errorString();
 		return 0;
 	}
 
-	reader.setDevice(&file);
+	QXmlStreamReader reader(&file);
 	if (reader.readNextStartElement()) {
 		if (reader.name() == "map")
 			map(reader, config);
@@ -185,59 +183,51 @@ Map *MapSource::loadFile(const QString &path)
 			reader.raiseError("Not an online map source file");
 	}
 	if (reader.error()) {
-		_errorString = QString("%1: %2").arg(reader.lineNumber())
+		errorString = QString("%1: %2").arg(reader.lineNumber())
 		  .arg(reader.errorString());
 		return 0;
 	}
 
 	if (config.name.isEmpty()) {
-		_errorString = "Missing name definition";
+		errorString = "Missing name definition";
 		return 0;
 	}
 	if (config.url.isEmpty()) {
-		_errorString = "Missing URL definition";
+		errorString = "Missing URL definition";
 		return 0;
 	}
 	if (config.type == WMTS || config.type == WMS) {
 		if (config.layer.isEmpty()) {
-			_errorString = "Missing layer definition";
+			errorString = "Missing layer definition";
 			return 0;
 		}
 		if (config.format.isEmpty()) {
-			_errorString = "Missing format definition";
+			errorString = "Missing format definition";
 			return 0;
 		}
 	}
 	if (config.type == WMTS) {
 		if (config.set.isEmpty()) {
-			_errorString = "Missing set definiton";
+			errorString = "Missing set definiton";
 			return 0;
 		}
 	}
 	if (config.type == WMS) {
 		if (config.crs.isEmpty()) {
-			_errorString = "Missing CRS definiton";
+			errorString = "Missing CRS definiton";
 			return 0;
 		}
 	}
 
 	if (config.type == WMTS)
-		m = new WMTSMap(config.name, WMTS::Setup(config.url, config.layer,
+		return new WMTSMap(config.name, WMTS::Setup(config.url, config.layer,
 		  config.set, config.style, config.format, config.rest,
 		  config.coordinateSystem, config.dimensions, config.authorization));
 	else if (config.type == WMS)
-		m = new WMSMap(config.name, WMS::Setup(config.url, config.layer,
+		return new WMSMap(config.name, WMS::Setup(config.url, config.layer,
 		  config.style, config.format, config.crs, config.coordinateSystem,
 		  config.dimensions, config.authorization));
 	else
-		m = new OnlineMap(config.name, config.url, config.zooms, config.bounds,
-		  config.authorization);
-
-	if (!m->isValid()) {
-		_errorString = m->errorString();
-		delete m;
-		return 0;
-	}
-
-	return m;
+		return new OnlineMap(config.name, config.url, config.zooms,
+		  config.bounds, config.authorization);
 }

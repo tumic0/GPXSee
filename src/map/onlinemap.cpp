@@ -136,10 +136,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, bool block)
 		Tile &t = tiles[i];
 		QPoint tp(tl.x() + (t.xy().x() - tile.x()) * TILE_SIZE,
 		  tl.y() + (t.xy().y() - tile.y()) * TILE_SIZE);
-		if (t.pixmap().isNull())
-			painter->fillRect(QRect(tp, QSize(TILE_SIZE, TILE_SIZE)),
-			  _backgroundColor);
-		else
+		if (!t.pixmap().isNull())
 			painter->drawPixmap(tp, t.pixmap());
 	}
 }

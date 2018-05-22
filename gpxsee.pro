@@ -15,6 +15,7 @@ HEADERS += src/config.h \
     src/common/rectc.h \
     src/common/wgs84.h \
     src/common/str2int.h \
+    src/common/rtree.h \
     src/GUI/app.h \
     src/GUI/icons.h \
     src/GUI/gui.h \
@@ -117,7 +118,6 @@ HEADERS += src/config.h \
     src/data/trackdata.h \
     src/data/routedata.h \
     src/data/path.h \
-    src/data/rtree.h \
     src/data/gpxparser.h \
     src/data/tcxparser.h \
     src/data/csvparser.h \
@@ -128,7 +128,8 @@ HEADERS += src/config.h \
     src/data/oziparsers.h \
     src/map/rectd.h \
     src/map/geocentric.h \
-    src/map/mercator.h
+    src/map/mercator.h \
+    src/map/jnxmap.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -224,7 +225,8 @@ SOURCES += src/main.cpp \
     src/data/nmeaparser.cpp \
     src/data/oziparsers.cpp \
     src/map/geocentric.cpp \
-    src/map/mercator.cpp
+    src/map/mercator.cpp \
+    src/map/jnxmap.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \
