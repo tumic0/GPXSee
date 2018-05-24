@@ -884,27 +884,32 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="130"/>
+        <location filename="../src/map/maplist.cpp" line="111"/>
         <source>Supported files</source>
         <translation>Obsługiwane pliki</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="131"/>
+        <location filename="../src/map/maplist.cpp" line="112"/>
+        <source>Garmin JNX maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="113"/>
         <source>OziExplorer maps</source>
         <translation>Mapy OziExplorer</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="132"/>
+        <location filename="../src/map/maplist.cpp" line="114"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>Mapy/atlasy TrekBuddy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="133"/>
+        <location filename="../src/map/maplist.cpp" line="115"/>
         <source>GeoTIFF images</source>
         <translation>Obrazy GeoTIFF</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="134"/>
+        <location filename="../src/map/maplist.cpp" line="116"/>
         <source>Online map sources</source>
         <translation>Źródła map online</translation>
     </message>
@@ -1366,28 +1371,28 @@
 <context>
     <name>ScaleItem</name>
     <message>
-        <location filename="../src/GUI/scaleitem.cpp" line="83"/>
+        <location filename="../src/GUI/scaleitem.cpp" line="111"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/scaleitem.cpp" line="84"/>
-        <location filename="../src/GUI/scaleitem.cpp" line="87"/>
+        <location filename="../src/GUI/scaleitem.cpp" line="112"/>
+        <location filename="../src/GUI/scaleitem.cpp" line="115"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
     <message>
-        <location filename="../src/GUI/scaleitem.cpp" line="86"/>
+        <location filename="../src/GUI/scaleitem.cpp" line="114"/>
         <source>nmi</source>
         <translation>nmi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/scaleitem.cpp" line="89"/>
+        <location filename="../src/GUI/scaleitem.cpp" line="117"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="../src/GUI/scaleitem.cpp" line="90"/>
+        <location filename="../src/GUI/scaleitem.cpp" line="118"/>
         <source>m</source>
         <translation>m</translation>
     </message>
