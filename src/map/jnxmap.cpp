@@ -6,6 +6,8 @@
 #include "jnxmap.h"
 
 
+#define ic2dc(x) ((x) * 180.0 / 0x7FFFFFFF)
+
 struct Level {
 	quint32 count;
 	quint32 offset;
@@ -59,17 +61,19 @@ bool JNXMap::readTiles()
 	  && readValue(levels)))
 		return false;
 
-	_bounds = RectC(Coordinates(lon1 * 180.0 / 0x7FFFFFFF, lat1 * 180.0
-	  / 0x7FFFFFFF), Coordinates(lon2 * 180.0 / 0x7FFFFFFF, lat2 * 180.0
-	  / 0x7FFFFFFF));
+	_bounds = RectC(Coordinates(ic2dc(lon1), ic2dc(lat1)),
+	  Coordinates(ic2dc(lon2), ic2dc(lat2)));
+	if (!levels || !_bounds.isValid())
+		return false;
 
 	if (!_file.seek(version > 3 ? 0x34 : 0x30))
 		return false;
 
 	QVector<Level> lh(levels);
 	for (int i = 0; i < lh.count(); i++) {
-		if (!(readValue(lh[i].count) && readValue(lh[i].offset)
-		  && readValue(lh[i].scale)))
+		Level &l = lh[i];
+
+		if (!(readValue(l.count) && readValue(l.offset) && readValue(l.scale)))
 			return false;
 		if (version > 3) {
 			QByteArray ba;
@@ -80,12 +84,15 @@ bool JNXMap::readTiles()
 
 	_zooms = QVector<Zoom>(lh.size());
 	for (int i = 0; i < lh.count(); i++) {
-		if (!_file.seek(lh.at(i).offset))
+		Zoom &z = _zooms[i];
+		const Level &l = lh.at(i);
+
+		if (!_file.seek(l.offset))
 			return false;
 
-		_zooms[i].tiles = QVector<Tile>(lh.at(i).count);
-		for (quint32 j = 0; j < lh.at(i).count; j++) {
-			Tile &tile = _zooms[i].tiles[j];
+		z.tiles = QVector<Tile>(l.count);
+		for (quint32 j = 0; j < l.count; j++) {
+			Tile &tile = z.tiles[j];
 			qint32 top, right, bottom, left;
 			quint16 width, height;
 
@@ -95,19 +102,17 @@ bool JNXMap::readTiles()
 			  && readValue(tile.offset)))
 				return false;
 
-			RectD rect(PointD(left * 180.0 / 0x7FFFFFFF, top * 180.0
-			  / 0x7FFFFFFF), PointD(right * 180.0 / 0x7FFFFFFF, bottom * 180.0
-			  / 0x7FFFFFFF));
+			RectD rect(PointD(ic2dc(left), ic2dc(top)), PointD(ic2dc(right),
+			  ic2dc(bottom)));
 
 			if (j == 0) {
 				ReferencePoint tl(PointD(0, 0), rect.topLeft());
 				ReferencePoint br(PointD(width, height), rect.bottomRight());
-				_zooms[i].transform = Transform(tl, br);
+				z.transform = Transform(tl, br);
 			}
 
-			const Transform &t = _zooms.at(i).transform;
-			QRectF trect(t.proj2img(rect.topLeft()),
-			  t.proj2img(rect.bottomRight()));
+			QRectF trect(z.transform.proj2img(rect.topLeft()),
+			  z.transform.proj2img(rect.bottomRight()));
 			tile.pos = trect.topLeft();
 
 			qreal min[2], max[2];
@@ -115,7 +120,7 @@ bool JNXMap::readTiles()
 			min[1] = trect.top();
 			max[0] = trect.right();
 			max[1] = trect.bottom();
-			_zooms[i].tree.Insert(min, max, &tile);
+			z.tree.Insert(min, max, &tile);
 		}
 	}
 
