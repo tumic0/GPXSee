@@ -14,7 +14,7 @@
 class Ticks
 {
 public:
-	Ticks(double min, double max, int count);
+	Ticks(double minValue, double maxValue, int maxCount);
 
 	int count() const {return ((int)((_max - _min) / _d)) + 1;}
 	double val(int i) const {return _min + i * _d;}
@@ -27,12 +27,12 @@ private:
 	double _d;
 };
 
-Ticks::Ticks(double min, double max, int count)
+Ticks::Ticks(double minValue, double maxValue, int maxCount)
 {
-	double range = niceNum(max - min, 0);
-	_d = niceNum(range / count, 1);
-	_min = ceil(min / _d) * _d;
-	_max = floor(max / _d) * _d;
+	double range = niceNum(maxValue - minValue, 0);
+	_d = niceNum(range / maxCount, 1);
+	_min = ceil(minValue / _d) * _d;
+	_max = floor(maxValue / _d) * _d;
 }
 
 
