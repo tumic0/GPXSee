@@ -890,7 +890,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="112"/>
         <source>Garmin JNX maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Garmin JNX-kartor</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="113"/>
