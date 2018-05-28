@@ -1,5 +1,5 @@
 TARGET = GPXSee
-VERSION = 5.12
+VERSION = 5.13
 QT += core \
     gui \
     network
