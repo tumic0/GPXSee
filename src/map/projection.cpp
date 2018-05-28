@@ -5,6 +5,7 @@
 #include "lambertconic.h"
 #include "albersequal.h"
 #include "lambertazimuthal.h"
+#include "krovak.h"
 #include "latlon.h"
 #include "gcs.h"
 #include "pcs.h"
@@ -15,11 +16,13 @@ Projection::Method::Method(int id)
 {
 	switch (id) {
 		case 1024:
+		case 1041:
 		case 9801:
 		case 9802:
 		case 9804:
 		case 9807:
 		case 9815:
+		case 9819:
 		case 9820:
 		case 9822:
 			_id = id;
@@ -38,6 +41,12 @@ Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
 	switch (pcs->method().id()) {
 		case 1024:
 			_ct = new WebMercator();
+			break;
+		case 1041:
+			_ct = new Krovak(ellipsoid, setup.standardParallel1(),
+			  setup.standardParallel2(), setup.scale(), setup.latitudeOrigin(),
+			  setup.longitudeOrigin(), setup.falseEasting(),
+			  setup.falseNorthing(), Krovak::North);
 			break;
 		case 9801:
 		case 9815: // Oblique mercator aproximation using LCC1
@@ -60,6 +69,12 @@ Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
 			_ct = new TransverseMercator(ellipsoid, setup.latitudeOrigin(),
 			  setup.longitudeOrigin(), setup.scale(), setup.falseEasting(),
 			  setup.falseNorthing());
+			break;
+		case 9819:
+			_ct = new Krovak(ellipsoid, setup.standardParallel1(),
+			  setup.standardParallel2(), setup.scale(), setup.latitudeOrigin(),
+			  setup.longitudeOrigin(), setup.falseEasting(),
+			  setup.falseNorthing(), Krovak::South);
 			break;
 		case 9820:
 			_ct = new LambertAzimuthal(ellipsoid, setup.latitudeOrigin(),

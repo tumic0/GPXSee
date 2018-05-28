@@ -129,7 +129,8 @@ HEADERS += src/config.h \
     src/map/rectd.h \
     src/map/geocentric.h \
     src/map/mercator.h \
-    src/map/jnxmap.h
+    src/map/jnxmap.h \
+    src/map/krovak.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -226,7 +227,8 @@ SOURCES += src/main.cpp \
     src/data/oziparsers.cpp \
     src/map/geocentric.cpp \
     src/map/mercator.cpp \
-    src/map/jnxmap.cpp
+    src/map/jnxmap.cpp \
+    src/map/krovak.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \

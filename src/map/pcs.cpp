@@ -32,6 +32,7 @@ static bool parameter(int key, double val, int units, Projection::Setup &setup)
 		case 8802:
 		case 8812:
 		case 8822:
+		case 8833:
 			{AngularUnits au(units);
 			if (au.isNull())
 				return false;
@@ -39,6 +40,7 @@ static bool parameter(int key, double val, int units, Projection::Setup &setup)
 			return true;
 		case 8805:
 		case 8815:
+		case 8819:
 			setup.setScale(val);
 			return true;
 		case 8806:
@@ -58,12 +60,14 @@ static bool parameter(int key, double val, int units, Projection::Setup &setup)
 			setup.setFalseNorthing(lu.toMeters(val));}
 			return true;
 		case 8813:
+		case 8818:
 		case 8823:
 			{AngularUnits au(units);
 			if (au.isNull())
 				return false;
 			setup.setStandardParallel1(au.toDegrees(val));}
 			return true;
+		case 1036:
 		case 8814:
 		case 8824:
 			{AngularUnits au(units);
