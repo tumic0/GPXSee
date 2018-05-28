@@ -119,7 +119,7 @@ QString MapList::formats()
 QStringList MapList::filter()
 {
 	QStringList filter;
-	filter << "*.jnx *.map" << "*.tba" << "*.tar" << "*.xml" << "*.tif"
+	filter << "*.jnx" << "*.map" << "*.tba" << "*.tar" << "*.xml" << "*.tif"
 	  << "*.tiff";
 	return filter;
 }
