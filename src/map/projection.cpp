@@ -43,10 +43,10 @@ Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
 			_ct = new WebMercator();
 			break;
 		case 1041:
-			_ct = new Krovak(ellipsoid, setup.standardParallel1(),
+			_ct = new KrovakNE(ellipsoid, setup.standardParallel1(),
 			  setup.standardParallel2(), setup.scale(), setup.latitudeOrigin(),
 			  setup.longitudeOrigin(), setup.falseEasting(),
-			  setup.falseNorthing(), Krovak::North);
+			  setup.falseNorthing());
 			break;
 		case 9801:
 		case 9815: // Oblique mercator aproximation using LCC1
@@ -74,7 +74,7 @@ Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
 			_ct = new Krovak(ellipsoid, setup.standardParallel1(),
 			  setup.standardParallel2(), setup.scale(), setup.latitudeOrigin(),
 			  setup.longitudeOrigin(), setup.falseEasting(),
-			  setup.falseNorthing(), Krovak::South);
+			  setup.falseNorthing());
 			break;
 		case 9820:
 			_ct = new LambertAzimuthal(ellipsoid, setup.latitudeOrigin(),

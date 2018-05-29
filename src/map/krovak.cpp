@@ -3,7 +3,7 @@
 
 Krovak::Krovak(const Ellipsoid *ellipsoid, double standardParallel,
   double azimuth, double scale, double centerLatitude, double longitudeOrigin,
-  double falseEasting, double falseNorthing, Orientation orientation)
+  double falseEasting, double falseNorthing)
 {
 	double phiC = deg2rad(centerLatitude);
 	double sinPhiC = sin(phiC);
@@ -28,34 +28,30 @@ Krovak::Krovak(const Ellipsoid *ellipsoid, double standardParallel,
 	_cosAlphaC = cos(alphaC);
 	_sinAlphaC = sin(alphaC);
 	_lambda0 = deg2rad(longitudeOrigin);
-	_orientation = orientation;
 }
 
 PointD Krovak::ll2xy(const Coordinates &c) const
 {
 	double phi = deg2rad(c.lat());
 	double lambda = deg2rad(c.lon());
-	double sinPhi = sin(phi);
-	double eSinPhi = _e * sinPhi;
-
+	double eSinPhi = _e * sin(phi);
 	double U = 2.0 * (atan(_t0 * pow(tan(phi/2.0 + M_PI_4), _B)
-	  / pow((1.0 + eSinPhi) / (1.0 - eSinPhi), _e * _B / 2.0)) - M_PI_4);
+	  / pow((1.0 + eSinPhi) / (1.0 - eSinPhi), _e * _B/2.0)) - M_PI_4);
+	double cosU = cos(U);
 	double V = _B * (_lambda0 - lambda);
-	double T = asin(_cosAlphaC * sin(U) + _sinAlphaC * cos(U) * cos(V));
-	double D = asin(cos(U) * sin(V) / cos(T));
+	double T = asin(_cosAlphaC * sin(U) + _sinAlphaC * cosU * cos(V));
+	double D = asin(cosU * sin(V) / cos(T));
 	double theta = _n * D;
-	double r = _r0 * pow(tan(M_PI_4 + _phiP / 2.0), _n)
+	double r = _r0 * pow(tan(M_PI_4 + _phiP/2.0), _n)
 	  / pow(tan(T/2.0 + M_PI_4), _n);
-	double sign = (_orientation == North) ? -1.0 : 1.0;
 
-	return PointD(sign * (r * sin(theta) + _FE), sign * (r * cos(theta) + _FN));
+	return PointD(r * sin(theta) + _FE, r * cos(theta) + _FN);
 }
 
 Coordinates Krovak::xy2ll(const PointD &p) const
 {
-	double sign = (_orientation == North) ? -1.0 : 1.0;
-	double Xp = sign * p.y() - _FN;
-	double Yp = sign * p.x() - _FE;
+	double Xp = p.y() - _FN;
+	double Yp = p.x() - _FE;
 	double Xp2 = Xp * Xp;
 	double Yp2 = Yp * Yp;
 	double r = sqrt(Xp2 + Yp2);
