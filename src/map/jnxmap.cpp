@@ -1,6 +1,7 @@
 #include <QtEndian>
 #include <QPainter>
 #include <QFileInfo>
+#include <QPixmapCache>
 #include "transform.h"
 #include "rectd.h"
 #include "jnxmap.h"
@@ -212,18 +213,27 @@ int JNXMap::zoomOut()
 
 QPixmap JNXMap::pixmap(const Tile *tile, QFile *file)
 {
-	QByteArray ba;
-	ba.resize(tile->size + 2);
-	ba[0] = (char)0xFF;
-	ba[1] = (char)0xD8;
-	char *data = ba.data() + 2;
+	QPixmap pm;
 
-	if (!file->seek(tile->offset))
-		return QPixmap();
-	if (!file->read(data, tile->size))
-		return QPixmap();
+	QString key = file->fileName() + "-" + QString::number(tile->offset);
+	if (!QPixmapCache::find(key, &pm)) {
+		QByteArray ba;
+		ba.resize(tile->size + 2);
+		ba[0] = (char)0xFF;
+		ba[1] = (char)0xD8;
+		char *data = ba.data() + 2;
 
-	return QPixmap::fromImage(QImage::fromData(ba));
+		if (!file->seek(tile->offset))
+			return QPixmap();
+		if (!file->read(data, tile->size))
+			return QPixmap();
+		pm = QPixmap::fromImage(QImage::fromData(ba));
+
+		if (!pm.isNull())
+			QPixmapCache::insert(key, pm);
+	}
+
+	return pm;
 }
 
 bool JNXMap::cb(Tile *tile, void *context)
