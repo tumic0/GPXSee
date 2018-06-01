@@ -63,20 +63,14 @@ GraphView::GraphView(QWidget *parent)
 
 GraphView::~GraphView()
 {
-	if (_xAxis->scene() != _scene)
-		delete _xAxis;
-	if (_yAxis->scene() != _scene)
-		delete _yAxis;
-	if (_slider->scene() != _scene)
-		delete _slider;
-	if (_info->scene() != _scene)
-		delete _info;
-	if (_grid->scene() != _scene)
-		delete _grid;
+	delete _xAxis;
+	delete _yAxis;
+	delete _slider;
+	delete _info;
+	delete _grid;
 
 	for (int i = 0; i < _graphs.count(); i++)
-		if (_graphs.at(i)->scene() != _scene)
-			delete _graphs[i];
+		delete _graphs[i];
 }
 
 void GraphView::createXLabel()

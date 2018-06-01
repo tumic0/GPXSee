@@ -35,7 +35,6 @@ class GUI : public QMainWindow
 
 public:
 	GUI();
-	~GUI();
 
 	bool openFile(const QString &fileName);
 

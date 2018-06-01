@@ -13,7 +13,6 @@ class FileBrowser : public QObject
 
 public:
 	FileBrowser(QObject *parent = 0);
-	~FileBrowser();
 
 	void setFilter(const QStringList &filter);
 	void setCurrent(const QString &path);
