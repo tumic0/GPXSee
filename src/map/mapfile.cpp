@@ -26,7 +26,8 @@ int MapFile::parse(QIODevice &device, QList<CalibrationPoint> &points,
 		QByteArray line = device.readLine();
 
 		if (ln == 1) {
-			if (!line.trimmed().startsWith("OziExplorer Map Data File"))
+			QString fileType(QString::fromUtf8(line).trimmed());
+			if (!fileType.startsWith("OziExplorer Map Data File"))
 				return ln;
 		} else if (ln == 2)
 			_name = line.trimmed();

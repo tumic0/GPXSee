@@ -24,7 +24,8 @@ bool PLTParser::parse(QFile *file, QList<TrackData> &tracks,
 		QByteArray line = file->readLine();
 
 		if (_errorLine == 1) {
-			if (!line.trimmed().startsWith("OziExplorer Track Point File")) {
+			QString fileType(QString::fromUtf8(line).trimmed());
+			if (!fileType.startsWith("OziExplorer Track Point File")) {
 				_errorString = "Not a PLT file";
 				return false;
 			}
@@ -107,7 +108,8 @@ bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
 		QByteArray line = file->readLine();
 
 		if (_errorLine == 1) {
-			if (!line.trimmed().startsWith("OziExplorer Route File")) {
+			QString fileType(QString::fromUtf8(line).trimmed());
+			if (!fileType.startsWith("OziExplorer Route File")) {
 				_errorString = "Not a RTE file";
 				return false;
 			}
@@ -201,7 +203,8 @@ bool WPTParser::parse(QFile *file, QList<TrackData> &tracks,
 		QByteArray line = file->readLine();
 
 		if (_errorLine == 1) {
-			if (!line.trimmed().startsWith("OziExplorer Waypoint File")) {
+			QString fileType(QString::fromUtf8(line).trimmed());
+			if (!fileType.startsWith("OziExplorer Waypoint File")) {
 				_errorString = "Not a WPT file";
 				return false;
 			}
