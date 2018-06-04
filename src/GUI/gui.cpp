@@ -23,6 +23,7 @@
 #include <QUrl>
 #include <QPixmapCache>
 #include "data/data.h"
+#include "data/poi.h"
 #include "map/maplist.h"
 #include "map/emptymap.h"
 #include "map/downloader.h"

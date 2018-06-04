@@ -7,7 +7,6 @@
 #include <QDate>
 #include <QPrinter>
 #include "data/graph.h"
-#include "data/poi.h"
 #include "units.h"
 #include "timetype.h"
 #include "format.h"
@@ -28,6 +27,7 @@ class GraphTab;
 class MapView;
 class Map;
 class MapList;
+class POI;
 
 class GUI : public QMainWindow
 {

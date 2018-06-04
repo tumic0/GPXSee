@@ -1,6 +1,7 @@
 #ifndef TILE_H
 #define TILE_H
 
+#include <QVariant>
 #include <QPixmap>
 #include <QPoint>
 #include <QDebug>
