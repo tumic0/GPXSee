@@ -69,16 +69,17 @@ static Graph filter(const Graph &g, int window)
 Track::Track(const TrackData &data) : _data(data)
 {
 	QVector<qreal> acceleration;
+	qreal ds;
+	int last;
 
 	_time.append(0);
 	_distance.append(0);
 	_speed.append(0);
 	acceleration.append(0);
 
-	int last = 0;
-
+	last = 0;
 	for (int i = 1; i < _data.count(); i++) {
-		qreal ds = _data.at(i).coordinates().distanceTo(_data.at(i-1).coordinates());
+		ds = _data.at(i).coordinates().distanceTo(_data.at(i-1).coordinates());
 		_distance.append(ds);
 
 		if (_data.first().hasTimestamp() && _data.at(i).hasTimestamp()
@@ -122,13 +123,24 @@ Track::Track(const TrackData &data) : _data(data)
 	for (it = _stop.constBegin(); it != _stop.constEnd(); ++it)
 		_outliers.remove(*it);
 
-	qreal total = 0;
+	last = 0;
 	for (int i = 0; i < _data.size(); i++) {
 		if (_outliers.contains(i))
+			last++;
+		else
+			break;
+	}
+	for (int i = last + 1; i < _data.size(); i++) {
+		if (_outliers.contains(i))
 			continue;
-		if (!discardStopPoint(i))
-			total += _distance.at(i);
-		_distance[i] = total;
+		if (discardStopPoint(i))
+			_distance[i] = _distance.at(last);
+		else {
+			ds = _data.at(i).coordinates().distanceTo(
+			  _data.at(last).coordinates());
+			_distance[i] = _distance.at(last) + ds;
+		}
+		last = i;
 	}
 }
 
