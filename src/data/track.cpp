@@ -69,41 +69,34 @@ static Graph filter(const Graph &g, int window)
 Track::Track(const TrackData &data) : _data(data)
 {
 	QVector<qreal> acceleration;
-	qreal ds;
-	int last;
+	qreal ds, dt;
 
 	_time.append(0);
 	_distance.append(0);
 	_speed.append(0);
 	acceleration.append(0);
 
-	last = 0;
 	for (int i = 1; i < _data.count(); i++) {
 		ds = _data.at(i).coordinates().distanceTo(_data.at(i-1).coordinates());
-		_distance.append(ds);
+		_distance.append(_distance.at(i-1) + ds);
 
 		if (_data.first().hasTimestamp() && _data.at(i).hasTimestamp()
-		  && _data.at(i).timestamp() >= _data.at(last).timestamp()) {
+		  && _data.at(i).timestamp() >= _data.at(i-1).timestamp())
 			_time.append(_data.first().timestamp().msecsTo(
 			  _data.at(i).timestamp()) / 1000.0);
-			last = i;
-		} else
+		else
 			_time.append(NAN);
 
-		if (std::isnan(_time.at(i)) || std::isnan(_time.at(i-1)))
-			_speed.append(NAN);
-		else {
-			qreal dt = _time.at(i) - _time.at(i-1);
-			if (dt < 1e-3) {
-				_speed.append(_speed.at(i-1));
-				acceleration.append(acceleration.at(i-1));
-				continue;
-			}
-			_speed.append(ds / dt);
-
-			qreal dv = _speed.at(i) - _speed.at(i-1);
-			acceleration.append(dv / dt);
+		dt = _time.at(i) - _time.at(i-1);
+		if (dt < 1e-3) {
+			_speed.append(_speed.at(i-1));
+			acceleration.append(acceleration.at(i-1));
+			continue;
 		}
+		_speed.append(ds / dt);
+
+		qreal dv = _speed.at(i) - _speed.at(i-1);
+		acceleration.append(dv / dt);
 	}
 
 	_pause = 0;
@@ -116,14 +109,16 @@ Track::Track(const TrackData &data) : _data(data)
 		}
 	}
 
-	if (_outlierEliminate)
-		_outliers = eliminate(acceleration);
+	if (!_outlierEliminate)
+		return;
+
+	_outliers = eliminate(acceleration);
 
 	QSet<int>::const_iterator it;
 	for (it = _stop.constBegin(); it != _stop.constEnd(); ++it)
 		_outliers.remove(*it);
 
-	last = 0;
+	int last = 0;
 	for (int i = 0; i < _data.size(); i++) {
 		if (_outliers.contains(i))
 			last++;
@@ -133,12 +128,16 @@ Track::Track(const TrackData &data) : _data(data)
 	for (int i = last + 1; i < _data.size(); i++) {
 		if (_outliers.contains(i))
 			continue;
-		if (discardStopPoint(i))
+		if (discardStopPoint(i)) {
 			_distance[i] = _distance.at(last);
-		else {
+			_speed[i] = 0;
+		} else {
 			ds = _data.at(i).coordinates().distanceTo(
 			  _data.at(last).coordinates());
 			_distance[i] = _distance.at(last) + ds;
+
+			dt = _time.at(i) - _time.at(last);
+			_speed[i] = (dt < 1e-3) ? _speed.at(last) : ds / dt;
 		}
 		last = i;
 	}
