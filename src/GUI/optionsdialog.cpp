@@ -311,9 +311,25 @@ QWidget *OptionsDialog::createDataPage()
 	pauseTab->setLayout(pauseLayout);
 
 
+	_computed = new QRadioButton(tr("Computed from distance/time"));
+	_reported = new QRadioButton(tr("Reported by device"));
+	if (_options->useReportedSpeed)
+		_reported->setChecked(true);
+	else
+		_computed->setChecked(true);
+
+	QFormLayout *sourceLayout = new QFormLayout();
+	sourceLayout->addWidget(_computed);
+	sourceLayout->addWidget(_reported);
+
+	QWidget *sourceTab = new QWidget();
+	sourceTab->setLayout(sourceLayout);
+
+
 	QTabWidget *filterPage = new QTabWidget();
 	filterPage->addTab(filterTab, tr("Filtering"));
 	filterPage->addTab(pauseTab, tr("Pause detection"));
+	filterPage->addTab(sourceTab, tr("Speed"));
 
 	return filterPage;
 }
@@ -543,6 +559,7 @@ void OptionsDialog::accept()
 	if (qAbs(pauseSpeed - _options->pauseSpeed) > 0.01)
 		_options->pauseSpeed = pauseSpeed;
 	_options->pauseInterval = _pauseInterval->value();
+	_options->useReportedSpeed = _reported->isChecked();
 
 	qreal poiRadius = (_options->units == Imperial)
 		? _poiRadius->value() * MIINM : (_options->units == Nautical)

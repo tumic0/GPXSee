@@ -860,6 +860,7 @@ void GUI::openOptions()
 	SET_TRACK_OPTION(outlierEliminate, setOutlierElimination);
 	SET_TRACK_OPTION(pauseSpeed, setPauseSpeed);
 	SET_TRACK_OPTION(pauseInterval, setPauseInterval);
+	SET_TRACK_OPTION(useReportedSpeed, useReportedSpeed);
 
 	if (options.poiRadius != _options.poiRadius)
 		_poi->setRadius(options.poiRadius);
@@ -1631,6 +1632,8 @@ void GUI::writeSettings()
 		settings.setValue(PAUSE_SPEED_SETTING, _options.pauseSpeed);
 	if (_options.pauseInterval != PAUSE_INTERVAL_DEFAULT)
 		settings.setValue(PAUSE_INTERVAL_SETTING, _options.pauseInterval);
+	if (_options.useReportedSpeed != USE_REPORTED_SPEED_DEFAULT)
+		settings.setValue(USE_REPORTED_SPEED_SETTING, _options.useReportedSpeed);
 	if (_options.poiRadius != POI_RADIUS_DEFAULT)
 		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
 	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
@@ -1859,6 +1862,8 @@ void GUI::readSettings()
 	  OUTLIER_ELIMINATE_DEFAULT).toBool();
 	_options.pauseSpeed = settings.value(PAUSE_SPEED_SETTING,
 	  PAUSE_SPEED_DEFAULT).toFloat();
+	_options.useReportedSpeed = settings.value(USE_REPORTED_SPEED_SETTING,
+	  USE_REPORTED_SPEED_DEFAULT).toBool();
 	_options.pauseInterval = settings.value(PAUSE_INTERVAL_SETTING,
 	  PAUSE_INTERVAL_DEFAULT).toInt();
 	_options.poiRadius = settings.value(POI_RADIUS_SETTING, POI_RADIUS_DEFAULT)
@@ -1924,6 +1929,7 @@ void GUI::readSettings()
 	Track::setOutlierElimination(_options.outlierEliminate);
 	Track::setPauseSpeed(_options.pauseSpeed);
 	Track::setPauseInterval(_options.pauseInterval);
+	Track::useReportedSpeed(_options.useReportedSpeed);
 
 	_poi->setRadius(_options.poiRadius);
 

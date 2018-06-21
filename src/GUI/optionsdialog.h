@@ -43,6 +43,7 @@ struct Options {
 	bool outlierEliminate;
 	qreal pauseSpeed;
 	int pauseInterval;
+	bool useReportedSpeed;
 	// POI
 	int poiRadius;
 	// System
@@ -110,6 +111,8 @@ private:
 	QCheckBox *_outlierEliminate;
 	QDoubleSpinBox *_pauseSpeed;
 	QSpinBox *_pauseInterval;
+	QRadioButton *_computed;
+	QRadioButton *_reported;
 	// POI
 	QDoubleSpinBox *_poiRadius;
 	// System

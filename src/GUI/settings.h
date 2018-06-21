@@ -124,6 +124,8 @@
 #define PAUSE_SPEED_DEFAULT               0.5 /* m/s */
 #define PAUSE_INTERVAL_SETTING            "pauseInterval"
 #define PAUSE_INTERVAL_DEFAULT            10 /* s */
+#define USE_REPORTED_SPEED_SETTING        "useReportedSpeed"
+#define USE_REPORTED_SPEED_DEFAULT        false
 #define POI_RADIUS_SETTING                "poiRadius"
 #define POI_RADIUS_DEFAULT                (int)(IMPERIAL_UNITS() ? MIINM : KMINM)
 #define USE_OPENGL_SETTING                "useOpenGL"

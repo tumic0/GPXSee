@@ -10,6 +10,7 @@ qreal Track::_pauseSpeed = 0.5;
 int Track::_pauseInterval = 10;
 
 bool Track::_outlierEliminate = true;
+bool Track::_useReportedSpeed = false;
 
 
 static qreal median(QVector<qreal> &v)
@@ -91,12 +92,11 @@ Track::Track(const TrackData &data) : _data(data)
 		if (dt < 1e-3) {
 			_speed.append(_speed.at(i-1));
 			acceleration.append(acceleration.at(i-1));
-			continue;
+		} else {
+			_speed.append(ds / dt);
+			qreal dv = _speed.at(i) - _speed.at(i-1);
+			acceleration.append(dv / dt);
 		}
-		_speed.append(ds / dt);
-
-		qreal dv = _speed.at(i) - _speed.at(i-1);
-		acceleration.append(dv / dt);
 	}
 
 	_pause = 0;
@@ -166,7 +166,8 @@ Graph Track::speed() const
 		  || _data.at(i).hasSpeed())) {
 			v = 0;
 			stop.append(raw.size());
-		} else if (_data.at(i).hasSpeed() && !_outliers.contains(i))
+		} else if (_useReportedSpeed && _data.at(i).hasSpeed()
+		  && !_outliers.contains(i))
 			v = _data.at(i).speed();
 		else if (!std::isnan(_speed.at(i)) && !_outliers.contains(i))
 			v = _speed.at(i);
