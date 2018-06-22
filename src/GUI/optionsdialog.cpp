@@ -312,7 +312,7 @@ QWidget *OptionsDialog::createDataPage()
 
 
 	_computed = new QRadioButton(tr("Computed from distance/time"));
-	_reported = new QRadioButton(tr("Reported by device"));
+	_reported = new QRadioButton(tr("Recorded by device"));
 	if (_options->useReportedSpeed)
 		_reported->setChecked(true);
 	else
