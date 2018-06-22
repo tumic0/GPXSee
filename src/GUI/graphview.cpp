@@ -3,6 +3,8 @@
 #include <QMouseEvent>
 #include <QPaintEngine>
 #include <QPaintDevice>
+#include <QGraphicsSimpleTextItem>
+#include <QPalette>
 #include "data/graph.h"
 #include "opengl.h"
 #include "config.h"
@@ -41,6 +43,9 @@ GraphView::GraphView(QWidget *parent)
 	_sliderInfo->setZValue(3.0);
 	_info = new InfoItem();
 	_grid = new GridItem();
+	_message = new QGraphicsSimpleTextItem(tr("Data not available"));
+	_message->setBrush(QPalette().brush(QPalette::Disabled,
+	  QPalette::WindowText));
 
 	connect(_slider, SIGNAL(positionChanged(const QPointF&)), this,
 	  SLOT(emitSliderPositionChanged(const QPointF&)));
@@ -157,9 +162,16 @@ void GraphView::setGraphType(GraphType type)
 	_bounds = QRectF();
 
 	for (int i = 0; i < _graphs.count(); i++) {
-		_graphs.at(i)->setGraphType(type);
-		if (_graphs.at(i)->scene() == _scene)
-			_bounds |= _graphs.at(i)->bounds();
+		GraphItem *gi = _graphs.at(i);
+		gi->setGraphType(type);
+		if (!_hide.contains(gi->id())) {
+			if (gi->bounds().width() > 0)
+				addItem(gi);
+			else
+				removeItem(gi);
+		}
+		if (gi->scene() == _scene)
+			_bounds |= gi->bounds();
 	}
 
 	if (type == Distance)
@@ -198,8 +210,10 @@ void GraphView::addGraph(GraphItem *graph, int id)
 
 	if (!_hide.contains(id)) {
 		_visible.append(graph);
-		_scene->addItem(graph);
-		_bounds |= graph->bounds();
+		if (graph->bounds().width() > 0) {
+			_scene->addItem(graph);
+			_bounds |= graph->bounds();
+		}
 		setXUnits();
 	}
 }
@@ -226,13 +240,15 @@ void GraphView::showGraph(bool show, int id)
 	_visible.clear();
 	_bounds = QRectF();
 	for (int i = 0; i < _graphs.count(); i++) {
-		GraphItem* gi = _graphs.at(i);
+		GraphItem *gi = _graphs.at(i);
 		if (_hide.contains(gi->id()))
 			removeItem(gi);
 		else {
-			addItem(gi);
 			_visible.append(gi);
-			_bounds |= gi->bounds();
+			if (gi->bounds().width() > 0) {
+				addItem(gi);
+				_bounds |= gi->bounds();
+			}
 		}
 	}
 }
@@ -246,7 +262,8 @@ QRectF GraphView::bounds() const
 
 void GraphView::redraw()
 {
-	redraw(viewport()->size() - QSizeF(MARGIN, MARGIN));
+	if (!_graphs.isEmpty())
+		redraw(viewport()->size() - QSizeF(MARGIN, MARGIN));
 }
 
 void GraphView::redraw(const QSizeF &size)
@@ -263,10 +280,12 @@ void GraphView::redraw(const QSizeF &size)
 		removeItem(_slider);
 		removeItem(_info);
 		removeItem(_grid);
-		_scene->setSceneRect(QRectF());
+		addItem(_message);
+		_scene->setSceneRect(_scene->itemsBoundingRect());
 		return;
 	}
 
+	removeItem(_message);
 	addItem(_xAxis);
 	addItem(_yAxis);
 	addItem(_slider);
@@ -324,9 +343,11 @@ void GraphView::redraw(const QSizeF &size)
 	_scene->setSceneRect(_scene->itemsBoundingRect());
 }
 
-void GraphView::resizeEvent(QResizeEvent *)
+void GraphView::resizeEvent(QResizeEvent *e)
 {
-	redraw();
+	redraw(e->size() - QSizeF(MARGIN, MARGIN));
+
+	QGraphicsView::resizeEvent(e);
 }
 
 void GraphView::mousePressEvent(QMouseEvent *e)
