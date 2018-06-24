@@ -804,7 +804,7 @@
     <message>
         <location filename="../src/GUI/graphview.cpp" line="46"/>
         <source>Data not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Данные отсутствуют</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="111"/>
@@ -1167,12 +1167,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="314"/>
         <source>Computed from distance/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Вычисленная из расстояния/времени</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="315"/>
         <source>Recorded by device</source>
-        <translation type="unfinished"></translation>
+        <translation>Записанная устройством</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="330"/>
