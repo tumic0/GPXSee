@@ -73,6 +73,7 @@ GraphView::~GraphView()
 	delete _slider;
 	delete _info;
 	delete _grid;
+	delete _message;
 
 	for (int i = 0; i < _graphs.count(); i++)
 		delete _graphs[i];
@@ -274,7 +275,7 @@ void GraphView::redraw(const QSizeF &size)
 	qreal sx, sy;
 
 
-	if (_visible.isEmpty() || _bounds.isNull()) {
+	if (_bounds.isNull()) {
 		removeItem(_xAxis);
 		removeItem(_yAxis);
 		removeItem(_slider);
