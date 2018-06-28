@@ -16,7 +16,15 @@ private:
 	PCS _pcs;
 };
 
-QList<PCS::Entry> PCS::_pcss;
+QList<PCS::Entry> PCS::_pcss = defaults();
+
+QList<PCS::Entry> PCS::defaults()
+{
+	QList<PCS::Entry> list;
+	list.append(PCS::Entry(3857, 3856, PCS(&GCS::WGS84(), 1024,
+	  Projection::Setup(0, 0, NAN, 0, 0, NAN, NAN), 9001, 4499)));
+	return list;
+}
 
 static bool parameter(int key, double val, int units, Projection::Setup &setup)
 {

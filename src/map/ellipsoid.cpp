@@ -3,12 +3,18 @@
 #include "common/wgs84.h"
 #include "ellipsoid.h"
 
-QMap<int, Ellipsoid> Ellipsoid::_ellipsoids = WGS84();
+QMap<int, Ellipsoid> Ellipsoid::_ellipsoids = defaults();
 
-QMap<int, Ellipsoid> Ellipsoid::WGS84()
+const Ellipsoid &Ellipsoid::WGS84()
+{
+	static Ellipsoid e(WGS84_RADIUS, WGS84_FLATTENING);
+	return e;
+}
+
+QMap<int, Ellipsoid> Ellipsoid::defaults()
 {
 	QMap<int, Ellipsoid> map;
-	map.insert(7030, Ellipsoid(WGS84_RADIUS, WGS84_FLATTENING));
+	map.insert(7030, WGS84());
 	return map;
 }
 

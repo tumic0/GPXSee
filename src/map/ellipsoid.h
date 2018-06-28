@@ -23,6 +23,7 @@ public:
 	bool isValid() const
 	  {return !(std::isnan(_radius) || std::isnan(_flattening));}
 
+	static const Ellipsoid &WGS84();
 	static const Ellipsoid *ellipsoid(int id);
 	static void loadList(const QString &path);
 
@@ -31,7 +32,7 @@ private:
 	double _flattening;
 	double _es, _e2s, _b;
 
-	static QMap<int, Ellipsoid> WGS84();
+	static QMap<int, Ellipsoid> defaults();
 	static QMap<int, Ellipsoid> _ellipsoids;
 };
 
