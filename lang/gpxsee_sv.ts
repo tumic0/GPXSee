@@ -803,7 +803,7 @@
     <message>
         <location filename="../src/GUI/graphview.cpp" line="46"/>
         <source>Data not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen data tillgänglig</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="111"/>
@@ -1166,12 +1166,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="314"/>
         <source>Computed from distance/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Beräknad från distans/tid</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="315"/>
         <source>Recorded by device</source>
-        <translation type="unfinished"></translation>
+        <translation>Inspelad av enhet</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="330"/>
