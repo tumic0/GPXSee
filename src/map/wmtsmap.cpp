@@ -132,17 +132,6 @@ int WMTSMap::zoomFit(const QSize &size, const RectC &rect)
 	return _zoom;
 }
 
-qreal WMTSMap::resolution(const QRectF &rect) const
-{
-	Coordinates tl = xy2ll((rect.topLeft()));
-	Coordinates br = xy2ll(rect.bottomRight());
-
-	qreal ds = tl.distanceTo(br);
-	qreal ps = QLineF(rect.topLeft(), rect.bottomRight()).length();
-
-	return ds/ps;
-}
-
 void WMTSMap::setZoom(int zoom)
 {
 	_zoom = zoom;

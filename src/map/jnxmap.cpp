@@ -2,7 +2,6 @@
 #include <QPainter>
 #include <QFileInfo>
 #include <QPixmapCache>
-#include "transform.h"
 #include "rectd.h"
 #include "jnxmap.h"
 
@@ -146,13 +145,13 @@ JNXMap::JNXMap(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
-QPointF JNXMap::ll2xy(const Coordinates &c) const
+QPointF JNXMap::ll2xy(const Coordinates &c)
 {
 	const Transform &t = _zooms.at(_zoom).transform;
 	return t.proj2img(PointD(c.lon(), c.lat()));
 }
 
-Coordinates JNXMap::xy2ll(const QPointF &p) const
+Coordinates JNXMap::xy2ll(const QPointF &p)
 {
 	const Transform &t = _zooms.at(_zoom).transform;
 	PointD pp(t.img2proj(p));
@@ -166,17 +165,6 @@ QRectF JNXMap::bounds() const
 	return QRectF(t.proj2img(PointD(_bounds.topLeft().lon(),
 	  _bounds.topLeft().lat())), t.proj2img(PointD(_bounds.bottomRight().lon(),
 	  _bounds.bottomRight().lat())));
-}
-
-qreal JNXMap::resolution(const QRectF &rect) const
-{
-	Coordinates tl = xy2ll((rect.topLeft()));
-	Coordinates br = xy2ll(rect.bottomRight());
-
-	qreal ds = tl.distanceTo(br);
-	qreal ps = QLineF(rect.topLeft(), rect.bottomRight()).length();
-
-	return ds/ps;
 }
 
 int JNXMap::zoomFit(const QSize &size, const RectC &rect)

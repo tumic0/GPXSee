@@ -21,7 +21,7 @@ public:
 	virtual const QString &name() const = 0;
 
 	virtual QRectF bounds() const = 0;
-	virtual qreal resolution(const QRectF &rect) const = 0;
+	virtual qreal resolution(const QRectF &rect);
 
 	virtual int zoom() const = 0;
 	virtual void setZoom(int zoom) = 0;

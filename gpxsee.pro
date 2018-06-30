@@ -228,7 +228,8 @@ SOURCES += src/main.cpp \
     src/map/geocentric.cpp \
     src/map/mercator.cpp \
     src/map/jnxmap.cpp \
-    src/map/krovak.cpp
+    src/map/krovak.cpp \
+    src/map/map.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \

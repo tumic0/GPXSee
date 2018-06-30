@@ -65,7 +65,7 @@ int EmptyMap::zoomFit(const QSize &size, const RectC &rect)
 	return _zoom;
 }
 
-qreal EmptyMap::resolution(const QRectF &rect) const
+qreal EmptyMap::resolution(const QRectF &rect)
 {
 	qreal scale = zoom2scale(_zoom);
 

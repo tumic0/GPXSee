@@ -319,13 +319,13 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect, bool block)
 		drawImage(painter, rect);
 }
 
-QPointF OfflineMap::ll2xy(const Coordinates &c) const
+QPointF OfflineMap::ll2xy(const Coordinates &c)
 {
 	QPointF p(_transform.proj2img(_projection.ll2xy(c)));
 	return _ozf ? QPointF(p.x() * _scale.x(), p.y() * _scale.y()) : p;
 }
 
-Coordinates OfflineMap::xy2ll(const QPointF &p) const
+Coordinates OfflineMap::xy2ll(const QPointF &p)
 {
 	return _ozf
 	  ? _projection.xy2ll(_transform.img2proj(QPointF(p.x() / _scale.x(),
@@ -338,17 +338,6 @@ QRectF OfflineMap::bounds() const
 	return _ozf
 	  ? QRectF(QPointF(0, 0), _ozf->size(_zoom))
 	  : QRectF(QPointF(0, 0), _map.size);
-}
-
-qreal OfflineMap::resolution(const QRectF &rect) const
-{
-	Coordinates tl = xy2ll((rect.topLeft()));
-	Coordinates br = xy2ll(rect.bottomRight());
-
-	qreal ds = tl.distanceTo(br);
-	qreal ps = QLineF(rect.topLeft(), rect.bottomRight()).length();
-
-	return ds/ps;
 }
 
 int OfflineMap::zoomFit(const QSize &size, const RectC &rect)

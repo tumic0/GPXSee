@@ -21,7 +21,6 @@ public:
 	const QString &name() const {return _name;}
 
 	QRectF bounds() const;
-	qreal resolution(const QRectF &rect) const;
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom) {_zoom = zoom;}
@@ -29,10 +28,8 @@ public:
 	int zoomIn();
 	int zoomOut();
 
-	QPointF ll2xy(const Coordinates &c)
-		{return static_cast<const OfflineMap &>(*this).ll2xy(c);}
-	Coordinates xy2ll(const QPointF &p)
-		{return static_cast<const OfflineMap &>(*this).xy2ll(p);}
+	QPointF ll2xy(const Coordinates &c);
+	Coordinates xy2ll(const QPointF &p);
 
 	void draw(QPainter *painter, const QRectF &rect, bool block);
 
@@ -56,9 +53,6 @@ private:
 
 		bool isValid() const {return size.isValid() && !path.isEmpty();}
 	};
-
-	QPointF ll2xy(const Coordinates &c) const;
-	Coordinates xy2ll(const QPointF &p) const;
 
 	bool setTileInfo(const QStringList &tiles, const QString &path = QString());
 	bool setImageInfo(const QString &path);

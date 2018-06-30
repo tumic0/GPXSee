@@ -19,7 +19,6 @@ public:
 	const QString &name() const {return _name;}
 
 	QRectF bounds() const;
-	qreal resolution(const QRectF &rect) const;
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom) {_zoom = zoom;}
@@ -27,10 +26,8 @@ public:
 	int zoomIn();
 	int zoomOut();
 
-	QPointF ll2xy(const Coordinates &c)
-		{return static_cast<const JNXMap &>(*this).ll2xy(c);}
-	Coordinates xy2ll(const QPointF &p)
-		{return static_cast<const JNXMap &>(*this).xy2ll(p);}
+	QPointF ll2xy(const Coordinates &c);
+	Coordinates xy2ll(const QPointF &p);
 
 	void draw(QPainter *painter, const QRectF &rect, bool block);
 
@@ -49,9 +46,6 @@ private:
 		QVector<Tile> tiles;
 		RTree<Tile*, qreal, 2> tree;
 	};
-
-	QPointF ll2xy(const Coordinates &c) const;
-	Coordinates xy2ll(const QPointF &p) const;
 
 	template<class T> bool readValue(T &val);
 	bool readString(QByteArray &ba);

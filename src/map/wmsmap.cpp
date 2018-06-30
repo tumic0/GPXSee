@@ -132,17 +132,6 @@ QRectF WMSMap::bounds() const
 	  _transform.proj2img(_bbox.bottomRight()));
 }
 
-qreal WMSMap::resolution(const QRectF &rect) const
-{
-	Coordinates tl = xy2ll((rect.topLeft()));
-	Coordinates br = xy2ll(rect.bottomRight());
-
-	qreal ds = tl.distanceTo(br);
-	qreal ps = QLineF(rect.topLeft(), rect.bottomRight()).length();
-
-	return ds/ps;
-}
-
 int WMSMap::zoomFit(const QSize &size, const RectC &rect)
 {
 	if (rect.isValid()) {
@@ -187,12 +176,12 @@ int WMSMap::zoomOut()
 	return _zoom;
 }
 
-QPointF WMSMap::ll2xy(const Coordinates &c) const
+QPointF WMSMap::ll2xy(const Coordinates &c)
 {
 	return _transform.proj2img(_projection.ll2xy(c));
 }
 
-Coordinates WMSMap::xy2ll(const QPointF &p) const
+Coordinates WMSMap::xy2ll(const QPointF &p)
 {
 	return _projection.xy2ll(_transform.img2proj(p));
 }

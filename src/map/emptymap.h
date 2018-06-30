@@ -13,7 +13,7 @@ public:
 	const QString &name() const {return _name;}
 
 	QRectF bounds() const;
-	qreal resolution(const QRectF &rect) const;
+	qreal resolution(const QRectF &rect);
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom) {_zoom = zoom;}

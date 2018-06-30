@@ -92,7 +92,7 @@ int OnlineMap::zoomFit(const QSize &size, const RectC &rect)
 	return _zoom;
 }
 
-qreal OnlineMap::resolution(const QRectF &rect) const
+qreal OnlineMap::resolution(const QRectF &rect)
 {
 	qreal scale = zoom2scale(_zoom);
 

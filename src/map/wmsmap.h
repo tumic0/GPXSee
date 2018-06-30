@@ -19,7 +19,6 @@ public:
 	const QString &name() const {return _name;}
 
 	QRectF bounds() const;
-	qreal resolution(const QRectF &rect) const;
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);
@@ -27,10 +26,8 @@ public:
 	int zoomIn();
 	int zoomOut();
 
-	QPointF ll2xy(const Coordinates &c)
-		{return static_cast<const WMSMap &>(*this).ll2xy(c);}
-	Coordinates xy2ll(const QPointF &p)
-		{return static_cast<const WMSMap &>(*this).xy2ll(p);}
+	QPointF ll2xy(const Coordinates &c);
+	Coordinates xy2ll(const QPointF &p);
 
 	void draw(QPainter *painter, const QRectF &rect, bool block);
 
@@ -46,9 +43,6 @@ private:
 	void computeZooms(const RangeF &scaleDenominator);
 	void updateTransform();
 	bool loadWMS();
-
-	QPointF ll2xy(const Coordinates &c) const;
-	Coordinates xy2ll(const QPointF &p) const;
 
 	QString _name;
 

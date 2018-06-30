@@ -12,7 +12,7 @@
 #define TL(m) ((m)->xy2pp((m)->bounds().topLeft()))
 #define BR(m) ((m)->xy2pp((m)->bounds().bottomRight()))
 
-static bool resCmp(const OfflineMap *m1, const OfflineMap *m2)
+static bool resCmp(OfflineMap *m1, OfflineMap *m2)
 {
 	qreal r1, r2;
 
@@ -159,20 +159,6 @@ QRectF Atlas::bounds() const
 	}
 
 	return QRectF(QPointF(0, 0), s);
-}
-
-qreal Atlas::resolution(const QRectF &rect) const
-{
-	int idx = _zooms.at(_zoom).first;
-
-	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).last; i++) {
-		if (_bounds.at(i).xy.contains(rect.center())) {
-			idx = i;
-			break;
-		}
-	}
-
-	return _maps.at(idx)->resolution(rect);
 }
 
 int Atlas::zoomFit(const QSize &size, const RectC &br)
