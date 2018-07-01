@@ -12,7 +12,7 @@
         <location filename="../src/GUI/cadencegraph.cpp" line="11"/>
         <location filename="../src/GUI/cadencegraph.h" line="13"/>
         <source>Cadence</source>
-        <translation>Frequenz</translation>
+        <translation>Trittfrequenz</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="19"/>
@@ -694,7 +694,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="442"/>
         <source>&amp;Map</source>
-        <translation>&amp;Map</translation>
+        <translation>&amp;Karte</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="450"/>
