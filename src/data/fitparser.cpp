@@ -296,7 +296,7 @@ bool FITParser::parseData(TrackData &track, MessageDefinition *def,
                     if (lastTp.hasTemperature())
                         trackpoint.setTemperature(lastTp.temperature());
 
-                    track.removeLast();
+                    track.remove(track.size() - 1);
                     track.append(trackpoint);
                     warning("Records merged with last set of coordinates");
                 }
