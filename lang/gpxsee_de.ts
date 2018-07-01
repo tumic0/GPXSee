@@ -11,8 +11,8 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="11"/>
         <location filename="../src/GUI/cadencegraph.h" line="13"/>
-        <source>Trittfrequenz</source>
-        <translation>Frequenz</translation>
+        <source>Cadence</source>
+        <translation>Trittfrequenz</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="19"/>
