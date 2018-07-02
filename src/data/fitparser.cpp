@@ -283,17 +283,17 @@ bool FITParser::parseData(TrackData &track, MessageDefinition *def,
                     Trackpoint lastTp = track.last();
                     trackpoint.setCoordinates(lastTp.coordinates());
                     trackpoint.setTimestamp(lastTp.timestamp());
-                    if (lastTp.hasElevation())
+                    if (lastTp.hasElevation() && !trackpoint.hasElevation())
                         trackpoint.setElevation(lastTp.elevation());
-                    if (lastTp.hasHeartRate())
+                    if (lastTp.hasHeartRate() && !trackpoint.hasHeartRate())
                         trackpoint.setHeartRate(lastTp.heartRate());
-                    if (lastTp.hasCadence())
+                    if (lastTp.hasCadence() && !trackpoint.hasCadence())
                         trackpoint.setCadence(lastTp.cadence());
-                    if (lastTp.hasSpeed())
+                    if (lastTp.hasSpeed() && !trackpoint.hasSpeed())
                         trackpoint.setSpeed(lastTp.speed());
-                    if (lastTp.hasPower())
+                    if (lastTp.hasPower() && !trackpoint.hasPower())
                         trackpoint.setPower(lastTp.power());
-                    if (lastTp.hasTemperature())
+                    if (lastTp.hasTemperature() && !trackpoint.hasTemperature())
                         trackpoint.setTemperature(lastTp.temperature());
 
                     track.remove(track.size() - 1);
