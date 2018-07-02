@@ -145,7 +145,8 @@ bool FITParser::parseDefinitionMessage(quint8 header)
 				return false;
 			_len -= sizeof(def->devFields[i]);
 		}
-	}
+	} else
+		def->numDevFields = 0;
 
 	return true;
 }
