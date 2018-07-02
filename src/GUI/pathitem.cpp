@@ -175,10 +175,10 @@ void PathItem::setMarkerColor(const QColor &color)
 void PathItem::hover(bool hover)
 {
 	if (hover) {
-		_pen.setWidth(_width + 1);
+		_pen.setWidth((_width + 1) * pow(2, -_digitalZoom));
 		setZValue(zValue() + 1.0);
 	} else {
-		_pen.setWidth(_width);
+		_pen.setWidth(_width * pow(2, -_digitalZoom));
 		setZValue(zValue() - 1.0);
 	}
 
