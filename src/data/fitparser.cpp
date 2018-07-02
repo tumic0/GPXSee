@@ -271,8 +271,40 @@ bool FITParser::parseData(TrackData &track, MessageDefinition *def,
 			  + 631065600));
 			track.append(trackpoint);
 		} else {
-			if (trackpoint.coordinates().isNull())
-				warning("Missing coordinates");
+            if (trackpoint.coordinates().isNull())
+            {
+                if (track.size() > 0  &&
+                        (trackpoint.hasElevation() ||
+                         trackpoint.hasHeartRate() ||
+                         trackpoint.hasCadence() ||
+                         trackpoint.hasSpeed() ||
+                         trackpoint.hasPower() ||
+                         trackpoint.hasTemperature()))
+                {
+                    Trackpoint lastTp = track.last();
+                    trackpoint.setCoordinates(lastTp.coordinates());
+                    trackpoint.setTimestamp(lastTp.timestamp());
+                    if (lastTp.hasElevation() && !trackpoint.hasElevation())
+                        trackpoint.setElevation(lastTp.elevation());
+                    if (lastTp.hasHeartRate() && !trackpoint.hasHeartRate())
+                        trackpoint.setHeartRate(lastTp.heartRate());
+                    if (lastTp.hasCadence() && !trackpoint.hasCadence())
+                        trackpoint.setCadence(lastTp.cadence());
+                    if (lastTp.hasSpeed() && !trackpoint.hasSpeed())
+                        trackpoint.setSpeed(lastTp.speed());
+                    if (lastTp.hasPower() && !trackpoint.hasPower())
+                        trackpoint.setPower(lastTp.power());
+                    if (lastTp.hasTemperature() && !trackpoint.hasTemperature())
+                        trackpoint.setTemperature(lastTp.temperature());
+
+                    track.remove(track.size() - 1);
+                    track.append(trackpoint);
+                    warning("Records merged with last set of coordinates");
+                }
+                else {
+                    warning("Missing coordinates");
+                }
+            }
 			else {
 				_errorString = "Invalid coordinates";
 				return false;
