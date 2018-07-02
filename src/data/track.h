@@ -22,6 +22,7 @@ public:
 	Graph temperature() const;
 	Graph cadence() const;
 	Graph power() const;
+	Graph ratio() const;
 
 	qreal distance() const;
 	qreal time() const;

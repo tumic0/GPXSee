@@ -81,12 +81,14 @@ GraphView::~GraphView()
 
 void GraphView::createXLabel()
 {
-	_xAxis->setLabel(QString("%1 [%2]").arg(_xLabel, _xUnits));
+	_xAxis->setLabel(QString("%1 [%2]").arg(_xLabel,
+	  _xUnits.isEmpty() ? "-" : _xUnits));
 }
 
 void GraphView::createYLabel()
 {
-	_yAxis->setLabel(QString("%1 [%2]").arg(_yLabel, _yUnits));
+	_yAxis->setLabel(QString("%1 [%2]").arg(_yLabel,
+	  _yUnits.isEmpty() ? "-" : _yUnits));
 }
 
 void GraphView::setYLabel(const QString &label)

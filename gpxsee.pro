@@ -49,6 +49,7 @@ HEADERS += src/config.h \
     src/GUI/format.h \
     src/GUI/cadencegraph.h \
     src/GUI/powergraph.h \
+    src/GUI/gearratiograph.h \
     src/GUI/optionsdialog.h \
     src/GUI/colorbox.h \
     src/GUI/stylecombobox.h \
@@ -61,6 +62,7 @@ HEADERS += src/config.h \
     src/GUI/temperaturegraphitem.h \
     src/GUI/cadencegraphitem.h \
     src/GUI/powergraphitem.h \
+    src/GUI/gearratiographitem.h \
     src/GUI/oddspinbox.h \
     src/GUI/settings.h \
     src/GUI/nicenum.h \
@@ -164,6 +166,7 @@ SOURCES += src/main.cpp \
     src/GUI/format.cpp \
     src/GUI/cadencegraph.cpp \
     src/GUI/powergraph.cpp \
+    src/GUI/gearratiograph.cpp \
     src/GUI/optionsdialog.cpp \
     src/GUI/colorbox.cpp \
     src/GUI/stylecombobox.cpp \
@@ -175,6 +178,7 @@ SOURCES += src/main.cpp \
     src/GUI/temperaturegraphitem.cpp \
     src/GUI/cadencegraphitem.cpp \
     src/GUI/powergraphitem.cpp \
+    src/GUI/gearratiographitem.cpp \
     src/GUI/nicenum.cpp \
     src/GUI/mapview.cpp \
     src/map/maplist.cpp \

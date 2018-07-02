@@ -209,6 +209,18 @@ Graph Track::temperature() const
 	return raw;
 }
 
+Graph Track::ratio() const
+{
+	Graph raw;
+
+	for (int i = 0; i < _data.size(); i++)
+		if (_data.at(i).hasRatio() && !_outliers.contains(i))
+			raw.append(GraphPoint(_distance.at(i), _time.at(i),
+			  _data.at(i).ratio()));
+
+	return raw;
+}
+
 Graph Track::cadence() const
 {
 	Graph raw, filtered;

@@ -37,6 +37,7 @@
 #include "temperaturegraph.h"
 #include "cadencegraph.h"
 #include "powergraph.h"
+#include "gearratiograph.h"
 #include "mapview.h"
 #include "trackinfo.h"
 #include "filebrowser.h"
@@ -556,6 +557,7 @@ void GUI::createGraphTabs()
 	_tabs.append(new CadenceGraph(_graphTabWidget));
 	_tabs.append(new PowerGraph(_graphTabWidget));
 	_tabs.append(new TemperatureGraph(_graphTabWidget));
+	_tabs.append(new GearRatioGraph(_graphTabWidget));
 
 	for (int i = 0; i < _tabs.count(); i++)
 		connect(_tabs.at(i), SIGNAL(sliderPositionChanged(qreal)), this,

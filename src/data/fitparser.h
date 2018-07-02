@@ -52,14 +52,17 @@ private:
 	bool parseDataMessage(TrackData &track, quint8 header);
 	bool parseData(TrackData &track, MessageDefinition *def, quint8 offset);
 	bool readField(Field *f, quint32 &val);
+	bool addEntry(TrackData &track);
 
 	QIODevice *_device;
 	QString _errorString;
 
 	quint32 _len;
 	quint8 _endian;
-	quint32 _timestamp;
+	quint32 _timestamp, _last;
 	MessageDefinition _defs[16];
+	qreal _ratio;
+	Trackpoint _trackpoint;
 };
 
 #endif // FITPARSER_H

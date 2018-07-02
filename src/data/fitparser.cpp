@@ -4,10 +4,19 @@
 #include "fitparser.h"
 
 
-const quint32 FIT_MAGIC = 0x5449462E; // .FIT
+#define FIT_MAGIC 0x5449462E // .FIT
 
 #define RECORD_MESSAGE  20
+#define EVENT_MESSAGE   21
 #define TIMESTAMP_FIELD 253
+
+struct Event {
+	quint8 id;
+	quint8 type;
+	quint32 data;
+
+	Event() : id(0), type(0), data(0) {}
+};
 
 
 FITParser::FITParser()
@@ -17,7 +26,9 @@ FITParser::FITParser()
 	_device = 0;
 	_endian = 0;
 	_timestamp = 0;
+	_last = 0;
 	_len = 0;
+	_ratio = NAN;
 }
 
 void FITParser::clearDefinitions()
@@ -89,7 +100,7 @@ bool FITParser::skipValue(size_t size)
 bool FITParser::parseDefinitionMessage(quint8 header)
 {
 	int local_id = header & 0x0f;
-	MessageDefinition* def = &_defs[local_id];
+	MessageDefinition *def = &_defs[local_id];
 	quint8 i;
 
 
@@ -160,6 +171,7 @@ bool FITParser::readField(Field *f, quint32 &val)
 	val = (quint32)-1;
 
 	switch (f->type) {
+		case 0: // enum
 		case 1: // sint8
 		case 2: // uint8
 			if (f->size == 1) {
@@ -191,13 +203,31 @@ bool FITParser::readField(Field *f, quint32 &val)
 	return ret;
 }
 
+bool FITParser::addEntry(TrackData &track)
+{
+	if (_trackpoint.coordinates().isValid()) {
+		_trackpoint.setTimestamp(QDateTime::fromTime_t(_timestamp
+		  + 631065600));
+		_trackpoint.setRatio(_ratio);
+		track.append(_trackpoint);
+	} else {
+		if (_trackpoint.coordinates().isNull())
+			warning("Missing coordinates");
+		else {
+			_errorString = "Invalid coordinates";
+			return false;
+		}
+	}
+
+	return true;
+}
+
 bool FITParser::parseData(TrackData &track, MessageDefinition *def,
   quint8 offset)
 {
 	Field *field;
-	quint32 timestamp = _timestamp + offset;
+	Event event;
 	quint32 val;
-	Trackpoint trackpoint;
 	int i;
 
 
@@ -206,7 +236,15 @@ bool FITParser::parseData(TrackData &track, MessageDefinition *def,
 		return false;
 	}
 
+	if (def->globalId == RECORD_MESSAGE && _last != _timestamp) {
+		if (!addEntry(track))
+			return false;
+		_last = _timestamp;
+		_trackpoint = Trackpoint();
+	}
+
 	_endian = def->endian;
+	_timestamp += offset;
 
 	for (i = 0; i < def->numFields; i++) {
 		field = &def->fields[i];
@@ -214,46 +252,58 @@ bool FITParser::parseData(TrackData &track, MessageDefinition *def,
 			return false;
 
 		if (field->id == TIMESTAMP_FIELD)
-			_timestamp = timestamp = val;
+			_timestamp = val;
 		else if (def->globalId == RECORD_MESSAGE) {
 			switch (field->id) {
 				case 0:
 					if (val != 0x7fffffff)
-						trackpoint.rcoordinates().setLat(
+						_trackpoint.rcoordinates().setLat(
 						  ((qint32)val / (double)0x7fffffff) * 180);
 					break;
 				case 1:
 					if (val != 0x7fffffff)
-						trackpoint.rcoordinates().setLon(
+						_trackpoint.rcoordinates().setLon(
 						  ((qint32)val / (double)0x7fffffff) * 180);
 					break;
 				case 2:
 					if (val != 0xffff)
-						trackpoint.setElevation((val / 5.0) - 500);
+						_trackpoint.setElevation((val / 5.0) - 500);
 					break;
 				case 3:
 					if (val != 0xff)
-						trackpoint.setHeartRate(val);
+						_trackpoint.setHeartRate(val);
 					break;
 				case 4:
 					if (val != 0xff)
-						trackpoint.setCadence(val);
+						_trackpoint.setCadence(val);
 					break;
 				case 6:
 					if (val != 0xffff)
-						trackpoint.setSpeed(val / 1000.0f);
+						_trackpoint.setSpeed(val / 1000.0f);
 					break;
 				case 7:
 					if (val != 0xffff)
-						trackpoint.setPower(val);
+						_trackpoint.setPower(val);
 					break;
 				case 13:
 					if (val != 0x7f)
-						trackpoint.setTemperature((qint8)val);
+						_trackpoint.setTemperature((qint8)val);
 					break;
 				default:
 					break;
 
+			}
+		} else if (def->globalId == EVENT_MESSAGE) {
+			switch (field->id) {
+				case 0:
+					event.id = val;
+					break;
+				case 1:
+					event.type = val;
+					break;
+				case 3:
+					event.data = val;
+					break;
 			}
 		}
 	}
@@ -264,19 +314,11 @@ bool FITParser::parseData(TrackData &track, MessageDefinition *def,
 			return false;
 	}
 
-
-	if (def->globalId == RECORD_MESSAGE) {
-		if (trackpoint.coordinates().isValid()) {
-			trackpoint.setTimestamp(QDateTime::fromTime_t(timestamp
-			  + 631065600));
-			track.append(trackpoint);
-		} else {
-			if (trackpoint.coordinates().isNull())
-				warning("Missing coordinates");
-			else {
-				_errorString = "Invalid coordinates";
-				return false;
-			}
+	if (def->globalId == EVENT_MESSAGE) {
+		if ((event.id == 42 || event.id == 43)  && event.type == 3) {
+			quint32 front = ((event.data & 0xFF000000) >> 24);
+			quint32 rear = ((event.data & 0x0000FF00) >> 8);
+			_ratio = ((qreal)front / (qreal)rear);
 		}
 	}
 
@@ -286,14 +328,14 @@ bool FITParser::parseData(TrackData &track, MessageDefinition *def,
 bool FITParser::parseDataMessage(TrackData &track, quint8 header)
 {
 	int local_id = header & 0xf;
-	MessageDefinition* def = &_defs[local_id];
+	MessageDefinition *def = &_defs[local_id];
 	return parseData(track, def, 0);
 }
 
 bool FITParser::parseCompressedMessage(TrackData &track, quint8 header)
 {
 	int local_id = (header >> 5) & 3;
-	MessageDefinition* def = &_defs[local_id];
+	MessageDefinition *def = &_defs[local_id];
 	return parseData(track, def, header & 0x1f);
 }
 
@@ -348,6 +390,9 @@ bool FITParser::parse(QFile *file, QList<TrackData> &tracks,
 	_device = file;
 	_endian = 0;
 	_timestamp = 0;
+	_last = 0;
+	_ratio = NAN;
+	_trackpoint = Trackpoint();
 
 	if (!parseHeader())
 		return false;
@@ -356,8 +401,10 @@ bool FITParser::parse(QFile *file, QList<TrackData> &tracks,
 	TrackData &track = tracks.last();
 
 	while (_len)
-		if ((ret = parseRecord(track)) == false)
+		if (!(ret = parseRecord(track)))
 			break;
+	if (ret && _trackpoint.coordinates().isValid())
+		ret = addEntry(track);
 
 	clearDefinitions();
 
