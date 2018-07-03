@@ -67,7 +67,8 @@ inline QDebug operator<<(QDebug dbg, const Trackpoint &trackpoint)
 	dbg.nospace() << "Trackpoint(" << trackpoint.coordinates() << ", "
 	  << trackpoint.timestamp() << ", " << trackpoint.elevation() << ", "
 	  << trackpoint.speed() << ", " << trackpoint.heartRate() << ", "
-	  << trackpoint.temperature() << ")";
+	  << trackpoint.temperature() << ", " << trackpoint.cadence() << ", "
+	  << trackpoint.power() << ", " << trackpoint.ratio() << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG
