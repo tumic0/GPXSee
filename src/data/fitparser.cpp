@@ -41,9 +41,9 @@ public:
 	quint8 endian;
 	quint16 globalId;
 	quint8 numFields;
-	FITParser::Field *fields;
+	Field *fields;
 	quint8 numDevFields;
-	FITParser::Field *devFields;
+	Field *devFields;
 };
 
 class FITParser::CTX {
@@ -55,7 +55,7 @@ public:
 	quint32 len;
 	quint8 endian;
 	quint32 timestamp, lastWrite;
-	FITParser::MessageDefinition defs[16];
+	MessageDefinition defs[16];
 	qreal ratio;
 	Trackpoint trackpoint;
 	TrackData track;
