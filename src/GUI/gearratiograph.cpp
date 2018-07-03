@@ -60,7 +60,7 @@ QList<GraphItem*> GearRatioGraph::loadData(const Data &data)
 
 qreal GearRatioGraph::top() const
 {
-	qreal key, val;
+	qreal key = NAN, val = NAN;
 
 	for (QMap<qreal, qreal>::const_iterator it = _map.constBegin();
 	  it != _map.constEnd(); ++it) {

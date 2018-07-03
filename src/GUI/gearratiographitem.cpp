@@ -5,7 +5,7 @@
 GearRatioGraphItem::GearRatioGraphItem(const Graph &graph, GraphType type,
   QGraphicsItem *parent) : GraphItem(graph, type, parent)
 {
-	qreal val;
+	qreal val = NAN;
 
 	for (int j = 1; j < graph.size(); j++) {
 		const GraphPoint &p = graph.at(j);
