@@ -5,7 +5,7 @@ KML, FIT, IGC, NMEA and OziExplorer files.
 ## Features
 * User-definable online maps (OSM/Google tiles, WMTS, WMS).
 * Offline maps (OziExplorer maps, TrekBuddy maps/atlases, Garmin JNX maps, GeoTIFF images).
-* Elevation, speed, heart rate, cadence, power and temperature graphs.
+* Elevation, speed, heart rate, cadence, power, temperature and gear ratio/shifts graphs.
 * Support for multiple tracks in one view.
 * Support for POI files.
 * Print/export to PDF.
