@@ -788,22 +788,22 @@
         <location filename="../src/GUI/gearratiograph.cpp" line="11"/>
         <location filename="../src/GUI/gearratiograph.h" line="14"/>
         <source>Gear ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Utväxling</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="19"/>
         <source>Most used</source>
-        <translation type="unfinished"></translation>
+        <translation>Mest använd</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="21"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="23"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximum</translation>
     </message>
 </context>
 <context>
@@ -811,17 +811,17 @@
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="34"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="35"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="36"/>
         <source>Most used</source>
-        <translation type="unfinished"></translation>
+        <translation>Mest använd</translation>
     </message>
 </context>
 <context>
