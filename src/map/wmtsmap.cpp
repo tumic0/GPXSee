@@ -36,7 +36,8 @@ bool WMTSMap::loadWMTS()
 }
 
 WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent)
-  : Map(parent), _name(name), _setup(setup), _zoom(0), _valid(false)
+  : Map(parent), _name(name), _setup(setup), _tileLoader(0), _zoom(0),
+  _valid(false)
 {
 	if (!QDir().mkpath(tilesDir())) {
 		_errorString = "Error creating tiles dir";

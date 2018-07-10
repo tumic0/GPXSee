@@ -3,7 +3,7 @@
 #include "gearratiographitem.h"
 
 GearRatioGraphItem::GearRatioGraphItem(const Graph &graph, GraphType type,
-  QGraphicsItem *parent) : GraphItem(graph, type, parent)
+  QGraphicsItem *parent) : GraphItem(graph, type, parent), _top(NAN)
 {
 	qreal val = NAN;
 
