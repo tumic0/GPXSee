@@ -3,6 +3,8 @@
 #include <QFileInfo>
 #include <QPixmapCache>
 #include "rectd.h"
+#include "gcs.h"
+#include "pcs.h"
 #include "jnxmap.h"
 
 
@@ -82,6 +84,15 @@ bool JNXMap::readTiles()
 		}
 	}
 
+	QByteArray guid;
+	if (!(readValue(dummy) && readString(guid)))
+		return false;
+	/* Use WebMercator projection for nakarte.tk maps */
+	if (guid == "12345678-1234-1234-1234-123456789ABC")
+		_projection = Projection(PCS::pcs(3857));
+	else
+		_projection = Projection(GCS::gcs(4326));
+
 	_zooms = QVector<Zoom>(lh.size());
 	for (int i = 0; i < lh.count(); i++) {
 		Zoom &z = _zooms[i];
@@ -102,8 +113,8 @@ bool JNXMap::readTiles()
 			  && readValue(tile.offset)))
 				return false;
 
-			RectD rect(PointD(ic2dc(left), ic2dc(top)), PointD(ic2dc(right),
-			  ic2dc(bottom)));
+			RectD rect(_projection.ll2xy(Coordinates(ic2dc(left), ic2dc(top))),
+			  _projection.ll2xy(Coordinates(ic2dc(right), ic2dc(bottom))));
 
 			if (j == 0) {
 				ReferencePoint tl(PointD(0, 0), rect.topLeft());
@@ -147,24 +158,19 @@ JNXMap::JNXMap(const QString &fileName, QObject *parent)
 
 QPointF JNXMap::ll2xy(const Coordinates &c)
 {
-	const Transform &t = _zooms.at(_zoom).transform;
-	return t.proj2img(PointD(c.lon(), c.lat()));
+	const Zoom &z = _zooms.at(_zoom);
+	return z.transform.proj2img(_projection.ll2xy(c));
 }
 
 Coordinates JNXMap::xy2ll(const QPointF &p)
 {
-	const Transform &t = _zooms.at(_zoom).transform;
-	PointD pp(t.img2proj(p));
-	return Coordinates(pp.x(), pp.y());
+	const Zoom &z = _zooms.at(_zoom);
+	return _projection.xy2ll(z.transform.img2proj(p));
 }
 
 QRectF JNXMap::bounds()
 {
-	const Transform &t = _zooms.at(_zoom).transform;
-
-	return QRectF(t.proj2img(PointD(_bounds.topLeft().lon(),
-	  _bounds.topLeft().lat())), t.proj2img(PointD(_bounds.bottomRight().lon(),
-	  _bounds.bottomRight().lat())));
+	return QRectF(ll2xy(_bounds.topLeft()), ll2xy(_bounds.bottomRight()));
 }
 
 int JNXMap::zoomFit(const QSize &size, const RectC &rect)

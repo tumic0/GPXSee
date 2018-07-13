@@ -6,6 +6,7 @@
 #include "common/rtree.h"
 #include "common/rectc.h"
 #include "transform.h"
+#include "projection.h"
 #include "map.h"
 
 class JNXMap : public Map
@@ -59,6 +60,7 @@ private:
 	QVector<Zoom> _zooms;
 	int _zoom;
 	RectC _bounds;
+	Projection _projection;
 
 	bool _valid;
 	QString _errorString;
