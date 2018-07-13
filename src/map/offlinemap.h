@@ -18,9 +18,9 @@ public:
 	OfflineMap(const QString &fileName, Tar &tar, QObject *parent = 0);
 	~OfflineMap();
 
-	const QString &name() const {return _name;}
+	QString name() const {return _name;}
 
-	QRectF bounds() const;
+	QRectF bounds();
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom) {_zoom = zoom;}

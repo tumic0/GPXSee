@@ -16,9 +16,9 @@ public:
 public:
 	JNXMap(const QString &fileName, QObject *parent = 0);
 
-	const QString &name() const {return _name;}
+	QString name() const {return _name;}
 
-	QRectF bounds() const;
+	QRectF bounds();
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom) {_zoom = zoom;}

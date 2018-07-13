@@ -22,12 +22,12 @@ static bool resCmp(OfflineMap *m1, OfflineMap *m2)
 	return r1 > r2;
 }
 
-static bool xCmp(const OfflineMap *m1, const OfflineMap *m2)
+static bool xCmp(OfflineMap *m1, OfflineMap *m2)
 {
 	return TL(m1).x() < TL(m2).x();
 }
 
-static bool yCmp(const OfflineMap *m1, const OfflineMap *m2)
+static bool yCmp(OfflineMap *m1, OfflineMap *m2)
 {
 	return TL(m1).y() > TL(m2).y();
 }
@@ -147,7 +147,7 @@ Atlas::Atlas(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
-QRectF Atlas::bounds() const
+QRectF Atlas::bounds()
 {
 	QSizeF s(0, 0);
 

@@ -158,7 +158,7 @@ Coordinates JNXMap::xy2ll(const QPointF &p)
 	return Coordinates(pp.x(), pp.y());
 }
 
-QRectF JNXMap::bounds() const
+QRectF JNXMap::bounds()
 {
 	const Transform &t = _zooms.at(_zoom).transform;
 

@@ -15,9 +15,9 @@ public:
 	  const RectC &bounds, const Authorization &authorization,
 	  QObject *parent = 0);
 
-	const QString &name() const {return _name;}
+	QString name() const {return _name;}
 
-	QRectF bounds() const;
+	QRectF bounds();
 	qreal resolution(const QRectF &rect);
 
 	int zoom() const {return _zoom;}
@@ -26,10 +26,8 @@ public:
 	int zoomIn();
 	int zoomOut();
 
-	QPointF ll2xy(const Coordinates &c)
-		{return static_cast<const OnlineMap &>(*this).ll2xy(c);}
-	Coordinates xy2ll(const QPointF &p)
-		{return static_cast<const OnlineMap &>(*this).xy2ll(p);}
+	QPointF ll2xy(const Coordinates &c);
+	Coordinates xy2ll(const QPointF &p);
 
 	void draw(QPainter *painter, const QRectF &rect, bool block);
 
@@ -39,8 +37,6 @@ public:
 	QString errorString() const {return _errorString;}
 
 private:
-	QPointF ll2xy(const Coordinates &c) const;
-	Coordinates xy2ll(const QPointF &p) const;
 	int limitZoom(int zoom) const;
 
 	TileLoader *_tileLoader;

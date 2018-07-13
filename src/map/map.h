@@ -18,9 +18,9 @@ public:
 	Map(QObject *parent = 0) : QObject(parent) {}
 	virtual ~Map() {}
 
-	virtual const QString &name() const = 0;
+	virtual QString name() const = 0;
 
-	virtual QRectF bounds() const = 0;
+	virtual QRectF bounds() = 0;
 	virtual qreal resolution(const QRectF &rect);
 
 	virtual int zoom() const = 0;

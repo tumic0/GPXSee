@@ -333,7 +333,7 @@ Coordinates OfflineMap::xy2ll(const QPointF &p)
 	  : _projection.xy2ll(_transform.img2proj(p));
 }
 
-QRectF OfflineMap::bounds() const
+QRectF OfflineMap::bounds()
 {
 	return _ozf
 	  ? QRectF(QPointF(0, 0), _ozf->size(_zoom))

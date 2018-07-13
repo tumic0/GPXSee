@@ -127,7 +127,7 @@ void WMSMap::clearCache()
 		qWarning("%s: %s\n", qPrintable(_name), qPrintable(_errorString));
 }
 
-QRectF WMSMap::bounds() const
+QRectF WMSMap::bounds()
 {
 	return QRectF(_transform.proj2img(_bbox.topLeft()),
 	  _transform.proj2img(_bbox.bottomRight()));

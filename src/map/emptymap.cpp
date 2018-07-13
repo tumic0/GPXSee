@@ -46,7 +46,7 @@ EmptyMap::EmptyMap(QObject *parent) : Map(parent)
 	_zoom = ZOOM_MAX;
 }
 
-QRectF EmptyMap::bounds() const
+QRectF EmptyMap::bounds()
 {
 	return QRectF(ll2xy(Coordinates(-180, 85)), ll2xy(Coordinates(180, -85)));
 }
@@ -92,14 +92,14 @@ void EmptyMap::draw(QPainter *painter, const QRectF &rect, bool block)
 	Q_UNUSED(block);
 }
 
-QPointF EmptyMap::ll2xy(const Coordinates &c) const
+QPointF EmptyMap::ll2xy(const Coordinates &c)
 {
 	qreal scale = zoom2scale(_zoom);
 	QPointF m = ll2m(c);
 	return QPointF(m.x() / scale, m.y() / -scale);
 }
 
-Coordinates EmptyMap::xy2ll(const QPointF &p) const
+Coordinates EmptyMap::xy2ll(const QPointF &p)
 {
 	qreal scale = zoom2scale(_zoom);
 	return m2ll(QPointF(p.x() * scale, -p.y() * scale));

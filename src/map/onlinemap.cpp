@@ -64,7 +64,7 @@ OnlineMap::OnlineMap(const QString &name, const QString &url,
 	_valid = true;
 }
 
-QRectF OnlineMap::bounds() const
+QRectF OnlineMap::bounds()
 {
 	return QRectF(ll2xy(_bounds.topLeft()), ll2xy(_bounds.bottomRight()));
 }
@@ -141,14 +141,14 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, bool block)
 	}
 }
 
-QPointF OnlineMap::ll2xy(const Coordinates &c) const
+QPointF OnlineMap::ll2xy(const Coordinates &c)
 {
 	qreal scale = zoom2scale(_zoom);
 	QPointF m = ll2m(c);
 	return QPointF(m.x() / scale, m.y() / -scale);
 }
 
-Coordinates OnlineMap::xy2ll(const QPointF &p) const
+Coordinates OnlineMap::xy2ll(const QPointF &p)
 {
 	qreal scale = zoom2scale(_zoom);
 	return m2ll(QPointF(p.x() * scale, -p.y() * scale));
