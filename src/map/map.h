@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QString>
 #include <QRectF>
-#include <QColor>
 #include "common/coordinates.h"
 
 class QPainter;
