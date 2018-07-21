@@ -640,20 +640,20 @@ void GUI::paths()
 
 	msgBox.setWindowTitle(tr("Paths"));
 	msgBox.setText("<h3>" + tr("Paths") + "</h3>");
-	msgBox.setInformativeText("<h4>" + tr("Global")
-	  + "</h4><style>td {white-space: pre; padding-right: 1em;}</style>"
-	  + "<div><table><tr><td>" + tr("Map directory:") + "</td><td><code>"
-	  + QDir::cleanPath(GLOBAL_MAP_DIR) + "</code></td></tr><tr><td>"
-	  + tr("POI directory:") + "</td><td><code>"
+	msgBox.setInformativeText(
+	  "<style>td {white-space: pre; padding-right: 1em;}</style><h4>"
+	  + tr("Global") + "</h4><table><tr><td>" + tr("Map directory:")
+	  + "</td><td><code>" + QDir::cleanPath(GLOBAL_MAP_DIR)
+	  + "</code></td></tr><tr><td>" + tr("POI directory:") + "</td><td><code>"
 	  + QDir::cleanPath(GLOBAL_POI_DIR) + "</code></td></tr><tr><td>"
 	  + tr("GCS/PCS directory:") + "</td><td><code>"
-	  + QDir::cleanPath(GLOBAL_CSV_DIR) + "</code></td></tr></table></div>"
-	  + "<h4>" + tr("User-specific") + "</h4><div><table><tr><td>"
+	  + QDir::cleanPath(GLOBAL_CSV_DIR) + "</code></td></tr></table>"
+	  + "<h4>" + tr("User-specific") + "</h4><table><tr><td>"
 	  + tr("Map directory:") + "</td><td><code>" + QDir::cleanPath(USER_MAP_DIR)
 	  + "</code></td></tr><tr><td>" + tr("POI directory:") + "</td><td><code>"
 	  + QDir::cleanPath(USER_POI_DIR) + "</code></td></tr><tr><td>"
 	  + tr("GCS/PCS directory:") + "</td><td><code>"
-	  + QDir::cleanPath(USER_CSV_DIR) + "</code></td></tr></table></div>"
+	  + QDir::cleanPath(USER_CSV_DIR) + "</code></td></tr></table>"
 	);
 
 	msgBox.exec();
