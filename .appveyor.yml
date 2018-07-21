@@ -1,4 +1,4 @@
-version: 5.15.{build}
+version: 5.16.{build}
 configuration: Release
 platform: Any CPU
 environment:
