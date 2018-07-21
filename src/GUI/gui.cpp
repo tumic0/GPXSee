@@ -646,13 +646,13 @@ void GUI::paths()
 	  + QDir::cleanPath(GLOBAL_MAP_DIR) + "</code></td></tr><tr><td>"
 	  + tr("POI directory:") + "</td><td><code>"
 	  + QDir::cleanPath(GLOBAL_POI_DIR) + "</code></td></tr><tr><td>"
-	  + tr("GCS/PCS CSV directory:") + "</td><td><code>"
+	  + tr("GCS/PCS directory:") + "</td><td><code>"
 	  + QDir::cleanPath(GLOBAL_CSV_DIR) + "</code></td></tr></table></div>"
 	  + "<h4>" + tr("User-specific") + "</h4><div><table><tr><td>"
 	  + tr("Map directory:") + "</td><td><code>" + QDir::cleanPath(USER_MAP_DIR)
 	  + "</code></td></tr><tr><td>" + tr("POI directory:") + "</td><td><code>"
 	  + QDir::cleanPath(USER_POI_DIR) + "</code></td></tr><tr><td>"
-	  + tr("GCS/PCS CSV directory:") + "</td><td><code>"
+	  + tr("GCS/PCS directory:") + "</td><td><code>"
 	  + QDir::cleanPath(USER_CSV_DIR) + "</code></td></tr></table></div>"
 	);
 
