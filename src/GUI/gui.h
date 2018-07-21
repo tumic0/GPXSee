@@ -47,6 +47,7 @@ private slots:
 	void openFile();
 	void closeAll();
 	void reloadFile();
+	void statistics();
 	void openPOIFile();
 	void closePOIFiles();
 	void showGraphs(bool show);
@@ -150,6 +151,7 @@ private:
 	QAction *_openFileAction;
 	QAction *_closeFileAction;
 	QAction *_reloadFileAction;
+	QAction *_statisticsAction;
 	QAction *_openPOIAction;
 	QAction *_closePOIAction;
 	QAction *_showPOIAction;

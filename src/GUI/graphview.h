@@ -7,12 +7,12 @@
 #include "data/graph.h"
 #include "palette.h"
 #include "units.h"
+#include "infoitem.h"
 
 
 class AxisItem;
 class SliderItem;
 class SliderInfoItem;
-class InfoItem;
 class GraphItem;
 class PathItem;
 class GridItem;
@@ -27,6 +27,7 @@ public:
 	~GraphView();
 
 	bool isEmpty() const {return _graphs.isEmpty();}
+	const QList<KV> &info() const {return _info->info();}
 	void clear();
 
 	void plot(QPainter *painter, const QRectF &target, qreal scale);

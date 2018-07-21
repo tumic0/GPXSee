@@ -132,7 +132,8 @@ HEADERS += src/config.h \
     src/map/geocentric.h \
     src/map/mercator.h \
     src/map/jnxmap.h \
-    src/map/krovak.h
+    src/map/krovak.h \
+    src/GUI/kv.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \

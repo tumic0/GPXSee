@@ -238,6 +238,10 @@ void GUI::createActions()
 	_reloadFileAction->setActionGroup(_fileActionGroup);
 	connect(_reloadFileAction, SIGNAL(triggered()), this, SLOT(reloadFile()));
 	addAction(_reloadFileAction);
+	_statisticsAction = new QAction(tr("Statistics..."), this);
+	_statisticsAction->setShortcut(STATISTICS_SHORTCUT);
+	_statisticsAction->setActionGroup(_fileActionGroup);
+	connect(_statisticsAction, SIGNAL(triggered()), this, SLOT(statistics()));
 
 	// POI actions
 	_openPOIAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)),
@@ -432,8 +436,9 @@ void GUI::createMenus()
 	fileMenu->addAction(_printFileAction);
 	fileMenu->addAction(_exportFileAction);
 	fileMenu->addSeparator();
-	fileMenu->addAction(_reloadFileAction);
+	fileMenu->addAction(_statisticsAction);
 	fileMenu->addSeparator();
+	fileMenu->addAction(_reloadFileAction);
 	fileMenu->addAction(_closeFileAction);
 #ifndef Q_OS_MAC
 	fileMenu->addSeparator();
@@ -908,6 +913,67 @@ void GUI::exportFile()
 	plot(&printer);
 }
 
+void GUI::statistics()
+{
+	QString text = "<style>td {white-space: pre; padding-right: 1em;}"
+	  "th {text-align: left; padding-top: 0.5em;}</style><table>";
+
+	if (_showTracksAction->isChecked() && _trackCount > 1)
+		text.append("<tr><td>" + tr("Tracks") + ":</td><td>"
+		  + QString::number(_trackCount) + "</td></tr>");
+	if (_showRoutesAction->isChecked() && _routeCount > 1)
+		text.append("<tr><td>" + tr("Routes") + ":</td><td>"
+		  + QString::number(_routeCount) + "</td></tr>");
+	if (_showWaypointsAction->isChecked() && _waypointCount > 1)
+		text.append("<tr><td>" + tr("Waypoints") + ":</td><td>"
+		  + QString::number(_waypointCount) + "</td></tr>");
+
+	if (_dateRange.first.isValid()) {
+		if (_dateRange.first == _dateRange.second) {
+			QString format = QLocale::system().dateFormat(QLocale::LongFormat);
+			text.append("<tr><td>" + tr("Date") + ":</td><td>"
+			  + _dateRange.first.toString(format) + "</td></tr>");
+		} else {
+			QString format = QLocale::system().dateFormat(QLocale::ShortFormat);
+			text.append("<tr><td>" + tr("Date") + ":</td><td>"
+			  + QString("%1 - %2").arg(_dateRange.first.toString(format),
+			  _dateRange.second.toString(format)) + "</td></tr>");
+		}
+	}
+
+	if (distance() > 0)
+		text.append("<tr><td>" + tr("Distance") + ":</td><td>"
+		  + Format::distance(distance(), units()) + "</td></tr>");
+	if (time() > 0) {
+		text.append("<tr><td>" + tr("Time") + ":</td><td>"
+		  + Format::timeSpan(time()) + "</td></tr>");
+		text.append("<tr><td>" + tr("Moving time") + ":</td><td>"
+		  + Format::timeSpan(movingTime()) + "</td></tr>");
+	}
+
+	for (int i = 0; i < _tabs.count(); i++) {
+		const GraphTab *tab = _tabs.at(i);
+		if (tab->isEmpty())
+			continue;
+
+		text.append("<tr><th colspan=\"2\">" + tab->label() + "</th></tr>");
+		for (int j = 0; j < tab->info().size(); j++) {
+			const KV &kv = tab->info().at(j);
+			text.append("<tr><td>" + kv.key() + ":</td><td>" + kv.value()
+			  + "</td></tr>");
+		}
+	}
+
+	text.append("</table>");
+
+
+	QMessageBox msgBox(this);
+	msgBox.setWindowTitle(tr("Statistics"));
+	msgBox.setText("<h3>" + tr("Statistics") + "</h3>");
+	msgBox.setInformativeText(text);
+	msgBox.exec();
+}
+
 void GUI::plot(QPrinter *printer)
 {
 	QPainter p(printer);
@@ -925,7 +991,7 @@ void GUI::plot(QPrinter *printer)
 			info.insert(tr("Tracks"), QString::number(_trackCount));
 		if (_showRoutesAction->isChecked() && _routeCount > 1)
 			info.insert(tr("Routes"), QString::number(_routeCount));
-		if (_showWaypointsAction->isChecked() && _waypointCount > 2)
+		if (_showWaypointsAction->isChecked() && _waypointCount > 1)
 			info.insert(tr("Waypoints"), QString::number(_waypointCount));
 	}
 

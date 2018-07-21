@@ -22,8 +22,8 @@ void InfoItem::updateBoundingRect()
 
 	for (QList<KV>::const_iterator i = _list.constBegin();
 	  i != _list.constEnd(); i++) {
-		width += fm.width(i->key + ": ");
-		width += fm.width(i->value) + ((i == _list.constEnd() - 1)
+		width += fm.width(i->key() + ": ");
+		width += fm.width(i->value()) + ((i == _list.constEnd() - 1)
 		  ? 0 : PADDING);
 	}
 
@@ -43,10 +43,10 @@ void InfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 	for (QList<KV>::const_iterator i = _list.constBegin();
 	  i != _list.constEnd(); i++) {
-		painter->drawText(width, fm.height() - fm.descent(), i->key + ": ");
-		width += fm.width(i->key + ": ");
-		painter->drawText(width, fm.height() - fm.descent(), i->value);
-		width += fm.width(i->value) + ((i == _list.constEnd() - 1)
+		painter->drawText(width, fm.height() - fm.descent(), i->key() + ": ");
+		width += fm.width(i->key() + ": ");
+		painter->drawText(width, fm.height() - fm.descent(), i->value());
+		width += fm.width(i->value()) + ((i == _list.constEnd() - 1)
 		  ? 0 : PADDING);
 		if (i != _list.constEnd() - 1) {
 			painter->save();
