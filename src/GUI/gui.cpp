@@ -984,9 +984,7 @@ void GUI::plot(QPrinter *printer)
 	QPainter p(printer);
 	TrackInfo info;
 	qreal ih, gh, mh, ratio;
-	qreal d = distance();
-	qreal t = time();
-	qreal tm = movingTime();
+
 
 	if (!_pathName.isNull() && _options.printName)
 		info.insert(tr("Name"), _pathName);
@@ -1012,12 +1010,12 @@ void GUI::plot(QPrinter *printer)
 		}
 	}
 
-	if (d > 0 && _options.printDistance)
-		info.insert(tr("Distance"), Format::distance(d, units()));
-	if (t > 0 && _options.printTime)
-		info.insert(tr("Time"), Format::timeSpan(t));
-	if (tm > 0 && _options.printMovingTime)
-		info.insert(tr("Moving time"), Format::timeSpan(tm));
+	if (distance() > 0 && _options.printDistance)
+		info.insert(tr("Distance"), Format::distance(distance(), units()));
+	if (time() > 0 && _options.printTime)
+		info.insert(tr("Time"), Format::timeSpan(time()));
+	if (movingTime() > 0 && _options.printMovingTime)
+		info.insert(tr("Moving time"), Format::timeSpan(movingTime()));
 
 	qreal fsr = 1085.0 / (qMax(printer->width(), printer->height())
 	  / (qreal)printer->resolution());
