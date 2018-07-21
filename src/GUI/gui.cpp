@@ -915,8 +915,13 @@ void GUI::exportFile()
 
 void GUI::statistics()
 {
-	QString text = "<style>td {white-space: pre; padding-right: 1em;}"
+#ifdef Q_OS_WIN32
+	QString text = "<style>td {white-space: pre; padding-right: 4em;}"
 	  "th {text-align: left; padding-top: 0.5em;}</style><table>";
+#else // Q_OS_WIN32
+	QString text = "<style>td {white-space: pre; padding-right: 2em;}"
+	  "th {text-align: left; padding-top: 0.5em;}</style><table>";
+#endif // Q_OS_WIN32
 
 	if (_showTracksAction->isChecked() && _trackCount > 1)
 		text.append("<tr><td>" + tr("Tracks") + ":</td><td>"
