@@ -397,7 +397,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="241"/>
         <source>Statistics...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilasto...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="248"/>
@@ -596,24 +596,24 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="650"/>
         <source>Global</source>
-        <translation type="unfinished"></translation>
+        <translation>Globaaliset</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="654"/>
         <location filename="../src/GUI/gui.cpp" line="660"/>
         <source>GCS/PCS directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>GCS/PCS:n hakemisto:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="656"/>
         <source>User-specific</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjäkohtaiset</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="976"/>
         <location filename="../src/GUI/gui.cpp" line="977"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilasto</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1219"/>
