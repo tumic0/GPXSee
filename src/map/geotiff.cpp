@@ -313,9 +313,7 @@ const GCS *GeoTIFF::gcs(QMap<quint16, Value> &kv)
 
 		if (!(gcs = GCS::gcs(gd, pm, au)))
 			_errorString = QString("%1+%2: unknown geodetic datum + prime"
-			  " meridian combination")
-			  .arg(kv.value(GeogGeodeticDatumGeoKey).SHORT)
-			  .arg(kv.value(GeogPrimeMeridianGeoKey).SHORT);
+			  " meridian combination").arg(gd).arg(pm);
 	} else
 		_errorString = "Can not determine GCS";
 
