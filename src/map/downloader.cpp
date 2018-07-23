@@ -81,6 +81,9 @@ private:
 
 QNetworkAccessManager *Downloader::_manager = 0;
 int Downloader::_timeout = 30;
+#ifdef ENABLE_HTTP2
+bool Downloader::_http2 = true;
+#endif // ENABLE_HTTP2
 
 bool Downloader::doDownload(const Download &dl,
   const QByteArray &authorization, const Redirect *redirect)
@@ -108,6 +111,10 @@ bool Downloader::doDownload(const Download &dl,
 	request.setRawHeader("User-Agent", USER_AGENT);
 	if (!authorization.isNull())
 		request.setRawHeader("Authorization", authorization);
+#ifdef ENABLE_HTTP2
+	request.setAttribute(QNetworkRequest::HTTP2AllowedAttribute,
+	  QVariant(_http2));
+#endif // ENABLE_HTTP2
 
 	QNetworkReply *reply = _manager->get(request);
 	if (reply && reply->isRunning()) {

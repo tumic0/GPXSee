@@ -5,6 +5,7 @@
 #include "palette.h"
 #include "units.h"
 
+
 class ColorBox;
 class StyleComboBox;
 class OddSpinBox;
@@ -48,6 +49,9 @@ struct Options {
 	int poiRadius;
 	// System
 	bool useOpenGL;
+#ifdef ENABLE_HTTP2
+	bool enableHTTP2;
+#endif // ENABLE_HTTP2
 	int pixmapCache;
 	int connectionTimeout;
 	// Print/Export
@@ -119,6 +123,9 @@ private:
 	QSpinBox *_pixmapCache;
 	QSpinBox *_connectionTimeout;
 	QCheckBox *_useOpenGL;
+#ifdef ENABLE_HTTP2
+	QCheckBox *_enableHTTP2;
+#endif // ENABLE_HTTP2
 	// Print/Export
 	QRadioButton *_wysiwyg;
 	QRadioButton *_hires;

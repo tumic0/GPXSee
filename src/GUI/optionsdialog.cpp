@@ -440,6 +440,10 @@ QWidget *OptionsDialog::createSystemPage()
 {
 	_useOpenGL = new QCheckBox(tr("Use OpenGL"));
 	_useOpenGL->setChecked(_options->useOpenGL);
+#ifdef ENABLE_HTTP2
+	_enableHTTP2 = new QCheckBox(tr("Enable HTTP/2"));
+	_enableHTTP2->setChecked(_options->enableHTTP2);
+#endif // ENABLE_HTTP2
 
 	_pixmapCache = new QSpinBox();
 	_pixmapCache->setMinimum(16);
@@ -458,6 +462,9 @@ QWidget *OptionsDialog::createSystemPage()
 	formLayout->addRow(tr("Connection timeout:"), _connectionTimeout);
 
 	QFormLayout *checkboxLayout = new QFormLayout();
+#ifdef ENABLE_HTTP2
+	checkboxLayout->addWidget(_enableHTTP2);
+#endif // ENABLE_HTTP2
 	checkboxLayout->addWidget(_useOpenGL);
 
 	QWidget *systemTab = new QWidget();
@@ -568,6 +575,9 @@ void OptionsDialog::accept()
 		_options->poiRadius = poiRadius;
 
 	_options->useOpenGL = _useOpenGL->isChecked();
+#ifdef ENABLE_HTTP2
+	_options->enableHTTP2 = _enableHTTP2->isChecked();
+#endif // ENABLE_HTTP2
 	_options->pixmapCache = _pixmapCache->value();
 	_options->connectionTimeout = _connectionTimeout->value();
 

@@ -920,6 +920,10 @@ void GUI::openOptions()
 		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
 	if (options.connectionTimeout != _options.connectionTimeout)
 		Downloader::setTimeout(options.connectionTimeout);
+#ifdef ENABLE_HTTP2
+	if (options.enableHTTP2 != _options.enableHTTP2)
+		Downloader::enableHTTP2(options.enableHTTP2);
+#endif // ENABLE_HTTP2
 
 	if (reload)
 		reloadFile();
@@ -1755,6 +1759,10 @@ void GUI::writeSettings()
 		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
 	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
 		settings.setValue(USE_OPENGL_SETTING, _options.useOpenGL);
+#ifdef ENABLE_HTTP2
+	if (_options.enableHTTP2 != ENABLE_HTTP2_DEFAULT)
+		settings.setValue(ENABLE_HTTP2_SETTING, _options.enableHTTP2);
+#endif // ENABLE_HTTP2
 	if (_options.pixmapCache != PIXMAP_CACHE_DEFAULT)
 		settings.setValue(PIXMAP_CACHE_SETTING, _options.pixmapCache);
 	if (_options.connectionTimeout != CONNECTION_TIMEOUT_DEFAULT)
@@ -1987,6 +1995,10 @@ void GUI::readSettings()
 	  .toInt();
 	_options.useOpenGL = settings.value(USE_OPENGL_SETTING, USE_OPENGL_DEFAULT)
 	  .toBool();
+#ifdef ENABLE_HTTP2
+	_options.enableHTTP2 = settings.value(ENABLE_HTTP2_SETTING,
+	  ENABLE_HTTP2_DEFAULT).toBool();
+#endif // ENABLE_HTTP2
 	_options.pixmapCache = settings.value(PIXMAP_CACHE_SETTING,
 	  PIXMAP_CACHE_DEFAULT).toInt();
 	_options.connectionTimeout = settings.value(CONNECTION_TIMEOUT_SETTING,
@@ -2052,6 +2064,9 @@ void GUI::readSettings()
 
 	QPixmapCache::setCacheLimit(_options.pixmapCache * 1024);
 	Downloader::setTimeout(_options.connectionTimeout);
+#ifdef ENABLE_HTTP2
+	Downloader::enableHTTP2(_options.enableHTTP2);
+#endif // ENABLE_HTTP2
 
 	settings.endGroup();
 }
