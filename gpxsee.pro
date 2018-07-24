@@ -9,7 +9,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QT += printsupport
 }
 lessThan(QT_MAJOR_VERSION, 5) {QT += opengl}
-equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 5) {QT += opengl}
+equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 4) {QT += opengl}
 
 INCLUDEPATH += ./src
 HEADERS += src/config.h \
