@@ -6,6 +6,26 @@ static qint64 delphi2unixMS(double date)
 	return (qint64)((date - 25569.0) * 86400000);
 }
 
+static bool isASCII(const QByteArray &ba)
+{
+	for (int i = 0; i < ba.size(); i++) {
+		quint8 c = (quint8)ba.at(i);
+		if (c > 0x7f && c != 0xD1)
+			return false;
+	}
+
+	return true;
+}
+
+static QByteArray &decode(QByteArray &ba)
+{
+	if (isASCII(ba))
+		ba.replace('\xD1', ',');
+
+	return ba;
+}
+
+
 bool PLTParser::parse(QFile *file, QList<TrackData> &tracks,
   QList<RouteData> &routes, QList<Waypoint> &waypoints)
 {
@@ -129,12 +149,14 @@ bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
 				routes.append(RouteData());
 				record = true;
 
-				if (list.size() >= 3)
-					routes.last().setName(list.at(2).trimmed()
-					  .replace('\xD1', ','));
-				if (list.size() >= 4)
-					routes.last().setDescription(list.at(3).trimmed()
-					  .replace('\xD1', ','));
+				if (list.size() >= 3) {
+					QByteArray name(list.at(2).trimmed());
+					routes.last().setName(decode(name));
+				}
+				if (list.size() >= 4) {
+					QByteArray description(list.at(3).trimmed());
+					routes.last().setDescription(decode(description));
+				}
 			} else if (list.at(0).trimmed() == "W") {
 				if (!record || list.size() < 7) {
 					_errorString = "Parse error";
@@ -154,9 +176,9 @@ bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
 
 				Waypoint wp(gcs->toWGS84(Coordinates(lon, lat)));
 
-				QString name(list.at(4).trimmed().replace('\xD1', ','));
+				QByteArray name(list.at(4).trimmed());
 				if (!name.isEmpty())
-					wp.setName(name);
+					wp.setName(decode(name));
 				if (list.size() >= 8) {
 					QByteArray field(list.at(7).trimmed());
 					if (!field.isEmpty()) {
@@ -170,9 +192,9 @@ bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
 					}
 				}
 				if (list.size() >= 14) {
-					QString desc(list.at(13).trimmed().replace('\xD1', ','));
-					if (!desc.isEmpty())
-						wp.setDescription(desc);
+					QByteArray description(list.at(13).trimmed());
+					if (!description.isEmpty())
+						wp.setDescription(decode(description));
 				}
 
 				routes.last().append(wp);
@@ -233,9 +255,9 @@ bool WPTParser::parse(QFile *file, QList<TrackData> &tracks,
 
 			Waypoint wp(gcs->toWGS84(Coordinates(lon, lat)));
 
-			QString name(list.at(1).trimmed().replace('\xD1', ','));
+			QByteArray name(list.at(1).trimmed());
 			if (!name.isEmpty())
-				wp.setName(name);
+				wp.setName(decode(name));
 			if (list.size() >= 5) {
 				QByteArray field(list.at(4).trimmed());
 				if (!field.isEmpty()) {
@@ -249,9 +271,9 @@ bool WPTParser::parse(QFile *file, QList<TrackData> &tracks,
 				}
 			}
 			if (list.size() >= 11) {
-				QString desc(list.at(10).trimmed().replace('\xD1', ','));
-				if (!desc.isEmpty())
-					wp.setDescription(desc);
+				QByteArray description(list.at(10).trimmed());
+				if (!description.isEmpty())
+					wp.setDescription(decode(description));
 			}
 			if (list.size() >= 15) {
 				QByteArray field(list.at(14).trimmed());
