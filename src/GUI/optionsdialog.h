@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "palette.h"
 #include "units.h"
+#include "config.h"
 
 
 class ColorBox;

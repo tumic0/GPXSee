@@ -1,12 +1,16 @@
 TARGET = GPXSee
 VERSION = 5.16
+
 QT += core \
     gui \
     network
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-greaterThan(QT_MAJOR_VERSION, 4): QT += printsupport
-lessThan(QT_VERSION, 5.4): QT += opengl
-macx: QT += opengl
+greaterThan(QT_MAJOR_VERSION, 4) {
+    QT += widgets
+    QT += printsupport
+}
+lessThan(QT_MAJOR_VERSION, 5) {QT += opengl}
+equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 5) {QT += opengl}
+
 INCLUDEPATH += ./src
 HEADERS += src/config.h \
     src/common/staticassert.h \
@@ -235,6 +239,7 @@ SOURCES += src/main.cpp \
     src/map/jnxmap.cpp \
     src/map/krovak.cpp \
     src/map/map.cpp
+
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \
@@ -243,6 +248,7 @@ TRANSLATIONS = lang/gpxsee_cs.ts \
     lang/gpxsee_fi.ts \
     lang/gpxsee_fr.ts \
     lang/gpxsee_pl.ts
+
 macx {
     ICON = icons/gpxsee.icns
     QMAKE_INFO_PLIST = pkg/Info.plist
@@ -283,5 +289,5 @@ win32 {
         icons/wpt.ico
     DEFINES += _USE_MATH_DEFINES
 }
+
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-greaterThan(QT_VERSION, 5.10.0): DEFINES += ENABLE_HTTP2

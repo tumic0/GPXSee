@@ -2,7 +2,6 @@
 #include <QFileInfo>
 #include <QNetworkRequest>
 #include <QBasicTimer>
-#include "config.h"
 #include "downloader.h"
 
 

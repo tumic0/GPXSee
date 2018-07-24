@@ -12,7 +12,6 @@
 #include <QRadioButton>
 #include <QLabel>
 #include <QSysInfo>
-#include "config.h"
 #include "icons.h"
 #include "colorbox.h"
 #include "stylecombobox.h"
