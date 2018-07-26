@@ -35,6 +35,8 @@ public:
 	Coordinates toWGS84(const Coordinates &c) const;
 	Coordinates fromWGS84(const Coordinates &c) const;
 
+	static const Datum &WGS84();
+
 private:
 	enum TransformationType {
 		None,

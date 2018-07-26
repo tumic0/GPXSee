@@ -46,8 +46,7 @@ QList<GCS::Entry> GCS::_gcss = defaults();
 
 const GCS &GCS::WGS84()
 {
-	static Datum d(&Ellipsoid::WGS84(), 0.0, 0.0, 0.0);
-	static GCS g(d, 8901, 9122);
+	static GCS g(Datum::WGS84(), 8901, 9122);
 	return g;
 }
 
