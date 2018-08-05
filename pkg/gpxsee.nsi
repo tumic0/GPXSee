@@ -167,6 +167,7 @@ Section "QT framework" SEC_QT
   File /r "platforms"
   File /r "imageformats"
   File /r "printsupport"
+  File /r "styles"
 
 SectionEnd
 
