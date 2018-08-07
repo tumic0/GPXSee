@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map xmlns="http://www.gpxsee.org/map/1">
 	<name>4UMaps</name>
-	<url>http://4umaps.eu/$z/$x/$y.png</url>
+	<url>https://4umaps.com/$z/$x/$y.png</url>
 	<copyright>Map data: © OpenStreetMap contributors (ODbL) | Rendering: © 4UMaps.eu</copyright>
 	<zoom min="2" max="15"/>
 	<bounds bottom="-65"/>
