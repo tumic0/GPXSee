@@ -42,6 +42,7 @@ InstallDirRegKey HKLM "Software\GPXSee" "Install_Dir"
 !define REGPLT "GPXSee.plt"
 !define REGRTE "GPXSee.rte"
 !define REGWPT "GPXSee.wpt"
+!define REGLOC "GPXSee.loc"
 
 ; Start menu page configuration
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
@@ -157,6 +158,10 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKCR "${REGWPT}" ""  "OziExplorer Waypoint File"
   WriteRegStr HKCR "${REGWPT}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,1"
   WriteRegStr HKCR "${REGWPT}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
+  WriteRegStr HKCR ".loc" "" "${REGLOC}"
+  WriteRegStr HKCR "${REGLOC}" ""  "Geocaching.com Waypoint File"
+  WriteRegStr HKCR "${REGLOC}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,10"
+  WriteRegStr HKCR "${REGLOC}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
 
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
@@ -288,6 +293,8 @@ Section "Uninstall"
   DeleteRegKey HKCR ".rte"
   DeleteRegKey HKCR "${REGWPT}"
   DeleteRegKey HKCR ".wpt"
+  DeleteRegKey HKCR "${REGLOC}"
+  DeleteRegKey HKCR ".loc"
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
 SectionEnd

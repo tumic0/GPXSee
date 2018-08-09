@@ -275,7 +275,8 @@ macx {
         icons/nmea.icns \
         icons/plt.icns \
         icons/rte.icns \
-        icons/wpt.icns
+        icons/wpt.icns \
+        icons/loc.icns
     QMAKE_BUNDLE_DATA += LOCALE MAPS ICONS CSV
 }
 win32 {
@@ -288,7 +289,8 @@ win32 {
         icons/nmea.ico \
         icons/plt.ico \
         icons/rte.ico \
-        icons/wpt.ico
+        icons/wpt.ico \
+        icons/loc.ico
     DEFINES += _USE_MATH_DEFINES
 }
 
