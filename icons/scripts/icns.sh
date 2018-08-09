@@ -1,9 +1,6 @@
 #!/bin/bash
 
-EXTENSIONS="fit:#006600 gpx:#003399 igc:#ff3300 kml:#990000 nmea:#0083d7 \
-  plt:#66ff00 rte:#66ff00 tcx:#ffcc00 wpt:#66ff00"
-
-for e in $EXTENSIONS; do
+while read e; do
 	IFS=":"; set $e
 
 	EXT=`echo $1 | tr /a-z/ /A-Z/`
@@ -25,4 +22,4 @@ for e in $EXTENSIONS; do
 
 	iconutil -c icns -o $1.icns "$ICONSET"
 	rm -R "$ICONSET" $1.svg
-done
+done < extensions
