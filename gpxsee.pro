@@ -138,7 +138,8 @@ HEADERS += src/config.h \
     src/map/jnxmap.h \
     src/map/krovak.h \
     src/GUI/kv.h \
-    src/data/locparser.h
+    src/data/locparser.h \
+    src/data/slfparser.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -240,7 +241,8 @@ SOURCES += src/main.cpp \
     src/map/jnxmap.cpp \
     src/map/krovak.cpp \
     src/map/map.cpp \
-    src/data/locparser.cpp
+    src/data/locparser.cpp \
+    src/data/slfparser.cpp
 
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \

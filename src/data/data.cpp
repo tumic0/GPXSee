@@ -10,6 +10,7 @@
 #include "nmeaparser.h"
 #include "oziparsers.h"
 #include "locparser.h"
+#include "slfparser.h"
 #include "data.h"
 
 
@@ -24,6 +25,7 @@ static PLTParser plt;
 static WPTParser wpt;
 static RTEParser rte;
 static LOCParser loc;
+static SLFParser slf;
 
 static QHash<QString, Parser*> parsers()
 {
@@ -40,6 +42,7 @@ static QHash<QString, Parser*> parsers()
 	hash.insert("wpt", &wpt);
 	hash.insert("rte", &rte);
 	hash.insert("loc", &loc);
+	hash.insert("slf", &slf);
 
 	return hash;
 }
@@ -111,13 +114,14 @@ QString Data::formats()
 {
 	return
 	  tr("Supported files")
-	  + " (*.csv *.fit *.gpx *.igc *.kml *.loc *.nmea *.plt *.rte *.tcx *.wpt);;"
+	  + " (*.csv *.fit *.gpx *.igc *.kml *.loc *.nmea *.plt *.rte *.slf *.tcx *.wpt);;"
 	  + tr("CSV files") + " (*.csv);;" + tr("FIT files") + " (*.fit);;"
 	  + tr("GPX files") + " (*.gpx);;" + tr("IGC files") + " (*.igc);;"
 	  + tr("KML files") + " (*.kml);;" + tr("LOC files") + " (*.loc);;"
 	  + tr("NMEA files") + " (*.nmea);;"
 	  + tr("OziExplorer files") + " (*.plt *.rte *.wpt);;"
-	  + tr("TCX files") + " (*.tcx);;" + tr("All files") + " (*)";
+	  + tr("SLF files") + " (*.slf);;" + tr("TCX files") + " (*.tcx);;"
+	  + tr("All files") + " (*)";
 }
 
 QStringList Data::filter()
