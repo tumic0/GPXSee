@@ -79,7 +79,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="117"/>
         <source>LOC files</source>
-        <translation type="unfinished"></translation>
+        <translation>LOC-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="118"/>
@@ -1351,7 +1351,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="443"/>
         <source>Enable HTTP/2</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera HTTP/2</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="450"/>
