@@ -2,6 +2,7 @@
 !include "x64.nsh"
 !include "WinVer.nsh"
 
+
 ; Macros
 !macro FILE_ASSOCIATION_ADD EXT DESC ICON
   WriteRegStr HKCR ".${EXT}" "" "GPXSee.${EXT}"
@@ -14,6 +15,17 @@
   DeleteRegKey HKCR "GPXSee.${EXT}"
   DeleteRegKey HKCR ".${EXT}"
 !macroend
+
+!macro LOCALIZATION LANG CODE
+  Section "${LANG}"
+    CreateDirectory "$INSTDIR\translations"
+    File /oname=translations\gpxsee_${CODE}.qm translations\gpxsee_${CODE}.qm
+    !if /FileExists translations\qt_${CODE}.qm
+      File /oname=translations\qt_${CODE}.qm translations\qt_${CODE}.qm
+    !endif
+  SectionEnd
+!macroend
+
 
 ; The name of the installer
 Name "GPXSee"
@@ -190,40 +202,13 @@ Section "ANGLE" SEC_ANGLE
 SectionEnd
 
 SectionGroup "Localization" SEC_LOCALIZATION
-  Section "Czech"
-    CreateDirectory "$INSTDIR\translations"
-    File /oname=translations\gpxsee_cs.qm translations\gpxsee_cs.qm
-    File /oname=translations\qt_cs.qm translations\qt_cs.qm
-  SectionEnd
-  Section "Finnish"
-    CreateDirectory "$INSTDIR\translations"
-    File /oname=translations\gpxsee_fi.qm translations\gpxsee_fi.qm
-    File /oname=translations\qt_fi.qm translations\qt_fi.qm
-  SectionEnd
-  Section "French"
-    CreateDirectory "$INSTDIR\translations"
-    File /oname=translations\gpxsee_fr.qm translations\gpxsee_fr.qm
-    File /oname=translations\qt_fr.qm translations\qt_fr.qm
-  SectionEnd
-  Section "German"
-    CreateDirectory "$INSTDIR\translations"
-    File /oname=translations\gpxsee_de.qm translations\gpxsee_de.qm
-    File /oname=translations\qt_de.qm translations\qt_de.qm
-  SectionEnd
-  Section "Polish"
-    CreateDirectory "$INSTDIR\translations"
-    File /oname=translations\gpxsee_pl.qm translations\gpxsee_pl.qm
-    File /oname=translations\qt_pl.qm translations\qt_pl.qm
-  SectionEnd
-  Section "Russian"
-    CreateDirectory "$INSTDIR\translations" 
-    File /oname=translations\gpxsee_ru.qm translations\gpxsee_ru.qm
-    File /oname=translations\qt_ru.qm translations\qt_ru.qm
-  SectionEnd
-  Section "Swedish"
-    CreateDirectory "$INSTDIR\translations" 
-    File /oname=translations\gpxsee_sv.qm translations\gpxsee_sv.qm
-  SectionEnd
+  !insertmacro LOCALIZATION "Czech" "cs"
+  !insertmacro LOCALIZATION "Finnish" "fi"
+  !insertmacro LOCALIZATION "French" "fr"
+  !insertmacro LOCALIZATION "German" "de"
+  !insertmacro LOCALIZATION "Polish" "pl"
+  !insertmacro LOCALIZATION "Russian" "ru"
+  !insertmacro LOCALIZATION "Swedish" "sv"
 SectionGroupEnd
 
 ;--------------------------------
