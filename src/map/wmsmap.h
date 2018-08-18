@@ -31,6 +31,7 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, bool block);
 
+	void setDevicePixelRatio(qreal ratio) {_ratio = ratio;}
 	void clearCache();
 
 	bool isValid() const {return _valid;}
@@ -43,6 +44,7 @@ private:
 	void computeZooms(const RangeF &scaleDenominator);
 	void updateTransform();
 	bool loadWMS();
+	qreal tileSize() const;
 
 	QString _name;
 
@@ -54,6 +56,7 @@ private:
 	QVector<double> _zooms;
 	RectD _bbox;
 	int _zoom;
+	qreal _ratio;
 
 	bool _valid;
 	QString _errorString;

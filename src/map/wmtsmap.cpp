@@ -35,9 +35,9 @@ bool WMTSMap::loadWMTS()
 	return true;
 }
 
-WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent)
-  : Map(parent), _name(name), _setup(setup), _tileLoader(0), _zoom(0),
-  _valid(false)
+WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, qreal tileRatio,
+  QObject *parent) : Map(parent), _name(name), _setup(setup), _tileLoader(0),
+  _zoom(0), _deviceRatio(1.0), _tileRatio(tileRatio), _valid(false)
 {
 	if (!QDir().mkpath(tilesDir())) {
 		_errorString = "Error creating tiles dir";
@@ -105,7 +105,6 @@ QRectF WMTSMap::bounds()
 
 	bounds = _bounds.isValid() ? QRectF(ll2xy(_bounds.topLeft()),
 	  ll2xy(_bounds.bottomRight())) : QRectF();
-
 	return _bounds.isValid() ? tileBounds.intersected(bounds) : tileBounds;
 }
 
@@ -122,7 +121,8 @@ int WMTSMap::zoomFit(const QSize &size, const RectC &rect)
 
 		_zoom = 0;
 		for (int i = 0; i < _zooms.size(); i++) {
-			if (sd2res(_zooms.at(i).scaleDenominator()) < resolution)
+			if (sd2res(_zooms.at(i).scaleDenominator()) < resolution
+			  / coordinatesRatio())
 				break;
 			_zoom = i;
 		}
@@ -153,13 +153,31 @@ int WMTSMap::zoomOut()
 	return _zoom;
 }
 
+qreal WMTSMap::coordinatesRatio() const
+{
+	return _deviceRatio > 1.0 ? _deviceRatio / _tileRatio : 1.0;
+}
+
+qreal WMTSMap::imageRatio() const
+{
+	return _deviceRatio > 1.0 ? _deviceRatio : _tileRatio;
+}
+
+QSizeF WMTSMap::tileSize(const WMTS::Zoom &zoom) const
+{
+	return QSizeF(zoom.tile().width() / coordinatesRatio(),
+	  zoom.tile().height() / coordinatesRatio());
+}
+
 void WMTSMap::draw(QPainter *painter, const QRectF &rect, bool block)
 {
 	const WMTS::Zoom &z = _zooms.at(_zoom);
-	QPoint tl = QPoint((int)floor(rect.left() / (qreal)z.tile().width()),
-	  (int)floor(rect.top() / (qreal)z.tile().height()));
-	QPoint br = QPoint((int)ceil(rect.right() / (qreal)z.tile().width()),
-	  (int)ceil(rect.bottom() / (qreal)z.tile().height()));
+	QSizeF ts(tileSize(z));
+
+	QPoint tl = QPoint((int)floor(rect.left() / ts.width()),
+	  (int)floor(rect.top() / ts.height()));
+	QPoint br = QPoint((int)ceil(rect.right() / ts.width()),
+	  (int)ceil(rect.bottom() / ts.height()));
 
 	QList<Tile> tiles;
 	for (int i = tl.x(); i < br.x(); i++)
@@ -173,18 +191,22 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect, bool block)
 
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];
-		QPoint tp(t.xy().x() * z.tile().width(), t.xy().y() * z.tile().height());
-		if (!t.pixmap().isNull())
+		QPointF tp(t.xy().x() * ts.width(), t.xy().y() * ts.height());
+		if (!t.pixmap().isNull()) {
+#ifdef ENABLE_HIDPI
+			t.pixmap().setDevicePixelRatio(imageRatio());
+#endif // ENABLE_HIDPI
 			painter->drawPixmap(tp, t.pixmap());
+		}
 	}
 }
 
 QPointF WMTSMap::ll2xy(const Coordinates &c)
 {
-	return _transform.proj2img(_projection.ll2xy(c));
+	return _transform.proj2img(_projection.ll2xy(c)) / coordinatesRatio();
 }
 
 Coordinates WMTSMap::xy2ll(const QPointF &p)
 {
-	return _projection.xy2ll(_transform.img2proj(p));
+	return _projection.xy2ll(_transform.img2proj(p * coordinatesRatio()));
 }

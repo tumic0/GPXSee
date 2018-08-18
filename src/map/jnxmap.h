@@ -32,6 +32,8 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, bool block);
 
+	void setDevicePixelRatio(qreal ratio) {_ratio = ratio;}
+
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
@@ -61,6 +63,7 @@ private:
 	int _zoom;
 	RectC _bounds;
 	Projection _projection;
+	qreal _ratio;
 
 	bool _valid;
 	QString _errorString;

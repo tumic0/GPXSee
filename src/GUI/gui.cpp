@@ -1,3 +1,4 @@
+#include "config.h"
 #include <QApplication>
 #include <QSplitter>
 #include <QVBoxLayout>
@@ -22,12 +23,16 @@
 #include <QMimeData>
 #include <QUrl>
 #include <QPixmapCache>
+#ifdef ENABLE_HIDPI
+#include <QWindow>
+#include <QScreen>
+#endif // ENABLE_HIDPI
+#include <QStyle>
 #include "data/data.h"
 #include "data/poi.h"
 #include "map/maplist.h"
 #include "map/emptymap.h"
 #include "map/downloader.h"
-#include "config.h"
 #include "icons.h"
 #include "keys.h"
 #include "settings.h"
@@ -47,6 +52,8 @@
 #include "pathitem.h"
 #include "gui.h"
 
+
+#define TOOLBAR_ICON_SIZE 22
 
 GUI::GUI()
 {
@@ -72,7 +79,7 @@ GUI::GUI()
 	_splitter->setStretchFactor(1, 1);
 	setCentralWidget(_splitter);
 
-	setWindowIcon(QIcon(QPixmap(APP_ICON)));
+	setWindowIcon(QIcon(APP_ICON));
 	setWindowTitle(APP_NAME);
 	setUnifiedTitleAndToolBarOnMac(true);
 	setAcceptDrops(true);
@@ -195,7 +202,7 @@ void GUI::createActions()
 	_navigationActionGroup->setEnabled(false);
 
 	// General actions
-	_exitAction = new QAction(QIcon(QPixmap(QUIT_ICON)), tr("Quit"), this);
+	_exitAction = new QAction(QIcon(QUIT_ICON), tr("Quit"), this);
 	_exitAction->setShortcut(QUIT_SHORTCUT);
 	_exitAction->setMenuRole(QAction::QuitRole);
 	connect(_exitAction, SIGNAL(triggered()), this, SLOT(close()));
@@ -208,40 +215,37 @@ void GUI::createActions()
 	_keysAction = new QAction(tr("Keyboard controls"), this);
 	_keysAction->setMenuRole(QAction::NoRole);
 	connect(_keysAction, SIGNAL(triggered()), this, SLOT(keys()));
-	_aboutAction = new QAction(QIcon(QPixmap(APP_ICON)),
-	  tr("About GPXSee"), this);
+	_aboutAction = new QAction(QIcon(APP_ICON), tr("About GPXSee"), this);
 	_aboutAction->setMenuRole(QAction::AboutRole);
 	connect(_aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
 	// File actions
-	_openFileAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)),
-	  tr("Open..."), this);
+	_openFileAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Open..."), this);
 	_openFileAction->setMenuRole(QAction::NoRole);
 	_openFileAction->setShortcut(OPEN_SHORTCUT);
 	connect(_openFileAction, SIGNAL(triggered()), this, SLOT(openFile()));
 	addAction(_openFileAction);
-	_printFileAction = new QAction(QIcon(QPixmap(PRINT_FILE_ICON)),
-	  tr("Print..."), this);
+	_printFileAction = new QAction(QIcon(PRINT_FILE_ICON), tr("Print..."),
+	  this);
 	_printFileAction->setMenuRole(QAction::NoRole);
 	_printFileAction->setActionGroup(_fileActionGroup);
 	connect(_printFileAction, SIGNAL(triggered()), this, SLOT(printFile()));
 	addAction(_printFileAction);
-	_exportFileAction = new QAction(QIcon(QPixmap(EXPORT_FILE_ICON)),
+	_exportFileAction = new QAction(QIcon(EXPORT_FILE_ICON),
 	  tr("Export to PDF..."), this);
 	_exportFileAction->setMenuRole(QAction::NoRole);
 	_exportFileAction->setShortcut(EXPORT_SHORTCUT);
 	_exportFileAction->setActionGroup(_fileActionGroup);
 	connect(_exportFileAction, SIGNAL(triggered()), this, SLOT(exportFile()));
 	addAction(_exportFileAction);
-	_closeFileAction = new QAction(QIcon(QPixmap(CLOSE_FILE_ICON)),
-	  tr("Close"), this);
+	_closeFileAction = new QAction(QIcon(CLOSE_FILE_ICON), tr("Close"), this);
 	_closeFileAction->setMenuRole(QAction::NoRole);
 	_closeFileAction->setShortcut(CLOSE_SHORTCUT);
 	_closeFileAction->setActionGroup(_fileActionGroup);
 	connect(_closeFileAction, SIGNAL(triggered()), this, SLOT(closeAll()));
 	addAction(_closeFileAction);
-	_reloadFileAction = new QAction(QIcon(QPixmap(RELOAD_FILE_ICON)),
-	  tr("Reload"), this);
+	_reloadFileAction = new QAction(QIcon(RELOAD_FILE_ICON), tr("Reload"),
+	  this);
 	_reloadFileAction->setMenuRole(QAction::NoRole);
 	_reloadFileAction->setShortcut(RELOAD_SHORTCUT);
 	_reloadFileAction->setActionGroup(_fileActionGroup);
@@ -255,12 +259,12 @@ void GUI::createActions()
 	addAction(_statisticsAction);
 
 	// POI actions
-	_openPOIAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)),
-	  tr("Load POI file..."), this);
+	_openPOIAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Load POI file..."),
+	  this);
 	_openPOIAction->setMenuRole(QAction::NoRole);
 	connect(_openPOIAction, SIGNAL(triggered()), this, SLOT(openPOIFile()));
-	_closePOIAction = new QAction(QIcon(QPixmap(CLOSE_FILE_ICON)),
-	  tr("Close POI files"), this);
+	_closePOIAction = new QAction(QIcon(CLOSE_FILE_ICON), tr("Close POI files"),
+	  this);
 	_closePOIAction->setMenuRole(QAction::NoRole);
 	connect(_closePOIAction, SIGNAL(triggered()), this, SLOT(closePOIFiles()));
 	_overlapPOIAction = new QAction(tr("Overlap POIs"), this);
@@ -273,8 +277,7 @@ void GUI::createActions()
 	_showPOILabelsAction->setCheckable(true);
 	connect(_showPOILabelsAction, SIGNAL(triggered(bool)), _mapView,
 	  SLOT(showPOILabels(bool)));
-	_showPOIAction = new QAction(QIcon(QPixmap(SHOW_POI_ICON)),
-	  tr("Show POIs"), this);
+	_showPOIAction = new QAction(QIcon(SHOW_POI_ICON), tr("Show POIs"), this);
 	_showPOIAction->setMenuRole(QAction::NoRole);
 	_showPOIAction->setCheckable(true);
 	_showPOIAction->setShortcut(SHOW_POI_SHORTCUT);
@@ -284,7 +287,7 @@ void GUI::createActions()
 	createPOIFilesActions();
 
 	// Map actions
-	_showMapAction = new QAction(QIcon(QPixmap(SHOW_MAP_ICON)), tr("Show map"),
+	_showMapAction = new QAction(QIcon(SHOW_MAP_ICON), tr("Show map"),
 	  this);
 	_showMapAction->setMenuRole(QAction::NoRole);
 	_showMapAction->setCheckable(true);
@@ -292,8 +295,8 @@ void GUI::createActions()
 	connect(_showMapAction, SIGNAL(triggered(bool)), _mapView,
 	  SLOT(showMap(bool)));
 	addAction(_showMapAction);
-	_loadMapAction = new QAction(QIcon(QPixmap(OPEN_FILE_ICON)),
-	  tr("Load map..."), this);
+	_loadMapAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Load map..."),
+	  this);
 	_loadMapAction->setMenuRole(QAction::NoRole);
 	connect(_loadMapAction, SIGNAL(triggered()), this, SLOT(loadMap()));
 	_clearMapCacheAction = new QAction(tr("Clear tile cache"), this);
@@ -344,8 +347,8 @@ void GUI::createActions()
 	  SLOT(showRouteWaypoints(bool)));
 
 	// Graph actions
-	_showGraphsAction = new QAction(QIcon(QPixmap(SHOW_GRAPHS_ICON)),
-	  tr("Show graphs"), this);
+	_showGraphsAction = new QAction(QIcon(SHOW_GRAPHS_ICON), tr("Show graphs"),
+	  this);
 	_showGraphsAction->setMenuRole(QAction::NoRole);
 	_showGraphsAction->setCheckable(true);
 	_showGraphsAction->setShortcut(SHOW_GRAPHS_SHORTCUT);
@@ -439,7 +442,7 @@ void GUI::createActions()
 	_DMSAction->setCheckable(true);
 	_DMSAction->setActionGroup(ag);
 	connect(_DMSAction, SIGNAL(triggered()), this, SLOT(setDMS()));
-	_fullscreenAction = new QAction(QIcon(QPixmap(FULLSCREEN_ICON)),
+	_fullscreenAction = new QAction(QIcon(FULLSCREEN_ICON),
 	  tr("Fullscreen mode"), this);
 	_fullscreenAction->setMenuRole(QAction::NoRole);
 	_fullscreenAction->setCheckable(true);
@@ -453,21 +456,19 @@ void GUI::createActions()
 	  SLOT(openOptions()));
 
 	// Navigation actions
-	_nextAction = new QAction(QIcon(QPixmap(NEXT_FILE_ICON)), tr("Next"), this);
+	_nextAction = new QAction(QIcon(NEXT_FILE_ICON), tr("Next"), this);
 	_nextAction->setActionGroup(_navigationActionGroup);
 	_nextAction->setMenuRole(QAction::NoRole);
 	connect(_nextAction, SIGNAL(triggered()), this, SLOT(next()));
-	_prevAction = new QAction(QIcon(QPixmap(PREV_FILE_ICON)), tr("Previous"),
-	  this);
+	_prevAction = new QAction(QIcon(PREV_FILE_ICON), tr("Previous"), this);
 	_prevAction->setMenuRole(QAction::NoRole);
 	_prevAction->setActionGroup(_navigationActionGroup);
 	connect(_prevAction, SIGNAL(triggered()), this, SLOT(prev()));
-	_lastAction = new QAction(QIcon(QPixmap(LAST_FILE_ICON)), tr("Last"), this);
+	_lastAction = new QAction(QIcon(LAST_FILE_ICON), tr("Last"), this);
 	_lastAction->setMenuRole(QAction::NoRole);
 	_lastAction->setActionGroup(_navigationActionGroup);
 	connect(_lastAction, SIGNAL(triggered()), this, SLOT(last()));
-	_firstAction = new QAction(QIcon(QPixmap(FIRST_FILE_ICON)), tr("First"),
-	  this);
+	_firstAction = new QAction(QIcon(FIRST_FILE_ICON), tr("First"), this);
 	_firstAction->setMenuRole(QAction::NoRole);
 	_firstAction->setActionGroup(_navigationActionGroup);
 	connect(_firstAction, SIGNAL(triggered()), this, SLOT(first()));
@@ -555,22 +556,28 @@ void GUI::createMenus()
 
 void GUI::createToolBars()
 {
+	int is = style()->pixelMetric(QStyle::PM_ToolBarIconSize);
+	QSize iconSize(qMin(is, TOOLBAR_ICON_SIZE), qMin(is, TOOLBAR_ICON_SIZE));
+
 #ifdef Q_OS_MAC
 	setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 #endif // Q_OS_MAC
 
 	_fileToolBar = addToolBar(tr("File"));
+	_fileToolBar->setIconSize(iconSize);
 	_fileToolBar->addAction(_openFileAction);
 	_fileToolBar->addAction(_reloadFileAction);
 	_fileToolBar->addAction(_closeFileAction);
 	_fileToolBar->addAction(_printFileAction);
 
 	_showToolBar = addToolBar(tr("Show"));
+	_showToolBar->setIconSize(iconSize);
 	_showToolBar->addAction(_showPOIAction);
 	_showToolBar->addAction(_showMapAction);
 	_showToolBar->addAction(_showGraphsAction);
 
 	_navigationToolBar = addToolBar(tr("Navigation"));
+	_navigationToolBar->setIconSize(iconSize);
 	_navigationToolBar->addAction(_firstAction);
 	_navigationToolBar->addAction(_prevAction);
 	_navigationToolBar->addAction(_nextAction);
@@ -2106,4 +2113,40 @@ qreal GUI::time() const
 qreal GUI::movingTime() const
 {
 	return (_showTracksAction->isChecked()) ? _movingTime : 0;
+}
+
+void GUI::show()
+{
+	QMainWindow::show();
+
+#ifdef ENABLE_HIDPI
+	QWindow *w = windowHandle();
+	connect(w->screen(), SIGNAL(logicalDotsPerInchChanged(qreal)), this,
+	  SLOT(logicalDotsPerInchChanged(qreal)));
+	connect(w, SIGNAL(screenChanged(QScreen*)), this,
+	  SLOT(screenChanged(QScreen*)));
+#endif // ENABLE_HIDPI
+}
+
+void GUI::screenChanged(QScreen *screen)
+{
+#ifdef ENABLE_HIDPI
+	_mapView->updateDevicePixelRatio();
+
+	disconnect(SIGNAL(logicalDotsPerInchChanged(qreal)), this,
+	  SLOT(logicalDotsPerInchChanged(qreal)));
+	connect(screen, SIGNAL(logicalDotsPerInchChanged(qreal)), this,
+	  SLOT(logicalDotsPerInchChanged(qreal)));
+#else // ENABLE_HIDPI
+	Q_UNUSED(screen);
+#endif // ENABLE_HIDPI
+}
+
+void GUI::logicalDotsPerInchChanged(qreal dpi)
+{
+	Q_UNUSED(dpi)
+
+#ifdef ENABLE_HIDPI
+	_mapView->updateDevicePixelRatio();
+#endif // ENBLE_HIDPI
 }

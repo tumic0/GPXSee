@@ -49,10 +49,7 @@ void Atlas::computeZooms()
 
 void Atlas::computeBounds()
 {
-	QList<QPointF> offsets;
-
-	for (int i = 0; i < _maps.count(); i++)
-		offsets.append(QPointF());
+	QVector<QPointF> offsets(_maps.count());
 
 	for (int z = 0; z < _zooms.count(); z++) {
 		QList<OfflineMap*> m;
@@ -62,21 +59,22 @@ void Atlas::computeBounds()
 		qSort(m.begin(), m.end(), xCmp);
 		offsets[_maps.indexOf(m.first())].setX(0);
 		for (int i = 1; i < m.size(); i++) {
-			qreal w = round(m.first()->pp2xy(TL(m.at(i))).x());
+			qreal w = m.first()->pp2xy(TL(m.at(i))).x();
 			offsets[_maps.indexOf(m.at(i))].setX(w);
 		}
 
 		qSort(m.begin(), m.end(), yCmp);
 		offsets[_maps.indexOf(m.first())].setY(0);
 		for (int i = 1; i < m.size(); i++) {
-			qreal h = round(m.first()->pp2xy(TL(m.at(i))).y());
+			qreal h = m.first()->pp2xy(TL(m.at(i))).y();
 			offsets[_maps.indexOf(m.at(i))].setY(h);
 		}
 	}
 
+	_bounds = QVector<Bounds>(_maps.count());
 	for (int i = 0; i < _maps.count(); i++)
-		_bounds.append(Bounds(RectD(TL(_maps.at(i)), BR(_maps.at(i))),
-		  QRectF(offsets.at(i), _maps.at(i)->bounds().size())));
+		_bounds[i] = Bounds(RectD(TL(_maps.at(i)), BR(_maps.at(i))),
+		  QRectF(offsets.at(i), _maps.at(i)->bounds().size()));
 }
 
 Atlas::Atlas(const QString &fileName, QObject *parent)
@@ -145,6 +143,14 @@ Atlas::Atlas(const QString &fileName, QObject *parent)
 	computeBounds();
 
 	_valid = true;
+}
+
+void Atlas::setDevicePixelRatio(qreal ratio)
+{
+	for (int i = 0; i < _maps.size(); i++)
+		_maps[i]->setDevicePixelRatio(ratio);
+
+	computeBounds();
 }
 
 QRectF Atlas::bounds()

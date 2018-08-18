@@ -9,10 +9,6 @@ InfoItem::InfoItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
 	_font.setPixelSize(FONT_SIZE);
 	_font.setFamily(FONT_FAMILY);
-
-#ifndef Q_OS_MAC
-	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
-#endif // Q_OS_MAC
 }
 
 void InfoItem::updateBoundingRect()

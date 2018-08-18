@@ -13,7 +13,8 @@ class WMTSMap : public Map
 	Q_OBJECT
 
 public:
-	WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent = 0);
+	WMTSMap(const QString &name, const WMTS::Setup &setup, qreal tileRatio,
+	  QObject *parent = 0);
 
 	QString name() const {return _name;}
 
@@ -30,6 +31,7 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, bool block);
 
+	void setDevicePixelRatio(qreal ratio) {_deviceRatio = ratio;}
 	void clearCache();
 
 	bool isValid() const {return _valid;}
@@ -40,6 +42,9 @@ private:
 	double sd2res(double scaleDenominator) const;
 	QString tilesDir() const;
 	void updateTransform();
+	QSizeF tileSize(const WMTS::Zoom &zoom) const;
+	qreal coordinatesRatio() const;
+	qreal imageRatio() const;
 
 	QString _name;
 	WMTS::Setup _setup;
@@ -50,6 +55,7 @@ private:
 	Transform _transform;
 	CoordinateSystem _cs;
 	int _zoom;
+	qreal _deviceRatio, _tileRatio;
 
 	bool _valid;
 	QString _errorString;

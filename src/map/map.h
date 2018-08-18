@@ -36,6 +36,7 @@ public:
 	virtual void clearCache() {}
 	virtual void load() {}
 	virtual void unload() {}
+	virtual void setDevicePixelRatio(qreal ratio) {Q_UNUSED(ratio);}
 
 	virtual bool isValid() const {return true;}
 	virtual QString errorString() const {return QString();}

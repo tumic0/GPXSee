@@ -12,6 +12,7 @@
 #include "ozf.h"
 #include "mapfile.h"
 #include "geotiff.h"
+#include "config.h"
 #include "offlinemap.h"
 
 
@@ -94,7 +95,7 @@ bool OfflineMap::setTileInfo(const QStringList &tiles, const QString &path)
 }
 
 OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
-  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _valid(false)
+  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _ratio(1.0), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QString suffix = fi.suffix().toLower();
@@ -172,7 +173,7 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 }
 
 OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
-  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _valid(false)
+  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _ratio(1.0), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QFileInfo map(fi.absolutePath());
@@ -224,8 +225,13 @@ void OfflineMap::load()
 
 	if (!_ozf && !_img && _map.isValid()) {
 		_img = new QImage(_map.path);
-		if (_img->isNull())
+		if (!_img || _img->isNull()) {
 			qWarning("%s: error loading map image", qPrintable(_map.path));
+			return;
+		}
+#ifdef ENABLE_HIDPI
+		_img->setDevicePixelRatio(_ratio);
+#endif // ENABLE_HIDPI
 	}
 }
 
@@ -237,15 +243,15 @@ void OfflineMap::unload()
 
 void OfflineMap::drawTiled(QPainter *painter, const QRectF &rect) const
 {
-	QPoint tl = QPoint((int)floor(rect.left() / (qreal)_tile.size.width())
-	  * _tile.size.width(), (int)floor(rect.top() / _tile.size.height())
-	  * _tile.size.height());
+	QSizeF ts(_tile.size.width() / _ratio, _tile.size.height() / _ratio);
+	QPointF tl(floor(rect.left() / ts.width()) * ts.width(),
+	  floor(rect.top() / ts.height()) * ts.height());
 
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
-	for (int i = 0; i < ceil(s.width() / _tile.size.width()); i++) {
-		for (int j = 0; j < ceil(s.height() / _tile.size.height()); j++) {
-			int x = tl.x() + i * _tile.size.width();
-			int y = tl.y() + j * _tile.size.height();
+	for (int i = 0; i < ceil(s.width() / ts.width()); i++) {
+		for (int j = 0; j < ceil(s.height() / ts.height()); j++) {
+			int x = round(tl.x() * _ratio + i * _tile.size.width());
+			int y = round(tl.y() * _ratio + j * _tile.size.height());
 
 			QString tileName(_tile.path.arg(QString::number(x),
 			  QString::number(y)));
@@ -265,23 +271,29 @@ void OfflineMap::drawTiled(QPainter *painter, const QRectF &rect) const
 			if (pixmap.isNull())
 				qWarning("%s: error loading tile image", qPrintable(
 				  _tile.path.arg(QString::number(x), QString::number(y))));
-			else
-				painter->drawPixmap(QPoint(x, y), pixmap);
+			else {
+#ifdef ENABLE_HIDPI
+				pixmap.setDevicePixelRatio(_ratio);
+#endif // ENABLE_HIDPI
+				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
+				painter->drawPixmap(tp, pixmap);
+			}
 		}
 	}
 }
 
 void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect) const
 {
-	QPoint tl = QPoint((int)floor(rect.left() / _ozf->tileSize().width())
-	  * _ozf->tileSize().width(), (int)floor(rect.top()
-	  / _ozf->tileSize().height()) * _ozf->tileSize().height());
+	QSizeF ts(_ozf->tileSize().width() / _ratio, _ozf->tileSize().height()
+	  / _ratio);
+	QPointF tl(floor(rect.left() / ts.width()) * ts.width(),
+	  floor(rect.top() / ts.height()) * ts.height());
 
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
-	for (int i = 0; i < ceil(s.width() / _ozf->tileSize().width()); i++) {
-		for (int j = 0; j < ceil(s.height() / _ozf->tileSize().height()); j++) {
-			int x = tl.x() + i * _ozf->tileSize().width();
-			int y = tl.y() + j * _ozf->tileSize().height();
+	for (int i = 0; i < ceil(s.width() / ts.width()); i++) {
+		for (int j = 0; j < ceil(s.height() / ts.height()); j++) {
+			int x = round(tl.x() * _ratio + i * _ozf->tileSize().width());
+			int y = round(tl.y() * _ratio + j * _ozf->tileSize().height());
 
 			QPixmap pixmap;
 			QString key = _ozf->fileName() + "/" + QString::number(_zoom) + "_"
@@ -294,17 +306,21 @@ void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect) const
 
 			if (pixmap.isNull())
 				qWarning("%s: error loading tile image", qPrintable(key));
-			else
-				painter->drawPixmap(QPoint(x, y), pixmap);
+			else {
+#ifdef ENABLE_HIDPI
+				pixmap.setDevicePixelRatio(_ratio);
+#endif // ENABLE_HIDPI
+				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
+				painter->drawPixmap(tp, pixmap);
+			}
 		}
 	}
 }
 
 void OfflineMap::drawImage(QPainter *painter, const QRectF &rect) const
 {
-	QRect r(rect.toRect());
-	painter->drawImage(r.left(), r.top(), *_img, r.left(), r.top(),
-	  r.width(), r.height());
+	painter->drawImage(rect.topLeft(), *_img, QRectF(rect.topLeft() * _ratio,
+	  rect.size() * _ratio));
 }
 
 void OfflineMap::draw(QPainter *painter, const QRectF &rect, bool block)
@@ -322,22 +338,24 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect, bool block)
 QPointF OfflineMap::ll2xy(const Coordinates &c)
 {
 	QPointF p(_transform.proj2img(_projection.ll2xy(c)));
-	return _ozf ? QPointF(p.x() * _scale.x(), p.y() * _scale.y()) : p;
+	return _ozf
+	  ? QPointF(p.x() * _scale.x(), p.y() * _scale.y()) / _ratio
+	  : p / _ratio;
 }
 
 Coordinates OfflineMap::xy2ll(const QPointF &p)
 {
 	return _ozf
 	  ? _projection.xy2ll(_transform.img2proj(QPointF(p.x() / _scale.x(),
-		p.y() / _scale.y())))
-	  : _projection.xy2ll(_transform.img2proj(p));
+		p.y() / _scale.y()) * _ratio))
+	  : _projection.xy2ll(_transform.img2proj(p * _ratio));
 }
 
 QRectF OfflineMap::bounds()
 {
 	return _ozf
-	  ? QRectF(QPointF(0, 0), _ozf->size(_zoom))
-	  : QRectF(QPointF(0, 0), _map.size);
+	  ? QRectF(QPointF(0, 0), _ozf->size(_zoom) / _ratio)
+	  : QRectF(QPointF(0, 0), _map.size / _ratio);
 }
 
 int OfflineMap::zoomFit(const QSize &size, const RectC &rect)

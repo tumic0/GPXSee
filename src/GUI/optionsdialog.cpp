@@ -492,14 +492,14 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
 
 	QListWidget *menu = new QListWidget();
 	menu->setIconSize(QSize(MENU_ICON_SIZE, MENU_ICON_SIZE));
-	new QListWidgetItem(QIcon(QPixmap(APP_ICON)), tr("General"), menu);
-	new QListWidgetItem(QIcon(QPixmap(APPEARANCE_ICON)), tr("Appearance"),
+	new QListWidgetItem(QIcon(APP_ICON), tr("General"), menu);
+	new QListWidgetItem(QIcon(APPEARANCE_ICON), tr("Appearance"),
 	  menu);
-	new QListWidgetItem(QIcon(QPixmap(DATA_ICON)), tr("Data"), menu);
-	new QListWidgetItem(QIcon(QPixmap(POI_ICON)), tr("POI"), menu);
-	new QListWidgetItem(QIcon(QPixmap(PRINT_EXPORT_ICON)), tr("Print & Export"),
+	new QListWidgetItem(QIcon(DATA_ICON), tr("Data"), menu);
+	new QListWidgetItem(QIcon(POI_ICON), tr("POI"), menu);
+	new QListWidgetItem(QIcon(PRINT_EXPORT_ICON), tr("Print & Export"),
 	  menu);
-	new QListWidgetItem(QIcon(QPixmap(SYSTEM_ICON)), tr("System"), menu);
+	new QListWidgetItem(QIcon(SYSTEM_ICON), tr("System"), menu);
 
 	QHBoxLayout *contentLayout = new QHBoxLayout();
 	contentLayout->addWidget(menu);

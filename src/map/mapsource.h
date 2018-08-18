@@ -37,6 +37,7 @@ private:
 		bool rest;
 		QList<QPair<QString, QString> > dimensions;
 		Authorization authorization;
+		qreal tileRatio;
 
 		Config();
 	};

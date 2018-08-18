@@ -29,7 +29,6 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 
 	_scene = new QGraphicsScene(this);
 	setScene(_scene);
-	setCacheMode(QGraphicsView::CacheBackground);
 	setDragMode(QGraphicsView::ScrollHandDrag);
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -42,6 +41,10 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_scene->addItem(_mapScale);
 
 	_map = map;
+#ifdef ENABLE_HIDPI
+	_ratio = devicePixelRatioF();
+	_map->setDevicePixelRatio(_ratio);
+#endif // ENABLE_HIDPI
 	_map->load();
 	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
@@ -228,7 +231,7 @@ void MapView::updatePOIVisibility()
 void MapView::rescale()
 {
 	_scene->setSceneRect(_map->bounds());
-	resetCachedContent();
+	reloadMap();
 
 	for (int i = 0; i < _tracks.size(); i++)
 		_tracks.at(i)->setMap(_map);
@@ -265,6 +268,9 @@ void MapView::setMap(Map *map)
 	disconnect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
 	_map = map;
+#ifdef ENABLE_HIDPI
+	_map->setDevicePixelRatio(_ratio);
+#endif // ENABLE_HIDPI
 	_map->load();
 	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
@@ -289,7 +295,7 @@ void MapView::setMap(Map *map)
 	  _map->ll2xy(cr.bottomRight())).center();
 	centerOn(nc);
 
-	resetCachedContent();
+	reloadMap();
 	QPixmapCache::clear();
 }
 
@@ -498,6 +504,9 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	// Enter plot mode
 	setUpdatesEnabled(false);
 	_plot = true;
+#ifdef ENABLE_HIDPI
+	_map->setDevicePixelRatio(1.0);
+#endif // ENABLE_HIDPI
 
 	// Compute sizes & ratios
 	orig = viewport()->rect();
@@ -556,6 +565,9 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	_mapScale->setPos(origPos);
 
 	// Exit plot mode
+#ifdef ENABLE_HIDPI
+	_map->setDevicePixelRatio(_ratio);
+#endif // ENABLE_HIDPI
 	_plot = false;
 	setUpdatesEnabled(true);
 }
@@ -635,7 +647,7 @@ void MapView::showRouteWaypoints(bool show)
 void MapView::showMap(bool show)
 {
 	_showMap = show;
-	resetCachedContent();
+	reloadMap();
 }
 
 void MapView::showPOI(bool show)
@@ -738,13 +750,13 @@ void MapView::setPOIColor(const QColor &color)
 void MapView::setMapOpacity(int opacity)
 {
 	_opacity = opacity / 100.0;
-	resetCachedContent();
+	reloadMap();
 }
 
 void MapView::setBackgroundColor(const QColor &color)
 {
 	_backgroundColor = color;
-	resetCachedContent();
+	reloadMap();
 }
 
 void MapView::drawBackground(QPainter *painter, const QRectF &rect)
@@ -819,5 +831,44 @@ void MapView::setMarkerColor(const QColor &color)
 
 void MapView::reloadMap()
 {
-	resetCachedContent();
+	_scene->invalidate();
+}
+
+void MapView::updateDevicePixelRatio()
+{
+#ifdef ENABLE_HIDPI
+	if (_ratio == devicePixelRatioF())
+		return;
+
+	_ratio = devicePixelRatioF();
+
+	QRectF vr(mapToScene(viewport()->rect()).boundingRect()
+	  .intersected(_map->bounds()));
+	RectC cr(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
+
+	_map->setDevicePixelRatio(_ratio);
+
+	digitalZoom(0);
+
+	_map->zoomFit(viewport()->rect().size(), cr);
+	_scene->setSceneRect(_map->bounds());
+
+	for (int i = 0; i < _tracks.size(); i++)
+		_tracks.at(i)->setMap(_map);
+	for (int i = 0; i < _routes.size(); i++)
+		_routes.at(i)->setMap(_map);
+	for (int i = 0; i < _waypoints.size(); i++)
+		_waypoints.at(i)->setMap(_map);
+
+	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
+	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+		it.value()->setMap(_map);
+	updatePOIVisibility();
+
+	QPointF nc = QRectF(_map->ll2xy(cr.topLeft()),
+	  _map->ll2xy(cr.bottomRight())).center();
+	centerOn(nc);
+
+	reloadMap();
+#endif // ENABLE_HIDPI
 }

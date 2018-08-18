@@ -33,6 +33,7 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, bool block);
 
+	void setDevicePixelRatio(qreal ratio) {_ratio = ratio;}
 	void load();
 	void unload();
 
@@ -42,9 +43,9 @@ public:
 	PointD ll2pp(const Coordinates &c) const
 	  {return _projection.ll2xy(c);}
 	PointD xy2pp(const QPointF &p) const
-	  {return _transform.img2proj(p);}
+	  {return _transform.img2proj(p * _ratio);}
 	QPointF pp2xy(const PointD &p) const
-	  {return _transform.proj2img(p);}
+	  {return _transform.proj2img(p) / _ratio;}
 
 private:
 	struct ImageInfo {
@@ -72,6 +73,7 @@ private:
 	ImageInfo _map, _tile;
 	int _zoom;
 	QPointF _scale;
+	qreal _ratio;
 
 	bool _valid;
 	QString _errorString;

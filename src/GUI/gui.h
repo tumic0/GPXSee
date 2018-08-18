@@ -28,6 +28,7 @@ class MapView;
 class Map;
 class MapList;
 class POI;
+class QScreen;
 
 class GUI : public QMainWindow
 {
@@ -37,6 +38,7 @@ public:
 	GUI();
 
 	bool openFile(const QString &fileName);
+	void show();
 
 private slots:
 	void about();
@@ -83,6 +85,8 @@ private slots:
 	void setDMS() {setCoordinatesFormat(DMS);}
 
 	void sliderPositionChanged(qreal pos);
+	void screenChanged(QScreen *screen);
+	void logicalDotsPerInchChanged(qreal dpi);
 
 private:
 	typedef QPair<QDate, QDate> DateRange;

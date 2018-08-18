@@ -5,6 +5,7 @@
 #include "rectd.h"
 #include "gcs.h"
 #include "pcs.h"
+#include "config.h"
 #include "jnxmap.h"
 
 
@@ -19,8 +20,10 @@ struct Level {
 struct Ctx {
 	QPainter *painter;
 	QFile *file;
+	qreal ratio;
 
-	Ctx(QPainter *painter, QFile *file) : painter(painter), file(file) {}
+	Ctx(QPainter *painter, QFile *file, qreal ratio)
+	  : painter(painter), file(file), ratio(ratio) {}
 };
 
 
@@ -139,7 +142,7 @@ bool JNXMap::readTiles()
 }
 
 JNXMap::JNXMap(const QString &fileName, QObject *parent)
-  : Map(parent), _file(fileName), _zoom(0), _valid(false)
+  : Map(parent), _file(fileName), _zoom(0), _ratio(1.0), _valid(false)
 {
 	_name = QFileInfo(fileName).fileName();
 
@@ -159,13 +162,13 @@ JNXMap::JNXMap(const QString &fileName, QObject *parent)
 QPointF JNXMap::ll2xy(const Coordinates &c)
 {
 	const Zoom &z = _zooms.at(_zoom);
-	return z.transform.proj2img(_projection.ll2xy(c));
+	return z.transform.proj2img(_projection.ll2xy(c)) / _ratio;
 }
 
 Coordinates JNXMap::xy2ll(const QPointF &p)
 {
 	const Zoom &z = _zooms.at(_zoom);
-	return _projection.xy2ll(z.transform.img2proj(p));
+	return _projection.xy2ll(z.transform.img2proj(p * _ratio));
 }
 
 QRectF JNXMap::bounds()
@@ -233,7 +236,11 @@ QPixmap JNXMap::pixmap(const Tile *tile, QFile *file)
 bool JNXMap::cb(Tile *tile, void *context)
 {
 	Ctx *ctx = static_cast<Ctx*>(context);
-	ctx->painter->drawPixmap(tile->pos, pixmap(tile, ctx->file));
+	QPixmap pm(pixmap(tile, ctx->file));
+#ifdef ENABLE_HIDPI
+	pm.setDevicePixelRatio(ctx->ratio);
+#endif // ENABLE_HIDPI
+	ctx->painter->drawPixmap(tile->pos / ctx->ratio, pm);
 
 	return true;
 }
@@ -242,12 +249,13 @@ void JNXMap::draw(QPainter *painter, const QRectF &rect, bool block)
 {
 	Q_UNUSED(block);
 	const RTree<Tile*, qreal, 2> &tree = _zooms.at(_zoom).tree;
-	Ctx ctx(painter, &_file);
+	Ctx ctx(painter, &_file, _ratio);
+	QRectF rr(rect.topLeft() * _ratio, rect.size() * _ratio);
 
 	qreal min[2], max[2];
-	min[0] = rect.left();
-	min[1] = rect.top();
-	max[0] = rect.right();
-	max[1] = rect.bottom();
+	min[0] = rr.left();
+	min[1] = rr.top();
+	max[0] = rr.right();
+	max[1] = rr.bottom();
 	tree.Search(min, max, cb, &ctx);
 }

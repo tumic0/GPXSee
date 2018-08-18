@@ -28,6 +28,7 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, bool block);
 
+	void setDevicePixelRatio(qreal ratio);
 	void unload();
 
 	bool isValid() const {return _valid;}

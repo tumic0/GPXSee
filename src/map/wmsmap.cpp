@@ -103,7 +103,7 @@ bool WMSMap::loadWMS()
 
 WMSMap::WMSMap(const QString &name, const WMS::Setup &setup, QObject *parent)
   : Map(parent), _name(name), _setup(setup), _tileLoader(0), _zoom(0),
-  _valid(false)
+  _ratio(1.0), _valid(false)
 {
 	if (!QDir().mkpath(tilesDir())) {
 		_errorString = "Error creating tiles dir";
@@ -129,8 +129,8 @@ void WMSMap::clearCache()
 
 QRectF WMSMap::bounds()
 {
-	return QRectF(_transform.proj2img(_bbox.topLeft()),
-	  _transform.proj2img(_bbox.bottomRight()));
+	return QRectF(_transform.proj2img(_bbox.topLeft()) / _ratio,
+	  _transform.proj2img(_bbox.bottomRight()) / _ratio);
 }
 
 int WMSMap::zoomFit(const QSize &size, const RectC &rect)
@@ -146,7 +146,7 @@ int WMSMap::zoomFit(const QSize &size, const RectC &rect)
 
 		_zoom = 0;
 		for (int i = 0; i < _zooms.size(); i++) {
-			if (sd2res(_zooms.at(i)) < resolution)
+			if (sd2res(_zooms.at(i)) < resolution / _ratio)
 				break;
 			_zoom = i;
 		}
@@ -179,20 +179,25 @@ int WMSMap::zoomOut()
 
 QPointF WMSMap::ll2xy(const Coordinates &c)
 {
-	return _transform.proj2img(_projection.ll2xy(c));
+	return _transform.proj2img(_projection.ll2xy(c)) / _ratio;
 }
 
 Coordinates WMSMap::xy2ll(const QPointF &p)
 {
-	return _projection.xy2ll(_transform.img2proj(p));
+	return _projection.xy2ll(_transform.img2proj(p * _ratio));
+}
+
+qreal WMSMap::tileSize() const
+{
+	return (TILE_SIZE / _ratio);
 }
 
 void WMSMap::draw(QPainter *painter, const QRectF &rect, bool block)
 {
-	QPoint tl = QPoint((int)floor(rect.left() / (qreal)TILE_SIZE),
-	  (int)floor(rect.top() / (qreal)TILE_SIZE));
-	QPoint br = QPoint((int)ceil(rect.right() / (qreal)TILE_SIZE),
-	  (int)ceil(rect.bottom() / (qreal)TILE_SIZE));
+	QPoint tl = QPoint((int)floor(rect.left() / tileSize()),
+	  (int)floor(rect.top() / tileSize()));
+	QPoint br = QPoint((int)ceil(rect.right() / tileSize()),
+	  (int)ceil(rect.bottom() / tileSize()));
 
 	QList<Tile> tiles;
 	for (int i = tl.x(); i < br.x(); i++) {
@@ -216,8 +221,12 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, bool block)
 
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];
-		QPoint tp(t.xy().x() * TILE_SIZE, t.xy().y() * TILE_SIZE);
-		if (!t.pixmap().isNull())
+		QPointF tp(t.xy().x() * tileSize(), t.xy().y() * tileSize());
+		if (!t.pixmap().isNull()) {
+#ifdef ENABLE_HIDPI
+			t.pixmap().setDevicePixelRatio(_ratio);
+#endif // ENABLE_HIDPI
 			painter->drawPixmap(tp, t.pixmap());
+		}
 	}
 }

@@ -46,8 +46,13 @@
 #define TILES_DIR              USER_DIR + QString("/tiles")
 #define TRANSLATIONS_DIR       GLOBAL_DIR + QString("/translations")
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 1))
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 1)
 #define ENABLE_HTTP2
 #endif // QT >= 5.10.1
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+#define ENABLE_HIDPI
+#endif // QT >= 5.6
 
 #endif /* CONFIG_H */
