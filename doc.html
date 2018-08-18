@@ -127,6 +127,10 @@
           default zoom range is &lt;0,&nbsp;19&gt; and the default bounds are
           &lt;-85.0511,&nbsp;85.0511&gt; and &lt;-180,&nbsp;180&gt;.</p>
 
+          <p>Since version 5.17, GPXSee supports HiDPI map tiles. To specify, that a map
+          uses HiDPI tiles, use the <i>tilePixelRatio</i> tag. For the most common 512x512px
+          tiles (that shall be rendered as 256x256px) tiles, set the value to 2.</p>
+
           <h4 id="WMTS">WMTS</h4>
           <p>WMTS maps are distinguished by setting the <i>type</i> attribute of the
           <i>map</i> element to <code>WMTS</code>. Both the KVP and REST access methods
@@ -172,6 +176,8 @@
 
           <p>Finally, one can define additional dimensions like <code>Time</code> using
           the <i>dimension</i> element. Use a separate entry for every additional dimension.</p>
+
+          <p>HiDPI WMTS tiles are supported too.</p>
 
           <h4 id="WMS">WMS</h4>
           <p>WMS maps are distinguished by setting the <i>type</i> attribute of the

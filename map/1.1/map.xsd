@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://www.gpxsee.org/map/1"
+  xmlns="http://www.gpxsee.org/map/1"
+  elementFormDefault="qualified">
+
+	<xs:simpleType name="mapType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="OSM"/>
+			<xs:enumeration value="WMTS"/>
+			<xs:enumeration value="WMS"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="urlType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="REST"/>
+			<xs:enumeration value="KVP"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="axisOrder">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="xy"/>
+			<xs:enumeration value="yx"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="map">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="url" minOccurs="1" maxOccurs="1">
+					<xs:complexType mixed="true">
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="type" type="urlType"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="tilePixelRatio" type="xs:float" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="zoom" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:attribute name="min" type="xs:nonNegativeInteger"/>
+						<xs:attribute name="max" type="xs:nonNegativeInteger"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="bounds" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:attribute name="top" type="xs:decimal"/>
+						<xs:attribute name="bottom" type="xs:decimal"/>
+						<xs:attribute name="left" type="xs:decimal"/>
+						<xs:attribute name="right" type="xs:decimal"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="copyright" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="format" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="layer" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="style" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="crs" minOccurs="0" maxOccurs="1">
+					<xs:complexType mixed="true">
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="axis" type="axisOrder"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="set" minOccurs="0" maxOccurs="1">
+					<xs:complexType mixed="true">
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="axis" type="axisOrder"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="dimension" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType mixed="true">
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:string" use="required"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="authorization" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:attribute name="username" type="xs:string" use="required"/>
+						<xs:attribute name="password" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+
+			<xs:attribute name="type" type="mapType" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema> 
