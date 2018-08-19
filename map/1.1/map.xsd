@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  targetNamespace="http://www.gpxsee.org/map/1"
-  xmlns="http://www.gpxsee.org/map/1"
+  targetNamespace="http://www.gpxsee.org/map/1.1"
+  xmlns="http://www.gpxsee.org/map/1.1"
   elementFormDefault="qualified">
 
 	<xs:simpleType name="mapType">
