@@ -98,7 +98,7 @@ template<class T> bool FITParser::readValue(CTX &ctx, T &val)
 	return true;
 }
 
-bool FITParser::skipValue(CTX &ctx, size_t size)
+bool FITParser::skipValue(CTX &ctx, quint8 size)
 {
 	ctx.len -= size;
 	return ctx.file->seek(ctx.file->pos() + size);
