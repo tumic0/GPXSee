@@ -131,6 +131,17 @@
           uses HiDPI tiles use the <i>tilePixelRatio</i> tag. For the most common 512x512px
           tiles (that shall be rendered as 256x256px tiles), set the value to 2.</p>
 
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;map xmlns="http://www.gpxsee.org/map/1.1"&gt;
+	&lt;name&gt;OSM - HiDPI&lt;/name&gt;
+	&lt;url&gt;https://a.osm.rrze.fau.de/osmhd/$z/$x/$y.png&lt;/url&gt;
+	&lt;tilePixelRatio&gt;2&lt;/tilePixelRatio&gt;
+&lt;/map&gt;
+</pre>
+
+          <p></p>
+
           <h4 id="WMTS">WMTS</h4>
           <p>WMTS maps are distinguished by setting the <i>type</i> attribute of the
           <i>map</i> element to <code>WMTS</code>. Both the KVP and REST access methods
