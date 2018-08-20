@@ -1,5 +1,6 @@
 #include <QFile>
 #include <QXmlStreamReader>
+#include "config.h"
 #include "onlinemap.h"
 #include "wmtsmap.h"
 #include "wmsmap.h"
@@ -160,12 +161,16 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 			  attr.value("password").toString());
 			reader.skipCurrentElement();
 		} else if (reader.name() == "tilePixelRatio") {
+#ifdef ENABLE_HIDPI
 			bool res;
 			qreal val = reader.readElementText().toDouble(&res);
 			if (!res)
 				reader.raiseError("Invalid tilePixelRatio");
 			else
 				config.tileRatio = val;
+#else // ENABLE_HIDPI
+			reader.raiseError("HiDPI maps not supported");
+#endif // ENABLE_HIDPI
 		} else
 			reader.skipCurrentElement();
 	}
