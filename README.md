@@ -10,6 +10,7 @@ KML, FIT, IGC, NMEA, SLF, LOC and OziExplorer files.
 * Support for POI files.
 * Print/export to PDF.
 * Full-screen mode.
+* HiDPI/Retina displays & maps support.
 * Native GUI for Windows, Mac OS X and Linux.
 * Opens GPX, TCX, FIT, KML, IGC, NMEA, SLF, LOC, OziExplorer (PLT, RTE, WPT) and Garmin CSV files.
 
