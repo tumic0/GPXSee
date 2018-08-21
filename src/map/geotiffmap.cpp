@@ -79,7 +79,12 @@ void GeoTIFFMap::draw(QPainter *painter, const QRectF &rect, bool block)
 {
 	Q_UNUSED(block)
 
-	if (_img && !_img->isNull())
-		painter->drawImage(rect.topLeft(), *_img, QRectF(rect.topLeft()
-		  * _ratio, rect.size() * _ratio));
+	if (_img && !_img->isNull()) {
+		/* Drawing directly a sub-rectangle without an image copy does not work
+		   for big images under OpenGL. The image is most probably loaded as
+		   whole which exceeds the texture size limit. */
+		QRectF sr(rect.topLeft() * _ratio, rect.size() * _ratio);
+		QImage img(_img->copy(sr.toRect()));
+		painter->drawImage(rect.topLeft(), img);
+	}
 }

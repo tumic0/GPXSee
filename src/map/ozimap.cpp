@@ -302,8 +302,12 @@ void OziMap::drawOZF(QPainter *painter, const QRectF &rect) const
 
 void OziMap::drawImage(QPainter *painter, const QRectF &rect) const
 {
-	painter->drawImage(rect.topLeft(), *_img, QRectF(rect.topLeft() * _ratio,
-	  rect.size() * _ratio));
+	/* Drawing directly a sub-rectangle without an image copy does not work
+	   for big images under OpenGL. The image is most probably loaded as
+	   whole which exceeds the texture size limit. */
+	QRectF sr(rect.topLeft() * _ratio, rect.size() * _ratio);
+	QImage img(_img->copy(sr.toRect()));
+	painter->drawImage(rect.topLeft(), img);
 }
 
 void OziMap::draw(QPainter *painter, const QRectF &rect, bool block)
