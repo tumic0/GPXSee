@@ -4,7 +4,7 @@
 #include "map.h"
 #include "rectd.h"
 
-class OfflineMap;
+class OziMap;
 
 class Atlas : public Map
 {
@@ -59,7 +59,7 @@ private:
 
 	QString _name;
 
-	QList<OfflineMap*> _maps;
+	QList<OziMap*> _maps;
 	QVector<Zoom> _zooms;
 	QVector<Bounds> _bounds;
 	int _zoom;

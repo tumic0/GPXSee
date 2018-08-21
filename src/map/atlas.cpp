@@ -2,7 +2,7 @@
 #include <QtAlgorithms>
 #include <QPainter>
 #include "common/rectc.h"
-#include "offlinemap.h"
+#include "ozimap.h"
 #include "tar.h"
 #include "atlas.h"
 
@@ -12,7 +12,7 @@
 #define TL(m) ((m)->xy2pp((m)->bounds().topLeft()))
 #define BR(m) ((m)->xy2pp((m)->bounds().bottomRight()))
 
-static bool resCmp(OfflineMap *m1, OfflineMap *m2)
+static bool resCmp(OziMap *m1, OziMap *m2)
 {
 	qreal r1, r2;
 
@@ -22,12 +22,12 @@ static bool resCmp(OfflineMap *m1, OfflineMap *m2)
 	return r1 > r2;
 }
 
-static bool xCmp(OfflineMap *m1, OfflineMap *m2)
+static bool xCmp(OziMap *m1, OziMap *m2)
 {
 	return TL(m1).x() < TL(m2).x();
 }
 
-static bool yCmp(OfflineMap *m1, OfflineMap *m2)
+static bool yCmp(OziMap *m1, OziMap *m2)
 {
 	return TL(m1).y() > TL(m2).y();
 }
@@ -52,7 +52,7 @@ void Atlas::computeBounds()
 	QVector<QPointF> offsets(_maps.count());
 
 	for (int z = 0; z < _zooms.count(); z++) {
-		QList<OfflineMap*> m;
+		QList<OziMap*> m;
 		for (int i = _zooms.at(z).first; i <= _zooms.at(z).last; i++)
 			m.append(_maps.at(i));
 
@@ -119,11 +119,11 @@ Atlas::Atlas(const QString &fileName, QObject *parent)
 			QString mapFile = maps.at(i).absoluteFilePath() + "/"
 			  + maps.at(i).fileName() + ".map";
 
-			OfflineMap *map;
+			OziMap *map;
 			if (tar.isOpen())
-				map = new OfflineMap(mapFile, tar, this);
+				map = new OziMap(mapFile, tar, this);
 			else
-				map = new OfflineMap(mapFile, this);
+				map = new OziMap(mapFile, this);
 
 			if (map->isValid())
 				_maps.append(map);
@@ -277,7 +277,7 @@ void Atlas::draw(QPainter *painter, const QRectF &rect, bool block)
 
 void Atlas::draw(QPainter *painter, const QRectF &rect, int mapIndex)
 {
-	OfflineMap *map = _maps.at(mapIndex);
+	OziMap *map = _maps.at(mapIndex);
 	const QPointF offset = _bounds.at(mapIndex).xy.topLeft();
 	QRectF pr = QRectF(rect.topLeft() - offset, rect.size());
 

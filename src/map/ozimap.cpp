@@ -11,12 +11,11 @@
 #include "tar.h"
 #include "ozf.h"
 #include "mapfile.h"
-#include "geotiff.h"
 #include "config.h"
-#include "offlinemap.h"
+#include "ozimap.h"
 
 
-bool OfflineMap::setImageInfo(const QString &path)
+bool OziMap::setImageInfo(const QString &path)
 {
 	QFileInfo ii(_map.path);
 
@@ -59,7 +58,7 @@ bool OfflineMap::setImageInfo(const QString &path)
 	return true;
 }
 
-bool OfflineMap::setTileInfo(const QStringList &tiles, const QString &path)
+bool OziMap::setTileInfo(const QStringList &tiles, const QString &path)
 {
 	if (!_map.size.isValid()) {
 		_errorString = "Missing total image size (IWH)";
@@ -94,7 +93,7 @@ bool OfflineMap::setTileInfo(const QStringList &tiles, const QString &path)
 	return false;
 }
 
-OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
+OziMap::OziMap(const QString &fileName, QObject *parent)
   : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _ratio(1.0), _valid(false)
 {
 	QFileInfo fi(fileName);
@@ -126,7 +125,10 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 			_projection = mf.projection();
 			_transform = mf.transform();
 		}
-	} else if (suffix == "map") {
+
+		if (!setTileInfo(_tar->files()))
+			return;
+	} else {
 		QFile file(fileName);
 		MapFile mf(file);
 		if (!mf.isValid()) {
@@ -139,26 +141,7 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 			_projection = mf.projection();
 			_transform = mf.transform();
 		}
-	} else if (suffix == "tif" || suffix == "tiff") {
-		GeoTIFF gt(fileName);
-		if (!gt.isValid()) {
-			_errorString = gt.errorString();
-			return;
-		} else {
-			_name = fi.fileName();
-			_map.path = fileName;
-			_projection = gt.projection();
-			_transform = gt.transform();
-		}
-	} else {
-		_errorString = "Not a map file";
-		return;
-	}
 
-	if (_tar) {
-		if (!setTileInfo(_tar->files()))
-			return;
-	} else {
 		QDir set(fi.absolutePath() + "/" + "set");
 		if (set.exists()) {
 			if (!setTileInfo(set.entryList(), set.absolutePath()))
@@ -172,7 +155,7 @@ OfflineMap::OfflineMap(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
-OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
+OziMap::OziMap(const QString &fileName, Tar &tar, QObject *parent)
   : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _ratio(1.0), _valid(false)
 {
 	QFileInfo fi(fileName);
@@ -202,14 +185,14 @@ OfflineMap::OfflineMap(const QString &fileName, Tar &tar, QObject *parent)
 	_valid = true;
 }
 
-OfflineMap::~OfflineMap()
+OziMap::~OziMap()
 {
 	delete _img;
 	delete _tar;
 	delete _ozf;
 }
 
-void OfflineMap::load()
+void OziMap::load()
 {
 	if (_tar && !_tar->isOpen()) {
 		if (!_tar->open()) {
@@ -235,13 +218,13 @@ void OfflineMap::load()
 	}
 }
 
-void OfflineMap::unload()
+void OziMap::unload()
 {
 	delete _img;
 	_img = 0;
 }
 
-void OfflineMap::drawTiled(QPainter *painter, const QRectF &rect) const
+void OziMap::drawTiled(QPainter *painter, const QRectF &rect) const
 {
 	QSizeF ts(_tile.size.width() / _ratio, _tile.size.height() / _ratio);
 	QPointF tl(floor(rect.left() / ts.width()) * ts.width(),
@@ -282,7 +265,7 @@ void OfflineMap::drawTiled(QPainter *painter, const QRectF &rect) const
 	}
 }
 
-void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect) const
+void OziMap::drawOZF(QPainter *painter, const QRectF &rect) const
 {
 	QSizeF ts(_ozf->tileSize().width() / _ratio, _ozf->tileSize().height()
 	  / _ratio);
@@ -317,13 +300,13 @@ void OfflineMap::drawOZF(QPainter *painter, const QRectF &rect) const
 	}
 }
 
-void OfflineMap::drawImage(QPainter *painter, const QRectF &rect) const
+void OziMap::drawImage(QPainter *painter, const QRectF &rect) const
 {
 	painter->drawImage(rect.topLeft(), *_img, QRectF(rect.topLeft() * _ratio,
 	  rect.size() * _ratio));
 }
 
-void OfflineMap::draw(QPainter *painter, const QRectF &rect, bool block)
+void OziMap::draw(QPainter *painter, const QRectF &rect, bool block)
 {
 	Q_UNUSED(block);
 
@@ -335,7 +318,7 @@ void OfflineMap::draw(QPainter *painter, const QRectF &rect, bool block)
 		drawImage(painter, rect);
 }
 
-QPointF OfflineMap::ll2xy(const Coordinates &c)
+QPointF OziMap::ll2xy(const Coordinates &c)
 {
 	QPointF p(_transform.proj2img(_projection.ll2xy(c)));
 	return _ozf
@@ -343,7 +326,7 @@ QPointF OfflineMap::ll2xy(const Coordinates &c)
 	  : p / _ratio;
 }
 
-Coordinates OfflineMap::xy2ll(const QPointF &p)
+Coordinates OziMap::xy2ll(const QPointF &p)
 {
 	return _ozf
 	  ? _projection.xy2ll(_transform.img2proj(QPointF(p.x() / _scale.x(),
@@ -351,14 +334,14 @@ Coordinates OfflineMap::xy2ll(const QPointF &p)
 	  : _projection.xy2ll(_transform.img2proj(p * _ratio));
 }
 
-QRectF OfflineMap::bounds()
+QRectF OziMap::bounds()
 {
 	return _ozf
 	  ? QRectF(QPointF(0, 0), _ozf->size(_zoom) / _ratio)
 	  : QRectF(QPointF(0, 0), _map.size / _ratio);
 }
 
-int OfflineMap::zoomFit(const QSize &size, const RectC &rect)
+int OziMap::zoomFit(const QSize &size, const RectC &rect)
 {
 	if (!_ozf)
 		return _zoom;
@@ -381,7 +364,7 @@ int OfflineMap::zoomFit(const QSize &size, const RectC &rect)
 	return _zoom;
 }
 
-int OfflineMap::zoomIn()
+int OziMap::zoomIn()
 {
 	if (_ozf)
 		rescale(qMax(_zoom - 1, 0));
@@ -389,7 +372,7 @@ int OfflineMap::zoomIn()
 	return _zoom;
 }
 
-int OfflineMap::zoomOut()
+int OziMap::zoomOut()
 {
 	if (_ozf)
 		rescale(qMin(_zoom + 1, _ozf->zooms() - 1));
@@ -397,7 +380,7 @@ int OfflineMap::zoomOut()
 	return _zoom;
 }
 
-void OfflineMap::rescale(int zoom)
+void OziMap::rescale(int zoom)
 {
 	_zoom = zoom;
 	_scale = _ozf->scale(zoom);

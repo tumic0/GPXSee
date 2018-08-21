@@ -1,5 +1,5 @@
-#ifndef OFFLINEMAP_H
-#define OFFLINEMAP_H
+#ifndef OZIMAP_H
+#define OZIMAP_H
 
 #include "transform.h"
 #include "projection.h"
@@ -9,14 +9,14 @@ class Tar;
 class OZF;
 class QImage;
 
-class OfflineMap : public Map
+class OziMap : public Map
 {
 	Q_OBJECT
 
 public:
-	OfflineMap(const QString &fileName, QObject *parent = 0);
-	OfflineMap(const QString &fileName, Tar &tar, QObject *parent = 0);
-	~OfflineMap();
+	OziMap(const QString &fileName, QObject *parent = 0);
+	OziMap(const QString &fileName, Tar &tar, QObject *parent = 0);
+	~OziMap();
 
 	QString name() const {return _name;}
 
@@ -79,4 +79,4 @@ private:
 	QString _errorString;
 };
 
-#endif // OFFLINEMAP_H
+#endif // OZIMAP_H

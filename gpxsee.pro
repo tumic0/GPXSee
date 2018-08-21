@@ -89,7 +89,7 @@ HEADERS += src/config.h \
     src/map/downloader.h \
     src/map/tile.h \
     src/map/emptymap.h \
-    src/map/offlinemap.h \
+    src/map/ozimap.h \
     src/map/tar.h \
     src/map/ozf.h \
     src/map/atlas.h \
@@ -139,7 +139,8 @@ HEADERS += src/config.h \
     src/map/krovak.h \
     src/GUI/kv.h \
     src/data/locparser.h \
-    src/data/slfparser.h
+    src/data/slfparser.h \
+    src/map/geotiffmap.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -192,7 +193,7 @@ SOURCES += src/main.cpp \
     src/map/onlinemap.cpp \
     src/map/downloader.cpp \
     src/map/emptymap.cpp \
-    src/map/offlinemap.cpp \
+    src/map/ozimap.cpp \
     src/map/tar.cpp \
     src/map/atlas.cpp \
     src/map/ozf.cpp \
@@ -242,7 +243,8 @@ SOURCES += src/main.cpp \
     src/map/krovak.cpp \
     src/map/map.cpp \
     src/data/locparser.cpp \
-    src/data/slfparser.cpp
+    src/data/slfparser.cpp \
+    src/map/geotiffmap.cpp
 
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \
