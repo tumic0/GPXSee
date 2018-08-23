@@ -99,7 +99,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="123"/>
         <source>SLF files</source>
-        <translation type="unfinished"></translation>
+        <translation>SLF-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="124"/>
