@@ -16,7 +16,6 @@ public:
 
 private:
 	QImage _img;
-	qreal _ratio;
 };
 
 #endif // IMAGE_H

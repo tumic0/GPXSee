@@ -3,13 +3,14 @@
 #include "image.h"
 
 
-Image::Image(const QString &fileName) : _img(fileName), _ratio(1.0)
+Image::Image(const QString &fileName) : _img(fileName)
 {
 }
 
 void Image::draw(QPainter *painter, const QRectF &rect, Map::Flags flags)
 {
-	QRectF sr(rect.topLeft() * _ratio, rect.size() * _ratio);
+	qreal ratio = _img.devicePixelRatioF();
+	QRectF sr(rect.topLeft() * ratio, rect.size() * ratio);
 
 	if (flags & Map::OpenGL) {
 		QImage img(_img.copy(sr.toRect()));
@@ -21,7 +22,6 @@ void Image::draw(QPainter *painter, const QRectF &rect, Map::Flags flags)
 void Image::setDevicePixelRatio(qreal ratio)
 {
 #ifdef ENABLE_HIDPI
-	_ratio = ratio;
-	_img.setDevicePixelRatio(_ratio);
+	_img.setDevicePixelRatio(ratio);
 #endif // ENABLE_HIDPI
 }
