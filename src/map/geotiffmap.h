@@ -5,6 +5,8 @@
 #include "projection.h"
 #include "map.h"
 
+class Image;
+
 class GeoTIFFMap : public Map
 {
 	Q_OBJECT
@@ -26,24 +28,22 @@ public:
 	QPointF ll2xy(const Coordinates &c);
 	Coordinates xy2ll(const QPointF &p);
 
-	void draw(QPainter *painter, const QRectF &rect, bool block);
+	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
-	void setDevicePixelRatio(qreal ratio) {_ratio = ratio;}
-	void setOpenGLEnabled(bool enabled) {_opengl = enabled;}
 	void load();
 	void unload();
+	void setDevicePixelRatio(qreal ratio);
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
 private:
-	QString _path;
+	QString _fileName;
 	Projection _projection;
 	Transform _transform;
-	QImage *_img;
+	Image *_img;
 	QSize _size;
 	qreal _ratio;
-	bool _opengl;
 
 	bool _valid;
 	QString _errorString;

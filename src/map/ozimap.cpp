@@ -3,21 +3,20 @@
 #include <QMap>
 #include <QDir>
 #include <QBuffer>
-#include <QImage>
 #include <QImageReader>
 #include <QPixmapCache>
 #include "common/coordinates.h"
 #include "common/rectc.h"
 #include "tar.h"
 #include "ozf.h"
+#include "image.h"
 #include "mapfile.h"
 #include "config.h"
 #include "ozimap.h"
 
 
 OziMap::OziMap(const QString &fileName, QObject *parent)
-  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _ratio(1.0),
-  _opengl(false), _valid(false)
+  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _ratio(1.0), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QString suffix = fi.suffix().toLower();
@@ -79,8 +78,7 @@ OziMap::OziMap(const QString &fileName, QObject *parent)
 }
 
 OziMap::OziMap(const QString &fileName, Tar &tar, QObject *parent)
-  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _ratio(1.0),
-  _opengl(false), _valid(false)
+  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _ratio(1.0), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QFileInfo map(fi.absolutePath());
@@ -140,20 +138,19 @@ bool OziMap::setImageInfo(const QString &path)
 
 	if (OZF::isOZF(_map.path)) {
 		_ozf = new OZF(_map.path);
-		if (!_ozf->open()) {
-			_errorString = QString("%1: Error loading OZF file")
-			  .arg(_ozf->fileName());
+		if (!_ozf || !_ozf->open()) {
+			_errorString = QString("%1: Error loading OZF file").arg(_map.path);
 			return false;
 		}
 		_scale = _ozf->scale(_zoom);
 	} else {
-		QImageReader img(_map.path);
-		_map.size = img.size();
-		if (!_map.size.isValid()) {
-			_errorString = QString("%1: Error reading map image")
-			  .arg(QFileInfo(_map.path).fileName());
+		QImageReader ir(_map.path);
+		if (!ir.canRead()) {
+			_errorString = QString("%1: Unsupported/invalid image file")
+			  .arg(_map.path);
 			return false;
 		}
+		_map.size = ir.size();
 	}
 
 	return true;
@@ -208,16 +205,8 @@ void OziMap::load()
 		return;
 	}
 
-	if (!_ozf && !_img && _map.isValid()) {
-		_img = new QImage(_map.path);
-		if (!_img || _img->isNull()) {
-			qWarning("%s: error loading map image", qPrintable(_map.path));
-			return;
-		}
-#ifdef ENABLE_HIDPI
-		_img->setDevicePixelRatio(_ratio);
-#endif // ENABLE_HIDPI
-	}
+	if (!_tile.isValid() && !_ozf && !_img)
+		_img = new Image(_map.path);
 }
 
 void OziMap::unload()
@@ -302,26 +291,16 @@ void OziMap::drawOZF(QPainter *painter, const QRectF &rect) const
 	}
 }
 
-void OziMap::drawImage(QPainter *painter, const QRectF &rect) const
+void OziMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	QRectF sr(rect.topLeft() * _ratio, rect.size() * _ratio);
-	if (_opengl) {
-		QImage img(_img->copy(sr.toRect()));
-		painter->drawImage(rect.topLeft(), img);
-	} else
-		painter->drawImage(rect.topLeft(), *_img, sr);
-}
-
-void OziMap::draw(QPainter *painter, const QRectF &rect, bool block)
-{
-	Q_UNUSED(block);
+	Q_UNUSED(flags);
 
 	if (_ozf)
 		drawOZF(painter, rect);
+	else if (_img)
+		_img->draw(painter, rect, flags);
 	else if (_tile.isValid())
 		drawTiled(painter, rect);
-	else if (_img && !_img->isNull())
-		drawImage(painter, rect);
 }
 
 QPointF OziMap::ll2xy(const Coordinates &c)
@@ -390,4 +369,11 @@ void OziMap::rescale(int zoom)
 {
 	_zoom = zoom;
 	_scale = _ozf->scale(zoom);
+}
+
+void OziMap::setDevicePixelRatio(qreal ratio)
+{
+	_ratio = ratio;
+	if (_img)
+		_img->setDevicePixelRatio(_ratio);
 }

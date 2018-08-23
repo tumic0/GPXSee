@@ -140,7 +140,8 @@ HEADERS += src/config.h \
     src/GUI/kv.h \
     src/data/locparser.h \
     src/data/slfparser.h \
-    src/map/geotiffmap.h
+    src/map/geotiffmap.h \
+    src/map/image.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -244,7 +245,8 @@ SOURCES += src/main.cpp \
     src/map/map.cpp \
     src/data/locparser.cpp \
     src/data/slfparser.cpp \
-    src/map/geotiffmap.cpp
+    src/map/geotiffmap.cpp \
+    src/map/image.cpp
 
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_cs.ts \

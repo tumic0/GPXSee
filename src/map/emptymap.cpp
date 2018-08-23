@@ -85,11 +85,11 @@ int EmptyMap::zoomOut()
 	return _zoom;
 }
 
-void EmptyMap::draw(QPainter *painter, const QRectF &rect, bool block)
+void EmptyMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	Q_UNUSED(painter);
 	Q_UNUSED(rect);
-	Q_UNUSED(block);
+	Q_UNUSED(flags);
 }
 
 QPointF EmptyMap::ll2xy(const Coordinates &c)

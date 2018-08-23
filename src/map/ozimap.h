@@ -7,7 +7,7 @@
 
 class Tar;
 class OZF;
-class QImage;
+class Image;
 
 class OziMap : public Map
 {
@@ -31,10 +31,9 @@ public:
 	QPointF ll2xy(const Coordinates &c);
 	Coordinates xy2ll(const QPointF &p);
 
-	void draw(QPainter *painter, const QRectF &rect, bool block);
+	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
-	void setDevicePixelRatio(qreal ratio) {_ratio = ratio;}
-	void setOpenGLEnabled(bool enabled) {_opengl = enabled;}
+	void setDevicePixelRatio(qreal ratio);
 	void load();
 	void unload();
 
@@ -61,21 +60,20 @@ private:
 
 	void drawTiled(QPainter *painter, const QRectF &rect) const;
 	void drawOZF(QPainter *painter, const QRectF &rect) const;
-	void drawImage(QPainter *painter, const QRectF &rect) const;
+	void drawImage(QPainter *painter, const QRectF &rect, Flags flags) const;
 
 	void rescale(int zoom);
 
 	QString _name;
 	Projection _projection;
 	Transform _transform;
-	QImage *_img;
+	Image *_img;
 	Tar *_tar;
 	OZF *_ozf;
 	ImageInfo _map, _tile;
 	int _zoom;
 	QPointF _scale;
 	qreal _ratio;
-	bool _opengl;
 
 	bool _valid;
 	QString _errorString;

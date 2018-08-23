@@ -245,9 +245,9 @@ bool JNXMap::cb(Tile *tile, void *context)
 	return true;
 }
 
-void JNXMap::draw(QPainter *painter, const QRectF &rect, bool block)
+void JNXMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	Q_UNUSED(block);
+	Q_UNUSED(flags);
 	const RTree<Tile*, qreal, 2> &tree = _zooms.at(_zoom).tree;
 	Ctx ctx(painter, &_file, _ratio);
 	QRectF rr(rect.topLeft() * _ratio, rect.size() * _ratio);

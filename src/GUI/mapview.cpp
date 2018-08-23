@@ -27,7 +27,6 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	Q_ASSERT(map != 0);
 	Q_ASSERT(poi != 0);
 
-	_opengl = false;
 	_scene = new QGraphicsScene(this);
 	setScene(_scene);
 	setDragMode(QGraphicsView::ScrollHandDrag);
@@ -42,11 +41,11 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_scene->addItem(_mapScale);
 
 	_map = map;
+	_map->load();
 #ifdef ENABLE_HIDPI
 	_ratio = devicePixelRatioF();
 	_map->setDevicePixelRatio(_ratio);
 #endif // ENABLE_HIDPI
-	_map->load();
 	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
 	_poi = poi;
@@ -76,6 +75,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_poiSize = 8;
 	_poiColor = Qt::black;
 
+	_opengl = false;
 	_plot = false;
 	_digitalZoom = 0;
 
@@ -269,11 +269,10 @@ void MapView::setMap(Map *map)
 	disconnect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
 	_map = map;
+	_map->load();
 #ifdef ENABLE_HIDPI
 	_map->setDevicePixelRatio(_ratio);
 #endif // ENABLE_HIDPI
-	_map->setOpenGLEnabled(_opengl);
-	_map->load();
 	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
 	digitalZoom(0);
@@ -509,7 +508,6 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 #ifdef ENABLE_HIDPI
 	_map->setDevicePixelRatio(1.0);
 #endif // ENABLE_HIDPI
-	_map->setOpenGLEnabled(false);
 
 	// Compute sizes & ratios
 	orig = viewport()->rect();
@@ -571,7 +569,6 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 #ifdef ENABLE_HIDPI
 	_map->setDevicePixelRatio(_ratio);
 #endif // ENABLE_HIDPI
-	_map->setOpenGLEnabled(_opengl);
 	_plot = false;
 	setUpdatesEnabled(true);
 }
@@ -769,9 +766,17 @@ void MapView::drawBackground(QPainter *painter, const QRectF &rect)
 
 	if (_showMap) {
 		QRectF ir = rect.intersected(_map->bounds());
+		Map::Flags flags = Map::NoFlags;
+
 		if (_opacity < 1.0)
 			painter->setOpacity(_opacity);
-		_map->draw(painter, ir, _plot);
+
+		if (_plot)
+			flags = Map::Block;
+		else if (_opengl)
+			flags = Map::OpenGL;
+
+		_map->draw(painter, ir, flags);
 	}
 }
 
@@ -818,8 +823,6 @@ void MapView::useOpenGL(bool use)
 		setViewport(new OPENGL_WIDGET);
 	else
 		setViewport(new QWidget);
-
-	_map->setOpenGLEnabled(_opengl);
 }
 
 void MapView::useAntiAliasing(bool use)

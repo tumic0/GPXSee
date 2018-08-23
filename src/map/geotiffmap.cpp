@@ -3,27 +3,27 @@
 #include <QImageReader>
 #include "config.h"
 #include "geotiff.h"
+#include "image.h"
 #include "geotiffmap.h"
 
 
 GeoTIFFMap::GeoTIFFMap(const QString &fileName, QObject *parent)
-  : Map(parent), _img(0), _ratio(1.0), _opengl(false), _valid(false)
+  : Map(parent), _fileName(fileName), _img(0), _ratio(1.0), _valid(false)
 {
+	QImageReader ir(fileName);
+	if (!ir.canRead()) {
+		_errorString = "Unsupported/invalid image file";
+		return;
+	}
+	_size = ir.size();
+
 	GeoTIFF gt(fileName);
 	if (!gt.isValid()) {
 		_errorString = gt.errorString();
 		return;
 	} else {
-		_path = fileName;
 		_projection = gt.projection();
 		_transform = gt.transform();
-	}
-
-	QImageReader img(_path);
-	_size = img.size();
-	if (!_size.isValid()) {
-		_errorString = QString("%1: Invalid image file").arg(_path);
-		return;
 	}
 
 	_valid = true;
@@ -36,28 +36,8 @@ GeoTIFFMap::~GeoTIFFMap()
 
 QString GeoTIFFMap::name() const
 {
-	QFileInfo fi(_path);
+	QFileInfo fi(_fileName);
 	return fi.fileName();
-}
-
-void GeoTIFFMap::load()
-{
-	if (!_img) {
-		_img = new QImage(_path);
-		if (!_img || _img->isNull()) {
-			qWarning("%s: error loading map image", qPrintable(_path));
-			return;
-		}
-#ifdef ENABLE_HIDPI
-		_img->setDevicePixelRatio(_ratio);
-#endif // ENABLE_HIDPI
-	}
-}
-
-void GeoTIFFMap::unload()
-{
-	delete _img;
-	_img = 0;
 }
 
 QPointF GeoTIFFMap::ll2xy(const Coordinates &c)
@@ -75,16 +55,27 @@ QRectF GeoTIFFMap::bounds()
 	return QRectF(QPointF(0, 0), _size / _ratio);
 }
 
-void GeoTIFFMap::draw(QPainter *painter, const QRectF &rect, bool block)
+void GeoTIFFMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	Q_UNUSED(block)
+	if (_img)
+		_img->draw(painter, rect, flags);
+}
 
-	if (_img && !_img->isNull()) {
-		QRectF sr(rect.topLeft() * _ratio, rect.size() * _ratio);
-		if (_opengl) {
-			QImage img(_img->copy(sr.toRect()));
-			painter->drawImage(rect.topLeft(), img);
-		} else
-			painter->drawImage(rect.topLeft(), *_img, sr);
-	}
+void GeoTIFFMap::setDevicePixelRatio(qreal ratio)
+{
+	_ratio = ratio;
+	if (_img)
+		_img->setDevicePixelRatio(_ratio);
+}
+
+void GeoTIFFMap::load()
+{
+	if (!_img)
+		_img = new Image(_fileName);
+}
+
+void GeoTIFFMap::unload()
+{
+	delete _img;
+	_img = 0;
 }

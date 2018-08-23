@@ -26,7 +26,7 @@ public:
 	QPointF ll2xy(const Coordinates &c);
 	Coordinates xy2ll(const QPointF &p);
 
-	void draw(QPainter *painter, const QRectF &rect, bool block);
+	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
 	void setDevicePixelRatio(qreal ratio);
 	void unload();
@@ -53,7 +53,7 @@ private:
 		Bounds(const RectD &pp, const QRectF &xy) : pp(pp), xy(xy) {}
 	};
 
-	void draw(QPainter *painter, const QRectF &rect, int mapIndex);
+	void draw(QPainter *painter, const QRectF &rect, int mapIndex, Flags flags);
 	void computeZooms();
 	void computeBounds();
 

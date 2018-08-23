@@ -126,7 +126,7 @@ qreal OnlineMap::tileSize() const
 	return (TILE_SIZE / coordinatesRatio());
 }
 
-void OnlineMap::draw(QPainter *painter, const QRectF &rect, bool block)
+void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	qreal scale = zoom2scale(_zoom);
 
@@ -141,7 +141,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, bool block)
 		for (int j = 0; j < ceil(s.height() / tileSize()); j++)
 			tiles.append(Tile(QPoint(tile.x() + i, tile.y() + j), _zoom));
 
-	if (block)
+	if (flags & Map::Block)
 		_tileLoader->loadTilesSync(tiles);
 	else
 		_tileLoader->loadTilesAsync(tiles);

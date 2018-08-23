@@ -192,7 +192,7 @@ qreal WMSMap::tileSize() const
 	return (TILE_SIZE / _ratio);
 }
 
-void WMSMap::draw(QPainter *painter, const QRectF &rect, bool block)
+void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	QPoint tl = QPoint((int)floor(rect.left() / tileSize()),
 	  (int)floor(rect.top() / tileSize()));
@@ -214,7 +214,7 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, bool block)
 		}
 	}
 
-	if (block)
+	if (flags & Map::Block)
 		_tileLoader->loadTilesSync(tiles);
 	else
 		_tileLoader->loadTilesAsync(tiles);

@@ -255,14 +255,12 @@ Coordinates Atlas::xy2ll(const QPointF &p)
 	return _maps.at(idx)->xy2ll(p2);
 }
 
-void Atlas::draw(QPainter *painter, const QRectF &rect, bool block)
+void Atlas::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	Q_UNUSED(block);
-
 	// All in one map
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).last; i++) {
 		if (_bounds.at(i).xy.contains(rect)) {
-			draw(painter, rect, i);
+			draw(painter, rect, i, flags);
 			return;
 		}
 	}
@@ -271,11 +269,12 @@ void Atlas::draw(QPainter *painter, const QRectF &rect, bool block)
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).last; i++) {
 		QRectF ir = rect.intersected(_bounds.at(i).xy);
 		if (!ir.isNull())
-			draw(painter, ir, i);
+			draw(painter, ir, i, flags);
 	}
 }
 
-void Atlas::draw(QPainter *painter, const QRectF &rect, int mapIndex)
+void Atlas::draw(QPainter *painter, const QRectF &rect, int mapIndex,
+  Flags flags)
 {
 	OziMap *map = _maps.at(mapIndex);
 	const QPointF offset = _bounds.at(mapIndex).xy.topLeft();
@@ -284,7 +283,7 @@ void Atlas::draw(QPainter *painter, const QRectF &rect, int mapIndex)
 	map->load();
 
 	painter->translate(offset);
-	map->draw(painter, pr, true);
+	map->draw(painter, pr, flags);
 	painter->translate(-offset);
 }
 

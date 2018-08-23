@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QRectF>
+#include <QFlags>
 #include "common/coordinates.h"
 
 class QPainter;
@@ -14,6 +15,13 @@ class Map : public QObject
 	Q_OBJECT
 
 public:
+	enum Flag {
+		NoFlags = 0,
+		Block = 1,
+		OpenGL = 2
+	};
+	Q_DECLARE_FLAGS(Flags, Flag)
+
 	Map(QObject *parent = 0) : QObject(parent) {}
 	virtual ~Map() {}
 
@@ -31,13 +39,12 @@ public:
 	virtual QPointF ll2xy(const Coordinates &c) = 0;
 	virtual Coordinates xy2ll(const QPointF &p) = 0;
 
-	virtual void draw(QPainter *painter, const QRectF &rect, bool block) = 0;
+	virtual void draw(QPainter *painter, const QRectF &rect, Flags flags) = 0;
 
 	virtual void clearCache() {}
 	virtual void load() {}
 	virtual void unload() {}
 	virtual void setDevicePixelRatio(qreal ratio) {Q_UNUSED(ratio);}
-	virtual void setOpenGLEnabled(bool enabled) {Q_UNUSED(enabled);}
 
 	virtual bool isValid() const {return true;}
 	virtual QString errorString() const {return QString();}
@@ -45,5 +52,7 @@ public:
 signals:
 	void loaded();
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Map::Flags)
 
 #endif // MAP_H

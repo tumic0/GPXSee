@@ -169,7 +169,7 @@ QSizeF WMTSMap::tileSize(const WMTS::Zoom &zoom) const
 	  zoom.tile().height() / coordinatesRatio());
 }
 
-void WMTSMap::draw(QPainter *painter, const QRectF &rect, bool block)
+void WMTSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	const WMTS::Zoom &z = _zooms.at(_zoom);
 	QSizeF ts(tileSize(z));
@@ -184,7 +184,7 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect, bool block)
 		for (int j = tl.y(); j < br.y(); j++)
 			tiles.append(Tile(QPoint(i, j), z.id()));
 
-	if (block)
+	if (flags & Map::Block)
 		_tileLoader->loadTilesSync(tiles);
 	else
 		_tileLoader->loadTilesAsync(tiles);
