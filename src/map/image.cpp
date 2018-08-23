@@ -3,8 +3,6 @@
 #include "image.h"
 
 
-#define TILE_SIZE 256
-
 Image::Image(const QString &fileName) : _img(fileName), _ratio(1.0)
 {
 }
