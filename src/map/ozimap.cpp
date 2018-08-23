@@ -15,6 +15,107 @@
 #include "ozimap.h"
 
 
+OziMap::OziMap(const QString &fileName, QObject *parent)
+  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _ratio(1.0),
+  _opengl(false), _valid(false)
+{
+	QFileInfo fi(fileName);
+	QString suffix = fi.suffix().toLower();
+
+
+	if (suffix == "tar") {
+		_tar = new Tar(fileName);
+		if (!_tar->open()) {
+			_errorString = "Error reading tar file";
+			return;
+		}
+
+		QString mapFileName = fi.completeBaseName() + ".map";
+		QByteArray ba = _tar->file(mapFileName);
+		if (ba.isNull()) {
+			_errorString = "Map file not found";
+			return;
+		}
+		QBuffer buffer(&ba);
+		MapFile mf(buffer);
+		if (!mf.isValid()) {
+			_errorString = mf.errorString();
+			return;
+		} else {
+			_name = mf.name();
+			_map.size = mf.size();
+			_map.path = mf.image();
+			_projection = mf.projection();
+			_transform = mf.transform();
+		}
+
+		if (!setTileInfo(_tar->files()))
+			return;
+	} else {
+		QFile file(fileName);
+		MapFile mf(file);
+		if (!mf.isValid()) {
+			_errorString = mf.errorString();
+			return;
+		} else {
+			_name = mf.name();
+			_map.size = mf.size();
+			_map.path = mf.image();
+			_projection = mf.projection();
+			_transform = mf.transform();
+		}
+
+		QDir set(fi.absolutePath() + "/" + "set");
+		if (set.exists()) {
+			if (!setTileInfo(set.entryList(), set.absolutePath()))
+				return;
+		} else {
+			if (!setImageInfo(fi.absolutePath()))
+				return;
+		}
+	}
+
+	_valid = true;
+}
+
+OziMap::OziMap(const QString &fileName, Tar &tar, QObject *parent)
+  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _ratio(1.0),
+  _opengl(false), _valid(false)
+{
+	QFileInfo fi(fileName);
+	QFileInfo map(fi.absolutePath());
+	QFileInfo layer(map.absolutePath());
+	QString mapFile = layer.fileName() + "/" + map.fileName() + "/"
+	  + fi.fileName();
+
+	QByteArray ba = tar.file(mapFile);
+	if (ba.isNull()) {
+		_errorString = "Map file not found";
+		return;
+	}
+	QBuffer buffer(&ba);
+	MapFile mf(buffer);
+	if (!mf.isValid()) {
+		_errorString = mf.errorString();
+		return;
+	}
+
+	_name = mf.name();
+	_map.size = mf.size();
+	_projection = mf.projection();
+	_transform = mf.transform();
+	_tar = new Tar(fi.absolutePath() + "/" + fi.completeBaseName() + ".tar");
+
+	_valid = true;
+}
+
+OziMap::~OziMap()
+{
+	delete _img;
+	delete _tar;
+	delete _ozf;
+}
+
 bool OziMap::setImageInfo(const QString &path)
 {
 	QFileInfo ii(_map.path);
@@ -91,105 +192,6 @@ bool OziMap::setTileInfo(const QStringList &tiles, const QString &path)
 
 	_errorString = "Invalid/missing tile set";
 	return false;
-}
-
-OziMap::OziMap(const QString &fileName, QObject *parent)
-  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _ratio(1.0), _valid(false)
-{
-	QFileInfo fi(fileName);
-	QString suffix = fi.suffix().toLower();
-
-
-	if (suffix == "tar") {
-		_tar = new Tar(fileName);
-		if (!_tar->open()) {
-			_errorString = "Error reading tar file";
-			return;
-		}
-
-		QString mapFileName = fi.completeBaseName() + ".map";
-		QByteArray ba = _tar->file(mapFileName);
-		if (ba.isNull()) {
-			_errorString = "Map file not found";
-			return;
-		}
-		QBuffer buffer(&ba);
-		MapFile mf(buffer);
-		if (!mf.isValid()) {
-			_errorString = mf.errorString();
-			return;
-		} else {
-			_name = mf.name();
-			_map.size = mf.size();
-			_map.path = mf.image();
-			_projection = mf.projection();
-			_transform = mf.transform();
-		}
-
-		if (!setTileInfo(_tar->files()))
-			return;
-	} else {
-		QFile file(fileName);
-		MapFile mf(file);
-		if (!mf.isValid()) {
-			_errorString = mf.errorString();
-			return;
-		} else {
-			_name = mf.name();
-			_map.size = mf.size();
-			_map.path = mf.image();
-			_projection = mf.projection();
-			_transform = mf.transform();
-		}
-
-		QDir set(fi.absolutePath() + "/" + "set");
-		if (set.exists()) {
-			if (!setTileInfo(set.entryList(), set.absolutePath()))
-				return;
-		} else {
-			if (!setImageInfo(fi.absolutePath()))
-				return;
-		}
-	}
-
-	_valid = true;
-}
-
-OziMap::OziMap(const QString &fileName, Tar &tar, QObject *parent)
-  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _ratio(1.0), _valid(false)
-{
-	QFileInfo fi(fileName);
-	QFileInfo map(fi.absolutePath());
-	QFileInfo layer(map.absolutePath());
-	QString mapFile = layer.fileName() + "/" + map.fileName() + "/"
-	  + fi.fileName();
-
-	QByteArray ba = tar.file(mapFile);
-	if (ba.isNull()) {
-		_errorString = "Map file not found";
-		return;
-	}
-	QBuffer buffer(&ba);
-	MapFile mf(buffer);
-	if (!mf.isValid()) {
-		_errorString = mf.errorString();
-		return;
-	}
-
-	_name = mf.name();
-	_map.size = mf.size();
-	_projection = mf.projection();
-	_transform = mf.transform();
-	_tar = new Tar(fi.absolutePath() + "/" + fi.completeBaseName() + ".tar");
-
-	_valid = true;
-}
-
-OziMap::~OziMap()
-{
-	delete _img;
-	delete _tar;
-	delete _ozf;
 }
 
 void OziMap::load()
@@ -302,12 +304,12 @@ void OziMap::drawOZF(QPainter *painter, const QRectF &rect) const
 
 void OziMap::drawImage(QPainter *painter, const QRectF &rect) const
 {
-	/* Drawing directly a sub-rectangle without an image copy does not work
-	   for big images under OpenGL. The image is most probably loaded as
-	   whole which exceeds the texture size limit. */
 	QRectF sr(rect.topLeft() * _ratio, rect.size() * _ratio);
-	QImage img(_img->copy(sr.toRect()));
-	painter->drawImage(rect.topLeft(), img);
+	if (_opengl) {
+		QImage img(_img->copy(sr.toRect()));
+		painter->drawImage(rect.topLeft(), img);
+	} else
+		painter->drawImage(rect.topLeft(), *_img, sr);
 }
 
 void OziMap::draw(QPainter *painter, const QRectF &rect, bool block)

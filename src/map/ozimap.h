@@ -34,6 +34,7 @@ public:
 	void draw(QPainter *painter, const QRectF &rect, bool block);
 
 	void setDevicePixelRatio(qreal ratio) {_ratio = ratio;}
+	void setOpenGLEnabled(bool enabled) {_opengl = enabled;}
 	void load();
 	void unload();
 
@@ -74,6 +75,7 @@ private:
 	int _zoom;
 	QPointF _scale;
 	qreal _ratio;
+	bool _opengl;
 
 	bool _valid;
 	QString _errorString;

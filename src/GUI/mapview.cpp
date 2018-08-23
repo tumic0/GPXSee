@@ -27,6 +27,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	Q_ASSERT(map != 0);
 	Q_ASSERT(poi != 0);
 
+	_opengl = false;
 	_scene = new QGraphicsScene(this);
 	setScene(_scene);
 	setDragMode(QGraphicsView::ScrollHandDrag);
@@ -271,6 +272,7 @@ void MapView::setMap(Map *map)
 #ifdef ENABLE_HIDPI
 	_map->setDevicePixelRatio(_ratio);
 #endif // ENABLE_HIDPI
+	_map->setOpenGLEnabled(_opengl);
 	_map->load();
 	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
@@ -507,6 +509,7 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 #ifdef ENABLE_HIDPI
 	_map->setDevicePixelRatio(1.0);
 #endif // ENABLE_HIDPI
+	_map->setOpenGLEnabled(false);
 
 	// Compute sizes & ratios
 	orig = viewport()->rect();
@@ -568,6 +571,7 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 #ifdef ENABLE_HIDPI
 	_map->setDevicePixelRatio(_ratio);
 #endif // ENABLE_HIDPI
+	_map->setOpenGLEnabled(_opengl);
 	_plot = false;
 	setUpdatesEnabled(true);
 }
@@ -808,10 +812,14 @@ void MapView::scrollContentsBy(int dx, int dy)
 
 void MapView::useOpenGL(bool use)
 {
+	_opengl = use;
+
 	if (use)
 		setViewport(new OPENGL_WIDGET);
 	else
 		setViewport(new QWidget);
+
+	_map->setOpenGLEnabled(_opengl);
 }
 
 void MapView::useAntiAliasing(bool use)

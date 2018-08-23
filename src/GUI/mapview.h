@@ -142,6 +142,7 @@ private:
 #ifdef ENABLE_HIDPI
 	qreal _ratio;
 #endif // ENABLE_HIDPI
+	bool _opengl;
 };
 
 #endif // MAPVIEW_H
