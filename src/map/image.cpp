@@ -9,7 +9,11 @@ Image::Image(const QString &fileName) : _img(fileName)
 
 void Image::draw(QPainter *painter, const QRectF &rect, Map::Flags flags)
 {
+#ifdef ENABLE_HIDPI
 	qreal ratio = _img.devicePixelRatioF();
+#else // ENABLE_HIDPI
+	qreal ratio = 1.0;
+#endif // ENABLE_HIDPI
 	QRectF sr(rect.topLeft() * ratio, rect.size() * ratio);
 
 	if (flags & Map::OpenGL) {
