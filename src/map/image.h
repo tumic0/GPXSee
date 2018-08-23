@@ -11,7 +11,6 @@ class Image
 public:
 	Image(const QString &fileName);
 
-	QSize size() const {return _img.size();}
 	void draw(QPainter *painter, const QRectF &rect, Map::Flags flags);
 	void setDevicePixelRatio(qreal ratio);
 
