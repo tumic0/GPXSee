@@ -16,6 +16,7 @@ public:
 
 private:
 	QImage _img;
+	QString _fileName;
 };
 
 #endif // IMAGE_H
