@@ -54,7 +54,7 @@ Coordinates GPXParser::coordinates()
 void GPXParser::rpExtension(TrackData *autoRoute)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "rpt")
+		if (_reader.name() == QLatin1String("rpt"))
 			autoRoute->append(Trackpoint(coordinates()));
 		_reader.skipCurrentElement();
 	}
@@ -63,9 +63,9 @@ void GPXParser::rpExtension(TrackData *autoRoute)
 void GPXParser::tpExtension(Trackpoint &trackpoint)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "hr")
+		if (_reader.name() == QLatin1String("hr"))
 			trackpoint.setHeartRate(number());
-		else if (_reader.name() == "atemp")
+		else if (_reader.name() == QLatin1String("atemp"))
 			trackpoint.setTemperature(number());
 		else
 			_reader.skipCurrentElement();
@@ -75,7 +75,7 @@ void GPXParser::tpExtension(Trackpoint &trackpoint)
 void GPXParser::rteptExtensions(TrackData *autoRoute)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "RoutePointExtension")
+		if (_reader.name() == QLatin1String("RoutePointExtension"))
 			rpExtension(autoRoute);
 		else
 			_reader.skipCurrentElement();
@@ -85,17 +85,18 @@ void GPXParser::rteptExtensions(TrackData *autoRoute)
 void GPXParser::trkptExtensions(Trackpoint &trackpoint)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "speed")
+		if (_reader.name() == QLatin1String("speed"))
 			trackpoint.setSpeed(number());
-		else if (_reader.name() == "hr" || _reader.name() == "heartrate")
+		else if (_reader.name() == QLatin1String("hr")
+		  || _reader.name() == QLatin1String("heartrate"))
 			trackpoint.setHeartRate(number());
-		else if (_reader.name() == "temp")
+		else if (_reader.name() == QLatin1String("temp"))
 			trackpoint.setTemperature(number());
-		else if (_reader.name() == "cadence")
+		else if (_reader.name() == QLatin1String("cadence"))
 			trackpoint.setCadence(number());
-		else if (_reader.name() == "power")
+		else if (_reader.name() == QLatin1String("power"))
 			trackpoint.setPower(number());
-		else if (_reader.name() == "TrackPointExtension")
+		else if (_reader.name() == QLatin1String("TrackPointExtension"))
 			tpExtension(trackpoint);
 		else
 			_reader.skipCurrentElement();
@@ -107,13 +108,13 @@ void GPXParser::trackpointData(Trackpoint &trackpoint)
 	qreal gh = NAN;
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "ele")
+		if (_reader.name() == QLatin1String("ele"))
 			trackpoint.setElevation(number());
-		else if (_reader.name() == "time")
+		else if (_reader.name() == QLatin1String("time"))
 			trackpoint.setTimestamp(time());
-		else if (_reader.name() == "geoidheight")
+		else if (_reader.name() == QLatin1String("geoidheight"))
 			gh = number();
-		else if (_reader.name() == "extensions")
+		else if (_reader.name() == QLatin1String("extensions"))
 			trkptExtensions(trackpoint);
 		else
 			_reader.skipCurrentElement();
@@ -128,17 +129,17 @@ void GPXParser::waypointData(Waypoint &waypoint, TrackData *autoRoute)
 	qreal gh = NAN;
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "name")
+		if (_reader.name() == QLatin1String("name"))
 			waypoint.setName(_reader.readElementText());
-		else if (_reader.name() == "desc")
+		else if (_reader.name() == QLatin1String("desc"))
 			waypoint.setDescription(_reader.readElementText());
-		else if (_reader.name() == "ele")
+		else if (_reader.name() == QLatin1String("ele"))
 			waypoint.setElevation(number());
-		else if (_reader.name() == "geoidheight")
+		else if (_reader.name() == QLatin1String("geoidheight"))
 			gh = number();
-		else if (_reader.name() == "time")
+		else if (_reader.name() == QLatin1String("time"))
 			waypoint.setTimestamp(time());
-		else if (autoRoute && _reader.name() == "extensions")
+		else if (autoRoute && _reader.name() == QLatin1String("extensions"))
 			rteptExtensions(autoRoute);
 		else
 			_reader.skipCurrentElement();
@@ -151,7 +152,7 @@ void GPXParser::waypointData(Waypoint &waypoint, TrackData *autoRoute)
 void GPXParser::trackpoints(TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "trkpt") {
+		if (_reader.name() == QLatin1String("trkpt")) {
 			track.append(Trackpoint(coordinates()));
 			trackpointData(track.last());
 		} else
@@ -164,12 +165,12 @@ void GPXParser::routepoints(RouteData &route, QList<TrackData> &tracks)
 	TrackData autoRoute;
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "rtept") {
+		if (_reader.name() == QLatin1String("rtept")) {
 			route.append(Waypoint(coordinates()));
 			waypointData(route.last(), &autoRoute);
-		} else if (_reader.name() == "name")
+		} else if (_reader.name() == QLatin1String("name"))
 			route.setName(_reader.readElementText());
-		else if (_reader.name() == "desc")
+		else if (_reader.name() == QLatin1String("desc"))
 			route.setDescription(_reader.readElementText());
 		else
 			_reader.skipCurrentElement();
@@ -185,11 +186,11 @@ void GPXParser::routepoints(RouteData &route, QList<TrackData> &tracks)
 void GPXParser::track(TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "trkseg")
+		if (_reader.name() == QLatin1String("trkseg"))
 			trackpoints(track);
-		else if (_reader.name() == "name")
+		else if (_reader.name() == QLatin1String("name"))
 			track.setName(_reader.readElementText());
-		else if (_reader.name() == "desc")
+		else if (_reader.name() == QLatin1String("desc"))
 			track.setDescription(_reader.readElementText());
 		else
 			_reader.skipCurrentElement();
@@ -200,13 +201,13 @@ void GPXParser::gpx(QList<TrackData> &tracks, QList<RouteData> &routes,
   QList<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "trk") {
+		if (_reader.name() == QLatin1String("trk")) {
 			tracks.append(TrackData());
 			track(tracks.back());
-		} else if (_reader.name() == "rte") {
+		} else if (_reader.name() == QLatin1String("rte")) {
 			routes.append(RouteData());
 			routepoints(routes.back(), tracks);
-		} else if (_reader.name() == "wpt") {
+		} else if (_reader.name() == QLatin1String("wpt")) {
 			waypoints.append(Waypoint(coordinates()));
 			waypointData(waypoints.last());
 		} else
@@ -222,7 +223,7 @@ bool GPXParser::parse(QFile *file, QList<TrackData> &tracks,
 	_reader.setNamespaceProcessing(false);
 
 	if (_reader.readNextStartElement()) {
-		if (_reader.name() == "gpx")
+		if (_reader.name() == QLatin1String("gpx"))
 			gpx(tracks, routes, waypoints);
 		else
 			_reader.raiseError("Not a GPX file");

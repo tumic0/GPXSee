@@ -29,7 +29,7 @@ bool SLFParser::data(const QXmlStreamAttributes &attr, const char *name,
 void SLFParser::entries(const QDateTime &date, TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Entry") {
+		if (_reader.name() == QLatin1String("Entry")) {
 			qreal val, lat, lon;
 			QXmlStreamAttributes attr(_reader.attributes());
 
@@ -70,11 +70,11 @@ void SLFParser::entries(const QDateTime &date, TrackData &track)
 void SLFParser::generalInformation(QDateTime &date, TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "name")
+		if (_reader.name() == QLatin1String("name"))
 			track.setName(_reader.readElementText());
-		else if (_reader.name() == "description")
+		else if (_reader.name() == QLatin1String("description"))
 			track.setDescription(_reader.readElementText());
-		else if (_reader.name() == "startDate") {
+		else if (_reader.name() == QLatin1String("startDate")) {
 			QString ds(_reader.readElementText());
 			QLocale locale(QLocale::English);
 			date = locale.toDateTime(ds.mid(0, ds.indexOf("GMT"))
@@ -89,9 +89,9 @@ void SLFParser::activity(TrackData &track)
 	QDateTime date;
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Entries")
+		if (_reader.name() == QLatin1String("Entries"))
 			entries(date, track);
-		else if (_reader.name() == "GeneralInformation")
+		else if (_reader.name() == QLatin1String("GeneralInformation"))
 			generalInformation(date, track);
 		else
 			_reader.skipCurrentElement();
@@ -108,7 +108,7 @@ bool SLFParser::parse(QFile *file, QList<TrackData> &tracks,
 	_reader.setDevice(file);
 
 	if (_reader.readNextStartElement()) {
-		if (_reader.name() == "Activity") {
+		if (_reader.name() == QLatin1String("Activity")) {
 			tracks.append(TrackData());
 			activity(tracks.last());
 		} else

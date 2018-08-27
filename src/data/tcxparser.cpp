@@ -37,13 +37,13 @@ Coordinates TCXParser::position()
 	bool res;
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "LatitudeDegrees") {
+		if (_reader.name() == QLatin1String("LatitudeDegrees")) {
 			val = _reader.readElementText().toDouble(&res);
 			if (!res || (val < -90.0 || val > 90.0))
 				_reader.raiseError("Invalid LatitudeDegrees");
 			else
 				pos.setLat(val);
-		} else if (_reader.name() == "LongitudeDegrees") {
+		} else if (_reader.name() == QLatin1String("LongitudeDegrees")) {
 			val = _reader.readElementText().toDouble(&res);
 			if (!res || (val < -180.0 || val > 180.0))
 				_reader.raiseError("Invalid LongitudeDegrees");
@@ -59,7 +59,7 @@ Coordinates TCXParser::position()
 void TCXParser::heartRateBpm(Trackpoint &trackpoint)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Value")
+		if (_reader.name() == QLatin1String("Value"))
 			trackpoint.setHeartRate(number());
 		else
 			_reader.skipCurrentElement();
@@ -69,9 +69,9 @@ void TCXParser::heartRateBpm(Trackpoint &trackpoint)
 void TCXParser::extensions(Trackpoint &trackpoint)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "RunCadence")
+		if (_reader.name() == QLatin1String("RunCadence"))
 			trackpoint.setCadence(number());
-		else if (_reader.name() == "Watts")
+		else if (_reader.name() == QLatin1String("Watts"))
 			trackpoint.setPower(number());
 		else
 			_reader.skipCurrentElement();
@@ -81,17 +81,17 @@ void TCXParser::extensions(Trackpoint &trackpoint)
 void TCXParser::trackpointData(Trackpoint &trackpoint)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Position")
+		if (_reader.name() == QLatin1String("Position"))
 			trackpoint.setCoordinates(position());
-		else if (_reader.name() == "AltitudeMeters")
+		else if (_reader.name() == QLatin1String("AltitudeMeters"))
 			trackpoint.setElevation(number());
-		else if (_reader.name() == "Time")
+		else if (_reader.name() == QLatin1String("Time"))
 			trackpoint.setTimestamp(time());
-		else if (_reader.name() == "HeartRateBpm")
+		else if (_reader.name() == QLatin1String("HeartRateBpm"))
 			heartRateBpm(trackpoint);
-		else if (_reader.name() == "Cadence")
+		else if (_reader.name() == QLatin1String("Cadence"))
 			trackpoint.setCadence(number());
-		else if (_reader.name() == "Extensions")
+		else if (_reader.name() == QLatin1String("Extensions"))
 			extensions(trackpoint);
 		else
 			_reader.skipCurrentElement();
@@ -101,15 +101,15 @@ void TCXParser::trackpointData(Trackpoint &trackpoint)
 void TCXParser::waypointData(Waypoint &waypoint)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Position")
+		if (_reader.name() == QLatin1String("Position"))
 			waypoint.setCoordinates(position());
-		else if (_reader.name() == "Name")
+		else if (_reader.name() == QLatin1String("Name"))
 			waypoint.setName(_reader.readElementText());
-		else if (_reader.name() == "Notes")
+		else if (_reader.name() == QLatin1String("Notes"))
 			waypoint.setDescription(_reader.readElementText());
-		else if (_reader.name() == "AltitudeMeters")
+		else if (_reader.name() == QLatin1String("AltitudeMeters"))
 			waypoint.setElevation(number());
-		else if (_reader.name() == "Time")
+		else if (_reader.name() == QLatin1String("Time"))
 			waypoint.setTimestamp(time());
 		else
 			_reader.skipCurrentElement();
@@ -119,7 +119,7 @@ void TCXParser::waypointData(Waypoint &waypoint)
 void TCXParser::trackpoints(TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Trackpoint") {
+		if (_reader.name() == QLatin1String("Trackpoint")) {
 			Trackpoint t;
 			trackpointData(t);
 			if (t.coordinates().isValid())
@@ -134,7 +134,7 @@ void TCXParser::trackpoints(TrackData &track)
 void TCXParser::lap(TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Track")
+		if (_reader.name() == QLatin1String("Track"))
 			trackpoints(track);
 		else
 			_reader.skipCurrentElement();
@@ -144,13 +144,13 @@ void TCXParser::lap(TrackData &track)
 void TCXParser::course(QList<Waypoint> &waypoints, TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Track")
+		if (_reader.name() == QLatin1String("Track"))
 			trackpoints(track);
-		else if (_reader.name() == "Name")
+		else if (_reader.name() == QLatin1String("Name"))
 			track.setName(_reader.readElementText());
-		else if (_reader.name() == "Notes")
+		else if (_reader.name() == QLatin1String("Notes"))
 			track.setDescription(_reader.readElementText());
-		else if (_reader.name() == "CoursePoint") {
+		else if (_reader.name() == QLatin1String("CoursePoint")) {
 			Waypoint w;
 			waypointData(w);
 			if (w.coordinates().isValid())
@@ -165,7 +165,7 @@ void TCXParser::course(QList<Waypoint> &waypoints, TrackData &track)
 void TCXParser::activity(TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Lap")
+		if (_reader.name() == QLatin1String("Lap"))
 			lap(track);
 		else
 			_reader.skipCurrentElement();
@@ -175,7 +175,7 @@ void TCXParser::activity(TrackData &track)
 void TCXParser::courses(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Course") {
+		if (_reader.name() == QLatin1String("Course")) {
 			tracks.append(TrackData());
 			course(waypoints, tracks.back());
 		} else
@@ -186,7 +186,7 @@ void TCXParser::courses(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 void TCXParser::sport(QList<TrackData> &tracks)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Activity") {
+		if (_reader.name() == QLatin1String("Activity")) {
 			tracks.append(TrackData());
 			activity(tracks.back());
 		} else
@@ -197,7 +197,8 @@ void TCXParser::sport(QList<TrackData> &tracks)
 void TCXParser::multiSportSession(QList<TrackData> &tracks)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "FirstSport" || _reader.name() == "NextSport")
+		if (_reader.name() == QLatin1String("FirstSport")
+		  || _reader.name() == QLatin1String("NextSport"))
 			sport(tracks);
 		else
 			_reader.skipCurrentElement();
@@ -207,10 +208,10 @@ void TCXParser::multiSportSession(QList<TrackData> &tracks)
 void TCXParser::activities(QList<TrackData> &tracks)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Activity") {
+		if (_reader.name() == QLatin1String("Activity")) {
 			tracks.append(TrackData());
 			activity(tracks.back());
-		} else if (_reader.name() == "MultiSportSession")
+		} else if (_reader.name() == QLatin1String("MultiSportSession"))
 			multiSportSession(tracks);
 		else
 			_reader.skipCurrentElement();
@@ -220,9 +221,9 @@ void TCXParser::activities(QList<TrackData> &tracks)
 void TCXParser::tcx(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Courses")
+		if (_reader.name() == QLatin1String("Courses"))
 			courses(tracks, waypoints);
-		else if (_reader.name() == "Activities")
+		else if (_reader.name() == QLatin1String("Activities"))
 			activities(tracks);
 		else
 			_reader.skipCurrentElement();
@@ -238,7 +239,7 @@ bool TCXParser::parse(QFile *file, QList<TrackData> &tracks,
 	_reader.setDevice(file);
 
 	if (_reader.readNextStartElement()) {
-		if (_reader.name() == "TrainingCenterDatabase")
+		if (_reader.name() == QLatin1String("TrainingCenterDatabase"))
 			tcx(tracks, waypoints);
 		else
 			_reader.raiseError("Not a TCX file");

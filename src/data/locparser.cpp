@@ -31,11 +31,11 @@ Coordinates LOCParser::coordinates()
 void LOCParser::waypoint(Waypoint &waypoint)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "name") {
+		if (_reader.name() == QLatin1String("name")) {
 			const QXmlStreamAttributes &attr = _reader.attributes();
 			waypoint.setName(attr.value("id").toString());
 			waypoint.setDescription(_reader.readElementText());
-		} else if (_reader.name() == "coord") {
+		} else if (_reader.name() == QLatin1String("coord")) {
 			waypoint.setCoordinates(coordinates());
 			_reader.skipCurrentElement();
 		} else
@@ -49,7 +49,7 @@ void LOCParser::waypoint(Waypoint &waypoint)
 void LOCParser::loc(QList<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "waypoint") {
+		if (_reader.name() == QLatin1String("waypoint")) {
 			waypoints.append(Waypoint());
 			waypoint(waypoints.last());
 		} else
@@ -67,7 +67,7 @@ bool LOCParser::parse(QFile *file, QList<TrackData> &tracks,
 	_reader.setDevice(file);
 
 	if (_reader.readNextStartElement()) {
-		if (_reader.name() == "loc")
+		if (_reader.name() == QLatin1String("loc"))
 			loc(waypoints);
 		else
 			_reader.raiseError("Not a LOC file");
