@@ -129,6 +129,7 @@ qreal OnlineMap::tileSize() const
 void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	qreal scale = zoom2scale(_zoom);
+	QRectF b(bounds());
 
 	QPoint tile = mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * coordinatesRatio(), _zoom);
@@ -136,7 +137,8 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	  * tileSize(), floor(rect.top() / tileSize()) * tileSize());
 
 	QList<Tile> tiles;
-	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
+	QSizeF s(qMin(rect.right() - tl.x(), b.width()),
+	  qMin(rect.bottom() - tl.y(), b.height()));
 	for (int i = 0; i < ceil(s.width() / tileSize()); i++)
 		for (int j = 0; j < ceil(s.height() / tileSize()); j++)
 			tiles.append(Tile(QPoint(tile.x() + i, tile.y() + j), _zoom));
@@ -148,8 +150,8 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];
-		QPointF tp(tl.x() + (t.xy().x() - tile.x()) * tileSize(),
-		  tl.y() + (t.xy().y() - tile.y()) * tileSize());
+		QPointF tp(qMax(tl.x(), b.left()) + (t.xy().x() - tile.x()) * tileSize(),
+		  qMax(tl.y(), b.top()) + (t.xy().y() - tile.y()) * tileSize());
 		if (!t.pixmap().isNull()) {
 #ifdef ENABLE_HIDPI
 			t.pixmap().setDevicePixelRatio(imageRatio());
