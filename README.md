@@ -32,3 +32,6 @@ make
 
 ## Homepage
 http://www.gpxsee.org
+
+## Translations
+GPXSee uses [Weblate](https://hosted.weblate.org/projects/gpxsee) for translations.
