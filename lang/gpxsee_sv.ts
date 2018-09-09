@@ -655,11 +655,9 @@
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1318"/>
         <source>%n files</source>
-        <translation>
-            <numerusform>%n filer</numerusform>
-            <numerusform>%n filer</numerusform>
-        </translation>
-    </message>
+        <translation><numerusform>%n fil</numerusform>
+        <numerusform>%n filer</numerusform>
+        </translation></message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="995"/>
         <location filename="../src/GUI/gui.cpp" line="999"/>
