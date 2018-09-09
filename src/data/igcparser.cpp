@@ -98,12 +98,14 @@ static bool readARecord(const char *line, qint64 len)
 
 bool IGCParser::readHRecord(const char *line, int len)
 {
-	if (len < 10 || ::strncmp(line, "HFDTE", 5))
+	if (len < 11 || ::strncmp(line, "HFDTE", 5))
 		return true;
 
-	int d = str2int(line + 5, 2);
-	int m = str2int(line + 7, 2);
-	int y = str2int(line + 9, 2);
+	int offset = (len < 16 || ::strncmp(line + 5, "DATE:", 5)) ? 5 : 10;
+
+	int d = str2int(line + offset, 2);
+	int m = str2int(line + offset + 2, 2);
+	int y = str2int(line + offset + 4, 2);
 
 	if (y < 0 || m < 0 || d < 0) {
 		_errorString = "Invalid date header format";
