@@ -7,7 +7,7 @@ CadenceGraph::CadenceGraph(QWidget *parent) : GraphTab(parent)
 {
 	_showTracks = true;
 
-	GraphView::setYUnits(tr("1/min"));
+	GraphView::setYUnits(tr("rpm"));
 	setYLabel(tr("Cadence"));
 
 	setSliderPrecision(1);

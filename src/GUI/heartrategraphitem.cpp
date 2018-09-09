@@ -18,9 +18,9 @@ QString HeartRateGraphItem::toolTip() const
 	ToolTip tt;
 
 	tt.insert(tr("Maximum"), QString::number(max(), 'f', 0)
-	  + UNIT_SPACE + tr("1/min"));
+	  + UNIT_SPACE + tr("bpm"));
 	tt.insert(tr("Average"), QString::number(avg(), 'f', 0)
-	  + UNIT_SPACE + tr("1/min"));
+	  + UNIT_SPACE + tr("bpm"));
 
 	return tt.toString();
 }

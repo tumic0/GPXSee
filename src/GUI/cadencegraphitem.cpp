@@ -18,9 +18,9 @@ QString CadenceGraphItem::toolTip() const
 	ToolTip tt;
 
 	tt.insert(tr("Maximum"), QString::number(max(), 'f', 1)
-	  + UNIT_SPACE + tr("1/min"));
+	  + UNIT_SPACE + tr("rpm"));
 	tt.insert(tr("Average"), QString::number(avg(), 'f', 1)
-	  + UNIT_SPACE + tr("1/min"));
+	  + UNIT_SPACE + tr("rpm"));
 
 	return tt.toString();
 }
