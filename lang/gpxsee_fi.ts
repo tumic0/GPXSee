@@ -566,7 +566,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="675"/>
         <source>Next/Previous</source>
-        <translation>Next/Previous</translation>
+        <translation>Seuraava/edellinen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="677"/>
