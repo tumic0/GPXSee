@@ -36,7 +36,8 @@ Ticks::Ticks(double minValue, double maxValue, int maxCount)
 }
 
 
-AxisItem::AxisItem(Type type, QGraphicsItem *parent) : QGraphicsItem(parent)
+AxisItem::AxisItem(Type type, QGraphicsItem *parent)
+  : QGraphicsItem(parent), _locale(QLocale::system())
 {
 	_type = type;
 	_size = 0;
@@ -56,7 +57,7 @@ void AxisItem::setRange(const RangeF &range)
 	for (int i = 0; i < ticks.count(); i++) {
 		Tick &t = _ticks[i];
 		t.value = ticks.val(i);
-		t.boundingBox = fm.tightBoundingRect(QString::number(t.value));
+		t.boundingBox = fm.tightBoundingRect(_locale.toString(t.value));
 	}
 
 	updateBoundingRect();
@@ -126,7 +127,7 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 			  TICK/2, (_size/_range.size()) * (val - _range.min()), -TICK/2);
 			painter->drawText(((_size/_range.size()) * (val - _range.min()))
 			  - (ts.width()/2), ts.height() + TICK/2 + PADDING,
-			  QString::number(val));
+			  _locale.toString(val));
 		}
 
 		painter->drawText(_size/2 - _labelBB.width()/2, _labelBB.height()
@@ -145,7 +146,7 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 			  * (val - _range.min())));
 			painter->drawText(-(ts.width() + PADDING + TICK/2),
 			  -((_size/_range.size()) * (val - _range.min())) + (ts.height()/2),
-			  QString::number(val));
+			  _locale.toString(val));
 		}
 
 		painter->rotate(-90);

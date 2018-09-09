@@ -1,3 +1,4 @@
+#include <QLocale>
 #include "data/data.h"
 #include "temperaturegraphitem.h"
 #include "temperaturegraph.h"
@@ -16,11 +17,13 @@ TemperatureGraph::TemperatureGraph(QWidget *parent) : GraphTab(parent)
 void TemperatureGraph::setInfo()
 {
 	if (_showTracks) {
-		GraphView::addInfo(tr("Average"), QString::number(avg() * yScale()
+		QLocale l(QLocale::system());
+
+		GraphView::addInfo(tr("Average"), l.toString(avg() * yScale()
 		  + yOffset(), 'f', 1) + UNIT_SPACE + yUnits());
-		GraphView::addInfo(tr("Minimum"), QString::number(min() * yScale()
+		GraphView::addInfo(tr("Minimum"), l.toString(min() * yScale()
 		  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
-		GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale()
+		GraphView::addInfo(tr("Maximum"), l.toString(max() * yScale()
 		  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
 	} else
 		clearInfo();

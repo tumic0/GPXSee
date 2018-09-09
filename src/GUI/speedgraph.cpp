@@ -1,3 +1,4 @@
+#include <QLocale>
 #include "data/data.h"
 #include "config.h"
 #include "tooltip.h"
@@ -21,13 +22,14 @@ SpeedGraph::SpeedGraph(QWidget *parent) : GraphTab(parent)
 void SpeedGraph::setInfo()
 {
 	if (_showTracks) {
+		QLocale l(QLocale::system());
 		QString pace = Format::timeSpan((3600.0 / (avg() * yScale())), false);
 		QString pu = (_units == Metric) ? tr("min/km") : (_units == Imperial) ?
 		  tr("min/mi") : tr("min/nmi");
 
-		GraphView::addInfo(tr("Average"), QString::number(avg() * yScale(), 'f',
+		GraphView::addInfo(tr("Average"), l.toString(avg() * yScale(), 'f',
 		  1) + UNIT_SPACE + yUnits());
-		GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale(), 'f',
+		GraphView::addInfo(tr("Maximum"), l.toString(max() * yScale(), 'f',
 		  1) + UNIT_SPACE + yUnits());
 		GraphView::addInfo(tr("Pace"), pace + UNIT_SPACE + pu);
 	} else

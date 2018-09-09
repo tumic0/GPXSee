@@ -971,6 +971,8 @@ void GUI::exportFile()
 
 void GUI::statistics()
 {
+	QLocale l(QLocale::system());
+
 #ifdef Q_OS_WIN32
 	QString text = "<style>td {white-space: pre; padding-right: 4em;}"
 	  "th {text-align: left; padding-top: 0.5em;}</style><table>";
@@ -981,21 +983,21 @@ void GUI::statistics()
 
 	if (_showTracksAction->isChecked() && _trackCount > 1)
 		text.append("<tr><td>" + tr("Tracks") + ":</td><td>"
-		  + QString::number(_trackCount) + "</td></tr>");
+		  + l.toString(_trackCount) + "</td></tr>");
 	if (_showRoutesAction->isChecked() && _routeCount > 1)
 		text.append("<tr><td>" + tr("Routes") + ":</td><td>"
-		  + QString::number(_routeCount) + "</td></tr>");
+		  + l.toString(_routeCount) + "</td></tr>");
 	if (_showWaypointsAction->isChecked() && _waypointCount > 1)
 		text.append("<tr><td>" + tr("Waypoints") + ":</td><td>"
-		  + QString::number(_waypointCount) + "</td></tr>");
+		  + l.toString(_waypointCount) + "</td></tr>");
 
 	if (_dateRange.first.isValid()) {
 		if (_dateRange.first == _dateRange.second) {
-			QString format = QLocale::system().dateFormat(QLocale::LongFormat);
+			QString format = l.dateFormat(QLocale::LongFormat);
 			text.append("<tr><td>" + tr("Date") + ":</td><td>"
 			  + _dateRange.first.toString(format) + "</td></tr>");
 		} else {
-			QString format = QLocale::system().dateFormat(QLocale::ShortFormat);
+			QString format = l.dateFormat(QLocale::ShortFormat);
 			text.append("<tr><td>" + tr("Date") + ":</td><td>"
 			  + QString("%1 - %2").arg(_dateRange.first.toString(format),
 			  _dateRange.second.toString(format)) + "</td></tr>");
@@ -1037,6 +1039,7 @@ void GUI::statistics()
 
 void GUI::plot(QPrinter *printer)
 {
+	QLocale l(QLocale::system());
 	QPainter p(printer);
 	TrackInfo info;
 	qreal ih, gh, mh, ratio;
@@ -1047,19 +1050,19 @@ void GUI::plot(QPrinter *printer)
 
 	if (_options.printItemCount) {
 		if (_showTracksAction->isChecked() && _trackCount > 1)
-			info.insert(tr("Tracks"), QString::number(_trackCount));
+			info.insert(tr("Tracks"), l.toString(_trackCount));
 		if (_showRoutesAction->isChecked() && _routeCount > 1)
-			info.insert(tr("Routes"), QString::number(_routeCount));
+			info.insert(tr("Routes"), l.toString(_routeCount));
 		if (_showWaypointsAction->isChecked() && _waypointCount > 1)
-			info.insert(tr("Waypoints"), QString::number(_waypointCount));
+			info.insert(tr("Waypoints"), l.toString(_waypointCount));
 	}
 
 	if (_dateRange.first.isValid() && _options.printDate) {
 		if (_dateRange.first == _dateRange.second) {
-			QString format = QLocale::system().dateFormat(QLocale::LongFormat);
+			QString format = l.dateFormat(QLocale::LongFormat);
 			info.insert(tr("Date"), _dateRange.first.toString(format));
 		} else {
-			QString format = QLocale::system().dateFormat(QLocale::ShortFormat);
+			QString format = l.dateFormat(QLocale::ShortFormat);
 			info.insert(tr("Date"), QString("%1 - %2")
 			  .arg(_dateRange.first.toString(format),
 			  _dateRange.second.toString(format)));

@@ -1,5 +1,7 @@
+#include <QLocale>
 #include "tooltip.h"
 #include "temperaturegraphitem.h"
+
 
 TemperatureGraphItem::TemperatureGraphItem(const Graph &graph, GraphType type,
   QGraphicsItem *parent) : GraphItem(graph, type, parent)
@@ -20,12 +22,13 @@ QString TemperatureGraphItem::toolTip(Units units) const
 	qreal offset = (units == Metric) ? 0 : C2FO;
 	QString su = (units == Metric) ?
 	  QChar(0x00B0) + tr("C") : QChar(0x00B0) + tr("F");
+	QLocale l(QLocale::system());
 
-	tt.insert(tr("Average"), QString::number(avg() * scale + offset, 'f', 1)
+	tt.insert(tr("Average"), l.toString(avg() * scale + offset, 'f', 1)
 	  + UNIT_SPACE + su);
-	tt.insert(tr("Maximum"), QString::number(max() * scale + offset, 'f', 1)
+	tt.insert(tr("Maximum"), l.toString(max() * scale + offset, 'f', 1)
 	  + UNIT_SPACE + su);
-	tt.insert(tr("Minimum"), QString::number(min() * scale + offset, 'f', 1)
+	tt.insert(tr("Minimum"), l.toString(min() * scale + offset, 'f', 1)
 	  + UNIT_SPACE + su);
 
 	return tt.toString();

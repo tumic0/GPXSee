@@ -5,6 +5,7 @@
 #include <QPaintDevice>
 #include <QGraphicsSimpleTextItem>
 #include <QPalette>
+#include <QLocale>
 #include "data/graph.h"
 #include "opengl.h"
 #include "config.h"
@@ -413,7 +414,9 @@ void GraphView::updateSliderPosition()
 
 void GraphView::updateSliderInfo()
 {
+	QLocale l(QLocale::system());
 	qreal r, y;
+
 
 	if (_visible.count() > 1) {
 		r = 0;
@@ -435,9 +438,9 @@ void GraphView::updateSliderInfo()
 	_sliderInfo->setSide(s);
 	_sliderInfo->setPos(QPointF(0, _slider->boundingRect().height() * r));
 	_sliderInfo->setText(_graphType == Time ? Format::timeSpan(_sliderPos,
-	  bounds().width() > 3600) : QString::number(_sliderPos * _xScale, 'f', 1)
+	  bounds().width() > 3600) : l.toString(_sliderPos * _xScale, 'f', 1)
 	  + UNIT_SPACE + _xUnits, (_visible.count() > 1) ? QString()
-	  : QString::number(-y * _yScale + _yOffset, 'f', _precision) + UNIT_SPACE
+	  : l.toString(-y * _yScale + _yOffset, 'f', _precision) + UNIT_SPACE
 	  + _yUnits);
 }
 

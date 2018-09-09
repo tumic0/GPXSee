@@ -3,6 +3,7 @@
 
 #include <QGraphicsItem>
 #include <QVector>
+#include <QLocale>
 #include "common/range.h"
 
 class AxisItem : public QGraphicsItem
@@ -39,6 +40,7 @@ private:
 	QVector<Tick> _ticks;
 	QRectF _boundingRect;
 	QFont _font;
+	QLocale _locale;
 };
 
 #endif // AXISITEM_H

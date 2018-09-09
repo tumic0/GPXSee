@@ -1,6 +1,8 @@
+#include <QLocale>
 #include "tooltip.h"
 #include "format.h"
 #include "speedgraphitem.h"
+
 
 SpeedGraphItem::SpeedGraphItem(const Graph &graph, GraphType type,
   qreal movingTime, QGraphicsItem *parent) : GraphItem(graph, type, parent)
@@ -25,10 +27,11 @@ QString SpeedGraphItem::toolTip() const
 	  ? avg() * scale : mavg() * scale)), false);
 	QString pu = (_units == Metric) ? tr("min/km") : (_units == Imperial) ?
 	  tr("min/mi") : tr("min/nmi");
+	QLocale l(QLocale::system());
 
-	tt.insert(tr("Maximum"), QString::number(max() * scale, 'f', 1)
+	tt.insert(tr("Maximum"), l.toString(max() * scale, 'f', 1)
 	  + UNIT_SPACE + su);
-	tt.insert(tr("Average"), QString::number((_timeType == Total)
+	tt.insert(tr("Average"), l.toString((_timeType == Total)
 	  ? avg() * scale : mavg() * scale, 'f', 1) + UNIT_SPACE + su);
 	tt.insert(tr("Pace"), pace + UNIT_SPACE + pu);
 

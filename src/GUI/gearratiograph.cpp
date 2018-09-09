@@ -1,3 +1,4 @@
+#include <QLocale>
 #include "data/data.h"
 #include "gearratiographitem.h"
 #include "gearratiograph.h"
@@ -16,11 +17,13 @@ GearRatioGraph::GearRatioGraph(QWidget *parent) : GraphTab(parent)
 void GearRatioGraph::setInfo()
 {
 	if (_showTracks) {
-		GraphView::addInfo(tr("Most used"), QString::number(top() * yScale(),
+		QLocale l(QLocale::system());
+
+		GraphView::addInfo(tr("Most used"), l.toString(top() * yScale(),
 		  'f', 2) + UNIT_SPACE + yUnits());
-		GraphView::addInfo(tr("Minimum"), QString::number(min() * yScale(), 'f',
+		GraphView::addInfo(tr("Minimum"), l.toString(min() * yScale(), 'f',
 		  2) + UNIT_SPACE + yUnits());
-		GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale(), 'f',
+		GraphView::addInfo(tr("Maximum"), l.toString(max() * yScale(), 'f',
 		  2) + UNIT_SPACE + yUnits());
 	} else
 		clearInfo();
