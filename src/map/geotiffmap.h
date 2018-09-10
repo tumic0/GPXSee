@@ -18,13 +18,6 @@ public:
 	QString name() const;
 
 	QRectF bounds();
-
-	int zoom() const {return 0;}
-	void setZoom(int) {}
-	int zoomFit(const QSize &, const RectC &) {return 0;}
-	int zoomIn() {return 0;}
-	int zoomOut() {return 0;}
-
 	QPointF ll2xy(const Coordinates &c);
 	Coordinates xy2ll(const QPointF &p);
 

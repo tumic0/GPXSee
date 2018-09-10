@@ -30,11 +30,11 @@ public:
 	virtual QRectF bounds() = 0;
 	virtual qreal resolution(const QRectF &rect);
 
-	virtual int zoom() const = 0;
-	virtual void setZoom(int zoom) = 0;
-	virtual int zoomFit(const QSize &size, const RectC &rect) = 0;
-	virtual int zoomIn() = 0;
-	virtual int zoomOut() = 0;
+	virtual int zoom() const {return 0;}
+	virtual void setZoom(int) {}
+	virtual int zoomFit(const QSize &, const RectC &) {return 0;}
+	virtual int zoomIn() {return 0;}
+	virtual int zoomOut() {return 0;}
 
 	virtual QPointF ll2xy(const Coordinates &c) = 0;
 	virtual Coordinates xy2ll(const QPointF &p) = 0;
@@ -44,7 +44,7 @@ public:
 	virtual void clearCache() {}
 	virtual void load() {}
 	virtual void unload() {}
-	virtual void setDevicePixelRatio(qreal ratio) {Q_UNUSED(ratio);}
+	virtual void setDevicePixelRatio(qreal) {}
 
 	virtual bool isValid() const {return true;}
 	virtual QString errorString() const {return QString();}
