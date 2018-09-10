@@ -47,5 +47,7 @@ void Image::setDevicePixelRatio(qreal ratio)
 {
 #ifdef ENABLE_HIDPI
 	_img.setDevicePixelRatio(ratio);
+#else // ENABLE_HIDPI
+	Q_UNUSED(ratio);
 #endif // ENABLE_HIDPI
 }
