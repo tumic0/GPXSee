@@ -6,7 +6,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="10"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>об/мин</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="11"/>
@@ -36,7 +36,7 @@
         <location filename="../src/GUI/cadencegraphitem.cpp" line="21"/>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="23"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>об/мин</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="22"/>
@@ -566,7 +566,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="675"/>
         <source>Next/Previous</source>
-        <translation>Next/Previous</translation>
+        <translation>Следующий/предыдущий</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="677"/>
@@ -923,7 +923,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="10"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>уд/мин</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="19"/>
@@ -947,7 +947,7 @@
         <location filename="../src/GUI/heartrategraphitem.cpp" line="21"/>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="23"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>уд/мин</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="22"/>
@@ -1436,7 +1436,7 @@
         <location filename="../src/GUI/powergraphitem.cpp" line="21"/>
         <location filename="../src/GUI/powergraphitem.cpp" line="23"/>
         <source>W</source>
-        <translation type="unfinished">Вт</translation>
+        <translation>Вт</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="22"/>
