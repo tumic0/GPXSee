@@ -6,7 +6,7 @@
 
 
 #define BORDER_WIDTH   1
-#define SCALE_WIDTH    132
+#define SCALE_WIDTH    135
 #define SCALE_HEIGHT   5
 #define SEGMENTS       3
 #define PADDING        4
