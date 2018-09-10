@@ -6,7 +6,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="10"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>U/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="11"/>
@@ -36,7 +36,7 @@
         <location filename="../src/GUI/cadencegraphitem.cpp" line="21"/>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="23"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>U/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="22"/>
@@ -922,7 +922,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="10"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>bpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="19"/>
@@ -946,7 +946,7 @@
         <location filename="../src/GUI/heartrategraphitem.cpp" line="21"/>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="23"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>bpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="22"/>
@@ -1435,7 +1435,7 @@
         <location filename="../src/GUI/powergraphitem.cpp" line="21"/>
         <location filename="../src/GUI/powergraphitem.cpp" line="23"/>
         <source>W</source>
-        <translation type="unfinished">W</translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="22"/>
