@@ -18,8 +18,6 @@ class QRadioButton;
 class PercentSlider;
 
 struct Options {
-	// General
-	bool alwaysShowMap;
 	// Appearance
 	Palette palette;
 	int trackWidth;
@@ -36,6 +34,11 @@ struct Options {
 	bool graphAntiAliasing;
 	int mapOpacity;
 	QColor backgroundColor;
+	// Map
+	bool alwaysShowMap;
+#ifdef ENABLE_HIDPI
+	bool hidpiMap;
+#endif // ENABLE_HIDPI
 	// Data
 	int elevationFilter;
 	int speedFilter;
@@ -79,7 +82,7 @@ public slots:
 	void accept();
 
 private:
-	QWidget *createGeneralPage();
+	QWidget *createMapPage();
 	QWidget *createAppearancePage();
 	QWidget *createDataPage();
 	QWidget *createPOIPage();
@@ -88,8 +91,6 @@ private:
 
 	Options *_options;
 
-	// General
-	QCheckBox *_alwaysShowMap;
 	// Appearance
 	ColorBox *_baseColor;
 	QDoubleSpinBox *_colorOffset;
@@ -107,6 +108,12 @@ private:
 	QSpinBox *_graphWidth;
 	ColorBox *_sliderColor;
 	QCheckBox *_graphAA;
+	// Map
+	QCheckBox *_alwaysShowMap;
+#ifdef ENABLE_HIDPI
+	QRadioButton *_hidpi;
+	QRadioButton *_lodpi;
+#endif // ENABLE_HIDPI
 	// Data
 	OddSpinBox *_elevationFilter;
 	OddSpinBox *_speedFilter;

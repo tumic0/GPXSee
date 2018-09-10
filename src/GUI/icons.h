@@ -25,5 +25,6 @@
 #define SYSTEM_ICON       ":/icons/preferences-system.png"
 #define PRINT_EXPORT_ICON ":/icons/document-print_32.png"
 #define DATA_ICON         ":/icons/view-filter.png"
+#define MAPS_ICON         ":/icons/applications-internet_32.png"
 
 #endif /* ICONS_H */

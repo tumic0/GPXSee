@@ -42,10 +42,6 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 
 	_map = map;
 	_map->load();
-#ifdef ENABLE_HIDPI
-	_ratio = devicePixelRatioF();
-	_map->setDevicePixelRatio(_ratio);
-#endif // ENABLE_HIDPI
 	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
 	_poi = poi;
@@ -75,6 +71,9 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_poiSize = 8;
 	_poiColor = Qt::black;
 
+#ifdef ENABLE_HIDPI
+	_ratio = 1.0;
+#endif // ENABLE_HIDPI
 	_opengl = false;
 	_plot = false;
 	_digitalZoom = 0;
@@ -845,23 +844,19 @@ void MapView::reloadMap()
 	_scene->invalidate();
 }
 
-void MapView::updateDevicePixelRatio()
+void MapView::setDevicePixelRatio(qreal ratio)
 {
 #ifdef ENABLE_HIDPI
-	if (_ratio == devicePixelRatioF())
+	if (_ratio == ratio)
 		return;
 
-	_ratio = devicePixelRatioF();
+	_ratio = ratio;
 
 	QRectF vr(mapToScene(viewport()->rect()).boundingRect()
 	  .intersected(_map->bounds()));
 	RectC cr(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
 
 	_map->setDevicePixelRatio(_ratio);
-
-	digitalZoom(0);
-
-	_map->zoomFit(viewport()->rect().size(), cr);
 	_scene->setSceneRect(_map->bounds());
 
 	for (int i = 0; i < _tracks.size(); i++)
@@ -881,5 +876,7 @@ void MapView::updateDevicePixelRatio()
 	centerOn(nc);
 
 	reloadMap();
+#else // ENABLE_HIDPI
+	Q_UNUSED(ratio);
 #endif // ENABLE_HIDPI
 }

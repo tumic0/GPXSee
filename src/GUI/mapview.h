@@ -69,7 +69,7 @@ public slots:
 	void showRouteWaypoints(bool show);
 	void clearMapCache();
 	void setCoordinatesFormat(CoordinatesFormat format);
-	void updateDevicePixelRatio();
+	void setDevicePixelRatio(qreal ratio);
 
 private slots:
 	void updatePOI();

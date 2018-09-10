@@ -40,5 +40,7 @@
 		<file>icons/document-print_32@2x.png</file>
 		<file>icons/view-filter.png</file>
 		<file>icons/view-filter@2x.png</file>
+		<file>icons/applications-internet_32.png</file>
+		<file>icons/applications-internet_32@2x.png</file>
 	</qresource>
 </RCC>

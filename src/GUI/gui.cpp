@@ -931,6 +931,11 @@ void GUI::openOptions()
 	if (options.enableHTTP2 != _options.enableHTTP2)
 		Downloader::enableHTTP2(options.enableHTTP2);
 #endif // ENABLE_HTTP2
+#ifdef ENABLE_HIDPI
+	if (options.hidpiMap != _options.hidpiMap)
+		_mapView->setDevicePixelRatio(options.hidpiMap ? devicePixelRatioF()
+		  : 1.0);
+#endif // ENABLE_HIDPI
 
 	if (reload)
 		reloadFile();
@@ -1798,6 +1803,10 @@ void GUI::writeSettings()
 		settings.setValue(SLIDER_COLOR_SETTING, _options.sliderColor);
 	if (_options.alwaysShowMap != ALWAYS_SHOW_MAP_DEFAULT)
 		settings.setValue(ALWAYS_SHOW_MAP_SETTING, _options.alwaysShowMap);
+#ifdef ENABLE_HIDPI
+	if (_options.hidpiMap != HIDPI_MAP_DEFAULT)
+		settings.setValue(HIDPI_MAP_SETTING, _options.hidpiMap);
+#endif // ENABLE_HIDPI
 	settings.endGroup();
 }
 
@@ -2033,6 +2042,10 @@ void GUI::readSettings()
 	  SLIDER_COLOR_DEFAULT).value<QColor>();
 	_options.alwaysShowMap = settings.value(ALWAYS_SHOW_MAP_SETTING,
 	  ALWAYS_SHOW_MAP_DEFAULT).toBool();
+#ifdef ENABLE_HIDPI
+	_options.hidpiMap = settings.value(HIDPI_MAP_SETTING, HIDPI_MAP_SETTING)
+	  .toBool();
+#endif // ENABLE_HIDPI
 
 	_mapView->setPalette(_options.palette);
 	_mapView->setMapOpacity(_options.mapOpacity);
@@ -2049,6 +2062,9 @@ void GUI::readSettings()
 	_mapView->setMarkerColor(_options.sliderColor);
 	if (_options.useOpenGL)
 		_mapView->useOpenGL(true);
+#ifdef ENABLE_HIDPI
+	_mapView->setDevicePixelRatio(_options.hidpiMap ? devicePixelRatioF() : 1.0);
+#endif // ENABLE_HIDPI
 
 	for (int i = 0; i < _tabs.count(); i++) {
 		_tabs.at(i)->setPalette(_options.palette);
@@ -2134,7 +2150,7 @@ void GUI::show()
 void GUI::screenChanged(QScreen *screen)
 {
 #ifdef ENABLE_HIDPI
-	_mapView->updateDevicePixelRatio();
+	_mapView->setDevicePixelRatio(_options.hidpiMap ? devicePixelRatioF() : 1.0);
 
 	disconnect(SIGNAL(logicalDotsPerInchChanged(qreal)), this,
 	  SLOT(logicalDotsPerInchChanged(qreal)));
@@ -2150,6 +2166,6 @@ void GUI::logicalDotsPerInchChanged(qreal dpi)
 	Q_UNUSED(dpi)
 
 #ifdef ENABLE_HIDPI
-	_mapView->updateDevicePixelRatio();
+	_mapView->setDevicePixelRatio(_options.hidpiMap ? devicePixelRatioF() : 1.0);
 #endif // ENBLE_HIDPI
 }

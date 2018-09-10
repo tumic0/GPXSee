@@ -156,5 +156,7 @@
 #define SLIDER_COLOR_DEFAULT              QColor(Qt::red)
 #define ALWAYS_SHOW_MAP_SETTING           "alwaysShowMap"
 #define ALWAYS_SHOW_MAP_DEFAULT           true
+#define HIDPI_MAP_SETTING                 "HiDPIMap"
+#define HIDPI_MAP_DEFAULT                 true
 
 #endif // SETTINGS_H

@@ -34,26 +34,61 @@ static QFrame *line()
 }
 #endif
 
-QWidget *OptionsDialog::createGeneralPage()
+QWidget *OptionsDialog::createMapPage()
 {
 	_alwaysShowMap = new QCheckBox(tr("Always show the map"));
 	_alwaysShowMap->setChecked(_options->alwaysShowMap);
 	_alwaysShowMap->setToolTip("<p>" +
 	  tr("Show the map even when no files are loaded.") + "</p>");
 
+#ifdef ENABLE_HIDPI
+	_hidpi = new QRadioButton(tr("High-resolution"));
+	_lodpi = new QRadioButton(tr("Standard"));
+	if (_options->hidpiMap)
+		_hidpi->setChecked(true);
+	else
+		_lodpi->setChecked(true);
+	QLabel *lhi = new QLabel(tr("Non-HiDPI maps are loaded as HiDPI maps. "
+	  "The map is sharp but map objects are small/hard to read."));
+	QLabel *llo = new QLabel(tr("Non-HiDPI maps are loaded such as they are. "
+	  "Map objects have the expected size but the map is blurry."));
+	QFont f = lhi->font();
+	f.setPointSize(f.pointSize() - 1);
+	lhi->setWordWrap(true);
+	llo->setWordWrap(true);
+	lhi->setFont(f);
+	llo->setFont(f);
+#endif // ENABLE_HIDPI
+
 	QFormLayout *showMapLayout = new QFormLayout();
 	showMapLayout->addWidget(_alwaysShowMap);
 
-	QWidget *generalTab = new QWidget();
-	QVBoxLayout *generalTabLayout = new QVBoxLayout();
-	generalTabLayout->addLayout(showMapLayout);
-	generalTabLayout->addStretch();
-	generalTab->setLayout(generalTabLayout);
+	QWidget *mapTab = new QWidget();
+	QVBoxLayout *mapTabLayout = new QVBoxLayout();
+	mapTabLayout->addLayout(showMapLayout);
+	mapTabLayout->addStretch();
+	mapTab->setLayout(mapTabLayout);
 
-	QTabWidget *generalPage = new QTabWidget();
-	generalPage->addTab(generalTab, tr("General"));
+#ifdef ENABLE_HIDPI
+	QVBoxLayout *hidpiTabLayout = new QVBoxLayout();
+	hidpiTabLayout->addWidget(_lodpi);
+	hidpiTabLayout->addWidget(llo);
+	hidpiTabLayout->addSpacing(10);
+	hidpiTabLayout->addWidget(_hidpi);
+	hidpiTabLayout->addWidget(lhi);
+	hidpiTabLayout->addStretch();
 
-	return generalPage;
+	QWidget *hidpiTab = new QWidget();
+	hidpiTab->setLayout(hidpiTabLayout);
+#endif // ENABLE_HIDPI
+
+	QTabWidget *mapPage = new QTabWidget();
+	mapPage->addTab(mapTab, tr("General"));
+#ifdef ENABLE_HIDPI
+	mapPage->addTab(hidpiTab, tr("HiDPI display mode"));
+#endif // ENABLE_HIDPI
+
+	return mapPage;
 }
 
 QWidget *OptionsDialog::createAppearancePage()
@@ -483,8 +518,8 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
   : QDialog(parent), _options(options)
 {
 	QStackedWidget *pages = new QStackedWidget();
-	pages->addWidget(createGeneralPage());
 	pages->addWidget(createAppearancePage());
+	pages->addWidget(createMapPage());
 	pages->addWidget(createDataPage());
 	pages->addWidget(createPOIPage());
 	pages->addWidget(createExportPage());
@@ -492,9 +527,9 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
 
 	QListWidget *menu = new QListWidget();
 	menu->setIconSize(QSize(MENU_ICON_SIZE, MENU_ICON_SIZE));
-	new QListWidgetItem(QIcon(APP_ICON), tr("General"), menu);
 	new QListWidgetItem(QIcon(APPEARANCE_ICON), tr("Appearance"),
 	  menu);
+	new QListWidgetItem(QIcon(MAPS_ICON), tr("Maps"), menu);
 	new QListWidgetItem(QIcon(DATA_ICON), tr("Data"), menu);
 	new QListWidgetItem(QIcon(POI_ICON), tr("POI"), menu);
 	new QListWidgetItem(QIcon(PRINT_EXPORT_ICON), tr("Print & Export"),
@@ -532,8 +567,6 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
 
 void OptionsDialog::accept()
 {
-	_options->alwaysShowMap = _alwaysShowMap->isChecked();
-
 	_options->palette.setColor(_baseColor->color());
 	_options->palette.setShift(_colorOffset->value());
 	_options->mapOpacity = _mapOpacity->value();
@@ -552,6 +585,11 @@ void OptionsDialog::accept()
 	_options->graphWidth = _graphWidth->value();
 	_options->sliderColor = _sliderColor->color();
 	_options->graphAntiAliasing = _graphAA->isChecked();
+
+	_options->alwaysShowMap = _alwaysShowMap->isChecked();
+#ifdef ENABLE_HIDPI
+	_options->hidpiMap = _hidpi->isChecked();
+#endif // ENABLE_HIDPI
 
 	_options->elevationFilter = _elevationFilter->value();
 	_options->speedFilter = _speedFilter->value();
