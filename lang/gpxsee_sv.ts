@@ -6,7 +6,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="11"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>rpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="12"/>
@@ -36,7 +36,7 @@
         <location filename="../src/GUI/cadencegraphitem.cpp" line="24"/>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="26"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>rpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="25"/>
@@ -655,11 +655,9 @@
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1326"/>
         <source>%n files</source>
-        <translation>
-            <numerusform>%n filer</numerusform>
-            <numerusform>%n filer</numerusform>
-        </translation>
-    </message>
+        <translation><numerusform>%n fil</numerusform>
+        <numerusform>%n filer</numerusform>
+        </translation></message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1002"/>
         <location filename="../src/GUI/gui.cpp" line="1006"/>
@@ -922,7 +920,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="11"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>bpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="22"/>
@@ -946,7 +944,7 @@
         <location filename="../src/GUI/heartrategraphitem.cpp" line="24"/>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="26"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>bpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="25"/>
@@ -1464,7 +1462,7 @@
         <location filename="../src/GUI/powergraphitem.cpp" line="24"/>
         <location filename="../src/GUI/powergraphitem.cpp" line="26"/>
         <source>W</source>
-        <translation type="unfinished">W</translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="25"/>
