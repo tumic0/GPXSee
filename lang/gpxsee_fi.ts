@@ -229,7 +229,7 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="97"/>
         <source>Resolution:</source>
-        <translation>Erotuskyky:</translation>
+        <translation>Resoluutio:</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="99"/>
@@ -1315,7 +1315,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="402"/>
         <source>High-Resolution</source>
-        <translation>Korkea erotuskyky</translation>
+        <translation>Korkea resoluutio</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="407"/>
@@ -1411,7 +1411,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="532"/>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartat</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="533"/>
