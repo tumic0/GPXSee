@@ -1095,7 +1095,11 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="46"/>
         <source>Standard</source>
+<<<<<<< HEAD
         <translation>Стандартный</translation>
+=======
+        <translation>Стандартное</translation>
+>>>>>>> Translated using Weblate (Russian)
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="51"/>
