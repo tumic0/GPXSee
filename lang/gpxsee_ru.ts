@@ -1090,7 +1090,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="46"/>
         <source>Standard</source>
-        <translation>Стандартное</translation>
+        <translation>Стандартный</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="51"/>
@@ -1110,7 +1110,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="88"/>
         <source>HiDPI display mode</source>
-        <translation type="unfinished"></translation>
+        <translation>HiDPI режим отображения</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="122"/>
