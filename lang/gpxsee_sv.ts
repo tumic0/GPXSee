@@ -1082,22 +1082,22 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="45"/>
         <source>High-resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Högupplösning</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="46"/>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="51"/>
         <source>Non-HiDPI maps are loaded as HiDPI maps. The map is sharp but map objects are small/hard to read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Icke högupplösta kartor läses in som högupplösta. Kartan är skarp men kartobjekt är små/svåra att läsa.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="53"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Icke högupplösta kartor läses in som de är. Kartobjekt har förväntad storlek men kartan är oskarp.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="86"/>
@@ -1107,7 +1107,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="88"/>
         <source>HiDPI display mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Högupplöst visningsläge</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="122"/>
@@ -1409,7 +1409,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="532"/>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartor</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="533"/>
