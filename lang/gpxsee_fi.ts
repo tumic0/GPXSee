@@ -1084,12 +1084,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="45"/>
         <source>High-resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Korkea resoluutio</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="46"/>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Vakioresoluutio</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="51"/>
@@ -1109,7 +1109,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="88"/>
         <source>HiDPI display mode</source>
-        <translation type="unfinished"></translation>
+        <translation>HiDPI-näyttötila</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="122"/>
