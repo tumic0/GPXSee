@@ -2,6 +2,7 @@
 #include <QApplication>
 #include <QCursor>
 #include <QPainter>
+#include "common/greatcircle.h"
 #include "map/map.h"
 #include "tooltip.h"
 #include "nicenum.h"
@@ -44,8 +45,27 @@ void PathItem::updatePainterPath(Map *map)
 	_painterPath = QPainterPath();
 
 	_painterPath.moveTo(map->ll2xy(_path.first().coordinates()));
-	for (int i = 1; i < _path.size(); i++)
-		_painterPath.lineTo(map->ll2xy(_path.at(i).coordinates()));
+	for (int i = 1; i < _path.size(); i++) {
+		Coordinates c1(_path.at(i-1).coordinates());
+		Coordinates c2(_path.at(i).coordinates());
+		unsigned n = qAbs(c1.lon() - c2.lon());
+
+		if (n) {
+			if (n > 180)
+				n = n - 180;
+			double prev = c1.lon();
+			for (unsigned j = 1; j <= n * 60; j++) {
+				Coordinates c(GreatCircle::pointAt(c1, c2, j/(n * 60.0)));
+				double current = c.lon();
+				if (fabs(current - prev) > 180.0)
+					_painterPath.moveTo(map->ll2xy(c));
+				else
+					_painterPath.lineTo(map->ll2xy(c));
+				prev = current;
+			}
+		} else
+			_painterPath.lineTo(map->ll2xy(c2));
+	}
 }
 
 void PathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -141,19 +161,23 @@ QPointF PathItem::position(qreal x) const
 			return _map->ll2xy(_path.at(mid).coordinates());
 	}
 
-	QLineF l;
+	Coordinates c1, c2;
 	qreal p1, p2;
+
 	if (_path.at(mid).distance() < x) {
-		l = QLineF(_map->ll2xy(_path.at(mid).coordinates()),
-		  _map->ll2xy(_path.at(mid+1).coordinates()));
+		c1 = _path.at(mid).coordinates(); c2 = _path.at(mid+1).coordinates();
 		p1 = _path.at(mid).distance(); p2 = _path.at(mid+1).distance();
 	} else {
-		l = QLineF(_map->ll2xy(_path.at(mid-1).coordinates()),
-		  _map->ll2xy(_path.at(mid).coordinates()));
+		c1 = _path.at(mid-1).coordinates(); c2 = _path.at(mid).coordinates();
 		p1 = _path.at(mid-1).distance(); p2 = _path.at(mid).distance();
 	}
 
-	return l.pointAt((x - p1) / (p2 - p1));
+	if ((unsigned)qAbs(c1.lon() - c2.lon()))
+		return _map->ll2xy(GreatCircle::pointAt(c1, c2, (x - p1) / (p2 - p1)));
+	else {
+		QLineF l(_map->ll2xy(c1), _map->ll2xy(c2));
+		return l.pointAt((x - p1) / (p2 - p1));
+	}
 }
 
 void PathItem::moveMarker(qreal distance)
