@@ -6,7 +6,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="11"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>rpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="12"/>
@@ -36,7 +36,7 @@
         <location filename="../src/GUI/cadencegraphitem.cpp" line="24"/>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="26"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>rpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="25"/>
@@ -655,11 +655,9 @@
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1326"/>
         <source>%n files</source>
-        <translation>
-            <numerusform>%n filer</numerusform>
-            <numerusform>%n filer</numerusform>
-        </translation>
-    </message>
+        <translation><numerusform>%n fil</numerusform>
+        <numerusform>%n filer</numerusform>
+        </translation></message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1002"/>
         <location filename="../src/GUI/gui.cpp" line="1006"/>
@@ -922,7 +920,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="11"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>bpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="22"/>
@@ -946,7 +944,7 @@
         <location filename="../src/GUI/heartrategraphitem.cpp" line="24"/>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="26"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>bpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="25"/>
@@ -1084,22 +1082,22 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="45"/>
         <source>High-resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Högupplösning</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="46"/>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="51"/>
         <source>Non-HiDPI maps are loaded as HiDPI maps. The map is sharp but map objects are small/hard to read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Icke högupplösta kartor läses in som högupplösta. Kartan är skarp men kartobjekt är små/svåra att läsa.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="53"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Icke högupplösta kartor läses in som de är. Kartobjekt har förväntad storlek men kartan är oskarp.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="86"/>
@@ -1109,7 +1107,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="88"/>
         <source>HiDPI display mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Högupplöst visningsläge</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="122"/>
@@ -1411,7 +1409,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="532"/>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartor</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="533"/>
@@ -1464,7 +1462,7 @@
         <location filename="../src/GUI/powergraphitem.cpp" line="24"/>
         <location filename="../src/GUI/powergraphitem.cpp" line="26"/>
         <source>W</source>
-        <translation type="unfinished">W</translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="25"/>
