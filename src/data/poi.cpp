@@ -95,38 +95,43 @@ static bool cb(size_t data, void* context)
 	return true;
 }
 
+void POI::search(const RectC &rect, QSet<int> &set) const
+{
+	qreal min[2], max[2];
+
+	min[0] = rect.topLeft().lon();
+	min[1] = rect.bottomRight().lat();
+	max[0] = rect.bottomRight().lon();
+	max[1] = rect.topLeft().lat();
+
+	_tree.Search(min, max, cb, &set);
+}
+
 QList<Waypoint> POI::points(const Path &path) const
 {
 	QList<Waypoint> ret;
 	QSet<int> set;
-	qreal min[2], max[2];
 	QSet<int>::const_iterator it;
 
 
 	for (int i = 1; i < path.count(); i++) {
 		double ds = path.at(i).distance() - path.at(i-1).distance();
 		unsigned n = (unsigned)ceil(ds / _radius);
-		for (unsigned j = 0; j < n; j++) {
-			RectC br(n > 1 ? GreatCircle::pointAt(path.at(i-1).coordinates(),
-			  path.at(i).coordinates(), (double)j/n)
-			  : path.at(i-1).coordinates(), _radius);
 
-			min[0] = br.topLeft().lon();
-			min[1] = br.bottomRight().lat();
-			max[0] = br.bottomRight().lon();
-			max[1] = br.topLeft().lat();
-
-			_tree.Search(min, max, cb, &set);
+		if (n > 1) {
+			GreatCircle gc(path.at(i-1).coordinates(), path.at(i).coordinates());
+			for (unsigned j = 0; j < n; j++) {
+				RectC br(gc.pointAt((double)j/n), _radius);
+				search(br, set);
+			}
+		} else {
+			RectC br(path.at(i-1).coordinates(), _radius);
+			search(br, set);
 		}
 	}
 
 	RectC br(path.last().coordinates(), _radius);
-	min[0] = br.topLeft().lon();
-	min[1] = br.bottomRight().lat();
-	max[0] = br.bottomRight().lon();
-	max[1] = br.topLeft().lat();
-
-	_tree.Search(min, max, cb, &set);
+	search(br, set);
 
 
 	for (it = set.constBegin(); it != set.constEnd(); ++it)

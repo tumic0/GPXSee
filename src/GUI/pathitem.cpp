@@ -51,11 +51,14 @@ void PathItem::updatePainterPath(Map *map)
 		unsigned n = qAbs(c1.lon() - c2.lon());
 
 		if (n) {
+			double prev = c1.lon();
+			GreatCircle gc(c1, c2);
+
 			if (n > 180)
 				n = n - 180;
-			double prev = c1.lon();
+
 			for (unsigned j = 1; j <= n * 60; j++) {
-				Coordinates c(GreatCircle::pointAt(c1, c2, j/(n * 60.0)));
+				Coordinates c(gc.pointAt(j/(n * 60.0)));
 				double current = c.lon();
 				if (fabs(current - prev) > 180.0)
 					_painterPath.moveTo(map->ll2xy(c));
@@ -172,9 +175,10 @@ QPointF PathItem::position(qreal x) const
 		p1 = _path.at(mid-1).distance(); p2 = _path.at(mid).distance();
 	}
 
-	if ((unsigned)qAbs(c1.lon() - c2.lon()))
-		return _map->ll2xy(GreatCircle::pointAt(c1, c2, (x - p1) / (p2 - p1)));
-	else {
+	if ((unsigned)qAbs(c1.lon() - c2.lon())) {
+		GreatCircle gc(c1, c2);
+		return _map->ll2xy(gc.pointAt((x - p1) / (p2 - p1)));
+	} else {
 		QLineF l(_map->ll2xy(c1), _map->ll2xy(c2));
 		return l.pointAt((x - p1) / (p2 - p1));
 	}

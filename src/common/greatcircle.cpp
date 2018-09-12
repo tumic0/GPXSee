@@ -1,23 +1,26 @@
 #include "greatcircle.h"
 
-Coordinates GreatCircle::pointAt(const Coordinates &c1, const Coordinates &c2,
-  double f)
+GreatCircle::GreatCircle(const Coordinates &c1, const Coordinates &c2)
 {
-	double lat1 = deg2rad(c1.lat());
-	double lon1 = deg2rad(c1.lon());
-	double lat2 = deg2rad(c2.lat());
-	double lon2 = deg2rad(c2.lon());
+	_lat1 = deg2rad(c1.lat());
+	_lon1 = deg2rad(c1.lon());
+	_lat2 = deg2rad(c2.lat());
+	_lon2 = deg2rad(c2.lon());
 
-	double cosLat1 = cos(lat1);
-	double cosLat2 = cos(lat2);
-	double d = 2 * asin(sqrt(pow((sin((lat1 - lat2) / 2)), 2) + cosLat1
-	  * cosLat2 * pow(sin((lon1 - lon2) / 2), 2)));
-	double sinD = sin(d);
-	double A = sin((1.0-f)*d) / sinD;
-	double B = sin(f*d) / sinD;
-	double x = A * cosLat1 * cos(lon1) + B * cosLat2 * cos(lon2);
-	double y = A * cosLat1 * sin(lon1) + B * cosLat2 * sin(lon2);
-	double z = A * sin(lat1) + B * sin(lat2);
+	_cosLat1 = cos(_lat1);
+	_cosLat2 = cos(_lat2);
+	_d = 2 * asin(sqrt(pow((sin((_lat1 - _lat2) / 2)), 2) + _cosLat1
+	  * _cosLat2 * pow(sin((_lon1 - _lon2) / 2), 2)));
+	_sinD = sin(_d);
+}
+
+Coordinates GreatCircle::pointAt(double f) const
+{
+	double A = sin((1.0 - f) * _d) / _sinD;
+	double B = sin(f*_d) / _sinD;
+	double x = A * _cosLat1 * cos(_lon1) + B * _cosLat2 * cos(_lon2);
+	double y = A * _cosLat1 * sin(_lon1) + B * _cosLat2 * sin(_lon2);
+	double z = A * sin(_lat1) + B * sin(_lat2);
 
 	return Coordinates(rad2deg(atan2(y, x)), rad2deg(atan2(z, sqrt(x*x + y*y))));
 }

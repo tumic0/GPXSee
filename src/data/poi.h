@@ -45,6 +45,7 @@ private:
 	};
 
 	bool loadFile(const QString &path, bool dir);
+	void search(const RectC &rect, QSet<int> &set) const;
 
 	POITree _tree;
 	QVector<Waypoint> _data;
