@@ -94,6 +94,28 @@ static bool cb(size_t data, void* context)
 	return true;
 }
 
+static Coordinates intermediate(const Coordinates &c1, const Coordinates &c2,
+  double f)
+{
+	double lat1 = deg2rad(c1.lat());
+	double lon1 = deg2rad(c1.lon());
+	double lat2 = deg2rad(c2.lat());
+	double lon2 = deg2rad(c2.lon());
+
+	double cosLat1 = cos(lat1);
+	double cosLat2 = cos(lat2);
+	double d = 2 * asin(sqrt(pow((sin((lat1 - lat2) / 2)), 2) + cosLat1
+	  * cosLat2 * pow(sin((lon1 - lon2) / 2), 2)));
+	double sinD = sin(d);
+	double A = sin((1.0-f)*d) / sinD;
+	double B = sin(f*d) / sinD;
+	double x = A * cosLat1 * cos(lon1) + B * cosLat2 * cos(lon2);
+	double y = A * cosLat1 * sin(lon1) + B * cosLat2 * sin(lon2);
+	double z = A * sin(lat1) + B * sin(lat2);
+
+	return Coordinates(rad2deg(atan2(y, x)), rad2deg(atan2(z, sqrt(x*x + y*y))));
+}
+
 QList<Waypoint> POI::points(const Path &path) const
 {
 	QList<Waypoint> ret;
@@ -101,15 +123,32 @@ QList<Waypoint> POI::points(const Path &path) const
 	qreal min[2], max[2];
 	QSet<int>::const_iterator it;
 
-	for (int i = 0; i < path.count(); i++) {
-		RectC br(path.at(i).coordinates(), _radius);
-		min[0] = br.topLeft().lon();
-		min[1] = br.bottomRight().lat();
-		max[0] = br.bottomRight().lon();
-		max[1] = br.topLeft().lat();
 
-		_tree.Search(min, max, cb, &set);
+	for (int i = 1; i < path.count(); i++) {
+		double ds = path.at(i).distance() - path.at(i-1).distance();
+		unsigned n = (unsigned)ceil(ds / _radius);
+		for (unsigned j = 0; j < n; j++) {
+			RectC br(n > 1 ? intermediate(path.at(i-1).coordinates(),
+			  path.at(i).coordinates(), (double)j/(double)n)
+			  : path.at(i-1).coordinates(), _radius);
+
+			min[0] = br.topLeft().lon();
+			min[1] = br.bottomRight().lat();
+			max[0] = br.bottomRight().lon();
+			max[1] = br.topLeft().lat();
+
+			_tree.Search(min, max, cb, &set);
+		}
 	}
+
+	RectC br(path.last().coordinates(), _radius);
+	min[0] = br.topLeft().lon();
+	min[1] = br.bottomRight().lat();
+	max[0] = br.bottomRight().lon();
+	max[1] = br.topLeft().lat();
+
+	_tree.Search(min, max, cb, &set);
+
 
 	for (it = set.constBegin(); it != set.constEnd(); ++it)
 		ret.append(_data.at(*it));
