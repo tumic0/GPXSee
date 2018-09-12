@@ -6,7 +6,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="11"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>rpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="12"/>
@@ -36,7 +36,7 @@
         <location filename="../src/GUI/cadencegraphitem.cpp" line="24"/>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="26"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>rpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="25"/>
@@ -229,7 +229,7 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="97"/>
         <source>Resolution:</source>
-        <translation>Erotuskyky:</translation>
+        <translation>Resoluutio:</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="99"/>
@@ -566,7 +566,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="675"/>
         <source>Next/Previous</source>
-        <translation>Next/Previous</translation>
+        <translation>Seuraava/edellinen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="677"/>
@@ -922,7 +922,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="11"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>bpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="22"/>
@@ -946,7 +946,7 @@
         <location filename="../src/GUI/heartrategraphitem.cpp" line="24"/>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="26"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>bpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="25"/>
@@ -1084,12 +1084,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="45"/>
         <source>High-resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Korkea resoluutio</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="46"/>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Vakioresoluutio</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="51"/>
@@ -1109,7 +1109,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="88"/>
         <source>HiDPI display mode</source>
-        <translation type="unfinished"></translation>
+        <translation>HiDPI-näyttötila</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="122"/>
@@ -1315,7 +1315,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="402"/>
         <source>High-Resolution</source>
-        <translation>Korkea erotuskyky</translation>
+        <translation>Korkea resoluutio</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="407"/>
@@ -1411,7 +1411,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="532"/>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartat</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="533"/>
@@ -1464,7 +1464,7 @@
         <location filename="../src/GUI/powergraphitem.cpp" line="24"/>
         <location filename="../src/GUI/powergraphitem.cpp" line="26"/>
         <source>W</source>
-        <translation type="unfinished">W</translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="25"/>
