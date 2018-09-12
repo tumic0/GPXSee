@@ -11,10 +11,10 @@ public:
 	Coordinates pointAt(double f) const;
 
 private:
-	double _lat1, _lon1, _lat2, _lon2;
-	double _cosLat1, _cosLat2;
+	double _xA, _xB, _yA, _yB;
 	double _d;
 	double _sinD;
+	double _sinLat1, _sinLat2;
 };
 
 #endif // GREATCIRCLE_H
