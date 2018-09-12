@@ -18,14 +18,14 @@ bool CSVParser::parse(QFile *file, QList<TrackData> &tracks,
 			return false;
 		}
 
-		qreal lat = list[0].trimmed().toDouble(&res);
-		if (!res || (lat < -90.0 || lat > 90.0)) {
-			_errorString = "Invalid latitude";
-			return false;
-		}
-		qreal lon = list[1].trimmed().toDouble(&res);
+		qreal lon = list[0].trimmed().toDouble(&res);
 		if (!res || (lon < -180.0 || lon > 180.0)) {
 			_errorString = "Invalid longitude";
+			return false;
+		}
+		qreal lat = list[1].trimmed().toDouble(&res);
+		if (!res || (lat < -90.0 || lat > 90.0)) {
+			_errorString = "Invalid latitude";
 			return false;
 		}
 		Waypoint wp(Coordinates(lon, lat));
