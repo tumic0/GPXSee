@@ -46,19 +46,18 @@ void PathItem::updatePainterPath(Map *map)
 
 	_painterPath.moveTo(map->ll2xy(_path.first().coordinates()));
 	for (int i = 1; i < _path.size(); i++) {
-		Coordinates c1(_path.at(i-1).coordinates());
-		Coordinates c2(_path.at(i).coordinates());
-		unsigned n = qAbs(c1.lon() - c2.lon());
+		const PathPoint &p1 = _path.at(i-1);
+		const PathPoint &p2 = _path.at(i);
+		unsigned n = (p2.distance() - p1.distance()) / 1855.3;
 
 		if (n) {
-			double prev = c1.lon();
+			Coordinates c1(p1.coordinates());
+			Coordinates c2(p2.coordinates());
 			GreatCircle gc(c1, c2);
+			double prev = c1.lon();
 
-			if (n > 180)
-				n = n - 180;
-
-			for (unsigned j = 1; j <= n * 60; j++) {
-				Coordinates c(gc.pointAt(j/(n * 60.0)));
+			for (unsigned j = 1; j <= n; j++) {
+				Coordinates c(gc.pointAt(j/(double)n));
 				double current = c.lon();
 				if (fabs(current - prev) > 180.0)
 					_painterPath.moveTo(map->ll2xy(c));
@@ -67,7 +66,7 @@ void PathItem::updatePainterPath(Map *map)
 				prev = current;
 			}
 		} else
-			_painterPath.lineTo(map->ll2xy(c2));
+			_painterPath.lineTo(map->ll2xy(p2.coordinates()));
 	}
 }
 
