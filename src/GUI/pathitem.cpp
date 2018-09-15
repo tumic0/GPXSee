@@ -9,6 +9,8 @@
 #include "pathitem.h"
 
 
+#define GEOGRAPHICAL_MILE 1855.3248
+
 PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
   : QGraphicsObject(parent)
 {
@@ -48,9 +50,9 @@ void PathItem::updatePainterPath(Map *map)
 	for (int i = 1; i < _path.size(); i++) {
 		const PathPoint &p1 = _path.at(i-1);
 		const PathPoint &p2 = _path.at(i);
-		unsigned n = (p2.distance() - p1.distance()) / 1855.3;
+		unsigned n = ceil((p2.distance() - p1.distance()) / GEOGRAPHICAL_MILE);
 
-		if (n) {
+		if (n > 1) {
 			Coordinates c1(p1.coordinates());
 			Coordinates c2(p2.coordinates());
 			GreatCircle gc(c1, c2);
