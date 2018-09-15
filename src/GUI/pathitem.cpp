@@ -29,7 +29,7 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 	QBrush brush(Qt::SolidPattern);
 	_pen = QPen(brush, _width);
 
-	updatePainterPath(map);
+	updatePainterPath();
 	updateShape();
 
 	_marker = new MarkerItem(this);
@@ -47,33 +47,35 @@ void PathItem::updateShape()
 	_shape = s.createStroke(_painterPath);
 }
 
-void PathItem::updatePainterPath(Map *map)
+void PathItem::addSegment(const Coordinates &c1, const Coordinates &c2)
+{
+	if (fabs(c1.lon() - c2.lon()) > 180.0)
+		_painterPath.moveTo(_map->ll2xy(c2));
+	else
+		_painterPath.lineTo(_map->ll2xy(c2));
+}
+
+void PathItem::updatePainterPath()
 {
 	_painterPath = QPainterPath();
 
-	_painterPath.moveTo(map->ll2xy(_path.first().coordinates()));
+	_painterPath.moveTo(_map->ll2xy(_path.first().coordinates()));
 	for (int i = 1; i < _path.size(); i++) {
 		const PathPoint &p1 = _path.at(i-1);
 		const PathPoint &p2 = _path.at(i);
 		unsigned n = segments(p2.distance() - p1.distance());
 
 		if (n > 1) {
-			Coordinates c1(p1.coordinates());
-			Coordinates c2(p2.coordinates());
-			GreatCircle gc(c1, c2);
-			double prev = c1.lon();
+			GreatCircle gc(p1.coordinates(), p2.coordinates());
+			Coordinates last = p1.coordinates();
 
 			for (unsigned j = 1; j <= n; j++) {
 				Coordinates c(gc.pointAt(j/(double)n));
-				double current = c.lon();
-				if (fabs(current - prev) > 180.0)
-					_painterPath.moveTo(map->ll2xy(c));
-				else
-					_painterPath.lineTo(map->ll2xy(c));
-				prev = current;
+				addSegment(last, c);
+				last = c;
 			}
 		} else
-			_painterPath.lineTo(map->ll2xy(p2.coordinates()));
+			addSegment(p1.coordinates(), p2.coordinates());
 	}
 }
 
@@ -99,7 +101,7 @@ void PathItem::setMap(Map *map)
 
 	_map = map;
 
-	updatePainterPath(map);
+	updatePainterPath();
 	updateShape();
 
 	_marker->setPos(position(_markerDistance));
