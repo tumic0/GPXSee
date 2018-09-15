@@ -11,6 +11,11 @@
 
 #define GEOGRAPHICAL_MILE 1855.3248
 
+static unsigned segments(qreal distance)
+{
+	return ceil(distance / GEOGRAPHICAL_MILE);
+}
+
 PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
   : QGraphicsObject(parent)
 {
@@ -50,7 +55,7 @@ void PathItem::updatePainterPath(Map *map)
 	for (int i = 1; i < _path.size(); i++) {
 		const PathPoint &p1 = _path.at(i-1);
 		const PathPoint &p2 = _path.at(i);
-		unsigned n = ceil((p2.distance() - p1.distance()) / GEOGRAPHICAL_MILE);
+		unsigned n = segments(p2.distance() - p1.distance());
 
 		if (n > 1) {
 			Coordinates c1(p1.coordinates());
@@ -176,9 +181,25 @@ QPointF PathItem::position(qreal x) const
 		p1 = _path.at(mid-1).distance(); p2 = _path.at(mid).distance();
 	}
 
-	if ((unsigned)qAbs(c1.lon() - c2.lon())) {
+	unsigned n = segments(p2 - p1);
+	if (n > 1) {
 		GreatCircle gc(c1, c2);
-		return _map->ll2xy(gc.pointAt((x - p1) / (p2 - p1)));
+
+		// Great circle point
+		double f = (x - p1) / (p2 - p1);
+		QPointF p(_map->ll2xy(gc.pointAt(f)));
+
+		// Segment line of the great circle path
+		double f1 = floor(n * f) / n;
+		double f2 = ceil(n * f) / n;
+		QLineF l(_map->ll2xy(gc.pointAt(f1)), _map->ll2xy(gc.pointAt(f2)));
+
+		// Project the great circle point to the segment line
+		QLineF u = l.unitVector();
+		double lambda = (u.dx() * (p.x() - l.p1().x())) + (u.dy() * (p.y()
+		  - l.p1().y()));
+		return QPointF((u.dx() * lambda) + l.p1().x(), (u.dy() * lambda)
+		  + l.p1().y());
 	} else {
 		QLineF l(_map->ll2xy(c1), _map->ll2xy(c2));
 		return l.pointAt((x - p1) / (p2 - p1));
