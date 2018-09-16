@@ -17,10 +17,15 @@ KML, FIT, IGC, NMEA, SLF, LOC and OziExplorer files.
 ![GPXSee - Linux](https://a.fsdn.com/con/app/proj/gpxsee/screenshots/linux2.png)
 
 ## Build
+Build requirements:
+* Qt 4.8 or QT 5.x (Qt >= 5.10.1 recomended for all features)
+* C++03 compiler (tested: msvc2015, gcc >= 4.8, clang/Apple LLVM version 8.1.0)
+
+Build steps:
 ```shell
 lrelease gpxsee.pro
 qmake gpxsee.pro
-make
+make # nmake on windows
 ```
 
 ## Download
