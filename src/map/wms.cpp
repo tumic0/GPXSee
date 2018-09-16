@@ -274,8 +274,8 @@ bool WMS::getCapabilities(const QString &url, const QString &file,
 
 WMS::WMS(const QString &file, const WMS::Setup &setup) : _valid(false)
 {
-	QString capaUrl = QString("%1?service=WMS&request=GetCapabilities")
-	  .arg(setup.url());
+	QString capaUrl = QString("%1%2service=WMS&request=GetCapabilities")
+	  .arg(setup.url(), setup.url().contains('?') ? "&" : "?");
 
 	if (!QFileInfo(file).exists())
 		if (!getCapabilities(capaUrl, file, setup.authorization()))

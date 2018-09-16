@@ -20,11 +20,11 @@ QString WMSMap::tileUrl(const QString &version) const
 {
 	QString url;
 
-	url = QString("%1?version=%2&request=GetMap&bbox=$bbox"
-	  "&width=%3&height=%4&layers=%5&styles=%6&format=%7&transparent=true")
-	  .arg(_setup.url(), version, QString::number(TILE_SIZE),
-	  QString::number(TILE_SIZE), _setup.layer(), _setup.style(),
-	  _setup.format());
+	url = QString("%1%2version=%3&request=GetMap&bbox=$bbox"
+	  "&width=%4&height=%5&layers=%6&styles=%7&format=%8&transparent=true")
+	  .arg(_setup.url(), _setup.url().contains('?') ? "&" : "?", version,
+	  QString::number(TILE_SIZE), QString::number(TILE_SIZE), _setup.layer(),
+	  _setup.style(), _setup.format());
 
 	if (version >= "1.3.0")
 		url.append(QString("&CRS=%1").arg(_setup.crs()));

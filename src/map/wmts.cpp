@@ -301,8 +301,8 @@ bool WMTS::getCapabilities(const QString &url, const QString &file,
 WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
 {
 	QString capaUrl = setup.rest() ? setup.url() :
-	  QString("%1?service=WMTS&Version=1.0.0&request=GetCapabilities")
-	  .arg(setup.url());
+	  QString("%1%2service=WMTS&Version=1.0.0&request=GetCapabilities")
+	  .arg(setup.url(), setup.url().contains('?') ? "&" : "?");
 
 	if (!QFileInfo(file).exists())
 		if (!getCapabilities(capaUrl, file, setup.authorization()))
@@ -312,9 +312,10 @@ WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
 
 	QString style = setup.style().isEmpty() ? "default" : setup.style();
 	if (!setup.rest()) {
-		_tileUrl = QString("%1?service=WMTS&Version=1.0.0&request=GetTile"
-		  "&Format=%2&Layer=%3&Style=%4&TileMatrixSet=%5&TileMatrix=$z"
-		  "&TileRow=$y&TileCol=$x").arg(setup.url(), setup.format(),
+		_tileUrl = QString("%1%2service=WMTS&Version=1.0.0&request=GetTile"
+		  "&Format=%3&Layer=%4&Style=%5&TileMatrixSet=%6&TileMatrix=$z"
+		  "&TileRow=$y&TileCol=$x").arg(setup.url(),
+		  setup.url().contains('?') ? "&" : "?" , setup.format(),
 		  setup.layer(), style, setup.set());
 		for (int i = 0; i < setup.dimensions().size(); i++) {
 			const QPair<QString, QString> &dim = setup.dimensions().at(i);
