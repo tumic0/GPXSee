@@ -153,10 +153,12 @@ Section "QT framework" SEC_QT
   File "Qt5Widgets.dll"
   File "Qt5PrintSupport.dll"
   File "Qt5Network.dll"
+  File "Qt5Sql.dll"
   File /r "platforms"
   File /r "imageformats"
   File /r "printsupport"
   File /r "styles"
+  File /r "sqldrivers"
 
 SectionEnd
 
