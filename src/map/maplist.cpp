@@ -6,6 +6,7 @@
 #include "jnxmap.h"
 #include "geotiffmap.h"
 #include "mapsource.h"
+#include "mbtilesmap.h"
 #include "maplist.h"
 
 
@@ -56,6 +57,8 @@ bool MapList::loadFile(const QString &path, bool *atlas, bool dir)
 		return loadMap(new JNXMap(path, this), path, dir);
 	else if (suffix == "tif" || suffix == "tiff")
 		return loadMap(new GeoTIFFMap(path, this), path, dir);
+	else if (suffix == "mbtiles")
+		return loadMap(new MBTilesMap(path, this), path, dir);
 	else
 		return loadMap(new OziMap(path, this), path, dir);
 }
@@ -111,7 +114,9 @@ void MapList::clear()
 QString MapList::formats()
 {
 	return
-	  tr("Supported files") + " (*.jnx *.map *.tar *.tba *.tif *.tiff *.xml);;"
+	  tr("Supported files")
+	  + " (*.jnx *.map *.mbtiles *.tar *.tba *.tif *.tiff *.xml);;"
+	  + tr("MBTiles maps") + " (*.mbtiles);;"
 	  + tr("Garmin JNX maps") + " (*.jnx);;"
 	  + tr("OziExplorer maps") + " (*.map);;"
 	  + tr("TrekBuddy maps/atlases") + " (*.tar *.tba);;"

@@ -1,9 +1,10 @@
 TARGET = GPXSee
-VERSION = 5.18
+VERSION = 6.0
 
 QT += core \
     gui \
-    network
+    network \
+    sql
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets
     QT += printsupport
@@ -142,7 +143,9 @@ HEADERS += src/config.h \
     src/data/slfparser.h \
     src/map/geotiffmap.h \
     src/map/image.h \
-    src/common/greatcircle.h
+    src/common/greatcircle.h \
+    src/map/mbtilesmap.h \
+    src/map/osm.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -248,7 +251,9 @@ SOURCES += src/main.cpp \
     src/data/slfparser.cpp \
     src/map/geotiffmap.cpp \
     src/map/image.cpp \
-    src/common/greatcircle.cpp
+    src/common/greatcircle.cpp \
+    src/map/mbtilesmap.cpp \
+    src/map/osm.cpp
 
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_en.ts \
