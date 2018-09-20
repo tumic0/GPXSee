@@ -52,6 +52,10 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 			return;
 		}
 		_zooms = Range(query.value(0).toInt(), query.value(1).toInt());
+		if (_zooms.min() < 0 || !_zooms.isValid()) {
+			_errorString = "Invalid zoom levels";
+			return;
+		}
 	}
 	_zoom = _zooms.max();
 
@@ -62,13 +66,13 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 		QSqlQuery query(sql, _db);
 		query.first();
 
-		double minX = index2mercator(qMin((1<<_zooms.min()),
+		double minX = index2mercator(qMin((1<<_zooms.min()) - 1,
 		  qMax(0, query.value(0).toInt())), _zooms.min());
-		double minY = index2mercator(qMin((1<<_zooms.min()),
+		double minY = index2mercator(qMin((1<<_zooms.min()) - 1,
 		  qMax(0, query.value(1).toInt())), _zooms.min());
-		double maxX = index2mercator(qMin((1<<_zooms.min()),
+		double maxX = index2mercator(qMin((1<<_zooms.min()) - 1,
 		  qMax(0, query.value(2).toInt())) + 1, _zooms.min());
-		double maxY = index2mercator(qMin((1<<_zooms.min()),
+		double maxY = index2mercator(qMin((1<<_zooms.min()) - 1,
 		  qMax(0, query.value(3).toInt())) + 1, _zooms.min());
 		Coordinates tl(osm::m2ll(QPointF(minX, maxY)));
 		Coordinates br(osm::m2ll(QPointF(maxX, minY)));
