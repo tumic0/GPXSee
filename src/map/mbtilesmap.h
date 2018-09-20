@@ -11,7 +11,7 @@ class MBTilesMap : public Map
 public:
 	MBTilesMap(const QString &fileName, QObject *parent = 0);
 
-	QString name() const;
+	QString name() const {return _name;}
 
 	QRectF bounds();
 	qreal resolution(const QRectF &rect);
@@ -43,7 +43,7 @@ private:
 
 	QSqlDatabase _db;
 
-	QString _fileName;
+	QString _fileName, _name;
 	RectC _bounds;
 	Range _zooms;
 	int _zoom;

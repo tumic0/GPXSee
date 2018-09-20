@@ -76,20 +76,23 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 		  qMax(0, query.value(3).toInt())) + 1, _zooms.min());
 		Coordinates tl(osm::m2ll(QPointF(minX, maxY)));
 		Coordinates br(osm::m2ll(QPointF(maxX, minY)));
-		// Workaround of broken zoom level 0 and 1 due to numerical instability
+		// Workaround of broken zoom levels 0 and 1 due to numerical instability
 		tl.rlat() = qMin(tl.lat(), 85.0511);
 		br.rlat() = qMax(br.lat(), -85.0511);
 		_bounds = RectC(tl, br);
 	}
 
+	{
+		QSqlQuery query("SELECT value FROM metadata WHERE name = 'name'", _db);
+		if (query.first())
+			_name = query.value(0).toString();
+		else
+			_name = QFileInfo(_fileName).fileName();
+	}
+
 	_db.close();
 
 	_valid = true;
-}
-
-QString MBTilesMap::name() const
-{
-	return QFileInfo(_fileName).fileName();;
 }
 
 void MBTilesMap::load()
