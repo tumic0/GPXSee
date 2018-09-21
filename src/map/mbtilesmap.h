@@ -47,6 +47,7 @@ private:
 	RectC _bounds;
 	Range _zooms;
 	int _zoom;
+	int _tileSize;
 	qreal _deviceRatio, _tileRatio;
 
 	bool _valid;

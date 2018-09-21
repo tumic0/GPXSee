@@ -8,6 +8,8 @@
 #include "onlinemap.h"
 
 
+#define TILE_SIZE     256
+
 OnlineMap::OnlineMap(const QString &name, const QString &url,
   const Range &zooms, const RectC &bounds, qreal tileRatio,
   const Authorization &authorization, QObject *parent)
@@ -53,7 +55,7 @@ int OnlineMap::zoomFit(const QSize &size, const RectC &rect)
 		QRectF tbr(osm::ll2m(rect.topLeft()), osm::ll2m(rect.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
 		_zoom = limitZoom(osm::scale2zoom(qMax(sc.x(), -sc.y())
-		  / coordinatesRatio()));
+		  / coordinatesRatio(), TILE_SIZE));
 	}
 
 	return _zoom;
@@ -61,7 +63,7 @@ int OnlineMap::zoomFit(const QSize &size, const RectC &rect)
 
 qreal OnlineMap::resolution(const QRectF &rect)
 {
-	qreal scale = osm::zoom2scale(_zoom);
+	qreal scale = osm::zoom2scale(_zoom, TILE_SIZE);
 
 	return (WGS84_RADIUS * 2.0 * M_PI * scale / 360.0
 	  * cos(2.0 * atan(exp(deg2rad(-rect.center().y() * scale))) - M_PI/2));
@@ -96,7 +98,7 @@ qreal OnlineMap::tileSize() const
 
 void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	qreal scale = osm::zoom2scale(_zoom);
+	qreal scale = osm::zoom2scale(_zoom, TILE_SIZE);
 	QRectF b(bounds());
 
 	QPoint tile = osm::mercator2tile(QPointF(rect.topLeft().x() * scale,
@@ -131,14 +133,14 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 QPointF OnlineMap::ll2xy(const Coordinates &c)
 {
-	qreal scale = osm::zoom2scale(_zoom);
+	qreal scale = osm::zoom2scale(_zoom, TILE_SIZE);
 	QPointF m = osm::ll2m(c);
 	return QPointF(m.x() / scale, m.y() / -scale) / coordinatesRatio();
 }
 
 Coordinates OnlineMap::xy2ll(const QPointF &p)
 {
-	qreal scale = osm::zoom2scale(_zoom);
+	qreal scale = osm::zoom2scale(_zoom, TILE_SIZE);
 	return osm::m2ll(QPointF(p.x() * scale, -p.y() * scale)
 	  * coordinatesRatio());
 }

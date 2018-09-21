@@ -18,12 +18,12 @@ QPoint osm::mercator2tile(const QPointF &m, int z)
 	  (int)(floor((1.0 - (m.y() / 180.0)) / 2.0 * (1<<z))));
 }
 
-qreal osm::zoom2scale(int zoom)
+qreal osm::zoom2scale(int zoom, int tileSize)
 {
-	return (360.0/(qreal)((1<<zoom) * TILE_SIZE));
+	return (360.0/(qreal)((1<<zoom) * tileSize));
 }
 
-int osm::scale2zoom(qreal scale)
+int osm::scale2zoom(qreal scale, int tileSize)
 {
-	return (int)(log2(360.0/(scale * (qreal)TILE_SIZE)) + EPSILON);
+	return (int)(log2(360.0/(scale * (qreal)tileSize)) + EPSILON);
 }
