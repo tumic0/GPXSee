@@ -277,7 +277,7 @@ bool WMTS::parseCapabilities(const QString &path, const Setup &setup)
 	return true;
 }
 
-bool WMTS::getCapabilities(const QString &url, const QString &file,
+bool WMTS::downloadCapabilities(const QString &url, const QString &file,
   const Authorization &authorization)
 {
 	Downloader d;
@@ -300,14 +300,14 @@ bool WMTS::getCapabilities(const QString &url, const QString &file,
 
 WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
 {
-	QString capaUrl = setup.rest() ? setup.url() :
-	  QString("%1%2service=WMTS&Version=1.0.0&request=GetCapabilities")
-	  .arg(setup.url(), setup.url().contains('?') ? "&" : "?");
+	QUrl url(setup.rest() ? setup.url() : QString(
+	  "%1%2service=WMTS&Version=1.0.0&request=GetCapabilities").arg(setup.url(),
+	  setup.url().contains('?') ? "&" : "?"));
 
-	if (!QFileInfo(file).exists())
-		if (!getCapabilities(capaUrl, file, setup.authorization()))
+	if (!url.isLocalFile() && !QFileInfo(file).exists())
+		if (!downloadCapabilities(url.toString(), file, setup.authorization()))
 			return;
-	if (!parseCapabilities(file, setup))
+	if (!parseCapabilities(url.isLocalFile() ? url.toLocalFile() : file, setup))
 		return;
 
 	QString style = setup.style().isEmpty() ? "default" : setup.style();

@@ -139,7 +139,7 @@ private:
 	void contents(QXmlStreamReader &reader, CTX &ctx);
 	void capabilities(QXmlStreamReader &reader, CTX &ctx);
 	bool parseCapabilities(const QString &path, const Setup &setup);
-	bool getCapabilities(const QString &url, const QString &file,
+	bool downloadCapabilities(const QString &url, const QString &file,
 	  const Authorization &authorization);
 
 	QSet<TileMatrix> _matrixes;

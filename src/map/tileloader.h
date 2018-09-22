@@ -26,7 +26,7 @@ signals:
 	void finished();
 
 private:
-	QString tileUrl(const Tile &tile) const;
+	QUrl tileUrl(const Tile &tile) const;
 	QString tileFile(const Tile &tile) const;
 
 	Downloader *_downloader;
