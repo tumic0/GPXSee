@@ -128,6 +128,6 @@ QStringList MapList::filter()
 {
 	QStringList filter;
 	filter << "*.jnx" << "*.map" << "*.tba" << "*.tar" << "*.xml" << "*.tif"
-	  << "*.tiff";
+	  << "*.tiff" << "*.mbtiles";
 	return filter;
 }
