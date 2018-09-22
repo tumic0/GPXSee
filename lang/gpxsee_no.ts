@@ -6,23 +6,23 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="11"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>o/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="12"/>
         <location filename="../src/GUI/cadencegraph.h" line="13"/>
         <source>Cadence</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stegfrekvens</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="22"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Gjennomsnitt</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="24"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Maksimum</translation>
     </message>
 </context>
 <context>
@@ -30,18 +30,18 @@
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="23"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Maksimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="24"/>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="26"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>o/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="25"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Gjennomsnitt</translation>
     </message>
 </context>
 <context>
@@ -49,62 +49,62 @@
     <message>
         <location filename="../src/data/data.cpp" line="116"/>
         <source>Supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Støttede filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="118"/>
         <source>CSV files</source>
-        <translation type="unfinished"></translation>
+        <translation>CSV-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="118"/>
         <source>FIT files</source>
-        <translation type="unfinished"></translation>
+        <translation>FIT-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="119"/>
         <source>GPX files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPX-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="119"/>
         <source>IGC files</source>
-        <translation type="unfinished"></translation>
+        <translation>IGC-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="120"/>
         <source>KML files</source>
-        <translation type="unfinished"></translation>
+        <translation>KML-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="120"/>
         <source>LOC files</source>
-        <translation type="unfinished"></translation>
+        <translation>LOC-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="121"/>
         <source>NMEA files</source>
-        <translation type="unfinished"></translation>
+        <translation>NMEA-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="122"/>
         <source>OziExplorer files</source>
-        <translation type="unfinished"></translation>
+        <translation>OziExplorer-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="123"/>
         <source>SLF files</source>
-        <translation type="unfinished"></translation>
+        <translation>SLF-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="123"/>
         <source>TCX files</source>
-        <translation type="unfinished"></translation>
+        <translation>TCX-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="124"/>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle filer</translation>
     </message>
 </context>
 <context>
@@ -113,37 +113,37 @@
         <location filename="../src/GUI/elevationgraph.cpp" line="49"/>
         <location filename="../src/GUI/elevationgraph.h" line="13"/>
         <source>Elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Høyde</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="60"/>
         <source>Ascent</source>
-        <translation type="unfinished"></translation>
+        <translation>Stigning</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="62"/>
         <source>Descent</source>
-        <translation type="unfinished"></translation>
+        <translation>Nedstigning</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="64"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Maksimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="66"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="128"/>
         <source>m</source>
-        <translation type="unfinished"></translation>
+        <translation>m</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="131"/>
         <source>ft</source>
-        <translation type="unfinished"></translation>
+        <translation>fot</translation>
     </message>
 </context>
 <context>
@@ -151,32 +151,32 @@
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="28"/>
         <source>m</source>
-        <translation type="unfinished"></translation>
+        <translation>m</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="28"/>
         <source>ft</source>
-        <translation type="unfinished"></translation>
+        <translation>fot</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="31"/>
         <source>Ascent</source>
-        <translation type="unfinished"></translation>
+        <translation>Stigning</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="33"/>
         <source>Descent</source>
-        <translation type="unfinished"></translation>
+        <translation>Nedstigning</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="35"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Maksimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="37"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimum</translation>
     </message>
 </context>
 <context>
@@ -184,72 +184,72 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
         <source>PDF files (*.pdf);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF-filer (*.pdf);;Alle filer (*)</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="51"/>
         <source>Portrait</source>
-        <translation type="unfinished"></translation>
+        <translation>Stående</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="52"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>Liggende</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="65"/>
         <source>mm</source>
-        <translation type="unfinished"></translation>
+        <translation>mm</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="65"/>
         <source>in</source>
-        <translation type="unfinished"></translation>
+        <translation>tommer</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="93"/>
         <source>Page Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Sideinnstilling</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="96"/>
         <source>Page size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sidestørrelse:</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="97"/>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Oppløsning:</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="98"/>
         <source>Orientation:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sideretning:</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="99"/>
         <source>Margins:</source>
-        <translation type="unfinished"></translation>
+        <translation>Marger:</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="105"/>
         <source>File:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="112"/>
         <source>Output file</source>
-        <translation type="unfinished"></translation>
+        <translation>Utdatafil</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="119"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksporter</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="134"/>
         <source>Export to PDF</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksporter til PDF</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="141"/>
