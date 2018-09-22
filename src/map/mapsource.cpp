@@ -119,8 +119,20 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 void MapSource::map(QXmlStreamReader &reader, Config &config)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
-	config.type = (attr.value("type") == "WMTS") ? WMTS
-	  : (attr.value("type") == "WMS") ? WMS : OSM;
+	QStringRef type = attr.value("type");
+
+	if (type == "WMTS")
+		config.type = WMTS;
+	else if (type == "WMS")
+		config.type = WMS;
+	else if (type == "TMS")
+		config.type = TMS;
+	else if (type == "OSM" || type.isEmpty())
+		config.type = OSM;
+	else {
+		reader.raiseError("Invalid map type");
+		return;
+	}
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "name")
@@ -231,16 +243,23 @@ Map *MapSource::loadMap(const QString &path, QString &errorString)
 		}
 	}
 
-	if (config.type == WMTS)
-		return new WMTSMap(config.name, WMTS::Setup(config.url, config.layer,
-		  config.set, config.style, config.format, config.rest,
-		  config.coordinateSystem, config.dimensions, config.authorization),
-		  config.tileRatio);
-	else if (config.type == WMS)
-		return new WMSMap(config.name, WMS::Setup(config.url, config.layer,
-		  config.style, config.format, config.crs, config.coordinateSystem,
-		  config.dimensions, config.authorization));
-	else
-		return new OnlineMap(config.name, config.url, config.zooms,
-		  config.bounds, config.tileRatio, config.authorization);
+	switch (config.type) {
+		case WMTS:
+			return new WMTSMap(config.name, WMTS::Setup(config.url, config.layer,
+			  config.set, config.style, config.format, config.rest,
+			  config.coordinateSystem, config.dimensions, config.authorization),
+			  config.tileRatio);
+		case WMS:
+			return new WMSMap(config.name, WMS::Setup(config.url, config.layer,
+			  config.style, config.format, config.crs, config.coordinateSystem,
+			  config.dimensions, config.authorization));
+		case TMS:
+			return new OnlineMap(config.name, config.url, config.zooms,
+			  config.bounds, config.tileRatio, config.authorization, true);
+		case OSM:
+			return new OnlineMap(config.name, config.url, config.zooms,
+			 config.bounds, config.tileRatio, config.authorization, false);
+		default:
+			return 0;
+	}
 }

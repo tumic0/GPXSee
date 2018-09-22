@@ -19,7 +19,8 @@ private:
 	enum Type {
 		OSM,
 		WMTS,
-		WMS
+		WMS,
+		TMS
 	};
 
 	struct Config {

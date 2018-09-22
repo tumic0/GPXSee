@@ -12,9 +12,10 @@
 
 OnlineMap::OnlineMap(const QString &name, const QString &url,
   const Range &zooms, const RectC &bounds, qreal tileRatio,
-  const Authorization &authorization, QObject *parent)
+  const Authorization &authorization, bool invertY, QObject *parent)
 	: Map(parent), _name(name), _zooms(zooms), _bounds(bounds),
-	_zoom(_zooms.max()), _deviceRatio(1.0), _tileRatio(tileRatio), _valid(false)
+	_zoom(_zooms.max()), _deviceRatio(1.0), _tileRatio(tileRatio),
+	_invertY(invertY), _valid(false)
 {
 	QString dir(TILES_DIR + "/" + _name);
 
@@ -111,7 +112,8 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	  qMin(rect.bottom() - tl.y(), b.height()));
 	for (int i = 0; i < ceil(s.width() / tileSize()); i++)
 		for (int j = 0; j < ceil(s.height() / tileSize()); j++)
-			tiles.append(Tile(QPoint(tile.x() + i, tile.y() + j), _zoom));
+			tiles.append(Tile(QPoint(tile.x() + i,
+			  _invertY ? (1<<_zoom) - (tile.y() + j) - 1 : tile.y() + j), _zoom));
 
 	if (flags & Map::Block)
 		_tileLoader->loadTilesSync(tiles);
@@ -121,7 +123,8 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];
 		QPointF tp(qMax(tl.x(), b.left()) + (t.xy().x() - tile.x()) * tileSize(),
-		  qMax(tl.y(), b.top()) + (t.xy().y() - tile.y()) * tileSize());
+		  qMax(tl.y(), b.top()) + ((_invertY ? (1<<_zoom) - t.xy().y() - 1 :
+		  t.xy().y()) - tile.y()) * tileSize());
 		if (!t.pixmap().isNull()) {
 #ifdef ENABLE_HIDPI
 			t.pixmap().setDevicePixelRatio(imageRatio());
