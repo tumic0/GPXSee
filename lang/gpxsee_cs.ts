@@ -965,7 +965,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="119"/>
         <source>MBTiles maps</source>
-        <translation type="unfinished"></translation>
+        <translation>MBTiles mapy</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="120"/>
