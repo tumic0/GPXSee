@@ -957,32 +957,37 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="114"/>
+        <location filename="../src/map/maplist.cpp" line="117"/>
         <source>Supported files</source>
         <translation>Unterstütze Dateien</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="115"/>
+        <location filename="../src/map/maplist.cpp" line="119"/>
+        <source>MBTiles maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="120"/>
         <source>Garmin JNX maps</source>
         <translation>Garmin JNX Karten</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="116"/>
+        <location filename="../src/map/maplist.cpp" line="121"/>
         <source>OziExplorer maps</source>
         <translation>OziExplorer Karten</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="117"/>
+        <location filename="../src/map/maplist.cpp" line="122"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>TrekBuddy Karten/Atlanten</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="118"/>
+        <location filename="../src/map/maplist.cpp" line="123"/>
         <source>GeoTIFF images</source>
         <translation>GeoTIFF Bilder</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="119"/>
+        <location filename="../src/map/maplist.cpp" line="124"/>
         <source>Online map sources</source>
         <translation>Online-Kartenquellen</translation>
     </message>
