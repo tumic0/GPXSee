@@ -19,6 +19,8 @@ public:
 	void setMin(int min) {_min = min;}
 	void setMax(int max) {_max = max;}
 
+	bool contains(int val) const {return (val >= _min && val <= _max);}
+
 private:
 	int _min, _max;
 };

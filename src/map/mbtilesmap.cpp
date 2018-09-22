@@ -77,8 +77,8 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 		Coordinates tl(osm::m2ll(QPointF(minX, maxY)));
 		Coordinates br(osm::m2ll(QPointF(maxX, minY)));
 		// Workaround of broken zoom levels 0 and 1 due to numerical instability
-		tl.rlat() = qMin(tl.lat(), 85.0511);
-		br.rlat() = qMax(br.lat(), -85.0511);
+		tl.rlat() = qMin(tl.lat(), osm::bounds.top());
+		br.rlat() = qMax(br.lat(), osm::bounds.bottom());
 		_bounds = RectC(tl, br);
 	}
 

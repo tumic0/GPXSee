@@ -4,19 +4,12 @@
 #include "onlinemap.h"
 #include "wmtsmap.h"
 #include "wmsmap.h"
+#include "osm.h"
 #include "mapsource.h"
 
-#define ZOOM_MAX       19
-#define ZOOM_MIN       0
-#define BOUNDS_LEFT    -180
-#define BOUNDS_TOP     85.0511
-#define BOUNDS_RIGHT   180
-#define BOUNDS_BOTTOM  -85.0511
 
-
-MapSource::Config::Config() : type(OSM), zooms(ZOOM_MIN, ZOOM_MAX),
-  bounds(Coordinates(BOUNDS_LEFT, BOUNDS_TOP), Coordinates(BOUNDS_RIGHT,
-  BOUNDS_BOTTOM)), format("image/png"), rest(false), tileRatio(1.0) {}
+MapSource::Config::Config() : type(OSM), zooms(osm::zooms), bounds(osm::bounds),
+  format("image/png"), rest(false), tileRatio(1.0) {}
 
 
 static CoordinateSystem coordinateSystem(QXmlStreamReader &reader)
@@ -38,21 +31,21 @@ Range MapSource::zooms(QXmlStreamReader &reader)
 
 	if (attr.hasAttribute("min")) {
 		min = attr.value("min").toString().toInt(&res);
-		if (!res || (min < ZOOM_MIN || min > ZOOM_MAX)) {
+		if (!res || !osm::zooms.contains(min)) {
 			reader.raiseError("Invalid minimal zoom level");
 			return Range();
 		}
 	} else
-		min = ZOOM_MIN;
+		min = osm::zooms.min();
 
 	if (attr.hasAttribute("max")) {
 		max = attr.value("max").toString().toInt(&res);
-		if (!res || (max < ZOOM_MIN || max > ZOOM_MAX)) {
+		if (!res || !osm::zooms.contains(max)) {
 			reader.raiseError("Invalid maximal zoom level");
 			return Range();
 		}
 	} else
-		max = ZOOM_MAX;
+		max = osm::zooms.max();
 
 	if (min > max) {
 		reader.raiseError("Invalid maximal/minimal zoom level combination");
@@ -70,39 +63,41 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 
 	if (attr.hasAttribute("top")) {
 		top = attr.value("top").toString().toDouble(&res);
-		if (!res || (top < BOUNDS_BOTTOM || top > BOUNDS_TOP)) {
+		if (!res || (top < osm::bounds.bottom() || top > osm::bounds.top())) {
 			reader.raiseError("Invalid bounds top value");
 			return RectC();
 		}
 	} else
-		top = BOUNDS_TOP;
+		top = osm::bounds.top();
 
 	if (attr.hasAttribute("bottom")) {
 		bottom = attr.value("bottom").toString().toDouble(&res);
-		if (!res || (bottom < BOUNDS_BOTTOM || bottom > BOUNDS_TOP)) {
+		if (!res || (bottom < osm::bounds.bottom()
+		  || bottom > osm::bounds.top())) {
 			reader.raiseError("Invalid bounds bottom value");
 			return RectC();
 		}
 	} else
-		bottom = BOUNDS_BOTTOM;
+		bottom = osm::bounds.bottom();
 
 	if (attr.hasAttribute("left")) {
 		left = attr.value("left").toString().toDouble(&res);
-		if (!res || (left < BOUNDS_LEFT || left > BOUNDS_RIGHT)) {
+		if (!res || (left < osm::bounds.left() || left > osm::bounds.right())) {
 			reader.raiseError("Invalid bounds left value");
 			return RectC();
 		}
 	} else
-		left = BOUNDS_LEFT;
+		left = osm::bounds.left();
 
 	if (attr.hasAttribute("right")) {
 		right = attr.value("right").toString().toDouble(&res);
-		if (!res || (right < BOUNDS_LEFT || right > BOUNDS_RIGHT)) {
+		if (!res || (right < osm::bounds.left()
+		  || right > osm::bounds.right())) {
 			reader.raiseError("Invalid bounds right value");
 			return RectC();
 		}
 	} else
-		right = BOUNDS_RIGHT;
+		right = osm::bounds.right();
 
 	if (bottom >= top) {
 		reader.raiseError("Invalid bottom/top bounds combination");
