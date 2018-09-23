@@ -1104,7 +1104,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="53"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht-HiDPI-Karten werden so geladen, wie sie sind. Kartenobjekte haben die erwartete Größe, aber die Karte ist verschwommen.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="86"/>
