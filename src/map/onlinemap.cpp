@@ -122,9 +122,10 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];
-		QPointF tp(qMax(tl.x(), b.left()) + (t.xy().x() - tile.x()) * tileSize(),
-		  qMax(tl.y(), b.top()) + ((_invertY ? (1<<_zoom) - t.xy().y() - 1 :
-		  t.xy().y()) - tile.y()) * tileSize());
+		QPointF tp = _zoom ? QPointF(tl.x() + (t.xy().x() - tile.x())
+		  * tileSize(), tl.y() + ((_invertY ? (1<<_zoom) - t.xy().y() - 1 :
+		  t.xy().y()) - tile.y()) * tileSize()) : QPointF(-128, -128);
+
 		if (!t.pixmap().isNull()) {
 #ifdef ENABLE_HIDPI
 			t.pixmap().setDevicePixelRatio(imageRatio());
