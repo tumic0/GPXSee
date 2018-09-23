@@ -86,8 +86,8 @@
 
           <h3>Key features</h3>
           <ul>
-            <li>User-definable online maps (OSM/Google tiles, WMTS, WMS).</li>
-            <li>Offline maps (OziExplorer maps, TrekBuddy maps/atlases, Garmin JNX maps, GeoTIFF images).</li>
+            <li>User-definable online maps (OSM/Google tiles, WMTS, WMS, TMS).</li>
+            <li>Offline maps (OziExplorer maps, TrekBuddy maps/atlases, Garmin JNX maps, GeoTIFF images, MBTiles).</li>
             <li>Elevation, speed, heart rate, cadence, power, temperature and gear ratio/shifts graphs.</li>
             <li>Support for multiple tracks in one view.</li>
             <li>Support for POI files.</li>
@@ -149,6 +149,16 @@
         <div class="latest-news">
           <h3>Releases</h3>
           <div class="news-item">
+            <p class="date">Sep 23 2018</p>
+            <h4>Version 6.0</h4>
+            <ul>
+              <li>Added MBTiles maps support.</li>
+              <li>Added TMS maps support.</li>
+              <li>Added support for local file URLs (OSM, TMS, WMTS maps).</li>
+              <li>Minor bugfixes (localization, WMTS, date-line crossing).</li>
+            </ul>
+          </div>
+          <div class="news-item">
             <p class="date">Sep 15 2018</p>
             <h4>Version 5.18</h4>
             <ul>
@@ -187,16 +197,6 @@
               <li>Fixed FIT parser crash.</li>
               <li>Added support for obscure Bryton Rider FIT files.</li>
               <li>Some more minor bugfixes.</li>
-            </ul>
-          </div>
-          <div class="news-item">
-            <p class="date">Jun 23 2018</p>
-            <h4>Version 5.14</h4>
-            <ul>
-              <li>Improved outlier detection (now based on acceleration rather than speed).</li>
-              <li>Fixed broken distance computation when outlier detection was enabled.</li>
-              <li>Added speed data source setting.</li>
-              <li>Several minor bugfixes.</li>
             </ul>
           </div>
         </div>
