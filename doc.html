@@ -140,6 +140,8 @@
 &lt;/map&gt;
 </pre>
 
+          <p>The map URL can be also a local file URL (<i>file:</i> scheme).</p>
+
           <p></p>
 
           <h4 id="TMS">TMS</h4>
@@ -194,7 +196,10 @@
           <p>Finally, one can define additional dimensions like <code>Time</code> using
           the <i>dimension</i> element. Use a separate entry for every additional dimension.</p>
 
-          <p>HiDPI WMTS tiles are supported too.</p>
+          <p>HiDPI WMTS tiles are supported too. Local (<i>file:</i> scheme) URLs are
+          supported in the map definition file as well as in the WMTS capabilities file.
+          This enables a fully local REST WMTS map configuration without the need of a web
+          server.</p>
 
           <h4 id="WMS">WMS</h4>
           <p>WMS maps are distinguished by setting the <i>type</i> attribute of the
