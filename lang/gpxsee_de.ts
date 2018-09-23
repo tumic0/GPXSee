@@ -1099,7 +1099,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="51"/>
         <source>Non-HiDPI maps are loaded as HiDPI maps. The map is sharp but map objects are small/hard to read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht-HiDPI-Karten werden als HiDPI-Karten geladen. Die Karte ist scharf, aber die Kartenobjekte sind klein / schwer zu lesen.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="53"/>
