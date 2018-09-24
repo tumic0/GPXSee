@@ -39,7 +39,7 @@ void TileLoader::loadTilesAsync(QList<Tile> &list)
 		else if (fi.exists())
 			loadTileFile(t, file);
 		else
-			dl.append(Download(tileUrl(t), file));
+			dl.append(Download(url, file));
 	}
 
 	if (!dl.empty())
@@ -61,7 +61,7 @@ void TileLoader::loadTilesSync(QList<Tile> &list)
 		else if (fi.exists())
 			loadTileFile(t, file);
 		else
-			dl.append(Download(tileUrl(t), file));
+			dl.append(Download(url, file));
 	}
 
 	if (dl.empty())
