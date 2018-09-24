@@ -52,7 +52,7 @@ void WMTSMap::clearCache()
 	_zoom = 0;
 
 	if (!loadWMTS())
-		qWarning("%s: %s\n", qPrintable(_name), qPrintable(_errorString));
+		qWarning("%s: %s", qPrintable(_name), qPrintable(_errorString));
 }
 
 QString WMTSMap::tilesDir() const

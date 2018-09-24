@@ -98,9 +98,9 @@ bool Data::loadFile(const QString &fileName)
 			file.reset();
 		}
 
-		qWarning("Error loading data file: %s:\n", qPrintable(fileName));
+		qWarning("Error loading data file: %s:", qPrintable(fileName));
 		for (it = _parsers.begin(); it != _parsers.end(); it++)
-			qWarning("%s: line %d: %s\n", qPrintable(it.key()),
+			qWarning("%s: line %d: %s", qPrintable(it.key()),
 			  it.value()->errorLine(), qPrintable(it.value()->errorString()));
 
 		_errorLine = 0;

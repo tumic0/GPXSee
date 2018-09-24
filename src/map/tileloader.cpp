@@ -7,7 +7,7 @@
 static bool loadTileFile(Tile &tile, const QString &file)
 {
 	if (!tile.pixmap().load(file)) {
-		qWarning("%s: error loading tile file\n", qPrintable(file));
+		qWarning("%s: error loading tile file", qPrintable(file));
 		return false;
 	}
 
@@ -18,7 +18,7 @@ TileLoader::TileLoader(const QString &dir, QObject *parent)
   : QObject(parent), _dir(dir)
 {
 	if (!QDir().mkpath(_dir))
-		qWarning("%s: %s\n", qPrintable(_dir), "Error creating tiles directory");
+		qWarning("%s: %s", qPrintable(_dir), "Error creating tiles directory");
 
 	_downloader = new Downloader(this);
 	connect(_downloader, SIGNAL(finished()), this, SIGNAL(finished()));

@@ -118,7 +118,7 @@ void WMSMap::clearCache()
 	_zoom = 0;
 
 	if (!loadWMS())
-		qWarning("%s: %s\n", qPrintable(_name), qPrintable(_errorString));
+		qWarning("%s: %s", qPrintable(_name), qPrintable(_errorString));
 }
 
 QRectF WMSMap::bounds()

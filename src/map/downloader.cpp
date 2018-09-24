@@ -90,7 +90,7 @@ bool Downloader::doDownload(const Download &dl,
 	QUrl url(dl.url());
 
 	if (!url.isValid() || !(url.scheme() == "http" || url.scheme() == "https")) {
-		qWarning("%s: Invalid URL\n", qPrintable(url.toString()));
+		qWarning("%s: Invalid URL", qPrintable(url.toString()));
 		if (redirect)
 			_errorDownloads.insert(redirect->origin(), RETRIES);
 		return false;
@@ -138,7 +138,7 @@ bool Downloader::saveToDisk(const QString &filename, QIODevice *data)
 	QFile file(filename);
 
 	if (!file.open(QIODevice::WriteOnly)) {
-		qWarning("Error writing file: %s: %s\n",
+		qWarning("Error writing file: %s: %s",
 		  qPrintable(filename), qPrintable(file.errorString()));
 		return false;
 	}
@@ -166,11 +166,11 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 		QUrl origin = reply->request().attribute(ATTR_ORIGIN).toUrl();
 		if (origin.isEmpty()) {
 			insertError(url, error);
-			qWarning("Error downloading file: %s: %s\n",
+			qWarning("Error downloading file: %s: %s",
 			  url.toEncoded().constData(), qPrintable(reply->errorString()));
 		} else {
 			insertError(origin, error);
-			qWarning("Error downloading file: %s -> %s: %s\n",
+			qWarning("Error downloading file: %s -> %s: %s",
 			  origin.toEncoded().constData(), url.toEncoded().constData(),
 			  qPrintable(reply->errorString()));
 		}
@@ -186,7 +186,7 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 			if (level >= MAX_REDIRECT_LEVEL) {
 				_errorDownloads.insert(origin, RETRIES);
 				qWarning("Error downloading file: %s: "
-				  "redirect level limit reached (redirect loop?)\n",
+				  "redirect level limit reached (redirect loop?)",
 				  origin.toEncoded().constData());
 			} else {
 				QUrl redirectUrl;
