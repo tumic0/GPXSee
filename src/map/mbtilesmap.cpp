@@ -5,7 +5,6 @@
 #include <QPainter>
 #include <QPixmapCache>
 #include "common/rectc.h"
-#include "common/wgs84.h"
 #include "osm.h"
 #include "config.h"
 #include "mbtilesmap.h"
@@ -163,10 +162,7 @@ int MBTilesMap::zoomFit(const QSize &size, const RectC &rect)
 
 qreal MBTilesMap::resolution(const QRectF &rect)
 {
-	qreal scale = osm::zoom2scale(_zoom, _tileSize);
-
-	return (WGS84_RADIUS * 2.0 * M_PI * scale / 360.0
-	  * cos(2.0 * atan(exp(deg2rad(-rect.center().y() * scale))) - M_PI/2));
+	return osm::resolution(rect.center(), _zoom, _tileSize);
 }
 
 int MBTilesMap::zoomIn()

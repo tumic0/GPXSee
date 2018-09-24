@@ -11,10 +11,9 @@ class TileLoader : public QObject
 	Q_OBJECT
 
 public:
-	TileLoader(QObject *parent = 0);
+	TileLoader(const QString &dir, QObject *parent = 0);
 
 	void setUrl(const QString &url) {_url = url;}
-	void setDir(const QString &dir) {_dir = dir;}
 	void setAuthorization(const Authorization &authorization)
 	  {_authorization = authorization;}
 

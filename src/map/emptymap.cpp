@@ -1,41 +1,18 @@
 #include <QtGlobal>
 #include <QPainter>
-#include "common/coordinates.h"
 #include "common/rectc.h"
-#include "common/wgs84.h"
+#include "osm.h"
 #include "emptymap.h"
 
 
-#define ZOOM_MIN 0
-#define ZOOM_MAX 19
 #define TILE_SIZE 256
-
-static QPointF ll2m(const Coordinates &c)
-{
-	return QPointF(c.lon(), rad2deg(log(tan(M_PI_4 + deg2rad(c.lat())/2.0))));
-}
-
-static Coordinates m2ll(const QPointF &p)
-{
-	return Coordinates(p.x(), rad2deg(2.0 * atan(exp(deg2rad(p.y()))) - M_PI_2));
-}
-
-static qreal zoom2scale(int zoom)
-{
-	return (360.0/(qreal)((1<<zoom) * TILE_SIZE));
-}
-
-static int scale2zoom(qreal scale)
-{
-	return (int)log2(360.0/(scale * (qreal)TILE_SIZE));
-}
 
 static int limitZoom(int zoom)
 {
-	if (zoom < ZOOM_MIN)
-		return ZOOM_MIN;
-	if (zoom > ZOOM_MAX)
-		return ZOOM_MAX;
+	if (zoom < osm::zooms.min())
+		return osm::zooms.min();
+	if (zoom > osm::zooms.max())
+		return osm::zooms.max();
 
 	return zoom;
 }
@@ -43,23 +20,23 @@ static int limitZoom(int zoom)
 
 EmptyMap::EmptyMap(QObject *parent) : Map(parent)
 {
-	_zoom = ZOOM_MAX;
+	_zoom = osm::zooms.max();
 }
 
 QRectF EmptyMap::bounds()
 {
-	return QRectF(ll2xy(Coordinates(-180, 85)), ll2xy(Coordinates(180, -85)));
+	return QRectF(ll2xy(osm::bounds.topLeft()), ll2xy(osm::bounds.bottomRight()));
 }
 
 int EmptyMap::zoomFit(const QSize &size, const RectC &rect)
 {
 	if (!rect.isValid())
-		_zoom = ZOOM_MAX;
+		_zoom = osm::zooms.max();
 	else {
-		QRectF tbr(ll2m(rect.topLeft()), ll2m(rect.bottomRight()));
+		QRectF tbr(osm::ll2m(rect.topLeft()), osm::ll2m(rect.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
 
-		_zoom = limitZoom(scale2zoom(qMax(sc.x(), -sc.y())));
+		_zoom = limitZoom(osm::scale2zoom(qMax(sc.x(), -sc.y()), TILE_SIZE));
 	}
 
 	return _zoom;
@@ -67,21 +44,18 @@ int EmptyMap::zoomFit(const QSize &size, const RectC &rect)
 
 qreal EmptyMap::resolution(const QRectF &rect)
 {
-	qreal scale = zoom2scale(_zoom);
-
-	return (WGS84_RADIUS * 2.0 * M_PI * scale / 360.0
-	  * cos(2.0 * atan(exp(deg2rad(-rect.center().y() * scale))) - M_PI/2));
+	return osm::resolution(rect.center(), _zoom, TILE_SIZE);
 }
 
 int EmptyMap::zoomIn()
 {
-	_zoom = qMin(_zoom + 1, ZOOM_MAX);
+	_zoom = qMin(_zoom + 1, osm::zooms.max());
 	return _zoom;
 }
 
 int EmptyMap::zoomOut()
 {
-	_zoom = qMax(_zoom - 1, ZOOM_MIN);
+	_zoom = qMax(_zoom - 1, osm::zooms.min());
 	return _zoom;
 }
 
@@ -94,13 +68,13 @@ void EmptyMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 QPointF EmptyMap::ll2xy(const Coordinates &c)
 {
-	qreal scale = zoom2scale(_zoom);
-	QPointF m = ll2m(c);
+	qreal scale = osm::zoom2scale(_zoom, TILE_SIZE);
+	QPointF m = osm::ll2m(c);
 	return QPointF(m.x() / scale, m.y() / -scale);
 }
 
 Coordinates EmptyMap::xy2ll(const QPointF &p)
 {
-	qreal scale = zoom2scale(_zoom);
-	return m2ll(QPointF(p.x() * scale, -p.y() * scale));
+	qreal scale = osm::zoom2scale(_zoom, TILE_SIZE);
+	return osm::m2ll(QPointF(p.x() * scale, -p.y() * scale));
 }

@@ -39,13 +39,7 @@ WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, qreal tileRatio,
   QObject *parent) : Map(parent), _name(name), _setup(setup), _tileLoader(0),
   _zoom(0), _deviceRatio(1.0), _tileRatio(tileRatio), _valid(false)
 {
-	if (!QDir().mkpath(tilesDir())) {
-		_errorString = "Error creating tiles dir";
-		return;
-	}
-
-	_tileLoader = new TileLoader(this);
-	_tileLoader->setDir(tilesDir());
+	_tileLoader = new TileLoader(tilesDir(), this);
 	_tileLoader->setAuthorization(_setup.authorization());
 	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(loaded()));
 

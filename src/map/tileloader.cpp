@@ -14,8 +14,12 @@ static bool loadTileFile(Tile &tile, const QString &file)
 	return true;
 }
 
-TileLoader::TileLoader(QObject *parent) : QObject(parent)
+TileLoader::TileLoader(const QString &dir, QObject *parent)
+  : QObject(parent), _dir(dir)
 {
+	if (!QDir().mkpath(_dir))
+		qWarning("%s: %s\n", qPrintable(_dir), "Error creating tiles directory");
+
 	_downloader = new Downloader(this);
 	connect(_downloader, SIGNAL(finished()), this, SIGNAL(finished()));
 }

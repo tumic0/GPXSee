@@ -1,7 +1,5 @@
 #include <QPainter>
-#include "common/coordinates.h"
 #include "common/rectc.h"
-#include "common/wgs84.h"
 #include "downloader.h"
 #include "osm.h"
 #include "config.h"
@@ -15,22 +13,12 @@ OnlineMap::OnlineMap(const QString &name, const QString &url,
   const Authorization &authorization, bool invertY, QObject *parent)
 	: Map(parent), _name(name), _zooms(zooms), _bounds(bounds),
 	_zoom(_zooms.max()), _deviceRatio(1.0), _tileRatio(tileRatio),
-	_invertY(invertY), _valid(false)
+	_invertY(invertY)
 {
-	QString dir(TILES_DIR + "/" + _name);
-
-	_tileLoader = new TileLoader(this);
+	_tileLoader = new TileLoader(TILES_DIR + "/" + _name, this);
 	_tileLoader->setUrl(url);
-	_tileLoader->setDir(dir);
 	_tileLoader->setAuthorization(authorization);
 	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(loaded()));
-
-	if (!QDir().mkpath(dir)) {
-		_errorString = "Error creating tiles dir";
-		return;
-	}
-
-	_valid = true;
 }
 
 QRectF OnlineMap::bounds()
@@ -64,10 +52,7 @@ int OnlineMap::zoomFit(const QSize &size, const RectC &rect)
 
 qreal OnlineMap::resolution(const QRectF &rect)
 {
-	qreal scale = osm::zoom2scale(_zoom, TILE_SIZE);
-
-	return (WGS84_RADIUS * 2.0 * M_PI * scale / 360.0
-	  * cos(2.0 * atan(exp(deg2rad(-rect.center().y() * scale))) - M_PI/2));
+	return osm::resolution(rect.center(), _zoom, TILE_SIZE);
 }
 
 int OnlineMap::zoomIn()

@@ -34,9 +34,6 @@ public:
 	void setDevicePixelRatio(qreal ratio) {_deviceRatio = ratio;}
 	void clearCache() {_tileLoader->clearCache();}
 
-	bool isValid() const {return _valid;}
-	QString errorString() const {return _errorString;}
-
 private:
 	int limitZoom(int zoom) const;
 	qreal tileSize() const;
@@ -50,9 +47,6 @@ private:
 	int _zoom;
 	qreal _deviceRatio, _tileRatio;
 	bool _invertY;
-
-	bool _valid;
-	QString _errorString;
 };
 
 #endif // ONLINEMAP_H
