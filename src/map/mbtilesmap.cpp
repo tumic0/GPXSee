@@ -73,11 +73,11 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 		  qMax(0, query.value(2).toInt())) + 1, _zooms.min());
 		double maxY = index2mercator(qMin((1<<_zooms.min()) - 1,
 		  qMax(0, query.value(3).toInt())) + 1, _zooms.min());
-		Coordinates tl(osm::m2ll(QPointF(minX, maxY)));
-		Coordinates br(osm::m2ll(QPointF(maxX, minY)));
+		Coordinates tl(OSM::m2ll(QPointF(minX, maxY)));
+		Coordinates br(OSM::m2ll(QPointF(maxX, minY)));
 		// Workaround of broken zoom levels 0 and 1 due to numerical instability
-		tl.rlat() = qMin(tl.lat(), osm::bounds.top());
-		br.rlat() = qMax(br.lat(), osm::bounds.bottom());
+		tl.rlat() = qMin(tl.lat(), OSM::BOUNDS.top());
+		br.rlat() = qMax(br.lat(), OSM::BOUNDS.bottom());
 		_bounds = RectC(tl, br);
 	}
 
@@ -151,9 +151,9 @@ int MBTilesMap::zoomFit(const QSize &size, const RectC &rect)
 	if (!rect.isValid())
 		_zoom = _zooms.max();
 	else {
-		QRectF tbr(osm::ll2m(rect.topLeft()), osm::ll2m(rect.bottomRight()));
+		QRectF tbr(OSM::ll2m(rect.topLeft()), OSM::ll2m(rect.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
-		_zoom = limitZoom(osm::scale2zoom(qMax(sc.x(), -sc.y())
+		_zoom = limitZoom(OSM::scale2zoom(qMax(sc.x(), -sc.y())
 		  / coordinatesRatio(), _tileSize));
 	}
 
@@ -162,7 +162,7 @@ int MBTilesMap::zoomFit(const QSize &size, const RectC &rect)
 
 qreal MBTilesMap::resolution(const QRectF &rect)
 {
-	return osm::resolution(rect.center(), _zoom, _tileSize);
+	return OSM::resolution(rect.center(), _zoom, _tileSize);
 }
 
 int MBTilesMap::zoomIn()
@@ -211,11 +211,11 @@ QByteArray MBTilesMap::tileData(int zoom, const QPoint &tile) const
 void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	Q_UNUSED(flags);
-	qreal scale = osm::zoom2scale(_zoom, _tileSize);
+	qreal scale = OSM::zoom2scale(_zoom, _tileSize);
 	QRectF b(bounds());
 
 
-	QPoint tile = osm::mercator2tile(QPointF(rect.topLeft().x() * scale,
+	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * coordinatesRatio(), _zoom);
 	QPointF tl(floor(rect.left() / tileSize())
 	  * tileSize(), floor(rect.top() / tileSize()) * tileSize());
@@ -247,14 +247,14 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 QPointF MBTilesMap::ll2xy(const Coordinates &c)
 {
-	qreal scale = osm::zoom2scale(_zoom, _tileSize);
-	QPointF m = osm::ll2m(c);
+	qreal scale = OSM::zoom2scale(_zoom, _tileSize);
+	QPointF m = OSM::ll2m(c);
 	return QPointF(m.x() / scale, m.y() / -scale) / coordinatesRatio();
 }
 
 Coordinates MBTilesMap::xy2ll(const QPointF &p)
 {
-	qreal scale = osm::zoom2scale(_zoom, _tileSize);
-	return osm::m2ll(QPointF(p.x() * scale, -p.y() * scale)
+	qreal scale = OSM::zoom2scale(_zoom, _tileSize);
+	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale)
 	  * coordinatesRatio());
 }

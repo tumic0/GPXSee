@@ -41,9 +41,9 @@ int OnlineMap::zoomFit(const QSize &size, const RectC &rect)
 	if (!rect.isValid())
 		_zoom = _zooms.max();
 	else {
-		QRectF tbr(osm::ll2m(rect.topLeft()), osm::ll2m(rect.bottomRight()));
+		QRectF tbr(OSM::ll2m(rect.topLeft()), OSM::ll2m(rect.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
-		_zoom = limitZoom(osm::scale2zoom(qMax(sc.x(), -sc.y())
+		_zoom = limitZoom(OSM::scale2zoom(qMax(sc.x(), -sc.y())
 		  / coordinatesRatio(), TILE_SIZE));
 	}
 
@@ -52,7 +52,7 @@ int OnlineMap::zoomFit(const QSize &size, const RectC &rect)
 
 qreal OnlineMap::resolution(const QRectF &rect)
 {
-	return osm::resolution(rect.center(), _zoom, TILE_SIZE);
+	return OSM::resolution(rect.center(), _zoom, TILE_SIZE);
 }
 
 int OnlineMap::zoomIn()
@@ -84,10 +84,10 @@ qreal OnlineMap::tileSize() const
 
 void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	qreal scale = osm::zoom2scale(_zoom, TILE_SIZE);
+	qreal scale = OSM::zoom2scale(_zoom, TILE_SIZE);
 	QRectF b(bounds());
 
-	QPoint tile = osm::mercator2tile(QPointF(rect.topLeft().x() * scale,
+	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * coordinatesRatio(), _zoom);
 	QPointF tl(floor(rect.left() / tileSize())
 	  * tileSize(), floor(rect.top() / tileSize()) * tileSize());
@@ -122,14 +122,14 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 QPointF OnlineMap::ll2xy(const Coordinates &c)
 {
-	qreal scale = osm::zoom2scale(_zoom, TILE_SIZE);
-	QPointF m = osm::ll2m(c);
+	qreal scale = OSM::zoom2scale(_zoom, TILE_SIZE);
+	QPointF m = OSM::ll2m(c);
 	return QPointF(m.x() / scale, m.y() / -scale) / coordinatesRatio();
 }
 
 Coordinates OnlineMap::xy2ll(const QPointF &p)
 {
-	qreal scale = osm::zoom2scale(_zoom, TILE_SIZE);
-	return osm::m2ll(QPointF(p.x() * scale, -p.y() * scale)
+	qreal scale = OSM::zoom2scale(_zoom, TILE_SIZE);
+	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale)
 	  * coordinatesRatio());
 }
