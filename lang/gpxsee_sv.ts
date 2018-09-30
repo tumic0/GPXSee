@@ -182,94 +182,99 @@
 <context>
     <name>ExportDialog</name>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="134"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="135"/>
         <source>Export to PDF</source>
         <translation>Exportera till PDF</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="25"/>
-        <source>PDF files (*.pdf);;All files (*)</source>
-        <translation>PDF-filer (*.pdf);;Alla filer (*)</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="51"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="52"/>
         <source>Portrait</source>
         <translation>Stående</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="52"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="53"/>
         <source>Landscape</source>
         <translation>Liggande</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="96"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="97"/>
         <source>Page size:</source>
         <translation>Sidstorlek:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="98"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="99"/>
         <source>Orientation:</source>
         <translation>Orientering:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="93"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="94"/>
         <source>Page Setup</source>
         <translation>Sidinställning</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="65"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="25"/>
+        <source>PDF files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/exportdialog.cpp" line="25"/>
+        <source>All files</source>
+        <translation type="unfinished">Alla filer</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/exportdialog.cpp" line="66"/>
         <source>in</source>
         <translation>i</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="65"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="66"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="97"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="98"/>
         <source>Resolution:</source>
         <translation>Upplösning:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="99"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="100"/>
         <source>Margins:</source>
         <translation>Marginaler:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="105"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="106"/>
         <source>File:</source>
         <translation>Fil:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="112"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="113"/>
         <source>Output file</source>
         <translation>Utdatafil</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="119"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="120"/>
         <source>Export</source>
         <translation>Exportera</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="141"/>
-        <location filename="../src/GUI/exportdialog.cpp" line="151"/>
-        <location filename="../src/GUI/exportdialog.cpp" line="156"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="142"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="152"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="157"/>
         <source>Error</source>
         <translation>Fel</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="141"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="142"/>
         <source>No output file selected.</source>
         <translation>Ingen utdatafil vald.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="151"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="152"/>
         <source>%1 is a directory.</source>
         <translation>%1 är en mapp.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="156"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="157"/>
         <source>%1 is not writable.</source>
         <translation>%1 är skrivskyddad.</translation>
     </message>

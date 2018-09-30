@@ -22,7 +22,8 @@ ExportDialog::ExportDialog(Export *exp, QWidget *parent)
 	int index;
 
 	_fileSelect = new FileSelectWidget();
-	_fileSelect->setFilter(tr("PDF files (*.pdf);;All files (*)"));
+	_fileSelect->setFilter(tr("PDF files") + " (*.pdf);;" + tr("All files")
+	  + " (*)");
 	_fileSelect->setFile(_export->fileName);
 
 	_paperSize = new QComboBox();

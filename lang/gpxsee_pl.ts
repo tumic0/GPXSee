@@ -182,94 +182,99 @@
 <context>
     <name>ExportDialog</name>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="134"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="135"/>
         <source>Export to PDF</source>
         <translation>Eksportuj do PDF</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="25"/>
-        <source>PDF files (*.pdf);;All files (*)</source>
-        <translation>Pliki PDF (*.pdf);;Wszystkie pliki (*)</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="51"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="52"/>
         <source>Portrait</source>
         <translation>Pionowo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="52"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="53"/>
         <source>Landscape</source>
         <translation>Poziomo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="96"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="97"/>
         <source>Page size:</source>
         <translation>Rozmiar strony:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="98"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="99"/>
         <source>Orientation:</source>
         <translation>Orientacja:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="93"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="94"/>
         <source>Page Setup</source>
         <translation>Ustawienia strony</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="65"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="25"/>
+        <source>PDF files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/exportdialog.cpp" line="25"/>
+        <source>All files</source>
+        <translation type="unfinished">Wszystkie pliki</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/exportdialog.cpp" line="66"/>
         <source>in</source>
         <translation>in</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="65"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="66"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="97"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="98"/>
         <source>Resolution:</source>
         <translation>Rozdzielczość:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="99"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="100"/>
         <source>Margins:</source>
         <translation>Marginesy:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="105"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="106"/>
         <source>File:</source>
         <translation>Plik:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="112"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="113"/>
         <source>Output file</source>
         <translation>Plik docelowy</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="119"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="120"/>
         <source>Export</source>
         <translation>Eksportuj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="141"/>
-        <location filename="../src/GUI/exportdialog.cpp" line="151"/>
-        <location filename="../src/GUI/exportdialog.cpp" line="156"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="142"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="152"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="157"/>
         <source>Error</source>
         <translation>Błąd</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="141"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="142"/>
         <source>No output file selected.</source>
         <translation>Nie wybrano pliku docelowego.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="151"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="152"/>
         <source>%1 is a directory.</source>
         <translation>%1 jest katalogiem.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/exportdialog.cpp" line="156"/>
+        <location filename="../src/GUI/exportdialog.cpp" line="157"/>
         <source>%1 is not writable.</source>
         <translation>%1 nie jest zapisywalny.</translation>
     </message>
