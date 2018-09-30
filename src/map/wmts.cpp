@@ -318,8 +318,8 @@ WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
 		  setup.url().contains('?') ? "&" : "?" , setup.format(),
 		  setup.layer(), style, setup.set());
 		for (int i = 0; i < setup.dimensions().size(); i++) {
-			const QPair<QString, QString> &dim = setup.dimensions().at(i);
-			_tileUrl.append(QString("&%1=%2").arg(dim.first, dim.second));
+			const KV &dim = setup.dimensions().at(i);
+			_tileUrl.append(QString("&%1=%2").arg(dim.key(), dim.value()));
 		}
 	} else {
 		_tileUrl.replace("{Style}", style, Qt::CaseInsensitive);
@@ -328,8 +328,8 @@ WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
 		_tileUrl.replace("{TileRow}", "$y", Qt::CaseInsensitive);
 		_tileUrl.replace("{TileCol}", "$x", Qt::CaseInsensitive);
 		for (int i = 0; i < setup.dimensions().size(); i++) {
-			const QPair<QString, QString> &dim = setup.dimensions().at(i);
-			_tileUrl.replace(QString("{%1}").arg(dim.first), dim.second,
+			const KV &dim = setup.dimensions().at(i);
+			_tileUrl.replace(QString("{%1}").arg(dim.key()), dim.value(),
 			  Qt::CaseInsensitive);
 		}
 	}

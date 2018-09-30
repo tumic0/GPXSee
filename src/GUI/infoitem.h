@@ -3,7 +3,7 @@
 
 #include <QGraphicsItem>
 #include <QList>
-#include "kv.h"
+#include "common/kv.h"
 
 class InfoItem : public QGraphicsItem
 {

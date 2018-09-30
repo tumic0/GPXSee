@@ -4,6 +4,7 @@
 #include <QList>
 #include "common/range.h"
 #include "common/rectc.h"
+#include "common/kv.h"
 #include "downloader.h"
 #include "coordinatesystem.h"
 
@@ -36,7 +37,7 @@ private:
 		QString crs;
 		CoordinateSystem coordinateSystem;
 		bool rest;
-		QList<QPair<QString, QString> > dimensions;
+		QList<KV> dimensions;
 		Authorization authorization;
 		qreal tileRatio;
 

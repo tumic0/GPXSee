@@ -21,6 +21,7 @@ HEADERS += src/config.h \
     src/common/wgs84.h \
     src/common/str2int.h \
     src/common/rtree.h \
+    src/common/kv.h \
     src/GUI/app.h \
     src/GUI/icons.h \
     src/GUI/gui.h \
@@ -138,7 +139,6 @@ HEADERS += src/config.h \
     src/map/mercator.h \
     src/map/jnxmap.h \
     src/map/krovak.h \
-    src/GUI/kv.h \
     src/data/locparser.h \
     src/data/slfparser.h \
     src/map/geotiffmap.h \

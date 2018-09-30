@@ -3,7 +3,7 @@
 
 #include <QString>
 #include <QList>
-#include <QPair>
+#include "common/kv.h"
 
 class ToolTip
 {
@@ -12,7 +12,7 @@ public:
 	QString toString();
 
 private:
-	QList<QPair<QString, QString> > _list;
+	QList<KV> _list;
 };
 
 #endif // TOOLTIP_H

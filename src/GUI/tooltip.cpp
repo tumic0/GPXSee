@@ -2,8 +2,7 @@
 
 void ToolTip::insert(const QString &key, const QString &value)
 {
-	QPair<QString, QString> entry(key, value);
-	_list.append(entry);
+	_list.append(KV(key, value));
 }
 
 QString ToolTip::toString()
@@ -11,8 +10,8 @@ QString ToolTip::toString()
 	QString ret = "<table>";
 
 	for (int i = 0; i < _list.count(); i++)
-		ret += "<tr><td align=\"right\"><b>" + _list.at(i).first
-		  + ":&nbsp;</b></td><td>" + _list.at(i).second + "</td></tr>";
+		ret += "<tr><td align=\"right\"><b>" + _list.at(i).key()
+		  + ":&nbsp;</b></td><td>" + _list.at(i).value() + "</td></tr>";
 
 	ret += "</table>";
 

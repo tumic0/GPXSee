@@ -7,6 +7,7 @@
 #include <QList>
 #include <QHash>
 #include "common/rectc.h"
+#include "common/kv.h"
 #include "projection.h"
 #include "downloader.h"
 #include "coordinatesystem.h"
@@ -21,8 +22,7 @@ public:
 	public:
 		Setup(const QString &url, const QString &layer, const QString &set,
 		  const QString &style, const QString &format, bool rest,
-		  const CoordinateSystem &cs,
-		  const QList<QPair<QString, QString> > &dimensions,
+		  const CoordinateSystem &cs, const QList<KV> &dimensions,
 		  const Authorization &authorization = Authorization())
 			: _url(url), _layer(layer), _set(set), _style(style),
 			  _format(format), _rest(rest), _cs(cs), _dimensions(dimensions),
@@ -36,8 +36,7 @@ public:
 		const QString &format() const {return _format;}
 		bool rest() const {return _rest;}
 		const CoordinateSystem &coordinateSystem() const {return _cs;}
-		const QList<QPair<QString, QString> > &dimensions() const
-		  {return _dimensions;}
+		const QList<KV> &dimensions() const {return _dimensions;}
 
 	private:
 		QString _url;
@@ -47,7 +46,7 @@ public:
 		QString _format;
 		bool _rest;
 		CoordinateSystem _cs;
-		QList<QPair<QString, QString> > _dimensions;
+		QList<KV> _dimensions;
 		Authorization _authorization;
 	};
 
