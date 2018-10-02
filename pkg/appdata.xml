@@ -8,21 +8,23 @@
 	<summary>GPS log file viewer and analyzer</summary>
 	<description>
 		<p>GPXSee is a GPS log file viewer and analyzer that supports GPX, TCX,
-		KML, FIT, IGC, NMEA and OziExplorer files.</p>
+		KML, FIT, IGC, NMEA, SLF, LOC and OziExplorer files.</p>
 
 		<p>Features:</p>
 		<ul>
-			<li>User-definable online maps (OSM/Google tiles, WMTS, WMS).</li>
-			<li>Offline maps (OziExplorer maps, TrekBuddy maps/atlases, GeoTIFF
-				images).</li>
+			<li>User-definable online maps (OpenStreetMap/Google tiles, WMTS,
+				WMS, TMS).</li>
+			<li>Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases,
+				GeoTIFF images).</li>
 			<li>Elevation, speed, heart rate, cadence, power and temperature
 				graphs.</li>
 			<li>Support for multiple tracks in one view.</li>
 			<li>Support for POI files.</li>
 			<li>Print/export to PDF.</li>
 			<li>Full-screen mode.</li>
-			<li>Opens GPX, TCX, FIT, KML, IGC, NMEA, OziExplorer (PLT, WPT, RTE)
-				and Garmin CSV files.</li>
+			<li>HiDPI/Retina displays & maps support.</li>
+			<li>Opens GPX, TCX, FIT, KML, IGC, NMEA, SLF, LOC, OziExplorer (PLT,
+				WPT, RTE) and Garmin CSV files.</li>
 		</ul>
 	</description>
 
@@ -38,6 +40,10 @@
 	<categories>
 		<category>Graphics</category>
 		<category>Viewer</category>
+		<category>Maps</category>
+		<category>Geoscience</category>
+		<category>Geography</category>
+		<category>DataVisualization</category>
 	</categories>
 
 	<url type="homepage">http://www.gpxsee.org</url>
@@ -58,5 +64,7 @@
 		<mimetype>application/vnd.oziexplorer.plt</mimetype>
 		<mimetype>application/vnd.oziexplorer.rte</mimetype>
 		<mimetype>application/vnd.oziexplorer.wpt</mimetype>
+		<mimetype>application/loc+xml</mimetype>
+		<mimetype>application/slf+xml</mimetype>
 	</mimetypes>
 </component>
