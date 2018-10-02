@@ -22,7 +22,7 @@
 			<li>Support for POI files.</li>
 			<li>Print/export to PDF.</li>
 			<li>Full-screen mode.</li>
-			<li>HiDPI/Retina displays & maps support.</li>
+			<li>HiDPI/Retina displays &amp; maps support.</li>
 			<li>Opens GPX, TCX, FIT, KML, IGC, NMEA, SLF, LOC, OziExplorer (PLT,
 				WPT, RTE) and Garmin CSV files.</li>
 		</ul>
