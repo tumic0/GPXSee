@@ -214,12 +214,12 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
         <source>PDF files</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF файлы</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
         <source>All files</source>
-        <translation type="unfinished">Все файлы</translation>
+        <translation>Все файлы</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="66"/>
@@ -400,7 +400,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="223"/>
         <source>Open...</source>
-        <translation>Открыть...</translation>
+        <translation>Открыть…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="212"/>
@@ -412,17 +412,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="254"/>
         <source>Statistics...</source>
-        <translation>Статистика...</translation>
+        <translation>Статистика…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="262"/>
         <source>Load POI file...</source>
-        <translation>Загрузить файл с точками POI...</translation>
+        <translation>Загрузить файл с точками POI…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="298"/>
         <source>Load map...</source>
-        <translation>Загрузить карту...</translation>
+        <translation>Загрузить карту…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="307"/>
@@ -521,7 +521,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="453"/>
         <source>Options...</source>
-        <translation>Параметры...</translation>
+        <translation>Параметры…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="459"/>
@@ -728,12 +728,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="228"/>
         <source>Print...</source>
-        <translation>Печать...</translation>
+        <translation>Печать…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="235"/>
         <source>Export to PDF...</source>
-        <translation>Экспорт в PDF...</translation>
+        <translation>Экспорт в PDF…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="996"/>

@@ -214,12 +214,12 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
         <source>PDF files</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF-filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
         <source>All files</source>
-        <translation type="unfinished">Alla filer</translation>
+        <translation>Alla filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="66"/>
