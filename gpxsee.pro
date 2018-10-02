@@ -1,5 +1,5 @@
 TARGET = GPXSee
-VERSION = 6.0
+VERSION = 6.1
 
 QT += core \
     gui \

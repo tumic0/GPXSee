@@ -1,4 +1,4 @@
-version: 6.0.{build}
+version: 6.1.{build}
 configuration: Release
 platform: Any CPU
 environment:
