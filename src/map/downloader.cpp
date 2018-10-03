@@ -20,8 +20,10 @@
 
 #define ATTR_REDIRECT QNetworkRequest::RedirectionTargetAttribute
 #define ATTR_FILE     QNetworkRequest::User
-#define ATTR_ORIGIN   (QNetworkRequest::Attribute)(QNetworkRequest::User + 1)
-#define ATTR_LEVEL    (QNetworkRequest::Attribute)(QNetworkRequest::User + 2)
+#define ATTR_ORIGIN \
+  static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1)
+#define ATTR_LEVEL \
+  static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 2)
 
 #define MAX_REDIRECT_LEVEL 5
 #define RETRIES 3
