@@ -15,8 +15,8 @@ class Download
 public:
 	Download(const QUrl &url, const QString &file) : _url(url), _file(file) {}
 
-	const QUrl& url() const {return _url;}
-	const QString& file() const {return _file;}
+	const QUrl &url() const {return _url;}
+	const QString &file() const {return _file;}
 
 private:
 	QUrl _url;

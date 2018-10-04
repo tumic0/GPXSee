@@ -89,9 +89,10 @@ bool Downloader::_http2 = true;
 bool Downloader::doDownload(const Download &dl,
   const QByteArray &authorization, const Redirect *redirect)
 {
-	QUrl url(dl.url());
+	const QUrl &url = dl.url();
 
-	if (!url.isValid() || !(url.scheme() == "http" || url.scheme() == "https")) {
+	if (!url.isValid() || !(url.scheme() == QLatin1String("http")
+	  || url.scheme() == QLatin1String("https"))) {
 		qWarning("%s: Invalid URL", qPrintable(url.toString()));
 		if (redirect)
 			_errorDownloads.insert(redirect->origin(), RETRIES);
@@ -161,11 +162,11 @@ void Downloader::insertError(const QUrl &url, QNetworkReply::NetworkError error)
 
 void Downloader::downloadFinished(QNetworkReply *reply)
 {
-	QUrl url = reply->request().url();
+	QUrl url(reply->request().url());
 	QNetworkReply::NetworkError error = reply->error();
 
 	if (error) {
-		QUrl origin = reply->request().attribute(ATTR_ORIGIN).toUrl();
+		QUrl origin(reply->request().attribute(ATTR_ORIGIN).toUrl());
 		if (origin.isEmpty()) {
 			insertError(url, error);
 			qWarning("Error downloading file: %s: %s",
@@ -177,12 +178,11 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 			  qPrintable(reply->errorString()));
 		}
 	} else {
-		QUrl location = reply->attribute(ATTR_REDIRECT).toUrl();
-		QString filename = reply->request().attribute(ATTR_FILE)
-		  .toString();
+		QUrl location(reply->attribute(ATTR_REDIRECT).toUrl());
+		QString filename(reply->request().attribute(ATTR_FILE).toString());
 
 		if (!location.isEmpty()) {
-			QUrl origin = reply->request().attribute(ATTR_ORIGIN).toUrl();
+			QUrl origin(reply->request().attribute(ATTR_ORIGIN).toUrl());
 			int level = reply->request().attribute(ATTR_LEVEL).toInt();
 
 			if (level >= MAX_REDIRECT_LEVEL) {

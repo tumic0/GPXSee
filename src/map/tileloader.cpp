@@ -32,14 +32,16 @@ void TileLoader::loadTilesAsync(QList<Tile> &list)
 		Tile &t = list[i];
 		QString file(tileFile(t));
 		QFileInfo fi(file);
-		QUrl url(tileUrl(t));
 
-		if (url.isLocalFile())
-			loadTileFile(t, url.toLocalFile());
-		else if (fi.exists())
+		if (fi.exists())
 			loadTileFile(t, file);
-		else
-			dl.append(Download(url, file));
+		else {
+			QUrl url(tileUrl(t));
+			if (url.isLocalFile())
+				loadTileFile(t, url.toLocalFile());
+			else
+				dl.append(Download(url, file));
+		}
 	}
 
 	if (!dl.empty())
@@ -54,14 +56,16 @@ void TileLoader::loadTilesSync(QList<Tile> &list)
 		Tile &t = list[i];
 		QString file(tileFile(t));
 		QFileInfo fi(file);
-		QUrl url(tileUrl(t));
 
-		if (url.isLocalFile())
-			loadTileFile(t, url.toLocalFile());
-		else if (fi.exists())
+		if (fi.exists())
 			loadTileFile(t, file);
-		else
-			dl.append(Download(url, file));
+		else {
+			QUrl url(tileUrl(t));
+			if (url.isLocalFile())
+				loadTileFile(t, url.toLocalFile());
+			else
+				dl.append(Download(url, file));
+		}
 	}
 
 	if (dl.empty())
@@ -116,8 +120,7 @@ QUrl TileLoader::tileUrl(const Tile &tile) const
 
 QString TileLoader::tileFile(const Tile &tile) const
 {
-	QString file = _dir + QString("/%1-%2-%3").arg(tile.zoom().toString())
-	  .arg(tile.xy().x()).arg(tile.xy().y());
-
-	return file;
+	return _dir + QLatin1Char('/') + tile.zoom().toString() + QLatin1Char('-')
+	  + QString::number(tile.xy().x()) + QLatin1Char('-')
+	  + QString::number(tile.xy().y());
 }
