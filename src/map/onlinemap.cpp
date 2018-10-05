@@ -92,13 +92,17 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	QPointF tl(floor(rect.left() / tileSize())
 	  * tileSize(), floor(rect.top() / tileSize()) * tileSize());
 
-	QList<Tile> tiles;
 	QSizeF s(qMin(rect.right() - tl.x(), b.width()),
 	  qMin(rect.bottom() - tl.y(), b.height()));
-	for (int i = 0; i < ceil(s.width() / tileSize()); i++)
-		for (int j = 0; j < ceil(s.height() / tileSize()); j++)
-			tiles.append(Tile(QPoint(tile.x() + i,
-			  _invertY ? (1<<_zoom) - (tile.y() + j) - 1 : tile.y() + j), _zoom));
+	int width = ceil(s.width() / tileSize());
+	int height = ceil(s.height() / tileSize());
+
+	QVector<Tile> tiles;
+	tiles.reserve(width * height);
+	for (int i = 0; i < width; i++)
+		for (int j = 0; j < height; j++)
+			tiles.append(Tile(QPoint(tile.x() + i, _invertY ? (1<<_zoom)
+			  - (tile.y() + j) - 1 : tile.y() + j), _zoom));
 
 	if (flags & Map::Block)
 		_tileLoader->loadTilesSync(tiles);

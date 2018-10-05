@@ -193,7 +193,8 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	QPoint br = QPoint((int)ceil(rect.right() / tileSize()),
 	  (int)ceil(rect.bottom() / tileSize()));
 
-	QList<Tile> tiles;
+	QVector<Tile> tiles;
+	tiles.reserve((br.x() - tl.x()) * (br.y() - tl.y()));
 	for (int i = tl.x(); i < br.x(); i++) {
 		for (int j = tl.y(); j < br.y(); j++) {
 			PointD ttl(_transform.img2proj(QPointF(i * TILE_SIZE,

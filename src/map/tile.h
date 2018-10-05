@@ -10,6 +10,7 @@
 class Tile
 {
 public:
+	Tile() {}
 	Tile(const QPoint &xy, const QVariant &zoom, const RectD &bbox = RectD())
 		{_xy = xy; _zoom = zoom; _bbox = bbox;}
 

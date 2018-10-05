@@ -17,8 +17,8 @@ public:
 	void setAuthorization(const Authorization &authorization)
 	  {_authorization = authorization;}
 
-	void loadTilesAsync(QList<Tile> &list);
-	void loadTilesSync(QList<Tile> &list);
+	void loadTilesAsync(QVector<Tile> &list);
+	void loadTilesSync(QVector<Tile> &list);
 	void clearCache();
 
 signals:

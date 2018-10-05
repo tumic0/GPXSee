@@ -173,7 +173,8 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	QPoint br = QPoint((int)ceil(rect.right() / ts.width()),
 	  (int)ceil(rect.bottom() / ts.height()));
 
-	QList<Tile> tiles;
+	QVector<Tile> tiles;
+	tiles.reserve((br.x() - tl.x()) * (br.y() - tl.y()));
 	for (int i = tl.x(); i < br.x(); i++)
 		for (int j = tl.y(); j < br.y(); j++)
 			tiles.append(Tile(QPoint(i, j), z.id()));

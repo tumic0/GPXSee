@@ -24,7 +24,7 @@ TileLoader::TileLoader(const QString &dir, QObject *parent)
 	connect(_downloader, SIGNAL(finished()), this, SIGNAL(finished()));
 }
 
-void TileLoader::loadTilesAsync(QList<Tile> &list)
+void TileLoader::loadTilesAsync(QVector<Tile> &list)
 {
 	QList<Download> dl;
 
@@ -48,7 +48,7 @@ void TileLoader::loadTilesAsync(QList<Tile> &list)
 		_downloader->get(dl, _authorization);
 }
 
-void TileLoader::loadTilesSync(QList<Tile> &list)
+void TileLoader::loadTilesSync(QVector<Tile> &list)
 {
 	QList<Download> dl;
 

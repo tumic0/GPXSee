@@ -18,7 +18,7 @@
 
 #define MAX_DIGITAL_ZOOM 2
 #define MIN_DIGITAL_ZOOM -3
-#define MARGIN           10.0
+#define MARGIN           10
 #define SCALE_OFFSET     7
 
 MapView::MapView(Map *map, POI *poi, QWidget *parent)
