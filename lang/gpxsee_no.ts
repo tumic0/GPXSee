@@ -697,7 +697,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="702"/>
         <source>Global</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Global</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="702"/>
@@ -1010,12 +1010,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="51"/>
         <source>Non-HiDPI maps are loaded as HiDPI maps. The map is sharp but map objects are small/hard to read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikke-HiDPI -kart lastes som HiDPI-kart. Kartet er skarpt, men kartobjekter kan være små/vanskelige å lese.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="53"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikke-HiDPI -kart lastes som de er. Kartobjekter har forventet størrelse, men kartet er uskarpt.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="86"/>
@@ -1035,7 +1035,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="106"/>
         <source>Palette shift:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Palettforskyvning:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="108"/>
@@ -1045,12 +1045,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="119"/>
         <source>Track width:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sporbredde:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="120"/>
         <source>Track style:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sporstil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="122"/>
@@ -1072,12 +1072,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="135"/>
         <source>Route width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rutebredde:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="136"/>
         <source>Route style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rutestil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="140"/>
@@ -1088,7 +1088,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="144"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="226"/>
         <source>Use anti-aliasing</source>
-        <translation type="unfinished"></translation>
+        <translation>Bruk kanutjevning</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="176"/>
@@ -1308,7 +1308,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="401"/>
         <source>WYSIWYG</source>
-        <translation type="unfinished"></translation>
+        <translation>WYSIWYG</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="402"/>
@@ -1318,12 +1318,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="407"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det utskrevne området er omentrent det samme som visningsområdet. Kartforstørrelsesnivået endrer seg ikke.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="409"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
-        <translation type="unfinished"></translation>
+        <translation>Forstørrelsesnivået vil endres slik at hele innholdet (spor/veipunkter) passer med utskrevet område, og kartoppløsningen er så lik utskriftsoppløsningen som mulig.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="431"/>
@@ -1353,7 +1353,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="441"/>
         <source>Item count (&gt;1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Elementantall (&gt;1)</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="456"/>
