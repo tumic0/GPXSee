@@ -1,5 +1,6 @@
 #include <QDir>
 #include <QPainter>
+#include <QtMath>
 #include "common/wgs84.h"
 #include "common/rectc.h"
 #include "config.h"
@@ -50,9 +51,9 @@ void WMSMap::computeZooms(const RangeF &scaleDenominator)
 
 	if (scaleDenominator.size() > 0) {
 		double ld = log2(scaleDenominator.max()) - log2(scaleDenominator.min());
-		int cld = ceil(ld);
-		double step = ld / (qreal)cld;
-		qreal lmax = log2(scaleDenominator.max());
+		int cld = (int)ceil(ld);
+		double step = ld / (double)cld;
+		double lmax = log2(scaleDenominator.max());
 		for (int i = 0; i <= cld; i++)
 			_zooms.append(pow(2.0, lmax - i * step));
 	} else
@@ -188,10 +189,10 @@ qreal WMSMap::tileSize() const
 
 void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	QPoint tl = QPoint((int)floor(rect.left() / tileSize()),
-	  (int)floor(rect.top() / tileSize()));
-	QPoint br = QPoint((int)ceil(rect.right() / tileSize()),
-	  (int)ceil(rect.bottom() / tileSize()));
+	QPoint tl = QPoint(qFloor(rect.left() / tileSize()),
+	  qFloor(rect.top() / tileSize()));
+	QPoint br = QPoint(qCeil(rect.right() / tileSize()),
+	  qCeil(rect.bottom() / tileSize()));
 
 	QVector<Tile> tiles;
 	tiles.reserve((br.x() - tl.x()) * (br.y() - tl.y()));

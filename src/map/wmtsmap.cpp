@@ -1,4 +1,5 @@
 #include <QPainter>
+#include <QtMath>
 #include "common/rectc.h"
 #include "common/wgs84.h"
 #include "config.h"
@@ -168,10 +169,10 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	const WMTS::Zoom &z = _zooms.at(_zoom);
 	QSizeF ts(tileSize(z));
 
-	QPoint tl = QPoint((int)floor(rect.left() / ts.width()),
-	  (int)floor(rect.top() / ts.height()));
-	QPoint br = QPoint((int)ceil(rect.right() / ts.width()),
-	  (int)ceil(rect.bottom() / ts.height()));
+	QPoint tl = QPoint(qFloor(rect.left() / ts.width()),
+	  qFloor(rect.top() / ts.height()));
+	QPoint br = QPoint(qCeil(rect.right() / ts.width()),
+	  qCeil(rect.bottom() / ts.height()));
 
 	QVector<Tile> tiles;
 	tiles.reserve((br.x() - tl.x()) * (br.y() - tl.y()));

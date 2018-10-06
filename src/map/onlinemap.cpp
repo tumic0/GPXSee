@@ -1,4 +1,5 @@
 #include <QPainter>
+#include <QtMath>
 #include "common/rectc.h"
 #include "downloader.h"
 #include "osm.h"
@@ -94,8 +95,8 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 	QSizeF s(qMin(rect.right() - tl.x(), b.width()),
 	  qMin(rect.bottom() - tl.y(), b.height()));
-	int width = ceil(s.width() / tileSize());
-	int height = ceil(s.height() / tileSize());
+	int width = qCeil(s.width() / tileSize());
+	int height = qCeil(s.height() / tileSize());
 
 	QVector<Tile> tiles;
 	tiles.reserve(width * height);
