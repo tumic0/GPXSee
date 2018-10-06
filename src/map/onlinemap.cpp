@@ -1,5 +1,5 @@
+#include <QtCore>
 #include <QPainter>
-#include <QtMath>
 #include "common/rectc.h"
 #include "downloader.h"
 #include "osm.h"

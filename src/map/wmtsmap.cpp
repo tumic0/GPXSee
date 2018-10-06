@@ -1,5 +1,5 @@
+#include <QtCore>
 #include <QPainter>
-#include <QtMath>
 #include "common/rectc.h"
 #include "common/wgs84.h"
 #include "config.h"

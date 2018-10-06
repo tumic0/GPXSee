@@ -1,6 +1,6 @@
+#include <QtCore>
 #include <QDir>
 #include <QPainter>
-#include <QtMath>
 #include "common/wgs84.h"
 #include "common/rectc.h"
 #include "config.h"

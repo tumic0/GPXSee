@@ -9,7 +9,6 @@
 #include "waypoint.h"
 #include "path.h"
 
-class WaypointItem;
 
 class POI : public QObject
 {
