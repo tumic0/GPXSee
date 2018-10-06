@@ -8,7 +8,7 @@ class Range
 {
 public:
 	Range() {_min = 0; _max = 0;}
-	Range(int min, int max) {_min = min, _max = max;}
+	Range(int min, int max) : _min(min), _max(max) {}
 
 	int min() const {return _min;}
 	int max() const {return _max;}
@@ -29,7 +29,7 @@ class RangeF
 {
 public:
 	RangeF() {_min = 0; _max = 0;}
-	RangeF(qreal min, qreal max) {_min = min, _max = max;}
+	RangeF(qreal min, qreal max) : _min(min), _max(max) {}
 
 	RangeF operator&(const RangeF &r) const;
 	RangeF &operator&=(const RangeF &r) {*this = *this & r; return *this;}
