@@ -42,4 +42,4 @@ http://www.gpxsee.org
 [GPXSee maps repository](https://github.com/tumic0/GPXSee-maps)
 
 ## Translations
-GPXSee uses [Weblate](https://hosted.weblate.org/projects/gpxsee) for translations.
+GPXSee uses [Weblate](https://hosted.weblate.org/projects/gpxsee/translations/) for translations.
