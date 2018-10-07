@@ -48,7 +48,7 @@ public:
 
 	static void setTimeout(int timeout) {_timeout = timeout;}
 #ifdef ENABLE_HTTP2
-	static void enableHTTP2(bool enable) {_http2 = enable;}
+	static void enableHTTP2(bool enable);
 #endif // ENABLE_HTTP2
 	static void setNetworkAccessManager(QNetworkAccessManager *manager)
 	  {_manager = manager;}

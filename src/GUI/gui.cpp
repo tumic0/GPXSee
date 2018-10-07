@@ -2085,10 +2085,6 @@ void GUI::readSettings()
 	_poi->setRadius(_options.poiRadius);
 
 	QPixmapCache::setCacheLimit(_options.pixmapCache * 1024);
-	Downloader::setTimeout(_options.connectionTimeout);
-#ifdef ENABLE_HTTP2
-	Downloader::enableHTTP2(_options.enableHTTP2);
-#endif // ENABLE_HTTP2
 
 	settings.endGroup();
 }

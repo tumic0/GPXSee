@@ -227,3 +227,11 @@ bool Downloader::get(const QList<Download> &list,
 
 	return finishEmitted;
 }
+
+#ifdef ENABLE_HTTP2
+void Downloader::enableHTTP2(bool enable)
+{
+	_http2 = enable;
+	_manager->clearConnectionCache();
+}
+#endif // ENABLE_HTTP2
