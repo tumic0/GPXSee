@@ -38,7 +38,6 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 #endif // Q_OS_MAC
 
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
-	Downloader::setNetworkAccessManager(new QNetworkAccessManager(this));
 	QSettings settings(APP_NAME, APP_NAME);
 	settings.beginGroup(OPTIONS_SETTINGS_GROUP);
 #ifdef ENABLE_HTTP2

@@ -50,8 +50,6 @@ public:
 #ifdef ENABLE_HTTP2
 	static void enableHTTP2(bool enable);
 #endif // ENABLE_HTTP2
-	static void setNetworkAccessManager(QNetworkAccessManager *manager)
-	  {_manager = manager;}
 
 signals:
 	void finished();
@@ -69,6 +67,8 @@ private:
 	  const Redirect *redirect = 0);
 	bool saveToDisk(const QString &filename, QIODevice *data);
 
+	static QNetworkAccessManager *manager();
+
 	QSet<QUrl> _currentDownloads;
 	QHash<QUrl, int> _errorDownloads;
 
@@ -76,7 +76,6 @@ private:
 #ifdef ENABLE_HTTP2
 	static bool _http2;
 #endif // ENABLE_HTTP2
-	static QNetworkAccessManager *_manager;
 };
 
 #endif // DOWNLOADER_H
