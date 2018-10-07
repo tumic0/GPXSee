@@ -30,7 +30,7 @@
 ; The name of the installer
 Name "GPXSee"
 ; Program version
-!define VERSION "6.1"
+!define VERSION "6.2"
 
 ; The file to write
 OutFile "GPXSee-${VERSION}.exe"
