@@ -96,7 +96,8 @@ private:
 	void closeFiles();
 	void plot(QPrinter *printer);
 
-	QAction *createPOIFileAction(int index);
+	QAction *createPOIFileAction(const QString &fileName);
+	QAction *createMapAction(const Map *map);
 	void createPOIFilesActions();
 	void createMapActions();
 	void createActions();

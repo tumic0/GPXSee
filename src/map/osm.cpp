@@ -1,3 +1,4 @@
+#include <QtCore>
 #include "common/wgs84.h"
 #include "osm.h"
 
@@ -16,8 +17,8 @@ Coordinates OSM::m2ll(const QPointF &p)
 
 QPoint OSM::mercator2tile(const QPointF &m, int zoom)
 {
-	return QPoint((int)(floor((m.x() + 180.0) / 360.0 * (1<<zoom))),
-	  (int)(floor((1.0 - (m.y() / 180.0)) / 2.0 * (1<<zoom))));
+	return QPoint(qFloor((m.x() + 180.0) / 360.0 * (1<<zoom)),
+	  qFloor((1.0 - (m.y() / 180.0)) / 2.0 * (1<<zoom)));
 }
 
 qreal OSM::zoom2scale(int zoom, int tileSize)

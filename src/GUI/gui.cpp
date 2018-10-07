@@ -147,20 +147,25 @@ void GUI::createMapActions()
 	_mapsActionGroup = new QActionGroup(this);
 	_mapsActionGroup->setExclusive(true);
 
-	for (int i = 0; i < _ml->maps().count(); i++) {
-		QAction *a = new QAction(_ml->maps().at(i)->name(), this);
-		a->setMenuRole(QAction::NoRole);
-		a->setCheckable(true);
-		a->setActionGroup(_mapsActionGroup);
-
-		_mapsSignalMapper->setMapping(a, i);
-		connect(a, SIGNAL(triggered()), _mapsSignalMapper, SLOT(map()));
-
-		_mapActions.append(a);
-	}
+	for (int i = 0; i < _ml->maps().count(); i++)
+		createMapAction(_ml->maps().at(i));
 
 	connect(_mapsSignalMapper, SIGNAL(mapped(int)), this,
 	  SLOT(mapChanged(int)));
+}
+
+QAction *GUI::createMapAction(const Map *map)
+{
+	QAction *a = new QAction(map->name(), this);
+	a->setMenuRole(QAction::NoRole);
+	a->setCheckable(true);
+	a->setActionGroup(_mapsActionGroup);
+
+	_mapActions.append(a);
+	_mapsSignalMapper->setMapping(a, _mapActions.size() - 1);
+	connect(a, SIGNAL(triggered()), _mapsSignalMapper, SLOT(map()));
+
+	return a;
 }
 
 void GUI::createPOIFilesActions()
@@ -168,23 +173,21 @@ void GUI::createPOIFilesActions()
 	_poiFilesSignalMapper = new QSignalMapper(this);
 
 	for (int i = 0; i < _poi->files().count(); i++)
-		createPOIFileAction(i);
+		createPOIFileAction(_poi->files().at(i));
 
 	connect(_poiFilesSignalMapper, SIGNAL(mapped(int)), this,
 	  SLOT(poiFileChecked(int)));
 }
 
-QAction *GUI::createPOIFileAction(int index)
+QAction *GUI::createPOIFileAction(const QString &fileName)
 {
-	QAction *a = new QAction(QFileInfo(_poi->files().at(index)).fileName(),
-	  this);
+	QAction *a = new QAction(QFileInfo(fileName).fileName(), this);
 	a->setMenuRole(QAction::NoRole);
 	a->setCheckable(true);
 
-	_poiFilesSignalMapper->setMapping(a, index);
-	connect(a, SIGNAL(triggered()), _poiFilesSignalMapper, SLOT(map()));
-
 	_poiFilesActions.append(a);
+	_poiFilesSignalMapper->setMapping(a, _poiFilesActions.size() - 1);
+	connect(a, SIGNAL(triggered()), _poiFilesSignalMapper, SLOT(map()));
 
 	return a;
 }
@@ -838,7 +841,15 @@ bool GUI::openPOIFile(const QString &fileName)
 	if (fileName.isEmpty() || _poi->files().contains(fileName))
 		return false;
 
-	if (!_poi->loadFile(fileName)) {
+	if (_poi->loadFile(fileName)) {
+		_mapView->showPOI(true);
+		_showPOIAction->setChecked(true);
+		QAction *action = createPOIFileAction(fileName);
+		action->setChecked(true);
+		_poiFilesMenu->addAction(action);
+
+		return true;
+	} else {
 		QString error = tr("Error loading POI file:") + "\n\n"
 		  + fileName + "\n\n" + _poi->errorString();
 		if (_poi->errorLine())
@@ -846,14 +857,6 @@ bool GUI::openPOIFile(const QString &fileName)
 		QMessageBox::critical(this, APP_NAME, error);
 
 		return false;
-	} else {
-		_mapView->showPOI(true);
-		_showPOIAction->setChecked(true);
-		QAction *action = createPOIFileAction(_poi->files().indexOf(fileName));
-		action->setChecked(true);
-		_poiFilesMenu->addAction(action);
-
-		return true;
 	}
 }
 
@@ -1294,18 +1297,11 @@ bool GUI::loadMap(const QString &fileName)
 		return false;
 
 	if (_ml->loadFile(fileName)) {
-		QAction *a = new QAction(_ml->maps().last()->name(), this);
-		a->setMenuRole(QAction::NoRole);
-		a->setCheckable(true);
-		a->setActionGroup(_mapsActionGroup);
-		_mapsSignalMapper->setMapping(a, _ml->maps().size() - 1);
-		connect(a, SIGNAL(triggered()), _mapsSignalMapper, SLOT(map()));
-		_mapActions.append(a);
+		QAction *a = createMapAction(_ml->maps().last());
 		_mapMenu->insertAction(_mapsEnd, a);
 		_showMapAction->setEnabled(true);
 		_clearMapCacheAction->setEnabled(true);
-		_mapActions.last()->trigger();
-
+		a->trigger();
 		return true;
 	} else {
 		QString error = tr("Error loading map:") + "\n\n"
