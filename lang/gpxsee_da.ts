@@ -393,17 +393,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="280"/>
         <source>Show POIs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vis IP&apos;er</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="290"/>
         <source>Show map</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis kort</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="298"/>
         <source>Load map...</source>
-        <translation type="unfinished"></translation>
+        <translation>Indlæs kort...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="302"/>
@@ -415,22 +415,22 @@
         <location filename="../src/GUI/gui.cpp" line="312"/>
         <location filename="../src/GUI/gui.cpp" line="681"/>
         <source>Next map</source>
-        <translation type="unfinished"></translation>
+        <translation>Næste kort</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="323"/>
         <source>Show tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis spor</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="328"/>
         <source>Show routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis ruter</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="333"/>
         <source>Show waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis rutepunkter</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="338"/>
@@ -452,7 +452,7 @@
         <location filename="../src/GUI/gui.cpp" line="1013"/>
         <location filename="../src/GUI/gui.cpp" line="1078"/>
         <source>Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Afstand</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="367"/>
@@ -460,12 +460,12 @@
         <location filename="../src/GUI/gui.cpp" line="1016"/>
         <location filename="../src/GUI/gui.cpp" line="1080"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tid</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="374"/>
         <source>Show grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis gitter</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="379"/>
@@ -475,12 +475,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="386"/>
         <source>Show toolbars</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis værktøjslinjer</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="393"/>
         <source>Total time</source>
-        <translation type="unfinished"></translation>
+        <translation>Samlet tid</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="399"/>
@@ -492,17 +492,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="407"/>
         <source>Metric</source>
-        <translation type="unfinished"></translation>
+        <translation>Metrisk</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="413"/>
         <source>Imperial</source>
-        <translation type="unfinished"></translation>
+        <translation>Imperial</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="419"/>
         <source>Nautical</source>
-        <translation type="unfinished"></translation>
+        <translation>Nautisk</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="427"/>
@@ -522,42 +522,42 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="446"/>
         <source>Fullscreen mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Fuldskærmstilstand</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="453"/>
         <source>Options...</source>
-        <translation type="unfinished"></translation>
+        <translation>Indstillinger…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="459"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Næste</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="463"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrige</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="467"/>
         <source>Last</source>
-        <translation type="unfinished"></translation>
+        <translation>Sidste</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>First</source>
-        <translation type="unfinished"></translation>
+        <translation>Første</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="479"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fil</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="494"/>
         <source>&amp;Map</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kort</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="502"/>
@@ -567,17 +567,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="511"/>
         <source>&amp;POI</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;IP</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="512"/>
         <source>POI files</source>
-        <translation type="unfinished"></translation>
+        <translation>IP- filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="523"/>
         <source>&amp;Data</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Data</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="524"/>
@@ -592,37 +592,37 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="536"/>
         <source>Units</source>
-        <translation type="unfinished"></translation>
+        <translation>Enheder</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="540"/>
         <source>Coordinates format</source>
-        <translation type="unfinished"></translation>
+        <translation>koordinatformat</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="550"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hjælp</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="566"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Fil</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="573"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="579"/>
         <source>Navigation</source>
-        <translation type="unfinished"></translation>
+        <translation>Navigation</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="644"/>
         <source>Version </source>
-        <translation type="unfinished"></translation>
+        <translation>Version </translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="647"/>
@@ -632,32 +632,32 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="668"/>
         <source>Next file</source>
-        <translation type="unfinished"></translation>
+        <translation>Næste fil</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="669"/>
         <source>Previous file</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrige fil</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="671"/>
         <source>First file</source>
-        <translation type="unfinished"></translation>
+        <translation>Første fil</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="673"/>
         <source>Last file</source>
-        <translation type="unfinished"></translation>
+        <translation>Sidste fil</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="674"/>
         <source>Append file</source>
-        <translation type="unfinished"></translation>
+        <translation>Vedhæft fil</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="675"/>
         <source>Next/Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Næste/Forrige</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="677"/>
@@ -672,7 +672,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="683"/>
         <source>Previous map</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrige kort</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="684"/>
@@ -697,7 +697,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="702"/>
         <source>Global</source>
-        <translation type="unfinished"></translation>
+        <translation>Global</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="702"/>
@@ -725,7 +725,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="721"/>
         <source>Open file</source>
-        <translation type="unfinished"></translation>
+        <translation>Åbn fil</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="815"/>
@@ -1713,7 +1713,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="22"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Dato</translation>
     </message>
 </context>
 <context>
@@ -1721,22 +1721,22 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="18"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="19"/>
         <source>Coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Koordinater</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="22"/>
         <source>Elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Højde</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="25"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Dato</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="28"/>
