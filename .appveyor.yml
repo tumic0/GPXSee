@@ -32,7 +32,7 @@ build_script:
 
     windeployqt --no-svg --release installer\GPXSee.exe
 
-    copy pkg\%NSI% installer
+    copy pkg\%NSI% + pkg\macros.nsh installer
 
     xcopy pkg\csv installer\csv /i
 
@@ -42,9 +42,7 @@ build_script:
 
     copy licence.txt installer
 
-    copy %OPENSSLDIR%\libeay32.dll installer
-
-    copy %OPENSSLDIR%\ssleay32.dll installer
+    copy %OPENSSLDIR%\libeay32.dll + %OPENSSLDIR%\ssleay32.dll installer
 
 
     makensis.exe installer\%NSI%
