@@ -649,9 +649,9 @@ void GUI::about()
 	msgBox.setInformativeText("<table width=\"300\"><tr><td>"
 	  + tr("GPXSee is distributed under the terms of the GNU General Public "
 	  "License version 3. For more info about GPXSee visit the project "
-	  "homepage at ") + "<a href=\"" + homepage.toString() + "\">"
-	  + homepage.toString(QUrl::RemoveScheme).mid(2)
-	  + "</a>.</td></tr></table>");
+	  "homepage at %1.").arg("<a href=\"" + homepage.toString() + "\">"
+	  + homepage.toString(QUrl::RemoveScheme).mid(2) + "</a>")
+	  + "</td></tr></table>");
 
 	QIcon icon = msgBox.windowIcon();
 	QSize size = icon.actualSize(QSize(64, 64));
