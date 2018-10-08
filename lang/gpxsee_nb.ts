@@ -184,7 +184,7 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
         <source>PDF files</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF-filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
@@ -969,7 +969,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="119"/>
         <source>MBTiles maps</source>
-        <translation type="unfinished"></translation>
+        <translation>MBTiles-kart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="120"/>
