@@ -46,6 +46,8 @@ public:
 	  = Authorization());
 	void clearErrors() {_errorDownloads.clear();}
 
+	static void setNetworkManager(QNetworkAccessManager *manager)
+	  {_manager = manager;}
 	static void setTimeout(int timeout) {_timeout = timeout;}
 #ifdef ENABLE_HTTP2
 	static void enableHTTP2(bool enable);
@@ -67,11 +69,10 @@ private:
 	  const Redirect *redirect = 0);
 	bool saveToDisk(const QString &filename, QIODevice *data);
 
-	static QNetworkAccessManager *manager();
-
 	QSet<QUrl> _currentDownloads;
 	QHash<QUrl, int> _errorDownloads;
 
+	static QNetworkAccessManager *_manager;
 	static int _timeout;
 #ifdef ENABLE_HTTP2
 	static bool _http2;

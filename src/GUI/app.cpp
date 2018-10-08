@@ -40,6 +40,11 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
 	QSettings settings(APP_NAME, APP_NAME);
 	settings.beginGroup(OPTIONS_SETTINGS_GROUP);
+
+	/* The QNetworkAccessManager must be a child of QApplication, otherwise it
+	   triggers the following warning on exit (and may probably crash):
+	   "QThreadStorage: Thread X exited after QThreadStorage Y destroyed" */
+	Downloader::setNetworkManager(new QNetworkAccessManager(this));
 #ifdef ENABLE_HTTP2
 	Downloader::enableHTTP2(settings.value(ENABLE_HTTP2_SETTING,
 	  ENABLE_HTTP2_DEFAULT).toBool());

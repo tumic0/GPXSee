@@ -79,17 +79,11 @@ private:
 	int _level;
 };
 
-
+QNetworkAccessManager *Downloader::_manager = 0;
 int Downloader::_timeout = 30;
 #ifdef ENABLE_HTTP2
 bool Downloader::_http2 = true;
 #endif // ENABLE_HTTP2
-
-QNetworkAccessManager *Downloader::manager()
-{
-	static QNetworkAccessManager manager;
-	return &manager;
-}
 
 bool Downloader::doDownload(const Download &dl,
   const QByteArray &authorization, const Redirect *redirect)
@@ -123,7 +117,8 @@ bool Downloader::doDownload(const Download &dl,
 	  QVariant(_http2));
 #endif // ENABLE_HTTP2
 
-	QNetworkReply *reply = manager()->get(request);
+	Q_ASSERT(_manager);
+	QNetworkReply *reply = _manager->get(request);
 	if (reply && reply->isRunning()) {
 		_currentDownloads.insert(url);
 		ReplyTimeout::setTimeout(reply, _timeout);
@@ -236,7 +231,8 @@ bool Downloader::get(const QList<Download> &list,
 #ifdef ENABLE_HTTP2
 void Downloader::enableHTTP2(bool enable)
 {
+	Q_ASSERT(_manager);
 	_http2 = enable;
-	manager()->clearConnectionCache();
+	_manager->clearConnectionCache();
 }
 #endif // ENABLE_HTTP2
