@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="en_US">
+<TS version="2.1" language="en_US">
 <context>
     <name>CadenceGraph</name>
     <message>
@@ -495,10 +495,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Version </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>GPXSee is distributed under the terms of the GNU General Public License version 3. For more info about GPXSee visit the project homepage at %1.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -628,6 +624,10 @@
     </message>
     <message>
         <source>No files loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

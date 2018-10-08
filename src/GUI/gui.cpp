@@ -644,8 +644,9 @@ void GUI::about()
 	QUrl homepage(APP_HOMEPAGE);
 
 	msgBox.setWindowTitle(tr("About GPXSee"));
-	msgBox.setText("<h2>" + QString(APP_NAME) + "</h2><p><p>" + tr("Version ")
-	  + APP_VERSION + " (" + CPU_ARCH + ", Qt " + QT_VERSION_STR + ")</p>");
+	msgBox.setText("<h2>" + QString(APP_NAME) + "</h2><p><p>" + tr("Version %1")
+	  .arg(QString(APP_VERSION) + " (" + CPU_ARCH + ", Qt " + QT_VERSION_STR
+	  + ")") + "</p>");
 	msgBox.setInformativeText("<table width=\"300\"><tr><td>"
 	  + tr("GPXSee is distributed under the terms of the GNU General Public "
 	  "License version 3. For more info about GPXSee visit the project "
