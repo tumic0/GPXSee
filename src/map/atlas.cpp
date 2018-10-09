@@ -297,9 +297,9 @@ bool Atlas::isAtlas(const QString &path)
 {
 	QFileInfo fi(path);
 	QString suffix = fi.suffix().toLower();
-	Tar tar(path);
 
 	if (suffix == "tar") {
+		Tar tar(path);
 		if (!tar.open())
 			return false;
 		QString tbaFileName = fi.completeBaseName() + ".tba";
