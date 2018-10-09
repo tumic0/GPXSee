@@ -86,17 +86,15 @@ qreal OnlineMap::tileSize() const
 void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	qreal scale = OSM::zoom2scale(_zoom, TILE_SIZE);
-	QRectF b(bounds());
 
 	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * coordinatesRatio(), _zoom);
 	QPointF tl(floor(rect.left() / tileSize())
 	  * tileSize(), floor(rect.top() / tileSize()) * tileSize());
 
-	QSizeF s(qMin(rect.right() - tl.x(), b.width()),
-	  qMin(rect.bottom() - tl.y(), b.height()));
-	int width = qCeil(s.width() / tileSize());
-	int height = qCeil(s.height() / tileSize());
+	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
+	int width = _zoom ? qCeil(s.width() / tileSize()) : 1;
+	int height = _zoom ? qCeil(s.height() / tileSize()) : 1;
 
 	QVector<Tile> tiles;
 	tiles.reserve(width * height);
