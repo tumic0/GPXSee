@@ -6,7 +6,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="11"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>obr./min</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="12"/>
@@ -36,7 +36,7 @@
         <location filename="../src/GUI/cadencegraphitem.cpp" line="24"/>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="26"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>obr./min</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="25"/>
@@ -79,7 +79,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="120"/>
         <source>LOC files</source>
-        <translation type="unfinished"></translation>
+        <translation>Pliki LOC</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="121"/>
@@ -99,7 +99,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="123"/>
         <source>SLF files</source>
-        <translation type="unfinished"></translation>
+        <translation>Pliki SLF</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="124"/>
@@ -214,12 +214,12 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
         <source>PDF files</source>
-        <translation type="unfinished"></translation>
+        <translation>Pliki PDF</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
         <source>All files</source>
-        <translation type="unfinished">Wszystkie pliki</translation>
+        <translation>Wszystkie pliki</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="66"/>
@@ -407,7 +407,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="257"/>
         <source>Statistics...</source>
-        <translation type="unfinished"></translation>
+        <translation>Statystyka...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="265"/>
@@ -616,24 +616,24 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="706"/>
         <source>Global</source>
-        <translation type="unfinished"></translation>
+        <translation>Globalny</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="710"/>
         <location filename="../src/GUI/gui.cpp" line="716"/>
         <source>GCS/PCS directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Katalog plików GCS/PCS:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="712"/>
         <source>User-specific</source>
-        <translation type="unfinished"></translation>
+        <translation>Użytkownika</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1043"/>
         <location filename="../src/GUI/gui.cpp" line="1044"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Statystyka</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1285"/>
@@ -821,22 +821,22 @@
         <location filename="../src/GUI/gearratiograph.cpp" line="12"/>
         <location filename="../src/GUI/gearratiograph.h" line="14"/>
         <source>Gear ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Przełożenie</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="22"/>
         <source>Most used</source>
-        <translation type="unfinished"></translation>
+        <translation>Najczęściej używane</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="24"/>
         <source>Minimum</source>
-        <translation type="unfinished">Minimum</translation>
+        <translation>Minimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="26"/>
         <source>Maximum</source>
-        <translation type="unfinished">Maksimum</translation>
+        <translation>Maksimum</translation>
     </message>
 </context>
 <context>
@@ -844,17 +844,17 @@
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="37"/>
         <source>Minimum</source>
-        <translation type="unfinished">Minimum</translation>
+        <translation>Minimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="38"/>
         <source>Maximum</source>
-        <translation type="unfinished">Maksimum</translation>
+        <translation>Maksimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="39"/>
         <source>Most used</source>
-        <translation type="unfinished"></translation>
+        <translation>Najczęściej używane</translation>
     </message>
 </context>
 <context>
@@ -878,7 +878,7 @@
     <message>
         <location filename="../src/GUI/graphview.cpp" line="47"/>
         <source>Data not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak danych</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="115"/>
@@ -928,7 +928,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="11"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>uderzeń/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="22"/>
@@ -952,7 +952,7 @@
         <location filename="../src/GUI/heartrategraphitem.cpp" line="24"/>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="26"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>uderzeń/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="25"/>
@@ -970,12 +970,12 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="119"/>
         <source>MBTiles maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy MBTiles</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="120"/>
         <source>Garmin JNX maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy Garmin JNX</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="121"/>
@@ -1095,22 +1095,22 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="45"/>
         <source>High-resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Wysoka rozdzielczość</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="46"/>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardowy</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="51"/>
         <source>Non-HiDPI maps are loaded as HiDPI maps. The map is sharp but map objects are small/hard to read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy inne niż HiDPI są ładowane jako mapy HiDPI. Mapa jest ostra, ale obiekty mapy są małe / trudne do odczytania.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="53"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy inne niż HiDPI są ładowane w takiej postaci, w jakiej są. Obiekty mapy mają oczekiwany rozmiar, ale mapa jest rozmyta / nieostra.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="86"/>
@@ -1120,7 +1120,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="88"/>
         <source>HiDPI display mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Tryb wyświetlania HiDPI</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="122"/>
@@ -1270,12 +1270,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="348"/>
         <source>Computed from distance/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Obliczona na postawie odległości/czasu</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="349"/>
         <source>Recorded by device</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapisana przez urządzenie</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="364"/>
@@ -1391,7 +1391,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="478"/>
         <source>Enable HTTP/2</source>
-        <translation type="unfinished"></translation>
+        <translation>Włącz HTTP/2</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="485"/>
@@ -1422,7 +1422,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="532"/>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="533"/>
@@ -1475,7 +1475,7 @@
         <location filename="../src/GUI/powergraphitem.cpp" line="24"/>
         <location filename="../src/GUI/powergraphitem.cpp" line="26"/>
         <source>W</source>
-        <translation type="unfinished">W</translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="25"/>
