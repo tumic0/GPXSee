@@ -1110,7 +1110,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="53"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
-        <translation>Mapy inne niż HiDPI są ładowane w takiej postaci, w jakiej są. Obiekty mapy mają oczekiwany rozmiar, ale mapa jest rozmyta /nieostra.</translation>
+        <translation>Mapy inne niż HiDPI są ładowane w takiej postaci, w jakiej są. Obiekty mapy mają oczekiwany rozmiar, ale mapa jest rozmyta / nieostra.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="86"/>
