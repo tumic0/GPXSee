@@ -2,7 +2,6 @@
 #include <QFileInfo>
 #include <QNetworkRequest>
 #include <QBasicTimer>
-#include "config.h"
 #include "downloader.h"
 
 
@@ -21,8 +20,10 @@
 
 #define ATTR_REDIRECT QNetworkRequest::RedirectionTargetAttribute
 #define ATTR_FILE     QNetworkRequest::User
-#define ATTR_ORIGIN   (QNetworkRequest::Attribute)(QNetworkRequest::User + 1)
-#define ATTR_LEVEL    (QNetworkRequest::Attribute)(QNetworkRequest::User + 2)
+#define ATTR_ORIGIN \
+  static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1)
+#define ATTR_LEVEL \
+  static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 2)
 
 #define MAX_REDIRECT_LEVEL 5
 #define RETRIES 3
@@ -78,17 +79,20 @@ private:
 	int _level;
 };
 
-
 QNetworkAccessManager *Downloader::_manager = 0;
 int Downloader::_timeout = 30;
+#ifdef ENABLE_HTTP2
+bool Downloader::_http2 = true;
+#endif // ENABLE_HTTP2
 
 bool Downloader::doDownload(const Download &dl,
   const QByteArray &authorization, const Redirect *redirect)
 {
-	QUrl url(dl.url());
+	const QUrl &url = dl.url();
 
-	if (!url.isValid() || !(url.scheme() == "http" || url.scheme() == "https")) {
-		qWarning("%s: Invalid URL\n", qPrintable(url.toString()));
+	if (!url.isValid() || !(url.scheme() == QLatin1String("http")
+	  || url.scheme() == QLatin1String("https"))) {
+		qWarning("%s: Invalid URL", qPrintable(url.toString()));
 		if (redirect)
 			_errorDownloads.insert(redirect->origin(), RETRIES);
 		return false;
@@ -108,7 +112,12 @@ bool Downloader::doDownload(const Download &dl,
 	request.setRawHeader("User-Agent", USER_AGENT);
 	if (!authorization.isNull())
 		request.setRawHeader("Authorization", authorization);
+#ifdef ENABLE_HTTP2
+	request.setAttribute(QNetworkRequest::HTTP2AllowedAttribute,
+	  QVariant(_http2));
+#endif // ENABLE_HTTP2
 
+	Q_ASSERT(_manager);
 	QNetworkReply *reply = _manager->get(request);
 	if (reply && reply->isRunning()) {
 		_currentDownloads.insert(url);
@@ -132,7 +141,7 @@ bool Downloader::saveToDisk(const QString &filename, QIODevice *data)
 	QFile file(filename);
 
 	if (!file.open(QIODevice::WriteOnly)) {
-		qWarning("Error writing file: %s: %s\n",
+		qWarning("Error writing file: %s: %s",
 		  qPrintable(filename), qPrintable(file.errorString()));
 		return false;
 	}
@@ -153,34 +162,33 @@ void Downloader::insertError(const QUrl &url, QNetworkReply::NetworkError error)
 
 void Downloader::downloadFinished(QNetworkReply *reply)
 {
-	QUrl url = reply->request().url();
+	QUrl url(reply->request().url());
 	QNetworkReply::NetworkError error = reply->error();
 
 	if (error) {
-		QUrl origin = reply->request().attribute(ATTR_ORIGIN).toUrl();
+		QUrl origin(reply->request().attribute(ATTR_ORIGIN).toUrl());
 		if (origin.isEmpty()) {
 			insertError(url, error);
-			qWarning("Error downloading file: %s: %s\n",
+			qWarning("Error downloading file: %s: %s",
 			  url.toEncoded().constData(), qPrintable(reply->errorString()));
 		} else {
 			insertError(origin, error);
-			qWarning("Error downloading file: %s -> %s: %s\n",
+			qWarning("Error downloading file: %s -> %s: %s",
 			  origin.toEncoded().constData(), url.toEncoded().constData(),
 			  qPrintable(reply->errorString()));
 		}
 	} else {
-		QUrl location = reply->attribute(ATTR_REDIRECT).toUrl();
-		QString filename = reply->request().attribute(ATTR_FILE)
-		  .toString();
+		QUrl location(reply->attribute(ATTR_REDIRECT).toUrl());
+		QString filename(reply->request().attribute(ATTR_FILE).toString());
 
 		if (!location.isEmpty()) {
-			QUrl origin = reply->request().attribute(ATTR_ORIGIN).toUrl();
+			QUrl origin(reply->request().attribute(ATTR_ORIGIN).toUrl());
 			int level = reply->request().attribute(ATTR_LEVEL).toInt();
 
 			if (level >= MAX_REDIRECT_LEVEL) {
 				_errorDownloads.insert(origin, RETRIES);
 				qWarning("Error downloading file: %s: "
-				  "redirect level limit reached (redirect loop?)\n",
+				  "redirect level limit reached (redirect loop?)",
 				  origin.toEncoded().constData());
 			} else {
 				QUrl redirectUrl;
@@ -219,3 +227,12 @@ bool Downloader::get(const QList<Download> &list,
 
 	return finishEmitted;
 }
+
+#ifdef ENABLE_HTTP2
+void Downloader::enableHTTP2(bool enable)
+{
+	Q_ASSERT(_manager);
+	_http2 = enable;
+	_manager->clearConnectionCache();
+}
+#endif // ENABLE_HTTP2

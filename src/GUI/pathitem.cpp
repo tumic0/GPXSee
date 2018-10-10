@@ -2,11 +2,19 @@
 #include <QApplication>
 #include <QCursor>
 #include <QPainter>
+#include "common/greatcircle.h"
 #include "map/map.h"
 #include "tooltip.h"
 #include "nicenum.h"
 #include "pathitem.h"
 
+
+#define GEOGRAPHICAL_MILE 1855.3248
+
+static unsigned segments(qreal distance)
+{
+	return ceil(distance / GEOGRAPHICAL_MILE);
+}
 
 PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
   : QGraphicsObject(parent)
@@ -21,7 +29,7 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 	QBrush brush(Qt::SolidPattern);
 	_pen = QPen(brush, _width);
 
-	updatePainterPath(map);
+	updatePainterPath();
 	updateShape();
 
 	_marker = new MarkerItem(this);
@@ -39,13 +47,53 @@ void PathItem::updateShape()
 	_shape = s.createStroke(_painterPath);
 }
 
-void PathItem::updatePainterPath(Map *map)
+void PathItem::addSegment(const Coordinates &c1, const Coordinates &c2)
+{
+	if (fabs(c1.lon() - c2.lon()) > 180.0) {
+		QPointF p;
+
+		if (c2.lon() < 0) {
+			QLineF l(QPointF(c1.lon(), c1.lat()), QPointF(c2.lon() + 360,
+			  c2.lat()));
+			QLineF dl(QPointF(180, -90), QPointF(180, 90));
+			l.intersect(dl, &p);
+			_painterPath.lineTo(_map->ll2xy(Coordinates(180, p.y())));
+			_painterPath.moveTo(_map->ll2xy(Coordinates(-180, p.y())));
+		} else {
+			QLineF l(QPointF(c1.lon(), c1.lat()), QPointF(c2.lon() - 360,
+			  c2.lat()));
+			QLineF dl(QPointF(-180, -90), QPointF(-180, 90));
+			l.intersect(dl, &p);
+			_painterPath.lineTo(_map->ll2xy(Coordinates(-180, p.y())));
+			_painterPath.moveTo(_map->ll2xy(Coordinates(180, p.y())));
+		}
+		_painterPath.lineTo(_map->ll2xy(c2));
+	} else
+		_painterPath.lineTo(_map->ll2xy(c2));
+}
+
+void PathItem::updatePainterPath()
 {
 	_painterPath = QPainterPath();
 
-	_painterPath.moveTo(map->ll2xy(_path.first().coordinates()));
-	for (int i = 1; i < _path.size(); i++)
-		_painterPath.lineTo(map->ll2xy(_path.at(i).coordinates()));
+	_painterPath.moveTo(_map->ll2xy(_path.first().coordinates()));
+	for (int i = 1; i < _path.size(); i++) {
+		const PathPoint &p1 = _path.at(i-1);
+		const PathPoint &p2 = _path.at(i);
+		unsigned n = segments(p2.distance() - p1.distance());
+
+		if (n > 1) {
+			GreatCircle gc(p1.coordinates(), p2.coordinates());
+			Coordinates last = p1.coordinates();
+
+			for (unsigned j = 1; j <= n; j++) {
+				Coordinates c(gc.pointAt(j/(double)n));
+				addSegment(last, c);
+				last = c;
+			}
+		} else
+			addSegment(p1.coordinates(), p2.coordinates());
+	}
 }
 
 void PathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -70,7 +118,7 @@ void PathItem::setMap(Map *map)
 
 	_map = map;
 
-	updatePainterPath(map);
+	updatePainterPath();
 	updateShape();
 
 	_marker->setPos(position(_markerDistance));
@@ -141,19 +189,40 @@ QPointF PathItem::position(qreal x) const
 			return _map->ll2xy(_path.at(mid).coordinates());
 	}
 
-	QLineF l;
+	Coordinates c1, c2;
 	qreal p1, p2;
+
 	if (_path.at(mid).distance() < x) {
-		l = QLineF(_map->ll2xy(_path.at(mid).coordinates()),
-		  _map->ll2xy(_path.at(mid+1).coordinates()));
+		c1 = _path.at(mid).coordinates(); c2 = _path.at(mid+1).coordinates();
 		p1 = _path.at(mid).distance(); p2 = _path.at(mid+1).distance();
 	} else {
-		l = QLineF(_map->ll2xy(_path.at(mid-1).coordinates()),
-		  _map->ll2xy(_path.at(mid).coordinates()));
+		c1 = _path.at(mid-1).coordinates(); c2 = _path.at(mid).coordinates();
 		p1 = _path.at(mid-1).distance(); p2 = _path.at(mid).distance();
 	}
 
-	return l.pointAt((x - p1) / (p2 - p1));
+	unsigned n = segments(p2 - p1);
+	if (n > 1) {
+		GreatCircle gc(c1, c2);
+
+		// Great circle point
+		double f = (x - p1) / (p2 - p1);
+		QPointF p(_map->ll2xy(gc.pointAt(f)));
+
+		// Segment line of the great circle path
+		double f1 = floor(n * f) / n;
+		double f2 = ceil(n * f) / n;
+		QLineF l(_map->ll2xy(gc.pointAt(f1)), _map->ll2xy(gc.pointAt(f2)));
+
+		// Project the great circle point to the segment line
+		QLineF u = l.unitVector();
+		double lambda = (u.dx() * (p.x() - l.p1().x())) + (u.dy() * (p.y()
+		  - l.p1().y()));
+		return QPointF((u.dx() * lambda) + l.p1().x(), (u.dy() * lambda)
+		  + l.p1().y());
+	} else {
+		QLineF l(_map->ll2xy(c1), _map->ll2xy(c2));
+		return l.pointAt((x - p1) / (p2 - p1));
+	}
 }
 
 void PathItem::moveMarker(qreal distance)
@@ -175,10 +244,10 @@ void PathItem::setMarkerColor(const QColor &color)
 void PathItem::hover(bool hover)
 {
 	if (hover) {
-		_pen.setWidth(_width + 1);
+		_pen.setWidth((_width + 1) * pow(2, -_digitalZoom));
 		setZValue(zValue() + 1.0);
 	} else {
-		_pen.setWidth(_width);
+		_pen.setWidth(_width * pow(2, -_digitalZoom));
 		setZValue(zValue() - 1.0);
 	}
 

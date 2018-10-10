@@ -24,7 +24,6 @@ private:
 	double _falseEasting;
 	double _falseNorthing;
 	double _a;
-
 	double _es;
 	double _ebs;
 	double _ap, _bp, _cp, _dp, _ep;

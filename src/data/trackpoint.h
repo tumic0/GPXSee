@@ -11,10 +11,10 @@ class Trackpoint
 public:
 	Trackpoint()
 	  {_elevation = NAN; _speed = NAN; _heartRate = NAN; _temperature = NAN;
-	  _cadence = NAN; _power = NAN;}
+	  _cadence = NAN; _power = NAN; _ratio = NAN;}
 	Trackpoint(const Coordinates &coordinates) : _coordinates(coordinates)
 	  {_elevation = NAN; _speed = NAN; _heartRate = NAN; _temperature = NAN;
-	  _cadence = NAN; _power = NAN;}
+	  _cadence = NAN; _power = NAN; _ratio = NAN;}
 
 	const Coordinates &coordinates() const {return _coordinates;}
 	Coordinates &rcoordinates() {return _coordinates;}
@@ -25,6 +25,7 @@ public:
 	qreal temperature() const {return _temperature;}
 	qreal cadence() const {return _cadence;}
 	qreal power() const {return _power;}
+	qreal ratio() const {return _ratio;}
 
 	void setCoordinates(const Coordinates &coordinates)
 	  {_coordinates = coordinates;}
@@ -35,6 +36,7 @@ public:
 	void setTemperature(qreal temperature) {_temperature = temperature;}
 	void setCadence(qreal cadence) {_cadence = cadence;}
 	void setPower(qreal power) {_power = power;}
+	void setRatio(qreal ratio) {_ratio = ratio;}
 
 	bool hasTimestamp() const {return !_timestamp.isNull();}
 	bool hasElevation() const {return !std::isnan(_elevation);}
@@ -43,6 +45,7 @@ public:
 	bool hasTemperature() const {return !std::isnan(_temperature);}
 	bool hasCadence() const {return !std::isnan(_cadence);}
 	bool hasPower() const {return !std::isnan(_power);}
+	bool hasRatio() const {return !std::isnan(_ratio);}
 
 private:
 	Coordinates _coordinates;
@@ -53,6 +56,7 @@ private:
 	qreal _temperature;
 	qreal _cadence;
 	qreal _power;
+	qreal _ratio;
 };
 
 Q_DECLARE_TYPEINFO(Trackpoint, Q_MOVABLE_TYPE);
@@ -63,7 +67,8 @@ inline QDebug operator<<(QDebug dbg, const Trackpoint &trackpoint)
 	dbg.nospace() << "Trackpoint(" << trackpoint.coordinates() << ", "
 	  << trackpoint.timestamp() << ", " << trackpoint.elevation() << ", "
 	  << trackpoint.speed() << ", " << trackpoint.heartRate() << ", "
-	  << trackpoint.temperature() << ")";
+	  << trackpoint.temperature() << ", " << trackpoint.cadence() << ", "
+	  << trackpoint.power() << ", " << trackpoint.ratio() << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG

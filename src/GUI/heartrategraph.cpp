@@ -1,3 +1,4 @@
+#include <QLocale>
 #include "data/data.h"
 #include "heartrategraphitem.h"
 #include "heartrategraph.h"
@@ -7,7 +8,7 @@ HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphTab(parent)
 {
 	_showTracks = true;
 
-	GraphView::setYUnits(tr("1/min"));
+	GraphView::setYUnits(tr("bpm"));
 	setYLabel(tr("Heart rate"));
 
 	setSliderPrecision(0);
@@ -16,9 +17,11 @@ HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphTab(parent)
 void HeartRateGraph::setInfo()
 {
 	if (_showTracks) {
-		GraphView::addInfo(tr("Average"), QString::number(avg() * yScale(), 'f',
+		QLocale l(QLocale::system());
+
+		GraphView::addInfo(tr("Average"), l.toString(avg() * yScale(), 'f',
 		  0) + UNIT_SPACE + yUnits());
-		GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale(), 'f',
+		GraphView::addInfo(tr("Maximum"), l.toString(max() * yScale(), 'f',
 		  0) + UNIT_SPACE + yUnits());
 	} else
 		clearInfo();

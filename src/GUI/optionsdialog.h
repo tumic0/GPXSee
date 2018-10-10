@@ -4,6 +4,8 @@
 #include <QDialog>
 #include "palette.h"
 #include "units.h"
+#include "config.h"
+
 
 class ColorBox;
 class StyleComboBox;
@@ -16,8 +18,6 @@ class QRadioButton;
 class PercentSlider;
 
 struct Options {
-	// General
-	bool alwaysShowMap;
 	// Appearance
 	Palette palette;
 	int trackWidth;
@@ -34,6 +34,11 @@ struct Options {
 	bool graphAntiAliasing;
 	int mapOpacity;
 	QColor backgroundColor;
+	// Map
+	bool alwaysShowMap;
+#ifdef ENABLE_HIDPI
+	bool hidpiMap;
+#endif // ENABLE_HIDPI
 	// Data
 	int elevationFilter;
 	int speedFilter;
@@ -43,10 +48,14 @@ struct Options {
 	bool outlierEliminate;
 	qreal pauseSpeed;
 	int pauseInterval;
+	bool useReportedSpeed;
 	// POI
 	int poiRadius;
 	// System
 	bool useOpenGL;
+#ifdef ENABLE_HTTP2
+	bool enableHTTP2;
+#endif // ENABLE_HTTP2
 	int pixmapCache;
 	int connectionTimeout;
 	// Print/Export
@@ -73,7 +82,7 @@ public slots:
 	void accept();
 
 private:
-	QWidget *createGeneralPage();
+	QWidget *createMapPage();
 	QWidget *createAppearancePage();
 	QWidget *createDataPage();
 	QWidget *createPOIPage();
@@ -82,8 +91,6 @@ private:
 
 	Options *_options;
 
-	// General
-	QCheckBox *_alwaysShowMap;
 	// Appearance
 	ColorBox *_baseColor;
 	QDoubleSpinBox *_colorOffset;
@@ -101,6 +108,12 @@ private:
 	QSpinBox *_graphWidth;
 	ColorBox *_sliderColor;
 	QCheckBox *_graphAA;
+	// Map
+	QCheckBox *_alwaysShowMap;
+#ifdef ENABLE_HIDPI
+	QRadioButton *_hidpi;
+	QRadioButton *_lodpi;
+#endif // ENABLE_HIDPI
 	// Data
 	OddSpinBox *_elevationFilter;
 	OddSpinBox *_speedFilter;
@@ -110,12 +123,17 @@ private:
 	QCheckBox *_outlierEliminate;
 	QDoubleSpinBox *_pauseSpeed;
 	QSpinBox *_pauseInterval;
+	QRadioButton *_computed;
+	QRadioButton *_reported;
 	// POI
 	QDoubleSpinBox *_poiRadius;
 	// System
 	QSpinBox *_pixmapCache;
 	QSpinBox *_connectionTimeout;
 	QCheckBox *_useOpenGL;
+#ifdef ENABLE_HTTP2
+	QCheckBox *_enableHTTP2;
+#endif // ENABLE_HTTP2
 	// Print/Export
 	QRadioButton *_wysiwyg;
 	QRadioButton *_hires;

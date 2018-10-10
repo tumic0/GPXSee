@@ -11,6 +11,7 @@
 #include "units.h"
 #include "format.h"
 #include "palette.h"
+#include "config.h"
 
 class Data;
 class POI;
@@ -68,6 +69,7 @@ public slots:
 	void showRouteWaypoints(bool show);
 	void clearMapCache();
 	void setCoordinatesFormat(CoordinatesFormat format);
+	void setDevicePixelRatio(qreal ratio);
 
 private slots:
 	void updatePOI();
@@ -136,6 +138,11 @@ private:
 
 	int _digitalZoom;
 	bool _plot;
+
+#ifdef ENABLE_HIDPI
+	qreal _ratio;
+#endif // ENABLE_HIDPI
+	bool _opengl;
 };
 
 #endif // MAPVIEW_H

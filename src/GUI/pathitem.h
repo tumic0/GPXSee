@@ -43,8 +43,10 @@ protected:
 
 private:
 	QPointF position(qreal distance) const;
-	void updatePainterPath(Map *map);
+	void updatePainterPath();
 	void updateShape();
+	void addSegment(const Coordinates &c1, const Coordinates &c2);
+
 
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);

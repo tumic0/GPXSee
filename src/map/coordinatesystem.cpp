@@ -29,6 +29,7 @@ CoordinateSystem::CoordinateSystem(int code)
 		case 4530:
 		case 4531:
 		case 4532:
+		case 6501:
 			_axisOrder = YX;
 			break;
 		default:

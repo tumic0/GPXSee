@@ -191,7 +191,7 @@ QDateTime KMLParser::timeStamp()
 	QDateTime ts;
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "when")
+		if (_reader.name() == QLatin1String("when"))
 			ts = time();
 		else
 			_reader.skipCurrentElement();
@@ -203,7 +203,7 @@ QDateTime KMLParser::timeStamp()
 void KMLParser::lineString(TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "coordinates") {
+		if (_reader.name() == QLatin1String("coordinates")) {
 			if (!lineCoordinates(track))
 				_reader.raiseError("Invalid coordinates");
 		} else
@@ -214,7 +214,7 @@ void KMLParser::lineString(TrackData &track)
 void KMLParser::point(Waypoint &waypoint)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "coordinates") {
+		if (_reader.name() == QLatin1String("coordinates")) {
 			if (!pointCoordinates(waypoint))
 				_reader.raiseError("Invalid coordinates");
 		} else
@@ -231,7 +231,7 @@ void KMLParser::heartRate(TrackData &track, int start)
 	const char error[] = "Heartrate data count mismatch";
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "value") {
+		if (_reader.name() == QLatin1String("value")) {
 			if (i < track.size())
 				track[i++].setHeartRate(number());
 			else {
@@ -252,7 +252,7 @@ void KMLParser::cadence(TrackData &track, int start)
 	const char error[] = "Cadence data count mismatch";
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "value") {
+		if (_reader.name() == QLatin1String("value")) {
 			if (i < track.size())
 				track[i++].setCadence(number());
 			else {
@@ -273,7 +273,7 @@ void KMLParser::speed(TrackData &track, int start)
 	const char error[] = "Speed data count mismatch";
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "value") {
+		if (_reader.name() == QLatin1String("value")) {
 			if (i < track.size())
 				track[i++].setSpeed(number());
 			else {
@@ -294,7 +294,7 @@ void KMLParser::temperature(TrackData &track, int start)
 	const char error[] = "Temperature data count mismatch";
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "value") {
+		if (_reader.name() == QLatin1String("value")) {
 			if (i < track.size())
 				track[i++].setTemperature(number());
 			else {
@@ -312,17 +312,17 @@ void KMLParser::temperature(TrackData &track, int start)
 void KMLParser::schemaData(TrackData &track, int start)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "SimpleArrayData") {
+		if (_reader.name() == QLatin1String("SimpleArrayData")) {
 			QXmlStreamAttributes attr = _reader.attributes();
 			QStringRef name = attr.value("name");
 
-			if (name == "Heartrate")
+			if (name == QLatin1String("Heartrate"))
 				heartRate(track, start);
-			else if (name == "Cadence")
+			else if (name == QLatin1String("Cadence"))
 				cadence(track, start);
-			else if (name == "Speed")
+			else if (name == QLatin1String("Speed"))
 				speed(track, start);
-			else if (name == "Temperature")
+			else if (name == QLatin1String("Temperature"))
 				temperature(track, start);
 			else
 				_reader.skipCurrentElement();
@@ -334,7 +334,7 @@ void KMLParser::schemaData(TrackData &track, int start)
 void KMLParser::extendedData(TrackData &track, int start)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "SchemaData")
+		if (_reader.name() == QLatin1String("SchemaData"))
 			schemaData(track, start);
 		else
 			_reader.skipCurrentElement();
@@ -348,10 +348,10 @@ void KMLParser::track(TrackData &track)
 	int i = first;
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "when") {
+		if (_reader.name() == QLatin1String("when")) {
 			track.append(Trackpoint());
 			track.last().setTimestamp(time());
-		} else if (_reader.name() == "coord") {
+		} else if (_reader.name() == QLatin1String("coord")) {
 			if (i == track.size()) {
 				_reader.raiseError(error);
 				return;
@@ -360,7 +360,7 @@ void KMLParser::track(TrackData &track)
 				return;
 			}
 			i++;
-		} else if (_reader.name() == "ExtendedData")
+		} else if (_reader.name() == QLatin1String("ExtendedData"))
 			extendedData(track, first);
 		else
 			_reader.skipCurrentElement();
@@ -373,7 +373,7 @@ void KMLParser::track(TrackData &track)
 void KMLParser::multiTrack(TrackData &t)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Track")
+		if (_reader.name() == QLatin1String("Track"))
 			track(t);
 		else
 			_reader.skipCurrentElement();
@@ -385,14 +385,14 @@ void KMLParser::multiGeometry(QList<TrackData> &tracks,
   const QDateTime timestamp)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Point") {
+		if (_reader.name() == QLatin1String("Point")) {
 			waypoints.append(Waypoint());
 			Waypoint &w = waypoints.last();
 			w.setName(name);
 			w.setDescription(desc);
 			w.setTimestamp(timestamp);
 			point(w);
-		} else if (_reader.name() == "LineString") {
+		} else if (_reader.name() == QLatin1String("LineString")) {
 			tracks.append(TrackData());
 			TrackData &t = tracks.last();
 			t.setName(name);
@@ -409,35 +409,35 @@ void KMLParser::placemark(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 	QDateTime timestamp;
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "name")
+		if (_reader.name() == QLatin1String("name"))
 			name = _reader.readElementText();
-		else if (_reader.name() == "description")
+		else if (_reader.name() == QLatin1String("description"))
 			desc = _reader.readElementText();
-		else if (_reader.name() == "TimeStamp")
+		else if (_reader.name() == QLatin1String("TimeStamp"))
 			timestamp = timeStamp();
-		else if (_reader.name() == "MultiGeometry")
+		else if (_reader.name() == QLatin1String("MultiGeometry"))
 			multiGeometry(tracks, waypoints, name, desc, timestamp);
-		else if (_reader.name() == "Point") {
+		else if (_reader.name() == QLatin1String("Point")) {
 			waypoints.append(Waypoint());
 			Waypoint &w = waypoints.last();
 			w.setName(name);
 			w.setDescription(desc);
 			w.setTimestamp(timestamp);
 			point(w);
-		} else if (_reader.name() == "LineString"
-		  || _reader.name() == "LinearRing") {
+		} else if (_reader.name() == QLatin1String("LineString")
+		  || _reader.name() == QLatin1String("LinearRing")) {
 			tracks.append(TrackData());
 			TrackData &t = tracks.last();
 			t.setName(name);
 			t.setDescription(desc);
 			lineString(t);
-		} else if (_reader.name() == "Track") {
+		} else if (_reader.name() == QLatin1String("Track")) {
 			tracks.append(TrackData());
 			TrackData &t = tracks.last();
 			t.setName(name);
 			t.setDescription(desc);
 			track(t);
-		} else if (_reader.name() == "MultiTrack") {
+		} else if (_reader.name() == QLatin1String("MultiTrack")) {
 			tracks.append(TrackData());
 			TrackData &t = tracks.last();
 			t.setName(name);
@@ -451,9 +451,9 @@ void KMLParser::placemark(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 void KMLParser::folder(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Placemark")
+		if (_reader.name() == QLatin1String("Placemark"))
 			placemark(tracks, waypoints);
-		else if (_reader.name() == "Folder")
+		else if (_reader.name() == QLatin1String("Folder"))
 			folder(tracks, waypoints);
 		else
 			_reader.skipCurrentElement();
@@ -463,9 +463,9 @@ void KMLParser::folder(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 void KMLParser::document(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Placemark")
+		if (_reader.name() == QLatin1String("Placemark"))
 			placemark(tracks, waypoints);
-		else if (_reader.name() == "Folder")
+		else if (_reader.name() == QLatin1String("Folder"))
 			folder(tracks, waypoints);
 		else
 			_reader.skipCurrentElement();
@@ -475,11 +475,11 @@ void KMLParser::document(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 void KMLParser::kml(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == "Document")
+		if (_reader.name() == QLatin1String("Document"))
 			document(tracks, waypoints);
-		else if (_reader.name() == "Placemark")
+		else if (_reader.name() == QLatin1String("Placemark"))
 			placemark(tracks, waypoints);
-		else if (_reader.name() == "Folder")
+		else if (_reader.name() == QLatin1String("Folder"))
 			folder(tracks, waypoints);
 		else
 			_reader.skipCurrentElement();
@@ -495,7 +495,7 @@ bool KMLParser::parse(QFile *file, QList<TrackData> &tracks,
 	_reader.setDevice(file);
 
 	if (_reader.readNextStartElement()) {
-		if (_reader.name() == "kml")
+		if (_reader.name() == QLatin1String("kml"))
 			kml(tracks, waypoints);
 		else
 			_reader.raiseError("Not a KML file");

@@ -47,28 +47,29 @@ Defense.
 Mercator::Mercator(const Ellipsoid *ellipsoid, double latitudeOrigin,
   double longitudeOrigin, double falseEasting, double falseNorthing)
 {
+	double es = ellipsoid->es();
 	double es2;
 	double es3;
 	double es4;
 	double sin_olat;
 
-	_a = ellipsoid->radius();
 	_latitudeOrigin = deg2rad(latitudeOrigin);
 	_longitudeOrigin = deg2rad(longitudeOrigin);
 	if (_longitudeOrigin > M_PI)
 		_longitudeOrigin -= M_2_PI;
 	_falseNorthing = falseNorthing;
 	_falseEasting = falseEasting;
-	_es = 2 * ellipsoid->flattening() - ellipsoid->flattening()
-	  * ellipsoid->flattening();
-	_e = sqrt(_es);
+
+	_a = ellipsoid->radius();
+	_e = sqrt(es);
+
 	sin_olat = sin(_latitudeOrigin);
-	_scaleFactor = 1.0 / (sqrt(1.e0 - _es * sin_olat * sin_olat)
+	_scaleFactor = 1.0 / (sqrt(1.e0 - es * sin_olat * sin_olat)
 	  / cos(_latitudeOrigin));
-	es2 = _es * _es;
-	es3 = es2 * _es;
-	es4 = es3 * _es;
-	_ab = _es / 2.e0 + 5.e0 * es2 / 24.e0 + es3 / 12.e0 + 13.e0 * es4 / 360.e0;
+	es2 = es * es;
+	es3 = es2 * es;
+	es4 = es3 * es;
+	_ab = es / 2.e0 + 5.e0 * es2 / 24.e0 + es3 / 12.e0 + 13.e0 * es4 / 360.e0;
 	_bb = 7.e0 * es2 / 48.e0 + 29.e0 * es3 / 240.e0 + 811.e0 * es4 / 11520.e0;
 	_cb = 7.e0 * es3 / 120.e0 + 81.e0 * es4 / 1120.e0;
 	_db = 4279.e0 * es4 / 161280.e0;

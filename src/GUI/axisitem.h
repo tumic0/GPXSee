@@ -2,6 +2,8 @@
 #define AXISITEM_H
 
 #include <QGraphicsItem>
+#include <QVector>
+#include <QLocale>
 #include "common/range.h"
 
 class AxisItem : public QGraphicsItem
@@ -23,13 +25,22 @@ public:
 	QList<qreal> ticks() const;
 
 private:
+	struct Tick {
+		double value;
+		QRect boundingBox;
+	};
+
 	void updateBoundingRect();
 
 	Type _type;
 	RangeF _range;
 	qreal _size;
 	QString _label;
+	QRect _labelBB;
+	QVector<Tick> _ticks;
 	QRectF _boundingRect;
+	QFont _font;
+	QLocale _locale;
 };
 
 #endif // AXISITEM_H

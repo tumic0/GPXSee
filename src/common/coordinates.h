@@ -32,6 +32,8 @@ private:
 	double _lat, _lon;
 };
 
+Q_DECLARE_TYPEINFO(Coordinates, Q_PRIMITIVE_TYPE);
+
 inline bool operator==(const Coordinates &c1, const Coordinates &c2)
   {return (c1.lat() == c2.lat() && c1.lon() == c2.lon());}
 inline bool operator!=(const Coordinates &c1, const Coordinates &c2)

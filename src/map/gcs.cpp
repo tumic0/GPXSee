@@ -19,9 +19,6 @@ private:
 	GCS _gcs;
 };
 
-static Ellipsoid WGS84e = Ellipsoid(WGS84_RADIUS, WGS84_FLATTENING);
-static Datum WGS84d = Datum(&WGS84e, 0.0, 0.0, 0.0);
-
 static int parameter(const QString &str, bool *res)
 {
 	QString field = str.trimmed();
@@ -45,12 +42,18 @@ static double parameterd(const QString &str, bool *res)
 }
 
 
-QList<GCS::Entry> GCS::_gcss = WGS84();
+QList<GCS::Entry> GCS::_gcss = defaults();
 
-QList<GCS::Entry> GCS::WGS84()
+const GCS &GCS::WGS84()
+{
+	static GCS g(Datum::WGS84(), 8901, 9122);
+	return g;
+}
+
+QList<GCS::Entry> GCS::defaults()
 {
 	QList<GCS::Entry> list;
-	list.append(GCS::Entry(4326, 6326, "WGS 84", GCS(WGS84d, 8901, 9122)));
+	list.append(GCS::Entry(4326, 6326, "WGS 84", WGS84()));
 	return list;
 }
 

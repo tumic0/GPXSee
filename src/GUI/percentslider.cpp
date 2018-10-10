@@ -1,13 +1,14 @@
 #include <QSlider>
 #include <QLabel>
 #include <QHBoxLayout>
+#include <QLocale>
 #include "units.h"
 #include "percentslider.h"
 
 
 static QString format(int value)
 {
-	return QString::number(value) + UNIT_SPACE + QString("%");
+	return QLocale::system().toString(value) + UNIT_SPACE + QString("%");
 }
 
 PercentSlider::PercentSlider(QWidget *parent) : QWidget(parent)

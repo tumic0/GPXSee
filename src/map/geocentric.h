@@ -4,7 +4,7 @@
 #include <cmath>
 #include "common/coordinates.h"
 
-class Datum;
+class Ellipsoid;
 
 class Point3D {
 public:
@@ -22,8 +22,8 @@ private:
 };
 
 namespace Geocentric {
-	Point3D fromGeodetic(const Coordinates &c, const Datum &datum);
-	Coordinates toGeodetic(const Point3D &p, const Datum &datum);
+	Point3D fromGeodetic(const Coordinates &c, const Ellipsoid *e);
+	Coordinates toGeodetic(const Point3D &p, const Ellipsoid *e);
 }
 
 #endif // GEOCENTRIC_H

@@ -7,15 +7,16 @@
 #include "data/graph.h"
 #include "palette.h"
 #include "units.h"
+#include "infoitem.h"
 
 
 class AxisItem;
 class SliderItem;
 class SliderInfoItem;
-class InfoItem;
 class GraphItem;
 class PathItem;
 class GridItem;
+class QGraphicsSimpleTextItem;
 
 class GraphView : public QGraphicsView
 {
@@ -26,6 +27,7 @@ public:
 	~GraphView();
 
 	bool isEmpty() const {return _graphs.isEmpty();}
+	const QList<KV> &info() const {return _info->info();}
 	void clear();
 
 	void plot(QPainter *painter, const QRectF &target, qreal scale);
@@ -64,7 +66,6 @@ protected:
 
 	QRectF bounds() const;
 	void redraw();
-	void redraw(const QSizeF &size);
 	void addInfo(const QString &key, const QString &value);
 	void clearInfo();
 	void skipColor() {_palette.nextColor();}
@@ -77,6 +78,7 @@ private slots:
 	void newSliderPosition(const QPointF &pos);
 
 private:
+	void redraw(const QSizeF &size);
 	void setXUnits();
 	void createXLabel();
 	void createYLabel();
@@ -85,8 +87,8 @@ private:
 	void removeItem(QGraphicsItem *item);
 	void addItem(QGraphicsItem *item);
 
-	void resizeEvent(QResizeEvent *);
-	void mousePressEvent(QMouseEvent *);
+	void resizeEvent(QResizeEvent *e);
+	void mousePressEvent(QMouseEvent *e);
 
 	Units _units;
 	qreal _xScale, _yScale;
@@ -104,6 +106,7 @@ private:
 	SliderInfoItem *_sliderInfo;
 	InfoItem *_info;
 	GridItem *_grid;
+	QGraphicsSimpleTextItem *_message;
 
 	QList<GraphItem*> _visible;
 	QSet<int> _hide;

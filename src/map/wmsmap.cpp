@@ -1,3 +1,4 @@
+#include <QtCore>
 #include <QDir>
 #include <QPainter>
 #include "common/wgs84.h"
@@ -20,11 +21,11 @@ QString WMSMap::tileUrl(const QString &version) const
 {
 	QString url;
 
-	url = QString("%1?version=%2&request=GetMap&bbox=$bbox"
-	  "&width=%3&height=%4&layers=%5&styles=%6&format=%7&transparent=true")
-	  .arg(_setup.url(), version, QString::number(TILE_SIZE),
-	  QString::number(TILE_SIZE), _setup.layer(), _setup.style(),
-	  _setup.format());
+	url = QString("%1%2version=%3&request=GetMap&bbox=$bbox"
+	  "&width=%4&height=%5&layers=%6&styles=%7&format=%8&transparent=true")
+	  .arg(_setup.url(), _setup.url().contains('?') ? "&" : "?", version,
+	  QString::number(TILE_SIZE), QString::number(TILE_SIZE), _setup.layer(),
+	  _setup.style(), _setup.format());
 
 	if (version >= "1.3.0")
 		url.append(QString("&CRS=%1").arg(_setup.crs()));
@@ -32,8 +33,8 @@ QString WMSMap::tileUrl(const QString &version) const
 		url.append(QString("&SRS=%1").arg(_setup.crs()));
 
 	for (int i = 0; i < _setup.dimensions().size(); i++) {
-		const QPair<QString, QString> &dim = _setup.dimensions().at(i);
-		url.append(QString("&%1=%2").arg(dim.first, dim.second));
+		const KV &dim = _setup.dimensions().at(i);
+		url.append(QString("&%1=%2").arg(dim.key(), dim.value()));
 	}
 
 	return url;
@@ -50,9 +51,9 @@ void WMSMap::computeZooms(const RangeF &scaleDenominator)
 
 	if (scaleDenominator.size() > 0) {
 		double ld = log2(scaleDenominator.max()) - log2(scaleDenominator.min());
-		int cld = ceil(ld);
-		double step = ld / (qreal)cld;
-		qreal lmax = log2(scaleDenominator.max());
+		int cld = (int)ceil(ld);
+		double step = ld / (double)cld;
+		double lmax = log2(scaleDenominator.max());
 		for (int i = 0; i <= cld; i++)
 			_zooms.append(pow(2.0, lmax - i * step));
 	} else
@@ -102,15 +103,10 @@ bool WMSMap::loadWMS()
 }
 
 WMSMap::WMSMap(const QString &name, const WMS::Setup &setup, QObject *parent)
-  : Map(parent), _name(name), _setup(setup), _zoom(0), _valid(false)
+  : Map(parent), _name(name), _setup(setup), _tileLoader(0), _zoom(0),
+  _ratio(1.0), _valid(false)
 {
-	if (!QDir().mkpath(tilesDir())) {
-		_errorString = "Error creating tiles dir";
-		return;
-	}
-
-	_tileLoader = new TileLoader(this);
-	_tileLoader->setDir(tilesDir());
+	_tileLoader = new TileLoader(tilesDir(), this);
 	_tileLoader->setAuthorization(_setup.authorization());
 	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(loaded()));
 
@@ -123,24 +119,13 @@ void WMSMap::clearCache()
 	_zoom = 0;
 
 	if (!loadWMS())
-		qWarning("%s: %s\n", qPrintable(_name), qPrintable(_errorString));
+		qWarning("%s: %s", qPrintable(_name), qPrintable(_errorString));
 }
 
-QRectF WMSMap::bounds() const
+QRectF WMSMap::bounds()
 {
-	return QRectF(_transform.proj2img(_bbox.topLeft()),
-	  _transform.proj2img(_bbox.bottomRight()));
-}
-
-qreal WMSMap::resolution(const QRectF &rect) const
-{
-	Coordinates tl = xy2ll((rect.topLeft()));
-	Coordinates br = xy2ll(rect.bottomRight());
-
-	qreal ds = tl.distanceTo(br);
-	qreal ps = QLineF(rect.topLeft(), rect.bottomRight()).length();
-
-	return ds/ps;
+	return QRectF(_transform.proj2img(_bbox.topLeft()) / _ratio,
+	  _transform.proj2img(_bbox.bottomRight()) / _ratio);
 }
 
 int WMSMap::zoomFit(const QSize &size, const RectC &rect)
@@ -156,7 +141,7 @@ int WMSMap::zoomFit(const QSize &size, const RectC &rect)
 
 		_zoom = 0;
 		for (int i = 0; i < _zooms.size(); i++) {
-			if (sd2res(_zooms.at(i)) < resolution)
+			if (sd2res(_zooms.at(i)) < resolution / _ratio)
 				break;
 			_zoom = i;
 		}
@@ -187,24 +172,30 @@ int WMSMap::zoomOut()
 	return _zoom;
 }
 
-QPointF WMSMap::ll2xy(const Coordinates &c) const
+QPointF WMSMap::ll2xy(const Coordinates &c)
 {
-	return _transform.proj2img(_projection.ll2xy(c));
+	return _transform.proj2img(_projection.ll2xy(c)) / _ratio;
 }
 
-Coordinates WMSMap::xy2ll(const QPointF &p) const
+Coordinates WMSMap::xy2ll(const QPointF &p)
 {
-	return _projection.xy2ll(_transform.img2proj(p));
+	return _projection.xy2ll(_transform.img2proj(p * _ratio));
 }
 
-void WMSMap::draw(QPainter *painter, const QRectF &rect, bool block)
+qreal WMSMap::tileSize() const
 {
-	QPoint tl = QPoint((int)floor(rect.left() / (qreal)TILE_SIZE),
-	  (int)floor(rect.top() / (qreal)TILE_SIZE));
-	QPoint br = QPoint((int)ceil(rect.right() / (qreal)TILE_SIZE),
-	  (int)ceil(rect.bottom() / (qreal)TILE_SIZE));
+	return (TILE_SIZE / _ratio);
+}
 
-	QList<Tile> tiles;
+void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
+{
+	QPoint tl = QPoint(qFloor(rect.left() / tileSize()),
+	  qFloor(rect.top() / tileSize()));
+	QPoint br = QPoint(qCeil(rect.right() / tileSize()),
+	  qCeil(rect.bottom() / tileSize()));
+
+	QVector<Tile> tiles;
+	tiles.reserve((br.x() - tl.x()) * (br.y() - tl.y()));
 	for (int i = tl.x(); i < br.x(); i++) {
 		for (int j = tl.y(); j < br.y(); j++) {
 			PointD ttl(_transform.img2proj(QPointF(i * TILE_SIZE,
@@ -219,18 +210,19 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, bool block)
 		}
 	}
 
-	if (block)
+	if (flags & Map::Block)
 		_tileLoader->loadTilesSync(tiles);
 	else
 		_tileLoader->loadTilesAsync(tiles);
 
 	for (int i = 0; i < tiles.count(); i++) {
 		Tile &t = tiles[i];
-		QPoint tp(t.xy().x() * TILE_SIZE, t.xy().y() * TILE_SIZE);
-		if (t.pixmap().isNull())
-			painter->fillRect(QRect(tp, QSize(TILE_SIZE, TILE_SIZE)),
-			  _backgroundColor);
-		else
+		QPointF tp(t.xy().x() * tileSize(), t.xy().y() * tileSize());
+		if (!t.pixmap().isNull()) {
+#ifdef ENABLE_HIDPI
+			t.pixmap().setDevicePixelRatio(_ratio);
+#endif // ENABLE_HIDPI
 			painter->drawPixmap(tp, t.pixmap());
+		}
 	}
 }

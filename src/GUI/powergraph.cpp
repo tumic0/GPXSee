@@ -1,3 +1,4 @@
+#include <QLocale>
 #include "data/data.h"
 #include "powergraphitem.h"
 #include "powergraph.h"
@@ -16,9 +17,11 @@ PowerGraph::PowerGraph(QWidget *parent) : GraphTab(parent)
 void PowerGraph::setInfo()
 {
 	if (_showTracks) {
-		GraphView::addInfo(tr("Average"), QString::number(avg() * yScale()
+		QLocale l(QLocale::system());
+
+		GraphView::addInfo(tr("Average"), l.toString(avg() * yScale()
 		  + yOffset(), 'f', 1) + UNIT_SPACE + yUnits());
-		GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale()
+		GraphView::addInfo(tr("Maximum"), l.toString(max() * yScale()
 		  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
 	} else
 		clearInfo();

@@ -6,7 +6,7 @@
 
 
 #define BORDER_WIDTH   1
-#define SCALE_WIDTH    132
+#define SCALE_WIDTH    135
 #define SCALE_HEIGHT   5
 #define SEGMENTS       3
 #define PADDING        4
@@ -18,26 +18,8 @@ ScaleItem::ScaleItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 	_res = 1.0;
 	_digitalZoom = 0;
 
-#ifndef Q_OS_MAC
-	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
-#endif // Q_OS_MAC
-}
-
-void ScaleItem::updateBoundingRect()
-{
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	font.setFamily(FONT_FAMILY);
-	QFontMetrics fm(font);
-	QRect ss, es, us;
-
-	ss = fm.tightBoundingRect(QString::number(0));
-	es = fm.tightBoundingRect(QString::number(_length * SEGMENTS));
-	us = fm.tightBoundingRect(units());
-
-	_boundingRect = QRectF(-ss.width()/2, 0, _width * SEGMENTS + ss.width()/2
-	  + qMax(us.width() + PADDING, es.width()/2) + 1, SCALE_HEIGHT + PADDING
-	  + ss.height() + 2*fm.descent());
+	_font.setPixelSize(FONT_SIZE);
+	_font.setFamily(FONT_FAMILY);
 }
 
 void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -45,25 +27,21 @@ void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 {
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	font.setFamily(FONT_FAMILY);
-	QFontMetrics fm(font);
+	QFontMetrics fm(_font);
 	QRect br;
-	QPen pen = QPen(Qt::black, BORDER_WIDTH);
 
 
 	painter->setRenderHint(QPainter::Antialiasing, false);
-	painter->setFont(font);
-	painter->setPen(pen);
+	painter->setFont(_font);
+	painter->setPen(QPen(Qt::black, BORDER_WIDTH));
 
-	for (int i = 0; i <= SEGMENTS; i++) {
-		QString label = QString::number(_length * i);
-		br = fm.tightBoundingRect(label);
-		painter->drawText(_width * i - br.width()/2, br.height() + 1, label);
+	for (int i = 0; i < _ticks.size(); i++) {
+		br = _ticks.at(i).boundingBox;
+		painter->drawText(_width * i - br.width()/2, br.height() + 1,
+		  QString::number(_ticks.at(i).value));
 	}
 	painter->drawText(_width * SEGMENTS + PADDING, SCALE_HEIGHT + PADDING
-	  + br.height() + fm.descent(), units());
+	  + br.height() + fm.descent(), _unitsStr);
 
 	painter->drawRect(QRectF(0, br.height() + PADDING, SEGMENTS * _width,
 	  SCALE_HEIGHT));
@@ -75,19 +53,6 @@ void ScaleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	painter->setPen(Qt::red);
 	painter->drawRect(boundingRect());
 */
-}
-
-QString ScaleItem::units() const
-{
-	if (_units == Imperial)
-		return _scale ? qApp->translate("ScaleItem", "mi")
-		  : qApp->translate("ScaleItem", "ft");
-	else if (_units == Nautical)
-		return _scale ? qApp->translate("ScaleItem", "nmi")
-		  : qApp->translate("ScaleItem", "ft");
-	else
-		return _scale ? qApp->translate("ScaleItem", "km")
-		  : qApp->translate("ScaleItem", "m");
 }
 
 void ScaleItem::computeScale()
@@ -127,21 +92,50 @@ void ScaleItem::computeScale()
 	}
 }
 
+void ScaleItem::updateCache()
+{
+	QFontMetrics fm(_font);
+
+	_ticks = QVector<Tick>(SEGMENTS + 1);
+	for (int i = 0; i < _ticks.size(); i++) {
+		Tick &t = _ticks[i];
+		t.value = _length * i;
+		t.boundingBox = fm.tightBoundingRect(QString::number(t.value));
+	}
+
+	if (_units == Imperial)
+		_unitsStr = _scale ? qApp->translate("ScaleItem", "mi")
+		  : qApp->translate("ScaleItem", "ft");
+	else if (_units == Nautical)
+		_unitsStr = _scale ? qApp->translate("ScaleItem", "nmi")
+		  : qApp->translate("ScaleItem", "ft");
+	else
+		_unitsStr = _scale ? qApp->translate("ScaleItem", "km")
+		  : qApp->translate("ScaleItem", "m");
+	_unitsBB = fm.tightBoundingRect(_unitsStr);
+
+	QRect ss = _ticks.isEmpty() ? QRect() : _ticks.first().boundingBox;
+	QRect es = _ticks.isEmpty() ? QRect() : _ticks.last().boundingBox;
+	_boundingRect = QRectF(-ss.width()/2, 0, _width * SEGMENTS + ss.width()/2
+	  + qMax(_unitsBB.width() + PADDING, es.width()/2) + 1, SCALE_HEIGHT
+	  + PADDING + ss.height() + 2*fm.descent());
+}
+
 void ScaleItem::setResolution(qreal res)
 {
 	prepareGeometryChange();
 	_res = res;
 	computeScale();
-	updateBoundingRect();
+	updateCache();
 	update();
 }
 
-void ScaleItem::setUnits(enum Units units)
+void ScaleItem::setUnits(Units units)
 {
 	prepareGeometryChange();
 	_units = units;
 	computeScale();
-	updateBoundingRect();
+	updateCache();
 	update();
 }
 
@@ -150,7 +144,7 @@ void ScaleItem::setDigitalZoom(qreal zoom)
 	prepareGeometryChange();
 	_digitalZoom = zoom;
 	computeScale();
-	updateBoundingRect();
+	updateCache();
 	update();
 
 	setScale(pow(2, -_digitalZoom));

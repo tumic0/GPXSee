@@ -23,8 +23,8 @@ private:
 	double _falseEasting;
 	double _falseNorthing;
 
-	double _es;
-	double _es_over_2;
+	double _e;
+	double _e_over_2;
 	double _n;
 	double _t0;
 	double _rho0;

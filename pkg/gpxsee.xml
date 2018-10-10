@@ -22,6 +22,20 @@
 		<glob pattern="*.kml"/>
 	</mime-type>
 
+	<mime-type type="application/loc+xml">
+		<comment>Geocaching.com Waypoint File</comment>
+		<sub-class-of type="application/xml"/>
+		<generic-icon name="application-xml"/>
+		<glob pattern="*.loc"/>
+	</mime-type>
+
+	<mime-type type="application/slf+xml">
+		<comment>Sigma Log Format</comment>
+		<sub-class-of type="application/xml"/>
+		<generic-icon name="application-xml"/>
+		<glob pattern="*.slf"/>
+	</mime-type>
+
 	<mime-type type="application/vnd.ant.fit">
 		<comment>Flexible and Interoperable Data Transfer</comment>
 		<sub-class-of type="application/octet-stream"/>

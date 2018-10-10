@@ -5,11 +5,10 @@
 #include <QPointF>
 #include <QString>
 #include <QStringList>
-#include "rtree.h"
+#include "common/rtree.h"
 #include "waypoint.h"
 #include "path.h"
 
-class WaypointItem;
 
 class POI : public QObject
 {
@@ -45,6 +44,7 @@ private:
 	};
 
 	bool loadFile(const QString &path, bool dir);
+	void search(const RectC &rect, QSet<int> &set) const;
 
 	POITree _tree;
 	QVector<Waypoint> _data;

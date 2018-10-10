@@ -70,6 +70,38 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>loc</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/loc+xml</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/loc.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Geocaching.com Waypoint File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>slf</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/slf+xml</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/slf.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Sigma Log Format</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>fit</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
@@ -228,6 +260,48 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.google-earth.kml+xml</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.geocaching.loc</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://www.geocaching.com</string>
+			<key>UTTypeDescription</key>
+			<string>Geocaching.com Waypoint File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.xml</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>loc</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/loc+xml</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.sigmasport.slf</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://www.sigmasport.com</string>
+			<key>UTTypeDescription</key>
+			<string>Sigma Log Format</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.xml</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>slf</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/slf+xml</string>
 			</dict>
 		</dict>
 		<dict>

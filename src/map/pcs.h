@@ -38,6 +38,8 @@ public:
 private:
 	class Entry;
 
+	static QList<PCS::Entry> defaults();
+
 	const GCS *_gcs;
 	Projection::Method _method;
 	Projection::Setup _setup;

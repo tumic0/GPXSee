@@ -1,5 +1,3 @@
-#include <QFileInfo>
-#include <QtEndian>
 #include "pcs.h"
 #include "tifffile.h"
 #include "geotiff.h"
@@ -33,11 +31,14 @@
 #define ProjNatOriginLatGeoKey        3081
 #define ProjFalseEastingGeoKey        3082
 #define ProjFalseNorthingGeoKey       3083
+#define ProjFalseOriginLongGeoKey     3084
 #define ProjFalseOriginLatGeoKey      3085
+#define ProjFalseOriginEastingGeoKey  3086
+#define ProjFalseOriginNorthingGeoKey 3087
 #define ProjCenterLongGeoKey          3088
 #define ProjCenterLatGeoKey           3089
 #define ProjCenterEastingGeoKey       3090
-#define ProjFalseOriginNorthingGeoKey 3091
+#define ProjCenterNorthingGeoKey      3091
 #define ProjScaleAtNatOriginGeoKey    3092
 #define ProjScaleAtCenterGeoKey       3093
 #define ProjAzimuthAngleGeoKey        3094
@@ -254,8 +255,11 @@ bool GeoTIFF::readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv) const
 			case ProjScaleAtCenterGeoKey:
 			case ProjAzimuthAngleGeoKey:
 			case ProjRectifiedGridAngleGeoKey:
+			case ProjFalseOriginLongGeoKey:
 			case ProjFalseOriginLatGeoKey:
 			case ProjCenterEastingGeoKey:
+			case ProjCenterNorthingGeoKey:
+			case ProjFalseOriginEastingGeoKey:
 			case ProjFalseOriginNorthingGeoKey:
 				if (!readGeoValue(file, ctx.values, entry.ValueOffset,
 				  value.DOUBLE))
@@ -309,9 +313,7 @@ const GCS *GeoTIFF::gcs(QMap<quint16, Value> &kv)
 
 		if (!(gcs = GCS::gcs(gd, pm, au)))
 			_errorString = QString("%1+%2: unknown geodetic datum + prime"
-			  " meridian combination")
-			  .arg(kv.value(GeogGeodeticDatumGeoKey).SHORT)
-			  .arg(kv.value(GeogPrimeMeridianGeoKey).SHORT);
+			  " meridian combination").arg(gd).arg(pm);
 	} else
 		_errorString = "Can not determine GCS";
 
@@ -403,6 +405,8 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 			lon0 = au.toDegrees(kv.value(ProjNatOriginLongGeoKey).DOUBLE);
 		else if (kv.contains(ProjCenterLongGeoKey))
 			lon0 = au.toDegrees(kv.value(ProjCenterLongGeoKey).DOUBLE);
+		else if (kv.contains(ProjFalseOriginLongGeoKey))
+			lon0 = au.toDegrees(kv.value(ProjFalseOriginLongGeoKey).DOUBLE);
 		else
 			lon0 = NAN;
 		if (kv.contains(ProjScaleAtNatOriginGeoKey))
@@ -425,6 +429,8 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 			sp2 = NAN;
 		if (kv.contains(ProjFalseNorthingGeoKey))
 			fn = lu.toMeters(kv.value(ProjFalseNorthingGeoKey).DOUBLE);
+		else if (kv.contains(ProjCenterNorthingGeoKey))
+			fn = lu.toMeters(kv.value(ProjCenterNorthingGeoKey).DOUBLE);
 		else if (kv.contains(ProjFalseOriginNorthingGeoKey))
 			fn = lu.toMeters(kv.value(ProjFalseOriginNorthingGeoKey).DOUBLE);
 		else
@@ -433,6 +439,8 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 			fe = lu.toMeters(kv.value(ProjFalseEastingGeoKey).DOUBLE);
 		else if (kv.contains(ProjCenterEastingGeoKey))
 			fe = lu.toMeters(kv.value(ProjCenterEastingGeoKey).DOUBLE);
+		else if (kv.contains(ProjFalseOriginEastingGeoKey))
+			fe = lu.toMeters(kv.value(ProjFalseOriginEastingGeoKey).DOUBLE);
 		else
 			fe = NAN;
 

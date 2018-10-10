@@ -1,21 +1,15 @@
 #include <QFile>
 #include <QXmlStreamReader>
+#include "config.h"
 #include "onlinemap.h"
 #include "wmtsmap.h"
 #include "wmsmap.h"
+#include "osm.h"
 #include "mapsource.h"
 
-#define ZOOM_MAX       19
-#define ZOOM_MIN       0
-#define BOUNDS_LEFT    -180
-#define BOUNDS_TOP     85.0511
-#define BOUNDS_RIGHT   180
-#define BOUNDS_BOTTOM  -85.0511
 
-
-MapSource::Config::Config() : type(OSM), zooms(ZOOM_MIN, ZOOM_MAX),
-  bounds(Coordinates(BOUNDS_LEFT, BOUNDS_TOP), Coordinates(BOUNDS_RIGHT,
-  BOUNDS_BOTTOM)), format("image/png"), rest(false) {}
+MapSource::Config::Config() : type(OSM), zooms(OSM::ZOOMS), bounds(OSM::BOUNDS),
+  format("image/png"), rest(false), tileRatio(1.0) {}
 
 
 static CoordinateSystem coordinateSystem(QXmlStreamReader &reader)
@@ -37,21 +31,21 @@ Range MapSource::zooms(QXmlStreamReader &reader)
 
 	if (attr.hasAttribute("min")) {
 		min = attr.value("min").toString().toInt(&res);
-		if (!res || (min < ZOOM_MIN || min > ZOOM_MAX)) {
+		if (!res || !OSM::ZOOMS.contains(min)) {
 			reader.raiseError("Invalid minimal zoom level");
 			return Range();
 		}
 	} else
-		min = ZOOM_MIN;
+		min = OSM::ZOOMS.min();
 
 	if (attr.hasAttribute("max")) {
 		max = attr.value("max").toString().toInt(&res);
-		if (!res || (max < ZOOM_MIN || max > ZOOM_MAX)) {
+		if (!res || !OSM::ZOOMS.contains(max)) {
 			reader.raiseError("Invalid maximal zoom level");
 			return Range();
 		}
 	} else
-		max = ZOOM_MAX;
+		max = OSM::ZOOMS.max();
 
 	if (min > max) {
 		reader.raiseError("Invalid maximal/minimal zoom level combination");
@@ -69,39 +63,41 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 
 	if (attr.hasAttribute("top")) {
 		top = attr.value("top").toString().toDouble(&res);
-		if (!res || (top < BOUNDS_BOTTOM || top > BOUNDS_TOP)) {
+		if (!res || (top < OSM::BOUNDS.bottom() || top > OSM::BOUNDS.top())) {
 			reader.raiseError("Invalid bounds top value");
 			return RectC();
 		}
 	} else
-		top = BOUNDS_TOP;
+		top = OSM::BOUNDS.top();
 
 	if (attr.hasAttribute("bottom")) {
 		bottom = attr.value("bottom").toString().toDouble(&res);
-		if (!res || (bottom < BOUNDS_BOTTOM || bottom > BOUNDS_TOP)) {
+		if (!res || (bottom < OSM::BOUNDS.bottom()
+		  || bottom > OSM::BOUNDS.top())) {
 			reader.raiseError("Invalid bounds bottom value");
 			return RectC();
 		}
 	} else
-		bottom = BOUNDS_BOTTOM;
+		bottom = OSM::BOUNDS.bottom();
 
 	if (attr.hasAttribute("left")) {
 		left = attr.value("left").toString().toDouble(&res);
-		if (!res || (left < BOUNDS_LEFT || left > BOUNDS_RIGHT)) {
+		if (!res || (left < OSM::BOUNDS.left() || left > OSM::BOUNDS.right())) {
 			reader.raiseError("Invalid bounds left value");
 			return RectC();
 		}
 	} else
-		left = BOUNDS_LEFT;
+		left = OSM::BOUNDS.left();
 
 	if (attr.hasAttribute("right")) {
 		right = attr.value("right").toString().toDouble(&res);
-		if (!res || (right < BOUNDS_LEFT || right > BOUNDS_RIGHT)) {
+		if (!res || (right < OSM::BOUNDS.left()
+		  || right > OSM::BOUNDS.right())) {
 			reader.raiseError("Invalid bounds right value");
 			return RectC();
 		}
 	} else
-		right = BOUNDS_RIGHT;
+		right = OSM::BOUNDS.right();
 
 	if (bottom >= top) {
 		reader.raiseError("Invalid bottom/top bounds combination");
@@ -118,8 +114,20 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 void MapSource::map(QXmlStreamReader &reader, Config &config)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
-	config.type = (attr.value("type") == "WMTS") ? WMTS
-	  : (attr.value("type") == "WMS") ? WMS : OSM;
+	QStringRef type = attr.value("type");
+
+	if (type == "WMTS")
+		config.type = WMTS;
+	else if (type == "WMS")
+		config.type = WMS;
+	else if (type == "TMS")
+		config.type = TMS;
+	else if (type == "OSM" || type.isEmpty())
+		config.type = OSM;
+	else {
+		reader.raiseError("Invalid map type");
+		return;
+	}
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "name")
@@ -148,8 +156,8 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 			if (!attr.hasAttribute("id"))
 				reader.raiseError("Missing dimension id");
 			else
-				config.dimensions.append(QPair<QString, QString>(
-				  attr.value("id").toString(), reader.readElementText()));
+				config.dimensions.append(KV(attr.value("id").toString(),
+				  reader.readElementText()));
 		} else if (reader.name() == "crs") {
 			config.coordinateSystem = coordinateSystem(reader);
 			config.crs = reader.readElementText();
@@ -159,25 +167,34 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 			  attr.value("username").toString(),
 			  attr.value("password").toString());
 			reader.skipCurrentElement();
+		} else if (reader.name() == "tilePixelRatio") {
+#ifdef ENABLE_HIDPI
+			bool res;
+			qreal val = reader.readElementText().toDouble(&res);
+			if (!res)
+				reader.raiseError("Invalid tilePixelRatio");
+			else
+				config.tileRatio = val;
+#else // ENABLE_HIDPI
+			reader.raiseError("HiDPI maps not supported");
+#endif // ENABLE_HIDPI
 		} else
 			reader.skipCurrentElement();
 	}
 }
 
-Map *MapSource::loadFile(const QString &path)
+Map *MapSource::loadMap(const QString &path, QString &errorString)
 {
-	QFile file(path);
-	QXmlStreamReader reader;
 	Config config;
-	Map *m;
+	QFile file(path);
 
 
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
-		_errorString = file.errorString();
+		errorString = file.errorString();
 		return 0;
 	}
 
-	reader.setDevice(&file);
+	QXmlStreamReader reader(&file);
 	if (reader.readNextStartElement()) {
 		if (reader.name() == "map")
 			map(reader, config);
@@ -185,59 +202,59 @@ Map *MapSource::loadFile(const QString &path)
 			reader.raiseError("Not an online map source file");
 	}
 	if (reader.error()) {
-		_errorString = QString("%1: %2").arg(reader.lineNumber())
+		errorString = QString("%1: %2").arg(reader.lineNumber())
 		  .arg(reader.errorString());
 		return 0;
 	}
 
 	if (config.name.isEmpty()) {
-		_errorString = "Missing name definition";
+		errorString = "Missing name definition";
 		return 0;
 	}
 	if (config.url.isEmpty()) {
-		_errorString = "Missing URL definition";
+		errorString = "Missing URL definition";
 		return 0;
 	}
 	if (config.type == WMTS || config.type == WMS) {
 		if (config.layer.isEmpty()) {
-			_errorString = "Missing layer definition";
+			errorString = "Missing layer definition";
 			return 0;
 		}
 		if (config.format.isEmpty()) {
-			_errorString = "Missing format definition";
+			errorString = "Missing format definition";
 			return 0;
 		}
 	}
 	if (config.type == WMTS) {
 		if (config.set.isEmpty()) {
-			_errorString = "Missing set definiton";
+			errorString = "Missing set definiton";
 			return 0;
 		}
 	}
 	if (config.type == WMS) {
 		if (config.crs.isEmpty()) {
-			_errorString = "Missing CRS definiton";
+			errorString = "Missing CRS definiton";
 			return 0;
 		}
 	}
 
-	if (config.type == WMTS)
-		m = new WMTSMap(config.name, WMTS::Setup(config.url, config.layer,
-		  config.set, config.style, config.format, config.rest,
-		  config.coordinateSystem, config.dimensions, config.authorization));
-	else if (config.type == WMS)
-		m = new WMSMap(config.name, WMS::Setup(config.url, config.layer,
-		  config.style, config.format, config.crs, config.coordinateSystem,
-		  config.dimensions, config.authorization));
-	else
-		m = new OnlineMap(config.name, config.url, config.zooms, config.bounds,
-		  config.authorization);
-
-	if (!m->isValid()) {
-		_errorString = m->errorString();
-		delete m;
-		return 0;
+	switch (config.type) {
+		case WMTS:
+			return new WMTSMap(config.name, WMTS::Setup(config.url, config.layer,
+			  config.set, config.style, config.format, config.rest,
+			  config.coordinateSystem, config.dimensions, config.authorization),
+			  config.tileRatio);
+		case WMS:
+			return new WMSMap(config.name, WMS::Setup(config.url, config.layer,
+			  config.style, config.format, config.crs, config.coordinateSystem,
+			  config.dimensions, config.authorization));
+		case TMS:
+			return new OnlineMap(config.name, config.url, config.zooms,
+			  config.bounds, config.tileRatio, config.authorization, true);
+		case OSM:
+			return new OnlineMap(config.name, config.url, config.zooms,
+			 config.bounds, config.tileRatio, config.authorization, false);
+		default:
+			return 0;
 	}
-
-	return m;
 }

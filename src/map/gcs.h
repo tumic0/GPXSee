@@ -29,13 +29,14 @@ public:
 	static const GCS *gcs(int geodeticDatum, int primeMeridian,
 	  int angularUnits);
 	static const GCS *gcs(const QString &name);
+	static const GCS &WGS84();
 
 	static void loadList(const QString &path);
 
 private:
 	class Entry;
 
-	static QList<Entry> WGS84();
+	static QList<Entry> defaults();
 
 	Datum _datum;
 	PrimeMeridian _primeMeridian;

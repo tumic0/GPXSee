@@ -5,6 +5,7 @@
 #include <QNetworkProxyFactory>
 #include <QNetworkAccessManager>
 #include <QLibraryInfo>
+#include <QSettings>
 #include "map/downloader.h"
 #include "map/ellipsoid.h"
 #include "map/gcs.h"
@@ -12,6 +13,7 @@
 #include "opengl.h"
 #include "gui.h"
 #include "config.h"
+#include "settings.h"
 #include "app.h"
 
 
@@ -36,7 +38,21 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 #endif // Q_OS_MAC
 
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
-	Downloader::setNetworkAccessManager(new QNetworkAccessManager(this));
+	QSettings settings(APP_NAME, APP_NAME);
+	settings.beginGroup(OPTIONS_SETTINGS_GROUP);
+
+	/* The QNetworkAccessManager must be a child of QApplication, otherwise it
+	   triggers the following warning on exit (and may probably crash):
+	   "QThreadStorage: Thread X exited after QThreadStorage Y destroyed" */
+	Downloader::setNetworkManager(new QNetworkAccessManager(this));
+#ifdef ENABLE_HTTP2
+	Downloader::enableHTTP2(settings.value(ENABLE_HTTP2_SETTING,
+	  ENABLE_HTTP2_DEFAULT).toBool());
+#endif // ENABLE_HTTP2
+	Downloader::setTimeout(settings.value(CONNECTION_TIMEOUT_SETTING,
+	  CONNECTION_TIMEOUT_DEFAULT).toInt());
+	settings.endGroup();
+
 	OPENGL_SET_SAMPLES(4);
 	loadDatums();
 	loadPCSs();

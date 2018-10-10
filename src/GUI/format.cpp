@@ -46,37 +46,41 @@ QString Format::timeSpan(qreal time, bool full)
 
 QString Format::distance(qreal value, Units units)
 {
+	QLocale l(QLocale::system());
+
 	if (units == Imperial) {
 		if (value < MIINM)
-			return QString::number(value * M2FT, 'f', 0) + UNIT_SPACE
+			return l.toString(value * M2FT, 'f', 0) + UNIT_SPACE
 			  + qApp->translate("Format", "ft");
 		else
-			return QString::number(value * M2MI, 'f', 1) + UNIT_SPACE
+			return l.toString(value * M2MI, 'f', 1) + UNIT_SPACE
 			  + qApp->translate("Format", "mi");
 	} else if (units == Nautical) {
 		if (value < NMIINM)
-			return QString::number(value * M2FT, 'f', 0) + UNIT_SPACE
+			return l.toString(value * M2FT, 'f', 0) + UNIT_SPACE
 			  + qApp->translate("Format", "ft");
 		else
-			return QString::number(value * M2NMI, 'f', 1) + UNIT_SPACE
+			return l.toString(value * M2NMI, 'f', 1) + UNIT_SPACE
 			  + qApp->translate("Format", "nmi");
 	} else {
 		if (value < KMINM)
-			return QString::number(value, 'f', 0) + UNIT_SPACE
+			return l.toString(value, 'f', 0) + UNIT_SPACE
 			  + qApp->translate("Format", "m");
 		else
-			return QString::number(value * M2KM, 'f', 1) + UNIT_SPACE
+			return l.toString(value * M2KM, 'f', 1) + UNIT_SPACE
 			  + qApp->translate("Format", "km");
 	}
 }
 
 QString Format::elevation(qreal value, Units units)
 {
+	QLocale l(QLocale::system());
+
 	if (units == Metric)
-		return QString::number(qRound(value)) + UNIT_SPACE
+		return l.toString(qRound(value)) + UNIT_SPACE
 		  + qApp->translate("Format", "m");
 	else
-		return QString::number(qRound(value * M2FT)) + UNIT_SPACE
+		return l.toString(qRound(value * M2FT)) + UNIT_SPACE
 		  + qApp->translate("Format", "ft");
 }
 
@@ -95,7 +99,8 @@ QString Format::coordinates(const Coordinates &value, CoordinatesFormat type)
 			  + deg2DMS(qAbs(value.lon())) + xH;
 			break;
 		default:
-			return QString::number(qAbs(value.lat()), 'f', 5) + yH + ","
-			  + QChar(0x00A0) + QString::number(qAbs(value.lon()), 'f', 5) + xH;
+			QLocale l(QLocale::system());
+			return l.toString(qAbs(value.lat()), 'f', 5) + yH + ","
+			+ QChar(0x00A0) + l.toString(qAbs(value.lon()), 'f', 5) + xH;
 	}
 }

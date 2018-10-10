@@ -7,6 +7,7 @@
 #include <QList>
 #include <QSet>
 #include <QHash>
+#include "config.h"
 
 
 class Download
@@ -14,8 +15,8 @@ class Download
 public:
 	Download(const QUrl &url, const QString &file) : _url(url), _file(file) {}
 
-	const QUrl& url() const {return _url;}
-	const QString& file() const {return _file;}
+	const QUrl &url() const {return _url;}
+	const QString &file() const {return _file;}
 
 private:
 	QUrl _url;
@@ -45,9 +46,12 @@ public:
 	  = Authorization());
 	void clearErrors() {_errorDownloads.clear();}
 
-	static void setTimeout(int timeout) {_timeout = timeout;}
-	static void setNetworkAccessManager(QNetworkAccessManager *manager)
+	static void setNetworkManager(QNetworkAccessManager *manager)
 	  {_manager = manager;}
+	static void setTimeout(int timeout) {_timeout = timeout;}
+#ifdef ENABLE_HTTP2
+	static void enableHTTP2(bool enable);
+#endif // ENABLE_HTTP2
 
 signals:
 	void finished();
@@ -68,8 +72,11 @@ private:
 	QSet<QUrl> _currentDownloads;
 	QHash<QUrl, int> _errorDownloads;
 
-	static int _timeout;
 	static QNetworkAccessManager *_manager;
+	static int _timeout;
+#ifdef ENABLE_HTTP2
+	static bool _http2;
+#endif // ENABLE_HTTP2
 };
 
 #endif // DOWNLOADER_H

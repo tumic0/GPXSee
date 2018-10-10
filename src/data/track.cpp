@@ -1,7 +1,5 @@
 #include "track.h"
 
-#define OUTLIER_WINDOW 21
-
 int Track::_elevationWindow = 3;
 int Track::_speedWindow = 5;
 int Track::_heartRateWindow = 3;
@@ -12,15 +10,16 @@ qreal Track::_pauseSpeed = 0.5;
 int Track::_pauseInterval = 10;
 
 bool Track::_outlierEliminate = true;
+bool Track::_useReportedSpeed = false;
 
 
-static qreal median(QVector<qreal> v)
+static qreal median(QVector<qreal> &v)
 {
 	qSort(v.begin(), v.end());
 	return v.at(v.size() / 2);
 }
 
-static qreal MAD(QVector<qreal> v, qreal m)
+static qreal MAD(QVector<qreal> &v, qreal m)
 {
 	for (int i = 0; i < v.size(); i++)
 		v[i] = qAbs(v.at(i) - m);
@@ -28,21 +27,17 @@ static qreal MAD(QVector<qreal> v, qreal m)
 	return v.at(v.size() / 2);
 }
 
-static QSet<int> eliminate(const QVector<qreal> &v, int window)
+static QSet<int> eliminate(const QVector<qreal> &v)
 {
 	QSet<int> rm;
-	qreal m, M;
 
+	QVector<qreal> w(v);
+	qreal m = median(w);
+	qreal M = MAD(w, m);
 
-	if (v.size() < window)
-		return rm;
-
-	for (int i = window/2; i < v.size() - window/2; i++) {
-		m = median(v.mid(i - window/2, window));
-		M = MAD(v.mid(i - window/2, window), m);
-		if (qAbs((0.6745 * (v.at(i) - m)) / M) > 3.5)
+	for (int i = 0; i < v.size(); i++)
+		if (qAbs((0.6745 * (v.at(i) - m)) / M) > 5)
 			rm.insert(i);
-	}
 
 	return rm;
 }
@@ -74,37 +69,33 @@ static Graph filter(const Graph &g, int window)
 
 Track::Track(const TrackData &data) : _data(data)
 {
-	qreal dt, ds, total;
-	int last;
-
+	QVector<qreal> acceleration;
+	qreal ds, dt;
 
 	_time.append(0);
 	_distance.append(0);
 	_speed.append(0);
-
-	last = 0;
+	acceleration.append(0);
 
 	for (int i = 1; i < _data.count(); i++) {
 		ds = _data.at(i).coordinates().distanceTo(_data.at(i-1).coordinates());
-		_distance.append(ds);
+		_distance.append(_distance.at(i-1) + ds);
 
 		if (_data.first().hasTimestamp() && _data.at(i).hasTimestamp()
-		  && _data.at(i).timestamp() >= _data.at(last).timestamp()) {
+		  && _data.at(i).timestamp() >= _data.at(i-1).timestamp())
 			_time.append(_data.first().timestamp().msecsTo(
 			  _data.at(i).timestamp()) / 1000.0);
-			last = i;
-		} else
+		else
 			_time.append(NAN);
 
-		if (std::isnan(_time.at(i)) || std::isnan(_time.at(i-1)))
-			_speed.append(NAN);
-		else {
-			dt = _time.at(i) - _time.at(i-1);
-			if (dt < 1e-3) {
-				_speed.append(_speed.at(i-1));
-				continue;
-			}
+		dt = _time.at(i) - _time.at(i-1);
+		if (dt < 1e-3) {
+			_speed.append(_speed.at(i-1));
+			acceleration.append(acceleration.at(i-1));
+		} else {
 			_speed.append(ds / dt);
+			qreal dv = _speed.at(i) - _speed.at(i-1);
+			acceleration.append(dv / dt);
 		}
 	}
 
@@ -118,20 +109,37 @@ Track::Track(const TrackData &data) : _data(data)
 		}
 	}
 
-	if (_outlierEliminate)
-		_outliers = eliminate(_speed, OUTLIER_WINDOW);
+	if (!_outlierEliminate)
+		return;
+
+	_outliers = eliminate(acceleration);
 
 	QSet<int>::const_iterator it;
 	for (it = _stop.constBegin(); it != _stop.constEnd(); ++it)
 		_outliers.remove(*it);
 
-	total = 0;
+	int last = 0;
 	for (int i = 0; i < _data.size(); i++) {
 		if (_outliers.contains(i))
+			last++;
+		else
+			break;
+	}
+	for (int i = last + 1; i < _data.size(); i++) {
+		if (_outliers.contains(i))
 			continue;
-		if (!discardStopPoint(i))
-			total += _distance.at(i);
-		_distance[i] = total;
+		if (discardStopPoint(i)) {
+			_distance[i] = _distance.at(last);
+			_speed[i] = 0;
+		} else {
+			ds = _data.at(i).coordinates().distanceTo(
+			  _data.at(last).coordinates());
+			_distance[i] = _distance.at(last) + ds;
+
+			dt = _time.at(i) - _time.at(last);
+			_speed[i] = (dt < 1e-3) ? _speed.at(last) : ds / dt;
+		}
+		last = i;
 	}
 }
 
@@ -151,14 +159,15 @@ Graph Track::speed() const
 {
 	Graph raw, filtered;
 	qreal v;
-	QSet<int> stop;
+	QList<int> stop;
 
 	for (int i = 0; i < _data.size(); i++) {
 		if (_stop.contains(i) && (!std::isnan(_speed.at(i))
 		  || _data.at(i).hasSpeed())) {
 			v = 0;
-			stop.insert(raw.size());
-		} else if (_data.at(i).hasSpeed() && !_outliers.contains(i))
+			stop.append(raw.size());
+		} else if (_useReportedSpeed && _data.at(i).hasSpeed()
+		  && !_outliers.contains(i))
 			v = _data.at(i).speed();
 		else if (!std::isnan(_speed.at(i)) && !_outliers.contains(i))
 			v = _speed.at(i);
@@ -170,9 +179,8 @@ Graph Track::speed() const
 
 	filtered = filter(raw, _speedWindow);
 
-	QSet<int>::const_iterator it;
-	for (it = stop.constBegin(); it != stop.constEnd(); ++it)
-		filtered[*it].setY(0);
+	for (int i = 0; i < stop.size(); i++)
+		filtered[stop.at(i)].setY(0);
 
 	return filtered;
 }
@@ -201,16 +209,28 @@ Graph Track::temperature() const
 	return raw;
 }
 
+Graph Track::ratio() const
+{
+	Graph raw;
+
+	for (int i = 0; i < _data.size(); i++)
+		if (_data.at(i).hasRatio() && !_outliers.contains(i))
+			raw.append(GraphPoint(_distance.at(i), _time.at(i),
+			  _data.at(i).ratio()));
+
+	return raw;
+}
+
 Graph Track::cadence() const
 {
 	Graph raw, filtered;
-	QSet<int> stop;
+	QList<int> stop;
 	qreal c;
 
 	for (int i = 0; i < _data.size(); i++) {
 		if (_data.at(i).hasCadence() && _stop.contains(i)) {
 			c = 0;
-			stop.insert(raw.size());
+			stop.append(raw.size());
 		} else if (_data.at(i).hasCadence() && !_outliers.contains(i))
 			c = _data.at(i).cadence();
 		else
@@ -221,9 +241,8 @@ Graph Track::cadence() const
 
 	filtered = filter(raw, _cadenceWindow);
 
-	QSet<int>::const_iterator it;
-	for (it = stop.constBegin(); it != stop.constEnd(); ++it)
-		filtered[*it].setY(0);
+	for (int i = 0; i < stop.size(); i++)
+		filtered[stop.at(i)].setY(0);
 
 	return filtered;
 }
@@ -231,13 +250,13 @@ Graph Track::cadence() const
 Graph Track::power() const
 {
 	Graph raw, filtered;
-	QSet<int> stop;
+	QList<int> stop;
 	qreal p;
 
 	for (int i = 0; i < _data.size(); i++) {
 		if (_data.at(i).hasPower() && _stop.contains(i)) {
 			p = 0;
-			stop.insert(raw.size());
+			stop.append(raw.size());
 		} else if (_data.at(i).hasPower() && !_outliers.contains(i))
 			p = _data.at(i).power();
 		else
@@ -248,22 +267,29 @@ Graph Track::power() const
 
 	filtered = filter(raw, _powerWindow);
 
-	QSet<int>::const_iterator it;
-	for (it = stop.constBegin(); it != stop.constEnd(); ++it)
-		filtered[*it].setY(0);
+	for (int i = 0; i < stop.size(); i++)
+		filtered[stop.at(i)].setY(0);
 
 	return filtered;
 }
 
 qreal Track::distance() const
 {
-	return _distance.isEmpty() ? 0 : _distance.last();
+	for (int i = _distance.size() - 1; i >= 0; i--)
+		if (!_outliers.contains(i))
+			return _distance.at(i);
+
+	return 0;
 }
 
 qreal Track::time() const
 {
-	return (_data.size() < 2) ? 0 :
-	  (_data.first().timestamp().msecsTo(_data.last().timestamp()) / 1000.0);
+	for (int i = _data.size() - 1; i >= 0; i--)
+		if (!_outliers.contains(i))
+			return _data.first().timestamp().msecsTo(_data.at(i).timestamp())
+			  / 1000.0;
+
+	return 0;
 }
 
 qreal Track::movingTime() const

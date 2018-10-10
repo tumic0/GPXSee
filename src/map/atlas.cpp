@@ -2,7 +2,7 @@
 #include <QtAlgorithms>
 #include <QPainter>
 #include "common/rectc.h"
-#include "offlinemap.h"
+#include "ozimap.h"
 #include "tar.h"
 #include "atlas.h"
 
@@ -12,7 +12,7 @@
 #define TL(m) ((m)->xy2pp((m)->bounds().topLeft()))
 #define BR(m) ((m)->xy2pp((m)->bounds().bottomRight()))
 
-static bool resCmp(const OfflineMap *m1, const OfflineMap *m2)
+static bool resCmp(OziMap *m1, OziMap *m2)
 {
 	qreal r1, r2;
 
@@ -22,12 +22,12 @@ static bool resCmp(const OfflineMap *m1, const OfflineMap *m2)
 	return r1 > r2;
 }
 
-static bool xCmp(const OfflineMap *m1, const OfflineMap *m2)
+static bool xCmp(OziMap *m1, OziMap *m2)
 {
 	return TL(m1).x() < TL(m2).x();
 }
 
-static bool yCmp(const OfflineMap *m1, const OfflineMap *m2)
+static bool yCmp(OziMap *m1, OziMap *m2)
 {
 	return TL(m1).y() > TL(m2).y();
 }
@@ -49,34 +49,32 @@ void Atlas::computeZooms()
 
 void Atlas::computeBounds()
 {
-	QList<QPointF> offsets;
-
-	for (int i = 0; i < _maps.count(); i++)
-		offsets.append(QPointF());
+	QVector<QPointF> offsets(_maps.count());
 
 	for (int z = 0; z < _zooms.count(); z++) {
-		QList<OfflineMap*> m;
+		QList<OziMap*> m;
 		for (int i = _zooms.at(z).first; i <= _zooms.at(z).last; i++)
 			m.append(_maps.at(i));
 
 		qSort(m.begin(), m.end(), xCmp);
 		offsets[_maps.indexOf(m.first())].setX(0);
 		for (int i = 1; i < m.size(); i++) {
-			qreal w = round(m.first()->pp2xy(TL(m.at(i))).x());
+			qreal w = m.first()->pp2xy(TL(m.at(i))).x();
 			offsets[_maps.indexOf(m.at(i))].setX(w);
 		}
 
 		qSort(m.begin(), m.end(), yCmp);
 		offsets[_maps.indexOf(m.first())].setY(0);
 		for (int i = 1; i < m.size(); i++) {
-			qreal h = round(m.first()->pp2xy(TL(m.at(i))).y());
+			qreal h = m.first()->pp2xy(TL(m.at(i))).y();
 			offsets[_maps.indexOf(m.at(i))].setY(h);
 		}
 	}
 
+	_bounds = QVector<Bounds>(_maps.count());
 	for (int i = 0; i < _maps.count(); i++)
-		_bounds.append(Bounds(RectD(TL(_maps.at(i)), BR(_maps.at(i))),
-		  QRectF(offsets.at(i), _maps.at(i)->bounds().size())));
+		_bounds[i] = Bounds(RectD(TL(_maps.at(i)), BR(_maps.at(i))),
+		  QRectF(offsets.at(i), _maps.at(i)->bounds().size()));
 }
 
 Atlas::Atlas(const QString &fileName, QObject *parent)
@@ -121,11 +119,11 @@ Atlas::Atlas(const QString &fileName, QObject *parent)
 			QString mapFile = maps.at(i).absoluteFilePath() + "/"
 			  + maps.at(i).fileName() + ".map";
 
-			OfflineMap *map;
+			OziMap *map;
 			if (tar.isOpen())
-				map = new OfflineMap(mapFile, tar, this);
+				map = new OziMap(mapFile, tar, this);
 			else
-				map = new OfflineMap(mapFile, this);
+				map = new OziMap(mapFile, this);
 
 			if (map->isValid())
 				_maps.append(map);
@@ -147,7 +145,15 @@ Atlas::Atlas(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
-QRectF Atlas::bounds() const
+void Atlas::setDevicePixelRatio(qreal ratio)
+{
+	for (int i = 0; i < _maps.size(); i++)
+		_maps[i]->setDevicePixelRatio(ratio);
+
+	computeBounds();
+}
+
+QRectF Atlas::bounds()
 {
 	QSizeF s(0, 0);
 
@@ -159,20 +165,6 @@ QRectF Atlas::bounds() const
 	}
 
 	return QRectF(QPointF(0, 0), s);
-}
-
-qreal Atlas::resolution(const QRectF &rect) const
-{
-	int idx = _zooms.at(_zoom).first;
-
-	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).last; i++) {
-		if (_bounds.at(i).xy.contains(rect.center())) {
-			idx = i;
-			break;
-		}
-	}
-
-	return _maps.at(idx)->resolution(rect);
 }
 
 int Atlas::zoomFit(const QSize &size, const RectC &br)
@@ -263,37 +255,35 @@ Coordinates Atlas::xy2ll(const QPointF &p)
 	return _maps.at(idx)->xy2ll(p2);
 }
 
-void Atlas::draw(QPainter *painter, const QRectF &rect, bool block)
+void Atlas::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	Q_UNUSED(block);
-
 	// All in one map
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).last; i++) {
 		if (_bounds.at(i).xy.contains(rect)) {
-			draw(painter, rect, i);
+			draw(painter, rect, i, flags);
 			return;
 		}
 	}
 
 	// Multiple maps
-	painter->fillRect(rect, _backgroundColor);
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).last; i++) {
 		QRectF ir = rect.intersected(_bounds.at(i).xy);
 		if (!ir.isNull())
-			draw(painter, ir, i);
+			draw(painter, ir, i, flags);
 	}
 }
 
-void Atlas::draw(QPainter *painter, const QRectF &rect, int mapIndex)
+void Atlas::draw(QPainter *painter, const QRectF &rect, int mapIndex,
+  Flags flags)
 {
-	OfflineMap *map = _maps.at(mapIndex);
+	OziMap *map = _maps.at(mapIndex);
 	const QPointF offset = _bounds.at(mapIndex).xy.topLeft();
 	QRectF pr = QRectF(rect.topLeft() - offset, rect.size());
 
 	map->load();
 
 	painter->translate(offset);
-	map->draw(painter, pr, true);
+	map->draw(painter, pr, flags);
 	painter->translate(-offset);
 }
 
@@ -307,9 +297,9 @@ bool Atlas::isAtlas(const QString &path)
 {
 	QFileInfo fi(path);
 	QString suffix = fi.suffix().toLower();
-	Tar tar(path);
 
 	if (suffix == "tar") {
+		Tar tar(path);
 		if (!tar.open())
 			return false;
 		QString tbaFileName = fi.completeBaseName() + ".tba";

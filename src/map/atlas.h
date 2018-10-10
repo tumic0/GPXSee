@@ -4,7 +4,7 @@
 #include "map.h"
 #include "rectd.h"
 
-class OfflineMap;
+class OziMap;
 
 class Atlas : public Map
 {
@@ -13,10 +13,9 @@ class Atlas : public Map
 public:
 	Atlas(const QString &fileName, QObject *parent = 0);
 
-	const QString &name() const {return _name;}
+	QString name() const {return _name;}
 
-	QRectF bounds() const;
-	qreal resolution(const QRectF &rect) const;
+	QRectF bounds();
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);
@@ -27,8 +26,9 @@ public:
 	QPointF ll2xy(const Coordinates &c);
 	Coordinates xy2ll(const QPointF &p);
 
-	void draw(QPainter *painter, const QRectF &rect, bool block);
+	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
+	void setDevicePixelRatio(qreal ratio);
 	void unload();
 
 	bool isValid() const {return _valid;}
@@ -53,13 +53,13 @@ private:
 		Bounds(const RectD &pp, const QRectF &xy) : pp(pp), xy(xy) {}
 	};
 
-	void draw(QPainter *painter, const QRectF &rect, int mapIndex);
+	void draw(QPainter *painter, const QRectF &rect, int mapIndex, Flags flags);
 	void computeZooms();
 	void computeBounds();
 
 	QString _name;
 
-	QList<OfflineMap*> _maps;
+	QList<OziMap*> _maps;
 	QVector<Zoom> _zooms;
 	QVector<Bounds> _bounds;
 	int _zoom;

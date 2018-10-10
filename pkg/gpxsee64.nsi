@@ -1,11 +1,13 @@
 !include "MUI2.nsh"
 !include "x64.nsh"
 !include "WinVer.nsh"
+!include "macros.nsh"
+
 
 ; The name of the installer
 Name "GPXSee"
 ; Program version
-!define VERSION "5.11"
+!define VERSION "6.3"
 
 ; The file to write
 OutFile "GPXSee-${VERSION}_x64.exe"
@@ -32,16 +34,6 @@ InstallDirRegKey HKLM "Software\GPXSee" "Install_Dir"
 
 ; Registry key for uninstaller
 !define REGENTRY "Software\Microsoft\Windows\CurrentVersion\Uninstall\GPXSee"
-; File types registry entries
-!define REGGPX "GPXSee.gpx"
-!define REGTCX "GPXSee.tcx"
-!define REGKML "GPXSee.kml"
-!define REGFIT "GPXSee.fit"
-!define REGIGC "GPXSee.igc"
-!define REGNMEA "GPXSee.nmea"
-!define REGPLT "GPXSee.plt"
-!define REGRTE "GPXSee.rte"
-!define REGWPT "GPXSee.wpt"
 
 ; Start menu page configuration
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
@@ -121,43 +113,17 @@ Section "GPXSee" SEC_APP
 
   ; Associate file formats
   DetailPrint "Associating file types..."
-  WriteRegStr HKCR ".gpx" "" "${REGGPX}"
-  WriteRegStr HKCR "${REGGPX}" ""  "GPS Exchange Format"
-  WriteRegStr HKCR "${REGGPX}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,2"
-  WriteRegStr HKCR "${REGGPX}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
-  WriteRegStr HKCR ".tcx" "" "${REGTCX}"
-  WriteRegStr HKCR "${REGTCX}" ""  "Training Center XML"
-  WriteRegStr HKCR "${REGTCX}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,3"
-  WriteRegStr HKCR "${REGTCX}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
-  WriteRegStr HKCR ".kml" "" "${REGKML}"
-  WriteRegStr HKCR "${REGKML}" ""  "Keyhole Markup Language"
-  WriteRegStr HKCR "${REGKML}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,4"
-  WriteRegStr HKCR "${REGKML}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
-  WriteRegStr HKCR ".fit" "" "${REGFIT}"
-  WriteRegStr HKCR "${REGFIT}" ""  "Flexible and Interoperable Data Transfer"
-  WriteRegStr HKCR "${REGFIT}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,5"
-  WriteRegStr HKCR "${REGFIT}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
-  WriteRegStr HKCR ".igc" "" "${REGIGC}"
-  WriteRegStr HKCR "${REGIGC}" ""  "Flight Recorder Data Format"
-  WriteRegStr HKCR "${REGIGC}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,6"
-  WriteRegStr HKCR "${REGIGC}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
-  WriteRegStr HKCR ".nmea" "" "${REGNMEA}"
-  WriteRegStr HKCR "${REGNMEA}" ""  "NMEA 0183 data"
-  WriteRegStr HKCR "${REGNMEA}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,7"
-  WriteRegStr HKCR "${REGNMEA}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
-  WriteRegStr HKCR ".plt" "" "${REGPLT}"
-  WriteRegStr HKCR "${REGPLT}" ""  "OziExplorer Track Point File"
-  WriteRegStr HKCR "${REGPLT}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,8"
-  WriteRegStr HKCR "${REGPLT}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
-  WriteRegStr HKCR ".rte" "" "${REGRTE}"
-  WriteRegStr HKCR "${REGRTE}" ""  "OziExplorer Route File"
-  WriteRegStr HKCR "${REGRTE}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,9"
-  WriteRegStr HKCR "${REGRTE}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
-  WriteRegStr HKCR ".wpt" "" "${REGWPT}"
-  WriteRegStr HKCR "${REGWPT}" ""  "OziExplorer Waypoint File"
-  WriteRegStr HKCR "${REGWPT}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,1"
-  WriteRegStr HKCR "${REGWPT}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
-
+  !insertmacro FILE_ASSOCIATION_ADD "gpx" "GPS Exchange Format" 4
+  !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 5
+  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 6
+  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 7
+  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 8
+  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 data" 9
+  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track Point File" 10
+  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 11
+  !insertmacro FILE_ASSOCIATION_ADD "wpt" "OziExplorer Waypoint File" 1
+  !insertmacro FILE_ASSOCIATION_ADD "loc" "Geocaching.com Waypoint File" 2
+  !insertmacro FILE_ASSOCIATION_ADD "slf" "Sigma Log File" 3
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
 SectionEnd
@@ -171,9 +137,12 @@ Section "QT framework" SEC_QT
   File "Qt5Widgets.dll"
   File "Qt5PrintSupport.dll"
   File "Qt5Network.dll"
+  File "Qt5Sql.dll"
   File /r "platforms"
   File /r "imageformats"
   File /r "printsupport"
+  File /r "styles"
+  File /r "sqldrivers"
 
 SectionEnd
 
@@ -212,40 +181,15 @@ Section "ANGLE" SEC_ANGLE
 SectionEnd
 
 SectionGroup "Localization" SEC_LOCALIZATION
-  Section "Czech"
-    CreateDirectory "$INSTDIR\translations"
-    File /oname=translations\gpxsee_cs.qm translations\gpxsee_cs.qm
-    File /oname=translations\qt_cs.qm translations\qt_cs.qm
-  SectionEnd
-  Section "Finnish"
-    CreateDirectory "$INSTDIR\translations"
-    File /oname=translations\gpxsee_fi.qm translations\gpxsee_fi.qm
-    File /oname=translations\qt_fi.qm translations\qt_fi.qm
-  SectionEnd
-  Section "French"
-    CreateDirectory "$INSTDIR\translations"
-    File /oname=translations\gpxsee_fr.qm translations\gpxsee_fr.qm
-    File /oname=translations\qt_fr.qm translations\qt_fr.qm
-  SectionEnd
-  Section "German"
-    CreateDirectory "$INSTDIR\translations"
-    File /oname=translations\gpxsee_de.qm translations\gpxsee_de.qm
-    File /oname=translations\qt_de.qm translations\qt_de.qm
-  SectionEnd
-  Section "Polish"
-    CreateDirectory "$INSTDIR\translations"
-    File /oname=translations\gpxsee_pl.qm translations\gpxsee_pl.qm
-    File /oname=translations\qt_pl.qm translations\qt_pl.qm
-  SectionEnd
-  Section "Russian"
-    CreateDirectory "$INSTDIR\translations" 
-    File /oname=translations\gpxsee_ru.qm translations\gpxsee_ru.qm
-    File /oname=translations\qt_ru.qm translations\qt_ru.qm
-  SectionEnd
-  Section "Swedish"
-    CreateDirectory "$INSTDIR\translations" 
-    File /oname=translations\gpxsee_sv.qm translations\gpxsee_sv.qm
-  SectionEnd
+  !insertmacro LOCALIZATION "Czech" "cs"
+  !insertmacro LOCALIZATION "Danish" "da"
+  !insertmacro LOCALIZATION "Finnish" "fi"
+  !insertmacro LOCALIZATION "French" "fr"
+  !insertmacro LOCALIZATION "German" "de"
+  !insertmacro LOCALIZATION "Norwegian" "nb"
+  !insertmacro LOCALIZATION "Polish" "pl"
+  !insertmacro LOCALIZATION "Russian" "ru"
+  !insertmacro LOCALIZATION "Swedish" "sv"
 SectionGroupEnd
 
 ;--------------------------------
@@ -269,24 +213,17 @@ Section "Uninstall"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
 
   ; Remove File associations
-  DeleteRegKey HKCR "${REGGPX}"
-  DeleteRegKey HKCR ".gpx"
-  DeleteRegKey HKCR "${REGTCX}"
-  DeleteRegKey HKCR ".tcx"
-  DeleteRegKey HKCR "${REGKML}"
-  DeleteRegKey HKCR ".kml"
-  DeleteRegKey HKCR "${REGFIT}"
-  DeleteRegKey HKCR ".fit"
-  DeleteRegKey HKCR "${REGIGC}"
-  DeleteRegKey HKCR ".igc"
-  DeleteRegKey HKCR "${REGNMEA}"
-  DeleteRegKey HKCR ".nmea"
-  DeleteRegKey HKCR "${REGPLT}"
-  DeleteRegKey HKCR ".plt"
-  DeleteRegKey HKCR "${REGRTE}"
-  DeleteRegKey HKCR ".rte"
-  DeleteRegKey HKCR "${REGWPT}"
-  DeleteRegKey HKCR ".wpt"
+  !insertmacro FILE_ASSOCIATION_REMOVE "gpx"
+  !insertmacro FILE_ASSOCIATION_REMOVE "tcx"
+  !insertmacro FILE_ASSOCIATION_REMOVE "kml"
+  !insertmacro FILE_ASSOCIATION_REMOVE "fit"
+  !insertmacro FILE_ASSOCIATION_REMOVE "igc"
+  !insertmacro FILE_ASSOCIATION_REMOVE "nmea"
+  !insertmacro FILE_ASSOCIATION_REMOVE "plt"
+  !insertmacro FILE_ASSOCIATION_REMOVE "rte"
+  !insertmacro FILE_ASSOCIATION_REMOVE "wpt"
+  !insertmacro FILE_ASSOCIATION_REMOVE "loc"
+  !insertmacro FILE_ASSOCIATION_REMOVE "slf"
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
 SectionEnd

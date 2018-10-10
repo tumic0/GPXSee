@@ -12,13 +12,13 @@ class OnlineMap : public Map
 
 public:
 	OnlineMap(const QString &name, const QString &url, const Range &zooms,
-	  const RectC &bounds, const Authorization &authorization,
-	  QObject *parent = 0);
+	  const RectC &bounds, qreal tileRatio, const Authorization &authorization,
+	  bool invertY, QObject *parent = 0);
 
-	const QString &name() const {return _name;}
+	QString name() const {return _name;}
 
-	QRectF bounds() const;
-	qreal resolution(const QRectF &rect) const;
+	QRectF bounds();
+	qreal resolution(const QRectF &rect);
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom) {_zoom = zoom;}
@@ -26,31 +26,27 @@ public:
 	int zoomIn();
 	int zoomOut();
 
-	QPointF ll2xy(const Coordinates &c)
-		{return static_cast<const OnlineMap &>(*this).ll2xy(c);}
-	Coordinates xy2ll(const QPointF &p)
-		{return static_cast<const OnlineMap &>(*this).xy2ll(p);}
+	QPointF ll2xy(const Coordinates &c);
+	Coordinates xy2ll(const QPointF &p);
 
-	void draw(QPainter *painter, const QRectF &rect, bool block);
+	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
+	void setDevicePixelRatio(qreal ratio) {_deviceRatio = ratio;}
 	void clearCache() {_tileLoader->clearCache();}
 
-	bool isValid() const {return _valid;}
-	QString errorString() const {return _errorString;}
-
 private:
-	QPointF ll2xy(const Coordinates &c) const;
-	Coordinates xy2ll(const QPointF &p) const;
 	int limitZoom(int zoom) const;
+	qreal tileSize() const;
+	qreal coordinatesRatio() const;
+	qreal imageRatio() const;
 
 	TileLoader *_tileLoader;
 	QString _name;
 	Range _zooms;
 	RectC _bounds;
 	int _zoom;
-
-	bool _valid;
-	QString _errorString;
+	qreal _deviceRatio, _tileRatio;
+	bool _invertY;
 };
 
 #endif // ONLINEMAP_H

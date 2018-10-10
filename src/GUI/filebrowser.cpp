@@ -13,11 +13,6 @@ FileBrowser::FileBrowser(QObject *parent) : QObject(parent)
 	_index = -1;
 }
 
-FileBrowser::~FileBrowser()
-{
-	delete _watcher;
-}
-
 void FileBrowser::setCurrent(const QString &path)
 {
 	QFileInfo file(path);

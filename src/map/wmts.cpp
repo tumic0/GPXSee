@@ -277,7 +277,7 @@ bool WMTS::parseCapabilities(const QString &path, const Setup &setup)
 	return true;
 }
 
-bool WMTS::getCapabilities(const QString &url, const QString &file,
+bool WMTS::downloadCapabilities(const QString &url, const QString &file,
   const Authorization &authorization)
 {
 	Downloader d;
@@ -300,25 +300,26 @@ bool WMTS::getCapabilities(const QString &url, const QString &file,
 
 WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
 {
-	QString capaUrl = setup.rest() ? setup.url() :
-	  QString("%1?service=WMTS&Version=1.0.0&request=GetCapabilities")
-	  .arg(setup.url());
+	QUrl url(setup.rest() ? setup.url() : QString(
+	  "%1%2service=WMTS&Version=1.0.0&request=GetCapabilities").arg(setup.url(),
+	  setup.url().contains('?') ? "&" : "?"));
 
-	if (!QFileInfo(file).exists())
-		if (!getCapabilities(capaUrl, file, setup.authorization()))
+	if (!url.isLocalFile() && !QFileInfo(file).exists())
+		if (!downloadCapabilities(url.toString(), file, setup.authorization()))
 			return;
-	if (!parseCapabilities(file, setup))
+	if (!parseCapabilities(url.isLocalFile() ? url.toLocalFile() : file, setup))
 		return;
 
 	QString style = setup.style().isEmpty() ? "default" : setup.style();
 	if (!setup.rest()) {
-		_tileUrl = QString("%1?service=WMTS&Version=1.0.0&request=GetTile"
-		  "&Format=%2&Layer=%3&Style=%4&TileMatrixSet=%5&TileMatrix=$z"
-		  "&TileRow=$y&TileCol=$x").arg(setup.url(), setup.format(),
+		_tileUrl = QString("%1%2service=WMTS&Version=1.0.0&request=GetTile"
+		  "&Format=%3&Layer=%4&Style=%5&TileMatrixSet=%6&TileMatrix=$z"
+		  "&TileRow=$y&TileCol=$x").arg(setup.url(),
+		  setup.url().contains('?') ? "&" : "?" , setup.format(),
 		  setup.layer(), style, setup.set());
 		for (int i = 0; i < setup.dimensions().size(); i++) {
-			const QPair<QString, QString> &dim = setup.dimensions().at(i);
-			_tileUrl.append(QString("&%1=%2").arg(dim.first, dim.second));
+			const KV &dim = setup.dimensions().at(i);
+			_tileUrl.append(QString("&%1=%2").arg(dim.key(), dim.value()));
 		}
 	} else {
 		_tileUrl.replace("{Style}", style, Qt::CaseInsensitive);
@@ -327,8 +328,8 @@ WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
 		_tileUrl.replace("{TileRow}", "$y", Qt::CaseInsensitive);
 		_tileUrl.replace("{TileCol}", "$x", Qt::CaseInsensitive);
 		for (int i = 0; i < setup.dimensions().size(); i++) {
-			const QPair<QString, QString> &dim = setup.dimensions().at(i);
-			_tileUrl.replace(QString("{%1}").arg(dim.first), dim.second,
+			const KV &dim = setup.dimensions().at(i);
+			_tileUrl.replace(QString("{%1}").arg(dim.key()), dim.value(),
 			  Qt::CaseInsensitive);
 		}
 	}

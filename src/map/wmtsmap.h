@@ -13,12 +13,12 @@ class WMTSMap : public Map
 	Q_OBJECT
 
 public:
-	WMTSMap(const QString &name, const WMTS::Setup &setup, QObject *parent = 0);
+	WMTSMap(const QString &name, const WMTS::Setup &setup, qreal tileRatio,
+	  QObject *parent = 0);
 
-	const QString &name() const {return _name;}
+	QString name() const {return _name;}
 
-	QRectF bounds() const;
-	qreal resolution(const QRectF &rect) const;
+	QRectF bounds();
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);
@@ -26,13 +26,12 @@ public:
 	int zoomIn();
 	int zoomOut();
 
-	QPointF ll2xy(const Coordinates &c)
-		{return static_cast<const WMTSMap &>(*this).ll2xy(c);}
-	Coordinates xy2ll(const QPointF &p)
-		{return static_cast<const WMTSMap &>(*this).xy2ll(p);}
+	QPointF ll2xy(const Coordinates &c);
+	Coordinates xy2ll(const QPointF &p);
 
-	void draw(QPainter *painter, const QRectF &rect, bool block);
+	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
+	void setDevicePixelRatio(qreal ratio) {_deviceRatio = ratio;}
 	void clearCache();
 
 	bool isValid() const {return _valid;}
@@ -43,9 +42,9 @@ private:
 	double sd2res(double scaleDenominator) const;
 	QString tilesDir() const;
 	void updateTransform();
-
-	QPointF ll2xy(const Coordinates &c) const;
-	Coordinates xy2ll(const QPointF &p) const;
+	QSizeF tileSize(const WMTS::Zoom &zoom) const;
+	qreal coordinatesRatio() const;
+	qreal imageRatio() const;
 
 	QString _name;
 	WMTS::Setup _setup;
@@ -56,6 +55,7 @@ private:
 	Transform _transform;
 	CoordinateSystem _cs;
 	int _zoom;
+	qreal _deviceRatio, _tileRatio;
 
 	bool _valid;
 	QString _errorString;

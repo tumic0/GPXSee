@@ -1,12 +1,17 @@
 TARGET = GPXSee
-VERSION = 5.11
+VERSION = 6.3
+
 QT += core \
     gui \
-    network
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-greaterThan(QT_MAJOR_VERSION, 4): QT += printsupport
-lessThan(QT_VERSION, 5.4): QT += opengl
-macx: QT += opengl
+    network \
+    sql
+greaterThan(QT_MAJOR_VERSION, 4) {
+    QT += widgets
+    QT += printsupport
+}
+lessThan(QT_MAJOR_VERSION, 5) {QT += opengl}
+equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 4) {QT += opengl}
+
 INCLUDEPATH += ./src
 HEADERS += src/config.h \
     src/common/staticassert.h \
@@ -15,6 +20,8 @@ HEADERS += src/config.h \
     src/common/rectc.h \
     src/common/wgs84.h \
     src/common/str2int.h \
+    src/common/rtree.h \
+    src/common/kv.h \
     src/GUI/app.h \
     src/GUI/icons.h \
     src/GUI/gui.h \
@@ -48,6 +55,7 @@ HEADERS += src/config.h \
     src/GUI/format.h \
     src/GUI/cadencegraph.h \
     src/GUI/powergraph.h \
+    src/GUI/gearratiograph.h \
     src/GUI/optionsdialog.h \
     src/GUI/colorbox.h \
     src/GUI/stylecombobox.h \
@@ -60,6 +68,7 @@ HEADERS += src/config.h \
     src/GUI/temperaturegraphitem.h \
     src/GUI/cadencegraphitem.h \
     src/GUI/powergraphitem.h \
+    src/GUI/gearratiographitem.h \
     src/GUI/oddspinbox.h \
     src/GUI/settings.h \
     src/GUI/nicenum.h \
@@ -82,7 +91,7 @@ HEADERS += src/config.h \
     src/map/downloader.h \
     src/map/tile.h \
     src/map/emptymap.h \
-    src/map/offlinemap.h \
+    src/map/ozimap.h \
     src/map/tar.h \
     src/map/ozf.h \
     src/map/atlas.h \
@@ -117,7 +126,6 @@ HEADERS += src/config.h \
     src/data/trackdata.h \
     src/data/routedata.h \
     src/data/path.h \
-    src/data/rtree.h \
     src/data/gpxparser.h \
     src/data/tcxparser.h \
     src/data/csvparser.h \
@@ -128,7 +136,16 @@ HEADERS += src/config.h \
     src/data/oziparsers.h \
     src/map/rectd.h \
     src/map/geocentric.h \
-    src/map/mercator.h
+    src/map/mercator.h \
+    src/map/jnxmap.h \
+    src/map/krovak.h \
+    src/data/locparser.h \
+    src/data/slfparser.h \
+    src/map/geotiffmap.h \
+    src/map/image.h \
+    src/common/greatcircle.h \
+    src/map/mbtilesmap.h \
+    src/map/osm.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -162,6 +179,7 @@ SOURCES += src/main.cpp \
     src/GUI/format.cpp \
     src/GUI/cadencegraph.cpp \
     src/GUI/powergraph.cpp \
+    src/GUI/gearratiograph.cpp \
     src/GUI/optionsdialog.cpp \
     src/GUI/colorbox.cpp \
     src/GUI/stylecombobox.cpp \
@@ -173,13 +191,14 @@ SOURCES += src/main.cpp \
     src/GUI/temperaturegraphitem.cpp \
     src/GUI/cadencegraphitem.cpp \
     src/GUI/powergraphitem.cpp \
+    src/GUI/gearratiographitem.cpp \
     src/GUI/nicenum.cpp \
     src/GUI/mapview.cpp \
     src/map/maplist.cpp \
     src/map/onlinemap.cpp \
     src/map/downloader.cpp \
     src/map/emptymap.cpp \
-    src/map/offlinemap.cpp \
+    src/map/ozimap.cpp \
     src/map/tar.cpp \
     src/map/atlas.cpp \
     src/map/ozf.cpp \
@@ -224,26 +243,44 @@ SOURCES += src/main.cpp \
     src/data/nmeaparser.cpp \
     src/data/oziparsers.cpp \
     src/map/geocentric.cpp \
-    src/map/mercator.cpp
+    src/map/mercator.cpp \
+    src/map/jnxmap.cpp \
+    src/map/krovak.cpp \
+    src/map/map.cpp \
+    src/data/locparser.cpp \
+    src/data/slfparser.cpp \
+    src/map/geotiffmap.cpp \
+    src/map/image.cpp \
+    src/common/greatcircle.cpp \
+    src/map/mbtilesmap.cpp \
+    src/map/osm.cpp
+
 RESOURCES += gpxsee.qrc
-TRANSLATIONS = lang/gpxsee_cs.ts \
+TRANSLATIONS = lang/gpxsee_en.ts \
+    lang/gpxsee_cs.ts \
     lang/gpxsee_sv.ts \
     lang/gpxsee_de.ts \
     lang/gpxsee_ru.ts \
     lang/gpxsee_fi.ts \
     lang/gpxsee_fr.ts \
-    lang/gpxsee_pl.ts
+    lang/gpxsee_pl.ts \
+    lang/gpxsee_nb.ts \
+    lang/gpxsee_da.ts
+
 macx {
     ICON = icons/gpxsee.icns
     QMAKE_INFO_PLIST = pkg/Info.plist
     LOCALE.path = Contents/Resources/translations
-    LOCALE.files = lang/gpxsee_cs.qm \
+    LOCALE.files = lang/gpxsee_en.qm \
+        lang/gpxsee_cs.qm \
         lang/gpxsee_de.qm \
         lang/gpxsee_fi.qm \
         lang/gpxsee_fr.qm \
         lang/gpxsee_ru.qm \
         lang/gpxsee_sv.qm \
-        lang/gpxsee_pl.qm
+        lang/gpxsee_pl.qm \
+        lang/gpxsee_nb.qm \
+        lang/gpxsee_da.qm
     CSV.path = Contents/Resources
     CSV.files = pkg/csv
     MAPS.path = Contents/Resources
@@ -257,7 +294,9 @@ macx {
         icons/nmea.icns \
         icons/plt.icns \
         icons/rte.icns \
-        icons/wpt.icns
+        icons/wpt.icns \
+        icons/loc.icns \
+        icons/slf.icns
     QMAKE_BUNDLE_DATA += LOCALE MAPS ICONS CSV
 }
 win32 {
@@ -270,7 +309,11 @@ win32 {
         icons/nmea.ico \
         icons/plt.ico \
         icons/rte.ico \
-        icons/wpt.ico
+        icons/wpt.ico \
+        icons/loc.ico \
+        icons/slf.ico
     DEFINES += _USE_MATH_DEFINES
 }
+
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+DEFINES *= QT_USE_QSTRINGBUILDER

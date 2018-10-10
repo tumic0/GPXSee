@@ -5,6 +5,7 @@
 #include <QRectF>
 #include "common/range.h"
 #include "common/rectc.h"
+#include "common/kv.h"
 #include "projection.h"
 #include "downloader.h"
 #include "coordinatesystem.h"
@@ -18,9 +19,8 @@ public:
 	{
 	public:
 		Setup(const QString &url, const QString &layer, const QString &style,
-		  const QString &format, const QString &crs,
-		  const CoordinateSystem &cs,
-		  const QList<QPair<QString, QString> > &dimensions,
+		  const QString &format, const QString &crs, const CoordinateSystem &cs,
+		  const QList<KV> &dimensions,
 		  const Authorization &authorization = Authorization())
 			: _url(url), _layer(layer), _style(style), _format(format),
 			  _crs(crs), _cs(cs), _dimensions(dimensions),
@@ -33,8 +33,7 @@ public:
 		const QString &format() const {return _format;}
 		const QString &crs() const {return _crs;}
 		const CoordinateSystem &coordinateSystem() const {return _cs;}
-		const QList<QPair<QString, QString> > &dimensions() const
-		  {return _dimensions;}
+		const QList<KV> &dimensions() const {return _dimensions;}
 
 	private:
 		QString _url;
@@ -43,7 +42,7 @@ public:
 		QString _format;
 		QString _crs;
 		CoordinateSystem _cs;
-		QList<QPair<QString, QString> > _dimensions;
+		QList<KV> _dimensions;
 		Authorization _authorization;
 	};
 

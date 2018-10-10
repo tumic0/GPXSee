@@ -1,5 +1,7 @@
+#include <QLocale>
 #include "tooltip.h"
 #include "elevationgraphitem.h"
+
 
 ElevationGraphItem::ElevationGraphItem(const Graph &graph, GraphType type,
   QGraphicsItem *parent) : GraphItem(graph, type, parent)
@@ -24,14 +26,15 @@ QString ElevationGraphItem::toolTip(Units units) const
 	ToolTip tt;
 	qreal scale = (units == Metric) ? 1.0 : M2FT;
 	QString su = (units == Metric) ? tr("m") : tr("ft");
+	QLocale l(QLocale::system());
 
-	tt.insert(tr("Ascent"), QString::number(ascent() * scale, 'f', 0)
+	tt.insert(tr("Ascent"), l.toString(ascent() * scale, 'f', 0)
 	  + UNIT_SPACE + su);
-	tt.insert(tr("Descent"), QString::number(descent() * scale, 'f', 0)
+	tt.insert(tr("Descent"), l.toString(descent() * scale, 'f', 0)
 	  + UNIT_SPACE + su);
-	tt.insert(tr("Maximum"), QString::number(max() * scale, 'f', 0)
+	tt.insert(tr("Maximum"), l.toString(max() * scale, 'f', 0)
 	  + UNIT_SPACE + su);
-	tt.insert(tr("Minimum"), QString::number(min() * scale, 'f', 0)
+	tt.insert(tr("Minimum"), l.toString(min() * scale, 'f', 0)
 	  + UNIT_SPACE + su);
 
 	return tt.toString();

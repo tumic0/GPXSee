@@ -3,15 +3,9 @@
 
 #include <cstdio>
 #include <cmath>
-#include <cassert>
 #include <cstdlib>
+#include <QtGlobal>
 
-#define ASSERT assert // RTree uses ASSERT( condition )
-
-#define Max(a,b) \
-	(((a) > (b)) ? (a) : (b))
-#define Min(a,b) \
-	(((a) < (b)) ? (a) : (b))
 
 #define RTREE_TEMPLATE template<class DATATYPE, class ELEMTYPE, int NUMDIMS, \
   class ELEMTYPEREAL, int TMAXNODES, int TMINNODES>
@@ -129,7 +123,7 @@ public:
 		/// Access the current data element.
 		DATATYPE& operator*()
 		{
-			ASSERT(IsNotNull());
+			Q_ASSERT(IsNotNull());
 			StackElement& curTos = m_stack[m_tos - 1];
 			return curTos.m_node->m_branch[curTos.m_branchIndex].m_data;
 		} 
@@ -137,7 +131,7 @@ public:
 		/// Access the current data element.
 		const DATATYPE& operator*() const
 		{
-			ASSERT(IsNotNull());
+			Q_ASSERT(IsNotNull());
 			StackElement& curTos = m_stack[m_tos - 1];
 			return curTos.m_node->m_branch[curTos.m_branchIndex].m_data;
 		} 
@@ -148,7 +142,7 @@ public:
 		/// Get the bounds for this node
 		void GetBounds(ELEMTYPE a_min[NUMDIMS], ELEMTYPE a_max[NUMDIMS])
 		{
-			ASSERT(IsNotNull());
+			Q_ASSERT(IsNotNull());
 			StackElement& curTos = m_stack[m_tos - 1];
 			Branch& curBranch = curTos.m_node->m_branch[curTos.m_branchIndex];
 
@@ -206,13 +200,13 @@ public:
 			m_stack[m_tos].m_node = a_node;
 			m_stack[m_tos].m_branchIndex = a_branchIndex;
 			++m_tos;
-			ASSERT(m_tos <= MAX_STACK);
+			Q_ASSERT(m_tos <= MAX_STACK);
 		}
 
 		// Pop element off iteration stack
 		StackElement& Pop()
 		{
-			ASSERT(m_tos > 0);
+			Q_ASSERT(m_tos > 0);
 			--m_tos;
 			return m_stack[m_tos];
 		}
@@ -356,12 +350,12 @@ protected:
 RTREE_TEMPLATE
 RTREE_QUAL::RTree()
 {
-	ASSERT(MAXNODES > MINNODES);
-	ASSERT(MINNODES > 0);
+	Q_ASSERT(MAXNODES > MINNODES);
+	Q_ASSERT(MINNODES > 0);
 
 	// We only support machine word size simple data type eg. integer index or
 	// object pointer. Since we are storing as union with non data branch
-	ASSERT(sizeof(DATATYPE) == sizeof(void*) || sizeof(DATATYPE) == sizeof(int));
+	Q_ASSERT(sizeof(DATATYPE) == sizeof(void*) || sizeof(DATATYPE) == sizeof(int));
 
 	// Precomputed volumes of the unit spheres for the first few dimensions
 	const float UNIT_SPHERE_VOLUMES[] = {
@@ -393,7 +387,7 @@ void RTREE_QUAL::Insert(const ELEMTYPE a_min[NUMDIMS],
 {
 	#ifdef _DEBUG
 	for (int index=0; index<NUMDIMS; ++index)
-		ASSERT(a_min[index] <= a_max[index]);
+		Q_ASSERT(a_min[index] <= a_max[index]);
 	#endif //_DEBUG
 
 	Rect rect;
@@ -413,7 +407,7 @@ void RTREE_QUAL::Remove(const ELEMTYPE a_min[NUMDIMS],
 {
 	#ifdef _DEBUG
 	for (int index=0; index<NUMDIMS; ++index)
-		ASSERT(a_min[index] <= a_max[index]);
+		Q_ASSERT(a_min[index] <= a_max[index]);
 	#endif //_DEBUG
 
 	Rect rect;
@@ -433,7 +427,7 @@ int RTREE_QUAL::Search(const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMDI
 {
 	#ifdef _DEBUG
 	for (int index=0; index<NUMDIMS; ++index)
-		ASSERT(a_min[index] <= a_max[index]);
+		Q_ASSERT(a_min[index] <= a_max[index]);
 	#endif //_DEBUG
 
 	Rect rect;
@@ -502,8 +496,8 @@ void RTREE_QUAL::Reset()
 RTREE_TEMPLATE
 void RTREE_QUAL::RemoveAllRec(Node* a_node)
 {
-	ASSERT(a_node);
-	ASSERT(a_node->m_level >= 0);
+	Q_ASSERT(a_node);
+	Q_ASSERT(a_node->m_level >= 0);
 
 	if (a_node->IsInternalNode()) { // This is an internal node in the tree
 		for (int index=0; index < a_node->m_count; ++index)
@@ -530,7 +524,7 @@ typename RTREE_QUAL::Node* RTREE_QUAL::AllocNode()
 RTREE_TEMPLATE
 void RTREE_QUAL::FreeNode(Node* a_node)
 {
-	ASSERT(a_node);
+	Q_ASSERT(a_node);
 
 	#ifdef RTREE_DONT_USE_MEMPOOLS
 	delete a_node;
@@ -593,8 +587,8 @@ RTREE_TEMPLATE
 bool RTREE_QUAL::InsertRectRec(Rect* a_rect, const DATATYPE& a_id, Node* a_node,
   Node** a_newNode, int a_level)
 {
-	ASSERT(a_rect && a_node && a_newNode);
-	ASSERT(a_level >= 0 && a_level <= a_node->m_level);
+	Q_ASSERT(a_rect && a_node && a_newNode);
+	Q_ASSERT(a_level >= 0 && a_level <= a_node->m_level);
 
 	int index;
 	Branch branch;
@@ -621,7 +615,7 @@ bool RTREE_QUAL::InsertRectRec(Rect* a_rect, const DATATYPE& a_id, Node* a_node,
 		return AddBranch(&branch, a_node, a_newNode);
 	} else {
 		// Should never occur
-		ASSERT(0);
+		Q_ASSERT(0);
 		return false;
 	}
 }
@@ -638,11 +632,11 @@ RTREE_TEMPLATE
 bool RTREE_QUAL::InsertRect(Rect* a_rect, const DATATYPE& a_id, Node** a_root,
   int a_level)
 {
-	ASSERT(a_rect && a_root);
-	ASSERT(a_level >= 0 && a_level <= (*a_root)->m_level);
+	Q_ASSERT(a_rect && a_root);
+	Q_ASSERT(a_level >= 0 && a_level <= (*a_root)->m_level);
 	#ifdef _DEBUG
 	for (int index=0; index < NUMDIMS; ++index)
-		ASSERT(a_rect->m_min[index] <= a_rect->m_max[index]);
+		Q_ASSERT(a_rect->m_min[index] <= a_rect->m_max[index]);
 	#endif //_DEBUG  
 
 	Node* newRoot;
@@ -672,7 +666,7 @@ bool RTREE_QUAL::InsertRect(Rect* a_rect, const DATATYPE& a_id, Node** a_root,
 RTREE_TEMPLATE
 typename RTREE_QUAL::Rect RTREE_QUAL::NodeCover(Node* a_node)
 {
-	ASSERT(a_node);
+	Q_ASSERT(a_node);
 
 	int firstTime = true;
 	Rect rect;
@@ -698,8 +692,8 @@ typename RTREE_QUAL::Rect RTREE_QUAL::NodeCover(Node* a_node)
 RTREE_TEMPLATE
 bool RTREE_QUAL::AddBranch(Branch* a_branch, Node* a_node, Node** a_newNode)
 {
-	ASSERT(a_branch);
-	ASSERT(a_node);
+	Q_ASSERT(a_branch);
+	Q_ASSERT(a_node);
 
 	if (a_node->m_count < MAXNODES) {  // Split won't be necessary
 		a_node->m_branch[a_node->m_count] = *a_branch;
@@ -707,7 +701,7 @@ bool RTREE_QUAL::AddBranch(Branch* a_branch, Node* a_node, Node** a_newNode)
 
 		return false;
 	} else {
-		ASSERT(a_newNode);
+		Q_ASSERT(a_newNode);
 
 		SplitNode(a_node, a_branch, a_newNode);
 		return true;
@@ -721,8 +715,8 @@ bool RTREE_QUAL::AddBranch(Branch* a_branch, Node* a_node, Node** a_newNode)
 RTREE_TEMPLATE
 void RTREE_QUAL::DisconnectBranch(Node* a_node, int a_index)
 {
-	ASSERT(a_node && (a_index >= 0) && (a_index < MAXNODES));
-	ASSERT(a_node->m_count > 0);
+	Q_ASSERT(a_node && (a_index >= 0) && (a_index < MAXNODES));
+	Q_ASSERT(a_node->m_count > 0);
 
 	// Remove element by swapping with the last element to prevent gaps in array
 	a_node->m_branch[a_index] = a_node->m_branch[a_node->m_count - 1];
@@ -739,7 +733,7 @@ void RTREE_QUAL::DisconnectBranch(Node* a_node, int a_index)
 RTREE_TEMPLATE
 int RTREE_QUAL::PickBranch(Rect* a_rect, Node* a_node)
 {
-	ASSERT(a_rect && a_node);
+	Q_ASSERT(a_rect && a_node);
 
 	bool firstTime = true;
 	ELEMTYPEREAL increase;
@@ -774,13 +768,13 @@ int RTREE_QUAL::PickBranch(Rect* a_rect, Node* a_node)
 RTREE_TEMPLATE
 typename RTREE_QUAL::Rect RTREE_QUAL::CombineRect(Rect* a_rectA, Rect* a_rectB)
 {
-	ASSERT(a_rectA && a_rectB);
+	Q_ASSERT(a_rectA && a_rectB);
 
 	Rect newRect;
 
 	for (int index = 0; index < NUMDIMS; ++index) {
-		newRect.m_min[index] = Min(a_rectA->m_min[index], a_rectB->m_min[index]);
-		newRect.m_max[index] = Max(a_rectA->m_max[index], a_rectB->m_max[index]);
+		newRect.m_min[index] = qMin(a_rectA->m_min[index], a_rectB->m_min[index]);
+		newRect.m_max[index] = qMax(a_rectA->m_max[index], a_rectB->m_max[index]);
 	}
 
 	return newRect;
@@ -795,8 +789,8 @@ typename RTREE_QUAL::Rect RTREE_QUAL::CombineRect(Rect* a_rectA, Rect* a_rectB)
 RTREE_TEMPLATE
 void RTREE_QUAL::SplitNode(Node* a_node, Branch* a_branch, Node** a_newNode)
 {
-	ASSERT(a_node);
-	ASSERT(a_branch);
+	Q_ASSERT(a_node);
+	Q_ASSERT(a_branch);
 
 	// Could just use local here, but member or external is faster since it is
 	// reused
@@ -816,7 +810,7 @@ void RTREE_QUAL::SplitNode(Node* a_node, Branch* a_branch, Node** a_newNode)
 	(*a_newNode)->m_level = a_node->m_level = level;
 	LoadNodes(a_node, *a_newNode, parVars);
 
-	ASSERT((a_node->m_count + (*a_newNode)->m_count) == parVars->m_total);
+	Q_ASSERT((a_node->m_count + (*a_newNode)->m_count) == parVars->m_total);
 }
 
 
@@ -824,14 +818,14 @@ void RTREE_QUAL::SplitNode(Node* a_node, Branch* a_branch, Node** a_newNode)
 RTREE_TEMPLATE
 ELEMTYPEREAL RTREE_QUAL::RectVolume(Rect* a_rect)
 {
-	ASSERT(a_rect);
+	Q_ASSERT(a_rect);
 
 	ELEMTYPEREAL volume = (ELEMTYPEREAL)1;
 
 	for (int index=0; index<NUMDIMS; ++index)
 		volume *= a_rect->m_max[index] - a_rect->m_min[index];
 
-	ASSERT(volume >= (ELEMTYPEREAL)0);
+	Q_ASSERT(volume >= (ELEMTYPEREAL)0);
 
 	return volume;
 }
@@ -841,7 +835,7 @@ ELEMTYPEREAL RTREE_QUAL::RectVolume(Rect* a_rect)
 RTREE_TEMPLATE
 ELEMTYPEREAL RTREE_QUAL::RectSphericalVolume(Rect* a_rect)
 {
-	ASSERT(a_rect);
+	Q_ASSERT(a_rect);
 
 	ELEMTYPEREAL sumOfSquares = (ELEMTYPEREAL)0;
 	ELEMTYPEREAL radius;
@@ -881,10 +875,10 @@ RTREE_TEMPLATE
 void RTREE_QUAL::GetBranches(Node* a_node, Branch* a_branch,
   PartitionVars* a_parVars)
 {
-	ASSERT(a_node);
-	ASSERT(a_branch);
+	Q_ASSERT(a_node);
+	Q_ASSERT(a_branch);
 
-	ASSERT(a_node->m_count == MAXNODES);
+	Q_ASSERT(a_node->m_count == MAXNODES);
 
 	// Load the branch buffer
 	for (int index=0; index < MAXNODES; ++index)
@@ -917,7 +911,7 @@ void RTREE_QUAL::GetBranches(Node* a_node, Branch* a_branch,
 RTREE_TEMPLATE
 void RTREE_QUAL::ChoosePartition(PartitionVars* a_parVars, int a_minFill)
 {
-	ASSERT(a_parVars);
+	Q_ASSERT(a_parVars);
 
 	ELEMTYPEREAL biggestDiff;
 	int group, chosen = 0, betterGroup = 0;
@@ -973,8 +967,8 @@ void RTREE_QUAL::ChoosePartition(PartitionVars* a_parVars, int a_minFill)
 		}
 	}
 
-	ASSERT((a_parVars->m_count[0] + a_parVars->m_count[1]) == a_parVars->m_total);
-	ASSERT((a_parVars->m_count[0] >= a_parVars->m_minFill) && 
+	Q_ASSERT((a_parVars->m_count[0] + a_parVars->m_count[1]) == a_parVars->m_total);
+	Q_ASSERT((a_parVars->m_count[0] >= a_parVars->m_minFill) &&
 	(a_parVars->m_count[1] >= a_parVars->m_minFill));
 }
 
@@ -983,12 +977,12 @@ void RTREE_QUAL::ChoosePartition(PartitionVars* a_parVars, int a_minFill)
 RTREE_TEMPLATE
 void RTREE_QUAL::LoadNodes(Node* a_nodeA, Node* a_nodeB, PartitionVars* a_parVars)
 {
-	ASSERT(a_nodeA);
-	ASSERT(a_nodeB);
-	ASSERT(a_parVars);
+	Q_ASSERT(a_nodeA);
+	Q_ASSERT(a_nodeB);
+	Q_ASSERT(a_parVars);
 
 	for (int index=0; index < a_parVars->m_total; ++index) {
-		ASSERT(a_parVars->m_partition[index] == 0 || a_parVars->m_partition[index] == 1);
+		Q_ASSERT(a_parVars->m_partition[index] == 0 || a_parVars->m_partition[index] == 1);
 
 		if (a_parVars->m_partition[index] == 0)
 			AddBranch(&a_parVars->m_branchBuf[index], a_nodeA, NULL);
@@ -1003,7 +997,7 @@ RTREE_TEMPLATE
 void RTREE_QUAL::InitParVars(PartitionVars* a_parVars, int a_maxRects,
   int a_minFill)
 {
-	ASSERT(a_parVars);
+	Q_ASSERT(a_parVars);
 
 	a_parVars->m_count[0] = a_parVars->m_count[1] = 0;
 	a_parVars->m_area[0] = a_parVars->m_area[1] = (ELEMTYPEREAL)0;
@@ -1049,8 +1043,8 @@ void RTREE_QUAL::PickSeeds(PartitionVars* a_parVars)
 RTREE_TEMPLATE
 void RTREE_QUAL::Classify(int a_index, int a_group, PartitionVars* a_parVars)
 {
-	ASSERT(a_parVars);
-	ASSERT(!a_parVars->m_taken[a_index]);
+	Q_ASSERT(a_parVars);
+	Q_ASSERT(!a_parVars->m_taken[a_index]);
 
 	a_parVars->m_partition[a_index] = a_group;
 	a_parVars->m_taken[a_index] = true;
@@ -1073,8 +1067,8 @@ void RTREE_QUAL::Classify(int a_index, int a_group, PartitionVars* a_parVars)
 RTREE_TEMPLATE
 bool RTREE_QUAL::RemoveRect(Rect* a_rect, const DATATYPE& a_id, Node** a_root)
 {
-	ASSERT(a_rect && a_root);
-	ASSERT(*a_root);
+	Q_ASSERT(a_rect && a_root);
+	Q_ASSERT(*a_root);
 
 	Node* tempNode;
 	ListNode* reInsertList = NULL;
@@ -1100,7 +1094,7 @@ bool RTREE_QUAL::RemoveRect(Rect* a_rect, const DATATYPE& a_id, Node** a_root)
 		if ((*a_root)->m_count == 1 && (*a_root)->IsInternalNode()) {
 			tempNode = (*a_root)->m_branch[0].m_child;
 
-			ASSERT(tempNode);
+			Q_ASSERT(tempNode);
 			FreeNode(*a_root);
 			*a_root = tempNode;
 		}
@@ -1119,8 +1113,8 @@ RTREE_TEMPLATE
 bool RTREE_QUAL::RemoveRectRec(Rect* a_rect, const DATATYPE& a_id, Node* a_node,
   ListNode** a_listNode)
 {
-	ASSERT(a_rect && a_node && a_listNode);
-	ASSERT(a_node->m_level >= 0);
+	Q_ASSERT(a_rect && a_node && a_listNode);
+	Q_ASSERT(a_node->m_level >= 0);
 
 	if (a_node->IsInternalNode()) {  // not a leaf node
 		for (int index = 0; index < a_node->m_count; ++index) {
@@ -1160,7 +1154,7 @@ bool RTREE_QUAL::RemoveRectRec(Rect* a_rect, const DATATYPE& a_id, Node* a_node,
 RTREE_TEMPLATE
 bool RTREE_QUAL::Overlap(Rect* a_rectA, Rect* a_rectB) const
 {
-	ASSERT(a_rectA && a_rectB);
+	Q_ASSERT(a_rectA && a_rectB);
 
 	for (int index=0; index < NUMDIMS; ++index) {
 		if (a_rectA->m_min[index] > a_rectB->m_max[index] ||
@@ -1193,9 +1187,9 @@ bool RTREE_QUAL::Search(Node* a_node, Rect* a_rect, int& a_foundCount,
   bool (*a_resultCallback)(DATATYPE a_data, void* a_context),
   void* a_context) const
 {
-	ASSERT(a_node);
-	ASSERT(a_node->m_level >= 0);
-	ASSERT(a_rect);
+	Q_ASSERT(a_node);
+	Q_ASSERT(a_node->m_level >= 0);
+	Q_ASSERT(a_rect);
 
 	if (a_node->IsInternalNode()) { // This is an internal node in the tree
 		for (int index=0; index < a_node->m_count; ++index) {

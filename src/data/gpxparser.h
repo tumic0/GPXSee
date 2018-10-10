@@ -18,11 +18,13 @@ private:
 	  QList<Waypoint> &waypoints);
 	void track(TrackData &track);
 	void trackpoints(TrackData &track);
-	void routepoints(RouteData &route);
+	void routepoints(RouteData &route, QList<TrackData> &tracks);
+	void rpExtension(TrackData *autoRoute);
 	void tpExtension(Trackpoint &trackpoint);
-	void extensions(Trackpoint &trackpoint);
+	void trkptExtensions(Trackpoint &trackpoint);
+	void rteptExtensions(TrackData *autoRoute);
 	void trackpointData(Trackpoint &trackpoint);
-	void waypointData(Waypoint &waypoint);
+	void waypointData(Waypoint &waypoint, TrackData *autoRoute = 0);
 	qreal number();
 	QDateTime time();
 	Coordinates coordinates();

@@ -1,4 +1,5 @@
 #include <cmath>
+#include <QLocale>
 #include "data/data.h"
 #include "config.h"
 #include "tooltip.h"
@@ -54,13 +55,15 @@ void ElevationGraph::setInfo()
 	if (std::isnan(max()) || std::isnan(min()))
 		clearInfo();
 	else {
-		GraphView::addInfo(tr("Ascent"), QString::number(ascent() * yScale(),
+		QLocale l(QLocale::system());
+
+		GraphView::addInfo(tr("Ascent"), l.toString(ascent() * yScale(),
 		  'f', 0) + UNIT_SPACE + yUnits());
-		GraphView::addInfo(tr("Descent"), QString::number(descent() * yScale(),
+		GraphView::addInfo(tr("Descent"), l.toString(descent() * yScale(),
 		  'f', 0) + UNIT_SPACE + yUnits());
-		GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale(), 'f',
+		GraphView::addInfo(tr("Maximum"), l.toString(max() * yScale(), 'f',
 		  0) + UNIT_SPACE + yUnits());
-		GraphView::addInfo(tr("Minimum"), QString::number(min() * yScale(), 'f',
+		GraphView::addInfo(tr("Minimum"), l.toString(min() * yScale(), 'f',
 		  0) + UNIT_SPACE + yUnits());
 	}
 }

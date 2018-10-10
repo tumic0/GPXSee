@@ -6,7 +6,7 @@
 class GridItem : public QGraphicsItem
 {
 public:
-	GridItem(QGraphicsItem *parent = 0);
+	GridItem(QGraphicsItem *parent = 0): QGraphicsItem(parent) {}
 
 	QRectF boundingRect() const {return _boundingRect;}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,

@@ -12,7 +12,6 @@
 #include <QRadioButton>
 #include <QLabel>
 #include <QSysInfo>
-#include "config.h"
 #include "icons.h"
 #include "colorbox.h"
 #include "stylecombobox.h"
@@ -35,26 +34,61 @@ static QFrame *line()
 }
 #endif
 
-QWidget *OptionsDialog::createGeneralPage()
+QWidget *OptionsDialog::createMapPage()
 {
 	_alwaysShowMap = new QCheckBox(tr("Always show the map"));
 	_alwaysShowMap->setChecked(_options->alwaysShowMap);
 	_alwaysShowMap->setToolTip("<p>" +
 	  tr("Show the map even when no files are loaded.") + "</p>");
 
+#ifdef ENABLE_HIDPI
+	_hidpi = new QRadioButton(tr("High-resolution"));
+	_lodpi = new QRadioButton(tr("Standard"));
+	if (_options->hidpiMap)
+		_hidpi->setChecked(true);
+	else
+		_lodpi->setChecked(true);
+	QLabel *lhi = new QLabel(tr("Non-HiDPI maps are loaded as HiDPI maps. "
+	  "The map is sharp but map objects are small/hard to read."));
+	QLabel *llo = new QLabel(tr("Non-HiDPI maps are loaded such as they are. "
+	  "Map objects have the expected size but the map is blurry."));
+	QFont f = lhi->font();
+	f.setPointSize(f.pointSize() - 1);
+	lhi->setWordWrap(true);
+	llo->setWordWrap(true);
+	lhi->setFont(f);
+	llo->setFont(f);
+#endif // ENABLE_HIDPI
+
 	QFormLayout *showMapLayout = new QFormLayout();
 	showMapLayout->addWidget(_alwaysShowMap);
 
-	QWidget *generalTab = new QWidget();
-	QVBoxLayout *generalTabLayout = new QVBoxLayout();
-	generalTabLayout->addLayout(showMapLayout);
-	generalTabLayout->addStretch();
-	generalTab->setLayout(generalTabLayout);
+	QWidget *mapTab = new QWidget();
+	QVBoxLayout *mapTabLayout = new QVBoxLayout();
+	mapTabLayout->addLayout(showMapLayout);
+	mapTabLayout->addStretch();
+	mapTab->setLayout(mapTabLayout);
 
-	QTabWidget *generalPage = new QTabWidget();
-	generalPage->addTab(generalTab, tr("General"));
+#ifdef ENABLE_HIDPI
+	QVBoxLayout *hidpiTabLayout = new QVBoxLayout();
+	hidpiTabLayout->addWidget(_lodpi);
+	hidpiTabLayout->addWidget(llo);
+	hidpiTabLayout->addSpacing(10);
+	hidpiTabLayout->addWidget(_hidpi);
+	hidpiTabLayout->addWidget(lhi);
+	hidpiTabLayout->addStretch();
 
-	return generalPage;
+	QWidget *hidpiTab = new QWidget();
+	hidpiTab->setLayout(hidpiTabLayout);
+#endif // ENABLE_HIDPI
+
+	QTabWidget *mapPage = new QTabWidget();
+	mapPage->addTab(mapTab, tr("General"));
+#ifdef ENABLE_HIDPI
+	mapPage->addTab(hidpiTab, tr("HiDPI display mode"));
+#endif // ENABLE_HIDPI
+
+	return mapPage;
 }
 
 QWidget *OptionsDialog::createAppearancePage()
@@ -311,9 +345,25 @@ QWidget *OptionsDialog::createDataPage()
 	pauseTab->setLayout(pauseLayout);
 
 
+	_computed = new QRadioButton(tr("Computed from distance/time"));
+	_reported = new QRadioButton(tr("Recorded by device"));
+	if (_options->useReportedSpeed)
+		_reported->setChecked(true);
+	else
+		_computed->setChecked(true);
+
+	QFormLayout *sourceLayout = new QFormLayout();
+	sourceLayout->addWidget(_computed);
+	sourceLayout->addWidget(_reported);
+
+	QWidget *sourceTab = new QWidget();
+	sourceTab->setLayout(sourceLayout);
+
+
 	QTabWidget *filterPage = new QTabWidget();
 	filterPage->addTab(filterTab, tr("Filtering"));
 	filterPage->addTab(pauseTab, tr("Pause detection"));
+	filterPage->addTab(sourceTab, tr("Speed"));
 
 	return filterPage;
 }
@@ -424,6 +474,10 @@ QWidget *OptionsDialog::createSystemPage()
 {
 	_useOpenGL = new QCheckBox(tr("Use OpenGL"));
 	_useOpenGL->setChecked(_options->useOpenGL);
+#ifdef ENABLE_HTTP2
+	_enableHTTP2 = new QCheckBox(tr("Enable HTTP/2"));
+	_enableHTTP2->setChecked(_options->enableHTTP2);
+#endif // ENABLE_HTTP2
 
 	_pixmapCache = new QSpinBox();
 	_pixmapCache->setMinimum(16);
@@ -442,6 +496,9 @@ QWidget *OptionsDialog::createSystemPage()
 	formLayout->addRow(tr("Connection timeout:"), _connectionTimeout);
 
 	QFormLayout *checkboxLayout = new QFormLayout();
+#ifdef ENABLE_HTTP2
+	checkboxLayout->addWidget(_enableHTTP2);
+#endif // ENABLE_HTTP2
 	checkboxLayout->addWidget(_useOpenGL);
 
 	QWidget *systemTab = new QWidget();
@@ -461,8 +518,8 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
   : QDialog(parent), _options(options)
 {
 	QStackedWidget *pages = new QStackedWidget();
-	pages->addWidget(createGeneralPage());
 	pages->addWidget(createAppearancePage());
+	pages->addWidget(createMapPage());
 	pages->addWidget(createDataPage());
 	pages->addWidget(createPOIPage());
 	pages->addWidget(createExportPage());
@@ -470,14 +527,14 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
 
 	QListWidget *menu = new QListWidget();
 	menu->setIconSize(QSize(MENU_ICON_SIZE, MENU_ICON_SIZE));
-	new QListWidgetItem(QIcon(QPixmap(APP_ICON)), tr("General"), menu);
-	new QListWidgetItem(QIcon(QPixmap(APPEARANCE_ICON)), tr("Appearance"),
+	new QListWidgetItem(QIcon(APPEARANCE_ICON), tr("Appearance"),
 	  menu);
-	new QListWidgetItem(QIcon(QPixmap(DATA_ICON)), tr("Data"), menu);
-	new QListWidgetItem(QIcon(QPixmap(POI_ICON)), tr("POI"), menu);
-	new QListWidgetItem(QIcon(QPixmap(PRINT_EXPORT_ICON)), tr("Print & Export"),
+	new QListWidgetItem(QIcon(MAPS_ICON), tr("Maps"), menu);
+	new QListWidgetItem(QIcon(DATA_ICON), tr("Data"), menu);
+	new QListWidgetItem(QIcon(POI_ICON), tr("POI"), menu);
+	new QListWidgetItem(QIcon(PRINT_EXPORT_ICON), tr("Print & Export"),
 	  menu);
-	new QListWidgetItem(QIcon(QPixmap(SYSTEM_ICON)), tr("System"), menu);
+	new QListWidgetItem(QIcon(SYSTEM_ICON), tr("System"), menu);
 
 	QHBoxLayout *contentLayout = new QHBoxLayout();
 	contentLayout->addWidget(menu);
@@ -510,8 +567,6 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
 
 void OptionsDialog::accept()
 {
-	_options->alwaysShowMap = _alwaysShowMap->isChecked();
-
 	_options->palette.setColor(_baseColor->color());
 	_options->palette.setShift(_colorOffset->value());
 	_options->mapOpacity = _mapOpacity->value();
@@ -531,6 +586,11 @@ void OptionsDialog::accept()
 	_options->sliderColor = _sliderColor->color();
 	_options->graphAntiAliasing = _graphAA->isChecked();
 
+	_options->alwaysShowMap = _alwaysShowMap->isChecked();
+#ifdef ENABLE_HIDPI
+	_options->hidpiMap = _hidpi->isChecked();
+#endif // ENABLE_HIDPI
+
 	_options->elevationFilter = _elevationFilter->value();
 	_options->speedFilter = _speedFilter->value();
 	_options->heartRateFilter = _heartRateFilter->value();
@@ -543,6 +603,7 @@ void OptionsDialog::accept()
 	if (qAbs(pauseSpeed - _options->pauseSpeed) > 0.01)
 		_options->pauseSpeed = pauseSpeed;
 	_options->pauseInterval = _pauseInterval->value();
+	_options->useReportedSpeed = _reported->isChecked();
 
 	qreal poiRadius = (_options->units == Imperial)
 		? _poiRadius->value() * MIINM : (_options->units == Nautical)
@@ -551,6 +612,9 @@ void OptionsDialog::accept()
 		_options->poiRadius = poiRadius;
 
 	_options->useOpenGL = _useOpenGL->isChecked();
+#ifdef ENABLE_HTTP2
+	_options->enableHTTP2 = _enableHTTP2->isChecked();
+#endif // ENABLE_HTTP2
 	_options->pixmapCache = _pixmapCache->value();
 	_options->connectionTimeout = _connectionTimeout->value();
 

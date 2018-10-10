@@ -26,12 +26,8 @@ public:
 private:
 	bool loadFile(const QString &path, bool *atlas, bool dir);
 	bool loadDirR(const QString &path);
-
-	Map *loadListEntry(const QByteArray &line);
-
 	bool loadSource(const QString &path, bool dir);
-	bool loadMap(const QString &path, bool dir);
-	bool loadAtlas(const QString &path, bool dir);
+	bool loadMap(Map *map, const QString &path, bool dir);
 
 	QList<Map*> _maps;
 	QString _errorString;

@@ -1,3 +1,4 @@
+#include <QLocale>
 #include "data/data.h"
 #include "cadencegraphitem.h"
 #include "cadencegraph.h"
@@ -7,7 +8,7 @@ CadenceGraph::CadenceGraph(QWidget *parent) : GraphTab(parent)
 {
 	_showTracks = true;
 
-	GraphView::setYUnits(tr("1/min"));
+	GraphView::setYUnits(tr("rpm"));
 	setYLabel(tr("Cadence"));
 
 	setSliderPrecision(1);
@@ -16,9 +17,11 @@ CadenceGraph::CadenceGraph(QWidget *parent) : GraphTab(parent)
 void CadenceGraph::setInfo()
 {
 	if (_showTracks) {
-		GraphView::addInfo(tr("Average"), QString::number(avg() * yScale()
+		QLocale l(QLocale::system());
+
+		GraphView::addInfo(tr("Average"), l.toString(avg() * yScale()
 		  + yOffset(), 'f', 1) + UNIT_SPACE + yUnits());
-		GraphView::addInfo(tr("Maximum"), QString::number(max() * yScale()
+		GraphView::addInfo(tr("Maximum"), l.toString(max() * yScale()
 		  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
 	} else
 		clearInfo();

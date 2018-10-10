@@ -1,6 +1,7 @@
 #ifndef TILE_H
 #define TILE_H
 
+#include <QVariant>
 #include <QPixmap>
 #include <QPoint>
 #include <QDebug>
@@ -9,6 +10,7 @@
 class Tile
 {
 public:
+	Tile() {}
 	Tile(const QPoint &xy, const QVariant &zoom, const RectD &bbox = RectD())
 		{_xy = xy; _zoom = zoom; _bbox = bbox;}
 

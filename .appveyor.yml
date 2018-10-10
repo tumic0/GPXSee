@@ -1,14 +1,14 @@
-version: 5.11.{build}
+version: 6.3.{build}
 configuration: Release
 platform: Any CPU
 environment:
   NSISDIR: C:\Program Files (x86)\NSIS
   matrix:
-  - QTDIR: C:\Qt\5.9\msvc2015
+  - QTDIR: C:\Qt\5.11\msvc2015
     PLATFORM: x86
     NSI: gpxsee.nsi
     OPENSSLDIR: C:\OpenSSL-Win32\bin
-  - QTDIR: C:\Qt\5.9\msvc2015_64
+  - QTDIR: C:\Qt\5.11\msvc2015_64
     PLATFORM: x86_amd64
     NSI: gpxsee64.nsi
     OPENSSLDIR: C:\OpenSSL-Win64\bin
@@ -33,6 +33,8 @@ build_script:
     windeployqt --no-svg --release installer\GPXSee.exe
 
     copy pkg\%NSI% installer
+
+    copy pkg\macros.nsh installer
 
     xcopy pkg\csv installer\csv /i
 

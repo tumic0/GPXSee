@@ -11,4 +11,4 @@ Icon=gpxsee
 Terminal=false
 Type=Application
 Categories=Graphics;Viewer;Maps;Qt;
-MimeType=application/gpx+xml;application/tcx+xml;application/vnd.ant.fit;application/vnd.google-earth.kml+xml;application/vnd.fai.igc;application/vnd.nmea.nmea;application/vnd.oziexplorer.plt;application/vnd.oziexplorer.rte;application/vnd.oziexplorer.wpt;
+MimeType=application/gpx+xml;application/tcx+xml;application/vnd.ant.fit;application/vnd.google-earth.kml+xml;application/vnd.fai.igc;application/vnd.nmea.nmea;application/vnd.oziexplorer.plt;application/vnd.oziexplorer.rte;application/vnd.oziexplorer.wpt;application/loc+xml;application/slf+xml;

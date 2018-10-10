@@ -22,6 +22,7 @@ public:
 	Graph temperature() const;
 	Graph cadence() const;
 	Graph power() const;
+	Graph ratio() const;
 
 	qreal distance() const;
 	qreal time() const;
@@ -42,6 +43,7 @@ public:
 	static void setPauseInterval(int interval) {_pauseInterval = interval;}
 	static void setOutlierElimination(bool eliminate)
 	  {_outlierEliminate = eliminate;}
+	static void useReportedSpeed(bool use) {_useReportedSpeed = use;}
 
 private:
 	bool discardStopPoint(int i) const;
@@ -58,15 +60,14 @@ private:
 	qreal _pause;
 
 	static bool _outlierEliminate;
-
 	static int _elevationWindow;
 	static int _speedWindow;
 	static int _heartRateWindow;
 	static int _cadenceWindow;
 	static int _powerWindow;
-
 	static qreal _pauseSpeed;
 	static int _pauseInterval;
+	static bool _useReportedSpeed;
 };
 
 #endif // TRACK_H

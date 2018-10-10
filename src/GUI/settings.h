@@ -124,10 +124,14 @@
 #define PAUSE_SPEED_DEFAULT               0.5 /* m/s */
 #define PAUSE_INTERVAL_SETTING            "pauseInterval"
 #define PAUSE_INTERVAL_DEFAULT            10 /* s */
+#define USE_REPORTED_SPEED_SETTING        "useReportedSpeed"
+#define USE_REPORTED_SPEED_DEFAULT        false
 #define POI_RADIUS_SETTING                "poiRadius"
 #define POI_RADIUS_DEFAULT                (int)(IMPERIAL_UNITS() ? MIINM : KMINM)
 #define USE_OPENGL_SETTING                "useOpenGL"
 #define USE_OPENGL_DEFAULT                false
+#define ENABLE_HTTP2_SETTING              "enableHTTP2"
+#define ENABLE_HTTP2_DEFAULT              true
 #define PIXMAP_CACHE_SETTING              "pixmapCache"
 #define PIXMAP_CACHE_DEFAULT              64 /* MB */
 #define CONNECTION_TIMEOUT_SETTING        "connectionTimeout"
@@ -152,5 +156,7 @@
 #define SLIDER_COLOR_DEFAULT              QColor(Qt::red)
 #define ALWAYS_SHOW_MAP_SETTING           "alwaysShowMap"
 #define ALWAYS_SHOW_MAP_DEFAULT           true
+#define HIDPI_MAP_SETTING                 "HiDPIMap"
+#define HIDPI_MAP_DEFAULT                 true
 
 #endif // SETTINGS_H

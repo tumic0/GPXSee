@@ -11,40 +11,55 @@
 #define XTICKS      15
 #define YTICKS      10
 
-struct Label {
-	double min;
-	double max;
-	double d;
+class Ticks
+{
+public:
+	Ticks(double minValue, double maxValue, int maxCount);
+
+	int count() const {return ((int)((_max - _min) / _d)) + 1;}
+	double val(int i) const {return _min + i * _d;}
+	double min() const {return _min;}
+	double max() const {return _max;}
+
+private:
+	double _min;
+	double _max;
+	double _d;
 };
 
-static struct Label label(double min, double max, int ticks)
+Ticks::Ticks(double minValue, double maxValue, int maxCount)
 {
-	double range;
-	struct Label l;
-
-	range = niceNum(max - min, 0);
-	l.d = niceNum(range / ticks, 1);
-	l.min = ceil(min / l.d) * l.d;
-	l.max = floor(max / l.d) * l.d;
-
-	return l;
+	double range = niceNum(maxValue - minValue, 0);
+	_d = niceNum(range / maxCount, 1);
+	_min = ceil(minValue / _d) * _d;
+	_max = floor(maxValue / _d) * _d;
 }
 
 
-AxisItem::AxisItem(Type type, QGraphicsItem *parent) : QGraphicsItem(parent)
+AxisItem::AxisItem(Type type, QGraphicsItem *parent)
+  : QGraphicsItem(parent), _locale(QLocale::system())
 {
 	_type = type;
 	_size = 0;
 
-#ifndef Q_OS_MAC
-	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
-#endif // Q_OS_MAC
+	_font.setPixelSize(FONT_SIZE);
+	_font.setFamily(FONT_FAMILY);
 }
 
 void AxisItem::setRange(const RangeF &range)
 {
 	prepareGeometryChange();
 	_range = range;
+
+	QFontMetrics fm(_font);
+	Ticks ticks(_range.min(), _range.max(), (_type == X) ? XTICKS : YTICKS);
+	_ticks = QVector<Tick>(ticks.count());
+	for (int i = 0; i < ticks.count(); i++) {
+		Tick &t = _ticks[i];
+		t.value = ticks.val(i);
+		t.boundingBox = fm.tightBoundingRect(_locale.toString(t.value));
+	}
+
 	updateBoundingRect();
 	update();
 }
@@ -60,42 +75,28 @@ void AxisItem::setSize(qreal size)
 void AxisItem::setLabel(const QString& label)
 {
 	prepareGeometryChange();
+	QFontMetrics fm(_font);
 	_label = label;
+	_labelBB = fm.tightBoundingRect(label);
 	updateBoundingRect();
 	update();
 }
 
 void AxisItem::updateBoundingRect()
 {
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	font.setFamily(FONT_FAMILY);
-	QFontMetrics fm(font);
-	QRect ss, es, ls;
-	struct Label l;
-
-
-	l = label(_range.min(), _range.max(), (_type == X) ? XTICKS : YTICKS);
-	es = fm.tightBoundingRect(QString::number(l.max));
-	ss = fm.tightBoundingRect(QString::number(l.min));
-	ls = fm.tightBoundingRect(_label);
+	QFontMetrics fm(_font);
+	QRect es = _ticks.isEmpty() ? QRect() : _ticks.last().boundingBox;
+	QRect ss = _ticks.isEmpty() ? QRect() : _ticks.first().boundingBox;
+	QRect ls(_labelBB);
 
 	if (_type == X) {
-		_boundingRect = QRectF(-ss.width()/2, -TICK/2,
-		_size + es.width()/2 + ss.width()/2,
-		ls.height() + es.height() - fm.descent() + TICK + 2*PADDING + 1);
+		_boundingRect = QRectF(-ss.width()/2, -TICK/2, _size + es.width()/2
+		  + ss.width()/2, ls.height() + es.height() - fm.descent() + TICK
+		  + 2*PADDING + 1);
 	} else {
 		int mtw = 0;
-		QRect ts;
-		qreal val;
-
-		for (int i = 0; i < ((l.max - l.min) / l.d) + 1; i++) {
-			val = l.min + i * l.d;
-			QString str = QString::number(val);
-			ts = fm.tightBoundingRect(str);
-			mtw = qMax(ts.width(), mtw);
-		}
-
+		for (int i = 0; i < _ticks.count(); i++)
+			mtw = qMax(_ticks.at(i).boundingBox.width(), mtw);
 		_boundingRect = QRectF(-(ls.height() + mtw + 2*PADDING + TICK/2),
 		  -(_size + es.height()/2 + fm.descent()), ls.height() + mtw + 2*PADDING
 		  + TICK, _size + es.height()/2 + fm.descent() + ss.height()/2);
@@ -107,60 +108,50 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 {
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	font.setFamily(FONT_FAMILY);
-	QFontMetrics fm(font);
-	QRect ts, ls;
-	struct Label l;
-	qreal range = _range.size();
-	qreal val;
-	QPen pen = QPen(Qt::black, AXIS_WIDTH);
+	QFontMetrics fm(_font);
+	QRect ts;
 
 
 	painter->setRenderHint(QPainter::Antialiasing, false);
-	painter->setFont(font);
-	painter->setPen(pen);
-
-	ls = fm.tightBoundingRect(_label);
+	painter->setFont(_font);
+	painter->setPen(QPen(Qt::black, AXIS_WIDTH));
 
 	if (_type == X) {
 		painter->drawLine(0, 0, _size, 0);
 
-		l = label(_range.min(), _range.max(), XTICKS);
-		for (int i = 0; i < ((l.max - l.min) / l.d) + 1; i++) {
-			val = l.min + i * l.d;
-			QString str = QString::number(val);
+		for (int i = 0; i < _ticks.count(); i++) {
+			qreal val = _ticks.at(i).value;
+			ts = _ticks.at(i).boundingBox;
 
-			painter->drawLine((_size/range) * (val - _range.min()), TICK/2,
-			  (_size/range) * (val - _range.min()), -TICK/2);
-			ts = fm.tightBoundingRect(str);
-			painter->drawText(((_size/range) * (val - _range.min()))
-			  - (ts.width()/2), ts.height() + TICK/2 + PADDING, str);
+			painter->drawLine((_size/_range.size()) * (val - _range.min()),
+			  TICK/2, (_size/_range.size()) * (val - _range.min()), -TICK/2);
+			painter->drawText(((_size/_range.size()) * (val - _range.min()))
+			  - (ts.width()/2), ts.height() + TICK/2 + PADDING,
+			  _locale.toString(val));
 		}
 
-		painter->drawText(_size/2 - ls.width()/2, ls.height() + ts.height()
-		  - 2*fm.descent() + TICK/2 + 2*PADDING, _label);
+		painter->drawText(_size/2 - _labelBB.width()/2, _labelBB.height()
+		  + ts.height() - 2*fm.descent() + TICK/2 + 2*PADDING, _label);
 	} else {
 		painter->drawLine(0, 0, 0, -_size);
 
-		l = label(_range.min(), _range.max(), YTICKS);
 		int mtw = 0;
-		for (int i = 0; i < ((l.max - l.min) / l.d) + 1; i++) {
-			val = l.min + i * l.d;
-			QString str = QString::number(val);
-
-			painter->drawLine(TICK/2, -((_size/range) * (val - _range.min())),
-			  -TICK/2, -((_size/range) * (val - _range.min())));
-			ts = fm.tightBoundingRect(str);
+		for (int i = 0; i < _ticks.count(); i++) {
+			qreal val = _ticks.at(i).value;
+			ts = _ticks.at(i).boundingBox;
 			mtw = qMax(ts.width(), mtw);
-			painter->drawText(-(ts.width() + PADDING + TICK/2), -((_size/range)
-			  * (val - _range.min())) + (ts.height()/2), str);
+
+			painter->drawLine(TICK/2, -((_size/_range.size())
+			  * (val - _range.min())), -TICK/2, -((_size/_range.size())
+			  * (val - _range.min())));
+			painter->drawText(-(ts.width() + PADDING + TICK/2),
+			  -((_size/_range.size()) * (val - _range.min())) + (ts.height()/2),
+			  _locale.toString(val));
 		}
 
 		painter->rotate(-90);
-		painter->drawText(_size/2 - ls.width()/2, -(mtw + 2*PADDING + TICK/2),
-		  _label);
+		painter->drawText(_size/2 - _labelBB.width()/2, -(mtw + 2*PADDING
+		  + TICK/2), _label);
 		painter->rotate(90);
 	}
 
@@ -172,46 +163,28 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 QSizeF AxisItem::margin() const
 {
-	QFont font;
-	font.setPixelSize(FONT_SIZE);
-	QFontMetrics fm(font);
-	QRect ss, es, ls;
-	struct Label l;
-
-
-	l = label(_range.min(), _range.max(), (_type == X) ? XTICKS : YTICKS);
-	es = fm.tightBoundingRect(QString::number(l.max));
-	ss = fm.tightBoundingRect(QString::number(l.min));
-	ls = fm.tightBoundingRect(_label);
+	QFontMetrics fm(_font);
+	QRect es = _ticks.isEmpty() ? QRect() : _ticks.last().boundingBox;
 
 	if (_type == X) {
-		return QSizeF(es.width()/2,
-		  ls.height() + es.height() - fm.descent() + TICK/2 + 2*PADDING);
+		return QSizeF(es.width()/2, _labelBB.height() + es.height()
+		  - fm.descent() + TICK/2 + 2*PADDING);
 	} else {
 		int mtw = 0;
-		QRect ts;
-		qreal val;
+		for (int i = 0; i < _ticks.count(); i++)
+			mtw = qMax(_ticks.at(i).boundingBox.width(), mtw);
 
-		for (int i = 0; i < ((l.max - l.min) / l.d) + 1; i++) {
-			val = l.min + i * l.d;
-			QString str = QString::number(val);
-			ts = fm.tightBoundingRect(str);
-			mtw = qMax(ts.width(), mtw);
-		}
-
-		return QSizeF(ls.height() -fm.descent() + mtw + 2*PADDING
+		return QSizeF(_labelBB.height() -fm.descent() + mtw + 2*PADDING
 		  + TICK/2, es.height()/2 + fm.descent());
 	}
 }
 
 QList<qreal> AxisItem::ticks() const
 {
-	struct Label l;
 	QList<qreal> list;
 
-	l = label(_range.min(), _range.max(), (_type == X) ? XTICKS : YTICKS);
-	for (int i = 0; i < ((l.max - l.min) / l.d) + 1; i++)
-		list.append(((_size/_range.size()) * ((l.min + i * l.d)
+	for (int i = 0; i < _ticks.count(); i++)
+		list.append(((_size/_range.size()) * (_ticks.at(i).value
 		  - _range.min())));
 
 	return list;

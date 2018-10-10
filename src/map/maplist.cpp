@@ -1,35 +1,17 @@
 #include <QFileInfo>
 #include <QDir>
 #include "atlas.h"
-#include "offlinemap.h"
+#include "ozimap.h"
 #include "onlinemap.h"
+#include "jnxmap.h"
+#include "geotiffmap.h"
 #include "mapsource.h"
+#include "mbtilesmap.h"
 #include "maplist.h"
 
 
-bool MapList::loadSource(const QString &path, bool dir)
+bool MapList::loadMap(Map* map, const QString &path, bool dir)
 {
-	MapSource ms;
-	Map *map;
-
-	if (!(map = ms.loadFile(path))) {
-		if (dir)
-			_errorString += path + ": " + ms.errorString() + "\n";
-		else
-			_errorString = ms.errorString();
-		return false;
-	}
-
-	map->setParent(this);
-	_maps.append(map);
-
-	return true;
-}
-
-bool MapList::loadMap(const QString &path, bool dir)
-{
-	OfflineMap *map = new OfflineMap(path, this);
-
 	if (map->isValid()) {
 		_maps.append(map);
 		return true;
@@ -38,26 +20,27 @@ bool MapList::loadMap(const QString &path, bool dir)
 			_errorString += path + ": " + map->errorString() + "\n";
 		else
 			_errorString = map->errorString();
+
 		delete map;
 		return false;
 	}
 }
 
-bool MapList::loadAtlas(const QString &path, bool dir)
+bool MapList::loadSource(const QString &path, bool dir)
 {
-	Atlas *atlas = new Atlas(path, this);
+	QString err;
+	Map *map = MapSource::loadMap(path, err);
 
-	if (atlas->isValid()) {
-		_maps.append(atlas);
-		return true;
-	} else {
+	if (!map) {
 		if (dir)
-			_errorString += path + ": " + atlas->errorString() + "\n";
+			_errorString += path + ": " + err + "\n";
 		else
-			_errorString = atlas->errorString();
-		delete atlas;
+			_errorString = err;
 		return false;
 	}
+	map->setParent(this);
+
+	return loadMap(map, path, dir);
 }
 
 bool MapList::loadFile(const QString &path, bool *atlas, bool dir)
@@ -67,14 +50,17 @@ bool MapList::loadFile(const QString &path, bool *atlas, bool dir)
 
 	if (Atlas::isAtlas(path)) {
 		*atlas = true;
-		return loadAtlas(path, dir);
-	} else if (suffix == "xml") {
-		*atlas = false;
+		return loadMap(new Atlas(path, this), path, dir);
+	} else if (suffix == "xml")
 		return loadSource(path, dir);
-	} else {
-		*atlas = false;
-		return loadMap(path, dir);
-	}
+	else if (suffix == "jnx")
+		return loadMap(new JNXMap(path, this), path, dir);
+	else if (suffix == "tif" || suffix == "tiff")
+		return loadMap(new GeoTIFFMap(path, this), path, dir);
+	else if (suffix == "mbtiles")
+		return loadMap(new MBTilesMap(path, this), path, dir);
+	else
+		return loadMap(new OziMap(path, this), path, dir);
 }
 
 bool MapList::loadDirR(const QString &path)
@@ -83,11 +69,12 @@ bool MapList::loadDirR(const QString &path)
 	md.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
 	md.setSorting(QDir::DirsLast);
 	QFileInfoList ml = md.entryInfoList();
-	bool atlas, ret = true;
+	bool ret = true;
 
 	for (int i = 0; i < ml.size(); i++) {
 		const QFileInfo &fi = ml.at(i);
 		QString suffix = fi.suffix().toLower();
+		bool atlas = false;
 
 		if (fi.isDir() && fi.fileName() != "set") {
 			if (!loadDirR(fi.absoluteFilePath()))
@@ -127,7 +114,10 @@ void MapList::clear()
 QString MapList::formats()
 {
 	return
-	  tr("Supported files") + " (*.map *.tar *.tba *.tif *.tiff *.xml);;"
+	  tr("Supported files")
+	  + " (*.jnx *.map *.mbtiles *.tar *.tba *.tif *.tiff *.xml);;"
+	  + tr("MBTiles maps") + " (*.mbtiles);;"
+	  + tr("Garmin JNX maps") + " (*.jnx);;"
 	  + tr("OziExplorer maps") + " (*.map);;"
 	  + tr("TrekBuddy maps/atlases") + " (*.tar *.tba);;"
 	  + tr("GeoTIFF images") + " (*.tif *.tiff);;"
@@ -137,6 +127,7 @@ QString MapList::formats()
 QStringList MapList::filter()
 {
 	QStringList filter;
-	filter << "*.map" << "*.tba" << "*.tar" << "*.xml" << "*.tif" << "*.tiff";
+	filter << "*.jnx" << "*.map" << "*.tba" << "*.tar" << "*.xml" << "*.tif"
+	  << "*.tiff" << "*.mbtiles";
 	return filter;
 }

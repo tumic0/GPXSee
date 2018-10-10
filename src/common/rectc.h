@@ -23,6 +23,11 @@ public:
 	  {return Coordinates((_tl.lon() + _br.lon()) / 2.0,
 	    (_tl.lat() + _br.lat()) / 2.0);}
 
+	double top() const {return _tl.lat();}
+	double bottom() const {return _br.lat();}
+	double left() const {return _tl.lon();}
+	double right() const {return _br.lon();}
+
 	RectC operator|(const RectC &r) const;
 	RectC &operator|=(const RectC &r) {*this = *this | r; return *this;}
 	RectC operator&(const RectC &r) const;

@@ -7,7 +7,6 @@
 #include <QDate>
 #include <QPrinter>
 #include "data/graph.h"
-#include "data/poi.h"
 #include "units.h"
 #include "timetype.h"
 #include "format.h"
@@ -28,6 +27,8 @@ class GraphTab;
 class MapView;
 class Map;
 class MapList;
+class POI;
+class QScreen;
 
 class GUI : public QMainWindow
 {
@@ -35,9 +36,9 @@ class GUI : public QMainWindow
 
 public:
 	GUI();
-	~GUI();
 
 	bool openFile(const QString &fileName);
+	void show();
 
 private slots:
 	void about();
@@ -48,6 +49,7 @@ private slots:
 	void openFile();
 	void closeAll();
 	void reloadFile();
+	void statistics();
 	void openPOIFile();
 	void closePOIFiles();
 	void showGraphs(bool show);
@@ -83,6 +85,8 @@ private slots:
 	void setDMS() {setCoordinatesFormat(DMS);}
 
 	void sliderPositionChanged(qreal pos);
+	void screenChanged(QScreen *screen);
+	void logicalDotsPerInchChanged(qreal dpi);
 
 private:
 	typedef QPair<QDate, QDate> DateRange;
@@ -92,7 +96,8 @@ private:
 	void closeFiles();
 	void plot(QPrinter *printer);
 
-	QAction *createPOIFileAction(int index);
+	QAction *createPOIFileAction(const QString &fileName);
+	QAction *createMapAction(const Map *map);
 	void createPOIFilesActions();
 	void createMapActions();
 	void createActions();
@@ -151,6 +156,7 @@ private:
 	QAction *_openFileAction;
 	QAction *_closeFileAction;
 	QAction *_reloadFileAction;
+	QAction *_statisticsAction;
 	QAction *_openPOIAction;
 	QAction *_closePOIAction;
 	QAction *_showPOIAction;

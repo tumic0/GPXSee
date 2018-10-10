@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QRectF>
-#include <QColor>
+#include <QFlags>
 #include "common/coordinates.h"
 
 class QPainter;
@@ -15,39 +15,44 @@ class Map : public QObject
 	Q_OBJECT
 
 public:
-	Map(QObject *parent = 0) : QObject(parent), _backgroundColor(Qt::white) {}
+	enum Flag {
+		NoFlags = 0,
+		Block = 1,
+		OpenGL = 2
+	};
+	Q_DECLARE_FLAGS(Flags, Flag)
+
+	Map(QObject *parent = 0) : QObject(parent) {}
 	virtual ~Map() {}
 
-	virtual const QString &name() const = 0;
+	virtual QString name() const = 0;
 
-	virtual QRectF bounds() const = 0;
-	virtual qreal resolution(const QRectF &rect) const = 0;
+	virtual QRectF bounds() = 0;
+	virtual qreal resolution(const QRectF &rect);
 
-	virtual int zoom() const = 0;
-	virtual void setZoom(int zoom) = 0;
-	virtual int zoomFit(const QSize &size, const RectC &rect) = 0;
-	virtual int zoomIn() = 0;
-	virtual int zoomOut() = 0;
+	virtual int zoom() const {return 0;}
+	virtual void setZoom(int) {}
+	virtual int zoomFit(const QSize &, const RectC &) {return 0;}
+	virtual int zoomIn() {return 0;}
+	virtual int zoomOut() {return 0;}
 
 	virtual QPointF ll2xy(const Coordinates &c) = 0;
 	virtual Coordinates xy2ll(const QPointF &p) = 0;
 
-	virtual void draw(QPainter *painter, const QRectF &rect, bool block) = 0;
+	virtual void draw(QPainter *painter, const QRectF &rect, Flags flags) = 0;
 
 	virtual void clearCache() {}
 	virtual void load() {}
 	virtual void unload() {}
+	virtual void setDevicePixelRatio(qreal) {}
 
 	virtual bool isValid() const {return true;}
 	virtual QString errorString() const {return QString();}
 
-	void setBackgroundColor(const QColor &color) {_backgroundColor = color;}
-
 signals:
 	void loaded();
-
-protected:
-	QColor _backgroundColor;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Map::Flags)
 
 #endif // MAP_H

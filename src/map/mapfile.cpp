@@ -5,12 +5,12 @@
 #include "mapfile.h"
 
 
-static double parameter(const QString &str, bool *res)
+static double parameter(const QString &str, bool *res, double def = 0.0)
 {
 	QString field = str.trimmed();
 	if (field.isEmpty()) {
 		*res = true;
-		return NAN;
+		return def;
 	}
 
 	return field.toDouble(res);
@@ -26,7 +26,8 @@ int MapFile::parse(QIODevice &device, QList<CalibrationPoint> &points,
 		QByteArray line = device.readLine();
 
 		if (ln == 1) {
-			if (!line.trimmed().startsWith("OziExplorer Map Data File"))
+			QString fileType(QString::fromUtf8(line).trimmed());
+			if (!fileType.startsWith("OziExplorer Map Data File"))
 				return ln;
 		} else if (ln == 2)
 			_name = line.trimmed();
@@ -116,7 +117,7 @@ int MapFile::parse(QIODevice &device, QList<CalibrationPoint> &points,
 
 				setup = Projection::Setup(
 				  parameter(list[1], &r[1]), parameter(list[2], &r[2]),
-				  parameter(list[3], &r[3]), parameter(list[4], &r[4]),
+				  parameter(list[3], &r[3], 1.0), parameter(list[4], &r[4]),
 				  parameter(list[5], &r[5]), parameter(list[6], &r[6]),
 				  parameter(list[7], &r[7]));
 

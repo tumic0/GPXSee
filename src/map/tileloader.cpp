@@ -7,51 +7,65 @@
 static bool loadTileFile(Tile &tile, const QString &file)
 {
 	if (!tile.pixmap().load(file)) {
-		qWarning("%s: error loading tile file\n", qPrintable(file));
+		qWarning("%s: error loading tile file", qPrintable(file));
 		return false;
 	}
 
 	return true;
 }
 
-TileLoader::TileLoader(QObject *parent) : QObject(parent)
+TileLoader::TileLoader(const QString &dir, QObject *parent)
+  : QObject(parent), _dir(dir)
 {
+	if (!QDir().mkpath(_dir))
+		qWarning("%s: %s", qPrintable(_dir), "Error creating tiles directory");
+
 	_downloader = new Downloader(this);
 	connect(_downloader, SIGNAL(finished()), this, SIGNAL(finished()));
 }
 
-void TileLoader::loadTilesAsync(QList<Tile> &list)
+void TileLoader::loadTilesAsync(QVector<Tile> &list)
 {
 	QList<Download> dl;
 
 	for (int i = 0; i < list.size(); i++) {
 		Tile &t = list[i];
-		QString file = tileFile(t);
+		QString file(tileFile(t));
 		QFileInfo fi(file);
 
-		if (!fi.exists())
-			dl.append(Download(tileUrl(t), file));
-		else
+		if (fi.exists())
 			loadTileFile(t, file);
+		else {
+			QUrl url(tileUrl(t));
+			if (url.isLocalFile())
+				loadTileFile(t, url.toLocalFile());
+			else
+				dl.append(Download(url, file));
+		}
 	}
 
 	if (!dl.empty())
 		_downloader->get(dl, _authorization);
 }
 
-void TileLoader::loadTilesSync(QList<Tile> &list)
+void TileLoader::loadTilesSync(QVector<Tile> &list)
 {
 	QList<Download> dl;
 
 	for (int i = 0; i < list.size(); i++) {
 		Tile &t = list[i];
-		QString file = tileFile(t);
+		QString file(tileFile(t));
 		QFileInfo fi(file);
 
-		if (!fi.exists())
-			dl.append(Download(tileUrl(t), file));
-		else
+		if (fi.exists())
 			loadTileFile(t, file);
+		else {
+			QUrl url(tileUrl(t));
+			if (url.isLocalFile())
+				loadTileFile(t, url.toLocalFile());
+			else
+				dl.append(Download(url, file));
+		}
 	}
 
 	if (dl.empty())
@@ -84,7 +98,7 @@ void TileLoader::clearCache()
 	_downloader->clearErrors();
 }
 
-QString TileLoader::tileUrl(const Tile &tile) const
+QUrl TileLoader::tileUrl(const Tile &tile) const
 {
 	QString url(_url);
 
@@ -101,13 +115,12 @@ QString TileLoader::tileUrl(const Tile &tile) const
 		url.replace("$y", QString::number(tile.xy().y()));
 	}
 
-	return url;
+	return QUrl(url);
 }
 
 QString TileLoader::tileFile(const Tile &tile) const
 {
-	QString file = _dir + QString("/%1-%2-%3").arg(tile.zoom().toString())
-	  .arg(tile.xy().x()).arg(tile.xy().y());
-
-	return file;
+	return _dir + QLatin1Char('/') + tile.zoom().toString() + QLatin1Char('-')
+	  + QString::number(tile.xy().x()) + QLatin1Char('-')
+	  + QString::number(tile.xy().y());
 }

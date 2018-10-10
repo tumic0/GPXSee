@@ -16,19 +16,17 @@ LambertAzimuthal::LambertAzimuthal(const Ellipsoid *ellipsoid,
 	_lon0 = deg2rad(longitudeOrigin);
 
 	_a = ellipsoid->radius();
+	_es = ellipsoid->es();
+	_e = sqrt(_es);
 
-	_es2 = 2.0 * ellipsoid->flattening() - ellipsoid->flattening()
-	  * ellipsoid->flattening();
-	_es = sqrt(_es2);
-
-	double q0 = (1.0 - _es2) * ((sin(lat0) / (1.0 - _es2 * sin2(lat0)))
-	  - ((1.0/(2.0*_es)) * log((1.0 - _es * sin(lat0)) / (1.0 + _es
+	double q0 = (1.0 - _es) * ((sin(lat0) / (1.0 - _es * sin2(lat0)))
+	  - ((1.0/(2.0*_e)) * log((1.0 - _e * sin(lat0)) / (1.0 + _e
 	  * sin(lat0)))));
-	_qP = (1.0 - _es2) * ((1.0 / (1.0 - _es2)) - ((1.0/(2.0*_es))
-	  * log((1.0 - _es) / (1.0 + _es))));
+	_qP = (1.0 - _es) * ((1.0 / (1.0 - _es)) - ((1.0/(2.0*_e))
+	  * log((1.0 - _e) / (1.0 + _e))));
 	_beta0 = asin(q0 / _qP);
 	_Rq = _a * sqrt(_qP / 2.0);
-	_D = _a * (cos(lat0) / sqrt(1.0 - _es2 * sin2(lat0))) / (_Rq * cos(_beta0));
+	_D = _a * (cos(lat0) / sqrt(1.0 - _es * sin2(lat0))) / (_Rq * cos(_beta0));
 }
 
 PointD LambertAzimuthal::ll2xy(const Coordinates &c) const
@@ -36,8 +34,8 @@ PointD LambertAzimuthal::ll2xy(const Coordinates &c) const
 	double lon = deg2rad(c.lon());
 	double lat = deg2rad(c.lat());
 
-	double q = (1.0 - _es2) * ((sin(lat) / (1.0 - _es2 * sin2(lat)))
-	  - ((1.0/(2.0*_es)) * log((1.0 - _es * sin(lat)) / (1.0 + _es
+	double q = (1.0 - _es) * ((sin(lat) / (1.0 - _es * sin2(lat)))
+	  - ((1.0/(2.0*_e)) * log((1.0 - _e * sin(lat)) / (1.0 + _e
 	  * sin(lat)))));
 	double beta = asin(q / _qP);
 	double B = _Rq * sqrt(2.0 / (1.0 + sin(_beta0) * sin(beta) + (cos(_beta0)
@@ -52,8 +50,8 @@ PointD LambertAzimuthal::ll2xy(const Coordinates &c) const
 
 Coordinates LambertAzimuthal::xy2ll(const PointD &p) const
 {
-	double es4 = _es2 * _es2;
-	double es6 = _es2 * es4;
+	double es4 = _es * _es;
+	double es6 = _es * es4;
 
 	double rho = sqrt(sqr((p.x() - _falseEasting) / _D) + sqr(_D * (p.y()
 	  - _falseNorthing)));
@@ -64,7 +62,7 @@ Coordinates LambertAzimuthal::xy2ll(const PointD &p) const
 	double lon = _lon0 + atan((p.x() - _falseEasting) * sin(C) / (_D * rho
 	  * cos(_beta0) * cos(C) - sqr(_D) * (p.y() - _falseNorthing) * sin(_beta0)
 	  * sin(C)));
-	double lat = betaS + ((_es2/3.0 + 31.0*es4/180.0 + 517.0*es6/5040.0)
+	double lat = betaS + ((_es/3.0 + 31.0*es4/180.0 + 517.0*es6/5040.0)
 	  * sin(2.0*betaS)) + ((23.0*es4/360.0 + 251.0*es6/3780.0) * sin(4.0*betaS))
 	  + ((761.0*es6/45360.0)*sin(6.0*betaS));
 
