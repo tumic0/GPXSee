@@ -19,7 +19,7 @@ HEADERS += src/config.h \
     src/common/range.h \
     src/common/rectc.h \
     src/common/wgs84.h \
-    src/common/str2int.h \
+    src/common/util.h \
     src/common/rtree.h \
     src/common/kv.h \
     src/GUI/app.h \
@@ -71,7 +71,6 @@ HEADERS += src/config.h \
     src/GUI/gearratiographitem.h \
     src/GUI/oddspinbox.h \
     src/GUI/settings.h \
-    src/GUI/nicenum.h \
     src/GUI/cpuarch.h \
     src/GUI/searchpointer.h \
     src/GUI/mapview.h \
@@ -150,7 +149,7 @@ SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
     src/common/range.cpp \
-    src/common/str2int.cpp \
+    src/common/util.cpp \
     src/GUI/app.cpp \
     src/GUI/gui.cpp \
     src/GUI/axisitem.cpp \
@@ -192,7 +191,6 @@ SOURCES += src/main.cpp \
     src/GUI/cadencegraphitem.cpp \
     src/GUI/powergraphitem.cpp \
     src/GUI/gearratiographitem.cpp \
-    src/GUI/nicenum.cpp \
     src/GUI/mapview.cpp \
     src/map/maplist.cpp \
     src/map/onlinemap.cpp \

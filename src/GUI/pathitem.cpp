@@ -1,11 +1,8 @@
 #include <cmath>
-#include <QApplication>
 #include <QCursor>
 #include <QPainter>
 #include "common/greatcircle.h"
 #include "map/map.h"
-#include "tooltip.h"
-#include "nicenum.h"
 #include "pathitem.h"
 
 
@@ -50,6 +47,7 @@ void PathItem::updateShape()
 void PathItem::addSegment(const Coordinates &c1, const Coordinates &c2)
 {
 	if (fabs(c1.lon() - c2.lon()) > 180.0) {
+		// Split segment on date line crossing
 		QPointF p;
 
 		if (c2.lon() < 0) {

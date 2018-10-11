@@ -1,5 +1,5 @@
 #include <cstring>
-#include "common/str2int.h"
+#include "common/util.h"
 #include "nmeaparser.h"
 
 
