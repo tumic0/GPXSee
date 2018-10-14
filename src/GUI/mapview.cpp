@@ -21,6 +21,7 @@
 #define MARGIN           10
 #define SCALE_OFFSET     7
 
+
 MapView::MapView(Map *map, POI *poi, QWidget *parent)
   : QGraphicsView(parent)
 {
@@ -438,10 +439,10 @@ void MapView::zoom(int zoom, const QPoint &pos)
 		digitalZoom(zoom);
 	} else {
 		Coordinates c = _map->xy2ll(mapToScene(pos));
-		qreal os = _map->zoom();
-		qreal ns = (zoom > 0) ? _map->zoomIn() : _map->zoomOut();
+		int oz = _map->zoom();
+		int nz = (zoom > 0) ? _map->zoomIn() : _map->zoomOut();
 
-		if (ns != os) {
+		if (nz != oz) {
 			rescale();
 			centerOn(_map->ll2xy(c) - (pos - viewport()->rect().center()));
 		} else {
