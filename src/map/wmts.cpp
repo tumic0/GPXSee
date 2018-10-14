@@ -12,6 +12,12 @@
 #include "wmts.h"
 
 
+static void skipParentElement(QXmlStreamReader &reader)
+{
+	while (reader.readNextStartElement())
+		reader.skipCurrentElement();
+}
+
 WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader)
 {
 	TileMatrix matrix;
@@ -45,23 +51,18 @@ WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader)
 
 void WMTS::tileMatrixSet(QXmlStreamReader &reader, CTX &ctx)
 {
-	QString id, crs;
-	QSet<TileMatrix> matrixes;
-
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Identifier")
-			id = reader.readElementText();
-		else if (reader.name() == "SupportedCRS")
-			crs = reader.readElementText();
+		if (reader.name() == "Identifier") {
+			if (reader.readElementText() != ctx.setup.set()) {
+				skipParentElement(reader);
+				return;
+			}
+		} else if (reader.name() == "SupportedCRS")
+			ctx.crs = reader.readElementText();
 		else if (reader.name() == "TileMatrix")
-			matrixes.insert(tileMatrix(reader));
+			ctx.matrixes.insert(tileMatrix(reader));
 		else
 			reader.skipCurrentElement();
-	}
-
-	if (id == ctx.setup.set()) {
-		ctx.crs = crs;
-		_matrixes = matrixes;
 	}
 }
 
@@ -106,21 +107,18 @@ QSet<WMTS::MatrixLimits> WMTS::tileMatrixSetLimits(QXmlStreamReader &reader)
 
 void WMTS::tileMatrixSetLink(QXmlStreamReader &reader, CTX &ctx)
 {
-	QString id;
-	QSet<MatrixLimits> limits;
-
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "TileMatrixSet")
-			id = reader.readElementText();
-		else if (reader.name() == "TileMatrixSetLimits")
-			limits = tileMatrixSetLimits(reader);
+		if (reader.name() == "TileMatrixSet") {
+			if (reader.readElementText() == ctx.setup.set())
+				ctx.hasSet = true;
+			else {
+				skipParentElement(reader);
+				return;
+			}
+		} else if (reader.name() == "TileMatrixSetLimits")
+			ctx.limits = tileMatrixSetLimits(reader);
 		else
 			reader.skipCurrentElement();
-	}
-
-	if (id == ctx.setup.set()) {
-		ctx.hasSet = true;
-		_limits = limits;
 	}
 }
 
@@ -158,39 +156,36 @@ QString WMTS::style(QXmlStreamReader &reader)
 
 void WMTS::layer(QXmlStreamReader &reader, CTX &ctx)
 {
-	QString id, tpl;
-	RectC bounds;
-	QStringList formats, styles;
-
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Identifier")
-			id = reader.readElementText();
-		else if (reader.name() == "TileMatrixSetLink")
+		if (reader.name() == "Identifier") {
+			if (reader.readElementText() == ctx.setup.layer())
+				ctx.hasLayer = true;
+			else {
+				skipParentElement(reader);
+				return;
+			}
+		} else if (reader.name() == "TileMatrixSetLink")
 			tileMatrixSetLink(reader, ctx);
 		else if (reader.name() == "WGS84BoundingBox")
-			bounds = wgs84BoundingBox(reader);
+			_bounds = wgs84BoundingBox(reader);
 		else if (reader.name() == "ResourceURL") {
 			const QXmlStreamAttributes &attr = reader.attributes();
-			if (attr.value("resourceType") == "tile")
-				tpl = attr.value("template").toString();
+			if (attr.value("resourceType") == "tile" && ctx.setup.rest())
+				_tileUrl = attr.value("template").toString();
 			reader.skipCurrentElement();
-		} else if (reader.name() == "Style")
-			styles.append(style(reader));
-		else if (reader.name() == "Format")
-			formats.append(reader.readElementText());
-		else
+		} else if (reader.name() == "Style") {
+			const QXmlStreamAttributes &attr = reader.attributes();
+			bool isDefault = (attr.value("isDefault") == "true");
+			QString s = style(reader);
+			if (isDefault)
+				ctx.defaultStyle = s;
+			if (!s.isEmpty() && s == ctx.setup.style())
+				ctx.hasStyle = true;
+		} else if (reader.name() == "Format") {
+			if (reader.readElementText() == ctx.setup.format())
+				ctx.hasFormat = true;
+		} else
 			reader.skipCurrentElement();
-	}
-
-	if (id == ctx.setup.layer()) {
-		ctx.hasLayer = true;
-		_bounds = bounds;
-		if (ctx.setup.rest())
-			_tileUrl = tpl;
-		if (styles.contains(ctx.setup.style()) || ctx.setup.style().isEmpty())
-			ctx.hasStyle = true;
-		if (formats.contains(ctx.setup.format()))
-			ctx.hasFormat = true;
 	}
 }
 
@@ -216,10 +211,24 @@ void WMTS::capabilities(QXmlStreamReader &reader, CTX &ctx)
 	}
 }
 
-bool WMTS::parseCapabilities(const QString &path, const Setup &setup)
+void WMTS::createZooms(const CTX &ctx)
+{
+	for (QSet<TileMatrix>::const_iterator mi = ctx.matrixes.constBegin();
+	  mi != ctx.matrixes.constEnd(); ++mi) {
+		QSet<MatrixLimits>::const_iterator li = ctx.limits.find(
+		  MatrixLimits(mi->id));
+		if (!ctx.limits.isEmpty() && li == ctx.limits.constEnd())
+			continue;
+		_zooms.append(Zoom(mi->id, mi->scaleDenominator, mi->topLeft, mi->tile,
+		  mi->matrix, li == ctx.limits.constEnd() ? QRect() : li->rect));
+	}
+
+	qSort(_zooms);
+}
+
+bool WMTS::parseCapabilities(const QString &path, CTX &ctx)
 {
 	QFile file(path);
-	CTX ctx(setup);
 	QXmlStreamReader reader;
 
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
@@ -240,12 +249,18 @@ bool WMTS::parseCapabilities(const QString &path, const Setup &setup)
 		return false;
 	}
 
+	createZooms(ctx);
+
 	if (!ctx.hasLayer) {
 		_errorString = ctx.setup.layer() + ": layer not provided";
 		return false;
 	}
-	if (!ctx.hasStyle) {
+	if (!ctx.hasStyle && !ctx.setup.style().isEmpty()) {
 		_errorString = ctx.setup.style() + ": style not provided";
+		return false;
+	}
+	if (ctx.setup.style().isEmpty() && ctx.defaultStyle.isEmpty()) {
+		_errorString = "Default style not provided";
 		return false;
 	}
 	if (!ctx.setup.rest() && !ctx.hasFormat) {
@@ -265,7 +280,7 @@ bool WMTS::parseCapabilities(const QString &path, const Setup &setup)
 		_errorString = ctx.crs + ": unknown CRS";
 		return false;
 	}
-	if (_matrixes.isEmpty()) {
+	if (ctx.matrixes.isEmpty()) {
 		_errorString = "No usable tile matrix found";
 		return false;
 	}
@@ -307,10 +322,12 @@ WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
 	if (!url.isLocalFile() && !QFileInfo(file).exists())
 		if (!downloadCapabilities(url.toString(), file, setup.authorization()))
 			return;
-	if (!parseCapabilities(url.isLocalFile() ? url.toLocalFile() : file, setup))
+
+	CTX ctx(setup);
+	if (!parseCapabilities(url.isLocalFile() ? url.toLocalFile() : file, ctx))
 		return;
 
-	QString style = setup.style().isEmpty() ? "default" : setup.style();
+	QString style = setup.style().isEmpty() ? ctx.defaultStyle : setup.style();
 	if (!setup.rest()) {
 		_tileUrl = QString("%1%2service=WMTS&Version=1.0.0&request=GetTile"
 		  "&Format=%3&Layer=%4&Style=%5&TileMatrixSet=%6&TileMatrix=$z"
@@ -335,26 +352,6 @@ WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
 	}
 
 	_valid = true;
-}
-
-QList<WMTS::Zoom> WMTS::zooms() const
-{
-	QList<Zoom> zooms;
-	QSet<TileMatrix>::const_iterator mi;
-	QSet<MatrixLimits>::const_iterator li;
-
-	for (mi = _matrixes.constBegin(); mi != _matrixes.constEnd(); ++mi) {
-		if ((li = _limits.find(MatrixLimits(mi->id))) == _limits.constEnd())
-			zooms.append(Zoom(mi->id, mi->scaleDenominator, mi->topLeft,
-			  mi->tile, mi->matrix, QRect()));
-		else
-			zooms.append(Zoom(mi->id, mi->scaleDenominator, mi->topLeft,
-			  mi->tile, mi->matrix, li->rect));
-	}
-
-	qSort(zooms);
-
-	return zooms;
 }
 
 #ifndef QT_NO_DEBUG

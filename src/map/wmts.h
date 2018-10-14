@@ -80,7 +80,7 @@ public:
 	WMTS(const QString &path, const Setup &setup);
 
 	const RectC &bounds() const {return _bounds;}
-	QList<Zoom> zooms() const;
+	const QList<Zoom> &zooms() const {return _zooms;}
 	const Projection &projection() const {return _projection;}
 	const QString &tileUrl() const {return _tileUrl;}
 
@@ -117,7 +117,10 @@ private:
 
 	struct CTX {
 		const Setup &setup;
+		QSet<TileMatrix> matrixes;
+		QSet<MatrixLimits> limits;
 		QString crs;
+		QString defaultStyle;
 		bool hasLayer;
 		bool hasStyle;
 		bool hasFormat;
@@ -137,12 +140,12 @@ private:
 	void layer(QXmlStreamReader &reader, CTX &ctx);
 	void contents(QXmlStreamReader &reader, CTX &ctx);
 	void capabilities(QXmlStreamReader &reader, CTX &ctx);
-	bool parseCapabilities(const QString &path, const Setup &setup);
+	bool parseCapabilities(const QString &path, CTX &ctx);
 	bool downloadCapabilities(const QString &url, const QString &file,
 	  const Authorization &authorization);
+	void createZooms(const CTX &ctx);
 
-	QSet<TileMatrix> _matrixes;
-	QSet<MatrixLimits> _limits;
+	QList<Zoom> _zooms;
 	RectC _bounds;
 	Projection _projection;
 	QString _tileUrl;
