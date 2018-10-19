@@ -6,7 +6,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="11"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>tr/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="12"/>
@@ -36,7 +36,7 @@
         <location filename="../src/GUI/cadencegraphitem.cpp" line="24"/>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="26"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>tr/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="25"/>
@@ -79,7 +79,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="120"/>
         <source>LOC files</source>
-        <translation type="unfinished"></translation>
+        <translation>Données LOC</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="121"/>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="122"/>
         <source>OziExplorer files</source>
-        <translation type="unfinished"></translation>
+        <translation>Données OziExplorer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="123"/>
@@ -99,7 +99,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="123"/>
         <source>SLF files</source>
-        <translation type="unfinished"></translation>
+        <translation>Données SLF</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="124"/>
@@ -138,7 +138,7 @@
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="131"/>
         <source>ft</source>
-        <translation>pied</translation>
+        <translation>pieds</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="64"/>
@@ -156,7 +156,7 @@
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="28"/>
         <source>ft</source>
-        <translation>pied</translation>
+        <translation>pieds</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="31"/>
@@ -214,12 +214,12 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
         <source>PDF files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers PDF</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
         <source>All files</source>
-        <translation type="unfinished">Tous les fichiers</translation>
+        <translation>Tous les fichiers</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="66"/>
@@ -419,7 +419,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="257"/>
         <source>Statistics...</source>
-        <translation type="unfinished"></translation>
+        <translation>Statistiques...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="265"/>
@@ -503,22 +503,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="422"/>
         <source>Nautical</source>
-        <translation type="unfinished"></translation>
+        <translation>Marin</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="430"/>
         <source>Decimal degrees (DD)</source>
-        <translation type="unfinished"></translation>
+        <translation>Degrés décimaux (°)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="436"/>
         <source>Degrees and decimal minutes (DMM)</source>
-        <translation type="unfinished"></translation>
+        <translation>Degrés, minutes décimales (° ́)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="443"/>
         <source>Degrees, minutes, seconds (DMS)</source>
-        <translation type="unfinished"></translation>
+        <translation>Degrés, minutes, secondes (° ́ ")</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="449"/>
@@ -568,7 +568,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="543"/>
         <source>Coordinates format</source>
-        <translation type="unfinished"></translation>
+        <translation>Unités des coordonées</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="647"/>
@@ -628,24 +628,24 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="706"/>
         <source>Global</source>
-        <translation type="unfinished"></translation>
+        <translation>Général</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="710"/>
         <location filename="../src/GUI/gui.cpp" line="716"/>
         <source>GCS/PCS directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dossiers GCS/PCS :</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="712"/>
         <source>User-specific</source>
-        <translation type="unfinished"></translation>
+        <translation>Personnalisé</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1043"/>
         <location filename="../src/GUI/gui.cpp" line="1044"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Statistiques</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1285"/>
@@ -820,22 +820,22 @@
         <location filename="../src/GUI/gearratiograph.cpp" line="12"/>
         <location filename="../src/GUI/gearratiograph.h" line="14"/>
         <source>Gear ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Rapport de transmission</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="22"/>
         <source>Most used</source>
-        <translation type="unfinished"></translation>
+        <translation>Le plus utilisé</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="24"/>
         <source>Minimum</source>
-        <translation type="unfinished">Minimum</translation>
+        <translation>Minimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="26"/>
         <source>Maximum</source>
-        <translation type="unfinished">Maximum</translation>
+        <translation>Maximum</translation>
     </message>
 </context>
 <context>
@@ -843,17 +843,17 @@
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="37"/>
         <source>Minimum</source>
-        <translation type="unfinished">Minimum</translation>
+        <translatio>Minimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="38"/>
         <source>Maximum</source>
-        <translation type="unfinished">Maximum</translation>
+        <translation>Maximum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="39"/>
         <source>Most used</source>
-        <translation type="unfinished"></translation>
+        <translation>Le plus utilisé</translation>
     </message>
 </context>
 <context>
@@ -872,12 +872,12 @@
         <location filename="../src/GUI/graphview.cpp" line="112"/>
         <location filename="../src/GUI/graphview.cpp" line="120"/>
         <source>ft</source>
-        <translation>pied</translation>
+        <translation>pieds</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="47"/>
         <source>Data not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Données non disponibles</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="115"/>
@@ -927,7 +927,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="11"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>bpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="22"/>
@@ -951,7 +951,7 @@
         <location filename="../src/GUI/heartrategraphitem.cpp" line="24"/>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="26"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>bpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="25"/>
@@ -969,12 +969,12 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="119"/>
         <source>MBTiles maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartes MBTiles</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="120"/>
         <source>Garmin JNX maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartes Garmin JNX</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="121"/>
@@ -1094,22 +1094,22 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="45"/>
         <source>High-resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Résolution élevée</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="46"/>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="51"/>
         <source>Non-HiDPI maps are loaded as HiDPI maps. The map is sharp but map objects are small/hard to read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Les cartes qui n'ont pas de résolution élevée sont chargées comme une carte à résolution élevée. La carte est nette mais ses symboles sont petits ou difficiles à lire.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="53"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Les cartes qui n'ont pas de résolution élevée sont chargées telles quelles. Les symboles de la carte ont leurs tailles attendues mais la carte est floue.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="86"/>
@@ -1119,7 +1119,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="88"/>
         <source>HiDPI display mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Affichage à haute résolution</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="122"/>
@@ -1243,7 +1243,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="330"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>nd</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="333"/>
@@ -1269,12 +1269,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="348"/>
         <source>Computed from distance/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Calculée comme distance/temps</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="349"/>
         <source>Recorded by device</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrée par l'appareil</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="364"/>
@@ -1390,7 +1390,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="478"/>
         <source>Enable HTTP/2</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer l'HTTP/2</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="485"/>
@@ -1405,7 +1405,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="496"/>
         <source>Connection timeout:</source>
-        <translation type="unfinished"></translation>
+        <translation>Délai d'attente de connexion:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="512"/>
@@ -1421,7 +1421,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="532"/>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartes</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="533"/>
@@ -1474,7 +1474,7 @@
         <location filename="../src/GUI/powergraphitem.cpp" line="24"/>
         <location filename="../src/GUI/powergraphitem.cpp" line="26"/>
         <source>W</source>
-        <translation type="unfinished">W</translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="25"/>
@@ -1511,7 +1511,7 @@
         <location filename="../src/GUI/scaleitem.cpp" line="108"/>
         <location filename="../src/GUI/scaleitem.cpp" line="111"/>
         <source>ft</source>
-        <translation>pied</translation>
+        <translation>pieds</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="110"/>
@@ -1550,17 +1550,17 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="27"/>
         <source>min/km</source>
-        <translation type="unfinished"></translation>
+        <translation>min/nd</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="28"/>
         <source>min/mi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="28"/>
         <source>min/nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="32"/>
@@ -1570,12 +1570,12 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="34"/>
         <source>Pace</source>
-        <translation type="unfinished"></translation>
+        <translation>pas</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="97"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>nd</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="100"/>
@@ -1598,22 +1598,22 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="25"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>nd</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="28"/>
         <source>min/km</source>
-        <translation type="unfinished"></translation>
+        <translation>min/km</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="29"/>
         <source>min/mi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="29"/>
         <source>min/nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="32"/>
@@ -1628,7 +1628,7 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="36"/>
         <source>Pace</source>
-        <translation type="unfinished"></translation>
+        <translation>pas</translation>
     </message>
 </context>
 <context>
