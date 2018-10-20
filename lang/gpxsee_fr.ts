@@ -628,7 +628,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="706"/>
         <source>Global</source>
-        <translation>Général</translation>
+        <translation>Global</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="710"/>
