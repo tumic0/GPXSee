@@ -508,17 +508,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="430"/>
         <source>Decimal degrees (DD)</source>
-        <translation>Degrés décimaux (°)</translation>
+        <translation>Degrés décimaux (DD)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="436"/>
         <source>Degrees and decimal minutes (DMM)</source>
-        <translation>Degrés, minutes décimales (° ́)</translation>
+        <translation>Degrés, minutes décimales (DMM)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="443"/>
         <source>Degrees, minutes, seconds (DMS)</source>
-        <translation>Degrés, minutes, secondes (° ́")</translation>
+        <translation>Degrés, minutes, secondes (DMS)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="449"/>
