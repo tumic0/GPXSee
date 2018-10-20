@@ -518,7 +518,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="443"/>
         <source>Degrees, minutes, seconds (DMS)</source>
-        <translation>Degrés, minutes, secondes (° ́ ")</translation>
+        <translation>Degrés, minutes, secondes (° ́")</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="449"/>
@@ -568,7 +568,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="543"/>
         <source>Coordinates format</source>
-        <translation>Unités des coordonées</translation>
+        <translation>Unités des coordonnées</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="647"/>
@@ -843,7 +843,7 @@
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="37"/>
         <source>Minimum</source>
-        <translatio>Minimum</translation>
+        <translation>Minimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="38"/>
