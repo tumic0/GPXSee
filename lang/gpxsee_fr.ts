@@ -1405,7 +1405,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="496"/>
         <source>Connection timeout:</source>
-        <translation>Délai d'attente de connexion:</translation>
+        <translation>Délai d'attente de connexion :</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="512"/>
