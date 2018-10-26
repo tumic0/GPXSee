@@ -249,8 +249,6 @@ bool WMTS::parseCapabilities(const QString &path, CTX &ctx)
 		return false;
 	}
 
-	createZooms(ctx);
-
 	if (!ctx.hasLayer) {
 		_errorString = ctx.setup.layer() + ": layer not provided";
 		return false;
@@ -280,7 +278,8 @@ bool WMTS::parseCapabilities(const QString &path, CTX &ctx)
 		_errorString = ctx.crs + ": unknown CRS";
 		return false;
 	}
-	if (ctx.matrixes.isEmpty()) {
+	createZooms(ctx);
+	if (_zooms.isEmpty()) {
 		_errorString = "No usable tile matrix found";
 		return false;
 	}
