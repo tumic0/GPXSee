@@ -7,6 +7,7 @@ ElevationGraphItem::ElevationGraphItem(const Graph &graph, GraphType type,
   QGraphicsItem *parent) : GraphItem(graph, type, parent)
 {
 	_ascent = _descent = 0;
+	_min = _max = graph.first().y();
 
 	for (int j = 1; j < graph.size(); j++) {
 		qreal cur = graph.at(j).y();
@@ -16,6 +17,11 @@ ElevationGraphItem::ElevationGraphItem(const Graph &graph, GraphType type,
 			_ascent += cur - prev;
 		if (cur < prev)
 			_descent += prev - cur;
+
+		if (cur < _min)
+			_min = cur;
+		if (cur > _max)
+			_max = cur;
 	}
 
 	setToolTip(toolTip(Metric));

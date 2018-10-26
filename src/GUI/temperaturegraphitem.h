@@ -11,8 +11,8 @@ public:
 	TemperatureGraphItem(const Graph &graph, GraphType type,
 	  QGraphicsItem *parent = 0);
 
-	qreal max() const {return -bounds().top();}
-	qreal min() const {return -bounds().bottom();}
+	qreal max() const {return _max;}
+	qreal min() const {return _min;}
 	qreal avg() const {return _avg;}
 
 	void setUnits(Units units);
@@ -20,7 +20,7 @@ public:
 private:
 	QString toolTip(Units units) const;
 
-	qreal _avg;
+	qreal _avg, _min, _max;
 };
 
 #endif // TEMPERATUREGRAPHITEM_H

@@ -7,9 +7,14 @@ PowerGraphItem::PowerGraphItem(const Graph &graph, GraphType type,
   QGraphicsItem *parent) : GraphItem(graph, type, parent)
 {
 	qreal sum = 0;
+	_max = graph.first().y();
 
-	for (int j = 1; j < graph.size(); j++)
-		sum += graph.at(j).y() * (graph.at(j).s() - graph.at(j-1).s());
+	for (int i = 1; i < graph.size(); i++) {
+		qreal y = graph.at(i).y();
+		sum += y * (graph.at(i).s() - graph.at(i-1).s());
+		if (y > _max)
+			_max = y;
+	}
 	_avg = sum/graph.last().s();
 
 	setToolTip(toolTip());

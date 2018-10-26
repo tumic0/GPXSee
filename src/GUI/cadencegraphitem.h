@@ -11,13 +11,13 @@ public:
 	CadenceGraphItem(const Graph &graph, GraphType type,
 	  QGraphicsItem *parent = 0);
 
-	qreal max() const {return -bounds().top();}
+	qreal max() const {return _max;}
 	qreal avg() const {return _avg;}
 
 private:
 	QString toolTip() const;
 
-	qreal _avg;
+	qreal _avg, _max;
 };
 
 #endif // CADENCEGRAPHITEM_H

@@ -12,7 +12,7 @@ public:
 	SpeedGraphItem(const Graph &graph, GraphType type, qreal movingTime,
 	  QGraphicsItem *parent = 0);
 
-	qreal max() const {return -bounds().top();}
+	qreal max() const {return _max;}
 	qreal avg() const {return _avg;}
 	qreal mavg() const {return _mavg;}
 
@@ -22,7 +22,7 @@ public:
 private:
 	QString toolTip() const;
 
-	qreal _avg, _mavg;
+	qreal _avg, _mavg, _max;
 
 	Units _units;
 	TimeType _timeType;

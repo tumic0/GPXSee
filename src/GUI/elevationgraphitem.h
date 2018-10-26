@@ -13,15 +13,15 @@ public:
 
 	qreal ascent() const {return _ascent;}
 	qreal descent() const {return _descent;}
-	qreal min() const {return -bounds().bottom();}
-	qreal max() const {return -bounds().top();}
+	qreal min() const {return _min;}
+	qreal max() const {return _max;}
 
 	void setUnits(Units units);
 
 private:
 	QString toolTip(Units units) const;
 
-	qreal _ascent, _descent;
+	qreal _ascent, _descent, _min, _max;
 };
 
 #endif // ELEVATIONGRAPHITEM_H

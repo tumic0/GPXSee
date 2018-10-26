@@ -8,11 +8,18 @@ GearRatioGraphItem::GearRatioGraphItem(const Graph &graph, GraphType type,
   QGraphicsItem *parent) : GraphItem(graph, type, parent), _top(NAN)
 {
 	qreal val = NAN;
+	_min = _max = graph.first().y();
 
-	for (int j = 1; j < graph.size(); j++) {
-		const GraphPoint &p = graph.at(j);
+	for (int i = 1; i < graph.size(); i++) {
+		const GraphPoint &p = graph.at(i);
+
 		qreal val = _map.value(p.y());
-		_map.insert(p.y(), val + (p.s() - graph.at(j-1).s()));
+		_map.insert(p.y(), val + (p.s() - graph.at(i-1).s()));
+
+		if (p.y() < _min)
+			_min = p.y();
+		if (p.y() > _max)
+			_max = p.y();
 	}
 
 	for (QMap<qreal, qreal>::const_iterator it = _map.constBegin();
