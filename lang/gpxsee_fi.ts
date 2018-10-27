@@ -606,7 +606,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="692"/>
         <source>Digital zoom</source>
-        <translation>Digitalinen zoomi</translation>
+        <translation>Digitaalinen zoomi</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="693"/>
@@ -643,7 +643,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1319"/>
         <source>No files loaded</source>
-        <translation>Yhtään tiedostoja ei ladattu</translation>
+        <translation>Yhtään tiedostoa ei ladattu</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1006"/>
@@ -969,7 +969,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="119"/>
         <source>MBTiles maps</source>
-        <translation>MBTiles -kartat</translation>
+        <translation>MBTiles-kartat</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="120"/>
@@ -979,12 +979,12 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="121"/>
         <source>OziExplorer maps</source>
-        <translation>OziExplorer -kartat</translation>
+        <translation>OziExplorer-kartat</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="122"/>
         <source>TrekBuddy maps/atlases</source>
-        <translation>TrekBuddy -kartat/kartastot</translation>
+        <translation>TrekBuddy-kartat/kartastot</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="123"/>
@@ -1043,7 +1043,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="144"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="226"/>
         <source>Use anti-aliasing</source>
-        <translation>Käytä reunojenpehmennys</translation>
+        <translation>Käytä reunanpehmennystä</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="223"/>
@@ -1223,12 +1223,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="296"/>
         <source>Eliminate GPS outliers</source>
-        <translation type="unfinished"></translation>
+        <translation>Poista poikkeavat GPS-havainnot</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="302"/>
         <source>Outlier elimination</source>
-        <translation type="unfinished"></translation>
+        <translation>Poikkeavan havainnon poistaminen</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="309"/>
@@ -1385,7 +1385,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="475"/>
         <source>Use OpenGL</source>
-        <translation>Käytä OpenGL</translation>
+        <translation>Käytä OpenGL:ää</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="478"/>
@@ -1395,7 +1395,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="485"/>
         <source>MB</source>
-        <translation>MT</translation>
+        <translation>Mt</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="495"/>
