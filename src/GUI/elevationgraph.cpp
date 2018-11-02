@@ -1,7 +1,6 @@
 #include <cmath>
 #include <QLocale>
 #include "data/data.h"
-#include "config.h"
 #include "tooltip.h"
 #include "elevationgraphitem.h"
 #include "elevationgraph.h"

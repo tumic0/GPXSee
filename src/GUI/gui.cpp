@@ -1,4 +1,4 @@
-#include "config.h"
+#include "common/config.h"
 #include <QApplication>
 #include <QSplitter>
 #include <QVBoxLayout>
@@ -28,6 +28,7 @@
 #include <QScreen>
 #endif // ENABLE_HIDPI
 #include <QStyle>
+#include "common/programpaths.h"
 #include "data/data.h"
 #include "data/poi.h"
 #include "map/maplist.h"
@@ -108,14 +109,9 @@ GUI::GUI()
 void GUI::loadMaps()
 {
 	_ml = new MapList(this);
-	QString dir;
+	QString mapDir(ProgramPaths::mapDir());
 
-	if (QFile::exists(USER_MAP_DIR))
-		dir = USER_MAP_DIR;
-	else if (QFile::exists(GLOBAL_MAP_DIR))
-		dir = GLOBAL_MAP_DIR;
-
-	if (!dir.isNull() && !_ml->loadDir(dir))
+	if (!mapDir.isNull() && !_ml->loadDir(mapDir))
 		qWarning("%s", qPrintable(_ml->errorString()));
 
 	_map = new EmptyMap(this);
@@ -124,14 +120,9 @@ void GUI::loadMaps()
 void GUI::loadPOIs()
 {
 	_poi = new POI(this);
-	QString dir;
+	QString poiDir(ProgramPaths::poiDir());
 
-	if (QFile::exists(USER_POI_DIR))
-		dir = USER_POI_DIR;
-	else if (QFile::exists(GLOBAL_POI_DIR))
-		dir = GLOBAL_POI_DIR;
-
-	if (!dir.isNull() && !_poi->loadDir(dir))
+	if (!poiDir.isNull() && !_poi->loadDir(poiDir))
 		qWarning("%s", qPrintable(_poi->errorString()));
 }
 
@@ -702,19 +693,13 @@ void GUI::paths()
 	msgBox.setWindowTitle(tr("Paths"));
 	msgBox.setText("<h3>" + tr("Paths") + "</h3>");
 	msgBox.setInformativeText(
-	  "<style>td {white-space: pre; padding-right: 1em;}</style><h4>"
-	  + tr("Global") + "</h4><table><tr><td>" + tr("Map directory:")
-	  + "</td><td><code>" + QDir::cleanPath(GLOBAL_MAP_DIR)
-	  + "</code></td></tr><tr><td>" + tr("POI directory:") + "</td><td><code>"
-	  + QDir::cleanPath(GLOBAL_POI_DIR) + "</code></td></tr><tr><td>"
+	  "<style>td {white-space: pre; padding-right: 1em;}</style><table><tr><td>"
+	  + tr("Map directory:") + "</td><td><code>"
+	  + QDir::cleanPath(ProgramPaths::mapDir(true)) + "</code></td></tr><tr><td>"
+	  + tr("POI directory:") + "</td><td><code>"
+	  + QDir::cleanPath(ProgramPaths::poiDir(true)) + "</code></td></tr><tr><td>"
 	  + tr("GCS/PCS directory:") + "</td><td><code>"
-	  + QDir::cleanPath(GLOBAL_CSV_DIR) + "</code></td></tr></table>"
-	  + "<h4>" + tr("User-specific") + "</h4><table><tr><td>"
-	  + tr("Map directory:") + "</td><td><code>" + QDir::cleanPath(USER_MAP_DIR)
-	  + "</code></td></tr><tr><td>" + tr("POI directory:") + "</td><td><code>"
-	  + QDir::cleanPath(USER_POI_DIR) + "</code></td></tr><tr><td>"
-	  + tr("GCS/PCS directory:") + "</td><td><code>"
-	  + QDir::cleanPath(USER_CSV_DIR) + "</code></td></tr></table>"
+	  + QDir::cleanPath(ProgramPaths::csvDir(true)) + "</code></td></tr></table>"
 	);
 
 	msgBox.exec();
@@ -1615,7 +1600,7 @@ void GUI::dropEvent(QDropEvent *event)
 
 void GUI::writeSettings()
 {
-	QSettings settings(APP_NAME, APP_NAME);
+	QSettings settings(qApp->applicationName(), qApp->applicationName());
 	settings.clear();
 
 	settings.beginGroup(WINDOW_SETTINGS_GROUP);
@@ -1810,7 +1795,7 @@ void GUI::writeSettings()
 void GUI::readSettings()
 {
 	int value;
-	QSettings settings(APP_NAME, APP_NAME);
+	QSettings settings(qApp->applicationName(), qApp->applicationName());
 
 	settings.beginGroup(WINDOW_SETTINGS_GROUP);
 	resize(settings.value(WINDOW_SIZE_SETTING, WINDOW_SIZE_DEFAULT).toSize());

@@ -1,6 +1,6 @@
 #include <QPainter>
 #include <QPixmapCache>
-#include "config.h"
+#include "common/config.h"
 #include "image.h"
 
 

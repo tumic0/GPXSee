@@ -1,6 +1,6 @@
 #include <QApplication>
 #include <QPainter>
-#include "config.h"
+#include "font.h"
 #include "tooltip.h"
 #include "waypointitem.h"
 

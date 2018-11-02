@@ -1,5 +1,5 @@
 TARGET = GPXSee
-VERSION = 6.3
+VERSION = 7.0
 
 QT += core \
     gui \
@@ -13,7 +13,7 @@ lessThan(QT_MAJOR_VERSION, 5) {QT += opengl}
 equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 4) {QT += opengl}
 
 INCLUDEPATH += ./src
-HEADERS += src/config.h \
+HEADERS += src/common/config.h \
     src/common/staticassert.h \
     src/common/coordinates.h \
     src/common/range.h \
@@ -22,6 +22,8 @@ HEADERS += src/config.h \
     src/common/util.h \
     src/common/rtree.h \
     src/common/kv.h \
+    src/common/greatcircle.h \
+    src/common/programpaths.h \
     src/GUI/app.h \
     src/GUI/icons.h \
     src/GUI/gui.h \
@@ -74,6 +76,7 @@ HEADERS += src/config.h \
     src/GUI/cpuarch.h \
     src/GUI/searchpointer.h \
     src/GUI/mapview.h \
+    src/GUI/font.h \
     src/map/projection.h \
     src/map/ellipsoid.h \
     src/map/datum.h \
@@ -114,6 +117,15 @@ HEADERS += src/config.h \
     src/map/crs.h \
     src/map/coordinatesystem.h \
     src/map/pointd.h \
+    src/map/rectd.h \
+    src/map/geocentric.h \
+    src/map/mercator.h \
+    src/map/jnxmap.h \
+    src/map/krovak.h \
+    src/map/geotiffmap.h \
+    src/map/image.h \
+    src/map/mbtilesmap.h \
+    src/map/osm.h \
     src/data/graph.h \
     src/data/poi.h \
     src/data/waypoint.h \
@@ -133,23 +145,15 @@ HEADERS += src/config.h \
     src/data/igcparser.h \
     src/data/nmeaparser.h \
     src/data/oziparsers.h \
-    src/map/rectd.h \
-    src/map/geocentric.h \
-    src/map/mercator.h \
-    src/map/jnxmap.h \
-    src/map/krovak.h \
     src/data/locparser.h \
-    src/data/slfparser.h \
-    src/map/geotiffmap.h \
-    src/map/image.h \
-    src/common/greatcircle.h \
-    src/map/mbtilesmap.h \
-    src/map/osm.h
+    src/data/slfparser.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
     src/common/range.cpp \
     src/common/util.cpp \
+    src/common/greatcircle.cpp \
+    src/common/programpaths.cpp \
     src/GUI/app.cpp \
     src/GUI/gui.cpp \
     src/GUI/axisitem.cpp \
@@ -227,6 +231,15 @@ SOURCES += src/main.cpp \
     src/map/wms.cpp \
     src/map/crs.cpp \
     src/map/coordinatesystem.cpp \
+    src/map/geocentric.cpp \
+    src/map/mercator.cpp \
+    src/map/jnxmap.cpp \
+    src/map/krovak.cpp \
+    src/map/map.cpp \
+    src/map/geotiffmap.cpp \
+    src/map/image.cpp \
+    src/map/mbtilesmap.cpp \
+    src/map/osm.cpp \
     src/data/data.cpp \
     src/data/poi.cpp \
     src/data/track.cpp \
@@ -240,19 +253,8 @@ SOURCES += src/main.cpp \
     src/data/igcparser.cpp \
     src/data/nmeaparser.cpp \
     src/data/oziparsers.cpp \
-    src/map/geocentric.cpp \
-    src/map/mercator.cpp \
-    src/map/jnxmap.cpp \
-    src/map/krovak.cpp \
-    src/map/map.cpp \
     src/data/locparser.cpp \
-    src/data/slfparser.cpp \
-    src/map/geotiffmap.cpp \
-    src/map/image.cpp \
-    src/common/greatcircle.cpp \
-    src/map/mbtilesmap.cpp \
-    src/map/osm.cpp
-
+    src/data/slfparser.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_en.ts \
     lang/gpxsee_cs.ts \

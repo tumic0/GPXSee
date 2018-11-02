@@ -1,6 +1,5 @@
 #include <QLocale>
 #include "data/data.h"
-#include "config.h"
 #include "tooltip.h"
 #include "format.h"
 #include "speedgraphitem.h"

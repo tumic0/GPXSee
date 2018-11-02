@@ -2,10 +2,10 @@
 #include <QPainter>
 #include <QFileInfo>
 #include <QPixmapCache>
+#include "common/config.h"
 #include "rectd.h"
 #include "gcs.h"
 #include "pcs.h"
-#include "config.h"
 #include "jnxmap.h"
 
 

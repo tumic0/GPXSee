@@ -8,7 +8,6 @@
 #include <QLocale>
 #include "data/graph.h"
 #include "opengl.h"
-#include "config.h"
 #include "axisitem.h"
 #include "slideritem.h"
 #include "sliderinfoitem.h"

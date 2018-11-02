@@ -1,8 +1,9 @@
 #include <QtCore>
 #include <QPainter>
+#include <QDir>
 #include "common/rectc.h"
 #include "common/wgs84.h"
-#include "config.h"
+#include "common/programpaths.h"
 #include "transform.h"
 #include "tileloader.h"
 #include "wmts.h"
@@ -58,7 +59,7 @@ void WMTSMap::clearCache()
 
 QString WMTSMap::tilesDir() const
 {
-	return QString(TILES_DIR + "/" + _name);
+	return QString(QDir(ProgramPaths::tilesDir()).filePath(_name));
 }
 
 double WMTSMap::sd2res(double scaleDenominator) const

@@ -1,7 +1,7 @@
 #include <QFileInfo>
 #include <QPainter>
 #include <QImageReader>
-#include "config.h"
+#include "common/config.h"
 #include "geotiff.h"
 #include "image.h"
 #include "geotiffmap.h"

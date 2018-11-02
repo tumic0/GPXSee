@@ -3,7 +3,7 @@
 #include <QPainter>
 #include "common/wgs84.h"
 #include "common/rectc.h"
-#include "config.h"
+#include "common/programpaths.h"
 #include "downloader.h"
 #include "tileloader.h"
 #include "wmsmap.h"
@@ -42,7 +42,7 @@ QString WMSMap::tileUrl(const QString &version) const
 
 QString WMSMap::tilesDir() const
 {
-	return QString(TILES_DIR + "/" + _name);
+	return QString(QDir(ProgramPaths::tilesDir()).filePath(_name));
 }
 
 void WMSMap::computeZooms(const RangeF &scaleDenominator)

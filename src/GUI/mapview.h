@@ -6,12 +6,12 @@
 #include <QHash>
 #include <QList>
 #include "common/rectc.h"
+#include "common/config.h"
 #include "data/waypoint.h"
 #include "searchpointer.h"
 #include "units.h"
 #include "format.h"
 #include "palette.h"
-#include "config.h"
 
 class Data;
 class POI;

@@ -6,13 +6,14 @@
 #include <QNetworkAccessManager>
 #include <QLibraryInfo>
 #include <QSettings>
+#include "common/programpaths.h"
+#include "common/config.h"
 #include "map/downloader.h"
 #include "map/ellipsoid.h"
 #include "map/gcs.h"
 #include "map/pcs.h"
 #include "opengl.h"
 #include "gui.h"
-#include "config.h"
 #include "settings.h"
 #include "app.h"
 
@@ -20,13 +21,21 @@
 App::App(int &argc, char **argv) : QApplication(argc, argv),
   _argc(argc), _argv(argv)
 {
+#if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
+	setApplicationName(APP_NAME);
+#else
+	setApplicationName(QString(APP_NAME).toLower());
+#endif
+	setApplicationVersion(APP_VERSION);
+
 	QTranslator *gpxsee = new QTranslator(this);
-	gpxsee->load(QLocale::system(), "gpxsee", "_", TRANSLATIONS_DIR);
+	gpxsee->load(QLocale::system(), "gpxsee", "_",
+	  ProgramPaths::translationsDir());
 	installTranslator(gpxsee);
 
 	QTranslator *qt = new QTranslator(this);
 #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
-	qt->load(QLocale::system(), "qt", "_", TRANSLATIONS_DIR);
+	qt->load(QLocale::system(), "qt", "_", ProgramPaths::translationsDir());
 #else // Q_OS_WIN32 || Q_OS_MAC
 	qt->load(QLocale::system(), "qt", "_", QLibraryInfo::location(
 	  QLibraryInfo::TranslationsPath));
@@ -65,14 +74,15 @@ App::~App()
 	delete _gui;
 }
 
-void App::run()
+int App::run()
 {
 	_gui->show();
 
-	for (int i = 1; i < _argc; i++)
-		_gui->openFile(QString::fromLocal8Bit(_argv[i]));
+	QStringList args(arguments());
+	for (int i = 1; i < args.count(); i++)
+		_gui->openFile(args.at(i));
 
-	exec();
+	return exec();
 }
 
 bool App::event(QEvent *event)
@@ -87,41 +97,27 @@ bool App::event(QEvent *event)
 
 void App::loadDatums()
 {
-	QString ef, df;
+	QString ellipsoidsFile(ProgramPaths::ellipsoidsFile());
+	QString gcsFile(ProgramPaths::gcsFile());
 
-	if (QFile::exists(USER_ELLIPSOID_FILE))
-		ef = USER_ELLIPSOID_FILE;
-	else if (QFile::exists(GLOBAL_ELLIPSOID_FILE))
-		ef = GLOBAL_ELLIPSOID_FILE;
-	else
+	if (ellipsoidsFile.isNull())
 		qWarning("No ellipsoids file found.");
+	if (gcsFile.isNull())
+		qWarning("No GCS file found.");
 
-	if (QFile::exists(USER_GCS_FILE))
-		df = USER_GCS_FILE;
-	else if (QFile::exists(GLOBAL_GCS_FILE))
-		df = GLOBAL_GCS_FILE;
-	else
-		qWarning("No datums file found.");
-
-	if (!ef.isNull() && !df.isNull()) {
-		Ellipsoid::loadList(ef);
-		GCS::loadList(df);
+	if (!ellipsoidsFile.isNull() && !gcsFile.isNull()) {
+		Ellipsoid::loadList(ellipsoidsFile);
+		GCS::loadList(gcsFile);
 	} else
 		qWarning("Maps based on a datum different from WGS84 won't work.");
 }
 
 void App::loadPCSs()
 {
-	QString file;
+	QString pcsFile(ProgramPaths::pcsFile());
 
-	if (QFile::exists(USER_PCS_FILE))
-		file = USER_PCS_FILE;
-	else if (QFile::exists(GLOBAL_PCS_FILE))
-		file = GLOBAL_PCS_FILE;
-	else {
+	if (pcsFile.isNull())
 		qWarning("No PCS file found.");
-		return;
-	}
-
-	PCS::loadList(file);
+	else
+		PCS::loadList(pcsFile);
 }

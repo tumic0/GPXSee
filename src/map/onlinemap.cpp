@@ -1,9 +1,10 @@
 #include <QtCore>
 #include <QPainter>
+#include <QDir>
 #include "common/rectc.h"
+#include "common/programpaths.h"
 #include "downloader.h"
 #include "osm.h"
-#include "config.h"
 #include "onlinemap.h"
 
 
@@ -16,7 +17,8 @@ OnlineMap::OnlineMap(const QString &name, const QString &url,
 	_zoom(_zooms.max()), _deviceRatio(1.0), _tileRatio(tileRatio),
 	_invertY(invertY)
 {
-	_tileLoader = new TileLoader(TILES_DIR + "/" + _name, this);
+	_tileLoader = new TileLoader(QDir(ProgramPaths::tilesDir()).filePath(_name),
+	  this);
 	_tileLoader->setUrl(url);
 	_tileLoader->setAuthorization(authorization);
 	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(loaded()));

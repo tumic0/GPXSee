@@ -5,8 +5,8 @@
 #include <QPainter>
 #include <QPixmapCache>
 #include "common/rectc.h"
+#include "common/config.h"
 #include "osm.h"
-#include "config.h"
 #include "mbtilesmap.h"
 
 

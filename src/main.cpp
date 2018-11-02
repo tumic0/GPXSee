@@ -1,5 +1,5 @@
+#include "common/config.h"
 #include "GUI/app.h"
-#include "config.h"
 
 int main(int argc, char *argv[])
 {
@@ -9,7 +9,5 @@ int main(int argc, char *argv[])
 #endif // ENABLE_HIDPI
 
 	App app(argc, argv);
-	app.run();
-
-	return 0;
+	return app.run();
 }

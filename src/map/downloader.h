@@ -7,7 +7,7 @@
 #include <QList>
 #include <QSet>
 #include <QHash>
-#include "config.h"
+#include "common/config.h"
 
 
 class Download

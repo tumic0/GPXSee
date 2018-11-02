@@ -1,7 +1,8 @@
 #include <cmath>
+#include <QApplication>
 #include <QPainter>
 #include "common/util.h"
-#include "config.h"
+#include "font.h"
 #include "scaleitem.h"
 
 

@@ -2,10 +2,9 @@
 #define OPTIONSDIALOG_H
 
 #include <QDialog>
+#include "common/config.h"
 #include "palette.h"
 #include "units.h"
-#include "config.h"
-
 
 class ColorBox;
 class StyleComboBox;

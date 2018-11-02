@@ -1,6 +1,5 @@
 #include <QPaintEngine>
 #include <QPaintDevice>
-#include "config.h"
 #include "infoitem.h"
 #include "trackinfo.h"
 

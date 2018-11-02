@@ -1,6 +1,6 @@
 #include <QFile>
 #include <QXmlStreamReader>
-#include "config.h"
+#include "common/config.h"
 #include "onlinemap.h"
 #include "wmtsmap.h"
 #include "wmsmap.h"

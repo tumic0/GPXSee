@@ -1,5 +1,5 @@
 #include <QPainter>
-#include "config.h"
+#include "font.h"
 #include "sliderinfoitem.h"
 
 

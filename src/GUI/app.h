@@ -12,7 +12,7 @@ class App : QApplication
 public:
 	App(int &argc, char **argv);
 	~App();
-	void run();
+	int run();
 
 protected:
 	bool event(QEvent *event);

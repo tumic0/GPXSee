@@ -1,6 +1,6 @@
 #include <QFont>
 #include <QPainter>
-#include "config.h"
+#include "font.h"
 #include "infoitem.h"
 
 #define PADDING     10
