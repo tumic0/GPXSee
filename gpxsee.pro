@@ -4,7 +4,8 @@ VERSION = 7.0
 QT += core \
     gui \
     network \
-    sql
+    sql \
+    concurrent
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets
     QT += printsupport
