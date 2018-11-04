@@ -75,7 +75,7 @@ QString ProgramPaths::csvDir(bool writable)
 
 QString ProgramPaths::tilesDir()
 {
-	return dir(TILES_DIR);
+	return dir(TILES_DIR, true);
 }
 
 QString ProgramPaths::translationsDir()
@@ -108,8 +108,8 @@ QString ProgramPaths::mapDir(bool writable)
 		return QDir(QStandardPaths::writableLocation(
 		  QStandardPaths::AppDataLocation)).filePath(MAP_DIR);
 	else
-		return QString(QStandardPaths::locate(QStandardPaths::AppDataLocation,
-		  MAP_DIR, QStandardPaths::LocateDirectory));
+		return QStandardPaths::locate(QStandardPaths::AppDataLocation,
+		  MAP_DIR, QStandardPaths::LocateDirectory);
 }
 
 QString ProgramPaths::poiDir(bool writable)
@@ -118,8 +118,8 @@ QString ProgramPaths::poiDir(bool writable)
 		return QDir(QStandardPaths::writableLocation(
 		  QStandardPaths::AppDataLocation)).filePath(POI_DIR);
 	else
-		return QString(QStandardPaths::locate(QStandardPaths::AppDataLocation,
-		  POI_DIR, QStandardPaths::LocateDirectory));
+		return QStandardPaths::locate(QStandardPaths::AppDataLocation,
+		  POI_DIR, QStandardPaths::LocateDirectory);
 }
 
 QString ProgramPaths::csvDir(bool writable)
@@ -128,20 +128,20 @@ QString ProgramPaths::csvDir(bool writable)
 		return QDir(QStandardPaths::writableLocation(
 		  QStandardPaths::AppDataLocation)).filePath(CSV_DIR);
 	else
-		return QString(QStandardPaths::locate(QStandardPaths::AppDataLocation,
-		  CSV_DIR, QStandardPaths::LocateDirectory));
+		return QStandardPaths::locate(QStandardPaths::AppDataLocation,
+		  CSV_DIR, QStandardPaths::LocateDirectory);
 }
 
 QString ProgramPaths::tilesDir()
 {
-	return QString(QStandardPaths::locate(QStandardPaths::AppLocalDataLocation,
-	  TILES_DIR, QStandardPaths::LocateDirectory));
+	return QDir(QStandardPaths::writableLocation(
+	  QStandardPaths::AppLocalDataLocation)).filePath(TILES_DIR);
 }
 
 QString ProgramPaths::translationsDir()
 {
-	return QString(QStandardPaths::locate(QStandardPaths::AppDataLocation,
-	  TRANSLATIONS_DIR, QStandardPaths::LocateDirectory));
+	return QStandardPaths::locate(QStandardPaths::AppDataLocation,
+	  TRANSLATIONS_DIR, QStandardPaths::LocateDirectory);
 }
 
 QString ProgramPaths::ellipsoidsFile()
