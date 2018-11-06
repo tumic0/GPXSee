@@ -30,11 +30,10 @@ public:
 
 #define META_TYPE(type) static_cast<QMetaType::Type>(type)
 
-static void render(MBTile &tile)
+static void render(MBTile *tile)
 {
-	if (tile.pixmap.isNull())
-		tile.pixmap.loadFromData(tile.data, QString::number(tile.zoom)
-		  .toLatin1());
+	tile->pixmap.loadFromData(tile->data, QString::number(tile->zoom)
+	  .toLatin1());
 }
 
 static double index2mercator(int index, int zoom)
@@ -250,6 +249,7 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	int width = ceil(s.width() / tileSize());
 	int height = ceil(s.height() / tileSize());
 
+	QList<MBTile*> jobs;
 	QVector<MBTile> tiles;
 	tiles.reserve(width * height);
 
@@ -265,11 +265,12 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				mt.data = tileData(_zoom, t);
 				mt.key = key;
 				mt.zoom = _zoom;
+				jobs.append(&mt);
 			}
 		}
 	}
 
-	QFuture<void> future = QtConcurrent::map(tiles, render);
+	QFuture<void> future = QtConcurrent::map(jobs, render);
 	future.waitForFinished();
 
 	for (int i = 0; i < tiles.size(); i++) {
