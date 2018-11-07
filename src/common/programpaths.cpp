@@ -77,12 +77,13 @@ QString ProgramPaths::tilesDir()
 {
 #if defined(Q_OS_WIN32)
 	return QDir::homePath() + QString("/AppData/Local/")
-	  + qApp->applicationName() + QString("/cache");
+	  + qApp->applicationName() + QString("/cache/") + QString(TILES_DIR);
 #elif defined(Q_OS_MAC)
 	return QDir::homePath() + QString("/Library/Caches/")
-	  + qApp->applicationName();
+	  + qApp->applicationName() + QString("/" TILES_DIR);
 #else
-	return QDir::homePath() + QString("/.cache/") + qApp->applicationName();
+	return QDir::homePath() + QString("/.cache/") + qApp->applicationName()
+	  + QString("/" TILES_DIR);
 #endif
 }
 
