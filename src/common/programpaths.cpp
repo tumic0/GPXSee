@@ -75,7 +75,15 @@ QString ProgramPaths::csvDir(bool writable)
 
 QString ProgramPaths::tilesDir()
 {
-	return dir(TILES_DIR, true);
+#if defined(Q_OS_WIN32)
+	return QDir::homePath() + QString("/AppData/Local/")
+	  + qApp->applicationName() + QString("/cache");
+#elif defined(Q_OS_MAC)
+	return QDir::homePath() + QString("/Library/Caches/")
+	  + qApp->applicationName();
+#else
+	return QDir::homePath() + QString("/.cache/") + qApp->applicationName();
+#endif
 }
 
 QString ProgramPaths::translationsDir()
@@ -135,7 +143,7 @@ QString ProgramPaths::csvDir(bool writable)
 QString ProgramPaths::tilesDir()
 {
 	return QDir(QStandardPaths::writableLocation(
-	  QStandardPaths::AppLocalDataLocation)).filePath(TILES_DIR);
+	  QStandardPaths::CacheLocation)).filePath(TILES_DIR);
 }
 
 QString ProgramPaths::translationsDir()

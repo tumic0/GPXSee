@@ -699,7 +699,9 @@ void GUI::paths()
 	  + tr("POI directory:") + "</td><td><code>"
 	  + QDir::cleanPath(ProgramPaths::poiDir(true)) + "</code></td></tr><tr><td>"
 	  + tr("GCS/PCS directory:") + "</td><td><code>"
-	  + QDir::cleanPath(ProgramPaths::csvDir(true)) + "</code></td></tr></table>"
+	  + QDir::cleanPath(ProgramPaths::csvDir(true)) + "</code></td></tr><tr><td>"
+	  + tr("Tile cache directory:") + "</td><td><code>"
+	  + QDir::cleanPath(ProgramPaths::tilesDir()) + "</code></td></tr></table>"
 	);
 
 	msgBox.exec();
