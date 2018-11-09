@@ -6,7 +6,7 @@
 
 static bool loadTileFile(Tile &tile, const QString &file)
 {
-	if (!tile.pixmap().load(file)) {
+	if (!tile.pixmap().load(file, tile.zoom().toString().toLatin1())) {
 		qWarning("%s: error loading tile file", qPrintable(file));
 		return false;
 	}
