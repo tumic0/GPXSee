@@ -40,6 +40,7 @@ private:
 	qreal coordinatesRatio() const;
 	qreal imageRatio() const;
 	QByteArray tileData(int zoom, const QPoint &tile) const;
+	void drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp);
 
 	QSqlDatabase _db;
 

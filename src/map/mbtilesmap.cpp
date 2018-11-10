@@ -15,25 +15,34 @@
 #include "mbtilesmap.h"
 
 
-struct MBTile
+class MBTile
 {
 public:
-	MBTile() {}
-	MBTile(const QPoint &xy) : xy(xy) {}
+	MBTile(int zoom, const QPoint &xy, const QByteArray &data,
+	  const QString &key) : _zoom(zoom), _xy(xy), _data(data), _key(key) {}
 
-	QPixmap pixmap;
-	QByteArray data;
-	QString key;
-	int zoom;
-	QPoint xy;
+	const QPoint &xy() const {return _xy;}
+	const QString &key() const {return _key;}
+	QPixmap pixmap() const {return QPixmap::fromImage(_image);}
+
+	void load() {
+		QByteArray z(QString::number(_zoom).toLatin1());
+		_image.loadFromData(_data, z);
+	}
+
+private:
+	int _zoom;
+	QPoint _xy;
+	QByteArray _data;
+	QString _key;
+	QImage _image;
 };
 
 #define META_TYPE(type) static_cast<QMetaType::Type>(type)
 
-static void render(MBTile *tile)
+static void render(MBTile &tile)
 {
-	tile->pixmap.loadFromData(tile->data, QString::number(tile->zoom)
-	  .toLatin1());
+	tile.load();
 }
 
 static double index2mercator(int index, int zoom)
@@ -249,43 +258,48 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	int width = ceil(s.width() / tileSize());
 	int height = ceil(s.height() / tileSize());
 
-	QList<MBTile*> jobs;
-	QVector<MBTile> tiles;
-	tiles.reserve(width * height);
+
+	QList<MBTile> tiles;
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
+			QPixmap pm;
 			QPoint t(tile.x() + i, tile.y() + j);
 			QString key = _fileName + "-" + QString::number(_zoom) + "_"
 			  + QString::number(t.x()) + "_" + QString::number(t.y());
 
-			tiles.append(MBTile(t));
-			MBTile &mt = tiles.last();
-			if (!QPixmapCache::find(key, &(mt.pixmap))) {
-				mt.data = tileData(_zoom, t);
-				mt.key = key;
-				mt.zoom = _zoom;
-				jobs.append(&mt);
-			}
+			if (QPixmapCache::find(key, pm)) {
+				QPointF tp(qMax(tl.x(), b.left()) + (t.x() - tile.x())
+				  * tileSize(), qMax(tl.y(), b.top()) + (t.y() - tile.y())
+				  * tileSize());
+				drawTile(painter, pm, tp);
+			} else
+				tiles.append(MBTile(_zoom, t, tileData(_zoom, t), key));
 		}
 	}
 
-	QFuture<void> future = QtConcurrent::map(jobs, render);
+	QFuture<void> future = QtConcurrent::map(tiles, render);
 	future.waitForFinished();
 
 	for (int i = 0; i < tiles.size(); i++) {
-		MBTile &mt = tiles[i];
-		if (!mt.pixmap.isNull() && !mt.data.isNull())
-			QPixmapCache::insert(mt.key, mt.pixmap);
+		const MBTile &mt = tiles.at(i);
+		QPixmap pm(mt.pixmap());
+		if (!pm.isNull())
+			QPixmapCache::insert(mt.key(), pm);
 
-		QPointF tp(qMax(tl.x(), b.left()) + (mt.xy.x() - tile.x()) * tileSize(),
-		  qMax(tl.y(), b.top()) + (mt.xy.y() - tile.y()) * tileSize());
-		if (!mt.pixmap.isNull()) {
+		QPointF tp(qMax(tl.x(), b.left()) + (mt.xy().x() - tile.x()) * tileSize(),
+		  qMax(tl.y(), b.top()) + (mt.xy().y() - tile.y()) * tileSize());
+		drawTile(painter, pm, tp);
+	}
+}
+
+void MBTilesMap::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
+{
+	if (!pixmap.isNull()) {
 #ifdef ENABLE_HIDPI
-			mt.pixmap.setDevicePixelRatio(imageRatio());
+		pixmap.setDevicePixelRatio(imageRatio());
 #endif // ENABLE_HIDPI
-			painter->drawPixmap(tp, mt.pixmap);
-		}
+		painter->drawPixmap(tp, pixmap);
 	}
 }
 
