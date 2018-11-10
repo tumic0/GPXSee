@@ -284,23 +284,24 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = 0; i < tiles.size(); i++) {
 		const MBTile &mt = tiles.at(i);
 		QPixmap pm(mt.pixmap());
-		if (!pm.isNull())
-			QPixmapCache::insert(mt.key(), pm);
+		if (pm.isNull())
+			continue;
 
-		QPointF tp(qMax(tl.x(), b.left()) + (mt.xy().x() - tile.x()) * tileSize(),
-		  qMax(tl.y(), b.top()) + (mt.xy().y() - tile.y()) * tileSize());
+		QPixmapCache::insert(mt.key(), pm);
+
+		QPointF tp(qMax(tl.x(), b.left()) + (mt.xy().x() - tile.x())
+		  * tileSize(), qMax(tl.y(), b.top()) + (mt.xy().y() - tile.y())
+		  * tileSize());
 		drawTile(painter, pm, tp);
 	}
 }
 
 void MBTilesMap::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
 {
-	if (!pixmap.isNull()) {
 #ifdef ENABLE_HIDPI
-		pixmap.setDevicePixelRatio(imageRatio());
+	pixmap.setDevicePixelRatio(imageRatio());
 #endif // ENABLE_HIDPI
-		painter->drawPixmap(tp, pixmap);
-	}
+	painter->drawPixmap(tp, pixmap);
 }
 
 QPointF MBTilesMap::ll2xy(const Coordinates &c)
