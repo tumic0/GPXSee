@@ -1,17 +1,43 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QEventLoop>
+#include <QPixmapCache>
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#include <QtCore>
+#else // QT_VERSION < 5
+#include <QtConcurrent>
+#endif // QT_VERSION < 5
 #include "tileloader.h"
 
 
-static bool loadTileFile(Tile &tile, const QString &file)
+class TileImage
 {
-	if (!tile.pixmap().load(file, tile.zoom().toString().toLatin1())) {
-		qWarning("%s: error loading tile file", qPrintable(file));
-		return false;
+public:
+	TileImage(const QString &file, Tile &tile)
+	  : _file(file), _tile(tile) {}
+
+	void createPixmap()
+	{
+		_tile.pixmap().convertFromImage(_image);
+	}
+	void load()
+	{
+		QByteArray z(_tile.zoom().toString().toLatin1());
+		_image.load(_file, z);
 	}
 
-	return true;
+	const QString &file() const {return _file;}
+	Tile &tile() {return _tile;}
+
+private:
+	QString _file;
+	Tile &_tile;
+	QImage _image;
+};
+
+static void render(TileImage &ti)
+{
+	ti.load();
 }
 
 TileLoader::TileLoader(const QString &dir, QObject *parent)
@@ -27,18 +53,23 @@ TileLoader::TileLoader(const QString &dir, QObject *parent)
 void TileLoader::loadTilesAsync(QVector<Tile> &list)
 {
 	QList<Download> dl;
+	QList<TileImage> imgs;
 
 	for (int i = 0; i < list.size(); i++) {
 		Tile &t = list[i];
 		QString file(tileFile(t));
+
+		if (QPixmapCache::find(file, t.pixmap()))
+			continue;
+
 		QFileInfo fi(file);
 
 		if (fi.exists())
-			loadTileFile(t, file);
+			imgs.append(TileImage(file, t));
 		else {
 			QUrl url(tileUrl(t));
 			if (url.isLocalFile())
-				loadTileFile(t, url.toLocalFile());
+				imgs.append(TileImage(url.toLocalFile(), t));
 			else
 				dl.append(Download(url, file));
 		}
@@ -46,45 +77,64 @@ void TileLoader::loadTilesAsync(QVector<Tile> &list)
 
 	if (!dl.empty())
 		_downloader->get(dl, _authorization);
+
+	QFuture<void> future = QtConcurrent::map(imgs, render);
+	future.waitForFinished();
+
+	for (int i = 0; i < imgs.size(); i++) {
+		TileImage &ti = imgs[i];
+		ti.createPixmap();
+		QPixmapCache::insert(ti.file(), ti.tile().pixmap());
+	}
 }
 
 void TileLoader::loadTilesSync(QVector<Tile> &list)
 {
 	QList<Download> dl;
+	QList<Tile *> tl;
+	QList<TileImage> imgs;
 
 	for (int i = 0; i < list.size(); i++) {
 		Tile &t = list[i];
 		QString file(tileFile(t));
+
+		if (QPixmapCache::find(file, t.pixmap()))
+			continue;
+
 		QFileInfo fi(file);
 
 		if (fi.exists())
-			loadTileFile(t, file);
+			imgs.append(TileImage(file, t));
 		else {
 			QUrl url(tileUrl(t));
 			if (url.isLocalFile())
-				loadTileFile(t, url.toLocalFile());
-			else
+				imgs.append(TileImage(url.toLocalFile(), t));
+			else {
 				dl.append(Download(url, file));
+				tl.append(&t);
+			}
 		}
 	}
 
-	if (dl.empty())
-		return;
+	if (!dl.empty()) {
+		QEventLoop wait;
+		QObject::connect(_downloader, SIGNAL(finished()), &wait, SLOT(quit()));
+		if (_downloader->get(dl, _authorization))
+			wait.exec();
 
-	QEventLoop wait;
-	QObject::connect(_downloader, SIGNAL(finished()), &wait, SLOT(quit()));
-	if (_downloader->get(dl, _authorization))
-		wait.exec();
-
-	for (int i = 0; i < list.size(); i++) {
-		Tile &t = list[i];
-
-		if (t.pixmap().isNull()) {
-			QString file = tileFile(t);
+		for (int i = 0; i < tl.size(); i++) {
+			Tile *t = tl[i];
+			QString file = tileFile(*t);
 			if (QFileInfo(file).exists())
-				loadTileFile(t, file);
+				imgs.append(TileImage(file, *t));
 		}
 	}
+
+	QFuture<void> future = QtConcurrent::map(imgs, render);
+	future.waitForFinished();
+
+	for (int i = 0; i < imgs.size(); i++)
+		imgs[i].createPixmap();
 }
 
 void TileLoader::clearCache()
