@@ -13,25 +13,26 @@
 class TileImage
 {
 public:
-	TileImage(const QString &file, Tile &tile)
+	TileImage() : _tile(0) {}
+	TileImage(const QString &file, Tile *tile)
 	  : _file(file), _tile(tile) {}
 
 	void createPixmap()
 	{
-		_tile.pixmap().convertFromImage(_image);
+		_tile->pixmap().convertFromImage(_image);
 	}
 	void load()
 	{
-		QByteArray z(_tile.zoom().toString().toLatin1());
+		QByteArray z(_tile->zoom().toString().toLatin1());
 		_image.load(_file, z);
 	}
 
 	const QString &file() const {return _file;}
-	Tile &tile() {return _tile;}
+	Tile *tile() {return _tile;}
 
 private:
 	QString _file;
-	Tile &_tile;
+	Tile *_tile;
 	QImage _image;
 };
 
@@ -65,11 +66,11 @@ void TileLoader::loadTilesAsync(QVector<Tile> &list)
 		QFileInfo fi(file);
 
 		if (fi.exists())
-			imgs.append(TileImage(file, t));
+			imgs.append(TileImage(file, &t));
 		else {
 			QUrl url(tileUrl(t));
 			if (url.isLocalFile())
-				imgs.append(TileImage(url.toLocalFile(), t));
+				imgs.append(TileImage(url.toLocalFile(), &t));
 			else
 				dl.append(Download(url, file));
 		}
@@ -84,7 +85,7 @@ void TileLoader::loadTilesAsync(QVector<Tile> &list)
 	for (int i = 0; i < imgs.size(); i++) {
 		TileImage &ti = imgs[i];
 		ti.createPixmap();
-		QPixmapCache::insert(ti.file(), ti.tile().pixmap());
+		QPixmapCache::insert(ti.file(), ti.tile()->pixmap());
 	}
 }
 
@@ -104,11 +105,11 @@ void TileLoader::loadTilesSync(QVector<Tile> &list)
 		QFileInfo fi(file);
 
 		if (fi.exists())
-			imgs.append(TileImage(file, t));
+			imgs.append(TileImage(file, &t));
 		else {
 			QUrl url(tileUrl(t));
 			if (url.isLocalFile())
-				imgs.append(TileImage(url.toLocalFile(), t));
+				imgs.append(TileImage(url.toLocalFile(), &t));
 			else {
 				dl.append(Download(url, file));
 				tl.append(&t);
@@ -126,7 +127,7 @@ void TileLoader::loadTilesSync(QVector<Tile> &list)
 			Tile *t = tl[i];
 			QString file = tileFile(*t);
 			if (QFileInfo(file).exists())
-				imgs.append(TileImage(file, *t));
+				imgs.append(TileImage(file, t));
 		}
 	}
 
