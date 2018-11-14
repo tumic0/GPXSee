@@ -29,7 +29,7 @@ public:
 
 	void load();
 	void unload();
-	void setDevicePixelRatio(qreal ratio) {_deviceRatio = ratio;}
+	void setDevicePixelRatio(qreal ratio);
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
@@ -50,6 +50,8 @@ private:
 	int _zoom;
 	int _tileSize;
 	qreal _deviceRatio, _tileRatio;
+	bool _scalable;
+	int _scaledSize;
 
 	bool _valid;
 	QString _errorString;

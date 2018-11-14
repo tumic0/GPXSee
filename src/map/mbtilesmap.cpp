@@ -4,6 +4,8 @@
 #include <QFileInfo>
 #include <QPainter>
 #include <QPixmapCache>
+#include <QImageReader>
+#include <QBuffer>
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #include <QtCore>
 #else // QT_VERSION < 5
@@ -18,8 +20,9 @@
 class MBTile
 {
 public:
-	MBTile(int zoom, const QPoint &xy, const QByteArray &data,
-	  const QString &key) : _zoom(zoom), _xy(xy), _data(data), _key(key) {}
+	MBTile(int zoom, int scaledSize, const QPoint &xy, const QByteArray &data,
+	  const QString &key) : _zoom(zoom), _scaledSize(scaledSize), _xy(xy),
+	  _data(data), _key(key) {}
 
 	const QPoint &xy() const {return _xy;}
 	const QString &key() const {return _key;}
@@ -27,11 +30,17 @@ public:
 
 	void load() {
 		QByteArray z(QString::number(_zoom).toLatin1());
-		_image.loadFromData(_data, z);
+
+		QBuffer buffer(&_data);
+		QImageReader reader(&buffer, z);
+		if (_scaledSize)
+			reader.setScaledSize(QSize(_scaledSize, _scaledSize));
+		reader.read(&_image);
 	}
 
 private:
 	int _zoom;
+	int _scaledSize;
 	QPoint _xy;
 	QByteArray _data;
 	QString _key;
@@ -52,7 +61,7 @@ static double index2mercator(int index, int zoom)
 
 MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
   : Map(parent), _fileName(fileName), _deviceRatio(1.0), _tileRatio(1.0),
-  _valid(false)
+  _scalable(false), _scaledSize(0), _valid(false)
 {
 	_db = QSqlDatabase::addDatabase("QSQLITE", fileName);
 	_db.setDatabaseName(fileName);
@@ -118,12 +127,26 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 		QString sql = QString("SELECT tile_data FROM tiles LIMIT 1");
 		QSqlQuery query(sql, _db);
 		query.first();
-		QImage tile = QImage::fromData(query.value(0).toByteArray());
-		if (tile.isNull() || tile.size().width() != tile.size().height()) {
+
+		QByteArray data = query.value(0).toByteArray();
+		QBuffer buffer(&data);
+		QImageReader reader(&buffer);
+		QSize tileSize(reader.size());
+
+		if (tileSize.isNull() || tileSize.width() != tileSize.height()) {
 			_errorString = "Unsupported/invalid tile images";
 			return;
 		}
-		_tileSize = tile.size().width();
+		_tileSize = tileSize.width();
+	}
+
+	{
+		QSqlQuery query("SELECT value FROM metadata WHERE name = 'format'", _db);
+		if (query.first()) {
+			if (query.value(0).toString() == "pbf")
+				_scalable = true;
+		} else
+			qWarning("%s: missing map name", qPrintable(_fileName));
 	}
 
 	{
@@ -210,6 +233,16 @@ int MBTilesMap::zoomOut()
 	return _zoom;
 }
 
+void MBTilesMap::setDevicePixelRatio(qreal ratio)
+{
+	_deviceRatio = ratio;
+
+	if (_scalable) {
+		_scaledSize = _tileSize * ratio;
+		_tileRatio = ratio;
+	}
+}
+
 qreal MBTilesMap::coordinatesRatio() const
 {
 	return _deviceRatio > 1.0 ? _deviceRatio / _tileRatio : 1.0;
@@ -273,8 +306,10 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				  * tileSize(), qMax(tl.y(), b.top()) + (t.y() - tile.y())
 				  * tileSize());
 				drawTile(painter, pm, tp);
-			} else
-				tiles.append(MBTile(_zoom, t, tileData(_zoom, t), key));
+			} else {
+				tiles.append(MBTile(_zoom, _scaledSize, t, tileData(_zoom, t),
+				  key));
+			}
 		}
 	}
 

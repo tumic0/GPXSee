@@ -9,7 +9,7 @@
 
 
 MapSource::Config::Config() : type(OSM), zooms(OSM::ZOOMS), bounds(OSM::BOUNDS),
-  format("image/png"), rest(false), tileRatio(1.0) {}
+  format("image/png"), rest(false), tileRatio(1.0), scalable(false) {}
 
 
 static CoordinateSystem coordinateSystem(QXmlStreamReader &reader)
@@ -178,6 +178,10 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 #else // ENABLE_HIDPI
 			reader.raiseError("HiDPI maps not supported");
 #endif // ENABLE_HIDPI
+		} else if (reader.name() == "scalable") {
+			QString val = reader.readElementText().trimmed();
+			if (val == "true" || val == "1")
+				config.scalable = true;
 		} else
 			reader.skipCurrentElement();
 	}
@@ -250,10 +254,12 @@ Map *MapSource::loadMap(const QString &path, QString &errorString)
 			  config.dimensions, config.authorization));
 		case TMS:
 			return new OnlineMap(config.name, config.url, config.zooms,
-			  config.bounds, config.tileRatio, config.authorization, true);
+			  config.bounds, config.tileRatio, config.authorization,
+			  config.scalable, true);
 		case OSM:
 			return new OnlineMap(config.name, config.url, config.zooms,
-			 config.bounds, config.tileRatio, config.authorization, false);
+			 config.bounds, config.tileRatio, config.authorization,
+			 config.scalable, false);
 		default:
 			return 0;
 	}

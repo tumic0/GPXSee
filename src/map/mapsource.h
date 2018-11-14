@@ -40,6 +40,7 @@ private:
 		QList<KV> dimensions;
 		Authorization authorization;
 		qreal tileRatio;
+		bool scalable;
 
 		Config();
 	};

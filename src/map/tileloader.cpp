@@ -2,6 +2,7 @@
 #include <QFileInfo>
 #include <QEventLoop>
 #include <QPixmapCache>
+#include <QImageReader>
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #include <QtCore>
 #else // QT_VERSION < 5
@@ -24,7 +25,10 @@ public:
 	void load()
 	{
 		QByteArray z(_tile->zoom().toString().toLatin1());
-		_image.load(_file, z);
+		QImageReader reader(_file, z);
+		if (_tile->scaledSize())
+			reader.setScaledSize(QSize(_tile->scaledSize(), _tile->scaledSize()));
+		reader.read(&_image);
 	}
 
 	const QString &file() const {return _file;}
