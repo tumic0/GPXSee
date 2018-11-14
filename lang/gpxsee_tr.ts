@@ -6,23 +6,23 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="11"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">rpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="12"/>
         <location filename="../src/GUI/cadencegraph.h" line="13"/>
         <source>Cadence</source>
-        <translation type="unfinished"></translation>
+        <translation>Kadans</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="22"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Ortalama</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="24"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami</translation>
     </message>
 </context>
 <context>
@@ -30,18 +30,18 @@
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="28"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="29"/>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="31"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>rpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="30"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Ortalama</translation>
     </message>
 </context>
 <context>
@@ -49,12 +49,12 @@
     <message>
         <location filename="../src/data/data.cpp" line="116"/>
         <source>Supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Desteklenen dosyalar</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="118"/>
         <source>CSV files</source>
-        <translation type="unfinished"></translation>
+        <translation>CSV dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="118"/>
