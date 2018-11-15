@@ -6,7 +6,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="11"/>
         <source>rpm</source>
-        <translation type="unfinished">rpm</translation>
+        <translation>rpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="12"/>
@@ -59,52 +59,52 @@
     <message>
         <location filename="../src/data/data.cpp" line="118"/>
         <source>FIT files</source>
-        <translation type="unfinished"></translation>
+        <translation>FIT dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="119"/>
         <source>GPX files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPX dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="119"/>
         <source>IGC files</source>
-        <translation type="unfinished"></translation>
+        <translation>IGC dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="120"/>
         <source>KML files</source>
-        <translation type="unfinished"></translation>
+        <translation>KML dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="120"/>
         <source>LOC files</source>
-        <translation type="unfinished"></translation>
+        <translation>LOC dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="121"/>
         <source>NMEA files</source>
-        <translation type="unfinished"></translation>
+        <translation>NMEA dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="122"/>
         <source>OziExplorer files</source>
-        <translation type="unfinished"></translation>
+        <translation>OziExplorer dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="123"/>
         <source>SLF files</source>
-        <translation type="unfinished"></translation>
+        <translation>SLF dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="123"/>
         <source>TCX files</source>
-        <translation type="unfinished"></translation>
+        <translation>TCX dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="124"/>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>Tüm dosyalar</translation>
     </message>
 </context>
 <context>
@@ -113,37 +113,37 @@
         <location filename="../src/GUI/elevationgraph.cpp" line="48"/>
         <location filename="../src/GUI/elevationgraph.h" line="13"/>
         <source>Elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Rakım</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="59"/>
         <source>Ascent</source>
-        <translation type="unfinished"></translation>
+        <translation>Tırmanış</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="61"/>
         <source>Descent</source>
-        <translation type="unfinished"></translation>
+        <translation>İniş</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="63"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="65"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Asgari</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="127"/>
         <source>m</source>
-        <translation type="unfinished"></translation>
+        <translation>m</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="130"/>
         <source>ft</source>
-        <translation type="unfinished"></translation>
+        <translation>ft</translation>
     </message>
 </context>
 <context>
@@ -151,32 +151,32 @@
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="34"/>
         <source>m</source>
-        <translation type="unfinished"></translation>
+        <translation>m</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="34"/>
         <source>ft</source>
-        <translation type="unfinished"></translation>
+        <translation>ft</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="37"/>
         <source>Ascent</source>
-        <translation type="unfinished"></translation>
+        <translation>Tırmanış</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="39"/>
         <source>Descent</source>
-        <translation type="unfinished"></translation>
+        <translation>İniş</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="41"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="43"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Asgari</translation>
     </message>
 </context>
 <context>
@@ -184,99 +184,99 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
         <source>PDF files</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF dosyaları</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>Tüm dosyalar</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="52"/>
         <source>Portrait</source>
-        <translation type="unfinished"></translation>
+        <translation>Dikey</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="53"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>Yatay</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="66"/>
         <source>mm</source>
-        <translation type="unfinished"></translation>
+        <translation>mm</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="66"/>
         <source>in</source>
-        <translation type="unfinished"></translation>
+        <translation>inç</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="94"/>
         <source>Page Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Sayfa Düzeni</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="97"/>
         <source>Page size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sayfa boyutu:</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="98"/>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Çözünürlük:</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="99"/>
         <source>Orientation:</source>
-        <translation type="unfinished"></translation>
+        <translation>Yönlendirme:</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="100"/>
         <source>Margins:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kenar boşlukları:</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="106"/>
         <source>File:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya:</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="113"/>
         <source>Output file</source>
-        <translation type="unfinished"></translation>
+        <translation>Çıktı dosyası</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="120"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Dışa aktar</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="135"/>
         <source>Export to PDF</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF olarak dışa aktar</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="142"/>
         <location filename="../src/GUI/exportdialog.cpp" line="152"/>
         <location filename="../src/GUI/exportdialog.cpp" line="157"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Hata</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="142"/>
         <source>No output file selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Çıkış dosyası seçilmedi.</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="152"/>
         <source>%1 is a directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 bir klasör.</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="157"/>
         <source>%1 is not writable.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 yazılabilir değil.</translation>
     </message>
 </context>
 <context>
@@ -284,7 +284,7 @@
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="38"/>
         <source>Select file</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya seç</translation>
     </message>
 </context>
 <context>
@@ -294,28 +294,28 @@
         <location filename="../src/GUI/format.cpp" line="61"/>
         <location filename="../src/GUI/format.cpp" line="84"/>
         <source>ft</source>
-        <translation type="unfinished"></translation>
+        <translation>ft</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="57"/>
         <source>mi</source>
-        <translation type="unfinished"></translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="64"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="68"/>
         <location filename="../src/GUI/format.cpp" line="81"/>
         <source>m</source>
-        <translation type="unfinished"></translation>
+        <translation>m</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="71"/>
         <source>km</source>
-        <translation type="unfinished"></translation>
+        <translation>km</translation>
     </message>
 </context>
 <context>
@@ -323,141 +323,141 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="199"/>
         <source>Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>Çıkış</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="206"/>
         <location filename="../src/GUI/gui.cpp" line="693"/>
         <location filename="../src/GUI/gui.cpp" line="694"/>
         <source>Paths</source>
-        <translation type="unfinished"></translation>
+        <translation>Yollar</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="209"/>
         <location filename="../src/GUI/gui.cpp" line="659"/>
         <location filename="../src/GUI/gui.cpp" line="660"/>
         <source>Keyboard controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Klavye kontrolleri</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="212"/>
         <location filename="../src/GUI/gui.cpp" line="637"/>
         <source>About GPXSee</source>
-        <translation type="unfinished"></translation>
+        <translation>Hakkında GPXSee</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="217"/>
         <source>Open...</source>
-        <translation type="unfinished"></translation>
+        <translation>Aç...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="222"/>
         <source>Print...</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazdır...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="229"/>
         <source>Export to PDF...</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF olarak dışa aktar...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="235"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Kapat</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="241"/>
         <source>Reload</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeniden yükle</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="248"/>
         <source>Statistics...</source>
-        <translation type="unfinished"></translation>
+        <translation>İstatistikler...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="256"/>
         <source>Load POI file...</source>
-        <translation type="unfinished"></translation>
+        <translation>POI dosyası yükle...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="260"/>
         <source>Close POI files</source>
-        <translation type="unfinished"></translation>
+        <translation>POI dosyaları kapat</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="264"/>
         <source>Overlap POIs</source>
-        <translation type="unfinished"></translation>
+        <translation>POI&apos;leri üst üste getir</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="269"/>
         <source>Show POI labels</source>
-        <translation type="unfinished"></translation>
+        <translation>POI etiketlerini göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="274"/>
         <source>Show POIs</source>
-        <translation type="unfinished"></translation>
+        <translation>POI&apos;leri göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="284"/>
         <source>Show map</source>
-        <translation type="unfinished"></translation>
+        <translation>Haritayı göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="292"/>
         <source>Load map...</source>
-        <translation type="unfinished"></translation>
+        <translation>Harita yükle...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="296"/>
         <source>Clear tile cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Döşeme önbelleğini temizle</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="301"/>
         <location filename="../src/GUI/gui.cpp" line="306"/>
         <location filename="../src/GUI/gui.cpp" line="676"/>
         <source>Next map</source>
-        <translation type="unfinished"></translation>
+        <translation>Sonraki harita</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="317"/>
         <source>Show tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>İzleri göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="322"/>
         <source>Show routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotaları göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="327"/>
         <source>Show waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretlerini göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="332"/>
         <source>Waypoint labels</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işareti etiketleri</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="337"/>
         <source>Route waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>Rota yer işaretleri</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="344"/>
         <source>Show graphs</source>
-        <translation type="unfinished"></translation>
+        <translation>Grafikleri göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="354"/>
         <location filename="../src/GUI/gui.cpp" line="1004"/>
         <location filename="../src/GUI/gui.cpp" line="1069"/>
         <source>Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesafe</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="361"/>
@@ -465,303 +465,303 @@
         <location filename="../src/GUI/gui.cpp" line="1007"/>
         <location filename="../src/GUI/gui.cpp" line="1071"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaman</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="368"/>
         <source>Show grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Izgarayı göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="373"/>
         <source>Show slider info</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaydırıcı bilgisi göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="380"/>
         <source>Show toolbars</source>
-        <translation type="unfinished"></translation>
+        <translation>Araç çubuklarını göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="387"/>
         <source>Total time</source>
-        <translation type="unfinished"></translation>
+        <translation>Toplam süre</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="393"/>
         <location filename="../src/GUI/gui.cpp" line="1009"/>
         <location filename="../src/GUI/gui.cpp" line="1073"/>
         <source>Moving time</source>
-        <translation type="unfinished"></translation>
+        <translation>Hareket zamanı</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="401"/>
         <source>Metric</source>
-        <translation type="unfinished"></translation>
+        <translation>Metrik</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="407"/>
         <source>Imperial</source>
-        <translation type="unfinished"></translation>
+        <translation>Emperyal</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="413"/>
         <source>Nautical</source>
-        <translation type="unfinished"></translation>
+        <translation>Denizcilik</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="421"/>
         <source>Decimal degrees (DD)</source>
-        <translation type="unfinished"></translation>
+        <translation>Desimal derece (DD)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="427"/>
         <source>Degrees and decimal minutes (DMM)</source>
-        <translation type="unfinished"></translation>
+        <translation>Derece ve desimal dakika (DDD)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="434"/>
         <source>Degrees, minutes, seconds (DMS)</source>
-        <translation type="unfinished"></translation>
+        <translation>Derece, dakika, saniye (DDS)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="440"/>
         <source>Fullscreen mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Tam ekran modu</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="447"/>
         <source>Options...</source>
-        <translation type="unfinished"></translation>
+        <translation>Seçenekler...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="453"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Sonraki</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="457"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Önceki</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="461"/>
         <source>Last</source>
-        <translation type="unfinished"></translation>
+        <translation>Son</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="465"/>
         <source>First</source>
-        <translation type="unfinished"></translation>
+        <translation>İlk</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="473"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Dosya</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="488"/>
         <source>&amp;Map</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Harita</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="496"/>
         <source>&amp;Graph</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Grafik</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="505"/>
         <source>&amp;POI</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="506"/>
         <source>POI files</source>
-        <translation type="unfinished"></translation>
+        <translation>POI dosyalar</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="517"/>
         <source>&amp;Data</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Veri</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="518"/>
         <source>Display</source>
-        <translation type="unfinished"></translation>
+        <translation>Görüntüleme</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="526"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ayarlar</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="530"/>
         <source>Units</source>
-        <translation type="unfinished"></translation>
+        <translation>Birimler</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="534"/>
         <source>Coordinates format</source>
-        <translation type="unfinished"></translation>
+        <translation>Koordinat biçimi</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="544"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Yardım</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="560"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="567"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>Göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="573"/>
         <source>Navigation</source>
-        <translation type="unfinished"></translation>
+        <translation>Navigasyon</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="638"/>
         <source>Version %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sürüm %1</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="642"/>
         <source>GPXSee is distributed under the terms of the GNU General Public License version 3. For more info about GPXSee visit the project homepage at %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>GPXSee, GNU Genel Kamu Lisansı sürüm 3 şartlarına göre dağıtılır. GPXSee hakkında daha fazla bilgi için %1 proje ana sayfasını ziyaret edin.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="663"/>
         <source>Next file</source>
-        <translation type="unfinished"></translation>
+        <translation>Sonraki dosya</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="664"/>
         <source>Previous file</source>
-        <translation type="unfinished"></translation>
+        <translation>Önceki dosya</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="666"/>
         <source>First file</source>
-        <translation type="unfinished"></translation>
+        <translation>İlk dosya</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="668"/>
         <source>Last file</source>
-        <translation type="unfinished"></translation>
+        <translation>Son dosya</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="669"/>
         <source>Append file</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya ekle</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="670"/>
         <source>Next/Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Sonraki/Önceki</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="672"/>
         <source>Toggle graph type</source>
-        <translation type="unfinished"></translation>
+        <translation>Geçiş grafik türü</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="674"/>
         <source>Toggle time type</source>
-        <translation type="unfinished"></translation>
+        <translation>Geçiş zaman türü</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="678"/>
         <source>Previous map</source>
-        <translation type="unfinished"></translation>
+        <translation>Önceki harita</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="679"/>
         <source>Zoom in</source>
-        <translation type="unfinished"></translation>
+        <translation>Yaklaş</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="681"/>
         <source>Zoom out</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzaklaş</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="683"/>
         <source>Digital zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Sayısal zum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="684"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="697"/>
         <source>Map directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Harita klasörü:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="699"/>
         <source>POI directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>POI klasörü:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="701"/>
         <source>GCS/PCS directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>GCS/PCS klasörü:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="703"/>
         <source>Tile cache directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Döşeme önbellek klaörü:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="712"/>
         <source>Open file</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya aç</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="806"/>
         <source>Error loading data file:</source>
-        <translation type="unfinished"></translation>
+        <translation>Veri dosyası yüklenirken hata oluştu:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="809"/>
         <location filename="../src/GUI/gui.cpp" line="844"/>
         <source>Line: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Satır: %1</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="817"/>
         <source>Open POI file</source>
-        <translation type="unfinished"></translation>
+        <translation>POI dosyası aç</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="841"/>
         <source>Error loading POI file:</source>
-        <translation type="unfinished"></translation>
+        <translation>POI dosyası yüklenirken hata oluştu:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="981"/>
         <location filename="../src/GUI/gui.cpp" line="1049"/>
         <source>Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>İzler</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="984"/>
         <location filename="../src/GUI/gui.cpp" line="1051"/>
         <source>Routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotalar</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="987"/>
         <location filename="../src/GUI/gui.cpp" line="1053"/>
         <source>Waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretleri</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="993"/>
@@ -769,33 +769,33 @@
         <location filename="../src/GUI/gui.cpp" line="1059"/>
         <location filename="../src/GUI/gui.cpp" line="1062"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Tarih</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1030"/>
         <location filename="../src/GUI/gui.cpp" line="1031"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>İstatistikler</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1045"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Adı</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1272"/>
         <source>Open map file</source>
-        <translation type="unfinished"></translation>
+        <translation>Harita dosyası aç</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1295"/>
         <source>Error loading map:</source>
-        <translation type="unfinished"></translation>
+        <translation>Harita yüklenirken hata oluştu:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1306"/>
         <source>No files loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiç dosya yüklenmedi</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1310"/>
@@ -811,22 +811,22 @@
         <location filename="../src/GUI/gearratiograph.cpp" line="12"/>
         <location filename="../src/GUI/gearratiograph.h" line="14"/>
         <source>Gear ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Dişli oranı</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="22"/>
         <source>Most used</source>
-        <translation type="unfinished"></translation>
+        <translation>Sık kullanılan</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="24"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Asgari</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="26"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami</translation>
     </message>
 </context>
 <context>
@@ -834,17 +834,17 @@
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="44"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Asgari</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="45"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="46"/>
         <source>Most used</source>
-        <translation type="unfinished"></translation>
+        <translation>Sık kullanılan</translation>
     </message>
 </context>
 <context>
@@ -852,59 +852,59 @@
     <message>
         <location filename="../src/GUI/graphview.cpp" line="46"/>
         <source>Data not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Data erişilemez</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="66"/>
         <location filename="../src/GUI/graphview.cpp" line="181"/>
         <source>Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesafe</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="111"/>
         <location filename="../src/GUI/graphview.cpp" line="119"/>
         <source>ft</source>
-        <translation type="unfinished"></translation>
+        <translation>ft</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="114"/>
         <source>mi</source>
-        <translation type="unfinished"></translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="122"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="127"/>
         <source>m</source>
-        <translation type="unfinished"></translation>
+        <translation>m</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="130"/>
         <source>km</source>
-        <translation type="unfinished"></translation>
+        <translation>Km</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="136"/>
         <source>s</source>
-        <translation type="unfinished"></translation>
+        <translation>s</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="139"/>
         <source>min</source>
-        <translation type="unfinished"></translation>
+        <translation>dk</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="142"/>
         <source>h</source>
-        <translation type="unfinished"></translation>
+        <translation>sa</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="183"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaman</translation>
     </message>
 </context>
 <context>
@@ -912,23 +912,23 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="11"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>bpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="12"/>
         <location filename="../src/GUI/heartrategraph.h" line="13"/>
         <source>Heart rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Nabız</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="22"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Ortalama</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="24"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami</translation>
     </message>
 </context>
 <context>
@@ -936,18 +936,18 @@
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="28"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="29"/>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="31"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>bpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="30"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Ortalama</translation>
     </message>
 </context>
 <context>
@@ -955,37 +955,37 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="117"/>
         <source>Supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Desteklenen dosyalar</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="119"/>
         <source>MBTiles maps</source>
-        <translation type="unfinished"></translation>
+        <translation>MBTiles haritalar</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="120"/>
         <source>Garmin JNX maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Garmin JNX haritalar</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="121"/>
         <source>OziExplorer maps</source>
-        <translation type="unfinished"></translation>
+        <translation>OziExplorer haritalar</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="122"/>
         <source>TrekBuddy maps/atlases</source>
-        <translation type="unfinished"></translation>
+        <translation>TrekBuddy haritalar/atlaslar</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="123"/>
         <source>GeoTIFF images</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoTIFF görüntü</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="124"/>
         <source>Online map sources</source>
-        <translation type="unfinished"></translation>
+        <translation>Online harita kaynakları</translation>
     </message>
 </context>
 <context>
