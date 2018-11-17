@@ -8,15 +8,13 @@
 #include "onlinemap.h"
 
 
-#define TILE_SIZE     256
-
 OnlineMap::OnlineMap(const QString &name, const QString &url,
   const Range &zooms, const RectC &bounds, qreal tileRatio,
-  const Authorization &authorization, bool scalable, bool invertY,
+  const Authorization &authorization, int tileSize, bool scalable, bool invertY,
   QObject *parent)
 	: Map(parent), _name(name), _zooms(zooms), _bounds(bounds),
-	_zoom(_zooms.max()), _deviceRatio(1.0), _tileRatio(tileRatio),
-	_scalable(scalable), _scaledSize(0), _invertY(invertY)
+	_zoom(_zooms.max()), _mapRatio(1.0), _tileRatio(tileRatio),
+	_tileSize(tileSize), _scalable(scalable), _invertY(invertY), _scaledSize(0)
 {
 	_tileLoader = new TileLoader(QDir(ProgramPaths::tilesDir()).filePath(_name),
 	  this);
@@ -48,7 +46,7 @@ int OnlineMap::zoomFit(const QSize &size, const RectC &rect)
 		QRectF tbr(OSM::ll2m(rect.topLeft()), OSM::ll2m(rect.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
 		_zoom = limitZoom(OSM::scale2zoom(qMax(sc.x(), -sc.y())
-		  / coordinatesRatio(), TILE_SIZE));
+		  / coordinatesRatio(), _tileSize));
 	}
 
 	return _zoom;
@@ -56,7 +54,7 @@ int OnlineMap::zoomFit(const QSize &size, const RectC &rect)
 
 qreal OnlineMap::resolution(const QRectF &rect)
 {
-	return OSM::resolution(rect.center(), _zoom, TILE_SIZE);
+	return OSM::resolution(rect.center(), _zoom, _tileSize);
 }
 
 int OnlineMap::zoomIn()
@@ -71,34 +69,34 @@ int OnlineMap::zoomOut()
 	return _zoom;
 }
 
-void OnlineMap::setDevicePixelRatio(qreal ratio)
+void OnlineMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 {
-	_deviceRatio = ratio;
+	_mapRatio = mapRatio;
 
 	if (_scalable) {
-		_scaledSize = TILE_SIZE * ratio;
-		_tileRatio = ratio;
+		_scaledSize = _tileSize * deviceRatio;
+		_tileRatio = deviceRatio;
 	}
 }
 
 qreal OnlineMap::coordinatesRatio() const
 {
-	return _deviceRatio > 1.0 ? _deviceRatio / _tileRatio : 1.0;
+	return _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
 }
 
 qreal OnlineMap::imageRatio() const
 {
-	return _deviceRatio > 1.0 ? _deviceRatio : _tileRatio;
+	return _mapRatio > 1.0 ? _mapRatio : _tileRatio;
 }
 
 qreal OnlineMap::tileSize() const
 {
-	return (TILE_SIZE / coordinatesRatio());
+	return (_tileSize / coordinatesRatio());
 }
 
 void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	qreal scale = OSM::zoom2scale(_zoom, TILE_SIZE);
+	qreal scale = OSM::zoom2scale(_zoom, _tileSize);
 
 	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * coordinatesRatio(), _zoom);
@@ -138,14 +136,14 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 QPointF OnlineMap::ll2xy(const Coordinates &c)
 {
-	qreal scale = OSM::zoom2scale(_zoom, TILE_SIZE);
+	qreal scale = OSM::zoom2scale(_zoom, _tileSize);
 	QPointF m = OSM::ll2m(c);
 	return QPointF(m.x() / scale, m.y() / -scale) / coordinatesRatio();
 }
 
 Coordinates OnlineMap::xy2ll(const QPointF &p)
 {
-	qreal scale = OSM::zoom2scale(_zoom, TILE_SIZE);
+	qreal scale = OSM::zoom2scale(_zoom, _tileSize);
 	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale)
 	  * coordinatesRatio());
 }

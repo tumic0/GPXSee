@@ -69,7 +69,7 @@ public slots:
 	void showRouteWaypoints(bool show);
 	void clearMapCache();
 	void setCoordinatesFormat(CoordinatesFormat format);
-	void setDevicePixelRatio(qreal ratio);
+	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
 
 private slots:
 	void updatePOI();
@@ -140,7 +140,8 @@ private:
 	bool _plot;
 
 #ifdef ENABLE_HIDPI
-	qreal _ratio;
+	qreal _deviceRatio;
+	qreal _mapRatio;
 #endif // ENABLE_HIDPI
 	bool _opengl;
 };

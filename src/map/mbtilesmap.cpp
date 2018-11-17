@@ -60,7 +60,7 @@ static double index2mercator(int index, int zoom)
 }
 
 MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
-  : Map(parent), _fileName(fileName), _deviceRatio(1.0), _tileRatio(1.0),
+  : Map(parent), _fileName(fileName), _mapRatio(1.0), _tileRatio(1.0),
   _scalable(false), _scaledSize(0), _valid(false)
 {
 	_db = QSqlDatabase::addDatabase("QSQLITE", fileName);
@@ -133,7 +133,7 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 		QImageReader reader(&buffer);
 		QSize tileSize(reader.size());
 
-		if (tileSize.isNull() || tileSize.width() != tileSize.height()) {
+		if (!tileSize.isValid() || tileSize.width() != tileSize.height()) {
 			_errorString = "Unsupported/invalid tile images";
 			return;
 		}
@@ -233,24 +233,24 @@ int MBTilesMap::zoomOut()
 	return _zoom;
 }
 
-void MBTilesMap::setDevicePixelRatio(qreal ratio)
+void MBTilesMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 {
-	_deviceRatio = ratio;
+	_mapRatio = mapRatio;
 
 	if (_scalable) {
-		_scaledSize = _tileSize * ratio;
-		_tileRatio = ratio;
+		_scaledSize = _tileSize * deviceRatio;
+		_tileRatio = deviceRatio;
 	}
 }
 
 qreal MBTilesMap::coordinatesRatio() const
 {
-	return _deviceRatio > 1.0 ? _deviceRatio / _tileRatio : 1.0;
+	return _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
 }
 
 qreal MBTilesMap::imageRatio() const
 {
-	return _deviceRatio > 1.0 ? _deviceRatio : _tileRatio;
+	return _mapRatio > 1.0 ? _mapRatio : _tileRatio;
 }
 
 qreal MBTilesMap::tileSize() const

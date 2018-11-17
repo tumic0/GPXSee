@@ -16,7 +16,7 @@
 
 
 OziMap::OziMap(const QString &fileName, QObject *parent)
-  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _ratio(1.0), _valid(false)
+  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QString suffix = fi.suffix().toLower();
@@ -78,7 +78,7 @@ OziMap::OziMap(const QString &fileName, QObject *parent)
 }
 
 OziMap::OziMap(const QString &fileName, Tar &tar, QObject *parent)
-  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _ratio(1.0), _valid(false)
+  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QFileInfo map(fi.absolutePath());
@@ -217,15 +217,15 @@ void OziMap::unload()
 
 void OziMap::drawTiled(QPainter *painter, const QRectF &rect) const
 {
-	QSizeF ts(_tile.size.width() / _ratio, _tile.size.height() / _ratio);
+	QSizeF ts(_tile.size.width() / _mapRatio, _tile.size.height() / _mapRatio);
 	QPointF tl(floor(rect.left() / ts.width()) * ts.width(),
 	  floor(rect.top() / ts.height()) * ts.height());
 
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	for (int i = 0; i < ceil(s.width() / ts.width()); i++) {
 		for (int j = 0; j < ceil(s.height() / ts.height()); j++) {
-			int x = round(tl.x() * _ratio + i * _tile.size.width());
-			int y = round(tl.y() * _ratio + j * _tile.size.height());
+			int x = round(tl.x() * _mapRatio + i * _tile.size.width());
+			int y = round(tl.y() * _mapRatio + j * _tile.size.height());
 
 			QString tileName(_tile.path.arg(QString::number(x),
 			  QString::number(y)));
@@ -247,7 +247,7 @@ void OziMap::drawTiled(QPainter *painter, const QRectF &rect) const
 				  _tile.path.arg(QString::number(x), QString::number(y))));
 			else {
 #ifdef ENABLE_HIDPI
-				pixmap.setDevicePixelRatio(_ratio);
+				pixmap.setDevicePixelRatio(_mapRatio);
 #endif // ENABLE_HIDPI
 				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
 				painter->drawPixmap(tp, pixmap);
@@ -258,16 +258,16 @@ void OziMap::drawTiled(QPainter *painter, const QRectF &rect) const
 
 void OziMap::drawOZF(QPainter *painter, const QRectF &rect) const
 {
-	QSizeF ts(_ozf->tileSize().width() / _ratio, _ozf->tileSize().height()
-	  / _ratio);
+	QSizeF ts(_ozf->tileSize().width() / _mapRatio, _ozf->tileSize().height()
+	  / _mapRatio);
 	QPointF tl(floor(rect.left() / ts.width()) * ts.width(),
 	  floor(rect.top() / ts.height()) * ts.height());
 
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	for (int i = 0; i < ceil(s.width() / ts.width()); i++) {
 		for (int j = 0; j < ceil(s.height() / ts.height()); j++) {
-			int x = round(tl.x() * _ratio + i * _ozf->tileSize().width());
-			int y = round(tl.y() * _ratio + j * _ozf->tileSize().height());
+			int x = round(tl.x() * _mapRatio + i * _ozf->tileSize().width());
+			int y = round(tl.y() * _mapRatio + j * _ozf->tileSize().height());
 
 			QPixmap pixmap;
 			QString key = _ozf->fileName() + "/" + QString::number(_zoom) + "_"
@@ -282,7 +282,7 @@ void OziMap::drawOZF(QPainter *painter, const QRectF &rect) const
 				qWarning("%s: error loading tile image", qPrintable(key));
 			else {
 #ifdef ENABLE_HIDPI
-				pixmap.setDevicePixelRatio(_ratio);
+				pixmap.setDevicePixelRatio(_mapRatio);
 #endif // ENABLE_HIDPI
 				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
 				painter->drawPixmap(tp, pixmap);
@@ -307,23 +307,23 @@ QPointF OziMap::ll2xy(const Coordinates &c)
 {
 	QPointF p(_transform.proj2img(_projection.ll2xy(c)));
 	return _ozf
-	  ? QPointF(p.x() * _scale.x(), p.y() * _scale.y()) / _ratio
-	  : p / _ratio;
+	  ? QPointF(p.x() * _scale.x(), p.y() * _scale.y()) / _mapRatio
+	  : p / _mapRatio;
 }
 
 Coordinates OziMap::xy2ll(const QPointF &p)
 {
 	return _ozf
 	  ? _projection.xy2ll(_transform.img2proj(QPointF(p.x() / _scale.x(),
-		p.y() / _scale.y()) * _ratio))
-	  : _projection.xy2ll(_transform.img2proj(p * _ratio));
+		p.y() / _scale.y()) * _mapRatio))
+	  : _projection.xy2ll(_transform.img2proj(p * _mapRatio));
 }
 
 QRectF OziMap::bounds()
 {
 	return _ozf
-	  ? QRectF(QPointF(0, 0), _ozf->size(_zoom) / _ratio)
-	  : QRectF(QPointF(0, 0), _map.size / _ratio);
+	  ? QRectF(QPointF(0, 0), _ozf->size(_zoom) / _mapRatio)
+	  : QRectF(QPointF(0, 0), _map.size / _mapRatio);
 }
 
 int OziMap::zoomFit(const QSize &size, const RectC &rect)
@@ -371,9 +371,11 @@ void OziMap::rescale(int zoom)
 	_scale = _ozf->scale(zoom);
 }
 
-void OziMap::setDevicePixelRatio(qreal ratio)
+void OziMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 {
-	_ratio = ratio;
+	Q_UNUSED(deviceRatio);
+
+	_mapRatio = mapRatio;
 	if (_img)
-		_img->setDevicePixelRatio(_ratio);
+		_img->setDevicePixelRatio(_mapRatio);
 }

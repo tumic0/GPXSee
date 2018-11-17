@@ -145,10 +145,10 @@ Atlas::Atlas(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
-void Atlas::setDevicePixelRatio(qreal ratio)
+void Atlas::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 {
 	for (int i = 0; i < _maps.size(); i++)
-		_maps[i]->setDevicePixelRatio(ratio);
+		_maps[i]->setDevicePixelRatio(deviceRatio, mapRatio);
 
 	computeBounds();
 }

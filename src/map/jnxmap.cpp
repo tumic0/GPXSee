@@ -142,7 +142,7 @@ bool JNXMap::readTiles()
 }
 
 JNXMap::JNXMap(const QString &fileName, QObject *parent)
-  : Map(parent), _file(fileName), _zoom(0), _ratio(1.0), _valid(false)
+  : Map(parent), _file(fileName), _zoom(0), _mapRatio(1.0), _valid(false)
 {
 	_name = QFileInfo(fileName).fileName();
 
@@ -162,13 +162,13 @@ JNXMap::JNXMap(const QString &fileName, QObject *parent)
 QPointF JNXMap::ll2xy(const Coordinates &c)
 {
 	const Zoom &z = _zooms.at(_zoom);
-	return z.transform.proj2img(_projection.ll2xy(c)) / _ratio;
+	return z.transform.proj2img(_projection.ll2xy(c)) / _mapRatio;
 }
 
 Coordinates JNXMap::xy2ll(const QPointF &p)
 {
 	const Zoom &z = _zooms.at(_zoom);
-	return _projection.xy2ll(z.transform.img2proj(p * _ratio));
+	return _projection.xy2ll(z.transform.img2proj(p * _mapRatio));
 }
 
 QRectF JNXMap::bounds()
@@ -249,8 +249,8 @@ void JNXMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	Q_UNUSED(flags);
 	const RTree<Tile*, qreal, 2> &tree = _zooms.at(_zoom).tree;
-	Ctx ctx(painter, &_file, _ratio);
-	QRectF rr(rect.topLeft() * _ratio, rect.size() * _ratio);
+	Ctx ctx(painter, &_file, _mapRatio);
+	QRectF rr(rect.topLeft() * _mapRatio, rect.size() * _mapRatio);
 
 	qreal min[2], max[2];
 	min[0] = rr.left();

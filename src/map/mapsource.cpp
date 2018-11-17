@@ -9,7 +9,8 @@
 
 
 MapSource::Config::Config() : type(OSM), zooms(OSM::ZOOMS), bounds(OSM::BOUNDS),
-  format("image/png"), rest(false), tileRatio(1.0), scalable(false) {}
+  format("image/png"), rest(false), tileRatio(1.0), tileSize(256),
+  scalable(false) {}
 
 
 static CoordinateSystem coordinateSystem(QXmlStreamReader &reader)
@@ -115,6 +116,7 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
 	QStringRef type = attr.value("type");
+	bool res;
 
 	if (type == "WMTS")
 		config.type = WMTS;
@@ -168,8 +170,8 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 			  attr.value("password").toString());
 			reader.skipCurrentElement();
 		} else if (reader.name() == "tilePixelRatio") {
+			// Legacy tilePixelRatio tag support
 #ifdef ENABLE_HIDPI
-			bool res;
 			qreal val = reader.readElementText().toDouble(&res);
 			if (!res)
 				reader.raiseError("Invalid tilePixelRatio");
@@ -178,10 +180,40 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 #else // ENABLE_HIDPI
 			reader.raiseError("HiDPI maps not supported");
 #endif // ENABLE_HIDPI
-		} else if (reader.name() == "scalable") {
-			QString val = reader.readElementText().trimmed();
-			if (val == "true" || val == "1")
-				config.scalable = true;
+		} else if (reader.name() == "tile") {
+			QXmlStreamAttributes attr = reader.attributes();
+
+			if (attr.hasAttribute("size")) {
+				int size = attr.value("size").toString().toInt(&res);
+				if (!res || size < 0) {
+					reader.raiseError("Invalid tile size");
+					return;
+				} else
+					config.tileSize = size;
+			}
+			if (attr.hasAttribute("type")) {
+				if (attr.value("type") == "raster")
+					config.scalable = false;
+				else if (attr.value("type") == "vector")
+					config.scalable = true;
+				else {
+					reader.raiseError("Invalid tile type");
+					return;
+				}
+			}
+			if (attr.hasAttribute("pixelRatio")) {
+#ifdef ENABLE_HIDPI
+				qreal ratio = attr.value("pixelRatio").toString().toDouble(&res);
+				if (!res || ratio < 0) {
+					reader.raiseError("Invalid tile pixelRatio");
+					return;
+				} else
+					config.tileRatio = ratio;
+#else // ENABLE_HIDPI
+				reader.raiseError("HiDPI maps not supported");
+#endif // ENABLE_HIDPI
+			}
+
 		} else
 			reader.skipCurrentElement();
 	}
@@ -255,11 +287,11 @@ Map *MapSource::loadMap(const QString &path, QString &errorString)
 		case TMS:
 			return new OnlineMap(config.name, config.url, config.zooms,
 			  config.bounds, config.tileRatio, config.authorization,
-			  config.scalable, true);
+			  config.tileSize, config.scalable, true);
 		case OSM:
 			return new OnlineMap(config.name, config.url, config.zooms,
 			 config.bounds, config.tileRatio, config.authorization,
-			 config.scalable, false);
+			 config.tileSize, config.scalable, false);
 		default:
 			return 0;
 	}

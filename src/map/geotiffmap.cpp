@@ -61,9 +61,11 @@ void GeoTIFFMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		_img->draw(painter, rect, flags);
 }
 
-void GeoTIFFMap::setDevicePixelRatio(qreal ratio)
+void GeoTIFFMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 {
-	_ratio = ratio;
+	Q_UNUSED(deviceRatio);
+
+	_ratio = mapRatio;
 	if (_img)
 		_img->setDevicePixelRatio(_ratio);
 }

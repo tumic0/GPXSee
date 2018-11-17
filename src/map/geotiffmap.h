@@ -25,7 +25,7 @@ public:
 
 	void load();
 	void unload();
-	void setDevicePixelRatio(qreal ratio);
+	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}

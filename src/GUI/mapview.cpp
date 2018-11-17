@@ -73,7 +73,8 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_poiColor = Qt::black;
 
 #ifdef ENABLE_HIDPI
-	_ratio = 1.0;
+	_deviceRatio = 1.0;
+	_mapRatio = 1.0;
 #endif // ENABLE_HIDPI
 	_opengl = false;
 	_plot = false;
@@ -271,7 +272,7 @@ void MapView::setMap(Map *map)
 	_map = map;
 	_map->load();
 #ifdef ENABLE_HIDPI
-	_map->setDevicePixelRatio(_ratio);
+	_map->setDevicePixelRatio(_deviceRatio, _mapRatio);
 #endif // ENABLE_HIDPI
 	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
@@ -506,7 +507,7 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	setUpdatesEnabled(false);
 	_plot = true;
 #ifdef ENABLE_HIDPI
-	_map->setDevicePixelRatio(1.0);
+	_map->setDevicePixelRatio(_deviceRatio, 1.0);
 #endif // ENABLE_HIDPI
 
 	// Compute sizes & ratios
@@ -567,7 +568,7 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 
 	// Exit plot mode
 #ifdef ENABLE_HIDPI
-	_map->setDevicePixelRatio(_ratio);
+	_map->setDevicePixelRatio(_deviceRatio, _mapRatio);
 #endif // ENABLE_HIDPI
 	_plot = false;
 	setUpdatesEnabled(true);
@@ -845,19 +846,21 @@ void MapView::reloadMap()
 	_scene->invalidate();
 }
 
-void MapView::setDevicePixelRatio(qreal ratio)
+void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 {
 #ifdef ENABLE_HIDPI
-	if (_ratio == ratio)
+	if (_deviceRatio == deviceRatio && _mapRatio == mapRatio)
 		return;
 
-	_ratio = ratio;
+	_deviceRatio = deviceRatio;
+	_mapRatio = mapRatio;
+	QPixmapCache::clear();
 
 	QRectF vr(mapToScene(viewport()->rect()).boundingRect()
 	  .intersected(_map->bounds()));
 	RectC cr(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
 
-	_map->setDevicePixelRatio(_ratio);
+	_map->setDevicePixelRatio(_deviceRatio, _mapRatio);
 	_scene->setSceneRect(_map->bounds());
 
 	for (int i = 0; i < _tracks.size(); i++)

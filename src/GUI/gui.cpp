@@ -924,8 +924,8 @@ void GUI::openOptions()
 #endif // ENABLE_HTTP2
 #ifdef ENABLE_HIDPI
 	if (options.hidpiMap != _options.hidpiMap)
-		_mapView->setDevicePixelRatio(options.hidpiMap ? devicePixelRatioF()
-		  : 1.0);
+		_mapView->setDevicePixelRatio(devicePixelRatioF(),
+		  options.hidpiMap ? devicePixelRatioF() : 1.0);
 #endif // ENABLE_HIDPI
 
 	if (reload)
@@ -2047,7 +2047,8 @@ void GUI::readSettings()
 	if (_options.useOpenGL)
 		_mapView->useOpenGL(true);
 #ifdef ENABLE_HIDPI
-	_mapView->setDevicePixelRatio(_options.hidpiMap ? devicePixelRatioF() : 1.0);
+	_mapView->setDevicePixelRatio(devicePixelRatioF(),
+	  _options.hidpiMap ? devicePixelRatioF() : 1.0);
 #endif // ENABLE_HIDPI
 
 	for (int i = 0; i < _tabs.count(); i++) {
@@ -2130,7 +2131,8 @@ void GUI::show()
 void GUI::screenChanged(QScreen *screen)
 {
 #ifdef ENABLE_HIDPI
-	_mapView->setDevicePixelRatio(_options.hidpiMap ? devicePixelRatioF() : 1.0);
+	_mapView->setDevicePixelRatio(devicePixelRatioF(),
+	  _options.hidpiMap ? devicePixelRatioF() : 1.0);
 
 	disconnect(SIGNAL(logicalDotsPerInchChanged(qreal)), this,
 	  SLOT(logicalDotsPerInchChanged(qreal)));
@@ -2146,6 +2148,7 @@ void GUI::logicalDotsPerInchChanged(qreal dpi)
 	Q_UNUSED(dpi)
 
 #ifdef ENABLE_HIDPI
-	_mapView->setDevicePixelRatio(_options.hidpiMap ? devicePixelRatioF() : 1.0);
+	_mapView->setDevicePixelRatio(devicePixelRatioF(),
+	  _options.hidpiMap ? devicePixelRatioF() : 1.0);
 #endif // ENBLE_HIDPI
 }

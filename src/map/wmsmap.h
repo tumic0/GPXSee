@@ -31,7 +31,8 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
-	void setDevicePixelRatio(qreal ratio) {_ratio = ratio;}
+	void setDevicePixelRatio(qreal /*deviceRatio*/, qreal mapRatio)
+	  {_mapRatio = mapRatio;}
 	void clearCache();
 
 	bool isValid() const {return _valid;}
@@ -56,7 +57,7 @@ private:
 	QVector<double> _zooms;
 	RectD _bbox;
 	int _zoom;
-	qreal _ratio;
+	qreal _mapRatio;
 
 	bool _valid;
 	QString _errorString;

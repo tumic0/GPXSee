@@ -39,7 +39,7 @@ bool WMTSMap::loadWMTS()
 
 WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, qreal tileRatio,
   QObject *parent) : Map(parent), _name(name), _setup(setup), _tileLoader(0),
-  _zoom(0), _deviceRatio(1.0), _tileRatio(tileRatio), _valid(false)
+  _zoom(0), _mapRatio(1.0), _tileRatio(tileRatio), _valid(false)
 {
 	_tileLoader = new TileLoader(tilesDir(), this);
 	_tileLoader->setAuthorization(_setup.authorization());
@@ -151,12 +151,12 @@ int WMTSMap::zoomOut()
 
 qreal WMTSMap::coordinatesRatio() const
 {
-	return _deviceRatio > 1.0 ? _deviceRatio / _tileRatio : 1.0;
+	return _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
 }
 
 qreal WMTSMap::imageRatio() const
 {
-	return _deviceRatio > 1.0 ? _deviceRatio : _tileRatio;
+	return _mapRatio > 1.0 ? _mapRatio : _tileRatio;
 }
 
 QSizeF WMTSMap::tileSize(const WMTS::Zoom &zoom) const
