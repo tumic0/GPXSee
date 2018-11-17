@@ -881,6 +881,7 @@ void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 
 	reloadMap();
 #else // ENABLE_HIDPI
-	Q_UNUSED(ratio);
+	Q_UNUSED(deviceRatio);
+	Q_UNUSED(mapRatio);
 #endif // ENABLE_HIDPI
 }
