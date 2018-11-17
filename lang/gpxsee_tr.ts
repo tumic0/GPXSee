@@ -993,441 +993,441 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="39"/>
         <source>Always show the map</source>
-        <translation type="unfinished"></translation>
+        <translation>Her zaman haritayı göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="42"/>
         <source>Show the map even when no files are loaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiç dosya yüklenmese dahi haritayı göster.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="45"/>
         <source>High-resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Yüksek çözünürlük</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="46"/>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Standart</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="51"/>
         <source>Non-HiDPI maps are loaded as HiDPI maps. The map is sharp but map objects are small/hard to read.</source>
-        <translation type="unfinished"></translation>
+        <translation>HiDPI olmayan haritalar, HiDPI haritaları olarak yüklenir. Harita keskin ama harita nesneleri küçük/okunması zor.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="53"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
-        <translation type="unfinished"></translation>
+        <translation>HiDPI olmayan haritalar, oldukları gibi yüklenir. Harita nesneleri beklenen boyuta sahip ancak harita bulanıktır.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="86"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Genel</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="88"/>
         <source>HiDPI display mode</source>
-        <translation type="unfinished"></translation>
+        <translation>HiDPI gösterim modu</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="105"/>
         <source>Base color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Temel renk:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="106"/>
         <source>Palette shift:</source>
-        <translation type="unfinished"></translation>
+        <translation>Palet değişimi:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="108"/>
         <source>Colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Renkler</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="119"/>
         <source>Track width:</source>
-        <translation type="unfinished"></translation>
+        <translation>İz genişliği:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="120"/>
         <source>Track style:</source>
-        <translation type="unfinished"></translation>
+        <translation>İz tarzı:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="122"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="138"/>
         <source>Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Genişlik:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="123"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="139"/>
         <source>Style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tarz:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="124"/>
         <source>Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>İzler</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="135"/>
         <source>Route width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rota genişliği:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="136"/>
         <source>Route style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rota tarzı:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="140"/>
         <source>Routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotalar</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="144"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="226"/>
         <source>Use anti-aliasing</source>
-        <translation type="unfinished"></translation>
+        <translation>Kenar yumuşatma kullan</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="176"/>
         <source>Waypoint color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işareti rengi:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="177"/>
         <source>Waypoint size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işareti boyutu:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="179"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="195"/>
         <source>Color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Renk:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="180"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="196"/>
         <source>Size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Boyut:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="181"/>
         <source>Waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretleri</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="192"/>
         <source>POI color:</source>
-        <translation type="unfinished"></translation>
+        <translation>POI renk:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="193"/>
         <source>POI size:</source>
-        <translation type="unfinished"></translation>
+        <translation>POI boyutu:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="197"/>
         <source>POIs</source>
-        <translation type="unfinished"></translation>
+        <translation>POI&apos;ler</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="223"/>
         <source>Line width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hat genişliği:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="224"/>
         <source>Slider color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaydırıcı rengi:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="246"/>
         <source>Background color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Arka plan rengi:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="247"/>
         <source>Map opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Harita opaklığı:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="257"/>
         <source>Paths</source>
-        <translation type="unfinished"></translation>
+        <translation>Yollar</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="258"/>
         <source>Points</source>
-        <translation type="unfinished"></translation>
+        <translation>Noktalar</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="259"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="468"/>
         <source>Graphs</source>
-        <translation type="unfinished"></translation>
+        <translation>Grafikler</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="260"/>
         <source>Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Harita</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="267"/>
         <source>Moving average window size</source>
-        <translation type="unfinished"></translation>
+        <translation>Ortalama pencere boyutuna taşıma</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="286"/>
         <source>Elevation:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rakım:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="287"/>
         <source>Speed:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hız:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="288"/>
         <source>Heart rate:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nabız:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
         <source>Cadence:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kadans:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="290"/>
         <source>Power:</source>
-        <translation type="unfinished"></translation>
+        <translation>Güç:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="292"/>
         <source>Smoothing</source>
-        <translation type="unfinished"></translation>
+        <translation>Yumuşatma</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="296"/>
         <source>Eliminate GPS outliers</source>
-        <translation type="unfinished"></translation>
+        <translation>Aykırı GPS ele</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="302"/>
         <source>Outlier elimination</source>
-        <translation type="unfinished"></translation>
+        <translation>Aykırıyı eleme</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="309"/>
         <source>Smoothing:</source>
-        <translation type="unfinished"></translation>
+        <translation>Yumuşatma:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="327"/>
         <source>mi/h</source>
-        <translation type="unfinished"></translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="330"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="333"/>
         <source>km/h</source>
-        <translation type="unfinished"></translation>
+        <translation>km/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="337"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="491"/>
         <source>s</source>
-        <translation type="unfinished"></translation>
+        <translation>s</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="341"/>
         <source>Minimal speed:</source>
-        <translation type="unfinished"></translation>
+        <translation>Asgari hız:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="342"/>
         <source>Minimal duration:</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimum süre:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="348"/>
         <source>Computed from distance/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesafe/zamandan hesaplandı</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="349"/>
         <source>Recorded by device</source>
-        <translation type="unfinished"></translation>
+        <translation>Cihazdan kaydedilen</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="364"/>
         <source>Filtering</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtreleme</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="365"/>
         <source>Pause detection</source>
-        <translation type="unfinished"></translation>
+        <translation>Duraklama algılama</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="366"/>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Hız</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="378"/>
         <source>mi</source>
-        <translation type="unfinished"></translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="381"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="384"/>
         <source>km</source>
-        <translation type="unfinished"></translation>
+        <translation>Km</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="388"/>
         <source>POI radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>POI yarıçapı:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="394"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="534"/>
         <source>POI</source>
-        <translation type="unfinished"></translation>
+        <translation>POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="401"/>
         <source>WYSIWYG</source>
-        <translation type="unfinished"></translation>
+        <translation>WYSIWYG</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="402"/>
         <source>High-Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Yüksek çözünürlük</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="407"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazdırılan alan yaklaşık olarak görüntü alanıdır. Harita zum seviyesi değişmez.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="409"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yakınlaştırma seviyesi, tüm içeriğin (izler/yer işaretleri) yazdırılan alana sığması ve harita çözünürlüğünün baskı çözünürlüğüne olabildiğince yakın olacak şekilde değiştirilecektir.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="431"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Adı</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="433"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Tarih</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="435"/>
         <source>Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesafe</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="437"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaman</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="439"/>
         <source>Moving time</source>
-        <translation type="unfinished"></translation>
+        <translation>Hareket zamanı</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="441"/>
         <source>Item count (&gt;1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Eşya sayısı (&gt;1)</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="456"/>
         <source>Separate graph page</source>
-        <translation type="unfinished"></translation>
+        <translation>Ayrı grafik sayfası</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="466"/>
         <source>Print mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazdırma modu</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="467"/>
         <source>Header</source>
-        <translation type="unfinished"></translation>
+        <translation>Başlık</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="475"/>
         <source>Use OpenGL</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenGL Kullan</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="478"/>
         <source>Enable HTTP/2</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTP/2 etkinleştir</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="485"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="495"/>
         <source>Image cache size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Görüntü önbellek boyutu:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="496"/>
         <source>Connection timeout:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bağlantı zaman aşımı:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="512"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="537"/>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>Sistem</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="530"/>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Görünüm</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="532"/>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Haritalar</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="533"/>
         <source>Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Veri</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="535"/>
         <source>Print &amp; Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazdır &amp; Dışa ver</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="564"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Seçenekler</translation>
     </message>
 </context>
 <context>
@@ -1435,23 +1435,23 @@
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="11"/>
         <source>W</source>
-        <translation type="unfinished"></translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="12"/>
         <location filename="../src/GUI/powergraph.h" line="13"/>
         <source>Power</source>
-        <translation type="unfinished"></translation>
+        <translation>Güç</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="22"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Ortalama</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="24"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami</translation>
     </message>
 </context>
 <context>
@@ -1459,18 +1459,18 @@
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="28"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="29"/>
         <location filename="../src/GUI/powergraphitem.cpp" line="31"/>
         <source>W</source>
-        <translation type="unfinished"></translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="30"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Ortalama</translation>
     </message>
 </context>
 <context>
@@ -1478,17 +1478,17 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Adı</translation>
     </message>
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="17"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Açıklama</translation>
     </message>
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="18"/>
         <source>Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesafe</translation>
     </message>
 </context>
 <context>
@@ -1496,28 +1496,28 @@
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="108"/>
         <source>mi</source>
-        <translation type="unfinished"></translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="109"/>
         <location filename="../src/GUI/scaleitem.cpp" line="112"/>
         <source>ft</source>
-        <translation type="unfinished"></translation>
+        <translation>ft</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="111"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="114"/>
         <source>km</source>
-        <translation type="unfinished"></translation>
+        <translation>Km</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="115"/>
         <source>m</source>
-        <translation type="unfinished"></translation>
+        <translation>m</translation>
     </message>
 </context>
 <context>
@@ -1526,52 +1526,52 @@
         <location filename="../src/GUI/speedgraph.cpp" line="16"/>
         <location filename="../src/GUI/speedgraph.h" line="14"/>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Hız</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="26"/>
         <source>min/km</source>
-        <translation type="unfinished"></translation>
+        <translation>min/km</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="27"/>
         <source>min/mi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="27"/>
         <source>min/nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="29"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Ortalama</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="31"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="33"/>
         <source>Pace</source>
-        <translation type="unfinished"></translation>
+        <translation>Hız</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="96"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="99"/>
         <source>mi/h</source>
-        <translation type="unfinished"></translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="102"/>
         <source>km/h</source>
-        <translation type="unfinished"></translation>
+        <translation>km/h</translation>
     </message>
 </context>
 <context>
@@ -1579,47 +1579,47 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="31"/>
         <source>mi/h</source>
-        <translation type="unfinished"></translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="32"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="32"/>
         <source>km/h</source>
-        <translation type="unfinished"></translation>
+        <translation>km/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="35"/>
         <source>min/km</source>
-        <translation type="unfinished"></translation>
+        <translation>min/km</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="36"/>
         <source>min/mi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="36"/>
         <source>min/nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="39"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="41"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Ortalama</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="43"/>
         <source>Pace</source>
-        <translation type="unfinished"></translation>
+        <translation>Hız</translation>
     </message>
 </context>
 <context>
@@ -1628,32 +1628,32 @@
         <location filename="../src/GUI/temperaturegraph.cpp" line="12"/>
         <location filename="../src/GUI/temperaturegraph.h" line="13"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Sıcaklık</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="22"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Ortalama</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="24"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Asgari</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="26"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="85"/>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="89"/>
         <source>F</source>
-        <translation type="unfinished"></translation>
+        <translation>F</translation>
     </message>
 </context>
 <context>
@@ -1661,27 +1661,27 @@
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="33"/>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="33"/>
         <source>F</source>
-        <translation type="unfinished"></translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="36"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Ortalama</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="38"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="40"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Asgari</translation>
     </message>
 </context>
 <context>
@@ -1689,32 +1689,32 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="13"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Adı</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="15"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Açıklama</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="16"/>
         <source>Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesafe</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="18"/>
         <source>Total time</source>
-        <translation type="unfinished"></translation>
+        <translation>Toplam süre</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="20"/>
         <source>Moving time</source>
-        <translation type="unfinished"></translation>
+        <translation>Hareket zamanı</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="22"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Tarih</translation>
     </message>
 </context>
 <context>
@@ -1722,27 +1722,27 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="18"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Adı</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="19"/>
         <source>Coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Koordinatlar</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="22"/>
         <source>Elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Rakım</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="25"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Tarih</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="28"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Açıklama</translation>
     </message>
 </context>
 </TS>
