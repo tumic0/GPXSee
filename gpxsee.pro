@@ -266,7 +266,8 @@ TRANSLATIONS = lang/gpxsee_en.ts \
     lang/gpxsee_fr.ts \
     lang/gpxsee_pl.ts \
     lang/gpxsee_nb.ts \
-    lang/gpxsee_da.ts
+    lang/gpxsee_da.ts \
+    lang/gpxsee_tr.ts
 
 macx {
     ICON = icons/gpxsee.icns
@@ -281,7 +282,8 @@ macx {
         lang/gpxsee_sv.qm \
         lang/gpxsee_pl.qm \
         lang/gpxsee_nb.qm \
-        lang/gpxsee_da.qm
+        lang/gpxsee_da.qm \
+        lang/gpxsee_tr.qm
     CSV.path = Contents/Resources
     CSV.files = pkg/csv
     MAPS.path = Contents/Resources

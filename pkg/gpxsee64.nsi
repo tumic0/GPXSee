@@ -191,6 +191,7 @@ SectionGroup "Localization" SEC_LOCALIZATION
   !insertmacro LOCALIZATION "Polish" "pl"
   !insertmacro LOCALIZATION "Russian" "ru"
   !insertmacro LOCALIZATION "Swedish" "sv"
+  !insertmacro LOCALIZATION "Turkish" "tr"
 SectionGroupEnd
 
 ;--------------------------------
