@@ -616,7 +616,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="701"/>
         <source>GCS/PCS directory:</source>
-        <translation>Директория с GCS/PCS:</translation>
+        <translation>Каталог с GCS/PCS:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1030"/>
@@ -680,17 +680,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="697"/>
         <source>Map directory:</source>
-        <translation>Директория с картами:</translation>
+        <translation>Каталог с картами:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="699"/>
         <source>POI directory:</source>
-        <translation>Директория с POI:</translation>
+        <translation>Каталог с POI:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="703"/>
         <source>Tile cache directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог кеша тайлов:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="984"/>
