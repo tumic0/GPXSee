@@ -690,7 +690,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="703"/>
         <source>Tile cache directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Välimuistin hakemisto:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="984"/>
