@@ -49,7 +49,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="116"/>
         <source>Supported files</source>
-        <translation>Unterstütze Dateien</translation>
+        <translation>Unterstützte Dateien</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="118"/>
@@ -956,7 +956,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="117"/>
         <source>Supported files</source>
-        <translation>Unterstütze Dateien</translation>
+        <translation>Unterstützte Dateien</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="119"/>
