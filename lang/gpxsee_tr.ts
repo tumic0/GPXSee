@@ -717,7 +717,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="703"/>
         <source>Tile cache directory:</source>
-        <translation>Döşeme önbellek klaörü:</translation>
+        <translation>Döşeme önbellek klasörü:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="712"/>
