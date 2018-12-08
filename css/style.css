@@ -240,6 +240,15 @@ h1.logo a span {
 	text-align:right;
 	margin-right:20px;
 }
+
+#footnote {
+	margin-top: 1em;
+}
+
+#footnote p {
+	margin: 0;
+}
+
 .latest-news .news-item h4 {
 	font-size:12px;
 }

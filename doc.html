@@ -145,9 +145,10 @@
 &lt;/map&gt;
 </pre>
 
-           <p>In case of vector tile images (PBF), set the type attribute of
-           the <i>tile</i> tag to "vector". This will adjust the pixel ratio
-           of the tile to the pixel ratio of the display device.</p>
+           <p>In case of vector tile images (PBF<sup><a href="#pbf">2</a></sup>),
+           set the type attribute of the <i>tile</i> tag to "vector". This will
+           adjust the pixel ratio of the tile to the pixel ratio of the display
+           device.</p>
 
 <pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -244,8 +245,8 @@
 </pre>
 
           <h3 id="offline">Offline maps</h3>
-          <p>OziExplorer maps, TrekBuddy maps/atlases, Garmin JNX maps, MBTiles (raster only)
-          and GeoTIFF images are supported by GPXSee.</p>
+          <p>OziExplorer maps, TrekBuddy maps/atlases, Garmin JNX maps, MBTiles and GeoTIFF
+          images are supported by GPXSee.</p>
 
           <p>Supported map projections are Mercator (including Web Mercator), Transverse Mercator
           (including UTM), Lambert Conformal Conic, Albers Equal Area, Lambert Azimuthal Equal Area,
@@ -270,7 +271,12 @@
           <p>To make GPXSee load a POI file automatically on startup, add the file to the
           <code>POI</code> directory in one of the configuration paths.</p>
 
+          <div id="footnote">
           <p id="legacyPaths"><i>[1] The user paths have changed in GPXSee 7.</i></p>
+          <p id="pbf"><i>[2] To display PBF tiles/MBTiles, <a href="https://github.com/tumic0/QtPBFImagePlugin">
+          QtPBFImagePlugin</a> is required (part of the official Windows &amp;
+          OS&nbsp;X builds).</i></p>
+          </div>
       </div>
 
       <div id="sidebar">
