@@ -145,6 +145,20 @@
 &lt;/map&gt;
 </pre>
 
+           <p>In case of vector tile images (PBF), set the type attribute of
+           the <i>tile</i> tag to "vector". This will adjust the pixel ratio
+           of the tile to the pixel ratio of the display device.</p>
+
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;map xmlns="http://www.gpxsee.org/map/1.3"&gt;
+  &lt;name>MapTiler&lt;/name&gt;
+  &lt;url>https://maps.tilehosting.com/data/v3/$z/$x/$y.pbf?key=apikey&lt;/url>
+  &lt;tile type="vector"/&gt;
+  &lt;zoom max="14"/&gt;
+&lt;/map&gt;
+</pre>
+
           <p>The map URL can be also a local file URL (<i>file:</i> scheme).</p>
 
           <p></p>
