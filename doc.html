@@ -83,15 +83,19 @@
           </table>
 
           <p>User specific map directories that - when present - override the global map
-          directory are also supported. The paths are as follows:</p>
+          directory are also supported. The paths are as
+          follows<sup><a href="#legacyPaths">1</a></sup>:</p>
 
           <table class="config-files">
             <tr>
               <td class="os">Windows:</td>
-              <td class="file">%HOMEPATH%\GPXSee\maps</td>
+              <td class="file">%APPDATA%\GPXSee\maps</td>
             </tr><tr>
-              <td class="os">OS X, Linux:</td>
-              <td class="file">$HOME/.gpxsee/maps</td>
+              <td class="os">Linux:</td>
+              <td class="file">~/.local/share/gpxsee/maps</td>
+            </tr><tr>
+              <td class="os">OS X:</td>
+              <td class="file">~/Library/Application Support/GPXSee/maps</td>
             </tr>
           </table>
 
@@ -102,7 +106,7 @@
           <h3 id="online">Online maps</h3>
 
           <p>The mapsource definition file format is based on XML and is fairly simple.
-          For the formal map source file syntax see the <a href="map/1.2/map.xsd">mapsource
+          For the formal map source file syntax see the <a href="map/1.3/map.xsd">mapsource
           XSD file</a>. The paragraphs below are a "human-readable" summary of the XSD
           syntax/semantics divided by map type.</p>
 
@@ -127,16 +131,17 @@
           default zoom range is &lt;0,&nbsp;19&gt; and the default bounds are
           &lt;-85.0511,&nbsp;85.0511&gt; and &lt;-180,&nbsp;180&gt;.</p>
 
-          <p>Since version 5.17 GPXSee supports HiDPI map tiles. To specify that a map
-          uses HiDPI tiles use the <i>tilePixelRatio</i> tag. For the most common 512x512px
-          tiles (that shall be rendered as 256x256px tiles), set the value to 2.</p>
+          <p>GPXSee supports HiDPI map tiles. To specify that a map uses HiDPI tiles
+          use the pixelRatio attribute of the <i>tile</i> tag. For the most common 
+          512x512px tiles (that shall be rendered as 256x256px tiles), set the value
+          to 2.</p>
 
 <pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;map xmlns="http://www.gpxsee.org/map/1.1"&gt;
+&lt;map xmlns="http://www.gpxsee.org/map/1.3"&gt;
   &lt;name&gt;OSM - HiDPI&lt;/name&gt;
   &lt;url&gt;https://a.osm.rrze.fau.de/osmhd/$z/$x/$y.png&lt;/url&gt;
-  &lt;tilePixelRatio&gt;2&lt;/tilePixelRatio&gt;
+  &lt;tile pixelRatio="2"&gt;
 &lt;/map&gt;
 </pre>
 
@@ -251,6 +256,7 @@
           <p>To make GPXSee load a POI file automatically on startup, add the file to the
           <code>POI</code> directory in one of the configuration paths.</p>
 
+          <p id="legacyPaths"><i>[1] The user paths have changed in GPXSee 7.</i></p>
       </div>
 
       <div id="sidebar">
