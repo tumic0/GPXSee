@@ -112,11 +112,47 @@ RectC MapSource::bounds(QXmlStreamReader &reader)
 	return RectC(Coordinates(left, top), Coordinates(right, bottom));
 }
 
+void MapSource::tile(QXmlStreamReader &reader, Config &config)
+{
+	QXmlStreamAttributes attr = reader.attributes();
+	bool ok;
+
+	if (attr.hasAttribute("size")) {
+		int size = attr.value("size").toString().toInt(&ok);
+		if (!ok || size < 0) {
+			reader.raiseError("Invalid tile size");
+			return;
+		} else
+			config.tileSize = size;
+	}
+	if (attr.hasAttribute("type")) {
+		if (attr.value("type") == "raster")
+			config.scalable = false;
+		else if (attr.value("type") == "vector")
+			config.scalable = true;
+		else {
+			reader.raiseError("Invalid tile type");
+			return;
+		}
+	}
+	if (attr.hasAttribute("pixelRatio")) {
+#ifdef ENABLE_HIDPI
+		qreal ratio = attr.value("pixelRatio").toString().toDouble(&ok);
+		if (!ok || ratio < 0) {
+			reader.raiseError("Invalid tile pixelRatio");
+			return;
+		} else
+			config.tileRatio = ratio;
+#else // ENABLE_HIDPI
+		reader.raiseError("HiDPI maps not supported");
+#endif // ENABLE_HIDPI
+	}
+}
+
 void MapSource::map(QXmlStreamReader &reader, Config &config)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
 	QStringRef type = attr.value("type");
-	bool res;
 
 	if (type == "WMTS")
 		config.type = WMTS;
@@ -172,48 +208,18 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 		} else if (reader.name() == "tilePixelRatio") {
 			// Legacy tilePixelRatio tag support
 #ifdef ENABLE_HIDPI
-			qreal val = reader.readElementText().toDouble(&res);
-			if (!res)
+			bool ok;
+			qreal ratio = reader.readElementText().toDouble(&ok);
+			if (!ok || ratio <= 0)
 				reader.raiseError("Invalid tilePixelRatio");
 			else
-				config.tileRatio = val;
+				config.tileRatio = ratio;
 #else // ENABLE_HIDPI
 			reader.raiseError("HiDPI maps not supported");
 #endif // ENABLE_HIDPI
 		} else if (reader.name() == "tile") {
-			QXmlStreamAttributes attr = reader.attributes();
-
-			if (attr.hasAttribute("size")) {
-				int size = attr.value("size").toString().toInt(&res);
-				if (!res || size < 0) {
-					reader.raiseError("Invalid tile size");
-					return;
-				} else
-					config.tileSize = size;
-			}
-			if (attr.hasAttribute("type")) {
-				if (attr.value("type") == "raster")
-					config.scalable = false;
-				else if (attr.value("type") == "vector")
-					config.scalable = true;
-				else {
-					reader.raiseError("Invalid tile type");
-					return;
-				}
-			}
-			if (attr.hasAttribute("pixelRatio")) {
-#ifdef ENABLE_HIDPI
-				qreal ratio = attr.value("pixelRatio").toString().toDouble(&res);
-				if (!res || ratio < 0) {
-					reader.raiseError("Invalid tile pixelRatio");
-					return;
-				} else
-					config.tileRatio = ratio;
-#else // ENABLE_HIDPI
-				reader.raiseError("HiDPI maps not supported");
-#endif // ENABLE_HIDPI
-			}
-
+			tile(reader, config);
+			reader.skipCurrentElement();
 		} else
 			reader.skipCurrentElement();
 	}

@@ -49,6 +49,7 @@ private:
 	static RectC bounds(QXmlStreamReader &reader);
 	static Range zooms(QXmlStreamReader &reader);
 	static void map(QXmlStreamReader &reader, Config &config);
+	static void tile(QXmlStreamReader &reader, Config &config);
 };
 
 #endif // MAPSOURCE_H
