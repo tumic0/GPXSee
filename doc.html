@@ -82,8 +82,8 @@
             </tr>  
           </table>
 
-          <p>User specific map directories that - when present - override the global map
-          directory are also supported. The paths are as
+          <p>User specific map directories that - when present - override the global
+          map directory are also supported. The paths are as
           follows<sup><a href="#legacyPaths">1</a></sup>:</p>
 
           <table class="config-files">
@@ -102,11 +102,21 @@
           <p>The map directory is recursively searched when loading the maps, so it
           may contain an arbitrary directory structure.</p>
 
+          <p>Supported map projections are Mercator (including Web Mercator),
+          Transverse Mercator (including UTM), Lambert Conformal Conic, Albers Equal Area,
+          Lambert Azimuthal Equal Area, Křovák's and Latitude/Longitude (2D geographic).
+          Additionally, the Swiss and Hungarian Oblique Mercator projections are aupported
+          using LCC1 approximation. For list of supported datums and projected coordinate
+          systems see the
+          <a href="https://github.com/tumic0/GPXSee/blob/master/pkg/csv/gcs.csv">GCS.csv</a>
+          and <a href="https://github.com/tumic0/GPXSee/blob/master/pkg/csv/pcs.csv">PCS.csv</a>
+          configuration files (can be modified or overridden by user files like the map
+          directory).</p>
 
           <h3 id="online">Online maps</h3>
 
-          <p>The mapsource definition file format is based on XML and is fairly simple.
-          For the formal map source file syntax see the <a href="map/1.3/map.xsd">mapsource
+          <p>Online maps are represented by map source definition XML files. For the formal
+          map source file syntax see the <a href="map/1.3/map.xsd">map source
           XSD file</a>. The paragraphs below are a "human-readable" summary of the XSD
           syntax/semantics divided by map type.</p>
 
@@ -247,16 +257,6 @@
           <h3 id="offline">Offline maps</h3>
           <p>OziExplorer maps, TrekBuddy maps/atlases, Garmin JNX maps, MBTiles and GeoTIFF
           images are supported by GPXSee.</p>
-
-          <p>Supported map projections are Mercator (including Web Mercator), Transverse Mercator
-          (including UTM), Lambert Conformal Conic, Albers Equal Area, Lambert Azimuthal Equal Area,
-          Křovák's and Latitude/Longitude (2D geographic). Additionally, the Swiss and Hungarian
-          Oblique Mercator projections are aupported using LCC1 approximation. For list of supported
-          datums and projected coordinate systems see the
-          <a href="https://github.com/tumic0/GPXSee/blob/master/pkg/csv/gcs.csv">GCS.csv</a>
-          and <a href="https://github.com/tumic0/GPXSee/blob/master/pkg/csv/pcs.csv">PCS.csv</a>
-          configuration files (can be modified or overridden by user files like the map
-          directory).</p>
 
           <p>You may easily create offline atlases from online map services by using
           <a href="http://mobac.sourceforge.net/">Mobile Atlas Creator (MOBAC)</a>.</p>
