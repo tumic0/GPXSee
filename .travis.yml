@@ -12,7 +12,38 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libqt4-dev; fi
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then PATH=/usr/local/opt/qt/bin/:${PATH}; fi
-  - lrelease gpxsee.pro
-  - qmake gpxsee.pro
-  - make
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      PATH=/usr/local/opt/qt/bin/:${PATH};
+      lrelease gpxsee.pro
+      qmake gpxsee.pro
+      make
+    else
+      qmake CONFIG+=release PREFIX=/usr
+      make -j$(nproc)
+      mkdir -p appdir/usr/bin #175
+      mkdir -p appdir/usr/share/applications #175
+      mkdir -p appdir/usr/share/pixmaps #175
+      mkdir -p appdir/usr/share/mime/packages #175
+      mkdir -p appdir/usr/share/gpxsee #175
+      mkdir -p appdir/usr/share/gpxsee/maps #175
+      mkdir -p appdir/usr/share/gpxsee/csv #175
+      mkdir -p appdir/usr/share/gpxsee/translations #175
+      cp GPXSee appdir/usr/bin/gpxsee #175
+      cp pkg/maps/* appdir/usr/share/gpxsee/maps/ #175
+      cp pkg/csv/* appdir/usr/share/gpxsee/csv/ #175
+      cp lang/*.qm appdir/usr/share/gpxsee/translations/ #175
+      cp icons/gpxsee.png appdir/usr/share/pixmaps/gpxsee.png #175
+      cp pkg/gpxsee.desktop appdir/usr/share/applications/gpxsee.desktop #175
+      cp pkg/gpxsee.xml appdir/usr/share/mime/packages/gpxsee.xml #175
+      find appdir/
+      wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+      chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+      unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
+      export VERSION=$(git rev-parse --short HEAD) # linuxdeployqt uses this for naming the file
+      ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -appimage
+      find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
+      # curl --upload-file GPXSee*.AppImage https://transfer.sh/GPXSee-git.$(git rev-parse --short HEAD)-x86_64.AppImage
+      wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+      bash upload.sh GPXSee*.AppImage* 
+    fi
