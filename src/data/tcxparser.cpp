@@ -167,6 +167,8 @@ void TCXParser::activity(TrackData &track)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Lap"))
 			lap(track);
+		else if (_reader.name() == QLatin1String("Notes"))
+			track.setDescription(_reader.readElementText());
 		else
 			_reader.skipCurrentElement();
 	}
