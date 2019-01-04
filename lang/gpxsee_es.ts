@@ -657,17 +657,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="669"/>
         <source>Append file</source>
-        <translation type="unfinished"></translation>
+        <translation>Adjuntar archivo</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="670"/>
         <source>Next/Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Siguiente/Anterior</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="672"/>
         <source>Toggle graph type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo de gráfica</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="674"/>
