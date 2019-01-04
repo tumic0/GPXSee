@@ -31,6 +31,7 @@ GraphView::GraphView(QWidget *parent)
 	setRenderHint(QPainter::Antialiasing, true);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	setBackgroundBrush(QBrush(palette().brush(QPalette::Base)));
 
 	_xAxis = new AxisItem(AxisItem::X);
 	_xAxis->setZValue(2.0);
