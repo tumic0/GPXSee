@@ -111,10 +111,11 @@ void AxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	QFontMetrics fm(_font);
 	QRect ts;
 
-
 	painter->setRenderHint(QPainter::Antialiasing, false);
 	painter->setFont(_font);
-	painter->setPen(QPen(Qt::black, AXIS_WIDTH));
+	QPen pen(painter->pen());
+	pen.setWidth(AXIS_WIDTH);
+	painter->setPen(pen);
 
 	if (_type == X) {
 		painter->drawLine(0, 0, _size, 0);

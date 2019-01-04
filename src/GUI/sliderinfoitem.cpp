@@ -49,7 +49,9 @@ void SliderInfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 	}
 
 	painter->setPen(Qt::NoPen);
-	painter->setBrush(QBrush(QColor(255, 255, 255, 196)));
+	QColor bc(painter->background().color());
+	bc.setAlpha(196);
+	painter->setBrush(QBrush(bc));
 	painter->drawRect(ry);
 	painter->drawRect(rx);
 	painter->setBrush(Qt::NoBrush);

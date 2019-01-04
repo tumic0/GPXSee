@@ -27,7 +27,6 @@ GraphView::GraphView(QWidget *parent)
 	_scene = new QGraphicsScene(this);
 	setScene(_scene);
 
-	setBackgroundBrush(QBrush(Qt::white));
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 	setRenderHint(QPainter::Antialiasing, true);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
