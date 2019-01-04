@@ -328,7 +328,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="699"/>
         <source>POI directory:</source>
-        <translation>Dossier des POI:</translation>
+        <translation>Dossier des POI :</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="712"/>
@@ -755,7 +755,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="806"/>
         <source>Error loading data file:</source>
-        <translation>Erreur lors du chargement des données:</translation>
+        <translation>Erreur lors du chargement des données :</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="809"/>
@@ -1195,7 +1195,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="288"/>
         <source>Heart rate:</source>
-        <translation>Fréquence cardiaque:</translation>
+        <translation>Fréquence cardiaque :</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
