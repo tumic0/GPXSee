@@ -18,8 +18,7 @@
 #include "app.h"
 
 
-App::App(int &argc, char **argv) : QApplication(argc, argv),
-  _argc(argc), _argv(argv)
+App::App(int &argc, char **argv) : QApplication(argc, argv)
 {
 #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
 	setApplicationName(APP_NAME);
