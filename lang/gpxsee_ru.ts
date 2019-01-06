@@ -1289,7 +1289,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="376"/>
         <source>Elevation</source>
-        <translation type="unfinished">Высота</translation>
+        <translation>Высота</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="398"/>
