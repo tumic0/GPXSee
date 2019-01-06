@@ -1,4 +1,6 @@
+#include "dem.h"
 #include "track.h"
+
 
 int Track::_elevationWindow = 3;
 int Track::_speedWindow = 5;
@@ -11,6 +13,9 @@ int Track::_pauseInterval = 10;
 
 bool Track::_outlierEliminate = true;
 bool Track::_useReportedSpeed = false;
+bool Track::_useDEMElevation = false;
+
+DEM Track::_dem;
 
 
 static qreal median(QVector<qreal> &v)
@@ -147,10 +152,19 @@ Graph Track::elevation() const
 {
 	Graph raw;
 
-	for (int i = 0; i < _data.size(); i++)
-		if (_data.at(i).hasElevation() && !_outliers.contains(i))
+	for (int i = 0; i < _data.size(); i++) {
+		if (_outliers.contains(i))
+			continue;
+
+		if (_data.at(i).hasElevation() && !_useDEMElevation)
 			raw.append(GraphPoint(_distance.at(i), _time.at(i),
 			  _data.at(i).elevation()));
+		else {
+			qreal elevation = _dem.elevation(_data.at(i).coordinates());
+			if (!std::isnan(elevation))
+				raw.append(GraphPoint(_distance.at(i), _time.at(i), elevation));
+		}
+	}
 
 	return filter(raw, _elevationWindow);
 }

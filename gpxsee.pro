@@ -147,7 +147,8 @@ HEADERS += src/common/config.h \
     src/data/nmeaparser.h \
     src/data/oziparsers.h \
     src/data/locparser.h \
-    src/data/slfparser.h
+    src/data/slfparser.h \
+    src/data/dem.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -255,7 +256,8 @@ SOURCES += src/main.cpp \
     src/data/nmeaparser.cpp \
     src/data/oziparsers.cpp \
     src/data/locparser.cpp \
-    src/data/slfparser.cpp
+    src/data/slfparser.cpp \
+    src/data/dem.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_en.ts \
     lang/gpxsee_cs.ts \

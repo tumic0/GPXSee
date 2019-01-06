@@ -700,6 +700,8 @@ void GUI::paths()
 	  + QDir::cleanPath(ProgramPaths::poiDir(true)) + "</code></td></tr><tr><td>"
 	  + tr("GCS/PCS directory:") + "</td><td><code>"
 	  + QDir::cleanPath(ProgramPaths::csvDir(true)) + "</code></td></tr><tr><td>"
+	  + tr("DEM directory:") + "</td><td><code>"
+	  + QDir::cleanPath(ProgramPaths::demDir(true)) + "</code></td></tr><tr><td>"
 	  + tr("Tile cache directory:") + "</td><td><code>"
 	  + QDir::cleanPath(ProgramPaths::tilesDir()) + "</code></td></tr></table>"
 	);
@@ -911,6 +913,7 @@ void GUI::openOptions()
 	SET_TRACK_OPTION(pauseSpeed, setPauseSpeed);
 	SET_TRACK_OPTION(pauseInterval, setPauseInterval);
 	SET_TRACK_OPTION(useReportedSpeed, useReportedSpeed);
+	SET_TRACK_OPTION(useDEMElevation, useDEMElevation);
 
 	if (options.poiRadius != _options.poiRadius)
 		_poi->setRadius(options.poiRadius);
@@ -1754,6 +1757,8 @@ void GUI::writeSettings()
 		settings.setValue(PAUSE_INTERVAL_SETTING, _options.pauseInterval);
 	if (_options.useReportedSpeed != USE_REPORTED_SPEED_DEFAULT)
 		settings.setValue(USE_REPORTED_SPEED_SETTING, _options.useReportedSpeed);
+	if (_options.useDEMElevation != USE_DEM_ELEVATION_DEFAULT)
+		settings.setValue(USE_DEM_ELEVATION_SETTING, _options.useDEMElevation);
 	if (_options.poiRadius != POI_RADIUS_DEFAULT)
 		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
 	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
@@ -1992,6 +1997,8 @@ void GUI::readSettings()
 	  PAUSE_SPEED_DEFAULT).toFloat();
 	_options.useReportedSpeed = settings.value(USE_REPORTED_SPEED_SETTING,
 	  USE_REPORTED_SPEED_DEFAULT).toBool();
+	_options.useDEMElevation = settings.value(USE_DEM_ELEVATION_SETTING,
+	  USE_DEM_ELEVATION_DEFAULT).toBool();
 	_options.pauseInterval = settings.value(PAUSE_INTERVAL_SETTING,
 	  PAUSE_INTERVAL_DEFAULT).toInt();
 	_options.poiRadius = settings.value(POI_RADIUS_SETTING, POI_RADIUS_DEFAULT)
@@ -2070,6 +2077,7 @@ void GUI::readSettings()
 	Track::setPauseSpeed(_options.pauseSpeed);
 	Track::setPauseInterval(_options.pauseInterval);
 	Track::useReportedSpeed(_options.useReportedSpeed);
+	Track::useDEMElevation(_options.useDEMElevation);
 
 	_poi->setRadius(_options.poiRadius);
 

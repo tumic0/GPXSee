@@ -48,6 +48,7 @@ struct Options {
 	qreal pauseSpeed;
 	int pauseInterval;
 	bool useReportedSpeed;
+	bool useDEMElevation;
 	// POI
 	int poiRadius;
 	// System
@@ -122,8 +123,10 @@ private:
 	QCheckBox *_outlierEliminate;
 	QDoubleSpinBox *_pauseSpeed;
 	QSpinBox *_pauseInterval;
-	QRadioButton *_computed;
-	QRadioButton *_reported;
+	QRadioButton *_computedSpeed;
+	QRadioButton *_reportedSpeed;
+	QRadioButton *_gpsElevation;
+	QRadioButton *_demElevation;
 	// POI
 	QDoubleSpinBox *_poiRadius;
 	// System

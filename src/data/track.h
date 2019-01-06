@@ -4,8 +4,10 @@
 #include <QVector>
 #include <QSet>
 #include <QDateTime>
+#include <QDir>
 #include "trackdata.h"
 #include "graph.h"
+#include "dem.h"
 #include "path.h"
 
 
@@ -44,6 +46,8 @@ public:
 	static void setOutlierElimination(bool eliminate)
 	  {_outlierEliminate = eliminate;}
 	static void useReportedSpeed(bool use) {_useReportedSpeed = use;}
+	static void useDEMElevation(bool use) {_useDEMElevation = use;}
+	static void setDEMDir(const QDir &dir) {_dem = DEM(dir);}
 
 private:
 	bool discardStopPoint(int i) const;
@@ -68,6 +72,8 @@ private:
 	static qreal _pauseSpeed;
 	static int _pauseInterval;
 	static bool _useReportedSpeed;
+	static bool _useDEMElevation;
+	static DEM _dem;
 };
 
 #endif // TRACK_H

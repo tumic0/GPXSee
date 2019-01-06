@@ -345,25 +345,59 @@ QWidget *OptionsDialog::createDataPage()
 	pauseTab->setLayout(pauseLayout);
 
 
-	_computed = new QRadioButton(tr("Computed from distance/time"));
-	_reported = new QRadioButton(tr("Recorded by device"));
+	_computedSpeed = new QRadioButton(tr("Computed from distance/time"));
+	_reportedSpeed = new QRadioButton(tr("Recorded by device"));
 	if (_options->useReportedSpeed)
-		_reported->setChecked(true);
+		_reportedSpeed->setChecked(true);
 	else
-		_computed->setChecked(true);
+		_computedSpeed->setChecked(true);
 
-	QFormLayout *sourceLayout = new QFormLayout();
-	sourceLayout->addWidget(_computed);
-	sourceLayout->addWidget(_reported);
+	QFormLayout *speedLayout = new QFormLayout();
+	speedLayout->addWidget(_computedSpeed);
+	speedLayout->addWidget(_reportedSpeed);
+
+#ifndef Q_OS_MAC
+	QGroupBox *speedBox = new QGroupBox(tr("Speed"));
+	speedBox->setLayout(speedLayout);
+#endif // Q_OS_MAC
+
+	_gpsElevation = new QRadioButton(tr("GPS data"));
+	_demElevation = new QRadioButton(tr("DEM data"));
+	if (_options->useDEMElevation)
+		_demElevation->setChecked(true);
+	else
+		_gpsElevation->setChecked(true);
+
+	QFormLayout *elevationLayout = new QFormLayout();
+	elevationLayout->addWidget(_gpsElevation);
+	elevationLayout->addWidget(_demElevation);
+
+#ifndef Q_OS_MAC
+	QGroupBox *elevationBox = new QGroupBox(tr("Elevation"));
+	elevationBox->setLayout(elevationLayout);
+#endif // Q_OS_MAC
+
 
 	QWidget *sourceTab = new QWidget();
-	sourceTab->setLayout(sourceLayout);
+	QVBoxLayout *sourceTabLayout = new QVBoxLayout();
+#ifdef Q_OS_MAC
+	sourceTabLayout->addWidget(new QLabel(tr("Speed:")));
+	sourceTabLayout->addLayout(speedLayout);
+	sourceTabLayout->addWidget(line());
+	sourceTabLayout->addWidget(new QLabel(tr("Elevation:")));
+	sourceTabLayout->addLayout(elevationLayout);
+#else // Q_OS_MAC
+	sourceTabLayout->addWidget(speedBox);
+	sourceTabLayout->addWidget(elevationBox);
+#endif // Q_OS_MAC
+	sourceTabLayout->addStretch();
+	sourceTab->setLayout(sourceTabLayout);
 
 
 	QTabWidget *filterPage = new QTabWidget();
 	filterPage->addTab(filterTab, tr("Filtering"));
+	filterPage->addTab(sourceTab, tr("Sources"));
 	filterPage->addTab(pauseTab, tr("Pause detection"));
-	filterPage->addTab(sourceTab, tr("Speed"));
 
 	return filterPage;
 }
@@ -603,7 +637,8 @@ void OptionsDialog::accept()
 	if (qAbs(pauseSpeed - _options->pauseSpeed) > 0.01)
 		_options->pauseSpeed = pauseSpeed;
 	_options->pauseInterval = _pauseInterval->value();
-	_options->useReportedSpeed = _reported->isChecked();
+	_options->useReportedSpeed = _reportedSpeed->isChecked();
+	_options->useDEMElevation = _demElevation->isChecked();
 
 	qreal poiRadius = (_options->units == Imperial)
 		? _poiRadius->value() * MIINM : (_options->units == Nautical)

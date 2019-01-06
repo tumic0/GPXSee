@@ -8,6 +8,7 @@ namespace ProgramPaths
 	QString mapDir(bool writable = false);
 	QString poiDir(bool writable = false);
 	QString csvDir(bool writable = false);
+	QString demDir(bool writable = false);
 	QString tilesDir();
 	QString translationsDir();
 	QString ellipsoidsFile();

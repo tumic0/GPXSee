@@ -6,6 +6,7 @@
 #define MAP_DIR          "maps"
 #define POI_DIR          "POI"
 #define CSV_DIR          "csv"
+#define DEM_DIR          "DEM"
 #define TILES_DIR        "tiles"
 #define TRANSLATIONS_DIR "translations"
 #define ELLIPSOID_FILE   "ellipsoids.csv"
@@ -71,6 +72,11 @@ QString ProgramPaths::poiDir(bool writable)
 QString ProgramPaths::csvDir(bool writable)
 {
 	return dir(CSV_DIR, writable);
+}
+
+QString ProgramPaths::demDir(bool writable)
+{
+	return dir(DEM_DIR, writable);
 }
 
 QString ProgramPaths::tilesDir()
@@ -139,6 +145,16 @@ QString ProgramPaths::csvDir(bool writable)
 	else
 		return QStandardPaths::locate(QStandardPaths::AppDataLocation,
 		  CSV_DIR, QStandardPaths::LocateDirectory);
+}
+
+QString ProgramPaths::demDir(bool writable)
+{
+	if (writable)
+		return QDir(QStandardPaths::writableLocation(
+		  QStandardPaths::AppDataLocation)).filePath(DEM_DIR);
+	else
+		return QStandardPaths::locate(QStandardPaths::AppDataLocation,
+		  DEM_DIR, QStandardPaths::LocateDirectory);
 }
 
 QString ProgramPaths::tilesDir()
