@@ -330,7 +330,7 @@
         <location filename="../src/GUI/gui.cpp" line="693"/>
         <location filename="../src/GUI/gui.cpp" line="694"/>
         <source>Paths</source>
-        <translation>Yollar</translation>
+        <translation>Klasör adresleri</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="209"/>
@@ -492,7 +492,7 @@
         <location filename="../src/GUI/gui.cpp" line="1009"/>
         <location filename="../src/GUI/gui.cpp" line="1073"/>
         <source>Moving time</source>
-        <translation>Hareket zamanı</translation>
+        <translation>Hareket süresi</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="401"/>
@@ -1158,7 +1158,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="257"/>
         <source>Paths</source>
-        <translation>Yollar</translation>
+        <translation>Klasör adresleri</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="258"/>
@@ -1351,7 +1351,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="439"/>
         <source>Moving time</source>
-        <translation>Hareket zamanı</translation>
+        <translation>Hareket süresi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="441"/>
@@ -1709,7 +1709,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="20"/>
         <source>Moving time</source>
-        <translation>Hareket zamanı</translation>
+        <translation>Hareket süresi</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="22"/>
