@@ -66,9 +66,10 @@ qreal DEM::elevation(const Coordinates &c)
 	QMap<Key, QByteArray>::const_iterator it(_data.find(k));
 	if (it == _data.constEnd()) {
 		QFile file(fileName(k));
-		if (!file.open(QIODevice::ReadOnly))
+		if (!file.open(QIODevice::ReadOnly)) {
+			_data.insert(k, QByteArray());
 			return NAN;
-		else {
+		} else {
 			it = _data.insert(k, file.readAll());
 			return height(c, *it);
 		}
