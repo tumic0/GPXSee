@@ -126,7 +126,7 @@
 #define PAUSE_INTERVAL_DEFAULT            10 /* s */
 #define USE_REPORTED_SPEED_SETTING        "useReportedSpeed"
 #define USE_REPORTED_SPEED_DEFAULT        false
-#define USE_DEM_ELEVATION_SETTING         "useReportedSpeed"
+#define USE_DEM_ELEVATION_SETTING         "useDEMElevation"
 #define USE_DEM_ELEVATION_DEFAULT         false
 #define POI_RADIUS_SETTING                "poiRadius"
 #define POI_RADIUS_DEFAULT                (int)(IMPERIAL_UNITS() ? MIINM : KMINM)
