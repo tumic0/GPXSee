@@ -163,6 +163,9 @@ Graph Track::elevation() const
 			qreal elevation = _dem.elevation(_data.at(i).coordinates());
 			if (!std::isnan(elevation))
 				raw.append(GraphPoint(_distance.at(i), _time.at(i), elevation));
+			else if (_data.at(i).hasElevation())
+				raw.append(GraphPoint(_distance.at(i), _time.at(i),
+				  _data.at(i).elevation()));
 		}
 	}
 
