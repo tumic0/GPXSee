@@ -47,7 +47,7 @@ public:
 	  {_outlierEliminate = eliminate;}
 	static void useReportedSpeed(bool use) {_useReportedSpeed = use;}
 	static void useDEMElevation(bool use) {_useDEMElevation = use;}
-	static void setDEMDir(const QDir &dir) {_dem = DEM(dir);}
+	static void setDEMDir(const QString &path) {_dem = DEM(path);}
 
 private:
 	bool discardStopPoint(int i) const;

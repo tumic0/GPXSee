@@ -12,7 +12,7 @@ class DEM
 {
 public:
 	DEM() {}
-	DEM(const QDir &dir) : _dir(dir) {}
+	DEM(const QString &dir) : _dir(dir) {}
 	qreal elevation(const Coordinates &c);
 
 private:
@@ -36,7 +36,7 @@ private:
 
 	QString fileName(const Key &key) const;
 
-	QDir _dir;
+	QString _dir;
 	QMap<Key, QByteArray> _data;
 };
 

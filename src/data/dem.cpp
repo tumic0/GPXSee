@@ -56,17 +56,22 @@ QString DEM::fileName(const Key &key) const
 	QString basename = QString("%1%2%3%4.hgt").arg(ns)
 	  .arg(qAbs(key.lat), 2, 10, QChar('0')).arg(ew)
 	  .arg(qAbs(key.lon), 3, 10, QChar('0'));
-	return _dir.absoluteFilePath(basename);
+	return QDir(_dir).absoluteFilePath(basename);
 }
 
 qreal DEM::elevation(const Coordinates &c)
 {
+	if (_dir.isEmpty())
+		return NAN;
+
 	Key k((int)c.lon(), (int)c.lat());
 
 	QMap<Key, QByteArray>::const_iterator it(_data.find(k));
 	if (it == _data.constEnd()) {
 		QFile file(fileName(k));
 		if (!file.open(QIODevice::ReadOnly)) {
+			qWarning("%s: %s", qPrintable(file.fileName()),
+			  qPrintable(file.errorString()));
 			_data.insert(k, QByteArray());
 			return NAN;
 		} else {
