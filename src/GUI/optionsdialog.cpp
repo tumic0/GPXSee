@@ -352,15 +352,6 @@ QWidget *OptionsDialog::createDataPage()
 	else
 		_computedSpeed->setChecked(true);
 
-	QFormLayout *speedLayout = new QFormLayout();
-	speedLayout->addWidget(_computedSpeed);
-	speedLayout->addWidget(_reportedSpeed);
-
-#ifndef Q_OS_MAC
-	QGroupBox *speedBox = new QGroupBox(tr("Speed"));
-	speedBox->setLayout(speedLayout);
-#endif // Q_OS_MAC
-
 	_gpsElevation = new QRadioButton(tr("GPS data"));
 	_demElevation = new QRadioButton(tr("DEM data"));
 	if (_options->useDEMElevation)
@@ -368,25 +359,40 @@ QWidget *OptionsDialog::createDataPage()
 	else
 		_gpsElevation->setChecked(true);
 
-	QFormLayout *elevationLayout = new QFormLayout();
-	elevationLayout->addWidget(_gpsElevation);
-	elevationLayout->addWidget(_demElevation);
-
-#ifndef Q_OS_MAC
-	QGroupBox *elevationBox = new QGroupBox(tr("Elevation"));
-	elevationBox->setLayout(elevationLayout);
-#endif // Q_OS_MAC
-
 
 	QWidget *sourceTab = new QWidget();
 	QVBoxLayout *sourceTabLayout = new QVBoxLayout();
+
 #ifdef Q_OS_MAC
-	sourceTabLayout->addWidget(new QLabel(tr("Speed:")));
-	sourceTabLayout->addLayout(speedLayout);
-	sourceTabLayout->addWidget(line());
-	sourceTabLayout->addWidget(new QLabel(tr("Elevation:")));
-	sourceTabLayout->addLayout(elevationLayout);
+	QVBoxLayout *speedOptions = new QVBoxLayout();
+	speedOptions->addWidget(_computedSpeed);
+	speedOptions->addWidget(_reportedSpeed);
+
+	QVBoxLayout *elevationOptions = new QVBoxLayout();
+	elevationOptions->addWidget(_gpsElevation);
+	elevationOptions->addWidget(_demElevation);
+
+	QFormLayout *formLayout = new QFormLayout();
+	formLayout->addRow(tr("Speed:"), speedOptions);
+	formLayout->addRow(tr("Elevation:"), elevationOptions);
+
+	sourceTabLayout->addLayout(formLayout);
 #else // Q_OS_MAC
+	QFormLayout *speedLayout = new QFormLayout();
+	QFormLayout *elevationLayout = new QFormLayout();
+
+	speedLayout->addWidget(_computedSpeed);
+	speedLayout->addWidget(_reportedSpeed);
+
+	QGroupBox *speedBox = new QGroupBox(tr("Speed"));
+	speedBox->setLayout(speedLayout);
+
+	elevationLayout->addWidget(_gpsElevation);
+	elevationLayout->addWidget(_demElevation);
+
+	QGroupBox *elevationBox = new QGroupBox(tr("Elevation"));
+	elevationBox->setLayout(elevationLayout);
+
 	sourceTabLayout->addWidget(speedBox);
 	sourceTabLayout->addWidget(elevationBox);
 #endif // Q_OS_MAC
