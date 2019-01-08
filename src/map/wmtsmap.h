@@ -4,6 +4,7 @@
 #include "transform.h"
 #include "projection.h"
 #include "map.h"
+#include "rectd.h"
 #include "wmts.h"
 
 class TileLoader;
@@ -50,7 +51,7 @@ private:
 	QString _name;
 	WMTS::Setup _setup;
 	TileLoader *_tileLoader;
-	RectC _bounds;
+	RectD _bounds;
 	QList<WMTS::Zoom> _zooms;
 	Projection _projection;
 	Transform _transform;

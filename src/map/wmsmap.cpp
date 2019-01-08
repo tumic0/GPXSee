@@ -65,12 +65,8 @@ void WMSMap::updateTransform()
 	double pixelSpan = sd2res(_zooms.at(_zoom));
 	if (_projection.isGeographic())
 		pixelSpan /= deg2rad(WGS84_RADIUS);
-	double sx = _bbox.width() / pixelSpan;
-	double sy = _bbox.height() / pixelSpan;
-
-	ReferencePoint tl(PointD(0, 0), _bbox.topLeft());
-	ReferencePoint br(PointD(sx, sy), _bbox.bottomRight());
-	_transform = Transform(tl, br);
+	_transform = Transform(ReferencePoint(PointD(0, 0),
+	  _projection.ll2xy(_bbox.topLeft())), PointD(pixelSpan, pixelSpan));
 }
 
 bool WMSMap::loadWMS()
@@ -84,8 +80,8 @@ bool WMSMap::loadWMS()
 	}
 
 	_projection = wms.projection();
-	_bbox = RectD(_projection.ll2xy(wms.boundingBox().topLeft()),
-	  _projection.ll2xy(wms.boundingBox().bottomRight()));
+	_bbox = wms.boundingBox();
+	_bounds = RectD(_bbox, _projection);
 	_tileLoader->setUrl(tileUrl(wms.version()));
 
 	if (wms.version() >= "1.3.0") {
@@ -124,8 +120,8 @@ void WMSMap::clearCache()
 
 QRectF WMSMap::bounds()
 {
-	return QRectF(_transform.proj2img(_bbox.topLeft()) / _mapRatio,
-	  _transform.proj2img(_bbox.bottomRight()) / _mapRatio);
+	return QRectF(_transform.proj2img(_bounds.topLeft()) / _mapRatio,
+	  _transform.proj2img(_bounds.bottomRight()) / _mapRatio);
 }
 
 int WMSMap::zoomFit(const QSize &size, const RectC &rect)

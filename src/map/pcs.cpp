@@ -32,6 +32,7 @@ static bool parameter(int key, double val, int units, Projection::Setup &setup)
 		case 8801:
 		case 8811:
 		case 8821:
+		case 8832:
 			{AngularUnits au(units);
 			if (au.isNull())
 				return false;

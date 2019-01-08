@@ -22,10 +22,10 @@ bool WMTSMap::loadWMTS()
 		return false;
 	}
 
-	_bounds = wmts.bounds();
 	_zooms = wmts.zooms();
 	_projection = wmts.projection();
 	_tileLoader->setUrl(wmts.tileUrl());
+	_bounds = RectD(wmts.bounds(), _projection);
 
 	if (_setup.coordinateSystem().axisOrder() == CoordinateSystem::Unknown)
 		_cs = _projection.coordinateSystem();
@@ -77,14 +77,8 @@ void WMTSMap::updateTransform()
 	double pixelSpan = sd2res(z.scaleDenominator());
 	if (_projection.isGeographic())
 		pixelSpan /= deg2rad(WGS84_RADIUS);
-	PointD tileSpan(z.tile().width() * pixelSpan, z.tile().height() * pixelSpan);
-	PointD bottomRight(topLeft.x() + tileSpan.x() * z.matrix().width(),
-	  topLeft.y() - tileSpan.y() * z.matrix().height());
-
-	ReferencePoint tl(PointD(0, 0), topLeft);
-	ReferencePoint br(PointD(z.tile().width() * z.matrix().width(),
-	  z.tile().height() * z.matrix().height()), bottomRight);
-	_transform = Transform(tl, br);
+	_transform = Transform(ReferencePoint(PointD(0, 0), topLeft),
+	  PointD(pixelSpan, pixelSpan));
 }
 
 QRectF WMTSMap::bounds()
@@ -99,9 +93,11 @@ QRectF WMTSMap::bounds()
 	  * z.tile().height()), QSize(z.tile().width() * z.limits().width(),
 	  z.tile().height() * z.limits().height()));
 
-	bounds = _bounds.isValid() ? QRectF(ll2xy(_bounds.topLeft()),
-	  ll2xy(_bounds.bottomRight())) : QRectF();
-	return _bounds.isValid() ? tileBounds.intersected(bounds) : tileBounds;
+	if (_bounds.isValid())
+		bounds = QRectF(_transform.proj2img(_bounds.topLeft())
+		  / coordinatesRatio(), _transform.proj2img(_bounds.bottomRight())
+		  / coordinatesRatio());
+	return bounds.isValid() ? tileBounds.intersected(bounds) : tileBounds;
 }
 
 int WMTSMap::zoomFit(const QSize &size, const RectC &rect)

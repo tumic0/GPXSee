@@ -6,6 +6,7 @@
 #include "albersequal.h"
 #include "lambertazimuthal.h"
 #include "krovak.h"
+#include "polarstereographic.h"
 #include "latlon.h"
 #include "gcs.h"
 #include "pcs.h"
@@ -25,6 +26,7 @@ Projection::Method::Method(int id)
 		case 9819:
 		case 9820:
 		case 9822:
+		case 9829:
 			_id = id;
 			break;
 		default:
@@ -84,6 +86,11 @@ Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
 		case 9822:
 			_ct = new AlbersEqual(ellipsoid, setup.standardParallel1(),
 			  setup.standardParallel2(), setup.latitudeOrigin(),
+			  setup.longitudeOrigin(), setup.falseEasting(),
+			  setup.falseNorthing());
+			break;
+		case 9829:
+			_ct = new PolarStereographic(ellipsoid, setup.latitudeOrigin(),
 			  setup.longitudeOrigin(), setup.falseEasting(),
 			  setup.falseNorthing());
 			break;

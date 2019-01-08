@@ -18,6 +18,7 @@ CoordinateSystem::CoordinateSystem(int code)
 		case 4467:
 		case 4469:
 		case 4470:
+		case 4490:
 		case 4495:
 		case 4496:
 		case 4497:

@@ -148,7 +148,8 @@ HEADERS += src/common/config.h \
     src/data/oziparsers.h \
     src/data/locparser.h \
     src/data/slfparser.h \
-    src/data/dem.h
+    src/data/dem.h \
+    src/map/polarstereographic.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -257,7 +258,9 @@ SOURCES += src/main.cpp \
     src/data/oziparsers.cpp \
     src/data/locparser.cpp \
     src/data/slfparser.cpp \
-    src/data/dem.cpp
+    src/data/dem.cpp \
+    src/map/polarstereographic.cpp \
+    src/map/rectd.cpp
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_en.ts \
     lang/gpxsee_cs.ts \

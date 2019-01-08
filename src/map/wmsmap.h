@@ -55,7 +55,8 @@ private:
 	Transform _transform;
 	CoordinateSystem _cs;
 	QVector<double> _zooms;
-	RectD _bbox;
+	RectC _bbox;
+	RectD _bounds;
 	int _zoom;
 	qreal _mapRatio;
 

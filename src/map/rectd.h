@@ -3,12 +3,16 @@
 
 #include "pointd.h"
 
+class RectC;
+class Projection;
+
 class RectD
 {
 public:
 	RectD() {}
 	RectD(const PointD &topLeft, const PointD &bottomRight)
 	  : _tl(topLeft), _br(bottomRight) {}
+	RectD(const RectC &rect, const Projection &proj);
 
 	PointD topLeft() const {return _tl;}
 	PointD bottomRight() const {return _br;}
@@ -18,6 +22,11 @@ public:
 	double top() const {return _tl.y();}
 	double bottom() const {return _br.y();}
 
+	void setLeft(double val) {_tl.rx() = val;}
+	void setRight(double val) {_br.rx() = val;}
+	void setTop(double val) {_tl.ry() = val;}
+	void setBottom(double val) {_br.ry() = val;}
+
 	double width() const {return (right() - left());}
 	double height() const {return (top() - bottom());}
 
@@ -26,6 +35,7 @@ public:
 	  && p.y() >= bottom());}
 
 	bool isNull() const {return _tl.isNull() && _br.isNull();}
+	bool isValid() const {return !(_tl.isNull() || _br.isNull());}
 
 private:
 	PointD _tl, _br;
