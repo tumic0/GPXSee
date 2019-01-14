@@ -127,10 +127,8 @@ QRectF WMSMap::bounds()
 int WMSMap::zoomFit(const QSize &size, const RectC &rect)
 {
 	if (rect.isValid()) {
-		PointD tl(_projection.ll2xy(rect.topLeft()));
-		PointD br(_projection.ll2xy(rect.bottomRight()));
-		PointD sc((br.x() - tl.x()) / size.width(), (tl.y() - br.y())
-		  / size.height());
+		RectD prect(rect, _projection);
+		PointD sc(prect.width() / size.width(), prect.height() / size.height());
 		double resolution = qMax(qAbs(sc.x()), qAbs(sc.y()));
 		if (_projection.isGeographic())
 			resolution *= deg2rad(WGS84_RADIUS);

@@ -12,6 +12,7 @@
 #include "ozf.h"
 #include "image.h"
 #include "mapfile.h"
+#include "rectd.h"
 #include "ozimap.h"
 
 
@@ -334,9 +335,9 @@ int OziMap::zoomFit(const QSize &size, const RectC &rect)
 	if (!rect.isValid())
 		rescale(0);
 	else {
-		QPointF tl(_transform.proj2img(_projection.ll2xy(rect.topLeft())));
-		QPointF br(_transform.proj2img(_projection.ll2xy(rect.bottomRight())));
-		QRect sbr(QRectF(tl, br).toRect().normalized());
+		RectD prect(rect, _projection);
+		QRectF sbr(_transform.proj2img(prect.topLeft()),
+		  _transform.proj2img(prect.bottomRight()));
 
 		for (int i = 0; i < _ozf->zooms(); i++) {
 			rescale(i);
