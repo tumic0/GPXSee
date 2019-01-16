@@ -15,8 +15,6 @@ bool Track::_outlierEliminate = true;
 bool Track::_useReportedSpeed = false;
 bool Track::_useDEMElevation = false;
 
-DEM Track::_dem;
-
 
 static qreal median(QVector<qreal> &v)
 {
@@ -160,7 +158,7 @@ Graph Track::elevation() const
 			raw.append(GraphPoint(_distance.at(i), _time.at(i),
 			  _data.at(i).elevation()));
 		else {
-			qreal elevation = _dem.elevation(_data.at(i).coordinates());
+			qreal elevation = DEM::elevation(_data.at(i).coordinates());
 			if (!std::isnan(elevation))
 				raw.append(GraphPoint(_distance.at(i), _time.at(i), elevation));
 			else if (_data.at(i).hasElevation())

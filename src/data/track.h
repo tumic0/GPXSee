@@ -7,7 +7,6 @@
 #include <QDir>
 #include "trackdata.h"
 #include "graph.h"
-#include "dem.h"
 #include "path.h"
 
 
@@ -47,7 +46,6 @@ public:
 	  {_outlierEliminate = eliminate;}
 	static void useReportedSpeed(bool use) {_useReportedSpeed = use;}
 	static void useDEMElevation(bool use) {_useDEMElevation = use;}
-	static void setDEMDir(const QString &path) {_dem = DEM(path);}
 
 private:
 	bool discardStopPoint(int i) const;
@@ -73,7 +71,6 @@ private:
 	static int _pauseInterval;
 	static bool _useReportedSpeed;
 	static bool _useDEMElevation;
-	static DEM _dem;
 };
 
 #endif // TRACK_H

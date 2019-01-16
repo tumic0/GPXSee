@@ -11,6 +11,7 @@
 #include "oziparsers.h"
 #include "locparser.h"
 #include "slfparser.h"
+#include "dem.h"
 #include "data.h"
 
 
@@ -49,6 +50,7 @@ static QHash<QString, Parser*> parsers()
 
 
 QHash<QString, Parser*> Data::_parsers = parsers();
+bool Data::_useDEMElevation = false;
 
 Data::~Data()
 {
@@ -64,6 +66,13 @@ void Data::processData()
 		_tracks.append(new Track(_trackData.at(i)));
 	for (int i = 0; i < _routeData.count(); i++)
 		_routes.append(new Route(_routeData.at(i)));
+	for (int i = 0; i < _waypoints.size(); i++) {
+		if (!_waypoints.at(i).hasElevation() || _useDEMElevation) {
+			qreal elevation = DEM::elevation(_waypoints.at(i).coordinates());
+			if (!std::isnan(elevation))
+				_waypoints[i].setElevation(elevation);
+		}
+	}
 }
 
 bool Data::loadFile(const QString &fileName)
@@ -133,4 +142,11 @@ QStringList Data::filter()
 		filter << QString("*.%1").arg(it.key());
 
 	return filter;
+}
+
+void Data::useDEMElevation(bool use)
+{
+	_useDEMElevation = use;
+	Route::useDEMElevation(use);
+	Track::useDEMElevation(use);
 }

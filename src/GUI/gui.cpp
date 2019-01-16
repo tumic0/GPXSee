@@ -875,6 +875,11 @@ void GUI::openOptions()
 		Track::action(options.option); \
 		reload = true; \
 	}
+#define SET_DATA_OPTION(option, action) \
+	if (options.option != _options.option) { \
+		Data::action(options.option); \
+		reload = true; \
+	}
 
 	Options options(_options);
 	bool reload = false;
@@ -913,7 +918,7 @@ void GUI::openOptions()
 	SET_TRACK_OPTION(pauseSpeed, setPauseSpeed);
 	SET_TRACK_OPTION(pauseInterval, setPauseInterval);
 	SET_TRACK_OPTION(useReportedSpeed, useReportedSpeed);
-	SET_TRACK_OPTION(useDEMElevation, useDEMElevation);
+	SET_DATA_OPTION(useDEMElevation, useDEMElevation);
 
 	if (options.poiRadius != _options.poiRadius)
 		_poi->setRadius(options.poiRadius);
@@ -2077,7 +2082,7 @@ void GUI::readSettings()
 	Track::setPauseSpeed(_options.pauseSpeed);
 	Track::setPauseInterval(_options.pauseInterval);
 	Track::useReportedSpeed(_options.useReportedSpeed);
-	Track::useDEMElevation(_options.useDEMElevation);
+	Data::useDEMElevation(_options.useDEMElevation);
 
 	_poi->setRadius(_options.poiRadius);
 

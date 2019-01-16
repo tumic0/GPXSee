@@ -32,6 +32,8 @@ public:
 	static QString formats();
 	static QStringList filter();
 
+	static void useDEMElevation(bool use);
+
 private:
 	void processData();
 
@@ -46,6 +48,7 @@ private:
 	QList<RouteData> _routeData;
 
 	static QHash<QString, Parser*> _parsers;
+	static bool _useDEMElevation;
 };
 
 #endif // DATA_H

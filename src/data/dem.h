@@ -1,19 +1,18 @@
 #ifndef DEM_H
 #define DEM_H
 
+#include <QString>
 #include <QMap>
 #include <QByteArray>
-#include <QDir>
 
-class QDir;
+class QString;
 class Coordinates;
 
 class DEM
 {
 public:
-	DEM() {}
-	DEM(const QString &dir) : _dir(dir) {}
-	qreal elevation(const Coordinates &c);
+	static void setDir(const QString &path);
+	static qreal elevation(const Coordinates &c);
 
 private:
 	struct Key {
@@ -31,13 +30,12 @@ private:
 			else
 				return (lat < other.lat);
 		}
-
 	};
 
-	QString fileName(const Key &key) const;
+	static QString fileName(const Key &key);
 
-	QString _dir;
-	QMap<Key, QByteArray> _data;
+	static QString _dir;
+	static QMap<Key, QByteArray> _data;
 };
 
 #endif // DEM_H

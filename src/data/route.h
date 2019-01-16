@@ -24,9 +24,13 @@ public:
 
 	bool isNull() const {return (_data.count() < 2);}
 
+	static void useDEMElevation(bool use) {_useDEMElevation = use;}
+
 private:
 	const RouteData &_data;
 	QVector<qreal> _distance;
+
+	static bool _useDEMElevation;
 };
 
 #endif // ROUTE_H

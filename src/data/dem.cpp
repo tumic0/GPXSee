@@ -1,4 +1,6 @@
 #include <QtEndian>
+#include <QDir>
+#include <QFile>
 #include "common/coordinates.h"
 #include "dem.h"
 
@@ -48,7 +50,11 @@ static qreal height(const Coordinates &c, const QByteArray data)
 	return interpolate(dx, dy, p0, p1, p2, p3);
 }
 
-QString DEM::fileName(const Key &key) const
+
+QString DEM::_dir;
+QMap<DEM::Key, QByteArray> DEM::_data;
+
+QString DEM::fileName(const Key &key)
 {
 	const char ns = (key.lat >= 0) ? 'N' : 'S';
 	const char ew = (key.lon >= 0) ? 'E' : 'W';
@@ -57,6 +63,11 @@ QString DEM::fileName(const Key &key) const
 	  .arg(qAbs(key.lat), 2, 10, QChar('0')).arg(ew)
 	  .arg(qAbs(key.lon), 3, 10, QChar('0'));
 	return QDir(_dir).absoluteFilePath(basename);
+}
+
+void DEM::setDir(const QString &path)
+{
+	_dir = path;
 }
 
 qreal DEM::elevation(const Coordinates &c)

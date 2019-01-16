@@ -12,7 +12,7 @@
 #include "map/ellipsoid.h"
 #include "map/gcs.h"
 #include "map/pcs.h"
-#include "data/track.h"
+#include "data/dem.h"
 #include "opengl.h"
 #include "gui.h"
 #include "settings.h"
@@ -65,8 +65,7 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	OPENGL_SET_SAMPLES(4);
 	loadDatums();
 	loadPCSs();
-
-	Track::setDEMDir(ProgramPaths::demDir());
+	DEM::setDir(ProgramPaths::demDir());
 
 	_gui = new GUI();
 }
