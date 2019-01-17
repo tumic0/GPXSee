@@ -1349,12 +1349,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="441"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
-        <translation type="unfinished"></translation>
+        <translation>Painettu alue on suunnilleen näyttöalue. Kartan zoomaustaso ei muutu.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="443"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoomaustasoa muutetaan niin, että koko sisältö (jäljet/reittipisteet) sopii painettuun alueeseen ja kartan resoluutio on mahdollisimman lähellä tulostusresoluutiota.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="465"/>
