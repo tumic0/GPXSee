@@ -27,7 +27,7 @@ static QByteArray &decode(QByteArray &ba)
 
 
 bool PLTParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QList<Waypoint> &waypoints)
+  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(waypoints);
 	Q_UNUSED(routes);
@@ -113,7 +113,7 @@ bool PLTParser::parse(QFile *file, QList<TrackData> &tracks,
 }
 
 bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QList<Waypoint> &waypoints)
+  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(waypoints);
 	Q_UNUSED(tracks);
@@ -211,7 +211,7 @@ bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
 }
 
 bool WPTParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QList<Waypoint> &waypoints)
+  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(tracks);
 	Q_UNUSED(routes);

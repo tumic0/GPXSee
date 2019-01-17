@@ -78,7 +78,7 @@ private slots:
 private:
 	PathItem *addTrack(const Track &track);
 	PathItem *addRoute(const Route &route);
-	void addWaypoints(const QList<Waypoint> &waypoints);
+	void addWaypoints(const QVector<Waypoint> &waypoints);
 	void addPOI(const QList<Waypoint> &waypoints);
 	void loadPOI();
 	void clearPOI();

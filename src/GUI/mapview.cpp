@@ -147,7 +147,7 @@ PathItem *MapView::addRoute(const Route &route)
 	return ri;
 }
 
-void MapView::addWaypoints(const QList<Waypoint> &waypoints)
+void MapView::addWaypoints(const QVector<Waypoint> &waypoints)
 {
 	for (int i = 0; i < waypoints.count(); i++) {
 		const Waypoint &w = waypoints.at(i);

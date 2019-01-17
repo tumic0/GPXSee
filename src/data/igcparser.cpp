@@ -192,7 +192,7 @@ bool IGCParser::readCRecord(RouteData &route, const char *line, int len)
 }
 
 bool IGCParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QList<Waypoint> &waypoints)
+  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(waypoints);
 	qint64 len;

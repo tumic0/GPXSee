@@ -14,13 +14,13 @@ POI::POI(QObject *parent) : QObject(parent)
 
 bool POI::loadFile(const QString &path, bool dir)
 {
-	Data data;
+	Data data(path);
 	FileIndex index;
 
 	index.enabled = true;
 	index.start = _data.size();
 
-	if (!data.loadFile(path)) {
+	if (!data.isValid()) {
 		if (dir) {
 			if (data.errorLine())
 				_errorString += QString("%1:%2: %3\n").arg(path)

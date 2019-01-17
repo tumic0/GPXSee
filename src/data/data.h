@@ -1,10 +1,8 @@
 #ifndef DATA_H
 #define DATA_H
 
-#include <QVector>
 #include <QList>
 #include <QHash>
-#include <QPointF>
 #include <QString>
 #include <QStringList>
 #include "waypoint.h"
@@ -13,21 +11,19 @@
 #include "parser.h"
 
 
-class Data : public QObject
+class Data
 {
-	Q_OBJECT
-
 public:
-	Data(QObject *parent = 0) : QObject(parent), _errorLine(0) {}
+	Data(const QString &fileName);
 	~Data();
 
-	bool loadFile(const QString &fileName);
+	bool isValid() const {return _valid;}
 	const QString &errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 
 	const QList<Track*> &tracks() const {return _tracks;}
 	const QList<Route*> &routes() const {return _routes;}
-	const QList<Waypoint> &waypoints() const {return _waypoints;}
+	const QVector<Waypoint> &waypoints() const {return _waypoints;}
 
 	static QString formats();
 	static QStringList filter();
@@ -37,12 +33,13 @@ public:
 private:
 	void processData();
 
+	bool _valid;
 	QString _errorString;
 	int _errorLine;
 
 	QList<Track*> _tracks;
 	QList<Route*> _routes;
-	QList<Waypoint> _waypoints;
+	QVector<Waypoint> _waypoints;
 
 	QList<TrackData> _trackData;
 	QList<RouteData> _routeData;

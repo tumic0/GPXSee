@@ -141,7 +141,7 @@ void TCXParser::lap(TrackData &track)
 	}
 }
 
-void TCXParser::course(QList<Waypoint> &waypoints, TrackData &track)
+void TCXParser::course(QVector<Waypoint> &waypoints, TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Track"))
@@ -174,7 +174,7 @@ void TCXParser::activity(TrackData &track)
 	}
 }
 
-void TCXParser::courses(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
+void TCXParser::courses(QList<TrackData> &tracks, QVector<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Course")) {
@@ -220,7 +220,7 @@ void TCXParser::activities(QList<TrackData> &tracks)
 	}
 }
 
-void TCXParser::tcx(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
+void TCXParser::tcx(QList<TrackData> &tracks, QVector<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Courses"))
@@ -233,7 +233,7 @@ void TCXParser::tcx(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 }
 
 bool TCXParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QList<Waypoint> &waypoints)
+  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(routes);
 

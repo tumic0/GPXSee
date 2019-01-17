@@ -1,3 +1,4 @@
+#include <QApplication>
 #include <QFile>
 #include <QFileInfo>
 #include <QLineF>
@@ -75,34 +76,35 @@ void Data::processData()
 	}
 }
 
-bool Data::loadFile(const QString &fileName)
+Data::Data(const QString &fileName)
 {
 	QFile file(fileName);
 	QFileInfo fi(fileName);
 
-
-	_errorString.clear();
+	_valid = false;
 	_errorLine = 0;
 
 	if (!file.open(QFile::ReadOnly)) {
 		_errorString = qPrintable(file.errorString());
-		return false;
+		return;
 	}
 
 	QHash<QString, Parser*>::iterator it;
 	if ((it = _parsers.find(fi.suffix().toLower())) != _parsers.end()) {
 		if (it.value()->parse(&file, _trackData, _routeData, _waypoints)) {
 			processData();
-			return true;
+			_valid = true;
+			return;
+		} else {
+			_errorLine = it.value()->errorLine();
+			_errorString = it.value()->errorString();
 		}
-
-		_errorLine = it.value()->errorLine();
-		_errorString = it.value()->errorString();
 	} else {
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
 			if (it.value()->parse(&file, _trackData, _routeData, _waypoints)) {
 				processData();
-				return true;
+				_valid = true;
+				return;
 			}
 			file.reset();
 		}
@@ -115,22 +117,24 @@ bool Data::loadFile(const QString &fileName)
 		_errorLine = 0;
 		_errorString = "Unknown format";
 	}
-
-	return false;
 }
 
 QString Data::formats()
 {
 	return
-	  tr("Supported files")
+	  qApp->translate("Data", "Supported files")
 	  + " (*.csv *.fit *.gpx *.igc *.kml *.loc *.nmea *.plt *.rte *.slf *.tcx *.wpt);;"
-	  + tr("CSV files") + " (*.csv);;" + tr("FIT files") + " (*.fit);;"
-	  + tr("GPX files") + " (*.gpx);;" + tr("IGC files") + " (*.igc);;"
-	  + tr("KML files") + " (*.kml);;" + tr("LOC files") + " (*.loc);;"
-	  + tr("NMEA files") + " (*.nmea);;"
-	  + tr("OziExplorer files") + " (*.plt *.rte *.wpt);;"
-	  + tr("SLF files") + " (*.slf);;" + tr("TCX files") + " (*.tcx);;"
-	  + tr("All files") + " (*)";
+	  + qApp->translate("Data", "CSV files") + " (*.csv);;"
+	  + qApp->translate("Data", "FIT files") + " (*.fit);;"
+	  + qApp->translate("Data", "GPX files") + " (*.gpx);;"
+	  + qApp->translate("Data", "IGC files") + " (*.igc);;"
+	  + qApp->translate("Data", "KML files") + " (*.kml);;"
+	  + qApp->translate("Data", "LOC files") + " (*.loc);;"
+	  + qApp->translate("Data", "NMEA files") + " (*.nmea);;"
+	  + qApp->translate("Data", "OziExplorer files") + " (*.plt *.rte *.wpt);;"
+	  + qApp->translate("Data", "SLF files") + " (*.slf);;"
+	  + qApp->translate("Data", "TCX files") + " (*.tcx);;"
+	  + qApp->translate("Data", "All files") + " (*)";
 }
 
 QStringList Data::filter()

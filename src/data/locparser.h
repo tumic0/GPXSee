@@ -8,12 +8,12 @@ class LOCParser : public Parser
 {
 public:
 	bool parse(QFile *file, QList<TrackData> &tracks,
-	  QList<RouteData> &routes, QList<Waypoint> &waypoints);
+	  QList<RouteData> &routes, QVector<Waypoint> &waypoints);
 	QString errorString() const {return _reader.errorString();}
 	int errorLine() const {return _reader.lineNumber();}
 
 private:
-	void loc(QList<Waypoint> &waypoints);
+	void loc(QVector<Waypoint> &waypoints);
 	void waypoint(Waypoint &waypoint);
 	Coordinates coordinates();
 

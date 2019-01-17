@@ -372,7 +372,7 @@ bool NMEAParser::readGGA(TrackData &track, const char *line, int len)
 	return true;
 }
 
-bool NMEAParser::readWPL(QList<Waypoint> &waypoints, const char *line, int len)
+bool NMEAParser::readWPL(QVector<Waypoint> &waypoints, const char *line, int len)
 {
 	int col = 1;
 	const char *vp = line;
@@ -478,7 +478,7 @@ bool NMEAParser::readZDA(const char *line, int len)
 }
 
 bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QList<Waypoint> &waypoints)
+  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(routes);
 	qint64 len;

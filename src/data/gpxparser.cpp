@@ -198,7 +198,7 @@ void GPXParser::track(TrackData &track)
 }
 
 void GPXParser::gpx(QList<TrackData> &tracks, QList<RouteData> &routes,
-  QList<Waypoint> &waypoints)
+  QVector<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("trk")) {
@@ -216,7 +216,7 @@ void GPXParser::gpx(QList<TrackData> &tracks, QList<RouteData> &routes,
 }
 
 bool GPXParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QList<Waypoint> &waypoints)
+  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
 {
 	_reader.clear();
 	_reader.setDevice(file);

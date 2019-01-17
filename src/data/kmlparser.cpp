@@ -381,7 +381,7 @@ void KMLParser::multiTrack(TrackData &t)
 }
 
 void KMLParser::multiGeometry(QList<TrackData> &tracks,
-  QList<Waypoint> &waypoints, const QString &name, const QString &desc,
+  QVector<Waypoint> &waypoints, const QString &name, const QString &desc,
   const QDateTime timestamp)
 {
 	while (_reader.readNextStartElement()) {
@@ -403,7 +403,7 @@ void KMLParser::multiGeometry(QList<TrackData> &tracks,
 	}
 }
 
-void KMLParser::placemark(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
+void KMLParser::placemark(QList<TrackData> &tracks, QVector<Waypoint> &waypoints)
 {
 	QString name, desc;
 	QDateTime timestamp;
@@ -448,7 +448,7 @@ void KMLParser::placemark(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 	}
 }
 
-void KMLParser::folder(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
+void KMLParser::folder(QList<TrackData> &tracks, QVector<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Placemark"))
@@ -460,7 +460,7 @@ void KMLParser::folder(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 	}
 }
 
-void KMLParser::document(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
+void KMLParser::document(QList<TrackData> &tracks, QVector<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Placemark"))
@@ -472,7 +472,7 @@ void KMLParser::document(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 	}
 }
 
-void KMLParser::kml(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
+void KMLParser::kml(QList<TrackData> &tracks, QVector<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Document"))
@@ -487,7 +487,7 @@ void KMLParser::kml(QList<TrackData> &tracks, QList<Waypoint> &waypoints)
 }
 
 bool KMLParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QList<Waypoint> &waypoints)
+  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(routes);
 

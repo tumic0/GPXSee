@@ -11,7 +11,7 @@ public:
 	NMEAParser() : _errorLine(0), _GGA(false) {}
 
 	bool parse(QFile *file, QList<TrackData> &tracks,
-	  QList<RouteData> &routes, QList<Waypoint> &waypoints);
+	  QList<RouteData> &routes, QVector<Waypoint> &waypoints);
 	QString errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 
@@ -27,7 +27,7 @@ private:
 
 	bool readRMC(TrackData &track, const char *line, int len);
 	bool readGGA(TrackData &track, const char *line, int len);
-	bool readWPL(QList<Waypoint> &waypoints, const char *line, int len);
+	bool readWPL(QVector<Waypoint> &waypoints, const char *line, int len);
 	bool readZDA(const char *line, int len);
 
 	int _errorLine;

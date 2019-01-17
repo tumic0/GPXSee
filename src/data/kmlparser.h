@@ -9,16 +9,16 @@ class KMLParser : public Parser
 {
 public:
 	bool parse(QFile *file, QList<TrackData> &tracks,
-	  QList<RouteData> &routes, QList<Waypoint> &waypoints);
+	  QList<RouteData> &routes, QVector<Waypoint> &waypoints);
 	QString errorString() const {return _reader.errorString();}
 	int errorLine() const {return _reader.lineNumber();}
 
 private:
-	void kml(QList<TrackData> &tracks, QList<Waypoint> &waypoints);
-	void document(QList<TrackData> &tracks, QList<Waypoint> &waypoints);
-	void folder(QList<TrackData> &tracks, QList<Waypoint> &waypoints);
-	void placemark(QList<TrackData> &tracks, QList<Waypoint> &waypoints);
-	void multiGeometry(QList<TrackData> &tracks, QList<Waypoint> &waypoints,
+	void kml(QList<TrackData> &tracks, QVector<Waypoint> &waypoints);
+	void document(QList<TrackData> &tracks, QVector<Waypoint> &waypoints);
+	void folder(QList<TrackData> &tracks, QVector<Waypoint> &waypoints);
+	void placemark(QList<TrackData> &tracks, QVector<Waypoint> &waypoints);
+	void multiGeometry(QList<TrackData> &tracks, QVector<Waypoint> &waypoints,
 	  const QString &name, const QString &desc, const QDateTime timestamp);
 	void track(TrackData &track);
 	void multiTrack(TrackData &t);

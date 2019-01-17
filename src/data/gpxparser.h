@@ -9,13 +9,13 @@ class GPXParser : public Parser
 {
 public:
 	bool parse(QFile *file, QList<TrackData> &tracks,
-	  QList<RouteData> &routes, QList<Waypoint> &waypoints);
+	  QList<RouteData> &routes, QVector<Waypoint> &waypoints);
 	QString errorString() const {return _reader.errorString();}
 	int errorLine() const {return _reader.lineNumber();}
 
 private:
 	void gpx(QList<TrackData> &tracks, QList<RouteData> &routes,
-	  QList<Waypoint> &waypoints);
+	  QVector<Waypoint> &waypoints);
 	void track(TrackData &track);
 	void trackpoints(TrackData &track);
 	void routepoints(RouteData &route, QList<TrackData> &tracks);

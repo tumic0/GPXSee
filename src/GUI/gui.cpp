@@ -747,11 +747,11 @@ bool GUI::openFile(const QString &fileName)
 
 bool GUI::loadFile(const QString &fileName)
 {
-	Data data;
+	Data data(fileName);
 	QList<QList<GraphItem*> > graphs;
 	QList<PathItem*> paths;
 
-	if (data.loadFile(fileName)) {
+	if (data.isValid()) {
 		for (int i = 0; i < data.tracks().count(); i++) {
 			_trackDistance += data.tracks().at(i)->distance();
 			_time += data.tracks().at(i)->time();

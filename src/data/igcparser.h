@@ -12,7 +12,7 @@ public:
 	IGCParser() : _errorLine(0) {}
 
 	bool parse(QFile *file, QList<TrackData> &tracks,
-	  QList<RouteData> &routes, QList<Waypoint> &waypoints);
+	  QList<RouteData> &routes, QVector<Waypoint> &waypoints);
 	QString errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 

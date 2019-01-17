@@ -46,7 +46,7 @@ void LOCParser::waypoint(Waypoint &waypoint)
 		_reader.raiseError("Missing waypoint coordinates");
 }
 
-void LOCParser::loc(QList<Waypoint> &waypoints)
+void LOCParser::loc(QVector<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("waypoint")) {
@@ -58,7 +58,7 @@ void LOCParser::loc(QList<Waypoint> &waypoints)
 }
 
 bool LOCParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QList<Waypoint> &waypoints)
+  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(tracks);
 	Q_UNUSED(routes);
