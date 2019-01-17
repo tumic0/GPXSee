@@ -65,6 +65,7 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 {
 	_db = QSqlDatabase::addDatabase("QSQLITE", fileName);
 	_db.setDatabaseName(fileName);
+	_db.setConnectOptions("QSQLITE_OPEN_READONLY");
 
 	if (!_db.open()) {
 		_errorString = fileName + ": Error opening database file";
