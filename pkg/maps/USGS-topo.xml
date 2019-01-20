@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map xmlns="http://www.gpxsee.org/map/1">
+<map xmlns="http://www.gpxsee.org/map/1.0">
 	<name>USGS Topo</name>
 	<url>https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/$z/$y/$x</url>
 	<copyright>Map services and data available from U.S. Geological Survey, National Geospatial Program.</copyright>

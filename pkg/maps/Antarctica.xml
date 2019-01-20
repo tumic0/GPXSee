@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map type="WMTS">
+<map xmlns="http://www.gpxsee.org/map/1.0" type="WMTS">
 	<name>Antarctica</name>
 	<url type="REST">https://gis.ngdc.noaa.gov/arcgis/rest/services/antarctic/antarctic_basemap/MapServer/WMTS/1.0.0/WMTSCapabilities.xml</url>
 	<copyright>NOAA National Centers for Environmental Information (NCEI); International Bathymetric Chart of the Southern Ocean (IBCSO); General Bathymetric Chart of the Oceans (GEBCO); Natural Earth</copyright>
