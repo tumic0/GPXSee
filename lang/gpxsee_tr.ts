@@ -717,7 +717,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="703"/>
         <source>DEM directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM klasörü:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="705"/>
@@ -1277,17 +1277,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="364"/>
         <source>GPS data</source>
-        <translation type="unfinished"></translation>
+        <translation>GPS verisi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="365"/>
         <source>DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM verisi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="376"/>
         <source>Elevation</source>
-        <translation type="unfinished">Rakım</translation>
+        <translation>Rakım</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="398"/>
@@ -1297,7 +1297,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="399"/>
         <source>Sources</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaynaklar</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="400"/>
