@@ -621,7 +621,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="703"/>
         <source>DEM directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог с DEM данными:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1033"/>
@@ -1279,17 +1279,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="364"/>
         <source>GPS data</source>
-        <translation type="unfinished"></translation>
+        <translation>GPS данные</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="365"/>
         <source>DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM данные</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="376"/>
         <source>Elevation</source>
-        <translation type="unfinished">Высота</translation>
+        <translation>Высота</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="398"/>
@@ -1299,7 +1299,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="399"/>
         <source>Sources</source>
-        <translation type="unfinished"></translation>
+        <translation>Источники</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="400"/>
