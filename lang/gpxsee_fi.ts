@@ -621,7 +621,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="703"/>
         <source>DEM directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM -tietojen hakemisto:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1033"/>
@@ -1278,17 +1278,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="364"/>
         <source>GPS data</source>
-        <translation type="unfinished"></translation>
+        <translation>GPS-tiedot</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="365"/>
         <source>DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM-tiedot</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="376"/>
         <source>Elevation</source>
-        <translation type="unfinished">Korkeus</translation>
+        <translation>Korkeus</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="398"/>
@@ -1298,7 +1298,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="399"/>
         <source>Sources</source>
-        <translation type="unfinished"></translation>
+        <translation>Lähteet</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="400"/>
@@ -1349,12 +1349,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="441"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
-        <translation type="unfinished"></translation>
+        <translation>Painettu alue on suunnilleen näyttöalue. Kartan zoomaustaso ei muutu.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="443"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoomaustasoa muutetaan niin, että koko sisältö (jäljet/reittipisteet) sopii painettuun alueeseen ja kartan resoluutio on mahdollisimman lähellä tulostusresoluutiota.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="465"/>
