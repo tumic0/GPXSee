@@ -572,7 +572,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="505"/>
         <source>&amp;POI</source>
-        <translation>&amp;POI</translation>
+        <translation>P&amp;OI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="506"/>
