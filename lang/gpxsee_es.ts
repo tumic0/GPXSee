@@ -557,22 +557,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="473"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Archivo</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="488"/>
         <source>&amp;Map</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mapa</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="496"/>
         <source>&amp;Graph</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Gráfico</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="505"/>
         <source>&amp;POI</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="506"/>
@@ -582,7 +582,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="517"/>
         <source>&amp;Data</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Datos</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="518"/>
@@ -592,7 +592,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="526"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Preferencias</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="530"/>
@@ -607,7 +607,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="544"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Ay&amp;uda</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="560"/>
