@@ -13,6 +13,7 @@
 #include "map/gcs.h"
 #include "map/pcs.h"
 #include "data/dem.h"
+#include "data/data.h"
 #include "opengl.h"
 #include "gui.h"
 #include "settings.h"
@@ -45,27 +46,28 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 #ifdef Q_OS_MAC
 	setAttribute(Qt::AA_DontShowIconsInMenus);
 #endif // Q_OS_MAC
-
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
-	QSettings settings(APP_NAME, APP_NAME);
-	settings.beginGroup(OPTIONS_SETTINGS_GROUP);
-
 	/* The QNetworkAccessManager must be a child of QApplication, otherwise it
 	   triggers the following warning on exit (and may probably crash):
 	   "QThreadStorage: Thread X exited after QThreadStorage Y destroyed" */
 	Downloader::setNetworkManager(new QNetworkAccessManager(this));
+	DEM::setDir(ProgramPaths::demDir());
+	OPENGL_SET_SAMPLES(4);
+
+	loadDatums();
+	loadPCSs();
+
+	QSettings settings(qApp->applicationName(), qApp->applicationName());
+	settings.beginGroup(OPTIONS_SETTINGS_GROUP);
 #ifdef ENABLE_HTTP2
 	Downloader::enableHTTP2(settings.value(ENABLE_HTTP2_SETTING,
 	  ENABLE_HTTP2_DEFAULT).toBool());
 #endif // ENABLE_HTTP2
 	Downloader::setTimeout(settings.value(CONNECTION_TIMEOUT_SETTING,
 	  CONNECTION_TIMEOUT_DEFAULT).toInt());
+	Data::useDEMElevation(settings.value(USE_DEM_ELEVATION_SETTING,
+	  USE_DEM_ELEVATION_DEFAULT).toBool());
 	settings.endGroup();
-
-	OPENGL_SET_SAMPLES(4);
-	loadDatums();
-	loadPCSs();
-	DEM::setDir(ProgramPaths::demDir());
 
 	_gui = new GUI();
 }
