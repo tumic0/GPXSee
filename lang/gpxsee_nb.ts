@@ -702,12 +702,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="703"/>
         <source>DEM directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM-mappe:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="705"/>
         <source>Tile cache directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Flishurtiglagringsmappe:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="697"/>
@@ -1278,12 +1278,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="364"/>
         <source>GPS data</source>
-        <translation type="unfinished"></translation>
+        <translation>GPS-data</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="365"/>
         <source>DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM-data</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="376"/>
@@ -1298,7 +1298,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="399"/>
         <source>Sources</source>
-        <translation type="unfinished"></translation>
+        <translation>Kilder</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="400"/>
