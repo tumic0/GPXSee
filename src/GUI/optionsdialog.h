@@ -48,9 +48,10 @@ struct Options {
 	qreal pauseSpeed;
 	int pauseInterval;
 	bool useReportedSpeed;
-	bool useDEMElevation;
+	bool dataUseDEM;
 	// POI
 	int poiRadius;
+	bool poiUseDEM;
 	// System
 	bool useOpenGL;
 #ifdef ENABLE_HTTP2
@@ -125,10 +126,12 @@ private:
 	QSpinBox *_pauseInterval;
 	QRadioButton *_computedSpeed;
 	QRadioButton *_reportedSpeed;
-	QRadioButton *_gpsElevation;
-	QRadioButton *_demElevation;
+	QRadioButton *_dataGPSElevation;
+	QRadioButton *_dataDEMElevation;
 	// POI
 	QDoubleSpinBox *_poiRadius;
+	QRadioButton *_poiGPSElevation;
+	QRadioButton *_poiDEMElevation;
 	// System
 	QSpinBox *_pixmapCache;
 	QSpinBox *_connectionTimeout;

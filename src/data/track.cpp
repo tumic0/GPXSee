@@ -13,7 +13,7 @@ int Track::_pauseInterval = 10;
 
 bool Track::_outlierEliminate = true;
 bool Track::_useReportedSpeed = false;
-bool Track::_useDEMElevation = false;
+bool Track::_useDEM = false;
 
 
 static qreal median(QVector<qreal> &v)
@@ -154,7 +154,7 @@ Graph Track::elevation() const
 		if (_outliers.contains(i))
 			continue;
 
-		if (_data.at(i).hasElevation() && !_useDEMElevation)
+		if (_data.at(i).hasElevation() && !_useDEM)
 			raw.append(GraphPoint(_distance.at(i), _time.at(i),
 			  _data.at(i).elevation()));
 		else {

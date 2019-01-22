@@ -13,7 +13,6 @@
 #include "map/gcs.h"
 #include "map/pcs.h"
 #include "data/dem.h"
-#include "data/data.h"
 #include "opengl.h"
 #include "gui.h"
 #include "settings.h"
@@ -65,8 +64,6 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 #endif // ENABLE_HTTP2
 	Downloader::setTimeout(settings.value(CONNECTION_TIMEOUT_SETTING,
 	  CONNECTION_TIMEOUT_DEFAULT).toInt());
-	Data::useDEMElevation(settings.value(USE_DEM_ELEVATION_SETTING,
-	  USE_DEM_ELEVATION_DEFAULT).toBool());
 	settings.endGroup();
 
 	_gui = new GUI();

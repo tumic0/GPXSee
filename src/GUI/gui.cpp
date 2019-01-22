@@ -918,18 +918,24 @@ void GUI::openOptions()
 	SET_TRACK_OPTION(pauseSpeed, setPauseSpeed);
 	SET_TRACK_OPTION(pauseInterval, setPauseInterval);
 	SET_TRACK_OPTION(useReportedSpeed, useReportedSpeed);
-	SET_DATA_OPTION(useDEMElevation, useDEMElevation);
+
+	SET_DATA_OPTION(dataUseDEM, useDEM);
 
 	if (options.poiRadius != _options.poiRadius)
 		_poi->setRadius(options.poiRadius);
+	if (options.poiUseDEM != _options.poiUseDEM)
+		_poi->useDEM(options.poiUseDEM);
+
 	if (options.pixmapCache != _options.pixmapCache)
 		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
+
 	if (options.connectionTimeout != _options.connectionTimeout)
 		Downloader::setTimeout(options.connectionTimeout);
 #ifdef ENABLE_HTTP2
 	if (options.enableHTTP2 != _options.enableHTTP2)
 		Downloader::enableHTTP2(options.enableHTTP2);
 #endif // ENABLE_HTTP2
+
 #ifdef ENABLE_HIDPI
 	if (options.hidpiMap != _options.hidpiMap)
 		_mapView->setDevicePixelRatio(devicePixelRatioF(),
@@ -1762,10 +1768,12 @@ void GUI::writeSettings()
 		settings.setValue(PAUSE_INTERVAL_SETTING, _options.pauseInterval);
 	if (_options.useReportedSpeed != USE_REPORTED_SPEED_DEFAULT)
 		settings.setValue(USE_REPORTED_SPEED_SETTING, _options.useReportedSpeed);
-	if (_options.useDEMElevation != USE_DEM_ELEVATION_DEFAULT)
-		settings.setValue(USE_DEM_ELEVATION_SETTING, _options.useDEMElevation);
+	if (_options.dataUseDEM != DATA_USE_DEM_DEFAULT)
+		settings.setValue(DATA_USE_DEM_SETTING, _options.dataUseDEM);
 	if (_options.poiRadius != POI_RADIUS_DEFAULT)
 		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
+	if (_options.poiUseDEM != POI_USE_DEM_DEFAULT)
+		settings.setValue(POI_USE_DEM_SETTING, _options.poiUseDEM);
 	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
 		settings.setValue(USE_OPENGL_SETTING, _options.useOpenGL);
 #ifdef ENABLE_HTTP2
@@ -2002,12 +2010,14 @@ void GUI::readSettings()
 	  PAUSE_SPEED_DEFAULT).toFloat();
 	_options.useReportedSpeed = settings.value(USE_REPORTED_SPEED_SETTING,
 	  USE_REPORTED_SPEED_DEFAULT).toBool();
-	_options.useDEMElevation = settings.value(USE_DEM_ELEVATION_SETTING,
-	  USE_DEM_ELEVATION_DEFAULT).toBool();
+	_options.dataUseDEM = settings.value(DATA_USE_DEM_SETTING,
+	  DATA_USE_DEM_DEFAULT).toBool();
 	_options.pauseInterval = settings.value(PAUSE_INTERVAL_SETTING,
 	  PAUSE_INTERVAL_DEFAULT).toInt();
 	_options.poiRadius = settings.value(POI_RADIUS_SETTING, POI_RADIUS_DEFAULT)
 	  .toInt();
+	_options.poiUseDEM = settings.value(POI_USE_DEM_SETTING,
+	  POI_USE_DEM_DEFAULT).toBool();
 	_options.useOpenGL = settings.value(USE_OPENGL_SETTING, USE_OPENGL_DEFAULT)
 	  .toBool();
 #ifdef ENABLE_HTTP2
@@ -2082,9 +2092,10 @@ void GUI::readSettings()
 	Track::setPauseSpeed(_options.pauseSpeed);
 	Track::setPauseInterval(_options.pauseInterval);
 	Track::useReportedSpeed(_options.useReportedSpeed);
-	Data::useDEMElevation(_options.useDEMElevation);
+	Data::useDEM(_options.dataUseDEM);
 
 	_poi->setRadius(_options.poiRadius);
+	_poi->useDEM(_options.poiUseDEM);
 
 	QPixmapCache::setCacheLimit(_options.pixmapCache * 1024);
 

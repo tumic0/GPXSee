@@ -51,7 +51,7 @@ static QHash<QString, Parser*> parsers()
 
 
 QHash<QString, Parser*> Data::_parsers = parsers();
-bool Data::_useDEMElevation = false;
+bool Data::_useDEM = false;
 
 Data::~Data()
 {
@@ -68,7 +68,7 @@ void Data::processData()
 	for (int i = 0; i < _routeData.count(); i++)
 		_routes.append(new Route(_routeData.at(i)));
 	for (int i = 0; i < _waypoints.size(); i++) {
-		if (!_waypoints.at(i).hasElevation() || _useDEMElevation) {
+		if (!_waypoints.at(i).hasElevation() || _useDEM) {
 			qreal elevation = DEM::elevation(_waypoints.at(i).coordinates());
 			if (!std::isnan(elevation))
 				_waypoints[i].setElevation(elevation);
@@ -76,7 +76,7 @@ void Data::processData()
 	}
 }
 
-Data::Data(const QString &fileName)
+Data::Data(const QString &fileName, bool poi)
 {
 	QFile file(fileName);
 	QFileInfo fi(fileName);
@@ -92,7 +92,8 @@ Data::Data(const QString &fileName)
 	QHash<QString, Parser*>::iterator it;
 	if ((it = _parsers.find(fi.suffix().toLower())) != _parsers.end()) {
 		if (it.value()->parse(&file, _trackData, _routeData, _waypoints)) {
-			processData();
+			if (!poi)
+				processData();
 			_valid = true;
 			return;
 		} else {
@@ -102,7 +103,8 @@ Data::Data(const QString &fileName)
 	} else {
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
 			if (it.value()->parse(&file, _trackData, _routeData, _waypoints)) {
-				processData();
+				if (!poi)
+					processData();
 				_valid = true;
 				return;
 			}
@@ -148,9 +150,9 @@ QStringList Data::filter()
 	return filter;
 }
 
-void Data::useDEMElevation(bool use)
+void Data::useDEM(bool use)
 {
-	_useDEMElevation = use;
-	Route::useDEMElevation(use);
-	Track::useDEMElevation(use);
+	_useDEM = use;
+	Route::useDEM(use);
+	Track::useDEM(use);
 }

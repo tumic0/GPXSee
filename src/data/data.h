@@ -14,7 +14,7 @@
 class Data
 {
 public:
-	Data(const QString &fileName);
+	Data(const QString &fileName, bool poi = false);
 	~Data();
 
 	bool isValid() const {return _valid;}
@@ -28,7 +28,7 @@ public:
 	static QString formats();
 	static QStringList filter();
 
-	static void useDEMElevation(bool use);
+	static void useDEM(bool use);
 
 private:
 	void processData();
@@ -45,7 +45,7 @@ private:
 	QList<RouteData> _routeData;
 
 	static QHash<QString, Parser*> _parsers;
-	static bool _useDEMElevation;
+	static bool _useDEM;
 };
 
 #endif // DATA_H

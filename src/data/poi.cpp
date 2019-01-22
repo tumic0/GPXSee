@@ -3,6 +3,7 @@
 #include "common/rectc.h"
 #include "common/greatcircle.h"
 #include "data.h"
+#include "dem.h"
 #include "poi.h"
 
 
@@ -14,7 +15,7 @@ POI::POI(QObject *parent) : QObject(parent)
 
 bool POI::loadFile(const QString &path, bool dir)
 {
-	Data data(path);
+	Data data(path, true);
 	FileIndex index;
 
 	index.enabled = true;
@@ -107,6 +108,17 @@ void POI::search(const RectC &rect, QSet<int> &set) const
 	_tree.Search(min, max, cb, &set);
 }
 
+void POI::appendElevation(QList<Waypoint> &points) const
+{
+	for (int i = 0; i < points.size(); i++) {
+		if (!points.at(i).hasElevation() || _useDEM) {
+			qreal elevation = DEM::elevation(points.at(i).coordinates());
+			if (!std::isnan(elevation))
+				points[i].setElevation(elevation);
+		}
+	}
+}
+
 QList<Waypoint> POI::points(const Path &path) const
 {
 	QList<Waypoint> ret;
@@ -137,6 +149,8 @@ QList<Waypoint> POI::points(const Path &path) const
 	for (it = set.constBegin(); it != set.constEnd(); ++it)
 		ret.append(_data.at(*it));
 
+	appendElevation(ret);
+
 	return ret;
 }
 
@@ -157,6 +171,8 @@ QList<Waypoint> POI::points(const Waypoint &point) const
 
 	for (it = set.constBegin(); it != set.constEnd(); ++it)
 		ret.append(_data.at(*it));
+
+	appendElevation(ret);
 
 	return ret;
 }
@@ -200,6 +216,13 @@ void POI::clear()
 void POI::setRadius(unsigned radius)
 {
 	_radius = radius;
+
+	emit pointsChanged();
+}
+
+void POI::useDEM(bool use)
+{
+	_useDEM = use;
 
 	emit pointsChanged();
 }

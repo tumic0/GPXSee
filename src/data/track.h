@@ -45,7 +45,7 @@ public:
 	static void setOutlierElimination(bool eliminate)
 	  {_outlierEliminate = eliminate;}
 	static void useReportedSpeed(bool use) {_useReportedSpeed = use;}
-	static void useDEMElevation(bool use) {_useDEMElevation = use;}
+	static void useDEM(bool use) {_useDEM = use;}
 
 private:
 	bool discardStopPoint(int i) const;
@@ -70,7 +70,7 @@ private:
 	static qreal _pauseSpeed;
 	static int _pauseInterval;
 	static bool _useReportedSpeed;
-	static bool _useDEMElevation;
+	static bool _useDEM;
 };
 
 #endif // TRACK_H

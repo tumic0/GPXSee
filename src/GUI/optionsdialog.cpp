@@ -352,12 +352,12 @@ QWidget *OptionsDialog::createDataPage()
 	else
 		_computedSpeed->setChecked(true);
 
-	_gpsElevation = new QRadioButton(tr("GPS data"));
-	_demElevation = new QRadioButton(tr("DEM data"));
-	if (_options->useDEMElevation)
-		_demElevation->setChecked(true);
+	_dataGPSElevation = new QRadioButton(tr("GPS data"));
+	_dataDEMElevation = new QRadioButton(tr("DEM data"));
+	if (_options->dataUseDEM)
+		_dataDEMElevation->setChecked(true);
 	else
-		_gpsElevation->setChecked(true);
+		_dataGPSElevation->setChecked(true);
 
 
 	QWidget *sourceTab = new QWidget();
@@ -387,8 +387,8 @@ QWidget *OptionsDialog::createDataPage()
 	QGroupBox *speedBox = new QGroupBox(tr("Speed"));
 	speedBox->setLayout(speedLayout);
 
-	elevationLayout->addWidget(_gpsElevation);
-	elevationLayout->addWidget(_demElevation);
+	elevationLayout->addWidget(_dataGPSElevation);
+	elevationLayout->addWidget(_dataDEMElevation);
 
 	QGroupBox *elevationBox = new QGroupBox(tr("Elevation"));
 	elevationBox->setLayout(elevationLayout);
@@ -410,6 +410,13 @@ QWidget *OptionsDialog::createDataPage()
 
 QWidget *OptionsDialog::createPOIPage()
 {
+	_poiGPSElevation = new QRadioButton(tr("GPS data"));
+	_poiDEMElevation = new QRadioButton(tr("DEM data"));
+	if (_options->poiUseDEM)
+		_poiDEMElevation->setChecked(true);
+	else
+		_poiGPSElevation->setChecked(true);
+
 	_poiRadius = new QDoubleSpinBox();
 	_poiRadius->setSingleStep(1);
 	_poiRadius->setDecimals(1);
@@ -424,8 +431,13 @@ QWidget *OptionsDialog::createPOIPage()
 		_poiRadius->setSuffix(UNIT_SPACE + tr("km"));
 	}
 
+	QVBoxLayout *elevationLayout = new QVBoxLayout();
+	elevationLayout->addWidget(_poiGPSElevation);
+	elevationLayout->addWidget(_poiDEMElevation);
+
 	QFormLayout *poiLayout = new QFormLayout();
-	poiLayout->addRow(tr("POI radius:"), _poiRadius);
+	poiLayout->addRow(tr("Radius:"), _poiRadius);
+	poiLayout->addRow(tr("Elevation:"), elevationLayout);
 
 	QWidget *poiTab = new QWidget();
 	poiTab->setLayout(poiLayout);
@@ -644,13 +656,14 @@ void OptionsDialog::accept()
 		_options->pauseSpeed = pauseSpeed;
 	_options->pauseInterval = _pauseInterval->value();
 	_options->useReportedSpeed = _reportedSpeed->isChecked();
-	_options->useDEMElevation = _demElevation->isChecked();
+	_options->dataUseDEM = _dataDEMElevation->isChecked();
 
 	qreal poiRadius = (_options->units == Imperial)
 		? _poiRadius->value() * MIINM : (_options->units == Nautical)
 		? _poiRadius->value() * NMIINM : _poiRadius->value() * KMINM;
 	if (qAbs(poiRadius - _options->poiRadius) > 0.01)
 		_options->poiRadius = poiRadius;
+	_options->poiUseDEM = _poiDEMElevation->isChecked();
 
 	_options->useOpenGL = _useOpenGL->isChecked();
 #ifdef ENABLE_HTTP2

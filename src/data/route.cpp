@@ -2,7 +2,7 @@
 #include "route.h"
 
 
-bool Route::_useDEMElevation = false;
+bool Route::_useDEM = false;
 
 Route::Route(const RouteData &data) : _data(data)
 {
@@ -31,7 +31,7 @@ Graph Route::elevation() const
 	Graph graph;
 
 	for (int i = 0; i < _data.size(); i++) {
-		if (_data.at(i).hasElevation() && !_useDEMElevation)
+		if (_data.at(i).hasElevation() && !_useDEM)
 			graph.append(GraphPoint(_distance.at(i), NAN,
 			  _data.at(i).elevation()));
 		else {
