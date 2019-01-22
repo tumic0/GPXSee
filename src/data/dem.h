@@ -2,7 +2,7 @@
 #define DEM_H
 
 #include <QString>
-#include <QMap>
+#include <QCache>
 #include <QByteArray>
 
 class QString;
@@ -10,32 +10,38 @@ class Coordinates;
 
 class DEM
 {
-public:
-	static void setDir(const QString &path);
-	static qreal elevation(const Coordinates &c);
-
 private:
-	struct Key {
-		int lon;
-		int lat;
+	class Key {
+	public:
+		Key(int lon, int lat) : _lon(lon), _lat(lat) {}
 
-		Key(int lon, int lat) : lon(lon), lat(lat) {}
+		int lon() const {return _lon;}
+		int lat() const {return _lat;}
 
-		bool operator<(const Key &other) const
+		bool operator==(const Key &other) const
 		{
-			if (lon < other.lon)
-				return true;
-			else if (lon > other.lon)
-				return false;
-			else
-				return (lat < other.lat);
+			return (_lon == other._lon && _lat == other._lat);
 		}
+
+	private:
+		int _lon, _lat;
 	};
 
 	static QString fileName(const Key &key);
 
 	static QString _dir;
-	static QMap<Key, QByteArray> _data;
+	static QCache<Key, QByteArray> _data;
+
+public:
+	static void setDir(const QString &path);
+	static qreal elevation(const Coordinates &c);
+
+	friend uint qHash(const Key &key);
 };
+
+inline uint qHash(const DEM::Key &key)
+{
+	return (key.lon() ^ key.lat());
+}
 
 #endif // DEM_H

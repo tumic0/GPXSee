@@ -4,12 +4,12 @@
 #include "common/coordinates.h"
 #include "dem.h"
 
+
 #define SRTM3_SAMPLES 1201
 #define SRTM1_SAMPLES 3601
 
 #define SRTM_SIZE(samples) \
 	((samples) * (samples) * 2)
-
 
 static qreal interpolate(qreal dx, qreal dy, qreal p0, qreal p1, qreal p2,
   qreal p3)
@@ -18,21 +18,21 @@ static qreal interpolate(qreal dx, qreal dy, qreal p0, qreal p1, qreal p2,
 	  + p3 * dx * dy;
 }
 
-static qreal value(int col, int row, int samples, const QByteArray data)
+static qreal value(int col, int row, int samples, const QByteArray *data)
 {
 	int pos = ((samples - 1 - row) * samples + col) * 2;
-	qint16 val = qFromBigEndian(*((const qint16*)(data.constData() + pos)));
+	qint16 val = qFromBigEndian(*((const qint16*)(data->constData() + pos)));
 
 	return (val == -32768) ? NAN : val;
 }
 
-static qreal height(const Coordinates &c, const QByteArray data)
+static qreal height(const Coordinates &c, const QByteArray *data)
 {
 	int samples;
 
-	if (data.size() == SRTM_SIZE(SRTM3_SAMPLES))
+	if (data->size() == SRTM_SIZE(SRTM3_SAMPLES))
 		samples = SRTM3_SAMPLES;
-	else if (data.size() == SRTM_SIZE(SRTM1_SAMPLES))
+	else if (data->size() == SRTM_SIZE(SRTM1_SAMPLES))
 		samples = SRTM1_SAMPLES;
 	else
 		return NAN;
@@ -52,16 +52,16 @@ static qreal height(const Coordinates &c, const QByteArray data)
 
 
 QString DEM::_dir;
-QMap<DEM::Key, QByteArray> DEM::_data;
+QCache<DEM::Key, QByteArray> DEM::_data;
 
 QString DEM::fileName(const Key &key)
 {
-	const char ns = (key.lat >= 0) ? 'N' : 'S';
-	const char ew = (key.lon >= 0) ? 'E' : 'W';
+	const char ns = (key.lat() >= 0) ? 'N' : 'S';
+	const char ew = (key.lon() >= 0) ? 'E' : 'W';
 
 	QString basename = QString("%1%2%3%4.hgt").arg(ns)
-	  .arg(qAbs(key.lat), 2, 10, QChar('0')).arg(ew)
-	  .arg(qAbs(key.lon), 3, 10, QChar('0'));
+	  .arg(qAbs(key.lat()), 2, 10, QChar('0')).arg(ew)
+	  .arg(qAbs(key.lon()), 3, 10, QChar('0'));
 	return QDir(_dir).absoluteFilePath(basename);
 }
 
@@ -77,18 +77,19 @@ qreal DEM::elevation(const Coordinates &c)
 
 	Key k((int)c.lon(), (int)c.lat());
 
-	QMap<Key, QByteArray>::const_iterator it(_data.find(k));
-	if (it == _data.constEnd()) {
+	QByteArray *ba = _data[k];
+	if (!ba) {
 		QFile file(fileName(k));
 		if (!file.open(QIODevice::ReadOnly)) {
 			qWarning("%s: %s", qPrintable(file.fileName()),
 			  qPrintable(file.errorString()));
-			_data.insert(k, QByteArray());
+			_data.insert(k, new QByteArray());
 			return NAN;
 		} else {
-			it = _data.insert(k, file.readAll());
-			return height(c, *it);
+			ba = new QByteArray(file.readAll());
+			_data.insert(k, ba);
+			return height(c, ba);
 		}
 	} else
-		return height(c, *it);
+		return height(c, ba);
 }
