@@ -369,8 +369,8 @@ QWidget *OptionsDialog::createDataPage()
 	speedOptions->addWidget(_reportedSpeed);
 
 	QVBoxLayout *elevationOptions = new QVBoxLayout();
-	elevationOptions->addWidget(_gpsElevation);
-	elevationOptions->addWidget(_demElevation);
+	elevationOptions->addWidget(_dataGPSElevation);
+	elevationOptions->addWidget(_dataDEMElevation);
 
 	QFormLayout *formLayout = new QFormLayout();
 	formLayout->addRow(tr("Speed:"), speedOptions);
