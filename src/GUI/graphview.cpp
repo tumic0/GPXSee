@@ -521,3 +521,14 @@ void GraphView::setSliderColor(const QColor &color)
 	_slider->setColor(color);
 	_sliderInfo->setColor(color);
 }
+
+void GraphView::changeEvent(QEvent *e)
+{
+	if (e->type() == QEvent::PaletteChange) {
+		_message->setBrush(QPalette().brush(QPalette::Disabled,
+		  QPalette::WindowText));
+		setBackgroundBrush(QBrush(palette().brush(QPalette::Base)));
+	}
+
+	QGraphicsView::changeEvent(e);
+}

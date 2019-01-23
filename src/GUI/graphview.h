@@ -70,6 +70,8 @@ protected:
 	void clearInfo();
 	void skipColor() {_palette.nextColor();}
 
+	void changeEvent(QEvent *e);
+
 	QList<GraphItem*> _graphs;
 	GraphType _graphType;
 
