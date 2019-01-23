@@ -1311,7 +1311,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="439"/>
         <source>Radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Radie:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="387"/>
