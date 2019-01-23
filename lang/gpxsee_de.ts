@@ -400,7 +400,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="296"/>
         <source>Clear tile cache</source>
-        <translation>Tile-Cache bereinigen</translation>
+        <translation>Kachel-Cache bereinigen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="217"/>
@@ -755,7 +755,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="705"/>
         <source>Tile cache directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kachel-Cache-Verzeichnis:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="808"/>
@@ -766,7 +766,7 @@
         <location filename="../src/GUI/gui.cpp" line="811"/>
         <location filename="../src/GUI/gui.cpp" line="846"/>
         <source>Line: %1</source>
-        <translation>Linie: %1</translation>
+        <translation>Zeile: %1</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="843"/>
