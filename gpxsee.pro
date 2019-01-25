@@ -339,7 +339,7 @@ win32 {
     DEFINES += _USE_MATH_DEFINES
 }
 
-unix {
+unix:!macx {
     maps.files = pkg/maps/*
     maps.path = /usr/local/share/gpxsee/maps
     csv.files = pkg/csv/*
