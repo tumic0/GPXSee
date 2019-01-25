@@ -12,6 +12,9 @@
 #include "oziparsers.h"
 #include "locparser.h"
 #include "slfparser.h"
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include "geojsonparser.h"
+#endif // QT 5
 #include "dem.h"
 #include "data.h"
 
@@ -28,6 +31,9 @@ static WPTParser wpt;
 static RTEParser rte;
 static LOCParser loc;
 static SLFParser slf;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+static GeoJSONParser geojson;
+#endif // QT 5
 
 static QHash<QString, Parser*> parsers()
 {
@@ -45,6 +51,10 @@ static QHash<QString, Parser*> parsers()
 	hash.insert("rte", &rte);
 	hash.insert("loc", &loc);
 	hash.insert("slf", &slf);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+	hash.insert("json", &geojson);
+	hash.insert("geojson", &geojson);
+#endif // QT 5
 
 	return hash;
 }
@@ -123,11 +133,22 @@ Data::Data(const QString &fileName, bool poi)
 
 QString Data::formats()
 {
+	QStringList l(filter());
+	qSort(l);
+	QString supported;
+	for (int i = 0; i < l.size(); i++) {
+		supported += l.at(i);
+		if (i != l.size() - 1)
+			supported += " ";
+	}
+
 	return
-	  qApp->translate("Data", "Supported files")
-	  + " (*.csv *.fit *.gpx *.igc *.kml *.loc *.nmea *.plt *.rte *.slf *.tcx *.wpt);;"
+	  qApp->translate("Data", "Supported files") + " (" + supported + ");;"
 	  + qApp->translate("Data", "CSV files") + " (*.csv);;"
 	  + qApp->translate("Data", "FIT files") + " (*.fit);;"
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+	  + qApp->translate("Data", "GeoJSON files") + " (*.geojson *.json);;"
+#endif // QT5
 	  + qApp->translate("Data", "GPX files") + " (*.gpx);;"
 	  + qApp->translate("Data", "IGC files") + " (*.igc);;"
 	  + qApp->translate("Data", "KML files") + " (*.kml);;"

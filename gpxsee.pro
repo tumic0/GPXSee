@@ -261,6 +261,12 @@ SOURCES += src/main.cpp \
     src/data/dem.cpp \
     src/map/polarstereographic.cpp \
     src/map/rectd.cpp
+
+greaterThan(QT_MAJOR_VERSION, 4) {
+    HEADERS += src/data/geojsonparser.h
+    SOURCES += src/data/geojsonparser.cpp
+}
+
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_en.ts \
     lang/gpxsee_cs.ts \
