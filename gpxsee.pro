@@ -1,4 +1,8 @@
-TARGET = GPXSee
+unix {
+    TARGET = gpxsee
+} else {
+    TARGET = GPXSee
+}
 VERSION = 7.2
 
 QT += core \
@@ -267,6 +271,9 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     SOURCES += src/data/geojsonparser.cpp
 }
 
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+DEFINES *= QT_USE_QSTRINGBUILDER
+
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_en.ts \
     lang/gpxsee_cs.ts \
@@ -284,8 +291,8 @@ TRANSLATIONS = lang/gpxsee_en.ts \
 macx {
     ICON = icons/gpxsee.icns
     QMAKE_INFO_PLIST = pkg/Info.plist
-    LOCALE.path = Contents/Resources/translations
-    LOCALE.files = lang/gpxsee_en.qm \
+    locale.path = Contents/Resources/translations
+    locale.files = lang/gpxsee_en.qm \
         lang/gpxsee_cs.qm \
         lang/gpxsee_de.qm \
         lang/gpxsee_fi.qm \
@@ -297,12 +304,12 @@ macx {
         lang/gpxsee_da.qm \
         lang/gpxsee_tr.qm \
         lang/gpxsee_es.qm
-    CSV.path = Contents/Resources
-    CSV.files = pkg/csv
-    MAPS.path = Contents/Resources
-    MAPS.files = pkg/maps
-    ICONS.path = Contents/Resources/icons
-    ICONS.files = icons/gpx.icns \
+    csv.path = Contents/Resources
+    csv.files = pkg/csv
+    maps.path = Contents/Resources
+    maps.files = pkg/maps
+    icons.path = Contents/Resources/icons
+    icons.files = icons/gpx.icns \
         icons/tcx.icns \
         icons/kml.icns \
         icons/fit.icns \
@@ -313,8 +320,9 @@ macx {
         icons/wpt.icns \
         icons/loc.icns \
         icons/slf.icns
-    QMAKE_BUNDLE_DATA += LOCALE MAPS ICONS CSV
+    QMAKE_BUNDLE_DATA += locale maps icons csv
 }
+
 win32 {
     RC_ICONS = icons/gpxsee.ico \
         icons/gpx.ico \
@@ -331,5 +339,19 @@ win32 {
     DEFINES += _USE_MATH_DEFINES
 }
 
-DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-DEFINES *= QT_USE_QSTRINGBUILDER
+unix {
+    maps.files = pkg/maps/*
+    maps.path = /usr/local/share/gpxsee/maps
+    csv.files = pkg/csv/*
+    csv.path = /usr/local/share/gpxsee/csv
+    locale.files = lang/*.qm
+    locale.path = /usr/local/share/gpxsee/translations
+    icon.files = icons/gpxsee.png
+    icon.path = /usr/local/share/pixmaps
+    desktop.files = pkg/gpxsee.desktop
+    desktop.path = /usr/local/share/applications
+    mime.files = pkg/gpxsee.xml
+    mime.path = /usr/local/share/mime/packages
+    target.path = /usr/local/bin
+    INSTALLS += target maps csv locale icon desktop mime
+}
