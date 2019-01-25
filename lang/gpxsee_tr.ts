@@ -805,10 +805,9 @@
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1324"/>
         <source>%n files</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
+        <translation><numerusform>%n dosya</numerusform>
+        <numerusform>%n dosya</numerusform>
+        </translation></message>
 </context>
 <context>
     <name>GearRatioGraph</name>
@@ -1310,7 +1309,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="439"/>
         <source>Radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Yarıçap:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="387"/>
