@@ -47,62 +47,67 @@
 <context>
     <name>Data</name>
     <message>
-        <location filename="../src/data/data.cpp" line="127"/>
+        <location filename="../src/data/data.cpp" line="146"/>
         <source>Supported files</source>
         <translation>Все поддерживаемые файлы</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="129"/>
+        <location filename="../src/data/data.cpp" line="147"/>
         <source>CSV files</source>
         <translation>CSV файлы</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="130"/>
+        <location filename="../src/data/data.cpp" line="148"/>
         <source>FIT files</source>
         <translation>FIT файлы</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="131"/>
+        <location filename="../src/data/data.cpp" line="150"/>
+        <source>GeoJSON files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="152"/>
         <source>GPX files</source>
         <translation>GPX файлы</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="132"/>
+        <location filename="../src/data/data.cpp" line="153"/>
         <source>IGC files</source>
         <translation>IGC файлы</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="133"/>
+        <location filename="../src/data/data.cpp" line="154"/>
         <source>KML files</source>
         <translation>KML файлы</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="134"/>
+        <location filename="../src/data/data.cpp" line="155"/>
         <source>LOC files</source>
         <translation>LOC файлы</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="135"/>
+        <location filename="../src/data/data.cpp" line="156"/>
         <source>NMEA files</source>
         <translation>NMEA файлы</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="136"/>
+        <location filename="../src/data/data.cpp" line="157"/>
         <source>OziExplorer files</source>
         <translation>OziExplorer файлы</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="138"/>
+        <location filename="../src/data/data.cpp" line="159"/>
         <source>TCX files</source>
         <translation>TCX файлы</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="137"/>
+        <location filename="../src/data/data.cpp" line="158"/>
         <source>SLF files</source>
         <translation>SLF файлы</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="139"/>
+        <location filename="../src/data/data.cpp" line="160"/>
         <source>All files</source>
         <translation>Все файлы</translation>
     </message>
