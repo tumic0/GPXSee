@@ -340,18 +340,20 @@ win32 {
 }
 
 unix:!macx {
+    isEmpty(PREFIX):PREFIX = /usr/local
+
     maps.files = pkg/maps/*
-    maps.path = /usr/local/share/gpxsee/maps
+    maps.path = $$PREFIX/share/gpxsee/maps
     csv.files = pkg/csv/*
-    csv.path = /usr/local/share/gpxsee/csv
+    csv.path = $$PREFIX/share/gpxsee/csv
     locale.files = lang/*.qm
-    locale.path = /usr/local/share/gpxsee/translations
+    locale.path = $$PREFIX/share/gpxsee/translations
     icon.files = icons/gpxsee.png
-    icon.path = /usr/local/share/pixmaps
+    icon.path = $$PREFIX/share/pixmaps
     desktop.files = pkg/gpxsee.desktop
-    desktop.path = /usr/local/share/applications
+    desktop.path = $$PREFIX/share/applications
     mime.files = pkg/gpxsee.xml
-    mime.path = /usr/local/share/mime/packages
-    target.path = /usr/local/bin
+    mime.path = $$PREFIX/share/mime/packages
+    target.path = $$PREFIX/bin
     INSTALLS += target maps csv locale icon desktop mime
 }
