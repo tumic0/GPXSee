@@ -309,33 +309,33 @@ macx {
     maps.path = Contents/Resources
     maps.files = pkg/maps
     icons.path = Contents/Resources/icons
-    icons.files = icons/gpx.icns \
-        icons/tcx.icns \
-        icons/kml.icns \
-        icons/fit.icns \
-        icons/igc.icns \
-        icons/nmea.icns \
-        icons/plt.icns \
-        icons/rte.icns \
-        icons/wpt.icns \
-        icons/loc.icns \
-        icons/slf.icns
+    icons.files = icons/formats/gpx.icns \
+        icons/formats/tcx.icns \
+        icons/formats/kml.icns \
+        icons/formats/fit.icns \
+        icons/formats/igc.icns \
+        icons/formats/nmea.icns \
+        icons/formats/plt.icns \
+        icons/formats/rte.icns \
+        icons/formats/wpt.icns \
+        icons/formats/loc.icns \
+        icons/formats/slf.icns
     QMAKE_BUNDLE_DATA += locale maps icons csv
 }
 
 win32 {
     RC_ICONS = icons/gpxsee.ico \
-        icons/gpx.ico \
-        icons/tcx.ico \
-        icons/kml.ico \
-        icons/fit.ico \
-        icons/igc.ico \
-        icons/nmea.ico \
-        icons/plt.ico \
-        icons/rte.ico \
-        icons/wpt.ico \
-        icons/loc.ico \
-        icons/slf.ico
+        icons/formats/gpx.ico \
+        icons/formats/tcx.ico \
+        icons/formats/kml.ico \
+        icons/formats/fit.ico \
+        icons/formats/igc.ico \
+        icons/formats/nmea.ico \
+        icons/formats/plt.ico \
+        icons/formats/rte.ico \
+        icons/formats/wpt.ico \
+        icons/formats/loc.ico \
+        icons/formats/slf.ico
     DEFINES += _USE_MATH_DEFINES
 }
 
