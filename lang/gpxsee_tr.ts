@@ -54,57 +54,57 @@
     <message>
         <location filename="../src/data/data.cpp" line="147"/>
         <source>CSV files</source>
-        <translation>CSV dosyaları</translation>
+        <translation>CSV dosyalar</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="148"/>
         <source>FIT files</source>
-        <translation>FIT dosyaları</translation>
+        <translation>FIT dosyalar</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="150"/>
         <source>GeoJSON files</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoJSON dosyalar</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="152"/>
         <source>GPX files</source>
-        <translation>GPX dosyaları</translation>
+        <translation>GPX dosyalar</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="153"/>
         <source>IGC files</source>
-        <translation>IGC dosyaları</translation>
+        <translation>IGC dosyalar</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="154"/>
         <source>KML files</source>
-        <translation>KML dosyaları</translation>
+        <translation>KML dosyalar</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="155"/>
         <source>LOC files</source>
-        <translation>LOC dosyaları</translation>
+        <translation>LOC dosyalar</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="156"/>
         <source>NMEA files</source>
-        <translation>NMEA dosyaları</translation>
+        <translation>NMEA dosyalar</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="157"/>
         <source>OziExplorer files</source>
-        <translation>OziExplorer dosyaları</translation>
+        <translation>OziExplorer dosyalar</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="158"/>
         <source>SLF files</source>
-        <translation>SLF dosyaları</translation>
+        <translation>SLF dosyalar</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="159"/>
         <source>TCX files</source>
-        <translation>TCX dosyaları</translation>
+        <translation>TCX dosyalar</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="160"/>
@@ -189,7 +189,7 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
         <source>PDF files</source>
-        <translation>PDF dosyaları</translation>
+        <translation>PDF dosyalar</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
@@ -335,7 +335,7 @@
         <location filename="../src/GUI/gui.cpp" line="693"/>
         <location filename="../src/GUI/gui.cpp" line="694"/>
         <source>Paths</source>
-        <translation>Klasör adresleri</translation>
+        <translation>Klasör konumları</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="209"/>
@@ -753,7 +753,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="843"/>
         <source>Error loading POI file:</source>
-        <translation>POI dosyası yüklenirken hata oluştu:</translation>
+        <translation>POI dosyası yükleme hatası:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="995"/>
@@ -1062,7 +1062,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="120"/>
         <source>Track style:</source>
-        <translation>İz tarzı:</translation>
+        <translation>İz stili:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="122"/>
@@ -1074,7 +1074,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="123"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="139"/>
         <source>Style:</source>
-        <translation>Tarz:</translation>
+        <translation>Stil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="124"/>
@@ -1089,7 +1089,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="136"/>
         <source>Route style:</source>
-        <translation>Rota tarzı:</translation>
+        <translation>Rota stili:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="140"/>
@@ -1167,7 +1167,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="257"/>
         <source>Paths</source>
-        <translation>Klasör adresleri</translation>
+        <translation>Klasör konumları</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="258"/>
@@ -1390,7 +1390,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="493"/>
         <source>Item count (&gt;1)</source>
-        <translation>Eşya sayısı (&gt;1)</translation>
+        <translation>Öğe sayısı (&gt;1)</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="508"/>
