@@ -64,7 +64,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="150"/>
         <source>GeoJSON files</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoJSON-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="152"/>
