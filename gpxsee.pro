@@ -335,7 +335,8 @@ win32 {
         icons/formats/rte.ico \
         icons/formats/wpt.ico \
         icons/formats/loc.ico \
-        icons/formats/slf.ico
+        icons/formats/slf.ico \
+        icons/formats/json.ico
     DEFINES += _USE_MATH_DEFINES
 }
 
