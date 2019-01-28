@@ -195,6 +195,22 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>geojson</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/geo+json</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/json.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>GeoJSON</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
@@ -430,7 +446,27 @@
 				<string>application/vnd.oziexplorer.wpt</string>
 			</dict>
 		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.geojson.geojson</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.geojson.org</string>
+			<key>UTTypeDescription</key>
+			<string>GeoJSON</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.json</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>geojson</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/geo+json</string>
+			</dict>
+		</dict>
 	</array>
-
 </dict>
 </plist>
