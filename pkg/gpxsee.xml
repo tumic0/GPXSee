@@ -79,7 +79,7 @@
 	</mime-type>
 
 	<mime-type type="application/geo+json">
-		<comment>GeoJSON File</comment>
+		<comment>GeoJSON</comment>
 		<sub-class-of type="text/plain"/>
 		<generic-icon name="text-plain"/>
 		<glob pattern="*.geojson"/>
