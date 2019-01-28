@@ -14,7 +14,8 @@
 ; Translations
 !macro LOCALIZATION LANG CODE
   Section "${LANG}"
-    CreateDirectory "$INSTDIR\translations"
+    IfFileExists "$INSTDIR\translations" +2 0
+      CreateDirectory "$INSTDIR\translations" 
     File /oname=translations\gpxsee_${CODE}.qm translations\gpxsee_${CODE}.qm
     !if /FileExists translations\qt_${CODE}.qm
       File /oname=translations\qt_${CODE}.qm translations\qt_${CODE}.qm
