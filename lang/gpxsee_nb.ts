@@ -64,7 +64,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="150"/>
         <source>GeoJSON files</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoJSON-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="152"/>
@@ -1316,7 +1316,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="439"/>
         <source>Radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Radius:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="387"/>
