@@ -225,6 +225,7 @@ Section "Uninstall"
   !insertmacro FILE_ASSOCIATION_REMOVE "wpt"
   !insertmacro FILE_ASSOCIATION_REMOVE "loc"
   !insertmacro FILE_ASSOCIATION_REMOVE "slf"
+  !insertmacro FILE_ASSOCIATION_REMOVE "geojson"
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
 SectionEnd
