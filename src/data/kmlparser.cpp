@@ -296,14 +296,14 @@ void KMLParser::polygon(Area &area)
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("outerBoundaryIs")) {
-			if (!area.isEmpty()) {
+			if (!polygon.isEmpty()) {
 				_reader.raiseError("Multiple polygon outerBoundaryIss");
 				return;
 			}
 			polygon.append(QVector<Coordinates>());
 			boundary(polygon.last());
 		} else if (_reader.name() == QLatin1String("innerBoundaryIs")) {
-			if (area.isEmpty()) {
+			if (polygon.isEmpty()) {
 				_reader.raiseError("Missing polygon outerBoundaryIs");
 				return;
 			}
