@@ -197,8 +197,42 @@ void GPXParser::track(TrackData &track)
 	}
 }
 
+void GPXParser::area(Area &area)
+{
+	area.append(Polygon());
+	area.last().append(QVector<Coordinates>());
+	QVector<Coordinates> &points = area.last().last();
+
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("point")) {
+			Coordinates c(coordinates());
+			_reader.readElementText();
+			if (c.isValid())
+				points.append(c);
+			else
+				return;
+		} else if (_reader.name() == QLatin1String("name"))
+			area.setName(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("desc"))
+			area.setDescription(_reader.readElementText());
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
+void GPXParser::gpxExtensions(QList<Area> &areas)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("area")) {
+			areas.append(Area());
+			area(areas.last());
+		} else
+			_reader.skipCurrentElement();
+	}
+}
+
 void GPXParser::gpx(QList<TrackData> &tracks, QList<RouteData> &routes,
-  QVector<Waypoint> &waypoints)
+  QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("trk")) {
@@ -210,24 +244,23 @@ void GPXParser::gpx(QList<TrackData> &tracks, QList<RouteData> &routes,
 		} else if (_reader.name() == QLatin1String("wpt")) {
 			waypoints.append(Waypoint(coordinates()));
 			waypointData(waypoints.last());
-		} else
+		} else if (_reader.name() == QLatin1String("extensions"))
+			gpxExtensions(areas);
+		else
 			_reader.skipCurrentElement();
 	}
 }
 
 bool GPXParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QList<Area> &polygons,
-  QVector<Waypoint> &waypoints)
+  QList<RouteData> &routes, QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
-	Q_UNUSED(polygons);
-
 	_reader.clear();
 	_reader.setDevice(file);
 	_reader.setNamespaceProcessing(false);
 
 	if (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("gpx"))
-			gpx(tracks, routes, waypoints);
+			gpx(tracks, routes, areas, waypoints);
 		else
 			_reader.raiseError("Not a GPX file");
 	}
