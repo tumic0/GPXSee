@@ -216,8 +216,11 @@ void GPXParser::gpx(QList<TrackData> &tracks, QList<RouteData> &routes,
 }
 
 bool GPXParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
+  QList<RouteData> &routes, QList<Area> &polygons,
+  QVector<Waypoint> &waypoints)
 {
+	Q_UNUSED(polygons);
+
 	_reader.clear();
 	_reader.setDevice(file);
 	_reader.setNamespaceProcessing(false);

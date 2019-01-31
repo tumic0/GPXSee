@@ -9,7 +9,7 @@ public:
 	PLTParser() : _errorLine(0) {}
 
 	bool parse(QFile *file, QList<TrackData> &tracks, QList<RouteData> &routes,
-	  QVector<Waypoint> &waypoints);
+	  QList<Area> &polygons, QVector<Waypoint> &waypoints);
 	QString errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 
@@ -24,7 +24,7 @@ public:
 	RTEParser() : _errorLine(0) {}
 
 	bool parse(QFile *file, QList<TrackData> &tracks, QList<RouteData> &routes,
-	  QVector<Waypoint> &waypoints);
+	  QList<Area> &polygons, QVector<Waypoint> &waypoints);
 	QString errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 
@@ -39,7 +39,7 @@ public:
 	WPTParser() : _errorLine(0) {}
 
 	bool parse(QFile *file, QList<TrackData> &tracks, QList<RouteData> &routes,
-	  QVector<Waypoint> &waypoints);
+	  QList<Area> &polygons, QVector<Waypoint> &waypoints);
 	QString errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 

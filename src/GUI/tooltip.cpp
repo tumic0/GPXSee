@@ -7,6 +7,9 @@ void ToolTip::insert(const QString &key, const QString &value)
 
 QString ToolTip::toString()
 {
+	if (_list.isEmpty())
+		return QString();
+
 	QString ret = "<table>";
 
 	for (int i = 0; i < _list.count(); i++)

@@ -88,6 +88,7 @@ GUI::GUI()
 	_trackCount = 0;
 	_routeCount = 0;
 	_waypointCount = 0;
+	_areaCount = 0;
 	_trackDistance = 0;
 	_routeDistance = 0;
 	_time = 0;
@@ -329,6 +330,11 @@ void GUI::createActions()
 	_showWaypointsAction->setCheckable(true);
 	connect(_showWaypointsAction, SIGNAL(triggered(bool)), _mapView,
 	  SLOT(showWaypoints(bool)));
+	_showAreasAction = new QAction(tr("Show areas"), this);
+	_showAreasAction->setMenuRole(QAction::NoRole);
+	_showAreasAction->setCheckable(true);
+	connect(_showAreasAction, SIGNAL(triggered(bool)), _mapView,
+	  SLOT(showAreas(bool)));
 	_showWaypointLabelsAction = new QAction(tr("Waypoint labels"), this);
 	_showWaypointLabelsAction->setMenuRole(QAction::NoRole);
 	_showWaypointLabelsAction->setCheckable(true);
@@ -521,6 +527,7 @@ void GUI::createMenus()
 	dataMenu->addSeparator();
 	dataMenu->addAction(_showTracksAction);
 	dataMenu->addAction(_showRoutesAction);
+	dataMenu->addAction(_showAreasAction);
 	dataMenu->addAction(_showWaypointsAction);
 
 	QMenu *settingsMenu = menuBar()->addMenu(tr("&Settings"));
@@ -753,10 +760,11 @@ bool GUI::loadFile(const QString &fileName)
 
 	if (data.isValid()) {
 		for (int i = 0; i < data.tracks().count(); i++) {
-			_trackDistance += data.tracks().at(i)->distance();
-			_time += data.tracks().at(i)->time();
-			_movingTime += data.tracks().at(i)->movingTime();
-			const QDate &date = data.tracks().at(i)->date().date();
+			const Track &track = data.tracks().at(i);
+			_trackDistance += track.distance();
+			_time += track.time();
+			_movingTime += track.movingTime();
+			const QDate &date = track.date().date();
 			if (_dateRange.first.isNull() || _dateRange.first > date)
 				_dateRange.first = date;
 			if (_dateRange.second.isNull() || _dateRange.second < date)
@@ -765,16 +773,17 @@ bool GUI::loadFile(const QString &fileName)
 		_trackCount += data.tracks().count();
 
 		for (int i = 0; i < data.routes().count(); i++)
-			_routeDistance += data.routes().at(i)->distance();
+			_routeDistance += data.routes().at(i).distance();
 		_routeCount += data.routes().count();
 
 		_waypointCount += data.waypoints().count();
+		_areaCount += data.areas().count();
 
 		if (_pathName.isNull()) {
 			if (data.tracks().count() == 1 && !data.routes().count())
-				_pathName = data.tracks().first()->name();
+				_pathName = data.tracks().first().name();
 			else if (data.routes().count() == 1 && !data.tracks().count())
-				_pathName = data.routes().first()->name();
+				_pathName = data.routes().first().name();
 		} else
 			_pathName = QString();
 
@@ -893,8 +902,11 @@ void GUI::openOptions()
 	SET_VIEW_OPTION(backgroundColor, setBackgroundColor);
 	SET_VIEW_OPTION(trackWidth, setTrackWidth);
 	SET_VIEW_OPTION(routeWidth, setRouteWidth);
+	SET_VIEW_OPTION(areaWidth, setAreaWidth);
 	SET_VIEW_OPTION(trackStyle, setTrackStyle);
 	SET_VIEW_OPTION(routeStyle, setRouteStyle);
+	SET_VIEW_OPTION(areaStyle, setAreaStyle);
+	SET_VIEW_OPTION(areaOpacity, setAreaOpacity);
 	SET_VIEW_OPTION(waypointSize, setWaypointSize);
 	SET_VIEW_OPTION(waypointColor, setWaypointColor);
 	SET_VIEW_OPTION(poiSize, setPOISize);
@@ -1000,6 +1012,9 @@ void GUI::statistics()
 	if (_showWaypointsAction->isChecked() && _waypointCount > 1)
 		text.append("<tr><td>" + tr("Waypoints") + ":</td><td>"
 		  + l.toString(_waypointCount) + "</td></tr>");
+	if (_showAreasAction->isChecked() && _areaCount > 1)
+		text.append("<tr><td>" + tr("Areas") + ":</td><td>"
+		  + l.toString(_areaCount) + "</td></tr>");
 
 	if (_dateRange.first.isValid()) {
 		if (_dateRange.first == _dateRange.second) {
@@ -1065,6 +1080,8 @@ void GUI::plot(QPrinter *printer)
 			info.insert(tr("Routes"), l.toString(_routeCount));
 		if (_showWaypointsAction->isChecked() && _waypointCount > 1)
 			info.insert(tr("Waypoints"), l.toString(_waypointCount));
+		if (_showAreasAction->isChecked() && _areaCount > 1)
+			info.insert(tr("Areas"), l.toString(_areaCount));
 	}
 
 	if (_dateRange.first.isValid() && _options.printDate) {
@@ -1138,6 +1155,7 @@ void GUI::reloadFile()
 	_trackCount = 0;
 	_routeCount = 0;
 	_waypointCount = 0;
+	_areaCount = 0;
 	_trackDistance = 0;
 	_routeDistance = 0;
 	_time = 0;
@@ -1171,6 +1189,7 @@ void GUI::closeFiles()
 	_trackCount = 0;
 	_routeCount = 0;
 	_waypointCount = 0;
+	_areaCount = 0;
 	_trackDistance = 0;
 	_routeDistance = 0;
 	_time = 0;
@@ -1457,7 +1476,8 @@ bool GUI::updateMapView()
 	if (_options.alwaysShowMap)
 		_mapView->setHidden(false);
 	else
-		_mapView->setHidden(!(_trackCount + _routeCount + _waypointCount));
+		_mapView->setHidden(!(_trackCount + _routeCount + _waypointCount
+		  + _areaCount));
 
 	return (hidden != _mapView->isHidden());
 }
@@ -1692,6 +1712,8 @@ void GUI::writeSettings()
 	if (_showWaypointsAction->isChecked() != SHOW_WAYPOINTS_DEFAULT)
 		settings.setValue(SHOW_WAYPOINTS_SETTING,
 		  _showWaypointsAction->isChecked());
+	if (_showAreasAction->isChecked() != SHOW_AREAS_DEFAULT)
+		settings.setValue(SHOW_AREAS_SETTING, _showAreasAction->isChecked());
 	if (_showWaypointLabelsAction->isChecked() != SHOW_WAYPOINT_LABELS_DEFAULT)
 		settings.setValue(SHOW_WAYPOINT_LABELS_SETTING,
 		  _showWaypointLabelsAction->isChecked());
@@ -1732,10 +1754,16 @@ void GUI::writeSettings()
 		settings.setValue(TRACK_WIDTH_SETTING, _options.trackWidth);
 	if (_options.routeWidth != ROUTE_WIDTH_DEFAULT)
 		settings.setValue(ROUTE_WIDTH_SETTING, _options.routeWidth);
+	if (_options.areaWidth != AREA_WIDTH_DEFAULT)
+		settings.setValue(AREA_WIDTH_SETTING, _options.areaWidth);
 	if (_options.trackStyle != TRACK_STYLE_DEFAULT)
 		settings.setValue(TRACK_STYLE_SETTING, (int)_options.trackStyle);
 	if (_options.routeStyle != ROUTE_STYLE_DEFAULT)
 		settings.setValue(ROUTE_STYLE_SETTING, (int)_options.routeStyle);
+	if (_options.areaStyle != AREA_STYLE_DEFAULT)
+		settings.setValue(AREA_STYLE_SETTING, (int)_options.areaStyle);
+	if (_options.areaOpacity != AREA_OPACITY_DEFAULT)
+		settings.setValue(AREA_OPACITY_SETTING, (int)_options.areaOpacity);
 	if (_options.waypointSize != WAYPOINT_SIZE_DEFAULT)
 		settings.setValue(WAYPOINT_SIZE_SETTING, _options.waypointSize);
 	if (_options.waypointColor != WAYPOINT_COLOR_DEFAULT)
@@ -1931,6 +1959,10 @@ void GUI::readSettings()
 		_mapView->showWaypoints(false);
 	else
 		_showWaypointsAction->setChecked(true);
+	if (!settings.value(SHOW_AREAS_SETTING, SHOW_AREAS_DEFAULT).toBool())
+		_mapView->showAreas(false);
+	else
+		_showAreasAction->setChecked(true);
 	if (!settings.value(SHOW_WAYPOINT_LABELS_SETTING,
 	  SHOW_WAYPOINT_LABELS_DEFAULT).toBool())
 		_mapView->showWaypointLabels(false);
@@ -1976,10 +2008,16 @@ void GUI::readSettings()
 	  TRACK_WIDTH_DEFAULT).toInt();
 	_options.routeWidth = settings.value(ROUTE_WIDTH_SETTING,
 	  ROUTE_WIDTH_DEFAULT).toInt();
+	_options.areaWidth = settings.value(AREA_WIDTH_SETTING,
+	  AREA_WIDTH_DEFAULT).toInt();
 	_options.trackStyle = (Qt::PenStyle) settings.value(TRACK_STYLE_SETTING,
 	  (int)TRACK_STYLE_DEFAULT).toInt();
 	_options.routeStyle = (Qt::PenStyle) settings.value(ROUTE_STYLE_SETTING,
 	  (int)ROUTE_STYLE_DEFAULT).toInt();
+	_options.areaStyle = (Qt::PenStyle) settings.value(AREA_STYLE_SETTING,
+	  (int)AREA_STYLE_DEFAULT).toInt();
+	_options.areaOpacity = settings.value(AREA_OPACITY_SETTING,
+	  AREA_OPACITY_DEFAULT).toInt();
 	_options.pathAntiAliasing = settings.value(PATH_AA_SETTING, PATH_AA_DEFAULT)
 	  .toBool();
 	_options.waypointSize = settings.value(WAYPOINT_SIZE_SETTING,
@@ -2058,8 +2096,11 @@ void GUI::readSettings()
 	_mapView->setBackgroundColor(_options.backgroundColor);
 	_mapView->setTrackWidth(_options.trackWidth);
 	_mapView->setRouteWidth(_options.routeWidth);
+	_mapView->setAreaWidth(_options.areaWidth);
 	_mapView->setTrackStyle(_options.trackStyle);
 	_mapView->setRouteStyle(_options.routeStyle);
+	_mapView->setAreaStyle(_options.areaStyle);
+	_mapView->setAreaOpacity(_options.areaOpacity);
 	_mapView->setWaypointSize(_options.waypointSize);
 	_mapView->setWaypointColor(_options.waypointColor);
 	_mapView->setPOISize(_options.poiSize);

@@ -372,10 +372,12 @@ bool FITParser::parseHeader(CTX &ctx)
 }
 
 bool FITParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
+  QList<RouteData> &routes,
+  QList<Area> &polygons, QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(routes);
 	Q_UNUSED(waypoints);
+	Q_UNUSED(polygons);
 	CTX ctx(file);
 
 

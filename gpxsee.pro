@@ -153,7 +153,10 @@ HEADERS += src/common/config.h \
     src/data/locparser.h \
     src/data/slfparser.h \
     src/data/dem.h \
-    src/map/polarstereographic.h
+    src/map/polarstereographic.h \
+    src/data/polygon.h \
+    src/data/area.h \
+    src/GUI/areaitem.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -264,7 +267,9 @@ SOURCES += src/main.cpp \
     src/data/slfparser.cpp \
     src/data/dem.cpp \
     src/map/polarstereographic.cpp \
-    src/map/rectd.cpp
+    src/map/rectd.cpp \
+    src/data/polygon.cpp \
+    src/GUI/areaitem.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     HEADERS += src/data/geojsonparser.h

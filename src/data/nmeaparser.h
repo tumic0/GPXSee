@@ -10,8 +10,8 @@ class NMEAParser : public Parser
 public:
 	NMEAParser() : _errorLine(0), _GGA(false) {}
 
-	bool parse(QFile *file, QList<TrackData> &tracks,
-	  QList<RouteData> &routes, QVector<Waypoint> &waypoints);
+	bool parse(QFile *file, QList<TrackData> &tracks, QList<RouteData> &routes,
+	  QList<Area> &polygons, QVector<Waypoint> &waypoints);
 	QString errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 

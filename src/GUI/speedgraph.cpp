@@ -40,19 +40,19 @@ QList<GraphItem*> SpeedGraph::loadData(const Data &data)
 	QList<GraphItem*> graphs;
 
 	for (int i = 0; i < data.tracks().count(); i++) {
-		const Track *track = data.tracks().at(i);
-		const Graph &graph = track->speed();
+		const Track &track = data.tracks().at(i);
+		const Graph &graph = track.speed();
 
-		if (graph.size() < 2) {
+		if (!graph.isValid()) {
 			skipColor();
 			graphs.append(0);
 		} else {
 			SpeedGraphItem *gi = new SpeedGraphItem(graph, _graphType,
-			  track->movingTime());
+			  track.movingTime());
 			gi->setTimeType(_timeType);
 			GraphView::addGraph(gi);
-			_avg.append(QPointF(track->distance(), gi->avg()));
-			_mavg.append(QPointF(track->distance(), gi->mavg()));
+			_avg.append(QPointF(track.distance(), gi->avg()));
+			_mavg.append(QPointF(track.distance(), gi->mavg()));
 			graphs.append(gi);
 		}
 	}
@@ -61,6 +61,9 @@ QList<GraphItem*> SpeedGraph::loadData(const Data &data)
 		skipColor();
 		graphs.append(0);
 	}
+
+	for (int i = 0; i < data.areas().count(); i++)
+		skipColor();
 
 	setInfo();
 	redraw();

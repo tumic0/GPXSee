@@ -99,10 +99,12 @@ void SLFParser::activity(TrackData &track)
 }
 
 bool SLFParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
+  QList<RouteData> &routes, QList<Area> &polygons,
+  QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(waypoints);
 	Q_UNUSED(routes);
+	Q_UNUSED(polygons);
 
 	_reader.clear();
 	_reader.setDevice(file);

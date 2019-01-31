@@ -58,10 +58,12 @@ void LOCParser::loc(QVector<Waypoint> &waypoints)
 }
 
 bool LOCParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
+  QList<RouteData> &routes, QList<Area> &polygons,
+  QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(tracks);
 	Q_UNUSED(routes);
+	Q_UNUSED(polygons);
 
 	_reader.clear();
 	_reader.setDevice(file);

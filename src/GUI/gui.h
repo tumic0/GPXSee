@@ -190,6 +190,7 @@ private:
 	QAction *_showRoutesAction;
 	QAction *_showWaypointsAction;
 	QAction *_showWaypointLabelsAction;
+	QAction *_showAreasAction;
 	QAction *_showRouteWaypointsAction;
 	QAction *_openOptionsAction;
 	QAction *_mapsEnd;
@@ -215,13 +216,9 @@ private:
 	FileBrowser *_browser;
 	QList<QString> _files;
 
-	int _trackCount;
-	int _routeCount;
-	int _waypointCount;
-	qreal _trackDistance;
-	qreal _routeDistance;
-	qreal _time;
-	qreal _movingTime;
+	int _trackCount, _routeCount, _areaCount, _waypointCount;
+	qreal _trackDistance, _routeDistance;
+	qreal _time, _movingTime;
 	DateRange _dateRange;
 	QString _pathName;
 

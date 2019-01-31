@@ -22,6 +22,7 @@ PercentSlider::PercentSlider(QWidget *parent) : QWidget(parent)
 	QFontMetrics fm(_label->font());
 	_label->setFixedWidth(fm.boundingRect(format(_slider->maximum())).width());
 	_label->setAlignment(Qt::AlignRight);
+	_label->setText(format(_slider->value()));
 
 	connect(_slider, SIGNAL(sliderMoved(int)), this, SLOT(updateLabel(int)));
 

@@ -93,22 +93,7 @@ QWidget *OptionsDialog::createMapPage()
 
 QWidget *OptionsDialog::createAppearancePage()
 {
-	// Paths
-	_baseColor = new ColorBox();
-	_baseColor->setColor(_options->palette.color());
-	_colorOffset = new QDoubleSpinBox();
-	_colorOffset->setMinimum(0);
-	_colorOffset->setMaximum(1.0);
-	_colorOffset->setSingleStep(0.01);
-	_colorOffset->setValue(_options->palette.shift());
-	QFormLayout *paletteLayout = new QFormLayout();
-	paletteLayout->addRow(tr("Base color:"), _baseColor);
-	paletteLayout->addRow(tr("Palette shift:"), _colorOffset);
-#ifndef Q_OS_MAC
-	QGroupBox *colorBox = new QGroupBox(tr("Colors"));
-	colorBox->setLayout(paletteLayout);
-#endif // Q_OS_MAC
-
+	// Tracks
 	_trackWidth = new QSpinBox();
 	_trackWidth->setValue(_options->trackWidth);
 	_trackWidth->setMinimum(1);
@@ -125,6 +110,7 @@ QWidget *OptionsDialog::createAppearancePage()
 	trackBox->setLayout(trackLayout);
 #endif // Q_OS_MAC
 
+	// Routes
 	_routeWidth = new QSpinBox();
 	_routeWidth->setValue(_options->routeWidth);
 	_routeWidth->setMinimum(1);
@@ -141,6 +127,17 @@ QWidget *OptionsDialog::createAppearancePage()
 	routeBox->setLayout(routeLayout);
 #endif // Q_OS_MAC
 
+	_baseColor = new ColorBox();
+	_baseColor->setColor(_options->palette.color());
+	_colorOffset = new QDoubleSpinBox();
+	_colorOffset->setMinimum(0);
+	_colorOffset->setMaximum(1.0);
+	_colorOffset->setSingleStep(0.01);
+	_colorOffset->setValue(_options->palette.shift());
+	QFormLayout *paletteLayout = new QFormLayout();
+	paletteLayout->addRow(tr("Base color:"), _baseColor);
+	paletteLayout->addRow(tr("Palette shift:"), _colorOffset);
+
 	_pathAA = new QCheckBox(tr("Use anti-aliasing"));
 	_pathAA->setChecked(_options->pathAntiAliasing);
 	QFormLayout *pathAALayout = new QFormLayout();
@@ -149,20 +146,38 @@ QWidget *OptionsDialog::createAppearancePage()
 	QWidget *pathTab = new QWidget();
 	QVBoxLayout *pathTabLayout = new QVBoxLayout();
 #ifdef Q_OS_MAC
-	pathTabLayout->addLayout(paletteLayout);
-	pathTabLayout->addWidget(line());
 	pathTabLayout->addLayout(trackLayout);
 	pathTabLayout->addWidget(line());
 	pathTabLayout->addLayout(routeLayout);
 	pathTabLayout->addWidget(line());
 #else // Q_OS_MAC
-	pathTabLayout->addWidget(colorBox);
 	pathTabLayout->addWidget(trackBox);
 	pathTabLayout->addWidget(routeBox);
 #endif // Q_OS_MAC
+	pathTabLayout->addLayout(paletteLayout);
 	pathTabLayout->addLayout(pathAALayout);
 	pathTabLayout->addStretch();
 	pathTab->setLayout(pathTabLayout);
+
+
+	// Areas
+	_areaWidth = new QSpinBox();
+	_areaWidth->setValue(_options->areaWidth);
+	_areaWidth->setMinimum(1);
+	_areaStyle = new StyleComboBox();
+	_areaStyle->setValue(_options->areaStyle);
+	_areaOpacity = new PercentSlider();
+	_areaOpacity->setValue(_options->areaOpacity);
+	QFormLayout *areaLayout = new QFormLayout();
+	areaLayout->addRow(tr("Border width:"), _areaWidth);
+	areaLayout->addRow(tr("Border style:"), _areaStyle);
+	areaLayout->addRow(tr("Fill opacity:"), _areaOpacity);
+
+	QWidget *areaTab = new QWidget();
+	QVBoxLayout *areaTabLayout = new QVBoxLayout();
+	areaTabLayout->addLayout(areaLayout);
+	areaTabLayout->addStretch();
+	areaTab->setLayout(areaTabLayout);
 
 
 	// Waypoints
@@ -255,6 +270,7 @@ QWidget *OptionsDialog::createAppearancePage()
 
 	QTabWidget *appearancePage = new QTabWidget();
 	appearancePage->addTab(pathTab, tr("Paths"));
+	appearancePage->addTab(areaTab, tr("Areas"));
 	appearancePage->addTab(pointTab, tr("Points"));
 	appearancePage->addTab(graphTab, tr("Graphs"));
 	appearancePage->addTab(mapTab, tr("Map"));
@@ -630,6 +646,10 @@ void OptionsDialog::accept()
 	_options->routeStyle = (Qt::PenStyle) _routeStyle->itemData(
 	  _routeStyle->currentIndex()).toInt();
 	_options->pathAntiAliasing = _pathAA->isChecked();
+	_options->areaWidth = _areaWidth->value();
+	_options->areaStyle = (Qt::PenStyle) _areaStyle->itemData(
+	  _areaStyle->currentIndex()).toInt();
+	_options->areaOpacity = _areaOpacity->value();
 	_options->waypointSize = _waypointSize->value();
 	_options->waypointColor = _waypointColor->color();
 	_options->poiSize = _poiSize->value();

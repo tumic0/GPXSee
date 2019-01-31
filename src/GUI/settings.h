@@ -52,6 +52,8 @@
 #define SHOW_ROUTES_DEFAULT               true
 #define SHOW_WAYPOINTS_SETTING            "waypoints"
 #define SHOW_WAYPOINTS_DEFAULT            true
+#define SHOW_AREAS_SETTING                "areas"
+#define SHOW_AREAS_DEFAULT                true
 #define SHOW_ROUTE_WAYPOINTS_SETTING      "routeWaypoints"
 #define SHOW_ROUTE_WAYPOINTS_DEFAULT      true
 #define SHOW_WAYPOINT_LABELS_SETTING      "waypointLabels"
@@ -90,10 +92,16 @@
 #define TRACK_WIDTH_DEFAULT               3
 #define ROUTE_WIDTH_SETTING               "routeWidth"
 #define ROUTE_WIDTH_DEFAULT               3
+#define AREA_WIDTH_SETTING                "areaWidth"
+#define AREA_WIDTH_DEFAULT                2
 #define TRACK_STYLE_SETTING               "trackStyle"
 #define TRACK_STYLE_DEFAULT               Qt::SolidLine
 #define ROUTE_STYLE_SETTING               "routeStyle"
 #define ROUTE_STYLE_DEFAULT               Qt::DotLine
+#define AREA_STYLE_SETTING                "areaStyle"
+#define AREA_STYLE_DEFAULT                Qt::SolidLine
+#define AREA_OPACITY_SETTING              "areaOpacity"
+#define AREA_OPACITY_DEFAULT              50
 #define WAYPOINT_SIZE_SETTING             "waypointSize"
 #define WAYPOINT_SIZE_DEFAULT             8
 #define WAYPOINT_COLOR_SETTING            "waypointColor"

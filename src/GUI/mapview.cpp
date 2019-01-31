@@ -11,6 +11,7 @@
 #include "trackitem.h"
 #include "routeitem.h"
 #include "waypointitem.h"
+#include "areaitem.h"
 #include "scaleitem.h"
 #include "keys.h"
 #include "mapview.h"
@@ -50,13 +51,14 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 
 	_units = Metric;
 	_coordinatesFormat = DecimalDegrees;
-	_opacity = 1.0;
+	_mapOpacity = 1.0;
 	_backgroundColor = Qt::white;
 	_markerColor = Qt::red;
 
 	_showMap = true;
 	_showTracks = true;
 	_showRoutes = true;
+	_showAreas = true;
 	_showWaypoints = true;
 	_showWaypointLabels = true;
 	_showPOI = true;
@@ -96,8 +98,8 @@ void MapView::centerOn(const QPointF &pos)
 
 PathItem *MapView::addTrack(const Track &track)
 {
-	if (track.isNull()) {
-		_palette.nextColor();
+	if (!track.isValid()) {
+		skipColor();
 		return 0;
 	}
 
@@ -121,8 +123,8 @@ PathItem *MapView::addTrack(const Track &track)
 
 PathItem *MapView::addRoute(const Route &route)
 {
-	if (route.isNull()) {
-		_palette.nextColor();
+	if (!route.isValid()) {
+		skipColor();
 		return 0;
 	}
 
@@ -145,6 +147,28 @@ PathItem *MapView::addRoute(const Route &route)
 		addPOI(_poi->points(ri->path()));
 
 	return ri;
+}
+
+void MapView::addArea(const Area &area)
+{
+	if (!area.isValid()) {
+		skipColor();
+		return;
+	}
+
+	AreaItem *ai = new AreaItem(area, _map);
+	_areas.append(ai);
+	_ar |= ai->area().boundingRect();
+	ai->setColor(_palette.nextColor());
+	ai->setWidth(_areaWidth);
+	ai->setStyle(_areaStyle);
+	ai->setOpacity(_areaOpacity);
+	ai->setDigitalZoom(_digitalZoom);
+	ai->setVisible(_showAreas);
+	_scene->addItem(ai);
+
+	if (_showAreas)
+		addPOI(_poi->points(ai->area()));
 }
 
 void MapView::addWaypoints(const QVector<Waypoint> &waypoints)
@@ -175,12 +199,15 @@ QList<PathItem *> MapView::loadData(const Data &data)
 	int zoom = _map->zoom();
 
 	for (int i = 0; i < data.tracks().count(); i++)
-		paths.append(addTrack(*(data.tracks().at(i))));
+		paths.append(addTrack(data.tracks().at(i)));
 	for (int i = 0; i < data.routes().count(); i++)
-		paths.append(addRoute(*(data.routes().at(i))));
+		paths.append(addRoute(data.routes().at(i)));
+	for (int i = 0; i < data.areas().count(); i++)
+		addArea(data.areas().at(i));
 	addWaypoints(data.waypoints());
 
-	if (_tracks.empty() && _routes.empty() && _waypoints.empty())
+	if (_tracks.empty() && _routes.empty() && _waypoints.empty()
+	  && _areas.empty())
 		return paths;
 
 	if (fitMapZoom() != zoom)
@@ -195,7 +222,7 @@ QList<PathItem *> MapView::loadData(const Data &data)
 
 int MapView::fitMapZoom() const
 {
-	RectC br = _tr | _rr | _wr;
+	RectC br = _tr | _rr | _wr | _ar;
 
 	return _map->zoomFit(viewport()->size() - QSize(2*MARGIN, 2*MARGIN),
 	  br.isNull() ? RectC(_map->xy2ll(_map->bounds().topLeft()),
@@ -204,7 +231,7 @@ int MapView::fitMapZoom() const
 
 QPointF MapView::contentCenter() const
 {
-	RectC br = _tr | _rr | _wr;
+	RectC br = _tr | _rr | _wr | _ar;
 
 	return br.isNull() ? sceneRect().center() : _map->ll2xy(br.center());
 }
@@ -239,6 +266,8 @@ void MapView::rescale()
 		_tracks.at(i)->setMap(_map);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->setMap(_map);
+	for (int i = 0; i < _areas.size(); i++)
+		_areas.at(i)->setMap(_map);
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setMap(_map);
 
@@ -258,6 +287,8 @@ void MapView::setPalette(const Palette &palette)
 		_tracks.at(i)->setColor(_palette.nextColor());
 	for (int i = 0; i < _routes.count(); i++)
 		_routes.at(i)->setColor(_palette.nextColor());
+	for (int i = 0; i < _areas.count(); i++)
+		_areas.at(i)->setColor(_palette.nextColor());
 }
 
 void MapView::setMap(Map *map)
@@ -285,6 +316,8 @@ void MapView::setMap(Map *map)
 		_tracks.at(i)->setMap(map);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->setMap(map);
+	for (int i = 0; i < _areas.size(); i++)
+		_areas.at(i)->setMap(map);
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setMap(map);
 
@@ -327,6 +360,9 @@ void MapView::updatePOI()
 	if (_showRoutes)
 		for (int i = 0; i < _routes.size(); i++)
 			addPOI(_poi->points(_routes.at(i)->path()));
+	if (_showAreas)
+		for (int i = 0; i < _areas.size(); i++)
+			addPOI(_poi->points(_areas.at(i)->area()));
 	if (_showWaypoints)
 		for (int i = 0; i< _waypoints.size(); i++)
 			addPOI(_poi->points(_waypoints.at(i)->waypoint()));
@@ -419,6 +455,8 @@ void MapView::digitalZoom(int zoom)
 		_tracks.at(i)->setDigitalZoom(_digitalZoom);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->setDigitalZoom(_digitalZoom);
+	for (int i = 0; i < _areas.size(); i++)
+		_areas.at(i)->setDigitalZoom(_digitalZoom);
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setDigitalZoom(_digitalZoom);
 	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
@@ -536,7 +574,7 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 		  painter->device()->logicalDpiY()
 		  / (qreal)metric(QPaintDevice::PdmDpiY));
 		adj = QRect(0, 0, adj.width() * s.x(), adj.height() * s.y());
-		_map->zoomFit(adj.size(), _tr | _rr | _wr);
+		_map->zoomFit(adj.size(), _tr | _rr | _wr | _ar);
 		rescale();
 
 		QPointF center = contentCenter();
@@ -579,6 +617,7 @@ void MapView::clear()
 	_pois.clear();
 	_tracks.clear();
 	_routes.clear();
+	_areas.clear();
 	_waypoints.clear();
 
 	_scene->removeItem(_mapScale);
@@ -590,6 +629,7 @@ void MapView::clear()
 	_tr = RectC();
 	_rr = RectC();
 	_wr = RectC();
+	_ar = RectC();
 
 	digitalZoom(0);
 
@@ -623,6 +663,16 @@ void MapView::showWaypoints(bool show)
 
 	for (int i = 0; i < _waypoints.count(); i++)
 		_waypoints.at(i)->setVisible(show);
+
+	updatePOI();
+}
+
+void MapView::showAreas(bool show)
+{
+	_showAreas = show;
+
+	for (int i = 0; i < _areas.count(); i++)
+		_areas.at(i)->setVisible(show);
 
 	updatePOI();
 }
@@ -697,6 +747,14 @@ void MapView::setRouteWidth(int width)
 		_routes.at(i)->setWidth(width);
 }
 
+void MapView::setAreaWidth(int width)
+{
+	_areaWidth = width;
+
+	for (int i = 0; i < _areas.count(); i++)
+		_areas.at(i)->setWidth(width);
+}
+
 void MapView::setTrackStyle(Qt::PenStyle style)
 {
 	_trackStyle = style;
@@ -711,6 +769,22 @@ void MapView::setRouteStyle(Qt::PenStyle style)
 
 	for (int i = 0; i < _routes.count(); i++)
 		_routes.at(i)->setStyle(style);
+}
+
+void MapView::setAreaStyle(Qt::PenStyle style)
+{
+	_areaStyle = style;
+
+	for (int i = 0; i < _areas.count(); i++)
+		_areas.at(i)->setStyle(style);
+}
+
+void MapView::setAreaOpacity(int opacity)
+{
+	_areaOpacity = opacity / 100.0;
+
+	for (int i = 0; i < _areas.count(); i++)
+		_areas.at(i)->setOpacity(_areaOpacity);
 }
 
 void MapView::setWaypointSize(int size)
@@ -751,7 +825,7 @@ void MapView::setPOIColor(const QColor &color)
 
 void MapView::setMapOpacity(int opacity)
 {
-	_opacity = opacity / 100.0;
+	_mapOpacity = opacity / 100.0;
 	reloadMap();
 }
 
@@ -769,8 +843,8 @@ void MapView::drawBackground(QPainter *painter, const QRectF &rect)
 		QRectF ir = rect.intersected(_map->bounds());
 		Map::Flags flags = Map::NoFlags;
 
-		if (_opacity < 1.0)
-			painter->setOpacity(_opacity);
+		if (_mapOpacity < 1.0)
+			painter->setOpacity(_mapOpacity);
 
 		if (_plot)
 			flags = Map::Block;
@@ -867,6 +941,8 @@ void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 		_tracks.at(i)->setMap(_map);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->setMap(_map);
+	for (int i = 0; i < _areas.size(); i++)
+		_areas.at(i)->setMap(_map);
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setMap(_map);
 

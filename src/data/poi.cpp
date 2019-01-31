@@ -4,6 +4,9 @@
 #include "common/greatcircle.h"
 #include "data.h"
 #include "dem.h"
+#include "path.h"
+#include "area.h"
+#include "common/wgs84.h"
 #include "poi.h"
 
 
@@ -166,6 +169,31 @@ QList<Waypoint> POI::points(const Waypoint &point) const
 	min[1] = br.bottomRight().lat();
 	max[0] = br.bottomRight().lon();
 	max[1] = br.topLeft().lat();
+
+	_tree.Search(min, max, cb, &set);
+
+	for (it = set.constBegin(); it != set.constEnd(); ++it)
+		ret.append(_data.at(*it));
+
+	appendElevation(ret);
+
+	return ret;
+}
+
+QList<Waypoint> POI::points(const Area &area) const
+{
+	QList<Waypoint> ret;
+	qreal min[2], max[2];
+	QSet<int> set;
+	QSet<int>::const_iterator it;
+
+	RectC br(area.boundingRect());
+	double offset = rad2deg(_radius / WGS84_RADIUS);
+
+	min[0] = br.topLeft().lon() - offset;
+	min[1] = br.bottomRight().lat() - offset;
+	max[0] = br.bottomRight().lon() + offset;
+	max[1] = br.topLeft().lat() + offset;
 
 	_tree.Search(min, max, cb, &set);
 

@@ -63,20 +63,13 @@ static QHash<QString, Parser*> parsers()
 QHash<QString, Parser*> Data::_parsers = parsers();
 bool Data::_useDEM = false;
 
-Data::~Data()
+void Data::processData(const QList<TrackData> &trackData,
+  const QList<RouteData> &routeData)
 {
-	for (int i = 0; i < _tracks.count(); i++)
-		delete _tracks.at(i);
-	for (int i = 0; i < _routes.count(); i++)
-		delete _routes.at(i);
-}
-
-void Data::processData()
-{
-	for (int i = 0; i < _trackData.count(); i++)
-		_tracks.append(new Track(_trackData.at(i)));
-	for (int i = 0; i < _routeData.count(); i++)
-		_routes.append(new Route(_routeData.at(i)));
+	for (int i = 0; i < trackData.count(); i++)
+		_tracks.append(Track(trackData.at(i)));
+	for (int i = 0; i < routeData.count(); i++)
+		_routes.append(Route(routeData.at(i)));
 	for (int i = 0; i < _waypoints.size(); i++) {
 		if (!_waypoints.at(i).hasElevation() || _useDEM) {
 			qreal elevation = DEM::elevation(_waypoints.at(i).coordinates());
@@ -90,6 +83,8 @@ Data::Data(const QString &fileName, bool poi)
 {
 	QFile file(fileName);
 	QFileInfo fi(fileName);
+	QList<TrackData> trackData;
+	QList<RouteData> routeData;
 
 	_valid = false;
 	_errorLine = 0;
@@ -101,9 +96,10 @@ Data::Data(const QString &fileName, bool poi)
 
 	QHash<QString, Parser*>::iterator it;
 	if ((it = _parsers.find(fi.suffix().toLower())) != _parsers.end()) {
-		if (it.value()->parse(&file, _trackData, _routeData, _waypoints)) {
+		if (it.value()->parse(&file, trackData, routeData, _polygons,
+		  _waypoints)) {
 			if (!poi)
-				processData();
+				processData(trackData, routeData);
 			_valid = true;
 			return;
 		} else {
@@ -112,9 +108,10 @@ Data::Data(const QString &fileName, bool poi)
 		}
 	} else {
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
-			if (it.value()->parse(&file, _trackData, _routeData, _waypoints)) {
+			if (it.value()->parse(&file, trackData, routeData, _polygons,
+			  _waypoints)) {
 				if (!poi)
-					processData();
+					processData(trackData, routeData);
 				_valid = true;
 				return;
 			}

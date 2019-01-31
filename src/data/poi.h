@@ -7,8 +7,10 @@
 #include <QStringList>
 #include "common/rtree.h"
 #include "waypoint.h"
-#include "path.h"
 
+class Path;
+class Area;
+class RectC;
 
 class POI : public QObject
 {
@@ -28,6 +30,7 @@ public:
 
 	QList<Waypoint> points(const Path &path) const;
 	QList<Waypoint> points(const Waypoint &point) const;
+	QList<Waypoint> points(const Area &area) const;
 
 	const QStringList &files() const {return _files;}
 	void enableFile(const QString &fileName, bool enable);

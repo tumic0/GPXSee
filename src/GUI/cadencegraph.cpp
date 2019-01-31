@@ -32,15 +32,16 @@ QList<GraphItem*> CadenceGraph::loadData(const Data &data)
 	QList<GraphItem*> graphs;
 
 	for (int i = 0; i < data.tracks().count(); i++) {
-		const Graph &graph = data.tracks().at(i)->cadence();
+		const Track &track = data.tracks().at(i);
+		const Graph &graph = track.cadence();
 
-		if (graph.size() < 2) {
+		if (!graph.isValid()) {
 			skipColor();
 			graphs.append(0);
 		} else {
 			CadenceGraphItem *gi = new CadenceGraphItem(graph, _graphType);
 			GraphView::addGraph(gi);
-			_avg.append(QPointF(data.tracks().at(i)->distance(), gi->avg()));
+			_avg.append(QPointF(track.distance(), gi->avg()));
 			graphs.append(gi);
 		}
 	}
@@ -49,6 +50,9 @@ QList<GraphItem*> CadenceGraph::loadData(const Data &data)
 		skipColor();
 		graphs.append(0);
 	}
+
+	for (int i = 0; i < data.areas().count(); i++)
+		skipColor();
 
 	setInfo();
 	redraw();

@@ -8,24 +8,33 @@
 class KMLParser : public Parser
 {
 public:
-	bool parse(QFile *file, QList<TrackData> &tracks,
-	  QList<RouteData> &routes, QVector<Waypoint> &waypoints);
+	bool parse(QFile *file, QList<TrackData> &tracks, QList<RouteData> &routes,
+	  QList<Area> &areas, QVector<Waypoint> &waypoints);
 	QString errorString() const {return _reader.errorString();}
 	int errorLine() const {return _reader.lineNumber();}
 
 private:
-	void kml(QList<TrackData> &tracks, QVector<Waypoint> &waypoints);
-	void document(QList<TrackData> &tracks, QVector<Waypoint> &waypoints);
-	void folder(QList<TrackData> &tracks, QVector<Waypoint> &waypoints);
-	void placemark(QList<TrackData> &tracks, QVector<Waypoint> &waypoints);
-	void multiGeometry(QList<TrackData> &tracks, QVector<Waypoint> &waypoints,
-	  const QString &name, const QString &desc, const QDateTime timestamp);
+	void kml(QList<TrackData> &tracks, QList<Area> &areas,
+	  QVector<Waypoint> &waypoints);
+	void document(QList<TrackData> &tracks, QList<Area> &areas,
+	  QVector<Waypoint> &waypoints);
+	void folder(QList<TrackData> &tracks, QList<Area> &areas,
+	  QVector<Waypoint> &waypoints);
+	void placemark(QList<TrackData> &tracks, QList<Area> &areas,
+	  QVector<Waypoint> &waypoints);
+	void multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
+	  QVector<Waypoint> &waypoints, const QString &name, const QString &desc,
+	  const QDateTime timestamp);
 	void track(TrackData &track);
 	void multiTrack(TrackData &t);
 	void lineString(TrackData &track);
+	void linearRing(QVector<Coordinates> &coordinates);
+	void boundary(QVector<Coordinates> &coordinates);
+	void polygon(Area &area);
 	void point(Waypoint &waypoint);
 	bool pointCoordinates(Waypoint &waypoint);
 	bool lineCoordinates(TrackData &track);
+	bool polygonCoordinates(QVector<Coordinates> &points);
 	bool coord(Trackpoint &trackpoint);
 	void extendedData(TrackData &track, int start);
 	void schemaData(TrackData &track, int start);

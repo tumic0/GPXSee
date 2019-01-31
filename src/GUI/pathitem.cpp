@@ -14,11 +14,10 @@ static unsigned segments(qreal distance)
 }
 
 PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
-  : QGraphicsObject(parent)
+  : QGraphicsObject(parent), _path(path)
 {
 	Q_ASSERT(path.count() >= 2);
 
-	_path = path;
 	_map = map;
 	_digitalZoom = 0;
 

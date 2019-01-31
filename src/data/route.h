@@ -22,12 +22,12 @@ public:
 	const QString &name() const {return _data.name();}
 	const QString &description() const {return _data.description();}
 
-	bool isNull() const {return (_data.count() < 2);}
+	bool isValid() const {return _data.size() >= 2;}
 
 	static void useDEM(bool use) {_useDEM = use;}
 
 private:
-	const RouteData &_data;
+	RouteData _data;
 	QVector<qreal> _distance;
 
 	static bool _useDEM;

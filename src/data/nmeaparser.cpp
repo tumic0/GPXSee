@@ -478,9 +478,11 @@ bool NMEAParser::readZDA(const char *line, int len)
 }
 
 bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
+  QList<RouteData> &routes, QList<Area> &polygons,
+  QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(routes);
+	Q_UNUSED(polygons);
 	qint64 len;
 	char line[80 + 2 + 1 + 1];
 

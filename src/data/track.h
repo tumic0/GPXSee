@@ -33,7 +33,7 @@ public:
 	const QString &name() const {return _data.name();}
 	const QString &description() const {return _data.description();}
 
-	bool isNull() const {return (_data.size() < 2);}
+	bool isValid() const {return _data.size() >= 2;}
 
 	static void setElevationFilter(int window) {_elevationWindow = window;}
 	static void setSpeedFilter(int window) {_speedWindow = window;}
@@ -50,7 +50,7 @@ public:
 private:
 	bool discardStopPoint(int i) const;
 
-	const TrackData &_data;
+	TrackData _data;
 
 	QVector<qreal> _distance;
 	QVector<qreal> _time;

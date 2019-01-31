@@ -69,7 +69,7 @@ void ElevationGraph::setInfo()
 
 GraphItem *ElevationGraph::loadGraph(const Graph &graph, Type type)
 {
-	if (graph.size() < 2) {
+	if (!graph.isValid()) {
 		skipColor();
 		return 0;
 	}
@@ -97,9 +97,11 @@ QList<GraphItem*> ElevationGraph::loadData(const Data &data)
 	QList<GraphItem*> graphs;
 
 	for (int i = 0; i < data.tracks().count(); i++)
-		graphs.append(loadGraph(data.tracks().at(i)->elevation(), Track));
+		graphs.append(loadGraph(data.tracks().at(i).elevation(), Track));
 	for (int i = 0; i < data.routes().count(); i++)
-		graphs.append(loadGraph(data.routes().at(i)->elevation(), Route));
+		graphs.append(loadGraph(data.routes().at(i).elevation(), Route));
+	for (int i = 0; i < data.areas().count(); i++)
+		skipColor();
 
 	setInfo();
 	redraw();

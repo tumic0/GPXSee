@@ -34,9 +34,9 @@ QList<GraphItem*> GearRatioGraph::loadData(const Data &data)
 	QList<GraphItem*> graphs;
 
 	for (int i = 0; i < data.tracks().count(); i++) {
-		const Graph &graph = data.tracks().at(i)->ratio();
+		const Graph &graph = data.tracks().at(i).ratio();
 
-		if (graph.size() < 2) {
+		if (!graph.isValid()) {
 			skipColor();
 			graphs.append(0);
 		} else {
@@ -54,6 +54,9 @@ QList<GraphItem*> GearRatioGraph::loadData(const Data &data)
 		skipColor();
 		graphs.append(0);
 	}
+
+	for (int i = 0; i < data.areas().count(); i++)
+		skipColor();
 
 	setInfo();
 	redraw();

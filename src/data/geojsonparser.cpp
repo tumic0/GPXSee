@@ -3,20 +3,7 @@
 #include "geojsonparser.h"
 
 
-enum Type {
-	Unknown,
-	Point,
-	LineString,
-	MultiPoint,
-	Polygon,
-	MultiLineString,
-	MultiPolygon,
-	GeometryCollection,
-	Feature,
-	FeatureCollection
-};
-
-static Type type(const QJsonObject &json)
+GeoJSONParser::Type GeoJSONParser::type(const QJsonObject &json)
 {
 	QString str(json["type"].toString());
 
@@ -57,6 +44,8 @@ bool GeoJSONParser::point(const QJsonArray &coordinates, Waypoint &waypoint,
 		waypoint.setElevation(coordinates.at(2).toDouble());
 	if (properties.contains("title") && properties["title"].isString())
 		waypoint.setName(properties["title"].toString());
+	if (properties.contains("name") && properties["name"].isString())
+		waypoint.setName(properties["name"].toString());
 	if (properties.contains("description")
 	  && properties["description"].isString())
 		waypoint.setDescription(properties["description"].toString());
@@ -69,7 +58,7 @@ bool GeoJSONParser::multiPoint(const QJsonArray &coordinates,
 {
 	for (int i = 0; i < coordinates.size(); i++) {
 		if (!coordinates.at(i).isArray()) {
-			_errorString = "Invalid MultiPoint Coordinates";
+			_errorString = "Invalid MultiPoint coordinates";
 			return false;
 		} else {
 			waypoints.resize(waypoints.size() + 1);
@@ -86,6 +75,8 @@ bool GeoJSONParser::lineString(const QJsonArray &coordinates, TrackData &track,
 {
 	if (properties.contains("title") && properties["title"].isString())
 		track.setName(properties["title"].toString());
+	if (properties.contains("name") && properties["name"].isString())
+		track.setName(properties["name"].toString());
 	if (properties.contains("description")
 	  && properties["description"].isString())
 		track.setDescription(properties["description"].toString());
@@ -94,7 +85,7 @@ bool GeoJSONParser::lineString(const QJsonArray &coordinates, TrackData &track,
 		QJsonArray point(coordinates.at(i).toArray());
 		if (point.count() < 2 || !point.at(0).isDouble()
 		  || !point.at(1).isDouble()) {
-			_errorString = "Invalid LineString Coordinates";
+			_errorString = "Invalid LineString coordinates";
 			return false;
 		}
 
@@ -113,7 +104,7 @@ bool GeoJSONParser::multiLineString(const QJsonArray &coordinates,
 {
 	for (int i = 0; i < coordinates.size(); i++) {
 		if (!coordinates.at(i).isArray()) {
-			_errorString = "Invalid MultiLineString Coordinates";
+			_errorString = "Invalid MultiLineString coordinates";
 			return false;
 		} else {
 			tracks.append(TrackData());
@@ -126,9 +117,76 @@ bool GeoJSONParser::multiLineString(const QJsonArray &coordinates,
 	return true;
 }
 
-bool GeoJSONParser::geometryCollection(const QJsonObject &json,
-  QList<TrackData> &tracks, QVector<Waypoint> &waypoints,
+bool GeoJSONParser::polygon(const QJsonArray &coordinates, ::Polygon &pg)
+{
+	for (int i = 0; i < coordinates.size(); i++) {
+		if (!coordinates.at(i).isArray()) {
+			_errorString = "Invalid Polygon linear ring";
+			return false;
+		}
+
+		const QJsonArray lr(coordinates.at(i).toArray());
+		pg.append(QVector<Coordinates>());
+		QVector<Coordinates> &data = pg.last();
+
+		for (int j = 0; j < lr.size(); j++) {
+			QJsonArray point(lr.at(j).toArray());
+			if (point.count() < 2 || !point.at(0).isDouble()
+			  || !point.at(1).isDouble()) {
+				_errorString = "Invalid Polygon linear ring coordinates";
+				return false;
+			}
+			data.append(Coordinates(point.at(0).toDouble(),
+			  point.at(1).toDouble()));
+		}
+	}
+
+	return true;
+}
+
+bool GeoJSONParser::polygon(const QJsonArray &coordinates, Area &area,
   const QJsonObject &properties)
+{
+	if (properties.contains("title") && properties["title"].isString())
+		area.setName(properties["title"].toString());
+	if (properties.contains("name") && properties["name"].isString())
+		area.setName(properties["name"].toString());
+	if (properties.contains("description")
+	  && properties["description"].isString())
+		area.setDescription(properties["description"].toString());
+
+	area.append(::Polygon());
+	return polygon(coordinates, area.last());
+}
+
+bool GeoJSONParser::multiPolygon(const QJsonArray &coordinates,
+  Area &area, const QJsonObject &properties)
+{
+	if (properties.contains("title") && properties["title"].isString())
+		area.setName(properties["title"].toString());
+	if (properties.contains("name") && properties["name"].isString())
+		area.setName(properties["name"].toString());
+	if (properties.contains("description")
+	  && properties["description"].isString())
+		area.setDescription(properties["description"].toString());
+
+	for (int i = 0; i < coordinates.size(); i++) {
+		if (!coordinates.at(i).isArray()) {
+			_errorString = "Invalid MultiPolygon coordinates";
+			return false;
+		} else {
+			area.append(::Polygon());
+			if (!polygon(coordinates.at(i).toArray(), area.last()))
+				return false;
+		}
+	}
+
+	return true;
+}
+
+bool GeoJSONParser::geometryCollection(const QJsonObject &json,
+  QList<TrackData> &tracks, QList<Area> &areas,
+  QVector<Waypoint> &waypoints, const QJsonObject &properties)
 {
 	if (!json.contains("geometries") || !json["geometries"].isArray()) {
 		_errorString = "Invalid/missing GeometryCollection geometries array";
@@ -162,10 +220,19 @@ bool GeoJSONParser::geometryCollection(const QJsonObject &json,
 					return false;
 				break;
 			case Polygon:
+				areas.append(Area());
+				if (!polygon(geometry["coordinates"].toArray(), areas.last(),
+				  properties))
+					return false;
+				break;
 			case MultiPolygon:
+				areas.append(Area());
+				if (!multiPolygon(geometry["coordinates"].toArray(),
+				  areas.last(), properties))
+					return false;
 				break;
 			case GeometryCollection:
-				if (!geometryCollection(geometry, tracks, waypoints,
+				if (!geometryCollection(geometry, tracks, areas, waypoints,
 				  properties))
 					return false;
 				break;
@@ -180,7 +247,7 @@ bool GeoJSONParser::geometryCollection(const QJsonObject &json,
 }
 
 bool GeoJSONParser::feature(const QJsonObject &json, QList<TrackData> &tracks,
-  QVector<Waypoint> &waypoints)
+  QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
 	QJsonObject properties(json["properties"].toObject());
 	QJsonObject geometry(json["geometry"].toObject());
@@ -201,10 +268,15 @@ bool GeoJSONParser::feature(const QJsonObject &json, QList<TrackData> &tracks,
 			return multiLineString(geometry["coordinates"].toArray(), tracks,
 			  properties);
 		case GeometryCollection:
-			return geometryCollection(geometry, tracks, waypoints);
+			return geometryCollection(geometry, tracks, areas, waypoints);
 		case Polygon:
+			areas.append(Area());
+			return polygon(geometry["coordinates"].toArray(), areas.last(),
+			  properties);
 		case MultiPolygon:
-			return true;
+			areas.append(Area());
+			return multiPolygon(geometry["coordinates"].toArray(), areas.last(),
+			  properties);
 		default:
 			_errorString = geometry["type"].toString()
 			  + ": invalid/missing Feature geometry";
@@ -213,7 +285,8 @@ bool GeoJSONParser::feature(const QJsonObject &json, QList<TrackData> &tracks,
 }
 
 bool GeoJSONParser::featureCollection(const QJsonObject &json,
-  QList<TrackData> &tracks, QVector<Waypoint> &waypoints)
+  QList<TrackData> &tracks, QList<Area> &areas,
+  QVector<Waypoint> &waypoints)
 {
 	if (!json.contains("features") || !json["features"].isArray()) {
 		_errorString = "Invalid/missing FeatureCollection features array";
@@ -222,7 +295,7 @@ bool GeoJSONParser::featureCollection(const QJsonObject &json,
 
 	QJsonArray features(json["features"].toArray());
 	for (int i = 0; i < features.size(); i++)
-		if (!feature(features.at(i).toObject(), tracks, waypoints))
+		if (!feature(features.at(i).toObject(), tracks, areas, waypoints))
 			return false;
 
 	return true;
@@ -230,7 +303,7 @@ bool GeoJSONParser::featureCollection(const QJsonObject &json,
 
 
 bool GeoJSONParser::parse(QFile *file, QList<TrackData> &tracks,
-  QList<RouteData> &routes, QVector<Waypoint> &waypoints)
+  QList<RouteData> &routes, QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(routes);
 	QJsonParseError error;
@@ -256,14 +329,17 @@ bool GeoJSONParser::parse(QFile *file, QList<TrackData> &tracks,
 		case MultiLineString:
 			return multiLineString(json["coordinates"].toArray(), tracks);
 		case GeometryCollection:
-			return geometryCollection(json, tracks, waypoints);
+			return geometryCollection(json, tracks, areas, waypoints);
 		case Feature:
-			return feature(json, tracks, waypoints);
+			return feature(json, tracks, areas, waypoints);
 		case FeatureCollection:
-			return featureCollection(json, tracks, waypoints);
+			return featureCollection(json, tracks, areas, waypoints);
 		case Polygon:
+			areas.append(Area());
+			return polygon(json["coordinates"].toArray(), areas.last());
 		case MultiPolygon:
-			return true;
+			areas.append(Area());
+			return multiPolygon(json["coordinates"].toArray(), areas.last());
 		case Unknown:
 			if (json["type"].toString().isNull())
 				_errorString = "Not a GeoJSON file";

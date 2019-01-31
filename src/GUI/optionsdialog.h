@@ -21,8 +21,11 @@ struct Options {
 	Palette palette;
 	int trackWidth;
 	int routeWidth;
+	int areaWidth;
 	Qt::PenStyle trackStyle;
 	Qt::PenStyle routeStyle;
+	Qt::PenStyle areaStyle;
+	int areaOpacity;
 	QColor waypointColor;
 	QColor poiColor;
 	int waypointSize;
@@ -101,6 +104,9 @@ private:
 	StyleComboBox *_trackStyle;
 	QSpinBox *_routeWidth;
 	StyleComboBox *_routeStyle;
+	QSpinBox *_areaWidth;
+	StyleComboBox *_areaStyle;
+	PercentSlider *_areaOpacity;
 	QCheckBox *_pathAA;
 	QSpinBox *_waypointSize;
 	ColorBox *_waypointColor;

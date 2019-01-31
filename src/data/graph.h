@@ -39,6 +39,14 @@ inline QDebug operator<<(QDebug dbg, const GraphPoint &point)
 }
 #endif // QT_NO_DEBUG
 
-typedef QVector<GraphPoint> Graph;
+class Graph : public QVector<GraphPoint>
+{
+public:
+	Graph() {}
+	Graph(int size) : QVector<GraphPoint>(size) {}
+	Graph(const Graph &other) : QVector<GraphPoint>(other) {}
+
+	bool isValid() const {return size() >= 2;}
+};
 
 #endif // GRAPH_H
