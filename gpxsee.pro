@@ -1,4 +1,4 @@
-unix:!mac {
+unix:!macx {
     TARGET = gpxsee
 } else {
     TARGET = GPXSee
