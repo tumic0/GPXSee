@@ -12,9 +12,9 @@ public:
 	SpeedGraphItem(const Graph &graph, GraphType type, qreal movingTime,
 	  QGraphicsItem *parent = 0);
 
-	qreal max() const {return _max;}
 	qreal avg() const {return _avg;}
 	qreal mavg() const {return _mavg;}
+	qreal max() const {return _max;}
 
 	void setUnits(Units units);
 	void setTimeType(TimeType type);

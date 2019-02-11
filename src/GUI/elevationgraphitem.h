@@ -13,8 +13,8 @@ public:
 
 	qreal ascent() const {return _ascent;}
 	qreal descent() const {return _descent;}
-	qreal min() const {return _min;}
-	qreal max() const {return _max;}
+	qreal max() const {return _min;}
+	qreal min() const {return _max;}
 
 	void setUnits(Units units);
 

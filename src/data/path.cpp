@@ -1,14 +1,27 @@
 #include "path.h"
 
+bool Path::isValid() const
+{
+	if (isEmpty())
+		return false;
+	for (int i = 0; i < size(); i++)
+		if (at(i).size() < 2)
+			return false;
+	return true;
+}
+
 RectC Path::boundingRect() const
 {
 	RectC ret;
 
-	if (size() < 2)
+	if (!isValid())
 		return ret;
 
-	for (int i = 0; i < size(); i++)
-		ret = ret.united(at(i).coordinates());
+	for (int i = 0; i < size(); i++) {
+		const PathSegment &segment = at(i);
+		for (int j = 0; j < segment.size(); j++)
+			ret = ret.united(segment.at(j).coordinates());
+	}
 
 	return ret;
 }

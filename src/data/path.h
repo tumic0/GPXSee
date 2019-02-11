@@ -27,10 +27,12 @@ Q_DECLARE_TYPEINFO(PathPoint, Q_PRIMITIVE_TYPE);
 QDebug operator<<(QDebug dbg, const PathPoint &point);
 #endif // QT_NO_DEBUG
 
+typedef QVector<PathPoint> PathSegment;
 
-class Path : public QVector<PathPoint>
+class Path : public QList<PathSegment>
 {
 public:
+	bool isValid() const;
 	RectC boundingRect() const;
 };
 

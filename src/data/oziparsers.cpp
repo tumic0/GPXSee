@@ -41,6 +41,8 @@ bool PLTParser::parse(QFile *file, QList<TrackData> &tracks,
 
 	tracks.append(TrackData());
 	TrackData &track = tracks.last();
+	track.append(SegmentData());
+	SegmentData &segment = track.last();
 
 	while (!file->atEnd()) {
 		QByteArray line = file->readLine();
@@ -105,7 +107,8 @@ bool PLTParser::parse(QFile *file, QList<TrackData> &tracks,
 				}
 			}
 
-			track.append(tp);
+
+			segment.append(tp);
 		}
 
 		_errorLine++;

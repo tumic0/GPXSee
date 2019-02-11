@@ -11,13 +11,8 @@ public:
 	PowerGraphItem(const Graph &graph, GraphType type,
 	  QGraphicsItem *parent = 0);
 
-	qreal max() const {return _max;}
-	qreal avg() const {return _avg;}
-
 private:
 	QString toolTip() const;
-
-	qreal _avg, _max;
 };
 
 #endif // POWERGRAPHITEM_H

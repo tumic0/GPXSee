@@ -18,7 +18,7 @@ public:
 
 private:
 	bool readHRecord(const char *line, int len);
-	bool readBRecord(TrackData &track, const char *line, int len);
+	bool readBRecord(SegmentData &segment, const char *line, int len);
 	bool readCRecord(RouteData &route, const char *line, int len);
 
 	int _errorLine;

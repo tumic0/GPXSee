@@ -21,8 +21,8 @@ private:
 	void sport(QList<TrackData> &tracks);
 	void course(QVector<Waypoint> &waypoints, TrackData &track);
 	void activity(TrackData &track);
-	void lap(TrackData &track);
-	void trackpoints(TrackData &track);
+	void lap(SegmentData &segment);
+	void trackpoints(SegmentData &segment);
 	void trackpointData(Trackpoint &trackpoint);
 	void waypointData(Waypoint &waypoint);
 	void extensions(Trackpoint &trackpoint);

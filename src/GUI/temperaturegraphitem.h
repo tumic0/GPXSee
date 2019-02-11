@@ -20,7 +20,7 @@ public:
 private:
 	QString toolTip(Units units) const;
 
-	qreal _avg, _min, _max;
+	qreal _min, _max, _avg;
 };
 
 #endif // TEMPERATUREGRAPHITEM_H

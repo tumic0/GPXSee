@@ -15,7 +15,8 @@ QString RouteItem::toolTip(Units units) const
 		tt.insert(tr("Name"), _name);
 	if (!_desc.isEmpty())
 		tt.insert(tr("Description"), _desc);
-	tt.insert(tr("Distance"), Format::distance(_path.last().distance(), units));
+	tt.insert(tr("Distance"), Format::distance(_path.last().last().distance(),
+	  units));
 
 	return tt.toString();
 }

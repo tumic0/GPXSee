@@ -10,15 +10,9 @@ SpeedGraphItem::SpeedGraphItem(const Graph &graph, GraphType type,
 	_units = Metric;
 	_timeType = Total;
 
-	_avg = graph.last().s() / graph.last().t();
-	_mavg = graph.last().s() / movingTime;
-
-	_max = graph.first().y();
-	for (int i = 1; i < graph.size(); i++) {
-		qreal y = graph.at(i).y();
-		if (y > _max)
-			_max = y;
-	}
+	_max = GraphItem::max();
+	_avg = graph.last().last().s() / graph.last().last().t();
+	_mavg = graph.last().last().s() / movingTime;
 
 	setToolTip(toolTip());
 }

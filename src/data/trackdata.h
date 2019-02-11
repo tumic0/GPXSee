@@ -1,11 +1,14 @@
 #ifndef TRACKDATA_H
 #define TRACKDATA_H
 
+#include <QList>
 #include <QVector>
 #include <QString>
 #include "trackpoint.h"
 
-class TrackData : public QVector<Trackpoint>
+typedef QVector<Trackpoint> SegmentData;
+
+class TrackData : public QList<SegmentData>
 {
 public:
 	const QString& name() const {return _name;}

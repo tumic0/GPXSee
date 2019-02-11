@@ -26,7 +26,7 @@ bool SLFParser::data(const QXmlStreamAttributes &attr, const char *name,
 	return res;
 }
 
-void SLFParser::entries(const QDateTime &date, TrackData &track)
+void SLFParser::entries(const QDateTime &date, SegmentData &segment)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Entry")) {
@@ -60,7 +60,7 @@ void SLFParser::entries(const QDateTime &date, TrackData &track)
 			if (data(attr, "trainingTimeAbsolute", val))
 				t.setTimestamp(date.addMSecs(val * 10));
 
-			track.append(t);
+			segment.append(t);
 		}
 
 		_reader.skipCurrentElement();
@@ -89,9 +89,10 @@ void SLFParser::activity(TrackData &track)
 	QDateTime date;
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == QLatin1String("Entries"))
-			entries(date, track);
-		else if (_reader.name() == QLatin1String("GeneralInformation"))
+		if (_reader.name() == QLatin1String("Entries")) {
+			track.append(SegmentData());
+			entries(date, track.last());
+		} else if (_reader.name() == QLatin1String("GeneralInformation"))
 			generalInformation(date, track);
 		else
 			_reader.skipCurrentElement();

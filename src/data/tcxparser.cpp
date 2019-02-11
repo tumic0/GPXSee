@@ -116,14 +116,14 @@ void TCXParser::waypointData(Waypoint &waypoint)
 	}
 }
 
-void TCXParser::trackpoints(TrackData &track)
+void TCXParser::trackpoints(SegmentData &segment)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Trackpoint")) {
 			Trackpoint t;
 			trackpointData(t);
 			if (t.coordinates().isValid())
-				track.append(t);
+				segment.append(t);
 			else
 				warning("Missing Trackpoint coordinates");
 		} else
@@ -131,11 +131,11 @@ void TCXParser::trackpoints(TrackData &track)
 	}
 }
 
-void TCXParser::lap(TrackData &track)
+void TCXParser::lap(SegmentData &segment)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Track"))
-			trackpoints(track);
+			trackpoints(segment);
 		else
 			_reader.skipCurrentElement();
 	}
@@ -144,9 +144,10 @@ void TCXParser::lap(TrackData &track)
 void TCXParser::course(QVector<Waypoint> &waypoints, TrackData &track)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == QLatin1String("Track"))
-			trackpoints(track);
-		else if (_reader.name() == QLatin1String("Name"))
+		if (_reader.name() == QLatin1String("Track")) {
+			track.append(SegmentData());
+			trackpoints(track.last());
+		} else if (_reader.name() == QLatin1String("Name"))
 			track.setName(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("Notes"))
 			track.setDescription(_reader.readElementText());
@@ -164,9 +165,11 @@ void TCXParser::course(QVector<Waypoint> &waypoints, TrackData &track)
 
 void TCXParser::activity(TrackData &track)
 {
+	track.append(SegmentData());
+
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Lap"))
-			lap(track);
+			lap(track.last());
 		else if (_reader.name() == QLatin1String("Notes"))
 			track.setDescription(_reader.readElementText());
 		else
@@ -190,7 +193,7 @@ void TCXParser::sport(QList<TrackData> &tracks)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Activity")) {
 			tracks.append(TrackData());
-			activity(tracks.back());
+			activity(tracks.last());
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -212,7 +215,7 @@ void TCXParser::activities(QList<TrackData> &tracks)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Activity")) {
 			tracks.append(TrackData());
-			activity(tracks.back());
+			activity(tracks.last());
 		} else if (_reader.name() == QLatin1String("MultiSportSession"))
 			multiSportSession(tracks);
 		else

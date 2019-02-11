@@ -34,10 +34,11 @@ private:
 	  const QJsonObject &properties = QJsonObject());
 	bool multiPoint(const QJsonArray &coordinates,
 	  QVector<Waypoint> &waypoints, const QJsonObject &properties = QJsonObject());
+	bool lineString(const QJsonArray &coordinates, SegmentData &segment);
 	bool lineString(const QJsonArray &coordinates, TrackData &track,
 	  const QJsonObject &properties = QJsonObject());
 	bool multiLineString(const QJsonArray &coordinates,
-	  QList<TrackData> &tracks, const QJsonObject &properties = QJsonObject());
+	  TrackData &track, const QJsonObject &properties = QJsonObject());
 	bool polygon(const QJsonArray &coordinates, ::Polygon &pg);
 	bool polygon(const QJsonArray &coordinates, Area &area,
 	  const QJsonObject &properties = QJsonObject());

@@ -70,17 +70,9 @@ bool GeoJSONParser::multiPoint(const QJsonArray &coordinates,
 	return true;
 }
 
-bool GeoJSONParser::lineString(const QJsonArray &coordinates, TrackData &track,
-  const QJsonObject &properties)
+bool GeoJSONParser::lineString(const QJsonArray &coordinates,
+  SegmentData &segment)
 {
-	if (properties.contains("title") && properties["title"].isString())
-		track.setName(properties["title"].toString());
-	if (properties.contains("name") && properties["name"].isString())
-		track.setName(properties["name"].toString());
-	if (properties.contains("description")
-	  && properties["description"].isString())
-		track.setDescription(properties["description"].toString());
-
 	for (int i = 0; i < coordinates.size(); i++) {
 		QJsonArray point(coordinates.at(i).toArray());
 		if (point.count() < 2 || !point.at(0).isDouble()
@@ -93,23 +85,48 @@ bool GeoJSONParser::lineString(const QJsonArray &coordinates, TrackData &track,
 		  point.at(1).toDouble()));
 		if (point.count() == 3 && point.at(2).isDouble())
 			t.setElevation(point.at(2).toDouble());
-		track.append(t);
+		segment.append(t);
 	}
 
 	return true;
 }
 
-bool GeoJSONParser::multiLineString(const QJsonArray &coordinates,
-  QList<TrackData> &tracks, const QJsonObject &properties)
+bool GeoJSONParser::lineString(const QJsonArray &coordinates, TrackData &track,
+  const QJsonObject &properties)
 {
+	if (properties.contains("title") && properties["title"].isString())
+		track.setName(properties["title"].toString());
+	if (properties.contains("name") && properties["name"].isString())
+		track.setName(properties["name"].toString());
+	if (properties.contains("description")
+	  && properties["description"].isString())
+		track.setDescription(properties["description"].toString());
+
+	track.append(SegmentData());
+
+	lineString(coordinates, track.last());
+
+	return true;
+}
+
+bool GeoJSONParser::multiLineString(const QJsonArray &coordinates,
+  TrackData &track, const QJsonObject &properties)
+{
+	if (properties.contains("title") && properties["title"].isString())
+		track.setName(properties["title"].toString());
+	if (properties.contains("name") && properties["name"].isString())
+		track.setName(properties["name"].toString());
+	if (properties.contains("description")
+	  && properties["description"].isString())
+		track.setDescription(properties["description"].toString());
+
 	for (int i = 0; i < coordinates.size(); i++) {
 		if (!coordinates.at(i).isArray()) {
 			_errorString = "Invalid MultiLineString coordinates";
 			return false;
 		} else {
-			tracks.append(TrackData());
-			if (!lineString(coordinates.at(i).toArray(), tracks.last(),
-			  properties))
+			track.append(SegmentData());
+			if (!lineString(coordinates.at(i).toArray(), track.last()))
 				return false;
 		}
 	}
@@ -215,8 +232,9 @@ bool GeoJSONParser::geometryCollection(const QJsonObject &json,
 					return false;
 				break;
 			case MultiLineString:
-				if (!multiLineString(geometry["coordinates"].toArray(), tracks,
-				  properties))
+				tracks.append(TrackData());
+				if (!multiLineString(geometry["coordinates"].toArray(),
+				  tracks.last(), properties))
 					return false;
 				break;
 			case Polygon:
@@ -265,8 +283,9 @@ bool GeoJSONParser::feature(const QJsonObject &json, QList<TrackData> &tracks,
 			return lineString(geometry["coordinates"].toArray(), tracks.last(),
 			  properties);
 		case MultiLineString:
-			return multiLineString(geometry["coordinates"].toArray(), tracks,
-			  properties);
+			tracks.append(TrackData());
+			return multiLineString(geometry["coordinates"].toArray(),
+			  tracks.last(), properties);
 		case GeometryCollection:
 			return geometryCollection(geometry, tracks, areas, waypoints);
 		case Polygon:
@@ -327,7 +346,8 @@ bool GeoJSONParser::parse(QFile *file, QList<TrackData> &tracks,
 			tracks.append(TrackData());
 			return lineString(json["coordinates"].toArray(), tracks.last());
 		case MultiLineString:
-			return multiLineString(json["coordinates"].toArray(), tracks);
+			tracks.append(TrackData());
+			return multiLineString(json["coordinates"].toArray(), tracks.last());
 		case GeometryCollection:
 			return geometryCollection(json, tracks, areas, waypoints);
 		case Feature:

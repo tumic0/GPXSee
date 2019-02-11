@@ -25,23 +25,23 @@ private:
 	void multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
 	  QVector<Waypoint> &waypoints, const QString &name, const QString &desc,
 	  const QDateTime timestamp);
-	void track(TrackData &track);
+	void track(SegmentData &segment);
 	void multiTrack(TrackData &t);
-	void lineString(TrackData &track);
+	void lineString(SegmentData &segment);
 	void linearRing(QVector<Coordinates> &coordinates);
 	void boundary(QVector<Coordinates> &coordinates);
 	void polygon(Area &area);
 	void point(Waypoint &waypoint);
 	bool pointCoordinates(Waypoint &waypoint);
-	bool lineCoordinates(TrackData &track);
+	bool lineCoordinates(SegmentData &segment);
 	bool polygonCoordinates(QVector<Coordinates> &points);
 	bool coord(Trackpoint &trackpoint);
-	void extendedData(TrackData &track, int start);
-	void schemaData(TrackData &track, int start);
-	void heartRate(TrackData &track, int start);
-	void cadence(TrackData &track, int start);
-	void speed(TrackData &track, int start);
-	void temperature(TrackData &track, int start);
+	void extendedData(SegmentData &segment, int start);
+	void schemaData(SegmentData &segment, int start);
+	void heartRate(SegmentData &segment, int start);
+	void cadence(SegmentData &segment, int start);
+	void speed(SegmentData &segment, int start);
+	void temperature(SegmentData &segment, int start);
 	QDateTime timeStamp();
 	qreal number();
 	QDateTime time();

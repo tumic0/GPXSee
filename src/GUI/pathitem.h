@@ -42,6 +42,7 @@ protected:
 	MarkerItem *_marker;
 
 private:
+	const PathSegment *segment(qreal x) const;
 	QPointF position(qreal distance) const;
 	void updatePainterPath();
 	void updateShape();

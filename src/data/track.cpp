@@ -45,13 +45,13 @@ static QSet<int> eliminate(const QVector<qreal> &v)
 	return rm;
 }
 
-static Graph filter(const Graph &g, int window)
+static GraphSegment filter(const GraphSegment &g, int window)
 {
 	if (g.size() < window || window < 2)
-		return Graph(g);
+		return GraphSegment(g);
 
 	qreal acc = 0;
-	Graph ret(g.size());
+	GraphSegment ret(g.size());
 
 	for (int i = 0; i < window; i++)
 		acc += g.at(i).y();
@@ -70,239 +70,319 @@ static Graph filter(const Graph &g, int window)
 }
 
 
-Track::Track(const TrackData &data) : _data(data)
+Track::Track(const TrackData &data) : _data(data), _pause(0)
 {
-	QVector<qreal> acceleration;
 	qreal ds, dt;
 
-	_time.append(0);
-	_distance.append(0);
-	_speed.append(0);
-	acceleration.append(0);
-
-	for (int i = 1; i < _data.count(); i++) {
-		ds = _data.at(i).coordinates().distanceTo(_data.at(i-1).coordinates());
-		_distance.append(_distance.at(i-1) + ds);
-
-		if (_data.first().hasTimestamp() && _data.at(i).hasTimestamp()
-		  && _data.at(i).timestamp() >= _data.at(i-1).timestamp())
-			_time.append(_data.first().timestamp().msecsTo(
-			  _data.at(i).timestamp()) / 1000.0);
-		else
-			_time.append(NAN);
-
-		dt = _time.at(i) - _time.at(i-1);
-		if (dt < 1e-3) {
-			_speed.append(_speed.at(i-1));
-			acceleration.append(acceleration.at(i-1));
-		} else {
-			_speed.append(ds / dt);
-			qreal dv = _speed.at(i) - _speed.at(i-1);
-			acceleration.append(dv / dt);
-		}
-	}
-
-	_pause = 0;
-	for (int i = 1; i < _data.count(); i++) {
-		if (_time.at(i) > _time.at(i-1) + _pauseInterval
-		  && _speed.at(i) < _pauseSpeed) {
-			_pause += _time.at(i) - _time.at(i-1);
-			_stop.insert(i-1);
-			_stop.insert(i);
-		}
-	}
-
-	if (!_outlierEliminate)
-		return;
-
-	_outliers = eliminate(acceleration);
-
-	QSet<int>::const_iterator it;
-	for (it = _stop.constBegin(); it != _stop.constEnd(); ++it)
-		_outliers.remove(*it);
-
-	int last = 0;
 	for (int i = 0; i < _data.size(); i++) {
-		if (_outliers.contains(i))
-			last++;
-		else
-			break;
-	}
-	for (int i = last + 1; i < _data.size(); i++) {
-		if (_outliers.contains(i))
+		const SegmentData &sd = _data.at(i);
+		if (sd.isEmpty())
 			continue;
-		if (discardStopPoint(i)) {
-			_distance[i] = _distance.at(last);
-			_speed[i] = 0;
-		} else {
-			ds = _data.at(i).coordinates().distanceTo(
-			  _data.at(last).coordinates());
-			_distance[i] = _distance.at(last) + ds;
 
-			dt = _time.at(i) - _time.at(last);
-			_speed[i] = (dt < 1e-3) ? _speed.at(last) : ds / dt;
+		// precompute distances, times, speeds and acceleration
+		QVector<qreal> acceleration;
+
+		_segments.append(Segment());
+		Segment &seg = _segments.last();
+
+		seg.distance.append(i ? _segments.at(i-1).distance.last() : 0);
+		seg.time.append(i ? _segments.at(i-1).time.last() :
+		  sd.first().hasTimestamp() ? 0 : NAN);
+		seg.speed.append(sd.first().hasTimestamp() ? 0 : NAN);
+		acceleration.append(sd.first().hasTimestamp() ? 0 : NAN);
+
+		for (int j = 1; j < sd.size(); j++) {
+			ds = sd.at(j).coordinates().distanceTo(
+			  sd.at(j-1).coordinates());
+			seg.distance.append(seg.distance.last() + ds);
+
+			if (sd.at(j).timestamp() >= sd.at(j-1).timestamp())
+				dt = sd.at(j-1).timestamp().msecsTo(
+				  sd.at(j).timestamp()) / 1000.0;
+			else
+				dt = NAN;
+			seg.time.append(seg.time.last() + dt);
+
+			if (dt < 1e-3) {
+				seg.speed.append(seg.speed.last());
+				acceleration.append(acceleration.last());
+			} else {
+				qreal v = ds / dt;
+				qreal dv = v - seg.speed.last();
+				seg.speed.append(v);
+				acceleration.append(dv / dt);
+			}
 		}
-		last = i;
+
+		// get stop-points + pause duration
+		for (int j = 1; j < seg.time.size(); j++) {
+			if (seg.time.at(j) > seg.time.at(j-1) + _pauseInterval
+			  && seg.speed.at(j) < _pauseSpeed) {
+				_pause += seg.time.at(j) - seg.time.at(j-1);
+				seg.stop.insert(j-1);
+				seg.stop.insert(j);
+			}
+		}
+
+		if (!_outlierEliminate)
+			continue;
+
+
+		// eliminate outliers
+		seg.outliers = eliminate(acceleration);
+
+		// stop-points can not be outliers
+		QSet<int>::const_iterator it;
+		for (it = seg.stop.constBegin(); it != seg.stop.constEnd(); ++it)
+			seg.outliers.remove(*it);
+
+		// recompute distances (and dependand data) without outliers
+		int last = 0;
+		for (int j = 0; j < sd.size(); j++) {
+			if (seg.outliers.contains(j))
+				last++;
+			else
+				break;
+		}
+		for (int j = last + 1; j < sd.size(); j++) {
+			if (seg.outliers.contains(i))
+				continue;
+			if (discardStopPoint(seg, j)) {
+				seg.distance[j] = seg.distance.at(last);
+				seg.speed[j] = 0;
+			} else {
+				ds = sd.at(j).coordinates().distanceTo(
+				  sd.at(last).coordinates());
+				seg.distance[j] = seg.distance.at(last) + ds;
+
+				dt = seg.time.at(i) - seg.time.at(last);
+				seg.speed[i] = (dt < 1e-3) ? seg.speed.at(last) : ds / dt;
+			}
+			last = j;
+		}
 	}
 }
 
 Graph Track::elevation() const
 {
-	Graph raw;
+	Graph ret;
 
 	for (int i = 0; i < _data.size(); i++) {
-		if (_outliers.contains(i))
-			continue;
+		const SegmentData &sd = _data.at(i);
+		const Segment &seg = _segments.at(i);
+		GraphSegment gs;
 
-		if (_data.at(i).hasElevation() && !_useDEM)
-			raw.append(GraphPoint(_distance.at(i), _time.at(i),
-			  _data.at(i).elevation()));
-		else {
-			qreal elevation = DEM::elevation(_data.at(i).coordinates());
-			if (!std::isnan(elevation))
-				raw.append(GraphPoint(_distance.at(i), _time.at(i), elevation));
-			else if (_data.at(i).hasElevation())
-				raw.append(GraphPoint(_distance.at(i), _time.at(i),
-				  _data.at(i).elevation()));
+		for (int j = 0; j < sd.size(); j++) {
+			if (seg.outliers.contains(j))
+				continue;
+
+			if (sd.at(j).hasElevation() && !_useDEM)
+				gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j),
+				  sd.at(j).elevation()));
+			else {
+				qreal elevation = DEM::elevation(sd.at(j).coordinates());
+				if (!std::isnan(elevation))
+					gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j),
+					  elevation));
+				else if (sd.at(j).hasElevation())
+					gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j),
+					  sd.at(j).elevation()));
+			}
 		}
+
+		ret.append(filter(gs, _elevationWindow));
 	}
 
-	return filter(raw, _elevationWindow);
+	return ret;
 }
 
 Graph Track::speed() const
 {
-	Graph raw, filtered;
-	qreal v;
-	QList<int> stop;
+	Graph ret;
 
 	for (int i = 0; i < _data.size(); i++) {
-		if (_stop.contains(i) && (!std::isnan(_speed.at(i))
-		  || _data.at(i).hasSpeed())) {
-			v = 0;
-			stop.append(raw.size());
-		} else if (_useReportedSpeed && _data.at(i).hasSpeed()
-		  && !_outliers.contains(i))
-			v = _data.at(i).speed();
-		else if (!std::isnan(_speed.at(i)) && !_outliers.contains(i))
-			v = _speed.at(i);
-		else
-			continue;
+		const SegmentData &sd = _data.at(i);
+		const Segment &seg = _segments.at(i);
+		GraphSegment gs;
+		QList<int> stop;
+		qreal v;
 
-		raw.append(GraphPoint(_distance.at(i), _time.at(i), v));
+		for (int j = 0; j < sd.size(); j++) {
+			if (seg.stop.contains(j) && (!std::isnan(seg.speed.at(j))
+			  || sd.at(j).hasSpeed())) {
+				v = 0;
+				stop.append(gs.size());
+			} else if (_useReportedSpeed && sd.at(j).hasSpeed()
+			  && seg.outliers.contains(j))
+				v = sd.at(j).speed();
+			else if (!std::isnan(seg.speed.at(j)) && !seg.outliers.contains(j))
+				v = seg.speed.at(j);
+			else
+				continue;
+
+			gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j), v));
+		}
+
+		ret.append(filter(gs, _speedWindow));
+		GraphSegment &filtered = ret.last();
+
+		for (int j = 0; j < stop.size(); j++)
+			filtered[stop.at(j)].setY(0);
 	}
 
-	filtered = filter(raw, _speedWindow);
-
-	for (int i = 0; i < stop.size(); i++)
-		filtered[stop.at(i)].setY(0);
-
-	return filtered;
+	return ret;
 }
 
 Graph Track::heartRate() const
 {
-	Graph raw;
+	Graph ret;
 
-	for (int i = 0; i < _data.count(); i++)
-		if (_data.at(i).hasHeartRate() && !_outliers.contains(i))
-			raw.append(GraphPoint(_distance.at(i), _time.at(i),
-			  _data.at(i).heartRate()));
+	for (int i = 0; i < _data.size(); i++) {
+		const SegmentData &sd = _data.at(i);
+		const Segment &seg = _segments.at(i);
+		GraphSegment gs;
 
-	return filter(raw, _heartRateWindow);
+		for (int j = 0; j < sd.size(); j++)
+			if (sd.at(j).hasHeartRate() && !seg.outliers.contains(j))
+				gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j),
+				  sd.at(j).heartRate()));
+
+		ret.append(filter(gs, _heartRateWindow));
+	}
+
+	return ret;
 }
 
 Graph Track::temperature() const
 {
-	Graph raw;
+	Graph ret;
 
-	for (int i = 0; i < _data.size(); i++)
-		if (_data.at(i).hasTemperature() && !_outliers.contains(i))
-			raw.append(GraphPoint(_distance.at(i), _time.at(i),
-			  _data.at(i).temperature()));
+	for (int i = 0; i < _data.size(); i++) {
+		const SegmentData &sd = _data.at(i);
+		const Segment &seg = _segments.at(i);
+		GraphSegment gs;
 
-	return raw;
+		for (int j = 0; j < sd.count(); j++) {
+			if (sd.at(j).hasTemperature() && !seg.outliers.contains(j))
+				gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j),
+				  sd.at(j).temperature()));
+		}
+
+		ret.append(gs);
+	}
+
+	return ret;
 }
 
 Graph Track::ratio() const
 {
-	Graph raw;
+	Graph ret;
 
-	for (int i = 0; i < _data.size(); i++)
-		if (_data.at(i).hasRatio() && !_outliers.contains(i))
-			raw.append(GraphPoint(_distance.at(i), _time.at(i),
-			  _data.at(i).ratio()));
+	for (int i = 0; i < _data.size(); i++) {
+		const SegmentData &sd = _data.at(i);
+		const Segment &seg = _segments.at(i);
+		GraphSegment gs;
 
-	return raw;
+		for (int j = 0; j < sd.size(); j++)
+			if (sd.at(j).hasRatio() && !seg.outliers.contains(j))
+				gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j),
+				  sd.at(j).ratio()));
+
+		ret.append(gs);
+	}
+
+	return ret;
 }
 
 Graph Track::cadence() const
 {
-	Graph raw, filtered;
-	QList<int> stop;
-	qreal c;
+	Graph ret;
 
 	for (int i = 0; i < _data.size(); i++) {
-		if (_data.at(i).hasCadence() && _stop.contains(i)) {
-			c = 0;
-			stop.append(raw.size());
-		} else if (_data.at(i).hasCadence() && !_outliers.contains(i))
-			c = _data.at(i).cadence();
-		else
-			continue;
+		const SegmentData &sd = _data.at(i);
+		const Segment &seg = _segments.at(i);
+		GraphSegment gs;
+		QList<int> stop;
+		qreal c;
 
-		raw.append(GraphPoint(_distance.at(i), _time.at(i), c));
+		for (int j = 0; j < sd.size(); j++) {
+			if (sd.at(j).hasCadence() && seg.stop.contains(j)) {
+				c = 0;
+				stop.append(gs.size());
+			} else if (sd.at(j).hasCadence() && !seg.outliers.contains(j))
+				c = sd.at(j).cadence();
+			else
+				continue;
+
+			gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j), c));
+		}
+
+		ret.append(filter(gs, _cadenceWindow));
+		GraphSegment &filtered = ret.last();
+
+		for (int j = 0; j < stop.size(); j++)
+			filtered[stop.at(j)].setY(0);
 	}
 
-	filtered = filter(raw, _cadenceWindow);
-
-	for (int i = 0; i < stop.size(); i++)
-		filtered[stop.at(i)].setY(0);
-
-	return filtered;
+	return ret;
 }
 
 Graph Track::power() const
 {
-	Graph raw, filtered;
+	Graph ret;
 	QList<int> stop;
 	qreal p;
 
-	for (int i = 0; i < _data.size(); i++) {
-		if (_data.at(i).hasPower() && _stop.contains(i)) {
-			p = 0;
-			stop.append(raw.size());
-		} else if (_data.at(i).hasPower() && !_outliers.contains(i))
-			p = _data.at(i).power();
-		else
-			continue;
 
-		raw.append(GraphPoint(_distance.at(i), _time.at(i), p));
+	for (int i = 0; i < _data.size(); i++) {
+		const SegmentData &segment = _data.at(i);
+		const Segment &seg = _segments.at(i);
+		GraphSegment gs;
+
+		for (int j = 0; j < segment.size(); j++) {
+			if (segment.at(j).hasPower() && seg.stop.contains(j)) {
+				p = 0;
+				stop.append(gs.size());
+			} else if (segment.at(j).hasPower() && !seg.outliers.contains(j))
+				p = segment.at(j).power();
+			else
+				continue;
+
+			gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j), p));
+		}
+
+		ret.append(filter(gs, _powerWindow));
+		GraphSegment &filtered = ret.last();
+
+		for (int j = 0; j < stop.size(); j++)
+			filtered[stop.at(j)].setY(0);
 	}
 
-	filtered = filter(raw, _powerWindow);
-
-	for (int i = 0; i < stop.size(); i++)
-		filtered[stop.at(i)].setY(0);
-
-	return filtered;
+	return ret;
 }
 
 qreal Track::distance() const
 {
-	for (int i = _distance.size() - 1; i >= 0; i--)
-		if (!_outliers.contains(i))
-			return _distance.at(i);
+	for (int i = _segments.size() - 1; i >= 0; i--) {
+		const Segment &seg = _segments.at(i);
+
+		for (int j = seg.distance.size() - 1; j >= 0; j--)
+			if (!seg.outliers.contains(j))
+				return seg.distance.at(j);
+	}
 
 	return 0;
 }
 
 qreal Track::time() const
 {
-	for (int i = _data.size() - 1; i >= 0; i--)
-		if (!_outliers.contains(i))
-			return _data.first().timestamp().msecsTo(_data.at(i).timestamp())
-			  / 1000.0;
+	for (int i = _segments.size() - 1; i >= 0; i--) {
+		const Segment &seg = _segments.at(i);
+
+		for (int j = seg.time.size() - 1; j >= 0; j--)
+			if (!seg.outliers.contains(j))
+				return seg.time.at(j);
+	}
 
 	return 0;
 }
@@ -314,22 +394,41 @@ qreal Track::movingTime() const
 
 QDateTime Track::date() const
 {
-	return (_data.size()) ? _data.first().timestamp() : QDateTime();
+	return (_data.size() && _data.first().size())
+	  ? _data.first().first().timestamp() : QDateTime();
 }
 
 Path Track::path() const
 {
 	Path ret;
 
-	for (int i = 0; i < _data.size(); i++)
-		if (!_outliers.contains(i) && !discardStopPoint(i))
-			ret.append(PathPoint(_data.at(i).coordinates(), _distance.at(i)));
+	for (int i = 0; i < _data.size(); i++) {
+		const SegmentData &sd = _data.at(i);
+		const Segment &seg = _segments.at(i);
+		ret.append(PathSegment());
+		PathSegment &ps = ret.last();
+
+		for (int j = 0; j < sd.size(); j++)
+			if (!seg.outliers.contains(j) && !discardStopPoint(seg, j))
+				ps.append(PathPoint(sd.at(j).coordinates(),
+				  seg.distance.at(j)));
+	}
 
 	return ret;
 }
 
-bool Track::discardStopPoint(int i) const
+bool Track::discardStopPoint(const Segment &seg, int i) const
 {
-	return (_stop.contains(i) && i > 0 && _stop.contains(i-1)
-	  && i < _data.size() - 1 && _stop.contains(i+1));
+	return (seg.stop.contains(i) && seg.stop.contains(i-1)
+	  && seg.stop.contains(i+1) && i > 0 && i < seg.distance.size() - 1);
+}
+
+bool Track::isValid() const
+{
+	if (_data.isEmpty())
+		return false;
+	for (int i = 0; i < _data.size(); i++)
+		if (_data.at(i).size() < 2)
+			return false;
+	return true;
 }

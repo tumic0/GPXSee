@@ -129,23 +129,28 @@ QList<Waypoint> POI::points(const Path &path) const
 	QSet<int>::const_iterator it;
 
 
-	for (int i = 1; i < path.count(); i++) {
-		double ds = path.at(i).distance() - path.at(i-1).distance();
-		unsigned n = (unsigned)ceil(ds / _radius);
+	for (int i = 0; i < path.count(); i++) {
+		const PathSegment &segment = path.at(i);
 
-		if (n > 1) {
-			GreatCircle gc(path.at(i-1).coordinates(), path.at(i).coordinates());
-			for (unsigned j = 0; j < n; j++) {
-				RectC br(gc.pointAt((double)j/n), _radius);
+		for (int j = 1; j < segment.size(); j++) {
+			double ds = segment.at(j).distance() - segment.at(j-1).distance();
+			unsigned n = (unsigned)ceil(ds / _radius);
+
+			if (n > 1) {
+				GreatCircle gc(segment.at(j-1).coordinates(),
+				  segment.at(j).coordinates());
+				for (unsigned k = 0; k < n; k++) {
+					RectC br(gc.pointAt((double)k/n), _radius);
+					search(br, set);
+				}
+			} else {
+				RectC br(segment.at(j-1).coordinates(), _radius);
 				search(br, set);
 			}
-		} else {
-			RectC br(path.at(i-1).coordinates(), _radius);
-			search(br, set);
 		}
 	}
 
-	RectC br(path.last().coordinates(), _radius);
+	RectC br(path.last().last().coordinates(), _radius);
 	search(br, set);
 
 

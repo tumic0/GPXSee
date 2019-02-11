@@ -82,6 +82,7 @@ HEADERS += src/common/config.h \
     src/GUI/searchpointer.h \
     src/GUI/mapview.h \
     src/GUI/font.h \
+    src/GUI/areaitem.h \
     src/map/projection.h \
     src/map/ellipsoid.h \
     src/map/datum.h \
@@ -131,6 +132,7 @@ HEADERS += src/common/config.h \
     src/map/image.h \
     src/map/mbtilesmap.h \
     src/map/osm.h \
+    src/map/polarstereographic.h \
     src/data/graph.h \
     src/data/poi.h \
     src/data/waypoint.h \
@@ -153,10 +155,8 @@ HEADERS += src/common/config.h \
     src/data/locparser.h \
     src/data/slfparser.h \
     src/data/dem.h \
-    src/map/polarstereographic.h \
     src/data/polygon.h \
-    src/data/area.h \
-    src/GUI/areaitem.h
+    src/data/area.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -206,6 +206,7 @@ SOURCES += src/main.cpp \
     src/GUI/powergraphitem.cpp \
     src/GUI/gearratiographitem.cpp \
     src/GUI/mapview.cpp \
+    src/GUI/areaitem.cpp \
     src/map/maplist.cpp \
     src/map/onlinemap.cpp \
     src/map/downloader.cpp \
@@ -250,6 +251,8 @@ SOURCES += src/main.cpp \
     src/map/image.cpp \
     src/map/mbtilesmap.cpp \
     src/map/osm.cpp \
+    src/map/polarstereographic.cpp \
+    src/map/rectd.cpp \
     src/data/data.cpp \
     src/data/poi.cpp \
     src/data/track.cpp \
@@ -266,10 +269,7 @@ SOURCES += src/main.cpp \
     src/data/locparser.cpp \
     src/data/slfparser.cpp \
     src/data/dem.cpp \
-    src/map/polarstereographic.cpp \
-    src/map/rectd.cpp \
-    src/data/polygon.cpp \
-    src/GUI/areaitem.cpp
+    src/data/polygon.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     HEADERS += src/data/geojsonparser.h

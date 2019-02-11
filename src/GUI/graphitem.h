@@ -21,6 +21,10 @@ public:
 
 	const QRectF &bounds() const {return _bounds;}
 
+	qreal max() const;
+	qreal min() const;
+	qreal avg() const;
+
 	void setScale(qreal sx, qreal sy);
 	void setGraphType(GraphType type);
 	int id() const {return _id;}
@@ -46,6 +50,7 @@ private:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
+	const GraphSegment *segment(qreal x, GraphType type) const;
 	void updatePath();
 	void updateShape();
 	void updateBounds();

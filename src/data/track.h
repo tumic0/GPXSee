@@ -33,7 +33,7 @@ public:
 	const QString &name() const {return _data.name();}
 	const QString &description() const {return _data.description();}
 
-	bool isValid() const {return _data.size() >= 2;}
+	bool isValid() const;
 
 	static void setElevationFilter(int window) {_elevationWindow = window;}
 	static void setSpeedFilter(int window) {_speedWindow = window;}
@@ -48,17 +48,18 @@ public:
 	static void useDEM(bool use) {_useDEM = use;}
 
 private:
-	bool discardStopPoint(int i) const;
+	struct Segment {
+		QVector<qreal> distance;
+		QVector<qreal> time;
+		QVector<qreal> speed;
+		QSet<int> outliers;
+		QSet<int> stop;
+	};
+
+	bool discardStopPoint(const Segment &seg, int i) const;
 
 	TrackData _data;
-
-	QVector<qreal> _distance;
-	QVector<qreal> _time;
-	QVector<qreal> _speed;
-
-	QSet<int> _outliers;
-	QSet<int> _stop;
-
+	QList<Segment> _segments;
 	qreal _pause;
 
 	static bool _outlierEliminate;

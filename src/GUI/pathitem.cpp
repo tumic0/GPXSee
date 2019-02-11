@@ -8,19 +8,22 @@
 
 #define GEOGRAPHICAL_MILE 1855.3248
 
-static unsigned segments(qreal distance)
+static inline bool isInvalid(const QPointF &p)
+{
+	return (std::isnan(p.x()) || std::isnan(p.y()));
+}
+
+static inline unsigned segments(qreal distance)
 {
 	return ceil(distance / GEOGRAPHICAL_MILE);
 }
 
 PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
-  : QGraphicsObject(parent), _path(path)
+  : QGraphicsObject(parent), _path(path), _map(map)
 {
-	Q_ASSERT(path.count() >= 2);
+	Q_ASSERT(_path.isValid());
 
-	_map = map;
 	_digitalZoom = 0;
-
 	_width = 3;
 	QBrush brush(Qt::SolidPattern);
 	_pen = QPen(brush, _width);
@@ -29,8 +32,8 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 	updateShape();
 
 	_marker = new MarkerItem(this);
-	_marker->setPos(position(_path.at(0).distance()));
-	_markerDistance = _path.at(0).distance();
+	_marker->setPos(position(_path.first().first().distance()));
+	_markerDistance = _path.first().first().distance();
 
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
@@ -73,23 +76,27 @@ void PathItem::updatePainterPath()
 {
 	_painterPath = QPainterPath();
 
-	_painterPath.moveTo(_map->ll2xy(_path.first().coordinates()));
-	for (int i = 1; i < _path.size(); i++) {
-		const PathPoint &p1 = _path.at(i-1);
-		const PathPoint &p2 = _path.at(i);
-		unsigned n = segments(p2.distance() - p1.distance());
+	for (int i = 0; i < _path.size(); i++) {
+		const PathSegment &segment = _path.at(i);
+		_painterPath.moveTo(_map->ll2xy(segment.first().coordinates()));
 
-		if (n > 1) {
-			GreatCircle gc(p1.coordinates(), p2.coordinates());
-			Coordinates last = p1.coordinates();
+		for (int j = 1; j < segment.size(); j++) {
+			const PathPoint &p1 = segment.at(j-1);
+			const PathPoint &p2 = segment.at(j);
+			unsigned n = segments(p2.distance() - p1.distance());
 
-			for (unsigned j = 1; j <= n; j++) {
-				Coordinates c(gc.pointAt(j/(double)n));
-				addSegment(last, c);
-				last = c;
-			}
-		} else
-			addSegment(p1.coordinates(), p2.coordinates());
+			if (n > 1) {
+				GreatCircle gc(p1.coordinates(), p2.coordinates());
+				Coordinates last = p1.coordinates();
+
+				for (unsigned k = 1; k <= n; k++) {
+					Coordinates c(gc.pointAt(k/(double)n));
+					addSegment(last, c);
+					last = c;
+				}
+			} else
+				addSegment(p1.coordinates(), p2.coordinates());
+		}
 	}
 }
 
@@ -166,35 +173,48 @@ void PathItem::setDigitalZoom(int zoom)
 	updateShape();
 }
 
+const PathSegment *PathItem::segment(qreal x) const
+{
+	for (int i = 0; i < _path.size(); i++)
+		if (x <= _path.at(i).last().distance())
+			return &(_path.at(i));
+
+	return 0;
+}
+
 QPointF PathItem::position(qreal x) const
 {
+	const PathSegment *seg = segment(x);
+	if (!seg)
+		return QPointF(NAN, NAN);
+
 	int low = 0;
-	int high = _path.count() - 1;
+	int high = seg->count() - 1;
 	int mid = 0;
 
-	Q_ASSERT(high > low);
-	Q_ASSERT(x >= _path.at(low).distance() && x <= _path.at(high).distance());
+	if (!(x >= seg->first().distance() && x <= seg->last().distance()))
+		return QPointF(NAN, NAN);
 
 	while (low <= high) {
 		mid = low + ((high - low) / 2);
-		qreal val = _path.at(mid).distance();
+		qreal val = seg->at(mid).distance();
 		if (val > x)
 			high = mid - 1;
 		else if (val < x)
 			low = mid + 1;
 		else
-			return _map->ll2xy(_path.at(mid).coordinates());
+			return _map->ll2xy(seg->at(mid).coordinates());
 	}
 
 	Coordinates c1, c2;
 	qreal p1, p2;
 
-	if (_path.at(mid).distance() < x) {
-		c1 = _path.at(mid).coordinates(); c2 = _path.at(mid+1).coordinates();
-		p1 = _path.at(mid).distance(); p2 = _path.at(mid+1).distance();
+	if (seg->at(mid).distance() < x) {
+		c1 = seg->at(mid).coordinates(); c2 = seg->at(mid+1).coordinates();
+		p1 = seg->at(mid).distance(); p2 = seg->at(mid+1).distance();
 	} else {
-		c1 = _path.at(mid-1).coordinates(); c2 = _path.at(mid).coordinates();
-		p1 = _path.at(mid-1).distance(); p2 = _path.at(mid).distance();
+		c1 = seg->at(mid-1).coordinates(); c2 = seg->at(mid).coordinates();
+		p1 = seg->at(mid-1).distance(); p2 = seg->at(mid).distance();
 	}
 
 	unsigned n = segments(p2 - p1);
@@ -224,13 +244,15 @@ QPointF PathItem::position(qreal x) const
 
 void PathItem::moveMarker(qreal distance)
 {
-	if (distance >= _path.first().distance()
-	  && distance <= _path.last().distance()) {
-		_marker->setVisible(true);
-		_marker->setPos(position(distance));
-		_markerDistance = distance;
-	} else
+	QPointF pos(position(distance));
+
+	if (isInvalid(pos))
 		_marker->setVisible(false);
+	else {
+		_marker->setVisible(true);
+		_marker->setPos(pos);
+		_markerDistance = distance;
+	}
 }
 
 void PathItem::setMarkerColor(const QColor &color)

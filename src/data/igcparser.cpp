@@ -122,7 +122,8 @@ bool IGCParser::readHRecord(const char *line, int len)
 	return true;
 }
 
-bool IGCParser::readBRecord(TrackData &track, const char *line, int len)
+bool IGCParser::readBRecord(SegmentData &segment, const char *line,
+  int len)
 {
 	qreal lat, lon, ele;
 	QTime time;
@@ -158,7 +159,7 @@ bool IGCParser::readBRecord(TrackData &track, const char *line, int len)
 	Trackpoint t(Coordinates(lon, lat));
 	t.setTimestamp(QDateTime(_date, _time, Qt::UTC));
 	t.setElevation(ele);
-	track.append(t);
+	segment.append(t);
 
 	return true;
 }
@@ -240,10 +241,11 @@ bool IGCParser::parse(QFile *file, QList<TrackData> &tracks,
 				}
 				if (!track) {
 					tracks.append(TrackData());
+					tracks.last().append(SegmentData());
 					_time = QTime(0, 0);
 					track = true;
 				}
-				if (!readBRecord(tracks.last(), line, len))
+				if (!readBRecord(tracks.last().last(), line, len))
 					return false;
 			}
 		}

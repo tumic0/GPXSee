@@ -227,7 +227,7 @@ bool NMEAParser::readEW(const char *data, int len, qreal &lon)
 	return true;
 }
 
-bool NMEAParser::readRMC(TrackData &track, const char *line, int len)
+bool NMEAParser::readRMC(SegmentData &segment, const char *line, int len)
 {
 	int col = 1;
 	const char *vp = line;
@@ -280,8 +280,8 @@ bool NMEAParser::readRMC(TrackData &track, const char *line, int len)
 	}
 
 	if (!date.isNull()) {
-		if (_date.isNull() && !_time.isNull() && !track.isEmpty())
-			track.last().setTimestamp(QDateTime(date, _time, Qt::UTC));
+		if (_date.isNull() && !_time.isNull() && !segment.isEmpty())
+			segment.last().setTimestamp(QDateTime(date, _time, Qt::UTC));
 		_date = date;
 	}
 
@@ -290,13 +290,13 @@ bool NMEAParser::readRMC(TrackData &track, const char *line, int len)
 		Trackpoint t(c);
 		if (!_date.isNull() && !time.isNull())
 			t.setTimestamp(QDateTime(_date, time, Qt::UTC));
-		track.append(t);
+		segment.append(t);
 	}
 
 	return true;
 }
 
-bool NMEAParser::readGGA(TrackData &track, const char *line, int len)
+bool NMEAParser::readGGA(SegmentData &segment, const char *line, int len)
 {
 	int col = 1;
 	const char *vp = line;
@@ -364,7 +364,7 @@ bool NMEAParser::readGGA(TrackData &track, const char *line, int len)
 			t.setTimestamp(QDateTime(_date, _time, Qt::UTC));
 		if (!std::isnan(ele))
 			t.setElevation(ele - gh);
-		track.append(t);
+		segment.append(t);
 
 		_GGA = true;
 	}
@@ -485,6 +485,7 @@ bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
 	Q_UNUSED(polygons);
 	qint64 len;
 	char line[80 + 2 + 1 + 1];
+	SegmentData segment;
 
 
 	_errorLine = 1;
@@ -492,9 +493,6 @@ bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
 	_date = QDate();
 	_time = QTime();
 	_GGA = false;
-
-	tracks.append(TrackData());
-	TrackData &track = tracks.last();
 
 	while (!file->atEnd()) {
 		len = file->readLine(line, sizeof(line));
@@ -509,10 +507,10 @@ bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
 
 		if (validSentence(line, len)) {
 			if (!memcmp(line + 3, "RMC,", 4)) {
-				if (!readRMC(track, line + 7, len - 7))
+				if (!readRMC(segment, line + 7, len - 7))
 					return false;
 			} else if (!memcmp(line + 3, "GGA,", 4)) {
-				if (!readGGA(track, line + 7, len - 7))
+				if (!readGGA(segment, line + 7, len - 7))
 					return false;
 			} else if (!memcmp(line + 3, "WPL,", 4)) {
 				if (!readWPL(waypoints, line + 7, len - 7))
@@ -526,9 +524,14 @@ bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
 		_errorLine++;
 	}
 
-	if (!tracks.last().size() && !waypoints.size()) {
+	if (!segment.size() && !waypoints.size()) {
 		_errorString = "No usable NMEA sentence found";
 		return false;
+	}
+
+	if (segment.size()) {
+		tracks.append(TrackData());
+		tracks.last().append(segment);
 	}
 
 	return true;

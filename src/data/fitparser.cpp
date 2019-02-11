@@ -58,7 +58,7 @@ public:
 	MessageDefinition defs[16];
 	qreal ratio;
 	Trackpoint trackpoint;
-	TrackData track;
+	SegmentData segment;
 };
 
 
@@ -306,7 +306,7 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 			ctx.trackpoint.setTimestamp(QDateTime::fromTime_t(ctx.timestamp
 			  + 631065600));
 			ctx.trackpoint.setRatio(ctx.ratio);
-			ctx.track.append(ctx.trackpoint);
+			ctx.segment.append(ctx.trackpoint);
 			ctx.trackpoint = Trackpoint();
 			ctx.lastWrite = ctx.timestamp;
 		}
@@ -388,7 +388,8 @@ bool FITParser::parse(QFile *file, QList<TrackData> &tracks,
 		if (!parseRecord(ctx))
 			return false;
 
-	tracks.append(ctx.track);
+	tracks.append(TrackData());
+	tracks.last().append(ctx.segment);
 
 	return true;
 }

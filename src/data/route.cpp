@@ -19,9 +19,11 @@ Route::Route(const RouteData &data) : _data(data)
 Path Route::path() const
 {
 	Path ret;
+	ret.append(PathSegment());
+	PathSegment &ps = ret.last();
 
 	for (int i = 0; i < _data.size(); i++)
-		ret.append(PathPoint(_data.at(i).coordinates(), _distance.at(i)));
+		ps.append(PathPoint(_data.at(i).coordinates(), _distance.at(i)));
 
 	return ret;
 }
@@ -29,17 +31,19 @@ Path Route::path() const
 Graph Route::elevation() const
 {
 	Graph graph;
+	graph.append(GraphSegment());
+	GraphSegment &gs = graph.last();
 
 	for (int i = 0; i < _data.size(); i++) {
 		if (_data.at(i).hasElevation() && !_useDEM)
-			graph.append(GraphPoint(_distance.at(i), NAN,
+			gs.append(GraphPoint(_distance.at(i), NAN,
 			  _data.at(i).elevation()));
 		else {
 			qreal elevation = DEM::elevation(_data.at(i).coordinates());
 			if (!std::isnan(elevation))
-				graph.append(GraphPoint(_distance.at(i), NAN, elevation));
+				gs.append(GraphPoint(_distance.at(i), NAN, elevation));
 			else if (_data.at(i).hasElevation())
-				graph.append(GraphPoint(_distance.at(i), NAN,
+				gs.append(GraphPoint(_distance.at(i), NAN,
 				  _data.at(i).elevation()));
 		}
 	}
