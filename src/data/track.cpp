@@ -145,7 +145,7 @@ Track::Track(const TrackData &data) : _data(data), _pause(0)
 				break;
 		}
 		for (int j = last + 1; j < sd.size(); j++) {
-			if (seg.outliers.contains(i))
+			if (seg.outliers.contains(j))
 				continue;
 			if (discardStopPoint(seg, j)) {
 				seg.distance[j] = seg.distance.at(last);
@@ -155,8 +155,8 @@ Track::Track(const TrackData &data) : _data(data), _pause(0)
 				  sd.at(last).coordinates());
 				seg.distance[j] = seg.distance.at(last) + ds;
 
-				dt = seg.time.at(i) - seg.time.at(last);
-				seg.speed[i] = (dt < 1e-3) ? seg.speed.at(last) : ds / dt;
+				dt = seg.time.at(j) - seg.time.at(last);
+				seg.speed[j] = (dt < 1e-3) ? seg.speed.at(last) : ds / dt;
 			}
 			last = j;
 		}
