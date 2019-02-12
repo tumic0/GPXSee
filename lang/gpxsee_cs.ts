@@ -64,7 +64,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="147"/>
         <source>GeoJSON files</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubory GeoJSON</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="149"/>
@@ -449,7 +449,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="333"/>
         <source>Show areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobrazit plochy</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="338"/>
@@ -637,7 +637,7 @@
         <location filename="../src/GUI/gui.cpp" line="1016"/>
         <location filename="../src/GUI/gui.cpp" line="1084"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Plochy</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1059"/>
@@ -1338,27 +1338,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="140"/>
         <source>Area border width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Šířka okrajů ploch:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="141"/>
         <source>Area border style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Styl okrajů ploch:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="142"/>
         <source>Area fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Neprůhlednost výpně ploch:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <source>Fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Neprůhlednost výplně:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Plochy</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="440"/>
@@ -1508,12 +1508,12 @@
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished">Název</translation>
+        <translation>Název</translation>
     </message>
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="17"/>
         <source>Description</source>
-        <translation type="unfinished">Popis</translation>
+        <translation>Popis</translation>
     </message>
 </context>
 <context>
