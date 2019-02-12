@@ -127,6 +127,28 @@ QWidget *OptionsDialog::createAppearancePage()
 	routeBox->setLayout(routeLayout);
 #endif // Q_OS_MAC
 
+	// Areas
+	_areaWidth = new QSpinBox();
+	_areaWidth->setValue(_options->areaWidth);
+	_areaWidth->setMinimum(1);
+	_areaStyle = new StyleComboBox();
+	_areaStyle->setValue(_options->areaStyle);
+	_areaOpacity = new PercentSlider();
+	_areaOpacity->setValue(_options->areaOpacity);
+	QFormLayout *areaLayout = new QFormLayout();
+#ifdef Q_OS_MAC
+	areaLayout->addRow(tr("Area border width:"), _areaWidth);
+	areaLayout->addRow(tr("Area border style:"), _areaStyle);
+	areaLayout->addRow(tr("Area fill opacity:"), _areaOpacity)
+#else // Q_OS_MAC
+	areaLayout->addRow(tr("Width:"), _areaWidth);
+	areaLayout->addRow(tr("Style:"), _areaStyle);
+	areaLayout->addRow(tr("Fill opacity:"), _areaOpacity);
+	QGroupBox *areaBox = new QGroupBox(tr("Areas"));
+	areaBox->setLayout(areaLayout);
+#endif // Q_OS_MAC
+
+	// Palette & antialiasing
 	_baseColor = new ColorBox();
 	_baseColor->setColor(_options->palette.color());
 	_colorOffset = new QDoubleSpinBox();
@@ -150,34 +172,17 @@ QWidget *OptionsDialog::createAppearancePage()
 	pathTabLayout->addWidget(line());
 	pathTabLayout->addLayout(routeLayout);
 	pathTabLayout->addWidget(line());
+	pathTabLayout->addLayout(areaLayout);
+	pathTabLayout->addWidget(line());
 #else // Q_OS_MAC
 	pathTabLayout->addWidget(trackBox);
 	pathTabLayout->addWidget(routeBox);
+	pathTabLayout->addWidget(areaBox);
 #endif // Q_OS_MAC
 	pathTabLayout->addLayout(paletteLayout);
 	pathTabLayout->addLayout(pathAALayout);
 	pathTabLayout->addStretch();
 	pathTab->setLayout(pathTabLayout);
-
-
-	// Areas
-	_areaWidth = new QSpinBox();
-	_areaWidth->setValue(_options->areaWidth);
-	_areaWidth->setMinimum(1);
-	_areaStyle = new StyleComboBox();
-	_areaStyle->setValue(_options->areaStyle);
-	_areaOpacity = new PercentSlider();
-	_areaOpacity->setValue(_options->areaOpacity);
-	QFormLayout *areaLayout = new QFormLayout();
-	areaLayout->addRow(tr("Border width:"), _areaWidth);
-	areaLayout->addRow(tr("Border style:"), _areaStyle);
-	areaLayout->addRow(tr("Fill opacity:"), _areaOpacity);
-
-	QWidget *areaTab = new QWidget();
-	QVBoxLayout *areaTabLayout = new QVBoxLayout();
-	areaTabLayout->addLayout(areaLayout);
-	areaTabLayout->addStretch();
-	areaTab->setLayout(areaTabLayout);
 
 
 	// Waypoints
@@ -270,7 +275,6 @@ QWidget *OptionsDialog::createAppearancePage()
 
 	QTabWidget *appearancePage = new QTabWidget();
 	appearancePage->addTab(pathTab, tr("Paths"));
-	appearancePage->addTab(areaTab, tr("Areas"));
 	appearancePage->addTab(pointTab, tr("Points"));
 	appearancePage->addTab(graphTab, tr("Graphs"));
 	appearancePage->addTab(mapTab, tr("Map"));
@@ -314,10 +318,6 @@ QWidget *OptionsDialog::createDataPage()
 
 	QFormLayout *outlierLayout = new QFormLayout();
 	outlierLayout->addWidget(_outlierEliminate);
-#ifndef Q_OS_MAC
-	QGroupBox *outlierBox = new QGroupBox(tr("Outlier elimination"));
-	outlierBox->setLayout(outlierLayout);
-#endif // Q_OS_MAC
 
 	QWidget *filterTab = new QWidget();
 	QVBoxLayout *filterTabLayout = new QVBoxLayout();
@@ -325,11 +325,10 @@ QWidget *OptionsDialog::createDataPage()
 	filterTabLayout->addWidget(new QLabel(tr("Smoothing:")));
 	filterTabLayout->addLayout(smoothLayout);
 	filterTabLayout->addWidget(line());
-	filterTabLayout->addLayout(outlierLayout);
 #else // Q_OS_MAC
 	filterTabLayout->addWidget(smoothBox);
-	filterTabLayout->addWidget(outlierBox);
 #endif // Q_OS_MAC
+	filterTabLayout->addLayout(outlierLayout);
 	filterTabLayout->addStretch();
 	filterTab->setLayout(filterTabLayout);
 
