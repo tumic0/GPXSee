@@ -139,7 +139,7 @@ QWidget *OptionsDialog::createAppearancePage()
 #ifdef Q_OS_MAC
 	areaLayout->addRow(tr("Area border width:"), _areaWidth);
 	areaLayout->addRow(tr("Area border style:"), _areaStyle);
-	areaLayout->addRow(tr("Area fill opacity:"), _areaOpacity)
+	areaLayout->addRow(tr("Area fill opacity:"), _areaOpacity);
 #else // Q_OS_MAC
 	areaLayout->addRow(tr("Width:"), _areaWidth);
 	areaLayout->addRow(tr("Style:"), _areaStyle);
