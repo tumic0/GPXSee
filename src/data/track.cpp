@@ -169,6 +169,8 @@ Graph Track::elevation() const
 
 	for (int i = 0; i < _data.size(); i++) {
 		const SegmentData &sd = _data.at(i);
+		if (sd.size() < 2)
+			continue;
 		const Segment &seg = _segments.at(i);
 		GraphSegment gs;
 
@@ -202,6 +204,8 @@ Graph Track::speed() const
 
 	for (int i = 0; i < _data.size(); i++) {
 		const SegmentData &sd = _data.at(i);
+		if (sd.size() < 2)
+			continue;
 		const Segment &seg = _segments.at(i);
 		GraphSegment gs;
 		QList<int> stop;
@@ -239,6 +243,8 @@ Graph Track::heartRate() const
 
 	for (int i = 0; i < _data.size(); i++) {
 		const SegmentData &sd = _data.at(i);
+		if (sd.size() < 2)
+			continue;
 		const Segment &seg = _segments.at(i);
 		GraphSegment gs;
 
@@ -259,6 +265,8 @@ Graph Track::temperature() const
 
 	for (int i = 0; i < _data.size(); i++) {
 		const SegmentData &sd = _data.at(i);
+		if (sd.size() < 2)
+			continue;
 		const Segment &seg = _segments.at(i);
 		GraphSegment gs;
 
@@ -280,6 +288,8 @@ Graph Track::ratio() const
 
 	for (int i = 0; i < _data.size(); i++) {
 		const SegmentData &sd = _data.at(i);
+		if (sd.size() < 2)
+			continue;
 		const Segment &seg = _segments.at(i);
 		GraphSegment gs;
 
@@ -300,6 +310,8 @@ Graph Track::cadence() const
 
 	for (int i = 0; i < _data.size(); i++) {
 		const SegmentData &sd = _data.at(i);
+		if (sd.size() < 2)
+			continue;
 		const Segment &seg = _segments.at(i);
 		GraphSegment gs;
 		QList<int> stop;
@@ -335,16 +347,18 @@ Graph Track::power() const
 
 
 	for (int i = 0; i < _data.size(); i++) {
-		const SegmentData &segment = _data.at(i);
+		const SegmentData &sd = _data.at(i);
+		if (sd.size() < 2)
+			continue;
 		const Segment &seg = _segments.at(i);
 		GraphSegment gs;
 
-		for (int j = 0; j < segment.size(); j++) {
-			if (segment.at(j).hasPower() && seg.stop.contains(j)) {
+		for (int j = 0; j < sd.size(); j++) {
+			if (sd.at(j).hasPower() && seg.stop.contains(j)) {
 				p = 0;
 				stop.append(gs.size());
-			} else if (segment.at(j).hasPower() && !seg.outliers.contains(j))
-				p = segment.at(j).power();
+			} else if (sd.at(j).hasPower() && !seg.outliers.contains(j))
+				p = sd.at(j).power();
 			else
 				continue;
 
@@ -404,6 +418,8 @@ Path Track::path() const
 
 	for (int i = 0; i < _data.size(); i++) {
 		const SegmentData &sd = _data.at(i);
+		if (sd.size() < 2)
+			continue;
 		const Segment &seg = _segments.at(i);
 		ret.append(PathSegment());
 		PathSegment &ps = ret.last();
@@ -425,10 +441,8 @@ bool Track::discardStopPoint(const Segment &seg, int i) const
 
 bool Track::isValid() const
 {
-	if (_data.isEmpty())
-		return false;
 	for (int i = 0; i < _data.size(); i++)
-		if (_data.at(i).size() < 2)
-			return false;
-	return true;
+		if (_data.at(i).size() >= 2)
+			return true;
+	return false;
 }
