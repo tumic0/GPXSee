@@ -1116,12 +1116,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="51"/>
         <source>Non-HiDPI maps are loaded as HiDPI maps. The map is sharp but map objects are small/hard to read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ei-HiDPI-kartat ladataan HiDPI-karttoina. Kartta on terävä, mutta karttakohteet ovat pieniä/vaikeasti luettavia.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="53"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ei-HiDPI-kartat ladataan kuten ne ovat. Karttakohteilla on odotettu koko, mutta kartta on epäselvä.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="86"/>
