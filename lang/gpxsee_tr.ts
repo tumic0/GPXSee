@@ -445,7 +445,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="333"/>
         <source>Show areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Alanları göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="338"/>
@@ -782,7 +782,7 @@
         <location filename="../src/GUI/gui.cpp" line="1016"/>
         <location filename="../src/GUI/gui.cpp" line="1084"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Alanlar</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1022"/>
@@ -1112,27 +1112,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="140"/>
         <source>Area border width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Alan sınır genişliği:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="141"/>
         <source>Area border style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Alan sınır stili:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="142"/>
         <source>Area fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Alan dolgusu opaklığı:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <source>Fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Opaklığı doldur:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Alanlar</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="163"/>
@@ -1506,12 +1506,12 @@
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished">Adı</translation>
+        <translation>Adı</translation>
     </message>
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="17"/>
         <source>Description</source>
-        <translation type="unfinished">Açıklama</translation>
+        <translation>Açıklama</translation>
     </message>
 </context>
 <context>
