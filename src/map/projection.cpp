@@ -7,6 +7,7 @@
 #include "lambertazimuthal.h"
 #include "krovak.h"
 #include "polarstereographic.h"
+#include "obliquestereographic.h"
 #include "latlon.h"
 #include "gcs.h"
 #include "pcs.h"
@@ -22,6 +23,7 @@ Projection::Method::Method(int id)
 		case 9802:
 		case 9804:
 		case 9807:
+		case 9809:
 		case 9815:
 		case 9819:
 		case 9820:
@@ -69,6 +71,11 @@ Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
 			break;
 		case 9807:
 			_ct = new TransverseMercator(ellipsoid, setup.latitudeOrigin(),
+			  setup.longitudeOrigin(), setup.scale(), setup.falseEasting(),
+			  setup.falseNorthing());
+			break;
+		case 9809:
+			_ct = new ObliqueStereographic(ellipsoid, setup.latitudeOrigin(),
 			  setup.longitudeOrigin(), setup.scale(), setup.falseEasting(),
 			  setup.falseNorthing());
 			break;

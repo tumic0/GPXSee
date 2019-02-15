@@ -156,7 +156,8 @@ HEADERS += src/common/config.h \
     src/data/slfparser.h \
     src/data/dem.h \
     src/data/polygon.h \
-    src/data/area.h
+    src/data/area.h \
+    src/map/obliquestereographic.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -269,7 +270,8 @@ SOURCES += src/main.cpp \
     src/data/locparser.cpp \
     src/data/slfparser.cpp \
     src/data/dem.cpp \
-    src/data/polygon.cpp
+    src/data/polygon.cpp \
+    src/map/obliquestereographic.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     HEADERS += src/data/geojsonparser.h
