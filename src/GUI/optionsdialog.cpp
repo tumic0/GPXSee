@@ -130,7 +130,7 @@ QWidget *OptionsDialog::createAppearancePage()
 	// Areas
 	_areaWidth = new QSpinBox();
 	_areaWidth->setValue(_options->areaWidth);
-	_areaWidth->setMinimum(1);
+	//_areaWidth->setMinimum(1);
 	_areaStyle = new StyleComboBox();
 	_areaStyle->setValue(_options->areaStyle);
 	_areaOpacity = new PercentSlider();

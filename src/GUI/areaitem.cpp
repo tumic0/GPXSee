@@ -77,7 +77,7 @@ void AreaItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 
-	painter->setPen(_pen);
+	painter->setPen(_width ? _pen : QPen(Qt::NoPen));
 	painter->drawPath(_painterPath);
 	painter->fillPath(_painterPath, _brush);
 
