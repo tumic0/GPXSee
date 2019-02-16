@@ -459,7 +459,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="333"/>
         <source>Show areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa områden</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="338"/>
@@ -484,7 +484,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
         <source>Show path markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa vägmarkörer</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="391"/>
@@ -652,7 +652,7 @@
         <location filename="../src/GUI/gui.cpp" line="1022"/>
         <location filename="../src/GUI/gui.cpp" line="1090"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Områden</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1065"/>
@@ -1334,27 +1334,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="139"/>
         <source>Area border width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kantbredd för områden:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="140"/>
         <source>Area border style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kantstil för områden:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="141"/>
         <source>Area fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ifyllnadsopacitet för områden:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="145"/>
         <source>Fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ifyllnadsopacitet:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Områden</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="439"/>
@@ -1504,12 +1504,12 @@
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished">Namn</translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="17"/>
         <source>Description</source>
-        <translation type="unfinished">Beskrivning</translation>
+        <translation>Beskrivning</translation>
     </message>
 </context>
 <context>
