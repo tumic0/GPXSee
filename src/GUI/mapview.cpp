@@ -65,6 +65,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_showPOILabels = true;
 	_overlapPOIs = true;
 	_showRouteWaypoints = true;
+	_showMarkers = true;
 	_trackWidth = 3;
 	_routeWidth = 3;
 	_trackStyle = Qt::SolidLine;
@@ -113,6 +114,7 @@ PathItem *MapView::addTrack(const Track &track)
 	ti->setVisible(_showTracks);
 	ti->setDigitalZoom(_digitalZoom);
 	ti->setMarkerColor(_markerColor);
+	ti->showMarker(_showMarkers);
 	_scene->addItem(ti);
 
 	if (_showTracks)
@@ -141,6 +143,7 @@ PathItem *MapView::addRoute(const Route &route)
 	ri->showWaypointLabels(_showWaypointLabels);
 	ri->setDigitalZoom(_digitalZoom);
 	ri->setMarkerColor(_markerColor);
+	ri->showMarker(_showMarkers);
 	_scene->addItem(ri);
 
 	if (_showRoutes)
@@ -683,7 +686,6 @@ void MapView::showWaypointLabels(bool show)
 
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->showLabel(show);
-
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->showWaypointLabels(show);
 }
@@ -694,6 +696,16 @@ void MapView::showRouteWaypoints(bool show)
 
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->showWaypoints(show);
+}
+
+void MapView::showMarkers(bool show)
+{
+	_showMarkers = show;
+
+	for (int i = 0; i < _tracks.size(); i++)
+		_tracks.at(i)->showMarker(show);
+	for (int i = 0; i < _routes.size(); i++)
+		_routes.at(i)->showMarker(show);
 }
 
 void MapView::showMap(bool show)

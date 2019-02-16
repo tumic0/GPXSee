@@ -74,6 +74,7 @@ public slots:
 	void showAreas(bool show);
 	void showWaypoints(bool show);
 	void showRouteWaypoints(bool show);
+	void showMarkers(bool show);
 	void clearMapCache();
 	void setCoordinatesFormat(CoordinatesFormat format);
 	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
@@ -128,7 +129,8 @@ private:
 	qreal _mapOpacity;
 
 	bool _showMap, _showTracks, _showRoutes, _showAreas, _showWaypoints,
-	  _showWaypointLabels, _showPOI, _showPOILabels, _showRouteWaypoints;
+	  _showWaypointLabels, _showPOI, _showPOILabels, _showRouteWaypoints,
+	  _showMarkers;
 	bool _overlapPOIs;
 	int _trackWidth, _routeWidth, _areaWidth;
 	Qt::PenStyle _trackStyle, _routeStyle, _areaStyle;

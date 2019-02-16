@@ -8,9 +8,9 @@
 
 #define GEOGRAPHICAL_MILE 1855.3248
 
-static inline bool isInvalid(const QPointF &p)
+static inline bool isValid(const QPointF &p)
 {
-	return (std::isnan(p.x()) || std::isnan(p.y()));
+	return (!std::isnan(p.x()) && !std::isnan(p.y()));
 }
 
 static inline unsigned segments(qreal distance)
@@ -27,13 +27,14 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 	_width = 3;
 	QBrush brush(Qt::SolidPattern);
 	_pen = QPen(brush, _width);
+	_showMarker = true;
 
 	updatePainterPath();
 	updateShape();
 
-	_marker = new MarkerItem(this);
-	_marker->setPos(position(_path.first().first().distance()));
 	_markerDistance = _path.first().first().distance();
+	_marker = new MarkerItem(this);
+	_marker->setPos(position(_markerDistance));
 
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
@@ -125,7 +126,9 @@ void PathItem::setMap(Map *map)
 	updatePainterPath();
 	updateShape();
 
-	_marker->setPos(position(_markerDistance));
+	QPointF pos = position(_markerDistance);
+	if (isValid(pos))
+		_marker->setPos(pos);
 }
 
 void PathItem::setColor(const QColor &color)
@@ -244,15 +247,14 @@ QPointF PathItem::position(qreal x) const
 
 void PathItem::moveMarker(qreal distance)
 {
+	_markerDistance = distance;
 	QPointF pos(position(distance));
 
-	if (isInvalid(pos))
-		_marker->setVisible(false);
-	else {
-		_marker->setVisible(true);
+	if (isValid(pos)) {
+		_marker->setVisible(_showMarker);
 		_marker->setPos(pos);
-		_markerDistance = distance;
-	}
+	} else
+		_marker->setVisible(false);
 }
 
 void PathItem::setMarkerColor(const QColor &color)
@@ -271,6 +273,15 @@ void PathItem::hover(bool hover)
 	}
 
 	update();
+}
+
+void PathItem::showMarker(bool show)
+{
+	if (_showMarker == show)
+		return;
+
+	_showMarker = show;
+	_marker->setVisible(show && isValid(position(_markerDistance)));
 }
 
 void PathItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)

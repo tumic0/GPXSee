@@ -29,6 +29,7 @@ public:
 	void setStyle(Qt::PenStyle style);
 	void setDigitalZoom(int zoom);
 	void setMarkerColor(const QColor &color);
+	void showMarker(bool show);
 
 public slots:
 	void moveMarker(qreal distance);
@@ -60,6 +61,7 @@ private:
 	QPen _pen;
 	QPainterPath _shape;
 	QPainterPath _painterPath;
+	bool _showMarker;
 };
 
 #endif // PATHITEM_H

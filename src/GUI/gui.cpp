@@ -381,6 +381,11 @@ void GUI::createActions()
 	_showGraphSliderInfoAction->setCheckable(true);
 	connect(_showGraphSliderInfoAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showGraphSliderInfo(bool)));
+	_showMarkersAction = new QAction(tr("Show path markers"), this);
+	_showMarkersAction->setMenuRole(QAction::NoRole);
+	_showMarkersAction->setCheckable(true);
+	connect(_showMarkersAction, SIGNAL(triggered(bool)), _mapView,
+	  SLOT(showMarkers(bool)));
 
 	// Settings actions
 	_showToolbarsAction = new QAction(tr("Show toolbars"), this);
@@ -505,6 +510,7 @@ void GUI::createMenus()
 	graphMenu->addSeparator();
 	graphMenu->addAction(_showGraphGridAction);
 	graphMenu->addAction(_showGraphSliderInfoAction);
+	graphMenu->addAction(_showMarkersAction);
 	graphMenu->addSeparator();
 	graphMenu->addAction(_showGraphsAction);
 
@@ -1683,6 +1689,9 @@ void GUI::writeSettings()
 	  != SHOW_GRAPH_SLIDER_INFO_DEFAULT)
 		settings.setValue(SHOW_GRAPH_SLIDER_INFO_SETTING,
 		  _showGraphSliderInfoAction->isChecked());
+	if (_showMarkersAction->isChecked() != SHOW_MARKERS_DEFAULT)
+		settings.setValue(SHOW_MARKERS_SETTING,
+		  _showMarkersAction->isChecked());
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);
@@ -1911,6 +1920,10 @@ void GUI::readSettings()
 		showGraphSliderInfo(false);
 	else
 		_showGraphSliderInfoAction->setChecked(true);
+	if (!settings.value(SHOW_MARKERS_SETTING, SHOW_MARKERS_DEFAULT).toBool())
+		_mapView->showMarkers(false);
+	else
+		_showMarkersAction->setChecked(true);
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);
