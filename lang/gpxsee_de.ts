@@ -1064,10 +1064,6 @@
         <translation>Linienbreite:</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation type="vanished">Farben</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="39"/>
         <source>Always show the map</source>
         <translation>Die Karte immer anzeigen</translation>
@@ -1241,10 +1237,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="316"/>
         <source>Eliminate GPS outliers</source>
         <translation>GPS Ausreißer entfernen</translation>
-    </message>
-    <message>
-        <source>Outlier elimination</source>
-        <translation type="vanished">Ausreißer Entfernung</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="325"/>

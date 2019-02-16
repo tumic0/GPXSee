@@ -1065,10 +1065,6 @@
         <translation>Толщина линии:</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation type="vanished">Цвета</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="39"/>
         <source>Always show the map</source>
         <translation>Всегда показывать карту</translation>
@@ -1242,10 +1238,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="316"/>
         <source>Eliminate GPS outliers</source>
         <translation>Устранять GPS выбросы</translation>
-    </message>
-    <message>
-        <source>Outlier elimination</source>
-        <translation type="vanished">Устранение выбросов</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="325"/>

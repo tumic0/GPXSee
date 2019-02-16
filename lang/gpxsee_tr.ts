@@ -1062,10 +1062,6 @@
         <translation>Palet değişimi:</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation type="vanished">Renkler</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="104"/>
         <source>Track width:</source>
         <translation>İz genişliği:</translation>
@@ -1265,10 +1261,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="316"/>
         <source>Eliminate GPS outliers</source>
         <translation>Aykırı GPS ele</translation>
-    </message>
-    <message>
-        <source>Outlier elimination</source>
-        <translation type="vanished">Aykırıyı eleme</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="325"/>

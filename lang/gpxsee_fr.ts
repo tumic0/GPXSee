@@ -1064,10 +1064,6 @@
         <translation>Épaisseur de ligne :</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation type="vanished">Couleurs</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="39"/>
         <source>Always show the map</source>
         <translation>Toujours afficher la carte</translation>
@@ -1241,10 +1237,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="316"/>
         <source>Eliminate GPS outliers</source>
         <translation>Supprimer les données GPS aberrantes</translation>
-    </message>
-    <message>
-        <source>Outlier elimination</source>
-        <translation type="vanished">Suppression des données aberrantes</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="325"/>

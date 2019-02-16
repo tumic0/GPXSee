@@ -1063,10 +1063,6 @@
         <translation>Paletteskift:</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation type="vanished">Farver</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="104"/>
         <source>Track width:</source>
         <translation>Sporvidde:</translation>
@@ -1266,10 +1262,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="316"/>
         <source>Eliminate GPS outliers</source>
         <translation>Eliminer GPS-ekstremværdier</translation>
-    </message>
-    <message>
-        <source>Outlier elimination</source>
-        <translation type="vanished">Ekstremværdieliminering</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="325"/>

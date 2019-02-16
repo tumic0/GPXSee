@@ -1064,10 +1064,6 @@
         <translation>Linjetjocklek:</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation type="vanished">Färger</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="39"/>
         <source>Always show the map</source>
         <translation>Visa alltid kartan</translation>
@@ -1241,10 +1237,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="316"/>
         <source>Eliminate GPS outliers</source>
         <translation>Eliminera GPS-extremvärden</translation>
-    </message>
-    <message>
-        <source>Outlier elimination</source>
-        <translation type="vanished">Extremvärdeseliminering</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="325"/>

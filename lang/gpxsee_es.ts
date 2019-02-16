@@ -1063,10 +1063,6 @@
         <translation>Cambiar paleta:</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation type="vanished">Colores</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="104"/>
         <source>Track width:</source>
         <translation>Anchura del track:</translation>
@@ -1266,10 +1262,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="316"/>
         <source>Eliminate GPS outliers</source>
         <translation>Borrar valores anormales del GPS</translation>
-    </message>
-    <message>
-        <source>Outlier elimination</source>
-        <translation type="vanished">Eliminación anormal</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="325"/>
