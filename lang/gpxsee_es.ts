@@ -30,7 +30,7 @@
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="17"/>
         <source>Maximum</source>
-        <translation>Mínima</translation>
+        <translation type="unfinished">Mínima</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="18"/>
@@ -1486,7 +1486,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="599"/>
         <source>Data</source>
-        <translation>Fecha</translation>
+        <translation type="unfinished">Fecha</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="601"/>
