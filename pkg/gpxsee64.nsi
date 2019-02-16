@@ -190,6 +190,7 @@ SectionGroup "Localization" SEC_LOCALIZATION
   !insertmacro LOCALIZATION "German" "de"
   !insertmacro LOCALIZATION "Norwegian" "nb"
   !insertmacro LOCALIZATION "Polish" "pl"
+  !insertmacro LOCALIZATION "Portuguese (Brazil)" "pt_BR"
   !insertmacro LOCALIZATION "Russian" "ru"
   !insertmacro LOCALIZATION "Spanish" "es"
   !insertmacro LOCALIZATION "Swedish" "sv"
