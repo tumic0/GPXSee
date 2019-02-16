@@ -6,23 +6,23 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="11"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">rpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="12"/>
         <location filename="../src/GUI/cadencegraph.h" line="13"/>
         <source>Cadence</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadência</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="22"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Média</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="24"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Máxima</translation>
     </message>
 </context>
 <context>
@@ -36,12 +36,12 @@
         <location filename="../src/GUI/cadencegraphitem.cpp" line="18"/>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="20"/>
         <source>rpm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">rpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="19"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Média</translation>
     </message>
 </context>
 <context>
@@ -54,32 +54,32 @@
     <message>
         <location filename="../src/data/data.cpp" line="144"/>
         <source>CSV files</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos CSV</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="145"/>
         <source>FIT files</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos FIT</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="147"/>
         <source>GeoJSON files</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos GeoJSON</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="149"/>
         <source>GPX files</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos GPX</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="150"/>
         <source>IGC files</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos IGC</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="151"/>
         <source>KML files</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos KML</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="152"/>
