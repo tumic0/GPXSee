@@ -64,7 +64,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="147"/>
         <source>GeoJSON files</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoJSON-Dateien</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="149"/>
@@ -459,7 +459,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="333"/>
         <source>Show areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Flächen anzeigen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="338"/>
@@ -647,7 +647,7 @@
         <location filename="../src/GUI/gui.cpp" line="1016"/>
         <location filename="../src/GUI/gui.cpp" line="1084"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Flächen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1059"/>
@@ -1337,27 +1337,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="140"/>
         <source>Area border width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Flächen Randbreite:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="141"/>
         <source>Area border style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Flächen Randstil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="142"/>
         <source>Area fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Flächen Deckkraft:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <source>Fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Deckkraft:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Flächen</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="440"/>
@@ -1507,12 +1507,12 @@
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="17"/>
         <source>Description</source>
-        <translation type="unfinished">Beschreibung</translation>
+        <translation>Beschreibung</translation>
     </message>
 </context>
 <context>
