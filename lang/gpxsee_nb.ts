@@ -445,7 +445,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="333"/>
         <source>Show areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis områder</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="338"/>
@@ -490,7 +490,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
         <source>Show path markers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vis veimarkører</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="391"/>
@@ -787,7 +787,7 @@
         <location filename="../src/GUI/gui.cpp" line="1022"/>
         <location filename="../src/GUI/gui.cpp" line="1090"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Områder</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1028"/>
@@ -1114,27 +1114,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="139"/>
         <source>Area border width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kantbredde for område:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="140"/>
         <source>Area border style:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kantstil for område:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="141"/>
         <source>Area fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fylldekkevne for område:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="145"/>
         <source>Fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fylldekkevne:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Områder</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="162"/>
