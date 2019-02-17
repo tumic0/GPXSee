@@ -1335,22 +1335,22 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="139"/>
         <source>Area border width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Толщина границы области:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="140"/>
         <source>Area border style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Стиль границы области:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="141"/>
         <source>Area fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Непрозрачность заливки области:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="145"/>
         <source>Fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Непрозрачность заливки:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
