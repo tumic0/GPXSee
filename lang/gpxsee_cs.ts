@@ -474,7 +474,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
         <source>Show path markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobrazit pozici na trase</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="391"/>
@@ -1345,7 +1345,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="141"/>
         <source>Area fill opacity:</source>
-        <translation>Neprůhlednost výpně ploch:</translation>
+        <translation>Neprůhlednost výplně ploch:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="145"/>
