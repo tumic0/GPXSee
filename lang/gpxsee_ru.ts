@@ -449,7 +449,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="333"/>
         <source>Show areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать области</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="338"/>
@@ -642,7 +642,7 @@
         <location filename="../src/GUI/gui.cpp" line="1022"/>
         <location filename="../src/GUI/gui.cpp" line="1090"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Области</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1065"/>
@@ -1355,7 +1355,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Области</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="439"/>
@@ -1505,12 +1505,12 @@
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished">Имя</translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="17"/>
         <source>Description</source>
-        <translation type="unfinished">Описание</translation>
+        <translation>Описание</translation>
     </message>
 </context>
 <context>
