@@ -1334,22 +1334,22 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="139"/>
         <source>Area border width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Alueen rajan leveys:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="140"/>
         <source>Area border style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Alueen rajan tyyli:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="141"/>
         <source>Area fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Alueen täytön läpinäkymättömyys:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="145"/>
         <source>Fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Täytön läpinäkymättömyys:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
