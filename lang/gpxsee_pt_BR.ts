@@ -430,7 +430,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="316"/>
         <source>Show cursor coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar coordenadas do cursor</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="323"/>
