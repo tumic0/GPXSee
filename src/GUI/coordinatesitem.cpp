@@ -25,6 +25,7 @@ void CoordinatesItem::paint(QPainter *painter,
 
 	QFontMetrics fm(_font);
 	painter->setFont(_font);
+	painter->setPen(QPen(Qt::black));
 	painter->drawText(0, -fm.descent(), Format::coordinates(_c, _format));
 
 /*
