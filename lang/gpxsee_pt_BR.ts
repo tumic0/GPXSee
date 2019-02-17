@@ -418,7 +418,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="297"/>
         <source>Clear tile cache</source>
-        <translation type="unfinished">Limpar o cache de mapa</translation>
+        <translation>Limpar o cache de ladrilhos</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="302"/>
@@ -430,7 +430,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="316"/>
         <source>Show cursor coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar coordenadas do cursor</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="323"/>
@@ -495,7 +495,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="389"/>
         <source>Show path markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar marcadores de caminho</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="396"/>
@@ -742,7 +742,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="725"/>
         <source>Tile cache directory:</source>
-        <translation type="unfinished">Diretório de cache de mapas:</translation>
+        <translation>Diretório de cache de ladrilhos:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="734"/>

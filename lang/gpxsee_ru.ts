@@ -380,17 +380,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="270"/>
         <source>Show POI labels</source>
-        <translation>Показать подписи к точкам POI</translation>
+        <translation>Показывать подписи к точкам POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="275"/>
         <source>Show POIs</source>
-        <translation>Показать точки POI</translation>
+        <translation>Показывать точки POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="285"/>
         <source>Show map</source>
-        <translation>Показать карту</translation>
+        <translation>Показывать карту</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="297"/>
@@ -434,27 +434,27 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="316"/>
         <source>Show cursor coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать координаты курсора</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="323"/>
         <source>Show tracks</source>
-        <translation>Показать треки</translation>
+        <translation>Показывать треки</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="328"/>
         <source>Show routes</source>
-        <translation>Показать маршруты</translation>
+        <translation>Показывать маршруты</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="333"/>
         <source>Show waypoints</source>
-        <translation>Показать точки</translation>
+        <translation>Показывать точки</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="338"/>
         <source>Show areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать области</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="343"/>
@@ -464,22 +464,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="355"/>
         <source>Show graphs</source>
-        <translation>Показать графики</translation>
+        <translation>Показывать графики</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="379"/>
         <source>Show grid</source>
-        <translation>Показать сетку</translation>
+        <translation>Показывать сетку</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
         <source>Show slider info</source>
-        <translation>Показать значение на слайдере</translation>
+        <translation>Показывать значение на слайдере</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="389"/>
         <source>Show path markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать указатель на треке</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="396"/>
@@ -647,7 +647,7 @@
         <location filename="../src/GUI/gui.cpp" line="1029"/>
         <location filename="../src/GUI/gui.cpp" line="1097"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Области</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1072"/>
@@ -1340,27 +1340,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="139"/>
         <source>Area border width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Толщина границы области:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="140"/>
         <source>Area border style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Стиль границы области:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="141"/>
         <source>Area fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Непрозрачность заливки области:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="145"/>
         <source>Fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Непрозрачность заливки:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Области</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="439"/>
@@ -1510,12 +1510,12 @@
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished">Имя</translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="17"/>
         <source>Description</source>
-        <translation type="unfinished">Описание</translation>
+        <translation>Описание</translation>
     </message>
 </context>
 <context>
