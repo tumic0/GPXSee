@@ -434,7 +434,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="316"/>
         <source>Show cursor coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Näytä kohdistimen koordinaatit</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="323"/>
