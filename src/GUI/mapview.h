@@ -23,6 +23,7 @@ class TrackItem;
 class RouteItem;
 class WaypointItem;
 class ScaleItem;
+class CoordinatesItem;
 class PathItem;
 class GraphItem;
 class AreaItem;
@@ -75,6 +76,7 @@ public slots:
 	void showWaypoints(bool show);
 	void showRouteWaypoints(bool show);
 	void showMarkers(bool show);
+	void showCoordinates(bool show);
 	void clearMapCache();
 	void setCoordinatesFormat(CoordinatesFormat format);
 	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
@@ -108,9 +110,12 @@ private:
 	void resizeEvent(QResizeEvent *event);
 	void paintEvent(QPaintEvent *event);
 	void scrollContentsBy(int dx, int dy);
+	void mouseMoveEvent(QMouseEvent *event);
+	void leaveEvent(QEvent *event);
 
 	QGraphicsScene *_scene;
 	ScaleItem *_mapScale;
+	CoordinatesItem *_coordinates;
 	QList<TrackItem*> _tracks;
 	QList<RouteItem*> _routes;
 	QList<WaypointItem*> _waypoints;

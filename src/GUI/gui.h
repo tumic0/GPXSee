@@ -193,6 +193,7 @@ private:
 	QAction *_showAreasAction;
 	QAction *_showRouteWaypointsAction;
 	QAction *_showMarkersAction;
+	QAction *_showCoordinatesAction;
 	QAction *_openOptionsAction;
 	QAction *_mapsEnd;
 	QList<QAction*> _mapActions;

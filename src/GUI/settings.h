@@ -36,6 +36,8 @@
 #define CURRENT_MAP_SETTING               "map"
 #define SHOW_MAP_SETTING                  "show"
 #define SHOW_MAP_DEFAULT                  true
+#define SHOW_COORDINATES_SETTING          "coordinates"
+#define SHOW_COORDINATES_DEFAULT          false
 
 #define POI_SETTINGS_GROUP                "POI"
 #define OVERLAP_POI_SETTING               "overlap"

@@ -13,6 +13,7 @@
 #include "waypointitem.h"
 #include "areaitem.h"
 #include "scaleitem.h"
+#include "coordinatesitem.h"
 #include "keys.h"
 #include "mapview.h"
 
@@ -21,6 +22,7 @@
 #define MIN_DIGITAL_ZOOM -3
 #define MARGIN           10
 #define SCALE_OFFSET     7
+#define COORDINATES_OFFSET SCALE_OFFSET
 
 
 MapView::MapView(Map *map, POI *poi, QWidget *parent)
@@ -41,6 +43,10 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_mapScale = new ScaleItem();
 	_mapScale->setZValue(2.0);
 	_scene->addItem(_mapScale);
+	_coordinates = new CoordinatesItem();
+	_coordinates->setZValue(2.0);
+	_coordinates->setVisible(false);
+	_scene->addItem(_coordinates);
 
 	_map = map;
 	_map->load();
@@ -95,6 +101,8 @@ void MapView::centerOn(const QPointF &pos)
 	QRectF vr(mapToScene(viewport()->rect()).boundingRect());
 	_res = _map->resolution(vr);
 	_mapScale->setResolution(_res);
+	if (_coordinates->isVisible() && underMouse())
+		_coordinates->setCoordinates(_map->xy2ll(pos));
 }
 
 PathItem *MapView::addTrack(const Track &track)
@@ -423,6 +431,8 @@ void MapView::setCoordinatesFormat(CoordinatesFormat format)
 
 	_coordinatesFormat = format;
 
+	_coordinates->setFormat(_coordinatesFormat);
+
 	for (int i = 0; i < _waypoints.count(); i++)
 		_waypoints.at(i)->setToolTipFormat(_units, _coordinatesFormat);
 	for (int i = 0; i < _routes.count(); i++)
@@ -624,8 +634,10 @@ void MapView::clear()
 	_waypoints.clear();
 
 	_scene->removeItem(_mapScale);
+	_scene->removeItem(_coordinates);
 	_scene->clear();
 	_scene->addItem(_mapScale);
+	_scene->addItem(_coordinates);
 
 	_palette.reset();
 
@@ -734,6 +746,12 @@ void MapView::showPOILabels(bool show)
 		it.value()->showLabel(show);
 
 	updatePOIVisibility();
+}
+
+void MapView::showCoordinates(bool show)
+{
+	_coordinates->setVisible(show);
+	setMouseTracking(show);
 }
 
 void MapView::setPOIOverlap(bool overlap)
@@ -880,11 +898,18 @@ void MapView::resizeEvent(QResizeEvent *event)
 
 void MapView::paintEvent(QPaintEvent *event)
 {
-	QPointF scenePos = mapToScene(rect().bottomRight() + QPoint(
+	QPointF scaleScenePos = mapToScene(rect().bottomRight() + QPoint(
 	  -(SCALE_OFFSET + _mapScale->boundingRect().width()),
 	  -(SCALE_OFFSET + _mapScale->boundingRect().height())));
-	if (_mapScale->pos() != scenePos && !_plot)
-		_mapScale->setPos(scenePos);
+	if (_mapScale->pos() != scaleScenePos && !_plot)
+		_mapScale->setPos(scaleScenePos);
+
+	if (_coordinates->isVisible()) {
+		QPointF coordinatesScenePos = mapToScene(rect().bottomLeft()
+		  + QPoint(COORDINATES_OFFSET, -COORDINATES_OFFSET));
+		if (_coordinates->pos() != coordinatesScenePos && !_plot)
+			_coordinates->setPos(coordinatesScenePos);
+	}
 
 	QGraphicsView::paintEvent(event);
 }
@@ -900,6 +925,20 @@ void MapView::scrollContentsBy(int dx, int dy)
 		_mapScale->setResolution(res);
 		_res = res;
 	}
+}
+
+void MapView::mouseMoveEvent(QMouseEvent *event)
+{
+	if (_coordinates->isVisible())
+		_coordinates->setCoordinates(_map->xy2ll(mapToScene(event->pos())));
+
+	QGraphicsView::mouseMoveEvent(event);
+}
+
+void MapView::leaveEvent(QEvent *event)
+{
+	_coordinates->setCoordinates(Coordinates());
+	QGraphicsView::leaveEvent(event);
 }
 
 void MapView::useOpenGL(bool use)

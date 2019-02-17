@@ -313,6 +313,11 @@ void GUI::createActions()
 		_showMapAction->setEnabled(false);
 		_clearMapCacheAction->setEnabled(false);
 	}
+	_showCoordinatesAction = new QAction(tr("Show cursor coordinates"), this);
+	_showCoordinatesAction->setMenuRole(QAction::NoRole);
+	_showCoordinatesAction->setCheckable(true);
+	connect(_showCoordinatesAction, SIGNAL(triggered(bool)), _mapView,
+	  SLOT(showCoordinates(bool)));
 
 	// Data actions
 	_showTracksAction = new QAction(tr("Show tracks"), this);
@@ -501,6 +506,8 @@ void GUI::createMenus()
 	_mapsEnd = _mapMenu->addSeparator();
 	_mapMenu->addAction(_loadMapAction);
 	_mapMenu->addAction(_clearMapCacheAction);
+	_mapMenu->addSeparator();
+	_mapMenu->addAction(_showCoordinatesAction);
 	_mapMenu->addSeparator();
 	_mapMenu->addAction(_showMapAction);
 
@@ -1674,6 +1681,8 @@ void GUI::writeSettings()
 	settings.setValue(CURRENT_MAP_SETTING, _map->name());
 	if (_showMapAction->isChecked() != SHOW_MAP_DEFAULT)
 		settings.setValue(SHOW_MAP_SETTING, _showMapAction->isChecked());
+	if (_showCoordinatesAction->isChecked() != SHOW_COORDINATES_DEFAULT)
+		settings.setValue(SHOW_COORDINATES_SETTING, _showMapAction->isChecked());
 	settings.endGroup();
 
 	settings.beginGroup(GRAPH_SETTINGS_GROUP);
@@ -1896,6 +1905,11 @@ void GUI::readSettings()
 	if (_ml->maps().count()) {
 		int index = mapIndex(settings.value(CURRENT_MAP_SETTING).toString());
 		_mapActions.at(index)->trigger();
+	}
+	if (settings.value(SHOW_COORDINATES_SETTING, SHOW_COORDINATES_DEFAULT)
+	  .toBool()) {
+		_showCoordinatesAction->setChecked(true);
+		_mapView->showCoordinates(true);
 	}
 	settings.endGroup();
 
