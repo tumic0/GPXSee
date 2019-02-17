@@ -380,17 +380,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="270"/>
         <source>Show POI labels</source>
-        <translation>Показать подписи к точкам POI</translation>
+        <translation>Показывать подписи к точкам POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="275"/>
         <source>Show POIs</source>
-        <translation>Показать точки POI</translation>
+        <translation>Показывать точки POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="285"/>
         <source>Show map</source>
-        <translation>Показать карту</translation>
+        <translation>Показывать карту</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="297"/>
@@ -434,22 +434,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="318"/>
         <source>Show tracks</source>
-        <translation>Показать треки</translation>
+        <translation>Показывать треки</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="323"/>
         <source>Show routes</source>
-        <translation>Показать маршруты</translation>
+        <translation>Показывать маршруты</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="328"/>
         <source>Show waypoints</source>
-        <translation>Показать точки</translation>
+        <translation>Показывать точки</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="333"/>
         <source>Show areas</source>
-        <translation>Показать области</translation>
+        <translation>Показывать области</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="338"/>
@@ -459,17 +459,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="350"/>
         <source>Show graphs</source>
-        <translation>Показать графики</translation>
+        <translation>Показывать графики</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="374"/>
         <source>Show grid</source>
-        <translation>Показать сетку</translation>
+        <translation>Показывать сетку</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="379"/>
         <source>Show slider info</source>
-        <translation>Показать значение на слайдере</translation>
+        <translation>Показывать значение на слайдере</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
