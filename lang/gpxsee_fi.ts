@@ -474,7 +474,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
         <source>Show path markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Näytä merkki jäljellä</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="391"/>
