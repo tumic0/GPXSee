@@ -65,6 +65,10 @@ void GPXParser::tpExtension(Trackpoint &trackpoint)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("hr"))
 			trackpoint.setHeartRate(number());
+		else if (_reader.name() == QLatin1String("cad"))
+			trackpoint.setCadence(number());
+		else if (_reader.name() == QLatin1String("speed"))
+			trackpoint.setSpeed(number());
 		else if (_reader.name() == QLatin1String("atemp"))
 			trackpoint.setTemperature(number());
 		else
