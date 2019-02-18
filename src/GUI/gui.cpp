@@ -1679,7 +1679,8 @@ void GUI::writeSettings()
 	if (_showMapAction->isChecked() != SHOW_MAP_DEFAULT)
 		settings.setValue(SHOW_MAP_SETTING, _showMapAction->isChecked());
 	if (_showCoordinatesAction->isChecked() != SHOW_COORDINATES_DEFAULT)
-		settings.setValue(SHOW_COORDINATES_SETTING, _showMapAction->isChecked());
+		settings.setValue(SHOW_COORDINATES_SETTING,
+		  _showCoordinatesAction->isChecked());
 	settings.endGroup();
 
 	settings.beginGroup(GRAPH_SETTINGS_GROUP);
