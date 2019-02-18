@@ -9,6 +9,7 @@
 #define WINDOW_SIZE_DEFAULT               QSize(600, 800)
 #define WINDOW_POS_SETTING                "pos"
 #define WINDOW_POS_DEFAULT                QPoint(10, 10)
+#define WINDOW_STATE_SETTING              "state"
 
 #define SETTINGS_SETTINGS_GROUP           "Settings"
 #define TIME_TYPE_SETTING                 "timeType"

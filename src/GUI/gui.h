@@ -226,8 +226,8 @@ private:
 
 	qreal _sliderPos;
 
+	QList<QByteArray> _windowStates;
 	int _frameStyle;
-	bool _showGraphs;
 
 	Export _export;
 	Options _options;

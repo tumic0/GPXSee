@@ -578,6 +578,7 @@ void GUI::createToolBars()
 #endif // Q_OS_MAC
 
 	_fileToolBar = addToolBar(tr("File"));
+	_fileToolBar->setObjectName("File");
 	_fileToolBar->setIconSize(iconSize);
 	_fileToolBar->addAction(_openFileAction);
 	_fileToolBar->addAction(_reloadFileAction);
@@ -585,12 +586,14 @@ void GUI::createToolBars()
 	_fileToolBar->addAction(_printFileAction);
 
 	_showToolBar = addToolBar(tr("Show"));
+	_showToolBar->setObjectName("Show");
 	_showToolBar->setIconSize(iconSize);
 	_showToolBar->addAction(_showPOIAction);
 	_showToolBar->addAction(_showMapAction);
 	_showToolBar->addAction(_showGraphsAction);
 
 	_navigationToolBar = addToolBar(tr("Navigation"));
+	_navigationToolBar->setObjectName("Navigation");
 	_navigationToolBar->setIconSize(iconSize);
 	_navigationToolBar->addAction(_firstAction);
 	_navigationToolBar->addAction(_prevAction);
@@ -1238,13 +1241,11 @@ void GUI::showGraphs(bool show)
 void GUI::showToolbars(bool show)
 {
 	if (show) {
-		addToolBar(_fileToolBar);
-		addToolBar(_showToolBar);
-		addToolBar(_navigationToolBar);
-		_fileToolBar->show();
-		_showToolBar->show();
-		_navigationToolBar->show();
+		Q_ASSERT(!_windowStates.isEmpty());
+		restoreState(_windowStates.last());
+		_windowStates.pop_back();
 	} else {
+		_windowStates.append(saveState());
 		removeToolBar(_fileToolBar);
 		removeToolBar(_showToolBar);
 		removeToolBar(_navigationToolBar);
@@ -1255,26 +1256,16 @@ void GUI::showFullscreen(bool show)
 {
 	if (show) {
 		_frameStyle = _mapView->frameStyle();
-		_showGraphs = _showGraphsAction->isChecked();
-
 		statusBar()->hide();
 		menuBar()->hide();
 		showToolbars(false);
-		showGraphs(false);
-		_showGraphsAction->setChecked(false);
 		_mapView->setFrameStyle(QFrame::NoFrame);
-
 		showFullScreen();
 	} else {
 		statusBar()->show();
 		menuBar()->show();
-		if (_showToolbarsAction->isChecked())
-			showToolbars(true);
-		_showGraphsAction->setChecked(_showGraphs);
-		if (_showGraphsAction->isEnabled())
-			showGraphs(_showGraphs);
+		showToolbars(true);
 		_mapView->setFrameStyle(_frameStyle);
-
 		showNormal();
 	}
 }
@@ -1645,6 +1636,8 @@ void GUI::dropEvent(QDropEvent *event)
 	QList<QUrl> urls = event->mimeData()->urls();
 	for (int i = 0; i < urls.size(); i++)
 		openFile(urls.at(i).toLocalFile());
+
+	event->acceptProposedAction();
 }
 
 void GUI::writeSettings()
@@ -1657,6 +1650,10 @@ void GUI::writeSettings()
 		settings.setValue(WINDOW_SIZE_SETTING, size());
 	if (pos() != WINDOW_POS_DEFAULT)
 		settings.setValue(WINDOW_POS_SETTING, pos());
+	if (_windowStates.isEmpty())
+		settings.setValue(WINDOW_STATE_SETTING, saveState());
+	else
+		settings.setValue(WINDOW_STATE_SETTING, _windowStates.first());
 	settings.endGroup();
 
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
@@ -1866,6 +1863,7 @@ void GUI::readSettings()
 	settings.beginGroup(WINDOW_SETTINGS_GROUP);
 	resize(settings.value(WINDOW_SIZE_SETTING, WINDOW_SIZE_DEFAULT).toSize());
 	move(settings.value(WINDOW_POS_SETTING, WINDOW_POS_DEFAULT).toPoint());
+	restoreState(settings.value(WINDOW_STATE_SETTING).toByteArray());
 	settings.endGroup();
 
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
