@@ -430,7 +430,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="316"/>
         <source>Show cursor coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>İmleç koordinatlarını göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="323"/>
@@ -832,6 +832,7 @@
         <location filename="../src/GUI/gui.cpp" line="1356"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n dosya</numerusform>
             <numerusform>%n dosya</numerusform>
         </translation>
     </message>
