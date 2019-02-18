@@ -102,8 +102,7 @@ void MapView::centerOn(const QPointF &pos)
 	QRectF vr(mapToScene(viewport()->rect()).boundingRect());
 	_res = _map->resolution(vr);
 	_mapScale->setResolution(_res);
-	if (_coordinates->isVisible() && underMouse())
-		_coordinates->setCoordinates(_map->xy2ll(pos));
+	_coordinates->setCoordinates(Coordinates());
 }
 
 PathItem *MapView::addTrack(const Track &track)
