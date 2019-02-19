@@ -516,7 +516,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="423"/>
         <source>Imperial</source>
-        <translation>Imperial</translation>
+        <translation>Angloamerikanisch</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="429"/>
