@@ -57,7 +57,7 @@ Point3D Geocentric::fromGeodetic(const Coordinates &c, const Ellipsoid *e)
 	double Rn = e->radius() / (sqrt(1.0 - e->es() * slat2));
 
 	if (lon > M_PI)
-		lon -= M_2_PI;
+		lon -= 2 * M_PI;
 
 	return Point3D(Rn * clat * cos(lon), Rn * clat * sin(lon),
 	  (Rn * (1 - e->es())) * slat);

@@ -65,7 +65,7 @@ LambertConic1::LambertConic1(const Ellipsoid *ellipsoid, double latitudeOrigin,
 	lat_orig = deg2rad(latitudeOrigin);
 	_longitudeOrigin = deg2rad(longitudeOrigin);
 	if (_longitudeOrigin > M_PI)
-		_longitudeOrigin -= M_2_PI;
+		_longitudeOrigin -= 2 * M_PI;
 
 	_falseEasting = falseEasting;
 	_falseNorthing = falseNorthing;
@@ -102,9 +102,9 @@ PointD LambertConic1::ll2xy(const Coordinates &c) const
 	dlam = deg2rad(c.lon()) - _longitudeOrigin;
 
 	if (dlam > M_PI)
-		dlam -= M_2_PI;
+		dlam -= 2 * M_PI;
 	if (dlam < -M_PI)
-		dlam += M_2_PI;
+		dlam += 2 * M_PI;
 
 	theta = _n * dlam;
 
@@ -168,13 +168,13 @@ Coordinates LambertConic1::xy2ll(const PointD &p) const
 			if (lon - M_PI < 3.5e-6)
 				lon = M_PI;
 			else
-				lon -= M_2_PI;
+				lon -= 2 * M_PI;
 		}
 		if (lon < -M_PI) {
 			if (fabs(lon + M_PI) < 3.5e-6)
 				lon = -M_PI;
 			else
-				lon += M_2_PI;
+				lon += 2 * M_PI;
 		}
 
 		if (fabs(lon) < 2.0e-7)

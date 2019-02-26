@@ -20,10 +20,10 @@ RectC::RectC(const Coordinates &center, double radius)
 		double deltaLon = asin(sin(radDist) / cos(radlat));
 		minLon = radLon - deltaLon;
 		if (minLon < MIN_LON)
-			minLon += M_2_PI;
+			minLon += 2 * M_PI;
 		maxLon = radLon + deltaLon;
 		if (maxLon > MAX_LON)
-			maxLon -= M_2_PI;
+			maxLon -= 2 * M_PI;
 	} else {
 		// a pole is within the distance
 		minLat = qMax(minLat, MIN_LAT);

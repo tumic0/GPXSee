@@ -56,7 +56,7 @@ Mercator::Mercator(const Ellipsoid *ellipsoid, double latitudeOrigin,
 	_latitudeOrigin = deg2rad(latitudeOrigin);
 	_longitudeOrigin = deg2rad(longitudeOrigin);
 	if (_longitudeOrigin > M_PI)
-		_longitudeOrigin -= M_2_PI;
+		_longitudeOrigin -= 2 * M_PI;
 	_falseNorthing = falseNorthing;
 	_falseEasting = falseEasting;
 
@@ -86,16 +86,16 @@ PointD Mercator::ll2xy(const Coordinates &c) const
 	double pow_temp;
 
 	if (lon > M_PI)
-		lon -= M_2_PI;
+		lon -= 2 * M_PI;
 	e_x_sinlat = _e * sin(lat);
 	tan_temp = tan(M_PI_4 + lat / 2.e0);
 	pow_temp = pow((1.e0 - e_x_sinlat) / (1.e0 + e_x_sinlat), _e / 2.e0);
 	ctanz2 = tan_temp * pow_temp;
 	delta_lon = lon - _longitudeOrigin;
 	if (delta_lon > M_PI)
-	  delta_lon -= M_2_PI;
+	  delta_lon -= 2 * M_PI;
 	if (delta_lon < -M_PI)
-	  delta_lon += M_2_PI;
+	  delta_lon += 2 * M_PI;
 
 	return PointD(_scaleFactor * _a * delta_lon + _falseEasting,
 	  _scaleFactor * _a * log(ctanz2) + _falseNorthing);
@@ -115,9 +115,9 @@ Coordinates Mercator::xy2ll(const PointD &p) const
 	lat = xphi + _ab * sin(2.e0 * xphi) + _bb * sin(4.e0 * xphi)
 	  + _cb * sin(6.e0 * xphi) + _db * sin(8.e0 * xphi);
 	if (lon > M_PI)
-		lon -= M_2_PI;
+		lon -= 2 * M_PI;
 	if (lon < -M_PI)
-		lon += M_2_PI;
+		lon += 2 * M_PI;
 
 	return Coordinates(rad2deg(lon), rad2deg(lat));
 }

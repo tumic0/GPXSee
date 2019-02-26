@@ -123,9 +123,9 @@ PointD AlbersEqual::ll2xy(const Coordinates &c) const
 
 	dlam = deg2rad(c.lon()) - _longitudeOrigin;
 	if (dlam > M_PI)
-		dlam -= M_2_PI;
+		dlam -= 2 * M_PI;
 	if (dlam < -M_PI)
-		dlam += M_2_PI;
+		dlam += 2 * M_PI;
 
 	sin_lat = sin(deg2rad(c.lat()));
 	e_sin = _e * sin_lat;
@@ -211,9 +211,9 @@ Coordinates AlbersEqual::xy2ll(const PointD &p) const
 	lon = _longitudeOrigin + theta / _n;
 
 	if (lon > M_PI)
-		lon -= M_2_PI;
+		lon -= 2 * M_PI;
 	if (lon < -M_PI)
-		lon += M_2_PI;
+		lon += 2 * M_PI;
 
 	if (lon > M_PI)
 		lon = M_PI;
