@@ -147,7 +147,7 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 			if (query.value(0).toString() == "pbf")
 				_scalable = true;
 		} else
-			qWarning("%s: missing map name", qPrintable(_fileName));
+			qWarning("%s: missing tiles format", qPrintable(_fileName));
 	}
 
 	{
