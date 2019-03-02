@@ -71,6 +71,8 @@ static Projection parseProjection(const QString &str, const GCS *gcs)
 			zone = fields.at(2).toInt(&ret);
 			if (!ret)
 				return Projection();
+			if (fields.at(3) == "S")
+				zone = -zone;
 			pcs = PCS(gcs, 9807, UTM::setup(zone), 9001);
 			return Projection(&pcs);
 		case 1:
