@@ -123,7 +123,7 @@ QString MapList::formats()
 	  + tr("OziExplorer maps") + " (*.map);;"
 	  + tr("TrekBuddy maps/atlases") + " (*.tar *.tba);;"
 	  + tr("GeoTIFF images") + " (*.tif *.tiff);;"
-	  + tr("RMap maps") + " (*.rmap);;"
+	  + tr("TwoNav maps") + " (*.rmap);;"
 	  + tr("Online map sources") + " (*.xml)";
 }
 
