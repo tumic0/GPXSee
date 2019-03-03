@@ -1,6 +1,7 @@
 #ifndef RMAP_H
 #define RMAP_H
 
+#include <QFile>
 #include "map.h"
 #include "transform.h"
 #include "projection.h"
