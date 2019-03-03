@@ -26,6 +26,7 @@ public:
 	QPointF ll2xy(const Coordinates &c);
 	Coordinates xy2ll(const QPointF &p);
 
+	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
 	void load();
 	void unload();
 
@@ -52,7 +53,7 @@ private:
 	Transform _transform;
 	QSize _tileSize;
 	QFile _file;
-
+	qreal _mapRatio;
 	QString _fileName;
 	int _zoom;
 

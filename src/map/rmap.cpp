@@ -4,6 +4,7 @@
 #include <QPainter>
 #include "common/rectc.h"
 #include "common/wgs84.h"
+#include "common/config.h"
 #include "transform.h"
 #include "utm.h"
 #include "pcs.h"
@@ -150,7 +151,7 @@ bool RMap::seek(QFile &file, quint64 offset)
 }
 
 RMap::RMap(const QString &fileName, QObject *parent)
-  : Map(parent), _fileName(fileName), _zoom(0), _valid(false)
+  : Map(parent), _mapRatio(1.0), _fileName(fileName), _zoom(0), _valid(false)
 {
 	QFile file(fileName);
 	if (!file.open(QIODevice::ReadOnly)) {
@@ -233,7 +234,7 @@ QString RMap::name() const
 
 QRectF RMap::bounds()
 {
-	return QRectF(QPointF(0, 0), _zooms.at(_zoom).size);
+	return QRectF(QPointF(0, 0), _zooms.at(_zoom).size / _mapRatio);
 }
 
 int RMap::zoomFit(const QSize &size, const RectC &rect)
@@ -273,14 +274,14 @@ QPointF RMap::ll2xy(const Coordinates &c)
 {
 	const QPointF &scale = _zooms.at(_zoom).scale;
 	QPointF p(_transform.proj2img(_projection.ll2xy(c)));
-	return QPointF(p.x() * scale.x(), p.y() * scale.y());
+	return QPointF(p.x() * scale.x(), p.y() * scale.y()) / _mapRatio;
 }
 
 Coordinates RMap::xy2ll(const QPointF &p)
 {
 	const QPointF &scale = _zooms.at(_zoom).scale;
 	return  _projection.xy2ll(_transform.img2proj(QPointF(p.x() / scale.x(),
-	  p.y() / scale.y())));
+	  p.y() / scale.y()) * _mapRatio));
 }
 
 void RMap::load()
@@ -326,15 +327,15 @@ void RMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	Q_UNUSED(flags);
 
-	QSizeF ts(_tileSize.width(), _tileSize.height());
+	QSizeF ts(_tileSize.width() / _mapRatio, _tileSize.height() / _mapRatio);
 	QPointF tl(floor(rect.left() / ts.width()) * ts.width(),
 	  floor(rect.top() / ts.height()) * ts.height());
 
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	for (int i = 0; i < ceil(s.width() / ts.width()); i++) {
 		for (int j = 0; j < ceil(s.height() / ts.height()); j++) {
-			int x = round(tl.x() + i * _tileSize.width());
-			int y = round(tl.y() + j * _tileSize.height());
+			int x = round(tl.x() * _mapRatio + i * _tileSize.width());
+			int y = round(tl.y() * _mapRatio + j * _tileSize.height());
 
 			QPixmap pixmap;
 			QString key = _fileName + "/" + QString::number(_zoom) + "_"
@@ -348,9 +349,18 @@ void RMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			if (pixmap.isNull())
 				qWarning("%s: error loading tile image", qPrintable(key));
 			else {
+#ifdef ENABLE_HIDPI
+				pixmap.setDevicePixelRatio(_mapRatio);
+#endif // ENABLE_HIDPI
 				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
 				painter->drawPixmap(tp, pixmap);
 			}
 		}
 	}
+}
+
+void RMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
+{
+	Q_UNUSED(deviceRatio);
+	_mapRatio = mapRatio;
 }
