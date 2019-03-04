@@ -2,6 +2,7 @@
 #include <QDataStream>
 #include <QPixmapCache>
 #include <QPainter>
+#include <QRegExp>
 #include "common/rectc.h"
 #include "common/wgs84.h"
 #include "common/config.h"
@@ -13,7 +14,11 @@
 
 
 #define MAGIC "CompeGPSRasterImage"
-#define strsize(str) (sizeof(str) - 1)
+#define CHECK(condition) \
+	if (!(condition)) { \
+		_errorString = "Invalid/corrupted RMap file"; \
+		return; \
+	}
 
 class CalibrationPoint {
 public:
@@ -92,6 +97,7 @@ bool RMap::parseIMP(const QByteArray &data)
 	QList<CalibrationPoint> cp;
 	const GCS *gcs = 0;
 	QString projection, datum;
+	QRegExp re("^P[0-9]+=");
 
 	for (int i = 0; i < lines.count(); i++) {
 		const QString &line = lines.at(i);
@@ -100,8 +106,7 @@ bool RMap::parseIMP(const QByteArray &data)
 			projection = line.split("=").at(1);
 		else if (line.startsWith("Datum="))
 			datum = line.split("=").at(1);
-		else if (line.startsWith("P0=") || line.startsWith("P1=")
-		 || line.startsWith("P2=") || line.startsWith("P3=")) {
+		else if (line.contains(re)) {
 			QString point(line.split("=").at(1));
 			cp.append(parseCalibrationPoint(point));
 		}
@@ -130,26 +135,6 @@ bool RMap::parseIMP(const QByteArray &data)
 	return true;
 }
 
-bool RMap::ok(const QDataStream &stream)
-{
-	if (stream.status() != QDataStream::Ok) {
-		_errorString = "Invalid/corrupted RMap file";
-		return false;
-	}
-
-	return true;
-}
-
-bool RMap::seek(QFile &file, quint64 offset)
-{
-	if (!file.seek(offset)) {
-		_errorString = "Invalid/corrupted RMap file";
-		return false;
-	}
-
-	return true;
-}
-
 RMap::RMap(const QString &fileName, QObject *parent)
   : Map(parent), _mapRatio(1.0), _fileName(fileName), _zoom(0), _valid(false)
 {
@@ -162,7 +147,7 @@ RMap::RMap(const QString &fileName, QObject *parent)
 	QDataStream stream(&file);
 	stream.setByteOrder(QDataStream::LittleEndian);
 
-	char magic[strsize(MAGIC)];
+	char magic[sizeof(MAGIC) - 1];
 	if (stream.readRawData(magic, sizeof(magic)) != sizeof(magic)
 	  || memcmp(MAGIC, magic, sizeof(magic))) {
 		_errorString = "Not a raster RMap file";
@@ -181,21 +166,18 @@ RMap::RMap(const QString &fileName, QObject *parent)
 	stream >> tmp;
 	qint32 zoomCount;
 	stream >> zoomCount;
-	if (!ok(stream))
-		return;
+	CHECK(stream.status() == QDataStream::Ok);
 
 	QVector<quint64> zoomOffsets(zoomCount);
 	for (int i = 0; i < zoomCount; i++)
 		stream >> zoomOffsets[i];
-	if (!ok(stream))
-		return;
+	CHECK(stream.status() == QDataStream::Ok);
 
 	for (int i = 0; i < zoomOffsets.size(); i++) {
 		_zooms.append(Zoom());
 		Zoom &zoom = _zooms.last();
 
-		if (!seek(file, zoomOffsets.at(i)))
-			return;
+		CHECK(file.seek(zoomOffsets.at(i)));
 
 		quint32 width, height;
 		stream >> width >> height;
@@ -204,22 +186,18 @@ RMap::RMap(const QString &fileName, QObject *parent)
 		zoom.dim = QSize(width, height);
 		zoom.scale = QPointF((qreal)zoom.size.width() / (qreal)imageSize.width(),
 		  (qreal)zoom.size.height() / (qreal)imageSize.height());
-		if (!ok(stream))
-			return;
+		CHECK(stream.status() == QDataStream::Ok);
 
 		zoom.tiles.resize(zoom.dim.width() * zoom.dim.height());
 		for (int j = 0; j < zoom.tiles.size(); j++)
 			stream >> zoom.tiles[j];
-		if (!ok(stream))
-			return;
+		CHECK(stream.status() == QDataStream::Ok);
 	}
 
-	if (!seek(file, IMPOffset))
-		return;
+	CHECK(file.seek(IMPOffset));
 	quint32 IMPSize;
 	stream >> tmp >> IMPSize;
-	if (!ok(stream))
-		return;
+	CHECK(stream.status() == QDataStream::Ok);
 
 	QByteArray IMP(IMPSize + 1, 0);
 	stream.readRawData(IMP.data(), IMP.size());

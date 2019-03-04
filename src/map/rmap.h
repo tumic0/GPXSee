@@ -43,8 +43,6 @@ private:
 		QVector<quint64> tiles;
 	};
 
-	bool ok(const QDataStream &stream);
-	bool seek(QFile &file, quint64 offset);
 	bool parseIMP(const QByteArray &data);
 	QPixmap tile(int x, int y);
 
