@@ -87,8 +87,9 @@ qreal DEM::elevation(const Coordinates &c)
 			return NAN;
 		} else {
 			ba = new QByteArray(file.readAll());
+			qreal ele = height(c, ba);
 			_data.insert(k, ba);
-			return height(c, ba);
+			return ele;
 		}
 	} else
 		return height(c, ba);
