@@ -26,6 +26,11 @@ public:
 	CalibrationPoint(PointD xy, PointD pp) : _xy(xy), _pp(pp) {}
 	CalibrationPoint(PointD xy, Coordinates c) : _xy(xy), _ll(c) {}
 
+	bool isValid() const
+	{
+		return !(_xy.isNull() || (_pp.isNull() && !_ll.isValid()));
+	}
+
 	ReferencePoint rp(const Projection &projection) const
 	{
 		return (_pp.isNull())
@@ -94,7 +99,7 @@ static Projection parseProjection(const QString &str, const GCS *gcs)
 bool RMap::parseIMP(const QByteArray &data)
 {
 	QStringList lines = QString(data).split("\r\n");
-	QList<CalibrationPoint> cp;
+	QList<CalibrationPoint> calibrationPoints;
 	const GCS *gcs = 0;
 	QString projection, datum;
 	QRegExp re("^P[0-9]+=");
@@ -108,23 +113,29 @@ bool RMap::parseIMP(const QByteArray &data)
 			datum = line.split("=").at(1);
 		else if (line.contains(re)) {
 			QString point(line.split("=").at(1));
-			cp.append(parseCalibrationPoint(point));
+			CalibrationPoint cp(parseCalibrationPoint(point));
+			if (cp.isValid())
+				calibrationPoints.append(cp);
+			else {
+				_errorString = point + ": invalid calibration point";
+				return false;
+			}
 		}
 	}
 
 	if (!(gcs = GCS::gcs(datum))) {
-		_errorString = datum + ": invalid datum";
+		_errorString = datum + ": unknown/invalid datum";
 		return false;
 	}
 	_projection = parseProjection(projection, gcs);
 	if (!_projection.isValid()) {
-		_errorString = projection + ": invalid projection";
+		_errorString = projection + ": unknown/invalid projection";
 		return false;
 	}
 
 	QList<ReferencePoint> rp;
-	for (int i = 0; i < cp.size(); i++)
-		rp.append(cp.at(i).rp(_projection));
+	for (int i = 0; i < calibrationPoints.size(); i++)
+		rp.append(calibrationPoints.at(i).rp(_projection));
 
 	_transform = Transform(rp);
 	if (!_transform.isValid()) {
