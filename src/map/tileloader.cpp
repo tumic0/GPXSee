@@ -130,7 +130,7 @@ void TileLoader::loadTilesSync(QVector<Tile> &list)
 		for (int i = 0; i < tl.size(); i++) {
 			Tile *t = tl[i];
 			QString file = tileFile(*t);
-			if (QFileInfo(file).exists())
+			if (QFileInfo::exists(file))
 				imgs.append(TileImage(file, t));
 		}
 	}

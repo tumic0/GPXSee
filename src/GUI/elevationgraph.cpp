@@ -120,7 +120,7 @@ void ElevationGraph::clear()
 	_routeMin = NAN;
 	_routeMax = NAN;
 
-	GraphView::clear();
+	GraphTab::clear();
 }
 
 void ElevationGraph::setYUnits(Units units)

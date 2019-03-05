@@ -86,7 +86,7 @@ void GearRatioGraph::clear()
 {
 	_map.clear();
 
-	GraphView::clear();
+	GraphTab::clear();
 }
 
 void GearRatioGraph::showTracks(bool show)

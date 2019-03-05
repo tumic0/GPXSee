@@ -77,7 +77,7 @@ void PowerGraph::clear()
 {
 	_avg.clear();
 
-	GraphView::clear();
+	GraphTab::clear();
 }
 
 void PowerGraph::showTracks(bool show)

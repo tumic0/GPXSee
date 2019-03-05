@@ -77,7 +77,7 @@ void CadenceGraph::clear()
 {
 	_avg.clear();
 
-	GraphView::clear();
+	GraphTab::clear();
 }
 
 void CadenceGraph::showTracks(bool show)

@@ -264,12 +264,12 @@ bool WMS::getCapabilities(const QString &url, const QString &file,
 	if (d.get(dl, authorization))
 		wait.exec();
 
-	if (QFileInfo(file).exists())
-		return true;
-	else {
+	if (!QFileInfo::exists(file)) {
 		_errorString = "Error downloading capabilities XML file";
 		return false;
 	}
+
+	return true;
 }
 
 WMS::WMS(const QString &file, const WMS::Setup &setup) : _valid(false)
@@ -277,7 +277,7 @@ WMS::WMS(const QString &file, const WMS::Setup &setup) : _valid(false)
 	QString capaUrl = QString("%1%2service=WMS&request=GetCapabilities")
 	  .arg(setup.url(), setup.url().contains('?') ? "&" : "?");
 
-	if (!QFileInfo(file).exists())
+	if (!QFileInfo::exists(file))
 		if (!getCapabilities(capaUrl, file, setup.authorization()))
 			return;
 	if (!parseCapabilities(file, setup))

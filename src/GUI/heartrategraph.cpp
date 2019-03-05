@@ -77,7 +77,7 @@ void HeartRateGraph::clear()
 {
 	_avg.clear();
 
-	GraphView::clear();
+	GraphTab::clear();
 }
 
 void HeartRateGraph::showTracks(bool show)

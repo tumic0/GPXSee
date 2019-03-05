@@ -80,7 +80,7 @@ void TemperatureGraph::clear()
 {
 	_avg.clear();
 
-	GraphView::clear();
+	GraphTab::clear();
 }
 
 void TemperatureGraph::setYUnits(Units units)

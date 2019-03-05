@@ -305,12 +305,12 @@ bool WMTS::downloadCapabilities(const QString &url, const QString &file,
 	if (d.get(dl, authorization))
 		wait.exec();
 
-	if (QFileInfo(file).exists())
-		return true;
-	else {
+	if (!QFileInfo::exists(file)) {
 		_errorString = "Error downloading capabilities XML file";
 		return false;
 	}
+
+	return true;
 }
 
 WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
@@ -319,7 +319,7 @@ WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
 	  "%1%2service=WMTS&Version=1.0.0&request=GetCapabilities").arg(setup.url(),
 	  setup.url().contains('?') ? "&" : "?"));
 
-	if (!url.isLocalFile() && !QFileInfo(file).exists())
+	if (!url.isLocalFile() && !QFileInfo::exists(file))
 		if (!downloadCapabilities(url.toString(), file, setup.authorization()))
 			return;
 

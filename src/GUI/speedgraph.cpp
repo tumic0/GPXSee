@@ -90,7 +90,7 @@ void SpeedGraph::clear()
 	_avg.clear();
 	_mavg.clear();
 
-	GraphView::clear();
+	GraphTab::clear();
 }
 
 void SpeedGraph::setYUnits()
