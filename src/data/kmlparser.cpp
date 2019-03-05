@@ -486,7 +486,7 @@ void KMLParser::multiTrack(TrackData &t)
 
 void KMLParser::multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
   QVector<Waypoint> &waypoints, const QString &name, const QString &desc,
-  const QDateTime timestamp)
+  const QDateTime &timestamp)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Point")) {

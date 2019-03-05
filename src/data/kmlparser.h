@@ -24,7 +24,7 @@ private:
 	  QVector<Waypoint> &waypoints);
 	void multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
 	  QVector<Waypoint> &waypoints, const QString &name, const QString &desc,
-	  const QDateTime timestamp);
+	  const QDateTime &timestamp);
 	void track(SegmentData &segment);
 	void multiTrack(TrackData &t);
 	void lineString(SegmentData &segment);
