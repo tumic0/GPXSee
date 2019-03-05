@@ -10,7 +10,7 @@
 class Tile
 {
 public:
-	Tile() {}
+	Tile() : _scaledSize(0) {}
 	Tile(const QPoint &xy, const QVariant &zoom, int scaledSize = 0,
 	  const RectD &bbox = RectD()) : _xy(xy), _zoom(zoom),
 	  _scaledSize(scaledSize), _bbox(bbox) {}

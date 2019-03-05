@@ -14,6 +14,7 @@ POI::POI(QObject *parent) : QObject(parent)
 {
 	_errorLine = 0;
 	_radius = 1000;
+	_useDEM = false;
 }
 
 bool POI::loadFile(const QString &path, bool dir)
