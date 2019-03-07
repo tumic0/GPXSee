@@ -160,7 +160,8 @@ HEADERS += src/common/config.h \
     src/map/obliquestereographic.h \
     src/GUI/coordinatesitem.h \
     src/map/rmap.h \
-    src/map/calibrationpoint.h
+    src/map/calibrationpoint.h \
+    src/map/color.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \

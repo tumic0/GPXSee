@@ -3,6 +3,7 @@
 #include <QPixmapCache>
 #include <QPainter>
 #include <QRegExp>
+#include <QtEndian>
 #include "common/rectc.h"
 #include "common/wgs84.h"
 #include "common/config.h"
@@ -10,6 +11,7 @@
 #include "utm.h"
 #include "pcs.h"
 #include "rectd.h"
+#include "color.h"
 #include "rmap.h"
 
 
@@ -52,7 +54,7 @@ static Projection parseProjection(const QString &str, const GCS *gcs)
 	int zone;
 
 	switch (id) {
-		case 0:
+		case 0: // UTM
 			if (fields.size() < 4)
 				return Projection();
 			zone = fields.at(2).toInt(&ret);
@@ -62,10 +64,42 @@ static Projection parseProjection(const QString &str, const GCS *gcs)
 				zone = -zone;
 			pcs = PCS(gcs, 9807, UTM::setup(zone), 9001);
 			return Projection(&pcs);
-		case 1:
+		case 1: // LatLon
 			return Projection(gcs);
-		case 2:
+		case 2: // Mercator
 			pcs = PCS(gcs, 1024, Projection::Setup(), 9001);
+			return Projection(&pcs);
+		case 3: // Transversal Mercator
+			if (fields.size() < 7)
+				return Projection();
+			pcs = PCS(gcs, 9807, Projection::Setup(fields.at(3).toDouble(),
+			  fields.at(2).toDouble(), fields.at(6).toDouble(),
+			  fields.at(5).toDouble(), fields.at(4).toDouble(),
+			  NAN, NAN), 9001);
+			return Projection(&pcs);
+		case 4: // Lambert 2SP
+			if (fields.size() < 8)
+				return Projection();
+			pcs = PCS(gcs, 9802, Projection::Setup(fields.at(4).toDouble(),
+			  fields.at(5).toDouble(), NAN,
+			  fields.at(6).toDouble(), fields.at(7).toDouble(),
+			  fields.at(3).toDouble(), fields.at(2).toDouble()), 9001);
+			return Projection(&pcs);
+		case 6: // BGN (British National Grid)
+			pcs = PCS(gcs, 9807, Projection::Setup(49, -2, 0.999601, 400000,
+			  -100000, NAN, NAN), 9001);
+			return Projection(&pcs);
+		case 12: // France Lambert II etendu
+			pcs = PCS(gcs, 9801, Projection::Setup(52, 0, 0.99987742, 600000,
+			  2200000, NAN, NAN), 9001);
+			return Projection(&pcs);
+		case 14: // Swiss Grid
+			pcs = PCS(gcs, 9815, Projection::Setup(46.570866, 7.26225, 1.0,
+			  600000, 200000, 90.0, 90.0), 9001);
+			return Projection(&pcs);
+		case 184: // Swedish Grid
+			pcs = PCS(gcs, 9807, Projection::Setup(0, 15.808278, 1, 1500000, 0,
+			  NAN, NAN), 9001);
 			return Projection(&pcs);
 		default:
 			return Projection();
@@ -141,19 +175,45 @@ RMap::RMap(const QString &fileName, QObject *parent)
 		return;
 	}
 
-	quint32 tmp, width, height;
-	stream >> tmp >> tmp >> tmp;
-	stream >> width >> height;
-	QSize imageSize(width, -height);
-	stream >> tmp >> tmp;
-	stream >> width >> height;
-	_tileSize = QSize(width, height);
+	quint32 unknown, type, subtype, obfuscated, width, height, bpp, tileWidth,
+	  tileHeight, paletteSize;
 	quint64 IMPOffset;
-	stream >> IMPOffset;
-	stream >> tmp;
+
+	stream >> type;
+	if (type > 5)
+		stream >> subtype >> obfuscated;
+	else
+		obfuscated = 0;
+	stream >> width >> height >> bpp >> unknown >> tileWidth >> tileHeight
+	  >> IMPOffset >> paletteSize;
+	CHECK(stream.status() == QDataStream::Ok);
+
+	if (!(type == 5 || (type >= 8 && type <= 10))) {
+		_errorString = QString::number(type) + ": unsupported map type";
+		return;
+	}
+	if (obfuscated) {
+		_errorString = "Obfuscated maps not supported";
+		return;
+	}
+
+	QSize imageSize(width, -height);
+	_tileSize = QSize(tileWidth, tileHeight);
+
+	if (paletteSize) {
+		quint32 bgr;
+		CHECK(paletteSize <= 256);
+
+		_palette.resize(256);
+		for (int i = 0; i < (int)paletteSize; i++) {
+			stream >> bgr;
+			_palette[i] = Color::bgr2rgb(bgr);
+		}
+	}
+
 	qint32 zoomCount;
 	stream >> zoomCount;
-	CHECK(stream.status() == QDataStream::Ok);
+	CHECK(stream.status() == QDataStream::Ok && zoomCount);
 
 	QVector<quint64> zoomOffsets(zoomCount);
 	for (int i = 0; i < zoomCount; i++)
@@ -183,7 +243,7 @@ RMap::RMap(const QString &fileName, QObject *parent)
 
 	CHECK(file.seek(IMPOffset));
 	quint32 IMPSize;
-	stream >> tmp >> IMPSize;
+	stream >> unknown >> IMPSize;
 	CHECK(stream.status() == QDataStream::Ok);
 
 	QByteArray IMP(IMPSize + 1, 0);
@@ -274,18 +334,46 @@ QPixmap RMap::tile(int x, int y)
 		return QPixmap();
 	QDataStream stream(&_file);
 	stream.setByteOrder(QDataStream::LittleEndian);
-	quint32 tag, len;
-	stream >> tag >> len;
+	quint32 tag;
+	stream >> tag;
 	if (stream.status() != QDataStream::Ok)
 		return QPixmap();
 
-	QByteArray ba;
-	ba.resize(len);
-	if (stream.readRawData(ba.data(), ba.size()) != ba.size())
-		return QPixmap();
+	if (tag == 2) {
+		if (_palette.isEmpty())
+			return QPixmap();
+		quint32 width, height, size;
+		stream >> width >> height >> size;
+		QSize tileSize(width, -height);
 
-	QImage img(QImage::fromData(ba));
-	return QPixmap::fromImage(img);
+		quint32 bes = qToBigEndian(tileSize.width() * tileSize.height());
+		QByteArray ba;
+		ba.resize(sizeof(bes) + size);
+		memcpy(ba.data(), &bes, sizeof(bes));
+
+		if (stream.readRawData(ba.data() + sizeof(bes), size) != (int)size)
+			return QPixmap();
+		QByteArray uba = qUncompress(ba);
+		if (uba.size() != tileSize.width() * tileSize.height())
+			return QPixmap();
+		QImage img((const uchar*)uba.constData(), tileSize.width(),
+		  tileSize.height(), QImage::Format_Indexed8);
+		img.setColorTable(_palette);
+
+		return QPixmap::fromImage(img);
+	} else if (tag == 7) {
+		quint32 len;
+		stream >> len;
+
+		QByteArray ba;
+		ba.resize(len);
+		if (stream.readRawData(ba.data(), ba.size()) != ba.size())
+			return QPixmap();
+
+		QImage img(QImage::fromData(ba));
+		return QPixmap::fromImage(img);
+	} else
+		return QPixmap();
 }
 
 void RMap::draw(QPainter *painter, const QRectF &rect, Flags flags)

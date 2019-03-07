@@ -1,6 +1,7 @@
 #include <cstring>
 #include <QtEndian>
 #include <QFile>
+#include "color.h"
 #include "ozf.h"
 
 
@@ -128,7 +129,7 @@ bool OZF::readHeaders()
 
 bool OZF::readTileTable()
 {
-	quint32 tableOffset, headerOffset, bgr0, w, h;
+	quint32 tableOffset, headerOffset, w, h;
 	quint16 x, y;
 	int zooms;
 
@@ -164,15 +165,9 @@ bool OZF::readTileTable()
 		zoom.palette = QVector<quint32>(256);
 		if (!read(&(zoom.palette[0]), sizeof(quint32) * 256))
 			return false;
-		for (int i = 0; i < zoom.palette.size(); i++) {
-			bgr0 = qFromLittleEndian(zoom.palette.at(i));
-
-			quint32 b = (bgr0 & 0x000000FF);
-			quint32 g = (bgr0 & 0x0000FF00) >> 8;
-			quint32 r = (bgr0 & 0x00FF0000) >> 16;
-
-			zoom.palette[i] = 0xFF000000 | r << 16 | g << 8 | b;
-		}
+		for (int i = 0; i < zoom.palette.size(); i++)
+			zoom.palette[i] = Color::bgr2rgb(qFromLittleEndian(
+			  zoom.palette.at(i)));
 
 		zoom.tiles = QVector<quint32>(zoom.dim.width() * zoom.dim.height() + 1);
 		for (int i = 0; i < zoom.tiles.size(); i++)

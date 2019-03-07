@@ -2,6 +2,7 @@
 #define RMAP_H
 
 #include <QFile>
+#include <QColor>
 #include "map.h"
 #include "transform.h"
 #include "projection.h"
@@ -54,6 +55,7 @@ private:
 	qreal _mapRatio;
 	QString _fileName;
 	int _zoom;
+	QVector<QRgb> _palette;
 
 	bool _valid;
 	QString _errorString;
