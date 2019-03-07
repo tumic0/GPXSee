@@ -5,12 +5,12 @@
 #include "mapfile.h"
 
 
-static double parameter(const QString &str, bool *res, double def = 0.0)
+static double parameter(const QString &str, bool *res, double dflt = 0.0)
 {
 	QString field = str.trimmed();
 	if (field.isEmpty()) {
 		*res = true;
-		return def;
+		return dflt;
 	}
 
 	return field.toDouble(res);
@@ -19,8 +19,9 @@ static double parameter(const QString &str, bool *res, double def = 0.0)
 int MapFile::parse(QIODevice &device, QList<CalibrationPoint> &points,
   QString &projection, Projection::Setup &setup, QString &datum)
 {
-	bool res, r[8];
-	int ln = 1;
+	bool res, utm = false;
+	int ln = 1, zone = 0;
+
 
 	while (!device.atEnd()) {
 		QByteArray line = device.readLine();
@@ -38,20 +39,19 @@ int MapFile::parse(QIODevice &device, QList<CalibrationPoint> &points,
 		else {
 			QList<QByteArray> list = line.split(',');
 			QString key(list.at(0).trimmed());
-			bool ll = true; bool pp = true;
-
 
 			if (key.startsWith("Point") && list.count() == 17
 			  && !list.at(2).trimmed().isEmpty()) {
-				CalibrationPoint p;
-
-				int x = list.at(2).trimmed().toInt(&res);
+				PointD xy;
+				xy.rx() = list.at(2).trimmed().toInt(&res);
 				if (!res)
 					return ln;
-				int y = list.at(3).trimmed().toInt(&res);
+				xy.ry() = list.at(3).trimmed().toInt(&res);
 				if (!res)
 					return ln;
 
+				Coordinates c;
+				bool ll = true;
 				int latd = list.at(6).trimmed().toInt(&res);
 				if (!res)
 					ll = false;
@@ -72,31 +72,34 @@ int MapFile::parse(QIODevice &device, QList<CalibrationPoint> &points,
 					lond = -lond;
 					lonm = -lonm;
 				}
+				if (ll)
+					c = Coordinates(lond + lonm/60.0, latd + latm/60.0);
 
-				p.zone = list.at(13).trimmed().toInt(&res);
-				if (!res)
-					p.zone = 0;
+				PointD pp;
 				double ppx = list.at(14).trimmed().toDouble(&res);
-				if (!res)
-					pp = false;
+				if (res)
+					pp.rx() = ppx;
 				double ppy = list.at(15).trimmed().toDouble(&res);
-				if (!res)
-					pp = false;
-				if (list.at(16).trimmed() == "S")
-					p.zone = -p.zone;
+				if (res)
+					pp.ry() = ppy;
 
-				p.rp.setXY(PointD(x, y));
-				if (ll) {
-					p.ll = Coordinates(lond + lonm/60.0, latd + latm/60.0);
-					if (p.ll.isValid())
-						points.append(p);
-					else
-						return ln;
-				} else if (pp) {
-					p.rp.setPP(PointD(ppx, ppy));
-					points.append(p);
-				} else
+				if (c.isValid())
+					points.append(CalibrationPoint(xy, c));
+				else if (pp.isValid())
+					points.append(CalibrationPoint(xy, pp));
+				else
 					return ln;
+
+				if (utm && !zone) {
+					zone = list.at(13).trimmed().toInt(&res);
+					if (res) {
+						if (list.at(16).trimmed() == "S")
+							zone = -zone;
+					} else {
+						if (c.isValid())
+							zone = UTM::zone(c);
+					}
+				}
 			} else if (key == "IWH") {
 				if (list.count() < 4)
 					return ln;
@@ -111,19 +114,25 @@ int MapFile::parse(QIODevice &device, QList<CalibrationPoint> &points,
 				if (list.count() < 2)
 					return ln;
 				projection = list.at(1);
+				utm = (projection == "(UTM) Universal Transverse Mercator");
 			} else if (key == "Projection Setup") {
 				if (list.count() < 8)
 					return ln;
 
-				setup = Projection::Setup(
-				  parameter(list[1], &r[1]), parameter(list[2], &r[2]),
-				  parameter(list[3], &r[3], 1.0), parameter(list[4], &r[4]),
-				  parameter(list[5], &r[5]), parameter(list[6], &r[6]),
-				  parameter(list[7], &r[7]));
+				if (utm && zone)
+					setup = UTM::setup(zone);
+				else {
+					bool r[8];
+					setup = Projection::Setup(
+					  parameter(list[1], &r[1]), parameter(list[2], &r[2]),
+					  parameter(list[3], &r[3], 1.0), parameter(list[4], &r[4]),
+					  parameter(list[5], &r[5]), parameter(list[6], &r[6]),
+					  parameter(list[7], &r[7]));
 
-				for (int i = 1; i < 8; i++)
-					if (!r[i])
-						return ln;
+					for (int i = 1; i < 8; i++)
+						if (!r[i])
+							return ln;
+				}
 			}
 		}
 
@@ -144,12 +153,12 @@ bool MapFile::parseMapFile(QIODevice &device, QList<CalibrationPoint> &points,
 		return false;
 	}
 
-	if ((el = parse(device, points, projection, setup, datum))) {
+	if ((el = parse(device, points, projection, setup, datum)))
 		_errorString = QString("Parse error on line %1").arg(el);
-		return false;
-	}
 
-	return true;
+	device.close();
+
+	return (!el);
 }
 
 const GCS *MapFile::createGCS(const QString &datum)
@@ -163,35 +172,25 @@ const GCS *MapFile::createGCS(const QString &datum)
 }
 
 bool MapFile::createProjection(const GCS *gcs, const QString &name,
-  const Projection::Setup &setup, QList<CalibrationPoint> &points)
+  const Projection::Setup &setup)
 {
 	PCS pcs;
 
-	if (name == "Mercator")
-		pcs = PCS(gcs, 1024, setup, 9001);
-	else if (name == "Transverse Mercator")
-		pcs = PCS(gcs, 9807, setup, 9001);
-	else if (name == "Latitude/Longitude") {
+	if (name == "Latitude/Longitude") {
 		_projection = Projection(gcs);
 		return true;
-	} else if (name == "Lambert Conformal Conic")
+	} else if (name == "Mercator")
+		pcs = PCS(gcs, 1024, setup, 9001);
+	else if (name == "Transverse Mercator"
+	  || name == "(UTM) Universal Transverse Mercator")
+		pcs = PCS(gcs, 9807, setup, 9001);
+	else if (name == "Lambert Conformal Conic")
 		pcs = PCS(gcs, 9802, setup, 9001);
 	else if (name == "Albers Equal Area")
 		pcs = PCS(gcs, 9822, setup, 9001);
 	else if (name == "(A)Lambert Azimuthual Equal Area")
 		pcs = PCS(gcs, 9820, setup, 9001);
-	else if (name == "(UTM) Universal Transverse Mercator") {
-		int zone;
-		if (points.first().zone)
-			zone = points.first().zone;
-		else if (!points.first().ll.isNull())
-			zone = UTM::zone(points.first().ll);
-		else {
-			_errorString = "Can not determine UTM zone";
-			return false;
-		}
-		pcs = PCS(gcs, 9807, UTM::setup(zone), 9001);
-	} else if (name == "(NZTM2) New Zealand TM 2000")
+	else if (name == "(NZTM2) New Zealand TM 2000")
 		pcs = PCS(gcs, 9807, Projection::Setup(0, 173.0, 0.9996, 1600000,
 		  10000000, NAN, NAN), 9001);
 	else if (name == "(BNG) British National Grid")
@@ -234,16 +233,12 @@ bool MapFile::createProjection(const GCS *gcs, const QString &name,
 	return true;
 }
 
-bool MapFile::computeTransformation(QList<CalibrationPoint> &points)
+bool MapFile::computeTransformation(const QList<CalibrationPoint> &points)
 {
 	QList<ReferencePoint> rp;
 
-	for (int i = 0; i < points.size(); i++) {
-		if (points.at(i).rp.pp().isNull())
-			points[i].rp.setPP(_projection.ll2xy(points.at(i).ll));
-
-		rp.append(points.at(i).rp);
-	}
+	for (int i = 0; i < points.size(); i++)
+		rp.append(points.at(i).rp(_projection));
 
 	_transform = Transform(rp);
 	if (!_transform.isValid()) {
@@ -265,7 +260,7 @@ MapFile::MapFile(QIODevice &file)
 		return;
 	if (!(gcs = createGCS(datum)))
 		return;
-	if (!createProjection(gcs, ct, setup, points))
+	if (!createProjection(gcs, ct, setup))
 		return;
 	if (!computeTransformation(points))
 		return;

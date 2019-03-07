@@ -6,7 +6,7 @@
 #include "common/rectc.h"
 #include "common/wgs84.h"
 #include "common/config.h"
-#include "transform.h"
+#include "calibrationpoint.h"
 #include "utm.h"
 #include "pcs.h"
 #include "rectd.h"
@@ -19,30 +19,6 @@
 		_errorString = "Invalid/corrupted RMap file"; \
 		return; \
 	}
-
-class CalibrationPoint {
-public:
-	CalibrationPoint() {}
-	CalibrationPoint(PointD xy, PointD pp) : _xy(xy), _pp(pp) {}
-	CalibrationPoint(PointD xy, Coordinates c) : _xy(xy), _ll(c) {}
-
-	bool isValid() const
-	{
-		return !(_xy.isNull() || (_pp.isNull() && !_ll.isValid()));
-	}
-
-	ReferencePoint rp(const Projection &projection) const
-	{
-		return (_pp.isNull())
-		  ? ReferencePoint(_xy, projection.ll2xy(_ll))
-		  : ReferencePoint(_xy, _pp);
-	}
-
-private:
-	PointD _xy;
-	PointD _pp;
-	Coordinates _ll;
-};
 
 static CalibrationPoint parseCalibrationPoint(const QString &str)
 {

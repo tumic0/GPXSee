@@ -3,6 +3,7 @@
 
 #include "transform.h"
 #include "projection.h"
+#include "calibrationpoint.h"
 
 class QIODevice;
 class GCS;
@@ -24,20 +25,14 @@ public:
 	const QSize &size() const {return _size;}
 
 private:
-	struct CalibrationPoint {
-		ReferencePoint rp;
-		Coordinates ll;
-		int zone;
-	};
-
 	int parse(QIODevice &device, QList<CalibrationPoint> &points,
 	  QString &projection, Projection::Setup &setup, QString &datum);
 	bool parseMapFile(QIODevice &device, QList<CalibrationPoint> &points,
 	  QString &projection, Projection::Setup &setup, QString &datum);
 	const GCS *createGCS(const QString &datum);
 	bool createProjection(const GCS *gcs, const QString &projection,
-	  const Projection::Setup &setup, QList<CalibrationPoint> &points);
-	bool computeTransformation(QList<CalibrationPoint> &points);
+	  const Projection::Setup &setup);
+	bool computeTransformation(const QList<CalibrationPoint> &points);
 
 	QString _name;
 	QString _image;
