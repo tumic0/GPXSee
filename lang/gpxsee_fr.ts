@@ -1628,7 +1628,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="26"/>
         <source>min/km</source>
-        <translation>min/nd</translation>
+        <translation>min/km</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="27"/>
@@ -1648,7 +1648,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="33"/>
         <source>Pace</source>
-        <translation>pas</translation>
+        <translation>Allure</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="99"/>
@@ -1706,7 +1706,7 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="37"/>
         <source>Pace</source>
-        <translation>pas</translation>
+        <translation>Allure</translation>
     </message>
 </context>
 <context>
