@@ -197,7 +197,7 @@ RMap::RMap(const QString &fileName, QObject *parent)
 		return;
 	}
 
-	QSize imageSize(width, -height);
+	QSize imageSize(width, -(int)height);
 	_tileSize = QSize(tileWidth, tileHeight);
 
 	if (paletteSize) {
@@ -228,7 +228,7 @@ RMap::RMap(const QString &fileName, QObject *parent)
 
 		quint32 width, height;
 		stream >> width >> height;
-		zoom.size = QSize(width, -height);
+		zoom.size = QSize(width, -(int)height);
 		stream >> width >> height;
 		zoom.dim = QSize(width, height);
 		zoom.scale = QPointF((qreal)zoom.size.width() / (qreal)imageSize.width(),
@@ -344,7 +344,7 @@ QPixmap RMap::tile(int x, int y)
 			return QPixmap();
 		quint32 width, height, size;
 		stream >> width >> height >> size;
-		QSize tileSize(width, -height);
+		QSize tileSize(width, -(int)height);
 
 		quint32 bes = qToBigEndian(tileSize.width() * tileSize.height());
 		QByteArray ba;
