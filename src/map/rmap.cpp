@@ -354,7 +354,7 @@ QPixmap RMap::tile(int x, int y)
 		if (stream.readRawData(ba.data() + sizeof(bes), size) != (int)size)
 			return QPixmap();
 		QByteArray uba = qUncompress(ba);
-		if (uba.size() != tileSize.width() * tileSize.height())
+		if (uba.size() < tileSize.width() * tileSize.height())
 			return QPixmap();
 		QImage img((const uchar*)uba.constData(), tileSize.width(),
 		  tileSize.height(), QImage::Format_Indexed8);
