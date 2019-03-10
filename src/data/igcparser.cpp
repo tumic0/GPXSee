@@ -126,13 +126,11 @@ bool IGCParser::readBRecord(SegmentData &segment, const char *line,
   int len)
 {
 	qreal lat, lon, ele;
-	QTime time;
-
 
 	if (len < 35)
 		return false;
 
-	if (!readTimestamp(line + 1, time)) {
+	if (!readTimestamp(line + 1, _time)) {
 		_errorString = "Invalid timestamp";
 		return false;
 	}
@@ -150,11 +148,6 @@ bool IGCParser::readBRecord(SegmentData &segment, const char *line,
 		_errorString = "Invalid altitude";
 		return false;
 	}
-
-
-	if (time < _time)
-		_date = _date.addDays(1);
-	_time = time;
 
 	Trackpoint t(Coordinates(lon, lat));
 	t.setTimestamp(QDateTime(_date, _time, Qt::UTC));
