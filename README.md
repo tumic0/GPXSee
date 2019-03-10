@@ -19,7 +19,7 @@ GPXSee is a Qt-based GPS log file viewer and analyzer that supports all common G
 ## Build
 Build requirements:
 * Qt 4.8 or QT 5.x (Qt >= 5.10.1 recommended for all features)
-* C++03 compiler (tested: msvc2015, gcc >= 4.8, clang/Apple LLVM version 8.1.0)
+* C++03 or newer compiler (tested: msvc2015, gcc >= 4.8, clang/Apple LLVM version 8.1.0)
 
 Build steps:
 ```shell
