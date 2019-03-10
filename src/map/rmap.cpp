@@ -97,6 +97,10 @@ static Projection parseProjection(const QString &str, const GCS *gcs)
 			pcs = PCS(gcs, 9815, Projection::Setup(46.570866, 7.26225, 1.0,
 			  600000, 200000, 90.0, 90.0), 9001);
 			return Projection(&pcs);
+		case 108: // Dutch RD grid
+			pcs = PCS(gcs, 9809, Projection::Setup(52.15616055555555,
+			  5.38763888888889, 0.9999079, 155000, 463000, NAN, NAN), 9001);
+			return Projection(&pcs);
 		case 184: // Swedish Grid
 			pcs = PCS(gcs, 9807, Projection::Setup(0, 15.808278, 1, 1500000, 0,
 			  NAN, NAN), 9001);
