@@ -112,7 +112,7 @@ bool IGCParser::readHRecord(const char *line, int len)
 		return false;
 	}
 
-	_date = QDate(y + 2000 < QDate::currentDate().year() ? 2000 + y : 1900 + y,
+	_date = QDate(y + 2000 <= QDate::currentDate().year() ? 2000 + y : 1900 + y,
 	  m, d);
 	if (!_date.isValid()) {
 		_errorString = "Invalid date";
