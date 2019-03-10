@@ -91,7 +91,7 @@
             <li>User-definable online maps (OpenStreetMap/Google tiles, WMTS,
                 WMS, TMS).</li>
             <li>Offline maps (OziExplorer maps, TrekBuddy maps/atlases, Garmin
-                JNX maps, GeoTIFF images, MBTiles).</li>
+                JNX maps, TwoNav RMaps, GeoTIFF images, MBTiles).</li>
             <li>Elevation, speed, heart rate, cadence, power, temperature
                 and gear ratio/shifts graphs.</li>
             <li>Support for DEM files (SRTM HGT).</li>
@@ -139,7 +139,7 @@
           organization.</p>
 
           <h2 id="bugreports">Reporting bugs</h2>
-          <p>If you have found some bug in GPXSee, please report it using the
+          <p>If you have found a bug in GPXSee, please report it using the
           <a href="https://github.com/tumic0/GPXSee/issues">GitHub issue tracker</a>.
           Bugs that are not reported can not be fixed! If you are missing some
           feature in GPXSee, you may also use the tracker to request it.</p>
@@ -153,6 +153,15 @@
       <div id="sidebar">
         <div class="latest-news">
           <h3>Releases</h3>
+          <div class="news-item">
+            <p class="date">Mar 10 2019</p>
+            <h4>Version 7.4</h4>
+            <ul>
+              <li>Added support for TwoNav RMaps.</li>
+              <li>Fixed broken projection equations (multiple corner cases).</li>
+              <li>Fixed IGC date handling issues.</li>
+            </ul>
+          </div>
           <div class="news-item">
             <p class="date">Feb 18 2019</p>
             <h4>Version 7.3</h4>
@@ -192,15 +201,6 @@
               <li>Changed user data/config paths locations.</li>
               <li>Added Turkish localization.</li>
               <li>Minor bug fixes (WMTS, graphs)</li>
-            </ul>
-          </div>
-          <div class="news-item">
-            <p class="date">Oct 13 2018</p>
-            <h4>Version 6.3</h4>
-            <ul>
-              <li>Fixed broken OSM maps non-default bounds handling.</li>
-              <li>Fixed broken cleanup on exit (introduced in 6.1).</li>
-              <li>Added Danish localization.</li>
             </ul>
           </div>
         </div>
