@@ -1017,7 +1017,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="126"/>
         <source>TwoNav maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapas TwoNav</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="127"/>
