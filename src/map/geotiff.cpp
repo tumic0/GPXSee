@@ -1,11 +1,7 @@
+#include "common/tifffile.h"
 #include "pcs.h"
-#include "tifffile.h"
 #include "geotiff.h"
 
-
-#define TIFF_DOUBLE                    12
-#define TIFF_SHORT                     3
-#define TIFF_LONG                      4
 
 #define ModelPixelScaleTag             33550
 #define ModelTiepointTag               33922
@@ -126,7 +122,7 @@ bool GeoTIFF::readEntry(TIFFFile &file, Ctx &ctx) const
 	return true;
 }
 
-bool GeoTIFF::readIFD(TIFFFile &file, quint32 &offset, Ctx &ctx) const
+bool GeoTIFF::readIFD(TIFFFile &file, quint32 offset, Ctx &ctx) const
 {
 	quint16 count;
 
@@ -138,9 +134,6 @@ bool GeoTIFF::readIFD(TIFFFile &file, quint32 &offset, Ctx &ctx) const
 	for (quint16 i = 0; i < count; i++)
 		if (!readEntry(file, ctx))
 			return false;
-
-	if (!file.readValue(offset))
-		return false;
 
 	return true;
 }
@@ -475,27 +468,26 @@ bool GeoTIFF::geographicModel(QMap<quint16, Value> &kv)
 
 GeoTIFF::GeoTIFF(const QString &path)
 {
-	quint32 ifd;
 	QList<ReferencePoint> points;
 	PointD scale;
 	QMap<quint16, Value> kv;
 	Ctx ctx;
-	TIFFFile file;
 
 
-	file.setFileName(path);
+	QFile file(path);
 	if (!file.open(QIODevice::ReadOnly)) {
-		_errorString = QString("Error opening TIFF file: %1")
-		  .arg(file.errorString());
-		return;
-	}
-	if (!file.readHeader(ifd)) {
-		_errorString = "Invalid TIFF header";
+		_errorString = file.errorString();
 		return;
 	}
 
-	while (ifd) {
-		if (!readIFD(file, ifd, ctx)) {
+	TIFFFile tiff(&file);
+	if (!tiff.isValid()) {
+		_errorString = "Not a TIFF file";
+		return;
+	}
+
+	for (quint32 ifd = tiff.ifd(); ifd; ) {
+		if (!readIFD(tiff, ifd, ctx) || !tiff.readValue(ifd)) {
 			_errorString = "Invalid IFD";
 			return;
 		}
@@ -507,19 +499,19 @@ GeoTIFF::GeoTIFF(const QString &path)
 	}
 
 	if (ctx.scale) {
-		if (!readScale(file, ctx.scale, scale)) {
+		if (!readScale(tiff, ctx.scale, scale)) {
 			_errorString = "Error reading model pixel scale";
 			return;
 		}
 	}
 	if (ctx.tiepoints) {
-		if (!readTiepoints(file, ctx.tiepoints, ctx.tiepointCount, points)) {
+		if (!readTiepoints(tiff, ctx.tiepoints, ctx.tiepointCount, points)) {
 			_errorString = "Error reading raster->model tiepoint pairs";
 			return;
 		}
 	}
 
-	if (!readKeys(file, ctx, kv)) {
+	if (!readKeys(tiff, ctx, kv)) {
 		_errorString = "Error reading Geo key/value";
 		return;
 	}
@@ -547,7 +539,7 @@ GeoTIFF::GeoTIFF(const QString &path)
 		_transform = Transform(points);
 	else if (ctx.matrix) {
 		double matrix[16];
-		if (!readMatrix(file, ctx.matrix, matrix)) {
+		if (!readMatrix(tiff, ctx.matrix, matrix)) {
 			_errorString = "Error reading transformation matrix";
 			return;
 		}

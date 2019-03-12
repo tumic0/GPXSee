@@ -29,6 +29,7 @@ HEADERS += src/common/config.h \
     src/common/kv.h \
     src/common/greatcircle.h \
     src/common/programpaths.h \
+    src/common/tifffile.h \
     src/GUI/app.h \
     src/GUI/icons.h \
     src/GUI/gui.h \
@@ -108,7 +109,6 @@ HEADERS += src/common/config.h \
     src/map/pcs.h \
     src/map/transform.h \
     src/map/mapfile.h \
-    src/map/tifffile.h \
     src/map/gcs.h \
     src/map/angularunits.h \
     src/map/primemeridian.h \
@@ -161,7 +161,8 @@ HEADERS += src/common/config.h \
     src/GUI/coordinatesitem.h \
     src/map/rmap.h \
     src/map/calibrationpoint.h \
-    src/map/color.h
+    src/map/color.h \
+    src/data/exifparser.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -169,6 +170,7 @@ SOURCES += src/main.cpp \
     src/common/util.cpp \
     src/common/greatcircle.cpp \
     src/common/programpaths.cpp \
+    src/common/tifffile.cpp \
     src/GUI/app.cpp \
     src/GUI/gui.cpp \
     src/GUI/axisitem.cpp \
@@ -233,7 +235,6 @@ SOURCES += src/main.cpp \
     src/map/pcs.cpp \
     src/map/transform.cpp \
     src/map/mapfile.cpp \
-    src/map/tifffile.cpp \
     src/map/projection.cpp \
     src/map/gcs.cpp \
     src/map/angularunits.cpp \
@@ -277,7 +278,8 @@ SOURCES += src/main.cpp \
     src/data/polygon.cpp \
     src/map/obliquestereographic.cpp \
     src/GUI/coordinatesitem.cpp \
-    src/map/rmap.cpp
+    src/map/rmap.cpp \
+    src/data/exifparser.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     HEADERS += src/data/geojsonparser.h

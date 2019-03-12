@@ -4,25 +4,23 @@
 #define TIFF_MM     0x4D4D
 #define TIFF_MAGIC  42
 
-bool TIFFFile::readHeader(quint32 &ifd)
+TIFFFile::TIFFFile(QIODevice *device) : _device(device), _ifd(0)
 {
 	quint16 endian, magic;
 
-	if (QFile::read((char*)&endian, sizeof(endian)) < (qint64)sizeof(endian))
-		return false;
+	if (_device->read((char*)&endian, sizeof(endian)) < (qint64)sizeof(endian))
+		return;
 	if (endian == TIFF_II)
 		_be = false;
 	else if (endian == TIFF_MM)
 		_be = true;
 	else
-		return false;
+		return;
 
 	if (!readValue(magic))
-		return false;
+		return;
 	if (magic != TIFF_MAGIC)
-		return false;
-	if (!readValue(ifd))
-		return false;
-
-	return true;
+		return;
+	if (!readValue(_ifd))
+		return;
 }

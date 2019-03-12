@@ -14,6 +14,7 @@
 #include "slfparser.h"
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include "geojsonparser.h"
+#include "exifparser.h"
 #endif // QT 5
 #include "dem.h"
 #include "data.h"
@@ -34,6 +35,7 @@ static SLFParser slf;
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 static GeoJSONParser geojson;
 #endif // QT 5
+static EXIFParser exif;
 
 static QHash<QString, Parser*> parsers()
 {
@@ -55,6 +57,8 @@ static QHash<QString, Parser*> parsers()
 	hash.insert("json", &geojson);
 	hash.insert("geojson", &geojson);
 #endif // QT 5
+	hash.insert("jpeg", &exif);
+	hash.insert("jpg", &exif);
 
 	return hash;
 }
@@ -148,6 +152,7 @@ QString Data::formats()
 #endif // QT5
 	  + qApp->translate("Data", "GPX files") + " (*.gpx);;"
 	  + qApp->translate("Data", "IGC files") + " (*.igc);;"
+	  + qApp->translate("Data", "JPEG images") + " (*.jpg *.jpeg);;"
 	  + qApp->translate("Data", "KML files") + " (*.kml);;"
 	  + qApp->translate("Data", "LOC files") + " (*.loc);;"
 	  + qApp->translate("Data", "NMEA files") + " (*.nmea);;"

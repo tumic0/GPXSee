@@ -1,21 +1,31 @@
 #ifndef TIFFFILE_H
 #define TIFFFILE_H
 
-#include <QFile>
+#include <QIODevice>
 #include <QtEndian>
 
-class TIFFFile : public QFile
+#define TIFF_BYTE      1
+#define TIFF_ASCII     2
+#define TIFF_SHORT     3
+#define TIFF_LONG      4
+#define TIFF_RATIONAL  5
+#define TIFF_DOUBLE    12
+
+class TIFFFile
 {
 public:
-	TIFFFile() : _be(false) {}
-	TIFFFile(const QString &path) : QFile(path), _be(false) {}
+	TIFFFile(QIODevice *device);
 
-	bool readHeader(quint32 &ifd);
+	bool isValid() const {return _ifd != 0;}
+	quint32 ifd() const {return _ifd;}
+
+	bool seek(qint64 pos) {return _device->seek(pos);}
+	qint64 pos() const {return _device->pos();}
 	template<class T> bool readValue(T &val)
 	{
 		T data;
 
-		if (QFile::read((char*)&data, sizeof(T)) < (qint64)sizeof(T))
+		if (_device->read((char*)&data, sizeof(T)) < (qint64)sizeof(T))
 			return false;
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
@@ -37,7 +47,9 @@ public:
 	}
 
 private:
+	QIODevice *_device;
 	bool _be;
+	quint32 _ifd;
 };
 
 #endif // TIFFFILE_H
