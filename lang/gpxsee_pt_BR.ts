@@ -47,67 +47,72 @@
 <context>
     <name>Data</name>
     <message>
-        <location filename="../src/data/data.cpp" line="143"/>
+        <location filename="../src/data/data.cpp" line="147"/>
         <source>Supported files</source>
         <translation>Formatos suportados</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="144"/>
+        <location filename="../src/data/data.cpp" line="148"/>
         <source>CSV files</source>
         <translation>Arquivos CSV</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="145"/>
+        <location filename="../src/data/data.cpp" line="149"/>
         <source>FIT files</source>
         <translation>Arquivos FIT</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="147"/>
+        <location filename="../src/data/data.cpp" line="151"/>
         <source>GeoJSON files</source>
         <translation>Arquivos GeoJSON</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="149"/>
+        <location filename="../src/data/data.cpp" line="153"/>
         <source>GPX files</source>
         <translation>Arquivos GPX</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="150"/>
+        <location filename="../src/data/data.cpp" line="154"/>
         <source>IGC files</source>
         <translation>Arquivos IGC</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="151"/>
+        <location filename="../src/data/data.cpp" line="155"/>
+        <source>JPEG images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="156"/>
         <source>KML files</source>
         <translation>Arquivos KML</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="152"/>
+        <location filename="../src/data/data.cpp" line="157"/>
         <source>LOC files</source>
         <translation>Arquivos LOC</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="153"/>
+        <location filename="../src/data/data.cpp" line="158"/>
         <source>NMEA files</source>
         <translation>Arquivos NMEA</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="154"/>
+        <location filename="../src/data/data.cpp" line="159"/>
         <source>OziExplorer files</source>
         <translation>Arquivos OziExplorer</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="155"/>
+        <location filename="../src/data/data.cpp" line="160"/>
         <source>SLF files</source>
         <translation>Arquivos SLF</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="156"/>
+        <location filename="../src/data/data.cpp" line="161"/>
         <source>TCX files</source>
         <translation>Arquivos TCX</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="157"/>
+        <location filename="../src/data/data.cpp" line="162"/>
         <source>All files</source>
         <translation>Todos os arquivos</translation>
     </message>
