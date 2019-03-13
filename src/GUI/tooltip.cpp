@@ -1,4 +1,8 @@
+#include <QImageReader>
 #include "tooltip.h"
+
+
+#define THUMBNAIL_MAX_SIZE 240
 
 void ToolTip::insert(const QString &key, const QString &value)
 {
@@ -7,16 +11,39 @@ void ToolTip::insert(const QString &key, const QString &value)
 
 QString ToolTip::toString()
 {
-	if (_list.isEmpty())
-		return QString();
+	QString html;
 
-	QString ret = "<table>";
+	if (!_img.isNull()) {
+		QImageReader r(_img);
+		QSize size(r.size());
 
-	for (int i = 0; i < _list.count(); i++)
-		ret += "<tr><td align=\"right\"><b>" + _list.at(i).key()
-		  + ":&nbsp;</b></td><td>" + _list.at(i).value() + "</td></tr>";
+		if (size.isValid()) {
+			int width, height;
 
-	ret += "</table>";
+			if (size.width() > size.height()) {
+				width = qMin(size.width(), THUMBNAIL_MAX_SIZE);
+				qreal ratio = (qreal)size.width() / (qreal)size.height();
+				height = (int)(width / ratio);
+			} else {
+				height = qMin(size.height(), THUMBNAIL_MAX_SIZE);
+				qreal ratio = (qreal)size.height() / (qreal)size.width();
+				width = (int)(height / ratio);
+			}
 
-	return ret;
+			html += "<div align=\"center\">";
+			html += QString("<img src=\"file:%0\" width=\"%1\" height=\"%2\"/>")
+			  .arg(_img, QString::number(width), QString::number(height));
+			html += "</div>";
+		}
+	}
+
+	if (!_list.isEmpty()) {
+		html += "<table>";
+		for (int i = 0; i < _list.count(); i++)
+			html += "<tr><td align=\"right\"><b>" + _list.at(i).key()
+			  + ":&nbsp;</b></td><td>" + _list.at(i).value() + "</td></tr>";
+		html += "</table>";
+	}
+
+	return html;
 }

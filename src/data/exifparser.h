@@ -1,6 +1,7 @@
 #ifndef EXIFPARSER_H
 #define EXIFPARSER_H
 
+#include <QDateTime>
 #include "parser.h"
 
 class QDataStream;
@@ -28,6 +29,14 @@ private:
 	  QMap<quint16, IFDEntry> &entries) const;
 	bool readEntry(TIFFFile &file, const QSet<quint16> &tags,
 	  QMap<quint16, IFDEntry> &entries) const;
+
+	double coordinate(TIFFFile &file, const IFDEntry &ll) const;
+	Coordinates coordinates(TIFFFile &file, const IFDEntry &lon,
+	  const IFDEntry &lonRef, const IFDEntry &lat, const IFDEntry &latRef) const;
+	double altitude(TIFFFile &file, const IFDEntry &alt,
+	  const IFDEntry &altRef) const;
+	QDate date(TIFFFile &file, const IFDEntry &ds) const;
+	QTime time(TIFFFile &file, const IFDEntry &ts) const;
 
 	QString _errorString;
 };

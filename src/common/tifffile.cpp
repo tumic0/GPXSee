@@ -4,9 +4,11 @@
 #define TIFF_MM     0x4D4D
 #define TIFF_MAGIC  42
 
-TIFFFile::TIFFFile(QIODevice *device) : _device(device), _ifd(0)
+TIFFFile::TIFFFile(QIODevice *device) : _device(device), _ifd(0), _offset(0)
 {
 	quint16 endian, magic;
+
+	_offset = _device->pos();
 
 	if (_device->read((char*)&endian, sizeof(endian)) < (qint64)sizeof(endian))
 		return;

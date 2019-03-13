@@ -5,7 +5,6 @@
 #include <QDateTime>
 #include <QHash>
 #include <QDebug>
-#include <cmath>
 #include "common/coordinates.h"
 
 class Waypoint
@@ -18,6 +17,7 @@ public:
 	const Coordinates &coordinates() const {return _coordinates;}
 	const QString &name() const {return _name;}
 	const QString &description() const {return _description;}
+	const QString &image() const {return _image;}
 	const QDateTime &timestamp() const {return _timestamp;}
 	qreal elevation() const {return _elevation;}
 
@@ -28,6 +28,7 @@ public:
 	  {_description = description;}
 	void setTimestamp(const QDateTime &timestamp) {_timestamp = timestamp;}
 	void setElevation(qreal elevation) {_elevation = elevation;}
+	void setImage(const QString &image) {_image = image;}
 
 	bool hasElevation() const {return !std::isnan(_elevation);}
 
@@ -39,6 +40,7 @@ private:
 	Coordinates _coordinates;
 	QString _name;
 	QString _description;
+	QString _image;
 	QDateTime _timestamp;
 	qreal _elevation;
 };

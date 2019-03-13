@@ -11,39 +11,104 @@
 #define GPSLongitude    4
 #define GPSAltitudeRef  5
 #define GPSAltitude     6
+#define GPSTimeStamp    7
+#define GPSDateStamp    29
 
-static double altitude(TIFFFile &file, quint32 offset)
+QTime EXIFParser::time(TIFFFile &file, const IFDEntry &ts) const
 {
-	if (!file.seek(offset))
+	if (!(ts.type == TIFF_RATIONAL && ts.count == 3))
+		return QTime();
+
+	if (!file.seek(ts.offset))
+		return QTime();
+
+	double hms[3];
+	for (int i = 0; i < 3; i++) {
+		quint32 num, den;
+		if (!file.readValue(num))
+			return QTime();
+		if (!file.readValue(den))
+			return QTime();
+
+		hms[i] = num/(double)den;
+	}
+
+	return QTime((int)hms[0], (int)hms[1], (int)hms[2]);
+}
+
+QDate EXIFParser::date(TIFFFile &file, const IFDEntry &ds) const
+{
+	if (!(ds.type == TIFF_ASCII && ds.count == 11))
+		return QDate();
+
+	if (!file.seek(ds.offset))
+		return QDate();
+
+	QByteArray text(file.read(11));
+	if (text.size() < 11)
+		return QDate();
+
+	return QDate::fromString(text, "yyyy:MM:dd");
+}
+
+double EXIFParser::altitude(TIFFFile &file, const IFDEntry &alt,
+  const IFDEntry &altRef) const
+{
+	if (!(alt.type == TIFF_RATIONAL && alt.count == 1
+	  && altRef.type == TIFF_BYTE && altRef.count == 1))
+		return NAN;
+
+	if (!file.seek(alt.offset))
 		return NAN;
 
 	quint32 num, den;
 	if (!file.readValue(num))
-		return false;
+		return NAN;
 	if (!file.readValue(den))
-		return false;
+		return NAN;
 
-	return num/den;
+	return altRef.offset ? -num/(double)den : num/(double)den;
 }
 
-static double coordinate(TIFFFile &file, quint32 offset)
+double EXIFParser::coordinate(TIFFFile &file, const IFDEntry &ll) const
 {
-	if (!file.seek(offset))
+	if (!(ll.type == TIFF_RATIONAL && ll.count == 3))
+		return NAN;
+
+	if (!file.seek(ll.offset))
 		return NAN;
 
 	double dms[3];
-
 	for (int i = 0; i < 3; i++) {
 		quint32 num, den;
 		if (!file.readValue(num))
-			return false;
+			return NAN;
 		if (!file.readValue(den))
-			return false;
+			return NAN;
 
-		dms[i] = num/den;
+		dms[i] = num/(double)den;
 	}
 
 	return dms[0] + dms[1]/60 + dms[2]/3600;
+}
+
+Coordinates EXIFParser::coordinates(TIFFFile &file, const IFDEntry &lon,
+  const IFDEntry &lonRef, const IFDEntry &lat, const IFDEntry &latRef) const
+{
+	if (!(latRef.type == TIFF_ASCII && latRef.count == 2
+	  && lonRef.type == TIFF_ASCII && lonRef.count == 2))
+		return Coordinates();
+
+	Coordinates c(coordinate(file, lon), coordinate(file, lat));
+	if (!c.isValid())
+		return Coordinates();
+
+	if (lonRef.offset == 'W')
+		c.rlon() = -c.lon();
+	if (latRef.offset == 'S')
+		c.rlat() = -c.lat();
+
+	return c;
 }
 
 bool EXIFParser::readEntry(TIFFFile &file, const QSet<quint16> &tags,
@@ -96,8 +161,6 @@ bool EXIFParser::parseTIFF(QDataStream &stream, QVector<Waypoint> &waypoints)
 		return false;
 	}
 
-	qint64 offset = stream.device()->pos();
-
 	TIFFFile tiff(stream.device());
 	if (!tiff.isValid()) {
 		_errorString = "Invalid EXIF data";
@@ -105,68 +168,46 @@ bool EXIFParser::parseTIFF(QDataStream &stream, QVector<Waypoint> &waypoints)
 	}
 
 	QSet<quint16> exifTags;
-	exifTags.insert(GPSIFDTag);
-	QMap<quint16, IFDEntry> exifEntries;
+	exifTags << GPSIFDTag;
+	QMap<quint16, IFDEntry> exif;
 	for (quint32 ifd = tiff.ifd(); ifd; ) {
-		if (!readIFD(tiff, offset + ifd, exifTags, exifEntries)
-		  || !tiff.readValue(ifd)) {
+		if (!readIFD(tiff, ifd, exifTags, exif) || !tiff.readValue(ifd)) {
 			_errorString = "Invalid EXIF IFD";
 			return false;
 		}
 	}
-	if (!exifEntries.contains(GPSIFDTag)) {
+	if (!exif.contains(GPSIFDTag)) {
 		_errorString = "GPS IFD not found";
 		return false;
 	}
 
 	QSet<quint16> gpsTags;
-	gpsTags.insert(GPSLatitude);
-	gpsTags.insert(GPSLongitude);
-	gpsTags.insert(GPSLatitudeRef);
-	gpsTags.insert(GPSLongitudeRef);
-	gpsTags.insert(GPSAltitude);
-	gpsTags.insert(GPSAltitudeRef);
-	QMap<quint16, IFDEntry> gpsEntries;
-	for (quint32 ifd = exifEntries.value(GPSIFDTag).offset; ifd; ) {
-		if (!readIFD(tiff, offset + ifd, gpsTags, gpsEntries)
-		  || !tiff.readValue(ifd)) {
+	gpsTags << GPSLatitude << GPSLongitude << GPSLatitudeRef << GPSLongitudeRef
+	  << GPSAltitude << GPSAltitudeRef << GPSDateStamp << GPSTimeStamp;
+	QMap<quint16, IFDEntry> gps;
+	for (quint32 ifd = exif.value(GPSIFDTag).offset; ifd; ) {
+		if (!readIFD(tiff, ifd, gpsTags, gps) || !tiff.readValue(ifd)) {
 			_errorString = "Invalid GPS IFD";
 			return false;
 		}
 	}
 
-	IFDEntry lat(gpsEntries.value(GPSLatitude));
-	IFDEntry lon(gpsEntries.value(GPSLongitude));
-	IFDEntry latRef(gpsEntries.value(GPSLatitudeRef));
-	IFDEntry lonRef(gpsEntries.value(GPSLongitudeRef));
-	if (!(lat.type == TIFF_RATIONAL && lat.count == 3
-	  && lon.type == TIFF_RATIONAL && lon.count == 3
-	  && latRef.type == TIFF_ASCII && latRef.count == 2
-	  && lonRef.type == TIFF_ASCII && lonRef.count == 2)) {
-		_errorString = "Invalid/missing GPS IFD Lat/Lon entry";
-		return false;
-	}
-
-	Coordinates c(coordinate(tiff, offset + lon.offset),
-	  coordinate(tiff, offset + lat.offset));
-	if (lonRef.offset == 'W')
-		c.rlon() = -c.lon();
-	if (latRef.offset == 'S')
-		c.rlat() = -c.lat();
+	Coordinates c(coordinates(tiff, gps.value(GPSLongitude),
+	  gps.value(GPSLongitudeRef), gps.value(GPSLatitude),
+	  gps.value(GPSLatitudeRef)));
 	if (!c.isValid()) {
-		_errorString = "Invalid coordinates";
+		_errorString = "Invalid/missing GPS coordinates";
 		return false;
 	}
 
 	Waypoint wp(c);
 	QFile *file = static_cast<QFile*>(stream.device());
-	wp.setName(QFileInfo(file->fileName()).fileName());
-	IFDEntry alt(gpsEntries.value(GPSAltitude));
-	IFDEntry altRef(gpsEntries.value(GPSAltitudeRef));
-	if (alt.type == TIFF_RATIONAL && alt.count == 1 && altRef.type == TIFF_BYTE
-	  && altRef.count == 1)
-		wp.setElevation(altRef.offset ? -altitude(tiff, alt.offset)
-		  : altitude(tiff, alt.offset));
+	wp.setName(QFileInfo(file->fileName()).baseName());
+	wp.setImage(file->fileName());
+	wp.setElevation(altitude(tiff, gps.value(GPSAltitude),
+	  gps.value(GPSAltitudeRef)));
+	wp.setTimestamp(QDateTime(date(tiff, gps.value(GPSDateStamp)),
+	  time(tiff, gps.value(GPSTimeStamp)), Qt::UTC));
 
 	waypoints.append(wp);
 

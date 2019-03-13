@@ -19,8 +19,10 @@ public:
 	bool isValid() const {return _ifd != 0;}
 	quint32 ifd() const {return _ifd;}
 
-	bool seek(qint64 pos) {return _device->seek(pos);}
-	qint64 pos() const {return _device->pos();}
+	bool seek(qint64 pos) {return _device->seek(_offset + pos);}
+	qint64 pos() const {return _offset + _device->pos();}
+	QByteArray read(qint64 maxSize) {return _device->read(maxSize);}
+
 	template<class T> bool readValue(T &val)
 	{
 		T data;
@@ -50,6 +52,7 @@ private:
 	QIODevice *_device;
 	bool _be;
 	quint32 _ifd;
+	qint64 _offset;
 };
 
 #endif // TIFFFILE_H

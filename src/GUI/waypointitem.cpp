@@ -27,6 +27,7 @@ QString WaypointItem::toolTip(Units units, CoordinatesFormat format)
 	if (!_waypoint.description().isNull())
 		tt.insert(qApp->translate("WaypointItem", "Description"),
 		  _waypoint.description());
+	tt.setImage(_waypoint.image());
 
 	return tt.toString();
 }
