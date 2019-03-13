@@ -14,8 +14,8 @@
 #include "slfparser.h"
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include "geojsonparser.h"
-#include "exifparser.h"
 #endif // QT 5
+#include "exifparser.h"
 #include "dem.h"
 #include "data.h"
 

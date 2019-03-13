@@ -1,3 +1,4 @@
+#include <QFile>
 #include "common/tifffile.h"
 #include "pcs.h"
 #include "geotiff.h"

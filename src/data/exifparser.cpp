@@ -127,7 +127,7 @@ bool EXIFParser::parseTIFF(QDataStream &stream, QVector<Waypoint> &waypoints)
 	gpsTags.insert(GPSAltitude);
 	gpsTags.insert(GPSAltitudeRef);
 	QMap<quint16, IFDEntry> gpsEntries;
-	for (quint32 ifd = exifEntries.first().offset; ifd; ) {
+	for (quint32 ifd = exifEntries.value(GPSIFDTag).offset; ifd; ) {
 		if (!readIFD(tiff, offset + ifd, gpsTags, gpsEntries)
 		  || !tiff.readValue(ifd)) {
 			_errorString = "Invalid GPS IFD";
