@@ -54,8 +54,7 @@ QDate EXIFParser::date(TIFFFile &file, const IFDEntry &ds) const
 double EXIFParser::altitude(TIFFFile &file, const IFDEntry &alt,
   const IFDEntry &altRef) const
 {
-	if (!(alt.type == TIFF_RATIONAL && alt.count == 1
-	  && altRef.type == TIFF_BYTE && altRef.count == 1))
+	if (!(alt.type == TIFF_RATIONAL && alt.count == 1))
 		return NAN;
 
 	if (!file.seek(alt.offset))
@@ -67,7 +66,8 @@ double EXIFParser::altitude(TIFFFile &file, const IFDEntry &alt,
 	if (!file.readValue(den))
 		return NAN;
 
-	return altRef.offset ? -num/(double)den : num/(double)den;
+	return (altRef.type == TIFF_BYTE && altRef.count == 1 && altRef.offset)
+	  ? -num/(double)den : num/(double)den;
 }
 
 double EXIFParser::coordinate(TIFFFile &file, const IFDEntry &ll) const
