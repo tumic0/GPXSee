@@ -79,7 +79,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="155"/>
         <source>JPEG images</source>
-        <translation type="unfinished"></translation>
+        <translation>Imagen JPEG</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="156"/>
@@ -455,7 +455,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="338"/>
         <source>Show areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Ver áreas</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="343"/>
@@ -500,7 +500,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="389"/>
         <source>Show path markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Ver marcadores de camino</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="396"/>
@@ -779,7 +779,7 @@
         <location filename="../src/GUI/gui.cpp" line="1023"/>
         <location filename="../src/GUI/gui.cpp" line="1094"/>
         <source>Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Tracks</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1026"/>
@@ -791,13 +791,13 @@
         <location filename="../src/GUI/gui.cpp" line="1029"/>
         <location filename="../src/GUI/gui.cpp" line="1098"/>
         <source>Waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>Waypoints</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1032"/>
         <location filename="../src/GUI/gui.cpp" line="1100"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Áreas</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1038"/>
@@ -836,9 +836,9 @@
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1347"/>
         <source>%n files</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n archivo</numerusform>
+            <numerusform>%n archivos</numerusform>
         </translation>
     </message>
 </context>
@@ -1022,7 +1022,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="126"/>
         <source>TwoNav maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapas TwoNav</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="127"/>
@@ -1075,7 +1075,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="159"/>
         <source>Base color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Color de base:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="160"/>
@@ -1109,7 +1109,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="109"/>
         <source>Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Tracks</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="121"/>
@@ -1129,27 +1129,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="139"/>
         <source>Area border width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ancho de frontera del área:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="140"/>
         <source>Area border style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Estilo de frontera del área:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="141"/>
         <source>Area fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Opacidad de relleno del área:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="145"/>
         <source>Fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Opacidad de relleno:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Áreas</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="162"/>
@@ -1171,7 +1171,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="214"/>
         <source>Color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Color:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="199"/>
@@ -1182,7 +1182,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="200"/>
         <source>Waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>Waypoints</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="211"/>
@@ -1354,7 +1354,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="419"/>
         <source>Sources</source>
-        <translation type="unfinished"></translation>
+        <translation>Fuentes</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="420"/>
@@ -1364,7 +1364,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="453"/>
         <source>Radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Radio:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="401"/>
