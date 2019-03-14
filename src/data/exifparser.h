@@ -4,7 +4,6 @@
 #include <QDateTime>
 #include "parser.h"
 
-class QDataStream;
 class TIFFFile;
 
 class EXIFParser : public Parser
@@ -24,7 +23,7 @@ private:
 		quint32 offset;
 	};
 
-	bool parseTIFF(QDataStream &stream, QVector<Waypoint> &waypoints);
+	bool parseTIFF(QFile *file, QVector<Waypoint> &waypoints);
 	bool readIFD(TIFFFile &file, quint32 offset, const QSet<quint16> &tags,
 	  QMap<quint16, IFDEntry> &entries) const;
 	bool readEntry(TIFFFile &file, const QSet<quint16> &tags,

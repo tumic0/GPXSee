@@ -149,19 +149,9 @@ bool EXIFParser::readIFD(TIFFFile &file, quint32 offset,
 	return true;
 }
 
-bool EXIFParser::parseTIFF(QDataStream &stream, QVector<Waypoint> &waypoints)
+bool EXIFParser::parseTIFF(QFile *file, QVector<Waypoint> &waypoints)
 {
-	quint16 size;
-	char magic[6];
-
-	stream >> size;
-	if (stream.readRawData(magic, sizeof(magic)) != sizeof(magic) ||
-	  memcmp(magic, "Exif\0\0", sizeof(magic))) {
-		_errorString = "No EXIF data found";
-		return false;
-	}
-
-	TIFFFile tiff(stream.device());
+	TIFFFile tiff(file);
 	if (!tiff.isValid()) {
 		_errorString = "Invalid EXIF data";
 		return false;
@@ -201,7 +191,6 @@ bool EXIFParser::parseTIFF(QDataStream &stream, QVector<Waypoint> &waypoints)
 	}
 
 	Waypoint wp(c);
-	QFile *file = static_cast<QFile*>(stream.device());
 	wp.setName(QFileInfo(file->fileName()).baseName());
 	wp.setImage(file->fileName());
 	wp.setElevation(altitude(tiff, gps.value(GPSAltitude),
@@ -228,8 +217,16 @@ bool EXIFParser::parse(QFile *file, QList<TrackData> &tracks,
 	quint16 marker;
 	while (!stream.atEnd()) {
 		stream >> marker;
-		if (marker == 0xFFE1)
-			return parseTIFF(stream, waypoints);
+		if (marker == 0xFFE1) {
+			quint16 size;
+			char magic[6];
+			stream >> size;
+			if (stream.readRawData(magic, sizeof(magic)) == sizeof(magic) &&
+			  !memcmp(magic, "Exif\0\0", sizeof(magic)))
+				return parseTIFF(file, waypoints);
+			else
+				break;
+		}
 	}
 
 	_errorString = "No EXIF data found";
