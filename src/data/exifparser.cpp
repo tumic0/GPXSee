@@ -4,15 +4,39 @@
 #include "exifparser.h"
 
 
-#define GPSIFDTag       34853
-#define GPSLatitudeRef  1
-#define GPSLatitude     2
-#define GPSLongitudeRef 3
-#define GPSLongitude    4
-#define GPSAltitudeRef  5
-#define GPSAltitude     6
-#define GPSTimeStamp    7
-#define GPSDateStamp    29
+#define SOI_MARKER       0xFFD8
+#define APP1_MARKER      0xFFE1
+
+#define GPSIFDTag        34853
+#define ImageDescription 270
+
+#define GPSLatitudeRef   1
+#define GPSLatitude      2
+#define GPSLongitudeRef  3
+#define GPSLongitude     4
+#define GPSAltitudeRef   5
+#define GPSAltitude      6
+#define GPSTimeStamp     7
+#define GPSDateStamp     29
+
+
+QString EXIFParser::text(TIFFFile &file, const IFDEntry &e) const
+{
+	if (e.type != TIFF_ASCII || !e.count)
+		return QString();
+
+	if (e.count <= sizeof(e.offset))
+		return QString(QByteArray((const char *)&e.offset, sizeof(e.offset)));
+
+	if (!file.seek(e.offset))
+		return QString();
+
+	QByteArray str(file.read(e.count));
+	if (str.size() < (int)e.count)
+		return QString();
+
+	return QString(str);
+}
 
 QTime EXIFParser::time(TIFFFile &file, const IFDEntry &ts) const
 {
@@ -34,21 +58,6 @@ QTime EXIFParser::time(TIFFFile &file, const IFDEntry &ts) const
 	}
 
 	return QTime((int)hms[0], (int)hms[1], (int)hms[2]);
-}
-
-QDate EXIFParser::date(TIFFFile &file, const IFDEntry &ds) const
-{
-	if (!(ds.type == TIFF_ASCII && ds.count == 11))
-		return QDate();
-
-	if (!file.seek(ds.offset))
-		return QDate();
-
-	QByteArray text(file.read(11));
-	if (text.size() < 11)
-		return QDate();
-
-	return QDate::fromString(text, "yyyy:MM:dd");
 }
 
 double EXIFParser::altitude(TIFFFile &file, const IFDEntry &alt,
@@ -157,34 +166,35 @@ bool EXIFParser::parseTIFF(QFile *file, QVector<Waypoint> &waypoints)
 		return false;
 	}
 
-	QSet<quint16> exifTags;
-	exifTags << GPSIFDTag;
-	QMap<quint16, IFDEntry> exif;
+	QSet<quint16> IFD0Tags;
+	IFD0Tags << GPSIFDTag << ImageDescription;
+	QMap<quint16, IFDEntry> IFD0;
 	for (quint32 ifd = tiff.ifd(); ifd; ) {
-		if (!readIFD(tiff, ifd, exifTags, exif) || !tiff.readValue(ifd)) {
-			_errorString = "Invalid EXIF IFD";
+		if (!readIFD(tiff, ifd, IFD0Tags, IFD0) || !tiff.readValue(ifd)) {
+			_errorString = "Invalid IFD0";
 			return false;
 		}
 	}
-	if (!exif.contains(GPSIFDTag)) {
+	if (!IFD0.contains(GPSIFDTag)) {
 		_errorString = "GPS IFD not found";
 		return false;
 	}
 
-	QSet<quint16> gpsTags;
-	gpsTags << GPSLatitude << GPSLongitude << GPSLatitudeRef << GPSLongitudeRef
-	  << GPSAltitude << GPSAltitudeRef << GPSDateStamp << GPSTimeStamp;
-	QMap<quint16, IFDEntry> gps;
-	for (quint32 ifd = exif.value(GPSIFDTag).offset; ifd; ) {
-		if (!readIFD(tiff, ifd, gpsTags, gps) || !tiff.readValue(ifd)) {
+	QSet<quint16> GPSIFDTags;
+	GPSIFDTags << GPSLatitude << GPSLongitude << GPSLatitudeRef
+	  << GPSLongitudeRef << GPSAltitude << GPSAltitudeRef << GPSDateStamp
+	  << GPSTimeStamp;
+	QMap<quint16, IFDEntry> GPSIFD;
+	for (quint32 ifd = IFD0.value(GPSIFDTag).offset; ifd; ) {
+		if (!readIFD(tiff, ifd, GPSIFDTags, GPSIFD) || !tiff.readValue(ifd)) {
 			_errorString = "Invalid GPS IFD";
 			return false;
 		}
 	}
 
-	Coordinates c(coordinates(tiff, gps.value(GPSLongitude),
-	  gps.value(GPSLongitudeRef), gps.value(GPSLatitude),
-	  gps.value(GPSLatitudeRef)));
+	Coordinates c(coordinates(tiff, GPSIFD.value(GPSLongitude),
+	  GPSIFD.value(GPSLongitudeRef), GPSIFD.value(GPSLatitude),
+	  GPSIFD.value(GPSLatitudeRef)));
 	if (!c.isValid()) {
 		_errorString = "Invalid/missing GPS coordinates";
 		return false;
@@ -193,10 +203,12 @@ bool EXIFParser::parseTIFF(QFile *file, QVector<Waypoint> &waypoints)
 	Waypoint wp(c);
 	wp.setName(QFileInfo(file->fileName()).baseName());
 	wp.setImage(file->fileName());
-	wp.setElevation(altitude(tiff, gps.value(GPSAltitude),
-	  gps.value(GPSAltitudeRef)));
-	wp.setTimestamp(QDateTime(date(tiff, gps.value(GPSDateStamp)),
-	  time(tiff, gps.value(GPSTimeStamp)), Qt::UTC));
+	wp.setElevation(altitude(tiff, GPSIFD.value(GPSAltitude),
+	  GPSIFD.value(GPSAltitudeRef)));
+	wp.setTimestamp(QDateTime(QDate::fromString(text(tiff,
+	  GPSIFD.value(GPSDateStamp)), "yyyy:MM:dd"), time(tiff,
+	  GPSIFD.value(GPSTimeStamp)), Qt::UTC));
+	wp.setDescription(text(tiff, IFD0.value(ImageDescription)).trimmed());
 
 	waypoints.append(wp);
 
@@ -210,14 +222,19 @@ bool EXIFParser::parse(QFile *file, QList<TrackData> &tracks,
 	Q_UNUSED(tracks);
 	Q_UNUSED(routes);
 	Q_UNUSED(polygons);
+	quint16 marker;
 
 	QDataStream stream(file);
 	stream.setByteOrder(QDataStream::BigEndian);
+	stream >> marker;
+	if (marker != SOI_MARKER) {
+		_errorString = "Not a JPEG file";
+		return false;
+	}
 
-	quint16 marker;
 	while (!stream.atEnd()) {
 		stream >> marker;
-		if (marker == 0xFFE1) {
+		if (marker == APP1_MARKER) {
 			quint16 size;
 			char magic[6];
 			stream >> size;

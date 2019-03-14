@@ -18,13 +18,13 @@ QString WaypointItem::toolTip(Units units, CoordinatesFormat format)
 		tt.insert(qApp->translate("WaypointItem", "Name"), _waypoint.name());
 	tt.insert(qApp->translate("WaypointItem", "Coordinates"),
 	  Format::coordinates(_waypoint.coordinates(), format));
-	if (!std::isnan(_waypoint.elevation()))
+	if (_waypoint.hasElevation())
 		tt.insert(qApp->translate("WaypointItem", "Elevation"),
 		  Format::elevation(_waypoint.elevation(), units));
-	if (!_waypoint.timestamp().isNull())
+	if (_waypoint.timestamp().isValid())
 		tt.insert(qApp->translate("WaypointItem", "Date"),
 		  _waypoint.timestamp().toString(Qt::SystemLocaleShortDate));
-	if (!_waypoint.description().isNull())
+	if (!_waypoint.description().isEmpty())
 		tt.insert(qApp->translate("WaypointItem", "Description"),
 		  _waypoint.description());
 	tt.setImage(_waypoint.image());

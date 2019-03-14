@@ -34,8 +34,8 @@ private:
 	  const IFDEntry &lonRef, const IFDEntry &lat, const IFDEntry &latRef) const;
 	double altitude(TIFFFile &file, const IFDEntry &alt,
 	  const IFDEntry &altRef) const;
-	QDate date(TIFFFile &file, const IFDEntry &ds) const;
 	QTime time(TIFFFile &file, const IFDEntry &ts) const;
+	QString text(TIFFFile &file, const IFDEntry &e) const;
 
 	QString _errorString;
 };
