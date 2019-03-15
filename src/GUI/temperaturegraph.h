@@ -23,7 +23,7 @@ private:
 	void setYUnits(Units units);
 	void setInfo();
 
-	QList<QPointF> _avg;
+	QVector<QPointF> _avg;
 
 	bool _showTracks;
 };

@@ -24,8 +24,8 @@ private:
 	void setYUnits();
 	void setInfo();
 
-	QList<QPointF> _avg;
-	QList<QPointF> _mavg;
+	QVector<QPointF> _avg;
+	QVector<QPointF> _mavg;
 
 	Units _units;
 	TimeType _timeType;

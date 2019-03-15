@@ -63,11 +63,11 @@ QList<GraphItem*> PowerGraph::loadData(const Data &data)
 qreal PowerGraph::avg() const
 {
 	qreal sum = 0, w = 0;
-	QList<QPointF>::const_iterator it;
 
-	for (it = _avg.begin(); it != _avg.end(); it++) {
-		sum += it->y() * it->x();
-		w += it->x();
+	for (int i = 0; i < _avg.size(); i++) {
+		const QPointF &p = _avg.at(i);
+		sum += p.y() * p.x();
+		w += p.x();
 	}
 
 	return (sum / w);

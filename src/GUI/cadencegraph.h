@@ -21,7 +21,7 @@ private:
 	qreal max() const {return bounds().bottom();}
 	void setInfo();
 
-	QList<QPointF> _avg;
+	QVector<QPointF> _avg;
 
 	bool _showTracks;
 };
