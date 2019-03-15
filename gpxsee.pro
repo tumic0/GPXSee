@@ -162,7 +162,8 @@ HEADERS += src/common/config.h \
     src/map/rmap.h \
     src/map/calibrationpoint.h \
     src/map/color.h \
-    src/data/exifparser.h
+    src/data/exifparser.h \
+    src/data/imageinfo.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \

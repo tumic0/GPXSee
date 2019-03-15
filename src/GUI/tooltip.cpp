@@ -9,32 +9,26 @@ void ToolTip::insert(const QString &key, const QString &value)
 	_list.append(KV(key, value));
 }
 
-QString ToolTip::toString()
+QString ToolTip::toString() const
 {
 	QString html;
 
-	if (!_img.isNull()) {
-		QImageReader r(_img);
-		QSize size(r.size());
-
-		if (size.isValid()) {
-			int width, height;
-
-			if (size.width() > size.height()) {
-				width = qMin(size.width(), THUMBNAIL_MAX_SIZE);
-				qreal ratio = (qreal)size.width() / (qreal)size.height();
-				height = (int)(width / ratio);
-			} else {
-				height = qMin(size.height(), THUMBNAIL_MAX_SIZE);
-				qreal ratio = (qreal)size.height() / (qreal)size.width();
-				width = (int)(height / ratio);
-			}
-
-			html += "<div align=\"center\">";
-			html += QString("<img src=\"file:%0\" width=\"%1\" height=\"%2\"/>")
-			  .arg(_img, QString::number(width), QString::number(height));
-			html += "</div>";
+	if (_img.isValid()) {
+		int width, height;
+		if (_img.size().width() > _img.size().height()) {
+			width = qMin(_img.size().width(), THUMBNAIL_MAX_SIZE);
+			qreal ratio = _img.size().width() / (qreal)_img.size().height();
+			height = (int)(width / ratio);
+		} else {
+			height = qMin(_img.size().height(), THUMBNAIL_MAX_SIZE);
+			qreal ratio = _img.size().height() / (qreal)_img.size().width();
+			width = (int)(height / ratio);
 		}
+
+		html += "<div align=\"center\">";
+		html += QString("<img src=\"file:%0\" width=\"%1\" height=\"%2\"/>")
+		  .arg(_img.path(), QString::number(width), QString::number(height));
+		html += "</div>";
 	}
 
 	if (!_list.isEmpty()) {

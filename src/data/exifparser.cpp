@@ -1,5 +1,6 @@
 #include <QDataStream>
 #include <QFileInfo>
+#include <QImageReader>
 #include "common/tifffile.h"
 #include "exifparser.h"
 
@@ -200,9 +201,12 @@ bool EXIFParser::parseTIFF(QFile *file, QVector<Waypoint> &waypoints)
 		return false;
 	}
 
+	file->reset();
+	ImageInfo img(file->fileName(), QImageReader(file).size());
+
 	Waypoint wp(c);
 	wp.setName(QFileInfo(file->fileName()).baseName());
-	wp.setImage(file->fileName());
+	wp.setImage(img);
 	wp.setElevation(altitude(tiff, GPSIFD.value(GPSAltitude),
 	  GPSIFD.value(GPSAltitudeRef)));
 	wp.setTimestamp(QDateTime(QDate::fromString(text(tiff,
