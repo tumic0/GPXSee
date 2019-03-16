@@ -77,7 +77,7 @@ double EXIFParser::altitude(TIFFFile &file, const IFDEntry &alt,
 		return NAN;
 
 	return (altRef.type == TIFF_BYTE && altRef.count == 1 && altRef.offset)
-	  ? -num/(double)den : num/(double)den;
+	  ? -(num/(double)den) : num/(double)den;
 }
 
 double EXIFParser::coordinate(TIFFFile &file, const IFDEntry &ll) const
