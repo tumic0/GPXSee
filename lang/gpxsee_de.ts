@@ -79,7 +79,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="155"/>
         <source>JPEG images</source>
-        <translation type="unfinished"></translation>
+        <translation>JPEG Bilder</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="156"/>
