@@ -2,6 +2,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QLineF>
+#include "common/config.h"
 #include "gpxparser.h"
 #include "tcxparser.h"
 #include "csvparser.h"
@@ -12,9 +13,9 @@
 #include "oziparsers.h"
 #include "locparser.h"
 #include "slfparser.h"
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#ifdef ENABLE_GEOJSON
 #include "geojsonparser.h"
-#endif // QT 5
+#endif // ENABLE_GEOJSON
 #include "exifparser.h"
 #include "dem.h"
 #include "data.h"
@@ -32,9 +33,9 @@ static WPTParser wpt;
 static RTEParser rte;
 static LOCParser loc;
 static SLFParser slf;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#ifdef ENABLE_GEOJSON
 static GeoJSONParser geojson;
-#endif // QT 5
+#endif // ENABLE_GEOJSON
 static EXIFParser exif;
 
 static QHash<QString, Parser*> parsers()
@@ -53,10 +54,10 @@ static QHash<QString, Parser*> parsers()
 	hash.insert("rte", &rte);
 	hash.insert("loc", &loc);
 	hash.insert("slf", &slf);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#ifdef ENABLE_GEOJSON
 	hash.insert("json", &geojson);
 	hash.insert("geojson", &geojson);
-#endif // QT 5
+#endif // ENABLE_GEOJSON
 	hash.insert("jpeg", &exif);
 	hash.insert("jpg", &exif);
 
@@ -147,9 +148,9 @@ QString Data::formats()
 	  qApp->translate("Data", "Supported files") + " (" + supported + ");;"
 	  + qApp->translate("Data", "CSV files") + " (*.csv);;"
 	  + qApp->translate("Data", "FIT files") + " (*.fit);;"
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#ifdef ENABLE_GEOJSON
 	  + qApp->translate("Data", "GeoJSON files") + " (*.geojson *.json);;"
-#endif // QT5
+#endif // ENABLE_GEOJSON
 	  + qApp->translate("Data", "GPX files") + " (*.gpx);;"
 	  + qApp->translate("Data", "IGC files") + " (*.igc);;"
 	  + qApp->translate("Data", "JPEG images") + " (*.jpg *.jpeg);;"
