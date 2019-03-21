@@ -31,7 +31,7 @@
 #else
 #define USER_DIR        QDir::homePath() + QString("/.local/share/") \
 						  + qApp->applicationName()
-#define GLOBAL_DIR      QString("/usr/share/") + qApp->applicationName()
+#define GLOBAL_DIR      QString(PREFIX "/share/") + qApp->applicationName()
 #endif
 
 static QString dir(const QString &dirName, bool writable = false)
