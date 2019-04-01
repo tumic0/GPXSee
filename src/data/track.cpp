@@ -217,7 +217,7 @@ Graph Track::speed() const
 				v = 0;
 				stop.append(gs.size());
 			} else if (_useReportedSpeed && sd.at(j).hasSpeed()
-			  && seg.outliers.contains(j))
+			  && !seg.outliers.contains(j))
 				v = sd.at(j).speed();
 			else if (!std::isnan(seg.speed.at(j)) && !seg.outliers.contains(j))
 				v = seg.speed.at(j);
