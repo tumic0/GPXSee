@@ -138,7 +138,6 @@ bool CSVParser::parse_wheellog(QFile *file, QList<TrackData> &tracks,
 	tracks.append(TrackData());
 	TrackData &track = tracks.back();
 	track.append(SegmentData());
-	SegmentData &segment = track.last();
 
 	QString last_mode;
 	QDateTime last_time_stamp;
@@ -157,53 +156,66 @@ bool CSVParser::parse_wheellog(QFile *file, QList<TrackData> &tracks,
 			return false;
 		}
 
+		// Sometimes, the last column (alert) contain commas,
+		// merge back items entries after the last header column
+		while (list.size() > header_list.size()) {
+			int last = list.size() - 1;
+			list[last - 1] += "," + list[last];
+			list.removeLast();
+		}
+
+		QString mode, alert;
 		Coordinates coords;
 		QDateTime time_stamp;
 		Trackpoint trackpoint;
-		Waypoint waypoint;
 
 		for (int idx = 0; idx < sizeof(WlColumns) / sizeof(*WlColumns); idx++) {
 			QString str_val = get_column_str(list, static_cast<WlColumn_t>(idx));
 			bool res = !str_val.isNull();
+			if (!res)
+				continue;
 
 			// Convert to float if necessary
 			double float_val = (double)NAN;
 			switch (idx)
 			{
+			// These columns contain strings or date-time
 			case wl_date_idx: case wl_time_idx: case wl_mode_idx: case wl_alert_idx:
+				//qDebug("%d(%s): %s\n", idx, WlColumns[idx].name, qUtf8Printable(str_val));
 				break;
-			// Other columns are float numbers
+			// Other columns contain float numbers
 			default:
 				float_val = str_val.toDouble(&res);
+				//qDebug("%d(%s): %f\n", idx, WlColumns[idx].name, float_val);
 			}
+			if (!res)
+				continue;
 
-			if (res) {
-				switch (idx)
-				{
-				/* Android's GPS data */
-				case wl_date_idx:			time_stamp.setDate(QDate::fromString(str_val, Qt::ISODate)); break;
-				case wl_time_idx:			time_stamp.setTime(QTime::fromString(str_val)); break;
-				case wl_latitude_idx:		coords.setLat(float_val); break;
-				case wl_longitude_idx:		coords.setLon(float_val); break;
-				case wl_gps_speed_idx:		/*trackpoint.setSpeed(float_val);*/ break;
-				case wl_gps_alt_idx:		trackpoint.setElevation(float_val); break;
-				case wl_gps_heading_idx:	break;
-				case wl_gps_distance_idx:	break;
-				/* Electric Vehicle data */
-				case wl_speed_idx:			trackpoint.setSpeed(float_val); break;
-				case wl_voltage_idx:		break;
-				case wl_current_idx:		break;
-				case wl_power_idx:			trackpoint.setPower(float_val); break;
-				case wl_battery_level_idx:	break;
-				case wl_distance_idx:		break;
-				case wl_totaldistance_idx:	break;
-				case wl_system_temp_idx:	trackpoint.setTemperature(float_val); break;
-				case wl_cpu_temp_idx:		break;
-				case wl_tilt_idx:			break;
-				case wl_roll_idx:			break;
-				case wl_mode_idx:			waypoint.setName(str_val); break;
-				case wl_alert_idx:			waypoint.setDescription(str_val); break;
-				}
+			switch (idx)
+			{
+			/* Android's GPS data */
+			case wl_date_idx:			time_stamp.setDate(QDate::fromString(str_val, Qt::ISODate)); break;
+			case wl_time_idx:			time_stamp.setTime(QTime::fromString(str_val)); break;
+			case wl_latitude_idx:		coords.setLat(float_val); break;
+			case wl_longitude_idx:		coords.setLon(float_val); break;
+			case wl_gps_speed_idx:		/*trackpoint.setSpeed(float_val / 3.6);*/ break;	// km/h -> m/s
+			case wl_gps_alt_idx:		trackpoint.setElevation(float_val); break;
+			case wl_gps_heading_idx:	break;
+			case wl_gps_distance_idx:	break;
+			/* Electric Vehicle data */
+			case wl_speed_idx:			trackpoint.setSpeed(float_val / 3.6); break;	// km/h -> m/s
+			case wl_voltage_idx:		break;
+			case wl_current_idx:		break;
+			case wl_power_idx:			trackpoint.setPower(float_val); break;
+			case wl_battery_level_idx:	break;
+			case wl_distance_idx:		break;
+			case wl_totaldistance_idx:	break;
+			case wl_system_temp_idx:	trackpoint.setTemperature(float_val); break;
+			case wl_cpu_temp_idx:		break;
+			case wl_tilt_idx:			break;
+			case wl_roll_idx:			break;
+			case wl_mode_idx:			mode = str_val; break;
+			case wl_alert_idx:			alert = str_val; break;
 			}
 		}
 
@@ -211,20 +223,27 @@ bool CSVParser::parse_wheellog(QFile *file, QList<TrackData> &tracks,
 			// Avoid problems with unordered time-stamps by ignoring them
 			// TODO: Must sort the log
 			if (last_time_stamp < time_stamp) {
+				last_time_stamp = time_stamp;
 				trackpoint.setTimestamp(time_stamp);
 				trackpoint.setCoordinates(coords);
-				segment.append(trackpoint);
-				last_time_stamp = time_stamp;
+				track.last().append(trackpoint);
+			}
+			else {
+				qDebug() << "Warning: Ignored unordered time-stamp" << time_stamp.toString() << ", at line" << _errorLine;
 			}
 
 			// Add waypoint on alert or mode change
-			if (!waypoint.description().isEmpty() || last_mode != waypoint.name()) {
-				waypoint.setCoordinates(coords);
+			if (!alert.isEmpty() || last_mode != mode) {
+				Waypoint waypoint(coords);
+				waypoint.setName(alert.isEmpty() ? mode : "ALERT");
+				QString descr;
+				QTextStream(&descr) << "Line " << _errorLine << ": " << alert;
+				waypoint.setDescription(descr);
 				waypoints.append(waypoint);
 			}
 
 			// Keep the last mode
-			last_mode = waypoint.name();
+			last_mode = mode;
 		}
 
 		_errorLine++;
