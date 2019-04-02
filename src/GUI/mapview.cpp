@@ -476,6 +476,7 @@ void MapView::digitalZoom(int zoom)
 		it.value()->setDigitalZoom(_digitalZoom);
 
 	_mapScale->setDigitalZoom(_digitalZoom);
+	_coordinates->setDigitalZoom(_digitalZoom);
 }
 
 void MapView::zoom(int zoom, const QPoint &pos)
