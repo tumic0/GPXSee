@@ -1,4 +1,6 @@
+#include <QImageReader>
 #include "csvparser.h"
+#include "GUI/icons.h"
 
 // Wheel log columns
 #define ENUM_WHEELLOG_COLUMNS(F)	\
@@ -235,10 +237,17 @@ bool CSVParser::parse_wheellog(QFile *file, QList<TrackData> &tracks,
 			// Add waypoint on alert or mode change
 			if (!alert.isEmpty() || last_mode != mode) {
 				Waypoint waypoint(coords);
+				waypoint.setTimestamp(time_stamp);
+				waypoint.setElevation(trackpoint.elevation());
 				waypoint.setName(alert.isEmpty() ? mode : "ALERT");
 				QString descr;
 				QTextStream(&descr) << "Line " << _errorLine << ": " << alert;
 				waypoint.setDescription(descr);
+#if 1	//Experimental: Add icons
+				static ImageInfo poiIcon(SHOW_POI_ICON, QImageReader(SHOW_POI_ICON).size());
+				static ImageInfo alertIcon(CLOSE_FILE_ICON, QImageReader(CLOSE_FILE_ICON).size());
+				waypoint.setImage(alert.isEmpty() ?  poiIcon : alertIcon);
+#endif
 				waypoints.append(waypoint);
 			}
 
