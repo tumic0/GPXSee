@@ -39,7 +39,6 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setRenderHint(QPainter::Antialiasing, true);
 	setAcceptDrops(false);
-	setMouseTracking(true);
 
 	_mapScale = new ScaleItem();
 	_mapScale->setZValue(2.0);
@@ -752,6 +751,7 @@ void MapView::showPOILabels(bool show)
 void MapView::showCoordinates(bool show)
 {
 	_coordinates->setVisible(show);
+	setMouseTracking(show);
 }
 
 void MapView::setPOIOverlap(bool overlap)

@@ -13,6 +13,8 @@ CoordinatesItem::CoordinatesItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 
 	_digitalZoom = 0;
 
+	setAcceptHoverEvents(true);
+
 	updateBoundingRect();
 }
 
