@@ -11,6 +11,8 @@ CoordinatesItem::CoordinatesItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 	_font.setPixelSize(FONT_SIZE);
 	_font.setFamily(FONT_FAMILY);
 
+	_digitalZoom = 0;
+
 	updateBoundingRect();
 }
 
@@ -46,6 +48,12 @@ void CoordinatesItem::setFormat(const CoordinatesFormat &format)
 
 	_format = format;
 	updateBoundingRect();
+}
+
+void CoordinatesItem::setDigitalZoom(qreal zoom)
+{
+	_digitalZoom = zoom;
+	setScale(pow(2, -_digitalZoom));
 }
 
 void CoordinatesItem::updateBoundingRect()

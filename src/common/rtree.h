@@ -215,6 +215,8 @@ public:
 		StackElement m_stack[MAX_STACK];
 		// Top Of Stack index
 		int m_tos;
+
+		friend class RTree;
 	};
 
 	// Get 'first' for iteration

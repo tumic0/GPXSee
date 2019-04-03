@@ -17,6 +17,7 @@ public:
 
 	void setCoordinates(const Coordinates &c);
 	void setFormat(const CoordinatesFormat &format);
+	void setDigitalZoom(qreal zoom);
 
 private:
 	void updateBoundingRect();
@@ -25,6 +26,7 @@ private:
 	CoordinatesFormat _format;
 	QRectF _boundingRect;
 	QFont _font;
+	qreal _digitalZoom;
 };
 
 #endif // COORDINATESITEM_H
