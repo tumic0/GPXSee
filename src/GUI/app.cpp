@@ -51,7 +51,7 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	   "QThreadStorage: Thread X exited after QThreadStorage Y destroyed" */
 	Downloader::setNetworkManager(new QNetworkAccessManager(this));
 	DEM::setDir(ProgramPaths::demDir());
-	OPENGL_SET_SAMPLES(4);
+	OPENGL_SET_FORMAT(4, 8);
 
 	loadDatums();
 	loadPCSs();

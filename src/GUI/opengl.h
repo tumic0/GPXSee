@@ -14,13 +14,15 @@
 #endif
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
-#define OPENGL_SET_SAMPLES(samples) \
+#define OPENGL_SET_FORMAT(samples, stencilBuffer) \
 	{QGLFormat fmt; \
+	fmt.setStencilBufferSize(stencilBuffer); \
 	fmt.setSamples(samples); \
 	QGLFormat::setDefaultFormat(fmt);}
 #else
-#define OPENGL_SET_SAMPLES(samples) \
+#define OPENGL_SET_FORMAT(samples, stencilBuffer) \
 	{QSurfaceFormat fmt; \
-	fmt.setSamples(samples);\
+	fmt.setStencilBufferSize(stencilBuffer); \
+	fmt.setSamples(samples); \
 	QSurfaceFormat::setDefaultFormat(fmt);}
 #endif
