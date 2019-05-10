@@ -8,8 +8,7 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(0x01)] = Style::Polygon(QBrush("#dfd3b5"));
 	_polygons[TYPE(0x02)] = Style::Polygon(QBrush("#dfd3b5"));
 	_polygons[TYPE(0x03)] = Style::Polygon(QBrush("#dfd3b5"));
-	_polygons[TYPE(0x04)] = Style::Polygon(QBrush("#ff4040", Qt::BDiagPattern),
-	  QPen(QColor("#ff4040")));
+	_polygons[TYPE(0x04)] = Style::Polygon(QBrush("#ff4040", Qt::BDiagPattern));
 	_polygons[TYPE(0x05)] = Style::Polygon(QBrush("#d6d4ce"));
 	_polygons[TYPE(0x06)] = Style::Polygon(QBrush("#d6d4ce"));
 	_polygons[TYPE(0x07)] = Style::Polygon(QBrush("#d6d4ce"));
@@ -26,19 +25,21 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(0x12)] = Style::Polygon(QBrush("#e6e2d9"));
 	_polygons[TYPE(0x13)] = Style::Polygon(QBrush("#dbd0b6"),
 	  QPen(QColor("#cdccc4"), 1));
-	_polygons[TYPE(0x14)] = Style::Polygon(QBrush(Qt::NoBrush),
-	  QPen(QColor("#9ac269"), 2, Qt::DashLine));
-	_polygons[TYPE(0x15)] = Style::Polygon(QBrush(Qt::NoBrush),
-	  QPen(QColor("#9ac269"), 2, Qt::DashLine));
+	_polygons[TYPE(0x14)] = Style::Polygon(QBrush(QColor("#9ac269"),
+	  Qt::BDiagPattern));
+	_polygons[TYPE(0x15)] = Style::Polygon(QBrush(QColor("#9ac269"),
+	  Qt::BDiagPattern));
+	_polygons[TYPE(0x16)] = Style::Polygon(QBrush(QColor("#9ac269"),
+	  Qt::BDiagPattern));
 	_polygons[TYPE(0x17)] = Style::Polygon(QBrush("#d4ebb8"));
 	_polygons[TYPE(0x18)] = Style::Polygon(QBrush("#d4ebb8"));
 	_polygons[TYPE(0x19)] = Style::Polygon(QBrush("#d6d4ce"));
 	_polygons[TYPE(0x1a)] = Style::Polygon(QBrush("#000000", Qt::Dense6Pattern),
 	  QPen(QColor("#cdccc4"), 1));
-	_polygons[TYPE(0x1e)] = Style::Polygon(QBrush(Qt::NoBrush),
-	  QPen(QColor("#9ac269"), 1, Qt::DashLine));
-	_polygons[TYPE(0x1f)] = Style::Polygon(QBrush(Qt::NoBrush),
-	  QPen(QColor("#9ac269"), 1, Qt::DashLine));
+	_polygons[TYPE(0x1e)] = Style::Polygon(QBrush(QColor("#9ac269"),
+	  Qt::BDiagPattern));
+	_polygons[TYPE(0x1f)] = Style::Polygon(QBrush(QColor("#9ac269"),
+	  Qt::BDiagPattern));
 	_polygons[TYPE(0x28)] = Style::Polygon(QBrush("#9fc4e1"));
 	_polygons[TYPE(0x29)] = Style::Polygon(QBrush("#9fc4e1"));
 	_polygons[TYPE(0x32)] = Style::Polygon(QBrush("#9fc4e1"));
