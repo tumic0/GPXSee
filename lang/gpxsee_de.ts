@@ -79,7 +79,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="155"/>
         <source>JPEG images</source>
-        <translation>JPEG Bilder</translation>
+        <translation>JPEG-Bilder</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="156"/>
@@ -194,7 +194,7 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="135"/>
         <source>Export to PDF</source>
-        <translation>PDF Export</translation>
+        <translation>In PDF exportieren</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="52"/>
@@ -214,12 +214,12 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="99"/>
         <source>Orientation:</source>
-        <translation>Orientierung:</translation>
+        <translation>Ausrichtung:</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="94"/>
         <source>Page Setup</source>
-        <translation>Seiten Setup</translation>
+        <translation>Seite einrichten</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
@@ -281,12 +281,12 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="152"/>
         <source>%1 is a directory.</source>
-        <translation>%1 ist ein Verzeichniss.</translation>
+        <translation>%1 ist ein Verzeichnis.</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="157"/>
         <source>%1 is not writable.</source>
-        <translation>%1 ist nich schreibbar.</translation>
+        <translation>%1 ist nicht beschreibbar.</translation>
     </message>
 </context>
 <context>
@@ -294,7 +294,7 @@
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="38"/>
         <source>Select file</source>
-        <translation>Datei Auswählen</translation>
+        <translation>Datei auswählen</translation>
     </message>
 </context>
 <context>
@@ -348,7 +348,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="844"/>
         <source>Open POI file</source>
-        <translation>POI Datei öffnen</translation>
+        <translation>POI-Datei öffnen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="200"/>
@@ -370,7 +370,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="242"/>
         <source>Reload</source>
-        <translation>Neu Laden</translation>
+        <translation>Neu laden</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="588"/>
@@ -390,7 +390,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="265"/>
         <source>Overlap POIs</source>
-        <translation>POI überlappen</translation>
+        <translation>POIs überlappen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="270"/>
@@ -415,7 +415,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="218"/>
         <source>Open...</source>
-        <translation>Öffnen...</translation>
+        <translation>Öffnen …</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="207"/>
@@ -427,17 +427,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="249"/>
         <source>Statistics...</source>
-        <translation>Statistiken...</translation>
+        <translation>Statistiken …</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="257"/>
         <source>Load POI file...</source>
-        <translation>POI-Datei laden...</translation>
+        <translation>POI-Datei laden …</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="293"/>
         <source>Load map...</source>
-        <translation>Karte laden...</translation>
+        <translation>Karte laden …</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="302"/>
@@ -474,7 +474,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="343"/>
         <source>Waypoint labels</source>
-        <translation>Wegpunkt Labels</translation>
+        <translation>Wegpunkt-Labels</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="355"/>
@@ -551,7 +551,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="463"/>
         <source>Options...</source>
-        <translation>Einstellungen...</translation>
+        <translation>Einstellungen …</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="469"/>
@@ -601,7 +601,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="665"/>
         <source>GPXSee is distributed under the terms of the GNU General Public License version 3. For more info about GPXSee visit the project homepage at %1.</source>
-        <translation>GPXSee wird unter der GNU General Public License version 3 vertrieben. Mehr Informationen zu GPXSee auf der Homepage %1.</translation>
+        <translation>GPXSee wird unter der GNU General Public License version 3 veröffentlicht. Mehr Informationen zu GPXSee auf der Homepage %1.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="692"/>
@@ -673,12 +673,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1309"/>
         <source>Open map file</source>
-        <translation>Karte Datei öffnen</translation>
+        <translation>Kartendatei öffnen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1332"/>
         <source>Error loading map:</source>
-        <translation>Fehler beim Laden der Karte-Datei:</translation>
+        <translation>Fehler beim Laden der Kartendatei:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1343"/>
@@ -715,12 +715,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="223"/>
         <source>Print...</source>
-        <translation>Drucken...</translation>
+        <translation>Drucken …</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="230"/>
         <source>Export to PDF...</source>
-        <translation>Als PDF exportieren...</translation>
+        <translation>Als PDF exportieren …</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1029"/>
@@ -736,7 +736,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="348"/>
         <source>Route waypoints</source>
-        <translation>Routen Wegpunkte</translation>
+        <translation>Routen-Wegpunkte</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="489"/>
@@ -791,7 +791,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="833"/>
         <source>Error loading data file:</source>
-        <translation>Fehler beim Laden der Datei:</translation>
+        <translation>Fehler beim Laden der Datendatei:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="836"/>
@@ -997,32 +997,32 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="121"/>
         <source>MBTiles maps</source>
-        <translation>MBTiles Karten</translation>
+        <translation>MBTiles-Karten</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="122"/>
         <source>Garmin JNX maps</source>
-        <translation>Garmin JNX Karten</translation>
+        <translation>Garmin JNX-Karten</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="123"/>
         <source>OziExplorer maps</source>
-        <translation>OziExplorer Karten</translation>
+        <translation>OziExplorer-Karten</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="124"/>
         <source>TrekBuddy maps/atlases</source>
-        <translation>TrekBuddy Karten/Atlanten</translation>
+        <translation>TrekBuddy-Karten/Atlanten</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="125"/>
         <source>GeoTIFF images</source>
-        <translation>GeoTIFF Bilder</translation>
+        <translation>GeoTIFF-Bilder</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="126"/>
         <source>TwoNav maps</source>
-        <translation>TwoNav Karten</translation>
+        <translation>TwoNav-Karten</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="127"/>
@@ -1106,7 +1106,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="266"/>
         <source>Map opacity:</source>
-        <translation>Karte Deckkraft:</translation>
+        <translation>Kartendeckkraft:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="279"/>
@@ -1256,7 +1256,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="315"/>
         <source>Eliminate GPS outliers</source>
-        <translation>GPS Ausreißer entfernen</translation>
+        <translation>GPS-Ausreißer entfernen</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="324"/>
@@ -1349,17 +1349,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="139"/>
         <source>Area border width:</source>
-        <translation>Flächen Randbreite:</translation>
+        <translation>Flächen-Randbreite:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="140"/>
         <source>Area border style:</source>
-        <translation>Flächen Randstil:</translation>
+        <translation>Flächen-Randstil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="141"/>
         <source>Area fill opacity:</source>
-        <translation>Flächen Deckkraft:</translation>
+        <translation>Flächendeckkraft:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="145"/>
@@ -1405,7 +1405,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="473"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
-        <translation>Der Druckbereich ist circa der Anzeigebereich. Das Karten-Zoom ändert sich nicht.</translation>
+        <translation>Der Druckbereich entspricht ungefähr dem Anzeigebereich. Das Karten-Zoom ändert sich nicht.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="475"/>
@@ -1475,7 +1475,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="561"/>
         <source>Image cache size:</source>
-        <translation>Bild-Cache größe:</translation>
+        <translation>Bild-Cachegröße:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="562"/>
@@ -1506,7 +1506,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="601"/>
         <source>Print &amp; Export</source>
-        <translation>Druck &amp; Export</translation>
+        <translation>Druck / Export</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="630"/>
