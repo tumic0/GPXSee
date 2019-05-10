@@ -1,0 +1,76 @@
+#include <QFont>
+#include <QFontMetrics>
+#include <QImage>
+#include <QPainter>
+#include "textpointitem.h"
+
+
+#define FLAGS (Qt::AlignCenter | Qt::TextWordWrap | Qt::TextDontClip)
+#define MAX_TEXT_WIDTH 8
+
+TextPointItem::TextPointItem(const QPoint &point, const QString *text,
+  const QFont *font, const QImage *img, const QColor *color)
+  : _text(text), _font(font), _img(img), _color(color)
+{
+	QRect iconRect;
+
+	if (text) {
+		QFontMetrics fm(*font);
+		int limit = font->pixelSize() * MAX_TEXT_WIDTH;
+		_textRect = fm.boundingRect(QRect(0, 0, limit, 0), FLAGS, *text);
+	}
+	if (img) {
+		iconRect = QRect(QPoint(point.x() - img->width()/2, point.y()
+		  - img->height()/2), img->size());
+		_textRect.moveTopLeft(QPoint(point.x() + img->width(), point.y()
+		  - _textRect.height()/2));
+	} else
+		_textRect.moveCenter(point);
+
+	_rect = _textRect | iconRect;
+}
+
+bool TextPointItem::collides(const QVector<TextPointItem> &list) const
+{
+	for (int i = 0; i < list.size(); i++)
+		if (list.at(i)._rect.intersects(_rect))
+			return true;
+
+	return false;
+}
+
+void TextPointItem::paint(QPainter *painter) const
+{
+	if (_img)
+		painter->drawImage(QPoint(_rect.left(), _rect.center().y()
+		  - _img->height()/2), *_img);
+
+	if (_text) {
+		QImage img(_textRect.size(), QImage::Format_ARGB32_Premultiplied);
+		img.fill(Qt::transparent);
+		QPainter ip(&img);
+		ip.setPen(Qt::white);
+		ip.setFont(*_font);
+		ip.drawText(img.rect(), FLAGS, *_text);
+
+		painter->drawImage(_textRect.x() - 1, _textRect.y() - 1, img);
+		painter->drawImage(_textRect.x() + 1, _textRect.y() + 1, img);
+		painter->drawImage(_textRect.x() - 1, _textRect.y() + 1, img);
+		painter->drawImage(_textRect.x(), _textRect.y() - 1, img);
+		painter->drawImage(_textRect.x(), _textRect.y() + 1, img);
+		painter->drawImage(_textRect.x() - 1, _textRect.y(), img);
+		painter->drawImage(_textRect.x() + 1, _textRect.y(), img);
+
+		if (_color) {
+			painter->setFont(*_font);
+			painter->setPen(*_color);
+			painter->drawText(_textRect, FLAGS, *_text);
+		} else {
+			img.invertPixels();
+			painter->drawImage(_textRect, img);
+		}
+	}
+
+	//painter->setPen(Qt::red);
+	//painter->drawRect(_rect);
+}

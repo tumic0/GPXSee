@@ -28,12 +28,24 @@ public:
 	double left() const {return _tl.lon();}
 	double right() const {return _br.lon();}
 
+	void setLeft(double val) {_tl.rlon() = val;}
+	void setRight(double val) {_br.rlon() = val;}
+	void setTop(double val) {_tl.rlat() = val;}
+	void setBottom(double val) {_br.rlat() = val;}
+
 	RectC operator|(const RectC &r) const;
 	RectC &operator|=(const RectC &r) {*this = *this | r; return *this;}
 	RectC operator&(const RectC &r) const;
 	RectC &operator&=(const RectC &r) {*this = *this & r; return *this;}
 
 	RectC united(const Coordinates &c) const;
+
+	bool intersects(const RectC &r) const
+	  {return (right() >= r.left() && bottom() <= r.top() && left() <= r.right()
+		&& top() >= r.bottom());}
+	bool contains(const Coordinates&c) const
+	  {return (c.lon() >= left() && c.lon() <= right() && c.lat() <= top()
+		&& c.lat() >= bottom());}
 
 private:
 	Coordinates _tl, _br;
