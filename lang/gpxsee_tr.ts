@@ -838,6 +838,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n dosya</numerusform>
+            <numerusform>%n dosya</numerusform>
         </translation>
     </message>
 </context>
