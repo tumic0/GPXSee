@@ -180,14 +180,17 @@ bool TREFile::init()
 	}
 
 	// objects with extended types (TRE7)
-	if (extSize && extItemSize == 13) {
+	if (extSize && extItemSize >= 12
+	  && (sl.size() - (int)(extSize/extItemSize) + 1 >= 0)) {
 		quint32 polygons, lines, points;
-		quint8 kinds;
 		if (!seek(hdl, extOffset))
 			return false;
-		for (int i = 0; i < sl.size(); i++) {
+
+		for (int i = sl.size() - (extSize/extItemSize) + 1; i < sl.size(); i++) {
 			if (!(readUInt32(hdl, polygons) && readUInt32(hdl, lines)
-			  && readUInt32(hdl, points) && readByte(hdl, kinds)))
+			  && readUInt32(hdl, points)))
+				return false;
+			if (!seek(hdl, hdl.pos + extItemSize - 12))
 				return false;
 			if (i && sl.at(i-1))
 				sl.at(i-1)->setExtEnds(polygons, lines, points);
