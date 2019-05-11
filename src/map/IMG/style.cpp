@@ -121,16 +121,22 @@ void Style::defaultLineStyle()
 	_lines[TYPE(0x1e)] = Style::Line(QPen(QColor("#505145"), 2, Qt::DashDotLine));
 	_lines[TYPE(0x1f)] = Style::Line(QPen(QColor("#9fc4e1"), 3, Qt::SolidLine));
 	_lines[TYPE(0x1f)].setTextColor(QColor("#9fc4e1"));
-	_lines[TYPE(0x21)] = Style::Line(QPen(QColor("#cacfc0"), 1, Qt::SolidLine));
+	_lines[TYPE(0x20)] = Style::Line(QPen(QColor("#cacfc0"), 1, Qt::SolidLine));
+	_lines[TYPE(0x20)].setTextColor(QColor("#62695a"));
+	_lines[TYPE(0x20)].setTextFontSize(Style::Small);
+	_lines[TYPE(0x21)] = Style::Line(QPen(QColor("#cacfc0"), 1.5, Qt::SolidLine));
 	_lines[TYPE(0x21)].setTextColor(QColor("#62695a"));
 	_lines[TYPE(0x21)].setTextFontSize(Style::Small);
-	_lines[TYPE(0x22)] = Style::Line(QPen(QColor("#cacfc0"), 1.5, Qt::SolidLine));
+	_lines[TYPE(0x22)] = Style::Line(QPen(QColor("#cacfc0"), 2, Qt::SolidLine));
 	_lines[TYPE(0x22)].setTextColor(QColor("#62695a"));
 	_lines[TYPE(0x22)].setTextFontSize(Style::Small);
-	_lines[TYPE(0x24)] = Style::Line(QPen(QColor("#55aaff"), 1, Qt::SolidLine));
+	_lines[TYPE(0x23)] = Style::Line(QPen(QColor("#55aaff"), 1, Qt::SolidLine));
+	_lines[TYPE(0x23)].setTextColor(QColor("#55aaff"));
+	_lines[TYPE(0x23)].setTextFontSize(Style::Small);
+	_lines[TYPE(0x24)] = Style::Line(QPen(QColor("#55aaff"), 1.5, Qt::SolidLine));
 	_lines[TYPE(0x24)].setTextColor(QColor("#55aaff"));
 	_lines[TYPE(0x24)].setTextFontSize(Style::Small);
-	_lines[TYPE(0x25)] = Style::Line(QPen(QColor("#55aaff"), 1.5, Qt::SolidLine));
+	_lines[TYPE(0x25)] = Style::Line(QPen(QColor("#55aaff"), 2, Qt::SolidLine));
 	_lines[TYPE(0x25)].setTextColor(QColor("#55aaff"));
 	_lines[TYPE(0x25)].setTextFontSize(Style::Small);
 	_lines[TYPE(0x26)] = Style::Line(QPen(QColor("#9fc4e1"), 2, Qt::DotLine));
@@ -186,32 +192,24 @@ static bool readColor(SubFile *file, SubFile::Handle &hdl, QColor &color)
 
 static bool skipLocalization(SubFile *file, SubFile::Handle &hdl)
 {
-	quint8 t8, n = 1;
+	quint8 t8;
 	quint16 len;
 
 	if (!file->readByte(hdl, t8))
 		return false;
 	len = t8;
-	if (!(t8 & 0x01)) {
-		n = 2;
+
+	if (len & 0x01)
+		len = len >> 1;
+	else {
 		if (!file->readByte(hdl, t8))
 			return false;
-		len |= t8 << 8;
+		len = (((quint16)t8) << 8) | len;
+		len = len >> 2;
 	}
 
-	len -= n;
-	while (len > 0) {
-		if (!file->readByte(hdl, t8))
-			return false;
-		len -= 2 * n;
-		while (len > 0) {
-			if (!file->readByte(hdl, t8))
-				return false;
-			len -= 2 * n;
-			if (!t8)
-				break;
-		}
-	}
+	if (!file->seek(hdl, hdl.pos + len))
+		return false;
 
 	return true;
 }
@@ -665,7 +663,7 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 		bool textColor = t8_1 & 0x08;
 
 		int bpp = colors2bpp(numColors, imgType);
-		if (bpp < 0)
+		if (bpp <= 0)
 			continue;
 		QImage img(width, height, QImage::Format_Indexed8);
 		if (!readColorTable(file, hdl, img, numColors, bpp, imgType == 0x20))
@@ -674,7 +672,7 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 			return false;
 		_points[type] = Point(img);
 
-		if (t8_1 & 0x02) {
+		if (t8_1 == 0x03) {
 			if (!(file->readByte(hdl, numColors)
 			  && file->readByte(hdl, imgType)))
 				return false;
@@ -683,6 +681,14 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 			if (!readColorTable(file, hdl, img, numColors, bpp, imgType == 0x20))
 				return false;
 			if (!readBitmap(file, hdl, img, bpp))
+				return false;
+		} else if (t8_1 == 0x02) {
+			if (!(file->readByte(hdl, numColors)
+			  && file->readByte(hdl, imgType)))
+				return false;
+			if ((bpp = colors2bpp(numColors, imgType)) < 0)
+				continue;
+			if (!readColorTable(file, hdl, img, numColors, bpp, imgType == 0x20))
 				return false;
 		}
 
