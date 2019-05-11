@@ -47,72 +47,72 @@
 <context>
     <name>Data</name>
     <message>
-        <location filename="../src/data/data.cpp" line="147"/>
+        <location filename="../src/data/data.cpp" line="148"/>
         <source>Supported files</source>
         <translation>Formats pris en charge</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="148"/>
+        <location filename="../src/data/data.cpp" line="149"/>
         <source>CSV files</source>
         <translation>Données CSV</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="149"/>
+        <location filename="../src/data/data.cpp" line="150"/>
         <source>FIT files</source>
         <translation>Données FIT</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="151"/>
+        <location filename="../src/data/data.cpp" line="152"/>
         <source>GeoJSON files</source>
         <translation>Données GeoJSON</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="153"/>
+        <location filename="../src/data/data.cpp" line="154"/>
         <source>GPX files</source>
         <translation>Données GPX</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="154"/>
+        <location filename="../src/data/data.cpp" line="155"/>
         <source>IGC files</source>
         <translation>Données IGC</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="155"/>
+        <location filename="../src/data/data.cpp" line="156"/>
         <source>JPEG images</source>
         <translation>Images JPEG</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="156"/>
+        <location filename="../src/data/data.cpp" line="157"/>
         <source>KML files</source>
         <translation>Données KML</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="157"/>
+        <location filename="../src/data/data.cpp" line="158"/>
         <source>LOC files</source>
         <translation>Données LOC</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="158"/>
+        <location filename="../src/data/data.cpp" line="159"/>
         <source>NMEA files</source>
         <translation>Données NMEA</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="159"/>
+        <location filename="../src/data/data.cpp" line="160"/>
         <source>OziExplorer files</source>
         <translation>Données OziExplorer</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="161"/>
+        <location filename="../src/data/data.cpp" line="162"/>
         <source>TCX files</source>
         <translation>Données TCX</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="160"/>
+        <location filename="../src/data/data.cpp" line="161"/>
         <source>SLF files</source>
         <translation>Données SLF</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="162"/>
+        <location filename="../src/data/data.cpp" line="163"/>
         <source>All files</source>
         <translation>Tous les fichiers</translation>
     </message>
@@ -990,42 +990,47 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="119"/>
+        <location filename="../src/map/maplist.cpp" line="121"/>
         <source>Supported files</source>
         <translation>Formats pris en charge</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="121"/>
+        <location filename="../src/map/maplist.cpp" line="126"/>
         <source>MBTiles maps</source>
         <translation>Cartes MBTiles</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="122"/>
+        <location filename="../src/map/maplist.cpp" line="124"/>
         <source>Garmin JNX maps</source>
         <translation>Cartes Garmin JNX</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="123"/>
+        <source>Garmin IMG maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="125"/>
         <source>OziExplorer maps</source>
         <translation>Cartes OziExplorer</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="124"/>
+        <location filename="../src/map/maplist.cpp" line="127"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>Cartes ou atlas TrekBuddy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="125"/>
+        <location filename="../src/map/maplist.cpp" line="128"/>
         <source>GeoTIFF images</source>
         <translation>Images GeoTIFF</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="126"/>
+        <location filename="../src/map/maplist.cpp" line="129"/>
         <source>TwoNav maps</source>
         <translation>Cartes TwoNav</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="127"/>
+        <location filename="../src/map/maplist.cpp" line="130"/>
         <source>Online map sources</source>
         <translation>Cartes en ligne</translation>
     </message>
