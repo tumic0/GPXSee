@@ -65,7 +65,7 @@ private:
 	typedef RTree<VectorTile*, double, 2> TileTree;
 
 	int blockSize() const {return _blockSize;}
-	QByteArray readBlock(int blockNum);
+	bool readBlock(int blockNum, QByteArray &data);
 	qint64 read(char *data, qint64 maxSize);
 	template<class T> bool readValue(T &val);
 

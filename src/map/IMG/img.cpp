@@ -230,20 +230,18 @@ template<class T> bool IMG::readValue(T &val)
 	return true;
 }
 
-QByteArray IMG::readBlock(int blockNum)
+bool IMG::readBlock(int blockNum, QByteArray &data)
 {
 	QByteArray *block = _blockCache[blockNum];
 	if (!block) {
 		if (!_file.seek((qint64)blockNum * (qint64)_blockSize))
-			return QByteArray();
-		QByteArray *ba = new QByteArray();
-		ba->resize(_blockSize);
-		if (read(ba->data(), _blockSize) < _blockSize) {
-			delete ba;
-			return QByteArray();
-		}
-		_blockCache.insert(blockNum, ba);
-		return *ba;
+			return false;
+		data.resize(_blockSize);
+		if (read(data.data(), _blockSize) < _blockSize)
+			return false;
+		_blockCache.insert(blockNum, new QByteArray(data));
 	} else
-		return *block;
+		data = *block;
+
+	return true;
 }

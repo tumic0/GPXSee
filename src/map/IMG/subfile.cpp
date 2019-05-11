@@ -33,8 +33,7 @@ bool SubFile::seek(Handle &handle, quint32 pos) const
 	if (handle.blockNum != blockNum) {
 		if (blockNum >= _blocks.size())
 			return false;
-		handle.data = _img->readBlock(_blocks.at(blockNum));
-		if (handle.data.isNull())
+		if (!_img->readBlock(_blocks.at(blockNum), handle.data))
 			return false;
 		handle.blockNum = blockNum;
 	}
