@@ -4,7 +4,7 @@ GPXSee is a Qt-based GPS log file viewer and analyzer that supports all common G
 ## Features
 * Opens GPX, TCX, FIT, KML, IGC, NMEA, SLF, LOC, GeoJSON, OziExplorer (PLT, RTE, WPT), Garmin CSV and geotagged JPEG files.
 * User-definable online maps (OpenStreetMap/Google tiles, WMTS, WMS, TMS).
-* Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases, Garmin JNX maps, TwoNav RMaps, GeoTIFF images).
+* Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases, Garmin JNX maps, Garmin IMG maps, TwoNav RMaps, GeoTIFF images).
 * Elevation, speed, heart rate, cadence, power, temperature and gear ratio/shifts graphs.
 * Support for DEM files (SRTM HGT).
 * Support for multiple tracks in one view.
