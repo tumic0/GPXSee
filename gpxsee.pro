@@ -388,7 +388,7 @@ win32 {
 
 unix:!macx {
     isEmpty(PREFIX):PREFIX = /usr/local
-    lessThan(QT_MAJOR_VERSION, 5) {DEFINES += PREFIX=\\\"$$PREFIX\\\"}
+    DEFINES += PREFIX=\\\"$$PREFIX\\\"
 
     maps.files = pkg/maps/*
     maps.path = $$PREFIX/share/gpxsee/maps
