@@ -90,6 +90,7 @@ public:
 	const QList<quint32> &drawOrder() const {return _drawOrder;}
 
 	static bool isContourLine(quint32 type);
+	static bool isSpot(quint32 type);
 
 private:
 	struct Section {

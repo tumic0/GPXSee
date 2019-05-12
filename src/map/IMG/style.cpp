@@ -825,6 +825,11 @@ bool Style::isContourLine(quint32 type)
 	  || type == TYPE(0x23) || type == TYPE(0x24) || type == TYPE(0x25));
 }
 
+bool Style::isSpot(quint32 type)
+{
+	return (type == TYPE(0x62) || type == TYPE(0x63));
+}
+
 #ifndef QT_NO_DEBUG
 static QString penColor(const QPen &pen)
 {

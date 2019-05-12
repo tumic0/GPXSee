@@ -267,7 +267,7 @@ void IMGMap::drawPoints(QPainter *painter, QList<IMG::Point> &points)
 	QVector<TextPointItem> items;
 
 	for (int i = 0; i < points.size(); i++) {
-		const IMG::Point &point = points.at(i);
+		IMG::Point &point = points[i];
 		const Style::Point &style = _img.style().point(point.type);
 
 		if (point.poi && _zoom < POI_MIN_ZOOM)
@@ -299,6 +299,9 @@ void IMGMap::drawPoints(QPainter *painter, QList<IMG::Point> &points)
 
 		if (!label && !img)
 			continue;
+
+		if (Style::isSpot(point.type))
+			convertUnits(point.label);
 
 		TextPointItem item(ll2xy(point.coordinates).toPoint(), label, font, img,
 		  color);
