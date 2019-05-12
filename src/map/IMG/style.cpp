@@ -822,7 +822,7 @@ const Style::Point &Style::point(quint32 type) const
 bool Style::isContourLine(quint32 type)
 {
 	return (type == TYPE(0x20) || type == TYPE(0x21) || type == TYPE(0x22)
-	  || type == TYPE(23) || type == TYPE(24) || type == TYPE(25));
+	  || type == TYPE(0x23) || type == TYPE(0x24) || type == TYPE(0x25));
 }
 
 #ifndef QT_NO_DEBUG
