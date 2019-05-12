@@ -838,6 +838,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n dosya</numerusform>
+            <numerusform>%n dosya</numerusform>
         </translation>
     </message>
 </context>
@@ -1006,7 +1007,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="123"/>
         <source>Garmin IMG maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Garmin IMG haritaları</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="125"/>
