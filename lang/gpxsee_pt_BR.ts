@@ -1007,7 +1007,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="123"/>
         <source>Garmin IMG maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapas Garmin IMG</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="125"/>
