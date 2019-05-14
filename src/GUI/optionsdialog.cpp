@@ -12,11 +12,14 @@
 #include <QRadioButton>
 #include <QLabel>
 #include <QSysInfo>
+#include <QInputDialog>
+#include "map/pcs.h"
 #include "icons.h"
 #include "colorbox.h"
 #include "stylecombobox.h"
 #include "oddspinbox.h"
 #include "percentslider.h"
+#include "limitedcombobox.h"
 #include "optionsdialog.h"
 
 
@@ -36,10 +39,15 @@ static QFrame *line()
 
 QWidget *OptionsDialog::createMapPage()
 {
-	_alwaysShowMap = new QCheckBox(tr("Always show the map"));
-	_alwaysShowMap->setChecked(_options->alwaysShowMap);
-	_alwaysShowMap->setToolTip("<p>" +
-	  tr("Show the map even when no files are loaded.") + "</p>");
+	_projection = new LimitedComboBox(200);
+	QList<PCS::Info> projections(PCS::pcsList());
+	qSort(projections);
+	for (int i = 0; i < projections.size(); i++) {
+		QString text = QString::number(projections.at(i).id()) + " - "
+		  + projections.at(i).name();
+		_projection->addItem(text, QVariant(projections.at(i).id()));
+	}
+	_projection->setCurrentIndex(_projection->findData(_options->projection));
 
 #ifdef ENABLE_HIDPI
 	_hidpi = new QRadioButton(tr("High-resolution"));
@@ -60,14 +68,14 @@ QWidget *OptionsDialog::createMapPage()
 	llo->setFont(f);
 #endif // ENABLE_HIDPI
 
-	QFormLayout *showMapLayout = new QFormLayout();
-	showMapLayout->addWidget(_alwaysShowMap);
+	QFormLayout *vectorLayout = new QFormLayout();
+	vectorLayout->addRow(tr("Projection:"), _projection);
 
-	QWidget *mapTab = new QWidget();
-	QVBoxLayout *mapTabLayout = new QVBoxLayout();
-	mapTabLayout->addLayout(showMapLayout);
-	mapTabLayout->addStretch();
-	mapTab->setLayout(mapTabLayout);
+	QWidget *vectorMapsTab = new QWidget();
+	QVBoxLayout *vectorMapsTabLayout = new QVBoxLayout();
+	vectorMapsTabLayout->addLayout(vectorLayout);
+	vectorMapsTabLayout->addStretch();
+	vectorMapsTab->setLayout(vectorMapsTabLayout);
 
 #ifdef ENABLE_HIDPI
 	QVBoxLayout *hidpiTabLayout = new QVBoxLayout();
@@ -83,7 +91,7 @@ QWidget *OptionsDialog::createMapPage()
 #endif // ENABLE_HIDPI
 
 	QTabWidget *mapPage = new QTabWidget();
-	mapPage->addTab(mapTab, tr("General"));
+	mapPage->addTab(vectorMapsTab, tr("Vector maps"));
 #ifdef ENABLE_HIDPI
 	mapPage->addTab(hidpiTab, tr("HiDPI display mode"));
 #endif // ENABLE_HIDPI
@@ -261,6 +269,7 @@ QWidget *OptionsDialog::createAppearancePage()
 	_backgroundColor = new ColorBox();
 	_backgroundColor->setColor(_options->backgroundColor);
 	_backgroundColor->enableAlphaChannel(false);
+
 	QFormLayout *mapLayout = new QFormLayout();
 	mapLayout->addRow(tr("Background color:"), _backgroundColor);
 	mapLayout->addRow(tr("Map opacity:"), _mapOpacity);
@@ -656,7 +665,7 @@ void OptionsDialog::accept()
 	_options->sliderColor = _sliderColor->color();
 	_options->graphAntiAliasing = _graphAA->isChecked();
 
-	_options->alwaysShowMap = _alwaysShowMap->isChecked();
+	_options->projection = _projection->currentData().toInt();
 #ifdef ENABLE_HIDPI
 	_options->hidpiMap = _hidpi->isChecked();
 #endif // ENABLE_HIDPI

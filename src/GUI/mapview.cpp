@@ -7,6 +7,7 @@
 #include "data/poi.h"
 #include "data/data.h"
 #include "map/map.h"
+#include "map/pcs.h"
 #include "opengl.h"
 #include "trackitem.h"
 #include "routeitem.h"
@@ -48,8 +49,10 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_coordinates->setVisible(false);
 	_scene->addItem(_coordinates);
 
+	_projection = PCS::pcs(3857);
 	_map = map;
 	_map->load();
+	_map->setProjection(_projection);
 	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
 
 	_poi = poi;
@@ -312,6 +315,7 @@ void MapView::setMap(Map *map)
 
 	_map = map;
 	_map->load();
+	_map->setProjection(_projection);
 #ifdef ENABLE_HIDPI
 	_map->setDevicePixelRatio(_deviceRatio, _mapRatio);
 #endif // ENABLE_HIDPI
@@ -1011,4 +1015,18 @@ void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 	Q_UNUSED(deviceRatio);
 	Q_UNUSED(mapRatio);
 #endif // ENABLE_HIDPI
+}
+
+void MapView::setProjection(int id)
+{
+	Projection projection(PCS::pcs(id));
+	if (!projection.isValid())
+		return;
+
+	_projection = projection;
+
+	Coordinates center = _map->xy2ll(mapToScene(viewport()->rect().center()));
+	_map->setProjection(_projection);
+	rescale();
+	centerOn(_map->ll2xy(center));
 }

@@ -15,6 +15,7 @@ class QComboBox;
 class QCheckBox;
 class QRadioButton;
 class PercentSlider;
+class LimitedComboBox;
 
 struct Options {
 	// Appearance
@@ -37,7 +38,7 @@ struct Options {
 	int mapOpacity;
 	QColor backgroundColor;
 	// Map
-	bool alwaysShowMap;
+	int projection;
 #ifdef ENABLE_HIDPI
 	bool hidpiMap;
 #endif // ENABLE_HIDPI
@@ -79,11 +80,14 @@ class OptionsDialog : public QDialog
 {
 	Q_OBJECT
 
+public slots:
+	void accept();
+
 public:
 	OptionsDialog(Options *options, QWidget *parent = 0);
 
-public slots:
-	void accept();
+//private slots:
+//	void projectionChanged(int index);
 
 private:
 	QWidget *createMapPage();
@@ -116,7 +120,7 @@ private:
 	ColorBox *_sliderColor;
 	QCheckBox *_graphAA;
 	// Map
-	QCheckBox *_alwaysShowMap;
+	LimitedComboBox *_projection;
 #ifdef ENABLE_HIDPI
 	QRadioButton *_hidpi;
 	QRadioButton *_lodpi;

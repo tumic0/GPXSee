@@ -369,3 +369,10 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		painter->drawPixmap(mt.xy(), pm);
 	}
 }
+
+void IMGMap::setProjection(const Projection &projection)
+{
+	_projection = projection;
+	updateTransform();
+	QPixmapCache::clear();
+}

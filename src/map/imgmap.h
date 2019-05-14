@@ -31,6 +31,8 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
+	void setProjection(const Projection &projection);
+
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 

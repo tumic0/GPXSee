@@ -5,13 +5,16 @@
 
 class PCS::Entry {
 public:
-	Entry(int id, int proj, const PCS &pcs) : _id(id), _proj(proj), _pcs(pcs) {}
+	Entry(const QString &name, int id, int proj, const PCS &pcs)
+	  : _name(name), _id(id), _proj(proj), _pcs(pcs) {}
 
+	const QString &name() const {return _name;}
 	int id() const {return _id;}
 	int proj() const {return _proj;}
 	const PCS &pcs() const {return _pcs;}
 
 private:
+	QString _name;
 	int _id, _proj;
 	PCS _pcs;
 };
@@ -21,8 +24,9 @@ QList<PCS::Entry> PCS::_pcss = defaults();
 QList<PCS::Entry> PCS::defaults()
 {
 	QList<PCS::Entry> list;
-	list.append(PCS::Entry(3857, 3856, PCS(&GCS::WGS84(), 1024,
-	  Projection::Setup(0, 0, NAN, 0, 0, NAN, NAN), 9001, 4499)));
+	list.append(PCS::Entry("WGS 84 / Pseudo-Mercator", 3857, 3856,
+	  PCS(&GCS::WGS84(), 1024, Projection::Setup(0, 0, NAN, 0, 0, NAN, NAN),
+	  9001, 4499)));
 	return list;
 }
 
@@ -154,27 +158,28 @@ void PCS::loadList(const QString &path)
 			continue;
 		}
 
-		int id = list[1].trimmed().toInt(&res);
+		QString name(list.at(0).trimmed());
+		int id = list.at(1).trimmed().toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid PCS code", qPrintable(path), ln);
 			continue;
 		}
-		int gcsid = list[2].trimmed().toInt(&res);
+		int gcsid = list.at(2).trimmed().toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid GCS code", qPrintable(path), ln);
 			continue;
 		}
-		int proj = list[3].trimmed().toInt(&res);
+		int proj = list.at(3).trimmed().toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid projection code", qPrintable(path), ln);
 			continue;
 		}
-		int units = list[4].trimmed().toInt(&res);
+		int units = list.at(4).trimmed().toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid linear units code", qPrintable(path), ln);
 			continue;
 		}
-		int transform = list[5].trimmed().toInt(&res);
+		int transform = list.at(5).trimmed().toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid coordinate transformation code",
 			  qPrintable(path), ln);
@@ -214,8 +219,18 @@ void PCS::loadList(const QString &path)
 		}
 
 		PCS pcs(gcs, transform, setup, units, cs);
-		_pcss.append(Entry(id, proj, pcs));
+		_pcss.append(Entry(name, id, proj, pcs));
 	}
+}
+
+QList<PCS::Info> PCS::pcsList()
+{
+	QList<Info> list;
+
+	for (int i = 0; i < _pcss.size(); i++)
+		list.append(Info(_pcss.at(i).id(), _pcss.at(i).name()));
+
+	return list;
 }
 
 #ifndef QT_NO_DEBUG

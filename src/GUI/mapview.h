@@ -8,11 +8,13 @@
 #include "common/rectc.h"
 #include "common/config.h"
 #include "data/waypoint.h"
+#include "data/polygon.h"
+#include "map/projection.h"
 #include "searchpointer.h"
 #include "units.h"
 #include "format.h"
 #include "palette.h"
-#include "data/polygon.h"
+
 
 class Data;
 class POI;
@@ -80,6 +82,7 @@ public slots:
 	void clearMapCache();
 	void setCoordinatesFormat(CoordinatesFormat format);
 	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
+	void setProjection(int id);
 
 private slots:
 	void updatePOI();
@@ -132,6 +135,7 @@ private:
 	Units _units;
 	CoordinatesFormat _coordinatesFormat;
 	qreal _mapOpacity;
+	Projection _projection;
 
 	bool _showMap, _showTracks, _showRoutes, _showAreas, _showWaypoints,
 	  _showWaypointLabels, _showPOI, _showPOILabels, _showRouteWaypoints,

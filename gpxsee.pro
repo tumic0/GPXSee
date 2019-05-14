@@ -177,7 +177,8 @@ HEADERS += src/common/config.h \
     src/map/IMG/subdiv.h \
     src/map/IMG/units.h \
     src/map/IMG/style.h \
-    src/map/IMG/netfile.h
+    src/map/IMG/netfile.h \
+    src/GUI/limitedcombobox.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \

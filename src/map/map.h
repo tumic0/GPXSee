@@ -7,8 +7,10 @@
 #include <QFlags>
 #include "common/coordinates.h"
 
+
 class QPainter;
 class RectC;
+class Projection;
 
 class Map : public QObject
 {
@@ -45,6 +47,7 @@ public:
 	virtual void load() {}
 	virtual void unload() {}
 	virtual void setDevicePixelRatio(qreal, qreal) {}
+	virtual void setProjection(const Projection &) {}
 
 	virtual bool isValid() const {return true;}
 	virtual QString errorString() const {return QString();}

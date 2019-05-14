@@ -11,6 +11,20 @@
 class PCS
 {
 public:
+	class Info {
+	public:
+		Info(int id, const QString &name) : _id(id), _name(name) {}
+
+		int id() const {return _id;}
+		const QString &name() const {return _name;}
+
+		bool operator<(const Info &other) const {return _id < other._id;}
+
+	private:
+		int _id;
+		QString _name;
+	};
+
 	PCS() : _gcs(0) {}
 	PCS(const GCS *gcs, const Projection::Method &method,
 	  const Projection::Setup &setup, const LinearUnits &units,
@@ -34,11 +48,12 @@ public:
 	static void loadList(const QString &path);
 	static const PCS *pcs(int id);
 	static const PCS *pcs(const GCS *gcs, int proj);
+	static QList<Info> pcsList();
 
 private:
 	class Entry;
 
-	static QList<PCS::Entry> defaults();
+	static QList<Entry> defaults();
 
 	const GCS *_gcs;
 	Projection::Method _method;

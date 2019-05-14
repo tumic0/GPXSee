@@ -116,7 +116,6 @@ private:
 	void updateWindowTitle();
 	void updateNavigationActions();
 	bool updateGraphTabs();
-	bool updateMapView();
 
 	TimeType timeType() const;
 	Units units() const;
