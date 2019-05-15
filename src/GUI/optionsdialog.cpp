@@ -665,7 +665,8 @@ void OptionsDialog::accept()
 	_options->sliderColor = _sliderColor->color();
 	_options->graphAntiAliasing = _graphAA->isChecked();
 
-	_options->projection = _projection->currentData().toInt();
+	_options->projection = _projection->itemData(_projection->currentIndex())
+	  .toInt();
 #ifdef ENABLE_HIDPI
 	_options->hidpiMap = _hidpi->isChecked();
 #endif // ENABLE_HIDPI
