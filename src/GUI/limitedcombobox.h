@@ -11,6 +11,7 @@ public:
 	  : QComboBox(parent), _limit(limit)
 	{
 		setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+		setStyleSheet("combobox-popup: 0;");
 	}
 
 	QSize sizeHint() const
