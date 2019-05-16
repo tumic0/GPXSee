@@ -651,7 +651,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="727"/>
         <source>Styles directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresář se styly:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1031"/>
