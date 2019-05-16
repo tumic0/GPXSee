@@ -1,5 +1,6 @@
 #include <QSet>
 #include <QtEndian>
+#include "common/programpaths.h"
 #include "vectortile.h"
 #include "img.h"
 
@@ -162,9 +163,18 @@ IMG::IMG(const QString &fileName) : _file(fileName), _valid(false)
 
 	// Read TYP file if any
 	if (!TYPMap.isEmpty()) {
+		if (TYPMap.size() > 1)
+			qWarning("%s: Multiple TYP files, using %s",
+			  qPrintable(_file.fileName()), qPrintable(TYPMap.keys().first()));
 		SubFile *typ = TYPMap.values().first();
 		_style = Style(typ);
 		qDeleteAll(TYPMap);
+	} else {
+		QFile typFile(ProgramPaths::typFile());
+		if (typFile.exists()) {
+			SubFile typ(&typFile);
+			_style = Style(&typ);
+		}
 	}
 
 	_valid = true;

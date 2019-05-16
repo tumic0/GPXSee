@@ -9,9 +9,11 @@
 #define DEM_DIR          "DEM"
 #define TILES_DIR        "tiles"
 #define TRANSLATIONS_DIR "translations"
+#define STYLE_DIR        "style"
 #define ELLIPSOID_FILE   "ellipsoids.csv"
 #define GCS_FILE         "gcs.csv"
 #define PCS_FILE         "pcs.csv"
+#define TYP_FILE         "style.typ"
 
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
@@ -79,6 +81,11 @@ QString ProgramPaths::demDir(bool writable)
 	return dir(DEM_DIR, writable);
 }
 
+QString ProgramPaths::styleDir(bool writable)
+{
+	return dir(STYLE_DIR, writable);
+}
+
 QString ProgramPaths::tilesDir()
 {
 #if defined(Q_OS_WIN32)
@@ -111,6 +118,11 @@ QString ProgramPaths::gcsFile()
 QString ProgramPaths::pcsFile()
 {
 	return file(dir(CSV_DIR), PCS_FILE);
+}
+
+QString ProgramPaths::typFile()
+{
+	return file(dir(STYLE_DIR), TYP_FILE);
 }
 
 #else // QT_VERSION < 5
@@ -157,6 +169,16 @@ QString ProgramPaths::demDir(bool writable)
 		  DEM_DIR, QStandardPaths::LocateDirectory);
 }
 
+QString ProgramPaths::styleDir(bool writable)
+{
+	if (writable)
+		return QDir(QStandardPaths::writableLocation(
+		  QStandardPaths::AppDataLocation)).filePath(STYLE_DIR);
+	else
+		return QStandardPaths::locate(QStandardPaths::AppDataLocation,
+		  STYLE_DIR, QStandardPaths::LocateDirectory);
+}
+
 QString ProgramPaths::tilesDir()
 {
 	return QDir(QStandardPaths::writableLocation(
@@ -185,6 +207,12 @@ QString ProgramPaths::pcsFile()
 {
 	return QStandardPaths::locate(QStandardPaths::AppDataLocation,
 	  CSV_DIR "/" PCS_FILE, QStandardPaths::LocateFile);
+}
+
+QString ProgramPaths::typFile()
+{
+	return QStandardPaths::locate(QStandardPaths::AppDataLocation,
+	  STYLE_DIR "/" TYP_FILE, QStandardPaths::LocateFile);
 }
 
 #endif // QT_VERSION < 5

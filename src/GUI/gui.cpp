@@ -724,6 +724,8 @@ void GUI::paths()
 	  + QDir::cleanPath(ProgramPaths::csvDir(true)) + "</code></td></tr><tr><td>"
 	  + tr("DEM directory:") + "</td><td><code>"
 	  + QDir::cleanPath(ProgramPaths::demDir(true)) + "</code></td></tr><tr><td>"
+	  + tr("Styles directory:") + "</td><td><code>"
+	  + QDir::cleanPath(ProgramPaths::styleDir(true)) + "</code></td></tr><tr><td>"
 	  + tr("Tile cache directory:") + "</td><td><code>"
 	  + QDir::cleanPath(ProgramPaths::tilesDir()) + "</code></td></tr></table>"
 	);

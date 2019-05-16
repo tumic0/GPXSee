@@ -779,7 +779,7 @@ bool Style::parseTYPFile(SubFile *file)
 	  && parsePolygons(file, hdl, polygons)
 	  && parseDrawOrder(file, hdl, order))) {
 		qWarning("%s: Invalid TYP file, using default style",
-		  qPrintable(file->imgName()));
+		  qPrintable(file->fileName()));
 		return false;
 	}
 
@@ -791,7 +791,7 @@ Style::Style(SubFile *typ)
 	defaultLineStyle();
 	defaultPolygonStyle();
 
-	if (typ)
+	if (typ && typ->isValid())
 		parseTYPFile(typ);
 }
 

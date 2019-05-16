@@ -5,6 +5,7 @@
 #include <QDebug>
 
 class IMG;
+class QFile;
 
 class SubFile
 {
@@ -21,12 +22,13 @@ public:
 		int pos;
 	};
 
-	SubFile(IMG *img, quint32 size) : _img(img), _size(size) {}
+	SubFile(IMG *img, quint32 size) : _img(img), _file(0), _size(size) {}
+	SubFile(QFile *file);
 
 	void addBlock(quint16 block) {_blocks.append(block);}
 	bool isValid() const;
 
-	quint32 size() const {return _size;}
+	quint32 size() const;
 	bool seek(Handle &handle, quint32 pos) const;
 	bool readByte(Handle &handle, quint8 &val) const;
 
@@ -79,7 +81,7 @@ public:
 	}
 
 	quint16 offset() const {return _blocks.first();}
-	const QString &imgName() const;
+	QString fileName() const;
 
 	static Type type(const char str[3]);
 
@@ -87,6 +89,7 @@ public:
 
 private:
 	IMG *_img;
+	QFile *_file;
 	quint32 _size;
 	QVector<quint16> _blocks;
 };

@@ -50,20 +50,19 @@ public:
 	const QString &name() const {return _name;}
 	const RectC &bounds() const {return _bounds;}
 	Range zooms() const {return Range(_bits.first(), _bits.last());}
+	void objects(const RectC &rect, int bits, QList<Poly> *polygons,
+	  QList<Poly> *lines, QList<Point> *points) const;
+	const Style &style() const {return _style;}
 
 	bool isValid() const {return _valid;}
 	const QString &errorString() const {return _errorString;}
-
-	void objects(const RectC &rect, int bits, QList<Poly> *polygons,
-	  QList<Poly> *lines, QList<Point> *points) const;
-
-	const Style &style() const {return _style;}
 
 private:
 	friend class SubFile;
 
 	typedef RTree<VectorTile*, double, 2> TileTree;
 
+	QString fileName() const {return _file.fileName();}
 	int blockSize() const {return _blockSize;}
 	bool readBlock(int blockNum, QByteArray &data);
 	qint64 read(char *data, qint64 maxSize);
