@@ -732,7 +732,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="727"/>
         <source>Styles directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilmappe:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="729"/>
