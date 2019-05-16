@@ -1339,12 +1339,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="72"/>
         <source>Projection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Projektion:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="94"/>
         <source>Vector maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Vektor-kartor</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
