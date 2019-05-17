@@ -747,7 +747,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="727"/>
         <source>Styles directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stil klasörü:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="729"/>
