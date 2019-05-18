@@ -7,15 +7,17 @@
 	<name>GPXSee</name>
 	<summary>GPS log file viewer and analyzer</summary>
 	<description>
-		<p>GPXSee is a GPS log file viewer and analyzer that supports GPX, TCX,
-		KML, FIT, IGC, NMEA, SLF, LOC, GeoJSON and OziExplorer files.</p>
+		<p>GPXSee is a GPS log file viewer and analyzer that supports all common
+		GPS log file formats.</p>
 
 		<p>Features:</p>
 		<ul>
+			<li>Opens GPX, TCX, FIT, KML, IGC, NMEA, SLF, LOC, OziExplorer (PLT,
+				WPT, RTE), GeoJSON, Garmin CSV and geotagged JPEG files.</li>
 			<li>User-definable online maps (OpenStreetMap/Google tiles, WMTS,
 				WMS, TMS).</li>
 			<li>Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases,
-				GeoTIFF images).</li>
+				TwoNav RMaps, Garmin IMG &amp; JNX, GeoTIFF images).</li>
 			<li>Elevation, speed, heart rate, cadence, power and temperature
 				graphs.</li>
 			<li>Support for multiple tracks in one view.</li>
@@ -23,8 +25,6 @@
 			<li>Print/export to PDF.</li>
 			<li>Full-screen mode.</li>
 			<li>HiDPI/Retina displays &amp; maps support.</li>
-			<li>Opens GPX, TCX, FIT, KML, IGC, NMEA, SLF, LOC, OziExplorer (PLT,
-				WPT, RTE), GeoJSON and Garmin CSV files.</li>
 		</ul>
 	</description>
 
