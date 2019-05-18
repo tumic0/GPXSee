@@ -661,7 +661,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="727"/>
         <source>Styles directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Formatvorlagen-Verzeichnis:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1031"/>
@@ -1344,12 +1344,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="72"/>
         <source>Projection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Projektion:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="94"/>
         <source>Vector maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Vektorkarten</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
