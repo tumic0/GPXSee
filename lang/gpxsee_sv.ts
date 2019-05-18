@@ -661,7 +661,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="727"/>
         <source>Styles directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapp för stilar:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1031"/>
