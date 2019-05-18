@@ -173,8 +173,6 @@
 
           <p>The map URL can be also a local file URL (<i>file:</i> scheme).</p>
 
-          <p></p>
-
           <h4 id="TMS">TMS</h4>
           <p>TMS maps with the global-mercator profile are supported by GPXSee in addition
           to the OSM/Google tiles maps. The configuration is exactly the same as in the case
@@ -262,6 +260,13 @@
           <p>You may easily create offline atlases from online map services by using
           <a href="http://mobac.sourceforge.net/">Mobile Atlas Creator (MOBAC)</a>.</p>
 
+          <h3 id="styles">Map styles</h3>
+          <p>MVT(PBF) and Garmin IMG maps can be styled with user defined styles.
+          To apply a user defined style, place it to the <code>style</code> directory in
+          one of the configuration paths. The style must be named <i>style.typ</i> (Garmin
+          IMG) or <i>style.json</i> (MVT) for GPXSee to use it. If a Garmin IMG map
+          contains a TYP file, it takes precedence over the user TYP file.</p>
+
 
           <h2 id="poi">POI files</h2>
           <p>All of the supported formats with waypoints capability - GPX, KML, TCX, NMEA,
@@ -298,6 +303,7 @@
       <h4><a href="#maps">Maps</a></h4>
         <h5><a href="#online">Online maps</a></h5>
         <h5><a href="#offline">Offline maps</a></h5>
+        <h5><a href="#styles">Map styles</a></h5>
       <h4><a href="#poi">POI files</a></h4>
       <h4><a href="#dem">DEM files</a></h4>
       </div>
