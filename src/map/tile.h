@@ -10,21 +10,18 @@
 class Tile
 {
 public:
-	Tile() : _scaledSize(0) {}
-	Tile(const QPoint &xy, const QVariant &zoom, int scaledSize = 0,
-	  const RectD &bbox = RectD()) : _xy(xy), _zoom(zoom),
-	  _scaledSize(scaledSize), _bbox(bbox) {}
+	Tile() {}
+	Tile(const QPoint &xy, const QVariant &zoom, const RectD &bbox = RectD())
+	  : _xy(xy), _zoom(zoom), _bbox(bbox) {}
 
 	const QVariant &zoom() const {return _zoom;}
 	const QPoint &xy() const {return _xy;}
 	const RectD &bbox() const {return _bbox;}
-	int scaledSize() const {return _scaledSize;}
 	QPixmap& pixmap() {return _pixmap;}
 
 private:
 	QPoint _xy;
 	QVariant _zoom;
-	int _scaledSize;
 	RectD _bbox;
 	QPixmap _pixmap;
 };

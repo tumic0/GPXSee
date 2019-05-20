@@ -14,9 +14,9 @@
 class TileImage
 {
 public:
-	TileImage() : _tile(0) {}
-	TileImage(const QString &file, Tile *tile)
-	  : _file(file), _tile(tile) {}
+	TileImage() : _tile(0), _scaledSize(0) {}
+	TileImage(const QString &file, Tile *tile, int scaledSize)
+	  : _file(file), _tile(tile), _scaledSize(scaledSize) {}
 
 	void createPixmap()
 	{
@@ -26,8 +26,8 @@ public:
 	{
 		QByteArray z(_tile->zoom().toString().toLatin1());
 		QImageReader reader(_file, z);
-		if (_tile->scaledSize())
-			reader.setScaledSize(QSize(_tile->scaledSize(), _tile->scaledSize()));
+		if (_scaledSize)
+			reader.setScaledSize(QSize(_scaledSize, _scaledSize));
 		reader.read(&_image);
 	}
 
@@ -37,6 +37,7 @@ public:
 private:
 	QString _file;
 	Tile *_tile;
+	int _scaledSize;
 	QImage _image;
 };
 
@@ -45,8 +46,27 @@ static void render(TileImage &ti)
 	ti.load();
 }
 
+static QString quadKey(const QPoint &xy, int zoom)
+{
+	QString qk;
+
+	for (int i = zoom; i > 0; i--) {
+		char digit = '0';
+		unsigned mask = 1 << (i - 1);
+		if (xy.x() & mask)
+			digit++;
+		if (xy.y() & mask) {
+			digit++;
+			digit++;
+		}
+		qk.append(digit);
+	}
+
+	return qk;
+}
+
 TileLoader::TileLoader(const QString &dir, QObject *parent)
-  : QObject(parent), _dir(dir)
+  : QObject(parent), _dir(dir), _scaledSize(0), _quadTiles(false)
 {
 	if (!QDir().mkpath(_dir))
 		qWarning("%s: %s", qPrintable(_dir), "Error creating tiles directory");
@@ -70,11 +90,11 @@ void TileLoader::loadTilesAsync(QVector<Tile> &list)
 		QFileInfo fi(file);
 
 		if (fi.exists())
-			imgs.append(TileImage(file, &t));
+			imgs.append(TileImage(file, &t, _scaledSize));
 		else {
 			QUrl url(tileUrl(t));
 			if (url.isLocalFile())
-				imgs.append(TileImage(url.toLocalFile(), &t));
+				imgs.append(TileImage(url.toLocalFile(), &t, _scaledSize));
 			else
 				dl.append(Download(url, file));
 		}
@@ -109,11 +129,11 @@ void TileLoader::loadTilesSync(QVector<Tile> &list)
 		QFileInfo fi(file);
 
 		if (fi.exists())
-			imgs.append(TileImage(file, &t));
+			imgs.append(TileImage(file, &t, _scaledSize));
 		else {
 			QUrl url(tileUrl(t));
 			if (url.isLocalFile())
-				imgs.append(TileImage(url.toLocalFile(), &t));
+				imgs.append(TileImage(url.toLocalFile(), &t, _scaledSize));
 			else {
 				dl.append(Download(url, file));
 				tl.append(&t);
@@ -131,7 +151,7 @@ void TileLoader::loadTilesSync(QVector<Tile> &list)
 			Tile *t = tl[i];
 			QString file = tileFile(*t);
 			if (QFileInfo(file).exists())
-				imgs.append(TileImage(file, t));
+				imgs.append(TileImage(file, t, _scaledSize));
 		}
 	}
 
@@ -164,6 +184,8 @@ QUrl TileLoader::tileUrl(const Tile &tile) const
 		  QString::number(tile.bbox().right(), 'f', 6),
 		  QString::number(tile.bbox().top(), 'f', 6));
 		url.replace("$bbox", bbox);
+	} else if (_quadTiles) {
+		url.replace("$quadkey", quadKey(tile.xy(), tile.zoom().toInt()));
 	} else {
 		url.replace("$z", tile.zoom().toString());
 		url.replace("$x", QString::number(tile.xy().x()));

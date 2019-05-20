@@ -200,7 +200,7 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			  ? RectD(PointD(tbr.y(), tbr.x()), PointD(ttl.y(), ttl.x()))
 			  : RectD(ttl, tbr);
 
-			tiles.append(Tile(QPoint(i, j), _zoom, 0, bbox));
+			tiles.append(Tile(QPoint(i, j), _zoom, bbox));
 		}
 	}
 

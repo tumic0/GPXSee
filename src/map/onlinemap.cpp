@@ -11,15 +11,16 @@
 OnlineMap::OnlineMap(const QString &name, const QString &url,
   const Range &zooms, const RectC &bounds, qreal tileRatio,
   const Authorization &authorization, int tileSize, bool scalable, bool invertY,
-  QObject *parent)
+  bool quadTiles, QObject *parent)
 	: Map(parent), _name(name), _zooms(zooms), _bounds(bounds),
 	_zoom(_zooms.max()), _mapRatio(1.0), _tileRatio(tileRatio),
-	_tileSize(tileSize), _scalable(scalable), _invertY(invertY), _scaledSize(0)
+	_tileSize(tileSize), _scalable(scalable), _invertY(invertY)
 {
 	_tileLoader = new TileLoader(QDir(ProgramPaths::tilesDir()).filePath(_name),
 	  this);
 	_tileLoader->setUrl(url);
 	_tileLoader->setAuthorization(authorization);
+	_tileLoader->setQuadTiles(quadTiles);
 	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(loaded()));
 }
 
@@ -74,7 +75,7 @@ void OnlineMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 	_mapRatio = mapRatio;
 
 	if (_scalable) {
-		_scaledSize = _tileSize * deviceRatio;
+		_tileLoader->setScaledSize(_tileSize * deviceRatio);
 		_tileRatio = deviceRatio;
 	}
 }
@@ -112,7 +113,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = 0; i < width; i++)
 		for (int j = 0; j < height; j++)
 			tiles.append(Tile(QPoint(tile.x() + i, _invertY ? (1<<_zoom)
-			  - (tile.y() + j) - 1 : tile.y() + j), _zoom, _scaledSize));
+			  - (tile.y() + j) - 1 : tile.y() + j), _zoom));
 
 	if (flags & Map::Block)
 		_tileLoader->loadTilesSync(tiles);

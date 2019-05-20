@@ -21,7 +21,8 @@ private:
 		OSM,
 		WMTS,
 		WMS,
-		TMS
+		TMS,
+		QuadTiles
 	};
 
 	struct Config {

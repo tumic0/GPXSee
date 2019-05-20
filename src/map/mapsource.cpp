@@ -160,6 +160,8 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 		config.type = WMS;
 	else if (type == "TMS")
 		config.type = TMS;
+	else if (type == "QuadTiles")
+		config.type = QuadTiles;
 	else if (type == "OSM" || type.isEmpty())
 		config.type = OSM;
 	else {
@@ -293,11 +295,15 @@ Map *MapSource::loadMap(const QString &path, QString &errorString)
 		case TMS:
 			return new OnlineMap(config.name, config.url, config.zooms,
 			  config.bounds, config.tileRatio, config.authorization,
-			  config.tileSize, config.scalable, true);
+			  config.tileSize, config.scalable, true, false);
 		case OSM:
 			return new OnlineMap(config.name, config.url, config.zooms,
 			 config.bounds, config.tileRatio, config.authorization,
-			 config.tileSize, config.scalable, false);
+			 config.tileSize, config.scalable, false, false);
+		case QuadTiles:
+			return new OnlineMap(config.name, config.url, config.zooms,
+			 config.bounds, config.tileRatio, config.authorization,
+			 config.tileSize, config.scalable, false, true);
 		default:
 			return 0;
 	}

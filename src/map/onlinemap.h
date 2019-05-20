@@ -13,7 +13,8 @@ class OnlineMap : public Map
 public:
 	OnlineMap(const QString &name, const QString &url, const Range &zooms,
 	  const RectC &bounds, qreal tileRatio, const Authorization &authorization,
-	  int tileSize, bool scalable, bool invertY, QObject *parent = 0);
+	  int tileSize, bool scalable, bool invertY, bool quadTiles,
+	  QObject *parent = 0);
 
 	QString name() const {return _name;}
 
@@ -49,7 +50,6 @@ private:
 	int _tileSize;
 	bool _scalable;
 	bool _invertY;
-	int _scaledSize;
 };
 
 #endif // ONLINEMAP_H

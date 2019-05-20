@@ -16,6 +16,8 @@ public:
 	void setUrl(const QString &url) {_url = url;}
 	void setAuthorization(const Authorization &authorization)
 	  {_authorization = authorization;}
+	void setScaledSize(int size) {_scaledSize = size;}
+	void setQuadTiles(bool quadTiles) {_quadTiles = quadTiles;}
 
 	void loadTilesAsync(QVector<Tile> &list);
 	void loadTilesSync(QVector<Tile> &list);
@@ -32,6 +34,8 @@ private:
 	QString _url;
 	QString _dir;
 	Authorization _authorization;
+	int _scaledSize;
+	bool _quadTiles;
 };
 
 #endif // TILELOADER_Honlinemap
