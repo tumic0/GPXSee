@@ -21,7 +21,7 @@ public:
 	QRectF bounds();
 
 	virtual int zoom() const {return _zoom;}
-	virtual void setZoom(int zoom) {_zoom = zoom;}
+	virtual void setZoom(int zoom);
 	virtual int zoomFit(const QSize &, const RectC &);
 	virtual int zoomIn();
 	virtual int zoomOut();

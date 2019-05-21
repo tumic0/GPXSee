@@ -141,6 +141,12 @@ int IMGMap::zoomOut()
 	return _zoom;
 }
 
+void IMGMap::setZoom(int zoom)
+{
+	_zoom = zoom;
+	updateTransform();
+}
+
 void IMGMap::updateTransform()
 {
 	double scale = (2.0 * M_PI * WGS84_RADIUS) / (1<<_zoom);;
