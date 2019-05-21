@@ -55,10 +55,8 @@ static QString quadKey(const QPoint &xy, int zoom)
 		unsigned mask = 1 << (i - 1);
 		if (xy.x() & mask)
 			digit++;
-		if (xy.y() & mask) {
-			digit++;
-			digit++;
-		}
+		if (xy.y() & mask)
+			digit += 2;
 		qk.append(digit);
 	}
 
