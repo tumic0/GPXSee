@@ -31,7 +31,6 @@ RouteItem::RouteItem(const Route &route, Map *map, QGraphicsItem *parent)
 
 	_name = route.name();
 	_desc = route.description();
-	_units = Metric;
 	_coordinatesFormat = DecimalDegrees;
 
 	setToolTip(toolTip(Metric));
@@ -50,20 +49,20 @@ void RouteItem::setMap(Map *map)
 	PathItem::setMap(map);
 }
 
-void RouteItem::setUnits(Units units)
+void RouteItem::setUnits(Units u)
 {
-	if (_units == units)
+	if (units() == u)
 		return;
 
-	_units = units;
+	PathItem::setUnits(u);
 
-	setToolTip(toolTip(_units));
+	setToolTip(toolTip(units()));
 
 	QList<QGraphicsItem *> childs =	childItems();
 	for (int i = 0; i < childs.count(); i++) {
 		if (childs.at(i) != _marker) {
 			WaypointItem *wi = static_cast<WaypointItem*>(childs.at(i));
-			wi->setToolTipFormat(_units, _coordinatesFormat);
+			wi->setToolTipFormat(units(), _coordinatesFormat);
 		}
 	}
 }
@@ -79,7 +78,7 @@ void RouteItem::setCoordinatesFormat(CoordinatesFormat format)
 	for (int i = 0; i < childs.count(); i++) {
 		if (childs.at(i) != _marker) {
 			WaypointItem *wi = static_cast<WaypointItem*>(childs.at(i));
-			wi->setToolTipFormat(_units, _coordinatesFormat);
+			wi->setToolTipFormat(units(), _coordinatesFormat);
 		}
 	}
 }

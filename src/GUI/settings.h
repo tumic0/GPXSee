@@ -32,6 +32,8 @@
 #define SHOW_GRAPH_SLIDER_INFO_DEFAULT    true
 #define SHOW_MARKERS_SETTING              "pathMarkers"
 #define SHOW_MARKERS_DEFAULT              true
+#define SHOW_TICKS_SETTING                "pathTicks"
+#define SHOW_TICKS_DEFAULT                false
 
 #define MAP_SETTINGS_GROUP                "Map"
 #define CURRENT_MAP_SETTING               "map"

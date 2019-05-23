@@ -17,7 +17,7 @@ int str2int(const char *str, int len)
 	return res;
 }
 
-double niceNum(double x, int round)
+double niceNum(double x, bool round)
 {
 	int expv;
 	double f;

@@ -349,6 +349,11 @@ void GUI::createActions()
 	_showRouteWaypointsAction->setCheckable(true);
 	connect(_showRouteWaypointsAction, SIGNAL(triggered(bool)), _mapView,
 	  SLOT(showRouteWaypoints(bool)));
+	_showTicksAction = new QAction(tr("km/mi markers"), this);
+	_showTicksAction->setMenuRole(QAction::NoRole);
+	_showTicksAction->setCheckable(true);
+	connect(_showTicksAction, SIGNAL(triggered(bool)), _mapView,
+	  SLOT(showTicks(bool)));
 
 	// Graph actions
 	_showGraphsAction = new QAction(QIcon(SHOW_GRAPHS_ICON), tr("Show graphs"),
@@ -536,6 +541,7 @@ void GUI::createMenus()
 	QMenu *displayMenu = dataMenu->addMenu(tr("Display"));
 	displayMenu->addAction(_showWaypointLabelsAction);
 	displayMenu->addAction(_showRouteWaypointsAction);
+	displayMenu->addAction(_showTicksAction);
 	dataMenu->addSeparator();
 	dataMenu->addAction(_showTracksAction);
 	dataMenu->addAction(_showRoutesAction);
@@ -1721,6 +1727,9 @@ void GUI::writeSettings()
 	if (_showRouteWaypointsAction->isChecked() != SHOW_ROUTE_WAYPOINTS_DEFAULT)
 		settings.setValue(SHOW_ROUTE_WAYPOINTS_SETTING,
 		  _showRouteWaypointsAction->isChecked());
+	if (_showTicksAction->isChecked() != SHOW_TICKS_DEFAULT)
+		settings.setValue(SHOW_TICKS_SETTING,
+		  _showTicksAction->isChecked());
 	settings.endGroup();
 
 	settings.beginGroup(EXPORT_SETTINGS_GROUP);
@@ -1984,6 +1993,10 @@ void GUI::readSettings()
 		_mapView->showRouteWaypoints(false);
 	else
 		_showRouteWaypointsAction->setChecked(true);
+	if (settings.value(SHOW_TICKS_SETTING, SHOW_TICKS_DEFAULT).toBool()) {
+		_mapView->showTicks(true);
+		_showTicksAction->setChecked(true);
+	}
 	settings.endGroup();
 
 	settings.beginGroup(EXPORT_SETTINGS_GROUP);

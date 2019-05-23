@@ -61,9 +61,9 @@ void ScaleItem::computeScale()
 	qreal res = _res * pow(2, -_digitalZoom);
 
 	if (_units == Imperial) {
-		_length = niceNum((res * M2FT * SCALE_WIDTH) / SEGMENTS, 1);
+		_length = niceNum((res * M2FT * SCALE_WIDTH) / SEGMENTS, true);
 		if (_length >= MIINFT) {
-			_length = niceNum((res * M2MI * SCALE_WIDTH) / SEGMENTS, 1);
+			_length = niceNum((res * M2MI * SCALE_WIDTH) / SEGMENTS, true);
 			_width = (_length / (res * M2MI));
 			_scale = true;
 		} else {
@@ -71,9 +71,9 @@ void ScaleItem::computeScale()
 			_scale = false;
 		}
 	} else if (_units == Nautical) {
-		_length = niceNum((res * M2FT * SCALE_WIDTH) / SEGMENTS, 1);
+		_length = niceNum((res * M2FT * SCALE_WIDTH) / SEGMENTS, true);
 		if (_length >= NMIINFT) {
-			_length = niceNum((res * M2NMI * SCALE_WIDTH) / SEGMENTS, 1);
+			_length = niceNum((res * M2NMI * SCALE_WIDTH) / SEGMENTS, true);
 			_width = (_length / (res * M2NMI));
 			_scale = true;
 		} else {
@@ -81,7 +81,7 @@ void ScaleItem::computeScale()
 			_scale = false;
 		}
 	} else {
-		_length = niceNum((res * SCALE_WIDTH) / SEGMENTS, 1);
+		_length = niceNum((res * SCALE_WIDTH) / SEGMENTS, true);
 		if (_length >= KMINM) {
 			_length *= M2KM;
 			_width = (_length / (res * M2KM));

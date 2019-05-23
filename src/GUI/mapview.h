@@ -79,6 +79,7 @@ public slots:
 	void showRouteWaypoints(bool show);
 	void showMarkers(bool show);
 	void showCoordinates(bool show);
+	void showTicks(bool show);
 	void clearMapCache();
 	void setCoordinatesFormat(CoordinatesFormat format);
 	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
@@ -139,7 +140,7 @@ private:
 
 	bool _showMap, _showTracks, _showRoutes, _showAreas, _showWaypoints,
 	  _showWaypointLabels, _showPOI, _showPOILabels, _showRouteWaypoints,
-	  _showMarkers;
+	  _showMarkers, _showPathTicks;
 	bool _overlapPOIs;
 	int _trackWidth, _routeWidth, _areaWidth;
 	Qt::PenStyle _trackStyle, _routeStyle, _areaStyle;
