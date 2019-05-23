@@ -56,7 +56,7 @@ private:
 
 	qreal xInM() const;
 	unsigned tickSize() const;
-	void computeTickInfo();
+	void updateTickRects();
 
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
@@ -73,6 +73,7 @@ private:
 	bool _showMarker;
 	bool _showTicks;
 	QRect _tickRect;
+	QRectF _tickBoundingRect;
 	int _tickSize, _tickCount;
 
 	static QFont _font;

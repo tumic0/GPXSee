@@ -46,6 +46,7 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 
 	updatePainterPath();
 	updateShape();
+	updateTickRects();
 
 	_markerDistance = _path.first().first().distance();
 	_marker = new MarkerItem(this);
@@ -53,8 +54,6 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
-
-	computeTickInfo();
 }
 
 void PathItem::updateShape()
@@ -132,17 +131,19 @@ void PathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 		painter->setRenderHint(QPainter::Antialiasing, false);
 
 		for (int i = 1; i < _tickCount; i++) {
-			QPointF pos(position(i * _tickSize * xInM()));
-			QPointF arrow[3] = {pos, QPointF(pos.x() + 3, pos.y() - 3),
-			  QPointF(pos.x() - 3, pos.y() - 3)};
+			QPoint pos(position(i * _tickSize * xInM()).toPoint());
+			QPointF arrow[3] = {QPointF(pos.x() - 0.5, pos.y()),
+			  QPointF(pos.x() + 2.5, pos.y() - 3),
+			  QPointF(pos.x() - 3.5, pos.y() - 3)};
 			QString val(QString::number(i * _tickSize));
 
-			QRect br(_tickRect);
-			br.moveCenter(QPoint(pos.x(), pos.y() - br.height()/2 - 5));
+			QRectF br(_tickRect);
+			br.moveCenter(QPointF(pos.x() - 0.5, pos.y() - br.height()/2.0
+			  - 2.5));
 			painter->setPen(Qt::white);
 			painter->setBrush(_pen.color());
 			painter->drawPolygon(arrow, 3);
-			painter->drawRoundedRect(br, 2, 2);
+			painter->drawRoundedRect(br, 1.5, 1.5);
 			painter->drawText(br, Qt::AlignCenter, val);
 		}
 	}
@@ -162,6 +163,7 @@ void PathItem::setMap(Map *map)
 
 	updatePainterPath();
 	updateShape();
+	updateTickRects();
 
 	QPointF pos = position(_markerDistance);
 	if (isValid(pos))
@@ -332,15 +334,15 @@ unsigned PathItem::tickSize() const
 
 	if (r < 1)
 		return 0;
-	else if (r < 10)
+	else if (r < 15)
 		return 1;
 	else if (r < 50)
 		return 5;
-	else if (r < 100)
+	else if (r < 150)
 		return 10;
 	else if (r < 500)
 		return 50;
-	else if (r < 1000)
+	else if (r < 1500)
 		return 100;
 	else if (r < 5000)
 		return 500;
@@ -348,7 +350,7 @@ unsigned PathItem::tickSize() const
 		return 1000;
 }
 
-void PathItem::computeTickInfo()
+void PathItem::updateTickRects()
 {
 	_tickSize = tickSize();
 	qreal f = xInM();
@@ -358,6 +360,15 @@ void PathItem::computeTickInfo()
 	_tickRect = fm.boundingRect(QRect(), Qt::AlignCenter,
 	  QString::number(qMax(_tickSize * (_tickCount - 1), 10)))
 	  .adjusted(-2, 0, 2, 0);
+
+	_tickBoundingRect = QRectF();
+	for (int i = 1; i < _tickCount; i++) {
+		QPoint pos(position(i * _tickSize * xInM()).toPoint());
+		QRectF br(_tickRect);
+		br.moveCenter(QPointF(pos.x() - 0.5, pos.y() - br.height()/2.0
+		  - 2.5));
+		_tickBoundingRect |= br;
+	}
 }
 
 void PathItem::showTicks(bool show)
@@ -376,7 +387,7 @@ void PathItem::setUnits(Units units)
 
 	prepareGeometryChange();
 	_units = units;
-	computeTickInfo();
+	updateTickRects();
 }
 
 void PathItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -404,7 +415,6 @@ void PathItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 QRectF PathItem::boundingRect() const
 {
 	return _showTicks
-	  ? _shape.boundingRect().adjusted(-_tickRect.width()/2,
-		-(_tickRect.height() + 4), _tickRect.width()/2, 0)
+	  ? _shape.boundingRect() | _tickBoundingRect
 	  : _shape.boundingRect();
 }
