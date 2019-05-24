@@ -3,7 +3,7 @@
 #include <QPainter>
 #include "common/greatcircle.h"
 #include "map/map.h"
-#include "font.h"
+#include "pathtickitem.h"
 #include "pathitem.h"
 
 
@@ -18,18 +18,6 @@ static inline unsigned segments(qreal distance)
 {
 	return ceil(distance / GEOGRAPHICAL_MILE);
 }
-
-static QFont font()
-{
-	QFont font;
-	font.setPixelSize(10);
-	font.setFamily(FONT_FAMILY);
-	font.setBold(true);
-
-	return font;
-}
-
-QFont PathItem::_font = font();
 
 PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
   : QGraphicsObject(parent), _path(path), _map(map)
@@ -46,7 +34,7 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 
 	updatePainterPath();
 	updateShape();
-	updateTickRects();
+	updateTicks();
 
 	_markerDistance = _path.first().first().distance();
 	_marker = new MarkerItem(this);
@@ -126,30 +114,7 @@ void PathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	painter->setPen(_pen);
 	painter->drawPath(_painterPath);
 
-	if (_showTicks) {
-		painter->setFont(_font);
-		painter->setRenderHint(QPainter::Antialiasing, false);
-
-		for (int i = 1; i < _tickCount; i++) {
-			QPoint pos(position(i * _tickSize * xInM()).toPoint());
-			QPointF arrow[3] = {QPointF(pos.x() - 0.5, pos.y()),
-			  QPointF(pos.x() + 2.5, pos.y() - 3),
-			  QPointF(pos.x() - 3.5, pos.y() - 3)};
-			QString val(QString::number(i * _tickSize));
-
-			QRectF br(_tickRect);
-			br.moveCenter(QPointF(pos.x() - 0.5, pos.y() - br.height()/2.0
-			  - 2.5));
-			painter->setPen(Qt::white);
-			painter->setBrush(_pen.color());
-			painter->drawPolygon(arrow, 3);
-			painter->drawRoundedRect(br, 1.5, 1.5);
-			painter->drawText(br, Qt::AlignCenter, val);
-		}
-	}
-
 /*
-	painter->setBrush(Qt::NoBrush);
 	painter->setPen(Qt::red);
 	painter->drawRect(boundingRect());
 */
@@ -163,7 +128,7 @@ void PathItem::setMap(Map *map)
 
 	updatePainterPath();
 	updateShape();
-	updateTickRects();
+	updateTicks();
 
 	QPointF pos = position(_markerDistance);
 	if (isValid(pos))
@@ -350,24 +315,30 @@ unsigned PathItem::tickSize() const
 		return 1000;
 }
 
-void PathItem::updateTickRects()
+void PathItem::updateTicks()
 {
-	_tickSize = tickSize();
-	qreal f = xInM();
-	_tickCount = (int)_path.last().last().distance() / (_tickSize * f) + 1;
+	for (int i = 0; i < _ticks.size(); i++)
+		delete _ticks[i];
+	_ticks.clear();
 
-	QFontMetrics fm(_font);
-	_tickRect = fm.boundingRect(QRect(), Qt::AlignCenter,
-	  QString::number(qMax(_tickSize * (_tickCount - 1), 10)))
+	if (!_showTicks)
+		return;
+
+	int ts = tickSize();
+	qreal f = xInM();
+	int tc = (int)_path.last().last().distance() / (ts * f);
+
+	QFontMetrics fm(PathTickItem::font());
+	QRect tr = fm.boundingRect(QRect(), Qt::AlignCenter,
+	  QString::number(qMax(ts * (tc - 1), 10)))
 	  .adjusted(-2, 0, 2, 0);
 
-	_tickBoundingRect = QRectF();
-	for (int i = 1; i < _tickCount; i++) {
-		QPoint pos(position(i * _tickSize * xInM()).toPoint());
-		QRectF br(_tickRect);
-		br.moveCenter(QPointF(pos.x() - 0.5, pos.y() - br.height()/2.0
-		  - 2.5));
-		_tickBoundingRect |= br;
+	_ticks.resize(tc);
+	for (int i = 0; i < tc; i++) {
+		QPoint pos(position((i + 1) * ts * xInM()).toPoint());
+		_ticks[i] = new PathTickItem(tr, (i + 1) * ts, this);
+		_ticks[i]->setPos(QPointF(pos.x() - 0.5, pos.y() - 0.5));
+		_ticks[i]->setColor(_pen.color());
 	}
 }
 
@@ -378,6 +349,7 @@ void PathItem::showTicks(bool show)
 
 	prepareGeometryChange();
 	_showTicks = show;
+	updateTicks();
 }
 
 void PathItem::setUnits(Units units)
@@ -387,7 +359,7 @@ void PathItem::setUnits(Units units)
 
 	prepareGeometryChange();
 	_units = units;
-	updateTickRects();
+	updateTicks();
 }
 
 void PathItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -410,11 +382,4 @@ void PathItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 	update();
 
 	emit selected(false);
-}
-
-QRectF PathItem::boundingRect() const
-{
-	return _showTicks
-	  ? _shape.boundingRect() | _tickBoundingRect
-	  : _shape.boundingRect();
 }

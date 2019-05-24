@@ -8,6 +8,7 @@
 #include "units.h"
 
 class Map;
+class PathTickItem;
 
 class PathItem : public QGraphicsObject
 {
@@ -17,7 +18,7 @@ public:
 	PathItem(const Path &path, Map *map, QGraphicsItem *parent = 0);
 
 	QPainterPath shape() const {return _shape;}
-	QRectF boundingRect() const;
+	QRectF boundingRect() const {return _shape.boundingRect();}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
@@ -43,10 +44,6 @@ public slots:
 signals:
 	void selected(bool);
 
-protected:
-	Path _path;
-	MarkerItem *_marker;
-
 private:
 	const PathSegment *segment(qreal x) const;
 	QPointF position(qreal distance) const;
@@ -56,11 +53,12 @@ private:
 
 	qreal xInM() const;
 	unsigned tickSize() const;
-	void updateTickRects();
+	void updateTicks();
 
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
+	Path _path;
 	Map *_map;
 	qreal _markerDistance;
 	int _digitalZoom;
@@ -72,11 +70,9 @@ private:
 	QPainterPath _painterPath;
 	bool _showMarker;
 	bool _showTicks;
-	QRect _tickRect;
-	QRectF _tickBoundingRect;
-	int _tickSize, _tickCount;
 
-	static QFont _font;
+	MarkerItem *_marker;
+	QVector<PathTickItem*> _ticks;
 };
 
 #endif // PATHITEM_H

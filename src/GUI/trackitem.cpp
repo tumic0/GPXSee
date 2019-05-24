@@ -13,7 +13,7 @@ QString TrackItem::toolTip(Units units) const
 		tt.insert(tr("Name"), _name);
 	if (!_desc.isEmpty())
 		tt.insert(tr("Description"), _desc);
-	tt.insert(tr("Distance"), Format::distance(_path.last().last().distance(),
+	tt.insert(tr("Distance"), Format::distance(path().last().last().distance(),
 	  units));
 	if  (_time > 0)
 		tt.insert(tr("Total time"), Format::timeSpan(_time));

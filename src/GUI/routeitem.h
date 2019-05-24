@@ -7,6 +7,7 @@
 #include "format.h"
 
 class Map;
+class WaypointItem;
 
 class RouteItem : public PathItem
 {
@@ -28,6 +29,8 @@ private:
 	QString _name;
 	QString _desc;
 	CoordinatesFormat _coordinatesFormat;
+
+	QVector<WaypointItem*> _waypoints;
 };
 
 #endif // ROUTEITEM_H
