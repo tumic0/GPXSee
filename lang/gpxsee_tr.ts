@@ -470,7 +470,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>km/mi markers</source>
-        <translation type="unfinished"></translation>
+        <translation>km/mil işaretleri</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="359"/>
