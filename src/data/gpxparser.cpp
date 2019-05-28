@@ -118,6 +118,9 @@ void GPXParser::trackpointData(Trackpoint &trackpoint)
 			trackpoint.setTimestamp(time());
 		else if (_reader.name() == QLatin1String("geoidheight"))
 			gh = number();
+		// GPX 1.0
+		else if (_reader.name() == QLatin1String("speed"))
+			trackpoint.setSpeed(number());
 		else if (_reader.name() == QLatin1String("extensions"))
 			trkptExtensions(trackpoint);
 		else
