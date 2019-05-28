@@ -11,6 +11,7 @@
 
 #define CAPABILITIES_FILE "capabilities.xml"
 #define TILE_SIZE 256
+#define EPSILON 1e-6
 
 double WMSMap::sd2res(double scaleDenominator) const
 {
@@ -50,14 +51,15 @@ void WMSMap::computeZooms(const RangeF &scaleDenominator)
 	_zooms.clear();
 
 	if (scaleDenominator.size() > 0) {
-		double ld = log2(scaleDenominator.max()) - log2(scaleDenominator.min());
+		double ld = log2(scaleDenominator.max() - EPSILON)
+		  - log2(scaleDenominator.min() + EPSILON);
 		int cld = (int)ceil(ld);
 		double step = ld / (double)cld;
-		double lmax = log2(scaleDenominator.max());
+		double lmax = log2(scaleDenominator.max() - EPSILON);
 		for (int i = 0; i <= cld; i++)
 			_zooms.append(pow(2.0, lmax - i * step));
 	} else
-		_zooms.append(scaleDenominator.min());
+		_zooms.append(scaleDenominator.min() + EPSILON);
 }
 
 void WMSMap::updateTransform()
@@ -194,8 +196,8 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		for (int j = tl.y(); j < br.y(); j++) {
 			PointD ttl(_transform.img2proj(QPointF(i * TILE_SIZE,
 			  j * TILE_SIZE)));
-			PointD tbr(_transform.img2proj(QPointF(i * TILE_SIZE + TILE_SIZE
-			  - 1, j * TILE_SIZE + TILE_SIZE - 1)));
+			PointD tbr(_transform.img2proj(QPointF(i * TILE_SIZE + TILE_SIZE,
+			  j * TILE_SIZE + TILE_SIZE)));
 			RectD bbox = (_cs.axisOrder() == CoordinateSystem::YX)
 			  ? RectD(PointD(tbr.y(), tbr.x()), PointD(ttl.y(), ttl.x()))
 			  : RectD(ttl, tbr);
