@@ -12,6 +12,7 @@ ColorBox::ColorBox(QWidget *parent) : QWidget(parent)
 	_alpha = true;
 
 	setSizePolicy(QSizePolicy::QSizePolicy::Minimum, QSizePolicy::Fixed);
+	setAttribute(Qt::WA_Hover);
 }
 
 QSize ColorBox::sizeHint() const
