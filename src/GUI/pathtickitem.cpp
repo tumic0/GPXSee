@@ -54,3 +54,18 @@ void PathTickItem::paint(QPainter *painter,
 	painter->drawRect(boundingRect());
 */
 }
+
+void PathTickItem::setPos(const QPointF &pos)
+{
+	/* For propper rounded rect rendering, the item must be positioned in the
+	   middle of a pixel */
+	QPoint p(pos.toPoint());
+	QGraphicsItem::setPos(QPointF(p.x() - 0.5, p.y() - 0.5));
+}
+
+QRect PathTickItem::tickRect(int value)
+{
+	QFontMetrics fm(_font);
+	return fm.boundingRect(QRect(), Qt::AlignCenter,
+	  QString::number(qMax(value, 10))).adjusted(-2, 0, 2, 0);
+}

@@ -325,20 +325,15 @@ void PathItem::updateTicks()
 		return;
 
 	int ts = tickSize();
-	qreal f = xInM();
-	int tc = (int)_path.last().last().distance() / (ts * f);
-
-	QFontMetrics fm(PathTickItem::font());
-	QRect tr = fm.boundingRect(QRect(), Qt::AlignCenter,
-	  QString::number(qMax(ts * (tc - 1), 10)))
-	  .adjusted(-2, 0, 2, 0);
+	int tc = _path.last().last().distance() / (ts * xInM());
+	QRect tr = PathTickItem::tickRect(ts * (tc - 1));
 
 	_ticks.resize(tc);
 	for (int i = 0; i < tc; i++) {
-		QPoint pos(position((i + 1) * ts * xInM()).toPoint());
 		_ticks[i] = new PathTickItem(tr, (i + 1) * ts, this);
-		_ticks[i]->setPos(QPointF(pos.x() - 0.5, pos.y() - 0.5));
+		_ticks[i]->setPos(position((i + 1) * ts * xInM()));
 		_ticks[i]->setColor(_pen.color());
+		_ticks[i]->setToolTip(toolTip());
 	}
 }
 

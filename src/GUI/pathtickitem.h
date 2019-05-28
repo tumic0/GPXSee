@@ -13,9 +13,10 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
+	void setPos(const QPointF &pos);
 	void setColor(const QColor &color) {_brush = QBrush(color);}
 
-	static const QFont &font() {return _font;}
+	static QRect tickRect(int value);
 
 private:
 	QRectF _tickRect;
