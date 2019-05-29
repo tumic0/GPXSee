@@ -295,24 +295,24 @@ qreal PathItem::xInM() const
 
 unsigned PathItem::tickSize() const
 {
-	qreal r = _path.last().last().distance() / xInM();
+	qreal res = _map->resolution(sceneBoundingRect());
 
-	if (r < 1)
-		return 0;
-	else if (r < 15)
+	if (res < 10)
 		return 1;
-	else if (r < 50)
+	else if (res < 25)
 		return 5;
-	else if (r < 150)
+	else if (res < 100)
 		return 10;
-	else if (r < 500)
+	else if (res < 500)
 		return 50;
-	else if (r < 1500)
+	else if (res < 2000)
 		return 100;
-	else if (r < 5000)
+	else if (res < 10000)
 		return 500;
-	else
+	else if (res < 20000)
 		return 1000;
+	else
+		return 5000;
 }
 
 void PathItem::updateTicks()
