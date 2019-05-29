@@ -128,6 +128,8 @@ Projection::~Projection()
 
 Projection &Projection::operator=(const Projection &p)
 {
+	delete _ct;
+
 	_gcs = p._gcs;
 	_units = p._units;
 	_ct = p._ct ? p._ct->clone() : 0;
