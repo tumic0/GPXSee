@@ -326,7 +326,7 @@ void PathItem::updateTicks()
 
 	int ts = tickSize();
 	int tc = _path.last().last().distance() / (ts * xInM());
-	QRect tr = PathTickItem::tickRect(ts * (tc - 1));
+	QRect tr = PathTickItem::tickRect(ts * tc);
 
 	_ticks.resize(tc);
 	for (int i = 0; i < tc; i++) {
