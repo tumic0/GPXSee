@@ -109,13 +109,13 @@ QRectF IMGMap::bounds()
 int IMGMap::zoomFit(const QSize &size, const RectC &rect)
 {
 	if (rect.isValid()) {
-		QPointF sc((rect.right() - rect.left()) / size.width(),
-		  (rect.top() - rect.bottom()) / size.height());
-		double resolution = qMax(qAbs(sc.x()), qAbs(sc.y()));
+		RectD pr(rect, _projection, 10);
 
 		_zoom = _zooms.min();
-		for (int i = _zooms.min(); i <= _zooms.max(); i++) {
-			if (360.0 / (1<<i) < resolution)
+		for (int i = _zooms.min() + 1; i <= _zooms.max(); i++) {
+			Transform t(transform(i));
+			QRectF r(t.proj2img(pr.topLeft()), t.proj2img(pr.bottomRight()));
+			if (size.width() < r.width() || size.height() < r.height())
 				break;
 			_zoom = i;
 		}
@@ -147,12 +147,17 @@ void IMGMap::setZoom(int zoom)
 	updateTransform();
 }
 
+Transform IMGMap::transform(int zoom) const
+{
+	double scale = (2.0 * M_PI * WGS84_RADIUS) / (1<<zoom);
+	PointD topLeft(_projection.ll2xy(_img.bounds().topLeft()));
+	return Transform(ReferencePoint(PointD(0, 0), topLeft),
+	  PointD(scale, scale));
+}
+
 void IMGMap::updateTransform()
 {
-	double scale = (2.0 * M_PI * WGS84_RADIUS) / (1<<_zoom);;
-	PointD topLeft(_projection.ll2xy(_img.bounds().topLeft()));
-	_transform = Transform(ReferencePoint(PointD(0, 0), topLeft),
-	  PointD(scale, scale));
+	_transform = transform(_zoom);
 }
 
 QPointF IMGMap::ll2xy(const Coordinates &c)

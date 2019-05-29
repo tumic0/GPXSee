@@ -39,6 +39,7 @@ public:
 private:
 	friend class RasterTile;
 
+	Transform transform(int zoom) const;
 	void updateTransform();
 	void drawPolygons(QPainter *painter, QList<IMG::Poly> &polygons);
 	void drawLines(QPainter *painter, QList<IMG::Poly> &lines,
