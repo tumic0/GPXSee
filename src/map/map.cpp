@@ -1,6 +1,5 @@
 #include <QLineF>
 #include "map.h"
-#include "pcs.h"
 
 qreal Map::resolution(const QRectF &rect)
 {

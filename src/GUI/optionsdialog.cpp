@@ -12,7 +12,6 @@
 #include <QRadioButton>
 #include <QLabel>
 #include <QSysInfo>
-#include <QInputDialog>
 #include "map/pcs.h"
 #include "icons.h"
 #include "colorbox.h"
@@ -35,7 +34,7 @@ static QFrame *line()
 
 	return l;
 }
-#endif
+#endif // Q_OS_MAC
 
 QWidget *OptionsDialog::createMapPage()
 {

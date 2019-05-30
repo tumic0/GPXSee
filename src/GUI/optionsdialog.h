@@ -86,9 +86,6 @@ public slots:
 public:
 	OptionsDialog(Options *options, QWidget *parent = 0);
 
-//private slots:
-//	void projectionChanged(int index);
-
 private:
 	QWidget *createMapPage();
 	QWidget *createAppearancePage();
