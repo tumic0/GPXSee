@@ -479,7 +479,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>km/mi markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Bornes kilométriques ou milliaires</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="359"/>
@@ -606,7 +606,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="670"/>
         <source>GPXSee is distributed under the terms of the GNU General Public License version 3. For more info about GPXSee visit the project homepage at %1.</source>
-        <translation>GPXSee est distribué selon les termes de la licence publique générale GNU (version 3). Pour plus d&apos;information sur GPXSee, visiter le site du projet sur %1.</translation>
+        <translation>GPXSee est distribué selon les termes de la licence publique générale GNU (version 3). Pour plus d&apos;information sur GPXSee, visiter le site du projet %1.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="697"/>
@@ -666,7 +666,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="733"/>
         <source>Styles directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dossier de styles :</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1037"/>
@@ -1017,7 +1017,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="123"/>
         <source>Garmin IMG maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartes Garmin IMG</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="125"/>
@@ -1349,12 +1349,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="72"/>
         <source>Projection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Projection :</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="94"/>
         <source>Vector maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartes vectorielles</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
