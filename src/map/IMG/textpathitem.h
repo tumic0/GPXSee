@@ -3,9 +3,9 @@
 
 #include <QVector>
 #include <QPainterPath>
-#include "img.h"
+#include "textitem.h"
 
-class TextPathItem
+class TextPathItem : public TextItem
 {
 public:
 	TextPathItem() : _text(0), _font(0), _color(0) {}
@@ -13,7 +13,9 @@ public:
 	  const QRect &tileRect, const QFont *font, const QColor *color);
 
 	bool isValid() const {return !_path.isEmpty();}
-	bool collides(const QVector<TextPathItem> &list) const;
+
+	QPainterPath shape() const {return _shape;}
+	QRectF boundingRect() const {return _rect;}
 	void paint(QPainter *painter) const;
 
 private:

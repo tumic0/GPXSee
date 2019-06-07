@@ -154,23 +154,6 @@ TextPathItem::TextPathItem(const QPolygonF &line, const QString *label,
 	_rect = _shape.boundingRect();
 }
 
-bool TextPathItem::collides(const QVector<TextPathItem> &list) const
-{
-	if (_rect.isEmpty())
-		return false;
-
-	for (int i = 0; i < list.size(); i++) {
-		const TextPathItem &other = list.at(i);
-		if (other._rect.isEmpty() || !_rect.intersects(other._rect))
-			continue;
-
-		if (other._shape.intersects(_shape))
-			return true;
-	}
-
-	return false;
-}
-
 void TextPathItem::paint(QPainter *painter) const
 {
 	QFontMetrics fm(*_font);

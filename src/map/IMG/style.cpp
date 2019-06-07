@@ -75,10 +75,11 @@ void Style::defaultPolygonStyle()
 	  << TYPE(0x42) << TYPE(0x43) << TYPE(0x44) << TYPE(0x45) << TYPE(0x46)
 	  << TYPE(0x47) << TYPE(0x48) << TYPE(0x49) << TYPE(0x4c) << TYPE(0x4d)
 	  << TYPE(0x4e) << TYPE(0x4f) << TYPE(0x50) << TYPE(0x51) << TYPE(0x52)
-	  << TYPE(0x14) << TYPE(0x15) << TYPE(0x1e) << TYPE(0x1f) << TYPE(0x04)
-	  << TYPE(0x05) << TYPE(0x06) << TYPE(0x07) << TYPE(0x08) << TYPE(0x09)
-	  << TYPE(0x0a) << TYPE(0x0b) << TYPE(0x0c) << TYPE(0x0d) << TYPE(0x0e)
-	  << TYPE(0x0f) << TYPE(0x10) << TYPE(0x11) << TYPE(0x12) << TYPE(0x13);
+	  << TYPE(0x14) << TYPE(0x15) << TYPE(0x16) << TYPE(0x1e) << TYPE(0x1f)
+	  << TYPE(0x04) << TYPE(0x05) << TYPE(0x06) << TYPE(0x07) << TYPE(0x08)
+	  << TYPE(0x09) << TYPE(0x0a) << TYPE(0x0b) << TYPE(0x0c) << TYPE(0x0d)
+	  << TYPE(0x0e) << TYPE(0x0f) << TYPE(0x10) << TYPE(0x11) << TYPE(0x12)
+	  << TYPE(0x13);
 }
 
 void Style::defaultLineStyle()
@@ -960,6 +961,11 @@ bool Style::isContourLine(quint32 type)
 bool Style::isSpot(quint32 type)
 {
 	return (type == TYPE(0x62) || type == TYPE(0x63));
+}
+
+bool Style::isSummit(quint32 type)
+{
+	return  (type == 0x6616);
 }
 
 Style::POIClass Style::poiClass(quint32 type)

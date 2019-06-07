@@ -24,7 +24,7 @@
 #define SMALL_FONT_SIZE   10
 #define POI_FONT_SIZE      9
 
-#define LINE_TEXT_MIN_ZOOM   23
+#define LINE_TEXT_MIN_ZOOM   22
 
 class RasterTile
 {
@@ -43,6 +43,12 @@ public:
 
 	void load()
 	{
+		QList<TextItem*> textItems;
+
+		_map->processPolygons(_polygons);
+		_map->processPoints(_points, textItems);
+		_map->processLines(_lines, _xy, textItems);
+
 		_img.fill(Qt::transparent);
 
 		QPainter painter(&_img);
@@ -51,8 +57,10 @@ public:
 		painter.translate(-_xy.x(), -_xy.y());
 
 		_map->drawPolygons(&painter, _polygons);
-		_map->drawLines(&painter, _lines, _xy);
-		_map->drawPoints(&painter, _points);
+		_map->drawLines(&painter, _lines);
+		_map->drawTextItems(&painter, textItems);
+
+		qDeleteAll(textItems);
 	}
 
 private:
@@ -189,19 +197,14 @@ Coordinates IMGMap::xy2ll(const QPointF &p)
 }
 
 
-void IMGMap::drawPolygons(QPainter *painter, QList<IMG::Poly> &polygons)
+void IMGMap::drawPolygons(QPainter *painter, const QList<IMG::Poly> &polygons)
 {
 	for (int n = 0; n < _img.style().drawOrder().size(); n++) {
 		for (int i = 0; i < polygons.size(); i++) {
-			IMG::Poly &poly = polygons[i];
+			const IMG::Poly &poly = polygons.at(i);
 			if (poly.type != _img.style().drawOrder().at(n))
 				continue;
 			const Style::Polygon &style = _img.style().polygon(poly.type);
-
-			for (int j = 0; j < poly.points.size(); j++) {
-				QPointF &p = poly.points[j];
-				p = ll2xy(Coordinates(p.x(), p.y()));
-			}
 
 			painter->setPen(style.pen());
 			painter->setBrush(style.brush());
@@ -210,19 +213,8 @@ void IMGMap::drawPolygons(QPainter *painter, QList<IMG::Poly> &polygons)
 	}
 }
 
-void IMGMap::drawLines(QPainter *painter, QList<IMG::Poly> &lines,
-  const QPoint &tile)
+void IMGMap::drawLines(QPainter *painter, const QList<IMG::Poly> &lines)
 {
-	qStableSort(lines);
-
-	for (int i = 0; i < lines.size(); i++) {
-		IMG::Poly &poly = lines[i];
-		for (int j = 0; j < poly.points.size(); j++) {
-			QPointF &p = poly.points[j];
-			p = ll2xy(Coordinates(p.x(), p.y()));
-		}
-	}
-
 	painter->setBrush(Qt::NoBrush);
 
 	for (int i = 0; i < lines.size(); i++) {
@@ -247,11 +239,41 @@ void IMGMap::drawLines(QPainter *painter, QList<IMG::Poly> &lines,
 			painter->drawPolyline(poly.points);
 		}
 	}
+}
+
+void IMGMap::drawTextItems(QPainter *painter, const QList<TextItem*> &textItems)
+{
+	for (int i = 0; i < textItems.size(); i++)
+		textItems.at(i)->paint(painter);
+}
+
+
+void IMGMap::processPolygons(QList<IMG::Poly> &polygons)
+{
+	for (int i = 0; i < polygons.size(); i++) {
+		IMG::Poly &poly = polygons[i];
+		for (int j = 0; j < poly.points.size(); j++) {
+			QPointF &p = poly.points[j];
+			p = ll2xy(Coordinates(p.x(), p.y()));
+		}
+	}
+}
+
+void IMGMap::processLines(QList<IMG::Poly> &lines, const QPoint &tile,
+  QList<TextItem*> &textItems)
+{
+	qStableSort(lines);
+
+	for (int i = 0; i < lines.size(); i++) {
+		IMG::Poly &poly = lines[i];
+		for (int j = 0; j < poly.points.size(); j++) {
+			QPointF &p = poly.points[j];
+			p = ll2xy(Coordinates(p.x(), p.y()));
+		}
+	}
 
 	if (_zoom < LINE_TEXT_MIN_ZOOM)
 		return;
-
-	QVector<TextPathItem> items;
 
 	for (int i = 0; i < lines.size(); i++) {
 		IMG::Poly &poly = lines[i];
@@ -279,28 +301,26 @@ void IMGMap::drawLines(QPainter *painter, QList<IMG::Poly> &lines,
 		const QColor *color = style.textColor().isValid()
 		  ? &style.textColor() : 0;
 
-		TextPathItem item(poly.points, &poly.label, QRect(tile,
-		  QSize(TILE_SIZE, TILE_SIZE)), font, color);
-		if (item.isValid() && !item.collides(items))
-			items.append(item);
+		TextPathItem *item = new TextPathItem(poly.points, &poly.label,
+		  QRect(tile, QSize(TILE_SIZE, TILE_SIZE)), font, color);
+		if (item->isValid() && !item->collides(textItems))
+			textItems.append(item);
+		else
+			delete item;
 	}
-
-	for (int i = 0; i < items.size(); i++)
-		items.at(i).paint(painter);
 }
 
-void IMGMap::drawPoints(QPainter *painter, QList<IMG::Point> &points)
+void IMGMap::processPoints(QList<IMG::Point> &points,
+  QList<TextItem*> &textItems)
 {
 	qSort(points);
 
-	QVector<TextPointItem> items;
-
 	for (int i = 0; i < points.size(); i++) {
 		IMG::Point &point = points[i];
-		const Style::Point &style = _img.style().point(point.type);
-		int mz = minPOIZoom(Style::poiClass(point.type));
 
-		if (point.poi && _zoom < mz)
+		const Style::Point &style = _img.style().point(point.type);
+
+		if (point.poi && _zoom < minPOIZoom(Style::poiClass(point.type)))
 			continue;
 
 		const QString *label = point.label.isEmpty() ? 0 : &(point.label);
@@ -334,15 +354,19 @@ void IMGMap::drawPoints(QPainter *painter, QList<IMG::Point> &points)
 
 		if (Style::isSpot(point.type))
 			convertUnits(point.label);
+		if (Style::isSummit(point.type) && !point.label.isEmpty()) {
+			QStringList list = point.label.split(" ");
+			convertUnits(list.last());
+			point.label = list.join(" ");
+		}
 
-		TextPointItem item(ll2xy(point.coordinates).toPoint(), label, font, img,
-		  color);
-		if (!item.collides(items))
-			items.append(item);
+		TextPointItem *item = new TextPointItem(
+		  ll2xy(point.coordinates).toPoint(), label, font, img, color);
+		if (item->isValid() && !item->collides(textItems))
+			textItems.append(item);
+		else
+			delete item;
 	}
-
-	for (int i = 0; i < items.size(); i++)
-		items.at(i).paint(painter);
 }
 
 static void render(RasterTile &tile)

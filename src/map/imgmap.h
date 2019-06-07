@@ -8,6 +8,7 @@
 #include "common/range.h"
 #include "IMG/img.h"
 
+class TextItem;
 
 class IMGMap : public Map
 {
@@ -41,10 +42,14 @@ private:
 
 	Transform transform(int zoom) const;
 	void updateTransform();
-	void drawPolygons(QPainter *painter, QList<IMG::Poly> &polygons);
-	void drawLines(QPainter *painter, QList<IMG::Poly> &lines,
-	  const QPoint &tile);
-	void drawPoints(QPainter *painter, QList<IMG::Point> &points);
+	void drawPolygons(QPainter *painter, const QList<IMG::Poly> &polygons);
+	void drawLines(QPainter *painter, const QList<IMG::Poly> &lines);
+	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
+
+	void processPolygons(QList<IMG::Poly> &polygons);
+	void processLines(QList<IMG::Poly> &lines, const QPoint &tile,
+	  QList<TextItem*> &textItems);
+	void processPoints(QList<IMG::Point> &points, QList<TextItem*> &textItems);
 
 	QString _fileName;
 	IMG _img;

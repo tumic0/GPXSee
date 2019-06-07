@@ -28,15 +28,7 @@ TextPointItem::TextPointItem(const QPoint &point, const QString *text,
 		_textRect.moveCenter(point);
 
 	_rect = _textRect | iconRect;
-}
-
-bool TextPointItem::collides(const QVector<TextPointItem> &list) const
-{
-	for (int i = 0; i < list.size(); i++)
-		if (list.at(i)._rect.intersects(_rect))
-			return true;
-
-	return false;
+	_shape.addRect(_rect);
 }
 
 void TextPointItem::paint(QPainter *painter) const
