@@ -25,8 +25,6 @@
 #define POI_FONT_SIZE      9
 
 #define LINE_TEXT_MIN_ZOOM   23
-#define POI_MIN_ZOOM         25
-#define POI_TEXT_MIN_ZOOM    26
 
 class RasterTile
 {
@@ -76,6 +74,26 @@ static void convertUnits(QString &str)
 		str = QString::number(qRound(number * 0.3048));
 }
 
+static int minPOIZoom(Style::POIClass cl)
+{
+	switch (cl) {
+		case Style::Food:
+		case Style::Shopping:
+		case Style::Services:
+			return 27;
+		case Style::Accommodation:
+		case Style::Recreation:
+			return 25;
+		case Style::ManmadePlaces:
+		case Style::NaturePlaces:
+		case Style::Transport:
+		case Style::Community:
+		case Style::Elementary:
+			return 23;
+		default:
+			return 0;
+	}
+}
 
 IMGMap::IMGMap(const QString &fileName, QObject *parent)
   : Map(parent), _fileName(fileName), _img(fileName),
@@ -280,17 +298,20 @@ void IMGMap::drawPoints(QPainter *painter, QList<IMG::Point> &points)
 	for (int i = 0; i < points.size(); i++) {
 		IMG::Point &point = points[i];
 		const Style::Point &style = _img.style().point(point.type);
+		int mz = minPOIZoom(Style::poiClass(point.type));
 
-		if (point.poi && _zoom < POI_MIN_ZOOM)
+		if (point.poi && _zoom < mz)
 			continue;
 
-		const QString *label = ((point.poi && _zoom < POI_TEXT_MIN_ZOOM)
-		  || point.label.isEmpty()) ? 0 : &(point.label);
+		const QString *label = point.label.isEmpty() ? 0 : &(point.label);
 		const QImage *img = style.img().isNull() ? 0 : &style.img();
 		const QFont *font = 0;
-		if (point.poi)
-			font = &_poiFont;
-		else {
+		if (point.poi) {
+			if (style.textFontSize() == Style::None)
+				label = 0;
+			else
+				font = &_poiFont;
+		} else {
 			switch (style.textFontSize()) {
 				case Style::None:
 					label = 0;

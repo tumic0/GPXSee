@@ -18,6 +18,20 @@ public:
 		Large = 4
 	};
 
+	enum POIClass {
+		Unknown,
+		Food,
+		Accommodation,
+		Recreation,
+		Shopping,
+		Transport,
+		Services,
+		Community,
+		Elementary,
+		ManmadePlaces,
+		NaturePlaces
+	};
+
 	class Polygon {
 	public:
 		Polygon() : _brush(Qt::NoBrush), _pen(Qt::NoPen) {}
@@ -91,6 +105,7 @@ public:
 
 	static bool isContourLine(quint32 type);
 	static bool isSpot(quint32 type);
+	static POIClass poiClass(quint32 type);
 
 private:
 	struct Section {
@@ -121,6 +136,7 @@ private:
 	  const Section &section, ItemInfo &info);
 	void defaultPolygonStyle();
 	void defaultLineStyle();
+	void defaultPOIStyle();
 
 	QMap<quint32, Line> _lines;
 	QMap<quint32, Polygon> _polygons;

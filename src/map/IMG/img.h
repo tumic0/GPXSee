@@ -40,7 +40,7 @@ public:
 		quint64 id;
 
 		bool operator<(const Point &other) const
-		  {return id < other.id;}
+		  {return id > other.id;}
 	};
 
 
@@ -83,5 +83,10 @@ private:
 	bool _valid;
 	QString _errorString;
 };
+
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const IMG::Point &point);
+QDebug operator<<(QDebug dbg, const IMG::Poly &poly);
+#endif // QT_NO_DEBUG
 
 #endif // IMG_H

@@ -147,6 +147,137 @@ void Style::defaultLineStyle()
 	_lines[TYPE(0x29)].setTextFontSize(Style::None);
 }
 
+void Style::defaultPOIStyle()
+{
+	_points[0x2a00] = Point(QImage(":/restaurant-11.png"));
+	_points[0x2a01] = Point(QImage(":/restaurant-11.png"));
+	_points[0x2a02] = Point(QImage(":/restaurant-noodle-11.png"));
+	_points[0x2a03] = Point(QImage(":/bbq-11.png"));
+	_points[0x2a04] = Point(QImage(":/restaurant-noodle-11.png"));
+	_points[0x2a05] = Point(QImage(":/bakery-11.png"));
+	_points[0x2a06] = Point(QImage(":/restaurant-11.png"));
+	_points[0x2a07] = Point(QImage(":/fast-food-11.png"));
+	_points[0x2a08] = Point(QImage(":/restaurant-pizza-11.png"));
+	_points[0x2a09] = Point(QImage(":/restaurant-11.png"));
+	_points[0x2a0a] = Point(QImage(":/restaurant-pizza-11.png"));
+	_points[0x2a0b] = Point(QImage(":/restaurant-seafood-11.png"));
+	_points[0x2a0c] = Point(QImage(":/restaurant-11.png"));
+	_points[0x2a0d] = Point(QImage(":/bakery-11.png"));
+	_points[0x2a0e] = Point(QImage(":/cafe-11.png"));
+	_points[0x2a0f] = Point(QImage(":/restaurant-11.png"));
+	_points[0x2a10] = Point(QImage(":/restaurant-11.png"));
+	_points[0x2a11] = Point(QImage(":/restaurant-11.png"));
+	_points[0x2a12] = Point(QImage(":/restaurant-11.png"));
+	_points[0x2a13] = Point(QImage(":/restaurant-11.png"));
+
+	_points[0x2b01] = Point(QImage(":/lodging-11.png"));
+	_points[0x2b02] = Point(QImage(":/lodging-11.png"));
+	_points[0x2b03] = Point(QImage(":/campsite-11.png"));
+	_points[0x2b04] = Point(QImage(":/village-11.png"));
+	_points[0x2b06] = Point(QImage(":/shelter-11.png"));
+
+	_points[0x2c01] = Point(QImage(":/amusement-park-11.png"));
+	_points[0x2c02] = Point(QImage(":/museum-11.png"));
+	_points[0x2c03] = Point(QImage(":/library-11.png"));
+	_points[0x2c04] = Point(QImage(":/landmark-11.png"));
+	_points[0x2c05] = Point(QImage(":/school-11.png"));
+	_points[0x2c06] = Point(QImage(":/garden-11.png"));
+	_points[0x2c07] = Point(QImage(":/zoo-11.png"));
+	_points[0x2c08] = Point(QImage(":/soccer-11.png"));
+	_points[0x2c0a] = Point(QImage(":/bar-11.png"));
+	_points[0x2c0b] = Point(QImage(":/place-of-worship-11.png"));
+	_points[0x2c0d] = Point(QImage(":/religious-muslim-11.png"));
+	_points[0x2c0e] = Point(QImage(":/religious-christian-11.png"));
+	_points[0x2c10] = Point(QImage(":/religious-jewish-11.png"));
+	_points[0x2d01] = Point(QImage(":/theatre-11.png"));
+	_points[0x2d02] = Point(QImage(":/bar-11.png"));
+	_points[0x2d03] = Point(QImage(":/cinema-11.png"));
+	_points[0x2d04] = Point(QImage(":/casino-11.png"));
+	_points[0x2d05] = Point(QImage(":/golf-11.png"));
+	_points[0x2d06] = Point(QImage(":/skiing-11.png"));
+	_points[0x2d07] = Point(QImage(":/bowling-alley-11.png"));
+	_points[0x2d09] = Point(QImage(":/swimming-11.png"));
+	_points[0x2d0a] = Point(QImage(":/fitness-centre-11.png"));
+	_points[0x2d0b] = Point(QImage(":/airfield-11.png"));
+
+	_points[0x2e02] = Point(QImage(":/grocery-11.png"));
+	_points[0x2e05] = Point(QImage(":/pharmacy-11.png"));
+	_points[0x2e07] = Point(QImage(":/clothing-store-11.png"));
+	_points[0x2e08] = Point(QImage(":/garden-centre-11.png"));
+	_points[0x2e09] = Point(QImage(":/furniture-11.png"));
+	_points[0x2e0c] = Point(QImage(":/shop-11.png"));
+
+	_points[0x2f01] = Point(QImage(":/fuel-11.png"));
+	_points[0x2f02] = Point(QImage(":/car-rental-11.png"));
+	_points[0x2f03] = Point(QImage(":/car-repair-11.png"));
+	_points[0x2f04] = Point(QImage(":/airport-11.png"));
+	_points[0x2f05] = Point(QImage(":/post-11.png"));
+	_points[0x2f06] = Point(QImage(":/bank-11.png"));
+	_points[0x2f07] = Point(QImage(":/car-11.png"));
+	_points[0x2f08] = Point(QImage(":/bus-11.png"));
+	_points[0x2f09] = Point(QImage(":/harbor-11.png"));
+	_points[0x2f0b] = Point(QImage(":/parking-11.png"));
+	_points[0x2f0b].setTextFontSize(None);
+	_points[0x2f0c] = Point(QImage(":/toilet-11.png"));
+	_points[0x2f0c].setTextFontSize(None);
+	_points[0x2f10] = Point(QImage(":/hairdresser-11.png"));
+	_points[0x2f12].setTextFontSize(None);
+	_points[0x2f13] = Point(QImage(":/hardware-11.png"));
+	_points[0x2f17] = Point(QImage(":/bus-11.png"));
+
+	_points[0x3001] = Point(QImage(":/police-11.png"));
+	_points[0x3002] = Point(QImage(":/hospital-11.png"));
+	_points[0x3003] = Point(QImage(":/town-hall-11.png"));
+	_points[0x3007] = Point(QImage(":/prison-11.png"));
+	_points[0x3008] = Point(QImage(":/fire-station-11.png"));
+
+	_points[0x4000] = Point(QImage(":/golf-11.png"));
+	_points[0x4300] = Point(QImage(":/harbor-11.png"));
+	_points[0x4400] = Point(QImage(":/fuel-11.png"));
+	_points[0x4500] = Point(QImage(":/restaurant-11.png"));
+	_points[0x4600] = Point(QImage(":/bar-11.png"));
+	_points[0x4900] = Point(QImage(":/park-11.png"));
+	_points[0x4a00] = Point(QImage(":/picnic-site-11.png"));
+	_points[0x4c00] = Point(QImage(":/information-11.png"));
+	_points[0x4800] = Point(QImage(":/campsite-11.png"));
+	_points[0x4a00] = Point(QImage(":/picnic-site-11.png"));
+	_points[0x4b00] = Point(QImage(":/hospital-11.png"));
+	_points[0x4c00] = Point(QImage(":/information-11.png"));
+	_points[0x4d00] = Point(QImage(":/parking-11.png"));
+	_points[0x4d00].setTextFontSize(None);
+	_points[0x4e00] = Point(QImage(":/toilet-11.png"));
+	_points[0x4e00].setTextFontSize(None);
+	_points[0x5000] = Point(QImage(":/drinking-water-11.png"));
+	_points[0x5000].setTextFontSize(None);
+	_points[0x5100] = Point(QImage(":/telephone-11.png"));
+	_points[0x5200] = Point(QImage(":/viewpoint-11.png"));
+	_points[0x5300] = Point(QImage(":/skiing-11.png"));
+	_points[0x5400] = Point(QImage(":/swimming-11.png"));
+	_points[0x5500] = Point(QImage(":/dam-11.png"));
+	_points[0x5700] = Point(QImage(":/danger-11.png"));
+	_points[0x5800] = Point(QImage(":/roadblock-11.png"));
+	_points[0x5900] = Point(QImage(":/airport-11.png"));
+	_points[0x5901] = Point(QImage(":/airport-11.png"));
+	_points[0x5904] = Point(QImage(":/heliport-11.png"));
+
+	_points[0x6401] = Point(QImage(":/bridge-11.png"));
+	_points[0x6402] = Point(QImage(":/building-alt1-11.png"));
+	_points[0x6403] = Point(QImage(":/cemetery-11.png"));
+	_points[0x6404] = Point(QImage(":/religious-christian-11.png"));
+	_points[0x6407] = Point(QImage(":/dam-11.png"));
+	_points[0x6408] = Point(QImage(":/hospital-11.png"));
+	_points[0x6409] = Point(QImage(":/dam-11.png"));
+	_points[0x640d] = Point(QImage(":/communications-tower-11.png"));
+	_points[0x640e] = Point(QImage(":/park-11.png"));
+	_points[0x640f] = Point(QImage(":/post-11.png"));
+	_points[0x6411] = Point(QImage(":/communications-tower-11.png"));
+
+	_points[0x6508] = Point(QImage(":/waterfall-11.png"));
+	_points[0x6513] = Point(QImage(":/wetland-11.png"));
+	_points[0x6604] = Point(QImage(":/beach-11.png"));
+	_points[0x6616] = Point(QImage(":/mountain-11.png"));
+}
+
 static bool readBitmap(SubFile *file, SubFile::Handle &hdl, QImage &img,
   int bpp)
 {
@@ -790,6 +921,7 @@ Style::Style(SubFile *typ)
 {
 	defaultLineStyle();
 	defaultPolygonStyle();
+	defaultPOIStyle();
 
 	if (typ && typ->isValid())
 		parseTYPFile(typ);
@@ -828,6 +960,32 @@ bool Style::isContourLine(quint32 type)
 bool Style::isSpot(quint32 type)
 {
 	return (type == TYPE(0x62) || type == TYPE(0x63));
+}
+
+Style::POIClass Style::poiClass(quint32 type)
+{
+	if ((type >= 0x2a00 && type < 0x2b00) || type == 0x2c0a || type == 0x2d02)
+		return Food;
+	else if (type >= 0x2b00 && type < 0x2c00)
+		return Accommodation;
+	else if (type >= 0x2c00 && type < 0x2e00)
+		return Recreation;
+	else if (type >= 0x2e00 && type < 0x2f00)
+		return Shopping;
+	else if (type >= 0x2f00 && type < 0x2f0f)
+		return Transport;
+	else if (type >= 0x2f0f && type < 0x3000)
+		return Services;
+	else if (type >= 0x3000 && type < 0x3100)
+		return Community;
+	else if (type >= 0x4000 && type < 0x6000)
+		return Elementary;
+	else if (type >= 0x6400 && type < 0x6500)
+		return ManmadePlaces;
+	else if (type >= 0x6500 && type < 0x6700)
+		return NaturePlaces;
+	else
+		return Unknown;
 }
 
 #ifndef QT_NO_DEBUG

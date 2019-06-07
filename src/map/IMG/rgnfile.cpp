@@ -338,7 +338,8 @@ bool RGNFile::pointObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
 		point.poi = labelPtr & 0x400000;
 		if (lbl && (labelPtr & 0x3FFFFF)) {
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi);
-			point.id = ((quint64)lbl->offset())<<24 | (labelPtr & 0x3FFFFF);
+			point.id = ((quint64)point.type)<<40 | ((quint64)lbl->offset())<<24
+			  | (labelPtr & 0x3FFFFF);
 		}
 
 		points->append(point);
@@ -383,7 +384,8 @@ bool RGNFile::extPointObjects(const RectC &rect, Handle &hdl,
 			point.poi = labelPtr & 0x400000;
 			if (lbl && (labelPtr & 0x3FFFFF)) {
 				point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi);
-				point.id = ((quint64)lbl->offset())<<24 | (labelPtr & 0x3FFFFF);
+				point.id = ((quint64)point.type)<<40
+				  | ((quint64)lbl->offset())<<24 | (labelPtr & 0x3FFFFF);
 			}
 		}
 

@@ -255,3 +255,18 @@ bool IMG::readBlock(int blockNum, QByteArray &data)
 
 	return true;
 }
+
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const IMG::Point &point)
+{
+	dbg.nospace() << "Point(" << hex << point.type << ", " << point.label
+	  << ", " << point.poi << ")";
+	return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const IMG::Poly &poly)
+{
+	dbg.nospace() << "Poly(" << hex << poly.type << ", " << poly.label << ")";
+	return dbg.space();
+}
+#endif // QT_NO_DEBUG
