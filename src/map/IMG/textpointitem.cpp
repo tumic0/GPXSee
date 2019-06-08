@@ -18,6 +18,7 @@ TextPointItem::TextPointItem(const QPoint &point, const QString *text,
 		QFontMetrics fm(*font);
 		int limit = font->pixelSize() * MAX_TEXT_WIDTH;
 		_textRect = fm.boundingRect(QRect(0, 0, limit, 0), FLAGS, *text);
+		_textRect.adjust(0, 0, 1, 1);
 	}
 	if (img) {
 		iconRect = QRect(QPoint(point.x() - img->width()/2, point.y()
