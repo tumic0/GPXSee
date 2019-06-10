@@ -85,6 +85,8 @@ public slots:
 	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
 	void setProjection(int id);
 
+	void fitContentToSize();
+
 private slots:
 	void updatePOI();
 	void reloadMap();
@@ -111,7 +113,6 @@ private:
 	void wheelEvent(QWheelEvent *event);
 	void keyPressEvent(QKeyEvent *event);
 	void drawBackground(QPainter *painter, const QRectF &rect);
-	void resizeEvent(QResizeEvent *event);
 	void paintEvent(QPaintEvent *event);
 	void scrollContentsBy(int dx, int dy);
 	void mouseMoveEvent(QMouseEvent *event);

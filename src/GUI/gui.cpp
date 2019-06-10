@@ -2216,6 +2216,8 @@ void GUI::show()
 	connect(w, SIGNAL(screenChanged(QScreen*)), this,
 	  SLOT(screenChanged(QScreen*)));
 #endif // ENABLE_HIDPI
+
+	_mapView->fitContentToSize();
 }
 
 void GUI::screenChanged(QScreen *screen)

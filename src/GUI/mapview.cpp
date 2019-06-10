@@ -39,6 +39,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setRenderHint(QPainter::Antialiasing, true);
+	setResizeAnchor(QGraphicsView::AnchorViewCenter);
 	setAcceptDrops(false);
 
 	_mapScale = new ScaleItem();
@@ -901,17 +902,6 @@ void MapView::drawBackground(QPainter *painter, const QRectF &rect)
 	}
 }
 
-void MapView::resizeEvent(QResizeEvent *event)
-{
-	QGraphicsView::resizeEvent(event);
-
-	int zoom = _map->zoom();
-	if (fitMapZoom() != zoom)
-		rescale();
-
-	centerOn(contentCenter());
-}
-
 void MapView::paintEvent(QPaintEvent *event)
 {
 	QPointF scaleScenePos = mapToScene(rect().bottomRight() + QPoint(
@@ -1041,4 +1031,13 @@ void MapView::setProjection(int id)
 	_map->setProjection(_projection);
 	rescale();
 	centerOn(_map->ll2xy(center));
+}
+
+void MapView::fitContentToSize()
+{
+	int zoom = _map->zoom();
+	if (fitMapZoom() != zoom)
+		rescale();
+
+	centerOn(contentCenter());
 }
