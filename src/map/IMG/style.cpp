@@ -978,7 +978,7 @@ Style::POIClass Style::poiClass(quint32 type)
 		return Recreation;
 	else if (type >= 0x2e00 && type < 0x2f00)
 		return Shopping;
-	else if (type >= 0x2f00 && type < 0x2f0f)
+	else if ((type >= 0x2f00 && type < 0x2f0f) || type == 0x2f17)
 		return Transport;
 	else if (type >= 0x2f0f && type < 0x3000)
 		return Services;
