@@ -885,8 +885,7 @@ void GUI::closePOIFiles()
 {
 	_poiFilesMenu->clear();
 
-	for (int i = 0; i < _poiFilesActions.count(); i++)
-		delete _poiFilesActions[i];
+	qDeleteAll(_poiFilesActions);
 	_poiFilesActions.clear();
 
 	_poi->clear();

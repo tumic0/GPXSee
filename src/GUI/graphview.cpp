@@ -75,8 +75,7 @@ GraphView::~GraphView()
 	delete _grid;
 	delete _message;
 
-	for (int i = 0; i < _graphs.count(); i++)
-		delete _graphs[i];
+	qDeleteAll(_graphs);
 }
 
 void GraphView::createXLabel()
@@ -380,9 +379,7 @@ void GraphView::clear()
 	_slider->clear();
 	_info->clear();
 
-	for (int i = 0; i < _graphs.count(); i++)
-		delete _graphs[i];
-
+	qDeleteAll(_graphs);
 	_graphs.clear();
 	_visible.clear();
 	_palette.reset();

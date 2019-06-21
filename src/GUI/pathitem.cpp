@@ -317,8 +317,7 @@ unsigned PathItem::tickSize() const
 
 void PathItem::updateTicks()
 {
-	for (int i = 0; i < _ticks.size(); i++)
-		delete _ticks[i];
+	qDeleteAll(_ticks);
 	_ticks.clear();
 
 	if (!_showTicks)
