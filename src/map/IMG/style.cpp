@@ -380,6 +380,9 @@ bool Style::itemInfo(SubFile *file, SubFile::Handle &hdl,
 bool Style::parsePolygons(SubFile *file, SubFile::Handle &hdl,
   const Section &section)
 {
+	if (!section.arrayItemSize)
+		return section.arraySize ? false : true;
+
 	for (quint32 i = 0; i < section.arraySize / section.arrayItemSize; i++) {
 		if (!file->seek(hdl, section.arrayOffset + i * section.arrayItemSize))
 			return false;
@@ -493,6 +496,9 @@ bool Style::parsePolygons(SubFile *file, SubFile::Handle &hdl,
 bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
   const Section &section)
 {
+	if (!section.arrayItemSize)
+		return section.arraySize ? false : true;
+
 	for (quint32 i = 0; i < section.arraySize / section.arrayItemSize; i++) {
 		if (!file->seek(hdl, section.arrayOffset + i * section.arrayItemSize))
 			return false;
@@ -774,6 +780,9 @@ static bool readColorTable(SubFile *file, SubFile::Handle &hdl, QImage& img,
 bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
   const Section &section)
 {
+	if (!section.arrayItemSize)
+		return section.arraySize ? false : true;
+
 	for (quint32 i = 0; i < section.arraySize / section.arrayItemSize; i++) {
 		if (!file->seek(hdl, section.arrayOffset + i * section.arrayItemSize))
 			return false;
@@ -848,6 +857,9 @@ bool Style::parseDrawOrder(SubFile *file, SubFile::Handle &hdl,
   const Section &order)
 {
 	QList<quint32> drawOrder;
+
+	if (!order.arrayItemSize)
+		return order.arraySize ? false : true;
 
 	if (!file->seek(hdl, order.arrayOffset))
 		return false;
