@@ -99,8 +99,11 @@ Track::Track(const TrackData &data) : _data(data), _pause(0)
 			if (sd.at(j).timestamp() >= sd.at(j-1).timestamp())
 				dt = sd.at(j-1).timestamp().msecsTo(
 				  sd.at(j).timestamp()) / 1000.0;
-			else
-				dt = NAN;
+			else {
+				qWarning("%s: %s: time skew detected", qPrintable(_data.name()),
+				  qPrintable(sd.at(j).timestamp().toString(Qt::ISODate)));
+				dt = 0;
+			}
 			seg.time.append(seg.time.last() + dt);
 
 			if (dt < 1e-3) {
