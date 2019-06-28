@@ -73,7 +73,6 @@ private:
 	QList<IMG::Point> _points;
 };
 
-
 static void convertUnits(QString &str)
 {
 	bool ok;
@@ -103,6 +102,22 @@ static int minPOIZoom(Style::POIClass cl)
 	}
 }
 
+/* The fonts must be initialized on first usage (after the QGuiApplication
+   instance is created) */
+#define FONT(name, size) \
+static const QFont *name() \
+{ \
+	static QFont f; \
+	f.setPixelSize(size); \
+	return &f; \
+}
+
+FONT(largeFont, LARGE_FONT_SIZE)
+FONT(normalFont, NORMAL_FONT_SIZE)
+FONT(smallFont, SMALL_FONT_SIZE)
+FONT(poiFont, POI_FONT_SIZE)
+
+
 IMGMap::IMGMap(const QString &fileName, QObject *parent)
   : Map(parent), _fileName(fileName), _img(fileName),
   _projection(PCS::pcs(3857)), _valid(false)
@@ -116,11 +131,6 @@ IMGMap::IMGMap(const QString &fileName, QObject *parent)
 	_zoom = _zooms.min();
 
 	updateTransform();
-
-	_largeFont.setPixelSize(LARGE_FONT_SIZE);
-	_normalFont.setPixelSize(NORMAL_FONT_SIZE);
-	_smallFont.setPixelSize(SMALL_FONT_SIZE);
-	_poiFont.setPixelSize(POI_FONT_SIZE);
 
 	_valid = true;
 }
@@ -290,13 +300,13 @@ void IMGMap::processLines(QList<IMG::Poly> &lines, const QPoint &tile,
 		const QFont *font;
 		switch (style.textFontSize()) {
 			case Style::Large:
-				font = &_largeFont;
+				font = largeFont();
 				break;
 			case Style::Small:
-				font = &_smallFont;
+				font = smallFont();
 				break;
 			default:
-				font = &_normalFont;
+				font = normalFont();
 		}
 		const QColor *color = style.textColor().isValid()
 		  ? &style.textColor() : 0;
@@ -330,20 +340,20 @@ void IMGMap::processPoints(QList<IMG::Point> &points,
 			if (style.textFontSize() == Style::None)
 				label = 0;
 			else
-				font = &_poiFont;
+				font = poiFont();
 		} else {
 			switch (style.textFontSize()) {
 				case Style::None:
 					label = 0;
 					break;
 				case Style::Normal:
-					font = &_normalFont;
+					font = normalFont();
 					break;
 				case Style::Small:
-					font = &_smallFont;
+					font = smallFont();
 					break;
 				default:
-					font = &_largeFont;
+					font = largeFont();
 			}
 		}
 		const QColor *color = style.textColor().isValid()

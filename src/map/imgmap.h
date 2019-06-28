@@ -57,9 +57,6 @@ private:
 	Range _zooms;
 	Projection _projection;
 	Transform _transform;
-
-	QFont _largeFont, _normalFont, _smallFont, _poiFont;
-
 	bool _valid;
 	QString _errorString;
 };
