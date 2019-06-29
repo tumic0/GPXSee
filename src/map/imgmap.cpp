@@ -102,13 +102,19 @@ static int minPOIZoom(Style::POIClass cl)
 	}
 }
 
+static QFont font(int pixelSize)
+{
+	QFont f;
+	f.setPixelSize(pixelSize);
+	return f;
+}
+
 /* The fonts must be initialized on first usage (after the QGuiApplication
    instance is created) */
 #define FONT(name, size) \
 static const QFont *name() \
 { \
-	static QFont f; \
-	f.setPixelSize(size); \
+	static QFont f = font(size); \
 	return &f; \
 }
 
