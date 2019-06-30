@@ -139,9 +139,12 @@ Label LBLFile::label8b(Handle &hdl, quint32 offset) const
 		if (!c || c == 0x1d)
 			break;
 
-		if ((c >= 0x1e && c <= 0x1f))
-			bap->append(' ');
-		else if (c <= 0x07) {
+		if ((c >= 0x1e && c <= 0x1f)) {
+			if (bap == &shieldLabel)
+				bap = &label;
+			else
+				bap->append(' ');
+		} else if (c <= 0x07) {
 			shieldType = (Label::Shield::Type)c;
 			bap = &shieldLabel;
 		} else if (bap == &shieldLabel && QChar(c).isSpace()) {
