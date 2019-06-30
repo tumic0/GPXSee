@@ -7,7 +7,7 @@ static quint8 NORMAL_CHARS[] = {
 	' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
 	'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
 	'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-	'X', 'Y', 'Z',  '~', '~', '~', '~', '~',
+	'X', 'Y', 'Z',  '~', '~', '~', ' ', ' ',
 	'0', '1', '2', '3', '4', '5', '6', '7',
 	'8', '9', '~', '~', '~', '~', '~', '~'
 };
@@ -48,6 +48,7 @@ static QString capitalize(const QString &str)
 	return ret;
 }
 
+
 bool LBLFile::init()
 {
 	Handle hdl;
@@ -73,45 +74,48 @@ bool LBLFile::init()
 	return true;
 }
 
-QString LBLFile::label6b(Handle &hdl, quint32 offset) const
+Label LBLFile::label6b(Handle &hdl, quint32 offset) const
 {
-	QByteArray result;
+	Label::Shield::Type shieldType = Label::Shield::None;
+	QByteArray label, shieldLabel;
+	QByteArray *bap = &label;
 	Charset curCharSet = Normal;
 	quint8 b1, b2, b3;
 
 	if (!seek(hdl, offset))
-		return QString();
+		return Label();
 
 	while (true) {
 		if (!(readByte(hdl, b1) && readByte(hdl, b2) && readByte(hdl, b3)))
-			return QString();
+			return Label();
 
 		int c[]= {b1>>2, (b1&0x3)<<4|b2>>4, (b2&0xF)<<2|b3>>6, b3&0x3F};
 
 		for (int cpt = 0; cpt < 4; cpt++) {
-			if (c[cpt] > 0x2F)
-				return QString::fromLatin1(result);
+			if (c[cpt] > 0x2f || (curCharSet == Normal && c[cpt] == 0x1d))
+				return Label(capitalize(QString::fromLatin1(label)),
+				  Label::Shield(shieldType, shieldLabel));
 			switch (curCharSet) {
 				case Normal:
 					if (c[cpt] == 0x1c)
 						curCharSet = Symbol;
 					else if (c[cpt] == 0x1b)
 						curCharSet = Special;
-					else if(c[cpt] == 0x1d)
-						result.append('|');
-					else if (c[cpt] == 0x1f)
-						result.append(' ');
-					else if (c[cpt] == 0x1e)
-						result.append(' ');
+					else if (c[cpt] >= 0x2a && c[cpt] <= 0x2f) {
+						shieldType = (Label::Shield::Type)(c[cpt] - 0x29);
+						bap = &shieldLabel;
+					} else if (bap == &shieldLabel
+					  && NORMAL_CHARS[c[cpt]] == ' ')
+						bap = &label;
 					else
-						result.append(NORMAL_CHARS[c[cpt]]);
+						bap->append(NORMAL_CHARS[c[cpt]]);
 					break;
 				case Symbol:
-					result.append(SYMBOL_CHARS[c[cpt]]);
+					bap->append(SYMBOL_CHARS[c[cpt]]);
 					curCharSet = Normal;
 					break;
 				case Special:
-					result.append(SPECIAL_CHARS[c[cpt]]);
+					bap->append(SPECIAL_CHARS[c[cpt]]);
 					curCharSet = Normal;
 					break;
 			}
@@ -119,30 +123,39 @@ QString LBLFile::label6b(Handle &hdl, quint32 offset) const
 	}
 }
 
-QString LBLFile::label8b(Handle &hdl, quint32 offset) const
+Label LBLFile::label8b(Handle &hdl, quint32 offset) const
 {
-	QByteArray result;
+	Label::Shield::Type shieldType = Label::Shield::None;
+	QByteArray label, shieldLabel;
+	QByteArray *bap = &label;
 	quint8 c;
 
 	if (!seek(hdl, offset))
-		return QString();
+		return Label();
 
 	while (true) {
 		if (!readByte(hdl, c))
-			return QString();
-		if (!c)
+			return Label();
+		if (!c || c == 0x1d)
 			break;
 
-		if (c >= 0x1B && c <= 0x1F)
-			result.append(' ');
-		else if (c > 0x07)
-			result.append(c);
+		if ((c >= 0x1e && c <= 0x1f))
+			bap->append(' ');
+		else if (c <= 0x07) {
+			shieldType = (Label::Shield::Type)c;
+			bap = &shieldLabel;
+		} else if (bap == &shieldLabel && QChar(c).isSpace()) {
+			bap = &label;
+		} else
+			bap->append(c);
 	}
 
-	return _codec ? _codec->toUnicode(result) : QString::fromLatin1(result);
+	return Label(capitalize(_codec ? _codec->toUnicode(label)
+	  : QString::fromLatin1(label)), Label::Shield(shieldType, _codec
+	  ? _codec->toUnicode(shieldLabel) : QString::fromLatin1(shieldLabel)));
 }
 
-QString LBLFile::label(Handle &hdl, quint32 offset, bool poi)
+Label LBLFile::label(Handle &hdl, quint32 offset, bool poi)
 {
 	if (!_init) {
 		if (!(_init = init()))
@@ -163,11 +176,11 @@ QString LBLFile::label(Handle &hdl, quint32 offset, bool poi)
 
 	switch (_encoding) {
 		case 6:
-			return capitalize(label6b(hdl, labelOffset));
+			return label6b(hdl, labelOffset);
 		case 9:
 		case 10:
-			return capitalize(label8b(hdl, labelOffset));
+			return label8b(hdl, labelOffset);
 		default:
-			return QString();
+			return Label();
 	}
 }

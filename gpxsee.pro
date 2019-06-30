@@ -180,7 +180,8 @@ HEADERS += src/common/config.h \
     src/map/IMG/netfile.h \
     src/GUI/limitedcombobox.h \
     src/GUI/pathtickitem.h \
-    src/map/IMG/textitem.h
+    src/map/IMG/textitem.h \
+    src/map/IMG/label.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \

@@ -16,7 +16,7 @@ class TextPointItem : public TextItem
 public:
 	TextPointItem() : _text(0), _font(0), _img(0) {}
 	TextPointItem(const QPoint &point, const QString *text, const QFont *font,
-	  const QImage *img, const QColor *color);
+	  const QImage *img, const QColor *color, const QColor *bgColor = 0);
 
 	bool isValid() const {return !_rect.isEmpty();}
 
@@ -24,11 +24,13 @@ public:
 	QPainterPath shape() const {return _shape;}
 	void paint(QPainter *painter) const;
 
+	void setPos(const QPoint &point);
+
 private:
 	const QString *_text;
 	const QFont *_font;
 	const QImage *_img;
-	const QColor *_color;
+	const QColor *_color, *_bgColor;
 	QRect _rect, _textRect;
 	QPainterPath _shape;
 };

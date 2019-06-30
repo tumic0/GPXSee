@@ -977,7 +977,12 @@ bool Style::isSpot(quint32 type)
 
 bool Style::isSummit(quint32 type)
 {
-	return  (type == 0x6616);
+	return (type == 0x6616);
+}
+
+bool Style::isMajorRoad(quint32 type)
+{
+	return (type <= TYPE(0x04));
 }
 
 Style::POIClass Style::poiClass(quint32 type)

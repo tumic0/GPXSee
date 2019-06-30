@@ -7,29 +7,48 @@
 
 #define FLAGS (Qt::AlignCenter | Qt::TextWordWrap | Qt::TextDontClip)
 #define MAX_TEXT_WIDTH 8
+#define MIN_BOX_WIDTH 2
+
+
+static void expand(QRect &rect, int width)
+{
+	rect.adjust(-(width/2 - rect.width()/2), 0, width/2 - rect.width()/2, 0);
+}
 
 TextPointItem::TextPointItem(const QPoint &point, const QString *text,
-  const QFont *font, const QImage *img, const QColor *color)
-  : _text(text), _font(font), _img(img), _color(color)
+  const QFont *font, const QImage *img, const QColor *color,
+  const QColor *bgColor) : _text(text), _font(font), _img(img), _color(color),
+  _bgColor(bgColor)
 {
-	QRect iconRect;
-
 	if (text) {
 		QFontMetrics fm(*font);
 		int limit = font->pixelSize() * MAX_TEXT_WIDTH;
 		_textRect = fm.boundingRect(QRect(0, 0, limit, 0), FLAGS, *text);
 		_textRect.adjust(0, 0, 1, 1);
 	}
-	if (img) {
-		iconRect = QRect(QPoint(point.x() - img->width()/2, point.y()
-		  - img->height()/2), img->size());
-		_textRect.moveTopLeft(QPoint(point.x() + img->width(), point.y()
+
+	if (_bgColor && _textRect.width() < font->pixelSize() * MIN_BOX_WIDTH)
+		expand(_textRect, font->pixelSize() * MIN_BOX_WIDTH);
+
+	setPos(point);
+}
+
+void TextPointItem::setPos(const QPoint &point)
+{
+	QPainterPath shape;
+	QRect iconRect;
+
+	if (_img) {
+		iconRect = QRect(QPoint(point.x() - _img->width()/2, point.y()
+		  - _img->height()/2), _img->size());
+		_textRect.moveTopLeft(QPoint(point.x() + _img->width(), point.y()
 		  - _textRect.height()/2));
 	} else
 		_textRect.moveCenter(point);
 
 	_rect = _textRect | iconRect;
-	_shape.addRect(_rect);
+	shape.addRect(_rect);
+	_shape = shape;
 }
 
 void TextPointItem::paint(QPainter *painter) const
@@ -54,6 +73,13 @@ void TextPointItem::paint(QPainter *painter) const
 		painter->drawImage(_textRect.x() - 1, _textRect.y(), img);
 		painter->drawImage(_textRect.x() + 1, _textRect.y(), img);
 
+
+		if (_bgColor) {
+			painter->setPen(*_color);
+			painter->setBrush(*_bgColor);
+			painter->drawRect(_textRect);
+			painter->setBrush(Qt::NoBrush);
+		}
 		if (_color) {
 			painter->setFont(*_font);
 			painter->setPen(*_color);

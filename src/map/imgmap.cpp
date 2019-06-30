@@ -73,12 +73,18 @@ private:
 	QList<IMG::Point> _points;
 };
 
-static void convertUnits(QString &str)
+
+static QColor shieldColor(Qt::white);
+static QColor shieldBgColor1("#dd3e3e");
+static QColor shieldBgColor2("#379947");
+static QColor shieldBgColor3("#4a7fc1");
+
+
+static QString convertUnits(const QString &str)
 {
 	bool ok;
 	int number = str.toInt(&ok);
-	if (ok)
-		str = QString::number(qRound(number * 0.3048));
+	return ok ? QString::number(qRound(number * 0.3048)) : str;
 }
 
 static int minPOIZoom(Style::POIClass cl)
@@ -122,6 +128,40 @@ FONT(largeFont, LARGE_FONT_SIZE)
 FONT(normalFont, NORMAL_FONT_SIZE)
 FONT(smallFont, SMALL_FONT_SIZE)
 FONT(poiFont, POI_FONT_SIZE)
+
+static const QColor *shieldBgColor(Label::Shield::Type type)
+{
+	switch (type) {
+		case Label::Shield::USInterstate:
+		case Label::Shield::Hbox:
+			return &shieldBgColor1;
+		case Label::Shield::USShield:
+		case Label::Shield::Box:
+			return &shieldBgColor2;
+		case Label::Shield::USRound:
+		case Label::Shield::Oval:
+			return &shieldBgColor3;
+		default:
+			return 0;
+	}
+}
+
+static int minShieldZoom(Label::Shield::Type type)
+{
+	switch (type) {
+		case Label::Shield::USInterstate:
+		case Label::Shield::Hbox:
+			return 18;
+		case Label::Shield::USShield:
+		case Label::Shield::Box:
+			return 19;
+		case Label::Shield::USRound:
+		case Label::Shield::Oval:
+			return 20;
+		default:
+			return INT_MAX;
+	}
+}
 
 
 IMGMap::IMGMap(const QString &fileName, QObject *parent)
@@ -278,6 +318,8 @@ void IMGMap::processPolygons(QList<IMG::Poly> &polygons)
 void IMGMap::processLines(QList<IMG::Poly> &lines, const QPoint &tile,
   QList<TextItem*> &textItems)
 {
+	QRect tileRect(tile, QSize(TILE_SIZE, TILE_SIZE));
+
 	qStableSort(lines);
 
 	for (int i = 0; i < lines.size(); i++) {
@@ -288,41 +330,87 @@ void IMGMap::processLines(QList<IMG::Poly> &lines, const QPoint &tile,
 		}
 	}
 
-	if (_zoom < LINE_TEXT_MIN_ZOOM)
-		return;
+	if (_zoom >= LINE_TEXT_MIN_ZOOM) {
+		for (int i = 0; i < lines.size(); i++) {
+			IMG::Poly &poly = lines[i];
+			const Style::Line &style = _img.style().line(poly.type);
 
-	for (int i = 0; i < lines.size(); i++) {
-		IMG::Poly &poly = lines[i];
-		const Style::Line &style = _img.style().line(poly.type);
+			if (style.img().isNull() && style.foreground() == Qt::NoPen)
+				continue;
+			if (poly.label.text().isEmpty()
+			  || style.textFontSize() == Style::None)
+				continue;
 
-		if (style.img().isNull() && style.foreground() == Qt::NoPen)
-			continue;
-		if (poly.label.isEmpty() || style.textFontSize() == Style::None)
-			continue;
+			if (Style::isContourLine(poly.type))
+				poly.label.setText(convertUnits(poly.label.text()));
 
-		if (Style::isContourLine(poly.type))
-			convertUnits(poly.label);
+			const QFont *font;
+			switch (style.textFontSize()) {
+				case Style::Large:
+					font = largeFont();
+					break;
+				case Style::Small:
+					font = smallFont();
+					break;
+				default:
+					font = normalFont();
+			}
+			const QColor *color = style.textColor().isValid()
+			  ? &style.textColor() : 0;
 
-		const QFont *font;
-		switch (style.textFontSize()) {
-			case Style::Large:
-				font = largeFont();
-				break;
-			case Style::Small:
-				font = smallFont();
-				break;
-			default:
-				font = normalFont();
+			TextPathItem *item = new TextPathItem(poly.points,
+			  &poly.label.text(), tileRect, font, color);
+			if (item->isValid() && !item->collides(textItems))
+				textItems.append(item);
+			else
+				delete item;
 		}
-		const QColor *color = style.textColor().isValid()
-		  ? &style.textColor() : 0;
+	}
 
-		TextPathItem *item = new TextPathItem(poly.points, &poly.label,
-		  QRect(tile, QSize(TILE_SIZE, TILE_SIZE)), font, color);
-		if (item->isValid() && !item->collides(textItems))
-			textItems.append(item);
-		else
-			delete item;
+
+	for (int type = 1; type < 7; type++) {
+		if (minShieldZoom((Label::Shield::Type)type) > _zoom)
+			continue;
+
+		QSet<Label::Shield> shields;
+
+		for (int i = 0; i < lines.size(); i++) {
+			const IMG::Poly &poly = lines.at(i);
+			const Label::Shield &shield = poly.label.shield();
+			if (shield.type() != type || !Style::isMajorRoad(poly.type))
+				continue;
+
+			if (poly.label.shield().isValid() && !shields.contains(shield)) {
+				bool valid = false;
+				int idx = poly.points.size()/2, inc = 0, sign = 1;
+
+				TextPointItem *item = new TextPointItem(
+				  poly.points.at(idx).toPoint(), &shield.text(), normalFont(),
+				  0, &shieldColor, shieldBgColor(shield.type()));
+
+				while (1) {
+					if (!item->collides(textItems)
+					  && tileRect.contains(item->boundingRect().toRect())) {
+						valid = true;
+						break;
+					}
+					inc++;
+					sign = (sign < 0) ? 1 : -1;
+					idx += inc * sign;
+
+					if (!(idx >= 0 && idx < poly.points.size()))
+						break;
+
+					item->setPos(poly.points.at(idx).toPoint());
+				}
+
+				if (valid) {
+					textItems.append(item);
+					shields.insert(shield);
+				} else
+					delete item;
+			}
+		}
 	}
 }
 
@@ -339,7 +427,8 @@ void IMGMap::processPoints(QList<IMG::Point> &points,
 		if (point.poi && _zoom < minPOIZoom(Style::poiClass(point.type)))
 			continue;
 
-		const QString *label = point.label.isEmpty() ? 0 : &(point.label);
+		const QString *label = point.label.text().isEmpty()
+		  ? 0 : &(point.label.text());
 		const QImage *img = style.img().isNull() ? 0 : &style.img();
 		const QFont *font = 0;
 		if (point.poi) {
@@ -369,10 +458,10 @@ void IMGMap::processPoints(QList<IMG::Point> &points,
 			continue;
 
 		if (Style::isSpot(point.type))
-			convertUnits(point.label);
-		if (Style::isSummit(point.type) && !point.label.isEmpty()) {
-			QStringList list = point.label.split(" ");
-			convertUnits(list.last());
+			point.label.setText(convertUnits(point.label.text()));
+		if (Style::isSummit(point.type) && !point.label.text().isEmpty()) {
+			QStringList list = point.label.text().split(" ");
+			list.last() = convertUnits(list.last());
 			point.label = list.join(" ");
 		}
 

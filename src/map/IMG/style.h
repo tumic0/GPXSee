@@ -106,6 +106,7 @@ public:
 	static bool isContourLine(quint32 type);
 	static bool isSpot(quint32 type);
 	static bool isSummit(quint32 type);
+	static bool isMajorRoad(quint32 type);
 	static POIClass poiClass(quint32 type);
 
 private:

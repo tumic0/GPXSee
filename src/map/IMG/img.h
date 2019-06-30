@@ -10,6 +10,7 @@
 #include "common/rectc.h"
 #include "common/range.h"
 #include "style.h"
+#include "label.h"
 
 class VectorTile;
 class SubFile;
@@ -23,7 +24,7 @@ public:
 		   ll2xy() the points in the IMG class as this can not be done in
 		   parallel. */
 		QVector<QPointF> points;
-		QString label;
+		Label label;
 		quint32 type;
 
 		bool operator<(const Poly &other) const
@@ -34,7 +35,7 @@ public:
 		Point() : id(0) {}
 
 		Coordinates coordinates;
-		QString label;
+		Label label;
 		quint32 type;
 		bool poi;
 		quint64 id;
