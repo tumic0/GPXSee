@@ -1055,7 +1055,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="168"/>
         <source>Palette shift:</source>
-        <translation>Décalage de palette :</translation>
+        <translation>Incrément de palette :</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="112"/>
