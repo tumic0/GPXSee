@@ -141,6 +141,10 @@ void PathItem::setColor(const QColor &color)
 		return;
 
 	_pen.setColor(color);
+
+	for (int i = 0; i < _ticks.size(); i++)
+		_ticks[i]->setColor(color);
+
 	update();
 }
 
