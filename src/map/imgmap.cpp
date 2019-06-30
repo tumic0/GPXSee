@@ -385,7 +385,7 @@ void IMGMap::processLines(QList<IMG::Poly> &lines, const QPoint &tile,
 				int idx = poly.points.size()/2, inc = 0, sign = 1;
 
 				TextPointItem *item = new TextPointItem(
-				  poly.points.at(idx).toPoint(), &shield.text(), normalFont(),
+				  poly.points.at(idx).toPoint(), &shield.text(), smallFont(),
 				  0, &shieldColor, shieldBgColor(shield.type()));
 
 				while (1) {
