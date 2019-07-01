@@ -205,7 +205,8 @@ bool RGNFile::polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
 		if (lbl && (labelPtr & 0x3FFFFF)) {
 			if (labelPtr & 0x800000) {
 				quint32 lblOff;
-				if (net && net->lblOffset(netHdl, labelPtr & 0x3FFFFF, lblOff))
+				if (net && net->lblOffset(netHdl, labelPtr & 0x3FFFFF, lblOff)
+				  && lblOff)
 					poly.label = lbl->label(lblHdl, lblOff);
 			} else
 				poly.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
@@ -289,7 +290,7 @@ bool RGNFile::extPolyObjects(const RectC &rect, Handle &hdl,
 		if (subtype & 0x20) {
 			if (!readUInt24(hdl, labelPtr))
 				return false;
-			if (lbl)
+			if (lbl && (labelPtr & 0x3FFFFF))
 				poly.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
 		}
 

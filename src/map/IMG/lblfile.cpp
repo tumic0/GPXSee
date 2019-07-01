@@ -168,7 +168,8 @@ Label LBLFile::label(Handle &hdl, quint32 offset, bool poi)
 	quint32 labelOffset;
 	if (poi) {
 		quint32 poiOffset;
-		if (!(seek(hdl, _poiOffset + offset) && readUInt24(hdl, poiOffset)))
+		if (!(seek(hdl, _poiOffset + offset) && readUInt24(hdl, poiOffset)
+		  && (poiOffset & 0x3FFFFF)))
 			return QString();
 		labelOffset = _offset + (poiOffset & 0x3FFFFF) * _multiplier;
 	} else
