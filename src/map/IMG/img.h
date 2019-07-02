@@ -41,7 +41,7 @@ public:
 		quint64 id;
 
 		bool operator<(const Point &other) const
-		  {return id > other.id;}
+		  {return id < other.id;}
 	};
 
 

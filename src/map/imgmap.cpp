@@ -18,12 +18,6 @@
 
 #define TILE_SIZE   256
 #define TEXT_EXTENT 256
-
-#define LARGE_FONT_SIZE   14
-#define NORMAL_FONT_SIZE  12
-#define SMALL_FONT_SIZE   10
-#define POI_FONT_SIZE      9
-
 #define LINE_TEXT_MIN_ZOOM   22
 
 class RasterTile
@@ -124,10 +118,10 @@ static const QFont *name() \
 	return &f; \
 }
 
-FONT(largeFont, LARGE_FONT_SIZE)
-FONT(normalFont, NORMAL_FONT_SIZE)
-FONT(smallFont, SMALL_FONT_SIZE)
-FONT(poiFont, POI_FONT_SIZE)
+FONT(largeFont, 14)
+FONT(normalFont, 12)
+FONT(smallFont, 10)
+FONT(poiFont, 9)
 
 static const QColor *shieldBgColor(Label::Shield::Type type)
 {
@@ -173,7 +167,7 @@ IMGMap::IMGMap(const QString &fileName, QObject *parent)
 		return;
 	}
 
-	_zooms = Range(_img.zooms().min() - 1, 28);
+	_zooms = Range(qMin(_img.zooms().min(), 12), 28);
 	_zoom = _zooms.min();
 
 	updateTransform();
