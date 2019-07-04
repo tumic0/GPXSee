@@ -16,7 +16,6 @@ public:
 	bool init();
 
 	const RectC &bounds() const {return _tre->bounds();}
-	const QList<int> bits() const {return _tre->bits();}
 
 	SubFile *file(SubFile::Type type);
 	SubFile *addFile(IMG *img, SubFile::Type type, quint32 size);

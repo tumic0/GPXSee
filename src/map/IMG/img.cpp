@@ -25,18 +25,6 @@ struct CTX
 	QList<IMG::Point> *points;
 };
 
-#ifndef QT_NO_DEBUG
-static QDebug operator<<(QDebug dbg, const QMap<QString, VectorTile*> &map)
-{
-	dbg.nospace() << "TileMap(";
-	for (QMap<QString, VectorTile*>::const_iterator it = map.constBegin();
-	  it != map.constEnd(); ++it)
-		dbg << "(" << it.key() << ", " << *(*it) << ")";
-	dbg << ")";
-	return dbg.space();
-}
-#endif // QT_NO_DEBUG
-
 IMG::IMG(const QString &fileName) : _file(fileName), _valid(false)
 {
 	if (!_file.open(QFile::ReadOnly)) {
@@ -141,7 +129,6 @@ IMG::IMG(const QString &fileName) : _file(fileName), _valid(false)
 	}
 
 	// Create tile tree
-	QSet<int> bits;
 	for (QMap<QString, VectorTile*>::iterator it = tileMap.begin();
 	  it != tileMap.end(); ++it) {
 		CHECK((*it)->init());
@@ -154,12 +141,7 @@ IMG::IMG(const QString &fileName) : _file(fileName), _valid(false)
 		_tileTree.Insert(min, max, *it);
 
 		_bounds |= (*it)->bounds();
-
-		for (int i = 0; i < (*it)->bits().count(); i++)
-			bits.insert((*it)->bits().at(i));
 	}
-	_bits = bits.toList();
-	qSort(_bits);
 
 	// Read TYP file if any
 	if (!TYPMap.isEmpty()) {
@@ -195,17 +177,9 @@ static bool cb(VectorTile *tile, void *context)
 }
 
 void IMG::objects(const RectC &rect, int bits, QList<Poly> *polygons,
-  QList<Poly> *lines, QList<Point> *points) const
+  QList<Poly> *lines, QList<Point> *points)
 {
-	int mb = _bits.first();
-	for (int i = 0; i < _bits.size(); i++) {
-		if (_bits.at(i) > bits)
-			break;
-		else
-			mb = _bits.at(i);
-	}
-
-	CTX ctx(rect, mb, polygons, lines, points);
+	CTX ctx(rect, bits, polygons, lines, points);
 	double min[2], max[2];
 
 	min[0] = rect.left();

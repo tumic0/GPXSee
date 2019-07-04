@@ -159,15 +159,14 @@ static int minShieldZoom(Label::Shield::Type type)
 
 
 IMGMap::IMGMap(const QString &fileName, QObject *parent)
-  : Map(parent), _fileName(fileName), _img(fileName),
-  _projection(PCS::pcs(3857)), _valid(false)
+  : Map(parent), _img(fileName), _projection(PCS::pcs(3857)), _valid(false)
 {
 	if (!_img.isValid()) {
 		_errorString = _img.errorString();
 		return;
 	}
 
-	_zooms = Range(qMin(_img.zooms().min(), 12), 28);
+	_zooms = Range(12, 28);
 	_zoom = _zooms.min();
 
 	updateTransform();
@@ -489,7 +488,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		for (int j = 0; j < height; j++) {
 			QPixmap pm;
 			QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
-			QString key = _fileName + "-" + QString::number(_zoom) + "_"
+			QString key = _img.fileName() + "-" + QString::number(_zoom) + "_"
 			  + QString::number(ttl.x()) + "_" + QString::number(ttl.y());
 			if (QPixmapCache::find(key, pm))
 				painter->drawPixmap(ttl, pm);

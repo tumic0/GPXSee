@@ -38,7 +38,8 @@ SubFile *VectorTile::addFile(IMG *img, SubFile::Type type, quint32 size)
 
 bool VectorTile::init()
 {
-	if (!(_tre && _tre->init() && _rgn && _rgn->isValid()))
+	if (!(_tre && _tre->isValid() && _tre->init() && _rgn
+	  && _rgn->isValid()))
 		return false;
 	if (_lbl && !_lbl->isValid())
 		return false;

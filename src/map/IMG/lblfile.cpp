@@ -160,10 +160,8 @@ Label LBLFile::label8b(Handle &hdl, quint32 offset) const
 
 Label LBLFile::label(Handle &hdl, quint32 offset, bool poi)
 {
-	if (!_init) {
-		if (!(_init = init()))
-			return QString();
-	}
+	if (!_size && !init())
+		return QString();
 
 	quint32 labelOffset;
 	if (poi) {

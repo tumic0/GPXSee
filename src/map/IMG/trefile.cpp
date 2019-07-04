@@ -9,16 +9,6 @@ struct MapLevel {
 	quint16 subdivs;
 };
 
-#ifndef QT_NO_DEBUG
-static QDebug operator<<(QDebug dbg, const MapLevel &ml)
-{
-	bool inherited = ml.level & 0x80 ? true : false;
-	dbg.nospace() << "MapLevel(" << (ml.level & 0x7F) << ", " << inherited
-	  << ", " << ml.bits << ", " << ml.subdivs << ")";
-	return dbg.space();
-}
-#endif // QT_NO_DEBUG
-
 static void unlock(quint8 *dst, const quint8 *src, quint32 size, quint32 key)
 {
 	static const unsigned char shuf[] = {
@@ -67,12 +57,6 @@ TREFile::~TREFile()
 bool TREFile::init()
 {
 	Handle hdl;
-	quint8 locked;
-	quint16 hdrLen;
-
-	if (!(isValid() && seek(hdl, 0) && readUInt16(hdl, hdrLen)
-	  && seek(hdl, 0x0D) && readByte(hdl, locked)))
-		return false;
 
 	// Tile bounds
 	qint32 north, east, south, west;
@@ -82,9 +66,23 @@ bool TREFile::init()
 	_bounds = RectC(Coordinates(toWGS84(west), toWGS84(north)),
 	  Coordinates(toWGS84(east), toWGS84(south)));
 
+	return true;
+}
+
+bool TREFile::init2()
+{
+	Handle hdl;
+	quint8 locked;
+	quint16 hdrLen;
+
+	if (!(seek(hdl, 0) && readUInt16(hdl, hdrLen)
+	  && seek(hdl, 0x0D) && readByte(hdl, locked)))
+		return false;
+
 	quint32 levelsOffset, levelsSize, subdivOffset, subdivSize;
-	if (!(readUInt32(hdl, levelsOffset) && readUInt32(hdl, levelsSize)
-	  && readUInt32(hdl, subdivOffset) && readUInt32(hdl, subdivSize)))
+	if (!(seek(hdl, 0x21) && readUInt32(hdl, levelsOffset)
+	  && readUInt32(hdl, levelsSize) && readUInt32(hdl, subdivOffset)
+	  && readUInt32(hdl, subdivSize)))
 		return false;
 
 	quint32 extOffset, extSize = 0;
@@ -199,7 +197,25 @@ bool TREFile::init()
 		}
 	}
 
+	_levels = _subdivs.keys();
+
 	return true;
+}
+
+int TREFile::level(int bits)
+{
+	if (_levels.isEmpty() && !init2())
+		return -1;
+
+	int l = _levels.first();
+	for (int i = 0; i < _levels.size(); i++) {
+		if (_levels.at(i) > bits)
+			break;
+		else
+			l = _levels.at(i);
+	}
+
+	return l;
 }
 
 static bool cb(SubDiv *subdiv, void *context)
@@ -209,9 +225,10 @@ static bool cb(SubDiv *subdiv, void *context)
 	return true;
 }
 
-QList<SubDiv*> TREFile::subdivs(const RectC &rect, int bits) const
+QList<SubDiv*> TREFile::subdivs(const RectC &rect, int bits)
 {
 	QList<SubDiv*> list;
+	SubDivTree *tree = _subdivs.value(level(bits));
 	double min[2], max[2];
 
 	min[0] = rect.left();
@@ -219,7 +236,8 @@ QList<SubDiv*> TREFile::subdivs(const RectC &rect, int bits) const
 	max[0] = rect.right();
 	max[1] = rect.top();
 
-	_subdivs.value(bits)->Search(min, max, cb, &list);
+	if (tree)
+		tree->Search(min, max, cb, &list);
 
 	return list;
 }

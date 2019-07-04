@@ -48,11 +48,12 @@ public:
 	IMG(const QString &fileName);
 	~IMG();
 
+	QString fileName() const {return _file.fileName();}
 	const QString &name() const {return _name;}
 	const RectC &bounds() const {return _bounds;}
-	Range zooms() const {return Range(_bits.first(), _bits.last());}
+
 	void objects(const RectC &rect, int bits, QList<Poly> *polygons,
-	  QList<Poly> *lines, QList<Point> *points) const;
+	  QList<Poly> *lines, QList<Point> *points);
 	const Style &style() const {return _style;}
 
 	bool isValid() const {return _valid;}
@@ -63,11 +64,11 @@ private:
 
 	typedef RTree<VectorTile*, double, 2> TileTree;
 
-	QString fileName() const {return _file.fileName();}
 	int blockSize() const {return _blockSize;}
 	bool readBlock(int blockNum, QByteArray &data);
 	qint64 read(char *data, qint64 maxSize);
 	template<class T> bool readValue(T &val);
+	bool init();
 
 	QFile _file;
 	quint8 _key;
@@ -78,7 +79,6 @@ private:
 
 	QString _name;
 	RectC _bounds;
-	QList<int> _bits;
 	Style _style;
 
 	bool _valid;

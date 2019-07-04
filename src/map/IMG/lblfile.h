@@ -9,7 +9,9 @@ class QTextCodec;
 class LBLFile : public SubFile
 {
 public:
-	LBLFile(IMG *img, quint32 size) : SubFile(img, size), _init(false) {}
+	LBLFile(IMG *img, quint32 size)
+	  : SubFile(img, size), _offset(0), _size(0), _poiOffset(0), _poiSize(0),
+	  _multiplier(0), _encoding(0), _codec(0) {}
 
 	Label label(Handle &hdl, quint32 offset, bool poi = false);
 
@@ -26,8 +28,6 @@ private:
 	quint8 _multiplier;
 	quint8 _encoding;
 	QTextCodec *_codec;
-
-	bool _init;
 };
 
 #endif // LBLFILE_H

@@ -404,10 +404,8 @@ void RGNFile::objects(const RectC &rect, const SubDiv *subdiv, LBLFile *lbl,
 {
 	Handle rgnHdl, lblHdl, netHdl;
 
-	if (!_init) {
-		if (!(_init = init()))
-			return;
-	}
+	if (!_size && !init())
+		return;
 
 	QVector<RGNFile::Segment> seg(segments(rgnHdl, subdiv));
 	for (int i = 0; i < seg.size(); i++) {
@@ -438,10 +436,8 @@ void RGNFile::extObjects(const RectC &rect, const SubDiv *subdiv, LBLFile *lbl,
 {
 	Handle rgnHdl, lblHdl;
 
-	if (!_init) {
-		if (!(_init = init()))
-			return;
-	}
+	if (!_size && !init())
+		return;
 
 	if (polygons && subdiv->polygonsOffset() != subdiv->polygonsEnd()) {
 		quint32 start = _polygonsOffset + subdiv->polygonsOffset();

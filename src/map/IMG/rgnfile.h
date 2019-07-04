@@ -11,7 +11,10 @@ class NETFile;
 class RGNFile : public SubFile
 {
 public:
-	RGNFile(IMG *img, quint32 size) : SubFile(img, size), _init(false) {}
+	RGNFile(IMG *img, quint32 size)
+	  : SubFile(img, size), _offset(0), _size(0), _polygonsOffset(0),
+	  _polygonsSize(), _linesOffset(), _linesSize(), _pointsOffset(),
+	  _pointsSize() {}
 
 	void objects(const RectC &rect, const SubDiv *subdiv, LBLFile *lbl,
 	  NETFile *net, QList<IMG::Poly> *polygons, QList<IMG::Poly> *lines,
@@ -96,8 +99,6 @@ private:
 	quint32 _linesSize;
 	quint32 _pointsOffset;
 	quint32 _pointsSize;
-
-	bool _init;
 };
 
 #ifndef QT_NO_DEBUG

@@ -19,18 +19,19 @@ public:
 	bool init();
 
 	const RectC &bounds() const {return _bounds;}
-	const QList<int> bits() const {return _subdivs.keys();}
-
-	QList<SubDiv*> subdivs(const RectC &rect, int bits) const;
+	QList<SubDiv*> subdivs(const RectC &rect, int bits);
 
 private:
 	typedef RTree<SubDiv*, double, 2> SubDivTree;
 
+	bool init2();
+	int level(int bits);
 	bool parsePoly(Handle hdl, quint32 pos, const QMap<int, int> &level2bits,
 	  QMap<quint32, int> &map);
 	bool parsePoints(Handle hdl, quint32 pos, const QMap<int, int> &level2bits);
 
 	RectC _bounds;
+	QList<int> _levels;
 	QMap<int, SubDivTree*> _subdivs;
 };
 

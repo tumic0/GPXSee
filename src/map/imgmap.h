@@ -51,7 +51,6 @@ private:
 	  QList<TextItem*> &textItems);
 	void processPoints(QList<IMG::Point> &points, QList<TextItem*> &textItems);
 
-	QString _fileName;
 	IMG _img;
 	int _zoom;
 	Range _zooms;
