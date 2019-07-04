@@ -138,7 +138,7 @@ private:
 	  const Section &section, ItemInfo &info);
 	void defaultPolygonStyle();
 	void defaultLineStyle();
-	void defaultPOIStyle();
+	void defaultPointStyle();
 
 	QMap<quint32, Line> _lines;
 	QMap<quint32, Polygon> _polygons;

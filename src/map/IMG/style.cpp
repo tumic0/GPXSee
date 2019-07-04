@@ -148,8 +148,14 @@ void Style::defaultLineStyle()
 	_lines[TYPE(0x29)].setTextFontSize(Style::None);
 }
 
-void Style::defaultPOIStyle()
+void Style::defaultPointStyle()
 {
+	// Cities
+	_points[TYPE(0x01)].setTextFontSize(Style::Large);
+	_points[TYPE(0x02)].setTextFontSize(Style::Large);
+	_points[TYPE(0x03)].setTextFontSize(Style::Large);
+
+	// POI
 	_points[0x2a00] = Point(QImage(":/restaurant-11.png"));
 	_points[0x2a01] = Point(QImage(":/restaurant-11.png"));
 	_points[0x2a02] = Point(QImage(":/restaurant-noodle-11.png"));
@@ -934,7 +940,7 @@ Style::Style(SubFile *typ)
 {
 	defaultLineStyle();
 	defaultPolygonStyle();
-	defaultPOIStyle();
+	defaultPointStyle();
 
 	if (typ && typ->isValid())
 		parseTYPFile(typ);

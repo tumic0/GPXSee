@@ -118,10 +118,10 @@ static const QFont *name() \
 	return &f; \
 }
 
-FONT(largeFont, 14)
-FONT(normalFont, 12)
-FONT(smallFont, 10)
-FONT(poiFont, 9)
+FONT(largeFont, 16)
+FONT(normalFont, 14)
+FONT(smallFont, 12)
+FONT(poiFont, 10)
 
 static const QColor *shieldBgColor(Label::Shield::Type type)
 {
@@ -352,11 +352,11 @@ void IMGMap::processLines(QList<IMG::Poly> &lines, const QPoint &tile,
 				case Style::Large:
 					font = largeFont();
 					break;
-				case Style::Small:
-					font = smallFont();
+				case Style::Normal:
+					font = normalFont();
 					break;
 				default:
-					font = normalFont();
+					font = smallFont();
 			}
 			const QColor *color = style.textColor().isValid()
 			  ? &style.textColor() : 0;
@@ -388,7 +388,7 @@ void IMGMap::processLines(QList<IMG::Poly> &lines, const QPoint &tile,
 				int idx = poly.points.size()/2, inc = 0, sign = 1;
 
 				TextPointItem *item = new TextPointItem(
-				  poly.points.at(idx).toPoint(), &shield.text(), smallFont(),
+				  poly.points.at(idx).toPoint(), &shield.text(), poiFont(),
 				  0, &shieldColor, shieldBgColor(shield.type()));
 
 				while (1) {
@@ -444,14 +444,14 @@ void IMGMap::processPoints(QList<IMG::Point> &points,
 				case Style::None:
 					label = 0;
 					break;
-				case Style::Normal:
-					font = normalFont();
-					break;
 				case Style::Small:
 					font = smallFont();
 					break;
-				default:
+				case Style::Large:
 					font = largeFont();
+					break;
+				default:
+					font = normalFont();
 			}
 		}
 		const QColor *color = style.textColor().isValid()
