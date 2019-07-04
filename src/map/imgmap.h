@@ -34,6 +34,9 @@ public:
 
 	void setProjection(const Projection &projection);
 
+	void load();
+	void unload();
+
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
@@ -56,6 +59,7 @@ private:
 	Range _zooms;
 	Projection _projection;
 	Transform _transform;
+
 	bool _valid;
 	QString _errorString;
 };

@@ -174,6 +174,16 @@ IMGMap::IMGMap(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
+void IMGMap::load()
+{
+	_img.load();
+}
+
+void IMGMap::unload()
+{
+	_img.clear();
+}
+
 QRectF IMGMap::bounds()
 {
 	RectD prect(_img.bounds(), _projection);
@@ -248,12 +258,12 @@ Coordinates IMGMap::xy2ll(const QPointF &p)
 
 void IMGMap::drawPolygons(QPainter *painter, const QList<IMG::Poly> &polygons)
 {
-	for (int n = 0; n < _img.style().drawOrder().size(); n++) {
+	for (int n = 0; n < _img.style()->drawOrder().size(); n++) {
 		for (int i = 0; i < polygons.size(); i++) {
 			const IMG::Poly &poly = polygons.at(i);
-			if (poly.type != _img.style().drawOrder().at(n))
+			if (poly.type != _img.style()->drawOrder().at(n))
 				continue;
-			const Style::Polygon &style = _img.style().polygon(poly.type);
+			const Style::Polygon &style = _img.style()->polygon(poly.type);
 
 			painter->setPen(style.pen());
 			painter->setBrush(style.brush());
@@ -268,7 +278,7 @@ void IMGMap::drawLines(QPainter *painter, const QList<IMG::Poly> &lines)
 
 	for (int i = 0; i < lines.size(); i++) {
 		const IMG::Poly &poly = lines.at(i);
-		const Style::Line &style = _img.style().line(poly.type);
+		const Style::Line &style = _img.style()->line(poly.type);
 
 		if (style.background() == Qt::NoPen)
 			continue;
@@ -279,7 +289,7 @@ void IMGMap::drawLines(QPainter *painter, const QList<IMG::Poly> &lines)
 
 	for (int i = 0; i < lines.size(); i++) {
 		const IMG::Poly &poly = lines.at(i);
-		const Style::Line &style = _img.style().line(poly.type);
+		const Style::Line &style = _img.style()->line(poly.type);
 
 		if (!style.img().isNull())
 			BitmapLine::draw(painter, poly.points, style.img());
@@ -326,7 +336,7 @@ void IMGMap::processLines(QList<IMG::Poly> &lines, const QPoint &tile,
 	if (_zoom >= LINE_TEXT_MIN_ZOOM) {
 		for (int i = 0; i < lines.size(); i++) {
 			IMG::Poly &poly = lines[i];
-			const Style::Line &style = _img.style().line(poly.type);
+			const Style::Line &style = _img.style()->line(poly.type);
 
 			if (style.img().isNull() && style.foreground() == Qt::NoPen)
 				continue;
@@ -415,7 +425,7 @@ void IMGMap::processPoints(QList<IMG::Point> &points,
 	for (int i = 0; i < points.size(); i++) {
 		IMG::Point &point = points[i];
 
-		const Style::Point &style = _img.style().point(point.type);
+		const Style::Point &style = _img.style()->point(point.type);
 
 		if (point.poi && _zoom < minPOIZoom(Style::poiClass(point.type)))
 			continue;

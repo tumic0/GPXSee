@@ -14,6 +14,7 @@ public:
 	~VectorTile() {delete _tre; delete _rgn; delete _lbl; delete _net;}
 
 	bool init();
+	void clear() {_tre->clear();}
 
 	const RectC &bounds() const {return _tre->bounds();}
 

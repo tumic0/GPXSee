@@ -40,18 +40,7 @@ static void unlock(quint8 *dst, const quint8 *src, quint32 size, quint32 key)
 
 TREFile::~TREFile()
 {
-	SubDivTree::Iterator jt;
-
-	for (QMap<int, SubDivTree*>::iterator it = _subdivs.begin();
-	  it != _subdivs.end(); ++it) {
-		SubDivTree *tree = *it;
-		for (tree->GetFirst(jt); !tree->IsNull(jt); tree->GetNext(jt))
-			delete tree->GetAt(jt);
-	}
-
-	for (QMap<int, SubDivTree*>::iterator it = _subdivs.begin();
-	  it != _subdivs.end(); ++it)
-		delete *it;
+	clear();
 }
 
 bool TREFile::init()
@@ -69,7 +58,7 @@ bool TREFile::init()
 	return true;
 }
 
-bool TREFile::init2()
+bool TREFile::load()
 {
 	Handle hdl;
 	quint8 locked;
@@ -202,9 +191,26 @@ bool TREFile::init2()
 	return true;
 }
 
+void TREFile::clear()
+{
+	SubDivTree::Iterator jt;
+
+	for (QMap<int, SubDivTree*>::iterator it = _subdivs.begin();
+	  it != _subdivs.end(); ++it) {
+		SubDivTree *tree = *it;
+		for (tree->GetFirst(jt); !tree->IsNull(jt); tree->GetNext(jt))
+			delete tree->GetAt(jt);
+	}
+
+	qDeleteAll(_subdivs);
+
+	_subdivs.clear();
+	_levels.clear();
+}
+
 int TREFile::level(int bits)
 {
-	if (_levels.isEmpty() && !init2())
+	if (_levels.isEmpty() && !load())
 		return -1;
 
 	int l = _levels.first();

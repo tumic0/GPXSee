@@ -48,13 +48,16 @@ public:
 	IMG(const QString &fileName);
 	~IMG();
 
+	void load();
+	void clear();
+
 	QString fileName() const {return _file.fileName();}
 	const QString &name() const {return _name;}
 	const RectC &bounds() const {return _bounds;}
 
 	void objects(const RectC &rect, int bits, QList<Poly> *polygons,
 	  QList<Poly> *lines, QList<Point> *points);
-	const Style &style() const {return _style;}
+	const Style *style() const {return _style;}
 
 	bool isValid() const {return _valid;}
 	const QString &errorString() const {return _errorString;}
@@ -75,11 +78,11 @@ private:
 	int _blockSize;
 	QCache<int, QByteArray> _blockCache;
 
-	TileTree _tileTree;
-
 	QString _name;
 	RectC _bounds;
-	Style _style;
+	TileTree _tileTree;
+	SubFile *_typ;
+	Style *_style;
 
 	bool _valid;
 	QString _errorString;

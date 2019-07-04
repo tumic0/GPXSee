@@ -17,6 +17,7 @@ public:
 	~TREFile();
 
 	bool init();
+	void clear();
 
 	const RectC &bounds() const {return _bounds;}
 	QList<SubDiv*> subdivs(const RectC &rect, int bits);
@@ -24,7 +25,7 @@ public:
 private:
 	typedef RTree<SubDiv*, double, 2> SubDivTree;
 
-	bool init2();
+	bool load();
 	int level(int bits);
 	bool parsePoly(Handle hdl, quint32 pos, const QMap<int, int> &level2bits,
 	  QMap<quint32, int> &map);

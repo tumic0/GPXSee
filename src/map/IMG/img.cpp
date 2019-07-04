@@ -5,6 +5,8 @@
 #include "img.h"
 
 
+#define CACHE_SIZE 8388608 /* 8MB */
+
 #define CHECK(condition) \
 	if (!(condition)) { \
 		_errorString = "Invalid/corrupted IMG file"; \
@@ -25,7 +27,8 @@ struct CTX
 	QList<IMG::Point> *points;
 };
 
-IMG::IMG(const QString &fileName) : _file(fileName), _valid(false)
+IMG::IMG(const QString &fileName)
+  : _file(fileName), _typ(0), _style(0), _valid(false)
 {
 	if (!_file.open(QFile::ReadOnly)) {
 		_errorString = _file.errorString();
@@ -50,6 +53,7 @@ IMG::IMG(const QString &fileName) : _file(fileName), _valid(false)
 	QByteArray nba(QByteArray(d1, sizeof(d1)) + QByteArray(d2, sizeof(d2)));
 	_name = QString(nba).trimmed();
 	_blockSize = 1 << (e1 + e2);
+	_blockCache.setMaxCost(CACHE_SIZE / _blockSize);
 
 	// Read the FAT table
 	quint8 flag;
@@ -72,7 +76,7 @@ IMG::IMG(const QString &fileName) : _file(fileName), _valid(false)
 
 
 	QMap<QString, VectorTile*> tileMap;
-	QMap<QString, SubFile*> TYPMap;
+	QString typFile;
 
 	// Read FAT blocks describing the IMG sub-files
 	for (int i = 0; i < cnt; i++) {
@@ -108,20 +112,22 @@ IMG::IMG(const QString &fileName) : _file(fileName), _valid(false)
 				file->addBlock(block);
 			}
 		} else if (tt == SubFile::TYP) {
-			SubFile *typ;
-			QMap<QString, SubFile*>::iterator it = TYPMap.find(fn);
-			if (it == TYPMap.end()) {
-				typ = new SubFile(this, size);
-				TYPMap.insert(fn, typ);
-			} else
-				typ = *it;
+			SubFile *typ = 0;
+			if (typFile.isNull()) {
+				_typ = new SubFile(this, size);
+				typ = _typ;
+				typFile = fn;
+			} else if (fn == typFile)
+				typ = _typ;
 
-			_file.seek(offset + 0x20);
-			for (int i = 0; i < 240; i++) {
-				CHECK(readValue(block));
-				if (block == 0xFFFF)
-					break;
-				typ->addBlock(block);
+			if (typ) {
+				_file.seek(offset + 0x20);
+				for (int i = 0; i < 240; i++) {
+					CHECK(readValue(block));
+					if (block == 0xFFFF)
+						break;
+					typ->addBlock(block);
+				}
 			}
 		}
 
@@ -143,22 +149,6 @@ IMG::IMG(const QString &fileName) : _file(fileName), _valid(false)
 		_bounds |= (*it)->bounds();
 	}
 
-	// Read TYP file if any
-	if (!TYPMap.isEmpty()) {
-		if (TYPMap.size() > 1)
-			qWarning("%s: Multiple TYP files, using %s",
-			  qPrintable(_file.fileName()), qPrintable(TYPMap.keys().first()));
-		SubFile *typ = TYPMap.values().first();
-		_style = Style(typ);
-		qDeleteAll(TYPMap);
-	} else {
-		QFile typFile(ProgramPaths::typFile());
-		if (typFile.exists()) {
-			SubFile typ(&typFile);
-			_style = Style(&typ);
-		}
-	}
-
 	_valid = true;
 }
 
@@ -167,6 +157,37 @@ IMG::~IMG()
 	TileTree::Iterator it;
 	for (_tileTree.GetFirst(it); !_tileTree.IsNull(it); _tileTree.GetNext(it))
 		delete _tileTree.GetAt(it);
+
+	delete _typ;
+	delete _style;
+}
+
+void IMG::load()
+{
+	Q_ASSERT(!_style);
+
+	if (_typ && _typ->isValid())
+		_style = new Style(_typ);
+	else {
+		QFile typFile(ProgramPaths::typFile());
+		if (typFile.exists()) {
+			SubFile typ(&typFile);
+			_style = new Style(&typ);
+		} else
+			_style = new Style();
+	}
+}
+
+void IMG::clear()
+{
+	TileTree::Iterator it;
+	for (_tileTree.GetFirst(it); !_tileTree.IsNull(it); _tileTree.GetNext(it))
+		_tileTree.GetAt(it)->clear();
+
+	delete _style;
+	_style = 0;
+
+	_blockCache.clear();
 }
 
 static bool cb(VectorTile *tile, void *context)
