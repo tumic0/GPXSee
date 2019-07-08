@@ -64,7 +64,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="152"/>
         <source>GeoJSON files</source>
-        <translation type="unfinished"></translation>
+        <translation>Pliki GeoJSON</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="154"/>
@@ -79,7 +79,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="156"/>
         <source>JPEG images</source>
-        <translation type="unfinished"></translation>
+        <translation>Pliki JPEG</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="157"/>
@@ -439,7 +439,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="315"/>
         <source>Show cursor coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaż współrzędne kursora</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="322"/>
@@ -459,7 +459,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="337"/>
         <source>Show areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaż obszary</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="342"/>
@@ -469,7 +469,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>km/mi markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Znaczniki km/mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="359"/>
@@ -489,7 +489,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="393"/>
         <source>Show path markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaż znaczniki ścieżki</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="400"/>
@@ -651,18 +651,18 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="731"/>
         <source>DEM directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Katalog z danymi DEM:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="733"/>
         <source>Styles directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Katalog ze stylami:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1037"/>
         <location filename="../src/GUI/gui.cpp" line="1105"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Obszary</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1080"/>
@@ -736,7 +736,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="735"/>
         <source>Tile cache directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Katalog pamięci podręcznej kafelków:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1031"/>
@@ -1018,7 +1018,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="123"/>
         <source>Garmin IMG maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy Garmin IMG</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="125"/>
@@ -1038,7 +1038,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="129"/>
         <source>TwoNav maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy TwoNav</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="130"/>
@@ -1309,18 +1309,18 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="378"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="436"/>
         <source>GPS data</source>
-        <translation type="unfinished"></translation>
+        <translation>Dane GPS</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="379"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="437"/>
         <source>DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>Dane DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="416"/>
         <source>Elevation</source>
-        <translation type="unfinished">Wysokość</translation>
+        <translation>Wysokość</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="427"/>
@@ -1330,7 +1330,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="428"/>
         <source>Sources</source>
-        <translation type="unfinished"></translation>
+        <translation>Źródła</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="429"/>
@@ -1340,7 +1340,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="462"/>
         <source>Radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Promień:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="410"/>
@@ -1350,37 +1350,37 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="72"/>
         <source>Projection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Odwzorowanie:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="94"/>
         <source>Vector maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy wektorowe</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
         <source>Area border width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Szerokość granicy obszaru:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="148"/>
         <source>Area border style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Styl obramowania obszaru:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="149"/>
         <source>Area fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprzezroczystość wypełnienia obszaru:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="153"/>
         <source>Fill opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprzezroczystość wypełnienia:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="154"/>
         <source>Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>Obszary</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="448"/>
@@ -1530,12 +1530,12 @@
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished">Nazwa</translation>
+        <translation>Nazwa</translation>
     </message>
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="17"/>
         <source>Description</source>
-        <translation type="unfinished">Opis</translation>
+        <translation>Opis</translation>
     </message>
 </context>
 <context>
