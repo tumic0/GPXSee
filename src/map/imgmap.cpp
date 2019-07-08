@@ -73,7 +73,6 @@ static QColor shieldBgColor1("#dd3e3e");
 static QColor shieldBgColor2("#379947");
 static QColor shieldBgColor3("#4a7fc1");
 
-
 static QString convertUnits(const QString &str)
 {
 	bool ok;
@@ -102,26 +101,47 @@ static int minPOIZoom(Style::POIClass cl)
 	}
 }
 
-static QFont font(int pixelSize)
+static QFont pixelSizeFont(int pixelSize)
 {
 	QFont f;
 	f.setPixelSize(pixelSize);
 	return f;
 }
 
-/* The fonts must be initialized on first usage (after the QGuiApplication
-   instance is created) */
-#define FONT(name, size) \
-static const QFont *name() \
-{ \
-	static QFont f = font(size); \
-	return &f; \
+static QFont *font(Style::FontSize size, Style::FontSize defaultSize
+  = Style::Normal)
+{
+	/* The fonts must be initialized on first usage (after the QGuiApplication
+	   instance is created) */
+	static QFont large = pixelSizeFont(16);
+	static QFont normal = pixelSizeFont(14);
+	static QFont small = pixelSizeFont(12);
+
+	switch (size) {
+		case Style::None:
+			return 0;
+		case Style::Large:
+			return &large;
+		case Style::Normal:
+			return &normal;
+		case Style::Small:
+			return &small;
+		default:
+			return font(defaultSize);
+	}
 }
 
-FONT(largeFont, 16)
-FONT(normalFont, 14)
-FONT(smallFont, 12)
-FONT(poiFont, 10)
+static QFont *poiFont(Style::FontSize size = Style::Normal)
+{
+	static QFont poi = pixelSizeFont(10);
+
+	switch (size) {
+		case Style::None:
+			return 0;
+		default:
+			return &poi;
+	}
+}
 
 static const QColor *shieldBgColor(Label::Shield::Type type)
 {
@@ -347,22 +367,12 @@ void IMGMap::processLines(QList<IMG::Poly> &lines, const QPoint &tile,
 			if (Style::isContourLine(poly.type))
 				poly.label.setText(convertUnits(poly.label.text()));
 
-			const QFont *font;
-			switch (style.textFontSize()) {
-				case Style::Large:
-					font = largeFont();
-					break;
-				case Style::Normal:
-					font = normalFont();
-					break;
-				default:
-					font = smallFont();
-			}
+			const QFont *fnt = font(style.textFontSize(), Style::Small);
 			const QColor *color = style.textColor().isValid()
 			  ? &style.textColor() : 0;
 
 			TextPathItem *item = new TextPathItem(poly.points,
-			  &poly.label.text(), tileRect, font, color);
+			  &poly.label.text(), tileRect, fnt, color);
 			if (item->isValid() && !item->collides(textItems))
 				textItems.append(item);
 			else
@@ -424,7 +434,6 @@ void IMGMap::processPoints(QList<IMG::Point> &points,
 
 	for (int i = 0; i < points.size(); i++) {
 		IMG::Point &point = points[i];
-
 		const Style::Point &style = _img.style()->point(point.type);
 
 		if (point.poi && _zoom < minPOIZoom(Style::poiClass(point.type)))
@@ -433,31 +442,12 @@ void IMGMap::processPoints(QList<IMG::Point> &points,
 		const QString *label = point.label.text().isEmpty()
 		  ? 0 : &(point.label.text());
 		const QImage *img = style.img().isNull() ? 0 : &style.img();
-		const QFont *font = 0;
-		if (point.poi) {
-			if (style.textFontSize() == Style::None)
-				label = 0;
-			else
-				font = poiFont();
-		} else {
-			switch (style.textFontSize()) {
-				case Style::None:
-					label = 0;
-					break;
-				case Style::Small:
-					font = smallFont();
-					break;
-				case Style::Large:
-					font = largeFont();
-					break;
-				default:
-					font = normalFont();
-			}
-		}
+		const QFont *fnt = point.poi
+		  ? poiFont(style.textFontSize()) : font(style.textFontSize());
 		const QColor *color = style.textColor().isValid()
 		  ? &style.textColor() : 0;
 
-		if (!label && !img)
+		if ((!label || !fnt) && !img)
 			continue;
 
 		if (Style::isSpot(point.type))
@@ -469,7 +459,7 @@ void IMGMap::processPoints(QList<IMG::Point> &points,
 		}
 
 		TextPointItem *item = new TextPointItem(
-		  ll2xy(point.coordinates).toPoint(), label, font, img, color);
+		  ll2xy(point.coordinates).toPoint(), label, fnt, img, color);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
 		else

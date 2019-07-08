@@ -17,18 +17,18 @@ static void expand(QRect &rect, int width)
 
 TextPointItem::TextPointItem(const QPoint &point, const QString *text,
   const QFont *font, const QImage *img, const QColor *color,
-  const QColor *bgColor) : _text(text), _font(font), _img(img), _color(color),
-  _bgColor(bgColor)
+  const QColor *bgColor) : _text(font ? text : 0), _font(font), _img(img),
+  _color(color), _bgColor(bgColor)
 {
-	if (text) {
-		QFontMetrics fm(*font);
-		int limit = font->pixelSize() * MAX_TEXT_WIDTH;
-		_textRect = fm.boundingRect(QRect(0, 0, limit, 0), FLAGS, *text);
+	if (_text) {
+		QFontMetrics fm(*_font);
+		int limit = _font->pixelSize() * MAX_TEXT_WIDTH;
+		_textRect = fm.boundingRect(QRect(0, 0, limit, 0), FLAGS, *_text);
 		_textRect.adjust(0, 0, 1, 1);
-	}
 
-	if (_bgColor && _textRect.width() < font->pixelSize() * MIN_BOX_WIDTH)
-		expand(_textRect, font->pixelSize() * MIN_BOX_WIDTH);
+		if (_bgColor && _textRect.width() < _font->pixelSize() * MIN_BOX_WIDTH)
+			expand(_textRect, _font->pixelSize() * MIN_BOX_WIDTH);
+	}
 
 	setPos(point);
 }
@@ -58,41 +58,44 @@ void TextPointItem::paint(QPainter *painter) const
 		  - _img->height()/2), *_img);
 
 	if (_text) {
-		QImage img(_textRect.size(), QImage::Format_ARGB32_Premultiplied);
-		img.fill(Qt::transparent);
-		QPainter ip(&img);
-		ip.setPen(Qt::white);
-		ip.setFont(*_font);
-		ip.drawText(img.rect(), FLAGS, *_text);
-
-		painter->drawImage(_textRect.x() - 1, _textRect.y() - 1, img);
-		painter->drawImage(_textRect.x() + 1, _textRect.y() + 1, img);
-		painter->drawImage(_textRect.x() - 1, _textRect.y() + 1, img);
-		painter->drawImage(_textRect.x(), _textRect.y() - 1, img);
-		painter->drawImage(_textRect.x(), _textRect.y() + 1, img);
-		painter->drawImage(_textRect.x() - 1, _textRect.y(), img);
-		painter->drawImage(_textRect.x() + 1, _textRect.y(), img);
-
-
 		if (_bgColor) {
 			painter->setPen(*_color);
 			painter->setBrush(*_bgColor);
 			painter->drawRect(_textRect);
 			painter->setBrush(Qt::NoBrush);
-		}
-		if (_color) {
 			painter->setFont(*_font);
-			painter->setPen(*_color);
 			painter->drawText(_textRect, FLAGS, *_text);
 		} else {
+			QImage img(_textRect.size(), QImage::Format_ARGB32_Premultiplied);
+			img.fill(Qt::transparent);
+			QPainter ip(&img);
+			ip.setPen(Qt::white);
+			ip.setFont(*_font);
+			ip.drawText(img.rect(), FLAGS, *_text);
+
+			painter->drawImage(_textRect.x() - 1, _textRect.y() - 1, img);
+			painter->drawImage(_textRect.x() + 1, _textRect.y() + 1, img);
+			painter->drawImage(_textRect.x() - 1, _textRect.y() + 1, img);
+			painter->drawImage(_textRect.x() + 1, _textRect.y() - 1, img);
+			painter->drawImage(_textRect.x(), _textRect.y() - 1, img);
+			painter->drawImage(_textRect.x(), _textRect.y() + 1, img);
+			painter->drawImage(_textRect.x() - 1, _textRect.y(), img);
+			painter->drawImage(_textRect.x() + 1, _textRect.y(), img);
+
+			if (_color) {
+				painter->setFont(*_font);
+				painter->setPen(*_color);
+				painter->drawText(_textRect, FLAGS, *_text);
+			} else {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 4, 0)
-			img.invertPixels();
-			painter->drawImage(_textRect, img);
+				img.invertPixels();
+				painter->drawImage(_textRect, img);
 #else // QT >= 5.4
-			QImage iimg(img.convertToFormat(QImage::Format_ARGB32));
-			iimg.invertPixels();
-			painter->drawImage(_textRect, iimg);
+				QImage iimg(img.convertToFormat(QImage::Format_ARGB32));
+				iimg.invertPixels();
+				painter->drawImage(_textRect, iimg);
 #endif // QT >= 5.4
+			}
 		}
 	}
 
