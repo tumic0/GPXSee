@@ -128,13 +128,15 @@ Projection::~Projection()
 
 Projection &Projection::operator=(const Projection &p)
 {
-	delete _ct;
+	if (this != &p) {
+		delete _ct;
 
-	_gcs = p._gcs;
-	_units = p._units;
-	_ct = p._ct ? p._ct->clone() : 0;
-	_geographic = p._geographic;
-	_cs = p._cs;
+		_gcs = p._gcs;
+		_units = p._units;
+		_ct = p._ct ? p._ct->clone() : 0;
+		_geographic = p._geographic;
+		_cs = p._cs;
+	}
 
 	return *this;
 }

@@ -37,20 +37,22 @@ Matrix::Matrix(const Matrix& M)
 
 Matrix &Matrix::operator=(const Matrix &M)
 {
-	if (_h != M._h || _w != M._w) {
-		if (!isNull())
-			delete[] _m;
+	if (this != &M) {
+		if (_h != M._h || _w != M._w) {
+			if (!isNull())
+				delete[] _m;
 
-		_h = M._h; _w = M._w;
-		if (isNull())
-			_m = 0;
-		else
-			_m = new double[_h * _w];
+			_h = M._h; _w = M._w;
+			if (isNull())
+				_m = 0;
+			else
+				_m = new double[_h * _w];
+		}
+
+		for (size_t i = 0; i < _h; i++)
+			for (size_t j = 0; j < _w; j++)
+				m(i,j) = M.m(i,j);
 	}
-
-	for (size_t i = 0; i < _h; i++)
-		for (size_t j = 0; j < _w; j++)
-			m(i,j) = M.m(i,j);
 
 	return *this;
 }
