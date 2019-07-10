@@ -56,7 +56,6 @@ private:
 
 	IMG _img;
 	int _zoom;
-	Range _zooms;
 	Projection _projection;
 	Transform _transform;
 

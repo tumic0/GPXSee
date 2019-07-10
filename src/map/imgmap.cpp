@@ -68,6 +68,8 @@ private:
 };
 
 
+static Range zooms(12, 28);
+
 static QColor shieldColor(Qt::white);
 static QColor shieldBgColor1("#dd3e3e");
 static QColor shieldBgColor2("#379947");
@@ -186,9 +188,7 @@ IMGMap::IMGMap(const QString &fileName, QObject *parent)
 		return;
 	}
 
-	_zooms = Range(12, 28);
-	_zoom = _zooms.min();
-
+	_zoom = zooms.min();
 	updateTransform();
 
 	_valid = true;
@@ -216,8 +216,8 @@ int IMGMap::zoomFit(const QSize &size, const RectC &rect)
 	if (rect.isValid()) {
 		RectD pr(rect, _projection, 10);
 
-		_zoom = _zooms.min();
-		for (int i = _zooms.min() + 1; i <= _zooms.max(); i++) {
+		_zoom = zooms.min();
+		for (int i = zooms.min() + 1; i <= zooms.max(); i++) {
 			Transform t(transform(i));
 			QRectF r(t.proj2img(pr.topLeft()), t.proj2img(pr.bottomRight()));
 			if (size.width() < r.width() || size.height() < r.height())
@@ -225,7 +225,7 @@ int IMGMap::zoomFit(const QSize &size, const RectC &rect)
 			_zoom = i;
 		}
 	} else
-		_zoom = _zooms.max();
+		_zoom = zooms.max();
 
 	updateTransform();
 
@@ -234,14 +234,14 @@ int IMGMap::zoomFit(const QSize &size, const RectC &rect)
 
 int IMGMap::zoomIn()
 {
-	_zoom = qMin(_zoom + 1, _zooms.max());
+	_zoom = qMin(_zoom + 1, zooms.max());
 	updateTransform();
 	return _zoom;
 }
 
 int IMGMap::zoomOut()
 {
-	_zoom = qMax(_zoom - 1, _zooms.min());
+	_zoom = qMax(_zoom - 1, zooms.min());
 	updateTransform();
 	return _zoom;
 }
