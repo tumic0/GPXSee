@@ -323,7 +323,6 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     QT_NO_DEPRECATED_WARNINGS
 DEFINES *= QT_USE_QSTRINGBUILDER
 
-
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_en.ts \
     lang/gpxsee_cs.ts \

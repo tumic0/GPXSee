@@ -381,8 +381,9 @@ void IMGMap::processLines(QList<IMG::Poly> &lines, const QPoint &tile,
 	}
 
 
-	for (int type = 1; type < 7; type++) {
-		if (minShieldZoom((Label::Shield::Type)type) > _zoom)
+	for (int type = Label::Shield::USInterstate; type <= Label::Shield::Oval;
+	  type++) {
+		if (minShieldZoom(static_cast<Label::Shield::Type>(type)) > _zoom)
 			continue;
 
 		QSet<Label::Shield> shields;

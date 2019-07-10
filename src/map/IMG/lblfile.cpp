@@ -102,7 +102,8 @@ Label LBLFile::label6b(Handle &hdl, quint32 offset) const
 					else if (c[cpt] == 0x1b)
 						curCharSet = Special;
 					else if (c[cpt] >= 0x2a && c[cpt] <= 0x2f) {
-						shieldType = (Label::Shield::Type)(c[cpt] - 0x29);
+						shieldType = static_cast<Label::Shield::Type>
+						  (c[cpt] - 0x29);
 						bap = &shieldLabel;
 					} else if (bap == &shieldLabel
 					  && NORMAL_CHARS[c[cpt]] == ' ')
@@ -145,7 +146,7 @@ Label LBLFile::label8b(Handle &hdl, quint32 offset) const
 			else
 				bap->append(' ');
 		} else if (c <= 0x07) {
-			shieldType = (Label::Shield::Type)c;
+			shieldType = static_cast<Label::Shield::Type>(c);
 			bap = &shieldLabel;
 		} else if (bap == &shieldLabel && QChar(c).isSpace()) {
 			bap = &label;
