@@ -319,8 +319,10 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     SOURCES += src/data/geojsonparser.cpp
 }
 
-DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
+    QT_NO_DEPRECATED_WARNINGS
 DEFINES *= QT_USE_QSTRINGBUILDER
+
 
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_en.ts \
