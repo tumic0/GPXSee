@@ -459,7 +459,7 @@ void RGNFile::extObjects(const RectC &rect, const SubDiv *subdiv, LBLFile *lbl,
 		quint32 start = _pointsOffset + subdiv->pointsOffset();
 		quint32 end = subdiv->pointsEnd()
 		  ? _pointsOffset + subdiv->pointsEnd()
-		  : _pointsOffset + _linesSize;
+		  : _pointsOffset + _pointsSize;
 		extPointObjects(rect, rgnHdl, subdiv, Segment(start, end,
 		  Segment::Point), lbl, lblHdl, points);
 	}
