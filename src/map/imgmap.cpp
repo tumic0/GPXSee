@@ -428,12 +428,13 @@ void IMGMap::processShields(QList<IMG::Poly> &lines, const QRect &tileRect,
 				map.insert(l.length(), j);
 			}
 
+			QMap<qreal, int>::const_iterator jt = map.constBegin();
+
 			TextPointItem *item = new TextPointItem(
-			  p.at(map.first()).toPoint(), &(sp.value(it.key())->text()),
+			  p.at(jt.value()).toPoint(), &(sp.value(it.key())->text()),
 			  poiFont(), 0, &shieldColor, shieldBgColor(it.key().type()));
 
 			bool valid = false;
-			QMap<qreal, int>::const_iterator jt = map.constBegin();
 			while (true) {
 				if (!item->collides(textItems)
 				  && tileRect.contains(item->boundingRect().toRect())) {
