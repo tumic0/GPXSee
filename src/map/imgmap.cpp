@@ -421,7 +421,7 @@ void IMGMap::processShields(QList<IMG::Poly> &lines, const QRect &tileRect,
 		  = shields.constBegin(); it != shields.constEnd(); ++it) {
 			const QPolygonF &p = it.value();
 			QRectF rect(p.boundingRect() & tileRect);
-			if (qSqrt(AREA(rect)) < qSqrt(AREA(tileRect)) / 8)
+			if (qSqrt(AREA(rect)) < 32)
 				continue;
 
 			QMap<qreal, int> map;
