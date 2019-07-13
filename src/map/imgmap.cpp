@@ -20,6 +20,9 @@
 #define TEXT_EXTENT 256
 #define LINE_TEXT_MIN_ZOOM   22
 
+#define AREA(rect) \
+	(rect.size().width() * rect.size().height())
+
 class RasterTile
 {
 public:
@@ -35,13 +38,14 @@ public:
 	QList<IMG::Poly> &lines() {return _lines;}
 	QList<IMG::Point> &points() {return _points;}
 
-	void load()
+	void render()
 	{
 		QList<TextItem*> textItems;
 
 		_map->processPolygons(_polygons);
 		_map->processPoints(_points, textItems);
-		_map->processLines(_lines, _xy, textItems);
+		_map->processLines(_lines, QRect(_xy, QSize(TILE_SIZE, TILE_SIZE)),
+		  textItems);
 
 		_img.fill(Qt::transparent);
 
@@ -53,6 +57,8 @@ public:
 		_map->drawPolygons(&painter, _polygons);
 		_map->drawLines(&painter, _lines);
 		_map->drawTextItems(&painter, textItems);
+		//painter.setPen(Qt::red);
+		//painter.drawRect(QRect(_xy, QSize(TILE_SIZE, TILE_SIZE)));
 
 		qDeleteAll(textItems);
 	}
@@ -338,11 +344,9 @@ void IMGMap::processPolygons(QList<IMG::Poly> &polygons)
 	}
 }
 
-void IMGMap::processLines(QList<IMG::Poly> &lines, const QPoint &tile,
+void IMGMap::processLines(QList<IMG::Poly> &lines, const QRect &tileRect,
   QList<TextItem*> &textItems)
 {
-	QRect tileRect(tile, QSize(TILE_SIZE, TILE_SIZE));
-
 	qStableSort(lines);
 
 	for (int i = 0; i < lines.size(); i++) {
@@ -353,6 +357,13 @@ void IMGMap::processLines(QList<IMG::Poly> &lines, const QPoint &tile,
 		}
 	}
 
+	processStreetNames(lines, tileRect, textItems);
+	processShields(lines, tileRect, textItems);
+}
+
+void IMGMap::processStreetNames(QList<IMG::Poly> &lines, const QRect &tileRect,
+  QList<TextItem*> &textItems)
+{
 	if (_zoom >= LINE_TEXT_MIN_ZOOM) {
 		for (int i = 0; i < lines.size(); i++) {
 			IMG::Poly &poly = lines[i];
@@ -379,51 +390,68 @@ void IMGMap::processLines(QList<IMG::Poly> &lines, const QPoint &tile,
 				delete item;
 		}
 	}
+}
 
-
+void IMGMap::processShields(QList<IMG::Poly> &lines, const QRect &tileRect,
+  QList<TextItem*> &textItems)
+{
 	for (int type = Label::Shield::USInterstate; type <= Label::Shield::Oval;
 	  type++) {
 		if (minShieldZoom(static_cast<Label::Shield::Type>(type)) > _zoom)
 			continue;
 
-		QSet<Label::Shield> shields;
+		QHash<Label::Shield, QPolygonF> shields;
+		QHash<Label::Shield, const Label::Shield*> sp;
 
 		for (int i = 0; i < lines.size(); i++) {
 			const IMG::Poly &poly = lines.at(i);
 			const Label::Shield &shield = poly.label.shield();
-			if (shield.type() != type || !Style::isMajorRoad(poly.type))
+			if (!shield.isValid() || shield.type() != type
+			  || !Style::isMajorRoad(poly.type))
 				continue;
 
-			if (poly.label.shield().isValid() && !shields.contains(shield)) {
-				bool valid = false;
-				int idx = poly.points.size()/2, inc = 0, sign = 1;
+			QPolygonF &p = shields[shield];
+			for (int j = 0; j < poly.points.size(); j++)
+				p.append(poly.points.at(j));
 
-				TextPointItem *item = new TextPointItem(
-				  poly.points.at(idx).toPoint(), &shield.text(), poiFont(),
-				  0, &shieldColor, shieldBgColor(shield.type()));
+			sp.insert(shield, &shield);
+		}
 
-				while (1) {
-					if (!item->collides(textItems)
-					  && tileRect.contains(item->boundingRect().toRect())) {
-						valid = true;
-						break;
-					}
-					inc++;
-					sign = (sign < 0) ? 1 : -1;
-					idx += inc * sign;
+		for (QHash<Label::Shield, QPolygonF>::const_iterator it
+		  = shields.constBegin(); it != shields.constEnd(); ++it) {
+			const QPolygonF &p = it.value();
+			QRectF rect(p.boundingRect() & tileRect);
+			if (qSqrt(AREA(rect)) < qSqrt(AREA(tileRect)) / 8)
+				continue;
 
-					if (!(idx >= 0 && idx < poly.points.size()))
-						break;
-
-					item->setPos(poly.points.at(idx).toPoint());
-				}
-
-				if (valid) {
-					textItems.append(item);
-					shields.insert(shield);
-				} else
-					delete item;
+			QMap<qreal, int> map;
+			QPointF center = rect.center();
+			for (int j = 0; j < p.size(); j++) {
+				QLineF l(p.at(j), center);
+				map.insert(l.length(), j);
 			}
+
+			TextPointItem *item = new TextPointItem(
+			  p.at(map.first()).toPoint(), &(sp.value(it.key())->text()),
+			  poiFont(), 0, &shieldColor, shieldBgColor(it.key().type()));
+
+			bool valid = false;
+			QMap<qreal, int>::const_iterator jt = map.constBegin();
+			while (true) {
+				if (!item->collides(textItems)
+				  && tileRect.contains(item->boundingRect().toRect())) {
+					valid = true;
+					break;
+				}
+				if (++jt == map.constEnd())
+					break;
+				item->setPos(p.at(jt.value()).toPoint());
+			}
+
+			if (valid)
+				textItems.append(item);
+			else
+				delete item;
 		}
 	}
 }
@@ -470,7 +498,7 @@ void IMGMap::processPoints(QList<IMG::Point> &points,
 
 static void render(RasterTile &tile)
 {
-	tile.load();
+	tile.render();
 }
 
 void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)

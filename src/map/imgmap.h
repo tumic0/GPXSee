@@ -50,9 +50,13 @@ private:
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
 
 	void processPolygons(QList<IMG::Poly> &polygons);
-	void processLines(QList<IMG::Poly> &lines, const QPoint &tile,
+	void processLines(QList<IMG::Poly> &lines, const QRect &tileRect,
 	  QList<TextItem*> &textItems);
 	void processPoints(QList<IMG::Point> &points, QList<TextItem*> &textItems);
+	void processShields(QList<IMG::Poly> &lines, const QRect &tileRect,
+	  QList<TextItem*> &textItems);
+	void processStreetNames(QList<IMG::Poly> &lines, const QRect &tileRect,
+	  QList<TextItem*> &textItems);
 
 	IMG _img;
 	int _zoom;
