@@ -4,6 +4,9 @@
 #include <QString>
 #include <QDebug>
 
+#define FIRST_SHIELD Label::Shield::USInterstate
+#define LAST_SHIELD  Label::Shield::Oval
+
 class Label {
 public:
 	class Shield

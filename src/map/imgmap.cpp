@@ -18,7 +18,6 @@
 
 #define TILE_SIZE   256
 #define TEXT_EXTENT 256
-#define LINE_TEXT_MIN_ZOOM   22
 
 #define AREA(rect) \
 	(rect.size().width() * rect.size().height())
@@ -181,7 +180,7 @@ static int minShieldZoom(Label::Shield::Type type)
 		case Label::Shield::Oval:
 			return 20;
 		default:
-			return INT_MAX;
+			return 0;
 	}
 }
 
@@ -357,46 +356,44 @@ void IMGMap::processLines(QList<IMG::Poly> &lines, const QRect &tileRect,
 		}
 	}
 
-	processStreetNames(lines, tileRect, textItems);
+	if (_zoom >= 22)
+		processStreetNames(lines, tileRect, textItems);
 	processShields(lines, tileRect, textItems);
 }
 
 void IMGMap::processStreetNames(QList<IMG::Poly> &lines, const QRect &tileRect,
   QList<TextItem*> &textItems)
 {
-	if (_zoom >= LINE_TEXT_MIN_ZOOM) {
-		for (int i = 0; i < lines.size(); i++) {
-			IMG::Poly &poly = lines[i];
-			const Style::Line &style = _img.style()->line(poly.type);
+	for (int i = 0; i < lines.size(); i++) {
+		IMG::Poly &poly = lines[i];
+		const Style::Line &style = _img.style()->line(poly.type);
 
-			if (style.img().isNull() && style.foreground() == Qt::NoPen)
-				continue;
-			if (poly.label.text().isEmpty()
-			  || style.textFontSize() == Style::None)
-				continue;
+		if (style.img().isNull() && style.foreground() == Qt::NoPen)
+			continue;
+		if (poly.label.text().isEmpty()
+		  || style.textFontSize() == Style::None)
+			continue;
 
-			if (Style::isContourLine(poly.type))
-				poly.label.setText(convertUnits(poly.label.text()));
+		if (Style::isContourLine(poly.type))
+			poly.label.setText(convertUnits(poly.label.text()));
 
-			const QFont *fnt = font(style.textFontSize(), Style::Small);
-			const QColor *color = style.textColor().isValid()
-			  ? &style.textColor() : 0;
+		const QFont *fnt = font(style.textFontSize(), Style::Small);
+		const QColor *color = style.textColor().isValid()
+		  ? &style.textColor() : 0;
 
-			TextPathItem *item = new TextPathItem(poly.points,
-			  &poly.label.text(), tileRect, fnt, color);
-			if (item->isValid() && !item->collides(textItems))
-				textItems.append(item);
-			else
-				delete item;
-		}
+		TextPathItem *item = new TextPathItem(poly.points,
+		  &poly.label.text(), tileRect, fnt, color);
+		if (item->isValid() && !item->collides(textItems))
+			textItems.append(item);
+		else
+			delete item;
 	}
 }
 
 void IMGMap::processShields(QList<IMG::Poly> &lines, const QRect &tileRect,
   QList<TextItem*> &textItems)
 {
-	for (int type = Label::Shield::USInterstate; type <= Label::Shield::Oval;
-	  type++) {
+	for (int type = FIRST_SHIELD; type <= LAST_SHIELD; type++) {
 		if (minShieldZoom(static_cast<Label::Shield::Type>(type)) > _zoom)
 			continue;
 
