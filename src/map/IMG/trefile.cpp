@@ -100,7 +100,6 @@ bool TREFile::load()
 
 	quint32 levelsCount = levelsSize / 4;
 	QVector<MapLevel> ml(levelsCount);
-	QMap<int, int> level2bits;
 
 	for (quint32 i = 0; i < levelsCount; i++) {
 		quint8 *zoom = levels + (i * 4);
@@ -109,8 +108,6 @@ bool TREFile::load()
 		ml[i].subdivs = *(zoom + 2) | (quint16)(*(zoom + 3)) << 8;
 		if ((ml[i].level & 0xF) > 15 || ml[i].bits > 24)
 			return false;
-
-		level2bits.insert(ml[i].level & 0xF, ml[i].bits);
 	}
 
 	// Subdivisions
