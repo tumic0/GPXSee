@@ -113,6 +113,12 @@ bool TREFile::init()
 bool TREFile::load(int idx)
 {
 	Handle hdl;
+	QList<SubDiv*> sl;
+	SubDiv *s = 0;
+	SubDivTree *tree = new SubDivTree();
+
+
+	_subdivs.insert(_levels.at(idx).bits, tree);
 
 	quint32 skip = 0;
 	for (int i = 0; i < idx; i++)
@@ -120,10 +126,6 @@ bool TREFile::load(int idx)
 
 	if (!seek(hdl, _subdivOffset + skip * 16))
 		return false;
-
-	_subdivs.insert(_levels.at(idx).bits, new SubDivTree());
-	QList<SubDiv*> sl;
-	SubDiv *s = 0;
 
 	for (int j = 0; j < _levels.at(idx).subdivs; j++) {
 		quint32 offset;
@@ -134,10 +136,10 @@ bool TREFile::load(int idx)
 		if (!(readUInt24(hdl, offset) && readByte(hdl, objects)
 		  && readInt24(hdl, lon) && readInt24(hdl, lat)
 		  && readUInt16(hdl, width) && readUInt16(hdl, height)))
-			return false;
+			goto error;
 		if (idx != _levels.size() - 1)
 			if (!readUInt16(hdl, nextLevel))
-				return false;
+				goto error;
 
 		if (s)
 			s->setEnd(offset);
@@ -158,13 +160,14 @@ bool TREFile::load(int idx)
 		min[1] = bounds.bottom();
 		max[0] = bounds.right();
 		max[1] = bounds.top();
-		_subdivs[_levels.at(idx).bits]->Insert(min, max, s);
+
+		tree->Insert(min, max, s);
 	}
 
 	if (idx != _levels.size() - 1) {
 		quint32 offset;
 		if (!readUInt24(hdl, offset))
-			return false;
+			goto error;
 		s->setEnd(offset);
 	}
 
@@ -182,30 +185,36 @@ bool TREFile::load(int idx)
 
 		quint32 polygons, lines, points;
 		if (!seek(hdl, _extended.offset + (skip - diff) * _extended.itemSize))
-			return false;
+			goto error;
 
 		for (int i = 0; i < sl.size(); i++) {
 			if (!(readUInt32(hdl, polygons) && readUInt32(hdl, lines)
 			  && readUInt32(hdl, points)))
-				return false;
+				goto error;
 
 			sl.at(i)->setExtOffsets(polygons, lines, points);
 			if (i)
 				sl.at(i-1)->setExtEnds(polygons, lines, points);
 
 			if (!seek(hdl, hdl.pos + _extended.itemSize - 12))
-				return false;
+				goto error;
 		}
 
 		if (idx != _levels.size() - 1) {
 			if (!(readUInt32(hdl, polygons) && readUInt32(hdl, lines)
 			  && readUInt32(hdl, points)))
-				return false;
+				goto error;
 			sl.last()->setExtEnds(polygons, lines, points);
 		}
 	}
 
 	return true;
+
+error:
+	qDeleteAll(sl);
+	tree->RemoveAll();
+
+	return false;
 }
 
 void TREFile::clear()
