@@ -35,7 +35,8 @@ static QString capitalize(const QString &str)
 	if (str.isEmpty())
 		return str;
 	for (int i = 0; i < str.size(); i++)
-		if (str.at(i).isLetter() && !str.at(i).isUpper())
+		if (str.at(i).isLetter() && !(str.at(i).isUpper()
+		  || str.at(i) == QChar(0x00DF)))
 			return str;
 
 	QString ret(str);
