@@ -73,12 +73,12 @@ private:
 };
 
 
-static Range zooms(12, 28);
+static const Range zooms(12, 28);
 
-static QColor shieldColor(Qt::white);
-static QColor shieldBgColor1("#dd3e3e");
-static QColor shieldBgColor2("#379947");
-static QColor shieldBgColor3("#4a7fc1");
+static const QColor shieldColor(Qt::white);
+static const QColor shieldBgColor1("#dd3e3e");
+static const QColor shieldBgColor2("#379947");
+static const QColor shieldBgColor3("#4a7fc1");
 
 static QString convertUnits(const QString &str)
 {
@@ -259,7 +259,8 @@ void IMGMap::setZoom(int zoom)
 
 Transform IMGMap::transform(int zoom) const
 {
-	double scale = (2.0 * M_PI * WGS84_RADIUS) / (1<<zoom);
+	double scale = _projection.isGeographic()
+	  ? 360.0 / (1<<zoom) : (2.0 * M_PI * WGS84_RADIUS) / (1<<zoom);
 	PointD topLeft(_projection.ll2xy(_img.bounds().topLeft()));
 	return Transform(ReferencePoint(PointD(0, 0), topLeft),
 	  PointD(scale, scale));

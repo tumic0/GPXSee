@@ -14,7 +14,7 @@ public:
 	QString toString() const;
 
 private:
-	QList<KV> _list;
+	QList<KV<QString, QString> > _list;
 	ImageInfo _img;
 };
 

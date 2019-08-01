@@ -1066,7 +1066,7 @@ void GUI::statistics()
 
 		text.append("<tr><th colspan=\"2\">" + tab->label() + "</th></tr>");
 		for (int j = 0; j < tab->info().size(); j++) {
-			const KV &kv = tab->info().at(j);
+			const KV<QString, QString> &kv = tab->info().at(j);
 			text.append("<tr><td>" + kv.key() + ":</td><td>" + kv.value()
 			  + "</td></tr>");
 		}

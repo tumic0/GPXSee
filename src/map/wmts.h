@@ -22,7 +22,8 @@ public:
 	public:
 		Setup(const QString &url, const QString &layer, const QString &set,
 		  const QString &style, const QString &format, bool rest,
-		  const CoordinateSystem &cs, const QList<KV> &dimensions,
+		  const CoordinateSystem &cs,
+		  const QList<KV<QString, QString> > &dimensions,
 		  const Authorization &authorization = Authorization())
 			: _url(url), _layer(layer), _set(set), _style(style),
 			  _format(format), _rest(rest), _cs(cs), _dimensions(dimensions),
@@ -36,7 +37,8 @@ public:
 		const QString &format() const {return _format;}
 		bool rest() const {return _rest;}
 		const CoordinateSystem &coordinateSystem() const {return _cs;}
-		const QList<KV> &dimensions() const {return _dimensions;}
+		const QList<KV<QString, QString> > &dimensions() const
+		  {return _dimensions;}
 
 	private:
 		QString _url;
@@ -46,7 +48,7 @@ public:
 		QString _format;
 		bool _rest;
 		CoordinateSystem _cs;
-		QList<KV> _dimensions;
+		QList<KV<QString, QString> > _dimensions;
 		Authorization _authorization;
 	};
 

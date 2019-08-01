@@ -92,6 +92,8 @@ private slots:
 	void reloadMap();
 
 private:
+	typedef QHash<SearchPointer<Waypoint>, WaypointItem*> POIHash;
+
 	PathItem *addTrack(const Track &track);
 	PathItem *addRoute(const Route &route);
 	void addArea(const Area &area);
@@ -125,7 +127,7 @@ private:
 	QList<RouteItem*> _routes;
 	QList<WaypointItem*> _waypoints;
 	QList<AreaItem*> _areas;
-	QHash<SearchPointer<Waypoint>, WaypointItem*> _pois;
+	POIHash _pois;
 
 	RectC _tr, _rr, _wr, _ar;
 	qreal _res;

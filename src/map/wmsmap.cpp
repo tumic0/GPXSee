@@ -34,7 +34,7 @@ QString WMSMap::tileUrl(const QString &version) const
 		url.append(QString("&SRS=%1").arg(_setup.crs()));
 
 	for (int i = 0; i < _setup.dimensions().size(); i++) {
-		const KV &dim = _setup.dimensions().at(i);
+		const KV<QString, QString> &dim = _setup.dimensions().at(i);
 		url.append(QString("&%1=%2").arg(dim.key(), dim.value()));
 	}
 

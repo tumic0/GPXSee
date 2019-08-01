@@ -14,7 +14,7 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-	const QList<KV> &info() const {return _list;}
+	const QList<KV<QString, QString> > &info() const {return _list;}
 
 	void insert(const QString &key, const QString &value);
 	void clear();
@@ -23,7 +23,7 @@ public:
 private:
 	void updateBoundingRect();
 
-	QList<KV> _list;
+	QList<KV<QString, QString> > _list;
 	QRectF _boundingRect;
 	QFont _font;
 };

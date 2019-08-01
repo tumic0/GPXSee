@@ -16,7 +16,7 @@ void InfoItem::updateBoundingRect()
 	QFontMetrics fm(_font);
 	qreal width = 0;
 
-	for (QList<KV>::const_iterator i = _list.constBegin();
+	for (QList<KV<QString, QString> >::const_iterator i = _list.constBegin();
 	  i != _list.constEnd(); i++) {
 		width += fm.width(i->key() + ": ");
 		width += fm.width(i->value()) + ((i == _list.constEnd() - 1)
@@ -37,7 +37,7 @@ void InfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	painter->setFont(_font);
 	painter->setRenderHint(QPainter::Antialiasing, false);
 
-	for (QList<KV>::const_iterator i = _list.constBegin();
+	for (QList<KV<QString, QString> >::const_iterator i = _list.constBegin();
 	  i != _list.constEnd(); i++) {
 		painter->drawText(width, fm.height() - fm.descent(), i->key() + ": ");
 		width += fm.width(i->key() + ": ");
@@ -61,7 +61,7 @@ void InfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 void InfoItem::insert(const QString &key, const QString &value)
 {
-	KV kv(key, value);
+	KV<QString, QString> kv(key, value);
 	int i;
 
 	prepareGeometryChange();

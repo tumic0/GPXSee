@@ -223,12 +223,12 @@ void PCS::loadList(const QString &path)
 	}
 }
 
-QList<PCS::Info> PCS::pcsList()
+QList<KV<int, QString> > PCS::list()
 {
-	QList<Info> list;
+	QList<KV<int, QString> > list;
 
 	for (int i = 0; i < _pcss.size(); i++)
-		list.append(Info(_pcss.at(i).id(), _pcss.at(i).name()));
+		list.append(KV<int, QString>(_pcss.at(i).id(), _pcss.at(i).name()));
 
 	return list;
 }

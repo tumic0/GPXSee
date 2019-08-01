@@ -255,17 +255,18 @@ QPointF MapView::contentCenter() const
 
 void MapView::updatePOIVisibility()
 {
-	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it, jt;
-
 	if (!_showPOI)
 		return;
 
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+	for (POIHash::const_iterator it = _pois.constBegin();
+	  it != _pois.constEnd(); it++)
 		it.value()->show();
 
 	if (!_overlapPOIs) {
-		for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
-			for (jt = _pois.constBegin(); jt != _pois.constEnd(); jt++) {
+		for (POIHash::const_iterator it = _pois.constBegin();
+		  it != _pois.constEnd(); it++) {
+			for (POIHash::const_iterator jt = _pois.constBegin();
+			  jt != _pois.constEnd(); jt++) {
 				if (it.value()->isVisible() && jt.value()->isVisible()
 				  && it != jt && it.value()->collidesWithItem(jt.value()))
 					jt.value()->hide();
@@ -288,8 +289,8 @@ void MapView::rescale()
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setMap(_map);
 
-	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+	for (POIHash::const_iterator it = _pois.constBegin();
+	  it != _pois.constEnd(); it++)
 		it.value()->setMap(_map);
 
 	updatePOIVisibility();
@@ -339,8 +340,8 @@ void MapView::setMap(Map *map)
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setMap(map);
 
-	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+	for (POIHash::const_iterator it = _pois.constBegin();
+	  it != _pois.constEnd(); it++)
 		it.value()->setMap(_map);
 	updatePOIVisibility();
 
@@ -364,12 +365,10 @@ void MapView::setPOI(POI *poi)
 
 void MapView::updatePOI()
 {
-	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
-
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++) {
+	for (POIHash::const_iterator it = _pois.constBegin();
+	  it != _pois.constEnd(); it++)
 		_scene->removeItem(it.value());
-		delete it.value();
-	}
+	qDeleteAll(_pois);
 	_pois.clear();
 
 	if (_showTracks)
@@ -426,8 +425,8 @@ void MapView::setUnits(Units units)
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setToolTipFormat(_units, _coordinatesFormat);
 
-	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+	for (POIHash::const_iterator it = _pois.constBegin();
+	  it != _pois.constEnd(); it++)
 		it.value()->setToolTipFormat(_units, _coordinatesFormat);
 }
 
@@ -445,8 +444,8 @@ void MapView::setCoordinatesFormat(CoordinatesFormat format)
 	for (int i = 0; i < _routes.count(); i++)
 		_routes[i]->setCoordinatesFormat(_coordinatesFormat);
 
-	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+	for (POIHash::const_iterator it = _pois.constBegin();
+	  it != _pois.constEnd(); it++)
 		it.value()->setToolTipFormat(_units, _coordinatesFormat);
 }
 
@@ -461,8 +460,6 @@ void MapView::clearMapCache()
 
 void MapView::digitalZoom(int zoom)
 {
-	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
-
 	if (zoom) {
 		_digitalZoom += zoom;
 		scale(pow(2, zoom), pow(2, zoom));
@@ -479,7 +476,8 @@ void MapView::digitalZoom(int zoom)
 		_areas.at(i)->setDigitalZoom(_digitalZoom);
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setDigitalZoom(_digitalZoom);
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+	for (POIHash::const_iterator it = _pois.constBegin();
+	  it != _pois.constEnd(); it++)
 		it.value()->setDigitalZoom(_digitalZoom);
 
 	_mapScale->setDigitalZoom(_digitalZoom);
@@ -747,8 +745,8 @@ void MapView::showPOI(bool show)
 {
 	_showPOI = show;
 
-	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+	for (POIHash::const_iterator it = _pois.constBegin();
+	  it != _pois.constEnd(); it++)
 		it.value()->setVisible(show);
 
 	updatePOIVisibility();
@@ -758,8 +756,8 @@ void MapView::showPOILabels(bool show)
 {
 	_showPOILabels = show;
 
-	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+	for (POIHash::const_iterator it = _pois.constBegin();
+	  it != _pois.constEnd(); it++)
 		it.value()->showLabel(show);
 
 	updatePOIVisibility();
@@ -852,21 +850,19 @@ void MapView::setWaypointColor(const QColor &color)
 
 void MapView::setPOISize(int size)
 {
-	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
-
 	_poiSize = size;
 
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+	for (POIHash::const_iterator it = _pois.constBegin();
+	  it != _pois.constEnd(); it++)
 		it.value()->setSize(size);
 }
 
 void MapView::setPOIColor(const QColor &color)
 {
-	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
-
 	_poiColor = color;
 
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+	for (POIHash::const_iterator it = _pois.constBegin();
+	  it != _pois.constEnd(); it++)
 		it.value()->setColor(color);
 }
 
@@ -1003,8 +999,8 @@ void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setMap(_map);
 
-	QHash<SearchPointer<Waypoint>, WaypointItem*>::const_iterator it;
-	for (it = _pois.constBegin(); it != _pois.constEnd(); it++)
+	for (POIHash::const_iterator it = _pois.constBegin();
+	  it != _pois.constEnd(); it++)
 		it.value()->setMap(_map);
 	updatePOIVisibility();
 
@@ -1021,13 +1017,19 @@ void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 
 void MapView::setProjection(int id)
 {
-	Projection projection(PCS::pcs(id));
-	if (!projection.isValid())
-		return;
-
-	_projection = projection;
-
 	Coordinates center = _map->xy2ll(mapToScene(viewport()->rect().center()));
+
+	const PCS *pcs = PCS::pcs(id);
+	if (pcs)
+		_projection = Projection(pcs);
+	else {
+		const GCS *gcs = GCS::gcs(id);
+		if (gcs)
+			_projection = Projection(gcs);
+		else
+			qWarning("%d: Unknown PCS/GCS id", id);
+	}
+
 	_map->setProjection(_projection);
 	rescale();
 	centerOn(_map->ll2xy(center));

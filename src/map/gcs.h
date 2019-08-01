@@ -1,6 +1,7 @@
 #ifndef GCS_H
 #define GCS_H
 
+#include "common/kv.h"
 #include "datum.h"
 #include "angularunits.h"
 #include "primemeridian.h"
@@ -32,6 +33,7 @@ public:
 	static const GCS &WGS84();
 
 	static void loadList(const QString &path);
+	static QList<KV<int, QString> > list();
 
 private:
 	class Entry;

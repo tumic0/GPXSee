@@ -229,6 +229,18 @@ Coordinates GCS::fromWGS84(const Coordinates &c) const
 	return Coordinates(_primeMeridian.fromGreenwich(ds.lon()), ds.lat());
 }
 
+QList<KV<int, QString> > GCS::list()
+{
+	QList<KV<int, QString> > list;
+
+	for (int i = 0; i < _gcss.size(); i++)
+		if (_gcss.at(i).id())
+			list.append(KV<int, QString>(_gcss.at(i).id(), _gcss.at(i).name()
+			  + " / Geographic 2D"));
+
+	return list;
+}
+
 #ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const GCS &gcs)
 {

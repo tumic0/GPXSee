@@ -36,15 +36,18 @@ static QFrame *line()
 }
 #endif // Q_OS_MAC
 
+
 QWidget *OptionsDialog::createMapPage()
 {
 	_projection = new LimitedComboBox(200);
-	QList<PCS::Info> projections(PCS::pcsList());
+
+	QList<KV<int, QString> > projections(GCS::list() + PCS::list());
 	qSort(projections);
+
 	for (int i = 0; i < projections.size(); i++) {
-		QString text = QString::number(projections.at(i).id()) + " - "
-		  + projections.at(i).name();
-		_projection->addItem(text, QVariant(projections.at(i).id()));
+		QString text = QString::number(projections.at(i).key()) + " - "
+		  + projections.at(i).value();
+		_projection->addItem(text, QVariant(projections.at(i).key()));
 	}
 	_projection->setCurrentIndex(_projection->findData(_options->projection));
 

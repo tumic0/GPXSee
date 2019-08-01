@@ -196,8 +196,8 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 			if (!attr.hasAttribute("id"))
 				reader.raiseError("Missing dimension id");
 			else
-				config.dimensions.append(KV(attr.value("id").toString(),
-				  reader.readElementText()));
+				config.dimensions.append(KV<QString, QString>
+				  (attr.value("id").toString(), reader.readElementText()));
 		} else if (reader.name() == "crs") {
 			config.coordinateSystem = coordinateSystem(reader);
 			config.crs = reader.readElementText();

@@ -27,7 +27,7 @@ public:
 	~GraphView();
 
 	bool isEmpty() const {return _graphs.isEmpty();}
-	const QList<KV> &info() const {return _info->info();}
+	const QList<KV<QString, QString> > &info() const {return _info->info();}
 	void clear();
 
 	void plot(QPainter *painter, const QRectF &target, qreal scale);

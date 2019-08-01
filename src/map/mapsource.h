@@ -38,7 +38,7 @@ private:
 		QString crs;
 		CoordinateSystem coordinateSystem;
 		bool rest;
-		QList<KV> dimensions;
+		QList<KV<QString, QString> > dimensions;
 		Authorization authorization;
 		qreal tileRatio;
 		int tileSize;

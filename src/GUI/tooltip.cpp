@@ -6,7 +6,7 @@
 
 void ToolTip::insert(const QString &key, const QString &value)
 {
-	_list.append(KV(key, value));
+	_list.append(KV<QString, QString>(key, value));
 }
 
 QString ToolTip::toString() const

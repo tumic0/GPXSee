@@ -1,21 +1,20 @@
 #ifndef KV_H
 #define KV_H
 
-#include <QString>
-
+template <class KEY, class VALUE>
 class KV {
 public:
-	KV(const QString &key, const QString &value) : _key(key), _value(value) {}
+	KV(const KEY &key, const VALUE &value) : _key(key), _value(value) {}
 
-	const QString &key() const {return _key;}
-	const QString &value() const {return _value;}
+	const KEY &key() const {return _key;}
+	const VALUE &value() const {return _value;}
 
-	bool operator==(const KV &other) const
-	  {return this->key() == other.key();}
+	bool operator==(const KV &other) const {return _key == other._key;}
+	bool operator<(const KV &other) const {return _key < other._key;}
 
 private:
-	QString _key;
-	QString _value;
+	KEY _key;
+	VALUE _value;
 };
 
 #endif // KV_H
