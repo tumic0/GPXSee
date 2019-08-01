@@ -422,7 +422,7 @@
         <location filename="../src/GUI/gui.cpp" line="721"/>
         <location filename="../src/GUI/gui.cpp" line="722"/>
         <source>Paths</source>
-        <translation>Chemin d&apos;accès</translation>
+        <translation>Chemins d&apos;accès</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="248"/>
