@@ -1017,18 +1017,16 @@ void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 
 void MapView::setProjection(int id)
 {
+	const PCS *pcs;
+	const GCS *gcs;
 	Coordinates center = _map->xy2ll(mapToScene(viewport()->rect().center()));
 
-	const PCS *pcs = PCS::pcs(id);
-	if (pcs)
+	if ((pcs = PCS::pcs(id)))
 		_projection = Projection(pcs);
-	else {
-		const GCS *gcs = GCS::gcs(id);
-		if (gcs)
-			_projection = Projection(gcs);
-		else
-			qWarning("%d: Unknown PCS/GCS id", id);
-	}
+	else if ((gcs = GCS::gcs(id)))
+		_projection = Projection(gcs);
+	else
+		qWarning("%d: Unknown PCS/GCS id", id);
 
 	_map->setProjection(_projection);
 	rescale();
