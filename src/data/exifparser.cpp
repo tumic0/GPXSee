@@ -113,9 +113,12 @@ Coordinates EXIFParser::coordinates(TIFFFile &file, const IFDEntry &lon,
 	if (!c.isValid())
 		return Coordinates();
 
-	if (lonRef.offset == 'W')
+	char ew = file.isBE() ? lonRef.offset >> 24 : lonRef.offset;
+	char ns = file.isBE() ? latRef.offset >> 24 : latRef.offset;
+
+	if (ew == 'W')
 		c.rlon() = -c.lon();
-	if (latRef.offset == 'S')
+	if (ns == 'S')
 		c.rlat() = -c.lat();
 
 	return c;
