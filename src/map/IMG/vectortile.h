@@ -26,12 +26,6 @@ public:
 
 	friend QDebug operator<<(QDebug dbg, const VectorTile &tile);
 
-	static bool isTileFile(SubFile::Type type)
-	{
-		return (type == SubFile::TRE || type == SubFile::LBL
-		  || type == SubFile::RGN || type == SubFile::NET);
-	}
-
 private:
 	TREFile *_tre;
 	RGNFile *_rgn;

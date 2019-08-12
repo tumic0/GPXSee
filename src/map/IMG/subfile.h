@@ -84,6 +84,8 @@ public:
 	QString fileName() const;
 
 	static Type type(const char str[3]);
+	static bool isTileFile(Type type)
+	  {return (type == TRE || type == LBL || type == RGN || type == NET);}
 
 	friend QDebug operator<<(QDebug dbg, const SubFile &file);
 

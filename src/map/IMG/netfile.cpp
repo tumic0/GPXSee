@@ -3,22 +3,21 @@
 bool NETFile::init()
 {
 	Handle hdl;
+	quint8 multiplier;
 
 	if (!(seek(hdl, 0x15) && readUInt32(hdl, _offset)
-	  && readUInt32(hdl, _size) && readByte(hdl, _multiplier)))
+	  && readUInt32(hdl, _size) && readByte(hdl, multiplier)))
 		return false;
 
-	_multiplier = 1<<_multiplier;
+	_multiplier = 1<<multiplier;
 
 	return true;
 }
 
 bool NETFile::lblOffset(Handle &hdl, quint32 netOffset, quint32 &lblOffset)
 {
-	if (!_init) {
-		if (!(_init = init()))
-			return false;
-	}
+	if (!_multiplier && !init())
+		return false;
 
 	if (!(seek(hdl, _offset + netOffset * _multiplier)
 	  && readUInt24(hdl, lblOffset)))

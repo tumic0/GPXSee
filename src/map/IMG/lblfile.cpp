@@ -54,15 +54,18 @@ bool LBLFile::init()
 {
 	Handle hdl;
 	quint16 codepage;
+	quint8 multiplier, poiMultiplier;
 
 	if (!(seek(hdl, 0x15) && readUInt32(hdl, _offset)
-	  && readUInt32(hdl, _size) && readByte(hdl, _multiplier)
+	  && readUInt32(hdl, _size) && readByte(hdl, multiplier)
 	  && readByte(hdl, _encoding) && seek(hdl, 0x57)
 	  && readUInt32(hdl, _poiOffset) && readUInt32(hdl, _poiSize)
-	  && seek(hdl, 0xAA) && readUInt16(hdl, codepage)))
+	  && readByte(hdl, poiMultiplier) && seek(hdl, 0xAA)
+	  && readUInt16(hdl, codepage)))
 		return false;
 
-	_multiplier = 1<<_multiplier;
+	_multiplier = 1<<multiplier;
+	_poiMultiplier = 1<<poiMultiplier;
 
 	if (codepage == 65001)
 		_codec = QTextCodec::codecForName("UTF-8");
@@ -162,14 +165,15 @@ Label LBLFile::label8b(Handle &hdl, quint32 offset) const
 
 Label LBLFile::label(Handle &hdl, quint32 offset, bool poi)
 {
-	if (!_size && !init())
+	if (!_multiplier && !init())
 		return QString();
 
 	quint32 labelOffset;
 	if (poi) {
 		quint32 poiOffset;
-		if (!(seek(hdl, _poiOffset + offset) && readUInt24(hdl, poiOffset)
-		  && (poiOffset & 0x3FFFFF)))
+		if (!(_poiSize >= offset * _poiMultiplier
+		  && seek(hdl, _poiOffset + offset * _poiMultiplier)
+		  && readUInt24(hdl, poiOffset) && (poiOffset & 0x3FFFFF)))
 			return QString();
 		labelOffset = _offset + (poiOffset & 0x3FFFFF) * _multiplier;
 	} else

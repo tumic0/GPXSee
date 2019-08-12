@@ -76,12 +76,12 @@ bool SubFile::readByte(Handle &handle, quint8 &val) const
 
 quint32 SubFile::size() const
 {
-	return _img ? _size : (quint32)_file->size();
+	return _file ? (quint32)_file->size() : _size;
 }
 
 QString SubFile::fileName() const
 {
-	return _img ? _img->fileName() : _file->fileName();
+	return _file ? _file->fileName() : _img->fileName();
 }
 
 #ifndef QT_NO_DEBUG

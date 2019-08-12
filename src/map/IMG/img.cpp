@@ -91,7 +91,7 @@ IMG::IMG(const QString &fileName)
 		}
 
 		QString fn(QByteArray(name, sizeof(name)));
-		if (VectorTile::isTileFile(tt)) {
+		if (SubFile::isTileFile(tt)) {
 			VectorTile *tile;
 			QMap<QString, VectorTile*>::iterator it = tileMap.find(fn);
 			if (it == tileMap.end()) {
