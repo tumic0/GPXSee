@@ -87,13 +87,10 @@ template<class T> bool FITParser::readValue(CTX &ctx, T &val)
 
 	ctx.len -= sizeof(T);
 
-	if (sizeof(T) > 1) {
-		if (ctx.endian)
-			val = qFromBigEndian(data);
-		else
-			val = qFromLittleEndian(data);
-	} else
-		val = data;
+	if (ctx.endian)
+		val = qFromBigEndian(data);
+	else
+		val = qFromLittleEndian(data);
 
 	return true;
 }

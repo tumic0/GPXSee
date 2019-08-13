@@ -32,10 +32,7 @@ template<class T> bool OZF::readValue(T &val)
 	if (_decrypt)
 		decrypt(&data, sizeof(T), _key);
 
-	if (sizeof(T) > 1)
-		val = qFromLittleEndian(data);
-	else
-		val = data;
+	val = qFromLittleEndian(data);
 
 	return true;
 }

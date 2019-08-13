@@ -227,10 +227,7 @@ template<class T> bool IMG::readValue(T &val)
 	if (read((char*)&data, sizeof(T)) < (qint64)sizeof(T))
 		return false;
 
-	if (sizeof(T) > 1)
-		val = qFromLittleEndian(data);
-	else
-		val = data;
+	val = qFromLittleEndian(data);
 
 	return true;
 }
