@@ -181,7 +181,9 @@ HEADERS += src/common/config.h \
     src/GUI/limitedcombobox.h \
     src/GUI/pathtickitem.h \
     src/map/IMG/textitem.h \
-    src/map/IMG/label.h
+    src/map/IMG/label.h \
+    src/data/csv.h \
+    src/data/cupparser.h
 SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -312,7 +314,9 @@ SOURCES += src/main.cpp \
     src/map/IMG/style.cpp \
     src/map/IMG/netfile.cpp \
     src/GUI/pathtickitem.cpp \
-    src/map/IMG/textitem.cpp
+    src/map/IMG/textitem.cpp \
+    src/data/csv.cpp \
+    src/data/cupparser.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     HEADERS += src/data/geojsonparser.h
