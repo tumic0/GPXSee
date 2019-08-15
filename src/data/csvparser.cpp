@@ -1,3 +1,4 @@
+#include <QStringList>
 #include "csv.h"
 #include "csvparser.h"
 

@@ -1,4 +1,5 @@
 #include <cmath>
+#include <QStringList>
 #include "csv.h"
 #include "cupparser.h"
 
@@ -21,7 +22,7 @@ static double latitude(const QString &str)
 		return NAN;
 
 	double dd = deg + min/60.0;
-	return (str.right(1) == 'S') ? -dd : dd;
+	return (str.right(1) == "S") ? -dd : dd;
 }
 
 static double longitude(const QString &str)
@@ -38,7 +39,7 @@ static double longitude(const QString &str)
 		return NAN;
 
 	double dd = deg + min/60.0;
-	return (str.right(1) == 'W') ? -dd : dd;
+	return (str.right(1) == "W") ? -dd : dd;
 }
 
 static double elevation(const QString &str)
