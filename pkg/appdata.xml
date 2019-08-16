@@ -13,7 +13,8 @@
 		<p>Features:</p>
 		<ul>
 			<li>Opens GPX, TCX, FIT, KML, IGC, NMEA, SLF, LOC, OziExplorer (PLT,
-				WPT, RTE), GeoJSON, Garmin CSV and geotagged JPEG files.</li>
+				WPT, RTE), GeoJSON, SeeYou CUP, Garmin CSV and geotagged
+				JPEG files.</li>
 			<li>User-definable online maps (OpenStreetMap/Google tiles, WMTS,
 				WMS, TMS).</li>
 			<li>Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases,
@@ -67,5 +68,6 @@
 		<mimetype>application/loc+xml</mimetype>
 		<mimetype>application/slf+xml</mimetype>
 		<mimetype>application/geo+json</mimetype>
+		<mimetype>application/vnd.naviter.seeyou.cup</mimetype>
 	</mimetypes>
 </component>

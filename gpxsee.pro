@@ -392,7 +392,8 @@ win32 {
         icons/formats/wpt.ico \
         icons/formats/loc.ico \
         icons/formats/slf.ico \
-        icons/formats/json.ico
+        icons/formats/json.ico \
+        icons/formats/cup.ico
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }

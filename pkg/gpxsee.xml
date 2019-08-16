@@ -84,4 +84,11 @@
 		<generic-icon name="text-plain"/>
 		<glob pattern="*.geojson"/>
 	</mime-type>
+
+	<mime-type type="application/vnd.naviter.seeyou.cup">
+		<comment>SeeYou CUP File</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text-plain"/>
+		<glob pattern="*.cup"/>
+	</mime-type>
 </mime-info>
