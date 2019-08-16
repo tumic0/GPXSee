@@ -375,7 +375,8 @@ macx {
         icons/formats/wpt.icns \
         icons/formats/loc.icns \
         icons/formats/slf.icns \
-        icons/formats/json.icns
+        icons/formats/json.icns \
+        icons/formats/cup.icns
     QMAKE_BUNDLE_DATA += locale maps icons csv
 }
 

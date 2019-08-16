@@ -211,6 +211,22 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>cup</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.naviter.seeyou.cup</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/cup.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>SeeYou CUP File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
@@ -465,6 +481,27 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/geo+json</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.naviter.seeyou.cup</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.naviter.com</string>
+			<key>UTTypeDescription</key>
+			<string>SeeYou CUP File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>cup</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.naviter.seeyou.cup</string>
 			</dict>
 		</dict>
 	</array>
