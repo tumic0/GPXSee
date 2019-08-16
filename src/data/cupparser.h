@@ -14,10 +14,9 @@ public:
 	int errorLine() const {return _errorLine;}
 
 private:
-	bool waypoint(const QStringList &entry, QVector<Waypoint> &waypoints,
-	  QMap<QString, Coordinates> &turnpoints);
-	bool task(const QStringList &entry, QList<RouteData> &routes,
-	  const QMap<QString, Coordinates> &turnpoints);
+	bool waypoint(const QStringList &entry, QVector<Waypoint> &waypoints);
+	bool task(const QStringList &entry, const QVector<Waypoint> &waypoints,
+	  QList<RouteData> &routes);
 
 	QString _errorString;
 	int _errorLine;

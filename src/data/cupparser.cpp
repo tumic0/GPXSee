@@ -58,8 +58,7 @@ static double elevation(const QString &str)
 }
 
 
-bool CUPParser::waypoint(const QStringList &entry, QVector<Waypoint> &waypoints,
-  QMap<QString, Coordinates> &turnpoints)
+bool CUPParser::waypoint(const QStringList &entry, QVector<Waypoint> &waypoints)
 {
 	if (entry.size() < 11) {
 		_errorString = "Invalid number of fields";
@@ -83,15 +82,13 @@ bool CUPParser::waypoint(const QStringList &entry, QVector<Waypoint> &waypoints,
 	wp.setElevation(elevation(entry.at(5)));
 	waypoints.append(wp);
 
-	turnpoints.insert(wp.name(), wp.coordinates());
-
 	return true;
 }
 
-bool CUPParser::task(const QStringList &entry, QList<RouteData> &routes,
-  const QMap<QString, Coordinates> &turnpoints)
+bool CUPParser::task(const QStringList &entry,
+  const QVector<Waypoint> &waypoints, QList<RouteData> &routes)
 {
-	if (entry.size() < 2) {
+	if (entry.size() < 3) {
 		_errorString = "Invalid number of fields";
 		return false;
 	}
@@ -99,13 +96,17 @@ bool CUPParser::task(const QStringList &entry, QList<RouteData> &routes,
 	RouteData r;
 	r.setName(entry.at(0));
 	for (int i = 1; i < entry.size(); i++) {
-		if (!turnpoints.contains(entry.at(i))) {
+		Waypoint w;
+		for (int j = 0; j < waypoints.size(); j++) {
+			if (waypoints.at(j).name() == entry.at(i)) {
+				w = waypoints.at(j);
+				break;
+			}
+		}
+		if (w.coordinates().isNull()) {
 			_errorString = entry.at(i) + ": unknown turnpoint";
 			return false;
 		}
-
-		Waypoint w(turnpoints[entry.at(i)]);
-		w.setName(entry.at(i));
 		r.append(w);
 	}
 
@@ -121,9 +122,8 @@ bool CUPParser::parse(QFile *file, QList<TrackData> &tracks,
 	Q_UNUSED(tracks);
 	Q_UNUSED(polygons);
 	CSV csv(file);
-	SegmentType st = Header;
 	QStringList entry;
-	QMap<QString, Coordinates> turnpoints;
+	SegmentType segment = Header;
 
 
 	while (!csv.atEnd()) {
@@ -133,26 +133,26 @@ bool CUPParser::parse(QFile *file, QList<TrackData> &tracks,
 			return false;
 		}
 
-		if (st == Header) {
-			st = Waypoints;
+		if (segment == Header) {
+			segment = Waypoints;
 			if (entry.size() >= 11 && entry.at(3) == "lat"
 			  && entry.at(4) == "lon") {
 				entry.clear();
 				continue;
 			}
-		} else if (st == Waypoints && entry.size() == 1
+		} else if (segment == Waypoints && entry.size() == 1
 		  && entry.at(0) == "-----Related Tasks-----") {
-			st = Tasks;
+			segment = Tasks;
 			entry.clear();
 			continue;
 		}
 
-		if (st == Waypoints) {
-			if (!waypoint(entry, waypoints, turnpoints))
+		if (segment == Waypoints) {
+			if (!waypoint(entry, waypoints))
 				return false;
-		} else if (st == Tasks) {
+		} else if (segment == Tasks) {
 			if (entry.at(0) != "Options" && entry.at(0) != "ObsZone"
-			  && !task(entry, routes, turnpoints))
+			  && !task(entry, waypoints, routes))
 				return false;
 		}
 
