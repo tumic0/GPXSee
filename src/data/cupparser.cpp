@@ -151,7 +151,7 @@ bool CUPParser::parse(QFile *file, QList<TrackData> &tracks,
 			if (!waypoint(entry, waypoints))
 				return false;
 		} else if (segment == Tasks) {
-			if (entry.at(0) != "Options" && entry.at(0) != "ObsZone"
+			if (entry.at(0) != "Options" && !entry.at(0).startsWith("ObsZone=")
 			  && !task(entry, waypoints, routes))
 				return false;
 		}
