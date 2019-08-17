@@ -30,7 +30,7 @@
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="17"/>
         <source>Maximum</source>
-        <translation>Mínima</translation>
+        <translation>Máxima</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="18"/>
