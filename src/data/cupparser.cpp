@@ -96,6 +96,9 @@ bool CUPParser::task(const QStringList &entry,
 	RouteData r;
 	r.setName(entry.at(0));
 	for (int i = 1; i < entry.size(); i++) {
+		if (entry.at(i) == "???")
+			continue;
+
 		Waypoint w;
 		for (int j = 0; j < waypoints.size(); j++) {
 			if (waypoints.at(j).name() == entry.at(i)) {
