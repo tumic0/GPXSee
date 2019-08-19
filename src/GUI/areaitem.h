@@ -27,6 +27,9 @@ public:
 	void setDigitalZoom(int zoom);
 
 private:
+	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
 	QPainterPath painterPath(const Polygon &polygon);
 	void updatePainterPath();
 	QString toolTip() const;

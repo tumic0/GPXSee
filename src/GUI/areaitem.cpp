@@ -153,3 +153,21 @@ void AreaItem::setDigitalZoom(int zoom)
 	_digitalZoom = zoom;
 	_pen.setWidthF(_width * pow(2, -_digitalZoom));
 }
+
+void AreaItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+	Q_UNUSED(event);
+
+	_pen.setWidthF((_width + 1) * pow(2, -_digitalZoom));
+	setZValue(zValue() + 1.0);
+	update();
+}
+
+void AreaItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+	Q_UNUSED(event);
+
+	_pen.setWidthF(_width * pow(2, -_digitalZoom));
+	setZValue(zValue() - 1.0);
+	update();
+}
