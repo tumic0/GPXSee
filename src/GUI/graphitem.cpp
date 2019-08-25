@@ -2,30 +2,25 @@
 #include "graphitem.h"
 
 
-GraphItem::GraphItem(const Graph &graph, GraphType type, QGraphicsItem *parent)
+GraphItem::GraphItem(const Graph &graph, GraphType type, int width,
+  const QColor &color, QGraphicsItem *parent)
   : QGraphicsObject(parent), _graph(graph), _type(type)
 {
 	Q_ASSERT(_graph.isValid());
 
-	_id = 0;
-	_width = 1;
-	_pen = QPen(Qt::black, _width);
-	_sx = 1.0; _sy = 1.0;
+	_pen = QPen(color, width);
+	_sx = 0; _sy = 0;
 	_time = _graph.hasTime();
-
 	setZValue(2.0);
-
-	updatePath();
-	updateShape();
-	updateBounds();
-
 	setAcceptHoverEvents(true);
+
+	updateBounds();
 }
 
 void GraphItem::updateShape()
 {
 	QPainterPathStroker s;
-	s.setWidth(_width + 1);
+	s.setWidth(_pen.width() + 1);
 	_shape = s.createStroke(_path);
 }
 
@@ -54,7 +49,6 @@ void GraphItem::setGraphType(GraphType type)
 
 	_type = type;
 	updatePath();
-	updateShape();
 	updateBounds();
 }
 
@@ -69,12 +63,11 @@ void GraphItem::setColor(const QColor &color)
 
 void GraphItem::setWidth(int width)
 {
-	if (width == _width)
+	if (width == _pen.width())
 		return;
 
 	prepareGeometryChange();
 
-	_width = width;
 	_pen.setWidth(width);
 
 	updateShape();
@@ -170,10 +163,10 @@ void GraphItem::emitSliderPositionChanged(qreal pos)
 void GraphItem::hover(bool hover)
 {
 	if (hover) {
-		_pen.setWidth(_width + 1);
+		_pen.setWidth(_pen.width() + 1);
 		setZValue(zValue() + 1.0);
 	} else {
-		_pen.setWidth(_width);
+		_pen.setWidth(_pen.width() - 1);
 		setZValue(zValue() - 1.0);
 	}
 
@@ -189,23 +182,30 @@ void GraphItem::setScale(qreal sx, qreal sy)
 
 	_sx = sx; _sy = sy;
 	updatePath();
-	updateShape();
 }
 
 void GraphItem::updatePath()
 {
-	_path = QPainterPath();
-
-	if (_type == Time && !_time)
+	if (_sx == 0 && _sy == 0)
 		return;
 
-	for (int i = 0; i < _graph.size(); i++) {
-		const GraphSegment &segment = _graph.at(i);
+	prepareGeometryChange();
 
-		_path.moveTo(segment.first().x(_type) * _sx, -segment.first().y() * _sy);
-		for (int i = 1; i < segment.size(); i++)
-			_path.lineTo(segment.at(i).x(_type) * _sx, -segment.at(i).y() * _sy);
+	_path = QPainterPath();
+
+	if (!(_type == Time && !_time)) {
+		for (int i = 0; i < _graph.size(); i++) {
+			const GraphSegment &segment = _graph.at(i);
+
+			_path.moveTo(segment.first().x(_type) * _sx, -segment.first().y()
+			  * _sy);
+			for (int i = 1; i < segment.size(); i++)
+				_path.lineTo(segment.at(i).x(_type) * _sx, -segment.at(i).y()
+				  * _sy);
+		}
 	}
+
+	updateShape();
 }
 
 void GraphItem::updateBounds()
@@ -286,7 +286,7 @@ void GraphItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
 	Q_UNUSED(event);
 
-	_pen.setWidthF(_width + 1);
+	_pen.setWidth(_pen.width() + 1);
 	setZValue(zValue() + 1.0);
 	update();
 
@@ -297,7 +297,7 @@ void GraphItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
 	Q_UNUSED(event);
 
-	_pen.setWidthF(_width);
+	_pen.setWidth(_pen.width() - 1);
 	setZValue(zValue() - 1.0);
 	update();
 

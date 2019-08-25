@@ -3,8 +3,9 @@
 #include "powergraphitem.h"
 
 
-PowerGraphItem::PowerGraphItem(const Graph &graph, GraphType type,
-  QGraphicsItem *parent) : GraphItem(graph, type, parent)
+PowerGraphItem::PowerGraphItem(const Graph &graph, GraphType type, int width,
+  const QColor &color, QGraphicsItem *parent)
+  : GraphItem(graph, type, width, color, parent)
 {
 	setToolTip(toolTip());
 }

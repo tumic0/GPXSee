@@ -8,8 +8,8 @@ class CadenceGraphItem : public GraphItem
 	Q_OBJECT
 
 public:
-	CadenceGraphItem(const Graph &graph, GraphType type,
-	  QGraphicsItem *parent = 0);
+	CadenceGraphItem(const Graph &graph, GraphType type, int width,
+	  const QColor &color, QGraphicsItem *parent = 0);
 
 private:
 	QString toolTip() const;

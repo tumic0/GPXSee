@@ -3,18 +3,20 @@
 
 #include "graphtab.h"
 
+class CadenceGraphItem;
+
 class CadenceGraph : public GraphTab
 {
 	Q_OBJECT
 
 public:
 	CadenceGraph(QWidget *parent = 0);
+	~CadenceGraph();
 
 	QString label() const {return tr("Cadence");}
 	QList<GraphItem*> loadData(const Data &data);
 	void clear();
 	void showTracks(bool show);
-	void showRoutes(bool show) {Q_UNUSED(show);}
 
 private:
 	qreal avg() const;
@@ -24,6 +26,7 @@ private:
 	QVector<QPointF> _avg;
 
 	bool _showTracks;
+	QList<CadenceGraphItem *> _tracks;
 };
 
 #endif // CADENCEGRAPH_H

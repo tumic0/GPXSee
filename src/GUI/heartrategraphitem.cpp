@@ -4,7 +4,8 @@
 
 
 HeartRateGraphItem::HeartRateGraphItem(const Graph &graph, GraphType type,
-  QGraphicsItem *parent) : GraphItem(graph, type, parent)
+  int width, const QColor &color, QGraphicsItem *parent)
+  : GraphItem(graph, type, width, color, parent)
 {
 	setToolTip(toolTip());
 }

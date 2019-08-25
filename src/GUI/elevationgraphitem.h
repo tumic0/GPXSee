@@ -8,8 +8,8 @@ class ElevationGraphItem : public GraphItem
 	Q_OBJECT
 
 public:
-	ElevationGraphItem(const Graph &graph, GraphType type,
-	  QGraphicsItem *parent = 0);
+	ElevationGraphItem(const Graph &graph, GraphType type, int width,
+	  const QColor &color, QGraphicsItem *parent = 0);
 
 	qreal ascent() const {return _ascent;}
 	qreal descent() const {return _descent;}

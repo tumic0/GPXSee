@@ -4,8 +4,9 @@
 #include "speedgraphitem.h"
 
 
-SpeedGraphItem::SpeedGraphItem(const Graph &graph, GraphType type,
-  qreal movingTime, QGraphicsItem *parent) : GraphItem(graph, type, parent)
+SpeedGraphItem::SpeedGraphItem(const Graph &graph, GraphType type, int width,
+  const QColor &color, qreal movingTime, QGraphicsItem *parent)
+  : GraphItem(graph, type, width, color, parent)
 {
 	_units = Metric;
 	_timeType = Total;

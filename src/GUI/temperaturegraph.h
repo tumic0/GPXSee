@@ -3,12 +3,15 @@
 
 #include "graphtab.h"
 
+class TemperatureGraphItem;
+
 class TemperatureGraph : public GraphTab
 {
 	Q_OBJECT
 
 public:
 	TemperatureGraph(QWidget *parent = 0);
+	~TemperatureGraph();
 
 	QString label() const {return tr("Temperature");}
 	QList<GraphItem*> loadData(const Data &data);
@@ -26,6 +29,7 @@ private:
 	QVector<QPointF> _avg;
 
 	bool _showTracks;
+	QList<TemperatureGraphItem *> _tracks;
 };
 
 #endif // TEMPERATUREGRAPH_H

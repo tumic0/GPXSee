@@ -14,6 +14,11 @@ TemperatureGraph::TemperatureGraph(QWidget *parent) : GraphTab(parent)
 	setSliderPrecision(1);
 }
 
+TemperatureGraph::~TemperatureGraph()
+{
+	qDeleteAll(_tracks);
+}
+
 void TemperatureGraph::setInfo()
 {
 	if (_showTracks) {
@@ -38,24 +43,29 @@ QList<GraphItem*> TemperatureGraph::loadData(const Data &data)
 		const Graph &graph = track.temperature();
 
 		if (!graph.isValid()) {
-			skipColor();
+			_palette.nextColor();
 			graphs.append(0);
 		} else {
 			TemperatureGraphItem *gi = new TemperatureGraphItem(graph,
-			  _graphType);
-			GraphView::addGraph(gi);
+			  _graphType, _width, _palette.nextColor());
+			gi->setUnits(_units);
+
+			_tracks.append(gi);
+			if (_showTracks)
+				addGraph(gi);
+
 			_avg.append(QPointF(track.distance(), gi->avg()));
 			graphs.append(gi);
 		}
 	}
 
 	for (int i = 0; i < data.routes().count(); i++) {
-		skipColor();
+		_palette.nextColor();
 		graphs.append(0);
 	}
 
 	for (int i = 0; i < data.areas().count(); i++)
-		skipColor();
+		_palette.nextColor();
 
 	setInfo();
 	redraw();
@@ -78,6 +88,9 @@ qreal TemperatureGraph::avg() const
 
 void TemperatureGraph::clear()
 {
+	qDeleteAll(_tracks);
+	_tracks.clear();
+
 	_avg.clear();
 
 	GraphTab::clear();
@@ -108,7 +121,13 @@ void TemperatureGraph::showTracks(bool show)
 {
 	_showTracks = show;
 
-	showGraph(show);
+	for (int i = 0; i < _tracks.size(); i++) {
+		if (show)
+			addGraph(_tracks.at(i));
+		else
+			removeGraph(_tracks.at(i));
+	}
+
 	setInfo();
 
 	redraw();

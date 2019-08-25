@@ -8,26 +8,18 @@
 
 static qreal nMin(qreal a, qreal b)
 {
-	if (!std::isnan(a) && !std::isnan(b))
-		return qMin(a, b);
-	else if (!std::isnan(a))
-		return a;
-	else if (!std::isnan(b))
-		return b;
+	if (std::isnan(a))
+		return std::isnan(b) ? NAN : b;
 	else
-		return NAN;
+		return std::isnan(b) ? a : qMin(a, b);
 }
 
 static qreal nMax(qreal a, qreal b)
 {
-	if (!std::isnan(a) && !std::isnan(b))
-		return qMax(a, b);
-	else if (!std::isnan(a))
-		return a;
-	else if (!std::isnan(b))
-		return b;
+	if (std::isnan(a))
+		return std::isnan(b) ? NAN : b;
 	else
-		return NAN;
+		return std::isnan(b) ? a : qMax(a, b);
 }
 
 ElevationGraph::ElevationGraph(QWidget *parent) : GraphTab(parent)
@@ -47,6 +39,12 @@ ElevationGraph::ElevationGraph(QWidget *parent) : GraphTab(parent)
 	setYUnits(Metric);
 	setYLabel(tr("Elevation"));
 	setMinYRange(50.0);
+}
+
+ElevationGraph::~ElevationGraph()
+{
+	qDeleteAll(_tracks);
+	qDeleteAll(_routes);
 }
 
 void ElevationGraph::setInfo()
@@ -70,19 +68,28 @@ void ElevationGraph::setInfo()
 GraphItem *ElevationGraph::loadGraph(const Graph &graph, Type type)
 {
 	if (!graph.isValid()) {
-		skipColor();
+		_palette.nextColor();
 		return 0;
 	}
 
-	ElevationGraphItem *gi = new ElevationGraphItem(graph, _graphType);
-	GraphView::addGraph(gi, type);
+	ElevationGraphItem *gi = new ElevationGraphItem(graph, _graphType, _width,
+	  _palette.nextColor());
+	gi->setUnits(_units);
 
 	if (type == Track) {
+		_tracks.append(gi);
+		if (_showTracks)
+			addGraph(gi);
+
 		_trackAscent += gi->ascent();
 		_trackDescent += gi->descent();
 		_trackMax = nMax(_trackMax, gi->max());
 		_trackMin = nMin(_trackMin, gi->min());
 	} else {
+		_routes.append(gi);
+		if (_showRoutes)
+			addGraph(gi);
+
 		_routeAscent += gi->ascent();
 		_routeDescent += gi->descent();
 		_routeMax = nMax(_routeMax, gi->max());
@@ -101,7 +108,7 @@ QList<GraphItem*> ElevationGraph::loadData(const Data &data)
 	for (int i = 0; i < data.routes().count(); i++)
 		graphs.append(loadGraph(data.routes().at(i).elevation(), Route));
 	for (int i = 0; i < data.areas().count(); i++)
-		skipColor();
+		_palette.nextColor();
 
 	setInfo();
 	redraw();
@@ -111,6 +118,11 @@ QList<GraphItem*> ElevationGraph::loadData(const Data &data)
 
 void ElevationGraph::clear()
 {
+	qDeleteAll(_tracks);
+	_tracks.clear();
+	qDeleteAll(_routes);
+	_routes.clear();
+
 	_trackAscent = 0;
 	_routeAscent = 0;
 	_trackDescent = 0;
@@ -142,12 +154,23 @@ void ElevationGraph::setUnits(Units units)
 	GraphView::setUnits(units);
 }
 
+void ElevationGraph::showItems(const QList<ElevationGraphItem *> &list,
+  bool show)
+{
+	for (int i = 0; i < list.size(); i++) {
+		if (show)
+			addGraph(list.at(i));
+		else
+			removeGraph(list.at(i));
+	}
+}
+
 void ElevationGraph::showTracks(bool show)
 {
 	_showTracks = show;
 
+	showItems(_tracks, show);
 	setInfo();
-	showGraph(show, Track);
 
 	redraw();
 }
@@ -156,7 +179,7 @@ void ElevationGraph::showRoutes(bool show)
 {
 	_showRoutes = show;
 
-	showGraph(show, Route);
+	showItems(_routes, show);
 	setInfo();
 
 	redraw();

@@ -74,8 +74,6 @@ GraphView::~GraphView()
 	delete _info;
 	delete _grid;
 	delete _message;
-
-	qDeleteAll(_graphs);
 }
 
 void GraphView::createXLabel()
@@ -166,14 +164,7 @@ void GraphView::setGraphType(GraphType type)
 	for (int i = 0; i < _graphs.count(); i++) {
 		GraphItem *gi = _graphs.at(i);
 		gi->setGraphType(type);
-		if (!_hide.contains(gi->id())) {
-			if (gi->bounds().width() > 0)
-				addItem(gi);
-			else
-				removeItem(gi);
-		}
-		if (gi->scene() == _scene)
-			_bounds |= gi->bounds();
+		_bounds |= gi->bounds();
 	}
 
 	if (type == Distance)
@@ -195,29 +186,31 @@ void GraphView::showSliderInfo(bool show)
 	_sliderInfo->setVisible(show);
 }
 
-void GraphView::addGraph(GraphItem *graph, int id)
+void GraphView::addGraph(GraphItem *graph)
 {
-	QColor color(_palette.nextColor());
-	color.setAlpha(255);
-
-	graph->setUnits(_units);
-	graph->setId(id);
-	graph->setColor(color);
-	graph->setWidth(_width);
-
 	connect(this, SIGNAL(sliderPositionChanged(qreal)), graph,
 	  SLOT(emitSliderPositionChanged(qreal)));
 
 	_graphs.append(graph);
+	_scene->addItem(graph);
+	_bounds |= graph->bounds();
 
-	if (!_hide.contains(id)) {
-		_visible.append(graph);
-		if (graph->bounds().width() > 0) {
-			_scene->addItem(graph);
-			_bounds |= graph->bounds();
-		}
-		setXUnits();
-	}
+	setXUnits();
+}
+
+void GraphView::removeGraph(GraphItem *graph)
+{
+	disconnect(this, SIGNAL(sliderPositionChanged(qreal)), graph,
+	  SLOT(emitSliderPositionChanged(qreal)));
+
+	_graphs.removeOne(graph);
+	_scene->removeItem(graph);
+
+	_bounds = QRectF();
+	for (int i = 0; i < _graphs.count(); i++)
+		_bounds |= _graphs.at(i)->bounds();
+
+	setXUnits();
 }
 
 void GraphView::removeItem(QGraphicsItem *item)
@@ -230,29 +223,6 @@ void GraphView::addItem(QGraphicsItem *item)
 {
 	if (item->scene() != _scene)
 		_scene->addItem(item);
-}
-
-void GraphView::showGraph(bool show, int id)
-{
-	if (show)
-		_hide.remove(id);
-	else
-		_hide.insert(id);
-
-	_visible.clear();
-	_bounds = QRectF();
-	for (int i = 0; i < _graphs.count(); i++) {
-		GraphItem *gi = _graphs.at(i);
-		if (_hide.contains(gi->id()))
-			removeItem(gi);
-		else {
-			_visible.append(gi);
-			if (gi->bounds().width() > 0) {
-				addItem(gi);
-				_bounds |= gi->bounds();
-			}
-		}
-	}
 }
 
 QRectF GraphView::bounds() const
@@ -314,8 +284,8 @@ void GraphView::redraw(const QSizeF &size)
 	sy = (size.height() - (mx.height() + my.height())
 	  - _info->boundingRect().height()) / r.height();
 
-	for (int i = 0; i < _visible.size(); i++)
-		_visible.at(i)->setScale(sx, sy);
+	for (int i = 0; i < _graphs.size(); i++)
+		_graphs.at(i)->setScale(sx, sy);
 
 	QPointF p(r.left() * sx, r.top() * sy);
 	QSizeF s(r.width() * sx, r.height() * sy);
@@ -376,12 +346,11 @@ void GraphView::plot(QPainter *painter, const QRectF &target, qreal scale)
 
 void GraphView::clear()
 {
+	_graphs.clear();
+
 	_slider->clear();
 	_info->clear();
 
-	qDeleteAll(_graphs);
-	_graphs.clear();
-	_visible.clear();
 	_palette.reset();
 
 	_bounds = QRectF();
@@ -392,38 +361,29 @@ void GraphView::clear()
 
 void GraphView::updateSliderPosition()
 {
-	if (bounds().width() <= 0)
-		return;
-
 	if (_sliderPos <= bounds().right() && _sliderPos >= bounds().left()) {
 		_slider->setPos((_sliderPos / bounds().width())
 		  * _slider->area().width(), _slider->area().bottom());
-		_slider->setVisible(!_visible.isEmpty());
+		_slider->setVisible(true);
+		updateSliderInfo();
 	} else {
 		_slider->setPos(_slider->area().left(), _slider->area().bottom());
 		_slider->setVisible(false);
 	}
-
-	if (_slider->isVisible())
-		updateSliderInfo();
 }
 
 void GraphView::updateSliderInfo()
 {
 	QLocale l(QLocale::system());
-	qreal r, y;
+	qreal r = 0, y = 0;
 
-
-	if (_visible.count() > 1) {
-		r = 0;
-		y = 0;
-	} else {
-		QRectF br(_visible.first()->bounds());
+	if (_graphs.count() == 1) {
+		QRectF br(_graphs.first()->bounds());
 		if (br.height() < _minYRange)
 			br.adjust(0, -(_minYRange/2 - br.height()/2), 0,
 			  _minYRange/2 - br.height()/2);
 
-		y = _visible.first()->yAtX(_sliderPos);
+		y = _graphs.first()->yAtX(_sliderPos);
 		r = (y - br.bottom()) / br.height();
 	}
 
@@ -435,7 +395,7 @@ void GraphView::updateSliderInfo()
 	_sliderInfo->setPos(QPointF(0, _slider->boundingRect().height() * r));
 	_sliderInfo->setText(_graphType == Time ? Format::timeSpan(_sliderPos,
 	  bounds().width() > 3600) : l.toString(_sliderPos * _xScale, 'f', 1)
-	  + UNIT_SPACE + _xUnits, (_visible.count() > 1) ? QString()
+	  + UNIT_SPACE + _xUnits, (_graphs.count() > 1) ? QString()
 	  : l.toString(-y * _yScale + _yOffset, 'f', _precision) + UNIT_SPACE
 	  + _yUnits);
 }
@@ -455,7 +415,7 @@ void GraphView::emitSliderPositionChanged(const QPointF &pos)
 
 void GraphView::setSliderPosition(qreal pos)
 {
-	if (_visible.isEmpty())
+	if (_graphs.isEmpty())
 		return;
 
 	_sliderPos = pos;
@@ -483,11 +443,8 @@ void GraphView::setPalette(const Palette &palette)
 	_palette = palette;
 	_palette.reset();
 
-	for (int i = 0; i < _graphs.count(); i++) {
-		QColor color(_palette.nextColor());
-		color.setAlpha(255);
-		_graphs.at(i)->setColor(color);
-	}
+	for (int i = 0; i < _graphs.count(); i++)
+		_graphs.at(i)->setColor(_palette.nextColor());
 }
 
 void GraphView::setGraphWidth(int width)

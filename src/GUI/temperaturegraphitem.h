@@ -8,8 +8,8 @@ class TemperatureGraphItem : public GraphItem
 	Q_OBJECT
 
 public:
-	TemperatureGraphItem(const Graph &graph, GraphType type,
-	  QGraphicsItem *parent = 0);
+	TemperatureGraphItem(const Graph &graph, GraphType type, int width,
+	  const QColor &color, QGraphicsItem *parent = 0);
 
 	qreal max() const {return _max;}
 	qreal min() const {return _min;}

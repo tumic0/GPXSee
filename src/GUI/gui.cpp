@@ -739,6 +739,7 @@ void GUI::paths()
 	msgBox.exec();
 }
 
+#include <QElapsedTimer>
 void GUI::openFile()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open file"),

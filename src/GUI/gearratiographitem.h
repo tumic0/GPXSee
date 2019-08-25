@@ -9,8 +9,8 @@ class GearRatioGraphItem : public GraphItem
 	Q_OBJECT
 
 public:
-	GearRatioGraphItem(const Graph &graph, GraphType type,
-	  QGraphicsItem *parent = 0);
+	GearRatioGraphItem(const Graph &graph, GraphType type, int width,
+	  const QColor &color, QGraphicsItem *parent = 0);
 
 	qreal top() const {return _top;}
 

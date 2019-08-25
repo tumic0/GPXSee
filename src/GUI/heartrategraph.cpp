@@ -14,6 +14,11 @@ HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphTab(parent)
 	setSliderPrecision(0);
 }
 
+HeartRateGraph::~HeartRateGraph()
+{
+	qDeleteAll(_tracks);
+}
+
 void HeartRateGraph::setInfo()
 {
 	if (_showTracks) {
@@ -36,23 +41,28 @@ QList<GraphItem*> HeartRateGraph::loadData(const Data &data)
 		const Graph &graph = track.heartRate();
 
 		if (!graph.isValid()) {
-			skipColor();
+			_palette.nextColor();
 			graphs.append(0);
 		} else {
-			HeartRateGraphItem *gi = new HeartRateGraphItem(graph, _graphType);
-			GraphView::addGraph(gi);
+			HeartRateGraphItem *gi = new HeartRateGraphItem(graph, _graphType,
+			  _width, _palette.nextColor());
+
+			_tracks.append(gi);
+			if (_showTracks)
+				addGraph(gi);
+
 			_avg.append(QPointF(track.distance(), gi->avg()));
 			graphs.append(gi);
 		}
 	}
 
 	for (int i = 0; i < data.routes().count(); i++) {
-		skipColor();
+		_palette.nextColor();
 		graphs.append(0);
 	}
 
 	for (int i = 0; i < data.areas().count(); i++)
-		skipColor();
+		_palette.nextColor();
 
 	setInfo();
 	redraw();
@@ -75,6 +85,9 @@ qreal HeartRateGraph::avg() const
 
 void HeartRateGraph::clear()
 {
+	qDeleteAll(_tracks);
+	_tracks.clear();
+
 	_avg.clear();
 
 	GraphTab::clear();
@@ -84,7 +97,13 @@ void HeartRateGraph::showTracks(bool show)
 {
 	_showTracks = show;
 
-	showGraph(show);
+	for (int i = 0; i < _tracks.size(); i++) {
+		if (show)
+			addGraph(_tracks.at(i));
+		else
+			removeGraph(_tracks.at(i));
+	}
+
 	setInfo();
 
 	redraw();

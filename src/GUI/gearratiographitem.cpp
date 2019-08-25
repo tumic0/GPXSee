@@ -5,7 +5,8 @@
 
 
 GearRatioGraphItem::GearRatioGraphItem(const Graph &graph, GraphType type,
-  QGraphicsItem *parent) : GraphItem(graph, type, parent), _top(NAN)
+  int width, const QColor &color, QGraphicsItem *parent)
+  : GraphItem(graph, type, width, color, parent)
 {
 	for (int i = 0; i < graph.size(); i++) {
 		const GraphSegment &segment = graph.at(i);
@@ -14,6 +15,16 @@ GearRatioGraphItem::GearRatioGraphItem(const Graph &graph, GraphType type,
 			_map.insert(segment.at(j).y(), _map.value(segment.at(j).y()) + dx);
 		}
 	}
+
+	qreal key = NAN, val = NAN;
+	for (QMap<qreal, qreal>::const_iterator it = _map.constBegin();
+	  it != _map.constEnd(); ++it) {
+		if (std::isnan(val) || it.value() > val) {
+			val = it.value();
+			key = it.key();
+		}
+	}
+	_top = key;
 
 	setToolTip(toolTip());
 }

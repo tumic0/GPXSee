@@ -3,12 +3,15 @@
 
 #include "graphtab.h"
 
+class ElevationGraphItem;
+
 class ElevationGraph : public GraphTab
 {
 	Q_OBJECT
 
 public:
 	ElevationGraph(QWidget *parent = 0);
+	~ElevationGraph();
 
 	QString label() const {return tr("Elevation");}
 	QList<GraphItem*> loadData(const Data &data);
@@ -29,6 +32,7 @@ private:
 	void setInfo();
 
 	GraphItem *loadGraph(const Graph &graph, Type type);
+	void showItems(const QList<ElevationGraphItem *> &list, bool show);
 
 	qreal _trackAscent, _trackDescent;
 	qreal _routeAscent, _routeDescent;
@@ -36,6 +40,7 @@ private:
 	qreal _trackMin, _routeMin;
 
 	bool _showTracks, _showRoutes;
+	QList<ElevationGraphItem *> _tracks, _routes;
 };
 
 #endif // ELEVATIONGRAPH_H

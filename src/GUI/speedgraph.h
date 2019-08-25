@@ -4,12 +4,15 @@
 #include <QList>
 #include "graphtab.h"
 
+class SpeedGraphItem;
+
 class SpeedGraph : public GraphTab
 {
 	Q_OBJECT
 
 public:
 	SpeedGraph(QWidget *parent = 0);
+	~SpeedGraph();
 
 	QString label() const {return tr("Speed");}
 	QList<GraphItem*> loadData(const Data &data);
@@ -29,7 +32,9 @@ private:
 
 	Units _units;
 	TimeType _timeType;
+
 	bool _showTracks;
+	QList<SpeedGraphItem *> _tracks;
 };
 
 #endif // SPEEDGRAPH_H

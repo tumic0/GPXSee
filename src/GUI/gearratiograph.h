@@ -4,12 +4,15 @@
 #include <QMap>
 #include "graphtab.h"
 
+class GearRatioGraphItem;
+
 class GearRatioGraph : public GraphTab
 {
 	Q_OBJECT
 
 public:
 	GearRatioGraph(QWidget *parent = 0);
+	~GearRatioGraph();
 
 	QString label() const {return tr("Gear ratio");}
 	QList<GraphItem*> loadData(const Data &data);
@@ -25,6 +28,7 @@ private:
 	QMap<qreal, qreal> _map;
 
 	bool _showTracks;
+	QList<GearRatioGraphItem*> _tracks;
 };
 
 #endif // GEARRATIOGRAPH_H
