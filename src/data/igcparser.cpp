@@ -130,6 +130,8 @@ bool IGCParser::readBRecord(SegmentData &segment, const char *line,
 
 	if (len < 35)
 		return false;
+	if (line[24] != 'A')
+		return true;
 
 	if (!readTimestamp(line + 1, time)) {
 		_errorString = "Invalid timestamp";
