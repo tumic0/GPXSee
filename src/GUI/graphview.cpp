@@ -1,8 +1,7 @@
 #include <QGraphicsScene>
 #include <QEvent>
 #include <QMouseEvent>
-#include <QPaintEngine>
-#include <QPaintDevice>
+#include <QScrollBar>
 #include <QGraphicsSimpleTextItem>
 #include <QPalette>
 #include <QLocale>
@@ -64,6 +63,8 @@ GraphView::GraphView(QWidget *parent)
 	_units = Metric;
 	_graphType = Distance;
 	_xLabel = tr("Distance");
+
+	_zoom = 1.0;
 }
 
 GraphView::~GraphView()
@@ -283,6 +284,7 @@ void GraphView::redraw(const QSizeF &size)
 	sx = (size.width() - (my.width() + mx.width())) / r.width();
 	sy = (size.height() - (mx.height() + my.height())
 	  - _info->boundingRect().height()) / r.height();
+	sx *= _zoom;
 
 	for (int i = 0; i < _graphs.size(); i++)
 		_graphs.at(i)->setScale(sx, sy);
@@ -330,6 +332,39 @@ void GraphView::mousePressEvent(QMouseEvent *e)
 	QGraphicsView::mousePressEvent(e);
 }
 
+void GraphView::wheelEvent(QWheelEvent *e)
+{
+	static int deg = 0;
+
+	deg += e->delta() / 8;
+	if (qAbs(deg) < 15)
+		return;
+	deg = 0;
+
+	QPointF pos = mapToScene(e->pos());
+	QRectF gr(_grid->boundingRect());
+	QPointF r(pos.x() / gr.width(), pos.y() / gr.height());
+
+	_zoom = (e->delta() > 0) ? _zoom * 1.25 : qMax(_zoom / 1.25, 1.0);
+	redraw();
+
+	gr = _grid->boundingRect();
+	QPointF npos(mapFromScene(QPointF(r.x() * gr.width(), r.y() * gr.height())));
+	QScrollBar *sb = horizontalScrollBar();
+	sb->setSliderPosition(sb->sliderPosition() + npos.x() - e->pos().x());
+
+	QGraphicsView::wheelEvent(e);
+}
+
+void GraphView::paintEvent(QPaintEvent *event)
+{
+	QRectF viewRect(mapToScene(rect()).boundingRect());
+	_info->setPos(QPointF(viewRect.left() + (viewRect.width()
+	  - _info->boundingRect().width())/2.0, _info->pos().y()));
+
+	QGraphicsView::paintEvent(event);
+}
+
 void GraphView::plot(QPainter *painter, const QRectF &target, qreal scale)
 {
 	QSizeF canvas = QSizeF(target.width() / scale, target.height() / scale);
@@ -355,6 +390,7 @@ void GraphView::clear()
 
 	_bounds = QRectF();
 	_sliderPos = 0;
+	_zoom = 1.0;
 
 	_scene->setSceneRect(0, 0, 0, 0);
 }

@@ -69,8 +69,6 @@ protected:
 	void addInfo(const QString &key, const QString &value);
 	void clearInfo();
 
-	void changeEvent(QEvent *e);
-
 	GraphType _graphType;
 	Units _units;
 	Palette _palette;
@@ -92,6 +90,9 @@ private:
 
 	void resizeEvent(QResizeEvent *e);
 	void mousePressEvent(QMouseEvent *e);
+	void wheelEvent(QWheelEvent *e);
+	void changeEvent(QEvent *e);
+	void paintEvent(QPaintEvent *event);
 
 	QGraphicsScene *_scene;
 
@@ -112,6 +113,8 @@ private:
 	QString _xLabel, _yLabel;
 	int _precision;
 	qreal _minYRange;
+
+	qreal _zoom;
 };
 
 #endif // GRAPHVIEW_H
