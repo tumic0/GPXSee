@@ -348,8 +348,9 @@ void GraphView::wheelEvent(QWheelEvent *e)
 	_zoom = (e->delta() > 0) ? _zoom * 1.25 : qMax(_zoom / 1.25, 1.0);
 	redraw();
 
-	gr = _grid->boundingRect();
-	QPointF npos(mapFromScene(QPointF(r.x() * gr.width(), r.y() * gr.height())));
+	QRectF ngr(_grid->boundingRect());
+	QPointF npos(mapFromScene(QPointF(r.x() * ngr.width(),
+	  r.y() * ngr.height())));
 	QScrollBar *sb = horizontalScrollBar();
 	sb->setSliderPosition(sb->sliderPosition() + npos.x() - e->pos().x());
 
