@@ -31,8 +31,7 @@ public:
 	static void useDEM(bool use);
 
 private:
-	void processData(const QList<TrackData> &trackData,
-	  const QList<RouteData> &routeData);
+	void processData(QList<TrackData> &trackData, QList<RouteData> &routeData);
 
 	bool _valid;
 	QString _errorString;

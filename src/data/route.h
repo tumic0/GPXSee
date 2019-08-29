@@ -13,7 +13,7 @@ public:
 
 	Path path() const;
 
-	const QVector<Waypoint> &waypoints() const {return _data;}
+	const RouteData &data() const {return _data;}
 
 	Graph elevation() const;
 
@@ -24,13 +24,9 @@ public:
 
 	bool isValid() const {return _data.size() >= 2;}
 
-	static void useDEM(bool use) {_useDEM = use;}
-
 private:
 	RouteData _data;
 	QVector<qreal> _distance;
-
-	static bool _useDEM;
 };
 
 #endif // ROUTE_H

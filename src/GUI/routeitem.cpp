@@ -24,7 +24,7 @@ QString RouteItem::toolTip(Units units) const
 RouteItem::RouteItem(const Route &route, Map *map, QGraphicsItem *parent)
   : PathItem(route.path(), map, parent)
 {
-	const QVector<Waypoint> &waypoints = route.waypoints();
+	const RouteData &waypoints = route.data();
 
 	_waypoints.resize(waypoints.size());
 	for (int i = 0; i < waypoints.size(); i++)

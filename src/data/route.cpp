@@ -2,8 +2,6 @@
 #include "route.h"
 
 
-bool Route::_useDEM = false;
-
 Route::Route(const RouteData &data) : _data(data)
 {
 	qreal dist = 0;
@@ -34,19 +32,8 @@ Graph Route::elevation() const
 	graph.append(GraphSegment());
 	GraphSegment &gs = graph.last();
 
-	for (int i = 0; i < _data.size(); i++) {
-		if (_data.at(i).hasElevation() && !_useDEM)
-			gs.append(GraphPoint(_distance.at(i), NAN,
-			  _data.at(i).elevation()));
-		else {
-			qreal elevation = DEM::elevation(_data.at(i).coordinates());
-			if (!std::isnan(elevation))
-				gs.append(GraphPoint(_distance.at(i), NAN, elevation));
-			else if (_data.at(i).hasElevation())
-				gs.append(GraphPoint(_distance.at(i), NAN,
-				  _data.at(i).elevation()));
-		}
-	}
+	for (int i = 0; i < _data.size(); i++)
+		gs.append(GraphPoint(_distance.at(i), NAN, _data.at(i).elevation()));
 
 	return graph;
 }

@@ -71,13 +71,35 @@ static QHash<QString, Parser*> parsers()
 QHash<QString, Parser*> Data::_parsers = parsers();
 bool Data::_useDEM = false;
 
-void Data::processData(const QList<TrackData> &trackData,
-  const QList<RouteData> &routeData)
+void Data::processData(QList<TrackData> &trackData, QList<RouteData> &routeData)
 {
-	for (int i = 0; i < trackData.count(); i++)
+	for (int i = 0; i < trackData.count(); i++) {
+		TrackData &track = trackData[i];
+		for (int j = 0; j < track.size(); j++) {
+			SegmentData &segment = track[j];
+			for (int k = 0; k < segment.size(); k++) {
+				Trackpoint &t = segment[k];
+				if (!t.hasElevation() || _useDEM) {
+					qreal elevation = DEM::elevation(t.coordinates());
+					if (!std::isnan(elevation))
+						t.setElevation(elevation);
+				}
+			}
+		}
 		_tracks.append(Track(trackData.at(i)));
-	for (int i = 0; i < routeData.count(); i++)
+	}
+	for (int i = 0; i < routeData.count(); i++) {
+		RouteData &route = routeData[i];
+		for (int j = 0; j < route.size(); j++) {
+			Waypoint &w = route[j];
+			if (!w.hasElevation() || _useDEM) {
+				qreal elevation = DEM::elevation(w.coordinates());
+				if (!std::isnan(elevation))
+					w.setElevation(elevation);
+			}
+		}
 		_routes.append(Route(routeData.at(i)));
+	}
 	for (int i = 0; i < _waypoints.size(); i++) {
 		if (!_waypoints.at(i).hasElevation() || _useDEM) {
 			qreal elevation = DEM::elevation(_waypoints.at(i).coordinates());
@@ -181,6 +203,4 @@ QStringList Data::filter()
 void Data::useDEM(bool use)
 {
 	_useDEM = use;
-	Route::useDEM(use);
-	Track::useDEM(use);
 }
