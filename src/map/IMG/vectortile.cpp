@@ -11,26 +11,31 @@ SubFile *VectorTile::file(SubFile::Type type)
 			return _lbl;
 		case SubFile::NET:
 			return _net;
+		case SubFile::GMP:
+			return _gmp;
 		default:
 			return 0;
 	}
 }
 
-SubFile *VectorTile::addFile(IMG *img, SubFile::Type type, quint32 size)
+SubFile *VectorTile::addFile(IMG *img, SubFile::Type type)
 {
 	switch (type) {
 		case SubFile::TRE:
-			_tre = new TREFile(img, size);
+			_tre = new TREFile(img);
 			return _tre;
 		case SubFile::RGN:
-			_rgn = new RGNFile(img, size);
+			_rgn = new RGNFile(img);
 			return _rgn;
 		case SubFile::LBL:
-			_lbl = new LBLFile(img, size);
+			_lbl = new LBLFile(img);
 			return _lbl;
 		case SubFile::NET:
-			_net = new NETFile(img, size);
+			_net = new NETFile(img);
 			return _net;
+		case SubFile::GMP:
+			_gmp = new SubFile(img);
+			return _gmp;
 		default:
 			return 0;
 	}
@@ -38,13 +43,29 @@ SubFile *VectorTile::addFile(IMG *img, SubFile::Type type, quint32 size)
 
 bool VectorTile::init()
 {
-	if (!(_tre && _tre->isValid() && _tre->init() && _rgn
-	  && _rgn->isValid()))
+	if (_gmp && !initGMP())
 		return false;
-	if (_lbl && !_lbl->isValid())
+
+	if (!(_tre && _tre->init() && _rgn && _rgn->init()))
 		return false;
-	if (_net && !_net->isValid())
+
+	return true;
+}
+
+bool VectorTile::initGMP()
+{
+	SubFile::Handle hdl;
+	quint32 tre, rgn, lbl, net;
+
+	if (!(_gmp->seek(hdl, 0x19) && _gmp->readUInt32(hdl, tre)
+	  && _gmp->readUInt32(hdl, rgn) && _gmp->readUInt32(hdl, lbl)
+	  && _gmp->readUInt32(hdl, net)))
 		return false;
+
+	_tre = new TREFile(_gmp, tre);
+	_rgn = new RGNFile(_gmp, rgn);
+	_lbl = new LBLFile(_gmp, lbl);
+	_net = new NETFile(_gmp, net);
 
 	return true;
 }

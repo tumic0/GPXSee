@@ -6,8 +6,9 @@
 class NETFile : public SubFile
 {
 public:
-	NETFile(IMG *img, quint32 size)
-	  : SubFile(img, size), _offset(0), _size(0), _multiplier(0) {}
+	NETFile(IMG *img) : SubFile(img), _offset(0), _size(0), _multiplier(0) {}
+	NETFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
+	  _offset(0), _size(0), _multiplier(0) {}
 
 	bool lblOffset(Handle &hdl, quint32 netOffset, quint32 &lblOffset);
 

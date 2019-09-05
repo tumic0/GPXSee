@@ -5,7 +5,7 @@ bool NETFile::init()
 	Handle hdl;
 	quint8 multiplier;
 
-	if (!(seek(hdl, 0x15) && readUInt32(hdl, _offset)
+	if (!(seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _offset)
 	  && readUInt32(hdl, _size) && readByte(hdl, multiplier)))
 		return false;
 

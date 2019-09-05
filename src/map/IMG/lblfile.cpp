@@ -56,11 +56,11 @@ bool LBLFile::init()
 	quint16 codepage;
 	quint8 multiplier, poiMultiplier;
 
-	if (!(seek(hdl, 0x15) && readUInt32(hdl, _offset)
+	if (!(seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _offset)
 	  && readUInt32(hdl, _size) && readByte(hdl, multiplier)
-	  && readByte(hdl, _encoding) && seek(hdl, 0x57)
+	  && readByte(hdl, _encoding) && seek(hdl, _gmpOffset + 0x57)
 	  && readUInt32(hdl, _poiOffset) && readUInt32(hdl, _poiSize)
-	  && readByte(hdl, poiMultiplier) && seek(hdl, 0xAA)
+	  && readByte(hdl, poiMultiplier) && seek(hdl, _gmpOffset + 0xAA)
 	  && readUInt16(hdl, codepage)))
 		return false;
 

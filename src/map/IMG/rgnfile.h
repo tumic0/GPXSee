@@ -11,10 +11,15 @@ class NETFile;
 class RGNFile : public SubFile
 {
 public:
-	RGNFile(IMG *img, quint32 size)
-	  : SubFile(img, size), _offset(0), _size(0), _polygonsOffset(0),
-	  _polygonsSize(), _linesOffset(), _linesSize(), _pointsOffset(),
-	  _pointsSize() {}
+	RGNFile(IMG *img)
+	  : SubFile(img), _offset(0), _size(0), _polygonsOffset(0),
+	  _polygonsSize(0), _linesOffset(0), _linesSize(0), _pointsOffset(0),
+	  _pointsSize(0) {}
+	RGNFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset), _offset(0),
+	  _size(0), _polygonsOffset(0), _polygonsSize(0), _linesOffset(0),
+	  _linesSize(0), _pointsOffset(0), _pointsSize(0) {}
+
+	bool init();
 
 	void objects(const RectC &rect, const SubDiv *subdiv, LBLFile *lbl,
 	  NETFile *net, QList<IMG::Poly> *polygons, QList<IMG::Poly> *lines,
@@ -73,7 +78,6 @@ private:
 	static bool sign(BitStream &bs, int &val);
 	static int bitSize(quint8 baseSize, bool variableSign, bool extraBit);
 
-	bool init();
 	QVector<Segment> segments(Handle &hdl, const SubDiv *subdiv) const;
 	bool polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
 	  const Segment &segment, LBLFile *lbl, Handle &lblHdl, NETFile *net,

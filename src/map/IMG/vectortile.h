@@ -10,8 +10,9 @@
 
 class VectorTile {
 public:
-	VectorTile() : _tre(0), _rgn(0), _lbl(0), _net(0) {}
-	~VectorTile() {delete _tre; delete _rgn; delete _lbl; delete _net;}
+	VectorTile() : _tre(0), _rgn(0), _lbl(0), _net(0), _gmp(0) {}
+	~VectorTile()
+	  {delete _tre; delete _rgn; delete _lbl; delete _net; delete _gmp;}
 
 	bool init();
 	void clear() {_tre->clear();}
@@ -19,7 +20,7 @@ public:
 	const RectC &bounds() const {return _tre->bounds();}
 
 	SubFile *file(SubFile::Type type);
-	SubFile *addFile(IMG *img, SubFile::Type type, quint32 size);
+	SubFile *addFile(IMG *img, SubFile::Type type);
 
 	void objects(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
 	  QList<IMG::Poly> *lines, QList<IMG::Point> *points) const;
@@ -27,10 +28,13 @@ public:
 	friend QDebug operator<<(QDebug dbg, const VectorTile &tile);
 
 private:
+	bool initGMP();
+
 	TREFile *_tre;
 	RGNFile *_rgn;
 	LBLFile *_lbl;
 	NETFile *_net;
+	SubFile *_gmp;
 };
 
 #ifndef QT_NO_DEBUG

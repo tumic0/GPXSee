@@ -942,7 +942,7 @@ Style::Style(SubFile *typ)
 	defaultPolygonStyle();
 	defaultPointStyle();
 
-	if (typ && typ->isValid())
+	if (typ)
 		parseTYPFile(typ);
 }
 

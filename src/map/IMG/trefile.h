@@ -13,7 +13,8 @@ class SubDiv;
 class TREFile : public SubFile
 {
 public:
-	TREFile(IMG *img, quint32 size) : SubFile(img, size) {}
+	TREFile(IMG *img) : SubFile(img) {}
+	TREFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset) {}
 	~TREFile();
 
 	bool init();

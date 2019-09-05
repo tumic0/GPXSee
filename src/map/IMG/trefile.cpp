@@ -43,28 +43,28 @@ bool TREFile::init()
 	quint8 locked;
 	quint16 hdrLen;
 
-	if (!(seek(hdl, 0) && readUInt16(hdl, hdrLen)
-	  && seek(hdl, 0x0D) && readByte(hdl, locked)))
+	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)
+	  && seek(hdl, _gmpOffset + 0x0D) && readByte(hdl, locked)))
 		return false;
 
 	// Tile bounds
 	qint32 north, east, south, west;
-	if (!(seek(hdl, 0x15) && readInt24(hdl, north) && readInt24(hdl, east)
-	  && readInt24(hdl, south) && readInt24(hdl, west)))
+	if (!(seek(hdl, _gmpOffset + 0x15) && readInt24(hdl, north)
+	  && readInt24(hdl, east) && readInt24(hdl, south) && readInt24(hdl, west)))
 		return false;
 	_bounds = RectC(Coordinates(toWGS84(west), toWGS84(north)),
 	  Coordinates(toWGS84(east), toWGS84(south)));
 
 	// Levels & subdivs info
 	quint32 levelsOffset, levelsSize, subdivSize;
-	if (!(seek(hdl, 0x21) && readUInt32(hdl, levelsOffset)
+	if (!(seek(hdl, _gmpOffset + 0x21) && readUInt32(hdl, levelsOffset)
 	  && readUInt32(hdl, levelsSize) && readUInt32(hdl, _subdivOffset)
 	  && readUInt32(hdl, subdivSize)))
 		return false;
 
 	// TRE7 info
 	if (hdrLen > 0x9A) {
-		if (!(seek(hdl, 0x7C) && readUInt32(hdl, _extended.offset)
+		if (!(seek(hdl, _gmpOffset + 0x7C) && readUInt32(hdl, _extended.offset)
 		  && readUInt32(hdl, _extended.size)
 		  && readUInt16(hdl, _extended.itemSize)))
 			return false;
@@ -80,7 +80,7 @@ bool TREFile::init()
 	if (locked) {
 		quint32 key;
 		quint8 unlocked[64];
-		if (!seek(hdl, 0xAA) || !readUInt32(hdl, key))
+		if (!seek(hdl, _gmpOffset + 0xAA) || !readUInt32(hdl, key))
 			return false;
 		unlock(unlocked, levels, levelsSize, key);
 		memcpy(levels, unlocked, levelsSize);

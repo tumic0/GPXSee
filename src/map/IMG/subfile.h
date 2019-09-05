@@ -22,13 +22,14 @@ public:
 		int pos;
 	};
 
-	SubFile(IMG *img, quint32 size) : _img(img), _file(0), _size(size) {}
+	SubFile(IMG *img) : _gmpOffset(0), _img(img), _file(0),
+	  _blocks(&_blockData) {}
+	SubFile(SubFile *gmp, quint32 offset) : _gmpOffset(offset), _img(gmp->_img),
+	  _file(0), _blocks(&(gmp->_blockData)) {}
 	SubFile(QFile *file);
 
-	void addBlock(quint16 block) {_blocks.append(block);}
-	bool isValid() const;
+	void addBlock(quint16 block) {_blocks->append(block);}
 
-	quint32 size() const;
 	bool seek(Handle &handle, quint32 pos) const;
 	bool readByte(Handle &handle, quint8 &val) const;
 
@@ -80,20 +81,26 @@ public:
 		return true;
 	}
 
-	quint16 offset() const {return _blocks.first();}
+	quint16 offset() const {return _blocks->first();}
 	QString fileName() const;
 
 	static Type type(const char str[3]);
 	static bool isTileFile(Type type)
-	  {return (type == TRE || type == LBL || type == RGN || type == NET);}
+	{
+		return (type == TRE || type == LBL || type == RGN || type == NET
+		  || type == GMP);
+	}
 
 	friend QDebug operator<<(QDebug dbg, const SubFile &file);
+
+protected:
+	quint32 _gmpOffset;
 
 private:
 	IMG *_img;
 	QFile *_file;
-	quint32 _size;
-	QVector<quint16> _blocks;
+	QVector<quint16> *_blocks;
+	QVector<quint16> _blockData;
 };
 
 #ifndef QT_NO_DEBUG

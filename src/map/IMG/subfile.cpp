@@ -20,19 +20,11 @@ SubFile::Type SubFile::type(const char str[3])
 		return Unknown;
 }
 
-SubFile::SubFile(QFile *file) : _img(0), _file(file), _size(0)
+SubFile::SubFile(QFile *file) :_gmpOffset(0), _img(0), _file(file), _blocks(0)
 {
 	if (!_file->open(QIODevice::ReadOnly))
 		qWarning("Error opening %s: %s", qPrintable(_file->fileName()),
 		  qPrintable(_file->errorString()));
-}
-
-bool SubFile::isValid() const
-{
-	return _file
-	  ? _file->isOpen()
-	  : ((quint32)_img->blockSize() * (quint32)_blocks.size() - _size
-		  < (quint32)_img->blockSize());
 }
 
 bool SubFile::seek(Handle &handle, quint32 pos) const
@@ -46,9 +38,9 @@ bool SubFile::seek(Handle &handle, quint32 pos) const
 		int blockNum = pos / blockSize;
 
 		if (handle.blockNum != blockNum) {
-			if (blockNum >= _blocks.size())
+			if (blockNum >= _blocks->size())
 				return false;
-			if (!_img->readBlock(_blocks.at(blockNum), handle.data))
+			if (!_img->readBlock(_blocks->at(blockNum), handle.data))
 				return false;
 			handle.blockNum = blockNum;
 		}
@@ -74,11 +66,6 @@ bool SubFile::readByte(Handle &handle, quint8 &val) const
 	}
 }
 
-quint32 SubFile::size() const
-{
-	return _file ? (quint32)_file->size() : _size;
-}
-
 QString SubFile::fileName() const
 {
 	return _file ? _file->fileName() : _img->fileName();
@@ -88,15 +75,15 @@ QString SubFile::fileName() const
 QDebug operator<<(QDebug dbg, const SubFile &file)
 {
 	bool continuous = true;
-	for (int i = 1; i < file._blocks.size(); i++) {
-		if (file._blocks.at(i) != file._blocks.at(i-1) + 1) {
+	for (int i = 1; i < file._blocks->size(); i++) {
+		if (file._blocks->at(i) != file._blocks->at(i-1) + 1) {
 			continuous = false;
 			break;
 		}
 	}
 
-	dbg.nospace() << "SubFile(" << file._size << ", " << file._blocks.size()
-	  << ", " << continuous << ")";
+	dbg.nospace() << "SubFile(" << file._blocks->size() << ", "
+	  << continuous << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG

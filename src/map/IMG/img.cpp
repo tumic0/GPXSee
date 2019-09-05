@@ -9,7 +9,7 @@
 
 #define CHECK(condition) \
 	if (!(condition)) { \
-		_errorString = "Invalid/corrupted IMG file"; \
+		_errorString = "Unsupported or invalid IMG file"; \
 		return; \
 	}
 
@@ -85,11 +85,6 @@ IMG::IMG(const QString &fileName)
 		  && read(type, sizeof(type)) && readValue(size) && readValue(part));
 		SubFile::Type tt = SubFile::type(type);
 
-		if (tt == SubFile::GMP) {
-			_errorString = "NT maps not supported";
-			return;
-		}
-
 		QString fn(QByteArray(name, sizeof(name)));
 		if (SubFile::isTileFile(tt)) {
 			VectorTile *tile;
@@ -101,7 +96,7 @@ IMG::IMG(const QString &fileName)
 				tile = *it;
 
 			SubFile *file = part ? tile->file(tt)
-			  : tile->addFile(this, tt, size);
+			  : tile->addFile(this, tt);
 			CHECK(file);
 
 			_file.seek(offset + 0x20);
@@ -114,7 +109,7 @@ IMG::IMG(const QString &fileName)
 		} else if (tt == SubFile::TYP) {
 			SubFile *typ = 0;
 			if (typFile.isNull()) {
-				_typ = new SubFile(this, size);
+				_typ = new SubFile(this);
 				typ = _typ;
 				typFile = fn;
 			} else if (fn == typFile)
@@ -166,7 +161,7 @@ void IMG::load()
 {
 	Q_ASSERT(!_style);
 
-	if (_typ && _typ->isValid())
+	if (_typ)
 		_style = new Style(_typ);
 	else {
 		QFile typFile(ProgramPaths::typFile());
