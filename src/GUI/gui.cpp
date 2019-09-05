@@ -214,19 +214,19 @@ void GUI::createActions()
 	connect(_aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
 	// File actions
-	_openFileAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Open..."), this);
+	_openFileAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Open…"), this);
 	_openFileAction->setMenuRole(QAction::NoRole);
 	_openFileAction->setShortcut(OPEN_SHORTCUT);
 	connect(_openFileAction, SIGNAL(triggered()), this, SLOT(openFile()));
 	addAction(_openFileAction);
-	_printFileAction = new QAction(QIcon(PRINT_FILE_ICON), tr("Print..."),
+	_printFileAction = new QAction(QIcon(PRINT_FILE_ICON), tr("Print…"),
 	  this);
 	_printFileAction->setMenuRole(QAction::NoRole);
 	_printFileAction->setActionGroup(_fileActionGroup);
 	connect(_printFileAction, SIGNAL(triggered()), this, SLOT(printFile()));
 	addAction(_printFileAction);
 	_exportFileAction = new QAction(QIcon(EXPORT_FILE_ICON),
-	  tr("Export to PDF..."), this);
+	  tr("Export to PDF…"), this);
 	_exportFileAction->setMenuRole(QAction::NoRole);
 	_exportFileAction->setShortcut(EXPORT_SHORTCUT);
 	_exportFileAction->setActionGroup(_fileActionGroup);
@@ -245,7 +245,7 @@ void GUI::createActions()
 	_reloadFileAction->setActionGroup(_fileActionGroup);
 	connect(_reloadFileAction, SIGNAL(triggered()), this, SLOT(reloadFile()));
 	addAction(_reloadFileAction);
-	_statisticsAction = new QAction(tr("Statistics..."), this);
+	_statisticsAction = new QAction(tr("Statistics…"), this);
 	_statisticsAction->setMenuRole(QAction::NoRole);
 	_statisticsAction->setShortcut(STATISTICS_SHORTCUT);
 	_statisticsAction->setActionGroup(_fileActionGroup);
@@ -253,7 +253,7 @@ void GUI::createActions()
 	addAction(_statisticsAction);
 
 	// POI actions
-	_openPOIAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Load POI file..."),
+	_openPOIAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Load POI file…"),
 	  this);
 	_openPOIAction->setMenuRole(QAction::NoRole);
 	connect(_openPOIAction, SIGNAL(triggered()), this, SLOT(openPOIFile()));
@@ -289,7 +289,7 @@ void GUI::createActions()
 	connect(_showMapAction, SIGNAL(triggered(bool)), _mapView,
 	  SLOT(showMap(bool)));
 	addAction(_showMapAction);
-	_loadMapAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Load map..."),
+	_loadMapAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Load map…"),
 	  this);
 	_loadMapAction->setMenuRole(QAction::NoRole);
 	connect(_loadMapAction, SIGNAL(triggered()), this, SLOT(loadMap()));
@@ -464,7 +464,7 @@ void GUI::createActions()
 	connect(_fullscreenAction, SIGNAL(triggered(bool)), this,
 	  SLOT(showFullscreen(bool)));
 	addAction(_fullscreenAction);
-	_openOptionsAction = new QAction(tr("Options..."), this);
+	_openOptionsAction = new QAction(tr("Options…"), this);
 	_openOptionsAction->setMenuRole(QAction::PreferencesRole);
 	connect(_openOptionsAction, SIGNAL(triggered()), this,
 	  SLOT(openOptions()));
