@@ -99,17 +99,19 @@ bool RGNFile::init()
 		  && readUInt32(hdl, _pointsOffset) && readUInt32(hdl, _pointsSize)))
 			return false;
 	}
+
 	if (hdrLen >= 0x7D) {
 		quint32 dictOffset, dictSize;
 		if (!(seek(hdl, _gmpOffset + 0x71) && readUInt32(hdl, dictOffset)
 		  && readUInt32(hdl, dictSize)))
 			return false;
 
-		if (dictSize || dictOffset) {
-			qWarning("%s: NT compression not supported", qPrintable(fileName()));
+		// NT maps
+		if (dictSize || dictOffset)
 			return false;
-		}
 	}
+
+	_init = true;
 
 	return true;
 }
@@ -418,6 +420,9 @@ void RGNFile::objects(const RectC &rect, const SubDiv *subdiv, LBLFile *lbl,
 {
 	Handle rgnHdl, lblHdl, netHdl;
 
+	if (!_init && !init())
+		return;
+
 	QVector<RGNFile::Segment> seg(segments(rgnHdl, subdiv));
 	for (int i = 0; i < seg.size(); i++) {
 		switch (seg.at(i).type()) {
@@ -446,6 +451,9 @@ void RGNFile::extObjects(const RectC &rect, const SubDiv *subdiv, LBLFile *lbl,
   QList<IMG::Point> *points)
 {
 	Handle rgnHdl, lblHdl;
+
+	if (!_init && !init())
+		return;
 
 	if (polygons && subdiv->polygonsOffset() != subdiv->polygonsEnd()) {
 		quint32 start = _polygonsOffset + subdiv->polygonsOffset();

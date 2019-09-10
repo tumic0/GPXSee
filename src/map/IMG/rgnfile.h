@@ -14,12 +14,10 @@ public:
 	RGNFile(IMG *img)
 	  : SubFile(img), _offset(0), _size(0), _polygonsOffset(0),
 	  _polygonsSize(0), _linesOffset(0), _linesSize(0), _pointsOffset(0),
-	  _pointsSize(0) {}
+	  _pointsSize(0), _init(false) {}
 	RGNFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset), _offset(0),
 	  _size(0), _polygonsOffset(0), _polygonsSize(0), _linesOffset(0),
-	  _linesSize(0), _pointsOffset(0), _pointsSize(0) {}
-
-	bool init();
+	  _linesSize(0), _pointsOffset(0), _pointsSize(0), _init(false) {}
 
 	void objects(const RectC &rect, const SubDiv *subdiv, LBLFile *lbl,
 	  NETFile *net, QList<IMG::Poly> *polygons, QList<IMG::Poly> *lines,
@@ -75,6 +73,8 @@ private:
 		quint8 _data;
 	};
 
+	bool init();
+
 	static bool sign(BitStream &bs, int &val);
 	static int bitSize(quint8 baseSize, bool variableSign, bool extraBit);
 
@@ -103,6 +103,8 @@ private:
 	quint32 _linesSize;
 	quint32 _pointsOffset;
 	quint32 _pointsSize;
+
+	bool _init;
 };
 
 #ifndef QT_NO_DEBUG

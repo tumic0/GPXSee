@@ -46,7 +46,7 @@ bool VectorTile::init()
 	if (_gmp && !initGMP())
 		return false;
 
-	if (!(_tre && _tre->init() && _rgn && _rgn->init()))
+	if (!(_tre && _tre->init() && _rgn))
 		return false;
 
 	return true;
