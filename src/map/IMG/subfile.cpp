@@ -92,7 +92,6 @@ bool SubFile::readVUInt32(Handle &hdl, quint32 &val) const
 		if (!readByte(hdl, b))
 			return false;
 		val |= (((quint32)b) << (i * 8)) >> (8 - shift);
-
 	}
 
 	return true;
