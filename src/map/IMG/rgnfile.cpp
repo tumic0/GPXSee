@@ -268,7 +268,7 @@ bool RGNFile::extPolyObjects(const RectC &rect, Handle &hdl,
 		br = br.united(c);
 		poly.points.append(QPointF(c.lon(), c.lat()));
 
-		BitStream bs(*this, hdl, len);
+		BitStream bs(*this, hdl, len - 1);
 		int lonSign, latSign;
 		if (!bs.sign(lonSign) || !bs.sign(latSign))
 			return false;
