@@ -66,6 +66,39 @@ bool SubFile::readByte(Handle &handle, quint8 &val) const
 	}
 }
 
+bool SubFile::readVUInt32(Handle &hdl, quint32 &val) const
+{
+	quint8 bytes, shift, b;
+
+	if (!readByte(hdl, b))
+		return false;
+
+	if ((b & 1) == 0) {
+		if ((b & 2) == 0) {
+			bytes = ((b >> 2) & 1) ^ 3;
+			shift = 5;
+		} else {
+			shift = 6;
+			bytes = 1;
+		}
+	} else {
+		shift = 7;
+		bytes = 0;
+	}
+
+	val = b >> (8 - shift);
+
+	for (int i = 1; i <= bytes; i++) {
+		if (!readByte(hdl, b))
+			return false;
+		val |= (((quint32)b) << (i * 8)) >> (8 - shift);
+
+	}
+	val--;
+
+	return true;
+}
+
 QString SubFile::fileName() const
 {
 	return _file ? _file->fileName() : _img->fileName();

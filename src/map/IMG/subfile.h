@@ -81,6 +81,8 @@ public:
 		return true;
 	}
 
+	bool readVUInt32(Handle &hdl, quint32 &val) const;
+
 	quint16 offset() const {return _blocks->first();}
 	QString fileName() const;
 

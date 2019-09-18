@@ -73,6 +73,22 @@ bool RGNFile::BitStream::readDelta(int bits, int sign, bool extraBit,
 	return true;
 }
 
+bool RGNFile::BitStream::sign(int &val)
+{
+	quint32 bit;
+	val = 0;
+
+	if (!read(1, bit))
+		return false;
+	if (bit) {
+		if (!read(1, bit))
+			return false;
+		val = bit ? -1 : 1;
+	}
+
+	return true;
+}
+
 bool RGNFile::BitStream::finish()
 {
 	while (_length--)
@@ -116,23 +132,7 @@ bool RGNFile::init()
 	return true;
 }
 
-bool RGNFile::sign(BitStream &bs, int &val)
-{
-	quint32 bit;
-	val = 0;
-
-	if (!bs.read(1, bit))
-		return false;
-	if (bit) {
-		if (!bs.read(1, bit))
-			return false;
-		val = bit ? -1 : 1;
-	}
-
-	return true;
-}
-
-int RGNFile::bitSize(quint8 baseSize, bool variableSign, bool extraBit)
+static int bitSize(quint8 baseSize, bool variableSign, bool extraBit)
 {
 	int bits = 2;
 	if (baseSize <= 9)
@@ -192,7 +192,7 @@ bool RGNFile::polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
 
 		BitStream bs(*this, hdl, len);
 		int lonSign, latSign;
-		if (!sign(bs, lonSign) || !sign(bs, latSign))
+		if (!bs.sign(lonSign) || !bs.sign(latSign))
 			return false;
 		bool extraBit = labelPtr & 0x400000;
 		int lonBits = bitSize(bitstreamInfo & 0x0F, !lonSign, extraBit);
@@ -238,10 +238,9 @@ bool RGNFile::extPolyObjects(const RectC &rect, Handle &hdl,
   const SubDiv *subdiv, const Segment &segment, LBLFile *lbl, Handle &lblHdl,
   QList<IMG::Poly> *polys) const
 {
-	quint32 labelPtr;
-	quint8 type, subtype, len8, len82, bitstreamInfo;
+	quint32 labelPtr, len;
+	quint8 type, subtype, bitstreamInfo;
 	qint16 lon, lat;
-	quint16 len;
 
 
 	if (!seek(hdl, segment.start()))
@@ -251,7 +250,8 @@ bool RGNFile::extPolyObjects(const RectC &rect, Handle &hdl,
 		IMG::Poly poly;
 
 		if (!(readByte(hdl, type) && readByte(hdl, subtype)
-		  && readInt16(hdl, lon) && readInt16(hdl, lat) && readByte(hdl, len8)))
+		  && readInt16(hdl, lon) && readInt16(hdl, lat)
+		  && readVUInt32(hdl, len) && readByte(hdl, bitstreamInfo)))
 			return false;
 
 		if (subtype & 0x80) {
@@ -259,15 +259,6 @@ bool RGNFile::extPolyObjects(const RectC &rect, Handle &hdl,
 			return false;
 		}
 
-		if (len8 & 0x01)
-			len = (len8>>1) - 1;
-		else {
-			if (!readByte(hdl, len82))
-				return false;
-			len = ((len8 | ((quint16)len82<<8))>>2) - 1;
-		}
-		if (!readByte(hdl, bitstreamInfo))
-			return false;
 		poly.type = 0x10000 + (quint16(type) << 8) + (subtype & 0x1F);
 
 		RectC br;
@@ -279,7 +270,7 @@ bool RGNFile::extPolyObjects(const RectC &rect, Handle &hdl,
 
 		BitStream bs(*this, hdl, len);
 		int lonSign, latSign;
-		if (!sign(bs, lonSign) || !sign(bs, latSign))
+		if (!bs.sign(lonSign) || !bs.sign(latSign))
 			return false;
 		quint32 extraBit;
 		bs.read(1, extraBit);

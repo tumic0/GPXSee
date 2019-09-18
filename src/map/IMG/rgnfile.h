@@ -56,11 +56,12 @@ private:
 
 	class BitStream {
 	public:
-		BitStream(const SubFile &file, Handle &hdl, quint16 length)
+		BitStream(const SubFile &file, Handle &hdl, quint32 length)
 		  : _file(file), _hdl(hdl), _length(length), _remaining(0) {}
 
 		bool read(int bits, quint32 &val);
 		bool readDelta(int bits, int sign, bool extraBit, qint32 &delta);
+		bool sign(int &val);
 		bool hasNext(int bits) const
 		  {return _length * 8 + _remaining >= (quint32)bits;}
 		bool finish();
@@ -68,15 +69,11 @@ private:
 	private:
 		const SubFile &_file;
 		Handle &_hdl;
-		quint16 _length;
-		quint32 _remaining;
+		quint32 _length, _remaining;
 		quint8 _data;
 	};
 
 	bool init();
-
-	static bool sign(BitStream &bs, int &val);
-	static int bitSize(quint8 baseSize, bool variableSign, bool extraBit);
 
 	QVector<Segment> segments(Handle &hdl, const SubDiv *subdiv) const;
 	bool polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
