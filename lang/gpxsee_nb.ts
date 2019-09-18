@@ -59,7 +59,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="175"/>
         <source>CUP files</source>
-        <translation type="unfinished"></translation>
+        <translation>CUP-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="176"/>
