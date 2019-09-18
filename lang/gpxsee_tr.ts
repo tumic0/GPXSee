@@ -59,7 +59,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="175"/>
         <source>CUP files</source>
-        <translation type="unfinished"></translation>
+        <translation>CUP dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="176"/>
@@ -852,6 +852,7 @@
         <location filename="../src/GUI/gui.cpp" line="1350"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n dosya</numerusform>
             <numerusform>%n dosya</numerusform>
         </translation>
     </message>
