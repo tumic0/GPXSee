@@ -60,17 +60,34 @@ private:
 		  : _file(file), _hdl(hdl), _length(length), _remaining(0) {}
 
 		bool read(int bits, quint32 &val);
-		bool readDelta(int bits, int sign, bool extraBit, qint32 &delta);
-		bool sign(int &val);
-		bool hasNext(int bits) const
-		  {return _length * 8 + _remaining >= (quint32)bits;}
-		bool finish();
+		bool flush();
+		quint64 bits() const {return _length * 8 + _remaining;}
 
 	private:
 		const SubFile &_file;
 		Handle &_hdl;
 		quint32 _length, _remaining;
 		quint8 _data;
+	};
+
+	class DeltaStream : public BitStream {
+	public:
+		DeltaStream(const SubFile &file, Handle &hdl, quint32 length,
+		  quint8 info, bool extraBit, bool extended);
+
+		bool isValid() const {return _lonBits && _latBits;}
+		bool hasNext() const
+		  {return bits() >= _lonBits + _latBits;}
+		bool readNext(qint32 &lonDelta, qint32 &latDelta)
+		  {return (readDelta(_lonBits, _lonSign, _extraBit, lonDelta)
+		  && readDelta(_latBits, _latSign, false, latDelta));}
+
+	private:
+		bool sign(int &val);
+		bool readDelta(int bits, int sign, int extraBit, qint32 &delta);
+
+		int _lonSign, _latSign, _extraBit;
+		quint32 _lonBits, _latBits;
 	};
 
 	bool init();

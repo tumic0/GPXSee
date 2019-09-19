@@ -1,9 +1,25 @@
-#include "trefile.h"
+#include "common/rectc.h"
 #include "units.h"
 #include "lblfile.h"
 #include "netfile.h"
 #include "rgnfile.h"
 
+
+static int bitSize(quint8 baseSize, bool variableSign, bool extraBit)
+{
+	int bits = 2;
+	if (baseSize <= 9)
+		bits += baseSize;
+	else
+		bits += 2 * baseSize - 9;
+
+	if (variableSign)
+		bits++;
+	if (extraBit)
+		bits++;
+
+	return bits;
+}
 
 bool RGNFile::BitStream::read(int bits, quint32 &val)
 {
@@ -34,29 +50,49 @@ bool RGNFile::BitStream::read(int bits, quint32 &val)
 	return true;
 }
 
-bool RGNFile::BitStream::readDelta(int bits, int sign, bool extraBit,
+bool RGNFile::BitStream::flush()
+{
+	while (_length--)
+		if (!_file.readByte(_hdl, _data))
+			return false;
+	return true;
+}
+
+RGNFile::DeltaStream::DeltaStream(const SubFile &file, Handle &hdl,
+  quint32 length, quint8 info, bool extraBit, bool extended)
+  : BitStream(file, hdl, length), _lonBits(0), _latBits(0)
+{
+	_extraBit = extraBit ? 1 : 0;
+	if (!(sign(_lonSign) && sign(_latSign)))
+		return;
+	if (extended) {
+		quint32 b;
+		if (!read(1, b))
+			return;
+	}
+	_lonBits = bitSize(info & 0x0F, !_lonSign, extraBit);
+	_latBits = bitSize(info >> 4, !_latSign, false);
+}
+
+bool RGNFile::DeltaStream::readDelta(int bits, int sign, int extraBit,
   qint32 &delta)
 {
 	quint32 value;
-	int bo = 0;
 
 	if (!read(bits, value))
 		return false;
 
-	if (extraBit) {
-		value>>=1;
-		bo = 1;
-	}
+	value >>= extraBit;
 
 	if (!sign) {
-		qint32 signMask = 1 << (bits - bo - 1);
+		qint32 signMask = 1 << (bits - extraBit - 1);
 		if (value & signMask) {
 			qint32 comp = value ^ signMask;
 			if (comp)
 				delta = comp - signMask;
 			else {
 				qint32 other;
-				if (!readDelta(bits - bo, sign, false, other))
+				if (!readDelta(bits - extraBit, sign, false, other))
 					return false;
 				if (other < 0)
 					delta = 1 - signMask + other;
@@ -73,7 +109,7 @@ bool RGNFile::BitStream::readDelta(int bits, int sign, bool extraBit,
 	return true;
 }
 
-bool RGNFile::BitStream::sign(int &val)
+bool RGNFile::DeltaStream::sign(int &val)
 {
 	quint32 bit;
 	val = 0;
@@ -86,14 +122,6 @@ bool RGNFile::BitStream::sign(int &val)
 		val = bit ? -1 : 1;
 	}
 
-	return true;
-}
-
-bool RGNFile::BitStream::finish()
-{
-	while (_length--)
-		if (!_file.readByte(_hdl, _data))
-			return false;
 	return true;
 }
 
@@ -130,22 +158,6 @@ bool RGNFile::init()
 	_init = true;
 
 	return true;
-}
-
-static int bitSize(quint8 baseSize, bool variableSign, bool extraBit)
-{
-	int bits = 2;
-	if (baseSize <= 9)
-		bits += baseSize;
-	else
-		bits += 2 * baseSize - 9;
-
-	if (variableSign)
-		bits++;
-	if (extraBit)
-		bits++;
-
-	return bits;
 }
 
 bool RGNFile::polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
@@ -190,19 +202,14 @@ bool RGNFile::polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
 		br = br.united(c);
 		poly.points.append(QPointF(c.lon(), c.lat()));
 
-		BitStream bs(*this, hdl, len);
-		int lonSign, latSign;
-		if (!bs.sign(lonSign) || !bs.sign(latSign))
+		DeltaStream stream(*this, hdl, len, bitstreamInfo, labelPtr & 0x400000,
+		  false);
+		if (!stream.isValid())
 			return false;
-		bool extraBit = labelPtr & 0x400000;
-		int lonBits = bitSize(bitstreamInfo & 0x0F, !lonSign, extraBit);
-		int latBits = bitSize(bitstreamInfo >> 4, !latSign, false);
-
-		while (bs.hasNext(lonBits + latBits)) {
+		while (stream.hasNext()) {
 			qint32 lonDelta, latDelta;
 
-			if (!(bs.readDelta(lonBits, lonSign, extraBit, lonDelta)
-			  &&  bs.readDelta(latBits, latSign, false, latDelta)))
+			if (!(stream.readNext(lonDelta, latDelta)))
 				return false;
 
 			pos.rx() += lonDelta<<(24-subdiv->bits());
@@ -212,7 +219,7 @@ bool RGNFile::polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
 			poly.points.append(QPointF(c.lon(), c.lat()));
 			br = br.united(c);
 		}
-		if (!bs.finish())
+		if (!stream.flush())
 			return false;
 
 		if (!rect.intersects(br))
@@ -268,20 +275,13 @@ bool RGNFile::extPolyObjects(const RectC &rect, Handle &hdl,
 		br = br.united(c);
 		poly.points.append(QPointF(c.lon(), c.lat()));
 
-		BitStream bs(*this, hdl, len - 1);
-		int lonSign, latSign;
-		if (!bs.sign(lonSign) || !bs.sign(latSign))
+		DeltaStream stream(*this, hdl, len - 1, bitstreamInfo, false, true);
+		if (!stream.isValid())
 			return false;
-		quint32 extraBit;
-		bs.read(1, extraBit);
-		int lonBits = bitSize(bitstreamInfo & 0x0F, !lonSign, extraBit);
-		int latBits = bitSize(bitstreamInfo >> 4, !latSign, extraBit);
-
-		while (bs.hasNext(lonBits + latBits)) {
+		while (stream.hasNext()) {
 			qint32 lonDelta, latDelta;
 
-			if (!(bs.readDelta(lonBits, lonSign, false, lonDelta)
-			  &&  bs.readDelta(latBits, latSign, false, latDelta)))
+			if (!(stream.readNext(lonDelta, latDelta)))
 				return false;
 
 			pos.rx() += lonDelta<<(24-subdiv->bits());
@@ -291,7 +291,7 @@ bool RGNFile::extPolyObjects(const RectC &rect, Handle &hdl,
 			poly.points.append(QPointF(c.lon(), c.lat()));
 			br = br.united(c);
 		}
-		if (!bs.finish())
+		if (!stream.flush())
 			return false;
 
 		if (subtype & 0x20) {
