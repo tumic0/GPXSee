@@ -60,8 +60,8 @@ private:
 		  : _file(file), _hdl(hdl), _length(length), _remaining(0) {}
 
 		bool read(int bits, quint32 &val);
-		bool flush();
-		quint64 bits() const {return _length * 8 + _remaining;}
+		bool flush() {return _file.seek(_hdl, _hdl.pos + _length);}
+		quint32 bitsAvailable() const {return _length * 8 + _remaining;}
 
 	private:
 		const SubFile &_file;
@@ -75,19 +75,22 @@ private:
 		DeltaStream(const SubFile &file, Handle &hdl, quint32 length,
 		  quint8 info, bool extraBit, bool extended);
 
-		bool isValid() const {return _lonBits && _latBits;}
-		bool hasNext() const
-		  {return bits() >= _lonBits + _latBits;}
 		bool readNext(qint32 &lonDelta, qint32 &latDelta)
-		  {return (readDelta(_lonBits, _lonSign, _extraBit, lonDelta)
-		  && readDelta(_latBits, _latSign, false, latDelta));}
+		{
+			return hasNext()
+			  ? (readDelta(_lonBits, _lonSign, _extraBit, lonDelta)
+				  && readDelta(_latBits, _latSign, false, latDelta))
+			  : false;
+		}
+		bool atEnd() const {return (_readBits != 0xFFFFFFFF && !hasNext());}
 
 	private:
+		bool hasNext() const {return bitsAvailable() >= _readBits;}
 		bool sign(int &val);
 		bool readDelta(int bits, int sign, int extraBit, qint32 &delta);
 
 		int _lonSign, _latSign, _extraBit;
-		quint32 _lonBits, _latBits;
+		quint32 _lonBits, _latBits, _readBits;
 	};
 
 	bool init();

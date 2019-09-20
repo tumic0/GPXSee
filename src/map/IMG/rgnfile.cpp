@@ -50,17 +50,9 @@ bool RGNFile::BitStream::read(int bits, quint32 &val)
 	return true;
 }
 
-bool RGNFile::BitStream::flush()
-{
-	while (_length--)
-		if (!_file.readByte(_hdl, _data))
-			return false;
-	return true;
-}
-
 RGNFile::DeltaStream::DeltaStream(const SubFile &file, Handle &hdl,
   quint32 length, quint8 info, bool extraBit, bool extended)
-  : BitStream(file, hdl, length), _lonBits(0), _latBits(0)
+  : BitStream(file, hdl, length), _readBits(0xFFFFFFFF)
 {
 	_extraBit = extraBit ? 1 : 0;
 	if (!(sign(_lonSign) && sign(_latSign)))
@@ -72,6 +64,7 @@ RGNFile::DeltaStream::DeltaStream(const SubFile &file, Handle &hdl,
 	}
 	_lonBits = bitSize(info & 0x0F, !_lonSign, extraBit);
 	_latBits = bitSize(info >> 4, !_latSign, false);
+	_readBits = _lonBits + _latBits;
 }
 
 bool RGNFile::DeltaStream::readDelta(int bits, int sign, int extraBit,
@@ -195,23 +188,17 @@ bool RGNFile::polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
 		poly.type = (segment.type() == Segment::Polygon)
 		  ? ((quint32)(type & 0x7F)) << 8 : ((quint32)(type & 0x3F)) << 8;
 
-		RectC br;
+
 		QPoint pos(subdiv->lon() + ((qint32)lon<<(24-subdiv->bits())),
 		  subdiv->lat() + ((qint32)lat<<(24-subdiv->bits())));
 		Coordinates c(toWGS84(pos.x()), toWGS84(pos.y()));
-		br = br.united(c);
+		RectC br(c, c);
 		poly.points.append(QPointF(c.lon(), c.lat()));
 
+		qint32 lonDelta, latDelta;
 		DeltaStream stream(*this, hdl, len, bitstreamInfo, labelPtr & 0x400000,
 		  false);
-		if (!stream.isValid())
-			return false;
-		while (stream.hasNext()) {
-			qint32 lonDelta, latDelta;
-
-			if (!(stream.readNext(lonDelta, latDelta)))
-				return false;
-
+		while (stream.readNext(lonDelta, latDelta)) {
 			pos.rx() += lonDelta<<(24-subdiv->bits());
 			pos.ry() += latDelta<<(24-subdiv->bits());
 
@@ -219,7 +206,7 @@ bool RGNFile::polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
 			poly.points.append(QPointF(c.lon(), c.lat()));
 			br = br.united(c);
 		}
-		if (!stream.flush())
+		if (!(stream.atEnd() && stream.flush()))
 			return false;
 
 		if (!rect.intersects(br))
@@ -245,7 +232,7 @@ bool RGNFile::extPolyObjects(const RectC &rect, Handle &hdl,
   const SubDiv *subdiv, const Segment &segment, LBLFile *lbl, Handle &lblHdl,
   QList<IMG::Poly> *polys) const
 {
-	quint32 labelPtr, len;
+	quint32 len, labelPtr = 0;
 	quint8 type, subtype, bitstreamInfo;
 	qint16 lon, lat;
 
@@ -268,22 +255,15 @@ bool RGNFile::extPolyObjects(const RectC &rect, Handle &hdl,
 
 		poly.type = 0x10000 + (quint16(type) << 8) + (subtype & 0x1F);
 
-		RectC br;
 		QPoint pos(subdiv->lon() + ((qint32)lon<<(24-subdiv->bits())),
 		  subdiv->lat() + ((qint32)lat<<(24-subdiv->bits())));
 		Coordinates c(toWGS84(pos.x()), toWGS84(pos.y()));
-		br = br.united(c);
+		RectC br(c, c);
 		poly.points.append(QPointF(c.lon(), c.lat()));
 
+		qint32 lonDelta, latDelta;
 		DeltaStream stream(*this, hdl, len - 1, bitstreamInfo, false, true);
-		if (!stream.isValid())
-			return false;
-		while (stream.hasNext()) {
-			qint32 lonDelta, latDelta;
-
-			if (!(stream.readNext(lonDelta, latDelta)))
-				return false;
-
+		while (stream.readNext(lonDelta, latDelta)) {
 			pos.rx() += lonDelta<<(24-subdiv->bits());
 			pos.ry() += latDelta<<(24-subdiv->bits());
 
@@ -291,18 +271,20 @@ bool RGNFile::extPolyObjects(const RectC &rect, Handle &hdl,
 			poly.points.append(QPointF(c.lon(), c.lat()));
 			br = br.united(c);
 		}
-		if (!stream.flush())
+		if (!(stream.atEnd() && stream.flush()))
 			return false;
 
-		if (subtype & 0x20) {
+		if ((subtype & 0x20)) {
 			if (!readUInt24(hdl, labelPtr))
 				return false;
-			if (lbl && (labelPtr & 0x3FFFFF))
-				poly.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
-		}
+		} else
+			labelPtr = 0;
 
 		if (!rect.intersects(br))
 			continue;
+
+		if (lbl && (labelPtr & 0x3FFFFF))
+			poly.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
 
 		polys->append(poly);
 	}
