@@ -144,8 +144,10 @@ bool RGNFile::init()
 			return false;
 
 		// NT maps
-		if (dictSize || dictOffset)
+		if (dictSize || dictOffset) {
+			qWarning("NT compression not supported");
 			return false;
+		}
 	}
 
 	_init = true;
