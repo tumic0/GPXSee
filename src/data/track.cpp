@@ -1,4 +1,3 @@
-#include "dem.h"
 #include "track.h"
 
 
@@ -177,7 +176,7 @@ Graph Track::elevation() const
 		GraphSegment gs;
 
 		for (int j = 0; j < sd.size(); j++) {
-			if (seg.outliers.contains(j))
+			if (!sd.at(j).hasElevation() || seg.outliers.contains(j))
 				continue;
 			gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j),
 			  sd.at(j).elevation()));

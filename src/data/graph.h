@@ -54,6 +54,7 @@ public:
 				return false;
 		return true;
 	}
+
 	bool hasTime() const
 	{
 		for (int i = 0; i < size(); i++) {
