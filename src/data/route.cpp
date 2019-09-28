@@ -32,7 +32,8 @@ Graph Route::elevation() const
 	GraphSegment &gs = graph.last();
 
 	for (int i = 0; i < _data.size(); i++)
-		gs.append(GraphPoint(_distance.at(i), NAN, _data.at(i).elevation()));
+		if (_data.at(i).hasElevation())
+			gs.append(GraphPoint(_distance.at(i), NAN, _data.at(i).elevation()));
 
 	return graph;
 }
