@@ -265,6 +265,14 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 					if (val != 0x7f)
 						ctx.trackpoint.setTemperature((qint8)val);
 					break;
+				case 73:
+					if (val != 0xffffffff)
+						ctx.trackpoint.setSpeed(val / 1000.0f);
+					break;
+				case 78:
+					if (val != 0xffffffff)
+						ctx.trackpoint.setElevation((val / 5.0) - 500);
+					break;
 				default:
 					break;
 
