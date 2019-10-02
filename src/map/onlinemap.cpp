@@ -124,7 +124,8 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		Tile &t = tiles[i];
 		QPointF tp = _zoom ? QPointF(tl.x() + (t.xy().x() - tile.x())
 		  * tileSize(), tl.y() + ((_invertY ? (1<<_zoom) - t.xy().y() - 1 :
-		  t.xy().y()) - tile.y()) * tileSize()) : QPointF(-128, -128);
+		  t.xy().y()) - tile.y()) * tileSize())
+		  : QPointF(-_tileSize/2, -_tileSize/2);
 
 		if (!t.pixmap().isNull()) {
 #ifdef ENABLE_HIDPI
