@@ -16,8 +16,8 @@
 #include "imgmap.h"
 
 
-#define TILE_SIZE   256
-#define TEXT_EXTENT 256
+#define TILE_SIZE   384
+#define TEXT_EXTENT 160
 
 #define AREA(rect) \
 	(rect.size().width() * rect.size().height())
@@ -419,7 +419,7 @@ void IMGMap::processShields(QList<IMG::Poly> &lines, const QRect &tileRect,
 		  = shields.constBegin(); it != shields.constEnd(); ++it) {
 			const QPolygonF &p = it.value();
 			QRectF rect(p.boundingRect() & tileRect);
-			if (qSqrt(AREA(rect)) < 32)
+			if (qSqrt(AREA(rect)) < TILE_SIZE/8)
 				continue;
 
 			QMap<qreal, int> map;
