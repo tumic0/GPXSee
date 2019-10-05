@@ -33,7 +33,7 @@ make # nmake on windows
 * [Linux packages](http://software.opensuse.org/download.html?project=home%3Atumic%3AGPXSee&package=gpxsee)
 
 ## Changelog
-[Changelog](https://build.opensuse.org/package/view_file/home:tumic:QtPBFImagePlugin/QtPBFImagePlugin/libqt5-qtpbfimageformat.changes)
+[Changelog](https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes)
 
 ## Homepage
 [https://www.gpxsee.org](https://www.gpxsee.org)
