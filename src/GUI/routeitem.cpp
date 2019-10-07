@@ -50,12 +50,11 @@ void RouteItem::setUnits(Units u)
 	if (units() == u)
 		return;
 
-	PathItem::setUnits(u);
-
 	setToolTip(toolTip(units()));
-
 	for (int i = 0; i < _waypoints.count(); i++)
 		_waypoints[i]->setToolTipFormat(units(), _coordinatesFormat);
+
+	PathItem::setUnits(u);
 }
 
 void RouteItem::setCoordinatesFormat(CoordinatesFormat format)
