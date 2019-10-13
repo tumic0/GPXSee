@@ -54,6 +54,7 @@ Label::Label(const QString &text, QWidget *parent)
 
 	setTextInteractionFlags(Qt::TextBrowserInteraction);
 	setOpenExternalLinks(true);
+	setWordWrap(true);
 
 	setMouseTracking(true);
 
