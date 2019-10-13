@@ -4,7 +4,6 @@
 #include <QXmlStreamReader>
 #include "parser.h"
 
-
 class GPXParser : public Parser
 {
 public:
@@ -30,6 +29,7 @@ private:
 	qreal number();
 	QDateTime time();
 	Coordinates coordinates();
+	Link link();
 
 	QXmlStreamReader _reader;
 };

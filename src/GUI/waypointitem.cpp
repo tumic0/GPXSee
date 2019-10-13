@@ -30,6 +30,11 @@ ToolTip WaypointItem::toolTip(Units units, CoordinatesFormat format)
 	if (!_waypoint.description().isEmpty())
 		tt.insert(qApp->translate("WaypointItem", "Description"),
 		  _waypoint.description());
+	if (!_waypoint.link().URL().isEmpty())
+		tt.insert(qApp->translate("WaypointItem", "Link"),
+		  QString("<a href=\"%0\">%1</a>").arg(_waypoint.link().URL(),
+		  _waypoint.link().text().isEmpty() ? _waypoint.link().URL()
+		  : _waypoint.link().text()));
 	tt.setImage(_waypoint.image());
 
 	return tt;

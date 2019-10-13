@@ -85,6 +85,7 @@ HEADERS += src/common/config.h \
     src/GUI/mapview.h \
     src/GUI/font.h \
     src/GUI/areaitem.h \
+    src/data/link.h \
     src/map/IMG/bitmapline.h \
     src/map/IMG/textpathitem.h \
     src/map/IMG/textpointitem.h \

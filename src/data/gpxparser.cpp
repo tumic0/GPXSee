@@ -23,6 +23,21 @@ QDateTime GPXParser::time()
 	return d;
 }
 
+Link GPXParser::link()
+{
+	QString URL = _reader.attributes().value("href").toString();
+	QString text;
+
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("text"))
+			text = _reader.readElementText();
+		else
+			_reader.skipCurrentElement();
+	}
+
+	return Link(URL, text);
+}
+
 Coordinates GPXParser::coordinates()
 {
 	bool res;
@@ -146,6 +161,8 @@ void GPXParser::waypointData(Waypoint &waypoint, SegmentData *autoRoute)
 			gh = number();
 		else if (_reader.name() == QLatin1String("time"))
 			waypoint.setTimestamp(time());
+		else if (_reader.name() == QLatin1String("link"))
+			waypoint.setLink(link());
 		else if (autoRoute && _reader.name() == QLatin1String("extensions"))
 			rteptExtensions(autoRoute);
 		else

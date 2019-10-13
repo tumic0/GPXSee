@@ -7,6 +7,7 @@
 #include <QDebug>
 #include "common/coordinates.h"
 #include "imageinfo.h"
+#include "link.h"
 
 class Waypoint
 {
@@ -19,6 +20,7 @@ public:
 	const QString &name() const {return _name;}
 	const QString &description() const {return _description;}
 	const ImageInfo &image() const {return _image;}
+	const Link &link() const {return _link;}
 	const QDateTime &timestamp() const {return _timestamp;}
 	qreal elevation() const {return _elevation;}
 
@@ -30,6 +32,7 @@ public:
 	void setTimestamp(const QDateTime &timestamp) {_timestamp = timestamp;}
 	void setElevation(qreal elevation) {_elevation = elevation;}
 	void setImage(const ImageInfo &image) {_image = image;}
+	void setLink(const Link &link) {_link = link;}
 
 	bool hasElevation() const {return !std::isnan(_elevation);}
 
@@ -42,6 +45,7 @@ private:
 	QString _name;
 	QString _description;
 	ImageInfo _image;
+	Link _link;
 	QDateTime _timestamp;
 	qreal _elevation;
 };
