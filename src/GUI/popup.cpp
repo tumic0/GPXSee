@@ -9,8 +9,6 @@
 #include <QBasicTimer>
 #include "popup.h"
 
-#include <QDebug>
-
 
 class Label : public QLabel
 {
@@ -28,6 +26,7 @@ public:
 protected:
 	void paintEvent(QPaintEvent *event);
 	void timerEvent(QTimerEvent *event);
+	void contextMenuEvent(QContextMenuEvent *) {}
 
 private:
 	QBasicTimer _timer;
@@ -107,7 +106,7 @@ bool Label::eventFilter(QObject *o, QEvent *ev)
 			break;
 		case QEvent::MouseMove: {
 			QRectF r(geometry().adjusted(-5, -20, 5, 20));
-			QPointF p(static_cast<QMouseEvent*>(ev)->screenPos());
+			QPointF p(static_cast<QMouseEvent*>(ev)->globalPos());
 			if (!r.contains(p))
 				deleteAfterTimer();
 			break;
@@ -152,11 +151,10 @@ void Popup::show(const QPoint &pos, const QString &text, QWidget *w)
 	if (Label::_instance) {
 		Label::_instance->stopTimer();
 		Label::_instance->setText(text);
-		Label::_instance->resize(Label::_instance->sizeHint());
-	} else {
+	} else
 		Label::_instance = new Label(text);
-		Label::_instance->showNormal();
-	}
 
+	Label::_instance->resize(Label::_instance->sizeHint());
 	Label::_instance->place(pos, w);
+	Label::_instance->showNormal();
 }
