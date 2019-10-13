@@ -1,7 +1,10 @@
 #include <QApplication>
 #include <QPainter>
+#include <QGraphicsSceneMouseEvent>
+#include <QLabel>
 #include "font.h"
 #include "tooltip.h"
+#include "popup.h"
 #include "waypointitem.h"
 
 
@@ -10,7 +13,7 @@
 #define FS(size) \
 	((int)((qreal)size * 1.41))
 
-QString WaypointItem::toolTip(Units units, CoordinatesFormat format)
+ToolTip WaypointItem::toolTip(Units units, CoordinatesFormat format)
 {
 	ToolTip tt;
 
@@ -29,7 +32,7 @@ QString WaypointItem::toolTip(Units units, CoordinatesFormat format)
 		  _waypoint.description());
 	tt.setImage(_waypoint.image());
 
-	return tt.toString();
+	return tt;
 }
 
 WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
@@ -43,10 +46,12 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
 	_font.setPixelSize(FS(_size));
 	_font.setFamily(FONT_FAMILY);
 
+	_units = Metric;
+	_format = DecimalDegrees;
+
 	updateCache();
 
 	setPos(map->ll2xy(waypoint.coordinates()));
-	setToolTip(toolTip(Metric, DecimalDegrees));
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
 }
@@ -116,7 +121,8 @@ void WaypointItem::setColor(const QColor &color)
 
 void WaypointItem::setToolTipFormat(Units units, CoordinatesFormat format)
 {
-	setToolTip(toolTip(units, format));
+	_units = units;
+	_format = format;
 }
 
 void WaypointItem::showLabel(bool show)
@@ -147,4 +153,11 @@ void WaypointItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 	_font.setBold(false);
 	updateCache();
 	setZValue(zValue() - 1.0);
+}
+
+void WaypointItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+	ToolTip tt(toolTip(_units, _format));
+	Popup::show(event->screenPos(), tt.toString(), event->widget());
+	QGraphicsItem::mousePressEvent(event);
 }

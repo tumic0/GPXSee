@@ -357,13 +357,13 @@ void GraphView::wheelEvent(QWheelEvent *e)
 	QGraphicsView::wheelEvent(e);
 }
 
-void GraphView::paintEvent(QPaintEvent *event)
+void GraphView::paintEvent(QPaintEvent *e)
 {
 	QRectF viewRect(mapToScene(rect()).boundingRect());
 	_info->setPos(QPointF(viewRect.left() + (viewRect.width()
 	  - _info->boundingRect().width())/2.0, _info->pos().y()));
 
-	QGraphicsView::paintEvent(event);
+	QGraphicsView::paintEvent(e);
 }
 
 void GraphView::plot(QPainter *painter, const QRectF &target, qreal scale)

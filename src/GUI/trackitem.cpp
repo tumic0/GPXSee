@@ -33,12 +33,4 @@ TrackItem::TrackItem(const Track &track, Map *map, QGraphicsItem *parent)
 	_date = track.date();
 	_time = track.time();
 	_movingTime = track.movingTime();
-
-	setToolTip(toolTip(Metric));
-}
-
-void TrackItem::setUnits(Units units)
-{
-	setToolTip(toolTip(units));
-	PathItem::setUnits(units);
 }

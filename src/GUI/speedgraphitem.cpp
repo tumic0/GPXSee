@@ -8,26 +8,23 @@ SpeedGraphItem::SpeedGraphItem(const Graph &graph, GraphType type, int width,
   const QColor &color, qreal movingTime, QGraphicsItem *parent)
   : GraphItem(graph, type, width, color, parent)
 {
-	_units = Metric;
 	_timeType = Total;
 
 	_max = GraphItem::max();
 	_avg = graph.last().last().s() / graph.last().last().t();
 	_mavg = graph.last().last().s() / movingTime;
-
-	setToolTip(toolTip());
 }
 
-QString SpeedGraphItem::toolTip() const
+QString SpeedGraphItem::toolTip(Units units) const
 {
 	ToolTip tt;
-	qreal scale = (_units == Imperial) ? MS2MIH : (_units == Nautical)
+	qreal scale = (units == Imperial) ? MS2MIH : (units == Nautical)
 	  ? MS2KN : MS2KMH;
-	QString su = (_units == Imperial) ? tr("mi/h") : (_units == Nautical)
+	QString su = (units == Imperial) ? tr("mi/h") : (units == Nautical)
 	  ? tr("kn") : tr("km/h");
 	QString pace = Format::timeSpan((3600.0 / ((_timeType == Total)
 	  ? avg() * scale : mavg() * scale)), false);
-	QString pu = (_units == Metric) ? tr("min/km") : (_units == Imperial) ?
+	QString pu = (units == Metric) ? tr("min/km") : (units == Imperial) ?
 	  tr("min/mi") : tr("min/nmi");
 	QLocale l(QLocale::system());
 
@@ -40,14 +37,7 @@ QString SpeedGraphItem::toolTip() const
 	return tt.toString();
 }
 
-void SpeedGraphItem::setUnits(Units units)
-{
-	_units = units;
-	setToolTip(toolTip());
-}
-
 void SpeedGraphItem::setTimeType(TimeType type)
 {
 	_timeType = type;
-	setToolTip(toolTip());
 }

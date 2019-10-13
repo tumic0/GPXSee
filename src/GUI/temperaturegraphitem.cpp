@@ -10,8 +10,6 @@ TemperatureGraphItem::TemperatureGraphItem(const Graph &graph, GraphType type,
 	_min = GraphItem::min();
 	_max = GraphItem::max();
 	_avg = GraphItem::avg();
-
-	setToolTip(toolTip(Metric));
 }
 
 QString TemperatureGraphItem::toolTip(Units units) const
@@ -31,9 +29,4 @@ QString TemperatureGraphItem::toolTip(Units units) const
 	  + UNIT_SPACE + su);
 
 	return tt.toString();
-}
-
-void TemperatureGraphItem::setUnits(Units units)
-{
-	setToolTip(toolTip(units));
 }

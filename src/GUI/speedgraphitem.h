@@ -16,15 +16,13 @@ public:
 	qreal mavg() const {return _mavg;}
 	qreal max() const {return _max;}
 
-	void setUnits(Units units);
+	QString toolTip(Units units) const;
+
 	void setTimeType(TimeType type);
 
 private:
-	QString toolTip() const;
-
 	qreal _avg, _mavg, _max;
 	TimeType _timeType;
-	Units _units;
 };
 
 #endif // SPEEDGRAPHITEM_H

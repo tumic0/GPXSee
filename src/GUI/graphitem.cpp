@@ -1,4 +1,6 @@
 #include <QPainter>
+#include <QGraphicsSceneMouseEvent>
+#include "popup.h"
 #include "graphitem.h"
 
 
@@ -8,6 +10,7 @@ GraphItem::GraphItem(const Graph &graph, GraphType type, int width,
 {
 	Q_ASSERT(_graph.isValid());
 
+	_units = Metric;
 	_pen = QPen(color, width);
 	_sx = 0; _sy = 0;
 	_time = _graph.hasTime();
@@ -302,4 +305,10 @@ void GraphItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 	update();
 
 	emit selected(false);
+}
+
+void GraphItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+	Popup::show(event->screenPos(), toolTip(_units), event->widget());
+	QGraphicsObject::mousePressEvent(event);
 }

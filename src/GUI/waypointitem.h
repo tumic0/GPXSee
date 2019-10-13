@@ -7,6 +7,8 @@
 #include "map/map.h"
 #include "units.h"
 #include "format.h"
+#include "tooltip.h"
+
 
 class WaypointItem : public QGraphicsItem
 {
@@ -16,23 +18,25 @@ public:
 	const Waypoint &waypoint() const {return _waypoint;}
 
 	void setMap(Map *map) {setPos(map->ll2xy(_waypoint.coordinates()));}
-	void setToolTipFormat(Units units, CoordinatesFormat format);
 	void setSize(int size);
 	void setColor(const QColor &color);
 	void showLabel(bool show);
 	void setDigitalZoom(int zoom) {setScale(pow(2, -zoom));}
+	void setToolTipFormat(Units units, CoordinatesFormat format);
 
 	QPainterPath shape() const {return _shape;}
 	QRectF boundingRect() const {return _shape.boundingRect();}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-private:
+protected:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+	void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
+private:
 	void updateCache();
-	QString toolTip(Units units, CoordinatesFormat format);
+	ToolTip toolTip(Units units, CoordinatesFormat format);
 
 	Waypoint _waypoint;
 	QPainterPath _shape;
@@ -41,6 +45,9 @@ private:
 	bool _showLabel;
 	QFont _font;
 	QRect _labelBB;
+
+	Units _units;
+	CoordinatesFormat _format;
 };
 
 #endif // WAYPOINTITEM_H

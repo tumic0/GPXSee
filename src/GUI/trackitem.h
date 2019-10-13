@@ -16,11 +16,9 @@ class TrackItem : public PathItem
 public:
 	TrackItem(const Track &track, Map *map, QGraphicsItem *parent = 0);
 
-	void setUnits(Units units);
-
-private:
 	QString toolTip(Units units) const;
 
+private:
 	QString _name;
 	QString _desc;
 	QDateTime _date;

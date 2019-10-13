@@ -1,6 +1,9 @@
 #include <QPainter>
 #include <QCursor>
+#include <QGraphicsSceneMouseEvent>
 #include "font.h"
+#include "popup.h"
+#include "pathitem.h"
 #include "pathtickitem.h"
 
 
@@ -68,4 +71,11 @@ QRect PathTickItem::tickRect(int value)
 	QFontMetrics fm(_font);
 	return fm.boundingRect(QRect(), Qt::AlignCenter,
 	  QString::number(qMax(value, 10))).adjusted(-2, 0, 2, 0);
+}
+
+void PathTickItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+	const PathItem *pi = static_cast<PathItem*>(parentItem());
+	Popup::show(event->screenPos(), pi->toolTip(pi->units()), event->widget());
+	QGraphicsItem::mousePressEvent(event);
 }

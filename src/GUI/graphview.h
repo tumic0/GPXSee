@@ -48,9 +48,14 @@ signals:
 protected:
 	void addGraph(GraphItem *graph);
 	void removeGraph(GraphItem *graph);
-
 	void setGraphType(GraphType type);
 	void setUnits(Units units);
+
+	void resizeEvent(QResizeEvent *e);
+	void mousePressEvent(QMouseEvent *e);
+	void wheelEvent(QWheelEvent *e);
+	void changeEvent(QEvent *e);
+	void paintEvent(QPaintEvent *e);
 
 	const QString &yLabel() const {return _yLabel;}
 	const QString &yUnits() const {return _yUnits;}
@@ -87,12 +92,6 @@ private:
 	void updateSliderInfo();
 	void removeItem(QGraphicsItem *item);
 	void addItem(QGraphicsItem *item);
-
-	void resizeEvent(QResizeEvent *e);
-	void mousePressEvent(QMouseEvent *e);
-	void wheelEvent(QWheelEvent *e);
-	void changeEvent(QEvent *e);
-	void paintEvent(QPaintEvent *event);
 
 	QGraphicsScene *_scene;
 

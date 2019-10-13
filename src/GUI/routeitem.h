@@ -23,9 +23,9 @@ public:
 	void showWaypoints(bool show);
 	void showWaypointLabels(bool show);
 
-private:
 	QString toolTip(Units units) const;
 
+private:
 	QString _name;
 	QString _desc;
 	CoordinatesFormat _coordinatesFormat;

@@ -1580,7 +1580,6 @@ void GUI::keyPressEvent(QKeyEvent *event)
 			else
 				_movingTimeAction->trigger();
 			break;
-
 		case Qt::Key_Escape:
 			if (_fullscreenAction->isChecked()) {
 				_fullscreenAction->setChecked(false);

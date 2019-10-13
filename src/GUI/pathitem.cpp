@@ -1,9 +1,11 @@
 #include <cmath>
 #include <QCursor>
 #include <QPainter>
+#include <QGraphicsSceneMouseEvent>
 #include "common/greatcircle.h"
 #include "map/map.h"
 #include "pathtickitem.h"
+#include "popup.h"
 #include "pathitem.h"
 
 
@@ -336,7 +338,6 @@ void PathItem::updateTicks()
 		_ticks[i] = new PathTickItem(tr, (i + 1) * ts, this);
 		_ticks[i]->setPos(position((i + 1) * ts * xInM()));
 		_ticks[i]->setColor(_pen.color());
-		_ticks[i]->setToolTip(toolTip());
 	}
 }
 
@@ -380,4 +381,10 @@ void PathItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 	update();
 
 	emit selected(false);
+}
+
+void PathItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+	Popup::show(event->screenPos(), toolTip(_units), event->widget());
+	QGraphicsObject::mousePressEvent(event);
 }

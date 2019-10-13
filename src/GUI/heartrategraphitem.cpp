@@ -7,11 +7,11 @@ HeartRateGraphItem::HeartRateGraphItem(const Graph &graph, GraphType type,
   int width, const QColor &color, QGraphicsItem *parent)
   : GraphItem(graph, type, width, color, parent)
 {
-	setToolTip(toolTip());
 }
 
-QString HeartRateGraphItem::toolTip() const
+QString HeartRateGraphItem::toolTip(Units units) const
 {
+	Q_UNUSED(units);
 	ToolTip tt;
 	QLocale l(QLocale::system());
 

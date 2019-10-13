@@ -1,4 +1,6 @@
 #include <QImageReader>
+#include <QLabel>
+#include "popup.h"
 #include "tooltip.h"
 
 
@@ -26,7 +28,8 @@ QString ToolTip::toString() const
 		}
 
 		html += "<div align=\"center\">";
-		html += QString("<img src=\"file:%0\" width=\"%1\" height=\"%2\"/>")
+		html += QString("<a href=\"file:%0\">"
+		  "<img src=\"file:%0\" width=\"%1\" height=\"%2\"/></a>")
 		  .arg(_img.path(), QString::number(width), QString::number(height));
 		html += "</div>";
 	}

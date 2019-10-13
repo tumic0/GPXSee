@@ -16,11 +16,9 @@ public:
 	qreal max() const {return _max;}
 	qreal min() const {return _min;}
 
-	void setUnits(Units units);
-
-private:
 	QString toolTip(Units units) const;
 
+private:
 	qreal _ascent, _descent, _min, _max;
 };
 

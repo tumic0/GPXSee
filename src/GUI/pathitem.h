@@ -16,6 +16,9 @@ class PathItem : public QGraphicsObject
 
 public:
 	PathItem(const Path &path, Map *map, QGraphicsItem *parent = 0);
+	virtual ~PathItem() {}
+
+	virtual QString toolTip(Units units) const = 0;
 
 	QPainterPath shape() const {return _shape;}
 	QRectF boundingRect() const {return _shape.boundingRect();}
@@ -44,6 +47,11 @@ public slots:
 signals:
 	void selected(bool);
 
+protected:
+	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+	void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
 private:
 	const PathSegment *segment(qreal x) const;
 	QPointF position(qreal distance) const;
@@ -54,9 +62,6 @@ private:
 	qreal xInM() const;
 	unsigned tickSize() const;
 	void updateTicks();
-
-	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 	Path _path;
 	Map *_map;

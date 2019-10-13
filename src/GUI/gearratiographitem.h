@@ -13,12 +13,11 @@ public:
 	  const QColor &color, QGraphicsItem *parent = 0);
 
 	qreal top() const {return _top;}
-
 	const QMap<qreal, qreal> &map() const {return _map;}
 
-private:
-	QString toolTip() const;
+	QString toolTip(Units units) const;
 
+private:
 	QMap<qreal, qreal> _map;
 	qreal _top;
 };

@@ -15,6 +15,8 @@ public:
 	  QGraphicsItem *parent = 0);
 	virtual ~GraphItem() {}
 
+	virtual QString toolTip(Units units) const = 0;
+
 	QPainterPath shape() const {return _shape;}
 	QRectF boundingRect() const {return _shape.boundingRect();}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -30,7 +32,7 @@ public:
 	void setGraphType(GraphType type);
 	void setColor(const QColor &color);
 	void setWidth(int width);
-	virtual void setUnits(Units units) {Q_UNUSED(units);}
+	void setUnits(Units units) {_units = units;}
 
 	qreal yAtX(qreal x);
 	qreal distanceAtTime(qreal time);
@@ -45,10 +47,12 @@ public slots:
 	void emitSliderPositionChanged(qreal);
 	void hover(bool hover);
 
-private:
+protected:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+	void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
+private:
 	const GraphSegment *segment(qreal x, GraphType type) const;
 	void updatePath();
 	void updateShape();
@@ -56,6 +60,7 @@ private:
 
 	Graph _graph;
 	GraphType _type;
+	Units _units;
 	QPainterPath _path;
 	QPainterPath _shape;
 	QRectF _bounds;

@@ -18,6 +18,9 @@ public:
 
 	static QRect tickRect(int value);
 
+protected:
+	void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
 private:
 	QRectF _tickRect;
 	QString _text;

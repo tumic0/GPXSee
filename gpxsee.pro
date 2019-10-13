@@ -19,6 +19,7 @@ equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 4) {QT += opengl}
 
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
+    src/GUI/popup.h \
     src/common/staticassert.h \
     src/common/coordinates.h \
     src/common/range.h \
@@ -185,6 +186,7 @@ HEADERS += src/common/config.h \
     src/data/csv.h \
     src/data/cupparser.h
 SOURCES += src/main.cpp \
+    src/GUI/popup.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
     src/common/range.cpp \

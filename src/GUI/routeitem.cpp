@@ -33,8 +33,6 @@ RouteItem::RouteItem(const Route &route, Map *map, QGraphicsItem *parent)
 	_name = route.name();
 	_desc = route.description();
 	_coordinatesFormat = DecimalDegrees;
-
-	setToolTip(toolTip(Metric));
 }
 
 void RouteItem::setMap(Map *map)
@@ -50,9 +48,8 @@ void RouteItem::setUnits(Units u)
 	if (units() == u)
 		return;
 
-	setToolTip(toolTip(units()));
 	for (int i = 0; i < _waypoints.count(); i++)
-		_waypoints[i]->setToolTipFormat(units(), _coordinatesFormat);
+		_waypoints[i]->setToolTipFormat(u, _coordinatesFormat);
 
 	PathItem::setUnits(u);
 }

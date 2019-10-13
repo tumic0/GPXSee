@@ -7,11 +7,11 @@ PowerGraphItem::PowerGraphItem(const Graph &graph, GraphType type, int width,
   const QColor &color, QGraphicsItem *parent)
   : GraphItem(graph, type, width, color, parent)
 {
-	setToolTip(toolTip());
 }
 
-QString PowerGraphItem::toolTip() const
+QString PowerGraphItem::toolTip(Units units) const
 {
+	Q_UNUSED(units);
 	ToolTip tt;
 	QLocale l(QLocale::system());
 

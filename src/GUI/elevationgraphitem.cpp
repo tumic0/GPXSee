@@ -24,8 +24,6 @@ ElevationGraphItem::ElevationGraphItem(const Graph &graph, GraphType type,
 				_descent += prev - cur;
 		}
 	}
-
-	setToolTip(toolTip(Metric));
 }
 
 QString ElevationGraphItem::toolTip(Units units) const
@@ -45,9 +43,4 @@ QString ElevationGraphItem::toolTip(Units units) const
 	  + UNIT_SPACE + su);
 
 	return tt.toString();
-}
-
-void ElevationGraphItem::setUnits(Units units)
-{
-	setToolTip(toolTip(units));
 }
