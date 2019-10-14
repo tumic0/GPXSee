@@ -162,7 +162,7 @@ void GPXParser::waypointData(Waypoint &waypoint, SegmentData *autoRoute)
 		else if (_reader.name() == QLatin1String("time"))
 			waypoint.setTimestamp(time());
 		else if (_reader.name() == QLatin1String("link"))
-			waypoint.setLink(link());
+			waypoint.addLink(link());
 		else if (autoRoute && _reader.name() == QLatin1String("extensions"))
 			rteptExtensions(autoRoute);
 		else
@@ -198,6 +198,8 @@ void GPXParser::routepoints(RouteData &route, QList<TrackData> &tracks)
 			route.setName(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("desc"))
 			route.setDescription(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("link"))
+			route.addLink(link());
 		else
 			_reader.skipCurrentElement();
 	}
@@ -219,6 +221,8 @@ void GPXParser::track(TrackData &track)
 			track.setName(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("desc"))
 			track.setDescription(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("link"))
+			track.addLink(link());
 		else
 			_reader.skipCurrentElement();
 	}

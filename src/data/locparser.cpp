@@ -40,7 +40,7 @@ void LOCParser::waypoint(Waypoint &waypoint)
 			_reader.skipCurrentElement();
 		} else if (_reader.name() == QLatin1String("link")) {
 			const QXmlStreamAttributes &attr = _reader.attributes();
-			waypoint.setLink(Link(_reader.readElementText(),
+			waypoint.addLink(Link(_reader.readElementText(),
 			  attr.value("text").toString()));
 		} else
 			_reader.skipCurrentElement();

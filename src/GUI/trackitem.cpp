@@ -21,6 +21,13 @@ QString TrackItem::toolTip(Units units) const
 		tt.insert(tr("Moving time"), Format::timeSpan(_movingTime));
 	if (!_date.isNull())
 		tt.insert(tr("Date"), _date.toString(Qt::SystemLocaleShortDate));
+	for (int i = 0; i < _links.size(); i++) {
+		const Link &link = _links.at(i);
+		if (!link.URL().isEmpty()) {
+			tt.insert(tr("Link"), QString("<a href=\"%0\">%1</a>").arg(
+			  link.URL(), link.text().isEmpty() ? link.URL() : link.text()));
+		}
+	}
 
 	return tt.toString();
 }
@@ -30,6 +37,7 @@ TrackItem::TrackItem(const Track &track, Map *map, QGraphicsItem *parent)
 {
 	_name = track.name();
 	_desc = track.description();
+	_links = track.links();
 	_date = track.date();
 	_time = track.time();
 	_movingTime = track.movingTime();

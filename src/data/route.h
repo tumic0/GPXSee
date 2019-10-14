@@ -21,6 +21,7 @@ public:
 
 	const QString &name() const {return _data.name();}
 	const QString &description() const {return _data.description();}
+	const QVector<Link> &links() const {return _data.links();}
 
 	bool isValid() const {return _data.size() >= 2;}
 

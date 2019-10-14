@@ -215,12 +215,12 @@ QList<PathItem *> MapView::loadData(const Data &data)
 	QList<PathItem *> paths;
 	int zoom = _map->zoom();
 
+	for (int i = 0; i < data.areas().count(); i++)
+		addArea(data.areas().at(i));
 	for (int i = 0; i < data.tracks().count(); i++)
 		paths.append(addTrack(data.tracks().at(i)));
 	for (int i = 0; i < data.routes().count(); i++)
 		paths.append(addRoute(data.routes().at(i)));
-	for (int i = 0; i < data.areas().count(); i++)
-		addArea(data.areas().at(i));
 	addWaypoints(data.waypoints());
 
 	if (_tracks.empty() && _routes.empty() && _waypoints.empty()

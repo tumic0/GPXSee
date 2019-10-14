@@ -3,6 +3,7 @@
 
 #include <QGraphicsItem>
 #include "data/area.h"
+#include "tooltip.h"
 
 class Map;
 
@@ -26,13 +27,15 @@ public:
 	void setStyle(Qt::PenStyle style);
 	void setDigitalZoom(int zoom);
 
-private:
+protected:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+	void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
+private:
 	QPainterPath painterPath(const Polygon &polygon);
 	void updatePainterPath();
-	QString toolTip() const;
+	ToolTip toolTip() const;
 
 	Area _area;
 	Map *_map;

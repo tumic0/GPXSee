@@ -28,6 +28,7 @@ public:
 private:
 	QString _name;
 	QString _desc;
+	QVector<Link> _links;
 	CoordinatesFormat _coordinatesFormat;
 
 	QVector<WaypointItem*> _waypoints;

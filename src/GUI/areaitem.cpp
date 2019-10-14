@@ -2,12 +2,13 @@
 #include <QApplication>
 #include <QCursor>
 #include <QPainter>
+#include <QGraphicsSceneMouseEvent>
 #include "map/map.h"
-#include "tooltip.h"
+#include "popup.h"
 #include "areaitem.h"
 
 
-QString AreaItem::toolTip() const
+ToolTip AreaItem::toolTip() const
 {
 	ToolTip tt;
 
@@ -17,7 +18,7 @@ QString AreaItem::toolTip() const
 		tt.insert(qApp->translate("PolygonItem", "Description"),
 		  _area.description());
 
-	return tt.toString();
+	return tt;
 }
 
 AreaItem::AreaItem(const Area &area, Map *map, QGraphicsItem *parent)
@@ -35,8 +36,6 @@ AreaItem::AreaItem(const Area &area, Map *map, QGraphicsItem *parent)
 
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
-
-	setToolTip(toolTip());
 }
 
 
@@ -170,4 +169,10 @@ void AreaItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 	_pen.setWidthF(_width * pow(2, -_digitalZoom));
 	setZValue(zValue() - 1.0);
 	update();
+}
+
+void AreaItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+	Popup::show(event->screenPos(), toolTip().toString(), event->widget());
+	QGraphicsItem::mousePressEvent(event);
 }

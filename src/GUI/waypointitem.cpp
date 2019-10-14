@@ -30,11 +30,14 @@ ToolTip WaypointItem::toolTip(Units units, CoordinatesFormat format)
 	if (!_waypoint.description().isEmpty())
 		tt.insert(qApp->translate("WaypointItem", "Description"),
 		  _waypoint.description());
-	if (!_waypoint.link().URL().isEmpty())
-		tt.insert(qApp->translate("WaypointItem", "Link"),
-		  QString("<a href=\"%0\">%1</a>").arg(_waypoint.link().URL(),
-		  _waypoint.link().text().isEmpty() ? _waypoint.link().URL()
-		  : _waypoint.link().text()));
+	for (int i = 0; i < _waypoint.links().size(); i++) {
+		const Link &link = _waypoint.links().at(i);
+		if (!link.URL().isEmpty()) {
+			tt.insert(qApp->translate("WaypointItem", "Link"),
+			  QString("<a href=\"%0\">%1</a>").arg(link.URL(),
+			  link.text().isEmpty() ? link.URL() : link.text()));
+		}
+	}
 	tt.setImage(_waypoint.image());
 
 	return tt;
@@ -164,5 +167,6 @@ void WaypointItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
 	ToolTip tt(toolTip(_units, _format));
 	Popup::show(event->screenPos(), tt.toString(), event->widget());
-	QGraphicsItem::mousePressEvent(event);
+	/* Do not propagate the event any further as lower stacked items (path
+	   items) would replace the popup with their own popup */
 }
