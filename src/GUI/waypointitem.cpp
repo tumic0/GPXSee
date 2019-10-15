@@ -13,17 +13,17 @@
 #define FS(size) \
 	((int)((qreal)size * 1.41))
 
-ToolTip WaypointItem::toolTip(Units units, CoordinatesFormat format)
+QString WaypointItem::info() const
 {
 	ToolTip tt;
 
 	if (!_waypoint.name().isEmpty())
 		tt.insert(qApp->translate("WaypointItem", "Name"), _waypoint.name());
 	tt.insert(qApp->translate("WaypointItem", "Coordinates"),
-	  Format::coordinates(_waypoint.coordinates(), format));
+	  Format::coordinates(_waypoint.coordinates(), _format));
 	if (_waypoint.hasElevation())
 		tt.insert(qApp->translate("WaypointItem", "Elevation"),
-		  Format::elevation(_waypoint.elevation(), units));
+		  Format::elevation(_waypoint.elevation(), _units));
 	if (_waypoint.timestamp().isValid())
 		tt.insert(qApp->translate("WaypointItem", "Date"),
 		  _waypoint.timestamp().toString(Qt::SystemLocaleShortDate));
@@ -40,11 +40,11 @@ ToolTip WaypointItem::toolTip(Units units, CoordinatesFormat format)
 	}
 	tt.setImage(_waypoint.image());
 
-	return tt;
+	return tt.toString();
 }
 
 WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
-  QGraphicsItem *parent) : QGraphicsItem(parent)
+  QGraphicsItem *parent) : GraphicsItem(parent)
 {
 	_waypoint = waypoint;
 	_showLabel = true;
@@ -165,8 +165,7 @@ void WaypointItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void WaypointItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	ToolTip tt(toolTip(_units, _format));
-	Popup::show(event->screenPos(), tt.toString(), event->widget());
+	Popup::show(event->screenPos(), info(), event->widget());
 	/* Do not propagate the event any further as lower stacked items (path
 	   items) would replace the popup with their own popup */
 }

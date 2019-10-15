@@ -27,9 +27,8 @@ GearRatioGraphItem::GearRatioGraphItem(const Graph &graph, GraphType type,
 	_top = key;
 }
 
-QString GearRatioGraphItem::toolTip(Units units) const
+QString GearRatioGraphItem::info() const
 {
-	Q_UNUSED(units);
 	ToolTip tt;
 	QLocale l(QLocale::system());
 

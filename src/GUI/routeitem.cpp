@@ -7,7 +7,7 @@
 #include "routeitem.h"
 
 
-QString RouteItem::toolTip(Units units) const
+QString RouteItem::info() const
 {
 	ToolTip tt;
 
@@ -16,7 +16,7 @@ QString RouteItem::toolTip(Units units) const
 	if (!_desc.isEmpty())
 		tt.insert(tr("Description"), _desc);
 	tt.insert(tr("Distance"), Format::distance(path().last().last().distance(),
-	  units));
+	  _units));
 	for (int i = 0; i < _links.size(); i++) {
 		const Link &link = _links.at(i);
 		if (!link.URL().isEmpty()) {
@@ -53,7 +53,7 @@ void RouteItem::setMap(Map *map)
 
 void RouteItem::setUnits(Units u)
 {
-	if (units() == u)
+	if (_units == u)
 		return;
 
 	for (int i = 0; i < _waypoints.count(); i++)
@@ -70,7 +70,7 @@ void RouteItem::setCoordinatesFormat(CoordinatesFormat format)
 	_coordinatesFormat = format;
 
 	for (int i = 0; i < _waypoints.count(); i++)
-		_waypoints[i]->setToolTipFormat(units(), _coordinatesFormat);
+		_waypoints[i]->setToolTipFormat(_units, _coordinatesFormat);
 }
 
 void RouteItem::showWaypoints(bool show)

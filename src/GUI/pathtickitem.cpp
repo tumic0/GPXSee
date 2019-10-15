@@ -20,7 +20,7 @@ static QFont defaultFont()
 QFont PathTickItem::_font = defaultFont();
 
 PathTickItem::PathTickItem(const QRectF &tickRect, int value,
-  QGraphicsItem *parent) : QGraphicsItem(parent), _tickRect(tickRect),
+  QGraphicsItem *parent) : GraphicsItem(parent), _tickRect(tickRect),
   _text(QString::number(value))
 {
 	_tickRect.moveCenter(QPointF(0, -_tickRect.height()/2.0 - 3));
@@ -76,6 +76,6 @@ QRect PathTickItem::tickRect(int value)
 void PathTickItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
 	const PathItem *pi = static_cast<PathItem*>(parentItem());
-	Popup::show(event->screenPos(), pi->toolTip(pi->units()), event->widget());
+	Popup::show(event->screenPos(), pi->info(), event->widget());
 	QGraphicsItem::mousePressEvent(event);
 }

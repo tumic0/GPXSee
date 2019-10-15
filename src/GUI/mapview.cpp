@@ -16,6 +16,7 @@
 #include "scaleitem.h"
 #include "coordinatesitem.h"
 #include "keys.h"
+#include "graphicsscene.h"
 #include "mapview.h"
 
 
@@ -32,7 +33,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	Q_ASSERT(map != 0);
 	Q_ASSERT(poi != 0);
 
-	_scene = new QGraphicsScene(this);
+	_scene = new GraphicsScene(this);
 	setScene(_scene);
 	setDragMode(QGraphicsView::ScrollHandDrag);
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);

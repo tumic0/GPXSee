@@ -5,8 +5,9 @@
 #include <QPen>
 #include "data/graph.h"
 #include "units.h"
+#include "graphicsscene.h"
 
-class GraphItem : public QGraphicsObject
+class GraphItem : public QObject, public GraphicsItem
 {
 	Q_OBJECT
 
@@ -15,7 +16,7 @@ public:
 	  QGraphicsItem *parent = 0);
 	virtual ~GraphItem() {}
 
-	virtual QString toolTip(Units units) const = 0;
+	virtual QString info() const = 0;
 
 	QPainterPath shape() const {return _shape;}
 	QRectF boundingRect() const {return _shape.boundingRect();}
@@ -52,6 +53,8 @@ protected:
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 	void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
+	Units _units;
+
 private:
 	const GraphSegment *segment(qreal x, GraphType type) const;
 	void updatePath();
@@ -60,13 +63,11 @@ private:
 
 	Graph _graph;
 	GraphType _type;
-	Units _units;
 	QPainterPath _path;
 	QPainterPath _shape;
 	QRectF _bounds;
 	qreal _sx, _sy;
 	QPen _pen;
-
 	bool _time;
 };
 

@@ -5,7 +5,7 @@
 #include "trackitem.h"
 
 
-QString TrackItem::toolTip(Units units) const
+QString TrackItem::info() const
 {
 	ToolTip tt;
 
@@ -14,7 +14,7 @@ QString TrackItem::toolTip(Units units) const
 	if (!_desc.isEmpty())
 		tt.insert(tr("Description"), _desc);
 	tt.insert(tr("Distance"), Format::distance(path().last().last().distance(),
-	  units));
+	  _units));
 	if  (_time > 0)
 		tt.insert(tr("Total time"), Format::timeSpan(_time));
 	if  (_movingTime > 0)

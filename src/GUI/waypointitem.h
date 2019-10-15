@@ -3,14 +3,15 @@
 
 #include <cmath>
 #include <QGraphicsItem>
+#include <QFont>
 #include "data/waypoint.h"
 #include "map/map.h"
 #include "units.h"
+#include "graphicsscene.h"
 #include "format.h"
-#include "tooltip.h"
 
 
-class WaypointItem : public QGraphicsItem
+class WaypointItem : public GraphicsItem
 {
 public:
 	WaypointItem(const Waypoint &waypoint, Map *map, QGraphicsItem *parent = 0);
@@ -29,6 +30,8 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
+	QString info() const;
+
 protected:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
@@ -36,7 +39,6 @@ protected:
 
 private:
 	void updateCache();
-	ToolTip toolTip(Units units, CoordinatesFormat format);
 
 	Waypoint _waypoint;
 	QPainterPath _shape;

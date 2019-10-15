@@ -15,6 +15,7 @@
 #include "graphitem.h"
 #include "pathitem.h"
 #include "format.h"
+#include "graphicsscene.h"
 #include "graphview.h"
 
 
@@ -23,7 +24,7 @@
 GraphView::GraphView(QWidget *parent)
 	: QGraphicsView(parent)
 {
-	_scene = new QGraphicsScene(this);
+	_scene = new GraphicsScene(this);
 	setScene(_scene);
 
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
@@ -37,9 +38,9 @@ GraphView::GraphView(QWidget *parent)
 	_yAxis = new AxisItem(AxisItem::Y);
 	_yAxis->setZValue(1.0);
 	_slider = new SliderItem();
-	_slider->setZValue(3.0);
+	_slider->setZValue(4.0);
 	_sliderInfo = new SliderInfoItem(_slider);
-	_sliderInfo->setZValue(3.0);
+	_sliderInfo->setZValue(4.0);
 	_info = new InfoItem();
 	_grid = new GridItem();
 	_message = new QGraphicsSimpleTextItem(tr("Data not available"));

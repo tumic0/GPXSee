@@ -30,6 +30,7 @@ class PathItem;
 class GraphItem;
 class AreaItem;
 class Area;
+class GraphicsScene;
 
 class MapView : public QGraphicsView
 {
@@ -120,7 +121,7 @@ private:
 	void mouseMoveEvent(QMouseEvent *event);
 	void leaveEvent(QEvent *event);
 
-	QGraphicsScene *_scene;
+	GraphicsScene *_scene;
 	ScaleItem *_mapScale;
 	CoordinatesItem *_coordinates;
 	QList<TrackItem*> _tracks;

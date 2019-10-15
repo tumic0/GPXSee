@@ -26,11 +26,11 @@ ElevationGraphItem::ElevationGraphItem(const Graph &graph, GraphType type,
 	}
 }
 
-QString ElevationGraphItem::toolTip(Units units) const
+QString ElevationGraphItem::info() const
 {
 	ToolTip tt;
-	qreal scale = (units == Metric) ? 1.0 : M2FT;
-	QString su = (units == Metric) ? tr("m") : tr("ft");
+	qreal scale = (_units == Metric) ? 1.0 : M2FT;
+	QString su = (_units == Metric) ? tr("m") : tr("ft");
 	QLocale l(QLocale::system());
 
 	tt.insert(tr("Ascent"), l.toString(ascent() * scale, 'f', 0)

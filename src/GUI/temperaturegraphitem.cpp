@@ -12,12 +12,12 @@ TemperatureGraphItem::TemperatureGraphItem(const Graph &graph, GraphType type,
 	_avg = GraphItem::avg();
 }
 
-QString TemperatureGraphItem::toolTip(Units units) const
+QString TemperatureGraphItem::info() const
 {
 	ToolTip tt;
-	qreal scale = (units == Metric) ? 1.0 : C2FS;
-	qreal offset = (units == Metric) ? 0 : C2FO;
-	QString su = (units == Metric) ?
+	qreal scale = (_units == Metric) ? 1.0 : C2FS;
+	qreal offset = (_units == Metric) ? 0 : C2FO;
+	QString su = (_units == Metric) ?
 	  QChar(0x00B0) + tr("C") : QChar(0x00B0) + tr("F");
 	QLocale l(QLocale::system());
 

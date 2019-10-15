@@ -22,7 +22,7 @@ static inline unsigned segments(qreal distance)
 }
 
 PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
-  : QGraphicsObject(parent), _path(path), _map(map)
+  : GraphicsItem(parent), _path(path), _map(map)
 {
 	Q_ASSERT(_path.isValid());
 
@@ -385,6 +385,6 @@ void PathItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void PathItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	Popup::show(event->screenPos(), toolTip(_units), event->widget());
-	QGraphicsObject::mousePressEvent(event);
+	Popup::show(event->screenPos(), info(), event->widget());
+	GraphicsItem::mousePressEvent(event);
 }

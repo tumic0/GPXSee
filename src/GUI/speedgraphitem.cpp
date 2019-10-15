@@ -15,16 +15,16 @@ SpeedGraphItem::SpeedGraphItem(const Graph &graph, GraphType type, int width,
 	_mavg = graph.last().last().s() / movingTime;
 }
 
-QString SpeedGraphItem::toolTip(Units units) const
+QString SpeedGraphItem::info() const
 {
 	ToolTip tt;
-	qreal scale = (units == Imperial) ? MS2MIH : (units == Nautical)
+	qreal scale = (_units == Imperial) ? MS2MIH : (_units == Nautical)
 	  ? MS2KN : MS2KMH;
-	QString su = (units == Imperial) ? tr("mi/h") : (units == Nautical)
+	QString su = (_units == Imperial) ? tr("mi/h") : (_units == Nautical)
 	  ? tr("kn") : tr("km/h");
 	QString pace = Format::timeSpan((3600.0 / ((_timeType == Total)
 	  ? avg() * scale : mavg() * scale)), false);
-	QString pu = (units == Metric) ? tr("min/km") : (units == Imperial) ?
+	QString pu = (_units == Metric) ? tr("min/km") : (_units == Imperial) ?
 	  tr("min/mi") : tr("min/nmi");
 	QLocale l(QLocale::system());
 

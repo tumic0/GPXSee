@@ -6,7 +6,7 @@
 
 GraphItem::GraphItem(const Graph &graph, GraphType type, int width,
   const QColor &color, QGraphicsItem *parent)
-  : QGraphicsObject(parent), _graph(graph), _type(type)
+  : GraphicsItem(parent), _graph(graph), _type(type)
 {
 	Q_ASSERT(_graph.isValid());
 
@@ -309,6 +309,6 @@ void GraphItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void GraphItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	Popup::show(event->screenPos(), toolTip(_units), event->widget());
-	QGraphicsObject::mousePressEvent(event);
+	Popup::show(event->screenPos(), info(), event->widget());
+	GraphicsItem::mousePressEvent(event);
 }

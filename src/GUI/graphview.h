@@ -17,6 +17,7 @@ class GraphItem;
 class PathItem;
 class GridItem;
 class QGraphicsSimpleTextItem;
+class GraphicsScene;
 
 class GraphView : public QGraphicsView
 {
@@ -93,7 +94,7 @@ private:
 	void removeItem(QGraphicsItem *item);
 	void addItem(QGraphicsItem *item);
 
-	QGraphicsScene *_scene;
+	GraphicsScene *_scene;
 
 	AxisItem *_xAxis, *_yAxis;
 	SliderItem *_slider;

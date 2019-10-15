@@ -9,9 +9,8 @@ CadenceGraphItem::CadenceGraphItem(const Graph &graph, GraphType type,
 {
 }
 
-QString CadenceGraphItem::toolTip(Units units) const
+QString CadenceGraphItem::info() const
 {
-	Q_UNUSED(units);
 	ToolTip tt;
 	QLocale l(QLocale::system());
 
