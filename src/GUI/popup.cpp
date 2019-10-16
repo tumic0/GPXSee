@@ -98,10 +98,18 @@ bool Label::eventFilter(QObject *o, QEvent *ev)
 			}
 			break;
 		}
+#ifdef Q_OS_WIN32
+		case QEvent::FocusOut:
+		case QEvent::WindowDeactivate:
+			if (o == this)
+				deleteLater();
+			break;
+#else // Q_OS_WIN32
 		case QEvent::FocusIn:
 		case QEvent::FocusOut:
 		case QEvent::WindowActivate:
 		case QEvent::WindowDeactivate:
+#endif // Q_OS_WIN32
 		case QEvent::Close:
 			deleteLater();
 			break;
