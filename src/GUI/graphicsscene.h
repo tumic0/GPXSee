@@ -3,9 +3,6 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsItem>
-#include <QGraphicsSceneHelpEvent>
-#include <QWidget>
-#include "popup.h"
 
 class GraphicsItem : public QGraphicsItem
 {
@@ -22,15 +19,11 @@ public:
 	GraphicsScene(QObject *parent = 0) : QGraphicsScene(parent) {}
 
 protected:
-	void helpEvent(QGraphicsSceneHelpEvent *event)
-	{
-		QGraphicsItem *item = itemAt(event->scenePos(), QTransform());
-		if (item && item->type() == QGraphicsItem::UserType + 1) {
-			GraphicsItem *mi = static_cast<GraphicsItem*>(item);
-			Popup::show(event->screenPos(), mi->info(),
-			  static_cast<QWidget*>(parent()));
-		}
-	}
+	void helpEvent(QGraphicsSceneHelpEvent *event);
+
+private:
+	QList<QGraphicsItem *> itemsAtPosition(const QPoint &screenPos,
+	  const QPointF &scenePos, QWidget *widget) const;
 };
 
 #endif // GRAPHICSSCENE_H

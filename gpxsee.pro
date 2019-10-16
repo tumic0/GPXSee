@@ -320,7 +320,8 @@ SOURCES += src/main.cpp \
     src/GUI/pathtickitem.cpp \
     src/map/IMG/textitem.cpp \
     src/data/csv.cpp \
-    src/data/cupparser.cpp
+    src/data/cupparser.cpp \
+    src/GUI/graphicsscene.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     HEADERS += src/data/geojsonparser.h
