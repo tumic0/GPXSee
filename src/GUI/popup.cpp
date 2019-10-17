@@ -10,18 +10,18 @@
 #include "popup.h"
 
 
-class Label : public QLabel
+class PopupLabel : public QLabel
 {
 public:
-	Label(const QString &text, QWidget *parent = 0);
-	~Label();
+	PopupLabel(const QString &text, QWidget *parent = 0);
+	~PopupLabel();
 
 	bool eventFilter(QObject *o, QEvent *ev);
 	void place(const QPoint &pos, QWidget *w);
 	void deleteAfterTimer();
 	void stopTimer() {_timer.stop();}
 
-	static Label *_instance;
+	static PopupLabel *_instance;
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -32,9 +32,9 @@ private:
 	QBasicTimer _timer;
 };
 
-Label *Label::_instance = 0;
+PopupLabel *PopupLabel::_instance = 0;
 
-Label::Label(const QString &text, QWidget *parent)
+PopupLabel::PopupLabel(const QString &text, QWidget *parent)
   : QLabel(text, parent, Qt::ToolTip | Qt::BypassGraphicsProxyWidget
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	| Qt::WindowDoesNotAcceptFocus
@@ -65,12 +65,12 @@ Label::Label(const QString &text, QWidget *parent)
 	qApp->installEventFilter(this);
 }
 
-Label::~Label()
+PopupLabel::~PopupLabel()
 {
 	_instance = 0;
 }
 
-void Label::paintEvent(QPaintEvent *event)
+void PopupLabel::paintEvent(QPaintEvent *event)
 {
 	QStylePainter p(this);
 	QStyleOptionFrame opt;
@@ -80,7 +80,7 @@ void Label::paintEvent(QPaintEvent *event)
 	QLabel::paintEvent(event);
 }
 
-void Label::timerEvent(QTimerEvent *event)
+void PopupLabel::timerEvent(QTimerEvent *event)
 {
 	if (event->timerId() == _timer.timerId()) {
 		_timer.stop();
@@ -88,7 +88,7 @@ void Label::timerEvent(QTimerEvent *event)
 	}
 }
 
-bool Label::eventFilter(QObject *o, QEvent *ev)
+bool PopupLabel::eventFilter(QObject *o, QEvent *ev)
 {
 	Q_UNUSED(o);
 
@@ -123,7 +123,7 @@ bool Label::eventFilter(QObject *o, QEvent *ev)
 	return false;
 }
 
-void Label::place(const QPoint &pos, QWidget *w)
+void PopupLabel::place(const QPoint &pos, QWidget *w)
 {
 	QRect screen = QApplication::desktop()->screenGeometry(w);
 	QPoint p(pos.x() + 2, pos.y() + 16);
@@ -144,7 +144,7 @@ void Label::place(const QPoint &pos, QWidget *w)
 	this->move(p);
 }
 
-void Label::deleteAfterTimer()
+void PopupLabel::deleteAfterTimer()
 {
 	if (!_timer.isActive())
 		_timer.start(300, this);
@@ -153,13 +153,13 @@ void Label::deleteAfterTimer()
 
 void Popup::show(const QPoint &pos, const QString &text, QWidget *w)
 {
-	if (Label::_instance) {
-		Label::_instance->stopTimer();
-		Label::_instance->setText(text);
+	if (PopupLabel::_instance) {
+		PopupLabel::_instance->stopTimer();
+		PopupLabel::_instance->setText(text);
 	} else
-		Label::_instance = new Label(text);
+		PopupLabel::_instance = new PopupLabel(text);
 
-	Label::_instance->resize(Label::_instance->sizeHint());
-	Label::_instance->place(pos, w);
-	Label::_instance->showNormal();
+	PopupLabel::_instance->resize(PopupLabel::_instance->sizeHint());
+	PopupLabel::_instance->place(pos, w);
+	PopupLabel::_instance->showNormal();
 }
