@@ -35,7 +35,8 @@ private:
 Label *Label::_instance = 0;
 
 Label::Label(const QString &text, QWidget *parent)
-  : QLabel(text, parent, Qt::ToolTip | Qt::BypassGraphicsProxyWidget)
+  : QLabel(text, parent, Qt::ToolTip | Qt::BypassGraphicsProxyWidget
+	| Qt::WindowDoesNotAcceptFocus)
 {
 	delete _instance;
 	_instance = this;
@@ -98,18 +99,10 @@ bool Label::eventFilter(QObject *o, QEvent *ev)
 			}
 			break;
 		}
-#ifdef Q_OS_WIN32
-		case QEvent::FocusOut:
-		case QEvent::WindowDeactivate:
-			if (o == this)
-				deleteLater();
-			break;
-#else // Q_OS_WIN32
 		case QEvent::FocusIn:
 		case QEvent::FocusOut:
 		case QEvent::WindowActivate:
 		case QEvent::WindowDeactivate:
-#endif // Q_OS_WIN32
 		case QEvent::Close:
 			deleteLater();
 			break;
