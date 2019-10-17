@@ -36,7 +36,10 @@ Label *Label::_instance = 0;
 
 Label::Label(const QString &text, QWidget *parent)
   : QLabel(text, parent, Qt::ToolTip | Qt::BypassGraphicsProxyWidget
-	| Qt::WindowDoesNotAcceptFocus)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+	| Qt::WindowDoesNotAcceptFocus
+#endif // QT5
+)
 {
 	delete _instance;
 	_instance = this;
