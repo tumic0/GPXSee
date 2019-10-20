@@ -149,6 +149,7 @@ void GPXParser::trackpointData(Trackpoint &trackpoint)
 void GPXParser::waypointData(Waypoint &waypoint, SegmentData *autoRoute)
 {
 	qreal gh = NAN;
+	Link link10;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("name"))
@@ -161,14 +162,22 @@ void GPXParser::waypointData(Waypoint &waypoint, SegmentData *autoRoute)
 			gh = number();
 		else if (_reader.name() == QLatin1String("time"))
 			waypoint.setTimestamp(time());
-		else if (_reader.name() == QLatin1String("link"))
-			waypoint.addLink(link());
+		else if (_reader.name() == QLatin1String("link")) {
+			Link l(link());
+			if (!l.URL().isEmpty())
+				waypoint.addLink(l);
+		} else if (_reader.name() == QLatin1String("url"))
+			link10.setURL(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("urlname"))
+			link10.setText(_reader.readElementText());
 		else if (autoRoute && _reader.name() == QLatin1String("extensions"))
 			rteptExtensions(autoRoute);
 		else
 			_reader.skipCurrentElement();
 	}
 
+	if (!link10.URL().isEmpty())
+		waypoint.addLink(link10);
 	if (!std::isnan(gh) && !std::isnan(waypoint.elevation()))
 		waypoint.setElevation(waypoint.elevation() - gh);
 }
@@ -189,6 +198,7 @@ void GPXParser::routepoints(RouteData &route, QList<TrackData> &tracks)
 	TrackData autoRoute;
 	autoRoute.append(SegmentData());
 	SegmentData &autoRouteSegment = autoRoute.last();
+	Link link10;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("rtept")) {
@@ -198,11 +208,20 @@ void GPXParser::routepoints(RouteData &route, QList<TrackData> &tracks)
 			route.setName(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("desc"))
 			route.setDescription(_reader.readElementText());
-		else if (_reader.name() == QLatin1String("link"))
-			route.addLink(link());
+		else if (_reader.name() == QLatin1String("link")) {
+			Link l(link());
+			if (!l.URL().isEmpty())
+				route.addLink(l);
+		} else if (_reader.name() == QLatin1String("url"))
+			link10.setURL(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("urlname"))
+			link10.setText(_reader.readElementText());
 		else
 			_reader.skipCurrentElement();
 	}
+
+	if (!link10.URL().isEmpty())
+		route.addLink(link10);
 
 	if (!autoRouteSegment.isEmpty()) {
 		autoRoute.setName(route.name());
@@ -213,6 +232,8 @@ void GPXParser::routepoints(RouteData &route, QList<TrackData> &tracks)
 
 void GPXParser::track(TrackData &track)
 {
+	Link link10;
+
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("trkseg")) {
 			track.append(SegmentData());
@@ -221,11 +242,20 @@ void GPXParser::track(TrackData &track)
 			track.setName(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("desc"))
 			track.setDescription(_reader.readElementText());
-		else if (_reader.name() == QLatin1String("link"))
-			track.addLink(link());
+		else if (_reader.name() == QLatin1String("link")) {
+			Link l(link());
+			if (!l.URL().isEmpty())
+				track.addLink(l);
+		} else if (_reader.name() == QLatin1String("url"))
+			link10.setURL(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("urlname"))
+			link10.setText(_reader.readElementText());
 		else
 			_reader.skipCurrentElement();
 	}
+
+	if (!link10.URL().isEmpty())
+		track.addLink(link10);
 }
 
 void GPXParser::area(Area &area)

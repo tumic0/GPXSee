@@ -32,11 +32,9 @@ QString WaypointItem::info() const
 		  _waypoint.description());
 	for (int i = 0; i < _waypoint.links().size(); i++) {
 		const Link &link = _waypoint.links().at(i);
-		if (!link.URL().isEmpty()) {
-			tt.insert(qApp->translate("WaypointItem", "Link"),
-			  QString("<a href=\"%0\">%1</a>").arg(link.URL(),
-			  link.text().isEmpty() ? link.URL() : link.text()));
-		}
+		tt.insert(qApp->translate("WaypointItem", "Link"),
+		  QString("<a href=\"%0\">%1</a>").arg(link.URL(),
+		  link.text().isEmpty() ? link.URL() : link.text()));
 	}
 	tt.setImage(_waypoint.image());
 

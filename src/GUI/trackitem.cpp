@@ -23,10 +23,8 @@ QString TrackItem::info() const
 		tt.insert(tr("Date"), _date.toString(Qt::SystemLocaleShortDate));
 	for (int i = 0; i < _links.size(); i++) {
 		const Link &link = _links.at(i);
-		if (!link.URL().isEmpty()) {
-			tt.insert(tr("Link"), QString("<a href=\"%0\">%1</a>").arg(
-			  link.URL(), link.text().isEmpty() ? link.URL() : link.text()));
-		}
+		tt.insert(tr("Link"), QString("<a href=\"%0\">%1</a>").arg(
+		  link.URL(), link.text().isEmpty() ? link.URL() : link.text()));
 	}
 
 	return tt.toString();
