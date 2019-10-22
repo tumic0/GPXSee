@@ -21,10 +21,16 @@ QString TrackItem::info() const
 		tt.insert(tr("Moving time"), Format::timeSpan(_movingTime));
 	if (!_date.isNull())
 		tt.insert(tr("Date"), _date.toString(Qt::SystemLocaleShortDate));
-	for (int i = 0; i < _links.size(); i++) {
-		const Link &link = _links.at(i);
-		tt.insert(tr("Link"), QString("<a href=\"%0\">%1</a>").arg(
-		  link.URL(), link.text().isEmpty() ? link.URL() : link.text()));
+	if (!_links.isEmpty()) {
+		QString links;
+		for (int i = 0; i < _links.size(); i++) {
+			const Link &link = _links.at(i);
+			links.append(QString("<a href=\"%0\">%1</a>").arg(link.URL(),
+			  link.text().isEmpty() ? link.URL() : link.text()));
+			if (i != _links.size() - 1)
+				links.append("<br/>");
+		}
+		tt.insert(tr("Links"), links);
 	}
 
 	return tt.toString();
