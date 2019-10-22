@@ -28,18 +28,18 @@
 <context>
     <name>CadenceGraphItem</name>
     <message>
-        <location filename="../src/GUI/cadencegraphitem.cpp" line="18"/>
+        <location filename="../src/GUI/cadencegraphitem.cpp" line="17"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/cadencegraphitem.cpp" line="19"/>
-        <location filename="../src/GUI/cadencegraphitem.cpp" line="21"/>
+        <location filename="../src/GUI/cadencegraphitem.cpp" line="18"/>
+        <location filename="../src/GUI/cadencegraphitem.cpp" line="20"/>
         <source>rpm</source>
         <translation>tr/min</translation>
     </message>
     <message>
-        <location filename="../src/GUI/cadencegraphitem.cpp" line="20"/>
+        <location filename="../src/GUI/cadencegraphitem.cpp" line="19"/>
         <source>Average</source>
         <translation>Moyenne</translation>
     </message>
@@ -164,32 +164,32 @@
 <context>
     <name>ElevationGraphItem</name>
     <message>
-        <location filename="../src/GUI/elevationgraphitem.cpp" line="35"/>
+        <location filename="../src/GUI/elevationgraphitem.cpp" line="33"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraphitem.cpp" line="35"/>
+        <location filename="../src/GUI/elevationgraphitem.cpp" line="33"/>
         <source>ft</source>
         <translation>pieds</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraphitem.cpp" line="38"/>
+        <location filename="../src/GUI/elevationgraphitem.cpp" line="36"/>
         <source>Ascent</source>
         <translation>Dénivelé positif</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraphitem.cpp" line="40"/>
+        <location filename="../src/GUI/elevationgraphitem.cpp" line="38"/>
         <source>Descent</source>
         <translation>Dénivelé négatif</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraphitem.cpp" line="42"/>
+        <location filename="../src/GUI/elevationgraphitem.cpp" line="40"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraphitem.cpp" line="44"/>
+        <location filename="../src/GUI/elevationgraphitem.cpp" line="42"/>
         <source>Minimum</source>
         <translation>Minimum</translation>
     </message>
@@ -884,17 +884,17 @@
 <context>
     <name>GearRatioGraphItem</name>
     <message>
-        <location filename="../src/GUI/gearratiographitem.cpp" line="37"/>
+        <location filename="../src/GUI/gearratiographitem.cpp" line="35"/>
         <source>Minimum</source>
         <translation>Minimum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gearratiographitem.cpp" line="38"/>
+        <location filename="../src/GUI/gearratiographitem.cpp" line="36"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gearratiographitem.cpp" line="39"/>
+        <location filename="../src/GUI/gearratiographitem.cpp" line="37"/>
         <source>Most used</source>
         <translation>Le plus utilisé</translation>
     </message>
@@ -902,59 +902,59 @@
 <context>
     <name>GraphView</name>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="125"/>
+        <location filename="../src/GUI/graphview.cpp" line="126"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="128"/>
+        <location filename="../src/GUI/graphview.cpp" line="129"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="109"/>
-        <location filename="../src/GUI/graphview.cpp" line="117"/>
+        <location filename="../src/GUI/graphview.cpp" line="110"/>
+        <location filename="../src/GUI/graphview.cpp" line="118"/>
         <source>ft</source>
         <translation>pieds</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="45"/>
+        <location filename="../src/GUI/graphview.cpp" line="46"/>
         <source>Data not available</source>
         <translation>Données non disponibles</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="112"/>
+        <location filename="../src/GUI/graphview.cpp" line="113"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="120"/>
+        <location filename="../src/GUI/graphview.cpp" line="121"/>
         <source>nmi</source>
         <translation>nmi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="134"/>
+        <location filename="../src/GUI/graphview.cpp" line="135"/>
         <source>s</source>
         <translation>s</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="137"/>
+        <location filename="../src/GUI/graphview.cpp" line="138"/>
         <source>min</source>
         <translation>min</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="140"/>
+        <location filename="../src/GUI/graphview.cpp" line="141"/>
         <source>h</source>
         <translation>h</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="65"/>
-        <location filename="../src/GUI/graphview.cpp" line="172"/>
+        <location filename="../src/GUI/graphview.cpp" line="66"/>
+        <location filename="../src/GUI/graphview.cpp" line="173"/>
         <source>Distance</source>
         <translation>Distance</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="174"/>
+        <location filename="../src/GUI/graphview.cpp" line="175"/>
         <source>Time</source>
         <translation>Temps</translation>
     </message>
@@ -986,18 +986,18 @@
 <context>
     <name>HeartRateGraphItem</name>
     <message>
-        <location filename="../src/GUI/heartrategraphitem.cpp" line="18"/>
+        <location filename="../src/GUI/heartrategraphitem.cpp" line="17"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/heartrategraphitem.cpp" line="19"/>
-        <location filename="../src/GUI/heartrategraphitem.cpp" line="21"/>
+        <location filename="../src/GUI/heartrategraphitem.cpp" line="18"/>
+        <location filename="../src/GUI/heartrategraphitem.cpp" line="20"/>
         <source>bpm</source>
         <translation>bpm</translation>
     </message>
     <message>
-        <location filename="../src/GUI/heartrategraphitem.cpp" line="20"/>
+        <location filename="../src/GUI/heartrategraphitem.cpp" line="19"/>
         <source>Average</source>
         <translation>Moyenne</translation>
     </message>
@@ -1532,12 +1532,12 @@
 <context>
     <name>PolygonItem</name>
     <message>
-        <location filename="../src/GUI/areaitem.cpp" line="15"/>
+        <location filename="../src/GUI/areaitem.cpp" line="16"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../src/GUI/areaitem.cpp" line="17"/>
+        <location filename="../src/GUI/areaitem.cpp" line="18"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
@@ -1569,18 +1569,18 @@
 <context>
     <name>PowerGraphItem</name>
     <message>
-        <location filename="../src/GUI/powergraphitem.cpp" line="18"/>
+        <location filename="../src/GUI/powergraphitem.cpp" line="17"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/powergraphitem.cpp" line="19"/>
-        <location filename="../src/GUI/powergraphitem.cpp" line="21"/>
+        <location filename="../src/GUI/powergraphitem.cpp" line="18"/>
+        <location filename="../src/GUI/powergraphitem.cpp" line="20"/>
         <source>W</source>
         <translation>W</translation>
     </message>
     <message>
-        <location filename="../src/GUI/powergraphitem.cpp" line="20"/>
+        <location filename="../src/GUI/powergraphitem.cpp" line="19"/>
         <source>Average</source>
         <translation>Moyenne</translation>
     </message>
@@ -1601,6 +1601,11 @@
         <location filename="../src/GUI/routeitem.cpp" line="18"/>
         <source>Distance</source>
         <translation>Distance</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/routeitem.cpp" line="29"/>
+        <source>Links</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1689,47 +1694,47 @@
 <context>
     <name>SpeedGraphItem</name>
     <message>
-        <location filename="../src/GUI/speedgraphitem.cpp" line="27"/>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraphitem.cpp" line="26"/>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="23"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraphitem.cpp" line="27"/>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
         <source>kn</source>
         <translation>nd</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraphitem.cpp" line="30"/>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="27"/>
         <source>min/km</source>
         <translation>min/km</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraphitem.cpp" line="31"/>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="28"/>
         <source>min/mi</source>
         <translation>min/mi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraphitem.cpp" line="31"/>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="28"/>
         <source>min/nmi</source>
         <translation>min/nmi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraphitem.cpp" line="34"/>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="31"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraphitem.cpp" line="36"/>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="33"/>
         <source>Average</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraphitem.cpp" line="38"/>
+        <location filename="../src/GUI/speedgraphitem.cpp" line="35"/>
         <source>Pace</source>
         <translation>Allure</translation>
     </message>
@@ -1771,27 +1776,27 @@
 <context>
     <name>TemperatureGraphItem</name>
     <message>
-        <location filename="../src/GUI/temperaturegraphitem.cpp" line="23"/>
+        <location filename="../src/GUI/temperaturegraphitem.cpp" line="21"/>
         <source>C</source>
         <translation>°C</translation>
     </message>
     <message>
-        <location filename="../src/GUI/temperaturegraphitem.cpp" line="23"/>
+        <location filename="../src/GUI/temperaturegraphitem.cpp" line="21"/>
         <source>F</source>
         <translation>°F</translation>
     </message>
     <message>
-        <location filename="../src/GUI/temperaturegraphitem.cpp" line="26"/>
+        <location filename="../src/GUI/temperaturegraphitem.cpp" line="24"/>
         <source>Average</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../src/GUI/temperaturegraphitem.cpp" line="28"/>
+        <location filename="../src/GUI/temperaturegraphitem.cpp" line="26"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/temperaturegraphitem.cpp" line="30"/>
+        <location filename="../src/GUI/temperaturegraphitem.cpp" line="28"/>
         <source>Minimum</source>
         <translation>Minimum</translation>
     </message>
@@ -1828,33 +1833,43 @@
         <source>Date</source>
         <translation>Date</translation>
     </message>
+    <message>
+        <location filename="../src/GUI/trackitem.cpp" line="33"/>
+        <source>Links</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WaypointItem</name>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="18"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="21"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="19"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="22"/>
         <source>Coordinates</source>
         <translation>Coordonnées</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="22"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="25"/>
         <source>Elevation</source>
         <translation>Altitude</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="25"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="28"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="28"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="31"/>
         <source>Description</source>
         <translation>Description</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/waypointitem.cpp" line="42"/>
+        <source>Links</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
