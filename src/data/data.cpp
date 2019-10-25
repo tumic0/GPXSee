@@ -18,6 +18,7 @@
 #endif // ENABLE_GEOJSON
 #include "exifparser.h"
 #include "cupparser.h"
+#include "gpiparser.h"
 #include "dem.h"
 #include "data.h"
 
@@ -39,6 +40,7 @@ static GeoJSONParser geojson;
 #endif // ENABLE_GEOJSON
 static EXIFParser exif;
 static CUPParser cup;
+static GPIParser gpi;
 
 static QHash<QString, Parser*> parsers()
 {
@@ -63,6 +65,7 @@ static QHash<QString, Parser*> parsers()
 	hash.insert("jpeg", &exif);
 	hash.insert("jpg", &exif);
 	hash.insert("cup", &cup);
+	hash.insert("gpi", &gpi);
 
 	return hash;
 }
@@ -177,6 +180,7 @@ QString Data::formats()
 #ifdef ENABLE_GEOJSON
 	  + qApp->translate("Data", "GeoJSON files") + " (*.geojson *.json);;"
 #endif // ENABLE_GEOJSON
+	  + qApp->translate("Data", "GPI files") + " (*.gpi);;"
 	  + qApp->translate("Data", "GPX files") + " (*.gpx);;"
 	  + qApp->translate("Data", "IGC files") + " (*.igc);;"
 	  + qApp->translate("Data", "JPEG images") + " (*.jpg *.jpeg);;"
