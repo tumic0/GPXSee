@@ -166,6 +166,10 @@ void GraphView::setGraphType(GraphType type)
 	for (int i = 0; i < _graphs.count(); i++) {
 		GraphItem *gi = _graphs.at(i);
 		gi->setGraphType(type);
+		if (gi->bounds().isNull())
+			removeItem(gi);
+		else
+			addItem(gi);
 		_bounds |= gi->bounds();
 	}
 
@@ -194,7 +198,8 @@ void GraphView::addGraph(GraphItem *graph)
 	  SLOT(emitSliderPositionChanged(qreal)));
 
 	_graphs.append(graph);
-	_scene->addItem(graph);
+	if (!graph->bounds().isNull())
+		_scene->addItem(graph);
 	_bounds |= graph->bounds();
 
 	setXUnits();

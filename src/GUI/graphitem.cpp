@@ -234,7 +234,8 @@ void GraphItem::updateBounds()
 		}
 	}
 
-	_bounds = QRectF(QPointF(left, top), QPointF(right, bottom));
+	QRectF bounds(QPointF(left, top), QPointF(right, bottom));
+	_bounds = bounds.isValid() ? bounds : QRectF();
 }
 
 qreal GraphItem::max() const
