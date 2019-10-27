@@ -414,6 +414,16 @@ bool GPIParser::readEntry(QDataStream &stream, QTextCodec *codec,
 	return true;
 }
 
+bool GPIParser::readData(QDataStream &stream, QTextCodec *codec,
+  QVector<Waypoint> &waypoints)
+{
+	while (stream.status() == QDataStream::Ok)
+		if (!readEntry(stream, codec, waypoints))
+			return stream.atEnd();
+
+	return false;
+}
+
 bool GPIParser::parse(QFile *file, QList<TrackData> &tracks,
   QList<RouteData> &routes, QList<Area> &polygons, QVector<Waypoint> &waypoints)
 {
@@ -428,11 +438,7 @@ bool GPIParser::parse(QFile *file, QList<TrackData> &tracks,
 	if (!readFileHeader(stream) || !readGPIHeader(stream, codec))
 		return false;
 
-	while (stream.status() == QDataStream::Ok)
-		if (!readEntry(stream, codec, waypoints))
-			break;
-
-	if (!stream.atEnd()) {
+	if (!readData(stream, codec, waypoints)) {
 		_errorString = "Invalid/corrupted GPI data";
 		return false;
 	} else

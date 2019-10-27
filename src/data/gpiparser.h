@@ -17,6 +17,8 @@ public:
 private:
 	bool readFileHeader(QDataStream &stream);
 	bool readGPIHeader(QDataStream &stream, QTextCodec *codec);
+	bool readData(QDataStream &stream, QTextCodec *codec,
+	  QVector<Waypoint> &waypoints);
 	bool readEntry(QDataStream &stream, QTextCodec *codec,
 	  QVector<Waypoint> &waypoints);
 	void readPOIDatabase(QDataStream &stream, QTextCodec *codec,
