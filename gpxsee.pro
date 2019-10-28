@@ -383,7 +383,8 @@ macx {
         icons/formats/loc.icns \
         icons/formats/slf.icns \
         icons/formats/json.icns \
-        icons/formats/cup.icns
+        icons/formats/cup.icns \
+        icons/formats/gpi.icns
     QMAKE_BUNDLE_DATA += locale maps icons csv
 }
 
