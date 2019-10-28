@@ -88,19 +88,34 @@ Track::Track(const TrackData &data) : _data(data), _pause(0)
 		  sd.first().hasTimestamp() ? 0 : NAN);
 		seg.speed.append(sd.first().hasTimestamp() ? 0 : NAN);
 		acceleration.append(sd.first().hasTimestamp() ? 0 : NAN);
+		bool hasTime = !std::isnan(seg.time.first());
 
 		for (int j = 1; j < sd.size(); j++) {
 			ds = sd.at(j).coordinates().distanceTo(
 			  sd.at(j-1).coordinates());
 			seg.distance.append(seg.distance.last() + ds);
 
-			if (sd.at(j).timestamp() >= sd.at(j-1).timestamp())
-				dt = sd.at(j-1).timestamp().msecsTo(
-				  sd.at(j).timestamp()) / 1000.0;
-			else {
-				qWarning("%s: %s: time skew detected", qPrintable(_data.name()),
-				  qPrintable(sd.at(j).timestamp().toString(Qt::ISODate)));
-				dt = 0;
+			if (hasTime && sd.at(j).timestamp().isValid()) {
+				if (sd.at(j).timestamp() > sd.at(j-1).timestamp())
+					dt = sd.at(j-1).timestamp().msecsTo(
+					  sd.at(j).timestamp()) / 1000.0;
+				else {
+					qWarning("%s: %s: time skew detected", qPrintable(
+					  _data.name()), qPrintable(sd.at(j).timestamp().toString(
+					  Qt::ISODate)));
+					dt = 0;
+				}
+			} else {
+				dt = NAN;
+				if (hasTime) {
+					qWarning("%s: missing timestamp(s), time graphs disabled",
+					  qPrintable(_data.name()));
+					hasTime = false;
+					for (int i = 0; i < seg.time.size(); i++)
+						seg.time[i] = NAN;
+					for (int i = 0; i < seg.speed.size(); i++)
+						seg.speed[i] = NAN;
+				}
 			}
 			seg.time.append(seg.time.last() + dt);
 
@@ -125,7 +140,7 @@ Track::Track(const TrackData &data) : _data(data), _pause(0)
 			}
 		}
 
-		if (!_outlierEliminate)
+		if (!_outlierEliminate || !hasTime)
 			continue;
 
 
