@@ -853,6 +853,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n dosya</numerusform>
+            <numerusform>%n dosya</numerusform>
         </translation>
     </message>
 </context>
@@ -1604,7 +1605,7 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="29"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Bağlantılar</translation>
     </message>
 </context>
 <context>
@@ -1835,7 +1836,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="33"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Bağlantılar</translation>
     </message>
 </context>
 <context>
@@ -1868,7 +1869,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="42"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Bağlantılar</translation>
     </message>
 </context>
 </TS>
