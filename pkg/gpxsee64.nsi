@@ -113,19 +113,20 @@ Section "GPXSee" SEC_APP
 
   ; Associate file formats
   DetailPrint "Associating file types..."
-  !insertmacro FILE_ASSOCIATION_ADD "gpx" "GPS Exchange Format" 6
-  !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 7
-  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 8
-  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 9
-  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 10
-  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 data" 11
-  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track Point File" 12
-  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 13
+  !insertmacro FILE_ASSOCIATION_ADD "gpx" "GPS Exchange Format" 7
+  !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 8
+  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 9
+  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 10
+  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 11
+  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 12
+  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track Point File" 13
+  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 14
   !insertmacro FILE_ASSOCIATION_ADD "wpt" "OziExplorer Waypoint File" 1
   !insertmacro FILE_ASSOCIATION_ADD "loc" "Geocaching.com Waypoint File" 2
   !insertmacro FILE_ASSOCIATION_ADD "slf" "Sigma Log File" 3
   !insertmacro FILE_ASSOCIATION_ADD "geojson" "GeoJSON" 4
-  !insertmacro FILE_ASSOCIATION_ADD "cup" "SeeYou CUP file" 5
+  !insertmacro FILE_ASSOCIATION_ADD "cup" "SeeYou CUP File" 5
+  !insertmacro FILE_ASSOCIATION_ADD "gpi" "Garmin POI File" 6
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
 SectionEnd
@@ -232,6 +233,7 @@ Section "Uninstall"
   !insertmacro FILE_ASSOCIATION_REMOVE "slf"
   !insertmacro FILE_ASSOCIATION_REMOVE "geojson"
   !insertmacro FILE_ASSOCIATION_REMOVE "cup"
+  !insertmacro FILE_ASSOCIATION_REMOVE "gpi"
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
 SectionEnd
