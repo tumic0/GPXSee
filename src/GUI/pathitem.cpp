@@ -40,6 +40,7 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 
 	_markerDistance = _path.first().first().distance();
 	_marker = new MarkerItem(this);
+	_marker->setZValue(1);
 	_marker->setPos(position(_markerDistance));
 
 	setCursor(Qt::ArrowCursor);
