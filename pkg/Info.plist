@@ -227,6 +227,22 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>gpi</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.garmin.gpi</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/gpi.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Garmin POI File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
@@ -502,6 +518,27 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.naviter.seeyou.cup</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.garmin.gpi</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.garmin.com</string>
+			<key>UTTypeDescription</key>
+			<string>Garmin POI File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>gpi</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.garmin.cup</string>
 			</dict>
 		</dict>
 	</array>
