@@ -74,17 +74,19 @@ Track::Track(const TrackData &data) : _data(data), _pause(0)
 
 	for (int i = 0; i < _data.size(); i++) {
 		const SegmentData &sd = _data.at(i);
+		_segments.append(Segment());
 		if (sd.isEmpty())
 			continue;
 
 		// precompute distances, times, speeds and acceleration
 		QVector<qreal> acceleration;
 
-		_segments.append(Segment());
 		Segment &seg = _segments.last();
 
-		seg.distance.append(i ? _segments.at(i-1).distance.last() : 0);
-		seg.time.append(i ? _segments.at(i-1).time.last() :
+		seg.distance.append(i && !_segments.at(i-1).distance.isEmpty()
+		  ? _segments.at(i-1).distance.last() : 0);
+		seg.time.append(i && !_segments.at(i-1).time.isEmpty()
+		  ? _segments.at(i-1).time.last() :
 		  sd.first().hasTimestamp() ? 0 : NAN);
 		seg.speed.append(sd.first().hasTimestamp() ? 0 : NAN);
 		acceleration.append(sd.first().hasTimestamp() ? 0 : NAN);
