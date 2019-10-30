@@ -47,77 +47,82 @@
 <context>
     <name>Data</name>
     <message>
-        <location filename="../src/data/data.cpp" line="173"/>
+        <location filename="../src/data/data.cpp" line="176"/>
         <source>Supported files</source>
         <translation>Formats pris en charge</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="174"/>
+        <location filename="../src/data/data.cpp" line="177"/>
         <source>CSV files</source>
         <translation>Données CSV</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="175"/>
+        <location filename="../src/data/data.cpp" line="178"/>
         <source>CUP files</source>
         <translation>Données CUP</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="176"/>
+        <location filename="../src/data/data.cpp" line="179"/>
         <source>FIT files</source>
         <translation>Données FIT</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="178"/>
+        <location filename="../src/data/data.cpp" line="181"/>
         <source>GeoJSON files</source>
         <translation>Données GeoJSON</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="180"/>
+        <location filename="../src/data/data.cpp" line="183"/>
+        <source>GPI files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="184"/>
         <source>GPX files</source>
         <translation>Données GPX</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="181"/>
+        <location filename="../src/data/data.cpp" line="185"/>
         <source>IGC files</source>
         <translation>Données IGC</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="182"/>
+        <location filename="../src/data/data.cpp" line="186"/>
         <source>JPEG images</source>
         <translation>Images JPEG</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="183"/>
+        <location filename="../src/data/data.cpp" line="187"/>
         <source>KML files</source>
         <translation>Données KML</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="184"/>
+        <location filename="../src/data/data.cpp" line="188"/>
         <source>LOC files</source>
         <translation>Données LOC</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="185"/>
+        <location filename="../src/data/data.cpp" line="189"/>
         <source>NMEA files</source>
         <translation>Données NMEA</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="186"/>
+        <location filename="../src/data/data.cpp" line="190"/>
         <source>OziExplorer files</source>
         <translation>Données OziExplorer</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="188"/>
+        <location filename="../src/data/data.cpp" line="192"/>
         <source>TCX files</source>
         <translation>Données TCX</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="187"/>
+        <location filename="../src/data/data.cpp" line="191"/>
         <source>SLF files</source>
         <translation>Données SLF</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="189"/>
+        <location filename="../src/data/data.cpp" line="193"/>
         <source>All files</source>
         <translation>Tous les fichiers</translation>
     </message>
@@ -949,12 +954,12 @@
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="66"/>
-        <location filename="../src/GUI/graphview.cpp" line="173"/>
+        <location filename="../src/GUI/graphview.cpp" line="177"/>
         <source>Distance</source>
         <translation>Distance</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="175"/>
+        <location filename="../src/GUI/graphview.cpp" line="179"/>
         <source>Time</source>
         <translation>Temps</translation>
     </message>
