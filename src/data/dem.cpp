@@ -1,4 +1,9 @@
 #include <QtEndian>
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#include <QtCore/qmath.h>
+#else // QT5
+#include <QtMath>
+#endif // QT5
 #include <QDir>
 #include <QFile>
 #include "common/coordinates.h"
@@ -37,10 +42,10 @@ static qreal height(const Coordinates &c, const QByteArray *data)
 	else
 		return NAN;
 
-	int row = (int)((c.lat() - (int)c.lat()) * (samples - 1));
-	int col = (int)((c.lon() - (int)c.lon()) * (samples - 1));
-	qreal dx = ((c.lon() - (int)c.lon()) * (samples - 1)) - col;
-	qreal dy = ((c.lat() - (int)c.lat()) * (samples - 1)) - row;
+	int row = (int)((c.lat() - qFloor(c.lat())) * (samples - 1));
+	int col = (int)((c.lon() - qFloor(c.lon())) * (samples - 1));
+	qreal dx = ((c.lon() - qFloor(c.lon())) * (samples - 1)) - col;
+	qreal dy = ((c.lat() - qFloor(c.lat())) * (samples - 1)) - row;
 
 	qreal p0 = value(col, row, samples, data);
 	qreal p1 = value(col + 1, row, samples, data);
@@ -75,7 +80,7 @@ qreal DEM::elevation(const Coordinates &c)
 	if (_dir.isEmpty())
 		return NAN;
 
-	Key k((int)c.lon(), (int)c.lat());
+	Key k(qFloor(c.lon()), qFloor(c.lat()));
 
 	QByteArray *ba = _data[k];
 	if (!ba) {
