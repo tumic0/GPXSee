@@ -74,7 +74,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="183"/>
         <source>GPI files</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos GPI</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="184"/>
