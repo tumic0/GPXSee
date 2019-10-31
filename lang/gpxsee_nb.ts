@@ -74,7 +74,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="183"/>
         <source>GPI files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPI-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="184"/>
@@ -1539,12 +1539,12 @@
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="16"/>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="18"/>
         <source>Description</source>
-        <translation type="unfinished">Beskrivelse</translation>
+        <translation>Beskrivelse</translation>
     </message>
 </context>
 <context>

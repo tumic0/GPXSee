@@ -74,7 +74,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="183"/>
         <source>GPI files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPI dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="184"/>
@@ -857,6 +857,7 @@
         <location filename="../src/GUI/gui.cpp" line="1350"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n dosya</numerusform>
             <numerusform>%n dosya</numerusform>
         </translation>
     </message>
