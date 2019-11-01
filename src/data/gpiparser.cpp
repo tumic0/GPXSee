@@ -2,6 +2,7 @@
 #include <QTextCodec>
 #include <QtEndian>
 #include <QUrl>
+#include <QBuffer>
 #include "gpiparser.h"
 
 
@@ -25,6 +26,32 @@ private:
 	QString _lang;
 	QString _str;
 };
+
+
+#define BLOCK_KEY 0xf870b5
+
+void demangle(quint8 *data, quint32 size, quint32 key)
+{
+	static const unsigned char shuf[] = {
+		0xb, 0xc, 0xa, 0x0,
+		0x8, 0xf, 0x2, 0x1,
+		0x6, 0x4, 0x9, 0x3,
+		0xd, 0x5, 0x7, 0xe
+	};
+
+	int hiCnt = 0, loCnt;
+	quint8 sum = shuf[(key >> 0x10) + key + (key >> 0x18) + (key >> 8) & 0xf];
+
+	for (quint32 i = 0; i < size; i++) {
+		quint8 hiAdd = shuf[key >> (hiCnt << 2) & 0xf] + sum;
+		loCnt = (hiCnt > 6) ? 0 : hiCnt + 1;
+		quint8 loAdd = shuf[key >> (loCnt << 2) & 0xf] + sum;
+		quint8 hi = data[i] + hiAdd * 0xf0;
+		quint8 lo = data[i] - loAdd;
+		data[i] = (hi & 0xf0) | (lo & 0x0f);
+		hiCnt = (loCnt > 6) ? 0 : loCnt + 1;
+	}
+}
 
 static inline double toWGS(qint32 v)
 {
@@ -306,7 +333,7 @@ static quint32 readFileDataRecord(QDataStream &stream, QTextCodec *codec)
 	return rs + rh.size;
 }
 
-bool GPIParser::readFileHeader(QDataStream &stream)
+bool GPIParser::readFileHeader(QDataStream &stream, quint32 &ebs)
 {
 	RecordHeader rh;
 	quint32 ds, s7;
@@ -326,10 +353,7 @@ bool GPIParser::readFileHeader(QDataStream &stream)
 	if (rh.flags & 8)
 		ds += readFprsRecord(stream);
 
-	if (s8 & 0x4) {
-		_errorString = "Encrypted GPI files not supported";
-		return false;
-	}
+	ebs = (s8 & 0x4) ? s9 * 8 + 8 : 0;
 
 	if (stream.status() != QDataStream::Ok || ds != rh.size) {
 		_errorString = "Invalid file header";
@@ -432,13 +456,31 @@ bool GPIParser::parse(QFile *file, QList<TrackData> &tracks,
 	Q_UNUSED(polygons);
 	QDataStream stream(file);
 	QTextCodec *codec = 0;
+	quint32 ebs;
+	bool ret;
 
 	stream.setByteOrder(QDataStream::LittleEndian);
 
-	if (!readFileHeader(stream) || !readGPIHeader(stream, codec))
+	if (!readFileHeader(stream, ebs) || !readGPIHeader(stream, codec))
 		return false;
 
-	if (!readData(stream, codec, waypoints)) {
+	if (ebs) {
+		QByteArray ba(stream.device()->readAll());
+		for (int i = 0; i < (ba.size() / (int)ebs); i++)
+			demangle((quint8*)(ba.data() + i * ebs), ebs, BLOCK_KEY);
+		demangle((quint8*)(ba.data() + (ba.size() / (int)ebs) * ebs),
+		  ba.size() - ((ba.size() / (int)ebs) * ebs), BLOCK_KEY);
+
+		QBuffer buffer(&ba);
+		buffer.open(QIODevice::ReadOnly);
+		QDataStream memStream(&buffer);
+		memStream.setByteOrder(QDataStream::LittleEndian);
+		ret = readData(memStream, codec, waypoints);
+	} else
+		ret = readData(stream, codec, waypoints);
+
+
+	if (!ret) {
 		_errorString = "Invalid/corrupted GPI data";
 		return false;
 	} else

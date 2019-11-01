@@ -15,7 +15,7 @@ public:
 	int errorLine() const {return 0;}
 
 private:
-	bool readFileHeader(QDataStream &stream);
+	bool readFileHeader(QDataStream &stream, quint32 &ebs);
 	bool readGPIHeader(QDataStream &stream, QTextCodec *codec);
 	bool readData(QDataStream &stream, QTextCodec *codec,
 	  QVector<Waypoint> &waypoints);
