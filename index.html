@@ -132,11 +132,12 @@
           <p><i>The official Windows &amp; OS X installers are always signed using
           <a href="https://github.com/tumic0/GPXSee/tree/master/cert">certificates</a>
           available at the GitHub project page. As the certificates are non-commercial
-          (self-signed) you have to import them first if you want your OS automatically
-          check the installer when installing GPXSee. On OS X this
-          <a href="https://github.com/tumic0/GPXSee/issues/234">may not work</a> on some
-          newer OS X versions and you need to run the application using the "right click
-          menu" when opening it for the first time.</i></p>
+          (self-signed) you have to import the certificate on Windows first if you want
+          your OS automatically check the installer when installing GPXSee. On OS X,
+          Apple does not allow software that does not generate them profit like GPXSee
+          to pass <a href="https://en.wikipedia.org/wiki/Gatekeeper_(macOS)">Gatekeeper</a>
+          (you can't import custom certificates) so you need to run the application using
+          the "right click menu" when opening it for the first time.</i></p>
 
           <h2 id="maps">Maps</h2>
           <p>GPXSee supports most tile server based online maps out there, but the
