@@ -362,7 +362,7 @@ bool GPIParser::readFileHeader(QDataStream &stream, quint32 &ebs)
 		return true;
 }
 
-bool GPIParser::readGPIHeader(QDataStream &stream, QTextCodec *codec)
+bool GPIParser::readGPIHeader(QDataStream &stream, QTextCodec **codec)
 {
 	RecordHeader rh;
 	char m1[6], m2[2];
@@ -377,15 +377,15 @@ bool GPIParser::readGPIHeader(QDataStream &stream, QTextCodec *codec)
 	ds = sizeof(m1) + sizeof(m2) + 4;
 
 	if (codepage == 65001)
-		codec = QTextCodec::codecForName("UTF-8");
+		*codec = QTextCodec::codecForName("UTF-8");
 	else if (codepage == 0)
-		codec = 0;
+		*codec = 0;
 	else
-		codec = QTextCodec::codecForName(QString("CP%1").arg(codepage)
+		*codec = QTextCodec::codecForName(QString("CP%1").arg(codepage)
 		  .toLatin1());
 
 	if (s2 & 0x10)
-		ds += readFileDataRecord(stream, codec);
+		ds += readFileDataRecord(stream, *codec);
 
 	if (stream.status() != QDataStream::Ok || ds != rh.size) {
 		_errorString = "Invalid GPI header";
@@ -461,7 +461,7 @@ bool GPIParser::parse(QFile *file, QList<TrackData> &tracks,
 
 	stream.setByteOrder(QDataStream::LittleEndian);
 
-	if (!readFileHeader(stream, ebs) || !readGPIHeader(stream, codec))
+	if (!readFileHeader(stream, ebs) || !readGPIHeader(stream, &codec))
 		return false;
 
 	if (ebs) {
