@@ -129,6 +129,15 @@
                 Linux repos/packages</a></li>
           </ul>
 
+          <p><i>The official Windows &amp; OS X installers are allways signed using
+          <a href="https://github.com/tumic0/GPXSee/tree/master/cert">certificates</a>
+          available at the GitHub project page. As the certificates are non-comercial
+          (self-signed) you have to import them first if you want your OS automatically
+          check the installer when installing GPXSee. On OS X this
+          <a href="https://github.com/tumic0/GPXSee/issues/234">may not work</a> on some
+          newer OS X versions and you need to run the application using the "right click
+          menu" when openinig it for the first time.</i></p>
+
           <h2 id="maps">Maps</h2>
           <p>GPXSee supports most tile server based online maps out there, but the
           <a href="https://github.com/tumic0/GPXSee/tree/master/pkg/maps">list
@@ -157,6 +166,15 @@
       <div id="sidebar">
         <div class="latest-news">
           <h3>Releases</h3>
+          <div class="news-item">
+            <p class="date">Nov 2 2019</p>
+            <h4>Version 7.17</h4>
+            <ul>
+              <li>Fixed program crash on empty GPX segment.</li>
+              <li>Fixed broken DEM value reading on S/W coordinates.</li>
+              <li>Various GPI parser fixes &amp; improvements.</li>
+            </ul>
+          </div>
           <div class="news-item">
             <p class="date">Oct 28 2019</p>
             <h4>Version 7.16</h4>
@@ -190,15 +208,6 @@
             <ul>
               <li>Added support for graph zooming.</li>
               <li>Several minor bug fixes.</li>
-            </ul>
-          </div>
-          <div class="news-item">
-            <p class="date">Aug 17 2019</p>
-            <h4>Version 7.12</h4>
-            <ul>
-              <li>Added support for SeeYou CUP files.</li>
-              <li>Added support for Geographic 2D projection in vector maps.</li>
-              <li>Fixed lat/lon reference parsing in big endian EXIF entries.</li>
             </ul>
           </div>
         </div>
