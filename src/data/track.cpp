@@ -133,12 +133,19 @@ Track::Track(const TrackData &data) : _data(data), _pause(0)
 		}
 
 		// get stop-points + pause duration
+		int ss = 0, la = 0;
 		for (int j = 1; j < seg.time.size(); j++) {
-			if (seg.time.at(j) > seg.time.at(j-1) + _pauseInterval
-			  && seg.speed.at(j) < _pauseSpeed) {
-				_pause += seg.time.at(j) - seg.time.at(j-1);
-				seg.stop.insert(j-1);
-				seg.stop.insert(j);
+			if (seg.speed.at(j) > _pauseSpeed)
+				ss = -1;
+			else if (ss < 0)
+				ss = j;
+
+			if (ss >= 0 && seg.time.at(j) > seg.time.at(ss) + _pauseInterval) {
+				int l = qMax(ss, la);
+				_pause += seg.time.at(j) - seg.time.at(l);
+				for (int k = l; k <= j; k++)
+					seg.stop.insert(k);
+				la = j;
 			}
 		}
 
