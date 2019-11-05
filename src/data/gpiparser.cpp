@@ -40,13 +40,13 @@ void demangle(quint8 *data, quint32 size, quint32 key)
 	};
 
 	int hiCnt = 0, loCnt;
-	quint8 sum = shuf[(key >> 0x10) + key + (key >> 0x18) + (key >> 8) & 0xf];
+	quint8 sum = shuf[((key >> 24) + (key >> 16) + (key >> 8) + key) & 0xf];
 
 	for (quint32 i = 0; i < size; i++) {
 		quint8 hiAdd = shuf[key >> (hiCnt << 2) & 0xf] + sum;
 		loCnt = (hiCnt > 6) ? 0 : hiCnt + 1;
 		quint8 loAdd = shuf[key >> (loCnt << 2) & 0xf] + sum;
-		quint8 hi = data[i] + hiAdd * 0xf0;
+		quint8 hi = data[i] - (hiAdd << 4);
 		quint8 lo = data[i] - loAdd;
 		data[i] = (hi & 0xf0) | (lo & 0x0f);
 		hiCnt = (loCnt > 6) ? 0 : loCnt + 1;
