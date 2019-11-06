@@ -2,7 +2,11 @@
 #include <QTextCodec>
 #include <QtEndian>
 #include <QUrl>
+#include <QIODevice>
+#include <QApplication>
 #include <QBuffer>
+#include <QImageReader>
+#include <QTemporaryDir>
 #include "gpiparser.h"
 
 
@@ -27,10 +31,25 @@ private:
 	QString _str;
 };
 
+class CryptDevice : public QIODevice
+{
+public:
+	CryptDevice(QIODevice *device, quint32 key, quint32 blockSize,
+	  QObject *parent = 0);
+	bool isSequential() const {return true;}
 
-#define BLOCK_KEY 0xf870b5
+protected:
+	qint64 readData(char *data, qint64 maxSize);
+	qint64 writeData(const char *, qint64) {return -1;}
 
-void demangle(quint8 *data, quint32 size, quint32 key)
+private:
+	QIODevice *_device;
+	quint32 _key;
+	QByteArray _block;
+	int _available;
+};
+
+static void demangle(quint8 *data, quint32 size, quint32 key)
 {
 	static const unsigned char shuf[] = {
 		0xb, 0xc, 0xa, 0x0,
@@ -51,6 +70,51 @@ void demangle(quint8 *data, quint32 size, quint32 key)
 		data[i] = (hi & 0xf0) | (lo & 0x0f);
 		hiCnt = (loCnt > 6) ? 0 : loCnt + 1;
 	}
+}
+
+CryptDevice::CryptDevice(QIODevice *device, quint32 key, quint32 blockSize,
+  QObject *parent) : QIODevice(parent), _device(device), _key(key), _available(0)
+{
+	_block.resize(blockSize);
+	setOpenMode(_device->openMode());
+}
+
+qint64 CryptDevice::readData(char *data, qint64 maxSize)
+{
+	qint64 rs, ts = 0;
+	int cs;
+
+	if (_available) {
+		cs = qMin(maxSize, (qint64)_available);
+		memcpy(data, _block.constData() + _block.size() - _available, cs);
+		_available -= cs;
+		maxSize -= cs;
+		ts = cs;
+	}
+
+	while (maxSize) {
+		if ((rs = _device->read(_block.data(), _block.size())) < 0)
+			return -1;
+		else if (!rs)
+			break;
+		_available = rs;
+		demangle((quint8*)_block.data(), _available, _key);
+		cs = qMin(maxSize, (qint64)_available);
+		memcpy(data + ts, _block.constData(), cs);
+		_available -= cs;
+		maxSize -= cs;
+		ts += cs;
+	}
+
+	return ts;
+}
+
+static int cnt = 0;
+
+static const QTemporaryDir &tempDir()
+{
+	static QTemporaryDir dir;
+	return dir;
 }
 
 static inline double toWGS(qint32 v)
@@ -212,6 +276,36 @@ static quint32 readContact(QDataStream &stream, QTextCodec *codec,
 	return rs + rh.size;
 }
 
+static quint32 readImageInfo(QDataStream &stream, Waypoint &waypoint)
+{
+	RecordHeader rh;
+	quint8 rs, s1;
+	quint32 size;
+
+	rs = readRecordHeader(stream, rh);
+	stream >> s1 >> size;
+
+	QByteArray ba;
+	ba.resize(size);
+	stream.readRawData(ba.data(), ba.size());
+
+	QBuffer buf(&ba);
+	QImageReader ir(&buf);
+
+	QFile imgFile(tempDir().filePath(QString("%0.%1").arg(QString::number(cnt++),
+	  QString(ir.format()))));
+	imgFile.open(QIODevice::WriteOnly);
+	imgFile.write(ba);
+	imgFile.close();
+
+	waypoint.setImage(ImageInfo(imgFile.fileName(), ir.size()));
+
+	if (size + 5 != rh.size)
+		stream.setStatus(QDataStream::ReadCorruptData);
+
+	return rs + rh.size;
+}
+
 static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
   QVector<Waypoint> &waypoints)
 {
@@ -239,6 +333,9 @@ static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
 				break;
 			case 12:
 				ds += readContact(stream, codec, waypoints.last());
+				break;
+			case 13:
+				ds += readImageInfo(stream, waypoints.last());
 				break;
 			case 14:
 				ds += readNotes(stream, codec, waypoints.last());
@@ -326,9 +423,13 @@ static quint32 readFileDataRecord(QDataStream &stream, QTextCodec *codec)
 			stream.skipRawData(ss1);
 		ds += ss1 + 2;
 	}
+	// structure of higher fields not known
 
-	if (ds != rh.size)
+	if (ds > rh.size)
 		stream.setStatus(QDataStream::ReadCorruptData);
+	else if (ds < rh.size)
+		// skip remaining unknown fields
+		stream.skipRawData(rh.size - ds);
 
 	return rs + rh.size;
 }
@@ -435,17 +536,16 @@ bool GPIParser::readEntry(QDataStream &stream, QTextCodec *codec,
 			skipRecord(stream);
 	}
 
-	return true;
+	return (stream.status() == QDataStream::Ok);
 }
 
 bool GPIParser::readData(QDataStream &stream, QTextCodec *codec,
   QVector<Waypoint> &waypoints)
 {
-	while (stream.status() == QDataStream::Ok)
-		if (!readEntry(stream, codec, waypoints))
-			return stream.atEnd();
+	while (readEntry(stream, codec, waypoints))
+		;
 
-	return false;
+	return (stream.status() == QDataStream::Ok);
 }
 
 bool GPIParser::parse(QFile *file, QList<TrackData> &tracks,
@@ -465,20 +565,12 @@ bool GPIParser::parse(QFile *file, QList<TrackData> &tracks,
 		return false;
 
 	if (ebs) {
-		QByteArray ba(stream.device()->readAll());
-		for (int i = 0; i < (ba.size() / (int)ebs); i++)
-			demangle((quint8*)(ba.data() + i * ebs), ebs, BLOCK_KEY);
-		demangle((quint8*)(ba.data() + (ba.size() / (int)ebs) * ebs),
-		  ba.size() - ((ba.size() / (int)ebs) * ebs), BLOCK_KEY);
-
-		QBuffer buffer(&ba);
-		buffer.open(QIODevice::ReadOnly);
-		QDataStream memStream(&buffer);
-		memStream.setByteOrder(QDataStream::LittleEndian);
-		ret = readData(memStream, codec, waypoints);
+		CryptDevice dev(stream.device(), 0xf870b5, ebs);
+		QDataStream cryptStream(&dev);
+		cryptStream.setByteOrder(QDataStream::LittleEndian);
+		ret = readData(cryptStream, codec, waypoints);
 	} else
 		ret = readData(stream, codec, waypoints);
-
 
 	if (!ret) {
 		_errorString = "Invalid/corrupted GPI data";
