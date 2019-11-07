@@ -6,6 +6,7 @@
 #include <QApplication>
 #include <QBuffer>
 #include <QImageReader>
+#include <QCryptographicHash>
 #include <QTemporaryDir>
 #include "gpiparser.h"
 
@@ -109,7 +110,6 @@ qint64 CryptDevice::readData(char *data, qint64 maxSize)
 	return ts;
 }
 
-static int cnt = 0;
 
 static const QTemporaryDir &tempDir()
 {
@@ -125,8 +125,13 @@ static inline double toWGS(qint32 v)
 static quint16 nextHeaderType(QDataStream &stream)
 {
 	quint16 type = 0;
-	stream.device()->peek((char*)&type, sizeof(type));
-	return qFromLittleEndian(type);
+
+	if (stream.device()->peek((char*)&type, sizeof(type))
+	  < (qint64)sizeof(type)) {
+		stream.setStatus(QDataStream::ReadCorruptData);
+		return 0xFFFF;
+	} else
+		return qFromLittleEndian(type);
 }
 
 static quint8 readRecordHeader(QDataStream &stream, RecordHeader &hdr)
@@ -144,18 +149,6 @@ static quint32 skipRecord(QDataStream &stream)
 	stream.skipRawData(rh.size);
 
 	return rs + rh.size;
-}
-
-static quint32 readFprsRecord(QDataStream &stream)
-{
-	RecordHeader rh;
-	quint16 s1;
-	quint8 rs, s2, s3, s4;
-
-	rs = readRecordHeader(stream, rh);
-	stream >> s1 >> s2 >> s3 >> s4;
-
-	return rs + 5;
 }
 
 static quint16 readString(QDataStream &stream, QTextCodec *codec, QString &str)
@@ -180,7 +173,7 @@ static quint32 readTranslatedObjects(QDataStream &stream, QTextCodec *codec,
 
 	stream >> size;
 	ret = size + 4;
-	while (size > 0) {
+	while (stream.status() == QDataStream::Ok && size > 0) {
 		QString str;
 		stream.readRawData(lang, sizeof(lang));
 		size -= readString(stream, codec, str) + 2;
@@ -191,6 +184,67 @@ static quint32 readTranslatedObjects(QDataStream &stream, QTextCodec *codec,
 		stream.setStatus(QDataStream::ReadCorruptData);
 
 	return ret;
+}
+
+static quint32 readFprsRecord(QDataStream &stream)
+{
+	RecordHeader rh;
+	quint16 s1;
+	quint8 rs, s2, s3, s4;
+
+	rs = readRecordHeader(stream, rh);
+	stream >> s1 >> s2 >> s3 >> s4;
+
+	return rs + 5;
+}
+
+static quint32 readFileDataRecord(QDataStream &stream, QTextCodec *codec)
+{
+	RecordHeader rh;
+	quint32 ds, s1;
+	quint16 s2, s3;
+	quint8 rs;
+	QList<TranslatedString> obj;
+
+	rs = readRecordHeader(stream, rh);
+	stream >> s1 >> s2 >> s3;
+	ds = 8;
+	ds += readTranslatedObjects(stream, codec, obj);
+	ds += readTranslatedObjects(stream, codec, obj);
+
+	if (s1 & 0x10) {
+		quint8 ss1, ss2;
+		quint16 ss3;
+		stream >> ss1 >> ss2 >> ss3;
+		ds += 4;
+	}
+	if (s1 & 0x100) {
+		quint32 ss1;
+		stream >> ss1;
+		if (ss1)
+			stream.skipRawData(ss1);
+		ds += ss1 + 4;
+	}
+	if (s1 & 0x400) {
+		QString str;
+		ds += readString(stream, codec, str);
+	}
+	if (s1 & 0x400000) {
+		quint16 ss1;
+		stream >> ss1;
+		if (ss1)
+			stream.skipRawData(ss1);
+		ds += ss1 + 2;
+	}
+	// structure of higher fields not known
+
+	if (ds > rh.size)
+		stream.setStatus(QDataStream::ReadCorruptData);
+	else if (ds < rh.size)
+		// skip remaining unknown fields
+		stream.skipRawData(rh.size - ds);
+
+	return rs + rh.size;
 }
 
 static quint32 readDescription(QDataStream &stream, QTextCodec *codec,
@@ -276,7 +330,8 @@ static quint32 readContact(QDataStream &stream, QTextCodec *codec,
 	return rs + rh.size;
 }
 
-static quint32 readImageInfo(QDataStream &stream, Waypoint &waypoint)
+static quint32 readImageInfo(QDataStream &stream, Waypoint &waypoint,
+  const QString &fileName, int &imgId)
 {
 	RecordHeader rh;
 	quint8 rs, s1;
@@ -292,7 +347,9 @@ static quint32 readImageInfo(QDataStream &stream, Waypoint &waypoint)
 	QBuffer buf(&ba);
 	QImageReader ir(&buf);
 
-	QFile imgFile(tempDir().filePath(QString("%0.%1").arg(QString::number(cnt++),
+	QByteArray id(fileName.toUtf8() + QByteArray::number(imgId++));
+	QFile imgFile(tempDir().filePath(QString("%0.%1").arg(
+	  QCryptographicHash::hash(id, QCryptographicHash::Sha1).toHex(),
 	  QString(ir.format()))));
 	imgFile.open(QIODevice::WriteOnly);
 	imgFile.write(ba);
@@ -307,7 +364,7 @@ static quint32 readImageInfo(QDataStream &stream, Waypoint &waypoint)
 }
 
 static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
-  QVector<Waypoint> &waypoints)
+  QVector<Waypoint> &waypoints, const QString &fileName, int &imgId)
 {
 	RecordHeader rh;
 	quint8 rs;
@@ -326,7 +383,7 @@ static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
 	if (!obj.isEmpty())
 		waypoints.last().setName(obj.first().str());
 
-	while (ds < rh.size) {
+	while (stream.status() == QDataStream::Ok && ds < rh.size) {
 		switch(nextHeaderType(stream)) {
 			case 10:
 				ds += readDescription(stream, codec, waypoints.last());
@@ -335,7 +392,7 @@ static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
 				ds += readContact(stream, codec, waypoints.last());
 				break;
 			case 13:
-				ds += readImageInfo(stream, waypoints.last());
+				ds += readImageInfo(stream, waypoints.last(), fileName, imgId);
 				break;
 			case 14:
 				ds += readNotes(stream, codec, waypoints.last());
@@ -352,7 +409,7 @@ static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
 }
 
 static quint32 readSpatialIndex(QDataStream &stream, QTextCodec *codec,
-  QVector<Waypoint> &waypoints)
+  QVector<Waypoint> &waypoints, const QString &fileName, int &imgId)
 {
 	RecordHeader rh;
 	quint32 ds, s5;
@@ -365,13 +422,14 @@ static quint32 readSpatialIndex(QDataStream &stream, QTextCodec *codec,
 	stream.skipRawData(s6);
 	ds = 22 + s6;
 	if (rh.flags & 0x8) {
-		while (ds < rh.size) {
+		while (stream.status() == QDataStream::Ok && ds < rh.size) {
 			switch(nextHeaderType(stream)) {
 				case 2:
-					ds += readPOI(stream, codec, waypoints);
+					ds += readPOI(stream, codec, waypoints, fileName, imgId);
 					break;
 				case 8:
-					ds += readSpatialIndex(stream, codec, waypoints);
+					ds += readSpatialIndex(stream, codec, waypoints, fileName,
+					  imgId);
 					break;
 				default:
 					ds += skipRecord(stream);
@@ -385,82 +443,54 @@ static quint32 readSpatialIndex(QDataStream &stream, QTextCodec *codec,
 	return rs + rh.size;
 }
 
-static quint32 readFileDataRecord(QDataStream &stream, QTextCodec *codec)
+static void readPOIDatabase(QDataStream &stream, QTextCodec *codec,
+  QVector<Waypoint> &waypoints, const QString &fileName, int &imgId)
 {
 	RecordHeader rh;
-	quint32 ds, s1;
-	quint16 s2, s3;
-	quint8 rs;
 	QList<TranslatedString> obj;
-
-	rs = readRecordHeader(stream, rh);
-	stream >> s1 >> s2 >> s3;
-	ds = 8;
-	ds += readTranslatedObjects(stream, codec, obj);
-	ds += readTranslatedObjects(stream, codec, obj);
-
-	if (s1 & 0x10) {
-		quint8 ss1, ss2;
-		quint16 ss3;
-		stream >> ss1 >> ss2 >> ss3;
-		ds += 4;
-	}
-	if (s1 & 0x100) {
-		quint32 ss1;
-		stream >> ss1;
-		if (ss1)
-			stream.skipRawData(ss1);
-		ds += ss1 + 4;
-	}
-	if (s1 & 0x400) {
-		QString str;
-		ds += readString(stream, codec, str);
-	}
-	if (s1 & 0x400000) {
-		quint16 ss1;
-		stream >> ss1;
-		if (ss1)
-			stream.skipRawData(ss1);
-		ds += ss1 + 2;
-	}
-	// structure of higher fields not known
-
-	if (ds > rh.size)
-		stream.setStatus(QDataStream::ReadCorruptData);
-	else if (ds < rh.size)
-		// skip remaining unknown fields
-		stream.skipRawData(rh.size - ds);
-
-	return rs + rh.size;
-}
-
-bool GPIParser::readFileHeader(QDataStream &stream, quint32 &ebs)
-{
-	RecordHeader rh;
-	quint32 ds, s7;
-	quint16 s10;
-	quint8 s5, s6, s8, s9;
-	char magic[6];
+	quint32 ds;
 
 	readRecordHeader(stream, rh);
-	stream.readRawData(magic, sizeof(magic));
-	if (memcmp(magic, "GRMREC", sizeof(magic))) {
-		_errorString = "Not a GPI file";
-		return false;
+	ds = readTranslatedObjects(stream, codec, obj);
+	ds += readSpatialIndex(stream, codec, waypoints, fileName, imgId);
+	if (rh.flags & 0x8) {
+		while (stream.status() == QDataStream::Ok && ds < rh.size) {
+			switch(nextHeaderType(stream)) {
+				case 5: // symbol
+				case 7: // category
+				default:
+					ds += skipRecord(stream);
+			}
+		}
 	}
-	stream >> s5 >> s6 >> s7 >> s8 >> s9 >> s10;
-	stream.skipRawData(s10);
-	ds = sizeof(magic) + 10 + s10;
-	if (rh.flags & 8)
-		ds += readFprsRecord(stream);
 
-	ebs = (s8 & 0x4) ? s9 * 8 + 8 : 0;
+	if (ds != rh.size)
+		stream.setStatus(QDataStream::ReadCorruptData);
+}
 
-	if (stream.status() != QDataStream::Ok || ds != rh.size) {
-		_errorString = "Invalid file header";
-		return false;
-	} else
-		return true;
+bool GPIParser::readData(QDataStream &stream, QTextCodec *codec,
+  QVector<Waypoint> &waypoints, const QString &fileName, int &imgId)
+{
+	while (stream.status() == QDataStream::Ok) {
+		switch (nextHeaderType(stream)) {
+			case 0x09:   // POI database
+				readPOIDatabase(stream, codec, waypoints, fileName, imgId);
+				break;
+			case 0xffff: // EOF
+				skipRecord(stream);
+				if (stream.status() == QDataStream::Ok)
+					return true;
+				break;
+			case 0x16:   // route
+			case 0x15:   // info header
+			default:
+				skipRecord(stream);
+		}
+	}
+
+	_errorString = "Invalid/corrupted GPI data";
+
+	return false;
 }
 
 bool GPIParser::readGPIHeader(QDataStream &stream, QTextCodec **codec)
@@ -495,57 +525,33 @@ bool GPIParser::readGPIHeader(QDataStream &stream, QTextCodec **codec)
 		return true;
 }
 
-void GPIParser::readPOIDatabase(QDataStream &stream, QTextCodec *codec,
-  QVector<Waypoint> &waypoints)
+bool GPIParser::readFileHeader(QDataStream &stream, quint32 &ebs)
 {
 	RecordHeader rh;
-	QList<TranslatedString> obj;
-	quint32 ds;
+	quint32 ds, s7;
+	quint16 s10;
+	quint8 s5, s6, s8, s9;
+	char magic[6];
 
 	readRecordHeader(stream, rh);
-	ds = readTranslatedObjects(stream, codec, obj);
-	ds += readSpatialIndex(stream, codec, waypoints);
-	if (rh.flags & 0x8) {
-		while (ds < rh.size) {
-			switch(nextHeaderType(stream)) {
-				case 5: // symbol
-				case 7: // category
-				default:
-					ds += skipRecord(stream);
-			}
-		}
+	stream.readRawData(magic, sizeof(magic));
+	if (memcmp(magic, "GRMREC", sizeof(magic))) {
+		_errorString = "Not a GPI file";
+		return false;
 	}
+	stream >> s5 >> s6 >> s7 >> s8 >> s9 >> s10;
+	stream.skipRawData(s10);
+	ds = sizeof(magic) + 10 + s10;
+	if (rh.flags & 8)
+		ds += readFprsRecord(stream);
 
-	if (ds != rh.size)
-		stream.setStatus(QDataStream::ReadCorruptData);
-}
+	ebs = (s8 & 0x4) ? s9 * 8 + 8 : 0;
 
-bool GPIParser::readEntry(QDataStream &stream, QTextCodec *codec,
-  QVector<Waypoint> &waypoints)
-{
-	switch (nextHeaderType(stream)) {
-		case 0x09:   // POI database
-			readPOIDatabase(stream, codec, waypoints);
-			break;
-		case 0xffff: // EOF
-			skipRecord(stream);
-			return false;
-		case 0x16:   // route
-		case 0x15:   // info header
-		default:
-			skipRecord(stream);
-	}
-
-	return (stream.status() == QDataStream::Ok);
-}
-
-bool GPIParser::readData(QDataStream &stream, QTextCodec *codec,
-  QVector<Waypoint> &waypoints)
-{
-	while (readEntry(stream, codec, waypoints))
-		;
-
-	return (stream.status() == QDataStream::Ok);
+	if (stream.status() != QDataStream::Ok || ds != rh.size) {
+		_errorString = "Invalid file header";
+		return false;
+	} else
+		return true;
 }
 
 bool GPIParser::parse(QFile *file, QList<TrackData> &tracks,
@@ -557,7 +563,7 @@ bool GPIParser::parse(QFile *file, QList<TrackData> &tracks,
 	QDataStream stream(file);
 	QTextCodec *codec = 0;
 	quint32 ebs;
-	bool ret;
+	int imgId = 0;
 
 	stream.setByteOrder(QDataStream::LittleEndian);
 
@@ -568,13 +574,7 @@ bool GPIParser::parse(QFile *file, QList<TrackData> &tracks,
 		CryptDevice dev(stream.device(), 0xf870b5, ebs);
 		QDataStream cryptStream(&dev);
 		cryptStream.setByteOrder(QDataStream::LittleEndian);
-		ret = readData(cryptStream, codec, waypoints);
+		return readData(cryptStream, codec, waypoints, file->fileName(), imgId);
 	} else
-		ret = readData(stream, codec, waypoints);
-
-	if (!ret) {
-		_errorString = "Invalid/corrupted GPI data";
-		return false;
-	} else
-		return true;
+		return readData(stream, codec, waypoints, file->fileName(), imgId);
 }

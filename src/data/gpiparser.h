@@ -18,11 +18,7 @@ private:
 	bool readFileHeader(QDataStream &stream, quint32 &ebs);
 	bool readGPIHeader(QDataStream &stream, QTextCodec **codec);
 	bool readData(QDataStream &stream, QTextCodec *codec,
-	  QVector<Waypoint> &waypoints);
-	bool readEntry(QDataStream &stream, QTextCodec *codec,
-	  QVector<Waypoint> &waypoints);
-	void readPOIDatabase(QDataStream &stream, QTextCodec *codec,
-	  QVector<Waypoint> &waypoints);
+	  QVector<Waypoint> &waypoints, const QString &fileName, int &imgId);
 
 	QString _errorString;
 };
