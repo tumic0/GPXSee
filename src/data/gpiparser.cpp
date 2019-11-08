@@ -7,7 +7,9 @@
 #include <QBuffer>
 #include <QImageReader>
 #include <QCryptographicHash>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <QTemporaryDir>
+#endif // QT_VERSION >= 5
 #include "gpiparser.h"
 
 
@@ -108,13 +110,6 @@ qint64 CryptDevice::readData(char *data, qint64 maxSize)
 	}
 
 	return ts;
-}
-
-
-static const QTemporaryDir &tempDir()
-{
-	static QTemporaryDir dir;
-	return dir;
 }
 
 static inline double toWGS(qint32 v)
@@ -330,6 +325,13 @@ static quint32 readContact(QDataStream &stream, QTextCodec *codec,
 	return rs + rh.size;
 }
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+static const QTemporaryDir &tempDir()
+{
+	static QTemporaryDir dir;
+	return dir;
+}
+
 static quint32 readImageInfo(QDataStream &stream, Waypoint &waypoint,
   const QString &fileName, int &imgId)
 {
@@ -362,6 +364,7 @@ static quint32 readImageInfo(QDataStream &stream, Waypoint &waypoint,
 
 	return rs + rh.size;
 }
+#endif // QT_VERSION >= 5
 
 static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
   QVector<Waypoint> &waypoints, const QString &fileName, int &imgId)
@@ -391,9 +394,11 @@ static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
 			case 12:
 				ds += readContact(stream, codec, waypoints.last());
 				break;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 			case 13:
 				ds += readImageInfo(stream, waypoints.last(), fileName, imgId);
 				break;
+#endif // QT_VERSION >= 5
 			case 14:
 				ds += readNotes(stream, codec, waypoints.last());
 				break;
