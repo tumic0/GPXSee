@@ -294,30 +294,79 @@ static quint32 readContact(QDataStream &stream, QTextCodec *codec,
 {
 	RecordHeader rh;
 	quint8 rs;
-	quint16 s1;
+	quint16 flags;
 	quint32 ds = 2;
 	QString str;
 	QList<TranslatedString> obj;
 
 	rs = readRecordHeader(stream, rh);
-	stream >> s1;
+	stream >> flags;
 
-	if (s1 & 0x1) // phone
+	if (flags & 0x1) // phone
 		ds += readString(stream, codec, str);
-	if (s1 & 0x2) // phone2
+	if (flags & 0x2) // phone2
 		ds += readString(stream, codec, str);
-	if (s1 & 0x4) // fax
+	if (flags & 0x4) // fax
 		ds += readString(stream, codec, str);
-	if (s1 & 0x8) // mail
+	if (flags & 0x8) // mail
 		ds += readString(stream, codec, str);
-	if (s1 & 0x10) { // web
+	if (flags & 0x10) { // web
 		ds += readString(stream, codec, str);
 		QUrl url(str);
 		waypoint.addLink(Link(url.scheme().isEmpty()
 		  ? "http://" + str : str, str));
 	}
-	if (s1 & 0x20) // unknown
+	if (flags & 0x20) // unknown
 		ds += readTranslatedObjects(stream, codec, obj);
+
+	if (ds != rh.size)
+		stream.setStatus(QDataStream::ReadCorruptData);
+
+	return rs + rh.size;
+}
+
+static quint32 readAddress(QDataStream &stream, QTextCodec *codec,
+  Waypoint &waypoint)
+{
+	RecordHeader rh;
+	quint8 rs;
+	quint16 flags;
+	quint32 ds = 2;
+	QList<TranslatedString> obj;
+	QString str;
+	Address addr;
+
+	rs = readRecordHeader(stream, rh);
+	stream >> flags;
+
+	if (flags & 0x1) {
+		ds += readTranslatedObjects(stream, codec, obj);
+		if (!obj.isEmpty())
+			addr.setCity(obj.first().str());
+	}
+	if (flags & 0x2) {
+		ds += readTranslatedObjects(stream, codec, obj);
+		if (!obj.isEmpty())
+			addr.setCountry(obj.first().str());
+	}
+	if (flags & 0x4) {
+		ds += readTranslatedObjects(stream, codec, obj);
+		if (!obj.isEmpty())
+			addr.setState(obj.first().str());
+	}
+	if (flags & 0x8) {
+		ds += readString(stream, codec, str);
+		addr.setPostalCode(str);
+	}
+	if (flags & 0x10) {
+		ds += readTranslatedObjects(stream, codec, obj);
+		if (!obj.isEmpty())
+			addr.setStreet(obj.first().str());
+	}
+	if (flags & 0x20) // unknown
+		ds += readString(stream, codec, str);
+
+	waypoint.setAddress(addr);
 
 	if (ds != rh.size)
 		stream.setStatus(QDataStream::ReadCorruptData);
@@ -390,6 +439,9 @@ static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
 		switch(nextHeaderType(stream)) {
 			case 10:
 				ds += readDescription(stream, codec, waypoints.last());
+				break;
+			case 11:
+				ds += readAddress(stream, codec, waypoints.last());
 				break;
 			case 12:
 				ds += readContact(stream, codec, waypoints.last());

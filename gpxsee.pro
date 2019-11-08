@@ -187,7 +187,8 @@ HEADERS += src/common/config.h \
     src/map/IMG/label.h \
     src/data/csv.h \
     src/data/cupparser.h \
-    src/data/gpiparser.h
+    src/data/gpiparser.h \
+    src/data/address.h
 SOURCES += src/main.cpp \
     src/GUI/popup.cpp \
     src/common/coordinates.cpp \

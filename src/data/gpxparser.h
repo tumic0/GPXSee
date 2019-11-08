@@ -21,11 +21,13 @@ private:
 	void rpExtension(SegmentData *autoRoute);
 	void tpExtension(Trackpoint &trackpoint);
 	void trkptExtensions(Trackpoint &trackpoint);
-	void rteptExtensions(SegmentData *autoRoute);
+	void wpExtension(Waypoint &waypoint);
+	void waypointExtensions(Waypoint &waypoint, SegmentData *autoRoute);
 	void area(Area &area);
 	void gpxExtensions(QList<Area> &areas);
 	void trackpointData(Trackpoint &trackpoint);
 	void waypointData(Waypoint &waypoint, SegmentData *autoRoute = 0);
+	void address(Waypoint &waypoint);
 	qreal number();
 	QDateTime time();
 	Coordinates coordinates();

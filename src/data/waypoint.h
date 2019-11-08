@@ -8,6 +8,7 @@
 #include "common/coordinates.h"
 #include "imageinfo.h"
 #include "link.h"
+#include "address.h"
 
 class Waypoint
 {
@@ -19,6 +20,7 @@ public:
 	const Coordinates &coordinates() const {return _coordinates;}
 	const QString &name() const {return _name;}
 	const QString &description() const {return _description;}
+	const Address &address() const {return _address;}
 	const ImageInfo &image() const {return _image;}
 	const QVector<Link> &links() const {return _links;}
 	const QDateTime &timestamp() const {return _timestamp;}
@@ -29,6 +31,7 @@ public:
 	void setName(const QString &name) {_name = name;}
 	void setDescription(const QString &description)
 	  {_description = description;}
+	void setAddress(const Address &address) {_address = address;}
 	void setTimestamp(const QDateTime &timestamp) {_timestamp = timestamp;}
 	void setElevation(qreal elevation) {_elevation = elevation;}
 	void setImage(const ImageInfo &image) {_image = image;}
@@ -44,6 +47,7 @@ private:
 	Coordinates _coordinates;
 	QString _name;
 	QString _description;
+	Address _address;
 	ImageInfo _image;
 	QVector<Link> _links;
 	QDateTime _timestamp;

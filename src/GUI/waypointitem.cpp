@@ -30,6 +30,19 @@ QString WaypointItem::info() const
 	if (!_waypoint.description().isEmpty())
 		tt.insert(qApp->translate("WaypointItem", "Description"),
 		  _waypoint.description());
+	if (_waypoint.address().isValid()) {
+		QString addr("<address>");
+		addr += _waypoint.address().street();
+		addr += "<br/>" + _waypoint.address().city();
+		if (!_waypoint.address().postalCode().isEmpty())
+			addr += "<br/>" + _waypoint.address().postalCode();
+		if (!_waypoint.address().state().isEmpty())
+			addr += "<br/>" + _waypoint.address().state();
+		if (!_waypoint.address().country().isEmpty())
+			addr += "<br/>" + _waypoint.address().country();
+		addr += "</address>";
+		tt.insert(qApp->translate("WaypointItem", "Address"), addr);
+	}
 	if (!_waypoint.links().isEmpty()) {
 		QString links;
 		for (int i = 0; i < _waypoint.links().size(); i++) {

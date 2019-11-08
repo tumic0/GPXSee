@@ -69,8 +69,10 @@ Coordinates GPXParser::coordinates()
 void GPXParser::rpExtension(SegmentData *autoRoute)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == QLatin1String("rpt"))
-			autoRoute->append(Trackpoint(coordinates()));
+		if (_reader.name() == QLatin1String("rpt")) {
+			if (autoRoute)
+				autoRoute->append(Trackpoint(coordinates()));
+		}
 		_reader.skipCurrentElement();
 	}
 }
@@ -91,11 +93,45 @@ void GPXParser::tpExtension(Trackpoint &trackpoint)
 	}
 }
 
-void GPXParser::rteptExtensions(SegmentData *autoRoute)
+void GPXParser::address(Waypoint &waypoint)
+{
+	Address addr;
+
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("StreetAddress"))
+			addr.setStreet(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("City"))
+			addr.setCity(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("PostalCode"))
+			addr.setPostalCode(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("State"))
+			addr.setState(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("Country"))
+			addr.setCountry(_reader.readElementText());
+		else
+			_reader.skipCurrentElement();
+	}
+
+	waypoint.setAddress(addr);
+}
+
+void GPXParser::wpExtension(Waypoint &waypoint)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("Address"))
+			address(waypoint);
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
+void GPXParser::waypointExtensions(Waypoint &waypoint, SegmentData *autoRoute)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("RoutePointExtension"))
 			rpExtension(autoRoute);
+		else if (_reader.name() == QLatin1String("WaypointExtension"))
+			wpExtension(waypoint);
 		else
 			_reader.skipCurrentElement();
 	}
@@ -170,8 +206,8 @@ void GPXParser::waypointData(Waypoint &waypoint, SegmentData *autoRoute)
 			link10.setURL(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("urlname"))
 			link10.setText(_reader.readElementText());
-		else if (autoRoute && _reader.name() == QLatin1String("extensions"))
-			rteptExtensions(autoRoute);
+		else if (_reader.name() == QLatin1String("extensions"))
+			waypointExtensions(waypoint, autoRoute);
 		else
 			_reader.skipCurrentElement();
 	}

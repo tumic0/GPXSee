@@ -1,5 +1,3 @@
-#include <QImageReader>
-#include <QLabel>
 #include "popup.h"
 #include "tooltip.h"
 
