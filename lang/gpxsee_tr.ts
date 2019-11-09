@@ -858,7 +858,6 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n dosya</numerusform>
-            <numerusform>%n dosya</numerusform>
         </translation>
     </message>
 </context>
@@ -1872,7 +1871,12 @@
         <translation>Açıklama</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="42"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="44"/>
+        <source>Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/waypointitem.cpp" line="55"/>
         <source>Links</source>
         <translation>Bağlantılar</translation>
     </message>

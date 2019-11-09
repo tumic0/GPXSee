@@ -1872,7 +1872,12 @@
         <translation>Beskrivning</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="42"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="44"/>
+        <source>Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/waypointitem.cpp" line="55"/>
         <source>Links</source>
         <translation>Länkar</translation>
     </message>
