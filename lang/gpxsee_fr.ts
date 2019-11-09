@@ -74,7 +74,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="183"/>
         <source>GPI files</source>
-        <translation type="unfinished"></translation>
+        <translation>Données GPI</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="184"/>
@@ -1610,7 +1610,7 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="29"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Liens</translation>
     </message>
 </context>
 <context>
@@ -1841,7 +1841,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="33"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Liens</translation>
     </message>
 </context>
 <context>
@@ -1879,7 +1879,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="55"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Liens</translation>
     </message>
 </context>
 </TS>
