@@ -421,17 +421,17 @@ static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
 	RecordHeader rh;
 	quint8 rs;
 	quint32 ds;
-	qint32 s1, s2;
+	qint32 lat, lon;
 	quint16 s3;
 	QList<TranslatedString> obj;
 
 	rs = readRecordHeader(stream, rh);
-	stream >> s1 >> s2 >> s3;
+	stream >> lat >> lon >> s3;
 	stream.skipRawData(s3);
 	ds = 10 + s3;
 	ds += readTranslatedObjects(stream, codec, obj);
 
-	waypoints.append(Waypoint(Coordinates(toWGS(s2), toWGS(s1))));
+	waypoints.append(Waypoint(Coordinates(toWGS(lon), toWGS(lat))));
 	if (!obj.isEmpty())
 		waypoints.last().setName(obj.first().str());
 
