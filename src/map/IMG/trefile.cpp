@@ -3,7 +3,7 @@
 #include "trefile.h"
 
 
-static void unlock(quint8 *dst, const quint8 *src, quint32 size, quint32 key)
+static void demangle(quint8 *data, quint32 size, quint32 key)
 {
 	static const unsigned char shuf[] = {
 		0xb, 0xc, 0xa, 0x0,
@@ -15,8 +15,8 @@ static void unlock(quint8 *dst, const quint8 *src, quint32 size, quint32 key)
 	int sum = shuf[((key >> 24) + (key >> 16) + (key >> 8) + key) & 0xf];
 
 	for (quint32 i = 0, ringctr = 16; i < size; i++) {
-		quint32 upper = src[i] >> 4;
-		quint32 lower = src[i];
+		quint32 upper = data[i] >> 4;
+		quint32 lower = data[i];
 
 		upper -= sum;
 		upper -= key >> ringctr;
@@ -28,7 +28,7 @@ static void unlock(quint8 *dst, const quint8 *src, quint32 size, quint32 key)
 		lower -= shuf[(key >> ringctr) & 0xf];
 		ringctr = ringctr ? ringctr - 4 : 16;
 
-		dst[i] = ((upper << 4) & 0xf0) | (lower & 0xf);
+		data[i] = ((upper << 4) & 0xf0) | (lower & 0xf);
 	}
 }
 
@@ -79,11 +79,9 @@ bool TREFile::init()
 			return false;
 	if (locked) {
 		quint32 key;
-		quint8 unlocked[64];
 		if (!seek(hdl, _gmpOffset + 0xAA) || !readUInt32(hdl, key))
 			return false;
-		unlock(unlocked, levels, levelsSize, key);
-		memcpy(levels, unlocked, levelsSize);
+		demangle(levels, levelsSize, key);
 	}
 
 	quint32 levelsCount = levelsSize / 4;
