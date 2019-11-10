@@ -32,7 +32,7 @@ Range MapSource::zooms(QXmlStreamReader &reader)
 
 	if (attr.hasAttribute("min")) {
 		min = attr.value("min").toString().toInt(&res);
-		if (!res || !OSM::ZOOMS.contains(min)) {
+		if (!res || min < 0) {
 			reader.raiseError("Invalid minimal zoom level");
 			return Range();
 		}
@@ -41,17 +41,12 @@ Range MapSource::zooms(QXmlStreamReader &reader)
 
 	if (attr.hasAttribute("max")) {
 		max = attr.value("max").toString().toInt(&res);
-		if (!res || !OSM::ZOOMS.contains(max)) {
+		if (!res || max < min) {
 			reader.raiseError("Invalid maximal zoom level");
 			return Range();
 		}
 	} else
 		max = OSM::ZOOMS.max();
-
-	if (min > max) {
-		reader.raiseError("Invalid maximal/minimal zoom level combination");
-		return Range();
-	}
 
 	return Range(min, max);
 }
