@@ -5,14 +5,14 @@
 
 inline double toWGS32(qint32 v)
 {
-	return (double)(((double)v / (double)(1<<31)) * (double)180);
+	return (double)(((double)v / (double)(1U<<31)) * (double)180);
 }
 
-inline double toWGS24(qint32 coord)
+inline double toWGS24(qint32 v)
 {
-	return (coord < 0x800000)
-	  ? (double)coord * 360.0 / (double)(1<<24)
-	  : (double)(coord - 0x1000000) * 360.0 / (double)(1<<24);
+	return (v < 0x800000)
+	  ? (double)v * 360.0 / (double)(1U<<24)
+	  : (double)(v - 0x1000000) * 360.0 / (double)(1<<24);
 }
 
 #endif // GARMIN_H
