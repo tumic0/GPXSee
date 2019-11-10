@@ -10,6 +10,7 @@
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <QTemporaryDir>
 #endif // QT_VERSION >= 5
+#include "common/garmin.h"
 #include "gpiparser.h"
 
 
@@ -112,9 +113,15 @@ qint64 CryptDevice::readData(char *data, qint64 maxSize)
 	return ts;
 }
 
-static inline double toWGS(qint32 v)
+
+static qint32 readInt24(QDataStream &stream)
 {
-	return (double)(((double)v / (double)(1U<<31)) * (double)180);
+	unsigned char data[3];
+	quint32 val;
+
+	stream.readRawData((char*)data, sizeof(data));
+	val = data[0] | ((quint32)data[1]) << 8 | ((quint32)data[2]) << 16;
+	return (val > 0x7FFFFF) ? (val & 0x7FFFFF) - 0x800000 : val;
 }
 
 static quint16 nextHeaderType(QDataStream &stream)
@@ -415,6 +422,85 @@ static quint32 readImageInfo(QDataStream &stream, Waypoint &waypoint,
 }
 #endif // QT_VERSION >= 5
 
+static int speed(quint8 flags)
+{
+	switch (flags >> 4) {
+		case 0x8:
+			return 40;
+		case 0x9:
+			return 30;
+		case 0xA:
+			return 50;
+		case 0xB:
+			return 70;
+		case 0xC:
+			return 80;
+		case 0xD:
+			return 90;
+		case 0xE:
+			return 100;
+		default:
+			return 0;
+	}
+}
+
+static quint32 readCamera(QDataStream &stream, QVector<Waypoint> &waypoints,
+  QList<Area> &polygons)
+{
+	RecordHeader rh;
+	quint8 flags, type, s7, rs;
+	qint32 top, right, bottom, left;
+
+
+	rs = readRecordHeader(stream, rh);
+	top = readInt24(stream);
+	right = readInt24(stream);
+	bottom = readInt24(stream);
+	left = readInt24(stream);
+
+	stream >> flags >> type >> s7;
+
+	if (s7) {
+		int skip = s7 + 2 + s7/4;
+		stream.skipRawData(skip);
+		qint32 lat = readInt24(stream);
+		qint32 lon = readInt24(stream);
+		stream.skipRawData(rh.size - 12 - 3 - skip - 6);
+
+		waypoints.append(Coordinates(toWGS24(lon), toWGS24(lat)));
+	} else
+		stream.skipRawData(rh.size - 15);
+
+	Area area;
+	Polygon polygon;
+	QVector<Coordinates> v(4);
+	v[0] = Coordinates(toWGS24(left), toWGS24(top));
+	v[1] = Coordinates(toWGS24(right), toWGS24(top));
+	v[2] = Coordinates(toWGS24(right), toWGS24(bottom));
+	v[3] = Coordinates(toWGS24(left), toWGS24(bottom));
+	polygon.append(v);
+	area.append(polygon);
+
+	switch (type) {
+		case 8:
+			area.setDescription(QString("%1&nbsp;mi/h")
+			  .arg(speed(flags)));
+			break;
+		case 9:
+			area.setDescription(QString("%1&nbsp;km/h")
+			  .arg(speed(flags)));
+			break;
+		case 10:
+		case 11:
+			area.setDescription("Red light camera");
+			break;
+	}
+
+	polygons.append(area);
+
+	return rs + rh.size;
+}
+
 static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
   QVector<Waypoint> &waypoints, const QString &fileName, int &imgId)
 {
@@ -431,7 +517,7 @@ static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
 	ds = 10 + s3;
 	ds += readTranslatedObjects(stream, codec, obj);
 
-	waypoints.append(Waypoint(Coordinates(toWGS(lon), toWGS(lat))));
+	waypoints.append(Waypoint(Coordinates(toWGS32(lon), toWGS32(lat))));
 	if (!obj.isEmpty())
 		waypoints.last().setName(obj.first().str());
 
@@ -466,7 +552,8 @@ static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
 }
 
 static quint32 readSpatialIndex(QDataStream &stream, QTextCodec *codec,
-  QVector<Waypoint> &waypoints, const QString &fileName, int &imgId)
+  QVector<Waypoint> &waypoints, QList<Area> &polygons, const QString &fileName,
+  int &imgId)
 {
 	RecordHeader rh;
 	quint32 ds, s5;
@@ -485,8 +572,11 @@ static quint32 readSpatialIndex(QDataStream &stream, QTextCodec *codec,
 					ds += readPOI(stream, codec, waypoints, fileName, imgId);
 					break;
 				case 8:
-					ds += readSpatialIndex(stream, codec, waypoints, fileName,
-					  imgId);
+					ds += readSpatialIndex(stream, codec, waypoints, polygons,
+					  fileName, imgId);
+					break;
+				case 19:
+					ds += readCamera(stream, waypoints, polygons);
 					break;
 				default:
 					ds += skipRecord(stream);
@@ -501,7 +591,8 @@ static quint32 readSpatialIndex(QDataStream &stream, QTextCodec *codec,
 }
 
 static void readPOIDatabase(QDataStream &stream, QTextCodec *codec,
-  QVector<Waypoint> &waypoints, const QString &fileName, int &imgId)
+  QVector<Waypoint> &waypoints, QList<Area> &polygons, const QString &fileName,
+  int &imgId)
 {
 	RecordHeader rh;
 	QList<TranslatedString> obj;
@@ -509,7 +600,7 @@ static void readPOIDatabase(QDataStream &stream, QTextCodec *codec,
 
 	readRecordHeader(stream, rh);
 	ds = readTranslatedObjects(stream, codec, obj);
-	ds += readSpatialIndex(stream, codec, waypoints, fileName, imgId);
+	ds += readSpatialIndex(stream, codec, waypoints, polygons, fileName, imgId);
 	if (rh.flags & 0x8) {
 		while (stream.status() == QDataStream::Ok && ds < rh.size) {
 			switch(nextHeaderType(stream)) {
@@ -526,12 +617,14 @@ static void readPOIDatabase(QDataStream &stream, QTextCodec *codec,
 }
 
 bool GPIParser::readData(QDataStream &stream, QTextCodec *codec,
-  QVector<Waypoint> &waypoints, const QString &fileName, int &imgId)
+  QVector<Waypoint> &waypoints, QList<Area> &polygons, const QString &fileName,
+  int &imgId)
 {
 	while (stream.status() == QDataStream::Ok) {
 		switch (nextHeaderType(stream)) {
 			case 0x09:   // POI database
-				readPOIDatabase(stream, codec, waypoints, fileName, imgId);
+				readPOIDatabase(stream, codec, waypoints, polygons, fileName,
+				  imgId);
 				break;
 			case 0xffff: // EOF
 				skipRecord(stream);
@@ -631,7 +724,9 @@ bool GPIParser::parse(QFile *file, QList<TrackData> &tracks,
 		CryptDevice dev(stream.device(), 0xf870b5, ebs);
 		QDataStream cryptStream(&dev);
 		cryptStream.setByteOrder(QDataStream::LittleEndian);
-		return readData(cryptStream, codec, waypoints, file->fileName(), imgId);
+		return readData(cryptStream, codec, waypoints, polygons, file->fileName(),
+		  imgId);
 	} else
-		return readData(stream, codec, waypoints, file->fileName(), imgId);
+		return readData(stream, codec, waypoints, polygons, file->fileName(),
+		  imgId);
 }

@@ -21,6 +21,7 @@ INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
     src/GUI/graphicsscene.h \
     src/GUI/popup.h \
+    src/common/garmin.h \
     src/common/staticassert.h \
     src/common/coordinates.h \
     src/common/range.h \
@@ -178,7 +179,6 @@ HEADERS += src/common/config.h \
     src/map/IMG/lblfile.h \
     src/map/IMG/vectortile.h \
     src/map/IMG/subdiv.h \
-    src/map/IMG/units.h \
     src/map/IMG/style.h \
     src/map/IMG/netfile.h \
     src/GUI/limitedcombobox.h \

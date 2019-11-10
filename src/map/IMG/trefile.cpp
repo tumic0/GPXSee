@@ -1,5 +1,5 @@
+#include "common/garmin.h"
 #include "subdiv.h"
-#include "units.h"
 #include "trefile.h"
 
 
@@ -52,8 +52,8 @@ bool TREFile::init()
 	if (!(seek(hdl, _gmpOffset + 0x15) && readInt24(hdl, north)
 	  && readInt24(hdl, east) && readInt24(hdl, south) && readInt24(hdl, west)))
 		return false;
-	_bounds = RectC(Coordinates(toWGS84(west), toWGS84(north)),
-	  Coordinates(toWGS84(east), toWGS84(south)));
+	_bounds = RectC(Coordinates(toWGS24(west), toWGS24(north)),
+	  Coordinates(toWGS24(east), toWGS24(south)));
 
 	// Levels & subdivs info
 	quint32 levelsOffset, levelsSize, subdivSize;
@@ -150,9 +150,9 @@ bool TREFile::load(int idx)
 		sl.append(s);
 
 		double min[2], max[2];
-		RectC bounds(Coordinates(toWGS84(lon - width),
-		  toWGS84(lat + height + 1)), Coordinates(toWGS84(lon + width + 1),
-		  toWGS84(lat - height)));
+		RectC bounds(Coordinates(toWGS24(lon - width),
+		  toWGS24(lat + height + 1)), Coordinates(toWGS24(lon + width + 1),
+		  toWGS24(lat - height)));
 
 		min[0] = bounds.left();
 		min[1] = bounds.bottom();

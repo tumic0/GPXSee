@@ -3,7 +3,7 @@
 
 #include <QtGlobal>
 #include "common/coordinates.h"
-#include "units.h"
+#include "common/garmin.h"
 
 class SubDiv {
 public:
@@ -51,7 +51,7 @@ private:
 #ifndef QT_NO_DEBUG
 inline QDebug operator<<(QDebug dbg, const SubDiv &subdiv)
 {
-	Coordinates c(toWGS84(subdiv.lon()), toWGS84(subdiv.lat()));
+	Coordinates c(toWGS24(subdiv.lon()), toWGS24(subdiv.lat()));
 	dbg.nospace() << "SubDiv(" << c << ", " << subdiv.offset()
 	  << ", " << subdiv.end() << ", " << subdiv.objects() << ")";
 	return dbg.space();

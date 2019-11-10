@@ -1,5 +1,5 @@
 #include "common/rectc.h"
-#include "units.h"
+#include "common/garmin.h"
 #include "lblfile.h"
 #include "netfile.h"
 #include "rgnfile.h"
@@ -193,7 +193,7 @@ bool RGNFile::polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
 
 		QPoint pos(subdiv->lon() + ((qint32)lon<<(24-subdiv->bits())),
 		  subdiv->lat() + ((qint32)lat<<(24-subdiv->bits())));
-		Coordinates c(toWGS84(pos.x()), toWGS84(pos.y()));
+		Coordinates c(toWGS24(pos.x()), toWGS24(pos.y()));
 		RectC br(c, c);
 		poly.points.append(QPointF(c.lon(), c.lat()));
 
@@ -204,7 +204,7 @@ bool RGNFile::polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
 			pos.rx() += lonDelta<<(24-subdiv->bits());
 			pos.ry() += latDelta<<(24-subdiv->bits());
 
-			Coordinates c(toWGS84(pos.x()), toWGS84(pos.y()));
+			Coordinates c(toWGS24(pos.x()), toWGS24(pos.y()));
 			poly.points.append(QPointF(c.lon(), c.lat()));
 			br = br.united(c);
 		}
@@ -259,7 +259,7 @@ bool RGNFile::extPolyObjects(const RectC &rect, Handle &hdl,
 
 		QPoint pos(subdiv->lon() + ((qint32)lon<<(24-subdiv->bits())),
 		  subdiv->lat() + ((qint32)lat<<(24-subdiv->bits())));
-		Coordinates c(toWGS84(pos.x()), toWGS84(pos.y()));
+		Coordinates c(toWGS24(pos.x()), toWGS24(pos.y()));
 		RectC br(c, c);
 		poly.points.append(QPointF(c.lon(), c.lat()));
 
@@ -269,7 +269,7 @@ bool RGNFile::extPolyObjects(const RectC &rect, Handle &hdl,
 			pos.rx() += lonDelta<<(24-subdiv->bits());
 			pos.ry() += latDelta<<(24-subdiv->bits());
 
-			Coordinates c(toWGS84(pos.x()), toWGS84(pos.y()));
+			Coordinates c(toWGS24(pos.x()), toWGS24(pos.y()));
 			poly.points.append(QPointF(c.lon(), c.lat()));
 			br = br.united(c);
 		}
@@ -321,8 +321,8 @@ bool RGNFile::pointObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
 
 		qint16 lonOffset = lon<<(24-subdiv->bits());
 		qint16 latOffset = lat<<(24-subdiv->bits());
-		point.coordinates = Coordinates(toWGS84(subdiv->lon() + lonOffset),
-		  toWGS84(subdiv->lat() + latOffset));
+		point.coordinates = Coordinates(toWGS24(subdiv->lon() + lonOffset),
+		  toWGS24(subdiv->lat() + latOffset));
 
 		if (!rect.contains(point.coordinates))
 			continue;
@@ -367,8 +367,8 @@ bool RGNFile::extPointObjects(const RectC &rect, Handle &hdl,
 
 		qint16 lonOffset = lon<<(24-subdiv->bits());
 		qint16 latOffset = lat<<(24-subdiv->bits());
-		point.coordinates = Coordinates(toWGS84(subdiv->lon() + lonOffset),
-		  toWGS84(subdiv->lat() + latOffset));
+		point.coordinates = Coordinates(toWGS24(subdiv->lon() + lonOffset),
+		  toWGS24(subdiv->lat() + latOffset));
 
 		if (subtype & 0x20) {
 			if (!readUInt24(hdl, labelPtr))
