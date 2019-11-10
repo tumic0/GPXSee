@@ -1,16 +1,16 @@
 #ifndef AREAITEM_H
 #define AREAITEM_H
 
-#include <QGraphicsItem>
 #include "data/area.h"
+#include "graphicsscene.h"
 #include "tooltip.h"
 
 class Map;
 
-class AreaItem : public QGraphicsItem
+class AreaItem : public GraphicsItem
 {
 public:
-	AreaItem(const Area &area, Map *map, QGraphicsItem *parent = 0);
+	AreaItem(const Area &area, Map *map, GraphicsItem *parent = 0);
 
 	QPainterPath shape() const {return _painterPath;}
 	QRectF boundingRect() const {return _painterPath.boundingRect();}
@@ -26,6 +26,8 @@ public:
 	void setWidth(qreal width);
 	void setStyle(Qt::PenStyle style);
 	void setDigitalZoom(int zoom);
+
+	virtual QString info() const;
 
 protected:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);

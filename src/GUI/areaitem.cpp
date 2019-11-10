@@ -8,7 +8,7 @@
 #include "areaitem.h"
 
 
-ToolTip AreaItem::toolTip() const
+QString AreaItem::info() const
 {
 	ToolTip tt;
 
@@ -18,11 +18,11 @@ ToolTip AreaItem::toolTip() const
 		tt.insert(qApp->translate("PolygonItem", "Description"),
 		  _area.description());
 
-	return tt;
+	return tt.toString();
 }
 
-AreaItem::AreaItem(const Area &area, Map *map, QGraphicsItem *parent)
-  : QGraphicsItem(parent), _area(area)
+AreaItem::AreaItem(const Area &area, Map *map, GraphicsItem *parent)
+  : GraphicsItem(parent), _area(area)
 {
 	_map = map;
 	_digitalZoom = 0;
@@ -173,6 +173,6 @@ void AreaItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void AreaItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	Popup::show(event->screenPos(), toolTip().toString(), event->widget());
+	Popup::show(event->screenPos(), info(), event->widget());
 	QGraphicsItem::mousePressEvent(event);
 }
