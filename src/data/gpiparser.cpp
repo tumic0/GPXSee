@@ -450,6 +450,7 @@ static quint32 readCamera(QDataStream &stream, QVector<Waypoint> &waypoints,
 	RecordHeader rh;
 	quint8 flags, type, s7, rs;
 	qint32 top, right, bottom, left;
+	quint32 ds = 15;
 
 
 	rs = readRecordHeader(stream, rh);
@@ -461,15 +462,14 @@ static quint32 readCamera(QDataStream &stream, QVector<Waypoint> &waypoints,
 	stream >> flags >> type >> s7;
 
 	if (s7) {
-		int skip = s7 + 2 + s7/4;
+		quint32 skip = s7 + 2 + s7/4;
 		stream.skipRawData(skip);
 		qint32 lat = readInt24(stream);
 		qint32 lon = readInt24(stream);
-		stream.skipRawData(rh.size - 12 - 3 - skip - 6);
+		ds += skip + 6;
 
 		waypoints.append(Coordinates(toWGS24(lon), toWGS24(lat)));
-	} else
-		stream.skipRawData(rh.size - 15);
+	}
 
 	Area area;
 	Polygon polygon;
@@ -497,6 +497,11 @@ static quint32 readCamera(QDataStream &stream, QVector<Waypoint> &waypoints,
 	}
 
 	polygons.append(area);
+
+	if (ds > rh.size)
+		stream.setStatus(QDataStream::ReadCorruptData);
+	else if (ds < rh.size)
+		stream.skipRawData(rh.size - ds);
 
 	return rs + rh.size;
 }
