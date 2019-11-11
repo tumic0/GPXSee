@@ -91,4 +91,11 @@
 		<generic-icon name="text-plain"/>
 		<glob pattern="*.cup"/>
 	</mime-type>
+
+	<mime-type type="application/vnd.garmin.gpi">
+		<comment>Garmin POI File</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application/octet-stream"/>
+		<glob pattern="*.gpi"/>
+	</mime-type>
 </mime-info>

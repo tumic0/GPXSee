@@ -538,7 +538,7 @@
 					<string>gpi</string>
 				</array>
 				<key>public.mime-type</key>
-				<string>application/vnd.garmin.cup</string>
+				<string>application/vnd.garmin.gpi</string>
 			</dict>
 		</dict>
 	</array>
