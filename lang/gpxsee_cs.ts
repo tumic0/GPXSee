@@ -1277,7 +1277,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="352"/>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatická</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="366"/>
@@ -1400,7 +1400,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="353"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Vlastní</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="477"/>
