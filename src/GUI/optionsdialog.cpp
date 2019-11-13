@@ -381,6 +381,9 @@ QWidget *OptionsDialog::createDataPage()
 	  SLOT(automaticPauseDetectionSet(bool)));
 
 	QHBoxLayout *pauseTypeLayout = new QHBoxLayout();
+#ifdef Q_OS_MAC
+	pauseTypeLayout->addStretch();
+#endif
 	pauseTypeLayout->addWidget(_automaticPause);
 	pauseTypeLayout->addWidget(_manualPause);
 	pauseTypeLayout->addStretch();
