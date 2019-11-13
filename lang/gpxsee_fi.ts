@@ -1399,7 +1399,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="353"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjän määrittämä</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="477"/>
