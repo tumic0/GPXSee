@@ -7,12 +7,23 @@ int Track::_heartRateWindow = 3;
 int Track::_cadenceWindow = 3;
 int Track::_powerWindow = 3;
 
+bool Track::_automaticPause = true;
 qreal Track::_pauseSpeed = 0.5;
 int Track::_pauseInterval = 10;
 
 bool Track::_outlierEliminate = true;
 bool Track::_useReportedSpeed = false;
 
+
+static qreal avg(const QVector<qreal> &v)
+{
+	qreal sum = 0;
+
+	for (int i = 0; i < v.size(); i++)
+		sum += v.at(i);
+
+	return sum/v.size();
+}
 
 static qreal median(QVector<qreal> &v)
 {
@@ -24,8 +35,7 @@ static qreal MAD(QVector<qreal> &v, qreal m)
 {
 	for (int i = 0; i < v.size(); i++)
 		v[i] = qAbs(v.at(i) - m);
-	qSort(v.begin(), v.end());
-	return v.at(v.size() / 2);
+	return median(v);
 }
 
 static QSet<int> eliminate(const QVector<qreal> &v)
@@ -132,15 +142,30 @@ Track::Track(const TrackData &data) : _data(data), _pause(0)
 			}
 		}
 
+		if (!hasTime)
+			continue;
+
+
 		// get stop-points + pause duration
+		int pauseInterval;
+		qreal pauseSpeed;
+
+		if (_automaticPause) {
+			pauseSpeed = (avg(seg.speed) > 2.8) ? 0.55 : 0.15;
+			pauseInterval = 10;
+		} else {
+			pauseSpeed = _pauseSpeed;
+			pauseInterval = _pauseInterval;
+		}
+
 		int ss = 0, la = 0;
 		for (int j = 1; j < seg.time.size(); j++) {
-			if (seg.speed.at(j) > _pauseSpeed)
+			if (seg.speed.at(j) > pauseSpeed)
 				ss = -1;
 			else if (ss < 0)
 				ss = j;
 
-			if (ss >= 0 && seg.time.at(j) > seg.time.at(ss) + _pauseInterval) {
+			if (ss >= 0 && seg.time.at(j) > seg.time.at(ss) + pauseInterval) {
 				int l = qMax(ss, la);
 				_pause += seg.time.at(j) - seg.time.at(l);
 				for (int k = l; k <= j; k++)
@@ -149,7 +174,7 @@ Track::Track(const TrackData &data) : _data(data), _pause(0)
 			}
 		}
 
-		if (!_outlierEliminate || !hasTime)
+		if (!_outlierEliminate)
 			continue;
 
 

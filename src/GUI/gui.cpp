@@ -949,6 +949,7 @@ void GUI::openOptions()
 	SET_TRACK_OPTION(cadenceFilter, setCadenceFilter);
 	SET_TRACK_OPTION(powerFilter, setPowerFilter);
 	SET_TRACK_OPTION(outlierEliminate, setOutlierElimination);
+	SET_TRACK_OPTION(automaticPause, setAutomaticPause);
 	SET_TRACK_OPTION(pauseSpeed, setPauseSpeed);
 	SET_TRACK_OPTION(pauseInterval, setPauseInterval);
 	SET_TRACK_OPTION(useReportedSpeed, useReportedSpeed);
@@ -1798,6 +1799,8 @@ void GUI::writeSettings()
 		settings.setValue(POWER_FILTER_SETTING, _options.powerFilter);
 	if (_options.outlierEliminate != OUTLIER_ELIMINATE_DEFAULT)
 		settings.setValue(OUTLIER_ELIMINATE_SETTING, _options.outlierEliminate);
+	if (_options.automaticPause != AUTOMATIC_PAUSE_DEFAULT)
+		settings.setValue(AUTOMATIC_PAUSE_SETTING, _options.automaticPause);
 	if (_options.pauseSpeed != PAUSE_SPEED_DEFAULT)
 		settings.setValue(PAUSE_SPEED_SETTING, _options.pauseSpeed);
 	if (_options.pauseInterval != PAUSE_INTERVAL_DEFAULT)
@@ -2072,6 +2075,8 @@ void GUI::readSettings()
 	  USE_REPORTED_SPEED_DEFAULT).toBool();
 	_options.dataUseDEM = settings.value(DATA_USE_DEM_SETTING,
 	  DATA_USE_DEM_DEFAULT).toBool();
+	_options.automaticPause = settings.value(AUTOMATIC_PAUSE_SETTING,
+	  AUTOMATIC_PAUSE_DEFAULT).toBool();
 	_options.pauseInterval = settings.value(PAUSE_INTERVAL_SETTING,
 	  PAUSE_INTERVAL_DEFAULT).toInt();
 	_options.poiRadius = settings.value(POI_RADIUS_SETTING, POI_RADIUS_DEFAULT)
@@ -2153,6 +2158,7 @@ void GUI::readSettings()
 	Track::setCadenceFilter(_options.cadenceFilter);
 	Track::setPowerFilter(_options.powerFilter);
 	Track::setOutlierElimination(_options.outlierEliminate);
+	Track::setAutomaticPause(_options.automaticPause);
 	Track::setPauseSpeed(_options.pauseSpeed);
 	Track::setPauseInterval(_options.pauseInterval);
 	Track::useReportedSpeed(_options.useReportedSpeed);

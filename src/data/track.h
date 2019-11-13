@@ -41,6 +41,7 @@ public:
 	static void setHeartRateFilter(int window) {_heartRateWindow = window;}
 	static void setCadenceFilter(int window) {_cadenceWindow = window;}
 	static void setPowerFilter(int window) {_powerWindow = window;}
+	static void setAutomaticPause(bool set) {_automaticPause = set;}
 	static void setPauseSpeed(qreal speed) {_pauseSpeed = speed;}
 	static void setPauseInterval(int interval) {_pauseInterval = interval;}
 	static void setOutlierElimination(bool eliminate)
@@ -68,6 +69,7 @@ private:
 	static int _heartRateWindow;
 	static int _cadenceWindow;
 	static int _powerWindow;
+	static bool _automaticPause;
 	static qreal _pauseSpeed;
 	static int _pauseInterval;
 	static bool _useReportedSpeed;

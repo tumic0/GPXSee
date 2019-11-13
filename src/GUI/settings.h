@@ -135,6 +135,8 @@
 #define POWER_FILTER_DEFAULT              3
 #define OUTLIER_ELIMINATE_SETTING         "outlierEliminate"
 #define OUTLIER_ELIMINATE_DEFAULT         true
+#define AUTOMATIC_PAUSE_SETTING           "automaticPause"
+#define AUTOMATIC_PAUSE_DEFAULT           true
 #define PAUSE_SPEED_SETTING               "pauseSpeed"
 #define PAUSE_SPEED_DEFAULT               0.5 /* m/s */
 #define PAUSE_INTERVAL_SETTING            "pauseInterval"

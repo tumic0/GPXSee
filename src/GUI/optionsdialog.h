@@ -49,6 +49,7 @@ struct Options {
 	int cadenceFilter;
 	int powerFilter;
 	bool outlierEliminate;
+	bool automaticPause;
 	qreal pauseSpeed;
 	int pauseInterval;
 	bool useReportedSpeed;
@@ -85,6 +86,9 @@ public slots:
 
 public:
 	OptionsDialog(Options *options, QWidget *parent = 0);
+
+private slots:
+	void automaticPauseDetectionSet(bool set);
 
 private:
 	QWidget *createMapPage();
@@ -129,6 +133,9 @@ private:
 	OddSpinBox *_cadenceFilter;
 	OddSpinBox *_powerFilter;
 	QCheckBox *_outlierEliminate;
+
+	QRadioButton *_automaticPause;
+	QRadioButton *_manualPause;
 	QDoubleSpinBox *_pauseSpeed;
 	QSpinBox *_pauseInterval;
 	QRadioButton *_computedSpeed;

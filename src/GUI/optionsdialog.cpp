@@ -37,6 +37,12 @@ static QFrame *line()
 #endif // Q_OS_MAC
 
 
+void OptionsDialog::automaticPauseDetectionSet(bool set)
+{
+	_pauseInterval->setEnabled(!set);
+	_pauseSpeed->setEnabled(!set);
+}
+
 QWidget *OptionsDialog::createMapPage()
 {
 	_projection = new LimitedComboBox(200);
@@ -343,10 +349,18 @@ QWidget *OptionsDialog::createDataPage()
 	filterTab->setLayout(filterTabLayout);
 
 
+	_automaticPause = new QRadioButton(tr("Automatic"));
+	_manualPause = new QRadioButton(tr("User defined"));
+	if (_options->automaticPause)
+		_automaticPause->setChecked(true);
+	else
+		_manualPause->setChecked(true);
+
 	_pauseSpeed = new QDoubleSpinBox();
 	_pauseSpeed->setDecimals(1);
 	_pauseSpeed->setSingleStep(0.1);
 	_pauseSpeed->setMinimum(0.1);
+	_pauseSpeed->setEnabled(_manualPause->isChecked());
 	if (_options->units == Imperial) {
 		_pauseSpeed->setValue(_options->pauseSpeed * MS2MIH);
 		_pauseSpeed->setSuffix(UNIT_SPACE + tr("mi/h"));
@@ -361,10 +375,23 @@ QWidget *OptionsDialog::createDataPage()
 	_pauseInterval->setMinimum(1);
 	_pauseInterval->setSuffix(UNIT_SPACE + tr("s"));
 	_pauseInterval->setValue(_options->pauseInterval);
+	_pauseInterval->setEnabled(_manualPause->isChecked());
 
-	QFormLayout *pauseLayout = new QFormLayout();
-	pauseLayout->addRow(tr("Minimal speed:"), _pauseSpeed);
-	pauseLayout->addRow(tr("Minimal duration:"), _pauseInterval);
+	connect(_automaticPause, SIGNAL(toggled(bool)), this,
+	  SLOT(automaticPauseDetectionSet(bool)));
+
+	QHBoxLayout *pauseTypeLayout = new QHBoxLayout();
+	pauseTypeLayout->addWidget(_automaticPause);
+	pauseTypeLayout->addWidget(_manualPause);
+	pauseTypeLayout->addStretch();
+
+	QFormLayout *pauseValuesLayout = new QFormLayout();
+	pauseValuesLayout->addRow(tr("Minimal speed:"), _pauseSpeed);
+	pauseValuesLayout->addRow(tr("Minimal duration:"), _pauseInterval);
+
+	QVBoxLayout *pauseLayout = new QVBoxLayout();
+	pauseLayout->addLayout(pauseTypeLayout);
+	pauseLayout->addLayout(pauseValuesLayout);
 
 	QWidget *pauseTab = new QWidget();
 	pauseTab->setLayout(pauseLayout);
@@ -679,6 +706,7 @@ void OptionsDialog::accept()
 	_options->cadenceFilter = _cadenceFilter->value();
 	_options->powerFilter = _powerFilter->value();
 	_options->outlierEliminate = _outlierEliminate->isChecked();
+	_options->automaticPause = _automaticPause->isChecked();
 	qreal pauseSpeed = (_options->units == Imperial)
 		? _pauseSpeed->value() / MS2MIH : (_options->units == Nautical)
 		? _pauseSpeed->value() / MS2KN : _pauseSpeed->value() / MS2KMH;
