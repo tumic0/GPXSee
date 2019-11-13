@@ -1276,7 +1276,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="352"/>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Automaattinen</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="366"/>
