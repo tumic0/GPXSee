@@ -1277,12 +1277,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="352"/>
         <source>Automatic</source>
-        <translation>Автоматически</translation>
+        <translation>Автоматическое</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="353"/>
         <source>User defined</source>
-        <translation type="unfinished"></translation>
+        <translation>Пользовательскoe</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="366"/>
