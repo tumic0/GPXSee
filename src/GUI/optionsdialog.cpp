@@ -350,7 +350,7 @@ QWidget *OptionsDialog::createDataPage()
 
 
 	_automaticPause = new QRadioButton(tr("Automatic"));
-	_manualPause = new QRadioButton(tr("User defined"));
+	_manualPause = new QRadioButton(tr("Custom"));
 	if (_options->automaticPause)
 		_automaticPause->setChecked(true);
 	else

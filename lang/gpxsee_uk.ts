@@ -1316,7 +1316,7 @@
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="353"/>
-        <source>User defined</source>
+        <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

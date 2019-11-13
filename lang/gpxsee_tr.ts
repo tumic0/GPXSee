@@ -1313,11 +1313,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="353"/>
-        <source>User defined</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="366"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
@@ -1399,6 +1394,11 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="439"/>
         <source>Speed</source>
         <translation>Hız</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="353"/>
+        <source>Custom</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="477"/>
