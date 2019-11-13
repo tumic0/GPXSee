@@ -439,6 +439,8 @@ static int speed(quint8 flags)
 			return 90;
 		case 0xE:
 			return 100;
+		case 0xF:
+			return 120;
 		default:
 			return 0;
 	}
