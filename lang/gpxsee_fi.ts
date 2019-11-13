@@ -1277,7 +1277,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="352"/>
         <source>Automatic</source>
         <translation>Automaattinen</translation>
-    </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="366"/>
         <source>mi/h</source>
