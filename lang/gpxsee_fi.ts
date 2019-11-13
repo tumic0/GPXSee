@@ -1276,12 +1276,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="352"/>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Automaattinen</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="353"/>
         <source>User defined</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjän määrittämä</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="366"/>
