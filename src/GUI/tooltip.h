@@ -10,12 +10,12 @@ class ToolTip
 {
 public:
 	void insert(const QString &key, const QString &value);
-	void setImage(const ImageInfo &image) {_img = image;}
+	void setImages(const QVector<ImageInfo> &images) {_images = images;}
 	QString toString() const;
 
 private:
 	QList<KV<QString, QString> > _list;
-	ImageInfo _img;
+	QVector<ImageInfo> _images;
 };
 
 #endif // TOOLTIP_H

@@ -21,7 +21,7 @@ public:
 	const QString &name() const {return _name;}
 	const QString &description() const {return _description;}
 	const Address &address() const {return _address;}
-	const ImageInfo &image() const {return _image;}
+	const QVector<ImageInfo> &images() const {return _images;}
 	const QVector<Link> &links() const {return _links;}
 	const QDateTime &timestamp() const {return _timestamp;}
 	qreal elevation() const {return _elevation;}
@@ -34,7 +34,7 @@ public:
 	void setAddress(const Address &address) {_address = address;}
 	void setTimestamp(const QDateTime &timestamp) {_timestamp = timestamp;}
 	void setElevation(qreal elevation) {_elevation = elevation;}
-	void setImage(const ImageInfo &image) {_image = image;}
+	void addImage(const ImageInfo &image) {_images.append(image);}
 	void addLink(const Link &link) {_links.append(link);}
 
 	bool hasElevation() const {return !std::isnan(_elevation);}
@@ -48,7 +48,7 @@ private:
 	QString _name;
 	QString _description;
 	Address _address;
-	ImageInfo _image;
+	QVector<ImageInfo> _images;
 	QVector<Link> _links;
 	QDateTime _timestamp;
 	qreal _elevation;

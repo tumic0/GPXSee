@@ -1,8 +1,21 @@
 #include "popup.h"
 #include "tooltip.h"
 
+static QSize thumbnailSize(const ImageInfo &img, int limit)
+{
+	int width, height;
+	if (img.size().width() > img.size().height()) {
+		width = qMin(img.size().width(), limit);
+		qreal ratio = img.size().width() / (qreal)img.size().height();
+		height = (int)(width / ratio);
+	} else {
+		height = qMin(img.size().height(), limit);
+		qreal ratio = img.size().height() / (qreal)img.size().width();
+		width = (int)(height / ratio);
+	}
 
-#define THUMBNAIL_MAX_SIZE 240
+	return QSize(width, height);
+}
 
 void ToolTip::insert(const QString &key, const QString &value)
 {
@@ -13,22 +26,17 @@ QString ToolTip::toString() const
 {
 	QString html;
 
-	if (_img.isValid()) {
-		int width, height;
-		if (_img.size().width() > _img.size().height()) {
-			width = qMin(_img.size().width(), THUMBNAIL_MAX_SIZE);
-			qreal ratio = _img.size().width() / (qreal)_img.size().height();
-			height = (int)(width / ratio);
-		} else {
-			height = qMin(_img.size().height(), THUMBNAIL_MAX_SIZE);
-			qreal ratio = _img.size().height() / (qreal)_img.size().width();
-			width = (int)(height / ratio);
-		}
+	if (_images.size()) {
+		html = "<div align=\"center\">";
+		for (int i = 0; i < _images.size(); i++) {
+			const ImageInfo &img = _images.at(i);
+			QSize size(thumbnailSize(img, qMin(960/_images.size(), 240)));
 
-		html += "<div align=\"center\">";
-		html += QString("<a href=\"file:%0\">"
-		  "<img src=\"%0\" width=\"%1\" height=\"%2\"/></a>")
-		  .arg(_img.path(), QString::number(width), QString::number(height));
+			html += QString("<a href=\"file:%0\">"
+			  "<img src=\"%0\" width=\"%1\" height=\"%2\"/></a>")
+			  .arg(img.path(), QString::number(size.width()),
+			  QString::number(size.height()));
+		}
 		html += "</div>";
 	}
 

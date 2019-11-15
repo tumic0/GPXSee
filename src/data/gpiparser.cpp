@@ -413,7 +413,7 @@ static quint32 readImageInfo(QDataStream &stream, Waypoint &waypoint,
 	imgFile.write(ba);
 	imgFile.close();
 
-	waypoint.setImage(ImageInfo(imgFile.fileName(), ir.size()));
+	waypoint.addImage(ImageInfo(imgFile.fileName(), ir.size()));
 
 	if (size + 5 != rh.size)
 		stream.setStatus(QDataStream::ReadCorruptData);

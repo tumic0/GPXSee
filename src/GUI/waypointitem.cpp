@@ -54,7 +54,7 @@ QString WaypointItem::info() const
 		}
 		tt.insert(qApp->translate("WaypointItem", "Links"), links);
 	}
-	tt.setImage(_waypoint.image());
+	tt.setImages(_waypoint.images());
 
 	return tt.toString();
 }

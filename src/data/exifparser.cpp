@@ -209,7 +209,7 @@ bool EXIFParser::parseTIFF(QFile *file, QVector<Waypoint> &waypoints)
 
 	Waypoint wp(c);
 	wp.setName(QFileInfo(file->fileName()).baseName());
-	wp.setImage(img);
+	wp.addImage(img);
 	wp.setElevation(altitude(tiff, GPSIFD.value(GPSAltitude),
 	  GPSIFD.value(GPSAltitudeRef)));
 	wp.setTimestamp(QDateTime(QDate::fromString(text(tiff,
