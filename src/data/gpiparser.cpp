@@ -402,18 +402,20 @@ static quint32 readImageInfo(QDataStream &stream, Waypoint &waypoint,
 	ba.resize(size);
 	stream.readRawData(ba.data(), ba.size());
 
-	QBuffer buf(&ba);
-	QImageReader ir(&buf);
+	if (tempDir().isValid()) {
+		QBuffer buf(&ba);
+		QImageReader ir(&buf);
 
-	QByteArray id(fileName.toUtf8() + QByteArray::number(imgId++));
-	QFile imgFile(tempDir().filePath(QString("%0.%1").arg(
-	  QCryptographicHash::hash(id, QCryptographicHash::Sha1).toHex(),
-	  QString(ir.format()))));
-	imgFile.open(QIODevice::WriteOnly);
-	imgFile.write(ba);
-	imgFile.close();
+		QByteArray id(fileName.toUtf8() + QByteArray::number(imgId++));
+		QFile imgFile(tempDir().path() + "/" + QString("%0.%1").arg(
+		  QCryptographicHash::hash(id, QCryptographicHash::Sha1).toHex(),
+		  QString(ir.format())));
+		imgFile.open(QIODevice::WriteOnly);
+		imgFile.write(ba);
+		imgFile.close();
 
-	waypoint.addImage(ImageInfo(imgFile.fileName(), ir.size()));
+		waypoint.addImage(ImageInfo(imgFile.fileName(), ir.size()));
+	}
 
 	if (size + 5 != rh.size)
 		stream.setStatus(QDataStream::ReadCorruptData);
