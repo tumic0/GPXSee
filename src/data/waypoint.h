@@ -4,6 +4,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QHash>
+#include <QVector>
 #include <QDebug>
 #include "common/coordinates.h"
 #include "imageinfo.h"

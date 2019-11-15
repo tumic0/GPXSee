@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QList>
+#include <QVector>
 #include "common/kv.h"
 #include "data/imageinfo.h"
 
