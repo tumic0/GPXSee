@@ -140,7 +140,7 @@ static quint8 readRecordHeader(QDataStream &stream, RecordHeader &hdr)
 {
 	stream >> hdr.type >> hdr.flags >> hdr.size;
 	if (hdr.flags & 0xA)
-		stream >> hdr.extra;
+		stream >> hdr.extra;			
 	return (hdr.flags & 0xA) ? 12 : 8;
 }
 
@@ -428,9 +428,9 @@ static int speed(quint8 flags)
 {
 	switch (flags >> 4) {
 		case 0x8:
-			return 40;
-		case 0x9:
 			return 30;
+		case 0x9:
+			return 40;
 		case 0xA:
 			return 50;
 		case 0xB:
