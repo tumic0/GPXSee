@@ -79,10 +79,7 @@ static bool readTimestamp(const char *data, QTime &time)
 		return false;
 
 	time = QTime(h, m, s);
-	if (!time.isValid())
-		return false;
-
-	return true;
+	return time.isValid();
 }
 
 static bool readARecord(const char *line, qint64 len)
