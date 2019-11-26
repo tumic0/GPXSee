@@ -634,9 +634,10 @@ static void readPOIDatabase(QDataStream &stream, QTextCodec *codec,
 }
 
 bool GPIParser::readData(QDataStream &stream, QTextCodec *codec,
-  QVector<Waypoint> &waypoints, QList<Area> &polygons, const QString &fileName,
-  int &imgId)
+  QVector<Waypoint> &waypoints, QList<Area> &polygons, const QString &fileName)
 {
+	int imgId = 0;
+
 	while (stream.status() == QDataStream::Ok) {
 		switch (nextHeaderType(stream)) {
 			case 0x09:   // POI database
@@ -726,11 +727,9 @@ bool GPIParser::parse(QFile *file, QList<TrackData> &tracks,
 {
 	Q_UNUSED(tracks);
 	Q_UNUSED(routes);
-	Q_UNUSED(polygons);
 	QDataStream stream(file);
 	QTextCodec *codec = 0;
 	quint32 ebs;
-	int imgId = 0;
 
 	stream.setByteOrder(QDataStream::LittleEndian);
 
@@ -741,9 +740,8 @@ bool GPIParser::parse(QFile *file, QList<TrackData> &tracks,
 		CryptDevice dev(stream.device(), 0xf870b5, ebs);
 		QDataStream cryptStream(&dev);
 		cryptStream.setByteOrder(QDataStream::LittleEndian);
-		return readData(cryptStream, codec, waypoints, polygons, file->fileName(),
-		  imgId);
+		return readData(cryptStream, codec, waypoints, polygons,
+		  file->fileName());
 	} else
-		return readData(stream, codec, waypoints, polygons, file->fileName(),
-		  imgId);
+		return readData(stream, codec, waypoints, polygons, file->fileName());
 }

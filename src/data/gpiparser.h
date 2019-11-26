@@ -19,7 +19,7 @@ private:
 	bool readGPIHeader(QDataStream &stream, QTextCodec **codec);
 	bool readData(QDataStream &stream, QTextCodec *codec,
 	  QVector<Waypoint> &waypoints, QList<Area> &polygons,
-	  const QString &fileName, int &imgId);
+	  const QString &fileName);
 
 	QString _errorString;
 };
