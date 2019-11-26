@@ -1312,12 +1312,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="352"/>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматичне</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="353"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувацьке</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="366"/>
