@@ -151,7 +151,7 @@ Track::Track(const TrackData &data) : _data(data), _pause(0)
 		qreal pauseSpeed;
 
 		if (_automaticPause) {
-			pauseSpeed = (avg(seg.speed) > 2.8) ? 0.55 : 0.15;
+			pauseSpeed = (avg(seg.speed) > 2.8) ? 0.40 : 0.15;
 			pauseInterval = 10;
 		} else {
 			pauseSpeed = _pauseSpeed;
@@ -163,7 +163,7 @@ Track::Track(const TrackData &data) : _data(data), _pause(0)
 			if (seg.speed.at(j) > pauseSpeed)
 				ss = -1;
 			else if (ss < 0)
-				ss = j;
+				ss = j-1;
 
 			if (ss >= 0 && seg.time.at(j) > seg.time.at(ss) + pauseInterval) {
 				int l = qMax(ss, la);
