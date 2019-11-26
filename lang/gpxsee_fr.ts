@@ -1147,12 +1147,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="67"/>
         <source>Non-HiDPI maps are loaded as HiDPI maps. The map is sharp but map objects are small/hard to read.</source>
-        <translation>Les cartes qui n&apos;ont pas de résolution élevée sont chargées comme une carte à résolution élevée. La carte est nette mais ses symboles sont petits ou difficiles à lire.</translation>
+        <translation>Les cartes qui n&apos;ont pas de résolution élevée sont chargées comme une carte à résolution élevée. La carte est nette mais ses symboles sont petits et moins lisible.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="69"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
-        <translation>Les cartes qui n&apos;ont pas de résolution élevée sont chargées telles quelles. Les symboles de la carte ont leurs tailles attendues mais la carte est floue.</translation>
+        <translation>Les cartes qui n&apos;ont pas de résolution élevée sont chargées telles quelles. Les symboles de la carte ont une taille adaptée mais la carte est floue.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="104"/>
@@ -1276,7 +1276,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="352"/>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatique</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="366"/>
@@ -1399,7 +1399,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="353"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Personnalisé</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="477"/>
@@ -1884,7 +1884,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="44"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="55"/>
