@@ -100,6 +100,8 @@ static QPainterPath textPath(const QPolygonF &path, qreal textWidth,
   qreal charWidth, const QRectF &tileRect)
 {
 	QList<QLineF> lines(lineString(path, tileRect));
+	if (lines.isEmpty())
+		return QPainterPath();
 	qreal length = 0;
 	qreal angle = lines.first().angle();
 	int last = 0;
