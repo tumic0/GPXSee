@@ -8,6 +8,7 @@ Comment[pl]=Przeglądarka i analizator plików dziennika GPS
 Comment[ru]=Программа для просмотра и анализа GPS логов
 Comment[sv]=GPS-loggfilsläsare och analysator
 Comment[tr]=GPS günlük dosyası görüntüleyici ve analizcisi
+Comment[uk]=Переглядач та аналізатор GPS логів
 Exec=gpxsee %F
 Icon=gpxsee
 Terminal=false
