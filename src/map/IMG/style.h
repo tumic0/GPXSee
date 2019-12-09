@@ -142,7 +142,7 @@ private:
 
 	QMap<quint32, Line> _lines;
 	QMap<quint32, Polygon> _polygons;
-	QMap<quint16, Point> _points;
+	QMap<quint32, Point> _points;
 	QList<quint32> _drawOrder;
 };
 

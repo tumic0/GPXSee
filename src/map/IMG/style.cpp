@@ -966,7 +966,7 @@ const Style::Point &Style::point(quint32 type) const
 {
 	static Point null;
 
-	QMap<quint16, Point>::const_iterator it = _points.find(type);
+	QMap<quint32, Point>::const_iterator it = _points.find(type);
 	return (it == _points.constEnd()) ? null : *it;
 }
 
