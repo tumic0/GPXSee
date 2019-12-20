@@ -50,8 +50,9 @@ IMG::IMG(const QString &fileName)
 	CHECK(_file.seek(0x49) && read(d1, sizeof(d1)) && _file.seek(0x61)
 	  && readValue(e1) && readValue(e2) && _file.seek(0x65)
 	  && read(d2, sizeof(d2)));
+
 	QByteArray nba(QByteArray(d1, sizeof(d1)) + QByteArray(d2, sizeof(d2)));
-	_name = QString(nba).trimmed();
+	_name = QString::fromLatin1(nba.constData(), nba.size()-1).trimmed();
 	_blockSize = 1 << (e1 + e2);
 	_blockCache.setMaxCost(CACHE_SIZE / _blockSize);
 
