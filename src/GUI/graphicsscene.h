@@ -18,6 +18,9 @@ class GraphicsScene : public QGraphicsScene
 public:
 	GraphicsScene(QObject *parent = 0) : QGraphicsScene(parent) {}
 
+public slots:
+	void clear();
+
 protected:
 	void helpEvent(QGraphicsSceneHelpEvent *event);
 

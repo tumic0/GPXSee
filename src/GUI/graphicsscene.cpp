@@ -46,3 +46,9 @@ void GraphicsScene::helpEvent(QGraphicsSceneHelpEvent *event)
 
 	/* No need to process QGraphicsScene::helpEvent() */
 }
+
+void GraphicsScene::clear()
+{
+	Popup::clear();
+	QGraphicsScene::clear();
+}

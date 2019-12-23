@@ -9,6 +9,7 @@ class Popup
 {
 public:
 	static void show(const QPoint &pos, const QString &text, QWidget *w);
+	static void clear();
 };
 
 #endif // POPUP_H
