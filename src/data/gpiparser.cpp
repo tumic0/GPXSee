@@ -1,3 +1,4 @@
+#include <cstring>
 #include <QDataStream>
 #include <QTextCodec>
 #include <QtEndian>
@@ -169,15 +170,16 @@ static quint32 readTranslatedObjects(QDataStream &stream, QTextCodec *codec,
   QList<TranslatedString> &objects)
 {
 	qint32 size = 0, ret;
-	char lang[2];
+	char lang[3];
 
+	memset(lang, 0, sizeof(lang));
 	objects.clear();
 
 	stream >> size;
 	ret = size + 4;
 	while (stream.status() == QDataStream::Ok && size > 0) {
 		QString str;
-		stream.readRawData(lang, sizeof(lang));
+		stream.readRawData(lang, sizeof(lang) - 1);
 		size -= readString(stream, codec, str) + 2;
 		objects.append(TranslatedString(lang, str));
 	}
