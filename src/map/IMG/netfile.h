@@ -13,7 +13,7 @@ public:
 	bool lblOffset(Handle &hdl, quint32 netOffset, quint32 &lblOffset);
 
 private:
-	bool init();
+	bool init(Handle &hdl);
 
 	quint32 _offset;
 	quint32 _size;

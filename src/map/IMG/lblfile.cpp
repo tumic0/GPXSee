@@ -50,9 +50,8 @@ static QString capitalize(const QString &str)
 }
 
 
-bool LBLFile::init()
+bool LBLFile::init(Handle &hdl)
 {
-	Handle hdl;
 	quint16 codepage;
 	quint8 multiplier, poiMultiplier;
 
@@ -165,7 +164,7 @@ Label LBLFile::label8b(Handle &hdl, quint32 offset) const
 
 Label LBLFile::label(Handle &hdl, quint32 offset, bool poi)
 {
-	if (!_multiplier && !init())
+	if (!_multiplier && !init(hdl))
 		return QString();
 
 	quint32 labelOffset;

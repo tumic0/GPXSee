@@ -19,7 +19,7 @@ public:
 	Label label(Handle &hdl, quint32 offset, bool poi = false);
 
 private:
-	bool init();
+	bool init(Handle &hdl);
 
 	Label label6b(Handle &hdl, quint32 offset) const;
 	Label label8b(Handle &hdl, quint32 offset) const;

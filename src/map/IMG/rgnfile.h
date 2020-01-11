@@ -93,7 +93,7 @@ private:
 		quint32 _lonBits, _latBits, _readBits;
 	};
 
-	bool init();
+	bool init(Handle &hdl);
 
 	QVector<Segment> segments(Handle &hdl, const SubDiv *subdiv) const;
 	bool polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,

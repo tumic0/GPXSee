@@ -1,8 +1,7 @@
 #include "netfile.h"
 
-bool NETFile::init()
+bool NETFile::init(Handle &hdl)
 {
-	Handle hdl;
 	quint8 multiplier;
 
 	if (!(seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _offset)
@@ -16,7 +15,7 @@ bool NETFile::init()
 
 bool NETFile::lblOffset(Handle &hdl, quint32 netOffset, quint32 &lblOffset)
 {
-	if (!_multiplier && !init())
+	if (!_multiplier && !init(hdl))
 		return false;
 
 	if (!(seek(hdl, _offset + netOffset * _multiplier)

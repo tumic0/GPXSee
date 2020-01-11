@@ -119,9 +119,8 @@ bool RGNFile::DeltaStream::sign(int &val)
 }
 
 
-bool RGNFile::init()
+bool RGNFile::init(Handle &hdl)
 {
-	Handle hdl;
 	quint16 hdrLen;
 
 	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)
@@ -395,7 +394,7 @@ void RGNFile::objects(const RectC &rect, const SubDiv *subdiv, LBLFile *lbl,
 {
 	Handle rgnHdl, lblHdl, netHdl;
 
-	if (!_init && !init())
+	if (!_init && !init(rgnHdl))
 		return;
 
 	QVector<RGNFile::Segment> seg(segments(rgnHdl, subdiv));
@@ -427,7 +426,7 @@ void RGNFile::extObjects(const RectC &rect, const SubDiv *subdiv, LBLFile *lbl,
 {
 	Handle rgnHdl, lblHdl;
 
-	if (!_init && !init())
+	if (!_init && !init(rgnHdl))
 		return;
 
 	if (polygons && subdiv->polygonsOffset() != subdiv->polygonsEnd()) {
