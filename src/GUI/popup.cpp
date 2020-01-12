@@ -167,5 +167,5 @@ void Popup::show(const QPoint &pos, const QString &text, QWidget *w)
 void Popup::clear()
 {
 	if (PopupLabel::_instance)
-		PopupLabel::_instance->deleteLater();
+		delete PopupLabel::_instance;
 }
