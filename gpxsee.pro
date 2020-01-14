@@ -188,7 +188,8 @@ HEADERS += src/common/config.h \
     src/data/csv.h \
     src/data/cupparser.h \
     src/data/gpiparser.h \
-    src/data/address.h
+    src/data/address.h \
+    src/data/smlparser.h
 SOURCES += src/main.cpp \
     src/GUI/popup.cpp \
     src/common/coordinates.cpp \
@@ -324,7 +325,8 @@ SOURCES += src/main.cpp \
     src/data/csv.cpp \
     src/data/cupparser.cpp \
     src/GUI/graphicsscene.cpp \
-    src/data/gpiparser.cpp
+    src/data/gpiparser.cpp \
+    src/data/smlparser.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     HEADERS += src/data/geojsonparser.h

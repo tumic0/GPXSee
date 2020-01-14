@@ -19,6 +19,7 @@
 #include "exifparser.h"
 #include "cupparser.h"
 #include "gpiparser.h"
+#include "smlparser.h"
 #include "dem.h"
 #include "data.h"
 
@@ -41,6 +42,7 @@ static GeoJSONParser geojson;
 static EXIFParser exif;
 static CUPParser cup;
 static GPIParser gpi;
+static SMLParser sml;
 
 static QHash<QString, Parser*> parsers()
 {
@@ -66,6 +68,7 @@ static QHash<QString, Parser*> parsers()
 	hash.insert("jpg", &exif);
 	hash.insert("cup", &cup);
 	hash.insert("gpi", &gpi);
+	hash.insert("sml", &sml);
 
 	return hash;
 }
@@ -189,6 +192,7 @@ QString Data::formats()
 	  + qApp->translate("Data", "NMEA files") + " (*.nmea);;"
 	  + qApp->translate("Data", "OziExplorer files") + " (*.plt *.rte *.wpt);;"
 	  + qApp->translate("Data", "SLF files") + " (*.slf);;"
+	  + qApp->translate("Data", "SML files") + " (*.sml);;"
 	  + qApp->translate("Data", "TCX files") + " (*.tcx);;"
 	  + qApp->translate("Data", "All files") + " (*)";
 }
