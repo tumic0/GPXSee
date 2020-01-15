@@ -408,7 +408,8 @@ win32 {
         icons/formats/slf.ico \
         icons/formats/json.ico \
         icons/formats/cup.ico \
-        icons/formats/gpi.ico
+        icons/formats/gpi.ico \
+        icons/formats/sml.ico
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }

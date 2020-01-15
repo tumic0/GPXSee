@@ -98,4 +98,11 @@
 		<generic-icon name="application/octet-stream"/>
 		<glob pattern="*.gpi"/>
 	</mime-type>
+
+	<mime-type type="application/sml+xml">
+		<comment>Suunto Markup Language</comment>
+		<sub-class-of type="application/xml"/>
+		<generic-icon name="application-xml"/>
+		<glob pattern="*.sml"/>
+	</mime-type>
 </mime-info>
