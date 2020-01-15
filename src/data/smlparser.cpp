@@ -1,11 +1,24 @@
 #include "smlparser.h"
 
 
-void SMLParser::sample(SegmentData &segment)
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const SMLParser::Sensors &sensors)
+{
+	dbg.nospace() << "Sensors(" << sensors.cadence << ", "
+	  << sensors.temperature << ", " << sensors.hr << "," << sensors.power
+	  << ", " << sensors.speed << ")";
+
+	return dbg.space();
+}
+#endif // QT_NO_DEBUG
+
+
+void SMLParser::sample(SegmentData &segment, QMap<QDateTime, Sensors> &map)
 {
 	QDateTime timestamp;
+	Sensors sensors;
 	qreal lat = NAN, lon = NAN, altitude = NAN;
-	bool ok;
+	bool ok, periodic = false;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Latitude")) {
@@ -33,26 +46,76 @@ void SMLParser::sample(SegmentData &segment)
 				_reader.raiseError("Invalid GPS altitude");
 				return;
 			}
+		} else if (_reader.name() == QLatin1String("SampleType")) {
+			if (_reader.readElementText() == "periodic")
+				periodic = true;
+		} else if (_reader.name() == QLatin1String("Cadence")) {
+			sensors.cadence = _reader.readElementText().toDouble(&ok);
+			if (!ok || sensors.cadence < 0) {
+				_reader.raiseError("Invalid Cadence");
+				return;
+			}
+		} else if (_reader.name() == QLatin1String("Temperature")) {
+			sensors.temperature = _reader.readElementText().toDouble(&ok);
+			// Temperature is in Kelvin units
+			if (!ok || sensors.temperature < 0) {
+				_reader.raiseError("Invalid Temperature");
+				return;
+			}
+		} else if (_reader.name() == QLatin1String("HR")) {
+			sensors.hr = _reader.readElementText().toDouble(&ok);
+			if (!ok || sensors.hr < 0) {
+				_reader.raiseError("Invalid HR");
+				return;
+			}
+		} else if (_reader.name() == QLatin1String("BikePower")) {
+			sensors.power = _reader.readElementText().toDouble(&ok);
+			if (!ok || sensors.power < 0) {
+				_reader.raiseError("Invalid BikePower");
+				return;
+			}
+		} else if (_reader.name() == QLatin1String("Speed")) {
+			sensors.speed = _reader.readElementText().toDouble(&ok);
+			if (!ok || sensors.speed < 0) {
+				_reader.raiseError("Invalid Speed");
+				return;
+			}
 		} else
 			_reader.skipCurrentElement();
 	}
 
-	Trackpoint t(Coordinates((lon * 180) / M_PI, (lat * 180) / M_PI));
-	if (!t.coordinates().isValid())
-		return;
-	t.setTimestamp(timestamp);
-	t.setElevation(altitude);
+	if (periodic && timestamp.isValid())
+		map.insert(timestamp, sensors);
+	else if (!(std::isnan(lon) || std::isnan(lat))) {
+		Trackpoint t(Coordinates(rad2deg(lon), rad2deg(lat)));
+		t.setTimestamp(timestamp);
+		t.setElevation(altitude);
 
-	segment.append(t);
+		segment.append(t);
+	}
 }
 
 void SMLParser::samples(SegmentData &segment)
 {
+	QMap<QDateTime, Sensors> sensors;
+	QMap<QDateTime, Sensors>::const_iterator it;
+
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Sample")) {
-			sample(segment);
+			sample(segment, sensors);
 		} else
 			_reader.skipCurrentElement();
+	}
+
+	for (int i = 0; i < segment.size(); i++) {
+		Trackpoint &t = segment[i];
+		if ((it = sensors.lowerBound(t.timestamp())) != sensors.constEnd()) {
+			t.setCadence(it->cadence * 60);
+			t.setTemperature(it->temperature - 273.15);
+			t.setHeartRate(it->hr * 60);
+			t.setPower(it->power);
+			t.setSpeed(it->speed);
+		}
 	}
 }
 
