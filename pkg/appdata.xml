@@ -12,17 +12,18 @@
 
 		<p>Features:</p>
 		<ul>
-			<li>Opens GPX, TCX, FIT, KML, IGC, NMEA, SLF, LOC, OziExplorer (PLT,
-				WPT, RTE), GeoJSON, SeeYou CUP, Garmin GPI &amp; CSV and
-				geotagged JPEG files.</li>
+			<li>Opens GPX, TCX, FIT, KML, IGC, NMEA, SIGMA SLF, Suunto SML, LOC,
+				OziExplorer (PLT, WPT, RTE), GeoJSON, SeeYou CUP,
+				Garmin GPI &amp; CSV and geotagged JPEG files.</li>
 			<li>User-definable online maps (OpenStreetMap/Google tiles, WMTS,
-				WMS, TMS).</li>
+				WMS, TMS, QuadTiles).</li>
 			<li>Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases,
 				TwoNav RMaps, Garmin IMG &amp; JNX, GeoTIFF images).</li>
 			<li>Elevation, speed, heart rate, cadence, power, temperature and
 				gear ratio graphs.</li>
 			<li>Support for multiple tracks in one view.</li>
 			<li>Support for POI files.</li>
+			<li>Support for DEM files (SRTM HGT).</li>
 			<li>Print/export to PDF.</li>
 			<li>Full-screen mode.</li>
 			<li>HiDPI/Retina displays &amp; maps support.</li>
@@ -70,5 +71,6 @@
 		<mimetype>application/geo+json</mimetype>
 		<mimetype>application/vnd.naviter.seeyou.cup</mimetype>
 		<mimetype>application/vnd.garmin.gpi</mimetype>
+		<mimetype>application/sml+xml</mimetype>
 	</mimetypes>
 </component>
