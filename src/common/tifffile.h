@@ -9,6 +9,7 @@
 #define TIFF_SHORT     3
 #define TIFF_LONG      4
 #define TIFF_RATIONAL  5
+#define TIFF_SRATIONAL 10
 #define TIFF_DOUBLE    12
 
 class TIFFFile

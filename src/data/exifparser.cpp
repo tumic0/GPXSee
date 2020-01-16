@@ -82,7 +82,10 @@ double EXIFParser::altitude(TIFFFile &file, const IFDEntry &alt,
 
 double EXIFParser::coordinate(TIFFFile &file, const IFDEntry &ll) const
 {
-	if (!(ll.type == TIFF_RATIONAL && ll.count == 3))
+	// Some broken image creators like NOKIA phones use a wrong (SRATIONAL)
+	// data type
+	if (!((ll.type == TIFF_RATIONAL || ll.type == TIFF_SRATIONAL)
+	  && ll.count == 3))
 		return NAN;
 
 	if (!file.seek(ll.offset))
