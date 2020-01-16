@@ -243,6 +243,22 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sml</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/sml+xml</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/sml.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Suunto Markup Language</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
@@ -539,6 +555,27 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.garmin.gpi</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.suunto.sml</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://www.suunto.com</string>
+			<key>UTTypeDescription</key>
+			<string>Suunto Markup Language</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.xml</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sml</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/sml+xml</string>
 			</dict>
 		</dict>
 	</array>
