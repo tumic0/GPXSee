@@ -1,4 +1,4 @@
-#include <QSet>
+#include <QMap>
 #include <QtEndian>
 #include "common/programpaths.h"
 #include "vectortile.h"
@@ -110,8 +110,8 @@ IMG::IMG(const QString &fileName)
 		QString fn(QByteArray(name, sizeof(name)));
 		if (VectorTile::isTileFile(tt)) {
 			VectorTile *tile;
-			QMap<QString, VectorTile*>::iterator it = tileMap.find(fn);
-			if (it == tileMap.end()) {
+			TileMap::const_iterator it = tileMap.find(fn);
+			if (it == tileMap.constEnd()) {
 				tile = new VectorTile();
 				tileMap.insert(fn, tile);
 			} else
@@ -152,7 +152,8 @@ IMG::IMG(const QString &fileName)
 	}
 
 	// Create tile tree
-	for (TileMap::iterator it = tileMap.begin(); it != tileMap.end(); ++it) {
+	for (TileMap::const_iterator it = tileMap.constBegin();
+	  it != tileMap.constEnd(); ++it) {
 		VectorTile *tile = it.value();
 
 		if (!tile->init()) {
