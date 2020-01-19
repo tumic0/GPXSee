@@ -9,6 +9,7 @@
 #endif // QT_VERSION < 5
 #include "common/rectc.h"
 #include "common/wgs84.h"
+#include "common/range.h"
 #include "IMG/textpathitem.h"
 #include "IMG/textpointitem.h"
 #include "IMG/bitmapline.h"

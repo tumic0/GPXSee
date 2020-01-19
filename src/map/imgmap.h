@@ -4,7 +4,6 @@
 #include "map.h"
 #include "projection.h"
 #include "transform.h"
-#include "common/range.h"
 #include "IMG/img.h"
 
 class TextItem;
