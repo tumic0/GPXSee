@@ -85,16 +85,7 @@ void VectorTile::objects(const RectC &rect, int bits,
 #ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const VectorTile &tile)
 {
-	dbg.nospace() << "VectorTile(";
-	if (tile._tre)
-		dbg << "TRE: " << *(tile._tre);
-	if (tile._rgn)
-		dbg << ", RGN: " << *(tile._rgn);
-	if (tile._lbl)
-		dbg << ", LBL: " << *(tile._lbl);
-	if (tile._net)
-		dbg << ", NET: " << *(tile._net);
-	dbg << ")";
+	dbg.nospace() << "VectorTile(" << tile.bounds() <<")";
 
 	return dbg.space();
 }

@@ -2,35 +2,9 @@
 #include "img.h"
 #include "subfile.h"
 
-SubFile::Type SubFile::type(const char str[3])
-{
-	if (!memcmp(str, "TRE", 3))
-		return TRE;
-	else if (!memcmp(str, "RGN", 3))
-		return RGN;
-	else if (!memcmp(str, "LBL", 3))
-		return LBL;
-	else if (!memcmp(str, "TYP", 3))
-		return TYP;
-	else if (!memcmp(str, "GMP", 3))
-		return GMP;
-	else if (!memcmp(str, "NET", 3))
-		return NET;
-	else
-		return Unknown;
-}
-
-SubFile::SubFile(QFile *file) :_gmpOffset(0), _img(0), _file(file), _blocks(0)
-{
-	if (!_file->open(QIODevice::ReadOnly))
-		qWarning("Error opening %s: %s", qPrintable(_file->fileName()),
-		  qPrintable(_file->errorString()));
-}
 
 bool SubFile::seek(Handle &handle, quint32 pos) const
 {
-	Q_ASSERT(_img || _file);
-
 	if (_file)
 		return _file->seek(pos);
 	else {
@@ -54,8 +28,6 @@ bool SubFile::seek(Handle &handle, quint32 pos) const
 
 bool SubFile::readByte(Handle &handle, quint8 &val) const
 {
-	Q_ASSERT(_img || _file);
-
 	if (_file)
 		return _file->getChar((char*)&val);
 	else {
@@ -101,20 +73,3 @@ QString SubFile::fileName() const
 {
 	return _file ? _file->fileName() : _img->fileName();
 }
-
-#ifndef QT_NO_DEBUG
-QDebug operator<<(QDebug dbg, const SubFile &file)
-{
-	bool continuous = true;
-	for (int i = 1; i < file._blocks->size(); i++) {
-		if (file._blocks->at(i) != file._blocks->at(i-1) + 1) {
-			continuous = false;
-			break;
-		}
-	}
-
-	dbg.nospace() << "SubFile(" << file._blocks->size() << ", "
-	  << continuous << ")";
-	return dbg.space();
-}
-#endif // QT_NO_DEBUG

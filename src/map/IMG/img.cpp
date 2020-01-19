@@ -7,12 +7,6 @@
 
 #define CACHE_SIZE 8388608 /* 8MB */
 
-#define CHECK(condition) \
-	if (!(condition)) { \
-		_errorString = "Unsupported or invalid IMG file"; \
-		return; \
-	}
-
 struct CTX
 {
 	CTX(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
@@ -27,9 +21,37 @@ struct CTX
 	QList<IMG::Point> *points;
 };
 
+static SubFile::Type tileType(const char str[3])
+{
+	if (!memcmp(str, "TRE", 3))
+		return SubFile::TRE;
+	else if (!memcmp(str, "RGN", 3))
+		return SubFile::RGN;
+	else if (!memcmp(str, "LBL", 3))
+		return SubFile::LBL;
+	else if (!memcmp(str, "TYP", 3))
+		return SubFile::TYP;
+	else if (!memcmp(str, "GMP", 3))
+		return SubFile::GMP;
+	else if (!memcmp(str, "NET", 3))
+		return SubFile::NET;
+	else
+		return SubFile::Unknown;
+}
+
 IMG::IMG(const QString &fileName)
   : _file(fileName), _typ(0), _style(0), _valid(false)
 {
+#define CHECK(condition) \
+	if (!(condition)) { \
+		_errorString = "Unsupported or invalid IMG file"; \
+		qDeleteAll(tileMap); \
+		return; \
+	}
+
+	QMap<QString, VectorTile*> tileMap;
+	QString typFile;
+
 	if (!_file.open(QFile::ReadOnly)) {
 		_errorString = _file.errorString();
 		return;
@@ -75,19 +97,15 @@ IMG::IMG(const QString &fileName)
 	offset += 512;
 	int cnt = (size - offset) / 512;
 
-
-	QMap<QString, VectorTile*> tileMap;
-	QString typFile;
-
 	// Read FAT blocks describing the IMG sub-files
 	for (int i = 0; i < cnt; i++) {
 		quint16 block;
 		CHECK(_file.seek(offset) && readValue(flag) && read(name, sizeof(name))
 		  && read(type, sizeof(type)) && readValue(size) && readValue(part));
-		SubFile::Type tt = SubFile::type(type);
+		SubFile::Type tt = tileType(type);
 
 		QString fn(QByteArray(name, sizeof(name)));
-		if (SubFile::isTileFile(tt)) {
+		if (VectorTile::isTileFile(tt)) {
 			VectorTile *tile;
 			QMap<QString, VectorTile*>::iterator it = tileMap.find(fn);
 			if (it == tileMap.end()) {
@@ -166,7 +184,7 @@ void IMG::load()
 		_style = new Style(_typ);
 	else {
 		QFile typFile(ProgramPaths::typFile());
-		if (typFile.exists()) {
+		if (typFile.open(QIODevice::ReadOnly)) {
 			SubFile typ(&typFile);
 			_style = new Style(&typ);
 		} else

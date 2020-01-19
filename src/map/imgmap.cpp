@@ -1,5 +1,6 @@
 #include <QFile>
 #include <QPainter>
+#include <QFont>
 #include <QPixmapCache>
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #include <QtCore>

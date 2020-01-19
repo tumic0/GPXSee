@@ -1,14 +1,12 @@
 #ifndef IMG_H
 #define IMG_H
 
-#include <QRect>
 #include <QFile>
 #include <QByteArray>
 #include <QCache>
 #include <QDebug>
 #include "common/rtree.h"
 #include "common/rectc.h"
-#include "common/range.h"
 #include "style.h"
 #include "label.h"
 

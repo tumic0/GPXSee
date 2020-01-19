@@ -1,7 +1,6 @@
 #ifndef IMGMAP_H
 #define IMGMAP_H
 
-#include <QFont>
 #include "map.h"
 #include "projection.h"
 #include "transform.h"

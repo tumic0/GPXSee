@@ -22,11 +22,17 @@ public:
 		int pos;
 	};
 
-	SubFile(IMG *img) : _gmpOffset(0), _img(img), _file(0),
-	  _blocks(&_blockData) {}
+	SubFile(IMG *img)
+	  : _gmpOffset(0), _img(img), _blocks(new QVector<quint16>()), _file(0) {}
 	SubFile(SubFile *gmp, quint32 offset) : _gmpOffset(offset), _img(gmp->_img),
-	  _file(0), _blocks(&(gmp->_blockData)) {}
-	SubFile(QFile *file);
+	  _blocks(gmp->_blocks), _file(gmp->_file) {}
+	SubFile(QFile *file)
+	  : _gmpOffset(0), _img(0), _blocks(0), _file(file) {}
+	~SubFile()
+	{
+		if (!_gmpOffset)
+			delete _blocks;
+	}
 
 	void addBlock(quint16 block) {_blocks->append(block);}
 
@@ -86,27 +92,13 @@ public:
 	quint16 offset() const {return _blocks->first();}
 	QString fileName() const;
 
-	static Type type(const char str[3]);
-	static bool isTileFile(Type type)
-	{
-		return (type == TRE || type == LBL || type == RGN || type == NET
-		  || type == GMP);
-	}
-
-	friend QDebug operator<<(QDebug dbg, const SubFile &file);
-
 protected:
 	quint32 _gmpOffset;
 
 private:
 	IMG *_img;
-	QFile *_file;
 	QVector<quint16> *_blocks;
-	QVector<quint16> _blockData;
+	QFile *_file;
 };
-
-#ifndef QT_NO_DEBUG
-QDebug operator<<(QDebug dbg, const SubFile &file);
-#endif // QT_NO_DEBUG
 
 #endif // SUBFILE_H

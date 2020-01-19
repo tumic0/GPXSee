@@ -25,6 +25,13 @@ public:
 	void objects(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
 	  QList<IMG::Poly> *lines, QList<IMG::Point> *points) const;
 
+	static bool isTileFile(SubFile::Type type)
+	{
+		return (type == SubFile::TRE || type == SubFile::LBL
+		  || type == SubFile::RGN || type == SubFile::NET
+		  || type == SubFile::GMP);
+	}
+
 	friend QDebug operator<<(QDebug dbg, const VectorTile &tile);
 
 private:
