@@ -7,6 +7,8 @@
 
 #define CACHE_SIZE 8388608 /* 8MB */
 
+typedef QMap<QString, VectorTile*> TileMap;
+
 struct CTX
 {
 	CTX(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
@@ -49,7 +51,7 @@ IMG::IMG(const QString &fileName)
 		return; \
 	}
 
-	QMap<QString, VectorTile*> tileMap;
+	TileMap tileMap;
 	QString typFile;
 
 	if (!_file.open(QFile::ReadOnly)) {
@@ -77,6 +79,7 @@ IMG::IMG(const QString &fileName)
 	_name = QString::fromLatin1(nba.constData(), nba.size()-1).trimmed();
 	_blockSize = 1 << (e1 + e2);
 	_blockCache.setMaxCost(CACHE_SIZE / _blockSize);
+
 
 	// Read the FAT table
 	quint8 flag;
@@ -149,21 +152,30 @@ IMG::IMG(const QString &fileName)
 	}
 
 	// Create tile tree
-	for (QMap<QString, VectorTile*>::iterator it = tileMap.begin();
-	  it != tileMap.end(); ++it) {
-		CHECK((*it)->init());
+	for (TileMap::iterator it = tileMap.begin(); it != tileMap.end(); ++it) {
+		VectorTile *tile = it.value();
+
+		if (!tile->init()) {
+			qWarning("%s: %s: Invalid map tile", qPrintable(_file.fileName()),
+			  qPrintable(it.key()));
+			delete tile;
+			continue;
+		}
 
 		double min[2], max[2];
-		min[0] = (*it)->bounds().left();
-		min[1] = (*it)->bounds().bottom();
-		max[0] = (*it)->bounds().right();
-		max[1] = (*it)->bounds().top();
-		_tileTree.Insert(min, max, *it);
+		min[0] = tile->bounds().left();
+		min[1] = tile->bounds().bottom();
+		max[0] = tile->bounds().right();
+		max[1] = tile->bounds().top();
+		_tileTree.Insert(min, max, tile);
 
-		_bounds |= (*it)->bounds();
+		_bounds |= tile->bounds();
 	}
 
-	_valid = true;
+	if (!_tileTree.Count())
+		_errorString = "No usable map tile found";
+	else
+		_valid = true;
 }
 
 IMG::~IMG()
