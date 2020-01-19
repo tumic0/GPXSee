@@ -69,7 +69,6 @@ private:
 	bool readBlock(int blockNum, QByteArray &data);
 	qint64 read(char *data, qint64 maxSize);
 	template<class T> bool readValue(T &val);
-	bool init();
 
 	QFile _file;
 	quint8 _key;
