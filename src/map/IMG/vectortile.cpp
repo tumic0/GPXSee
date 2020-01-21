@@ -76,9 +76,11 @@ void VectorTile::objects(const RectC &rect, int bits,
 {
 	QList<SubDiv*> subdivs = _tre->subdivs(rect, bits);
 	for (int i = 0; i < subdivs.size(); i++) {
-		_rgn->objects(rect, subdivs.at(i), _lbl, _net, polygons, lines, points);
-		_rgn->extObjects(rect, subdivs.at(i), _lbl, polygons, lines,
-		  points);
+		const SubDiv *subdiv = subdivs.at(i);
+		quint32 shift = _tre->shift(subdiv->bits());
+
+		_rgn->objects(rect, subdiv, _lbl, _net, polygons, lines, points);
+		_rgn->extObjects(rect, subdiv, shift, _lbl, polygons, lines, points);
 	}
 }
 

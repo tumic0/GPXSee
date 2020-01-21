@@ -12,7 +12,9 @@ class VectorTile {
 public:
 	VectorTile() : _tre(0), _rgn(0), _lbl(0), _net(0), _gmp(0) {}
 	~VectorTile()
-	  {delete _tre; delete _rgn; delete _lbl; delete _net; delete _gmp;}
+	{
+		delete _tre; delete _rgn; delete _lbl; delete _net; delete _gmp;
+	}
 
 	bool init();
 	void clear() {_tre->clear();}

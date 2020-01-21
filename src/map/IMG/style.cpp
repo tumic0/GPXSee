@@ -294,7 +294,7 @@ static bool readBitmap(SubFile *file, SubFile::Handle &hdl, QImage &img,
 	for (int y = 0; y < img.height(); y++) {
 		for (int x = 0; x < img.width(); x += 8/bpp) {
 			quint8 color;
-			if (!file->readByte(hdl, color))
+			if (!file->readUInt8(hdl, color))
 				return false;
 
 			for (int i = 0; i < 8/bpp && x + i < img.width(); i++) {
@@ -319,8 +319,8 @@ static bool readColor(SubFile *file, SubFile::Handle &hdl, QColor &color)
 {
 	quint8 b, g, r;
 
-	if (!(file->readByte(hdl, b) && file->readByte(hdl, g)
-	  && file->readByte(hdl, r)))
+	if (!(file->readUInt8(hdl, b) && file->readUInt8(hdl, g)
+	  && file->readUInt8(hdl, r)))
 		return false;
 
 	color = qRgb(r, g, b);
@@ -333,14 +333,14 @@ static bool skipLocalization(SubFile *file, SubFile::Handle &hdl)
 	quint8 t8;
 	quint16 len;
 
-	if (!file->readByte(hdl, t8))
+	if (!file->readUInt8(hdl, t8))
 		return false;
 	len = t8;
 
 	if (len & 0x01)
 		len = len >> 1;
 	else {
-		if (!file->readByte(hdl, t8))
+		if (!file->readUInt8(hdl, t8))
 			return false;
 		len = (((quint16)t8) << 8) | len;
 		len = len >> 2;
@@ -361,7 +361,7 @@ bool Style::itemInfo(SubFile *file, SubFile::Handle &hdl,
 
 	if (section.arrayItemSize == 5) {
 		if (!(file->readUInt16(hdl, t16_1) && file->readUInt16(hdl, t16_2)
-		  && file->readByte(hdl, t8)))
+		  && file->readUInt8(hdl, t8)))
 			return false;
 		info.offset = t16_2 | (t8<<16);
 	} else if (section.arrayItemSize == 4) {
@@ -369,7 +369,7 @@ bool Style::itemInfo(SubFile *file, SubFile::Handle &hdl,
 			return false;
 		info.offset = t16_2;
 	} else if (section.arrayItemSize == 3) {
-		if (!(file->readUInt16(hdl, t16_1) && file->readByte(hdl, t8)))
+		if (!(file->readUInt16(hdl, t16_1) && file->readUInt8(hdl, t8)))
 			return false;
 		info.offset = t8;
 	} else
@@ -400,7 +400,7 @@ bool Style::parsePolygons(SubFile *file, SubFile::Handle &hdl,
 
 		quint8 t8, flags;
 		if (!(file->seek(hdl, section.offset + info.offset)
-		  && file->readByte(hdl, t8)))
+		  && file->readUInt8(hdl, t8)))
 			return false;
 		flags = t8 & 0x0F;
 
@@ -516,7 +516,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 		quint8 t8_1, t8_2, flags, rows;
 		if (!(file->seek(hdl, section.offset + info.offset)
-		  && file->readByte(hdl, t8_1) && file->readByte(hdl, t8_2)))
+		  && file->readUInt8(hdl, t8_1) && file->readUInt8(hdl, t8_2)))
 			return false;
 		flags = t8_1 & 0x07;
 		rows = t8_1 >> 3;
@@ -541,7 +541,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 					_lines[type] = Style::Line(img);
 				} else {
-					if (!(file->readByte(hdl, w1) && file->readByte(hdl, w2)))
+					if (!(file->readUInt8(hdl, w1) && file->readUInt8(hdl, w2)))
 						return false;
 
 					_lines[type] = (w2 > w1)
@@ -568,7 +568,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 					_lines[type] = Style::Line(img);
 				} else {
-					if (!(file->readByte(hdl, w1) && file->readByte(hdl, w2)))
+					if (!(file->readUInt8(hdl, w1) && file->readUInt8(hdl, w2)))
 						return false;
 
 					_lines[type] = (w2 > w1)
@@ -595,7 +595,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 					_lines[type] = Style::Line(img);
 				} else {
-					if (!(file->readByte(hdl, w1) && file->readByte(hdl, w2)))
+					if (!(file->readUInt8(hdl, w1) && file->readUInt8(hdl, w2)))
 						return false;
 
 					_lines[type] = Style::Line(QPen(c1, w1, Qt::SolidLine,
@@ -618,7 +618,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 					_lines[type] = Style::Line(img);
 				} else {
-					if (!(file->readByte(hdl, w1) && file->readByte(hdl, w2)))
+					if (!(file->readUInt8(hdl, w1) && file->readUInt8(hdl, w2)))
 						return false;
 
 					_lines[type] = (w2 > w1)
@@ -644,7 +644,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 					_lines[type] = Style::Line(img);
 				} else {
-					if (!file->readByte(hdl, w1))
+					if (!file->readUInt8(hdl, w1))
 						return false;
 
 					_lines[type] = Style::Line(QPen(c1, w1, Qt::SolidLine,
@@ -666,7 +666,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 					_lines[type] = Style::Line(img);
 				} else {
-					if (!file->readByte(hdl, w1))
+					if (!file->readUInt8(hdl, w1))
 						return false;
 
 					_lines[type] = Style::Line(QPen(c1, w1, Qt::SolidLine,
@@ -689,7 +689,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 		if (textColor) {
 			quint8 labelFlags;
-			if (!file->readByte(hdl, labelFlags))
+			if (!file->readUInt8(hdl, labelFlags))
 				return false;
 			if (labelFlags & 0x08) {
 				if (!readColor(file, hdl, c1))
@@ -751,7 +751,7 @@ static bool readColorTable(SubFile *file, SubFile::Handle &hdl, QImage& img,
 
 		for (int i = 0; i < colors; i++) {
 			while (bits < 28) {
-				if (!file->readByte(hdl, byte))
+				if (!file->readUInt8(hdl, byte))
 					return false;
 
 				mask = 0x000000FF << bits;
@@ -801,9 +801,9 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 
 		quint8 t8_1, width, height, numColors, imgType;
 		if (!(file->seek(hdl, section.offset + info.offset)
-		  && file->readByte(hdl, t8_1) && file->readByte(hdl, width)
-		  && file->readByte(hdl, height) && file->readByte(hdl, numColors)
-		  && file->readByte(hdl, imgType)))
+		  && file->readUInt8(hdl, t8_1) && file->readUInt8(hdl, width)
+		  && file->readUInt8(hdl, height) && file->readUInt8(hdl, numColors)
+		  && file->readUInt8(hdl, imgType)))
 			return false;
 
 		bool localization = t8_1 & 0x04;
@@ -820,8 +820,8 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 		_points[type] = Point(img);
 
 		if (t8_1 == 0x03) {
-			if (!(file->readByte(hdl, numColors)
-			  && file->readByte(hdl, imgType)))
+			if (!(file->readUInt8(hdl, numColors)
+			  && file->readUInt8(hdl, imgType)))
 				return false;
 			if ((bpp = colors2bpp(numColors, imgType)) < 0)
 				continue;
@@ -830,8 +830,8 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 			if (!readBitmap(file, hdl, img, bpp))
 				return false;
 		} else if (t8_1 == 0x02) {
-			if (!(file->readByte(hdl, numColors)
-			  && file->readByte(hdl, imgType)))
+			if (!(file->readUInt8(hdl, numColors)
+			  && file->readUInt8(hdl, imgType)))
 				return false;
 			if ((bpp = colors2bpp(numColors, imgType)) < 0)
 				continue;
@@ -845,7 +845,7 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 		if (textColor) {
 			quint8 labelFlags;
 			QColor color;
-			if (!file->readByte(hdl, labelFlags))
+			if (!file->readUInt8(hdl, labelFlags))
 				return false;
 			if (labelFlags & 0x08) {
 				if (!readColor(file, hdl, color))
@@ -874,7 +874,7 @@ bool Style::parseDrawOrder(SubFile *file, SubFile::Handle &hdl,
 		quint8 type;
 		quint32 subtype;
 
-		if (!(file->readByte(hdl, type) && file->readUInt32(hdl, subtype)))
+		if (!(file->readUInt8(hdl, type) && file->readUInt32(hdl, subtype)))
 			return false;
 
 		if (!subtype)
@@ -944,6 +944,9 @@ Style::Style(SubFile *typ)
 
 	if (typ)
 		parseTYPFile(typ);
+
+	// Override stuff breaking the style display logic
+	_points[0x11400] = Point(None);
 }
 
 const Style::Line &Style::line(quint32 type) const
@@ -973,7 +976,8 @@ const Style::Point &Style::point(quint32 type) const
 bool Style::isContourLine(quint32 type)
 {
 	return (type == TYPE(0x20) || type == TYPE(0x21) || type == TYPE(0x22)
-	  || type == TYPE(0x23) || type == TYPE(0x24) || type == TYPE(0x25));
+	  || type == TYPE(0x23) || type == TYPE(0x24) || type == TYPE(0x25)
+	  || (type & 0xffff00) == TYPE(0x109));
 }
 
 bool Style::isSpot(quint32 type)
@@ -1039,6 +1043,13 @@ QDebug operator<<(QDebug dbg, const Style::Line &line)
 {
 	dbg.nospace() << "Line(" << penColor(line.foreground()) << ", "
 	  << penColor(line.background()) << ", " << !line.img().isNull() << ")";
+	return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const Style::Point &point)
+{
+	dbg.nospace() << "Point(" << point.textFontSize() << ", "
+	  << point.textColor() << ", " << !point.img().isNull() << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG

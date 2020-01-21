@@ -3,9 +3,11 @@
 bool NETFile::init(Handle &hdl)
 {
 	quint8 multiplier;
+	quint16 hdrLen;
 
-	if (!(seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _offset)
-	  && readUInt32(hdl, _size) && readByte(hdl, multiplier)))
+	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)
+	  && seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _offset)
+	  && readUInt32(hdl, _size) && readUInt8(hdl, multiplier)))
 		return false;
 
 	_multiplier = 1<<multiplier;

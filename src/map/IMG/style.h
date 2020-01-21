@@ -80,6 +80,8 @@ public:
 	class Point {
 	public:
 		Point() : _textFontSize(NotSet) {}
+		Point(FontSize fontSize, const QColor &textColor = QColor())
+		  : _textColor(textColor), _textFontSize(fontSize) {}
 		Point(const QImage &img) : _textFontSize(NotSet), _img(img) {}
 
 		void setTextColor(const QColor &color) {_textColor = color;}
@@ -149,6 +151,7 @@ private:
 #ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Style::Polygon &polygon);
 QDebug operator<<(QDebug dbg, const Style::Line &line);
+QDebug operator<<(QDebug dbg, const Style::Point &point);
 #endif // QT_NO_DEBUG
 
 #endif // STYLE_H

@@ -44,7 +44,7 @@ bool TREFile::init()
 	quint16 hdrLen;
 
 	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)
-	  && seek(hdl, _gmpOffset + 0x0D) && readByte(hdl, locked)))
+	  && seek(hdl, _gmpOffset + 0x0D) && readUInt8(hdl, locked)))
 		return false;
 
 	// Tile bounds
@@ -62,11 +62,14 @@ bool TREFile::init()
 	  && readUInt32(hdl, subdivSize)))
 		return false;
 
-	// TRE7 info
 	if (hdrLen > 0x9A) {
+		// TRE7 info
 		if (!(seek(hdl, _gmpOffset + 0x7C) && readUInt32(hdl, _extended.offset)
 		  && readUInt32(hdl, _extended.size)
 		  && readUInt16(hdl, _extended.itemSize)))
+			return false;
+		// flags
+		if (!(seek(hdl, _gmpOffset + 0x86) && readUInt32(hdl, _flags)))
 			return false;
 	}
 
@@ -75,7 +78,7 @@ bool TREFile::init()
 		return false;
 	quint8 levels[64];
 	for (quint32 i = 0; i < levelsSize; i++)
-		if (!readByte(hdl, levels[i]))
+		if (!readUInt8(hdl, levels[i]))
 			return false;
 	if (locked) {
 		quint32 key;
@@ -126,15 +129,16 @@ bool TREFile::load(int idx)
 		return false;
 
 	for (int j = 0; j < _levels.at(idx).subdivs; j++) {
-		quint32 offset;
+		quint32 oo;
 		qint32 lon, lat;
-		quint8 objects;
 		quint16 width, height, nextLevel;
 
-		if (!(readUInt24(hdl, offset) && readByte(hdl, objects)
-		  && readInt24(hdl, lon) && readInt24(hdl, lat)
+		if (!(readUInt32(hdl, oo) && readInt24(hdl, lon) && readInt24(hdl, lat)
 		  && readUInt16(hdl, width) && readUInt16(hdl, height)))
 			goto error;
+		quint32 offset = oo & 0xfffffff;
+		quint8 objects = (((qint16)height < 0) << 4) | (oo >> 0x1c);
+
 		if (idx != _levels.size() - 1)
 			if (!readUInt16(hdl, nextLevel))
 				goto error;
@@ -145,6 +149,7 @@ bool TREFile::load(int idx)
 		width &= 0x7FFF;
 		width <<= (24 - _levels.at(idx).bits);
 		height <<= (24 - _levels.at(idx).bits);
+
 
 		s = new SubDiv(offset, lon, lat, _levels.at(idx).bits, objects);
 		sl.append(s);

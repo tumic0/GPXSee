@@ -4,8 +4,8 @@
 #include <QVector>
 #include <QDebug>
 
-class IMG;
 class QFile;
+class IMG;
 
 class SubFile
 {
@@ -37,9 +37,19 @@ public:
 	void addBlock(quint16 block) {_blocks->append(block);}
 
 	bool seek(Handle &handle, quint32 pos) const;
-	bool readByte(Handle &handle, quint8 &val) const;
 
-	bool readUInt16(Handle &handle, quint16 &val) const
+	template<typename T>
+	bool readUInt8(Handle &handle, T &val) const
+	{
+		quint8 b;
+		if (!readByte(handle, b))
+			return false;
+		val = b;
+		return true;
+	}
+
+	template<typename T>
+	bool readUInt16(Handle &handle, T &val) const
 	{
 		quint8 b0, b1;
 		if (!(readByte(handle, b0) && readByte(handle, b1)))
@@ -88,6 +98,8 @@ public:
 	}
 
 	bool readVUInt32(Handle &hdl, quint32 &val) const;
+	bool readVUInt32SW(Handle &hdl, quint32 bytes, quint32 &val) const;
+	bool readVBitfield32(Handle &hdl, quint32 &bitfield) const;
 
 	quint16 offset() const {return _blocks->first();}
 	QString fileName() const;
@@ -96,6 +108,8 @@ protected:
 	quint32 _gmpOffset;
 
 private:
+	bool readByte(Handle &handle, quint8 &val) const;
+
 	IMG *_img;
 	QVector<quint16> *_blocks;
 	QFile *_file;

@@ -15,8 +15,7 @@ public:
 private:
 	bool init(Handle &hdl);
 
-	quint32 _offset;
-	quint32 _size;
+	quint32 _offset, _size;
 	quint8 _multiplier;
 };
 

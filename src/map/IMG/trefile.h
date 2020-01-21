@@ -22,6 +22,8 @@ public:
 
 	const RectC &bounds() const {return _bounds;}
 	QList<SubDiv*> subdivs(const RectC &rect, int bits);
+	quint32 shift(quint8 bits) const
+	  {return (bits == _levels.last().bits) ? (_flags >> 0xb) & 7 : 0;}
 
 private:
 	struct MapLevel {
@@ -51,6 +53,7 @@ private:
 	quint32 _subdivOffset;
 	Extended _extended;
 	int _firstLevel;
+	quint32 _flags;
 
 	QMap<int, SubDivTree*> _subdivs;
 };

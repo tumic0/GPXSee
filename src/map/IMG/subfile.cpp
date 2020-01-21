@@ -69,6 +69,49 @@ bool SubFile::readVUInt32(Handle &hdl, quint32 &val) const
 	return true;
 }
 
+bool SubFile::readVUInt32SW(Handle &hdl, quint32 bytes, quint32 &val) const
+{
+	quint8 b;
+
+	val = 0;
+	for (quint32 i = bytes; i; i--) {
+		if (!readByte(hdl, b))
+			return false;
+		val |= ((quint32)b) << ((i-1) * 8);
+	}
+
+	return true;
+}
+
+bool SubFile::readVBitfield32(Handle &hdl, quint32 &bitfield) const
+{
+	quint8 bits;
+
+	if (!readUInt8(hdl, bits))
+		return false;
+
+	if (!(bits & 1)) {
+		seek(hdl, hdl.pos - 1);
+		if (!((bits>>1) & 1)) {
+			if (!((bits>>2) & 1)) {
+				if (!readUInt32(hdl, bitfield))
+					return false;
+			} else {
+				if (!readUInt24(hdl, bitfield))
+					return false;
+			}
+			bitfield >>= 3;
+		} else {
+			if (!readUInt16(hdl, bitfield))
+				return false;
+			bitfield >>= 2;
+		}
+	} else
+		bitfield = bits>>1;
+
+	return true;
+}
+
 QString SubFile::fileName() const
 {
 	return _file ? _file->fileName() : _img->fileName();
