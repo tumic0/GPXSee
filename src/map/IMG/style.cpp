@@ -990,12 +990,6 @@ bool Style::isMilitaryArea(quint32 type)
 	return (type == TYPE(0x04));
 }
 
-bool Style::isInfrastructureArea(quint32 type)
-{
-	return ((type >= TYPE(0x07) && type <= TYPE(0xc)) || type == TYPE(0x13)
-	  || type == TYPE(0x1a) || type == TYPE(0x19));
-}
-
 bool Style::isSpot(quint32 type)
 {
 	return (type == TYPE(0x62) || type == TYPE(0x63));
@@ -1009,6 +1003,11 @@ bool Style::isSummit(quint32 type)
 bool Style::isMajorRoad(quint32 type)
 {
 	return (type <= TYPE(0x04));
+}
+
+bool Style::isWaterAreaPOI(quint32 type)
+{
+	return (type == 0x6603);
 }
 
 Style::POIClass Style::poiClass(quint32 type)

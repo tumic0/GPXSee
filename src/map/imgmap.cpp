@@ -391,8 +391,7 @@ void IMGMap::processPolygons(QList<IMG::Poly> &polygons,
 		if (poly.label.text().isEmpty())
 			continue;
 
-		if (Style::isWaterArea(poly.type) || Style::isMilitaryArea(poly.type)
-		  || Style::isInfrastructureArea(poly.type)) {
+		if (Style::isWaterArea(poly.type) || Style::isMilitaryArea(poly.type)) {
 			const Style::Polygon &style = _img.style()->polygon(poly.type);
 			TextPointItem *item = new TextPointItem(
 			  centroid(poly.points).toPoint(), &poly.label.text(),
@@ -526,7 +525,8 @@ void IMGMap::processPoints(QList<IMG::Point> &points,
 		IMG::Point &point = points[i];
 		const Style::Point &style = _img.style()->point(point.type);
 
-		if (point.poi && _zoom < minPOIZoom(Style::poiClass(point.type)))
+		if (point.poi && (_zoom < minPOIZoom(Style::poiClass(point.type))
+		  || Style::isWaterAreaPOI(point.type)))
 			continue;
 
 		const QString *label = point.label.text().isEmpty()
