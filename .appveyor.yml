@@ -1,4 +1,4 @@
-version: 7.19.{build}
+version: 7.20.{build}
 configuration: Release
 platform: Any CPU
 environment:
