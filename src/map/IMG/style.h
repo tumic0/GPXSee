@@ -47,6 +47,7 @@ public:
 	private:
 		QBrush _brush;
 		QPen _pen;
+		QColor _textColor;
 	};
 
 	class Line {
@@ -109,6 +110,9 @@ public:
 	static bool isSpot(quint32 type);
 	static bool isSummit(quint32 type);
 	static bool isMajorRoad(quint32 type);
+	static bool isWaterArea(quint32 type);
+	static bool isMilitaryArea(quint32 type);
+	static bool isInfrastructureArea(quint32 type);
 	static POIClass poiClass(quint32 type);
 
 private:

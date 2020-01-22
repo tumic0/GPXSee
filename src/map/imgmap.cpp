@@ -43,10 +43,10 @@ public:
 	{
 		QList<TextItem*> textItems;
 
-		_map->processPolygons(_polygons);
+		QRect tileRect(_xy, QSize(TILE_SIZE, TILE_SIZE));
+		_map->processPolygons(_polygons, textItems);
 		_map->processPoints(_points, textItems);
-		_map->processLines(_lines, QRect(_xy, QSize(TILE_SIZE, TILE_SIZE)),
-		  textItems);
+		_map->processLines(_lines, tileRect, textItems);
 
 		_img.fill(Qt::transparent);
 
@@ -186,6 +186,49 @@ static int minShieldZoom(Label::Shield::Type type)
 	}
 }
 
+static qreal area(const QVector<QPointF> &polygon)
+{
+	qreal area = 0;
+
+	for (int i = 0; i < polygon.size(); i++) {
+		int j = (i + 1) % polygon.size();
+		area += polygon.at(i).x() * polygon.at(j).y();
+		area -= polygon.at(i).y() * polygon.at(j).x();
+	}
+	area /= 2.0;
+
+   return area;
+}
+
+static QPointF centroid(const QVector<QPointF> polygon)
+{
+	qreal cx = 0, cy = 0, factor = 0;
+	qreal A = area(polygon);
+
+	for (int i = 0; i < polygon.size(); i++) {
+		int j = (i + 1) % polygon.size();
+		factor=(polygon.at(i).x() * polygon.at(j).y() - polygon[j].x()
+		  * polygon[i].y());
+		cx+=(polygon[i].x() + polygon[j].x()) * factor;
+		cy+=(polygon[i].y() + polygon[j].y()) * factor;
+	}
+
+	A *= 6.0f;
+	factor = 1/A;
+	cx *= factor;
+	cy *= factor;
+
+	return QPointF(cx, cy);
+}
+
+static bool rectNearPolygon(const QPolygonF &polygon, const QRectF &rect)
+{
+	return (polygon.boundingRect().contains(rect)
+	  && (polygon.containsPoint(rect.topLeft(), Qt::OddEvenFill)
+	  || polygon.containsPoint(rect.topRight(), Qt::OddEvenFill)
+	  || polygon.containsPoint(rect.bottomLeft(), Qt::OddEvenFill)
+	  || polygon.containsPoint(rect.bottomRight(), Qt::OddEvenFill)));
+}
 
 IMGMap::IMGMap(const QString &fileName, QObject *parent)
   : Map(parent), _img(fileName), _projection(PCS::pcs(3857)), _valid(false)
@@ -335,13 +378,30 @@ void IMGMap::drawTextItems(QPainter *painter, const QList<TextItem*> &textItems)
 }
 
 
-void IMGMap::processPolygons(QList<IMG::Poly> &polygons)
+void IMGMap::processPolygons(QList<IMG::Poly> &polygons,
+  QList<TextItem*> &textItems)
 {
 	for (int i = 0; i < polygons.size(); i++) {
 		IMG::Poly &poly = polygons[i];
 		for (int j = 0; j < poly.points.size(); j++) {
 			QPointF &p = poly.points[j];
 			p = ll2xy(Coordinates(p.x(), p.y()));
+		}
+
+		if (poly.label.text().isEmpty())
+			continue;
+
+		if (Style::isWaterArea(poly.type) || Style::isMilitaryArea(poly.type)
+		  || Style::isInfrastructureArea(poly.type)) {
+			const Style::Polygon &style = _img.style()->polygon(poly.type);
+			TextPointItem *item = new TextPointItem(
+			  centroid(poly.points).toPoint(), &poly.label.text(),
+			  poiFont(), 0, &style.brush().color(), 0);
+			if (item->isValid() && !item->collides(textItems)
+			  && rectNearPolygon(poly.points, item->boundingRect()))
+				textItems.append(item);
+			else
+				delete item;
 		}
 	}
 }

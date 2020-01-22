@@ -33,7 +33,7 @@ void Style::defaultPolygonStyle()
 	  Qt::BDiagPattern));
 	_polygons[TYPE(0x17)] = Style::Polygon(QBrush("#d4ebb8"));
 	_polygons[TYPE(0x18)] = Style::Polygon(QBrush("#d4ebb8"));
-	_polygons[TYPE(0x19)] = Style::Polygon(QBrush("#d6d4ce"));
+	_polygons[TYPE(0x19)] = Style::Polygon(QBrush("#e3edc6"), QPen("#c9d3a5"));
 	_polygons[TYPE(0x1a)] = Style::Polygon(QBrush("#000000", Qt::Dense6Pattern),
 	  QPen(QColor("#cdccc4"), 1));
 	_polygons[TYPE(0x1e)] = Style::Polygon(QBrush(QColor("#9ac269"),
@@ -978,6 +978,22 @@ bool Style::isContourLine(quint32 type)
 	return (type == TYPE(0x20) || type == TYPE(0x21) || type == TYPE(0x22)
 	  || type == TYPE(0x23) || type == TYPE(0x24) || type == TYPE(0x25)
 	  || (type & 0xffff00) == TYPE(0x109));
+}
+
+bool Style::isWaterArea(quint32 type)
+{
+	return (type >= TYPE(0x3c) && type <= TYPE(0x44));
+}
+
+bool Style::isMilitaryArea(quint32 type)
+{
+	return (type == TYPE(0x04));
+}
+
+bool Style::isInfrastructureArea(quint32 type)
+{
+	return ((type >= TYPE(0x07) && type <= TYPE(0xc)) || type == TYPE(0x13)
+	  || type == TYPE(0x1a) || type == TYPE(0x19));
 }
 
 bool Style::isSpot(quint32 type)

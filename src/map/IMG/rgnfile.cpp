@@ -118,7 +118,7 @@ bool RGNFile::init(Handle &hdl)
 
 bool RGNFile::polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
   const Segment &segment, LBLFile *lbl, Handle &lblHdl, NETFile *net,
-  Handle &netHdl, QList<IMG::Poly> *polys, bool line) const
+  Handle &netHdl, QList<IMG::Poly> *polys) const
 {
 	if (!seek(hdl, segment.start()))
 		return false;
@@ -172,7 +172,7 @@ bool RGNFile::polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
 		if (!rect.intersects(br))
 			continue;
 
-		if (line && lbl && (labelPtr & 0x3FFFFF)) {
+		if (lbl && (labelPtr & 0x3FFFFF)) {
 			if (labelPtr & 0x800000) {
 				quint32 lblOff;
 				if (net && net->lblOffset(netHdl, labelPtr & 0x3FFFFF, lblOff)
@@ -278,7 +278,7 @@ bool RGNFile::extPolyObjects(const RectC &rect, Handle &hdl,
 		if (!rect.intersects(br))
 			continue;
 
-		if (line && lbl && (labelPtr & 0x3FFFFF))
+		if (lbl && (labelPtr & 0x3FFFFF))
 			poly.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
 
 		polys->append(poly);
@@ -409,12 +409,12 @@ void RGNFile::objects(const RectC &rect, const SubDiv *subdiv,
 			case Segment::Line:
 				if (lines)
 					polyObjects(rect, rgnHdl, subdiv, segment, lbl, lblHdl, net,
-					  netHdl, lines, true);
+					  netHdl, lines);
 				break;
 			case Segment::Polygon:
 				if (polygons)
 					polyObjects(rect, rgnHdl, subdiv, segment, lbl, lblHdl, net,
-					  netHdl, polygons, false);
+					  netHdl, polygons);
 				break;
 			case Segment::RoadReference:
 				break;

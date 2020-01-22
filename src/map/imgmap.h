@@ -47,7 +47,8 @@ private:
 	void drawLines(QPainter *painter, const QList<IMG::Poly> &lines);
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
 
-	void processPolygons(QList<IMG::Poly> &polygons);
+	void processPolygons(QList<IMG::Poly> &polygons,
+	  QList<TextItem *> &textItems);
 	void processLines(QList<IMG::Poly> &lines, const QRect &tileRect,
 	  QList<TextItem*> &textItems);
 	void processPoints(QList<IMG::Point> &points, QList<TextItem*> &textItems);
