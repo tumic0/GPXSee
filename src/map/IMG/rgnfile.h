@@ -62,7 +62,7 @@ private:
 	QVector<Segment> segments(Handle &hdl, const SubDiv *subdiv) const;
 	bool polyObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
 	  const Segment &segment, LBLFile *lbl, Handle &lblHdl, NETFile *net,
-	  Handle &netHdl, QList<IMG::Poly> *polys) const;
+	  Handle &netHdl, QList<IMG::Poly> *polys, bool line) const;
 	bool pointObjects(const RectC &rect, Handle &hdl, const SubDiv *subdiv,
 	  const Segment &segment, LBLFile *lbl, Handle &lblHdl,
 	  QList<IMG::Point> *points) const;
