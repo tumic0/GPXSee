@@ -451,11 +451,11 @@ void GUI::createActions()
 	_degreesMinutesAction->setActionGroup(ag);
 	connect(_degreesMinutesAction, SIGNAL(triggered()), this,
 	  SLOT(setDegreesMinutes()));
-	_DMSAction = new QAction(tr("Degrees, minutes, seconds (DMS)"), this);
-	_DMSAction->setMenuRole(QAction::NoRole);
-	_DMSAction->setCheckable(true);
-	_DMSAction->setActionGroup(ag);
-	connect(_DMSAction, SIGNAL(triggered()), this, SLOT(setDMS()));
+	_dmsAction = new QAction(tr("Degrees, minutes, seconds (DMS)"), this);
+	_dmsAction->setMenuRole(QAction::NoRole);
+	_dmsAction->setCheckable(true);
+	_dmsAction->setActionGroup(ag);
+	connect(_dmsAction, SIGNAL(triggered()), this, SLOT(setDMS()));
 	_fullscreenAction = new QAction(QIcon(FULLSCREEN_ICON),
 	  tr("Fullscreen mode"), this);
 	_fullscreenAction->setMenuRole(QAction::NoRole);
@@ -559,7 +559,7 @@ void GUI::createMenus()
 	QMenu *coordinatesMenu = settingsMenu->addMenu(tr("Coordinates format"));
 	coordinatesMenu->addAction(_decimalDegreesAction);
 	coordinatesMenu->addAction(_degreesMinutesAction);
-	coordinatesMenu->addAction(_DMSAction);
+	coordinatesMenu->addAction(_dmsAction);
 	settingsMenu->addSeparator();
 	settingsMenu->addAction(_showToolbarsAction);
 	settingsMenu->addAction(_fullscreenAction);
@@ -1655,7 +1655,7 @@ void GUI::writeSettings()
 	  : _nauticalUnitsAction->isChecked() ? Nautical : Metric;
 	if (units != UNITS_DEFAULT)
 		settings.setValue(UNITS_SETTING, units);
-	CoordinatesFormat format = _DMSAction->isChecked() ? DMS
+	CoordinatesFormat format = _dmsAction->isChecked() ? DMS
 	  : _degreesMinutesAction->isChecked() ? DegreesMinutes : DecimalDegrees;
 	if (format != COORDINATES_DEFAULT)
 		settings.setValue(COORDINATES_SETTING, format);
@@ -1879,7 +1879,7 @@ void GUI::readSettings()
 
 	value = settings.value(COORDINATES_SETTING, COORDINATES_DEFAULT).toInt();
 	if (value == DMS)
-		_DMSAction->trigger();
+		_dmsAction->trigger();
 	else if (value == DegreesMinutes)
 		_degreesMinutesAction->trigger();
 	else

@@ -8,7 +8,7 @@
 ObliqueStereographic::ObliqueStereographic(const Ellipsoid *ellipsoid,
   double latitudeOrigin, double longitudeOrigin, double scale,
   double falseEasting, double falseNorthing)
-  : _FE(falseEasting), _FN(falseNorthing)
+  : _fe(falseEasting), _fn(falseNorthing)
 {
 	double lat0 = deg2rad(latitudeOrigin);
 	double sinPhi0 = sin(lat0);
@@ -48,17 +48,17 @@ PointD ObliqueStereographic::ll2xy(const Coordinates &c) const
 	double B = (1.0 + sin(chi) * _sinChi0 + cos(chi) * _cosChi0
 	  * cos(lambda - _lambda0));
 
-	return PointD(_FE + _twoRk0 * cos(chi) * sin(lambda - _lambda0) / B,
-	  _FN + _twoRk0 * (sin(chi) * _cosChi0 - cos(chi) * _sinChi0
+	return PointD(_fe + _twoRk0 * cos(chi) * sin(lambda - _lambda0) / B,
+	  _fn + _twoRk0 * (sin(chi) * _cosChi0 - cos(chi) * _sinChi0
 	  * cos(lambda - _lambda0)) / B);
 }
 
 Coordinates ObliqueStereographic::xy2ll(const PointD &p) const
 {
-	double i = atan((p.x() - _FE) / (_h + (p.y() - _FN)));
-	double j = atan((p.x() - _FE) / (_g - (p.y() - _FN))) - i;
+	double i = atan((p.x() - _fe) / (_h + (p.y() - _fn)));
+	double j = atan((p.x() - _fe) / (_g - (p.y() - _fn))) - i;
 
-	double chi = _chi0 + 2.0 * atan(((p.y() - _FN) - (p.x() - _FE) * tan(j/2.0))
+	double chi = _chi0 + 2.0 * atan(((p.y() - _fn) - (p.x() - _fe) * tan(j/2.0))
 	  / _twoRk0);
 	double lambda = j + 2.0 * i + _lambda0;
 

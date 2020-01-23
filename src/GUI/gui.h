@@ -180,7 +180,7 @@ private:
 	QAction *_nauticalUnitsAction;
 	QAction *_decimalDegreesAction;
 	QAction *_degreesMinutesAction;
-	QAction *_DMSAction;
+	QAction *_dmsAction;
 	QAction *_totalTimeAction;
 	QAction *_movingTimeAction;
 	QAction *_nextMapAction;

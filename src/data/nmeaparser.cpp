@@ -227,7 +227,8 @@ bool NMEAParser::readEW(const char *data, int len, qreal &lon)
 	return true;
 }
 
-bool NMEAParser::readRMC(SegmentData &segment, const char *line, int len)
+bool NMEAParser::readRMC(CTX &ctx, const char *line, int len,
+  SegmentData &segment)
 {
 	int col = 1;
 	const char *vp = line;
@@ -280,23 +281,24 @@ bool NMEAParser::readRMC(SegmentData &segment, const char *line, int len)
 	}
 
 	if (!date.isNull()) {
-		if (_date.isNull() && !_time.isNull() && !segment.isEmpty())
-			segment.last().setTimestamp(QDateTime(date, _time, Qt::UTC));
-		_date = date;
+		if (ctx.date.isNull() && !ctx.time.isNull() && !segment.isEmpty())
+			segment.last().setTimestamp(QDateTime(date, ctx.time, Qt::UTC));
+		ctx.date = date;
 	}
 
 	Coordinates c(lon, lat);
-	if (valid && !_GGA && c.isValid()) {
+	if (valid && !ctx.GGA && c.isValid()) {
 		Trackpoint t(c);
-		if (!_date.isNull() && !time.isNull())
-			t.setTimestamp(QDateTime(_date, time, Qt::UTC));
+		if (!ctx.date.isNull() && !time.isNull())
+			t.setTimestamp(QDateTime(ctx.date, time, Qt::UTC));
 		segment.append(t);
 	}
 
 	return true;
 }
 
-bool NMEAParser::readGGA(SegmentData &segment, const char *line, int len)
+bool NMEAParser::readGGA(CTX &ctx, const char *line, int len,
+  SegmentData &segment)
 {
 	int col = 1;
 	const char *vp = line;
@@ -306,7 +308,7 @@ bool NMEAParser::readGGA(SegmentData &segment, const char *line, int len)
 		if (*lp == ',' || *lp == '*') {
 			switch (col) {
 				case 1:
-					if (!readTime(vp, lp - vp, _time))
+					if (!readTime(vp, lp - vp, ctx.time))
 						return false;
 					break;
 				case 2:
@@ -360,19 +362,19 @@ bool NMEAParser::readGGA(SegmentData &segment, const char *line, int len)
 	Coordinates c(lon, lat);
 	if (c.isValid()) {
 		Trackpoint t(c);
-		if (!(_time.isNull() || _date.isNull()))
-			t.setTimestamp(QDateTime(_date, _time, Qt::UTC));
+		if (!(ctx.time.isNull() || ctx.date.isNull()))
+			t.setTimestamp(QDateTime(ctx.date, ctx.time, Qt::UTC));
 		if (!std::isnan(ele))
 			t.setElevation(ele - gh);
 		segment.append(t);
 
-		_GGA = true;
+		ctx.GGA = true;
 	}
 
 	return true;
 }
 
-bool NMEAParser::readWPL(QVector<Waypoint> &waypoints, const char *line, int len)
+bool NMEAParser::readWPL(const char *line, int len, QVector<Waypoint> &waypoints)
 {
 	int col = 1;
 	const char *vp = line;
@@ -423,7 +425,7 @@ bool NMEAParser::readWPL(QVector<Waypoint> &waypoints, const char *line, int len
 	return true;
 }
 
-bool NMEAParser::readZDA(const char *line, int len)
+bool NMEAParser::readZDA(CTX &ctx, const char *line, int len)
 {
 	int col = 1;
 	const char *vp = line;
@@ -468,8 +470,8 @@ bool NMEAParser::readZDA(const char *line, int len)
 		return false;
 	}
 
-	_date = QDate(y, m, d);
-	if (!_date.isValid()) {
+	ctx.date = QDate(y, m, d);
+	if (!ctx.date.isValid()) {
 		_errorString = "Invalid date";
 		return false;
 	}
@@ -486,13 +488,11 @@ bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
 	qint64 len;
 	char line[80 + 2 + 1 + 1];
 	SegmentData segment;
+	CTX ctx;
 
 
 	_errorLine = 1;
 	_errorString.clear();
-	_date = QDate();
-	_time = QTime();
-	_GGA = false;
 
 	while (!file->atEnd()) {
 		len = file->readLine(line, sizeof(line));
@@ -507,16 +507,16 @@ bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
 
 		if (validSentence(line, len)) {
 			if (!memcmp(line + 3, "RMC,", 4)) {
-				if (!readRMC(segment, line + 7, len - 7))
+				if (!readRMC(ctx, line + 7, len - 7, segment))
 					return false;
 			} else if (!memcmp(line + 3, "GGA,", 4)) {
-				if (!readGGA(segment, line + 7, len - 7))
+				if (!readGGA(ctx, line + 7, len - 7, segment))
 					return false;
 			} else if (!memcmp(line + 3, "WPL,", 4)) {
-				if (!readWPL(waypoints, line + 7, len - 7))
+				if (!readWPL(line + 7, len - 7, waypoints))
 					return false;
 			} else if (!memcmp(line + 3, "ZDA,", 4)) {
-				if (!readZDA(line + 7, len - 7))
+				if (!readZDA(ctx, line + 7, len - 7))
 					return false;
 			}
 		}

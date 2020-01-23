@@ -25,7 +25,7 @@ private:
 
 	double _a2;
 	double _rho0;
-	double _C;
+	double _c;
 	double _n;
 	double _e;
 	double _es;

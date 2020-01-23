@@ -18,8 +18,8 @@ public:
 	virtual Coordinates xy2ll(const PointD &p) const;
 
 private:
-	double _e, _A, _B, _t0, _n, _r0, _phiP;
-	double _cosAlphaC, _sinAlphaC, _lambda0, _FE, _FN;
+	double _e, _a, _b, _t0, _n, _r0, _phiP;
+	double _cosAlphaC, _sinAlphaC, _lambda0, _fe, _fn;
 };
 
 class KrovakNE : public CT

@@ -8,7 +8,7 @@
 class NMEAParser : public Parser
 {
 public:
-	NMEAParser() : _errorLine(0), _GGA(false) {}
+	NMEAParser() : _errorLine(0) {}
 
 	bool parse(QFile *file, QList<TrackData> &tracks, QList<RouteData> &routes,
 	  QList<Area> &polygons, QVector<Waypoint> &waypoints);
@@ -16,6 +16,14 @@ public:
 	int errorLine() const {return _errorLine;}
 
 private:
+	struct CTX {
+		CTX() : GGA(false) {}
+
+		QDate date;
+		QTime time;
+		bool GGA;
+	};
+
 	bool readEW(const char *data, int len, qreal &lon);
 	bool readLon(const char *data, int len, qreal &lon);
 	bool readNS(const char *data, int len, qreal &lat);
@@ -25,17 +33,13 @@ private:
 	bool readAltitude(const char *data, int len, qreal &ele);
 	bool readGeoidHeight(const char *data, int len, qreal &gh);
 
-	bool readRMC(SegmentData &segment, const char *line, int len);
-	bool readGGA(SegmentData &segment, const char *line, int len);
-	bool readWPL(QVector<Waypoint> &waypoints, const char *line, int len);
-	bool readZDA(const char *line, int len);
+	bool readRMC(CTX &ctx, const char *line, int len, SegmentData &segment);
+	bool readGGA(CTX &ctx, const char *line, int len, SegmentData &segment);
+	bool readWPL(const char *line, int len, QVector<Waypoint> &waypoints);
+	bool readZDA(CTX &ctx, const char *line, int len);
 
 	int _errorLine;
 	QString _errorString;
-
-	QDate _date;
-	QTime _time;
-	bool _GGA;
 };
 
 #endif // NMEAPARSER_H

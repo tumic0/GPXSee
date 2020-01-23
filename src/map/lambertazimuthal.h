@@ -18,9 +18,8 @@ public:
 
 private:
 	double _lon0;
-	double _falseNorthing;
-	double _falseEasting;
-	double _a, _e, _es, _qP, _beta0, _Rq, _D;
+	double _fn, _fe;
+	double _a, _e, _es, _qP, _beta0, _rq, _d;
 };
 
 #endif // LAMBERTAZIMUTHAL_H

@@ -22,7 +22,7 @@ private:
 	double _lambda0;
 	double _n;
 	double _c;
-	double _FE, _FN;
+	double _fe, _fn;
 	double _twoRk0,	_g, _h;
 };
 
