@@ -96,7 +96,7 @@ static bool readARecord(const char *line, qint64 len)
 	return true;
 }
 
-bool IGCParser::readHRecord(const char *line, int len)
+bool IGCParser::readHRecord(CTX &ctx, const char *line, int len)
 {
 	if (len < 11 || ::strncmp(line, "HFDTE", 5))
 		return true;
@@ -112,9 +112,9 @@ bool IGCParser::readHRecord(const char *line, int len)
 		return false;
 	}
 
-	_date = QDate(y + 2000 <= QDate::currentDate().year() ? 2000 + y : 1900 + y,
-	  m, d);
-	if (!_date.isValid()) {
+	ctx.date = QDate(y + 2000 <= QDate::currentDate().year()
+	  ? 2000 + y : 1900 + y, m, d);
+	if (!ctx.date.isValid()) {
 		_errorString = "Invalid date";
 		return false;
 	}
@@ -122,8 +122,8 @@ bool IGCParser::readHRecord(const char *line, int len)
 	return true;
 }
 
-bool IGCParser::readBRecord(SegmentData &segment, const char *line,
-  int len)
+bool IGCParser::readBRecord(CTX &ctx, const char *line, int len,
+  SegmentData &segment)
 {
 	qreal lat, lon, ele;
 	QTime time;
@@ -152,20 +152,20 @@ bool IGCParser::readBRecord(SegmentData &segment, const char *line,
 		return false;
 	}
 
-	if (time < _time && !segment.isEmpty()
-	  && _date == segment.last().timestamp().date())
-		_date = _date.addDays(1);
-	_time = time;
+	if (time < ctx.time && !segment.isEmpty()
+	  && ctx.date == segment.last().timestamp().date())
+		ctx.date = ctx.date.addDays(1);
+	ctx.time = time;
 
 	Trackpoint t(Coordinates(lon, lat));
-	t.setTimestamp(QDateTime(_date, _time, Qt::UTC));
+	t.setTimestamp(QDateTime(ctx.date, ctx.time, Qt::UTC));
 	t.setElevation(ele);
 	segment.append(t);
 
 	return true;
 }
 
-bool IGCParser::readCRecord(RouteData &route, const char *line, int len)
+bool IGCParser::readCRecord(const char *line, int len, RouteData &route)
 {
 	qreal lat, lon;
 
@@ -202,6 +202,7 @@ bool IGCParser::parse(QFile *file, QList<TrackData> &tracks,
 	qint64 len;
 	char line[76 + 2 + 1 + 1];
 	bool route = false, track = false;
+	CTX ctx;
 
 
 	_errorLine = 1;
@@ -225,28 +226,28 @@ bool IGCParser::parse(QFile *file, QList<TrackData> &tracks,
 			}
 		} else {
 			if (line[0] == 'H') {
-				if (!readHRecord(line, len))
+				if (!readHRecord(ctx, line, len))
 					return false;
 			} else if (line[0] == 'C') {
 				if (route) {
-					if (!readCRecord(routes.last() ,line, len))
+					if (!readCRecord(line, len, routes.last()))
 						return false;
 				} else {
 					route = true;
 					routes.append(RouteData());
 				}
 			} else if (line[0] == 'B') {
-				if (_date.isNull()) {
+				if (ctx.date.isNull()) {
 					_errorString = "Missing date header";
 					return false;
 				}
 				if (!track) {
 					tracks.append(TrackData());
 					tracks.last().append(SegmentData());
-					_time = QTime(0, 0);
+					ctx.time = QTime(0, 0);
 					track = true;
 				}
-				if (!readBRecord(tracks.last().last(), line, len))
+				if (!readBRecord(ctx, line, len, tracks.last().last()))
 					return false;
 			}
 		}

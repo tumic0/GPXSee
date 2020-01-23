@@ -17,15 +17,17 @@ public:
 	int errorLine() const {return _errorLine;}
 
 private:
-	bool readHRecord(const char *line, int len);
-	bool readBRecord(SegmentData &segment, const char *line, int len);
-	bool readCRecord(RouteData &route, const char *line, int len);
+	struct CTX {
+		QDate date;
+		QTime time;
+	};
+
+	bool readHRecord(CTX &ctx, const char *line, int len);
+	bool readBRecord(CTX &ctx, const char *line, int len, SegmentData &segment);
+	bool readCRecord(const char *line, int len, RouteData &route);
 
 	int _errorLine;
 	QString _errorString;
-
-	QDate _date;
-	QTime _time;
 };
 
 #endif // IGCPARSER_H
