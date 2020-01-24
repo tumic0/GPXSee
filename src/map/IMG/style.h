@@ -6,6 +6,7 @@
 #include <QDebug>
 #include "subfile.h"
 
+#define TYPE(t) ((t)<<8)
 
 class Style
 {
@@ -106,13 +107,22 @@ public:
 	const Point &point(quint32 type) const;
 	const QList<quint32> &drawOrder() const {return _drawOrder;}
 
-	static bool isContourLine(quint32 type);
-	static bool isSpot(quint32 type);
-	static bool isSummit(quint32 type);
-	static bool isMajorRoad(quint32 type);
-	static bool isWaterArea(quint32 type);
-	static bool isMilitaryArea(quint32 type);
-	static bool isWaterAreaPOI(quint32 type);
+	static bool isContourLine(quint32 type)
+	  {return ((type >= TYPE(0x20) && type <= TYPE(0x25))
+	  || (type & 0xffff00) == TYPE(0x109));}
+	static bool isWaterArea(quint32 type)
+	  {return (type >= TYPE(0x3c) && type <= TYPE(0x44));}
+	static bool isMilitaryArea(quint32 type)
+	  {return (type == TYPE(0x04));}
+	static bool isNatureReserve(quint32 type)
+	  {return (type == TYPE(0x16));}
+	static bool isSpot(quint32 type)
+	  {return (type == TYPE(0x62) || type == TYPE(0x63));}
+	static bool isSummit(quint32 type)
+	  {return (type == 0x6616);}
+	static bool isMajorRoad(quint32 type)
+	  {return (type <= TYPE(0x04));}
+
 	static POIClass poiClass(quint32 type);
 
 private:

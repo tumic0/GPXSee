@@ -44,8 +44,9 @@ public:
 		QList<TextItem*> textItems;
 
 		QRect tileRect(_xy, QSize(TILE_SIZE, TILE_SIZE));
-		_map->processPolygons(_polygons, textItems);
+
 		_map->processPoints(_points, textItems);
+		_map->processPolygons(_polygons, textItems);
 		_map->processLines(_lines, tileRect, textItems);
 
 		_img.fill(Qt::transparent);
@@ -174,7 +175,7 @@ static int minShieldZoom(Label::Shield::Type type)
 	switch (type) {
 		case Label::Shield::USInterstate:
 		case Label::Shield::Hbox:
-			return 18;
+			return 17;
 		case Label::Shield::USShield:
 		case Label::Shield::Box:
 			return 19;
@@ -391,11 +392,13 @@ void IMGMap::processPolygons(QList<IMG::Poly> &polygons,
 		if (poly.label.text().isEmpty())
 			continue;
 
-		if (Style::isWaterArea(poly.type) || Style::isMilitaryArea(poly.type)) {
+		if (_zoom <= 23 && (Style::isWaterArea(poly.type)
+		  || Style::isMilitaryArea(poly.type)
+		  || Style::isNatureReserve(poly.type))) {
 			const Style::Polygon &style = _img.style()->polygon(poly.type);
 			TextPointItem *item = new TextPointItem(
 			  centroid(poly.points).toPoint(), &poly.label.text(),
-			  poiFont(), 0, &style.brush().color(), 0);
+			  poiFont(), 0, &style.brush().color());
 			if (item->isValid() && !item->collides(textItems)
 			  && rectNearPolygon(poly.points, item->boundingRect()))
 				textItems.append(item);
@@ -525,8 +528,7 @@ void IMGMap::processPoints(QList<IMG::Point> &points,
 		IMG::Point &point = points[i];
 		const Style::Point &style = _img.style()->point(point.type);
 
-		if (point.poi && (_zoom < minPOIZoom(Style::poiClass(point.type))
-		  || Style::isWaterAreaPOI(point.type)))
+		if (point.poi && _zoom < minPOIZoom(Style::poiClass(point.type)))
 			continue;
 
 		const QString *label = point.label.text().isEmpty()
