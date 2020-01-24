@@ -59,7 +59,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="181"/>
         <source>CUP files</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivos CUP</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="182"/>
@@ -74,7 +74,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="186"/>
         <source>GPI files</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivos GPI</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="187"/>
@@ -119,7 +119,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="195"/>
         <source>SML files</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivos SML</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="196"/>
@@ -485,7 +485,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>km/mi markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Hitos kilométricos o cada milla</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="359"/>
@@ -767,7 +767,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="733"/>
         <source>Styles directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Directorio de estilos:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="735"/>
@@ -1032,7 +1032,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="123"/>
         <source>Garmin IMG maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapas Garmin IMG</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="125"/>
@@ -1105,12 +1105,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="80"/>
         <source>Projection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Proyección:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="102"/>
         <source>Vector maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapas vectoriales</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="121"/>
@@ -1316,7 +1316,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="352"/>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Automática</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="366"/>
@@ -1404,7 +1404,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="353"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Personalizada</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="480"/>
@@ -1625,7 +1625,7 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="29"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Enlaces</translation>
     </message>
 </context>
 <context>
@@ -1856,7 +1856,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="33"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Enlaces</translation>
     </message>
 </context>
 <context>
@@ -1889,12 +1889,12 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="44"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Dirección</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="55"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Enlaces</translation>
     </message>
 </context>
 </TS>
