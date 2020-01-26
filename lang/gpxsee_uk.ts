@@ -119,7 +119,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="195"/>
         <source>SML files</source>
-        <translation type="unfinished"></translation>
+        <translation>SML файли</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="196"/>
