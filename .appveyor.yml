@@ -1,7 +1,5 @@
 version: 7.20.{build}
 
-configuration: Release
-
 platform:
   - x86
   - x64
