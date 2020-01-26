@@ -2,8 +2,8 @@ version: 7.20.{build}
 configuration: Release
 platform: Any CPU
 environment:
-  NSISDIR: "C:\Program Files (x86)\NSIS"
-  MSVCDIR: "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build"
+  NSISDIR: 'C:\Program Files (x86)\NSIS'
+  MSVCDIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build'
   matrix:
   - QTDIR: C:\Qt\5.14\msvc2017
     VCVARS: vcvars32.bat
