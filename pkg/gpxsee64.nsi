@@ -156,7 +156,7 @@ Section "MSVC runtime" SEC_MSVC
   SectionIn RO
 
   DetailPrint "Checking whether Visual C++ 2017 runtime is already installed..."
-  ReadRegDword $R0 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Version"
+  ReadRegStr $R0 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Version"
   ${If} $R0 >= "v14.24.28127.04"
     DetailPrint "Visual C++ 2017 runtime is already installed, skipping install."
   ${Else}
