@@ -1,6 +1,17 @@
 version: 7.20.{build}
+
 configuration: Release
-platform: Any CPU
+
+platform:
+  - x86
+  - x64
+
+configuration:
+  - Release
+
+image:
+  - Visual Studio 2017
+
 environment:
   NSISDIR: C:\Program Files (x86)\NSIS
   matrix:
@@ -19,7 +30,7 @@ install:
 - cmd: >-
     set PATH=%QTDIR%\bin;%NSISDIR%;%PATH%
 
-    call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall32.bat"
+    call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
 
 build_script:
 - cmd: >-
