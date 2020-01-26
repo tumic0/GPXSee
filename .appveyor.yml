@@ -5,13 +5,13 @@ environment:
   NSISDIR: C:\Program Files (x86)\NSIS
   matrix:
   - QTDIR: C:\Qt\5.14\msvc2017
-    VCVARS: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"'
+    VCVARS: vcvars32.bat
     NSI: gpxsee.nsi
     OPENSSLDIR: C:\OpenSSL-v111-Win32\bin
     LIBCRYPTO: libssl-1_1.dll
     LIBSSL: libcrypto-1_1.dll
   - QTDIR: C:\Qt\5.14\msvc2017_64
-    VCVARS: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"'
+    VCVARS: vcvars64.bat
     NSI: gpxsee64.nsi
     OPENSSLDIR: C:\OpenSSL-v111-Win64\bin
     LIBCRYPTO: libssl-1_1-x64.dll
@@ -20,7 +20,7 @@ install:
 - cmd: >-
     set PATH=%QTDIR%\bin;%NSISDIR%;%PATH%
 
-    call %VCVARS%
+    call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\"%VCVARS%
 
 build_script:
 - cmd: >-
