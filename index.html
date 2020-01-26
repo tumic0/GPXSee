@@ -54,7 +54,7 @@
           <li>
             <div class="left-side"> <img src="css/images/formats.png" alt="" /> </div>
             <div class="right-side">
-              <p>GPXSee supports all main GPS log file formats, namely GPX, TCX, KML, FIT, IGC, NMEA, LOC, SLF and OziExplorer files.</p>
+              <p>GPXSee supports all main GPS log file formats, namely GPX, TCX, KML, FIT, IGC, NMEA, GPI, LOC, SLF, SML and OziExplorer files.</p>
               <div class="buttons">
                 <a href="https://sourceforge.net/projects/gpxsee/files/latest/download" class="download-btn">Download GPXSee</a>
                 <a href="https://github.com/tumic0/GPXSee" class="github-btn">View on GitHub</a>
@@ -86,8 +86,8 @@
 
           <h3>Key features</h3>
           <ul>
-            <li>Opens GPX, TCX, FIT, KML, NMEA, IGC, CUP, SLF, LOC, GeoJSON,
-                OziExplorer (PLT, RTE, WPT), Garmin GPI &amp; CSV and
+            <li>Opens GPX, TCX, FIT, KML, NMEA, IGC, CUP, SIGMA SLF, Suunto SML, LOC,
+                GeoJSON, OziExplorer (PLT, RTE, WPT), Garmin GPI &amp; CSV and
                 geotagged JPEG files.</li>
             <li>User-definable online maps (OpenStreetMap/Google tiles, WMTS,
                 WMS, TMS, QuadTiles).</li>
@@ -115,8 +115,9 @@
           installer and an OS X dmg from the project's Sourceforge page and in
           form of various Linux packages from the project's openSUSE Build Service
           page. Most Linux distributions (Archlinux, Fedora, Gentoo, openSUSE, ...)
-          as well as BSD distributions (FreeBSD, NetBSD) also provide GPXSee in
-          their official repositories, however not always in the latest version.</p>
+          as well as BSD distributions (FreeBSD, NetBSD, OpenBSD) also provide
+          GPXSee in their official repositories, however not always in the latest
+          version.</p>
 
           <p>On OS X you can also use the MacPorts or Homebrew packaging systems
           to install GPXSee.</p>
@@ -168,6 +169,15 @@
         <div class="latest-news">
           <h3>Releases</h3>
           <div class="news-item">
+            <p class="date">Jan 26 2020</p>
+            <h4>Version 7.20</h4>
+            <ul>
+              <li>Added support for Suunto SML files.</li>
+              <li>Various IMG maps improvements.</li>
+              <li>Windows build toolchain update (MSVC 2017, Qt 5.14, OpenSSL 1.1.1)</li>
+            </ul>
+          </div>
+          <div class="news-item">
             <p class="date">Jan 12 2020</p>
             <h4>Version 7.19</h4>
             <ul>
@@ -205,16 +215,6 @@
               <li>Added support for Garmin GPI files.</li>
               <li>Hyperlink + copy&amp;paste enabled tool tips.</li>
               <li>Various minor bug fixes in data loading.</li>
-            </ul>
-          </div>
-          <div class="news-item">
-            <p class="date">Oct 5 2019</p>
-            <h4>Version 7.15</h4>
-            <ul>
-              <li>Fixed broken align of zoom level 0 with tiles of a different size than 256px.</li>
-              <li>Increased the default tile cache size value to 256MB.</li>
-              <li>IMG maps text layout tweaking and optimization.</li>
-              <li>The Windows &amp; OS X builds now use QtPBFImagePlugin v2.</li>
             </ul>
           </div>
         </div>
