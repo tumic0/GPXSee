@@ -160,8 +160,8 @@ Section "MSVC runtime" SEC_MSVC
   ${Else}
     DetailPrint "Installing Visual C++ 2017 Redistributable..."
     SetOutPath $TEMP
-    File "vcredist_x86.exe"
-    ExecWait '"$TEMP\vcredist_x86.exe" /install /quiet /norestart'
+    File "vc_redist.x86.exe"
+    ExecWait '"$TEMP\vc_redist.x86.exe" /install /quiet /norestart'
     SetOutPath $INSTDIR    
   ${EndIf}
 SectionEnd
