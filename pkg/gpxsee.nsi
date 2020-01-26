@@ -148,22 +148,11 @@ Section "MSVC runtime" SEC_MSVC
 
   SectionIn RO
 
-  DetailPrint "Checking whether Visual C++ 2017 runtime is already installed..."
-  ${If} ${RunningX64}
-    ReadRegStr $R0 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Version"
-  ${Else}
-    ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Version"
-  ${EndIf}
+  SetOutPath $TEMP
+  File "vc_redist.x86.exe"
+  ExecWait '"$TEMP\vc_redist.x86.exe" /install /quiet /norestart'
+  SetOutPath $INSTDIR    
 
-  ${If} $R0 >= "v14.24.28127.04"
-    DetailPrint "Visual C++ 2017 runtime is already installed, skipping install."
-  ${Else}
-    DetailPrint "Installing Visual C++ 2017 Redistributable..."
-    SetOutPath $TEMP
-    File "vc_redist.x86.exe"
-    ExecWait '"$TEMP\vc_redist.x86.exe" /install /quiet /norestart'
-    SetOutPath $INSTDIR    
-  ${EndIf}
 SectionEnd
 
 Section "OpenSSL" SEC_OPENSSL
