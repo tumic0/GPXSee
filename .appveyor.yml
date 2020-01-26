@@ -21,7 +21,7 @@ install:
 - cmd: >-
     set PATH=%QTDIR%\bin;%NSISDIR%;%PATH%
 
-    call %MSVCDIR%\%VCVARS%
+    call "%MSVCDIR%\%VCVARS%"
 
 build_script:
 - cmd: >-
