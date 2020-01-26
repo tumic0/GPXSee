@@ -155,25 +155,23 @@ Section "MSVC runtime" SEC_MSVC
 
   SectionIn RO
 
-  DetailPrint "Checking whether Visual C++ 2015 Redistributable is already installed..."
-  ReadRegDword $R0 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Installed"
-  StrCmp $R0 "1" 0 +3
-  DetailPrint "Visual C++ 2015 Redistributable is already installed, skipping install."
-  Goto done
-
-  DetailPrint "Installing Visual C++ 2015 Redistributable..."
-  SetOutPath $TEMP
-  File "vcredist_x64.exe"
-  ExecWait '"$TEMP\vcredist_x64.exe" /install /quiet /norestart'
-  SetOutPath $INSTDIR
-
-  done:
+  DetailPrint "Checking whether Visual C++ 2017 runtime is already installed..."
+  ReadRegDword $R0 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Version"
+  ${If} $R0 >= "v14.24.28127.04"
+    DetailPrint "Visual C++ 2017 runtime is already installed, skipping install."
+  ${Else}
+    DetailPrint "Installing Visual C++ 2017 runtime..."
+    SetOutPath $TEMP
+    File "vcredist_x64.exe"
+    ExecWait '"$TEMP\vcredist_x64.exe" /install /quiet /norestart'
+    SetOutPath $INSTDIR
+  ${EndIf}
 SectionEnd
 
 Section "OpenSSL" SEC_OPENSSL
 
-  File "libeay32.dll"
-  File "ssleay32.dll"
+  File "libcrypto-1_1-x64.dll"
+  File "libssl-1_1-x64.dll"
 
 SectionEnd
 
@@ -249,7 +247,7 @@ SectionEnd
 LangString DESC_QT ${LANG_ENGLISH} \
   "QT cross-platform application framework."
 LangString DESC_MSVC ${LANG_ENGLISH} \
-  "Visual C++ 2015 runtime components. If already installed, will be skipped."
+  "Microsoft Visual C++ 2017 runtime. If already installed, will be skipped."
 LangString DESC_OPENSSL ${LANG_ENGLISH} \
   "OpenSSL library. Required for HTTPS to work."
 LangString DESC_ANGLE ${LANG_ENGLISH} \
