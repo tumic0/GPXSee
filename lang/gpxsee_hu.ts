@@ -355,14 +355,14 @@
         <location filename="../src/GUI/gui.cpp" line="721"/>
         <location filename="../src/GUI/gui.cpp" line="722"/>
         <source>Paths</source>
-        <translation>Útvonalak</translation>
+        <translation>Elérési utak</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="209"/>
         <location filename="../src/GUI/gui.cpp" line="687"/>
         <location filename="../src/GUI/gui.cpp" line="688"/>
         <source>Keyboard controls</source>
-        <translation>Billentyűzet vezérlés</translation>
+        <translation>Gyorsbillentyűk</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="212"/>
@@ -398,7 +398,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="248"/>
         <source>Statistics...</source>
-        <translation>Statisztikák...</translation>
+        <translation>Statisztika...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="256"/>
@@ -413,7 +413,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="264"/>
         <source>Overlap POIs</source>
-        <translation type="unfinished"></translation>
+        <translation>POI-k átfedése</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="269"/>
@@ -438,7 +438,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="296"/>
         <source>Clear tile cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Gyorsítótár törlése</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="301"/>
@@ -465,7 +465,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="332"/>
         <source>Show waypoints</source>
-        <translation>Útpontok mutatása</translation>
+        <translation>Köztespontok mutatása</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="337"/>
@@ -475,22 +475,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="342"/>
         <source>Waypoint labels</source>
-        <translation>Útpontok neve</translation>
+        <translation>Köztespontok neve</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="347"/>
         <source>Route waypoints</source>
-        <translation>Útvonal útpontok</translation>
+        <translation>Útvonal köztespontok</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>km/mi markers</source>
-        <translation>km(mérföld)szám mutatása</translation>
+        <translation>km(mérföld) jelölők</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="359"/>
         <source>Show graphs</source>
-        <translation>Grafikonok mutatása</translation>
+        <translation>Grafikon mutatása</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="369"/>
@@ -515,17 +515,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="388"/>
         <source>Show slider info</source>
-        <translation>Információk mutatása</translation>
+        <translation>Adatok a csúszka mellett</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="393"/>
         <source>Show path markers</source>
-        <translation>Útjelölések mutatása</translation>
+        <translation>Pozíció mutatása a térképen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="400"/>
         <source>Show toolbars</source>
-        <translation>Eszköztár mutatása</translation>
+        <translation>Gombok mutatása</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="407"/>
@@ -537,7 +537,7 @@
         <location filename="../src/GUI/gui.cpp" line="1059"/>
         <location filename="../src/GUI/gui.cpp" line="1125"/>
         <source>Moving time</source>
-        <translation>Mozgásban töltött idő</translation>
+        <translation>Mozgásban töltött</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="421"/>
@@ -572,7 +572,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="460"/>
         <source>Fullscreen mode</source>
-        <translation>Teljes képernyős mód</translation>
+        <translation>Teljes képernyős</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="467"/>
@@ -657,17 +657,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="585"/>
         <source>File</source>
-        <translation>Fájl</translation>
+        <translation>Műveletgombok</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="593"/>
         <source>Show</source>
-        <translation>Mutassa</translation>
+        <translation>Szűrőgombok</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="600"/>
         <source>Navigation</source>
-        <translation>Navigáció</translation>
+        <translation>Léptető gombok</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="666"/>
@@ -677,7 +677,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="670"/>
         <source>GPXSee is distributed under the terms of the GNU General Public License version 3. For more info about GPXSee visit the project homepage at %1.</source>
-        <translation>A GPXSee-t a GNU General Public License 3. verziója szerint terjesztik. A GPXSee-re vonatkozó további információkért látogasson el a projekt honlapjára a (z)% 1 oldalon.</translation>
+        <translation>A GPXSee-t a GNU General Public License 3. verziója szerint terjesztik. A GPXSee-re vonatkozó további információkért látogasson el a projekt honlapjára a(z) %1 oldalon.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="691"/>
@@ -702,7 +702,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="697"/>
         <source>Append file</source>
-        <translation>Fájl hozzáadása</translation>
+        <translation>További fájl hozzáadása</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="698"/>
@@ -712,12 +712,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="700"/>
         <source>Toggle graph type</source>
-        <translation>Grafikus mód váltása</translation>
+        <translation>Grafikon: idő/távolság váltás</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="702"/>
         <source>Toggle time type</source>
-        <translation type="unfinished">Időtípus váltás</translation>
+        <translation>Idő: összes/mozgásban váltás</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="706"/>
@@ -772,7 +772,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="735"/>
         <source>Tile cache directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gyorsítótár mappája:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="744"/>
@@ -816,7 +816,7 @@
         <location filename="../src/GUI/gui.cpp" line="1034"/>
         <location filename="../src/GUI/gui.cpp" line="1103"/>
         <source>Waypoints</source>
-        <translation>Útpontok</translation>
+        <translation>Köztespontok</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1037"/>
@@ -836,7 +836,7 @@
         <location filename="../src/GUI/gui.cpp" line="1080"/>
         <location filename="../src/GUI/gui.cpp" line="1081"/>
         <source>Statistics</source>
-        <translation>Statisztikák</translation>
+        <translation>Összesítés</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1095"/>
@@ -920,7 +920,7 @@
         <location filename="../src/GUI/graphview.cpp" line="66"/>
         <location filename="../src/GUI/graphview.cpp" line="177"/>
         <source>Distance</source>
-        <translation>Távolság</translation>
+        <translation>Távolságalapú</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="110"/>
@@ -966,7 +966,7 @@
     <message>
         <location filename="../src/GUI/graphview.cpp" line="179"/>
         <source>Time</source>
-        <translation>Idő</translation>
+        <translation>Időalapú</translation>
     </message>
 </context>
 <context>
@@ -1105,7 +1105,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="121"/>
         <source>Track style:</source>
-        <translation>Nyomvonal kinézete:</translation>
+        <translation>Nyomvonal stílus:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="123"/>
@@ -1149,17 +1149,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="156"/>
         <source>Area border style:</source>
-        <translation>Terület szegély stílus:</translation>
+        <translation>Területhatár stílusa:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="157"/>
         <source>Area fill opacity:</source>
-        <translation>Terület átlátszóság:</translation>
+        <translation>Átlátszóság:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="161"/>
         <source>Fill opacity:</source>
-        <translation>Kitöltés átlátszósága:</translation>
+        <translation>Átlátszóság:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="162"/>
@@ -1169,12 +1169,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="175"/>
         <source>Base color:</source>
-        <translation>Alapszín:</translation>
+        <translation>Alapszín (első nyomvonal):</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="176"/>
         <source>Palette shift:</source>
-        <translation type="unfinished"></translation>
+        <translation>Színhasonlóság (továbbiak):</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="178"/>
@@ -1185,12 +1185,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="211"/>
         <source>Waypoint color:</source>
-        <translation>Útpont szín:</translation>
+        <translation>Köztespont szín:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="212"/>
         <source>Waypoint size:</source>
-        <translation>Útpont méret:</translation>
+        <translation>Köztespont méret:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="214"/>
@@ -1207,7 +1207,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="216"/>
         <source>Waypoints</source>
-        <translation>Útpontok</translation>
+        <translation>Köztespontok</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="227"/>
@@ -1232,7 +1232,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="259"/>
         <source>Slider color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Csúszka színe:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="282"/>
@@ -1242,7 +1242,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="283"/>
         <source>Map opacity:</source>
-        <translation>Térkép átlátszóság:</translation>
+        <translation>Térkép átlátszósága:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="293"/>
@@ -1268,7 +1268,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="303"/>
         <source>Moving average window size</source>
-        <translation type="unfinished"></translation>
+        <translation>Interpoláció ablakmérete</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="322"/>
@@ -1301,7 +1301,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="328"/>
         <source>Smoothing</source>
-        <translation>Simítás</translation>
+        <translation>Finomhangolás</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="332"/>
@@ -1347,12 +1347,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="392"/>
         <source>Minimal speed:</source>
-        <translation>Legkisebb sebesség:</translation>
+        <translation>Ennél kisebb sebesség:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="393"/>
         <source>Minimal duration:</source>
-        <translation>Legrövidebb időtartam:</translation>
+        <translation>min. ennyi ideig:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="403"/>
@@ -1399,7 +1399,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="461"/>
         <source>Pause detection</source>
-        <translation>Megállásérzékelés</translation>
+        <translation>Megállás érzékelése</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="480"/>
@@ -1419,7 +1419,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="494"/>
         <source>Radius:</source>
-        <translation>Sugár:</translation>
+        <translation>Láthatóság sugara:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="501"/>
@@ -1445,7 +1445,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="516"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
-        <translation>A nagyítás mértéke megváltozik, hogy a teljes tartalom (nyomvonal / útpontok) illeszkedjen a nyomtatott területhez, és a térkép felbontása a lehető legközelebb legyen a nyomtatási felbontáshoz.</translation>
+        <translation>A nagyítás mértéke megváltozik, hogy a teljes tartalom (nyomvonal / köztespontok) illeszkedjen a nyomtatott területhez, és a térkép felbontása a lehető legközelebb legyen a nyomtatási felbontáshoz.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="538"/>
@@ -1470,17 +1470,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="546"/>
         <source>Moving time</source>
-        <translation>Mozgásban töltött idő</translation>
+        <translation>Mozgásban töltött</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="548"/>
         <source>Item count (&gt;1)</source>
-        <translation>tétel szám (&gt;1)</translation>
+        <translation>nyomvonalak száma (ha&gt;1)</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="563"/>
         <source>Separate graph page</source>
-        <translation>Grafikon önálló oldalon</translation>
+        <translation>A grafikon külön oldalra</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="573"/>
@@ -1495,7 +1495,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="582"/>
         <source>Use OpenGL</source>
-        <translation>OpenGL</translation>
+        <translation>OpenGL használata</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="585"/>
@@ -1510,7 +1510,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="602"/>
         <source>Image cache size:</source>
-        <translation>Kép gyorsítótár méret:</translation>
+        <translation>Kép gyorsítótár mérete:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="603"/>
@@ -1541,7 +1541,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Print &amp; Export</source>
-        <translation>Nyomtatás és exportálás</translation>
+        <translation>Kimenet</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="671"/>
@@ -1846,7 +1846,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="21"/>
         <source>Moving time</source>
-        <translation>Mozgásban töltött idő</translation>
+        <translation>Mozgásban töltött</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="23"/>
