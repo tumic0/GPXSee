@@ -183,6 +183,7 @@ SectionGroup "Localization" SEC_LOCALIZATION
   !insertmacro LOCALIZATION "Finnish" "fi"
   !insertmacro LOCALIZATION "French" "fr"
   !insertmacro LOCALIZATION "German" "de"
+  !insertmacro LOCALIZATION "Hungarian" "hu"
   !insertmacro LOCALIZATION "Norwegian" "nb"
   !insertmacro LOCALIZATION "Polish" "pl"
   !insertmacro LOCALIZATION "Portuguese (Brazil)" "pt_BR"

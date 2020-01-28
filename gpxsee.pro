@@ -359,7 +359,8 @@ TRANSLATIONS = lang/gpxsee_en.ts \
     lang/gpxsee_tr.ts \
     lang/gpxsee_es.ts \
     lang/gpxsee_pt_BR.ts \
-    lang/gpxsee_uk.ts
+    lang/gpxsee_uk.ts \
+    lang/gpxsee_hu.ts
 
 macx {
     ICON = icons/gpxsee.icns
