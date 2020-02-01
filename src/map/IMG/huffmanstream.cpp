@@ -23,29 +23,6 @@ HuffmanStream::HuffmanStream(const SubFile &file, SubFile::Handle &hdl,
 	}
 }
 
-bool HuffmanStream::readNext(qint32 &lonDelta, qint32 &latDelta)
-{
-	if (!readDelta(_lonSign, lonDelta))
-		return false;
-	if (!readDelta(_latSign, latDelta))
-		return false;
-
-	if (!(lonDelta|latDelta))
-		return false;
-
-	return true;
-}
-
-bool HuffmanStream::readOffset(qint32 &lonDelta, qint32 &latDelta)
-{
-	if (!readDelta(1, lonDelta))
-		return false;
-	if (!readDelta(1, latDelta))
-		return false;
-
-	return true;
-}
-
 bool HuffmanStream::sign(int &val)
 {
 	quint32 bit;

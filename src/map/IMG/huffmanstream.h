@@ -9,8 +9,16 @@ public:
 	HuffmanStream(const SubFile &file, SubFile::Handle &hdl, quint32 length,
 	  const HuffmanTable &table, bool line);
 
-	bool readNext(qint32 &lonDelta, qint32 &latDelta);
-	bool readOffset(qint32 &lonDelta, qint32 &latDelta);
+	bool readNext(qint32 &lonDelta, qint32 &latDelta)
+	{
+		if (!(readDelta(_lonSign, lonDelta) && readDelta(_latSign, latDelta)))
+			return false;
+
+		return (lonDelta || latDelta);
+	}
+
+	bool readOffset(qint32 &lonDelta, qint32 &latDelta)
+	  {return (readDelta(1, lonDelta) && readDelta(1, latDelta));}
 	bool atEnd() const
 	  {return _symbolDataSize + bitsAvailable() < _table.maxSymbolSize();}
 
