@@ -41,21 +41,17 @@ bool HuffmanStream::sign(int &val)
 
 bool HuffmanStream::readDelta(int sign, qint32 &symbol)
 {
-	uchar size;
+	quint8 size;
+	quint32 next;
+	quint8 nextSize = qMin((quint32)(32 - _symbolDataSize), bitsAvailable());
 
-	if (_symbolDataSize < 32) {
-		quint32 next;
-		quint8 nextSize = qMin((quint32)(32 - _symbolDataSize),
-		  bitsAvailable());
+	if (!read(nextSize, next))
+		return false;
 
-		if (!read(nextSize, next))
-			return false;
+	_symbolData = (_symbolData << nextSize) | next;
+	_symbolDataSize += nextSize;
 
-		_symbolData = (_symbolData << nextSize) | next;
-		_symbolDataSize += nextSize;
-	}
-
-	symbol = _table.symbol(_symbolData << (32U - _symbolDataSize), size);
+	symbol = _table.symbol(_symbolData << (32 - _symbolDataSize), size);
 
 	if (size <= _symbolDataSize)
 		_symbolDataSize -= size;
