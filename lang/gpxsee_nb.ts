@@ -12,7 +12,7 @@
         <location filename="../src/GUI/cadencegraph.cpp" line="12"/>
         <location filename="../src/GUI/cadencegraph.h" line="16"/>
         <source>Cadence</source>
-        <translation type="unfinished">Stegfrekvens</translation>
+        <translation>Stegfrekvens</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="27"/>
@@ -214,7 +214,7 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="25"/>
         <source>All files</source>
-        <translation type="unfinished">Alle filer</translation>
+        <translation>Alle filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="52"/>
@@ -239,7 +239,7 @@
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="94"/>
         <source>Page Setup</source>
-        <translation>Sideinnstilling</translation>
+        <translation>Sideoppsett</translation>
     </message>
     <message>
         <location filename="../src/GUI/exportdialog.cpp" line="97"/>
@@ -373,17 +373,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="217"/>
         <source>Open...</source>
-        <translation type="unfinished">Åpne…</translation>
+        <translation>Åpne…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="222"/>
         <source>Print...</source>
-        <translation type="unfinished">Skriv ut…</translation>
+        <translation>Skriv ut…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="229"/>
         <source>Export to PDF...</source>
-        <translation type="unfinished">Eksporter til PDF…</translation>
+        <translation>Eksporter til PDF…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="235"/>
@@ -398,12 +398,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="248"/>
         <source>Statistics...</source>
-        <translation type="unfinished">Statistikk…</translation>
+        <translation>Statistikk…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="256"/>
         <source>Load POI file...</source>
-        <translation type="unfinished">Last inn POI-fil…</translation>
+        <translation>Last inn POI-fil…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="260"/>
@@ -433,7 +433,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="292"/>
         <source>Load map...</source>
-        <translation type="unfinished">Last inn kart…</translation>
+        <translation>Last inn kart…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="296"/>
@@ -485,7 +485,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>km/mi markers</source>
-        <translation type="unfinished">km/mi-markører</translation>
+        <translation>km/mi-markører</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="359"/>
@@ -520,7 +520,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="393"/>
         <source>Show path markers</source>
-        <translation type="unfinished">Vis veimarkører</translation>
+        <translation>Vis veimarkører</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="400"/>
@@ -557,17 +557,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="441"/>
         <source>Decimal degrees (DD)</source>
-        <translation type="unfinished">Desimalgrader (DD)</translation>
+        <translation>Desimalgrader (DD)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="447"/>
         <source>Degrees and decimal minutes (DMM)</source>
-        <translation type="unfinished">Desimalgrader og desimalminutter (DMM)</translation>
+        <translation>Desimalgrader og desimalminutter (DMM)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="454"/>
         <source>Degrees, minutes, seconds (DMS)</source>
-        <translation type="unfinished">Grader, minutter, sekunder (DMS)</translation>
+        <translation>Grader, minutter, sekunder (DMS)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="460"/>
@@ -577,7 +577,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="467"/>
         <source>Options...</source>
-        <translation type="unfinished">Valg…</translation>
+        <translation>Valg…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="473"/>
@@ -647,7 +647,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="559"/>
         <source>Coordinates format</source>
-        <translation type="unfinished">Koordinatformat</translation>
+        <translation>Koordinatformat</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="569"/>
@@ -861,7 +861,7 @@
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1351"/>
         <source>%n files</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n fil</numerusform>
             <numerusform>%n filer</numerusform>
         </translation>
@@ -974,7 +974,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="11"/>
         <source>bpm</source>
-        <translation type="unfinished">s/m</translation>
+        <translation>bpm</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="12"/>
@@ -1095,12 +1095,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="176"/>
         <source>Palette shift:</source>
-        <translation type="unfinished">Palettforskyvning:</translation>
+        <translation>Palettforskyvning:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="120"/>
         <source>Track width:</source>
-        <translation type="unfinished">Sporbredde:</translation>
+        <translation>Sporbredde:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="80"/>
@@ -1115,7 +1115,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="121"/>
         <source>Track style:</source>
-        <translation type="unfinished">Sporstil:</translation>
+        <translation>Sporstil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="123"/>
@@ -1159,12 +1159,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="156"/>
         <source>Area border style:</source>
-        <translation type="unfinished">Kantstil for område:</translation>
+        <translation>Kantstil for område:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="157"/>
         <source>Area fill opacity:</source>
-        <translation type="unfinished">Fylldekkevne for område:</translation>
+        <translation>Ugjennomsiktighet for område:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="161"/>
@@ -1232,7 +1232,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="259"/>
         <source>Slider color:</source>
-        <translation type="unfinished">Linjalfarge:</translation>
+        <translation>Farge på skyveregulering:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="282"/>
@@ -1374,7 +1374,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="448"/>
         <source>Elevation</source>
-        <translation type="unfinished">Høyde</translation>
+        <translation>Høyde</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="459"/>
@@ -1668,17 +1668,17 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="31"/>
         <source>min/km</source>
-        <translation type="unfinished">min/km</translation>
+        <translation>min/km</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="32"/>
         <source>min/mi</source>
-        <translation type="unfinished">min/mi</translation>
+        <translation>min/mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="32"/>
         <source>min/nmi</source>
-        <translation type="unfinished">min/nmi</translation>
+        <translation>min/nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="34"/>
@@ -1741,7 +1741,7 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="28"/>
         <source>min/nmi</source>
-        <translation type="unfinished">min/nmi</translation>
+        <translation>min/nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="31"/>
