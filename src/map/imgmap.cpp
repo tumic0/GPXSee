@@ -201,7 +201,7 @@ static qreal area(const QVector<QPointF> &polygon)
    return area;
 }
 
-static QPointF centroid(const QVector<QPointF> polygon)
+static QPointF centroid(const QVector<QPointF> &polygon)
 {
 	qreal cx = 0, cy = 0;
 	qreal factor = 1.0 / (6.0 * area(polygon));
