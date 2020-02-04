@@ -69,20 +69,6 @@ bool SubFile::readVUInt32(Handle &hdl, quint32 &val) const
 	return true;
 }
 
-bool SubFile::readVUInt32SW(Handle &hdl, quint32 bytes, quint32 &val) const
-{
-	quint8 b;
-
-	val = 0;
-	for (quint32 i = bytes; i; i--) {
-		if (!readByte(hdl, b))
-			return false;
-		val |= ((quint32)b) << ((i-1) * 8);
-	}
-
-	return true;
-}
-
 bool SubFile::readVBitfield32(Handle &hdl, quint32 &bitfield) const
 {
 	quint8 bits;

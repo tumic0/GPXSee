@@ -97,8 +97,21 @@ public:
 		return true;
 	}
 
+	bool readVUInt32SW(Handle &hdl, quint32 bytes, quint32 &val) const
+	{
+		quint8 b;
+
+		val = 0;
+		for (quint32 i = bytes; i; i--) {
+			if (!readByte(hdl, b))
+				return false;
+			val |= ((quint32)b) << ((i-1) * 8);
+		}
+
+		return true;
+	}
+
 	bool readVUInt32(Handle &hdl, quint32 &val) const;
-	bool readVUInt32SW(Handle &hdl, quint32 bytes, quint32 &val) const;
 	bool readVBitfield32(Handle &hdl, quint32 &bitfield) const;
 
 	quint16 offset() const {return _blocks->first();}

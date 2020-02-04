@@ -50,18 +50,13 @@ bool BitStream4::read(int bits, quint32 &val)
 		return true;
 	}
 
-	quint32 old = 0;
-	if (_used < 32) {
-		old = (_data << _used) >> (32 - bits);
-		bits = (bits - 32) + _used;
-	}
-	_used = bits;
-
-	quint32 bytes = qMin(_length, (quint32)4);
+	quint32 old = (_used < 32) ? (_data << _used) >> (32 - bits) : 0;
+	quint32 bytes = qMin(_length, 4U);
 
 	if (!_file.readVUInt32SW(_hdl, bytes, _data))
 		return false;
 
+	_used -= 32 - bits;
 	_length -= bytes;
 	_unused = (4 - bytes) * 8;
 	_data <<= _unused;
