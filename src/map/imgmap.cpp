@@ -203,23 +203,18 @@ static qreal area(const QVector<QPointF> &polygon)
 
 static QPointF centroid(const QVector<QPointF> polygon)
 {
-	qreal cx = 0, cy = 0, factor = 0;
-	qreal A = area(polygon);
+	qreal cx = 0, cy = 0;
+	qreal factor = 1.0 / (6.0 * area(polygon));
 
 	for (int i = 0; i < polygon.size(); i++) {
 		int j = (i + 1) % polygon.size();
-		factor=(polygon.at(i).x() * polygon.at(j).y() - polygon[j].x()
-		  * polygon[i].y());
-		cx+=(polygon[i].x() + polygon[j].x()) * factor;
-		cy+=(polygon[i].y() + polygon[j].y()) * factor;
+		qreal f = (polygon.at(i).x() * polygon.at(j).y() - polygon.at(j).x()
+		  * polygon.at(i).y());
+		cx += (polygon.at(i).x() + polygon.at(j).x()) * f;
+		cy += (polygon.at(i).y() + polygon.at(j).y()) * f;
 	}
 
-	A *= 6.0f;
-	factor = 1/A;
-	cx *= factor;
-	cy *= factor;
-
-	return QPointF(cx, cy);
+	return QPointF(cx * factor, cy * factor);
 }
 
 static bool rectNearPolygon(const QPolygonF &polygon, const QRectF &rect)
