@@ -1,5 +1,23 @@
 #include "vectortile.h"
 
+
+static void copyPolys(const RectC &rect, QList<IMG::Poly> *src,
+  QList<IMG::Poly> *dst)
+{
+	for (int i = 0; i < src->size(); i++)
+		if (rect.intersects(src->at(i).boundingRect))
+			dst->append(src->at(i));
+}
+
+static void copyPoints(const RectC &rect, QList<IMG::Point> *src,
+  QList<IMG::Point> *dst)
+{
+	for (int j = 0; j < src->size(); j++)
+		if (rect.contains(src->at(j).coordinates))
+			dst->append(src->at(j));
+}
+
+
 SubFile *VectorTile::file(SubFile::Type type)
 {
 	switch (type) {
@@ -70,17 +88,75 @@ bool VectorTile::initGMP()
 	return true;
 }
 
-void VectorTile::objects(const RectC &rect, int bits,
-  QList<IMG::Poly> *polygons, QList<IMG::Poly> *lines,
-  QList<IMG::Point> *points) const
+void VectorTile::polys(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
+  QList<IMG::Poly> *lines, QCache<const SubDiv *, IMG::Polys> *polyCache)
+  const
 {
+	SubFile::Handle rgnHdl, lblHdl, netHdl;
+
+	if (!_rgn->initialized() && !_rgn->init(rgnHdl))
+		return;
+
 	QList<SubDiv*> subdivs = _tre->subdivs(rect, bits);
 	for (int i = 0; i < subdivs.size(); i++) {
-		const SubDiv *subdiv = subdivs.at(i);
-		quint32 shift = _tre->shift(subdiv->bits());
+		SubDiv *subdiv = subdivs.at(i);
 
-		_rgn->objects(rect, subdiv, _lbl, _net, polygons, lines, points);
-		_rgn->extObjects(rect, subdiv, shift, _lbl, polygons, lines, points);
+		IMG::Polys *polys = polyCache->object(subdiv);
+		if (!polys) {
+			quint32 shift = _tre->shift(subdiv->bits());
+			QList<IMG::Poly> p, l;
+
+			if (!subdiv->initialized() && !_rgn->subdivInit(rgnHdl, subdiv))
+				continue;
+
+			_rgn->polyObjects(rgnHdl, subdiv, RGNFile::Polygon, _lbl, lblHdl,
+			  _net, netHdl, &p);
+			_rgn->polyObjects(rgnHdl, subdiv, RGNFile::Line, _lbl, lblHdl,
+			  _net, netHdl, &l);
+			_rgn->extPolyObjects(rgnHdl, subdiv, shift, RGNFile::Polygon, _lbl,
+			  lblHdl, &p);
+			_rgn->extPolyObjects(rgnHdl, subdiv, shift, RGNFile::Line, _lbl,
+			  lblHdl, &l);
+
+			copyPolys(rect, &p, polygons);
+			copyPolys(rect, &l, lines);
+			polyCache->insert(subdiv, new IMG::Polys(p, l));
+		} else {
+			copyPolys(rect, &(polys->polygons), polygons);
+			copyPolys(rect, &(polys->lines), lines);
+		}
+	}
+}
+
+void VectorTile::points(const RectC &rect, int bits, QList<IMG::Point> *points,
+  QCache<const SubDiv *, QList<IMG::Point> > *pointCache) const
+{
+	SubFile::Handle rgnHdl, lblHdl;
+
+	if (!_rgn->initialized() && !_rgn->init(rgnHdl))
+		return;
+
+	QList<SubDiv*> subdivs = _tre->subdivs(rect, bits);
+	for (int i = 0; i < subdivs.size(); i++) {
+		SubDiv *subdiv = subdivs.at(i);
+
+		QList<IMG::Point> *pl = pointCache->object(subdiv);
+		if (!pl) {
+			QList<IMG::Point> p;
+
+			if (!subdiv->initialized() && !_rgn->subdivInit(rgnHdl, subdiv))
+				continue;
+
+			_rgn->pointObjects(rgnHdl, subdiv, RGNFile::Point, _lbl, lblHdl,
+			  &p);
+			_rgn->pointObjects(rgnHdl, subdiv, RGNFile::IndexedPoint, _lbl,
+			  lblHdl, &p);
+			_rgn->extPointObjects(rgnHdl, subdiv, _lbl, lblHdl, &p);
+
+			copyPoints(rect, &p, points);
+			pointCache->insert(subdiv, new QList<IMG::Point>(p));
+		} else
+			copyPoints(rect, pl, points);
 	}
 }
 

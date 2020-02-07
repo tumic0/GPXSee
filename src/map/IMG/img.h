@@ -12,6 +12,7 @@
 
 class VectorTile;
 class SubFile;
+class SubDiv;
 
 class IMG
 {
@@ -24,6 +25,7 @@ public:
 		QVector<QPointF> points;
 		Label label;
 		quint32 type;
+		RectC boundingRect;
 
 		bool operator<(const Poly &other) const
 		  {return type > other.type;}
@@ -42,6 +44,14 @@ public:
 		  {return id < other.id;}
 	};
 
+	struct Polys {
+		Polys() {}
+		Polys(const QList<Poly> &polygons, const QList<Poly> &lines)
+			: polygons(polygons), lines(lines) {}
+
+		QList<Poly> polygons;
+		QList<Poly> lines;
+	};
 
 	IMG(const QString &fileName);
 	~IMG();
@@ -53,8 +63,9 @@ public:
 	const QString &name() const {return _name;}
 	const RectC &bounds() const {return _bounds;}
 
-	void objects(const RectC &rect, int bits, QList<Poly> *polygons,
-	  QList<Poly> *lines, QList<Point> *points);
+	void polys(const RectC &rect, int bits, QList<Poly> *polygons,
+	  QList<Poly> *lines);
+	void points(const RectC &rect, int bits, QList<Point> *points);
 	const Style *style() const {return _style;}
 
 	bool isValid() const {return _valid;}
@@ -73,13 +84,15 @@ private:
 	QFile _file;
 	quint8 _key;
 	int _blockSize;
-	QCache<int, QByteArray> _blockCache;
 
 	QString _name;
 	RectC _bounds;
 	TileTree _tileTree;
 	SubFile *_typ;
 	Style *_style;
+
+	QCache<const SubDiv*, Polys> _polyCache;
+	QCache<const SubDiv*, QList<Point> > _pointCache;
 
 	bool _valid;
 	QString _errorString;

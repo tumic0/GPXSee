@@ -939,9 +939,6 @@ Style::Style(SubFile *typ)
 
 	if (typ)
 		parseTYPFile(typ);
-
-	// Override stuff breaking the style display logic
-	_points[0x11400] = Point(None);
 }
 
 const Style::Line &Style::line(quint32 type) const

@@ -322,7 +322,6 @@ Coordinates IMGMap::xy2ll(const QPointF &p)
 	return _projection.xy2ll(_transform.img2proj(p));
 }
 
-
 void IMGMap::drawPolygons(QPainter *painter, const QList<IMG::Poly> &polygons)
 {
 	for (int n = 0; n < _img.style()->drawOrder().size(); n++) {
@@ -585,13 +584,14 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 				RectD polyRect(_transform.img2proj(ttl), _transform.img2proj(
 				  QPointF(ttl.x() + TILE_SIZE, ttl.y() + TILE_SIZE)));
-				_img.objects(polyRect.toRectC(_projection, 4), _zoom,
-				  &(tile.polygons()), &(tile.lines()), 0);
+				_img.polys(polyRect.toRectC(_projection, 4), _zoom,
+				  &(tile.polygons()), &(tile.lines()));
+
 				RectD pointRect(_transform.img2proj(QPointF(ttl.x() - TEXT_EXTENT,
 				  ttl.y() - TEXT_EXTENT)), _transform.img2proj(QPointF(ttl.x()
 				  + TILE_SIZE + TEXT_EXTENT, ttl.y() + TILE_SIZE + TEXT_EXTENT)));
-				_img.objects(pointRect.toRectC(_projection, 4), _zoom,
-				  0, 0, &(tile.points()));
+				_img.points(pointRect.toRectC(_projection, 4), _zoom,
+				  &(tile.points()));
 			}
 		}
 	}

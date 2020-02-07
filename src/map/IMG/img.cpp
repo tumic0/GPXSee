@@ -4,23 +4,34 @@
 #include "vectortile.h"
 #include "img.h"
 
-
-#define CACHE_SIZE 8388608 /* 8MB */
+#define CACHED_SUBDIVS_COUNT 2048 // ~32MB
 
 typedef QMap<QString, VectorTile*> TileMap;
 
-struct CTX
+struct PolyCTX
 {
-	CTX(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
-	  QList<IMG::Poly> *lines, QList<IMG::Point> *points)
+	PolyCTX(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
+	  QList<IMG::Poly> *lines, QCache<const SubDiv*, IMG::Polys> *polyCache)
 	  : rect(rect), bits(bits), polygons(polygons), lines(lines),
-	  points(points) {}
+	  polyCache(polyCache) {}
 
 	const RectC &rect;
 	int bits;
 	QList<IMG::Poly> *polygons;
 	QList<IMG::Poly> *lines;
+	QCache<const SubDiv*, IMG::Polys> *polyCache;
+};
+
+struct PointCTX
+{
+	PointCTX(const RectC &rect, int bits, QList<IMG::Point> *points,
+	  QCache<const SubDiv*, QList<IMG::Point> > *pointCache)
+	  : rect(rect), bits(bits), points(points), pointCache(pointCache) {}
+
+	const RectC &rect;
+	int bits;
 	QList<IMG::Point> *points;
+	QCache<const SubDiv*, QList<IMG::Point> > *pointCache;
 };
 
 static SubFile::Type tileType(const char str[3])
@@ -78,8 +89,9 @@ IMG::IMG(const QString &fileName)
 	QByteArray nba(QByteArray(d1, sizeof(d1)) + QByteArray(d2, sizeof(d2)));
 	_name = QString::fromLatin1(nba.constData(), nba.size()-1).trimmed();
 	_blockSize = 1 << (e1 + e2);
-	_blockCache.setMaxCost(CACHE_SIZE / _blockSize);
 
+	_polyCache.setMaxCost(CACHED_SUBDIVS_COUNT);
+	_pointCache.setMaxCost(CACHED_SUBDIVS_COUNT);
 
 	// Read the FAT table
 	quint8 flag;
@@ -214,20 +226,28 @@ void IMG::clear()
 	delete _style;
 	_style = 0;
 
-	_blockCache.clear();
+	_polyCache.clear();
+	_pointCache.clear();
 }
 
-static bool cb(VectorTile *tile, void *context)
+static bool polyCb(VectorTile *tile, void *context)
 {
-	CTX *ctx = (CTX*)context;
-	tile->objects(ctx->rect, ctx->bits, ctx->polygons, ctx->lines, ctx->points);
+	PolyCTX *ctx = (PolyCTX*)context;
+	tile->polys(ctx->rect, ctx->bits, ctx->polygons, ctx->lines, ctx->polyCache);
 	return true;
 }
 
-void IMG::objects(const RectC &rect, int bits, QList<Poly> *polygons,
-  QList<Poly> *lines, QList<Point> *points)
+static bool pointCb(VectorTile *tile, void *context)
 {
-	CTX ctx(rect, bits, polygons, lines, points);
+	PointCTX *ctx = (PointCTX*)context;
+	tile->points(ctx->rect, ctx->bits, ctx->points, ctx->pointCache);
+	return true;
+}
+
+void IMG::polys(const RectC &rect, int bits, QList<Poly> *polygons,
+  QList<Poly> *lines)
+{
+	PolyCTX ctx(rect, bits, polygons, lines, &_polyCache);
 	double min[2], max[2];
 
 	min[0] = rect.left();
@@ -235,7 +255,20 @@ void IMG::objects(const RectC &rect, int bits, QList<Poly> *polygons,
 	max[0] = rect.right();
 	max[1] = rect.top();
 
-	_tileTree.Search(min, max, cb, &ctx);
+	_tileTree.Search(min, max, polyCb, &ctx);
+}
+
+void IMG::points(const RectC &rect, int bits, QList<Point> *points)
+{
+	PointCTX ctx(rect, bits, points, &_pointCache);
+	double min[2], max[2];
+
+	min[0] = rect.left();
+	min[1] = rect.bottom();
+	max[0] = rect.right();
+	max[1] = rect.top();
+
+	_tileTree.Search(min, max, pointCb, &ctx);
 }
 
 qint64 IMG::read(char *data, qint64 maxSize)
@@ -261,16 +294,11 @@ template<class T> bool IMG::readValue(T &val)
 
 bool IMG::readBlock(int blockNum, QByteArray &data)
 {
-	QByteArray *block = _blockCache[blockNum];
-	if (!block) {
-		if (!_file.seek((qint64)blockNum * (qint64)_blockSize))
-			return false;
-		data.resize(_blockSize);
-		if (read(data.data(), _blockSize) < _blockSize)
-			return false;
-		_blockCache.insert(blockNum, new QByteArray(data));
-	} else
-		data = *block;
+	if (!_file.seek((qint64)blockNum * (qint64)_blockSize))
+		return false;
+	data.resize(_blockSize);
+	if (read(data.data(), _blockSize) < _blockSize)
+		return false;
 
 	return true;
 }

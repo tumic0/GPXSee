@@ -24,8 +24,11 @@ public:
 	SubFile *file(SubFile::Type type);
 	SubFile *addFile(IMG *img, SubFile::Type type);
 
-	void objects(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
-	  QList<IMG::Poly> *lines, QList<IMG::Point> *points) const;
+	void polys(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
+	  QList<IMG::Poly> *lines, QCache<const SubDiv *, IMG::Polys> *polyCache)
+	  const;
+	void points(const RectC &rect, int bits, QList<IMG::Point> *points,
+	  QCache<const SubDiv*, QList<IMG::Point> > *pointCache) const;
 
 	static bool isTileFile(SubFile::Type type)
 	{
