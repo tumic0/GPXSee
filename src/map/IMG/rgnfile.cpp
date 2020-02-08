@@ -125,7 +125,7 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 
 	if (!segment.isValid())
 		return true;
-	if (!seek(hdl, segment.start()))
+	if (!seek(hdl, segment.offset()))
 		return false;
 
 	quint32 labelPtr;
@@ -203,7 +203,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 
 	if (!segment.isValid())
 		return true;
-	if (!seek(hdl, segment.start()))
+	if (!seek(hdl, segment.offset()))
 		return false;
 
 	while (hdl.pos < (int)segment.end()) {
@@ -302,7 +302,7 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 
 	if (!segment.isValid())
 		return true;
-	if (!seek(hdl, segment.start()))
+	if (!seek(hdl, segment.offset()))
 		return false;
 
 	while (hdl.pos < (int)segment.end()) {
@@ -348,7 +348,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 
 	if (!segment.isValid())
 		return true;
-	if (!seek(hdl, segment.start()))
+	if (!seek(hdl, segment.offset()))
 		return false;
 
 	while (hdl.pos < (int)segment.end()) {
@@ -412,22 +412,19 @@ QMap<RGNFile::SegmentType, SubDiv::Segment> RGNFile::segments(Handle &hdl,
 	quint32 start = offset + 2 * (no - 1);
 	quint32 ls = 0;
 	SegmentType lt = (SegmentType)0;
-	quint16 po;
-	int cnt = 0;
 
 	for (quint16 mask = 0x1; mask <= 0x10; mask <<= 1) {
 		if (subdiv->objects() & mask) {
-			if (cnt) {
+			if (ls) {
+				quint16 po;
 				if (!readUInt16(hdl, po) || !po)
 					return QMap<RGNFile::SegmentType, SubDiv::Segment>();
 				start = offset + po;
-			}
-			if (ls)
 				ret.insert(lt, SubDiv::Segment(ls, start));
+			}
 
 			lt = (SegmentType)mask;
 			ls = start;
-			cnt++;
 		}
 	}
 

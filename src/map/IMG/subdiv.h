@@ -9,16 +9,16 @@ class SubDiv {
 public:
 	class Segment {
 	public:
-		Segment() : _start(0), _end(0) {}
-		Segment(quint32 start, quint32 end) : _start(start), _end(end) {}
+		Segment() : _offset(0), _end(0) {}
+		Segment(quint32 ofset, quint32 end) : _offset(ofset), _end(end) {}
 
-		bool isValid() const {return (_end > _start);}
+		bool isValid() const {return (_end > _offset);}
 
-		quint32 start() const {return _start;}
+		quint32 offset() const {return _offset;}
 		quint32 end() const {return _end;}
 
 	private:
-		quint32 _start, _end;
+		quint32 _offset, _end;
 	};
 
 	SubDiv(quint32 offset, qint32 lon, qint32 lat, int bits, quint8 objects)
@@ -54,21 +54,21 @@ public:
 	  const Segment &roadReferences, const Segment &extPoints,
 	  const Segment &extLines, const Segment &extPolygons)
 	{
-		_rgn.pointsOffset = points.start();
+		_rgn.pointsOffset = points.offset();
 		_rgn.pointsEnd = points.end();
-		_rgn.idxPointsOffset = idxPoints.start();
+		_rgn.idxPointsOffset = idxPoints.offset();
 		_rgn.idxPointsEnd = idxPoints.end();
-		_rgn.linesOffset = lines.start();
+		_rgn.linesOffset = lines.offset();
 		_rgn.linesEnd = lines.end();
-		_rgn.polygonsOffset = polygons.start();
+		_rgn.polygonsOffset = polygons.offset();
 		_rgn.polygonsEnd = polygons.end();
-		_rgn.roadReferencesOffset = roadReferences.start();
+		_rgn.roadReferencesOffset = roadReferences.offset();
 		_rgn.roadReferencesEnd = roadReferences.end();
-		_rgn.extPointsOffset = extPoints.start();
+		_rgn.extPointsOffset = extPoints.offset();
 		_rgn.extPointsEnd = extPoints.end();
-		_rgn.extLinesOffset = extLines.start();
+		_rgn.extLinesOffset = extLines.offset();
 		_rgn.extLinesEnd = extLines.end();
-		_rgn.extPolygonsOffset = extPolygons.start();
+		_rgn.extPolygonsOffset = extPolygons.offset();
 		_rgn.extPolygonsEnd = extPolygons.end();
 
 		_init = true;
