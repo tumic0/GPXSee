@@ -28,25 +28,25 @@ public:
 		_tre.offset = offset;
 		_tre.end = 0;
 
-		_tre.polygonsOffset = 0;
-		_tre.polygonsEnd = 0;
-		_tre.linesOffset = 0;
-		_tre.linesEnd = 0;
-		_tre.pointsOffset = 0;
-		_tre.pointsEnd = 0;
+		_tre.extPolygonsOffset = 0;
+		_tre.extPolygonsEnd = 0;
+		_tre.extLinesOffset = 0;
+		_tre.extLinesEnd = 0;
+		_tre.extPointsOffset = 0;
+		_tre.extPointsEnd = 0;
 	}
 	void setEnd(quint32 end) {_tre.end = end;}
 	void setExtOffsets(quint32 polygon, quint32 line, quint32 point)
 	{
-		_tre.polygonsOffset = polygon;
-		_tre.linesOffset = line;
-		_tre.pointsOffset = point;
+		_tre.extPolygonsOffset = polygon;
+		_tre.extLinesOffset = line;
+		_tre.extPointsOffset = point;
 	}
 	void setExtEnds(quint32 polygon, quint32 line, quint32 point)
 	{
-		_tre.polygonsEnd = polygon;
-		_tre.linesEnd = line;
-		_tre.pointsEnd = point;
+		_tre.extPolygonsEnd = polygon;
+		_tre.extLinesEnd = line;
+		_tre.extPointsEnd = point;
 	}
 
 	void init(const Segment &points, const Segment &idxPoints,
@@ -54,14 +54,23 @@ public:
 	  const Segment &roadReferences, const Segment &extPoints,
 	  const Segment &extLines, const Segment &extPolygons)
 	{
-		_rgn.points = points;
-		_rgn.idxPoints = idxPoints;
-		_rgn.lines = lines;
-		_rgn.polygons = polygons;
-		_rgn.roadReferences = roadReferences;
-		_rgn.extPoints = extPoints;
-		_rgn.extLines = extLines;
-		_rgn.extPolygons = extPolygons;
+		_rgn.pointsOffset = points.start();
+		_rgn.pointsEnd = points.end();
+		_rgn.idxPointsOffset = idxPoints.start();
+		_rgn.idxPointsEnd = idxPoints.end();
+		_rgn.linesOffset = lines.start();
+		_rgn.linesEnd = lines.end();
+		_rgn.polygonsOffset = polygons.start();
+		_rgn.polygonsEnd = polygons.end();
+		_rgn.roadReferencesOffset = roadReferences.start();
+		_rgn.roadReferencesEnd = roadReferences.end();
+		_rgn.extPointsOffset = extPoints.start();
+		_rgn.extPointsEnd = extPoints.end();
+		_rgn.extLinesOffset = extLines.start();
+		_rgn.extLinesEnd = extLines.end();
+		_rgn.extPolygonsOffset = extPolygons.start();
+		_rgn.extPolygonsEnd = extPolygons.end();
+
 		_init = true;
 	}
 	bool initialized() const {return _init;}
@@ -71,24 +80,31 @@ public:
 	quint8 bits() const {return _bits;}
 
 	// Valid only after initialization
-	const Segment &points() const {return _rgn.points;}
-	const Segment &idxPoints() const {return _rgn.idxPoints;}
-	const Segment &lines() const {return _rgn.lines;}
-	const Segment &polygons() const {return _rgn.polygons;}
-	const Segment &extPoints() const {return _rgn.extPoints;}
-	const Segment &extLines() const {return _rgn.extLines;}
-	const Segment &extPolygons() const {return _rgn.extPolygons;}
+	Segment points() const
+	  {return Segment(_rgn.pointsOffset, _rgn.pointsEnd);}
+	Segment idxPoints() const
+	  {return Segment(_rgn.idxPointsOffset, _rgn.idxPointsEnd);}
+	Segment lines() const
+	  {return Segment(_rgn.linesOffset, _rgn.linesEnd);}
+	Segment polygons() const
+	  {return Segment(_rgn.polygonsOffset, _rgn.polygonsEnd);}
+	Segment extPoints() const
+	  {return Segment(_rgn.extPointsOffset, _rgn.extPointsEnd);}
+	Segment extLines() const
+	  {return Segment(_rgn.extLinesOffset, _rgn.extLinesEnd);}
+	Segment extPolygons() const
+	  {return Segment(_rgn.extPolygonsOffset, _rgn.extPolygonsEnd);}
 
 	// Valid only until initialization
 	quint8 objects() const {return _tre.objects;}
 	quint32 offset() const {return _tre.offset;}
 	quint32 end() const {return _tre.end;}
-	quint32 extPolygonsOffset() const {return _tre.polygonsOffset;}
-	quint32 extPolygonsEnd() const {return _tre.polygonsEnd;}
-	quint32 extLinesOffset() const {return _tre.linesOffset;}
-	quint32 extLinesEnd() const {return _tre.linesEnd;}
-	quint32 extPointsOffset() const {return _tre.pointsOffset;}
-	quint32 extPointsEnd() const {return _tre.pointsEnd;}
+	quint32 extPolygonsOffset() const {return _tre.extPolygonsOffset;}
+	quint32 extPolygonsEnd() const {return _tre.extPolygonsEnd;}
+	quint32 extLinesOffset() const {return _tre.extLinesOffset;}
+	quint32 extLinesEnd() const {return _tre.extLinesEnd;}
+	quint32 extPointsOffset() const {return _tre.extPointsOffset;}
+	quint32 extPointsEnd() const {return _tre.extPointsEnd;}
 
 private:
 	struct TRE
@@ -97,24 +113,32 @@ private:
 		quint32 offset;
 		quint32 end;
 
-		quint32 polygonsOffset;
-		quint32 polygonsEnd;
-		quint32 linesOffset;
-		quint32 linesEnd;
-		quint32 pointsOffset;
-		quint32 pointsEnd;
+		quint32 extPolygonsOffset;
+		quint32 extPolygonsEnd;
+		quint32 extLinesOffset;
+		quint32 extLinesEnd;
+		quint32 extPointsOffset;
+		quint32 extPointsEnd;
 	};
 
 	struct RGN
 	{
-		Segment points;
-		Segment idxPoints;
-		Segment lines;
-		Segment polygons;
-		Segment roadReferences;
-		Segment extPoints;
-		Segment extLines;
-		Segment extPolygons;
+		quint32 pointsOffset;
+		quint32 pointsEnd;
+		quint32 idxPointsOffset;
+		quint32 idxPointsEnd;
+		quint32 linesOffset;
+		quint32 linesEnd;
+		quint32 polygonsOffset;
+		quint32 polygonsEnd;
+		quint32 roadReferencesOffset;
+		quint32 roadReferencesEnd;
+		quint32 extPointsOffset;
+		quint32 extPointsEnd;
+		quint32 extLinesOffset;
+		quint32 extLinesEnd;
+		quint32 extPolygonsOffset;
+		quint32 extPolygonsEnd;
 	};
 
 	qint32 _lon, _lat;
