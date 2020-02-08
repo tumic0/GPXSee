@@ -72,7 +72,8 @@ bool BitStream4::flush()
 		return false;
 
 	_length = 0;
-	_unused = 32;
+	_used = 32;
+	_unused = 0;
 
 	return true;
 }
