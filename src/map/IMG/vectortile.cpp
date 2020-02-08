@@ -80,10 +80,10 @@ bool VectorTile::initGMP()
 	  && _gmp->readUInt32(hdl, net)))
 		return false;
 
-	_tre = new TREFile(_gmp, tre);
-	_rgn = new RGNFile(_gmp, rgn);
-	_lbl = new LBLFile(_gmp, lbl);
-	_net = new NETFile(_gmp, net);
+	_tre = tre ? new TREFile(_gmp, tre) : 0;
+	_rgn = rgn ? new RGNFile(_gmp, rgn) : 0;
+	_lbl = lbl ? new LBLFile(_gmp, lbl) : 0;
+	_net = net ? new NETFile(_gmp, net) : 0;
 
 	return true;
 }
