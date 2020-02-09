@@ -39,7 +39,7 @@ TREFile::~TREFile()
 
 bool TREFile::init()
 {
-	Handle hdl;
+	Handle hdl(this);
 	quint8 locked;
 	quint16 hdrLen;
 
@@ -113,7 +113,7 @@ bool TREFile::init()
 
 bool TREFile::load(int idx)
 {
-	Handle hdl;
+	Handle hdl(this);
 	QList<SubDiv*> sl;
 	SubDiv *s = 0;
 	SubDivTree *tree = new SubDivTree();
@@ -199,7 +199,7 @@ bool TREFile::load(int idx)
 			if (i)
 				sl.at(i-1)->setExtEnds(polygons, lines, points);
 
-			if (!seek(hdl, hdl.pos + _extended.itemSize - 12))
+			if (!seek(hdl, hdl.pos() + _extended.itemSize - 12))
 				goto error;
 		}
 

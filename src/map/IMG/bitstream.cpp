@@ -32,7 +32,7 @@ bool BitStream1::read(int bits, quint32 &val)
 
 bool BitStream1::flush()
 {
-	if (_length && !_file.seek(_hdl, _hdl.pos + _length))
+	if (_length && !_file.seek(_hdl, _hdl.pos() + _length))
 		return false;
 
 	_length = 0;
@@ -68,7 +68,7 @@ bool BitStream4::read(int bits, quint32 &val)
 
 bool BitStream4::flush()
 {
-	if (_length && !_file.seek(_hdl, _hdl.pos + _length))
+	if (_length && !_file.seek(_hdl, _hdl.pos() + _length))
 		return false;
 
 	_length = 0;

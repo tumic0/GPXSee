@@ -35,7 +35,7 @@ bool RGNFile::skipClassFields(Handle &hdl) const
 			break;
 	}
 
-	return seek(hdl, hdl.pos + rs);
+	return seek(hdl, hdl.pos() + rs);
 }
 
 bool RGNFile::skipLclFields(Handle &hdl, const quint32 flags[3],
@@ -133,7 +133,7 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 	qint16 lon, lat;
 	quint16 len;
 
-	while (hdl.pos < (int)segment.end()) {
+	while (hdl.pos() < (int)segment.end()) {
 		IMG::Poly poly;
 
 		if (!(readUInt8(hdl, type) && readUInt24(hdl, labelPtr)
@@ -206,7 +206,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 	if (!seek(hdl, segment.offset()))
 		return false;
 
-	while (hdl.pos < (int)segment.end()) {
+	while (hdl.pos() < (int)segment.end()) {
 		IMG::Poly poly;
 		QPoint pos;
 
@@ -305,7 +305,7 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 	if (!seek(hdl, segment.offset()))
 		return false;
 
-	while (hdl.pos < (int)segment.end()) {
+	while (hdl.pos() < (int)segment.end()) {
 		IMG::Point point;
 
 		if (!(readUInt8(hdl, type) && readUInt24(hdl, labelPtr)
@@ -327,7 +327,7 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 		point.poi = labelPtr & 0x400000;
 		if (lbl && (labelPtr & 0x3FFFFF)) {
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi);
-			point.id = ((quint64)point.type)<<40 | ((quint64)lbl->offset())<<24
+			point.id = ((quint64)point.type)<<40 | ((quint64)lbl->id())<<24
 			  | (labelPtr & 0x3FFFFF);
 		}
 
@@ -351,7 +351,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 	if (!seek(hdl, segment.offset()))
 		return false;
 
-	while (hdl.pos < (int)segment.end()) {
+	while (hdl.pos() < (int)segment.end()) {
 		IMG::Point point;
 
 		if (!(readUInt8(hdl, type) && readUInt8(hdl, subtype)
@@ -382,7 +382,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 		if (lbl && (labelPtr & 0x3FFFFF)) {
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi);
 			point.id = ((quint64)point.type)<<40
-			  | ((quint64)lbl->offset())<<24 | (labelPtr & 0x3FFFFF);
+			  | ((quint64)lbl->id())<<24 | (labelPtr & 0x3FFFFF);
 		}
 
 		points->append(point);

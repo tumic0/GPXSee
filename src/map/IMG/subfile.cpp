@@ -5,22 +5,35 @@
 
 bool SubFile::seek(Handle &handle, quint32 pos) const
 {
-	if (_file)
-		return _file->seek(pos);
-	else {
+	if (handle._file) {
+		int blockNum = pos / BLOCK_SIZE;
+
+		if (handle._blockNum != blockNum) {
+			if (!handle._file->seek((qint64)blockNum * BLOCK_SIZE))
+				return false;
+			if (handle._file->read(handle._data.data(), BLOCK_SIZE) < 0)
+				return false;
+			handle._blockNum = blockNum;
+		}
+
+		handle._blockPos = pos % BLOCK_SIZE;
+		handle._pos = pos;
+
+		return true;
+	} else {
 		quint32 blockSize = _img->blockSize();
 		int blockNum = pos / blockSize;
 
-		if (handle.blockNum != blockNum) {
+		if (handle._blockNum != blockNum) {
 			if (blockNum >= _blocks->size())
 				return false;
-			if (!_img->readBlock(_blocks->at(blockNum), handle.data))
+			if (!_img->readBlock(_blocks->at(blockNum), handle._data.data()))
 				return false;
-			handle.blockNum = blockNum;
+			handle._blockNum = blockNum;
 		}
 
-		handle.blockPos = pos % blockSize;
-		handle.pos = pos;
+		handle._blockPos = pos % blockSize;
+		handle._pos = pos;
 
 		return true;
 	}
@@ -28,14 +41,10 @@ bool SubFile::seek(Handle &handle, quint32 pos) const
 
 bool SubFile::readByte(Handle &handle, quint8 &val) const
 {
-	if (_file)
-		return _file->getChar((char*)&val);
-	else {
-		val = handle.data.at(handle.blockPos++);
-		handle.pos++;
-		return (handle.blockPos >= _img->blockSize())
-		  ? seek(handle, handle.pos) : true;
-	}
+	int blockSize = handle._file ? BLOCK_SIZE : _img->blockSize();
+	val = handle._data.at(handle._blockPos++);
+	handle._pos++;
+	return (handle._blockPos >= blockSize) ? seek(handle, handle._pos) : true;
 }
 
 bool SubFile::readVUInt32(Handle &hdl, quint32 &val) const
@@ -77,7 +86,7 @@ bool SubFile::readVBitfield32(Handle &hdl, quint32 &bitfield) const
 		return false;
 
 	if (!(bits & 1)) {
-		seek(hdl, hdl.pos - 1);
+		seek(hdl, hdl._pos - 1);
 		if (!((bits>>1) & 1)) {
 			if (!((bits>>2) & 1)) {
 				if (!readUInt32(hdl, bitfield))
@@ -96,9 +105,4 @@ bool SubFile::readVBitfield32(Handle &hdl, quint32 &bitfield) const
 		bitfield = bits>>1;
 
 	return true;
-}
-
-QString SubFile::fileName() const
-{
-	return _file ? _file->fileName() : _img->fileName();
 }

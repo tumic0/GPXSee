@@ -23,6 +23,7 @@ public:
 
 	SubFile *file(SubFile::Type type);
 	SubFile *addFile(IMG *img, SubFile::Type type);
+	SubFile *addFile(const QString &path, SubFile::Type type);
 
 	void polys(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
 	  QList<IMG::Poly> *lines, QCache<const SubDiv *, IMG::Polys> *polyCache)
@@ -36,8 +37,6 @@ public:
 		  || type == SubFile::RGN || type == SubFile::NET
 		  || type == SubFile::GMP);
 	}
-
-	friend QDebug operator<<(QDebug dbg, const VectorTile &tile);
 
 private:
 	bool initGMP();

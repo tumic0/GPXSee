@@ -24,6 +24,10 @@ public:
 	  : SubFile(img), _offset(0), _size(0), _polygonsOffset(0),
 	  _polygonsSize(0), _linesOffset(0), _linesSize(0), _pointsOffset(0),
 	  _pointsSize(0), _init(false) {clearFlags();}
+	RGNFile(const QString &path)
+	  : SubFile(path), _offset(0), _size(0), _polygonsOffset(0),
+	  _polygonsSize(0), _linesOffset(0), _linesSize(0), _pointsOffset(0),
+	  _pointsSize(0), _init(false) {clearFlags();}
 	RGNFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset), _offset(0),
 	  _size(0), _polygonsOffset(0), _polygonsSize(0), _linesOffset(0),
 	  _linesSize(0), _pointsOffset(0), _pointsSize(0), _init(false)

@@ -59,6 +59,29 @@ SubFile *VectorTile::addFile(IMG *img, SubFile::Type type)
 	}
 }
 
+SubFile *VectorTile::addFile(const QString &path, SubFile::Type type)
+{
+	switch (type) {
+		case SubFile::TRE:
+			_tre = new TREFile(path);
+			return _tre;
+		case SubFile::RGN:
+			_rgn = new RGNFile(path);
+			return _rgn;
+		case SubFile::LBL:
+			_lbl = new LBLFile(path);
+			return _lbl;
+		case SubFile::NET:
+			_net = new NETFile(path);
+			return _net;
+		case SubFile::GMP:
+			_gmp = new SubFile(path);
+			return _gmp;
+		default:
+			return 0;
+	}
+}
+
 bool VectorTile::init()
 {
 	if (_gmp && !initGMP())
@@ -72,7 +95,7 @@ bool VectorTile::init()
 
 bool VectorTile::initGMP()
 {
-	SubFile::Handle hdl;
+	SubFile::Handle hdl(_gmp);
 	quint32 tre, rgn, lbl, net;
 
 	if (!(_gmp->seek(hdl, 0x19) && _gmp->readUInt32(hdl, tre)
@@ -92,7 +115,7 @@ void VectorTile::polys(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
   QList<IMG::Poly> *lines, QCache<const SubDiv *, IMG::Polys> *polyCache)
   const
 {
-	SubFile::Handle rgnHdl, lblHdl, netHdl;
+	SubFile::Handle rgnHdl(_rgn), lblHdl(_lbl), netHdl(_net);
 
 	if (!_rgn->initialized() && !_rgn->init(rgnHdl))
 		return;
@@ -131,7 +154,7 @@ void VectorTile::polys(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
 void VectorTile::points(const RectC &rect, int bits, QList<IMG::Point> *points,
   QCache<const SubDiv *, QList<IMG::Point> > *pointCache) const
 {
-	SubFile::Handle rgnHdl, lblHdl;
+	SubFile::Handle rgnHdl(_rgn), lblHdl(_lbl);
 
 	if (!_rgn->initialized() && !_rgn->init(rgnHdl))
 		return;

@@ -23,7 +23,7 @@ public:
 	static QStringList filter();
 
 private:
-	bool loadFile(const QString &path, bool *atlas, bool dir);
+	bool loadFile(const QString &path, bool *terminate, bool dir);
 	bool loadDirR(const QString &path);
 	Map *loadSource(const QString &path, bool dir);
 	bool loadMap(Map *map, const QString &path, bool dir);

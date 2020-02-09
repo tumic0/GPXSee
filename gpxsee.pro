@@ -91,8 +91,10 @@ HEADERS += src/common/config.h \
     src/map/IMG/bitmapline.h \
     src/map/IMG/bitstream.h \
     src/map/IMG/deltastream.h \
+    src/map/IMG/gmap.h \
     src/map/IMG/huffmanstream.h \
     src/map/IMG/huffmantable.h \
+    src/map/IMG/mapdata.h \
     src/map/IMG/textpathitem.h \
     src/map/IMG/textpointitem.h \
     src/map/projection.h \
@@ -249,8 +251,10 @@ SOURCES += src/main.cpp \
     src/map/IMG/bitmapline.cpp \
     src/map/IMG/bitstream.cpp \
     src/map/IMG/deltastream.cpp \
+    src/map/IMG/gmap.cpp \
     src/map/IMG/huffmanstream.cpp \
     src/map/IMG/huffmantable.cpp \
+    src/map/IMG/mapdata.cpp \
     src/map/IMG/textpathitem.cpp \
     src/map/IMG/textpointitem.cpp \
     src/map/maplist.cpp \

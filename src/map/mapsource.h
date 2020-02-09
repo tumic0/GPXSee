@@ -15,6 +15,7 @@ class MapSource
 {
 public:
 	static Map *loadMap(const QString &path, QString &errorString);
+	static bool isMap(const QString &path);
 
 private:
 	enum Type {

@@ -8,19 +8,26 @@
 #include "mbtilesmap.h"
 #include "rmap.h"
 #include "imgmap.h"
+#include "IMG/gmap.h"
 #include "maplist.h"
 
 
-bool MapList::loadMap(Map* map, const QString &path, bool dir)
+bool MapList::loadMap(Map *map, const QString &path, bool dir)
 {
-	if (map->isValid()) {
+	if (map && map->isValid()) {
 		_maps.append(map);
 		return true;
-	} else {
+	} else if (map) {
 		if (dir)
 			_errorString += path + ": " + map->errorString() + "\n";
 		else
 			_errorString = map->errorString();
+		return false;
+	} else {
+		if (dir)
+			_errorString += path + ": " + "Unknown map format\n";
+		else
+			_errorString = "Unknown map format";
 		return false;
 	}
 }
@@ -41,18 +48,22 @@ Map *MapList::loadSource(const QString &path, bool dir)
 	return map;
 }
 
-bool MapList::loadFile(const QString &path, bool *atlas, bool dir)
+bool MapList::loadFile(const QString &path, bool *terminate, bool dir)
 {
 	QFileInfo fi(path);
 	QString suffix = fi.suffix().toLower();
-	Map *map;
+	Map *map = 0;
 
 	if (Atlas::isAtlas(path)) {
-		*atlas = true;
+		*terminate = true;
 		map = new Atlas(path, this);
 	} else if (suffix == "xml") {
-		if (!(map = loadSource(path, dir)))
+		if (MapSource::isMap(path) && !(map = loadSource(path, dir)))
 			return false;
+		else if (GMAP::isGMAP(path)) {
+			*terminate = true;
+			map = new IMGMap(path);
+		}
 	} else if (suffix == "jnx")
 		map = new JNXMap(path, this);
 	else if (suffix == "tif" || suffix == "tiff")
@@ -85,15 +96,15 @@ bool MapList::loadDirR(const QString &path)
 	for (int i = 0; i < ml.size(); i++) {
 		const QFileInfo &fi = ml.at(i);
 		QString suffix = fi.suffix().toLower();
-		bool atlas = false;
+		bool terminate = false;
 
 		if (fi.isDir() && fi.fileName() != "set") {
 			if (!loadDirR(fi.absoluteFilePath()))
 				ret = false;
 		} else if (filter().contains("*." + suffix)) {
-			if (!loadFile(fi.absoluteFilePath(), &atlas, true))
+			if (!loadFile(fi.absoluteFilePath(), &terminate, true))
 				ret = false;
-			if (atlas)
+			if (terminate)
 				break;
 		}
 	}
@@ -120,7 +131,7 @@ QString MapList::formats()
 	return
 	  tr("Supported files")
 	  + " (*.img *.jnx *.map *.mbtiles *.rmap *.rtmap *.tar *.tba *.tif *.tiff *.xml);;"
-	  + tr("Garmin IMG maps") + " (*.img);;"
+	  + tr("Garmin IMG maps") + " (*.img *.xml);;"
 	  + tr("Garmin JNX maps") + " (*.jnx);;"
 	  + tr("OziExplorer maps") + " (*.map);;"
 	  + tr("MBTiles maps") + " (*.mbtiles);;"
