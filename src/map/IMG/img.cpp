@@ -1,10 +1,8 @@
 #include <QMap>
 #include <QtEndian>
-
 #include "vectortile.h"
 #include "img.h"
 
-#define CACHED_SUBDIVS_COUNT 2048 // ~32MB
 
 typedef QMap<QByteArray, VectorTile*> TileMap;
 
@@ -62,9 +60,6 @@ IMG::IMG(const QString &fileName) : _file(fileName)
 	QByteArray nba(QByteArray(d1, sizeof(d1)) + QByteArray(d2, sizeof(d2)));
 	_name = QString::fromLatin1(nba.constData(), nba.size()-1).trimmed();
 	_blockSize = 1 << (e1 + e2);
-
-	_polyCache.setMaxCost(CACHED_SUBDIVS_COUNT);
-	_pointCache.setMaxCost(CACHED_SUBDIVS_COUNT);
 
 	// Read the FAT table
 	quint8 flag;

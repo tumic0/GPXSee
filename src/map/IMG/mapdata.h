@@ -53,7 +53,7 @@ public:
 		QList<Poly> lines;
 	};
 
-	MapData() : _typ(0), _style(0), _valid(false) {}
+	MapData();
 	virtual ~MapData();
 
 	const QString &name() const {return _name;}
@@ -78,13 +78,14 @@ protected:
 	RectC _bounds;
 	SubFile *_typ;
 	Style *_style;
-
 	TileTree _tileTree;
-	QCache<const SubDiv*, Polys> _polyCache;
-	QCache<const SubDiv*, QList<Point> > _pointCache;
 
 	bool _valid;
 	QString _errorString;
+
+private:
+	QCache<const SubDiv*, Polys> _polyCache;
+	QCache<const SubDiv*, QList<Point> > _pointCache;
 };
 
 #ifndef QT_NO_DEBUG

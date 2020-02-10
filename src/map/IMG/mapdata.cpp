@@ -4,6 +4,8 @@
 #include "mapdata.h"
 
 
+#define CACHED_SUBDIVS_COUNT 2048 // ~32MB for both caches together
+
 struct PolyCTX
 {
 	PolyCTX(const RectC &rect, int bits, QList<MapData::Poly> *polygons,
@@ -44,6 +46,12 @@ inline bool pointCb(VectorTile *tile, void *context)
 	return true;
 }
 
+
+MapData::MapData() : _typ(0), _style(0), _valid(false)
+{
+	_polyCache.setMaxCost(CACHED_SUBDIVS_COUNT);
+	_pointCache.setMaxCost(CACHED_SUBDIVS_COUNT);
+}
 
 MapData::~MapData()
 {
