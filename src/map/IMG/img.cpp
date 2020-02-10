@@ -6,7 +6,7 @@
 
 #define CACHED_SUBDIVS_COUNT 2048 // ~32MB
 
-typedef QMap<QString, VectorTile*> TileMap;
+typedef QMap<QByteArray, VectorTile*> TileMap;
 
 static SubFile::Type tileType(const char str[3])
 {
@@ -36,7 +36,7 @@ IMG::IMG(const QString &fileName) : _file(fileName)
 	}
 
 	TileMap tileMap;
-	QString typFile;
+	QByteArray typFile;
 
 	if (!_file.open(QFile::ReadOnly)) {
 		_errorString = _file.errorString();
@@ -92,7 +92,7 @@ IMG::IMG(const QString &fileName) : _file(fileName)
 		  && read(type, sizeof(type)) && readValue(size) && readValue(part));
 		SubFile::Type tt = tileType(type);
 
-		QString fn(QByteArray(name, sizeof(name)));
+		QByteArray fn(name, sizeof(name));
 		if (VectorTile::isTileFile(tt)) {
 			VectorTile *tile;
 			TileMap::const_iterator it = tileMap.find(fn);
