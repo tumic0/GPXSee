@@ -26,9 +26,6 @@ public:
 				_data.resize(BLOCK_SIZE);
 			} else if (subFile)
 				_data.resize(subFile->_img->blockSize());
-			_blockNum = -1;
-			_blockPos = -1;
-			_pos = -1;
 		}
 		~Handle() {delete _file;}
 
