@@ -59,7 +59,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="181"/>
         <source>CUP files</source>
-        <translation type="unfinished"></translation>
+        <translation>Pliki CUP</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="182"/>
@@ -74,7 +74,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="186"/>
         <source>GPI files</source>
-        <translation type="unfinished"></translation>
+        <translation>Pliki GPI</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="187"/>
@@ -114,7 +114,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="195"/>
         <source>SML files</source>
-        <translation type="unfinished"></translation>
+        <translation>Pliki SML</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="196"/>
