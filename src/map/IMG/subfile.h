@@ -147,7 +147,14 @@ protected:
 	quint32 _gmpOffset;
 
 private:
-	bool readByte(Handle &handle, quint8 &val) const;
+	bool readByte(Handle &handle, quint8 &val) const
+	{
+		int blockSize = handle._file ? BLOCK_SIZE : _img->blockSize();
+		val = handle._data.at(handle._blockPos++);
+		handle._pos++;
+		return (handle._blockPos >= blockSize)
+		  ? seek(handle, handle._pos) : true;
+	}
 
 	IMG *_img;
 	QVector<quint16> *_blocks;

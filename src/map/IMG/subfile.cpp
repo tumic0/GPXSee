@@ -39,14 +39,6 @@ bool SubFile::seek(Handle &handle, quint32 pos) const
 	}
 }
 
-bool SubFile::readByte(Handle &handle, quint8 &val) const
-{
-	int blockSize = handle._file ? BLOCK_SIZE : _img->blockSize();
-	val = handle._data.at(handle._blockPos++);
-	handle._pos++;
-	return (handle._blockPos >= blockSize) ? seek(handle, handle._pos) : true;
-}
-
 bool SubFile::readVUInt32(Handle &hdl, quint32 &val) const
 {
 	quint8 bytes, shift, b;
