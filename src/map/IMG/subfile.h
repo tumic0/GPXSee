@@ -7,7 +7,7 @@
 #include "img.h"
 
 
-#define BLOCK_SIZE 8192
+#define BLOCK_SIZE 4096
 
 class SubFile
 {
@@ -146,7 +146,7 @@ protected:
 private:
 	bool readByte(Handle &handle, quint8 &val) const
 	{
-		int blockSize = handle._file ? BLOCK_SIZE : _img->blockSize();
+		int blockSize = _img ? _img->blockSize() : BLOCK_SIZE;
 		val = handle._data.at(handle._blockPos++);
 		handle._pos++;
 		return (handle._blockPos >= blockSize)
