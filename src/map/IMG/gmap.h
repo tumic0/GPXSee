@@ -16,8 +16,6 @@ public:
 	static bool isGMAP(const QString &path);
 
 private:
-	QString _fileName;
-
 	bool readXML(const QString &path, QString &dataDir, QString &typFile,
 	  QString &baseMap);
 	void mapProduct(QXmlStreamReader &reader, QString &dataDir,
@@ -25,6 +23,8 @@ private:
 	void subProduct(QXmlStreamReader &reader, QString &dataDir,
 	  QString &baseMap);
 	bool loadTile(const QDir &dir, quint16 &id);
+
+	QString _fileName;
 };
 
 #endif // GMAP_H
