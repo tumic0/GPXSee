@@ -174,7 +174,7 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 		if (!(stream.atEnd() && stream.flush()))
 			return false;
 
-		if (lbl && (labelPtr & 0x3FFFFF) && subdiv->bits() > 18) {
+		if (lbl && (labelPtr & 0x3FFFFF)) {
 			if (labelPtr & 0x800000) {
 				quint32 lblOff;
 				if (net && net->lblOffset(netHdl, labelPtr & 0x3FFFFF, lblOff)
@@ -281,7 +281,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 		  ? _linesFlags : _polygonsFlags, segmentType))
 			return false;
 
-		if (lbl && (labelPtr & 0x3FFFFF) && subdiv->bits() > 18)
+		if (lbl && (labelPtr & 0x3FFFFF))
 			poly.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
 
 		polys->append(poly);
