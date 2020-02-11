@@ -8,13 +8,15 @@
 
 struct PolyCTX
 {
-	PolyCTX(const RectC &rect, int bits, QList<MapData::Poly> *polygons,
-	  QList<MapData::Poly> *lines, QCache<const SubDiv*,
-	  MapData::Polys> *polyCache) : rect(rect), bits(bits), polygons(polygons),
+	PolyCTX(const RectC &rect, int bits, bool baseMap,
+	  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
+	  QCache<const SubDiv*, MapData::Polys> *polyCache)
+	  : rect(rect), bits(bits), baseMap(baseMap), polygons(polygons),
 	  lines(lines), polyCache(polyCache) {}
 
 	const RectC &rect;
 	int bits;
+	bool baseMap;
 	QList<MapData::Poly> *polygons;
 	QList<MapData::Poly> *lines;
 	QCache<const SubDiv*, MapData::Polys> *polyCache;
@@ -22,12 +24,15 @@ struct PolyCTX
 
 struct PointCTX
 {
-	PointCTX(const RectC &rect, int bits, QList<MapData::Point> *points,
+	PointCTX(const RectC &rect, int bits, bool baseMap,
+	  QList<MapData::Point> *points,
 	  QCache<const SubDiv*, QList<MapData::Point> > *pointCache)
-	  : rect(rect), bits(bits), points(points), pointCache(pointCache) {}
+	  : rect(rect), bits(bits), baseMap(baseMap), points(points),
+	  pointCache(pointCache) {}
 
 	const RectC &rect;
 	int bits;
+	bool baseMap;
 	QList<MapData::Point> *points;
 	QCache<const SubDiv*, QList<MapData::Point> > *pointCache;
 };
@@ -35,19 +40,21 @@ struct PointCTX
 inline bool polyCb(VectorTile *tile, void *context)
 {
 	PolyCTX *ctx = (PolyCTX*)context;
-	tile->polys(ctx->rect, ctx->bits, ctx->polygons, ctx->lines, ctx->polyCache);
+	tile->polys(ctx->rect, ctx->bits, ctx->baseMap, ctx->polygons, ctx->lines,
+	  ctx->polyCache);
 	return true;
 }
 
 inline bool pointCb(VectorTile *tile, void *context)
 {
 	PointCTX *ctx = (PointCTX*)context;
-	tile->points(ctx->rect, ctx->bits, ctx->points, ctx->pointCache);
+	tile->points(ctx->rect, ctx->bits, ctx->baseMap, ctx->points,
+	  ctx->pointCache);
 	return true;
 }
 
 
-MapData::MapData() : _typ(0), _style(0), _valid(false)
+MapData::MapData() : _typ(0), _style(0), _baseMap(false), _valid(false)
 {
 	_polyCache.setMaxCost(CACHED_SUBDIVS_COUNT);
 	_pointCache.setMaxCost(CACHED_SUBDIVS_COUNT);
@@ -66,7 +73,7 @@ MapData::~MapData()
 void MapData::polys(const RectC &rect, int bits, QList<Poly> *polygons,
   QList<Poly> *lines)
 {
-	PolyCTX ctx(rect, bits, polygons, lines, &_polyCache);
+	PolyCTX ctx(rect, bits, _baseMap, polygons, lines, &_polyCache);
 	double min[2], max[2];
 
 	min[0] = rect.left();
@@ -79,7 +86,7 @@ void MapData::polys(const RectC &rect, int bits, QList<Poly> *polygons,
 
 void MapData::points(const RectC &rect, int bits, QList<Point> *points)
 {
-	PointCTX ctx(rect, bits, points, &_pointCache);
+	PointCTX ctx(rect, bits, _baseMap, points, &_pointCache);
 	double min[2], max[2];
 
 	min[0] = rect.left();

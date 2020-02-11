@@ -1,7 +1,6 @@
 #ifndef VECTORTILE_H
 #define VECTORTILE_H
 
-#include "img.h"
 #include "trefile.h"
 #include "trefile.h"
 #include "rgnfile.h"
@@ -16,7 +15,7 @@ public:
 		delete _tre; delete _rgn; delete _lbl; delete _net; delete _gmp;
 	}
 
-	bool init();
+	bool init(bool baseMap);
 	void clear() {_tre->clear();}
 
 	const RectC &bounds() const {return _tre->bounds();}
@@ -25,11 +24,12 @@ public:
 	SubFile *addFile(IMG *img, SubFile::Type type);
 	SubFile *addFile(const QString &path, SubFile::Type type);
 
-	void polys(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
-	  QList<IMG::Poly> *lines, QCache<const SubDiv *, IMG::Polys> *polyCache)
-	  const;
-	void points(const RectC &rect, int bits, QList<IMG::Point> *points,
-	  QCache<const SubDiv*, QList<IMG::Point> > *pointCache) const;
+	void polys(const RectC &rect, int bits, bool baseMap,
+	  QList<IMG::Poly> *polygons, QList<IMG::Poly> *lines,
+	  QCache<const SubDiv *, IMG::Polys> *polyCache) const;
+	void points(const RectC &rect, int bits, bool baseMap,
+	  QList<IMG::Point> *points, QCache<const SubDiv*,
+	  QList<IMG::Point> > *pointCache) const;
 
 	static bool isTileFile(SubFile::Type type)
 	{

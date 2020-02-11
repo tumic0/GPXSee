@@ -74,19 +74,17 @@ bool GMAP::readXML(const QString &path, QString &dataDir, QString &typFile,
 	return true;
 }
 
-bool GMAP::loadTile(const QDir &dir, quint16 &id)
+bool GMAP::loadTile(const QDir &dir, bool baseMap)
 {
 	VectorTile *tile = new VectorTile();
-	SubFile *file;
 
 	QFileInfoList ml = dir.entryInfoList(QDir::Files);
 	for (int i = 0; i < ml.size(); i++) {
 		const QFileInfo &fi = ml.at(i);
-		if ((file = tile->addFile(fi.absoluteFilePath(), tileType(fi.suffix()))))
-			file->setId(id++);
+		tile->addFile(fi.absoluteFilePath(), tileType(fi.suffix()));
 	}
 
-	if (!tile->init()) {
+	if (!tile->init(baseMap)) {
 		qWarning("%s: Invalid map tile", qPrintable(dir.path()));
 		delete tile;
 		return false;
@@ -118,12 +116,15 @@ GMAP::GMAP(const QString &fileName) : _fileName(fileName)
 	QDir dataDir(baseDir.filePath(dataDirPath));
 	QFileInfoList ml = dataDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
 
-	quint16 id = 0;
-	QFileInfo baseMap(baseMapPath);
+
+	QFileInfo baseMap(dataDir.filePath(baseMapPath));
+	_baseMap = !baseMapPath.isEmpty() && baseMap.exists();
+
 	for (int i = 0; i < ml.size(); i++) {
 		const QFileInfo &fi = ml.at(i);
-		if (fi.isDir() && fi.baseName() != baseMap.baseName())
-			loadTile(QDir(fi.absoluteFilePath()), id);
+		if (fi.isDir())
+			loadTile(QDir(fi.absoluteFilePath()),
+			  fi.absoluteFilePath() == baseMap.absoluteFilePath());
 	}
 
 	if (baseDir.exists(typFilePath))

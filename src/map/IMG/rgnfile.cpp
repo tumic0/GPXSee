@@ -174,7 +174,7 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 		if (!(stream.atEnd() && stream.flush()))
 			return false;
 
-		if (lbl && (labelPtr & 0x3FFFFF)) {
+		if (lbl && (labelPtr & 0x3FFFFF) && subdiv->bits() > 18) {
 			if (labelPtr & 0x800000) {
 				quint32 lblOff;
 				if (net && net->lblOffset(netHdl, labelPtr & 0x3FFFFF, lblOff)
@@ -281,7 +281,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 		  ? _linesFlags : _polygonsFlags, segmentType))
 			return false;
 
-		if (lbl && (labelPtr & 0x3FFFFF))
+		if (lbl && (labelPtr & 0x3FFFFF) && subdiv->bits() > 18)
 			poly.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
 
 		polys->append(poly);
@@ -319,17 +319,18 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 
 		point.type = (quint16)type<<8 | subtype;
 
-		qint16 lonOffset = lon<<(24-subdiv->bits());
-		qint16 latOffset = lat<<(24-subdiv->bits());
+		qint32 lonOffset = lon<<(24-subdiv->bits());
+		qint32 latOffset = lat<<(24-subdiv->bits());
 		point.coordinates = Coordinates(toWGS24(subdiv->lon() + lonOffset),
 		  toWGS24(subdiv->lat() + latOffset));
 
+		uint hash = qHash(QPair<uint,uint>(qHash(QPair<qint32, qint32>
+		  (subdiv->lon() + lonOffset, subdiv->lat() + latOffset)),
+		  labelPtr & 0x3FFFFF));
+		point.id = ((quint64)point.type)<<32 | hash;
 		point.poi = labelPtr & 0x400000;
-		if (lbl && (labelPtr & 0x3FFFFF)) {
+		if (lbl && (labelPtr & 0x3FFFFF))
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi);
-			point.id = ((quint64)point.type)<<40 | ((quint64)lbl->id())<<24
-			  | (labelPtr & 0x3FFFFF);
-		}
 
 		points->append(point);
 	}
@@ -360,8 +361,8 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 
 		point.type = 0x10000 | (((quint32)type)<<8) | (subtype & 0x1F);
 
-		qint16 lonOffset = lon<<(24-subdiv->bits());
-		qint16 latOffset = lat<<(24-subdiv->bits());
+		qint32 lonOffset = lon<<(24-subdiv->bits());
+		qint32 latOffset = lat<<(24-subdiv->bits());
 		point.coordinates = Coordinates(toWGS24(subdiv->lon() + lonOffset),
 		  toWGS24(subdiv->lat() + latOffset));
 		labelPtr = 0;
@@ -378,12 +379,13 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 		if (point.type == 0x11400)
 			continue;
 
+		uint hash = qHash(QPair<uint,uint>(qHash(QPair<qint32, qint32>
+		  (subdiv->lon() + lonOffset, subdiv->lat() + latOffset)),
+		  labelPtr & 0x3FFFFF));
+		point.id = ((quint64)point.type)<<32 | hash;
 		point.poi = labelPtr & 0x400000;
-		if (lbl && (labelPtr & 0x3FFFFF)) {
+		if (lbl && (labelPtr & 0x3FFFFF))
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi);
-			point.id = ((quint64)point.type)<<40
-			  | ((quint64)lbl->id())<<24 | (labelPtr & 0x3FFFFF);
-		}
 
 		points->append(point);
 	}

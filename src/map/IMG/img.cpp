@@ -136,7 +136,7 @@ IMG::IMG(const QString &fileName) : _file(fileName)
 	  it != tileMap.constEnd(); ++it) {
 		VectorTile *tile = it.value();
 
-		if (!tile->init()) {
+		if (!tile->init(false)) {
 			qWarning("%s: %s: Invalid map tile", qPrintable(_file.fileName()),
 			  qPrintable(it.key()));
 			delete tile;

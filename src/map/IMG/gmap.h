@@ -22,7 +22,7 @@ private:
 	  QString &typFile, QString &baseMap);
 	void subProduct(QXmlStreamReader &reader, QString &dataDir,
 	  QString &baseMap);
-	bool loadTile(const QDir &dir, quint16 &id);
+	bool loadTile(const QDir &dir, bool baseMap);
 
 	QString _fileName;
 };

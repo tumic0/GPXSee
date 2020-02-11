@@ -82,12 +82,12 @@ SubFile *VectorTile::addFile(const QString &path, SubFile::Type type)
 	}
 }
 
-bool VectorTile::init()
+bool VectorTile::init(bool baseMap)
 {
 	if (_gmp && !initGMP())
 		return false;
 
-	if (!(_tre && _tre->init() && _rgn))
+	if (!(_tre && _tre->init(baseMap) && _rgn))
 		return false;
 
 	return true;
@@ -111,16 +111,16 @@ bool VectorTile::initGMP()
 	return true;
 }
 
-void VectorTile::polys(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
-  QList<IMG::Poly> *lines, QCache<const SubDiv *, IMG::Polys> *polyCache)
-  const
+void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
+  QList<IMG::Poly> *polygons, QList<IMG::Poly> *lines,
+  QCache<const SubDiv *, IMG::Polys> *polyCache) const
 {
 	SubFile::Handle rgnHdl(_rgn), lblHdl(_lbl), netHdl(_net);
 
 	if (!_rgn->initialized() && !_rgn->init(rgnHdl))
 		return;
 
-	QList<SubDiv*> subdivs = _tre->subdivs(rect, bits);
+	QList<SubDiv*> subdivs = _tre->subdivs(rect, bits, baseMap);
 	for (int i = 0; i < subdivs.size(); i++) {
 		SubDiv *subdiv = subdivs.at(i);
 
@@ -151,15 +151,16 @@ void VectorTile::polys(const RectC &rect, int bits, QList<IMG::Poly> *polygons,
 	}
 }
 
-void VectorTile::points(const RectC &rect, int bits, QList<IMG::Point> *points,
-  QCache<const SubDiv *, QList<IMG::Point> > *pointCache) const
+void VectorTile::points(const RectC &rect, int bits, bool baseMap,
+  QList<IMG::Point> *points, QCache<const SubDiv *,
+  QList<IMG::Point> > *pointCache) const
 {
 	SubFile::Handle rgnHdl(_rgn), lblHdl(_lbl);
 
 	if (!_rgn->initialized() && !_rgn->init(rgnHdl))
 		return;
 
-	QList<SubDiv*> subdivs = _tre->subdivs(rect, bits);
+	QList<SubDiv*> subdivs = _tre->subdivs(rect, bits, baseMap);
 	for (int i = 0; i < subdivs.size(); i++) {
 		SubDiv *subdiv = subdivs.at(i);
 

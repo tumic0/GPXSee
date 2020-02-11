@@ -37,7 +37,7 @@ TREFile::~TREFile()
 	clear();
 }
 
-bool TREFile::init()
+bool TREFile::init(bool baseMap)
 {
 	Handle hdl(this);
 	quint8 locked;
@@ -107,6 +107,8 @@ bool TREFile::init()
 			break;
 		}
 	}
+
+	_isBaseMap = baseMap;
 
 	return (_firstLevel >= 0);
 }
@@ -236,9 +238,16 @@ void TREFile::clear()
 	_subdivs.clear();
 }
 
-int TREFile::level(int bits)
+int TREFile::level(int bits, bool baseMap)
 {
 	int idx = _firstLevel;
+
+	if (baseMap) {
+		if (!_isBaseMap && _levels.at(idx).bits > bits)
+			return -1;
+		if (_isBaseMap && bits > _levels.last().bits)
+			return -1;
+	}
 
 	for (int i = idx + 1; i < _levels.size(); i++) {
 		if (_levels.at(i).bits > bits)
@@ -259,10 +268,10 @@ static bool cb(SubDiv *subdiv, void *context)
 	return true;
 }
 
-QList<SubDiv*> TREFile::subdivs(const RectC &rect, int bits)
+QList<SubDiv*> TREFile::subdivs(const RectC &rect, int bits, bool baseMap)
 {
 	QList<SubDiv*> list;
-	SubDivTree *tree = _subdivs.value(level(bits));
+	SubDivTree *tree = _subdivs.value(level(bits, baseMap));
 	double min[2], max[2];
 
 	min[0] = rect.left();

@@ -79,6 +79,7 @@ protected:
 	SubFile *_typ;
 	Style *_style;
 	TileTree _tileTree;
+	bool _baseMap;
 
 	bool _valid;
 	QString _errorString;

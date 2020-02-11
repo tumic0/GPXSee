@@ -42,12 +42,11 @@ public:
 	};
 
 	SubFile(IMG *img)
-	  : _gmpOffset(0), _img(img), _blocks(new QVector<quint16>()), _path(0),
-	  _id(0) {}
+	  : _gmpOffset(0), _img(img), _blocks(new QVector<quint16>()), _path(0) {}
 	SubFile(SubFile *gmp, quint32 offset) : _gmpOffset(offset), _img(gmp->_img),
-	  _blocks(gmp->_blocks), _path(gmp->_path), _id(gmp->id()) {}
+	  _blocks(gmp->_blocks), _path(gmp->_path) {}
 	SubFile(const QString &path)
-	  : _gmpOffset(0), _img(0), _blocks(0), _path(new QString(path)), _id(0) {}
+	  : _gmpOffset(0), _img(0), _blocks(0), _path(new QString(path)) {}
 	~SubFile()
 	{
 		if (!_gmpOffset) {
@@ -57,7 +56,6 @@ public:
 	}
 
 	void addBlock(quint16 block) {_blocks->append(block);}
-	void setId(quint16 id) {_id = id;}
 
 	bool seek(Handle &handle, quint32 pos) const;
 
@@ -137,7 +135,6 @@ public:
 	bool readVUInt32(Handle &hdl, quint32 &val) const;
 	bool readVBitfield32(Handle &hdl, quint32 &bitfield) const;
 
-	quint16 id() const {return _blocks ? _blocks->first() : _id;}
 	QString fileName() const {return _path ? *_path : _img->fileName();}
 
 protected:
@@ -156,7 +153,6 @@ private:
 	IMG *_img;
 	QVector<quint16> *_blocks;
 	QString *_path;
-	quint16 _id;
 };
 
 #endif // SUBFILE_H
