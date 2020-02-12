@@ -1,4 +1,4 @@
-version: 7.21.{build}
+version: 7.22.{build}
 
 configuration:
   - Release
