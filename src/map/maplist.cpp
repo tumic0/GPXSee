@@ -130,8 +130,8 @@ QString MapList::formats()
 {
 	return
 	  tr("Supported files")
-	  + " (*.img *.jnx *.map *.mbtiles *.rmap *.rtmap *.tar *.tba *.tif *.tiff *.xml);;"
-	  + tr("Garmin IMG maps") + " (*.img *.xml);;"
+	  + " (*.gmap *.gmapi *.img *.jnx *.map *.mbtiles *.rmap *.rtmap *.tar *.tba *.tif *.tiff *.xml);;"
+	  + tr("Garmin IMG maps") + " (*.gmap *.gmapi *.img *.xml);;"
 	  + tr("Garmin JNX maps") + " (*.jnx);;"
 	  + tr("OziExplorer maps") + " (*.map);;"
 	  + tr("MBTiles maps") + " (*.mbtiles);;"
@@ -144,7 +144,7 @@ QString MapList::formats()
 QStringList MapList::filter()
 {
 	QStringList filter;
-	filter << "*.img" << "*.jnx" << "*.map" << "*.tba" << "*.tar" << "*.xml"
-	  << "*.tif" << "*.tiff" << "*.mbtiles" << "*.rmap" << "*.rtmap" << "*.img";
+	filter << "*.img" << "*.jnx" << "*.map" << "*.mbtiles" << "*.rmap"
+	  << "*.rtmap" << "*.tar" << "*.tba" << "*.tif" << "*.tiff"  << "*.xml";
 	return filter;
 }

@@ -1325,7 +1325,10 @@ bool GUI::loadMap(const QString &fileName)
 	if (fileName.isEmpty())
 		return false;
 
-	if (_ml->loadFile(fileName)) {
+	QFileInfo fi(fileName);
+	bool res = fi.isDir() ? _ml->loadDir(fileName) : _ml->loadFile(fileName);
+
+	if (res) {
 		QAction *a = createMapAction(_ml->maps().last());
 		_mapMenu->insertAction(_mapsEnd, a);
 		_showMapAction->setEnabled(true);
