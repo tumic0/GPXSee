@@ -112,7 +112,7 @@ void GUI::loadMaps()
 	QString mapDir(ProgramPaths::mapDir());
 
 	if (!mapDir.isNull() && !_ml->loadDir(mapDir))
-		qWarning("%s", qPrintable(_ml->errorString()));
+		qWarning("%s", qPrintable(_ml->errorPath() + ": " + _ml->errorString()));
 
 	_map = new EmptyMap(this);
 }
