@@ -2,7 +2,7 @@
 #define DATA_H
 
 #include <QList>
-#include <QHash>
+#include <QMap>
 #include <QString>
 #include <QStringList>
 #include "waypoint.h"
@@ -42,7 +42,7 @@ private:
 	QList<Area> _polygons;
 	QVector<Waypoint> _waypoints;
 
-	static QHash<QString, Parser*> _parsers;
+	static QMap<QString, Parser*> _parsers;
 	static bool _useDEM;
 };
 

@@ -44,37 +44,37 @@ static CUPParser cup;
 static GPIParser gpi;
 static SMLParser sml;
 
-static QHash<QString, Parser*> parsers()
+static QMap<QString, Parser*> parsers()
 {
-	QHash<QString, Parser*> hash;
+	QMap<QString, Parser*> map;
 
-	hash.insert("gpx", &gpx);
-	hash.insert("tcx", &tcx);
-	hash.insert("kml", &kml);
-	hash.insert("fit", &fit);
-	hash.insert("csv", &csv);
-	hash.insert("igc", &igc);
-	hash.insert("nmea", &nmea);
-	hash.insert("plt", &plt);
-	hash.insert("wpt", &wpt);
-	hash.insert("rte", &rte);
-	hash.insert("loc", &loc);
-	hash.insert("slf", &slf);
+	map.insert("gpx", &gpx);
+	map.insert("tcx", &tcx);
+	map.insert("kml", &kml);
+	map.insert("fit", &fit);
+	map.insert("csv", &csv);
+	map.insert("igc", &igc);
+	map.insert("nmea", &nmea);
+	map.insert("plt", &plt);
+	map.insert("wpt", &wpt);
+	map.insert("rte", &rte);
+	map.insert("loc", &loc);
+	map.insert("slf", &slf);
 #ifdef ENABLE_GEOJSON
-	hash.insert("json", &geojson);
-	hash.insert("geojson", &geojson);
+	map.insert("json", &geojson);
+	map.insert("geojson", &geojson);
 #endif // ENABLE_GEOJSON
-	hash.insert("jpeg", &exif);
-	hash.insert("jpg", &exif);
-	hash.insert("cup", &cup);
-	hash.insert("gpi", &gpi);
-	hash.insert("sml", &sml);
+	map.insert("jpeg", &exif);
+	map.insert("jpg", &exif);
+	map.insert("cup", &cup);
+	map.insert("gpi", &gpi);
+	map.insert("sml", &sml);
 
-	return hash;
+	return map;
 }
 
 
-QHash<QString, Parser*> Data::_parsers = parsers();
+QMap<QString, Parser*> Data::_parsers = parsers();
 bool Data::_useDEM = false;
 
 void Data::processData(QList<TrackData> &trackData, QList<RouteData> &routeData)
@@ -130,7 +130,7 @@ Data::Data(const QString &fileName, bool poi)
 		return;
 	}
 
-	QHash<QString, Parser*>::iterator it;
+	QMap<QString, Parser*>::iterator it;
 	if ((it = _parsers.find(fi.suffix().toLower())) != _parsers.end()) {
 		if (it.value()->parse(&file, trackData, routeData, _polygons,
 		  _waypoints)) {
@@ -166,17 +166,8 @@ Data::Data(const QString &fileName, bool poi)
 
 QString Data::formats()
 {
-	QStringList l(filter());
-	qSort(l);
-	QString supported;
-	for (int i = 0; i < l.size(); i++) {
-		supported += l.at(i);
-		if (i != l.size() - 1)
-			supported += " ";
-	}
-
 	return
-	  qApp->translate("Data", "Supported files") + " (" + supported + ");;"
+	  qApp->translate("Data", "Supported files") + " (" + filter().join(" ") + ");;"
 	  + qApp->translate("Data", "CSV files") + " (*.csv);;"
 	  + qApp->translate("Data", "CUP files") + " (*.cup);;"
 	  + qApp->translate("Data", "FIT files") + " (*.fit);;"
@@ -200,10 +191,10 @@ QString Data::formats()
 QStringList Data::filter()
 {
 	QStringList filter;
-	QHash<QString, Parser*>::iterator it;
 
-	for (it = _parsers.begin(); it != _parsers.end(); it++)
-		filter << QString("*.%1").arg(it.key());
+	for (QMap<QString, Parser*>::iterator it = _parsers.begin();
+	  it != _parsers.end(); it++)
+		filter << "*." + it.key();
 
 	return filter;
 }
