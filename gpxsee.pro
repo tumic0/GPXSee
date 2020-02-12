@@ -383,7 +383,8 @@ macx {
         lang/gpxsee_tr.qm \
         lang/gpxsee_es.qm \
         lang/gpxsee_pt_BR.qm \
-        lang/gpxsee_uk.qm
+        lang/gpxsee_uk.qm \
+        lang/gpxsee_hu.qm
     csv.path = Contents/Resources
     csv.files = pkg/csv
     maps.path = Contents/Resources
