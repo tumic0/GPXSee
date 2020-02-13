@@ -17,13 +17,9 @@ bool MapList::loadMap(Map *map, const QString &path)
 	if (map && map->isValid()) {
 		_maps.append(map);
 		return true;
-	} else if (map) {
-		_errorPath = path;
-		_errorString = map->errorString();
-		return false;
 	} else {
-		_errorString = path;
-		_errorString = "Unknown file format";
+		_errorPath = path;
+		_errorString = (map) ? map->errorString() : "Unknown file format";
 		return false;
 	}
 }
