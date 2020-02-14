@@ -132,8 +132,8 @@ bool TREFile::load(int idx)
 
 	for (int j = 0; j < _levels.at(idx).subdivs; j++) {
 		quint32 oo;
-		qint32 lon, lat;
-		quint16 width, height, nextLevel;
+		qint32 lon, lat, width, height;
+		quint16 nextLevel;
 
 		if (!(readUInt32(hdl, oo) && readInt24(hdl, lon) && readInt24(hdl, lat)
 		  && readUInt16(hdl, width) && readUInt16(hdl, height)))
