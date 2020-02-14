@@ -104,8 +104,12 @@ void MapData::load()
 	if (_typ)
 		_style = new Style(_typ);
 	else {
-		SubFile typ(ProgramPaths::typFile());
-		_style = new Style(&typ);
+		QString typFile(ProgramPaths::typFile());
+		if (!typFile.isEmpty()) {
+			SubFile typ(typFile);
+			_style = new Style(&typ);
+		} else
+			_style = new Style();
 	}
 }
 
