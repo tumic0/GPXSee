@@ -57,7 +57,7 @@ bool TREFile::init(bool baseMap)
 	if (!(seek(hdl, _gmpOffset + 0x15) && readInt24(hdl, north)
 	  && readInt24(hdl, east) && readInt24(hdl, south) && readInt24(hdl, west)))
 		return false;
-	_bounds = RectC(Coordinates(toWGS24(west), toWGS24(north)),
+	_bounds = RectC(Coordinates(toWGS24(west), qMin(toWGS24(north), 85.11)),
 	  Coordinates(RB(east), toWGS24(south)));
 	Q_ASSERT(_bounds.left() <= _bounds.right());
 

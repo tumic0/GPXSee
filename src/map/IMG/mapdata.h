@@ -7,6 +7,7 @@
 #include <QDebug>
 #include "common/rectc.h"
 #include "common/rtree.h"
+#include "common/range.h"
 #include "label.h"
 
 class Style;
@@ -58,6 +59,7 @@ public:
 
 	const QString &name() const {return _name;}
 	const RectC &bounds() const {return _bounds;}
+	const Range &zooms() const {return _zooms;}
 	const Style *style() const {return _style;}
 	void polys(const RectC &rect, int bits, QList<Poly> *polygons,
 	  QList<Poly> *lines);
@@ -79,6 +81,7 @@ protected:
 	SubFile *_typ;
 	Style *_style;
 	TileTree _tileTree;
+	Range _zooms;
 	bool _baseMap;
 
 	bool _valid;

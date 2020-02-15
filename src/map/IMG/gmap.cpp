@@ -98,6 +98,8 @@ bool GMAP::loadTile(const QDir &dir, bool baseMap)
 	_tileTree.Insert(min, max, tile);
 
 	_bounds |= tile->bounds();
+	if (tile->zooms().min() < _zooms.min())
+		_zooms.setMin(tile->zooms().min());
 
 	return true;
 }

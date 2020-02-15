@@ -19,6 +19,7 @@ public:
 	void clear() {_tre->clear();}
 
 	const RectC &bounds() const {return _tre->bounds();}
+	Range zooms() const {return _tre->zooms();}
 
 	SubFile *file(SubFile::Type type);
 	SubFile *addFile(IMG *img, SubFile::Type type);

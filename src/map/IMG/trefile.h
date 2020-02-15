@@ -25,6 +25,8 @@ public:
 	QList<SubDiv*> subdivs(const RectC &rect, int bits, bool baseMap);
 	quint32 shift(quint8 bits) const
 	  {return (bits == _levels.last().bits) ? (_flags >> 0xb) & 7 : 0;}
+	Range zooms() const
+	  {return Range(_levels.first().bits, _levels.last().bits);}
 
 private:
 	struct MapLevel {

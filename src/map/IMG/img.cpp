@@ -151,6 +151,8 @@ IMG::IMG(const QString &fileName) : _file(fileName)
 		_tileTree.Insert(min, max, tile);
 
 		_bounds |= tile->bounds();
+		if (tile->zooms().min() < _zooms.min())
+			_zooms.setMin(tile->zooms().min());
 	}
 
 	if (!_tileTree.Count())

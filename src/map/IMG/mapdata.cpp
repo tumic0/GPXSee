@@ -54,7 +54,8 @@ inline bool pointCb(VectorTile *tile, void *context)
 }
 
 
-MapData::MapData() : _typ(0), _style(0), _baseMap(false), _valid(false)
+MapData::MapData() : _typ(0), _style(0), _zooms(24, 28), _baseMap(false),
+  _valid(false)
 {
 	_polyCache.setMaxCost(CACHED_SUBDIVS_COUNT);
 	_pointCache.setMaxCost(CACHED_SUBDIVS_COUNT);
