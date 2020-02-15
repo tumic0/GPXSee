@@ -154,8 +154,8 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 		  ? ((quint32)(type & 0x7F)) << 8 : ((quint32)(type & 0x3F)) << 8;
 
 
-		QPoint pos(subdiv->lon() + ((qint32)lon<<(24-subdiv->bits())),
-		  subdiv->lat() + ((qint32)lat<<(24-subdiv->bits())));
+		QPoint pos(subdiv->lon() + LS(lon, 24-subdiv->bits()),
+		  subdiv->lat() + LS(lat, 24-subdiv->bits()));
 		Coordinates c(toWGS24(pos.x()), toWGS24(pos.y()));
 		poly.boundingRect = RectC(c, c);
 		poly.points.append(QPointF(c.lon(), c.lat()));
@@ -164,8 +164,10 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 		DeltaStream stream(*this, hdl, len, bitstreamInfo, labelPtr & 0x400000,
 		  false);
 		while (stream.readNext(lonDelta, latDelta)) {
-			pos.rx() += lonDelta<<(24-subdiv->bits());
-			pos.ry() += latDelta<<(24-subdiv->bits());
+			pos.rx() += LS(lonDelta, (24-subdiv->bits()));
+			if (pos.rx() >= 0x800000 && subdiv->lon() >= 0)
+				pos.rx() = 0x7fffff;
+			pos.ry() += LS(latDelta, (24-subdiv->bits()));
 
 			Coordinates c(toWGS24(pos.x()), toWGS24(pos.y()));
 			poly.points.append(QPointF(c.lon(), c.lat()));
@@ -219,8 +221,8 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 		labelPtr = 0;
 
 		if (!_huffmanTable.isNull()) {
-			pos = QPoint((subdiv->lon()<<8) + ((qint32)lon<<(32-subdiv->bits())),
-			  (subdiv->lat()<<8) + ((qint32)lat<<(32-subdiv->bits())));
+			pos = QPoint(LS(subdiv->lon(), 8) + LS(lon, 32-subdiv->bits()),
+			  LS(subdiv->lat(), 8) + LS(lat, (32-subdiv->bits())));
 
 			qint32 lonDelta, latDelta;
 			HuffmanStream stream(*this, hdl, len, _huffmanTable,
@@ -229,16 +231,18 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 			if (shift) {
 				if (!stream.readOffset(lonDelta, latDelta))
 					return false;
-				pos = QPoint(pos.x() | lonDelta<<(32-subdiv->bits()-shift),
-				  pos.y() | latDelta<<(32-subdiv->bits()-shift));
+				pos = QPoint(pos.x() | LS(lonDelta, 32-subdiv->bits()-shift),
+				  pos.y() | LS(latDelta, 32-subdiv->bits()-shift));
 			}
 			Coordinates c(toWGS32(pos.x()), toWGS32(pos.y()));
 			poly.boundingRect = RectC(c, c);
 			poly.points.append(QPointF(c.lon(), c.lat()));
 
 			while (stream.readNext(lonDelta, latDelta)) {
-				pos.rx() += lonDelta<<(32-subdiv->bits()-shift);
-				pos.ry() += latDelta<<(32-subdiv->bits()-shift);
+				pos.rx() += LS(lonDelta, 32-subdiv->bits()-shift);
+				if (pos.rx() < 0 && subdiv->lon() >= 0)
+					pos.rx() = 0x7fffffff;
+				pos.ry() += LS(latDelta, 32-subdiv->bits()-shift);
 
 				Coordinates c(toWGS32(pos.x()), toWGS32(pos.y()));
 				poly.points.append(QPointF(c.lon(), c.lat()));
@@ -248,8 +252,8 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 			if (!(stream.atEnd() && stream.flush()))
 				return false;
 		} else {
-			pos = QPoint(subdiv->lon() + ((qint32)lon<<(24-subdiv->bits())),
-			  subdiv->lat() + ((qint32)lat<<(24-subdiv->bits())));
+			pos = QPoint(subdiv->lon() + LS(lon, 24-subdiv->bits()),
+			  subdiv->lat() + LS(lat, 24-subdiv->bits()));
 			Coordinates c(toWGS24(pos.x()), toWGS24(pos.y()));
 			poly.boundingRect = RectC(c, c);
 			poly.points.append(QPointF(c.lon(), c.lat()));
@@ -262,8 +266,10 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 			DeltaStream stream(*this, hdl, len - 1, bitstreamInfo, false, true);
 
 			while (stream.readNext(lonDelta, latDelta)) {
-				pos.rx() += lonDelta<<(24-subdiv->bits());
-				pos.ry() += latDelta<<(24-subdiv->bits());
+				pos.rx() += LS(lonDelta, 24-subdiv->bits());
+				if (pos.rx() >= 0x800000 && subdiv->lon() >= 0)
+					pos.rx() = 0x7fffff;
+				pos.ry() += LS(latDelta, 24-subdiv->bits());
 
 				Coordinates c(toWGS24(pos.x()), toWGS24(pos.y()));
 				poly.points.append(QPointF(c.lon(), c.lat()));
@@ -319,8 +325,8 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 
 		point.type = (quint16)type<<8 | subtype;
 
-		qint32 lonOffset = lon<<(24-subdiv->bits());
-		qint32 latOffset = lat<<(24-subdiv->bits());
+		qint32 lonOffset = LS(lon, 24-subdiv->bits());
+		qint32 latOffset = LS(lat, 24-subdiv->bits());
 		point.coordinates = Coordinates(toWGS24(subdiv->lon() + lonOffset),
 		  toWGS24(subdiv->lat() + latOffset));
 
@@ -361,8 +367,8 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 
 		point.type = 0x10000 | (((quint32)type)<<8) | (subtype & 0x1F);
 
-		qint32 lonOffset = lon<<(24-subdiv->bits());
-		qint32 latOffset = lat<<(24-subdiv->bits());
+		qint32 lonOffset = LS(lon, 24-subdiv->bits());
+		qint32 latOffset = LS(lat, 24-subdiv->bits());
 		point.coordinates = Coordinates(toWGS24(subdiv->lon() + lonOffset),
 		  toWGS24(subdiv->lat() + latOffset));
 		labelPtr = 0;

@@ -3,6 +3,11 @@
 #include "trefile.h"
 
 
+static inline double RB(qint32 val)
+{
+	return (val == -0x800000 || val == 0x800000) ? 180.0 : toWGS24(val);
+}
+
 static void demangle(quint8 *data, quint32 size, quint32 key)
 {
 	static const unsigned char shuf[] = {
@@ -53,7 +58,8 @@ bool TREFile::init(bool baseMap)
 	  && readInt24(hdl, east) && readInt24(hdl, south) && readInt24(hdl, west)))
 		return false;
 	_bounds = RectC(Coordinates(toWGS24(west), toWGS24(north)),
-	  Coordinates(toWGS24(east), toWGS24(south)));
+	  Coordinates(RB(east), toWGS24(south)));
+	Q_ASSERT(_bounds.left() <= _bounds.right());
 
 	// Levels & subdivs info
 	quint32 levelsOffset, levelsSize, subdivSize;
@@ -149,17 +155,16 @@ bool TREFile::load(int idx)
 			s->setEnd(offset);
 
 		width &= 0x7FFF;
-		width <<= (24 - _levels.at(idx).bits);
-		height <<= (24 - _levels.at(idx).bits);
-
+		width = LS(width, 24 - _levels.at(idx).bits);
+		height = LS(height, 24 - _levels.at(idx).bits);
 
 		s = new SubDiv(offset, lon, lat, _levels.at(idx).bits, objects);
 		sl.append(s);
 
 		double min[2], max[2];
-		RectC bounds(Coordinates(toWGS24(lon - width),
-		  toWGS24(lat + height + 1)), Coordinates(toWGS24(lon + width + 1),
-		  toWGS24(lat - height)));
+		RectC bounds(Coordinates(toWGS24(lon - width), toWGS24(lat + height)),
+		  Coordinates(RB(lon + width), toWGS24(lat - height)));
+		Q_ASSERT(bounds.left() <= bounds.right());
 
 		min[0] = bounds.left();
 		min[1] = bounds.bottom();
