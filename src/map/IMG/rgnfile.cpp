@@ -8,12 +8,12 @@
 #include "rgnfile.h"
 
 
-static quint64 pointId(qint32 x, qint32 y, quint32 type, quint32 labelPtr)
+static quint64 pointId(const QPoint &pos, quint32 type, quint32 labelPtr)
 {
 	quint64 id;
 
-	uint hash = qHash(QPair<uint,uint>(qHash(QPair<qint32, qint32>(x, y)),
-	  labelPtr & 0x3FFFFF));
+	uint hash = qHash(QPair<uint,uint>(qHash(QPair<int, int>(pos.x(),
+	  pos.y())), labelPtr & 0x3FFFFF));
 	id = ((quint64)type)<<32 | hash;
 	// Make country labels precedent over city labels
 	if (!(type >= 0x1400 && type <= 0x153f))
@@ -342,7 +342,7 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 
 		point.type = (quint16)type<<8 | subtype;
 		point.coordinates = Coordinates(toWGS24(pos.x()), toWGS24(pos.y()));
-		point.id = pointId(pos.x(), pos.y(), point.type, labelPtr & 0x3FFFFF);
+		point.id = pointId(pos, point.type, labelPtr & 0x3FFFFF);
 		point.poi = labelPtr & 0x400000;
 		if (lbl && (labelPtr & 0x3FFFFF))
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi,
@@ -391,7 +391,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 			continue;
 
 		point.coordinates = Coordinates(toWGS24(pos.x()), toWGS24(pos.y()));
-		point.id = pointId(pos.x(), pos.y(), point.type, labelPtr & 0x3FFFFF);
+		point.id = pointId(pos, point.type, labelPtr & 0x3FFFFF);
 		point.poi = labelPtr & 0x400000;
 		if (lbl && (labelPtr & 0x3FFFFF))
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi);

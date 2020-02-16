@@ -2,7 +2,6 @@
 #define SUBFILE_H
 
 #include <QVector>
-#include <QDebug>
 #include <QFile>
 #include "img.h"
 
