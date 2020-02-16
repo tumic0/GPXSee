@@ -145,6 +145,15 @@ void Style::defaultLineStyle()
 
 void Style::defaultPointStyle()
 {
+	// Countries
+	_points[TYPE(0x14)].setTextColor(QColor("#777777"));
+	_points[TYPE(0x14)].setTextFontSize(Small);
+	_points[TYPE(0x15)].setTextColor(QColor("#777777"));
+	_points[TYPE(0x15)].setTextFontSize(Small);
+
+	// Regions
+	_points[TYPE(0x28)].setTextFontSize(Small);
+
 	// Cities
 	_points[TYPE(0x01)].setTextFontSize(Large);
 	_points[TYPE(0x02)].setTextFontSize(Large);

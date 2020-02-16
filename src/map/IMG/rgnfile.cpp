@@ -8,6 +8,20 @@
 #include "rgnfile.h"
 
 
+static quint64 pointId(qint32 x, qint32 y, quint32 type, quint32 labelPtr)
+{
+	quint64 id;
+
+	uint hash = qHash(QPair<uint,uint>(qHash(QPair<qint32, qint32>(x, y)),
+	  labelPtr & 0x3FFFFF));
+	id = ((quint64)type)<<32 | hash;
+	// Make country labels precedent over city labels
+	if (!(type >= 0x1400 && type <= 0x153f))
+		id |= 1ULL<<63;
+
+	return id;
+}
+
 bool RGNFile::skipClassFields(Handle &hdl) const
 {
 	quint8 flags;
@@ -300,9 +314,6 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
   SegmentType segmentType, LBLFile *lbl, Handle &lblHdl,
   QList<IMG::Point> *points) const
 {
-	quint8 type, subtype;
-	qint16 lon, lat;
-	quint32 labelPtr;
 	const SubDiv::Segment &segment = (segmentType == IndexedPoint)
 	 ? subdiv->idxPoints() : subdiv->points();
 
@@ -313,6 +324,9 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 
 	while (hdl.pos() < (int)segment.end()) {
 		IMG::Point point;
+		quint8 type, subtype;
+		qint16 lon, lat;
+		quint32 labelPtr;
 
 		if (!(readUInt8(hdl, type) && readUInt24(hdl, labelPtr)
 		  && readInt16(hdl, lon) && readInt16(hdl, lat)))
@@ -323,20 +337,16 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 		} else
 			subtype = 0;
 
+		QPoint pos(subdiv->lon() + LS(lon, 24-subdiv->bits()),
+		  subdiv->lat() + LS(lat, 24-subdiv->bits()));
+
 		point.type = (quint16)type<<8 | subtype;
-
-		qint32 lonOffset = LS(lon, 24-subdiv->bits());
-		qint32 latOffset = LS(lat, 24-subdiv->bits());
-		point.coordinates = Coordinates(toWGS24(subdiv->lon() + lonOffset),
-		  toWGS24(subdiv->lat() + latOffset));
-
-		uint hash = qHash(QPair<uint,uint>(qHash(QPair<qint32, qint32>
-		  (subdiv->lon() + lonOffset, subdiv->lat() + latOffset)),
-		  labelPtr & 0x3FFFFF));
-		point.id = ((quint64)point.type)<<32 | hash;
+		point.coordinates = Coordinates(toWGS24(pos.x()), toWGS24(pos.y()));
+		point.id = pointId(pos.x(), pos.y(), point.type, labelPtr & 0x3FFFFF);
 		point.poi = labelPtr & 0x400000;
 		if (lbl && (labelPtr & 0x3FFFFF))
-			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi);
+			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi,
+			  !(point.type == 0x1400 || point.type == 0x1500));
 
 		points->append(point);
 	}
@@ -347,11 +357,7 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
   Handle &lblHdl, QList<IMG::Point> *points) const
 {
-	quint8 type, subtype;
-	qint16 lon, lat;
-	quint32 labelPtr;
 	const SubDiv::Segment &segment = subdiv->extPoints();
-
 
 	if (!segment.isValid())
 		return true;
@@ -360,18 +366,13 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 
 	while (hdl.pos() < (int)segment.end()) {
 		IMG::Point point;
+		qint16 lon, lat;
+		quint8 type, subtype;
+		quint32 labelPtr = 0;
 
 		if (!(readUInt8(hdl, type) && readUInt8(hdl, subtype)
 		  && readInt16(hdl, lon) && readInt16(hdl, lat)))
 			return false;
-
-		point.type = 0x10000 | (((quint32)type)<<8) | (subtype & 0x1F);
-
-		qint32 lonOffset = LS(lon, 24-subdiv->bits());
-		qint32 latOffset = LS(lat, 24-subdiv->bits());
-		point.coordinates = Coordinates(toWGS24(subdiv->lon() + lonOffset),
-		  toWGS24(subdiv->lat() + latOffset));
-		labelPtr = 0;
 
 		if (subtype & 0x20 && !readUInt24(hdl, labelPtr))
 			return false;
@@ -380,15 +381,17 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 		if (subtype & 0x40 && !skipLclFields(hdl, _pointsFlags, Point))
 			return false;
 
+		QPoint pos(subdiv->lon() + LS(lon, 24-subdiv->bits()),
+		  subdiv->lat() + LS(lat, 24-subdiv->bits()));
+
+		point.type = 0x10000 | (((quint32)type)<<8) | (subtype & 0x1F);
 		// Discard NT points breaking style draw order logic (and causing huge
 		// performance drawback)
 		if (point.type == 0x11400)
 			continue;
 
-		uint hash = qHash(QPair<uint,uint>(qHash(QPair<qint32, qint32>
-		  (subdiv->lon() + lonOffset, subdiv->lat() + latOffset)),
-		  labelPtr & 0x3FFFFF));
-		point.id = ((quint64)point.type)<<32 | hash;
+		point.coordinates = Coordinates(toWGS24(pos.x()), toWGS24(pos.y()));
+		point.id = pointId(pos.x(), pos.y(), point.type, labelPtr & 0x3FFFFF);
 		point.poi = labelPtr & 0x400000;
 		if (lbl && (labelPtr & 0x3FFFFF))
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi);

@@ -30,15 +30,20 @@ static quint8 SPECIAL_CHARS[] = {
 	'8', '9', '~', '~', '~', '~', '~', '~'
 };
 
-static QString capitalize(const QString &str)
+static bool isAllUpperCase(const QString &str)
 {
 	if (str.isEmpty())
-		return str;
+		return false;
 	for (int i = 0; i < str.size(); i++)
 		if (str.at(i).isLetter() && !(str.at(i).isUpper()
 		  || str.at(i) == QChar(0x00DF)))
-			return str;
+			return false;
 
+	return true;
+}
+
+static QString capitalized(const QString &str)
+{
 	QString ret(str);
 	for (int i = 0; i < str.size(); i++)
 		if (i && !str.at(i-1).isSpace())
@@ -77,7 +82,7 @@ bool LBLFile::init(Handle &hdl)
 	return true;
 }
 
-Label LBLFile::label6b(Handle &hdl, quint32 offset) const
+Label LBLFile::label6b(Handle &hdl, quint32 offset, bool capitalize) const
 {
 	Label::Shield::Type shieldType = Label::Shield::None;
 	QByteArray label, shieldLabel;
@@ -95,9 +100,12 @@ Label LBLFile::label6b(Handle &hdl, quint32 offset) const
 		int c[]= {b1>>2, (b1&0x3)<<4|b2>>4, (b2&0xF)<<2|b3>>6, b3&0x3F};
 
 		for (int cpt = 0; cpt < 4; cpt++) {
-			if (c[cpt] > 0x2f || (curCharSet == Normal && c[cpt] == 0x1d))
-				return Label(capitalize(QString::fromLatin1(label)),
-				  Label::Shield(shieldType, shieldLabel));
+			if (c[cpt] > 0x2f || (curCharSet == Normal && c[cpt] == 0x1d)) {
+				QString text(QString::fromLatin1(label));
+				return Label(capitalize & isAllUpperCase(text)
+				  ? capitalized(text) : text, Label::Shield(shieldType,
+				  shieldLabel));
+			}
 			switch (curCharSet) {
 				case Normal:
 					if (c[cpt] == 0x1c)
@@ -127,7 +135,7 @@ Label LBLFile::label6b(Handle &hdl, quint32 offset) const
 	}
 }
 
-Label LBLFile::label8b(Handle &hdl, quint32 offset) const
+Label LBLFile::label8b(Handle &hdl, quint32 offset, bool capitalize) const
 {
 	Label::Shield::Type shieldType = Label::Shield::None;
 	QByteArray label, shieldLabel;
@@ -157,12 +165,15 @@ Label LBLFile::label8b(Handle &hdl, quint32 offset) const
 			bap->append(c);
 	}
 
-	return Label(capitalize(_codec ? _codec->toUnicode(label)
-	  : QString::fromLatin1(label)), Label::Shield(shieldType, _codec
-	  ? _codec->toUnicode(shieldLabel) : QString::fromLatin1(shieldLabel)));
+	QString text(_codec ? _codec->toUnicode(label) : QString::fromLatin1(label));
+	QString shieldText(_codec ? _codec->toUnicode(shieldLabel)
+	  : QString::fromLatin1(shieldLabel));
+
+	return Label(capitalize && isAllUpperCase(text) ? capitalized(text) : text,
+	  Label::Shield(shieldType, shieldText));
 }
 
-Label LBLFile::label(Handle &hdl, quint32 offset, bool poi)
+Label LBLFile::label(Handle &hdl, quint32 offset, bool poi, bool capitalize)
 {
 	if (!_multiplier && !init(hdl))
 		return QString();
@@ -183,10 +194,10 @@ Label LBLFile::label(Handle &hdl, quint32 offset, bool poi)
 
 	switch (_encoding) {
 		case 6:
-			return label6b(hdl, labelOffset);
+			return label6b(hdl, labelOffset, capitalize);
 		case 9:
 		case 10:
-			return label8b(hdl, labelOffset);
+			return label8b(hdl, labelOffset, capitalize);
 		default:
 			return Label();
 	}
