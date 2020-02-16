@@ -102,7 +102,7 @@ Label LBLFile::label6b(Handle &hdl, quint32 offset, bool capitalize) const
 		for (int cpt = 0; cpt < 4; cpt++) {
 			if (c[cpt] > 0x2f || (curCharSet == Normal && c[cpt] == 0x1d)) {
 				QString text(QString::fromLatin1(label));
-				return Label(capitalize & isAllUpperCase(text)
+				return Label(capitalize && isAllUpperCase(text)
 				  ? capitalized(text) : text, Label::Shield(shieldType,
 				  shieldLabel));
 			}
