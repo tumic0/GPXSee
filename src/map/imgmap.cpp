@@ -588,15 +588,21 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				tiles.append(RasterTile(this, ttl, key));
 				RasterTile &tile = tiles.last();
 
-				RectD polyRect(_transform.img2proj(ttl), _transform.img2proj(
-				  QPointF(ttl.x() + TILE_SIZE, ttl.y() + TILE_SIZE)));
-				_data->polys(polyRect.toRectC(_projection, 4), _zoom,
+				QRectF polyRect(ttl, QPointF(ttl.x() + TILE_SIZE,
+				  ttl.y() + TILE_SIZE));
+				polyRect &= bounds();
+				RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
+				  _transform.img2proj(polyRect.bottomRight()));
+				_data->polys(polyRectD.toRectC(_projection, 4), _zoom,
 				  &(tile.polygons()), &(tile.lines()));
 
-				RectD pointRect(_transform.img2proj(QPointF(ttl.x() - TEXT_EXTENT,
-				  ttl.y() - TEXT_EXTENT)), _transform.img2proj(QPointF(ttl.x()
-				  + TILE_SIZE + TEXT_EXTENT, ttl.y() + TILE_SIZE + TEXT_EXTENT)));
-				_data->points(pointRect.toRectC(_projection, 4), _zoom,
+				QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT,
+				  ttl.y() - TEXT_EXTENT), QPointF(ttl.x() + TILE_SIZE
+				  + TEXT_EXTENT, ttl.y() + TILE_SIZE + TEXT_EXTENT));
+				pointRect &= bounds();
+				RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
+				  _transform.img2proj(pointRect.bottomRight()));
+				_data->points(pointRectD.toRectC(_projection, 4), _zoom,
 				  &(tile.points()));
 			}
 		}
