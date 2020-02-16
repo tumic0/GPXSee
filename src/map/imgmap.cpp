@@ -127,6 +127,7 @@ static QFont *font(Style::FontSize size, Style::FontSize defaultSize
 	static QFont large = pixelSizeFont(16);
 	static QFont normal = pixelSizeFont(14);
 	static QFont small = pixelSizeFont(12);
+	static QFont extraSmall = pixelSizeFont(10);
 
 	switch (size) {
 		case Style::None:
@@ -137,6 +138,8 @@ static QFont *font(Style::FontSize size, Style::FontSize defaultSize
 			return &normal;
 		case Style::Small:
 			return &small;
+		case Style::ExtraSmall:
+			return &extraSmall;
 		default:
 			return font(defaultSize);
 	}

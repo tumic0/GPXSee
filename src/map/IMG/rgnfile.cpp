@@ -346,7 +346,8 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 		point.poi = labelPtr & 0x400000;
 		if (lbl && (labelPtr & 0x3FFFFF))
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi,
-			  !(point.type == 0x1400 || point.type == 0x1500));
+			  !(point.type == 0x1400 || point.type == 0x1500
+			  || point.type == 0x1e00));
 
 		points->append(point);
 	}

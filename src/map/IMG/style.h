@@ -16,7 +16,8 @@ public:
 		None = 1,
 		Small = 2,
 		Normal = 3,
-		Large = 4
+		Large = 4,
+		ExtraSmall = 5
 	};
 
 	enum POIClass {

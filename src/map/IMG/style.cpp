@@ -116,6 +116,7 @@ void Style::defaultLineStyle()
 	_lines[TYPE(0x18)].setTextColor(QColor("#9fc4e1"));
 	//_lines[TYPE(0x1a)] = Line(QPen(QColor("#7697b7"), 1, Qt::DashLine));
 	_lines[TYPE(0x1b)] = Line(QPen(QColor("#7697b7"), 1, Qt::DashLine));
+	_lines[TYPE(0x1c)] = Line(QPen(QColor("#505145"), 1, Qt::DashLine));
 	_lines[TYPE(0x1e)] = Line(QPen(QColor("#505145"), 2, Qt::DashDotLine));
 	_lines[TYPE(0x1f)] = Line(QPen(QColor("#9fc4e1"), 3, Qt::SolidLine));
 	_lines[TYPE(0x1f)].setTextColor(QColor("#9fc4e1"));
@@ -146,12 +147,14 @@ void Style::defaultLineStyle()
 void Style::defaultPointStyle()
 {
 	// Countries
-	_points[TYPE(0x14)].setTextColor(QColor("#777777"));
+	_points[TYPE(0x14)].setTextColor(QColor("#505145"));
 	_points[TYPE(0x14)].setTextFontSize(Small);
-	_points[TYPE(0x15)].setTextColor(QColor("#777777"));
+	_points[TYPE(0x15)].setTextColor(QColor("#505145"));
 	_points[TYPE(0x15)].setTextFontSize(Small);
 
 	// Regions
+	_points[TYPE(0x1e)].setTextColor(QColor("#505145"));
+	_points[TYPE(0x1e)].setTextFontSize(ExtraSmall);
 	_points[TYPE(0x28)].setTextFontSize(Small);
 
 	// Cities
