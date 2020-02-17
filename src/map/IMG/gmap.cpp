@@ -1,5 +1,6 @@
 #include <QXmlStreamReader>
 #include <QDir>
+#include "map/osm.h"
 #include "vectortile.h"
 #include "gmap.h"
 
@@ -102,6 +103,11 @@ bool GMAP::loadTile(const QDir &dir, bool baseMap)
 	_bounds |= tile->bounds();
 	if (tile->zooms().min() < _zooms.min())
 		_zooms.setMin(tile->zooms().min());
+
+	// Limit world maps bounds so that the maps can be projected using
+	// the default Web Mercator projection
+	if (_bounds.height() > 120)
+		_bounds &= OSM::BOUNDS;
 
 	return true;
 }

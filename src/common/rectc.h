@@ -28,6 +28,9 @@ public:
 	double left() const {return _tl.lon();}
 	double right() const {return _br.lon();}
 
+	double width() const {return (right() - left());}
+	double height() const {return (top() - bottom());}
+
 	void setLeft(double val) {_tl.rlon() = val;}
 	void setRight(double val) {_br.rlon() = val;}
 	void setTop(double val) {_tl.rlat() = val;}
