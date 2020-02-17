@@ -132,11 +132,13 @@ IMG::IMG(const QString &fileName) : _file(fileName)
 	}
 
 	// Create tile tree
+
+	int minMapZoom = 24;
 	for (TileMap::const_iterator it = tileMap.constBegin();
 	  it != tileMap.constEnd(); ++it) {
 		VectorTile *tile = it.value();
 
-		if (!tile->init(false)) {
+		if (!tile->init()) {
 			qWarning("%s: %s: Invalid map tile", qPrintable(_file.fileName()),
 			  qPrintable(it.key()));
 			delete tile;
@@ -153,6 +155,17 @@ IMG::IMG(const QString &fileName) : _file(fileName)
 		_bounds |= tile->bounds();
 		if (tile->zooms().min() < _zooms.min())
 			_zooms.setMin(tile->zooms().min());
+		if (tile->zooms().min() < minMapZoom)
+			minMapZoom = tile->zooms().min();
+	}
+
+	for (TileMap::const_iterator it = tileMap.constBegin();
+	  it != tileMap.constEnd(); ++it) {
+		VectorTile *tile = it.value();
+		if (tile->zooms().min() > minMapZoom)
+			_baseMap = true;
+		if (tile->zooms().min() == minMapZoom)
+			tile->markAsBasemap();
 	}
 
 	if (!_tileTree.Count())

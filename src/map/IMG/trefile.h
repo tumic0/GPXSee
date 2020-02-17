@@ -18,7 +18,8 @@ public:
 	TREFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset) {}
 	~TREFile();
 
-	bool init(bool baseMap);
+	bool init();
+	void markAsBasemap() {_isBaseMap = true;}
 	void clear();
 
 	const RectC &bounds() const {return _bounds;}
@@ -26,7 +27,7 @@ public:
 	quint32 shift(quint8 bits) const
 	  {return (bits == _levels.last().bits) ? (_flags >> 0xb) & 7 : 0;}
 	Range zooms() const
-	  {return Range(_levels.first().bits, _levels.last().bits);}
+	  {return Range(_levels.at(_firstLevel).bits, _levels.last().bits);}
 
 private:
 	struct MapLevel {

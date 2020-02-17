@@ -42,11 +42,12 @@ TREFile::~TREFile()
 	clear();
 }
 
-bool TREFile::init(bool baseMap)
+bool TREFile::init()
 {
 	Handle hdl(this);
 	quint8 locked;
 	quint16 hdrLen;
+
 
 	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)
 	  && seek(hdl, _gmpOffset + 0x0D) && readUInt8(hdl, locked)))
@@ -114,7 +115,7 @@ bool TREFile::init(bool baseMap)
 		}
 	}
 
-	_isBaseMap = baseMap;
+	_isBaseMap = false;
 
 	return (_firstLevel >= 0);
 }

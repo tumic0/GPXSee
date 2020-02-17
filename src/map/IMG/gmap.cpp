@@ -84,11 +84,13 @@ bool GMAP::loadTile(const QDir &dir, bool baseMap)
 		tile->addFile(fi.absoluteFilePath(), tileType(fi.suffix()));
 	}
 
-	if (!tile->init(baseMap)) {
+	if (!tile->init()) {
 		qWarning("%s: Invalid map tile", qPrintable(dir.path()));
 		delete tile;
 		return false;
 	}
+	if (baseMap)
+		tile->markAsBasemap();
 
 	double min[2], max[2];
 	min[0] = tile->bounds().left();

@@ -82,12 +82,12 @@ SubFile *VectorTile::addFile(const QString &path, SubFile::Type type)
 	}
 }
 
-bool VectorTile::init(bool baseMap)
+bool VectorTile::init()
 {
 	if (_gmp && !initGMP())
 		return false;
 
-	if (!(_tre && _tre->init(baseMap) && _rgn))
+	if (!(_tre && _tre->init() && _rgn))
 		return false;
 
 	return true;
