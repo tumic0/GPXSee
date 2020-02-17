@@ -14,8 +14,8 @@ double Coordinates::distanceTo(const Coordinates &c) const
 #ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Coordinates &c)
 {
-	dbg.nospace() << qSetRealNumberPrecision(10) << "Coordinates(" << c.lat()
-	  << ", " << c.lon() << ")";
+	dbg.nospace() << qSetRealNumberPrecision(10) << "Coordinates(" << c.lon()
+	  << ", " << c.lat() << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG
