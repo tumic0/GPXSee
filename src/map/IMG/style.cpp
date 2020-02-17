@@ -1,4 +1,5 @@
 #include <QImage>
+#include <QPainter>
 #include "style.h"
 
 
@@ -79,13 +80,19 @@ void Style::defaultPolygonStyle()
 	  << TYPE(0x13);
 }
 
+static QImage railroad()
+{
+	QImage img(16, 4, QImage::Format_ARGB32_Premultiplied);
+	img.fill(QColor("#717171"));
+	QPainter p(&img);
+	p.setPen(QPen(Qt::white, 2));
+	p.drawLine(9, 2, 15, 2);
+
+	return img;
+}
+
 void Style::defaultLineStyle()
 {
-	QVector<qreal> pattern;
-	pattern << 4 << 4;
-	QPen rr(QColor("#717171"), 3, Qt::CustomDashLine);
-	rr.setDashPattern(pattern);
-
 	_lines[TYPE(0x01)] = Line(QPen(QColor("#9bd772"), 2, Qt::SolidLine),
 	  QPen(QColor("#72a35a"), 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 	_lines[TYPE(0x02)] = Line(QPen(QColor("#ffcc78"), 2, Qt::SolidLine),
@@ -109,8 +116,7 @@ void Style::defaultLineStyle()
 	  QPen(QColor("#e8a541"), 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 	_lines[TYPE(0x0c)] = Line(QPen(QColor("#ffffff"), 3, Qt::SolidLine),
 	  QPen(QColor("#d5cdc0"), 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	_lines[TYPE(0x14)] = Line(rr, QPen(Qt::white, 3, Qt::SolidLine,
-	  Qt::RoundCap, Qt::RoundJoin));
+	_lines[TYPE(0x14)] = Line(railroad());
 	_lines[TYPE(0x16)] = Line(QPen(QColor("#aba083"), 1, Qt::DotLine));
 	_lines[TYPE(0x18)] = Line(QPen(QColor("#9fc4e1"), 2, Qt::SolidLine));
 	_lines[TYPE(0x18)].setTextColor(QColor("#9fc4e1"));

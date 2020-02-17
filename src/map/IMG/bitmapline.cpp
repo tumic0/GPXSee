@@ -1,6 +1,12 @@
 #include <QPainter>
 #include <QImage>
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#include <QtCore/qmath.h>
+#else // QT5
+#include <QtMath>
+#endif // QT5
 #include "bitmapline.h"
+
 
 static QImage img2line(const QImage &img, int width)
 {
@@ -32,8 +38,8 @@ void BitmapLine::draw(QPainter *painter, const QPolygonF &line,
 		painter->save();
 		painter->translate(segment.p1());
 		painter->rotate(-segment.angle());
-		painter->drawImage(0, -img.height()/2, img2line(img, segment.length()));
+		painter->drawImage(0.0, -img.height()/2.0, img2line(img,
+		  qCeil(segment.length())));
 		painter->restore();
 	}
 }
-
