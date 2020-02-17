@@ -593,7 +593,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 				QRectF polyRect(ttl, QPointF(ttl.x() + TILE_SIZE,
 				  ttl.y() + TILE_SIZE));
-				polyRect &= bounds();
+				polyRect &= bounds().adjusted(0.5, 0.5, -0.5, -0.5);
 				RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
 				  _transform.img2proj(polyRect.bottomRight()));
 				_data->polys(polyRectD.toRectC(_projection, 4), _zoom,
@@ -602,7 +602,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT,
 				  ttl.y() - TEXT_EXTENT), QPointF(ttl.x() + TILE_SIZE
 				  + TEXT_EXTENT, ttl.y() + TILE_SIZE + TEXT_EXTENT));
-				pointRect &= bounds();
+				pointRect &= bounds().adjusted(0.5, 0.5, -0.5, -0.5);
 				RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
 				  _transform.img2proj(pointRect.bottomRight()));
 				_data->points(pointRectD.toRectC(_projection, 4), _zoom,
