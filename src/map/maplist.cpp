@@ -52,7 +52,7 @@ bool MapList::loadFile(const QString &path, bool *terminate)
 		else if (GMAP::isGMAP(path)) {
 			if (terminate)
 				*terminate = true;
-			map = new IMGMap(path);
+			map = new IMGMap(path, this);
 		}
 	} else if (suffix == "jnx")
 		map = new JNXMap(path, this);
