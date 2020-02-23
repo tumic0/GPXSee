@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map xmlns="http://www.gpxsee.org/map/1.3">
+<map xmlns="http://www.gpxsee.org/map/1.4">
 	<name>Open Topo Map</name>
 	<url>https://a.tile.opentopomap.org/$z/$x/$y.png</url>
 	<zoom max="17"/>

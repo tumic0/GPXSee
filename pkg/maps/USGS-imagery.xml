@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map xmlns="http://www.gpxsee.org/map/1.3">
+<map xmlns="http://www.gpxsee.org/map/1.4">
 	<name>USGS Imagery</name>
 	<url>https://basemap.nationalmap.gov/ArcGIS/rest/services/USGSImageryOnly/MapServer/tile/$z/$y/$x</url>
 	<zoom min="2" max="15"/>
