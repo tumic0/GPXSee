@@ -10,7 +10,10 @@
 
 static inline double hint2denominator(double h)
 {
-	return sqrt((h * h) / 2.0) / 0.28e-3;
+	/* Some WMS 1.1.1 servers use a 72dpi resolution by default. Using the usual
+	   90dpi (0.28mm) resolution known from later standards (WMS 1.3, WMTS) does
+	   make them return emty images in the "max" scale level. */
+	return h / (M_SQRT2 * 0.36e-3);
 }
 
 WMS::CTX::CTX(const Setup &setup) : setup(setup), formatSupported(false)
