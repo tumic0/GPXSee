@@ -110,8 +110,11 @@ void WMS::layer(QXmlStreamReader &reader, CTX &ctx,
 			QXmlStreamAttributes attr = reader.attributes();
 			double minHint = attr.value("min").toString().toDouble();
 			double maxHint = attr.value("max").toString().toDouble();
-			scaleDenominator.setMin(hint2denominator(minHint));
-			scaleDenominator.setMax(hint2denominator(maxHint));
+			if (minHint > 0)
+				scaleDenominator.setMin(hint2denominator(minHint));
+			if (maxHint > 0)
+				scaleDenominator.setMax(hint2denominator(maxHint));
+			reader.skipCurrentElement();
 		} else if (reader.name() == "MinScaleDenominator") {
 			double sd = reader.readElementText().toDouble();
 			if (sd > 0)
