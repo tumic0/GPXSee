@@ -1,3 +1,4 @@
+#include <cmath>
 #include <QFileInfo>
 #include <QEventLoop>
 #include <QXmlStreamReader>
@@ -6,6 +7,11 @@
 #include "crs.h"
 #include "wms.h"
 
+
+static inline double hint2denominator(double h)
+{
+	return sqrt((h * h) / 2.0) / 0.28e-3;
+}
 
 WMS::CTX::CTX(const Setup &setup) : setup(setup), formatSupported(false)
 {
@@ -97,7 +103,13 @@ void WMS::layer(QXmlStreamReader &reader, CTX &ctx,
 			CRSs.append(reader.readElementText());
 		else if (reader.name() == "Style")
 			styles.append(style(reader));
-		else if (reader.name() == "MinScaleDenominator") {
+		else if (reader.name() == "ScaleHint") {
+			QXmlStreamAttributes attr = reader.attributes();
+			double minHint = attr.value("min").toString().toDouble();
+			double maxHint = attr.value("max").toString().toDouble();
+			scaleDenominator.setMin(hint2denominator(minHint));
+			scaleDenominator.setMax(hint2denominator(maxHint));
+		} else if (reader.name() == "MinScaleDenominator") {
 			double sd = reader.readElementText().toDouble();
 			if (sd > 0)
 				scaleDenominator.setMin(sd);
