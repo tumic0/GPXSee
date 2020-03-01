@@ -2,7 +2,6 @@
 #include <QGraphicsScene>
 #include <QWheelEvent>
 #include <QApplication>
-#include <QPixmapCache>
 #include <QScrollBar>
 #include "data/poi.h"
 #include "data/data.h"
