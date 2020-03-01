@@ -300,7 +300,7 @@ Map *MapSource::loadMap(const QString &path, QString &errorString)
 		case WMS:
 			return new WMSMap(config.name, WMS::Setup(config.url, config.layer,
 			  config.style, config.format, config.crs, config.coordinateSystem,
-			  config.dimensions, config.authorization));
+			  config.dimensions, config.authorization), config.tileSize);
 		case TMS:
 			return new OnlineMap(config.name, config.url, config.zooms,
 			  config.bounds, config.tileRatio, config.authorization,

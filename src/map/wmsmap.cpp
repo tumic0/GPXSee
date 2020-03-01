@@ -10,7 +10,6 @@
 
 
 #define CAPABILITIES_FILE "capabilities.xml"
-#define TILE_SIZE 256
 #define EPSILON 1e-6
 
 double WMSMap::sd2res(double scaleDenominator) const
@@ -25,7 +24,7 @@ QString WMSMap::tileUrl(const QString &version) const
 	url = QString("%1%2version=%3&request=GetMap&bbox=$bbox"
 	  "&width=%4&height=%5&layers=%6&styles=%7&format=%8&transparent=true")
 	  .arg(_setup.url(), _setup.url().contains('?') ? "&" : "?", version,
-	  QString::number(TILE_SIZE), QString::number(TILE_SIZE), _setup.layer(),
+	  QString::number(_tileSize), QString::number(_tileSize), _setup.layer(),
 	  _setup.style(), _setup.format());
 
 	if (version >= "1.3.0")
@@ -100,9 +99,9 @@ bool WMSMap::loadWMS()
 	return true;
 }
 
-WMSMap::WMSMap(const QString &name, const WMS::Setup &setup, QObject *parent)
-  : Map(parent), _name(name), _setup(setup), _tileLoader(0), _zoom(0),
-  _mapRatio(1.0), _valid(false)
+WMSMap::WMSMap(const QString &name, const WMS::Setup &setup, int tileSize,
+  QObject *parent) : Map(parent), _name(name), _setup(setup), _tileLoader(0),
+  _zoom(0), _tileSize(tileSize), _mapRatio(1.0), _valid(false)
 {
 	_tileLoader = new TileLoader(tilesDir(), this);
 	_tileLoader->setAuthorization(_setup.authorization());
@@ -180,7 +179,7 @@ Coordinates WMSMap::xy2ll(const QPointF &p)
 
 qreal WMSMap::tileSize() const
 {
-	return (TILE_SIZE / _mapRatio);
+	return (_tileSize / _mapRatio);
 }
 
 void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
@@ -194,10 +193,10 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	tiles.reserve((br.x() - tl.x()) * (br.y() - tl.y()));
 	for (int i = tl.x(); i < br.x(); i++) {
 		for (int j = tl.y(); j < br.y(); j++) {
-			PointD ttl(_transform.img2proj(QPointF(i * TILE_SIZE,
-			  j * TILE_SIZE)));
-			PointD tbr(_transform.img2proj(QPointF(i * TILE_SIZE + TILE_SIZE,
-			  j * TILE_SIZE + TILE_SIZE)));
+			PointD ttl(_transform.img2proj(QPointF(i * _tileSize,
+			  j * _tileSize)));
+			PointD tbr(_transform.img2proj(QPointF(i * _tileSize + _tileSize,
+			  j * _tileSize + _tileSize)));
 			RectD bbox = (_cs.axisOrder() == CoordinateSystem::YX)
 			  ? RectD(PointD(tbr.y(), tbr.x()), PointD(ttl.y(), ttl.x()))
 			  : RectD(ttl, tbr);
