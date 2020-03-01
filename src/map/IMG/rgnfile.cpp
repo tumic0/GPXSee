@@ -425,7 +425,7 @@ QMap<RGNFile::SegmentType, SubDiv::Segment> RGNFile::segments(Handle &hdl,
 	quint32 ls = 0;
 	SegmentType lt = (SegmentType)0;
 
-	for (quint16 mask = 0x1; mask <= 0x10; mask <<= 1) {
+	for (quint8 mask = 0x1; mask <= 0x10; mask <<= 1) {
 		if (subdiv->objects() & mask) {
 			if (ls) {
 				quint16 po;
