@@ -182,7 +182,8 @@ void WMTS::layer(QXmlStreamReader &reader, CTX &ctx)
 			if (s == ctx.setup.style())
 				ctx.hasStyle = true;
 		} else if (reader.name() == "Format") {
-			if (reader.readElementText() == ctx.setup.format())
+			QString format(reader.readElementText());
+			if (format.left(format.indexOf(';')) == ctx.setup.format())
 				ctx.hasFormat = true;
 		} else
 			reader.skipCurrentElement();

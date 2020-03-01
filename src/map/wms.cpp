@@ -37,7 +37,8 @@ void WMS::getMap(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Format") {
-			if (reader.readElementText() == ctx.setup.format())
+			QString format(reader.readElementText());
+			if (format.left(format.indexOf(';')) == ctx.setup.format())
 				ctx.formatSupported = true;
 		} else
 			reader.skipCurrentElement();
