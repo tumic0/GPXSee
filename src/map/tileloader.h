@@ -16,7 +16,7 @@ public:
 	void setUrl(const QString &url) {_url = url;}
 	void setAuthorization(const Authorization &authorization)
 	  {_authorization = authorization;}
-	void setScaledSize(int size) {_scaledSize = size;}
+	void setScaledSize(int size);
 	void setQuadTiles(bool quadTiles) {_quadTiles = quadTiles;}
 
 	void loadTilesAsync(QVector<Tile> &list);

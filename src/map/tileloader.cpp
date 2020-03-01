@@ -169,6 +169,17 @@ void TileLoader::clearCache()
 		dir.remove(list.at(i));
 
 	_downloader->clearErrors();
+
+	QPixmapCache::clear();
+}
+
+void TileLoader::setScaledSize(int size)
+{
+	if (_scaledSize == size)
+		return;
+
+	_scaledSize = size;
+	QPixmapCache::clear();
 }
 
 QUrl TileLoader::tileUrl(const Tile &tile) const

@@ -351,7 +351,6 @@ void MapView::setMap(Map *map)
 	centerOn(nc);
 
 	reloadMap();
-	QPixmapCache::clear();
 }
 
 void MapView::setPOI(POI *poi)
@@ -982,7 +981,6 @@ void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 
 	_deviceRatio = deviceRatio;
 	_mapRatio = mapRatio;
-	QPixmapCache::clear();
 
 	QRectF vr(mapToScene(viewport()->rect()).boundingRect()
 	  .intersected(_map->bounds()));
