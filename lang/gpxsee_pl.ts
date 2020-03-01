@@ -1890,7 +1890,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="44"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="55"/>
