@@ -21,7 +21,7 @@ QString WMSMap::tileUrl(const QString &version) const
 {
 	QString url;
 
-	url = QString("%1%2version=%3&request=GetMap&bbox=$bbox"
+	url = QString("%1%2service=WMS&version=%3&request=GetMap&bbox=$bbox"
 	  "&width=%4&height=%5&layers=%6&styles=%7&format=%8&transparent=true")
 	  .arg(_setup.url(), _setup.url().contains('?') ? "&" : "?", version,
 	  QString::number(_tileSize), QString::number(_tileSize), _setup.layer(),
