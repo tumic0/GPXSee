@@ -12,6 +12,11 @@
 #include "wmts.h"
 
 
+static QString bareFormat(const QString &format)
+{
+	return format.left(format.indexOf(';')).trimmed();
+}
+
 static void skipParentElement(QXmlStreamReader &reader)
 {
 	while (reader.readNextStartElement())
@@ -183,7 +188,7 @@ void WMTS::layer(QXmlStreamReader &reader, CTX &ctx)
 				ctx.hasStyle = true;
 		} else if (reader.name() == "Format") {
 			QString format(reader.readElementText());
-			if (format.left(format.indexOf(';')) == ctx.setup.format())
+			if (bareFormat(format) == bareFormat(ctx.setup.format()))
 				ctx.hasFormat = true;
 		} else
 			reader.skipCurrentElement();

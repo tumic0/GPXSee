@@ -8,6 +8,11 @@
 #include "wms.h"
 
 
+static QString bareFormat(const QString &format)
+{
+	return format.left(format.indexOf(';')).trimmed();
+}
+
 static inline double hint2denominator(double h)
 {
 	/* Some WMS 1.1.1 servers use a 72dpi resolution by default. Using the usual
@@ -38,7 +43,7 @@ void WMS::getMap(QXmlStreamReader &reader, CTX &ctx)
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Format") {
 			QString format(reader.readElementText());
-			if (format.left(format.indexOf(';')) == ctx.setup.format())
+			if (bareFormat(format) == bareFormat(ctx.setup.format()))
 				ctx.formatSupported = true;
 		} else
 			reader.skipCurrentElement();
