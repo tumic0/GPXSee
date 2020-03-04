@@ -17,13 +17,13 @@ double WMSMap::sd2res(double scaleDenominator) const
 	return scaleDenominator * 0.28e-3 * _projection.units().fromMeters(1.0);
 }
 
-QString WMSMap::tileUrl(const QString &version) const
+QString WMSMap::tileUrl(const QString &baseUrl, const QString &version) const
 {
 	QString url;
 
 	url = QString("%1%2service=WMS&version=%3&request=GetMap&bbox=$bbox"
 	  "&width=%4&height=%5&layers=%6&styles=%7&format=%8&transparent=true")
-	  .arg(_setup.url(), _setup.url().contains('?') ? "&" : "?", version,
+	  .arg(baseUrl, baseUrl.contains('?') ? "&" : "?", version,
 	  QString::number(_tileSize), QString::number(_tileSize), _setup.layer(),
 	  _setup.style(), _setup.format());
 
@@ -83,7 +83,7 @@ bool WMSMap::loadWMS()
 	_projection = wms.projection();
 	_bbox = wms.boundingBox();
 	_bounds = RectD(_bbox, _projection);
-	_tileLoader->setUrl(tileUrl(wms.version()));
+	_tileLoader->setUrl(tileUrl(wms.tileUrl(), wms.version()));
 
 	if (wms.version() >= "1.3.0") {
 		if (_setup.coordinateSystem().axisOrder() == CoordinateSystem::Unknown)

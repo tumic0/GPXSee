@@ -38,6 +38,38 @@ WMS::CTX::CTX(const Setup &setup) : setup(setup), formatSupported(false)
 	}
 }
 
+void WMS::get(QXmlStreamReader &reader, CTX &ctx)
+{
+	while (reader.readNextStartElement()) {
+		if (reader.name() == "OnlineResource") {
+			QXmlStreamAttributes attr = reader.attributes();
+			ctx.url =  attr.value("xlink:href").toString();
+			reader.skipCurrentElement();
+		} else
+			reader.skipCurrentElement();
+	}
+}
+
+void WMS::http(QXmlStreamReader &reader, CTX &ctx)
+{
+	while (reader.readNextStartElement()) {
+		if (reader.name() == "Get")
+			get(reader, ctx);
+		else
+			reader.skipCurrentElement();
+	}
+}
+
+void WMS::dcpType(QXmlStreamReader &reader, CTX &ctx)
+{
+	while (reader.readNextStartElement()) {
+		if (reader.name() == "HTTP")
+			http(reader, ctx);
+		else
+			reader.skipCurrentElement();
+	}
+}
+
 void WMS::getMap(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
@@ -45,7 +77,9 @@ void WMS::getMap(QXmlStreamReader &reader, CTX &ctx)
 			QString format(reader.readElementText());
 			if (bareFormat(format) == bareFormat(ctx.setup.format()))
 				ctx.formatSupported = true;
-		} else
+		} else if (reader.name() == "DCPType")
+			dcpType(reader, ctx);
+		else
 			reader.skipCurrentElement();
 	}
 }
@@ -271,6 +305,8 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 		_errorString = "Empty layers scale denominator range join";
 		return false;
 	}
+
+	_tileUrl = ctx.url.isEmpty() ? setup.url() : ctx.url;
 
 	return true;
 }

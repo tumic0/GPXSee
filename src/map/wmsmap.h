@@ -40,7 +40,7 @@ public:
 	QString errorString() const {return _errorString;}
 
 private:
-	QString tileUrl(const QString &version) const;
+	QString tileUrl(const QString &baseUrl, const QString &version) const;
 	double sd2res(double scaleDenominator) const;
 	QString tilesDir() const;
 	void computeZooms(const RangeF &scaleDenominator);

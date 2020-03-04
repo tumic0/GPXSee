@@ -54,6 +54,7 @@ public:
 	const RangeF &scaleDenominator() const {return _scaleDenominator;}
 	const RectC &boundingBox() const {return _boundingBox;}
 	const QString &version() const {return _version;}
+	const QString &tileUrl() const {return _tileUrl;}
 
 	bool isValid() const {return _valid;}
 	const QString &errorString() const {return _errorString;}
@@ -79,12 +80,16 @@ private:
 		const Setup &setup;
 		QList<Layer> layers;
 		bool formatSupported;
+		QString url;
 
 		CTX(const Setup &setup);
 	};
 
 	RectC geographicBoundingBox(QXmlStreamReader &reader);
 	QString style(QXmlStreamReader &reader);
+	void get(QXmlStreamReader &reader, CTX &ctx);
+	void http(QXmlStreamReader &reader, CTX &ctx);
+	void dcpType(QXmlStreamReader &reader, CTX &ctx);
 	void getMap(QXmlStreamReader &reader, CTX &ctx);
 	void request(QXmlStreamReader &reader, CTX &ctx);
 	void layer(QXmlStreamReader &reader, CTX &ctx, const QList<QString> &pCRSs,
@@ -100,6 +105,7 @@ private:
 	RangeF _scaleDenominator;
 	RectC _boundingBox;
 	QString _version;
+	QString _tileUrl;
 
 	bool _valid;
 	QString _errorString;
