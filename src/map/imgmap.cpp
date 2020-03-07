@@ -260,13 +260,6 @@ void IMGMap::unload()
 	_data->clear();
 }
 
-QRectF IMGMap::bounds()
-{
-	RectD prect(_data->bounds(), _projection);
-	return QRectF(_transform.proj2img(prect.topLeft()),
-	  _transform.proj2img(prect.bottomRight()));
-}
-
 int IMGMap::zoomFit(const QSize &size, const RectC &rect)
 {
 	if (rect.isValid()) {
@@ -320,6 +313,10 @@ Transform IMGMap::transform(int zoom) const
 void IMGMap::updateTransform()
 {
 	_transform = transform(_zoom);
+
+	RectD prect(_data->bounds(), _projection);
+	_bounds = QRectF(_transform.proj2img(prect.topLeft()),
+	  _transform.proj2img(prect.bottomRight()));
 }
 
 QPointF IMGMap::ll2xy(const Coordinates &c)
