@@ -192,6 +192,8 @@ void GPXParser::waypointData(Waypoint &waypoint, SegmentData *autoRoute)
 			waypoint.setName(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("desc"))
 			waypoint.setDescription(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("cmt"))
+			waypoint.setComment(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("ele"))
 			waypoint.setElevation(number());
 		else if (_reader.name() == QLatin1String("geoidheight"))
@@ -244,6 +246,8 @@ void GPXParser::routepoints(RouteData &route, QList<TrackData> &tracks)
 			route.setName(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("desc"))
 			route.setDescription(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("cmt"))
+			route.setComment(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("link")) {
 			Link l(link());
 			if (!l.URL().isEmpty())
@@ -278,6 +282,8 @@ void GPXParser::track(TrackData &track)
 			track.setName(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("desc"))
 			track.setDescription(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("cmt"))
+			track.setComment(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("link")) {
 			Link l(link());
 			if (!l.URL().isEmpty())

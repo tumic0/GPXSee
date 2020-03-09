@@ -15,6 +15,8 @@ QString RouteItem::info() const
 		tt.insert(tr("Name"), _name);
 	if (!_desc.isEmpty())
 		tt.insert(tr("Description"), _desc);
+	if (!_comment.isEmpty() && _comment != _desc)
+		tt.insert(tr("Comment"), _comment);
 	tt.insert(tr("Distance"), Format::distance(path().last().last().distance(),
 	  _units));
 	if (!_links.isEmpty()) {
@@ -43,6 +45,7 @@ RouteItem::RouteItem(const Route &route, Map *map, QGraphicsItem *parent)
 
 	_name = route.name();
 	_desc = route.description();
+	_comment = route.comment();
 	_links = route.links();
 	_coordinatesFormat = DecimalDegrees;
 }

@@ -21,6 +21,7 @@ public:
 	const Coordinates &coordinates() const {return _coordinates;}
 	const QString &name() const {return _name;}
 	const QString &description() const {return _description;}
+	const QString &comment() const {return _comment;}
 	const Address &address() const {return _address;}
 	const QVector<ImageInfo> &images() const {return _images;}
 	const QVector<Link> &links() const {return _links;}
@@ -32,6 +33,7 @@ public:
 	void setName(const QString &name) {_name = name;}
 	void setDescription(const QString &description)
 	  {_description = description;}
+	void setComment(const QString &comment) {_comment = comment;}
 	void setAddress(const Address &address) {_address = address;}
 	void setTimestamp(const QDateTime &timestamp) {_timestamp = timestamp;}
 	void setElevation(qreal elevation) {_elevation = elevation;}
@@ -48,6 +50,7 @@ private:
 	Coordinates _coordinates;
 	QString _name;
 	QString _description;
+	QString _comment;
 	Address _address;
 	QVector<ImageInfo> _images;
 	QVector<Link> _links;

@@ -29,6 +29,7 @@ public:
 private:
 	QString _name;
 	QString _desc;
+	QString _comment;
 	QVector<Link> _links;
 	CoordinatesFormat _coordinatesFormat;
 

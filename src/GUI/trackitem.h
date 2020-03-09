@@ -22,6 +22,7 @@ public:
 private:
 	QString _name;
 	QString _desc;
+	QString _comment;
 	QVector<Link> _links;
 	QDateTime _date;
 	qreal _time;
