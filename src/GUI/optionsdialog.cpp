@@ -12,6 +12,7 @@
 #include <QRadioButton>
 #include <QLabel>
 #include <QSysInfo>
+#include <QButtonGroup>
 #include "map/pcs.h"
 #include "icons.h"
 #include "colorbox.h"
@@ -419,10 +420,16 @@ QWidget *OptionsDialog::createDataPage()
 	QVBoxLayout *sourceTabLayout = new QVBoxLayout();
 
 #ifdef Q_OS_MAC
+	QButtonGroup *speedGroup = new QButtonGroup(this);
+	speedGroup->addButton(_computedSpeed);
+	speedGroup->addButton(_reportedSpeed);
 	QVBoxLayout *speedOptions = new QVBoxLayout();
 	speedOptions->addWidget(_computedSpeed);
 	speedOptions->addWidget(_reportedSpeed);
 
+	QButtonGroup *elevationGroup = new QButtonGroup(this);
+	elevationGroup->addButton(_dataGPSElevation);
+	elevationGroup->addButton(_dataDEMElevation);
 	QVBoxLayout *elevationOptions = new QVBoxLayout();
 	elevationOptions->addWidget(_dataGPSElevation);
 	elevationOptions->addWidget(_dataDEMElevation);
