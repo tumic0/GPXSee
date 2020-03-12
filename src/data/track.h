@@ -32,6 +32,7 @@ public:
 
 	const QString &name() const {return _data.name();}
 	const QString &description() const {return _data.description();}
+	const QString &comment() const {return _data.comment();}
 	const QVector<Link> &links() const {return _data.links();}
 
 	bool isValid() const;

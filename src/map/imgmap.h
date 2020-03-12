@@ -18,7 +18,7 @@ public:
 
 	QString name() const {return _data->name();}
 
-	QRectF bounds();
+	QRectF bounds() {return _bounds;}
 
 	virtual int zoom() const {return _zoom;}
 	virtual void setZoom(int zoom);
@@ -62,6 +62,7 @@ private:
 	int _zoom;
 	Projection _projection;
 	Transform _transform;
+	QRectF _bounds;
 
 	bool _valid;
 	QString _errorString;

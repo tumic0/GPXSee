@@ -282,14 +282,14 @@ static quint32 readNotes(QDataStream &stream, QTextCodec *codec,
 	if (s1 & 0x1) {
 		QList<TranslatedString> obj;
 		ds += readTranslatedObjects(stream, codec, obj);
-		if (!obj.isEmpty() && waypoint.description().isNull())
-			waypoint.setDescription(obj.first().str());
+		if (!obj.isEmpty())
+			waypoint.setComment(obj.first().str());
 	}
 	if (s1 & 0x2) {
 		QString str;
 		ds += readString(stream, codec, str);
-		if (!str.isEmpty() && waypoint.description().isNull())
-			waypoint.setDescription(str);
+		if (!str.isEmpty())
+			waypoint.setComment(str);
 	}
 
 	if (ds != rh.size)
