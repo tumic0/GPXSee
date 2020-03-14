@@ -274,8 +274,8 @@ void GraphView::redraw(const QSizeF &size)
 	rx = RangeF(bounds().left() * _xScale, bounds().right() * _xScale);
 	ry = RangeF(bounds().top() * _yScale + _yOffset, bounds().bottom() * _yScale
 	  + _yOffset);
-	if (ry.size() < _minYRange)
-		ry.resize(_minYRange);
+	if (ry.size() < _minYRange * _yScale)
+		ry.resize(_minYRange * _yScale);
 
 	_xAxis->setRange(rx);
 	_yAxis->setRange(ry);
