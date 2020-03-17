@@ -54,7 +54,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_map = map;
 	_map->load();
 	_map->setProjection(_projection);
-	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
+	connect(_map, SIGNAL(tilesLoaded()), this, SLOT(reloadMap()));
 
 	_poi = poi;
 	connect(_poi, SIGNAL(pointsChanged()), this, SLOT(updatePOI()));
@@ -316,7 +316,7 @@ void MapView::setMap(Map *map)
 	RectC cr(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
 
 	_map->unload();
-	disconnect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
+	disconnect(_map, SIGNAL(tilesLoaded()), this, SLOT(reloadMap()));
 
 	_map = map;
 	_map->load();
@@ -324,7 +324,7 @@ void MapView::setMap(Map *map)
 #ifdef ENABLE_HIDPI
 	_map->setDevicePixelRatio(_deviceRatio, _mapRatio);
 #endif // ENABLE_HIDPI
-	connect(_map, SIGNAL(loaded()), this, SLOT(reloadMap()));
+	connect(_map, SIGNAL(tilesLoaded()), this, SLOT(reloadMap()));
 
 	digitalZoom(0);
 

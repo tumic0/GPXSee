@@ -20,7 +20,7 @@ public:
 	POI(QObject *parent = 0);
 
 	bool loadFile(const QString &path);
-	bool loadDir(const QString &path);
+	void loadDir(const QString &path);
 	const QString &errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 

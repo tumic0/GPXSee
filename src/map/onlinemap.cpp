@@ -21,7 +21,7 @@ OnlineMap::OnlineMap(const QString &name, const QString &url,
 	_tileLoader->setUrl(url);
 	_tileLoader->setAuthorization(authorization);
 	_tileLoader->setQuadTiles(quadTiles);
-	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(loaded()));
+	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(tilesLoaded()));
 }
 
 QRectF OnlineMap::bounds()

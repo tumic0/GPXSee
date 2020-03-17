@@ -12,70 +12,57 @@
 
 #define CAPABILITIES_FILE "capabilities.xml"
 
-bool WMTSMap::loadWMTS()
+WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, qreal tileRatio,
+  QObject *parent) : Map(parent), _name(name), _tileLoader(0), _zoom(0),
+  _mapRatio(1.0), _tileRatio(tileRatio)
 {
-	QString file = tilesDir() + "/" + CAPABILITIES_FILE;
+	QString tilesDir(QDir(ProgramPaths::tilesDir()).filePath(_name));
 
-	WMTS wmts(file, _setup);
-	if (!wmts.isValid()) {
-		_errorString = wmts.errorString();
-		return false;
-	}
+	_tileLoader = new TileLoader(tilesDir, this);
+	_tileLoader->setAuthorization(setup.authorization());
+	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(tilesLoaded()));
 
-	_zooms = wmts.zooms();
-	_projection = wmts.projection();
-	_tileLoader->setUrl(wmts.tileUrl());
-	_bounds = RectD(wmts.bounds(), _projection);
-
-	if (_setup.coordinateSystem().axisOrder() == CoordinateSystem::Unknown)
-		_cs = _projection.coordinateSystem();
-	else
-		_cs = _setup.coordinateSystem();
-
-	updateTransform();
-
-	return true;
+	_wmts = new WMTS(QDir(tilesDir).filePath(CAPABILITIES_FILE), setup, this);
+	connect(_wmts, SIGNAL(downloadFinished()), this, SLOT(wmtsReady()));
+	if (_wmts->isReady())
+		init();
 }
 
-WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, qreal tileRatio,
-  QObject *parent) : Map(parent), _name(name), _setup(setup), _tileLoader(0),
-  _zoom(0), _mapRatio(1.0), _tileRatio(tileRatio), _valid(false)
+void WMTSMap::init()
 {
-	_tileLoader = new TileLoader(tilesDir(), this);
-	_tileLoader->setAuthorization(_setup.authorization());
-	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(loaded()));
+	_tileLoader->setUrl(_wmts->tileUrl());
+	_bounds = RectD(_wmts->bbox(), _wmts->projection());
+	updateTransform();
+}
 
-	_valid = loadWMTS();
+void WMTSMap::wmtsReady()
+{
+	if (_wmts->isValid())
+		init();
+
+	emit mapLoaded();
 }
 
 void WMTSMap::clearCache()
 {
 	_tileLoader->clearCache();
-	_zoom = 0;
-
-	if (!loadWMTS())
-		qWarning("%s: %s", qPrintable(_name), qPrintable(_errorString));
-}
-
-QString WMTSMap::tilesDir() const
-{
-	return QString(QDir(ProgramPaths::tilesDir()).filePath(_name));
 }
 
 double WMTSMap::sd2res(double scaleDenominator) const
 {
-	return scaleDenominator * 0.28e-3 * _projection.units().fromMeters(1.0);
+	return scaleDenominator * 0.28e-3
+	  * _wmts->projection().units().fromMeters(1.0);
 }
 
 void WMTSMap::updateTransform()
 {
-	const WMTS::Zoom &z = _zooms.at(_zoom);
+	const WMTS::Zoom &z = _wmts->zooms().at(_zoom);
 
-	PointD topLeft = (_cs.axisOrder() == CoordinateSystem::YX)
+	PointD topLeft = (_wmts->cs().axisOrder() == CoordinateSystem::YX)
 	  ? PointD(z.topLeft().y(), z.topLeft().x()) : z.topLeft();
 
 	double pixelSpan = sd2res(z.scaleDenominator());
-	if (_projection.isGeographic())
+	if (_wmts->projection().isGeographic())
 		pixelSpan /= deg2rad(WGS84_RADIUS);
 	_transform = Transform(ReferencePoint(PointD(0, 0), topLeft),
 	  PointD(pixelSpan, pixelSpan));
@@ -83,7 +70,7 @@ void WMTSMap::updateTransform()
 
 QRectF WMTSMap::bounds()
 {
-	const WMTS::Zoom &z = _zooms.at(_zoom);
+	const WMTS::Zoom &z = _wmts->zooms().at(_zoom);
 	QRectF tileBounds, bounds;
 
 	tileBounds = (z.limits().isNull()) ?
@@ -95,29 +82,29 @@ QRectF WMTSMap::bounds()
 
 	if (_bounds.isValid())
 		bounds = QRectF(_transform.proj2img(_bounds.topLeft())
-		  / coordinatesRatio(), _transform.proj2img(_bounds.bottomRight())
-		  / coordinatesRatio());
+		  / coordinatesRatio(), _transform.proj2img(
+		  _bounds.bottomRight()) / coordinatesRatio());
 	return bounds.isValid() ? tileBounds.intersected(bounds) : tileBounds;
 }
 
 int WMTSMap::zoomFit(const QSize &size, const RectC &rect)
 {
 	if (rect.isValid()) {
-		RectD prect(rect, _projection);
+		RectD prect(rect, _wmts->projection());
 		PointD sc(prect.width() / size.width(), prect.height() / size.height());
 		double resolution = qMax(qAbs(sc.x()), qAbs(sc.y()));
-		if (_projection.isGeographic())
+		if (_wmts->projection().isGeographic())
 			resolution *= deg2rad(WGS84_RADIUS);
 
 		_zoom = 0;
-		for (int i = 0; i < _zooms.size(); i++) {
-			if (sd2res(_zooms.at(i).scaleDenominator()) < resolution
+		for (int i = 0; i < _wmts->zooms().size(); i++) {
+			if (sd2res(_wmts->zooms().at(i).scaleDenominator()) < resolution
 			  / coordinatesRatio())
 				break;
 			_zoom = i;
 		}
 	} else
-		_zoom = _zooms.size() - 1;
+		_zoom = _wmts->zooms().size() - 1;
 
 	updateTransform();
 	return _zoom;
@@ -131,7 +118,7 @@ void WMTSMap::setZoom(int zoom)
 
 int WMTSMap::zoomIn()
 {
-	_zoom = qMin(_zoom + 1, _zooms.size() - 1);
+	_zoom = qMin(_zoom + 1, _wmts->zooms().size() - 1);
 	updateTransform();
 	return _zoom;
 }
@@ -161,7 +148,7 @@ QSizeF WMTSMap::tileSize(const WMTS::Zoom &zoom) const
 
 void WMTSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	const WMTS::Zoom &z = _zooms.at(_zoom);
+	const WMTS::Zoom &z = _wmts->zooms().at(_zoom);
 	QSizeF ts(tileSize(z));
 
 	QPoint tl = QPoint(qFloor(rect.left() / ts.width()),
@@ -194,10 +181,12 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 QPointF WMTSMap::ll2xy(const Coordinates &c)
 {
-	return _transform.proj2img(_projection.ll2xy(c)) / coordinatesRatio();
+	return _transform.proj2img(_wmts->projection().ll2xy(c))
+	  / coordinatesRatio();
 }
 
 Coordinates WMTSMap::xy2ll(const QPointF &p)
 {
-	return _projection.xy2ll(_transform.img2proj(p * coordinatesRatio()));
+	return _wmts->projection().xy2ll(_transform.img2proj(p
+	  * coordinatesRatio()));
 }

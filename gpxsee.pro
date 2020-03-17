@@ -20,6 +20,7 @@ equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 4) {QT += opengl}
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
     src/GUI/graphicsscene.h \
+    src/GUI/mapaction.h \
     src/GUI/popup.h \
     src/common/garmin.h \
     src/common/staticassert.h \

@@ -14,8 +14,10 @@
 
 class QXmlStreamReader;
 
-class WMTS
+class WMTS : public QObject
 {
+	Q_OBJECT
+
 public:
 	class Setup
 	{
@@ -79,15 +81,23 @@ public:
 	};
 
 
-	WMTS(const QString &path, const Setup &setup);
+	WMTS(const QString &path, const Setup &setup, QObject *parent = 0);
 
-	const RectC &bounds() const {return _bounds;}
+	const RectC &bbox() const {return _bbox;}
 	const QList<Zoom> &zooms() const {return _zooms;}
 	const Projection &projection() const {return _projection;}
 	const QString &tileUrl() const {return _tileUrl;}
+	CoordinateSystem cs() const {return _cs;}
 
+	bool isReady() const {return _valid && _ready;}
 	bool isValid() const {return _valid;}
 	const QString &errorString() const {return _errorString;}
+
+signals:
+	void downloadFinished();
+
+private slots:
+	void capabilitiesReady();
 
 private:
 	struct TileMatrix {
@@ -118,18 +128,18 @@ private:
 	};
 
 	struct CTX {
-		const Setup &setup;
 		QSet<TileMatrix> matrixes;
 		QSet<MatrixLimits> limits;
 		QString crs;
 		QString defaultStyle;
+		RectC bbox;
 		bool hasLayer;
 		bool hasStyle;
 		bool hasFormat;
 		bool hasSet;
 
-		CTX(const Setup &setup) : setup(setup), hasLayer(false), hasStyle(false),
-		  hasFormat(false), hasSet(false) {}
+		CTX() : hasLayer(false), hasStyle(false), hasFormat(false), hasSet(false)
+		  {}
 	};
 
 	RectC wgs84BoundingBox(QXmlStreamReader &reader);
@@ -142,17 +152,21 @@ private:
 	void layer(QXmlStreamReader &reader, CTX &ctx);
 	void contents(QXmlStreamReader &reader, CTX &ctx);
 	void capabilities(QXmlStreamReader &reader, CTX &ctx);
-	bool parseCapabilities(const QString &path, CTX &ctx);
-	bool downloadCapabilities(const QString &url, const QString &file,
-	  const Authorization &authorization);
+	bool parseCapabilities(CTX &ctx);
+	bool downloadCapabilities(const QString &url);
 	void createZooms(const CTX &ctx);
+	bool init();
 
+	WMTS::Setup _setup;
+	QString _path;
+	Downloader *_downloader;
+	RectC _bbox;
 	QList<Zoom> _zooms;
-	RectC _bounds;
 	Projection _projection;
 	QString _tileUrl;
+	CoordinateSystem _cs;
 
-	bool _valid;
+	bool _valid, _ready;
 	QString _errorString;
 
 	friend uint qHash(const WMTS::TileMatrix &key);

@@ -51,6 +51,7 @@
 #include "graphtab.h"
 #include "graphitem.h"
 #include "pathitem.h"
+#include "mapaction.h"
 #include "gui.h"
 
 
@@ -58,7 +59,6 @@
 
 GUI::GUI()
 {
-	loadMaps();
 	loadPOIs();
 
 	createMapView();
@@ -106,24 +106,13 @@ GUI::GUI()
 	updateStatusBarInfo();
 }
 
-void GUI::loadMaps()
-{
-	_ml = new MapList(this);
-	QString mapDir(ProgramPaths::mapDir());
-
-	if (!mapDir.isNull() && !_ml->loadDir(mapDir))
-		qWarning("%s", qPrintable(_ml->errorPath() + ": " + _ml->errorString()));
-
-	_map = new EmptyMap(this);
-}
-
 void GUI::loadPOIs()
 {
 	_poi = new POI(this);
-	QString poiDir(ProgramPaths::poiDir());
 
-	if (!poiDir.isNull() && !_poi->loadDir(poiDir))
-		qWarning("%s", qPrintable(_poi->errorString()));
+	QString poiDir(ProgramPaths::poiDir());
+	if (!poiDir.isNull())
+		_poi->loadDir(poiDir);
 }
 
 void GUI::createBrowser()
@@ -134,40 +123,56 @@ void GUI::createBrowser()
 
 void GUI::createMapActions()
 {
-	_mapsSignalMapper = new QSignalMapper(this);
 	_mapsActionGroup = new QActionGroup(this);
 	_mapsActionGroup->setExclusive(true);
 
-	for (int i = 0; i < _ml->maps().count(); i++)
-		createMapAction(_ml->maps().at(i));
+	QString mapDir(ProgramPaths::mapDir());
+	if (mapDir.isNull())
+		return;
 
-	connect(_mapsSignalMapper, SIGNAL(mapped(int)), this,
-	  SLOT(mapChanged(int)));
+	QString unused;
+	QList<Map*> maps(MapList::loadMaps(mapDir, unused));
+	for (int i = 0; i < maps.count(); i++) {
+		MapAction *a = createMapAction(maps.at(i));
+		connect(a, SIGNAL(loaded()), this, SLOT(mapInitialized()));
+	}
 }
 
-QAction *GUI::createMapAction(const Map *map)
+MapAction *GUI::createMapAction(Map *map)
 {
-	QAction *a = new QAction(map->name(), this);
+	MapAction *a = new MapAction(map);
 	a->setMenuRole(QAction::NoRole);
 	a->setCheckable(true);
 	a->setActionGroup(_mapsActionGroup);
-
-	_mapActions.append(a);
-	_mapsSignalMapper->setMapping(a, _mapActions.size() - 1);
-	connect(a, SIGNAL(triggered()), _mapsSignalMapper, SLOT(map()));
+	connect(a, SIGNAL(triggered()), this, SLOT(mapChanged()));
 
 	return a;
+}
+
+void GUI::mapInitialized()
+{
+	MapAction *action = static_cast<MapAction*>(QObject::sender());
+	Map *map = action->data().value<Map*>();
+
+	if (map->isValid()) {
+		if (!_mapsActionGroup->checkedAction())
+			action->trigger();
+		_showMapAction->setEnabled(true);
+		_clearMapCacheAction->setEnabled(true);
+	} else {
+		qWarning(qPrintable(map->name() + ": " + map->errorString()));
+		action->deleteLater();
+	}
 }
 
 void GUI::createPOIFilesActions()
 {
 	_poiFilesSignalMapper = new QSignalMapper(this);
+	connect(_poiFilesSignalMapper, SIGNAL(mapped(int)), this,
+	  SLOT(poiFileChecked(int)));
 
 	for (int i = 0; i < _poi->files().count(); i++)
 		createPOIFileAction(_poi->files().at(i));
-
-	connect(_poiFilesSignalMapper, SIGNAL(mapped(int)), this,
-	  SLOT(poiFileChecked(int)));
 }
 
 QAction *GUI::createPOIFileAction(const QString &fileName)
@@ -281,8 +286,10 @@ void GUI::createActions()
 	createPOIFilesActions();
 
 	// Map actions
+	createMapActions();
 	_showMapAction = new QAction(QIcon(SHOW_MAP_ICON), tr("Show map"),
 	  this);
+	_showMapAction->setEnabled(false);
 	_showMapAction->setMenuRole(QAction::NoRole);
 	_showMapAction->setCheckable(true);
 	_showMapAction->setShortcut(SHOW_MAP_SHORTCUT);
@@ -294,10 +301,10 @@ void GUI::createActions()
 	_loadMapAction->setMenuRole(QAction::NoRole);
 	connect(_loadMapAction, SIGNAL(triggered()), this, SLOT(loadMap()));
 	_clearMapCacheAction = new QAction(tr("Clear tile cache"), this);
+	_clearMapCacheAction->setEnabled(false);
 	_clearMapCacheAction->setMenuRole(QAction::NoRole);
 	connect(_clearMapCacheAction, SIGNAL(triggered()), _mapView,
 	  SLOT(clearMapCache()));
-	createMapActions();
 	_nextMapAction = new QAction(tr("Next map"), this);
 	_nextMapAction->setMenuRole(QAction::NoRole);
 	_nextMapAction->setShortcut(NEXT_MAP_SHORTCUT);
@@ -308,10 +315,6 @@ void GUI::createActions()
 	_prevMapAction->setShortcut(PREV_MAP_SHORTCUT);
 	connect(_prevMapAction, SIGNAL(triggered()), this, SLOT(prevMap()));
 	addAction(_prevMapAction);
-	if (_ml->maps().isEmpty()) {
-		_showMapAction->setEnabled(false);
-		_clearMapCacheAction->setEnabled(false);
-	}
 	_showCoordinatesAction = new QAction(tr("Show cursor coordinates"), this);
 	_showCoordinatesAction->setMenuRole(QAction::NoRole);
 	_showCoordinatesAction->setCheckable(true);
@@ -506,7 +509,7 @@ void GUI::createMenus()
 #endif // Q_OS_MAC
 
 	_mapMenu = menuBar()->addMenu(tr("&Map"));
-	_mapMenu->addActions(_mapActions);
+	_mapMenu->addActions(_mapsActionGroup->actions());
 	_mapsEnd = _mapMenu->addSeparator();
 	_mapMenu->addAction(_loadMapAction);
 	_mapMenu->addAction(_clearMapCacheAction);
@@ -608,6 +611,7 @@ void GUI::createToolBars()
 
 void GUI::createMapView()
 {
+	_map = new EmptyMap(this);
 	_mapView = new MapView(_map, _poi, this);
 	_mapView->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,
 	  QSizePolicy::Expanding));
@@ -1322,25 +1326,49 @@ void GUI::loadMap()
 
 bool GUI::loadMap(const QString &fileName)
 {
+	// On OS X fileName may be a directory!
+
 	if (fileName.isEmpty())
 		return false;
 
-	QFileInfo fi(fileName);
-	bool res = fi.isDir() ? _ml->loadDir(fileName) : _ml->loadFile(fileName);
+	QString error;
+	QList<Map*> maps = MapList::loadMaps(fileName, error);
+	if (maps.isEmpty()) {
+		error = tr("Error loading map:") + "\n\n"
+		  + fileName + "\n\n" + error;
+		QMessageBox::critical(this, APP_NAME, error);
+		return false;
+	}
 
-	if (res) {
-		QAction *a = createMapAction(_ml->maps().last());
+	for (int i = 0; i < maps.size(); i++) {
+		Map *map = maps.at(i);
+		MapAction *a = createMapAction(map);
 		_mapMenu->insertAction(_mapsEnd, a);
+		if (map->isReady()) {
+			a->trigger();
+			_showMapAction->setEnabled(true);
+			_clearMapCacheAction->setEnabled(true);
+		} else
+			connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
+	}
+
+	return true;
+}
+
+void GUI::mapLoaded()
+{
+	MapAction *action = static_cast<MapAction*>(QObject::sender());
+	Map *map = action->data().value<Map*>();
+
+	if (map->isValid()) {
+		action->trigger();
 		_showMapAction->setEnabled(true);
 		_clearMapCacheAction->setEnabled(true);
-		a->trigger();
-		return true;
 	} else {
 		QString error = tr("Error loading map:") + "\n\n"
-		  + fileName + "\n\n" + _ml->errorString();
+		  + map->name() + "\n\n" + map->errorString();
 		QMessageBox::critical(this, APP_NAME, error);
-
-		return false;
+		action->deleteLater();
 	}
 }
 
@@ -1382,31 +1410,42 @@ void GUI::updateWindowTitle()
 		setWindowTitle(APP_NAME);
 }
 
-void GUI::mapChanged(int index)
+void GUI::mapChanged()
 {
-	_map = _ml->maps().at(index);
+	_map = _mapsActionGroup->checkedAction()->data().value<Map*>();
 	_mapView->setMap(_map);
 }
 
 void GUI::nextMap()
 {
-	if (_ml->maps().count() < 2)
+	QAction *checked = _mapsActionGroup->checkedAction();
+	if (!checked)
 		return;
 
-	int next = (_ml->maps().indexOf(_map) + 1) % _ml->maps().count();
-	_mapActions.at(next)->setChecked(true);
-	mapChanged(next);
+	QList<QAction*> maps = _mapsActionGroup->actions();
+	for (int i = 1;	i < maps.size(); i++) {
+		int next = (maps.indexOf(checked) + i) % maps.count();
+		if (maps.at(next)->isEnabled()) {
+			maps.at(next)->trigger();
+			break;
+		}
+	}
 }
 
 void GUI::prevMap()
 {
-	if (_ml->maps().count() < 2)
+	QAction *checked = _mapsActionGroup->checkedAction();
+	if (!checked)
 		return;
 
-	int prev = (_ml->maps().indexOf(_map) + _ml->maps().count() - 1)
-	  % _ml->maps().count();
-	_mapActions.at(prev)->setChecked(true);
-	mapChanged(prev);
+	QList<QAction*> maps = _mapsActionGroup->actions();
+	for (int i = 1; i < maps.size(); i++) {
+		int prev = (maps.indexOf(checked) + maps.count() - i) % maps.count();
+		if (maps.at(prev)->isEnabled()) {
+			maps.at(prev)->trigger();
+			break;
+		}
+	}
 }
 
 void GUI::poiFileChecked(int index)
@@ -1899,9 +1938,11 @@ void GUI::readSettings()
 		_showMapAction->setChecked(true);
 	else
 		_mapView->showMap(false);
-	if (_ml->maps().count()) {
-		int index = mapIndex(settings.value(CURRENT_MAP_SETTING).toString());
-		_mapActions.at(index)->trigger();
+	QAction *ma = mapAction(settings.value(CURRENT_MAP_SETTING).toString());
+	if (ma) {
+		ma->trigger();
+		_showMapAction->setEnabled(true);
+		_clearMapCacheAction->setEnabled(true);
 	}
 	if (settings.value(SHOW_COORDINATES_SETTING, SHOW_COORDINATES_DEFAULT)
 	  .toBool()) {
@@ -2175,11 +2216,23 @@ void GUI::readSettings()
 	settings.endGroup();
 }
 
-int GUI::mapIndex(const QString &name)
+QAction *GUI::mapAction(const QString &name)
 {
-	for (int i = 0; i < _ml->maps().count(); i++)
-		if (_ml->maps().at(i)->name() == name)
-			return i;
+	QList<QAction *> maps = _mapsActionGroup->actions();
+
+	// Last map
+	for (int i = 0; i < maps.count(); i++) {
+		Map *map = maps.at(i)->data().value<Map*>();
+		if (map->name() == name && map->isReady())
+			return maps.at(i);
+	}
+
+	// Any usable map
+	for (int i = 0; i < maps.count(); i++) {
+		Map *map = maps.at(i)->data().value<Map*>();
+		if (map->isReady())
+			return maps.at(i);
+	}
 
 	return 0;
 }

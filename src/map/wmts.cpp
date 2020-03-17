@@ -58,7 +58,7 @@ void WMTS::tileMatrixSet(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Identifier") {
-			if (reader.readElementText() != ctx.setup.set()) {
+			if (reader.readElementText() != _setup.set()) {
 				skipParentElement(reader);
 				return;
 			}
@@ -114,7 +114,7 @@ void WMTS::tileMatrixSetLink(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "TileMatrixSet") {
-			if (reader.readElementText() == ctx.setup.set())
+			if (reader.readElementText() == _setup.set())
 				ctx.hasSet = true;
 			else {
 				skipParentElement(reader);
@@ -163,7 +163,7 @@ void WMTS::layer(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == "Identifier") {
-			if (reader.readElementText() == ctx.setup.layer())
+			if (reader.readElementText() == _setup.layer())
 				ctx.hasLayer = true;
 			else {
 				skipParentElement(reader);
@@ -172,10 +172,10 @@ void WMTS::layer(QXmlStreamReader &reader, CTX &ctx)
 		} else if (reader.name() == "TileMatrixSetLink")
 			tileMatrixSetLink(reader, ctx);
 		else if (reader.name() == "WGS84BoundingBox")
-			_bounds = wgs84BoundingBox(reader);
+			ctx.bbox = wgs84BoundingBox(reader);
 		else if (reader.name() == "ResourceURL") {
 			const QXmlStreamAttributes &attr = reader.attributes();
-			if (attr.value("resourceType") == "tile" && ctx.setup.rest())
+			if (attr.value("resourceType") == "tile" && _setup.rest())
 				_tileUrl = attr.value("template").toString();
 			reader.skipCurrentElement();
 		} else if (reader.name() == "Style") {
@@ -184,11 +184,11 @@ void WMTS::layer(QXmlStreamReader &reader, CTX &ctx)
 			QString s = style(reader);
 			if (isDefault)
 				ctx.defaultStyle = s;
-			if (s == ctx.setup.style())
+			if (s == _setup.style())
 				ctx.hasStyle = true;
 		} else if (reader.name() == "Format") {
 			QString format(reader.readElementText());
-			if (bareFormat(format) == bareFormat(ctx.setup.format()))
+			if (bareFormat(format) == bareFormat(_setup.format()))
 				ctx.hasFormat = true;
 		} else
 			reader.skipCurrentElement();
@@ -232,9 +232,9 @@ void WMTS::createZooms(const CTX &ctx)
 	qSort(_zooms);
 }
 
-bool WMTS::parseCapabilities(const QString &path, CTX &ctx)
+bool WMTS::parseCapabilities(CTX &ctx)
 {
-	QFile file(path);
+	QFile file(_path);
 	QXmlStreamReader reader;
 
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
@@ -250,30 +250,30 @@ bool WMTS::parseCapabilities(const QString &path, CTX &ctx)
 			reader.raiseError("Not a Capabilities XML file");
 	}
 	if (reader.error()) {
-		_errorString = QString("%1:%2: %3").arg(path).arg(reader.lineNumber())
+		_errorString = QString("%1:%2: %3").arg(_path).arg(reader.lineNumber())
 		  .arg(reader.errorString());
 		return false;
 	}
 
 	if (!ctx.hasLayer) {
-		_errorString = ctx.setup.layer() + ": layer not provided";
+		_errorString = _setup.layer() + ": layer not provided";
 		return false;
 	}
-	if (!ctx.hasStyle && !ctx.setup.style().isEmpty()) {
-		_errorString = ctx.setup.style() + ": style not provided";
+	if (!ctx.hasStyle && !_setup.style().isEmpty()) {
+		_errorString = _setup.style() + ": style not provided";
 		return false;
 	}
-	if (!ctx.hasStyle && ctx.setup.style().isEmpty()
+	if (!ctx.hasStyle && _setup.style().isEmpty()
 	  && ctx.defaultStyle.isEmpty()) {
 		_errorString = "Default style not provided";
 		return false;
 	}
-	if (!ctx.setup.rest() && !ctx.hasFormat) {
-		_errorString = ctx.setup.format() + ": format not provided";
+	if (!_setup.rest() && !ctx.hasFormat) {
+		_errorString = _setup.format() + ": format not provided";
 		return false;
 	}
 	if (!ctx.hasSet) {
-		_errorString = ctx.setup.set() + ": set not provided";
+		_errorString = _setup.set() + ": set not provided";
 		return false;
 	}
 	if (ctx.crs.isNull()) {
@@ -290,74 +290,92 @@ bool WMTS::parseCapabilities(const QString &path, CTX &ctx)
 		_errorString = "No usable tile matrix found";
 		return false;
 	}
-	if (ctx.setup.rest() && _tileUrl.isNull()) {
+	if (_setup.rest() && _tileUrl.isNull()) {
 		_errorString = "Missing tile URL template";
 		return false;
 	}
+	_bbox = ctx.bbox;
+	_cs = (_setup.coordinateSystem().axisOrder() == CoordinateSystem::Unknown)
+	  ? _projection.coordinateSystem() : _setup.coordinateSystem();
 
 	return true;
 }
 
-bool WMTS::downloadCapabilities(const QString &url, const QString &file,
-  const Authorization &authorization)
+bool WMTS::downloadCapabilities(const QString &url)
 {
-	Downloader d;
-	QList<Download> dl;
-
-	dl.append(Download(url, file));
-
-	QEventLoop wait;
-	QObject::connect(&d, SIGNAL(finished()), &wait, SLOT(quit()));
-	if (d.get(dl, authorization))
-		wait.exec();
-
-	if (!QFileInfo(file).exists()) {
-		_errorString = "Error downloading capabilities XML file";
-		return false;
+	if (!_downloader) {
+		_downloader = new Downloader(this);
+		connect(_downloader, SIGNAL(finished()), this,
+		  SLOT(capabilitiesReady()));
 	}
 
-	return true;
+	QList<Download> dl;
+	dl.append(Download(url, _path));
+
+	return _downloader->get(dl, _setup.authorization());
 }
 
-WMTS::WMTS(const QString &file, const WMTS::Setup &setup) : _valid(false)
+void WMTS::capabilitiesReady()
 {
-	QUrl url(setup.rest() ? setup.url() : QString(
-	  "%1%2service=WMTS&Version=1.0.0&request=GetCapabilities").arg(setup.url(),
-	  setup.url().contains('?') ? "&" : "?"));
+	if (!QFileInfo(_path).exists()) {
+		_errorString = "Error downloading capabilities XML file";
+		_valid = false;
+	} else {
+		_ready = true;
+		_valid = init();
+	}
 
-	if (!url.isLocalFile() && !QFileInfo(file).exists())
-		if (!downloadCapabilities(url.toString(), file, setup.authorization()))
-			return;
+	emit downloadFinished();
+}
 
-	CTX ctx(setup);
-	if (!parseCapabilities(url.isLocalFile() ? url.toLocalFile() : file, ctx))
-		return;
+bool WMTS::init()
+{
+	CTX ctx;
+	if (!parseCapabilities(ctx))
+		return false;
 
-	QString style = setup.style().isEmpty() ? ctx.defaultStyle : setup.style();
-	if (!setup.rest()) {
+	QString style = _setup.style().isEmpty() ? ctx.defaultStyle : _setup.style();
+	if (!_setup.rest()) {
 		_tileUrl = QString("%1%2service=WMTS&Version=1.0.0&request=GetTile"
 		  "&Format=%3&Layer=%4&Style=%5&TileMatrixSet=%6&TileMatrix=$z"
-		  "&TileRow=$y&TileCol=$x").arg(setup.url(),
-		  setup.url().contains('?') ? "&" : "?" , setup.format(),
-		  setup.layer(), style, setup.set());
-		for (int i = 0; i < setup.dimensions().size(); i++) {
-			const KV<QString, QString> &dim = setup.dimensions().at(i);
+		  "&TileRow=$y&TileCol=$x").arg(_setup.url(),
+		  _setup.url().contains('?') ? "&" : "?" , _setup.format(),
+		  _setup.layer(), style, _setup.set());
+		for (int i = 0; i < _setup.dimensions().size(); i++) {
+			const KV<QString, QString> &dim = _setup.dimensions().at(i);
 			_tileUrl.append(QString("&%1=%2").arg(dim.key(), dim.value()));
 		}
 	} else {
 		_tileUrl.replace("{Style}", style, Qt::CaseInsensitive);
-		_tileUrl.replace("{TileMatrixSet}", setup.set(), Qt::CaseInsensitive);
+		_tileUrl.replace("{TileMatrixSet}", _setup.set(), Qt::CaseInsensitive);
 		_tileUrl.replace("{TileMatrix}", "$z", Qt::CaseInsensitive);
 		_tileUrl.replace("{TileRow}", "$y", Qt::CaseInsensitive);
 		_tileUrl.replace("{TileCol}", "$x", Qt::CaseInsensitive);
-		for (int i = 0; i < setup.dimensions().size(); i++) {
-			const KV<QString, QString> &dim = setup.dimensions().at(i);
+		for (int i = 0; i < _setup.dimensions().size(); i++) {
+			const KV<QString, QString> &dim = _setup.dimensions().at(i);
 			_tileUrl.replace(QString("{%1}").arg(dim.key()), dim.value(),
 			  Qt::CaseInsensitive);
 		}
 	}
 
-	_valid = true;
+	return true;
+}
+
+WMTS::WMTS(const QString &file, const WMTS::Setup &setup, QObject *parent)
+  : QObject(parent), _setup(setup), _downloader(0), _valid(false), _ready(false)
+{
+	QUrl url(setup.rest() ? setup.url() : QString(
+	  "%1%2service=WMTS&Version=1.0.0&request=GetCapabilities").arg(setup.url(),
+	  setup.url().contains('?') ? "&" : "?"));
+
+	_path = url.isLocalFile() ? url.toLocalFile() : file;
+
+	if (!url.isLocalFile() && !QFileInfo(file).exists())
+		_valid = downloadCapabilities(url.toString());
+	else {
+		_ready = true;
+		_valid = init();
+	}
 }
 
 #ifndef QT_NO_DEBUG

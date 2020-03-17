@@ -50,12 +50,15 @@ public:
 	virtual void setProjection(const Projection &) {}
 
 	virtual bool isValid() const {return true;}
+	virtual bool isReady() const {return true;}
 	virtual QString errorString() const {return QString();}
 
 signals:
-	void loaded();
+	void tilesLoaded();
+	void mapLoaded();
 };
 
+Q_DECLARE_METATYPE(Map*)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Map::Flags)
 
 #endif // MAP_H

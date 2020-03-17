@@ -36,34 +36,30 @@ public:
 	  {_mapRatio = mapRatio;}
 	void clearCache();
 
-	bool isValid() const {return _valid;}
-	QString errorString() const {return _errorString;}
+	bool isReady() const {return _wms->isReady();}
+	bool isValid() const {return _wms->isValid();}
+	QString errorString() const {return _wms->errorString();}
+
+private slots:
+	void wmsReady();
 
 private:
-	QString tileUrl(const QString &baseUrl, const QString &version) const;
+	QString tileUrl() const;
 	double sd2res(double scaleDenominator) const;
-	QString tilesDir() const;
-	void computeZooms(const RangeF &scaleDenominator);
+	void computeZooms();
 	void updateTransform();
-	bool loadWMS();
 	qreal tileSize() const;
+	void init();
 
 	QString _name;
-
-	WMS::Setup _setup;
+	WMS *_wms;
 	TileLoader *_tileLoader;
-	Projection _projection;
-	Transform _transform;
-	CoordinateSystem _cs;
-	QVector<double> _zooms;
-	RectC _bbox;
 	RectD _bounds;
+	Transform _transform;
+	QVector<double> _zooms;
 	int _zoom;
 	int _tileSize;
 	qreal _mapRatio;
-
-	bool _valid;
-	QString _errorString;
 };
 
 #endif // WMSMAP_H

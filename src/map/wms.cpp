@@ -218,10 +218,10 @@ void WMS::capabilities(QXmlStreamReader &reader, CTX &ctx)
 	}
 }
 
-bool WMS::parseCapabilities(const QString &path, const Setup &setup)
+bool WMS::parseCapabilities()
 {
-	QFile file(path);
-	CTX ctx(setup);
+	QFile file(_path);
+	CTX ctx(_setup);
 	QXmlStreamReader reader;
 
 
@@ -244,7 +244,7 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 			reader.raiseError("Not a WMS Capabilities XML file");
 	}
 	if (reader.error()) {
-		_errorString = QString("%1:%2: %3").arg(path).arg(reader.lineNumber())
+		_errorString = QString("%1:%2: %3").arg(_path).arg(reader.lineNumber())
 		  .arg(reader.errorString());
 		return false;
 	}
@@ -290,10 +290,10 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 		return false;
 	}
 
-	_boundingBox = ctx.layers.first().boundingBox;
+	_bbox = ctx.layers.first().boundingBox;
 	for (int i = 1; i < ctx.layers.size(); i++)
-		_boundingBox &= ctx.layers.at(i).boundingBox;
-	if (_boundingBox.isNull()) {
+		_bbox &= ctx.layers.at(i).boundingBox;
+	if (_bbox.isNull()) {
 		_errorString = "Empty layers bounding box join";
 		return false;
 	}
@@ -306,42 +306,57 @@ bool WMS::parseCapabilities(const QString &path, const Setup &setup)
 		return false;
 	}
 
-	_tileUrl = ctx.url.isEmpty() ? setup.url() : ctx.url;
+	if (_version >= "1.3.0") {
+		if (_setup.coordinateSystem().axisOrder() == CoordinateSystem::Unknown)
+			_cs = _projection.coordinateSystem();
+		else
+			_cs = _setup.coordinateSystem();
+	} else
+		_cs = CoordinateSystem::XY;
+
+	_getMapUrl = ctx.url.isEmpty() ? _setup.url() : ctx.url;
 
 	return true;
 }
 
-bool WMS::getCapabilities(const QString &url, const QString &file,
-  const Authorization &authorization)
+bool WMS::downloadCapabilities(const QString &url)
 {
-	Downloader d;
-	QList<Download> dl;
-
-	dl.append(Download(url, file));
-
-	QEventLoop wait;
-	QObject::connect(&d, SIGNAL(finished()), &wait, SLOT(quit()));
-	if (d.get(dl, authorization))
-		wait.exec();
-
-	if (!QFileInfo(file).exists()) {
-		_errorString = "Error downloading capabilities XML file";
-		return false;
+	if (!_downloader) {
+		_downloader = new Downloader(this);
+		connect(_downloader, SIGNAL(finished()), this,
+		  SLOT(capabilitiesReady()));
 	}
 
-	return true;
+	QList<Download> dl;
+	dl.append(Download(url, _path));
+
+	return _downloader->get(dl, _setup.authorization());
 }
 
-WMS::WMS(const QString &file, const WMS::Setup &setup) : _valid(false)
+void WMS::capabilitiesReady()
 {
-	QString capaUrl = QString("%1%2service=WMS&request=GetCapabilities")
+	if (!QFileInfo(_path).exists()) {
+		_errorString = "Error downloading capabilities XML file";
+		_valid = false;
+	} else {
+		_ready = true;
+		_valid = parseCapabilities();
+	}
+
+	emit downloadFinished();
+}
+
+WMS::WMS(const QString &file, const WMS::Setup &setup, QObject *parent)
+  : QObject(parent), _setup(setup), _path(file), _downloader(0), _valid(false),
+  _ready(false)
+{
+	QString url = QString("%1%2service=WMS&request=GetCapabilities")
 	  .arg(setup.url(), setup.url().contains('?') ? "&" : "?");
 
 	if (!QFileInfo(file).exists())
-		if (!getCapabilities(capaUrl, file, setup.authorization()))
-			return;
-	if (!parseCapabilities(file, setup))
-		return;
-
-	_valid = true;
+		_valid = downloadCapabilities(url);
+	else {
+		_ready = true;
+		_valid = parseCapabilities();
+	}
 }

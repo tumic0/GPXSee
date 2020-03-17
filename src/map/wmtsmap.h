@@ -36,31 +36,28 @@ public:
 	  {_mapRatio = mapRatio;}
 	void clearCache();
 
-	bool isValid() const {return _valid;}
-	QString errorString() const {return _errorString;}
+	bool isReady() const {return _wmts->isReady();}
+	bool isValid() const {return _wmts->isValid();}
+	QString errorString() const {return _wmts->errorString();}
+
+private slots:
+	void wmtsReady();
 
 private:
-	bool loadWMTS();
 	double sd2res(double scaleDenominator) const;
-	QString tilesDir() const;
 	void updateTransform();
 	QSizeF tileSize(const WMTS::Zoom &zoom) const;
 	qreal coordinatesRatio() const;
 	qreal imageRatio() const;
+	void init();
 
 	QString _name;
-	WMTS::Setup _setup;
+	WMTS *_wmts;
 	TileLoader *_tileLoader;
-	RectD _bounds;
-	QList<WMTS::Zoom> _zooms;
-	Projection _projection;
 	Transform _transform;
-	CoordinateSystem _cs;
+	RectD _bounds;
 	int _zoom;
 	qreal _mapRatio, _tileRatio;
-
-	bool _valid;
-	QString _errorString;
 };
 
 #endif // WMTSMAP_H

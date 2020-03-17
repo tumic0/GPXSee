@@ -1,5 +1,6 @@
 #include <QFileInfo>
 #include <QDir>
+#include <QApplication>
 #include "atlas.h"
 #include "ozimap.h"
 #include "jnxmap.h"
@@ -12,31 +13,8 @@
 #include "maplist.h"
 
 
-bool MapList::loadMap(Map *map, const QString &path)
-{
-	if (map && map->isValid()) {
-		_maps.append(map);
-		return true;
-	} else {
-		_errorPath = path;
-		_errorString = (map) ? map->errorString() : "Unknown file format";
-		return false;
-	}
-}
-
-Map *MapList::loadSource(const QString &path)
-{
-	Map *map = MapSource::loadMap(path, _errorString);
-
-	if (!map)
-		_errorPath = path;
-	else
-		map->setParent(this);
-
-	return map;
-}
-
-bool MapList::loadFile(const QString &path, bool *terminate)
+Map *MapList::loadFile(const QString &path, QString &errorString,
+  bool *terminate)
 {
 	QFileInfo fi(path);
 	QString suffix = fi.suffix().toLower();
@@ -45,75 +23,94 @@ bool MapList::loadFile(const QString &path, bool *terminate)
 	if (Atlas::isAtlas(path)) {
 		if (terminate)
 			*terminate = true;
-		map = new Atlas(path, this);
+		map = new Atlas(path);
 	} else if (suffix == "xml") {
-		if (MapSource::isMap(path) && !(map = loadSource(path)))
-			return false;
-		else if (GMAP::isGMAP(path)) {
+		if (MapSource::isMap(path)) {
+			if (!(map = MapSource::loadMap(path, errorString)))
+				return 0;
+		} else if (GMAP::isGMAP(path)) {
 			if (terminate)
 				*terminate = true;
-			map = new IMGMap(path, this);
+			map = new IMGMap(path);
 		}
 	} else if (suffix == "jnx")
-		map = new JNXMap(path, this);
+		map = new JNXMap(path);
 	else if (suffix == "tif" || suffix == "tiff")
-		map = new GeoTIFFMap(path, this);
+		map = new GeoTIFFMap(path);
 	else if (suffix == "mbtiles")
-		map = new MBTilesMap(path, this);
+		map = new MBTilesMap(path);
 	else if (suffix == "rmap" || suffix == "rtmap")
-		map = new RMap(path, this);
+		map = new RMap(path);
 	else if (suffix == "img")
-		map = new IMGMap(path, this);
+		map = new IMGMap(path);
 	else if (suffix == "map" || suffix == "tar")
-		map = new OziMap(path, this);
+		map = new OziMap(path);
 
-	if (!loadMap(map, path)) {
+	if (map && map->isValid())
+		return map;
+	else {
+		errorString = (map) ? map->errorString() : "Unknown file format";
 		delete map;
-		return false;
+		return 0;
 	}
-
-	return true;
 }
 
-bool MapList::loadDir(const QString &path)
+QList<Map*> MapList::loadDir(const QString &path, QString &errorString)
 {
 	QDir md(path);
 	md.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
 	md.setSorting(QDir::DirsLast);
 	QFileInfoList ml = md.entryInfoList();
-	bool ret = true;
+	QList<Map*> list;
 
 	for (int i = 0; i < ml.size(); i++) {
 		const QFileInfo &fi = ml.at(i);
 		QString suffix = fi.suffix().toLower();
 		bool terminate = false;
 
-		if (fi.isDir() && fi.fileName() != "set") {
-			if (!loadDir(fi.absoluteFilePath()))
-				ret = false;
-		} else if (filter().contains("*." + suffix)) {
-			if (!loadFile(fi.absoluteFilePath(), &terminate))
-				ret = false;
+		if (fi.isDir() && fi.fileName() != "set")
+			list.append(loadDir(fi.absoluteFilePath(), errorString));
+		else if (filter().contains("*." + suffix)) {
+			Map *map = loadFile(fi.absoluteFilePath(), errorString, &terminate);
+			if (map)
+				list.append(map);
+			else
+				qWarning(qPrintable(path + ": " + errorString));
 			if (terminate)
 				break;
 		}
 	}
 
-	return ret;
+	return list;
+}
+
+QList<Map*> MapList::loadMaps(const QString &path, QString &errorString)
+{
+	if (QFileInfo(path).isDir())
+		return loadDir(path, errorString);
+	else {
+		QList<Map*> list;
+		Map *map = loadFile(path, errorString, 0);
+		if (map)
+			list.append(map);
+		return list;
+	}
 }
 
 QString MapList::formats()
 {
 	return
-	  tr("Supported files") + " (" + filter().join(" ") + ");;"
-	  + tr("Garmin IMG maps") + " (*.gmap *.gmapi *.img *.xml);;"
-	  + tr("Garmin JNX maps") + " (*.jnx);;"
-	  + tr("OziExplorer maps") + " (*.map);;"
-	  + tr("MBTiles maps") + " (*.mbtiles);;"
-	  + tr("TrekBuddy maps/atlases") + " (*.tar *.tba);;"
-	  + tr("GeoTIFF images") + " (*.tif *.tiff);;"
-	  + tr("TwoNav maps") + " (*.rmap *.rtmap);;"
-	  + tr("Online map sources") + " (*.xml)";
+	  qApp->translate("MapList", "Supported files")
+		+ " (" + filter().join(" ") + ");;"
+	  + qApp->translate("MapList", "Garmin IMG maps")
+		+ " (*.gmap *.gmapi *.img *.xml);;"
+	  + qApp->translate("MapList", "Garmin JNX maps") + " (*.jnx);;"
+	  + qApp->translate("MapList", "OziExplorer maps") + " (*.map);;"
+	  + qApp->translate("MapList", "MBTiles maps") + " (*.mbtiles);;"
+	  + qApp->translate("MapList", "TrekBuddy maps/atlases") + " (*.tar *.tba);;"
+	  + qApp->translate("MapList", "GeoTIFF images") + " (*.tif *.tiff);;"
+	  + qApp->translate("MapList", "TwoNav maps") + " (*.rmap *.rtmap);;"
+	  + qApp->translate("MapList", "Online map sources") + " (*.xml)";
 }
 
 QStringList MapList::filter()
