@@ -87,10 +87,12 @@ static bool readTimestamp(const char *data, QTime &time)
 
 static bool readARecord(const char *line, qint64 len)
 {
-	if (len < 7 || line[0] != 'A')
+	/* The minimal A record length should be 7 according to the specification,
+	   but records with length of 6 exist in the wild */
+	if (len < 6 || line[0] != 'A')
 		return false;
 
-	for (int i = 1; i < 7; i++)
+	for (int i = 1; i < 6; i++)
 		if (!::isprint(line[i]))
 			return false;
 	return true;
