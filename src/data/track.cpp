@@ -51,7 +51,7 @@ static QSet<int> eliminate(const QVector<qreal> &v)
 	qreal M = MAD(w, m);
 
 	for (int i = 0; i < v.size(); i++)
-		if (qAbs((0.6745 * (v.at(i) - m)) / M) > 5)
+		if (qAbs((0.6745 * (v.at(i) - m)) / M) > 3.5)
 			rm.insert(i);
 
 	return rm;
