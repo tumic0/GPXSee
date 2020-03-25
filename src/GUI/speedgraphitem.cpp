@@ -5,8 +5,8 @@
 
 
 SpeedGraphItem::SpeedGraphItem(const Graph &graph, GraphType type, int width,
-  const QColor &color, qreal movingTime, QGraphicsItem *parent)
-  : GraphItem(graph, type, width, color, parent)
+  const QColor &color, Qt::PenStyle style, qreal movingTime,
+  QGraphicsItem *parent) : GraphItem(graph, type, width, color, style, parent)
 {
 	_timeType = Total;
 

@@ -14,9 +14,9 @@
 class Waypoint
 {
 public:
-	Waypoint() {_elevation = NAN;}
-	Waypoint(const Coordinates &coordinates) : _coordinates(coordinates)
-	  {_elevation = NAN;}
+	Waypoint() : _elevation(NAN) {}
+	Waypoint(const Coordinates &coordinates)
+	  : _coordinates(coordinates), _elevation(NAN) {}
 
 	const Coordinates &coordinates() const {return _coordinates;}
 	const QString &name() const {return _name;}
@@ -27,6 +27,8 @@ public:
 	const QVector<Link> &links() const {return _links;}
 	const QDateTime &timestamp() const {return _timestamp;}
 	qreal elevation() const {return _elevation;}
+
+	QPair<qreal, qreal> elevations() const;
 
 	void setCoordinates(const Coordinates &coordinates)
 	  {_coordinates = coordinates;}
@@ -46,6 +48,10 @@ public:
 	  {return this->_name == other._name
 	  && this->_coordinates == other._coordinates;}
 
+	static void useDEM(bool use) {_useDEM = use;}
+	static void showSecondaryElevation(bool show)
+	  {_show2ndElevation = show;}
+
 private:
 	Coordinates _coordinates;
 	QString _name;
@@ -56,6 +62,9 @@ private:
 	QVector<Link> _links;
 	QDateTime _timestamp;
 	qreal _elevation;
+
+	static bool _useDEM;
+	static bool _show2ndElevation;
 };
 
 inline uint qHash(const Waypoint &key)
@@ -67,11 +76,9 @@ inline uint qHash(const Waypoint &key)
 inline QDebug operator<<(QDebug dbg, const Waypoint &waypoint)
 {
 	dbg.nospace() << "Waypoint(" << waypoint.coordinates() << ", "
-	  << waypoint.name() << ", " << waypoint.description() << ")";
+	  << waypoint.name() << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG
-
-Q_DECLARE_TYPEINFO(Waypoint, Q_MOVABLE_TYPE);
 
 #endif // WAYPOINT_H

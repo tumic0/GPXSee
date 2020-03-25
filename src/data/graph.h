@@ -67,4 +67,17 @@ public:
 	}
 };
 
+class GraphPair
+{
+public:
+	GraphPair(const Graph &primary, const Graph &secondary)
+	  : _primary(primary), _secondary(secondary) {}
+
+	const Graph &primary() const {return _primary;}
+	const Graph &secondary() const {return _secondary;}
+
+private:
+	Graph _primary, _secondary;
+};
+
 #endif // GRAPH_H

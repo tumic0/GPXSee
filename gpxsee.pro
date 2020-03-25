@@ -249,6 +249,7 @@ SOURCES += src/main.cpp \
     src/GUI/gearratiographitem.cpp \
     src/GUI/mapview.cpp \
     src/GUI/areaitem.cpp \
+    src/data/waypoint.cpp \
     src/map/IMG/bitmapline.cpp \
     src/map/IMG/bitstream.cpp \
     src/map/IMG/deltastream.cpp \

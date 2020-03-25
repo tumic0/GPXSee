@@ -5,7 +5,7 @@
 
 CadenceGraphItem::CadenceGraphItem(const Graph &graph, GraphType type,
   int width, const QColor &color, QGraphicsItem *parent)
-  : GraphItem(graph, type, width, color, parent)
+  : GraphItem(graph, type, width, color, Qt::SolidLine, parent)
 {
 }
 

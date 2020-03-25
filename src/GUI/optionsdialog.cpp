@@ -407,6 +407,8 @@ QWidget *OptionsDialog::createDataPage()
 		_reportedSpeed->setChecked(true);
 	else
 		_computedSpeed->setChecked(true);
+	_showSecondarySpeed = new QCheckBox(tr("Show secondary speed"));
+	_showSecondarySpeed->setChecked(_options->showSecondarySpeed);
 
 	_dataGPSElevation = new QRadioButton(tr("GPS data"));
 	_dataDEMElevation = new QRadioButton(tr("DEM data"));
@@ -414,7 +416,8 @@ QWidget *OptionsDialog::createDataPage()
 		_dataDEMElevation->setChecked(true);
 	else
 		_dataGPSElevation->setChecked(true);
-
+	_showSecondaryElevation = new QCheckBox(tr("Show secondary elevation"));
+	_showSecondaryElevation->setChecked(_options->showSecondaryElevation);
 
 	QWidget *sourceTab = new QWidget();
 	QVBoxLayout *sourceTabLayout = new QVBoxLayout();
@@ -426,6 +429,7 @@ QWidget *OptionsDialog::createDataPage()
 	QVBoxLayout *speedOptions = new QVBoxLayout();
 	speedOptions->addWidget(_computedSpeed);
 	speedOptions->addWidget(_reportedSpeed);
+	speedOptions->addWidget(_showSecondarySpeed);
 
 	QButtonGroup *elevationGroup = new QButtonGroup(this);
 	elevationGroup->addButton(_dataGPSElevation);
@@ -433,6 +437,7 @@ QWidget *OptionsDialog::createDataPage()
 	QVBoxLayout *elevationOptions = new QVBoxLayout();
 	elevationOptions->addWidget(_dataGPSElevation);
 	elevationOptions->addWidget(_dataDEMElevation);
+	elevationOptions->addWidget(_showSecondaryElevation);
 
 	QFormLayout *formLayout = new QFormLayout();
 	formLayout->addRow(tr("Speed:"), speedOptions);
@@ -445,12 +450,14 @@ QWidget *OptionsDialog::createDataPage()
 
 	speedLayout->addWidget(_computedSpeed);
 	speedLayout->addWidget(_reportedSpeed);
+	speedLayout->addWidget(_showSecondarySpeed);
 
 	QGroupBox *speedBox = new QGroupBox(tr("Speed"));
 	speedBox->setLayout(speedLayout);
 
 	elevationLayout->addWidget(_dataGPSElevation);
 	elevationLayout->addWidget(_dataDEMElevation);
+	elevationLayout->addWidget(_showSecondaryElevation);
 
 	QGroupBox *elevationBox = new QGroupBox(tr("Elevation"));
 	elevationBox->setLayout(elevationLayout);
@@ -472,13 +479,6 @@ QWidget *OptionsDialog::createDataPage()
 
 QWidget *OptionsDialog::createPOIPage()
 {
-	_poiGPSElevation = new QRadioButton(tr("GPS data"));
-	_poiDEMElevation = new QRadioButton(tr("DEM data"));
-	if (_options->poiUseDEM)
-		_poiDEMElevation->setChecked(true);
-	else
-		_poiGPSElevation->setChecked(true);
-
 	_poiRadius = new QDoubleSpinBox();
 	_poiRadius->setSingleStep(1);
 	_poiRadius->setDecimals(1);
@@ -493,13 +493,8 @@ QWidget *OptionsDialog::createPOIPage()
 		_poiRadius->setSuffix(UNIT_SPACE + tr("km"));
 	}
 
-	QVBoxLayout *elevationLayout = new QVBoxLayout();
-	elevationLayout->addWidget(_poiGPSElevation);
-	elevationLayout->addWidget(_poiDEMElevation);
-
 	QFormLayout *poiLayout = new QFormLayout();
 	poiLayout->addRow(tr("Radius:"), _poiRadius);
-	poiLayout->addRow(tr("Elevation:"), elevationLayout);
 
 	QWidget *poiTab = new QWidget();
 	poiTab->setLayout(poiLayout);
@@ -725,13 +720,14 @@ void OptionsDialog::accept()
 	_options->pauseInterval = _pauseInterval->value();
 	_options->useReportedSpeed = _reportedSpeed->isChecked();
 	_options->dataUseDEM = _dataDEMElevation->isChecked();
+	_options->showSecondaryElevation = _showSecondaryElevation->isChecked();
+	_options->showSecondarySpeed = _showSecondarySpeed->isChecked();
 
 	qreal poiRadius = (_options->units == Imperial)
 		? _poiRadius->value() * MIINM : (_options->units == Nautical)
 		? _poiRadius->value() * NMIINM : _poiRadius->value() * KMINM;
 	if (qAbs(poiRadius - _options->poiRadius) > 0.01)
 		_options->poiRadius = poiRadius;
-	_options->poiUseDEM = _poiDEMElevation->isChecked();
 
 	_options->useOpenGL = _useOpenGL->isChecked();
 #ifdef ENABLE_HTTP2

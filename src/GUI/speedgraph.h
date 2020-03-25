@@ -5,6 +5,7 @@
 #include "graphtab.h"
 
 class SpeedGraphItem;
+class Track;
 
 class SpeedGraph : public GraphTab
 {
@@ -22,6 +23,8 @@ public:
 	void showTracks(bool show);
 
 private:
+	GraphItem *loadGraph(const Graph &graph, const Track &track,
+	  const QColor &color, bool primary);
 	qreal avg() const;
 	qreal max() const {return bounds().bottom();}
 	void setYUnits();

@@ -1,3 +1,4 @@
+#include "dem.h"
 #include "track.h"
 
 
@@ -13,6 +14,9 @@ int Track::_pauseInterval = 10;
 
 bool Track::_outlierEliminate = true;
 bool Track::_useReportedSpeed = false;
+bool Track::_useDEM = false;
+bool Track::_show2ndElevation = false;
+bool Track::_show2ndSpeed = false;
 
 
 static qreal avg(const QVector<qreal> &v)
@@ -213,7 +217,7 @@ Track::Track(const TrackData &data) : _data(data), _pause(0)
 	}
 }
 
-Graph Track::elevation() const
+Graph Track::gpsElevation() const
 {
 	Graph ret;
 
@@ -237,7 +241,48 @@ Graph Track::elevation() const
 	return ret;
 }
 
-Graph Track::speed() const
+Graph Track::demElevation() const
+{
+	Graph ret;
+
+	for (int i = 0; i < _data.size(); i++) {
+		const SegmentData &sd = _data.at(i);
+		if (sd.size() < 2)
+			continue;
+		const Segment &seg = _segments.at(i);
+		GraphSegment gs;
+
+		for (int j = 0; j < sd.size(); j++) {
+			qreal dem = DEM::elevation(sd.at(j).coordinates());
+			if (std::isnan(dem) || seg.outliers.contains(j))
+				continue;
+			gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j), dem));
+		}
+
+		ret.append(filter(gs, _elevationWindow));
+	}
+
+	return ret;
+}
+
+GraphPair Track::elevation() const
+{
+	if (_useDEM) {
+		Graph dem(demElevation());
+		if (dem.isValid())
+			return GraphPair(dem, _show2ndElevation ? gpsElevation() : Graph());
+		else
+			return GraphPair(gpsElevation(), Graph());
+	} else {
+		Graph gps(gpsElevation());
+		if (gps.isValid())
+			return GraphPair(gps, _show2ndElevation ? demElevation() : Graph());
+		else
+			return GraphPair(demElevation(), Graph());
+	}
+}
+
+Graph Track::computedSpeed() const
 {
 	Graph ret;
 
@@ -251,14 +296,10 @@ Graph Track::speed() const
 		qreal v;
 
 		for (int j = 0; j < sd.size(); j++) {
-			if (seg.stop.contains(j) && (!std::isnan(seg.speed.at(j))
-			  || sd.at(j).hasSpeed())) {
+			if (seg.stop.contains(j) && !std::isnan(seg.speed.at(j))) {
 				v = 0;
 				stop.append(gs.size());
-			} else if (_useReportedSpeed && sd.at(j).hasSpeed()
-			  && !seg.outliers.contains(j))
-				v = sd.at(j).speed();
-			else if (!std::isnan(seg.speed.at(j)) && !seg.outliers.contains(j))
+			} else if (!std::isnan(seg.speed.at(j)) && !seg.outliers.contains(j))
 				v = seg.speed.at(j);
 			else
 				continue;
@@ -274,6 +315,60 @@ Graph Track::speed() const
 	}
 
 	return ret;
+}
+
+Graph Track::reportedSpeed() const
+{
+	Graph ret;
+
+	for (int i = 0; i < _data.size(); i++) {
+		const SegmentData &sd = _data.at(i);
+		if (sd.size() < 2)
+			continue;
+		const Segment &seg = _segments.at(i);
+		GraphSegment gs;
+		QList<int> stop;
+		qreal v;
+
+		for (int j = 0; j < sd.size(); j++) {
+			if (seg.stop.contains(j) && sd.at(j).hasSpeed()) {
+				v = 0;
+				stop.append(gs.size());
+			} else if (sd.at(j).hasSpeed() && !seg.outliers.contains(j))
+				v = sd.at(j).speed();
+			else
+				continue;
+
+			gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j), v));
+		}
+
+		ret.append(filter(gs, _speedWindow));
+		GraphSegment &filtered = ret.last();
+
+		for (int j = 0; j < stop.size(); j++)
+			filtered[stop.at(j)].setY(0);
+	}
+
+	return ret;
+}
+
+GraphPair Track::speed() const
+{
+	if (_useReportedSpeed) {
+		Graph reported(reportedSpeed());
+		if (reported.isValid())
+			return GraphPair(reported, _show2ndSpeed ? computedSpeed()
+			  : Graph());
+		else
+			return GraphPair(computedSpeed(), Graph());
+	} else {
+		Graph computed(computedSpeed());
+		if (computed.isValid())
+			return GraphPair(computed, _show2ndSpeed ? reportedSpeed()
+			  : Graph());
+		else
+			return GraphPair(reportedSpeed(), Graph());
+	}
 }
 
 Graph Track::heartRate() const

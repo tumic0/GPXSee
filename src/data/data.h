@@ -14,7 +14,7 @@
 class Data
 {
 public:
-	Data(const QString &fileName, bool poi = false);
+	Data(const QString &fileName);
 
 	bool isValid() const {return _valid;}
 	const QString &errorString() const {return _errorString;}
@@ -27,8 +27,6 @@ public:
 
 	static QString formats();
 	static QStringList filter();
-
-	static void useDEM(bool use);
 
 private:
 	void processData(QList<TrackData> &trackData, QList<RouteData> &routeData);
@@ -43,7 +41,6 @@ private:
 	QVector<Waypoint> _waypoints;
 
 	static QMap<QString, Parser*> _parsers;
-	static bool _useDEM;
 };
 
 #endif // DATA_H

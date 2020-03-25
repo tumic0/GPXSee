@@ -8,8 +8,10 @@ class ElevationGraphItem : public GraphItem
 	Q_OBJECT
 
 public:
+	enum DataType {GPS, DEM};
+
 	ElevationGraphItem(const Graph &graph, GraphType type, int width,
-	  const QColor &color, QGraphicsItem *parent = 0);
+	  const QColor &color, Qt::PenStyle style, QGraphicsItem *parent = 0);
 
 	qreal ascent() const {return _ascent;}
 	qreal descent() const {return _descent;}

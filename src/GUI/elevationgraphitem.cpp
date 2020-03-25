@@ -4,8 +4,8 @@
 
 
 ElevationGraphItem::ElevationGraphItem(const Graph &graph, GraphType type,
-  int width, const QColor &color, QGraphicsItem *parent)
-  : GraphItem(graph, type, width, color, parent)
+  int width, const QColor &color, Qt::PenStyle style, QGraphicsItem *parent)
+  : GraphItem(graph, type, width, color, style, parent)
 {
 	_min = GraphItem::min();
 	_max = GraphItem::max();
@@ -41,6 +41,7 @@ QString ElevationGraphItem::info() const
 	  + UNIT_SPACE + su);
 	tt.insert(tr("Minimum"), l.toString(min() * scale, 'f', 0)
 	  + UNIT_SPACE + su);
+
 
 	return tt.toString();
 }

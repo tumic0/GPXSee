@@ -21,7 +21,7 @@ public:
 	void showRoutes(bool show);
 
 private:
-	enum Type {Track, Route};
+	enum PathType {TrackPath, RoutePath};
 
 	qreal max() const;
 	qreal min() const;
@@ -31,7 +31,8 @@ private:
 	void setYUnits(Units units);
 	void setInfo();
 
-	GraphItem *loadGraph(const Graph &graph, Type type);
+	GraphItem *loadGraph(const Graph &graph, PathType type, const QColor &color,
+	  bool primary);
 	void showItems(const QList<ElevationGraphItem *> &list, bool show);
 
 	qreal _trackAscent, _trackDescent;

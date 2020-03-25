@@ -12,8 +12,8 @@ class GraphItem : public QObject, public GraphicsItem
 	Q_OBJECT
 
 public:
-	GraphItem(const Graph &graph, GraphType type, int width, const QColor &color,
-	  QGraphicsItem *parent = 0);
+	GraphItem(const Graph &graph, GraphType type, int width,
+	  const QColor &color, Qt::PenStyle style, QGraphicsItem *parent = 0);
 	virtual ~GraphItem() {}
 
 	virtual QString info() const = 0;
@@ -34,6 +34,9 @@ public:
 	void setColor(const QColor &color);
 	void setWidth(int width);
 	void setUnits(Units units) {_units = units;}
+
+	GraphItem *secondaryGraph() const {return _secondaryGraph;}
+	void setSecondaryGraph(GraphItem *graph) {_secondaryGraph = graph;}
 
 	qreal yAtX(qreal x);
 	qreal distanceAtTime(qreal time);
@@ -69,6 +72,8 @@ private:
 	qreal _sx, _sy;
 	QPen _pen;
 	bool _time;
+
+	GraphItem *_secondaryGraph;
 };
 
 #endif // GRAPHITEM_H

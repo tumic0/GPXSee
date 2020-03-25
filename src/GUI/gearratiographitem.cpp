@@ -6,7 +6,7 @@
 
 GearRatioGraphItem::GearRatioGraphItem(const Graph &graph, GraphType type,
   int width, const QColor &color, QGraphicsItem *parent)
-  : GraphItem(graph, type, width, color, parent)
+  : GraphItem(graph, type, width, color, Qt::SolidLine, parent)
 {
 	for (int i = 0; i < graph.size(); i++) {
 		const GraphSegment &segment = graph.at(i);

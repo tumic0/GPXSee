@@ -65,35 +65,38 @@ void ElevationGraph::setInfo()
 	}
 }
 
-GraphItem *ElevationGraph::loadGraph(const Graph &graph, Type type)
+GraphItem *ElevationGraph::loadGraph(const Graph &graph, PathType type,
+  const QColor &color, bool primary)
 {
-	if (!graph.isValid()) {
-		_palette.nextColor();
+	if (!graph.isValid())
 		return 0;
-	}
 
 	ElevationGraphItem *gi = new ElevationGraphItem(graph, _graphType, _width,
-	  _palette.nextColor());
+	  color, primary ? Qt::SolidLine : Qt::DashLine);
 	gi->setUnits(_units);
 
-	if (type == Track) {
+	if (type == TrackPath) {
 		_tracks.append(gi);
 		if (_showTracks)
 			addGraph(gi);
 
-		_trackAscent += gi->ascent();
-		_trackDescent += gi->descent();
-		_trackMax = nMax(_trackMax, gi->max());
-		_trackMin = nMin(_trackMin, gi->min());
+		if (primary) {
+			_trackAscent += gi->ascent();
+			_trackDescent += gi->descent();
+			_trackMax = nMax(_trackMax, gi->max());
+			_trackMin = nMin(_trackMin, gi->min());
+		}
 	} else {
 		_routes.append(gi);
 		if (_showRoutes)
 			addGraph(gi);
 
-		_routeAscent += gi->ascent();
-		_routeDescent += gi->descent();
-		_routeMax = nMax(_routeMax, gi->max());
-		_routeMin = nMin(_routeMin, gi->min());
+		if (primary) {
+			_routeAscent += gi->ascent();
+			_routeDescent += gi->descent();
+			_routeMax = nMax(_routeMax, gi->max());
+			_routeMin = nMin(_routeMin, gi->min());
+		}
 	}
 
 	return gi;
@@ -102,11 +105,32 @@ GraphItem *ElevationGraph::loadGraph(const Graph &graph, Type type)
 QList<GraphItem*> ElevationGraph::loadData(const Data &data)
 {
 	QList<GraphItem*> graphs;
+	GraphItem *primary, *secondary;
 
-	for (int i = 0; i < data.tracks().count(); i++)
-		graphs.append(loadGraph(data.tracks().at(i).elevation(), Track));
-	for (int i = 0; i < data.routes().count(); i++)
-		graphs.append(loadGraph(data.routes().at(i).elevation(), Route));
+	for (int i = 0; i < data.tracks().count(); i++) {
+		QColor color(_palette.nextColor());
+		const GraphPair &gp = data.tracks().at(i).elevation();
+
+		primary = loadGraph(gp.primary(), TrackPath, color, true);
+		secondary = primary
+		  ? loadGraph(gp.secondary(), TrackPath, color, false) : 0;
+		if (primary && secondary)
+			primary->setSecondaryGraph(secondary);
+
+		graphs.append(primary);
+	}
+	for (int i = 0; i < data.routes().count(); i++) {
+		QColor color(_palette.nextColor());
+		const GraphPair &gp = data.routes().at(i).elevation();
+
+		primary = loadGraph(gp.primary(), RoutePath, color, true);
+		secondary = primary
+		  ? loadGraph(gp.secondary(), RoutePath, color, false) : 0;
+		if (primary && secondary)
+			primary->setSecondaryGraph(secondary);
+
+		graphs.append(primary);
+	}
 	for (int i = 0; i < data.areas().count(); i++)
 		_palette.nextColor();
 

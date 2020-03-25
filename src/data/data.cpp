@@ -20,7 +20,6 @@
 #include "cupparser.h"
 #include "gpiparser.h"
 #include "smlparser.h"
-#include "dem.h"
 #include "data.h"
 
 
@@ -73,49 +72,17 @@ static QMap<QString, Parser*> parsers()
 	return map;
 }
 
-
 QMap<QString, Parser*> Data::_parsers = parsers();
-bool Data::_useDEM = false;
 
 void Data::processData(QList<TrackData> &trackData, QList<RouteData> &routeData)
 {
-	for (int i = 0; i < trackData.count(); i++) {
-		TrackData &track = trackData[i];
-		for (int j = 0; j < track.size(); j++) {
-			SegmentData &segment = track[j];
-			for (int k = 0; k < segment.size(); k++) {
-				Trackpoint &t = segment[k];
-				if (!t.hasElevation() || _useDEM) {
-					qreal elevation = DEM::elevation(t.coordinates());
-					if (!std::isnan(elevation))
-						t.setElevation(elevation);
-				}
-			}
-		}
+	for (int i = 0; i < trackData.count(); i++)
 		_tracks.append(Track(trackData.at(i)));
-	}
-	for (int i = 0; i < routeData.count(); i++) {
-		RouteData &route = routeData[i];
-		for (int j = 0; j < route.size(); j++) {
-			Waypoint &w = route[j];
-			if (!w.hasElevation() || _useDEM) {
-				qreal elevation = DEM::elevation(w.coordinates());
-				if (!std::isnan(elevation))
-					w.setElevation(elevation);
-			}
-		}
+	for (int i = 0; i < routeData.count(); i++)
 		_routes.append(Route(routeData.at(i)));
-	}
-	for (int i = 0; i < _waypoints.size(); i++) {
-		if (!_waypoints.at(i).hasElevation() || _useDEM) {
-			qreal elevation = DEM::elevation(_waypoints.at(i).coordinates());
-			if (!std::isnan(elevation))
-				_waypoints[i].setElevation(elevation);
-		}
-	}
 }
 
-Data::Data(const QString &fileName, bool poi)
+Data::Data(const QString &fileName)
 {
 	QFile file(fileName);
 	QFileInfo fi(fileName);
@@ -134,8 +101,7 @@ Data::Data(const QString &fileName, bool poi)
 	if ((it = _parsers.find(fi.suffix().toLower())) != _parsers.end()) {
 		if (it.value()->parse(&file, trackData, routeData, _polygons,
 		  _waypoints)) {
-			if (!poi)
-				processData(trackData, routeData);
+			processData(trackData, routeData);
 			_valid = true;
 			return;
 		} else {
@@ -146,8 +112,7 @@ Data::Data(const QString &fileName, bool poi)
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
 			if (it.value()->parse(&file, trackData, routeData, _polygons,
 			  _waypoints)) {
-				if (!poi)
-					processData(trackData, routeData);
+				processData(trackData, routeData);
 				_valid = true;
 				return;
 			}
@@ -197,9 +162,4 @@ QStringList Data::filter()
 		filter << "*." + it.key();
 
 	return filter;
-}
-
-void Data::useDEM(bool use)
-{
-	_useDEM = use;
 }

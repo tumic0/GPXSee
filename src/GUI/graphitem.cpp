@@ -5,13 +5,13 @@
 
 
 GraphItem::GraphItem(const Graph &graph, GraphType type, int width,
-  const QColor &color, QGraphicsItem *parent)
-  : GraphicsItem(parent), _graph(graph), _type(type)
+  const QColor &color, Qt::PenStyle style, QGraphicsItem *parent)
+  : GraphicsItem(parent), _graph(graph), _type(type), _secondaryGraph(0)
 {
 	Q_ASSERT(_graph.isValid());
 
 	_units = Metric;
-	_pen = QPen(color, width);
+	_pen = QPen(color, width, style);
 	_sx = 0; _sy = 0;
 	_time = _graph.hasTime();
 	setZValue(2.0);

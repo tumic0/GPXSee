@@ -21,9 +21,13 @@ QString WaypointItem::info() const
 		tt.insert(qApp->translate("WaypointItem", "Name"), _waypoint.name());
 	tt.insert(qApp->translate("WaypointItem", "Coordinates"),
 	  Format::coordinates(_waypoint.coordinates(), _format));
-	if (_waypoint.hasElevation())
-		tt.insert(qApp->translate("WaypointItem", "Elevation"),
-		  Format::elevation(_waypoint.elevation(), _units));
+	if (!std::isnan(_waypoint.elevations().first)) {
+		QString val = Format::elevation(_waypoint.elevations().first, _units);
+		if (!std::isnan(_waypoint.elevations().second))
+			val += " (" + Format::elevation(_waypoint.elevations().second,
+			  _units) + ")";
+		tt.insert(qApp->translate("WaypointItem", "Elevation"), val);
+	}
 	if (_waypoint.timestamp().isValid())
 		tt.insert(qApp->translate("WaypointItem", "Date"),
 		  _waypoint.timestamp().toString(Qt::SystemLocaleShortDate));

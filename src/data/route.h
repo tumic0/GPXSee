@@ -11,12 +11,9 @@ class Route
 public:
 	Route(const RouteData &data);
 
-	Path path() const;
-
 	const RouteData &data() const {return _data;}
-
-	Graph elevation() const;
-
+	Path path() const;
+	GraphPair elevation() const;
 	qreal distance() const;
 
 	const QString &name() const {return _data.name();}
@@ -26,9 +23,19 @@ public:
 
 	bool isValid() const {return _data.size() >= 2;}
 
+	static void useDEM(bool use) {_useDEM = use;}
+	static void showSecondaryElevation(bool show)
+	  {_show2ndElevation = show;}
+
 private:
+	Graph gpsElevation() const;
+	Graph demElevation() const;
+
 	RouteData _data;
 	QVector<qreal> _distance;
+
+	static bool _useDEM;
+	static bool _show2ndElevation;
 };
 
 #endif // ROUTE_H

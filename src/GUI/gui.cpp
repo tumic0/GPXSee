@@ -909,9 +909,14 @@ void GUI::openOptions()
 		Track::action(options.option); \
 		reload = true; \
 	}
-#define SET_DATA_OPTION(option, action) \
+#define SET_ROUTE_OPTION(option, action) \
 	if (options.option != _options.option) { \
-		Data::action(options.option); \
+		Route::action(options.option); \
+		reload = true; \
+	}
+#define SET_WAYPOINT_OPTION(option, action) \
+	if (options.option != _options.option) { \
+		Waypoint::action(options.option); \
 		reload = true; \
 	}
 
@@ -957,13 +962,18 @@ void GUI::openOptions()
 	SET_TRACK_OPTION(pauseSpeed, setPauseSpeed);
 	SET_TRACK_OPTION(pauseInterval, setPauseInterval);
 	SET_TRACK_OPTION(useReportedSpeed, useReportedSpeed);
+	SET_TRACK_OPTION(dataUseDEM, useDEM);
+	SET_TRACK_OPTION(showSecondaryElevation, showSecondaryElevation);
+	SET_TRACK_OPTION(showSecondarySpeed, showSecondarySpeed);
 
-	SET_DATA_OPTION(dataUseDEM, useDEM);
+	SET_ROUTE_OPTION(dataUseDEM, useDEM);
+	SET_ROUTE_OPTION(showSecondaryElevation, showSecondaryElevation);
+
+	SET_WAYPOINT_OPTION(dataUseDEM, useDEM);
+	SET_WAYPOINT_OPTION(showSecondaryElevation, showSecondaryElevation);
 
 	if (options.poiRadius != _options.poiRadius)
 		_poi->setRadius(options.poiRadius);
-	if (options.poiUseDEM != _options.poiUseDEM)
-		_poi->useDEM(options.poiUseDEM);
 
 	if (options.pixmapCache != _options.pixmapCache)
 		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
@@ -1851,10 +1861,14 @@ void GUI::writeSettings()
 		settings.setValue(USE_REPORTED_SPEED_SETTING, _options.useReportedSpeed);
 	if (_options.dataUseDEM != DATA_USE_DEM_DEFAULT)
 		settings.setValue(DATA_USE_DEM_SETTING, _options.dataUseDEM);
+	if (_options.showSecondaryElevation != SHOW_SECONDARY_ELEVATION_DEFAULT)
+		settings.setValue(SHOW_SECONDARY_ELEVATION_SETTING,
+		  _options.showSecondaryElevation);
+	if (_options.showSecondarySpeed != SHOW_SECONDARY_SPEED_DEFAULT)
+		settings.setValue(SHOW_SECONDARY_SPEED_SETTING,
+		  _options.showSecondarySpeed);
 	if (_options.poiRadius != POI_RADIUS_DEFAULT)
 		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
-	if (_options.poiUseDEM != POI_USE_DEM_DEFAULT)
-		settings.setValue(POI_USE_DEM_SETTING, _options.poiUseDEM);
 	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
 		settings.setValue(USE_OPENGL_SETTING, _options.useOpenGL);
 #ifdef ENABLE_HTTP2
@@ -2119,14 +2133,18 @@ void GUI::readSettings()
 	  USE_REPORTED_SPEED_DEFAULT).toBool();
 	_options.dataUseDEM = settings.value(DATA_USE_DEM_SETTING,
 	  DATA_USE_DEM_DEFAULT).toBool();
+	_options.showSecondaryElevation = settings.value(
+	  SHOW_SECONDARY_ELEVATION_SETTING,
+	  SHOW_SECONDARY_ELEVATION_DEFAULT).toBool();
+	_options.showSecondarySpeed = settings.value(
+	  SHOW_SECONDARY_SPEED_SETTING,
+	  SHOW_SECONDARY_SPEED_DEFAULT).toBool();
 	_options.automaticPause = settings.value(AUTOMATIC_PAUSE_SETTING,
 	  AUTOMATIC_PAUSE_DEFAULT).toBool();
 	_options.pauseInterval = settings.value(PAUSE_INTERVAL_SETTING,
 	  PAUSE_INTERVAL_DEFAULT).toInt();
 	_options.poiRadius = settings.value(POI_RADIUS_SETTING, POI_RADIUS_DEFAULT)
 	  .toInt();
-	_options.poiUseDEM = settings.value(POI_USE_DEM_SETTING,
-	  POI_USE_DEM_DEFAULT).toBool();
 	_options.useOpenGL = settings.value(USE_OPENGL_SETTING, USE_OPENGL_DEFAULT)
 	  .toBool();
 #ifdef ENABLE_HTTP2
@@ -2206,10 +2224,15 @@ void GUI::readSettings()
 	Track::setPauseSpeed(_options.pauseSpeed);
 	Track::setPauseInterval(_options.pauseInterval);
 	Track::useReportedSpeed(_options.useReportedSpeed);
-	Data::useDEM(_options.dataUseDEM);
+	Track::useDEM(_options.dataUseDEM);
+	Track::showSecondaryElevation(_options.showSecondaryElevation);
+	Track::showSecondarySpeed(_options.showSecondarySpeed);
+	Route::useDEM(_options.dataUseDEM);
+	Route::showSecondaryElevation(_options.showSecondaryElevation);
+	Waypoint::useDEM(_options.dataUseDEM);
+	Waypoint::showSecondaryElevation(_options.showSecondaryElevation);
 
 	_poi->setRadius(_options.poiRadius);
-	_poi->useDEM(_options.poiUseDEM);
 
 	QPixmapCache::setCacheLimit(_options.pixmapCache * 1024);
 

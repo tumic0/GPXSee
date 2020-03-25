@@ -10,7 +10,8 @@ class SpeedGraphItem : public GraphItem
 
 public:
 	SpeedGraphItem(const Graph &graph, GraphType type, int width,
-	  const QColor &color, qreal movingTime, QGraphicsItem *parent = 0);
+	  const QColor &color, Qt::PenStyle style, qreal movingTime,
+	  QGraphicsItem *parent = 0);
 
 	qreal avg() const {return _avg;}
 	qreal mavg() const {return _mavg;}

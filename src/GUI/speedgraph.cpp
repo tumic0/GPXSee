@@ -40,31 +40,46 @@ void SpeedGraph::setInfo()
 		clearInfo();
 }
 
+GraphItem *SpeedGraph::loadGraph(const Graph &graph, const Track &track,
+  const QColor &color, bool primary)
+{
+	if (!graph.isValid())
+		return 0;
+
+	SpeedGraphItem *gi = new SpeedGraphItem(graph, _graphType, _width,
+	  color, primary ? Qt::SolidLine : Qt::DashLine, track.movingTime());
+	gi->setTimeType(_timeType);
+	gi->setUnits(_units);
+
+	_tracks.append(gi);
+	if (_showTracks)
+		addGraph(gi);
+
+	if (primary) {
+		_avg.append(QPointF(track.distance(), gi->avg()));
+		_mavg.append(QPointF(track.distance(), gi->mavg()));
+	}
+
+	return gi;
+}
+
 QList<GraphItem*> SpeedGraph::loadData(const Data &data)
 {
 	QList<GraphItem*> graphs;
 
 	for (int i = 0; i < data.tracks().count(); i++) {
+		GraphItem *primary, *secondary;
+		QColor color(_palette.nextColor());
 		const Track &track = data.tracks().at(i);
-		const Graph &graph = track.speed();
+		const GraphPair &gp = track.speed();
 
-		if (!graph.isValid()) {
-			_palette.nextColor();
-			graphs.append(0);
-		} else {
-			SpeedGraphItem *gi = new SpeedGraphItem(graph, _graphType, _width,
-			  _palette.nextColor(), track.movingTime());
-			gi->setTimeType(_timeType);
-			gi->setUnits(_units);
+		primary = loadGraph(gp.primary(), track, color, true);
+		secondary = primary
+		  ? loadGraph(gp.secondary(), track, color, false) : 0;
+		if (primary && secondary)
+			primary->setSecondaryGraph(secondary);
 
-			_tracks.append(gi);
-			if (_showTracks)
-				addGraph(gi);
-
-			_avg.append(QPointF(track.distance(), gi->avg()));
-			_mavg.append(QPointF(track.distance(), gi->mavg()));
-			graphs.append(gi);
-		}
+		graphs.append(primary);
 	}
 
 	for (int i = 0; i < data.routes().count(); i++) {
