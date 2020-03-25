@@ -1628,7 +1628,7 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="19"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentti</translation>
     </message>
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="20"/>
@@ -1849,7 +1849,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="17"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentti</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="18"/>
@@ -1907,7 +1907,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="39"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentti</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="52"/>
