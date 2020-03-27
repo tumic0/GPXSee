@@ -26,7 +26,6 @@ class FileBrowser;
 class GraphTab;
 class MapView;
 class Map;
-class MapList;
 class POI;
 class QScreen;
 class MapAction;
@@ -213,7 +212,6 @@ private:
 	QList<GraphTab*> _tabs;
 
 	POI *_poi;
-	MapList *_ml;
 	Map *_map;
 
 	FileBrowser *_browser;
