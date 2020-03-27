@@ -1327,7 +1327,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="410"/>
         <source>Show secondary speed</source>
-        <translation>Sekundärgeschwindigkeit anzeigen</translation>
+        <translation>Sekundäre Geschwindigkeit anzeigen</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="413"/>
@@ -1342,7 +1342,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="419"/>
         <source>Show secondary elevation</source>
-        <translation>Sekundärhöhe anzeigen</translation>
+        <translation>Sekundäre Höhe anzeigen</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="462"/>
