@@ -75,7 +75,8 @@ QList<Map*> MapList::loadDir(const QString &path, QString &errorString)
 			if (map)
 				list.append(map);
 			else
-				qWarning(qPrintable(fi.absoluteFilePath() + ": " + errorString));
+				qWarning("%s: %s", qPrintable(fi.absoluteFilePath()),
+				  qPrintable(errorString));
 			if (terminate)
 				break;
 		}

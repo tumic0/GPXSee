@@ -160,7 +160,7 @@ void GUI::mapInitialized()
 		_showMapAction->setEnabled(true);
 		_clearMapCacheAction->setEnabled(true);
 	} else {
-		qWarning(qPrintable(map->name() + ": " + map->errorString()));
+		qWarning("%s: %s", qPrintable(map->name()), qPrintable(map->errorString()));
 		action->deleteLater();
 	}
 }
