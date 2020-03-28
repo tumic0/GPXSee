@@ -63,8 +63,8 @@ void POI::loadDir(const QString &path)
 			loadDir(fi.absoluteFilePath());
 		else
 			if (!loadFile(fi.absoluteFilePath()))
-				qWarning(qPrintable(fi.absoluteFilePath() + ": "
-				  + _errorString));
+				qWarning("%s: %s", qPrintable(fi.absoluteFilePath()),
+				  qPrintable(_errorString));
 	}
 }
 
