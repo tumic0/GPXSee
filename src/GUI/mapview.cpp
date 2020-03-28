@@ -451,10 +451,7 @@ void MapView::setCoordinatesFormat(CoordinatesFormat format)
 void MapView::clearMapCache()
 {
 	_map->clearCache();
-
-	fitMapZoom();
-	rescale();
-	centerOn(contentCenter());
+	reloadMap();
 }
 
 void MapView::digitalZoom(int zoom)
