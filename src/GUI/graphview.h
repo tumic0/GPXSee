@@ -3,7 +3,6 @@
 
 #include <QGraphicsView>
 #include <QList>
-#include <QSet>
 #include "data/graph.h"
 #include "palette.h"
 #include "units.h"

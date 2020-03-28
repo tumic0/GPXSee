@@ -1,3 +1,4 @@
+#include <QSet>
 #include <QGraphicsScene>
 #include <QEvent>
 #include <QMouseEvent>
@@ -494,8 +495,23 @@ void GraphView::setPalette(const Palette &palette)
 	_palette = palette;
 	_palette.reset();
 
-	for (int i = 0; i < _graphs.count(); i++)
-		_graphs.at(i)->setColor(_palette.nextColor());
+	QSet<GraphItem*> secondary;
+	for (int i = 0; i < _graphs.count(); i++) {
+		GraphItem *g = _graphs[i];
+		if (g->secondaryGraph())
+			secondary.insert(g->secondaryGraph());
+	}
+
+	for (int i = 0; i < _graphs.count(); i++) {
+		GraphItem *g = _graphs[i];
+		if (secondary.contains(g))
+			continue;
+
+		QColor color(_palette.nextColor());
+		g->setColor(color);
+		if (g->secondaryGraph())
+			g->secondaryGraph()->setColor(color);
+	}
 }
 
 void GraphView::setGraphWidth(int width)
