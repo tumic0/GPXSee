@@ -583,6 +583,7 @@ void GUI::createToolBars()
 
 #ifdef Q_OS_MAC
 	setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+	setUnifiedTitleAndToolBarOnMac(true);
 #endif // Q_OS_MAC
 
 	_fileToolBar = addToolBar(tr("File"));
