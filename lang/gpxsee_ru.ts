@@ -1328,7 +1328,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="410"/>
         <source>Show secondary speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать обе одновременно</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="413"/>
@@ -1343,7 +1343,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="419"/>
         <source>Show secondary elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать обе одновременно</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="462"/>

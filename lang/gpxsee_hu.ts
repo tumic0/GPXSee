@@ -864,6 +864,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fájl</numerusform>
+            <numerusform>%n fájl</numerusform>
         </translation>
     </message>
 </context>
@@ -1366,7 +1367,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="410"/>
         <source>Show secondary speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Másodlagos sebesség mutatása</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="413"/>
@@ -1381,7 +1382,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="419"/>
         <source>Show secondary elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Másodlagos emelkedés mutatása</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="455"/>
@@ -1627,7 +1628,7 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="19"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Megjegyzés</translation>
     </message>
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="20"/>
@@ -1848,7 +1849,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="17"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Megjegyzés</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="18"/>
@@ -1906,7 +1907,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="39"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Megjegyzés</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="52"/>
