@@ -13,7 +13,7 @@ public:
 	{
 		map->setParent(this);
 		setData(QVariant::fromValue(map));
-		setEnabled(map->isValid());
+		setEnabled(map->isReady());
 		connect(map, SIGNAL(mapLoaded()), this, SLOT(mapLoaded()));
 	}
 
