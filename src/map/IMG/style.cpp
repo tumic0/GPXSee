@@ -60,7 +60,7 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(0x4a)] = Polygon(QBrush("#f1f0e5"), QPen("#f1f0e5"));
 	_polygons[TYPE(0x4c)] = Polygon(QBrush("#9fc4e1", Qt::Dense6Pattern));
 	_polygons[TYPE(0x4d)] = Polygon(QBrush("#ddf1fd"));
-	_polygons[TYPE(0x4e)] = Polygon(QBrush("#e3edc1"));
+	_polygons[TYPE(0x4e)] = Polygon(QBrush("#ffffff"));
 	_polygons[TYPE(0x4f)] = Polygon(QBrush("#d4ebb8"));
 	_polygons[TYPE(0x50)] = Polygon(QBrush("#d4ebb8"));
 	_polygons[TYPE(0x51)] = Polygon(QBrush("#9fc4e1", Qt::Dense4Pattern));
