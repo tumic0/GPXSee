@@ -21,7 +21,7 @@ private:
 	bool readData(QFile *file, char *data, size_t size);
 	template<class T> bool readValue(CTX &ctx, T &val);
 	bool skipValue(CTX &ctx, quint8 size);
-	bool readField(CTX &ctx, Field *field, quint32 &val);
+	bool readField(CTX &ctx, Field *field, QVariant &val);
 
 	bool parseHeader(CTX &ctx);
 	bool parseRecord(CTX &ctx);

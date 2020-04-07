@@ -19,6 +19,7 @@ public:
 	  : _coordinates(coordinates), _elevation(NAN) {}
 
 	const Coordinates &coordinates() const {return _coordinates;}
+	Coordinates &rcoordinates() {return _coordinates;}
 	const QString &name() const {return _name;}
 	const QString &description() const {return _description;}
 	const QString &comment() const {return _comment;}
