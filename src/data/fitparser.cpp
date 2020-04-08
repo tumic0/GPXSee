@@ -205,49 +205,51 @@ bool FITParser::parseDefinitionMessage(CTX &ctx, quint8 header)
 	return true;
 }
 
-bool FITParser::readField(CTX &ctx, Field *field, QVariant &val)
+bool FITParser::readField(CTX &ctx, Field *field, QVariant &val, bool &valid)
 {
-	quint8 v8 = (quint8)-1;
-	quint16 v16 = (quint16)-1;
-	quint32 v32 = (quint32)-1;
 	bool ret;
 
-	val = (quint32)-1;
+#define VAL(type, inval) \
+	{type var; \
+	if (field->size == sizeof(var)) { \
+		ret = readValue(ctx, var); \
+		val = var; \
+		valid = (var != (inval)); \
+	} else { \
+		ret = skipValue(ctx, field->size); \
+		valid = false; \
+	}}
 
 	switch (field->type) {
-		case 0: // enum
 		case 1: // sint8
+			VAL(qint8, 0x7fU);
+			break;
 		case 2: // uint8
-			if (field->size == 1) {
-				ret = readValue(ctx, v8);
-				val = v8;
-			} else
-				ret = skipValue(ctx, field->size);
+		case 0: // enum
+			VAL(quint8, 0xffU);
 			break;
 		case 7: // UTF8 nul terminated string
 			{QByteArray ba(ctx.file->read(field->size));
 			ctx.len -= field->size;
 			ret = (ba.size() == field->size);
-			val = ret ? ba : QString();}
+			val = ret ? ba : QString();
+			valid = !ba.isEmpty();}
 			break;
 		case 0x83: // sint16
+			VAL(qint16, 0x7fffU);
+			break;
 		case 0x84: // uint16
-			if (field->size == 2) {
-				ret = readValue(ctx, v16);
-				val = v16;
-			} else
-				ret = skipValue(ctx, field->size);
+			VAL(quint16, 0xffffU);
 			break;
 		case 0x85: // sint32
+			VAL(qint32, 0x7fffffffU);
+			break;
 		case 0x86: // uint32
-			if (field->size == 4) {
-				ret = readValue(ctx, v32);
-				val = v32;
-			} else
-				ret = skipValue(ctx, field->size);
+			VAL(quint32, 0xffffffffU);
 			break;
 		default:
 			ret = skipValue(ctx, field->size);
+			valid = false;
 			break;
 	}
 
@@ -257,9 +259,10 @@ bool FITParser::readField(CTX &ctx, Field *field, QVariant &val)
 bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 {
 	Field *field;
-	Event event;
 	QVariant val;
-	Waypoint w;
+	bool valid;
+	Event event;
+	Waypoint waypoint;
 
 
 	if (!def->fields && !def->devFields) {
@@ -271,58 +274,47 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 
 	for (int i = 0; i < def->numFields; i++) {
 		field = &def->fields[i];
-		if (!readField(ctx, field, val))
+		if (!readField(ctx, field, val, valid))
 			return false;
+		if (!valid)
+			continue;
 
 		if (field->id == TIMESTAMP_FIELD)
 			ctx.timestamp = val.toUInt();
 		else if (def->globalId == RECORD_MESSAGE) {
 			switch (field->id) {
 				case 0:
-					if (val != 0x7fffffffU)
-						ctx.trackpoint.rcoordinates().setLat(
-						  ((qint32)val.toUInt() / (double)0x7fffffff) * 180);
+					ctx.trackpoint.rcoordinates().setLat(
+					  (val.toInt() / (double)0x7fffffff) * 180);
 					break;
 				case 1:
-					if (val != 0x7fffffffU)
-						ctx.trackpoint.rcoordinates().setLon(
-						  ((qint32)val.toUInt() / (double)0x7fffffff) * 180);
+					ctx.trackpoint.rcoordinates().setLon(
+					  (val.toInt() / (double)0x7fffffff) * 180);
 					break;
 				case 2:
-					if (val != 0xffffU)
-						ctx.trackpoint.setElevation((val.toUInt() / 5.0) - 500);
+					ctx.trackpoint.setElevation((val.toUInt() / 5.0) - 500);
 					break;
 				case 3:
-					if (val != 0xffU)
-						ctx.trackpoint.setHeartRate(val.toUInt());
+					ctx.trackpoint.setHeartRate(val.toUInt());
 					break;
 				case 4:
-					if (val != 0xffU)
-						ctx.trackpoint.setCadence(val.toUInt());
+					ctx.trackpoint.setCadence(val.toUInt());
 					break;
 				case 6:
-					if (val != 0xffffU)
-						ctx.trackpoint.setSpeed(val.toUInt() / 1000.0f);
+					ctx.trackpoint.setSpeed(val.toUInt() / 1000.0f);
 					break;
 				case 7:
-					if (val != 0xffffU)
-						ctx.trackpoint.setPower(val.toUInt());
+					ctx.trackpoint.setPower(val.toUInt());
 					break;
 				case 13:
-					if (val != 0x7fU)
-						ctx.trackpoint.setTemperature((qint8)val.toUInt());
+					ctx.trackpoint.setTemperature(val.toInt());
 					break;
 				case 73:
-					if (val != 0xffffffffU)
-						ctx.trackpoint.setSpeed(val.toUInt() / 1000.0f);
+					ctx.trackpoint.setSpeed(val.toUInt() / 1000.0f);
 					break;
 				case 78:
-					if (val != 0xffffffffU)
-						ctx.trackpoint.setElevation((val.toUInt() / 5.0) - 500);
+					ctx.trackpoint.setElevation((val.toUInt() / 5.0) - 500);
 					break;
-				default:
-					break;
-
 			}
 		} else if (def->globalId == EVENT_MESSAGE) {
 			switch (field->id) {
@@ -339,24 +331,22 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 		} else if (def->globalId == COURSE_POINT) {
 			switch (field->id) {
 				case 1:
-					w.setTimestamp(QDateTime::fromTime_t(val.toUInt()
+					waypoint.setTimestamp(QDateTime::fromTime_t(val.toUInt()
 					  + 631065600));
 					break;
 				case 2:
-					if (val != 0x7fffffff)
-						w.rcoordinates().setLat(
-						  ((qint32)val.toUInt() / (double)0x7fffffff) * 180);
+					waypoint.rcoordinates().setLat(
+					  (val.toInt() / (double)0x7fffffff) * 180);
 					break;
 				case 3:
-					if (val != 0x7fffffff)
-						w.rcoordinates().setLon(
-						  ((qint32)val.toUInt() / (double)0x7fffffff) * 180);
+					waypoint.rcoordinates().setLon(
+					  (val.toInt() / (double)0x7fffffff) * 180);
 					break;
 				case 5:
-					w.setDescription(coursePointDesc.value(val.toUInt()));
+					waypoint.setDescription(coursePointDesc.value(val.toUInt()));
 					break;
 				case 6:
-					w.setName(val.toString());
+					waypoint.setName(val.toString());
 					break;
 			}
 		}
@@ -364,7 +354,7 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 
 	for (int i = 0; i < def->numDevFields; i++) {
 		field = &def->devFields[i];
-		if (!readField(ctx, field, val))
+		if (!readField(ctx, field, val, valid))
 			return false;
 	}
 
@@ -386,8 +376,8 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 			ctx.lastWrite = ctx.timestamp;
 		}
 	} else if (def->globalId == COURSE_POINT)
-		if (w.coordinates().isValid())
-			ctx.waypoints.append(w);
+		if (waypoint.coordinates().isValid())
+			ctx.waypoints.append(waypoint);
 
 	return true;
 }
