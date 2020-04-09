@@ -118,17 +118,12 @@ bool FITParser::readData(QFile *file, char *data, size_t size)
 
 template<class T> bool FITParser::readValue(CTX &ctx, T &val)
 {
-	T data;
-
-	if (!readData(ctx.file, (char*)&data, sizeof(T)))
+	if (!readData(ctx.file, (char*)&val, sizeof(T)))
 		return false;
 
 	ctx.len -= sizeof(T);
-
-	if (ctx.endian)
-		val = qFromBigEndian(data);
-	else
-		val = qFromLittleEndian(data);
+	if (sizeof(T) > 1)
+		val = (ctx.endian) ? qFromBigEndian(val) : qFromLittleEndian(val);
 
 	return true;
 }
