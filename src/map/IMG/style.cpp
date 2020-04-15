@@ -25,12 +25,12 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(0x12)] = Polygon(QBrush("#e6e2d9"));
 	_polygons[TYPE(0x13)] = Polygon(QBrush("#dbd0b6"),
 	  QPen(QColor("#cdccc4"), 1));
-	_polygons[TYPE(0x14)] = Polygon(QBrush("#d4ebb8"));
-	_polygons[TYPE(0x15)] = Polygon(QBrush("#d4ebb8"));
+	_polygons[TYPE(0x14)] = Polygon(QBrush("#cadfaf"));
+	_polygons[TYPE(0x15)] = Polygon(QBrush("#cadfaf"));
 	_polygons[TYPE(0x16)] = Polygon(QBrush(QColor("#9ac269"),
 	  Qt::BDiagPattern));
-	_polygons[TYPE(0x17)] = Polygon(QBrush("#d4ebb8"));
-	_polygons[TYPE(0x18)] = Polygon(QBrush("#d4ebb8"));
+	_polygons[TYPE(0x17)] = Polygon(QBrush("#e4efcf"));
+	_polygons[TYPE(0x18)] = Polygon(QBrush("#e3edc6"));
 	_polygons[TYPE(0x19)] = Polygon(QBrush("#e3edc6"), QPen("#c9d3a5"));
 	_polygons[TYPE(0x1a)] = Polygon(QBrush("#000000", Qt::Dense6Pattern),
 	  QPen(QColor("#cdccc4"), 1));
@@ -61,22 +61,22 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(0x4c)] = Polygon(QBrush("#9fc4e1", Qt::Dense6Pattern));
 	_polygons[TYPE(0x4d)] = Polygon(QBrush("#ddf1fd"));
 	_polygons[TYPE(0x4e)] = Polygon(QBrush("#f8f8f8"));
-	_polygons[TYPE(0x4f)] = Polygon(QBrush("#d4ebb8"));
-	_polygons[TYPE(0x50)] = Polygon(QBrush("#d4ebb8"));
+	_polygons[TYPE(0x4f)] = Polygon(QBrush("#e4efcf"));
+	_polygons[TYPE(0x50)] = Polygon(QBrush("#cadfaf"));
 	_polygons[TYPE(0x51)] = Polygon(QBrush("#9fc4e1", Qt::Dense4Pattern));
-	_polygons[TYPE(0x52)] = Polygon(QBrush("#d4ebb8"));
+	_polygons[TYPE(0x52)] = Polygon(QBrush("#cadfaf"));
 
 	_drawOrder << TYPE(0x4b) << TYPE(0x4a) << TYPE(0x01) << TYPE(0x02)
-	  << TYPE(0x03) << TYPE(0x17) << TYPE(0x18) << TYPE(0x19) << TYPE(0x1a)
-	  << TYPE(0x28) << TYPE(0x29) << TYPE(0x32) << TYPE(0x3b) << TYPE(0x3c)
-	  << TYPE(0x3d) << TYPE(0x3e) << TYPE(0x3f) << TYPE(0x40) << TYPE(0x41)
-	  << TYPE(0x42) << TYPE(0x43) << TYPE(0x44) << TYPE(0x45) << TYPE(0x46)
-	  << TYPE(0x47) << TYPE(0x48) << TYPE(0x49) << TYPE(0x4c) << TYPE(0x4d)
-	  << TYPE(0x4e) << TYPE(0x4f) << TYPE(0x50) << TYPE(0x51) << TYPE(0x52)
-	  << TYPE(0x14) << TYPE(0x15) << TYPE(0x16) << TYPE(0x1e) << TYPE(0x1f)
-	  << TYPE(0x04) << TYPE(0x05) << TYPE(0x06) << TYPE(0x07) << TYPE(0x08)
-	  << TYPE(0x09) << TYPE(0x0a) << TYPE(0x0b) << TYPE(0x0c) << TYPE(0x0d)
-	  << TYPE(0x0e) << TYPE(0x0f) << TYPE(0x10) << TYPE(0x11) << TYPE(0x12)
+	  << TYPE(0x03) << TYPE(0x17) << TYPE(0x18) << TYPE(0x1a) << TYPE(0x28)
+	  << TYPE(0x29) << TYPE(0x32) << TYPE(0x3b) << TYPE(0x3c) << TYPE(0x3d)
+	  << TYPE(0x3e) << TYPE(0x3f) << TYPE(0x40) << TYPE(0x41) << TYPE(0x42)
+	  << TYPE(0x43) << TYPE(0x44) << TYPE(0x45) << TYPE(0x46) << TYPE(0x47)
+	  << TYPE(0x48) << TYPE(0x49) << TYPE(0x4c) << TYPE(0x4d) << TYPE(0x4e)
+	  << TYPE(0x4f) << TYPE(0x50) << TYPE(0x51) << TYPE(0x52) << TYPE(0x14)
+	  << TYPE(0x15) << TYPE(0x16) << TYPE(0x1e) << TYPE(0x1f) << TYPE(0x04)
+	  << TYPE(0x05) << TYPE(0x06) << TYPE(0x07) << TYPE(0x08) << TYPE(0x09)
+	  << TYPE(0x0a) << TYPE(0x0b) << TYPE(0x0c) << TYPE(0x0d) << TYPE(0x0e)
+	  << TYPE(0x0f) << TYPE(0x10) << TYPE(0x11) << TYPE(0x12) << TYPE(0x19)
 	  << TYPE(0x13);
 }
 
