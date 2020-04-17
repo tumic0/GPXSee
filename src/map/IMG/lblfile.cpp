@@ -151,7 +151,9 @@ Label LBLFile::label8b(Handle &hdl, quint32 offset, bool capitalize) const
 		if (!c || c == 0x1d)
 			break;
 
-		if ((c >= 0x1e && c <= 0x1f)) {
+		if (c == 0x1c)
+			capitalize = false;
+		else if ((c >= 0x1e && c <= 0x1f)) {
 			if (bap == &shieldLabel)
 				bap = &label;
 			else
