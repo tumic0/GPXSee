@@ -63,6 +63,7 @@ private:
 	Projection _projection;
 	Transform _transform;
 	QRectF _bounds;
+	RectC _dataBounds;
 
 	bool _valid;
 	QString _errorString;

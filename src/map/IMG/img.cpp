@@ -1,6 +1,5 @@
 #include <QMap>
 #include <QtEndian>
-#include "map/osm.h"
 #include "vectortile.h"
 #include "img.h"
 
@@ -168,11 +167,6 @@ IMG::IMG(const QString &fileName) : _file(fileName)
 		if (tile->zooms().min() == minMapZoom)
 			tile->markAsBasemap();
 	}
-
-	// Limit world maps bounds so that the maps can be projected using
-	// the default Web Mercator projection
-	if (_bounds.height() > 120)
-		_bounds &= OSM::BOUNDS;
 
 	if (!_tileTree.Count())
 		_errorString = "No usable map tile found";

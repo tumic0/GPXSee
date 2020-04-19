@@ -16,6 +16,7 @@
 #include "IMG/style.h"
 #include "IMG/img.h"
 #include "IMG/gmap.h"
+#include "osm.h"
 #include "pcs.h"
 #include "rectd.h"
 #include "imgmap.h"
@@ -244,6 +245,11 @@ IMGMap::IMGMap(const QString &fileName, QObject *parent)
 		return;
 	}
 
+	// Limit world maps bounds so that the maps can be projected using
+	// the default Web Mercator projection
+	_dataBounds = (_data->bounds().height() > 120)
+	  ? _data->bounds() & OSM::BOUNDS : _data->bounds();
+
 	_zoom = _data->zooms().min();
 	updateTransform();
 
@@ -305,7 +311,7 @@ Transform IMGMap::transform(int zoom) const
 {
 	double scale = _projection.isGeographic()
 	  ? 360.0 / (1<<zoom) : (2.0 * M_PI * WGS84_RADIUS) / (1<<zoom);
-	PointD topLeft(_projection.ll2xy(_data->bounds().topLeft()));
+	PointD topLeft(_projection.ll2xy(_dataBounds.topLeft()));
 	return Transform(ReferencePoint(PointD(0, 0), topLeft),
 	  PointD(scale, scale));
 }
@@ -314,7 +320,7 @@ void IMGMap::updateTransform()
 {
 	_transform = transform(_zoom);
 
-	RectD prect(_data->bounds(), _projection);
+	RectD prect(_dataBounds, _projection);
 	_bounds = QRectF(_transform.proj2img(prect.topLeft()),
 	  _transform.proj2img(prect.bottomRight()));
 }
