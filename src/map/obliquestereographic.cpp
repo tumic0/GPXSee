@@ -80,3 +80,13 @@ Coordinates ObliqueStereographic::xy2ll(const PointD &p) const
 	return Coordinates(rad2deg((lambda - _lambda0) / _n + _lambda0),
 	  rad2deg(phi));
 }
+
+bool ObliqueStereographic::operator==(const CT &ct) const
+{
+	const ObliqueStereographic *other
+	  = dynamic_cast<const ObliqueStereographic*>(&ct);
+	return (other != 0 && _es == other->_es && _chi0 == other->_chi0
+	  && _sinChi0 == other->_sinChi0 && _cosChi0 == other->_cosChi0
+	  && _lambda0 == other->_lambda0 && _n == other->_n && _c == other->_c
+	  && _fe == other->_fe && _fn == other->_fn && _twoRk0 == other->_twoRk0);
+}

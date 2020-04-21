@@ -222,3 +222,14 @@ Coordinates AlbersEqual::xy2ll(const PointD &p) const
 
 	return Coordinates(rad2deg(lon), rad2deg(lat));
 }
+
+bool AlbersEqual::operator==(const CT &ct) const
+{
+	const AlbersEqual *other = dynamic_cast<const AlbersEqual*>(&ct);
+	return (other != 0 && _latitudeOrigin == other->_latitudeOrigin
+	  && _longitudeOrigin == other->_longitudeOrigin
+	  && _falseEasting == other->_falseEasting
+	  && _falseNorthing == other->_falseNorthing && _a2 == other->_a2
+	  && _es == other->_es && _rho0 == other->_rho0 && _c == other->_c
+	  && _n == other->_n);
+}

@@ -190,3 +190,14 @@ Coordinates PolarStereographic::xy2ll(const PointD &p) const
 
 	return Coordinates(rad2deg(Longitude), rad2deg(Latitude));
 }
+
+bool PolarStereographic::operator==(const CT &ct) const
+{
+	const PolarStereographic *other
+	  = dynamic_cast<const PolarStereographic*>(&ct);
+	return (other != 0 && _originLatitude == other->_originLatitude
+	  && _originLongitude == other->_originLongitude
+	  && _falseEasting == other->_falseEasting
+	  && _falseNorthing == other->_falseNorthing && _two_a == other->_two_a
+	  && _es == other->_es);
+}

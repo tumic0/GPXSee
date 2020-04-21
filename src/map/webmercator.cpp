@@ -14,3 +14,9 @@ Coordinates WebMercator::xy2ll(const PointD &p) const
 	return Coordinates(rad2deg(p.x() / WGS84_RADIUS),
 	  rad2deg(2.0 * atan(exp(p.y() / WGS84_RADIUS)) - M_PI_2));
 }
+
+bool WebMercator::operator==(const CT &ct) const
+{
+	const WebMercator *other = dynamic_cast<const WebMercator*>(&ct);
+	return (other != 0);
+}

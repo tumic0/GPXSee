@@ -78,6 +78,7 @@ public:
 	~Projection();
 
 	Projection &operator=(const Projection &p);
+	bool operator==(const Projection &p) const;
 
 	bool isNull() const {return (_gcs == 0 && _ct == 0 && _units.isNull());}
 	bool isValid() const {return !(_gcs == 0 || _ct == 0 || _units.isNull());}

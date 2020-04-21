@@ -13,6 +13,7 @@ public:
 	  double longitudeOrigin, double falseEasting, double falseNorthing);
 
 	virtual CT *clone() const {return new Krovak(*this);}
+	virtual bool operator==(const CT &ct) const;
 
 	virtual PointD ll2xy(const Coordinates &c) const;
 	virtual Coordinates xy2ll(const PointD &p) const;
@@ -32,6 +33,7 @@ public:
 		longitudeOrigin, falseEasting, falseNorthing) {}
 
 	virtual CT *clone() const {return new KrovakNE(*this);}
+	virtual bool operator==(const CT &ct) const;
 
 	virtual PointD ll2xy(const Coordinates &c) const
 	  {PointD p(_k.ll2xy(c)); return PointD(-p.x(), -p.y());}

@@ -13,6 +13,7 @@ public:
 	  double falseEasting, double falseNorthing);
 
 	virtual CT *clone() const {return new AlbersEqual(*this);}
+	virtual bool operator==(const CT &ct) const;
 
 	virtual PointD ll2xy(const Coordinates &c) const;
 	virtual Coordinates xy2ll(const PointD &p) const;

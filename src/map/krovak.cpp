@@ -68,3 +68,18 @@ Coordinates Krovak::xy2ll(const PointD &p) const
 
 	return Coordinates(rad2deg(_lambda0 - V/_b), rad2deg(phi));
 }
+
+bool Krovak::operator==(const CT &ct) const
+{
+	const Krovak *other = dynamic_cast<const Krovak*>(&ct);
+	return (other != 0 && _e == other->_e && _a == other->_a && _b == other->_b
+	  && _t0 == other->_t0 && _r0 == other->_r0 && _phiP == other->_phiP
+	  && _cosAlphaC == other->_cosAlphaC && _sinAlphaC == other->_sinAlphaC
+	  && _lambda0 == other->_lambda0 && _fe == other->_fe && _fn == other->_fn);
+}
+
+bool KrovakNE::operator==(const CT &ct) const
+{
+	const KrovakNE *other = dynamic_cast<const KrovakNE*>(&ct);
+	return (other != 0 && _k == other->_k);
+}

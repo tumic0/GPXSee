@@ -194,6 +194,16 @@ Coordinates LambertConic1::xy2ll(const PointD &p) const
 	return Coordinates(rad2deg(lon), rad2deg(lat));
 }
 
+bool LambertConic1::operator==(const CT &ct) const
+{
+	const LambertConic1 *other = dynamic_cast<const LambertConic1*>(&ct);
+	return (other != 0 && _longitudeOrigin == other->_longitudeOrigin
+	  && _falseEasting == other->_falseEasting
+	  && _falseNorthing == other->_falseNorthing && _e == other->_e
+	  && _n == other->_n && _rho0 == other->_rho0);
+}
+
+
 LambertConic2::LambertConic2(const Ellipsoid *ellipsoid,
   double standardParallel1, double standardParallel2, double latitudeOrigin,
   double longitudeOrigin, double falseEasting, double falseNorthing)
@@ -263,4 +273,10 @@ PointD LambertConic2::ll2xy(const Coordinates &c) const
 Coordinates LambertConic2::xy2ll(const PointD &p) const
 {
 	return _lc1.xy2ll(p);
+}
+
+bool LambertConic2::operator==(const CT &ct) const
+{
+	const LambertConic2 *other = dynamic_cast<const LambertConic2*>(&ct);
+	return (other != 0 && _lc1 == other->_lc1);
 }

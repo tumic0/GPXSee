@@ -68,3 +68,11 @@ Coordinates LambertAzimuthal::xy2ll(const PointD &p) const
 
 	return Coordinates(rad2deg(lon), rad2deg(lat));
 }
+
+bool LambertAzimuthal::operator==(const CT &ct) const
+{
+	const LambertAzimuthal *other = dynamic_cast<const LambertAzimuthal*>(&ct);
+	return (other != 0 && _lon0 == other->_lon0 && _fn == other->_fn
+	  && _fe == other->_fe && _a == other->_a && _es == other->_es
+	  && _beta0 == other->_beta0 && _rq == other->_rq && _d == other->_d);
+}

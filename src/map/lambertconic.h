@@ -14,6 +14,7 @@ public:
 	  double falseNorthing);
 
 	virtual CT *clone() const {return new LambertConic1(*this);}
+	virtual bool operator==(const CT &ct) const;
 
 	virtual PointD ll2xy(const Coordinates &c) const;
 	virtual Coordinates xy2ll(const PointD &p) const;
@@ -39,6 +40,7 @@ public:
 	   double falseEasting, double falseNorthing);
 
 	virtual CT *clone() const {return new LambertConic2(*this);}
+	virtual bool operator==(const CT &ct) const;
 
 	virtual PointD ll2xy(const Coordinates &c) const;
 	virtual Coordinates xy2ll(const PointD &p) const;

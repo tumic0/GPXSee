@@ -36,9 +36,15 @@ Projection::Method::Method(int id)
 	}
 }
 
-Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
-	_cs(pcs->coordinateSystem()), _geographic(false)
+Projection::Projection(const PCS *pcs) : _gcs(0), _ct(0), _geographic(false)
 {
+	if (!pcs)
+		return;
+
+	_gcs = pcs->gcs();
+	_units = pcs->units();
+	_cs = pcs->coordinateSystem();
+
 	const Ellipsoid *ellipsoid = _gcs->datum().ellipsoid();
 	const Projection::Setup &setup = pcs->setup();
 
@@ -109,6 +115,8 @@ Projection::Projection(const PCS *pcs) : _gcs(pcs->gcs()), _units(pcs->units()),
 Projection::Projection(const GCS *gcs, const CoordinateSystem &cs)
   : _gcs(gcs), _units(LinearUnits(9001)), _cs(cs), _geographic(true)
 {
+	if (!gcs)
+		return;
 	_ct = new LatLon(gcs->angularUnits());
 }
 
@@ -139,6 +147,15 @@ Projection &Projection::operator=(const Projection &p)
 	}
 
 	return *this;
+}
+
+bool Projection::operator==(const Projection &p) const
+{
+	if (!isValid() || !p.isValid())
+		return false;
+
+	return (*_ct == *p._ct && *_gcs == *p._gcs && _units == p._units
+	  && _cs == p._cs && _geographic == p._geographic);
 }
 
 PointD Projection::ll2xy(const Coordinates &c) const

@@ -12,6 +12,9 @@ public:
 	CoordinateSystem(AxisOrder axisOrder) : _axisOrder(axisOrder) {}
 	CoordinateSystem(int code);
 
+	bool operator==(const CoordinateSystem &other) const
+	  {return (_axisOrder == other._axisOrder);}
+
 	bool isNull() const {return (_axisOrder == Unknown);}
 	bool isValid() const {return (_axisOrder != Unknown);}
 

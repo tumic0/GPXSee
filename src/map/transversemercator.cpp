@@ -252,3 +252,14 @@ Coordinates TransverseMercator::xy2ll(const PointD &p) const
 
 	return Coordinates(rad2deg(lon), rad2deg(lat));
 }
+
+bool TransverseMercator::operator==(const CT &ct) const
+{
+	const TransverseMercator *other
+	  = dynamic_cast<const TransverseMercator*>(&ct);
+	return (other != 0 && _longitudeOrigin == other->_longitudeOrigin
+	  && _latitudeOrigin == other->_latitudeOrigin && _scale == other->_scale
+	  && _falseEasting == other->_falseEasting
+	  && _falseNorthing == other->_falseNorthing && _a == other->_a
+	  && _es == other->_es);
+}

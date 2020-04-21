@@ -121,3 +121,13 @@ Coordinates Mercator::xy2ll(const PointD &p) const
 
 	return Coordinates(rad2deg(lon), rad2deg(lat));
 }
+
+bool Mercator::operator==(const CT &ct) const
+{
+	const Mercator *other = dynamic_cast<const Mercator*>(&ct);
+	return (other != 0 && _a == other->_a && _e == other->_e
+	  && _latitudeOrigin == other->_latitudeOrigin
+	  && _longitudeOrigin == other->_longitudeOrigin
+	  && _falseNorthing == other->_falseNorthing
+	  && _falseEasting == other->_falseEasting);
+}

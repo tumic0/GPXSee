@@ -245,11 +245,7 @@ IMGMap::IMGMap(const QString &fileName, QObject *parent)
 		return;
 	}
 
-	// Limit world maps bounds so that the maps can be projected using
-	// the default Web Mercator projection
-	_dataBounds = (_data->bounds().height() > 120)
-	  ? _data->bounds() & OSM::BOUNDS : _data->bounds();
-
+	_dataBounds = _data->bounds() & OSM::BOUNDS;
 	_zoom = _data->zooms().min();
 	updateTransform();
 
@@ -631,7 +627,16 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 void IMGMap::setProjection(const Projection &projection)
 {
+	if (projection == _projection)
+		return;
+
 	_projection = projection;
+	// Limit the bounds for some well known Mercator projections
+	// (GARMIN world maps have N/S bounds up to 90/-90!)
+	_dataBounds = (_projection == PCS::pcs(3857)
+	  || _projection == PCS::pcs(3395))
+	  ? _data->bounds() & OSM::BOUNDS : _data->bounds();
+
 	updateTransform();
 	QPixmapCache::clear();
 }
