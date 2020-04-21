@@ -113,10 +113,11 @@ Projection::Projection(const PCS *pcs) : _gcs(0), _ct(0), _geographic(false)
 }
 
 Projection::Projection(const GCS *gcs, const CoordinateSystem &cs)
-  : _gcs(gcs), _units(LinearUnits(9001)), _cs(cs), _geographic(true)
+  : _gcs(gcs), _ct(0), _units(LinearUnits(9001)), _cs(cs), _geographic(true)
 {
 	if (!gcs)
 		return;
+
 	_ct = new LatLon(gcs->angularUnits());
 }
 
