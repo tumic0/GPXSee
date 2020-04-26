@@ -11,7 +11,6 @@ class Style;
 class RasterTile
 {
 public:
-	RasterTile() : _style(0), _zoom(0) {}
 	RasterTile(const Style *style, int zoom, const QRect &rect,
 	  const QString &key, const QList<MapData::Poly> &polygons,
 	  const QList<MapData::Poly> &lines, QList<MapData::Point> &points)
