@@ -21,21 +21,45 @@
 #define TILE_SIZE   384
 #define TEXT_EXTENT 160
 
+static QList<MapData*> overlays(const QString &fileName)
+{
+	QList<MapData*> list;
+
+	for (int i = 1; ; i++) {
+		QString ol(fileName + "." + QString::number(i));
+		if (QFileInfo(ol).isFile()) {
+			MapData *data = new IMG(ol);
+			if (data->isValid())
+				list.append(data);
+			else {
+				qWarning("%s: %s", qPrintable(data->fileName()),
+				  qPrintable(data->errorString()));
+				delete data;
+			}
+		} else
+			break;
+	}
+
+	return list;
+}
+
 IMGMap::IMGMap(const QString &fileName, QObject *parent)
   : Map(parent), _projection(PCS::pcs(3857)), _valid(false)
 {
 	if (GMAP::isGMAP(fileName))
-		_data = new GMAP(fileName);
-	else
-		_data = new IMG(fileName);
+		_data.append(new GMAP(fileName));
+	else {
+		_data.append(new IMG(fileName));
+		_data.append(overlays(fileName));
+	}
 
-	if (!_data->isValid()) {
-		_errorString = _data->errorString();
+	if (!_data.first()->isValid()) {
+		_errorString = _data.first()->errorString();
 		return;
 	}
 
-	_dataBounds = _data->bounds() & OSM::BOUNDS;
-	_zoom = _data->zooms().min();
+	_dataBounds = _data.first()->bounds() & OSM::BOUNDS;
+	_zoom = _data.first()->zooms().min();
 	updateTransform();
 
 	_valid = true;
@@ -43,21 +67,25 @@ IMGMap::IMGMap(const QString &fileName, QObject *parent)
 
 void IMGMap::load()
 {
-	_data->load();
+	for (int i = 0; i < _data.size(); i++)
+		_data.at(i)->load();
 }
 
 void IMGMap::unload()
 {
-	_data->clear();
+	for (int i = 0; i < _data.size(); i++)
+		_data.at(i)->clear();
 }
 
 int IMGMap::zoomFit(const QSize &size, const RectC &rect)
 {
+	const Range &zooms = _data.first()->zooms();
+
 	if (rect.isValid()) {
 		RectD pr(rect, _projection, 10);
 
-		_zoom = _data->zooms().min();
-		for (int i = _data->zooms().min() + 1; i <= _data->zooms().max(); i++) {
+		_zoom = zooms.min();
+		for (int i = zooms.min() + 1; i <= zooms.max(); i++) {
 			Transform t(transform(i));
 			QRectF r(t.proj2img(pr.topLeft()), t.proj2img(pr.bottomRight()));
 			if (size.width() < r.width() || size.height() < r.height())
@@ -65,7 +93,7 @@ int IMGMap::zoomFit(const QSize &size, const RectC &rect)
 			_zoom = i;
 		}
 	} else
-		_zoom = _data->zooms().max();
+		_zoom = zooms.max();
 
 	updateTransform();
 
@@ -74,14 +102,14 @@ int IMGMap::zoomFit(const QSize &size, const RectC &rect)
 
 int IMGMap::zoomIn()
 {
-	_zoom = qMin(_zoom + 1, _data->zooms().max());
+	_zoom = qMin(_zoom + 1, _data.first()->zooms().max());
 	updateTransform();
 	return _zoom;
 }
 
 int IMGMap::zoomOut()
 {
-	_zoom = qMax(_zoom - 1, _data->zooms().min());
+	_zoom = qMax(_zoom - 1, _data.first()->zooms().min());
 	updateTransform();
 	return _zoom;
 }
@@ -156,40 +184,42 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 	QList<RasterTile> tiles;
 
-	for (int i = 0; i < width; i++) {
-		for (int j = 0; j < height; j++) {
-			QPixmap pm;
-			QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
-			QString key = _data->fileName() + "-" + QString::number(_zoom) + "_"
-			  + QString::number(ttl.x()) + "_" + QString::number(ttl.y());
-			if (QPixmapCache::find(key, pm))
-				painter->drawPixmap(ttl, pm);
-			else {
-				QList<MapData::Poly> polygons, lines;
-				QList<MapData::Point> points;
+	for (int n = 0; n < _data.size(); n++) {
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				QPixmap pm;
+				QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
+				QString key = _data.at(n)->fileName() + "-" + QString::number(_zoom)
+				  + "_" + QString::number(ttl.x()) + "_" + QString::number(ttl.y());
+				if (QPixmapCache::find(key, pm))
+					painter->drawPixmap(ttl, pm);
+				else {
+					QList<MapData::Poly> polygons, lines;
+					QList<MapData::Point> points;
 
-				QRectF polyRect(ttl, QPointF(ttl.x() + TILE_SIZE,
-				  ttl.y() + TILE_SIZE));
-				polyRect &= bounds().adjusted(0.5, 0.5, -0.5, -0.5);
-				RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
-				  _transform.img2proj(polyRect.bottomRight()));
-				_data->polys(polyRectD.toRectC(_projection, 4), _zoom,
-				  &polygons, &lines);
-				ll2xy(polygons); ll2xy(lines);
+					QRectF polyRect(ttl, QPointF(ttl.x() + TILE_SIZE,
+					  ttl.y() + TILE_SIZE));
+					polyRect &= bounds().adjusted(0.5, 0.5, -0.5, -0.5);
+					RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
+					  _transform.img2proj(polyRect.bottomRight()));
+					_data.at(n)->polys(polyRectD.toRectC(_projection, 4), _zoom,
+					  &polygons, &lines);
+					ll2xy(polygons); ll2xy(lines);
 
-				QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT,
-				  ttl.y() - TEXT_EXTENT), QPointF(ttl.x() + TILE_SIZE
-				  + TEXT_EXTENT, ttl.y() + TILE_SIZE + TEXT_EXTENT));
-				pointRect &= bounds().adjusted(0.5, 0.5, -0.5, -0.5);
-				RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
-				  _transform.img2proj(pointRect.bottomRight()));
-				_data->points(pointRectD.toRectC(_projection, 4), _zoom,
-				  &points);
-				ll2xy(points);
+					QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT,
+					  ttl.y() - TEXT_EXTENT), QPointF(ttl.x() + TILE_SIZE
+					  + TEXT_EXTENT, ttl.y() + TILE_SIZE + TEXT_EXTENT));
+					pointRect &= bounds().adjusted(0.5, 0.5, -0.5, -0.5);
+					RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
+					  _transform.img2proj(pointRect.bottomRight()));
+					_data.at(n)->points(pointRectD.toRectC(_projection, 4),
+					  _zoom, &points);
+					ll2xy(points);
 
-				tiles.append(RasterTile(_data->style(), _zoom,
-				  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), key, polygons, lines,
-				  points));
+					tiles.append(RasterTile(_data.at(n)->style(), _zoom,
+					  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), key, polygons,
+					  lines, points));
+				}
 			}
 		}
 	}
@@ -217,9 +247,8 @@ void IMGMap::setProjection(const Projection &projection)
 	_projection = projection;
 	// Limit the bounds for some well known Mercator projections
 	// (GARMIN world maps have N/S bounds up to 90/-90!)
-	_dataBounds = (_projection == PCS::pcs(3857)
-	  || _projection == PCS::pcs(3395))
-	  ? _data->bounds() & OSM::BOUNDS : _data->bounds();
+	_dataBounds = (_projection == PCS::pcs(3857) || _projection == PCS::pcs(3395))
+	  ? _data.first()->bounds() & OSM::BOUNDS : _data.first()->bounds();
 
 	updateTransform();
 	QPixmapCache::clear();

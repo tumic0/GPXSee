@@ -13,9 +13,9 @@ class IMGMap : public Map
 
 public:
 	IMGMap(const QString &fileName, QObject *parent = 0);
-	~IMGMap() {delete _data;}
+	~IMGMap() {qDeleteAll(_data);}
 
-	QString name() const {return _data->name();}
+	QString name() const {return _data.first()->name();}
 
 	QRectF bounds() {return _bounds;}
 
@@ -44,7 +44,7 @@ private:
 	Transform transform(int zoom) const;
 	void updateTransform();
 
-	MapData *_data;
+	QList<MapData *> _data;
 	int _zoom;
 	Projection _projection;
 	Transform _transform;
