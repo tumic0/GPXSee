@@ -25,7 +25,7 @@ static QList<MapData*> overlays(const QString &fileName)
 {
 	QList<MapData*> list;
 
-	for (int i = 1; ; i++) {
+	for (int i = 1; i < 32; i++) {
 		QString ol(fileName + "." + QString::number(i));
 		if (QFileInfo(ol).isFile()) {
 			MapData *data = new IMG(ol);
