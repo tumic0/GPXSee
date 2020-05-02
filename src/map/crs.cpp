@@ -20,6 +20,10 @@ Projection CRS::projection(const QString &crs)
 			authority = list.at(4);
 			code = list.at(6);
 			break;
+		case 8:
+			authority = list.at(4);
+			code = list.at(7);
+			break;
 		default:
 			return Projection();
 	}
