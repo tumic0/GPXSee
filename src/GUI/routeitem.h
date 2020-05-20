@@ -19,8 +19,6 @@ public:
 
 	void setMap(Map *map);
 
-	void setUnits(Units u);
-	void setCoordinatesFormat(CoordinatesFormat format);
 	void showWaypoints(bool show);
 	void showWaypointLabels(bool show);
 
@@ -31,7 +29,6 @@ private:
 	QString _desc;
 	QString _comment;
 	QVector<Link> _links;
-	CoordinatesFormat _coordinatesFormat;
 
 	QVector<WaypointItem*> _waypoints;
 };

@@ -149,6 +149,7 @@
 #define SHOW_SECONDARY_ELEVATION_DEFAULT  false
 #define SHOW_SECONDARY_SPEED_SETTING      "showSecondarySpeed"
 #define SHOW_SECONDARY_SPEED_DEFAULT      false
+#define TIME_ZONE_SETTING                 "timeZone"
 #define POI_RADIUS_SETTING                "poiRadius"
 #define POI_RADIUS_DEFAULT                (int)(IMPERIAL_UNITS() ? MIINM : KMINM)
 #define USE_OPENGL_SETTING                "useOpenGL"

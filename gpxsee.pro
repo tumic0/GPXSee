@@ -14,8 +14,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets
     QT += printsupport
 }
-lessThan(QT_MAJOR_VERSION, 5) {QT += opengl}
-equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 4) {QT += opengl}
+lessThan(QT_VERSION, 5.4.0) {QT += opengl}
 
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
@@ -347,6 +346,9 @@ SOURCES += src/main.cpp \
 greaterThan(QT_MAJOR_VERSION, 4) {
     HEADERS += src/data/geojsonparser.h
     SOURCES += src/data/geojsonparser.cpp
+}
+greaterThan(QT_VERSION, 5.1.0) {
+    HEADERS += src/GUI/timezoneinfo.h
 }
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \

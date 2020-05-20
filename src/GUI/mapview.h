@@ -31,6 +31,7 @@ class GraphItem;
 class AreaItem;
 class Area;
 class GraphicsScene;
+class QTimeZone;
 
 class MapView : public QGraphicsView
 {
@@ -83,6 +84,7 @@ public slots:
 	void showTicks(bool show);
 	void clearMapCache();
 	void setCoordinatesFormat(CoordinatesFormat format);
+	void setTimeZone(const QTimeZone &zone);
 	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
 	void setProjection(int id);
 
@@ -137,8 +139,6 @@ private:
 	POI *_poi;
 
 	Palette _palette;
-	Units _units;
-	CoordinatesFormat _coordinatesFormat;
 	qreal _mapOpacity;
 	Projection _projection;
 

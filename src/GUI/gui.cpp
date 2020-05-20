@@ -248,7 +248,7 @@ void GUI::createActions()
 	_reloadFileAction->setMenuRole(QAction::NoRole);
 	_reloadFileAction->setShortcut(RELOAD_SHORTCUT);
 	_reloadFileAction->setActionGroup(_fileActionGroup);
-	connect(_reloadFileAction, SIGNAL(triggered()), this, SLOT(reloadFile()));
+	connect(_reloadFileAction, SIGNAL(triggered()), this, SLOT(reloadFiles()));
 	addAction(_reloadFileAction);
 	_statisticsAction = new QAction(tr("Statistics..."), this);
 	_statisticsAction->setMenuRole(QAction::NoRole);
@@ -791,7 +791,12 @@ bool GUI::loadFile(const QString &fileName)
 			_trackDistance += track.distance();
 			_time += track.time();
 			_movingTime += track.movingTime();
-			const QDate &date = track.date().date();
+#ifdef ENABLE_TIMEZONES
+			const QDateTime date = track.date().toTimeZone(
+			  _options.timeZone.zone());
+#else // ENABLE_TIMEZONES
+			const QDateTime &date = track.date();
+#endif // ENABLE_TIMEZONES
 			if (_dateRange.first.isNull() || _dateRange.first > date)
 				_dateRange.first = date;
 			if (_dateRange.second.isNull() || _dateRange.second < date)
@@ -990,9 +995,16 @@ void GUI::openOptions()
 		_mapView->setDevicePixelRatio(devicePixelRatioF(),
 		  options.hidpiMap ? devicePixelRatioF() : 1.0);
 #endif // ENABLE_HIDPI
+#ifdef ENABLE_TIMEZONES
+	if (options.timeZone != _options.timeZone) {
+		_mapView->setTimeZone(options.timeZone.zone());
+		_dateRange.first = _dateRange.first.toTimeZone(options.timeZone.zone());
+		_dateRange.second = _dateRange.second.toTimeZone(options.timeZone.zone());
+	}
+#endif // ENABLE_TIMEZONES
 
 	if (reload)
-		reloadFile();
+		reloadFiles();
 
 	_options = options;
 }
@@ -1185,7 +1197,7 @@ void GUI::plot(QPrinter *printer)
 	}
 }
 
-void GUI::reloadFile()
+void GUI::reloadFiles()
 {
 	_trackCount = 0;
 	_routeCount = 0;
@@ -1195,7 +1207,7 @@ void GUI::reloadFile()
 	_routeDistance = 0;
 	_time = 0;
 	_movingTime = 0;
-	_dateRange = DateRange(QDate(), QDate());
+	_dateRange = DateTimeRange(QDateTime(), QDateTime());
 	_pathName = QString();
 
 	for (int i = 0; i < _tabs.count(); i++)
@@ -1229,7 +1241,7 @@ void GUI::closeFiles()
 	_routeDistance = 0;
 	_time = 0;
 	_movingTime = 0;
-	_dateRange = DateRange(QDate(), QDate());
+	_dateRange = DateTimeRange(QDateTime(), QDateTime());
 	_pathName = QString();
 
 	_sliderPos = 0;
@@ -1867,6 +1879,9 @@ void GUI::writeSettings()
 	if (_options.showSecondarySpeed != SHOW_SECONDARY_SPEED_DEFAULT)
 		settings.setValue(SHOW_SECONDARY_SPEED_SETTING,
 		  _options.showSecondarySpeed);
+	if (_options.timeZone != TimeZoneInfo())
+		settings.setValue(TIME_ZONE_SETTING, QVariant::fromValue(
+		  _options.timeZone));
 	if (_options.poiRadius != POI_RADIUS_DEFAULT)
 		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
 	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
@@ -2139,6 +2154,9 @@ void GUI::readSettings()
 	_options.showSecondarySpeed = settings.value(
 	  SHOW_SECONDARY_SPEED_SETTING,
 	  SHOW_SECONDARY_SPEED_DEFAULT).toBool();
+#ifdef ENABLE_TIMEZONES
+	_options.timeZone = settings.value(TIME_ZONE_SETTING).value<TimeZoneInfo>();
+#endif // ENABLE_TIMEZONES
 	_options.automaticPause = settings.value(AUTOMATIC_PAUSE_SETTING,
 	  AUTOMATIC_PAUSE_DEFAULT).toBool();
 	_options.pauseInterval = settings.value(PAUSE_INTERVAL_SETTING,
@@ -2203,6 +2221,9 @@ void GUI::readSettings()
 	  _options.hidpiMap ? devicePixelRatioF() : 1.0);
 #endif // ENABLE_HIDPI
 	_mapView->setProjection(_options.projection);
+#ifdef ENABLE_TIMEZONES
+	_mapView->setTimeZone(_options.timeZone.zone());
+#endif // ENABLE_TIMEZONES
 
 	for (int i = 0; i < _tabs.count(); i++) {
 		_tabs.at(i)->setPalette(_options.palette);

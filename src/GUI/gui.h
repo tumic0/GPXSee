@@ -48,7 +48,7 @@ private slots:
 	void exportFile();
 	void openFile();
 	void closeAll();
-	void reloadFile();
+	void reloadFiles();
 	void statistics();
 	void openPOIFile();
 	void closePOIFiles();
@@ -92,7 +92,7 @@ private slots:
 	void mapInitialized();
 
 private:
-	typedef QPair<QDate, QDate> DateRange;
+	typedef QPair<QDateTime, QDateTime> DateTimeRange;
 
 	void loadPOIs();
 	void closeFiles();
@@ -220,7 +220,7 @@ private:
 	int _trackCount, _routeCount, _areaCount, _waypointCount;
 	qreal _trackDistance, _routeDistance;
 	qreal _time, _movingTime;
-	DateRange _dateRange;
+	DateTimeRange _dateRange;
 	QString _pathName;
 
 	qreal _sliderPos;

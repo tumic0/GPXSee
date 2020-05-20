@@ -47,7 +47,6 @@ RouteItem::RouteItem(const Route &route, Map *map, QGraphicsItem *parent)
 	_desc = route.description();
 	_comment = route.comment();
 	_links = route.links();
-	_coordinatesFormat = DecimalDegrees;
 }
 
 void RouteItem::setMap(Map *map)
@@ -56,28 +55,6 @@ void RouteItem::setMap(Map *map)
 		_waypoints[i]->setMap(map);
 
 	PathItem::setMap(map);
-}
-
-void RouteItem::setUnits(Units u)
-{
-	if (_units == u)
-		return;
-
-	for (int i = 0; i < _waypoints.count(); i++)
-		_waypoints[i]->setToolTipFormat(u, _coordinatesFormat);
-
-	PathItem::setUnits(u);
-}
-
-void RouteItem::setCoordinatesFormat(CoordinatesFormat format)
-{
-	if (_coordinatesFormat == format)
-		return;
-
-	_coordinatesFormat = format;
-
-	for (int i = 0; i < _waypoints.count(); i++)
-		_waypoints[i]->setToolTipFormat(_units, _coordinatesFormat);
 }
 
 void RouteItem::showWaypoints(bool show)

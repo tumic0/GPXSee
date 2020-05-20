@@ -5,6 +5,9 @@
 #include "common/config.h"
 #include "palette.h"
 #include "units.h"
+#ifdef ENABLE_TIMEZONES
+#include "timezoneinfo.h"
+#endif // ENABLE_TIMEZONES
 
 class ColorBox;
 class StyleComboBox;
@@ -16,6 +19,7 @@ class QCheckBox;
 class QRadioButton;
 class PercentSlider;
 class LimitedComboBox;
+
 
 struct Options {
 	// Appearance
@@ -56,6 +60,9 @@ struct Options {
 	bool dataUseDEM;
 	bool showSecondaryElevation;
 	bool showSecondarySpeed;
+#ifdef ENABLE_TIMEZONES
+	TimeZoneInfo timeZone;
+#endif // ENABLE_TIMEZONES
 	// POI
 	int poiRadius;
 	// System
@@ -103,7 +110,7 @@ private:
 
 	// Appearance
 	ColorBox *_baseColor;
-	QDoubleSpinBox *_colorOffset;
+	PercentSlider *_colorOffset;
 	PercentSlider *_mapOpacity;
 	ColorBox *_backgroundColor;
 	QSpinBox *_trackWidth;
@@ -134,7 +141,6 @@ private:
 	OddSpinBox *_cadenceFilter;
 	OddSpinBox *_powerFilter;
 	QCheckBox *_outlierEliminate;
-
 	QRadioButton *_automaticPause;
 	QRadioButton *_manualPause;
 	QDoubleSpinBox *_pauseSpeed;
@@ -145,6 +151,12 @@ private:
 	QRadioButton *_dataDEMElevation;
 	QCheckBox *_showSecondaryElevation;
 	QCheckBox *_showSecondarySpeed;
+#ifdef ENABLE_TIMEZONES
+	QRadioButton *_utcZone;
+	QRadioButton *_systemZone;
+	QRadioButton *_customZone;
+	QComboBox *_timeZone;
+#endif // ENABLE_TIMEZONES
 	// POI
 	QDoubleSpinBox *_poiRadius;
 	// System

@@ -1,9 +1,13 @@
 #ifndef WAYPOINTITEM_H
 #define WAYPOINTITEM_H
 
+#include "common/config.h"
 #include <cmath>
 #include <QGraphicsItem>
 #include <QFont>
+#ifdef ENABLE_TIMEZONES
+#include <QTimeZone>
+#endif // ENABLE_TIMEZONES
 #include "data/waypoint.h"
 #include "map/map.h"
 #include "units.h"
@@ -23,7 +27,6 @@ public:
 	void setColor(const QColor &color);
 	void showLabel(bool show);
 	void setDigitalZoom(int zoom) {setScale(pow(2, -zoom));}
-	void setToolTipFormat(Units units, CoordinatesFormat format);
 
 	QPainterPath shape() const {return _shape;}
 	QRectF boundingRect() const {return _shape.boundingRect();}
@@ -31,6 +34,13 @@ public:
 	  QWidget *widget);
 
 	QString info() const;
+
+	static void setUnits(Units units) {_units = units;}
+	static void setCoordinatesFormat(CoordinatesFormat format)
+	  {_format = format;}
+#ifdef ENABLE_TIMEZONES
+	static void setTimeZone(const QTimeZone &zone) {_timeZone = zone;}
+#endif // ENABLE_TIMEZONES
 
 protected:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
@@ -48,8 +58,11 @@ private:
 	QFont _font;
 	QRect _labelBB;
 
-	Units _units;
-	CoordinatesFormat _format;
+	static Units _units;
+	static CoordinatesFormat _format;
+#ifdef ENABLE_TIMEZONES
+	static QTimeZone _timeZone;
+#endif // ENABLE_TIMEZONES
 };
 
 #endif // WAYPOINTITEM_H

@@ -21,12 +21,16 @@ static inline unsigned segments(qreal distance)
 	return ceil(distance / GEOGRAPHICAL_MILE);
 }
 
+Units PathItem::_units = Metric;
+#ifdef ENABLE_TIMEZONES
+QTimeZone PathItem::_timeZone = QTimeZone::utc();
+#endif // ENABLE_TIMEZONES
+
 PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
   : GraphicsItem(parent), _path(path), _map(map)
 {
 	Q_ASSERT(_path.isValid());
 
-	_units = Metric;
 	_digitalZoom = 0;
 	_width = 3;
 	QBrush brush(Qt::SolidPattern);
@@ -349,16 +353,6 @@ void PathItem::showTicks(bool show)
 
 	prepareGeometryChange();
 	_showTicks = show;
-	updateTicks();
-}
-
-void PathItem::setUnits(Units units)
-{
-	if (_units == units)
-		return;
-
-	prepareGeometryChange();
-	_units = units;
 	updateTicks();
 }
 
