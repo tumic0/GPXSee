@@ -1363,7 +1363,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="509"/>
         <source>Time zone</source>
-        <translation type="unfinished">Časová zóna</translation>
+        <translation>Časová zóna</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="524"/>
