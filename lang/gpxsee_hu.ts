@@ -497,7 +497,7 @@
         <location filename="../src/GUI/gui.cpp" line="1080"/>
         <location filename="../src/GUI/gui.cpp" line="1147"/>
         <source>Distance</source>
-        <translation>Távolságalapú</translation>
+        <translation>Távolság</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="379"/>
@@ -505,7 +505,7 @@
         <location filename="../src/GUI/gui.cpp" line="1083"/>
         <location filename="../src/GUI/gui.cpp" line="1149"/>
         <source>Time</source>
-        <translation>Időalapú</translation>
+        <translation>Idő</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="386"/>
@@ -863,6 +863,7 @@
         <location filename="../src/GUI/gui.cpp" line="1404"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
@@ -1387,12 +1388,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="420"/>
         <source>UTC</source>
-        <translation type="unfinished"></translation>
+        <translation>UTC</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="478"/>
         <source>Time zone:</source>
-        <translation type="unfinished"></translation>
+        <translation>Időzóna:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="493"/>
@@ -1407,7 +1408,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="509"/>
         <source>Time zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Időzóna</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="524"/>
