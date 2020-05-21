@@ -1879,9 +1879,11 @@ void GUI::writeSettings()
 	if (_options.showSecondarySpeed != SHOW_SECONDARY_SPEED_DEFAULT)
 		settings.setValue(SHOW_SECONDARY_SPEED_SETTING,
 		  _options.showSecondarySpeed);
+#ifdef ENABLE_TIMEZONES
 	if (_options.timeZone != TimeZoneInfo())
 		settings.setValue(TIME_ZONE_SETTING, QVariant::fromValue(
 		  _options.timeZone));
+#endif // ENABLE_TIMEZONES
 	if (_options.poiRadius != POI_RADIUS_DEFAULT)
 		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
 	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
