@@ -460,7 +460,7 @@ QWidget *OptionsDialog::createDataPage()
 	elevationOptions->addWidget(_showSecondaryElevation);
 
 #ifdef ENABLE_TIMEZONES
-	QButtonGroup *zoneGroup = new QButtonGroup(this);
+	QButtonGroup *timeZoneGroup = new QButtonGroup(this);
 	timeZoneGroup->addButton(_utcZone);
 	timeZoneGroup->addButton(_systemZone);
 	timeZoneGroup->addButton(_customZone);
