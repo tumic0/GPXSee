@@ -864,6 +864,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n dosya</numerusform>
+            <numerusform>%n dosya</numerusform>
         </translation>
     </message>
 </context>
@@ -1361,7 +1362,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="407"/>
         <source>Show secondary speed</source>
-        <translation type="unfinished"></translation>
+        <translation>İkincil hızı göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="410"/>
@@ -1376,17 +1377,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="416"/>
         <source>Show secondary elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>İkincil rakımı göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="420"/>
         <source>UTC</source>
-        <translation type="unfinished"></translation>
+        <translation>UTC</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="478"/>
         <source>Time zone:</source>
-        <translation type="unfinished"></translation>
+        <translation>Saat dilimi:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="500"/>
@@ -1396,7 +1397,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="509"/>
         <source>Time zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Saat dilimi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="524"/>
@@ -1644,7 +1645,7 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="19"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Yorum</translation>
     </message>
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="20"/>
@@ -1865,7 +1866,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="17"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Yorum</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="18"/>
@@ -1923,7 +1924,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="51"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Yorum</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="64"/>
