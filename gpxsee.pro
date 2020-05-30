@@ -14,7 +14,8 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets
     QT += printsupport
 }
-lessThan(QT_VERSION, 5.4.0) {QT += opengl}
+lessThan(QT_MAJOR_VERSION, 5) {QT += opengl}
+equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 4) {QT += opengl}
 
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
@@ -196,7 +197,7 @@ HEADERS += src/common/config.h \
     src/data/cupparser.h \
     src/data/gpiparser.h \
     src/data/address.h \
-    src/data/smlparser.h
+	src/data/smlparser.h
 SOURCES += src/main.cpp \
     src/GUI/popup.cpp \
     src/common/coordinates.cpp \
@@ -347,7 +348,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     HEADERS += src/data/geojsonparser.h
     SOURCES += src/data/geojsonparser.cpp
 }
-greaterThan(QT_VERSION, 5.1.0) {
+equals(QT_MAJOR_VERSION, 5):greaterThan(QT_MINOR_VERSION, 4) {
     HEADERS += src/GUI/timezoneinfo.h
 }
 
