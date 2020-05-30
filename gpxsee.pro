@@ -197,7 +197,7 @@ HEADERS += src/common/config.h \
     src/data/cupparser.h \
     src/data/gpiparser.h \
     src/data/address.h \
-	src/data/smlparser.h
+    src/data/smlparser.h
 SOURCES += src/main.cpp \
     src/GUI/popup.cpp \
     src/common/coordinates.cpp \
