@@ -585,7 +585,9 @@ void KMLParser::document(QList<TrackData> &tracks, QList<Area> &areas,
   QVector<Waypoint> &waypoints)
 {
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == QLatin1String("Placemark"))
+		if (_reader.name() == QLatin1String("Document"))
+			document(tracks, areas, waypoints);
+		else if (_reader.name() == QLatin1String("Placemark"))
 			placemark(tracks, areas, waypoints);
 		else if (_reader.name() == QLatin1String("Folder"))
 			folder(tracks, areas, waypoints);
