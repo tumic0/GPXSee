@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map xmlns="http://www.gpxsee.org/map/1.4" type="WMTS">
 	<name>Antarctica</name>
-	<url type="REST">https://gis.ngdc.noaa.gov/arcgis/rest/services/antarctic/antarctic_basemap/MapServer/WMTS/1.0.0/WMTSCapabilities.xml</url>
+	<url type="REST">https://tiles.arcgis.com/tiles/C8EMgrsFcRFL6LrL/arcgis/rest/services/Antarctic_Basemap/MapServer/WMTS/1.0.0/WMTSCapabilities.xml</url>
 	<copyright>NOAA National Centers for Environmental Information (NCEI); International Bathymetric Chart of the Southern Ocean (IBCSO); General Bathymetric Chart of the Oceans (GEBCO); Natural Earth</copyright>
-	<layer>antarctic_antarctic_basemap</layer>
+	<layer>Antarctic_Basemap</layer>
 	<set>default028mm</set>
 </map>
