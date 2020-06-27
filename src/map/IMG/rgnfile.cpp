@@ -5,8 +5,11 @@
 #include "huffmanstream.h"
 #include "lblfile.h"
 #include "netfile.h"
+#include "nodfile.h"
 #include "rgnfile.h"
 
+
+#define MASK(bits) ((2U << ((bits) - 1U)) - 1U)
 
 static quint64 pointId(const QPoint &pos, quint32 type, quint32 labelPtr)
 {
@@ -52,8 +55,7 @@ bool RGNFile::skipClassFields(Handle &hdl) const
 	return seek(hdl, hdl.pos() + rs);
 }
 
-bool RGNFile::skipLclFields(Handle &hdl, const quint32 flags[3],
-  SegmentType type) const
+bool RGNFile::skipLclFields(Handle &hdl, const quint32 flags[3]) const
 {
 	quint32 bitfield = 0xFFFFFFFF;
 
@@ -61,27 +63,38 @@ bool RGNFile::skipLclFields(Handle &hdl, const quint32 flags[3],
 		if (!readVBitfield32(hdl, bitfield))
 			return false;
 
-	for (int i = 0; i < 29; i++) {
+	for (int i = 0, j = 0; i < 29; i++) {
 		if ((flags[0] >> i) & 1) {
 			if (bitfield & 1) {
-				quint32 m = flags[(i >> 4) + 1] >> ((i * 2) & 0x1e) & 3;
-				switch (i) {
-					case 5:
-						if (m == 1 && type == Point) {
-							quint16 u16;
-							if (!readUInt16(hdl, u16))
-								return false;
-						}
-						break;
-					default:
-						break;
-				}
+				quint32 m = flags[(j >> 4) + 1] >> ((j * 2) & 0x1e) & 3;
+
+				quint32 skip = 0;
+				if (m == 3) {
+					if (!readVUInt32(hdl, skip))
+						return false;
+				} else
+					skip = m + 1;
+				if (!seek(hdl, hdl.pos() + skip))
+					return false;
 			}
 			bitfield >>= 1;
+			j++;
 		}
 	}
 
 	return true;
+}
+
+bool RGNFile::skipGblFields(Handle &hdl, quint32 flags) const
+{
+	int cnt = 0;
+
+	do {
+		cnt = cnt + (flags & 3);
+		flags = flags >> 2;
+	} while (flags != 0);
+
+	return seek(hdl, hdl.pos() + cnt);
 }
 
 void RGNFile::clearFlags()
@@ -102,14 +115,17 @@ bool RGNFile::init(Handle &hdl)
 
 	if (hdrLen >= 0x68) {
 		if (!(readUInt32(hdl, _polygonsOffset) && readUInt32(hdl, _polygonsSize)
-		  && seek(hdl, _gmpOffset + 0x2D) && readUInt32(hdl, _polygonsFlags[0])
-		  && readUInt32(hdl, _polygonsFlags[1]) && readUInt32(hdl, _polygonsFlags[2])
+		  && seek(hdl, _gmpOffset + 0x29) && readUInt32(hdl, _polygonGblFlags)
+		  && readUInt32(hdl, _polygonsFlags[0]) && readUInt32(hdl, _polygonsFlags[1])
+		  && readUInt32(hdl, _polygonsFlags[2])
 		  && readUInt32(hdl, _linesOffset) && readUInt32(hdl, _linesSize)
-		  && seek(hdl, _gmpOffset + 0x49) && readUInt32(hdl, _linesFlags[0])
-		  && readUInt32(hdl, _linesFlags[1]) && readUInt32(hdl, _linesFlags[2])
+		  && seek(hdl, _gmpOffset + 0x45) && readUInt32(hdl, _linesGblFlags)
+		  && readUInt32(hdl, _linesFlags[0]) && readUInt32(hdl, _linesFlags[1])
+		  && readUInt32(hdl, _linesFlags[2])
 		  && readUInt32(hdl, _pointsOffset) && readUInt32(hdl, _pointsSize)
-		  && seek(hdl, _gmpOffset + 0x65) && readUInt32(hdl, _pointsFlags[0])
-		  && readUInt32(hdl, _pointsFlags[1]) && readUInt32(hdl, _pointsFlags[2])))
+		  && seek(hdl, _gmpOffset + 0x61) && readUInt32(hdl, _pointsGblFlags)
+		  && readUInt32(hdl, _pointsFlags[0]) && readUInt32(hdl, _pointsFlags[1])
+		  && readUInt32(hdl, _pointsFlags[2])))
 			return false;
 	}
 
@@ -230,6 +246,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 		  && readInt16(hdl, lon) && readInt16(hdl, lat)
 		  && readVUInt32(hdl, len)))
 			return false;
+		Q_ASSERT(hdl.pos() + len <= segment.end());
 
 		poly.type = 0x10000 | (quint16(type)<<8) | (subtype & 0x1F);
 		labelPtr = 0;
@@ -239,8 +256,10 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 			  LS(subdiv->lat(), 8) + LS(lat, (32-subdiv->bits())));
 
 			qint32 lonDelta, latDelta;
-			HuffmanStream stream(*this, hdl, len, _huffmanTable,
-			  segmentType == Line);
+			BitStream4F bs(*this, hdl, len);
+			HuffmanStreamF stream(bs, _huffmanTable);
+			if (!stream.init(segmentType == Line))
+				return false;
 
 			if (shift) {
 				if (!stream.readOffset(lonDelta, latDelta))
@@ -298,7 +317,11 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 		if (subtype & 0x80 && !skipClassFields(hdl))
 			return false;
 		if (subtype & 0x40 && !skipLclFields(hdl, segmentType == Line
-		  ? _linesFlags : _polygonsFlags, segmentType))
+		  ? _linesFlags : _polygonsFlags))
+			return false;
+		quint32 gblFlags = (segmentType == Line)
+		  ? _linesGblFlags : _polygonGblFlags;
+		if (gblFlags && !skipGblFields(hdl, gblFlags))
 			return false;
 
 		if (lbl && (labelPtr & 0x3FFFFF))
@@ -316,6 +339,7 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 {
 	const SubDiv::Segment &segment = (segmentType == IndexedPoint)
 	 ? subdiv->idxPoints() : subdiv->points();
+
 
 	if (!segment.isValid())
 		return true;
@@ -379,7 +403,9 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 			return false;
 		if (subtype & 0x80 && !skipClassFields(hdl))
 			return false;
-		if (subtype & 0x40 && !skipLclFields(hdl, _pointsFlags, Point))
+		if (subtype & 0x40 && !skipLclFields(hdl, _pointsFlags))
+			return false;
+		if (_pointsGblFlags && !skipGblFields(hdl, _pointsGblFlags))
 			return false;
 
 		QPoint pos(subdiv->lon() + LS(lon, 24-subdiv->bits()),
@@ -398,6 +424,86 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi);
 
 		points->append(point);
+	}
+
+	return true;
+}
+
+bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, NETFile *net,
+  Handle &netHdl, NODFile *nod, Handle &nodHdl, QList<IMG::Poly> *lines) const
+{
+	quint32 size, blockIndexIdSize, blockIndexId;
+	quint8 flags;
+	const SubDiv::Segment &segment = subdiv->roadReferences();
+
+	if (!segment.isValid())
+		return true;
+	if (!seek(hdl, segment.offset()))
+		return false;
+
+	if (!net || !nod)
+		return false;
+	if (!(blockIndexIdSize = nod->indexIdSize(nodHdl)))
+		return false;
+
+	while (hdl.pos() < (int)segment.end()) {
+		if (!readVUInt32(hdl, size))
+			return false;
+
+		int pos = hdl.pos();
+
+		if (!(readUInt8(hdl, flags) && readVUInt32(hdl, blockIndexIdSize,
+		  blockIndexId)))
+			return false;
+
+		quint8 bits[3];
+		for (int i = 0; i < 3; i++)
+			bits[i] = 0x4000a08 >> (((flags >> (2*i) & 3) << 3) ^ 0x10);
+		quint8 byteSize = ((bits[0] + bits[1] + bits[2]) + 7) >> 3;
+
+		quint32 counts;
+		if (!readVUInt32(hdl, byteSize, counts))
+			return false;
+
+		quint16 b8 = bits[0] ? (MASK(bits[0]) & counts) + 1 : 0;
+		quint16 b10 = bits[1] ? (MASK(bits[1]) & (counts >> bits[0])) + 1 : 0;
+		quint16 b16 = bits[2] ? (MASK(bits[2]) & (counts >> (bits[0] + bits[1])))
+		  + 1 : 0;
+
+		NODFile::BlockInfo blockInfo;
+		if (!nod->blockInfo(nodHdl, blockIndexId, blockInfo))
+			return false;
+
+		quint8 linkId, lineId;
+		for (int i = 0; i < b8 + b10 + b16; i++) {
+			if (!b8 || b8 <= i) {
+				quint16 v16;
+				if (!readUInt16(hdl, v16))
+					return false;
+
+				if (!b16 || b8 + b16 <= i) {
+					int shift = ((i - (b8 + b16)) * 10) % 8;
+					linkId = (quint8)(v16 >> shift);
+					lineId = (((v16 >> shift) >> 8) & 3) + 1;
+
+					if (shift < 6 && i < b8 + b10 + b16 - 1)
+						seek(hdl, hdl.pos() - 1);
+				} else {
+					linkId = (quint8)v16;
+					lineId = v16 >> 8;
+					Q_ASSERT(lineId > 4);
+				}
+			} else {
+				if (!readUInt8(hdl, linkId))
+					return false;
+				lineId = 0;
+			}
+
+			net->link(subdiv, netHdl, nod, nodHdl, blockInfo, linkId, lineId,
+			  _huffmanTable, lines);
+		}
+
+		Q_ASSERT(pos + (int)size == hdl.pos());
 	}
 
 	return true;

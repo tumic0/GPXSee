@@ -3,26 +3,28 @@
 #include "subfile.h"
 
 
+#define mod2n(x, m) ((x) & ((m) - 1));
+
 bool SubFile::seek(Handle &handle, quint32 pos) const
 {
 	if (handle._file) {
-		int blockNum = pos / BLOCK_SIZE;
+		int blockNum = pos >> BLOCK_BITS;
 
 		if (handle._blockNum != blockNum) {
-			if (!handle._file->seek((qint64)blockNum * BLOCK_SIZE))
+			if (!handle._file->seek((quint64)blockNum << BLOCK_BITS))
 				return false;
-			if (handle._file->read(handle._data.data(), BLOCK_SIZE) < 0)
+			if (handle._file->read(handle._data.data(), (1<<BLOCK_BITS)) < 0)
 				return false;
 			handle._blockNum = blockNum;
 		}
 
-		handle._blockPos = pos % BLOCK_SIZE;
+		handle._blockPos = mod2n(pos, 1U<<BLOCK_BITS);
 		handle._pos = pos;
 
 		return true;
 	} else {
-		quint32 blockSize = _img->blockSize();
-		int blockNum = pos / blockSize;
+		quint32 blockBits = _img->blockBits();
+		int blockNum = pos >> blockBits;
 
 		if (handle._blockNum != blockNum) {
 			if (blockNum >= _blocks->size())
@@ -32,7 +34,7 @@ bool SubFile::seek(Handle &handle, quint32 pos) const
 			handle._blockNum = blockNum;
 		}
 
-		handle._blockPos = pos % blockSize;
+		handle._blockPos = mod2n(pos, 1U<<blockBits);
 		handle._pos = pos;
 
 		return true;
@@ -68,6 +70,22 @@ bool SubFile::readVUInt32(Handle &hdl, quint32 &val) const
 	}
 
 	return true;
+}
+
+bool SubFile::readVUInt32(Handle &hdl, quint32 bytes, quint32 &val) const
+{
+	switch (bytes) {
+		case 1:
+			return readUInt8(hdl, val);
+		case 2:
+			return readUInt16(hdl, val);
+		case 3:
+			return readUInt24(hdl, val);
+		case 4:
+			return readUInt32(hdl, val);
+		default:
+			return false;
+	}
 }
 
 bool SubFile::readVBitfield32(Handle &hdl, quint32 &bitfield) const

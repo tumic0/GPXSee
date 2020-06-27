@@ -6,13 +6,15 @@
 #include "rgnfile.h"
 #include "lblfile.h"
 #include "netfile.h"
+#include "nodfile.h"
 
 class VectorTile {
 public:
-	VectorTile() : _tre(0), _rgn(0), _lbl(0), _net(0), _gmp(0) {}
+	VectorTile() : _tre(0), _rgn(0), _lbl(0), _net(0), _nod(0), _gmp(0) {}
 	~VectorTile()
 	{
-		delete _tre; delete _rgn; delete _lbl; delete _net; delete _gmp;
+		delete _tre; delete _rgn; delete _lbl; delete _net; delete _nod;
+		delete _gmp;
 	}
 
 	bool init();
@@ -37,7 +39,7 @@ public:
 	{
 		return (type == SubFile::TRE || type == SubFile::LBL
 		  || type == SubFile::RGN || type == SubFile::NET
-		  || type == SubFile::GMP);
+		  || type == SubFile::NOD || type == SubFile::GMP);
 	}
 
 private:
@@ -47,6 +49,7 @@ private:
 	RGNFile *_rgn;
 	LBLFile *_lbl;
 	NETFile *_net;
+	NODFile *_nod;
 	SubFile *_gmp;
 };
 

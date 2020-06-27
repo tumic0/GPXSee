@@ -21,8 +21,9 @@ public:
 		quint32 _offset, _end;
 	};
 
-	SubDiv(quint32 offset, qint32 lon, qint32 lat, int bits, quint8 objects)
-	  : _lon(lon), _lat(lat), _bits(bits), _init(false)
+	SubDiv(quint32 offset, qint32 lon, qint32 lat, quint8 level, quint8 bits,
+	  quint8 objects) : _lon(lon), _lat(lat), _level(level), _bits(bits),
+	  _init(false)
 	{
 		_tre.objects = objects;
 		_tre.offset = offset;
@@ -78,6 +79,7 @@ public:
 	qint32 lon() const {return _lon;}
 	qint32 lat() const {return _lat;}
 	quint8 bits() const {return _bits;}
+	quint8 level() const {return _level;}
 
 	// Valid only after initialization
 	Segment points() const
@@ -94,6 +96,8 @@ public:
 	  {return Segment(_rgn.extLinesOffset, _rgn.extLinesEnd);}
 	Segment extPolygons() const
 	  {return Segment(_rgn.extPolygonsOffset, _rgn.extPolygonsEnd);}
+	Segment roadReferences() const
+	  {return Segment(_rgn.roadReferencesOffset, _rgn.roadReferencesEnd);}
 
 	// Valid only until initialization
 	quint8 objects() const {return _tre.objects;}
@@ -142,6 +146,7 @@ private:
 	};
 
 	qint32 _lon, _lat;
+	quint8 _level;
 	quint8 _bits;
 	bool _init;
 	union {

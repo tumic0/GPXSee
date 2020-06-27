@@ -42,6 +42,8 @@ bool HuffmanTable::load(const SubFile &file, SubFile::Handle &hdl,
 	_s10 = _s14 + _s1c * _s1d;
 	_s18 = _s10 + (_s1 << _s0);
 
+	_id = id;
+
 	return true;
 }
 

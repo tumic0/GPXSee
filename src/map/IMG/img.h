@@ -14,14 +14,14 @@ public:
 private:
 	friend class SubFile;
 
-	int blockSize() const {return _blockSize;}
+	unsigned blockBits() const {return _blockBits;}
 	bool readBlock(int blockNum, char *data);
 	qint64 read(char *data, qint64 maxSize);
 	template<class T> bool readValue(T &val);
 
 	QFile _file;
 	quint8 _key;
-	int _blockSize;
+	unsigned _blockBits;
 };
 
 #endif // IMG_H

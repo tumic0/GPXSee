@@ -8,6 +8,7 @@
 
 class LBLFile;
 class NETFile;
+class NODFile;
 
 class RGNFile : public SubFile
 {
@@ -46,6 +47,8 @@ public:
 	  QList<IMG::Poly> *polys) const;
 	bool extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 	  Handle &lblHdl, QList<IMG::Point> *points) const;
+	bool links(Handle &hdl, const SubDiv *subdiv, NETFile *net, Handle &netHdl,
+	  NODFile *nod, Handle &nodHdl, QList<IMG::Poly> *lines) const;
 
 	bool subdivInit(Handle &hdl, SubDiv *subdiv) const;
 
@@ -54,8 +57,9 @@ private:
 	  const;
 	void clearFlags();
 	bool skipClassFields(Handle &hdl) const;
-	bool skipLclFields(Handle &hdl, const quint32 flags[3], SegmentType type)
+	bool skipLclFields(Handle &hdl, const quint32 flags[3])
 	  const;
+	bool skipGblFields(Handle &hdl, quint32 flags) const;
 
 	quint32 _offset;
 	quint32 _size;
@@ -69,6 +73,9 @@ private:
 	quint32 _pointsOffset;
 	quint32 _pointsSize;
 	quint32 _pointsFlags[3];
+	quint32 _polygonGblFlags;
+	quint32 _linesGblFlags;
+	quint32 _pointsGblFlags;
 
 	HuffmanTable _huffmanTable;
 
