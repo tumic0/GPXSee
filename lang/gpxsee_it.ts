@@ -12,7 +12,7 @@
         <location filename="../src/GUI/cadencegraph.cpp" line="12"/>
         <location filename="../src/GUI/cadencegraph.h" line="16"/>
         <source>Cadence</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadenza</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="27"/>
@@ -30,7 +30,7 @@
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="17"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Massima</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="18"/>
@@ -460,12 +460,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="330"/>
         <source>Show routes</source>
-        <translation type="unfinished">Mostra percorso</translation>
+        <translation>Mostra percorso</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="335"/>
         <source>Show waypoints</source>
-        <translation type="unfinished">Mostra tappe</translation>
+        <translation>Mostra punti</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="340"/>
@@ -475,12 +475,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="345"/>
         <source>Waypoint labels</source>
-        <translation type="unfinished">Etichette tappe</translation>
+        <translation>Etichette punti</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="350"/>
         <source>Route waypoints</source>
-        <translation type="unfinished">Tappe del percorso</translation>
+        <translation>Punti del percorso</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="355"/>
@@ -520,7 +520,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="396"/>
         <source>Show path markers</source>
-        <translation type="unfinished">Mostra marcatori di percorso</translation>
+        <translation>Mostra marcatori del percorso</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="403"/>
@@ -810,13 +810,13 @@
         <location filename="../src/GUI/gui.cpp" line="1057"/>
         <location filename="../src/GUI/gui.cpp" line="1127"/>
         <source>Routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Percorsi</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1060"/>
         <location filename="../src/GUI/gui.cpp" line="1129"/>
         <source>Waypoints</source>
-        <translation type="unfinished">Tappe</translation>
+        <translation>Punti</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1063"/>
@@ -1130,22 +1130,22 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="138"/>
         <source>Route width:</source>
-        <translation type="unfinished">Larghezza rotta:</translation>
+        <translation>Larghezza percorso:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="139"/>
         <source>Route style:</source>
-        <translation type="unfinished">Stile rotta:</translation>
+        <translation>Stile percorso:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="143"/>
         <source>Routes</source>
-        <translation type="unfinished">Rotte</translation>
+        <translation>Percorsi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="156"/>
         <source>Area border width:</source>
-        <translation>Larghezza bordo aree:</translation>
+        <translation>Larghezza bordo area:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="157"/>
@@ -1186,12 +1186,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="209"/>
         <source>Waypoint color:</source>
-        <translation type="unfinished">Colore tappa:</translation>
+        <translation>Colore punto:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="210"/>
         <source>Waypoint size:</source>
-        <translation type="unfinished">Dimensione tappa:</translation>
+        <translation>Dimensione punto:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="212"/>
@@ -1208,7 +1208,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="214"/>
         <source>Waypoints</source>
-        <translation type="unfinished">Tappe</translation>
+        <translation>Punti</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="225"/>
@@ -1291,7 +1291,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="323"/>
         <source>Cadence:</source>
-        <translation type="unfinished">Cadenza:</translation>
+        <translation>Cadenza:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="324"/>
@@ -1301,7 +1301,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="326"/>
         <source>Smoothing</source>
-        <translation type="unfinished">Smoothing</translation>
+        <translation>Smoothing</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="330"/>
@@ -1311,7 +1311,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="339"/>
         <source>Smoothing:</source>
-        <translation type="unfinished">Smoothing:</translation>
+        <translation>Smoothing:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="350"/>
@@ -1655,7 +1655,7 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="31"/>
         <source>Links</source>
-        <translation type="unfinished">Collegamenti</translation>
+        <translation>Links</translation>
     </message>
 </context>
 <context>
@@ -1891,7 +1891,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="41"/>
         <source>Links</source>
-        <translation type="unfinished">Collegamenti</translation>
+        <translation>Links</translation>
     </message>
 </context>
 <context>
@@ -1934,7 +1934,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="75"/>
         <source>Links</source>
-        <translation type="unfinished">Collegamenti</translation>
+        <translation>Links</translation>
     </message>
 </context>
 </TS>
