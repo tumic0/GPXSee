@@ -1347,12 +1347,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="420"/>
         <source>UTC</source>
-        <translation type="unfinished"></translation>
+        <translation>UTC</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="478"/>
         <source>Time zone:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeitzone:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="500"/>
@@ -1362,7 +1362,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="509"/>
         <source>Time zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeitzone</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="524"/>
