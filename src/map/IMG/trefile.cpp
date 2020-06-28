@@ -122,6 +122,33 @@ bool TREFile::init()
 	return (_firstLevel >= 0);
 }
 
+int TREFile::readExtEntry(Handle &hdl, quint32 &polygons, quint32 &lines,
+  quint32 &points)
+{
+	int rb = 0;
+
+	if (_flags & 1) {
+		if (!readUInt32(hdl, polygons))
+			return -1;
+		rb += 4;
+	} else
+		polygons = 0;
+	if (_flags & 2) {
+		if (!readUInt32(hdl, lines))
+			return -1;
+		rb += 4;
+	} else
+		lines = 0;
+	if (_flags & 4) {
+		if (!readUInt32(hdl, points))
+			return -1;
+		rb += 4;
+	} else
+		points = 0;
+
+	return rb;
+}
+
 bool TREFile::load(int idx)
 {
 	Handle hdl(this);
@@ -196,25 +223,11 @@ bool TREFile::load(int idx)
 		if (!seek(hdl, _extended.offset + (skip - diff) * _extended.itemSize))
 			goto error;
 
-		quint32 polygons = 0, lines = 0, points = 0;
+		quint32 polygons, lines, points;
+		int rb;
 		for (int i = 0; i < sl.size(); i++) {
-			quint32 rb = 0;
-
-			if (_flags & 1) {
-				if (!readUInt32(hdl, polygons))
-					goto error;
-				rb += 4;
-			}
-			if (_flags & 2) {
-				if (!readUInt32(hdl, lines))
-					goto error;
-				rb += 4;
-			}
-			if (_flags & 4) {
-				if (!readUInt32(hdl, points))
-					goto error;
-				rb += 4;
-			}
+			if ((rb = readExtEntry(hdl, polygons, lines, points)) < 0)
+				goto error;
 
 			sl.at(i)->setExtOffsets(polygons, lines, points);
 			if (i)
@@ -225,8 +238,7 @@ bool TREFile::load(int idx)
 		}
 
 		if (idx != _levels.size() - 1) {
-			if (!(readUInt32(hdl, polygons) && readUInt32(hdl, lines)
-			  && readUInt32(hdl, points)))
+			if (readExtEntry(hdl, polygons, lines, points) < 0)
 				goto error;
 			sl.last()->setExtEnds(polygons, lines, points);
 		}
