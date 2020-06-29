@@ -21,7 +21,6 @@ public:
 
 	struct LinkInfo {
 		quint32 linkOffset;
-		//quint32 nodeOffset;
 		quint32 flags;
 	};
 
