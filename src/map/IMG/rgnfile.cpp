@@ -1,4 +1,3 @@
-#include <cstring>
 #include "common/rectc.h"
 #include "common/garmin.h"
 #include "deltastream.h"
@@ -97,13 +96,6 @@ bool RGNFile::skipGblFields(Handle &hdl, quint32 flags) const
 	return seek(hdl, hdl.pos() + cnt);
 }
 
-void RGNFile::clearFlags()
-{
-	memset(_polygonsFlags, 0, sizeof(_polygonsFlags));
-	memset(_linesFlags, 0, sizeof(_linesFlags));
-	memset(_pointsFlags, 0, sizeof(_pointsFlags));
-}
-
 bool RGNFile::init(Handle &hdl)
 {
 	quint16 hdrLen;
@@ -115,17 +107,20 @@ bool RGNFile::init(Handle &hdl)
 
 	if (hdrLen >= 0x68) {
 		if (!(readUInt32(hdl, _polygonsOffset) && readUInt32(hdl, _polygonsSize)
-		  && seek(hdl, _gmpOffset + 0x29) && readUInt32(hdl, _polygonGblFlags)
-		  && readUInt32(hdl, _polygonsFlags[0]) && readUInt32(hdl, _polygonsFlags[1])
-		  && readUInt32(hdl, _polygonsFlags[2])
+		  && seek(hdl, _gmpOffset + 0x29) && readUInt32(hdl, _polygonsGblFlags)
+		  && readUInt32(hdl, _polygonsLclFlags[0])
+		  && readUInt32(hdl, _polygonsLclFlags[1])
+		  && readUInt32(hdl, _polygonsLclFlags[2])
 		  && readUInt32(hdl, _linesOffset) && readUInt32(hdl, _linesSize)
 		  && seek(hdl, _gmpOffset + 0x45) && readUInt32(hdl, _linesGblFlags)
-		  && readUInt32(hdl, _linesFlags[0]) && readUInt32(hdl, _linesFlags[1])
-		  && readUInt32(hdl, _linesFlags[2])
+		  && readUInt32(hdl, _linesLclFlags[0])
+		  && readUInt32(hdl, _linesLclFlags[1])
+		  && readUInt32(hdl, _linesLclFlags[2])
 		  && readUInt32(hdl, _pointsOffset) && readUInt32(hdl, _pointsSize)
 		  && seek(hdl, _gmpOffset + 0x61) && readUInt32(hdl, _pointsGblFlags)
-		  && readUInt32(hdl, _pointsFlags[0]) && readUInt32(hdl, _pointsFlags[1])
-		  && readUInt32(hdl, _pointsFlags[2])))
+		  && readUInt32(hdl, _pointsLclFlags[0])
+		  && readUInt32(hdl, _pointsLclFlags[1])
+		  && readUInt32(hdl, _pointsLclFlags[2])))
 			return false;
 	}
 
@@ -317,10 +312,10 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 		if (subtype & 0x80 && !skipClassFields(hdl))
 			return false;
 		if (subtype & 0x40 && !skipLclFields(hdl, segmentType == Line
-		  ? _linesFlags : _polygonsFlags))
+		  ? _linesLclFlags : _polygonsLclFlags))
 			return false;
 		quint32 gblFlags = (segmentType == Line)
-		  ? _linesGblFlags : _polygonGblFlags;
+		  ? _linesGblFlags : _polygonsGblFlags;
 		if (gblFlags && !skipGblFields(hdl, gblFlags))
 			return false;
 
@@ -403,7 +398,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 			return false;
 		if (subtype & 0x80 && !skipClassFields(hdl))
 			return false;
-		if (subtype & 0x40 && !skipLclFields(hdl, _pointsFlags))
+		if (subtype & 0x40 && !skipLclFields(hdl, _pointsLclFlags))
 			return false;
 		if (_pointsGblFlags && !skipGblFields(hdl, _pointsGblFlags))
 			return false;
