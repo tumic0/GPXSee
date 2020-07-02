@@ -167,11 +167,6 @@ void IMGMap::ll2xy(QList<MapData::Point> &points)
 	}
 }
 
-static void render(RasterTile &tile)
-{
-	tile.render();
-}
-
 void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	Q_UNUSED(flags);
@@ -224,7 +219,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		}
 	}
 
-	QFuture<void> future = QtConcurrent::map(tiles, render);
+	QFuture<void> future = QtConcurrent::map(tiles, &RasterTile::render);
 	future.waitForFinished();
 
 	for (int i = 0; i < tiles.size(); i++) {

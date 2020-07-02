@@ -41,11 +41,6 @@ private:
 	QImage _image;
 };
 
-static void render(TileImage &ti)
-{
-	ti.load();
-}
-
 static QString quadKey(const QPoint &xy, int zoom)
 {
 	QString qk;
@@ -101,7 +96,7 @@ void TileLoader::loadTilesAsync(QVector<Tile> &list)
 	if (!dl.empty())
 		_downloader->get(dl, _authorization);
 
-	QFuture<void> future = QtConcurrent::map(imgs, render);
+	QFuture<void> future = QtConcurrent::map(imgs, &TileImage::load);
 	future.waitForFinished();
 
 	for (int i = 0; i < imgs.size(); i++) {
@@ -153,7 +148,7 @@ void TileLoader::loadTilesSync(QVector<Tile> &list)
 		}
 	}
 
-	QFuture<void> future = QtConcurrent::map(imgs, render);
+	QFuture<void> future = QtConcurrent::map(imgs, &TileImage::load);
 	future.waitForFinished();
 
 	for (int i = 0; i < imgs.size(); i++)

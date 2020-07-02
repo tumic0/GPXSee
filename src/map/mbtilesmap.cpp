@@ -49,11 +49,6 @@ private:
 
 #define META_TYPE(type) static_cast<QMetaType::Type>(type)
 
-static void render(MBTile &tile)
-{
-	tile.load();
-}
-
 static double index2mercator(int index, int zoom)
 {
 	return rad2deg(-M_PI + 2 * M_PI * ((double)index / (1<<zoom)));
@@ -314,7 +309,7 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		}
 	}
 
-	QFuture<void> future = QtConcurrent::map(tiles, render);
+	QFuture<void> future = QtConcurrent::map(tiles, &MBTile::load);
 	future.waitForFinished();
 
 	for (int i = 0; i < tiles.size(); i++) {
