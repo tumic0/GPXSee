@@ -451,7 +451,7 @@ unix:!macx {
     locale.files = lang/*.qm
     locale.path = $$PREFIX/share/gpxsee/translations
     icon.files = icons/gpxsee.png
-    icon.path = $$PREFIX/share/pixmaps
+    icon.path = $$PREFIX/share/icons/hicolor/64x64/apps
     desktop.files = pkg/gpxsee.desktop
     desktop.path = $$PREFIX/share/applications
     mime.files = pkg/gpxsee.xml
