@@ -369,12 +369,14 @@ unix:!macx {
     csv.path = $$PREFIX/share/gpxsee/csv
     locale.files = lang/*.qm
     locale.path = $$PREFIX/share/gpxsee/translations
-    icon.files = icons/gpxsee.png
-    icon.path = $$PREFIX/share/pixmaps
+    pixmap.files = icons/gpxsee.png
+    pixmap.path = $$PREFIX/share/pixmaps
+    icon.files = icons/hicolor/*
+    icon.path = $$PREFIX/share/icons/hicolor
     desktop.files = pkg/gpxsee.desktop
     desktop.path = $$PREFIX/share/applications
     mime.files = pkg/gpxsee.xml
     mime.path = $$PREFIX/share/mime/packages
     target.path = $$PREFIX/bin
-    INSTALLS += target maps csv locale icon desktop mime
+    INSTALLS += target maps csv locale pixmap icon desktop mime
 }
