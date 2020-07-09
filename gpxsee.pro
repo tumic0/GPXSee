@@ -377,7 +377,7 @@ TRANSLATIONS = lang/gpxsee_en.ts \
     lang/gpxsee_it.ts
 
 macx {
-    ICON = icons/gpxsee.icns
+    ICON = icons/app/gpxsee.icns
     QMAKE_INFO_PLIST = pkg/Info.plist
     locale.path = Contents/Resources/translations
     locale.files = lang/gpxsee_en.qm \
@@ -420,7 +420,7 @@ macx {
 }
 
 win32 {
-    RC_ICONS = icons/gpxsee.ico \
+    RC_ICONS = icons/app/gpxsee.ico \
         icons/formats/gpx.ico \
         icons/formats/tcx.ico \
         icons/formats/kml.ico \
@@ -450,8 +450,8 @@ unix:!macx {
     csv.path = $$PREFIX/share/gpxsee/csv
     locale.files = lang/*.qm
     locale.path = $$PREFIX/share/gpxsee/translations
-    icon.files = icons/gpxsee.png
-    icon.path = $$PREFIX/share/pixmaps
+    icon.files = icons/app/hicolor/*
+    icon.path = $$PREFIX/share/icons/hicolor
     desktop.files = pkg/gpxsee.desktop
     desktop.path = $$PREFIX/share/applications
     mime.files = pkg/gpxsee.xml

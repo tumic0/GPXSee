@@ -1,8 +1,8 @@
 <RCC>
 	<qresource prefix="/">
 		<!-- GUI -->
-		<file alias="gpxsee.png">icons/gpxsee.png</file>
-		<file alias="gpxsee@2x.png">icons/gpxsee@2x.png</file>
+		<file alias="gpxsee.png">icons/app/gpxsee.png</file>
+		<file alias="gpxsee@2x.png">icons/app/gpxsee@2x.png</file>
 		<file alias="dialog-close.png">icons/GUI/dialog-close.png</file>
 		<file alias="dialog-close@2x.png">icons/GUI/dialog-close@2x.png</file>
 		<file alias="document-open.png">icons/GUI/document-open.png</file>
