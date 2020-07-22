@@ -1282,7 +1282,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="350"/>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatycznie</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="364"/>
@@ -1429,7 +1429,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="351"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="422"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Niestandardowe</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="538"/>
@@ -1656,7 +1656,7 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="31"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Linki</translation>
     </message>
 </context>
 <context>
@@ -1892,7 +1892,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="41"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Odnośniki do stron</translation>
     </message>
 </context>
 <context>
