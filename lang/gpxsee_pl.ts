@@ -1328,7 +1328,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="407"/>
         <source>Show secondary speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaż średnią prędkość</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="410"/>
@@ -1343,17 +1343,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="416"/>
         <source>Show secondary elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaż średnią wysokość</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="420"/>
         <source>UTC</source>
-        <translation type="unfinished"></translation>
+        <translation>UTC</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="478"/>
         <source>Time zone:</source>
-        <translation type="unfinished"></translation>
+        <translation>Strefa czasowa:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="500"/>
@@ -1363,7 +1363,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="509"/>
         <source>Time zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Strefa czasowa</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="524"/>
@@ -1646,7 +1646,7 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="19"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Komentarz</translation>
     </message>
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="20"/>
@@ -1867,7 +1867,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="17"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Komentarz</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="18"/>
@@ -1925,7 +1925,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="51"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Komentarz</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="64"/>
@@ -1935,7 +1935,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="75"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Linki</translation>
     </message>
 </context>
 </TS>
