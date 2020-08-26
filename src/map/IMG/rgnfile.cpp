@@ -445,7 +445,7 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, NETFile *net,
 		if (!readVUInt32(hdl, size))
 			return false;
 
-		quint32 pos = SubFile::pos(hdl);
+		quint32 entryStart = pos(hdl);
 
 		if (!(readUInt8(hdl, flags) && readVUInt32(hdl, blockIndexIdSize,
 		  blockIndexId)))
@@ -482,7 +482,7 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, NETFile *net,
 					lineId = (((v16 >> shift) >> 8) & 3) + 1;
 
 					if (shift < 6 && i < b8 + b10 + b16 - 1)
-						seek(hdl, SubFile::pos(hdl) - 1);
+						seek(hdl, pos(hdl) - 1);
 				} else {
 					linkId = (quint8)v16;
 					lineId = v16 >> 8;
@@ -498,7 +498,7 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, NETFile *net,
 			  _huffmanTable, lines);
 		}
 
-		Q_ASSERT(pos + size == SubFile::pos(hdl));
+		Q_ASSERT(entryStart + size == pos(hdl));
 	}
 
 	return true;
