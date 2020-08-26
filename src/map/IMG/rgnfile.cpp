@@ -51,7 +51,7 @@ bool RGNFile::skipClassFields(Handle &hdl) const
 			break;
 	}
 
-	return seek(hdl, hdl.pos() + rs);
+	return seek(hdl, pos(hdl) + rs);
 }
 
 bool RGNFile::skipLclFields(Handle &hdl, const quint32 flags[3]) const
@@ -73,7 +73,7 @@ bool RGNFile::skipLclFields(Handle &hdl, const quint32 flags[3]) const
 						return false;
 				} else
 					skip = m + 1;
-				if (!seek(hdl, hdl.pos() + skip))
+				if (!seek(hdl, pos(hdl) + skip))
 					return false;
 			}
 			bitfield >>= 1;
@@ -93,7 +93,7 @@ bool RGNFile::skipGblFields(Handle &hdl, quint32 flags) const
 		flags = flags >> 2;
 	} while (flags != 0);
 
-	return seek(hdl, hdl.pos() + cnt);
+	return seek(hdl, pos(hdl) + cnt);
 }
 
 bool RGNFile::init(Handle &hdl)
@@ -158,7 +158,7 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 	qint16 lon, lat;
 	quint16 len;
 
-	while (hdl.pos() < (int)segment.end()) {
+	while (pos(hdl) < segment.end()) {
 		IMG::Poly poly;
 
 		if (!(readUInt8(hdl, type) && readUInt24(hdl, labelPtr)
@@ -233,7 +233,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 	if (!seek(hdl, segment.offset()))
 		return false;
 
-	while (hdl.pos() < (int)segment.end()) {
+	while (pos(hdl) < segment.end()) {
 		IMG::Poly poly;
 		QPoint pos;
 
@@ -241,7 +241,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 		  && readInt16(hdl, lon) && readInt16(hdl, lat)
 		  && readVUInt32(hdl, len)))
 			return false;
-		Q_ASSERT(hdl.pos() + len <= segment.end());
+		Q_ASSERT(SubFile::pos(hdl) + len <= segment.end());
 
 		poly.type = 0x10000 | (quint16(type)<<8) | (subtype & 0x1F);
 		labelPtr = 0;
@@ -341,7 +341,7 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 	if (!seek(hdl, segment.offset()))
 		return false;
 
-	while (hdl.pos() < (int)segment.end()) {
+	while (pos(hdl) < segment.end()) {
 		IMG::Point point;
 		quint8 type, subtype;
 		qint16 lon, lat;
@@ -384,7 +384,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 	if (!seek(hdl, segment.offset()))
 		return false;
 
-	while (hdl.pos() < (int)segment.end()) {
+	while (pos(hdl) < segment.end()) {
 		IMG::Point point;
 		qint16 lon, lat;
 		quint8 type, subtype;
@@ -441,11 +441,11 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, NETFile *net,
 	if (!(blockIndexIdSize = nod->indexIdSize(nodHdl)))
 		return false;
 
-	while (hdl.pos() < (int)segment.end()) {
+	while (pos(hdl) < segment.end()) {
 		if (!readVUInt32(hdl, size))
 			return false;
 
-		int pos = hdl.pos();
+		quint32 pos = SubFile::pos(hdl);
 
 		if (!(readUInt8(hdl, flags) && readVUInt32(hdl, blockIndexIdSize,
 		  blockIndexId)))
@@ -482,7 +482,7 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, NETFile *net,
 					lineId = (((v16 >> shift) >> 8) & 3) + 1;
 
 					if (shift < 6 && i < b8 + b10 + b16 - 1)
-						seek(hdl, hdl.pos() - 1);
+						seek(hdl, SubFile::pos(hdl) - 1);
 				} else {
 					linkId = (quint8)v16;
 					lineId = v16 >> 8;
@@ -498,7 +498,7 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, NETFile *net,
 			  _huffmanTable, lines);
 		}
 
-		Q_ASSERT(pos + (int)size == hdl.pos());
+		Q_ASSERT(pos + size == SubFile::pos(hdl));
 	}
 
 	return true;

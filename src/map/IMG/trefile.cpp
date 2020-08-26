@@ -233,7 +233,7 @@ bool TREFile::load(int idx)
 			if (i)
 				sl.at(i-1)->setExtEnds(polygons, lines, points);
 
-			if (!seek(hdl, hdl.pos() + _extended.itemSize - rb))
+			if (!seek(hdl, pos(hdl) + _extended.itemSize - rb))
 				goto error;
 		}
 

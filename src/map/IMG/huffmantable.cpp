@@ -57,7 +57,7 @@ bool HuffmanTable::getBuffer(const SubFile &file, SubFile::Handle &hdl,
 			return false;
 		if (!file.readVUInt32(hdl, recordSize))
 			return false;
-		recordOffset = hdl.pos() + recordSize;
+		recordOffset = file.pos(hdl) + recordSize;
 		if (recordOffset > offset + size)
 			return false;
 	};

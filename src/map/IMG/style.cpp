@@ -359,7 +359,7 @@ static bool skipLocalization(SubFile *file, SubFile::Handle &hdl)
 		len = len >> 2;
 	}
 
-	if (!file->seek(hdl, hdl.pos() + len))
+	if (!file->seek(hdl, file->pos(hdl) + len))
 		return false;
 
 	return true;

@@ -73,7 +73,7 @@ bool BitStream4R::read(int bits, T &val)
 
 	if (!_file.readUInt32(_hdl, _data))
 		return false;
-	if (!_file.seek(_hdl, _hdl.pos() - 8))
+	if (!_file.seek(_hdl, _file.pos(_hdl) - 8))
 		return false;
 
 	_length -= bytes;

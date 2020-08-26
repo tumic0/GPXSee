@@ -32,7 +32,7 @@ bool BitStream1::read(int bits, quint32 &val)
 
 bool BitStream1::flush()
 {
-	if (_length && !_file.seek(_hdl, _hdl.pos() + _length))
+	if (_length && !_file.seek(_hdl, _file.pos(_hdl) + _length))
 		return false;
 
 	_length = 0;
@@ -43,7 +43,7 @@ bool BitStream1::flush()
 
 bool BitStream4::flush()
 {
-	if (_length && !_file.seek(_hdl, _hdl.pos() + _length))
+	if (_length && !_file.seek(_hdl, _file.pos(_hdl) + _length))
 		return false;
 
 	_length = 0;
@@ -82,7 +82,7 @@ bool BitStream4F::read(int bits, quint32 &val)
 BitStream4R::BitStream4R(const SubFile &file, SubFile::Handle &hdl,
   quint32 length) : BitStream4(file, hdl, length)
 {
-	_file.seek(_hdl, _hdl.pos() - 4);
+	_file.seek(_hdl, _file.pos(_hdl) - 4);
 }
 
 bool BitStream4R::readBytes(int bytes, quint32 &val)
@@ -169,14 +169,14 @@ bool BitStream4R::skip(quint32 bytes)
 	else {
 		quint32 seek = ((bytes - ab)/4)*4;
 		quint32 read = (bytes - ab)%4;
-		if (seek && !_file.seek(_hdl, _hdl.pos() - seek))
+		if (seek && !_file.seek(_hdl, _file.pos(_hdl) - seek))
 			return false;
 		_length -= seek;
 		if (read) {
 			quint32 rb = qMin(_length, 4U);
 			if (!_file.readUInt32(_hdl, _data))
 				return false;
-			if (!_file.seek(_hdl, _hdl.pos() - 8))
+			if (!_file.seek(_hdl, _file.pos(_hdl) - 8))
 				return false;
 			_length -= rb;
 			_unused = (4 - rb) * 8;

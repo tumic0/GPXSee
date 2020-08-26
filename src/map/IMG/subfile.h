@@ -28,8 +28,6 @@ public:
 		}
 		~Handle() {delete _file;}
 
-		int pos() const {return _pos;}
-
 	private:
 		friend class SubFile;
 
@@ -57,6 +55,7 @@ public:
 	void addBlock(quint16 block) {_blocks->append(block);}
 
 	bool seek(Handle &handle, quint32 pos) const;
+	quint32 pos(Handle &handle) const {return handle._pos;}
 
 	template<typename T>
 	bool readUInt8(Handle &handle, T &val) const
