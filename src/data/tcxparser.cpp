@@ -66,13 +66,25 @@ void TCXParser::heartRateBpm(Trackpoint &trackpoint)
 	}
 }
 
-void TCXParser::extensions(Trackpoint &trackpoint)
+void TCXParser::TPX(Trackpoint &trackpoint)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("RunCadence"))
 			trackpoint.setCadence(number());
 		else if (_reader.name() == QLatin1String("Watts"))
 			trackpoint.setPower(number());
+		else if (_reader.name() == QLatin1String("Speed"))
+			trackpoint.setSpeed(number());
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
+void TCXParser::extensions(Trackpoint &trackpoint)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("TPX"))
+			TPX(trackpoint);
 		else
 			_reader.skipCurrentElement();
 	}
