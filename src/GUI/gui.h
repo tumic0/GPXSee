@@ -63,6 +63,7 @@ private slots:
 	void nextMap();
 	void prevMap();
 	void openOptions();
+    void openRecentFile();
 
 	void mapChanged();
 	void graphChanged(int);
@@ -94,6 +95,7 @@ private slots:
 private:
 	typedef QPair<QDateTime, QDateTime> DateTimeRange;
 
+    enum {MaxRecentFiles = 5};
 	void loadPOIs();
 	void closeFiles();
 	void plot(QPrinter *printer);
@@ -109,6 +111,8 @@ private:
 	void createMapView();
 	void createGraphTabs();
 	void createBrowser();
+    void updateRecentFileListAction();
+    void addRecentFile(const QString &fileName);
 
 	bool openPOIFile(const QString &fileName);
 	bool loadFile(const QString &fileName);
@@ -138,11 +142,14 @@ private:
 	void dragEnterEvent(QDragEnterEvent *event);
 	void dropEvent(QDropEvent *event);
 
-	QToolBar *_fileToolBar;
+    QString strippedName(const QString &fullFileName);
+
+    QToolBar *_fileToolBar;
 	QToolBar *_showToolBar;
 	QToolBar *_navigationToolBar;
 	QMenu *_poiFilesMenu;
 	QMenu *_mapMenu;
+    QMenu *_recentFileMenu;
 
 	QActionGroup *_fileActionGroup;
 	QActionGroup *_navigationActionGroup;
@@ -198,6 +205,9 @@ private:
 	QAction *_showCoordinatesAction;
 	QAction *_openOptionsAction;
 	QAction *_mapsEnd;
+    QAction *_separatorAct;
+
+    QAction *_recentFileActs[MaxRecentFiles];
 
 	QList<QAction*> _poiFilesActions;
 	QSignalMapper *_poiFilesSignalMapper;
@@ -232,6 +242,10 @@ private:
 	Options _options;
 
 	QString _dataDir, _mapDir, _poiDir;
+    QString currentFile;
+    QStringList _recentfiles;
+
+
 };
 
 #endif // GUI_H

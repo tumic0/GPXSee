@@ -102,7 +102,8 @@ GUI::GUI()
 
 	readSettings();
 
-	updateGraphTabs();
+    updateRecentFileListAction();
+    updateGraphTabs();
 	updateStatusBarInfo();
 }
 
@@ -114,6 +115,45 @@ void GUI::loadPOIs()
 	if (!poiDir.isNull())
 		_poi->loadDir(poiDir);
 }
+
+void GUI::updateRecentFileListAction()
+{
+
+    int numRecentFiles = qMin(_recentfiles.size(), (int)MaxRecentFiles);
+
+    for (int i = 0; i < numRecentFiles; ++i) {
+        QString text = tr("&%1 %2").arg(i + 1).arg(strippedName(_recentfiles[i]));
+        _recentFileActs[i]->setText(text);
+        _recentFileActs[i]->setData(_recentfiles[i]);
+        _recentFileActs[i]->setVisible(true);
+    }
+    for (int j = numRecentFiles; j < MaxRecentFiles; ++j)
+        _recentFileActs[j]->setVisible(false);
+
+    _separatorAct->setVisible(numRecentFiles > 0);
+
+}
+
+void GUI::addRecentFile(const QString &fileName)
+{
+    currentFile = fileName;
+    setWindowFilePath(currentFile);
+
+    QSettings settings;
+    _recentfiles = settings.value("recentFileList").toStringList();
+    _recentfiles.removeAll(fileName);
+    _recentfiles.prepend(fileName);
+    while (_recentfiles.size() > MaxRecentFiles)
+        _recentfiles.removeLast();
+
+    foreach (QWidget *widget, QApplication::topLevelWidgets()) {
+        GUI *mainWin = qobject_cast<GUI *>(widget);
+        if (mainWin)
+            mainWin->updateRecentFileListAction();
+    }
+    writeSettings();
+}
+
 
 void GUI::createBrowser()
 {
@@ -256,6 +296,14 @@ void GUI::createActions()
 	_statisticsAction->setActionGroup(_fileActionGroup);
 	connect(_statisticsAction, SIGNAL(triggered()), this, SLOT(statistics()));
 	addAction(_statisticsAction);
+
+    // Recent Files actions
+    for (int i = 0; i < MaxRecentFiles; ++i) {
+        _recentFileActs[i] = new QAction(this);
+        _recentFileActs[i]->setVisible(false);
+        connect(_recentFileActs[i], SIGNAL(triggered()),
+                this, SLOT(openRecentFile()));
+    }
 
 	// POI actions
 	_openPOIAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Load POI file..."),
@@ -503,6 +551,9 @@ void GUI::createMenus()
 	fileMenu->addSeparator();
 	fileMenu->addAction(_reloadFileAction);
 	fileMenu->addAction(_closeFileAction);
+    _separatorAct = fileMenu->addSeparator();
+    for (int i = 0; i < MaxRecentFiles; ++i)
+        fileMenu->addAction(_recentFileActs[i]);
 #ifndef Q_OS_MAC
 	fileMenu->addSeparator();
 	fileMenu->addAction(_exitAction);
@@ -745,14 +796,21 @@ void GUI::paths()
 
 void GUI::openFile()
 {
-	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open file"),
-	  _dataDir, Data::formats());
-	QStringList list = files;
+    QStringList files = QFileDialog::getOpenFileNames(this, tr("Open file"),
+      _dataDir, Data::formats());
+    QStringList list = files;
 
-	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
-		openFile(*it);
-	if (!list.isEmpty())
-		_dataDir = QFileInfo(list.first()).path();
+    for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
+        openFile(*it);
+    if (!list.isEmpty())
+        _dataDir = QFileInfo(list.first()).path();
+}
+
+void GUI::openRecentFile()
+{
+    QAction *action = qobject_cast<QAction *>(sender());
+    if (action)
+        loadFile(action->data().toString());
 }
 
 bool GUI::openFile(const QString &fileName)
@@ -769,7 +827,7 @@ bool GUI::openFile(const QString &fileName)
 		updateNavigationActions();
 		updateStatusBarInfo();
 		updateWindowTitle();
-
+        addRecentFile(fileName);
 		return true;
 	} else {
 		if (_files.isEmpty())
@@ -837,7 +895,7 @@ bool GUI::loadFile(const QString &fileName)
 				connect(gi, SIGNAL(selected(bool)), pi, SLOT(hover(bool)));
 			}
 		}
-
+        addRecentFile(fileName);
 		return true;
 	} else {
 		updateNavigationActions();
@@ -1922,6 +1980,11 @@ void GUI::writeSettings()
 		settings.setValue(HIDPI_MAP_SETTING, _options.hidpiMap);
 #endif // ENABLE_HIDPI
 	settings.endGroup();
+
+    settings.beginGroup(RECENT_FILE_GROUP);
+    if (_recentfiles.size() > 0)
+        settings.setValue(RECENT_FILE_LIST, _recentfiles);
+    settings.endGroup();
 }
 
 void GUI::readSettings()
@@ -2093,6 +2156,10 @@ void GUI::readSettings()
 	_export.fileName = settings.value(EXPORT_FILENAME_SETTING,
 	 EXPORT_FILENAME_DEFAULT).toString();
 	settings.endGroup();
+
+    settings.beginGroup(RECENT_FILE_GROUP);
+    _recentfiles = settings.value(RECENT_FILE_LIST).toStringList();
+    settings.endGroup();
 
 	settings.beginGroup(OPTIONS_SETTINGS_GROUP);
 	QColor pc = settings.value(PALETTE_COLOR_SETTING, PALETTE_COLOR_DEFAULT)
@@ -2349,4 +2416,10 @@ void GUI::logicalDotsPerInchChanged(qreal dpi)
 	_mapView->setDevicePixelRatio(devicePixelRatioF(),
 	  _options.hidpiMap ? devicePixelRatioF() : 1.0);
 #endif // ENBLE_HIDPI
+}
+
+
+QString GUI::strippedName(const QString &fullFileName)
+{
+    return QFileInfo(fullFileName).fileName();
 }

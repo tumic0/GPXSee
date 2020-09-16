@@ -86,6 +86,9 @@
 #define RESOLUTION_SETTING                "resolution"
 #define RESOLUTION_DEFAULT                600
 
+#define RECENT_FILE_GROUP                 "RecentFiles"
+#define RECENT_FILE_LIST                  "Files"
+
 #define OPTIONS_SETTINGS_GROUP            "Options"
 #define PALETTE_COLOR_SETTING             "paletteColor"
 #define PALETTE_COLOR_DEFAULT             QColor(Qt::blue)
