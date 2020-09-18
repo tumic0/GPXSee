@@ -1,35 +1,6 @@
 #include "bitstream.h"
 
 
-bool BitStream1::read(int bits, quint32 &val)
-{
-	val = 0;
-
-	for (int pos = 0; pos < bits; ) {
-		if (!_remaining) {
-			if (!_length || !_file.readUInt8(_hdl, _data))
-				return false;
-			_remaining = 8;
-			_length--;
-		}
-
-		quint32 get = bits - pos;
-		if (get >= _remaining) {
-			val |= _data << pos;
-			pos += _remaining;
-			_remaining = 0;
-		} else {
-			quint32 mask = (1<<get) - 1;
-			val |= (_data & mask)<<pos;
-			_data >>= get;
-			_remaining -= get;
-			break;
-		}
-	}
-
-	return true;
-}
-
 bool BitStream1::flush()
 {
 	if (_length && !_file.seek(_hdl, _file.pos(_hdl) + _length))
@@ -41,7 +12,7 @@ bool BitStream1::flush()
 	return true;
 }
 
-bool BitStream4::flush()
+bool BitStream4F::flush()
 {
 	if (_length && !_file.seek(_hdl, _file.pos(_hdl) + _length))
 		return false;
@@ -96,7 +67,14 @@ bool BitStream4R::readBytes(int bytes, quint32 &val)
 		Q_ASSERT(!b);
 	}
 
-	return read(bytes * 8, val);
+	val = 0;
+	for (int i = 0; i < bytes; i++) {
+		if (!read(8, b))
+			return false;
+		val |= (b << (i * 8));
+	}
+
+	return true;
 }
 
 bool BitStream4R::readVUInt32(quint32 &val)
@@ -139,7 +117,7 @@ bool BitStream4R::readVuint32SM(quint32 &val1, quint32 &val2, quint32 &val2Bits)
 		return false;
 
 	if (!(b & 1)) {
-		val1 = b >> 3 & 0x1f;
+		val1 = b >> 3;
 		val2 = b >> 1 & 3;
 		val2Bits = 2;
 	} else {
@@ -188,14 +166,33 @@ bool BitStream4R::skip(quint32 bytes)
 	return true;
 }
 
-void BitStream4R::resize(quint32 length)
+void BitStream4R::resize(quint32 bytes)
 {
-	quint32 ab = (32 - _used)/8;
+	quint32 ab = (32 - (_used + _unused) + 7)/8;
 
-	if (ab < length)
-		_length = length - ab;
+	if (ab <= bytes)
+		_length = bytes - ab;
 	else {
 		_length = 0;
-		_used += length * 8;
+		_unused += (ab - bytes) * 8;
 	}
+}
+
+void BitStream4R::save(State &state)
+{
+	state.pos = _file.pos(_hdl);
+	state.length = _length;
+	state.used = _used;
+	state.unused = _unused;
+	state.data = _data;
+}
+
+bool BitStream4R::restore(const State &state)
+{
+	_length = state.length;
+	_used = state.used;
+	_unused = state.unused;
+	_data = state.data;
+
+	return _file.seek(_hdl, state.pos);
 }

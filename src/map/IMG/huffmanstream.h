@@ -11,6 +11,8 @@ public:
 	  : _bs(bitstream), _table(table), _symbolDataSize(0), _symbolData(0),
 	  _lonSign(0), _latSign(0) {}
 
+	bool read(int bits, quint32 &val);
+	bool readSymbol(quint32 &symbol);
 	bool readNext(qint32 &lonDelta, qint32 &latDelta)
 	{
 		if (!(readDelta(_lonSign, lonDelta) && readDelta(_latSign, latDelta)))
@@ -52,7 +54,31 @@ bool HuffmanStream<BitStream>::sign(int &val)
 }
 
 template <class BitStream>
-bool HuffmanStream<BitStream>::readDelta(int sign, qint32 &symbol)
+bool HuffmanStream<BitStream>::read(int bits, quint32 &val)
+{
+	if (_symbolDataSize < (quint32)bits) {
+		quint32 next;
+		quint8 nextSize = qMin((quint64)(32 - _symbolDataSize),
+		  _bs.bitsAvailable());
+
+		if (!_bs.read(nextSize, next))
+			return false;
+
+		_symbolData = (_symbolData << nextSize) | next;
+		_symbolDataSize += nextSize;
+	}
+
+	if (_symbolDataSize < (quint32)bits)
+		return false;
+
+	val = (_symbolData << (32-_symbolDataSize)) >> (32 - bits);
+	_symbolDataSize -= bits;
+
+	return true;
+}
+
+template <class BitStream>
+bool HuffmanStream<BitStream>::readSymbol(quint32 &symbol)
 {
 	quint8 size;
 	quint32 next;
@@ -65,10 +91,19 @@ bool HuffmanStream<BitStream>::readDelta(int sign, qint32 &symbol)
 	_symbolDataSize += nextSize;
 
 	symbol = _table.symbol(_symbolData << (32 - _symbolDataSize), size);
+	if (size > _symbolDataSize)
+		return false;
 
-	if (size <= _symbolDataSize)
-		_symbolDataSize -= size;
-	else
+	_symbolDataSize -= size;
+
+	return true;
+}
+
+template <class BitStream>
+bool HuffmanStream<BitStream>::readDelta(int sign, qint32 &delta)
+{
+	quint32 symbol;
+	if (!readSymbol(symbol))
 		return false;
 
 	if (symbol && !sign) {
@@ -79,7 +114,7 @@ bool HuffmanStream<BitStream>::readDelta(int sign, qint32 &symbol)
 			_symbolDataSize--;
 		}
 	}
-	symbol = sign * symbol;
+	delta = sign * symbol;
 
 	return true;
 }
@@ -100,6 +135,7 @@ public:
 	  : HuffmanStream(bitstream, table) {}
 
 	bool init();
+	bool init(int lonSign, int latSign, quint32 data, quint32 dataSize);
 };
 
 #endif // HUFFMANSTREAM_H

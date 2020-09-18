@@ -46,8 +46,9 @@ public:
 	  QList<IMG::Poly> *polys) const;
 	bool extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 	  Handle &lblHdl, QList<IMG::Point> *points) const;
-	bool links(Handle &hdl, const SubDiv *subdiv, NETFile *net, Handle &netHdl,
-	  NODFile *nod, Handle &nodHdl, QList<IMG::Poly> *lines) const;
+	bool links(Handle &hdl, const SubDiv *subdiv, quint32 shift, NETFile *net,
+	  Handle &netHdl, NODFile *nod, Handle &nodHdl, LBLFile *lbl, Handle &lblHdl,
+	  QList<IMG::Poly> *lines) const;
 
 	bool subdivInit(Handle &hdl, SubDiv *subdiv) const;
 

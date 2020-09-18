@@ -8,7 +8,7 @@ public:
 	BitStream1(const SubFile &file, SubFile::Handle &hdl, quint32 length)
 	  : _file(file), _hdl(hdl), _length(length), _remaining(0) {}
 
-	bool read(int bits, quint32 &val);
+	template<typename T> bool read(int bits, T &val);
 	bool flush();
 	quint64 bitsAvailable() const {return (quint64)_length * 8 + _remaining;}
 
@@ -25,7 +25,6 @@ public:
 	  : _file(file), _hdl(hdl), _length(length), _used(32), _unused(0),
 	  _data(0) {}
 
-	bool flush();
 	quint64 bitsAvailable() const
 	  {return (quint64)_length * 8 + (32 - _used) - _unused;}
 
@@ -42,10 +41,19 @@ public:
 	  : BitStream4(file, hdl, length) {}
 
 	bool read(int bits, quint32 &val);
+	bool flush();
 };
 
 class BitStream4R : public BitStream4 {
 public:
+	struct State {
+		quint32 pos;
+		quint32 length;
+		quint32 used;
+		quint32 unused;
+		quint32 data;
+	};
+
 	BitStream4R(const SubFile &file, SubFile::Handle &hdl, quint32 length);
 
 	template<typename T> bool read(int bits, T &val);
@@ -54,8 +62,41 @@ public:
 	bool readVuint32SM(quint32 &val1, quint32 &val2, quint32 &val2Bits);
 
 	bool skip(quint32 bytes);
-	void resize(quint32 length);
+	void resize(quint32 bytes);
+	void save(State &state);
+	bool restore(const State &state);
 };
+
+
+template<typename T>
+bool BitStream1::read(int bits, T &val)
+{
+	val = 0;
+
+	for (int pos = 0; pos < bits; ) {
+		if (!_remaining) {
+			if (!_length || !_file.readUInt8(_hdl, _data))
+				return false;
+			_remaining = 8;
+			_length--;
+		}
+
+		quint32 get = bits - pos;
+		if (get >= _remaining) {
+			val |= _data << pos;
+			pos += _remaining;
+			_remaining = 0;
+		} else {
+			quint32 mask = (1<<get) - 1;
+			val |= (_data & mask)<<pos;
+			_data >>= get;
+			_remaining -= get;
+			break;
+		}
+	}
+
+	return true;
+}
 
 template<typename T>
 bool BitStream4R::read(int bits, T &val)

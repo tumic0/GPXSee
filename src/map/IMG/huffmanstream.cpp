@@ -28,3 +28,14 @@ bool HuffmanStreamR::init()
 
 	return true;
 }
+
+bool HuffmanStreamR::init(int lonSign, int latSign, quint32 data,
+  quint32 dataSize)
+{
+	_lonSign = lonSign;
+	_latSign = latSign;
+	_symbolData = data;
+	_symbolDataSize = dataSize;
+
+	return true;
+}

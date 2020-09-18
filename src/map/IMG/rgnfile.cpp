@@ -424,8 +424,9 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 	return true;
 }
 
-bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, NETFile *net,
-  Handle &netHdl, NODFile *nod, Handle &nodHdl, QList<IMG::Poly> *lines) const
+bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
+  NETFile *net, Handle &netHdl, NODFile *nod, Handle &nodHdl, LBLFile *lbl,
+  Handle &lblHdl, QList<IMG::Poly> *lines) const
 {
 	quint32 size, blockIndexIdSize, blockIndexId;
 	quint8 flags;
@@ -494,8 +495,8 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, NETFile *net,
 				lineId = 0;
 			}
 
-			net->link(subdiv, netHdl, nod, nodHdl, blockInfo, linkId, lineId,
-			  _huffmanTable, lines);
+			net->link(subdiv, shift, netHdl, nod, nodHdl, lbl, lblHdl,
+			  blockInfo, linkId, lineId, _huffmanTable, lines);
 		}
 
 		Q_ASSERT(entryStart + size == pos(hdl));

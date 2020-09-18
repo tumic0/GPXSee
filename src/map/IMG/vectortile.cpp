@@ -149,7 +149,8 @@ void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
 			  lblHdl, &p);
 			_rgn->extPolyObjects(rgnHdl, subdiv, shift, RGNFile::Line, _lbl,
 			  lblHdl, &l);
-			_rgn->links(rgnHdl, subdiv, _net, netHdl, _nod, nodHdl, &l);
+			_rgn->links(rgnHdl, subdiv, shift, _net, netHdl, _nod, nodHdl, _lbl,
+			  lblHdl, &l);
 
 			copyPolys(rect, &p, polygons);
 			copyPolys(rect, &l, lines);
