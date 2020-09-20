@@ -150,6 +150,8 @@
 #define SHOW_SECONDARY_SPEED_SETTING      "showSecondarySpeed"
 #define SHOW_SECONDARY_SPEED_DEFAULT      false
 #define TIME_ZONE_SETTING                 "timeZone"
+#define USE_SEGMENTS_SETTING              "useSegments"
+#define USE_SEGMENTS_DEFAULT              true
 #define POI_RADIUS_SETTING                "poiRadius"
 #define POI_RADIUS_DEFAULT                (int)(IMPERIAL_UNITS() ? MIINM : KMINM)
 #define USE_OPENGL_SETTING                "useOpenGL"

@@ -970,6 +970,7 @@ void GUI::openOptions()
 	SET_TRACK_OPTION(dataUseDEM, useDEM);
 	SET_TRACK_OPTION(showSecondaryElevation, showSecondaryElevation);
 	SET_TRACK_OPTION(showSecondarySpeed, showSecondarySpeed);
+	SET_TRACK_OPTION(useSegments, useSegments);
 
 	SET_ROUTE_OPTION(dataUseDEM, useDEM);
 	SET_ROUTE_OPTION(showSecondaryElevation, showSecondaryElevation);
@@ -1884,6 +1885,8 @@ void GUI::writeSettings()
 		settings.setValue(TIME_ZONE_SETTING, QVariant::fromValue(
 		  _options.timeZone));
 #endif // ENABLE_TIMEZONES
+	if (_options.useSegments != USE_SEGMENTS_DEFAULT)
+		settings.setValue(USE_SEGMENTS_SETTING, _options.useSegments);
 	if (_options.poiRadius != POI_RADIUS_DEFAULT)
 		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
 	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
@@ -2159,6 +2162,8 @@ void GUI::readSettings()
 #ifdef ENABLE_TIMEZONES
 	_options.timeZone = settings.value(TIME_ZONE_SETTING).value<TimeZoneInfo>();
 #endif // ENABLE_TIMEZONES
+	_options.useSegments = settings.value(USE_SEGMENTS_SETTING,
+	  USE_SEGMENTS_DEFAULT).toBool();
 	_options.automaticPause = settings.value(AUTOMATIC_PAUSE_SETTING,
 	  AUTOMATIC_PAUSE_DEFAULT).toBool();
 	_options.pauseInterval = settings.value(PAUSE_INTERVAL_SETTING,
@@ -2250,6 +2255,7 @@ void GUI::readSettings()
 	Track::useDEM(_options.dataUseDEM);
 	Track::showSecondaryElevation(_options.showSecondaryElevation);
 	Track::showSecondarySpeed(_options.showSecondarySpeed);
+	Track::useSegments(_options.useSegments);
 	Route::useDEM(_options.dataUseDEM);
 	Route::showSecondaryElevation(_options.showSecondaryElevation);
 	Waypoint::useDEM(_options.dataUseDEM);

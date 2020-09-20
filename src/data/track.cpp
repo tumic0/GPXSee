@@ -17,7 +17,7 @@ bool Track::_useReportedSpeed = false;
 bool Track::_useDEM = false;
 bool Track::_show2ndElevation = false;
 bool Track::_show2ndSpeed = false;
-
+bool Track::_useSegments = true;
 
 static qreal avg(const QVector<qreal> &v)
 {
@@ -88,9 +88,17 @@ static GraphSegment filter(const GraphSegment &g, int window)
 }
 
 
-Track::Track(const TrackData &data) : _data(data), _pause(0)
+Track::Track(const TrackData &data) : _pause(0)
 {
 	qreal ds, dt;
+
+	if (_useSegments)
+		_data = data;
+	else {
+		_data.append(SegmentData());
+		for (int i = 0; i < data.size(); i++)
+			_data[0].append(data.at(i));
+	}
 
 	for (int i = 0; i < _data.size(); i++) {
 		const SegmentData &sd = _data.at(i);

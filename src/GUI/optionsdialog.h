@@ -63,6 +63,7 @@ struct Options {
 #ifdef ENABLE_TIMEZONES
 	TimeZoneInfo timeZone;
 #endif // ENABLE_TIMEZONES
+	bool useSegments;
 	// POI
 	int poiRadius;
 	// System
@@ -157,6 +158,7 @@ private:
 	QRadioButton *_customZone;
 	QComboBox *_timeZone;
 #endif // ENABLE_TIMEZONES
+	QCheckBox *_useSegments;
 	// POI
 	QDoubleSpinBox *_poiRadius;
 	// System

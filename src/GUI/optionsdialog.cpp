@@ -439,6 +439,9 @@ QWidget *OptionsDialog::createDataPage()
 	customZoneLayout->addWidget(_timeZone);
 #endif // ENABLE_TIMEZONES
 
+	_useSegments = new QCheckBox(tr("Use segments"));
+	_useSegments->setChecked(_options->useSegments);
+
 	QWidget *sourceTab = new QWidget();
 	QVBoxLayout *sourceTabLayout = new QVBoxLayout();
 
@@ -477,6 +480,7 @@ QWidget *OptionsDialog::createDataPage()
 #ifdef ENABLE_TIMEZONES
 	formLayout->addRow(tr("Time zone:"), zoneOptions);
 #endif // ENABLE_TIMEZONES
+	formLayout->addRow(_useSegments);
 
 	sourceTabLayout->addLayout(formLayout);
 #else // Q_OS_MAC
@@ -485,6 +489,7 @@ QWidget *OptionsDialog::createDataPage()
 #ifdef ENABLE_TIMEZONES
 	QFormLayout *timeZoneLayout = new QFormLayout();
 #endif // ENABLE_TIMEZONES
+	QFormLayout *segmentsLayout = new QFormLayout();
 
 	speedLayout->addWidget(_computedSpeed);
 	speedLayout->addWidget(_reportedSpeed);
@@ -510,11 +515,14 @@ QWidget *OptionsDialog::createDataPage()
 	timeZoneBox->setLayout(timeZoneLayout);
 #endif // ENABLE_TIMEZONES
 
+	segmentsLayout->addWidget(_useSegments);
+
 	sourceTabLayout->addWidget(speedBox);
 	sourceTabLayout->addWidget(elevationBox);
 #ifdef ENABLE_TIMEZONES
 	sourceTabLayout->addWidget(timeZoneBox);
 #endif // ENABLE_TIMEZONES
+	sourceTabLayout->addLayout(segmentsLayout);
 #endif // Q_OS_MAC
 	sourceTabLayout->addStretch();
 	sourceTab->setLayout(sourceTabLayout);
@@ -780,6 +788,7 @@ void OptionsDialog::accept()
 	_options->timeZone.setCustomZone(QTimeZone(_timeZone->currentText()
 	  .toLatin1()));
 #endif // ENABLE_TIMEZONES
+	_options->useSegments = _useSegments->isChecked();
 
 	qreal poiRadius = (_options->units == Imperial)
 		? _poiRadius->value() * MIINM : (_options->units == Nautical)

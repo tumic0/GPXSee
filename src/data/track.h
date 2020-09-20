@@ -49,10 +49,9 @@ public:
 	  {_outlierEliminate = eliminate;}
 	static void useReportedSpeed(bool use) {_useReportedSpeed = use;}
 	static void useDEM(bool use) {_useDEM = use;}
-	static void showSecondaryElevation(bool show)
-	  {_show2ndElevation = show;}
-	static void showSecondarySpeed(bool show)
-	  {_show2ndSpeed = show;}
+	static void showSecondaryElevation(bool show) {_show2ndElevation = show;}
+	static void showSecondarySpeed(bool show) {_show2ndSpeed = show;}
+	static void useSegments(bool use) {_useSegments = use;}
 
 private:
 	struct Segment {
@@ -87,6 +86,7 @@ private:
 	static bool _useDEM;
 	static bool _show2ndElevation;
 	static bool _show2ndSpeed;
+	static bool _useSegments;
 };
 
 #endif // TRACK_H
