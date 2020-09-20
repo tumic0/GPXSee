@@ -494,16 +494,16 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="372"/>
-        <location filename="../src/GUI/gui.cpp" line="1080"/>
-        <location filename="../src/GUI/gui.cpp" line="1147"/>
+        <location filename="../src/GUI/gui.cpp" line="1081"/>
+        <location filename="../src/GUI/gui.cpp" line="1148"/>
         <source>Distance</source>
         <translation>Відстань</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="379"/>
         <location filename="../src/GUI/gui.cpp" line="555"/>
-        <location filename="../src/GUI/gui.cpp" line="1083"/>
-        <location filename="../src/GUI/gui.cpp" line="1149"/>
+        <location filename="../src/GUI/gui.cpp" line="1084"/>
+        <location filename="../src/GUI/gui.cpp" line="1150"/>
         <source>Time</source>
         <translation>Час</translation>
     </message>
@@ -534,8 +534,8 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="416"/>
-        <location filename="../src/GUI/gui.cpp" line="1085"/>
-        <location filename="../src/GUI/gui.cpp" line="1151"/>
+        <location filename="../src/GUI/gui.cpp" line="1086"/>
+        <location filename="../src/GUI/gui.cpp" line="1152"/>
         <source>Moving time</source>
         <translation>Час руху</translation>
     </message>
@@ -801,66 +801,66 @@
         <translation>Помилка під час завантаження файлу POI:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1054"/>
-        <location filename="../src/GUI/gui.cpp" line="1125"/>
+        <location filename="../src/GUI/gui.cpp" line="1055"/>
+        <location filename="../src/GUI/gui.cpp" line="1126"/>
         <source>Tracks</source>
         <translation>Треки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1057"/>
-        <location filename="../src/GUI/gui.cpp" line="1127"/>
+        <location filename="../src/GUI/gui.cpp" line="1058"/>
+        <location filename="../src/GUI/gui.cpp" line="1128"/>
         <source>Routes</source>
         <translation>Маршрути</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1060"/>
-        <location filename="../src/GUI/gui.cpp" line="1129"/>
+        <location filename="../src/GUI/gui.cpp" line="1061"/>
+        <location filename="../src/GUI/gui.cpp" line="1130"/>
         <source>Waypoints</source>
         <translation>Маршрутні точки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1063"/>
-        <location filename="../src/GUI/gui.cpp" line="1131"/>
+        <location filename="../src/GUI/gui.cpp" line="1064"/>
+        <location filename="../src/GUI/gui.cpp" line="1132"/>
         <source>Areas</source>
         <translation>Області</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1069"/>
-        <location filename="../src/GUI/gui.cpp" line="1073"/>
-        <location filename="../src/GUI/gui.cpp" line="1137"/>
-        <location filename="../src/GUI/gui.cpp" line="1140"/>
+        <location filename="../src/GUI/gui.cpp" line="1070"/>
+        <location filename="../src/GUI/gui.cpp" line="1074"/>
+        <location filename="../src/GUI/gui.cpp" line="1138"/>
+        <location filename="../src/GUI/gui.cpp" line="1141"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1106"/>
         <location filename="../src/GUI/gui.cpp" line="1107"/>
+        <location filename="../src/GUI/gui.cpp" line="1108"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1121"/>
+        <location filename="../src/GUI/gui.cpp" line="1122"/>
         <source>Name</source>
         <translation>Ім’я</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1339"/>
+        <location filename="../src/GUI/gui.cpp" line="1340"/>
         <source>Open map file</source>
         <translation>Відкрити файл мапи</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1359"/>
-        <location filename="../src/GUI/gui.cpp" line="1390"/>
+        <location filename="../src/GUI/gui.cpp" line="1360"/>
+        <location filename="../src/GUI/gui.cpp" line="1391"/>
         <source>Error loading map:</source>
         <translation>Помилка завантаження мапи:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1400"/>
+        <location filename="../src/GUI/gui.cpp" line="1401"/>
         <source>No files loaded</source>
         <translation>Файли не завантажені</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1404"/>
+        <location filename="../src/GUI/gui.cpp" line="1405"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n файл</numerusform>
@@ -1258,7 +1258,7 @@
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="293"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="628"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="636"/>
         <source>Graphs</source>
         <translation>Графіки</translation>
     </message>
@@ -1274,13 +1274,13 @@
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="320"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="476"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="479"/>
         <source>Elevation:</source>
         <translation>Висота:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="321"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="475"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="478"/>
         <source>Speed:</source>
         <translation>Швидкість:</translation>
     </message>
@@ -1342,7 +1342,7 @@
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="374"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="651"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="659"/>
         <source>s</source>
         <translation>с</translation>
     </message>
@@ -1392,185 +1392,190 @@
         <translation>UTC</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="478"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="442"/>
+        <source>Use segments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="481"/>
         <source>Time zone:</source>
         <translation>Часовий пояс:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="493"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="498"/>
         <source>Speed</source>
         <translation>Швидкість</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="500"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="505"/>
         <source>Elevation</source>
         <translation>Висота</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="509"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="514"/>
         <source>Time zone</source>
         <translation>Часовий пояс</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="524"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="532"/>
         <source>Filtering</source>
         <translation>Фільтрування</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="525"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="533"/>
         <source>Sources</source>
         <translation>Джерела</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="526"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="534"/>
         <source>Pause detection</source>
         <translation>Виявлення пауз</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="538"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="546"/>
         <source>mi</source>
         <translation>миля</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="541"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="549"/>
         <source>nmi</source>
         <translation>мор.миля</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="544"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="552"/>
         <source>km</source>
         <translation>км</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="548"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="556"/>
         <source>Radius:</source>
         <translation>Радіус:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="554"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="694"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="562"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
         <source>POI</source>
         <translation>Точки POI</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="561"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="569"/>
         <source>WYSIWYG</source>
         <translation>WYSIWYG (Візуальний редактор)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="562"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="570"/>
         <source>High-Resolution</source>
         <translation>Висока роздільна здатність</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="567"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="575"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
         <translation>Область друку є приблизною областю відображення. Рівень масштабування мапи не змінюється.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="569"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="577"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
         <translation>Масштаб буде змінено так, щоби весь зміст (треки/маршрутні точки) вмістився на друковану область, а роздільна здатність мапи була якомога наближеною до роздільної здатності друку.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="591"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="599"/>
         <source>Name</source>
         <translation>Ім’я</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="593"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="601"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="595"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="603"/>
         <source>Distance</source>
         <translation>Відстань</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="597"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="605"/>
         <source>Time</source>
         <translation>Час</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="599"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="607"/>
         <source>Moving time</source>
         <translation>Час руху</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="601"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="609"/>
         <source>Item count (&gt;1)</source>
         <translation>Кількість об’єктів (&gt;1)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="616"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="624"/>
         <source>Separate graph page</source>
         <translation>Окрема сторінка із графіком</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="626"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="634"/>
         <source>Print mode</source>
         <translation>Режим друку</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="627"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="635"/>
         <source>Header</source>
         <translation>Заголовок</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="635"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="643"/>
         <source>Use OpenGL</source>
         <translation>Використовувати OpenGL</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="638"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="646"/>
         <source>Enable HTTP/2</source>
         <translation>Дозволити HTTP/2</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="653"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="655"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="663"/>
         <source>Image cache size:</source>
         <translation>Розмір кешу зображень:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="656"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="664"/>
         <source>Connection timeout:</source>
         <translation>Час з’єднання вичерпаний:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="421"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="672"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="697"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="680"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="705"/>
         <source>System</source>
         <translation>Система</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="690"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="698"/>
         <source>Appearance</source>
         <translation>Зовнішній вигляд</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="692"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="700"/>
         <source>Maps</source>
         <translation>Мапи</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="693"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="701"/>
         <source>Data</source>
         <translation>Дані</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="695"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="703"/>
         <source>Print &amp; Export</source>
         <translation>Друк та експорт</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="724"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="732"/>
         <source>Options</source>
         <translation>Налаштування</translation>
     </message>
