@@ -527,9 +527,7 @@ bool NODFile::linkType(Handle &hdl, const BlockInfo &blockInfo, quint8 linkId,
 		} while (low + 1 < high);
 	}
 
-	if (!seek(hdl, offset + _blockRecordSize * low))
-		return false;
-	if (!readUInt16(hdl, val))
+	if (!(seek(hdl, offset + _blockRecordSize * low) && readUInt16(hdl, val)))
 		return false;
 
 	type = val & 0x3f;
