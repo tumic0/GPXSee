@@ -46,8 +46,8 @@ public:
 		{}
 
 		Handle extHdl;
-		struct BlockInfo blockInfo;
-		struct NodeInfo nodeInfo;
+		BlockInfo blockInfo;
+		NodeInfo nodeInfo;
 		quint32 nodeOffset;
 		quint32 linkOffset;
 		quint32 linkId;
