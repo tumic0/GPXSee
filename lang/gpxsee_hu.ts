@@ -863,6 +863,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fájl</numerusform>
+            <numerusform>%n fájl</numerusform>
         </translation>
     </message>
 </context>
@@ -1391,7 +1392,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="442"/>
         <source>Use segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Szakaszok használata</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="481"/>

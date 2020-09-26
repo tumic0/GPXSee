@@ -1351,7 +1351,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="442"/>
         <source>Use segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd segment</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="481"/>
