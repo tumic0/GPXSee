@@ -82,36 +82,38 @@ bool NODFile::init(Handle &hdl)
 
 	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)))
 		return false;
+	if (hdrLen < 0x7b)
+		return false;
 
-	if (hdrLen >= 0x7b) {
-		if (!(seek(hdl, _gmpOffset + 0x1d) && readUInt32(hdl, _flags)
-		  && readUInt8(hdl, _blockShift) && readUInt8(hdl, _nodeShift)))
-			return false;
+	if (!(seek(hdl, _gmpOffset + 0x1d) && readUInt32(hdl, _flags)
+	  && readUInt8(hdl, _blockShift) && readUInt8(hdl, _nodeShift)))
+		return false;
 
-		if (!(seek(hdl, _gmpOffset + 0x67) && readUInt32(hdl, _blockOffset)
-		  && readUInt32(hdl, _blockSize) && readUInt16(hdl, _blockRecordSize)
-		  && readUInt32(hdl, _indexOffset) && readUInt32(hdl, _indexSize)
-		  && readUInt16(hdl, _indexRecordSize) && readUInt32(hdl, _indexFlags)))
-			return false;
-	}
+	if (!(seek(hdl, _gmpOffset + 0x67) && readUInt32(hdl, _blockOffset)
+	  && readUInt32(hdl, _blockSize) && readUInt16(hdl, _blockRecordSize)
+	  && readUInt32(hdl, _indexOffset) && readUInt32(hdl, _indexSize)
+	  && readUInt16(hdl, _indexRecordSize) && readUInt32(hdl, _indexFlags)))
+		return false;
 
-	return true;
+	if (!_indexRecordSize)
+		return false;
+	quint32 indexCount = _indexSize / _indexRecordSize;
+	if (indexCount <= 0x100)
+		_indexIdSize = 1;
+	else if (indexCount <= 0x1000)
+		_indexIdSize = 2;
+	else if (indexCount <= 0x1000000)
+		_indexIdSize = 3;
+
+	return (_indexIdSize > 0);
 }
 
 quint32 NODFile::indexIdSize(Handle &hdl)
 {
-	if (!_indexRecordSize && !init(hdl))
+	if (!_indexIdSize && !init(hdl))
 		return 0;
 
-	quint32 indexCount = _indexSize / _indexRecordSize;
-	if (indexCount <= 0x100)
-		return 1;
-	else if (indexCount <= 0x1000)
-		return 2;
-	else if (indexCount <= 0x1000000)
-		return 3;
-	else
-		return 0;
+	return _indexIdSize;
 }
 
 bool NODFile::readBlock(Handle &hdl, quint32 blockOffset,
@@ -300,7 +302,7 @@ bool NODFile::absAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 	quint32 m2p = 2;
 	quint32 skip = 8;
 	quint32 flags;
-	quint32 nextOffset;
+	quint32 nextOffset = 0xFFFFFFFF;
 	bool extraBit = (adj.nodeInfo.flags >> 6) & 1;
 	bool linkIdValid = true;
 	bool firstLoop = true;
@@ -403,7 +405,7 @@ bool NODFile::relAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 	quint32 skip = 8;
 	quint32 flagsBits = 8;
 	quint32 flags;
-	quint32 nextOffset;
+	quint32 nextOffset = 0xFFFFFFFF;
 	bool extraBit = (adj.nodeInfo.flags >> 6) & 1;
 	bool linkIdValid = true;
 	bool firstLoop = true;
@@ -507,24 +509,21 @@ bool NODFile::linkType(Handle &hdl, const BlockInfo &blockInfo, quint8 linkId,
 	  + blockInfo.hdr.s11 * 3;
 	quint32 low = 0;
 	quint32 high = blockInfo.hdr.s12 - 1;
-	quint32 pos;
+	quint32 pos = blockInfo.hdr.s12;
 	quint16 val;
 
 	if (high > 1) {
 		do {
 			pos = (low + high) / 2;
 
-			if (!seek(hdl, offset + _blockRecordSize * pos))
-				return false;
-			if (!readUInt16(hdl, val))
+			if (!(seek(hdl, offset + _blockRecordSize * pos)
+			  && readUInt16(hdl, val)))
 				return false;
 
-			quint32 tmp = pos;
-			if ((val >> 8) <= linkId) {
+			if ((val >> 8) <= linkId)
 				low = pos;
-				tmp = high;
-			}
-			high = tmp;
+			else
+				high = pos;
 		} while (low + 1 < high);
 	}
 
@@ -536,13 +535,11 @@ bool NODFile::linkType(Handle &hdl, const BlockInfo &blockInfo, quint8 linkId,
 	type = val & 0x3f;
 
 	if ((low < high) && (pos != high)) {
-		if (!seek(hdl, offset + _blockRecordSize * high))
+		if (!(seek(hdl, offset + _blockRecordSize * high)
+		  && readUInt16(hdl, val)))
 			return false;
-		if (!readUInt16(hdl, val))
-			return false;
-		if ((val >> 8) <= linkId) {
+		if ((val >> 8) <= linkId)
 			type = (val & 0x3f);
-		}
 	}
 
 	type <<= 8;

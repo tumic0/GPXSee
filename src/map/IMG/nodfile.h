@@ -56,14 +56,14 @@ public:
 
 	NODFile(IMG *img) : SubFile(img), _indexOffset(0), _indexSize(0),
 	  _indexFlags(0), _blockOffset(0), _blockSize(0), _indexRecordSize(0),
-	  _blockRecordSize(0), _blockShift(0), _nodeShift(0) {}
+	  _blockRecordSize(0), _blockShift(0), _nodeShift(0), _indexIdSize(0) {}
 	NODFile(const QString &path) : SubFile(path), _indexOffset(0), _indexSize(0),
 	  _indexFlags(0), _blockOffset(0), _blockSize(0), _indexRecordSize(0),
-	  _blockRecordSize(0), _blockShift(0), _nodeShift(0) {}
+	  _blockRecordSize(0), _blockShift(0), _nodeShift(0), _indexIdSize(0) {}
 	NODFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
 	  _indexOffset(0), _indexSize(0),_indexFlags(0), _blockOffset(0),
 	  _blockSize(0), _indexRecordSize(0), _blockRecordSize(0), _blockShift(0),
-	  _nodeShift(0) {}
+	  _nodeShift(0), _indexIdSize(0) {}
 
 	quint32 indexIdSize(Handle &hdl);
 	bool blockInfo(Handle &hdl, quint32 blockId, BlockInfo &blockInfo) const;
@@ -93,6 +93,7 @@ private:
 	quint16 _indexRecordSize, _blockRecordSize;
 	quint8 _blockShift, _nodeShift;
 	quint32 _flags;
+	quint32 _indexIdSize;
 };
 
 #endif // NETFILE_H
