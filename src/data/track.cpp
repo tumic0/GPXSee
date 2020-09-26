@@ -95,9 +95,11 @@ Track::Track(const TrackData &data) : _pause(0)
 	if (_useSegments)
 		_data = data;
 	else {
-		_data.append(SegmentData());
-		for (int i = 0; i < data.size(); i++)
-			_data[0] << data.at(i);
+		if (!data.isEmpty()) {
+			_data.append(data.first());
+			for (int i = 1; i < data.size(); i++)
+				_data.first() << data.at(i);
+		}
 	}
 
 	for (int i = 0; i < _data.size(); i++) {
