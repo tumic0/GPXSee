@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QHash>
 #include <QList>
+#include <QFlags>
 #include "common/rectc.h"
 #include "common/config.h"
 #include "data/waypoint.h"
@@ -38,6 +39,13 @@ class MapView : public QGraphicsView
 	Q_OBJECT
 
 public:
+	enum Flag {
+		NoFlags = 0,
+		HiRes = 1,
+		Expand = 2
+	};
+	Q_DECLARE_FLAGS(PlotFlags, Flag)
+
 	MapView(Map *map, POI *poi, QWidget *parent = 0);
 
 	QList<PathItem *> loadData(const Data &data);
@@ -46,7 +54,8 @@ public:
 	void setPOI(POI *poi);
 	void setMap(Map *map);
 
-	void plot(QPainter *painter, const QRectF &target, qreal scale, bool hires);
+	void plot(QPainter *painter, const QRectF &target, qreal scale,
+	  PlotFlags flags);
 
 	void clear();
 

@@ -531,7 +531,7 @@ void MapView::keyPressEvent(QKeyEvent *event)
 }
 
 void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
-  bool hires)
+  PlotFlags flags)
 {
 	QRect orig, adj;
 	qreal ratio, diff, q;
@@ -559,10 +559,18 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 		diff = (orig.height() * ratio) - orig.width();
 		adj = orig.adjusted(-diff/2, 0, diff/2, 0);
 	}
-	q = (target.width() / scale) / adj.width();
+
+	// Expand the view if plotting into a bitmap
+	if (flags & Expand) {
+		qreal xdiff = (target.width() - adj.width()) / 2.0;
+		qreal ydiff = (target.height() - adj.height()) / 2.0;
+		adj.adjust(-xdiff, -ydiff, xdiff, ydiff);
+		q = 1.0;
+	} else
+		q = (target.width() / scale) / adj.width();
 
 	// Adjust the view for printing
-	if (hires) {
+	if (flags & HiRes) {
 		zoom = _map->zoom();
 		QRectF vr(mapToScene(orig).boundingRect());
 		origScene = vr.center();
@@ -594,7 +602,7 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	render(painter, target, adj);
 
 	// Revert view changes to display mode
-	if (hires) {
+	if (flags) {
 		_map->setZoom(zoom);
 		rescale();
 		centerOn(origScene);

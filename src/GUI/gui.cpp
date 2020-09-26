@@ -230,13 +230,20 @@ void GUI::createActions()
 	_printFileAction->setActionGroup(_fileActionGroup);
 	connect(_printFileAction, SIGNAL(triggered()), this, SLOT(printFile()));
 	addAction(_printFileAction);
-	_exportFileAction = new QAction(QIcon(EXPORT_FILE_ICON),
+	_exportPDFFileAction = new QAction(QIcon(EXPORT_FILE_ICON),
 	  tr("Export to PDF..."), this);
-	_exportFileAction->setMenuRole(QAction::NoRole);
-	_exportFileAction->setShortcut(EXPORT_SHORTCUT);
-	_exportFileAction->setActionGroup(_fileActionGroup);
-	connect(_exportFileAction, SIGNAL(triggered()), this, SLOT(exportFile()));
-	addAction(_exportFileAction);
+	_exportPDFFileAction->setMenuRole(QAction::NoRole);
+	_exportPDFFileAction->setShortcut(EXPORT_SHORTCUT);
+	_exportPDFFileAction->setActionGroup(_fileActionGroup);
+	connect(_exportPDFFileAction, SIGNAL(triggered()), this, SLOT(exportPDFFile()));
+	addAction(_exportPDFFileAction);
+	_exportPNGFileAction = new QAction(QIcon(EXPORT_FILE_ICON),
+	  tr("Export to PNG..."), this);
+	_exportPNGFileAction->setMenuRole(QAction::NoRole);
+	_exportPNGFileAction->setShortcut(EXPORT_SHORTCUT);
+	_exportPNGFileAction->setActionGroup(_fileActionGroup);
+	connect(_exportPNGFileAction, SIGNAL(triggered()), this, SLOT(exportPNGFile()));
+	addAction(_exportPNGFileAction);
 	_closeFileAction = new QAction(QIcon(CLOSE_FILE_ICON), tr("Close"), this);
 	_closeFileAction->setMenuRole(QAction::NoRole);
 	_closeFileAction->setShortcut(CLOSE_SHORTCUT);
@@ -497,7 +504,8 @@ void GUI::createMenus()
 	fileMenu->addAction(_openFileAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(_printFileAction);
-	fileMenu->addAction(_exportFileAction);
+	fileMenu->addAction(_exportPDFFileAction);
+	fileMenu->addAction(_exportPNGFileAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(_statisticsAction);
 	fileMenu->addSeparator();
@@ -928,7 +936,7 @@ void GUI::openOptions()
 	Options options(_options);
 	bool reload = false;
 
-	OptionsDialog dialog(&options, this);
+	OptionsDialog dialog(options, _units, this);
 	if (dialog.exec() != QDialog::Accepted)
 		return;
 
@@ -1019,9 +1027,9 @@ void GUI::printFile()
 		plot(&printer);
 }
 
-void GUI::exportFile()
+void GUI::exportPDFFile()
 {
-	ExportDialog dialog(&_export, this);
+	PDFExportDialog dialog(_pdfExport, _units, this);
 	if (dialog.exec() != QDialog::Accepted)
 		return;
 
@@ -1029,14 +1037,51 @@ void GUI::exportFile()
 	printer.setOutputFormat(QPrinter::PdfFormat);
 	printer.setCreator(QString(APP_NAME) + QString(" ")
 	  + QString(APP_VERSION));
-	printer.setResolution(_export.resolution);
-	printer.setOrientation(_export.orientation);
-	printer.setOutputFileName(_export.fileName);
-	printer.setPaperSize(_export.paperSize);
-	printer.setPageMargins(_export.margins.left(), _export.margins.top(),
-	  _export.margins.right(), _export.margins.bottom(), QPrinter::Millimeter);
+	printer.setResolution(_pdfExport.resolution);
+	printer.setOrientation(_pdfExport.orientation);
+	printer.setOutputFileName(_pdfExport.fileName);
+	printer.setPaperSize(_pdfExport.paperSize);
+	printer.setPageMargins(_pdfExport.margins.left(), _pdfExport.margins.top(),
+	  _pdfExport.margins.right(), _pdfExport.margins.bottom(),
+	  QPrinter::Millimeter);
 
 	plot(&printer);
+}
+
+void GUI::exportPNGFile()
+{
+	PNGExportDialog dialog(_pngExport, this);
+	if (dialog.exec() != QDialog::Accepted)
+		return;
+
+	QImage img(_pngExport.size, QImage::Format_ARGB32_Premultiplied);
+	QPainter p(&img);
+	QRectF rect(0, 0, img.width(), img.height());
+	QRectF contentRect(rect.adjusted(_pngExport.margins.left(),
+	  _pngExport.margins.top(), -_pngExport.margins.right(),
+	  -_pngExport.margins.bottom()));
+
+	if (_pngExport.antialiasing)
+		p.setRenderHint(QPainter::Antialiasing);
+	p.fillRect(rect, Qt::white);
+	plotMainPage(&p, contentRect, 1.0, true);
+	img.save(_pngExport.fileName);
+
+	if (!_tabs.isEmpty() && _options.separateGraphPage) {
+		QImage img2(_pngExport.size.width(), (int)graphPlotHeight(rect, 1),
+		  QImage::Format_ARGB32_Premultiplied);
+		QPainter p2(&img2);
+		QRectF rect2(0, 0, img2.width(), img2.height());
+
+		if (_pngExport.antialiasing)
+			p2.setRenderHint(QPainter::Antialiasing);
+		p2.fillRect(rect2, Qt::white);
+		plotGraphsPage(&p2, contentRect, 1);
+
+		QFileInfo fi(_pngExport.fileName);
+		img2.save(fi.absolutePath() + "/" + fi.baseName() + "-graphs."
+		  + fi.suffix());
+	}
 }
 
 void GUI::statistics()
@@ -1110,12 +1155,12 @@ void GUI::statistics()
 	msgBox.exec();
 }
 
-void GUI::plot(QPrinter *printer)
+void GUI::plotMainPage(QPainter *painter, const QRectF &rect, qreal ratio,
+  bool expand)
 {
 	QLocale l(QLocale::system());
-	QPainter p(printer);
 	TrackInfo info;
-	qreal ih, gh, mh, ratio;
+	qreal ih, gh, mh;
 
 
 	if (!_pathName.isNull() && _options.printName)
@@ -1151,50 +1196,84 @@ void GUI::plot(QPrinter *printer)
 	if (movingTime() > 0 && _options.printMovingTime)
 		info.insert(tr("Moving time"), Format::timeSpan(movingTime()));
 
-	qreal fsr = 1085.0 / (qMax(printer->width(), printer->height())
-	  / (qreal)printer->resolution());
-	ratio = p.paintEngine()->paintDevice()->logicalDpiX() / fsr;
 	if (info.isEmpty()) {
 		ih = 0;
 		mh = 0;
 	} else {
 		ih = info.contentSize().height() * ratio;
 		mh = ih / 2;
-		info.plot(&p, QRectF(0, 0, printer->width(), ih), ratio);
+		info.plot(painter, QRectF(rect.x(), rect.y(), rect.width(), ih), ratio);
 	}
 	if (_graphTabWidget->isVisible() && !_options.separateGraphPage) {
-		qreal r = (((qreal)(printer)->width()) / (qreal)(printer->height()));
-		gh = (printer->width() > printer->height())
-		  ? 0.15 * r * (printer->height() - ih - 2*mh)
-		  : 0.15 * (printer->height() - ih - 2*mh);
+		qreal r = rect.width() / rect.height();
+		gh = (rect.width() > rect.height())
+		  ? 0.15 * r * (rect.height() - ih - 2*mh)
+		  : 0.15 * (rect.height() - ih - 2*mh);
 		GraphTab *gt = static_cast<GraphTab*>(_graphTabWidget->currentWidget());
-		gt->plot(&p,  QRectF(0, printer->height() - gh, printer->width(), gh),
-		  ratio);
-	} else
+		gt->plot(painter,  QRectF(rect.x(), rect.y() + rect.height() - gh,
+		  rect.width(), gh), ratio);
+	} else {
 		gh = 0;
-	_mapView->plot(&p, QRectF(0, ih + mh, printer->width(), printer->height()
-	  - (ih + 2*mh + gh)), ratio, _options.hiresPrint);
+	}
 
-	if (_graphTabWidget->isVisible() && _options.separateGraphPage) {
-		printer->newPage();
+	MapView::PlotFlags flags = MapView::NoFlags;
+	if (_options.hiresPrint)
+		flags |= MapView::HiRes;
+	if (expand)
+		flags |= MapView::Expand;
 
-		int cnt = 0;
-		for (int i = 0; i < _tabs.size(); i++)
-			if (!_tabs.at(i)->isEmpty())
-				cnt++;
+	_mapView->plot(painter, QRectF(rect.x(), rect.y() + ih + mh, rect.width(),
+	  rect.height() - (ih + 2*mh + gh)), ratio, flags);
+}
 
-		qreal sp = ratio * 20;
-		gh = qMin((printer->height() - ((cnt - 1) * sp))/(qreal)cnt,
-		  0.20 * printer->height());
+void GUI::plotGraphsPage(QPainter *painter, const QRectF &rect, qreal ratio)
+{
+	int cnt = 0;
+	for (int i = 0; i < _tabs.size(); i++)
+		if (!_tabs.at(i)->isEmpty())
+			cnt++;
 
-		qreal y = 0;
-		for (int i = 0; i < _tabs.size(); i++) {
-			if (!_tabs.at(i)->isEmpty()) {
-				_tabs.at(i)->plot(&p,  QRectF(0, y, printer->width(), gh),
-				  ratio);
-				y += gh + sp;
-			}
+	qreal sp = ratio * 20;
+	qreal gh = qMin((rect.height() - ((cnt - 1) * sp))/(qreal)cnt,
+	  0.20 * rect.height());
+
+	qreal y = 0;
+	for (int i = 0; i < _tabs.size(); i++) {
+		if (!_tabs.at(i)->isEmpty()) {
+			_tabs.at(i)->plot(painter,  QRectF(rect.x(), rect.y() + y,
+			  rect.width(), gh), ratio);
+			y += gh + sp;
 		}
+	}
+}
+
+qreal GUI::graphPlotHeight(const QRectF &rect, qreal ratio)
+{
+	int cnt = 0;
+	for (int i = 0; i < _tabs.size(); i++)
+		if (!_tabs.at(i)->isEmpty())
+			cnt++;
+
+	qreal sp = ratio * 20;
+	qreal gh = qMin((rect.height() - ((cnt - 1) * sp))/(qreal)cnt,
+	  0.20 * rect.height());
+
+	return cnt * gh + (cnt - 1) * sp;
+}
+
+void GUI::plot(QPrinter *printer)
+{
+	QPainter p(printer);
+	qreal fsr = 1085.0 / (qMax(printer->width(), printer->height())
+	  / (qreal)printer->resolution());
+	qreal ratio = p.paintEngine()->paintDevice()->logicalDpiX() / fsr;
+	QRectF rect(0, 0, printer->width(), printer->height());
+
+	plotMainPage(&p, rect, ratio);
+
+	if (!_tabs.isEmpty() && _options.separateGraphPage) {
+		printer->newPage();
+		plotGraphsPage(&p, rect, ratio);
 	}
 }
 
@@ -1552,8 +1631,7 @@ void GUI::setTimeType(TimeType type)
 
 void GUI::setUnits(Units units)
 {
-	_export.units = units;
-	_options.units = units;
+	_units = units;
 
 	_mapView->setUnits(units);
 	for (int i = 0; i <_tabs.count(); i++)
@@ -1796,23 +1874,42 @@ void GUI::writeSettings()
 		  _showTicksAction->isChecked());
 	settings.endGroup();
 
-	settings.beginGroup(EXPORT_SETTINGS_GROUP);
-	if (_export.orientation != PAPER_ORIENTATION_DEFAULT)
-		settings.setValue(PAPER_ORIENTATION_SETTING, _export.orientation);
-	if (_export.resolution != RESOLUTION_DEFAULT)
-		settings.setValue(RESOLUTION_SETTING, _export.resolution);
-	if (_export.paperSize != PAPER_SIZE_DEFAULT)
-		settings.setValue(PAPER_SIZE_SETTING, _export.paperSize);
-	if (_export.margins.left() != MARGIN_LEFT_DEFAULT)
-		settings.setValue(MARGIN_LEFT_SETTING, _export.margins.left());
-	if (_export.margins.top() != MARGIN_TOP_DEFAULT)
-		settings.setValue(MARGIN_TOP_SETTING, _export.margins.top());
-	if (_export.margins.right() != MARGIN_RIGHT_DEFAULT)
-		settings.setValue(MARGIN_RIGHT_SETTING, _export.margins.right());
-	if (_export.margins.bottom() != MARGIN_BOTTOM_DEFAULT)
-		settings.setValue(MARGIN_BOTTOM_SETTING, _export.margins.bottom());
-	if (_export.fileName != EXPORT_FILENAME_DEFAULT)
-		settings.setValue(EXPORT_FILENAME_SETTING, _export.fileName);
+	settings.beginGroup(PDF_EXPORT_SETTINGS_GROUP);
+	if (_pdfExport.orientation != PAPER_ORIENTATION_DEFAULT)
+		settings.setValue(PAPER_ORIENTATION_SETTING, _pdfExport.orientation);
+	if (_pdfExport.resolution != RESOLUTION_DEFAULT)
+		settings.setValue(RESOLUTION_SETTING, _pdfExport.resolution);
+	if (_pdfExport.paperSize != PAPER_SIZE_DEFAULT)
+		settings.setValue(PAPER_SIZE_SETTING, _pdfExport.paperSize);
+	if (_pdfExport.margins.left() != PDF_MARGIN_LEFT_DEFAULT)
+		settings.setValue(PDF_MARGIN_LEFT_SETTING, _pdfExport.margins.left());
+	if (_pdfExport.margins.top() != PDF_MARGIN_TOP_DEFAULT)
+		settings.setValue(PDF_MARGIN_TOP_SETTING, _pdfExport.margins.top());
+	if (_pdfExport.margins.right() != PDF_MARGIN_RIGHT_DEFAULT)
+		settings.setValue(PDF_MARGIN_RIGHT_SETTING, _pdfExport.margins.right());
+	if (_pdfExport.margins.bottom() != PDF_MARGIN_BOTTOM_DEFAULT)
+		settings.setValue(PDF_MARGIN_BOTTOM_SETTING, _pdfExport.margins.bottom());
+	if (_pdfExport.fileName != PDF_FILENAME_DEFAULT)
+		settings.setValue(PDF_FILENAME_SETTING, _pdfExport.fileName);
+	settings.endGroup();
+
+	settings.beginGroup(PNG_EXPORT_SETTINGS_GROUP);
+	if (_pngExport.size.width() != PNG_WIDTH_DEFAULT)
+		settings.setValue(PNG_WIDTH_SETTING, _pngExport.size.width());
+	if (_pngExport.size.height() != PNG_HEIGHT_DEFAULT)
+		settings.setValue(PNG_HEIGHT_SETTING, _pngExport.size.height());
+	if (_pngExport.margins.left() != PNG_MARGIN_LEFT_DEFAULT)
+		settings.setValue(PNG_MARGIN_LEFT_SETTING, _pngExport.margins.left());
+	if (_pngExport.margins.top() != PNG_MARGIN_TOP_DEFAULT)
+		settings.setValue(PNG_MARGIN_TOP_SETTING, _pngExport.margins.top());
+	if (_pngExport.margins.right() != PNG_MARGIN_RIGHT_DEFAULT)
+		settings.setValue(PNG_MARGIN_RIGHT_SETTING, _pngExport.margins.right());
+	if (_pngExport.margins.bottom() != PNG_MARGIN_BOTTOM_DEFAULT)
+		settings.setValue(PNG_MARGIN_BOTTOM_SETTING, _pngExport.margins.bottom());
+	if (_pngExport.antialiasing != PNG_ANTIALIASING_DEFAULT)
+		settings.setValue(PNG_ANTIALIASING_SETTING, _pngExport.antialiasing);
+	if (_pngExport.fileName != PNG_FILENAME_DEFAULT)
+		settings.setValue(PNG_FILENAME_SETTING, _pngExport.fileName);
 	settings.endGroup();
 
 	settings.beginGroup(OPTIONS_SETTINGS_GROUP);
@@ -2078,23 +2175,42 @@ void GUI::readSettings()
 	}
 	settings.endGroup();
 
-	settings.beginGroup(EXPORT_SETTINGS_GROUP);
-	_export.orientation = (QPrinter::Orientation) settings.value(
+	settings.beginGroup(PDF_EXPORT_SETTINGS_GROUP);
+	_pdfExport.orientation = (QPrinter::Orientation) settings.value(
 	  PAPER_ORIENTATION_SETTING, PAPER_ORIENTATION_DEFAULT).toInt();
-	_export.resolution = settings.value(RESOLUTION_SETTING, RESOLUTION_DEFAULT)
+	_pdfExport.resolution = settings.value(RESOLUTION_SETTING,
+	  RESOLUTION_DEFAULT).toInt();
+	_pdfExport.paperSize = (QPrinter::PaperSize) settings.value(
+	  PAPER_SIZE_SETTING, PAPER_SIZE_DEFAULT).toInt();
+	qreal ml = settings.value(PDF_MARGIN_LEFT_SETTING, PDF_MARGIN_LEFT_DEFAULT)
+	  .toReal();
+	qreal mt = settings.value(PDF_MARGIN_TOP_SETTING, PDF_MARGIN_TOP_DEFAULT)
+	  .toReal();
+	qreal mr = settings.value(PDF_MARGIN_RIGHT_SETTING,
+	  PDF_MARGIN_RIGHT_DEFAULT).toReal();
+	qreal mb = settings.value(PDF_MARGIN_BOTTOM_SETTING,
+	  PDF_MARGIN_BOTTOM_DEFAULT).toReal();
+	_pdfExport.margins = MarginsF(ml, mt, mr, mb);
+	_pdfExport.fileName = settings.value(PDF_FILENAME_SETTING,
+	 PDF_FILENAME_DEFAULT).toString();
+	settings.endGroup();
+
+	settings.beginGroup(PNG_EXPORT_SETTINGS_GROUP);
+	_pngExport.size = QSize(settings.value(PNG_WIDTH_SETTING, PNG_WIDTH_DEFAULT)
+	  .toInt(), settings.value(PNG_HEIGHT_SETTING, PNG_HEIGHT_DEFAULT).toInt());
+	int mli = settings.value(PNG_MARGIN_LEFT_SETTING, PNG_MARGIN_LEFT_DEFAULT)
 	  .toInt();
-	_export.paperSize = (QPrinter::PaperSize) settings.value(PAPER_SIZE_SETTING,
-	  PAPER_SIZE_DEFAULT).toInt();
-	qreal ml = settings.value(MARGIN_LEFT_SETTING, MARGIN_LEFT_DEFAULT)
-	  .toReal();
-	qreal mt = settings.value(MARGIN_TOP_SETTING, MARGIN_TOP_DEFAULT).toReal();
-	qreal mr = settings.value(MARGIN_RIGHT_SETTING, MARGIN_RIGHT_DEFAULT)
-	  .toReal();
-	qreal mb = settings.value(MARGIN_BOTTOM_SETTING, MARGIN_BOTTOM_DEFAULT)
-	  .toReal();
-	_export.margins = MarginsF(ml, mt, mr, mb);
-	_export.fileName = settings.value(EXPORT_FILENAME_SETTING,
-	 EXPORT_FILENAME_DEFAULT).toString();
+	int mti = settings.value(PNG_MARGIN_TOP_SETTING, PNG_MARGIN_TOP_DEFAULT)
+	  .toInt();
+	int mri = settings.value(PNG_MARGIN_RIGHT_SETTING, PNG_MARGIN_RIGHT_DEFAULT)
+	  .toInt();
+	int mbi = settings.value(PNG_MARGIN_BOTTOM_SETTING, PNG_MARGIN_BOTTOM_DEFAULT)
+	  .toInt();
+	_pngExport.margins = Margins(mli, mti, mri, mbi);
+	_pngExport.antialiasing = settings.value(PNG_ANTIALIASING_SETTING,
+	  PNG_ANTIALIASING_DEFAULT).toBool();
+	_pngExport.fileName = settings.value(PNG_FILENAME_SETTING,
+	  PNG_FILENAME_DEFAULT).toString();
 	settings.endGroup();
 
 	settings.beginGroup(OPTIONS_SETTINGS_GROUP);

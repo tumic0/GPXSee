@@ -10,7 +10,8 @@
 #include "units.h"
 #include "timetype.h"
 #include "format.h"
-#include "exportdialog.h"
+#include "pdfexportdialog.h"
+#include "pngexportdialog.h"
 #include "optionsdialog.h"
 
 class QMenu;
@@ -45,7 +46,8 @@ private slots:
 	void keys();
 	void paths();
 	void printFile();
-	void exportFile();
+	void exportPDFFile();
+	void exportPNGFile();
 	void openFile();
 	void closeAll();
 	void reloadFiles();
@@ -97,6 +99,10 @@ private:
 	void loadPOIs();
 	void closeFiles();
 	void plot(QPrinter *printer);
+	void plotMainPage(QPainter *painter, const QRectF &rect, qreal ratio,
+	  bool expand = false);
+	void plotGraphsPage(QPainter *painter, const QRectF &rect, qreal ratio);
+	qreal graphPlotHeight(const QRectF &rect, qreal ratio);
 
 	QAction *createPOIFileAction(const QString &fileName);
 	MapAction *createMapAction(Map *map);
@@ -113,7 +119,6 @@ private:
 	bool openPOIFile(const QString &fileName);
 	bool loadFile(const QString &fileName);
 	bool loadMap(const QString &fileName);
-	void exportFile(const QString &fileName);
 	void updateStatusBarInfo();
 	void updateWindowTitle();
 	void updateNavigationActions();
@@ -153,7 +158,8 @@ private:
 	QAction *_aboutAction;
 	QAction *_aboutQtAction;
 	QAction *_printFileAction;
-	QAction *_exportFileAction;
+	QAction *_exportPDFFileAction;
+	QAction *_exportPNGFileAction;
 	QAction *_openFileAction;
 	QAction *_closeFileAction;
 	QAction *_reloadFileAction;
@@ -228,10 +234,13 @@ private:
 	QList<QByteArray> _windowStates;
 	int _frameStyle;
 
-	Export _export;
+	PDFExport _pdfExport;
+	PNGExport _pngExport;
 	Options _options;
 
 	QString _dataDir, _mapDir, _poiDir;
+
+	Units _units;
 };
 
 #endif // GUI_H

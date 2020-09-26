@@ -56,12 +56,12 @@ QWidget *OptionsDialog::createMapPage()
 		  + projections.at(i).value();
 		_projection->addItem(text, QVariant(projections.at(i).key()));
 	}
-	_projection->setCurrentIndex(_projection->findData(_options->projection));
+	_projection->setCurrentIndex(_projection->findData(_options.projection));
 
 #ifdef ENABLE_HIDPI
 	_hidpi = new QRadioButton(tr("High-resolution"));
 	_lodpi = new QRadioButton(tr("Standard"));
-	if (_options->hidpiMap)
+	if (_options.hidpiMap)
 		_hidpi->setChecked(true);
 	else
 		_lodpi->setChecked(true);
@@ -112,10 +112,10 @@ QWidget *OptionsDialog::createAppearancePage()
 {
 	// Tracks
 	_trackWidth = new QSpinBox();
-	_trackWidth->setValue(_options->trackWidth);
+	_trackWidth->setValue(_options.trackWidth);
 	_trackWidth->setMinimum(1);
 	_trackStyle = new StyleComboBox();
-	_trackStyle->setValue(_options->trackStyle);
+	_trackStyle->setValue(_options.trackStyle);
 	QFormLayout *trackLayout = new QFormLayout();
 #ifdef Q_OS_MAC
 	trackLayout->addRow(tr("Track width:"), _trackWidth);
@@ -129,10 +129,10 @@ QWidget *OptionsDialog::createAppearancePage()
 
 	// Routes
 	_routeWidth = new QSpinBox();
-	_routeWidth->setValue(_options->routeWidth);
+	_routeWidth->setValue(_options.routeWidth);
 	_routeWidth->setMinimum(1);
 	_routeStyle = new StyleComboBox();
-	_routeStyle->setValue(_options->routeStyle);
+	_routeStyle->setValue(_options.routeStyle);
 	QFormLayout *routeLayout = new QFormLayout();
 #ifdef Q_OS_MAC
 	routeLayout->addRow(tr("Route width:"), _routeWidth);
@@ -146,11 +146,11 @@ QWidget *OptionsDialog::createAppearancePage()
 
 	// Areas
 	_areaWidth = new QSpinBox();
-	_areaWidth->setValue(_options->areaWidth);
+	_areaWidth->setValue(_options.areaWidth);
 	_areaStyle = new StyleComboBox();
-	_areaStyle->setValue(_options->areaStyle);
+	_areaStyle->setValue(_options.areaStyle);
 	_areaOpacity = new PercentSlider();
-	_areaOpacity->setValue(_options->areaOpacity);
+	_areaOpacity->setValue(_options.areaOpacity);
 	QFormLayout *areaLayout = new QFormLayout();
 #ifdef Q_OS_MAC
 	areaLayout->addRow(tr("Area border width:"), _areaWidth);
@@ -166,15 +166,15 @@ QWidget *OptionsDialog::createAppearancePage()
 
 	// Palette & antialiasing
 	_baseColor = new ColorBox();
-	_baseColor->setColor(_options->palette.color());
+	_baseColor->setColor(_options.palette.color());
 	_colorOffset = new PercentSlider();
-	_colorOffset->setValue(_options->palette.shift() * 100);
+	_colorOffset->setValue(_options.palette.shift() * 100);
 	QFormLayout *paletteLayout = new QFormLayout();
 	paletteLayout->addRow(tr("Base color:"), _baseColor);
 	paletteLayout->addRow(tr("Palette shift:"), _colorOffset);
 
 	_pathAA = new QCheckBox(tr("Use anti-aliasing"));
-	_pathAA->setChecked(_options->pathAntiAliasing);
+	_pathAA->setChecked(_options.pathAntiAliasing);
 	QFormLayout *pathAALayout = new QFormLayout();
 	pathAALayout->addWidget(_pathAA);
 
@@ -201,9 +201,9 @@ QWidget *OptionsDialog::createAppearancePage()
 	// Waypoints
 	_waypointSize = new QSpinBox();
 	_waypointSize->setMinimum(1);
-	_waypointSize->setValue(_options->waypointSize);
+	_waypointSize->setValue(_options.waypointSize);
 	_waypointColor = new ColorBox();
-	_waypointColor->setColor(_options->waypointColor);
+	_waypointColor->setColor(_options.waypointColor);
 	QFormLayout *waypointLayout = new QFormLayout();
 #ifdef Q_OS_MAC
 	waypointLayout->addRow(tr("Waypoint color:"), _waypointColor);
@@ -217,9 +217,9 @@ QWidget *OptionsDialog::createAppearancePage()
 
 	_poiSize = new QSpinBox();
 	_poiSize->setMinimum(1);
-	_poiSize->setValue(_options->poiSize);
+	_poiSize->setValue(_options.poiSize);
 	_poiColor = new ColorBox();
-	_poiColor->setColor(_options->poiColor);
+	_poiColor->setColor(_options.poiColor);
 	QFormLayout *poiLayout = new QFormLayout();
 #ifdef Q_OS_MAC
 	poiLayout->addRow(tr("POI color:"), _poiColor);
@@ -247,9 +247,9 @@ QWidget *OptionsDialog::createAppearancePage()
 
 	// Graphs
 	_sliderColor = new ColorBox();
-	_sliderColor->setColor(_options->sliderColor);
+	_sliderColor->setColor(_options.sliderColor);
 	_graphWidth = new QSpinBox();
-	_graphWidth->setValue(_options->graphWidth);
+	_graphWidth->setValue(_options.graphWidth);
 	_graphWidth->setMinimum(1);
 
 	QFormLayout *graphLayout = new QFormLayout();
@@ -257,7 +257,7 @@ QWidget *OptionsDialog::createAppearancePage()
 	graphLayout->addRow(tr("Slider color:"), _sliderColor);
 
 	_graphAA = new QCheckBox(tr("Use anti-aliasing"));
-	_graphAA->setChecked(_options->graphAntiAliasing);
+	_graphAA->setChecked(_options.graphAntiAliasing);
 	QFormLayout *graphAALayout = new QFormLayout();
 	graphAALayout->addWidget(_graphAA);
 
@@ -271,9 +271,9 @@ QWidget *OptionsDialog::createAppearancePage()
 
 	// Map
 	_mapOpacity = new PercentSlider();
-	_mapOpacity->setValue(_options->mapOpacity);
+	_mapOpacity->setValue(_options.mapOpacity);
 	_backgroundColor = new ColorBox();
-	_backgroundColor->setColor(_options->backgroundColor);
+	_backgroundColor->setColor(_options.backgroundColor);
 	_backgroundColor->enableAlphaChannel(false);
 
 	QFormLayout *mapLayout = new QFormLayout();
@@ -301,19 +301,19 @@ QWidget *OptionsDialog::createDataPage()
 	QString filterToolTip = tr("Moving average window size");
 
 	_elevationFilter = new OddSpinBox();
-	_elevationFilter->setValue(_options->elevationFilter);
+	_elevationFilter->setValue(_options.elevationFilter);
 	_elevationFilter->setToolTip(filterToolTip);
 	_speedFilter = new OddSpinBox();
-	_speedFilter->setValue(_options->speedFilter);
+	_speedFilter->setValue(_options.speedFilter);
 	_speedFilter->setToolTip(filterToolTip);
 	_heartRateFilter = new OddSpinBox();
-	_heartRateFilter->setValue(_options->heartRateFilter);
+	_heartRateFilter->setValue(_options.heartRateFilter);
 	_heartRateFilter->setToolTip(filterToolTip);
 	_cadenceFilter = new OddSpinBox();
-	_cadenceFilter->setValue(_options->cadenceFilter);
+	_cadenceFilter->setValue(_options.cadenceFilter);
 	_cadenceFilter->setToolTip(filterToolTip);
 	_powerFilter = new OddSpinBox();
-	_powerFilter->setValue(_options->powerFilter);
+	_powerFilter->setValue(_options.powerFilter);
 	_powerFilter->setToolTip(filterToolTip);
 
 	QFormLayout *smoothLayout = new QFormLayout();
@@ -328,7 +328,7 @@ QWidget *OptionsDialog::createDataPage()
 #endif // Q_OS_MAC
 
 	_outlierEliminate = new QCheckBox(tr("Eliminate GPS outliers"));
-	_outlierEliminate->setChecked(_options->outlierEliminate);
+	_outlierEliminate->setChecked(_options.outlierEliminate);
 
 	QFormLayout *outlierLayout = new QFormLayout();
 	outlierLayout->addWidget(_outlierEliminate);
@@ -349,7 +349,7 @@ QWidget *OptionsDialog::createDataPage()
 
 	_automaticPause = new QRadioButton(tr("Automatic"));
 	_manualPause = new QRadioButton(tr("Custom"));
-	if (_options->automaticPause)
+	if (_options.automaticPause)
 		_automaticPause->setChecked(true);
 	else
 		_manualPause->setChecked(true);
@@ -359,20 +359,20 @@ QWidget *OptionsDialog::createDataPage()
 	_pauseSpeed->setSingleStep(0.1);
 	_pauseSpeed->setMinimum(0.1);
 	_pauseSpeed->setEnabled(_manualPause->isChecked());
-	if (_options->units == Imperial) {
-		_pauseSpeed->setValue(_options->pauseSpeed * MS2MIH);
+	if (_units == Imperial) {
+		_pauseSpeed->setValue(_options.pauseSpeed * MS2MIH);
 		_pauseSpeed->setSuffix(UNIT_SPACE + tr("mi/h"));
-	} else if (_options->units == Nautical) {
-		_pauseSpeed->setValue(_options->pauseSpeed * MS2KN);
+	} else if (_units == Nautical) {
+		_pauseSpeed->setValue(_options.pauseSpeed * MS2KN);
 		_pauseSpeed->setSuffix(UNIT_SPACE + tr("kn"));
 	} else {
-		_pauseSpeed->setValue(_options->pauseSpeed * MS2KMH);
+		_pauseSpeed->setValue(_options.pauseSpeed * MS2KMH);
 		_pauseSpeed->setSuffix(UNIT_SPACE + tr("km/h"));
 	}
 	_pauseInterval = new QSpinBox();
 	_pauseInterval->setMinimum(1);
 	_pauseInterval->setSuffix(UNIT_SPACE + tr("s"));
-	_pauseInterval->setValue(_options->pauseInterval);
+	_pauseInterval->setValue(_options.pauseInterval);
 	_pauseInterval->setEnabled(_manualPause->isChecked());
 
 	connect(_automaticPause, SIGNAL(toggled(bool)), this,
@@ -400,29 +400,29 @@ QWidget *OptionsDialog::createDataPage()
 
 	_computedSpeed = new QRadioButton(tr("Computed from distance/time"));
 	_reportedSpeed = new QRadioButton(tr("Recorded by device"));
-	if (_options->useReportedSpeed)
+	if (_options.useReportedSpeed)
 		_reportedSpeed->setChecked(true);
 	else
 		_computedSpeed->setChecked(true);
 	_showSecondarySpeed = new QCheckBox(tr("Show secondary speed"));
-	_showSecondarySpeed->setChecked(_options->showSecondarySpeed);
+	_showSecondarySpeed->setChecked(_options.showSecondarySpeed);
 
 	_dataGPSElevation = new QRadioButton(tr("GPS data"));
 	_dataDEMElevation = new QRadioButton(tr("DEM data"));
-	if (_options->dataUseDEM)
+	if (_options.dataUseDEM)
 		_dataDEMElevation->setChecked(true);
 	else
 		_dataGPSElevation->setChecked(true);
 	_showSecondaryElevation = new QCheckBox(tr("Show secondary elevation"));
-	_showSecondaryElevation->setChecked(_options->showSecondaryElevation);
+	_showSecondaryElevation->setChecked(_options.showSecondaryElevation);
 
 #ifdef ENABLE_TIMEZONES
 	_utcZone = new QRadioButton(tr("UTC"));
 	_systemZone = new QRadioButton(tr("System"));
 	_customZone = new QRadioButton(tr("Custom"));
-	if (_options->timeZone.type() == TimeZoneInfo::UTC)
+	if (_options.timeZone.type() == TimeZoneInfo::UTC)
 		_utcZone->setChecked(true);
-	else if (_options->timeZone.type() == TimeZoneInfo::System)
+	else if (_options.timeZone.type() == TimeZoneInfo::System)
 		_systemZone->setChecked(true);
 	else
 		_customZone->setChecked(true);
@@ -431,7 +431,7 @@ QWidget *OptionsDialog::createDataPage()
 	QList<QByteArray> zones = QTimeZone::availableTimeZoneIds();
 	for (int i = 0; i < zones.size(); i++)
 		_timeZone->addItem(zones.at(i));
-	_timeZone->setCurrentText(_options->timeZone.customZone().id());
+	_timeZone->setCurrentText(_options.timeZone.customZone().id());
 	connect(_customZone, SIGNAL(toggled(bool)), _timeZone,
 	  SLOT(setEnabled(bool)));
 	QHBoxLayout *customZoneLayout = new QHBoxLayout();
@@ -440,7 +440,7 @@ QWidget *OptionsDialog::createDataPage()
 #endif // ENABLE_TIMEZONES
 
 	_useSegments = new QCheckBox(tr("Use segments"));
-	_useSegments->setChecked(_options->useSegments);
+	_useSegments->setChecked(_options.useSegments);
 
 	QWidget *sourceTab = new QWidget();
 	QVBoxLayout *sourceTabLayout = new QVBoxLayout();
@@ -541,14 +541,14 @@ QWidget *OptionsDialog::createPOIPage()
 	_poiRadius = new QDoubleSpinBox();
 	_poiRadius->setSingleStep(1);
 	_poiRadius->setDecimals(1);
-	if (_options->units == Imperial) {
-		_poiRadius->setValue(_options->poiRadius / MIINM);
+	if (_units == Imperial) {
+		_poiRadius->setValue(_options.poiRadius / MIINM);
 		_poiRadius->setSuffix(UNIT_SPACE + tr("mi"));
-	} else if (_options->units == Nautical) {
-		_poiRadius->setValue(_options->poiRadius / NMIINM);
+	} else if (_units == Nautical) {
+		_poiRadius->setValue(_options.poiRadius / NMIINM);
 		_poiRadius->setSuffix(UNIT_SPACE + tr("nmi"));
 	} else {
-		_poiRadius->setValue(_options->poiRadius / KMINM);
+		_poiRadius->setValue(_options.poiRadius / KMINM);
 		_poiRadius->setSuffix(UNIT_SPACE + tr("km"));
 	}
 
@@ -568,7 +568,7 @@ QWidget *OptionsDialog::createExportPage()
 {
 	_wysiwyg = new QRadioButton(tr("WYSIWYG"));
 	_hires = new QRadioButton(tr("High-Resolution"));
-	if (_options->hiresPrint)
+	if (_options.hiresPrint)
 		_hires->setChecked(true);
 	else
 		_wysiwyg->setChecked(true);
@@ -597,17 +597,17 @@ QWidget *OptionsDialog::createExportPage()
 
 
 	_name = new QCheckBox(tr("Name"));
-	_name->setChecked(_options->printName);
+	_name->setChecked(_options.printName);
 	_date = new QCheckBox(tr("Date"));
-	_date->setChecked(_options->printDate);
+	_date->setChecked(_options.printDate);
 	_distance = new QCheckBox(tr("Distance"));
-	_distance->setChecked(_options->printDistance);
+	_distance->setChecked(_options.printDistance);
 	_time = new QCheckBox(tr("Time"));
-	_time->setChecked(_options->printTime);
+	_time->setChecked(_options.printTime);
 	_movingTime = new QCheckBox(tr("Moving time"));
-	_movingTime->setChecked(_options->printMovingTime);
+	_movingTime->setChecked(_options.printMovingTime);
 	_itemCount = new QCheckBox(tr("Item count (>1)"));
-	_itemCount->setChecked(_options->printItemCount);
+	_itemCount->setChecked(_options.printItemCount);
 
 	QFormLayout *headerTabLayout = new QFormLayout();
 	headerTabLayout->addWidget(_name);
@@ -622,7 +622,7 @@ QWidget *OptionsDialog::createExportPage()
 
 
 	_separateGraphPage = new QCheckBox(tr("Separate graph page"));
-	_separateGraphPage->setChecked(_options->separateGraphPage);
+	_separateGraphPage->setChecked(_options.separateGraphPage);
 
 	QFormLayout *graphTabLayout = new QFormLayout();
 	graphTabLayout->addWidget(_separateGraphPage);
@@ -641,23 +641,23 @@ QWidget *OptionsDialog::createExportPage()
 QWidget *OptionsDialog::createSystemPage()
 {
 	_useOpenGL = new QCheckBox(tr("Use OpenGL"));
-	_useOpenGL->setChecked(_options->useOpenGL);
+	_useOpenGL->setChecked(_options.useOpenGL);
 #ifdef ENABLE_HTTP2
 	_enableHTTP2 = new QCheckBox(tr("Enable HTTP/2"));
-	_enableHTTP2->setChecked(_options->enableHTTP2);
+	_enableHTTP2->setChecked(_options.enableHTTP2);
 #endif // ENABLE_HTTP2
 
 	_pixmapCache = new QSpinBox();
 	_pixmapCache->setMinimum(16);
 	_pixmapCache->setMaximum(1024);
 	_pixmapCache->setSuffix(UNIT_SPACE + tr("MB"));
-	_pixmapCache->setValue(_options->pixmapCache);
+	_pixmapCache->setValue(_options.pixmapCache);
 
 	_connectionTimeout = new QSpinBox();
 	_connectionTimeout->setMinimum(30);
 	_connectionTimeout->setMaximum(120);
 	_connectionTimeout->setSuffix(UNIT_SPACE + tr("s"));
-	_connectionTimeout->setValue(_options->connectionTimeout);
+	_connectionTimeout->setValue(_options.connectionTimeout);
 
 	QFormLayout *formLayout = new QFormLayout();
 	formLayout->addRow(tr("Image cache size:"), _pixmapCache);
@@ -682,8 +682,8 @@ QWidget *OptionsDialog::createSystemPage()
 	return systemPage;
 }
 
-OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
-  : QDialog(parent), _options(options)
+OptionsDialog::OptionsDialog(Options &options, Units units, QWidget *parent)
+  : QDialog(parent), _options(options), _units(units)
 {
 	QStackedWidget *pages = new QStackedWidget();
 	pages->addWidget(createAppearancePage());
@@ -735,82 +735,82 @@ OptionsDialog::OptionsDialog(Options *options, QWidget *parent)
 
 void OptionsDialog::accept()
 {
-	_options->palette.setColor(_baseColor->color());
-	_options->palette.setShift(_colorOffset->value() / 100.0);
-	_options->mapOpacity = _mapOpacity->value();
-	_options->backgroundColor = _backgroundColor->color();
-	_options->trackWidth = _trackWidth->value();
-	_options->trackStyle = (Qt::PenStyle) _trackStyle->itemData(
+	_options.palette.setColor(_baseColor->color());
+	_options.palette.setShift(_colorOffset->value() / 100.0);
+	_options.mapOpacity = _mapOpacity->value();
+	_options.backgroundColor = _backgroundColor->color();
+	_options.trackWidth = _trackWidth->value();
+	_options.trackStyle = (Qt::PenStyle) _trackStyle->itemData(
 	  _trackStyle->currentIndex()).toInt();
-	_options->routeWidth = _routeWidth->value();
-	_options->routeStyle = (Qt::PenStyle) _routeStyle->itemData(
+	_options.routeWidth = _routeWidth->value();
+	_options.routeStyle = (Qt::PenStyle) _routeStyle->itemData(
 	  _routeStyle->currentIndex()).toInt();
-	_options->pathAntiAliasing = _pathAA->isChecked();
-	_options->areaWidth = _areaWidth->value();
-	_options->areaStyle = (Qt::PenStyle) _areaStyle->itemData(
+	_options.pathAntiAliasing = _pathAA->isChecked();
+	_options.areaWidth = _areaWidth->value();
+	_options.areaStyle = (Qt::PenStyle) _areaStyle->itemData(
 	  _areaStyle->currentIndex()).toInt();
-	_options->areaOpacity = _areaOpacity->value();
-	_options->waypointSize = _waypointSize->value();
-	_options->waypointColor = _waypointColor->color();
-	_options->poiSize = _poiSize->value();
-	_options->poiColor = _poiColor->color();
-	_options->graphWidth = _graphWidth->value();
-	_options->sliderColor = _sliderColor->color();
-	_options->graphAntiAliasing = _graphAA->isChecked();
+	_options.areaOpacity = _areaOpacity->value();
+	_options.waypointSize = _waypointSize->value();
+	_options.waypointColor = _waypointColor->color();
+	_options.poiSize = _poiSize->value();
+	_options.poiColor = _poiColor->color();
+	_options.graphWidth = _graphWidth->value();
+	_options.sliderColor = _sliderColor->color();
+	_options.graphAntiAliasing = _graphAA->isChecked();
 
-	_options->projection = _projection->itemData(_projection->currentIndex())
+	_options.projection = _projection->itemData(_projection->currentIndex())
 	  .toInt();
 #ifdef ENABLE_HIDPI
-	_options->hidpiMap = _hidpi->isChecked();
+	_options.hidpiMap = _hidpi->isChecked();
 #endif // ENABLE_HIDPI
 
-	_options->elevationFilter = _elevationFilter->value();
-	_options->speedFilter = _speedFilter->value();
-	_options->heartRateFilter = _heartRateFilter->value();
-	_options->cadenceFilter = _cadenceFilter->value();
-	_options->powerFilter = _powerFilter->value();
-	_options->outlierEliminate = _outlierEliminate->isChecked();
-	_options->automaticPause = _automaticPause->isChecked();
-	qreal pauseSpeed = (_options->units == Imperial)
-		? _pauseSpeed->value() / MS2MIH : (_options->units == Nautical)
+	_options.elevationFilter = _elevationFilter->value();
+	_options.speedFilter = _speedFilter->value();
+	_options.heartRateFilter = _heartRateFilter->value();
+	_options.cadenceFilter = _cadenceFilter->value();
+	_options.powerFilter = _powerFilter->value();
+	_options.outlierEliminate = _outlierEliminate->isChecked();
+	_options.automaticPause = _automaticPause->isChecked();
+	qreal pauseSpeed = (_units == Imperial)
+		? _pauseSpeed->value() / MS2MIH : (_units == Nautical)
 		? _pauseSpeed->value() / MS2KN : _pauseSpeed->value() / MS2KMH;
-	if (qAbs(pauseSpeed - _options->pauseSpeed) > 0.01)
-		_options->pauseSpeed = pauseSpeed;
-	_options->pauseInterval = _pauseInterval->value();
-	_options->useReportedSpeed = _reportedSpeed->isChecked();
-	_options->dataUseDEM = _dataDEMElevation->isChecked();
-	_options->showSecondaryElevation = _showSecondaryElevation->isChecked();
-	_options->showSecondarySpeed = _showSecondarySpeed->isChecked();
+	if (qAbs(pauseSpeed - _options.pauseSpeed) > 0.01)
+		_options.pauseSpeed = pauseSpeed;
+	_options.pauseInterval = _pauseInterval->value();
+	_options.useReportedSpeed = _reportedSpeed->isChecked();
+	_options.dataUseDEM = _dataDEMElevation->isChecked();
+	_options.showSecondaryElevation = _showSecondaryElevation->isChecked();
+	_options.showSecondarySpeed = _showSecondarySpeed->isChecked();
 #ifdef ENABLE_TIMEZONES
-	_options->timeZone.setType(_utcZone->isChecked()
+	_options.timeZone.setType(_utcZone->isChecked()
 	  ? TimeZoneInfo::UTC : _systemZone->isChecked()
 	  ? TimeZoneInfo::System : TimeZoneInfo::Custom);
-	_options->timeZone.setCustomZone(QTimeZone(_timeZone->currentText()
+	_options.timeZone.setCustomZone(QTimeZone(_timeZone->currentText()
 	  .toLatin1()));
 #endif // ENABLE_TIMEZONES
-	_options->useSegments = _useSegments->isChecked();
+	_options.useSegments = _useSegments->isChecked();
 
-	qreal poiRadius = (_options->units == Imperial)
-		? _poiRadius->value() * MIINM : (_options->units == Nautical)
+	qreal poiRadius = (_units == Imperial)
+		? _poiRadius->value() * MIINM : (_units == Nautical)
 		? _poiRadius->value() * NMIINM : _poiRadius->value() * KMINM;
-	if (qAbs(poiRadius - _options->poiRadius) > 0.01)
-		_options->poiRadius = poiRadius;
+	if (qAbs(poiRadius - _options.poiRadius) > 0.01)
+		_options.poiRadius = poiRadius;
 
-	_options->useOpenGL = _useOpenGL->isChecked();
+	_options.useOpenGL = _useOpenGL->isChecked();
 #ifdef ENABLE_HTTP2
-	_options->enableHTTP2 = _enableHTTP2->isChecked();
+	_options.enableHTTP2 = _enableHTTP2->isChecked();
 #endif // ENABLE_HTTP2
-	_options->pixmapCache = _pixmapCache->value();
-	_options->connectionTimeout = _connectionTimeout->value();
+	_options.pixmapCache = _pixmapCache->value();
+	_options.connectionTimeout = _connectionTimeout->value();
 
-	_options->hiresPrint = _hires->isChecked();
-	_options->printName = _name->isChecked();
-	_options->printDate = _date->isChecked();
-	_options->printDistance = _distance->isChecked();
-	_options->printTime = _time->isChecked();
-	_options->printMovingTime = _movingTime->isChecked();
-	_options->printItemCount = _itemCount->isChecked();
-	_options->separateGraphPage = _separateGraphPage->isChecked();
+	_options.hiresPrint = _hires->isChecked();
+	_options.printName = _name->isChecked();
+	_options.printDate = _date->isChecked();
+	_options.printDistance = _distance->isChecked();
+	_options.printTime = _time->isChecked();
+	_options.printMovingTime = _movingTime->isChecked();
+	_options.printItemCount = _itemCount->isChecked();
+	_options.separateGraphPage = _separateGraphPage->isChecked();
 
 	QDialog::accept();
 }

@@ -6,25 +6,24 @@
 #include <QGroupBox>
 #include <QComboBox>
 #include <QRadioButton>
-#include <QPushButton>
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QTabWidget>
 #include <QDoubleSpinBox>
 #include "fileselectwidget.h"
 #include "units.h"
-#include "exportdialog.h"
+#include "pdfexportdialog.h"
 
 
-ExportDialog::ExportDialog(Export *exp, QWidget *parent)
-  : QDialog(parent), _export(exp)
+PDFExportDialog::PDFExportDialog(PDFExport &exp, Units units, QWidget *parent)
+  : QDialog(parent), _export(exp), _units(units)
 {
 	int index;
 
 	_fileSelect = new FileSelectWidget();
 	_fileSelect->setFilter(tr("PDF files") + " (*.pdf);;" + tr("All files")
 	  + " (*)");
-	_fileSelect->setFile(_export->fileName);
+	_fileSelect->setFile(_export.fileName);
 
 	_paperSize = new QComboBox();
 	_paperSize->addItem("A2", QPrinter::A2);
@@ -39,14 +38,14 @@ ExportDialog::ExportDialog(Export *exp, QWidget *parent)
 	_paperSize->addItem("Tabloid", QPrinter::Tabloid);
 	_paperSize->addItem("Legal", QPrinter::Legal);
 	_paperSize->addItem("Letter", QPrinter::Letter);
-	if ((index = _paperSize->findData(_export->paperSize)) >= 0)
+	if ((index = _paperSize->findData(_export.paperSize)) >= 0)
 		_paperSize->setCurrentIndex(index);
 
 	_resolution = new QComboBox();
 	_resolution->addItem("150 DPI", 150);
 	_resolution->addItem("300 DPI", 300);
 	_resolution->addItem("600 DPI", 600);
-	if ((index = _resolution->findData(_export->resolution)) >= 0)
+	if ((index = _resolution->findData(_export.resolution)) >= 0)
 		_resolution->setCurrentIndex(index);
 
 	_portrait = new QRadioButton(tr("Portrait"));
@@ -54,7 +53,7 @@ ExportDialog::ExportDialog(Export *exp, QWidget *parent)
 	QHBoxLayout *orientationLayout = new QHBoxLayout();
 	orientationLayout->addWidget(_portrait);
 	orientationLayout->addWidget(_landscape);
-	if (_export->orientation == QPrinter::Portrait)
+	if (_export.orientation == QPrinter::Portrait)
 		_portrait->setChecked(true);
 	else
 		_landscape->setChecked(true);
@@ -63,21 +62,21 @@ ExportDialog::ExportDialog(Export *exp, QWidget *parent)
 	_bottomMargin = new QDoubleSpinBox();
 	_leftMargin = new QDoubleSpinBox();
 	_rightMargin = new QDoubleSpinBox();
-	QString us = (_export->units == Metric) ? tr("mm") : tr("in");
+	QString us = (units == Metric) ? tr("mm") : tr("in");
 	_topMargin->setSuffix(UNIT_SPACE + us);
 	_bottomMargin->setSuffix(UNIT_SPACE + us);
 	_leftMargin->setSuffix(UNIT_SPACE + us);
 	_rightMargin->setSuffix(UNIT_SPACE + us);
-	if (_export->units == Metric) {
-		_topMargin->setValue(_export->margins.top());
-		_bottomMargin->setValue(_export->margins.bottom());
-		_leftMargin->setValue(_export->margins.left());
-		_rightMargin->setValue(_export->margins.right());
+	if (units == Metric) {
+		_topMargin->setValue(_export.margins.top());
+		_bottomMargin->setValue(_export.margins.bottom());
+		_leftMargin->setValue(_export.margins.left());
+		_rightMargin->setValue(_export.margins.right());
 	} else {
-		_topMargin->setValue(_export->margins.top() * MM2IN);
-		_bottomMargin->setValue(_export->margins.bottom() * MM2IN);
-		_leftMargin->setValue(_export->margins.left() * MM2IN);
-		_rightMargin->setValue(_export->margins.right() * MM2IN);
+		_topMargin->setValue(_export.margins.top() * MM2IN);
+		_bottomMargin->setValue(_export.margins.bottom() * MM2IN);
+		_leftMargin->setValue(_export.margins.left() * MM2IN);
+		_rightMargin->setValue(_export.margins.right() * MM2IN);
 		_topMargin->setSingleStep(0.1);
 		_bottomMargin->setSingleStep(0.1);
 		_leftMargin->setSingleStep(0.1);
@@ -136,41 +135,13 @@ ExportDialog::ExportDialog(Export *exp, QWidget *parent)
 	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
-bool ExportDialog::checkFile()
+void PDFExportDialog::accept()
 {
-	if (_fileSelect->file().isEmpty()) {
-		QMessageBox::warning(this, tr("Error"), tr("No output file selected."));
-		return false;
-	}
-
-	QFile file(_fileSelect->file());
-	QFileInfo fi(file);
-	bool exists = fi.exists();
-	bool opened = false;
-
-	if (exists && fi.isDir()) {
-		QMessageBox::warning(this, tr("Error"), tr("%1 is a directory.")
-		  .arg(file.fileName()));
-		return false;
-	} else if ((exists && !fi.isWritable())
-	  || !(opened = file.open(QFile::Append))) {
-		QMessageBox::warning(this, tr("Error"), tr("%1 is not writable.")
-		  .arg(file.fileName()));
-		return false;
-	}
-	if (opened) {
-		file.close();
-		if (!exists)
-			file.remove();
-	}
-
-	return true;
-}
-
-void ExportDialog::accept()
-{
-	if (!checkFile())
+	QString error;
+	if (!_fileSelect->checkFile(error)) {
+		QMessageBox::warning(this, tr("Error"), error);
 		return;
+	}
 
 	QPrinter::Orientation orientation = _portrait->isChecked()
 	  ? QPrinter::Portrait : QPrinter::Landscape;
@@ -178,16 +149,16 @@ void ExportDialog::accept()
 	  (_paperSize->itemData(_paperSize->currentIndex()).toInt());
 	int resolution = _resolution->itemData(_resolution->currentIndex()).toInt();
 
-	_export->fileName = _fileSelect->file();
-	_export->paperSize = paperSize;
-	_export->resolution = resolution;
-	_export->orientation = orientation;
-	if (_export->units == Imperial)
-		_export->margins = MarginsF(_leftMargin->value() / MM2IN,
+	_export.fileName = _fileSelect->file();
+	_export.paperSize = paperSize;
+	_export.resolution = resolution;
+	_export.orientation = orientation;
+	if (_units == Imperial)
+		_export.margins = MarginsF(_leftMargin->value() / MM2IN,
 		_topMargin->value() / MM2IN, _rightMargin->value() / MM2IN,
 		_bottomMargin->value() / MM2IN);
 	else
-		_export->margins = MarginsF(_leftMargin->value(), _topMargin->value(),
+		_export.margins = MarginsF(_leftMargin->value(), _topMargin->value(),
 		  _rightMargin->value(), _bottomMargin->value());
 
 	QDialog::accept();

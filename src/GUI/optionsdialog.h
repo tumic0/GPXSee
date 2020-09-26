@@ -82,8 +82,6 @@ struct Options {
 	bool printMovingTime;
 	bool printItemCount;
 	bool separateGraphPage;
-
-	Units units;
 };
 
 class OptionsDialog : public QDialog
@@ -94,7 +92,7 @@ public slots:
 	void accept();
 
 public:
-	OptionsDialog(Options *options, QWidget *parent = 0);
+	OptionsDialog(Options &options, Units units, QWidget *parent = 0);
 
 private slots:
 	void automaticPauseDetectionSet(bool set);
@@ -107,8 +105,9 @@ private:
 	QWidget *createSystemPage();
 	QWidget *createExportPage();
 
-	Options *_options;
+	Options &_options;
 
+	Units _units;
 	// Appearance
 	ColorBox *_baseColor;
 	PercentSlider *_colorOffset;

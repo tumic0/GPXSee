@@ -1,5 +1,5 @@
-#ifndef EXPORTDIALOG_H
-#define EXPORTDIALOG_H
+#ifndef PDFEXPORTDIALOG_H
+#define PDFEXPORTDIALOG_H
 
 #include <QDialog>
 #include <QPrinter>
@@ -11,31 +11,29 @@ class QRadioButton;
 class FileSelectWidget;
 class QDoubleSpinBox;
 
-struct Export {
+struct PDFExport
+{
 	QString fileName;
 	QPrinter::PaperSize paperSize;
 	QPrinter::Orientation orientation;
 	MarginsF margins;
 	int resolution;
-
-	Units units;
 };
 
-class ExportDialog : public QDialog
+class PDFExportDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
-	ExportDialog(Export *exp, QWidget *parent = 0);
+	PDFExportDialog(PDFExport &exp, Units units, QWidget *parent = 0);
 
 public slots:
 	void accept();
 
 private:
-	bool checkFile();
+	PDFExport &_export;
 
-	Export *_export;
-
+	Units _units;
 	FileSelectWidget *_fileSelect;
 	QComboBox *_paperSize;
 	QComboBox *_resolution;
@@ -47,4 +45,4 @@ private:
 	QDoubleSpinBox *_rightMargin;
 };
 
-#endif // EXPORTDIALOG_H
+#endif // PDFEXPORTDIALOG_H

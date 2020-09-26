@@ -41,3 +41,33 @@ void FileSelectWidget::browse()
 	if (!fileName.isEmpty())
 		_edit->setText(fileName);
 }
+
+bool FileSelectWidget::checkFile(QString &error) const
+{
+	if (_edit->text().isEmpty()) {
+		error = tr("No output file selected.");
+		return false;
+	}
+
+	QFile file(_edit->text());
+	QFileInfo fi(file);
+	bool exists = fi.exists();
+	bool opened = false;
+
+	if (exists && fi.isDir()) {
+		error = tr("%1 is a directory.").arg(file.fileName());
+		return false;
+	} else if ((exists && !fi.isWritable())
+	  || !(opened = file.open(QFile::Append))) {
+		error = tr("%1 is not writable.").arg(file.fileName());
+		return false;
+	}
+
+	if (opened) {
+		file.close();
+		if (!exists)
+			file.remove();
+	}
+
+	return true;
+}

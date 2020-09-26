@@ -66,25 +66,44 @@
 #define SHOW_WAYPOINT_LABELS_SETTING      "waypointLabels"
 #define SHOW_WAYPOINT_LABELS_DEFAULT      true
 
-#define EXPORT_SETTINGS_GROUP             "Export"
+#define PDF_EXPORT_SETTINGS_GROUP         "Export"
 #define PAPER_ORIENTATION_SETTING         "orientation"
 #define PAPER_ORIENTATION_DEFAULT         QPrinter::Portrait
 #define PAPER_SIZE_SETTING                "size"
 #define PAPER_SIZE_DEFAULT                (IMPERIAL_UNITS() ? QPrinter::Letter \
                                             : QPrinter::A4)
-#define MARGIN_LEFT_SETTING               "marginLeft"
-#define MARGIN_LEFT_DEFAULT               5 /* mm */
-#define MARGIN_TOP_SETTING                "marginTop"
-#define MARGIN_TOP_DEFAULT                5 /* mm */
-#define MARGIN_RIGHT_SETTING              "marginRight"
-#define MARGIN_RIGHT_DEFAULT              5 /* mm */
-#define MARGIN_BOTTOM_SETTING             "marginBottom"
-#define MARGIN_BOTTOM_DEFAULT             5 /* mm */
-#define EXPORT_FILENAME_SETTING           "fileName"
-#define EXPORT_FILENAME_DEFAULT           QString("%1/export.pdf"). \
+#define PDF_MARGIN_LEFT_SETTING           "marginLeft"
+#define PDF_MARGIN_LEFT_DEFAULT           5 /* mm */
+#define PDF_MARGIN_TOP_SETTING            "marginTop"
+#define PDF_MARGIN_TOP_DEFAULT            5 /* mm */
+#define PDF_MARGIN_RIGHT_SETTING          "marginRight"
+#define PDF_MARGIN_RIGHT_DEFAULT          5 /* mm */
+#define PDF_MARGIN_BOTTOM_SETTING         "marginBottom"
+#define PDF_MARGIN_BOTTOM_DEFAULT         5 /* mm */
+#define PDF_FILENAME_SETTING              "fileName"
+#define PDF_FILENAME_DEFAULT              QString("%1/export.pdf"). \
                                             arg(QDir::currentPath())
 #define RESOLUTION_SETTING                "resolution"
 #define RESOLUTION_DEFAULT                600
+
+#define PNG_EXPORT_SETTINGS_GROUP         "PNGExport"
+#define PNG_WIDTH_SETTING                 "width"
+#define PNG_WIDTH_DEFAULT                 600
+#define PNG_HEIGHT_SETTING                "height"
+#define PNG_HEIGHT_DEFAULT                800
+#define PNG_MARGIN_LEFT_SETTING           "marginLeft"
+#define PNG_MARGIN_LEFT_DEFAULT           5 /* px */
+#define PNG_MARGIN_TOP_SETTING            "marginTop"
+#define PNG_MARGIN_TOP_DEFAULT            5 /* px */
+#define PNG_MARGIN_RIGHT_SETTING          "marginRight"
+#define PNG_MARGIN_RIGHT_DEFAULT          5 /* px */
+#define PNG_MARGIN_BOTTOM_SETTING         "marginBottom"
+#define PNG_MARGIN_BOTTOM_DEFAULT         5 /* px */
+#define PNG_ANTIALIASING_SETTING          "antialiasing"
+#define PNG_ANTIALIASING_DEFAULT          true
+#define PNG_FILENAME_SETTING              "fileName"
+#define PNG_FILENAME_DEFAULT              QString("%1/export.png"). \
+											arg(QDir::currentPath())
 
 #define OPTIONS_SETTINGS_GROUP            "Options"
 #define PALETTE_COLOR_SETTING             "paletteColor"
