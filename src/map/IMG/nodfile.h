@@ -61,7 +61,7 @@ public:
 	  _indexFlags(0), _blockOffset(0), _blockSize(0), _indexRecordSize(0),
 	  _blockRecordSize(0), _blockShift(0), _nodeShift(0), _indexIdSize(0) {}
 	NODFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
-	  _indexOffset(0), _indexSize(0),_indexFlags(0), _blockOffset(0),
+	  _indexOffset(0), _indexSize(0), _indexFlags(0), _blockOffset(0),
 	  _blockSize(0), _indexRecordSize(0), _blockRecordSize(0), _blockShift(0),
 	  _nodeShift(0), _indexIdSize(0) {}
 
@@ -89,11 +89,10 @@ private:
 	bool nodeBlock(Handle &hdl, quint32 nodeOffset, BlockInfo &blockInfo) const;
 	bool readBlock(Handle &hdl, quint32 blockOffset, BlockInfo &blockInfo) const;
 
-	quint32 _indexOffset, _indexSize, _indexFlags, _blockOffset, _blockSize;
+	quint32 _flags, _indexOffset, _indexSize, _indexFlags, _blockOffset,
+	  _blockSize;
 	quint16 _indexRecordSize, _blockRecordSize;
-	quint8 _blockShift, _nodeShift;
-	quint32 _flags;
-	quint32 _indexIdSize;
+	quint8 _blockShift, _nodeShift, _indexIdSize;
 };
 
 #endif // NETFILE_H
