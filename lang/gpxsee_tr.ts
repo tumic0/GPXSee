@@ -89,7 +89,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="145"/>
         <source>JPEG images</source>
-        <translation>JPEG resimler</translation>
+        <translation>JPEG görüntüler</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="146"/>
@@ -293,17 +293,17 @@
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="48"/>
         <source>No output file selected.</source>
-        <translation type="unfinished">Çıkış dosyası seçilmedi.</translation>
+        <translation>Çıktı dosyası seçilmedi.</translation>
     </message>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="58"/>
         <source>%1 is a directory.</source>
-        <translation type="unfinished">%1 bir klasör.</translation>
+        <translation>%1 bir dizin.</translation>
     </message>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="62"/>
         <source>%1 is not writable.</source>
-        <translation type="unfinished">%1 yazılabilir değil.</translation>
+        <translation>%1 yazılabilir değil.</translation>
     </message>
 </context>
 <context>
@@ -382,7 +382,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="241"/>
         <source>Export to PNG...</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG olarak dışa aktar...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="247"/>
@@ -746,32 +746,32 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="737"/>
         <source>Map directory:</source>
-        <translation>Harita klasörü:</translation>
+        <translation>Harita dizini:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="739"/>
         <source>POI directory:</source>
-        <translation>POI klasörü:</translation>
+        <translation>POI dizini:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="741"/>
         <source>GCS/PCS directory:</source>
-        <translation>GCS/PCS klasörü:</translation>
+        <translation>GCS/PCS dizini:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="743"/>
         <source>DEM directory:</source>
-        <translation>DEM klasörü:</translation>
+        <translation>DEM dizini:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="745"/>
         <source>Styles directory:</source>
-        <translation>Stil klasörü:</translation>
+        <translation>Tarz dizini:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="747"/>
         <source>Tile cache directory:</source>
-        <translation>Döşeme önbellek klasörü:</translation>
+        <translation>Döşeme önbellek dizini:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="756"/>
@@ -862,6 +862,7 @@
         <location filename="../src/GUI/gui.cpp" line="1484"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n dosya</numerusform>
             <numerusform>%n dosya</numerusform>
         </translation>
     </message>
@@ -1046,7 +1047,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="112"/>
         <source>GeoTIFF images</source>
-        <translation>GeoTIFF görüntü</translation>
+        <translation>GeoTIFF görüntüler</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="113"/>
@@ -1114,7 +1115,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="122"/>
         <source>Track style:</source>
-        <translation>İz stili:</translation>
+        <translation>İz tarzı:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="124"/>
@@ -1128,7 +1129,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="142"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="161"/>
         <source>Style:</source>
-        <translation>Stil:</translation>
+        <translation>Tarz:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="126"/>
@@ -1143,7 +1144,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="139"/>
         <source>Route style:</source>
-        <translation>Rota stili:</translation>
+        <translation>Rota tarzı:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="143"/>
@@ -1158,7 +1159,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="157"/>
         <source>Area border style:</source>
-        <translation>Alan sınır stili:</translation>
+        <translation>Alan sınır tarzı:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="158"/>
@@ -1582,82 +1583,82 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="24"/>
         <source>PDF files</source>
-        <translation type="unfinished">PDF dosyalar</translation>
+        <translation>PDF dosyaları</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="24"/>
         <source>All files</source>
-        <translation type="unfinished">Tüm dosyalar</translation>
+        <translation>Tüm dosyalar</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="51"/>
         <source>Portrait</source>
-        <translation type="unfinished">Dikey</translation>
+        <translation>Dikey</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="52"/>
         <source>Landscape</source>
-        <translation type="unfinished">Yatay</translation>
+        <translation>Yatay</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
         <source>mm</source>
-        <translation type="unfinished">mm</translation>
+        <translation>mm</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
         <source>in</source>
-        <translation type="unfinished">inç</translation>
+        <translation>inç</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="93"/>
         <source>Page Setup</source>
-        <translation type="unfinished">Sayfa Düzeni</translation>
+        <translation>Sayfa Düzeni</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="96"/>
         <source>Page size:</source>
-        <translation type="unfinished">Sayfa boyutu:</translation>
+        <translation>Sayfa boyutu:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="97"/>
         <source>Resolution:</source>
-        <translation type="unfinished">Çözünürlük:</translation>
+        <translation>Çözünürlük:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="98"/>
         <source>Orientation:</source>
-        <translation type="unfinished">Yönlendirme:</translation>
+        <translation>Yönlendirme:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="99"/>
         <source>Margins:</source>
-        <translation type="unfinished">Kenar boşlukları:</translation>
+        <translation>Kenar boşlukları:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="105"/>
         <source>File:</source>
-        <translation type="unfinished">Dosya:</translation>
+        <translation>Dosya:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="112"/>
         <source>Output file</source>
-        <translation type="unfinished">Çıktı dosyası</translation>
+        <translation>Çıktı dosyası</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="119"/>
         <source>Export</source>
-        <translation type="unfinished">Dışa aktar</translation>
+        <translation>Dışa aktar</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="134"/>
         <source>Export to PDF</source>
-        <translation type="unfinished">PDF olarak dışa aktar</translation>
+        <translation>PDF olarak dışa aktar</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="142"/>
         <source>Error</source>
-        <translation type="unfinished">Hata</translation>
+        <translation>Hata</translation>
     </message>
 </context>
 <context>
@@ -1665,12 +1666,12 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="22"/>
         <source>PNG files</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG dosyaları</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="22"/>
         <source>All files</source>
-        <translation type="unfinished">Tüm dosyalar</translation>
+        <translation>Tüm dosyalar</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="30"/>
@@ -1680,52 +1681,52 @@
         <location filename="../src/GUI/pngexportdialog.cpp" line="43"/>
         <location filename="../src/GUI/pngexportdialog.cpp" line="44"/>
         <source>px</source>
-        <translation type="unfinished"></translation>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="60"/>
         <source>Image Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Görüntü Düzeni</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="63"/>
         <source>Image width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Görüntü genişliği:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="64"/>
         <source>Image height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Görüntü yüksekliği:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="65"/>
         <source>Margins:</source>
-        <translation type="unfinished">Kenar boşlukları:</translation>
+        <translation>Kenar boşlukları:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="72"/>
         <source>File:</source>
-        <translation type="unfinished">Dosya:</translation>
+        <translation>Dosya:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="79"/>
         <source>Output file</source>
-        <translation type="unfinished">Çıktı dosyası</translation>
+        <translation>Çıktı dosyası</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="86"/>
         <source>Export</source>
-        <translation type="unfinished">Dışa aktar</translation>
+        <translation>Dışa aktar</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="101"/>
         <source>Export to PNG</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG olarak dışa aktar</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="109"/>
         <source>Error</source>
-        <translation type="unfinished">Hata</translation>
+        <translation>Hata</translation>
     </message>
 </context>
 <context>
