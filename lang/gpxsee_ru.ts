@@ -293,7 +293,7 @@
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="48"/>
         <source>No output file selected.</source>
-        <translation type="unfinished">Не выбран файл вывода.</translation>
+        <translation>Не выбран файл вывода.</translation>
     </message>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="58"/>
@@ -1644,7 +1644,7 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="112"/>
         <source>Output file</source>
-        <translation type="unfinished">Файл вывода</translation>
+        <translation>Файл вывода</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="119"/>
@@ -1712,7 +1712,7 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="79"/>
         <source>Output file</source>
-        <translation type="unfinished">Файл вывода</translation>
+        <translation>Файл вывода</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="86"/>
