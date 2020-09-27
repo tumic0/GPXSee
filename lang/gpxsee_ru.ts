@@ -1609,7 +1609,7 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
         <source>in</source>
-        <translation>в</translation>
+        <translation>in</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="93"/>
