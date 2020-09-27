@@ -298,12 +298,12 @@
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="58"/>
         <source>%1 is a directory.</source>
-        <translation type="unfinished">Файл %1 - это директория.</translation>
+        <translation>%1 - это директория.</translation>
     </message>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="62"/>
         <source>%1 is not writable.</source>
-        <translation type="unfinished">%1 не доступен для записи.</translation>
+        <translation>%1 не доступен для записи.</translation>
     </message>
 </context>
 <context>
@@ -426,7 +426,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="241"/>
         <source>Export to PNG...</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспорт в PNG...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="260"/>
@@ -508,7 +508,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="410"/>
         <source>Show toolbars</source>
-        <translation>Показывать панели инструментов</translation>
+        <translation>Показывать панель инструментов</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="417"/>
@@ -730,7 +730,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="562"/>
         <source>&amp;Settings</source>
-        <translation>&amp;Параметры</translation>
+        <translation>&amp;Настройки</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="580"/>
@@ -1584,62 +1584,62 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="24"/>
         <source>PDF files</source>
-        <translation type="unfinished">PDF файлы</translation>
+        <translation>PDF файлы</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="24"/>
         <source>All files</source>
-        <translation type="unfinished">Все файлы</translation>
+        <translation>Все файлы</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="51"/>
         <source>Portrait</source>
-        <translation type="unfinished">Портретная</translation>
+        <translation>Портретная</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="52"/>
         <source>Landscape</source>
-        <translation type="unfinished">Ландшафтная</translation>
+        <translation>Ландшафтная</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
         <source>mm</source>
-        <translation type="unfinished">мм</translation>
+        <translation>мм</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
         <source>in</source>
-        <translation type="unfinished">in</translation>
+        <translation>в</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="93"/>
         <source>Page Setup</source>
-        <translation type="unfinished">Параметры страницы</translation>
+        <translation>Параметры страницы</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="96"/>
         <source>Page size:</source>
-        <translation type="unfinished">Размер страницы:</translation>
+        <translation>Размер страницы:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="97"/>
         <source>Resolution:</source>
-        <translation type="unfinished">Разрешение:</translation>
+        <translation>Разрешение:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="98"/>
         <source>Orientation:</source>
-        <translation type="unfinished">Ориентация:</translation>
+        <translation>Ориентация:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="99"/>
         <source>Margins:</source>
-        <translation type="unfinished">Поля:</translation>
+        <translation>Поля:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="105"/>
         <source>File:</source>
-        <translation type="unfinished">Файл:</translation>
+        <translation>Файл:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="112"/>
@@ -1649,17 +1649,17 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="119"/>
         <source>Export</source>
-        <translation type="unfinished">Экспорт</translation>
+        <translation>Экспорт</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="134"/>
         <source>Export to PDF</source>
-        <translation type="unfinished">Экспорт в PDF</translation>
+        <translation>Экспорт в PDF</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="142"/>
         <source>Error</source>
-        <translation type="unfinished">Ошибка</translation>
+        <translation>Ошибка</translation>
     </message>
 </context>
 <context>
@@ -1667,12 +1667,12 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="22"/>
         <source>PNG files</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG файлы</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="22"/>
         <source>All files</source>
-        <translation type="unfinished">Все файлы</translation>
+        <translation>Все файлы</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="30"/>
@@ -1682,32 +1682,32 @@
         <location filename="../src/GUI/pngexportdialog.cpp" line="43"/>
         <location filename="../src/GUI/pngexportdialog.cpp" line="44"/>
         <source>px</source>
-        <translation type="unfinished"></translation>
+        <translation>пикс</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="60"/>
         <source>Image Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметры изображения</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="63"/>
         <source>Image width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ширина изображения:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="64"/>
         <source>Image height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Высота изображения:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="65"/>
         <source>Margins:</source>
-        <translation type="unfinished">Поля:</translation>
+        <translation>Поля:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="72"/>
         <source>File:</source>
-        <translation type="unfinished">Файл:</translation>
+        <translation>Файл:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="79"/>
@@ -1717,17 +1717,17 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="86"/>
         <source>Export</source>
-        <translation type="unfinished">Экспорт</translation>
+        <translation>Экспорт</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="101"/>
         <source>Export to PNG</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспорт в PNG</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="109"/>
         <source>Error</source>
-        <translation type="unfinished">Ошибка</translation>
+        <translation>Ошибка</translation>
     </message>
 </context>
 <context>
