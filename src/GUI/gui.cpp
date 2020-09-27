@@ -1161,6 +1161,7 @@ void GUI::plotMainPage(QPainter *painter, const QRectF &rect, qreal ratio,
 	QLocale l(QLocale::system());
 	TrackInfo info;
 	qreal ih, gh, mh;
+	int sc;
 
 
 	if (!_pathName.isNull() && _options.printName)
@@ -1209,11 +1210,15 @@ void GUI::plotMainPage(QPainter *painter, const QRectF &rect, qreal ratio,
 		gh = (rect.width() > rect.height())
 		  ? 0.15 * r * (rect.height() - ih - 2*mh)
 		  : 0.15 * (rect.height() - ih - 2*mh);
+		if (gh < 150)
+			gh = 150;
+		sc = 2;
 		GraphTab *gt = static_cast<GraphTab*>(_graphTabWidget->currentWidget());
 		gt->plot(painter,  QRectF(rect.x(), rect.y() + rect.height() - gh,
 		  rect.width(), gh), ratio);
 	} else {
 		gh = 0;
+		sc = 1;
 	}
 
 	MapView::PlotFlags flags = MapView::NoFlags;
@@ -1223,7 +1228,7 @@ void GUI::plotMainPage(QPainter *painter, const QRectF &rect, qreal ratio,
 		flags |= MapView::Expand;
 
 	_mapView->plot(painter, QRectF(rect.x(), rect.y() + ih + mh, rect.width(),
-	  rect.height() - (ih + 2*mh + gh)), ratio, flags);
+	  rect.height() - (ih + sc*mh + gh)), ratio, flags);
 }
 
 void GUI::plotGraphsPage(QPainter *painter, const QRectF &rect, qreal ratio)
