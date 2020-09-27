@@ -382,7 +382,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="241"/>
         <source>Export to PNG...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eksporter til PNG…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="247"/>
@@ -1386,7 +1386,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="442"/>
         <source>Use segments</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bruk segmenter</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="481"/>
@@ -1666,7 +1666,7 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="22"/>
         <source>PNG files</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG-filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="22"/>
@@ -1681,22 +1681,22 @@
         <location filename="../src/GUI/pngexportdialog.cpp" line="43"/>
         <location filename="../src/GUI/pngexportdialog.cpp" line="44"/>
         <source>px</source>
-        <translation type="unfinished"></translation>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="60"/>
         <source>Image Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildeoppsett</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="63"/>
         <source>Image width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildebredde:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="64"/>
         <source>Image height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildehøyde:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="65"/>
@@ -1721,7 +1721,7 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="101"/>
         <source>Export to PNG</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksporter til PNG</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="109"/>
