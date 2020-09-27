@@ -602,7 +602,7 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	render(painter, target, adj);
 
 	// Revert view changes to display mode
-	if (flags) {
+	if (flags & HiRes) {
 		_map->setZoom(zoom);
 		rescale();
 		centerOn(origScene);
