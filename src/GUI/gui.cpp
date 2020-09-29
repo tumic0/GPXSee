@@ -1068,8 +1068,8 @@ void GUI::exportPNGFile()
 	img.save(_pngExport.fileName);
 
 	if (!_tabs.isEmpty() && _options.separateGraphPage) {
-		QImage img2(_pngExport.size.width(), (int)graphPlotHeight(rect, 1),
-		  QImage::Format_ARGB32_Premultiplied);
+		QImage img2(_pngExport.size.width(), (int)graphPlotHeight(rect, 1)
+		  + _pngExport.margins.bottom(), QImage::Format_ARGB32_Premultiplied);
 		QPainter p2(&img2);
 		QRectF rect2(0, 0, img2.width(), img2.height());
 
