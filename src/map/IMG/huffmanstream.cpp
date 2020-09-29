@@ -13,10 +13,10 @@ bool HuffmanStreamF::init(bool line)
 	quint32 eb;
 	if (!_bs.read(1, eb))
 		return false;
-	if (eb) {
-		qWarning() << "Extended lines/polygons not supported";
+
+	Q_ASSERT(!eb);
+	if (eb)
 		return false;
-	}
 
 	return true;
 }
