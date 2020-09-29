@@ -51,7 +51,7 @@ public:
 		quint32 nodeOffset;
 		quint32 linkOffset;
 		quint32 linkId;
-		quint8 flags;
+		bool eog;
 	};
 
 	NODFile(IMG *img) : SubFile(img), _indexOffset(0), _indexSize(0),

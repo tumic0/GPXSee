@@ -5,7 +5,8 @@
 #define ARRAY_SIZE(array) \
   (sizeof(array) / sizeof(array[0]))
 
-static const struct {
+static const struct
+{
 	quint8 lon;
 	quint8 lat;
 } LLBITS[] = {
@@ -13,12 +14,16 @@ static const struct {
 	{0x14, 0xc}, {0x14, 0x14}
 };
 
-union NodeShift {
-	qint32 offset;
-	quint8 id;
+struct NodeOffset
+{
+	bool ext;
+	union {
+		qint32 offset;
+		quint8 id;
+	} u;
 };
 
-static bool adjDistInfo(BitStream1 &bs, bool extraBit, quint8 &flags)
+static bool adjDistInfo(BitStream1 &bs, bool extraBit, bool &eog)
 {
 	quint32 data, cnt;
 
@@ -26,7 +31,7 @@ static bool adjDistInfo(BitStream1 &bs, bool extraBit, quint8 &flags)
 		return false;
 
 	data <<= !extraBit;
-	flags |= (quint8)data & 1;
+	eog |= (quint8)data & 1;
 	data >>= 1;
 
 	for (cnt = 0; (data >> cnt) & 1; cnt++) {
@@ -39,8 +44,7 @@ static bool adjDistInfo(BitStream1 &bs, bool extraBit, quint8 &flags)
 	return true;
 }
 
-static bool adjNodeInfo(BitStream1 &bs, bool extraBit, NodeShift &shift,
-  quint8 &flags)
+static bool adjNodeInfo(BitStream1 &bs, bool extraBit, NodeOffset &offset)
 {
 	quint32 data;
 
@@ -49,19 +53,20 @@ static bool adjNodeInfo(BitStream1 &bs, bool extraBit, NodeShift &shift,
 
 	data <<= !extraBit;
 
-	if (data & 1)
-		shift.id = data >> 1;
-	else {
+	if (data & 1) {
+		offset.ext = true;
+		offset.u.id = data >> 1;
+	} else {
 		quint32 bits = (data >> 1) & 7;
 		quint32 data2;
-		flags |= 2;
 
 		if (!bs.read(bits + extraBit + 1, data2))
 			return false;
 
 		data = data2 << (6 - extraBit) | data >> 4;
 		bits = 0x19 - bits;
-		shift.offset = ((qint32)(data << bits) >> bits);
+		offset.ext = false;
+		offset.u.offset = ((qint32)(data << bits) >> bits);
 	}
 
 	return true;
@@ -306,9 +311,10 @@ bool NODFile::absAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 	bool extraBit = (adj.nodeInfo.flags >> 6) & 1;
 	bool linkIdValid = true;
 	bool firstLoop = true;
+	NodeOffset offset;
 
 	do {
-		adj.flags = 0;
+		adj.eog = false;
 
 		if (!bs.read(8, flags))
 			return false;
@@ -336,15 +342,15 @@ bool NODFile::absAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 		}
 
 		if (!(flags & 0x10)) {
-			if (!adjDistInfo(bs, (m2 == 1 && linkIdValid), adj.flags))
+			if (!adjDistInfo(bs, (m2 == 1 && linkIdValid), adj.eog))
 				return false;
 
-			NodeShift shift;
-			if (!adjNodeInfo(bs, extraBit, shift, adj.flags))
+			if (!adjNodeInfo(bs, extraBit, offset))
 				return false;
-			if (adj.flags & 2)
-				nextOffset = adj.nodeOffset + shift.offset;
-			else if (!nodeOffset(adj.extHdl, adj.blockInfo, shift.id, nextOffset))
+			if (!offset.ext)
+				nextOffset = adj.nodeOffset + offset.u.offset;
+			else if (!nodeOffset(adj.extHdl, adj.blockInfo, offset.u.id,
+			  nextOffset))
 				return false;
 
 			m2p = m2;
@@ -373,7 +379,7 @@ bool NODFile::absAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 
 			if ((adj.linkOffset == li.linkOffset) || (adj.linkId == linkId)) {
 				adj.nodeOffset = nextOffset;
-				if (!(adj.flags & 2)) {
+				if (offset.ext) {
 					adj.linkId = 0xFFFFFFFF;
 					return nodeBlock(hdl, adj.nodeOffset << _nodeShift,
 					  adj.blockInfo);
@@ -406,12 +412,13 @@ bool NODFile::relAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 	quint32 flagsBits = 8;
 	quint32 flags;
 	quint32 nextOffset = 0xFFFFFFFF;
+	NodeOffset offset;
 	bool extraBit = (adj.nodeInfo.flags >> 6) & 1;
 	bool linkIdValid = true;
 	bool firstLoop = true;
 
 	do {
-		adj.flags = 0;
+		adj.eog = false;
 
 		if (!bs.read(flagsBits, flags))
 			return false;
@@ -442,17 +449,17 @@ bool NODFile::relAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 		}
 
 		if ((flags & 0x50) == 0x50) {
-			if (!adjDistInfo(bs, false, adj.flags))
+			if (!adjDistInfo(bs, false, adj.eog))
 				return false;
-			adj.flags |= 1;
+			adj.eog = true;
 		}
 		if ((flags >> 6) & 1) {
-			NodeShift shift;
-			if (!adjNodeInfo(bs, extraBit, shift, adj.flags))
+			if (!adjNodeInfo(bs, extraBit, offset))
 				return false;
-			if (adj.flags & 2)
-				nextOffset = adj.nodeOffset + shift.offset;
-			else if (!nodeOffset(adj.extHdl, adj.blockInfo, shift.id, nextOffset))
+			if (!offset.ext)
+				nextOffset = adj.nodeOffset + offset.u.offset;
+			else if (!nodeOffset(adj.extHdl, adj.blockInfo, offset.u.id,
+			  nextOffset))
 				return false;
 		}
 
@@ -469,7 +476,7 @@ bool NODFile::relAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 
 			if ((adj.linkOffset == li.linkOffset) || (adj.linkId == linkId)) {
 				adj.nodeOffset = nextOffset;
-				if (!(adj.flags & 2)) {
+				if (offset.ext) {
 					adj.linkId = 0xFFFFFFFF;
 					return nodeBlock(hdl, adj.nodeOffset << _nodeShift,
 					  adj.blockInfo);

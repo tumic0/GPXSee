@@ -217,7 +217,7 @@ static bool readShape(NODFile *nod, SubFile::Handle &nodHdl,
 		poly.points.append(QPointF(c.lon(), c.lat()));
 		poly.boundingRect = poly.boundingRect.united(c);
 
-		while (!(adj.flags & 1)) {
+		while (!adj.eog) {
 			int ret = nod->nextNode(nodHdl, adj);
 			if (ret < 0)
 				return false;
@@ -299,7 +299,7 @@ static bool readShape(NODFile *nod, SubFile::Handle &nodHdl,
 			steps = 0;
 			startWithStream = false;
 
-			if (adj.flags & 1)
+			if (adj.eog)
 				eos = 0;
 		}
 
@@ -330,7 +330,7 @@ static bool readShape(NODFile *nod, SubFile::Handle &nodHdl,
 				poly.points.append(QPointF(c.lon(), c.lat()));
 				poly.boundingRect = poly.boundingRect.united(c);
 				pos = adj.nodeInfo.pos;
-			} while (!(adj.flags & 1) && nodes < cnt);
+			} while (!adj.eog && nodes < cnt);
 
 			if (nodes == cnt)
 				break;
