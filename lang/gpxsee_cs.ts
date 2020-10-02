@@ -1608,12 +1608,12 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="56"/>
         <source>Use anti-aliasing</source>
-        <translation type="unfinished">Vyhlazovat hrany</translation>
+        <translation>Vyhlazovat hrany</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="60"/>
         <source>Image Setup</source>
-        <translation>Nastavení obrazu</translation>
+        <translation>Nastavení obrázku</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="63"/>
