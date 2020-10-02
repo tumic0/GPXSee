@@ -53,7 +53,7 @@ PNGExportDialog::PNGExportDialog(PNGExport &exp, QWidget *parent)
 	marginsLayout->addWidget(_rightMargin, 1, 1, 1, 1, Qt::AlignLeft);
 	marginsLayout->addWidget(_bottomMargin, 2, 0, 1, 2, Qt::AlignCenter);
 
-	_antialiasing = new QCheckBox("Use antialiasing");
+	_antialiasing = new QCheckBox(tr("Use anti-aliasing"));
 	_antialiasing->setChecked(_export.antialiasing);
 
 #ifndef Q_OS_MAC
