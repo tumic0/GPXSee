@@ -205,85 +205,6 @@
     </message>
 </context>
 <context>
-    <name>ExportDialog</name>
-    <message>
-        <source>PDF files</source>
-        <translation type="vanished">PDF fájlok</translation>
-    </message>
-    <message>
-        <source>All files</source>
-        <translation type="vanished">Minden fájl</translation>
-    </message>
-    <message>
-        <source>Portrait</source>
-        <translation type="vanished">Álló</translation>
-    </message>
-    <message>
-        <source>Landscape</source>
-        <translation type="vanished">Fekvő</translation>
-    </message>
-    <message>
-        <source>mm</source>
-        <translation type="vanished">mm</translation>
-    </message>
-    <message>
-        <source>in</source>
-        <translation type="vanished">hüvelyk</translation>
-    </message>
-    <message>
-        <source>Page Setup</source>
-        <translation type="vanished">Oldalbeállítás</translation>
-    </message>
-    <message>
-        <source>Page size:</source>
-        <translation type="vanished">Oldalméret:</translation>
-    </message>
-    <message>
-        <source>Resolution:</source>
-        <translation type="vanished">Felbontás:</translation>
-    </message>
-    <message>
-        <source>Orientation:</source>
-        <translation type="vanished">Tájolás:</translation>
-    </message>
-    <message>
-        <source>Margins:</source>
-        <translation type="vanished">Margók:</translation>
-    </message>
-    <message>
-        <source>File:</source>
-        <translation type="vanished">Fájl:</translation>
-    </message>
-    <message>
-        <source>Output file</source>
-        <translation type="vanished">Kimeneti fájl</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="vanished">Exportálás</translation>
-    </message>
-    <message>
-        <source>Export to PDF</source>
-        <translation type="vanished">Exportálás PDF-be</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="vanished">Hiba</translation>
-    </message>
-    <message>
-        <source>No output file selected.</source>
-        <translation type="vanished">Nincs kimeneti fájl.</translation>
-    </message>
-    <message>
-        <source>%1 is a directory.</source>
-        <translation type="vanished">A(z) %1 egy mappa.</translation>
-    </message>
-    <message>
-        <source>%1 is not writable.</source>
-        <translation type="vanished">A(z) %1 írásvédett.</translation>
-    </message>
-</context>
-<context>
     <name>FileSelectWidget</name>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="38"/>
@@ -494,7 +415,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="379"/>
         <location filename="../src/GUI/gui.cpp" line="1126"/>
-        <location filename="../src/GUI/gui.cpp" line="1193"/>
+        <location filename="../src/GUI/gui.cpp" line="1194"/>
         <source>Distance</source>
         <translation>Távolság</translation>
     </message>
@@ -502,7 +423,7 @@
         <location filename="../src/GUI/gui.cpp" line="386"/>
         <location filename="../src/GUI/gui.cpp" line="563"/>
         <location filename="../src/GUI/gui.cpp" line="1129"/>
-        <location filename="../src/GUI/gui.cpp" line="1195"/>
+        <location filename="../src/GUI/gui.cpp" line="1196"/>
         <source>Time</source>
         <translation>Idő</translation>
     </message>
@@ -534,7 +455,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="423"/>
         <location filename="../src/GUI/gui.cpp" line="1131"/>
-        <location filename="../src/GUI/gui.cpp" line="1197"/>
+        <location filename="../src/GUI/gui.cpp" line="1198"/>
         <source>Moving time</source>
         <translation>Mozgásban töltött idő</translation>
     </message>
@@ -801,33 +722,33 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1100"/>
-        <location filename="../src/GUI/gui.cpp" line="1171"/>
+        <location filename="../src/GUI/gui.cpp" line="1172"/>
         <source>Tracks</source>
         <translation>Nyomvonalak</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1103"/>
-        <location filename="../src/GUI/gui.cpp" line="1173"/>
+        <location filename="../src/GUI/gui.cpp" line="1174"/>
         <source>Routes</source>
         <translation>Útvonalak</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1106"/>
-        <location filename="../src/GUI/gui.cpp" line="1175"/>
+        <location filename="../src/GUI/gui.cpp" line="1176"/>
         <source>Waypoints</source>
         <translation>Köztespontok</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1109"/>
-        <location filename="../src/GUI/gui.cpp" line="1177"/>
+        <location filename="../src/GUI/gui.cpp" line="1178"/>
         <source>Areas</source>
         <translation>Területek</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1115"/>
         <location filename="../src/GUI/gui.cpp" line="1119"/>
-        <location filename="../src/GUI/gui.cpp" line="1183"/>
-        <location filename="../src/GUI/gui.cpp" line="1186"/>
+        <location filename="../src/GUI/gui.cpp" line="1184"/>
+        <location filename="../src/GUI/gui.cpp" line="1187"/>
         <source>Date</source>
         <translation>Dátum</translation>
     </message>
@@ -838,31 +759,30 @@
         <translation>Összesítés</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1167"/>
+        <location filename="../src/GUI/gui.cpp" line="1168"/>
         <source>Name</source>
         <translation>Név</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1419"/>
+        <location filename="../src/GUI/gui.cpp" line="1424"/>
         <source>Open map file</source>
         <translation>Térképfájl megnyitása</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1439"/>
-        <location filename="../src/GUI/gui.cpp" line="1470"/>
+        <location filename="../src/GUI/gui.cpp" line="1444"/>
+        <location filename="../src/GUI/gui.cpp" line="1475"/>
         <source>Error loading map:</source>
         <translation>Térképbetöltési hiba:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1480"/>
+        <location filename="../src/GUI/gui.cpp" line="1485"/>
         <source>No files loaded</source>
         <translation>Nincs betöltött fájl</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1484"/>
+        <location filename="../src/GUI/gui.cpp" line="1489"/>
         <source>%n files</source>
         <translation>
-            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>

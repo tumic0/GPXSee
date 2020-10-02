@@ -205,85 +205,6 @@
     </message>
 </context>
 <context>
-    <name>ExportDialog</name>
-    <message>
-        <source>PDF files</source>
-        <translation type="vanished">PDF-filer</translation>
-    </message>
-    <message>
-        <source>All files</source>
-        <translation type="vanished">Alle filer</translation>
-    </message>
-    <message>
-        <source>Portrait</source>
-        <translation type="vanished">Stående</translation>
-    </message>
-    <message>
-        <source>Landscape</source>
-        <translation type="vanished">Liggende</translation>
-    </message>
-    <message>
-        <source>mm</source>
-        <translation type="vanished">mm</translation>
-    </message>
-    <message>
-        <source>in</source>
-        <translation type="vanished">tommer</translation>
-    </message>
-    <message>
-        <source>Page Setup</source>
-        <translation type="vanished">Sideoppsett</translation>
-    </message>
-    <message>
-        <source>Page size:</source>
-        <translation type="vanished">Sidestørrelse:</translation>
-    </message>
-    <message>
-        <source>Resolution:</source>
-        <translation type="vanished">Oppløsning:</translation>
-    </message>
-    <message>
-        <source>Orientation:</source>
-        <translation type="vanished">Sideretning:</translation>
-    </message>
-    <message>
-        <source>Margins:</source>
-        <translation type="vanished">Marger:</translation>
-    </message>
-    <message>
-        <source>File:</source>
-        <translation type="vanished">Fil:</translation>
-    </message>
-    <message>
-        <source>Output file</source>
-        <translation type="vanished">Utdatafil</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="vanished">Eksporter</translation>
-    </message>
-    <message>
-        <source>Export to PDF</source>
-        <translation type="vanished">Eksporter til PDF</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="vanished">Feil</translation>
-    </message>
-    <message>
-        <source>No output file selected.</source>
-        <translation type="vanished">Ingen utdatafil valgt.</translation>
-    </message>
-    <message>
-        <source>%1 is a directory.</source>
-        <translation type="vanished">%1 er en mappe.</translation>
-    </message>
-    <message>
-        <source>%1 is not writable.</source>
-        <translation type="vanished">%1 er skrivebeskyttet.</translation>
-    </message>
-</context>
-<context>
     <name>FileSelectWidget</name>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="38"/>
@@ -293,17 +214,17 @@
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="48"/>
         <source>No output file selected.</source>
-        <translation type="unfinished">Ingen utdatafil valgt.</translation>
+        <translation>Ingen utdatafil valgt.</translation>
     </message>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="58"/>
         <source>%1 is a directory.</source>
-        <translation type="unfinished">%1 er en mappe.</translation>
+        <translation>%1 er en mappe.</translation>
     </message>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="62"/>
         <source>%1 is not writable.</source>
-        <translation type="unfinished">%1 er skrivebeskyttet.</translation>
+        <translation>%1 er skrivebeskyttet.</translation>
     </message>
 </context>
 <context>
@@ -382,7 +303,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="241"/>
         <source>Export to PNG...</source>
-        <translation type="unfinished">Eksporter til PNG…</translation>
+        <translation>Eksporter til PNG…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="247"/>
@@ -494,7 +415,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="379"/>
         <location filename="../src/GUI/gui.cpp" line="1126"/>
-        <location filename="../src/GUI/gui.cpp" line="1193"/>
+        <location filename="../src/GUI/gui.cpp" line="1194"/>
         <source>Distance</source>
         <translation>Avstand</translation>
     </message>
@@ -502,7 +423,7 @@
         <location filename="../src/GUI/gui.cpp" line="386"/>
         <location filename="../src/GUI/gui.cpp" line="563"/>
         <location filename="../src/GUI/gui.cpp" line="1129"/>
-        <location filename="../src/GUI/gui.cpp" line="1195"/>
+        <location filename="../src/GUI/gui.cpp" line="1196"/>
         <source>Time</source>
         <translation>Tid</translation>
     </message>
@@ -534,7 +455,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="423"/>
         <location filename="../src/GUI/gui.cpp" line="1131"/>
-        <location filename="../src/GUI/gui.cpp" line="1197"/>
+        <location filename="../src/GUI/gui.cpp" line="1198"/>
         <source>Moving time</source>
         <translation>Tid i bevegelse</translation>
     </message>
@@ -801,33 +722,33 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1100"/>
-        <location filename="../src/GUI/gui.cpp" line="1171"/>
+        <location filename="../src/GUI/gui.cpp" line="1172"/>
         <source>Tracks</source>
         <translation>Spor</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1103"/>
-        <location filename="../src/GUI/gui.cpp" line="1173"/>
+        <location filename="../src/GUI/gui.cpp" line="1174"/>
         <source>Routes</source>
         <translation>Ruter</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1106"/>
-        <location filename="../src/GUI/gui.cpp" line="1175"/>
+        <location filename="../src/GUI/gui.cpp" line="1176"/>
         <source>Waypoints</source>
         <translation>Veipunkter</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1109"/>
-        <location filename="../src/GUI/gui.cpp" line="1177"/>
+        <location filename="../src/GUI/gui.cpp" line="1178"/>
         <source>Areas</source>
         <translation>Områder</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1115"/>
         <location filename="../src/GUI/gui.cpp" line="1119"/>
-        <location filename="../src/GUI/gui.cpp" line="1183"/>
-        <location filename="../src/GUI/gui.cpp" line="1186"/>
+        <location filename="../src/GUI/gui.cpp" line="1184"/>
+        <location filename="../src/GUI/gui.cpp" line="1187"/>
         <source>Date</source>
         <translation>Dato</translation>
     </message>
@@ -838,28 +759,28 @@
         <translation>Statistikk</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1167"/>
+        <location filename="../src/GUI/gui.cpp" line="1168"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1419"/>
+        <location filename="../src/GUI/gui.cpp" line="1424"/>
         <source>Open map file</source>
         <translation>Åpne kartfil</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1439"/>
-        <location filename="../src/GUI/gui.cpp" line="1470"/>
+        <location filename="../src/GUI/gui.cpp" line="1444"/>
+        <location filename="../src/GUI/gui.cpp" line="1475"/>
         <source>Error loading map:</source>
         <translation>Feil ved innlasting av kart:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1480"/>
+        <location filename="../src/GUI/gui.cpp" line="1485"/>
         <source>No files loaded</source>
         <translation>Ingen filer lastet opp</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1484"/>
+        <location filename="../src/GUI/gui.cpp" line="1489"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n fil</numerusform>
@@ -1386,7 +1307,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="442"/>
         <source>Use segments</source>
-        <translation type="unfinished">Bruk segmenter</translation>
+        <translation>Bruk segmenter</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="481"/>
@@ -1583,82 +1504,82 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="24"/>
         <source>PDF files</source>
-        <translation type="unfinished">PDF-filer</translation>
+        <translation>PDF-filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="24"/>
         <source>All files</source>
-        <translation type="unfinished">Alle filer</translation>
+        <translation>Alle filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="51"/>
         <source>Portrait</source>
-        <translation type="unfinished">Stående</translation>
+        <translation>Stående</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="52"/>
         <source>Landscape</source>
-        <translation type="unfinished">Liggende</translation>
+        <translation>Liggende</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
         <source>mm</source>
-        <translation type="unfinished">mm</translation>
+        <translation>mm</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
         <source>in</source>
-        <translation type="unfinished">tommer</translation>
+        <translation>tommer</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="93"/>
         <source>Page Setup</source>
-        <translation type="unfinished">Sideoppsett</translation>
+        <translation>Sideoppsett</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="96"/>
         <source>Page size:</source>
-        <translation type="unfinished">Sidestørrelse:</translation>
+        <translation>Sidestørrelse:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="97"/>
         <source>Resolution:</source>
-        <translation type="unfinished">Oppløsning:</translation>
+        <translation>Oppløsning:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="98"/>
         <source>Orientation:</source>
-        <translation type="unfinished">Sideretning:</translation>
+        <translation>Sideretning:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="99"/>
         <source>Margins:</source>
-        <translation type="unfinished">Marger:</translation>
+        <translation>Marger:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="105"/>
         <source>File:</source>
-        <translation type="unfinished">Fil:</translation>
+        <translation>Fil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="112"/>
         <source>Output file</source>
-        <translation type="unfinished">Utdatafil</translation>
+        <translation>Utdatafil</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="119"/>
         <source>Export</source>
-        <translation type="unfinished">Eksporter</translation>
+        <translation>Eksporter</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="134"/>
         <source>Export to PDF</source>
-        <translation type="unfinished">Eksporter til PDF</translation>
+        <translation>Eksporter til PDF</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="142"/>
         <source>Error</source>
-        <translation type="unfinished">Feil</translation>
+        <translation>Feil</translation>
     </message>
 </context>
 <context>
@@ -1671,7 +1592,7 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="22"/>
         <source>All files</source>
-        <translation type="unfinished">Alle filer</translation>
+        <translation>Alle filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="30"/>
@@ -1701,22 +1622,22 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="65"/>
         <source>Margins:</source>
-        <translation type="unfinished">Marger:</translation>
+        <translation>Marger:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="72"/>
         <source>File:</source>
-        <translation type="unfinished">Fil:</translation>
+        <translation>Fil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="79"/>
         <source>Output file</source>
-        <translation type="unfinished">Utdatafil</translation>
+        <translation>Utdatafil</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="86"/>
         <source>Export</source>
-        <translation type="unfinished">Eksporter</translation>
+        <translation>Eksporter</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="101"/>
@@ -1726,7 +1647,7 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="109"/>
         <source>Error</source>
-        <translation type="unfinished">Feil</translation>
+        <translation>Feil</translation>
     </message>
 </context>
 <context>
@@ -2021,7 +1942,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="17"/>
         <source>Comment</source>
-        <translation type="unfinished">Kommentar</translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="18"/>
@@ -2079,7 +2000,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="51"/>
         <source>Comment</source>
-        <translation type="unfinished">Kommentar</translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="64"/>

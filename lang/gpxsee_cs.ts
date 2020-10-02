@@ -205,85 +205,6 @@
     </message>
 </context>
 <context>
-    <name>ExportDialog</name>
-    <message>
-        <source>Export to PDF</source>
-        <translation type="vanished">Exportovat do PDF</translation>
-    </message>
-    <message>
-        <source>Portrait</source>
-        <translation type="vanished">Na výšku</translation>
-    </message>
-    <message>
-        <source>Landscape</source>
-        <translation type="vanished">Na šířku</translation>
-    </message>
-    <message>
-        <source>Page size:</source>
-        <translation type="vanished">Velikost stránky:</translation>
-    </message>
-    <message>
-        <source>Orientation:</source>
-        <translation type="vanished">Orientace:</translation>
-    </message>
-    <message>
-        <source>Page Setup</source>
-        <translation type="vanished">Nastavení stránky</translation>
-    </message>
-    <message>
-        <source>PDF files</source>
-        <translation type="vanished">Soubory PDF</translation>
-    </message>
-    <message>
-        <source>All files</source>
-        <translation type="vanished">Všechny soubory</translation>
-    </message>
-    <message>
-        <source>in</source>
-        <translation type="vanished">in</translation>
-    </message>
-    <message>
-        <source>mm</source>
-        <translation type="vanished">mm</translation>
-    </message>
-    <message>
-        <source>Resolution:</source>
-        <translation type="vanished">Rozlišení:</translation>
-    </message>
-    <message>
-        <source>Margins:</source>
-        <translation type="vanished">Okraje:</translation>
-    </message>
-    <message>
-        <source>File:</source>
-        <translation type="vanished">Soubor:</translation>
-    </message>
-    <message>
-        <source>Output file</source>
-        <translation type="vanished">Výstupní soubor</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="vanished">Exportovat</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="vanished">Chyba</translation>
-    </message>
-    <message>
-        <source>No output file selected.</source>
-        <translation type="vanished">Nebyl zvolen žádný výstupní soubor.</translation>
-    </message>
-    <message>
-        <source>%1 is a directory.</source>
-        <translation type="vanished">%1 je adresář.</translation>
-    </message>
-    <message>
-        <source>%1 is not writable.</source>
-        <translation type="vanished">%1 nelze zapsat.</translation>
-    </message>
-</context>
-<context>
     <name>FileSelectWidget</name>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="38"/>
@@ -518,7 +439,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="423"/>
         <location filename="../src/GUI/gui.cpp" line="1131"/>
-        <location filename="../src/GUI/gui.cpp" line="1197"/>
+        <location filename="../src/GUI/gui.cpp" line="1198"/>
         <source>Moving time</source>
         <translation>Čistý čas</translation>
     </message>
@@ -674,7 +595,7 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1109"/>
-        <location filename="../src/GUI/gui.cpp" line="1177"/>
+        <location filename="../src/GUI/gui.cpp" line="1178"/>
         <source>Areas</source>
         <translation>Plochy</translation>
     </message>
@@ -685,20 +606,20 @@
         <translation>Statistika</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1419"/>
+        <location filename="../src/GUI/gui.cpp" line="1424"/>
         <source>Open map file</source>
         <translation>Otevřít mapový soubor</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1480"/>
+        <location filename="../src/GUI/gui.cpp" line="1485"/>
         <source>No files loaded</source>
         <translation>Nejsou načteny žádné soubory</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1115"/>
         <location filename="../src/GUI/gui.cpp" line="1119"/>
-        <location filename="../src/GUI/gui.cpp" line="1183"/>
-        <location filename="../src/GUI/gui.cpp" line="1186"/>
+        <location filename="../src/GUI/gui.cpp" line="1184"/>
+        <location filename="../src/GUI/gui.cpp" line="1187"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
@@ -754,18 +675,18 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1103"/>
-        <location filename="../src/GUI/gui.cpp" line="1173"/>
+        <location filename="../src/GUI/gui.cpp" line="1174"/>
         <source>Routes</source>
         <translation>Trasy</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1439"/>
-        <location filename="../src/GUI/gui.cpp" line="1470"/>
+        <location filename="../src/GUI/gui.cpp" line="1444"/>
+        <location filename="../src/GUI/gui.cpp" line="1475"/>
         <source>Error loading map:</source>
         <translation>Mapu nelze načíst:</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1484"/>
+        <location filename="../src/GUI/gui.cpp" line="1489"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n soubor</numerusform>
@@ -790,7 +711,7 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1106"/>
-        <location filename="../src/GUI/gui.cpp" line="1175"/>
+        <location filename="../src/GUI/gui.cpp" line="1176"/>
         <source>Waypoints</source>
         <translation>Navigační body</translation>
     </message>
@@ -831,13 +752,13 @@
         <translation>Soubor POI nelze načíst:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1167"/>
+        <location filename="../src/GUI/gui.cpp" line="1168"/>
         <source>Name</source>
         <translation>Název</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1100"/>
-        <location filename="../src/GUI/gui.cpp" line="1171"/>
+        <location filename="../src/GUI/gui.cpp" line="1172"/>
         <source>Tracks</source>
         <translation>Cesty</translation>
     </message>
@@ -855,7 +776,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="379"/>
         <location filename="../src/GUI/gui.cpp" line="1126"/>
-        <location filename="../src/GUI/gui.cpp" line="1193"/>
+        <location filename="../src/GUI/gui.cpp" line="1194"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
@@ -863,7 +784,7 @@
         <location filename="../src/GUI/gui.cpp" line="386"/>
         <location filename="../src/GUI/gui.cpp" line="563"/>
         <location filename="../src/GUI/gui.cpp" line="1129"/>
-        <location filename="../src/GUI/gui.cpp" line="1195"/>
+        <location filename="../src/GUI/gui.cpp" line="1196"/>
         <source>Time</source>
         <translation>Čas</translation>
     </message>

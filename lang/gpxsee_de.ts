@@ -205,85 +205,6 @@
     </message>
 </context>
 <context>
-    <name>ExportDialog</name>
-    <message>
-        <source>Export to PDF</source>
-        <translation type="vanished">In PDF exportieren</translation>
-    </message>
-    <message>
-        <source>Portrait</source>
-        <translation type="vanished">Hochformat</translation>
-    </message>
-    <message>
-        <source>Landscape</source>
-        <translation type="vanished">Querformat</translation>
-    </message>
-    <message>
-        <source>Page size:</source>
-        <translation type="vanished">Seitengröße:</translation>
-    </message>
-    <message>
-        <source>Orientation:</source>
-        <translation type="vanished">Ausrichtung:</translation>
-    </message>
-    <message>
-        <source>Page Setup</source>
-        <translation type="vanished">Seite einrichten</translation>
-    </message>
-    <message>
-        <source>PDF files</source>
-        <translation type="vanished">PDF-Dateien</translation>
-    </message>
-    <message>
-        <source>All files</source>
-        <translation type="vanished">Alle Dateien</translation>
-    </message>
-    <message>
-        <source>in</source>
-        <translation type="vanished">in</translation>
-    </message>
-    <message>
-        <source>mm</source>
-        <translation type="vanished">mm</translation>
-    </message>
-    <message>
-        <source>Resolution:</source>
-        <translation type="vanished">Druckauflösung:</translation>
-    </message>
-    <message>
-        <source>Margins:</source>
-        <translation type="vanished">Ränder:</translation>
-    </message>
-    <message>
-        <source>File:</source>
-        <translation type="vanished">Ausgabedatei:</translation>
-    </message>
-    <message>
-        <source>Output file</source>
-        <translation type="vanished">Ausgabedatei</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="vanished">Export</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="vanished">Fehler</translation>
-    </message>
-    <message>
-        <source>No output file selected.</source>
-        <translation type="vanished">Keine Ausgabedatei ausgewählt.</translation>
-    </message>
-    <message>
-        <source>%1 is a directory.</source>
-        <translation type="vanished">%1 ist ein Verzeichnis.</translation>
-    </message>
-    <message>
-        <source>%1 is not writable.</source>
-        <translation type="vanished">%1 ist nicht beschreibbar.</translation>
-    </message>
-</context>
-<context>
     <name>FileSelectWidget</name>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="38"/>
@@ -528,7 +449,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="423"/>
         <location filename="../src/GUI/gui.cpp" line="1131"/>
-        <location filename="../src/GUI/gui.cpp" line="1197"/>
+        <location filename="../src/GUI/gui.cpp" line="1198"/>
         <source>Moving time</source>
         <translation>Bewegungszeit</translation>
     </message>
@@ -684,7 +605,7 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1109"/>
-        <location filename="../src/GUI/gui.cpp" line="1177"/>
+        <location filename="../src/GUI/gui.cpp" line="1178"/>
         <source>Areas</source>
         <translation>Flächen</translation>
     </message>
@@ -695,23 +616,23 @@
         <translation>Statistiken</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1419"/>
+        <location filename="../src/GUI/gui.cpp" line="1424"/>
         <source>Open map file</source>
         <translation>Kartendatei öffnen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1439"/>
-        <location filename="../src/GUI/gui.cpp" line="1470"/>
+        <location filename="../src/GUI/gui.cpp" line="1444"/>
+        <location filename="../src/GUI/gui.cpp" line="1475"/>
         <source>Error loading map:</source>
         <translation>Fehler beim Laden der Kartendatei:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1480"/>
+        <location filename="../src/GUI/gui.cpp" line="1485"/>
         <source>No files loaded</source>
         <translation>Keine Dateien geladen</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1484"/>
+        <location filename="../src/GUI/gui.cpp" line="1489"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n Datei</numerusform>
@@ -721,14 +642,14 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1115"/>
         <location filename="../src/GUI/gui.cpp" line="1119"/>
-        <location filename="../src/GUI/gui.cpp" line="1183"/>
-        <location filename="../src/GUI/gui.cpp" line="1186"/>
+        <location filename="../src/GUI/gui.cpp" line="1184"/>
+        <location filename="../src/GUI/gui.cpp" line="1187"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1103"/>
-        <location filename="../src/GUI/gui.cpp" line="1173"/>
+        <location filename="../src/GUI/gui.cpp" line="1174"/>
         <source>Routes</source>
         <translation>Routen</translation>
     </message>
@@ -749,7 +670,7 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1106"/>
-        <location filename="../src/GUI/gui.cpp" line="1175"/>
+        <location filename="../src/GUI/gui.cpp" line="1176"/>
         <source>Waypoints</source>
         <translation>Wegpunkte</translation>
     </message>
@@ -830,13 +751,13 @@
         <translation>Fehler beim Laden der POI-Datei:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1167"/>
+        <location filename="../src/GUI/gui.cpp" line="1168"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1100"/>
-        <location filename="../src/GUI/gui.cpp" line="1171"/>
+        <location filename="../src/GUI/gui.cpp" line="1172"/>
         <source>Tracks</source>
         <translation>Strecken</translation>
     </message>
@@ -854,7 +775,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="379"/>
         <location filename="../src/GUI/gui.cpp" line="1126"/>
-        <location filename="../src/GUI/gui.cpp" line="1193"/>
+        <location filename="../src/GUI/gui.cpp" line="1194"/>
         <source>Distance</source>
         <translation>Distanz</translation>
     </message>
@@ -862,7 +783,7 @@
         <location filename="../src/GUI/gui.cpp" line="386"/>
         <location filename="../src/GUI/gui.cpp" line="563"/>
         <location filename="../src/GUI/gui.cpp" line="1129"/>
-        <location filename="../src/GUI/gui.cpp" line="1195"/>
+        <location filename="../src/GUI/gui.cpp" line="1196"/>
         <source>Time</source>
         <translation>Zeit</translation>
     </message>

@@ -205,85 +205,6 @@
     </message>
 </context>
 <context>
-    <name>ExportDialog</name>
-    <message>
-        <source>Export to PDF</source>
-        <translation type="vanished">Exportera till PDF</translation>
-    </message>
-    <message>
-        <source>Portrait</source>
-        <translation type="vanished">Stående</translation>
-    </message>
-    <message>
-        <source>Landscape</source>
-        <translation type="vanished">Liggande</translation>
-    </message>
-    <message>
-        <source>Page size:</source>
-        <translation type="vanished">Sidstorlek:</translation>
-    </message>
-    <message>
-        <source>Orientation:</source>
-        <translation type="vanished">Orientering:</translation>
-    </message>
-    <message>
-        <source>Page Setup</source>
-        <translation type="vanished">Sidinställning</translation>
-    </message>
-    <message>
-        <source>PDF files</source>
-        <translation type="vanished">PDF-filer</translation>
-    </message>
-    <message>
-        <source>All files</source>
-        <translation type="vanished">Alla filer</translation>
-    </message>
-    <message>
-        <source>in</source>
-        <translation type="vanished">i</translation>
-    </message>
-    <message>
-        <source>mm</source>
-        <translation type="vanished">mm</translation>
-    </message>
-    <message>
-        <source>Resolution:</source>
-        <translation type="vanished">Upplösning:</translation>
-    </message>
-    <message>
-        <source>Margins:</source>
-        <translation type="vanished">Marginaler:</translation>
-    </message>
-    <message>
-        <source>File:</source>
-        <translation type="vanished">Fil:</translation>
-    </message>
-    <message>
-        <source>Output file</source>
-        <translation type="vanished">Utdatafil</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="vanished">Exportera</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="vanished">Fel</translation>
-    </message>
-    <message>
-        <source>No output file selected.</source>
-        <translation type="vanished">Ingen utdatafil vald.</translation>
-    </message>
-    <message>
-        <source>%1 is a directory.</source>
-        <translation type="vanished">%1 är en mapp.</translation>
-    </message>
-    <message>
-        <source>%1 is not writable.</source>
-        <translation type="vanished">%1 är skrivskyddad.</translation>
-    </message>
-</context>
-<context>
     <name>FileSelectWidget</name>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="38"/>
@@ -528,7 +449,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="423"/>
         <location filename="../src/GUI/gui.cpp" line="1131"/>
-        <location filename="../src/GUI/gui.cpp" line="1197"/>
+        <location filename="../src/GUI/gui.cpp" line="1198"/>
         <source>Moving time</source>
         <translation>Förflyttningstid</translation>
     </message>
@@ -684,7 +605,7 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1109"/>
-        <location filename="../src/GUI/gui.cpp" line="1177"/>
+        <location filename="../src/GUI/gui.cpp" line="1178"/>
         <source>Areas</source>
         <translation>Områden</translation>
     </message>
@@ -695,23 +616,23 @@
         <translation>Statistik</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1419"/>
+        <location filename="../src/GUI/gui.cpp" line="1424"/>
         <source>Open map file</source>
         <translation>Öppna kartfil</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1439"/>
-        <location filename="../src/GUI/gui.cpp" line="1470"/>
+        <location filename="../src/GUI/gui.cpp" line="1444"/>
+        <location filename="../src/GUI/gui.cpp" line="1475"/>
         <source>Error loading map:</source>
         <translation>Fel vid inläsning av karta:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1480"/>
+        <location filename="../src/GUI/gui.cpp" line="1485"/>
         <source>No files loaded</source>
         <translation>Inga filer inlästa</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1484"/>
+        <location filename="../src/GUI/gui.cpp" line="1489"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n fil</numerusform>
@@ -721,14 +642,14 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1115"/>
         <location filename="../src/GUI/gui.cpp" line="1119"/>
-        <location filename="../src/GUI/gui.cpp" line="1183"/>
-        <location filename="../src/GUI/gui.cpp" line="1186"/>
+        <location filename="../src/GUI/gui.cpp" line="1184"/>
+        <location filename="../src/GUI/gui.cpp" line="1187"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1103"/>
-        <location filename="../src/GUI/gui.cpp" line="1173"/>
+        <location filename="../src/GUI/gui.cpp" line="1174"/>
         <source>Routes</source>
         <translation>Rutter</translation>
     </message>
@@ -749,7 +670,7 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1106"/>
-        <location filename="../src/GUI/gui.cpp" line="1175"/>
+        <location filename="../src/GUI/gui.cpp" line="1176"/>
         <source>Waypoints</source>
         <translation>Vägpunkter</translation>
     </message>
@@ -830,13 +751,13 @@
         <translation>Fel vid inläsning av POI-fil:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1167"/>
+        <location filename="../src/GUI/gui.cpp" line="1168"/>
         <source>Name</source>
         <translation>Namn</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1100"/>
-        <location filename="../src/GUI/gui.cpp" line="1171"/>
+        <location filename="../src/GUI/gui.cpp" line="1172"/>
         <source>Tracks</source>
         <translation>Spår</translation>
     </message>
@@ -854,7 +775,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="379"/>
         <location filename="../src/GUI/gui.cpp" line="1126"/>
-        <location filename="../src/GUI/gui.cpp" line="1193"/>
+        <location filename="../src/GUI/gui.cpp" line="1194"/>
         <source>Distance</source>
         <translation>Avstånd</translation>
     </message>
@@ -862,7 +783,7 @@
         <location filename="../src/GUI/gui.cpp" line="386"/>
         <location filename="../src/GUI/gui.cpp" line="563"/>
         <location filename="../src/GUI/gui.cpp" line="1129"/>
-        <location filename="../src/GUI/gui.cpp" line="1195"/>
+        <location filename="../src/GUI/gui.cpp" line="1196"/>
         <source>Time</source>
         <translation>Tid</translation>
     </message>

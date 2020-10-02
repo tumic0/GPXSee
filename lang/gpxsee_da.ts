@@ -22,7 +22,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="29"/>
         <source>Maximum</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
 </context>
 <context>
@@ -30,7 +30,7 @@
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="17"/>
         <source>Maximum</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="18"/>
@@ -59,7 +59,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="137"/>
         <source>CUP files</source>
-        <translation type="unfinished"></translation>
+        <translation>CUP-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="138"/>
@@ -69,12 +69,12 @@
     <message>
         <location filename="../src/data/data.cpp" line="140"/>
         <source>GeoJSON files</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoJSON-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="142"/>
         <source>GPI files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPI-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="143"/>
@@ -119,7 +119,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="151"/>
         <source>SML files</source>
-        <translation type="unfinished"></translation>
+        <translation>SML-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="152"/>
@@ -153,7 +153,7 @@
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="61"/>
         <source>Maximum</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="63"/>
@@ -196,91 +196,12 @@
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="40"/>
         <source>Maximum</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="42"/>
         <source>Minimum</source>
         <translation>Min</translation>
-    </message>
-</context>
-<context>
-    <name>ExportDialog</name>
-    <message>
-        <source>PDF files</source>
-        <translation type="vanished">PDF-filer</translation>
-    </message>
-    <message>
-        <source>All files</source>
-        <translation type="vanished">Alle filer</translation>
-    </message>
-    <message>
-        <source>Portrait</source>
-        <translation type="vanished">Stående</translation>
-    </message>
-    <message>
-        <source>Landscape</source>
-        <translation type="vanished">Liggende</translation>
-    </message>
-    <message>
-        <source>mm</source>
-        <translation type="vanished">mm</translation>
-    </message>
-    <message>
-        <source>in</source>
-        <translation type="obsolete">tomme</translation>
-    </message>
-    <message>
-        <source>Page Setup</source>
-        <translation type="vanished">Sideopsætning</translation>
-    </message>
-    <message>
-        <source>Page size:</source>
-        <translation type="vanished">Sidestørrelse:</translation>
-    </message>
-    <message>
-        <source>Resolution:</source>
-        <translation type="vanished">Opløsning:</translation>
-    </message>
-    <message>
-        <source>Orientation:</source>
-        <translation type="vanished">Orientering:</translation>
-    </message>
-    <message>
-        <source>Margins:</source>
-        <translation type="vanished">Margener:</translation>
-    </message>
-    <message>
-        <source>File:</source>
-        <translation type="vanished">Fil:</translation>
-    </message>
-    <message>
-        <source>Output file</source>
-        <translation type="vanished">Uddatafil</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="vanished">Eksporter</translation>
-    </message>
-    <message>
-        <source>Export to PDF</source>
-        <translation type="vanished">Eksporter til PDF</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="vanished">Fejl</translation>
-    </message>
-    <message>
-        <source>No output file selected.</source>
-        <translation type="vanished">Ingen uddatafil valgt.</translation>
-    </message>
-    <message>
-        <source>%1 is a directory.</source>
-        <translation type="vanished">%1 er en mappe.</translation>
-    </message>
-    <message>
-        <source>%1 is not writable.</source>
-        <translation type="vanished">%1 er skrivebeskyttet.</translation>
     </message>
 </context>
 <context>
@@ -293,17 +214,17 @@
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="48"/>
         <source>No output file selected.</source>
-        <translation type="unfinished">Ingen uddatafil valgt.</translation>
+        <translation>Ingen uddatafil valgt.</translation>
     </message>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="58"/>
         <source>%1 is a directory.</source>
-        <translation type="unfinished">%1 er en mappe.</translation>
+        <translation>%1 er en mappe.</translation>
     </message>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="62"/>
         <source>%1 is not writable.</source>
-        <translation type="unfinished">%1 er skrivebeskyttet.</translation>
+        <translation>%1 er skrivebeskyttet.</translation>
     </message>
 </context>
 <context>
@@ -356,7 +277,7 @@
         <location filename="../src/GUI/gui.cpp" line="699"/>
         <location filename="../src/GUI/gui.cpp" line="700"/>
         <source>Keyboard controls</source>
-        <translation type="unfinished">Tastaturgenveje</translation>
+        <translation>Tastaturgenveje</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="217"/>
@@ -382,7 +303,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="241"/>
         <source>Export to PNG...</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksporter til PNG…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="247"/>
@@ -422,7 +343,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="286"/>
         <source>Show POIs</source>
-        <translation type="unfinished">Vis IP&apos;er</translation>
+        <translation>Vis IP&apos;er</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="297"/>
@@ -437,7 +358,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="310"/>
         <source>Clear tile cache</source>
-        <translation type="unfinished">Ryd kortbrikmellemlager (cache)</translation>
+        <translation>Ryd kortbrikmellemlager (cache)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="315"/>
@@ -479,7 +400,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="357"/>
         <source>Route waypoints</source>
-        <translation type="unfinished">Vej rutepunkter</translation>
+        <translation>Vej rutepunkter</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="362"/>
@@ -494,7 +415,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="379"/>
         <location filename="../src/GUI/gui.cpp" line="1126"/>
-        <location filename="../src/GUI/gui.cpp" line="1193"/>
+        <location filename="../src/GUI/gui.cpp" line="1194"/>
         <source>Distance</source>
         <translation>Afstand</translation>
     </message>
@@ -502,7 +423,7 @@
         <location filename="../src/GUI/gui.cpp" line="386"/>
         <location filename="../src/GUI/gui.cpp" line="563"/>
         <location filename="../src/GUI/gui.cpp" line="1129"/>
-        <location filename="../src/GUI/gui.cpp" line="1195"/>
+        <location filename="../src/GUI/gui.cpp" line="1196"/>
         <source>Time</source>
         <translation>Tid</translation>
     </message>
@@ -514,7 +435,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="398"/>
         <source>Show slider info</source>
-        <translation type="unfinished">Vis skyder info</translation>
+        <translation>Vis skyder info</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="403"/>
@@ -534,7 +455,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="423"/>
         <location filename="../src/GUI/gui.cpp" line="1131"/>
-        <location filename="../src/GUI/gui.cpp" line="1197"/>
+        <location filename="../src/GUI/gui.cpp" line="1198"/>
         <source>Moving time</source>
         <translation>Tid i bevægelse</translation>
     </message>
@@ -801,33 +722,33 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1100"/>
-        <location filename="../src/GUI/gui.cpp" line="1171"/>
+        <location filename="../src/GUI/gui.cpp" line="1172"/>
         <source>Tracks</source>
         <translation>Spor</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1103"/>
-        <location filename="../src/GUI/gui.cpp" line="1173"/>
+        <location filename="../src/GUI/gui.cpp" line="1174"/>
         <source>Routes</source>
         <translation>Ruter</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1106"/>
-        <location filename="../src/GUI/gui.cpp" line="1175"/>
+        <location filename="../src/GUI/gui.cpp" line="1176"/>
         <source>Waypoints</source>
         <translation>Rutepunkter</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1109"/>
-        <location filename="../src/GUI/gui.cpp" line="1177"/>
+        <location filename="../src/GUI/gui.cpp" line="1178"/>
         <source>Areas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1115"/>
         <location filename="../src/GUI/gui.cpp" line="1119"/>
-        <location filename="../src/GUI/gui.cpp" line="1183"/>
-        <location filename="../src/GUI/gui.cpp" line="1186"/>
+        <location filename="../src/GUI/gui.cpp" line="1184"/>
+        <location filename="../src/GUI/gui.cpp" line="1187"/>
         <source>Date</source>
         <translation>Dato</translation>
     </message>
@@ -838,28 +759,28 @@
         <translation>Statistikker</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1167"/>
+        <location filename="../src/GUI/gui.cpp" line="1168"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1419"/>
+        <location filename="../src/GUI/gui.cpp" line="1424"/>
         <source>Open map file</source>
         <translation>Åbn kort-fil</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1439"/>
-        <location filename="../src/GUI/gui.cpp" line="1470"/>
+        <location filename="../src/GUI/gui.cpp" line="1444"/>
+        <location filename="../src/GUI/gui.cpp" line="1475"/>
         <source>Error loading map:</source>
         <translation>Fejl ved indlæsning af kort:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1480"/>
+        <location filename="../src/GUI/gui.cpp" line="1485"/>
         <source>No files loaded</source>
         <translation>Ingen filer indlæst</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1484"/>
+        <location filename="../src/GUI/gui.cpp" line="1489"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n fil</numerusform>
@@ -873,7 +794,7 @@
         <location filename="../src/GUI/gearratiograph.cpp" line="12"/>
         <location filename="../src/GUI/gearratiograph.h" line="17"/>
         <source>Gear ratio</source>
-        <translation type="unfinished">Udvekslingsforhold</translation>
+        <translation>Udvekslingsforhold</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="27"/>
@@ -888,7 +809,7 @@
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="31"/>
         <source>Maximum</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
 </context>
 <context>
@@ -901,7 +822,7 @@
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="36"/>
         <source>Maximum</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="37"/>
@@ -974,7 +895,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="11"/>
         <source>bpm</source>
-        <translation type="unfinished">puls</translation>
+        <translation>puls</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="12"/>
@@ -990,7 +911,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="29"/>
         <source>Maximum</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
 </context>
 <context>
@@ -998,13 +919,13 @@
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="17"/>
         <source>Maximum</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="18"/>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="20"/>
         <source>bpm</source>
-        <translation type="unfinished">puls</translation>
+        <translation>puls</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="19"/>
@@ -1032,7 +953,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="106"/>
         <source>Garmin IMG maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Garmin IMG-kort</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="109"/>
@@ -1057,7 +978,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="114"/>
         <source>Online map sources</source>
-        <translation type="unfinished">Online-kort kilder</translation>
+        <translation>Online-kort kilder</translation>
     </message>
 </context>
 <context>
@@ -1222,7 +1143,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="230"/>
         <source>POIs</source>
-        <translation type="unfinished">Interessepunkter</translation>
+        <translation>Interessepunkter</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="256"/>
@@ -1232,7 +1153,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="257"/>
         <source>Slider color:</source>
-        <translation type="unfinished">Skyderfarve:</translation>
+        <translation>Skyderfarve:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="280"/>
@@ -1242,7 +1163,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="281"/>
         <source>Map opacity:</source>
-        <translation type="unfinished">Gennemsigtighed for kort:</translation>
+        <translation>Gennemsigtighed for kort:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="291"/>
@@ -1268,7 +1189,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="301"/>
         <source>Moving average window size</source>
-        <translation type="unfinished">Glidende gennemsnitlig vinduesstørrelse</translation>
+        <translation>Glidende gennemsnitlig vinduesstørrelse</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="320"/>
@@ -1325,7 +1246,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="367"/>
         <source>kn</source>
-        <translation type="unfinished">knob</translation>
+        <translation>knob</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="370"/>
@@ -1396,7 +1317,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="505"/>
         <source>Elevation</source>
-        <translation type="unfinished">Højde</translation>
+        <translation>Højde</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="514"/>
@@ -1416,7 +1337,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="534"/>
         <source>Pause detection</source>
-        <translation type="unfinished">Pause genkendelse</translation>
+        <translation>Pause genkendelse</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="556"/>
@@ -1458,7 +1379,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="569"/>
         <source>WYSIWYG</source>
-        <translation type="unfinished">WYSIWYG</translation>
+        <translation>WYSIWYG</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="570"/>
@@ -1468,12 +1389,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="575"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
-        <translation type="unfinished">Det udskrevne område er ca. det samme som visningsområdet. Kortes zoomniveau ændres ikke.</translation>
+        <translation>Det udskrevne område er ca. det samme som visningsområdet. Kortes zoomniveau ændres ikke.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="577"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
-        <translation type="unfinished">Zoom-niveauet vil blive ændret, således at hele indholdet (spor/rutepunkter) passer til udskriftsområdet og kortopløsning er så tæt som muligt på udskriftsopløsningen.</translation>
+        <translation>Zoom-niveauet vil blive ændret, således at hele indholdet (spor/rutepunkter) passer til udskriftsområdet og kortopløsning er så tæt som muligt på udskriftsopløsningen.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="599"/>
@@ -1503,7 +1424,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="609"/>
         <source>Item count (&gt;1)</source>
-        <translation type="unfinished">Elementantal (&gt;1)</translation>
+        <translation>Elementantal (&gt;1)</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="624"/>
@@ -1513,12 +1434,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="634"/>
         <source>Print mode</source>
-        <translation type="unfinished">Udskrivningstilstand</translation>
+        <translation>Udskrivningstilstand</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="635"/>
         <source>Header</source>
-        <translation type="unfinished">Toptekst</translation>
+        <translation>Toptekst</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="643"/>
@@ -1538,7 +1459,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="663"/>
         <source>Image cache size:</source>
-        <translation type="unfinished">Billed cachestørrelse:</translation>
+        <translation>Billed cachestørrelse:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="664"/>
@@ -1583,82 +1504,82 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="24"/>
         <source>PDF files</source>
-        <translation type="unfinished">PDF-filer</translation>
+        <translation>PDF-filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="24"/>
         <source>All files</source>
-        <translation type="unfinished">Alle filer</translation>
+        <translation>Alle filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="51"/>
         <source>Portrait</source>
-        <translation type="unfinished">Stående</translation>
+        <translation>Stående</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="52"/>
         <source>Landscape</source>
-        <translation type="unfinished">Liggende</translation>
+        <translation>Liggende</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
         <source>mm</source>
-        <translation type="unfinished">mm</translation>
+        <translation>mm</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
         <source>in</source>
-        <translation type="unfinished">tomme</translation>
+        <translation>tomme</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="93"/>
         <source>Page Setup</source>
-        <translation type="unfinished">Sideopsætning</translation>
+        <translation>Sideopsætning</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="96"/>
         <source>Page size:</source>
-        <translation type="unfinished">Sidestørrelse:</translation>
+        <translation>Sidestørrelse:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="97"/>
         <source>Resolution:</source>
-        <translation type="unfinished">Opløsning:</translation>
+        <translation>Opløsning:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="98"/>
         <source>Orientation:</source>
-        <translation type="unfinished">Orientering:</translation>
+        <translation>Orientering:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="99"/>
         <source>Margins:</source>
-        <translation type="unfinished">Margener:</translation>
+        <translation>Margener:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="105"/>
         <source>File:</source>
-        <translation type="unfinished">Fil:</translation>
+        <translation>Fil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="112"/>
         <source>Output file</source>
-        <translation type="unfinished">Uddatafil</translation>
+        <translation>Uddatafil</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="119"/>
         <source>Export</source>
-        <translation type="unfinished">Eksporter</translation>
+        <translation>Eksporter</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="134"/>
         <source>Export to PDF</source>
-        <translation type="unfinished">Eksporter til PDF</translation>
+        <translation>Eksporter til PDF</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="142"/>
         <source>Error</source>
-        <translation type="unfinished">Fejl</translation>
+        <translation>Fejl</translation>
     </message>
 </context>
 <context>
@@ -1666,12 +1587,12 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="22"/>
         <source>PNG files</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG-filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="22"/>
         <source>All files</source>
-        <translation type="unfinished">Alle filer</translation>
+        <translation>Alle filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="30"/>
@@ -1681,7 +1602,7 @@
         <location filename="../src/GUI/pngexportdialog.cpp" line="43"/>
         <location filename="../src/GUI/pngexportdialog.cpp" line="44"/>
         <source>px</source>
-        <translation type="unfinished"></translation>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="60"/>
@@ -1701,32 +1622,32 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="65"/>
         <source>Margins:</source>
-        <translation type="unfinished">Margener:</translation>
+        <translation>Margener:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="72"/>
         <source>File:</source>
-        <translation type="unfinished">Fil:</translation>
+        <translation>Fil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="79"/>
         <source>Output file</source>
-        <translation type="unfinished">Uddatafil</translation>
+        <translation>Uddatafil</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="86"/>
         <source>Export</source>
-        <translation type="unfinished">Eksporter</translation>
+        <translation>Eksporter</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="101"/>
         <source>Export to PNG</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksporter til PNG</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="109"/>
         <source>Error</source>
-        <translation type="unfinished">Fejl</translation>
+        <translation>Fejl</translation>
     </message>
 </context>
 <context>
@@ -1734,12 +1655,12 @@
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="16"/>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="18"/>
         <source>Description</source>
-        <translation type="unfinished">Beskrivelse</translation>
+        <translation>Beskrivelse</translation>
     </message>
 </context>
 <context>
@@ -1763,7 +1684,7 @@
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="29"/>
         <source>Maximum</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
 </context>
 <context>
@@ -1771,7 +1692,7 @@
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="17"/>
         <source>Maximum</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="18"/>
@@ -1853,17 +1774,17 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="31"/>
         <source>min/km</source>
-        <translation type="unfinished">min/km</translation>
+        <translation>min/km</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="32"/>
         <source>min/mi</source>
-        <translation type="unfinished">min/mil</translation>
+        <translation>min/mil</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="32"/>
         <source>min/nmi</source>
-        <translation type="unfinished">min/sømil</translation>
+        <translation>min/sømil</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="34"/>
@@ -1873,7 +1794,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="36"/>
         <source>Maximum</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="38"/>
@@ -1883,7 +1804,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="127"/>
         <source>kn</source>
-        <translation type="unfinished">knob</translation>
+        <translation>knob</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="130"/>
@@ -1906,7 +1827,7 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
         <source>kn</source>
-        <translation type="unfinished">knob</translation>
+        <translation>knob</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
@@ -1916,22 +1837,22 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="27"/>
         <source>min/km</source>
-        <translation type="unfinished">min/km</translation>
+        <translation>min/km</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="28"/>
         <source>min/mi</source>
-        <translation type="unfinished">min/mil</translation>
+        <translation>min/mil</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="28"/>
         <source>min/nmi</source>
-        <translation type="unfinished">min/sømil</translation>
+        <translation>min/sømil</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="31"/>
         <source>Maximum</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="33"/>
@@ -1960,12 +1881,12 @@
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="29"/>
         <source>Minimum</source>
-        <translation type="unfinished">Min</translation>
+        <translation>Min</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="31"/>
         <source>Maximum</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="102"/>
@@ -1998,12 +1919,12 @@
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="26"/>
         <source>Maximum</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="28"/>
         <source>Minimum</source>
-        <translation type="unfinished">Min</translation>
+        <translation>Min</translation>
     </message>
 </context>
 <context>
