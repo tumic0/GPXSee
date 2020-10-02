@@ -784,6 +784,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fájl</numerusform>
+            <numerusform>%n fájl</numerusform>
         </translation>
     </message>
 </context>
@@ -1606,7 +1607,7 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="56"/>
         <source>Use anti-aliasing</source>
-        <translation type="unfinished">Élsimítás be</translation>
+        <translation>Élsimítás be</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="60"/>
