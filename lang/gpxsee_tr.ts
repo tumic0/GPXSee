@@ -1606,7 +1606,7 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="56"/>
         <source>Use anti-aliasing</source>
-        <translation type="unfinished">Kenar yumuşatma kullan</translation>
+        <translation>Kenar yumuşatma kullan</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="60"/>
