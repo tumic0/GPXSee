@@ -9,7 +9,6 @@
 #include <QSpinBox>
 #include <QMessageBox>
 #include <QTabWidget>
-#include <QDoubleSpinBox>
 #include <QCheckBox>
 #include "units.h"
 #include "fileselectwidget.h"
@@ -34,10 +33,10 @@ PNGExportDialog::PNGExportDialog(PNGExport &exp, QWidget *parent)
 	_height->setValue(_export.size.height());
 	_height->setSuffix(UNIT_SPACE + tr("px"));
 
-	_topMargin = new QDoubleSpinBox();
-	_bottomMargin = new QDoubleSpinBox();
-	_leftMargin = new QDoubleSpinBox();
-	_rightMargin = new QDoubleSpinBox();
+	_topMargin = new QSpinBox();
+	_bottomMargin = new QSpinBox();
+	_leftMargin = new QSpinBox();
+	_rightMargin = new QSpinBox();
 	_topMargin->setSuffix(UNIT_SPACE + tr("px"));
 	_bottomMargin->setSuffix(UNIT_SPACE + tr("px"));
 	_leftMargin->setSuffix(UNIT_SPACE + tr("px"));

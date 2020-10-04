@@ -6,7 +6,6 @@
 
 class FileSelectWidget;
 class QSpinBox;
-class QDoubleSpinBox;
 class QCheckBox;
 
 struct PNGExport
@@ -33,10 +32,10 @@ private:
 	FileSelectWidget *_fileSelect;
 	QSpinBox *_width;
 	QSpinBox *_height;
-	QDoubleSpinBox *_topMargin;
-	QDoubleSpinBox *_bottomMargin;
-	QDoubleSpinBox *_leftMargin;
-	QDoubleSpinBox *_rightMargin;
+	QSpinBox *_topMargin;
+	QSpinBox *_bottomMargin;
+	QSpinBox *_leftMargin;
+	QSpinBox *_rightMargin;
 	QCheckBox *_antialiasing;
 };
 
