@@ -1607,7 +1607,7 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="56"/>
         <source>Use anti-aliasing</source>
-        <translation type="unfinished">Käytä reunanpehmennystä</translation>
+        <translation>Käytä reunanpehmennystä</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="60"/>
