@@ -10,12 +10,20 @@ MarginsWidget::MarginsWidget(QWidget *parent) : QWidget(parent)
 	_left = new QSpinBox();
 	_right = new QSpinBox();
 
+#ifdef Q_OS_WIN32
+	_top->setMaximumWidth(_top->sizeHint().width());
+	_bottom->setMaximumWidth(_bottom->sizeHint().width());
+	_left->setMaximumWidth(_left->sizeHint().width());
+	_right->setMaximumWidth(_right->sizeHint().width());
+#endif // W_OS_WIN32
+
 	QGridLayout *layout = new QGridLayout();
 	layout->addWidget(_top, 0, 0, 1, 2, Qt::AlignCenter);
 	layout->addWidget(_left, 1, 0, 1, 1, Qt::AlignRight);
 	layout->addWidget(_right, 1, 1, 1, 1, Qt::AlignLeft);
 	layout->addWidget(_bottom, 2, 0, 1, 2, Qt::AlignCenter);
 
+	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	setLayout(layout);
 }
 
@@ -49,12 +57,20 @@ MarginsFWidget::MarginsFWidget(QWidget *parent) : QWidget(parent)
 	_left = new QDoubleSpinBox();
 	_right = new QDoubleSpinBox();
 
+#ifdef Q_OS_WIN32
+	_top->setMaximumWidth(_top->sizeHint().width());
+	_bottom->setMaximumWidth(_bottom->sizeHint().width());
+	_left->setMaximumWidth(_left->sizeHint().width());
+	_right->setMaximumWidth(_right->sizeHint().width());
+#endif // Q_OS_WIN32
+
 	QGridLayout *layout = new QGridLayout();
 	layout->addWidget(_top, 0, 0, 1, 2, Qt::AlignCenter);
 	layout->addWidget(_left, 1, 0, 1, 1, Qt::AlignRight);
 	layout->addWidget(_right, 1, 1, 1, 1, Qt::AlignLeft);
 	layout->addWidget(_bottom, 2, 0, 1, 2, Qt::AlignCenter);
 
+	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	setLayout(layout);
 }
 
