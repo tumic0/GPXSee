@@ -9,7 +9,7 @@
 class QComboBox;
 class QRadioButton;
 class FileSelectWidget;
-class QDoubleSpinBox;
+class MarginsFWidget;
 
 struct PDFExport
 {
@@ -39,10 +39,7 @@ private:
 	QComboBox *_resolution;
 	QRadioButton *_portrait;
 	QRadioButton *_landscape;
-	QDoubleSpinBox *_topMargin;
-	QDoubleSpinBox *_bottomMargin;
-	QDoubleSpinBox *_leftMargin;
-	QDoubleSpinBox *_rightMargin;
+	MarginsFWidget *_margins;
 };
 
 #endif // PDFEXPORTDIALOG_H

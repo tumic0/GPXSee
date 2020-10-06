@@ -21,6 +21,7 @@ INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
     src/GUI/graphicsscene.h \
     src/GUI/mapaction.h \
+    src/GUI/marginswidget.h \
     src/GUI/popup.h \
     src/common/garmin.h \
     src/common/staticassert.h \
@@ -201,6 +202,7 @@ HEADERS += src/common/config.h \
     src/GUI/pdfexportdialog.h \
     src/GUI/pngexportdialog.h
 SOURCES += src/main.cpp \
+    src/GUI/marginswidget.cpp \
     src/GUI/popup.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \

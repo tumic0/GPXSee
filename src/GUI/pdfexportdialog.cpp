@@ -9,7 +9,7 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QTabWidget>
-#include <QDoubleSpinBox>
+#include "marginswidget.h"
 #include "fileselectwidget.h"
 #include "units.h"
 #include "pdfexportdialog.h"
@@ -58,36 +58,11 @@ PDFExportDialog::PDFExportDialog(PDFExport &exp, Units units, QWidget *parent)
 	else
 		_landscape->setChecked(true);
 
-	_topMargin = new QDoubleSpinBox();
-	_bottomMargin = new QDoubleSpinBox();
-	_leftMargin = new QDoubleSpinBox();
-	_rightMargin = new QDoubleSpinBox();
-	QString us = (units == Metric) ? tr("mm") : tr("in");
-	_topMargin->setSuffix(UNIT_SPACE + us);
-	_bottomMargin->setSuffix(UNIT_SPACE + us);
-	_leftMargin->setSuffix(UNIT_SPACE + us);
-	_rightMargin->setSuffix(UNIT_SPACE + us);
-	if (units == Metric) {
-		_topMargin->setValue(_export.margins.top());
-		_bottomMargin->setValue(_export.margins.bottom());
-		_leftMargin->setValue(_export.margins.left());
-		_rightMargin->setValue(_export.margins.right());
-	} else {
-		_topMargin->setValue(_export.margins.top() * MM2IN);
-		_bottomMargin->setValue(_export.margins.bottom() * MM2IN);
-		_leftMargin->setValue(_export.margins.left() * MM2IN);
-		_rightMargin->setValue(_export.margins.right() * MM2IN);
-		_topMargin->setSingleStep(0.1);
-		_bottomMargin->setSingleStep(0.1);
-		_leftMargin->setSingleStep(0.1);
-		_rightMargin->setSingleStep(0.1);
-	}
-
-	QGridLayout *marginsLayout = new QGridLayout();
-	marginsLayout->addWidget(_topMargin, 0, 0, 1, 2, Qt::AlignCenter);
-	marginsLayout->addWidget(_leftMargin, 1, 0, 1, 1, Qt::AlignRight);
-	marginsLayout->addWidget(_rightMargin, 1, 1, 1, 1, Qt::AlignLeft);
-	marginsLayout->addWidget(_bottomMargin, 2, 0, 1, 2, Qt::AlignCenter);
+	_margins = new MarginsFWidget();
+	_margins->setUnits((units == Metric) ? tr("mm") : tr("in"));
+	_margins->setSingleStep(0.1);
+	_margins->setValue((units == Metric)
+	  ? _export.margins : _export.margins * MM2IN);
 
 #ifndef Q_OS_MAC
 	QGroupBox *pageSetupBox = new QGroupBox(tr("Page Setup"));
@@ -96,7 +71,7 @@ PDFExportDialog::PDFExportDialog(PDFExport &exp, Units units, QWidget *parent)
 	pageSetupLayout->addRow(tr("Page size:"), _paperSize);
 	pageSetupLayout->addRow(tr("Resolution:"), _resolution);
 	pageSetupLayout->addRow(tr("Orientation:"), orientationLayout);
-	pageSetupLayout->addRow(tr("Margins:"), marginsLayout);
+	pageSetupLayout->addRow(tr("Margins:"), _margins);
 #ifdef Q_OS_MAC
 	QFrame *line = new QFrame();
 	line->setFrameShape(QFrame::HLine);
@@ -153,13 +128,8 @@ void PDFExportDialog::accept()
 	_export.paperSize = paperSize;
 	_export.resolution = resolution;
 	_export.orientation = orientation;
-	if (_units == Imperial)
-		_export.margins = MarginsF(_leftMargin->value() / MM2IN,
-		_topMargin->value() / MM2IN, _rightMargin->value() / MM2IN,
-		_bottomMargin->value() / MM2IN);
-	else
-		_export.margins = MarginsF(_leftMargin->value(), _topMargin->value(),
-		  _rightMargin->value(), _bottomMargin->value());
+	_export.margins = (_units == Imperial)
+	  ? _margins->value() / MM2IN : _margins->value();
 
 	QDialog::accept();
 }

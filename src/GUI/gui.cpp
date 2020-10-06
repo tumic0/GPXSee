@@ -2211,7 +2211,7 @@ void GUI::readSettings()
 	  .toInt();
 	int mbi = settings.value(PNG_MARGIN_BOTTOM_SETTING, PNG_MARGIN_BOTTOM_DEFAULT)
 	  .toInt();
-	_pngExport.margins = Margins(mli, mti, mri, mbi);
+	_pngExport.margins = QMargins(mli, mti, mri, mbi);
 	_pngExport.antialiasing = settings.value(PNG_ANTIALIASING_SETTING,
 	  PNG_ANTIALIASING_DEFAULT).toBool();
 	_pngExport.fileName = settings.value(PNG_FILENAME_SETTING,
