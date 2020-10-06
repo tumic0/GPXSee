@@ -20,13 +20,13 @@ private:
 	qreal _left, _top, _right, _bottom;
 };
 
-inline MarginsF operator*(const MarginsF &margins, int factor)
+inline MarginsF operator*(const MarginsF &margins, qreal factor)
 {
 	return MarginsF(margins.left() * factor, margins.top() * factor,
 	  margins.right() * factor, margins.bottom() * factor);
 }
 
-inline MarginsF operator/(const MarginsF &margins, int factor)
+inline MarginsF operator/(const MarginsF &margins, qreal factor)
 {
 	return MarginsF(margins.left() / factor, margins.top() / factor,
 	  margins.right() / factor, margins.bottom() / factor);

@@ -59,10 +59,10 @@ PDFExportDialog::PDFExportDialog(PDFExport &exp, Units units, QWidget *parent)
 		_landscape->setChecked(true);
 
 	_margins = new MarginsFWidget();
-	_margins->setUnits((units == Metric) ? tr("mm") : tr("in"));
+	_margins->setUnits((units == Metric) ? tr("cm") : tr("in"));
 	_margins->setSingleStep(0.1);
 	_margins->setValue((units == Metric)
-	  ? _export.margins : _export.margins * MM2IN);
+	  ? _export.margins * MM2CM : _export.margins * MM2IN);
 
 #ifndef Q_OS_MAC
 	QGroupBox *pageSetupBox = new QGroupBox(tr("Page Setup"));
@@ -129,7 +129,7 @@ void PDFExportDialog::accept()
 	_export.resolution = resolution;
 	_export.orientation = orientation;
 	_export.margins = (_units == Imperial)
-	  ? _margins->value() / MM2IN : _margins->value();
+	  ? _margins->value() / MM2IN : _margins->value() / MM2CM;
 
 	QDialog::accept();
 }

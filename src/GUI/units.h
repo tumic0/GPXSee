@@ -16,6 +16,7 @@ enum Units {
 #define MS2KN   1.943844490000  // m/s -> kn
 #define FT2MI   0.000189393939  // ft -> mi
 #define MM2IN   0.039370100000  // mm -> in
+#define MM2CM   0.100000000000  // mm -> cm
 #define H2S     0.000277777778  // h -> s
 #define MIN2S   0.016666666667  // min -> s
 
