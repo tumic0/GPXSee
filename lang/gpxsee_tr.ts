@@ -1521,62 +1521,62 @@
         <translation>Yatay</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
-        <source>mm</source>
-        <translation>mm</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="62"/>
         <source>in</source>
         <translation>inç</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="93"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="62"/>
+        <source>cm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="68"/>
         <source>Page Setup</source>
         <translation>Sayfa Düzeni</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="96"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="71"/>
         <source>Page size:</source>
         <translation>Sayfa boyutu:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="97"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="72"/>
         <source>Resolution:</source>
         <translation>Çözünürlük:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="98"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="73"/>
         <source>Orientation:</source>
         <translation>Yönlendirme:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="99"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="74"/>
         <source>Margins:</source>
         <translation>Kenar boşlukları:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="105"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="80"/>
         <source>File:</source>
         <translation>Dosya:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="112"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="87"/>
         <source>Output file</source>
         <translation>Çıktı dosyası</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="119"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="94"/>
         <source>Export</source>
         <translation>Dışa aktar</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="134"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="109"/>
         <source>Export to PDF</source>
         <translation>PDF olarak dışa aktar</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="142"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="117"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
@@ -1596,60 +1596,57 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="30"/>
         <location filename="../src/GUI/pngexportdialog.cpp" line="35"/>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="41"/>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="42"/>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="43"/>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="44"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="39"/>
         <source>px</source>
         <translation>px</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="56"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="41"/>
         <source>Use anti-aliasing</source>
         <translation>Kenar yumuşatma kullan</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="60"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="45"/>
         <source>Image Setup</source>
         <translation>Görüntü Düzeni</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="63"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="48"/>
         <source>Image width:</source>
         <translation>Görüntü genişliği:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="64"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="49"/>
         <source>Image height:</source>
         <translation>Görüntü yüksekliği:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="65"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="50"/>
         <source>Margins:</source>
         <translation>Kenar boşlukları:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="72"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="57"/>
         <source>File:</source>
         <translation>Dosya:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="79"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="64"/>
         <source>Output file</source>
         <translation>Çıktı dosyası</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="86"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="71"/>
         <source>Export</source>
         <translation>Dışa aktar</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="101"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="86"/>
         <source>Export to PNG</source>
         <translation>PNG olarak dışa aktar</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="109"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="94"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>

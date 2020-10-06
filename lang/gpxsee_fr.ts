@@ -1522,62 +1522,62 @@
         <translation>Paysage</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
-        <source>mm</source>
-        <translation>mm</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="62"/>
         <source>in</source>
         <translation>po</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="93"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="62"/>
+        <source>cm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="68"/>
         <source>Page Setup</source>
         <translation>Style de page</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="96"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="71"/>
         <source>Page size:</source>
         <translation>Format de papier :</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="97"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="72"/>
         <source>Resolution:</source>
         <translation>Résolution :</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="98"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="73"/>
         <source>Orientation:</source>
         <translation>Orientation :</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="99"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="74"/>
         <source>Margins:</source>
         <translation>Marges :</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="105"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="80"/>
         <source>File:</source>
         <translation>Fichier :</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="112"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="87"/>
         <source>Output file</source>
         <translation>Fichier exporté</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="119"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="94"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="134"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="109"/>
         <source>Export to PDF</source>
         <translation>Exporter au format PDF</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="142"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="117"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
@@ -1597,60 +1597,57 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="30"/>
         <location filename="../src/GUI/pngexportdialog.cpp" line="35"/>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="41"/>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="42"/>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="43"/>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="44"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="39"/>
         <source>px</source>
         <translation>px</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="56"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="41"/>
         <source>Use anti-aliasing</source>
         <translation type="unfinished">Utiliser l&apos;anticrénelage</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="60"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="45"/>
         <source>Image Setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="63"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="48"/>
         <source>Image width:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="64"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="49"/>
         <source>Image height:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="65"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="50"/>
         <source>Margins:</source>
         <translation>Marges :</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="72"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="57"/>
         <source>File:</source>
         <translation>Fichier :</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="79"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="64"/>
         <source>Output file</source>
         <translation>Fichier exporté</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="86"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="71"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="101"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="86"/>
         <source>Export to PNG</source>
         <translation>Exporter au format PNG</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="109"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="94"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>

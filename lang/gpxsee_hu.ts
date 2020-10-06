@@ -784,7 +784,6 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fájl</numerusform>
-            <numerusform>%n fájl</numerusform>
         </translation>
     </message>
 </context>
@@ -1522,62 +1521,62 @@
         <translation>Fekvő</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
-        <source>mm</source>
-        <translation>mm</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="65"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="62"/>
         <source>in</source>
         <translation>hüvelyk</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="93"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="62"/>
+        <source>cm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="68"/>
         <source>Page Setup</source>
         <translation>Oldalbeállítás</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="96"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="71"/>
         <source>Page size:</source>
         <translation>Oldalméret:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="97"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="72"/>
         <source>Resolution:</source>
         <translation>Felbontás:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="98"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="73"/>
         <source>Orientation:</source>
         <translation>Tájolás:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="99"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="74"/>
         <source>Margins:</source>
         <translation>Margók:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="105"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="80"/>
         <source>File:</source>
         <translation>Fájl:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="112"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="87"/>
         <source>Output file</source>
         <translation>Kimeneti fájl</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="119"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="94"/>
         <source>Export</source>
         <translation>Exportálás</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="134"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="109"/>
         <source>Export to PDF</source>
         <translation>Exportálás PDF-be</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pdfexportdialog.cpp" line="142"/>
+        <location filename="../src/GUI/pdfexportdialog.cpp" line="117"/>
         <source>Error</source>
         <translation>Hiba</translation>
     </message>
@@ -1597,60 +1596,57 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="30"/>
         <location filename="../src/GUI/pngexportdialog.cpp" line="35"/>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="41"/>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="42"/>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="43"/>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="44"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="39"/>
         <source>px</source>
         <translation>pont</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="56"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="41"/>
         <source>Use anti-aliasing</source>
         <translation>Élsimítás be</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="60"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="45"/>
         <source>Image Setup</source>
         <translation>Kép beállítása</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="63"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="48"/>
         <source>Image width:</source>
         <translation>Kép szélessége:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="64"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="49"/>
         <source>Image height:</source>
         <translation>Kép magassága:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="65"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="50"/>
         <source>Margins:</source>
         <translation>Margók:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="72"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="57"/>
         <source>File:</source>
         <translation>Fájl:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="79"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="64"/>
         <source>Output file</source>
         <translation>Kimeneti fájl</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="86"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="71"/>
         <source>Export</source>
         <translation>Exportálás</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="101"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="86"/>
         <source>Export to PNG</source>
         <translation>Exportálás PNG-be</translation>
     </message>
     <message>
-        <location filename="../src/GUI/pngexportdialog.cpp" line="109"/>
+        <location filename="../src/GUI/pngexportdialog.cpp" line="94"/>
         <source>Error</source>
         <translation>Hiba</translation>
     </message>
