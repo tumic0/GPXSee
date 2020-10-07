@@ -233,14 +233,14 @@ void GUI::createActions()
 	_exportPDFFileAction = new QAction(QIcon(EXPORT_FILE_ICON),
 	  tr("Export to PDF..."), this);
 	_exportPDFFileAction->setMenuRole(QAction::NoRole);
-	_exportPDFFileAction->setShortcut(EXPORT_SHORTCUT);
+	_exportPDFFileAction->setShortcut(PDF_EXPORT_SHORTCUT);
 	_exportPDFFileAction->setActionGroup(_fileActionGroup);
 	connect(_exportPDFFileAction, SIGNAL(triggered()), this, SLOT(exportPDFFile()));
 	addAction(_exportPDFFileAction);
 	_exportPNGFileAction = new QAction(QIcon(EXPORT_FILE_ICON),
 	  tr("Export to PNG..."), this);
 	_exportPNGFileAction->setMenuRole(QAction::NoRole);
-	_exportPNGFileAction->setShortcut(EXPORT_SHORTCUT);
+	_exportPNGFileAction->setShortcut(PNG_EXPORT_SHORTCUT);
 	_exportPNGFileAction->setActionGroup(_fileActionGroup);
 	connect(_exportPNGFileAction, SIGNAL(triggered()), this, SLOT(exportPNGFile()));
 	addAction(_exportPNGFileAction);
