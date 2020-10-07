@@ -1,11 +1,7 @@
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QFormLayout>
-#include <QGridLayout>
 #include <QDialogButtonBox>
 #include <QGroupBox>
-#include <QComboBox>
-#include <QRadioButton>
 #include <QSpinBox>
 #include <QMessageBox>
 #include <QTabWidget>
@@ -14,6 +10,7 @@
 #include "fileselectwidget.h"
 #include "marginswidget.h"
 #include "pngexportdialog.h"
+
 
 PNGExportDialog::PNGExportDialog(PNGExport &exp, QWidget *parent)
   : QDialog(parent), _export(exp)
@@ -62,7 +59,7 @@ PNGExportDialog::PNGExportDialog(PNGExport &exp, QWidget *parent)
 
 #ifndef Q_OS_MAC
 	QGroupBox *outputFileBox = new QGroupBox(tr("Output file"));
-	QHBoxLayout *outputFileLayout = new QHBoxLayout();
+	QVBoxLayout *outputFileLayout = new QVBoxLayout();
 	outputFileLayout->addWidget(_fileSelect);
 	outputFileBox->setLayout(outputFileLayout);
 #endif // Q_OS_MAC

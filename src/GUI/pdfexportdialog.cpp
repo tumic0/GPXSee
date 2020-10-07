@@ -1,12 +1,10 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>
-#include <QGridLayout>
 #include <QDialogButtonBox>
 #include <QGroupBox>
 #include <QComboBox>
 #include <QRadioButton>
-#include <QFileInfo>
 #include <QMessageBox>
 #include <QTabWidget>
 #include "marginswidget.h"
@@ -85,7 +83,7 @@ PDFExportDialog::PDFExportDialog(PDFExport &exp, Units units, QWidget *parent)
 
 #ifndef Q_OS_MAC
 	QGroupBox *outputFileBox = new QGroupBox(tr("Output file"));
-	QHBoxLayout *outputFileLayout = new QHBoxLayout();
+	QVBoxLayout *outputFileLayout = new QVBoxLayout();
 	outputFileLayout->addWidget(_fileSelect);
 	outputFileBox->setLayout(outputFileLayout);
 #endif // Q_OS_MAC
