@@ -784,6 +784,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fájl</numerusform>
+            <numerusform>%n fájl</numerusform>
         </translation>
     </message>
 </context>
@@ -1528,7 +1529,7 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="62"/>
         <source>cm</source>
-        <translation type="unfinished"></translation>
+        <translation>cm</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="68"/>
