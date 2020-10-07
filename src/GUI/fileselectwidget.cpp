@@ -12,7 +12,8 @@ FileSelectWidget::FileSelectWidget(QWidget *parent) : QWidget(parent)
 {
 	QFontMetrics fm(QApplication::font());
 	_edit = new QLineEdit();
-	_edit->setMinimumWidth(fm.boundingRect(QDir::homePath()).width());
+	_edit->setMinimumWidth(fm.averageCharWidth() * (QDir::homePath().length()
+	  + 12));
 #ifdef Q_OS_WIN32
 	_button = new QPushButton("...");
 	_button->setMaximumWidth(_button->sizeHint().width() / 2);

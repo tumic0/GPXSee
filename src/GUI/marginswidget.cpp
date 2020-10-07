@@ -10,12 +10,10 @@ MarginsWidget::MarginsWidget(QWidget *parent) : QWidget(parent)
 	_left = new QSpinBox();
 	_right = new QSpinBox();
 
-#ifdef Q_OS_WIN32
 	_top->setMaximumWidth(_top->sizeHint().width());
 	_bottom->setMaximumWidth(_bottom->sizeHint().width());
 	_left->setMaximumWidth(_left->sizeHint().width());
 	_right->setMaximumWidth(_right->sizeHint().width());
-#endif // W_OS_WIN32
 
 	QGridLayout *layout = new QGridLayout();
 	layout->addWidget(_top, 0, 0, 1, 2, Qt::AlignCenter);
@@ -41,6 +39,11 @@ void MarginsWidget::setUnits(const QString &units)
 	_bottom->setSuffix(UNIT_SPACE + units);
 	_left->setSuffix(UNIT_SPACE + units);
 	_right->setSuffix(UNIT_SPACE + units);
+
+	_top->setMaximumWidth(_top->sizeHint().width());
+	_bottom->setMaximumWidth(_bottom->sizeHint().width());
+	_left->setMaximumWidth(_left->sizeHint().width());
+	_right->setMaximumWidth(_right->sizeHint().width());
 }
 
 QMargins MarginsWidget::value() const
@@ -57,12 +60,10 @@ MarginsFWidget::MarginsFWidget(QWidget *parent) : QWidget(parent)
 	_left = new QDoubleSpinBox();
 	_right = new QDoubleSpinBox();
 
-#ifdef Q_OS_WIN32
 	_top->setMaximumWidth(_top->sizeHint().width());
 	_bottom->setMaximumWidth(_bottom->sizeHint().width());
 	_left->setMaximumWidth(_left->sizeHint().width());
 	_right->setMaximumWidth(_right->sizeHint().width());
-#endif // Q_OS_WIN32
 
 	QGridLayout *layout = new QGridLayout();
 	layout->addWidget(_top, 0, 0, 1, 2, Qt::AlignCenter);
@@ -88,6 +89,11 @@ void MarginsFWidget::setUnits(const QString &units)
 	_bottom->setSuffix(UNIT_SPACE + units);
 	_left->setSuffix(UNIT_SPACE + units);
 	_right->setSuffix(UNIT_SPACE + units);
+
+	_top->setMaximumWidth(_top->sizeHint().width());
+	_bottom->setMaximumWidth(_bottom->sizeHint().width());
+	_left->setMaximumWidth(_left->sizeHint().width());
+	_right->setMaximumWidth(_right->sizeHint().width());
 }
 
 void MarginsFWidget::setSingleStep(qreal step)
