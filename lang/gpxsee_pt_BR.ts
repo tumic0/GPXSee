@@ -1313,7 +1313,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="442"/>
         <source>Use segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar segmentos</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="481"/>
@@ -1529,7 +1529,7 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="62"/>
         <source>cm</source>
-        <translation type="unfinished"></translation>
+        <translation>cm</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="68"/>
@@ -1604,22 +1604,22 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="41"/>
         <source>Use anti-aliasing</source>
-        <translation type="unfinished">Usar anti-aliasing</translation>
+        <translation>Usar anti-aliasing</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="45"/>
         <source>Image Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuração da Imagem</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="48"/>
         <source>Image width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Largura da imagem:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="49"/>
         <source>Image height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Altura da imagem:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="50"/>
