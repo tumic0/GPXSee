@@ -61,19 +61,19 @@
 	((map).contains(key) && (map).value(key).SHORT != 32767)
 
 
-typedef struct {
+struct TIFFHeader {
 	quint16 KeyDirectoryVersion;
 	quint16 KeyRevision;
 	quint16 MinorRevision;
 	quint16 NumberOfKeys;
-} Header;
+};
 
-typedef struct {
+struct KeyEntry {
 	quint16 KeyID;
 	quint16 TIFFTagLocation;
 	quint16 Count;
 	quint16 ValueOffset;
-} KeyEntry;
+};
 
 
 bool GeoTIFF::readEntry(TIFFFile &file, Ctx &ctx) const
@@ -196,7 +196,7 @@ bool GeoTIFF::readMatrix(TIFFFile &file, quint32 offset, double matrix[16]) cons
 
 bool GeoTIFF::readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv) const
 {
-	Header header;
+	TIFFHeader header;
 	KeyEntry entry;
 	Value value;
 

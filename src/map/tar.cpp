@@ -9,7 +9,7 @@
 #define BLOCKCOUNT(size) \
 	((size)/BLOCKSIZE + ((size) % BLOCKSIZE > 0 ? 1 : 0))
 
-struct Header
+struct TARHeader
 {
 	char name[100];               /*   0 */
 	char mode[8];                 /* 100 */
@@ -61,7 +61,7 @@ bool Tar::open()
 bool Tar::loadTar()
 {
 	char buffer[BLOCKSIZE];
-	struct Header *hdr = (struct Header*)&buffer;
+	TARHeader *hdr = (TARHeader*)&buffer;
 	quint64 size;
 	qint64 ret;
 
@@ -113,7 +113,7 @@ bool Tar::loadTmi(const QString &path)
 QByteArray Tar::file(const QString &name)
 {
 	char buffer[BLOCKSIZE];
-	struct Header *hdr = (struct Header*)&buffer;
+	TARHeader *hdr = (TARHeader*)&buffer;
 	quint64 size;
 
 	QMap<QString, quint64>::const_iterator it(_index.find(name));
