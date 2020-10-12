@@ -33,18 +33,18 @@ public:
 			return false;
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
-			if (_be)
-				val = data;
-			else {
-				for (size_t i = 0; i < sizeof(T); i++)
-					*((char *)&val + i) = *((char*)&data + sizeof(T) - 1 - i);
-			}
+		if (_be)
+			val = data;
+		else {
+			for (size_t i = 0; i < sizeof(T); i++)
+				*((char *)&val + i) = *((char*)&data + sizeof(T) - 1 - i);
+		}
 #else
-			if (_be) {
-				for (size_t i = 0; i < sizeof(T); i++)
-					*((char *)&val + i) = *((char*)&data + sizeof(T) - 1 - i);
-			} else
-				val = data;
+		if (_be) {
+			for (size_t i = 0; i < sizeof(T); i++)
+				*((char *)&val + i) = *((char*)&data + sizeof(T) - 1 - i);
+		} else
+			val = data;
 #endif
 
 		return true;
