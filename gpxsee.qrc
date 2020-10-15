@@ -71,6 +71,7 @@
 		<file alias="danger-11.png">icons/POI/danger-11.png</file>
 		<file alias="drinking-water-11.png">icons/POI/drinking-water-11.png</file>
 		<file alias="fast-food-11.png">icons/POI/fast-food-11.png</file>
+		<file alias="entrance-alt1-11.png">icons/POI/entrance-alt1-11.png</file>
 		<file alias="fire-station-11.png">icons/POI/fire-station-11.png</file>
 		<file alias="fitness-centre-11.png">icons/POI/fitness-centre-11.png</file>
 		<file alias="fuel-11.png">icons/POI/fuel-11.png</file>
@@ -97,7 +98,6 @@
 		<file alias="place-of-worship-11.png">icons/POI/place-of-worship-11.png</file>
 		<file alias="police-11.png">icons/POI/police-11.png</file>
 		<file alias="post-11.png">icons/POI/post-11.png</file>
-		<file alias="prison-11.png">icons/POI/prison-11.png</file>
 		<file alias="religious-christian-11.png">icons/POI/religious-christian-11.png</file>
 		<file alias="religious-jewish-11.png">icons/POI/religious-jewish-11.png</file>
 		<file alias="religious-muslim-11.png">icons/POI/religious-muslim-11.png</file>

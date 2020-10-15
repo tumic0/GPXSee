@@ -28,7 +28,7 @@ static int minPOIZoom(Style::POIClass cl)
 		case Style::Food:
 		case Style::Shopping:
 		case Style::Services:
-			return 27;
+			return 26;
 		case Style::Accommodation:
 		case Style::Recreation:
 			return 25;
@@ -372,14 +372,15 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 	for (int i = 0; i < _points.size(); i++) {
 		MapData::Point &point = _points[i];
 		const Style::Point &style = _style->point(point.type);
+		bool poi = Style::isPOI(point.type);
 
-		if (point.poi && _zoom < minPOIZoom(Style::poiClass(point.type)))
+		if (poi && _zoom < minPOIZoom(Style::poiClass(point.type)))
 			continue;
 
 		const QString *label = point.label.text().isEmpty()
 		  ? 0 : &(point.label.text());
 		const QImage *img = style.img().isNull() ? 0 : &style.img();
-		const QFont *fnt = point.poi
+		const QFont *fnt = poi
 		  ? poiFont(style.textFontSize()) : font(style.textFontSize());
 		const QColor *color = style.textColor().isValid()
 		  ? &style.textColor() : 0;

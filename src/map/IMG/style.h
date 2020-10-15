@@ -108,15 +108,19 @@ public:
 	const Point &point(quint32 type) const;
 	const QList<quint32> &drawOrder() const {return _drawOrder;}
 
+	static bool isPOI(quint32 type)
+	  {return !((type >= TYPE(0x01) && type <= TYPE(0x1f))
+	  || (type >= 0x11400 && type < 0x11500));}
 	static bool isContourLine(quint32 type)
 	  {return ((type >= TYPE(0x20) && type <= TYPE(0x25))
 	  || (type & 0xffff00) == TYPE(0x109));}
 	static bool isWaterArea(quint32 type)
-	  {return (type >= TYPE(0x3c) && type <= TYPE(0x44));}
+	  {return ((type >= TYPE(0x3c) && type <= TYPE(0x44))
+	  || (type & 0xffff00) == TYPE(0x10b));}
 	static bool isMilitaryArea(quint32 type)
-	  {return (type == TYPE(0x04));}
+	  {return (type == TYPE(0x04) || type == 0x10901);}
 	static bool isNatureReserve(quint32 type)
-	  {return (type == TYPE(0x16));}
+	  {return (type == TYPE(0x16) || type == 0x10a03);}
 	static bool isSpot(quint32 type)
 	  {return (type == TYPE(0x62) || type == TYPE(0x63));}
 	static bool isSummit(quint32 type)

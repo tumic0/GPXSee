@@ -38,7 +38,6 @@ public:
 		Coordinates coordinates;
 		Label label;
 		quint32 type;
-		bool poi;
 		quint64 id;
 
 		bool operator<(const Point &other) const
@@ -95,8 +94,7 @@ private:
 #ifndef QT_NO_DEBUG
 inline QDebug operator<<(QDebug dbg, const MapData::Point &point)
 {
-	dbg.nospace() << "Point(" << hex << point.type << ", " << point.label
-	  << ", " << point.poi << ")";
+	dbg.nospace() << "Point(" << hex << point.type << ", " << point.label << ")";
 	return dbg.space();
 }
 

@@ -39,9 +39,7 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(0x1f)] = Polygon(QBrush(QColor("#9ac269"),
 	  Qt::BDiagPattern));
 	_polygons[TYPE(0x28)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x29)] = Polygon(QBrush("#9fc4e1"));
 	_polygons[TYPE(0x32)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x3b)] = Polygon(QBrush("#9fc4e1"));
 	_polygons[TYPE(0x3c)] = Polygon(QBrush("#9fc4e1"));
 	_polygons[TYPE(0x3d)] = Polygon(QBrush("#9fc4e1"));
 	_polygons[TYPE(0x3e)] = Polygon(QBrush("#9fc4e1"));
@@ -51,13 +49,12 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(0x42)] = Polygon(QBrush("#9fc4e1"));
 	_polygons[TYPE(0x43)] = Polygon(QBrush("#9fc4e1"));
 	_polygons[TYPE(0x44)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x45)] = Polygon(QBrush("#9fc4e1"));
 	_polygons[TYPE(0x46)] = Polygon(QBrush("#9fc4e1"));
 	_polygons[TYPE(0x47)] = Polygon(QBrush("#9fc4e1"));
 	_polygons[TYPE(0x48)] = Polygon(QBrush("#9fc4e1"));
 	_polygons[TYPE(0x49)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x4b)] = Polygon(QBrush("#f1f0e5"), QPen("#f1f0e5"));
 	_polygons[TYPE(0x4a)] = Polygon(QBrush("#f1f0e5"), QPen("#f1f0e5"));
+	_polygons[TYPE(0x4b)] = Polygon(QBrush("#f1f0e5"), QPen("#f1f0e5"));
 	_polygons[TYPE(0x4c)] = Polygon(QBrush("#9fc4e1", Qt::Dense6Pattern));
 	_polygons[TYPE(0x4d)] = Polygon(QBrush("#ddf1fd"));
 	_polygons[TYPE(0x4e)] = Polygon(QBrush("#f8f8f8"));
@@ -66,18 +63,73 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(0x51)] = Polygon(QBrush("#9fc4e1", Qt::Dense4Pattern));
 	_polygons[TYPE(0x52)] = Polygon(QBrush("#cadfaf"));
 
-	_drawOrder << TYPE(0x4b) << TYPE(0x4a) << TYPE(0x01) << TYPE(0x02)
-	  << TYPE(0x03) << TYPE(0x17) << TYPE(0x18) << TYPE(0x1a) << TYPE(0x28)
-	  << TYPE(0x29) << TYPE(0x32) << TYPE(0x3b) << TYPE(0x3c) << TYPE(0x3d)
-	  << TYPE(0x3e) << TYPE(0x3f) << TYPE(0x40) << TYPE(0x41) << TYPE(0x42)
-	  << TYPE(0x43) << TYPE(0x44) << TYPE(0x45) << TYPE(0x46) << TYPE(0x47)
-	  << TYPE(0x48) << TYPE(0x49) << TYPE(0x4c) << TYPE(0x4d) << TYPE(0x4e)
-	  << TYPE(0x4f) << TYPE(0x50) << TYPE(0x51) << TYPE(0x52) << TYPE(0x14)
-	  << TYPE(0x15) << TYPE(0x16) << TYPE(0x1e) << TYPE(0x1f) << TYPE(0x04)
-	  << TYPE(0x05) << TYPE(0x06) << TYPE(0x07) << TYPE(0x08) << TYPE(0x09)
-	  << TYPE(0x0a) << TYPE(0x0b) << TYPE(0x0c) << TYPE(0x0d) << TYPE(0x0e)
-	  << TYPE(0x0f) << TYPE(0x10) << TYPE(0x11) << TYPE(0x12) << TYPE(0x19)
-	  << TYPE(0x13);
+	// NT types
+	_polygons[0x10800] = _polygons[TYPE(0x01)];
+	_polygons[0x10801] = _polygons[TYPE(0x02)];
+	_polygons[0x10802] = _polygons[TYPE(0x03)];
+	_polygons[0x10901] = _polygons[TYPE(0x04)];
+	_polygons[0x10902] = _polygons[TYPE(0x05)];
+	_polygons[0x10903] = _polygons[TYPE(0x06)];
+	_polygons[0x10904] = _polygons[TYPE(0x07)];
+	_polygons[0x10905] = _polygons[TYPE(0x08)];
+	_polygons[0x10906] = _polygons[TYPE(0x09)];
+	_polygons[0x10907] = _polygons[TYPE(0x0a)];
+	_polygons[0x10908] = _polygons[TYPE(0x0b)];
+	_polygons[0x10909] = _polygons[TYPE(0x0c)];
+	_polygons[0x1090a] = _polygons[TYPE(0x0d)];
+	_polygons[0x1090b] = _polygons[TYPE(0x0e)];
+	_polygons[0x10900] = _polygons[TYPE(0x13)];
+	_polygons[0x10a01] = _polygons[TYPE(0x14)];
+	_polygons[0x10a02] = _polygons[TYPE(0x15)];
+	_polygons[0x10a03] = _polygons[TYPE(0x16)];
+	_polygons[0x10a04] = _polygons[TYPE(0x17)];
+	_polygons[0x1090c] = _polygons[TYPE(0x18)];
+	_polygons[0x1090d] = _polygons[TYPE(0x19)];
+	_polygons[0x1090e] = _polygons[TYPE(0x1a)];
+	_polygons[0x10a05] = _polygons[TYPE(0x1e)];
+	_polygons[0x10a06] = _polygons[TYPE(0x1f)];
+	_polygons[0x10b01] = _polygons[TYPE(0x28)];
+	_polygons[0x10b02] = _polygons[TYPE(0x32)];
+	_polygons[0x10b03] = _polygons[TYPE(0x3c)];
+	_polygons[0x10b04] = _polygons[TYPE(0x3d)];
+	_polygons[0x10b05] = _polygons[TYPE(0x3e)];
+	_polygons[0x10b06] = _polygons[TYPE(0x3f)];
+	_polygons[0x10b07] = _polygons[TYPE(0x40)];
+	_polygons[0x10b08] = _polygons[TYPE(0x41)];
+	_polygons[0x10b09] = _polygons[TYPE(0x42)];
+	_polygons[0x10b0a] = _polygons[TYPE(0x43)];
+	_polygons[0x10b0b] = _polygons[TYPE(0x44)];
+	_polygons[0x10b0c] = _polygons[TYPE(0x46)];
+	_polygons[0x10b0d] = _polygons[TYPE(0x47)];
+	_polygons[0x10b0e] = _polygons[TYPE(0x48)];
+	_polygons[0x10b0f] = _polygons[TYPE(0x49)];
+	_polygons[0x10d01] = _polygons[TYPE(0x4b)];
+	_polygons[0x10b10] = _polygons[TYPE(0x4c)];
+	_polygons[0x10c00] = _polygons[TYPE(0x4d)];
+	_polygons[0x10c01] = _polygons[TYPE(0x4e)];
+	_polygons[0x10c02] = _polygons[TYPE(0x4f)];
+	_polygons[0x10c03] = _polygons[TYPE(0x50)];
+	_polygons[0x10c04] = _polygons[TYPE(0x51)];
+	_polygons[0x10c05] = _polygons[TYPE(0x52)];
+
+	// Draw order
+	_drawOrder << TYPE(0x4b) << 0x10d01 << TYPE(0x4a) << TYPE(0x01) << 0x10800
+	  << TYPE(0x02) << 0x10801 << TYPE(0x03) << 0x10802 << TYPE(0x17) << 0x10a04
+	  << TYPE(0x18) << 0x1090c << TYPE(0x1a) << 0x1090e << TYPE(0x28) << 0x10b01
+	  << TYPE(0x32) << 0x10b02 << TYPE(0x3c) << 0x10b03 << TYPE(0x3d) << 0x10b04
+	  << TYPE(0x3e) << 0x10b05 << TYPE(0x3f) << 0x10b06 << TYPE(0x40) << 0x10b07
+	  << TYPE(0x41) << 0x10b08 << TYPE(0x42) << 0x10b09 << TYPE(0x43) << 0x10b0a
+	  << TYPE(0x44) << 0x10b0b << TYPE(0x46) << 0x10b0c << TYPE(0x47) << 0x10b0d
+	  << TYPE(0x48) << 0x10b0e << TYPE(0x49) << 0x10b0f << TYPE(0x4c) << 0x10b10
+	  << TYPE(0x4d) << 0x10c00 << TYPE(0x4e) << 0x10c01 << TYPE(0x4f) << 0x10c02
+	  << TYPE(0x50) << 0x10c03 << TYPE(0x51) << 0x10c04 << TYPE(0x52) << 0x10c05
+	  << TYPE(0x14) << 0x10a01 << TYPE(0x15) << 0x10a02 << TYPE(0x16) << 0x10a03
+	  << TYPE(0x1e) << 0x10a05 << TYPE(0x1f) << 0x10a06 << TYPE(0x04) << 0x10901
+	  << TYPE(0x05) << 0x10902 << TYPE(0x06) << 0x10903 << TYPE(0x07) << 0x10904
+	  << TYPE(0x08) << 0x10905 << TYPE(0x09) << 0x10906 << TYPE(0x0a) << 0x10907
+	  << TYPE(0x0b) << 0x10908 << TYPE(0x0c) << 0x10909 << TYPE(0x0d) << 0x1090a
+	  << TYPE(0x0e) << 0x1090b << TYPE(0x0f) << TYPE(0x10) << TYPE(0x11)
+	  << TYPE(0x12) << TYPE(0x19) << 0x1090d << TYPE(0x13) << 0x10900;
 }
 
 static QImage railroad()
@@ -148,6 +200,22 @@ void Style::defaultLineStyle()
 	//_lines[TYPE(0x28)] = Line(QPen(QColor("#5a5a5a"), 1, Qt::SolidLine));
 	_lines[TYPE(0x29)] = Line(QPen(QColor("#5a5a5a"), 1, Qt::SolidLine));
 	_lines[TYPE(0x29)].setTextFontSize(None);
+
+	// NT types
+	_lines[0x10c00] = _lines[TYPE(0x14)];
+	_lines[0x10a00] = _lines[TYPE(0x18)];
+	_lines[0x10b04] = _lines[TYPE(0x1e)];
+	_lines[0x10a01] = _lines[TYPE(0x1f)];
+	_lines[0x10900] = _lines[TYPE(0x20)];
+	_lines[0x10901] = _lines[TYPE(0x21)];
+	_lines[0x10902] = _lines[TYPE(0x22)];
+	_lines[0x10903] = _lines[TYPE(0x23)];
+	_lines[0x10904] = _lines[TYPE(0x24)];
+	_lines[0x10905] = _lines[TYPE(0x25)];
+	_lines[0x10a02] = _lines[TYPE(0x26)];
+	_lines[0x10c02] = _lines[TYPE(0x27)];
+	//_lines[0x10c03] = _lines[TYPE(0x28)];
+	_lines[0x10c04] = _lines[TYPE(0x29)];
 }
 
 void Style::defaultPointStyle()
@@ -248,7 +316,8 @@ void Style::defaultPointStyle()
 	_points[0x3001] = Point(QImage(":/police-11.png"));
 	_points[0x3002] = Point(QImage(":/hospital-11.png"));
 	_points[0x3003] = Point(QImage(":/town-hall-11.png"));
-	_points[0x3007] = Point(QImage(":/prison-11.png"));
+	_points[0x3006] = Point(QImage(":/entrance-alt1-11.png"));
+	_points[0x3007] = Point(QImage(":/town-hall-11.png"));
 	_points[0x3008] = Point(QImage(":/fire-station-11.png"));
 
 	_points[0x4000] = Point(QImage(":/golf-11.png"));
@@ -296,6 +365,85 @@ void Style::defaultPointStyle()
 	_points[0x6513] = Point(QImage(":/wetland-11.png"));
 	_points[0x6604] = Point(QImage(":/beach-11.png"));
 	_points[0x6616] = Point(QImage(":/mountain-11.png"));
+
+
+	// NT types
+	_points[0x11401] = _points[TYPE(0x01)];
+	_points[0x11402] = _points[TYPE(0x02)];
+	_points[0x11403] = _points[TYPE(0x03)];
+	_points[0x10b00] = _points[0x2a00];
+	_points[0x10b01] = _points[0x2a01];
+	_points[0x10b02] = _points[0x2a02];
+	_points[0x10b03] = _points[0x2a03];
+	_points[0x10b04] = _points[0x2a04];
+	_points[0x10b05] = _points[0x2a05];
+	_points[0x10b06] = _points[0x2a06];
+	_points[0x10b07] = _points[0x2a07];
+	_points[0x10b08] = _points[0x2a08];
+	_points[0x10b09] = _points[0x2a09];
+	_points[0x10b0a] = _points[0x2a0a];
+	_points[0x10b0b] = _points[0x2a0b];
+	_points[0x10b0c] = _points[0x2a0c];
+	_points[0x10b0d] = _points[0x2a0d];
+	_points[0x10b0e] = _points[0x2a0e];
+	_points[0x10b0f] = _points[0x2a0f];
+	_points[0x10b10] = _points[0x2a10];
+	_points[0x10b11] = _points[0x2a11];
+	_points[0x10c01] = _points[0x2b01];
+	_points[0x10c02] = _points[0x2b02];
+	_points[0x10c03] = _points[0x2b03];
+	_points[0x10c04] = _points[0x2b04];
+	_points[0x10d01] = _points[0x2c01];
+	_points[0x10d02] = _points[0x2c02];
+	_points[0x10d03] = _points[0x2c03];
+	_points[0x10d04] = _points[0x2c04];
+	_points[0x10d05] = _points[0x2c05];
+	_points[0x10d06] = _points[0x2c06];
+	_points[0x10d07] = _points[0x2c07];
+	_points[0x10d08] = _points[0x2c08];
+	_points[0x10d0a] = _points[0x2c0a];
+	_points[0x10d0b] = _points[0x2c0b];
+	_points[0x10d0d] = _points[0x2c0d];
+	_points[0x10d0e] = _points[0x2c0e];
+	_points[0x10d10] = _points[0x2c10];
+	_points[0x10e01] = _points[0x2d01];
+	_points[0x10e02] = _points[0x2d02];
+	_points[0x10e03] = _points[0x2d03];
+	_points[0x10e04] = _points[0x2d04];
+	_points[0x10e05] = _points[0x2d05];
+	_points[0x10e06] = _points[0x2d06];
+	_points[0x10e07] = _points[0x2d07];
+	_points[0x10e08] = _points[0x2d08];
+	_points[0x10e09] = _points[0x2d09];
+	_points[0x10e0a] = _points[0x2d0a];
+	_points[0x10e0b] = _points[0x2d0b];
+	_points[0x10f02] = _points[0x2e02];
+	_points[0x10f05] = _points[0x2e05];
+	_points[0x10f07] = _points[0x2e07];
+	_points[0x10f08] = _points[0x2e08];
+	_points[0x10f09] = _points[0x2e09];
+	_points[0x11001] = _points[0x2f01];
+	_points[0x11002] = _points[0x2f02];
+	_points[0x11003] = _points[0x2f03];
+	_points[0x11004] = _points[0x2f04];
+	_points[0x11005] = _points[0x2f05];
+	_points[0x11006] = _points[0x2f06];
+	_points[0x11007] = _points[0x2f07];
+	_points[0x11008] = _points[0x2f08];
+	_points[0x11009] = _points[0x2f09];
+	_points[0x1100b] = _points[0x2f0b];
+	_points[0x1100c] = _points[0x2f0c];
+	_points[0x11010] = _points[0x2f10];
+	_points[0x11012] = _points[0x2f12];
+	_points[0x11013] = _points[0x2f13];
+	_points[0x11017] = _points[0x2f17];
+	_points[0x11101] = _points[0x3001];
+	_points[0x11102] = _points[0x3002];
+	_points[0x11103] = _points[0x3003];
+	_points[0x11106] = _points[0x3006];
+	_points[0x11107] = _points[0x3007];
+	_points[0x11108] = _points[0x3008];
+
 }
 
 static bool readBitmap(SubFile *file, SubFile::Handle &hdl, QImage &img,
@@ -985,19 +1133,26 @@ const Style::Point &Style::point(quint32 type) const
 
 Style::POIClass Style::poiClass(quint32 type)
 {
-	if ((type >= 0x2a00 && type < 0x2b00) || type == 0x2c0a || type == 0x2d02)
+	if ((type >= 0x2a00 && type < 0x2b00) || type == 0x2c0a || type == 0x2d02
+	  || (type & 0xffff00) == TYPE(0x10b))
 		return Food;
-	else if (type >= 0x2b00 && type < 0x2c00)
+	else if ((type >= 0x2b00 && type < 0x2c00)
+	  || (type & 0xffff00) == TYPE(0x10c))
 		return Accommodation;
-	else if (type >= 0x2c00 && type < 0x2e00)
+	else if ((type >= 0x2c00 && type < 0x2e00)
+	  || (type & 0xffff00) == TYPE(0x10d) || (type & 0xffff00) == TYPE(0x10e))
 		return Recreation;
-	else if (type >= 0x2e00 && type < 0x2f00)
+	else if ((type >= 0x2e00 && type < 0x2f00)
+	  || (type & 0xffff00) == TYPE(0x10f))
 		return Shopping;
-	else if ((type >= 0x2f00 && type < 0x2f0f) || type == 0x2f17)
+	else if ((type >= 0x2f00 && type < 0x2f0f) || type == 0x2f17
+	  || (type >= 0x11001 && type < 0x1100f))
 		return Transport;
-	else if (type >= 0x2f0f && type < 0x3000)
+	else if ((type >= 0x2f0f && type < 0x3000)
+	  || (type >= 0x1100f && type < 0x11100))
 		return Services;
-	else if (type >= 0x3000 && type < 0x3100)
+	else if ((type >= 0x3000 && type < 0x3100)
+	  || (type & 0xffff00) == TYPE(0x111))
 		return Community;
 	else if (type >= 0x4000 && type < 0x6000)
 		return Elementary;

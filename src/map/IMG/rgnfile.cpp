@@ -362,10 +362,9 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 		point.type = (quint16)type<<8 | subtype;
 		point.coordinates = Coordinates(toWGS24(pos.x()), toWGS24(pos.y()));
 		point.id = pointId(pos, point.type, labelPtr & 0x3FFFFF);
-		point.poi = labelPtr & 0x400000;
 		if (lbl && (labelPtr & 0x3FFFFF))
-			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi,
-			  !(point.type == 0x1400 || point.type == 0x1500
+			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF,
+			  labelPtr & 0x400000, !(point.type == 0x1400 || point.type == 0x1500
 			  || point.type == 0x1e00));
 
 		points->append(point);
@@ -414,9 +413,8 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 
 		point.coordinates = Coordinates(toWGS24(pos.x()), toWGS24(pos.y()));
 		point.id = pointId(pos, point.type, labelPtr & 0x3FFFFF);
-		point.poi = labelPtr & 0x400000;
 		if (lbl && (labelPtr & 0x3FFFFF))
-			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, point.poi);
+			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, false);
 
 		points->append(point);
 	}
