@@ -289,10 +289,13 @@ void Style::defaultPointStyle()
 	_points[0x2d0b] = Point(QImage(":/airfield-11.png"));
 
 	_points[0x2e02] = Point(QImage(":/grocery-11.png"));
+	_points[0x2e03] = Point(QImage(":/shop-11.png"));
 	_points[0x2e05] = Point(QImage(":/pharmacy-11.png"));
+	_points[0x2e06] = Point(QImage(":/convenience-11.png"));
 	_points[0x2e07] = Point(QImage(":/clothing-store-11.png"));
 	_points[0x2e08] = Point(QImage(":/garden-centre-11.png"));
 	_points[0x2e09] = Point(QImage(":/furniture-11.png"));
+	_points[0x2e0a] = Point(QImage(":/shop-11.png"));
 	_points[0x2e0c] = Point(QImage(":/shop-11.png"));
 
 	_points[0x2f01] = Point(QImage(":/fuel-11.png"));
@@ -418,10 +421,13 @@ void Style::defaultPointStyle()
 	_points[0x10e0a] = _points[0x2d0a];
 	_points[0x10e0b] = _points[0x2d0b];
 	_points[0x10f02] = _points[0x2e02];
+	_points[0x10f03] = _points[0x2e03];
 	_points[0x10f05] = _points[0x2e05];
+	_points[0x10f06] = _points[0x2e06];
 	_points[0x10f07] = _points[0x2e07];
 	_points[0x10f08] = _points[0x2e08];
 	_points[0x10f09] = _points[0x2e09];
+	_points[0x10f0a] = _points[0x2e0a];
 	_points[0x11001] = _points[0x2f01];
 	_points[0x11002] = _points[0x2f02];
 	_points[0x11003] = _points[0x2f03];
@@ -443,7 +449,6 @@ void Style::defaultPointStyle()
 	_points[0x11106] = _points[0x3006];
 	_points[0x11107] = _points[0x3007];
 	_points[0x11108] = _points[0x3008];
-
 }
 
 static bool readBitmap(SubFile *file, SubFile::Handle &hdl, QImage &img,
