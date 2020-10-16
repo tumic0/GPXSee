@@ -1530,7 +1530,7 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="62"/>
         <source>cm</source>
-        <translation type="unfinished"></translation>
+        <translation>см</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="68"/>
