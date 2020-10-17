@@ -244,6 +244,7 @@ static void removeDuplicitLabel(QList<TextItem *> &labels, const QString &text,
 		TextItem *item = labels.at(j);
 		if (tileRect.contains(item->boundingRect()) && *(item->text()) == text) {
 			labels.removeOne(item);
+			delete item;
 			return;
 		}
 	}
