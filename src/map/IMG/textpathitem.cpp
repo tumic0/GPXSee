@@ -137,7 +137,7 @@ static bool reverse(const QPainterPath &path)
 
 TextPathItem::TextPathItem(const QPolygonF &line, const QString *label,
   const QRect &tileRect, const QFont *font, const QColor *color)
-  : _text(label), _font(font), _color(color)
+  : TextItem(label), _font(font), _color(color)
 {
 	qreal cw = font->pixelSize() * 0.7;
 	qreal textWidth = _text->size() * cw;

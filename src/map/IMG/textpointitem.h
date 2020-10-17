@@ -14,7 +14,7 @@ class QColor;
 class TextPointItem : public TextItem
 {
 public:
-	TextPointItem() : _text(0), _font(0), _img(0) {}
+	TextPointItem() : TextItem(0), _font(0), _img(0) {}
 	TextPointItem(const QPoint &point, const QString *text, const QFont *font,
 	  const QImage *img, const QColor *color, const QColor *bgColor = 0);
 
@@ -27,7 +27,6 @@ public:
 	void setPos(const QPoint &point);
 
 private:
-	const QString *_text;
 	const QFont *_font;
 	const QImage *_img;
 	const QColor *_color, *_bgColor;

@@ -237,10 +237,27 @@ void RasterTile::drawTextItems(QPainter *painter,
 		textItems.at(i)->paint(painter);
 }
 
+static void removeDuplicitLabel(QList<TextItem *> &labels, const QString &text,
+  const QRectF &tileRect)
+{
+	for (int j = 0; j < labels.size(); j++) {
+		TextItem *item = labels.at(j);
+		if (tileRect.contains(item->boundingRect()) && *(item->text()) == text) {
+			labels.removeOne(item);
+			return;
+		}
+	}
+}
+
 void RasterTile::processPolygons(QList<TextItem*> &textItems)
 {
+	QRectF tileRect(_xy, _img.size());
+	QSet<QString> set;
+	QList<TextItem *> labels;
+
 	for (int i = 0; i < _polygons.size(); i++) {
 		MapData::Poly &poly = _polygons[i];
+		bool exists = set.contains(poly.label.text());
 
 		if (poly.label.text().isEmpty())
 			continue;
@@ -253,12 +270,19 @@ void RasterTile::processPolygons(QList<TextItem*> &textItems)
 			  centroid(poly.points).toPoint(), &poly.label.text(),
 			  poiFont(), 0, &style.brush().color());
 			if (item->isValid() && !item->collides(textItems)
-			  && rectNearPolygon(poly.points, item->boundingRect()))
-				textItems.append(item);
-			else
+			  && !(exists && tileRect.contains(item->boundingRect()))
+			  && rectNearPolygon(poly.points, item->boundingRect())) {
+				if (exists)
+					removeDuplicitLabel(labels, poly.label.text(), tileRect);
+				else
+					set.insert(poly.label.text());
+				labels.append(item);
+			} else
 				delete item;
 		}
 	}
+
+	textItems.append(labels);
 }
 
 void RasterTile::processLines(QList<TextItem*> &textItems)

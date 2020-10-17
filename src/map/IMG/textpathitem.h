@@ -8,7 +8,7 @@
 class TextPathItem : public TextItem
 {
 public:
-	TextPathItem() : _text(0), _font(0), _color(0) {}
+	TextPathItem() : TextItem(0), _font(0), _color(0) {}
 	TextPathItem(const QPolygonF &line, const QString *label,
 	  const QRect &tileRect, const QFont *font, const QColor *color);
 
@@ -19,7 +19,6 @@ public:
 	void paint(QPainter *painter) const;
 
 private:
-	const QString *_text;
 	const QFont *_font;
 	const QColor *_color;
 	QPainterPath _path;

@@ -17,7 +17,7 @@ static void expand(QRect &rect, int width)
 
 TextPointItem::TextPointItem(const QPoint &point, const QString *text,
   const QFont *font, const QImage *img, const QColor *color,
-  const QColor *bgColor) : _text(font ? text : 0), _font(font), _img(img),
+  const QColor *bgColor) : TextItem(font ? text : 0), _font(font), _img(img),
   _color(color), _bgColor(bgColor)
 {
 	if (_text) {
