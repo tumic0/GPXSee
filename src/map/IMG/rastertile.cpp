@@ -240,10 +240,10 @@ void RasterTile::drawTextItems(QPainter *painter,
 static void removeDuplicitLabel(QList<TextItem *> &labels, const QString &text,
   const QRectF &tileRect)
 {
-	for (int j = 0; j < labels.size(); j++) {
-		TextItem *item = labels.at(j);
+	for (int i = 0; i < labels.size(); i++) {
+		TextItem *item = labels.at(i);
 		if (tileRect.contains(item->boundingRect()) && *(item->text()) == text) {
-			labels.removeOne(item);
+			labels.removeAt(i);
 			delete item;
 			return;
 		}
