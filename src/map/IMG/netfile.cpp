@@ -401,7 +401,7 @@ bool NETFile::init(Handle &hdl)
 
 bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
   NODFile *nod, Handle &nodHdl, LBLFile *lbl, Handle &lblHdl,
-  const NODFile::BlockInfo blockInfo, quint8 linkId, quint8 lineId,
+  const NODFile::BlockInfo &blockInfo, quint8 linkId, quint8 lineId,
   const HuffmanTable &table, QList<IMG::Poly> *lines)
 {
 	if (!_init && !init(hdl))

@@ -25,7 +25,7 @@ public:
 	bool lblOffset(Handle &hdl, quint32 netOffset, quint32 &lblOffset);
 	bool link(const SubDiv *subdiv, quint32 shift, Handle &hdl, NODFile *nod,
 	  Handle &nodHdl, LBLFile *lbl, Handle &lblHdl,
-	  const NODFile::BlockInfo blockInfo, quint8 linkId, quint8 lineId,
+	  const NODFile::BlockInfo &blockInfo, quint8 linkId, quint8 lineId,
 	  const HuffmanTable &table, QList<IMG::Poly> *lines);
 
 private:
