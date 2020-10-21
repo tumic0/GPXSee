@@ -141,7 +141,7 @@
 #define PATH_AA_SETTING                   "pathAntiAliasing"
 #define PATH_AA_DEFAULT                   true
 #define GRAPH_AA_SETTING                  "graphAntiAliasing"
-#define GRAPH_AA_DEFAULT                  false
+#define GRAPH_AA_DEFAULT                  true
 #define ELEVATION_FILTER_SETTING          "elevationFilter"
 #define ELEVATION_FILTER_DEFAULT          3
 #define SPEED_FILTER_SETTING              "speedFilter"
