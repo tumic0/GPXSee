@@ -271,6 +271,7 @@ void RasterTile::processPolygons(QList<TextItem*> &textItems)
 			  centroid(poly.points).toPoint(), &poly.label.text(),
 			  poiFont(), 0, &style.brush().color());
 			if (item->isValid() && !item->collides(textItems)
+			  && !item->collides(labels)
 			  && !(exists && tileRect.contains(item->boundingRect()))
 			  && rectNearPolygon(poly.points, item->boundingRect())) {
 				if (exists)
