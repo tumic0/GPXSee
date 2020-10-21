@@ -17,6 +17,9 @@ SetCompressor /SOLID lzma
 ; Required execution level
 RequestExecutionLevel admin
 
+; Don't let the OS scale(blur) the installer GUI
+ManifestDPIAware true
+
 ; The default installation directory
 InstallDir "$PROGRAMFILES\GPXSee"
 
