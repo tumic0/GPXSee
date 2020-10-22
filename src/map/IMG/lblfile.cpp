@@ -161,7 +161,7 @@ Label LBLFile::label8b(Handle &hdl, quint32 offset, bool capitalize) const
 		} else if (c <= 0x07) {
 			shieldType = static_cast<Label::Shield::Type>(c);
 			bap = &shieldLabel;
-		} else if (bap == &shieldLabel && QChar(c).isSpace()) {
+		} else if (bap == &shieldLabel && c == 0x20) {
 			bap = &label;
 		} else
 			bap->append(c);
