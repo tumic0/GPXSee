@@ -352,21 +352,19 @@ bool NETFile::linkLabel(Handle &hdl, quint32 offset, quint32 size, LBLFile *lbl,
 		return false;
 	BitStream1 bs(*this, hdl, size);
 
-	quint32 flags, b, labelPtr = 0;
+	quint32 flags, labelPtr;
 	if (!bs.read(8, flags))
 		return false;
-	for (int i = 0; i < 3; i++) {
-		if (!bs.read(8, b))
-			return false;
-		labelPtr |= (b << (i * 8));
-	}
+	if (!(flags & 1))
+		return true;
 
-	if (lbl && (labelPtr & 0x3FFFFF)) {
+	if (!bs.readUInt24(labelPtr))
+		return false;
+	if (labelPtr & 0x3FFFFF) {
 		if (labelPtr & 0x400000) {
 			quint32 lblOff;
 			if (lblOffset(hdl, labelPtr & 0x3FFFFF, lblOff) && lblOff)
 				label = lbl->label(lblHdl, lblOff);
-
 		} else
 			label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
 	}
@@ -489,8 +487,9 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 			return false;
 	}
 
-	linkLabel(hdl, linkOffset, _linksSize - (linkOffset - _linksOffset), lbl,
-	  lblHdl, poly.label);
+	if (lbl)
+		linkLabel(hdl, linkOffset, _linksSize - (linkOffset - _linksOffset),
+		  lbl, lblHdl, poly.label);
 
 	lines->append(poly);
 

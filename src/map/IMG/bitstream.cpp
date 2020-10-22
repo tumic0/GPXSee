@@ -12,6 +12,22 @@ bool BitStream1::flush()
 	return true;
 }
 
+bool BitStream1::readUInt24(quint32 &val)
+{
+	quint8 b;
+
+	val = 0;
+
+	for (int i = 0; i < 3; i++) {
+		if (!read(8, b))
+			return false;
+		val |= (b << (i * 8));
+	}
+
+	return true;
+}
+
+
 bool BitStream4F::flush()
 {
 	if (_length && !_file.seek(_hdl, _file.pos(_hdl) + _length))

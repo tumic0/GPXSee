@@ -12,6 +12,8 @@ public:
 	bool flush();
 	quint64 bitsAvailable() const {return (quint64)_length * 8 + _remaining;}
 
+	bool readUInt24(quint32 &val);
+
 private:
 	const SubFile &_file;
 	SubFile::Handle &_hdl;
