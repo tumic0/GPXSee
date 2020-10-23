@@ -531,7 +531,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="682"/>
         <source>GPXSee is distributed under the terms of the GNU General Public License version 3. For more info about GPXSee visit the project homepage at %1.</source>
-        <translation>GPXSee распространяется в соответствиями с условиями версии 3 Стандартной Общественной Лицензии GNU. Для получения дополнительной информации о GPXSee посетите страницу проекта %1.</translation>
+        <translation>GPXSee распространяется в соответствии с условиями GNU General Public License 3 версии. Для получения дополнительной информации о GPXSee посетите страницу проекта %1.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="709"/>
