@@ -1,4 +1,4 @@
-version: 7.34.{build}
+version: 7.35.{build}
 
 configuration:
   - Release
