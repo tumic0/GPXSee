@@ -136,6 +136,9 @@ void IMGMap::updateTransform()
 	RectD prect(_dataBounds, _projection);
 	_bounds = QRectF(_transform.proj2img(prect.topLeft()),
 	  _transform.proj2img(prect.bottomRight()));
+	// Adjust the bounds of world maps to avoid problems with wrapping
+	if (_dataBounds.left() == -180.0 || _dataBounds.right() == 180.0)
+		_bounds.adjust(0.5, 0, -0.5, 0);
 }
 
 QPointF IMGMap::ll2xy(const Coordinates &c)
@@ -194,7 +197,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 					QRectF polyRect(ttl, QPointF(ttl.x() + TILE_SIZE,
 					  ttl.y() + TILE_SIZE));
-					polyRect &= bounds().adjusted(0.5, 0.5, -0.5, -0.5);
+					polyRect &= bounds();
 					RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
 					  _transform.img2proj(polyRect.bottomRight()));
 					_data.at(n)->polys(polyRectD.toRectC(_projection, 4), _zoom,
@@ -204,7 +207,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 					QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT,
 					  ttl.y() - TEXT_EXTENT), QPointF(ttl.x() + TILE_SIZE
 					  + TEXT_EXTENT, ttl.y() + TILE_SIZE + TEXT_EXTENT));
-					pointRect &= bounds().adjusted(0.5, 0.5, -0.5, -0.5);
+					pointRect &= bounds();
 					RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
 					  _transform.img2proj(pointRect.bottomRight()));
 					_data.at(n)->points(pointRectD.toRectC(_projection, 4),
@@ -241,7 +244,7 @@ void IMGMap::setProjection(const Projection &projection)
 
 	_projection = projection;
 	// Limit the bounds for some well known Mercator projections
-	// (GARMIN world maps have N/S bounds up to 90/-90!)
+	// (world maps have N/S bounds up to 90/-90!)
 	_dataBounds = (_projection == PCS::pcs(3857) || _projection == PCS::pcs(3395))
 	  ? _data.first()->bounds() & OSM::BOUNDS : _data.first()->bounds();
 

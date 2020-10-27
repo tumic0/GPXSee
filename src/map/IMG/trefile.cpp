@@ -5,7 +5,12 @@
 
 static inline double RB(qint32 val)
 {
-	return (val == -0x800000 || val == 0x800000) ? 180.0 : toWGS24(val);
+	return (val == -0x800000 || val >= 0x800000) ? 180.0 : toWGS24(val);
+}
+
+static inline double LB(qint32 val)
+{
+	return (val <= -0x800000) ? -180.0 : toWGS24(val);
 }
 
 static void demangle(quint8 *data, quint32 size, quint32 key)
@@ -60,7 +65,8 @@ bool TREFile::init()
 		return false;
 	_bounds = RectC(Coordinates(toWGS24(west), toWGS24(north)),
 	  Coordinates(RB(east), toWGS24(south)));
-	Q_ASSERT(_bounds.left() <= _bounds.right());
+	if (!_bounds.isValid())
+		return false;
 
 	// Levels & subdivs info
 	quint32 levelsOffset, levelsSize, subdivSize;
@@ -193,9 +199,10 @@ bool TREFile::load(int idx)
 		sl.append(s);
 
 		double min[2], max[2];
-		RectC bounds(Coordinates(toWGS24(lon - width), toWGS24(lat + height)),
+		RectC bounds(Coordinates(LB(lon - width), toWGS24(lat + height)),
 		  Coordinates(RB(lon + width), toWGS24(lat - height)));
-		Q_ASSERT(bounds.left() <= bounds.right());
+		if (!bounds.isValid())
+			goto error;
 
 		min[0] = bounds.left();
 		min[1] = bounds.bottom();

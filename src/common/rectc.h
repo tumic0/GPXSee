@@ -15,7 +15,8 @@ public:
 	bool isNull() const
 	  {return _tl.isNull() && _br.isNull();}
 	bool isValid() const
-	  {return (_tl.isValid() && _br.isValid() && _tl != _br);}
+	  {return (_tl.isValid() && _br.isValid()
+	  && _tl.lat() > _br.lat() && _tl.lon() < _br.lon());}
 
 	Coordinates topLeft() const {return _tl;}
 	Coordinates bottomRight() const {return _br;}
