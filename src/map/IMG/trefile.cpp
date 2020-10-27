@@ -193,6 +193,7 @@ bool TREFile::load(int idx)
 
 		width &= 0x7FFF;
 		width = LS(width, 24 - level.bits);
+		height &= 0x7FFF;
 		height = LS(height, 24 - level.bits);
 
 		s = new SubDiv(offset, lon, lat, level.level, level.bits, objects);
