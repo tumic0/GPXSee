@@ -9,7 +9,7 @@ GPXSee is a Qt-based GPS log file viewer and analyzer that supports all common G
 * Support for DEM files (SRTM HGT).
 * Support for multiple tracks in one view.
 * Support for POI files.
-* Print/export to PDF.
+* Print/export to PDF/PNG.
 * Full-screen mode.
 * HiDPI/Retina displays & maps support.
 * Native GUI for Windows, Mac OS X and Linux.
