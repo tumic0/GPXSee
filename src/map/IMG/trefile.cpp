@@ -202,8 +202,12 @@ bool TREFile::load(int idx)
 		double min[2], max[2];
 		RectC bounds(Coordinates(LB(lon - width), toWGS24(lat + height)),
 		  Coordinates(RB(lon + width), toWGS24(lat - height)));
-		if (!bounds.isValid())
+		if (!bounds.isValid()) {
+			qWarning("%s: invalid subdiv bounds (level %d; pos %f,%f; size %fx%f)",
+			  qPrintable(fileName()), level.level, toWGS24(lon), toWGS24(lat),
+			  toWGS24(width), toWGS24(height));
 			goto error;
+		}
 
 		min[0] = bounds.left();
 		min[1] = bounds.bottom();
