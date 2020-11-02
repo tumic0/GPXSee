@@ -1525,7 +1525,7 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="62"/>
         <source>in</source>
-        <translation type="unfinished">дюйм</translation>
+        <translation>in</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="62"/>
@@ -1605,22 +1605,22 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="41"/>
         <source>Use anti-aliasing</source>
-        <translation type="unfinished">Використовувати згладжування</translation>
+        <translation>Використовувати згладжування</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="45"/>
         <source>Image Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштування зображення</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="48"/>
         <source>Image width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ширина зображення:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="49"/>
         <source>Image height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Висота зображення:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="50"/>
