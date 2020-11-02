@@ -202,21 +202,17 @@ bool TREFile::load(int idx)
 		double min[2], max[2];
 		RectC bounds(Coordinates(LB(lon - width), toWGS24(lat + height)),
 		  Coordinates(RB(lon + width), toWGS24(lat - height)));
-		if (!bounds.isValid()) {
-			qWarning("%s: invalid subdiv bounds (level %d; pos %f,%f; size %fx%f)",
-			  qPrintable(fileName()), level.level, toWGS24(lon), toWGS24(lat),
-			  toWGS24(width), toWGS24(height));
-			/* mkgmap produces invalid (zero width or/and zero height) subdiv
-			   bounds in some cases. Allow such bounds as they should not break
-			   things. */
-			if (!(!width || !height))
-				goto error;
-		}
 
 		min[0] = bounds.left();
 		min[1] = bounds.bottom();
 		max[0] = bounds.right();
 		max[1] = bounds.top();
+
+		/* both mkgmap and cGPSmapper generate all kinds of broken subdiv bounds
+		   (zero lat/lon, zero width/height, ...) so we check only that the
+		   subdiv item does not break the rtree, not for full bounds validity. */
+		if (!(min[0] <= max[0] && min[1] <= max[1]))
+			goto error;
 
 		tree->Insert(min, max, s);
 	}
