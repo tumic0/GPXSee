@@ -81,7 +81,11 @@ bool GMAP::loadTile(const QDir &dir, bool baseMap)
 	QFileInfoList ml = dir.entryInfoList(QDir::Files);
 	for (int i = 0; i < ml.size(); i++) {
 		const QFileInfo &fi = ml.at(i);
-		tile->addFile(fi.absoluteFilePath(), tileType(fi.suffix()));
+		SubFile::Type tt = tileType(fi.suffix());
+		if (VectorTile::isTileFile(tt)) {
+			_files.append(new QString(fi.absoluteFilePath()));
+			tile->addFile(_files.last(), tt);
+		}
 	}
 
 	if (!tile->init()) {
@@ -131,13 +135,20 @@ GMAP::GMAP(const QString &fileName) : _fileName(fileName)
 			  fi.absoluteFilePath() == baseMap.absoluteFilePath());
 	}
 
-	if (baseDir.exists(typFilePath))
-		_typ = new SubFile(baseDir.filePath(typFilePath));
+	if (baseDir.exists(typFilePath)) {
+		_files.append(new QString(baseDir.filePath(typFilePath)));
+		_typ = new SubFile(_files.last());
+	}
 
 	if (!_tileTree.Count())
 		_errorString = "No usable map tile found";
 	else
 		_valid = true;
+}
+
+GMAP::~GMAP()
+{
+	qDeleteAll(_files);
 }
 
 bool GMAP::isGMAP(const QString &path)

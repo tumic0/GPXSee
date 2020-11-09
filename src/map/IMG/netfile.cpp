@@ -3,6 +3,7 @@
 #include "subdiv.h"
 #include "nodfile.h"
 #include "lblfile.h"
+#include "rgnfile.h"
 #include "netfile.h"
 
 
@@ -93,7 +94,7 @@ static bool seekToLine(BitStream4R &bs, quint8 line)
 }
 
 static bool readLine(BitStream4R &bs, const SubDiv *subdiv,
-  const HuffmanTable &table, IMG::Poly &poly)
+  const HuffmanTable *table, MapData::Poly &poly)
 {
 	quint32 v1, v2, v2b;
 	if (!bs.readVuint32SM(v1, v2, v2b))
@@ -113,7 +114,7 @@ static bool readLine(BitStream4R &bs, const SubDiv *subdiv,
 	poly.boundingRect = RectC(c, c);
 	poly.points.append(QPointF(c.lon(), c.lat()));
 
-	HuffmanStreamR stream(bs, table);
+	HuffmanStreamR stream(bs, *table);
 	if (!stream.init())
 		return false;
 	qint32 lonDelta, latDelta;
@@ -132,8 +133,8 @@ static bool readLine(BitStream4R &bs, const SubDiv *subdiv,
 	return stream.atEnd();
 }
 
-static bool readNodeGeometry(NODFile *nod, SubFile::Handle &nodHdl,
-  NODFile::AdjacencyInfo &adj, IMG::Poly &poly, quint16 cnt = 0xFFFF)
+static bool readNodeGeometry(const NODFile *nod, SubFile::Handle &nodHdl,
+  NODFile::AdjacencyInfo &adj, MapData::Poly &poly, quint16 cnt = 0xFFFF)
 {
 	for (int i = 0; i <= cnt; i++) {
 		int ret = nod->nextNode(nodHdl, adj);
@@ -151,7 +152,7 @@ static bool readNodeGeometry(NODFile *nod, SubFile::Handle &nodHdl,
 	return true;
 }
 
-static bool skipNodes(NODFile *nod, SubFile::Handle &nodHdl,
+static bool skipNodes(const NODFile *nod, SubFile::Handle &nodHdl,
   NODFile::AdjacencyInfo &adj, int cnt)
 {
 	for (int i = 0; i < cnt; i++)
@@ -161,10 +162,10 @@ static bool skipNodes(NODFile *nod, SubFile::Handle &nodHdl,
 	return true;
 }
 
-static bool readShape(NODFile *nod, SubFile::Handle &nodHdl,
-  NODFile::AdjacencyInfo &adj, BitStream4R &bs, const HuffmanTable &table,
-  const SubDiv *subdiv, quint32 shift, IMG::Poly &poly, quint16 cnt = 0xFFFF,
-  bool check = false)
+static bool readShape(const NODFile *nod, SubFile::Handle &nodHdl,
+  NODFile::AdjacencyInfo &adj, BitStream4R &bs, const HuffmanTable *table,
+  const SubDiv *subdiv, quint32 shift, MapData::Poly &poly,
+  quint16 cnt = 0xFFFF, bool check = false)
 {
 	quint32 v1, v2, v2b;
 	if (!bs.readVuint32SM(v1, v2, v2b))
@@ -233,7 +234,7 @@ static bool readShape(NODFile *nod, SubFile::Handle &nodHdl,
 		}
 	}
 
-	HuffmanStreamR stream(bs, table);
+	HuffmanStreamR stream(bs, *table);
 	if (!stream.init(lonSign, latSign, flags, extraBits))
 		return false;
 	qint32 lonDelta, latDelta;
@@ -345,8 +346,13 @@ static bool readShape(NODFile *nod, SubFile::Handle &nodHdl,
 }
 
 
-bool NETFile::linkLabel(Handle &hdl, quint32 offset, quint32 size, LBLFile *lbl,
-  Handle &lblHdl, Label &label)
+NETFile::~NETFile()
+{
+	delete _huffmanTable;
+}
+
+bool NETFile::linkLabel(Handle &hdl, quint32 offset, quint32 size,
+  const LBLFile *lbl, Handle &lblHdl, Label &label) const
 {
 	if (!seek(hdl, offset))
 		return false;
@@ -360,19 +366,13 @@ bool NETFile::linkLabel(Handle &hdl, quint32 offset, quint32 size, LBLFile *lbl,
 
 	if (!bs.readUInt24(labelPtr))
 		return false;
-	if (labelPtr & 0x3FFFFF) {
-		if (labelPtr & 0x400000) {
-			quint32 lblOff;
-			if (lblOffset(hdl, labelPtr & 0x3FFFFF, lblOff) && lblOff)
-				label = lbl->label(lblHdl, lblOff);
-		} else
-			label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
-	}
+	if (labelPtr & 0x3FFFFF)
+		label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
 
 	return true;
 }
 
-bool NETFile::init(Handle &hdl)
+bool NETFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 {
 	quint16 hdrLen;
 
@@ -385,31 +385,36 @@ bool NETFile::init(Handle &hdl)
 		quint32 info;
 		if (!(seek(hdl, _gmpOffset + 0x37) && readUInt32(hdl, info)))
 			return false;
-		_tableId = ((info >> 2) & 0xF);
-
 		if (!(seek(hdl, _gmpOffset + 0x43) && readUInt32(hdl, _linksOffset)
 		  && readUInt32(hdl, _linksSize) && readUInt8(hdl, _linksShift)))
 			return false;
-	}
 
-	_init = true;
+		quint8 tableId = ((info >> 2) & 0xF);
+		if (_linksSize && (!rgn->huffmanTable() || rgn->huffmanTable()->id()
+		  != tableId)) {
+			_huffmanTable = new HuffmanTable(tableId);
+			if (!_huffmanTable->load(rgn, rgnHdl))
+				return false;
+		}
+
+		_tp = _huffmanTable ? _huffmanTable : rgn->huffmanTable();
+	}
 
 	return true;
 }
 
-bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
-  NODFile *nod, Handle &nodHdl, LBLFile *lbl, Handle &lblHdl,
-  const NODFile::BlockInfo &blockInfo, quint8 linkId, quint8 lineId,
-  const HuffmanTable &table, QList<IMG::Poly> *lines)
+void NETFile::clear()
 {
-	if (!_init && !init(hdl))
-		return false;
+	delete _huffmanTable;
+	_huffmanTable = 0;
+}
 
-	Q_ASSERT(_tableId == table.id());
-	if (_tableId != table.id())
-		return false;
-
-	IMG::Poly poly;
+bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
+  const NODFile *nod, Handle &nodHdl, const LBLFile *lbl, Handle &lblHdl,
+  const NODFile::BlockInfo &blockInfo, quint8 linkId, quint8 lineId,
+  QList<MapData::Poly> *lines) const
+{
+	MapData::Poly poly;
 	if (!nod->linkType(nodHdl, blockInfo, linkId, poly.type))
 		return false;
 
@@ -445,7 +450,7 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 
 		if (s69 == 1) {
 			if (s68 == 1) {
-				if (!readShape(nod, nodHdl, adj, bs, table, subdiv, shift, poly))
+				if (!readShape(nod, nodHdl, adj, bs, _tp, subdiv, shift, poly))
 					return false;
 			} else {
 				if (!readNodeGeometry(nod, nodHdl, adj, poly))
@@ -459,7 +464,7 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 				if (i == lineId) {
 					if (shape) {
 						bool check = (i < ca.size()) ? (ca.at(i) & mask) : false;
-						if (!readShape(nod, nodHdl, adj, bs, table, subdiv,
+						if (!readShape(nod, nodHdl, adj, bs, _tp, subdiv,
 						  shift, poly, step, check))
 							return false;
 					} else {
@@ -483,7 +488,7 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 			return false;
 		if (!seekToLine(bs, lineId))
 			return false;
-		if (!readLine(bs, subdiv, table, poly))
+		if (!readLine(bs, subdiv, _tp, poly))
 			return false;
 	}
 
@@ -496,11 +501,8 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 	return true;
 }
 
-bool NETFile::lblOffset(Handle &hdl, quint32 netOffset, quint32 &lblOffset)
+bool NETFile::lblOffset(Handle &hdl, quint32 netOffset, quint32 &lblOffset) const
 {
-	if (!_init && !init(hdl))
-		return false;
-
 	if (!(seek(hdl, _offset + (netOffset << _shift))
 	  && readUInt24(hdl, lblOffset)))
 		return false;

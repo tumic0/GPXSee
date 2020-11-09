@@ -1,16 +1,16 @@
 #include "vectortile.h"
 
 
-static void copyPolys(const RectC &rect, QList<IMG::Poly> *src,
-  QList<IMG::Poly> *dst)
+static void copyPolys(const RectC &rect, QList<MapData::Poly> *src,
+  QList<MapData::Poly> *dst)
 {
 	for (int i = 0; i < src->size(); i++)
 		if (rect.intersects(src->at(i).boundingRect))
 			dst->append(src->at(i));
 }
 
-static void copyPoints(const RectC &rect, QList<IMG::Point> *src,
-  QList<IMG::Point> *dst)
+static void copyPoints(const RectC &rect, QList<MapData::Point> *src,
+  QList<MapData::Point> *dst)
 {
 	for (int j = 0; j < src->size(); j++)
 		if (rect.contains(src->at(j).coordinates))
@@ -32,58 +32,6 @@ SubFile *VectorTile::file(SubFile::Type type)
 		case SubFile::NOD:
 			return _nod;
 		case SubFile::GMP:
-			return _gmp;
-		default:
-			return 0;
-	}
-}
-
-SubFile *VectorTile::addFile(IMG *img, SubFile::Type type)
-{
-	switch (type) {
-		case SubFile::TRE:
-			_tre = new TREFile(img);
-			return _tre;
-		case SubFile::RGN:
-			_rgn = new RGNFile(img);
-			return _rgn;
-		case SubFile::LBL:
-			_lbl = new LBLFile(img);
-			return _lbl;
-		case SubFile::NET:
-			_net = new NETFile(img);
-			return _net;
-		case SubFile::NOD:
-			_nod = new NODFile(img);
-			return _nod;
-		case SubFile::GMP:
-			_gmp = new SubFile(img);
-			return _gmp;
-		default:
-			return 0;
-	}
-}
-
-SubFile *VectorTile::addFile(const QString &path, SubFile::Type type)
-{
-	switch (type) {
-		case SubFile::TRE:
-			_tre = new TREFile(path);
-			return _tre;
-		case SubFile::RGN:
-			_rgn = new RGNFile(path);
-			return _rgn;
-		case SubFile::LBL:
-			_lbl = new LBLFile(path);
-			return _lbl;
-		case SubFile::NET:
-			_net = new NETFile(path);
-			return _net;
-		case SubFile::NOD:
-			_nod = new NODFile(path);
-			return _nod;
-		case SubFile::GMP:
-			_gmp = new SubFile(path);
 			return _gmp;
 		default:
 			return 0;
@@ -120,23 +68,54 @@ bool VectorTile::initGMP()
 	return true;
 }
 
+bool VectorTile::load(SubFile::Handle &rgnHdl, SubFile::Handle &lblHdl,
+  SubFile::Handle &netHdl, SubFile::Handle &nodHdl)
+{
+	_loaded = -1;
+
+	if (!_rgn->load(rgnHdl))
+		return false;
+	if (_lbl && !_lbl->load(lblHdl, _rgn, rgnHdl))
+		return false;
+	if (_net && !_net->load(netHdl, _rgn, rgnHdl))
+		return false;
+	if (_nod && !_nod->load(nodHdl))
+		return false;
+
+	_loaded = 1;
+
+	return true;
+}
+
+void VectorTile::clear()
+{
+	_tre->clear();
+	_rgn->clear();
+	if (_lbl)
+		_lbl->clear();
+	if (_net)
+		_net->clear();
+
+	_loaded = 0;
+}
+
 void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
-  QList<IMG::Poly> *polygons, QList<IMG::Poly> *lines,
-  QCache<const SubDiv *, IMG::Polys> *polyCache) const
+  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
+  QCache<const SubDiv *, MapData::Polys> *polyCache)
 {
 	SubFile::Handle rgnHdl(_rgn), lblHdl(_lbl), netHdl(_net), nodHdl(_nod);
 
-	if (!_rgn->initialized() && !_rgn->init(rgnHdl))
+	if (_loaded < 0 || (!_loaded && !load(rgnHdl, lblHdl, netHdl, nodHdl)))
 		return;
 
 	QList<SubDiv*> subdivs = _tre->subdivs(rect, bits, baseMap);
 	for (int i = 0; i < subdivs.size(); i++) {
 		SubDiv *subdiv = subdivs.at(i);
 
-		IMG::Polys *polys = polyCache->object(subdiv);
+		MapData::Polys *polys = polyCache->object(subdiv);
 		if (!polys) {
 			quint32 shift = _tre->shift(subdiv->bits());
-			QList<IMG::Poly> p, l;
+			QList<MapData::Poly> p, l;
 
 			if (!subdiv->initialized() && !_rgn->subdivInit(rgnHdl, subdiv))
 				continue;
@@ -154,7 +133,7 @@ void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
 
 			copyPolys(rect, &p, polygons);
 			copyPolys(rect, &l, lines);
-			polyCache->insert(subdiv, new IMG::Polys(p, l));
+			polyCache->insert(subdiv, new MapData::Polys(p, l));
 		} else {
 			copyPolys(rect, &(polys->polygons), polygons);
 			copyPolys(rect, &(polys->lines), lines);
@@ -163,21 +142,21 @@ void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
 }
 
 void VectorTile::points(const RectC &rect, int bits, bool baseMap,
-  QList<IMG::Point> *points, QCache<const SubDiv *,
-  QList<IMG::Point> > *pointCache) const
+  QList<MapData::Point> *points, QCache<const SubDiv *,
+  QList<MapData::Point> > *pointCache)
 {
-	SubFile::Handle rgnHdl(_rgn), lblHdl(_lbl);
+	SubFile::Handle rgnHdl(_rgn), lblHdl(_lbl), netHdl(_net), nodHdl(_nod);
 
-	if (!_rgn->initialized() && !_rgn->init(rgnHdl))
+	if (_loaded < 0 || (!_loaded && !load(rgnHdl, lblHdl, netHdl, nodHdl)))
 		return;
 
 	QList<SubDiv*> subdivs = _tre->subdivs(rect, bits, baseMap);
 	for (int i = 0; i < subdivs.size(); i++) {
 		SubDiv *subdiv = subdivs.at(i);
 
-		QList<IMG::Point> *pl = pointCache->object(subdiv);
+		QList<MapData::Point> *pl = pointCache->object(subdiv);
 		if (!pl) {
-			QList<IMG::Point> p;
+			QList<MapData::Point> p;
 
 			if (!subdiv->initialized() && !_rgn->subdivInit(rgnHdl, subdiv))
 				continue;
@@ -189,7 +168,7 @@ void VectorTile::points(const RectC &rect, int bits, bool baseMap,
 			_rgn->extPointObjects(rgnHdl, subdiv, _lbl, lblHdl, &p);
 
 			copyPoints(rect, &p, points);
-			pointCache->insert(subdiv, new QList<IMG::Point>(p));
+			pointCache->insert(subdiv, new QList<MapData::Point>(p));
 		} else
 			copyPoints(rect, pl, points);
 	}

@@ -93,8 +93,10 @@ HEADERS += src/common/config.h \
     src/map/IMG/bitstream.h \
     src/map/IMG/deltastream.h \
     src/map/IMG/gmap.h \
+    src/map/IMG/huffmanbuffer.h \
     src/map/IMG/huffmanstream.h \
     src/map/IMG/huffmantable.h \
+    src/map/IMG/huffmantext.h \
     src/map/IMG/nodfile.h \
     src/map/IMG/mapdata.h \
     src/map/IMG/rastertile.h \
@@ -258,8 +260,10 @@ SOURCES += src/main.cpp \
     src/map/IMG/bitstream.cpp \
     src/map/IMG/deltastream.cpp \
     src/map/IMG/gmap.cpp \
+    src/map/IMG/huffmanbuffer.cpp \
     src/map/IMG/huffmanstream.cpp \
     src/map/IMG/huffmantable.cpp \
+    src/map/IMG/huffmantext.cpp \
     src/map/IMG/nodfile.cpp \
     src/map/IMG/mapdata.cpp \
     src/map/IMG/rastertile.cpp \

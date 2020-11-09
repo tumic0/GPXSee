@@ -1,16 +1,6 @@
+#include "common/garmin.h"
 #include "huffmantable.h"
 
-
-static quint8 vs(const quint8 b0)
-{
-	static const quint8 sizes[] = {4, 1, 2, 1, 3, 1, 2, 1};
-	return sizes[b0 & 0x07];
-}
-
-static inline quint8 bs(const quint8 val)
-{
-	return (val + 7) >> 3;
-}
 
 static inline quint32 readVUint32(const quint8 *buffer, quint32 bytes)
 {
@@ -22,10 +12,9 @@ static inline quint32 readVUint32(const quint8 *buffer, quint32 bytes)
 	return val;
 }
 
-bool HuffmanTable::load(const SubFile &file, SubFile::Handle &hdl,
-  quint32 offset, quint32 size, quint32 id)
+bool HuffmanTable::load(const RGNFile *rgn, SubFile::Handle &rgnHdl)
 {
-	if (!getBuffer(file, hdl, offset, size, id))
+	if (!_buffer.load(rgn, rgnHdl))
 		return false;
 
 	_s0 = (quint8)_buffer.at(0) & 0x0F;
@@ -41,31 +30,6 @@ bool HuffmanTable::load(const SubFile &file, SubFile::Handle &hdl,
 	_s14 = (quint8*)(_buffer.data()) + 4 + _s22;
 	_s10 = _s14 + _s1c * _s1d;
 	_s18 = _s10 + (_s1 << _s0);
-
-	_id = id;
-
-	return true;
-}
-
-bool HuffmanTable::getBuffer(const SubFile &file, SubFile::Handle &hdl,
-  quint32 offset, quint32 size, quint8 id)
-{
-	quint32 recordSize, recordOffset = offset;
-
-	for (int i = 0; i <= id; i++) {
-		if (!file.seek(hdl, recordOffset))
-			return false;
-		if (!file.readVUInt32(hdl, recordSize))
-			return false;
-		recordOffset = file.pos(hdl) + recordSize;
-		if (recordOffset > offset + size)
-			return false;
-	};
-
-	_buffer.resize(recordSize);
-	for (int i = 0; i < _buffer.size(); i++)
-		if (!file.readUInt8(hdl, *((quint8*)(_buffer.data() + i))))
-			return false;
 
 	return true;
 }

@@ -81,14 +81,14 @@ static bool skipOptAdjData(BitStream1 &bs)
 }
 
 
-bool NODFile::init(Handle &hdl)
+bool NODFile::load(Handle &hdl)
 {
 	quint16 hdrLen;
 
 	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)))
 		return false;
 	if (hdrLen < 0x7b)
-		return false;
+		return true;
 
 	if (!(seek(hdl, _gmpOffset + 0x1d) && readUInt32(hdl, _flags)
 	  && readUInt8(hdl, _blockShift) && readUInt8(hdl, _nodeShift)))
@@ -111,14 +111,6 @@ bool NODFile::init(Handle &hdl)
 		_indexIdSize = 3;
 
 	return (_indexIdSize > 0);
-}
-
-quint32 NODFile::indexIdSize(Handle &hdl)
-{
-	if (!_indexIdSize && !init(hdl))
-		return 0;
-
-	return _indexIdSize;
 }
 
 bool NODFile::readBlock(Handle &hdl, quint32 blockOffset,
@@ -494,7 +486,7 @@ bool NODFile::relAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 	return true;
 }
 
-int NODFile::nextNode(Handle &hdl, AdjacencyInfo &adjInfo)
+int NODFile::nextNode(Handle &hdl, AdjacencyInfo &adjInfo) const
 {
 	if (adjInfo.nodeOffset == 0xFFFFFFFF)
 		return 1;

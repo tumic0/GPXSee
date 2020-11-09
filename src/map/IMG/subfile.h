@@ -42,14 +42,12 @@ public:
 	  : _gmpOffset(0), _img(img), _blocks(new QVector<quint16>()), _path(0) {}
 	SubFile(SubFile *gmp, quint32 offset) : _gmpOffset(offset), _img(gmp->_img),
 	  _blocks(gmp->_blocks), _path(gmp->_path) {}
-	SubFile(const QString &path)
-	  : _gmpOffset(0), _img(0), _blocks(0), _path(new QString(path)) {}
+	SubFile(const QString *path)
+	  : _gmpOffset(0), _img(0), _blocks(0), _path(path) {}
 	~SubFile()
 	{
-		if (!_gmpOffset) {
+		if (!_gmpOffset)
 			delete _blocks;
-			delete _path;
-		}
 	}
 
 	void addBlock(quint16 block) {_blocks->append(block);}
@@ -151,7 +149,7 @@ private:
 
 	IMG *_img;
 	QVector<quint16> *_blocks;
-	QString *_path;
+	const QString *_path;
 };
 
 #endif // SUBFILE_H

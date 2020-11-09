@@ -14,7 +14,7 @@ class TREFile : public SubFile
 {
 public:
 	TREFile(IMG *img) : SubFile(img) {}
-	TREFile(const QString &path) : SubFile(path) {}
+	TREFile(const QString *path) : SubFile(path) {}
 	TREFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset) {}
 	~TREFile();
 

@@ -5,28 +5,40 @@
 #include "label.h"
 
 class QTextCodec;
+class HuffmanText;
+class RGNFile;
 
 class LBLFile : public SubFile
 {
 public:
 	LBLFile(IMG *img)
-	  : SubFile(img), _codec(0), _offset(0), _size(0), _poiOffset(0),
-	  _poiSize(0), _poiMultiplier(0), _multiplier(0), _encoding(0) {}
-	LBLFile(const QString &path)
-	  : SubFile(path), _codec(0), _offset(0), _size(0), _poiOffset(0),
-	  _poiSize(0), _poiMultiplier(0), _multiplier(0), _encoding(0) {}
+	  : SubFile(img), _huffmanText(0), _table(0), _codec(0), _offset(0),
+	  _size(0), _poiOffset(0), _poiSize(0), _poiMultiplier(0), _multiplier(0),
+	  _encoding(0) {}
+	LBLFile(const QString *path)
+	  : SubFile(path), _huffmanText(0), _table(0), _codec(0), _offset(0),
+	  _size(0), _poiOffset(0), _poiSize(0), _poiMultiplier(0), _multiplier(0),
+	  _encoding(0) {}
 	LBLFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
-	  _codec(0), _offset(0), _size(0), _poiOffset(0), _poiSize(0),
-	  _poiMultiplier(0), _multiplier(0), _encoding(0) {}
+	  _huffmanText(0), _table(0), _codec(0), _offset(0), _size(0),
+	  _poiOffset(0), _poiSize(0), _poiMultiplier(0), _multiplier(0),
+	  _encoding(0) {}
+	~LBLFile();
+
+	bool load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl);
+	void clear();
 
 	Label label(Handle &hdl, quint32 offset, bool poi = false,
-	  bool capitalize = true);
+	  bool capitalize = true) const;
 
 private:
-	bool init(Handle &hdl);
-
+	Label str2label(const QVector<quint8> &str, bool capitalize) const;
 	Label label6b(Handle &hdl, quint32 offset, bool capitalize) const;
 	Label label8b(Handle &hdl, quint32 offset, bool capitalize) const;
+	Label labelHuffman(Handle &hdl, quint32 offset, bool capitalize) const;
+
+	HuffmanText *_huffmanText;
+	quint32 *_table;
 
 	QTextCodec *_codec;
 	quint32 _offset;

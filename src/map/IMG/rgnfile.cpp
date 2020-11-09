@@ -24,6 +24,11 @@ static quint64 pointId(const QPoint &pos, quint32 type, quint32 labelPtr)
 	return id;
 }
 
+RGNFile::~RGNFile()
+{
+	delete _huffmanTable;
+}
+
 bool RGNFile::skipClassFields(Handle &hdl) const
 {
 	quint8 flags;
@@ -96,7 +101,7 @@ bool RGNFile::skipGblFields(Handle &hdl, quint32 flags) const
 	return seek(hdl, pos(hdl) + cnt);
 }
 
-bool RGNFile::init(Handle &hdl)
+bool RGNFile::load(Handle &hdl)
 {
 	quint16 hdrLen;
 
@@ -125,24 +130,29 @@ bool RGNFile::init(Handle &hdl)
 	}
 
 	if (hdrLen >= 0x7D) {
-		quint32 dictOffset, dictSize, info;
-		if (!(seek(hdl, _gmpOffset + 0x71) && readUInt32(hdl, dictOffset)
-		  && readUInt32(hdl, dictSize) && readUInt32(hdl, info)))
+		quint32 info;
+		if (!(seek(hdl, _gmpOffset + 0x71) && readUInt32(hdl, _dictOffset)
+		  && readUInt32(hdl, _dictSize) && readUInt32(hdl, info)))
 			return false;
 
-		if (dictSize && dictOffset && (info & 0x1E))
-			if (!_huffmanTable.load(*this, hdl, dictOffset, dictSize,
-			  ((info >> 1) & 0xF) - 1))
+		if (_dictSize && _dictOffset && (info & 0x1E)) {
+			_huffmanTable = new HuffmanTable(((info >> 1) & 0xF) - 1);
+			if (!_huffmanTable->load(this, hdl))
 				return false;
+		}
 	}
-
-	_init = true;
 
 	return true;
 }
 
+void RGNFile::clear()
+{
+	delete _huffmanTable;
+	_huffmanTable = 0;
+}
+
 bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
-  SegmentType segmentType, LBLFile *lbl, Handle &lblHdl, NETFile *net,
+  SegmentType segmentType, const LBLFile *lbl, Handle &lblHdl, NETFile *net,
   Handle &netHdl, QList<IMG::Poly> *polys) const
 {
 	const SubDiv::Segment &segment = (segmentType == Line)
@@ -218,7 +228,7 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 }
 
 bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
-  SegmentType segmentType, LBLFile *lbl, Handle &lblHdl,
+  SegmentType segmentType, const LBLFile *lbl, Handle &lblHdl,
   QList<IMG::Poly> *polys) const
 {
 	quint32 labelPtr, len;
@@ -246,13 +256,13 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 		poly.type = 0x10000 | (quint16(type)<<8) | (subtype & 0x1F);
 		labelPtr = 0;
 
-		if (!_huffmanTable.isNull()) {
+		if (_huffmanTable) {
 			pos = QPoint(LS(subdiv->lon(), 8) + LS(lon, 32-subdiv->bits()),
 			  LS(subdiv->lat(), 8) + LS(lat, (32-subdiv->bits())));
 
 			qint32 lonDelta, latDelta;
 			BitStream4F bs(*this, hdl, len);
-			HuffmanStreamF stream(bs, _huffmanTable);
+			HuffmanStreamF stream(bs, *_huffmanTable);
 			if (!stream.init(segmentType == Line))
 				return false;
 
@@ -329,7 +339,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 }
 
 bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
-  SegmentType segmentType, LBLFile *lbl, Handle &lblHdl,
+  SegmentType segmentType, const LBLFile *lbl, Handle &lblHdl,
   QList<IMG::Point> *points) const
 {
 	const SubDiv::Segment &segment = (segmentType == IndexedPoint)
@@ -363,9 +373,8 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 		point.coordinates = Coordinates(toWGS24(pos.x()), toWGS24(pos.y()));
 		point.id = pointId(pos, point.type, labelPtr & 0x3FFFFF);
 		if (lbl && (labelPtr & 0x3FFFFF))
-			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF,
-			  labelPtr & 0x400000, !(point.type == 0x1400 || point.type == 0x1500
-			  || point.type == 0x1e00));
+			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, labelPtr & 0x400000,
+			  !(point.type == 0x1400 || point.type == 0x1500 || point.type == 0x1e00));
 
 		points->append(point);
 	}
@@ -373,10 +382,11 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 	return true;
 }
 
-bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
-  Handle &lblHdl, QList<IMG::Point> *points) const
+bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
+  const LBLFile *lbl, Handle &lblHdl, QList<IMG::Point> *points) const
 {
 	const SubDiv::Segment &segment = subdiv->extPoints();
+
 
 	if (!segment.isValid())
 		return true;
@@ -423,21 +433,18 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 }
 
 bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
-  NETFile *net, Handle &netHdl, NODFile *nod, Handle &nodHdl, LBLFile *lbl,
-  Handle &lblHdl, QList<IMG::Poly> *lines) const
+  const NETFile *net, Handle &netHdl, const NODFile *nod, Handle &nodHdl,
+  const LBLFile *lbl, Handle &lblHdl, QList<IMG::Poly> *lines) const
 {
-	quint32 size, blockIndexIdSize, blockIndexId;
+	quint32 size, blockIndexId;
 	quint8 flags;
 	const SubDiv::Segment &segment = subdiv->roadReferences();
 
+	if (!net || !nod)
+		return false;
 	if (!segment.isValid())
 		return true;
 	if (!seek(hdl, segment.offset()))
-		return false;
-
-	if (!net || !nod)
-		return false;
-	if (!(blockIndexIdSize = nod->indexIdSize(nodHdl)))
 		return false;
 
 	while (pos(hdl) < segment.end()) {
@@ -446,7 +453,7 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 
 		quint32 entryStart = pos(hdl);
 
-		if (!(readUInt8(hdl, flags) && readVUInt32(hdl, blockIndexIdSize,
+		if (!(readUInt8(hdl, flags) && readVUInt32(hdl, nod->indexIdSize(),
 		  blockIndexId)))
 			return false;
 
@@ -494,10 +501,11 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 			}
 
 			net->link(subdiv, shift, netHdl, nod, nodHdl, lbl, lblHdl,
-			  blockInfo, linkId, lineId, _huffmanTable, lines);
+			  blockInfo, linkId, lineId, lines);
 		}
 
-		Q_ASSERT(entryStart + size == pos(hdl));
+		if (entryStart + size != pos(hdl))
+			return false;
 	}
 
 	return true;
@@ -546,7 +554,7 @@ QMap<RGNFile::SegmentType, SubDiv::Segment> RGNFile::segments(Handle &hdl,
 	return ret;
 }
 
-bool RGNFile::subdivInit(Handle &hdl, SubDiv *subdiv) const
+bool RGNFile::subdivInit(Handle &hdl, SubDiv *subdiv)
 {
 	QMap<RGNFile::SegmentType, SubDiv::Segment> seg(segments(hdl, subdiv));
 	SubDiv::Segment extPoints, extLines, extPolygons;

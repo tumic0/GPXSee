@@ -1,4 +1,6 @@
 #include <QTextCodec>
+#include "huffmantext.h"
+#include "rgnfile.h"
 #include "lblfile.h"
 
 enum Charset {Normal, Symbol, Special};
@@ -55,21 +57,48 @@ static QString capitalized(const QString &str)
 }
 
 
-bool LBLFile::init(Handle &hdl)
+LBLFile::~LBLFile()
 {
-	quint16 codepage;
-	quint8 multiplier, poiMultiplier;
+	delete _huffmanText;
+	delete _table;
+}
 
-	if (!(seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _offset)
-	  && readUInt32(hdl, _size) && readUInt8(hdl, multiplier)
+bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
+{
+	quint16 hdrLen, codepage;
+
+	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)
+	  && seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _offset)
+	  && readUInt32(hdl, _size) && readUInt8(hdl, _multiplier)
 	  && readUInt8(hdl, _encoding) && seek(hdl, _gmpOffset + 0x57)
 	  && readUInt32(hdl, _poiOffset) && readUInt32(hdl, _poiSize)
-	  && readUInt8(hdl, poiMultiplier) && seek(hdl, _gmpOffset + 0xAA)
+	  && readUInt8(hdl, _poiMultiplier) && seek(hdl, _gmpOffset + 0xAA)
 	  && readUInt16(hdl, codepage)))
 		return false;
 
-	_multiplier = 1<<multiplier;
-	_poiMultiplier = 1<<poiMultiplier;
+	if (hdrLen >= 0x132) {
+		quint32 offset, size;
+		quint16 recordSize;
+		if (!(seek(hdl, _gmpOffset + 0x124) && readUInt32(hdl, offset)
+		  && readUInt32(hdl, size) && readUInt16(hdl, recordSize)))
+			return false;
+
+		if (size && recordSize) {
+			_table = new quint32[size / recordSize];
+			if (!seek(hdl, offset))
+				return false;
+			for (quint32 i = 0; i < size / recordSize; i++) {
+				if (!readVUInt32(hdl, recordSize, _table[i]))
+					return false;
+			}
+		}
+	}
+
+	if (_encoding == 11) {
+		_huffmanText = new HuffmanText();
+		if (!_huffmanText->load(rgn, rgnHdl))
+			return false;
+	}
 
 	if (codepage == 65001)
 		_codec = QTextCodec::codecForName("UTF-8");
@@ -80,6 +109,14 @@ bool LBLFile::init(Handle &hdl)
 		  .toLatin1());
 
 	return true;
+}
+
+void LBLFile::clear()
+{
+	delete _huffmanText;
+	delete _table;
+	_huffmanText = 0;
+	_table = 0;
 }
 
 Label LBLFile::label6b(Handle &hdl, quint32 offset, bool capitalize) const
@@ -135,20 +172,16 @@ Label LBLFile::label6b(Handle &hdl, quint32 offset, bool capitalize) const
 	}
 }
 
-Label LBLFile::label8b(Handle &hdl, quint32 offset, bool capitalize) const
+Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize) const
 {
 	Label::Shield::Type shieldType = Label::Shield::None;
 	QByteArray label, shieldLabel;
 	QByteArray *bap = &label;
-	quint8 c;
 
-	if (!seek(hdl, offset))
-		return Label();
+	for (int i = 0; i < str.size(); i++) {
+		const quint8 &c = str.at(i);
 
-	while (true) {
-		if (!readUInt8(hdl, c))
-			return Label();
-		if (!c || c == 0x1d)
+		if (c == 0 || c == 0x1d)
 			break;
 
 		if (c == 0x1c)
@@ -158,7 +191,7 @@ Label LBLFile::label8b(Handle &hdl, quint32 offset, bool capitalize) const
 				bap = &label;
 			else
 				bap->append(' ');
-		} else if (c <= 0x07) {
+		} else if (c < 0x07) {
 			shieldType = static_cast<Label::Shield::Type>(c);
 			bap = &shieldLabel;
 		} else if (bap == &shieldLabel && c == 0x20) {
@@ -175,21 +208,74 @@ Label LBLFile::label8b(Handle &hdl, quint32 offset, bool capitalize) const
 	  Label::Shield(shieldType, shieldText));
 }
 
-Label LBLFile::label(Handle &hdl, quint32 offset, bool poi, bool capitalize)
+Label LBLFile::label8b(Handle &hdl, quint32 offset, bool capitalize) const
 {
-	if (!_multiplier && !init(hdl))
-		return QString();
+	QVector<quint8> str;
+	quint8 c;
 
+	if (!seek(hdl, offset))
+		return Label();
+
+	do {
+		if (!readUInt8(hdl, c))
+			return Label();
+		str.append(c);
+	} while (c);
+
+	return str2label(str, capitalize);
+}
+
+Label LBLFile::labelHuffman(Handle &hdl, quint32 offset, bool capitalize) const
+{
+	QVector<quint8> str;
+
+	if (!seek(hdl, offset))
+		return Label();
+	if (!_huffmanText->decode(this, hdl, str))
+		return Label();
+	if (!_table)
+		return str2label(str, capitalize);
+
+
+	QVector<quint8> str2;
+	for (int i = 0; i < str.size(); i++) {
+		quint32 val = _table[str.at(i)];
+		if (val) {
+			if (!seek(hdl, _offset + ((val & 0x7fffff) << _multiplier)))
+				return Label();
+
+			if (str2.size() && str2.back() == '\0')
+				str2[str2.size() - 1] = ' ';
+			else if (str2.size())
+				str2.append(' ');
+			if (!_huffmanText->decode(this, hdl, str2))
+				return Label();
+		} else {
+			if (str.at(i) == 7) {
+				str2.append(0);
+				break;
+			}
+			if (str2.size() && str2.back() == '\0')
+				str2[str2.size() - 1] = ' ';
+			str2.append(str.at(i));
+		}
+	}
+
+	return str2label(str2, capitalize);
+}
+
+Label LBLFile::label(Handle &hdl, quint32 offset, bool poi, bool capitalize) const
+{
 	quint32 labelOffset;
 	if (poi) {
 		quint32 poiOffset;
-		if (!(_poiSize >= offset * _poiMultiplier
-		  && seek(hdl, _poiOffset + offset * _poiMultiplier)
+		if (!(_poiSize >= (offset << _poiMultiplier)
+		  && seek(hdl, _poiOffset + (offset << _poiMultiplier))
 		  && readUInt24(hdl, poiOffset) && (poiOffset & 0x3FFFFF)))
 			return QString();
-		labelOffset = _offset + (poiOffset & 0x3FFFFF) * _multiplier;
+		labelOffset = _offset + ((poiOffset & 0x3FFFFF) << _multiplier);
 	} else
-		labelOffset = _offset + offset * _multiplier;
+		labelOffset = _offset + (offset << _multiplier);
 
 	if (labelOffset > _offset + _size)
 		return QString();
@@ -200,6 +286,8 @@ Label LBLFile::label(Handle &hdl, quint32 offset, bool poi, bool capitalize)
 		case 9:
 		case 10:
 			return label8b(hdl, labelOffset, capitalize);
+		case 11:
+			return labelHuffman(hdl, labelOffset, capitalize);
 		default:
 			return Label();
 	}

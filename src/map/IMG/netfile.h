@@ -1,42 +1,44 @@
 #ifndef NETFILE_H
 #define NETFILE_H
 
-#include "img.h"
 #include "subfile.h"
 #include "nodfile.h"
 
-class NODFile;
 class LBLFile;
+class RGNFile;
 class SubDiv;
 class HuffmanTable;
 
 class NETFile : public SubFile
 {
 public:
-	NETFile(IMG *img) : SubFile(img), _offset(0), _size(0), _linksOffset(0),
-	  _linksSize(0), _shift(0), _linksShift(0), _init(false) {}
-	NETFile(const QString &path) : SubFile(path), _offset(0), _size(0),
-	  _linksOffset(0), _linksSize(0), _shift(0), _linksShift(0),
-	  _init(false) {}
-	NETFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
+	NETFile(IMG *img) : SubFile(img), _huffmanTable(0), _tp(0), _offset(0),
+	  _size(0), _linksOffset(0), _linksSize(0), _shift(0), _linksShift(0) {}
+	NETFile(const QString *path) : SubFile(path), _huffmanTable(0), _tp(0),
 	  _offset(0), _size(0), _linksOffset(0), _linksSize(0), _shift(0),
-	  _linksShift(0), _init(false) {}
+	  _linksShift(0) {}
+	NETFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
+	  _huffmanTable(0), _tp(0), _offset(0), _size(0), _linksOffset(0),
+	  _linksSize(0), _shift(0), _linksShift(0) {}
+	~NETFile();
 
-	bool lblOffset(Handle &hdl, quint32 netOffset, quint32 &lblOffset);
-	bool link(const SubDiv *subdiv, quint32 shift, Handle &hdl, NODFile *nod,
-	  Handle &nodHdl, LBLFile *lbl, Handle &lblHdl,
+	bool load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl);
+	void clear();
+
+	bool lblOffset(Handle &hdl, quint32 netOffset, quint32 &lblOffset) const;
+	bool link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
+	  const NODFile *nod, Handle &nodHdl, const LBLFile *lbl, Handle &lblHdl,
 	  const NODFile::BlockInfo &blockInfo, quint8 linkId, quint8 lineId,
-	  const HuffmanTable &table, QList<IMG::Poly> *lines);
+	  QList<MapData::Poly> *lines) const;
 
 private:
-	bool init(Handle &hdl);
-	bool linkLabel(Handle &hdl, quint32 offset, quint32 size, LBLFile *lbl,
-	  Handle &lblHdl, Label &label);
+	bool linkLabel(Handle &hdl, quint32 offset, quint32 size,
+	  const LBLFile *lbl, Handle &lblHdl, Label &label) const;
 
+	HuffmanTable *_huffmanTable;
+	const HuffmanTable *_tp;
 	quint32 _offset, _size, _linksOffset, _linksSize;
 	quint8 _shift, _linksShift;
-	quint8 _tableId;
-	bool _init;
 };
 
 #endif // NETFILE_H

@@ -10,6 +10,7 @@ class GMAP : public MapData
 {
 public:
 	GMAP(const QString &fileName);
+	~GMAP();
 
 	QString fileName() const {return _fileName;}
 
@@ -25,6 +26,7 @@ private:
 	bool loadTile(const QDir &dir, bool baseMap);
 
 	QString _fileName;
+	QList<const QString*> _files;
 };
 
 #endif // GMAP_H
