@@ -51,13 +51,13 @@ class FITParser::CTX {
 public:
 	CTX(QFile *file, QVector<Waypoint> &waypoints)
 	  : file(file), waypoints(waypoints), len(0), endian(0), timestamp(0),
-	  lastWrite(0), ratio(NAN) {}
+	  ratio(NAN) {}
 
 	QFile *file;
 	QVector<Waypoint> &waypoints;
 	quint32 len;
 	quint8 endian;
-	quint32 timestamp, lastWrite;
+	quint32 timestamp;
 	MessageDefinition defs[16];
 	qreal ratio;
 	Trackpoint trackpoint;
@@ -361,14 +361,12 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 			ctx.ratio = ((qreal)front / (qreal)rear);
 		}
 	} else if (def->globalId == RECORD_MESSAGE) {
-		if (ctx.timestamp > ctx.lastWrite
-		  && ctx.trackpoint.coordinates().isValid()) {
+		if (ctx.trackpoint.coordinates().isValid()) {
 			ctx.trackpoint.setTimestamp(QDateTime::fromTime_t(ctx.timestamp
 			  + 631065600));
 			ctx.trackpoint.setRatio(ctx.ratio);
 			ctx.segment.append(ctx.trackpoint);
 			ctx.trackpoint = Trackpoint();
-			ctx.lastWrite = ctx.timestamp;
 		}
 	} else if (def->globalId == COURSE_POINT)
 		if (waypoint.coordinates().isValid())
