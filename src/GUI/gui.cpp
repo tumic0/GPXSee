@@ -140,10 +140,9 @@ void GUI::createMapActions()
 
 MapAction *GUI::createMapAction(Map *map)
 {
-	MapAction *a = new MapAction(map);
+	MapAction *a = new MapAction(map, _mapsActionGroup);
 	a->setMenuRole(QAction::NoRole);
 	a->setCheckable(true);
-	a->setActionGroup(_mapsActionGroup);
 	connect(a, SIGNAL(triggered()), this, SLOT(mapChanged()));
 
 	return a;
