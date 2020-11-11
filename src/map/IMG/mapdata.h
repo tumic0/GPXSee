@@ -91,7 +91,7 @@ private:
 	QCache<const SubDiv*, QList<Point> > _pointCache;
 
 	friend class VectorTile;
-	friend class PolyCTX;
+	friend struct PolyCTX;
 };
 
 #ifndef QT_NO_DEBUG
