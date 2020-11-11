@@ -60,7 +60,7 @@ static QString capitalized(const QString &str)
 LBLFile::~LBLFile()
 {
 	delete _huffmanText;
-	delete _table;
+        delete[] _table;
 }
 
 bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
@@ -114,7 +114,7 @@ bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 void LBLFile::clear()
 {
 	delete _huffmanText;
-	delete _table;
+        delete[] _table;
 	_huffmanText = 0;
 	_table = 0;
 }
