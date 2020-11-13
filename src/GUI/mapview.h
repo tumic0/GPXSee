@@ -123,13 +123,15 @@ private:
 	void updatePOIVisibility();
 	void skipColor() {_palette.nextColor();}
 
+	void mouseMoveEvent(QMouseEvent *event);
+	void mousePressEvent(QMouseEvent *event);
 	void mouseDoubleClickEvent(QMouseEvent *event);
 	void wheelEvent(QWheelEvent *event);
 	void keyPressEvent(QKeyEvent *event);
+	void keyReleaseEvent(QKeyEvent *event);
 	void drawBackground(QPainter *painter, const QRectF &rect);
 	void paintEvent(QPaintEvent *event);
 	void scrollContentsBy(int dx, int dy);
-	void mouseMoveEvent(QMouseEvent *event);
 	void leaveEvent(QEvent *event);
 
 	GraphicsScene *_scene;
@@ -163,6 +165,7 @@ private:
 
 	int _digitalZoom;
 	bool _plot;
+	QCursor _cursor;
 
 #ifdef ENABLE_HIDPI
 	qreal _deviceRatio;

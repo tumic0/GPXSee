@@ -3,6 +3,7 @@
 #include <QWheelEvent>
 #include <QApplication>
 #include <QScrollBar>
+#include <QClipboard>
 #include "data/poi.h"
 #include "data/data.h"
 #include "map/map.h"
@@ -522,12 +523,34 @@ void MapView::keyPressEvent(QKeyEvent *event)
 	else if (_digitalZoom && event->key() == Qt::Key_Escape) {
 		digitalZoom(0);
 		return;
-	} else {
+	} else  {
+		if (event->key() == MODIFIER_KEY) {
+			_cursor = viewport()->cursor();
+			viewport()->setCursor(Qt::CrossCursor);
+		}
+
 		QGraphicsView::keyPressEvent(event);
 		return;
 	}
 
 	zoom(z, pos);
+}
+
+void MapView::keyReleaseEvent(QKeyEvent *event)
+{
+	if (event->key() == MODIFIER_KEY && viewport()->cursor() == Qt::CrossCursor)
+		viewport()->setCursor(_cursor);
+
+	QGraphicsView::keyReleaseEvent(event);
+}
+
+void MapView::mousePressEvent(QMouseEvent *event)
+{
+	if (event->button() == Qt::LeftButton && event->modifiers() & MODIFIER)
+		QGuiApplication::clipboard()->setText(Format::coordinates(
+		  _map->xy2ll(mapToScene(event->pos())), _coordinates->format()));
+	else
+		QGraphicsView::mousePressEvent(event);
 }
 
 void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,

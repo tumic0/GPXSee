@@ -8,6 +8,7 @@
 #define PREV_KEY                Qt::Key_Backspace
 #define FIRST_KEY               Qt::Key_Home
 #define LAST_KEY                Qt::Key_End
+#define MODIFIER_KEY            Qt::Key_Shift
 #define MODIFIER                Qt::ShiftModifier
 #define ZOOM_IN                 Qt::Key_Plus
 #define ZOOM_OUT                Qt::Key_Minus

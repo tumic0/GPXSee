@@ -720,7 +720,10 @@ void GUI::keys()
 	  + "</i></td></tr><tr><td>" + tr("Zoom out") + "</td><td><i>"
 	  + QKeySequence(ZOOM_OUT).toString() + "</i></td></tr><tr><td>"
 	  + tr("Digital zoom") + "</td><td><i>" + QKeySequence(MODIFIER).toString()
-	  + tr("Zoom") + "</i></td></tr></table></div>");
+	  + tr("Zoom") + "</i></td></tr><tr><td></td><td></td></tr><tr><td>"
+	  + tr("Copy coordinates") + "</td><td><i>"
+	  + QKeySequence(MODIFIER).toString() + tr("Left Click")
+	  + "</i></td></tr></table></div>");
 
 	msgBox.exec();
 }

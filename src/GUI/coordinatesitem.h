@@ -15,6 +15,8 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
+	CoordinatesFormat format() const {return _format;}
+
 	void setCoordinates(const Coordinates &c);
 	void setFormat(const CoordinatesFormat &format);
 	void setDigitalZoom(qreal zoom);
