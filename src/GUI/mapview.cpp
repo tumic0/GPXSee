@@ -538,7 +538,8 @@ void MapView::keyPressEvent(QKeyEvent *event)
 
 void MapView::keyReleaseEvent(QKeyEvent *event)
 {
-	if (event->key() == MODIFIER_KEY && viewport()->cursor() == Qt::CrossCursor)
+	if (event->key() == MODIFIER_KEY
+	  && viewport()->cursor().shape() == Qt::CrossCursor)
 		viewport()->setCursor(_cursor);
 
 	QGraphicsView::keyReleaseEvent(event);
@@ -547,7 +548,7 @@ void MapView::keyReleaseEvent(QKeyEvent *event)
 void MapView::mousePressEvent(QMouseEvent *event)
 {
 	if (event->button() == Qt::LeftButton && event->modifiers() & MODIFIER)
-		QGuiApplication::clipboard()->setText(Format::coordinates(
+		QApplication::clipboard()->setText(Format::coordinates(
 		  _map->xy2ll(mapToScene(event->pos())), _coordinates->format()));
 	else
 		QGraphicsView::mousePressEvent(event);
