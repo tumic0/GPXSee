@@ -45,7 +45,7 @@ make # nmake on windows
 GPXSee uses [Weblate](https://hosted.weblate.org/projects/gpxsee/translations/) for translations.
 
 ## License
-GPXSee is licensed under GPL-3.0. However, some 3rd party parts are using different, GPL compatible,
+GPXSee is licensed under GPL-3.0 (only). However, some 3rd party parts are using different, GPL compatible,
 licenses:
 * [Oxygen icons](icons/GUI) - LGPLv3
 * [Mapbox Maki icons](icons/POI) - CC0
