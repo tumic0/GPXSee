@@ -7,14 +7,15 @@
 class QPainter;
 class TextItem;
 class Style;
+class IMGMap;
 
 class RasterTile
 {
 public:
-	RasterTile(const Style *style, int zoom, const QRect &rect,
+	RasterTile(IMGMap *map, const Style *style, int zoom, const QRect &rect,
 	  const QString &key, const QList<MapData::Poly> &polygons,
 	  const QList<MapData::Poly> &lines, QList<MapData::Point> &points)
-	  : _style(style), _zoom(zoom), _xy(rect.topLeft()),
+	  : _map(map), _style(style), _zoom(zoom), _xy(rect.topLeft()),
 	  _key(key), _img(rect.size(), QImage::Format_ARGB32_Premultiplied),
 	  _polygons(polygons), _lines(lines), _points(points) {}
 
@@ -25,6 +26,9 @@ public:
 	void render();
 
 private:
+	void ll2xy(QList<MapData::Poly> &polys);
+	void ll2xy(QList<MapData::Point> &points);
+
 	void drawPolygons(QPainter *painter);
 	void drawLines(QPainter *painter);
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
@@ -35,6 +39,7 @@ private:
 	void processShields(const QRect &tileRect, QList<TextItem*> &textItems);
 	void processStreetNames(const QRect &tileRect, QList<TextItem*> &textItems);
 
+	IMGMap *_map;
 	const Style *_style;
 	int _zoom;
 	QPoint _xy;

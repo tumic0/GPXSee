@@ -19,14 +19,16 @@ public:
 
 	QRectF bounds() {return _bounds;}
 
-	virtual int zoom() const {return _zoom;}
-	virtual void setZoom(int zoom);
-	virtual int zoomFit(const QSize &, const RectC &);
-	virtual int zoomIn();
-	virtual int zoomOut();
+	int zoom() const {return _zoom;}
+	void setZoom(int zoom);
+	int zoomFit(const QSize &, const RectC &);
+	int zoomIn();
+	int zoomOut();
 
-	QPointF ll2xy(const Coordinates &c);
-	Coordinates xy2ll(const QPointF &p);
+	QPointF ll2xy(const Coordinates &c)
+	  {return _transform.proj2img(_projection.ll2xy(c));}
+	Coordinates xy2ll(const QPointF &p)
+	  {return _projection.xy2ll(_transform.img2proj(p));}
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
@@ -39,8 +41,6 @@ public:
 	QString errorString() const {return _errorString;}
 
 private:
-	void ll2xy(QList<MapData::Poly> &polys);
-	void ll2xy(QList<MapData::Point> &points);
 	Transform transform(int zoom) const;
 	void updateTransform();
 

@@ -1,5 +1,6 @@
 #include <QFont>
 #include <QPainter>
+#include "map/imgmap.h"
 #include "textpathitem.h"
 #include "textpointitem.h"
 #include "bitmapline.h"
@@ -166,6 +167,10 @@ void RasterTile::render()
 {
 	QList<TextItem*> textItems;
 
+	ll2xy(_polygons);
+	ll2xy(_lines);
+	ll2xy(_points);
+
 	processPoints(textItems);
 	processPolygons(textItems);
 	processLines(textItems);
@@ -184,6 +189,25 @@ void RasterTile::render()
 	//painter.drawRect(QRect(_xy, _img.size()));
 
 	qDeleteAll(textItems);
+}
+
+void RasterTile::ll2xy(QList<MapData::Poly> &polys)
+{
+	for (int i = 0; i < polys.size(); i++) {
+		MapData::Poly &poly = polys[i];
+		for (int j = 0; j < poly.points.size(); j++) {
+			QPointF &p = poly.points[j];
+			p = _map->ll2xy(Coordinates(p.x(), p.y()));
+		}
+	}
+}
+
+void RasterTile::ll2xy(QList<MapData::Point> &points)
+{
+	for (int i = 0; i < points.size(); i++) {
+		QPointF p(_map->ll2xy(points.at(i).coordinates));
+		points[i].coordinates = Coordinates(p.x(), p.y());
+	}
 }
 
 void RasterTile::drawPolygons(QPainter *painter)

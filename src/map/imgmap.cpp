@@ -141,35 +141,6 @@ void IMGMap::updateTransform()
 		_bounds.adjust(0.5, 0, -0.5, 0);
 }
 
-QPointF IMGMap::ll2xy(const Coordinates &c)
-{
-	return _transform.proj2img(_projection.ll2xy(c));
-}
-
-Coordinates IMGMap::xy2ll(const QPointF &p)
-{
-	return _projection.xy2ll(_transform.img2proj(p));
-}
-
-void IMGMap::ll2xy(QList<MapData::Poly> &polys)
-{
-	for (int i = 0; i < polys.size(); i++) {
-		MapData::Poly &poly = polys[i];
-		for (int j = 0; j < poly.points.size(); j++) {
-			QPointF &p = poly.points[j];
-			p = ll2xy(Coordinates(p.x(), p.y()));
-		}
-	}
-}
-
-void IMGMap::ll2xy(QList<MapData::Point> &points)
-{
-	for (int i = 0; i < points.size(); i++) {
-		QPointF p(ll2xy(points.at(i).coordinates));
-		points[i].coordinates = Coordinates(p.x(), p.y());
-	}
-}
-
 void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	Q_UNUSED(flags);
@@ -202,7 +173,6 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 					  _transform.img2proj(polyRect.bottomRight()));
 					_data.at(n)->polys(polyRectD.toRectC(_projection, 4), _zoom,
 					  &polygons, &lines);
-					ll2xy(polygons); ll2xy(lines);
 
 					QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT,
 					  ttl.y() - TEXT_EXTENT), QPointF(ttl.x() + TILE_SIZE
@@ -212,9 +182,8 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 					  _transform.img2proj(pointRect.bottomRight()));
 					_data.at(n)->points(pointRectD.toRectC(_projection, 4),
 					  _zoom, &points);
-					ll2xy(points);
 
-					tiles.append(RasterTile(_data.at(n)->style(), _zoom,
+					tiles.append(RasterTile(this, _data.at(n)->style(), _zoom,
 					  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), key, polygons,
 					  lines, points));
 				}
