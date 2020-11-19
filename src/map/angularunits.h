@@ -11,7 +11,12 @@ public:
 	AngularUnits(int code);
 
 	bool operator==(const AngularUnits &other) const
-	  {return (_code == other._code && _f == other._f);}
+	{
+		if (_code == 9110)
+			return (other._code == 9110);
+		else
+			return (_f == other._f);
+	}
 
 	bool isNull() const {return std::isnan(_f);}
 	bool isValid() const {return !std::isnan(_f);}
