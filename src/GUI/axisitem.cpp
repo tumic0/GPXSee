@@ -41,6 +41,7 @@ AxisItem::AxisItem(Type type, QGraphicsItem *parent)
 {
 	_type = type;
 	_size = 0;
+	_zoom = 1.0;
 
 	_font.setPixelSize(FONT_SIZE);
 	_font.setFamily(FONT_FAMILY);
@@ -52,7 +53,8 @@ void AxisItem::setRange(const RangeF &range)
 	_range = range;
 
 	QFontMetrics fm(_font);
-	Ticks ticks(_range.min(), _range.max(), (_type == X) ? XTICKS : YTICKS);
+	Ticks ticks(_range.min(), _range.max(),
+	  (_type == X) ? XTICKS * _zoom : YTICKS * _zoom);
 	_ticks = QVector<Tick>(ticks.count());
 	for (int i = 0; i < ticks.count(); i++) {
 		Tick &t = _ticks[i];

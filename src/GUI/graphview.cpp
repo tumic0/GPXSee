@@ -279,6 +279,7 @@ void GraphView::redraw(const QSizeF &size)
 		ry.resize(_minYRange * _yScale);
 
 	_xAxis->setRange(rx);
+	_xAxis->setZoom(_zoom);
 	_yAxis->setRange(ry);
 	mx = _xAxis->margin();
 	my = _yAxis->margin();

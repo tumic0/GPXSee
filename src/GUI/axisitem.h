@@ -20,6 +20,7 @@ public:
 	void setRange(const RangeF &range);
 	void setSize(qreal size);
 	void setLabel(const QString& label);
+	void setZoom(qreal zoom) {_zoom = zoom;}
 
 	QSizeF margin() const;
 	QList<qreal> ticks() const;
@@ -41,6 +42,7 @@ private:
 	QRectF _boundingRect;
 	QFont _font;
 	QLocale _locale;
+	qreal _zoom;
 };
 
 #endif // AXISITEM_H
