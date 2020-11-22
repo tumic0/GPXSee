@@ -667,7 +667,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="724"/>
         <source>Copy coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Скопіювати координати</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="725"/>
