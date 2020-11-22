@@ -16,7 +16,7 @@ void AxisLabelItem::setLabel(const QString& label, const QString &units)
 	prepareGeometryChange();
 	QFontMetrics fm(_font);
 	_label = QString("%1 [%2]").arg(label, units.isEmpty() ? "-" : units);
-	_labelBB = fm.tightBoundingRect(label);
+	_labelBB = fm.tightBoundingRect(_label);
 	updateBoundingRect();
 	update();
 }
