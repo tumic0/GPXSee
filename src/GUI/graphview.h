@@ -87,8 +87,6 @@ private slots:
 private:
 	void redraw(const QSizeF &size);
 	void setXUnits();
-	void createXLabel();
-	void createYLabel();
 	void updateSliderPosition();
 	void updateSliderInfo();
 	void removeItem(QGraphicsItem *item);

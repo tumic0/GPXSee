@@ -15,7 +15,7 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-	void setLabel(const QString& label);
+	void setLabel(const QString& label, const QString &units);
 
 private:
 	void updateBoundingRect();

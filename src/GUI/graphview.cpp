@@ -89,28 +89,16 @@ GraphView::~GraphView()
 	delete _message;
 }
 
-void GraphView::createXLabel()
-{
-	_xAxisLabel->setLabel(QString("%1 [%2]").arg(_xLabel,
-	  _xUnits.isEmpty() ? "-" : _xUnits));
-}
-
-void GraphView::createYLabel()
-{
-	_yAxisLabel->setLabel(QString("%1 [%2]").arg(_yLabel,
-	  _yUnits.isEmpty() ? "-" : _yUnits));
-}
-
 void GraphView::setYLabel(const QString &label)
 {
 	_yLabel = label;
-	createYLabel();
+	_yAxisLabel->setLabel(_yLabel, _yUnits);
 }
 
 void GraphView::setYUnits(const QString &units)
 {
 	_yUnits = units;
-	createYLabel();
+	_yAxisLabel->setLabel(_yLabel, _yUnits);
 }
 
 void GraphView::setXUnits()
@@ -154,7 +142,7 @@ void GraphView::setXUnits()
 			}
 	}
 
-	createXLabel();
+	_xAxisLabel->setLabel(_xLabel, _xUnits);
 }
 
 void GraphView::setUnits(Units units)

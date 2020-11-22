@@ -11,11 +11,11 @@ AxisLabelItem::AxisLabelItem(Type type, QGraphicsItem *parent)
 	_font.setFamily(FONT_FAMILY);
 }
 
-void AxisLabelItem::setLabel(const QString& label)
+void AxisLabelItem::setLabel(const QString& label, const QString &units)
 {
 	prepareGeometryChange();
 	QFontMetrics fm(_font);
-	_label = label;
+	_label = QString("%1 [%2]").arg(label, units.isEmpty() ? "-" : units);
 	_labelBB = fm.tightBoundingRect(label);
 	updateBoundingRect();
 	update();
