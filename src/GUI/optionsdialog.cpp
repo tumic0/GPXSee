@@ -477,12 +477,18 @@ QWidget *OptionsDialog::createDataPage()
 	QFormLayout *formLayout = new QFormLayout();
 	formLayout->addRow(tr("Speed:"), speedOptions);
 	formLayout->addRow(tr("Elevation:"), elevationOptions);
+
 #ifdef ENABLE_TIMEZONES
 	formLayout->addRow(tr("Time zone:"), zoneOptions);
 #endif // ENABLE_TIMEZONES
-	formLayout->addRow(_useSegments);
+
+	QFormLayout *segmentsLayout = new QFormLayout();
+	segmentsLayout->addWidget(_useSegments);
 
 	sourceTabLayout->addLayout(formLayout);
+	sourceTabLayout->addWidget(line());
+	sourceTabLayout->addLayout(segmentsLayout);
+
 #else // Q_OS_MAC
 	QFormLayout *speedLayout = new QFormLayout();
 	QFormLayout *elevationLayout = new QFormLayout();
