@@ -667,12 +667,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="724"/>
         <source>Copy coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Koordináták másolása</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="725"/>
         <source>Left Click</source>
-        <translation type="unfinished"></translation>
+        <translation>Bal kattintás</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="739"/>
@@ -793,6 +793,7 @@
         <location filename="../src/GUI/gui.cpp" line="1491"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
