@@ -23,10 +23,8 @@ void GridItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 		painter->drawLine(0, -_yTicks.at(i), boundingRect().width(),
 		  -_yTicks.at(i));
 
-/*
-	painter->setPen(Qt::red);
-	painter->drawRect(boundingRect());
-*/
+	//painter->setPen(Qt::red);
+	//painter->drawRect(boundingRect());
 }
 
 void GridItem::setTicks(const QList<qreal> &x, const QList<qreal> &y)

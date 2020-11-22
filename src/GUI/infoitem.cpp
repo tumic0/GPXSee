@@ -53,10 +53,8 @@ void InfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 		}
 	}
 
-/*
-	painter->setPen(Qt::red);
-	painter->drawRect(boundingRect());
-*/
+	//painter->setPen(Qt::red);
+	//painter->drawRect(boundingRect());
 }
 
 void InfoItem::insert(const QString &key, const QString &value)

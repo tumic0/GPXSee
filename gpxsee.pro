@@ -19,6 +19,7 @@ equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 4) {QT += opengl}
 
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
+    src/GUI/axislabelitem.h \
     src/GUI/graphicsscene.h \
     src/GUI/mapaction.h \
     src/GUI/marginswidget.h \
@@ -204,6 +205,7 @@ HEADERS += src/common/config.h \
     src/GUI/pdfexportdialog.h \
     src/GUI/pngexportdialog.h
 SOURCES += src/main.cpp \
+    src/GUI/axislabelitem.cpp \
     src/GUI/marginswidget.cpp \
     src/GUI/popup.cpp \
     src/common/coordinates.cpp \

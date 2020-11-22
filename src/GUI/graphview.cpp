@@ -9,6 +9,7 @@
 #include "data/graph.h"
 #include "opengl.h"
 #include "axisitem.h"
+#include "axislabelitem.h"
 #include "slideritem.h"
 #include "sliderinfoitem.h"
 #include "infoitem.h"
@@ -21,6 +22,9 @@
 
 
 #define MARGIN 10.0
+
+#define IW(item) ((item)->boundingRect().width())
+#define IH(item) ((item)->boundingRect().height())
 
 GraphView::GraphView(QWidget *parent)
 	: QGraphicsView(parent)
@@ -38,6 +42,10 @@ GraphView::GraphView(QWidget *parent)
 	_xAxis->setZValue(1.0);
 	_yAxis = new AxisItem(AxisItem::Y);
 	_yAxis->setZValue(1.0);
+	_xAxisLabel = new AxisLabelItem(AxisLabelItem::X);
+	_xAxisLabel->setZValue(1.0);
+	_yAxisLabel = new AxisLabelItem(AxisLabelItem::Y);
+	_yAxisLabel->setZValue(1.0);
 	_slider = new SliderItem();
 	_slider->setZValue(4.0);
 	_sliderInfo = new SliderInfoItem(_slider);
@@ -73,6 +81,8 @@ GraphView::~GraphView()
 {
 	delete _xAxis;
 	delete _yAxis;
+	delete _xAxisLabel;
+	delete _yAxisLabel;
 	delete _slider;
 	delete _info;
 	delete _grid;
@@ -81,13 +91,13 @@ GraphView::~GraphView()
 
 void GraphView::createXLabel()
 {
-	_xAxis->setLabel(QString("%1 [%2]").arg(_xLabel,
+	_xAxisLabel->setLabel(QString("%1 [%2]").arg(_xLabel,
 	  _xUnits.isEmpty() ? "-" : _xUnits));
 }
 
 void GraphView::createYLabel()
 {
-	_yAxis->setLabel(QString("%1 [%2]").arg(_yLabel,
+	_yAxisLabel->setLabel(QString("%1 [%2]").arg(_yLabel,
 	  _yUnits.isEmpty() ? "-" : _yUnits));
 }
 
@@ -163,6 +173,7 @@ void GraphView::setGraphType(GraphType type)
 {
 	_graphType = type;
 	_bounds = QRectF();
+	_zoom = 1.0;
 
 	for (int i = 0; i < _graphs.count(); i++) {
 		GraphItem *gi = _graphs.at(i);
@@ -257,6 +268,8 @@ void GraphView::redraw(const QSizeF &size)
 	if (_bounds.isNull()) {
 		removeItem(_xAxis);
 		removeItem(_yAxis);
+		removeItem(_xAxisLabel);
+		removeItem(_yAxisLabel);
 		removeItem(_slider);
 		removeItem(_info);
 		removeItem(_grid);
@@ -268,6 +281,8 @@ void GraphView::redraw(const QSizeF &size)
 	removeItem(_message);
 	addItem(_xAxis);
 	addItem(_yAxis);
+	addItem(_xAxisLabel);
+	addItem(_yAxisLabel);
 	addItem(_slider);
 	addItem(_info);
 	addItem(_grid);
@@ -278,6 +293,7 @@ void GraphView::redraw(const QSizeF &size)
 	if (ry.size() < _minYRange * _yScale)
 		ry.resize(_minYRange * _yScale);
 
+	_xAxis->setZoom(_zoom);
 	_xAxis->setRange(rx);
 	_xAxis->setZoom(_zoom);
 	_yAxis->setRange(ry);
@@ -289,9 +305,10 @@ void GraphView::redraw(const QSizeF &size)
 		r.adjust(0, -(_minYRange/2 - r.height()/2), 0,
 		  _minYRange/2 - r.height()/2);
 
-	sx = (size.width() - (my.width() + mx.width())) / r.width();
+	sx = (size.width() - (my.width() + mx.width()) - IW(_yAxisLabel))
+	  / r.width();
 	sy = (size.height() - (mx.height() + my.height())
-	  - _info->boundingRect().height()) / r.height();
+	  - IH(_info) - IH(_xAxisLabel)) / r.height();
 	sx *= _zoom;
 
 	for (int i = 0; i < _graphs.size(); i++)
@@ -317,10 +334,12 @@ void GraphView::redraw(const QSizeF &size)
 	_slider->setArea(r);
 	updateSliderPosition();
 
-	r |= _xAxis->sceneBoundingRect();
-	r |= _yAxis->sceneBoundingRect();
-	_info->setPos(r.topLeft() + QPointF(r.width()/2
-	  - _info->boundingRect().width()/2, -_info->boundingRect().height()));
+	_info->setPos(QPointF(r.width()/2 - IW(_info)/2 - (IW(_yAxisLabel)
+	  + IW(_yAxis))/2, r.top() - IH(_info) - my.height()));
+	_xAxisLabel->setPos(QPointF(r.width()/2 - IW(_xAxisLabel)/2,
+	  r.bottom() + mx.height()));
+	_yAxisLabel->setPos(QPointF(r.left() - my.width() - IW(_yAxisLabel),
+	  r.bottom() - (r.height()/2 + IH(_yAxisLabel)/2)));
 
 	_scene->setSceneRect(_scene->itemsBoundingRect());
 }
@@ -368,8 +387,10 @@ void GraphView::wheelEvent(QWheelEvent *e)
 void GraphView::paintEvent(QPaintEvent *e)
 {
 	QRectF viewRect(mapToScene(rect()).boundingRect());
-	_info->setPos(QPointF(viewRect.left() + (viewRect.width()
-	  - _info->boundingRect().width())/2.0, _info->pos().y()));
+	_info->setPos(QPointF(viewRect.left() + (viewRect.width() - IW(_info))/2.0,
+	  _info->pos().y()));
+	_xAxisLabel->setPos(QPointF(viewRect.left() + (viewRect.width()
+	  - IW(_xAxisLabel))/2.0, _xAxisLabel->pos().y()));
 
 	QGraphicsView::paintEvent(e);
 }

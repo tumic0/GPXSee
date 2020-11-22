@@ -10,6 +10,7 @@
 
 
 class AxisItem;
+class AxisLabelItem;
 class SliderItem;
 class SliderInfoItem;
 class GraphItem;
@@ -96,6 +97,7 @@ private:
 	GraphicsScene *_scene;
 
 	AxisItem *_xAxis, *_yAxis;
+	AxisLabelItem *_xAxisLabel, *_yAxisLabel;
 	SliderItem *_slider;
 	SliderInfoItem *_sliderInfo;
 	InfoItem *_info;

@@ -13,13 +13,14 @@ public:
 
 	AxisItem(Type type, QGraphicsItem *parent = 0);
 
+	/* Note: The items position is at the 0 point of the axis line, not at the
+	   top-left point of the bounding rect as usual */
 	QRectF boundingRect() const {return _boundingRect;}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
 	void setRange(const RangeF &range);
 	void setSize(qreal size);
-	void setLabel(const QString& label);
 	void setZoom(qreal zoom) {_zoom = zoom;}
 
 	QSizeF margin() const;
@@ -36,8 +37,6 @@ private:
 	Type _type;
 	RangeF _range;
 	qreal _size;
-	QString _label;
-	QRect _labelBB;
 	QVector<Tick> _ticks;
 	QRectF _boundingRect;
 	QFont _font;
