@@ -11,7 +11,7 @@ GraphItem::GraphItem(const Graph &graph, GraphType type, int width,
 	Q_ASSERT(_graph.isValid());
 
 	_units = Metric;
-	_pen = QPen(color, width, style);
+	_pen = QPen(color, width, style, Qt::FlatCap);
 	_sx = 0; _sy = 0;
 	_time = _graph.hasTime();
 	setZValue(2.0);
