@@ -1069,7 +1069,7 @@ void GUI::exportPNGFile()
 		p.setRenderHint(QPainter::Antialiasing);
 	p.fillRect(rect, Qt::white);
 	plotMainPage(&p, contentRect, 1.0, true);
-	img.save(_pngExport.fileName);
+	img.save(_pngExport.fileName, "png");
 
 	if (!_tabs.isEmpty() && _options.separateGraphPage) {
 		QImage img2(_pngExport.size.width(), (int)graphPlotHeight(rect, 1)
@@ -1084,7 +1084,7 @@ void GUI::exportPNGFile()
 
 		QFileInfo fi(_pngExport.fileName);
 		img2.save(fi.absolutePath() + "/" + fi.baseName() + "-graphs."
-		  + fi.suffix());
+		  + fi.suffix(), "png");
 	}
 }
 
