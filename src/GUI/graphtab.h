@@ -14,8 +14,7 @@ class GraphTab : public GraphView
 	Q_OBJECT
 
 public:
-	GraphTab(QWidget *parent = 0) : GraphView(parent)
-	  {setFrameShape(QFrame::NoFrame);}
+	GraphTab(QWidget *parent = 0) : GraphView(parent) {}
 	virtual ~GraphTab() {}
 
 	virtual QString label() const = 0;

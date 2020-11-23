@@ -631,15 +631,13 @@ void GUI::createMapView()
 void GUI::createGraphTabs()
 {
 	_graphTabWidget = new QTabWidget();
-	connect(_graphTabWidget, SIGNAL(currentChanged(int)), this,
-	  SLOT(graphChanged(int)));
-
 	_graphTabWidget->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,
 	  QSizePolicy::Preferred));
 	_graphTabWidget->setMinimumHeight(200);
-#ifdef Q_OS_WIN32
 	_graphTabWidget->setDocumentMode(true);
-#endif // Q_OS_WIN32
+
+	connect(_graphTabWidget, SIGNAL(currentChanged(int)), this,
+	  SLOT(graphChanged(int)));
 
 	_tabs.append(new ElevationGraph(_graphTabWidget));
 	_tabs.append(new SpeedGraph(_graphTabWidget));
@@ -649,9 +647,13 @@ void GUI::createGraphTabs()
 	_tabs.append(new TemperatureGraph(_graphTabWidget));
 	_tabs.append(new GearRatioGraph(_graphTabWidget));
 
-	for (int i = 0; i < _tabs.count(); i++)
+	for (int i = 0; i < _tabs.count(); i++) {
+#ifdef Q_OS_WIN32
+		_tabs.at(i)->setFrameShape(QFrame::NoFrame);
+#endif // Q_OS_WIN32
 		connect(_tabs.at(i), SIGNAL(sliderPositionChanged(qreal)), this,
 		  SLOT(sliderPositionChanged(qreal)));
+	}
 }
 
 void GUI::createStatusBar()
