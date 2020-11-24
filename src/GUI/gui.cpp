@@ -634,7 +634,9 @@ void GUI::createGraphTabs()
 	_graphTabWidget->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,
 	  QSizePolicy::Preferred));
 	_graphTabWidget->setMinimumHeight(200);
+#ifndef Q_OS_MAC
 	_graphTabWidget->setDocumentMode(true);
+#endif // Q_OS_MAC
 
 	connect(_graphTabWidget, SIGNAL(currentChanged(int)), this,
 	  SLOT(graphChanged(int)));
@@ -648,9 +650,9 @@ void GUI::createGraphTabs()
 	_tabs.append(new GearRatioGraph(_graphTabWidget));
 
 	for (int i = 0; i < _tabs.count(); i++) {
-#ifdef Q_OS_WIN32
+#if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
 		_tabs.at(i)->setFrameShape(QFrame::NoFrame);
-#endif // Q_OS_WIN32
+#endif // Q_OS_WIN32 || Q_OS_MAC
 		connect(_tabs.at(i), SIGNAL(sliderPositionChanged(qreal)), this,
 		  SLOT(sliderPositionChanged(qreal)));
 	}
