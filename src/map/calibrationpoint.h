@@ -1,6 +1,7 @@
 #ifndef CALIBRATIONPOINT_H
 #define CALIBRATIONPOINT_H
 
+#include <QDebug>
 #include "transform.h"
 #include "projection.h"
 
@@ -22,10 +23,21 @@ public:
 		  : ReferencePoint(_xy, _pp);
 	}
 
+	friend QDebug operator<<(QDebug dbg, const CalibrationPoint &p);
+
 private:
 	PointD _xy;
 	PointD _pp;
 	Coordinates _ll;
 };
+
+#ifndef QT_NO_DEBUG
+inline QDebug operator<<(QDebug dbg, const CalibrationPoint &p)
+{
+	dbg.nospace() << "CalibrationPoint(" << p._xy << ", " << p._pp << ", "
+	  << p._ll << ")";
+	return dbg.space();
+}
+#endif // QT_NO_DEBUG
 
 #endif // CALIBRATIONPOINT_H

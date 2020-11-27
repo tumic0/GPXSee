@@ -13,6 +13,11 @@ namespace Color
 
 		return (0xFF000000 | r << 16 | g << 8 | b);
 	}
+
+	inline QRgb rgb(quint32 r, quint32 g, quint32 b)
+	{
+		return (0xFF000000 | r << 16 | g << 8 | b);
+	}
 }
 
 #endif // COLOR_H

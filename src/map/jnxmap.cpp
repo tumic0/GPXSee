@@ -144,7 +144,7 @@ JNXMap::JNXMap(const QString &fileName, QObject *parent)
 	_name = QFileInfo(fileName).fileName();
 
 	if (!_file.open(QIODevice::ReadOnly)) {
-		_errorString = QString("%1: Error opening file").arg(fileName);
+		_errorString = fileName + ": " + _file.errorString();
 		return;
 	}
 

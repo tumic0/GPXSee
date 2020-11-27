@@ -9,14 +9,14 @@ class QPainter;
 class Image
 {
 public:
-	Image(const QString &fileName);
+	Image(const QString &fileName) : _img(fileName) {}
+	Image(const QImage &img) : _img(img) {}
 
 	void draw(QPainter *painter, const QRectF &rect, Map::Flags flags);
 	void setDevicePixelRatio(qreal ratio);
 
 private:
 	QImage _img;
-	QString _fileName;
 };
 
 #endif // IMAGE_H

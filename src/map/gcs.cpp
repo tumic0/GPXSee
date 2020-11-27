@@ -54,6 +54,7 @@ QList<GCS::Entry> GCS::defaults()
 {
 	QList<GCS::Entry> list;
 	list.append(GCS::Entry(4326, 6326, "WGS 84", WGS84()));
+	list.append(GCS::Entry(4326, 6326, "WGS84", WGS84()));
 	return list;
 }
 

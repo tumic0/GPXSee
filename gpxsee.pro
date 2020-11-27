@@ -103,6 +103,7 @@ HEADERS += src/common/config.h \
     src/map/IMG/rastertile.h \
     src/map/IMG/textpathitem.h \
     src/map/IMG/textpointitem.h \
+    src/map/bsbmap.h \
     src/map/projection.h \
     src/map/ellipsoid.h \
     src/map/datum.h \
@@ -271,6 +272,7 @@ SOURCES += src/main.cpp \
     src/map/IMG/rastertile.cpp \
     src/map/IMG/textpathitem.cpp \
     src/map/IMG/textpointitem.cpp \
+    src/map/bsbmap.cpp \
     src/map/maplist.cpp \
     src/map/onlinemap.cpp \
     src/map/downloader.cpp \
