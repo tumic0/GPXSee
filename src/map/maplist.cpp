@@ -46,7 +46,7 @@ Map *MapList::loadFile(const QString &path, QString &errorString,
 		map = new IMGMap(path);
 	else if (suffix == "map" || suffix == "tar")
 		map = new OziMap(path);
-	else if (suffix == "kap" || suffix == "no1" || suffix == "nos")
+	else if (suffix == "kap")
 		map = new BSBMap(path);
 
 	if (map && map->isValid())
@@ -109,7 +109,7 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "Garmin IMG maps")
 		+ " (*.gmap *.gmapi *.img *.xml);;"
 	  + qApp->translate("MapList", "Garmin JNX maps") + " (*.jnx);;"
-	  + qApp->translate("MapList", "BSB nautical charts") + " (*.kap *.no1 *.nos);;"
+	  + qApp->translate("MapList", "BSB nautical charts") + " (*.kap);;"
 	  + qApp->translate("MapList", "OziExplorer maps") + " (*.map);;"
 	  + qApp->translate("MapList", "MBTiles maps") + " (*.mbtiles);;"
 	  + qApp->translate("MapList", "TrekBuddy maps/atlases") + " (*.tar *.tba);;"
@@ -122,7 +122,7 @@ QStringList MapList::filter()
 {
 	QStringList filter;
 	filter << "*.gmap" << "*.gmapi" << "*.img" << "*.jnx" << "*.kap" << "*.map"
-	  << "*.mbtiles" << "*.no1" << "*.nos" << "*.rmap" << "*.rtmap" << "*.tar"
-	  << "*.tba" << "*.tif" << "*.tiff"  << "*.xml";
+	  << "*.mbtiles" << "*.rmap" << "*.rtmap" << "*.tar" << "*.tba" << "*.tif"
+	  << "*.tiff"  << "*.xml";
 	return filter;
 }

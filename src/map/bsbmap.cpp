@@ -11,15 +11,6 @@
 
 #define LINE_LIMIT 1024
 
-static inline bool getChar(QFile &file, bool mangled, char *c)
-{
-	if (!file.getChar(c))
-		return false;
-	if (mangled)
-		*c = (char)((int)(*c - 9) & 0xFF);
-	return true;
-}
-
 static inline bool isEOH(const QByteArray &line)
 {
 	return (line.size() >= 2 && line.at(line.size() - 2) == 0x1A
@@ -36,11 +27,11 @@ static inline QByteArray hdrData(const QByteArray &line)
 	return line.right(line.size() - 4);
 }
 
-static bool readHeaderLine(QFile &file, bool mangled, QByteArray &line)
+static bool readHeaderLine(QFile &file, QByteArray &line)
 {
 	char c;
 
-	while (getChar(file, mangled, &c) && line.size() < LINE_LIMIT) {
+	while (file.getChar(&c) && line.size() < LINE_LIMIT) {
 		if (c == '\0') {
 			line.append(c);
 			return true;
@@ -50,11 +41,11 @@ static bool readHeaderLine(QFile &file, bool mangled, QByteArray &line)
 			continue;
 
 		if (c == '\n') {
-			if (!getChar(file, mangled, &c))
+			if (!file.getChar(&c))
 				return false;
 			if (c == ' ') {
 				do {
-					if (!getChar(file, mangled, &c))
+					if (!file.getChar(&c))
 						return false;
 				} while (c == ' ');
 				line.append(',');
@@ -136,11 +127,7 @@ bool BSBMap::parseBSB(const QByteArray &line)
 	if (sv.size() == 2) {
 		w = sv.at(0).toUInt(&wok);
 		h = sv.at(1).toUInt(&hok);
-	} else if (sv.size() == 4) {
-		w = sv.at(2).toUInt(&wok);
-		h = sv.at(3).toUInt(&hok);
 	}
-
 	if (!wok || !hok || !w || !h) {
 		_errorString = "Invalid BSB RA field";
 		return false;
@@ -225,24 +212,23 @@ bool BSBMap::parseRGB(const QByteArray &line)
 	return false;
 }
 
-bool BSBMap::readHeader(QFile &file, bool mangled)
+bool BSBMap::readHeader(QFile &file)
 {
 	QByteArray line;
 	QString datum, proj;
 	double params[9];
 	QList<ReferencePoint> points;
 
-	while (readHeaderLine(file, mangled, line)) {
+	while (readHeaderLine(file, line)) {
 		if (isEOH(line)) {
 			if (!_size.isValid() || !_projection.isValid()) {
-				_errorString = "Invalid KAP/NOS file header";
+				_errorString = "Invalid KAP file header";
 				return false;
 			}
 			return createTransform(points);
 		}
 
-		if ((isType(line, "BSB/") || isType(line, "NOS/"))
-		  && !parseBSB(hdrData(line)))
+		if (isType(line, "BSB/") && !parseBSB(hdrData(line)))
 			return false;
 		else if (isType(line, "KNP/")
 		  && !parseKNP(hdrData(line), datum, proj, params[0]))
@@ -262,7 +248,7 @@ bool BSBMap::readHeader(QFile &file, bool mangled)
 		line.clear();
 	}
 
-	_errorString = "Not a KAP/NOS file";
+	_errorString = "Not a KAP file";
 
 	return false;
 }
@@ -324,12 +310,12 @@ bool BSBMap::readRow(QFile &file, char bits, uchar *buf)
 	static const char mask[] = {0, 63, 31, 15, 7, 3, 1, 0};
 
 	do {
-		if (!getChar(file, _mangled, &c))
+		if (!file.getChar(&c))
 			return false;
 	} while ((uchar)c >= 0x80);
 
 	while (true) {
-		if (!getChar(file, _mangled, &c))
+		if (!file.getChar(&c))
 			return false;
 		if (c == '\0')
 			break;
@@ -338,7 +324,7 @@ bool BSBMap::readRow(QFile &file, char bits, uchar *buf)
 		multiplier = c & mask[(int)bits];
 
 		while ((uchar)c >= 0x80) {
-			if (!getChar(file, _mangled, &c))
+			if (!file.getChar(&c))
 				return false;
 			multiplier = (multiplier << 7) + (c & 0x7f);
 		}
@@ -363,7 +349,7 @@ QImage BSBMap::readImage()
 	if (!file.open(QIODevice::ReadOnly))
 		return QImage();
 	file.seek(_dataOffset);
-	if (!getChar(file, _mangled, &bits))
+	if (!file.getChar(&bits))
 		return QImage();
 
 	QImage img(_size, QImage::Format_Indexed8);
@@ -382,7 +368,6 @@ BSBMap::BSBMap(const QString &fileName, QObject *parent)
   : Map(parent), _fileName(fileName), _img(0), _ratio(1.0), _dataOffset(-1),
   _valid(false)
 {
-	QFileInfo fi(fileName);
 	QFile file(fileName);
 
 	if (!file.open(QIODevice::ReadOnly)) {
@@ -391,8 +376,7 @@ BSBMap::BSBMap(const QString &fileName, QObject *parent)
 	}
 
 	_palette.resize(256);
-	_mangled = !fi.suffix().compare("no1", Qt::CaseInsensitive);
-	if (!readHeader(file, _mangled))
+	if (!readHeader(file))
 		return;
 	_dataOffset = file.pos();
 

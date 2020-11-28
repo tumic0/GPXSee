@@ -39,7 +39,7 @@ private:
 	bool parseKNQ(const QByteArray &line, double params[9]);
 	bool parseREF(const QByteArray &line, QList<ReferencePoint> &points);
 	bool parseRGB(const QByteArray &line);
-	bool readHeader(QFile &file, bool mangled);
+	bool readHeader(QFile &file);
 	bool createProjection(const QString &datum, const QString &proj,
 	  double params[9]);
 	bool createTransform(const QList<ReferencePoint> &points);
@@ -54,7 +54,6 @@ private:
 	QSize _size;
 	qreal _ratio;
 	qint64 _dataOffset;
-	bool _mangled;
 	QVector<QRgb> _palette;
 
 	bool _valid;
