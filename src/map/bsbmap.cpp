@@ -295,7 +295,7 @@ bool BSBMap::createProjection(const QString &datum, const QString &proj,
 
 	if (!proj.compare("MERCATOR", Qt::CaseInsensitive)) {
 		Projection::Setup setup(0, 0, NAN, 0, 0, NAN, NAN);
-		pcs = PCS(gcs, 1024, setup, 9001);
+		pcs = PCS(gcs, 9804, setup, 9001);
 	} else if (!proj.compare("TRANSVERSE MERCATOR", Qt::CaseInsensitive)) {
 		Projection::Setup setup(0, params[1], params[2], 0, 0, NAN, NAN);
 		pcs = PCS(gcs, 9807, setup, 9001);
