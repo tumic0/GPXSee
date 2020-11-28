@@ -36,12 +36,12 @@ private:
 	bool parseBSB(const QByteArray &line);
 	bool parseKNP(const QByteArray &line, QString &datum, QString &proj,
 	  double &pp);
-	bool parseKNQ(const QByteArray &line, double &p2, double &p3);
+	bool parseKNQ(const QByteArray &line, double params[9]);
 	bool parseREF(const QByteArray &line, QList<ReferencePoint> &points);
 	bool parseRGB(const QByteArray &line);
 	bool readHeader(QFile &file, bool mangled);
 	bool createProjection(const QString &datum, const QString &proj,
-	  double pp, double p2, double p3);
+	  double params[9]);
 	bool createTransform(const QList<ReferencePoint> &points);
 	QImage readImage();
 	bool readRow(QFile &file, char bits, uchar *buf);

@@ -94,9 +94,9 @@ static QList<QByteArray> split(const QByteArray &line)
 	return list;
 }
 
-static QMap<QString, QString> kvMap(const QByteArray &line)
+static QMap<QByteArray, QByteArray> kvMap(const QByteArray &line)
 {
-	QMap<QString, QString> map;
+	QMap<QByteArray, QByteArray> map;
 	QList<QByteArray> parts(split(line));
 
 	for (int i = 0; i < parts.size(); i++) {
@@ -111,7 +111,7 @@ static QMap<QString, QString> kvMap(const QByteArray &line)
 
 static double parameter(const QString &str, bool *res)
 {
-	if (str.isEmpty() || str == "NOT_APPLICABLE") {
+	if (str.isEmpty() || str == "NOT_APPLICABLE" || str == "UNKNOWN") {
 		*res = true;
 		return NAN;
 	}
@@ -122,15 +122,15 @@ static double parameter(const QString &str, bool *res)
 
 bool BSBMap::parseBSB(const QByteArray &line)
 {
-	QMap<QString, QString> map(kvMap(line));
+	QMap<QByteArray, QByteArray> map(kvMap(line));
 
-	_name = map.value("NA");
+	_name = QString::fromLatin1(map.value("NA"));
 	if (_name.isEmpty()) {
 		_errorString = "Invalid/missing BSB NA field";
 		return false;
 	}
 
-	QStringList sv(map.value("RA").split(','));
+	QList<QByteArray> sv(map.value("RA").split(','));
 	unsigned w, h;
 	bool wok = false, hok = false;
 	if (sv.size() == 2) {
@@ -154,7 +154,7 @@ bool BSBMap::parseBSB(const QByteArray &line)
 bool BSBMap::parseKNP(const QByteArray &line, QString &datum, QString &proj,
   double &pp)
 {
-	QMap<QString, QString> map(kvMap(line));
+	QMap<QByteArray, QByteArray> map(kvMap(line));
 	bool ok;
 
 	if (!(map.contains("PR") && map.contains("GD") && map.contains("PP"))) {
@@ -174,20 +174,17 @@ bool BSBMap::parseKNP(const QByteArray &line, QString &datum, QString &proj,
 	return true;
 }
 
-bool BSBMap::parseKNQ(const QByteArray &line, double &p2, double &p3)
+bool BSBMap::parseKNQ(const QByteArray &line, double params[9])
 {
-	QMap<QString, QString> map(kvMap(line));
+	QMap<QByteArray, QByteArray> map(kvMap(line));
 	bool ok;
 
-	p2 = parameter(map.value("P2"), &ok);
-	if (!ok) {
-		_errorString = "Invalid KNQ P2 parameter";
-		return false;
-	}
-	p3 = parameter(map.value("P3"), &ok);
-	if (!ok) {
-		_errorString = "Invalid KNQ P3 parameter";
-		return false;
+	for (int i = 1; i <= 8; i++) {
+		params[i] = parameter(map.value(QString("P%1").arg(i).toLatin1()), &ok);
+		if (!ok) {
+			_errorString = QString("Invalid KNQ P%1 parameter").arg(i);
+			return false;
+		}
 	}
 
 	return true;
@@ -232,7 +229,7 @@ bool BSBMap::readHeader(QFile &file, bool mangled)
 {
 	QByteArray line;
 	QString datum, proj;
-	double pp, p2, p3;
+	double params[9];
 	QList<ReferencePoint> points;
 
 	while (readHeaderLine(file, mangled, line)) {
@@ -247,14 +244,14 @@ bool BSBMap::readHeader(QFile &file, bool mangled)
 		if ((isType(line, "BSB/") || isType(line, "NOS/"))
 		  && !parseBSB(hdrData(line)))
 			return false;
-		else if (isType(line, "KNP/") && !parseKNP(hdrData(line), datum, proj,
-		  pp))
+		else if (isType(line, "KNP/")
+		  && !parseKNP(hdrData(line), datum, proj, params[0]))
 			return false;
-		else if (isType(line, "KNQ/") && !parseKNQ(hdrData(line), p2, p3))
+		else if (isType(line, "KNQ/") && !parseKNQ(hdrData(line), params))
 			return false;
 		else if (isType(line, "REF/")) {
 			if (_projection.isNull()) {
-				if (!createProjection(datum, proj, pp, p2, p3))
+				if (!createProjection(datum, proj, params))
 					return false;
 			}
 			if (!parseREF(hdrData(line), points))
@@ -282,7 +279,7 @@ bool BSBMap::createTransform(const QList<ReferencePoint> &points)
 }
 
 bool BSBMap::createProjection(const QString &datum, const QString &proj,
-  double pp, double p2, double p3)
+  double params[9])
 {
 	const GCS *gcs = 0;
 	PCS pcs;
@@ -296,18 +293,18 @@ bool BSBMap::createProjection(const QString &datum, const QString &proj,
 		return false;
 	}
 
-	if (proj.compare("MERCATOR", Qt::CaseInsensitive)) {
-		Projection::Setup setup(0, 0, 1, 0, 0, 0, 0);
-		pcs = PCS(gcs, 9804, setup, 9001);
-	} else if (proj.compare("TRANSVERSE MERCATOR", Qt::CaseInsensitive)) {
-		Projection::Setup setup(0, pp, 1, 0, 0, 0, 0);
+	if (!proj.compare("MERCATOR", Qt::CaseInsensitive)) {
+		Projection::Setup setup(0, 0, NAN, 0, 0, NAN, NAN);
+		pcs = PCS(gcs, 1024, setup, 9001);
+	} else if (!proj.compare("TRANSVERSE MERCATOR", Qt::CaseInsensitive)) {
+		Projection::Setup setup(0, params[1], params[2], 0, 0, NAN, NAN);
 		pcs = PCS(gcs, 9807, setup, 9001);
-	} else if (proj.compare("UNIVERSAL TRANSVERSE MERCATOR",
+	} else if (!proj.compare("UNIVERSAL TRANSVERSE MERCATOR",
 	  Qt::CaseInsensitive)) {
-		Projection::Setup setup(0, pp, 0.9996, 500000, 0, 0, 0);
+		Projection::Setup setup(0, params[0], 0.9996, 500000, 0, NAN, NAN);
 		pcs = PCS(gcs, 9807, setup, 9001);
-	} else if (proj.compare("LAMBERT CONFORMAL CONIC", Qt::CaseInsensitive)) {
-		Projection::Setup setup(0, pp, 1, 0, 0, p2, p3);
+	} else if (!proj.compare("LAMBERT CONFORMAL CONIC", Qt::CaseInsensitive)) {
+		Projection::Setup setup(0, params[0], NAN, 0, 0, params[2], params[3]);
 		pcs = PCS(gcs, 9802, setup, 9001);
 	} else {
 		_errorString = proj + ": Unknown/missing projection";
