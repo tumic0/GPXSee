@@ -157,6 +157,11 @@ bool BSBMap::parseKNP(const QByteArray &line, QString &datum, QString &proj,
 		_errorString = "Invalid KNP PP field";
 		return false;
 	}
+	_skew = parameter(map.value("SK"), &ok);
+	if (!ok) {
+		_errorString = "Invalid KNP SK field";
+		return false;
+	}
 
 	return true;
 }
@@ -253,8 +258,16 @@ bool BSBMap::readHeader(QFile &file)
 	return false;
 }
 
-bool BSBMap::createTransform(const QList<ReferencePoint> &points)
+bool BSBMap::createTransform(QList<ReferencePoint> &points)
 {
+	if (_skew > 0.0 && _skew < 360.0) {
+		QTransform matrix;
+		matrix.rotate(-_skew);
+		QTransform t(QImage::trueMatrix(matrix, _size.width(), _size.height()));
+		for (int i = 0; i < points.size(); i++)
+			points[i].setXY(t.map(points.at(i).xy().toPointF()));
+	}
+
 	_transform = Transform(points);
 	if (!_transform.isValid()) {
 		_errorString = _transform.errorString();
@@ -400,7 +413,9 @@ Coordinates BSBMap::xy2ll(const QPointF &p)
 
 QRectF BSBMap::bounds()
 {
-	return QRectF(QPointF(0, 0), _size / _ratio);
+	return _skewSize.isValid()
+	  ? QRectF(QPointF(0, 0), _skewSize / _ratio)
+	  : QRectF(QPointF(0, 0), _size / _ratio);
 }
 
 void BSBMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
@@ -420,8 +435,16 @@ void BSBMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 
 void BSBMap::load()
 {
-	if (!_img)
-		_img = new Image(readImage());
+	if (!_img) {
+		if (_skew > 0.0 && _skew < 360.0) {
+			QTransform matrix;
+			matrix.rotate(-_skew);
+			QImage img(readImage().transformed(matrix));
+			_skewSize = img.size();
+			_img = new Image(img);
+		} else
+			_img = new Image(readImage());
+	}
 }
 
 void BSBMap::unload()

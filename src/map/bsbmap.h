@@ -42,7 +42,7 @@ private:
 	bool readHeader(QFile &file);
 	bool createProjection(const QString &datum, const QString &proj,
 	  double params[9]);
-	bool createTransform(const QList<ReferencePoint> &points);
+	bool createTransform(QList<ReferencePoint> &points);
 	QImage readImage();
 	bool readRow(QFile &file, char bits, uchar *buf);
 
@@ -50,8 +50,10 @@ private:
 	QString _name;
 	Projection _projection;
 	Transform _transform;
+	qreal _skew;
 	Image *_img;
 	QSize _size;
+	QSize _skewSize;
 	qreal _ratio;
 	qint64 _dataOffset;
 	QVector<QRgb> _palette;
