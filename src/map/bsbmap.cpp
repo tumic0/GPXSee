@@ -264,8 +264,13 @@ bool BSBMap::createTransform(QList<ReferencePoint> &points)
 		QTransform matrix;
 		matrix.rotate(-_skew);
 		QTransform t(QImage::trueMatrix(matrix, _size.width(), _size.height()));
+
 		for (int i = 0; i < points.size(); i++)
 			points[i].setXY(t.map(points.at(i).xy().toPointF()));
+
+		QPolygonF a(QRectF(0, 0, _size.width(), _size.height()));
+		a = t.map(a);
+		_skewSize = a.boundingRect().toAlignedRect().size();
 	}
 
 	_transform = Transform(points);
@@ -439,9 +444,7 @@ void BSBMap::load()
 		if (_skew > 0.0 && _skew < 360.0) {
 			QTransform matrix;
 			matrix.rotate(-_skew);
-			QImage img(readImage().transformed(matrix));
-			_skewSize = img.size();
-			_img = new Image(img);
+			_img = new Image(readImage().transformed(matrix));
 		} else
 			_img = new Image(readImage());
 	}
