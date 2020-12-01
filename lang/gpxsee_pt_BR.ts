@@ -667,12 +667,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="724"/>
         <source>Copy coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar coordenadas</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="725"/>
         <source>Left Click</source>
-        <translation type="unfinished"></translation>
+        <translation>Clique esquerdo</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="739"/>
