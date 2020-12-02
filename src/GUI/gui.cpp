@@ -1494,7 +1494,7 @@ void GUI::mapLoaded()
 void GUI::loadMapDir()
 {
 	QString dir = QFileDialog::getExistingDirectory(this,
-	  tr("Select maps directory"), _mapDir, QFileDialog::ShowDirsOnly);
+	  tr("Select map directory"), _mapDir, QFileDialog::ShowDirsOnly);
 	if (dir.isEmpty())
 		return;
 
