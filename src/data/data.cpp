@@ -20,6 +20,7 @@
 #include "cupparser.h"
 #include "gpiparser.h"
 #include "smlparser.h"
+#include "map/map.h"
 #include "data.h"
 
 

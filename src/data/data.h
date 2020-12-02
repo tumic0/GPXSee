@@ -10,7 +10,6 @@
 #include "route.h"
 #include "parser.h"
 
-
 class Data
 {
 public:

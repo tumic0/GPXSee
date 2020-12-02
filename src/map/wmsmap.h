@@ -14,8 +14,8 @@ class WMSMap : public Map
 	Q_OBJECT
 
 public:
-	WMSMap(const QString &name, const WMS::Setup &setup, int tileSize,
-	  QObject *parent = 0);
+	WMSMap(const QString &fileName, const QString &name, const WMS::Setup &setup,
+	  int tileSize, QObject *parent = 0);
 
 	QString name() const {return _name;}
 

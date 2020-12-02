@@ -147,20 +147,19 @@ QList<Waypoint> POI::points(const Waypoint &point) const
 	return ret;
 }
 
-QList<Waypoint> POI::points(const Area &area) const
+QList<Waypoint> POI::points(const RectC &rect) const
 {
 	QList<Waypoint> ret;
 	qreal min[2], max[2];
 	QSet<int> set;
 	QSet<int>::const_iterator it;
 
-	RectC br(area.boundingRect());
 	double offset = rad2deg(_radius / WGS84_RADIUS);
 
-	min[0] = br.topLeft().lon() - offset;
-	min[1] = br.bottomRight().lat() - offset;
-	max[0] = br.bottomRight().lon() + offset;
-	max[1] = br.topLeft().lat() + offset;
+	min[0] = rect.topLeft().lon() - offset;
+	min[1] = rect.bottomRight().lat() - offset;
+	max[0] = rect.bottomRight().lon() + offset;
+	max[1] = rect.topLeft().lat() + offset;
 
 	_tree.Search(min, max, cb, &set);
 

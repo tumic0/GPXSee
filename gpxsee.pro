@@ -22,7 +22,9 @@ HEADERS += src/common/config.h \
     src/GUI/axislabelitem.h \
     src/GUI/graphicsscene.h \
     src/GUI/mapaction.h \
+    src/GUI/mapitem.h \
     src/GUI/marginswidget.h \
+    src/GUI/planeitem.h \
     src/GUI/popup.h \
     src/common/garmin.h \
     src/common/staticassert.h \
@@ -207,6 +209,7 @@ HEADERS += src/common/config.h \
     src/GUI/pngexportdialog.h
 SOURCES += src/main.cpp \
     src/GUI/axislabelitem.cpp \
+    src/GUI/mapitem.cpp \
     src/GUI/marginswidget.cpp \
     src/GUI/popup.cpp \
     src/common/coordinates.cpp \

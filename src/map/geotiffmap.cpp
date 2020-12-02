@@ -7,7 +7,8 @@
 
 
 GeoTIFFMap::GeoTIFFMap(const QString &fileName, QObject *parent)
-  : Map(parent), _fileName(fileName), _img(0), _ratio(1.0), _valid(false)
+  : Map(fileName, parent), _fileName(fileName), _img(0), _ratio(1.0),
+  _valid(false)
 {
 	QImageReader ir(fileName);
 	if (!ir.canRead()) {

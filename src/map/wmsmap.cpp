@@ -67,8 +67,9 @@ void WMSMap::updateTransform()
 	  PointD(pixelSpan, pixelSpan));
 }
 
-WMSMap::WMSMap(const QString &name, const WMS::Setup &setup, int tileSize,
-  QObject *parent) : Map(parent), _name(name), _tileLoader(0), _zoom(0),
+WMSMap::WMSMap(const QString &fileName, const QString &name,
+  const WMS::Setup &setup, int tileSize, QObject *parent)
+  : Map(fileName, parent), _name(name), _tileLoader(0), _zoom(0),
   _tileSize(tileSize), _mapRatio(1.0)
 {
 	QString tilesDir(QDir(ProgramPaths::tilesDir()).filePath(_name));

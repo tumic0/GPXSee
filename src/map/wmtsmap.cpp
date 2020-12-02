@@ -12,9 +12,10 @@
 
 #define CAPABILITIES_FILE "capabilities.xml"
 
-WMTSMap::WMTSMap(const QString &name, const WMTS::Setup &setup, qreal tileRatio,
-  QObject *parent) : Map(parent), _name(name), _tileLoader(0), _zoom(0),
-  _mapRatio(1.0), _tileRatio(tileRatio)
+WMTSMap::WMTSMap(const QString &fileName, const QString &name,
+  const WMTS::Setup &setup, qreal tileRatio,
+  QObject *parent) : Map(fileName, parent), _name(name), _tileLoader(0),
+  _zoom(0), _mapRatio(1.0), _tileRatio(tileRatio)
 {
 	QString tilesDir(QDir(ProgramPaths::tilesDir()).filePath(_name));
 

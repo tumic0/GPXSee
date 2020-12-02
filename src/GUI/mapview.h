@@ -29,7 +29,8 @@ class ScaleItem;
 class CoordinatesItem;
 class PathItem;
 class GraphItem;
-class AreaItem;
+class PlaneItem;
+class MapItem;
 class Area;
 class GraphicsScene;
 class QTimeZone;
@@ -49,6 +50,7 @@ public:
 	MapView(Map *map, POI *poi, QWidget *parent = 0);
 
 	QList<PathItem *> loadData(const Data &data);
+	QList<MapItem *> loadMaps(const QList<Map*> &maps);
 
 	void setPalette(const Palette &palette);
 	void setPOI(POI *poi);
@@ -108,6 +110,7 @@ private:
 
 	PathItem *addTrack(const Track &track);
 	PathItem *addRoute(const Route &route);
+	MapItem *addMap(Map *map);
 	void addArea(const Area &area);
 	void addWaypoints(const QVector<Waypoint> &waypoints);
 	void addPOI(const QList<Waypoint> &waypoints);
@@ -140,7 +143,7 @@ private:
 	QList<TrackItem*> _tracks;
 	QList<RouteItem*> _routes;
 	QList<WaypointItem*> _waypoints;
-	QList<AreaItem*> _areas;
+	QList<PlaneItem*> _areas;
 	POIHash _pois;
 
 	RectC _tr, _rr, _wr, _ar;

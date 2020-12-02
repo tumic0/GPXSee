@@ -16,7 +16,7 @@ public:
 	  {return _tl.isNull() && _br.isNull();}
 	bool isValid() const
 	  {return (_tl.isValid() && _br.isValid()
-	  && _tl.lat() > _br.lat() && _tl.lon() < _br.lon());}
+	  && _tl.lat() != _br.lat() && _tl.lon() != _br.lon());}
 
 	Coordinates topLeft() const {return _tl;}
 	Coordinates bottomRight() const {return _br;}
@@ -28,9 +28,6 @@ public:
 	double bottom() const {return _br.lat();}
 	double left() const {return _tl.lon();}
 	double right() const {return _br.lon();}
-
-	double width() const {return (right() - left());}
-	double height() const {return (top() - bottom());}
 
 	void setLeft(double val) {_tl.rlon() = val;}
 	void setRight(double val) {_br.rlon() = val;}

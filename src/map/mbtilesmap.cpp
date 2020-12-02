@@ -55,7 +55,7 @@ static double index2mercator(int index, int zoom)
 }
 
 MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
-  : Map(parent), _fileName(fileName), _mapRatio(1.0), _tileRatio(1.0),
+  : Map(fileName, parent), _fileName(fileName), _mapRatio(1.0), _tileRatio(1.0),
   _scalable(false), _scaledSize(0), _valid(false)
 {
 	_db = QSqlDatabase::addDatabase("QSQLITE", fileName);

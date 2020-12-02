@@ -11,10 +11,10 @@ class OnlineMap : public Map
 	Q_OBJECT
 
 public:
-	OnlineMap(const QString &name, const QString &url, const Range &zooms,
-	  const RectC &bounds, qreal tileRatio, const Authorization &authorization,
-	  int tileSize, bool scalable, bool invertY, bool quadTiles,
-	  QObject *parent = 0);
+	OnlineMap(const QString &fileName, const QString &name, const QString &url,
+	  const Range &zooms, const RectC &bounds, qreal tileRatio,
+	  const Authorization &authorization, int tileSize, bool scalable,
+	  bool invertY, bool quadTiles, QObject *parent = 0);
 
 	QString name() const {return _name;}
 

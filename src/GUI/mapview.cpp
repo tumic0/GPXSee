@@ -15,6 +15,7 @@
 #include "areaitem.h"
 #include "scaleitem.h"
 #include "coordinatesitem.h"
+#include "mapitem.h"
 #include "keys.h"
 #include "graphicsscene.h"
 #include "mapview.h"
@@ -25,6 +26,20 @@
 #define MARGIN           10
 #define SCALE_OFFSET     7
 #define COORDINATES_OFFSET SCALE_OFFSET
+
+
+template<typename T>
+static void updateZValues(T &items)
+{
+	for (int i = 0; i < items.size(); i++) {
+		const QGraphicsItem *ai = items.at(i);
+		for (int j = 0; j < items.size(); j++) {
+			QGraphicsItem *aj = items[j];
+			if (aj->boundingRect().contains(ai->boundingRect()))
+				aj->setZValue(qMin(ai->zValue() - 1, aj->zValue()));
+		}
+	}
+}
 
 
 MapView::MapView(Map *map, POI *poi, QWidget *parent)
@@ -170,18 +185,19 @@ void MapView::addArea(const Area &area)
 	}
 
 	AreaItem *ai = new AreaItem(area, _map);
-	_areas.append(ai);
-	_ar |= ai->area().boundingRect();
 	ai->setColor(_palette.nextColor());
 	ai->setWidth(_areaWidth);
 	ai->setStyle(_areaStyle);
 	ai->setOpacity(_areaOpacity);
 	ai->setDigitalZoom(_digitalZoom);
 	ai->setVisible(_showAreas);
+
 	_scene->addItem(ai);
+	_ar |= ai->bounds();
+	_areas.append(ai);
 
 	if (_showAreas)
-		addPOI(_poi->points(ai->area()));
+		addPOI(_poi->points(ai->bounds()));
 }
 
 void MapView::addWaypoints(const QVector<Waypoint> &waypoints)
@@ -203,6 +219,26 @@ void MapView::addWaypoints(const QVector<Waypoint> &waypoints)
 		if (_showWaypoints)
 			addPOI(_poi->points(w));
 	}
+}
+
+MapItem *MapView::addMap(Map *map)
+{
+	MapItem *mi = new MapItem(map, _map);
+	mi->setColor(_palette.nextColor());
+	mi->setWidth(_areaWidth);
+	mi->setStyle(_areaStyle);
+	mi->setOpacity(_areaOpacity);
+	mi->setDigitalZoom(_digitalZoom);
+	mi->setVisible(_showAreas);
+
+	_scene->addItem(mi);
+	_ar |= mi->bounds();
+	_areas.append(mi);
+
+	if (_showAreas)
+		addPOI(_poi->points(mi->bounds()));
+
+	return mi;
 }
 
 QList<PathItem *> MapView::loadData(const Data &data)
@@ -227,9 +263,32 @@ QList<PathItem *> MapView::loadData(const Data &data)
 	else
 		updatePOIVisibility();
 
+	if (!data.areas().isEmpty())
+		updateZValues(_areas);
+
 	centerOn(contentCenter());
 
 	return paths;
+}
+
+QList<MapItem *> MapView::loadMaps(const QList<Map*> &maps)
+{
+	QList<MapItem *> items;
+	int zoom = _map->zoom();
+
+	for (int i = 0; i < maps.size(); i++)
+		items.append(addMap(maps.at(i)));
+
+	if (fitMapZoom() != zoom)
+		rescale();
+	else
+		updatePOIVisibility();
+
+	updateZValues(_areas);
+
+	centerOn(contentCenter());
+
+	return items;
 }
 
 int MapView::fitMapZoom() const
@@ -373,7 +432,7 @@ void MapView::updatePOI()
 			addPOI(_poi->points(_routes.at(i)->path()));
 	if (_showAreas)
 		for (int i = 0; i < _areas.size(); i++)
-			addPOI(_poi->points(_areas.at(i)->area()));
+			addPOI(_poi->points(_areas.at(i)->bounds()));
 	if (_showWaypoints)
 		for (int i = 0; i< _waypoints.size(); i++)
 			addPOI(_poi->points(_waypoints.at(i)->waypoint()));
@@ -504,6 +563,10 @@ void MapView::wheelEvent(QWheelEvent *event)
 
 void MapView::mouseDoubleClickEvent(QMouseEvent *event)
 {
+	QGraphicsView::mouseDoubleClickEvent(event);
+	if (event->isAccepted())
+		return;
+
 	if (event->button() != Qt::LeftButton && event->button() != Qt::RightButton)
 		return;
 

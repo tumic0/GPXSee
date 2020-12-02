@@ -1,22 +1,21 @@
-#ifndef AREAITEM_H
-#define AREAITEM_H
+#ifndef MAPITEM_H
+#define MAPITEM_H
 
-#include "data/area.h"
 #include "planeitem.h"
 
-class AreaItem : public PlaneItem
+class MapItem : public QObject, public PlaneItem
 {
+	Q_OBJECT
+
 public:
-	AreaItem(const Area &area, Map *map, GraphicsItem *parent = 0);
+	MapItem(Map *src, Map *map, GraphicsItem *parent = 0);
 
 	QPainterPath shape() const {return _painterPath;}
 	QRectF boundingRect() const {return _painterPath.boundingRect();}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-	const Area &area() const {return _area;}
-
-	RectC bounds() const {return _area.boundingRect();}
+	RectC bounds() const {return _bounds;}
 	void setMap(Map *map);
 
 	void setColor(const QColor &color);
@@ -27,15 +26,21 @@ public:
 
 	QString info() const;
 
+signals:
+	void triggered();
+
 protected:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 
 private:
-	QPainterPath painterPath(const Polygon &polygon);
 	void updatePainterPath();
 
-	Area _area;
+	RectC _bounds;
+	QString _name;
+	QString _fileName;
+
 	Map *_map;
 	int _digitalZoom;
 
@@ -47,4 +52,4 @@ private:
 	QPainterPath _painterPath;
 };
 
-#endif // AREAITEM_H
+#endif // MAPITEM_H

@@ -161,7 +161,8 @@ bool RMap::parseIMP(const QByteArray &data)
 }
 
 RMap::RMap(const QString &fileName, QObject *parent)
-  : Map(parent), _mapRatio(1.0), _fileName(fileName), _zoom(0), _valid(false)
+  : Map(fileName, parent), _mapRatio(1.0), _fileName(fileName), _zoom(0),
+  _valid(false)
 {
 	QFile file(fileName);
 	if (!file.open(QIODevice::ReadOnly)) {

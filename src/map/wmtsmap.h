@@ -14,8 +14,8 @@ class WMTSMap : public Map
 	Q_OBJECT
 
 public:
-	WMTSMap(const QString &name, const WMTS::Setup &setup, qreal tileRatio,
-	  QObject *parent = 0);
+	WMTSMap(const QString &fileName, const QString &name,
+	  const WMTS::Setup &setup, qreal tileRatio, QObject *parent = 0);
 
 	QString name() const {return _name;}
 

@@ -17,7 +17,8 @@
 
 
 OziMap::OziMap(const QString &fileName, QObject *parent)
-  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0), _valid(false)
+  : Map(fileName, parent), _img(0), _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0),
+  _valid(false)
 {
 	QFileInfo fi(fileName);
 	QString suffix = fi.suffix().toLower();
@@ -79,7 +80,8 @@ OziMap::OziMap(const QString &fileName, QObject *parent)
 }
 
 OziMap::OziMap(const QString &fileName, Tar &tar, QObject *parent)
-  : Map(parent), _img(0), _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0), _valid(false)
+  : Map(fileName, parent), _img(0), _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0),
+  _valid(false)
 {
 	QFileInfo fi(fileName);
 	QFileInfo map(fi.absolutePath());

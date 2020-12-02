@@ -388,8 +388,8 @@ QImage BSBMap::readImage()
 }
 
 BSBMap::BSBMap(const QString &fileName, QObject *parent)
-  : Map(parent), _fileName(fileName), _img(0), _ratio(1.0), _dataOffset(-1),
-  _valid(false)
+  : Map(fileName, parent), _fileName(fileName), _img(0), _ratio(1.0),
+  _dataOffset(-1), _valid(false)
 {
 	QFile file(fileName);
 

@@ -139,7 +139,8 @@ bool JNXMap::readTiles()
 }
 
 JNXMap::JNXMap(const QString &fileName, QObject *parent)
-  : Map(parent), _file(fileName), _zoom(0), _mapRatio(1.0), _valid(false)
+  : Map(fileName, parent), _file(fileName), _zoom(0), _mapRatio(1.0),
+  _valid(false)
 {
 	_name = QFileInfo(fileName).fileName();
 

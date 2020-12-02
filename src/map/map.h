@@ -24,9 +24,11 @@ public:
 	};
 	Q_DECLARE_FLAGS(Flags, Flag)
 
-	Map(QObject *parent = 0) : QObject(parent) {}
+	Map(const QString &path, QObject *parent = 0)
+	  : QObject(parent), _path(path) {}
 	virtual ~Map() {}
 
+	const QString &path() const {return _path;}
 	virtual QString name() const = 0;
 
 	virtual QRectF bounds() = 0;
@@ -56,6 +58,9 @@ public:
 signals:
 	void tilesLoaded();
 	void mapLoaded();
+
+private:
+	QString _path;
 };
 
 Q_DECLARE_METATYPE(Map*)

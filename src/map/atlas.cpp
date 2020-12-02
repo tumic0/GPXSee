@@ -78,7 +78,7 @@ void Atlas::computeBounds()
 }
 
 Atlas::Atlas(const QString &fileName, QObject *parent)
-  : Map(parent), _zoom(0), _mapIndex(-1), _valid(false)
+  : Map(fileName, parent), _zoom(0), _mapIndex(-1), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QByteArray ba;

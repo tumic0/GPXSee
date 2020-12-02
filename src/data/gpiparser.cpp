@@ -485,15 +485,8 @@ static quint32 readCamera(QDataStream &stream, QVector<Waypoint> &waypoints,
 
 	waypoints.append(Coordinates(toWGS24(lon), toWGS24(lat)));
 
-	Area area;
-	Polygon polygon;
-	QVector<Coordinates> v(4);
-	v[0] = Coordinates(toWGS24(left), toWGS24(top));
-	v[1] = Coordinates(toWGS24(right), toWGS24(top));
-	v[2] = Coordinates(toWGS24(right), toWGS24(bottom));
-	v[3] = Coordinates(toWGS24(left), toWGS24(bottom));
-	polygon.append(v);
-	area.append(polygon);
+	Area area(RectC(Coordinates(toWGS24(left), toWGS24(top)),
+	  Coordinates(toWGS24(right), toWGS24(bottom))));
 
 	switch (type) {
 		case 8:

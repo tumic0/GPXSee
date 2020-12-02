@@ -44,7 +44,7 @@ static QList<MapData*> overlays(const QString &fileName)
 }
 
 IMGMap::IMGMap(const QString &fileName, QObject *parent)
-  : Map(parent), _projection(PCS::pcs(3857)), _valid(false)
+  : Map(fileName, parent), _projection(PCS::pcs(3857)), _valid(false)
 {
 	if (GMAP::isGMAP(fileName))
 		_data.append(new GMAP(fileName));

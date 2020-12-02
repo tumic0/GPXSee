@@ -51,6 +51,7 @@
 #include "graphtab.h"
 #include "graphitem.h"
 #include "pathitem.h"
+#include "mapitem.h"
 #include "mapaction.h"
 #include "gui.h"
 
@@ -306,10 +307,14 @@ void GUI::createActions()
 	  this);
 	_loadMapAction->setMenuRole(QAction::NoRole);
 	connect(_loadMapAction, SIGNAL(triggered()), this, SLOT(loadMap()));
+	_loadMapDirAction = new QAction(QIcon(OPEN_FILE_ICON),
+	  tr("Load map directory..."), this);
+	_loadMapDirAction->setMenuRole(QAction::NoRole);
+	connect(_loadMapDirAction, SIGNAL(triggered()), this, SLOT(loadMapDir()));
 	_clearMapCacheAction = new QAction(tr("Clear tile cache"), this);
 	_clearMapCacheAction->setEnabled(false);
 	_clearMapCacheAction->setMenuRole(QAction::NoRole);
-	connect(_clearMapCacheAction, SIGNAL(triggered()), _mapView,
+	connect(_clearMapCacheAction, SIGNAL(triggered()), this,
 	  SLOT(clearMapCache()));
 	_nextMapAction = new QAction(tr("Next map"), this);
 	_nextMapAction->setMenuRole(QAction::NoRole);
@@ -519,6 +524,7 @@ void GUI::createMenus()
 	_mapMenu->addActions(_mapsActionGroup->actions());
 	_mapsEnd = _mapMenu->addSeparator();
 	_mapMenu->addAction(_loadMapAction);
+	_mapMenu->addAction(_loadMapDirAction);
 	_mapMenu->addAction(_clearMapCacheAction);
 	_mapMenu->addSeparator();
 	_mapMenu->addAction(_showCoordinatesAction);
@@ -774,23 +780,19 @@ bool GUI::openFile(const QString &fileName)
 	if (fileName.isEmpty() || _files.contains(fileName))
 		return false;
 
-	if (loadFile(fileName)) {
-		_files.append(fileName);
-		_browser->setCurrent(fileName);
-		_fileActionGroup->setEnabled(true);
-		_navigationActionGroup->setEnabled(true);
-
-		updateNavigationActions();
-		updateStatusBarInfo();
-		updateWindowTitle();
-
-		return true;
-	} else {
-		if (_files.isEmpty())
-			_fileActionGroup->setEnabled(false);
-
+	if (!loadFile(fileName))
 		return false;
-	}
+
+	_files.append(fileName);
+	_browser->setCurrent(fileName);
+	_fileActionGroup->setEnabled(true);
+	_navigationActionGroup->setEnabled(true);
+
+	updateNavigationActions();
+	updateStatusBarInfo();
+	updateWindowTitle();
+
+	return true;
 }
 
 bool GUI::loadFile(const QString &fileName)
@@ -1453,17 +1455,21 @@ bool GUI::loadMap(const QString &fileName)
 		return false;
 	}
 
+	MapAction *lastReady = 0;
 	for (int i = 0; i < maps.size(); i++) {
 		Map *map = maps.at(i);
 		MapAction *a = createMapAction(map);
 		_mapMenu->insertAction(_mapsEnd, a);
 		if (map->isReady()) {
-			a->trigger();
+			lastReady = a;
 			_showMapAction->setEnabled(true);
 			_clearMapCacheAction->setEnabled(true);
 		} else
 			connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
 	}
+
+	if (lastReady)
+		lastReady->trigger();
 
 	return true;
 }
@@ -1483,6 +1489,52 @@ void GUI::mapLoaded()
 		QMessageBox::critical(this, APP_NAME, error);
 		action->deleteLater();
 	}
+}
+
+void GUI::loadMapDir()
+{
+	QString dir = QFileDialog::getExistingDirectory(this,
+	  tr("Select maps directory"), _mapDir, QFileDialog::ShowDirsOnly);
+	if (dir.isEmpty())
+		return;
+
+	QString error;
+	QList<Map*> maps(MapList::loadMaps(dir, error));
+	if (maps.isEmpty()) {
+		QMessageBox::critical(this, APP_NAME, tr("No usable map found"));
+		return;
+	}
+
+	QList<MapItem*> items(_mapView->loadMaps(maps));
+
+	QFileInfo fi(dir);
+	QMenu *menu = new QMenu(fi.fileName());
+	_mapMenu->insertMenu(_mapsEnd, menu);
+
+	for (int i = 0; i < maps.size(); i++) {
+		Map *map = maps.at(i);
+		MapAction *a = createMapAction(map);
+		menu->addAction(a);
+		if (map->isReady()) {
+			_showMapAction->setEnabled(true);
+			_clearMapCacheAction->setEnabled(true);
+		} else
+			connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
+
+		connect(items.at(i), SIGNAL(triggered()), a, SLOT(trigger()));
+	}
+
+	_mapDir = fi.absolutePath();
+	_areaCount += maps.size();
+	_fileActionGroup->setEnabled(true);
+	_reloadFileAction->setEnabled(false);
+}
+
+void GUI::clearMapCache()
+{
+	if (QMessageBox::question(this, APP_NAME,
+	  tr("Clear the map tile cache?")) == QMessageBox::Yes)
+		_mapView->clearMapCache();
 }
 
 void GUI::updateStatusBarInfo()

@@ -18,7 +18,7 @@ static int limitZoom(int zoom)
 }
 
 
-EmptyMap::EmptyMap(QObject *parent) : Map(parent)
+EmptyMap::EmptyMap(QObject *parent) : Map(QString(), parent)
 {
 	_zoom = OSM::ZOOMS.max();
 }

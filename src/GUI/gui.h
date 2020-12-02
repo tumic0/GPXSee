@@ -62,9 +62,11 @@ private slots:
 	void showTracks(bool show);
 	void showRoutes(bool show);
 	void loadMap();
+	void loadMapDir();
 	void nextMap();
 	void prevMap();
 	void openOptions();
+	void clearMapCache();
 
 	void mapChanged();
 	void graphChanged(int);
@@ -172,6 +174,7 @@ private:
 	QAction *_showMapAction;
 	QAction *_fullscreenAction;
 	QAction *_loadMapAction;
+	QAction *_loadMapDirAction;
 	QAction *_clearMapCacheAction;
 	QAction *_showGraphsAction;
 	QAction *_showGraphGridAction;

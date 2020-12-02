@@ -5,6 +5,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include "map/map.h"
 #include "popup.h"
+#include "tooltip.h"
 #include "areaitem.h"
 
 
@@ -22,7 +23,7 @@ QString AreaItem::info() const
 }
 
 AreaItem::AreaItem(const Area &area, Map *map, GraphicsItem *parent)
-  : GraphicsItem(parent), _area(area)
+  : PlaneItem(parent), _area(area)
 {
 	_map = map;
 	_digitalZoom = 0;
@@ -158,7 +159,6 @@ void AreaItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 	Q_UNUSED(event);
 
 	_pen.setWidthF((_width + 1) * pow(2, -_digitalZoom));
-	setZValue(zValue() + 1.0);
 	update();
 }
 
@@ -167,12 +167,5 @@ void AreaItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 	Q_UNUSED(event);
 
 	_pen.setWidthF(_width * pow(2, -_digitalZoom));
-	setZValue(zValue() - 1.0);
 	update();
-}
-
-void AreaItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-	Popup::show(event->screenPos(), info(), event->widget());
-	QGraphicsItem::mousePressEvent(event);
 }
