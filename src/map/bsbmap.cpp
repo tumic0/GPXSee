@@ -182,18 +182,26 @@ bool BSBMap::parseKNQ(const QByteArray &line, double params[9])
 	return true;
 }
 
-bool BSBMap::parseREF(const QByteArray &line, QList<ReferencePoint> &points)
+bool BSBMap::parseREF(const QByteArray &line, const QString &datum,
+  const QString &proj, double params[9], QList<ReferencePoint> &points)
 {
 	QList<QByteArray> fields(line.split(','));
 
 	if (fields.size() == 5) {
 		bool xok, yok, lonok, latok;
-		CalibrationPoint p(PointD(fields.at(1).toDouble(&xok),
-		  fields.at(2).toDouble(&yok)), Coordinates(fields.at(4).toDouble(&lonok),
-		  fields.at(3).toDouble(&latok)));
-		if (xok && yok && lonok && latok) {
-			points.append(p.rp(_projection));
-			return true;
+		Coordinates c(fields.at(4).toDouble(&lonok),
+		  fields.at(3).toDouble(&latok));
+		if (lonok && latok && c.isValid()) {
+			if (_projection.isNull()) {
+				if (!createProjection(datum, proj, params, c))
+					return false;
+			}
+			CalibrationPoint p(PointD(fields.at(1).toDouble(&xok),
+			  fields.at(2).toDouble(&yok)), c);
+			if (xok && yok) {
+				points.append(p.rp(_projection));
+				return true;
+			}
 		}
 	}
 
@@ -207,10 +215,11 @@ bool BSBMap::parseRGB(const QByteArray &line)
 	bool iok, rok, gok, bok;
 	int i = fields.at(0).toUInt(&iok);
 
-	if (fields.size() == 4 && i > 0 && i < 256) {
+	if (iok && fields.size() == 4 && i > 0 && i < 256) {
 		_palette[i-1] = Color::rgb(fields.at(1).toUInt(&rok),
 		  fields.at(2).toUInt(&gok), fields.at(3).toUInt(&bok));
-		return true;
+		if (rok && gok && bok)
+			return true;
 	}
 
 	_errorString = QString(line) + ": Invalid RGB entry";
@@ -240,14 +249,10 @@ bool BSBMap::readHeader(QFile &file)
 			return false;
 		else if (isType(line, "KNQ/") && !parseKNQ(hdrData(line), params))
 			return false;
-		else if (isType(line, "REF/")) {
-			if (_projection.isNull()) {
-				if (!createProjection(datum, proj, params))
-					return false;
-			}
-			if (!parseREF(hdrData(line), points))
-				return false;
-		} else if (isType(line, "RGB/") && !parseRGB(hdrData(line)))
+		else if (isType(line, "REF/")
+		  && !parseREF(hdrData(line), datum, proj, params, points))
+			return false;
+		else if (isType(line, "RGB/") && !parseRGB(hdrData(line)))
 			return false;
 
 		line.clear();
@@ -283,7 +288,7 @@ bool BSBMap::createTransform(QList<ReferencePoint> &points)
 }
 
 bool BSBMap::createProjection(const QString &datum, const QString &proj,
-  double params[9])
+  double params[9], const Coordinates &c)
 {
 	const GCS *gcs = 0;
 	PCS pcs;
@@ -298,7 +303,7 @@ bool BSBMap::createProjection(const QString &datum, const QString &proj,
 	}
 
 	if (!proj.compare("MERCATOR", Qt::CaseInsensitive)) {
-		Projection::Setup setup(0, 0, NAN, 0, 0, NAN, NAN);
+		Projection::Setup setup(0, c.lon(), NAN, 0, 0, NAN, NAN);
 		pcs = PCS(gcs, 9804, setup, 9001);
 	} else if (!proj.compare("TRANSVERSE MERCATOR", Qt::CaseInsensitive)) {
 		Projection::Setup setup(0, params[1], params[2], 0, 0, NAN, NAN);
