@@ -80,12 +80,25 @@ void POI::search(const RectC &rect, QSet<int> &set) const
 {
 	qreal min[2], max[2];
 
-	min[0] = rect.topLeft().lon();
-	min[1] = rect.bottomRight().lat();
-	max[0] = rect.bottomRight().lon();
-	max[1] = rect.topLeft().lat();
+	if (rect.left() > rect.right()) {
+		min[0] = rect.topLeft().lon();
+		min[1] = rect.bottomRight().lat();
+		max[0] = 180.0;
+		max[1] = rect.topLeft().lat();
+		_tree.Search(min, max, cb, &set);
 
-	_tree.Search(min, max, cb, &set);
+		min[0] = -180.0;
+		min[1] = rect.bottomRight().lat();
+		max[0] = rect.bottomRight().lon();
+		max[1] = rect.topLeft().lat();
+		_tree.Search(min, max, cb, &set);
+	} else {
+		min[0] = rect.topLeft().lon();
+		min[1] = rect.bottomRight().lat();
+		max[0] = rect.bottomRight().lon();
+		max[1] = rect.topLeft().lat();
+		_tree.Search(min, max, cb, &set);
+	}
 }
 
 QList<Waypoint> POI::points(const Path &path) const
@@ -130,16 +143,10 @@ QList<Waypoint> POI::points(const Waypoint &point) const
 {
 	QList<Waypoint> ret;
 	QSet<int> set;
-	qreal min[2], max[2];
 	QSet<int>::const_iterator it;
 
 	RectC br(point.coordinates(), _radius);
-	min[0] = br.topLeft().lon();
-	min[1] = br.bottomRight().lat();
-	max[0] = br.bottomRight().lon();
-	max[1] = br.topLeft().lat();
-
-	_tree.Search(min, max, cb, &set);
+	search(br, set);
 
 	for (it = set.constBegin(); it != set.constEnd(); ++it)
 		ret.append(_data.at(*it));
@@ -150,18 +157,12 @@ QList<Waypoint> POI::points(const Waypoint &point) const
 QList<Waypoint> POI::points(const RectC &rect) const
 {
 	QList<Waypoint> ret;
-	qreal min[2], max[2];
 	QSet<int> set;
 	QSet<int>::const_iterator it;
 
 	double offset = rad2deg(_radius / WGS84_RADIUS);
-
-	min[0] = rect.topLeft().lon() - offset;
-	min[1] = rect.bottomRight().lat() - offset;
-	max[0] = rect.bottomRight().lon() + offset;
-	max[1] = rect.topLeft().lat() + offset;
-
-	_tree.Search(min, max, cb, &set);
+	RectC br(rect.adjusted(-offset, offset, offset, -offset));
+	search(br, set);
 
 	for (it = set.constBegin(); it != set.constEnd(); ++it)
 		ret.append(_data.at(*it));

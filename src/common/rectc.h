@@ -40,6 +40,7 @@ public:
 	RectC &operator&=(const RectC &r) {*this = *this & r; return *this;}
 
 	RectC united(const Coordinates &c) const;
+	RectC adjusted(double lon1, double lat1, double lon2, double lat2) const;
 
 	bool intersects(const RectC &r) const
 	  {return (right() >= r.left() && bottom() <= r.top() && left() <= r.right()

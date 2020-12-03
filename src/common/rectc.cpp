@@ -1,3 +1,4 @@
+#include <cmath>
 #include "wgs84.h"
 #include "rectc.h"
 
@@ -5,6 +6,16 @@
 #define MAX_LAT deg2rad(90.0)
 #define MIN_LON deg2rad(-180.0)
 #define MAX_LON deg2rad(180.0)
+
+static inline double WLON(double lon)
+{
+	return remainder(lon, 360.0);
+}
+
+static inline double LLAT(double lat)
+{
+	return (lat < 0.0) ? qMax(lat, -90.0) : qMin(lat, 90.0);
+}
 
 RectC::RectC(const Coordinates &center, double radius)
 {
@@ -149,6 +160,12 @@ RectC RectC::united(const Coordinates &c) const
 		t = c.lat();
 
 	return RectC(Coordinates(l, t), Coordinates(r, b));
+}
+
+RectC RectC::adjusted(double lon1, double lat1, double lon2, double lat2) const
+{
+	return RectC(Coordinates(WLON(_tl.lon() + lon1), LLAT(_tl.lat() + lat1)),
+	  Coordinates(WLON(_br.lon() + lon2), LLAT(_br.lat() + lat2)));
 }
 
 #ifndef QT_NO_DEBUG
