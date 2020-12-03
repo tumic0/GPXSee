@@ -270,7 +270,7 @@
         <location filename="../src/GUI/gui.cpp" line="745"/>
         <location filename="../src/GUI/gui.cpp" line="746"/>
         <source>Paths</source>
-        <translation>Elérési utak</translation>
+        <translation>Adatmappák</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="214"/>
@@ -358,7 +358,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="311"/>
         <source>Load map directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Térképmappa betöltése...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="314"/>
@@ -792,17 +792,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1497"/>
         <source>Select map directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Térképmappa kiválasztása</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1504"/>
         <source>No usable map found</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem található felhasználható térkép</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1536"/>
         <source>Clear the map tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Térkép gyorsítótár törlése?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1543"/>
@@ -813,6 +813,7 @@
         <location filename="../src/GUI/gui.cpp" line="1547"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
@@ -967,12 +968,12 @@
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="17"/>
         <source>File</source>
-        <translation type="unfinished">Műveletgombok</translation>
+        <translation>Műveletgombok</translation>
     </message>
 </context>
 <context>
@@ -995,7 +996,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="112"/>
         <source>BSB nautical charts</source>
-        <translation type="unfinished"></translation>
+        <translation>BSB tengeri térképek</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="113"/>
@@ -1210,7 +1211,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="281"/>
         <source>Map opacity:</source>
-        <translation>Térkép átlátszósága:</translation>
+        <translation>Térkép átlátszatlansága:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="291"/>
