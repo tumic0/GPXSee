@@ -55,6 +55,7 @@
 #define CT_AlbersEqualArea             11
 #define CT_PolarStereographic          15
 #define CT_ObliqueStereographic        16
+#define CT_Polyconic                   22
 
 
 #define IS_SET(map, key) \
@@ -344,6 +345,8 @@ Projection::Method GeoTIFF::method(QMap<quint16, Value> &kv)
 			return Projection::Method(9829);
 		case CT_ObliqueStereographic:
 			return Projection::Method(9809);
+		case CT_Polyconic:
+			return Projection::Method(9818);
 		default:
 			_errorString = QString("%1: unknown coordinate transformation method")
 			  .arg(kv.value(ProjCoordTransGeoKey).SHORT);

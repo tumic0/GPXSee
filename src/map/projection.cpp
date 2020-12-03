@@ -8,6 +8,7 @@
 #include "krovak.h"
 #include "polarstereographic.h"
 #include "obliquestereographic.h"
+#include "polyconic.h"
 #include "latlon.h"
 #include "gcs.h"
 #include "pcs.h"
@@ -25,6 +26,7 @@ Projection::Method::Method(int id)
 		case 9807:
 		case 9809:
 		case 9815:
+		case 9818:
 		case 9819:
 		case 9820:
 		case 9822:
@@ -83,6 +85,11 @@ Projection::Projection(const PCS *pcs) : _gcs(0), _ct(0), _geographic(false)
 		case 9809:
 			_ct = new ObliqueStereographic(ellipsoid, setup.latitudeOrigin(),
 			  setup.longitudeOrigin(), setup.scale(), setup.falseEasting(),
+			  setup.falseNorthing());
+			break;
+		case 9818:
+			_ct = new Polyconic(ellipsoid, setup.latitudeOrigin(),
+			  setup.longitudeOrigin(), setup.falseEasting(),
 			  setup.falseNorthing());
 			break;
 		case 9819:

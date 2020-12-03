@@ -190,6 +190,8 @@ bool MapFile::createProjection(const GCS *gcs, const QString &name,
 		pcs = PCS(gcs, 9822, setup, 9001);
 	else if (name == "(A)Lambert Azimuthual Equal Area")
 		pcs = PCS(gcs, 9820, setup, 9001);
+	else if (name == "Polyconic (American)")
+		pcs = PCS(gcs, 9818, setup, 9001);
 	else if (name == "(NZTM2) New Zealand TM 2000")
 		pcs = PCS(gcs, 9807, Projection::Setup(0, 173.0, 0.9996, 1600000,
 		  10000000, NAN, NAN), 9001);

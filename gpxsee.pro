@@ -106,6 +106,7 @@ HEADERS += src/common/config.h \
     src/map/IMG/textpathitem.h \
     src/map/IMG/textpointitem.h \
     src/map/bsbmap.h \
+    src/map/polyconic.h \
     src/map/projection.h \
     src/map/ellipsoid.h \
     src/map/datum.h \
@@ -281,6 +282,7 @@ SOURCES += src/main.cpp \
     src/map/downloader.cpp \
     src/map/emptymap.cpp \
     src/map/ozimap.cpp \
+    src/map/polyconic.cpp \
     src/map/tar.cpp \
     src/map/atlas.cpp \
     src/map/ozf.cpp \
