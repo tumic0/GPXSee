@@ -786,6 +786,8 @@ bool GUI::openFile(const QString &fileName)
 	_files.append(fileName);
 	_browser->setCurrent(fileName);
 	_fileActionGroup->setEnabled(true);
+	// Explicitly enable the reload action as it may be disabled by loadMapDir()
+	_reloadFileAction->setEnabled(true);
 	_navigationActionGroup->setEnabled(true);
 
 	updateNavigationActions();
