@@ -358,7 +358,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="311"/>
         <source>Load map directory...</source>
-        <translation>Térképmappa betöltése...</translation>
+        <translation>Térképmappa megadása...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="314"/>
@@ -792,7 +792,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1497"/>
         <source>Select map directory</source>
-        <translation>Térképmappa kiválasztása</translation>
+        <translation>Térképmappa választása</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1504"/>
