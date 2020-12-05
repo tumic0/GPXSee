@@ -1511,6 +1511,7 @@ void GUI::loadMapDir()
 
 	QFileInfo fi(dir);
 	QMenu *menu = new QMenu(fi.fileName());
+	menu->setStyleSheet("QMenu { menu-scrollable: 1; }");
 	_mapMenu->insertMenu(_mapsEnd, menu);
 
 	for (int i = 0; i < maps.size(); i++) {
