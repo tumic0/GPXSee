@@ -54,7 +54,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	setRenderHint(QPainter::Antialiasing, true);
+	setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 	setResizeAnchor(QGraphicsView::AnchorViewCenter);
 	setAcceptDrops(false);
 
