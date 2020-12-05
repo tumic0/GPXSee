@@ -358,7 +358,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="311"/>
         <source>Load map directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Harita dizinini yükle...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="314"/>
@@ -792,17 +792,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1497"/>
         <source>Select map directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Harita dizinini seç</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1504"/>
         <source>No usable map found</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanılabilir harita bulunamadı</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1536"/>
         <source>Clear the map tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Harita döşemeleri önbelleği temizlensin mi?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1543"/>
@@ -813,6 +813,7 @@
         <location filename="../src/GUI/gui.cpp" line="1547"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n dosya</numerusform>
             <numerusform>%n dosya</numerusform>
         </translation>
     </message>
@@ -967,12 +968,12 @@
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished">Adı</translation>
+        <translation>Ad</translation>
     </message>
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="17"/>
         <source>File</source>
-        <translation type="unfinished">Dosya</translation>
+        <translation>Dosya</translation>
     </message>
 </context>
 <context>
@@ -1000,7 +1001,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="112"/>
         <source>BSB nautical charts</source>
-        <translation type="unfinished"></translation>
+        <translation>BSB denizcilik haritaları</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="113"/>
