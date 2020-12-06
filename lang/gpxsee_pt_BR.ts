@@ -672,12 +672,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="734"/>
         <source>Copy coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar coordenadas</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="735"/>
         <source>Left Click</source>
-        <translation type="unfinished"></translation>
+        <translation>Clique esquerdo</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="749"/>
