@@ -765,14 +765,13 @@ void GUI::paths()
 
 void GUI::openFile()
 {
-	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open file"),
-	  _dataDir, Data::formats());
-	QStringList list = files;
+	QStringList files(QFileDialog::getOpenFileNames(this, tr("Open file"),
+	  _dataDir, Data::formats()));
 
-	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
-		openFile(*it);
-	if (!list.isEmpty())
-		_dataDir = QFileInfo(list.first()).path();
+	for (int i = 0; i < files.size(); i++)
+		openFile(files.at(i));
+	if (!files.isEmpty())
+		_dataDir = QFileInfo(files.last()).path();
 }
 
 bool GUI::openFile(const QString &fileName)
@@ -874,14 +873,13 @@ bool GUI::loadFile(const QString &fileName)
 
 void GUI::openPOIFile()
 {
-	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open POI file"),
-	  _poiDir, Data::formats());
-	QStringList list = files;
+	QStringList files(QFileDialog::getOpenFileNames(this, tr("Open POI file"),
+	  _poiDir, Data::formats()));
 
-	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
-		openPOIFile(*it);
-	if (!list.isEmpty())
-		_poiDir = QFileInfo(list.first()).path();
+	for (int i = 0; i < files.size(); i++)
+		openPOIFile(files.at(i));
+	if (!files.isEmpty())
+		_poiDir = QFileInfo(files.last()).path();
 }
 
 bool GUI::openPOIFile(const QString &fileName)
@@ -1431,18 +1429,17 @@ void GUI::showGraphSliderInfo(bool show)
 
 void GUI::loadMap()
 {
-	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open map file"),
-	  _mapDir, MapList::formats());
-	QStringList list = files;
+	QStringList files(QFileDialog::getOpenFileNames(this, tr("Open map file"),
+	  _mapDir, MapList::formats()));
 	MapAction *lastReady = 0;
 
-	for (QStringList::Iterator it = list.begin(); it != list.end(); it++) {
-		MapAction *a = loadMap(*it);
+	for (int i = 0; i < files.size(); i++) {
+		MapAction *a = loadMap(files.at(i));
 		if (a)
 			lastReady = a;
 	}
-	if (!list.isEmpty())
-		_mapDir = QFileInfo(list.first()).path();
+	if (!files.isEmpty())
+		_mapDir = QFileInfo(files.last()).path();
 	if (lastReady)
 		lastReady->trigger();
 }
