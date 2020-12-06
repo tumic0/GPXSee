@@ -120,7 +120,7 @@ private:
 
 	bool openPOIFile(const QString &fileName);
 	bool loadFile(const QString &fileName);
-	bool loadMap(const QString &fileName);
+	MapAction *loadMap(const QString &fileName);
 	void updateStatusBarInfo();
 	void updateWindowTitle();
 	void updateNavigationActions();

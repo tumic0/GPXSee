@@ -1434,19 +1434,25 @@ void GUI::loadMap()
 	QStringList files = QFileDialog::getOpenFileNames(this, tr("Open map file"),
 	  _mapDir, MapList::formats());
 	QStringList list = files;
+	MapAction *lastReady = 0;
 
-	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
-		loadMap(*it);
+	for (QStringList::Iterator it = list.begin(); it != list.end(); it++) {
+		MapAction *a = loadMap(*it);
+		if (a)
+			lastReady = a;
+	}
 	if (!list.isEmpty())
 		_mapDir = QFileInfo(list.first()).path();
+	if (lastReady)
+		lastReady->trigger();
 }
 
-bool GUI::loadMap(const QString &fileName)
+MapAction *GUI::loadMap(const QString &fileName)
 {
 	// On OS X fileName may be a directory!
 
 	if (fileName.isEmpty())
-		return false;
+		return 0;
 
 	QString error;
 	QList<Map*> maps = MapList::loadMaps(fileName, error);
@@ -1454,7 +1460,7 @@ bool GUI::loadMap(const QString &fileName)
 		error = tr("Error loading map:") + "\n\n"
 		  + fileName + "\n\n" + error;
 		QMessageBox::critical(this, APP_NAME, error);
-		return false;
+		return 0;
 	}
 
 	MapAction *lastReady = 0;
@@ -1470,10 +1476,7 @@ bool GUI::loadMap(const QString &fileName)
 			connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
 	}
 
-	if (lastReady)
-		lastReady->trigger();
-
-	return true;
+	return lastReady;
 }
 
 void GUI::mapLoaded()
