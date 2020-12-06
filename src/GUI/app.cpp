@@ -77,9 +77,11 @@ App::~App()
 
 int App::run()
 {
+	MapAction *lastReady = 0;
+	QStringList args(arguments());
+
 	_gui->show();
 
-	QStringList args(arguments());
 	for (int i = 1; i < args.count(); i++) {
 		if (!_gui->openFile(args.at(i), true)) {
 			MapAction *a;
@@ -87,10 +89,13 @@ int App::run()
 				_gui->openFile(args.at(i), false);
 			else {
 				if (a)
-					a->trigger();
+					lastReady = a;
 			}
 		}
 	}
+
+	if (lastReady)
+		lastReady->trigger();
 
 	return exec();
 }
