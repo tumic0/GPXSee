@@ -16,6 +16,7 @@
 #include "opengl.h"
 #include "gui.h"
 #include "settings.h"
+#include "mapaction.h"
 #include "app.h"
 
 
@@ -79,8 +80,17 @@ int App::run()
 	_gui->show();
 
 	QStringList args(arguments());
-	for (int i = 1; i < args.count(); i++)
-		_gui->openFile(args.at(i));
+	for (int i = 1; i < args.count(); i++) {
+		if (!_gui->openFile(args.at(i), true)) {
+			MapAction *a;
+			if (!_gui->loadMap(args.at(i), a, true))
+				_gui->openFile(args.at(i), false);
+			else {
+				if (a)
+					a->trigger();
+			}
+		}
+	}
 
 	return exec();
 }
@@ -89,6 +99,19 @@ bool App::event(QEvent *event)
 {
 	if (event->type() == QEvent::FileOpen) {
 		QFileOpenEvent *e = static_cast<QFileOpenEvent *>(event);
+
+		if (!_gui->openFile(e->file(), true)) {
+			MapAction *a;
+			if (!_gui->loadMap(e->file(), a, true))
+				return _gui->openFile(e->file(), false);
+			else {
+				if (a)
+					a->trigger();
+				return true;
+			}
+		} else
+			return true;
+
 		return _gui->openFile(e->file());
 	}
 

@@ -83,7 +83,7 @@ void Data::processData(QList<TrackData> &trackData, QList<RouteData> &routeData)
 		_routes.append(Route(routeData.at(i)));
 }
 
-Data::Data(const QString &fileName)
+Data::Data(const QString &fileName, bool tryUnknown)
 {
 	QFile file(fileName);
 	QFileInfo fi(fileName);
@@ -109,7 +109,7 @@ Data::Data(const QString &fileName)
 			_errorLine = it.value()->errorLine();
 			_errorString = it.value()->errorString();
 		}
-	} else {
+	} else if (tryUnknown) {
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
 			if (it.value()->parse(&file, trackData, routeData, _polygons,
 			  _waypoints)) {

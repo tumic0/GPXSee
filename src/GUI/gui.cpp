@@ -774,12 +774,12 @@ void GUI::openFile()
 		_dataDir = QFileInfo(files.last()).path();
 }
 
-bool GUI::openFile(const QString &fileName)
+bool GUI::openFile(const QString &fileName, bool silent)
 {
-	if (fileName.isEmpty() || _files.contains(fileName))
+	if (_files.contains(fileName))
 		return false;
 
-	if (!loadFile(fileName))
+	if (!loadFile(fileName, silent))
 		return false;
 
 	_files.append(fileName);
@@ -796,67 +796,14 @@ bool GUI::openFile(const QString &fileName)
 	return true;
 }
 
-bool GUI::loadFile(const QString &fileName)
+bool GUI::loadFile(const QString &fileName, bool silent)
 {
-	Data data(fileName);
-	QList<QList<GraphItem*> > graphs;
-	QList<PathItem*> paths;
+	Data data(fileName, !silent);
 
 	if (data.isValid()) {
-		for (int i = 0; i < data.tracks().count(); i++) {
-			const Track &track = data.tracks().at(i);
-			_trackDistance += track.distance();
-			_time += track.time();
-			_movingTime += track.movingTime();
-#ifdef ENABLE_TIMEZONES
-			const QDateTime date = track.date().toTimeZone(
-			  _options.timeZone.zone());
-#else // ENABLE_TIMEZONES
-			const QDateTime &date = track.date();
-#endif // ENABLE_TIMEZONES
-			if (_dateRange.first.isNull() || _dateRange.first > date)
-				_dateRange.first = date;
-			if (_dateRange.second.isNull() || _dateRange.second < date)
-				_dateRange.second = date;
-		}
-		_trackCount += data.tracks().count();
-
-		for (int i = 0; i < data.routes().count(); i++)
-			_routeDistance += data.routes().at(i).distance();
-		_routeCount += data.routes().count();
-
-		_waypointCount += data.waypoints().count();
-		_areaCount += data.areas().count();
-
-		if (_pathName.isNull()) {
-			if (data.tracks().count() == 1 && !data.routes().count())
-				_pathName = data.tracks().first().name();
-			else if (data.routes().count() == 1 && !data.tracks().count())
-				_pathName = data.routes().first().name();
-		} else
-			_pathName = QString();
-
-		for (int i = 0; i < _tabs.count(); i++)
-			graphs.append(_tabs.at(i)->loadData(data));
-		if (updateGraphTabs())
-			_splitter->refresh();
-		paths = _mapView->loadData(data);
-
-		for (int i = 0; i < paths.count(); i++) {
-			const PathItem *pi = paths.at(i);
-			for (int j = 0; j < graphs.count(); j++) {
-				const GraphItem *gi = graphs.at(j).at(i);
-				if (!gi)
-					continue;
-				connect(gi, SIGNAL(sliderPositionChanged(qreal)), pi,
-				  SLOT(moveMarker(qreal)));
-				connect(pi, SIGNAL(selected(bool)), gi, SLOT(hover(bool)));
-				connect(gi, SIGNAL(selected(bool)), pi, SLOT(hover(bool)));
-			}
-		}
-
+		loadData(data);
 		return true;
-	} else {
+	} else if (!silent) {
 		updateNavigationActions();
 		updateStatusBarInfo();
 		updateWindowTitle();
@@ -868,6 +815,65 @@ bool GUI::loadFile(const QString &fileName)
 			error.append("\n" + tr("Line: %1").arg(data.errorLine()));
 		QMessageBox::critical(this, APP_NAME, error);
 		return false;
+	} else
+		return false;
+}
+
+void GUI::loadData(const Data &data)
+{
+	QList<QList<GraphItem*> > graphs;
+	QList<PathItem*> paths;
+
+	for (int i = 0; i < data.tracks().count(); i++) {
+		const Track &track = data.tracks().at(i);
+		_trackDistance += track.distance();
+		_time += track.time();
+		_movingTime += track.movingTime();
+#ifdef ENABLE_TIMEZONES
+		const QDateTime date = track.date().toTimeZone(
+		            _options.timeZone.zone());
+#else // ENABLE_TIMEZONES
+		const QDateTime &date = track.date();
+#endif // ENABLE_TIMEZONES
+		if (_dateRange.first.isNull() || _dateRange.first > date)
+			_dateRange.first = date;
+		if (_dateRange.second.isNull() || _dateRange.second < date)
+			_dateRange.second = date;
+	}
+	_trackCount += data.tracks().count();
+
+	for (int i = 0; i < data.routes().count(); i++)
+		_routeDistance += data.routes().at(i).distance();
+	_routeCount += data.routes().count();
+
+	_waypointCount += data.waypoints().count();
+	_areaCount += data.areas().count();
+
+	if (_pathName.isNull()) {
+		if (data.tracks().count() == 1 && !data.routes().count())
+			_pathName = data.tracks().first().name();
+		else if (data.routes().count() == 1 && !data.tracks().count())
+			_pathName = data.routes().first().name();
+	} else
+		_pathName = QString();
+
+	for (int i = 0; i < _tabs.count(); i++)
+		graphs.append(_tabs.at(i)->loadData(data));
+	if (updateGraphTabs())
+		_splitter->refresh();
+	paths = _mapView->loadData(data);
+
+	for (int i = 0; i < paths.count(); i++) {
+		const PathItem *pi = paths.at(i);
+		for (int j = 0; j < graphs.count(); j++) {
+			const GraphItem *gi = graphs.at(j).at(i);
+			if (!gi)
+				continue;
+			connect(gi, SIGNAL(sliderPositionChanged(qreal)), pi,
+			        SLOT(moveMarker(qreal)));
+			connect(pi, SIGNAL(selected(bool)), gi, SLOT(hover(bool)));
+			connect(gi, SIGNAL(selected(bool)), pi, SLOT(hover(bool)));
+		}
 	}
 }
 
@@ -1431,11 +1437,10 @@ void GUI::loadMap()
 {
 	QStringList files(QFileDialog::getOpenFileNames(this, tr("Open map file"),
 	  _mapDir, MapList::formats()));
-	MapAction *lastReady = 0;
+	MapAction *a, *lastReady = 0;
 
 	for (int i = 0; i < files.size(); i++) {
-		MapAction *a = loadMap(files.at(i));
-		if (a)
+		if (loadMap(files.at(i), a) && a)
 			lastReady = a;
 	}
 	if (!files.isEmpty())
@@ -1444,20 +1449,15 @@ void GUI::loadMap()
 		lastReady->trigger();
 }
 
-MapAction *GUI::loadMap(const QString &fileName)
+bool GUI::loadMap(const QString &fileName, MapAction *&action, bool silent)
 {
-	// On OS X fileName may be a directory!
-
-	if (fileName.isEmpty())
-		return 0;
-
 	QString error;
 	QList<Map*> maps = MapList::loadMaps(fileName, error);
 	if (maps.isEmpty()) {
-		error = tr("Error loading map:") + "\n\n"
-		  + fileName + "\n\n" + error;
-		QMessageBox::critical(this, APP_NAME, error);
-		return 0;
+		error = tr("Error loading map:") + "\n\n" + fileName + "\n\n" + error;
+		if (!silent)
+			QMessageBox::critical(this, APP_NAME, error);
+		return false;
 	}
 
 	MapAction *lastReady = 0;
@@ -1473,7 +1473,9 @@ MapAction *GUI::loadMap(const QString &fileName)
 			connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
 	}
 
-	return lastReady;
+	action = lastReady;
+
+	return true;
 }
 
 void GUI::mapLoaded()

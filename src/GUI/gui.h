@@ -30,6 +30,7 @@ class Map;
 class POI;
 class QScreen;
 class MapAction;
+class Data;
 
 class GUI : public QMainWindow
 {
@@ -38,7 +39,9 @@ class GUI : public QMainWindow
 public:
 	GUI();
 
-	bool openFile(const QString &fileName);
+	bool openFile(const QString &fileName, bool silent = false);
+	bool loadMap(const QString &fileName, MapAction *&action,
+	  bool silent = false);
 	void show();
 
 private slots:
@@ -119,8 +122,8 @@ private:
 	void createBrowser();
 
 	bool openPOIFile(const QString &fileName);
-	bool loadFile(const QString &fileName);
-	MapAction *loadMap(const QString &fileName);
+	bool loadFile(const QString &fileName, bool silent = false);
+	void loadData(const Data &data);
 	void updateStatusBarInfo();
 	void updateWindowTitle();
 	void updateNavigationActions();
