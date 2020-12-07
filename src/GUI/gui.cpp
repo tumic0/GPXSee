@@ -890,7 +890,7 @@ void GUI::openPOIFile()
 
 bool GUI::openPOIFile(const QString &fileName)
 {
-	if (fileName.isEmpty() || _poi->files().contains(fileName))
+	if (_poi->files().contains(fileName))
 		return false;
 
 	if (_poi->loadFile(fileName)) {
@@ -1235,7 +1235,7 @@ void GUI::plotMainPage(QPainter *painter, const QRectF &rect, qreal ratio,
 		sc = 1;
 	}
 
-	MapView::PlotFlags flags = MapView::NoFlags;
+	MapView::PlotFlags flags;
 	if (_options.hiresPrint)
 		flags |= MapView::HiRes;
 	if (expand)
@@ -1452,7 +1452,7 @@ void GUI::loadMap()
 bool GUI::loadMap(const QString &fileName, MapAction *&action, bool silent)
 {
 	QString error;
-	QList<Map*> maps = MapList::loadMaps(fileName, error);
+	QList<Map*> maps(MapList::loadMaps(fileName, error));
 	if (maps.isEmpty()) {
 		error = tr("Error loading map:") + "\n\n" + fileName + "\n\n" + error;
 		if (!silent)
@@ -1488,8 +1488,8 @@ void GUI::mapLoaded()
 		_showMapAction->setEnabled(true);
 		_clearMapCacheAction->setEnabled(true);
 	} else {
-		QString error = tr("Error loading map:") + "\n\n"
-		  + map->name() + "\n\n" + map->errorString();
+		QString error = tr("Error loading map:") + "\n\n" + map->name() + "\n\n"
+		  + map->errorString();
 		QMessageBox::critical(this, APP_NAME, error);
 		action->deleteLater();
 	}
@@ -1497,8 +1497,8 @@ void GUI::mapLoaded()
 
 void GUI::loadMapDir()
 {
-	QString dir = QFileDialog::getExistingDirectory(this,
-	  tr("Select map directory"), _mapDir, QFileDialog::ShowDirsOnly);
+	QString dir(QFileDialog::getExistingDirectory(this,
+	  tr("Select map directory"), _mapDir, QFileDialog::ShowDirsOnly));
 	if (dir.isEmpty())
 		return;
 
@@ -1592,7 +1592,7 @@ void GUI::nextMap()
 	if (!checked)
 		return;
 
-	QList<QAction*> maps = _mapsActionGroup->actions();
+	QList<QAction*> maps(_mapsActionGroup->actions());
 	for (int i = 1;	i < maps.size(); i++) {
 		int next = (maps.indexOf(checked) + i) % maps.count();
 		if (maps.at(next)->isEnabled()) {
@@ -1608,7 +1608,7 @@ void GUI::prevMap()
 	if (!checked)
 		return;
 
-	QList<QAction*> maps = _mapsActionGroup->actions();
+	QList<QAction*> maps(_mapsActionGroup->actions());
 	for (int i = 1; i < maps.size(); i++) {
 		int prev = (maps.indexOf(checked) + maps.count() - i) % maps.count();
 		if (maps.at(prev)->isEnabled()) {
