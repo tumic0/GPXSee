@@ -116,8 +116,6 @@ bool App::event(QEvent *event)
 			}
 		} else
 			return true;
-
-		return _gui->openFile(e->file());
 	}
 
 	return QApplication::event(event);
