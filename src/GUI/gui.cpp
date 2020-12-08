@@ -1834,9 +1834,25 @@ void GUI::dragEnterEvent(QDragEnterEvent *event)
 
 void GUI::dropEvent(QDropEvent *event)
 {
-	QList<QUrl> urls = event->mimeData()->urls();
-	for (int i = 0; i < urls.size(); i++)
-		openFile(urls.at(i).toLocalFile());
+	MapAction *lastReady = 0;
+	QList<QUrl> urls(event->mimeData()->urls());
+
+	for (int i = 0; i < urls.size(); i++) {
+		QString file(urls.at(i).toLocalFile());
+
+		if (!openFile(file, true)) {
+			MapAction *a;
+			if (!loadMap(file, a, true))
+				openFile(file, false);
+			else {
+				if (a)
+					lastReady = a;
+			}
+		}
+	}
+
+	if (lastReady)
+		lastReady->trigger();
 
 	event->acceptProposedAction();
 }
