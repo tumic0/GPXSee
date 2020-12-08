@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
 
+	<!-- Data files -->
+
 	<mime-type type="application/gpx+xml">
 		<comment>GPS Exchange Format</comment>
 		<sub-class-of type="application/xml"/>
 		<generic-icon name="application-xml"/>
+		<root-XML namespaceURI="http://www.topografix.com/GPX/1/0" localName="gpx"/>
+		<root-XML namespaceURI="http://www.topografix.com/GPX/1/1" localName="gpx"/>
 		<glob pattern="*.gpx"/>
 	</mime-type>
 
-	<mime-type type="application/tcx+xml">
+	<mime-type type="application/vnd.garmin.tcx+xml">
 		<comment>Training Center XML</comment>
 		<sub-class-of type="application/xml"/>
 		<generic-icon name="application-xml"/>
+		<root-XML namespaceURI="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2" localName="TrainingCenterDatabase"/>
 		<glob pattern="*.tcx"/>
 	</mime-type>
 
-	<mime-type type="application/kml+xml">
+	<mime-type type="application/vnd.google-earth.kml+xml">
 		<comment>Keyhole Markup Language</comment>
 		<sub-class-of type="application/xml"/>
 		<generic-icon name="application-xml"/>
+		<root-XML namespaceURI="http://www.opengis.net/kml/2.2" localName="kml"/>
 		<glob pattern="*.kml"/>
 	</mime-type>
 
-	<mime-type type="application/loc+xml">
+	<mime-type type="application/vnd.groundspeak.loc+xml">
 		<comment>Geocaching.com Waypoint File</comment>
 		<sub-class-of type="application/xml"/>
 		<generic-icon name="application-xml"/>
 		<glob pattern="*.loc"/>
 	</mime-type>
 
-	<mime-type type="application/slf+xml">
+	<mime-type type="application/vnd.sigma.slf+xml">
 		<comment>Sigma Log Format</comment>
 		<sub-class-of type="application/xml"/>
 		<generic-icon name="application-xml"/>
@@ -40,6 +46,9 @@
 		<comment>Flexible and Interoperable Data Transfer</comment>
 		<sub-class-of type="application/octet-stream"/>
 		<generic-icon name="application-octet-stream"/>
+		<magic>
+			<match type="string" offset="8" value=".FIT"/>
+		</magic>
 		<glob pattern="*.fit"/>
 	</mime-type>
 
@@ -61,6 +70,9 @@
 		<comment>OziExplorer Track Point File</comment>
 		<sub-class-of type="text/plain"/>
 		<generic-icon name="text-plain"/>
+		<magic>
+			<match type="string" offset="0" value="OziExplorer Track Point File"/>
+		</magic>
 		<glob pattern="*.plt"/>
 	</mime-type>
 
@@ -68,6 +80,9 @@
 		<comment>OziExplorer Route File</comment>
 		<sub-class-of type="text/plain"/>
 		<generic-icon name="text-plain"/>
+		<magic>
+			<match type="string" offset="0" value="OziExplorer Route File"/>
+		</magic>
 		<glob pattern="*.rte"/>
 	</mime-type>
 
@@ -75,6 +90,9 @@
 		<comment>OziExplorer Waypoint File</comment>
 		<sub-class-of type="text/plain"/>
 		<generic-icon name="text-plain"/>
+		<magic>
+			<match type="string" offset="0" value="OziExplorer Waypoint File"/>
+		</magic>
 		<glob pattern="*.wpt"/>
 	</mime-type>
 
@@ -96,13 +114,103 @@
 		<comment>Garmin POI File</comment>
 		<sub-class-of type="application/octet-stream"/>
 		<generic-icon name="application/octet-stream"/>
+		<magic>
+			<match type="string" offset="8" value="GRMREC"/>
+		</magic>
 		<glob pattern="*.gpi"/>
 	</mime-type>
 
-	<mime-type type="application/sml+xml">
+	<mime-type type="application/vnd.suunto.sml+xml">
 		<comment>Suunto Markup Language</comment>
 		<sub-class-of type="application/xml"/>
 		<generic-icon name="application-xml"/>
+		<root-XML namespaceURI="http://www.suunto.com/schemas/sml" localName="sml"/>
 		<glob pattern="*.sml"/>
 	</mime-type>
+
+
+	<!-- Maps -->
+
+	<mime-type type="application/vnd.garmin.img">
+		<comment>Garmin IMG Map</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application-octet-stream"/>
+		<magic>
+			<match type="string" offset="16" value="DSKIMG"/>
+		</magic>
+		<glob pattern="*.img"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.garmin.jnx">
+		<comment>Garmin JNX Map</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application-octet-stream"/>
+		<glob pattern="*.jnx"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.garmin.gmap+xml">
+		<comment>Garmin Map Product File</comment>
+		<sub-class-of type="application/xml"/>
+		<generic-icon name="application-xml"/>
+		<root-XML namespaceURI="http://www.garmin.com/xmlschemas/MapProduct/v1" localName="MapProduct"/>
+		<root-XML namespaceURI="http://www.garmin.com/xmlschemas/MapProduct/v2" localName="MapProduct"/>
+		<glob pattern="*.xml"/>
+	</mime-type>
+
+	<mime-type type="image/vnd.maptech.kap">
+		<comment>BSB Nautical Chart</comment>
+		<generic-icon name="image-x-generic"/>
+		<glob pattern="*.kap"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.oziexplorer.map">
+		<comment>OziExplorer Map File</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text-plain"/>
+		<magic>
+			<match type="string" offset="0" value="OziExplorer Map Data File"/>
+		</magic>
+		<glob pattern="*.map"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.mapbox.mbtiles">
+		<comment>MBTiles Map File</comment>
+		<sub-class-of type="application/vnd.sqlite3"/>
+		<generic-icon name="application/octet-stream"/>
+		<glob pattern="*.mbtiles"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.twonav.rmap">
+		<comment>TwoNav Raster Map File</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application/octet-stream"/>
+		<magic>
+			<match type="string" offset="0" value="CompeGPSRasterImage"/>
+		</magic>
+		<glob pattern="*.rmap"/>
+		<glob pattern="*.rtmap"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.trekbuddy.tba">
+		<comment>TrekBuddy Atlas</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text-plain"/>
+		<magic>
+			<match type="string" offset="0" value="Atlas 1.0"/>
+		</magic>
+		<glob pattern="*.tba"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.gpxsee.map+xml">
+		<comment>GPXSee Map Definition File</comment>
+		<sub-class-of type="application/xml"/>
+		<generic-icon name="application-xml"/>
+		<root-XML namespaceURI="http://www.gpxsee.org/map/1.0" localName="map"/>
+		<root-XML namespaceURI="http://www.gpxsee.org/map/1.1" localName="map"/>
+		<root-XML namespaceURI="http://www.gpxsee.org/map/1.2" localName="map"/>
+		<root-XML namespaceURI="http://www.gpxsee.org/map/1.3" localName="map"/>
+		<root-XML namespaceURI="http://www.gpxsee.org/map/1.4" localName="map"/>
+		<glob pattern="*.xml"/>
+	</mime-type>
+
 </mime-info>

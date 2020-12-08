@@ -18,13 +18,14 @@
 			<li>User-definable online maps (OpenStreetMap/Google tiles, WMTS,
 				WMS, TMS, QuadTiles).</li>
 			<li>Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases,
-				TwoNav RMaps, Garmin IMG &amp; JNX, GeoTIFF images).</li>
+				TwoNav RMaps, Garmin IMG &amp; JNX maps, GeoTIFF images,
+				BSB nautical charts).</li>
 			<li>Elevation, speed, heart rate, cadence, power, temperature and
 				gear ratio graphs.</li>
 			<li>Support for multiple tracks in one view.</li>
 			<li>Support for POI files.</li>
 			<li>Support for DEM files (SRTM HGT).</li>
-			<li>Print/export to PDF.</li>
+			<li>Print/export to PDF &amp; PNG.</li>
 			<li>Full-screen mode.</li>
 			<li>HiDPI/Retina displays &amp; maps support.</li>
 		</ul>
@@ -58,7 +59,7 @@
 
 	<mimetypes>
 		<mimetype>application/gpx+xml</mimetype>
-		<mimetype>application/tcx+xml</mimetype>
+		<mimetype>application/vnd.garmin.tcx+xml</mimetype>
 		<mimetype>application/vnd.ant.fit</mimetype>
 		<mimetype>application/vnd.google-earth.kml+xml</mimetype>
 		<mimetype>application/vnd.fai.igc</mimetype>
@@ -66,11 +67,24 @@
 		<mimetype>application/vnd.oziexplorer.plt</mimetype>
 		<mimetype>application/vnd.oziexplorer.rte</mimetype>
 		<mimetype>application/vnd.oziexplorer.wpt</mimetype>
-		<mimetype>application/loc+xml</mimetype>
-		<mimetype>application/slf+xml</mimetype>
+		<mimetype>application/vnd.groundspeak.loc+xml</mimetype>
+		<mimetype>application/vnd.sigma.slf+xml</mimetype>
 		<mimetype>application/geo+json</mimetype>
 		<mimetype>application/vnd.naviter.seeyou.cup</mimetype>
 		<mimetype>application/vnd.garmin.gpi</mimetype>
-		<mimetype>application/sml+xml</mimetype>
+		<mimetype>application/vnd.suunto.sml+xml</mimetype>
+		<mimetype>image/jpeg</mimetype>
+		<mimetype>text/csv</mimetype>
+		<mimetype>application/vnd.garmin.img</mimetype>
+		<mimetype>application/vnd.garmin.jnx</mimetype>
+		<mimetype>application/vnd.garmin.gmap+xml</mimetype>
+		<mimetype>image/vnd.maptech.kap</mimetype>
+		<mimetype>application/vnd.oziexplorer.map</mimetype>
+		<mimetype>application/vnd.mapbox.mbtiles</mimetype>
+		<mimetype>application/vnd.twonav.rmap</mimetype>
+		<mimetype>application/vnd.trekbuddy.tba</mimetype>
+		<mimetype>application/vnd.gpxsee.map+xml</mimetype>
+		<mimetype>application/x-tar</mimetype>
+		<mimetype>image/tiff</mimetype>
 	</mimetypes>
 </component>
