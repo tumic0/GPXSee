@@ -777,7 +777,7 @@ void GUI::openFile()
 bool GUI::openFile(const QString &fileName, bool silent)
 {
 	if (_files.contains(fileName))
-		return false;
+		return true;
 
 	if (!loadFile(fileName, silent))
 		return false;
@@ -891,7 +891,7 @@ void GUI::openPOIFile()
 bool GUI::openPOIFile(const QString &fileName)
 {
 	if (_poi->files().contains(fileName))
-		return false;
+		return true;
 
 	if (_poi->loadFile(fileName)) {
 		_mapView->showPOI(true);
@@ -1449,6 +1449,18 @@ void GUI::loadMap()
 		lastReady->trigger();
 }
 
+static MapAction *findMapAction(const QList<QAction*> &mapActions,
+  const Map *map)
+{
+	for (int i = 0; i < mapActions.count(); i++) {
+		const Map *m = mapActions.at(i)->data().value<Map*>();
+		if (map->path() == m->path())
+			return static_cast<MapAction*>(mapActions.at(i));
+	}
+
+	return 0;
+}
+
 bool GUI::loadMap(const QString &fileName, MapAction *&action, bool silent)
 {
 	QString error;
@@ -1461,16 +1473,26 @@ bool GUI::loadMap(const QString &fileName, MapAction *&action, bool silent)
 	}
 
 	MapAction *lastReady = 0;
+	QList<QAction*> mapActions(_mapsActionGroup->actions());
+
 	for (int i = 0; i < maps.size(); i++) {
 		Map *map = maps.at(i);
-		MapAction *a = createMapAction(map);
-		_mapMenu->insertAction(_mapsEnd, a);
-		if (map->isReady()) {
-			lastReady = a;
-			_showMapAction->setEnabled(true);
-			_clearMapCacheAction->setEnabled(true);
-		} else
-			connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
+		MapAction *a;
+
+		if (!(a = findMapAction(mapActions, map))) {
+			a = createMapAction(map);
+			_mapMenu->insertAction(_mapsEnd, a);
+			if (map->isReady()) {
+				lastReady = a;
+				_showMapAction->setEnabled(true);
+				_clearMapCacheAction->setEnabled(true);
+			} else
+				connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
+		} else {
+			map = a->data().value<Map*>();
+			if (map->isReady())
+				lastReady = a;
+		}
 	}
 
 	action = lastReady;
@@ -1510,23 +1532,32 @@ void GUI::loadMapDir()
 	}
 
 	QList<MapItem*> items(_mapView->loadMaps(maps));
+	QList<QAction*> mapActions(_mapsActionGroup->actions());
 
 	QFileInfo fi(dir);
 	QMenu *menu = new QMenu(fi.fileName());
-	menu->setStyleSheet("QMenu { menu-scrollable: 1; }");
-	_mapMenu->insertMenu(_mapsEnd, menu);
 
 	for (int i = 0; i < maps.size(); i++) {
 		Map *map = maps.at(i);
-		MapAction *a = createMapAction(map);
-		menu->addAction(a);
-		if (map->isReady()) {
-			_showMapAction->setEnabled(true);
-			_clearMapCacheAction->setEnabled(true);
-		} else
-			connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
 
-		connect(items.at(i), SIGNAL(triggered()), a, SLOT(trigger()));
+		if (!findMapAction(mapActions, map)) {
+			MapAction *a = createMapAction(map);
+			menu->addAction(a);
+			if (map->isReady()) {
+				_showMapAction->setEnabled(true);
+				_clearMapCacheAction->setEnabled(true);
+			} else
+				connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
+
+			connect(items.at(i), SIGNAL(triggered()), a, SLOT(trigger()));
+		}
+	}
+
+	if (menu->isEmpty())
+		delete menu;
+	else {
+		menu->setStyleSheet("QMenu { menu-scrollable: 1; }");
+		_mapMenu->insertMenu(_mapsEnd, menu);
 	}
 
 	_mapDir = fi.absolutePath();
@@ -2470,7 +2501,7 @@ void GUI::readSettings()
 
 QAction *GUI::mapAction(const QString &name)
 {
-	QList<QAction *> maps = _mapsActionGroup->actions();
+	QList<QAction *> maps(_mapsActionGroup->actions());
 
 	// Last map
 	for (int i = 0; i < maps.count(); i++) {
