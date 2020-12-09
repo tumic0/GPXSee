@@ -14,7 +14,7 @@ class QXmlStreamReader;
 class MapSource
 {
 public:
-	static Map *loadMap(const QString &path, QString &errorString);
+	static Map *loadMap(const QString &path);
 	static bool isMap(const QString &path);
 
 private:

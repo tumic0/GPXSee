@@ -5,6 +5,7 @@
 #include "wmtsmap.h"
 #include "wmsmap.h"
 #include "osm.h"
+#include "invalidmap.h"
 #include "mapsource.h"
 
 
@@ -236,16 +237,14 @@ bool MapSource::isMap(const QString &path)
 	return false;
 }
 
-Map *MapSource::loadMap(const QString &path, QString &errorString)
+Map *MapSource::loadMap(const QString &path)
 {
 	Config config;
 	QFile file(path);
 
 
-	if (!file.open(QFile::ReadOnly | QFile::Text)) {
-		errorString = file.errorString();
-		return 0;
-	}
+	if (!file.open(QFile::ReadOnly | QFile::Text))
+		return new InvalidMap(path, file.errorString());
 
 	QXmlStreamReader reader(&file);
 	if (reader.readNextStartElement()) {
@@ -254,41 +253,27 @@ Map *MapSource::loadMap(const QString &path, QString &errorString)
 		else
 			reader.raiseError("Not an online map source file");
 	}
-	if (reader.error()) {
-		errorString = QString("%1: %2").arg(reader.lineNumber())
-		  .arg(reader.errorString());
-		return 0;
-	}
+	if (reader.error())
+		return new InvalidMap(path, QString("%1: %2").arg(reader.lineNumber())
+		  .arg(reader.errorString()));
 
-	if (config.name.isEmpty()) {
-		errorString = "Missing name definition";
-		return 0;
-	}
-	if (config.url.isEmpty()) {
-		errorString = "Missing URL definition";
-		return 0;
-	}
+	if (config.name.isEmpty())
+		return new InvalidMap(path, "Missing name definition");
+	if (config.url.isEmpty())
+		return new InvalidMap(path, "Missing URL definition");
 	if (config.type == WMTS || config.type == WMS) {
-		if (config.layer.isEmpty()) {
-			errorString = "Missing layer definition";
-			return 0;
-		}
-		if (config.format.isEmpty()) {
-			errorString = "Missing format definition";
-			return 0;
-		}
+		if (config.layer.isEmpty())
+			return new InvalidMap(path, "Missing layer definition");
+		if (config.format.isEmpty())
+			return new InvalidMap(path, "Missing format definition");
 	}
 	if (config.type == WMTS) {
-		if (config.set.isEmpty()) {
-			errorString = "Missing set definiton";
-			return 0;
-		}
+		if (config.set.isEmpty())
+			return new InvalidMap(path, "Missing set definiton");
 	}
 	if (config.type == WMS) {
-		if (config.crs.isEmpty()) {
-			errorString = "Missing CRS definiton";
-			return 0;
-		}
+		if (config.crs.isEmpty())
+			return new InvalidMap(path, "Missing CRS definiton");
 	}
 
 	switch (config.type) {
@@ -315,6 +300,6 @@ Map *MapSource::loadMap(const QString &path, QString &errorString)
 			 config.bounds, config.tileRatio, config.authorization,
 			 config.tileSize, config.scalable, false, true);
 		default:
-			return 0;
+			return new InvalidMap(path, "Invalid map type");
 	}
 }

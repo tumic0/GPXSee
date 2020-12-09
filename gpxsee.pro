@@ -106,6 +106,7 @@ HEADERS += src/common/config.h \
     src/map/IMG/textpathitem.h \
     src/map/IMG/textpointitem.h \
     src/map/bsbmap.h \
+    src/map/invalidmap.h \
     src/map/polyconic.h \
     src/map/projection.h \
     src/map/ellipsoid.h \

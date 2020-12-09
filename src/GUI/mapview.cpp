@@ -18,6 +18,7 @@
 #include "mapitem.h"
 #include "keys.h"
 #include "graphicsscene.h"
+#include "mapaction.h"
 #include "mapview.h"
 
 
@@ -271,13 +272,19 @@ QList<PathItem *> MapView::loadData(const Data &data)
 	return paths;
 }
 
-QList<MapItem *> MapView::loadMaps(const QList<Map*> &maps)
+void MapView::loadMaps(const QList<MapAction *> &maps)
 {
-	QList<MapItem *> items;
 	int zoom = _map->zoom();
 
-	for (int i = 0; i < maps.size(); i++)
-		items.append(addMap(maps.at(i)));
+	for (int i = 0; i < maps.size(); i++) {
+		MapAction *a = maps.at(i);
+		Map *map = a->data().value<Map*>();
+		if (map->isReady()) {
+			MapItem *mi = addMap(map);
+			connect(mi, SIGNAL(triggered()), a, SLOT(trigger()));
+		} else
+			connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
+	}
 
 	if (fitMapZoom() != zoom)
 		rescale();
@@ -287,8 +294,29 @@ QList<MapItem *> MapView::loadMaps(const QList<Map*> &maps)
 	updateZValues(_areas);
 
 	centerOn(contentCenter());
+}
 
-	return items;
+void MapView::mapLoaded()
+{
+	MapAction *action = static_cast<MapAction*>(QObject::sender());
+	Map *map = action->data().value<Map*>();
+
+	if (!map->isValid())
+		return;
+
+	int zoom = _map->zoom();
+
+	MapItem *mi = addMap(map);
+	connect(mi, SIGNAL(triggered()), action, SLOT(trigger()));
+
+	if (fitMapZoom() != zoom)
+		rescale();
+	else
+		updatePOIVisibility();
+
+	updateZValues(_areas);
+
+	centerOn(contentCenter());
 }
 
 int MapView::fitMapZoom() const

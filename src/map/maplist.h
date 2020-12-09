@@ -8,14 +8,13 @@ class Map;
 class MapList
 {
 public:
-	static QList<Map*> loadMaps(const QString &path, QString &errorString);
+	static QList<Map*> loadMaps(const QString &path);
 	static QString formats();
 	static QStringList filter();
 
 private:
-	static Map *loadFile(const QString &path, QString &errorString,
-	  bool *terminate);
-	static QList<Map*> loadDir(const QString &path, QString &errorString);
+	static Map *loadFile(const QString &path, bool *terminate);
+	static QList<Map*> loadDir(const QString &path);
 };
 
 #endif // MAPLIST_H

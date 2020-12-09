@@ -34,6 +34,7 @@ class MapItem;
 class Area;
 class GraphicsScene;
 class QTimeZone;
+class MapAction;
 
 class MapView : public QGraphicsView
 {
@@ -50,7 +51,7 @@ public:
 	MapView(Map *map, POI *poi, QWidget *parent = 0);
 
 	QList<PathItem *> loadData(const Data &data);
-	QList<MapItem *> loadMaps(const QList<Map*> &maps);
+	void loadMaps(const QList<MapAction*> &maps);
 
 	void setPalette(const Palette &palette);
 	void setPOI(POI *poi);
@@ -104,6 +105,7 @@ public slots:
 private slots:
 	void updatePOI();
 	void reloadMap();
+	void mapLoaded();
 
 private:
 	typedef QHash<SearchPointer<Waypoint>, WaypointItem*> POIHash;

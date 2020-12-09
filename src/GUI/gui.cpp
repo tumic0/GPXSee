@@ -131,11 +131,17 @@ void GUI::createMapActions()
 	if (mapDir.isNull())
 		return;
 
-	QString unused;
-	QList<Map*> maps(MapList::loadMaps(mapDir, unused));
+	QList<Map*> maps(MapList::loadMaps(mapDir));
 	for (int i = 0; i < maps.count(); i++) {
-		MapAction *a = createMapAction(maps.at(i));
-		connect(a, SIGNAL(loaded()), this, SLOT(mapInitialized()));
+		Map *map = maps.at(i);
+		if (map->isValid()) {
+			MapAction *a = createMapAction(map);
+			connect(a, SIGNAL(loaded()), this, SLOT(mapInitialized()));
+		} else {
+			qWarning("%s: %s", qPrintable(map->path()),
+			  qPrintable(map->errorString()));
+			delete map;
+		}
 	}
 }
 
@@ -160,7 +166,7 @@ void GUI::mapInitialized()
 		_showMapAction->setEnabled(true);
 		_clearMapCacheAction->setEnabled(true);
 	} else {
-		qWarning("%s: %s", qPrintable(map->name()), qPrintable(map->errorString()));
+		qWarning("%s: %s", qPrintable(map->path()), qPrintable(map->errorString()));
 		action->deleteLater();
 	}
 }
@@ -1463,32 +1469,36 @@ static MapAction *findMapAction(const QList<QAction*> &mapActions,
 
 bool GUI::loadMap(const QString &fileName, MapAction *&action, bool silent)
 {
-	QString error;
-	QList<Map*> maps(MapList::loadMaps(fileName, error));
-	if (maps.isEmpty()) {
-		error = tr("Error loading map:") + "\n\n" + fileName + "\n\n" + error;
-		if (!silent)
-			QMessageBox::critical(this, APP_NAME, error);
-		return false;
-	}
-
+	QList<Map*> maps(MapList::loadMaps(fileName));
+	QList<QAction*> existingActions(_mapsActionGroup->actions());
 	MapAction *lastReady = 0;
-	QList<QAction*> mapActions(_mapsActionGroup->actions());
+	bool valid = false;
 
 	for (int i = 0; i < maps.size(); i++) {
 		Map *map = maps.at(i);
 		MapAction *a;
 
-		if (!(a = findMapAction(mapActions, map))) {
-			a = createMapAction(map);
-			_mapMenu->insertAction(_mapsEnd, a);
-			if (map->isReady()) {
-				lastReady = a;
-				_showMapAction->setEnabled(true);
-				_clearMapCacheAction->setEnabled(true);
-			} else
-				connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
+		if (!(a = findMapAction(existingActions, map))) {
+			if (!map->isValid()) {
+				if (!silent)
+					QMessageBox::critical(this, APP_NAME,
+					  tr("Error loading map:") + "\n\n" + map->path() + "\n\n"
+					  + map->errorString());
+				delete map;
+			} else {
+				valid = true;
+				a = createMapAction(map);
+				_mapMenu->insertAction(_mapsEnd, a);
+
+				if (map->isReady()) {
+					lastReady = a;
+					_showMapAction->setEnabled(true);
+					_clearMapCacheAction->setEnabled(true);
+				} else
+					connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
+			}
 		} else {
+			valid = true;
 			map = a->data().value<Map*>();
 			if (map->isReady())
 				lastReady = a;
@@ -1497,7 +1507,7 @@ bool GUI::loadMap(const QString &fileName, MapAction *&action, bool silent)
 
 	action = lastReady;
 
-	return true;
+	return valid;
 }
 
 void GUI::mapLoaded()
@@ -1510,7 +1520,23 @@ void GUI::mapLoaded()
 		_showMapAction->setEnabled(true);
 		_clearMapCacheAction->setEnabled(true);
 	} else {
-		QString error = tr("Error loading map:") + "\n\n" + map->name() + "\n\n"
+		QString error = tr("Error loading map:") + "\n\n" + map->path() + "\n\n"
+		  + map->errorString();
+		QMessageBox::critical(this, APP_NAME, error);
+		action->deleteLater();
+	}
+}
+
+void GUI::mapLoadedNoTrigger()
+{
+	MapAction *action = static_cast<MapAction*>(QObject::sender());
+	Map *map = action->data().value<Map*>();
+
+	if (map->isValid()) {
+		_showMapAction->setEnabled(true);
+		_clearMapCacheAction->setEnabled(true);
+	} else {
+		QString error = tr("Error loading map:") + "\n\n" + map->path() + "\n\n"
 		  + map->errorString();
 		QMessageBox::critical(this, APP_NAME, error);
 		action->deleteLater();
@@ -1524,34 +1550,38 @@ void GUI::loadMapDir()
 	if (dir.isEmpty())
 		return;
 
-	QString error;
-	QList<Map*> maps(MapList::loadMaps(dir, error));
-	if (maps.isEmpty()) {
-		QMessageBox::critical(this, APP_NAME, tr("No usable map found"));
-		return;
-	}
-
-	QList<MapItem*> items(_mapView->loadMaps(maps));
-	QList<QAction*> mapActions(_mapsActionGroup->actions());
-
+	QList<Map*> maps(MapList::loadMaps(dir));
+	QList<MapAction*> actions;
+	QList<QAction*> existingActions(_mapsActionGroup->actions());
 	QFileInfo fi(dir);
 	QMenu *menu = new QMenu(fi.fileName());
 
 	for (int i = 0; i < maps.size(); i++) {
 		Map *map = maps.at(i);
+		MapAction *a;
 
-		if (!findMapAction(mapActions, map)) {
-			MapAction *a = createMapAction(map);
-			menu->addAction(a);
-			if (map->isReady()) {
-				_showMapAction->setEnabled(true);
-				_clearMapCacheAction->setEnabled(true);
-			} else
-				connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
+		if (!(a = findMapAction(existingActions, map))) {
+			if (!map->isValid()) {
+				QMessageBox::critical(this, APP_NAME, tr("Error loading map:")
+				  + "\n\n" + map->path() + "\n\n" + map->errorString());
+				delete map;
+			} else {
+				a = createMapAction(map);
+				menu->addAction(a);
+				actions.append(a);
 
-			connect(items.at(i), SIGNAL(triggered()), a, SLOT(trigger()));
-		}
+				if (map->isReady()) {
+					_showMapAction->setEnabled(true);
+					_clearMapCacheAction->setEnabled(true);
+				} else
+					connect(a, SIGNAL(loaded()), this,
+					  SLOT(mapLoadedNoTrigger()));
+			}
+		} else
+			actions.append(a);
 	}
+
+	_mapView->loadMaps(actions);
 
 	if (menu->isEmpty())
 		delete menu;
