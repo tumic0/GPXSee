@@ -1527,7 +1527,7 @@ void GUI::mapLoaded()
 	}
 }
 
-void GUI::mapLoadedNoTrigger()
+void GUI::mapLoadedDir()
 {
 	MapAction *action = static_cast<MapAction*>(QObject::sender());
 	Map *map = action->data().value<Map*>();
@@ -1535,6 +1535,9 @@ void GUI::mapLoadedNoTrigger()
 	if (map->isValid()) {
 		_showMapAction->setEnabled(true);
 		_clearMapCacheAction->setEnabled(true);
+		QList<MapAction*> actions;
+		actions.append(action);
+		_mapView->loadMaps(actions);
 	} else {
 		QString error = tr("Error loading map:") + "\n\n" + map->path() + "\n\n"
 		  + map->errorString();
@@ -1568,17 +1571,19 @@ void GUI::loadMapDir()
 			} else {
 				a = createMapAction(map);
 				menu->addAction(a);
-				actions.append(a);
 
 				if (map->isReady()) {
 					_showMapAction->setEnabled(true);
 					_clearMapCacheAction->setEnabled(true);
+					actions.append(a);
 				} else
-					connect(a, SIGNAL(loaded()), this,
-					  SLOT(mapLoadedNoTrigger()));
+					connect(a, SIGNAL(loaded()), this, SLOT(mapLoadedDir()));
 			}
-		} else
-			actions.append(a);
+		} else {
+			map = a->data().value<Map*>();
+			if (map->isReady())
+				actions.append(a);
+		}
 	}
 
 	_mapView->loadMaps(actions);

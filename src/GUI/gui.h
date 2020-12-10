@@ -96,7 +96,7 @@ private slots:
 	void logicalDotsPerInchChanged(qreal dpi);
 
 	void mapLoaded();
-	void mapLoadedNoTrigger();
+	void mapLoadedDir();
 	void mapInitialized();
 
 private:

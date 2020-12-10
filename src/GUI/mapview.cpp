@@ -279,35 +279,10 @@ void MapView::loadMaps(const QList<MapAction *> &maps)
 	for (int i = 0; i < maps.size(); i++) {
 		MapAction *a = maps.at(i);
 		Map *map = a->data().value<Map*>();
-		if (map->isReady()) {
-			MapItem *mi = addMap(map);
-			connect(mi, SIGNAL(triggered()), a, SLOT(trigger()));
-		} else
-			connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
+		Q_ASSERT(map->isReady());
+		MapItem *mi = addMap(map);
+		connect(mi, SIGNAL(triggered()), a, SLOT(trigger()));
 	}
-
-	if (fitMapZoom() != zoom)
-		rescale();
-	else
-		updatePOIVisibility();
-
-	updateZValues(_areas);
-
-	centerOn(contentCenter());
-}
-
-void MapView::mapLoaded()
-{
-	MapAction *action = static_cast<MapAction*>(QObject::sender());
-	Map *map = action->data().value<Map*>();
-
-	if (!map->isValid())
-		return;
-
-	int zoom = _map->zoom();
-
-	MapItem *mi = addMap(map);
-	connect(mi, SIGNAL(triggered()), action, SLOT(trigger()));
 
 	if (fitMapZoom() != zoom)
 		rescale();

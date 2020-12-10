@@ -21,6 +21,7 @@ public:
 	void draw(QPainter *, const QRectF &, Flags) {}
 
 	bool isValid() const {return false;}
+	bool isReady() const {return false;}
 	QString errorString() const {return _errorString;}
 
 private:

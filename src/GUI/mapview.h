@@ -105,7 +105,6 @@ public slots:
 private slots:
 	void updatePOI();
 	void reloadMap();
-	void mapLoaded();
 
 private:
 	typedef QHash<SearchPointer<Waypoint>, WaypointItem*> POIHash;
