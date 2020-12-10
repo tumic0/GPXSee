@@ -330,7 +330,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="314"/>
         <source>Clear tile cache</source>
-        <translation>Очистить кэш</translation>
+        <translation>Очистить кэш тайлов</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="222"/>
@@ -367,7 +367,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="311"/>
         <source>Load map directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузить каталог карт…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="319"/>
@@ -628,12 +628,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1504"/>
         <source>No usable map found</source>
-        <translation type="unfinished"></translation>
+        <translation>Карта не найдена</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1536"/>
         <source>Clear the map tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистить кэш тайлов?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1543"/>
@@ -713,7 +713,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1497"/>
         <source>Select map directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите каталог с картами</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1547"/>
@@ -969,12 +969,12 @@
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished">Имя</translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="17"/>
         <source>File</source>
-        <translation type="unfinished">Файл</translation>
+        <translation>Файл</translation>
     </message>
 </context>
 <context>
@@ -1002,7 +1002,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="112"/>
         <source>BSB nautical charts</source>
-        <translation type="unfinished"></translation>
+        <translation>BSB навигационные карты</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="113"/>
