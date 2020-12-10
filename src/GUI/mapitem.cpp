@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include "map/map.h"
+#include "mapaction.h"
 #include "popup.h"
 #include "tooltip.h"
 #include "mapitem.h"
@@ -19,13 +20,18 @@ QString MapItem::info() const
 	return tt.toString();
 }
 
-MapItem::MapItem(Map *src, Map *map, GraphicsItem *parent)
+MapItem::MapItem(MapAction *action, Map *map, GraphicsItem *parent)
   : PlaneItem(parent)
 {
+	Map *src = action->data().value<Map*>();
+	Q_ASSERT(map->isReady());
+
 	_name = src->name();
 	_fileName = src->path();
 	_bounds = RectC(src->xy2ll(src->bounds().topLeft()),
 	  src->xy2ll(src->bounds().bottomRight()));
+
+	connect(this, SIGNAL(triggered()), action, SLOT(trigger()));
 
 	_map = map;
 	_digitalZoom = 0;

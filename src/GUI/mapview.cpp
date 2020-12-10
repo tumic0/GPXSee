@@ -222,7 +222,7 @@ void MapView::addWaypoints(const QVector<Waypoint> &waypoints)
 	}
 }
 
-MapItem *MapView::addMap(Map *map)
+MapItem *MapView::addMap(MapAction *map)
 {
 	MapItem *mi = new MapItem(map, _map);
 	mi->setColor(_palette.nextColor());
@@ -276,13 +276,8 @@ void MapView::loadMaps(const QList<MapAction *> &maps)
 {
 	int zoom = _map->zoom();
 
-	for (int i = 0; i < maps.size(); i++) {
-		MapAction *a = maps.at(i);
-		Map *map = a->data().value<Map*>();
-		Q_ASSERT(map->isReady());
-		MapItem *mi = addMap(map);
-		connect(mi, SIGNAL(triggered()), a, SLOT(trigger()));
-	}
+	for (int i = 0; i < maps.size(); i++)
+		addMap(maps.at(i));
 
 	if (fitMapZoom() != zoom)
 		rescale();

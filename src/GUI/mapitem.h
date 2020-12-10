@@ -3,12 +3,14 @@
 
 #include "planeitem.h"
 
+class MapAction;
+
 class MapItem : public QObject, public PlaneItem
 {
 	Q_OBJECT
 
 public:
-	MapItem(Map *src, Map *map, GraphicsItem *parent = 0);
+	MapItem(MapAction *action, Map *map, GraphicsItem *parent = 0);
 
 	QPainterPath shape() const {return _painterPath;}
 	QRectF boundingRect() const {return _painterPath.boundingRect();}

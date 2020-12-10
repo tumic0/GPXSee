@@ -111,7 +111,7 @@ private:
 
 	PathItem *addTrack(const Track &track);
 	PathItem *addRoute(const Route &route);
-	MapItem *addMap(Map *map);
+	MapItem *addMap(MapAction *map);
 	void addArea(const Area &area);
 	void addWaypoints(const QVector<Waypoint> &waypoints);
 	void addPOI(const QList<Waypoint> &waypoints);
