@@ -969,12 +969,12 @@
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished">Ім’я</translation>
+        <translation>Ім’я</translation>
     </message>
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="17"/>
         <source>File</source>
-        <translation type="unfinished">Файл</translation>
+        <translation>Файл</translation>
     </message>
 </context>
 <context>

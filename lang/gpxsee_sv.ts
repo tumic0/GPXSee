@@ -377,7 +377,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="311"/>
         <source>Load map directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Läs in kartmapp...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="319"/>
@@ -644,17 +644,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1497"/>
         <source>Select map directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj kartmapp</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1504"/>
         <source>No usable map found</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen användbar karta hittades</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1536"/>
         <source>Clear the map tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vill du rensa cache-lagrade kartor?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1543"/>
@@ -968,12 +968,12 @@
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished">Namn</translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="17"/>
         <source>File</source>
-        <translation type="unfinished">Arkiv</translation>
+        <translation>Arkiv</translation>
     </message>
 </context>
 <context>
@@ -1001,7 +1001,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="112"/>
         <source>BSB nautical charts</source>
-        <translation type="unfinished"></translation>
+        <translation>BSB nautiska sjökort</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="113"/>
