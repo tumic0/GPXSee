@@ -35,7 +35,9 @@ public:
 	  && p.y() >= bottom());}
 
 	bool isNull() const {return _tl.isNull() && _br.isNull();}
-	bool isValid() const {return !(_tl.isNull() || _br.isNull());}
+	bool isValid() const
+	  {return (_tl.isValid() && _br.isValid()
+	  && _tl.x() != _br.x() && _tl.y() != _br.y());}
 
 	RectC toRectC(const Projection &proj, int samples = 100) const;
 

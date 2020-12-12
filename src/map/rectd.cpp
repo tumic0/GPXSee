@@ -1,3 +1,4 @@
+#include <cmath>
 #include "common/rectc.h"
 #include "projection.h"
 #include "rectd.h"
@@ -48,19 +49,19 @@ static void growRect(const Projection &proj, const PointD &p, RectC &rect)
 RectD::RectD(const RectC &rect, const Projection &proj, int samples)
 {
 	RectD prect;
-	double dx = (rect.right() - rect.left()) / samples;
-	double dy = (rect.top() - rect.bottom()) / samples;
 
-	growRect(proj, rect.topLeft(), prect);
+	if (rect.isValid()) {
+		double dx = rect.width() / samples;
+		double dy = rect.height() / samples;
 
-	if (dx > 0) {
+		growRect(proj, rect.topLeft(), prect);
+
 		for (int i = 0; i <= samples; i++) {
-			double x = rect.left() + i * dx;
+			double x = remainder(rect.left() + i * dx, 360.0);
 			growRect(proj, Coordinates(x, rect.bottom()), prect);
 			growRect(proj, Coordinates(x, rect.top()), prect);
 		}
-	}
-	if (dy > 0) {
+
 		for (int i = 0; i <= samples; i++ ) {
 			double y = rect.bottom() + i * dy;
 			growRect(proj, Coordinates(rect.left(), y), prect);
@@ -73,26 +74,26 @@ RectD::RectD(const RectC &rect, const Projection &proj, int samples)
 
 RectC RectD::toRectC(const Projection &proj, int samples) const
 {
-	RectC ret;
-	double dx = (right() - left()) / samples;
-	double dy = (top() - bottom()) / samples;
+	if (!isValid())
+		return RectC();
 
-	growRect(proj, topLeft(), ret);
+	RectC rect;
+	double dx = width() / samples;
+	double dy = height() / samples;
 
-	if (dx > 0) {
-		for (int i = 0; i <= samples; i++) {
-			double x = left() + i * dx;
-			growRect(proj, PointD(x, bottom()), ret);
-			growRect(proj, PointD(x, top()), ret);
-		}
-	}
-	if (dy > 0) {
-		for (int i = 0; i <= samples; i++ ) {
-			double y = bottom() + i * dy;
-			growRect(proj, PointD(left(), y), ret);
-			growRect(proj, PointD(right(), y), ret);
-		}
+	growRect(proj, topLeft(), rect);
+
+	for (int i = 0; i <= samples; i++) {
+		double x = left() + i * dx;
+		growRect(proj, PointD(x, bottom()), rect);
+		growRect(proj, PointD(x, top()), rect);
 	}
 
-	return ret;
+	for (int i = 0; i <= samples; i++ ) {
+		double y = bottom() + i * dy;
+		growRect(proj, PointD(left(), y), rect);
+		growRect(proj, PointD(right(), y), rect);
+	}
+
+	return rect;
 }

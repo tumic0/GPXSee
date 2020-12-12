@@ -24,6 +24,13 @@ public:
 	  {return Coordinates((_tl.lon() + _br.lon()) / 2.0,
 	    (_tl.lat() + _br.lat()) / 2.0);}
 
+	double width() const
+	{
+		double res = right() - left();
+		return (left() > right()) ? 360.0 - res : res;
+	}
+	double height() const {return (top() - bottom());}
+
 	double top() const {return _tl.lat();}
 	double bottom() const {return _br.lat();}
 	double left() const {return _tl.lon();}
