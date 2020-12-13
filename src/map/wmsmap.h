@@ -20,6 +20,7 @@ public:
 	QString name() const {return _name;}
 
 	QRectF bounds();
+	RectC llBounds() {return _wms->bbox();}
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);

@@ -294,8 +294,7 @@ int MapView::fitMapZoom() const
 	RectC br = _tr | _rr | _wr | _ar;
 
 	return _map->zoomFit(viewport()->size() - QSize(2*MARGIN, 2*MARGIN),
-	  br.isNull() ? RectC(_map->xy2ll(_map->bounds().topLeft()),
-	  _map->xy2ll(_map->bounds().bottomRight())) : br);
+	  br.isNull() ? _map->llBounds() : br);
 }
 
 QPointF MapView::contentCenter() const

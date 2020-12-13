@@ -18,6 +18,7 @@ public:
 	QString name() const {return _data.first()->name();}
 
 	QRectF bounds() {return _bounds;}
+	RectC llBounds() {return _dataBounds;}
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);

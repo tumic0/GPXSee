@@ -1,3 +1,4 @@
+#include <cmath>
 #include <QCursor>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
@@ -7,6 +8,66 @@
 #include "tooltip.h"
 #include "mapitem.h"
 
+
+static void growLeft(Map *map, const Coordinates &c, QRectF &rect)
+{
+	QPointF p(map->ll2xy(c));
+
+	if (p.x() < rect.left())
+		rect.setLeft(p.x());
+}
+
+static void growRight(Map *map, const Coordinates &c, QRectF &rect)
+{
+
+	QPointF p(map->ll2xy(c));
+
+	if (p.x() > rect.right())
+		rect.setRight(p.x());
+}
+
+static void growTop(Map *map, const Coordinates &c, QRectF &rect)
+{
+	QPointF p(map->ll2xy(c));
+
+	if (p.y() > rect.top())
+		rect.setTop(p.y());
+}
+
+static void growBottom(Map *map, const Coordinates &c, QRectF &rect)
+{
+	QPointF p(map->ll2xy(c));
+
+	if (p.y() < rect.bottom())
+		rect.setBottom(p.y());
+}
+
+static QRectF bbox(const RectC &rect, Map *map, int samples = 100)
+{
+	if (!rect.isValid())
+		return QRectF();
+
+	double dx = rect.width() / samples;
+	double dy = rect.height() / samples;
+
+	QPointF tl(map->ll2xy(rect.topLeft()));
+	QPointF br(map->ll2xy(rect.bottomRight()));
+	QRectF prect(tl, br);
+
+	for (int i = 0; i <= samples; i++) {
+		double x = remainder(rect.left() + i * dx, 360.0);
+		growTop(map, Coordinates(x, rect.bottom()), prect);
+		growBottom(map, Coordinates(x, rect.top()), prect);
+	}
+
+	for (int i = 0; i <= samples; i++) {
+		double y = rect.bottom() + i * dy;
+		growLeft(map, Coordinates(rect.left(), y), prect);
+		growRight(map, Coordinates(rect.right(), y), prect);
+	}
+
+	return prect;
+}
 
 QString MapItem::info() const
 {
@@ -28,8 +89,9 @@ MapItem::MapItem(MapAction *action, Map *map, GraphicsItem *parent)
 
 	_name = src->name();
 	_fileName = src->path();
-	_bounds = RectC(src->xy2ll(src->bounds().topLeft()),
-	  src->xy2ll(src->bounds().bottomRight()));
+	// Zoom to the maximal zoom level to get the most accurate bounds
+	src->zoomFit(QSize(), RectC());
+	_bounds = src->llBounds();
 
 	connect(this, SIGNAL(triggered()), action, SLOT(trigger()));
 
@@ -51,23 +113,18 @@ void MapItem::updatePainterPath()
 {
 	_painterPath = QPainterPath();
 
-	if (_bounds.left() > _bounds.right()) {
-		QRectF r1(_map->ll2xy(_bounds.topLeft()), _map->ll2xy(Coordinates(180,
-		  _bounds.bottomRight().lat())));
-		QRectF r2(_map->ll2xy(Coordinates(-180, _bounds.topLeft().lat())),
-		  _map->ll2xy(_bounds.bottomRight()));
-		QRectF r(_map->ll2xy(_bounds.topLeft()),
-		  _map->ll2xy(_bounds.bottomRight()));
+	QRectF r(bbox(_bounds, _map));
 
-		if (r1.united(r2) == r)
-			_painterPath.addRect(r);
-		else {
-			_painterPath.addRect(r1);
-			_painterPath.addRect(r2);
-		}
+	if (r.left() > r.right()) {
+		QRectF r1(bbox(RectC(_bounds.topLeft(),
+		  Coordinates(180, _bounds.bottomRight().lat())), _map));
+		QRectF r2(bbox(RectC(Coordinates(-180, _bounds.topLeft().lat()),
+		  _bounds.bottomRight()), _map));
+
+		_painterPath.addRect(r1);
+		_painterPath.addRect(r2);
 	} else
-		_painterPath.addRect(QRectF(_map->ll2xy(_bounds.topLeft()),
-		  _map->ll2xy(_bounds.bottomRight())));
+		_painterPath.addRect(r);
 }
 
 void MapItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,

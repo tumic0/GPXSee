@@ -1,6 +1,7 @@
 #ifndef EMPTYMAP_H
 #define EMPTYMAP_H
 
+#include "osm.h"
 #include "map.h"
 
 class EmptyMap : public Map
@@ -13,6 +14,7 @@ public:
 	QString name() const {return QString();}
 
 	QRectF bounds();
+	RectC llBounds() {return OSM::BOUNDS;}
 	qreal resolution(const QRectF &rect);
 
 	int zoom() const {return _zoom;}

@@ -5,11 +5,10 @@
 #include <QString>
 #include <QRectF>
 #include <QFlags>
-#include "common/coordinates.h"
+#include "common/rectc.h"
 
 
 class QPainter;
-class RectC;
 class Projection;
 
 class Map : public QObject
@@ -31,6 +30,7 @@ public:
 	const QString &path() const {return _path;}
 	virtual QString name() const = 0;
 
+	virtual RectC llBounds();
 	virtual QRectF bounds() = 0;
 	virtual qreal resolution(const QRectF &rect);
 
@@ -60,6 +60,11 @@ signals:
 	void mapLoaded();
 
 private:
+	void growLeft(const QPointF &p, RectC &rect);
+	void growRight(const QPointF &p, RectC &rect);
+	void growTop(const QPointF &p, RectC &rect);
+	void growBottom(const QPointF &p, RectC &rect);
+
 	QString _path;
 };
 

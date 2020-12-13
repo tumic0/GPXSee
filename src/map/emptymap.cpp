@@ -1,7 +1,6 @@
 #include <QtGlobal>
 #include <QPainter>
 #include "common/rectc.h"
-#include "osm.h"
 #include "emptymap.h"
 
 

@@ -85,6 +85,7 @@ QRectF WMTSMap::bounds()
 		bounds = QRectF(_transform.proj2img(_bounds.topLeft())
 		  / coordinatesRatio(), _transform.proj2img(
 		  _bounds.bottomRight()) / coordinatesRatio());
+
 	return bounds.isValid() ? tileBounds.intersected(bounds) : tileBounds;
 }
 
