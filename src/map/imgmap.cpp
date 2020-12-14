@@ -171,7 +171,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 					polyRect &= bounds();
 					RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
 					  _transform.img2proj(polyRect.bottomRight()));
-					_data.at(n)->polys(polyRectD.toRectC(_projection, 4), _zoom,
+					_data.at(n)->polys(polyRectD.toRectC(_projection, 20), _zoom,
 					  &polygons, &lines);
 
 					QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT,
@@ -180,7 +180,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 					pointRect &= bounds();
 					RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
 					  _transform.img2proj(pointRect.bottomRight()));
-					_data.at(n)->points(pointRectD.toRectC(_projection, 4),
+					_data.at(n)->points(pointRectD.toRectC(_projection, 20),
 					  _zoom, &points);
 
 					tiles.append(RasterTile(this, _data.at(n)->style(), _zoom,
@@ -212,10 +212,18 @@ void IMGMap::setProjection(const Projection &projection)
 		return;
 
 	_projection = projection;
-	// Limit the bounds for some well known Mercator projections
+	// Limit the bounds for some well known projections
 	// (world maps have N/S bounds up to 90/-90!)
-	_dataBounds = (_projection == PCS::pcs(3857) || _projection == PCS::pcs(3395))
-	  ? _data.first()->bounds() & OSM::BOUNDS : _data.first()->bounds();
+	if (_projection == PCS::pcs(3857) || _projection == PCS::pcs(3395))
+		_dataBounds = _data.first()->bounds() & OSM::BOUNDS;
+	else if (_projection == PCS::pcs(3031) || _projection == PCS::pcs(3976))
+		_dataBounds = _data.first()->bounds() & RectC(Coordinates(-180, -60),
+		  Coordinates(180, -90));
+	else if (_projection == PCS::pcs(3995) || _projection == PCS::pcs(3413))
+		_dataBounds = _data.first()->bounds() & RectC(Coordinates(-180, 90),
+		  Coordinates(180, 60));
+	else
+		_dataBounds = _data.first()->bounds();
 
 	updateTransform();
 	QPixmapCache::clear();

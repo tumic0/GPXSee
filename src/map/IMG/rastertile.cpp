@@ -454,4 +454,3 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 			delete item;
 	}
 }
-

@@ -16,6 +16,9 @@ public:
 
 	PointD topLeft() const {return _tl;}
 	PointD bottomRight() const {return _br;}
+	PointD center() const
+	  {return PointD((_tl.x() + _br.x()) / 2.0,
+		(_tl.y() + _br.y()) / 2.0);}
 
 	double left() const {return _tl.x();}
 	double right() const {return _br.x();}

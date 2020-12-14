@@ -89,8 +89,6 @@ MapItem::MapItem(MapAction *action, Map *map, GraphicsItem *parent)
 
 	_name = src->name();
 	_fileName = src->path();
-	// Zoom to the maximal zoom level to get the most accurate bounds
-	src->zoomFit(QSize(), RectC());
 	_bounds = src->llBounds();
 
 	connect(this, SIGNAL(triggered()), action, SLOT(trigger()));
