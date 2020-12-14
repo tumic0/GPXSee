@@ -199,5 +199,5 @@ bool PolarStereographic::operator==(const CT &ct) const
 	  && _originLongitude == other->_originLongitude
 	  && _falseEasting == other->_falseEasting
 	  && _falseNorthing == other->_falseNorthing && _two_a == other->_two_a
-	  && _es == other->_es);
+	  && _es == other->_es && _southernHemisphere == other->_southernHemisphere);
 }
