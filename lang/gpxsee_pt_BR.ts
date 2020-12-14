@@ -358,7 +358,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="311"/>
         <source>Load map directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Carregar diretório de mapa...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="314"/>
@@ -792,17 +792,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1497"/>
         <source>Select map directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecionar diretório de mapa</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1504"/>
         <source>No usable map found</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum mapa utilizável encontrado</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1536"/>
         <source>Clear the map tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Limpar o cache de ladrilhos de mapa?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1543"/>
@@ -968,12 +968,12 @@
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="17"/>
         <source>File</source>
-        <translation type="unfinished">Arquivo</translation>
+        <translation>Arquivo</translation>
     </message>
 </context>
 <context>
@@ -1001,7 +1001,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="112"/>
         <source>BSB nautical charts</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartas náuticas BSB</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="113"/>
