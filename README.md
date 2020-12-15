@@ -51,6 +51,7 @@ licenses:
 * [Mapbox Maki icons](icons/POI) - CC0
 * [RTree implementation](src/common/rtree.h) - Public domain
 * [Albers](src/map/albersequal.cpp), [Geocentric](src/map/geocentric.cpp), [LCC](src/map/lambertconic.cpp),
-  [Mercator](src/map/mercator.cpp), [Polar Stereographic](src/map/polarstereographic.cpp)
-  and [Transverse Mercator](src/map/transversemercator.cpp) projections - NIMA Source Code Disclaimer
+  [Mercator](src/map/mercator.cpp), [Polar Stereographic](src/map/polarstereographic.cpp),
+  [Polyconic](src/map/polyconic.cpp) and [Transverse Mercator](src/map/transversemercator.cpp)
+  projections - NIMA Source Code Disclaimer
 * [Projection parameters CSV files](pkg/csv) - BSD/EPSG/Public domain
