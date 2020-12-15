@@ -42,7 +42,7 @@
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
-				<string>application/tcx+xml</string>
+				<string>application/vnd.garmin.tcx+xml</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>icons/tcx.icns</string>
@@ -74,7 +74,7 @@
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
-				<string>application/loc+xml</string>
+				<string>application/vnd.groundspeak.loc+xml</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>icons/loc.icns</string>
@@ -90,7 +90,7 @@
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
-				<string>application/slf+xml</string>
+				<string>application/vnd.sigma.slf+xml</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>icons/slf.icns</string>
@@ -250,12 +250,199 @@
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
-				<string>application/sml+xml</string>
+				<string>application/vnd.suunto.sml+xml</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>icons/sml.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Suunto Markup Language</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>jpeg</string>
+				<string>jpg</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>image/jpeg</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>JPEG Image</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>csv</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>text/csv</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Comma-Separated Values (CSV) Files</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>img</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.garmin.img</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/img.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Garmin IMG Map</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>gmap</string>
+				<string>gmapi</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.garmin.gmap</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/img.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Garmin Map Product File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>jnx</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.garmin.jnx</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/jnx.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Garmin JNX Map</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>kap</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.maptech.kap</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/kap.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>BSB Nautical Charts</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>map</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.oziexplorer.map</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/map.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>OziExplorer Map File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>rmap</string>
+				<string>rtmap</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.twonav.rmap</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/rmap.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>TwoNav Raster Map File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>tba</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.trekbuddy.tba</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/tba.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>TrekBuddy Atlas</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>mbtiles</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.mapbox.mbtiles</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/mbts.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>MBTiles Map File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>tiff</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>image/tiff</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>GeoTIFF Image</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>xml</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.gpxsee.map+xml</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>GPXSee Map Definition File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
@@ -302,7 +489,7 @@
 					<string>tcx</string>
 				</array>
 				<key>public.mime-type</key>
-				<string>application/tcx+xml</string>
+				<string>application/vnd.garmin.tcx+xml</string>
 			</dict>
 		</dict>
 		<dict>
@@ -344,7 +531,7 @@
 					<string>loc</string>
 				</array>
 				<key>public.mime-type</key>
-				<string>application/loc+xml</string>
+				<string>application/vnd.groundspeak.loc+xml</string>
 			</dict>
 		</dict>
 		<dict>
@@ -365,7 +552,7 @@
 					<string>slf</string>
 				</array>
 				<key>public.mime-type</key>
-				<string>application/slf+xml</string>
+				<string>application/vnd.sigma.slf+xml</string>
 			</dict>
 		</dict>
 		<dict>
@@ -575,7 +762,269 @@
 					<string>sml</string>
 				</array>
 				<key>public.mime-type</key>
-				<string>application/sml+xml</string>
+				<string>application/vnd.suunto.sml+xml</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>public.jpeg</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.w3.org/Graphics/JPEG/</string>
+			<key>UTTypeDescription</key>
+			<string>JPEG Image</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.image</string>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>jpeg</string>
+					<string>jpg</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>image/jpeg</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>public.csv</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://tools.ietf.org/html/rfc4180</string>
+			<key>UTTypeDescription</key>
+			<string>Comma-Separated Values (CSV) Files</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>csv</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>text/csv</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.garmin.img</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://sourceforge.net/projects/garmin-img/</string>
+			<key>UTTypeDescription</key>
+			<string>Garmin IMG map</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>img</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.garmin.img</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.garmin.jnx</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://whiter.brinkster.net/en/JNX.shtml</string>
+			<key>UTTypeDescription</key>
+			<string>Garmin JNX Map</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>jnx</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.garmin.jnx</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.garmin.gmap</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://sourceforge.net/projects/garmin-img/</string>
+			<key>UTTypeDescription</key>
+			<string>Garmin Map Product File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.xml</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>xml</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.garmin.gmap</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.maptech.kap</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://libbsb.sourceforge.net/bsb_file_format.html</string>
+			<key>UTTypeDescription</key>
+			<string>BSB Nautical Charts</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.image</string>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>kap</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>image/vnd.maptech.kap</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.oziexplorer3.map</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://www.oziexplorer3.com/eng/help/map_file_format.html</string>
+			<key>UTTypeDescription</key>
+			<string>OziExplorer Map File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>map</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.oziexplorer.map</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.mapbox.mbtiles</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://github.com/mapbox/mbtiles-spec</string>
+			<key>UTTypeDescription</key>
+			<string>MBTiles Map File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>mbtiles</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.mapbox.mbtiles</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.twonav.rmap</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://wiki.openstreetmap.org/wiki/TwoNav_RMAP</string>
+			<key>UTTypeDescription</key>
+			<string>TwoNav Raster Map File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>rmap</string>
+					<string>rtmap</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.twonav.rmap</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>net.trekbuddy.tba</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://github.com/kruhc/trekbuddy</string>
+			<key>UTTypeDescription</key>
+			<string>TrekBuddy Atlas</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tba</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.trekbuddy.tba</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>public.tiff</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://www.adobe.io/open/standards/TIFF.html</string>
+			<key>UTTypeDescription</key>
+			<string>TIFF Image</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.image</string>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tiff</string>
+					<string>tif</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>image/tiff</string>
+			</dict>
+		</dict>
+	</array>
+
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.gpxsee.map</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.gpxsee.org/map/1.4/</string>
+			<key>UTTypeDescription</key>
+			<string>GPXSee Map Definition File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.xml</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>xml</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.gpxsee.map+xml</string>
 			</dict>
 		</dict>
 	</array>

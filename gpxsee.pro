@@ -433,7 +433,13 @@ macx {
         icons/formats/json.icns \
         icons/formats/cup.icns \
         icons/formats/gpi.icns \
-        icons/formats/sml.icns
+        icons/formats/sml.icns \
+        icons/formats/img.icns \
+        icons/formats/jnx.icns \
+        icons/formats/kap.icns \
+        icons/formats/mbts.icns \
+        icons/formats/rmap.icns \
+        icons/formats/tba.icns
     QMAKE_BUNDLE_DATA += locale maps icons csv
 }
 
@@ -453,7 +459,14 @@ win32 {
         icons/formats/json.ico \
         icons/formats/cup.ico \
         icons/formats/gpi.ico \
-        icons/formats/sml.ico
+        icons/formats/sml.ico \
+        icons/formats/img.ico \
+        icons/formats/jnx.ico \
+        icons/formats/kap.ico \
+        icons/formats/map.ico \
+        icons/formats/mbts.ico \
+        icons/formats/rmap.ico \
+        icons/formats/tba.ico
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }

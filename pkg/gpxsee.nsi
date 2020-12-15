@@ -109,14 +109,14 @@ Section "GPXSee" SEC_APP
 
   ; Associate file formats
   DetailPrint "Associating file types..."
-  !insertmacro FILE_ASSOCIATION_ADD "gpx" "GPS Exchange Format" 8
-  !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 9
-  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 10
-  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 11
-  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 12
-  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 13
-  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track Point File" 14
-  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 15
+  !insertmacro FILE_ASSOCIATION_ADD "gpx" "GPS Exchange Format" 11
+  !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 16
+  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 17
+  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 18
+  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 19
+  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 20
+  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track Point File" 21
+  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 22
   !insertmacro FILE_ASSOCIATION_ADD "wpt" "OziExplorer Waypoint File" 1
   !insertmacro FILE_ASSOCIATION_ADD "loc" "Geocaching.com Waypoint File" 2
   !insertmacro FILE_ASSOCIATION_ADD "slf" "Sigma Log File" 3
@@ -124,6 +124,13 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "cup" "SeeYou CUP File" 5
   !insertmacro FILE_ASSOCIATION_ADD "gpi" "Garmin POI File" 6
   !insertmacro FILE_ASSOCIATION_ADD "sml" "Suunto Markup Language" 7
+  !insertmacro FILE_ASSOCIATION_ADD "img" "Garmin IMG Map" 8
+  !insertmacro FILE_ASSOCIATION_ADD "jnx" "Garmin JNX Map" 9
+  !insertmacro FILE_ASSOCIATION_ADD "kap" "BSB Nautical Chart" 10
+  !insertmacro FILE_ASSOCIATION_ADD "map" "OziExplorer Map File" 12
+  !insertmacro FILE_ASSOCIATION_ADD "mbtiles" "MBTiles Map File" 13
+  !insertmacro FILE_ASSOCIATION_ADD "rmap" "TwoNav Raster Map File" 14
+  !insertmacro FILE_ASSOCIATION_ADD "tba" "TrekBuddy Atlas" 15
 
   WriteRegStr HKCR "Applications\GPXSee.exe\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
   WriteRegStr HKCR ".gpx\OpenWithList" "GPXSee.exe" ""
@@ -260,6 +267,13 @@ Section "Uninstall"
   !insertmacro FILE_ASSOCIATION_REMOVE "cup"
   !insertmacro FILE_ASSOCIATION_REMOVE "gpi"
   !insertmacro FILE_ASSOCIATION_REMOVE "sml"
+  !insertmacro FILE_ASSOCIATION_REMOVE "img"
+  !insertmacro FILE_ASSOCIATION_REMOVE "jnx"
+  !insertmacro FILE_ASSOCIATION_REMOVE "kap"
+  !insertmacro FILE_ASSOCIATION_REMOVE "map"
+  !insertmacro FILE_ASSOCIATION_REMOVE "mbtiles"
+  !insertmacro FILE_ASSOCIATION_REMOVE "rmap"
+  !insertmacro FILE_ASSOCIATION_REMOVE "tba"
 
   DeleteRegValue HKCR ".gpx\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".tcx\OpenWithList" "GPXSee.exe"
