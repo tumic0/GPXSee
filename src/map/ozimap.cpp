@@ -124,15 +124,13 @@ bool OziMap::setImageInfo(const QString &path)
 	if (ii.isRelative())
 		ii.setFile(path + "/" + _map.path);
 
-/*
 	if (!ii.exists()) {
 		int last = _map.path.lastIndexOf('\\');
 		if (last >= 0 && last < _map.path.length() - 1) {
-			QStringRef fn(&_map.path, last + 1, _map.path.length() - last - 1);
-			ii.setFile(path + "/" + fn.toString());
+			QString fn(_map.path.mid(last + 1, _map.path.length() - last - 1));
+			ii.setFile(path + "/" + fn);
 		}
 	}
-*/
 
 	if (ii.exists())
 		_map.path = ii.absoluteFilePath();
