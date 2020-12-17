@@ -185,7 +185,7 @@ void TextPathItem::paint(QPainter *painter) const
 		painter->drawText(QPoint(1, fm.descent()), _text->at(i));
 		painter->setTransform(t);
 
-		int width = fm.boundingRect(_text->at(i)).width();
+		int width = fm.horizontalAdvance(_text->at(i));
 		percent += ((qreal)width / (qreal)textWidth) * factor;
 	}
 	percent = (1.0 - factor) / 2.0;
@@ -200,7 +200,7 @@ void TextPathItem::paint(QPainter *painter) const
 		painter->drawText(QPoint(0, fm.descent()), _text->at(i));
 		painter->setTransform(t);
 
-		int width = fm.boundingRect(_text->at(i)).width();
+		int width = fm.horizontalAdvance(_text->at(i));
 		percent += ((qreal)width / (qreal)textWidth) * factor;
 	}
 
