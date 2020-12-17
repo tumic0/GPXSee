@@ -170,8 +170,13 @@ void GUI::mapInitialized()
 void GUI::createPOIFilesActions()
 {
 	_poiFilesSignalMapper = new QSignalMapper(this);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	connect(_poiFilesSignalMapper, SIGNAL(mapped(int)), this,
 	  SLOT(poiFileChecked(int)));
+#else // QT6
+	connect(_poiFilesSignalMapper, SIGNAL(mappedInt(int)), this,
+	  SLOT(poiFileChecked(int)));
+#endif // QT6
 
 	for (int i = 0; i < _poi->files().count(); i++)
 		createPOIFileAction(_poi->files().at(i));
