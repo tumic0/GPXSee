@@ -456,8 +456,8 @@ void GraphView::updateSliderInfo()
 	  'f', _precision) + UNIT_SPACE + _yUnits);
 	if (cardinal && cardinal->secondaryGraph()) {
 		qreal delta = y - cardinal->secondaryGraph()->yAtX(_sliderPos);
-		yText += " " + QChar(0x0394) + l.toString(-delta * _yScale + _yOffset,
-		  'f', _precision) + UNIT_SPACE + _yUnits;
+		yText += QString(" ") + QChar(0x0394) + l.toString(-delta * _yScale
+		  + _yOffset, 'f', _precision) + UNIT_SPACE + _yUnits;
 	}
 	_sliderInfo->setText(xText, yText);
 }

@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include <QApplication>
 #include <QBasicTimer>
+#include <QScreen>
 #include "popup.h"
 
 
