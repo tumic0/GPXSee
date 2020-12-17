@@ -315,7 +315,7 @@ void RasterTile::processLines(QList<TextItem*> &textItems)
 {
 	QRect tileRect(_xy, _img.size());
 
-	qStableSort(_lines);
+	std::stable_sort(_lines.begin(), _lines.end());
 
 	if (_zoom >= 22)
 		processStreetNames(tileRect, textItems);
@@ -417,7 +417,7 @@ void RasterTile::processShields(const QRect &tileRect,
 
 void RasterTile::processPoints(QList<TextItem*> &textItems)
 {
-	qSort(_points);
+	std::sort(_points.begin(), _points.end());
 
 	for (int i = 0; i < _points.size(); i++) {
 		MapData::Point &point = _points[i];

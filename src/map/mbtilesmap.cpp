@@ -6,11 +6,7 @@
 #include <QPixmapCache>
 #include <QImageReader>
 #include <QBuffer>
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-#include <QtCore>
-#else // QT_VERSION < 5
 #include <QtConcurrent>
-#endif // QT_VERSION < 5
 #include "common/rectc.h"
 #include "common/config.h"
 #include "osm.h"
@@ -297,7 +293,7 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			QString key = _fileName + "-" + QString::number(_zoom) + "_"
 			  + QString::number(t.x()) + "_" + QString::number(t.y());
 
-			if (QPixmapCache::find(key, pm)) {
+			if (QPixmapCache::find(key, &pm)) {
 				QPointF tp(qMax(tl.x(), b.left()) + (t.x() - tile.x())
 				  * tileSize(), qMax(tl.y(), b.top()) + (t.y() - tile.y())
 				  * tileSize());
@@ -329,9 +325,7 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 void MBTilesMap::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
 {
-#ifdef ENABLE_HIDPI
 	pixmap.setDevicePixelRatio(imageRatio());
-#endif // ENABLE_HIDPI
 	painter->drawPixmap(tp, pixmap);
 }
 

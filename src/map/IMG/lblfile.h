@@ -12,15 +12,15 @@ class LBLFile : public SubFile
 {
 public:
 	LBLFile(IMG *img)
-	  : SubFile(img), _huffmanText(0), _table(0), _codec(0), _offset(0),
+	  : SubFile(img), _huffmanText(0), _table(0), _codepage(0), _offset(0),
 	  _size(0), _poiOffset(0), _poiSize(0), _poiMultiplier(0), _multiplier(0),
 	  _encoding(0) {}
 	LBLFile(const QString *path)
-	  : SubFile(path), _huffmanText(0), _table(0), _codec(0), _offset(0),
+	  : SubFile(path), _huffmanText(0), _table(0), _codepage(0), _offset(0),
 	  _size(0), _poiOffset(0), _poiSize(0), _poiMultiplier(0), _multiplier(0),
 	  _encoding(0) {}
 	LBLFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
-	  _huffmanText(0), _table(0), _codec(0), _offset(0), _size(0),
+	  _huffmanText(0), _table(0), _codepage(0), _offset(0), _size(0),
 	  _poiOffset(0), _poiSize(0), _poiMultiplier(0), _multiplier(0),
 	  _encoding(0) {}
 	~LBLFile();
@@ -39,8 +39,7 @@ private:
 
 	HuffmanText *_huffmanText;
 	quint32 *_table;
-
-	QTextCodec *_codec;
+	quint16 _codepage;
 	quint32 _offset;
 	quint32 _size;
 	quint32 _poiOffset;

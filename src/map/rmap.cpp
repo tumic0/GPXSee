@@ -2,11 +2,10 @@
 #include <QDataStream>
 #include <QPixmapCache>
 #include <QPainter>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QtEndian>
 #include "common/rectc.h"
 #include "common/wgs84.h"
-#include "common/config.h"
 #include "calibrationpoint.h"
 #include "utm.h"
 #include "pcs.h"
@@ -116,7 +115,7 @@ bool RMap::parseIMP(const QByteArray &data)
 	QVector<CalibrationPoint> calibrationPoints;
 	const GCS *gcs = 0;
 	QString projection, datum;
-	QRegExp re("^P[0-9]+=");
+	QRegularExpression re("^P[0-9]+=");
 
 	for (int i = 0; i < lines.count(); i++) {
 		const QString &line = lines.at(i);
@@ -407,9 +406,7 @@ void RMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			if (pixmap.isNull())
 				qWarning("%s: error loading tile image", qPrintable(key));
 			else {
-#ifdef ENABLE_HIDPI
 				pixmap.setDevicePixelRatio(_mapRatio);
-#endif // ENABLE_HIDPI
 				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
 				painter->drawPixmap(tp, pixmap);
 			}

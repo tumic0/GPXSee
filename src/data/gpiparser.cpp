@@ -1,6 +1,5 @@
 #include <cstring>
 #include <QDataStream>
-#include <QTextCodec>
 #include <QtEndian>
 #include <QUrl>
 #include <QIODevice>
@@ -8,9 +7,7 @@
 #include <QBuffer>
 #include <QImageReader>
 #include <QCryptographicHash>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <QTemporaryDir>
-#endif // QT_VERSION >= 5
 #include "common/garmin.h"
 #include "gpiparser.h"
 
@@ -115,59 +112,76 @@ qint64 CryptDevice::readData(char *data, qint64 maxSize)
 }
 
 
-static qint32 readInt24(QDataStream &stream)
+class DataStream : public QDataStream
+{
+public:
+	DataStream(QIODevice *d) : QDataStream(d), _codepage(0) {}
+
+	void setCodepage(quint16 codepage) {_codepage = codepage;}
+
+	quint16 readString(QString &str);
+	qint32 readInt24();
+	quint8 readRecordHeader(RecordHeader &hdr);
+	quint32 readTranslatedObjects(QList<TranslatedString> &objects);
+
+	quint32 skipRecord();
+	quint16 nextHeaderType();
+
+private:
+	quint16 _codepage;
+};
+
+quint16 DataStream::readString(QString &str)
+{
+	quint16 len;
+	*this >> len;
+	QByteArray ba;
+	ba.resize(len);
+	readRawData(ba.data(), len);
+	str = (_codepage == 65001) ? ba : QString::fromLatin1(ba);
+
+	return len + 2;
+}
+
+qint32 DataStream::readInt24()
 {
 	unsigned char data[3];
 	quint32 val;
 
-	stream.readRawData((char*)data, sizeof(data));
+	readRawData((char*)data, sizeof(data));
 	val = data[0] | ((quint32)data[1]) << 8 | ((quint32)data[2]) << 16;
 	return (val > 0x7FFFFF) ? (val & 0x7FFFFF) - 0x800000 : val;
 }
 
-static quint16 nextHeaderType(QDataStream &stream)
+quint16 DataStream::nextHeaderType()
 {
 	quint16 type = 0;
 
-	if (stream.device()->peek((char*)&type, sizeof(type))
-	  < (qint64)sizeof(type)) {
-		stream.setStatus(QDataStream::ReadCorruptData);
+	if (device()->peek((char*)&type, sizeof(type)) < (qint64)sizeof(type)) {
+		setStatus(QDataStream::ReadCorruptData);
 		return 0xFFFF;
 	} else
 		return qFromLittleEndian(type);
 }
 
-static quint8 readRecordHeader(QDataStream &stream, RecordHeader &hdr)
+quint8 DataStream::readRecordHeader(RecordHeader &hdr)
 {
-	stream >> hdr.type >> hdr.flags >> hdr.size;
+	*this >> hdr.type >> hdr.flags >> hdr.size;
 	if (hdr.flags & 0xA)
-		stream >> hdr.extra;
+		*this >> hdr.extra;
 	return (hdr.flags & 0xA) ? 12 : 8;
 }
 
-static quint32 skipRecord(QDataStream &stream)
+quint32 DataStream::skipRecord()
 {
 	RecordHeader rh;
-	quint8 rs = readRecordHeader(stream, rh);
-	stream.skipRawData(rh.size);
+	quint8 rs = readRecordHeader(rh);
+	skipRawData(rh.size);
 
 	return rs + rh.size;
 }
 
-static quint16 readString(QDataStream &stream, QTextCodec *codec, QString &str)
-{
-	quint16 len;
-	stream >> len;
-	QByteArray ba;
-	ba.resize(len);
-	stream.readRawData(ba.data(), len);
-	str = codec ? codec->toUnicode(ba) : QString::fromLatin1(ba);
-
-	return len + 2;
-}
-
-static quint32 readTranslatedObjects(QDataStream &stream, QTextCodec *codec,
-  QList<TranslatedString> &objects)
+quint32 DataStream::readTranslatedObjects(QList<TranslatedString> &objects)
 {
 	qint32 size = 0, ret;
 	char lang[3];
@@ -175,34 +189,35 @@ static quint32 readTranslatedObjects(QDataStream &stream, QTextCodec *codec,
 	memset(lang, 0, sizeof(lang));
 	objects.clear();
 
-	stream >> size;
+	*this >> size;
 	ret = size + 4;
-	while (stream.status() == QDataStream::Ok && size > 0) {
+	while (status() == QDataStream::Ok && size > 0) {
 		QString str;
-		stream.readRawData(lang, sizeof(lang) - 1);
-		size -= readString(stream, codec, str) + 2;
+		readRawData(lang, sizeof(lang) - 1);
+		size -= readString(str) + 2;
 		objects.append(TranslatedString(lang, str));
 	}
 
 	if (size < 0)
-		stream.setStatus(QDataStream::ReadCorruptData);
+		setStatus(QDataStream::ReadCorruptData);
 
 	return ret;
 }
 
-static quint32 readFprsRecord(QDataStream &stream)
+
+static quint32 readFprsRecord(DataStream &stream)
 {
 	RecordHeader rh;
 	quint16 s1;
 	quint8 rs, s2, s3, s4;
 
-	rs = readRecordHeader(stream, rh);
+	rs = stream.readRecordHeader(rh);
 	stream >> s1 >> s2 >> s3 >> s4;
 
 	return rs + 5;
 }
 
-static quint32 readFileDataRecord(QDataStream &stream, QTextCodec *codec)
+static quint32 readFileDataRecord(DataStream &stream)
 {
 	RecordHeader rh;
 	quint32 ds, s1;
@@ -210,11 +225,11 @@ static quint32 readFileDataRecord(QDataStream &stream, QTextCodec *codec)
 	quint8 rs;
 	QList<TranslatedString> obj;
 
-	rs = readRecordHeader(stream, rh);
+	rs = stream.readRecordHeader(rh);
 	stream >> s1 >> s2 >> s3;
 	ds = 8;
-	ds += readTranslatedObjects(stream, codec, obj);
-	ds += readTranslatedObjects(stream, codec, obj);
+	ds += stream.readTranslatedObjects(obj);
+	ds += stream.readTranslatedObjects(obj);
 
 	if (s1 & 0x10) {
 		quint8 ss1, ss2;
@@ -231,7 +246,7 @@ static quint32 readFileDataRecord(QDataStream &stream, QTextCodec *codec)
 	}
 	if (s1 & 0x400) {
 		QString str;
-		ds += readString(stream, codec, str);
+		ds += stream.readString(str);
 	}
 	if (s1 & 0x400000) {
 		quint16 ss1;
@@ -251,16 +266,15 @@ static quint32 readFileDataRecord(QDataStream &stream, QTextCodec *codec)
 	return rs + rh.size;
 }
 
-static quint32 readDescription(QDataStream &stream, QTextCodec *codec,
-  Waypoint &waypoint)
+static quint32 readDescription(DataStream &stream, Waypoint &waypoint)
 {
 	RecordHeader rh;
 	quint8 rs;
 	quint32 ds;
 	QList<TranslatedString> obj;
 
-	rs = readRecordHeader(stream, rh);
-	ds = readTranslatedObjects(stream, codec, obj);
+	rs = stream.readRecordHeader(rh);
+	ds = stream.readTranslatedObjects(obj);
 	if (!obj.isEmpty())
 		waypoint.setDescription(obj.first().str());
 
@@ -270,24 +284,23 @@ static quint32 readDescription(QDataStream &stream, QTextCodec *codec,
 	return rs + rh.size;
 }
 
-static quint32 readNotes(QDataStream &stream, QTextCodec *codec,
-  Waypoint &waypoint)
+static quint32 readNotes(DataStream &stream, Waypoint &waypoint)
 {
 	RecordHeader rh;
 	quint8 rs, s1;
 	quint32 ds = 1;
 
-	rs = readRecordHeader(stream, rh);
+	rs = stream.readRecordHeader(rh);
 	stream >> s1;
 	if (s1 & 0x1) {
 		QList<TranslatedString> obj;
-		ds += readTranslatedObjects(stream, codec, obj);
+		ds += stream.readTranslatedObjects(obj);
 		if (!obj.isEmpty())
 			waypoint.setComment(obj.first().str());
 	}
 	if (s1 & 0x2) {
 		QString str;
-		ds += readString(stream, codec, str);
+		ds += stream.readString(str);
 		if (!str.isEmpty())
 			waypoint.setComment(str);
 	}
@@ -298,8 +311,7 @@ static quint32 readNotes(QDataStream &stream, QTextCodec *codec,
 	return rs + rh.size;
 }
 
-static quint32 readContact(QDataStream &stream, QTextCodec *codec,
-  Waypoint &waypoint)
+static quint32 readContact(DataStream &stream, Waypoint &waypoint)
 {
 	RecordHeader rh;
 	quint8 rs;
@@ -308,25 +320,25 @@ static quint32 readContact(QDataStream &stream, QTextCodec *codec,
 	QString str;
 	QList<TranslatedString> obj;
 
-	rs = readRecordHeader(stream, rh);
+	rs = stream.readRecordHeader(rh);
 	stream >> flags;
 
 	if (flags & 0x1) // phone
-		ds += readString(stream, codec, str);
+		ds += stream.readString(str);
 	if (flags & 0x2) // phone2
-		ds += readString(stream, codec, str);
+		ds += stream.readString(str);
 	if (flags & 0x4) // fax
-		ds += readString(stream, codec, str);
+		ds += stream.readString(str);
 	if (flags & 0x8) // mail
-		ds += readString(stream, codec, str);
+		ds += stream.readString(str);
 	if (flags & 0x10) { // web
-		ds += readString(stream, codec, str);
+		ds += stream.readString(str);
 		QUrl url(str);
 		waypoint.addLink(Link(url.scheme().isEmpty()
 		  ? "http://" + str : str, str));
 	}
 	if (flags & 0x20) // unknown
-		ds += readTranslatedObjects(stream, codec, obj);
+		ds += stream.readTranslatedObjects(obj);
 
 	if (ds != rh.size)
 		stream.setStatus(QDataStream::ReadCorruptData);
@@ -334,8 +346,7 @@ static quint32 readContact(QDataStream &stream, QTextCodec *codec,
 	return rs + rh.size;
 }
 
-static quint32 readAddress(QDataStream &stream, QTextCodec *codec,
-  Waypoint &waypoint)
+static quint32 readAddress(DataStream &stream, Waypoint &waypoint)
 {
 	RecordHeader rh;
 	quint8 rs;
@@ -345,35 +356,35 @@ static quint32 readAddress(QDataStream &stream, QTextCodec *codec,
 	QString str;
 	Address addr;
 
-	rs = readRecordHeader(stream, rh);
+	rs = stream.readRecordHeader(rh);
 	stream >> flags;
 
 	if (flags & 0x1) {
-		ds += readTranslatedObjects(stream, codec, obj);
+		ds += stream.readTranslatedObjects(obj);
 		if (!obj.isEmpty())
 			addr.setCity(obj.first().str());
 	}
 	if (flags & 0x2) {
-		ds += readTranslatedObjects(stream, codec, obj);
+		ds += stream.readTranslatedObjects(obj);
 		if (!obj.isEmpty())
 			addr.setCountry(obj.first().str());
 	}
 	if (flags & 0x4) {
-		ds += readTranslatedObjects(stream, codec, obj);
+		ds += stream.readTranslatedObjects(obj);
 		if (!obj.isEmpty())
 			addr.setState(obj.first().str());
 	}
 	if (flags & 0x8) {
-		ds += readString(stream, codec, str);
+		ds += stream.readString(str);
 		addr.setPostalCode(str);
 	}
 	if (flags & 0x10) {
-		ds += readTranslatedObjects(stream, codec, obj);
+		ds += stream.readTranslatedObjects(obj);
 		if (!obj.isEmpty())
 			addr.setStreet(obj.first().str());
 	}
 	if (flags & 0x20) // unknown
-		ds += readString(stream, codec, str);
+		ds += stream.readString(str);
 
 	waypoint.setAddress(addr);
 
@@ -383,21 +394,20 @@ static quint32 readAddress(QDataStream &stream, QTextCodec *codec,
 	return rs + rh.size;
 }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 static const QTemporaryDir &tempDir()
 {
 	static QTemporaryDir dir;
 	return dir;
 }
 
-static quint32 readImageInfo(QDataStream &stream, Waypoint &waypoint,
+static quint32 readImageInfo(DataStream &stream, Waypoint &waypoint,
   const QString &fileName, int &imgId)
 {
 	RecordHeader rh;
 	quint8 rs, s1;
 	quint32 size;
 
-	rs = readRecordHeader(stream, rh);
+	rs = stream.readRecordHeader(rh);
 	stream >> s1 >> size;
 
 	QByteArray ba;
@@ -424,7 +434,6 @@ static quint32 readImageInfo(QDataStream &stream, Waypoint &waypoint,
 
 	return rs + rh.size;
 }
-#endif // QT_VERSION >= 5
 
 static int speed(quint8 flags)
 {
@@ -450,7 +459,7 @@ static int speed(quint8 flags)
 	}
 }
 
-static quint32 readCamera(QDataStream &stream, QVector<Waypoint> &waypoints,
+static quint32 readCamera(DataStream &stream, QVector<Waypoint> &waypoints,
   QList<Area> &polygons)
 {
 	RecordHeader rh;
@@ -459,18 +468,18 @@ static quint32 readCamera(QDataStream &stream, QVector<Waypoint> &waypoints,
 	quint32 ds = 15;
 
 
-	rs = readRecordHeader(stream, rh);
-	top = readInt24(stream);
-	right = readInt24(stream);
-	bottom = readInt24(stream);
-	left = readInt24(stream);
+	rs = stream.readRecordHeader(rh);
+	top = stream.readInt24();
+	right = stream.readInt24();
+	bottom = stream.readInt24();
+	left = stream.readInt24();
 	stream >> flags >> type >> s7;
 
 	if (s7) {
 		quint32 skip = s7 + 2 + s7/4;
 		stream.skipRawData(skip);
-		lat = readInt24(stream);
-		lon = readInt24(stream);
+		lat = stream.readInt24();
+		lon = stream.readInt24();
 		ds += skip + 6;
 	} else {
 		quint8 s8;
@@ -478,8 +487,8 @@ static quint32 readCamera(QDataStream &stream, QVector<Waypoint> &waypoints,
 		stream >> s8;
 		quint32 skip = 3 + s8 + s8/4;
 		stream.skipRawData(skip);
-		lat = readInt24(stream);
-		lon = readInt24(stream);
+		lat = stream.readInt24();
+		lon = stream.readInt24();
 		ds += skip + 16;
 	}
 
@@ -513,8 +522,8 @@ static quint32 readCamera(QDataStream &stream, QVector<Waypoint> &waypoints,
 	return rs + rh.size;
 }
 
-static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
-  QVector<Waypoint> &waypoints, const QString &fileName, int &imgId)
+static quint32 readPOI(DataStream &stream, QVector<Waypoint> &waypoints,
+  const QString &fileName, int &imgId)
 {
 	RecordHeader rh;
 	quint8 rs;
@@ -523,37 +532,35 @@ static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
 	quint16 s3;
 	QList<TranslatedString> obj;
 
-	rs = readRecordHeader(stream, rh);
+	rs = stream.readRecordHeader(rh);
 	stream >> lat >> lon >> s3;
 	stream.skipRawData(s3);
 	ds = 10 + s3;
-	ds += readTranslatedObjects(stream, codec, obj);
+	ds += stream.readTranslatedObjects(obj);
 
 	waypoints.append(Waypoint(Coordinates(toWGS32(lon), toWGS32(lat))));
 	if (!obj.isEmpty())
 		waypoints.last().setName(obj.first().str());
 
 	while (stream.status() == QDataStream::Ok && ds < rh.size) {
-		switch(nextHeaderType(stream)) {
+		switch(stream.nextHeaderType()) {
 			case 10:
-				ds += readDescription(stream, codec, waypoints.last());
+				ds += readDescription(stream, waypoints.last());
 				break;
 			case 11:
-				ds += readAddress(stream, codec, waypoints.last());
+				ds += readAddress(stream, waypoints.last());
 				break;
 			case 12:
-				ds += readContact(stream, codec, waypoints.last());
+				ds += readContact(stream, waypoints.last());
 				break;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 			case 13:
 				ds += readImageInfo(stream, waypoints.last(), fileName, imgId);
 				break;
-#endif // QT_VERSION >= 5
 			case 14:
-				ds += readNotes(stream, codec, waypoints.last());
+				ds += readNotes(stream, waypoints.last());
 				break;
 			default:
-				ds += skipRecord(stream);
+				ds += stream.skipRecord();
 		}
 	}
 
@@ -563,9 +570,8 @@ static quint32 readPOI(QDataStream &stream, QTextCodec *codec,
 	return rs + rh.size;
 }
 
-static quint32 readSpatialIndex(QDataStream &stream, QTextCodec *codec,
-  QVector<Waypoint> &waypoints, QList<Area> &polygons, const QString &fileName,
-  int &imgId)
+static quint32 readSpatialIndex(DataStream &stream, QVector<Waypoint> &waypoints,
+  QList<Area> &polygons, const QString &fileName, int &imgId)
 {
 	RecordHeader rh;
 	quint32 ds, s5;
@@ -573,25 +579,25 @@ static quint32 readSpatialIndex(QDataStream &stream, QTextCodec *codec,
 	quint16 s6;
 	quint8 rs;
 
-	rs = readRecordHeader(stream, rh);
+	rs = stream.readRecordHeader(rh);
 	stream >> top >> right >> bottom >> left >> s5 >> s6;
 	stream.skipRawData(s6);
 	ds = 22 + s6;
 	if (rh.flags & 0x8) {
 		while (stream.status() == QDataStream::Ok && ds < rh.size) {
-			switch(nextHeaderType(stream)) {
+			switch(stream.nextHeaderType()) {
 				case 2:
-					ds += readPOI(stream, codec, waypoints, fileName, imgId);
+					ds += readPOI(stream, waypoints, fileName, imgId);
 					break;
 				case 8:
-					ds += readSpatialIndex(stream, codec, waypoints, polygons,
+					ds += readSpatialIndex(stream, waypoints, polygons,
 					  fileName, imgId);
 					break;
 				case 19:
 					ds += readCamera(stream, waypoints, polygons);
 					break;
 				default:
-					ds += skipRecord(stream);
+					ds += stream.skipRecord();
 			}
 		}
 	}
@@ -602,24 +608,23 @@ static quint32 readSpatialIndex(QDataStream &stream, QTextCodec *codec,
 	return rs + rh.size;
 }
 
-static void readPOIDatabase(QDataStream &stream, QTextCodec *codec,
-  QVector<Waypoint> &waypoints, QList<Area> &polygons, const QString &fileName,
-  int &imgId)
+static void readPOIDatabase(DataStream &stream, QVector<Waypoint> &waypoints,
+  QList<Area> &polygons, const QString &fileName, int &imgId)
 {
 	RecordHeader rh;
 	QList<TranslatedString> obj;
 	quint32 ds;
 
-	readRecordHeader(stream, rh);
-	ds = readTranslatedObjects(stream, codec, obj);
-	ds += readSpatialIndex(stream, codec, waypoints, polygons, fileName, imgId);
+	stream.readRecordHeader(rh);
+	ds = stream.readTranslatedObjects(obj);
+	ds += readSpatialIndex(stream, waypoints, polygons, fileName, imgId);
 	if (rh.flags & 0x8) {
 		while (stream.status() == QDataStream::Ok && ds < rh.size) {
-			switch(nextHeaderType(stream)) {
+			switch(stream.nextHeaderType()) {
 				case 5: // symbol
 				case 7: // category
 				default:
-					ds += skipRecord(stream);
+					ds += stream.skipRecord();
 			}
 		}
 	}
@@ -628,26 +633,26 @@ static void readPOIDatabase(QDataStream &stream, QTextCodec *codec,
 		stream.setStatus(QDataStream::ReadCorruptData);
 }
 
-bool GPIParser::readData(QDataStream &stream, QTextCodec *codec,
-  QVector<Waypoint> &waypoints, QList<Area> &polygons, const QString &fileName)
+bool GPIParser::readData(DataStream &stream, QVector<Waypoint> &waypoints,
+  QList<Area> &polygons, const QString &fileName)
 {
 	int imgId = 0;
 
 	while (stream.status() == QDataStream::Ok) {
-		switch (nextHeaderType(stream)) {
+		switch (stream.nextHeaderType()) {
 			case 0x09:   // POI database
-				readPOIDatabase(stream, codec, waypoints, polygons, fileName,
+				readPOIDatabase(stream, waypoints, polygons, fileName,
 				  imgId);
 				break;
 			case 0xffff: // EOF
-				skipRecord(stream);
+				stream.skipRecord();
 				if (stream.status() == QDataStream::Ok)
 					return true;
 				break;
 			case 0x16:   // route
 			case 0x15:   // info header
 			default:
-				skipRecord(stream);
+				stream.skipRecord();
 		}
 	}
 
@@ -656,7 +661,7 @@ bool GPIParser::readData(QDataStream &stream, QTextCodec *codec,
 	return false;
 }
 
-bool GPIParser::readGPIHeader(QDataStream &stream, QTextCodec **codec)
+bool GPIParser::readGPIHeader(DataStream &stream)
 {
 	RecordHeader rh;
 	char m1[6], m2[2];
@@ -664,22 +669,16 @@ bool GPIParser::readGPIHeader(QDataStream &stream, QTextCodec **codec)
 	quint8 s2, s3;
 	quint32 ds;
 
-	readRecordHeader(stream, rh);
+	stream.readRecordHeader(rh);
 	stream.readRawData(m1, sizeof(m1));
 	stream.readRawData(m2, sizeof(m2));
 	stream >> codepage >> s2 >> s3;
 	ds = sizeof(m1) + sizeof(m2) + 4;
 
-	if (codepage == 65001)
-		*codec = QTextCodec::codecForName("UTF-8");
-	else if (codepage == 0)
-		*codec = 0;
-	else
-		*codec = QTextCodec::codecForName(QString("CP%1").arg(codepage)
-		  .toLatin1());
+	stream.setCodepage(codepage);
 
 	if (s2 & 0x10)
-		ds += readFileDataRecord(stream, *codec);
+		ds += readFileDataRecord(stream);
 
 	if (stream.status() != QDataStream::Ok || ds != rh.size) {
 		_errorString = "Invalid GPI header";
@@ -688,7 +687,7 @@ bool GPIParser::readGPIHeader(QDataStream &stream, QTextCodec **codec)
 		return true;
 }
 
-bool GPIParser::readFileHeader(QDataStream &stream, quint32 &ebs)
+bool GPIParser::readFileHeader(DataStream &stream, quint32 &ebs)
 {
 	RecordHeader rh;
 	quint32 ds, s7;
@@ -696,7 +695,7 @@ bool GPIParser::readFileHeader(QDataStream &stream, quint32 &ebs)
 	quint8 s5, s6, s8, s9;
 	char magic[6];
 
-	readRecordHeader(stream, rh);
+	stream.readRecordHeader(rh);
 	stream.readRawData(magic, sizeof(magic));
 	if (memcmp(magic, "GRMREC", sizeof(magic))) {
 		_errorString = "Not a GPI file";
@@ -722,21 +721,19 @@ bool GPIParser::parse(QFile *file, QList<TrackData> &tracks,
 {
 	Q_UNUSED(tracks);
 	Q_UNUSED(routes);
-	QDataStream stream(file);
-	QTextCodec *codec = 0;
+	DataStream stream(file);
 	quint32 ebs;
 
 	stream.setByteOrder(QDataStream::LittleEndian);
 
-	if (!readFileHeader(stream, ebs) || !readGPIHeader(stream, &codec))
+	if (!readFileHeader(stream, ebs) || !readGPIHeader(stream))
 		return false;
 
 	if (ebs) {
 		CryptDevice dev(stream.device(), 0xf870b5, ebs);
-		QDataStream cryptStream(&dev);
+		DataStream cryptStream(&dev);
 		cryptStream.setByteOrder(QDataStream::LittleEndian);
-		return readData(cryptStream, codec, waypoints, polygons,
-		  file->fileName());
+		return readData(cryptStream, waypoints, polygons, file->fileName());
 	} else
-		return readData(stream, codec, waypoints, polygons, file->fileName());
+		return readData(stream, waypoints, polygons, file->fileName());
 }

@@ -22,9 +22,7 @@ static inline unsigned segments(qreal distance)
 }
 
 Units PathItem::_units = Metric;
-#ifdef ENABLE_TIMEZONES
 QTimeZone PathItem::_timeZone = QTimeZone::utc();
-#endif // ENABLE_TIMEZONES
 
 PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
   : GraphicsItem(parent), _path(path), _map(map)
@@ -68,14 +66,14 @@ void PathItem::addSegment(const Coordinates &c1, const Coordinates &c2)
 			QLineF l(QPointF(c1.lon(), c1.lat()), QPointF(c2.lon() + 360,
 			  c2.lat()));
 			QLineF dl(QPointF(180, -90), QPointF(180, 90));
-			l.intersect(dl, &p);
+			l.intersects(dl, &p);
 			_painterPath.lineTo(_map->ll2xy(Coordinates(180, p.y())));
 			_painterPath.moveTo(_map->ll2xy(Coordinates(-180, p.y())));
 		} else {
 			QLineF l(QPointF(c1.lon(), c1.lat()), QPointF(c2.lon() - 360,
 			  c2.lat()));
 			QLineF dl(QPointF(-180, -90), QPointF(-180, 90));
-			l.intersect(dl, &p);
+			l.intersects(dl, &p);
 			_painterPath.lineTo(_map->ll2xy(Coordinates(-180, p.y())));
 			_painterPath.moveTo(_map->ll2xy(Coordinates(180, p.y())));
 		}

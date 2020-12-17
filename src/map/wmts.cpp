@@ -28,21 +28,21 @@ WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader)
 	TileMatrix matrix;
 
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Identifier")
+		if (reader.name() == QLatin1String("Identifier"))
 			matrix.id = reader.readElementText();
-		else if (reader.name() == "ScaleDenominator")
+		else if (reader.name() == QLatin1String("ScaleDenominator"))
 			matrix.scaleDenominator = reader.readElementText().toDouble();
-		else if (reader.name() == "TopLeftCorner") {
+		else if (reader.name() == QLatin1String("TopLeftCorner")) {
 			QString str = reader.readElementText();
 			QTextStream ts(&str);
 			ts >> matrix.topLeft.rx() >> matrix.topLeft.ry();
-		} else if (reader.name() == "TileWidth")
+		} else if (reader.name() == QLatin1String("TileWidth"))
 			matrix.tile.setWidth(reader.readElementText().toInt());
-		else if (reader.name() == "TileHeight")
+		else if (reader.name() == QLatin1String("TileHeight"))
 			matrix.tile.setHeight(reader.readElementText().toInt());
-		else if (reader.name() == "MatrixWidth")
+		else if (reader.name() == QLatin1String("MatrixWidth"))
 			matrix.matrix.setWidth(reader.readElementText().toInt());
-		else if (reader.name() == "MatrixHeight")
+		else if (reader.name() == QLatin1String("MatrixHeight"))
 			matrix.matrix.setHeight(reader.readElementText().toInt());
 		else
 			reader.skipCurrentElement();
@@ -57,14 +57,14 @@ WMTS::TileMatrix WMTS::tileMatrix(QXmlStreamReader &reader)
 void WMTS::tileMatrixSet(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Identifier") {
+		if (reader.name() == QLatin1String("Identifier")) {
 			if (reader.readElementText() != _setup.set()) {
 				skipParentElement(reader);
 				return;
 			}
-		} else if (reader.name() == "SupportedCRS")
+		} else if (reader.name() == QLatin1String("SupportedCRS"))
 			ctx.crs = reader.readElementText();
-		else if (reader.name() == "TileMatrix")
+		else if (reader.name() == QLatin1String("TileMatrix"))
 			ctx.matrixes.insert(tileMatrix(reader));
 		else
 			reader.skipCurrentElement();
@@ -76,15 +76,15 @@ WMTS::MatrixLimits WMTS::tileMatrixLimits(QXmlStreamReader &reader)
 	MatrixLimits limits;
 
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "TileMatrix")
+		if (reader.name() == QLatin1String("TileMatrix"))
 			limits.id = reader.readElementText();
-		else if (reader.name() == "MinTileRow")
+		else if (reader.name() == QLatin1String("MinTileRow"))
 			limits.rect.setTop(reader.readElementText().toInt());
-		else if (reader.name() == "MaxTileRow")
+		else if (reader.name() == QLatin1String("MaxTileRow"))
 			limits.rect.setBottom(reader.readElementText().toInt());
-		else if (reader.name() == "MinTileCol")
+		else if (reader.name() == QLatin1String("MinTileCol"))
 			limits.rect.setLeft(reader.readElementText().toInt());
-		else if (reader.name() == "MaxTileCol")
+		else if (reader.name() == QLatin1String("MaxTileCol"))
 			limits.rect.setRight(reader.readElementText().toInt());
 		else
 			reader.skipCurrentElement();
@@ -101,7 +101,7 @@ QSet<WMTS::MatrixLimits> WMTS::tileMatrixSetLimits(QXmlStreamReader &reader)
 	QSet<MatrixLimits> limits;
 
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "TileMatrixLimits")
+		if (reader.name() == QLatin1String("TileMatrixLimits"))
 			limits.insert(tileMatrixLimits(reader));
 		else
 			reader.skipCurrentElement();
@@ -113,14 +113,14 @@ QSet<WMTS::MatrixLimits> WMTS::tileMatrixSetLimits(QXmlStreamReader &reader)
 void WMTS::tileMatrixSetLink(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "TileMatrixSet") {
+		if (reader.name() == QLatin1String("TileMatrixSet")) {
 			if (reader.readElementText() == _setup.set())
 				ctx.hasSet = true;
 			else {
 				skipParentElement(reader);
 				return;
 			}
-		} else if (reader.name() == "TileMatrixSetLimits")
+		} else if (reader.name() == QLatin1String("TileMatrixSetLimits"))
 			ctx.limits = tileMatrixSetLimits(reader);
 		else
 			reader.skipCurrentElement();
@@ -132,10 +132,10 @@ RectC WMTS::wgs84BoundingBox(QXmlStreamReader &reader)
 	Coordinates topLeft, bottomRight;
 
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "LowerCorner") {
+		if (reader.name() == QLatin1String("LowerCorner")) {
 			QString str = reader.readElementText();
 			QTextStream(&str) >> topLeft.rlon() >> bottomRight.rlat();
-		} else if (reader.name() == "UpperCorner") {
+		} else if (reader.name() == QLatin1String("UpperCorner")) {
 			QString str = reader.readElementText();
 			QTextStream(&str) >> bottomRight.rlon() >> topLeft.rlat();
 		} else
@@ -150,7 +150,7 @@ QString WMTS::style(QXmlStreamReader &reader)
 	QString id;
 
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Identifier")
+		if (reader.name() == QLatin1String("Identifier"))
 			id = reader.readElementText();
 		else
 			reader.skipCurrentElement();
@@ -162,31 +162,32 @@ QString WMTS::style(QXmlStreamReader &reader)
 void WMTS::layer(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Identifier") {
+		if (reader.name() == QLatin1String("Identifier")) {
 			if (reader.readElementText() == _setup.layer())
 				ctx.hasLayer = true;
 			else {
 				skipParentElement(reader);
 				return;
 			}
-		} else if (reader.name() == "TileMatrixSetLink")
+		} else if (reader.name() == QLatin1String("TileMatrixSetLink"))
 			tileMatrixSetLink(reader, ctx);
-		else if (reader.name() == "WGS84BoundingBox")
+		else if (reader.name() == QLatin1String("WGS84BoundingBox"))
 			ctx.bbox = wgs84BoundingBox(reader);
-		else if (reader.name() == "ResourceURL") {
+		else if (reader.name() == QLatin1String("ResourceURL")) {
 			const QXmlStreamAttributes &attr = reader.attributes();
-			if (attr.value("resourceType") == "tile" && _setup.rest())
+			if (attr.value("resourceType") == QLatin1String("tile")
+			  && _setup.rest())
 				_tileUrl = attr.value("template").toString();
 			reader.skipCurrentElement();
-		} else if (reader.name() == "Style") {
+		} else if (reader.name() == QLatin1String("Style")) {
 			const QXmlStreamAttributes &attr = reader.attributes();
-			bool isDefault = (attr.value("isDefault") == "true");
+			bool isDefault = (attr.value("isDefault") == QLatin1String("true"));
 			QString s = style(reader);
 			if (isDefault)
 				ctx.defaultStyle = s;
 			if (s == _setup.style())
 				ctx.hasStyle = true;
-		} else if (reader.name() == "Format") {
+		} else if (reader.name() == QLatin1String("Format")) {
 			QString format(reader.readElementText());
 			if (bareFormat(format) == bareFormat(_setup.format()))
 				ctx.hasFormat = true;
@@ -198,9 +199,9 @@ void WMTS::layer(QXmlStreamReader &reader, CTX &ctx)
 void WMTS::contents(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "TileMatrixSet")
+		if (reader.name() == QLatin1String("TileMatrixSet"))
 			tileMatrixSet(reader, ctx);
-		else if (reader.name() == "Layer")
+		else if (reader.name() == QLatin1String("Layer"))
 			layer(reader, ctx);
 		else
 			reader.skipCurrentElement();
@@ -210,7 +211,7 @@ void WMTS::contents(QXmlStreamReader &reader, CTX &ctx)
 void WMTS::capabilities(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Contents")
+		if (reader.name() == QLatin1String("Contents"))
 			contents(reader, ctx);
 		else
 			reader.skipCurrentElement();
@@ -229,7 +230,7 @@ void WMTS::createZooms(const CTX &ctx)
 		  mi->matrix, li == ctx.limits.constEnd() ? QRect() : li->rect));
 	}
 
-	qSort(_zooms);
+	std::sort(_zooms.begin(), _zooms.end());
 }
 
 bool WMTS::parseCapabilities(CTX &ctx)
@@ -244,7 +245,7 @@ bool WMTS::parseCapabilities(CTX &ctx)
 
 	reader.setDevice(&file);
 	if (reader.readNextStartElement()) {
-		if (reader.name() == "Capabilities")
+		if (reader.name() == QLatin1String("Capabilities"))
 			capabilities(reader, ctx);
 		else
 			reader.raiseError("Not a Capabilities XML file");

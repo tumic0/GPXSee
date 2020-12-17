@@ -6,6 +6,7 @@
 #include <QNetworkAccessManager>
 #include <QLibraryInfo>
 #include <QSettings>
+#include <QSurfaceFormat>
 #include "common/programpaths.h"
 #include "common/config.h"
 #include "map/downloader.h"
@@ -13,7 +14,6 @@
 #include "map/gcs.h"
 #include "map/pcs.h"
 #include "data/dem.h"
-#include "opengl.h"
 #include "gui.h"
 #include "settings.h"
 #include "mapaction.h"
@@ -52,17 +52,18 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	   "QThreadStorage: Thread X exited after QThreadStorage Y destroyed" */
 	Downloader::setNetworkManager(new QNetworkAccessManager(this));
 	DEM::setDir(ProgramPaths::demDir());
-	OPENGL_SET_FORMAT(4, 8);
+	QSurfaceFormat fmt;
+	fmt.setStencilBufferSize(8);
+	fmt.setSamples(4);
+	QSurfaceFormat::setDefaultFormat(fmt);
 
 	loadDatums();
 	loadPCSs();
 
 	QSettings settings(qApp->applicationName(), qApp->applicationName());
 	settings.beginGroup(OPTIONS_SETTINGS_GROUP);
-#ifdef ENABLE_HTTP2
 	Downloader::enableHTTP2(settings.value(ENABLE_HTTP2_SETTING,
 	  ENABLE_HTTP2_DEFAULT).toBool());
-#endif // ENABLE_HTTP2
 	Downloader::setTimeout(settings.value(CONNECTION_TIMEOUT_SETTING,
 	  CONNECTION_TIMEOUT_DEFAULT).toInt());
 	settings.endGroup();

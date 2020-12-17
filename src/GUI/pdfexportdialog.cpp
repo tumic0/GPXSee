@@ -24,18 +24,18 @@ PDFExportDialog::PDFExportDialog(PDFExport &exp, Units units, QWidget *parent)
 	_fileSelect->setFile(_export.fileName);
 
 	_paperSize = new QComboBox();
-	_paperSize->addItem("A2", QPrinter::A2);
-	_paperSize->addItem("A3", QPrinter::A3);
-	_paperSize->addItem("A4", QPrinter::A4);
-	_paperSize->addItem("A5", QPrinter::A5);
-	_paperSize->addItem("A6", QPrinter::A6);
-	_paperSize->addItem("B3", QPrinter::B3);
-	_paperSize->addItem("B4", QPrinter::B4);
-	_paperSize->addItem("B5", QPrinter::B5);
-	_paperSize->addItem("B6", QPrinter::B6);
-	_paperSize->addItem("Tabloid", QPrinter::Tabloid);
-	_paperSize->addItem("Legal", QPrinter::Legal);
-	_paperSize->addItem("Letter", QPrinter::Letter);
+	_paperSize->addItem("A2", QPageSize::PageSizeId::A2);
+	_paperSize->addItem("A3", QPageSize::PageSizeId::A3);
+	_paperSize->addItem("A4", QPageSize::PageSizeId::A4);
+	_paperSize->addItem("A5", QPageSize::PageSizeId::A5);
+	_paperSize->addItem("A6", QPageSize::PageSizeId::A6);
+	_paperSize->addItem("B3", QPageSize::PageSizeId::B3);
+	_paperSize->addItem("B4", QPageSize::PageSizeId::B4);
+	_paperSize->addItem("B5", QPageSize::PageSizeId::B5);
+	_paperSize->addItem("B6", QPageSize::PageSizeId::B6);
+	_paperSize->addItem("Tabloid", QPageSize::PageSizeId::Tabloid);
+	_paperSize->addItem("Legal", QPageSize::PageSizeId::Legal);
+	_paperSize->addItem("Letter", QPageSize::PageSizeId::Letter);
 	if ((index = _paperSize->findData(_export.paperSize)) >= 0)
 		_paperSize->setCurrentIndex(index);
 
@@ -51,7 +51,7 @@ PDFExportDialog::PDFExportDialog(PDFExport &exp, Units units, QWidget *parent)
 	QHBoxLayout *orientationLayout = new QHBoxLayout();
 	orientationLayout->addWidget(_portrait);
 	orientationLayout->addWidget(_landscape);
-	if (_export.orientation == QPrinter::Portrait)
+	if (_export.orientation == QPageLayout::Orientation::Portrait)
 		_portrait->setChecked(true);
 	else
 		_landscape->setChecked(true);
@@ -116,9 +116,9 @@ void PDFExportDialog::accept()
 		return;
 	}
 
-	QPrinter::Orientation orientation = _portrait->isChecked()
-	  ? QPrinter::Portrait : QPrinter::Landscape;
-	QPrinter::PaperSize paperSize = static_cast<QPrinter::PaperSize>
+	QPageLayout::Orientation orientation = _portrait->isChecked()
+	  ? QPageLayout::Orientation::Portrait : QPageLayout::Orientation::Landscape;
+	QPageSize::PageSizeId paperSize = static_cast<QPageSize::PageSizeId>
 	  (_paperSize->itemData(_paperSize->currentIndex()).toInt());
 	int resolution = _resolution->itemData(_resolution->currentIndex()).toInt();
 

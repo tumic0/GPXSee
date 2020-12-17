@@ -1,5 +1,6 @@
 #include <QtGlobal>
 #include <QDir>
+#include <QStandardPaths>
 #include "programpaths.h"
 
 
@@ -15,119 +16,6 @@
 #define PCS_FILE         "pcs.csv"
 #define TYP_FILE         "style.typ"
 
-
-#if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
-
-#include <QApplication>
-
-#if defined(Q_OS_WIN32)
-#define USER_DIR        QDir::homePath() + QString("/AppData/Roaming/") \
-						  + qApp->applicationName()
-#define GLOBAL_DIR      QApplication::applicationDirPath()
-#elif defined(Q_OS_MAC)
-#define USER_DIR        QDir::homePath() \
-						  + QString("/Library/Application Support/") \
-						  + qApp->applicationName()
-#define GLOBAL_DIR      QApplication::applicationDirPath() \
-						  + QString("/../Resources")
-#else
-#define USER_DIR        QDir::homePath() + QString("/.local/share/") \
-						  + qApp->applicationName()
-#define GLOBAL_DIR      QString(PREFIX "/share/") + qApp->applicationName()
-#endif
-
-static QString dir(const QString &dirName, bool writable = false)
-{
-	QDir userDir(QDir(USER_DIR).filePath(dirName));
-
-	if (writable || userDir.exists())
-		return userDir.absolutePath();
-	else {
-		QDir globalDir(QDir(GLOBAL_DIR).filePath(dirName));
-
-		if (globalDir.exists())
-			return globalDir.absolutePath();
-		else
-			return QString();
-	}
-}
-
-static QString file(const QString &path, const QString &fileName)
-{
-	if (path.isNull())
-		return QString();
-
-	QFileInfo fi(QDir(path).filePath(fileName));
-	return fi.exists() ? fi.absoluteFilePath() : QString();
-}
-
-QString ProgramPaths::mapDir(bool writable)
-{
-	return dir(MAP_DIR, writable);
-}
-
-QString ProgramPaths::poiDir(bool writable)
-{
-	return dir(POI_DIR, writable);
-}
-
-QString ProgramPaths::csvDir(bool writable)
-{
-	return dir(CSV_DIR, writable);
-}
-
-QString ProgramPaths::demDir(bool writable)
-{
-	return dir(DEM_DIR, writable);
-}
-
-QString ProgramPaths::styleDir(bool writable)
-{
-	return dir(STYLE_DIR, writable);
-}
-
-QString ProgramPaths::tilesDir()
-{
-#if defined(Q_OS_WIN32)
-	return QDir::homePath() + QString("/AppData/Local/")
-	  + qApp->applicationName() + QString("/cache/") + QString(TILES_DIR);
-#elif defined(Q_OS_MAC)
-	return QDir::homePath() + QString("/Library/Caches/")
-	  + qApp->applicationName() + QString("/" TILES_DIR);
-#else
-	return QDir::homePath() + QString("/.cache/") + qApp->applicationName()
-	  + QString("/" TILES_DIR);
-#endif
-}
-
-QString ProgramPaths::translationsDir()
-{
-	return dir(TRANSLATIONS_DIR);
-}
-
-QString ProgramPaths::ellipsoidsFile()
-{
-	return file(dir(CSV_DIR),  ELLIPSOID_FILE);
-}
-
-QString ProgramPaths::gcsFile()
-{
-	return file(dir(CSV_DIR), GCS_FILE);
-}
-
-QString ProgramPaths::pcsFile()
-{
-	return file(dir(CSV_DIR), PCS_FILE);
-}
-
-QString ProgramPaths::typFile()
-{
-	return file(dir(STYLE_DIR), TYP_FILE);
-}
-
-#else // QT_VERSION < 5
-
-#include <QStandardPaths>
 
 QString ProgramPaths::mapDir(bool writable)
 {
@@ -214,5 +102,3 @@ QString ProgramPaths::typFile()
 	return QStandardPaths::locate(QStandardPaths::AppDataLocation,
 	  STYLE_DIR "/" TYP_FILE, QStandardPaths::LocateFile);
 }
-
-#endif // QT_VERSION < 5

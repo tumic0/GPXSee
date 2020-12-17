@@ -235,9 +235,7 @@ bool JNXMap::cb(Tile *tile, void *context)
 {
 	Ctx *ctx = static_cast<Ctx*>(context);
 	QPixmap pm(pixmap(tile, ctx->file));
-#ifdef ENABLE_HIDPI
 	pm.setDevicePixelRatio(ctx->ratio);
-#endif // ENABLE_HIDPI
 	ctx->painter->drawPixmap(tile->pos / ctx->ratio, pm);
 
 	return true;

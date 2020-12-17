@@ -68,10 +68,11 @@
 
 #define PDF_EXPORT_SETTINGS_GROUP         "Export"
 #define PAPER_ORIENTATION_SETTING         "orientation"
-#define PAPER_ORIENTATION_DEFAULT         QPrinter::Portrait
+#define PAPER_ORIENTATION_DEFAULT         QPageLayout::Orientation::Portrait
 #define PAPER_SIZE_SETTING                "size"
-#define PAPER_SIZE_DEFAULT                (IMPERIAL_UNITS() ? QPrinter::Letter \
-                                            : QPrinter::A4)
+#define PAPER_SIZE_DEFAULT                (IMPERIAL_UNITS() \
+	                                        ? QPageSize::PageSizeId::Letter \
+	                                        : QPageSize::PageSizeId::A4)
 #define PDF_MARGIN_LEFT_SETTING           "marginLeft"
 #define PDF_MARGIN_LEFT_DEFAULT           5 /* mm */
 #define PDF_MARGIN_TOP_SETTING            "marginTop"

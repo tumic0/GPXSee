@@ -8,16 +8,16 @@
 static bool intersection(const QLineF &line, const QRectF &rect,
   QPointF *p)
 {
-	if (line.intersect(QLineF(rect.topLeft(), rect.topRight()), p)
+	if (line.intersects(QLineF(rect.topLeft(), rect.topRight()), p)
 	  == QLineF::BoundedIntersection)
 		return true;
-	if (line.intersect(QLineF(rect.topLeft(), rect.bottomLeft()), p)
+	if (line.intersects(QLineF(rect.topLeft(), rect.bottomLeft()), p)
 	  == QLineF::BoundedIntersection)
 		return true;
-	if (line.intersect(QLineF(rect.bottomRight(), rect.bottomLeft()), p)
+	if (line.intersects(QLineF(rect.bottomRight(), rect.bottomLeft()), p)
 	  == QLineF::BoundedIntersection)
 		return true;
-	if (line.intersect(QLineF(rect.bottomRight(), rect.topRight()), p)
+	if (line.intersects(QLineF(rect.bottomRight(), rect.topRight()), p)
 	  == QLineF::BoundedIntersection)
 		return true;
 
@@ -159,7 +159,7 @@ TextPathItem::TextPathItem(const QPolygonF &line, const QString *label,
 void TextPathItem::paint(QPainter *painter) const
 {
 	QFontMetrics fm(*_font);
-	int textWidth = fm.width(*_text);
+	int textWidth = fm.boundingRect(*_text).width();
 
 	qreal factor = (textWidth) / qMax(_path.length(), (qreal)textWidth);
 	qreal percent = (1.0 - factor) / 2.0;
@@ -185,7 +185,7 @@ void TextPathItem::paint(QPainter *painter) const
 		painter->drawText(QPoint(1, fm.descent()), _text->at(i));
 		painter->setTransform(t);
 
-		int width = fm.charWidth(*_text, i);
+		int width = fm.boundingRect(_text->at(i)).width();
 		percent += ((qreal)width / (qreal)textWidth) * factor;
 	}
 	percent = (1.0 - factor) / 2.0;
@@ -200,7 +200,7 @@ void TextPathItem::paint(QPainter *painter) const
 		painter->drawText(QPoint(0, fm.descent()), _text->at(i));
 		painter->setTransform(t);
 
-		int width = fm.charWidth(*_text, i);
+		int width = fm.boundingRect(_text->at(i)).width();
 		percent += ((qreal)width / (qreal)textWidth) * factor;
 	}
 

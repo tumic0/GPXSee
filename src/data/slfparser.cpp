@@ -15,11 +15,7 @@ bool SLFParser::data(const QXmlStreamAttributes &attr, const char *name,
 	if (!attr.hasAttribute(name))
 		return false;
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-	val = attr.value(name).toString().toDouble(&res);
-#else // QT_VERSION < 5
 	val = attr.value(name).toDouble(&res);
-#endif // QT_VERSION < 5
 	if (!res)
 		_reader.raiseError("Invalid " + QString(name));
 

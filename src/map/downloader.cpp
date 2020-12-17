@@ -4,6 +4,7 @@
 #include <QBasicTimer>
 #include <QDir>
 #include <QTimerEvent>
+#include "common/config.h"
 #include "downloader.h"
 
 
@@ -83,9 +84,7 @@ private:
 
 QNetworkAccessManager *Downloader::_manager = 0;
 int Downloader::_timeout = 30;
-#ifdef ENABLE_HTTP2
 bool Downloader::_http2 = true;
-#endif // ENABLE_HTTP2
 
 bool Downloader::doDownload(const Download &dl,
   const QByteArray &authorization, const Redirect *redirect)
@@ -114,10 +113,8 @@ bool Downloader::doDownload(const Download &dl,
 	request.setRawHeader("User-Agent", USER_AGENT);
 	if (!authorization.isNull())
 		request.setRawHeader("Authorization", authorization);
-#ifdef ENABLE_HTTP2
-	request.setAttribute(QNetworkRequest::HTTP2AllowedAttribute,
+	request.setAttribute(QNetworkRequest::Http2AllowedAttribute,
 	  QVariant(_http2));
-#endif // ENABLE_HTTP2
 
 	Q_ASSERT(_manager);
 	QNetworkReply *reply = _manager->get(request);
@@ -230,11 +227,9 @@ bool Downloader::get(const QList<Download> &list,
 	return finishEmitted;
 }
 
-#ifdef ENABLE_HTTP2
 void Downloader::enableHTTP2(bool enable)
 {
 	Q_ASSERT(_manager);
 	_http2 = enable;
 	_manager->clearConnectionCache();
 }
-#endif // ENABLE_HTTP2

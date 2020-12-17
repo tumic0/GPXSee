@@ -326,8 +326,8 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 		} else if (def->globalId == COURSE_POINT) {
 			switch (field->id) {
 				case 1:
-					waypoint.setTimestamp(QDateTime::fromTime_t(val.toUInt()
-					  + 631065600));
+					waypoint.setTimestamp(QDateTime::fromSecsSinceEpoch(val.toUInt()
+					  + 631065600, Qt::UTC));
 					break;
 				case 2:
 					waypoint.rcoordinates().setLat(
@@ -362,8 +362,8 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 		}
 	} else if (def->globalId == RECORD_MESSAGE) {
 		if (ctx.trackpoint.coordinates().isValid()) {
-			ctx.trackpoint.setTimestamp(QDateTime::fromTime_t(ctx.timestamp
-			  + 631065600));
+			ctx.trackpoint.setTimestamp(QDateTime::fromSecsSinceEpoch(ctx.timestamp
+			  + 631065600, Qt::UTC));
 			ctx.trackpoint.setRatio(ctx.ratio);
 			ctx.segment.append(ctx.trackpoint);
 			ctx.trackpoint = Trackpoint();

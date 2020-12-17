@@ -34,7 +34,7 @@ static bool yCmp(OziMap *m1, OziMap *m2)
 
 void Atlas::computeZooms()
 {
-	qSort(_maps.begin(), _maps.end(), resCmp);
+	std::sort(_maps.begin(), _maps.end(), resCmp);
 
 	_zooms.append(Zoom(0, _maps.count() - 1));
 	for (int i = 1; i < _maps.count(); i++) {
@@ -56,14 +56,14 @@ void Atlas::computeBounds()
 		for (int i = _zooms.at(z).first; i <= _zooms.at(z).last; i++)
 			m.append(_maps.at(i));
 
-		qSort(m.begin(), m.end(), xCmp);
+		std::sort(m.begin(), m.end(), xCmp);
 		offsets[_maps.indexOf(m.first())].setX(0);
 		for (int i = 1; i < m.size(); i++) {
 			qreal w = m.first()->pp2xy(TL(m.at(i))).x();
 			offsets[_maps.indexOf(m.at(i))].setX(w);
 		}
 
-		qSort(m.begin(), m.end(), yCmp);
+		std::sort(m.begin(), m.end(), yCmp);
 		offsets[_maps.indexOf(m.first())].setY(0);
 		for (int i = 1; i < m.size(); i++) {
 			qreal h = m.first()->pp2xy(TL(m.at(i))).y();

@@ -24,7 +24,7 @@ FileSelectWidget::FileSelectWidget(QWidget *parent) : QWidget(parent)
 	connect(_button, SIGNAL(clicked()), this, SLOT(browse()));
 
 	QHBoxLayout *layout = new QHBoxLayout();
-	layout->setMargin(0);
+	layout->setContentsMargins(QMargins());
 	layout->addWidget(_edit);
 	layout->addWidget(_button);
 	setLayout(layout);

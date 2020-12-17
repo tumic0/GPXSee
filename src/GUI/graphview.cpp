@@ -6,8 +6,8 @@
 #include <QGraphicsSimpleTextItem>
 #include <QPalette>
 #include <QLocale>
+#include <QOpenGLWidget>
 #include "data/graph.h"
-#include "opengl.h"
 #include "axisitem.h"
 #include "axislabelitem.h"
 #include "slideritem.h"
@@ -351,23 +351,23 @@ void GraphView::wheelEvent(QWheelEvent *e)
 {
 	static int deg = 0;
 
-	deg += e->delta() / 8;
+	deg += e->angleDelta().y() / 8;
 	if (qAbs(deg) < 15)
 		return;
 	deg = 0;
 
-	QPointF pos = mapToScene(e->pos());
+	QPointF pos = mapToScene(e->position().toPoint());
 	QRectF gr(_grid->boundingRect());
 	QPointF r(pos.x() / gr.width(), pos.y() / gr.height());
 
-	_zoom = (e->delta() > 0) ? _zoom * 1.25 : qMax(_zoom / 1.25, 1.0);
+	_zoom = (e->angleDelta().y() > 0) ? _zoom * 1.25 : qMax(_zoom / 1.25, 1.0);
 	redraw();
 
 	QRectF ngr(_grid->boundingRect());
 	QPointF npos(mapFromScene(QPointF(r.x() * ngr.width(),
 	  r.y() * ngr.height())));
 	QScrollBar *sb = horizontalScrollBar();
-	sb->setSliderPosition(sb->sliderPosition() + npos.x() - e->pos().x());
+	sb->setSliderPosition(sb->sliderPosition() + npos.x() - e->position().x());
 
 	QGraphicsView::wheelEvent(e);
 }
@@ -537,7 +537,7 @@ void GraphView::setGraphWidth(int width)
 void GraphView::useOpenGL(bool use)
 {
 	if (use)
-		setViewport(new OPENGL_WIDGET);
+		setViewport(new QOpenGLWidget);
 	else
 		setViewport(new QWidget);
 }

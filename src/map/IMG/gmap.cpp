@@ -26,9 +26,9 @@ void GMAP::subProduct(QXmlStreamReader &reader, QString &dataDir,
   QString &baseMap)
 {
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Directory")
+		if (reader.name() == QLatin1String("Directory"))
 			dataDir = reader.readElementText();
-		else if (reader.name() == "BaseMap")
+		else if (reader.name() == QLatin1String("BaseMap"))
 			baseMap = reader.readElementText();
 		else
 			reader.skipCurrentElement();
@@ -39,11 +39,11 @@ void GMAP::mapProduct(QXmlStreamReader &reader, QString &dataDir,
   QString &typFile, QString &baseMap)
 {
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Name")
+		if (reader.name() == QLatin1String("Name"))
 			_name = reader.readElementText();
-		else if (reader.name() == "TYP")
+		else if (reader.name() == QLatin1String("TYP"))
 			typFile = reader.readElementText();
-		else if (reader.name() == "SubProduct")
+		else if (reader.name() == QLatin1String("SubProduct"))
 			subProduct(reader, dataDir, baseMap);
 		else
 			reader.skipCurrentElement();
@@ -60,7 +60,7 @@ bool GMAP::readXML(const QString &path, QString &dataDir, QString &typFile,
 
 	QXmlStreamReader reader(&file);
 	if (reader.readNextStartElement()) {
-		if (reader.name() == "MapProduct")
+		if (reader.name() == QLatin1String("MapProduct"))
 			mapProduct(reader, dataDir, typFile, baseMap);
 		else
 			reader.raiseError("Not a GMAP XML file");
@@ -159,7 +159,8 @@ bool GMAP::isGMAP(const QString &path)
 		return false;
 
 	QXmlStreamReader reader(&file);
-	if (reader.readNextStartElement() && reader.name() == "MapProduct")
+	if (reader.readNextStartElement()
+	  && reader.name() == QLatin1String("MapProduct"))
 		return true;
 
 	return false;

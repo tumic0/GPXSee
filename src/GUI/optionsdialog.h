@@ -2,12 +2,9 @@
 #define OPTIONSDIALOG_H
 
 #include <QDialog>
-#include "common/config.h"
 #include "palette.h"
 #include "units.h"
-#ifdef ENABLE_TIMEZONES
 #include "timezoneinfo.h"
-#endif // ENABLE_TIMEZONES
 
 class ColorBox;
 class StyleComboBox;
@@ -43,9 +40,7 @@ struct Options {
 	QColor backgroundColor;
 	// Map
 	int projection;
-#ifdef ENABLE_HIDPI
 	bool hidpiMap;
-#endif // ENABLE_HIDPI
 	// Data
 	int elevationFilter;
 	int speedFilter;
@@ -60,17 +55,13 @@ struct Options {
 	bool dataUseDEM;
 	bool showSecondaryElevation;
 	bool showSecondarySpeed;
-#ifdef ENABLE_TIMEZONES
 	TimeZoneInfo timeZone;
-#endif // ENABLE_TIMEZONES
 	bool useSegments;
 	// POI
 	int poiRadius;
 	// System
 	bool useOpenGL;
-#ifdef ENABLE_HTTP2
 	bool enableHTTP2;
-#endif // ENABLE_HTTP2
 	int pixmapCache;
 	int connectionTimeout;
 	// Print/Export
@@ -130,10 +121,8 @@ private:
 	QCheckBox *_graphAA;
 	// Map
 	LimitedComboBox *_projection;
-#ifdef ENABLE_HIDPI
 	QRadioButton *_hidpi;
 	QRadioButton *_lodpi;
-#endif // ENABLE_HIDPI
 	// Data
 	OddSpinBox *_elevationFilter;
 	OddSpinBox *_speedFilter;
@@ -151,12 +140,10 @@ private:
 	QRadioButton *_dataDEMElevation;
 	QCheckBox *_showSecondaryElevation;
 	QCheckBox *_showSecondarySpeed;
-#ifdef ENABLE_TIMEZONES
 	QRadioButton *_utcZone;
 	QRadioButton *_systemZone;
 	QRadioButton *_customZone;
 	QComboBox *_timeZone;
-#endif // ENABLE_TIMEZONES
 	QCheckBox *_useSegments;
 	// POI
 	QDoubleSpinBox *_poiRadius;
@@ -164,9 +151,7 @@ private:
 	QSpinBox *_pixmapCache;
 	QSpinBox *_connectionTimeout;
 	QCheckBox *_useOpenGL;
-#ifdef ENABLE_HTTP2
 	QCheckBox *_enableHTTP2;
-#endif // ENABLE_HTTP2
 	// Print/Export
 	QRadioButton *_wysiwyg;
 	QRadioButton *_hires;

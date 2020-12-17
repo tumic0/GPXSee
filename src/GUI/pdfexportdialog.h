@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include <QPrinter>
-#include "margins.h"
 #include "units.h"
 
 class QComboBox;
@@ -14,9 +13,9 @@ class MarginsFWidget;
 struct PDFExport
 {
 	QString fileName;
-	QPrinter::PaperSize paperSize;
-	QPrinter::Orientation orientation;
-	MarginsF margins;
+	QPageSize::PageSizeId paperSize;
+	QPageLayout::Orientation orientation;
+	QMarginsF margins;
 	int resolution;
 };
 

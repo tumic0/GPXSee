@@ -6,20 +6,4 @@
 #define APP_NAME        "GPXSee"
 #define APP_HOMEPAGE    "http://www.gpxsee.org"
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 1)
-#define ENABLE_HTTP2
-#endif // QT >= 5.10.1
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
-#define ENABLE_HIDPI
-#endif // QT >= 5.6
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-#define ENABLE_GEOJSON
-#endif // QT >= 5.0
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
-#define ENABLE_TIMEZONES
-#endif // QT >= 5.5
-
 #endif /* CONFIG_H */

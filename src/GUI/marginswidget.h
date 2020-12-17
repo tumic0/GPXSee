@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <QMargins>
-#include "margins.h"
 
 class QSpinBox;
 class QDoubleSpinBox;
@@ -33,8 +32,8 @@ class MarginsFWidget : public QWidget
 public:
 	MarginsFWidget(QWidget *parent = 0);
 
-	MarginsF value() const;
-	void setValue(const MarginsF &value);
+	QMarginsF value() const;
+	void setValue(const QMarginsF &value);
 	void setUnits(const QString &units);
 	void setSingleStep(qreal step);
 

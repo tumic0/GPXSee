@@ -24,8 +24,8 @@ public:
 	  {return !(*this == other);}
 
 private:
-	qreal _h, _s, _v, _a, _shift;
-	qreal _state;
+	float _h, _s, _v, _a, _shift;
+	float _state;
 };
 
 #ifndef QT_NO_DEBUG

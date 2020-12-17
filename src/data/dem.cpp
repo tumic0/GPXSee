@@ -1,9 +1,5 @@
 #include <QtEndian>
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-#include <QtCore/qmath.h>
-#else // QT5
 #include <QtMath>
-#endif // QT5
 #include <QDir>
 #include <QFile>
 #include "common/coordinates.h"

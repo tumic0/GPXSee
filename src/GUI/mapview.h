@@ -171,10 +171,8 @@ private:
 	bool _plot;
 	QCursor _cursor;
 
-#ifdef ENABLE_HIDPI
 	qreal _deviceRatio;
 	qreal _mapRatio;
-#endif // ENABLE_HIDPI
 	bool _opengl;
 };
 

@@ -4,11 +4,11 @@
 #include <QApplication>
 #include <QScrollBar>
 #include <QClipboard>
+#include <QOpenGLWidget>
 #include "data/poi.h"
 #include "data/data.h"
 #include "map/map.h"
 #include "map/pcs.h"
-#include "opengl.h"
 #include "trackitem.h"
 #include "routeitem.h"
 #include "waypointitem.h"
@@ -101,10 +101,8 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_poiSize = 8;
 	_poiColor = Qt::black;
 
-#ifdef ENABLE_HIDPI
 	_deviceRatio = 1.0;
 	_mapRatio = 1.0;
-#endif // ENABLE_HIDPI
 	_opengl = false;
 	_plot = false;
 	_digitalZoom = 0;
@@ -372,9 +370,7 @@ void MapView::setMap(Map *map)
 	_map = map;
 	_map->load();
 	_map->setProjection(_projection);
-#ifdef ENABLE_HIDPI
 	_map->setDevicePixelRatio(_deviceRatio, _mapRatio);
-#endif // ENABLE_HIDPI
 	connect(_map, SIGNAL(tilesLoaded()), this, SLOT(reloadMap()));
 
 	digitalZoom(0);
@@ -480,12 +476,8 @@ void MapView::setCoordinatesFormat(CoordinatesFormat format)
 
 void MapView::setTimeZone(const QTimeZone &zone)
 {
-#ifdef ENABLE_TIMEZONES
 	WaypointItem::setTimeZone(zone);
 	PathItem::setTimeZone(zone);
-#else // ENABLE_TIMEZONES
-	Q_UNUSED(zone);
-#endif // ENABLE_TIMEZONES
 }
 
 void MapView::clearMapCache()
@@ -550,12 +542,12 @@ void MapView::wheelEvent(QWheelEvent *event)
 {
 	static int deg = 0;
 
-	deg += event->delta() / 8;
+	deg += event->angleDelta().y() / 8;
 	if (qAbs(deg) < 15)
 		return;
 	deg = 0;
 
-	zoom((event->delta() > 0) ? 1 : -1, event->pos());
+	zoom((event->angleDelta().y() > 0) ? 1 : -1, event->position().toPoint());
 }
 
 void MapView::mouseDoubleClickEvent(QMouseEvent *event)
@@ -626,9 +618,7 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	// Enter plot mode
 	setUpdatesEnabled(false);
 	_plot = true;
-#ifdef ENABLE_HIDPI
 	_map->setDevicePixelRatio(_deviceRatio, 1.0);
-#endif // ENABLE_HIDPI
 
 	// Compute sizes & ratios
 	orig = viewport()->rect();
@@ -695,9 +685,7 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	_mapScale->setPos(origPos);
 
 	// Exit plot mode
-#ifdef ENABLE_HIDPI
 	_map->setDevicePixelRatio(_deviceRatio, _mapRatio);
-#endif // ENABLE_HIDPI
 	_plot = false;
 	setUpdatesEnabled(true);
 }
@@ -1019,7 +1007,7 @@ void MapView::useOpenGL(bool use)
 	_opengl = use;
 
 	if (use)
-		setViewport(new OPENGL_WIDGET);
+		setViewport(new QOpenGLWidget);
 	else
 		setViewport(new QWidget);
 }
@@ -1046,7 +1034,6 @@ void MapView::reloadMap()
 
 void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 {
-#ifdef ENABLE_HIDPI
 	if (_deviceRatio == deviceRatio && _mapRatio == mapRatio)
 		return;
 
@@ -1079,10 +1066,6 @@ void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 	centerOn(nc);
 
 	reloadMap();
-#else // ENABLE_HIDPI
-	Q_UNUSED(deviceRatio);
-	Q_UNUSED(mapRatio);
-#endif // ENABLE_HIDPI
 }
 
 void MapView::setProjection(int id)

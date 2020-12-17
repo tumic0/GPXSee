@@ -200,9 +200,7 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		Tile &t = tiles[i];
 		QPointF tp(t.xy().x() * tileSize(), t.xy().y() * tileSize());
 		if (!t.pixmap().isNull()) {
-#ifdef ENABLE_HIDPI
 			t.pixmap().setDevicePixelRatio(_mapRatio);
-#endif // ENABLE_HIDPI
 			painter->drawPixmap(tp, t.pixmap());
 		}
 	}

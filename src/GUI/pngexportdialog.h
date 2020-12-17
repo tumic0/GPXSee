@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include <QMargins>
-#include "margins.h"
 
 class FileSelectWidget;
 class MarginsWidget;

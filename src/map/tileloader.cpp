@@ -3,11 +3,7 @@
 #include <QEventLoop>
 #include <QPixmapCache>
 #include <QImageReader>
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-#include <QtCore>
-#else // QT_VERSION < 5
 #include <QtConcurrent>
-#endif // QT_VERSION < 5
 #include "tileloader.h"
 
 
@@ -77,7 +73,7 @@ void TileLoader::loadTilesAsync(QVector<Tile> &list)
 		Tile &t = list[i];
 		QString file(tileFile(t));
 
-		if (QPixmapCache::find(file, t.pixmap()))
+		if (QPixmapCache::find(file, &t.pixmap()))
 			continue;
 
 		QFileInfo fi(file);
@@ -116,7 +112,7 @@ void TileLoader::loadTilesSync(QVector<Tile> &list)
 		Tile &t = list[i];
 		QString file(tileFile(t));
 
-		if (QPixmapCache::find(file, t.pixmap()))
+		if (QPixmapCache::find(file, &t.pixmap()))
 			continue;
 
 		QFileInfo fi(file);
