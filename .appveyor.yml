@@ -4,18 +4,18 @@ configuration:
   - Release
 
 image:
-  - Visual Studio 2017
+  - Visual Studio 2019
 
 environment:
   NSISDIR: C:\Program Files (x86)\NSIS
   matrix:
-  - QTDIR: C:\Qt\5.13\msvc2017
+  - QTDIR: C:\Qt\5.15\msvc2019
     NSI: gpxsee.nsi
     VCVARS: vcvars32.bat
     OPENSSLDIR: C:\OpenSSL-v111-Win32\bin
     LIBCRYPTO: libssl-1_1.dll
     LIBSSL: libcrypto-1_1.dll
-  - QTDIR: C:\Qt\5.13\msvc2017_64
+  - QTDIR: C:\Qt\5.15\msvc2019_64
     NSI: gpxsee64.nsi
     VCVARS: vcvars64.bat
     OPENSSLDIR: C:\OpenSSL-v111-Win64\bin
