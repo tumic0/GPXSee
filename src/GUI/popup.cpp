@@ -6,8 +6,8 @@
 #include <QMouseEvent>
 #include <QBasicTimer>
 #include <QScreen>
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 #include <QApplication>
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 #include <QDesktopWidget>
 #endif // QT 5.15
 #include "popup.h"
