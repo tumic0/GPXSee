@@ -24,7 +24,6 @@ HEADERS += src/common/config.h \
     src/GUI/planeitem.h \
     src/GUI/popup.h \
     src/common/garmin.h \
-    src/common/staticassert.h \
     src/common/coordinates.h \
     src/common/range.h \
     src/common/rectc.h \
