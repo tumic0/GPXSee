@@ -26,7 +26,7 @@ install:
 - cmd: >-
     set PATH=%QTDIR%\bin;%NSISDIR%;%PATH%
 
-    call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\"%VCVARS%
+    call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\"%VCVARS%
 
 build_script:
 - cmd: >-
