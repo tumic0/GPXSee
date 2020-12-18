@@ -5,6 +5,7 @@
 #include <QBuffer>
 #include <QImageReader>
 #include <QPixmapCache>
+#include <QRegularExpression>
 #include "common/coordinates.h"
 #include "common/rectc.h"
 #include "common/config.h"

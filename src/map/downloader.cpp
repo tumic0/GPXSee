@@ -113,8 +113,13 @@ bool Downloader::doDownload(const Download &dl,
 	request.setRawHeader("User-Agent", USER_AGENT);
 	if (!authorization.isNull())
 		request.setRawHeader("Authorization", authorization);
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+	request.setAttribute(QNetworkRequest::HTTP2AllowedAttribute,
+	  QVariant(_http2));
+#else // QT 5.15
 	request.setAttribute(QNetworkRequest::Http2AllowedAttribute,
 	  QVariant(_http2));
+#endif // QT 5.15
 
 	Q_ASSERT(_manager);
 	QNetworkReply *reply = _manager->get(request);

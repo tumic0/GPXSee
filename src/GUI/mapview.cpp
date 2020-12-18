@@ -547,7 +547,11 @@ void MapView::wheelEvent(QWheelEvent *event)
 		return;
 	deg = 0;
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+	zoom((event->angleDelta().y() > 0) ? 1 : -1, event->pos());
+#else // QT 5.15
 	zoom((event->angleDelta().y() > 0) ? 1 : -1, event->position().toPoint());
+#endif // QT 5.15
 }
 
 void MapView::mouseDoubleClickEvent(QMouseEvent *event)

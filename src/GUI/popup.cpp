@@ -4,9 +4,12 @@
 #include <QStyleOptionFrame>
 #include <QLabel>
 #include <QMouseEvent>
-#include <QApplication>
 #include <QBasicTimer>
 #include <QScreen>
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+#include <QApplication>
+#include <QDesktopWidget>
+#endif // QT 5.15
 #include "popup.h"
 
 
@@ -122,7 +125,11 @@ bool PopupLabel::eventFilter(QObject *o, QEvent *ev)
 
 void PopupLabel::place(const QPoint &pos, QWidget *w)
 {
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+	QRect screen = QApplication::desktop()->screenGeometry(w);
+#else // QT 5.15
 	QRect screen = w->screen()->geometry();
+#endif // QT 5.15
 	QPoint p(pos.x() + 2, pos.y() + 16);
 
 	if (p.x() + width() > screen.x() + screen.width())

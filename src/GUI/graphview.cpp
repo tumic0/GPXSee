@@ -356,7 +356,11 @@ void GraphView::wheelEvent(QWheelEvent *e)
 		return;
 	deg = 0;
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+	QPointF pos = mapToScene(e->pos());
+#else // QT 5.15
 	QPointF pos = mapToScene(e->position().toPoint());
+#endif // QT 5.15
 	QRectF gr(_grid->boundingRect());
 	QPointF r(pos.x() / gr.width(), pos.y() / gr.height());
 
@@ -367,7 +371,11 @@ void GraphView::wheelEvent(QWheelEvent *e)
 	QPointF npos(mapFromScene(QPointF(r.x() * ngr.width(),
 	  r.y() * ngr.height())));
 	QScrollBar *sb = horizontalScrollBar();
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+	sb->setSliderPosition(sb->sliderPosition() + npos.x() - e->pos().x());
+#else // QT 5.15
 	sb->setSliderPosition(sb->sliderPosition() + npos.x() - e->position().x());
+#endif // QT 5.15
 
 	QGraphicsView::wheelEvent(e);
 }

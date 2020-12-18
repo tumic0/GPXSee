@@ -66,14 +66,22 @@ void PathItem::addSegment(const Coordinates &c1, const Coordinates &c2)
 			QLineF l(QPointF(c1.lon(), c1.lat()), QPointF(c2.lon() + 360,
 			  c2.lat()));
 			QLineF dl(QPointF(180, -90), QPointF(180, 90));
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+			l.intersect(dl, &p);
+#else // QT 5.15
 			l.intersects(dl, &p);
+#endif // QT 5.15
 			_painterPath.lineTo(_map->ll2xy(Coordinates(180, p.y())));
 			_painterPath.moveTo(_map->ll2xy(Coordinates(-180, p.y())));
 		} else {
 			QLineF l(QPointF(c1.lon(), c1.lat()), QPointF(c2.lon() - 360,
 			  c2.lat()));
 			QLineF dl(QPointF(-180, -90), QPointF(-180, 90));
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+			l.intersect(dl, &p);
+#else // QT 5.15
 			l.intersects(dl, &p);
+#endif // QT 5.15
 			_painterPath.lineTo(_map->ll2xy(Coordinates(-180, p.y())));
 			_painterPath.moveTo(_map->ll2xy(Coordinates(180, p.y())));
 		}

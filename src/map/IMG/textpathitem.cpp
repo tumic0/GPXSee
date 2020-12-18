@@ -8,6 +8,20 @@
 static bool intersection(const QLineF &line, const QRectF &rect,
   QPointF *p)
 {
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+	if (line.intersect(QLineF(rect.topLeft(), rect.topRight()), p)
+	  == QLineF::BoundedIntersection)
+		return true;
+	if (line.intersect(QLineF(rect.topLeft(), rect.bottomLeft()), p)
+	  == QLineF::BoundedIntersection)
+		return true;
+	if (line.intersect(QLineF(rect.bottomRight(), rect.bottomLeft()), p)
+	  == QLineF::BoundedIntersection)
+		return true;
+	if (line.intersect(QLineF(rect.bottomRight(), rect.topRight()), p)
+	  == QLineF::BoundedIntersection)
+		return true;
+#else // QT 5.15
 	if (line.intersects(QLineF(rect.topLeft(), rect.topRight()), p)
 	  == QLineF::BoundedIntersection)
 		return true;
@@ -20,6 +34,7 @@ static bool intersection(const QLineF &line, const QRectF &rect,
 	if (line.intersects(QLineF(rect.bottomRight(), rect.topRight()), p)
 	  == QLineF::BoundedIntersection)
 		return true;
+#endif // QT 5.15
 
 	return false;
 }
