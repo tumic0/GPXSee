@@ -64,7 +64,7 @@ LBLFile::~LBLFile()
 
 bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 {
-	quint16 hdrLen;
+	quint16 hdrLen, codepage;
 
 	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)
 	  && seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _offset)
@@ -72,7 +72,7 @@ bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 	  && readUInt8(hdl, _encoding) && seek(hdl, _gmpOffset + 0x57)
 	  && readUInt32(hdl, _poiOffset) && readUInt32(hdl, _poiSize)
 	  && readUInt8(hdl, _poiMultiplier) && seek(hdl, _gmpOffset + 0xAA)
-	  && readUInt16(hdl, _codepage)))
+	  && readUInt16(hdl, codepage)))
 		return false;
 
 	if (hdrLen >= 0x132) {
@@ -98,6 +98,8 @@ bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 		if (!_huffmanText->load(rgn, rgnHdl))
 			return false;
 	}
+
+	_codec = TextCodec(codepage);
 
 	return true;
 }
@@ -191,12 +193,10 @@ Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize) const
 			bap->append(c);
 	}
 
-	QString text((_codepage == 65001) ? label : QString::fromLatin1(label));
-	QString shieldText((_codepage == 65001) ? shieldLabel
-	  : QString::fromLatin1(shieldLabel));
+	QString text(_codec.toString(label));
 
 	return Label(capitalize && isAllUpperCase(text) ? capitalized(text) : text,
-	  Label::Shield(shieldType, shieldText));
+	  Label::Shield(shieldType, _codec.toString(shieldLabel)));
 }
 
 Label LBLFile::label8b(Handle &hdl, quint32 offset, bool capitalize) const

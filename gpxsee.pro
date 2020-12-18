@@ -28,6 +28,7 @@ HEADERS += src/common/config.h \
     src/common/coordinates.h \
     src/common/range.h \
     src/common/rectc.h \
+    src/common/textcodec.h \
     src/common/wgs84.h \
     src/common/util.h \
     src/common/rtree.h \
@@ -214,6 +215,7 @@ SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
     src/common/range.cpp \
+    src/common/textcodec.cpp \
     src/common/util.cpp \
     src/common/greatcircle.cpp \
     src/common/programpaths.cpp \

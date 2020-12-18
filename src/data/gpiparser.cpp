@@ -9,6 +9,7 @@
 #include <QCryptographicHash>
 #include <QTemporaryDir>
 #include "common/garmin.h"
+#include "common/textcodec.h"
 #include "gpiparser.h"
 
 
@@ -115,9 +116,9 @@ qint64 CryptDevice::readData(char *data, qint64 maxSize)
 class DataStream : public QDataStream
 {
 public:
-	DataStream(QIODevice *d) : QDataStream(d), _codepage(0) {}
+	DataStream(QIODevice *d) : QDataStream(d) {}
 
-	void setCodepage(quint16 codepage) {_codepage = codepage;}
+	void setCodepage(quint16 codepage) {_codec = TextCodec(codepage);}
 
 	quint16 readString(QString &str);
 	qint32 readInt24();
@@ -128,7 +129,7 @@ public:
 	quint16 nextHeaderType();
 
 private:
-	quint16 _codepage;
+	TextCodec _codec;
 };
 
 quint16 DataStream::readString(QString &str)
@@ -138,7 +139,7 @@ quint16 DataStream::readString(QString &str)
 	QByteArray ba;
 	ba.resize(len);
 	readRawData(ba.data(), len);
-	str = (_codepage == 65001) ? ba : QString::fromLatin1(ba);
+	str = _codec.toString(ba);
 
 	return len + 2;
 }
