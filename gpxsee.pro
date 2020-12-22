@@ -7,6 +7,7 @@ VERSION = 8.0
 
 QT += core \
     gui \
+    gui-private \
     network \
     sql \
     concurrent \
@@ -101,6 +102,7 @@ HEADERS += src/common/config.h \
     src/map/IMG/textpointitem.h \
     src/map/bsbmap.h \
     src/map/invalidmap.h \
+    src/map/kmzmap.h \
     src/map/polyconic.h \
     src/map/projection.h \
     src/map/ellipsoid.h \
@@ -276,6 +278,7 @@ SOURCES += src/main.cpp \
     src/map/IMG/textpathitem.cpp \
     src/map/IMG/textpointitem.cpp \
     src/map/bsbmap.cpp \
+    src/map/kmzmap.cpp \
     src/map/maplist.cpp \
     src/map/onlinemap.cpp \
     src/map/downloader.cpp \
