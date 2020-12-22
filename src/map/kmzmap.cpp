@@ -3,11 +3,11 @@
 	ZIP files - and things may break if Qt changes the API. For Qt5 this is not
 	a problem as we can "see the feature" now and there are no changes in all
 	the supported Qt5 versions up to the last one (5.15). In Qt6 the class
-	might change or even disappear in the feature, but this is very unlikely
+	might change or even disappear in the future, but this is very unlikely
 	as there were no changes for several years and The Qt Company's politics
-	is: "do not	invest any resources to any desktop platform stuff unless
+	is: "do not	invest any resources into any desktop platform stuff unless
 	absolutely necessary". There is an issue (QTBUG-3897) since year 2009 to
-	include the ZIP reader into the public API, which aptly ilustrates the
+	include the ZIP reader into the public API, which aptly illustrates the
 	effort The Qt Company is willing to make about anything desktop related...
 */
 
