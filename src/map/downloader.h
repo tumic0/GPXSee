@@ -7,7 +7,6 @@
 #include <QList>
 #include <QSet>
 #include <QHash>
-#include "common/config.h"
 
 
 class Download
@@ -49,9 +48,7 @@ public:
 	static void setNetworkManager(QNetworkAccessManager *manager)
 	  {_manager = manager;}
 	static void setTimeout(int timeout) {_timeout = timeout;}
-#ifdef ENABLE_HTTP2
 	static void enableHTTP2(bool enable);
-#endif // ENABLE_HTTP2
 
 signals:
 	void finished();
@@ -74,9 +71,7 @@ private:
 
 	static QNetworkAccessManager *_manager;
 	static int _timeout;
-#ifdef ENABLE_HTTP2
 	static bool _http2;
-#endif // ENABLE_HTTP2
 };
 
 #endif // DOWNLOADER_H

@@ -18,7 +18,7 @@ void SliderInfoItem::updateBoundingRect()
 {
 	QFontMetrics fm(_font);
 
-	qreal width = qMax(fm.width(_x), fm.width(_y));
+	qreal width = qMax(fm.boundingRect(_x).width(), fm.boundingRect(_y).width());
 	qreal height = 2 * fm.height() - 2*fm.descent();
 
 	_boundingRect = (_side == Right)
@@ -35,16 +35,16 @@ void SliderInfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 	QRectF rx, ry;
 
 
-	qreal width = qMax(fm.width(_x), fm.width(_y));
+	qreal width = qMax(fm.boundingRect(_x).width(), fm.boundingRect(_y).width());
 	if (_side == Right) {
-		ry = QRectF(SIZE, -fm.height() + fm.descent(), fm.width(_y),
+		ry = QRectF(SIZE, -fm.height() + fm.descent(), fm.boundingRect(_y).width(),
 		  fm.height() - fm.descent());
-		rx = QRectF(SIZE, 0, fm.width(_x), fm.height()
+		rx = QRectF(SIZE, 0, fm.boundingRect(_x).width(), fm.height()
 		  - fm.descent());
 	} else {
-		ry = QRectF(-(width + SIZE), -fm.height() + fm.descent(), fm.width(_y),
-		  fm.height() - fm.descent());
-		rx = QRectF(-(width + SIZE), 0, fm.width(_x), fm.height()
+		ry = QRectF(-(width + SIZE), -fm.height() + fm.descent(),
+		  fm.boundingRect(_y).width(), fm.height() - fm.descent());
+		rx = QRectF(-(width + SIZE), 0, fm.boundingRect(_x).width(), fm.height()
 		  - fm.descent());
 	}
 

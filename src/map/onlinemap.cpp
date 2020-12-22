@@ -128,9 +128,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		  : QPointF(-_tileSize/2, -_tileSize/2);
 
 		if (!t.pixmap().isNull()) {
-#ifdef ENABLE_HIDPI
 			t.pixmap().setDevicePixelRatio(imageRatio());
-#endif // ENABLE_HIDPI
 			painter->drawPixmap(tp, t.pixmap());
 		}
 	}

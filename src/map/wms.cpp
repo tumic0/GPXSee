@@ -41,7 +41,7 @@ WMS::CTX::CTX(const Setup &setup) : setup(setup), formatSupported(false)
 void WMS::get(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "OnlineResource") {
+		if (reader.name() == QLatin1String("OnlineResource")) {
 			QXmlStreamAttributes attr = reader.attributes();
 			ctx.url =  attr.value("xlink:href").toString();
 			reader.skipCurrentElement();
@@ -53,7 +53,7 @@ void WMS::get(QXmlStreamReader &reader, CTX &ctx)
 void WMS::http(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Get")
+		if (reader.name() == QLatin1String("Get"))
 			get(reader, ctx);
 		else
 			reader.skipCurrentElement();
@@ -63,7 +63,7 @@ void WMS::http(QXmlStreamReader &reader, CTX &ctx)
 void WMS::dcpType(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "HTTP")
+		if (reader.name() == QLatin1String("HTTP"))
 			http(reader, ctx);
 		else
 			reader.skipCurrentElement();
@@ -73,11 +73,11 @@ void WMS::dcpType(QXmlStreamReader &reader, CTX &ctx)
 void WMS::getMap(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Format") {
+		if (reader.name() == QLatin1String("Format")) {
 			QString format(reader.readElementText());
 			if (bareFormat(format) == bareFormat(ctx.setup.format()))
 				ctx.formatSupported = true;
-		} else if (reader.name() == "DCPType")
+		} else if (reader.name() == QLatin1String("DCPType"))
 			dcpType(reader, ctx);
 		else
 			reader.skipCurrentElement();
@@ -87,7 +87,7 @@ void WMS::getMap(QXmlStreamReader &reader, CTX &ctx)
 void WMS::request(QXmlStreamReader &reader, CTX &ctx)
 {
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "GetMap")
+		if (reader.name() == QLatin1String("GetMap"))
 			getMap(reader, ctx);
 		else
 			reader.skipCurrentElement();
@@ -99,7 +99,7 @@ QString WMS::style(QXmlStreamReader &reader)
 	QString name;
 
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Name")
+		if (reader.name() == QLatin1String("Name"))
 			name = reader.readElementText();
 		else
 			reader.skipCurrentElement();
@@ -113,13 +113,13 @@ RectC WMS::geographicBoundingBox(QXmlStreamReader &reader)
 	double left = NAN, top = NAN, right = NAN, bottom = NAN;
 
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "westBoundLongitude")
+		if (reader.name() == QLatin1String("westBoundLongitude"))
 			left = reader.readElementText().toDouble();
-		else if (reader.name() == "eastBoundLongitude")
+		else if (reader.name() == QLatin1String("eastBoundLongitude"))
 			right = reader.readElementText().toDouble();
-		else if (reader.name() == "northBoundLatitude")
+		else if (reader.name() == QLatin1String("northBoundLatitude"))
 			top = reader.readElementText().toDouble();
-		else if (reader.name() == "southBoundLatitude")
+		else if (reader.name() == QLatin1String("southBoundLatitude"))
 			bottom = reader.readElementText().toDouble();
 		else
 			reader.skipCurrentElement();
@@ -140,13 +140,14 @@ void WMS::layer(QXmlStreamReader &reader, CTX &ctx,
 	int index;
 
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Name")
+		if (reader.name() == QLatin1String("Name"))
 			name = reader.readElementText();
-		else if (reader.name() == "CRS" || reader.name() == "SRS")
+		else if (reader.name() == QLatin1String("CRS")
+		  || reader.name() == QLatin1String("SRS"))
 			CRSs.append(reader.readElementText());
-		else if (reader.name() == "Style")
+		else if (reader.name() == QLatin1String("Style"))
 			styles.append(style(reader));
-		else if (reader.name() == "ScaleHint") {
+		else if (reader.name() == QLatin1String("ScaleHint")) {
 			QXmlStreamAttributes attr = reader.attributes();
 			double minHint = attr.value("min").toString().toDouble();
 			double maxHint = attr.value("max").toString().toDouble();
@@ -155,15 +156,15 @@ void WMS::layer(QXmlStreamReader &reader, CTX &ctx,
 			if (maxHint > 0)
 				scaleDenominator.setMax(hint2denominator(maxHint));
 			reader.skipCurrentElement();
-		} else if (reader.name() == "MinScaleDenominator") {
+		} else if (reader.name() == QLatin1String("MinScaleDenominator")) {
 			double sd = reader.readElementText().toDouble();
 			if (sd > 0)
 				scaleDenominator.setMin(sd);
-		} else if (reader.name() == "MaxScaleDenominator") {
+		} else if (reader.name() == QLatin1String("MaxScaleDenominator")) {
 			double sd = reader.readElementText().toDouble();
 			if (sd > 0)
 				scaleDenominator.setMax(sd);
-		} else if (reader.name() == "LatLonBoundingBox") {
+		} else if (reader.name() == QLatin1String("LatLonBoundingBox")) {
 			QXmlStreamAttributes attr = reader.attributes();
 			boundingBox = RectC(Coordinates(
 			  attr.value("minx").toString().toDouble(),
@@ -171,9 +172,9 @@ void WMS::layer(QXmlStreamReader &reader, CTX &ctx,
 			  Coordinates(attr.value("maxx").toString().toDouble(),
 			  attr.value("miny").toString().toDouble()));
 			reader.skipCurrentElement();
-		} else if (reader.name() == "EX_GeographicBoundingBox")
+		} else if (reader.name() == QLatin1String("EX_GeographicBoundingBox"))
 			boundingBox = geographicBoundingBox(reader);
-		else if (reader.name() == "Layer")
+		else if (reader.name() == QLatin1String("Layer"))
 			layer(reader, ctx, CRSs, styles, scaleDenominator, boundingBox);
 		else
 			reader.skipCurrentElement();
@@ -197,9 +198,9 @@ void WMS::capability(QXmlStreamReader &reader, CTX &ctx)
 	RectC boundingBox;
 
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Layer")
+		if (reader.name() == QLatin1String("Layer"))
 			layer(reader, ctx, CRSs, styles, scaleDenominator, boundingBox);
-		else if (reader.name() == "Request")
+		else if (reader.name() == QLatin1String("Request"))
 			request(reader, ctx);
 		else
 			reader.skipCurrentElement();
@@ -211,7 +212,7 @@ void WMS::capabilities(QXmlStreamReader &reader, CTX &ctx)
 	_version = reader.attributes().value("version").toString();
 
 	while (reader.readNextStartElement()) {
-		if (reader.name() == "Capability")
+		if (reader.name() == QLatin1String("Capability"))
 			capability(reader, ctx);
 		else
 			reader.skipCurrentElement();
@@ -237,8 +238,8 @@ bool WMS::parseCapabilities()
 
 	reader.setDevice(&file);
 	if (reader.readNextStartElement()) {
-		if (reader.name() == "WMS_Capabilities"
-		  || reader.name() == "WMT_MS_Capabilities")
+		if (reader.name() == QLatin1String("WMS_Capabilities")
+		  || reader.name() == QLatin1String("WMT_MS_Capabilities"))
 			capabilities(reader, ctx);
 		else
 			reader.raiseError("Not a WMS Capabilities XML file");

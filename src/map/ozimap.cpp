@@ -5,6 +5,7 @@
 #include <QBuffer>
 #include <QImageReader>
 #include <QPixmapCache>
+#include <QRegularExpression>
 #include "common/coordinates.h"
 #include "common/rectc.h"
 #include "common/config.h"
@@ -127,8 +128,8 @@ bool OziMap::setImageInfo(const QString &path)
 	if (!ii.exists()) {
 		int last = _map.path.lastIndexOf('\\');
 		if (last >= 0 && last < _map.path.length() - 1) {
-			QStringRef fn(&_map.path, last + 1, _map.path.length() - last - 1);
-			ii.setFile(path + "/" + fn.toString());
+			QString fn(_map.path.mid(last + 1, _map.path.length() - last - 1));
+			ii.setFile(path + "/" + fn);
 		}
 	}
 
@@ -166,7 +167,7 @@ bool OziMap::setTileInfo(const QStringList &tiles, const QString &path)
 		return false;
 	}
 
-	QRegExp rx("_[0-9]+_[0-9]+\\.");
+	QRegularExpression rx("_[0-9]+_[0-9]+\\.");
 	for (int i = 0; i < tiles.size(); i++) {
 		if (tiles.at(i).contains(rx)) {
 			_tile.path = QString(tiles.at(i)).replace(rx, "_%1_%2.");
@@ -249,9 +250,7 @@ void OziMap::drawTiled(QPainter *painter, const QRectF &rect) const
 				qWarning("%s: error loading tile image", qPrintable(
 				  _tile.path.arg(QString::number(x), QString::number(y))));
 			else {
-#ifdef ENABLE_HIDPI
 				pixmap.setDevicePixelRatio(_mapRatio);
-#endif // ENABLE_HIDPI
 				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
 				painter->drawPixmap(tp, pixmap);
 			}
@@ -284,9 +283,7 @@ void OziMap::drawOZF(QPainter *painter, const QRectF &rect) const
 			if (pixmap.isNull())
 				qWarning("%s: error loading tile image", qPrintable(key));
 			else {
-#ifdef ENABLE_HIDPI
 				pixmap.setDevicePixelRatio(_mapRatio);
-#endif // ENABLE_HIDPI
 				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
 				painter->drawPixmap(tp, pixmap);
 			}

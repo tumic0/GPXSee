@@ -1,4 +1,3 @@
-#include <QTextCodec>
 #include "huffmantext.h"
 #include "rgnfile.h"
 #include "lblfile.h"
@@ -100,13 +99,7 @@ bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 			return false;
 	}
 
-	if (codepage == 65001)
-		_codec = QTextCodec::codecForName("UTF-8");
-	else if (codepage == 0)
-		_codec = 0;
-	else
-		_codec = QTextCodec::codecForName(QString("CP%1").arg(codepage)
-		  .toLatin1());
+	_codec = TextCodec(codepage);
 
 	return true;
 }
@@ -200,12 +193,10 @@ Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize) const
 			bap->append(c);
 	}
 
-	QString text(_codec ? _codec->toUnicode(label) : QString::fromLatin1(label));
-	QString shieldText(_codec ? _codec->toUnicode(shieldLabel)
-	  : QString::fromLatin1(shieldLabel));
+	QString text(_codec.toString(label));
 
 	return Label(capitalize && isAllUpperCase(text) ? capitalized(text) : text,
-	  Label::Shield(shieldType, shieldText));
+	  Label::Shield(shieldType, _codec.toString(shieldLabel)));
 }
 
 Label LBLFile::label8b(Handle &hdl, quint32 offset, bool capitalize) const

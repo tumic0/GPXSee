@@ -5,21 +5,58 @@
 
 #define MAX_TEXT_ANGLE 30
 
-static bool intersection(const QLineF &line, const QRectF &rect,
-  QPointF *p)
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+#define INTERSECTS intersect
+#else // QT 5.15
+#define INTERSECTS intersects
+#endif // QT 5.15
+
+
+static bool intersection(const QLineF &line, const QRectF &rect, QPointF *p)
 {
-	if (line.intersect(QLineF(rect.topLeft(), rect.topRight()), p)
+	if (line.INTERSECTS(QLineF(rect.topLeft(), rect.topRight()), p)
 	  == QLineF::BoundedIntersection)
 		return true;
-	if (line.intersect(QLineF(rect.topLeft(), rect.bottomLeft()), p)
+	if (line.INTERSECTS(QLineF(rect.topLeft(), rect.bottomLeft()), p)
 	  == QLineF::BoundedIntersection)
 		return true;
-	if (line.intersect(QLineF(rect.bottomRight(), rect.bottomLeft()), p)
+	if (line.INTERSECTS(QLineF(rect.bottomRight(), rect.bottomLeft()), p)
 	  == QLineF::BoundedIntersection)
 		return true;
-	if (line.intersect(QLineF(rect.bottomRight(), rect.topRight()), p)
+	if (line.INTERSECTS(QLineF(rect.bottomRight(), rect.topRight()), p)
 	  == QLineF::BoundedIntersection)
 		return true;
+
+	return false;
+}
+
+static bool intersection(const QLineF &line, const QRectF &rect, QPointF *p1,
+  QPointF *p2)
+{
+	QPointF *p = p1;
+
+	if (line.INTERSECTS(QLineF(rect.topLeft(), rect.topRight()), p)
+	  == QLineF::BoundedIntersection)
+		p = p2;
+	if (line.INTERSECTS(QLineF(rect.topLeft(), rect.bottomLeft()), p)
+	  == QLineF::BoundedIntersection) {
+		if (p == p2)
+			return true;
+		p = p2;
+	}
+	if (line.INTERSECTS(QLineF(rect.bottomRight(), rect.bottomLeft()), p)
+	  == QLineF::BoundedIntersection) {
+		if (p == p2)
+			return true;
+		p = p2;
+	}
+	if (line.INTERSECTS(QLineF(rect.bottomRight(), rect.topRight()), p)
+	  == QLineF::BoundedIntersection) {
+		if (p == p2)
+			return true;
+	}
+
+	Q_ASSERT(p != p2);
 
 	return false;
 }
@@ -64,8 +101,8 @@ static QList<QLineF> lineString(const QPolygonF &path,
   const QRectF &boundingRect)
 {
 	QList<QLineF> lines;
-	int start = 0, end = path.count() - 1;
-	QPointF p;
+	int start = -1, end = -1;
+
 
 	for (int i = 0; i < path.count(); i++) {
 		if (boundingRect.contains(path.at(i))) {
@@ -80,21 +117,36 @@ static QList<QLineF> lineString(const QPolygonF &path,
 		}
 	}
 
-	if (start > 0) {
-		QLineF l(path.at(start-1), path.at(start));
-		if (intersection(l, boundingRect, &p))
-			lines.append(QLineF(p, path.at(start)));
-	}
-	for (int i = start + 1; i <= end; i++)
-		lines.append(QLineF(path.at(i-1), path.at(i)));
-	if (end < path.count() - 1) {
-		QLineF l(path.at(end), path.at(end+1));
-		if (intersection(l, boundingRect, &p))
-			lines.append(QLineF(path.at(end), p));
+	if (start < 0) {
+		QPointF p1, p2;
+
+		for (int i = 1; i < path.count(); i++) {
+			QLineF l(path.at(i-1), path.at(i));
+			if (intersection(l, boundingRect, &p1, &p2)) {
+				lines.append(QLineF(p1, p2));
+				break;
+			}
+		}
+	} else {
+		QPointF p;
+
+		if (start > 0) {
+			QLineF l(path.at(start-1), path.at(start));
+			if (intersection(l, boundingRect, &p))
+				lines.append(QLineF(p, path.at(start)));
+		}
+		for (int i = start + 1; i <= end; i++)
+			lines.append(QLineF(path.at(i-1), path.at(i)));
+		if (end < path.count() - 1) {
+			QLineF l(path.at(end), path.at(end+1));
+			if (intersection(l, boundingRect, &p))
+				lines.append(QLineF(path.at(end), p));
+		}
 	}
 
 	return lines;
 }
+
 
 static QPainterPath textPath(const QPolygonF &path, qreal textWidth,
   qreal charWidth, const QRectF &tileRect)
@@ -139,7 +191,7 @@ TextPathItem::TextPathItem(const QPolygonF &line, const QString *label,
   const QRect &tileRect, const QFont *font, const QColor *color)
   : TextItem(label), _font(font), _color(color)
 {
-	qreal cw = font->pixelSize() * 0.7;
+	qreal cw = font->pixelSize() * 0.6;
 	qreal textWidth = _text->size() * cw;
 	qreal mw = font->pixelSize() / 2;
 	_path = textPath(line, textWidth, cw, tileRect.adjusted(mw, mw, -mw, -mw));
@@ -159,7 +211,7 @@ TextPathItem::TextPathItem(const QPolygonF &line, const QString *label,
 void TextPathItem::paint(QPainter *painter) const
 {
 	QFontMetrics fm(*_font);
-	int textWidth = fm.width(*_text);
+	int textWidth = fm.boundingRect(*_text).width();
 
 	qreal factor = (textWidth) / qMax(_path.length(), (qreal)textWidth);
 	qreal percent = (1.0 - factor) / 2.0;
@@ -185,7 +237,7 @@ void TextPathItem::paint(QPainter *painter) const
 		painter->drawText(QPoint(1, fm.descent()), _text->at(i));
 		painter->setTransform(t);
 
-		int width = fm.charWidth(*_text, i);
+		int width = fm.horizontalAdvance(_text->at(i));
 		percent += ((qreal)width / (qreal)textWidth) * factor;
 	}
 	percent = (1.0 - factor) / 2.0;
@@ -200,7 +252,7 @@ void TextPathItem::paint(QPainter *painter) const
 		painter->drawText(QPoint(0, fm.descent()), _text->at(i));
 		painter->setTransform(t);
 
-		int width = fm.charWidth(*_text, i);
+		int width = fm.horizontalAdvance(_text->at(i));
 		percent += ((qreal)width / (qreal)textWidth) * factor;
 	}
 

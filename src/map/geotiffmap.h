@@ -31,7 +31,6 @@ public:
 	QString errorString() const {return _errorString;}
 
 private:
-	QString _fileName;
 	Projection _projection;
 	Transform _transform;
 	Image *_img;

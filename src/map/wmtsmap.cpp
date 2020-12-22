@@ -195,9 +195,7 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		Tile &t = tiles[i];
 		QPointF tp(t.xy().x() * ts.width(), t.xy().y() * ts.height());
 		if (!t.pixmap().isNull()) {
-#ifdef ENABLE_HIDPI
 			t.pixmap().setDevicePixelRatio(imageRatio());
-#endif // ENABLE_HIDPI
 			painter->drawPixmap(tp, t.pixmap());
 		}
 	}

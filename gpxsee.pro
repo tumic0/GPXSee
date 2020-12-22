@@ -3,19 +3,16 @@ unix:!macx {
 } else {
     TARGET = GPXSee
 }
-VERSION = 7.38
+VERSION = 8.0
 
 QT += core \
     gui \
     network \
     sql \
-    concurrent
-greaterThan(QT_MAJOR_VERSION, 4) {
-    QT += widgets
-    QT += printsupport
-}
-lessThan(QT_MAJOR_VERSION, 5) {QT += opengl}
-equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 4) {QT += opengl}
+    concurrent \
+    widgets \
+    printsupport
+greaterThan(QT_MAJOR_VERSION, 5) {QT += openglwidgets}
 
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
@@ -27,10 +24,10 @@ HEADERS += src/common/config.h \
     src/GUI/planeitem.h \
     src/GUI/popup.h \
     src/common/garmin.h \
-    src/common/staticassert.h \
     src/common/coordinates.h \
     src/common/range.h \
     src/common/rectc.h \
+    src/common/textcodec.h \
     src/common/wgs84.h \
     src/common/util.h \
     src/common/rtree.h \
@@ -58,7 +55,6 @@ HEADERS += src/common/config.h \
     src/GUI/heartrategraph.h \
     src/GUI/trackinfo.h \
     src/GUI/fileselectwidget.h \
-    src/GUI/margins.h \
     src/GUI/temperaturegraph.h \
     src/GUI/graphtab.h \
     src/GUI/trackitem.h \
@@ -74,7 +70,6 @@ HEADERS += src/common/config.h \
     src/GUI/optionsdialog.h \
     src/GUI/colorbox.h \
     src/GUI/stylecombobox.h \
-    src/GUI/opengl.h \
     src/GUI/timetype.h \
     src/GUI/percentslider.h \
     src/GUI/elevationgraphitem.h \
@@ -86,7 +81,6 @@ HEADERS += src/common/config.h \
     src/GUI/gearratiographitem.h \
     src/GUI/oddspinbox.h \
     src/GUI/settings.h \
-    src/GUI/cpuarch.h \
     src/GUI/searchpointer.h \
     src/GUI/mapview.h \
     src/GUI/font.h \
@@ -208,7 +202,10 @@ HEADERS += src/common/config.h \
     src/data/address.h \
     src/data/smlparser.h \
     src/GUI/pdfexportdialog.h \
-    src/GUI/pngexportdialog.h
+    src/GUI/pngexportdialog.h \
+    src/data/geojsonparser.h \
+    src/GUI/timezoneinfo.h
+
 SOURCES += src/main.cpp \
     src/GUI/axislabelitem.cpp \
     src/GUI/mapitem.cpp \
@@ -217,6 +214,7 @@ SOURCES += src/main.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
     src/common/range.cpp \
+    src/common/textcodec.cpp \
     src/common/util.cpp \
     src/common/greatcircle.cpp \
     src/common/programpaths.cpp \
@@ -362,19 +360,11 @@ SOURCES += src/main.cpp \
     src/data/gpiparser.cpp \
     src/data/smlparser.cpp \
     src/GUI/pdfexportdialog.cpp \
-    src/GUI/pngexportdialog.cpp
-
-greaterThan(QT_MAJOR_VERSION, 4) {
-    HEADERS += src/data/geojsonparser.h
-    SOURCES += src/data/geojsonparser.cpp
-}
-equals(QT_MAJOR_VERSION, 5):greaterThan(QT_MINOR_VERSION, 4) {
-    HEADERS += src/GUI/timezoneinfo.h
-}
+    src/GUI/pngexportdialog.cpp \
+    src/data/geojsonparser.cpp
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     QT_NO_DEPRECATED_WARNINGS
-DEFINES *= QT_USE_QSTRINGBUILDER
 
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_en.ts \

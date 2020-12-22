@@ -16,13 +16,12 @@
 
 Units WaypointItem::_units = Metric;
 CoordinatesFormat WaypointItem::_format = DecimalDegrees;
-#ifdef ENABLE_TIMEZONES
 QTimeZone WaypointItem::_timeZone = QTimeZone::utc();
-#endif // ENABLE_TIMEZONES
 
 QString WaypointItem::info() const
 {
 	ToolTip tt;
+	QLocale l;
 
 	if (!_waypoint.name().isEmpty())
 		tt.insert(qApp->translate("WaypointItem", "Name"), _waypoint.name());
@@ -37,12 +36,8 @@ QString WaypointItem::info() const
 	}
 	if (_waypoint.timestamp().isValid())
 		tt.insert(qApp->translate("WaypointItem", "Date"),
-#ifdef ENABLE_TIMEZONES
-		  _waypoint.timestamp().toTimeZone(_timeZone)
-#else // ENABLE_TIMEZONES
-		  _waypoint.timestamp()
-#endif // ENABLE_TIMEZONES
-		  .toString(Qt::SystemLocaleShortDate));
+		  l.toString(_waypoint.timestamp().toTimeZone(_timeZone),
+		  QLocale::ShortFormat));
 	if (!_waypoint.description().isEmpty())
 		tt.insert(qApp->translate("WaypointItem", "Description"),
 		  _waypoint.description());

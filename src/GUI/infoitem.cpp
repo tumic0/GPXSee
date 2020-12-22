@@ -18,9 +18,9 @@ void InfoItem::updateBoundingRect()
 
 	for (QList<KV<QString, QString> >::const_iterator i = _list.constBegin();
 	  i != _list.constEnd(); i++) {
-		width += fm.width(i->key() + ": ");
-		width += fm.width(i->value()) + ((i == _list.constEnd() - 1)
-		  ? 0 : PADDING);
+		width += fm.boundingRect(i->key() + ": ").width();
+		width += fm.boundingRect(i->value()).width()
+		  + ((i == _list.constEnd() - 1) ? 0 : PADDING);
 	}
 
 	_boundingRect = QRectF(0, 0, width, _list.isEmpty() ? 0 : fm.height());
@@ -40,10 +40,10 @@ void InfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	for (QList<KV<QString, QString> >::const_iterator i = _list.constBegin();
 	  i != _list.constEnd(); i++) {
 		painter->drawText(width, fm.height() - fm.descent(), i->key() + ": ");
-		width += fm.width(i->key() + ": ");
+		width += fm.boundingRect(i->key() + ": ").width();
 		painter->drawText(width, fm.height() - fm.descent(), i->value());
-		width += fm.width(i->value()) + ((i == _list.constEnd() - 1)
-		  ? 0 : PADDING);
+		width += fm.boundingRect(i->value()).width()
+		  + ((i == _list.constEnd() - 1) ? 0 : PADDING);
 		if (i != _list.constEnd() - 1) {
 			painter->save();
 			painter->setPen(Qt::gray);

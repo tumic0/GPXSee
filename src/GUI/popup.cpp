@@ -4,9 +4,12 @@
 #include <QStyleOptionFrame>
 #include <QLabel>
 #include <QMouseEvent>
-#include <QApplication>
-#include <QDesktopWidget>
 #include <QBasicTimer>
+#include <QScreen>
+#include <QApplication>
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+#include <QDesktopWidget>
+#endif // QT 5.15
 #include "popup.h"
 
 
@@ -36,10 +39,7 @@ PopupLabel *PopupLabel::_instance = 0;
 
 PopupLabel::PopupLabel(const QString &text, QWidget *parent)
   : QLabel(text, parent, Qt::ToolTip | Qt::BypassGraphicsProxyWidget
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-	| Qt::WindowDoesNotAcceptFocus
-#endif // QT5
-)
+	| Qt::WindowDoesNotAcceptFocus)
 {
 	delete _instance;
 	_instance = this;
@@ -74,7 +74,7 @@ void PopupLabel::paintEvent(QPaintEvent *event)
 {
 	QStylePainter p(this);
 	QStyleOptionFrame opt;
-	opt.init(this);
+	opt.initFrom(this);
 	p.drawPrimitive(QStyle::PE_PanelTipLabel, opt);
 	p.end();
 	QLabel::paintEvent(event);
@@ -125,7 +125,11 @@ bool PopupLabel::eventFilter(QObject *o, QEvent *ev)
 
 void PopupLabel::place(const QPoint &pos, QWidget *w)
 {
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 	QRect screen = QApplication::desktop()->screenGeometry(w);
+#else // QT 5.15
+	QRect screen = w->screen()->geometry();
+#endif // QT 5.15
 	QPoint p(pos.x() + 2, pos.y() + 16);
 
 	if (p.x() + width() > screen.x() + screen.width())

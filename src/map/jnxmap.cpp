@@ -154,7 +154,19 @@ JNXMap::JNXMap(const QString &fileName, QObject *parent)
 		return;
 	}
 
+	_file.close();
+
 	_valid = true;
+}
+
+void JNXMap::load()
+{
+	_file.open(QIODevice::ReadOnly);
+}
+
+void JNXMap::unload()
+{
+	_file.close();
 }
 
 QPointF JNXMap::ll2xy(const Coordinates &c)
@@ -235,9 +247,7 @@ bool JNXMap::cb(Tile *tile, void *context)
 {
 	Ctx *ctx = static_cast<Ctx*>(context);
 	QPixmap pm(pixmap(tile, ctx->file));
-#ifdef ENABLE_HIDPI
 	pm.setDevicePixelRatio(ctx->ratio);
-#endif // ENABLE_HIDPI
 	ctx->painter->drawPixmap(tile->pos / ctx->ratio, pm);
 
 	return true;

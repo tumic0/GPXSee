@@ -121,11 +121,11 @@ void Matrix::zeroize()
 #ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Matrix &matrix)
 {
-	dbg.nospace() << "Matrix(" << endl;
+	dbg.nospace() << "Matrix(" << "\n";
 	for (size_t i = 0; i < matrix.h(); i++) {
 		for (size_t j = 0; j < matrix.w(); j++)
 			dbg << "\t" << matrix.m(i, j);
-		dbg << endl;
+		dbg << "\n";
 	}
 	dbg << ")";
 

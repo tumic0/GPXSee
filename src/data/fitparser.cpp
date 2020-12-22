@@ -1,5 +1,4 @@
 #include <QtEndian>
-#include "common/staticassert.h"
 #include "fitparser.h"
 
 
@@ -174,7 +173,7 @@ bool FITParser::parseDefinitionMessage(CTX &ctx, quint8 header)
 	// definition records
 	def->fields = new Field[def->numFields];
 	for (i = 0; i < def->numFields; i++) {
-		STATIC_ASSERT(sizeof(def->fields[i]) == 3);
+		static_assert(sizeof(def->fields[i]) == 3, "Invalid Field alignment");
 		if (!readData(ctx.file, (char*)&(def->fields[i]),
 		  sizeof(def->fields[i])))
 			return false;
@@ -188,7 +187,7 @@ bool FITParser::parseDefinitionMessage(CTX &ctx, quint8 header)
 
 		def->devFields = new Field[def->numDevFields];
 		for (i = 0; i < def->numDevFields; i++) {
-			STATIC_ASSERT(sizeof(def->devFields[i]) == 3);
+			static_assert(sizeof(def->fields[i]) == 3, "Invalid Field alignment");
 			if (!readData(ctx.file, (char*)&(def->devFields[i]),
 			  sizeof(def->devFields[i])))
 				return false;
@@ -326,8 +325,8 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 		} else if (def->globalId == COURSE_POINT) {
 			switch (field->id) {
 				case 1:
-					waypoint.setTimestamp(QDateTime::fromTime_t(val.toUInt()
-					  + 631065600));
+					waypoint.setTimestamp(QDateTime::fromSecsSinceEpoch(val.toUInt()
+					  + 631065600, Qt::UTC));
 					break;
 				case 2:
 					waypoint.rcoordinates().setLat(
@@ -362,8 +361,8 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 		}
 	} else if (def->globalId == RECORD_MESSAGE) {
 		if (ctx.trackpoint.coordinates().isValid()) {
-			ctx.trackpoint.setTimestamp(QDateTime::fromTime_t(ctx.timestamp
-			  + 631065600));
+			ctx.trackpoint.setTimestamp(QDateTime::fromSecsSinceEpoch(ctx.timestamp
+			  + 631065600, Qt::UTC));
 			ctx.trackpoint.setRatio(ctx.ratio);
 			ctx.segment.append(ctx.trackpoint);
 			ctx.trackpoint = Trackpoint();
@@ -411,7 +410,7 @@ bool FITParser::parseHeader(CTX &ctx)
 	quint16 crc;
 	qint64 len;
 
-	STATIC_ASSERT(sizeof(hdr) == 12);
+	static_assert(sizeof(hdr) == 12, "Invalid FileHeader alignment");
 	len = ctx.file->read((char*)&hdr, sizeof(hdr));
 	if (len < 0) {
 		_errorString = "I/O error";

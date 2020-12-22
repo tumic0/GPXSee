@@ -1,4 +1,3 @@
-#include "common/config.h"
 #include <QApplication>
 #include <QSplitter>
 #include <QVBoxLayout>
@@ -23,10 +22,8 @@
 #include <QMimeData>
 #include <QUrl>
 #include <QPixmapCache>
-#ifdef ENABLE_HIDPI
 #include <QWindow>
 #include <QScreen>
-#endif // ENABLE_HIDPI
 #include <QStyle>
 #include "common/programpaths.h"
 #include "data/data.h"
@@ -47,7 +44,6 @@
 #include "mapview.h"
 #include "trackinfo.h"
 #include "filebrowser.h"
-#include "cpuarch.h"
 #include "graphtab.h"
 #include "graphitem.h"
 #include "pathitem.h"
@@ -174,8 +170,13 @@ void GUI::mapInitialized()
 void GUI::createPOIFilesActions()
 {
 	_poiFilesSignalMapper = new QSignalMapper(this);
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 	connect(_poiFilesSignalMapper, SIGNAL(mapped(int)), this,
 	  SLOT(poiFileChecked(int)));
+#else // QT 5.15
+	connect(_poiFilesSignalMapper, SIGNAL(mappedInt(int)), this,
+	  SLOT(poiFileChecked(int)));
+#endif // QT 5.15
 
 	for (int i = 0; i < _poi->files().count(); i++)
 		createPOIFileAction(_poi->files().at(i));
@@ -691,8 +692,8 @@ void GUI::about()
 
 	msgBox.setWindowTitle(tr("About GPXSee"));
 	msgBox.setText("<h2>" + QString(APP_NAME) + "</h2><p><p>" + tr("Version %1")
-	  .arg(QString(APP_VERSION) + " (" + CPU_ARCH + ", Qt " + QT_VERSION_STR
-	  + ")") + "</p>");
+	  .arg(QString(APP_VERSION) + " (" + QSysInfo::buildCpuArchitecture()
+	  + ", Qt " + QT_VERSION_STR + ")") + "</p>");
 	msgBox.setInformativeText("<table width=\"300\"><tr><td>"
 	  + tr("GPXSee is distributed under the terms of the GNU General Public "
 	  "License version 3. For more info about GPXSee visit the project "
@@ -835,12 +836,7 @@ void GUI::loadData(const Data &data)
 		_trackDistance += track.distance();
 		_time += track.time();
 		_movingTime += track.movingTime();
-#ifdef ENABLE_TIMEZONES
-		const QDateTime date = track.date().toTimeZone(
-		            _options.timeZone.zone());
-#else // ENABLE_TIMEZONES
-		const QDateTime &date = track.date();
-#endif // ENABLE_TIMEZONES
+		const QDateTime date = track.date().toTimeZone(_options.timeZone.zone());
 		if (_dateRange.first.isNull() || _dateRange.first > date)
 			_dateRange.first = date;
 		if (_dateRange.second.isNull() || _dateRange.second < date)
@@ -1014,23 +1010,18 @@ void GUI::openOptions()
 
 	if (options.connectionTimeout != _options.connectionTimeout)
 		Downloader::setTimeout(options.connectionTimeout);
-#ifdef ENABLE_HTTP2
 	if (options.enableHTTP2 != _options.enableHTTP2)
 		Downloader::enableHTTP2(options.enableHTTP2);
-#endif // ENABLE_HTTP2
 
-#ifdef ENABLE_HIDPI
 	if (options.hidpiMap != _options.hidpiMap)
 		_mapView->setDevicePixelRatio(devicePixelRatioF(),
 		  options.hidpiMap ? devicePixelRatioF() : 1.0);
-#endif // ENABLE_HIDPI
-#ifdef ENABLE_TIMEZONES
+
 	if (options.timeZone != _options.timeZone) {
 		_mapView->setTimeZone(options.timeZone.zone());
 		_dateRange.first = _dateRange.first.toTimeZone(options.timeZone.zone());
 		_dateRange.second = _dateRange.second.toTimeZone(options.timeZone.zone());
 	}
-#endif // ENABLE_TIMEZONES
 
 	if (reload)
 		reloadFiles();
@@ -1058,12 +1049,9 @@ void GUI::exportPDFFile()
 	printer.setCreator(QString(APP_NAME) + QString(" ")
 	  + QString(APP_VERSION));
 	printer.setResolution(_pdfExport.resolution);
-	printer.setOrientation(_pdfExport.orientation);
+	printer.setPageLayout(QPageLayout(QPageSize(_pdfExport.paperSize),
+	  _pdfExport.orientation, _pdfExport.margins, QPageLayout::Millimeter));
 	printer.setOutputFileName(_pdfExport.fileName);
-	printer.setPaperSize(_pdfExport.paperSize);
-	printer.setPageMargins(_pdfExport.margins.left(), _pdfExport.margins.top(),
-	  _pdfExport.margins.right(), _pdfExport.margins.bottom(),
-	  QPrinter::Millimeter);
 
 	plot(&printer);
 }
@@ -2127,21 +2115,17 @@ void GUI::writeSettings()
 	if (_options.showSecondarySpeed != SHOW_SECONDARY_SPEED_DEFAULT)
 		settings.setValue(SHOW_SECONDARY_SPEED_SETTING,
 		  _options.showSecondarySpeed);
-#ifdef ENABLE_TIMEZONES
 	if (_options.timeZone != TimeZoneInfo())
 		settings.setValue(TIME_ZONE_SETTING, QVariant::fromValue(
 		  _options.timeZone));
-#endif // ENABLE_TIMEZONES
 	if (_options.useSegments != USE_SEGMENTS_DEFAULT)
 		settings.setValue(USE_SEGMENTS_SETTING, _options.useSegments);
 	if (_options.poiRadius != POI_RADIUS_DEFAULT)
 		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
 	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
 		settings.setValue(USE_OPENGL_SETTING, _options.useOpenGL);
-#ifdef ENABLE_HTTP2
 	if (_options.enableHTTP2 != ENABLE_HTTP2_DEFAULT)
 		settings.setValue(ENABLE_HTTP2_SETTING, _options.enableHTTP2);
-#endif // ENABLE_HTTP2
 	if (_options.pixmapCache != PIXMAP_CACHE_DEFAULT)
 		settings.setValue(PIXMAP_CACHE_SETTING, _options.pixmapCache);
 	if (_options.connectionTimeout != CONNECTION_TIMEOUT_DEFAULT)
@@ -2167,10 +2151,8 @@ void GUI::writeSettings()
 		settings.setValue(SLIDER_COLOR_SETTING, _options.sliderColor);
 	if (_options.projection != PROJECTION_DEFAULT)
 		settings.setValue(PROJECTION_SETTING, _options.projection);
-#ifdef ENABLE_HIDPI
 	if (_options.hidpiMap != HIDPI_MAP_DEFAULT)
 		settings.setValue(HIDPI_MAP_SETTING, _options.hidpiMap);
-#endif // ENABLE_HIDPI
 	settings.endGroup();
 }
 
@@ -2326,11 +2308,11 @@ void GUI::readSettings()
 	settings.endGroup();
 
 	settings.beginGroup(PDF_EXPORT_SETTINGS_GROUP);
-	_pdfExport.orientation = (QPrinter::Orientation) settings.value(
+	_pdfExport.orientation = (QPageLayout::Orientation) settings.value(
 	  PAPER_ORIENTATION_SETTING, PAPER_ORIENTATION_DEFAULT).toInt();
 	_pdfExport.resolution = settings.value(RESOLUTION_SETTING,
 	  RESOLUTION_DEFAULT).toInt();
-	_pdfExport.paperSize = (QPrinter::PaperSize) settings.value(
+	_pdfExport.paperSize = (QPageSize::PageSizeId) settings.value(
 	  PAPER_SIZE_SETTING, PAPER_SIZE_DEFAULT).toInt();
 	qreal ml = settings.value(PDF_MARGIN_LEFT_SETTING, PDF_MARGIN_LEFT_DEFAULT)
 	  .toReal();
@@ -2340,7 +2322,7 @@ void GUI::readSettings()
 	  PDF_MARGIN_RIGHT_DEFAULT).toReal();
 	qreal mb = settings.value(PDF_MARGIN_BOTTOM_SETTING,
 	  PDF_MARGIN_BOTTOM_DEFAULT).toReal();
-	_pdfExport.margins = MarginsF(ml, mt, mr, mb);
+	_pdfExport.margins = QMarginsF(ml, mt, mr, mb);
 	_pdfExport.fileName = settings.value(PDF_FILENAME_SETTING,
 	 PDF_FILENAME_DEFAULT).toString();
 	settings.endGroup();
@@ -2425,9 +2407,7 @@ void GUI::readSettings()
 	_options.showSecondarySpeed = settings.value(
 	  SHOW_SECONDARY_SPEED_SETTING,
 	  SHOW_SECONDARY_SPEED_DEFAULT).toBool();
-#ifdef ENABLE_TIMEZONES
 	_options.timeZone = settings.value(TIME_ZONE_SETTING).value<TimeZoneInfo>();
-#endif // ENABLE_TIMEZONES
 	_options.useSegments = settings.value(USE_SEGMENTS_SETTING,
 	  USE_SEGMENTS_DEFAULT).toBool();
 	_options.automaticPause = settings.value(AUTOMATIC_PAUSE_SETTING,
@@ -2438,10 +2418,8 @@ void GUI::readSettings()
 	  .toInt();
 	_options.useOpenGL = settings.value(USE_OPENGL_SETTING, USE_OPENGL_DEFAULT)
 	  .toBool();
-#ifdef ENABLE_HTTP2
 	_options.enableHTTP2 = settings.value(ENABLE_HTTP2_SETTING,
 	  ENABLE_HTTP2_DEFAULT).toBool();
-#endif // ENABLE_HTTP2
 	_options.pixmapCache = settings.value(PIXMAP_CACHE_SETTING,
 	  PIXMAP_CACHE_DEFAULT).toInt();
 	_options.connectionTimeout = settings.value(CONNECTION_TIMEOUT_SETTING,
@@ -2466,10 +2444,8 @@ void GUI::readSettings()
 	  SLIDER_COLOR_DEFAULT).value<QColor>();
 	_options.projection = settings.value(PROJECTION_SETTING, PROJECTION_DEFAULT)
 	  .toInt();
-#ifdef ENABLE_HIDPI
 	_options.hidpiMap = settings.value(HIDPI_MAP_SETTING, HIDPI_MAP_SETTING)
 	  .toBool();
-#endif // ENABLE_HIDPI
 
 	_mapView->setPalette(_options.palette);
 	_mapView->setMapOpacity(_options.mapOpacity);
@@ -2489,14 +2465,10 @@ void GUI::readSettings()
 	_mapView->setMarkerColor(_options.sliderColor);
 	if (_options.useOpenGL)
 		_mapView->useOpenGL(true);
-#ifdef ENABLE_HIDPI
 	_mapView->setDevicePixelRatio(devicePixelRatioF(),
 	  _options.hidpiMap ? devicePixelRatioF() : 1.0);
-#endif // ENABLE_HIDPI
 	_mapView->setProjection(_options.projection);
-#ifdef ENABLE_TIMEZONES
 	_mapView->setTimeZone(_options.timeZone.zone());
-#endif // ENABLE_TIMEZONES
 
 	for (int i = 0; i < _tabs.count(); i++) {
 		_tabs.at(i)->setPalette(_options.palette);
@@ -2587,20 +2559,17 @@ void GUI::show()
 {
 	QMainWindow::show();
 
-#ifdef ENABLE_HIDPI
 	QWindow *w = windowHandle();
 	connect(w->screen(), SIGNAL(logicalDotsPerInchChanged(qreal)), this,
 	  SLOT(logicalDotsPerInchChanged(qreal)));
 	connect(w, SIGNAL(screenChanged(QScreen*)), this,
 	  SLOT(screenChanged(QScreen*)));
-#endif // ENABLE_HIDPI
 
 	_mapView->fitContentToSize();
 }
 
 void GUI::screenChanged(QScreen *screen)
 {
-#ifdef ENABLE_HIDPI
 	_mapView->setDevicePixelRatio(devicePixelRatioF(),
 	  _options.hidpiMap ? devicePixelRatioF() : 1.0);
 
@@ -2608,17 +2577,12 @@ void GUI::screenChanged(QScreen *screen)
 	  SLOT(logicalDotsPerInchChanged(qreal)));
 	connect(screen, SIGNAL(logicalDotsPerInchChanged(qreal)), this,
 	  SLOT(logicalDotsPerInchChanged(qreal)));
-#else // ENABLE_HIDPI
-	Q_UNUSED(screen);
-#endif // ENABLE_HIDPI
 }
 
 void GUI::logicalDotsPerInchChanged(qreal dpi)
 {
 	Q_UNUSED(dpi)
 
-#ifdef ENABLE_HIDPI
 	_mapView->setDevicePixelRatio(devicePixelRatioF(),
 	  _options.hidpiMap ? devicePixelRatioF() : 1.0);
-#endif // ENBLE_HIDPI
 }

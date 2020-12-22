@@ -75,7 +75,7 @@ MarginsFWidget::MarginsFWidget(QWidget *parent) : QWidget(parent)
 	setLayout(layout);
 }
 
-void MarginsFWidget::setValue(const MarginsF &value)
+void MarginsFWidget::setValue(const QMarginsF &value)
 {
 	_top->setValue(value.top());
 	_bottom->setValue(value.bottom());
@@ -104,8 +104,8 @@ void MarginsFWidget::setSingleStep(qreal step)
 	_right->setSingleStep(step);
 }
 
-MarginsF MarginsFWidget::value() const
+QMarginsF MarginsFWidget::value() const
 {
-	return MarginsF(_left->value(), _top->value(), _right->value(),
+	return QMarginsF(_left->value(), _top->value(), _right->value(),
 	  _bottom->value());
 }

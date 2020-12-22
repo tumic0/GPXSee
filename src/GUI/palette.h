@@ -24,8 +24,13 @@ public:
 	  {return !(*this == other);}
 
 private:
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	qreal _h, _s, _v, _a, _shift;
 	qreal _state;
+#else // QT6
+	float _h, _s, _v, _a, _shift;
+	float _state;
+#endif // QT6
 };
 
 #ifndef QT_NO_DEBUG

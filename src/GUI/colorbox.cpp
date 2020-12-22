@@ -55,7 +55,8 @@ void ColorBox::mousePressEvent(QMouseEvent *event)
 	if (event->button() != Qt::LeftButton)
 		return;
 	QColorDialog::ColorDialogOptions options = _alpha
-	  ? QColorDialog::ShowAlphaChannel : (QColorDialog::ColorDialogOptions)0;
+	  ? QColorDialog::ColorDialogOptions(QColorDialog::ShowAlphaChannel)
+	  : QColorDialog::ColorDialogOptions();
 	QColor color = QColorDialog::getColor(_color, this, QString(), options);
 	if (color.isValid()) {
 		_color = color;

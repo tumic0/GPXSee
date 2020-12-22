@@ -8,6 +8,7 @@
 QString TrackItem::info() const
 {
 	ToolTip tt;
+	QLocale l;
 
 	if (!_name.isEmpty())
 		tt.insert(tr("Name"), _name);
@@ -22,13 +23,7 @@ QString TrackItem::info() const
 	if  (_movingTime > 0)
 		tt.insert(tr("Moving time"), Format::timeSpan(_movingTime));
 	if (!_date.isNull())
-		tt.insert(tr("Date"),
-#ifdef ENABLE_TIMEZONES
-		  _date.toTimeZone(_timeZone)
-#else // ENABLE_TIMEZONES
-		  _date
-#endif // ENABLE_TIMEZONES
-		  .toString(Qt::SystemLocaleShortDate));
+		tt.insert(tr("Date"), l.toString(_date.toTimeZone(_timeZone)));
 	if (!_links.isEmpty()) {
 		QString links;
 		for (int i = 0; i < _links.size(); i++) {

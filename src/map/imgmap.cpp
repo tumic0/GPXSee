@@ -1,11 +1,7 @@
 #include <QFile>
 #include <QPainter>
 #include <QPixmapCache>
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-#include <QtCore>
-#else // QT_VERSION < 5
 #include <QtConcurrent>
-#endif // QT_VERSION < 5
 #include "common/rectc.h"
 #include "common/range.h"
 #include "common/wgs84.h"
@@ -160,7 +156,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
 				QString key = _data.at(n)->fileName() + "-" + QString::number(_zoom)
 				  + "_" + QString::number(ttl.x()) + "_" + QString::number(ttl.y());
-				if (QPixmapCache::find(key, pm))
+				if (QPixmapCache::find(key, &pm))
 					painter->drawPixmap(ttl, pm);
 				else {
 					QList<MapData::Poly> polygons, lines;

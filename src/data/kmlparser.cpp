@@ -44,11 +44,7 @@ bool KMLParser::coord(Trackpoint &trackpoint)
 			if (c > 2)
 				return false;
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 			val[c] = QString(vp, cp - vp).toDouble(&res);
-#else // QT_VERSION < 5
-			val[c] = QStringRef(&data, vp - sp, cp - vp).toDouble(&res);
-#endif // QT_VERSION < 5
 			if (!res)
 				return false;
 
@@ -90,11 +86,7 @@ bool KMLParser::pointCoordinates(Waypoint &waypoint)
 			if (c > 1)
 				return false;
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 			val[c] = QString(vp, cp - vp).toDouble(&res);
-#else // QT_VERSION < 5
-			val[c] = QStringRef(&data, vp - sp, cp - vp).toDouble(&res);
-#endif // QT_VERSION < 5
 			if (!res)
 				return false;
 
@@ -104,11 +96,7 @@ bool KMLParser::pointCoordinates(Waypoint &waypoint)
 			if (c < 1)
 				return false;
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 			val[c] = QString(vp, cp - vp).toDouble(&res);
-#else // QT_VERSION < 5
-			val[c] = QStringRef(&data, vp - sp, cp - vp).toDouble(&res);
-#endif // QT_VERSION < 5
 			if (!res)
 				return false;
 
@@ -148,11 +136,7 @@ bool KMLParser::lineCoordinates(SegmentData &segment)
 			if (c > 1)
 				return false;
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 			val[c] = QString(vp, cp - vp).toDouble(&res);
-#else // QT_VERSION < 5
-			val[c] = QStringRef(&data, vp - sp, cp - vp).toDouble(&res);
-#endif // QT_VERSION < 5
 			if (!res)
 				return false;
 
@@ -162,11 +146,7 @@ bool KMLParser::lineCoordinates(SegmentData &segment)
 			if (c < 1 || c > 2)
 				return false;
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 			val[c] = QString(vp, cp - vp).toDouble(&res);
-#else // QT_VERSION < 5
-			val[c] = QStringRef(&data, vp - sp, cp - vp).toDouble(&res);
-#endif // QT_VERSION < 5
 			if (!res)
 				return false;
 
@@ -207,11 +187,7 @@ bool KMLParser::polygonCoordinates(QVector<Coordinates> &points)
 			if (c > 1)
 				return false;
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 			val[c] = QString(vp, cp - vp).toDouble(&res);
-#else // QT_VERSION < 5
-			val[c] = QStringRef(&data, vp - sp, cp - vp).toDouble(&res);
-#endif // QT_VERSION < 5
 			if (!res)
 				return false;
 
@@ -221,11 +197,7 @@ bool KMLParser::polygonCoordinates(QVector<Coordinates> &points)
 			if (c < 1 || c > 2)
 				return false;
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 			val[c] = QString(vp, cp - vp).toDouble(&res);
-#else // QT_VERSION < 5
-			val[c] = QStringRef(&data, vp - sp, cp - vp).toDouble(&res);
-#endif // QT_VERSION < 5
 			if (!res)
 				return false;
 
@@ -417,7 +389,7 @@ void KMLParser::schemaData(SegmentData &segment, int start)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("SimpleArrayData")) {
 			QXmlStreamAttributes attr = _reader.attributes();
-			QStringRef name = attr.value("name");
+			QString name(attr.value("name").toString());
 
 			if (name == QLatin1String("Heartrate"))
 				heartRate(segment, start);

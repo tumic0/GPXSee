@@ -31,7 +31,7 @@ static qreal avg(const QVector<qreal> &v)
 
 static qreal median(QVector<qreal> &v)
 {
-	qSort(v.begin(), v.end());
+	std::sort(v.begin(), v.end());
 	return v.at(v.size() / 2);
 }
 

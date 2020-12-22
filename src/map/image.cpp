@@ -1,5 +1,4 @@
 #include <QPainter>
-#include "common/config.h"
 #include "image.h"
 
 
@@ -7,11 +6,7 @@
 
 void Image::draw(QPainter *painter, const QRectF &rect, Map::Flags flags)
 {
-#ifdef ENABLE_HIDPI
 	qreal ratio = _img.devicePixelRatioF();
-#else // ENABLE_HIDPI
-	qreal ratio = 1.0;
-#endif // ENABLE_HIDPI
 	QRectF sr(rect.topLeft() * ratio, rect.size() * ratio);
 
 	/* When OpenGL is used, big images are rendered incredibly slow or not at
@@ -30,9 +25,7 @@ void Image::draw(QPainter *painter, const QRectF &rect, Map::Flags flags)
 				QRect tile(tl, QSize(TILE_SIZE, TILE_SIZE));
 				QPixmap *pm = new QPixmap(QPixmap::fromImage(_img.copy(tile)));
 				list.append(pm);
-#ifdef ENABLE_HIDPI
 				pm->setDevicePixelRatio(ratio);
-#endif // ENABLE_HIDPI
 				painter->drawPixmap(tl/ratio, *pm);
 			}
 		}
@@ -44,9 +37,5 @@ void Image::draw(QPainter *painter, const QRectF &rect, Map::Flags flags)
 
 void Image::setDevicePixelRatio(qreal ratio)
 {
-#ifdef ENABLE_HIDPI
 	_img.setDevicePixelRatio(ratio);
-#else // ENABLE_HIDPI
-	Q_UNUSED(ratio);
-#endif // ENABLE_HIDPI
 }

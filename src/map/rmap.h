@@ -53,7 +53,6 @@ private:
 	QSize _tileSize;
 	QFile _file;
 	qreal _mapRatio;
-	QString _fileName;
 	int _zoom;
 	QVector<QRgb> _palette;
 

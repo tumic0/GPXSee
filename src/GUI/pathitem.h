@@ -1,12 +1,9 @@
 #ifndef PATHITEM_H
 #define PATHITEM_H
 
-#include "common/config.h"
 #include <QGraphicsObject>
 #include <QPen>
-#ifdef ENABLE_TIMEZONES
 #include <QTimeZone>
-#endif // ENABLE_TIMEZONES
 #include "data/path.h"
 #include "markeritem.h"
 #include "units.h"
@@ -43,9 +40,7 @@ public:
 	void updateTicks();
 
 	static void setUnits(Units units) {_units = units;}
-#ifdef ENABLE_TIMEZONES
 	static void setTimeZone(const QTimeZone &zone) {_timeZone = zone;}
-#endif // ENABLE_TIMEZONES
 
 public slots:
 	void moveMarker(qreal distance);
@@ -60,9 +55,7 @@ protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 	static Units _units;
-#ifdef ENABLE_TIMEZONES
 	static QTimeZone _timeZone;
-#endif // ENABLE_TIMEZONES
 
 private:
 	const PathSegment *segment(qreal x) const;

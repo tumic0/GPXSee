@@ -97,13 +97,13 @@ private:
 #ifndef QT_NO_DEBUG
 inline QDebug operator<<(QDebug dbg, const MapData::Point &point)
 {
-	dbg.nospace() << "Point(" << hex << point.type << ", " << point.label << ")";
+	dbg.nospace() << "Point(" << point.type << ", " << point.label << ")";
 	return dbg.space();
 }
 
 inline QDebug operator<<(QDebug dbg, const MapData::Poly &poly)
 {
-	dbg.nospace() << "Poly(" << hex << poly.type << ", " << poly.label << ")";
+	dbg.nospace() << "Poly(" << poly.type << ", " << poly.label << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG

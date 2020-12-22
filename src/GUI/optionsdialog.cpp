@@ -49,7 +49,7 @@ QWidget *OptionsDialog::createMapPage()
 	_projection = new LimitedComboBox(200);
 
 	QList<KV<int, QString> > projections(GCS::list() + PCS::list());
-	qSort(projections);
+	std::sort(projections.begin(), projections.end());
 
 	for (int i = 0; i < projections.size(); i++) {
 		QString text = QString::number(projections.at(i).key()) + " - "
@@ -58,7 +58,6 @@ QWidget *OptionsDialog::createMapPage()
 	}
 	_projection->setCurrentIndex(_projection->findData(_options.projection));
 
-#ifdef ENABLE_HIDPI
 	_hidpi = new QRadioButton(tr("High-resolution"));
 	_lodpi = new QRadioButton(tr("Standard"));
 	if (_options.hidpiMap)
@@ -75,7 +74,6 @@ QWidget *OptionsDialog::createMapPage()
 	llo->setWordWrap(true);
 	lhi->setFont(f);
 	llo->setFont(f);
-#endif // ENABLE_HIDPI
 
 	QFormLayout *vectorLayout = new QFormLayout();
 	vectorLayout->addRow(tr("Projection:"), _projection);
@@ -86,7 +84,6 @@ QWidget *OptionsDialog::createMapPage()
 	vectorMapsTabLayout->addStretch();
 	vectorMapsTab->setLayout(vectorMapsTabLayout);
 
-#ifdef ENABLE_HIDPI
 	QVBoxLayout *hidpiTabLayout = new QVBoxLayout();
 	hidpiTabLayout->addWidget(_lodpi);
 	hidpiTabLayout->addWidget(llo);
@@ -97,13 +94,10 @@ QWidget *OptionsDialog::createMapPage()
 
 	QWidget *hidpiTab = new QWidget();
 	hidpiTab->setLayout(hidpiTabLayout);
-#endif // ENABLE_HIDPI
 
 	QTabWidget *mapPage = new QTabWidget();
 	mapPage->addTab(vectorMapsTab, tr("Vector maps"));
-#ifdef ENABLE_HIDPI
 	mapPage->addTab(hidpiTab, tr("HiDPI display mode"));
-#endif // ENABLE_HIDPI
 
 	return mapPage;
 }
@@ -416,7 +410,6 @@ QWidget *OptionsDialog::createDataPage()
 	_showSecondaryElevation = new QCheckBox(tr("Show secondary elevation"));
 	_showSecondaryElevation->setChecked(_options.showSecondaryElevation);
 
-#ifdef ENABLE_TIMEZONES
 	_utcZone = new QRadioButton(tr("UTC"));
 	_systemZone = new QRadioButton(tr("System"));
 	_customZone = new QRadioButton(tr("Custom"));
@@ -437,7 +430,6 @@ QWidget *OptionsDialog::createDataPage()
 	QHBoxLayout *customZoneLayout = new QHBoxLayout();
 	customZoneLayout->addSpacing(20);
 	customZoneLayout->addWidget(_timeZone);
-#endif // ENABLE_TIMEZONES
 
 	_useSegments = new QCheckBox(tr("Use segments"));
 	_useSegments->setChecked(_options.useSegments);
@@ -462,7 +454,6 @@ QWidget *OptionsDialog::createDataPage()
 	elevationOptions->addWidget(_dataDEMElevation);
 	elevationOptions->addWidget(_showSecondaryElevation);
 
-#ifdef ENABLE_TIMEZONES
 	QButtonGroup *timeZoneGroup = new QButtonGroup(this);
 	timeZoneGroup->addButton(_utcZone);
 	timeZoneGroup->addButton(_systemZone);
@@ -472,15 +463,12 @@ QWidget *OptionsDialog::createDataPage()
 	zoneOptions->addWidget(_systemZone);
 	zoneOptions->addWidget(_customZone);
 	zoneOptions->addItem(customZoneLayout);
-#endif // ENABLE_TIMEZONES
 
 	QFormLayout *formLayout = new QFormLayout();
 	formLayout->addRow(tr("Speed:"), speedOptions);
 	formLayout->addRow(tr("Elevation:"), elevationOptions);
 
-#ifdef ENABLE_TIMEZONES
 	formLayout->addRow(tr("Time zone:"), zoneOptions);
-#endif // ENABLE_TIMEZONES
 
 	QFormLayout *segmentsLayout = new QFormLayout();
 	segmentsLayout->addWidget(_useSegments);
@@ -492,9 +480,7 @@ QWidget *OptionsDialog::createDataPage()
 #else // Q_OS_MAC
 	QFormLayout *speedLayout = new QFormLayout();
 	QFormLayout *elevationLayout = new QFormLayout();
-#ifdef ENABLE_TIMEZONES
 	QFormLayout *timeZoneLayout = new QFormLayout();
-#endif // ENABLE_TIMEZONES
 	QFormLayout *segmentsLayout = new QFormLayout();
 
 	speedLayout->addWidget(_computedSpeed);
@@ -511,7 +497,6 @@ QWidget *OptionsDialog::createDataPage()
 	QGroupBox *elevationBox = new QGroupBox(tr("Elevation"));
 	elevationBox->setLayout(elevationLayout);
 
-#ifdef ENABLE_TIMEZONES
 	timeZoneLayout->addWidget(_utcZone);
 	timeZoneLayout->addWidget(_systemZone);
 	timeZoneLayout->addWidget(_customZone);
@@ -519,15 +504,12 @@ QWidget *OptionsDialog::createDataPage()
 
 	QGroupBox *timeZoneBox = new QGroupBox(tr("Time zone"));
 	timeZoneBox->setLayout(timeZoneLayout);
-#endif // ENABLE_TIMEZONES
 
 	segmentsLayout->addWidget(_useSegments);
 
 	sourceTabLayout->addWidget(speedBox);
 	sourceTabLayout->addWidget(elevationBox);
-#ifdef ENABLE_TIMEZONES
 	sourceTabLayout->addWidget(timeZoneBox);
-#endif // ENABLE_TIMEZONES
 	sourceTabLayout->addLayout(segmentsLayout);
 #endif // Q_OS_MAC
 	sourceTabLayout->addStretch();
@@ -648,10 +630,8 @@ QWidget *OptionsDialog::createSystemPage()
 {
 	_useOpenGL = new QCheckBox(tr("Use OpenGL"));
 	_useOpenGL->setChecked(_options.useOpenGL);
-#ifdef ENABLE_HTTP2
 	_enableHTTP2 = new QCheckBox(tr("Enable HTTP/2"));
 	_enableHTTP2->setChecked(_options.enableHTTP2);
-#endif // ENABLE_HTTP2
 
 	_pixmapCache = new QSpinBox();
 	_pixmapCache->setMinimum(16);
@@ -670,9 +650,7 @@ QWidget *OptionsDialog::createSystemPage()
 	formLayout->addRow(tr("Connection timeout:"), _connectionTimeout);
 
 	QFormLayout *checkboxLayout = new QFormLayout();
-#ifdef ENABLE_HTTP2
 	checkboxLayout->addWidget(_enableHTTP2);
-#endif // ENABLE_HTTP2
 	checkboxLayout->addWidget(_useOpenGL);
 
 	QWidget *systemTab = new QWidget();
@@ -766,9 +744,7 @@ void OptionsDialog::accept()
 
 	_options.projection = _projection->itemData(_projection->currentIndex())
 	  .toInt();
-#ifdef ENABLE_HIDPI
 	_options.hidpiMap = _hidpi->isChecked();
-#endif // ENABLE_HIDPI
 
 	_options.elevationFilter = _elevationFilter->value();
 	_options.speedFilter = _speedFilter->value();
@@ -787,13 +763,11 @@ void OptionsDialog::accept()
 	_options.dataUseDEM = _dataDEMElevation->isChecked();
 	_options.showSecondaryElevation = _showSecondaryElevation->isChecked();
 	_options.showSecondarySpeed = _showSecondarySpeed->isChecked();
-#ifdef ENABLE_TIMEZONES
 	_options.timeZone.setType(_utcZone->isChecked()
 	  ? TimeZoneInfo::UTC : _systemZone->isChecked()
 	  ? TimeZoneInfo::System : TimeZoneInfo::Custom);
 	_options.timeZone.setCustomZone(QTimeZone(_timeZone->currentText()
 	  .toLatin1()));
-#endif // ENABLE_TIMEZONES
 	_options.useSegments = _useSegments->isChecked();
 
 	qreal poiRadius = (_units == Imperial)
@@ -803,9 +777,7 @@ void OptionsDialog::accept()
 		_options.poiRadius = poiRadius;
 
 	_options.useOpenGL = _useOpenGL->isChecked();
-#ifdef ENABLE_HTTP2
 	_options.enableHTTP2 = _enableHTTP2->isChecked();
-#endif // ENABLE_HTTP2
 	_options.pixmapCache = _pixmapCache->value();
 	_options.connectionTimeout = _connectionTimeout->value();
 
