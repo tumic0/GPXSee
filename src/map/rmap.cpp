@@ -160,16 +160,15 @@ bool RMap::parseIMP(const QByteArray &data)
 }
 
 RMap::RMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _mapRatio(1.0), _fileName(fileName), _zoom(0),
+  : Map(fileName, parent), _file(fileName), _mapRatio(1.0), _zoom(0),
   _valid(false)
 {
-	QFile file(fileName);
-	if (!file.open(QIODevice::ReadOnly)) {
-		_errorString = file.errorString();
+	if (!_file.open(QIODevice::ReadOnly)) {
+		_errorString = _file.errorString();
 		return;
 	}
 
-	QDataStream stream(&file);
+	QDataStream stream(&_file);
 	stream.setByteOrder(QDataStream::LittleEndian);
 
 	char magic[sizeof(MAGIC) - 1];
@@ -228,7 +227,7 @@ RMap::RMap(const QString &fileName, QObject *parent)
 		_zooms.append(Zoom());
 		Zoom &zoom = _zooms.last();
 
-		CHECK(file.seek(zoomOffsets.at(i)));
+		CHECK(_file.seek(zoomOffsets.at(i)));
 
 		quint32 width, height;
 		stream >> width >> height;
@@ -245,7 +244,7 @@ RMap::RMap(const QString &fileName, QObject *parent)
 		CHECK(stream.status() == QDataStream::Ok);
 	}
 
-	CHECK(file.seek(IMPOffset));
+	CHECK(_file.seek(IMPOffset));
 	quint32 IMPSize;
 	stream >> unknown >> IMPSize;
 	CHECK(stream.status() == QDataStream::Ok);
@@ -253,11 +252,13 @@ RMap::RMap(const QString &fileName, QObject *parent)
 	QByteArray IMP(IMPSize + 1, 0);
 	stream.readRawData(IMP.data(), IMP.size());
 	_valid = parseIMP(IMP);
+
+	_file.close();
 }
 
 QString RMap::name() const
 {
-	QFileInfo fi(_fileName);
+	QFileInfo fi(path());
 	return fi.baseName();
 }
 
@@ -315,7 +316,6 @@ Coordinates RMap::xy2ll(const QPointF &p)
 
 void RMap::load()
 {
-	_file.setFileName(_fileName);
 	_file.open(QIODevice::ReadOnly);
 }
 
@@ -395,7 +395,7 @@ void RMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			int y = round(tl.y() * _mapRatio + j * _tileSize.height());
 
 			QPixmap pixmap;
-			QString key = _fileName + "/" + QString::number(_zoom) + "_"
+			QString key = path() + "/" + QString::number(_zoom) + "_"
 			  + QString::number(x) + "_" + QString::number(y);
 			if (!QPixmapCache::find(key, &pixmap)) {
 				pixmap = tile(x, y);

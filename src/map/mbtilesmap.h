@@ -45,7 +45,7 @@ private:
 
 	QSqlDatabase _db;
 
-	QString _fileName, _name;
+	QString _name;
 	RectC _bounds;
 	Range _zooms;
 	int _zoom;

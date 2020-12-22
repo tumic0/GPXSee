@@ -47,7 +47,6 @@ private:
 	QImage readImage();
 	bool readRow(QFile &file, char bits, uchar *buf);
 
-	QString _fileName;
 	QString _name;
 	Projection _projection;
 	Transform _transform;

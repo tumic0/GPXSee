@@ -51,8 +51,8 @@ static double index2mercator(int index, int zoom)
 }
 
 MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _fileName(fileName), _mapRatio(1.0), _tileRatio(1.0),
-  _scalable(false), _scaledSize(0), _valid(false)
+  : Map(fileName, parent), _mapRatio(1.0), _tileRatio(1.0), _scalable(false),
+  _scaledSize(0), _valid(false)
 {
 	_db = QSqlDatabase::addDatabase("QSQLITE", fileName);
 	_db.setDatabaseName(fileName);
@@ -138,7 +138,7 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 			if (query.value(0).toString() == "pbf")
 				_scalable = true;
 		} else
-			qWarning("%s: missing tiles format", qPrintable(_fileName));
+			qWarning("%s: missing tiles format", qPrintable(fileName));
 	}
 
 	{
@@ -146,8 +146,8 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 		if (query.first())
 			_name = query.value(0).toString();
 		else {
-			qWarning("%s: missing map name", qPrintable(_fileName));
-			_name = QFileInfo(_fileName).fileName();
+			qWarning("%s: missing map name", qPrintable(fileName));
+			_name = QFileInfo(fileName).fileName();
 		}
 	}
 
@@ -290,7 +290,7 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		for (int j = 0; j < height; j++) {
 			QPixmap pm;
 			QPoint t(tile.x() + i, tile.y() + j);
-			QString key = _fileName + "-" + QString::number(_zoom) + "_"
+			QString key = path() + "-" + QString::number(_zoom) + "_"
 			  + QString::number(t.x()) + "_" + QString::number(t.y());
 
 			if (QPixmapCache::find(key, &pm)) {

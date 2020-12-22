@@ -7,8 +7,7 @@
 
 
 GeoTIFFMap::GeoTIFFMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _fileName(fileName), _img(0), _ratio(1.0),
-  _valid(false)
+  : Map(fileName, parent), _img(0), _ratio(1.0), _valid(false)
 {
 	QImageReader ir(fileName);
 	if (!ir.canRead()) {
@@ -36,7 +35,7 @@ GeoTIFFMap::~GeoTIFFMap()
 
 QString GeoTIFFMap::name() const
 {
-	QFileInfo fi(_fileName);
+	QFileInfo fi(path());
 	return fi.fileName();
 }
 
@@ -73,7 +72,7 @@ void GeoTIFFMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 void GeoTIFFMap::load()
 {
 	if (!_img)
-		_img = new Image(_fileName);
+		_img = new Image(path());
 }
 
 void GeoTIFFMap::unload()

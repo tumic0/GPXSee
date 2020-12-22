@@ -154,7 +154,19 @@ JNXMap::JNXMap(const QString &fileName, QObject *parent)
 		return;
 	}
 
+	_file.close();
+
 	_valid = true;
+}
+
+void JNXMap::load()
+{
+	_file.open(QIODevice::ReadOnly);
+}
+
+void JNXMap::unload()
+{
+	_file.close();
 }
 
 QPointF JNXMap::ll2xy(const Coordinates &c)

@@ -31,6 +31,9 @@ public:
 	QPointF ll2xy(const Coordinates &c);
 	Coordinates xy2ll(const QPointF &p);
 
+	void load();
+	void unload();
+
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
 	void setDevicePixelRatio(qreal /*deviceRatio*/, qreal mapRatio)
