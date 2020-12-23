@@ -1,12 +1,12 @@
 /*
 	WARNING: This code uses internal Qt API - the QZipReader class for reading
 	ZIP files - and things may break if Qt changes the API. For Qt5 this is not
-	a problem as we can "see the feature" now and there are no changes in all
+	a problem as we can "see the future" now and there are no changes in all
 	the supported Qt5 versions up to the last one (5.15). In Qt6 the class
 	might change or even disappear in the future, but this is very unlikely
 	as there were no changes for several years and The Qt Company's politics
-	is: "do not	invest any resources into any desktop platform stuff unless
-	absolutely necessary". There is an issue (QTBUG-3897) since year 2009 to
+	is: "do not	invest any resources into any desktop related stuff unless
+	absolutely necessary". There is an issue (QTBUG-3897) since the year 2009 to
 	include the ZIP reader into the public API, which aptly illustrates the
 	effort The Qt Company is willing to make about anything desktop related...
 */
@@ -25,24 +25,24 @@
 
 #define ZOOM_THRESHOLD 0.9
 
-#define TL(m) ((m).bbox.topLeft())
-#define BR(m) ((m).bbox.bottomRight())
-
-const Projection &KMZMap::Overlay::projection()
-{
-	static Projection p = Projection(PCS::pcs(3857));
-	return p;
-}
+#define TL(m) ((m).bbox().topLeft())
+#define BR(m) ((m).bbox().bottomRight())
 
 KMZMap::Overlay::Overlay(const QString &path, const QSize &size,
-  const RectC &bbox, double rotation) : path(path), size(size), bbox(bbox),
-  rotation(rotation), img(0)
+  const RectC &bbox, double rotation) : _path(path), _bbox(bbox),
+  _rotation(rotation), _img(0)
 {
-	ReferencePoint tl(PointD(0, 0), projection().ll2xy(bbox.topLeft()));
+	ReferencePoint tl(PointD(0, 0), PointD(bbox.left(), bbox.top()));
 	ReferencePoint br(PointD(size.width(), size.height()),
-	  projection().ll2xy(bbox.bottomRight()));
+	  PointD(bbox.right(), bbox.bottom()));
 
-	transform = Transform(tl, br);
+	QTransform t;
+	t.rotate(-rotation);
+	QRectF b(0, 0, size.width(), size.height());
+	QPolygonF ma = t.map(b);
+	_bounds = ma.boundingRect();
+
+	_transform = Transform(tl, br);
 }
 
 qreal KMZMap::Overlay::resolution(const QRectF &rect) const
@@ -59,31 +59,33 @@ qreal KMZMap::Overlay::resolution(const QRectF &rect) const
 
 void KMZMap::Overlay::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	if (img) {
-		if (rotation) {
+	if (_img) {
+		if (_rotation) {
 			painter->save();
-			painter->rotate(-rotation);
-			img->draw(painter, rect.adjusted(-10, -10, 10, 10), flags);
+			painter->rotate(-_rotation);
+			_img->draw(painter, rect, flags);
 			painter->restore();
 		} else
-			img->draw(painter, rect, flags);
+		    _img->draw(painter, rect, flags);
 	}
+
+	//painter->setPen(Qt::red);
+	//painter->drawRect(_bounds);
 }
 
 void KMZMap::Overlay::load(QZipReader *zip)
 {
-	if (!img) {
-		QByteArray ba(zip->fileData(path));
-		img = new Image(QImage::fromData(ba));
+	if (!_img) {
+		QByteArray ba(zip->fileData(_path));
+		_img = new Image(QImage::fromData(ba));
 	}
 }
 
 void KMZMap::Overlay::unload()
 {
-	delete img;
-	img = 0;
+	delete _img;
+	_img = 0;
 }
-
 
 bool KMZMap::resCmp(const Overlay &m1, const Overlay &m2)
 {
@@ -130,24 +132,30 @@ void KMZMap::computeBounds()
 			m.append(_maps.at(i));
 
 		std::sort(m.begin(), m.end(), xCmp);
-		offsets[_maps.indexOf(m.first())].setX(0);
+		offsets[_maps.indexOf(m.first())].setX(m.first().bounds().left());
 		for (int i = 1; i < m.size(); i++) {
 			qreal w = m.first().ll2xy(TL(m.at(i))).x();
-			offsets[_maps.indexOf(m.at(i))].setX(w);
+			offsets[_maps.indexOf(m.at(i))].setX(w + m.at(i).bounds().left());
 		}
 
 		std::sort(m.begin(), m.end(), yCmp);
-		offsets[_maps.indexOf(m.first())].setY(0);
+		offsets[_maps.indexOf(m.first())].setY(m.first().bounds().top());
 		for (int i = 1; i < m.size(); i++) {
 			qreal h = m.first().ll2xy(TL(m.at(i))).y();
-			offsets[_maps.indexOf(m.at(i))].setY(h);
+			offsets[_maps.indexOf(m.at(i))].setY(h + m.at(i).bounds().top());
 		}
 	}
 
+	_adjust = 0;
 	_bounds = QVector<Bounds>(_maps.count());
-	for (int i = 0; i < _maps.count(); i++)
-		_bounds[i] = Bounds(_maps.at(i).bbox,
-		  QRectF(offsets.at(i), _maps.at(i).size));
+	for (int i = 0; i < _maps.count(); i++) {
+		QRectF xy(offsets.at(i), _maps.at(i).bounds().size());
+
+		_bounds[i] = Bounds(_maps.at(i).bbox(), xy);
+		_adjust = qMin(qMin(_maps.at(i).bounds().left(),
+		  _maps.at(i).bounds().top()), _adjust);
+	}
+	_adjust = -_adjust;
 }
 
 
@@ -243,7 +251,7 @@ void KMZMap::document(QXmlStreamReader &reader, QZipReader &zip)
 void KMZMap::folder(QXmlStreamReader &reader, QZipReader &zip)
 {
 	while (reader.readNextStartElement()) {
-		if (reader.name() == QLatin1String("Placemark"))
+		if (reader.name() == QLatin1String("GroundOverlay"))
 			groundOverlay(reader, zip);
 		else if (reader.name() == QLatin1String("Folder"))
 			folder(reader, zip);
@@ -268,7 +276,7 @@ void KMZMap::kml(QXmlStreamReader &reader, QZipReader &zip)
 
 
 KMZMap::KMZMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _zip(0)
+  : Map(fileName, parent), _zoom(0), _mapIndex(-1), _zip(0)
 {
 	QZipReader zip(fileName, QIODevice::ReadOnly);
 	QByteArray xml(zip.fileData("doc.kml"));
@@ -305,16 +313,13 @@ QString KMZMap::name() const
 
 QRectF KMZMap::bounds()
 {
-	QSizeF s(0, 0);
+	QRectF rect;
 
-	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).last; i++) {
-		if (_bounds.at(i).xy.right() > s.width())
-			s.setWidth(_bounds.at(i).xy.right());
-		if (_bounds.at(i).xy.bottom() > s.height())
-			s.setHeight(_bounds.at(i).xy.bottom());
-	}
+	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).last; i++)
+		rect |= _bounds.at(i).xy;
 
-	return QRectF(QPointF(0, 0), s);
+	rect.moveTopLeft(rect.topLeft() * 2);
+	return rect;
 }
 
 int KMZMap::zoomFit(const QSize &size, const RectC &br)
@@ -382,7 +387,12 @@ QPointF KMZMap::ll2xy(const Coordinates &c)
 	}
 
 	QPointF p = _maps.at(_mapIndex).ll2xy(c);
-	return p + _bounds.at(_mapIndex).xy.topLeft();
+	if (_maps.at(_mapIndex).rotation()) {
+		QTransform matrix;
+		matrix.rotate(-_maps.at(_mapIndex).rotation());
+		return matrix.map(p) + _bounds.at(_mapIndex).xy.topLeft();
+	} else
+		return p + _bounds.at(_mapIndex).xy.topLeft();
 }
 
 Coordinates KMZMap::xy2ll(const QPointF &p)
@@ -397,22 +407,29 @@ Coordinates KMZMap::xy2ll(const QPointF &p)
 	}
 
 	QPointF p2 = p - _bounds.at(idx).xy.topLeft();
-	return _maps.at(idx).xy2ll(p2);
+	if (_maps.at(idx).rotation()) {
+		QTransform matrix;
+		matrix.rotate(_maps.at(idx).rotation());
+		return _maps.at(idx).xy2ll(matrix.map(p2));
+	} else
+		return _maps.at(idx).xy2ll(p2);
 }
 
 void KMZMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
+	QRectF er = rect.adjusted(-_adjust, -_adjust, _adjust, _adjust);
+
 	// All in one map
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).last; i++) {
-		if (_bounds.at(i).xy.contains(rect)) {
-			draw(painter, rect, i, flags);
+		if (_bounds.at(i).xy.contains(er)) {
+			draw(painter, er, i, flags);
 			return;
 		}
 	}
 
 	// Multiple maps
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).last; i++) {
-		QRectF ir = rect.intersected(_bounds.at(i).xy);
+		QRectF ir = er.intersected(_bounds.at(i).xy);
 		if (!ir.isNull())
 			draw(painter, ir, i, flags);
 	}

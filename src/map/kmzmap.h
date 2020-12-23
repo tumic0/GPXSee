@@ -1,7 +1,6 @@
 #ifndef KMZMAP_H
 #define KMZMAP_H
 
-#include "projection.h"
 #include "transform.h"
 #include "rectd.h"
 #include "map.h"
@@ -39,34 +38,39 @@ public:
 	QString errorString() const {return _errorString;}
 
 private:
-	struct Overlay {
-		QString path;
-		QSize size;
-		RectC bbox;
-		double rotation;
-		Image *img;
-
-		Transform transform;
-
+	class Overlay {
+	public:
 		Overlay(const QString &path, const QSize &size, const RectC &bbox,
 		  double rotation);
 		bool operator==(const Overlay &other) const
-		  {return path == other.path;}
+		  {return _path == other._path;}
 
 		QPointF ll2xy(const Coordinates &c) const
-		  {return QPointF(transform.proj2img(projection().ll2xy(c)));}
+		  {return QPointF(_transform.proj2img(QPointF(c.lon(), c.lat())));}
 		Coordinates xy2ll(const QPointF &p) const
-		  {return projection().xy2ll(transform.img2proj(p));}
+		{
+			PointD pp(_transform.img2proj(p));
+			return Coordinates(pp.x(), pp.y());
+		}
 
-		QRectF bounds() const {return QRectF(QPointF(0, 0), size);}
+		const RectC &bbox() const {return _bbox;}
+		const QRectF &bounds() const {return _bounds;}
 		qreal resolution(const QRectF &rect) const;
+		qreal rotation() const {return _rotation;}
 
 		void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
 		void load(QZipReader *zip);
 		void unload();
 
-		static const Projection &projection();
+	private:
+		QString _path;
+		QRectF _bounds;
+		RectC _bbox;
+		qreal _rotation;
+		Image *_img;
+
+		Transform _transform;
 	};
 
 	struct Zoom {
@@ -107,6 +111,7 @@ private:
 	int _zoom;
 	int _mapIndex;
 	QZipReader *_zip;
+	qreal _adjust;
 
 	bool _valid;
 	QString _errorString;
