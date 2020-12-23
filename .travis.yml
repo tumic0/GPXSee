@@ -12,7 +12,7 @@ before_install:
 
 install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install qt; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install qtbase5-dev libqt5opengl5-dev qttools5-dev-tools; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install qtbase5-dev qtbase5-private-dev libqt5opengl5-dev qttools5-dev-tools; fi
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then PATH=/usr/local/opt/qt/bin/:${PATH}; fi
