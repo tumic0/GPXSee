@@ -67,10 +67,12 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_coordinates->setVisible(false);
 	_scene->addItem(_coordinates);
 
-	_projection = PCS::pcs(3857);
+	_outputProjection = PCS::pcs(3857);
+	_inputProjection = GCS::gcs(4326);
 	_map = map;
 	_map->load();
-	_map->setProjection(_projection);
+	_map->setOutputProjection(_outputProjection);
+	_map->setInputProjection(_inputProjection);
 	connect(_map, SIGNAL(tilesLoaded()), this, SLOT(reloadMap()));
 
 	_poi = poi;
@@ -369,7 +371,8 @@ void MapView::setMap(Map *map)
 
 	_map = map;
 	_map->load();
-	_map->setProjection(_projection);
+	_map->setOutputProjection(_outputProjection);
+	_map->setInputProjection(_inputProjection);
 	_map->setDevicePixelRatio(_deviceRatio, _mapRatio);
 	connect(_map, SIGNAL(tilesLoaded()), this, SLOT(reloadMap()));
 
@@ -1072,20 +1075,38 @@ void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 	reloadMap();
 }
 
-void MapView::setProjection(int id)
+void MapView::setOutputProjection(int id)
 {
 	const PCS *pcs;
 	const GCS *gcs;
 	Coordinates center = _map->xy2ll(mapToScene(viewport()->rect().center()));
 
 	if ((pcs = PCS::pcs(id)))
-		_projection = Projection(pcs);
+		_outputProjection = Projection(pcs);
 	else if ((gcs = GCS::gcs(id)))
-		_projection = Projection(gcs);
+		_outputProjection = Projection(gcs);
 	else
 		qWarning("%d: Unknown PCS/GCS id", id);
 
-	_map->setProjection(_projection);
+	_map->setOutputProjection(_outputProjection);
+	rescale();
+	centerOn(_map->ll2xy(center));
+}
+
+void MapView::setInputProjection(int id)
+{
+	const PCS *pcs;
+	const GCS *gcs;
+	Coordinates center = _map->xy2ll(mapToScene(viewport()->rect().center()));
+
+	if ((pcs = PCS::pcs(id)))
+		_inputProjection = Projection(pcs);
+	else if ((gcs = GCS::gcs(id)))
+		_inputProjection = Projection(gcs);
+	else
+		qWarning("%d: Unknown PCS/GCS id", id);
+
+	_map->setInputProjection(_inputProjection);
 	rescale();
 	centerOn(_map->ll2xy(center));
 }

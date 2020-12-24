@@ -200,8 +200,10 @@
 #define SEPARATE_GRAPH_PAGE_DEFAULT       false
 #define SLIDER_COLOR_SETTING              "sliderColor"
 #define SLIDER_COLOR_DEFAULT              QColor(Qt::red)
-#define PROJECTION_SETTING                "projection"
-#define PROJECTION_DEFAULT                3857
+#define OUTPUT_PROJECTION_SETTING         "outputProjection"
+#define OUTPUT_PROJECTION_DEFAULT         3857
+#define INPUT_PROJECTION_SETTING          "inputProjection"
+#define INPUT_PROJECTION_DEFAULT          4326
 #define HIDPI_MAP_SETTING                 "HiDPIMap"
 #define HIDPI_MAP_DEFAULT                 true
 

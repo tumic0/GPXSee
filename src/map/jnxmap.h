@@ -36,6 +36,7 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
+	void setInputProjection(const Projection &projection);
 	void setDevicePixelRatio(qreal /*deviceRatio*/, qreal mapRatio)
 	  {_mapRatio = mapRatio;}
 
@@ -44,9 +45,12 @@ public:
 
 private:
 	struct Tile {
-		QPointF pos;
+		qint32 top, right, bottom, left;
+		quint16 width, height;
 		quint32 size;
 		quint32 offset;
+
+		QPointF pos;
 	};
 
 	struct Zoom {

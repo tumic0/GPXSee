@@ -46,17 +46,52 @@ void OptionsDialog::automaticPauseDetectionSet(bool set)
 
 QWidget *OptionsDialog::createMapPage()
 {
-	_projection = new LimitedComboBox(200);
+	int last = -1;
 
+	_outputProjection = new LimitedComboBox(200);
 	QList<KV<int, QString> > projections(GCS::list() + PCS::list());
 	std::sort(projections.begin(), projections.end());
-
 	for (int i = 0; i < projections.size(); i++) {
-		QString text = QString::number(projections.at(i).key()) + " - "
-		  + projections.at(i).value();
-		_projection->addItem(text, QVariant(projections.at(i).key()));
+		const KV<int, QString> &proj = projections.at(i);
+		// There may be same EPSG codes with different names
+		if (proj.key() == last)
+			continue;
+		else
+			last = proj.key();
+		QString text = QString::number(proj.key()) + " - " + proj.value();
+		_outputProjection->addItem(text, QVariant(proj.key()));
 	}
-	_projection->setCurrentIndex(_projection->findData(_options.projection));
+	_outputProjection->setCurrentIndex(_outputProjection->findData(
+	  _options.outputProjection));
+
+	_inputProjection = new LimitedComboBox(200);
+	last = -1;
+	for (int i = 0; i < projections.size(); i++) {
+		const KV<int, QString> &proj = projections.at(i);
+		// There may be same EPSG codes with different names
+		if (proj.key() == last)
+			continue;
+		else
+			last = proj.key();
+		if (proj.key() == 4326 || proj.key() == 3857) {
+			QString text = QString::number(proj.key()) + " - " + proj.value();
+			_inputProjection->addItem(text, QVariant(proj.key()));
+		}
+	}
+	_inputProjection->setCurrentIndex(_inputProjection->findData(
+	  _options.inputProjection));
+
+	QLabel *inInfo = new QLabel(tr("Select the propper projection of"
+	  " JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps"
+	  " exist and there is no projection info in the map file."));
+	QLabel *outInfo = new QLabel(tr("Select the desired projection of IMG"
+	  " maps. The projection must be valid for the whole map area."));
+	QFont f = inInfo->font();
+	f.setPointSize(f.pointSize() - 1);
+	inInfo->setWordWrap(true);
+	outInfo->setWordWrap(true);
+	inInfo->setFont(f);
+	outInfo->setFont(f);
 
 	_hidpi = new QRadioButton(tr("High-resolution"));
 	_lodpi = new QRadioButton(tr("Standard"));
@@ -68,21 +103,24 @@ QWidget *OptionsDialog::createMapPage()
 	  "The map is sharp but map objects are small/hard to read."));
 	QLabel *llo = new QLabel(tr("Non-HiDPI maps are loaded such as they are. "
 	  "Map objects have the expected size but the map is blurry."));
-	QFont f = lhi->font();
 	f.setPointSize(f.pointSize() - 1);
 	lhi->setWordWrap(true);
 	llo->setWordWrap(true);
 	lhi->setFont(f);
 	llo->setFont(f);
 
-	QFormLayout *vectorLayout = new QFormLayout();
-	vectorLayout->addRow(tr("Projection:"), _projection);
 
-	QWidget *vectorMapsTab = new QWidget();
-	QVBoxLayout *vectorMapsTabLayout = new QVBoxLayout();
-	vectorMapsTabLayout->addLayout(vectorLayout);
-	vectorMapsTabLayout->addStretch();
-	vectorMapsTab->setLayout(vectorMapsTabLayout);
+	QFormLayout *projLayout = new QFormLayout();
+	projLayout->addRow(tr("Input:"), _inputProjection);
+	projLayout->addWidget(inInfo);
+	projLayout->addRow(tr("Output:"), _outputProjection);
+	projLayout->addWidget(outInfo);
+
+	QWidget *projectionTab = new QWidget();
+	QVBoxLayout *projectionTabLayout = new QVBoxLayout();
+	projectionTabLayout->addLayout(projLayout);
+	projectionTabLayout->addStretch();
+	projectionTab->setLayout(projectionTabLayout);
 
 	QVBoxLayout *hidpiTabLayout = new QVBoxLayout();
 	hidpiTabLayout->addWidget(_lodpi);
@@ -96,7 +134,7 @@ QWidget *OptionsDialog::createMapPage()
 	hidpiTab->setLayout(hidpiTabLayout);
 
 	QTabWidget *mapPage = new QTabWidget();
-	mapPage->addTab(vectorMapsTab, tr("Vector maps"));
+	mapPage->addTab(projectionTab, tr("Projection"));
 	mapPage->addTab(hidpiTab, tr("HiDPI display mode"));
 
 	return mapPage;
@@ -742,8 +780,10 @@ void OptionsDialog::accept()
 	_options.sliderColor = _sliderColor->color();
 	_options.graphAntiAliasing = _graphAA->isChecked();
 
-	_options.projection = _projection->itemData(_projection->currentIndex())
-	  .toInt();
+	_options.outputProjection = _outputProjection->itemData(
+	  _outputProjection->currentIndex()).toInt();
+	_options.inputProjection = _inputProjection->itemData(
+	  _inputProjection->currentIndex()).toInt();
 	_options.hidpiMap = _hidpi->isChecked();
 
 	_options.elevationFilter = _elevationFilter->value();

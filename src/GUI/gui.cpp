@@ -973,7 +973,8 @@ void GUI::openOptions()
 	SET_VIEW_OPTION(pathAntiAliasing, useAntiAliasing);
 	SET_VIEW_OPTION(useOpenGL, useOpenGL);
 	SET_VIEW_OPTION(sliderColor, setMarkerColor);
-	SET_VIEW_OPTION(projection, setProjection);
+	SET_VIEW_OPTION(outputProjection, setOutputProjection);
+	SET_VIEW_OPTION(inputProjection, setInputProjection);
 
 	SET_TAB_OPTION(palette, setPalette);
 	SET_TAB_OPTION(graphWidth, setGraphWidth);
@@ -2149,8 +2150,10 @@ void GUI::writeSettings()
 		  _options.separateGraphPage);
 	if (_options.sliderColor != SLIDER_COLOR_DEFAULT)
 		settings.setValue(SLIDER_COLOR_SETTING, _options.sliderColor);
-	if (_options.projection != PROJECTION_DEFAULT)
-		settings.setValue(PROJECTION_SETTING, _options.projection);
+	if (_options.outputProjection != OUTPUT_PROJECTION_DEFAULT)
+		settings.setValue(OUTPUT_PROJECTION_SETTING, _options.outputProjection);
+	if (_options.inputProjection != INPUT_PROJECTION_DEFAULT)
+		settings.setValue(INPUT_PROJECTION_SETTING, _options.outputProjection);
 	if (_options.hidpiMap != HIDPI_MAP_DEFAULT)
 		settings.setValue(HIDPI_MAP_SETTING, _options.hidpiMap);
 	settings.endGroup();
@@ -2442,8 +2445,10 @@ void GUI::readSettings()
 	  SEPARATE_GRAPH_PAGE_DEFAULT).toBool();
 	_options.sliderColor = settings.value(SLIDER_COLOR_SETTING,
 	  SLIDER_COLOR_DEFAULT).value<QColor>();
-	_options.projection = settings.value(PROJECTION_SETTING, PROJECTION_DEFAULT)
-	  .toInt();
+	_options.outputProjection = settings.value(OUTPUT_PROJECTION_SETTING,
+	  OUTPUT_PROJECTION_DEFAULT).toInt();
+	_options.inputProjection = settings.value(INPUT_PROJECTION_SETTING,
+	  INPUT_PROJECTION_DEFAULT).toInt();
 	_options.hidpiMap = settings.value(HIDPI_MAP_SETTING, HIDPI_MAP_SETTING)
 	  .toBool();
 
@@ -2467,7 +2472,8 @@ void GUI::readSettings()
 		_mapView->useOpenGL(true);
 	_mapView->setDevicePixelRatio(devicePixelRatioF(),
 	  _options.hidpiMap ? devicePixelRatioF() : 1.0);
-	_mapView->setProjection(_options.projection);
+	_mapView->setOutputProjection(_options.outputProjection);
+	_mapView->setInputProjection(_options.inputProjection);
 	_mapView->setTimeZone(_options.timeZone.zone());
 
 	for (int i = 0; i < _tabs.count(); i++) {

@@ -33,7 +33,7 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
-	void setProjection(const Projection &projection);
+	void setOutputProjection(const Projection &projection);
 
 	void load();
 	void unload();

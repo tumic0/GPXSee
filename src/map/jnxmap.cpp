@@ -84,15 +84,6 @@ bool JNXMap::readTiles()
 		}
 	}
 
-	QByteArray guid;
-	if (!(readValue(dummy) && readString(guid)))
-		return false;
-	/* Use WebMercator projection for nakarte.tk maps */
-	if (guid == "12345678-1234-1234-1234-123456789ABC")
-		_projection = Projection(PCS::pcs(3857));
-	else
-		_projection = Projection(GCS::gcs(4326));
-
 	_zooms = QVector<Zoom>(lh.size());
 	for (int i = 0; i < lh.count(); i++) {
 		Zoom &z = _zooms[i];
@@ -104,21 +95,22 @@ bool JNXMap::readTiles()
 		z.tiles = QVector<Tile>(l.count);
 		for (quint32 j = 0; j < l.count; j++) {
 			Tile &tile = z.tiles[j];
-			qint32 top, right, bottom, left;
-			quint16 width, height;
 
-			if (!(readValue(top) && readValue(right) && readValue(bottom)
-			  && readValue(left) && readValue(width)
-			  && readValue(height) && readValue(tile.size)
-			  && readValue(tile.offset)))
+			if (!(readValue(tile.top) && readValue(tile.right)
+			  && readValue(tile.bottom) && readValue(tile.left)
+			  && readValue(tile.width) && readValue(tile.height)
+			  && readValue(tile.size) && readValue(tile.offset)))
 				return false;
 
-			RectD rect(_projection.ll2xy(Coordinates(ic2dc(left), ic2dc(top))),
-			  _projection.ll2xy(Coordinates(ic2dc(right), ic2dc(bottom))));
+			RectC llrect(Coordinates(ic2dc(tile.left), ic2dc(tile.top)),
+			  Coordinates(ic2dc(tile.right), ic2dc(tile.bottom)));
+			RectD rect(_projection.ll2xy(llrect.topLeft()),
+			  _projection.ll2xy(llrect.bottomRight()));
 
 			if (j == 0) {
 				ReferencePoint tl(PointD(0, 0), rect.topLeft());
-				ReferencePoint br(PointD(width, height), rect.bottomRight());
+				ReferencePoint br(PointD(tile.width, tile.height),
+				  rect.bottomRight());
 				z.transform = Transform(tl, br);
 			}
 
@@ -143,6 +135,7 @@ JNXMap::JNXMap(const QString &fileName, QObject *parent)
   _valid(false)
 {
 	_name = QFileInfo(fileName).fileName();
+	_projection = Projection(GCS::gcs(4326));
 
 	if (!_file.open(QIODevice::ReadOnly)) {
 		_errorString = fileName + ": " + _file.errorString();
@@ -266,4 +259,45 @@ void JNXMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	max[0] = rr.right();
 	max[1] = rr.bottom();
 	tree.Search(min, max, cb, &ctx);
+}
+
+void JNXMap::setInputProjection(const Projection &projection)
+{
+	if (projection == _projection)
+		return;
+
+	_projection = projection;
+
+	for (int i = 0; i < _zooms.size(); i++) {
+		Zoom &z = _zooms[i];
+
+		z.tree.RemoveAll();
+
+		for (int j = 0; j < z.tiles.size(); j++) {
+			Tile &tile = z.tiles[j];
+
+			RectC llrect(Coordinates(ic2dc(tile.left), ic2dc(tile.top)),
+			  Coordinates(ic2dc(tile.right), ic2dc(tile.bottom)));
+			RectD rect(_projection.ll2xy(llrect.topLeft()),
+			  _projection.ll2xy(llrect.bottomRight()));
+
+			if (j == 0) {
+				ReferencePoint tl(PointD(0, 0), rect.topLeft());
+				ReferencePoint br(PointD(tile.width, tile.height),
+				  rect.bottomRight());
+				z.transform = Transform(tl, br);
+			}
+
+			QRectF trect(z.transform.proj2img(rect.topLeft()),
+			  z.transform.proj2img(rect.bottomRight()));
+			tile.pos = trect.topLeft();
+
+			qreal min[2], max[2];
+			min[0] = trect.left();
+			min[1] = trect.top();
+			max[0] = trect.right();
+			max[1] = trect.bottom();
+			z.tree.Insert(min, max, &tile);
+		}
+	}
 }

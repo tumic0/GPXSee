@@ -28,13 +28,15 @@
 #define TL(m) ((m).bbox().topLeft())
 #define BR(m) ((m).bbox().bottomRight())
 
+
 KMZMap::Overlay::Overlay(const QString &path, const QSize &size,
-  const RectC &bbox, double rotation) : _path(path), _bbox(bbox),
-  _rotation(rotation), _img(0)
+  const RectC &bbox, double rotation, const Projection *proj)
+  : _path(path), _size(size), _bbox(bbox), _rotation(rotation), _img(0),
+  _proj(proj)
 {
-	ReferencePoint tl(PointD(0, 0), PointD(bbox.left(), bbox.top()));
+	ReferencePoint tl(PointD(0, 0), _proj->ll2xy(bbox.topLeft()));
 	ReferencePoint br(PointD(size.width(), size.height()),
-	  PointD(bbox.right(), bbox.bottom()));
+	  _proj->ll2xy(bbox.bottomRight()));
 
 	QTransform t;
 	t.rotate(-rotation);
@@ -86,6 +88,24 @@ void KMZMap::Overlay::unload()
 	delete _img;
 	_img = 0;
 }
+
+void KMZMap::Overlay::setProjection(const Projection *proj)
+{
+	_proj = proj;
+
+	ReferencePoint tl(PointD(0, 0), _proj->ll2xy(_bbox.topLeft()));
+	ReferencePoint br(PointD(_size.width(), _size.height()),
+	  _proj->ll2xy(_bbox.bottomRight()));
+
+	QTransform t;
+	t.rotate(-_rotation);
+	QRectF b(0, 0, _size.width(), _size.height());
+	QPolygonF ma = t.map(b);
+	_bounds = ma.boundingRect();
+
+	_transform = Transform(tl, br);
+}
+
 
 bool KMZMap::resCmp(const Overlay &m1, const Overlay &m2)
 {
@@ -150,7 +170,6 @@ void KMZMap::computeBounds()
 	_bounds = QVector<Bounds>(_maps.count());
 	for (int i = 0; i < _maps.count(); i++) {
 		QRectF xy(offsets.at(i), _maps.at(i).bounds().size());
-
 		_bounds[i] = Bounds(_maps.at(i).bbox(), xy);
 		_adjust = qMin(qMin(_maps.at(i).bounds().left(),
 		  _maps.at(i).bounds().top()), _adjust);
@@ -227,7 +246,7 @@ void KMZMap::groundOverlay(QXmlStreamReader &reader, QZipReader &zip)
 		QSize size(ir.size());
 
 		if (size.isValid())
-			_maps.append(Overlay(image, size, rect, rotation));
+			_maps.append(Overlay(image, size, rect, rotation, &_projection));
 		else
 			reader.raiseError(image + ": Invalid image file");
 	} else
@@ -281,6 +300,8 @@ KMZMap::KMZMap(const QString &fileName, QObject *parent)
 	QZipReader zip(fileName, QIODevice::ReadOnly);
 	QByteArray xml(zip.fileData("doc.kml"));
 	QXmlStreamReader reader(xml);
+
+	_projection = Projection(GCS::gcs(4326));
 
 	if (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("kml"))
@@ -448,6 +469,20 @@ void KMZMap::unload()
 
 	delete _zip;
 	_zip = 0;
+}
+
+void KMZMap::setInputProjection(const Projection &projection)
+{
+	if (projection == _projection)
+		return;
+
+	_projection = projection;
+
+	for (int i = 0; i < _maps.size(); i++)
+		_maps[i].setProjection(&_projection);
+
+	_bounds.clear();
+	computeBounds();
 }
 
 void KMZMap::draw(QPainter *painter, const QRectF &rect, int mapIndex,

@@ -98,7 +98,8 @@ public slots:
 	void setCoordinatesFormat(CoordinatesFormat format);
 	void setTimeZone(const QTimeZone &zone);
 	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
-	void setProjection(int id);
+	void setOutputProjection(int id);
+	void setInputProjection(int id);
 
 	void fitContentToSize();
 
@@ -155,7 +156,7 @@ private:
 
 	Palette _palette;
 	qreal _mapOpacity;
-	Projection _projection;
+	Projection _outputProjection, _inputProjection;
 
 	bool _showMap, _showTracks, _showRoutes, _showAreas, _showWaypoints,
 	  _showWaypointLabels, _showPOI, _showPOILabels, _showRouteWaypoints,

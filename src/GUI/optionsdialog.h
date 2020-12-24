@@ -39,7 +39,8 @@ struct Options {
 	int mapOpacity;
 	QColor backgroundColor;
 	// Map
-	int projection;
+	int outputProjection;
+	int inputProjection;
 	bool hidpiMap;
 	// Data
 	int elevationFilter;
@@ -120,7 +121,8 @@ private:
 	ColorBox *_sliderColor;
 	QCheckBox *_graphAA;
 	// Map
-	LimitedComboBox *_projection;
+	LimitedComboBox *_outputProjection;
+	LimitedComboBox *_inputProjection;
 	QRadioButton *_hidpi;
 	QRadioButton *_lodpi;
 	// Data

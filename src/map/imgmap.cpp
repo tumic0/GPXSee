@@ -202,7 +202,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 }
 
-void IMGMap::setProjection(const Projection &projection)
+void IMGMap::setOutputProjection(const Projection &projection)
 {
 	if (projection == _projection)
 		return;

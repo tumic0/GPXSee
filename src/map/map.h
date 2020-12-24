@@ -49,7 +49,8 @@ public:
 	virtual void load() {}
 	virtual void unload() {}
 	virtual void setDevicePixelRatio(qreal, qreal) {}
-	virtual void setProjection(const Projection &) {}
+	virtual void setOutputProjection(const Projection &) {}
+	virtual void setInputProjection(const Projection &) {}
 
 	virtual bool isValid() const {return true;}
 	virtual bool isReady() const {return true;}
