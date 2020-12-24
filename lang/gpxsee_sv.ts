@@ -1007,7 +1007,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="102"/>
         <source>KMZ maps</source>
-        <translation type="unfinished"></translation>
+        <translation>KMZ-kartor</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="103"/>
@@ -1117,12 +1117,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the propper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj korrekt projektion av JNX- och KMZ-kartor. Både EPSG:3857- och EPSG:4326-projicerade kartor finns och det finns ingen projektionsinformation i kartfilen.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>
         <source>Select the desired projection of IMG maps. The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj önskad projektion av IMG-kartor. Projektionen måste vara giltig för hela kartområdet.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="96"/>
@@ -1147,17 +1147,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="114"/>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>Indata:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="116"/>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Utdata:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="137"/>
         <source>Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>Projektion</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="138"/>
