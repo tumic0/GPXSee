@@ -815,6 +815,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n dosya</numerusform>
+            <numerusform>%n dosya</numerusform>
         </translation>
     </message>
 </context>
@@ -1006,7 +1007,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="102"/>
         <source>KMZ maps</source>
-        <translation type="unfinished"></translation>
+        <translation>KMZ haritaları</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="103"/>
@@ -1403,27 +1404,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the propper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
+        <translation>JNX ve KMZ haritaları için uygun iz düşümünü seçin. EPSG:3857 ve EPSG:4326 iz düşümlü haritaların ikisi de mevcut ve harita dosyasında iz düşümü bilgisi yok.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>
         <source>Select the desired projection of IMG maps. The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>IMG haritaları için istenen iz düşümünü seçin. İz düşümü tüm harita alanı için geçerli olmalıdır.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="114"/>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>Girdi:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="116"/>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Çıktı:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="137"/>
         <source>Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>İz düşümü</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="383"/>
