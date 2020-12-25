@@ -1117,12 +1117,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the propper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Valitse JNX- ja KMZ-karttojen projektio. Sekä EPSG:3857 että EPSG:4326 ovat olemassa, mutta karttatiedostossa ei ole projektiotietoja.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>
         <source>Select the desired projection of IMG maps. The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Valitse haluttu IMG-karttojen projektio. Projektion on oltava voimassa koko kartta-alueella.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="96"/>
@@ -1147,12 +1147,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="114"/>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>Syöte:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="116"/>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuloste:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="137"/>
