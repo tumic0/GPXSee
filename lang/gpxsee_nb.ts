@@ -799,7 +799,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1596"/>
         <source>Clear the map tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjern kartflis fra hurtiglager?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1603"/>
@@ -998,7 +998,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="101"/>
         <source>BSB nautical charts</source>
-        <translation type="unfinished"></translation>
+        <translation>BSB-sjøkart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="102"/>
@@ -1400,12 +1400,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the propper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg korrekt kartprojeksjon for JNX og KMZ-kart. Både EPSG:3857 og EPSG:4325-kartprojeksjon finnes, og det finnes ingen kartprojeksjonsinfo i kartfilen.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>
         <source>Select the desired projection of IMG maps. The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg ønsket kartprojeksjon for IMG-kart. Kartprojeksjon må være gyldig for hele kartområdet.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="114"/>
@@ -1420,7 +1420,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="137"/>
         <source>Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartprojeksjon</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="383"/>
