@@ -113,6 +113,7 @@ QWidget *OptionsDialog::createMapPage()
 	QFormLayout *projLayout = new QFormLayout();
 	projLayout->addRow(tr("Input:"), _inputProjection);
 	projLayout->addWidget(inInfo);
+	projLayout->addItem(new QSpacerItem(10, 10));
 	projLayout->addRow(tr("Output:"), _outputProjection);
 	projLayout->addWidget(outInfo);
 
