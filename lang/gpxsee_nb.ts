@@ -358,7 +358,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="318"/>
         <source>Load map directory...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Last inn kartmappe …</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="321"/>
@@ -697,7 +697,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1541"/>
         <source>Select map directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg kartmappe</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="756"/>
@@ -799,7 +799,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1596"/>
         <source>Clear the map tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjern kartflis fra hurtiglager?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1603"/>
@@ -998,12 +998,12 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="101"/>
         <source>BSB nautical charts</source>
-        <translation type="unfinished"></translation>
+        <translation>BSB-sjøkart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="102"/>
         <source>KMZ maps</source>
-        <translation type="unfinished"></translation>
+        <translation>KMZ-kart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="103"/>
@@ -1398,24 +1398,29 @@
         <translation>Hastighet</translation>
     </message>
     <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
+        <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
+        <translation>Velg korrekt kartprojeksjon for JNX og KMZ-kart. Både EPSG:3857 og EPSG:4325-kartprojeksjon finnes, og det finnes ingen kartprojeksjonsinfo i kartfilen.</translation>
+    </message>
+    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>
         <source>Select the desired projection of IMG maps. The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg ønsket kartprojeksjon for IMG-kart. Kartprojeksjon må være gyldig for hele kartområdet.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="114"/>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>Inndata:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="116"/>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Utdata:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="137"/>
         <source>Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartprojeksjon</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="383"/>
