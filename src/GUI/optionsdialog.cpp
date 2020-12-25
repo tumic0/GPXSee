@@ -81,7 +81,7 @@ QWidget *OptionsDialog::createMapPage()
 	_inputProjection->setCurrentIndex(_inputProjection->findData(
 	  _options.inputProjection));
 
-	QLabel *inInfo = new QLabel(tr("Select the propper projection of"
+	QLabel *inInfo = new QLabel(tr("Select the proper projection of"
 	  " JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps"
 	  " exist and there is no projection info in the map file."));
 	QLabel *outInfo = new QLabel(tr("Select the desired projection of IMG"
