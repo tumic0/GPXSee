@@ -358,7 +358,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="318"/>
         <source>Load map directory...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Last inn kartmappe …</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="321"/>
@@ -697,7 +697,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1541"/>
         <source>Select map directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg kartmappe</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="756"/>
@@ -1003,7 +1003,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="102"/>
         <source>KMZ maps</source>
-        <translation type="unfinished"></translation>
+        <translation>KMZ-kart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="103"/>
@@ -1410,12 +1410,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="114"/>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>Inndata:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="116"/>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Utdata:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="137"/>
