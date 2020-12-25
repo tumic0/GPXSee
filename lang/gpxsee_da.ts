@@ -1074,6 +1074,11 @@
         <translation>Sporvidde:</translation>
     </message>
     <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
+        <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="154"/>
         <source>Track style:</source>
         <translation>Sporstil:</translation>
@@ -1388,11 +1393,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="528"/>
         <source>Speed</source>
         <translation>Hastighed</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
-        <source>Select the propper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>

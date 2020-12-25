@@ -1401,11 +1401,6 @@
         <translation>Hız</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
-        <source>Select the propper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>
         <source>Select the desired projection of IMG maps. The projection must be valid for the whole map area.</source>
         <translation type="unfinished"></translation>
@@ -1548,6 +1543,11 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="727"/>
         <source>System</source>
         <translation>Sistem</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
+        <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="720"/>
