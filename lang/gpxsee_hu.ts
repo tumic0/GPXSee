@@ -815,6 +815,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fájl</numerusform>
+            <numerusform>%n fájl</numerusform>
         </translation>
     </message>
 </context>
@@ -1001,7 +1002,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="102"/>
         <source>KMZ maps</source>
-        <translation type="unfinished"></translation>
+        <translation>KMZ térképek</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="103"/>
@@ -1527,27 +1528,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the propper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Válaszd ki a JNX és a KMZ térképek megfelelő vetületét. Mind az EPSG: 3857, mind az EPSG: 4326 vetületi térképek rendelkezésre állnak, a térkép fájlban nincsenek vetületi információk.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>
         <source>Select the desired projection of IMG maps. The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Válaszd ki az IMG térképek kívánt vetületét. A vetületnek a térkép teljes területén érvényesnek kell lennie.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="114"/>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bemenet:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="116"/>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kimenet:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="137"/>
         <source>Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>Vetület</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="720"/>

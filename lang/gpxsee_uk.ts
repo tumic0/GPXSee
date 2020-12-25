@@ -1545,7 +1545,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="137"/>
         <source>Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>Проєкція</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="720"/>
