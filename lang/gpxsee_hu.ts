@@ -797,10 +797,6 @@
         <translation>Térképmappa választása</translation>
     </message>
     <message>
-        <source>No usable map found</source>
-        <translation type="vanished">Nem található felhasználható térkép</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="1596"/>
         <source>Clear the map tile cache?</source>
         <translation>Térkép gyorsítótár törlése?</translation>
@@ -814,7 +810,6 @@
         <location filename="../src/GUI/gui.cpp" line="1607"/>
         <source>%n files</source>
         <translation>
-            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
@@ -1058,17 +1053,9 @@
         <translation>A nem HiDPI térképek változatlan formában töltődnek be. A térképobjektumok a várt méretűek, de a térkép kissé homályos lesz.</translation>
     </message>
     <message>
-        <source>Projection:</source>
-        <translation type="vanished">Vetület:</translation>
-    </message>
-    <message>
-        <source>Vector maps</source>
-        <translation type="vanished">Vektortérképek</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Válaszd ki a JNX és a KMZ térképek megfelelő vetületét. Mind az EPSG: 3857, mind az EPSG: 4326 vetületi térképek rendelkezésre állnak, a térkép fájlban nincsenek vetületi információk.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="138"/>
@@ -1529,11 +1516,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="727"/>
         <source>System</source>
         <translation>Rendszer</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
-        <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation>Válaszd ki a JNX és a KMZ térképek megfelelő vetületét. Mind az EPSG: 3857, mind az EPSG: 4326 vetületi térképek rendelkezésre állnak, a térkép fájlban nincsenek vetületi információk.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>

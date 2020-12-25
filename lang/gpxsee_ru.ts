@@ -626,10 +626,6 @@
         <translation>Открыть файл карты</translation>
     </message>
     <message>
-        <source>No usable map found</source>
-        <translation type="vanished">Карта не найдена</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="1596"/>
         <source>Clear the map tile cache?</source>
         <translation>Очистить кэш тайлов?</translation>
@@ -1056,7 +1052,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выберите правильную проекцию JNX и KMZ карт. Существуют карты в проекциях EPSG:3857 и EPSG:4326, но в файле карты нет информации о проекции.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="154"/>
@@ -1119,11 +1115,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="662"/>
         <source>Graphs</source>
         <translation>Графики</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
-        <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation>Выберите правильную проекцию JNX и KMZ карт. Существуют карты в проекциях EPSG:3857 и EPSG:4326, но в файле карты нет информации о проекции.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>
@@ -1398,14 +1389,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="528"/>
         <source>Speed</source>
         <translation>Скорость</translation>
-    </message>
-    <message>
-        <source>Projection:</source>
-        <translation type="vanished">Проекция:</translation>
-    </message>
-    <message>
-        <source>Vector maps</source>
-        <translation type="vanished">Векторные карты</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="188"/>

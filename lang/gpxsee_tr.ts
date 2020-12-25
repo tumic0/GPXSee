@@ -797,10 +797,6 @@
         <translation>Harita dizinini seç</translation>
     </message>
     <message>
-        <source>No usable map found</source>
-        <translation type="vanished">Kullanılabilir harita bulunamadı</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="1596"/>
         <source>Clear the map tile cache?</source>
         <translation>Harita döşemeleri önbelleği temizlensin mi?</translation>
@@ -814,7 +810,6 @@
         <location filename="../src/GUI/gui.cpp" line="1607"/>
         <source>%n files</source>
         <translation>
-            <numerusform>%n dosya</numerusform>
             <numerusform>%n dosya</numerusform>
         </translation>
     </message>
@@ -1076,14 +1071,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="153"/>
         <source>Track width:</source>
         <translation>İz genişliği:</translation>
-    </message>
-    <message>
-        <source>Projection:</source>
-        <translation type="vanished">Projeksiyon:</translation>
-    </message>
-    <message>
-        <source>Vector maps</source>
-        <translation type="vanished">Vektör haritaları</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="154"/>
@@ -1549,11 +1536,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="727"/>
         <source>System</source>
         <translation>Sistem</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
-        <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="720"/>

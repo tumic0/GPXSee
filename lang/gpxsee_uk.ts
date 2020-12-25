@@ -1055,14 +1055,6 @@
         <translation>Не-HiDPI мапи завантажуються такими, якими вони є. Об’єкти на мапі мають очікуваний розмір, але сама мапа розмита та не чітка.</translation>
     </message>
     <message>
-        <source>Projection:</source>
-        <translation type="vanished">Проєкція:</translation>
-    </message>
-    <message>
-        <source>Vector maps</source>
-        <translation type="vanished">Векторні мапи</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
         <translation type="unfinished"></translation>

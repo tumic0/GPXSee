@@ -1390,14 +1390,6 @@
         <translation>Vitesse</translation>
     </message>
     <message>
-        <source>Projection:</source>
-        <translation type="vanished">Projection :</translation>
-    </message>
-    <message>
-        <source>Vector maps</source>
-        <translation type="vanished">Cartes vectorielles</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="188"/>
         <source>Area border width:</source>
         <translation>Épaisseur de bord de zone :</translation>

@@ -797,10 +797,6 @@
         <translation>Selecionar diretório de mapa</translation>
     </message>
     <message>
-        <source>No usable map found</source>
-        <translation type="vanished">Nenhum mapa utilizável encontrado</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="1596"/>
         <source>Clear the map tile cache?</source>
         <translation>Limpar o cache de ladrilhos de mapa?</translation>
@@ -1056,14 +1052,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="104"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
         <translation>Mapas que não são HiDPI são carregados do modo que são. Objetos de mapa têm o tamanho esperado, mas o mapa é desfocado.</translation>
-    </message>
-    <message>
-        <source>Projection:</source>
-        <translation type="vanished">Projeção:</translation>
-    </message>
-    <message>
-        <source>Vector maps</source>
-        <translation type="vanished">Mapas vetoriais</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>

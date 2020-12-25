@@ -1391,14 +1391,6 @@
         <translation>Prędkość</translation>
     </message>
     <message>
-        <source>Projection:</source>
-        <translation type="vanished">Odwzorowanie:</translation>
-    </message>
-    <message>
-        <source>Vector maps</source>
-        <translation type="vanished">Mapy wektorowe</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="188"/>
         <source>Area border width:</source>
         <translation>Szerokość granicy obszaru:</translation>

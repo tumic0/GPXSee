@@ -1054,14 +1054,6 @@
         <translation>Le mappe non HiDPI sono caricate così come sono. Gli oggetti conservano la loro dimensione, ma la mappa appare sfocata.</translation>
     </message>
     <message>
-        <source>Projection:</source>
-        <translation type="vanished">Proiezione:</translation>
-    </message>
-    <message>
-        <source>Vector maps</source>
-        <translation type="vanished">Mappe vettoriali</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
         <translation type="unfinished"></translation>

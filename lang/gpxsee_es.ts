@@ -1074,14 +1074,6 @@
         <translation>Anchura del track:</translation>
     </message>
     <message>
-        <source>Projection:</source>
-        <translation type="vanished">Proyección:</translation>
-    </message>
-    <message>
-        <source>Vector maps</source>
-        <translation type="vanished">Mapas vectoriales</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="154"/>
         <source>Track style:</source>
         <translation>Estilo del track:</translation>

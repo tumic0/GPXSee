@@ -626,10 +626,6 @@
         <translation>Otevřít mapový soubor</translation>
     </message>
     <message>
-        <source>No usable map found</source>
-        <translation type="vanished">Nenalezena žádná použitelná mapa</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="1596"/>
         <source>Clear the map tile cache?</source>
         <translation>Vymazat mezipaměť mapových dlaždic?</translation>
@@ -1393,14 +1389,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="528"/>
         <source>Speed</source>
         <translation>Rychlost</translation>
-    </message>
-    <message>
-        <source>Projection:</source>
-        <translation type="vanished">Projekce:</translation>
-    </message>
-    <message>
-        <source>Vector maps</source>
-        <translation type="vanished">Vektorové mapy</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="188"/>

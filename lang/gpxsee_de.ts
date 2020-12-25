@@ -1390,14 +1390,6 @@
         <translation>Geschwindigkeit</translation>
     </message>
     <message>
-        <source>Projection:</source>
-        <translation type="vanished">Projektion:</translation>
-    </message>
-    <message>
-        <source>Vector maps</source>
-        <translation type="vanished">Vektorkarten</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="188"/>
         <source>Area border width:</source>
         <translation>Flächen-Randbreite:</translation>

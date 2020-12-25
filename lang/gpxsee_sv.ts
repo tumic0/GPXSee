@@ -649,10 +649,6 @@
         <translation>Välj kartmapp</translation>
     </message>
     <message>
-        <source>No usable map found</source>
-        <translation type="vanished">Ingen användbar karta hittades</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="1596"/>
         <source>Clear the map tile cache?</source>
         <translation>Vill du rensa cache-lagrade kartor?</translation>
@@ -1055,7 +1051,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Välj korrekt projektion av JNX- och KMZ-kartor. Både EPSG:3857- och EPSG:4326-projicerade kartor finns och det finns ingen projektionsinformation i kartfilen.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="154"/>
@@ -1118,11 +1114,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="662"/>
         <source>Graphs</source>
         <translation>Diagram</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
-        <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation>Välj korrekt projektion av JNX- och KMZ-kartor. Både EPSG:3857- och EPSG:4326-projicerade kartor finns och det finns ingen projektionsinformation i kartfilen.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>
@@ -1397,14 +1388,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="528"/>
         <source>Speed</source>
         <translation>Hastighet</translation>
-    </message>
-    <message>
-        <source>Projection:</source>
-        <translation type="vanished">Projektion:</translation>
-    </message>
-    <message>
-        <source>Vector maps</source>
-        <translation type="vanished">Vektor-kartor</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="188"/>
