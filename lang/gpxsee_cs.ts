@@ -1004,7 +1004,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="102"/>
         <source>KMZ maps</source>
-        <translation type="unfinished"></translation>
+        <translation>KMZ mapy</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="103"/>
@@ -1052,7 +1052,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Výběr projekce JNX a KMZ map. Existují mapy s projekcí EPSG:3857 i EPSG:4326 a v mapovém souboru není informace o projekci obsažena.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="154"/>
@@ -1119,7 +1119,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>
         <source>Select the desired projection of IMG maps. The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Výběr projekce IMG map. Projekce musí být platná přes celou oblast mapy.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="96"/>
@@ -1144,17 +1144,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="114"/>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vstup:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="116"/>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Výstup:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="137"/>
         <source>Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekce</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="138"/>
