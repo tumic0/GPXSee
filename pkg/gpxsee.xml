@@ -213,4 +213,11 @@
 		<glob pattern="*.xml"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.google-earth.kmz">
+		<comment>KML geographic compressed data</comment>
+		<sub-class-of type="application/zip"/>
+		<generic-icon name="application/zip"/>
+		<glob pattern="*.kmz"/>
+	</mime-type>
+
 </mime-info>

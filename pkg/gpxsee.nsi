@@ -110,13 +110,13 @@ Section "GPXSee" SEC_APP
   ; Associate file formats
   DetailPrint "Associating file types..."
   !insertmacro FILE_ASSOCIATION_ADD "gpx" "GPS Exchange Format" 11
-  !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 16
-  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 17
-  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 18
-  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 19
-  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 20
-  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track Point File" 21
-  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 22
+  !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 17
+  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 18
+  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 19
+  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 20
+  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 21
+  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track Point File" 22
+  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 23
   !insertmacro FILE_ASSOCIATION_ADD "wpt" "OziExplorer Waypoint File" 1
   !insertmacro FILE_ASSOCIATION_ADD "loc" "Geocaching.com Waypoint File" 2
   !insertmacro FILE_ASSOCIATION_ADD "slf" "Sigma Log File" 3
@@ -131,6 +131,7 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "mbtiles" "MBTiles Map File" 13
   !insertmacro FILE_ASSOCIATION_ADD "rmap" "TwoNav Raster Map File" 14
   !insertmacro FILE_ASSOCIATION_ADD "tba" "TrekBuddy Atlas" 15
+  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 16
 
   WriteRegStr HKCR "Applications\GPXSee.exe\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
   WriteRegStr HKCR ".gpx\OpenWithList" "GPXSee.exe" ""
@@ -163,7 +164,8 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKCR ".tba\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".tif\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".tiff\OpenWithList" "GPXSee.exe" ""
-  WriteRegStr HKCR ".xml\OpenWithList" "GPXSee.exe" ""  
+  WriteRegStr HKCR ".xml\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".kmz\OpenWithList" "GPXSee.exe" ""
   
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
@@ -274,6 +276,7 @@ Section "Uninstall"
   !insertmacro FILE_ASSOCIATION_REMOVE "mbtiles"
   !insertmacro FILE_ASSOCIATION_REMOVE "rmap"
   !insertmacro FILE_ASSOCIATION_REMOVE "tba"
+  !insertmacro FILE_ASSOCIATION_REMOVE "kmz"
 
   DeleteRegValue HKCR ".gpx\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".tcx\OpenWithList" "GPXSee.exe"
@@ -306,6 +309,7 @@ Section "Uninstall"
   DeleteRegValue HKCR ".tif\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".tiff\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".xml\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".kmz\OpenWithList" "GPXSee.exe"
   DeleteRegKey HKCR "Applications\GPXSee.exe"
   
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
