@@ -459,8 +459,7 @@ win32 {
         icons/formats/map.ico \
         icons/formats/mbts.ico \
         icons/formats/rmap.ico \
-        icons/formats/tba.ico \
-        icons/formats/kmz.ico
+        icons/formats/tba.ico
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }

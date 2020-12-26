@@ -70,6 +70,22 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>kmz</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.google-earth.kmz</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/kml.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>KML geographic compressed data</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>loc</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
@@ -511,6 +527,27 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.google-earth.kml+xml</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.google.kmz</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://developers.google.com/kml/documentation/kmlreference</string>
+			<key>UTTypeDescription</key>
+			<string>KML geographic compressed data</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.archive</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>kmz</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.google-earth.kmz</string>
 			</dict>
 		</dict>
 		<dict>
