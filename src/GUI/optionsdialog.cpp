@@ -124,11 +124,11 @@ QWidget *OptionsDialog::createMapPage()
 	QWidget *projectionTab = new QWidget();
 	QVBoxLayout *projectionTabLayout = new QVBoxLayout();
 #ifdef Q_OS_MAC
-	filterTabLayout->addWidget(new QLabel(tr("Input:")));
-	filterTabLayout->addLayout(inLayout);
-	filterTabLayout->addWidget(line());
-	filterTabLayout->addWidget(new QLabel(tr("Output:")));
-	filterTabLayout->addLayout(outLayout);
+	projectionTabLayout->addWidget(new QLabel(tr("Input:")));
+	projectionTabLayout->addLayout(inLayout);
+	projectionTabLayout->addWidget(line());
+	projectionTabLayout->addWidget(new QLabel(tr("Output:")));
+	projectionTabLayout->addLayout(outLayout);
 #else // Q_OS_MAC
 	projectionTabLayout->addWidget(inBox);
 	projectionTabLayout->addWidget(outBox);
