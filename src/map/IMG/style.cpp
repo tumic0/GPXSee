@@ -494,7 +494,7 @@ static bool readColor(SubFile *file, SubFile::Handle &hdl, QColor &color)
 	return true;
 }
 
-static bool skipLocalization(SubFile *file, SubFile::Handle &hdl)
+static bool skipLabel(SubFile *file, SubFile::Handle &hdl)
 {
 	quint32 len;
 
@@ -674,8 +674,8 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 			return false;
 		flags = t8_1 & 0x07;
 		rows = t8_1 >> 3;
-		bool localization = t8_2 & 0x01;
-		bool textColor = t8_2 & 0x04;
+		bool label = t8_2 & 0x01;
+		bool fontInfo = t8_2 & 0x04;
 
 		QColor c1, c2, c3, c4;
 		quint8 w1, w2;
@@ -838,10 +838,10 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 			l.setTextFontSize(Small);
 		}
 
-		if (localization && !skipLocalization(file, hdl))
+		if (label && !skipLabel(file, hdl))
 			return false;
 
-		if (textColor) {
+		if (fontInfo) {
 			quint8 labelFlags;
 			if (!file->readUInt8(hdl, labelFlags))
 				return false;
@@ -960,8 +960,8 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 		  && file->readUInt8(hdl, imgType)))
 			return false;
 
-		bool localization = t8_1 & 0x04;
-		bool textColor = t8_1 & 0x08;
+		bool label = t8_1 & 0x04;
+		bool fontInfo = t8_1 & 0x08;
 
 		int bpp = colors2bpp(numColors, imgType);
 		if (bpp <= 0)
@@ -993,10 +993,10 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 				return false;
 		}
 
-		if (localization && !skipLocalization(file, hdl))
+		if (label && !skipLabel(file, hdl))
 			return false;
 
-		if (textColor) {
+		if (fontInfo) {
 			quint8 labelFlags;
 			QColor color;
 			if (!file->readUInt8(hdl, labelFlags))
