@@ -30,18 +30,18 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	setApplicationVersion(APP_VERSION);
 
 	QTranslator *gpxsee = new QTranslator(this);
-	gpxsee->load(QLocale::system(), "gpxsee", "_",
-	  ProgramPaths::translationsDir());
-	installTranslator(gpxsee);
+	if (gpxsee->load(QLocale::system(), "gpxsee", "_",
+	  ProgramPaths::translationsDir()))
+		installTranslator(gpxsee);
 
 	QTranslator *qt = new QTranslator(this);
 #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
-	qt->load(QLocale::system(), "qt", "_", ProgramPaths::translationsDir());
+	if (qt->load(QLocale::system(), "qt", "_", ProgramPaths::translationsDir()))
 #else // Q_OS_WIN32 || Q_OS_MAC
-	qt->load(QLocale::system(), "qt", "_", QLibraryInfo::location(
-	  QLibraryInfo::TranslationsPath));
+	if (qt->load(QLocale::system(), "qt", "_", QLibraryInfo::location(
+	  QLibraryInfo::TranslationsPath)))
 #endif // Q_OS_WIN32 || Q_OS_MAC
-	installTranslator(qt);
+		installTranslator(qt);
 
 #ifdef Q_OS_MAC
 	setAttribute(Qt::AA_DontShowIconsInMenus);
