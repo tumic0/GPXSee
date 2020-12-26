@@ -496,22 +496,10 @@ static bool readColor(SubFile *file, SubFile::Handle &hdl, QColor &color)
 
 static bool skipLocalization(SubFile *file, SubFile::Handle &hdl)
 {
-	quint8 t8;
-	quint16 len;
+	quint32 len;
 
-	if (!file->readUInt8(hdl, t8))
+	if (!file->readVUInt32(hdl, len))
 		return false;
-	len = t8;
-
-	if (len & 0x01)
-		len = len >> 1;
-	else {
-		if (!file->readUInt8(hdl, t8))
-			return false;
-		len = (((quint16)t8) << 8) | len;
-		len = len >> 2;
-	}
-
 	if (!file->seek(hdl, file->pos(hdl) + len))
 		return false;
 
