@@ -103,23 +103,36 @@ QWidget *OptionsDialog::createMapPage()
 	  "The map is sharp but map objects are small/hard to read."));
 	QLabel *llo = new QLabel(tr("Non-HiDPI maps are loaded such as they are. "
 	  "Map objects have the expected size but the map is blurry."));
-	f.setPointSize(f.pointSize() - 1);
 	lhi->setWordWrap(true);
 	llo->setWordWrap(true);
 	lhi->setFont(f);
 	llo->setFont(f);
 
-
-	QFormLayout *projLayout = new QFormLayout();
-	projLayout->addRow(tr("Input:"), _inputProjection);
-	projLayout->addWidget(inInfo);
-	projLayout->addItem(new QSpacerItem(10, 10));
-	projLayout->addRow(tr("Output:"), _outputProjection);
-	projLayout->addWidget(outInfo);
+	QVBoxLayout *inLayout = new QVBoxLayout();
+	inLayout->addWidget(_inputProjection);
+	inLayout->addWidget(inInfo);
+	QVBoxLayout *outLayout = new QVBoxLayout();
+	outLayout->addWidget(_outputProjection);
+	outLayout->addWidget(outInfo);
+#ifndef Q_OS_MAC
+	QGroupBox *inBox = new QGroupBox(tr("Input"));
+	inBox->setLayout(inLayout);
+	QGroupBox *outBox = new QGroupBox(tr("Output"));
+	outBox->setLayout(outLayout);
+#endif // Q_OS_MAC
 
 	QWidget *projectionTab = new QWidget();
 	QVBoxLayout *projectionTabLayout = new QVBoxLayout();
-	projectionTabLayout->addLayout(projLayout);
+#ifdef Q_OS_MAC
+	filterTabLayout->addWidget(new QLabel(tr("Input:")));
+	filterTabLayout->addLayout(inLayout);
+	filterTabLayout->addWidget(line());
+	filterTabLayout->addWidget(new QLabel(tr("Output:")));
+	filterTabLayout->addLayout(outLayout);
+#else // Q_OS_MAC
+	projectionTabLayout->addWidget(inBox);
+	projectionTabLayout->addWidget(outBox);
+#endif // Q_OS_MAC
 	projectionTabLayout->addStretch();
 	projectionTab->setLayout(projectionTabLayout);
 
