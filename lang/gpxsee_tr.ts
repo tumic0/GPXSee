@@ -1053,338 +1053,348 @@
         <translation>HiDPI olmayan haritalar, oldukları gibi yüklenir. Harita nesneleri beklenen boyuta sahip ancak harita bulanıktır.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="138"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="152"/>
         <source>HiDPI display mode</source>
         <translation>HiDPI gösterim modu</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="205"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="219"/>
         <source>Base color:</source>
         <translation>Temel renk:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="206"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="220"/>
         <source>Palette shift:</source>
         <translation>Palet değişimi:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="153"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="167"/>
         <source>Track width:</source>
         <translation>İz genişliği:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="154"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="118"/>
+        <source>Input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="120"/>
+        <source>Output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="168"/>
         <source>Track style:</source>
         <translation>İz tarzı:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="156"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="173"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="192"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="170"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="187"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="206"/>
         <source>Width:</source>
         <translation>Genişlik:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="157"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="174"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="193"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="171"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="188"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="207"/>
         <source>Style:</source>
         <translation>Tarz:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="158"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="172"/>
         <source>Tracks</source>
         <translation>İzler</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="170"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="184"/>
         <source>Route width:</source>
         <translation>Rota genişliği:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="171"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="185"/>
         <source>Route style:</source>
         <translation>Rota tarzı:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="175"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="189"/>
         <source>Routes</source>
         <translation>Rotalar</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="188"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="202"/>
         <source>Area border width:</source>
         <translation>Alan sınır genişliği:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="189"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="203"/>
         <source>Area border style:</source>
         <translation>Alan sınır tarzı:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="190"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="204"/>
         <source>Area fill opacity:</source>
         <translation>Alan dolgusu opaklığı:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="194"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="208"/>
         <source>Fill opacity:</source>
         <translation>Opaklığı doldur:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="195"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="209"/>
         <source>Areas</source>
         <translation>Alanlar</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="208"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="291"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="222"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="305"/>
         <source>Use anti-aliasing</source>
         <translation>Kenar yumuşatma kullan</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="241"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="255"/>
         <source>Waypoint color:</source>
         <translation>Yer işareti rengi:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="242"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="256"/>
         <source>Waypoint size:</source>
         <translation>Yer işareti boyutu:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="244"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="260"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="258"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="274"/>
         <source>Color:</source>
         <translation>Renk:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="245"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="261"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="259"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="275"/>
         <source>Size:</source>
         <translation>Boyut:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="246"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="260"/>
         <source>Waypoints</source>
         <translation>Yer işaretleri</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="257"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="271"/>
         <source>POI color:</source>
         <translation>POI renk:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="258"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="272"/>
         <source>POI size:</source>
         <translation>POI boyutu:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="262"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="276"/>
         <source>POIs</source>
         <translation>POI&apos;ler</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="288"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="302"/>
         <source>Line width:</source>
         <translation>Hat genişliği:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="303"/>
         <source>Slider color:</source>
         <translation>Kaydırıcı rengi:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="312"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="326"/>
         <source>Background color:</source>
         <translation>Arka plan rengi:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="313"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="327"/>
         <source>Map opacity:</source>
         <translation>Harita opaklığı:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="323"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="337"/>
         <source>Paths</source>
         <translation>Klasör konumları</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="324"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="338"/>
         <source>Points</source>
         <translation>Noktalar</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="325"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="662"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="339"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="676"/>
         <source>Graphs</source>
         <translation>Grafikler</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="326"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="340"/>
         <source>Map</source>
         <translation>Harita</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="333"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="347"/>
         <source>Moving average window size</source>
         <translation>Ortalama pencere boyutuna taşıma</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="352"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="507"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="366"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="521"/>
         <source>Elevation:</source>
         <translation>Rakım:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="353"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="506"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="367"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="520"/>
         <source>Speed:</source>
         <translation>Hız:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="354"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="368"/>
         <source>Heart rate:</source>
         <translation>Nabız:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="355"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="369"/>
         <source>Cadence:</source>
         <translation>Kadans:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="356"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="370"/>
         <source>Power:</source>
         <translation>Güç:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="358"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="372"/>
         <source>Smoothing</source>
         <translation>Yumuşatma</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="362"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="376"/>
         <source>Eliminate GPS outliers</source>
         <translation>Aykırı GPS ele</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="371"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="385"/>
         <source>Smoothing:</source>
         <translation>Yumuşatma:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="382"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="396"/>
         <source>Automatic</source>
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="396"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="410"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="399"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="413"/>
         <source>kn</source>
         <translation>kn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="402"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="416"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="406"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="683"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="420"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="697"/>
         <source>s</source>
         <translation>s</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="422"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="436"/>
         <source>Minimal speed:</source>
         <translation>Asgari hız:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="423"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="437"/>
         <source>Minimal duration:</source>
         <translation>Minimum süre:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="433"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="447"/>
         <source>Computed from distance/time</source>
         <translation>Mesafe/zamandan hesaplandı</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="434"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="448"/>
         <source>Recorded by device</source>
         <translation>Cihazdan kaydedilen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="439"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="453"/>
         <source>Show secondary speed</source>
         <translation>İkincil hızı göster</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="442"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="456"/>
         <source>GPS data</source>
         <translation>GPS verisi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="443"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="457"/>
         <source>DEM data</source>
         <translation>DEM verisi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="448"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="462"/>
         <source>Show secondary elevation</source>
         <translation>İkincil rakımı göster</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="451"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="465"/>
         <source>UTC</source>
         <translation>UTC</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="472"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="486"/>
         <source>Use segments</source>
         <translation>Bölümleri kullan</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="509"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="523"/>
         <source>Time zone:</source>
         <translation>Saat dilimi:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="535"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="549"/>
         <source>Elevation</source>
         <translation>Rakım</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="543"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="557"/>
         <source>Time zone</source>
         <translation>Saat dilimi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="558"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="572"/>
         <source>Filtering</source>
         <translation>Filtreleme</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="559"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="573"/>
         <source>Sources</source>
         <translation>Kaynaklar</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="560"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="574"/>
         <source>Pause detection</source>
         <translation>Duraklama algılama</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="582"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="596"/>
         <source>Radius:</source>
         <translation>Yarıçap:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="528"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="542"/>
         <source>Speed</source>
         <translation>Hız</translation>
     </message>
@@ -1399,166 +1409,166 @@
         <translation>IMG haritaları için istenen iz düşümünü seçin. İz düşümü tüm harita alanı için geçerli olmalıdır.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="114"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="127"/>
         <source>Input:</source>
         <translation>Girdi:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="116"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="130"/>
         <source>Output:</source>
         <translation>Çıktı:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="137"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="151"/>
         <source>Projection</source>
         <translation>İz düşümü</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="383"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="453"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="397"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="467"/>
         <source>Custom</source>
         <translation>Özel</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="572"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="586"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="575"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="589"/>
         <source>nmi</source>
         <translation>nmi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="578"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="592"/>
         <source>km</source>
         <translation>Km</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="588"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="724"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="602"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="738"/>
         <source>POI</source>
         <translation>POI</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="595"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="609"/>
         <source>WYSIWYG</source>
         <translation>WYSIWYG</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="596"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="610"/>
         <source>High-Resolution</source>
         <translation>Yüksek çözünürlük</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="601"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="615"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
         <translation>Yazdırılan alan yaklaşık olarak görüntü alanıdır. Harita zum seviyesi değişmez.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="603"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="617"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
         <translation>Yakınlaştırma seviyesi, tüm içeriğin (izler/yer işaretleri) yazdırılan alana sığması ve harita çözünürlüğünün baskı çözünürlüğüne olabildiğince yakın olacak şekilde değiştirilecektir.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="625"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="639"/>
         <source>Name</source>
         <translation>Adı</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="627"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="641"/>
         <source>Date</source>
         <translation>Tarih</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="629"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="643"/>
         <source>Distance</source>
         <translation>Mesafe</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="631"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
         <source>Time</source>
         <translation>Zaman</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="633"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="647"/>
         <source>Moving time</source>
         <translation>Hareket süresi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="635"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="649"/>
         <source>Item count (&gt;1)</source>
         <translation>Öğe sayısı (&gt;1)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="650"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="664"/>
         <source>Separate graph page</source>
         <translation>Ayrı grafik sayfası</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="660"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="674"/>
         <source>Print mode</source>
         <translation>Yazdırma modu</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="661"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="675"/>
         <source>Header</source>
         <translation>Başlık</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="669"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="683"/>
         <source>Use OpenGL</source>
         <translation>OpenGL Kullan</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="671"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="685"/>
         <source>Enable HTTP/2</source>
         <translation>HTTP/2 etkinleştir</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="677"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="691"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="687"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="701"/>
         <source>Image cache size:</source>
         <translation>Görüntü önbellek boyutu:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="688"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
         <source>Connection timeout:</source>
         <translation>Bağlantı zaman aşımı:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="452"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="727"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="466"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="716"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="741"/>
         <source>System</source>
         <translation>Sistem</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="720"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="734"/>
         <source>Appearance</source>
         <translation>Görünüm</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="722"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="736"/>
         <source>Maps</source>
         <translation>Haritalar</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="723"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="737"/>
         <source>Data</source>
         <translation>Veri</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="725"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="739"/>
         <source>Print &amp; Export</source>
         <translation>Yazdır &amp; Dışa ver</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="754"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="768"/>
         <source>Options</source>
         <translation>Seçenekler</translation>
     </message>
