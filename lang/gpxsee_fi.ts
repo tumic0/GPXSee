@@ -1051,7 +1051,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished">Valitse JNX- ja KMZ-karttojen projektio. Sekä EPSG:3857 että EPSG:4326 ovat olemassa, mutta karttatiedostossa ei ole projektiotietoja.</translation>
+        <translation>Valitse JNX- ja KMZ-karttojen projektio. Sekä EPSG:3857 että EPSG:4326 ovat olemassa, mutta karttatiedostossa ei ole projektiotietoja.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="168"/>

@@ -994,12 +994,12 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="101"/>
         <source>BSB nautical charts</source>
-        <translation type="unfinished"></translation>
+        <translation>BSB навігаційні мапи</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="102"/>
         <source>KMZ maps</source>
-        <translation type="unfinished"></translation>
+        <translation>KMZ мапи</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="103"/>

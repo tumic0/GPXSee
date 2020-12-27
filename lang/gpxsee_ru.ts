@@ -1052,7 +1052,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished">Выберите правильную проекцию JNX и KMZ карт. Существуют карты в проекциях EPSG:3857 и EPSG:4326, но в файле карты нет информации о проекции.</translation>
+        <translation>Выберите правильную проекцию JNX и KMZ карт. Существуют карты в проекциях EPSG:3857 и EPSG:4326, но в файле карты нет информации о проекции.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="168"/>
