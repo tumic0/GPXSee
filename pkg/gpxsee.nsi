@@ -219,6 +219,7 @@ SectionEnd
 SectionGroup "Localization" SEC_LOCALIZATION
   !insertmacro LOCALIZATION "Czech" "cs"
   !insertmacro LOCALIZATION "Danish" "da"
+  !insertmacro LOCALIZATION "Esperanto" "eo"
   !insertmacro LOCALIZATION "Finnish" "fi"
   !insertmacro LOCALIZATION "French" "fr"
   !insertmacro LOCALIZATION "German" "de"
