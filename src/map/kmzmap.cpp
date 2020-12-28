@@ -4,7 +4,7 @@
 	a problem as we can "see the future" now and there are no changes in all
 	the supported Qt5 versions up to the last one (5.15). In Qt6 the class
 	might change or even disappear in the future, but this is very unlikely
-	as there were no changes for several years and The Qt Company's politics
+	as there were no changes for several years and The Qt Company's policy
 	is: "do not invest any resources into any desktop related stuff unless
 	absolutely necessary". There is an issue (QTBUG-3897) since the year 2009 to
 	include the ZIP reader into the public API, which aptly illustrates the
