@@ -1144,22 +1144,22 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="118"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Ввод</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="120"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Вывод</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="127"/>
         <source>Input:</source>
-        <translation>Вход:</translation>
+        <translation>Ввод:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="130"/>
         <source>Output:</source>
-        <translation>Выход:</translation>
+        <translation>Вывод:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="151"/>

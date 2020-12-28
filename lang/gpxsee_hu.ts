@@ -811,6 +811,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fájl</numerusform>
+            <numerusform>%n fájl</numerusform>
         </translation>
     </message>
 </context>
@@ -1055,17 +1056,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished">Válaszd ki a JNX és a KMZ térképek megfelelő vetületét. Mind az EPSG: 3857, mind az EPSG: 4326 vetületi térképek rendelkezésre állnak, a térkép fájlban nincsenek vetületi információk.</translation>
+        <translation>Válaszd ki a JNX és a KMZ térképek megfelelő vetületét. Mind az EPSG: 3857, mind az EPSG: 4326 vetületi térképek rendelkezésre állnak, a térkép fájlban nincsenek vetületi információk.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="118"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Bemenet</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="120"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Kimenet</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="152"/>
