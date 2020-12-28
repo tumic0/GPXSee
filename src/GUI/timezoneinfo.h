@@ -3,6 +3,7 @@
 
 #include <QTimeZone>
 #include <QDataStream>
+#include <QDebug>
 
 class TimeZoneInfo
 {
@@ -42,6 +43,7 @@ public:
 private:
 	friend QDataStream& operator<<(QDataStream &out, const TimeZoneInfo &info);
 	friend QDataStream& operator>>(QDataStream &in, TimeZoneInfo &info);
+	friend QDebug operator<<(QDebug dbg, const TimeZoneInfo &info);
 
 	Type _type;
 	QTimeZone _customZone;
@@ -65,5 +67,14 @@ inline QDataStream &operator>>(QDataStream &in, TimeZoneInfo &info)
 
 	return in;
 }
+
+#ifndef QT_NO_DEBUG
+inline QDebug operator<<(QDebug dbg, const TimeZoneInfo &info)
+{
+	dbg.nospace() << "TimeZoneInfo(" << static_cast<int>(info._type)
+	  << ", " << info._customZone << ")";
+	return dbg.space();
+}
+#endif // QT_NO_DEBUG
 
 #endif // TIMEZONEINFO_H
