@@ -36,6 +36,7 @@ public:
 	void unload();
 
 	void setInputProjection(const Projection &projection);
+	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
@@ -44,14 +45,14 @@ private:
 	class Overlay {
 	public:
 		Overlay(const QString &path, const QSize &size, const RectC &bbox,
-		  double rotation, const Projection *proj);
+		  double rotation, const Projection *proj, qreal ratio);
 		bool operator==(const Overlay &other) const
 		  {return _path == other._path;}
 
 		QPointF ll2xy(const Coordinates &c) const
-		  {return QPointF(_transform.proj2img(_proj->ll2xy(c)));}
+		  {return QPointF(_transform.proj2img(_proj->ll2xy(c))) / _ratio;}
 		Coordinates xy2ll(const QPointF &p) const
-		  {return _proj->xy2ll(_transform.img2proj(p));}
+		  {return _proj->xy2ll(_transform.img2proj(p * _ratio));}
 
 		const QString &path() const {return _path;}
 		const RectC &bbox() const {return _bbox;}
@@ -65,6 +66,7 @@ private:
 		void unload();
 
 		void setProjection(const Projection *proj);
+		void setDevicePixelRatio(qreal ratio);
 
 	private:
 		QString _path;
@@ -75,6 +77,7 @@ private:
 		Image *_img;
 		const Projection *_proj;
 		Transform _transform;
+		qreal _ratio;
 	};
 
 	struct Zoom {
@@ -117,6 +120,7 @@ private:
 	QZipReader *_zip;
 	qreal _adjust;
 	Projection _projection;
+	qreal _ratio;
 
 	bool _valid;
 	QString _errorString;

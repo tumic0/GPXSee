@@ -5,7 +5,7 @@
 	the supported Qt5 versions up to the last one (5.15). In Qt6 the class
 	might change or even disappear in the future, but this is very unlikely
 	as there were no changes for several years and The Qt Company's politics
-	is: "do not	invest any resources into any desktop related stuff unless
+	is: "do not invest any resources into any desktop related stuff unless
 	absolutely necessary". There is an issue (QTBUG-3897) since the year 2009 to
 	include the ZIP reader into the public API, which aptly illustrates the
 	effort The Qt Company is willing to make about anything desktop related...
@@ -30,9 +30,9 @@
 
 
 KMZMap::Overlay::Overlay(const QString &path, const QSize &size,
-  const RectC &bbox, double rotation, const Projection *proj)
+  const RectC &bbox, double rotation, const Projection *proj, qreal ratio)
   : _path(path), _size(size), _bbox(bbox), _rotation(rotation), _img(0),
-  _proj(proj)
+  _proj(proj), _ratio(ratio)
 {
 	ReferencePoint tl(PointD(0, 0), _proj->ll2xy(bbox.topLeft()));
 	ReferencePoint br(PointD(size.width(), size.height()),
@@ -62,13 +62,15 @@ qreal KMZMap::Overlay::resolution(const QRectF &rect) const
 void KMZMap::Overlay::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	if (_img) {
+		QRectF rr(rect.topLeft() / _ratio, rect.size());
+
 		if (_rotation) {
 			painter->save();
 			painter->rotate(-_rotation);
-			_img->draw(painter, rect, flags);
+			_img->draw(painter, rr, flags);
 			painter->restore();
 		} else
-		    _img->draw(painter, rect, flags);
+			_img->draw(painter, rr, flags);
 	}
 
 	//painter->setPen(Qt::red);
@@ -80,6 +82,7 @@ void KMZMap::Overlay::load(QZipReader *zip)
 	if (!_img) {
 		QByteArray ba(zip->fileData(_path));
 		_img = new Image(QImage::fromData(ba));
+		_img->setDevicePixelRatio(_ratio);
 	}
 }
 
@@ -104,6 +107,14 @@ void KMZMap::Overlay::setProjection(const Projection *proj)
 	_bounds = ma.boundingRect();
 
 	_transform = Transform(tl, br);
+}
+
+void KMZMap::Overlay::setDevicePixelRatio(qreal ratio)
+{
+	_ratio = ratio;
+
+	if (_img)
+		_img->setDevicePixelRatio(_ratio);
 }
 
 
@@ -246,7 +257,8 @@ void KMZMap::groundOverlay(QXmlStreamReader &reader, QZipReader &zip)
 		QSize size(ir.size());
 
 		if (size.isValid())
-			_maps.append(Overlay(image, size, rect, rotation, &_projection));
+			_maps.append(Overlay(image, size, rect, rotation, &_projection,
+			  _ratio));
 		else
 			reader.raiseError(image + ": Invalid image file");
 	} else
@@ -295,7 +307,7 @@ void KMZMap::kml(QXmlStreamReader &reader, QZipReader &zip)
 
 
 KMZMap::KMZMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _zoom(0), _mapIndex(-1), _zip(0)
+  : Map(fileName, parent), _zoom(0), _mapIndex(-1), _zip(0), _ratio(1.0)
 {
 	QZipReader zip(fileName, QIODevice::ReadOnly);
 	QByteArray xml(zip.fileData("doc.kml"));
@@ -438,17 +450,9 @@ Coordinates KMZMap::xy2ll(const QPointF &p)
 
 void KMZMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	QRectF er = rect.adjusted(-_adjust, -_adjust, _adjust, _adjust);
+	QRectF er = rect.adjusted(-_adjust * _ratio, -_adjust * _ratio,
+	  _adjust * _ratio, _adjust * _ratio);
 
-	// All in one map
-	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).last; i++) {
-		if (_bounds.at(i).xy.contains(er)) {
-			draw(painter, er, i, flags);
-			return;
-		}
-	}
-
-	// Multiple maps
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).last; i++) {
 		QRectF ir = er.intersected(_bounds.at(i).xy);
 		if (!ir.isNull())
@@ -480,6 +484,22 @@ void KMZMap::setInputProjection(const Projection &projection)
 
 	for (int i = 0; i < _maps.size(); i++)
 		_maps[i].setProjection(&_projection);
+
+	_bounds.clear();
+	computeBounds();
+}
+
+void KMZMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
+{
+	Q_UNUSED(deviceRatio);
+
+	if (mapRatio == _ratio)
+		return;
+
+	_ratio = mapRatio;
+
+	for (int i = 0; i < _maps.size(); i++)
+		_maps[i].setDevicePixelRatio(_ratio);
 
 	_bounds.clear();
 	computeBounds();
