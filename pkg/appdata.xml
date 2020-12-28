@@ -86,5 +86,6 @@
 		<mimetype>application/vnd.gpxsee.map+xml</mimetype>
 		<mimetype>application/x-tar</mimetype>
 		<mimetype>image/tiff</mimetype>
+		<mimetype>application/vnd.google-earth.kmz</mimetype>
 	</mimetypes>
 </component>
