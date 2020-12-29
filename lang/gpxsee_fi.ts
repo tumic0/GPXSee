@@ -1143,12 +1143,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="118"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Syöte</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="120"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuloste</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="127"/>
