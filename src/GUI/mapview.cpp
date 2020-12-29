@@ -515,10 +515,8 @@ void MapView::digitalZoom(int zoom)
 	_coordinates->setDigitalZoom(_digitalZoom);
 }
 
-void MapView::zoom(int zoom, const QPoint &pos)
+void MapView::zoom(int zoom, const QPoint &pos, bool shift)
 {
-	bool shift = QApplication::keyboardModifiers() & Qt::ShiftModifier;
-
 	if (_digitalZoom) {
 		if (((_digitalZoom > 0 && zoom > 0) && (!shift || _digitalZoom
 		  >= MAX_DIGITAL_ZOOM)) || ((_digitalZoom < 0 && zoom < 0) && (!shift
@@ -544,21 +542,28 @@ void MapView::zoom(int zoom, const QPoint &pos)
 void MapView::wheelEvent(QWheelEvent *event)
 {
 	static int deg = 0;
+	bool shift = (event->modifiers() & MODIFIER) ? true : false;
+	// Shift inverts the wheel axis on OS X, so use scrolling in both axis for
+	// the zoom.
+	int delta = event->angleDelta().y()
+	  ? event->angleDelta().y() : event->angleDelta().x();
 
-	deg += event->angleDelta().y() / 8;
+	deg += delta / 8;
 	if (qAbs(deg) < 15)
 		return;
 	deg = 0;
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-	zoom((event->angleDelta().y() > 0) ? 1 : -1, event->pos());
+	zoom((delta > 0) ? 1 : -1, event->pos(), shift);
 #else // QT 5.15
-	zoom((event->angleDelta().y() > 0) ? 1 : -1, event->position().toPoint());
+	zoom((delta > 0) ? 1 : -1, event->position().toPoint(), shift);
 #endif // QT 5.15
 }
 
 void MapView::mouseDoubleClickEvent(QMouseEvent *event)
 {
+	bool shift = (event->modifiers() & MODIFIER) ? true : false;
+
 	QGraphicsView::mouseDoubleClickEvent(event);
 	if (event->isAccepted())
 		return;
@@ -566,13 +571,13 @@ void MapView::mouseDoubleClickEvent(QMouseEvent *event)
 	if (event->button() != Qt::LeftButton && event->button() != Qt::RightButton)
 		return;
 
-	zoom((event->button() == Qt::LeftButton) ? 1 : -1, event->pos());
+	zoom((event->button() == Qt::LeftButton) ? 1 : -1, event->pos(), shift);
 }
 
 void MapView::keyPressEvent(QKeyEvent *event)
 {
 	int z;
-
+	bool shift = (event->modifiers() & MODIFIER) ? true : false;
 	QPoint pos = viewport()->rect().center();
 
 	if (event->key() == ZOOM_IN)
@@ -592,7 +597,7 @@ void MapView::keyPressEvent(QKeyEvent *event)
 		return;
 	}
 
-	zoom(z, pos);
+	zoom(z, pos, shift);
 }
 
 void MapView::keyReleaseEvent(QKeyEvent *event)

@@ -123,7 +123,7 @@ private:
 	QPointF contentCenter() const;
 	void rescale();
 	void centerOn(const QPointF &pos);
-	void zoom(int zoom, const QPoint &pos);
+	void zoom(int zoom, const QPoint &pos, bool shift);
 	void digitalZoom(int zoom);
 	void updatePOIVisibility();
 	void skipColor() {_palette.nextColor();}
