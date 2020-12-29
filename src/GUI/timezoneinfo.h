@@ -68,13 +68,12 @@ inline QDataStream &operator>>(QDataStream &in, TimeZoneInfo &info)
 	return in;
 }
 
-#ifndef QT_NO_DEBUG
+// Required in Qt6 even in release builds
 inline QDebug operator<<(QDebug dbg, const TimeZoneInfo &info)
 {
 	dbg.nospace() << "TimeZoneInfo(" << static_cast<int>(info._type)
 	  << ", " << info._customZone << ")";
 	return dbg.space();
 }
-#endif // QT_NO_DEBUG
 
 #endif // TIMEZONEINFO_H
