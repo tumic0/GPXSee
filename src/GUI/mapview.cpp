@@ -543,7 +543,7 @@ void MapView::wheelEvent(QWheelEvent *event)
 {
 	static int deg = 0;
 	bool shift = (event->modifiers() & MODIFIER) ? true : false;
-	// Shift inverts the wheel axis on OS X, so use scrolling in both axis for
+	// Shift inverts the wheel axis on OS X, so use scrolling in both axes for
 	// the zoom.
 	int delta = event->angleDelta().y()
 	  ? event->angleDelta().y() : event->angleDelta().x();
