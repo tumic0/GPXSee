@@ -27,7 +27,8 @@ private:
 		int _lon, _lat;
 	};
 
-	static QString fileName(const Key &key);
+	static QString baseName(const Key &key);
+	static QString fileName(const QString &baseName);
 
 	static QString _dir;
 	static QCache<Key, QByteArray> _data;
