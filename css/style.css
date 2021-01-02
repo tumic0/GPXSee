@@ -29,6 +29,9 @@ input, textarea, select {
 textarea {
 	overflow:hidden;
 }
+sup {
+    line-height: 0;
+}
 .cl {
 	display:block;
 	height:0;
