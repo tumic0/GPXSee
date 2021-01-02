@@ -467,7 +467,6 @@ win32 {
 
 unix:!macx {
     isEmpty(PREFIX):PREFIX = /usr/local
-    DEFINES += PREFIX=\\\"$$PREFIX\\\"
 
     maps.files = pkg/maps/*
     maps.path = $$PREFIX/share/gpxsee/maps
