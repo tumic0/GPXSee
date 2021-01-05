@@ -307,7 +307,8 @@ void KMZMap::kml(QXmlStreamReader &reader, QZipReader &zip)
 
 
 KMZMap::KMZMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _zoom(0), _mapIndex(-1), _zip(0), _ratio(1.0)
+  : Map(fileName, parent), _zoom(0), _mapIndex(-1), _zip(0), _ratio(1.0),
+  _valid(false)
 {
 	QZipReader zip(fileName, QIODevice::ReadOnly);
 	QByteArray xml(zip.fileData("doc.kml"));
