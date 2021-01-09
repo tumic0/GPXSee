@@ -27,6 +27,7 @@ environment:
     OPENSSLDIR: C:\OpenSSL-v111-Win64\bin
     LIBCRYPTO: libssl-1_1-x64.dll
     LIBSSL: libcrypto-1_1-x64.dll
+    NSISDEF: /DQT6
 
 install:
 - cmd: >-
@@ -66,6 +67,6 @@ build_script:
     copy %OPENSSLDIR%\%LIBSSL% installer
 
 
-    makensis.exe installer\%NSI%
+    makensis.exe %NSISDEF% installer\%NSI%
 artifacts:
 - path: installer\GPXSee-*.exe
