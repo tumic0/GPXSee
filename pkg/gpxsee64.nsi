@@ -200,10 +200,10 @@ Section "QT framework" SEC_QT
   File "Qt5Network.dll"
   File "Qt5Sql.dll"
   File "Qt5Concurrent.dll"
+  File /r "printsupport"
 !endif
   File /r "platforms"
   File /r "imageformats"
-  File /r "printsupport"
   File /r "styles"
   File /r "sqldrivers"
 
