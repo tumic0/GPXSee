@@ -4,6 +4,7 @@
 #include <QString>
 #include <QCache>
 #include <QByteArray>
+#include "common/config.h"
 
 class QString;
 class Coordinates;
@@ -37,12 +38,12 @@ public:
 	static void setDir(const QString &path);
 	static qreal elevation(const Coordinates &c);
 
-	friend uint qHash(const Key &key);
+	friend HASH_T qHash(const Key &key);
 };
 
-inline uint qHash(const DEM::Key &key)
+inline HASH_T qHash(const DEM::Key &key)
 {
-	return (key.lon() ^ key.lat());
+	return (qHash(key.lon()) ^ qHash(key.lat()));
 }
 
 #endif // DEM_H

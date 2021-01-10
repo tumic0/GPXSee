@@ -1,6 +1,8 @@
 #ifndef SEARCHPOINTER_H
 #define SEARCHPOINTER_H
 
+#include "common/config.h"
+
 template <class T>
 class SearchPointer
 {
@@ -16,7 +18,7 @@ private:
 };
 
 template <class T>
-inline uint qHash(const SearchPointer<T> &t)
+inline HASH_T qHash(const SearchPointer<T> &t)
 {
 	return ::qHash(*(t.data()));
 }

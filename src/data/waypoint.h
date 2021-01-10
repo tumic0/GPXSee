@@ -6,6 +6,7 @@
 #include <QHash>
 #include <QVector>
 #include <QDebug>
+#include "common/config.h"
 #include "common/coordinates.h"
 #include "imageinfo.h"
 #include "link.h"
@@ -68,7 +69,7 @@ private:
 	static bool _show2ndElevation;
 };
 
-inline uint qHash(const Waypoint &key)
+inline HASH_T qHash(const Waypoint &key)
 {
 	return ::qHash(key.name());
 }

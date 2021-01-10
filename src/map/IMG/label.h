@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QDebug>
+#include "common/config.h"
 
 #define FIRST_SHIELD Label::Shield::USInterstate
 #define LAST_SHIELD  Label::Shield::Oval
@@ -52,9 +53,9 @@ private:
 	Shield _shield;
 };
 
-inline uint qHash(const Label::Shield &shield)
+inline HASH_T qHash(const Label::Shield &shield)
 {
-	return qHash(shield.text()) ^ shield.type();
+	return qHash(shield.text()) ^ qHash(shield.type());
 }
 
 #ifndef QT_NO_DEBUG

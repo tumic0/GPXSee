@@ -6,6 +6,7 @@
 #include <QSet>
 #include <QList>
 #include <QHash>
+#include "common/config.h"
 #include "common/rectc.h"
 #include "common/kv.h"
 #include "projection.h"
@@ -169,16 +170,16 @@ private:
 	bool _valid, _ready;
 	QString _errorString;
 
-	friend uint qHash(const WMTS::TileMatrix &key);
-	friend uint qHash(const WMTS::MatrixLimits &key);
+	friend HASH_T qHash(const WMTS::TileMatrix &key);
+	friend HASH_T qHash(const WMTS::MatrixLimits &key);
 };
 
-inline uint qHash(const WMTS::TileMatrix &key)
+inline HASH_T qHash(const WMTS::TileMatrix &key)
 {
 	return ::qHash(key.id);
 }
 
-inline uint qHash(const WMTS::MatrixLimits &key)
+inline HASH_T qHash(const WMTS::MatrixLimits &key)
 {
 	return ::qHash(key.id);
 }
