@@ -14,7 +14,7 @@ static quint64 pointId(const QPoint &pos, quint32 type, quint32 labelPtr)
 {
 	quint64 id;
 
-	uint hash = qHash(QPair<uint,uint>(qHash(QPair<int, int>(pos.x(),
+	uint hash = (uint)qHash(QPair<uint,uint>(qHash(QPair<int, int>(pos.x(),
 	  pos.y())), labelPtr & 0x3FFFFF));
 	id = ((quint64)type)<<32 | hash;
 	// Make country labels precedent over city labels
