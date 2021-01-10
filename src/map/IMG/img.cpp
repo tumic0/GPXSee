@@ -203,7 +203,7 @@ bool IMG::readBlock(int blockNum, char *data)
 {
 	if (!_file.seek((quint64)blockNum << _blockBits))
 		return false;
-	if (read(data, (qint64)(1U<<_blockBits)) < (qint64)(1U<<_blockBits))
+	if (read(data, 1ULL<<_blockBits) < (qint64)(1ULL<<_blockBits))
 		return false;
 
 	return true;
