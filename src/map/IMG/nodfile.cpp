@@ -27,10 +27,10 @@ static bool adjDistInfo(BitStream1 &bs, bool extraBit, bool &eog)
 {
 	quint32 data, cnt;
 
-	if (!bs.read(extraBit | 8, data))
+	if (!bs.read((int)extraBit | 8, data))
 		return false;
 
-	data <<= !extraBit;
+	data <<= !(int)extraBit;
 	eog |= (quint8)data & 1;
 	data >>= 1;
 
@@ -51,7 +51,7 @@ static bool adjNodeInfo(BitStream1 &bs, bool extraBit, NodeOffset &offset)
 	if (!bs.read(9, data))
 		return false;
 
-	data <<= !extraBit;
+	data <<= !(int)extraBit;
 
 	if (data & 1) {
 		offset.ext = true;
