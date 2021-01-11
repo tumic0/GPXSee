@@ -1,4 +1,4 @@
-﻿#include "bitstream.h"
+#include "bitstream.h"
 #include "nodfile.h"
 
 
