@@ -377,7 +377,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="318"/>
         <source>Load map directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Charger le dossier de carte…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="326"/>
@@ -596,12 +596,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="741"/>
         <source>Copy coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier les coordonnées</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="742"/>
         <source>Left Click</source>
-        <translation type="unfinished"></translation>
+        <translation>Clique gauche</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="760"/>
@@ -646,12 +646,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1541"/>
         <source>Select map directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner le dossier de carte</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1596"/>
         <source>Clear the map tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer les tuiles de carte en cache ?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1603"/>
@@ -965,12 +965,12 @@
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="77"/>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="79"/>
         <source>File</source>
-        <translation type="unfinished">Fichier</translation>
+        <translation>Fichier</translation>
     </message>
 </context>
 <context>
@@ -998,12 +998,12 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="101"/>
         <source>BSB nautical charts</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartes marines BSB</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="102"/>
         <source>KMZ maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartes KMZ</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="103"/>
@@ -1051,7 +1051,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner la bonne projection de cartes JNX et KMZ. Les deux projections cartographiques EPSG:3857 et EPSG:4326 sont disponibles mais sans information de projection dans le fichier de carte.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="168"/>
@@ -1118,7 +1118,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>
         <source>Select the desired projection of IMG maps. The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisir une projection de cartes IMG. Elle doit être valide pour toute l&apos;étendue de la carte.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="96"/>
@@ -1143,27 +1143,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="118"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>En entrée</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="120"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>En sortie</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="127"/>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrée :</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="130"/>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortie :</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="151"/>
         <source>Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>Projection</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="152"/>
