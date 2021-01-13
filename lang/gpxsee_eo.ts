@@ -410,7 +410,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="373"/>
         <source>km/mi markers</source>
-        <translation type="unfinished"></translation>
+        <translation>km/mi markoj</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="380"/>
@@ -794,7 +794,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1541"/>
         <source>Select map directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Elekti dosierujon kun mapoj</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1596"/>
@@ -1353,7 +1353,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="439"/>
         <source>Show secondary speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Montri ambaŭ samtempe</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="442"/>
@@ -1368,7 +1368,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="448"/>
         <source>Show secondary elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Montri ambaŭ samtempe</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="451"/>
