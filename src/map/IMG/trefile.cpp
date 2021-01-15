@@ -139,12 +139,14 @@ int TREFile::readExtEntry(Handle &hdl, quint32 &polygons, quint32 &lines,
 		rb += 4;
 	} else
 		polygons = 0;
+
 	if (_flags & 2) {
 		if (!readUInt32(hdl, lines))
 			return -1;
 		rb += 4;
 	} else
 		lines = 0;
+
 	if (_flags & 4) {
 		if (!readUInt32(hdl, points))
 			return -1;
