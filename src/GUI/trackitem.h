@@ -2,13 +2,11 @@
 #define TRACKITEM_H
 
 #include <QDateTime>
-#include <QPen>
-#include "data/track.h"
+#include "data/link.h"
 #include "pathitem.h"
-#include "units.h"
-#include "graphicsscene.h"
 
 class Map;
+class Track;
 
 class TrackItem : public PathItem
 {

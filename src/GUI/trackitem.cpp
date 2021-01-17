@@ -1,5 +1,6 @@
 #include <QPainter>
 #include "map/map.h"
+#include "data/track.h"
 #include "format.h"
 #include "tooltip.h"
 #include "trackitem.h"

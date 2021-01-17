@@ -7,6 +7,7 @@
 #include "pathtickitem.h"
 #include "popup.h"
 #include "graphitem.h"
+#include "markeritem.h"
 #include "pathitem.h"
 
 

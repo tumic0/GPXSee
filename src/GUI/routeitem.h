@@ -1,13 +1,11 @@
 #ifndef ROUTEITEM_H
 #define ROUTEITEM_H
 
-#include "data/route.h"
+#include "data/link.h"
 #include "pathitem.h"
-#include "units.h"
-#include "format.h"
-#include "graphicsscene.h"
 
 class Map;
+class Route;
 class WaypointItem;
 
 class RouteItem : public PathItem

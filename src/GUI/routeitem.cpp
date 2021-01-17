@@ -1,5 +1,6 @@
 #include <QPainter>
 #include "data/waypoint.h"
+#include "data/route.h"
 #include "map/map.h"
 #include "format.h"
 #include "waypointitem.h"

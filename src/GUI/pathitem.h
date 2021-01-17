@@ -5,13 +5,13 @@
 #include <QPen>
 #include <QTimeZone>
 #include "data/path.h"
-#include "markeritem.h"
-#include "units.h"
 #include "graphicsscene.h"
+#include "units.h"
 
 class Map;
 class PathTickItem;
 class GraphItem;
+class MarkerItem;
 
 class PathItem : public QObject, public GraphicsItem
 {
