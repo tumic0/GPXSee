@@ -263,7 +263,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="750"/>
         <source>Map directory:</source>
-        <translation>Dossier des cartes :</translation>
+        <translation>Dossier de cartes :</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="752"/>
@@ -377,7 +377,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="317"/>
         <source>Load map directory...</source>
-        <translation>Charger le dossier de carte…</translation>
+        <translation>Charger un dossier de cartes…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="325"/>
@@ -424,7 +424,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="377"/>
         <source>Position markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Positions mesurées</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
@@ -650,7 +650,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1524"/>
         <source>Select map directory</source>
-        <translation>Sélectionner le dossier de carte</translation>
+        <translation>Sélectionner un dossier de cartes</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1579"/>
@@ -1432,7 +1432,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="397"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="467"/>
         <source>Custom</source>
-        <translation>Personnalisé</translation>
+        <translation>Personnalisée</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="586"/>
