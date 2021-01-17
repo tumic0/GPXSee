@@ -1,6 +1,7 @@
 #ifndef GRAPHTAB_H
 #define GRAPHTAB_H
 
+#include <QtGlobal>
 #include <QList>
 #include "graphview.h"
 #include "units.h"
@@ -14,7 +15,12 @@ class GraphTab : public GraphView
 	Q_OBJECT
 
 public:
-	GraphTab(QWidget *parent = 0) : GraphView(parent) {}
+	GraphTab(QWidget *parent = 0) : GraphView(parent)
+	{
+#if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
+		setFrameShape(QFrame::NoFrame);
+#endif // Q_OS_WIN32 || Q_OS_MAC
+	}
 	virtual ~GraphTab() {}
 
 	virtual QString label() const = 0;

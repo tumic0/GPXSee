@@ -30,8 +30,6 @@
 #define SHOW_GRAPH_GRIDS_DEFAULT          true
 #define SHOW_GRAPH_SLIDER_INFO_SETTING    "sliderInfo"
 #define SHOW_GRAPH_SLIDER_INFO_DEFAULT    true
-#define SHOW_MARKERS_SETTING              "pathMarkers"
-#define SHOW_MARKERS_DEFAULT              true
 #define SHOW_TICKS_SETTING                "pathTicks"
 #define SHOW_TICKS_DEFAULT                false
 
@@ -65,6 +63,8 @@
 #define SHOW_ROUTE_WAYPOINTS_DEFAULT      true
 #define SHOW_WAYPOINT_LABELS_SETTING      "waypointLabels"
 #define SHOW_WAYPOINT_LABELS_DEFAULT      true
+#define SHOW_MARKERS_SETTING              "positionMarkers"
+#define SHOW_MARKERS_DEFAULT              true
 
 #define PDF_EXPORT_SETTINGS_GROUP         "Export"
 #define PAPER_ORIENTATION_SETTING         "orientation"

@@ -23,6 +23,7 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
+	GraphType graphType() const {return _type;}
 	const QRectF &bounds() const {return _bounds;}
 
 	qreal max() const;
@@ -38,17 +39,16 @@ public:
 	GraphItem *secondaryGraph() const {return _secondaryGraph;}
 	void setSecondaryGraph(GraphItem *graph) {_secondaryGraph = graph;}
 
-	qreal yAtX(qreal x);
-	qreal distanceAtTime(qreal time);
+	qreal yAtX(qreal x) const;
+	qreal distanceAtTime(qreal time) const;
+	qreal timeAtDistance(qreal distance) const;
 
 	void redraw();
 
 signals:
-	void sliderPositionChanged(qreal);
 	void selected(bool);
 
 public slots:
-	void emitSliderPositionChanged(qreal);
 	void hover(bool hover);
 
 protected:

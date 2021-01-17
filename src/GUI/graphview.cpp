@@ -179,6 +179,13 @@ void GraphView::setGraphType(GraphType type)
 		_xLabel = tr("Time");
 	setXUnits();
 
+	if (singleGraph())
+		_sliderPos = (type == Distance)
+		  ? _graphs.first()->distanceAtTime(_sliderPos)
+		  : _graphs.first()->timeAtDistance(_sliderPos);
+	else
+		_sliderPos = 0;
+
 	redraw();
 }
 
@@ -194,9 +201,6 @@ void GraphView::showSliderInfo(bool show)
 
 void GraphView::addGraph(GraphItem *graph)
 {
-	connect(this, SIGNAL(sliderPositionChanged(qreal)), graph,
-	  SLOT(emitSliderPositionChanged(qreal)));
-
 	_graphs.append(graph);
 	if (!graph->bounds().isNull())
 		_scene->addItem(graph);
@@ -207,9 +211,6 @@ void GraphView::addGraph(GraphItem *graph)
 
 void GraphView::removeGraph(GraphItem *graph)
 {
-	disconnect(this, SIGNAL(sliderPositionChanged(qreal)), graph,
-	  SLOT(emitSliderPositionChanged(qreal)));
-
 	_graphs.removeOne(graph);
 	_scene->removeItem(graph);
 
@@ -434,12 +435,17 @@ void GraphView::updateSliderPosition()
 	}
 }
 
+bool GraphView::singleGraph() const
+{
+	return (_graphs.count() == 1
+	  || (_graphs.count() == 2 && _graphs.first()->secondaryGraph()));
+}
+
 void GraphView::updateSliderInfo()
 {
 	QLocale l(QLocale::system());
 	qreal r = 0, y = 0;
-	GraphItem *cardinal = (_graphs.count() == 1 || (_graphs.count() == 2
-	  && _graphs.first()->secondaryGraph())) ? _graphs.first() : 0;
+	GraphItem *cardinal = singleGraph() ? _graphs.first() : 0;
 
 	if (cardinal) {
 		QRectF br(_bounds);
@@ -447,7 +453,7 @@ void GraphView::updateSliderInfo()
 			br.adjust(0, -(_minYRange/2 - br.height()/2), 0,
 			  _minYRange/2 - br.height()/2);
 
-		y = cardinal->yAtX(_sliderPos);
+		y = -cardinal->yAtX(_sliderPos);
 		r = (y - br.bottom()) / br.height();
 	}
 
@@ -463,7 +469,7 @@ void GraphView::updateSliderInfo()
 	QString yText((!cardinal) ? QString() : l.toString(-y * _yScale + _yOffset,
 	  'f', _precision) + UNIT_SPACE + _yUnits);
 	if (cardinal && cardinal->secondaryGraph()) {
-		qreal delta = y - cardinal->secondaryGraph()->yAtX(_sliderPos);
+		qreal delta = y + cardinal->secondaryGraph()->yAtX(_sliderPos);
 		yText += QString(" ") + QChar(0x0394) + l.toString(-delta * _yScale
 		  + _yOffset, 'f', _precision) + UNIT_SPACE + _yUnits;
 	}

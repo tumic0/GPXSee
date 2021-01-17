@@ -56,6 +56,7 @@ public:
 	void setPalette(const Palette &palette);
 	void setPOI(POI *poi);
 	void setMap(Map *map);
+	void setGraph(int index);
 
 	void plot(QPainter *painter, const QRectF &target, qreal scale,
 	  PlotFlags flags);
@@ -79,29 +80,29 @@ public:
 	void setBackgroundColor(const QColor &color);
 	void useOpenGL(bool use);
 	void useAntiAliasing(bool use);
-
-public slots:
-	void showMap(bool show);
-	void showPOI(bool show);
-	void setPOIOverlap(bool overlap);
-	void showWaypointLabels(bool show);
-	void showPOILabels(bool show);
-	void showTracks(bool show);
-	void showRoutes(bool show);
-	void showAreas(bool show);
-	void showWaypoints(bool show);
-	void showRouteWaypoints(bool show);
-	void showMarkers(bool show);
-	void showCoordinates(bool show);
-	void showTicks(bool show);
-	void clearMapCache();
 	void setCoordinatesFormat(CoordinatesFormat format);
 	void setTimeZone(const QTimeZone &zone);
 	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
 	void setOutputProjection(int id);
 	void setInputProjection(int id);
-
+	void clearMapCache();
 	void fitContentToSize();
+
+public slots:
+	void showMap(bool show);
+	void showPOI(bool show);
+	void showPOILabels(bool show);
+	void showCoordinates(bool show);
+	void showTicks(bool show);
+	void showMarkers(bool show);
+	void showOverlappedPOIs(bool show);
+	void showWaypointLabels(bool show);
+	void showTracks(bool show);
+	void showRoutes(bool show);
+	void showAreas(bool show);
+	void showWaypoints(bool show);
+	void showRouteWaypoints(bool show);
+	void setMarkerPosition(qreal pos);
 
 private slots:
 	void updatePOI();

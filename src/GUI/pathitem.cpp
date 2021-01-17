@@ -6,8 +6,15 @@
 #include "map/map.h"
 #include "pathtickitem.h"
 #include "popup.h"
+#include "graphitem.h"
 #include "pathitem.h"
 
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+#define INTERSECTS intersect
+#else // QT 5.15
+#define INTERSECTS intersects
+#endif // QT 5.15
 
 #define GEOGRAPHICAL_MILE 1855.3248
 
@@ -25,7 +32,7 @@ Units PathItem::_units = Metric;
 QTimeZone PathItem::_timeZone = QTimeZone::utc();
 
 PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
-  : GraphicsItem(parent), _path(path), _map(map)
+  : GraphicsItem(parent), _path(path), _map(map), _graph(0)
 {
 	Q_ASSERT(_path.isValid());
 
@@ -66,22 +73,14 @@ void PathItem::addSegment(const Coordinates &c1, const Coordinates &c2)
 			QLineF l(QPointF(c1.lon(), c1.lat()), QPointF(c2.lon() + 360,
 			  c2.lat()));
 			QLineF dl(QPointF(180, -90), QPointF(180, 90));
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-			l.intersect(dl, &p);
-#else // QT 5.15
-			l.intersects(dl, &p);
-#endif // QT 5.15
+			l.INTERSECTS(dl, &p);
 			_painterPath.lineTo(_map->ll2xy(Coordinates(180, p.y())));
 			_painterPath.moveTo(_map->ll2xy(Coordinates(-180, p.y())));
 		} else {
 			QLineF l(QPointF(c1.lon(), c1.lat()), QPointF(c2.lon() - 360,
 			  c2.lat()));
 			QLineF dl(QPointF(-180, -90), QPointF(-180, 90));
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-			l.intersect(dl, &p);
-#else // QT 5.15
-			l.intersects(dl, &p);
-#endif // QT 5.15
+			l.INTERSECTS(dl, &p);
 			_painterPath.lineTo(_map->ll2xy(Coordinates(-180, p.y())));
 			_painterPath.moveTo(_map->ll2xy(Coordinates(180, p.y())));
 		}
@@ -266,14 +265,18 @@ QPointF PathItem::position(qreal x) const
 	}
 }
 
-void PathItem::moveMarker(qreal distance)
+void PathItem::setMarkerPosition(qreal pos)
 {
-	_markerDistance = distance;
-	QPointF pos(position(distance));
+	qreal distance = _graph
+	  ? (_graph->graphType() == Time) ? _graph->distanceAtTime(pos) : pos
+	  : NAN;
 
-	if (isValid(pos)) {
+	_markerDistance = distance;
+	QPointF pp(position(distance));
+
+	if (isValid(pp)) {
 		_marker->setVisible(_showMarker);
-		_marker->setPos(pos);
+		_marker->setPos(pp);
 	} else
 		_marker->setVisible(false);
 }
@@ -360,6 +363,24 @@ void PathItem::showTicks(bool show)
 	prepareGeometryChange();
 	_showTicks = show;
 	updateTicks();
+}
+
+void PathItem::addGraph(GraphItem *graph)
+{
+	_graphs.append(graph);
+
+	if (graph) {
+		connect(this, SIGNAL(selected(bool)), graph, SLOT(hover(bool)));
+		connect(graph, SIGNAL(selected(bool)), this, SLOT(hover(bool)));
+		if (graph->secondaryGraph())
+			connect(graph->secondaryGraph(), SIGNAL(selected(bool)), this,
+			  SLOT(hover(bool)));
+	}
+}
+
+void PathItem::setGraph(int index)
+{
+	_graph = _graphs.at(index);
 }
 
 void PathItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)

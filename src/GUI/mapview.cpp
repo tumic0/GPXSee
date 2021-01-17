@@ -412,6 +412,14 @@ void MapView::setPOI(POI *poi)
 	updatePOI();
 }
 
+void MapView::setGraph(int index)
+{
+	for (int i = 0; i < _tracks.size(); i++)
+		_tracks.at(i)->setGraph(index);
+	for (int i = 0; i < _routes.size(); i++)
+		_routes.at(i)->setGraph(index);
+}
+
 void MapView::updatePOI()
 {
 	for (POIHash::const_iterator it = _pois.constBegin();
@@ -840,9 +848,9 @@ void MapView::showCoordinates(bool show)
 	setMouseTracking(show);
 }
 
-void MapView::setPOIOverlap(bool overlap)
+void MapView::showOverlappedPOIs(bool show)
 {
-	_overlapPOIs = overlap;
+	_overlapPOIs = show;
 
 	updatePOIVisibility();
 }
@@ -1037,6 +1045,14 @@ void MapView::setMarkerColor(const QColor &color)
 		_tracks.at(i)->setMarkerColor(color);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->setMarkerColor(color);
+}
+
+void MapView::setMarkerPosition(qreal pos)
+{
+	for (int i = 0; i < _tracks.size(); i++)
+		_tracks.at(i)->setMarkerPosition(pos);
+	for (int i = 0; i < _routes.size(); i++)
+		_routes.at(i)->setMarkerPosition(pos);
 }
 
 void MapView::reloadMap()

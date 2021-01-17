@@ -85,7 +85,7 @@ const GraphSegment *GraphItem::segment(qreal x, GraphType type) const
 	return 0;
 }
 
-qreal GraphItem::yAtX(qreal x)
+qreal GraphItem::yAtX(qreal x) const
 {
 	const GraphSegment *seg = segment(x, _type);
 	if (!seg)
@@ -106,7 +106,7 @@ qreal GraphItem::yAtX(qreal x)
 		else if (p.x(_type) < x)
 			low = mid + 1;
 		else
-			return -p.y();
+			return p.y();
 	}
 
 	QLineF l;
@@ -117,11 +117,14 @@ qreal GraphItem::yAtX(qreal x)
 		l = QLineF(seg->at(mid-1).x(_type), seg->at(mid-1).y(),
 		  seg->at(mid).x(_type), seg->at(mid).y());
 
-	return -l.pointAt((x - l.p1().x()) / (l.p2().x() - l.p1().x())).y();
+	return l.pointAt((x - l.p1().x()) / (l.p2().x() - l.p1().x())).y();
 }
 
-qreal GraphItem::distanceAtTime(qreal time)
+qreal GraphItem::distanceAtTime(qreal time) const
 {
+	if (!_time)
+		return NAN;
+
 	const GraphSegment *seg = segment(time, Time);
 	if (!seg)
 		return NAN;
@@ -155,12 +158,42 @@ qreal GraphItem::distanceAtTime(qreal time)
 	return l.pointAt((time - l.p1().x()) / (l.p2().x() - l.p1().x())).y();
 }
 
-void GraphItem::emitSliderPositionChanged(qreal pos)
+qreal GraphItem::timeAtDistance(qreal distance) const
 {
-	if (_type == Time)
-		emit sliderPositionChanged(_time ? distanceAtTime(pos) : NAN);
+	if (!_time)
+		return NAN;
+
+	const GraphSegment *seg = segment(distance, Distance);
+	if (!seg)
+		return NAN;
+
+	int low = 0;
+	int high = seg->count() - 1;
+	int mid = 0;
+
+	if (!(distance >= seg->at(low).s() && distance <= seg->at(high).s()))
+		return NAN;
+
+	while (low <= high) {
+		mid = low + ((high - low) / 2);
+		const GraphPoint &p = seg->at(mid);
+		if (p.s() > distance)
+			high = mid - 1;
+		else if (p.s() < distance)
+			low = mid + 1;
+		else
+			return seg->at(mid).t();
+	}
+
+	QLineF l;
+	if (seg->at(mid).s() < distance)
+		l = QLineF(seg->at(mid).s(), seg->at(mid).t(), seg->at(mid+1).s(),
+		  seg->at(mid+1).t());
 	else
-		emit sliderPositionChanged(pos);
+		l = QLineF(seg->at(mid-1).s(), seg->at(mid-1).t(),
+		  seg->at(mid).s(), seg->at(mid).t());
+
+	return l.pointAt((distance - l.p1().x()) / (l.p2().x() - l.p1().x())).y();
 }
 
 void GraphItem::hover(bool hover)

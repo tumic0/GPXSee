@@ -91,7 +91,6 @@ private slots:
 	void setDegreesMinutes() {setCoordinatesFormat(DegreesMinutes);}
 	void setDMS() {setCoordinatesFormat(DMS);}
 
-	void sliderPositionChanged(qreal pos);
 	void screenChanged(QScreen *screen);
 	void logicalDotsPerInchChanged(qreal dpi);
 
@@ -236,7 +235,7 @@ private:
 	DateTimeRange _dateRange;
 	QString _pathName;
 
-	qreal _sliderPos;
+	GraphTab *_lastGraphTab;
 
 	QList<QByteArray> _windowStates;
 	int _frameStyle;

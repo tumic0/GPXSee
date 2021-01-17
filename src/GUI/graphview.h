@@ -43,6 +43,8 @@ public:
 	void setSliderPosition(qreal pos);
 	void setSliderColor(const QColor &color);
 
+	qreal sliderPosition() const {return _sliderPos;}
+
 signals:
 	void sliderPositionChanged(qreal);
 
@@ -91,6 +93,7 @@ private:
 	void updateSliderInfo();
 	void removeItem(QGraphicsItem *item);
 	void addItem(QGraphicsItem *item);
+	bool singleGraph() const;
 
 	GraphicsScene *_scene;
 
