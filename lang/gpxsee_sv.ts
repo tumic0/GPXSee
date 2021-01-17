@@ -424,7 +424,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="377"/>
         <source>Position markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Positionsmarkörer</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
