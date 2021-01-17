@@ -859,10 +859,17 @@ void GUI::loadData(const Data &data)
 		_splitter->refresh();
 	paths = _mapView->loadData(data);
 
+	GraphTab *gt = static_cast<GraphTab*>(_graphTabWidget->currentWidget());
+	int index = _graphTabWidget->currentIndex();
+
 	for (int i = 0; i < paths.count(); i++) {
+		PathItem *pi = paths.at(i);
+
 		for (int j = 0; j < graphs.count(); j++)
-			paths.at(i)->addGraph(graphs.at(j).at(i));
-		paths.at(i)->setGraph(_graphTabWidget->currentIndex());
+			pi->addGraph(graphs.at(j).at(i));
+
+		pi->setGraph(index);
+		pi->setMarkerPosition(gt->sliderPosition());
 	}
 }
 
