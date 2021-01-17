@@ -1,5 +1,4 @@
 #include <QDataStream>
-#include <QFileInfo>
 #include <QImageReader>
 #include "common/tifffile.h"
 #include "common/util.h"
