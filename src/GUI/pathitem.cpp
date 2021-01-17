@@ -373,9 +373,6 @@ void PathItem::addGraph(GraphItem *graph)
 	if (graph) {
 		connect(this, SIGNAL(selected(bool)), graph, SLOT(hover(bool)));
 		connect(graph, SIGNAL(selected(bool)), this, SLOT(hover(bool)));
-		if (graph->secondaryGraph())
-			connect(graph->secondaryGraph(), SIGNAL(selected(bool)), this,
-			  SLOT(hover(bool)));
 	}
 }
 
