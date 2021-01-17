@@ -6,6 +6,7 @@
 #include <QRectF>
 #include <QFlags>
 #include "common/rectc.h"
+#include "common/util.h"
 
 
 class QPainter;
@@ -28,7 +29,7 @@ public:
 	virtual ~Map() {}
 
 	const QString &path() const {return _path;}
-	virtual QString name() const = 0;
+	virtual QString name() const {return Util::file2name(path());}
 
 	virtual RectC llBounds();
 	virtual QRectF bounds() = 0;

@@ -15,8 +15,6 @@ public:
 	GeoTIFFMap(const QString &fileName, QObject *parent = 0);
 	~GeoTIFFMap();
 
-	QString name() const;
-
 	QRectF bounds();
 	QPointF ll2xy(const Coordinates &c);
 	Coordinates xy2ll(const QPointF &p);

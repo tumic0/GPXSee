@@ -2,7 +2,7 @@
 #include <QPainter>
 #include <QFileInfo>
 #include <QPixmapCache>
-#include "common/config.h"
+#include "common/util.h"
 #include "rectd.h"
 #include "gcs.h"
 #include "pcs.h"
@@ -134,7 +134,6 @@ JNXMap::JNXMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _file(fileName), _zoom(0), _mapRatio(1.0),
   _valid(false)
 {
-	_name = QFileInfo(fileName).fileName();
 	_projection = Projection(GCS::gcs(4326));
 
 	if (!_file.open(QIODevice::ReadOnly)) {

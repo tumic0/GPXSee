@@ -5,9 +5,9 @@
 
 static bool readLat(const char *data, qreal &lat)
 {
-	int d = str2int(data, 2);
-	int mi = str2int(data + 2, 2);
-	int mf = str2int(data + 4, 3);
+	int d = Util::str2int(data, 2);
+	int mi = Util::str2int(data + 2, 2);
+	int mf = Util::str2int(data + 4, 3);
 	if (d < 0 || mi < 0 || mf < 0)
 		return false;
 
@@ -26,9 +26,9 @@ static bool readLat(const char *data, qreal &lat)
 
 static bool readLon(const char *data, qreal &lon)
 {
-	int d = str2int(data, 3);
-	int mi = str2int(data + 3, 2);
-	int mf = str2int(data + 5, 3);
+	int d = Util::str2int(data, 3);
+	int mi = Util::str2int(data + 3, 2);
+	int mf = Util::str2int(data + 5, 3);
 	if (d < 0 || mi < 0 || mf < 0)
 		return false;
 
@@ -53,11 +53,11 @@ static bool readAltitude(const char *data, qreal &ele)
 		return false;
 
 	if (data[6] == '-') {
-		if ((ga = str2int(data + 7, 4)) < 0)
+		if ((ga = Util::str2int(data + 7, 4)) < 0)
 			return false;
 		ga = -ga;
 	} else {
-		if ((ga = str2int(data + 6, 5)) < 0)
+		if ((ga = Util::str2int(data + 6, 5)) < 0)
 			return false;
 	}
 
@@ -71,9 +71,9 @@ static bool readAltitude(const char *data, qreal &ele)
 
 static bool readTimestamp(const char *data, QTime &time)
 {
-	int h = str2int(data, 2);
-	int m = str2int(data + 2, 2);
-	int s = str2int(data + 4, 2);
+	int h = Util::str2int(data, 2);
+	int m = Util::str2int(data + 2, 2);
+	int s = Util::str2int(data + 4, 2);
 
 	if (h < 0 || m < 0 || s < 0)
 		return false;
@@ -105,9 +105,9 @@ bool IGCParser::readHRecord(CTX &ctx, const char *line, int len)
 
 	int offset = (len < 16 || ::strncmp(line + 5, "DATE:", 5)) ? 5 : 10;
 
-	int d = str2int(line + offset, 2);
-	int m = str2int(line + offset + 2, 2);
-	int y = str2int(line + offset + 4, 2);
+	int d = Util::str2int(line + offset, 2);
+	int m = Util::str2int(line + offset + 2, 2);
+	int y = Util::str2int(line + offset + 4, 2);
 
 	if (y < 0 || m < 0 || d < 0) {
 		_errorString = "Invalid date header format";

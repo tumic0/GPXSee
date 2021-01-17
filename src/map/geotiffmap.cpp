@@ -1,6 +1,7 @@
 #include <QFileInfo>
 #include <QPainter>
 #include <QImageReader>
+#include "common/util.h"
 #include "geotiff.h"
 #include "image.h"
 #include "geotiffmap.h"
@@ -31,12 +32,6 @@ GeoTIFFMap::GeoTIFFMap(const QString &fileName, QObject *parent)
 GeoTIFFMap::~GeoTIFFMap()
 {
 	delete _img;
-}
-
-QString GeoTIFFMap::name() const
-{
-	QFileInfo fi(path());
-	return fi.fileName();
 }
 
 QPointF GeoTIFFMap::ll2xy(const Coordinates &c)

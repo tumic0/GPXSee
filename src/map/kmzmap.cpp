@@ -18,6 +18,7 @@
 #include <QBuffer>
 #include <QPainter>
 #include <private/qzipreader_p.h>
+#include"common/util.h"
 #include "pcs.h"
 #include "image.h"
 #include "kmzmap.h"
@@ -337,12 +338,6 @@ KMZMap::KMZMap(const QString &fileName, QObject *parent)
 	computeBounds();
 
 	_valid = true;
-}
-
-QString KMZMap::name() const
-{
-	QFileInfo fi(path());
-	return fi.fileName();
 }
 
 QRectF KMZMap::bounds()

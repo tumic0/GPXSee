@@ -1,9 +1,10 @@
 #include <cctype>
 #include <cmath>
+#include <QFileInfo>
 #include "util.h"
 
 
-int str2int(const char *str, int len)
+int Util::str2int(const char *str, int len)
 {
 	int res = 0;
 
@@ -17,7 +18,7 @@ int str2int(const char *str, int len)
 	return res;
 }
 
-double niceNum(double x, bool round)
+double Util::niceNum(double x, bool round)
 {
 	int expv;
 	double f;
@@ -47,4 +48,10 @@ double niceNum(double x, bool round)
 	}
 
 	return nf * pow(10.0, expv);
+}
+
+QString Util::file2name(const QString &path)
+{
+	QFileInfo fi(path);
+	return fi.baseName().replace('_', ' ');
 }

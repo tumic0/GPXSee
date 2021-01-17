@@ -71,14 +71,14 @@ bool NMEAParser::readTime(const char *data, int len, QTime &time)
 	if (len < 6)
 		goto error;
 
-	h = str2int(data, 2);
-	m = str2int(data + 2, 2);
-	s = str2int(data + 4, 2);
+	h = Util::str2int(data, 2);
+	m = Util::str2int(data + 2, 2);
+	s = Util::str2int(data + 4, 2);
 	if (h < 0 || m < 0 || s < 0)
 		goto error;
 
 	if (len > 7 && data[6] == '.') {
-		if ((ms = str2int(data + 7, len - 7)) < 0)
+		if ((ms = Util::str2int(data + 7, len - 7)) < 0)
 			goto error;
 	}
 
@@ -106,9 +106,9 @@ bool NMEAParser::readDate(const char *data, int len, QDate &date)
 	if (len < 6)
 		goto error;
 
-	d = str2int(data, 2);
-	m = str2int(data + 2, 2);
-	y = str2int(data + 4, len - 4);
+	d = Util::str2int(data, 2);
+	m = Util::str2int(data + 2, 2);
+	y = Util::str2int(data + 4, len - 4);
 	if (d < 0 || m < 0 || y < 0)
 		goto error;
 
@@ -142,8 +142,8 @@ bool NMEAParser::readLat(const char *data, int len, qreal &lat)
 	if (len < 7 || data[4] != '.')
 		goto error;
 
-	d = str2int(data, 2);
-	mi = str2int(data + 2, 2);
+	d = Util::str2int(data, 2);
+	mi = Util::str2int(data + 2, 2);
 	mf = QString(QByteArray::fromRawData(data + 4, len - 4)).toFloat(&ok);
 	if (d < 0 || mi < 0 || !ok)
 		goto error;
@@ -192,8 +192,8 @@ bool NMEAParser::readLon(const char *data, int len, qreal &lon)
 	if (len < 8 || data[5] != '.')
 		goto error;
 
-	d = str2int(data, 3);
-	mi = str2int(data + 3, 2);
+	d = Util::str2int(data, 3);
+	mi = Util::str2int(data + 3, 2);
 	mf = QString(QByteArray::fromRawData(data + 5, len - 5)).toFloat(&ok);
 	if (d < 0 || mi < 0 || !ok)
 		goto error;
@@ -437,7 +437,7 @@ bool NMEAParser::readZDA(CTX &ctx, const char *line, int len)
 				case 2:
 					if (!(lp - vp))
 						return true;
-					if ((d = str2int(vp, lp - vp)) < 0) {
+					if ((d = Util::str2int(vp, lp - vp)) < 0) {
 						_errorString = "Invalid day";
 						return false;
 					}
@@ -445,7 +445,7 @@ bool NMEAParser::readZDA(CTX &ctx, const char *line, int len)
 				case 3:
 					if (!(lp - vp))
 						return true;
-					if ((m = str2int(vp, lp - vp)) < 0) {
+					if ((m = Util::str2int(vp, lp - vp)) < 0) {
 						_errorString = "Invalid month";
 						return false;
 					}
@@ -453,7 +453,7 @@ bool NMEAParser::readZDA(CTX &ctx, const char *line, int len)
 				case 4:
 					if (!(lp - vp))
 						return true;
-					if ((y = str2int(vp, lp - vp)) < 0) {
+					if ((y = Util::str2int(vp, lp - vp)) < 0) {
 						_errorString = "Invalid year";
 						return false;
 					}

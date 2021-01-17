@@ -29,8 +29,8 @@ private:
 
 Ticks::Ticks(double minValue, double maxValue, int maxCount)
 {
-	double range = niceNum(maxValue - minValue, false);
-	_d = niceNum(range / maxCount, false);
+	double range = Util::niceNum(maxValue - minValue, false);
+	_d = Util::niceNum(range / maxCount, false);
 	_min = ceil(minValue / _d) * _d;
 	_max = floor(maxValue / _d) * _d;
 }

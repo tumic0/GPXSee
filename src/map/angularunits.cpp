@@ -11,10 +11,10 @@ static double sDMS2deg(double val)
 	QByteArray ba = qstr.toLatin1();
 	const char *str = ba.constData();
 	decimal = strrchr(str, '.');
-	int deg = str2int(str, decimal - str);
-	int min = str2int(decimal + 1, 2);
-	int sec = str2int(decimal + 3, 2);
-	int f = str2int(decimal + 5, 3);
+	int deg = Util::str2int(str, decimal - str);
+	int min = Util::str2int(decimal + 1, 2);
+	int sec = Util::str2int(decimal + 3, 2);
+	int f = Util::str2int(decimal + 5, 3);
 
 	angle = deg + min/60.0 + sec/3600.0 + (f/1000.0)/3600.0;
 

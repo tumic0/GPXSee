@@ -14,8 +14,6 @@ class RMap : public Map
 public:
 	RMap(const QString &fileName, QObject *parent = 0);
 
-	QString name() const;
-
 	QRectF bounds();
 
 	int zoom() const {return _zoom;}

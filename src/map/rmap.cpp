@@ -256,12 +256,6 @@ RMap::RMap(const QString &fileName, QObject *parent)
 	_file.close();
 }
 
-QString RMap::name() const
-{
-	QFileInfo fi(path());
-	return fi.baseName();
-}
-
 QRectF RMap::bounds()
 {
 	return QRectF(QPointF(0, 0), _zooms.at(_zoom).size / _mapRatio);

@@ -17,8 +17,6 @@ class KMZMap : public Map
 public:
 	KMZMap(const QString &fileName, QObject *parent = 0);
 
-	QString name() const;
-
 	QRectF bounds();
 
 	int zoom() const {return _zoom;}

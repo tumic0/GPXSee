@@ -8,7 +8,7 @@
 #include <QBuffer>
 #include <QtConcurrent>
 #include "common/rectc.h"
-#include "common/config.h"
+#include "common/util.h"
 #include "osm.h"
 #include "mbtilesmap.h"
 
@@ -147,7 +147,7 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 			_name = query.value(0).toString();
 		else {
 			qWarning("%s: missing map name", qPrintable(fileName));
-			_name = QFileInfo(fileName).fileName();
+			_name = Util::file2name(fileName);
 		}
 	}
 

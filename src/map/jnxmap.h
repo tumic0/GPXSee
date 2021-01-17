@@ -17,8 +17,6 @@ public:
 public:
 	JNXMap(const QString &fileName, QObject *parent = 0);
 
-	QString name() const {return _name;}
-
 	QRectF bounds();
 	RectC llBounds() {return _bounds;}
 
@@ -66,7 +64,6 @@ private:
 	static bool cb(Tile *tile, void *context);
 	static QPixmap pixmap(const Tile *tile, QFile *file);
 
-	QString _name;
 	QFile _file;
 	QVector<Zoom> _zooms;
 	int _zoom;
