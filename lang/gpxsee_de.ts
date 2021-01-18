@@ -377,7 +377,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="317"/>
         <source>Load map directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartenverzeichnis laden...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="325"/>
@@ -424,7 +424,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="377"/>
         <source>Position markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Pfadposition</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
@@ -600,12 +600,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="735"/>
         <source>Copy coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Koordinaten kopieren</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="736"/>
         <source>Left Click</source>
-        <translation type="unfinished"></translation>
+        <translation>Links-Klick</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="754"/>
@@ -650,12 +650,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1524"/>
         <source>Select map directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartenverzeichnis auswählen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1579"/>
         <source>Clear the map tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Kachel-Cache bereinigen?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1586"/>
@@ -969,12 +969,12 @@
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="77"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="79"/>
         <source>File</source>
-        <translation type="unfinished">Datei</translation>
+        <translation>Datei</translation>
     </message>
 </context>
 <context>
@@ -1002,12 +1002,12 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="101"/>
         <source>BSB nautical charts</source>
-        <translation type="unfinished"></translation>
+        <translation>BSB-Seekarten</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="102"/>
         <source>KMZ maps</source>
-        <translation type="unfinished"></translation>
+        <translation>KMZ-Karten</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="103"/>
@@ -1055,7 +1055,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wählen Sie die richtige Projektion von JNX und KMZ-Karten. Es gibt sowohl EPSG:3857 als auch EPSG:4326 projizierte Karten und die Kartendatei enthält keine Projektionsinformation.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="168"/>
@@ -1122,7 +1122,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>
         <source>Select the desired projection of IMG maps. The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wählen Sie die gewünschte Projektion von IMG-Karten. Die Projektion muss im gesamten Kartenbereich gültig sein.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="96"/>
@@ -1147,27 +1147,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="118"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingabe</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="120"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgabe</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="127"/>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingabe:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="130"/>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgabe:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="151"/>
         <source>Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>Projektion</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="152"/>
