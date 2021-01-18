@@ -415,7 +415,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="377"/>
         <source>Position markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Helyzet jelölők</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
@@ -814,6 +814,7 @@
         <location filename="../src/GUI/gui.cpp" line="1590"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
