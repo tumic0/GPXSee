@@ -357,7 +357,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="247"/>
         <source>Export to PNG...</source>
-        <translation>Als PNG exportieren...</translation>
+        <translation>Als PNG exportieren ...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="266"/>
@@ -377,7 +377,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="317"/>
         <source>Load map directory...</source>
-        <translation>Kartenverzeichnis laden...</translation>
+        <translation>Kartenverzeichnis laden ...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="325"/>
