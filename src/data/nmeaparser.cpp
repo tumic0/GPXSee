@@ -23,7 +23,7 @@ static bool readFloat(const char *data, int len, qreal &f)
 {
 	bool ok;
 
-	f = QString(QByteArray::fromRawData(data, len)).toFloat(&ok);
+	f = QByteArray::fromRawData(data, len).toFloat(&ok);
 
 	return ok;
 }
@@ -144,7 +144,7 @@ bool NMEAParser::readLat(const char *data, int len, qreal &lat)
 
 	d = Util::str2int(data, 2);
 	mi = Util::str2int(data + 2, 2);
-	mf = QString(QByteArray::fromRawData(data + 4, len - 4)).toFloat(&ok);
+	mf = QByteArray::fromRawData(data + 4, len - 4).toFloat(&ok);
 	if (d < 0 || mi < 0 || !ok)
 		goto error;
 
@@ -194,7 +194,7 @@ bool NMEAParser::readLon(const char *data, int len, qreal &lon)
 
 	d = Util::str2int(data, 3);
 	mi = Util::str2int(data + 3, 2);
-	mf = QString(QByteArray::fromRawData(data + 5, len - 5)).toFloat(&ok);
+	mf = QByteArray::fromRawData(data + 5, len - 5).toFloat(&ok);
 	if (d < 0 || mi < 0 || !ok)
 		goto error;
 
