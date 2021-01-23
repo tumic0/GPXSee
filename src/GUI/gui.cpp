@@ -864,6 +864,8 @@ void GUI::loadData(const Data &data)
 
 	for (int i = 0; i < paths.count(); i++) {
 		PathItem *pi = paths.at(i);
+		if (!pi)
+			continue;
 
 		for (int j = 0; j < graphs.count(); j++)
 			pi->addGraph(graphs.at(j).at(i));
