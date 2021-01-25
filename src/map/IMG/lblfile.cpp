@@ -94,10 +94,10 @@ bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 	}
 
 	if (hdrLen >= 0x19A) {
-		quint32 size;
+		quint32 size, flags;
 		if (!(seek(hdl, _gmpOffset + 0x184) && readUInt32(hdl, _imgOffsetsOffset)
 		  && readUInt32(hdl, size) && readUInt16(hdl, _imgOffsetsRecordSize)
-		  && readUInt32(hdl, _imgOffsetsFlags) && readUInt32(hdl, _imgOffset)
+		  && readUInt32(hdl, flags) && readUInt32(hdl, _imgOffset)
 		  && readUInt32(hdl, _imgSize)))
 			return false;
 		_imgOffsetsCount = size ? size / _imgOffsetsRecordSize : 0;
@@ -305,7 +305,7 @@ QByteArray LBLFile::readImage(Handle &hdl, quint32 id) const
 {
 	quint32 offset, nextOffset, size;
 
-	if (!_imgOffsetsCount || id >= _imgOffsetsCount)
+	if (id >= _imgOffsetsCount)
 		return QByteArray();
 
 	if (!(seek(hdl, _imgOffsetsOffset + id * _imgOffsetsRecordSize)

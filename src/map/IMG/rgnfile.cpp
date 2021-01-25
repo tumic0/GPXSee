@@ -58,7 +58,7 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 	}
 
 	if (segmentType == Polygon && poly->type == 0x10613
-	  && lbl && rs >= lbl->imageIdSize() + 16U) {
+	  && lbl && lbl->imageIdSize() && rs >= lbl->imageIdSize() + 16U) {
 		quint32 id;
 		quint32 top, right, bottom, left;
 
