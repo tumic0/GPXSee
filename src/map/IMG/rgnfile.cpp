@@ -29,7 +29,8 @@ RGNFile::~RGNFile()
 	delete _huffmanTable;
 }
 
-bool RGNFile::skipClassFields(Handle &hdl) const
+bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
+  MapData::Poly *poly, const LBLFile *lbl, Handle *lblHdl) const
 {
 	quint8 flags;
 	quint32 rs;
@@ -54,6 +55,22 @@ bool RGNFile::skipClassFields(Handle &hdl) const
 		default:
 			rs = 0;
 			break;
+	}
+
+	if (segmentType == Polygon && poly->type == 0x10613
+	  && lbl && rs >= lbl->imageIdSize() + 16U) {
+		quint32 id;
+		quint32 top, right, bottom, left;
+
+		if (!(readVUInt32(hdl, lbl->imageIdSize(), id)
+		  && readUInt32(hdl, top) && readUInt32(hdl, right)
+		  && readUInt32(hdl, bottom) && readUInt32(hdl, left)))
+			return false;
+
+		poly->raster = Raster(lbl->readImage(*lblHdl, id),
+		  QRect(QPoint(left, top), QPoint(right, bottom)));
+
+		rs -= lbl->imageIdSize() + 16;
 	}
 
 	return seek(hdl, pos(hdl) + rs);
@@ -153,7 +170,7 @@ void RGNFile::clear()
 
 bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
   SegmentType segmentType, const LBLFile *lbl, Handle &lblHdl, NETFile *net,
-  Handle &netHdl, QList<IMG::Poly> *polys) const
+  Handle &netHdl, QList<MapData::Poly> *polys) const
 {
 	const SubDiv::Segment &segment = (segmentType == Line)
 	 ? subdiv->lines() : subdiv->polygons();
@@ -169,7 +186,7 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 	quint16 len;
 
 	while (pos(hdl) < segment.end()) {
-		IMG::Poly poly;
+		MapData::Poly poly;
 
 		if (!(readUInt8(hdl, type) && readUInt24(hdl, labelPtr)
 		  && readInt16(hdl, lon) && readInt16(hdl, lat)))
@@ -229,7 +246,7 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 
 bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
   SegmentType segmentType, const LBLFile *lbl, Handle &lblHdl,
-  QList<IMG::Poly> *polys) const
+  QList<MapData::Poly> *polys) const
 {
 	quint32 labelPtr, len;
 	quint8 type, subtype;
@@ -244,7 +261,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 		return false;
 
 	while (pos(hdl) < segment.end()) {
-		IMG::Poly poly;
+		MapData::Poly poly;
 		QPoint pos;
 
 		if (!(readUInt8(hdl, type) && readUInt8(hdl, subtype)
@@ -319,7 +336,8 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 
 		if (subtype & 0x20 && !readUInt24(hdl, labelPtr))
 			return false;
-		if (subtype & 0x80 && !skipClassFields(hdl))
+		if (subtype & 0x80 && !readClassFields(hdl, segmentType, &poly, lbl,
+		  &lblHdl))
 			return false;
 		if (subtype & 0x40 && !skipLclFields(hdl, segmentType == Line
 		  ? _linesLclFlags : _polygonsLclFlags))
@@ -340,7 +358,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 
 bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
   SegmentType segmentType, const LBLFile *lbl, Handle &lblHdl,
-  QList<IMG::Point> *points) const
+  QList<MapData::Point> *points) const
 {
 	const SubDiv::Segment &segment = (segmentType == IndexedPoint)
 	 ? subdiv->idxPoints() : subdiv->points();
@@ -352,7 +370,7 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 		return false;
 
 	while (pos(hdl) < segment.end()) {
-		IMG::Point point;
+		MapData::Point point;
 		quint8 type, subtype;
 		qint16 lon, lat;
 		quint32 labelPtr;
@@ -383,7 +401,7 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 }
 
 bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
-  const LBLFile *lbl, Handle &lblHdl, QList<IMG::Point> *points) const
+  const LBLFile *lbl, Handle &lblHdl, QList<MapData::Point> *points) const
 {
 	const SubDiv::Segment &segment = subdiv->extPoints();
 
@@ -394,7 +412,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
 		return false;
 
 	while (pos(hdl) < segment.end()) {
-		IMG::Point point;
+		MapData::Point point;
 		qint16 lon, lat;
 		quint8 type, subtype;
 		quint32 labelPtr = 0;
@@ -405,7 +423,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
 
 		if (subtype & 0x20 && !readUInt24(hdl, labelPtr))
 			return false;
-		if (subtype & 0x80 && !skipClassFields(hdl))
+		if (subtype & 0x80 && !readClassFields(hdl, Point))
 			return false;
 		if (subtype & 0x40 && !skipLclFields(hdl, _pointsLclFlags))
 			return false;
@@ -434,7 +452,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
 
 bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
   const NETFile *net, Handle &netHdl, const NODFile *nod, Handle &nodHdl,
-  const LBLFile *lbl, Handle &lblHdl, QList<IMG::Poly> *lines) const
+  const LBLFile *lbl, Handle &lblHdl, QList<MapData::Poly> *lines) const
 {
 	quint32 size, blockIndexId;
 	quint8 flags;

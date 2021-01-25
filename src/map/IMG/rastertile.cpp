@@ -217,11 +217,26 @@ void RasterTile::drawPolygons(QPainter *painter)
 			const MapData::Poly &poly = _polygons.at(i);
 			if (poly.type != _style->drawOrder().at(n))
 				continue;
-			const Style::Polygon &style = _style->polygon(poly.type);
 
-			painter->setPen(style.pen());
-			painter->setBrush(style.brush());
-			painter->drawPolygon(poly.points);
+			if (poly.raster.isValid()) {
+				RectC r(poly.raster.rect());
+				QPointF tl(_map->ll2xy(r.topLeft()));
+				QPointF br(_map->ll2xy(r.bottomRight()));
+				QSize size(QRectF(tl, br).toRect().size());
+
+				painter->drawImage(tl, QImage::fromData(poly.raster.img()).
+				  scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
+				//painter->setPen(Qt::blue);
+				//painter->setBrush(Qt::NoBrush);
+				//painter->drawRect(QRectF(tl, br));
+			} else {
+				const Style::Polygon &style = _style->polygon(poly.type);
+
+				painter->setPen(style.pen());
+				painter->setBrush(style.brush());
+				painter->drawPolygon(poly.points);
+			}
 		}
 	}
 }

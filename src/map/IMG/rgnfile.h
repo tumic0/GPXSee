@@ -60,9 +60,9 @@ public:
 private:
 	QMap<SegmentType, SubDiv::Segment> segments(Handle &hdl, SubDiv *subdiv)
 	  const;
-	bool skipClassFields(Handle &hdl) const;
-	bool skipLclFields(Handle &hdl, const quint32 flags[3])
-	  const;
+	bool readClassFields(Handle &hdl, SegmentType segmentType,
+	  MapData::Poly *poly = 0, const LBLFile *lbl = 0, Handle *lblHdl = 0) const;
+	bool skipLclFields(Handle &hdl, const quint32 flags[3]) const;
 	bool skipGblFields(Handle &hdl, quint32 flags) const;
 
 	HuffmanTable *_huffmanTable;

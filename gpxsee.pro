@@ -97,6 +97,7 @@ HEADERS += src/common/config.h \
     src/map/IMG/huffmantext.h \
     src/map/IMG/nodfile.h \
     src/map/IMG/mapdata.h \
+    src/map/IMG/raster.h \
     src/map/IMG/rastertile.h \
     src/map/IMG/textpathitem.h \
     src/map/IMG/textpointitem.h \
