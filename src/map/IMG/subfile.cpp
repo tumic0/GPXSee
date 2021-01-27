@@ -7,38 +7,37 @@
 
 bool SubFile::seek(Handle &handle, quint32 pos) const
 {
-	if (handle._file) {
-		int blockNum = pos >> BLOCK_BITS;
-
-		if (handle._blockNum != blockNum) {
-			if (!handle._file->seek((quint64)blockNum << BLOCK_BITS))
-				return false;
-			if (handle._file->read(handle._data.data(), (1<<BLOCK_BITS)) < 0)
-				return false;
-			handle._blockNum = blockNum;
-		}
-
-		handle._blockPos = mod2n(pos, 1U<<BLOCK_BITS);
-		handle._pos = pos;
-
-		return true;
-	} else {
+	if (_img) {
 		quint32 blockBits = _img->blockBits();
 		int blockNum = pos >> blockBits;
 
 		if (handle._blockNum != blockNum) {
 			if (blockNum >= _blocks->size())
 				return false;
-			if (!_img->readBlock(_blocks->at(blockNum), handle._data.data()))
+			if (!_img->readBlock(handle._file, _blocks->at(blockNum),
+			  handle._data.data()))
 				return false;
 			handle._blockNum = blockNum;
 		}
 
 		handle._blockPos = mod2n(pos, 1U<<blockBits);
 		handle._pos = pos;
+	} else {
+		int blockNum = pos >> BLOCK_BITS;
 
-		return true;
+		if (handle._blockNum != blockNum) {
+			if (!handle._file.seek((quint64)blockNum << BLOCK_BITS))
+				return false;
+			if (handle._file.read(handle._data.data(), (1<<BLOCK_BITS)) < 0)
+				return false;
+			handle._blockNum = blockNum;
+		}
+
+		handle._blockPos = mod2n(pos, 1U<<BLOCK_BITS);
+		handle._pos = pos;
 	}
+
+	return true;
 }
 
 bool SubFile::readVUInt32(Handle &hdl, quint32 &val) const

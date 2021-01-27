@@ -60,7 +60,7 @@ public:
 	void load();
 	void clear();
 
-	virtual QString fileName() const = 0;
+	virtual const QString &fileName() const = 0;
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}

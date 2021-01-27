@@ -12,7 +12,7 @@ public:
 	GMAP(const QString &fileName);
 	~GMAP();
 
-	QString fileName() const {return _fileName;}
+	const QString &fileName() const {return _fileName;}
 
 	static bool isGMAP(const QString &path);
 

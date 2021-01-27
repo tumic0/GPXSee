@@ -17,21 +17,26 @@ public:
 	{
 	public:
 		Handle(const SubFile *subFile)
-		  : _file(0), _blockNum(-1), _blockPos(-1), _pos(-1)
+		  : _blockNum(-1), _blockPos(-1), _pos(-1)
 		{
-			if (subFile && subFile->_path) {
-				_file = new QFile(*(subFile->_path));
-				_file->open(QIODevice::ReadOnly);
+			if (!subFile)
+				return;
+
+			if (subFile->_path) {
+				_file.setFileName(*(subFile->_path));
 				_data.resize(1U<<BLOCK_BITS);
-			} else if (subFile)
+			} else {
+				_file.setFileName(subFile->_img->fileName());
 				_data.resize(1U<<subFile->_img->blockBits());
+			}
+
+			_file.open(QIODevice::ReadOnly);
 		}
-		~Handle() {delete _file;}
 
 	private:
 		friend class SubFile;
 
-		QFile *_file;
+		QFile _file;
 		QByteArray _data;
 		int _blockNum;
 		int _blockPos;

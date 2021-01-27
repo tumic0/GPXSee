@@ -5,6 +5,7 @@
 #include "textpointitem.h"
 #include "bitmapline.h"
 #include "style.h"
+#include "lblfile.h"
 #include "rastertile.h"
 
 
@@ -224,8 +225,11 @@ void RasterTile::drawPolygons(QPainter *painter)
 				QPointF br(_map->ll2xy(r.bottomRight()));
 				QSize size(QRectF(tl, br).toRect().size());
 
-				painter->drawImage(tl, QImage::fromData(poly.raster.img()).
-				  scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+				SubFile::Handle hdl(poly.raster.lbl());
+				QImage img(poly.raster.lbl()->readImage(hdl, poly.raster.id()));
+
+				painter->drawImage(tl, img.scaled(size, Qt::IgnoreAspectRatio,
+				  Qt::SmoothTransformation));
 
 				//painter->setPen(Qt::blue);
 				//painter->setBrush(Qt::NoBrush);

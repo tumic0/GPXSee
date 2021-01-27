@@ -30,7 +30,7 @@ RGNFile::~RGNFile()
 }
 
 bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
-  MapData::Poly *poly, const LBLFile *lbl, Handle *lblHdl) const
+  MapData::Poly *poly, const LBLFile *lbl) const
 {
 	quint8 flags;
 	quint32 rs;
@@ -67,8 +67,8 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 		  && readUInt32(hdl, bottom) && readUInt32(hdl, left)))
 			return false;
 
-		poly->raster = Raster(lbl->readImage(*lblHdl, id),
-		  QRect(QPoint(left, top), QPoint(right, bottom)));
+		poly->raster = Raster(lbl, id, QRect(QPoint(left, top), QPoint(right,
+		  bottom)));
 
 		rs -= lbl->imageIdSize() + 16;
 	}
@@ -336,8 +336,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 
 		if (subtype & 0x20 && !readUInt24(hdl, labelPtr))
 			return false;
-		if (subtype & 0x80 && !readClassFields(hdl, segmentType, &poly, lbl,
-		  &lblHdl))
+		if (subtype & 0x80 && !readClassFields(hdl, segmentType, &poly, lbl))
 			return false;
 		if (subtype & 0x40 && !skipLclFields(hdl, segmentType == Line
 		  ? _linesLclFlags : _polygonsLclFlags))
