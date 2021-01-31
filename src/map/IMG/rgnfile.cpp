@@ -2,6 +2,7 @@
 #include "common/garmin.h"
 #include "deltastream.h"
 #include "huffmanstream.h"
+#include "style.h"
 #include "lblfile.h"
 #include "netfile.h"
 #include "nodfile.h"
@@ -18,7 +19,7 @@ static quint64 pointId(const QPoint &pos, quint32 type, quint32 labelPtr)
 	  QPair<int, int>(pos.x(), pos.y())), labelPtr & 0x3FFFFF));
 	id = ((quint64)type)<<32 | hash;
 	// Make country labels precedent over city labels
-	if (!(type >= 0x1400 && type <= 0x153f))
+	if (!Style::isCountry(type))
 		id |= 1ULL<<63;
 
 	return id;
@@ -390,8 +391,9 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 		point.coordinates = Coordinates(toWGS24(pos.x()), toWGS24(pos.y()));
 		point.id = pointId(pos, point.type, labelPtr & 0x3FFFFF);
 		if (lbl && (labelPtr & 0x3FFFFF))
-			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, labelPtr & 0x400000,
-			  !(point.type == 0x1400 || point.type == 0x1500 || point.type == 0x1e00));
+			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF,
+			  labelPtr & 0x400000, !(Style::isCountry(point.type)
+			  || Style::isState(point.type)));
 
 		points->append(point);
 	}
