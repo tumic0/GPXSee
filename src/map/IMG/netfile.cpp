@@ -378,7 +378,7 @@ bool NETFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 
 	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)
 	  && seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _offset)
-	  && readUInt32(hdl, _size) && readUInt8(hdl, _shift)))
+	  && readUInt32(hdl, _size) && readByte(hdl, &_shift)))
 		return false;
 
 	if (hdrLen >= 0x47) {
@@ -386,7 +386,7 @@ bool NETFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 		if (!(seek(hdl, _gmpOffset + 0x37) && readUInt32(hdl, info)))
 			return false;
 		if (!(seek(hdl, _gmpOffset + 0x43) && readUInt32(hdl, _linksOffset)
-		  && readUInt32(hdl, _linksSize) && readUInt8(hdl, _linksShift)))
+		  && readUInt32(hdl, _linksSize) && readByte(hdl, &_linksShift)))
 			return false;
 
 		quint8 tableId = ((info >> 2) & 0xF);

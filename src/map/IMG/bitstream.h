@@ -77,7 +77,7 @@ bool BitStream1::read(int bits, T &val)
 
 	for (int pos = 0; pos < bits; ) {
 		if (!_remaining) {
-			if (!_length || !_file.readUInt8(_hdl, _data))
+			if (!_length || !_file.readByte(_hdl, &_data))
 				return false;
 			_remaining = 8;
 			_length--;

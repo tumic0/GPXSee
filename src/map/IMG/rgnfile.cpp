@@ -36,7 +36,7 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 	quint8 flags;
 	quint32 rs;
 
-	if (!readUInt8(hdl, flags))
+	if (!readByte(hdl, &flags))
 		return false;
 
 	switch (flags >> 5) {
@@ -189,18 +189,18 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 	while (pos(hdl) < segment.end()) {
 		MapData::Poly poly;
 
-		if (!(readUInt8(hdl, type) && readUInt24(hdl, labelPtr)
+		if (!(readByte(hdl, &type) && readUInt24(hdl, labelPtr)
 		  && readInt16(hdl, lon) && readInt16(hdl, lat)))
 			return false;
 		if (type & 0x80) {
 			if (!readUInt16(hdl, len))
 				return false;
 		} else {
-			if (!readUInt8(hdl, len8))
+			if (!readByte(hdl, &len8))
 				return false;
 			len = len8;
 		}
-		if (!readUInt8(hdl, bitstreamInfo))
+		if (!readByte(hdl, &bitstreamInfo))
 			return false;
 
 		poly.type = (segmentType == Polygon)
@@ -265,7 +265,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 		MapData::Poly poly;
 		QPoint pos;
 
-		if (!(readUInt8(hdl, type) && readUInt8(hdl, subtype)
+		if (!(readByte(hdl, &type) && readByte(hdl, &subtype)
 		  && readInt16(hdl, lon) && readInt16(hdl, lat)
 		  && readVUInt32(hdl, len)))
 			return false;
@@ -315,7 +315,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 			poly.points.append(QPointF(c.lon(), c.lat()));
 
 			quint8 bitstreamInfo;
-			if (!readUInt8(hdl, bitstreamInfo))
+			if (!readByte(hdl, &bitstreamInfo))
 				return false;
 
 			qint32 lonDelta, latDelta;
@@ -375,11 +375,11 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 		qint16 lon, lat;
 		quint32 labelPtr;
 
-		if (!(readUInt8(hdl, type) && readUInt24(hdl, labelPtr)
+		if (!(readByte(hdl, &type) && readUInt24(hdl, labelPtr)
 		  && readInt16(hdl, lon) && readInt16(hdl, lat)))
 			return false;
 		if (labelPtr & 0x800000) {
-			if (!readUInt8(hdl, subtype))
+			if (!readByte(hdl, &subtype))
 				return false;
 		} else
 			subtype = 0;
@@ -418,7 +418,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
 		quint8 type, subtype;
 		quint32 labelPtr = 0;
 
-		if (!(readUInt8(hdl, type) && readUInt8(hdl, subtype)
+		if (!(readByte(hdl, &type) && readByte(hdl, &subtype)
 		  && readInt16(hdl, lon) && readInt16(hdl, lat)))
 			return false;
 
@@ -472,7 +472,7 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 
 		quint32 entryStart = pos(hdl);
 
-		if (!(readUInt8(hdl, flags) && readVUInt32(hdl, nod->indexIdSize(),
+		if (!(readByte(hdl, &flags) && readVUInt32(hdl, nod->indexIdSize(),
 		  blockIndexId)))
 			return false;
 
@@ -514,7 +514,7 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 					Q_ASSERT(lineId > 4);
 				}
 			} else {
-				if (!readUInt8(hdl, linkId))
+				if (!readByte(hdl, &linkId))
 					return false;
 				lineId = 0;
 			}

@@ -461,7 +461,7 @@ static bool readBitmap(SubFile *file, SubFile::Handle &hdl, QImage &img,
 	for (int y = 0; y < img.height(); y++) {
 		for (int x = 0; x < img.width(); x += 8/bpp) {
 			quint8 color;
-			if (!file->readUInt8(hdl, color))
+			if (!file->readByte(hdl, &color))
 				return false;
 
 			for (int i = 0; i < 8/bpp && x + i < img.width(); i++) {
@@ -486,8 +486,8 @@ static bool readColor(SubFile *file, SubFile::Handle &hdl, QColor &color)
 {
 	quint8 b, g, r;
 
-	if (!(file->readUInt8(hdl, b) && file->readUInt8(hdl, g)
-	  && file->readUInt8(hdl, r)))
+	if (!(file->readByte(hdl, &b) && file->readByte(hdl, &g)
+	  && file->readByte(hdl, &r)))
 		return false;
 
 	color = qRgb(r, g, b);
@@ -516,7 +516,7 @@ bool Style::itemInfo(SubFile *file, SubFile::Handle &hdl,
 
 	if (section.arrayItemSize == 5) {
 		if (!(file->readUInt16(hdl, t16_1) && file->readUInt16(hdl, t16_2)
-		  && file->readUInt8(hdl, t8)))
+		  && file->readByte(hdl, &t8)))
 			return false;
 		info.offset = t16_2 | (t8<<16);
 	} else if (section.arrayItemSize == 4) {
@@ -524,7 +524,7 @@ bool Style::itemInfo(SubFile *file, SubFile::Handle &hdl,
 			return false;
 		info.offset = t16_2;
 	} else if (section.arrayItemSize == 3) {
-		if (!(file->readUInt16(hdl, t16_1) && file->readUInt8(hdl, t8)))
+		if (!(file->readUInt16(hdl, t16_1) && file->readByte(hdl, &t8)))
 			return false;
 		info.offset = t8;
 	} else
@@ -555,7 +555,7 @@ bool Style::parsePolygons(SubFile *file, SubFile::Handle &hdl,
 
 		quint8 t8, flags;
 		if (!(file->seek(hdl, section.offset + info.offset)
-		  && file->readUInt8(hdl, t8)))
+		  && file->readByte(hdl, &t8)))
 			return false;
 		flags = t8 & 0x0F;
 
@@ -671,7 +671,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 		quint8 t8_1, t8_2, flags, rows;
 		if (!(file->seek(hdl, section.offset + info.offset)
-		  && file->readUInt8(hdl, t8_1) && file->readUInt8(hdl, t8_2)))
+		  && file->readByte(hdl, &t8_1) && file->readByte(hdl, &t8_2)))
 			return false;
 		flags = t8_1 & 0x07;
 		rows = t8_1 >> 3;
@@ -696,7 +696,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 					_lines[type] = Line(img);
 				} else {
-					if (!(file->readUInt8(hdl, w1) && file->readUInt8(hdl, w2)))
+					if (!(file->readByte(hdl, &w1) && file->readByte(hdl, &w2)))
 						return false;
 
 					_lines[type] = (w2 > w1)
@@ -723,7 +723,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 					_lines[type] = Line(img);
 				} else {
-					if (!(file->readUInt8(hdl, w1) && file->readUInt8(hdl, w2)))
+					if (!(file->readByte(hdl, &w1) && file->readByte(hdl, &w2)))
 						return false;
 
 					_lines[type] = (w2 > w1)
@@ -750,7 +750,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 					_lines[type] = Line(img);
 				} else {
-					if (!(file->readUInt8(hdl, w1) && file->readUInt8(hdl, w2)))
+					if (!(file->readByte(hdl, &w1) && file->readByte(hdl, &w2)))
 						return false;
 
 					_lines[type] = Line(QPen(c1, w1, Qt::SolidLine,
@@ -773,7 +773,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 					_lines[type] = Line(img);
 				} else {
-					if (!(file->readUInt8(hdl, w1) && file->readUInt8(hdl, w2)))
+					if (!(file->readByte(hdl, &w1) && file->readByte(hdl, &w2)))
 						return false;
 
 					_lines[type] = (w2 > w1)
@@ -799,7 +799,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 					_lines[type] = Line(img);
 				} else {
-					if (!file->readUInt8(hdl, w1))
+					if (!file->readByte(hdl, &w1))
 						return false;
 
 					_lines[type] = Line(QPen(c1, w1, Qt::SolidLine,
@@ -821,7 +821,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 					_lines[type] = Line(img);
 				} else {
-					if (!file->readUInt8(hdl, w1))
+					if (!file->readByte(hdl, &w1))
 						return false;
 
 					_lines[type] = Line(QPen(c1, w1, Qt::SolidLine,
@@ -844,7 +844,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 
 		if (fontInfo) {
 			quint8 labelFlags;
-			if (!file->readUInt8(hdl, labelFlags))
+			if (!file->readByte(hdl, &labelFlags))
 				return false;
 			if (labelFlags & 0x08) {
 				if (!readColor(file, hdl, c1))
@@ -906,7 +906,7 @@ static bool readColorTable(SubFile *file, SubFile::Handle &hdl, QImage& img,
 
 		for (int i = 0; i < colors; i++) {
 			while (bits < 28) {
-				if (!file->readUInt8(hdl, byte))
+				if (!file->readByte(hdl, &byte))
 					return false;
 
 				mask = 0x000000FF << bits;
@@ -956,9 +956,9 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 
 		quint8 t8_1, width, height, numColors, imgType;
 		if (!(file->seek(hdl, section.offset + info.offset)
-		  && file->readUInt8(hdl, t8_1) && file->readUInt8(hdl, width)
-		  && file->readUInt8(hdl, height) && file->readUInt8(hdl, numColors)
-		  && file->readUInt8(hdl, imgType)))
+		  && file->readByte(hdl, &t8_1) && file->readByte(hdl, &width)
+		  && file->readByte(hdl, &height) && file->readByte(hdl, &numColors)
+		  && file->readByte(hdl, &imgType)))
 			return false;
 
 		bool label = t8_1 & 0x04;
@@ -975,8 +975,8 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 		_points[type] = Point(img);
 
 		if (t8_1 == 0x03) {
-			if (!(file->readUInt8(hdl, numColors)
-			  && file->readUInt8(hdl, imgType)))
+			if (!(file->readByte(hdl, &numColors)
+			  && file->readByte(hdl, &imgType)))
 				return false;
 			if ((bpp = colors2bpp(numColors, imgType)) < 0)
 				continue;
@@ -985,8 +985,8 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 			if (!readBitmap(file, hdl, img, bpp))
 				return false;
 		} else if (t8_1 == 0x02) {
-			if (!(file->readUInt8(hdl, numColors)
-			  && file->readUInt8(hdl, imgType)))
+			if (!(file->readByte(hdl, &numColors)
+			  && file->readByte(hdl, &imgType)))
 				return false;
 			if ((bpp = colors2bpp(numColors, imgType)) < 0)
 				continue;
@@ -1000,7 +1000,7 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 		if (fontInfo) {
 			quint8 labelFlags;
 			QColor color;
-			if (!file->readUInt8(hdl, labelFlags))
+			if (!file->readByte(hdl, &labelFlags))
 				return false;
 			if (labelFlags & 0x08) {
 				if (!readColor(file, hdl, color))
@@ -1029,7 +1029,7 @@ bool Style::parseDrawOrder(SubFile *file, SubFile::Handle &hdl,
 		quint8 type;
 		quint32 subtype;
 
-		if (!(file->readUInt8(hdl, type) && file->readUInt32(hdl, subtype)))
+		if (!(file->readByte(hdl, &type) && file->readUInt32(hdl, subtype)))
 			return false;
 
 		if (!subtype)

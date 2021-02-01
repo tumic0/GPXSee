@@ -55,7 +55,7 @@ bool TREFile::init()
 
 
 	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)
-	  && seek(hdl, _gmpOffset + 0x0D) && readUInt8(hdl, locked)))
+	  && seek(hdl, _gmpOffset + 0x0D) && readByte(hdl, &locked)))
 		return false;
 
 	// Tile bounds
@@ -93,7 +93,7 @@ bool TREFile::init()
 		return false;
 	quint8 levels[64];
 	for (quint32 i = 0; i < levelsSize; i++)
-		if (!readUInt8(hdl, levels[i]))
+		if (!readByte(hdl, &levels[i]))
 			return false;
 	if (locked) {
 		quint32 key;

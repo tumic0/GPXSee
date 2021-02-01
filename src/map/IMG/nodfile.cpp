@@ -92,7 +92,7 @@ bool NODFile::load(Handle &hdl)
 		return true;
 
 	if (!(seek(hdl, _gmpOffset + 0x1d) && readUInt32(hdl, _flags)
-	  && readUInt8(hdl, _blockShift) && readUInt8(hdl, _nodeShift)))
+	  && readByte(hdl, &_blockShift) && readByte(hdl, &_nodeShift)))
 		return false;
 
 	if (!(seek(hdl, _gmpOffset + 0x67) && readUInt32(hdl, _blockOffset)
@@ -122,8 +122,8 @@ bool NODFile::readBlock(Handle &hdl, quint32 blockOffset,
 	if (!(seek(hdl, blockInfo.offset + _blockOffset)
 	  && readUInt16(hdl, blockInfo.hdr.s0) && readUInt32(hdl, blockInfo.hdr.s2)
 	  && readUInt32(hdl, blockInfo.hdr.s6) && readUInt32(hdl, blockInfo.hdr.sa)
-	  && readUInt16(hdl, blockInfo.hdr.se) && readUInt8(hdl, blockInfo.hdr.s10)
-	  && readUInt8(hdl, blockInfo.hdr.s11) && readUInt8(hdl, blockInfo.hdr.s12)))
+	  && readUInt16(hdl, blockInfo.hdr.se) && readByte(hdl, &blockInfo.hdr.s10)
+	  && readByte(hdl, &blockInfo.hdr.s11) && readByte(hdl, &blockInfo.hdr.s12)))
 		return false;
 
 	return true;

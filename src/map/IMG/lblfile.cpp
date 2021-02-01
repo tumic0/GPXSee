@@ -59,7 +59,7 @@ static QString capitalized(const QString &str)
 LBLFile::~LBLFile()
 {
 	delete _huffmanText;
-        delete[] _table;
+	delete[] _table;
 }
 
 bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
@@ -68,10 +68,10 @@ bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 
 	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)
 	  && seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _offset)
-	  && readUInt32(hdl, _size) && readUInt8(hdl, _multiplier)
-	  && readUInt8(hdl, _encoding) && seek(hdl, _gmpOffset + 0x57)
+	  && readUInt32(hdl, _size) && readByte(hdl, &_multiplier)
+	  && readByte(hdl, &_encoding) && seek(hdl, _gmpOffset + 0x57)
 	  && readUInt32(hdl, _poiOffset) && readUInt32(hdl, _poiSize)
-	  && readUInt8(hdl, _poiMultiplier) && seek(hdl, _gmpOffset + 0xAA)
+	  && readByte(hdl, &_poiMultiplier) && seek(hdl, _gmpOffset + 0xAA)
 	  && readUInt16(hdl, codepage)))
 		return false;
 
@@ -127,7 +127,7 @@ bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 void LBLFile::clear()
 {
 	delete _huffmanText;
-        delete[] _table;
+	delete[] _table;
 	_huffmanText = 0;
 	_table = 0;
 }
@@ -144,7 +144,7 @@ Label LBLFile::label6b(Handle &hdl, quint32 offset, bool capitalize) const
 		return Label();
 
 	while (true) {
-		if (!(readUInt8(hdl, b1) && readUInt8(hdl, b2) && readUInt8(hdl, b3)))
+		if (!(readByte(hdl, &b1) && readByte(hdl, &b2) && readByte(hdl, &b3)))
 			return Label();
 
 		int c[]= {b1>>2, (b1&0x3)<<4|b2>>4, (b2&0xF)<<2|b3>>6, b3&0x3F};
@@ -228,7 +228,7 @@ Label LBLFile::label8b(Handle &hdl, quint32 offset, bool capitalize) const
 		return Label();
 
 	do {
-		if (!readUInt8(hdl, c))
+		if (!readByte(hdl, &c))
 			return Label();
 		str.append(c);
 	} while (c);
@@ -339,7 +339,7 @@ QImage LBLFile::readImage(Handle &hdl, quint32 id) const
 	QByteArray ba;
 	ba.resize(_rasters.at(id).size);
 	for (int i = 0; i < ba.size(); i++)
-		if (!readUInt8(hdl, *(ba.data() + i)))
+		if (!readByte(hdl, (quint8*)(ba.data() + i)))
 			return QImage();
 
 	return QImage::fromData(ba);

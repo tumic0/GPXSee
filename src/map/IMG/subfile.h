@@ -60,11 +60,19 @@ public:
 	bool seek(Handle &handle, quint32 pos) const;
 	quint32 pos(Handle &handle) const {return handle._pos;}
 
+	bool readByte(Handle &handle, quint8 *val) const
+	{
+		*val = handle._data.at(handle._blockPos++);
+		handle._pos++;
+		return (handle._blockPos >= handle._data.size())
+		  ? seek(handle, handle._pos) : true;
+	}
+
 	template<typename T>
 	bool readUInt8(Handle &handle, T &val) const
 	{
 		quint8 b;
-		if (!readByte(handle, b))
+		if (!readByte(handle, &b))
 			return false;
 		val = b;
 		return true;
@@ -74,7 +82,7 @@ public:
 	bool readUInt16(Handle &handle, T &val) const
 	{
 		quint8 b0, b1;
-		if (!(readByte(handle, b0) && readByte(handle, b1)))
+		if (!(readByte(handle, &b0) && readByte(handle, &b1)))
 			return false;
 		val = b0 | ((quint16)b1) << 8;
 		return true;
@@ -92,8 +100,8 @@ public:
 	bool readUInt24(Handle &handle, quint32 &val) const
 	{
 		quint8 b0, b1, b2;
-		if (!(readByte(handle, b0) && readByte(handle, b1)
-		  && readByte(handle, b2)))
+		if (!(readByte(handle, &b0) && readByte(handle, &b1)
+		  && readByte(handle, &b2)))
 			return false;
 		val = b0 | ((quint32)b1) << 8 | ((quint32)b2) << 16;
 		return true;
@@ -111,8 +119,8 @@ public:
 	bool readUInt32(Handle &handle, quint32 &val) const
 	{
 		quint8 b0, b1, b2, b3;
-		if (!(readByte(handle, b0) && readByte(handle, b1)
-		  && readByte(handle, b2) && readByte(handle, b3)))
+		if (!(readByte(handle, &b0) && readByte(handle, &b1)
+		  && readByte(handle, &b2) && readByte(handle, &b3)))
 			return false;
 		val = b0 | ((quint32)b1) << 8 | ((quint32)b2) << 16
 		  | ((quint32)b3) << 24;
@@ -125,7 +133,7 @@ public:
 
 		val = 0;
 		for (quint32 i = bytes; i; i--) {
-			if (!readByte(hdl, b))
+			if (!readByte(hdl, &b))
 				return false;
 			val |= ((quint32)b) << ((i-1) * 8);
 		}
@@ -143,15 +151,6 @@ protected:
 	quint32 _gmpOffset;
 
 private:
-	bool readByte(Handle &handle, quint8 &val) const
-	{
-		int blockSize = _img ? 1U<<_img->blockBits() : 1U<<BLOCK_BITS;
-		val = handle._data.at(handle._blockPos++);
-		handle._pos++;
-		return (handle._blockPos >= blockSize)
-		  ? seek(handle, handle._pos) : true;
-	}
-
 	IMG *_img;
 	QVector<quint16> *_blocks;
 	const QString *_path;

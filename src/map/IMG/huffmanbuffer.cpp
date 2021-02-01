@@ -17,7 +17,7 @@ bool HuffmanBuffer::load(const RGNFile *rgn, SubFile::Handle &rgnHdl)
 
 	resize(recordSize);
 	for (int i = 0; i < QByteArray::size(); i++)
-		if (!rgn->readUInt8(rgnHdl, *((quint8*)(data() + i))))
+		if (!rgn->readByte(rgnHdl, (quint8*)(data() + i)))
 			return false;
 
 	return true;
