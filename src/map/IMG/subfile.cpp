@@ -123,7 +123,7 @@ bool SubFile::read(Handle &handle, quint8 *buff, quint32 size) const
 		if (size < remaining) {
 			memcpy(buff, handle._data.constData() + handle._blockPos, size);
 			handle._blockPos += size;
-			handle._pos++;
+			handle._pos += size;
 			return true;
 		} else {
 			memcpy(buff, handle._data.constData() + handle._blockPos,
