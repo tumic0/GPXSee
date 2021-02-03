@@ -16,5 +16,5 @@ bool HuffmanBuffer::load(const RGNFile *rgn, SubFile::Handle &rgnHdl)
 	};
 
 	resize(recordSize);
-	return rgn->read(rgnHdl, (quint8*)data(), recordSize);
+	return rgn->read(rgnHdl, data(), recordSize);
 }

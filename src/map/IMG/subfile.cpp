@@ -116,7 +116,7 @@ bool SubFile::readVBitfield32(Handle &hdl, quint32 &bitfield) const
 	return true;
 }
 
-bool SubFile::read(Handle &handle, quint8 *buff, quint32 size) const
+bool SubFile::read(Handle &handle, char *buff, quint32 size) const
 {
 	while (size) {
 		quint32 remaining = handle._data.size() - handle._blockPos;
