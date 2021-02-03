@@ -51,7 +51,7 @@ public:
 	  const NETFile *net, Handle &netHdl, const NODFile *nod, Handle &nodHdl,
 	  const LBLFile *lbl, Handle &lblHdl, QList<MapData::Poly> *lines) const;
 
-	bool subdivInit(Handle &hdl, SubDiv *subdiv);
+	bool subdivInit(Handle &hdl, SubDiv *subdiv) const;
 
 	const HuffmanTable *huffmanTable() const {return _huffmanTable;}
 	quint32 dictOffset() const {return _dictOffset;}

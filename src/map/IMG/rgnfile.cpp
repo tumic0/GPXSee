@@ -573,7 +573,7 @@ QMap<RGNFile::SegmentType, SubDiv::Segment> RGNFile::segments(Handle &hdl,
 	return ret;
 }
 
-bool RGNFile::subdivInit(Handle &hdl, SubDiv *subdiv)
+bool RGNFile::subdivInit(Handle &hdl, SubDiv *subdiv) const
 {
 	QMap<RGNFile::SegmentType, SubDiv::Segment> seg(segments(hdl, subdiv));
 	SubDiv::Segment extPoints, extLines, extPolygons;
