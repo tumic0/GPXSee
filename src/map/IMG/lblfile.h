@@ -1,4 +1,4 @@
-﻿#ifndef LBLFILE_H
+#ifndef LBLFILE_H
 #define LBLFILE_H
 
 #include <QImage>
