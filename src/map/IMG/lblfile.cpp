@@ -338,9 +338,8 @@ QImage LBLFile::readImage(Handle &hdl, quint32 id) const
 		return QImage();
 	QByteArray ba;
 	ba.resize(_rasters.at(id).size);
-	for (int i = 0; i < ba.size(); i++)
-		if (!readByte(hdl, (quint8*)(ba.data() + i)))
-			return QImage();
+	if (!read(hdl, (quint8*)ba.data(), _rasters.at(id).size))
+		return QImage();
 
 	return QImage::fromData(ba);
 }

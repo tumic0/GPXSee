@@ -60,6 +60,8 @@ public:
 	bool seek(Handle &handle, quint32 pos) const;
 	quint32 pos(Handle &handle) const {return handle._pos;}
 
+	bool read(Handle &handle, quint8 *buff, quint32 size) const;
+
 	bool readByte(Handle &handle, quint8 *val) const
 	{
 		*val = handle._data.at(handle._blockPos++);

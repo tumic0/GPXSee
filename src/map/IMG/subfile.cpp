@@ -1,4 +1,4 @@
-#include <QFile>
+#include <cstring>
 #include "img.h"
 #include "subfile.h"
 
@@ -112,6 +112,30 @@ bool SubFile::readVBitfield32(Handle &hdl, quint32 &bitfield) const
 		}
 	} else
 		bitfield = bits>>1;
+
+	return true;
+}
+
+bool SubFile::read(Handle &handle, quint8 *buff, quint32 size) const
+{
+	while (size) {
+		quint32 remaining = handle._data.size() - handle._blockPos;
+		if (size < remaining) {
+			memcpy(buff, handle._data.constData() + handle._blockPos, size);
+			handle._blockPos += size;
+			handle._pos++;
+			return true;
+		} else {
+			memcpy(buff, handle._data.constData() + handle._blockPos,
+			  remaining);
+			buff += remaining;
+			size -= remaining;
+			handle._blockPos = 0;
+			handle._pos += remaining;
+			if (!seek(handle, handle._pos))
+				return false;
+		}
+	}
 
 	return true;
 }
