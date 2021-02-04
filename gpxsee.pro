@@ -207,7 +207,8 @@ HEADERS += src/common/config.h \
     src/GUI/pdfexportdialog.h \
     src/GUI/pngexportdialog.h \
     src/data/geojsonparser.h \
-    src/GUI/timezoneinfo.h
+    src/GUI/timezoneinfo.h \
+    src/map/aqmmap.h
 
 SOURCES += src/main.cpp \
     src/GUI/axislabelitem.cpp \
@@ -365,7 +366,8 @@ SOURCES += src/main.cpp \
     src/data/smlparser.cpp \
     src/GUI/pdfexportdialog.cpp \
     src/GUI/pngexportdialog.cpp \
-    src/data/geojsonparser.cpp
+    src/data/geojsonparser.cpp \
+    src/map/aqmmap.cpp
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     QT_NO_DEPRECATED_WARNINGS
