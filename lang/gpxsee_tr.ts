@@ -424,16 +424,16 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="394"/>
-        <location filename="../src/GUI/gui.cpp" line="1122"/>
-        <location filename="../src/GUI/gui.cpp" line="1190"/>
+        <location filename="../src/GUI/gui.cpp" line="1131"/>
+        <location filename="../src/GUI/gui.cpp" line="1199"/>
         <source>Distance</source>
         <translation>Mesafe</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="401"/>
         <location filename="../src/GUI/gui.cpp" line="574"/>
-        <location filename="../src/GUI/gui.cpp" line="1125"/>
-        <location filename="../src/GUI/gui.cpp" line="1192"/>
+        <location filename="../src/GUI/gui.cpp" line="1134"/>
+        <location filename="../src/GUI/gui.cpp" line="1201"/>
         <source>Time</source>
         <translation>Zaman</translation>
     </message>
@@ -463,8 +463,8 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="433"/>
-        <location filename="../src/GUI/gui.cpp" line="1127"/>
-        <location filename="../src/GUI/gui.cpp" line="1194"/>
+        <location filename="../src/GUI/gui.cpp" line="1136"/>
+        <location filename="../src/GUI/gui.cpp" line="1203"/>
         <source>Moving time</source>
         <translation>Hareket süresi</translation>
     </message>
@@ -725,93 +725,93 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="816"/>
-        <location filename="../src/GUI/gui.cpp" line="897"/>
+        <location filename="../src/GUI/gui.cpp" line="906"/>
         <source>Line: %1</source>
         <translation>Satır: %1</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="871"/>
+        <location filename="../src/GUI/gui.cpp" line="880"/>
         <source>Open POI file</source>
         <translation>POI dosyası aç</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="894"/>
+        <location filename="../src/GUI/gui.cpp" line="903"/>
         <source>Error loading POI file:</source>
         <translation>POI dosyası yükleme hatası:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1096"/>
-        <location filename="../src/GUI/gui.cpp" line="1168"/>
+        <location filename="../src/GUI/gui.cpp" line="1105"/>
+        <location filename="../src/GUI/gui.cpp" line="1177"/>
         <source>Tracks</source>
         <translation>İzler</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1099"/>
-        <location filename="../src/GUI/gui.cpp" line="1170"/>
+        <location filename="../src/GUI/gui.cpp" line="1108"/>
+        <location filename="../src/GUI/gui.cpp" line="1179"/>
         <source>Routes</source>
         <translation>Rotalar</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1102"/>
-        <location filename="../src/GUI/gui.cpp" line="1172"/>
+        <location filename="../src/GUI/gui.cpp" line="1111"/>
+        <location filename="../src/GUI/gui.cpp" line="1181"/>
         <source>Waypoints</source>
         <translation>Yer işaretleri</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1105"/>
-        <location filename="../src/GUI/gui.cpp" line="1174"/>
+        <location filename="../src/GUI/gui.cpp" line="1114"/>
+        <location filename="../src/GUI/gui.cpp" line="1183"/>
         <source>Areas</source>
         <translation>Alanlar</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1111"/>
-        <location filename="../src/GUI/gui.cpp" line="1115"/>
-        <location filename="../src/GUI/gui.cpp" line="1180"/>
-        <location filename="../src/GUI/gui.cpp" line="1183"/>
+        <location filename="../src/GUI/gui.cpp" line="1120"/>
+        <location filename="../src/GUI/gui.cpp" line="1124"/>
+        <location filename="../src/GUI/gui.cpp" line="1189"/>
+        <location filename="../src/GUI/gui.cpp" line="1192"/>
         <source>Date</source>
         <translation>Tarih</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1148"/>
-        <location filename="../src/GUI/gui.cpp" line="1149"/>
+        <location filename="../src/GUI/gui.cpp" line="1157"/>
+        <location filename="../src/GUI/gui.cpp" line="1158"/>
         <source>Statistics</source>
         <translation>İstatistikler</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1164"/>
+        <location filename="../src/GUI/gui.cpp" line="1173"/>
         <source>Name</source>
         <translation>Adı</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1416"/>
+        <location filename="../src/GUI/gui.cpp" line="1425"/>
         <source>Open map file</source>
         <translation>Harita dosyası aç</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1457"/>
-        <location filename="../src/GUI/gui.cpp" line="1495"/>
-        <location filename="../src/GUI/gui.cpp" line="1514"/>
-        <location filename="../src/GUI/gui.cpp" line="1540"/>
+        <location filename="../src/GUI/gui.cpp" line="1466"/>
+        <location filename="../src/GUI/gui.cpp" line="1504"/>
+        <location filename="../src/GUI/gui.cpp" line="1523"/>
+        <location filename="../src/GUI/gui.cpp" line="1549"/>
         <source>Error loading map:</source>
         <translation>Harita yüklenirken hata oluştu:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1524"/>
+        <location filename="../src/GUI/gui.cpp" line="1533"/>
         <source>Select map directory</source>
         <translation>Harita dizinini seç</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1579"/>
+        <location filename="../src/GUI/gui.cpp" line="1588"/>
         <source>Clear the map tile cache?</source>
         <translation>Harita döşemeleri önbelleği temizlensin mi?</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1586"/>
+        <location filename="../src/GUI/gui.cpp" line="1595"/>
         <source>No files loaded</source>
         <translation>Hiç dosya yüklenmedi</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1590"/>
+        <location filename="../src/GUI/gui.cpp" line="1599"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n dosya</numerusform>
@@ -979,57 +979,62 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="96"/>
+        <location filename="../src/map/maplist.cpp" line="99"/>
         <source>Supported files</source>
         <translation>Desteklenen dosyalar</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="104"/>
+        <location filename="../src/map/maplist.cpp" line="108"/>
         <source>MBTiles maps</source>
         <translation>MBTiles haritalar</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="100"/>
+        <location filename="../src/map/maplist.cpp" line="104"/>
         <source>Garmin JNX maps</source>
         <translation>Garmin JNX haritalar</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="98"/>
+        <location filename="../src/map/maplist.cpp" line="101"/>
+        <source>AlpineQuest maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="102"/>
         <source>Garmin IMG maps</source>
         <translation>Garmin IMG haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="101"/>
+        <location filename="../src/map/maplist.cpp" line="105"/>
         <source>BSB nautical charts</source>
         <translation>BSB denizcilik haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="102"/>
+        <location filename="../src/map/maplist.cpp" line="106"/>
         <source>KMZ maps</source>
         <translation>KMZ haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="103"/>
+        <location filename="../src/map/maplist.cpp" line="107"/>
         <source>OziExplorer maps</source>
         <translation>OziExplorer haritalar</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="105"/>
+        <location filename="../src/map/maplist.cpp" line="109"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>TrekBuddy haritalar/atlaslar</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="106"/>
+        <location filename="../src/map/maplist.cpp" line="110"/>
         <source>GeoTIFF images</source>
         <translation>GeoTIFF görüntüler</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="107"/>
+        <location filename="../src/map/maplist.cpp" line="111"/>
         <source>TwoNav maps</source>
         <translation>TwoNav haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="108"/>
+        <location filename="../src/map/maplist.cpp" line="112"/>
         <source>Online map sources</source>
         <translation>Online harita kaynakları</translation>
     </message>
@@ -1789,27 +1794,27 @@
 <context>
     <name>RouteItem</name>
     <message>
-        <location filename="../src/GUI/routeitem.cpp" line="15"/>
+        <location filename="../src/GUI/routeitem.cpp" line="16"/>
         <source>Name</source>
         <translation>Adı</translation>
     </message>
     <message>
-        <location filename="../src/GUI/routeitem.cpp" line="17"/>
+        <location filename="../src/GUI/routeitem.cpp" line="18"/>
         <source>Description</source>
         <translation>Açıklama</translation>
     </message>
     <message>
-        <location filename="../src/GUI/routeitem.cpp" line="19"/>
+        <location filename="../src/GUI/routeitem.cpp" line="20"/>
         <source>Comment</source>
         <translation>Yorum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/routeitem.cpp" line="20"/>
+        <location filename="../src/GUI/routeitem.cpp" line="21"/>
         <source>Distance</source>
         <translation>Mesafe</translation>
     </message>
     <message>
-        <location filename="../src/GUI/routeitem.cpp" line="31"/>
+        <location filename="../src/GUI/routeitem.cpp" line="32"/>
         <source>Links</source>
         <translation>Bağlantılar</translation>
     </message>
@@ -2010,42 +2015,42 @@
 <context>
     <name>TrackItem</name>
     <message>
-        <location filename="../src/GUI/trackitem.cpp" line="14"/>
+        <location filename="../src/GUI/trackitem.cpp" line="15"/>
         <source>Name</source>
         <translation>Adı</translation>
     </message>
     <message>
-        <location filename="../src/GUI/trackitem.cpp" line="16"/>
+        <location filename="../src/GUI/trackitem.cpp" line="17"/>
         <source>Description</source>
         <translation>Açıklama</translation>
     </message>
     <message>
-        <location filename="../src/GUI/trackitem.cpp" line="18"/>
+        <location filename="../src/GUI/trackitem.cpp" line="19"/>
         <source>Comment</source>
         <translation>Yorum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/trackitem.cpp" line="19"/>
+        <location filename="../src/GUI/trackitem.cpp" line="20"/>
         <source>Distance</source>
         <translation>Mesafe</translation>
     </message>
     <message>
-        <location filename="../src/GUI/trackitem.cpp" line="22"/>
+        <location filename="../src/GUI/trackitem.cpp" line="23"/>
         <source>Total time</source>
         <translation>Toplam süre</translation>
     </message>
     <message>
-        <location filename="../src/GUI/trackitem.cpp" line="24"/>
+        <location filename="../src/GUI/trackitem.cpp" line="25"/>
         <source>Moving time</source>
         <translation>Hareket süresi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/trackitem.cpp" line="26"/>
+        <location filename="../src/GUI/trackitem.cpp" line="27"/>
         <source>Date</source>
         <translation>Tarih</translation>
     </message>
     <message>
-        <location filename="../src/GUI/trackitem.cpp" line="36"/>
+        <location filename="../src/GUI/trackitem.cpp" line="37"/>
         <source>Links</source>
         <translation>Bağlantılar</translation>
     </message>
