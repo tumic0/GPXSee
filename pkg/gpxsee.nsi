@@ -129,12 +129,12 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "aqm" "AlpineQuest Map File" 16
   !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 17
   !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 18
-  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 19
-  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 20
-  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 21
-  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 22
-  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track File" 23
-  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 24
+  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 18
+  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 19
+  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 20
+  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 21
+  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track File" 22
+  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 23
 
   WriteRegStr HKCR "Applications\GPXSee.exe\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
   WriteRegStr HKCR ".gpx\OpenWithList" "GPXSee.exe" ""
