@@ -410,7 +410,8 @@ macx {
         lang/gpxsee_pt_BR.qm \
         lang/gpxsee_uk.qm \
         lang/gpxsee_hu.qm \
-        lang/gpxsee_it.qm
+        lang/gpxsee_it.qm \
+        lang/gpxsee_eo.qm
     csv.path = Contents/Resources
     csv.files = pkg/csv
     maps.path = Contents/Resources
@@ -463,7 +464,8 @@ win32 {
         icons/formats/map.ico \
         icons/formats/mbts.ico \
         icons/formats/rmap.ico \
-        icons/formats/tba.ico
+        icons/formats/tba.ico \
+        icons/formats/aqm.ico
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }

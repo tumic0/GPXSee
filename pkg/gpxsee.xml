@@ -220,4 +220,14 @@
 		<glob pattern="*.kmz"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.alpinequest.aqm">
+		<comment>AlpineQuest Map File</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application/octet-stream"/>
+		<magic>
+			<match type="string" offset="0" value="FLATPACK1"/>
+		</magic>
+		<glob pattern="*.aqm"/>
+	</mime-type>
+
 </mime-info>
