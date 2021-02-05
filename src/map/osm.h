@@ -15,6 +15,7 @@ namespace OSM
 	QPointF ll2m(const Coordinates &c);
 	Coordinates m2ll(const QPointF &p);
 	QPoint mercator2tile(const QPointF &m, int zoom);
+	Coordinates tile2ll(const QPoint &p, int z);
 	qreal zoom2scale(int zoom, int tileSize);
 	int scale2zoom(qreal scale, int tileSize);
 	qreal resolution(const QPointF &p, int zoom, int tileSize);

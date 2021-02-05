@@ -100,13 +100,6 @@ static bool parseLevel(const QByteArray &data, int &zoom, int &tileSize,
 	return true;
 }
 
-static Coordinates tile2ll(const QPoint &p, int z)
-{
-	double n = M_PI - 2.0 * M_PI * p.y() / (double)(1 << z);
-	return Coordinates(p.x() / (double)(1 << z) * 360.0 - 180,
-	  180.0 / M_PI * atan(0.5 * (exp(n) - exp(-n))));
-}
-
 
 bool AQMMap::readSize(size_t &size)
 {
@@ -200,8 +193,8 @@ bool AQMMap::readHeader()
 			if (!parseLevel(data, zoom, tileSize, bounds))
 				return false;
 
-			_bounds = RectC(tile2ll(bounds.topLeft(), zoom),
-			  tile2ll(bounds.bottomRight(), zoom));
+			_bounds = RectC(OSM::tile2ll(bounds.topLeft(), zoom),
+			  OSM::tile2ll(bounds.bottomRight(), zoom));
 			_zooms.append(Zoom(zoom, tileSize));
 		} else if (files.at(i).name == "@LEVEL") {
 			li = i;
