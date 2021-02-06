@@ -462,6 +462,20 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>aqm</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.alpinequest.aqm</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>AlpineQuest Map File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
@@ -1014,6 +1028,27 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.trekbuddy.tba</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>net.alpinequest.aqm</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://svn.code.sf.net/p/mobac/code/trunk/MOBAC</string>
+			<key>UTTypeDescription</key>
+			<string>AlpineQuest Map File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>aqm</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.alpinequest.aqm</string>
 			</dict>
 		</dict>
 		<dict>
