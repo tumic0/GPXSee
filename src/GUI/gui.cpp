@@ -379,6 +379,11 @@ void GUI::createActions()
 	_showMarkersAction->setCheckable(true);
 	connect(_showMarkersAction, SIGNAL(triggered(bool)), _mapView,
 	  SLOT(showMarkers(bool)));
+	_showMarkerInfoAction = new QAction(tr("Position date/time"), this);
+	_showMarkerInfoAction->setMenuRole(QAction::NoRole);
+	_showMarkerInfoAction->setCheckable(true);
+	connect(_showMarkerInfoAction, SIGNAL(triggered(bool)), _mapView,
+	  SLOT(showMarkerInfo(bool)));
 
 	// Graph actions
 	_showGraphsAction = new QAction(QIcon(SHOW_GRAPHS_ICON), tr("Show graphs"),
@@ -564,6 +569,7 @@ void GUI::createMenus()
 	displayMenu->addAction(_showRouteWaypointsAction);
 	displayMenu->addAction(_showTicksAction);
 	displayMenu->addAction(_showMarkersAction);
+	displayMenu->addAction(_showMarkerInfoAction);
 	dataMenu->addSeparator();
 	dataMenu->addAction(_showTracksAction);
 	dataMenu->addAction(_showRoutesAction);
@@ -1018,6 +1024,7 @@ void GUI::openOptions()
 		_mapView->setTimeZone(options.timeZone.zone());
 		_dateRange.first = _dateRange.first.toTimeZone(options.timeZone.zone());
 		_dateRange.second = _dateRange.second.toTimeZone(options.timeZone.zone());
+		reload = true;
 	}
 
 	if (reload)
@@ -2006,6 +2013,9 @@ void GUI::writeSettings()
 	if (_showMarkersAction->isChecked() != SHOW_MARKERS_DEFAULT)
 		settings.setValue(SHOW_MARKERS_SETTING,
 		  _showMarkersAction->isChecked());
+	if (_showMarkerInfoAction->isChecked() != SHOW_MARKER_INFO_DEFAULT)
+		settings.setValue(SHOW_MARKER_INFO_SETTING,
+		  _showMarkerInfoAction->isChecked());
 	settings.endGroup();
 
 	settings.beginGroup(PDF_EXPORT_SETTINGS_GROUP);
@@ -2303,6 +2313,11 @@ void GUI::readSettings()
 		_mapView->showMarkers(false);
 	else
 		_showMarkersAction->setChecked(true);
+	if (settings.value(SHOW_MARKER_INFO_SETTING,
+	  SHOW_MARKER_INFO_DEFAULT).toBool()) {
+		_mapView->showMarkerInfo(true);
+		_showMarkerInfoAction->setChecked(true);
+	}
 	settings.endGroup();
 
 	settings.beginGroup(PDF_EXPORT_SETTINGS_GROUP);

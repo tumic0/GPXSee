@@ -21,6 +21,7 @@ public:
 	void showWaypointLabels(bool show);
 
 	QString info() const;
+	QDateTime date() const {return QDateTime();}
 
 private:
 	QString _name;

@@ -12,6 +12,7 @@ class Map;
 class PathTickItem;
 class GraphItem;
 class MarkerItem;
+class MarkerInfoItem;
 
 class PathItem : public QObject, public GraphicsItem
 {
@@ -26,6 +27,8 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
+	virtual QDateTime date() const = 0;
+
 	const Path &path() const {return _path;}
 
 	void addGraph(GraphItem *graph);
@@ -39,6 +42,7 @@ public:
 	void setDigitalZoom(int zoom);
 	void setMarkerColor(const QColor &color);
 	void showMarker(bool show);
+	void showMarkerInfo(bool show);
 	void showTicks(bool show);
 
 	void setMarkerPosition(qreal pos);
@@ -68,6 +72,7 @@ private:
 	void updatePainterPath();
 	void updateShape();
 	void addSegment(const Coordinates &c1, const Coordinates &c2);
+	void setMarkerInfo(qreal pos);
 
 	qreal xInM() const;
 	unsigned tickSize() const;
@@ -87,6 +92,7 @@ private:
 	bool _showTicks;
 
 	MarkerItem *_marker;
+	MarkerInfoItem *_markerInfo;
 	QVector<PathTickItem*> _ticks;
 };
 

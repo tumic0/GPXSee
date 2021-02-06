@@ -206,6 +206,7 @@ private:
 	QAction *_showAreasAction;
 	QAction *_showRouteWaypointsAction;
 	QAction *_showMarkersAction;
+	QAction *_showMarkerInfoAction;
 	QAction *_showTicksAction;
 	QAction *_showCoordinatesAction;
 	QAction *_openOptionsAction;

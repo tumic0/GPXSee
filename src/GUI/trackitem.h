@@ -16,6 +16,7 @@ public:
 	TrackItem(const Track &track, Map *map, QGraphicsItem *parent = 0);
 
 	QString info() const;
+	QDateTime date() const {return _date;}
 
 private:
 	QString _name;

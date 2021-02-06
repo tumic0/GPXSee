@@ -65,6 +65,8 @@
 #define SHOW_WAYPOINT_LABELS_DEFAULT      true
 #define SHOW_MARKERS_SETTING              "positionMarkers"
 #define SHOW_MARKERS_DEFAULT              true
+#define SHOW_MARKER_INFO_SETTING          "markerInfo"
+#define SHOW_MARKER_INFO_DEFAULT          false
 
 #define PDF_EXPORT_SETTINGS_GROUP         "Export"
 #define PAPER_ORIENTATION_SETTING         "orientation"

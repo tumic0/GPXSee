@@ -93,6 +93,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_overlapPOIs = true;
 	_showRouteWaypoints = true;
 	_showMarkers = true;
+	_showMarkerInfo = false;
 	_showPathTicks = false;
 	_trackWidth = 3;
 	_routeWidth = 3;
@@ -141,6 +142,7 @@ PathItem *MapView::addTrack(const Track &track)
 	ti->setDigitalZoom(_digitalZoom);
 	ti->setMarkerColor(_markerColor);
 	ti->showMarker(_showMarkers);
+	ti->showMarkerInfo(_showMarkerInfo);
 	ti->showTicks(_showPathTicks);
 	_scene->addItem(ti);
 
@@ -169,6 +171,7 @@ PathItem *MapView::addRoute(const Route &route)
 	ri->setDigitalZoom(_digitalZoom);
 	ri->setMarkerColor(_markerColor);
 	ri->showMarker(_showMarkers);
+	ri->showMarkerInfo(_showMarkerInfo);
 	ri->showTicks(_showPathTicks);
 	_scene->addItem(ri);
 
@@ -803,6 +806,16 @@ void MapView::showMarkers(bool show)
 		_tracks.at(i)->showMarker(show);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->showMarker(show);
+}
+
+void MapView::showMarkerInfo(bool show)
+{
+	_showMarkerInfo = show;
+
+	for (int i = 0; i < _tracks.size(); i++)
+		_tracks.at(i)->showMarkerInfo(show);
+	for (int i = 0; i < _routes.size(); i++)
+		_routes.at(i)->showMarkerInfo(show);
 }
 
 void MapView::showTicks(bool show)

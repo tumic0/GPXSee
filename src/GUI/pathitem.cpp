@@ -8,6 +8,7 @@
 #include "popup.h"
 #include "graphitem.h"
 #include "markeritem.h"
+#include "markerinfoitem.h"
 #include "pathitem.h"
 
 
@@ -52,6 +53,8 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 	_marker = new MarkerItem(this);
 	_marker->setZValue(1);
 	_marker->setPos(position(_markerDistance));
+	_markerInfo = new MarkerInfoItem(_marker);
+	_markerInfo->setVisible(false);
 
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
@@ -278,13 +281,26 @@ void PathItem::setMarkerPosition(qreal pos)
 	if (isValid(pp)) {
 		_marker->setVisible(_showMarker);
 		_marker->setPos(pp);
+		setMarkerInfo(pos);
 	} else
 		_marker->setVisible(false);
+}
+
+void PathItem::setMarkerInfo(qreal pos)
+{
+	qreal time = _graph
+	  ? (_graph->graphType() == Time) ? pos : _graph->timeAtDistance(pos)
+	  : NAN;
+	QDateTime d(date());
+
+	if (!std::isnan(time) && d.isValid())
+		_markerInfo->setDate(d.addSecs(time).toTimeZone(_timeZone));
 }
 
 void PathItem::setMarkerColor(const QColor &color)
 {
 	_marker->setColor(color);
+	_markerInfo->setColor(color);
 }
 
 void PathItem::hover(bool hover)
@@ -307,6 +323,11 @@ void PathItem::showMarker(bool show)
 
 	_showMarker = show;
 	_marker->setVisible(show && isValid(position(_markerDistance)));
+}
+
+void PathItem::showMarkerInfo(bool show)
+{
+	_markerInfo->setVisible(show);
 }
 
 qreal PathItem::xInM() const
