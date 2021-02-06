@@ -44,17 +44,17 @@ void MarkerInfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 	Q_UNUSED(widget);
 
 	QFontMetrics fm(_font);
-	QRectF ry(OFFSET, -fm.height() + fm.descent(),
-	  fm.boundingRect(_time).width(), fm.height() - fm.descent());
-	QRectF rx(OFFSET, 0, fm.boundingRect(_date).width(), fm.height()
+	QRectF rd(OFFSET, -fm.height() + fm.descent(),
+	  fm.boundingRect(_date).width(), fm.height() - fm.descent());
+	QRectF rt(OFFSET, 0, fm.boundingRect(_time).width(), fm.height()
 	  - fm.descent());
 
 	painter->setPen(Qt::NoPen);
 	QColor bc(painter->background().color());
 	bc.setAlpha(196);
 	painter->setBrush(QBrush(bc));
-	painter->drawRect(ry);
-	painter->drawRect(rx);
+	painter->drawRect(rt);
+	painter->drawRect(rd);
 	painter->setBrush(Qt::NoBrush);
 
 	painter->setFont(_font);
