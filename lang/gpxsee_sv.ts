@@ -997,7 +997,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="101"/>
         <source>AlpineQuest maps</source>
-        <translation type="unfinished"></translation>
+        <translation>AlpineQuest kartor</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="102"/>
