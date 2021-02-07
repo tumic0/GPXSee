@@ -429,7 +429,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="382"/>
         <source>Position date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum/Zeit der Position</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="389"/>
@@ -1002,7 +1002,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="101"/>
         <source>AlpineQuest maps</source>
-        <translation type="unfinished"></translation>
+        <translation>AlpineQuest-Karten</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="102"/>
