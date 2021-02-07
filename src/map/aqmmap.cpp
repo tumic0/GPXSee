@@ -178,8 +178,7 @@ bool AQMMap::readHeader()
 	int li = -1;
 	for (int i = 0; i < files.size(); i++) {
 		if (files.at(i).name == "V2HEADER") {
-			_file.seek(files.at(i).offset);
-			if (!readData(data))
+			if (!(_file.seek(files.at(i).offset) && readData(data)))
 				return false;
 			if (!parseHeader(data, _name))
 				return false;
@@ -187,8 +186,7 @@ bool AQMMap::readHeader()
 			int zoom, tileSize;
 			QRect bounds;
 
-			_file.seek(files.at(i).offset);
-			if (!readData(data))
+			if (!(_file.seek(files.at(i).offset) && readData(data)))
 				return false;
 			if (!parseLevel(data, zoom, tileSize, bounds))
 				return false;
@@ -344,7 +342,7 @@ QByteArray AQMMap::tileData(const QPoint &tile)
 	QByteArray ba;
 
 	size_t offset = z.tiles.value(tile);
-	if (!offset || !_file.seek(offset) || !readData(ba))
+	if (!(offset && _file.seek(offset) && readData(ba)))
 		return QByteArray();
 
 	return ba;
