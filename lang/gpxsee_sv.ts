@@ -429,7 +429,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="382"/>
         <source>Position date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Position datum/tid</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="389"/>
