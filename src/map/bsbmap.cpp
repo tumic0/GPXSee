@@ -374,8 +374,7 @@ QImage BSBMap::readImage()
 
 	if (!file.open(QIODevice::ReadOnly))
 		return QImage();
-	file.seek(_dataOffset);
-	if (!file.getChar(&bits))
+	if (!(file.seek(_dataOffset) && file.getChar(&bits)))
 		return QImage();
 
 	QImage img(_size, QImage::Format_Indexed8);
