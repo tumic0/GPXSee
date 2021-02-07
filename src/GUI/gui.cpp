@@ -866,6 +866,8 @@ void GUI::loadData(const Data &data)
 	paths = _mapView->loadData(data);
 
 	GraphTab *gt = static_cast<GraphTab*>(_graphTabWidget->currentWidget());
+	if (!gt)
+		return;
 	int index = _graphTabWidget->currentIndex();
 
 	for (int i = 0; i < paths.count(); i++) {
