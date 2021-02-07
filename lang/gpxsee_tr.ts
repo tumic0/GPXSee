@@ -820,6 +820,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n dosya</numerusform>
+            <numerusform>%n dosya</numerusform>
         </translation>
     </message>
 </context>
@@ -1001,7 +1002,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="101"/>
         <source>AlpineQuest maps</source>
-        <translation type="unfinished"></translation>
+        <translation>AlpineQuest haritaları</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="102"/>
