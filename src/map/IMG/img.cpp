@@ -105,7 +105,7 @@ IMG::IMG(const QString &fileName) : _fileName(fileName)
 			  : tile->addFile(this, tt);
 			CHECK(subFile);
 
-			file.seek(offset + 0x20);
+			CHECK(file.seek(offset + 0x20));
 			for (int i = 0; i < 240; i++) {
 				CHECK(readValue(file, block));
 				if (block == 0xFFFF)
@@ -122,7 +122,7 @@ IMG::IMG(const QString &fileName) : _fileName(fileName)
 				typ = _typ;
 
 			if (typ) {
-				file.seek(offset + 0x20);
+				CHECK(file.seek(offset + 0x20));
 				for (int i = 0; i < 240; i++) {
 					CHECK(readValue(file, block));
 					if (block == 0xFFFF)
