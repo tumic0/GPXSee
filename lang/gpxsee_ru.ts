@@ -419,7 +419,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="382"/>
         <source>Position date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата/время местоположения</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="389"/>
