@@ -130,7 +130,7 @@ public:
 	static bool isCountry(quint32 type)
 	  {return (type >= 0x1400 && type <= 0x153f);}
 	static bool isState(quint32 type)
-	  {return (type = TYPE(0x1e));}
+	  {return (type == TYPE(0x1e));}
 
 	static POIClass poiClass(quint32 type);
 
