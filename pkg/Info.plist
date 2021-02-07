@@ -471,6 +471,8 @@
 			<array>
 				<string>application/vnd.alpinequest.aqm</string>
 			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/aqm.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>AlpineQuest Map File</string>
 			<key>CFBundleTypeRole</key>
