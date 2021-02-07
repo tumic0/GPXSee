@@ -453,10 +453,6 @@
         <translation>Kaydırıcı bilgisi göster</translation>
     </message>
     <message>
-        <source>Show path markers</source>
-        <translation type="vanished">Yol işaretleyicilerini göster</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="425"/>
         <source>Show toolbars</source>
         <translation>Araç çubuklarını göster</translation>
@@ -819,7 +815,6 @@
         <location filename="../src/GUI/gui.cpp" line="1606"/>
         <source>%n files</source>
         <translation>
-            <numerusform>%n dosya</numerusform>
             <numerusform>%n dosya</numerusform>
         </translation>
     </message>

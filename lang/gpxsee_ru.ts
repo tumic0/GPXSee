@@ -437,10 +437,6 @@
         <translation>Показывать значение на слайдере</translation>
     </message>
     <message>
-        <source>Show path markers</source>
-        <translation type="vanished">Показывать указатель на треке</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="425"/>
         <source>Show toolbars</source>
         <translation>Показывать панель инструментов</translation>

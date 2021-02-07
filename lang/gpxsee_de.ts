@@ -447,10 +447,6 @@
         <translation>Schieberinfo anzeigen</translation>
     </message>
     <message>
-        <source>Show path markers</source>
-        <translation type="vanished">Pfadposition anzeigen</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="425"/>
         <source>Show toolbars</source>
         <translation>Toolbars anzeigen</translation>

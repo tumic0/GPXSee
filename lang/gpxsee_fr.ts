@@ -447,10 +447,6 @@
         <translation>Afficher les infos du curseur</translation>
     </message>
     <message>
-        <source>Show path markers</source>
-        <translation type="vanished">Afficher les points de chemin</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="425"/>
         <source>Show toolbars</source>
         <translation>Afficher la barre d&apos;outils</translation>

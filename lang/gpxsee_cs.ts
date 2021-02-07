@@ -437,10 +437,6 @@
         <translation>Zobrazit informace o posuvníku</translation>
     </message>
     <message>
-        <source>Show path markers</source>
-        <translation type="vanished">Zobrazit pozici na trase</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="425"/>
         <source>Show toolbars</source>
         <translation>Zobrazovat nástrojové lišty</translation>

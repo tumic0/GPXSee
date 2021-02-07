@@ -437,10 +437,6 @@
         <translation>Pokaż informację o suwaku</translation>
     </message>
     <message>
-        <source>Show path markers</source>
-        <translation type="vanished">Pokaż znaczniki ścieżki</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="425"/>
         <source>Show toolbars</source>
         <translation>Pokaż paski narzędzi</translation>

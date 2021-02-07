@@ -453,10 +453,6 @@
         <translation>Montri valoron de la ŝovilo</translation>
     </message>
     <message>
-        <source>Show path markers</source>
-        <translation type="vanished">Montri markon sur la vojo</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="425"/>
         <source>Show toolbars</source>
         <translation>Montri ilobretojn</translation>

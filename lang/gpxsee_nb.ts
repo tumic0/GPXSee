@@ -453,10 +453,6 @@
         <translation>Vis linjalinfo</translation>
     </message>
     <message>
-        <source>Show path markers</source>
-        <translation type="vanished">Vis veimarkører</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="425"/>
         <source>Show toolbars</source>
         <translation>Vis verktøylinjer</translation>

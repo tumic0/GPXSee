@@ -453,10 +453,6 @@
         <translation>Adatok a csúszka mellett</translation>
     </message>
     <message>
-        <source>Show path markers</source>
-        <translation type="vanished">Pozíció mutatása a térképen</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="425"/>
         <source>Show toolbars</source>
         <translation>Gombok mutatása</translation>
@@ -819,7 +815,6 @@
         <location filename="../src/GUI/gui.cpp" line="1606"/>
         <source>%n files</source>
         <translation>
-            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>

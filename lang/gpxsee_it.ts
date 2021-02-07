@@ -453,10 +453,6 @@
         <translation>Mostra informazioni cursore</translation>
     </message>
     <message>
-        <source>Show path markers</source>
-        <translation type="vanished">Mostra marcatori del percorso</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="425"/>
         <source>Show toolbars</source>
         <translation>Mostra barra degli strumenti</translation>

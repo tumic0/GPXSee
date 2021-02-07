@@ -453,10 +453,6 @@
         <translation>Ver datos al señalar</translation>
     </message>
     <message>
-        <source>Show path markers</source>
-        <translation type="vanished">Ver marcadores de camino</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="425"/>
         <source>Show toolbars</source>
         <translation>Ver barra de herramientas</translation>

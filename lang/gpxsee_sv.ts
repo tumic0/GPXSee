@@ -447,10 +447,6 @@
         <translation>Visa reglageinfo</translation>
     </message>
     <message>
-        <source>Show path markers</source>
-        <translation type="vanished">Visa vägmarkörer</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="425"/>
         <source>Show toolbars</source>
         <translation>Visa verktygsfält</translation>
