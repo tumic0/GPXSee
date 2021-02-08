@@ -157,6 +157,9 @@ void PopupLabel::deleteAfterTimer()
 
 void Popup::show(const QPoint &pos, const QString &text, QWidget *w)
 {
+	if (text.isEmpty())
+		return;
+
 	if (PopupLabel::_instance) {
 		PopupLabel::_instance->stopTimer();
 		PopupLabel::_instance->setText(text);
