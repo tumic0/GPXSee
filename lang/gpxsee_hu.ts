@@ -420,7 +420,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="382"/>
         <source>Position date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozíció dátum/idő</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="389"/>
@@ -815,6 +815,7 @@
         <location filename="../src/GUI/gui.cpp" line="1606"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
