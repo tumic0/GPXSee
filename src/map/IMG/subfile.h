@@ -43,10 +43,10 @@ public:
 		int _pos;
 	};
 
-	SubFile(IMG *img)
+	SubFile(const IMG *img)
 	  : _gmpOffset(0), _img(img), _blocks(new QVector<quint16>()), _path(0) {}
-	SubFile(SubFile *gmp, quint32 offset) : _gmpOffset(offset), _img(gmp->_img),
-	  _blocks(gmp->_blocks), _path(gmp->_path) {}
+	SubFile(const SubFile *gmp, quint32 offset) : _gmpOffset(offset),
+	  _img(gmp->_img), _blocks(gmp->_blocks), _path(gmp->_path) {}
 	SubFile(const QString *path)
 	  : _gmpOffset(0), _img(0), _blocks(0), _path(path) {}
 	~SubFile()
@@ -153,7 +153,7 @@ protected:
 	quint32 _gmpOffset;
 
 private:
-	IMG *_img;
+	const IMG *_img;
 	QVector<quint16> *_blocks;
 	const QString *_path;
 };

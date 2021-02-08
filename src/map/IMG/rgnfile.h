@@ -20,7 +20,7 @@ public:
 		RoadReference = 0x10
 	};
 
-	RGNFile(IMG *img)
+	RGNFile(const IMG *img)
 	  : SubFile(img), _huffmanTable(0), _offset(0), _size(0), _polygonsOffset(0),
 	  _polygonsSize(0), _linesOffset(0), _linesSize(0), _pointsOffset(0),
 	  _pointsSize(0) {}
@@ -28,7 +28,7 @@ public:
 	  : SubFile(path), _huffmanTable(0), _offset(0), _size(0), _polygonsOffset(0),
 	  _polygonsSize(0), _linesOffset(0), _linesSize(0), _pointsOffset(0),
 	  _pointsSize(0) {}
-	RGNFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
+	RGNFile(const SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
 	  _huffmanTable(0), _offset(0), _size(0), _polygonsOffset(0),
 	  _polygonsSize(0), _linesOffset(0), _linesSize(0), _pointsOffset(0),
 	  _pointsSize(0) {}

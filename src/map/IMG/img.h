@@ -12,13 +12,12 @@ public:
 
 	const QString &fileName() const {return _fileName;}
 
-private:
-	friend class SubFile;
-
 	unsigned blockBits() const {return _blockBits;}
-	bool readBlock(QFile &file, int blockNum, char *data);
-	qint64 read(QFile &file, char *data, qint64 maxSize);
-	template<class T> bool readValue(QFile &file, T &val);
+	bool readBlock(QFile &file, int blockNum, char *data) const;
+
+private:
+	qint64 read(QFile &file, char *data, qint64 maxSize) const;
+	template<class T> bool readValue(QFile &file, T &val) const;
 
 	QString _fileName;
 	quint8 _key;

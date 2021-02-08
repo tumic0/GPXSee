@@ -12,12 +12,12 @@ class HuffmanTable;
 class NETFile : public SubFile
 {
 public:
-	NETFile(IMG *img) : SubFile(img), _huffmanTable(0), _tp(0), _offset(0),
+	NETFile(const IMG *img) : SubFile(img), _huffmanTable(0), _tp(0), _offset(0),
 	  _size(0), _linksOffset(0), _linksSize(0), _shift(0), _linksShift(0) {}
 	NETFile(const QString *path) : SubFile(path), _huffmanTable(0), _tp(0),
 	  _offset(0), _size(0), _linksOffset(0), _linksSize(0), _shift(0),
 	  _linksShift(0) {}
-	NETFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
+	NETFile(const SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
 	  _huffmanTable(0), _tp(0), _offset(0), _size(0), _linksOffset(0),
 	  _linksSize(0), _shift(0), _linksShift(0) {}
 	~NETFile();

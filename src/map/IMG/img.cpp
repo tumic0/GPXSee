@@ -182,7 +182,7 @@ IMG::IMG(const QString &fileName) : _fileName(fileName)
 		_valid = true;
 }
 
-qint64 IMG::read(QFile &file, char *data, qint64 maxSize)
+qint64 IMG::read(QFile &file, char *data, qint64 maxSize) const
 {
 	qint64 ret = file.read(data, maxSize);
 	if (_key)
@@ -191,7 +191,7 @@ qint64 IMG::read(QFile &file, char *data, qint64 maxSize)
 	return ret;
 }
 
-template<class T> bool IMG::readValue(QFile &file, T &val)
+template<class T> bool IMG::readValue(QFile &file, T &val) const
 {
 	T data;
 
@@ -203,7 +203,7 @@ template<class T> bool IMG::readValue(QFile &file, T &val)
 	return true;
 }
 
-bool IMG::readBlock(QFile &file, int blockNum, char *data)
+bool IMG::readBlock(QFile &file, int blockNum, char *data) const
 {
 	if (!file.seek((quint64)blockNum << _blockBits))
 		return false;

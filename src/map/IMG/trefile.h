@@ -13,9 +13,9 @@ class SubDiv;
 class TREFile : public SubFile
 {
 public:
-	TREFile(IMG *img) : SubFile(img) {}
+	TREFile(const IMG *img) : SubFile(img) {}
 	TREFile(const QString *path) : SubFile(path) {}
-	TREFile(SubFile *gmp, quint32 offset) : SubFile(gmp, offset) {}
+	TREFile(const SubFile *gmp, quint32 offset) : SubFile(gmp, offset) {}
 	~TREFile();
 
 	bool init();
