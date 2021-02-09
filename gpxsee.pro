@@ -109,6 +109,7 @@ HEADERS += src/common/config.h \
     src/map/projection.h \
     src/map/ellipsoid.h \
     src/map/datum.h \
+    src/map/sqlitemap.h \
     src/map/webmercator.h \
     src/map/transversemercator.h \
     src/map/latlon.h \
@@ -289,6 +290,7 @@ SOURCES += src/main.cpp \
     src/map/emptymap.cpp \
     src/map/ozimap.cpp \
     src/map/polyconic.cpp \
+    src/map/sqlitemap.cpp \
     src/map/tar.cpp \
     src/map/atlas.cpp \
     src/map/ozf.cpp \

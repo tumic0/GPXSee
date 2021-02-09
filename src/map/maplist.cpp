@@ -13,6 +13,7 @@
 #include "bsbmap.h"
 #include "kmzmap.h"
 #include "aqmmap.h"
+#include "sqlitemap.h"
 #include "invalidmap.h"
 #include "maplist.h"
 
@@ -53,6 +54,8 @@ Map *MapList::loadFile(const QString &path, bool *terminate)
 		map = new KMZMap(path);
 	else if (suffix == "aqm")
 		map = new AQMMap(path);
+	else if (suffix == "sqlitedb")
+		map = new SqliteMap(path);
 
 	return map ? map : new InvalidMap(path, "Unknown file format");
 }
@@ -106,6 +109,8 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "KMZ maps") + " (*.kmz);;"
 	  + qApp->translate("MapList", "OziExplorer maps") + " (*.map);;"
 	  + qApp->translate("MapList", "MBTiles maps") + " (*.mbtiles);;"
+	  + qApp->translate("MapList", "Sqlite maps (Locus, OsmAnd, RMaps)")
+		+ " (*.sqlitedb);;"
 	  + qApp->translate("MapList", "TrekBuddy maps/atlases") + " (*.tar *.tba);;"
 	  + qApp->translate("MapList", "GeoTIFF images") + " (*.tif *.tiff);;"
 	  + qApp->translate("MapList", "TwoNav maps") + " (*.rmap *.rtmap);;"
@@ -116,7 +121,7 @@ QStringList MapList::filter()
 {
 	QStringList filter;
 	filter << "*.aqm" << "*.gmap" << "*.gmapi" << "*.img" << "*.jnx" << "*.kap"
-	  << "*.kmz" << "*.map" << "*.mbtiles" << "*.rmap" << "*.rtmap" << "*.tar"
-	  << "*.tba" << "*.tif" << "*.tiff"  << "*.xml";
+	  << "*.kmz" << "*.map" << "*.mbtiles" << "*.rmap" << "*.rtmap"
+	  << "*.sqlitedb" << "*.tar" << "*.tba" << "*.tif" << "*.tiff"  << "*.xml";
 	return filter;
 }
