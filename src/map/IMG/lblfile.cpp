@@ -100,17 +100,19 @@ bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 		  && readUInt32(hdl, flags) && readUInt32(hdl, _imgOffset)
 		  && readUInt32(hdl, _imgSize)))
 			return false;
-		quint32 count = size ? size / recordSize : 0;
 
-		quint32 maxId = count - 1;
-		_imgOffsetIdSize = 0;
-		do {
-			_imgOffsetIdSize++;
-			maxId = maxId >> 8;
-		} while (maxId != 0);
+		if (size && recordSize) {
+			quint32 count = size / recordSize;
+			quint32 maxId = count - 1;
+			_imgOffsetIdSize = 0;
+			do {
+				_imgOffsetIdSize++;
+				maxId = maxId >> 8;
+			} while (maxId != 0);
 
-		if (!loadFiles(hdl, count, offset, recordSize))
-			return false;
+			if (!loadFiles(hdl, count, offset, recordSize))
+				return false;
+		}
 	}
 
 	if (_encoding == 11) {
