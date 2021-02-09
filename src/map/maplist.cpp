@@ -109,11 +109,11 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "KMZ maps") + " (*.kmz);;"
 	  + qApp->translate("MapList", "OziExplorer maps") + " (*.map);;"
 	  + qApp->translate("MapList", "MBTiles maps") + " (*.mbtiles);;"
-	  + qApp->translate("MapList", "Sqlite maps (Locus, OsmAnd, RMaps)")
+	  + qApp->translate("MapList", "TwoNav maps") + " (*.rmap *.rtmap);;"
+	  + qApp->translate("MapList", "Locus/OsmAnd/RMaps sqlite maps")
 		+ " (*.sqlitedb);;"
 	  + qApp->translate("MapList", "TrekBuddy maps/atlases") + " (*.tar *.tba);;"
 	  + qApp->translate("MapList", "GeoTIFF images") + " (*.tif *.tiff);;"
-	  + qApp->translate("MapList", "TwoNav maps") + " (*.rmap *.rtmap);;"
 	  + qApp->translate("MapList", "Online map sources") + " (*.xml)";
 }
 
