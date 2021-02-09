@@ -1,17 +1,17 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlField>
-#include <QFileInfo>
 #include <QPainter>
 #include <QPixmapCache>
 #include <QImageReader>
 #include <QBuffer>
 #include <QtConcurrent>
-#include "common/rectc.h"
 #include "common/util.h"
 #include "osm.h"
 #include "mbtilesmap.h"
 
+
+#define META_TYPE(type) static_cast<QMetaType::Type>(type)
 
 class MBTile
 {
@@ -43,12 +43,6 @@ private:
 	QImage _image;
 };
 
-#define META_TYPE(type) static_cast<QMetaType::Type>(type)
-
-static double index2mercator(int index, int zoom)
-{
-	return rad2deg(-M_PI + 2 * M_PI * ((double)index / (1<<zoom)));
-}
 
 MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _mapRatio(1.0), _tileRatio(1.0), _scalable(false),
@@ -59,7 +53,7 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 	_db.setConnectOptions("QSQLITE_OPEN_READONLY");
 
 	if (!_db.open()) {
-		_errorString = fileName + ": Error opening database file";
+		_errorString = "Error opening database file";
 		return;
 	}
 
@@ -99,13 +93,13 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 		QSqlQuery query(sql, _db);
 		query.first();
 
-		double minX = index2mercator(qMin((1<<_zooms.min()) - 1,
+		double minX = OSM::index2mercator(qMin((1<<_zooms.min()) - 1,
 		  qMax(0, query.value(0).toInt())), _zooms.min());
-		double minY = index2mercator(qMin((1<<_zooms.min()) - 1,
+		double minY = OSM::index2mercator(qMin((1<<_zooms.min()) - 1,
 		  qMax(0, query.value(1).toInt())), _zooms.min());
-		double maxX = index2mercator(qMin((1<<_zooms.min()) - 1,
+		double maxX = OSM::index2mercator(qMin((1<<_zooms.min()) - 1,
 		  qMax(0, query.value(2).toInt())) + 1, _zooms.min());
-		double maxY = index2mercator(qMin((1<<_zooms.min()) - 1,
+		double maxY = OSM::index2mercator(qMin((1<<_zooms.min()) - 1,
 		  qMax(0, query.value(3).toInt())) + 1, _zooms.min());
 		Coordinates tl(OSM::m2ll(QPointF(minX, maxY)));
 		Coordinates br(OSM::m2ll(QPointF(maxX, minY)));

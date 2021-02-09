@@ -21,11 +21,9 @@ QPoint OSM::mercator2tile(const QPointF &m, int zoom)
 	  qFloor((1.0 - (m.y() / 180.0)) / 2.0 * (1<<zoom)));
 }
 
-Coordinates OSM::tile2ll(const QPoint &p, int z)
+double OSM::index2mercator(int index, int zoom)
 {
-	double n = M_PI - 2.0 * M_PI * p.y() / (double)(1 << z);
-	return Coordinates(p.x() / (double)(1 << z) * 360.0 - 180,
-	  180.0 / M_PI * atan(0.5 * (exp(n) - exp(-n))));
+	return rad2deg(-M_PI + 2 * M_PI * ((double)index / (1<<zoom)));
 }
 
 qreal OSM::zoom2scale(int zoom, int tileSize)

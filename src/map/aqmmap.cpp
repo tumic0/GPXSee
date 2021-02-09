@@ -191,8 +191,23 @@ bool AQMMap::readHeader()
 			if (!parseLevel(data, zoom, tileSize, bounds))
 				return false;
 
-			_bounds = RectC(OSM::tile2ll(bounds.topLeft(), zoom),
-			  OSM::tile2ll(bounds.bottomRight(), zoom));
+			if (_bounds.isNull()) {
+				double minX = OSM::index2mercator(qMin((1<<zoom) - 1,
+				  qMax(0, bounds.left())), zoom);
+				double minY = OSM::index2mercator(qMin((1<<zoom) - 1,
+				  qMax(0, bounds.top())), zoom);
+				double maxX = OSM::index2mercator(qMin((1<<zoom) - 1,
+				  qMax(0, bounds.right())) + 1, zoom);
+				double maxY = OSM::index2mercator(qMin((1<<zoom) - 1,
+				  qMax(0, bounds.bottom())) + 1, zoom);
+				Coordinates tl(OSM::m2ll(QPointF(minX, -minY)));
+				Coordinates br(OSM::m2ll(QPointF(maxX, -maxY)));
+				// Workaround of broken zoom levels 0 and 1 due to numerical
+				// instability
+				tl.rlat() = qMin(tl.lat(), OSM::BOUNDS.top());
+				br.rlat() = qMax(br.lat(), OSM::BOUNDS.bottom());
+				_bounds = RectC(tl, br);
+			}
 			_zooms.append(Zoom(zoom, tileSize));
 		} else if (files.at(i).name == "@LEVEL") {
 			li = i;
@@ -353,15 +368,19 @@ void AQMMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	Q_UNUSED(flags);
 	const Zoom &z = _zooms.at(_zoom);
 	qreal scale = OSM::zoom2scale(z.zoom, z.tileSize);
+	QRectF b(bounds());
+
 
 	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * _mapRatio, z.zoom);
 	QPointF tl(floor(rect.left() / tileSize())
 	  * tileSize(), floor(rect.top() / tileSize()) * tileSize());
 
-	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
+	QSizeF s(qMin(rect.right() - tl.x(), b.width()),
+	  qMin(rect.bottom() - tl.y(), b.height()));
 	int width = ceil(s.width() / tileSize());
 	int height = ceil(s.height() / tileSize());
+
 
 	QList<AQTile> tiles;
 
@@ -373,11 +392,13 @@ void AQMMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			  + QString::number(t.x()) + "_" + QString::number(t.y());
 
 			if (QPixmapCache::find(key, &pm)) {
-				QPointF tp(tl.x() + (t.x() - tile.x()) * tileSize(),
-				  tl.y() + (t.y() - tile.y()) * tileSize());
+				QPointF tp(qMax(tl.x(), b.left()) + (t.x() - tile.x())
+				  * tileSize(), qMax(tl.y(), b.top()) + (t.y() - tile.y())
+				  * tileSize());
 				drawTile(painter, pm, tp);
-			} else
+			} else {
 				tiles.append(AQTile(t, tileData(t), key));
+			}
 		}
 	}
 
@@ -389,10 +410,12 @@ void AQMMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		QPixmap pm(mt.pixmap());
 		if (pm.isNull())
 			continue;
+
 		QPixmapCache::insert(mt.key(), pm);
 
-		QPointF tp(tl.x() + (mt.xy().x() - tile.x()) * tileSize(),
-		  tl.y() + (mt.xy().y() - tile.y()) * tileSize());
+		QPointF tp(qMax(tl.x(), b.left()) + (mt.xy().x() - tile.x())
+		  * tileSize(), qMax(tl.y(), b.top()) + (mt.xy().y() - tile.y())
+		  * tileSize());
 		drawTile(painter, pm, tp);
 	}
 }

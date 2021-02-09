@@ -18,6 +18,7 @@ public:
 	QString name() const {return _name;}
 
 	QRectF bounds();
+	RectC llBounds() {return _bounds;}
 	qreal resolution(const QRectF &rect);
 
 	int zoom() const {return _zoom;}

@@ -2,7 +2,6 @@
 #define MBTILESMAP_H
 
 #include <QSqlDatabase>
-#include <QByteArray>
 #include "common/range.h"
 #include "map.h"
 
