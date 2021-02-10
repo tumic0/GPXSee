@@ -470,7 +470,8 @@ win32 {
         icons/formats/mbts.ico \
         icons/formats/rmap.ico \
         icons/formats/tba.ico \
-        icons/formats/aqm.ico
+        icons/formats/aqm.ico \
+        icons/formats/sqlt.ico
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }

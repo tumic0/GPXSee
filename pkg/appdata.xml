@@ -88,5 +88,6 @@
 		<mimetype>image/tiff</mimetype>
 		<mimetype>application/vnd.google-earth.kmz</mimetype>
 		<mimetype>application/vnd.alpinequest.aqm</mimetype>
+		<mimetype>application/vnd.rmaps.sqlite</mimetype>
 	</mimetypes>
 </component>
