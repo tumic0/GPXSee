@@ -93,6 +93,9 @@ Section "GPXSee" SEC_APP
   File /r "maps"
   File /r "csv"
 
+  ; Create the uninstaller
+  WriteUninstaller "$INSTDIR\uninstall.exe"
+  
   ; Create start menu entry and add links
   SetShellVarContext all
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -100,9 +103,6 @@ Section "GPXSee" SEC_APP
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\GPXSee.lnk" "$INSTDIR\gpxsee.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
-
-  ; Create the uninstaller
-  WriteUninstaller "$INSTDIR\uninstall.exe"
 
   ; Write the installation path into the registry
   DetailPrint "Registering application..."
@@ -113,6 +113,9 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKLM "${REGENTRY}" "Publisher" "Martin Tůma"
   WriteRegStr HKLM "${REGENTRY}" "DisplayVersion" "${VERSION}"
   WriteRegStr HKLM "${REGENTRY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
+  WriteRegStr HKLM "${REGENTRY}" "DisplayIcon" '"$INSTDIR\gpxsee.exe"'
+  WriteRegStr HKLM "${REGENTRY}" "InstallLocation" '"$INSTDIR"'
+  WriteRegStr HKLM "${REGENTRY}" "URLInfoAbout" "https://www.gpxsee.org"
   WriteRegDWORD HKLM "${REGENTRY}" "NoModify" 1
   WriteRegDWORD HKLM "${REGENTRY}" "NoRepair" 1
 
@@ -227,6 +230,8 @@ Section "MSVC runtime" SEC_MSVC
 SectionEnd
 
 Section "OpenSSL" SEC_OPENSSL
+
+  SectionIn RO
 
   File "libcrypto-1_1-x64.dll"
   File "libssl-1_1-x64.dll"
