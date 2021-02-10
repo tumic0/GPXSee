@@ -55,11 +55,24 @@ static QString capitalized(const QString &str)
 	return ret;
 }
 
+static quint8 byteSize(quint32 val)
+{
+	quint8 ret = 0;
+
+	do {
+		ret++;
+		val = val >> 8;
+	} while (val != 0);
+
+	return ret;
+}
+
 
 LBLFile::~LBLFile()
 {
 	delete _huffmanText;
 	delete[] _table;
+	delete[] _rasters;
 }
 
 bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
@@ -101,18 +114,9 @@ bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 		  && readUInt32(hdl, _imgSize)))
 			return false;
 
-		if (size && recordSize) {
-			quint32 count = size / recordSize;
-			quint32 maxId = count - 1;
-			_imgOffsetIdSize = 0;
-			do {
-				_imgOffsetIdSize++;
-				maxId = maxId >> 8;
-			} while (maxId != 0);
-
-			if (!loadFiles(hdl, count, offset, recordSize))
+		if (size && recordSize)
+			if (!loadRasterTable(hdl, offset, size, recordSize))
 				return false;
-		}
 	}
 
 	if (_encoding == 11) {
@@ -130,8 +134,10 @@ void LBLFile::clear()
 {
 	delete _huffmanText;
 	delete[] _table;
+	delete[] _rasters;
 	_huffmanText = 0;
 	_table = 0;
+	_rasters = 0;
 }
 
 Label LBLFile::label6b(Handle &hdl, quint32 offset, bool capitalize) const
@@ -306,41 +312,44 @@ Label LBLFile::label(Handle &hdl, quint32 offset, bool poi, bool capitalize) con
 	}
 }
 
-bool LBLFile::loadFiles(Handle &hdl, quint32 count, quint32 offset,
+bool LBLFile::loadRasterTable(Handle &hdl, quint32 offset, quint32 size,
   quint32 recordSize)
 {
-	_rasters.resize(count);
+	quint32 prev, cur;
 
-	for (quint32 i = 0; i < count; i++) {
-		quint32 currentOffset, nextOffset, size;
+	_imgCount = size / recordSize;
+	_imgOffsetIdSize = byteSize(_imgCount - 1);
+	_rasters = new Image[_imgCount];
 
-		if (!(seek(hdl, offset + i * recordSize)
-		  && readVUInt32(hdl, recordSize, currentOffset)))
+	if (!(seek(hdl, offset) && readVUInt32(hdl, recordSize, prev)))
+		return false;
+
+	for (quint32 i = 1; i < _imgCount; i++) {
+		if (!readVUInt32(hdl, recordSize, cur))
 			return false;
-		if (i == count - 1)
-			nextOffset = _imgSize;
-		else {
-			if (!readVUInt32(hdl, recordSize, nextOffset))
-				return false;
-		}
-		size = nextOffset - currentOffset;
 
-		_rasters[i] = File(currentOffset, size);
+		_rasters[i-1].offset = prev;
+		_rasters[i-1].size = cur - prev;
+
+		prev = cur;
 	}
+
+	_rasters[_imgCount-1].offset = prev;
+	_rasters[_imgCount-1].size = _imgSize - prev;
 
 	return true;
 }
 
 QImage LBLFile::readImage(Handle &hdl, quint32 id) const
 {
-	if (id >= (quint32)_rasters.size())
+	if (id >= _imgCount)
 		return QImage();
 
-	if (!seek(hdl, _imgOffset + _rasters.at(id).offset))
+	if (!seek(hdl, _imgOffset + _rasters[id].offset))
 		return QImage();
 	QByteArray ba;
-	ba.resize(_rasters.at(id).size);
-	if (!read(hdl, ba.data(), _rasters.at(id).size))
+	ba.resize(_rasters[id].size);
+	if (!read(hdl, ba.data(), _rasters[id].size))
 		return QImage();
 
 	return QImage::fromData(ba);
