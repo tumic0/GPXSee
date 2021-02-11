@@ -419,7 +419,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="382"/>
         <source>Position date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Sijainnin pvm/aika</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="389"/>
@@ -1023,7 +1023,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="113"/>
         <source>Locus/OsmAnd/RMaps sqlite maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Locus/OsmAnd/RMaps sqlite -kartat</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="115"/>
