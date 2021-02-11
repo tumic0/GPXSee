@@ -442,7 +442,8 @@ macx {
         icons/formats/mbts.icns \
         icons/formats/rmap.icns \
         icons/formats/tba.icns \
-        icons/formats/aqm.icns
+        icons/formats/aqm.icns \
+        icons/formats/sqlt.icns
     QMAKE_BUNDLE_DATA += locale maps icons csv
 }
 

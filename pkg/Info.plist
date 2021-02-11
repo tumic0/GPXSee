@@ -478,6 +478,22 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sqlitedb</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.rmaps.sqlite</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/sqlt.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>RMaps SQLite Map File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
@@ -1051,6 +1067,27 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.alpinequest.aqm</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.robert.maps</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://svn.code.sf.net/p/mobac/code/trunk/MOBAC</string>
+			<key>UTTypeDescription</key>
+			<string>RMaps SQLite Map File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sqlitedb</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.rmaps.sqlite</string>
 			</dict>
 		</dict>
 		<dict>
