@@ -60,6 +60,7 @@ private slots:
 	void showGraphs(bool show);
 	void showGraphGrids(bool show);
 	void showGraphSliderInfo(bool show);
+	void showPathMarkerInfo(QAction *action);
 	void showToolbars(bool show);
 	void showFullscreen(bool show);
 	void showTracks(bool show);
@@ -205,8 +206,10 @@ private:
 	QAction *_showWaypointLabelsAction;
 	QAction *_showAreasAction;
 	QAction *_showRouteWaypointsAction;
+	QAction *_hideMarkersAction;
 	QAction *_showMarkersAction;
-	QAction *_showMarkerInfoAction;
+	QAction *_showMarkerDateAction;
+	QAction *_showMarkerCoordinatesAction;
 	QAction *_showTicksAction;
 	QAction *_showCoordinatesAction;
 	QAction *_openOptionsAction;

@@ -17,7 +17,9 @@ namespace Format
 	QString timeSpan(qreal time, bool full = true);
 	QString distance(qreal value, Units units);
 	QString elevation(qreal value, Units units);
-	QString coordinates(const Coordinates &value, CoordinatesFormat type);
+	QString coordinates(const Coordinates &c, CoordinatesFormat type);
+	QString lon(const Coordinates &c, CoordinatesFormat type);
+	QString lat(const Coordinates &c, CoordinatesFormat type);
 }
 
 #endif // FORMAT_H

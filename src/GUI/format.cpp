@@ -84,23 +84,38 @@ QString Format::elevation(qreal value, Units units)
 		  + qApp->translate("Format", "ft");
 }
 
-QString Format::coordinates(const Coordinates &value, CoordinatesFormat type)
+
+QString Format::lon(const Coordinates &c, CoordinatesFormat type)
 {
-	QChar yH = (value.lat() < 0) ? 'S' : 'N';
-	QChar xH = (value.lon() < 0) ? 'W' : 'E';
+	QChar xH = (c.lon() < 0) ? 'W' : 'E';
 
 	switch (type) {
 		case DegreesMinutes:
-			return deg2DMM(qAbs(value.lat())) + yH + "," + QChar(0x00A0)
-			  + deg2DMM(qAbs(value.lon())) + xH;
-			break;
+			return deg2DMM(qAbs(c.lon())) + xH;
 		case DMS:
-			return deg2DMS(qAbs(value.lat())) + yH + "," + QChar(0x00A0)
-			  + deg2DMS(qAbs(value.lon())) + xH;
-			break;
+			return deg2DMS(qAbs(c.lon())) + xH;
 		default:
 			QLocale l(QLocale::system());
-			return l.toString(qAbs(value.lat()), 'f', 5) + yH + ","
-			+ QChar(0x00A0) + l.toString(qAbs(value.lon()), 'f', 5) + xH;
+			return l.toString(qAbs(c.lon()), 'f', 5) + xH;
 	}
+}
+
+QString Format::lat(const Coordinates &c, CoordinatesFormat type)
+{
+	QChar yH = (c.lat() < 0) ? 'S' : 'N';
+
+	switch (type) {
+		case DegreesMinutes:
+			return deg2DMM(qAbs(c.lat())) + yH;
+		case DMS:
+			return deg2DMS(qAbs(c.lat())) + yH;
+		default:
+			QLocale l(QLocale::system());
+			return l.toString(qAbs(c.lat()), 'f', 5) + yH;
+	}
+}
+
+QString Format::coordinates(const Coordinates &c, CoordinatesFormat type)
+{
+	return lat(c, type) + "," + QChar(0x00A0) + lon(c, type);
 }

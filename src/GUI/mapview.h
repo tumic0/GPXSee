@@ -14,6 +14,7 @@
 #include "searchpointer.h"
 #include "units.h"
 #include "format.h"
+#include "markerinfoitem.h"
 #include "palette.h"
 
 
@@ -95,7 +96,7 @@ public slots:
 	void showCoordinates(bool show);
 	void showTicks(bool show);
 	void showMarkers(bool show);
-	void showMarkerInfo(bool show);
+	void showMarkerInfo(MarkerInfoItem::Type type);
 	void showOverlappedPOIs(bool show);
 	void showWaypointLabels(bool show);
 	void showTracks(bool show);
@@ -162,7 +163,8 @@ private:
 
 	bool _showMap, _showTracks, _showRoutes, _showAreas, _showWaypoints,
 	  _showWaypointLabels, _showPOI, _showPOILabels, _showRouteWaypoints,
-	  _showMarkers, _showMarkerInfo, _showPathTicks;
+	  _showMarkers, _showPathTicks;
+	MarkerInfoItem::Type _markerInfoType;
 	bool _overlapPOIs;
 	int _trackWidth, _routeWidth, _areaWidth;
 	Qt::PenStyle _trackStyle, _routeStyle, _areaStyle;

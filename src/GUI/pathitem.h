@@ -6,13 +6,13 @@
 #include <QTimeZone>
 #include "data/path.h"
 #include "graphicsscene.h"
+#include "markerinfoitem.h"
 #include "units.h"
 
 class Map;
 class PathTickItem;
 class GraphItem;
 class MarkerItem;
-class MarkerInfoItem;
 
 class PathItem : public QObject, public GraphicsItem
 {
@@ -42,15 +42,18 @@ public:
 	void setDigitalZoom(int zoom);
 	void setMarkerColor(const QColor &color);
 	void showMarker(bool show);
-	void showMarkerInfo(bool show);
+	void showMarkerInfo(MarkerInfoItem::Type type);
 	void showTicks(bool show);
 
 	void setMarkerPosition(qreal pos);
 
 	void updateTicks();
+	void updateMarkerInfo();
 
 	static void setUnits(Units units) {_units = units;}
 	static void setTimeZone(const QTimeZone &zone) {_timeZone = zone;}
+	static void setCoordinatesFormat(const CoordinatesFormat &format)
+	  {MarkerInfoItem::setCoordinatesFormat(format);}
 
 public slots:
 	void hover(bool hover);
@@ -90,6 +93,7 @@ private:
 	QPainterPath _painterPath;
 	bool _showMarker;
 	bool _showTicks;
+	MarkerInfoItem::Type _markerInfoType;
 
 	MarkerItem *_marker;
 	MarkerInfoItem *_markerInfo;

@@ -19,6 +19,7 @@
 #include "keys.h"
 #include "graphicsscene.h"
 #include "mapaction.h"
+#include "markerinfoitem.h"
 #include "mapview.h"
 
 
@@ -93,7 +94,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_overlapPOIs = true;
 	_showRouteWaypoints = true;
 	_showMarkers = true;
-	_showMarkerInfo = false;
+	_markerInfoType = MarkerInfoItem::None;
 	_showPathTicks = false;
 	_trackWidth = 3;
 	_routeWidth = 3;
@@ -142,7 +143,7 @@ PathItem *MapView::addTrack(const Track &track)
 	ti->setDigitalZoom(_digitalZoom);
 	ti->setMarkerColor(_markerColor);
 	ti->showMarker(_showMarkers);
-	ti->showMarkerInfo(_showMarkerInfo);
+	ti->showMarkerInfo(_markerInfoType);
 	ti->showTicks(_showPathTicks);
 	_scene->addItem(ti);
 
@@ -171,7 +172,7 @@ PathItem *MapView::addRoute(const Route &route)
 	ri->setDigitalZoom(_digitalZoom);
 	ri->setMarkerColor(_markerColor);
 	ri->showMarker(_showMarkers);
-	ri->showMarkerInfo(_showMarkerInfo);
+	ri->showMarkerInfo(_markerInfoType);
 	ri->showTicks(_showPathTicks);
 	_scene->addItem(ri);
 
@@ -484,6 +485,12 @@ void MapView::setUnits(Units units)
 void MapView::setCoordinatesFormat(CoordinatesFormat format)
 {
 	WaypointItem::setCoordinatesFormat(format);
+	PathItem::setCoordinatesFormat(format);
+
+	for (int i = 0; i < _tracks.count(); i++)
+		_tracks[i]->updateMarkerInfo();
+	for (int i = 0; i < _routes.count(); i++)
+		_routes[i]->updateMarkerInfo();
 
 	_coordinates->setFormat(format);
 }
@@ -492,6 +499,11 @@ void MapView::setTimeZone(const QTimeZone &zone)
 {
 	WaypointItem::setTimeZone(zone);
 	PathItem::setTimeZone(zone);
+
+	for (int i = 0; i < _tracks.count(); i++)
+		_tracks[i]->updateMarkerInfo();
+	for (int i = 0; i < _routes.count(); i++)
+		_routes[i]->updateMarkerInfo();
 }
 
 void MapView::clearMapCache()
@@ -808,14 +820,14 @@ void MapView::showMarkers(bool show)
 		_routes.at(i)->showMarker(show);
 }
 
-void MapView::showMarkerInfo(bool show)
+void MapView::showMarkerInfo(MarkerInfoItem::Type type)
 {
-	_showMarkerInfo = show;
+	_markerInfoType = type;
 
 	for (int i = 0; i < _tracks.size(); i++)
-		_tracks.at(i)->showMarkerInfo(show);
+		_tracks.at(i)->showMarkerInfo(type);
 	for (int i = 0; i < _routes.size(); i++)
-		_routes.at(i)->showMarkerInfo(show);
+		_routes.at(i)->showMarkerInfo(type);
 }
 
 void MapView::showTicks(bool show)

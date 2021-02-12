@@ -14,6 +14,7 @@
 #define ZOOM_OUT                Qt::Key_Minus
 #define TOGGLE_GRAPH_TYPE_KEY   Qt::Key_X
 #define TOGGLE_TIME_TYPE_KEY    Qt::Key_T
+#define TOGGLE_MARKER_INFO_KEY  Qt::Key_I
 
 #define QUIT_SHORTCUT           QKeySequence(QKeySequence::Quit)
 #define OPEN_SHORTCUT           QKeySequence(QKeySequence::Open)

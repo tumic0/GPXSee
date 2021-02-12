@@ -374,16 +374,25 @@ void GUI::createActions()
 	_showTicksAction->setCheckable(true);
 	connect(_showTicksAction, SIGNAL(triggered(bool)), _mapView,
 	  SLOT(showTicks(bool)));
-	_showMarkersAction = new QAction(tr("Position markers"), this);
+	QActionGroup *markerInfoGroup = new QActionGroup(this);
+	connect(markerInfoGroup, SIGNAL(triggered(QAction*)), this,
+	  SLOT(showPathMarkerInfo(QAction*)));
+	_hideMarkersAction = new QAction(tr("Do not show"), this);
+	_hideMarkersAction->setMenuRole(QAction::NoRole);
+	_hideMarkersAction->setCheckable(true);
+	_hideMarkersAction->setActionGroup(markerInfoGroup);
+	_showMarkersAction = new QAction(tr("Marker only"), this);
 	_showMarkersAction->setMenuRole(QAction::NoRole);
 	_showMarkersAction->setCheckable(true);
-	connect(_showMarkersAction, SIGNAL(triggered(bool)), _mapView,
-	  SLOT(showMarkers(bool)));
-	_showMarkerInfoAction = new QAction(tr("Position date/time"), this);
-	_showMarkerInfoAction->setMenuRole(QAction::NoRole);
-	_showMarkerInfoAction->setCheckable(true);
-	connect(_showMarkerInfoAction, SIGNAL(triggered(bool)), _mapView,
-	  SLOT(showMarkerInfo(bool)));
+	_showMarkersAction->setActionGroup(markerInfoGroup);
+	_showMarkerDateAction = new QAction(tr("Date/time"), this);
+	_showMarkerDateAction->setMenuRole(QAction::NoRole);
+	_showMarkerDateAction->setCheckable(true);
+	_showMarkerDateAction->setActionGroup(markerInfoGroup);
+	_showMarkerCoordinatesAction = new QAction(tr("Coordinates"), this);
+	_showMarkerCoordinatesAction->setMenuRole(QAction::NoRole);
+	_showMarkerCoordinatesAction->setCheckable(true);
+	_showMarkerCoordinatesAction->setActionGroup(markerInfoGroup);
 
 	// Graph actions
 	_showGraphsAction = new QAction(QIcon(SHOW_GRAPHS_ICON), tr("Show graphs"),
@@ -564,12 +573,14 @@ void GUI::createMenus()
 	poiMenu->addAction(_showPOIAction);
 
 	QMenu *dataMenu = menuBar()->addMenu(tr("&Data"));
-	QMenu *displayMenu = dataMenu->addMenu(tr("Display"));
-	displayMenu->addAction(_showWaypointLabelsAction);
-	displayMenu->addAction(_showRouteWaypointsAction);
-	displayMenu->addAction(_showTicksAction);
-	displayMenu->addAction(_showMarkersAction);
-	displayMenu->addAction(_showMarkerInfoAction);
+	dataMenu->addAction(_showWaypointLabelsAction);
+	dataMenu->addAction(_showRouteWaypointsAction);
+	dataMenu->addAction(_showTicksAction);
+	QMenu *markerMenu = dataMenu->addMenu(tr("Position info"));
+	markerMenu->addAction(_hideMarkersAction);
+	markerMenu->addAction(_showMarkersAction);
+	markerMenu->addAction(_showMarkerDateAction);
+	markerMenu->addAction(_showMarkerCoordinatesAction);
 	dataMenu->addSeparator();
 	dataMenu->addAction(_showTracksAction);
 	dataMenu->addAction(_showRoutesAction);
@@ -728,7 +739,9 @@ void GUI::keys()
 	  + tr("Toggle graph type") + "</td><td><i>"
 	  + QKeySequence(TOGGLE_GRAPH_TYPE_KEY).toString() + "</i></td></tr><tr><td>"
 	  + tr("Toggle time type") + "</td><td><i>"
-	  + QKeySequence(TOGGLE_TIME_TYPE_KEY).toString()
+	  + QKeySequence(TOGGLE_TIME_TYPE_KEY).toString() + "</i></td></tr><tr><td>"
+	  + tr("Toggle position info") + "</td><td><i>"
+	  + QKeySequence(TOGGLE_MARKER_INFO_KEY).toString() + "</i></td></tr>"
 	  + "<tr><td></td><td></td></tr><tr><td>" + tr("Next map")
 	  + "</td><td><i>" + NEXT_MAP_SHORTCUT.toString() + "</i></td></tr><tr><td>"
 	  + tr("Previous map") + "</td><td><i>" + PREV_MAP_SHORTCUT.toString()
@@ -1026,7 +1039,6 @@ void GUI::openOptions()
 		_mapView->setTimeZone(options.timeZone.zone());
 		_dateRange.first = _dateRange.first.toTimeZone(options.timeZone.zone());
 		_dateRange.second = _dateRange.second.toTimeZone(options.timeZone.zone());
-		reload = true;
 	}
 
 	if (reload)
@@ -1427,6 +1439,23 @@ void GUI::showGraphSliderInfo(bool show)
 {
 	for (int i = 0; i < _tabs.size(); i++)
 		_tabs.at(i)->showSliderInfo(show);
+}
+
+void GUI::showPathMarkerInfo(QAction *action)
+{
+	if (action == _showMarkersAction) {
+		_mapView->showMarkers(true);
+		_mapView->showMarkerInfo(MarkerInfoItem::None);
+	} else if (action == _showMarkerDateAction) {
+		_mapView->showMarkers(true);
+		_mapView->showMarkerInfo(MarkerInfoItem::Date);
+	} else if (action == _showMarkerCoordinatesAction) {
+		_mapView->showMarkers(true);
+		_mapView->showMarkerInfo(MarkerInfoItem::Position);
+	} else {
+		_mapView->showMarkers(false);
+		_mapView->showMarkerInfo(MarkerInfoItem::None);
+	}
 }
 
 void GUI::loadMap()
@@ -1851,6 +1880,12 @@ void GUI::keyPressEvent(QKeyEvent *event)
 			else
 				_movingTimeAction->trigger();
 			break;
+		case TOGGLE_MARKER_INFO_KEY:
+			if (_showMarkerDateAction->isChecked())
+				_showMarkerCoordinatesAction->trigger();
+			else if (_showMarkerCoordinatesAction->isChecked())
+				_showMarkerDateAction->trigger();
+			break;
 		case Qt::Key_Escape:
 			if (_fullscreenAction->isChecked()) {
 				_fullscreenAction->setChecked(false);
@@ -2012,12 +2047,17 @@ void GUI::writeSettings()
 	if (_showTicksAction->isChecked() != SHOW_TICKS_DEFAULT)
 		settings.setValue(SHOW_TICKS_SETTING,
 		  _showTicksAction->isChecked());
-	if (_showMarkersAction->isChecked() != SHOW_MARKERS_DEFAULT)
-		settings.setValue(SHOW_MARKERS_SETTING,
-		  _showMarkersAction->isChecked());
-	if (_showMarkerInfoAction->isChecked() != SHOW_MARKER_INFO_DEFAULT)
-		settings.setValue(SHOW_MARKER_INFO_SETTING,
-		  _showMarkerInfoAction->isChecked());
+	bool sm = _showMarkersAction->isChecked()
+	  | _showMarkerDateAction->isChecked()
+	  | _showMarkerCoordinatesAction->isChecked();
+	if (sm != SHOW_MARKERS_DEFAULT)
+		settings.setValue(SHOW_MARKERS_SETTING, sm);
+	if (_showMarkerDateAction->isChecked()
+	  && SHOW_MARKER_INFO_DEFAULT != MarkerInfoItem::Date)
+		settings.setValue(SHOW_MARKER_INFO_SETTING, MarkerInfoItem::Date);
+	else if (_showMarkerCoordinatesAction->isChecked()
+	  && SHOW_MARKER_INFO_DEFAULT != MarkerInfoItem::Position)
+		settings.setValue(SHOW_MARKER_INFO_SETTING, MarkerInfoItem::Position);
 	settings.endGroup();
 
 	settings.beginGroup(PDF_EXPORT_SETTINGS_GROUP);
@@ -2311,15 +2351,18 @@ void GUI::readSettings()
 		_mapView->showTicks(true);
 		_showTicksAction->setChecked(true);
 	}
-	if (!settings.value(SHOW_MARKERS_SETTING, SHOW_MARKERS_DEFAULT).toBool())
-		_mapView->showMarkers(false);
-	else
-		_showMarkersAction->setChecked(true);
-	if (settings.value(SHOW_MARKER_INFO_SETTING,
-	  SHOW_MARKER_INFO_DEFAULT).toBool()) {
-		_mapView->showMarkerInfo(true);
-		_showMarkerInfoAction->setChecked(true);
-	}
+	if (settings.value(SHOW_MARKERS_SETTING, SHOW_MARKERS_DEFAULT).toBool()) {
+		MarkerInfoItem::Type mt = static_cast<MarkerInfoItem::Type>
+		  (settings.value(SHOW_MARKER_INFO_SETTING,
+		  SHOW_MARKER_INFO_DEFAULT).toInt());
+		if (mt == MarkerInfoItem::Position)
+			_showMarkerCoordinatesAction->trigger();
+		else if (mt == MarkerInfoItem::Date)
+			_showMarkerDateAction->trigger();
+		else
+			_showMarkersAction->trigger();
+	} else
+		_hideMarkersAction->trigger();
 	settings.endGroup();
 
 	settings.beginGroup(PDF_EXPORT_SETTINGS_GROUP);

@@ -8,7 +8,6 @@
 #include "popup.h"
 #include "graphitem.h"
 #include "markeritem.h"
-#include "markerinfoitem.h"
 #include "pathitem.h"
 
 
@@ -44,6 +43,7 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 	_pen = QPen(brush, _width);
 	_showMarker = true;
 	_showTicks = false;
+	_markerInfoType = MarkerInfoItem::None;
 
 	updatePainterPath();
 	updateShape();
@@ -288,13 +288,22 @@ void PathItem::setMarkerPosition(qreal pos)
 
 void PathItem::setMarkerInfo(qreal pos)
 {
-	qreal time = _graph
-	  ? (_graph->graphType() == Time) ? pos : _graph->timeAtDistance(pos)
-	  : NAN;
-	QDateTime d(date());
+	if (_markerInfoType == MarkerInfoItem::Date) {
+		qreal time = _graph
+		  ? (_graph->graphType() == Time) ? pos : _graph->timeAtDistance(pos)
+		  : NAN;
+		QDateTime d(date());
+		if (!std::isnan(time) && d.isValid())
+			_markerInfo->setDate(d.addSecs(time).toTimeZone(_timeZone));
+	} else if (_markerInfoType == MarkerInfoItem::Position)
+		_markerInfo->setCoordinates(_map->xy2ll(_marker->pos()));
+}
 
-	if (!std::isnan(time) && d.isValid())
-		_markerInfo->setDate(d.addSecs(time).toTimeZone(_timeZone));
+void PathItem::updateMarkerInfo()
+{
+	qreal pos = _graph ? (_graph->graphType() == Time)
+	  ? _graph->distanceAtTime(_markerDistance) : _markerDistance : NAN;
+	setMarkerInfo(pos);
 }
 
 void PathItem::setMarkerColor(const QColor &color)
@@ -322,12 +331,18 @@ void PathItem::showMarker(bool show)
 		return;
 
 	_showMarker = show;
+	updateMarkerInfo();
 	_marker->setVisible(show && isValid(position(_markerDistance)));
 }
 
-void PathItem::showMarkerInfo(bool show)
+void PathItem::showMarkerInfo(MarkerInfoItem::Type type)
 {
-	_markerInfo->setVisible(show);
+	if (_markerInfoType == type)
+		return;
+
+	_markerInfoType = type;
+	updateMarkerInfo();
+	_markerInfo->setVisible(type > MarkerInfoItem::None);
 }
 
 qreal PathItem::xInM() const
