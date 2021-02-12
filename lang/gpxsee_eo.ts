@@ -1003,7 +1003,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="104"/>
         <source>AlpineQuest maps</source>
-        <translation type="unfinished"></translation>
+        <translation>AlpineQuest-mapoj</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="105"/>
@@ -1038,7 +1038,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="113"/>
         <source>Locus/OsmAnd/RMaps sqlite maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Locus/OsmAnd/RMaps sqlite -mapoj</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="115"/>
@@ -1096,12 +1096,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="118"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Enigo</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="120"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Eligo</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="127"/>

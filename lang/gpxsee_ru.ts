@@ -1014,7 +1014,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="104"/>
         <source>AlpineQuest maps</source>
-        <translation>Карты AlpineQuest</translation>
+        <translation>AlpineQuest карты</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="105"/>
@@ -1039,7 +1039,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="113"/>
         <source>Locus/OsmAnd/RMaps sqlite maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Locus/OsmAnd/RMaps sqlite карты</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="115"/>
