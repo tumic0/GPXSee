@@ -424,22 +424,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="380"/>
         <source>Do not show</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht anzeigen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
         <source>Marker only</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur Markierung</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="388"/>
         <source>Date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum/Zeit</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
         <source>Coordinates</source>
-        <translation type="unfinished">Koordinaten</translation>
+        <translation>Koordinaten</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="398"/>
@@ -541,7 +541,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="579"/>
         <source>Position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Positionsinfo</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="594"/>
@@ -586,7 +586,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="743"/>
         <source>Toggle position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Positionsinfo umschalten</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="747"/>
@@ -1038,7 +1038,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="113"/>
         <source>Locus/OsmAnd/RMaps sqlite maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Locus/OsmAnd/RMaps SQLite-Karten</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="115"/>
