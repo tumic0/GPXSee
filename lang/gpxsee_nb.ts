@@ -415,17 +415,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="380"/>
         <source>Do not show</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikke vis</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
         <source>Marker only</source>
-        <translation type="unfinished"></translation>
+        <translation>Kun markør</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="388"/>
         <source>Date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Dato/tid</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
@@ -572,7 +572,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="579"/>
         <source>Position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Posisjonsinfo</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="590"/>
@@ -662,7 +662,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="743"/>
         <source>Toggle position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Veksle posisjonsinfo</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="747"/>
@@ -1013,7 +1013,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="104"/>
         <source>AlpineQuest maps</source>
-        <translation type="unfinished"></translation>
+        <translation>AlpineQuest-kart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="105"/>
@@ -1038,7 +1038,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="113"/>
         <source>Locus/OsmAnd/RMaps sqlite maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Locus/OsmAnd/RMaps-SQLite-kart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="115"/>
