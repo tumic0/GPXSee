@@ -1035,9 +1035,8 @@
         <translation>OziExplorer haritalar</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="113"/>
         <source>Locus/OsmAnd/RMaps sqlite maps</source>
-        <translation>Locus/OsmAnd/RMaps sqlite haritaları</translation>
+        <translation type="vanished">Locus/OsmAnd/RMaps sqlite haritaları</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="115"/>
@@ -1053,6 +1052,11 @@
         <location filename="../src/map/maplist.cpp" line="112"/>
         <source>TwoNav maps</source>
         <translation>TwoNav haritaları</translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="113"/>
+        <source>Locus/OsmAnd/RMaps SQLite maps</source>
+        <translation>Locus/OsmAnd/RMaps SQLite haritaları</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="117"/>

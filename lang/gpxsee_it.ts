@@ -1036,11 +1036,6 @@
         <translation>Mappe MBTiles</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="113"/>
-        <source>Locus/OsmAnd/RMaps sqlite maps</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/map/maplist.cpp" line="115"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>Mappe/Atlanti TrekBuddy</translation>
@@ -1054,6 +1049,11 @@
         <location filename="../src/map/maplist.cpp" line="112"/>
         <source>TwoNav maps</source>
         <translation>Mappe TwoNav</translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="113"/>
+        <source>Locus/OsmAnd/RMaps SQLite maps</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="117"/>

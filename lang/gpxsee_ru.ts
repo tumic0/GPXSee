@@ -1037,9 +1037,8 @@
         <translation>OziExplorer карты</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="113"/>
         <source>Locus/OsmAnd/RMaps sqlite maps</source>
-        <translation>Locus/OsmAnd/RMaps sqlite карты</translation>
+        <translation type="vanished">Locus/OsmAnd/RMaps sqlite карты</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="115"/>
@@ -1055,6 +1054,11 @@
         <location filename="../src/map/maplist.cpp" line="112"/>
         <source>TwoNav maps</source>
         <translation>TwoNav карты</translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="113"/>
+        <source>Locus/OsmAnd/RMaps SQLite maps</source>
+        <translation>Locus/OsmAnd/RMaps SQLite карты</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="117"/>
