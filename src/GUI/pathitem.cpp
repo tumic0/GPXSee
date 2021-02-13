@@ -295,6 +295,8 @@ void PathItem::setMarkerInfo(qreal pos)
 		QDateTime d(date());
 		if (!std::isnan(time) && d.isValid())
 			_markerInfo->setDate(d.addSecs(time).toTimeZone(_timeZone));
+		else
+			_markerInfo->setDate(QDateTime());
 	} else if (_markerInfoType == MarkerInfoItem::Position)
 		_markerInfo->setCoordinates(_map->xy2ll(_marker->pos()));
 }
