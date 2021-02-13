@@ -415,22 +415,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="380"/>
         <source>Do not show</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne mutassa</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
         <source>Marker only</source>
-        <translation type="unfinished"></translation>
+        <translation>Csak jelölő</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="388"/>
         <source>Date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Dátum/idő</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
         <source>Coordinates</source>
-        <translation type="unfinished">Koordináták</translation>
+        <translation>Koordináták</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="398"/>
@@ -572,7 +572,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="579"/>
         <source>Position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozíció információ</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="590"/>
@@ -662,7 +662,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="743"/>
         <source>Toggle position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozíció info kapcsoló</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="747"/>
@@ -830,6 +830,7 @@
         <location filename="../src/GUI/gui.cpp" line="1637"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
