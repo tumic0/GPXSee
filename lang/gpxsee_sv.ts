@@ -424,22 +424,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="380"/>
         <source>Do not show</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa inte</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
         <source>Marker only</source>
-        <translation type="unfinished"></translation>
+        <translation>Endast markör</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="388"/>
         <source>Date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum/tid</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
         <source>Coordinates</source>
-        <translation type="unfinished">Koordinater</translation>
+        <translation>Koordinater</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="398"/>
@@ -541,7 +541,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="579"/>
         <source>Position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Positionsinformation</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="594"/>
@@ -586,7 +586,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="743"/>
         <source>Toggle position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Positionsinfo av/på</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="747"/>

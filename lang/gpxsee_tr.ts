@@ -415,22 +415,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="380"/>
         <source>Do not show</source>
-        <translation type="unfinished"></translation>
+        <translation>Gösterme</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
         <source>Marker only</source>
-        <translation type="unfinished"></translation>
+        <translation>Yalnızca işaretleyici</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="388"/>
         <source>Date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tarih/saat</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
         <source>Coordinates</source>
-        <translation type="unfinished">Koordinatlar</translation>
+        <translation>Koordinatlar</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="398"/>
@@ -572,7 +572,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="579"/>
         <source>Position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Konum bilgisi</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="590"/>
@@ -662,7 +662,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="743"/>
         <source>Toggle position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Konum bilgilerini değiştir</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="747"/>
