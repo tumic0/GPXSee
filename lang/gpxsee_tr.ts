@@ -1035,10 +1035,6 @@
         <translation>OziExplorer haritalar</translation>
     </message>
     <message>
-        <source>Locus/OsmAnd/RMaps sqlite maps</source>
-        <translation type="vanished">Locus/OsmAnd/RMaps sqlite haritaları</translation>
-    </message>
-    <message>
         <location filename="../src/map/maplist.cpp" line="115"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>TrekBuddy haritalar/atlaslar</translation>

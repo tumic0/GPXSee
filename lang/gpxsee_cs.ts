@@ -1037,10 +1037,6 @@
         <translation>OziExplorer mapy</translation>
     </message>
     <message>
-        <source>Locus/OsmAnd/RMaps sqlite maps</source>
-        <translation type="vanished">Locus/OsmAnd/RMaps mapy</translation>
-    </message>
-    <message>
         <location filename="../src/map/maplist.cpp" line="115"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>TrekBuddy mapy/atlasy</translation>
