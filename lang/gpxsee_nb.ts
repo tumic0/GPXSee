@@ -1056,11 +1056,6 @@
         <translation>TwoNav-kart</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="113"/>
-        <source>Locus/OsmAnd/RMaps SQLite maps</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/map/maplist.cpp" line="117"/>
         <source>Online map sources</source>
         <translation>Nettbaserte kartkilder</translation>
