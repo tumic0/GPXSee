@@ -304,7 +304,7 @@ void PathItem::setMarkerInfo(qreal pos)
 void PathItem::updateMarkerInfo()
 {
 	qreal pos = _graph ? (_graph->graphType() == Time)
-	  ? _graph->distanceAtTime(_markerDistance) : _markerDistance : NAN;
+	  ? _graph->timeAtDistance(_markerDistance) : _markerDistance : NAN;
 	setMarkerInfo(pos);
 }
 
