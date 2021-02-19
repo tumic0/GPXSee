@@ -1380,7 +1380,7 @@ void GUI::showToolbars(bool show)
 	if (show) {
 		Q_ASSERT(!_windowStates.isEmpty());
 		restoreState(_windowStates.last());
-		_windowStates.pop_back();
+		_windowStates.removeLast();
 	} else {
 		_windowStates.append(saveState());
 		removeToolBar(_fileToolBar);
@@ -1392,6 +1392,7 @@ void GUI::showToolbars(bool show)
 void GUI::showFullscreen(bool show)
 {
 	if (show) {
+		_windowGeometries.append(saveGeometry());
 		_frameStyle = _mapView->frameStyle();
 		statusBar()->hide();
 		menuBar()->hide();
@@ -1399,6 +1400,8 @@ void GUI::showFullscreen(bool show)
 		_mapView->setFrameStyle(QFrame::NoFrame);
 		showFullScreen();
 	} else {
+		Q_ASSERT(!_windowGeometries.isEmpty());
+		_windowGeometries.removeLast();
 		statusBar()->show();
 		menuBar()->show();
 		showToolbars(true);
@@ -1957,14 +1960,13 @@ void GUI::writeSettings()
 	settings.clear();
 
 	settings.beginGroup(WINDOW_SETTINGS_GROUP);
-	if (size() != WINDOW_SIZE_DEFAULT)
-		settings.setValue(WINDOW_SIZE_SETTING, size());
-	if (pos() != WINDOW_POS_DEFAULT)
-		settings.setValue(WINDOW_POS_SETTING, pos());
-	if (_windowStates.isEmpty())
-		settings.setValue(WINDOW_STATE_SETTING, saveState());
-	else
+	if (!_windowStates.isEmpty() && !_windowGeometries.isEmpty()) {
 		settings.setValue(WINDOW_STATE_SETTING, _windowStates.first());
+		settings.setValue(WINDOW_GEOMETRY_SETTING, _windowGeometries.first());
+	} else {
+		settings.setValue(WINDOW_STATE_SETTING, saveState());
+		settings.setValue(WINDOW_GEOMETRY_SETTING, saveGeometry());
+	}
 	settings.endGroup();
 
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
@@ -2212,14 +2214,12 @@ void GUI::readSettings()
 	QSettings settings(qApp->applicationName(), qApp->applicationName());
 
 	settings.beginGroup(WINDOW_SETTINGS_GROUP);
-	resize(settings.value(WINDOW_SIZE_SETTING, WINDOW_SIZE_DEFAULT).toSize());
-	move(settings.value(WINDOW_POS_SETTING, WINDOW_POS_DEFAULT).toPoint());
+	restoreGeometry(settings.value(WINDOW_GEOMETRY_SETTING).toByteArray());
 	restoreState(settings.value(WINDOW_STATE_SETTING).toByteArray());
 	settings.endGroup();
 
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
-	if (settings.value(TIME_TYPE_SETTING, TIME_TYPE_DEFAULT).toInt()
-	  == Moving)
+	if (settings.value(TIME_TYPE_SETTING, TIME_TYPE_DEFAULT).toInt() == Moving)
 		_movingTimeAction->trigger();
 	else
 		_totalTimeAction->trigger();
@@ -2394,8 +2394,8 @@ void GUI::readSettings()
 	  .toInt();
 	int mri = settings.value(PNG_MARGIN_RIGHT_SETTING, PNG_MARGIN_RIGHT_DEFAULT)
 	  .toInt();
-	int mbi = settings.value(PNG_MARGIN_BOTTOM_SETTING, PNG_MARGIN_BOTTOM_DEFAULT)
-	  .toInt();
+	int mbi = settings.value(PNG_MARGIN_BOTTOM_SETTING,
+	  PNG_MARGIN_BOTTOM_DEFAULT).toInt();
 	_pngExport.margins = QMargins(mli, mti, mri, mbi);
 	_pngExport.antialiasing = settings.value(PNG_ANTIALIASING_SETTING,
 	  PNG_ANTIALIASING_DEFAULT).toBool();

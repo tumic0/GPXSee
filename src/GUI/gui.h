@@ -242,6 +242,7 @@ private:
 	GraphTab *_lastGraphTab;
 
 	QList<QByteArray> _windowStates;
+	QList<QByteArray> _windowGeometries;
 	int _frameStyle;
 
 	PDFExport _pdfExport;

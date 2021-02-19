@@ -5,10 +5,7 @@
 	(QLocale::system().measurementSystem() == QLocale::ImperialSystem)
 
 #define WINDOW_SETTINGS_GROUP             "Window"
-#define WINDOW_SIZE_SETTING               "size"
-#define WINDOW_SIZE_DEFAULT               QSize(600, 800)
-#define WINDOW_POS_SETTING                "pos"
-#define WINDOW_POS_DEFAULT                QPoint(10, 10)
+#define WINDOW_GEOMETRY_SETTING           "geometry"
 #define WINDOW_STATE_SETTING              "state"
 
 #define SETTINGS_SETTINGS_GROUP           "Settings"
