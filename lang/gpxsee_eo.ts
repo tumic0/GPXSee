@@ -415,7 +415,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="380"/>
         <source>Do not show</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne montri</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
@@ -425,12 +425,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="388"/>
         <source>Date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Dato/tempo</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
         <source>Coordinates</source>
-        <translation type="unfinished">Koordinatoj</translation>
+        <translation>Koordinatoj</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="398"/>
@@ -1053,7 +1053,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="113"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Locus/OsmAnd/RMaps SQLite -mapoj</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="117"/>
