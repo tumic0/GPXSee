@@ -415,7 +415,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="380"/>
         <source>Do not show</source>
-        <translation type="unfinished"></translation>
+        <translation>Не показувати</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
@@ -425,12 +425,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="388"/>
         <source>Date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата/час</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
         <source>Coordinates</source>
-        <translation type="unfinished">Координати</translation>
+        <translation>Координати</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="398"/>

@@ -414,7 +414,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="380"/>
         <source>Do not show</source>
-        <translation type="unfinished"></translation>
+        <translation>Älä näytä</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
@@ -424,7 +424,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="388"/>
         <source>Date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Pvm/aika</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
