@@ -25,6 +25,7 @@
 #include <QWindow>
 #include <QScreen>
 #include <QStyle>
+#include <QTabBar>
 #include "common/programpaths.h"
 #include "data/data.h"
 #include "data/poi.h"
@@ -1398,6 +1399,7 @@ void GUI::showFullscreen(bool show)
 		menuBar()->hide();
 		showToolbars(false);
 		_mapView->setFrameStyle(QFrame::NoFrame);
+		_graphTabWidget->tabBar()->hide();
 		showFullScreen();
 	} else {
 		Q_ASSERT(!_windowGeometries.isEmpty());
@@ -1406,6 +1408,7 @@ void GUI::showFullscreen(bool show)
 		menuBar()->show();
 		showToolbars(true);
 		_mapView->setFrameStyle(_frameStyle);
+		_graphTabWidget->tabBar()->show();
 		showNormal();
 	}
 }
