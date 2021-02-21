@@ -197,6 +197,10 @@ QAction *GUI::createPOIFileAction(const QString &fileName)
 
 void GUI::createActions()
 {
+	// File watcher
+	_fileWatcher = new QFileSystemWatcher(this);
+	connect(_fileWatcher, SIGNAL(fileChanged(const QString &)), this, SLOT(fileChanged(const QString &)));
+
 	QActionGroup *ag;
 
 	// Action Groups
@@ -804,6 +808,7 @@ bool GUI::openFile(const QString &fileName, bool silent)
 		return false;
 
 	_files.append(fileName);
+	_fileWatcher->addPath(fileName);
 	_browser->setCurrent(fileName);
 	_fileActionGroup->setEnabled(true);
 	// Explicitly enable the reload action as it may be disabled by loadMapDir()
@@ -1358,6 +1363,7 @@ void GUI::closeFiles()
 		_tabs.at(i)->clear();
 	_mapView->clear();
 
+	_fileWatcher->removePaths(_files);
 	_files.clear();
 }
 
@@ -2215,6 +2221,12 @@ void GUI::writeSettings()
 	if (_options.hidpiMap != HIDPI_MAP_DEFAULT)
 		settings.setValue(HIDPI_MAP_SETTING, _options.hidpiMap);
 	settings.endGroup();
+}
+
+void GUI::fileChanged(const QString & path)
+{
+	_fileWatcher->addPath(path);
+	this->reloadFiles();
 }
 
 void GUI::readSettings()

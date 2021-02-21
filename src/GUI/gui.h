@@ -6,6 +6,7 @@
 #include <QList>
 #include <QDate>
 #include <QPrinter>
+#include <QFileSystemWatcher>
 #include "data/graph.h"
 #include "units.h"
 #include "timetype.h"
@@ -75,6 +76,7 @@ private slots:
 	void mapChanged();
 	void graphChanged(int);
 	void poiFileChecked(int);
+	void fileChanged(const QString & path);
 
 	void next();
 	void prev();
@@ -155,6 +157,7 @@ private:
 	QMenu *_poiFilesMenu;
 	QMenu *_mapMenu;
 
+	QFileSystemWatcher * _fileWatcher;
 	QActionGroup *_fileActionGroup;
 	QActionGroup *_navigationActionGroup;
 	QActionGroup *_mapsActionGroup;
