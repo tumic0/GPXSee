@@ -1725,13 +1725,12 @@ void GUI::graphChanged(int index)
 	if (index < 0)
 		return;
 
-	_mapView->setGraph(index);
-
 	GraphTab *gt = static_cast<GraphTab*>(_graphTabWidget->widget(index));
+	_mapView->setGraph(_tabs.indexOf(gt));
+
 	if (_lastGraphTab)
 		disconnect(_lastGraphTab, SIGNAL(sliderPositionChanged(qreal)),
 		  _mapView, SLOT(setMarkerPosition(qreal)));
-
 	connect(gt, SIGNAL(sliderPositionChanged(qreal)), _mapView,
 	  SLOT(setMarkerPosition(qreal)));
 
