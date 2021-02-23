@@ -679,8 +679,9 @@ void GUI::createGraphTabs()
 	_tabs.append(new TemperatureGraph(_graphTabWidget));
 	_tabs.append(new GearRatioGraph(_graphTabWidget));
 
-	connect(_tabs.first(), SIGNAL(sliderPositionChanged(qreal)), _mapView,
-	  SLOT(setMarkerPosition(qreal)));
+	for (int i = 0; i < _tabs.size(); i++)
+		connect(_tabs.at(i), SIGNAL(sliderPositionChanged(qreal)), _mapView,
+		  SLOT(setMarkerPosition(qreal)));
 }
 
 void GUI::createStatusBar()
@@ -1726,17 +1727,11 @@ void GUI::graphChanged(int index)
 		return;
 
 	GraphTab *gt = static_cast<GraphTab*>(_graphTabWidget->widget(index));
+
 	_mapView->setGraph(_tabs.indexOf(gt));
 
 	if (_lastGraphTab)
-		disconnect(_lastGraphTab, SIGNAL(sliderPositionChanged(qreal)),
-		  _mapView, SLOT(setMarkerPosition(qreal)));
-	connect(gt, SIGNAL(sliderPositionChanged(qreal)), _mapView,
-	  SLOT(setMarkerPosition(qreal)));
-
-	if (_lastGraphTab)
 		gt->setSliderPosition(_lastGraphTab->sliderPosition());
-
 	_lastGraphTab = gt;
 }
 
