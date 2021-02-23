@@ -880,7 +880,6 @@ void GUI::loadData(const Data &data)
 	paths = _mapView->loadData(data);
 
 	GraphTab *gt = static_cast<GraphTab*>(_graphTabWidget->currentWidget());
-	int index = _graphTabWidget->currentIndex();
 
 	for (int i = 0; i < paths.count(); i++) {
 		PathItem *pi = paths.at(i);
@@ -890,8 +889,8 @@ void GUI::loadData(const Data &data)
 		for (int j = 0; j < graphs.count(); j++)
 			pi->addGraph(graphs.at(j).at(i));
 
-		if (gt && index >= 0) {
-			pi->setGraph(index);
+		if (gt) {
+			pi->setGraph(_tabs.indexOf(gt));
 			pi->setMarkerPosition(gt->sliderPosition());
 		}
 	}
