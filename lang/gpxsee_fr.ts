@@ -404,7 +404,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>Show waypoints</source>
-        <translation>Afficher les points de jalonnement</translation>
+        <translation>Afficher les points de cheminement</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="357"/>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="362"/>
         <source>Waypoint labels</source>
-        <translation>Étiquettes des jalons</translation>
+        <translation>Étiquettes des points de cheminement</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="372"/>
@@ -621,7 +621,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="755"/>
         <source>Left Click</source>
-        <translation>Clique gauche</translation>
+        <translation>Clic gauche</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="773"/>
@@ -719,7 +719,7 @@
         <location filename="../src/GUI/gui.cpp" line="1132"/>
         <location filename="../src/GUI/gui.cpp" line="1202"/>
         <source>Waypoints</source>
-        <translation>Points de jalonnement</translation>
+        <translation>Points de cheminement</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="731"/>
@@ -1239,7 +1239,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="260"/>
         <source>Waypoints</source>
-        <translation>Points de jalonnement</translation>
+        <translation>Points de cheminement</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="271"/>
