@@ -91,7 +91,7 @@ GUI::GUI()
 	_routeDistance = 0;
 	_time = 0;
 	_movingTime = 0;
-	_lastGraphTab = 0;
+	_lastTab = 0;
 
 	_dataDir = QDir::homePath();
 	_mapDir = QDir::homePath();
@@ -1356,6 +1356,8 @@ void GUI::closeFiles()
 
 	for (int i = 0; i < _tabs.count(); i++)
 		_tabs.at(i)->clear();
+	_lastTab = 0;
+
 	_mapView->clear();
 
 	_files.clear();
@@ -1730,9 +1732,9 @@ void GUI::graphChanged(int index)
 
 	_mapView->setGraph(_tabs.indexOf(gt));
 
-	if (_lastGraphTab)
-		gt->setSliderPosition(_lastGraphTab->sliderPosition());
-	_lastGraphTab = gt;
+	if (_lastTab)
+		gt->setSliderPosition(_lastTab->sliderPosition());
+	_lastTab = gt;
 }
 
 void GUI::updateNavigationActions()

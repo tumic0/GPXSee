@@ -226,6 +226,7 @@ private:
 	MapView *_mapView;
 	QTabWidget *_graphTabWidget;
 	QList<GraphTab*> _tabs;
+	GraphTab *_lastTab;
 
 	POI *_poi;
 	Map *_map;
@@ -238,8 +239,6 @@ private:
 	qreal _time, _movingTime;
 	DateTimeRange _dateRange;
 	QString _pathName;
-
-	GraphTab *_lastGraphTab;
 
 	QList<QByteArray> _windowStates;
 	QList<QByteArray> _windowGeometries;
