@@ -347,7 +347,6 @@ SOURCES += src/main.cpp \
     src/data/locparser.cpp \
     src/data/slfparser.cpp \
     src/data/dem.cpp \
-    src/data/polygon.cpp \
     src/map/obliquestereographic.cpp \
     src/GUI/coordinatesitem.cpp \
     src/map/rmap.cpp \

@@ -263,8 +263,7 @@ void KMLParser::boundary(QVector<Coordinates> &coordinates)
 
 void KMLParser::polygon(Area &area)
 {
-	area.append(Polygon());
-	Polygon &polygon = area.last();
+	Polygon polygon;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("outerBoundaryIs")) {
@@ -284,6 +283,8 @@ void KMLParser::polygon(Area &area)
 		} else
 			_reader.skipCurrentElement();
 	}
+
+	area.append(polygon);
 }
 
 void KMLParser::point(Waypoint &waypoint)

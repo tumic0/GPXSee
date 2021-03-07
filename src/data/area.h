@@ -5,48 +5,58 @@
 #include <QList>
 #include "polygon.h"
 
-class Area : public QList<Polygon>
+class Area
 {
 public:
 	Area() {}
 	Area(const RectC &rect)
 	{
-		Polygon polygon;
 		QVector<Coordinates> v(4);
 		v[0] = Coordinates(rect.left(), rect.top());
 		v[1] = Coordinates(rect.right(), rect.top());
 		v[2] = Coordinates(rect.right(), rect.bottom());
 		v[3] = Coordinates(rect.left(), rect.bottom());
-		polygon.append(v);
-		append(polygon);
+
+		_polygons.reserve(1);
+		_polygons.append(v);
+		_boundingRect = RectC(v.at(0), v.at(2));
+	}
+	Area(const Polygon &polygon)
+	{
+		_polygons.reserve(1);
+		_polygons.append(polygon);
+		_boundingRect = polygon.boundingRect();
 	}
 
-	const QString& name() const {return _name;}
-	const QString& description() const {return _desc;}
-	void setName(const QString &name) {_name = name;}
-	void setDescription(const QString &desc) {_desc = desc;}
+	const QString &name() const {return _name;}
+	const QString &description() const {return _desc;}
+	const QList<Polygon> &polygons() const {return _polygons;}
+	const RectC &boundingRect() const {return _boundingRect;}
 
 	bool isValid() const
 	{
-		if (isEmpty())
+		if (_polygons.isEmpty())
 			return false;
-		for (int i = 0; i < size(); i++)
-			if (!at(i).isValid())
+		for (int i = 0; i < _polygons.size(); i++)
+			if (!_polygons.at(i).isValid())
 				return false;
 		return true;
 	}
 
-	RectC boundingRect() const
+	void append(const Polygon &polygon)
 	{
-		RectC ret;
-		for (int i = 0; i < size(); i++)
-			ret |= at(i).boundingRect();
-		return ret;
+		_polygons.append(polygon);
+		_boundingRect |= polygon.boundingRect();
 	}
 
+	void setName(const QString &name) {_name = name;}
+	void setDescription(const QString &desc) {_desc = desc;}
+
 private:
+	QList<Polygon> _polygons;
 	QString _name;
 	QString _desc;
+	RectC _boundingRect;
 };
 
 #endif // AREA_H

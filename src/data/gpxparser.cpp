@@ -293,9 +293,7 @@ void GPXParser::track(TrackData &track)
 
 void GPXParser::area(Area &area)
 {
-	area.append(Polygon());
-	area.last().append(QVector<Coordinates>());
-	QVector<Coordinates> &points = area.last().last();
+	QVector<Coordinates> points;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("point")) {
@@ -312,6 +310,8 @@ void GPXParser::area(Area &area)
 		else
 			_reader.skipCurrentElement();
 	}
+
+	area.append(points);
 }
 
 void GPXParser::gpxExtensions(QList<Area> &areas)

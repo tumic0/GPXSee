@@ -67,8 +67,8 @@ void AreaItem::updatePainterPath()
 {
 	_painterPath = QPainterPath();
 
-	for (int i = 0; i < _area.size(); i++)
-		_painterPath.addPath(painterPath(_area.at(i)));
+	for (int i = 0; i < _area.polygons().size(); i++)
+		_painterPath.addPath(painterPath(_area.polygons().at(i)));
 }
 
 void AreaItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,

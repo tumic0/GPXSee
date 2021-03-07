@@ -172,8 +172,12 @@ bool GeoJSONParser::polygon(const QJsonArray &coordinates, Area &area,
 	  && properties["description"].isString())
 		area.setDescription(properties["description"].toString());
 
-	area.append(::Polygon());
-	return polygon(coordinates, area.last());
+	::Polygon p;
+	if (!polygon(coordinates, p))
+		return false;
+	area.append(p);
+
+	return true;
 }
 
 bool GeoJSONParser::multiPolygon(const QJsonArray &coordinates,
@@ -192,9 +196,10 @@ bool GeoJSONParser::multiPolygon(const QJsonArray &coordinates,
 			_errorString = "Invalid MultiPolygon coordinates";
 			return false;
 		} else {
-			area.append(::Polygon());
-			if (!polygon(coordinates.at(i).toArray(), area.last()))
+			::Polygon p;
+			if (!polygon(coordinates.at(i).toArray(), p))
 				return false;
+			area.append(p);
 		}
 	}
 
