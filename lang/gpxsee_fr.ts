@@ -404,7 +404,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>Show waypoints</source>
-        <translation>Afficher les points de jalonnement</translation>
+        <translation>Afficher les points de cheminement</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="357"/>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="362"/>
         <source>Waypoint labels</source>
-        <translation>Étiquettes des jalons</translation>
+        <translation>Étiquettes des points de cheminement</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="372"/>
@@ -424,22 +424,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="380"/>
         <source>Do not show</source>
-        <translation type="unfinished"></translation>
+        <translation>Masquer</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
         <source>Marker only</source>
-        <translation type="unfinished"></translation>
+        <translation>Seulement les points</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="388"/>
         <source>Date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Instant</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
         <source>Coordinates</source>
-        <translation type="unfinished">Coordonnées</translation>
+        <translation>Coordonnées</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="398"/>
@@ -541,7 +541,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="579"/>
         <source>Position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Infos de position</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="594"/>
@@ -586,7 +586,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="743"/>
         <source>Toggle position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer ou non les infos de position</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="747"/>
@@ -621,7 +621,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="755"/>
         <source>Left Click</source>
-        <translation>Clique gauche</translation>
+        <translation>Clic gauche</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="773"/>
@@ -719,7 +719,7 @@
         <location filename="../src/GUI/gui.cpp" line="1132"/>
         <location filename="../src/GUI/gui.cpp" line="1202"/>
         <source>Waypoints</source>
-        <translation>Points de jalonnement</translation>
+        <translation>Points de cheminement</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="731"/>
@@ -1013,7 +1013,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="104"/>
         <source>AlpineQuest maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartes AlpineQuest</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="105"/>
@@ -1053,7 +1053,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="113"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartes SQLite Locus, OsmAnd ou RMaps</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="117"/>
@@ -1239,7 +1239,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="260"/>
         <source>Waypoints</source>
-        <translation>Points de jalonnement</translation>
+        <translation>Points de cheminement</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="271"/>
@@ -1458,7 +1458,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="397"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="467"/>
         <source>Custom</source>
-        <translation>Personnalisée</translation>
+        <translation>Personnalisé</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="586"/>
