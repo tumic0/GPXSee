@@ -52,12 +52,10 @@ QPainterPath AreaItem::painterPath(const Polygon &polygon)
 
 	for (int i = 1; i < polygon.size(); i++) {
 		const QVector<Coordinates> &lr = polygon.at(i);
-		QPainterPath hole;
-		hole.moveTo(_map->ll2xy(lr.first()));
+		path.moveTo(_map->ll2xy(lr.first()));
 		for (int j = 1; j < lr.size(); j++)
-			hole.lineTo(_map->ll2xy(lr.at(j)));
-		hole.closeSubpath();
-		path = path.subtracted(hole);
+			path.lineTo(_map->ll2xy(lr.at(j)));
+		path.closeSubpath();
 	}
 
 	return path;
