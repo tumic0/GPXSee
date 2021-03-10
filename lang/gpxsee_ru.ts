@@ -576,7 +576,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="743"/>
         <source>Toggle position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключатель информация о позиции</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="747"/>
