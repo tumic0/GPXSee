@@ -340,17 +340,21 @@ bool LBLFile::loadRasterTable(Handle &hdl, quint32 offset, quint32 size,
 	return true;
 }
 
-QImage LBLFile::readImage(Handle &hdl, quint32 id) const
+QPixmap LBLFile::image(Handle &hdl, quint32 id) const
 {
+	QPixmap pm;
+
 	if (id >= _imgCount)
-		return QImage();
+		return pm;
 
 	if (!seek(hdl, _imgOffset + _rasters[id].offset))
-		return QImage();
+		return pm;
 	QByteArray ba;
 	ba.resize(_rasters[id].size);
 	if (!read(hdl, ba.data(), _rasters[id].size))
-		return QImage();
+		return pm;
 
-	return QImage::fromData(ba);
+	pm.loadFromData(ba, "jpeg");
+
+	return pm;
 }

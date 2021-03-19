@@ -226,13 +226,13 @@ void RasterTile::drawPolygons(QPainter *painter)
 				QSize size(QRectF(tl, br).toRect().size());
 
 				SubFile::Handle hdl(poly.raster.lbl());
-				QImage img(poly.raster.lbl()->readImage(hdl, poly.raster.id()));
-				qreal sx = (qreal)size.width() / (qreal)img.width();
-				qreal sy = (qreal)size.height() / (qreal)img.height();
+				QPixmap pm(poly.raster.lbl()->image(hdl, poly.raster.id()));
+				qreal sx = (qreal)size.width() / (qreal)pm.width();
+				qreal sy = (qreal)size.height() / (qreal)pm.height();
 
 				painter->save();
 				painter->scale(sx, sy);
-				painter->drawImage(QPointF(tl.x() / sx, tl.y() / sy), img);
+				painter->drawPixmap(QPointF(tl.x() / sx, tl.y() / sy), pm);
 				painter->restore();
 
 				//painter->setPen(Qt::blue);

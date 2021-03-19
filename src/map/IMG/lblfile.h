@@ -1,7 +1,7 @@
 #ifndef LBLFILE_H
 #define LBLFILE_H
 
-#include <QImage>
+#include <QPixmap>
 #include "common/textcodec.h"
 #include "subfile.h"
 #include "label.h"
@@ -33,7 +33,7 @@ public:
 	  bool capitalize = true) const;
 
 	quint8 imageIdSize() const {return _imgOffsetIdSize;}
-	QImage readImage(Handle &hdl, quint32 id) const;
+	QPixmap image(Handle &hdl, quint32 id) const;
 
 private:
 	struct Image {
