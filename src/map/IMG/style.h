@@ -131,6 +131,8 @@ public:
 	  {return (type >= 0x1400 && type <= 0x153f);}
 	static bool isState(quint32 type)
 	  {return (type == TYPE(0x1e));}
+	static bool isRaster(quint32 type)
+	  {return (type == 0x10613);}
 
 	static POIClass poiClass(quint32 type);
 

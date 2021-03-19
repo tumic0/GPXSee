@@ -58,11 +58,13 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 			break;
 	}
 
-	if (segmentType == Polygon && poly->type == 0x10613
-	  && lbl && lbl->imageIdSize() && rs >= lbl->imageIdSize() + 16U) {
+	if (segmentType == Polygon && Style::isRaster(poly->type) && lbl
+	  && lbl->imageIdSize()) {
 		quint32 id;
 		quint32 top, right, bottom, left;
 
+		if (rs < lbl->imageIdSize() + 16U)
+			return false;
 		if (!(readVUInt32(hdl, lbl->imageIdSize(), id)
 		  && readUInt32(hdl, top) && readUInt32(hdl, right)
 		  && readUInt32(hdl, bottom) && readUInt32(hdl, left)))
