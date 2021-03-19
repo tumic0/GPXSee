@@ -55,18 +55,6 @@ static QString capitalized(const QString &str)
 	return ret;
 }
 
-static quint8 byteSize(quint32 val)
-{
-	quint8 ret = 0;
-
-	do {
-		ret++;
-		val = val >> 8;
-	} while (val != 0);
-
-	return ret;
-}
-
 
 LBLFile::~LBLFile()
 {

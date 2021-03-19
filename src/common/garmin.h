@@ -26,4 +26,16 @@ inline quint8 bs(const quint8 val)
 	return (val + 7) >> 3;
 }
 
+inline quint8 byteSize(quint32 val)
+{
+	quint8 ret = 0;
+
+	do {
+		ret++;
+		val = val >> 8;
+	} while (val != 0);
+
+	return ret;
+}
+
 #endif // GARMIN_H

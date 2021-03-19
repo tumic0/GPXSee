@@ -88,30 +88,25 @@ bool NODFile::load(Handle &hdl)
 
 	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)))
 		return false;
-	if (hdrLen < 0x7b)
-		return true;
 
-	if (!(seek(hdl, _gmpOffset + 0x1d) && readUInt32(hdl, _flags)
-	  && readByte(hdl, &_blockShift) && readByte(hdl, &_nodeShift)))
-		return false;
+	if (hdrLen >= 0x7F) {
+		if (!(seek(hdl, _gmpOffset + 0x1d) && readUInt32(hdl, _flags)
+		  && readByte(hdl, &_blockShift) && readByte(hdl, &_nodeShift)))
+			return false;
 
-	if (!(seek(hdl, _gmpOffset + 0x67) && readUInt32(hdl, _blockOffset)
-	  && readUInt32(hdl, _blockSize) && readUInt16(hdl, _blockRecordSize)
-	  && readUInt32(hdl, _indexOffset) && readUInt32(hdl, _indexSize)
-	  && readUInt16(hdl, _indexRecordSize) && readUInt32(hdl, _indexFlags)))
-		return false;
+		if (!(seek(hdl, _gmpOffset + 0x67) && readUInt32(hdl, _blockOffset)
+		  && readUInt32(hdl, _blockSize) && readUInt16(hdl, _blockRecordSize)
+		  && readUInt32(hdl, _indexOffset) && readUInt32(hdl, _indexSize)
+		  && readUInt16(hdl, _indexRecordSize) && readUInt32(hdl, _indexFlags)))
+			return false;
 
-	if (!_indexRecordSize)
-		return false;
-	quint32 indexCount = _indexSize / _indexRecordSize;
-	if (indexCount <= 0x100)
-		_indexIdSize = 1;
-	else if (indexCount <= 0x1000)
-		_indexIdSize = 2;
-	else if (indexCount <= 0x1000000)
-		_indexIdSize = 3;
+		if (!_indexRecordSize || _indexSize < _indexRecordSize)
+			return false;
+		quint32 indexCount = _indexSize / _indexRecordSize;
+		_indexIdSize = byteSize(indexCount - 1);
+	}
 
-	return (_indexIdSize > 0);
+	return true;
 }
 
 bool NODFile::readBlock(Handle &hdl, quint32 blockOffset,

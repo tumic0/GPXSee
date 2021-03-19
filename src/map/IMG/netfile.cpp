@@ -381,7 +381,7 @@ bool NETFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 	  && readUInt32(hdl, _size) && readByte(hdl, &_shift)))
 		return false;
 
-	if (hdrLen >= 0x47) {
+	if (hdrLen >= 0x4C) {
 		quint32 info;
 		if (!(seek(hdl, _gmpOffset + 0x37) && readUInt32(hdl, info)))
 			return false;
@@ -389,7 +389,7 @@ bool NETFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 		  && readUInt32(hdl, _linksSize) && readByte(hdl, &_linksShift)))
 			return false;
 
-		quint8 tableId = ((info >> 2) & 0xF);
+		quint8 tableId = ((info >> 2) & 0x0F);
 		if (_linksSize && (!rgn->huffmanTable() || rgn->huffmanTable()->id()
 		  != tableId)) {
 			_huffmanTable = new HuffmanTable(tableId);
