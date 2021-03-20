@@ -6,6 +6,7 @@
 #include <QList>
 #include <QDate>
 #include <QPrinter>
+#include "common/treenode.h"
 #include "data/graph.h"
 #include "units.h"
 #include "timetype.h"
@@ -113,9 +114,11 @@ private:
 	QAction *createPOIFileAction(const QString &fileName);
 	MapAction *createMapAction(Map *map);
 	void createPOIFilesActions();
-	void createMapActions();
-	void createActions();
-	void createMenus();
+	TreeNode<MapAction*> createMapActionsNode(const TreeNode<Map*> &node);
+	TreeNode<MapAction *> createMapActions();
+	void createActions(TreeNode<MapAction *> &mapActions);
+	void createMapNodeMenu(const TreeNode<MapAction*> &node, QMenu *menu);
+	void createMenus(const TreeNode<MapAction *> &mapActions);
 	void createToolBars();
 	void createStatusBar();
 	void createMapView();
@@ -125,6 +128,10 @@ private:
 	bool openPOIFile(const QString &fileName);
 	bool loadFile(const QString &fileName, bool silent = false);
 	void loadData(const Data &data);
+	bool loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
+	  bool silent, const QList<QAction *> &existingActions);
+	void loadMapDirNode(const TreeNode<Map*> &node, QList<MapAction *> &actions,
+	  QMenu *menu, const QList<QAction*> &existingActions);
 	void updateStatusBarInfo();
 	void updateWindowTitle();
 	void updateNavigationActions();

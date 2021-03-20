@@ -18,23 +18,23 @@
 #include "maplist.h"
 
 
-Map *MapList::loadFile(const QString &path, bool *terminate)
+Map *MapList::loadFile(const QString &path, bool *isDir)
 {
 	QFileInfo fi(path);
 	QString suffix = fi.suffix().toLower();
 	Map *map = 0;
 
 	if (Atlas::isAtlas(path)) {
-		if (terminate)
-			*terminate = true;
+		if (isDir)
+			*isDir = true;
 		map = new Atlas(path);
 	} else if (suffix == "xml") {
 		if (MapSource::isMap(path)) {
 			map = MapSource::loadMap(path);
 		} else if (GMAP::isGMAP(path)) {
 			map = new IMGMap(path);
-			if (terminate)
-				*terminate = true;
+			if (isDir)
+				*isDir = true;
 		}
 	} else if (suffix == "jnx")
 		map = new JNXMap(path);
@@ -60,39 +60,44 @@ Map *MapList::loadFile(const QString &path, bool *terminate)
 	return map ? map : new InvalidMap(path, "Unknown file format");
 }
 
-QList<Map*> MapList::loadDir(const QString &path)
+TreeNode<Map *> MapList::loadDir(const QString &path, TreeNode<Map *> *parent)
 {
 	QDir md(path);
 	md.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
 	md.setSorting(QDir::DirsLast);
 	QFileInfoList ml = md.entryInfoList();
-	QList<Map*> list;
+	TreeNode<Map*> tree(md.dirName());
 
 	for (int i = 0; i < ml.size(); i++) {
 		const QFileInfo &fi = ml.at(i);
 		QString suffix = fi.suffix().toLower();
-		bool terminate = false;
 
-		if (fi.isDir() && fi.fileName() != "set")
-			list.append(loadDir(fi.absoluteFilePath()));
-		else if (filter().contains("*." + suffix)) {
-			list.append(loadFile(fi.absoluteFilePath(), &terminate));
-			if (terminate)
+		if (fi.isDir()) {
+			TreeNode<Map*> child(loadDir(fi.absoluteFilePath(), &tree));
+			if (!child.isEmpty())
+				tree.addChild(child);
+		} else if (filter().contains("*." + suffix)) {
+			bool isDir = false;
+			Map *map = loadFile(fi.absoluteFilePath(), &isDir);
+			if (isDir) {
+				parent->addItem(map);
 				break;
+			} else
+				tree.addItem(map);
 		}
 	}
 
-	return list;
+	return tree;
 }
 
-QList<Map*> MapList::loadMaps(const QString &path)
+TreeNode<Map *> MapList::loadMaps(const QString &path)
 {
 	if (QFileInfo(path).isDir())
 		return loadDir(path);
 	else {
-		QList<Map*> list;
-		list.append(loadFile(path, 0));
-		return list;
+		TreeNode<Map*> tree;
+		tree.addItem(loadFile(path));
+		return tree;
 	}
 }
 

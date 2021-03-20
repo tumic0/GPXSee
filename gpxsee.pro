@@ -30,6 +30,7 @@ HEADERS += src/common/config.h \
     src/common/range.h \
     src/common/rectc.h \
     src/common/textcodec.h \
+    src/common/treenode.h \
     src/common/wgs84.h \
     src/common/util.h \
     src/common/rtree.h \

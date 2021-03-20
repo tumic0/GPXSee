@@ -2,19 +2,21 @@
 #define MAPLIST_H
 
 #include <QString>
+#include "common/treenode.h"
 
 class Map;
 
 class MapList
 {
 public:
-	static QList<Map*> loadMaps(const QString &path);
+	static TreeNode<Map*> loadMaps(const QString &path);
 	static QString formats();
 	static QStringList filter();
 
 private:
-	static Map *loadFile(const QString &path, bool *terminate);
-	static QList<Map*> loadDir(const QString &path);
+	static Map *loadFile(const QString &path, bool *isDir = 0);
+	static TreeNode<Map*> loadDir(const QString &path,
+	  TreeNode<Map *> *parent = 0);
 };
 
 #endif // MAPLIST_H

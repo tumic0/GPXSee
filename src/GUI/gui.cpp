@@ -57,13 +57,15 @@
 
 GUI::GUI()
 {
+	TreeNode<MapAction*> mapActions;
+
 	loadPOIs();
 
 	createMapView();
 	createGraphTabs();
 	createStatusBar();
-	createActions();
-	createMenus();
+	createActions(mapActions);
+	createMenus(mapActions);
 	createToolBars();
 
 	createBrowser();
@@ -118,27 +120,40 @@ void GUI::createBrowser()
 	_browser->setFilter(Data::filter());
 }
 
-void GUI::createMapActions()
+TreeNode<MapAction*> GUI::createMapActionsNode(const TreeNode<Map*> &node)
 {
-	_mapsActionGroup = new QActionGroup(this);
-	_mapsActionGroup->setExclusive(true);
+	TreeNode<MapAction*> tree(node.name());
 
-	QString mapDir(ProgramPaths::mapDir());
-	if (mapDir.isNull())
-		return;
+	for (int i = 0; i < node.childs().size(); i++)
+		tree.addChild(createMapActionsNode(node.childs().at(i)));
 
-	QList<Map*> maps(MapList::loadMaps(mapDir));
-	for (int i = 0; i < maps.count(); i++) {
-		Map *map = maps.at(i);
+	for (int i = 0; i < node.items().size(); i++) {
+		Map *map = node.items().at(i);
 		if (map->isValid()) {
 			MapAction *a = createMapAction(map);
 			connect(a, SIGNAL(loaded()), this, SLOT(mapInitialized()));
+			tree.addItem(a);
 		} else {
 			qWarning("%s: %s", qPrintable(map->path()),
 			  qPrintable(map->errorString()));
 			delete map;
 		}
 	}
+
+	return tree;
+}
+
+TreeNode<MapAction*> GUI::createMapActions()
+{
+	_mapsActionGroup = new QActionGroup(this);
+	_mapsActionGroup->setExclusive(true);
+
+	QString mapDir(ProgramPaths::mapDir());
+	if (mapDir.isNull())
+		return TreeNode<MapAction*>();
+
+	TreeNode<Map*> maps(MapList::loadMaps(mapDir));
+	return createMapActionsNode(maps);
 }
 
 MapAction *GUI::createMapAction(Map *map)
@@ -195,7 +210,7 @@ QAction *GUI::createPOIFileAction(const QString &fileName)
 	return a;
 }
 
-void GUI::createActions()
+void GUI::createActions(TreeNode<MapAction*> &mapActions)
 {
 	QActionGroup *ag;
 
@@ -300,7 +315,7 @@ void GUI::createActions()
 	createPOIFilesActions();
 
 	// Map actions
-	createMapActions();
+	mapActions = createMapActions();
 	_showMapAction = new QAction(QIcon(SHOW_MAP_ICON), tr("Show map"),
 	  this);
 	_showMapAction->setEnabled(false);
@@ -523,7 +538,19 @@ void GUI::createActions()
 	connect(_firstAction, SIGNAL(triggered()), this, SLOT(first()));
 }
 
-void GUI::createMenus()
+void GUI::createMapNodeMenu(const TreeNode<MapAction*> &node, QMenu *menu)
+{
+	for (int i = 0; i < node.childs().size(); i++) {
+		QMenu *cm = new QMenu(node.childs().at(i).name(), menu);
+		menu->addMenu(cm);
+		createMapNodeMenu(node.childs().at(i), cm);
+	}
+
+	for (int i = 0; i < node.items().size(); i++)
+		menu->addAction(node.items().at(i));
+}
+
+void GUI::createMenus(const TreeNode<MapAction*> &mapActions)
 {
 	QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 	fileMenu->addAction(_openFileAction);
@@ -542,7 +569,7 @@ void GUI::createMenus()
 #endif // Q_OS_MAC
 
 	_mapMenu = menuBar()->addMenu(tr("&Map"));
-	_mapMenu->addActions(_mapsActionGroup->actions());
+	createMapNodeMenu(mapActions, _mapMenu);
 	_mapsEnd = _mapMenu->addSeparator();
 	_mapMenu->addAction(_loadMapAction);
 	_mapMenu->addAction(_loadMapDirAction);
@@ -1500,15 +1527,18 @@ static MapAction *findMapAction(const QList<QAction*> &mapActions,
 	return 0;
 }
 
-bool GUI::loadMap(const QString &fileName, MapAction *&action, bool silent)
+bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
+  bool silent, const QList<QAction*> &existingActions)
 {
-	QList<Map*> maps(MapList::loadMaps(fileName));
-	QList<QAction*> existingActions(_mapsActionGroup->actions());
-	MapAction *lastReady = 0;
 	bool valid = false;
 
-	for (int i = 0; i < maps.size(); i++) {
-		Map *map = maps.at(i);
+	action = 0;
+
+	for (int i = 0; i < node.childs().size(); i++)
+		valid = loadMapNode(node.childs().at(i), action, silent, existingActions);
+
+	for (int i = 0; i < node.items().size(); i++) {
+		Map *map = node.items().at(i);
 		MapAction *a;
 
 		if (!(a = findMapAction(existingActions, map))) {
@@ -1524,7 +1554,7 @@ bool GUI::loadMap(const QString &fileName, MapAction *&action, bool silent)
 				_mapMenu->insertAction(_mapsEnd, a);
 
 				if (map->isReady()) {
-					lastReady = a;
+					action = a;
 					_showMapAction->setEnabled(true);
 					_clearMapCacheAction->setEnabled(true);
 				} else
@@ -1534,13 +1564,19 @@ bool GUI::loadMap(const QString &fileName, MapAction *&action, bool silent)
 			valid = true;
 			map = a->data().value<Map*>();
 			if (map->isReady())
-				lastReady = a;
+				action = a;
 		}
 	}
 
-	action = lastReady;
-
 	return valid;
+}
+
+bool GUI::loadMap(const QString &fileName, MapAction *&action, bool silent)
+{
+	TreeNode<Map*> maps(MapList::loadMaps(fileName));
+	QList<QAction*> existingActions(_mapsActionGroup->actions());
+
+	return loadMapNode(maps, action, silent, existingActions);
 }
 
 void GUI::mapLoaded()
@@ -1579,21 +1615,17 @@ void GUI::mapLoadedDir()
 	}
 }
 
-void GUI::loadMapDir()
+void GUI::loadMapDirNode(const TreeNode<Map *> &node, QList<MapAction*> &actions,
+  QMenu *menu, const QList<QAction*> &existingActions)
 {
-	QString dir(QFileDialog::getExistingDirectory(this,
-	  tr("Select map directory"), _mapDir, QFileDialog::ShowDirsOnly));
-	if (dir.isEmpty())
-		return;
+	for (int i = 0; i < node.childs().size(); i++) {
+		QMenu *cm = new QMenu(node.childs().at(i).name(), menu);
+		menu->addMenu(cm);
+		loadMapDirNode(node.childs().at(i), actions, cm, existingActions);
+	}
 
-	QList<Map*> maps(MapList::loadMaps(dir));
-	QList<MapAction*> actions;
-	QList<QAction*> existingActions(_mapsActionGroup->actions());
-	QFileInfo fi(dir);
-	QMenu *menu = new QMenu(fi.fileName());
-
-	for (int i = 0; i < maps.size(); i++) {
-		Map *map = maps.at(i);
+	for (int i = 0; i < node.items().size(); i++) {
+		Map *map = node.items().at(i);
 		MapAction *a;
 
 		if (!(a = findMapAction(existingActions, map))) {
@@ -1612,24 +1644,39 @@ void GUI::loadMapDir()
 				} else
 					connect(a, SIGNAL(loaded()), this, SLOT(mapLoadedDir()));
 			}
+
+			_areaCount++;
 		} else {
 			map = a->data().value<Map*>();
 			if (map->isReady())
 				actions.append(a);
 		}
 	}
+}
+
+void GUI::loadMapDir()
+{
+	QString dir(QFileDialog::getExistingDirectory(this,
+	  tr("Select map directory"), _mapDir, QFileDialog::ShowDirsOnly));
+	if (dir.isEmpty())
+		return;
+
+	QFileInfo fi(dir);
+	TreeNode<Map*> maps(MapList::loadMaps(dir));
+	QList<QAction*> existingActions(_mapsActionGroup->actions());
+	QList<MapAction*> actions;
+	QMenu *menu = new QMenu(maps.name());
+
+	loadMapDirNode(maps, actions, menu, existingActions);
 
 	_mapView->loadMaps(actions);
 
 	if (menu->isEmpty())
 		delete menu;
-	else {
-		menu->setStyleSheet("QMenu { menu-scrollable: 1; }");
+	else
 		_mapMenu->insertMenu(_mapsEnd, menu);
-	}
 
 	_mapDir = fi.absolutePath();
-	_areaCount += maps.size();
 	_fileActionGroup->setEnabled(true);
 	_reloadFileAction->setEnabled(false);
 }
