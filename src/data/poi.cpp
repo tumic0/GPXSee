@@ -10,6 +10,14 @@
 #include "poi.h"
 
 
+static bool cb(size_t data, void* context)
+{
+	QSet<int> *set = (QSet<int>*) context;
+	set->insert((int)data);
+
+	return true;
+}
+
 POI::File::File(int start, int end, const QVector<Waypoint> &data)
   : _enabled(true)
 {
@@ -21,6 +29,33 @@ POI::File::File(int start, int end, const QVector<Waypoint> &data)
 		c[0] = p.lon();
 		c[1] = p.lat();
 		_tree.Insert(c, c, i);
+	}
+}
+
+void POI::File::search(const RectC &rect, QSet<int> &set) const
+{
+	qreal min[2], max[2];
+
+	if (_enabled) {
+		if (rect.left() > rect.right()) {
+			min[0] = rect.topLeft().lon();
+			min[1] = rect.bottomRight().lat();
+			max[0] = 180.0;
+			max[1] = rect.topLeft().lat();
+			_tree.Search(min, max, cb, &set);
+
+			min[0] = -180.0;
+			min[1] = rect.bottomRight().lat();
+			max[0] = rect.bottomRight().lon();
+			max[1] = rect.topLeft().lat();
+			_tree.Search(min, max, cb, &set);
+		} else {
+			min[0] = rect.topLeft().lon();
+			min[1] = rect.bottomRight().lat();
+			max[0] = rect.bottomRight().lon();
+			max[1] = rect.topLeft().lat();
+			_tree.Search(min, max, cb, &set);
+		}
 	}
 }
 
@@ -83,43 +118,10 @@ TreeNode<QString> POI::loadDir(const QString &path)
 	return tree;
 }
 
-static bool cb(size_t data, void* context)
-{
-	QSet<int> *set = (QSet<int>*) context;
-	set->insert((int)data);
-
-	return true;
-}
-
 void POI::search(const RectC &rect, QSet<int> &set) const
 {
-	qreal min[2], max[2];
-
-	for (ConstIterator it = _files.constBegin(); it != _files.constEnd(); ++it) {
-		const File *file = *it;
-
-		if (file->isEnabled()) {
-			if (rect.left() > rect.right()) {
-				min[0] = rect.topLeft().lon();
-				min[1] = rect.bottomRight().lat();
-				max[0] = 180.0;
-				max[1] = rect.topLeft().lat();
-				file->tree().Search(min, max, cb, &set);
-
-				min[0] = -180.0;
-				min[1] = rect.bottomRight().lat();
-				max[0] = rect.bottomRight().lon();
-				max[1] = rect.topLeft().lat();
-				file->tree().Search(min, max, cb, &set);
-			} else {
-				min[0] = rect.topLeft().lon();
-				min[1] = rect.bottomRight().lat();
-				max[0] = rect.bottomRight().lon();
-				max[1] = rect.topLeft().lat();
-				file->tree().Search(min, max, cb, &set);
-			}
-		}
-	}
+	for (ConstIterator it = _files.constBegin(); it != _files.constEnd(); ++it)
+		(*it)->search(rect, set);
 }
 
 QList<Waypoint> POI::points(const Path &path) const

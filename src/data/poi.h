@@ -44,8 +44,7 @@ private:
 	public:
 		File(int start, int end, const QVector<Waypoint> &data);
 
-		const POITree &tree() const {return _tree;}
-		bool isEnabled() const {return _enabled;}
+		void search(const RectC &rect, QSet<int> &set) const;
 		void enable(bool enable) {_enabled = enable;}
 
 	private:
