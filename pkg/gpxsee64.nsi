@@ -9,7 +9,7 @@ Unicode true
 ; The name of the installer
 Name "GPXSee"
 ; Program version
-!define VERSION "8.8"
+!define VERSION "8.9"
 
 ; The file to write
 OutFile "GPXSee-${VERSION}_x64.exe"
