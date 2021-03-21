@@ -270,10 +270,21 @@ void GUI::createActions(TreeNode<MapAction*> &mapActions,
 	addAction(_statisticsAction);
 
 	// POI actions
+	poiActions = createPOIActions();
 	_openPOIAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Load POI file..."),
 	  this);
 	_openPOIAction->setMenuRole(QAction::NoRole);
 	connect(_openPOIAction, SIGNAL(triggered()), this, SLOT(openPOIFile()));
+	_selectAllPOIAction = new QAction(tr("Select all files"), this);
+	_selectAllPOIAction->setMenuRole(QAction::NoRole);
+	_selectAllPOIAction->setEnabled(!_poisActionGroup->actions().isEmpty());
+	connect(_selectAllPOIAction, SIGNAL(triggered()), this,
+	  SLOT(selectAllPOIs()));
+	_unselectAllPOIAction = new QAction(tr("Unselect all files"), this);
+	_unselectAllPOIAction->setMenuRole(QAction::NoRole);
+	_unselectAllPOIAction->setEnabled(_selectAllPOIAction->isEnabled());
+	connect(_unselectAllPOIAction, SIGNAL(triggered()), this,
+	  SLOT(unselectAllPOIs()));
 	_overlapPOIAction = new QAction(tr("Overlap POIs"), this);
 	_overlapPOIAction->setMenuRole(QAction::NoRole);
 	_overlapPOIAction->setCheckable(true);
@@ -291,7 +302,6 @@ void GUI::createActions(TreeNode<MapAction*> &mapActions,
 	connect(_showPOIAction, SIGNAL(triggered(bool)), _mapView,
 	  SLOT(showPOI(bool)));
 	addAction(_showPOIAction);
-	poiActions = createPOIActions();
 
 	// Map actions
 	mapActions = createMapActions();
@@ -584,6 +594,8 @@ void GUI::createMenus(const TreeNode<MapAction*> &mapActions,
 	createPOINodeMenu(poiActions, _poiMenu);
 	_poisEnd = _poiMenu->addSeparator();
 	_poiMenu->addAction(_openPOIAction);
+	_poiMenu->addAction(_selectAllPOIAction);
+	_poiMenu->addAction(_unselectAllPOIAction);
 	_poiMenu->addSeparator();
 	_poiMenu->addAction(_showPOILabelsAction);
 	_poiMenu->addAction(_overlapPOIAction);
@@ -936,6 +948,9 @@ bool GUI::openPOIFile(const QString &fileName)
 		QAction *action = new POIAction(fileName, _poisActionGroup);
 		action->setChecked(true);
 		_poiMenu->insertAction(_poisEnd, action);
+
+		_selectAllPOIAction->setEnabled(true);
+		_unselectAllPOIAction->setEnabled(true);
 
 		return true;
 	} else {
@@ -1747,6 +1762,26 @@ void GUI::prevMap()
 void GUI::poiFileChecked(QAction *action)
 {
 	_poi->enableFile(action->data().value<QString>(), action->isChecked());
+}
+
+void GUI::selectAllPOIs()
+{
+	QList<QAction*> actions(_poisActionGroup->actions());
+	for (int i = 0; i < actions.size(); i++) {
+		POIAction *a = static_cast<POIAction*>(actions.at(i));
+		if (_poi->enableFile(a->data().toString(), true))
+			a->setChecked(true);
+	}
+}
+
+void GUI::unselectAllPOIs()
+{
+	QList<QAction*> actions(_poisActionGroup->actions());
+	for (int i = 0; i < actions.size(); i++) {
+		POIAction *a = static_cast<POIAction*>(actions.at(i));
+		if (_poi->enableFile(a->data().toString(), false))
+			a->setChecked(false);
+	}
 }
 
 void GUI::graphChanged(int index)

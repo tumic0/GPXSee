@@ -75,6 +75,8 @@ private slots:
 	void mapChanged(QAction *action);
 	void graphChanged(int);
 	void poiFileChecked(QAction *action);
+	void selectAllPOIs();
+	void unselectAllPOIs();
 
 	void next();
 	void prev();
@@ -179,6 +181,8 @@ private:
 	QAction *_reloadFileAction;
 	QAction *_statisticsAction;
 	QAction *_openPOIAction;
+	QAction *_selectAllPOIAction;
+	QAction *_unselectAllPOIAction;
 	QAction *_showPOIAction;
 	QAction *_overlapPOIAction;
 	QAction *_showPOILabelsAction;
