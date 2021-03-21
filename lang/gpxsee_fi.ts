@@ -424,7 +424,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="387"/>
         <source>Coordinates</source>
-        <translation type="unfinished">Koordinaatit</translation>
+        <translation>Koordinaatit</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="393"/>
