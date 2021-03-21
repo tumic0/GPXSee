@@ -80,6 +80,7 @@ public:
 public:
 
 	RTree();
+	RTree(const RTree &) = delete;
 	virtual ~RTree();
 
 	/// Insert entry

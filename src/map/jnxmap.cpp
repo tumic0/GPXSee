@@ -84,17 +84,18 @@ bool JNXMap::readTiles()
 		}
 	}
 
-	_zooms = QVector<Zoom>(lh.size());
+	_zooms.reserve(lh.size());
 	for (int i = 0; i < lh.count(); i++) {
-		Zoom &z = _zooms[i];
+		_zooms.append(new Zoom());
+		Zoom *z = _zooms.last();
 		const Level &l = lh.at(i);
 
 		if (!_file.seek(l.offset))
 			return false;
 
-		z.tiles = QVector<Tile>(l.count);
+		z->tiles = QVector<Tile>(l.count);
 		for (quint32 j = 0; j < l.count; j++) {
-			Tile &tile = z.tiles[j];
+			Tile &tile = z->tiles[j];
 
 			if (!(readValue(tile.top) && readValue(tile.right)
 			  && readValue(tile.bottom) && readValue(tile.left)
@@ -111,11 +112,11 @@ bool JNXMap::readTiles()
 				ReferencePoint tl(PointD(0, 0), rect.topLeft());
 				ReferencePoint br(PointD(tile.width, tile.height),
 				  rect.bottomRight());
-				z.transform = Transform(tl, br);
+				z->transform = Transform(tl, br);
 			}
 
-			QRectF trect(z.transform.proj2img(rect.topLeft()),
-			  z.transform.proj2img(rect.bottomRight()));
+			QRectF trect(z->transform.proj2img(rect.topLeft()),
+			  z->transform.proj2img(rect.bottomRight()));
 			tile.pos = trect.topLeft();
 
 			qreal min[2], max[2];
@@ -123,7 +124,7 @@ bool JNXMap::readTiles()
 			min[1] = trect.top();
 			max[0] = trect.right();
 			max[1] = trect.bottom();
-			z.tree.Insert(min, max, &tile);
+			z->tree.Insert(min, max, &tile);
 		}
 	}
 
@@ -151,6 +152,11 @@ JNXMap::JNXMap(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
+JNXMap::~JNXMap()
+{
+	qDeleteAll(_zooms);
+}
+
 void JNXMap::load()
 {
 	_file.open(QIODevice::ReadOnly);
@@ -163,14 +169,14 @@ void JNXMap::unload()
 
 QPointF JNXMap::ll2xy(const Coordinates &c)
 {
-	const Zoom &z = _zooms.at(_zoom);
-	return z.transform.proj2img(_projection.ll2xy(c)) / _mapRatio;
+	const Zoom *z = _zooms.at(_zoom);
+	return z->transform.proj2img(_projection.ll2xy(c)) / _mapRatio;
 }
 
 Coordinates JNXMap::xy2ll(const QPointF &p)
 {
-	const Zoom &z = _zooms.at(_zoom);
-	return _projection.xy2ll(z.transform.img2proj(p * _mapRatio));
+	const Zoom *z = _zooms.at(_zoom);
+	return _projection.xy2ll(z->transform.img2proj(p * _mapRatio));
 }
 
 QRectF JNXMap::bounds()
@@ -248,7 +254,7 @@ bool JNXMap::cb(Tile *tile, void *context)
 void JNXMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	Q_UNUSED(flags);
-	const RTree<Tile*, qreal, 2> &tree = _zooms.at(_zoom).tree;
+	const RTree<Tile*, qreal, 2> &tree = _zooms.at(_zoom)->tree;
 	Ctx ctx(painter, &_file, _mapRatio);
 	QRectF rr(rect.topLeft() * _mapRatio, rect.size() * _mapRatio);
 
@@ -268,12 +274,12 @@ void JNXMap::setInputProjection(const Projection &projection)
 	_projection = projection;
 
 	for (int i = 0; i < _zooms.size(); i++) {
-		Zoom &z = _zooms[i];
+		Zoom *z = _zooms[i];
 
-		z.tree.RemoveAll();
+		z->tree.RemoveAll();
 
-		for (int j = 0; j < z.tiles.size(); j++) {
-			Tile &tile = z.tiles[j];
+		for (int j = 0; j < z->tiles.size(); j++) {
+			Tile &tile = z->tiles[j];
 
 			RectC llrect(Coordinates(ic2dc(tile.left), ic2dc(tile.top)),
 			  Coordinates(ic2dc(tile.right), ic2dc(tile.bottom)));
@@ -284,11 +290,11 @@ void JNXMap::setInputProjection(const Projection &projection)
 				ReferencePoint tl(PointD(0, 0), rect.topLeft());
 				ReferencePoint br(PointD(tile.width, tile.height),
 				  rect.bottomRight());
-				z.transform = Transform(tl, br);
+				z->transform = Transform(tl, br);
 			}
 
-			QRectF trect(z.transform.proj2img(rect.topLeft()),
-			  z.transform.proj2img(rect.bottomRight()));
+			QRectF trect(z->transform.proj2img(rect.topLeft()),
+			  z->transform.proj2img(rect.bottomRight()));
 			tile.pos = trect.topLeft();
 
 			qreal min[2], max[2];
@@ -296,7 +302,7 @@ void JNXMap::setInputProjection(const Projection &projection)
 			min[1] = trect.top();
 			max[0] = trect.right();
 			max[1] = trect.bottom();
-			z.tree.Insert(min, max, &tile);
+			z->tree.Insert(min, max, &tile);
 		}
 	}
 }

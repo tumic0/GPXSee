@@ -16,6 +16,7 @@ public:
 
 public:
 	JNXMap(const QString &fileName, QObject *parent = 0);
+	~JNXMap();
 
 	QRectF bounds();
 	RectC llBounds() {return _bounds;}
@@ -65,7 +66,7 @@ private:
 	static QPixmap pixmap(const Tile *tile, QFile *file);
 
 	QFile _file;
-	QVector<Zoom> _zooms;
+	QList<Zoom*> _zooms;
 	int _zoom;
 	RectC _bounds;
 	Projection _projection;
