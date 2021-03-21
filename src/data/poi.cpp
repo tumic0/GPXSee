@@ -10,19 +10,35 @@
 #include "poi.h"
 
 
+POI::File::File(int start, int end, const QVector<Waypoint> &data)
+  : _enabled(true)
+{
+	qreal c[2];
+
+	for (int i = start; i <= end; i++) {
+		const Coordinates &p = data.at(i).coordinates();
+
+		c[0] = p.lon();
+		c[1] = p.lat();
+		_tree.Insert(c, c, i);
+	}
+}
+
+
 POI::POI(QObject *parent) : QObject(parent)
 {
 	_errorLine = 0;
 	_radius = 1000;
 }
 
+POI::~POI()
+{
+	qDeleteAll(_files);
+}
+
 bool POI::loadFile(const QString &path)
 {
 	Data data(path);
-	FileIndex index;
-
-	index.enabled = true;
-	index.start = _data.size();
 
 	if (!data.isValid()) {
 		_errorString = data.errorString();
@@ -30,42 +46,41 @@ bool POI::loadFile(const QString &path)
 		return false;
 	}
 
-	for (int i = 0; i < data.waypoints().size(); i++)
-		_data.append(data.waypoints().at(i));
-	index.end = _data.size() - 1;
+	int start = _data.size();
+	_data.append(data.waypoints());
 
-	for (int i = index.start; i <= index.end; i++) {
-		const Coordinates &p = _data.at(i).coordinates();
-		qreal c[2];
-		c[0] = p.lon();
-		c[1] = p.lat();
-		_tree.Insert(c, c, i);
-	}
-
-	_files.append(path);
-	_indexes.append(index);
+	_files.insert(path, new File(start, _data.size() - 1, _data));
 
 	emit pointsChanged();
 
 	return true;
 }
 
-void POI::loadDir(const QString &path)
+TreeNode<QString> POI::loadDir(const QString &path)
 {
 	QDir md(path);
 	md.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+	md.setSorting(QDir::DirsFirst);
 	QFileInfoList fl = md.entryInfoList();
+	TreeNode<QString> tree(md.dirName());
 
 	for (int i = 0; i < fl.size(); i++) {
 		const QFileInfo &fi = fl.at(i);
 
-		if (fi.isDir())
-			loadDir(fi.absoluteFilePath());
-		else
-			if (!loadFile(fi.absoluteFilePath()))
+		if (fi.isDir()) {
+			TreeNode<QString> child(loadDir(fi.absoluteFilePath()));
+			if (!child.isEmpty())
+				tree.addChild(child);
+		} else {
+			if (loadFile(fi.absoluteFilePath()))
+				tree.addItem(fi.absoluteFilePath());
+			else
 				qWarning("%s: %s", qPrintable(fi.absoluteFilePath()),
 				  qPrintable(_errorString));
+		}
 	}
+
+	return tree;
 }
 
 static bool cb(size_t data, void* context)
@@ -80,24 +95,30 @@ void POI::search(const RectC &rect, QSet<int> &set) const
 {
 	qreal min[2], max[2];
 
-	if (rect.left() > rect.right()) {
-		min[0] = rect.topLeft().lon();
-		min[1] = rect.bottomRight().lat();
-		max[0] = 180.0;
-		max[1] = rect.topLeft().lat();
-		_tree.Search(min, max, cb, &set);
+	for (ConstIterator it = _files.constBegin(); it != _files.constEnd(); ++it) {
+		const File *file = *it;
 
-		min[0] = -180.0;
-		min[1] = rect.bottomRight().lat();
-		max[0] = rect.bottomRight().lon();
-		max[1] = rect.topLeft().lat();
-		_tree.Search(min, max, cb, &set);
-	} else {
-		min[0] = rect.topLeft().lon();
-		min[1] = rect.bottomRight().lat();
-		max[0] = rect.bottomRight().lon();
-		max[1] = rect.topLeft().lat();
-		_tree.Search(min, max, cb, &set);
+		if (file->isEnabled()) {
+			if (rect.left() > rect.right()) {
+				min[0] = rect.topLeft().lon();
+				min[1] = rect.bottomRight().lat();
+				max[0] = 180.0;
+				max[1] = rect.topLeft().lat();
+				file->tree().Search(min, max, cb, &set);
+
+				min[0] = -180.0;
+				min[1] = rect.bottomRight().lat();
+				max[0] = rect.bottomRight().lon();
+				max[1] = rect.topLeft().lat();
+				file->tree().Search(min, max, cb, &set);
+			} else {
+				min[0] = rect.topLeft().lon();
+				min[1] = rect.bottomRight().lat();
+				max[0] = rect.bottomRight().lon();
+				max[1] = rect.topLeft().lat();
+				file->tree().Search(min, max, cb, &set);
+			}
+		}
 	}
 }
 
@@ -170,40 +191,17 @@ QList<Waypoint> POI::points(const RectC &rect) const
 	return ret;
 }
 
-void POI::enableFile(const QString &fileName, bool enable)
+bool POI::enableFile(const QString &fileName, bool enable)
 {
-	int i;
+	Iterator it = _files.find(fileName);
+	if (it == _files.end())
+		return false;
 
-	i = _files.indexOf(fileName);
-	Q_ASSERT(i >= 0);
-	_indexes[i].enabled = enable;
-
-	_tree.RemoveAll();
-	for (int i = 0; i < _indexes.count(); i++) {
-		FileIndex idx = _indexes.at(i);
-		if (!idx.enabled)
-			continue;
-
-		for (int j = idx.start; j <= idx.end; j++) {
-			const Coordinates &p = _data.at(j).coordinates();
-			qreal c[2];
-			c[0] = p.lon();
-			c[1] = p.lat();
-			_tree.Insert(c, c, j);
-		}
-	}
+	(*it)->enable(enable);
 
 	emit pointsChanged();
-}
 
-void POI::clear()
-{
-	_tree.RemoveAll();
-	_data.clear();
-	_files.clear();
-	_indexes.clear();
-
-	emit pointsChanged();
+	return true;
 }
 
 void POI::setRadius(unsigned radius)

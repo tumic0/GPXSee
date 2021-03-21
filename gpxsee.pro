@@ -24,6 +24,7 @@ HEADERS += src/common/config.h \
     src/GUI/marginswidget.h \
     src/GUI/markerinfoitem.h \
     src/GUI/planeitem.h \
+    src/GUI/poiaction.h \
     src/GUI/popup.h \
     src/common/garmin.h \
     src/common/coordinates.h \

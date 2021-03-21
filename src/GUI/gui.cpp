@@ -10,7 +10,6 @@
 #include <QPaintEngine>
 #include <QPaintDevice>
 #include <QKeyEvent>
-#include <QSignalMapper>
 #include <QMenu>
 #include <QToolBar>
 #include <QTabWidget>
@@ -50,6 +49,7 @@
 #include "pathitem.h"
 #include "mapitem.h"
 #include "mapaction.h"
+#include "poiaction.h"
 #include "gui.h"
 
 
@@ -58,16 +58,16 @@
 GUI::GUI()
 {
 	TreeNode<MapAction*> mapActions;
+	TreeNode<POIAction*> poiActions;
 
-	loadPOIs();
+	_poi = new POI(this);
 
 	createMapView();
 	createGraphTabs();
 	createStatusBar();
-	createActions(mapActions);
-	createMenus(mapActions);
+	createActions(mapActions, poiActions);
+	createMenus(mapActions, poiActions);
 	createToolBars();
-
 	createBrowser();
 
 	_splitter = new QSplitter();
@@ -105,19 +105,25 @@ GUI::GUI()
 	updateStatusBarInfo();
 }
 
-void GUI::loadPOIs()
-{
-	_poi = new POI(this);
-
-	QString poiDir(ProgramPaths::poiDir());
-	if (!poiDir.isNull())
-		_poi->loadDir(poiDir);
-}
-
 void GUI::createBrowser()
 {
 	_browser = new FileBrowser(this);
 	_browser->setFilter(Data::filter());
+}
+
+TreeNode<MapAction*> GUI::createMapActions()
+{
+	_mapsActionGroup = new QActionGroup(this);
+	_mapsActionGroup->setExclusive(true);
+	connect(_mapsActionGroup, SIGNAL(triggered(QAction*)), this,
+	  SLOT(mapChanged(QAction*)));
+
+	QString mapDir(ProgramPaths::mapDir());
+	if (mapDir.isNull())
+		return TreeNode<MapAction*>();
+
+	TreeNode<Map*> maps(MapList::loadMaps(mapDir));
+	return createMapActionsNode(maps);
 }
 
 TreeNode<MapAction*> GUI::createMapActionsNode(const TreeNode<Map*> &node)
@@ -130,7 +136,7 @@ TreeNode<MapAction*> GUI::createMapActionsNode(const TreeNode<Map*> &node)
 	for (int i = 0; i < node.items().size(); i++) {
 		Map *map = node.items().at(i);
 		if (map->isValid()) {
-			MapAction *a = createMapAction(map);
+			MapAction *a = new MapAction(map, _mapsActionGroup);
 			connect(a, SIGNAL(loaded()), this, SLOT(mapInitialized()));
 			tree.addItem(a);
 		} else {
@@ -141,29 +147,6 @@ TreeNode<MapAction*> GUI::createMapActionsNode(const TreeNode<Map*> &node)
 	}
 
 	return tree;
-}
-
-TreeNode<MapAction*> GUI::createMapActions()
-{
-	_mapsActionGroup = new QActionGroup(this);
-	_mapsActionGroup->setExclusive(true);
-
-	QString mapDir(ProgramPaths::mapDir());
-	if (mapDir.isNull())
-		return TreeNode<MapAction*>();
-
-	TreeNode<Map*> maps(MapList::loadMaps(mapDir));
-	return createMapActionsNode(maps);
-}
-
-MapAction *GUI::createMapAction(Map *map)
-{
-	MapAction *a = new MapAction(map, _mapsActionGroup);
-	a->setMenuRole(QAction::NoRole);
-	a->setCheckable(true);
-	connect(a, SIGNAL(triggered()), this, SLOT(mapChanged()));
-
-	return a;
 }
 
 void GUI::mapInitialized()
@@ -182,35 +165,35 @@ void GUI::mapInitialized()
 	}
 }
 
-void GUI::createPOIFilesActions()
+TreeNode<POIAction *> GUI::createPOIActions()
 {
-	_poiFilesSignalMapper = new QSignalMapper(this);
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-	connect(_poiFilesSignalMapper, SIGNAL(mapped(int)), this,
-	  SLOT(poiFileChecked(int)));
-#else // QT 5.15
-	connect(_poiFilesSignalMapper, SIGNAL(mappedInt(int)), this,
-	  SLOT(poiFileChecked(int)));
-#endif // QT 5.15
+	_poisActionGroup = new QActionGroup(this);
+	_poisActionGroup->setExclusive(false);
+	connect(_poisActionGroup, SIGNAL(triggered(QAction*)), this,
+	  SLOT(poiFileChecked(QAction*)));
 
-	for (int i = 0; i < _poi->files().count(); i++)
-		createPOIFileAction(_poi->files().at(i));
+	TreeNode<QString> poiFiles;
+	QString poiDir(ProgramPaths::poiDir());
+	if (!poiDir.isNull())
+		poiFiles = _poi->loadDir(poiDir);
+
+	return createPOIActionsNode(poiFiles);
 }
 
-QAction *GUI::createPOIFileAction(const QString &fileName)
+TreeNode<POIAction *> GUI::createPOIActionsNode(const TreeNode<QString> &node)
 {
-	QAction *a = new QAction(QFileInfo(fileName).fileName(), this);
-	a->setMenuRole(QAction::NoRole);
-	a->setCheckable(true);
+	TreeNode<POIAction*> tree(node.name());
 
-	_poiFilesActions.append(a);
-	_poiFilesSignalMapper->setMapping(a, _poiFilesActions.size() - 1);
-	connect(a, SIGNAL(triggered()), _poiFilesSignalMapper, SLOT(map()));
+	for (int i = 0; i < node.childs().size(); i++)
+		tree.addChild(createPOIActionsNode(node.childs().at(i)));
+	for (int i = 0; i < node.items().size(); i++)
+		tree.addItem(new POIAction(node.items().at(i), _poisActionGroup));
 
-	return a;
+	return tree;
 }
 
-void GUI::createActions(TreeNode<MapAction*> &mapActions)
+void GUI::createActions(TreeNode<MapAction*> &mapActions,
+  TreeNode<POIAction*> &poiActions)
 {
 	QActionGroup *ag;
 
@@ -291,10 +274,6 @@ void GUI::createActions(TreeNode<MapAction*> &mapActions)
 	  this);
 	_openPOIAction->setMenuRole(QAction::NoRole);
 	connect(_openPOIAction, SIGNAL(triggered()), this, SLOT(openPOIFile()));
-	_closePOIAction = new QAction(QIcon(CLOSE_FILE_ICON), tr("Close POI files"),
-	  this);
-	_closePOIAction->setMenuRole(QAction::NoRole);
-	connect(_closePOIAction, SIGNAL(triggered()), this, SLOT(closePOIFiles()));
 	_overlapPOIAction = new QAction(tr("Overlap POIs"), this);
 	_overlapPOIAction->setMenuRole(QAction::NoRole);
 	_overlapPOIAction->setCheckable(true);
@@ -312,7 +291,7 @@ void GUI::createActions(TreeNode<MapAction*> &mapActions)
 	connect(_showPOIAction, SIGNAL(triggered(bool)), _mapView,
 	  SLOT(showPOI(bool)));
 	addAction(_showPOIAction);
-	createPOIFilesActions();
+	poiActions = createPOIActions();
 
 	// Map actions
 	mapActions = createMapActions();
@@ -550,7 +529,20 @@ void GUI::createMapNodeMenu(const TreeNode<MapAction*> &node, QMenu *menu)
 		menu->addAction(node.items().at(i));
 }
 
-void GUI::createMenus(const TreeNode<MapAction*> &mapActions)
+void GUI::createPOINodeMenu(const TreeNode<POIAction*> &node, QMenu *menu)
+{
+	for (int i = 0; i < node.childs().size(); i++) {
+		QMenu *cm = new QMenu(node.childs().at(i).name(), menu);
+		menu->addMenu(cm);
+		createPOINodeMenu(node.childs().at(i), cm);
+	}
+
+	for (int i = 0; i < node.items().size(); i++)
+		menu->addAction(node.items().at(i));
+}
+
+void GUI::createMenus(const TreeNode<MapAction*> &mapActions,
+  const TreeNode<POIAction*> &poiActions)
 {
 	QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 	fileMenu->addAction(_openFileAction);
@@ -588,17 +580,15 @@ void GUI::createMenus(const TreeNode<MapAction*> &mapActions)
 	graphMenu->addSeparator();
 	graphMenu->addAction(_showGraphsAction);
 
-	QMenu *poiMenu = menuBar()->addMenu(tr("&POI"));
-	_poiFilesMenu = poiMenu->addMenu(tr("POI files"));
-	_poiFilesMenu->addActions(_poiFilesActions);
-	poiMenu->addSeparator();
-	poiMenu->addAction(_openPOIAction);
-	poiMenu->addAction(_closePOIAction);
-	poiMenu->addSeparator();
-	poiMenu->addAction(_showPOILabelsAction);
-	poiMenu->addAction(_overlapPOIAction);
-	poiMenu->addSeparator();
-	poiMenu->addAction(_showPOIAction);
+	_poiMenu = menuBar()->addMenu(tr("&POI"));
+	createPOINodeMenu(poiActions, _poiMenu);
+	_poisEnd = _poiMenu->addSeparator();
+	_poiMenu->addAction(_openPOIAction);
+	_poiMenu->addSeparator();
+	_poiMenu->addAction(_showPOILabelsAction);
+	_poiMenu->addAction(_overlapPOIAction);
+	_poiMenu->addSeparator();
+	_poiMenu->addAction(_showPOIAction);
 
 	QMenu *dataMenu = menuBar()->addMenu(tr("&Data"));
 	dataMenu->addAction(_showWaypointLabelsAction);
@@ -937,15 +927,15 @@ void GUI::openPOIFile()
 
 bool GUI::openPOIFile(const QString &fileName)
 {
-	if (_poi->files().contains(fileName))
+	if (_poi->isLoaded(fileName))
 		return true;
 
 	if (_poi->loadFile(fileName)) {
 		_mapView->showPOI(true);
 		_showPOIAction->setChecked(true);
-		QAction *action = createPOIFileAction(fileName);
+		QAction *action = new POIAction(fileName, _poisActionGroup);
 		action->setChecked(true);
-		_poiFilesMenu->addAction(action);
+		_poiMenu->insertAction(_poisEnd, action);
 
 		return true;
 	} else {
@@ -957,16 +947,6 @@ bool GUI::openPOIFile(const QString &fileName)
 
 		return false;
 	}
-}
-
-void GUI::closePOIFiles()
-{
-	_poiFilesMenu->clear();
-
-	qDeleteAll(_poiFilesActions);
-	_poiFilesActions.clear();
-
-	_poi->clear();
 }
 
 void GUI::openOptions()
@@ -1550,7 +1530,7 @@ bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 				delete map;
 			} else {
 				valid = true;
-				a = createMapAction(map);
+				a = new MapAction(map, _mapsActionGroup);
 				_mapMenu->insertAction(_mapsEnd, a);
 
 				if (map->isReady()) {
@@ -1634,7 +1614,7 @@ void GUI::loadMapDirNode(const TreeNode<Map *> &node, QList<MapAction*> &actions
 				  + "\n\n" + map->path() + "\n\n" + map->errorString());
 				delete map;
 			} else {
-				a = createMapAction(map);
+				a = new MapAction(map, _mapsActionGroup);
 				menu->addAction(a);
 
 				if (map->isReady()) {
@@ -1726,9 +1706,9 @@ void GUI::updateWindowTitle()
 		setWindowTitle(APP_NAME);
 }
 
-void GUI::mapChanged()
+void GUI::mapChanged(QAction *action)
 {
-	_map = _mapsActionGroup->checkedAction()->data().value<Map*>();
+	_map = action->data().value<Map*>();
 	_mapView->setMap(_map);
 }
 
@@ -1764,10 +1744,9 @@ void GUI::prevMap()
 	}
 }
 
-void GUI::poiFileChecked(int index)
+void GUI::poiFileChecked(QAction *action)
 {
-	_poi->enableFile(_poi->files().at(index),
-	  _poiFilesActions.at(index)->isChecked());
+	_poi->enableFile(action->data().value<QString>(), action->isChecked());
 }
 
 void GUI::graphChanged(int index)
@@ -2069,12 +2048,14 @@ void GUI::writeSettings()
 		settings.setValue(OVERLAP_POI_SETTING, _overlapPOIAction->isChecked());
 
 	int j = 0;
-	for (int i = 0; i < _poiFilesActions.count(); i++) {
-		if (!_poiFilesActions.at(i)->isChecked()) {
+	QList<QAction*> poiActions(_poisActionGroup->actions());
+	for (int i = 0; i < poiActions.count(); i++) {
+		POIAction *a = static_cast<POIAction*>(poiActions.at(i));
+		if (!a->isChecked()) {
 			if (j == 0)
 				settings.beginWriteArray(DISABLED_POI_FILE_SETTINGS_PREFIX);
 			settings.setArrayIndex(j++);
-			settings.setValue(DISABLED_POI_FILE_SETTING, _poi->files().at(i));
+			settings.setValue(DISABLED_POI_FILE_SETTING, a->data().toString());
 		}
 	}
 	if (j != 0)
@@ -2351,16 +2332,17 @@ void GUI::readSettings()
 		_showPOIAction->setChecked(true);
 	else
 		_mapView->showPOI(false);
-	for (int i = 0; i < _poiFilesActions.count(); i++)
-		_poiFilesActions.at(i)->setChecked(true);
+	QList<QAction*> poiActions(_poisActionGroup->actions());
+	for (int i = 0; i < poiActions.count(); i++)
+		poiActions.at(i)->setChecked(true);
 	int size = settings.beginReadArray(DISABLED_POI_FILE_SETTINGS_PREFIX);
 	for (int i = 0; i < size; i++) {
 		settings.setArrayIndex(i);
-		int index = _poi->files().indexOf(settings.value(
-		  DISABLED_POI_FILE_SETTING).toString());
-		if (index >= 0) {
-			_poi->enableFile(_poi->files().at(index), false);
-			_poiFilesActions.at(index)->setChecked(false);
+		QString file(settings.value(DISABLED_POI_FILE_SETTING).toString());
+		if (_poi->enableFile(file, false)) {
+			for (int j = 0; j < poiActions.size(); j++)
+				if (poiActions.at(j)->data().toString() == file)
+					poiActions.at(j)->setChecked(false);
 		}
 	}
 	settings.endArray();

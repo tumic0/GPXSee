@@ -22,7 +22,6 @@ class QActionGroup;
 class QAction;
 class QLabel;
 class QSplitter;
-class QSignalMapper;
 class QPrinter;
 class FileBrowser;
 class GraphTab;
@@ -31,6 +30,7 @@ class Map;
 class POI;
 class QScreen;
 class MapAction;
+class POIAction;
 class Data;
 
 class GUI : public QMainWindow
@@ -57,7 +57,6 @@ private slots:
 	void reloadFiles();
 	void statistics();
 	void openPOIFile();
-	void closePOIFiles();
 	void showGraphs(bool show);
 	void showGraphGrids(bool show);
 	void showGraphSliderInfo(bool show);
@@ -73,9 +72,9 @@ private slots:
 	void openOptions();
 	void clearMapCache();
 
-	void mapChanged();
+	void mapChanged(QAction *action);
 	void graphChanged(int);
-	void poiFileChecked(int);
+	void poiFileChecked(QAction *action);
 
 	void next();
 	void prev();
@@ -103,7 +102,6 @@ private slots:
 private:
 	typedef QPair<QDateTime, QDateTime> DateTimeRange;
 
-	void loadPOIs();
 	void closeFiles();
 	void plot(QPrinter *printer);
 	void plotMainPage(QPainter *painter, const QRectF &rect, qreal ratio,
@@ -111,14 +109,16 @@ private:
 	void plotGraphsPage(QPainter *painter, const QRectF &rect, qreal ratio);
 	qreal graphPlotHeight(const QRectF &rect, qreal ratio);
 
-	QAction *createPOIFileAction(const QString &fileName);
-	MapAction *createMapAction(Map *map);
-	void createPOIFilesActions();
+	TreeNode<POIAction*> createPOIActions();
+	TreeNode<POIAction*> createPOIActionsNode(const TreeNode<QString> &node);
+	TreeNode<MapAction*> createMapActions();
 	TreeNode<MapAction*> createMapActionsNode(const TreeNode<Map*> &node);
-	TreeNode<MapAction *> createMapActions();
-	void createActions(TreeNode<MapAction *> &mapActions);
+	void createActions(TreeNode<MapAction*> &mapActions,
+	  TreeNode<POIAction*> &poiActions);
 	void createMapNodeMenu(const TreeNode<MapAction*> &node, QMenu *menu);
-	void createMenus(const TreeNode<MapAction *> &mapActions);
+	void createPOINodeMenu(const TreeNode<POIAction*> &node, QMenu *menu);
+	void createMenus(const TreeNode<MapAction*> &mapActions,
+	  const TreeNode<POIAction*> &poiActions);
 	void createToolBars();
 	void createStatusBar();
 	void createMapView();
@@ -129,8 +129,8 @@ private:
 	bool loadFile(const QString &fileName, bool silent = false);
 	void loadData(const Data &data);
 	bool loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
-	  bool silent, const QList<QAction *> &existingActions);
-	void loadMapDirNode(const TreeNode<Map*> &node, QList<MapAction *> &actions,
+	  bool silent, const QList<QAction*> &existingActions);
+	void loadMapDirNode(const TreeNode<Map*> &node, QList<MapAction*> &actions,
 	  QMenu *menu, const QList<QAction*> &existingActions);
 	void updateStatusBarInfo();
 	void updateWindowTitle();
@@ -159,12 +159,13 @@ private:
 	QToolBar *_fileToolBar;
 	QToolBar *_showToolBar;
 	QToolBar *_navigationToolBar;
-	QMenu *_poiFilesMenu;
+	QMenu *_poiMenu;
 	QMenu *_mapMenu;
 
 	QActionGroup *_fileActionGroup;
 	QActionGroup *_navigationActionGroup;
 	QActionGroup *_mapsActionGroup;
+	QActionGroup *_poisActionGroup;
 	QAction *_exitAction;
 	QAction *_keysAction;
 	QAction *_pathsAction;
@@ -178,7 +179,6 @@ private:
 	QAction *_reloadFileAction;
 	QAction *_statisticsAction;
 	QAction *_openPOIAction;
-	QAction *_closePOIAction;
 	QAction *_showPOIAction;
 	QAction *_overlapPOIAction;
 	QAction *_showPOILabelsAction;
@@ -221,9 +221,7 @@ private:
 	QAction *_showCoordinatesAction;
 	QAction *_openOptionsAction;
 	QAction *_mapsEnd;
-
-	QList<QAction*> _poiFilesActions;
-	QSignalMapper *_poiFilesSignalMapper;
+	QAction *_poisEnd;
 
 	QLabel *_fileNameLabel;
 	QLabel *_distanceLabel;

@@ -12,8 +12,12 @@ public:
 	MapAction(Map *map, QObject *parent = 0) : QAction(map->name(), parent)
 	{
 		map->setParent(this);
+
 		setData(QVariant::fromValue(map));
 		setEnabled(map->isReady());
+		setMenuRole(QAction::NoRole);
+		setCheckable(true);
+
 		connect(map, SIGNAL(mapLoaded()), this, SLOT(mapLoaded()));
 	}
 
