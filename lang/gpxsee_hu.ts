@@ -328,12 +328,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="278"/>
         <source>Select all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Összes fájl kijelölése</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="283"/>
         <source>Unselect all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Összes kijelölés megszüntetése</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="288"/>
@@ -830,6 +830,7 @@
         <location filename="../src/GUI/gui.cpp" line="1693"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
