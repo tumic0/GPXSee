@@ -367,12 +367,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="278"/>
         <source>Select all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Markera alla filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="283"/>
         <source>Unselect all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Avmarkera alla filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="317"/>
