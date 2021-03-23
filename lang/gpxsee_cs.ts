@@ -357,12 +357,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="278"/>
         <source>Select all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Vybrat všechny soubory</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="283"/>
         <source>Unselect all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Odznačit všechny soubory</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="317"/>
