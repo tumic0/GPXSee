@@ -2269,7 +2269,7 @@ void GUI::writeSettings()
 	if (_options.outputProjection != OUTPUT_PROJECTION_DEFAULT)
 		settings.setValue(OUTPUT_PROJECTION_SETTING, _options.outputProjection);
 	if (_options.inputProjection != INPUT_PROJECTION_DEFAULT)
-		settings.setValue(INPUT_PROJECTION_SETTING, _options.outputProjection);
+		settings.setValue(INPUT_PROJECTION_SETTING, _options.inputProjection);
 	if (_options.hidpiMap != HIDPI_MAP_DEFAULT)
 		settings.setValue(HIDPI_MAP_SETTING, _options.hidpiMap);
 	settings.endGroup();
