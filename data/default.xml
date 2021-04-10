@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Mapsforge default render theme.
+
+    The only modification are the resource links which point to the GPXSee qrc
+    rather then the Mapsforge jar. Licensed under LGPLv3.
+-->
 <rendertheme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" map-background="#F8F8F8"
     map-background-outside="#DDDDDD" version="5" xmlns="http://mapsforge.org/renderTheme"
     xsi:schemaLocation="http://mapsforge.org/renderTheme https://raw.githubusercontent.com/mapsforge/mapsforge/master/resources/renderTheme.xsd">
