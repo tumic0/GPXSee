@@ -1,4 +1,4 @@
-version: 8.9.{build}
+version: 8.10.{build}
 
 configuration:
   - Release
