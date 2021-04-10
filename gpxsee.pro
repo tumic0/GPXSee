@@ -104,7 +104,6 @@ HEADERS += src/common/config.h \
     src/map/IMG/raster.h \
     src/map/IMG/rastertile.h \
     src/map/IMG/shield.h \
-    src/map/mapsforge/cmp.h \
     src/map/mapsforge/style.h \
     src/map/textpathitem.h \
     src/map/textpointitem.h \

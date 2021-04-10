@@ -9,7 +9,6 @@
 #include "common/rtree.h"
 #include "common/range.h"
 #include "common/polygon.h"
-#include "cmp.h"
 
 
 namespace Mapsforge {
@@ -34,7 +33,7 @@ public:
 		}
 
 		bool operator==(const Tag &other) const
-		  {return cmp(key, other.key) && cmp(value, other.value);}
+		  {return (key == other.key && value == other.value);}
 
 		QByteArray key;
 		QByteArray value;

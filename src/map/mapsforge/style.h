@@ -11,6 +11,17 @@ class QXmlStreamReader;
 
 namespace Mapsforge {
 
+inline bool wcmp(const QByteArray &b1, const QByteArray &b2)
+{
+	int len = b1.length();
+
+	if (!len)
+		return true;
+	if (len != b2.length())
+		return false;
+	return !memcmp(b1.constData(), b2.constData(), len);
+}
+
 class Style
 {
 public:
@@ -85,7 +96,7 @@ public:
 			{
 				for (int i = 0; i < _keys.size(); i++)
 					for (int j = 0; j < tags.size(); j++)
-						if (cmp(_keys.at(i), tags.at(j).key))
+						if (wcmp(_keys.at(i), tags.at(j).key))
 							return true;
 
 				return false;
@@ -95,7 +106,7 @@ public:
 			{
 				for (int i = 0; i < _vals.size(); i++)
 					for (int j = 0; j < tags.size(); j++)
-						if (cmp(_vals.at(i), tags.at(j).value))
+						if (wcmp(_vals.at(i), tags.at(j).value))
 							return true;
 
 				return false;

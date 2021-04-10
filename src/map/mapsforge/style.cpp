@@ -205,9 +205,9 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir,
 		return;
 	}
 
-	if (attr.value("e") == "way")
+	if (attr.value("e").toString() == "way")
 		r.setType(Rule::WayType);
-	else if (attr.value("e") == "node")
+	else if (attr.value("e").toString() == "node")
 		r.setType(Rule::NodeType);
 
 	if (attr.hasAttribute("zoom-min"))
@@ -224,7 +224,7 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir,
 
 	QList<QByteArray> keys(attr.value("k").toLatin1().split('|'));
 	QList<QByteArray> vals(attr.value("v").toLatin1().split('|'));
-    r.addFilter(Rule::Filter(keys, vals));
+	r.addFilter(Rule::Filter(keys, vals));
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("rule"))

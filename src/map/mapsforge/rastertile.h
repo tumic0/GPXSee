@@ -6,7 +6,6 @@
 #include "map/transform.h"
 #include "style.h"
 #include "mapdata.h"
-#include "cmp.h"
 
 class MapsforgeMap;
 class TextItem;
