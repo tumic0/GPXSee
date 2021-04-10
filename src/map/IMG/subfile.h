@@ -1,12 +1,14 @@
-#ifndef SUBFILE_H
-#define SUBFILE_H
+#ifndef IMG_SUBFILE_H
+#define IMG_SUBFILE_H
 
 #include <QVector>
 #include <QFile>
-#include "img.h"
+#include "imgdata.h"
 
 
 #define BLOCK_BITS 12 /* 4096 bytes */
+
+namespace IMG {
 
 class SubFile
 {
@@ -43,7 +45,7 @@ public:
 		int _pos;
 	};
 
-	SubFile(const IMG *img)
+	SubFile(const IMGData *img)
 	  : _gmpOffset(0), _img(img), _blocks(new QVector<quint16>()), _path(0) {}
 	SubFile(const SubFile *gmp, quint32 offset) : _gmpOffset(offset),
 	  _img(gmp->_img), _blocks(gmp->_blocks), _path(gmp->_path) {}
@@ -153,9 +155,11 @@ protected:
 	quint32 _gmpOffset;
 
 private:
-	const IMG *_img;
+	const IMGData *_img;
 	QVector<quint16> *_blocks;
 	const QString *_path;
 };
 
-#endif // SUBFILE_H
+}
+
+#endif // IMG_SUBFILE_H

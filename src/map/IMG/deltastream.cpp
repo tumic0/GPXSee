@@ -1,6 +1,8 @@
 #include "deltastream.h"
 
 
+using namespace IMG;
+
 static int bitSize(quint8 baseSize, bool variableSign, bool extraBit)
 {
 	int bits = 2;

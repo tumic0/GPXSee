@@ -1,7 +1,9 @@
-#ifndef BITSTREAM_H
-#define BITSTREAM_H
+#ifndef IMG_BITSTREAM_H
+#define IMG_BITSTREAM_H
 
 #include "subfile.h"
+
+namespace IMG {
 
 class BitStream1 {
 public:
@@ -128,4 +130,6 @@ bool BitStream4R::read(int bits, T &val)
 	return true;
 }
 
-#endif // BITSTREAM_H
+}
+
+#endif // IMG_BITSTREAM_H

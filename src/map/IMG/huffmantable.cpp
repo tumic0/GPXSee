@@ -2,6 +2,8 @@
 #include "huffmantable.h"
 
 
+using namespace IMG;
+
 static inline quint32 readVUint32(const quint8 *buffer, quint32 bytes)
 {
 	quint32 val = 0;

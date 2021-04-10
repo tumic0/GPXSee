@@ -266,20 +266,22 @@ void KMLParser::polygon(Area &area)
 	Polygon polygon;
 
 	while (_reader.readNextStartElement()) {
+		QVector<Coordinates> path;
+
 		if (_reader.name() == QLatin1String("outerBoundaryIs")) {
 			if (!polygon.isEmpty()) {
 				_reader.raiseError("Multiple polygon outerBoundaryIss");
 				return;
 			}
-			polygon.append(QVector<Coordinates>());
-			boundary(polygon.last());
+			boundary(path);
+			polygon.append(path);
 		} else if (_reader.name() == QLatin1String("innerBoundaryIs")) {
 			if (polygon.isEmpty()) {
 				_reader.raiseError("Missing polygon outerBoundaryIs");
 				return;
 			}
-			polygon.append(QVector<Coordinates>());
-			boundary(polygon.last());
+			boundary(path);
+			polygon.append(path);
 		} else
 			_reader.skipCurrentElement();
 	}

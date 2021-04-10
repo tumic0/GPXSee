@@ -192,16 +192,14 @@ bool AQMMap::readHeader()
 				return false;
 
 			if (_bounds.isNull()) {
-				double minX = OSM::index2mercator(qMin((1<<zoom) - 1,
-				  qMax(0, bounds.left())), zoom);
-				double minY = OSM::index2mercator(qMin((1<<zoom) - 1,
-				  qMax(0, bounds.top())), zoom);
-				double maxX = OSM::index2mercator(qMin((1<<zoom) - 1,
-				  qMax(0, bounds.right())) + 1, zoom);
-				double maxY = OSM::index2mercator(qMin((1<<zoom) - 1,
-				  qMax(0, bounds.bottom())) + 1, zoom);
-				Coordinates tl(OSM::m2ll(QPointF(minX, -minY)));
-				Coordinates br(OSM::m2ll(QPointF(maxX, -maxY)));
+				int minX = qMin((1<<zoom) - 1, qMax(0, bounds.left()));
+				int minY = qMin((1<<zoom) - 1, qMax(0, bounds.top()));
+				int maxX = qMin((1<<zoom) - 1, qMax(0, bounds.right())) + 1;
+				int maxY = qMin((1<<zoom) - 1, qMax(0, bounds.bottom())) + 1;
+				Coordinates tl(OSM::tile2ll(QPoint(minX, minY), zoom));
+				tl.rlat() = -tl.lat();
+				Coordinates br(OSM::tile2ll(QPoint(maxX, maxY), zoom));
+				br.rlat() = -br.lat();
 				// Workaround of broken zoom levels 0 and 1 due to numerical
 				// instability
 				tl.rlat() = qMin(tl.lat(), OSM::BOUNDS.top());

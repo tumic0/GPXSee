@@ -1,7 +1,9 @@
-#ifndef DELTASTREAM_H
-#define DELTASTREAM_H
+#ifndef IMG_DELTASTREAM_H
+#define IMG_DELTASTREAM_H
 
 #include "bitstream.h"
+
+namespace IMG {
 
 class DeltaStream : public BitStream1 {
 public:
@@ -25,4 +27,6 @@ private:
 	quint32 _lonBits, _latBits, _readBits;
 };
 
-#endif // DELTASTREAM_H
+}
+
+#endif // IMG_DELTASTREAM_H

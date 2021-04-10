@@ -1,13 +1,14 @@
 #include <QFont>
 #include <QPainter>
 #include "map/imgmap.h"
-#include "textpathitem.h"
-#include "textpointitem.h"
+#include "map/textpathitem.h"
+#include "map/textpointitem.h"
 #include "bitmapline.h"
 #include "style.h"
 #include "lblfile.h"
 #include "rastertile.h"
 
+using namespace IMG;
 
 #define AREA(rect) \
 	(rect.size().width() * rect.size().height())
@@ -90,34 +91,34 @@ static QFont *poiFont(Style::FontSize size = Style::Normal)
 	}
 }
 
-static const QColor *shieldBgColor(Label::Shield::Type type)
+static const QColor *shieldBgColor(Shield::Type type)
 {
 	switch (type) {
-		case Label::Shield::USInterstate:
-		case Label::Shield::Hbox:
+		case Shield::USInterstate:
+		case Shield::Hbox:
 			return &shieldBgColor1;
-		case Label::Shield::USShield:
-		case Label::Shield::Box:
+		case Shield::USShield:
+		case Shield::Box:
 			return &shieldBgColor2;
-		case Label::Shield::USRound:
-		case Label::Shield::Oval:
+		case Shield::USRound:
+		case Shield::Oval:
 			return &shieldBgColor3;
 		default:
 			return 0;
 	}
 }
 
-static int minShieldZoom(Label::Shield::Type type)
+static int minShieldZoom(Shield::Type type)
 {
 	switch (type) {
-		case Label::Shield::USInterstate:
-		case Label::Shield::Hbox:
+		case Shield::USInterstate:
+		case Shield::Hbox:
 			return 17;
-		case Label::Shield::USShield:
-		case Label::Shield::Box:
+		case Shield::USShield:
+		case Shield::Box:
 			return 19;
-		case Label::Shield::USRound:
-		case Label::Shield::Oval:
+		case Shield::USRound:
+		case Shield::Oval:
 			return 20;
 		default:
 			return 0;
@@ -378,15 +379,15 @@ void RasterTile::processShields(const QRect &tileRect,
   QList<TextItem*> &textItems)
 {
 	for (int type = FIRST_SHIELD; type <= LAST_SHIELD; type++) {
-		if (minShieldZoom(static_cast<Label::Shield::Type>(type)) > _zoom)
+		if (minShieldZoom(static_cast<Shield::Type>(type)) > _zoom)
 			continue;
 
-		QHash<Label::Shield, QPolygonF> shields;
-		QHash<Label::Shield, const Label::Shield*> sp;
+		QHash<Shield, QPolygonF> shields;
+		QHash<Shield, const Shield*> sp;
 
 		for (int i = 0; i < _lines.size(); i++) {
 			const MapData::Poly &poly = _lines.at(i);
-			const Label::Shield &shield = poly.label.shield();
+			const Shield &shield = poly.label.shield();
 			if (!shield.isValid() || shield.type() != type
 			  || !Style::isMajorRoad(poly.type))
 				continue;
@@ -398,8 +399,8 @@ void RasterTile::processShields(const QRect &tileRect,
 			sp.insert(shield, &shield);
 		}
 
-		for (QHash<Label::Shield, QPolygonF>::const_iterator it
-		  = shields.constBegin(); it != shields.constEnd(); ++it) {
+		for (QHash<Shield, QPolygonF>::const_iterator it = shields.constBegin();
+		  it != shields.constEnd(); ++it) {
 			const QPolygonF &p = it.value();
 			QRectF rect(p.boundingRect() & tileRect);
 			if (AREA(rect) < AREA(QRect(0, 0, _img.width()/4, _img.width()/4)))

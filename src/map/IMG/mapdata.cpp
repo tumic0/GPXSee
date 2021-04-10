@@ -4,40 +4,11 @@
 #include "mapdata.h"
 
 
+using namespace IMG;
+
 #define CACHED_SUBDIVS_COUNT 2048 // ~32MB for both caches together
 
-struct PolyCTX
-{
-	PolyCTX(const RectC &rect, int bits, bool baseMap,
-	  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
-	  QCache<const SubDiv*, MapData::Polys> *polyCache)
-	  : rect(rect), bits(bits), baseMap(baseMap), polygons(polygons),
-	  lines(lines), polyCache(polyCache) {}
-
-	const RectC &rect;
-	int bits;
-	bool baseMap;
-	QList<MapData::Poly> *polygons;
-	QList<MapData::Poly> *lines;
-	QCache<const SubDiv*, MapData::Polys> *polyCache;
-};
-
-struct PointCTX
-{
-	PointCTX(const RectC &rect, int bits, bool baseMap,
-	  QList<MapData::Point> *points,
-	  QCache<const SubDiv*, QList<MapData::Point> > *pointCache)
-	  : rect(rect), bits(bits), baseMap(baseMap), points(points),
-	  pointCache(pointCache) {}
-
-	const RectC &rect;
-	int bits;
-	bool baseMap;
-	QList<MapData::Point> *points;
-	QCache<const SubDiv*, QList<MapData::Point> > *pointCache;
-};
-
-inline bool polyCb(VectorTile *tile, void *context)
+bool MapData::polyCb(VectorTile *tile, void *context)
 {
 	PolyCTX *ctx = (PolyCTX*)context;
 	tile->polys(ctx->rect, ctx->bits, ctx->baseMap, ctx->polygons, ctx->lines,
@@ -45,7 +16,7 @@ inline bool polyCb(VectorTile *tile, void *context)
 	return true;
 }
 
-inline bool pointCb(VectorTile *tile, void *context)
+bool MapData::pointCb(VectorTile *tile, void *context)
 {
 	PointCTX *ctx = (PointCTX*)context;
 	tile->points(ctx->rect, ctx->bits, ctx->baseMap, ctx->points,

@@ -1,6 +1,7 @@
 #include "bitstream.h"
 #include "nodfile.h"
 
+using namespace IMG;
 
 #define ARRAY_SIZE(array) \
   (sizeof(array) / sizeof(array[0]))

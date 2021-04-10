@@ -2,6 +2,7 @@
 #include "subdiv.h"
 #include "trefile.h"
 
+using namespace IMG;
 
 static inline double RB(qint32 val)
 {
@@ -329,12 +330,3 @@ QList<SubDiv*> TREFile::subdivs(const RectC &rect, int bits, bool baseMap)
 
 	return list;
 }
-
-#ifndef QT_NO_DEBUG
-QDebug operator<<(QDebug dbg, const TREFile::MapLevel &level)
-{
-	dbg.nospace() << "MapLevel(" << level.level << ", " << level.bits << ", "
-	  << level.subdivs << ")";
-	return dbg.space();
-}
-#endif // QT_NO_DEBUG

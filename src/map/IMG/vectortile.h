@@ -1,11 +1,13 @@
-#ifndef VECTORTILE_H
-#define VECTORTILE_H
+#ifndef IMG_VECTORTILE_H
+#define IMG_VECTORTILE_H
 
 #include "trefile.h"
 #include "rgnfile.h"
 #include "lblfile.h"
 #include "netfile.h"
 #include "nodfile.h"
+
+namespace IMG {
 
 class VectorTile {
 public:
@@ -82,8 +84,10 @@ private:
 	int _loaded;
 };
 
+}
+
 #ifndef QT_NO_DEBUG
-QDebug operator<<(QDebug dbg, const VectorTile &tile);
+QDebug operator<<(QDebug dbg, const IMG::VectorTile &tile);
 #endif // QT_NO_DEBUG
 
-#endif // VECTORTILE_H
+#endif // IMG_VECTORTILE_H

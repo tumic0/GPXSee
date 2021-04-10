@@ -16,6 +16,7 @@ namespace ProgramPaths
 	QString gcsFile();
 	QString pcsFile();
 	QString typFile();
+	QString renderthemeFile();
 }
 
 #endif // PROGRAMPATHS_H

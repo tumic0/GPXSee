@@ -45,7 +45,7 @@ private:
 	Transform transform(int zoom) const;
 	void updateTransform();
 
-	QList<MapData *> _data;
+	QList<IMG::MapData *> _data;
 	int _zoom;
 	Projection _projection;
 	Transform _transform;

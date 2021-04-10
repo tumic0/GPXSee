@@ -1,13 +1,16 @@
-#ifndef RASTERTILE_H
-#define RASTERTILE_H
+#ifndef IMG_RASTERTILE_H
+#define IMG_RASTERTILE_H
 
 #include <QImage>
 #include "mapdata.h"
 
 class QPainter;
-class TextItem;
-class Style;
 class IMGMap;
+class TextItem;
+
+namespace IMG {
+
+class Style;
 
 class RasterTile
 {
@@ -50,4 +53,6 @@ private:
 	QList<MapData::Point> _points;
 };
 
-#endif // RASTERTILE_H
+}
+
+#endif // IMG_RASTERTILE_H

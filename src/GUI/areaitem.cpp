@@ -39,22 +39,16 @@ AreaItem::AreaItem(const Area &area, Map *map, GraphicsItem *parent)
 	setAcceptHoverEvents(true);
 }
 
-
 QPainterPath AreaItem::painterPath(const Polygon &polygon)
 {
 	QPainterPath path;
 
-	const QVector<Coordinates> &lr = polygon.first();
-	path.moveTo(_map->ll2xy(lr.first()));
-	for (int i = 1; i < lr.size(); i++)
-		path.lineTo(_map->ll2xy(lr.at(i)));
-	path.closeSubpath();
+	for (int i = 0; i < polygon.size(); i++) {
+		const QVector<Coordinates> &subpath = polygon.at(i);
 
-	for (int i = 1; i < polygon.size(); i++) {
-		const QVector<Coordinates> &lr = polygon.at(i);
-		path.moveTo(_map->ll2xy(lr.first()));
-		for (int j = 1; j < lr.size(); j++)
-			path.lineTo(_map->ll2xy(lr.at(j)));
+		path.moveTo(_map->ll2xy(subpath.first()));
+		for (int j = 1; j < subpath.size(); j++)
+			path.lineTo(_map->ll2xy(subpath.at(j)));
 		path.closeSubpath();
 	}
 

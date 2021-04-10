@@ -3,7 +3,7 @@
 
 #include <QString>
 #include <QList>
-#include "polygon.h"
+#include "common/polygon.h"
 
 class Area
 {
@@ -11,15 +11,10 @@ public:
 	Area() {}
 	Area(const RectC &rect)
 	{
-		QVector<Coordinates> v(4);
-		v[0] = Coordinates(rect.left(), rect.top());
-		v[1] = Coordinates(rect.right(), rect.top());
-		v[2] = Coordinates(rect.right(), rect.bottom());
-		v[3] = Coordinates(rect.left(), rect.bottom());
-
+		Polygon polygon(rect);
 		_polygons.reserve(1);
-		_polygons.append(v);
-		_boundingRect = RectC(v.at(0), v.at(2));
+		_polygons.append(polygon);
+		_boundingRect = polygon.boundingRect();
 	}
 	Area(const Polygon &polygon)
 	{
@@ -38,8 +33,9 @@ public:
 		if (_polygons.isEmpty())
 			return false;
 		for (int i = 0; i < _polygons.size(); i++)
-			if (!_polygons.at(i).isValid())
+			if (_polygons.at(i).isEmpty() || _polygons.at(i).first().size() < 3)
 				return false;
+
 		return true;
 	}
 

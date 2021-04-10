@@ -1,5 +1,5 @@
-#ifndef TREFILE_H
-#define TREFILE_H
+#ifndef IMG_TREFILE_H
+#define IMG_TREFILE_H
 
 #include <QVector>
 #include <QDebug>
@@ -8,12 +8,14 @@
 #include "common/rtree.h"
 #include "subfile.h"
 
+namespace IMG {
+
 class SubDiv;
 
 class TREFile : public SubFile
 {
 public:
-	TREFile(const IMG *img) : SubFile(img) {}
+	TREFile(const IMGData *img) : SubFile(img) {}
 	TREFile(const QString *path) : SubFile(path) {}
 	TREFile(const SubFile *gmp, quint32 offset) : SubFile(gmp, offset) {}
 	~TREFile();
@@ -49,8 +51,6 @@ private:
 	int readExtEntry(Handle &hdl, quint32 &polygons, quint32 &lines,
 	  quint32 &points);
 
-	friend QDebug operator<<(QDebug dbg, const MapLevel &level);
-
 	RectC _bounds;
 	QVector<MapLevel> _levels;
 	quint32 _subdivOffset;
@@ -62,8 +62,6 @@ private:
 	QMap<int, SubDivTree*> _subdivs;
 };
 
-#ifndef QT_NO_DEBUG
-QDebug operator<<(QDebug dbg, const TREFile::MapLevel &level);
-#endif // QT_NO_DEBUG
+}
 
-#endif // TREFILE_H
+#endif // IMG_TREFILE_H

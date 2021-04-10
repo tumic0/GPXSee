@@ -1,5 +1,5 @@
-#ifndef MAPDATA_H
-#define MAPDATA_H
+#ifndef IMG_MAPDATA_H
+#define IMG_MAPDATA_H
 
 #include <QList>
 #include <QPointF>
@@ -10,6 +10,9 @@
 #include "common/range.h"
 #include "label.h"
 #include "raster.h"
+
+
+namespace IMG {
 
 class Style;
 class SubDiv;
@@ -89,6 +92,40 @@ private:
 		QList<Poly> lines;
 	};
 
+	struct PolyCTX
+	{
+		PolyCTX(const RectC &rect, int bits, bool baseMap,
+		  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
+		  QCache<const SubDiv*, MapData::Polys> *polyCache)
+		  : rect(rect), bits(bits), baseMap(baseMap), polygons(polygons),
+		  lines(lines), polyCache(polyCache) {}
+
+		const RectC &rect;
+		int bits;
+		bool baseMap;
+		QList<MapData::Poly> *polygons;
+		QList<MapData::Poly> *lines;
+		QCache<const SubDiv*, MapData::Polys> *polyCache;
+	};
+
+	struct PointCTX
+	{
+		PointCTX(const RectC &rect, int bits, bool baseMap,
+		  QList<MapData::Point> *points,
+		  QCache<const SubDiv*, QList<MapData::Point> > *pointCache)
+		  : rect(rect), bits(bits), baseMap(baseMap), points(points),
+		  pointCache(pointCache) {}
+
+		const RectC &rect;
+		int bits;
+		bool baseMap;
+		QList<MapData::Point> *points;
+		QCache<const SubDiv*, QList<MapData::Point> > *pointCache;
+	};
+
+	static bool polyCb(VectorTile *tile, void *context);
+	static bool pointCb(VectorTile *tile, void *context);
+
 	QCache<const SubDiv*, Polys> _polyCache;
 	QCache<const SubDiv*, QList<Point> > _pointCache;
 
@@ -96,18 +133,20 @@ private:
 	friend struct PolyCTX;
 };
 
+}
+
 #ifndef QT_NO_DEBUG
-inline QDebug operator<<(QDebug dbg, const MapData::Point &point)
+inline QDebug operator<<(QDebug dbg, const IMG::MapData::Point &point)
 {
 	dbg.nospace() << "Point(" << point.type << ", " << point.label << ")";
 	return dbg.space();
 }
 
-inline QDebug operator<<(QDebug dbg, const MapData::Poly &poly)
+inline QDebug operator<<(QDebug dbg, const IMG::MapData::Poly &poly)
 {
 	dbg.nospace() << "Poly(" << poly.type << ", " << poly.label << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG
 
-#endif // MAPDATA_H
+#endif // IMG_MAPDATA_H

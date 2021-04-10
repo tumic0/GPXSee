@@ -1,5 +1,6 @@
 #include "vectortile.h"
 
+using namespace IMG;
 
 static void copyPolys(const RectC &rect, QList<MapData::Poly> *src,
   QList<MapData::Poly> *dst)

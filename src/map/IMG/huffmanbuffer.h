@@ -1,8 +1,10 @@
-#ifndef HUFFMANBUFFER_H
-#define HUFFMANBUFFER_H
+#ifndef IMG_HUFFMANBUFFER_H
+#define IMG_HUFFMANBUFFER_H
 
 #include <QByteArray>
 #include "subfile.h"
+
+namespace IMG {
 
 class RGNFile;
 
@@ -18,4 +20,6 @@ private:
 	quint8 _id;
 };
 
-#endif // HUFFMANBUFFER_H
+}
+
+#endif // IMG_HUFFMANBUFFER_H

@@ -1,8 +1,10 @@
-#ifndef RGNFILE_H
-#define RGNFILE_H
+#ifndef IMG_RGNFILE_H
+#define IMG_RGNFILE_H
 
 #include "subfile.h"
 #include "subdiv.h"
+
+namespace IMG {
 
 class LBLFile;
 class NETFile;
@@ -20,7 +22,7 @@ public:
 		RoadReference = 0x10
 	};
 
-	RGNFile(const IMG *img)
+	RGNFile(const IMGData *img)
 	  : SubFile(img), _huffmanTable(0), _offset(0), _size(0), _polygonsOffset(0),
 	  _polygonsSize(0), _linesOffset(0), _linesSize(0), _pointsOffset(0),
 	  _pointsSize(0) {}
@@ -86,4 +88,6 @@ private:
 	quint32 _pointsGblFlags;
 };
 
-#endif // RGNFILE_H
+}
+
+#endif // IMG_RGNFILE_H

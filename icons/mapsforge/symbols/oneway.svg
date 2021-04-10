@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="580" height="580">
+ <metadata id="metadata10"/>
+ <path id="path4151" d="m 30,261 286,0 0,-72.5 234,101.85 -234,101.15 0,-72.5 -286,0 z" mix-blend-mode="normal" solid-color="#000000" opacity="0.8" color-interpolation-filters="linearRGB" filter-gaussianBlur-deviation="0" color="#000000" image-rendering="auto" color-rendering="auto" stroke-width="64" isolation="auto" color-interpolation="sRGB" solid-opacity="1" fill="none" stroke-linejoin="round" filter-blend-mode="normal" stroke="#ffffff" shape-rendering="auto"/>
+ <path d="m 30,261 286,0 0,-72.5 234,101.85 -234,101.15 0,-72.5 -286,0 z" id="path4136" fill="#6a6a6a"/>
+</svg>

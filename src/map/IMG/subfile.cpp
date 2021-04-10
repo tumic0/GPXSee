@@ -1,7 +1,8 @@
 #include <cstring>
-#include "img.h"
+#include "imgdata.h"
 #include "subfile.h"
 
+using namespace IMG;
 
 #define mod2n(x, m) ((x) & ((m) - 1));
 

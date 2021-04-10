@@ -5,6 +5,11 @@
 
 #define EPSILON       1e-6
 
+static double index2mercator(int index, int zoom)
+{
+	return rad2deg(-M_PI + 2 * M_PI * ((double)index / (1<<zoom)));
+}
+
 QPointF OSM::ll2m(const Coordinates &c)
 {
 	return QPointF(c.lon(), rad2deg(log(tan(M_PI_4 + deg2rad(c.lat())/2.0))));
@@ -21,9 +26,9 @@ QPoint OSM::mercator2tile(const QPointF &m, int zoom)
 	  qFloor((1.0 - (m.y() / 180.0)) / 2.0 * (1<<zoom)));
 }
 
-double OSM::index2mercator(int index, int zoom)
+QPointF OSM::tile2mercator(const QPoint &p, int zoom)
 {
-	return rad2deg(-M_PI + 2 * M_PI * ((double)index / (1<<zoom)));
+	return QPointF(index2mercator(p.x(), zoom), index2mercator(p.y(), zoom));
 }
 
 qreal OSM::zoom2scale(int zoom, int tileSize)

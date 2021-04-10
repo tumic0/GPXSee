@@ -1,8 +1,10 @@
-#ifndef HUFFMANSTREAM_H
-#define HUFFMANSTREAM_H
+#ifndef IMG_HUFFMANSTREAM_H
+#define IMG_HUFFMANSTREAM_H
 
 #include "bitstream.h"
 #include "huffmantable.h"
+
+namespace IMG {
 
 template <class BitStream>
 class HuffmanStream {
@@ -138,4 +140,6 @@ public:
 	bool init(int lonSign, int latSign, quint32 data, quint32 dataSize);
 };
 
-#endif // HUFFMANSTREAM_H
+}
+
+#endif // IMG_HUFFMANSTREAM_H

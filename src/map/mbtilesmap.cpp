@@ -87,22 +87,19 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 	_zoom = _zooms.max();
 
 	{
+		int z = _zooms.min();
 		QString sql = QString("SELECT min(tile_column), min(tile_row), "
 		  "max(tile_column), max(tile_row) FROM tiles WHERE zoom_level = %1")
 		  .arg(_zooms.min());
 		QSqlQuery query(sql, _db);
 		query.first();
 
-		double minX = OSM::index2mercator(qMin((1<<_zooms.min()) - 1,
-		  qMax(0, query.value(0).toInt())), _zooms.min());
-		double minY = OSM::index2mercator(qMin((1<<_zooms.min()) - 1,
-		  qMax(0, query.value(1).toInt())), _zooms.min());
-		double maxX = OSM::index2mercator(qMin((1<<_zooms.min()) - 1,
-		  qMax(0, query.value(2).toInt())) + 1, _zooms.min());
-		double maxY = OSM::index2mercator(qMin((1<<_zooms.min()) - 1,
-		  qMax(0, query.value(3).toInt())) + 1, _zooms.min());
-		Coordinates tl(OSM::m2ll(QPointF(minX, maxY)));
-		Coordinates br(OSM::m2ll(QPointF(maxX, minY)));
+		int minX = qMin((1<<z) - 1, qMax(0, query.value(0).toInt()));
+		int minY = qMin((1<<z) - 1, qMax(0, query.value(1).toInt()));
+		int maxX = qMin((1<<z) - 1, qMax(0, query.value(2).toInt())) + 1;
+		int maxY = qMin((1<<z) - 1, qMax(0, query.value(3).toInt())) + 1;
+		Coordinates tl(OSM::tile2ll(QPoint(minX, maxY), z));
+		Coordinates br(OSM::tile2ll(QPoint(maxX, minY), z));
 		// Workaround of broken zoom levels 0 and 1 due to numerical instability
 		tl.rlat() = qMin(tl.lat(), OSM::BOUNDS.top());
 		br.rlat() = qMax(br.lat(), OSM::BOUNDS.bottom());

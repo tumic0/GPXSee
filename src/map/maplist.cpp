@@ -1,6 +1,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QApplication>
+#include "IMG/gmapdata.h"
 #include "atlas.h"
 #include "ozimap.h"
 #include "jnxmap.h"
@@ -9,11 +10,11 @@
 #include "mbtilesmap.h"
 #include "rmap.h"
 #include "imgmap.h"
-#include "IMG/gmap.h"
 #include "bsbmap.h"
 #include "kmzmap.h"
 #include "aqmmap.h"
 #include "sqlitemap.h"
+#include "mapsforgemap.h"
 #include "invalidmap.h"
 #include "maplist.h"
 
@@ -31,7 +32,7 @@ Map *MapList::loadFile(const QString &path, bool *isDir)
 	} else if (suffix == "xml") {
 		if (MapSource::isMap(path)) {
 			map = MapSource::loadMap(path);
-		} else if (GMAP::isGMAP(path)) {
+		} else if (IMG::GMAPData::isGMAP(path)) {
 			map = new IMGMap(path);
 			if (isDir)
 				*isDir = true;
@@ -46,7 +47,12 @@ Map *MapList::loadFile(const QString &path, bool *isDir)
 		map = new RMap(path);
 	else if (suffix == "img")
 		map = new IMGMap(path);
-	else if (suffix == "map" || suffix == "tar")
+	else if (suffix == "map") {
+		if (Mapsforge::MapData::isMapsforge(path))
+			map = new MapsforgeMap(path);
+		else
+			map = new OziMap(path);
+	} else if (suffix == "tar")
 		map = new OziMap(path);
 	else if (suffix == "kap")
 		map = new BSBMap(path);
@@ -112,6 +118,7 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "Garmin JNX maps") + " (*.jnx);;"
 	  + qApp->translate("MapList", "BSB nautical charts") + " (*.kap);;"
 	  + qApp->translate("MapList", "KMZ maps") + " (*.kmz);;"
+	  + qApp->translate("MapList", "Mapsforge maps") + " (*.map);;"
 	  + qApp->translate("MapList", "OziExplorer maps") + " (*.map);;"
 	  + qApp->translate("MapList", "MBTiles maps") + " (*.mbtiles);;"
 	  + qApp->translate("MapList", "TwoNav maps") + " (*.rmap *.rtmap);;"

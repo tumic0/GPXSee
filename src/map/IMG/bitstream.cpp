@@ -1,5 +1,6 @@
 #include "bitstream.h"
 
+using namespace IMG;
 
 bool BitStream1::flush()
 {

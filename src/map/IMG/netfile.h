@@ -1,8 +1,10 @@
-#ifndef NETFILE_H
-#define NETFILE_H
+#ifndef IMG_NETFILE_H
+#define IMG_NETFILE_H
 
 #include "subfile.h"
 #include "nodfile.h"
+
+namespace IMG {
 
 class LBLFile;
 class RGNFile;
@@ -12,8 +14,9 @@ class HuffmanTable;
 class NETFile : public SubFile
 {
 public:
-	NETFile(const IMG *img) : SubFile(img), _huffmanTable(0), _tp(0), _offset(0),
-	  _size(0), _linksOffset(0), _linksSize(0), _shift(0), _linksShift(0) {}
+	NETFile(const IMGData *img) : SubFile(img), _huffmanTable(0), _tp(0),
+	  _offset(0), _size(0), _linksOffset(0), _linksSize(0), _shift(0),
+	  _linksShift(0) {}
 	NETFile(const QString *path) : SubFile(path), _huffmanTable(0), _tp(0),
 	  _offset(0), _size(0), _linksOffset(0), _linksSize(0), _shift(0),
 	  _linksShift(0) {}
@@ -41,4 +44,6 @@ private:
 	quint8 _shift, _linksShift;
 };
 
-#endif // NETFILE_H
+}
+
+#endif // IMG_NETFILE_H

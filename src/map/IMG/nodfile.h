@@ -1,7 +1,9 @@
-#ifndef NODFILE_H
-#define NODFILE_H
+#ifndef IMG_NODFILE_H
+#define IMG_NODFILE_H
 
 #include "subfile.h"
+
+namespace IMG {
 
 class NODFile : public SubFile
 {
@@ -53,7 +55,7 @@ public:
 		bool eog;
 	};
 
-	NODFile(const IMG *img) : SubFile(img), _indexOffset(0), _indexSize(0),
+	NODFile(const IMGData *img) : SubFile(img), _indexOffset(0), _indexSize(0),
 	  _indexFlags(0), _blockOffset(0), _blockSize(0), _indexRecordSize(0),
 	  _blockRecordSize(0), _blockShift(0), _nodeShift(0), _indexIdSize(0) {}
 	NODFile(const QString *path) : SubFile(path), _indexOffset(0), _indexSize(0),
@@ -95,4 +97,6 @@ private:
 	quint8 _blockShift, _nodeShift, _indexIdSize;
 };
 
-#endif // NETFILE_H
+}
+
+#endif // IMG_NETFILE_H

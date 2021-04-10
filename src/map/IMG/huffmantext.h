@@ -1,7 +1,9 @@
-#ifndef HUFFMANTEXT_H
-#define HUFFMANTEXT_H
+#ifndef IMG_HUFFMANTEXT_H
+#define IMG_HUFFMANTEXT_H
 
 #include "huffmanbuffer.h"
+
+namespace IMG {
 
 class HuffmanText
 {
@@ -32,4 +34,6 @@ private:
 	quint8 *_bp4;
 };
 
-#endif // HUFFMANTEXT_H
+}
+
+#endif // IMG_HUFFMANTEXT_H

@@ -143,8 +143,7 @@ bool GeoJSONParser::polygon(const QJsonArray &coordinates, ::Polygon &pg)
 		}
 
 		const QJsonArray lr(coordinates.at(i).toArray());
-		pg.append(QVector<Coordinates>());
-		QVector<Coordinates> &data = pg.last();
+		QVector<Coordinates> data;
 
 		for (int j = 0; j < lr.size(); j++) {
 			QJsonArray point(lr.at(j).toArray());
@@ -156,6 +155,8 @@ bool GeoJSONParser::polygon(const QJsonArray &coordinates, ::Polygon &pg)
 			data.append(Coordinates(point.at(0).toDouble(),
 			  point.at(1).toDouble()));
 		}
+
+		pg.append(data);
 	}
 
 	return true;

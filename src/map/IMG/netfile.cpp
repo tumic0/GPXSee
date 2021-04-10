@@ -6,6 +6,7 @@
 #include "rgnfile.h"
 #include "netfile.h"
 
+using namespace IMG;
 
 static bool readAdjCounts(BitStream4R &bs, QVector<quint16> &cnts, quint16 &mask)
 {

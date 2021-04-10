@@ -1,9 +1,11 @@
-#ifndef SUBDIV_H
-#define SUBDIV_H
+#ifndef IMG_SUBDIV_H
+#define IMG_SUBDIV_H
 
 #include <QtGlobal>
 #include "common/coordinates.h"
 #include "common/garmin.h"
+
+namespace IMG {
 
 class SubDiv {
 public:
@@ -155,4 +157,6 @@ private:
 	};
 };
 
-#endif // SUBDIV_H
+}
+
+#endif // IMG_SUBDIV_H

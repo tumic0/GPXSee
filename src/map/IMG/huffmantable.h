@@ -1,7 +1,9 @@
-#ifndef HUFFMANTABLE_H
-#define HUFFMANTABLE_H
+#ifndef IMG_HUFFMANTABLE_H
+#define IMG_HUFFMANTABLE_H
 
 #include "huffmanbuffer.h"
+
+namespace IMG {
 
 class RGNFile;
 
@@ -23,4 +25,6 @@ private:
 	quint16 _s22;
 };
 
-#endif // HUFFMANTABLE_H
+}
+
+#endif // IMG_HUFFMANTABLE_H

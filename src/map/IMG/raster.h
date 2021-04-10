@@ -1,10 +1,12 @@
-#ifndef RASTER_H
-#define RASTER_H
+#ifndef IMG_RASTER_H
+#define IMG_RASTER_H
 
 #include <QRect>
 #include <QDebug>
 #include "common/rectc.h"
 #include "common/garmin.h"
+
+namespace IMG {
 
 class LBLFile;
 
@@ -29,12 +31,14 @@ private:
 	QRect _rect;
 };
 
+}
+
 #ifndef QT_NO_DEBUG
-inline QDebug operator<<(QDebug dbg, const Raster &raster)
+inline QDebug operator<<(QDebug dbg, const IMG::Raster &raster)
 {
 	dbg.nospace() << "Raster(" << raster.rect() << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG
 
-#endif // RASTER_H
+#endif // IMG_RASTER_H

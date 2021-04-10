@@ -1,6 +1,8 @@
 #include "rgnfile.h"
 #include "huffmanbuffer.h"
 
+using namespace IMG;
+
 bool HuffmanBuffer::load(const RGNFile *rgn, SubFile::Handle &rgnHdl)
 {
 	quint32 recordSize, recordOffset = rgn->dictOffset();

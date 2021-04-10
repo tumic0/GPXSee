@@ -8,6 +8,7 @@
 #include "nodfile.h"
 #include "rgnfile.h"
 
+using namespace IMG;
 
 #define MASK(bits) ((2U << ((bits) - 1U)) - 1U)
 

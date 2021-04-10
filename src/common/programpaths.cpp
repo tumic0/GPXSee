@@ -15,6 +15,7 @@
 #define GCS_FILE         "gcs.csv"
 #define PCS_FILE         "pcs.csv"
 #define TYP_FILE         "style.typ"
+#define RENDERTHEME_FILE "style.xml"
 
 
 QString ProgramPaths::mapDir(bool writable)
@@ -101,4 +102,10 @@ QString ProgramPaths::typFile()
 {
 	return QStandardPaths::locate(QStandardPaths::AppDataLocation,
 	  STYLE_DIR "/" TYP_FILE, QStandardPaths::LocateFile);
+}
+
+QString ProgramPaths::renderthemeFile()
+{
+	return QStandardPaths::locate(QStandardPaths::AppDataLocation,
+	  STYLE_DIR "/" RENDERTHEME_FILE, QStandardPaths::LocateFile);
 }

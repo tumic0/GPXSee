@@ -5,14 +5,15 @@
 #include "common/rectc.h"
 #include "common/range.h"
 #include "common/wgs84.h"
-#include "IMG/img.h"
-#include "IMG/gmap.h"
+#include "IMG/imgdata.h"
+#include "IMG/gmapdata.h"
 #include "IMG/rastertile.h"
 #include "osm.h"
 #include "pcs.h"
 #include "rectd.h"
 #include "imgmap.h"
 
+using namespace IMG;
 
 #define TILE_SIZE   384
 #define TEXT_EXTENT 160
@@ -24,7 +25,7 @@ static QList<MapData*> overlays(const QString &fileName)
 	for (int i = 1; i < 32; i++) {
 		QString ol(fileName + "." + QString::number(i));
 		if (QFileInfo(ol).isFile()) {
-			MapData *data = new IMG(ol);
+			MapData *data = new IMGData(ol);
 			if (data->isValid())
 				list.append(data);
 			else {
@@ -42,10 +43,10 @@ static QList<MapData*> overlays(const QString &fileName)
 IMGMap::IMGMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _projection(PCS::pcs(3857)), _valid(false)
 {
-	if (GMAP::isGMAP(fileName))
-		_data.append(new GMAP(fileName));
+	if (GMAPData::isGMAP(fileName))
+		_data.append(new GMAPData(fileName));
 	else {
-		_data.append(new IMG(fileName));
+		_data.append(new IMGData(fileName));
 		_data.append(overlays(fileName));
 	}
 
@@ -164,7 +165,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 					QRectF polyRect(ttl, QPointF(ttl.x() + TILE_SIZE,
 					  ttl.y() + TILE_SIZE));
-					polyRect &= bounds();
+					polyRect &= _bounds;
 					RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
 					  _transform.img2proj(polyRect.bottomRight()));
 					_data.at(n)->polys(polyRectD.toRectC(_projection, 20), _zoom,
@@ -173,7 +174,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 					QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT,
 					  ttl.y() - TEXT_EXTENT), QPointF(ttl.x() + TILE_SIZE
 					  + TEXT_EXTENT, ttl.y() + TILE_SIZE + TEXT_EXTENT));
-					pointRect &= bounds();
+					pointRect &= _bounds;
 					RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
 					  _transform.img2proj(pointRect.bottomRight()));
 					_data.at(n)->points(pointRectD.toRectC(_projection, 20),

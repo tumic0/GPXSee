@@ -1,5 +1,5 @@
-#ifndef STYLE_H
-#define STYLE_H
+#ifndef IMG_STYLE_H
+#define IMG_STYLE_H
 
 #include <QPen>
 #include <QBrush>
@@ -7,6 +7,8 @@
 #include "subfile.h"
 
 #define TYPE(t) ((t)<<8)
+
+namespace IMG {
 
 class Style
 {
@@ -173,10 +175,12 @@ private:
 	QList<quint32> _drawOrder;
 };
 
+}
+
 #ifndef QT_NO_DEBUG
-QDebug operator<<(QDebug dbg, const Style::Polygon &polygon);
-QDebug operator<<(QDebug dbg, const Style::Line &line);
-QDebug operator<<(QDebug dbg, const Style::Point &point);
+QDebug operator<<(QDebug dbg, const IMG::Style::Polygon &polygon);
+QDebug operator<<(QDebug dbg, const IMG::Style::Line &line);
+QDebug operator<<(QDebug dbg, const IMG::Style::Point &point);
 #endif // QT_NO_DEBUG
 
-#endif // STYLE_H
+#endif // IMG_STYLE_H

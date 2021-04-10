@@ -73,21 +73,20 @@ SqliteMap::SqliteMap(const QString &fileName, QObject *parent)
 	_zoom = _zooms.max();
 
 	{
+		int z = _zooms.min();
 		QString sql = QString("SELECT min(x), min(y), max(x), max(y) FROM tiles"
-		  " WHERE z = %1").arg(17 - _zooms.min());
+		  " WHERE z = %1").arg(17 - z);
 		QSqlQuery query(sql, _db);
 		query.first();
 
-		double minX = OSM::index2mercator(qMin((1<<_zooms.min()) - 1,
-		  qMax(0, query.value(0).toInt())), _zooms.min());
-		double minY = OSM::index2mercator(qMin((1<<_zooms.min()) - 1,
-		  qMax(0, query.value(1).toInt())), _zooms.min());
-		double maxX = OSM::index2mercator(qMin((1<<_zooms.min()) - 1,
-		  qMax(0, query.value(2).toInt())) + 1, _zooms.min());
-		double maxY = OSM::index2mercator(qMin((1<<_zooms.min()) - 1,
-		  qMax(0, query.value(3).toInt())) + 1, _zooms.min());
-		Coordinates tl(OSM::m2ll(QPointF(minX, -minY)));
-		Coordinates br(OSM::m2ll(QPointF(maxX, -maxY)));
+		int minX = qMin((1<<z) - 1, qMax(0, query.value(0).toInt()));
+		int minY = qMin((1<<z) - 1, qMax(0, query.value(1).toInt()));
+		int maxX = qMin((1<<z) - 1, qMax(0, query.value(2).toInt())) + 1;
+		int maxY = qMin((1<<z) - 1, qMax(0, query.value(3).toInt())) + 1;
+		Coordinates tl(OSM::tile2ll(QPoint(minX, minY), z));
+		tl.rlat() = -tl.lat();
+		Coordinates br(OSM::tile2ll(QPoint(maxX, maxY), z));
+		br.rlat() = -br.lat();
 		// Workaround of broken zoom levels 0 and 1 due to numerical instability
 		tl.rlat() = qMin(tl.lat(), OSM::BOUNDS.top());
 		br.rlat() = qMax(br.lat(), OSM::BOUNDS.bottom());

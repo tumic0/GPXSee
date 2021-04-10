@@ -15,6 +15,7 @@ QT += core \
     printsupport
 greaterThan(QT_MAJOR_VERSION, 5) {QT += openglwidgets}
 
+CONFIG += object_parallel_to_source
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
     src/GUI/axislabelitem.h \
@@ -93,7 +94,7 @@ HEADERS += src/common/config.h \
     src/map/IMG/bitmapline.h \
     src/map/IMG/bitstream.h \
     src/map/IMG/deltastream.h \
-    src/map/IMG/gmap.h \
+    src/map/IMG/gmapdata.h \
     src/map/IMG/huffmanbuffer.h \
     src/map/IMG/huffmanstream.h \
     src/map/IMG/huffmantable.h \
@@ -102,8 +103,14 @@ HEADERS += src/common/config.h \
     src/map/IMG/mapdata.h \
     src/map/IMG/raster.h \
     src/map/IMG/rastertile.h \
-    src/map/IMG/textpathitem.h \
-    src/map/IMG/textpointitem.h \
+    src/map/IMG/shield.h \
+    src/map/mapsforge/cmp.h \
+    src/map/mapsforge/style.h \
+    src/map/textpathitem.h \
+    src/map/textpointitem.h \
+    src/map/mapsforge/mapdata.h \
+    src/map/mapsforge/rastertile.h \
+    src/map/mapsforge/subfile.h \
     src/map/bsbmap.h \
     src/map/invalidmap.h \
     src/map/kmzmap.h \
@@ -180,7 +187,7 @@ HEADERS += src/common/config.h \
     src/data/locparser.h \
     src/data/slfparser.h \
     src/data/dem.h \
-    src/data/polygon.h \
+    src/common/polygon.h \
     src/data/area.h \
     src/map/obliquestereographic.h \
     src/GUI/coordinatesitem.h \
@@ -190,7 +197,7 @@ HEADERS += src/common/config.h \
     src/data/exifparser.h \
     src/data/imageinfo.h \
     src/map/imgmap.h \
-    src/map/IMG/img.h \
+    src/map/IMG/imgdata.h \
     src/map/IMG/subfile.h \
     src/map/IMG/trefile.h \
     src/map/IMG/rgnfile.h \
@@ -201,7 +208,7 @@ HEADERS += src/common/config.h \
     src/map/IMG/netfile.h \
     src/GUI/limitedcombobox.h \
     src/GUI/pathtickitem.h \
-    src/map/IMG/textitem.h \
+    src/map/textitem.h \
     src/map/IMG/label.h \
     src/data/csv.h \
     src/data/cupparser.h \
@@ -212,7 +219,8 @@ HEADERS += src/common/config.h \
     src/GUI/pngexportdialog.h \
     src/data/geojsonparser.h \
     src/GUI/timezoneinfo.h \
-    src/map/aqmmap.h
+    src/map/aqmmap.h \
+    src/map/mapsforgemap.h
 
 SOURCES += src/main.cpp \
     src/GUI/axislabelitem.cpp \
@@ -274,7 +282,7 @@ SOURCES += src/main.cpp \
     src/map/IMG/bitmapline.cpp \
     src/map/IMG/bitstream.cpp \
     src/map/IMG/deltastream.cpp \
-    src/map/IMG/gmap.cpp \
+    src/map/IMG/gmapdata.cpp \
     src/map/IMG/huffmanbuffer.cpp \
     src/map/IMG/huffmanstream.cpp \
     src/map/IMG/huffmantable.cpp \
@@ -282,8 +290,12 @@ SOURCES += src/main.cpp \
     src/map/IMG/nodfile.cpp \
     src/map/IMG/mapdata.cpp \
     src/map/IMG/rastertile.cpp \
-    src/map/IMG/textpathitem.cpp \
-    src/map/IMG/textpointitem.cpp \
+    src/map/mapsforge/style.cpp \
+    src/map/textpathitem.cpp \
+    src/map/textpointitem.cpp \
+    src/map/mapsforge/mapdata.cpp \
+    src/map/mapsforge/rastertile.cpp \
+    src/map/mapsforge/subfile.cpp \
     src/map/bsbmap.cpp \
     src/map/kmzmap.cpp \
     src/map/maplist.cpp \
@@ -354,7 +366,7 @@ SOURCES += src/main.cpp \
     src/map/rmap.cpp \
     src/data/exifparser.cpp \
     src/map/imgmap.cpp \
-    src/map/IMG/img.cpp \
+    src/map/IMG/imgdata.cpp \
     src/map/IMG/subfile.cpp \
     src/map/IMG/trefile.cpp \
     src/map/IMG/rgnfile.cpp \
@@ -363,7 +375,7 @@ SOURCES += src/main.cpp \
     src/map/IMG/style.cpp \
     src/map/IMG/netfile.cpp \
     src/GUI/pathtickitem.cpp \
-    src/map/IMG/textitem.cpp \
+    src/map/textitem.cpp \
     src/data/csv.cpp \
     src/data/cupparser.cpp \
     src/GUI/graphicsscene.cpp \
@@ -372,7 +384,8 @@ SOURCES += src/main.cpp \
     src/GUI/pdfexportdialog.cpp \
     src/GUI/pngexportdialog.cpp \
     src/data/geojsonparser.cpp \
-    src/map/aqmmap.cpp
+    src/map/aqmmap.cpp \
+    src/map/mapsforgemap.cpp
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     QT_NO_DEPRECATED_WARNINGS

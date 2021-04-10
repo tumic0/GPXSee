@@ -1,5 +1,7 @@
 #include "huffmanstream.h"
 
+using namespace IMG;
+
 bool HuffmanStreamF::init(bool line)
 {
 	if (line) {

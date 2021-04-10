@@ -1,10 +1,12 @@
-#ifndef LBLFILE_H
-#define LBLFILE_H
+#ifndef IMG_LBLFILE_H
+#define IMG_LBLFILE_H
 
 #include <QPixmap>
 #include "common/textcodec.h"
 #include "subfile.h"
 #include "label.h"
+
+namespace IMG {
 
 class HuffmanText;
 class RGNFile;
@@ -12,7 +14,7 @@ class RGNFile;
 class LBLFile : public SubFile
 {
 public:
-	LBLFile(const IMG *img)
+	LBLFile(const IMGData *img)
 	  : SubFile(img), _huffmanText(0), _table(0), _rasters(0), _offset(0),
 	  _size(0), _poiOffset(0), _poiSize(0), _imgOffsetIdSize(0),
 	  _poiMultiplier(0), _multiplier(0), _encoding(0) {}
@@ -65,4 +67,6 @@ private:
 	quint8 _encoding;
 };
 
-#endif // LBLFILE_H
+}
+
+#endif // IMG_LBLFILE_H
