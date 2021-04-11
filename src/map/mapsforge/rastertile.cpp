@@ -14,6 +14,36 @@ static const Style& style()
 	return s;
 }
 
+static qreal area(const QPainterPath &polygon)
+{
+	qreal area = 0;
+
+	for (int i = 0; i < polygon.elementCount(); i++) {
+		int j = (i + 1) % polygon.elementCount();
+		area += polygon.elementAt(i).x * polygon.elementAt(j).y;
+		area -= polygon.elementAt(i).y * polygon.elementAt(j).x;
+	}
+	area /= 2.0;
+
+	return area;
+}
+
+static QPointF centroid(const QPainterPath &polygon)
+{
+	qreal cx = 0, cy = 0;
+	qreal factor = 1.0 / (6.0 * area(polygon));
+
+	for (int i = 0; i < polygon.elementCount(); i++) {
+		int j = (i + 1) % polygon.elementCount();
+		qreal f = (polygon.elementAt(i).x * polygon.elementAt(j).y
+		  - polygon.elementAt(j).x * polygon.elementAt(i).y);
+		cx += (polygon.elementAt(i).x + polygon.elementAt(j).x) * f;
+		cy += (polygon.elementAt(i).y + polygon.elementAt(j).y) * f;
+	}
+
+	return QPointF(cx * factor, cy * factor);
+}
+
 void RasterTile::processPoints(QList<TextItem*> &textItems)
 {
 	const Style &s = style();
@@ -56,6 +86,42 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 		else
 			delete item;
 
+	}
+}
+
+void RasterTile::processPolygonNames(const QRect &tileRect,
+  QList<TextItem*> &textItems)
+{
+	const Style &s = style();
+	QSet<QString> set;
+
+	for (int i = 0; i < s.pointLabels().size(); i++) {
+		const Style::TextRender &ri = s.pointLabels().at(i);
+
+		for (int j = 0; j < _paths.size(); j++) {
+			const MapData::Path &path = _paths.at(j);
+
+			if (path.label.isEmpty())
+				continue;
+			if (!path.path.elementCount())
+				continue;
+			if (set.contains(path.label))
+				continue;
+			if (!ri.rule().match(_zoom, path.closed, path.tags))
+				continue;
+
+			QPointF pos = path.labelPos.isNull()
+			  ? centroid(path.path) : ll2xy(path.labelPos);
+
+			TextPointItem *item = new TextPointItem(pos.toPoint(), &path.label,
+			  &ri.font(), 0, &ri.fillColor(), 0, false);
+			if (item->isValid() && tileRect.contains(item->boundingRect().toRect())
+			  && !item->collides(textItems)) {
+				textItems.append(item);
+				set.insert(path.label);
+			} else
+				delete item;
+		}
 	}
 }
 
@@ -173,6 +239,7 @@ void RasterTile::render()
 	drawPaths(&painter);
 
 	processPoints(textItems);
+	processPolygonNames(tileRect, textItems);
 	processStreetNames(tileRect, textItems);
 	drawTextItems(&painter, textItems);
 

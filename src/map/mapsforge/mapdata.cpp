@@ -544,7 +544,7 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 	QVector<unsigned> paths(rows);
 	quint32 blocks, unused, val, cnt = 0;
 	quint16 bitmap;
-	quint8 flags;
+	quint8 sb, flags;
 	QByteArray label, houseNumber, reference;
 
 
@@ -565,13 +565,14 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 
 	for (unsigned i = 0; i < paths[zoom - info.min]; i++) {
 		Path p;
+		qint32 lon = 0, lat = 0;
 
 		if (!(subfile.readVUInt32(unused) && subfile.readUInt16(bitmap)
-		  && subfile.readByte(flags)))
+		  && subfile.readByte(sb)))
 			return false;
 
-		p.layer = flags >> 4;
-		int tags = flags & 0x0F;
+		p.layer = sb >> 4;
+		int tags = sb & 0x0F;
 		if (!readTags(subfile, tags, _pathTags, p.tags))
 			return false;
 
@@ -592,8 +593,7 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 			p.reference = reference;
 		}
 		if (flags & 0x10) {
-			qint32 unused;
-			if (!(subfile.readVInt32(unused) && subfile.readVInt32(unused)))
+			if (!(subfile.readVInt32(lat) && subfile.readVInt32(lon)))
 				return false;
 		}
 		if (flags & 0x08) {
@@ -607,6 +607,9 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 			if (!readPolygon(subfile, tile->pos, flags & 0x04, p.poly))
 				return false;
 			p.closed = isClosed(p.poly);
+			if (flags & 0x10)
+				p.labelPos = Coordinates(p.poly.first().first().lon() + MD(lon),
+				  p.poly.first().first().lat() + MD(lat));
 
 			list->append(p);
 		}
@@ -622,7 +625,7 @@ bool MapData::readPoints(const VectorTile *tile, int zoom, QList<Point> *list)
 	int rows = info.max - info.min + 1;
 	QVector<unsigned> points(rows);
 	quint32 val, unused, cnt = 0;
-	quint8 flags;
+	quint8 sb, flags;
 	QByteArray label, houseNumber;
 
 
@@ -647,10 +650,10 @@ bool MapData::readPoints(const VectorTile *tile, int zoom, QList<Point> *list)
 		Point p(Coordinates(tile->pos.lon() + MD(lon),
 		  tile->pos.lat() + MD(lat)));
 
-		if (!subfile.readByte(flags))
+		if (!subfile.readByte(sb))
 			return false;
-		p.layer = flags >> 4;
-		int tags = flags & 0x0F;
+		p.layer = sb >> 4;
+		int tags = sb & 0x0F;
 		if (!readTags(subfile, tags, _pointTags, p.tags))
 			return false;
 

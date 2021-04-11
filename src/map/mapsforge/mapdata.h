@@ -57,6 +57,7 @@ public:
 		QString label;
 		QString reference;
 		QVector<Tag> tags;
+		Coordinates labelPos;
 		int layer;
 		bool closed;
 

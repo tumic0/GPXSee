@@ -136,7 +136,7 @@ static qreal area(const QVector<QPointF> &polygon)
 	}
 	area /= 2.0;
 
-   return area;
+	return area;
 }
 
 static QPointF centroid(const QVector<QPointF> &polygon)
