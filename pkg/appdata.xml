@@ -19,7 +19,8 @@
 				WMS, TMS, QuadTiles).</li>
 			<li>Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases,
 				TwoNav RMaps, Garmin IMG &amp; JNX maps, GeoTIFF images,
-				BSB nautical charts, KMZ maps, AlpineQuest maps).</li>
+				BSB nautical charts, KMZ maps, AlpineQuest maps,
+				Mapsforge maps).</li>
 			<li>Elevation, speed, heart rate, cadence, power, temperature and
 				gear ratio graphs.</li>
 			<li>Support for multiple tracks in one view.</li>
@@ -89,5 +90,6 @@
 		<mimetype>application/vnd.google-earth.kmz</mimetype>
 		<mimetype>application/vnd.alpinequest.aqm</mimetype>
 		<mimetype>application/vnd.rmaps.sqlite</mimetype>
+		<mimetype>application/vnd.mapsforge.map</mimetype>
 	</mimetypes>
 </component>
