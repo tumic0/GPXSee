@@ -50,6 +50,7 @@ public:
 
 		class Filter {
 		public:
+			Filter() : _neg(false) {}
 			Filter(const QList<QByteArray> &keys, const QList<QByteArray> &vals)
 			  : _neg(false)
 			{
