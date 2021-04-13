@@ -31,6 +31,7 @@ private:
 	class PathInstruction
 	{
 	public:
+		PathInstruction() : _render(0), _path(0) {}
 		PathInstruction(const Style::PathRender *render, MapData::Path *path)
 		  : _render(render), _path(path) {}
 
