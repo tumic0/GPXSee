@@ -1,7 +1,7 @@
 #ifndef MAPSFORGE_RASTERTILE_H
 #define MAPSFORGE_RASTERTILE_H
 
-#include <QImage>
+#include <QPixmap>
 #include "map/projection.h"
 #include "map/transform.h"
 #include "style.h"
@@ -19,12 +19,11 @@ public:
 	  const QRect &rect, const QString &key, const QList<MapData::Path> &paths,
 	  const QList<MapData::Point> &points)
 	  : _proj(proj), _transform(transform), _zoom(zoom), _xy(rect.topLeft()),
-	  _key(key), _img(rect.size(), QImage::Format_ARGB32_Premultiplied),
-	  _paths(paths), _points(points) {}
+	  _key(key), _pixmap(rect.size()), _paths(paths), _points(points) {}
 
 	const QString &key() const {return _key;}
 	const QPoint &xy() const {return _xy;}
-	const QImage &img() const {return _img;}
+	const QPixmap &pixmap() const {return _pixmap;}
 
 	void render();
 
@@ -83,7 +82,7 @@ private:
 	int _zoom;
 	QPoint _xy;
 	QString _key;
-	QImage _img;
+	QPixmap _pixmap;
 	QList<MapData::Path> _paths;
 	QList<MapData::Point> _points;
 };

@@ -35,7 +35,7 @@ private slots:
 	{
 		for (int i = 0; i < _tiles.size(); i++) {
 			Mapsforge::RasterTile &mt = _tiles[i];
-			QPixmap pm(QPixmap::fromImage(mt.img()));
+			const QPixmap &pm = mt.pixmap();
 			if (pm.isNull())
 				continue;
 

@@ -228,11 +228,11 @@ void RasterTile::render()
 	std::sort(_points.begin(), _points.end());
 
 	QList<TextItem*> textItems;
-	QRect tileRect(_xy, _img.size());
+	QRect tileRect(_xy, _pixmap.size());
 
-	_img.fill(Qt::transparent);
+	_pixmap.fill(Qt::transparent);
 
-	QPainter painter(&_img);
+	QPainter painter(&_pixmap);
 	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-_xy.x(), -_xy.y());
 

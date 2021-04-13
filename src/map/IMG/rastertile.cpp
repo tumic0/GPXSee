@@ -177,9 +177,9 @@ void RasterTile::render()
 	processPolygons(textItems);
 	processLines(textItems);
 
-	_img.fill(Qt::transparent);
+	_pixmap.fill(Qt::transparent);
 
-	QPainter painter(&_img);
+	QPainter painter(&_pixmap);
 	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-_xy.x(), -_xy.y());
@@ -300,7 +300,7 @@ static void removeDuplicitLabel(QList<TextItem *> &labels, const QString &text,
 
 void RasterTile::processPolygons(QList<TextItem*> &textItems)
 {
-	QRectF tileRect(_xy, _img.size());
+	QRectF tileRect(_xy, _pixmap.size());
 	QSet<QString> set;
 	QList<TextItem *> labels;
 
@@ -337,7 +337,7 @@ void RasterTile::processPolygons(QList<TextItem*> &textItems)
 
 void RasterTile::processLines(QList<TextItem*> &textItems)
 {
-	QRect tileRect(_xy, _img.size());
+	QRect tileRect(_xy, _pixmap.size());
 
 	std::stable_sort(_lines.begin(), _lines.end());
 
@@ -403,7 +403,7 @@ void RasterTile::processShields(const QRect &tileRect,
 		  it != shields.constEnd(); ++it) {
 			const QPolygonF &p = it.value();
 			QRectF rect(p.boundingRect() & tileRect);
-			if (AREA(rect) < AREA(QRect(0, 0, _img.width()/4, _img.width()/4)))
+			if (AREA(rect) < AREA(QRect(0, 0, _pixmap.width()/4, _pixmap.width()/4)))
 				continue;
 
 			QMap<qreal, int> map;

@@ -1,7 +1,7 @@
 #ifndef IMG_RASTERTILE_H
 #define IMG_RASTERTILE_H
 
-#include <QImage>
+#include <QPixmap>
 #include "mapdata.h"
 
 class QPainter;
@@ -19,12 +19,12 @@ public:
 	  const QString &key, const QList<MapData::Poly> &polygons,
 	  const QList<MapData::Poly> &lines, QList<MapData::Point> &points)
 	  : _map(map), _style(style), _zoom(zoom), _xy(rect.topLeft()),
-	  _key(key), _img(rect.size(), QImage::Format_ARGB32_Premultiplied),
-	  _polygons(polygons), _lines(lines), _points(points) {}
+	  _key(key), _pixmap(rect.size()), _polygons(polygons), _lines(lines),
+	  _points(points) {}
 
 	const QString &key() const {return _key;}
 	const QPoint &xy() const {return _xy;}
-	const QImage &img() const {return _img;}
+	const QPixmap &pixmap() const {return _pixmap;}
 
 	void render();
 
@@ -47,7 +47,7 @@ private:
 	int _zoom;
 	QPoint _xy;
 	QString _key;
-	QImage _img;
+	QPixmap _pixmap;
 	QList<MapData::Poly> _polygons;
 	QList<MapData::Poly> _lines;
 	QList<MapData::Point> _points;

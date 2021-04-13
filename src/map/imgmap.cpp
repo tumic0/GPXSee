@@ -193,13 +193,12 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 	for (int i = 0; i < tiles.size(); i++) {
 		RasterTile &mt = tiles[i];
-		QPixmap pm(QPixmap::fromImage(mt.img()));
+		const QPixmap &pm = mt.pixmap();
 		if (pm.isNull())
 			continue;
 
-		QPixmapCache::insert(mt.key(), pm);
-
 		painter->drawPixmap(mt.xy(), pm);
+		QPixmapCache::insert(mt.key(), pm);
 	}
 }
 
