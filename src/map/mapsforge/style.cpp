@@ -35,15 +35,19 @@ static QImage image(const QString &path, int width, int height)
 		return QImage(path);
 }
 
-bool Style::Rule::match(int zoom, bool closed,
-  const QVector<MapData::Tag> &tags) const
+bool Style::Rule::match(const QVector<MapData::Tag> &tags) const
+{
+	for (int i = 0; i < _filters.size(); i++)
+		if (!_filters.at(i).match(tags))
+			return false;
+
+	return true;
+}
+
+bool Style::Rule::match(bool closed, const QVector<MapData::Tag> &tags) const
 {
 	Closed cl = closed ? YesClosed : NoClosed;
 
-	if (_type && WayType != _type)
-		return false;
-	if (!_zooms.contains(zoom))
-		return false;
 	if (_closed && cl != _closed)
 		return false;
 
@@ -54,11 +58,16 @@ bool Style::Rule::match(int zoom, bool closed,
 	return true;
 }
 
-bool Style::Rule::match(int zoom, const QVector<MapData::Tag> &tags) const
+bool Style::Rule::match(int zoom, bool closed,
+  const QVector<MapData::Tag> &tags) const
 {
-	if (_type && NodeType != _type)
+	Closed cl = closed ? YesClosed : NoClosed;
+
+	if (_type && WayType != _type)
 		return false;
 	if (!_zooms.contains(zoom))
+		return false;
+	if (_closed && cl != _closed)
 		return false;
 
 	for (int i = 0; i < _filters.size(); i++)
@@ -136,7 +145,7 @@ void Style::line(QXmlStreamReader &reader, const Rule &rule)
 }
 
 void Style::text(QXmlStreamReader &reader, const Rule &rule,
-  QList<TextRender> &list)
+  QList<QList<TextRender>*> &lists)
 {
 	TextRender ri(rule);
 	const QXmlStreamAttributes &attr = reader.attributes();
@@ -165,7 +174,8 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 	ri._font.setBold(bold);
 	ri._font.setItalic(italic);
 
-	list.append(ri);
+	for (int i = 0; i < lists.size(); i++)
+		lists[i]->append(ri);
 
 	reader.skipCurrentElement();
 }
@@ -233,10 +243,18 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir,
 			area(reader, dir, r);
 		else if (reader.name() == QLatin1String("line"))
 			line(reader, r);
-		else if (reader.name() == QLatin1String("pathText"))
-			text(reader, r, _pathLabels);
-		else if (reader.name() == QLatin1String("caption"))
-			text(reader, r, _pointLabels);
+		else if (reader.name() == QLatin1String("pathText")) {
+			QList<QList<TextRender>*> list;
+			list.append(&_pathLabels);
+			text(reader, r, list);
+		} else if (reader.name() == QLatin1String("caption")) {
+			QList<QList<TextRender>*> list;
+			if (r._type == Rule::WayType || r._type == Rule::AnyType)
+				list.append(&_areaLabels);
+			if (r._type == Rule::NodeType || r._type == Rule::AnyType)
+				list.append(&_pointLabels);
+			text(reader, r, list);
+		}
 		else if (reader.name() == QLatin1String("symbol"))
 			symbol(reader, dir, r);
 		else
@@ -325,6 +343,50 @@ void Style::match(int zoom, bool closed, const QVector<MapData::Tag> &tags,
 	for (int i = 0; i < _paths.size(); i++)
 		if (_paths.at(i).rule().match(zoom, closed, tags))
 			ri->append(&_paths.at(i));
+}
+
+QList<const Style::TextRender*> Style::pathLabels(int zoom) const
+{
+	QList<const Style::TextRender*> list;
+
+	for (int i = 0; i < _pathLabels.size(); i++)
+		if (_pathLabels.at(i).rule().zooms().contains(zoom))
+			list.append(&_pathLabels.at(i));
+
+	return list;
+}
+
+QList<const Style::TextRender*> Style::pointLabels(int zoom) const
+{
+	QList<const Style::TextRender*> list;
+
+	for (int i = 0; i < _pointLabels.size(); i++)
+		if (_pointLabels.at(i).rule().zooms().contains(zoom))
+			list.append(&_pointLabels.at(i));
+
+	return list;
+}
+
+QList<const Style::TextRender*> Style::areaLabels(int zoom) const
+{
+	QList<const Style::TextRender*> list;
+
+	for (int i = 0; i < _areaLabels.size(); i++)
+		if (_areaLabels.at(i).rule().zooms().contains(zoom))
+			list.append(&_areaLabels.at(i));
+
+	return list;
+}
+
+QList<const Style::Symbol*> Style::symbols(int zoom) const
+{
+	QList<const Style::Symbol*> list;
+
+	for (int i = 0; i < _symbols.size(); i++)
+		if (_symbols.at(i).rule().zooms().contains(zoom))
+			list.append(&_symbols.at(i));
+
+	return list;
 }
 
 QPen Style::PathRender::pen(int zoom) const

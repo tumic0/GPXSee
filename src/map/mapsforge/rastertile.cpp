@@ -47,6 +47,8 @@ static QPointF centroid(const QPainterPath &polygon)
 void RasterTile::processPoints(QList<TextItem*> &textItems)
 {
 	const Style &s = style();
+	QList<const Style::TextRender*> labels(s.pointLabels(_zoom));
+	QList<const Style::Symbol*> symbols(s.symbols(_zoom));
 
 	for (int i = 0; i < _points.size(); i++) {
 		const MapData::Point &point = _points.at(i);
@@ -55,19 +57,19 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 		const Style::Symbol *si = 0;
 
 		if (label) {
-			for (int i = 0; i < s.pointLabels().size(); i++) {
-				const Style::TextRender &ri = s.pointLabels().at(i);
-				if (ri.rule().match(_zoom, point.tags)) {
-					ti = &ri;
+			for (int i = 0; i < labels.size(); i++) {
+				const Style::TextRender *ri = labels.at(i);
+				if (ri->rule().match(point.tags)) {
+					ti = ri;
 					break;
 				}
 			}
 		}
 
-		for (int i = 0; i < s.symbols().size(); i++) {
-			const Style::Symbol &ri = s.symbols().at(i);
-			if (ri.rule().match(_zoom, point.tags)) {
-				si = &ri;
+		for (int i = 0; i < symbols.size(); i++) {
+			const Style::Symbol *ri = symbols.at(i);
+			if (ri->rule().match(point.tags)) {
+				si = ri;
 				break;
 			}
 		}
@@ -89,32 +91,33 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 	}
 }
 
-void RasterTile::processPolygonNames(const QRect &tileRect,
+void RasterTile::processAreaNames(const QRect &tileRect,
   QList<TextItem*> &textItems)
 {
 	const Style &s = style();
+	QList<const Style::TextRender*> instructions(s.areaLabels(_zoom));
 	QSet<QString> set;
 
-	for (int i = 0; i < s.pointLabels().size(); i++) {
-		const Style::TextRender &ri = s.pointLabels().at(i);
+	for (int i = 0; i < instructions.size(); i++) {
+		const Style::TextRender *ri = instructions.at(i);
 
 		for (int j = 0; j < _paths.size(); j++) {
 			const MapData::Path &path = _paths.at(j);
 
-			if (path.label.isEmpty())
+			if (!path.closed || path.label.isEmpty())
 				continue;
 			if (!path.path.elementCount())
 				continue;
 			if (set.contains(path.label))
 				continue;
-			if (!ri.rule().match(_zoom, path.closed, path.tags))
+			if (!ri->rule().match(path.closed, path.tags))
 				continue;
 
 			QPointF pos = path.labelPos.isNull()
 			  ? centroid(path.path) : ll2xy(path.labelPos);
 
 			TextPointItem *item = new TextPointItem(pos.toPoint(), &path.label,
-			  &ri.font(), 0, &ri.fillColor(), 0, false);
+			  &ri->font(), 0, &ri->fillColor(), 0, false);
 			if (item->isValid() && tileRect.contains(item->boundingRect().toRect())
 			  && !item->collides(textItems)) {
 				textItems.append(item);
@@ -129,9 +132,10 @@ void RasterTile::processStreetNames(const QRect &tileRect,
   QList<TextItem*> &textItems)
 {
 	const Style &s = style();
+	QList<const Style::TextRender*> instructions(s.pathLabels(_zoom));
 
-	for (int i = 0; i < s.pathLabels().size(); i++) {
-		const Style::TextRender &ri = s.pathLabels().at(i);
+	for (int i = 0; i < instructions.size(); i++) {
+		const Style::TextRender *ri = instructions.at(i);
 
 		for (int j = 0; j < _paths.size(); j++) {
 			MapData::Path &path = _paths[j];
@@ -140,12 +144,12 @@ void RasterTile::processStreetNames(const QRect &tileRect,
 				continue;
 			if (!path.path.elementCount())
 				continue;
-			if (!ri.rule().match(_zoom, path.closed, path.tags))
+			if (!ri->rule().match(path.closed, path.tags))
 				continue;
 
 			TextPathItem *item = new TextPathItem(path.path,
-			  &path.label, tileRect, &ri.font(), &ri.fillColor(),
-			  &ri.strokeColor());
+			  &path.label, tileRect, &ri->font(), &ri->fillColor(),
+			  &ri->strokeColor());
 			if (item->isValid() && !item->collides(textItems))
 				textItems.append(item);
 			else
@@ -208,19 +212,35 @@ QVector<RasterTile::PathInstruction> RasterTile::pathInstructions()
 void RasterTile::drawPaths(QPainter *painter)
 {
 	QVector<PathInstruction> instructions(pathInstructions());
+	const Style::PathRender *lri = 0;
+
+	QPixmap layer(_pixmap.size());
+	layer.fill(Qt::transparent);
+
+	QPainter lp(&layer);
+	lp.setRenderHint(QPainter::Antialiasing);
+	lp.translate(-_xy.x(), -_xy.y());
+	lp.setCompositionMode(QPainter::CompositionMode_Source);
 
 	for (int i = 0; i < instructions.size(); i++) {
 		PathInstruction &is = instructions[i];
 		const Style::PathRender *ri = is.render();
 
-		painter->setPen(ri->pen(_zoom));
-		painter->setBrush(ri->brush());
+		if (lri && ri != lri) {
+			painter->drawPixmap(_xy, layer);
+			layer.fill(Qt::transparent);
+		}
+		lri = ri;
 
 		if (!is.path()->path.elementCount())
 			is.path()->path = painterPath(is.path()->poly);
 
-		painter->drawPath(is.path()->path);
+		lp.setPen(ri->pen(_zoom));
+		lp.setBrush(ri->brush());
+		lp.drawPath(is.path()->path);
 	}
+
+	painter->drawPixmap(_xy, layer);
 }
 
 void RasterTile::render()
@@ -239,13 +259,13 @@ void RasterTile::render()
 	drawPaths(&painter);
 
 	processPoints(textItems);
-	processPolygonNames(tileRect, textItems);
+	processAreaNames(tileRect, textItems);
 	processStreetNames(tileRect, textItems);
 	drawTextItems(&painter, textItems);
 
 	//painter.setPen(Qt::red);
 	//painter.setBrush(Qt::NoBrush);
-	//painter.drawRect(QRect(_xy, _img.size()));
+	//painter.drawRect(QRect(_xy, _pixmap.size()));
 
 	qDeleteAll(textItems);
 }

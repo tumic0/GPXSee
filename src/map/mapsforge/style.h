@@ -29,9 +29,12 @@ public:
 	public:
 		Rule() : _type(AnyType), _closed(AnyClosed), _zooms(0, 127) {}
 
+		bool match(const QVector<MapData::Tag> &tags) const;
+		bool match(bool closed, const QVector<MapData::Tag> &tags) const;
 		bool match(int zoom, bool closed,
 		  const QVector<MapData::Tag> &tags) const;
-		bool match(int zoom, const QVector<MapData::Tag> &tags) const;
+
+		const Range &zooms() const {return _zooms;}
 
 	private:
 		enum Type {
@@ -214,13 +217,14 @@ public:
 
 	void match(int zoom, bool closed, const QVector<MapData::Tag> &tags,
 	  QVector<const PathRender *> *ri) const;
-	const QList<TextRender> &pathLabels() const {return _pathLabels;}
-	const QList<TextRender> &pointLabels() const {return _pointLabels;}
-	const QList<Symbol> &symbols() const {return _symbols;}
+	QList<const TextRender*> pathLabels(int zoom) const;
+	QList<const TextRender*> pointLabels(int zoom) const;
+	QList<const TextRender*> areaLabels(int zoom) const;
+	QList<const Symbol*> symbols(int zoom) const;
 
 private:
 	QList<PathRender> _paths;
-	QList<TextRender> _pathLabels, _pointLabels;
+	QList<TextRender> _pathLabels, _pointLabels, _areaLabels;
 	QList<Symbol> _symbols;
 
 	bool loadXml(const QString &path);
@@ -233,7 +237,7 @@ private:
 	void area(QXmlStreamReader &reader, const QString &dir, const Rule &rule);
 	void line(QXmlStreamReader &reader, const Rule &rule);
 	void text(QXmlStreamReader &reader, const Rule &rule,
-	  QList<TextRender> &list);
+	  QList<QList<TextRender> *> &lists);
 	void symbol(QXmlStreamReader &reader, const QString &dir, const Rule &rule);
 };
 
