@@ -192,12 +192,14 @@ public:
 		const QFont &font() const {return _font;}
 		const QColor &fillColor() const {return _fillColor;}
 		const QColor &strokeColor() const {return _strokeColor;}
+		const QByteArray &key() const {return _key;}
 
 	private:
 		friend class Style;
 
 		QColor _fillColor, _strokeColor;
 		QFont _font;
+		QByteArray _key;
 	};
 
 	class Symbol : public Render
@@ -215,8 +217,8 @@ public:
 
 	Style(const QString &path);
 
-	void match(int zoom, bool closed, const QVector<MapData::Tag> &tags,
-	  QVector<const PathRender *> *ri) const;
+	QVector<const PathRender *> paths(int zoom, bool closed,
+	  const QVector<MapData::Tag> &tags) const;
 	QList<const TextRender*> pathLabels(int zoom) const;
 	QList<const TextRender*> pointLabels(int zoom) const;
 	QList<const TextRender*> areaLabels(int zoom) const;

@@ -43,10 +43,11 @@ public:
 		Point(const Coordinates &c) : coordinates(c) {}
 
 		Coordinates coordinates;
-		QString label;
 		QVector<Tag> tags;
 		int layer;
 		quint64 id;
+
+		QString label;
 
 		bool operator<(const Point &other) const
 		  {return id > other.id;}
@@ -54,13 +55,12 @@ public:
 
 	struct Path {
 		Polygon poly;
-		QString label;
-		QString reference;
 		QVector<Tag> tags;
 		Coordinates labelPos;
 		int layer;
 		bool closed;
 
+		QString label;
 		QPainterPath path;
 
 		bool operator<(const Path &other) const

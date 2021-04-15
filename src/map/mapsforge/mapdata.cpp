@@ -545,7 +545,7 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 	quint32 blocks, unused, val, cnt = 0;
 	quint16 bitmap;
 	quint8 sb, flags;
-	QByteArray label, houseNumber, reference;
+	QByteArray name, houseNumber, reference;
 
 
 	if (!subfile.seek(tile->offset & OFFSET_MASK))
@@ -579,18 +579,20 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 		if (!subfile.readByte(flags))
 			return false;
 		if (flags & 0x80) {
-			if (!subfile.readString(label))
+			if (!subfile.readString(name))
 				return false;
-			p.label = label.split('\r').first();
+			name = name.split('\r').first();
+			p.tags.append(Tag("name", name));
 		}
 		if (flags & 0x40) {
 			if (!subfile.readString(houseNumber))
 				return false;
+			p.tags.append(Tag("addr:housenumber", houseNumber));
 		}
 		if (flags & 0x20) {
 			if (!subfile.readString(reference))
 				return false;
-			p.reference = reference;
+			p.tags.append(Tag("ref", reference));
 		}
 		if (flags & 0x10) {
 			if (!(subfile.readVInt32(lat) && subfile.readVInt32(lon)))
@@ -626,7 +628,7 @@ bool MapData::readPoints(const VectorTile *tile, int zoom, QList<Point> *list)
 	QVector<unsigned> points(rows);
 	quint32 val, unused, cnt = 0;
 	quint8 sb, flags;
-	QByteArray label, houseNumber;
+	QByteArray name, houseNumber;
 
 
 	if (!subfile.seek(tile->offset & OFFSET_MASK))
@@ -660,18 +662,21 @@ bool MapData::readPoints(const VectorTile *tile, int zoom, QList<Point> *list)
 		if (!subfile.readByte(flags))
 			return false;
 		if (flags & 0x80) {
-			if (!subfile.readString(label))
+			if (!subfile.readString(name))
 				return false;
-			p.label = label.split('\r').first();
+			name = name.split('\r').first();
+			p.tags.append(Tag("name", name));
 		}
 		if (flags & 0x40) {
 			if (!subfile.readString(houseNumber))
 				return false;
+			p.tags.append(Tag("addr:housenumber", houseNumber));
 		}
 		if (flags & 0x20) {
-			qint32 unused;
-			if (!subfile.readVInt32(unused))
+			qint32 elevation;
+			if (!subfile.readVInt32(elevation))
 				return false;
+			p.tags.append(Tag("ele", QByteArray::number(elevation)));
 		}
 
 		setPointId(p);

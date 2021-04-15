@@ -152,6 +152,8 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 	int fontSize = 9;
 	bool bold = false, italic = false;
 
+	if (attr.hasAttribute("k"))
+		ri._key = attr.value("k").toLatin1();
 	if (attr.hasAttribute("fill"))
 		ri._fillColor = QColor(attr.value("fill").toString());
 	if (attr.hasAttribute("stroke"))
@@ -169,7 +171,6 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 			italic = true;
 		}
 	}
-
 	ri._font.setPixelSize(fontSize);
 	ri._font.setBold(bold);
 	ri._font.setItalic(italic);
@@ -337,12 +338,16 @@ Style::Style(const QString &path)
 		loadXml(":/mapsforge/default.xml");
 }
 
-void Style::match(int zoom, bool closed, const QVector<MapData::Tag> &tags,
-  QVector<const Style::PathRender*> *ri) const
+QVector<const Style::PathRender *> Style::paths(int zoom, bool closed,
+  const QVector<MapData::Tag> &tags) const
 {
+	QVector<const Style::PathRender*> ri;
+
 	for (int i = 0; i < _paths.size(); i++)
 		if (_paths.at(i).rule().match(zoom, closed, tags))
-			ri->append(&_paths.at(i));
+			ri.append(&_paths.at(i));
+
+	return ri;
 }
 
 QList<const Style::TextRender*> Style::pathLabels(int zoom) const
