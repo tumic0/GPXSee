@@ -228,7 +228,7 @@ void RasterTile::drawPaths(QPainter *painter)
 
 		if (lri && ri != lri) {
 			painter->drawPixmap(_xy, layer);
-			layer.fill(Qt::transparent);
+			lp.fillRect(QRect(_xy, _pixmap.size()), Qt::transparent);
 		}
 		lri = ri;
 
