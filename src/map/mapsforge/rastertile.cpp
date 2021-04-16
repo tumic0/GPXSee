@@ -122,7 +122,6 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 			textItems.append(item);
 		else
 			delete item;
-
 	}
 }
 
@@ -254,9 +253,7 @@ QVector<RasterTile::PathInstruction> RasterTile::pathInstructions()
 void RasterTile::drawPaths(QPainter *painter)
 {
 	QVector<PathInstruction> instructions(pathInstructions());
-	if (instructions.isEmpty())
-		return;
-	const Style::PathRender *lri = instructions.first().render();
+	const Style::PathRender *lri = 0;
 
 	QPixmap layer(_pixmap.size());
 	layer.fill(Qt::transparent);
@@ -270,21 +267,29 @@ void RasterTile::drawPaths(QPainter *painter)
 		PathInstruction &is = instructions[i];
 		const Style::PathRender *ri = is.render();
 
-		if (ri != lri) {
+		if (lri && lri != ri) {
 			painter->drawPixmap(_xy, layer);
 			lp.fillRect(QRect(_xy, _pixmap.size()), Qt::transparent);
-			lri = ri;
 		}
 
 		if (!is.path()->path.elementCount())
 			is.path()->path = painterPath(is.path()->poly);
 
-		lp.setPen(ri->pen(_zoom));
-		lp.setBrush(ri->brush());
-		lp.drawPath(is.path()->path);
+		if (ri->area()) {
+			lp.setPen(ri->pen(_zoom));
+			lp.setBrush(ri->brush());
+			lp.drawPath(is.path()->path);
+			lri = ri;
+		} else {
+			painter->setPen(ri->pen(_zoom));
+			painter->setBrush(ri->brush());
+			painter->drawPath(is.path()->path);
+			lri = 0;
+		}
 	}
 
-	painter->drawPixmap(_xy, layer);
+	if (lri)
+		painter->drawPixmap(_xy, layer);
 }
 
 void RasterTile::render()

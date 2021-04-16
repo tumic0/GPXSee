@@ -84,6 +84,7 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, const Rule &rule)
 	QString file;
 	int height = 0, width = 0;
 
+	ri._area = true;
 	if (attr.hasAttribute("fill"))
 		ri._fillColor = QColor(attr.value("fill").toString());
 	if (attr.hasAttribute("stroke"))
