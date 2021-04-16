@@ -408,17 +408,12 @@ RectC MapData::bounds() const
 {
 	/* Align the map bounds with the OSM tiles to prevent area overlap artifacts
 	   at least when using EPSG:3857 projection. */
-
 	int zoom = _subFiles.last().base;
-
 	QPoint tl(OSM::mercator2tile(OSM::ll2m(_bounds.topLeft()), zoom));
-	QPoint br(OSM::mercator2tile(OSM::ll2m(_bounds.bottomRight()), zoom));
 	Coordinates ctl(OSM::tile2ll(tl, zoom));
 	ctl.rlat() = -ctl.lat();
-	Coordinates cbr(OSM::tile2ll(br, zoom));
-	cbr.rlat() = -cbr.lat();
 
-	return RectC(ctl, cbr);
+	return RectC(ctl, _bounds.bottomRight());
 }
 
 void MapData::load()
