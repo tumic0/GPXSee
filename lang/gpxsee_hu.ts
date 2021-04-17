@@ -430,7 +430,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="393"/>
         <source>Date/time</source>
-        <translation>Dátum/idő</translation>
+        <translation>Időpont</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="397"/>
@@ -622,12 +622,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="761"/>
         <source>Next file</source>
-        <translation>Következő fájl (léptetés)</translation>
+        <translation>Következő fájl</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="762"/>
         <source>Previous file</source>
-        <translation>Előző fájl (léptetés)</translation>
+        <translation>Előző fájl</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="764"/>
@@ -662,7 +662,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="774"/>
         <source>Toggle position info</source>
-        <translation>Pozíció info kapcsoló</translation>
+        <translation>Pozíció információ váltás</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="778"/>
@@ -830,6 +830,7 @@
         <location filename="../src/GUI/gui.cpp" line="1693"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
@@ -1027,7 +1028,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="121"/>
         <source>Mapsforge maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapsforge térképek</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="122"/>
@@ -1090,7 +1091,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation>Válaszd ki a JNX és a KMZ térképek megfelelő vetületét. Mind az EPSG: 3857, mind az EPSG: 4326 vetületi térképek rendelkezésre állnak, a térkép fájlban nincsenek vetületi információk.</translation>
+        <translation>Válaszd ki a JNX és a KMZ térképek megfelelő vetületét. Mind az EPSG: 3857, mind az EPSG: 4326 vetületi térképek rendelkezésre állnak, a térképfájlban nincsenek vetületi információk.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="118"/>
@@ -1910,7 +1911,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="38"/>
         <source>Pace</source>
-        <translation>Tempó</translation>
+        <translation>Iram</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="127"/>
@@ -1973,7 +1974,7 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="35"/>
         <source>Pace</source>
-        <translation>Tempó</translation>
+        <translation>Iram</translation>
     </message>
 </context>
 <context>
