@@ -71,9 +71,9 @@ private:
 	QVector<PathInstruction> pathInstructions();
 	QPointF ll2xy(const Coordinates &c) const
 	  {return _transform.proj2img(_proj.ll2xy(c));}
-	void processPoints(QList<TextItem*> &textItems);
-	void processAreaNames(const QRect &tileRect, QList<TextItem*> &textItems);
-	void processStreetNames(const QRect &tileRect, QList<TextItem*> &textItems);
+	void processPointLabels(QList<TextItem*> &textItems);
+	void processAreaLabels(const QRect &tileRect, QList<TextItem*> &textItems);
+	void processLineLabels(const QRect &tileRect, QList<TextItem*> &textItems);
 	QPainterPath painterPath(const Polygon &polygon) const;
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
 	void drawPaths(QPainter *painter);

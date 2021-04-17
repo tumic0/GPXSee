@@ -34,8 +34,6 @@ public:
 		bool match(int zoom, bool closed,
 		  const QVector<MapData::Tag> &tags) const;
 
-		const Range &zooms() const {return _zooms;}
-
 	private:
 		enum Type {
 			AnyType = 0,
@@ -224,7 +222,8 @@ public:
 	QList<const TextRender*> pathLabels(int zoom) const;
 	QList<const TextRender*> pointLabels(int zoom) const;
 	QList<const TextRender*> areaLabels(int zoom) const;
-	QList<const Symbol*> symbols(int zoom) const;
+	QList<const Symbol*> pointSymbols(int zoom) const;
+	QList<const Symbol*> areaSymbols(int zoom) const;
 
 private:
 	QList<PathRender> _paths;

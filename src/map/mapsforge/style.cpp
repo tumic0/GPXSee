@@ -342,7 +342,7 @@ Style::Style(const QString &path)
 QVector<const Style::PathRender *> Style::paths(int zoom, bool closed,
   const QVector<MapData::Tag> &tags) const
 {
-	QVector<const Style::PathRender*> ri;
+	QVector<const PathRender*> ri;
 
 	for (int i = 0; i < _paths.size(); i++)
 		if (_paths.at(i).rule().match(zoom, closed, tags))
@@ -353,10 +353,10 @@ QVector<const Style::PathRender *> Style::paths(int zoom, bool closed,
 
 QList<const Style::TextRender*> Style::pathLabels(int zoom) const
 {
-	QList<const Style::TextRender*> list;
+	QList<const TextRender*> list;
 
 	for (int i = 0; i < _pathLabels.size(); i++)
-		if (_pathLabels.at(i).rule().zooms().contains(zoom))
+		if (_pathLabels.at(i).rule()._zooms.contains(zoom))
 			list.append(&_pathLabels.at(i));
 
 	return list;
@@ -364,10 +364,10 @@ QList<const Style::TextRender*> Style::pathLabels(int zoom) const
 
 QList<const Style::TextRender*> Style::pointLabels(int zoom) const
 {
-	QList<const Style::TextRender*> list;
+	QList<const TextRender*> list;
 
 	for (int i = 0; i < _pointLabels.size(); i++)
-		if (_pointLabels.at(i).rule().zooms().contains(zoom))
+		if (_pointLabels.at(i).rule()._zooms.contains(zoom))
 			list.append(&_pointLabels.at(i));
 
 	return list;
@@ -375,22 +375,41 @@ QList<const Style::TextRender*> Style::pointLabels(int zoom) const
 
 QList<const Style::TextRender*> Style::areaLabels(int zoom) const
 {
-	QList<const Style::TextRender*> list;
+	QList<const TextRender*> list;
 
 	for (int i = 0; i < _areaLabels.size(); i++)
-		if (_areaLabels.at(i).rule().zooms().contains(zoom))
+		if (_areaLabels.at(i).rule()._zooms.contains(zoom))
 			list.append(&_areaLabels.at(i));
 
 	return list;
 }
 
-QList<const Style::Symbol*> Style::symbols(int zoom) const
+QList<const Style::Symbol*> Style::pointSymbols(int zoom) const
 {
-	QList<const Style::Symbol*> list;
+	QList<const Symbol*> list;
 
-	for (int i = 0; i < _symbols.size(); i++)
-		if (_symbols.at(i).rule().zooms().contains(zoom))
-			list.append(&_symbols.at(i));
+	for (int i = 0; i < _symbols.size(); i++) {
+		const Symbol &symbol = _symbols.at(i);
+		const Rule & rule = symbol.rule();
+		if (rule._zooms.contains(zoom) && (rule._type == Rule::AnyType
+		  || rule._type == Rule::NodeType))
+			list.append(&symbol);
+	}
+
+	return list;
+}
+
+QList<const Style::Symbol*> Style::areaSymbols(int zoom) const
+{
+	QList<const Symbol*> list;
+
+	for (int i = 0; i < _symbols.size(); i++) {
+		const Symbol &symbol = _symbols.at(i);
+		const Rule & rule = symbol.rule();
+		if (rule._zooms.contains(zoom) && (rule._type == Rule::AnyType
+		  || rule._type == Rule::WayType))
+			list.append(&symbol);
+	}
 
 	return list;
 }

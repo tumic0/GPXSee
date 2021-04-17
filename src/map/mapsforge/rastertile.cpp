@@ -79,11 +79,11 @@ static QString *pathLabel(const Style::TextRender *ri, MapData::Path &path,
 	return 0;
 }
 
-void RasterTile::processPoints(QList<TextItem*> &textItems)
+void RasterTile::processPointLabels(QList<TextItem*> &textItems)
 {
 	const Style &s = style();
 	QList<const Style::TextRender*> labels(s.pointLabels(_zoom));
-	QList<const Style::Symbol*> symbols(s.symbols(_zoom));
+	QList<const Style::Symbol*> symbols(s.pointSymbols(_zoom));
 
 	for (int i = 0; i < _points.size(); i++) {
 		MapData::Point &point = _points[i];
@@ -125,45 +125,60 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 	}
 }
 
-void RasterTile::processAreaNames(const QRect &tileRect,
+void RasterTile::processAreaLabels(const QRect &tileRect,
   QList<TextItem*> &textItems)
 {
 	const Style &s = style();
-	QList<const Style::TextRender*> instructions(s.areaLabels(_zoom));
-	QSet<QString> set;
+	QList<const Style::TextRender*> labels(s.areaLabels(_zoom));
+	QList<const Style::Symbol*> symbols(s.areaSymbols(_zoom));
 
-	for (int i = 0; i < instructions.size(); i++) {
-		const Style::TextRender *ri = instructions.at(i);
+	for (int i = 0; i < _paths.size(); i++) {
+		MapData::Path &path = _paths[i];
+		QString *label = 0;
+		const Style::TextRender *ti = 0;
+		const Style::Symbol *si = 0;
 
-		for (int j = 0; j < _paths.size(); j++) {
-			MapData::Path &path = _paths[j];
-			QString *label = 0;
+		if (!path.closed || !path.path.elementCount())
+			continue;
 
-			if (!path.closed || !path.path.elementCount())
-				continue;
-			if (!ri->rule().match(path.closed, path.tags))
-				continue;
-			if (!(label = pathLabel(ri, path)))
-				continue;
-			if (set.contains(path.label))
-				continue;
-
-			QPointF pos = path.labelPos.isNull()
-			  ? centroid(path.path) : ll2xy(path.labelPos);
-
-			TextPointItem *item = new TextPointItem(pos.toPoint(), label,
-			  &ri->font(), 0, &ri->fillColor(), 0, false);
-			if (item->isValid() && tileRect.contains(item->boundingRect().toRect())
-			  && !item->collides(textItems)) {
-				textItems.append(item);
-				set.insert(path.label);
-			} else
-				delete item;
+		for (int j = 0; j < labels.size(); j++) {
+			const Style::TextRender *ri = labels.at(j);
+			if (ri->rule().match(path.closed, path.tags)) {
+				if ((label = pathLabel(ri, path))) {
+					ti = ri;
+					break;
+				}
+			}
 		}
+
+		for (int j = 0; j < symbols.size(); j++) {
+			const Style::Symbol *ri = symbols.at(j);
+			if (ri->rule().match(path.tags)) {
+				si = ri;
+				break;
+			}
+		}
+
+		if (!ti && !si)
+			continue;
+
+		const QImage *img = si ? &si->img() : 0;
+		const QFont *font = ti ? &ti->font() : 0;
+		const QColor *color = ti ? &ti->fillColor() : 0;
+		QPointF pos = path.labelPos.isNull()
+		  ? centroid(path.path) : ll2xy(path.labelPos);
+
+		TextPointItem *item = new TextPointItem(pos.toPoint(), label, font, img,
+		  color, 0, false);
+		if (item->isValid() && tileRect.contains(item->boundingRect().toRect())
+		  && !item->collides(textItems))
+			textItems.append(item);
+		else
+			delete item;
 	}
 }
 
-void RasterTile::processStreetNames(const QRect &tileRect,
+void RasterTile::processLineLabels(const QRect &tileRect,
   QList<TextItem*> &textItems)
 {
 	const Style &s = style();
@@ -307,9 +322,9 @@ void RasterTile::render()
 
 	drawPaths(&painter);
 
-	processPoints(textItems);
-	processAreaNames(tileRect, textItems);
-	processStreetNames(tileRect, textItems);
+	processPointLabels(textItems);
+	processAreaLabels(tileRect, textItems);
+	processLineLabels(tileRect, textItems);
 	drawTextItems(&painter, textItems);
 
 	//painter.setPen(Qt::red);
