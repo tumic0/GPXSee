@@ -996,67 +996,72 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="107"/>
+        <location filename="../src/map/maplist.cpp" line="113"/>
         <source>Supported files</source>
         <translation>Filer som stöds</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="116"/>
+        <location filename="../src/map/maplist.cpp" line="123"/>
         <source>MBTiles maps</source>
         <translation>MBTiles-kartor</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="112"/>
+        <location filename="../src/map/maplist.cpp" line="118"/>
         <source>Garmin JNX maps</source>
         <translation>Garmin JNX-kartor</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="109"/>
+        <location filename="../src/map/maplist.cpp" line="115"/>
         <source>AlpineQuest maps</source>
         <translation>AlpineQuest kartor</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="110"/>
+        <location filename="../src/map/maplist.cpp" line="116"/>
         <source>Garmin IMG maps</source>
         <translation>Garmin IMG-kartor</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="113"/>
+        <location filename="../src/map/maplist.cpp" line="119"/>
         <source>BSB nautical charts</source>
         <translation>BSB nautiska sjökort</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="114"/>
+        <location filename="../src/map/maplist.cpp" line="120"/>
         <source>KMZ maps</source>
         <translation>KMZ-kartor</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="115"/>
+        <location filename="../src/map/maplist.cpp" line="121"/>
+        <source>Mapsforge maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="122"/>
         <source>OziExplorer maps</source>
         <translation>OziExplorer-kartor</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="120"/>
+        <location filename="../src/map/maplist.cpp" line="127"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>TrekBuddy-kartor/-atlaser</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="121"/>
+        <location filename="../src/map/maplist.cpp" line="128"/>
         <source>GeoTIFF images</source>
         <translation>GeoTIFF-bilder</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="117"/>
+        <location filename="../src/map/maplist.cpp" line="124"/>
         <source>TwoNav maps</source>
         <translation>TwoNav-kartor</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="118"/>
+        <location filename="../src/map/maplist.cpp" line="125"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
         <translation>Locus/OsmAnd/RMaps SQLite-kartor</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="122"/>
+        <location filename="../src/map/maplist.cpp" line="129"/>
         <source>Online map sources</source>
         <translation>Online-kartkällor</translation>
     </message>

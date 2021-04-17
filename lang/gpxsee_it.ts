@@ -996,67 +996,72 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="107"/>
+        <location filename="../src/map/maplist.cpp" line="113"/>
         <source>Supported files</source>
         <translation>File supportati</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="109"/>
+        <location filename="../src/map/maplist.cpp" line="115"/>
         <source>AlpineQuest maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="110"/>
+        <location filename="../src/map/maplist.cpp" line="116"/>
         <source>Garmin IMG maps</source>
         <translation>Mappe Garmin IMG</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="112"/>
+        <location filename="../src/map/maplist.cpp" line="118"/>
         <source>Garmin JNX maps</source>
         <translation>Mappe Garmin JNX</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="113"/>
+        <location filename="../src/map/maplist.cpp" line="119"/>
         <source>BSB nautical charts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="114"/>
+        <location filename="../src/map/maplist.cpp" line="120"/>
         <source>KMZ maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="115"/>
-        <source>OziExplorer maps</source>
-        <translation>Mappe OziExplorer</translation>
-    </message>
-    <message>
-        <location filename="../src/map/maplist.cpp" line="116"/>
-        <source>MBTiles maps</source>
-        <translation>Mappe MBTiles</translation>
-    </message>
-    <message>
-        <location filename="../src/map/maplist.cpp" line="120"/>
-        <source>TrekBuddy maps/atlases</source>
-        <translation>Mappe/Atlanti TrekBuddy</translation>
-    </message>
-    <message>
         <location filename="../src/map/maplist.cpp" line="121"/>
-        <source>GeoTIFF images</source>
-        <translation>Immagini GeoTIFF</translation>
-    </message>
-    <message>
-        <location filename="../src/map/maplist.cpp" line="117"/>
-        <source>TwoNav maps</source>
-        <translation>Mappe TwoNav</translation>
-    </message>
-    <message>
-        <location filename="../src/map/maplist.cpp" line="118"/>
-        <source>Locus/OsmAnd/RMaps SQLite maps</source>
+        <source>Mapsforge maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="122"/>
+        <source>OziExplorer maps</source>
+        <translation>Mappe OziExplorer</translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="123"/>
+        <source>MBTiles maps</source>
+        <translation>Mappe MBTiles</translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="127"/>
+        <source>TrekBuddy maps/atlases</source>
+        <translation>Mappe/Atlanti TrekBuddy</translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="128"/>
+        <source>GeoTIFF images</source>
+        <translation>Immagini GeoTIFF</translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="124"/>
+        <source>TwoNav maps</source>
+        <translation>Mappe TwoNav</translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="125"/>
+        <source>Locus/OsmAnd/RMaps SQLite maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="129"/>
         <source>Online map sources</source>
         <translation>Mappe online</translation>
     </message>
