@@ -148,10 +148,9 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			if (isRunning(key))
 				continue;
 
-			if (QPixmapCache::find(key, &pm)) {
-				pm.setDevicePixelRatio(_tileRatio);
+			if (QPixmapCache::find(key, &pm))
 				painter->drawPixmap(ttl, pm);
-			} else {
+			else {
 				QList<MapData::Path> paths;
 				QList<MapData::Point> points;
 

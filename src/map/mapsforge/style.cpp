@@ -16,7 +16,7 @@ static QString resourcePath(const QString &src, const QString &dir)
 		return dir + "/" + url.toLocalFile();
 }
 
-static QImage image(const QString &path, int width, int height)
+static QImage image(const QString &path, int width, int height, qreal ratio)
 {
 	QImageReader ir(path, "svg");
 
@@ -29,8 +29,10 @@ static QImage image(const QString &path, int width, int height)
 		} else if (!height)
 			height = ir.size().width() / (ir.size().width() / (double)width);
 
-		ir.setScaledSize(QSize(width, height));
-		return ir.read();
+		ir.setScaledSize(QSize(width * ratio, height * ratio));
+		QImage img(ir.read());
+		img.setDevicePixelRatio(ratio);
+		return img;
 	} else
 		return QImage(path);
 }
@@ -77,7 +79,8 @@ bool Style::Rule::match(int zoom, bool closed,
 	return true;
 }
 
-void Style::area(QXmlStreamReader &reader, const QString &dir, const Rule &rule)
+void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
+  const Rule &rule)
 {
 	PathRender ri(rule, _paths.size());
 	const QXmlStreamAttributes &attr = reader.attributes();
@@ -99,7 +102,7 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, const Rule &rule)
 		width = attr.value("symbol-width").toInt();
 
 	if (!file.isNull())
-		ri._fillImage = image(file, width, height);
+		ri._fillImage = image(file, width, height, ratio);
 
 	_paths.append(ri);
 
@@ -184,7 +187,7 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 	reader.skipCurrentElement();
 }
 
-void Style::symbol(QXmlStreamReader &reader, const QString &dir,
+void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
   const Rule &rule)
 {
 	Symbol ri(rule);
@@ -200,14 +203,14 @@ void Style::symbol(QXmlStreamReader &reader, const QString &dir,
 		width = attr.value("symbol-width").toInt();
 
 	if (!file.isNull())
-		ri._img = image(file, width, height);
+		ri._img = image(file, width, height, ratio);
 
 	_symbols.append(ri);
 
 	reader.skipCurrentElement();
 }
 
-void Style::rule(QXmlStreamReader &reader, const QString &dir,
+void Style::rule(QXmlStreamReader &reader, const QString &dir, qreal ratio,
   const QSet<QString> &cats, const Rule &parent)
 {
 	Rule r(parent);
@@ -242,9 +245,9 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir,
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("rule"))
-			rule(reader, dir, cats, r);
+			rule(reader, dir, ratio, cats, r);
 		else if (reader.name() == QLatin1String("area"))
-			area(reader, dir, r);
+			area(reader, dir, ratio, r);
 		else if (reader.name() == QLatin1String("line"))
 			line(reader, r);
 		else if (reader.name() == QLatin1String("pathText")) {
@@ -260,7 +263,7 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir,
 			text(reader, r, list);
 		}
 		else if (reader.name() == QLatin1String("symbol"))
-			symbol(reader, dir, r);
+			symbol(reader, dir, ratio, r);
 		else
 			reader.skipCurrentElement();
 	}
@@ -298,14 +301,15 @@ void Style::stylemenu(QXmlStreamReader &reader, QSet<QString> &cats)
 	}
 }
 
-void Style::rendertheme(QXmlStreamReader &reader, const QString &dir)
+void Style::rendertheme(QXmlStreamReader &reader, const QString &dir,
+  qreal ratio)
 {
 	Rule r;
 	QSet<QString> cats;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("rule"))
-			rule(reader, dir, cats, r);
+			rule(reader, dir, ratio, cats, r);
 		else if (reader.name() == QLatin1String("stylemenu"))
 			stylemenu(reader, cats);
 		else
@@ -313,7 +317,7 @@ void Style::rendertheme(QXmlStreamReader &reader, const QString &dir)
 	}
 }
 
-bool Style::loadXml(const QString &path)
+bool Style::loadXml(const QString &path, qreal ratio)
 {
 	QFile file(path);
 	if (!file.open(QFile::ReadOnly))
@@ -323,7 +327,7 @@ bool Style::loadXml(const QString &path)
 
 	if (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("rendertheme"))
-			rendertheme(reader, fi.absolutePath());
+			rendertheme(reader, fi.absolutePath(), ratio);
 		else
 			reader.raiseError("Not a Mapsforge style file");
 	}
@@ -335,10 +339,10 @@ bool Style::loadXml(const QString &path)
 	return !reader.error();
 }
 
-Style::Style(const QString &path)
+Style::Style(const QString &path, qreal ratio)
 {
-	if (!QFileInfo::exists(path) || !loadXml(path))
-		loadXml(":/mapsforge/default.xml");
+	if (!QFileInfo::exists(path) || !loadXml(path, ratio))
+		loadXml(":/mapsforge/default.xml", ratio);
 }
 
 QVector<const Style::PathRender *> Style::paths(int zoom, bool closed,

@@ -8,9 +8,9 @@
 
 using namespace Mapsforge;
 
-static const Style& style()
+static const Style& style(qreal ratio)
 {
-	static Style s(ProgramPaths::renderthemeFile());
+	static Style s(ProgramPaths::renderthemeFile(), ratio);
 	return s;
 }
 
@@ -88,7 +88,7 @@ static const QColor *haloColor(const Style::TextRender *ti)
 
 void RasterTile::processPointLabels(QList<TextItem*> &textItems)
 {
-	const Style &s = style();
+	const Style &s = style(_ratio);
 	QList<const Style::TextRender*> labels(s.pointLabels(_zoom));
 	QList<const Style::Symbol*> symbols(s.pointSymbols(_zoom));
 
@@ -136,7 +136,7 @@ void RasterTile::processPointLabels(QList<TextItem*> &textItems)
 
 void RasterTile::processAreaLabels(QList<TextItem*> &textItems)
 {
-	const Style &s = style();
+	const Style &s = style(_ratio);
 	QList<const Style::TextRender*> labels(s.areaLabels(_zoom));
 	QList<const Style::Symbol*> symbols(s.areaSymbols(_zoom));
 
@@ -189,7 +189,7 @@ void RasterTile::processAreaLabels(QList<TextItem*> &textItems)
 
 void RasterTile::processLineLabels(QList<TextItem*> &textItems)
 {
-	const Style &s = style();
+	const Style &s = style(_ratio);
 	QList<const Style::TextRender*> instructions(s.pathLabels(_zoom));
 	QSet<QString> set;
 
@@ -248,7 +248,7 @@ QVector<RasterTile::PathInstruction> RasterTile::pathInstructions()
 {
 	QCache<Key, QVector<const Style::PathRender *> > cache(1024);
 	QVector<PathInstruction> instructions;
-	const Style &s = style();
+	const Style &s = style(_ratio);
 	QVector<const Style::PathRender*> *ri;
 
 	for (int i = 0 ; i < _paths.size(); i++) {
@@ -322,11 +322,11 @@ void RasterTile::render()
 
 	QList<TextItem*> textItems;
 
+	_pixmap.setDevicePixelRatio(_ratio);
 	_pixmap.fill(Qt::transparent);
 
 	QPainter painter(&_pixmap);
 	painter.setRenderHint(QPainter::Antialiasing);
-	painter.scale(_ratio, _ratio);
 	painter.translate(-_rect.x(), -_rect.y());
 
 	drawPaths(&painter);

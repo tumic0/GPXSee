@@ -218,7 +218,7 @@ public:
 		QImage _img;
 	};
 
-	Style(const QString &path);
+	Style(const QString &path, qreal ratio);
 
 	QVector<const PathRender *> paths(int zoom, bool closed,
 	  const QVector<MapData::Tag> &tags) const;
@@ -233,18 +233,20 @@ private:
 	QList<TextRender> _pathLabels, _pointLabels, _areaLabels;
 	QList<Symbol> _symbols;
 
-	bool loadXml(const QString &path);
-	void rendertheme(QXmlStreamReader &reader, const QString &dir);
+	bool loadXml(const QString &path, qreal ratio);
+	void rendertheme(QXmlStreamReader &reader, const QString &dir, qreal ratio);
 	void layer(QXmlStreamReader &reader, QSet<QString> &cats);
 	void stylemenu(QXmlStreamReader &reader, QSet<QString> &cats);
 	void cat(QXmlStreamReader &reader, QSet<QString> &cats);
-	void rule(QXmlStreamReader &reader, const QString &dir,
+	void rule(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	  const QSet<QString> &cats, const Rule &parent);
-	void area(QXmlStreamReader &reader, const QString &dir, const Rule &rule);
+	void area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
+	  const Rule &rule);
 	void line(QXmlStreamReader &reader, const Rule &rule);
 	void text(QXmlStreamReader &reader, const Rule &rule,
 	  QList<QList<TextRender> *> &lists);
-	void symbol(QXmlStreamReader &reader, const QString &dir, const Rule &rule);
+	void symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
+	  const Rule &rule);
 };
 
 }

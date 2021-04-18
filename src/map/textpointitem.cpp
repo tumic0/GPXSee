@@ -41,10 +41,11 @@ void TextPointItem::setPos(const QPoint &point, bool padding)
 	QRect iconRect;
 
 	if (_img) {
-		int xOffset = padding ? _img->width() : _img->width() / 2;
+		QSize s(_img->size() / _img->devicePixelRatioF());
+		int xOffset = padding ? s.width() : s.width() / 2;
 		iconRect = QRect(QPoint(point.x() - xOffset, point.y()
-		  - _img->height()/2), _img->size());
-		_textRect.moveTopLeft(QPoint(point.x() + _img->width()/2, point.y()
+		  - s.height()/2), s);
+		_textRect.moveTopLeft(QPoint(point.x() + s.width()/2, point.y()
 		  - _textRect.height()/2));
 	} else
 		_textRect.moveCenter(point);
@@ -56,9 +57,11 @@ void TextPointItem::setPos(const QPoint &point, bool padding)
 
 void TextPointItem::paint(QPainter *painter) const
 {
-	if (_img)
+	if (_img) {
+		QSize s(_img->size() / _img->devicePixelRatioF());
 		painter->drawImage(QPoint(_rect.left(), _rect.center().y()
-		  - _img->height()/2), *_img);
+		  - s.height()/2), *_img);
+	}
 
 	if (_text) {
 		if (_bgColor) {
