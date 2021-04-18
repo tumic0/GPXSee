@@ -48,7 +48,7 @@ build_script:
 
     copy release\GPXSee.exe installer
 
-    windeployqt --no-svg --release installer\GPXSee.exe
+    windeployqt --release installer\GPXSee.exe
 
     copy pkg\%NSI% installer
 
