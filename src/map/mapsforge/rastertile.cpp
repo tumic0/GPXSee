@@ -79,6 +79,13 @@ static QString *pathLabel(const Style::TextRender *ri, MapData::Path &path,
 	return 0;
 }
 
+static const QColor *haloColor(const Style::TextRender *ti)
+{
+	return (ti->strokeColor() != ti->fillColor() && ti->strokeWidth() > 0)
+	  ? &ti->strokeColor() : 0;
+}
+
+
 void RasterTile::processPointLabels(QList<TextItem*> &textItems)
 {
 	const Style &s = style();
@@ -115,9 +122,11 @@ void RasterTile::processPointLabels(QList<TextItem*> &textItems)
 		const QImage *img = si ? &si->img() : 0;
 		const QFont *font = ti ? &ti->font() : 0;
 		const QColor *color = ti ? &ti->fillColor() : 0;
+		const QColor *hColor = ti ? haloColor(ti) : 0;
 
 		TextPointItem *item = new TextPointItem(
-		  ll2xy(point.coordinates).toPoint(), label, font, img, color, 0, false);
+		  ll2xy(point.coordinates).toPoint(), label, font, img, color,
+		    hColor, 0, false);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
 		else
@@ -125,8 +134,7 @@ void RasterTile::processPointLabels(QList<TextItem*> &textItems)
 	}
 }
 
-void RasterTile::processAreaLabels(const QRect &tileRect,
-  QList<TextItem*> &textItems)
+void RasterTile::processAreaLabels(QList<TextItem*> &textItems)
 {
 	const Style &s = style();
 	QList<const Style::TextRender*> labels(s.areaLabels(_zoom));
@@ -165,12 +173,13 @@ void RasterTile::processAreaLabels(const QRect &tileRect,
 		const QImage *img = si ? &si->img() : 0;
 		const QFont *font = ti ? &ti->font() : 0;
 		const QColor *color = ti ? &ti->fillColor() : 0;
+		const QColor *hColor = ti ? haloColor(ti) : 0;
 		QPointF pos = path.labelPos.isNull()
 		  ? centroid(path.path) : ll2xy(path.labelPos);
 
 		TextPointItem *item = new TextPointItem(pos.toPoint(), label, font, img,
-		  color, 0, false);
-		if (item->isValid() && tileRect.contains(item->boundingRect().toRect())
+		  color, hColor, 0, false);
+		if (item->isValid() && _rect.contains(item->boundingRect().toRect())
 		  && !item->collides(textItems))
 			textItems.append(item);
 		else
@@ -178,8 +187,7 @@ void RasterTile::processAreaLabels(const QRect &tileRect,
 	}
 }
 
-void RasterTile::processLineLabels(const QRect &tileRect,
-  QList<TextItem*> &textItems)
+void RasterTile::processLineLabels(QList<TextItem*> &textItems)
 {
 	const Style &s = style();
 	QList<const Style::TextRender*> instructions(s.pathLabels(_zoom));
@@ -202,8 +210,8 @@ void RasterTile::processLineLabels(const QRect &tileRect,
 			if (limit && set.contains(path.label))
 				continue;
 
-			TextPathItem *item = new TextPathItem(path.path, label, tileRect,
-			  &ri->font(), &ri->fillColor(), &ri->strokeColor());
+			TextPathItem *item = new TextPathItem(path.path, label, _rect,
+			  &ri->font(), &ri->fillColor(), haloColor(ri));
 			if (item->isValid() && !item->collides(textItems)) {
 				textItems.append(item);
 				if (limit)
@@ -271,11 +279,12 @@ void RasterTile::drawPaths(QPainter *painter)
 	const Style::PathRender *lri = 0;
 
 	QPixmap layer(_pixmap.size());
+	layer.setDevicePixelRatio(_ratio);
 	layer.fill(Qt::transparent);
 
 	QPainter lp(&layer);
 	lp.setRenderHint(QPainter::Antialiasing);
-	lp.translate(-_xy.x(), -_xy.y());
+	lp.translate(-_rect.x(), -_rect.y());
 	lp.setCompositionMode(QPainter::CompositionMode_Source);
 
 	for (int i = 0; i < instructions.size(); i++) {
@@ -283,8 +292,8 @@ void RasterTile::drawPaths(QPainter *painter)
 		const Style::PathRender *ri = is.render();
 
 		if (lri && lri != ri) {
-			painter->drawPixmap(_xy, layer);
-			lp.fillRect(QRect(_xy, _pixmap.size()), Qt::transparent);
+			painter->drawPixmap(_rect.topLeft(), layer);
+			lp.fillRect(QRect(_rect.topLeft(), _pixmap.size()), Qt::transparent);
 		}
 
 		if (!is.path()->path.elementCount())
@@ -304,7 +313,7 @@ void RasterTile::drawPaths(QPainter *painter)
 	}
 
 	if (lri)
-		painter->drawPixmap(_xy, layer);
+		painter->drawPixmap(_rect.topLeft(), layer);
 }
 
 void RasterTile::render()
@@ -312,24 +321,24 @@ void RasterTile::render()
 	std::sort(_points.begin(), _points.end());
 
 	QList<TextItem*> textItems;
-	QRect tileRect(_xy, _pixmap.size());
 
 	_pixmap.fill(Qt::transparent);
 
 	QPainter painter(&_pixmap);
 	painter.setRenderHint(QPainter::Antialiasing);
-	painter.translate(-_xy.x(), -_xy.y());
+	painter.scale(_ratio, _ratio);
+	painter.translate(-_rect.x(), -_rect.y());
 
 	drawPaths(&painter);
 
 	processPointLabels(textItems);
-	processAreaLabels(tileRect, textItems);
-	processLineLabels(tileRect, textItems);
+	processAreaLabels(textItems);
+	processLineLabels(textItems);
 	drawTextItems(&painter, textItems);
 
 	//painter.setPen(Qt::red);
 	//painter.setBrush(Qt::NoBrush);
-	//painter.drawRect(QRect(_xy, _pixmap.size()));
+	//painter.drawRect(QRect(_rect.topLeft(), _pixmap.size()));
 
 	qDeleteAll(textItems);
 }

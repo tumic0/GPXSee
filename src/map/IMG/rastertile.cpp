@@ -13,6 +13,8 @@ using namespace IMG;
 #define AREA(rect) \
 	(rect.size().width() * rect.size().height())
 
+static const QColor textColor(Qt::black);
+static const QColor haloColor(Qt::white);
 static const QColor shieldColor(Qt::white);
 static const QColor shieldBgColor1("#dd3e3e");
 static const QColor shieldBgColor2("#379947");
@@ -316,8 +318,8 @@ void RasterTile::processPolygons(QList<TextItem*> &textItems)
 		  || Style::isNatureReserve(poly.type))) {
 			const Style::Polygon &style = _style->polygon(poly.type);
 			TextPointItem *item = new TextPointItem(
-			  centroid(poly.points).toPoint(), &poly.label.text(),
-			  poiFont(), 0, &style.brush().color());
+			  centroid(poly.points).toPoint(), &poly.label.text(), poiFont(),
+			  0, &style.brush().color(), &haloColor);
 			if (item->isValid() && !item->collides(textItems)
 			  && !item->collides(labels)
 			  && !(exists && tileRect.contains(item->boundingRect()))
@@ -417,7 +419,7 @@ void RasterTile::processShields(const QRect &tileRect,
 
 			TextPointItem *item = new TextPointItem(
 			  p.at(jt.value()).toPoint(), &(sp.value(it.key())->text()),
-			  poiFont(), 0, &shieldColor, shieldBgColor(it.key().type()));
+			  poiFont(), 0, &shieldColor, 0, shieldBgColor(it.key().type()));
 
 			bool valid = false;
 			while (true) {
@@ -457,7 +459,7 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 		const QFont *fnt = poi
 		  ? poiFont(style.textFontSize()) : font(style.textFontSize());
 		const QColor *color = style.textColor().isValid()
-		  ? &style.textColor() : 0;
+		  ? &style.textColor() : &textColor;
 
 		if ((!label || !fnt) && !img)
 			continue;
@@ -471,7 +473,7 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 		}
 
 		TextPointItem *item = new TextPointItem(QPoint(point.coordinates.lon(),
-		  point.coordinates.lat()), label, fnt, img, color);
+		  point.coordinates.lat()), label, fnt, img, color, &haloColor);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
 		else

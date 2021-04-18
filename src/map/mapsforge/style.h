@@ -187,17 +187,20 @@ public:
 	{
 	public:
 		TextRender(const Rule &rule)
-		  : Render(rule), _fillColor(Qt::black), _strokeColor(Qt::white) {}
+		  : Render(rule), _fillColor(Qt::black), _strokeColor(Qt::black),
+		  _strokeWidth(0) {}
 
 		const QFont &font() const {return _font;}
 		const QColor &fillColor() const {return _fillColor;}
 		const QColor &strokeColor() const {return _strokeColor;}
+		qreal strokeWidth() const {return _strokeWidth;}
 		const QByteArray &key() const {return _key;}
 
 	private:
 		friend class Style;
 
 		QColor _fillColor, _strokeColor;
+		qreal _strokeWidth;
 		QFont _font;
 		QByteArray _key;
 	};

@@ -21,7 +21,8 @@ static int log2i(unsigned val)
 }
 
 MapsforgeMap::MapsforgeMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _data(fileName), _zoom(0), _projection(PCS::pcs(3857))
+  : Map(fileName, parent), _data(fileName), _zoom(0),
+  _projection(PCS::pcs(3857)), _tileRatio(1.0)
 {
 	_zoom = _data.zooms().min();
 	updateTransform();
@@ -147,9 +148,10 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			if (isRunning(key))
 				continue;
 
-			if (QPixmapCache::find(key, &pm))
+			if (QPixmapCache::find(key, &pm)) {
+				pm.setDevicePixelRatio(_tileRatio);
 				painter->drawPixmap(ttl, pm);
-			else {
+			} else {
 				QList<MapData::Path> paths;
 				QList<MapData::Point> points;
 
@@ -170,11 +172,12 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				pointRect &= _bounds;
 				RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
 				  _transform.img2proj(pointRect.bottomRight()));
-				_data.points(pointRectD.toRectC(_projection, 20), _zoom, &points);
+				_data.points(pointRectD.toRectC(_projection, 20), _zoom,
+				  &points);
 
 				tiles.append(RasterTile(_projection, _transform, _zoom,
-				  QRect(ttl, QSize(_data.tileSize(), _data.tileSize())), key,
-				  paths, points));
+				  QRect(ttl, QSize(_data.tileSize(), _data.tileSize())),
+				  _tileRatio, key, paths, points));
 			}
 		}
 	}
@@ -186,6 +189,13 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		addRunning(tiles);
 		job->run();
 	}
+}
+
+void MapsforgeMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
+{
+	Q_UNUSED(mapRatio);
+
+	_tileRatio = deviceRatio;
 }
 
 void MapsforgeMap::setOutputProjection(const Projection &projection)

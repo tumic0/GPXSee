@@ -16,13 +16,14 @@ class RasterTile
 {
 public:
 	RasterTile(const Projection &proj, const Transform &transform, int zoom,
-	  const QRect &rect, const QString &key, const QList<MapData::Path> &paths,
-	  const QList<MapData::Point> &points)
-	  : _proj(proj), _transform(transform), _zoom(zoom), _xy(rect.topLeft()),
-	  _key(key), _pixmap(rect.size()), _paths(paths), _points(points) {}
+	  const QRect &rect, qreal ratio, const QString &key,
+	  const QList<MapData::Path> &paths, const QList<MapData::Point> &points)
+	  : _proj(proj), _transform(transform), _zoom(zoom), _rect(rect),
+	  _ratio(ratio), _key(key), _pixmap(rect.width() * ratio,
+	  rect.height() * ratio), _paths(paths), _points(points) {}
 
 	const QString &key() const {return _key;}
-	const QPoint &xy() const {return _xy;}
+	QPoint xy() const {return _rect.topLeft();}
 	const QPixmap &pixmap() const {return _pixmap;}
 
 	void render();
@@ -72,8 +73,8 @@ private:
 	QPointF ll2xy(const Coordinates &c) const
 	  {return _transform.proj2img(_proj.ll2xy(c));}
 	void processPointLabels(QList<TextItem*> &textItems);
-	void processAreaLabels(const QRect &tileRect, QList<TextItem*> &textItems);
-	void processLineLabels(const QRect &tileRect, QList<TextItem*> &textItems);
+	void processAreaLabels(QList<TextItem*> &textItems);
+	void processLineLabels(QList<TextItem*> &textItems);
 	QPainterPath painterPath(const Polygon &polygon) const;
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
 	void drawPaths(QPainter *painter);
@@ -81,7 +82,8 @@ private:
 	Projection _proj;
 	Transform _transform;
 	int _zoom;
-	QPoint _xy;
+	QRect _rect;
+	qreal _ratio;
 	QString _key;
 	QPixmap _pixmap;
 	QList<MapData::Path> _paths;

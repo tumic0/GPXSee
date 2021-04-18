@@ -159,6 +159,8 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 		ri._fillColor = QColor(attr.value("fill").toString());
 	if (attr.hasAttribute("stroke"))
 		ri._strokeColor = QColor(attr.value("stroke").toString());
+	if (attr.hasAttribute("stroke-width"))
+		ri._strokeWidth = attr.value("stroke-width").toFloat();
 	if (attr.hasAttribute("font-size"))
 		fontSize = attr.value("font-size").toInt();
 	if (attr.hasAttribute("font-style")) {

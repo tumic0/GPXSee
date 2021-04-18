@@ -238,7 +238,7 @@ static bool reverse(const QPainterPath &path)
 
 TextPathItem::TextPathItem(const QPolygonF &line, const QString *label,
   const QRect &tileRect, const QFont *font, const QColor *color)
-  : TextItem(label), _font(font), _color(color), _outlineColor(0)
+  : TextItem(label), _font(font), _color(color), _haloColor(0)
 {
 	qreal cw = font->pixelSize() * 0.6;
 	qreal textWidth = _text->size() * cw;
@@ -259,8 +259,8 @@ TextPathItem::TextPathItem(const QPolygonF &line, const QString *label,
 
 TextPathItem::TextPathItem(const QPainterPath &line, const QString *label,
   const QRect &tileRect, const QFont *font, const QColor *color,
-  const QColor *outlineColor) : TextItem(label), _font(font), _color(color),
-  _outlineColor(outlineColor)
+  const QColor *haloColor) : TextItem(label), _font(font), _color(color),
+  _haloColor(haloColor)
 {
 	qreal cw = font->pixelSize() * 0.6;
 	qreal textWidth = _text->size() * cw;
@@ -290,22 +290,23 @@ void TextPathItem::paint(QPainter *painter) const
 	QTransform t = painter->transform();
 
 	painter->setFont(*_font);
-	painter->setPen(_outlineColor ? *_outlineColor : Qt::white);
+	painter->setPen(_haloColor ? *_haloColor : Qt::white);
 
 	for (int i = 0; i < _text->size(); i++) {
 		QPointF point = _path.pointAtPercent(percent);
 		qreal angle = _path.angleAtPercent(percent);
+		QChar c = _text->at(i);
 
 		painter->translate(point);
 		painter->rotate(-angle);
-		painter->drawText(QPoint(-1, fm.descent() - 1), _text->at(i));
-		painter->drawText(QPoint(1, fm.descent() + 1), _text->at(i));
-		painter->drawText(QPoint(-1, fm.descent() + 1), _text->at(i));
-		painter->drawText(QPoint(1, fm.descent() -1), _text->at(i));
-		painter->drawText(QPoint(0, fm.descent() - 1), _text->at(i));
-		painter->drawText(QPoint(0, fm.descent() + 1), _text->at(i));
-		painter->drawText(QPoint(-1, fm.descent()), _text->at(i));
-		painter->drawText(QPoint(1, fm.descent()), _text->at(i));
+		painter->drawText(QPoint(-1, fm.descent() - 1), c);
+		painter->drawText(QPoint(1, fm.descent() + 1), c);
+		painter->drawText(QPoint(-1, fm.descent() + 1), c);
+		painter->drawText(QPoint(1, fm.descent() -1), c);
+		painter->drawText(QPoint(0, fm.descent() - 1), c);
+		painter->drawText(QPoint(0, fm.descent() + 1), c);
+		painter->drawText(QPoint(-1, fm.descent()), c);
+		painter->drawText(QPoint(1, fm.descent()), c);
 		painter->setTransform(t);
 
 		int width = fm.horizontalAdvance(_text->at(i));

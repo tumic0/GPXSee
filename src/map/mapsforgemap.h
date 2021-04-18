@@ -72,6 +72,7 @@ public:
 	void load();
 	void unload();
 	void setOutputProjection(const Projection &projection);
+	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
 
 	QPointF ll2xy(const Coordinates &c)
 	  {return _transform.proj2img(_projection.ll2xy(c));}
@@ -99,6 +100,7 @@ private:
 	Projection _projection;
 	Transform _transform;
 	QRectF _bounds;
+	qreal _tileRatio;
 
 	QSet<QString> _running;
 };

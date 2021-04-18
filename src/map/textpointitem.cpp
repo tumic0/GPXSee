@@ -2,6 +2,7 @@
 #include <QFontMetrics>
 #include <QImage>
 #include <QPainter>
+#include <QStaticText>
 #include "textpointitem.h"
 
 
@@ -17,8 +18,9 @@ static void expand(QRect &rect, int width)
 
 TextPointItem::TextPointItem(const QPoint &point, const QString *text,
   const QFont *font, const QImage *img, const QColor *color,
-  const QColor *bgColor, bool padding) : TextItem(font ? text : 0),
-  _font(font), _img(img), _color(color), _bgColor(bgColor)
+  const QColor *haloColor, const QColor *bgColor, bool padding)
+  : TextItem(font ? text : 0), _font(font), _img(img), _color(color),
+  _haloColor(haloColor), _bgColor(bgColor)
 {
 	if (_text) {
 		QFontMetrics fm(*_font);
@@ -66,31 +68,31 @@ void TextPointItem::paint(QPainter *painter) const
 			painter->setBrush(Qt::NoBrush);
 			painter->setFont(*_font);
 			painter->drawText(_textRect, FLAGS, *_text);
+		} else if (_haloColor) {
+			QStaticText st(*_text);
+			st.setTextFormat(Qt::PlainText);
+			st.setTextWidth(_textRect.width());
+			st.setTextOption(QTextOption(Qt::AlignHCenter));
+			st.setPerformanceHint(QStaticText::AggressiveCaching);
+
+			painter->setPen(*_haloColor);
+			painter->setFont(*_font);
+
+			painter->drawStaticText(_textRect.topLeft() + QPointF(-1, -1), st);
+			painter->drawStaticText(_textRect.topLeft() + QPointF(+1, +1), st);
+			painter->drawStaticText(_textRect.topLeft() + QPointF(-1, +1), st);
+			painter->drawStaticText(_textRect.topLeft() + QPointF(+1, -1), st);
+			painter->drawStaticText(_textRect.topLeft() + QPointF(0, -1), st);
+			painter->drawStaticText(_textRect.topLeft() + QPointF(0, +1), st);
+			painter->drawStaticText(_textRect.topLeft() + QPointF(-1, 0), st);
+			painter->drawStaticText(_textRect.topLeft() + QPointF(+1, 0), st);
+
+			painter->setPen(*_color);
+			painter->drawStaticText(_textRect.topLeft(), st);
 		} else {
-			QImage img(_textRect.size(), QImage::Format_ARGB32_Premultiplied);
-			img.fill(Qt::transparent);
-			QPainter ip(&img);
-			ip.setPen(Qt::white);
-			ip.setFont(*_font);
-			ip.drawText(img.rect(), FLAGS, *_text);
-
-			painter->drawImage(_textRect.x() - 1, _textRect.y() - 1, img);
-			painter->drawImage(_textRect.x() + 1, _textRect.y() + 1, img);
-			painter->drawImage(_textRect.x() - 1, _textRect.y() + 1, img);
-			painter->drawImage(_textRect.x() + 1, _textRect.y() - 1, img);
-			painter->drawImage(_textRect.x(), _textRect.y() - 1, img);
-			painter->drawImage(_textRect.x(), _textRect.y() + 1, img);
-			painter->drawImage(_textRect.x() - 1, _textRect.y(), img);
-			painter->drawImage(_textRect.x() + 1, _textRect.y(), img);
-
-			if (_color) {
-				painter->setFont(*_font);
-				painter->setPen(*_color);
-				painter->drawText(_textRect, FLAGS, *_text);
-			} else {
-				img.invertPixels();
-				painter->drawImage(_textRect, img);
-			}
+			painter->setPen(*_color);
+			painter->setFont(*_font);
+			painter->drawText(_textRect, FLAGS, *_text);
 		}
 	}
 

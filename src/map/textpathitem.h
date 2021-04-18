@@ -13,7 +13,7 @@ public:
 	  const QRect &tileRect, const QFont *font, const QColor *color);
 	TextPathItem(const QPainterPath &line, const QString *label,
 	  const QRect &tileRect, const QFont *font, const QColor *color,
-	  const QColor *outlineColor);
+	  const QColor *haloColor);
 
 	bool isValid() const {return !_path.isEmpty();}
 
@@ -24,7 +24,7 @@ public:
 private:
 	const QFont *_font;
 	const QColor *_color;
-	const QColor *_outlineColor;
+	const QColor *_haloColor;
 	QPainterPath _path;
 	QRectF _rect;
 	QPainterPath _shape;
