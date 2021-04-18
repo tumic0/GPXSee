@@ -367,12 +367,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="278"/>
         <source>Select all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner tous les fichiers</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="283"/>
         <source>Unselect all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous désélectionner</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="317"/>
@@ -429,7 +429,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="385"/>
         <source>Do not show</source>
-        <translation>Masquer</translation>
+        <translation>Aucun affichage</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="389"/>
@@ -439,7 +439,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="393"/>
         <source>Date/time</source>
-        <translation>Instant</translation>
+        <translation>Date et heure</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="397"/>

@@ -831,6 +831,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n dosya</numerusform>
+            <numerusform>%n dosya</numerusform>
         </translation>
     </message>
 </context>
@@ -1032,7 +1033,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="121"/>
         <source>Mapsforge maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapsforge haritaları</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="122"/>
