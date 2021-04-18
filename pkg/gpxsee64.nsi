@@ -200,6 +200,7 @@ Section "QT framework" SEC_QT
   File "Qt6OpenGLWidgets.dll"
   File "Qt6PrintSupport.dll"
   File "Qt6Sql.dll"
+  File "Qt6Svg.dll"
   File "Qt6Widgets.dll"
 !else
   File "Qt5Core.dll"
@@ -208,6 +209,7 @@ Section "QT framework" SEC_QT
   File "Qt5PrintSupport.dll"
   File "Qt5Network.dll"
   File "Qt5Sql.dll"
+  File "Qt5Svg.dll"
   File "Qt5Concurrent.dll"
   File /r "printsupport"
 !endif
