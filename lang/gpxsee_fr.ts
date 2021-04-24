@@ -491,7 +491,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
         <source>Nautical</source>
-        <translation>Marin</translation>
+        <translation>Nautique</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
@@ -719,7 +719,7 @@
         <location filename="../src/GUI/gui.cpp" line="1155"/>
         <location filename="../src/GUI/gui.cpp" line="1225"/>
         <source>Waypoints</source>
-        <translation>Points de cheminement</translation>
+        <translation>Jalons</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="762"/>
@@ -759,7 +759,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="620"/>
         <source>&amp;Settings</source>
-        <translation>Pa&amp;ramètres</translation>
+        <translation>&amp;Paramètres</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="638"/>
@@ -1033,7 +1033,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="121"/>
         <source>Mapsforge maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartes Mapsforge</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="122"/>
@@ -1274,7 +1274,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="347"/>
         <source>Moving average window size</source>
-        <translation>Largeur de fenêtre de la moyenne glissante</translation>
+        <translation>Moyenne glissante de la largeur de fenêtre</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="366"/>
