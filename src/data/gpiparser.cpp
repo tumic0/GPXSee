@@ -622,6 +622,10 @@ static void readPOIDatabase(DataStream &stream, QVector<Waypoint> &waypoints,
 	if (rh.flags & 0x8) {
 		while (stream.status() == QDataStream::Ok && ds < rh.size) {
 			switch(stream.nextHeaderType()) {
+				case 8:
+					ds += readSpatialIndex(stream, waypoints, polygons,
+					  fileName, imgId);
+					break;
 				case 5: // symbol
 				case 7: // category
 				default:
