@@ -86,7 +86,10 @@ TreeNode<Map *> MapList::loadDir(const QString &path, TreeNode<Map *> *parent)
 			bool isDir = false;
 			Map *map = loadFile(fi.absoluteFilePath(), &isDir);
 			if (isDir) {
-				parent->addItem(map);
+				if (parent)
+					parent->addItem(map);
+				else
+					tree.addItem(map);
 				break;
 			} else
 				tree.addItem(map);
