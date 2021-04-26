@@ -363,7 +363,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="322"/>
         <source>Load map directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ŝargi dosierujon de mapoj…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="325"/>
@@ -572,7 +572,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="609"/>
         <source>Position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Informo pri pozicio</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="620"/>
@@ -662,7 +662,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="774"/>
         <source>Toggle position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Baskuligi informon pr pozicio</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="778"/>
@@ -1393,7 +1393,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="448"/>
         <source>Recorded by device</source>
-        <translation type="unfinished"></translation>
+        <translation>Registrita per aparato</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="453"/>
