@@ -328,7 +328,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="278"/>
         <source>Select all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Вибрати всі файли</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="283"/>
@@ -1029,7 +1029,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="121"/>
         <source>Mapsforge maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapsforge мапи</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="122"/>
