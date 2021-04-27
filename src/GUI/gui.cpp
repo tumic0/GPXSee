@@ -115,8 +115,7 @@ TreeNode<MapAction*> GUI::createMapActions()
 {
 	_mapsActionGroup = new QActionGroup(this);
 	_mapsActionGroup->setExclusive(true);
-	connect(_mapsActionGroup, SIGNAL(triggered(QAction*)), this,
-	  SLOT(mapChanged(QAction*)));
+	connect(_mapsActionGroup, &QActionGroup::triggered, this, &GUI::mapChanged);
 
 	QString mapDir(ProgramPaths::mapDir());
 	if (mapDir.isNull())
@@ -137,7 +136,7 @@ TreeNode<MapAction*> GUI::createMapActionsNode(const TreeNode<Map*> &node)
 		Map *map = node.items().at(i);
 		if (map->isValid()) {
 			MapAction *a = new MapAction(map, _mapsActionGroup);
-			connect(a, SIGNAL(loaded()), this, SLOT(mapInitialized()));
+			connect(a, &MapAction::loaded, this, &GUI::mapInitialized);
 			tree.addItem(a);
 		} else {
 			qWarning("%s: %s", qPrintable(map->path()),
@@ -169,8 +168,8 @@ TreeNode<POIAction *> GUI::createPOIActions()
 {
 	_poisActionGroup = new QActionGroup(this);
 	_poisActionGroup->setExclusive(false);
-	connect(_poisActionGroup, SIGNAL(triggered(QAction*)), this,
-	  SLOT(poiFileChecked(QAction*)));
+	connect(_poisActionGroup, &QActionGroup::triggered, this,
+	  &GUI::poiFileChecked);
 
 	TreeNode<QString> poiFiles;
 	QString poiDir(ProgramPaths::poiDir());
@@ -209,64 +208,65 @@ void GUI::createActions(TreeNode<MapAction*> &mapActions,
 	_exitAction = new QAction(QIcon(QUIT_ICON), tr("Quit"), this);
 	_exitAction->setShortcut(QUIT_SHORTCUT);
 	_exitAction->setMenuRole(QAction::QuitRole);
-	connect(_exitAction, SIGNAL(triggered()), this, SLOT(close()));
+	connect(_exitAction, &QAction::triggered, this, &GUI::close);
 	addAction(_exitAction);
 
 	// Help & About
 	_pathsAction = new QAction(tr("Paths"), this);
 	_pathsAction->setMenuRole(QAction::NoRole);
-	connect(_pathsAction, SIGNAL(triggered()), this, SLOT(paths()));
+	connect(_pathsAction, &QAction::triggered, this, &GUI::paths);
 	_keysAction = new QAction(tr("Keyboard controls"), this);
 	_keysAction->setMenuRole(QAction::NoRole);
-	connect(_keysAction, SIGNAL(triggered()), this, SLOT(keys()));
+	connect(_keysAction, &QAction::triggered, this, &GUI::keys);
 	_aboutAction = new QAction(QIcon(APP_ICON), tr("About GPXSee"), this);
 	_aboutAction->setMenuRole(QAction::AboutRole);
-	connect(_aboutAction, SIGNAL(triggered()), this, SLOT(about()));
+	connect(_aboutAction, &QAction::triggered, this, &GUI::about);
 
 	// File actions
 	_openFileAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Open..."), this);
 	_openFileAction->setMenuRole(QAction::NoRole);
 	_openFileAction->setShortcut(OPEN_SHORTCUT);
-	connect(_openFileAction, SIGNAL(triggered()), this, SLOT(openFile()));
+	connect(_openFileAction, &QAction::triggered, this,
+	  QOverload<>::of(&GUI::openFile));
 	addAction(_openFileAction);
 	_printFileAction = new QAction(QIcon(PRINT_FILE_ICON), tr("Print..."),
 	  this);
 	_printFileAction->setMenuRole(QAction::NoRole);
 	_printFileAction->setActionGroup(_fileActionGroup);
-	connect(_printFileAction, SIGNAL(triggered()), this, SLOT(printFile()));
+	connect(_printFileAction, &QAction::triggered, this, &GUI::printFile);
 	addAction(_printFileAction);
 	_exportPDFFileAction = new QAction(QIcon(EXPORT_FILE_ICON),
 	  tr("Export to PDF..."), this);
 	_exportPDFFileAction->setMenuRole(QAction::NoRole);
 	_exportPDFFileAction->setShortcut(PDF_EXPORT_SHORTCUT);
 	_exportPDFFileAction->setActionGroup(_fileActionGroup);
-	connect(_exportPDFFileAction, SIGNAL(triggered()), this, SLOT(exportPDFFile()));
+	connect(_exportPDFFileAction, &QAction::triggered, this, &GUI::exportPDFFile);
 	addAction(_exportPDFFileAction);
 	_exportPNGFileAction = new QAction(QIcon(EXPORT_FILE_ICON),
 	  tr("Export to PNG..."), this);
 	_exportPNGFileAction->setMenuRole(QAction::NoRole);
 	_exportPNGFileAction->setShortcut(PNG_EXPORT_SHORTCUT);
 	_exportPNGFileAction->setActionGroup(_fileActionGroup);
-	connect(_exportPNGFileAction, SIGNAL(triggered()), this, SLOT(exportPNGFile()));
+	connect(_exportPNGFileAction, &QAction::triggered, this, &GUI::exportPNGFile);
 	addAction(_exportPNGFileAction);
 	_closeFileAction = new QAction(QIcon(CLOSE_FILE_ICON), tr("Close"), this);
 	_closeFileAction->setMenuRole(QAction::NoRole);
 	_closeFileAction->setShortcut(CLOSE_SHORTCUT);
 	_closeFileAction->setActionGroup(_fileActionGroup);
-	connect(_closeFileAction, SIGNAL(triggered()), this, SLOT(closeAll()));
+	connect(_closeFileAction, &QAction::triggered, this, &GUI::closeAll);
 	addAction(_closeFileAction);
 	_reloadFileAction = new QAction(QIcon(RELOAD_FILE_ICON), tr("Reload"),
 	  this);
 	_reloadFileAction->setMenuRole(QAction::NoRole);
 	_reloadFileAction->setShortcut(RELOAD_SHORTCUT);
 	_reloadFileAction->setActionGroup(_fileActionGroup);
-	connect(_reloadFileAction, SIGNAL(triggered()), this, SLOT(reloadFiles()));
+	connect(_reloadFileAction, &QAction::triggered, this, &GUI::reloadFiles);
 	addAction(_reloadFileAction);
 	_statisticsAction = new QAction(tr("Statistics..."), this);
 	_statisticsAction->setMenuRole(QAction::NoRole);
 	_statisticsAction->setShortcut(STATISTICS_SHORTCUT);
 	_statisticsAction->setActionGroup(_fileActionGroup);
-	connect(_statisticsAction, SIGNAL(triggered()), this, SLOT(statistics()));
+	connect(_statisticsAction, &QAction::triggered, this, &GUI::statistics);
 	addAction(_statisticsAction);
 
 	// POI actions
@@ -274,33 +274,33 @@ void GUI::createActions(TreeNode<MapAction*> &mapActions,
 	_openPOIAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Load POI file..."),
 	  this);
 	_openPOIAction->setMenuRole(QAction::NoRole);
-	connect(_openPOIAction, SIGNAL(triggered()), this, SLOT(openPOIFile()));
+	connect(_openPOIAction, &QAction::triggered, this,
+	  QOverload<>::of(&GUI::openPOIFile));
 	_selectAllPOIAction = new QAction(tr("Select all files"), this);
 	_selectAllPOIAction->setMenuRole(QAction::NoRole);
 	_selectAllPOIAction->setEnabled(!_poisActionGroup->actions().isEmpty());
-	connect(_selectAllPOIAction, SIGNAL(triggered()), this,
-	  SLOT(selectAllPOIs()));
+	connect(_selectAllPOIAction, &QAction::triggered, this,
+	  &GUI::selectAllPOIs);
 	_unselectAllPOIAction = new QAction(tr("Unselect all files"), this);
 	_unselectAllPOIAction->setMenuRole(QAction::NoRole);
 	_unselectAllPOIAction->setEnabled(_selectAllPOIAction->isEnabled());
-	connect(_unselectAllPOIAction, SIGNAL(triggered()), this,
-	  SLOT(unselectAllPOIs()));
+	connect(_unselectAllPOIAction, &QAction::triggered, this,
+	  &GUI::unselectAllPOIs);
 	_overlapPOIAction = new QAction(tr("Overlap POIs"), this);
 	_overlapPOIAction->setMenuRole(QAction::NoRole);
 	_overlapPOIAction->setCheckable(true);
-	connect(_overlapPOIAction, SIGNAL(triggered(bool)), _mapView,
-	  SLOT(showOverlappedPOIs(bool)));
+	connect(_overlapPOIAction, &QAction::triggered, _mapView,
+	  &MapView::showOverlappedPOIs);
 	_showPOILabelsAction = new QAction(tr("Show POI labels"), this);
 	_showPOILabelsAction->setMenuRole(QAction::NoRole);
 	_showPOILabelsAction->setCheckable(true);
-	connect(_showPOILabelsAction, SIGNAL(triggered(bool)), _mapView,
-	  SLOT(showPOILabels(bool)));
+	connect(_showPOILabelsAction, &QAction::triggered, _mapView,
+	  &MapView::showPOILabels);
 	_showPOIAction = new QAction(QIcon(SHOW_POI_ICON), tr("Show POIs"), this);
 	_showPOIAction->setMenuRole(QAction::NoRole);
 	_showPOIAction->setCheckable(true);
 	_showPOIAction->setShortcut(SHOW_POI_SHORTCUT);
-	connect(_showPOIAction, SIGNAL(triggered(bool)), _mapView,
-	  SLOT(showPOI(bool)));
+	connect(_showPOIAction, &QAction::triggered, _mapView, &MapView::showPOI);
 	addAction(_showPOIAction);
 
 	// Map actions
@@ -311,77 +311,76 @@ void GUI::createActions(TreeNode<MapAction*> &mapActions,
 	_showMapAction->setMenuRole(QAction::NoRole);
 	_showMapAction->setCheckable(true);
 	_showMapAction->setShortcut(SHOW_MAP_SHORTCUT);
-	connect(_showMapAction, SIGNAL(triggered(bool)), _mapView,
-	  SLOT(showMap(bool)));
+	connect(_showMapAction, &QAction::triggered, _mapView,
+	  &MapView::showMap);
 	addAction(_showMapAction);
 	_loadMapAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Load map..."),
 	  this);
 	_loadMapAction->setMenuRole(QAction::NoRole);
-	connect(_loadMapAction, SIGNAL(triggered()), this, SLOT(loadMap()));
+	connect(_loadMapAction, &QAction::triggered, this,
+	  QOverload<>::of(&GUI::loadMap));
 	_loadMapDirAction = new QAction(QIcon(OPEN_FILE_ICON),
 	  tr("Load map directory..."), this);
 	_loadMapDirAction->setMenuRole(QAction::NoRole);
-	connect(_loadMapDirAction, SIGNAL(triggered()), this, SLOT(loadMapDir()));
+	connect(_loadMapDirAction, &QAction::triggered, this, &GUI::loadMapDir);
 	_clearMapCacheAction = new QAction(tr("Clear tile cache"), this);
 	_clearMapCacheAction->setEnabled(false);
 	_clearMapCacheAction->setMenuRole(QAction::NoRole);
-	connect(_clearMapCacheAction, SIGNAL(triggered()), this,
-	  SLOT(clearMapCache()));
+	connect(_clearMapCacheAction, &QAction::triggered, this,
+	  &GUI::clearMapCache);
 	_nextMapAction = new QAction(tr("Next map"), this);
 	_nextMapAction->setMenuRole(QAction::NoRole);
 	_nextMapAction->setShortcut(NEXT_MAP_SHORTCUT);
-	connect(_nextMapAction, SIGNAL(triggered()), this, SLOT(nextMap()));
+	connect(_nextMapAction, &QAction::triggered, this, &GUI::nextMap);
 	addAction(_nextMapAction);
 	_prevMapAction = new QAction(tr("Next map"), this);
 	_prevMapAction->setMenuRole(QAction::NoRole);
 	_prevMapAction->setShortcut(PREV_MAP_SHORTCUT);
-	connect(_prevMapAction, SIGNAL(triggered()), this, SLOT(prevMap()));
+	connect(_prevMapAction, &QAction::triggered, this, &GUI::prevMap);
 	addAction(_prevMapAction);
 	_showCoordinatesAction = new QAction(tr("Show cursor coordinates"), this);
 	_showCoordinatesAction->setMenuRole(QAction::NoRole);
 	_showCoordinatesAction->setCheckable(true);
-	connect(_showCoordinatesAction, SIGNAL(triggered(bool)), _mapView,
-	  SLOT(showCoordinates(bool)));
+	connect(_showCoordinatesAction, &QAction::triggered, _mapView,
+	  &MapView::showCoordinates);
 
 	// Data actions
 	_showTracksAction = new QAction(tr("Show tracks"), this);
 	_showTracksAction->setMenuRole(QAction::NoRole);
 	_showTracksAction->setCheckable(true);
-	connect(_showTracksAction, SIGNAL(triggered(bool)), this,
-	  SLOT(showTracks(bool)));
+	connect(_showTracksAction, &QAction::triggered, this, &GUI::showTracks);
 	_showRoutesAction = new QAction(tr("Show routes"), this);
 	_showRoutesAction->setMenuRole(QAction::NoRole);
 	_showRoutesAction->setCheckable(true);
-	connect(_showRoutesAction, SIGNAL(triggered(bool)), this,
-	  SLOT(showRoutes(bool)));
+	connect(_showRoutesAction, &QAction::triggered, this, &GUI::showRoutes);
 	_showWaypointsAction = new QAction(tr("Show waypoints"), this);
 	_showWaypointsAction->setMenuRole(QAction::NoRole);
 	_showWaypointsAction->setCheckable(true);
-	connect(_showWaypointsAction, SIGNAL(triggered(bool)), _mapView,
-	  SLOT(showWaypoints(bool)));
+	connect(_showWaypointsAction, &QAction::triggered, _mapView,
+	  &MapView::showWaypoints);
 	_showAreasAction = new QAction(tr("Show areas"), this);
 	_showAreasAction->setMenuRole(QAction::NoRole);
 	_showAreasAction->setCheckable(true);
-	connect(_showAreasAction, SIGNAL(triggered(bool)), _mapView,
-	  SLOT(showAreas(bool)));
+	connect(_showAreasAction, &QAction::triggered, _mapView,
+	  &MapView::showAreas);
 	_showWaypointLabelsAction = new QAction(tr("Waypoint labels"), this);
 	_showWaypointLabelsAction->setMenuRole(QAction::NoRole);
 	_showWaypointLabelsAction->setCheckable(true);
-	connect(_showWaypointLabelsAction, SIGNAL(triggered(bool)), _mapView,
-	  SLOT(showWaypointLabels(bool)));
+	connect(_showWaypointLabelsAction, &QAction::triggered, _mapView,
+	  &MapView::showWaypointLabels);
 	_showRouteWaypointsAction = new QAction(tr("Route waypoints"), this);
 	_showRouteWaypointsAction->setMenuRole(QAction::NoRole);
 	_showRouteWaypointsAction->setCheckable(true);
-	connect(_showRouteWaypointsAction, SIGNAL(triggered(bool)), _mapView,
-	  SLOT(showRouteWaypoints(bool)));
+	connect(_showRouteWaypointsAction, &QAction::triggered, _mapView,
+	  &MapView::showRouteWaypoints);
 	_showTicksAction = new QAction(tr("km/mi markers"), this);
 	_showTicksAction->setMenuRole(QAction::NoRole);
 	_showTicksAction->setCheckable(true);
-	connect(_showTicksAction, SIGNAL(triggered(bool)), _mapView,
-	  SLOT(showTicks(bool)));
+	connect(_showTicksAction, &QAction::triggered, _mapView,
+	  &MapView::showTicks);
 	QActionGroup *markerInfoGroup = new QActionGroup(this);
-	connect(markerInfoGroup, SIGNAL(triggered(QAction*)), this,
-	  SLOT(showPathMarkerInfo(QAction*)));
+	connect(markerInfoGroup, &QActionGroup::triggered, this,
+	  &GUI::showPathMarkerInfo);
 	_hideMarkersAction = new QAction(tr("Do not show"), this);
 	_hideMarkersAction->setMenuRole(QAction::NoRole);
 	_hideMarkersAction->setCheckable(true);
@@ -405,8 +404,7 @@ void GUI::createActions(TreeNode<MapAction*> &mapActions,
 	_showGraphsAction->setMenuRole(QAction::NoRole);
 	_showGraphsAction->setCheckable(true);
 	_showGraphsAction->setShortcut(SHOW_GRAPHS_SHORTCUT);
-	connect(_showGraphsAction, SIGNAL(triggered(bool)), this,
-	  SLOT(showGraphs(bool)));
+	connect(_showGraphsAction, &QAction::triggered, this, &GUI::showGraphs);
 	addAction(_showGraphsAction);
 	ag = new QActionGroup(this);
 	ag->setExclusive(true);
@@ -414,117 +412,110 @@ void GUI::createActions(TreeNode<MapAction*> &mapActions,
 	_distanceGraphAction->setMenuRole(QAction::NoRole);
 	_distanceGraphAction->setCheckable(true);
 	_distanceGraphAction->setActionGroup(ag);
-	connect(_distanceGraphAction, SIGNAL(triggered()), this,
-	  SLOT(setDistanceGraph()));
+	connect(_distanceGraphAction, &QAction::triggered, this,
+	  &GUI::setDistanceGraph);
 	addAction(_distanceGraphAction);
 	_timeGraphAction = new QAction(tr("Time"), this);
 	_timeGraphAction->setMenuRole(QAction::NoRole);
 	_timeGraphAction->setCheckable(true);
 	_timeGraphAction->setActionGroup(ag);
-	connect(_timeGraphAction, SIGNAL(triggered()), this,
-	  SLOT(setTimeGraph()));
+	connect(_timeGraphAction, &QAction::triggered, this, &GUI::setTimeGraph);
 	addAction(_timeGraphAction);
 	_showGraphGridAction = new QAction(tr("Show grid"), this);
 	_showGraphGridAction->setMenuRole(QAction::NoRole);
 	_showGraphGridAction->setCheckable(true);
-	connect(_showGraphGridAction, SIGNAL(triggered(bool)), this,
-	  SLOT(showGraphGrids(bool)));
+	connect(_showGraphGridAction, &QAction::triggered, this,
+	  &GUI::showGraphGrids);
 	_showGraphSliderInfoAction = new QAction(tr("Show slider info"), this);
 	_showGraphSliderInfoAction->setMenuRole(QAction::NoRole);
 	_showGraphSliderInfoAction->setCheckable(true);
-	connect(_showGraphSliderInfoAction, SIGNAL(triggered(bool)), this,
-	  SLOT(showGraphSliderInfo(bool)));
+	connect(_showGraphSliderInfoAction, &QAction::triggered, this,
+	  &GUI::showGraphSliderInfo);
 
 	// Settings actions
 	_showToolbarsAction = new QAction(tr("Show toolbars"), this);
 	_showToolbarsAction->setMenuRole(QAction::NoRole);
 	_showToolbarsAction->setCheckable(true);
-	connect(_showToolbarsAction, SIGNAL(triggered(bool)), this,
-	  SLOT(showToolbars(bool)));
+	connect(_showToolbarsAction, &QAction::triggered, this, &GUI::showToolbars);
 	ag = new QActionGroup(this);
 	ag->setExclusive(true);
 	_totalTimeAction = new QAction(tr("Total time"), this);
 	_totalTimeAction->setMenuRole(QAction::NoRole);
 	_totalTimeAction->setCheckable(true);
 	_totalTimeAction->setActionGroup(ag);
-	connect(_totalTimeAction, SIGNAL(triggered()), this,
-	  SLOT(setTotalTime()));
+	connect(_totalTimeAction, &QAction::triggered, this, &GUI::setTotalTime);
 	_movingTimeAction = new QAction(tr("Moving time"), this);
 	_movingTimeAction->setMenuRole(QAction::NoRole);
 	_movingTimeAction->setCheckable(true);
 	_movingTimeAction->setActionGroup(ag);
-	connect(_movingTimeAction, SIGNAL(triggered()), this,
-	  SLOT(setMovingTime()));
+	connect(_movingTimeAction, &QAction::triggered, this, &GUI::setMovingTime);
 	ag = new QActionGroup(this);
 	ag->setExclusive(true);
 	_metricUnitsAction = new QAction(tr("Metric"), this);
 	_metricUnitsAction->setMenuRole(QAction::NoRole);
 	_metricUnitsAction->setCheckable(true);
 	_metricUnitsAction->setActionGroup(ag);
-	connect(_metricUnitsAction, SIGNAL(triggered()), this,
-	  SLOT(setMetricUnits()));
+	connect(_metricUnitsAction, &QAction::triggered, this, &GUI::setMetricUnits);
 	_imperialUnitsAction = new QAction(tr("Imperial"), this);
 	_imperialUnitsAction->setMenuRole(QAction::NoRole);
 	_imperialUnitsAction->setCheckable(true);
 	_imperialUnitsAction->setActionGroup(ag);
-	connect(_imperialUnitsAction, SIGNAL(triggered()), this,
-	  SLOT(setImperialUnits()));
+	connect(_imperialUnitsAction, &QAction::triggered, this,
+	  &GUI::setImperialUnits);
 	_nauticalUnitsAction = new QAction(tr("Nautical"), this);
 	_nauticalUnitsAction->setMenuRole(QAction::NoRole);
 	_nauticalUnitsAction->setCheckable(true);
 	_nauticalUnitsAction->setActionGroup(ag);
-	connect(_nauticalUnitsAction, SIGNAL(triggered()), this,
-	  SLOT(setNauticalUnits()));
+	connect(_nauticalUnitsAction, &QAction::triggered, this,
+	  &GUI::setNauticalUnits);
 	ag = new QActionGroup(this);
 	ag->setExclusive(true);
 	_decimalDegreesAction = new QAction(tr("Decimal degrees (DD)"), this);
 	_decimalDegreesAction->setMenuRole(QAction::NoRole);
 	_decimalDegreesAction->setCheckable(true);
 	_decimalDegreesAction->setActionGroup(ag);
-	connect(_decimalDegreesAction, SIGNAL(triggered()), this,
-	  SLOT(setDecimalDegrees()));
+	connect(_decimalDegreesAction, &QAction::triggered, this,
+	  &GUI::setDecimalDegrees);
 	_degreesMinutesAction = new QAction(tr("Degrees and decimal minutes (DMM)"),
 	  this);
 	_degreesMinutesAction->setMenuRole(QAction::NoRole);
 	_degreesMinutesAction->setCheckable(true);
 	_degreesMinutesAction->setActionGroup(ag);
-	connect(_degreesMinutesAction, SIGNAL(triggered()), this,
-	  SLOT(setDegreesMinutes()));
+	connect(_degreesMinutesAction, &QAction::triggered, this,
+	  &GUI::setDegreesMinutes);
 	_dmsAction = new QAction(tr("Degrees, minutes, seconds (DMS)"), this);
 	_dmsAction->setMenuRole(QAction::NoRole);
 	_dmsAction->setCheckable(true);
 	_dmsAction->setActionGroup(ag);
-	connect(_dmsAction, SIGNAL(triggered()), this, SLOT(setDMS()));
+	connect(_dmsAction, &QAction::triggered, this, &GUI::setDMS);
 	_fullscreenAction = new QAction(QIcon(FULLSCREEN_ICON),
 	  tr("Fullscreen mode"), this);
 	_fullscreenAction->setMenuRole(QAction::NoRole);
 	_fullscreenAction->setCheckable(true);
 	_fullscreenAction->setShortcut(FULLSCREEN_SHORTCUT);
-	connect(_fullscreenAction, SIGNAL(triggered(bool)), this,
-	  SLOT(showFullscreen(bool)));
+	connect(_fullscreenAction, &QAction::triggered, this, &GUI::showFullscreen);
 	addAction(_fullscreenAction);
 	_openOptionsAction = new QAction(tr("Options..."), this);
 	_openOptionsAction->setMenuRole(QAction::PreferencesRole);
-	connect(_openOptionsAction, SIGNAL(triggered()), this,
-	  SLOT(openOptions()));
+	connect(_openOptionsAction, &QAction::triggered, this, &GUI::openOptions);
 
 	// Navigation actions
 	_nextAction = new QAction(QIcon(NEXT_FILE_ICON), tr("Next"), this);
 	_nextAction->setActionGroup(_navigationActionGroup);
 	_nextAction->setMenuRole(QAction::NoRole);
-	connect(_nextAction, SIGNAL(triggered()), this, SLOT(next()));
+	connect(_nextAction, &QAction::triggered, this, &GUI::next);
 	_prevAction = new QAction(QIcon(PREV_FILE_ICON), tr("Previous"), this);
 	_prevAction->setMenuRole(QAction::NoRole);
 	_prevAction->setActionGroup(_navigationActionGroup);
-	connect(_prevAction, SIGNAL(triggered()), this, SLOT(prev()));
+	connect(_prevAction, &QAction::triggered, this, &GUI::prev);
 	_lastAction = new QAction(QIcon(LAST_FILE_ICON), tr("Last"), this);
 	_lastAction->setMenuRole(QAction::NoRole);
 	_lastAction->setActionGroup(_navigationActionGroup);
-	connect(_lastAction, SIGNAL(triggered()), this, SLOT(last()));
+	connect(_lastAction, &QAction::triggered, this, &GUI::last);
 	_firstAction = new QAction(QIcon(FIRST_FILE_ICON), tr("First"), this);
 	_firstAction->setMenuRole(QAction::NoRole);
 	_firstAction->setActionGroup(_navigationActionGroup);
-	connect(_firstAction, SIGNAL(triggered()), this, SLOT(first()));
+	connect(_firstAction, &QAction::triggered, this, &GUI::first);
 }
 
 void GUI::createMapNodeMenu(const TreeNode<MapAction*> &node, QMenu *menu)
@@ -697,8 +688,8 @@ void GUI::createGraphTabs()
 	_graphTabWidget->setDocumentMode(true);
 #endif // Q_OS_MAC
 
-	connect(_graphTabWidget, SIGNAL(currentChanged(int)), this,
-	  SLOT(graphChanged(int)));
+	connect(_graphTabWidget, &QTabWidget::currentChanged, this,
+	  &GUI::graphChanged);
 
 	_tabs.append(new ElevationGraph(_graphTabWidget));
 	_tabs.append(new SpeedGraph(_graphTabWidget));
@@ -709,8 +700,8 @@ void GUI::createGraphTabs()
 	_tabs.append(new GearRatioGraph(_graphTabWidget));
 
 	for (int i = 0; i < _tabs.size(); i++)
-		connect(_tabs.at(i), SIGNAL(sliderPositionChanged(qreal)), _mapView,
-		  SLOT(setMarkerPosition(qreal)));
+		connect(_tabs.at(i), &GraphTab::sliderPositionChanged, _mapView,
+		  &MapView::setMarkerPosition);
 }
 
 void GUI::createStatusBar()
@@ -1553,7 +1544,7 @@ bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 					_showMapAction->setEnabled(true);
 					_clearMapCacheAction->setEnabled(true);
 				} else
-					connect(a, SIGNAL(loaded()), this, SLOT(mapLoaded()));
+					connect(a, &MapAction::loaded, this, &GUI::mapLoaded);
 			}
 		} else {
 			valid = true;
@@ -1637,7 +1628,7 @@ void GUI::loadMapDirNode(const TreeNode<Map *> &node, QList<MapAction*> &actions
 					_clearMapCacheAction->setEnabled(true);
 					actions.append(a);
 				} else
-					connect(a, SIGNAL(loaded()), this, SLOT(mapLoadedDir()));
+					connect(a, &MapAction::loaded, this, &GUI::mapLoadedDir);
 			}
 
 			_areaCount++;
@@ -2689,10 +2680,9 @@ void GUI::show()
 	QMainWindow::show();
 
 	QWindow *w = windowHandle();
-	connect(w->screen(), SIGNAL(logicalDotsPerInchChanged(qreal)), this,
-	  SLOT(logicalDotsPerInchChanged(qreal)));
-	connect(w, SIGNAL(screenChanged(QScreen*)), this,
-	  SLOT(screenChanged(QScreen*)));
+	connect(w->screen(), &QScreen::logicalDotsPerInchChanged, this,
+	  &GUI::logicalDotsPerInchChanged);
+	connect(w, &QWindow::screenChanged, this, &GUI::screenChanged);
 
 	_mapView->fitContentToSize();
 }
@@ -2704,8 +2694,8 @@ void GUI::screenChanged(QScreen *screen)
 
 	disconnect(SIGNAL(logicalDotsPerInchChanged(qreal)), this,
 	  SLOT(logicalDotsPerInchChanged(qreal)));
-	connect(screen, SIGNAL(logicalDotsPerInchChanged(qreal)), this,
-	  SLOT(logicalDotsPerInchChanged(qreal)));
+	connect(screen, &QScreen::logicalDotsPerInchChanged, this,
+	  &GUI::logicalDotsPerInchChanged);
 }
 
 void GUI::logicalDotsPerInchChanged(qreal dpi)

@@ -306,8 +306,8 @@ bool WMTS::downloadCapabilities(const QString &url)
 {
 	if (!_downloader) {
 		_downloader = new Downloader(this);
-		connect(_downloader, SIGNAL(finished()), this,
-		  SLOT(capabilitiesReady()));
+		connect(_downloader, &Downloader::finished, this,
+		  &WMTS::capabilitiesReady);
 	}
 
 	QList<Download> dl;

@@ -21,10 +21,10 @@ WMTSMap::WMTSMap(const QString &fileName, const QString &name,
 
 	_tileLoader = new TileLoader(tilesDir, this);
 	_tileLoader->setAuthorization(setup.authorization());
-	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(tilesLoaded()));
+	connect(_tileLoader, &TileLoader::finished, this, &WMTSMap::tilesLoaded);
 
 	_wmts = new WMTS(QDir(tilesDir).filePath(CAPABILITIES_FILE), setup, this);
-	connect(_wmts, SIGNAL(downloadFinished()), this, SLOT(wmtsReady()));
+	connect(_wmts, &WMTS::downloadFinished, this, &WMTSMap::wmtsReady);
 	if (_wmts->isReady())
 		init();
 }

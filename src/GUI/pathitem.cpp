@@ -409,8 +409,8 @@ void PathItem::addGraph(GraphItem *graph)
 	_graphs.append(graph);
 
 	if (graph) {
-		connect(this, SIGNAL(selected(bool)), graph, SLOT(hover(bool)));
-		connect(graph, SIGNAL(selected(bool)), this, SLOT(hover(bool)));
+		connect(this, &PathItem::selected, graph, &GraphItem::hover);
+		connect(graph, &GraphItem::selected, this, &PathItem::hover);
 	}
 }
 

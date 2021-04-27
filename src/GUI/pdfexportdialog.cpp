@@ -91,8 +91,10 @@ PDFExportDialog::PDFExportDialog(PDFExport &exp, Units units, QWidget *parent)
 	QDialogButtonBox *buttonBox = new QDialogButtonBox();
 	buttonBox->addButton(tr("Export"), QDialogButtonBox::AcceptRole);
 	buttonBox->addButton(QDialogButtonBox::Cancel);
-	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(buttonBox, &QDialogButtonBox::accepted, this,
+	  &PDFExportDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::rejected, this,
+	  &PDFExportDialog::reject);
 
 	QVBoxLayout *layout = new QVBoxLayout;
 #ifdef Q_OS_MAC

@@ -421,8 +421,8 @@ QWidget *OptionsDialog::createDataPage()
 	_pauseInterval->setValue(_options.pauseInterval);
 	_pauseInterval->setEnabled(_manualPause->isChecked());
 
-	connect(_automaticPause, SIGNAL(toggled(bool)), this,
-	  SLOT(automaticPauseDetectionSet(bool)));
+	connect(_automaticPause, &QRadioButton::toggled, this,
+	  &OptionsDialog::automaticPauseDetectionSet);
 
 	QHBoxLayout *pauseTypeLayout = new QHBoxLayout();
 #ifdef Q_OS_MAC
@@ -477,8 +477,8 @@ QWidget *OptionsDialog::createDataPage()
 	for (int i = 0; i < zones.size(); i++)
 		_timeZone->addItem(zones.at(i));
 	_timeZone->setCurrentText(_options.timeZone.customZone().id());
-	connect(_customZone, SIGNAL(toggled(bool)), _timeZone,
-	  SLOT(setEnabled(bool)));
+	connect(_customZone, &QRadioButton::toggled, _timeZone,
+	  &QComboBox::setEnabled);
 	QHBoxLayout *customZoneLayout = new QHBoxLayout();
 	customZoneLayout->addSpacing(20);
 	customZoneLayout->addWidget(_timeZone);
@@ -750,15 +750,17 @@ OptionsDialog::OptionsDialog(Options &options, Units units, QWidget *parent)
 	pages->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
 	pages->setMinimumWidth(2 * menu->size().width());
 
-	connect(menu, SIGNAL(currentRowChanged(int)), pages,
-	  SLOT(setCurrentIndex(int)));
+	connect(menu, &QListWidget::currentRowChanged, pages,
+	  &QStackedWidget::setCurrentIndex);
 	menu->item(0)->setSelected(true);
 
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
 	  | QDialogButtonBox::Cancel);
-	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(buttonBox, &QDialogButtonBox::accepted, this,
+	  &OptionsDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::rejected, this,
+	  &OptionsDialog::reject);
 
 	QVBoxLayout *layout = new QVBoxLayout;
 	layout->addLayout(contentLayout);

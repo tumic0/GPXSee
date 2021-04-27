@@ -324,8 +324,8 @@ bool WMS::downloadCapabilities(const QString &url)
 {
 	if (!_downloader) {
 		_downloader = new Downloader(this);
-		connect(_downloader, SIGNAL(finished()), this,
-		  SLOT(capabilitiesReady()));
+		connect(_downloader, &Downloader::finished, this,
+		  &WMS::capabilitiesReady);
 	}
 
 	QList<Download> dl;

@@ -74,10 +74,10 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_map->load();
 	_map->setOutputProjection(_outputProjection);
 	_map->setInputProjection(_inputProjection);
-	connect(_map, SIGNAL(tilesLoaded()), this, SLOT(reloadMap()));
+	connect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
 
 	_poi = poi;
-	connect(_poi, SIGNAL(pointsChanged()), this, SLOT(updatePOI()));
+	connect(_poi, &POI::pointsChanged, this, &MapView::updatePOI);
 
 	_mapOpacity = 1.0;
 	_backgroundColor = Qt::white;
@@ -371,14 +371,14 @@ void MapView::setMap(Map *map)
 	RectC cr(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
 
 	_map->unload();
-	disconnect(_map, SIGNAL(tilesLoaded()), this, SLOT(reloadMap()));
+	disconnect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
 
 	_map = map;
 	_map->load();
 	_map->setOutputProjection(_outputProjection);
 	_map->setInputProjection(_inputProjection);
 	_map->setDevicePixelRatio(_deviceRatio, _mapRatio);
-	connect(_map, SIGNAL(tilesLoaded()), this, SLOT(reloadMap()));
+	connect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
 
 	digitalZoom(0);
 
@@ -408,8 +408,8 @@ void MapView::setMap(Map *map)
 
 void MapView::setPOI(POI *poi)
 {
-	disconnect(_poi, SIGNAL(pointsChanged()), this, SLOT(updatePOI()));
-	connect(poi, SIGNAL(pointsChanged()), this, SLOT(updatePOI()));
+	disconnect(_poi, &POI::pointsChanged, this, &MapView::updatePOI);
+	connect(poi, &POI::pointsChanged, this, &MapView::updatePOI);
 
 	_poi = poi;
 

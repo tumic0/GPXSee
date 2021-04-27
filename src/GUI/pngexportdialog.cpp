@@ -67,8 +67,10 @@ PNGExportDialog::PNGExportDialog(PNGExport &exp, QWidget *parent)
 	QDialogButtonBox *buttonBox = new QDialogButtonBox();
 	buttonBox->addButton(tr("Export"), QDialogButtonBox::AcceptRole);
 	buttonBox->addButton(QDialogButtonBox::Cancel);
-	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(buttonBox, &QDialogButtonBox::accepted, this,
+	  &PNGExportDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::rejected, this,
+	  &PNGExportDialog::reject);
 
 	QVBoxLayout *layout = new QVBoxLayout;
 #ifdef Q_OS_MAC

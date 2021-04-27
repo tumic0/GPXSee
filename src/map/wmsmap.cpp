@@ -76,10 +76,10 @@ WMSMap::WMSMap(const QString &fileName, const QString &name,
 
 	_tileLoader = new TileLoader(tilesDir, this);
 	_tileLoader->setAuthorization(setup.authorization());
-	connect(_tileLoader, SIGNAL(finished()), this, SIGNAL(tilesLoaded()));
+	connect(_tileLoader, &TileLoader::finished, this, &WMSMap::tilesLoaded);
 
 	_wms = new WMS(QDir(tilesDir).filePath(CAPABILITIES_FILE), setup, this);
-	connect(_wms, SIGNAL(downloadFinished()), this, SLOT(wmsReady()));
+	connect(_wms, &WMS::downloadFinished, this, &WMSMap::wmsReady);
 	if (_wms->isReady())
 		init();
 }

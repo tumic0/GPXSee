@@ -126,7 +126,7 @@ bool Downloader::doDownload(const Download &dl,
 	if (reply && reply->isRunning()) {
 		_currentDownloads.insert(url);
 		ReplyTimeout::setTimeout(reply, _timeout);
-		connect(reply, SIGNAL(finished()), this, SLOT(emitFinished()));
+		connect(reply, &QNetworkReply::finished, this, &Downloader::emitFinished);
 	} else if (reply)
 		downloadFinished(reply);
 	else

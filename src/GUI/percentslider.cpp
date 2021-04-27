@@ -24,7 +24,7 @@ PercentSlider::PercentSlider(QWidget *parent) : QWidget(parent)
 	_label->setAlignment(Qt::AlignRight);
 	_label->setText(format(_slider->value()));
 
-	connect(_slider, SIGNAL(valueChanged(int)), this, SLOT(updateLabel(int)));
+	connect(_slider, &QSlider::valueChanged, this, &PercentSlider::updateLabel);
 
 	QHBoxLayout *layout = new QHBoxLayout();
 	layout->addWidget(_slider);

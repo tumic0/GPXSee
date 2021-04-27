@@ -7,8 +7,8 @@ FileBrowser::FileBrowser(QObject *parent) : QObject(parent)
 {
 	_watcher = new QFileSystemWatcher(this);
 
-	connect(_watcher, SIGNAL(directoryChanged(const QString &)), this,
-	  SLOT(reloadDirectory(const QString &)));
+	connect(_watcher, &QFileSystemWatcher::directoryChanged, this,
+	  &FileBrowser::reloadDirectory);
 
 	_index = -1;
 }

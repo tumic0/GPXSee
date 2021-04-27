@@ -61,7 +61,7 @@ TileLoader::TileLoader(const QString &dir, QObject *parent)
 		qWarning("%s: %s", qPrintable(_dir), "Error creating tiles directory");
 
 	_downloader = new Downloader(this);
-	connect(_downloader, SIGNAL(finished()), this, SIGNAL(finished()));
+	connect(_downloader, &Downloader::finished, this, &TileLoader::finished);
 }
 
 void TileLoader::loadTilesAsync(QVector<Tile> &list)
@@ -132,7 +132,7 @@ void TileLoader::loadTilesSync(QVector<Tile> &list)
 
 	if (!dl.empty()) {
 		QEventLoop wait;
-		QObject::connect(_downloader, SIGNAL(finished()), &wait, SLOT(quit()));
+		connect(_downloader, &Downloader::finished, &wait, &QEventLoop::quit);
 		if (_downloader->get(dl, _authorization))
 			wait.exec();
 

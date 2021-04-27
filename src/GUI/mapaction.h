@@ -18,7 +18,7 @@ public:
 		setMenuRole(QAction::NoRole);
 		setCheckable(true);
 
-		connect(map, SIGNAL(mapLoaded()), this, SLOT(mapLoaded()));
+		connect(map, &Map::mapLoaded, this, &MapAction::mapLoaded);
 	}
 
 signals:

@@ -56,8 +56,8 @@ GraphView::GraphView(QWidget *parent)
 	_message->setBrush(QPalette().brush(QPalette::Disabled,
 	  QPalette::WindowText));
 
-	connect(_slider, SIGNAL(positionChanged(const QPointF&)), this,
-	  SLOT(emitSliderPositionChanged(const QPointF&)));
+	connect(_slider, &SliderItem::positionChanged, this,
+	  &GraphView::emitSliderPositionChanged);
 
 	_width = 1;
 

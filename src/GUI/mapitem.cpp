@@ -91,7 +91,7 @@ MapItem::MapItem(MapAction *action, Map *map, GraphicsItem *parent)
 	_fileName = src->path();
 	_bounds = src->llBounds();
 
-	connect(this, SIGNAL(triggered()), action, SLOT(trigger()));
+	connect(this, &MapItem::triggered, action, &MapAction::trigger);
 
 	_map = map;
 	_digitalZoom = 0;

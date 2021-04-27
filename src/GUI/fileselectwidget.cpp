@@ -21,7 +21,7 @@ FileSelectWidget::FileSelectWidget(QWidget *parent) : QWidget(parent)
 	_button = new QToolButton();
 	_button->setText("...");
 #endif // Q_OS_WIN32
-	connect(_button, SIGNAL(clicked()), this, SLOT(browse()));
+	connect(_button, &QToolButton::clicked, this, &FileSelectWidget::browse);
 
 	QHBoxLayout *layout = new QHBoxLayout();
 	layout->setContentsMargins(QMargins());
