@@ -1033,7 +1033,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="121"/>
         <source>Mapsforge maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapsforge-kartat</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="122"/>
