@@ -328,12 +328,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="278"/>
         <source>Select all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona tutti i file</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="283"/>
         <source>Unselect all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Deseleziona tutti i file</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="288"/>
@@ -363,7 +363,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="322"/>
         <source>Load map directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Carica la directory della mappa…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="325"/>
@@ -420,7 +420,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="385"/>
         <source>Do not show</source>
-        <translation type="unfinished"></translation>
+        <translation>Non mostrare</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="389"/>
@@ -430,7 +430,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="393"/>
         <source>Date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Data e ora</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="397"/>
@@ -572,7 +572,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="609"/>
         <source>Position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Info sulla posizione</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="620"/>
@@ -1729,7 +1729,7 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="46"/>
         <source>Image height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Altezza immagine:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="47"/>
