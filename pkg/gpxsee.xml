@@ -128,6 +128,12 @@
 		<glob pattern="*.sml"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.tomtom.ov2">
+		<comment>TomTom POI File</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application/octet-stream"/>
+		<glob pattern="*.ov2"/>
+	</mime-type>
 
 	<!-- Maps -->
 

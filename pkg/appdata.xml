@@ -91,5 +91,6 @@
 		<mimetype>application/vnd.alpinequest.aqm</mimetype>
 		<mimetype>application/vnd.rmaps.sqlite</mimetype>
 		<mimetype>application/vnd.mapsforge.map</mimetype>
+		<mimetype>application/vnd.tomtom.ov2</mimetype>
 	</mimetypes>
 </component>

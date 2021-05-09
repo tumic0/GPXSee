@@ -17,7 +17,7 @@
 #include "cupparser.h"
 #include "gpiparser.h"
 #include "smlparser.h"
-#include "map/map.h"
+#include "ov2parser.h"
 #include "data.h"
 
 
@@ -38,6 +38,7 @@ static EXIFParser exif;
 static CUPParser cup;
 static GPIParser gpi;
 static SMLParser sml;
+static OV2Parser ov2;
 
 static QMap<QString, Parser*> parsers()
 {
@@ -62,6 +63,7 @@ static QMap<QString, Parser*> parsers()
 	map.insert("cup", &cup);
 	map.insert("gpi", &gpi);
 	map.insert("sml", &sml);
+	map.insert("ov2", &ov2);
 
 	return map;
 }
@@ -138,6 +140,7 @@ QString Data::formats()
 	  + qApp->translate("Data", "KML files") + " (*.kml);;"
 	  + qApp->translate("Data", "LOC files") + " (*.loc);;"
 	  + qApp->translate("Data", "NMEA files") + " (*.nmea);;"
+	  + qApp->translate("Data", "OV2 files") + " (*.ov2);;"
 	  + qApp->translate("Data", "OziExplorer files") + " (*.plt *.rte *.wpt);;"
 	  + qApp->translate("Data", "SLF files") + " (*.slf);;"
 	  + qApp->translate("Data", "SML files") + " (*.sml);;"

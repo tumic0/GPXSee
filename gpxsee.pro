@@ -91,6 +91,7 @@ HEADERS += src/common/config.h \
     src/GUI/font.h \
     src/GUI/areaitem.h \
     src/data/link.h \
+    src/data/ov2parser.h \
     src/map/IMG/bitmapline.h \
     src/map/IMG/bitstream.h \
     src/map/IMG/deltastream.h \
@@ -277,6 +278,7 @@ SOURCES += src/main.cpp \
     src/GUI/gearratiographitem.cpp \
     src/GUI/mapview.cpp \
     src/GUI/areaitem.cpp \
+    src/data/ov2parser.cpp \
     src/data/waypoint.cpp \
     src/map/IMG/bitmapline.cpp \
     src/map/IMG/bitstream.cpp \
