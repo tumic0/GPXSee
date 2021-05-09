@@ -541,7 +541,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="609"/>
         <source>Position info</source>
-        <translation>Positionsinfo</translation>
+        <translation>Positionsinfos</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="624"/>
