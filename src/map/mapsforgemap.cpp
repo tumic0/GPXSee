@@ -1,5 +1,4 @@
 #include <QPainter>
-#include <QTemporaryDir>
 #include "common/wgs84.h"
 #include "pcs.h"
 #include "rectd.h"
