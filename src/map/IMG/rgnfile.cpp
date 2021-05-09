@@ -482,7 +482,7 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 		quint8 bits[3];
 		for (int i = 0; i < 3; i++)
 			bits[i] = 0x4000a08 >> (((flags >> (2*i) & 3) << 3) ^ 0x10);
-		quint8 byteSize = ((bits[0] + bits[1] + bits[2]) + 7) >> 3;
+		quint8 byteSize = bs(bits[0] + bits[1] + bits[2]);
 
 		quint32 counts;
 		if (!readVUInt32(hdl, byteSize, counts))
@@ -505,7 +505,7 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 					return false;
 
 				if (!b16 || b8 + b16 <= i) {
-					int shift = ((i - (b8 + b16)) * 10) % 8;
+					int shift = ((i - (b8 + b16)) * 10) & 7;
 					linkId = (quint8)(v16 >> shift);
 					lineId = (((v16 >> shift) >> 8) & 3) + 1;
 
