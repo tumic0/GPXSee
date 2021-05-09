@@ -2072,6 +2072,9 @@ void GUI::writeSettings()
 		settings.setValue(SHOW_POI_SETTING, _showPOIAction->isChecked());
 	if (_overlapPOIAction->isChecked() != OVERLAP_POI_DEFAULT)
 		settings.setValue(OVERLAP_POI_SETTING, _overlapPOIAction->isChecked());
+	if (_showPOILabelsAction->isChecked() != SHOW_POI_LABELS_DEFAULT)
+		settings.setValue(SHOW_POI_LABELS_SETTING,
+		  _showPOILabelsAction->isChecked());
 
 	int j = 0;
 	QList<QAction*> poiActions(_poisActionGroup->actions());
@@ -2350,7 +2353,8 @@ void GUI::readSettings()
 		_mapView->showOverlappedPOIs(false);
 	else
 		_overlapPOIAction->setChecked(true);
-	if (!settings.value(LABELS_POI_SETTING, LABELS_POI_DEFAULT).toBool())
+	if (!settings.value(SHOW_POI_LABELS_SETTING, SHOW_POI_LABELS_DEFAULT)
+	  .toBool())
 		_mapView->showPOILabels(false);
 	else
 		_showPOILabelsAction->setChecked(true);

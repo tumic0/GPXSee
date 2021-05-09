@@ -40,8 +40,8 @@
 #define POI_SETTINGS_GROUP                "POI"
 #define OVERLAP_POI_SETTING               "overlap"
 #define OVERLAP_POI_DEFAULT               false
-#define LABELS_POI_SETTING                "labels"
-#define LABELS_POI_DEFAULT                true
+#define SHOW_POI_LABELS_SETTING           "labels"
+#define SHOW_POI_LABELS_DEFAULT           true
 #define SHOW_POI_SETTING                  "show"
 #define SHOW_POI_DEFAULT                  false
 #define DISABLED_POI_FILE_SETTINGS_PREFIX "disabled"
