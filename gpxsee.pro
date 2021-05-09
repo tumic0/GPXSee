@@ -3,7 +3,7 @@ unix:!macx {
 } else {
     TARGET = GPXSee
 }
-VERSION = 9.0
+VERSION = 9.1
 
 QT += core \
     gui \
