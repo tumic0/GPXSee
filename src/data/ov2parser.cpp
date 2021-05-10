@@ -22,11 +22,11 @@ bool OV2Parser::parse(QFile *file, QList<TrackData> &tracks,
 		switch (type) {
 			case 0:
 				stream >> len;
-				if (stream.status() != QDataStream::Ok || len < 5) {
+				if (stream.status() != QDataStream::Ok || len < 5
+				  || stream.skipRawData(len - 5) < (int)len - 5) {
 					_errorString = "Corrupted deleted record";
 					return false;
 				}
-				stream.skipRawData(len - 5);
 				break;
 			case 1:
 				if (stream.skipRawData(20) < 20) {
@@ -52,12 +52,8 @@ bool OV2Parser::parse(QFile *file, QList<TrackData> &tracks,
 					return false;
 				}
 				Waypoint wp(Coordinates(lon/1e5, lat/1e5));
-				if (type == 2)
-					wp.setName(codec.toString(ba));
-				else {
-					QList<QByteArray> parts(ba.split('\0'));
-					wp.setName(codec.toString(parts.at(0)));
-				}
+				QList<QByteArray> parts(ba.split('\0'));
+				wp.setName(codec.toString(parts.first()));
 				waypoints.append(wp);}
 				break;
 			default:
