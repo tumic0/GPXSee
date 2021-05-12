@@ -2131,7 +2131,12 @@
         <translation>Адреса</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="70"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="62"/>
+        <source>Phone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/waypointitem.cpp" line="72"/>
         <source>Links</source>
         <translation>Посилання</translation>
     </message>
