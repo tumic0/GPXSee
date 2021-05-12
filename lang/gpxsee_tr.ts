@@ -89,7 +89,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="142"/>
         <source>ITN files</source>
-        <translation type="unfinished"></translation>
+        <translation>ITN dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="143"/>
