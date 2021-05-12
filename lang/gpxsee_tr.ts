@@ -54,7 +54,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="135"/>
         <source>CSV files</source>
-        <translation>CSV dosyalar</translation>
+        <translation>CSV dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="136"/>
@@ -64,12 +64,12 @@
     <message>
         <location filename="../src/data/data.cpp" line="137"/>
         <source>FIT files</source>
-        <translation>FIT dosyalar</translation>
+        <translation>FIT dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="138"/>
         <source>GeoJSON files</source>
-        <translation>GeoJSON dosyalar</translation>
+        <translation>GeoJSON dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="139"/>
@@ -79,12 +79,12 @@
     <message>
         <location filename="../src/data/data.cpp" line="140"/>
         <source>GPX files</source>
-        <translation>GPX dosyalar</translation>
+        <translation>GPX dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="141"/>
         <source>IGC files</source>
-        <translation>IGC dosyalar</translation>
+        <translation>IGC dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="142"/>
@@ -94,47 +94,47 @@
     <message>
         <location filename="../src/data/data.cpp" line="143"/>
         <source>JPEG images</source>
-        <translation>JPEG görüntüler</translation>
+        <translation>JPEG görüntüleri</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="144"/>
         <source>KML files</source>
-        <translation>KML dosyalar</translation>
+        <translation>KML dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="145"/>
         <source>LOC files</source>
-        <translation>LOC dosyalar</translation>
+        <translation>LOC dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="146"/>
         <source>NMEA files</source>
-        <translation>NMEA dosyalar</translation>
+        <translation>NMEA dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="147"/>
         <source>OV2 files</source>
-        <translation type="unfinished"></translation>
+        <translation>OV2 dostaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="148"/>
         <source>OziExplorer files</source>
-        <translation>OziExplorer dosyalar</translation>
+        <translation>OziExplorer dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="149"/>
         <source>SLF files</source>
-        <translation>SLF dosyalar</translation>
+        <translation>SLF dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="150"/>
         <source>SML files</source>
-        <translation>SML dosyalar</translation>
+        <translation>SML dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="151"/>
         <source>TCX files</source>
-        <translation>TCX dosyalar</translation>
+        <translation>TCX dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="152"/>
@@ -293,7 +293,7 @@
         <location filename="../src/GUI/gui.cpp" line="221"/>
         <location filename="../src/GUI/gui.cpp" line="726"/>
         <source>About GPXSee</source>
-        <translation>Hakkında GPXSee</translation>
+        <translation>GPXSee hakkında</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="226"/>
