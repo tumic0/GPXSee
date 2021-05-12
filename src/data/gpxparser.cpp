@@ -1,3 +1,4 @@
+#include "address.h"
 #include "gpxparser.h"
 
 
@@ -103,7 +104,8 @@ void GPXParser::address(Waypoint &waypoint)
 			_reader.skipCurrentElement();
 	}
 
-	waypoint.setAddress(addr);
+	if (addr.isValid())
+		waypoint.setAddress(addr.address());
 }
 
 void GPXParser::wpExtension(Waypoint &waypoint)
@@ -111,6 +113,8 @@ void GPXParser::wpExtension(Waypoint &waypoint)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Address"))
 			address(waypoint);
+		else if (_reader.name() == QLatin1String("PhoneNumber"))
+			waypoint.setPhone(_reader.readElementText());
 		else
 			_reader.skipCurrentElement();
 	}

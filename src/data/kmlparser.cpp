@@ -492,7 +492,7 @@ void KMLParser::multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
 void KMLParser::placemark(QList<TrackData> &tracks, QList<Area> &areas,
   QVector<Waypoint> &waypoints)
 {
-	QString name, desc;
+	QString name, desc, phone, address;
 	QDateTime timestamp;
 
 	while (_reader.readNextStartElement()) {
@@ -500,6 +500,10 @@ void KMLParser::placemark(QList<TrackData> &tracks, QList<Area> &areas,
 			name = _reader.readElementText();
 		else if (_reader.name() == QLatin1String("description"))
 			desc = _reader.readElementText();
+		else if (_reader.name() == QLatin1String("phoneNumber"))
+			phone = _reader.readElementText();
+		else if (_reader.name() == QLatin1String("address"))
+			address = _reader.readElementText();
 		else if (_reader.name() == QLatin1String("TimeStamp"))
 			timestamp = timeStamp();
 		else if (_reader.name() == QLatin1String("MultiGeometry"))
@@ -510,6 +514,8 @@ void KMLParser::placemark(QList<TrackData> &tracks, QList<Area> &areas,
 			w.setName(name);
 			w.setDescription(desc);
 			w.setTimestamp(timestamp);
+			w.setAddress(address);
+			w.setPhone(phone);
 			point(w);
 		} else if (_reader.name() == QLatin1String("LineString")
 		  || _reader.name() == QLatin1String("LinearRing")) {

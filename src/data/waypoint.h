@@ -10,7 +10,6 @@
 #include "common/coordinates.h"
 #include "imageinfo.h"
 #include "link.h"
-#include "address.h"
 
 class Waypoint
 {
@@ -24,7 +23,8 @@ public:
 	const QString &name() const {return _name;}
 	const QString &description() const {return _description;}
 	const QString &comment() const {return _comment;}
-	const Address &address() const {return _address;}
+	const QString &address() const {return _address;}
+	const QString &phone() const {return _phone;}
 	const QVector<ImageInfo> &images() const {return _images;}
 	const QVector<Link> &links() const {return _links;}
 	const QDateTime &timestamp() const {return _timestamp;}
@@ -38,7 +38,8 @@ public:
 	void setDescription(const QString &description)
 	  {_description = description;}
 	void setComment(const QString &comment) {_comment = comment;}
-	void setAddress(const Address &address) {_address = address;}
+	void setAddress(const QString &address) {_address = address;}
+	void setPhone(const QString &phone) {_phone = phone;}
 	void setTimestamp(const QDateTime &timestamp) {_timestamp = timestamp;}
 	void setElevation(qreal elevation) {_elevation = elevation;}
 	void addImage(const ImageInfo &image) {_images.append(image);}
@@ -59,7 +60,8 @@ private:
 	QString _name;
 	QString _description;
 	QString _comment;
-	Address _address;
+	QString _address;
+	QString _phone;
 	QVector<ImageInfo> _images;
 	QVector<Link> _links;
 	QDateTime _timestamp;

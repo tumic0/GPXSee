@@ -53,7 +53,12 @@ bool OV2Parser::parse(QFile *file, QList<TrackData> &tracks,
 				}
 				Waypoint wp(Coordinates(lon/1e5, lat/1e5));
 				QList<QByteArray> parts(ba.split('\0'));
-				wp.setName(codec.toString(parts.first()));
+				int pp = parts.first().indexOf('>');
+				if (pp >= 0) {
+					wp.setName(codec.toString(parts.first().left(pp)));
+					wp.setPhone(parts.first().mid(pp+1));
+				} else
+					wp.setName(codec.toString(parts.first()));
 				waypoints.append(wp);}
 				break;
 			default:

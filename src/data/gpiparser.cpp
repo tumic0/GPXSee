@@ -10,6 +10,7 @@
 #include <QTemporaryDir>
 #include "common/garmin.h"
 #include "common/textcodec.h"
+#include "address.h"
 #include "gpiparser.h"
 
 
@@ -324,15 +325,19 @@ static quint32 readContact(DataStream &stream, Waypoint &waypoint)
 	rs = stream.readRecordHeader(rh);
 	stream >> flags;
 
-	if (flags & 0x1) // phone
+	if (flags & 0x1) {
 		ds += stream.readString(str);
+		waypoint.setPhone(str);
+	}
 	if (flags & 0x2) // phone2
 		ds += stream.readString(str);
 	if (flags & 0x4) // fax
 		ds += stream.readString(str);
-	if (flags & 0x8) // mail
+	if (flags & 0x8) {
 		ds += stream.readString(str);
-	if (flags & 0x10) { // web
+		waypoint.addLink(Link("mailto:" + str, str));
+	}
+	if (flags & 0x10) {
 		ds += stream.readString(str);
 		QUrl url(str);
 		waypoint.addLink(Link(url.scheme().isEmpty()
@@ -387,7 +392,8 @@ static quint32 readAddress(DataStream &stream, Waypoint &waypoint)
 	if (flags & 0x20) // unknown
 		ds += stream.readString(str);
 
-	waypoint.setAddress(addr);
+	if (addr.isValid())
+		waypoint.setAddress(addr.address());
 
 	if (ds != rh.size)
 		stream.setStatus(QDataStream::ReadCorruptData);

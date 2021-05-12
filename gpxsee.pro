@@ -279,6 +279,7 @@ SOURCES += src/main.cpp \
     src/GUI/gearratiographitem.cpp \
     src/GUI/mapview.cpp \
     src/GUI/areaitem.cpp \
+    src/data/address.cpp \
     src/data/itnparser.cpp \
     src/data/ov2parser.cpp \
     src/data/waypoint.cpp \
