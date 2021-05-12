@@ -135,6 +135,13 @@
 		<glob pattern="*.ov2"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.tomtom.itn">
+		<comment>TomTom Route File</comment>
+		<sub-class-of type="text/csv"/>
+		<generic-icon name="text/csv"/>
+		<glob pattern="*.itn"/>
+	</mime-type>
+
 	<!-- Maps -->
 
 	<mime-type type="application/vnd.garmin.img">

@@ -490,7 +490,9 @@ win32 {
         icons/formats/rmap.ico \
         icons/formats/tba.ico \
         icons/formats/aqm.ico \
-        icons/formats/sqlt.ico
+        icons/formats/sqlt.ico \
+        icons/formats/ov2.ico \
+        icons/formats/itn.ico
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }
