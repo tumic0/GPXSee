@@ -90,6 +90,7 @@ HEADERS += src/common/config.h \
     src/GUI/mapview.h \
     src/GUI/font.h \
     src/GUI/areaitem.h \
+    src/data/itnparser.h \
     src/data/link.h \
     src/data/ov2parser.h \
     src/map/IMG/bitmapline.h \
@@ -278,6 +279,7 @@ SOURCES += src/main.cpp \
     src/GUI/gearratiographitem.cpp \
     src/GUI/mapview.cpp \
     src/GUI/areaitem.cpp \
+    src/data/itnparser.cpp \
     src/data/ov2parser.cpp \
     src/data/waypoint.cpp \
     src/map/IMG/bitmapline.cpp \
