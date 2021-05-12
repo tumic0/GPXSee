@@ -89,7 +89,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="142"/>
         <source>ITN files</source>
-        <translation type="unfinished"></translation>
+        <translation>ITN fájlok</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="143"/>
@@ -114,7 +114,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="147"/>
         <source>OV2 files</source>
-        <translation type="unfinished"></translation>
+        <translation>OV2 fájlok</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="148"/>
@@ -840,6 +840,7 @@
         <location filename="../src/GUI/gui.cpp" line="1684"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
