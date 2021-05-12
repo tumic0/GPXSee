@@ -89,7 +89,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="142"/>
         <source>ITN files</source>
-        <translation type="unfinished"></translation>
+        <translation>ITN-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="143"/>
@@ -114,7 +114,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="147"/>
         <source>OV2 files</source>
-        <translation type="unfinished"></translation>
+        <translation>OV2-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="148"/>
