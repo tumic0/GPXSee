@@ -2131,7 +2131,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="62"/>
         <source>Phone</source>
-        <translation type="unfinished"></translation>
+        <translation>Telefon</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="72"/>
