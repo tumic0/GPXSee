@@ -89,7 +89,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="142"/>
         <source>ITN files</source>
-        <translation type="unfinished"></translation>
+        <translation>ITN файли</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="143"/>
@@ -114,7 +114,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="147"/>
         <source>OV2 files</source>
-        <translation type="unfinished"></translation>
+        <translation>OV2 файли</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="148"/>
@@ -2133,7 +2133,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="62"/>
         <source>Phone</source>
-        <translation type="unfinished"></translation>
+        <translation>Телефон</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="72"/>
