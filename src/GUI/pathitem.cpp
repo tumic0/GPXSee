@@ -196,6 +196,8 @@ void PathItem::setDigitalZoom(int zoom)
 	_digitalZoom = zoom;
 	_pen.setWidthF(_width * pow(2, -_digitalZoom));
 	_marker->setScale(pow(2, -_digitalZoom));
+	for (int i = 0; i < _ticks.size(); i++)
+		_ticks.at(i)->setDigitalZoom(zoom);
 
 	updateShape();
 }

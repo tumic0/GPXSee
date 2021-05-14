@@ -69,3 +69,11 @@ void RouteItem::showWaypointLabels(bool show)
 	for (int i = 0; i < _waypoints.count(); i++)
 		_waypoints[i]->showLabel(show);
 }
+
+void RouteItem::setDigitalZoom(int zoom)
+{
+	for (int i = 0; i < _waypoints.count(); i++)
+		_waypoints[i]->setDigitalZoom(zoom);
+
+	PathItem::setDigitalZoom(zoom);
+}

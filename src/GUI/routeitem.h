@@ -16,6 +16,7 @@ public:
 	RouteItem(const Route &route, Map *map, QGraphicsItem *parent = 0);
 
 	void setMap(Map *map);
+	void setDigitalZoom(int zoom);
 
 	void showWaypoints(bool show);
 	void showWaypointLabels(bool show);
