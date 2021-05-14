@@ -240,8 +240,11 @@ bool IGCParser::parse(QFile *file, QList<TrackData> &tracks,
 				}
 			} else if (line[0] == 'B') {
 				if (ctx.date.isNull()) {
-					_errorString = "Missing date header";
-					return false;
+					/* The date H header is mandatory, but XCSOAR generates
+					   files without it, so add a dummy date in such case */
+					qWarning("%s: Missing date header",
+					  qPrintable(file->fileName()));
+					ctx.date = QDate(1970, 1, 1);
 				}
 				if (!track) {
 					tracks.append(TrackData());
