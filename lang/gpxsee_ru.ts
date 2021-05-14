@@ -89,7 +89,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="142"/>
         <source>ITN files</source>
-        <translation type="unfinished"></translation>
+        <translation>Файлы ITN</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="143"/>
@@ -1685,7 +1685,7 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="85"/>
         <source>Output file</source>
-        <translation>Файл вывода</translation>
+        <translation>Выходной файл</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="92"/>
@@ -1755,7 +1755,7 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="61"/>
         <source>Output file</source>
-        <translation>Файл вывода</translation>
+        <translation>Выходной файл</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="68"/>
@@ -2133,7 +2133,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="62"/>
         <source>Phone</source>
-        <translation type="unfinished"></translation>
+        <translation>Телефон</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="72"/>
