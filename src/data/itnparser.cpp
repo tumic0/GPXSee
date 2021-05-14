@@ -21,7 +21,7 @@ bool ITNParser::parse(QFile *file, QList<TrackData> &tracks,
 		ba = file->readLine();
 
 		QList<QByteArray> fields(ba.split('|'));
-		if (fields.size() != 5) {
+		if (fields.size() < 4) {
 			_errorString = "File format error";
 			return false;
 		}
