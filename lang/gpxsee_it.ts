@@ -89,7 +89,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="142"/>
         <source>ITN files</source>
-        <translation type="unfinished"></translation>
+        <translation>File ITN</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="143"/>
@@ -114,7 +114,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="147"/>
         <source>OV2 files</source>
-        <translation type="unfinished"></translation>
+        <translation>File OV2</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="148"/>
@@ -445,7 +445,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="396"/>
         <source>Coordinates</source>
-        <translation type="unfinished">Coordinate</translation>
+        <translation>Coordinate</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="402"/>
@@ -672,7 +672,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="765"/>
         <source>Toggle position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Attiva/disattiva le informazioni posizione</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="769"/>
@@ -702,12 +702,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="776"/>
         <source>Copy coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia le coordinate</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="777"/>
         <source>Left Click</source>
-        <translation type="unfinished"></translation>
+        <translation>Clic sinistro</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="791"/>
@@ -824,7 +824,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1646"/>
         <source>Select map directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona la directory mappa</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1673"/>
@@ -995,12 +995,12 @@
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="77"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="79"/>
         <source>File</source>
-        <translation type="unfinished">File</translation>
+        <translation>File</translation>
     </message>
 </context>
 <context>
@@ -1013,7 +1013,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="118"/>
         <source>AlpineQuest maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mappe AlpineQuest</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="119"/>
@@ -1028,17 +1028,17 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="122"/>
         <source>BSB nautical charts</source>
-        <translation type="unfinished"></translation>
+        <translation>Carte nautiche BSB</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="123"/>
         <source>KMZ maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mappe KMZ</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="124"/>
         <source>Mapsforge maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mappe Mapsforge</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="125"/>
@@ -1068,7 +1068,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="128"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mappe Locus/OsmAnd/RMaps o SQLite</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="132"/>
@@ -1111,32 +1111,32 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="118"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingresso</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="120"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Uscita</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="127"/>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingresso:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="130"/>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Uscita:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="151"/>
         <source>Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>Proiezione</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="152"/>
         <source>HiDPI display mode</source>
-        <translation>Display HiDPI</translation>
+        <translation>Modalità di visualizzazione HiDPI</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="167"/>
@@ -1440,7 +1440,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="486"/>
         <source>Use segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa segmenti</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="523"/>
@@ -1551,7 +1551,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="649"/>
         <source>Item count (&gt;1)</source>
-        <translation type="unfinished">Conteggio elementi (&gt;1)</translation>
+        <translation>Numero elementi (&gt;1)</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="664"/>
@@ -1639,7 +1639,7 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="50"/>
         <source>Landscape</source>
-        <translation>Paesaggio (Landscape)</translation>
+        <translation>Paesaggio</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="60"/>
@@ -1649,7 +1649,7 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="60"/>
         <source>cm</source>
-        <translation type="unfinished"></translation>
+        <translation>cm</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="66"/>
@@ -1729,12 +1729,12 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="42"/>
         <source>Image Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurazione immagine</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="45"/>
         <source>Image width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Larghezza immagine:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="46"/>
@@ -2132,12 +2132,12 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="62"/>
         <source>Phone</source>
-        <translation type="unfinished"></translation>
+        <translation>Telefono</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="72"/>
         <source>Links</source>
-        <translation>Links</translation>
+        <translation>Collegamenti</translation>
     </message>
 </context>
 </TS>
