@@ -89,7 +89,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="142"/>
         <source>ITN files</source>
-        <translation type="unfinished"></translation>
+        <translation>Pliki ITN</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="143"/>
@@ -114,7 +114,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="147"/>
         <source>OV2 files</source>
-        <translation type="unfinished"></translation>
+        <translation>Pliki OV2</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="148"/>
@@ -367,12 +367,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="279"/>
         <source>Select all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz wszystkie pliki</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="284"/>
         <source>Unselect all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Odznacz wszystkie pliki</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="317"/>
@@ -382,7 +382,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="323"/>
         <source>Load map directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Załaduj katalog map ...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="331"/>
@@ -429,22 +429,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="384"/>
         <source>Do not show</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie pokazuj</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="388"/>
         <source>Marker only</source>
-        <translation type="unfinished"></translation>
+        <translation>Tylko znacznik</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
         <source>Date/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Data/czas</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="396"/>
         <source>Coordinates</source>
-        <translation type="unfinished">Współrzędne</translation>
+        <translation>Współrzędne</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="402"/>
@@ -541,7 +541,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="600"/>
         <source>Position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Informacje o pozycji</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="615"/>
@@ -586,7 +586,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="765"/>
         <source>Toggle position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Przełącz informacje o pozycji</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="769"/>
@@ -616,12 +616,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="776"/>
         <source>Copy coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Skopiuj współrzędne</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="777"/>
         <source>Left Click</source>
-        <translation type="unfinished"></translation>
+        <translation>Lewy przycisk myszy</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="795"/>
@@ -658,7 +658,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1673"/>
         <source>Clear the map tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyczyścić pamięć podręczną fragmentów mapy?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1680"/>
@@ -740,7 +740,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1646"/>
         <source>Select map directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz katalog map</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1684"/>
@@ -996,12 +996,12 @@
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="77"/>
         <source>Name</source>
-        <translation type="unfinished">Nazwa</translation>
+        <translation>Nazwa</translation>
     </message>
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="79"/>
         <source>File</source>
-        <translation type="unfinished">Plik</translation>
+        <translation>Plik</translation>
     </message>
 </context>
 <context>
@@ -1024,7 +1024,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="118"/>
         <source>AlpineQuest maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy AlpineQuest</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="119"/>
@@ -1034,17 +1034,17 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="122"/>
         <source>BSB nautical charts</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy morskie BSB</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="123"/>
         <source>KMZ maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy KMZ</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="124"/>
         <source>Mapsforge maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy Mapsforge</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="125"/>
@@ -1097,7 +1097,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Select the proper projection of JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps exist and there is no projection info in the map file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz odpowiednie odwzorowanie map JNX i KMZ. Zarówno EPSG: 3857, jak i EPSG: 4326 istnieją mapy rzutowane, a w pliku mapy nie ma informacji o odwzorowaniu.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="168"/>
@@ -1164,7 +1164,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="87"/>
         <source>Select the desired projection of IMG maps. The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz żądaną projekcję map IMG. Odwzorowanie musi być ważne dla całego obszaru mapy.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="96"/>
@@ -1189,27 +1189,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="118"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Wejście</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="120"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyjście</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="127"/>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wejście:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="130"/>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wyjście:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="151"/>
         <source>Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>Odwzorowanie</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="152"/>
@@ -1403,7 +1403,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="486"/>
         <source>Use segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Użyj segmentów</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="523"/>
@@ -1650,7 +1650,7 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="60"/>
         <source>cm</source>
-        <translation type="unfinished"></translation>
+        <translation>cm</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="66"/>
@@ -1725,22 +1725,22 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="38"/>
         <source>Use anti-aliasing</source>
-        <translation type="unfinished">Użyj wygładzania</translation>
+        <translation>Użyj wygładzania</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="42"/>
         <source>Image Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustawienia obrazu</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="45"/>
         <source>Image width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Szerokość obrazu:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="46"/>
         <source>Image height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wysokość obrazu:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="47"/>
@@ -2133,7 +2133,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="62"/>
         <source>Phone</source>
-        <translation type="unfinished"></translation>
+        <translation>Telefon</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="72"/>
