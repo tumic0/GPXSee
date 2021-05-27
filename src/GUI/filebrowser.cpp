@@ -83,8 +83,10 @@ QString FileBrowser::first()
 void FileBrowser::reloadDirectory(const QString &path)
 {
 	QDir dir(path);
-	QFileInfo current = _files.at(_index);
+	QFileInfo current = (_index >= 0) ? _files.at(_index) : QFileInfo();
 
 	_files = dir.entryInfoList(_filter, QDir::Files);
 	_index = _files.empty() ? -1 : _files.indexOf(current);
+
+	emit listChanged();
 }

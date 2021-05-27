@@ -25,6 +25,9 @@ public:
 	bool isLast() const;
 	bool isFirst() const;
 
+signals:
+	void listChanged();
+
 private slots:
 	void reloadDirectory(const QString &path);
 

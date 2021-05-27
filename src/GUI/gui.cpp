@@ -109,6 +109,8 @@ void GUI::createBrowser()
 {
 	_browser = new FileBrowser(this);
 	_browser->setFilter(Data::filter());
+	connect(_browser, &FileBrowser::listChanged, this,
+	  &GUI::updateNavigationActions);
 }
 
 TreeNode<MapAction*> GUI::createMapActions()
@@ -1791,21 +1793,10 @@ void GUI::graphChanged(int index)
 
 void GUI::updateNavigationActions()
 {
-	if (_browser->isLast()) {
-		_nextAction->setEnabled(false);
-		_lastAction->setEnabled(false);
-	} else {
-		_nextAction->setEnabled(true);
-		_lastAction->setEnabled(true);
-	}
-
-	if (_browser->isFirst()) {
-		_prevAction->setEnabled(false);
-		_firstAction->setEnabled(false);
-	} else {
-		_prevAction->setEnabled(true);
-		_firstAction->setEnabled(true);
-	}
+	_lastAction->setEnabled(!_browser->isLast());
+	_nextAction->setEnabled(!_browser->isLast());
+	_firstAction->setEnabled(!_browser->isFirst());
+	_prevAction->setEnabled(!_browser->isFirst());
 }
 
 bool GUI::updateGraphTabs()

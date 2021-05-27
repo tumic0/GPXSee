@@ -82,6 +82,7 @@ private slots:
 	void prev();
 	void last();
 	void first();
+	void updateNavigationActions();
 
 	void setTotalTime() {setTimeType(Total);}
 	void setMovingTime() {setTimeType(Moving);}
@@ -136,7 +137,6 @@ private:
 	  QMenu *menu, const QList<QAction*> &existingActions);
 	void updateStatusBarInfo();
 	void updateWindowTitle();
-	void updateNavigationActions();
 	bool updateGraphTabs();
 
 	TimeType timeType() const;
