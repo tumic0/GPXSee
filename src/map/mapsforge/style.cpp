@@ -155,6 +155,7 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 	const QXmlStreamAttributes &attr = reader.attributes();
 	int fontSize = 9;
 	bool bold = false, italic = false;
+	QString fontFamily("Helvetica");
 
 	if (attr.hasAttribute("k"))
 		ri._key = attr.value("k").toLatin1();
@@ -177,9 +178,19 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 			italic = true;
 		}
 	}
+	if (attr.hasAttribute("font-family")) {
+		QString family(attr.value("font-family").toString());
+		if (family == "monospace")
+			fontFamily = "Courier New";
+		else if (family == "serif")
+			fontFamily = "Times New Roman";
+	}
+
+	ri._font.setFamily(fontFamily);
 	ri._font.setPixelSize(fontSize);
 	ri._font.setBold(bold);
 	ri._font.setItalic(italic);
+
 
 	for (int i = 0; i < lists.size(); i++)
 		lists[i]->append(ri);
