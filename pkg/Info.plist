@@ -494,6 +494,38 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>ov2</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.tomtom.ov2</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/ov2.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>TomTom POI File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>itn</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.tomtom.itn</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/itn.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>TomTom Route File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
@@ -1111,6 +1143,48 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>image/tiff</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.tomtom.ov2</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://www.tomtom.com/lib/doc/ttnavsdk3_manual.pdf</string>
+			<key>UTTypeDescription</key>
+			<string>TomTom POI File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>ov2</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.tomtom.ov2</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.tomtom.itn</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://www.tomtom.com/lib/doc/ttnavsdk3_manual.pdf</string>
+			<key>UTTypeDescription</key>
+			<string>TomTom Route File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>itn</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.tomtom.itn</string>
 			</dict>
 		</dict>
 	</array>
