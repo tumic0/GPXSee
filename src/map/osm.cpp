@@ -22,8 +22,8 @@ Coordinates OSM::m2ll(const QPointF &p)
 
 QPoint OSM::mercator2tile(const QPointF &m, int zoom)
 {
-	return QPoint(qFloor((m.x() + 180.0) / 360.0 * (1<<zoom)),
-	  qFloor((1.0 - (m.y() / 180.0)) / 2.0 * (1<<zoom)));
+	return QPoint(qMin(qFloor((m.x() + 180.0) / 360.0 * (1<<zoom)), (1<<zoom) - 1),
+	  qMin(qFloor((1.0 - (m.y() / 180.0)) / 2.0 * (1<<zoom)), (1<<zoom) - 1));
 }
 
 QPointF OSM::tile2mercator(const QPoint &p, int zoom)

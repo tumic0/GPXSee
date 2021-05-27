@@ -377,6 +377,7 @@ bool MapData::readHeader()
 
 	_bounds = RectC(Coordinates(MD(minLon), MD(maxLat)),
 	  Coordinates(MD(maxLon), MD(minLat)));
+	_bounds &= OSM::BOUNDS;
 
 	return true;
 }
