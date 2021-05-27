@@ -5,6 +5,7 @@ os:
   - osx
 
 dist: focal
+osx_image: xcode11.6
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
