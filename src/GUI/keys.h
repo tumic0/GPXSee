@@ -28,11 +28,8 @@
 #define PREV_MAP_SHORTCUT       QKeySequence(QKeySequence::Back)
 #define SHOW_GRAPHS_SHORTCUT    QKeySequence(Qt::CTRL + Qt::Key_G)
 #define STATISTICS_SHORTCUT     QKeySequence(Qt::CTRL + Qt::Key_S)
-
-#ifdef Q_OS_MAC
-#define FULLSCREEN_SHORTCUT     QKeySequence(Qt::META + Qt::CTRL + Qt::Key_F)
-#else // Q_OS_MAC
-#define FULLSCREEN_SHORTCUT     QKeySequence(Qt::Key_F11)
-#endif // Q_OS_MAC
+#define FULLSCREEN_SHORTCUT     (QKeySequence(QKeySequence::FullScreen).isEmpty() \
+                                  ? QKeySequence(Qt::Key_F11) \
+                                  : QKeySequence(QKeySequence::FullScreen))
 
 #endif // KEYS_H
