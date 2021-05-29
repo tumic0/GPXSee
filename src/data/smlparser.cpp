@@ -23,13 +23,13 @@ void SMLParser::sample(SegmentData &segment, QMap<QDateTime, Sensors> &map)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Latitude")) {
 			lat = _reader.readElementText().toDouble(&ok);
-			if (!ok || lat < -90 || lon > 90) {
+			if (!ok || lat < -90 || lat > 90) {
 				_reader.raiseError("Invalid Latitude");
 				return;
 			}
 		} else if (_reader.name() == QLatin1String("Longitude")) {
 			lon = _reader.readElementText().toDouble(&ok);
-			if (!ok || lat < -180 || lon > 180) {
+			if (!ok || lon < -180 || lon > 180) {
 				_reader.raiseError("Invalid Longitude");
 				return;
 			}
