@@ -1069,7 +1069,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="128"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy Locus/OsmAnd/RMaps SQLite</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="132"/>
@@ -1204,7 +1204,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="130"/>
         <source>Output:</source>
-        <translation type="unfinished">Wyjście:</translation>
+        <translation>Wynik:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="151"/>
