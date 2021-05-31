@@ -10,7 +10,7 @@
 
 using namespace IMG;
 
-#define MASK(bits) ((2U << ((bits) - 1U)) - 1U)
+#define MASK(bits) ((1U << (bits)) - 1U)
 
 static quint64 pointId(const QPoint &pos, quint32 type, quint32 labelPtr)
 {
