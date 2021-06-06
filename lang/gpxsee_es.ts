@@ -254,7 +254,7 @@
     <message>
         <location filename="../src/GUI/format.cpp" line="64"/>
         <source>nmi</source>
-        <translation>millas náuticas</translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="68"/>
@@ -587,7 +587,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="611"/>
         <source>&amp;Settings</source>
-        <translation>&amp;Preferencias/Ajustes</translation>
+        <translation>&amp;Preferencias</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="615"/>
@@ -697,7 +697,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="775"/>
         <source>Zoom</source>
-        <translation>Zoom (alejar/acercar)</translation>
+        <translation>Escala</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="776"/>
@@ -722,12 +722,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="795"/>
         <source>GCS/PCS directory:</source>
-        <translation>Carpeta de Sistemas Geográficos de Coordenadas (GCS en inglés)/Sistemas de Coordenadas Proyectadas (PCS en inglés):</translation>
+        <translation>Carpeta de GCS/PCS:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="797"/>
         <source>DEM directory:</source>
-        <translation>Carpeta del modelo digital de elevación (MDE) [Modelo digital del Terreno (MDT)] :</translation>
+        <translation>Carpeta del MDT :</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="799"/>
@@ -781,7 +781,7 @@
         <location filename="../src/GUI/gui.cpp" line="1146"/>
         <location filename="../src/GUI/gui.cpp" line="1216"/>
         <source>Waypoints</source>
-        <translation>Puntos de referencia (waypoints)</translation>
+        <translation>Puntos de referencia</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1149"/>
@@ -1013,47 +1013,47 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="126"/>
         <source>MBTiles maps</source>
-        <translation>Mapas &quot;MBTiles&quot;</translation>
+        <translation>Mapas MBTiles</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="121"/>
         <source>Garmin JNX maps</source>
-        <translation>Mapas &quot;Garmin JNX&quot;</translation>
+        <translation>Mapas Garmin JNX</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="118"/>
         <source>AlpineQuest maps</source>
-        <translation>Mapas &quot;AlpineQuest&quot;</translation>
+        <translation>Mapas AlpineQuest</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="119"/>
         <source>Garmin IMG maps</source>
-        <translation>Mapas &quot;Garmin IMG&quot;</translation>
+        <translation>Mapas Garmin IMG</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="122"/>
         <source>BSB nautical charts</source>
-        <translation>Carta náutica &quot;BSB&quot;</translation>
+        <translation>Carta náutica BSB</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="123"/>
         <source>KMZ maps</source>
-        <translation>Mapas &quot;KMZ&quot;</translation>
+        <translation>Mapas KMZ</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="124"/>
         <source>Mapsforge maps</source>
-        <translation>Mapas &quot;Mapsforge&quot;</translation>
+        <translation>Mapas Mapsforge</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="125"/>
         <source>OziExplorer maps</source>
-        <translation>Mapas &quot;OziExplorer&quot;</translation>
+        <translation>Mapas OziExplorer</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="130"/>
         <source>TrekBuddy maps/atlases</source>
-        <translation>Mapas/atlas &quot;TrekBuddy&quot;</translation>
+        <translation>Mapas/atlas TrekBuddy</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="131"/>
@@ -1063,12 +1063,12 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="127"/>
         <source>TwoNav maps</source>
-        <translation>Mapas &quot;TwoNav&quot;</translation>
+        <translation>Mapas TwoNav</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="128"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
-        <translation>Mapas &quot;SQLite Locus/OsmAnd/RMaps&quot;</translation>
+        <translation>Mapas SQLite Locus/OsmAnd/RMaps</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="132"/>
@@ -1101,7 +1101,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="152"/>
         <source>HiDPI display mode</source>
-        <translation>Modo de pantalla HiDPI (High Dots Per Inch) (Alta Resolución aka Retina)</translation>
+        <translation>Modo de pantalla HiDPI</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="219"/>
@@ -1111,7 +1111,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="220"/>
         <source>Palette shift:</source>
-        <translation>Cambiar paleta (palette shift):</translation>
+        <translation>Cambiar paleta:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="167"/>
@@ -1201,12 +1201,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="255"/>
         <source>Waypoint color:</source>
-        <translation>Color de puntos de referencia (waypoints):</translation>
+        <translation>Color de puntos de referencia:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="256"/>
         <source>Waypoint size:</source>
-        <translation>Tamaño de puntos de referencia (waypoints):</translation>
+        <translation>Tamaño de puntos de referencia:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="258"/>
@@ -1223,7 +1223,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="260"/>
         <source>Waypoints</source>
-        <translation>Puntos de referencia (Waypoints)</translation>
+        <translation>Puntos de referencia</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="271"/>
@@ -1238,7 +1238,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="276"/>
         <source>POIs</source>
-        <translation>Puntos de Interés (POIs)</translation>
+        <translation>POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="302"/>
@@ -1248,7 +1248,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="303"/>
         <source>Slider color:</source>
-        <translation>Color de control deslizante/señalador:</translation>
+        <translation>Color de señalador:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="326"/>
@@ -1284,7 +1284,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="347"/>
         <source>Moving average window size</source>
-        <translation>Tamaño de (la ventana de) media móvil</translation>
+        <translation>Tamaño medio de la ventana en movimiento</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="366"/>
@@ -1387,7 +1387,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="457"/>
         <source>DEM data</source>
-        <translation>Datos del modelo digital de elevación/terreno (MDE/MDT)</translation>
+        <translation>Datos del modelo digital de elevación</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="462"/>
@@ -1397,7 +1397,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="465"/>
         <source>UTC</source>
-        <translation>Tiempo universal coordinado (UTC - Universal Time Coordinate)</translation>
+        <translation>UTC</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="486"/>
@@ -1724,7 +1724,7 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="38"/>
         <source>Use anti-aliasing</source>
-        <translation>Usar filtro antiplegamiento (anti-aliasing)</translation>
+        <translation>Usar filtro antiplegamiento</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="42"/>
@@ -2013,7 +2013,7 @@
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="102"/>
         <source>C</source>
-        <translation>℃ - Grados Centígrados</translation>
+        <translation>℃</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="106"/>
@@ -2026,7 +2026,7 @@
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="21"/>
         <source>C</source>
-        <translation>°C - Grados Centígrados</translation>
+        <translation>°C</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="21"/>
