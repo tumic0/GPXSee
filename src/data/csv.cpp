@@ -63,5 +63,5 @@ bool CSV::readEntry(QStringList &list)
 
 	list.append(field);
 
-	return (state == 0);
+	return (state == 0 || (state == 2 && _device->atEnd()));
 }
