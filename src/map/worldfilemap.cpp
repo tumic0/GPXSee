@@ -18,7 +18,7 @@ WorldFileMap::WorldFileMap(const QString &fileName, const Projection &proj,
 	QString basename(fi.baseName());
 
 
-	// Get transformation from the WLD file
+	// Get the transformation from the WLD file
 	WLDFile wld(fileName);
 	if (wld.transform().isValid())
 		_transform = wld.transform();
@@ -27,7 +27,7 @@ WorldFileMap::WorldFileMap(const QString &fileName, const Projection &proj,
 		return;
 	}
 
-	// Set the projection from PRJ file if any
+	// Get the projection from the corresponding PRJ file (if any)
 	QString prjFile(basename + ".prj");
 	if (dir.exists(prjFile)) {
 		PRJFile prj(dir.filePath(prjFile));
