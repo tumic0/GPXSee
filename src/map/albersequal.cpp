@@ -53,7 +53,7 @@ Defense.
 	((clat) / sqrt(one_minus_sqr_e_sin))
 
 
-AlbersEqual::AlbersEqual(const Ellipsoid *ellipsoid, double standardParallel1,
+AlbersEqual::AlbersEqual(const Ellipsoid &ellipsoid, double standardParallel1,
   double standardParallel2, double latitudeOrigin, double longitudeOrigin,
   double falseEasting, double falseNorthing)
 {
@@ -74,8 +74,8 @@ AlbersEqual::AlbersEqual(const Ellipsoid *ellipsoid, double standardParallel1,
 	sp1 = deg2rad(standardParallel1);
 	sp2 = deg2rad(standardParallel2);
 
-	_a2 = ellipsoid->radius() * ellipsoid->radius();
-	_es = ellipsoid->es();
+	_a2 = ellipsoid.radius() * ellipsoid.radius();
+	_es = ellipsoid.es();
 	_e = sqrt(_es);
 	_one_minus_es = 1 - _es;
 	_two_e = 2 * _e;
@@ -105,7 +105,7 @@ AlbersEqual::AlbersEqual(const Ellipsoid *ellipsoid, double standardParallel1,
 		_n = sin_lat1;
 
 	_c = sqr_m1 + _n * q1;
-	_a_over_n = ellipsoid->radius() / _n;
+	_a_over_n = ellipsoid.radius() / _n;
 	nq0 = _n * q0;
 	_rho0 = (_c < nq0) ? 0 : _a_over_n * sqrt(_c - nq0);
 }

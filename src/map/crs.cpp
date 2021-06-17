@@ -7,9 +7,6 @@ Projection CRS::projection(const QString &crs)
 	QStringList list(crs.split(':'));
 	QString authority, code;
 	bool res;
-	int epsg;
-	const PCS *pcs;
-	const GCS *gcs;
 
 	switch (list.size()) {
 		case 2:
@@ -33,16 +30,19 @@ Projection CRS::projection(const QString &crs)
 	}
 
 	if (!authority.compare("EPSG", Qt::CaseInsensitive)) {
-		epsg = code.toInt(&res);
+		int epsg = code.toInt(&res);
 		if (!res)
 			return Projection();
 
-		if ((pcs = PCS::pcs(epsg)))
+		const PCS &pcs = PCS::pcs(epsg);
+		if (!pcs.isNull())
 			return Projection(pcs);
-		else if ((gcs = GCS::gcs(epsg)))
+
+		const GCS &gcs = GCS::gcs(epsg);
+		if (!gcs.isNull())
 			return Projection(gcs);
-		else
-			return Projection();
+
+		return Projection();
 	} else if (!authority.compare("OGC", Qt::CaseInsensitive)) {
 		if (code == "CRS84")
 			return Projection(GCS::gcs(4326), CoordinateSystem::XY);
@@ -50,4 +50,17 @@ Projection CRS::projection(const QString &crs)
 			return Projection();
 	} else
 		return Projection();
+}
+
+Projection CRS::projection(int id)
+{
+	const PCS &pcs = PCS::pcs(id);
+	if (!pcs.isNull())
+		return Projection(pcs);
+
+	const GCS &gcs = GCS::gcs(id);
+	if (!gcs.isNull())
+		return Projection(gcs);
+
+	return Projection();
 }

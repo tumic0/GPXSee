@@ -8,7 +8,7 @@ class Ellipsoid;
 class ObliqueStereographic : public CT
 {
 public:
-	ObliqueStereographic(const Ellipsoid *ellipsoid, double latitudeOrigin,
+	ObliqueStereographic(const Ellipsoid &ellipsoid, double latitudeOrigin,
 	  double longitudeOrigin, double scale, double falseEasting,
 	  double falseNorthing);
 

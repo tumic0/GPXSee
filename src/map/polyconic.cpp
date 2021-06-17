@@ -51,7 +51,7 @@ Defense.
 #define FLOAT_EQ(x, v, epsilon) \
 	(((v - epsilon) < x) && (x < (v + epsilon)))
 
-Polyconic::Polyconic(const Ellipsoid *ellipsoid, double latitudeOrigin,
+Polyconic::Polyconic(const Ellipsoid &ellipsoid, double latitudeOrigin,
   double longitudeOrigin, double falseEasting, double falseNorthing)
 {
 	double j, three_es4;
@@ -61,8 +61,8 @@ Polyconic::Polyconic(const Ellipsoid *ellipsoid, double latitudeOrigin,
 
 	_longitudeOrigin = deg2rad(longitudeOrigin);
 	_latitudeOrigin = deg2rad(latitudeOrigin);
-	_a = ellipsoid->radius();
-	_b = ellipsoid->b();
+	_a = ellipsoid.radius();
+	_b = ellipsoid.b();
 	if (_longitudeOrigin > M_PI)
 		_longitudeOrigin -= 2 * M_PI;
 	_falseNorthing = falseNorthing;

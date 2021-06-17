@@ -1,7 +1,7 @@
 #include "ellipsoid.h"
 #include "krovak.h"
 
-Krovak::Krovak(const Ellipsoid *ellipsoid, double standardParallel,
+Krovak::Krovak(const Ellipsoid &ellipsoid, double standardParallel,
   double azimuth, double scale, double centerLatitude, double longitudeOrigin,
   double falseEasting, double falseNorthing)
 {
@@ -14,10 +14,10 @@ Krovak::Krovak(const Ellipsoid *ellipsoid, double standardParallel,
 	double alphaC = deg2rad(azimuth);
 
 	_phiP = deg2rad(standardParallel);
-	_e = sqrt(ellipsoid->es());
-	_a = ellipsoid->radius() * sqrt(1.0 - ellipsoid->es())
-	  / (1.0 - ellipsoid->es() * sinPhiC2);
-	_b = sqrt(1.0 + (ellipsoid->es() * cosPhiC4 / (1.0 - ellipsoid->es())));
+	_e = sqrt(ellipsoid.es());
+	_a = ellipsoid.radius() * sqrt(1.0 - ellipsoid.es())
+	  / (1.0 - ellipsoid.es() * sinPhiC2);
+	_b = sqrt(1.0 + (ellipsoid.es() * cosPhiC4 / (1.0 - ellipsoid.es())));
 	double gamma0 = asin(sinPhiC / _b);
 	_t0 = tan(M_PI_4 + gamma0 / 2.0) * pow((1.0 + _e * sinPhiC) /
 	  (1.0 - _e * sinPhiC), _e*_b / 2.0) / pow(tan(M_PI_4 + phiC/2.0), _b);

@@ -25,7 +25,7 @@ QList<PCS::Entry> PCS::defaults()
 {
 	QList<PCS::Entry> list;
 	list.append(PCS::Entry("WGS 84 / Pseudo-Mercator", 3857, 3856,
-	  PCS(&GCS::WGS84(), 1024, Projection::Setup(0, 0, NAN, 0, 0, NAN, NAN),
+	  PCS(GCS::WGS84(), 1024, Projection::Setup(0, 0, NAN, 0, 0, NAN, NAN),
 	  9001, 4499)));
 	return list;
 }
@@ -117,22 +117,26 @@ static int projectionSetup(const QList<QByteArray> &list,
 }
 
 
-const PCS *PCS::pcs(int id)
+const PCS &PCS::pcs(int id)
 {
+	static const PCS null;
+
 	for (int i = 0; i < _pcss.size(); i++)
 		if (_pcss.at(i).id() == id)
-			return &(_pcss.at(i).pcs());
+			return _pcss.at(i).pcs();
 
-	return 0;
+	return null;
 }
 
-const PCS *PCS::pcs(const GCS *gcs, int proj)
+const PCS &PCS::pcs(const GCS &gcs, int proj)
 {
-	for (int i = 0; i < _pcss.size(); i++)
-		if (_pcss.at(i).proj() == proj && *(_pcss.at(i).pcs().gcs()) == *gcs)
-			return &(_pcss.at(i).pcs());
+	static const PCS null;
 
-	return 0;
+	for (int i = 0; i < _pcss.size(); i++)
+		if (_pcss.at(i).proj() == proj && _pcss.at(i).pcs().gcs() == gcs)
+			return _pcss.at(i).pcs();
+
+	return null;
 }
 
 void PCS::loadList(const QString &path)
@@ -140,7 +144,7 @@ void PCS::loadList(const QString &path)
 	QFile file(path);
 	bool res;
 	int ln = 0, pn;
-	const GCS *gcs;
+
 
 	if (!file.open(QFile::ReadOnly)) {
 		qWarning("Error opening PCS file: %s: %s", qPrintable(path),
@@ -206,7 +210,8 @@ void PCS::loadList(const QString &path)
 			  ln);
 			continue;
 		}
-		if (!(gcs = GCS::gcs(gcsid))) {
+		const GCS &gcs = GCS::gcs(gcsid);
+		if (gcs.isNull()) {
 			qWarning("%s:%d: Unknown GCS code", qPrintable(path), ln);
 			continue;
 		}
@@ -236,7 +241,7 @@ QList<KV<int, QString> > PCS::list()
 #ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const PCS &pcs)
 {
-	dbg.nospace() << "PCS(" << *pcs.gcs() << ", " << pcs.method() << ", "
+	dbg.nospace() << "PCS(" << pcs.gcs() << ", " << pcs.method() << ", "
 	  << pcs.units() << ", " << pcs.setup() << ")";
 	return dbg.space();
 }

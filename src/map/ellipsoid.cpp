@@ -18,14 +18,15 @@ QMap<int, Ellipsoid> Ellipsoid::defaults()
 	return map;
 }
 
-const Ellipsoid *Ellipsoid::ellipsoid(int id)
+const Ellipsoid &Ellipsoid::ellipsoid(int id)
 {
 	QMap<int, Ellipsoid>::const_iterator it(_ellipsoids.find(id));
+	static const Ellipsoid null;
 
 	if (it == _ellipsoids.constEnd())
-		return 0;
+		return null;
 	else
-		return &(it.value());
+		return it.value();
 }
 
 void Ellipsoid::loadList(const QString &path)

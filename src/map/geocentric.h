@@ -22,8 +22,8 @@ private:
 };
 
 namespace Geocentric {
-	Point3D fromGeodetic(const Coordinates &c, const Ellipsoid *e);
-	Coordinates toGeodetic(const Point3D &p, const Ellipsoid *e);
+	Point3D fromGeodetic(const Coordinates &c, const Ellipsoid &e);
+	Coordinates toGeodetic(const Point3D &p, const Ellipsoid &e);
 }
 
 #endif // GEOCENTRIC_H

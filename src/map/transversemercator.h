@@ -8,7 +8,7 @@ class Ellipsoid;
 class TransverseMercator : public CT
 {
 public:
-	TransverseMercator(const Ellipsoid *ellipsoid, double latitudeOrigin,
+	TransverseMercator(const Ellipsoid &ellipsoid, double latitudeOrigin,
 	  double longitudeOrigin, double scale, double falseEasting,
 	  double falseNorthing);
 

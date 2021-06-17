@@ -8,7 +8,7 @@ class Ellipsoid;
 class PolarStereographic  : public CT
 {
 public:
-	PolarStereographic(const Ellipsoid *ellipsoid, double latitudeOrigin,
+	PolarStereographic(const Ellipsoid &ellipsoid, double latitudeOrigin,
 	  double longitudeOrigin, double falseEasting, double falseNorthing);
 
 	virtual CT *clone() const {return new PolarStereographic(*this);}

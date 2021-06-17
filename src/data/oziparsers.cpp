@@ -34,7 +34,7 @@ bool PLTParser::parse(QFile *file, QList<TrackData> &tracks,
 	Q_UNUSED(routes);
 	Q_UNUSED(polygons);
 	bool res;
-	const GCS *gcs = 0;
+	GCS gcs;
 
 	_errorLine = 1;
 	_errorString.clear();
@@ -54,7 +54,8 @@ bool PLTParser::parse(QFile *file, QList<TrackData> &tracks,
 				return false;
 			}
 		} else if (_errorLine == 2) {
-			if (!(gcs = GCS::gcs(QString(line.trimmed())))) {
+			gcs = GCS::gcs(QString(line.trimmed()));
+			if (gcs.isNull()) {
 				_errorString = "Invalid/unknown datum";
 				return false;
 			}
@@ -80,7 +81,7 @@ bool PLTParser::parse(QFile *file, QList<TrackData> &tracks,
 				return false;
 			}
 
-			Trackpoint tp(gcs->toWGS84(Coordinates(lon, lat)));
+			Trackpoint tp(gcs.toWGS84(Coordinates(lon, lat)));
 
 			if (list.size() >= 4) {
 				QByteArray field(list.at(3).trimmed());
@@ -125,7 +126,7 @@ bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
 	Q_UNUSED(tracks);
 	Q_UNUSED(polygons);
 	bool res, record = false;
-	const GCS *gcs = 0;
+	GCS gcs;
 
 	_errorLine = 1;
 	_errorString.clear();
@@ -141,7 +142,8 @@ bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
 				return false;
 			}
 		} else if (_errorLine == 2) {
-			if (!(gcs = GCS::gcs(QString(line.trimmed())))) {
+			gcs = GCS::gcs(QString(line.trimmed()));
+			if (gcs.isNull()) {
 				_errorString = "Invalid/unknown datum";
 				return false;
 			}
@@ -181,7 +183,7 @@ bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
 					return false;
 				}
 
-				Waypoint wp(gcs->toWGS84(Coordinates(lon, lat)));
+				Waypoint wp(gcs.toWGS84(Coordinates(lon, lat)));
 
 				QByteArray name(list.at(4).trimmed());
 				if (!name.isEmpty())
@@ -225,7 +227,7 @@ bool WPTParser::parse(QFile *file, QList<TrackData> &tracks,
 	Q_UNUSED(routes);
 	Q_UNUSED(polygons);
 	bool res;
-	const GCS *gcs = 0;
+	GCS gcs;
 
 	_errorLine = 1;
 	_errorString.clear();
@@ -240,7 +242,8 @@ bool WPTParser::parse(QFile *file, QList<TrackData> &tracks,
 				return false;
 			}
 		} else if (_errorLine == 2) {
-			if (!(gcs = GCS::gcs(QString(line.trimmed())))) {
+			gcs = GCS::gcs(QString(line.trimmed()));
+			if (gcs.isNull()) {
 				_errorString = "Invalid/unknown datum";
 				return false;
 			}
@@ -262,7 +265,7 @@ bool WPTParser::parse(QFile *file, QList<TrackData> &tracks,
 				return false;
 			}
 
-			Waypoint wp(gcs->toWGS84(Coordinates(lon, lat)));
+			Waypoint wp(gcs.toWGS84(Coordinates(lon, lat)));
 
 			QByteArray name(list.at(1).trimmed());
 			if (!name.isEmpty())

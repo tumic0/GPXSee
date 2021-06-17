@@ -8,7 +8,7 @@ class Ellipsoid;
 class Mercator : public CT
 {
 public:
-	Mercator(const Ellipsoid *ellipsoid, double latitudeOrigin,
+	Mercator(const Ellipsoid &ellipsoid, double latitudeOrigin,
 	  double longitudeOrigin, double falseEasting, double falseNorthing);
 
 	virtual CT *clone() const {return new Mercator(*this);}

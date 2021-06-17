@@ -15,11 +15,12 @@
 #include "aqmmap.h"
 #include "sqlitemap.h"
 #include "mapsforgemap.h"
+#include "worldfilemap.h"
 #include "invalidmap.h"
 #include "maplist.h"
 
 
-Map *MapList::loadFile(const QString &path, bool *isDir)
+Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 {
 	QFileInfo fi(path);
 	QString suffix = fi.suffix().toLower();
@@ -38,7 +39,7 @@ Map *MapList::loadFile(const QString &path, bool *isDir)
 				*isDir = true;
 		}
 	} else if (suffix == "jnx")
-		map = new JNXMap(path);
+		map = new JNXMap(path, proj);
 	else if (suffix == "tif" || suffix == "tiff")
 		map = new GeoTIFFMap(path);
 	else if (suffix == "mbtiles")
@@ -57,16 +58,20 @@ Map *MapList::loadFile(const QString &path, bool *isDir)
 	else if (suffix == "kap")
 		map = new BSBMap(path);
 	else if (suffix == "kmz")
-		map = new KMZMap(path);
+		map = new KMZMap(path, proj);
 	else if (suffix == "aqm")
 		map = new AQMMap(path);
 	else if (suffix == "sqlitedb")
 		map = new SqliteMap(path);
+	else if (suffix == "wld" || suffix == "jgw" || suffix == "gfw"
+	  || suffix == "pgw" || suffix == "tfw")
+		map = new WorldFileMap(path, proj);
 
 	return map ? map : new InvalidMap(path, "Unknown file format");
 }
 
-TreeNode<Map *> MapList::loadDir(const QString &path, TreeNode<Map *> *parent)
+TreeNode<Map *> MapList::loadDir(const QString &path, const Projection &proj,
+  TreeNode<Map *> *parent)
 {
 	QDir md(path);
 	md.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
@@ -79,12 +84,12 @@ TreeNode<Map *> MapList::loadDir(const QString &path, TreeNode<Map *> *parent)
 		QString suffix = fi.suffix().toLower();
 
 		if (fi.isDir()) {
-			TreeNode<Map*> child(loadDir(fi.absoluteFilePath(), &tree));
+			TreeNode<Map*> child(loadDir(fi.absoluteFilePath(), proj, &tree));
 			if (!child.isEmpty())
 				tree.addChild(child);
 		} else if (filter().contains("*." + suffix)) {
 			bool isDir = false;
-			Map *map = loadFile(fi.absoluteFilePath(), &isDir);
+			Map *map = loadFile(fi.absoluteFilePath(), proj, &isDir);
 			if (isDir) {
 				if (parent)
 					parent->addItem(map);
@@ -99,13 +104,13 @@ TreeNode<Map *> MapList::loadDir(const QString &path, TreeNode<Map *> *parent)
 	return tree;
 }
 
-TreeNode<Map *> MapList::loadMaps(const QString &path)
+TreeNode<Map *> MapList::loadMaps(const QString &path, const Projection &proj)
 {
 	if (QFileInfo(path).isDir())
-		return loadDir(path);
+		return loadDir(path, proj);
 	else {
 		TreeNode<Map*> tree;
-		tree.addItem(loadFile(path));
+		tree.addItem(loadFile(path, proj));
 		return tree;
 	}
 }
@@ -129,14 +134,17 @@ QString MapList::formats()
 		+ " (*.sqlitedb);;"
 	  + qApp->translate("MapList", "TrekBuddy maps/atlases") + " (*.tar *.tba);;"
 	  + qApp->translate("MapList", "GeoTIFF images") + " (*.tif *.tiff);;"
+	  + qApp->translate("MapList", "World-file georeferenced images")
+	    + " (*.wld *.jgw *.gfw *.pgw *.tfw);;"
 	  + qApp->translate("MapList", "Online map sources") + " (*.xml)";
 }
 
 QStringList MapList::filter()
 {
 	QStringList filter;
-	filter << "*.aqm" << "*.gmap" << "*.gmapi" << "*.img" << "*.jnx" << "*.kap"
-	  << "*.kmz" << "*.map" << "*.mbtiles" << "*.rmap" << "*.rtmap"
-	  << "*.sqlitedb" << "*.tar" << "*.tba" << "*.tif" << "*.tiff"  << "*.xml";
+	filter << "*.aqm" << "*.gfw" << "*.gmap" << "*.gmapi" << "*.img" << "*.jgw"
+	  << "*.jnx" << "*.kap" << "*.kmz" << "*.map" << "*.mbtiles" << "*.pgw"
+	  << "*.rmap" << "*.rtmap" << "*.sqlitedb" << "*.tar" << "*.tba" << "*.tfw"
+	  << "*.tif" << "*.tiff" << "*.wld" << "*.xml";
 	return filter;
 }

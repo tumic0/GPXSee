@@ -10,6 +10,7 @@ class LinearUnits
 public:
 	LinearUnits() : _f(NAN) {}
 	LinearUnits(int code);
+	LinearUnits(double val) : _f(val) {}
 
 	bool operator==(const LinearUnits &other) const
 	  {return (_f == other._f);}

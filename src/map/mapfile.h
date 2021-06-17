@@ -29,8 +29,7 @@ private:
 	  QString &projection, Projection::Setup &setup, QString &datum);
 	bool parseMapFile(QIODevice &device, QList<CalibrationPoint> &points,
 	  QString &projection, Projection::Setup &setup, QString &datum);
-	const GCS *createGCS(const QString &datum);
-	bool createProjection(const GCS *gcs, const QString &projection,
+	bool createProjection(const QString &datum, const QString &projection,
 	  const Projection::Setup &setup);
 	bool computeTransformation(const QList<CalibrationPoint> &points);
 

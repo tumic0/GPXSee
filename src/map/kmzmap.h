@@ -15,7 +15,7 @@ class KMZMap : public Map
 	Q_OBJECT
 
 public:
-	KMZMap(const QString &fileName, QObject *parent = 0);
+	KMZMap(const QString &fileName, const Projection &proj, QObject *parent = 0);
 
 	QRectF bounds();
 

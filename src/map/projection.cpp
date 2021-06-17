@@ -38,19 +38,14 @@ Projection::Method::Method(int id)
 	}
 }
 
-Projection::Projection(const PCS *pcs) : _gcs(0), _ct(0), _geographic(false)
+Projection::Projection(const PCS &pcs)
+  : _gcs(pcs.gcs()), _ct(0), _units(pcs.units()), _cs(pcs.coordinateSystem()),
+  _geographic(false)
 {
-	if (!pcs)
-		return;
+	const Ellipsoid &ellipsoid = _gcs.datum().ellipsoid();
+	const Projection::Setup &setup = pcs.setup();
 
-	_gcs = pcs->gcs();
-	_units = pcs->units();
-	_cs = pcs->coordinateSystem();
-
-	const Ellipsoid *ellipsoid = _gcs->datum().ellipsoid();
-	const Projection::Setup &setup = pcs->setup();
-
-	switch (pcs->method().id()) {
+	switch (pcs.method().id()) {
 		case 1024:
 			_ct = new WebMercator();
 			break;
@@ -119,13 +114,10 @@ Projection::Projection(const PCS *pcs) : _gcs(0), _ct(0), _geographic(false)
 	}
 }
 
-Projection::Projection(const GCS *gcs, const CoordinateSystem &cs)
+Projection::Projection(const GCS &gcs, const CoordinateSystem &cs)
   : _gcs(gcs), _ct(0), _units(LinearUnits(9001)), _cs(cs), _geographic(true)
 {
-	if (!gcs)
-		return;
-
-	_ct = new LatLon(gcs->angularUnits());
+	_ct = new LatLon(gcs.angularUnits());
 }
 
 Projection::Projection(const Projection &p)
@@ -162,20 +154,20 @@ bool Projection::operator==(const Projection &p) const
 	if (!isValid() || !p.isValid())
 		return false;
 
-	return (*_ct == *p._ct && *_gcs == *p._gcs && _units == p._units
+	return (*_ct == *p._ct && _gcs == p._gcs && _units == p._units
 	  && _cs == p._cs && _geographic == p._geographic);
 }
 
 PointD Projection::ll2xy(const Coordinates &c) const
 {
 	Q_ASSERT(isValid());
-	return _units.fromMeters(_ct->ll2xy(_gcs->fromWGS84(c)));
+	return _units.fromMeters(_ct->ll2xy(_gcs.fromWGS84(c)));
 }
 
 Coordinates Projection::xy2ll(const PointD &p) const
 {
 	Q_ASSERT(isValid());
-	return _gcs->toWGS84(_ct->xy2ll(_units.toMeters(p)));
+	return _gcs.toWGS84(_ct->xy2ll(_units.toMeters(p)));
 }
 
 #ifndef QT_NO_DEBUG

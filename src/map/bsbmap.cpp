@@ -290,14 +290,14 @@ bool BSBMap::createTransform(QList<ReferencePoint> &points)
 bool BSBMap::createProjection(const QString &datum, const QString &proj,
   double params[9], const Coordinates &c)
 {
-	const GCS *gcs = 0;
+	GCS gcs;
 	PCS pcs;
 
 	if (datum.isEmpty())
 		gcs = GCS::gcs(4326);
 	else
 		gcs = GCS::gcs(datum);
-	if (!gcs) {
+	if (gcs.isNull()) {
 		_errorString = datum + ": Unknown datum";
 		return false;
 	}
@@ -323,7 +323,7 @@ bool BSBMap::createProjection(const QString &datum, const QString &proj,
 		return false;
 	}
 
-	_projection = Projection(&pcs);
+	_projection = Projection(pcs);
 
 	return true;
 }

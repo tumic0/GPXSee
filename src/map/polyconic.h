@@ -8,7 +8,7 @@ class Ellipsoid;
 class Polyconic : public CT
 {
 public:
-	Polyconic(const Ellipsoid *ellipsoid, double latitudeOrigin,
+	Polyconic(const Ellipsoid &ellipsoid, double latitudeOrigin,
 	  double longitudeOrigin, double falseEasting, double falseNorthing);
 
 	virtual CT *clone() const {return new Polyconic(*this);}

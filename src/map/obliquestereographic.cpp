@@ -5,7 +5,7 @@
 #define S1(x) ((1.0 + x) / (1.0 - x))
 #define S2(x) ((1.0 - _e * x) / (1.0 + _e * x))
 
-ObliqueStereographic::ObliqueStereographic(const Ellipsoid *ellipsoid,
+ObliqueStereographic::ObliqueStereographic(const Ellipsoid &ellipsoid,
   double latitudeOrigin, double longitudeOrigin, double scale,
   double falseEasting, double falseNorthing)
   : _fe(falseEasting), _fn(falseNorthing)
@@ -15,8 +15,8 @@ ObliqueStereographic::ObliqueStereographic(const Ellipsoid *ellipsoid,
 	double cosPhi0 = cos(lat0);
 	double sinLat0s = sinPhi0 * sinPhi0;
 
-	double a = ellipsoid->radius();
-	_es = ellipsoid->es();
+	double a = ellipsoid.radius();
+	_es = ellipsoid.es();
 	_e = sqrt(_es);
 
 	double rho0 = a * (1.0 - _es) / pow(1.0 - _es * sinLat0s, 1.5);

@@ -107,6 +107,7 @@ HEADERS += src/common/config.h \
     src/map/IMG/rastertile.h \
     src/map/IMG/shield.h \
     src/map/mapsforge/style.h \
+    src/map/prjfile.h \
     src/map/textpathitem.h \
     src/map/textpointitem.h \
     src/map/mapsforge/mapdata.h \
@@ -149,6 +150,7 @@ HEADERS += src/common/config.h \
     src/map/ct.h \
     src/map/mapsource.h \
     src/map/tileloader.h \
+    src/map/wldfile.h \
     src/map/wmtsmap.h \
     src/map/wmts.h \
     src/map/wmsmap.h \
@@ -221,7 +223,8 @@ HEADERS += src/common/config.h \
     src/data/geojsonparser.h \
     src/GUI/timezoneinfo.h \
     src/map/aqmmap.h \
-    src/map/mapsforgemap.h
+    src/map/mapsforgemap.h \
+    src/map/worldfilemap.h
 
 SOURCES += src/main.cpp \
     src/GUI/axislabelitem.cpp \
@@ -295,6 +298,7 @@ SOURCES += src/main.cpp \
     src/map/IMG/mapdata.cpp \
     src/map/IMG/rastertile.cpp \
     src/map/mapsforge/style.cpp \
+    src/map/prjfile.cpp \
     src/map/textpathitem.cpp \
     src/map/textpointitem.cpp \
     src/map/mapsforge/mapdata.cpp \
@@ -332,6 +336,7 @@ SOURCES += src/main.cpp \
     src/map/linearunits.cpp \
     src/map/mapsource.cpp \
     src/map/tileloader.cpp \
+    src/map/wldfile.cpp \
     src/map/wmtsmap.cpp \
     src/map/wmts.cpp \
     src/map/wmsmap.cpp \
@@ -389,7 +394,8 @@ SOURCES += src/main.cpp \
     src/GUI/pngexportdialog.cpp \
     src/data/geojsonparser.cpp \
     src/map/aqmmap.cpp \
-    src/map/mapsforgemap.cpp
+    src/map/mapsforgemap.cpp \
+    src/map/worldfilemap.cpp
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     QT_NO_DEPRECATED_WARNINGS

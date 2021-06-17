@@ -8,7 +8,7 @@ class Ellipsoid;
 class Krovak : public CT
 {
 public:
-	Krovak(const Ellipsoid *ellipsoid, double standardParallel,
+	Krovak(const Ellipsoid &ellipsoid, double standardParallel,
 	  double azimuth, double scale, double centerLatitude,
 	  double longitudeOrigin, double falseEasting, double falseNorthing);
 
@@ -26,7 +26,7 @@ private:
 class KrovakNE : public CT
 {
 public:
-	KrovakNE(const Ellipsoid *ellipsoid, double standardParallel,
+	KrovakNE(const Ellipsoid &ellipsoid, double standardParallel,
 	  double azimuth, double scale, double centerLatitude,
 	  double longitudeOrigin, double falseEasting, double falseNorthing)
 		: _k(ellipsoid, standardParallel, azimuth, scale, centerLatitude,

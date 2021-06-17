@@ -15,7 +15,7 @@ public:
 	Q_OBJECT
 
 public:
-	JNXMap(const QString &fileName, QObject *parent = 0);
+	JNXMap(const QString &fileName, const Projection &proj, QObject *parent = 0);
 	~JNXMap();
 
 	QRectF bounds();

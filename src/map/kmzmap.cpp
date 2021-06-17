@@ -307,15 +307,13 @@ void KMZMap::kml(QXmlStreamReader &reader, QZipReader &zip)
 }
 
 
-KMZMap::KMZMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _zoom(0), _mapIndex(-1), _zip(0), _ratio(1.0),
-  _valid(false)
+KMZMap::KMZMap(const QString &fileName, const Projection &proj, QObject *parent)
+  : Map(fileName, parent), _zoom(0), _mapIndex(-1), _zip(0), _projection(proj),
+  _ratio(1.0), _valid(false)
 {
 	QZipReader zip(fileName, QIODevice::ReadOnly);
 	QByteArray xml(zip.fileData("doc.kml"));
 	QXmlStreamReader reader(xml);
-
-	_projection = Projection(GCS::gcs(4326));
 
 	if (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("kml"))

@@ -83,8 +83,8 @@ public:
 	void setCoordinatesFormat(CoordinatesFormat format);
 	void setTimeZone(const QTimeZone &zone);
 	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
-	void setOutputProjection(int id);
-	void setInputProjection(int id);
+	void setOutputProjection(const Projection &proj);
+	void setInputProjection(const Projection &proj);
 	void clearMapCache();
 	void fitContentToSize();
 

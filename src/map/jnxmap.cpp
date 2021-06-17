@@ -131,12 +131,10 @@ bool JNXMap::readTiles()
 	return true;
 }
 
-JNXMap::JNXMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _file(fileName), _zoom(0), _mapRatio(1.0),
-  _valid(false)
+JNXMap::JNXMap(const QString &fileName, const Projection &proj, QObject *parent)
+  : Map(fileName, parent), _file(fileName), _zoom(0), _projection(proj),
+  _mapRatio(1.0), _valid(false)
 {
-	_projection = Projection(GCS::gcs(4326));
-
 	if (!_file.open(QIODevice::ReadOnly)) {
 		_errorString = fileName + ": " + _file.errorString();
 		return;

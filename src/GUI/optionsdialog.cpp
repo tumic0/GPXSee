@@ -44,11 +44,12 @@ void OptionsDialog::automaticPauseDetectionSet(bool set)
 	_pauseSpeed->setEnabled(!set);
 }
 
-QWidget *OptionsDialog::createMapPage()
+static LimitedComboBox *projectionBox()
 {
+	LimitedComboBox *box;
 	int last = -1;
 
-	_outputProjection = new LimitedComboBox(200);
+	box = new LimitedComboBox(200);
 	QList<KV<int, QString> > projections(GCS::list() + PCS::list());
 	std::sort(projections.begin(), projections.end());
 	for (int i = 0; i < projections.size(); i++) {
@@ -59,33 +60,26 @@ QWidget *OptionsDialog::createMapPage()
 		else
 			last = proj.key();
 		QString text = QString::number(proj.key()) + " - " + proj.value();
-		_outputProjection->addItem(text, QVariant(proj.key()));
+		box->addItem(text, QVariant(proj.key()));
 	}
+
+	return box;
+}
+
+QWidget *OptionsDialog::createMapPage()
+{
+	_outputProjection = projectionBox();
 	_outputProjection->setCurrentIndex(_outputProjection->findData(
 	  _options.outputProjection));
-
-	_inputProjection = new LimitedComboBox(200);
-	last = -1;
-	for (int i = 0; i < projections.size(); i++) {
-		const KV<int, QString> &proj = projections.at(i);
-		// There may be same EPSG codes with different names
-		if (proj.key() == last)
-			continue;
-		else
-			last = proj.key();
-		if (proj.key() == 4326 || proj.key() == 3857) {
-			QString text = QString::number(proj.key()) + " - " + proj.value();
-			_inputProjection->addItem(text, QVariant(proj.key()));
-		}
-	}
+	_inputProjection = projectionBox();
 	_inputProjection->setCurrentIndex(_inputProjection->findData(
 	  _options.inputProjection));
 
-	QLabel *inInfo = new QLabel(tr("Select the proper projection of"
-	  " JNX and KMZ maps. Both EPSG:3857 and EPSG:4326 projected maps"
-	  " exist and there is no projection info in the map file."));
-	QLabel *outInfo = new QLabel(tr("Select the desired projection of IMG"
-	  " maps. The projection must be valid for the whole map area."));
+	QLabel *inInfo = new QLabel(tr("Select the proper projection of maps"
+	  " without a projection definition (JNX, KMZ and world file maps)"));
+	QLabel *outInfo = new QLabel(tr("Select the desired projection of vector"
+	  " maps (IMG and Mapsforge maps). The projection must be valid for"
+	  " the whole map area."));
 	QFont f = inInfo->font();
 	f.setPointSize(f.pointSize() - 1);
 	inInfo->setWordWrap(true);

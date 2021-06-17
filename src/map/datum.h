@@ -10,13 +10,13 @@
 class Datum
 {
 public:
-	Datum() : _ellipsoid(0), _transformation(None), _dx(NAN), _dy(NAN),
+	Datum() : _transformation(None), _dx(NAN), _dy(NAN),
 	  _dz(NAN), _rx(NAN), _ry(NAN), _rz(NAN), _scale(NAN) {}
-	Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz,
+	Datum(const Ellipsoid &ellipsoid, double dx, double dy, double dz,
 	  double rx, double ry, double rz, double ds);
-	Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz);
+	Datum(const Ellipsoid &ellipsoid, double dx, double dy, double dz);
 
-	const Ellipsoid *ellipsoid() const {return _ellipsoid;}
+	const Ellipsoid &ellipsoid() const {return _ellipsoid;}
 	double dx() const {return _dx;}
 	double dy() const {return _dy;}
 	double dz() const {return _dz;}
@@ -26,9 +26,9 @@ public:
 	double scale() const {return _scale;}
 
 	bool isNull() const
-	  {return !_ellipsoid;}
+	  {return _ellipsoid.isNull();}
 	bool isValid() const
-	  {return (_ellipsoid && !std::isnan(_dx) && !std::isnan(_dy)
+	  {return (_ellipsoid.isValid() && !std::isnan(_dx) && !std::isnan(_dy)
 		&& !std::isnan(_dz) && !std::isnan(_scale) && !std::isnan(_rx)
 		&& !std::isnan(_ry) && !std::isnan(_rz));}
 
@@ -47,13 +47,13 @@ private:
 	Point3D helmert(const Point3D &p) const;
 	Point3D helmertr(const Point3D &p) const;
 
-	const Ellipsoid *_ellipsoid;
+	Ellipsoid _ellipsoid;
 	TransformationType _transformation;
 	double _dx, _dy, _dz, _rx, _ry, _rz, _scale;
 };
 
 inline bool operator==(const Datum &d1, const Datum &d2)
-  {return (*d1.ellipsoid() == *d2.ellipsoid() && d1.dx() == d2.dx()
+  {return (d1.ellipsoid() == d2.ellipsoid() && d1.dx() == d2.dx()
 	&& d1.dy() == d2.dy() && d1.dz() == d2.dz() && d1.rx() == d2.rx()
 	&& d1.ry() == d2.ry() && d1.rz() == d2.rz() && d1.scale() == d2.scale());}
 

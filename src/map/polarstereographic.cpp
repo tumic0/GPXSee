@@ -47,11 +47,11 @@ Defense.
 
 #define POLAR_POW(EsSin) pow((1.0 - EsSin) / (1.0 + EsSin), _es_OVER_2)
 
-PolarStereographic::PolarStereographic(const Ellipsoid *ellipsoid,
+PolarStereographic::PolarStereographic(const Ellipsoid &ellipsoid,
   double latitudeOrigin, double longitudeOrigin,
   double falseEasting, double falseNorthing)
 {
-	_two_a = 2.0 * ellipsoid->radius();
+	_two_a = 2.0 * ellipsoid.radius();
 
 	if (longitudeOrigin > M_PI)
 		longitudeOrigin -= 2*M_PI;
@@ -68,7 +68,7 @@ PolarStereographic::PolarStereographic(const Ellipsoid *ellipsoid,
 	_falseEasting = falseEasting;
 	_falseNorthing = falseNorthing;
 
-	double es2 = ellipsoid->es();
+	double es2 = ellipsoid.es();
 	_es = sqrt(es2);
 	_es_OVER_2 = _es / 2.0;
 
@@ -78,7 +78,7 @@ PolarStereographic::PolarStereographic(const Ellipsoid *ellipsoid,
 		double pow_es = POLAR_POW(essin);
 		double clat = cos(_originLatitude);
 		_mc = clat / sqrt(1.0 - essin * essin);
-		_a_mc = ellipsoid->radius() * _mc;
+		_a_mc = ellipsoid.radius() * _mc;
 		_tc = tan(M_PI_4 - _originLatitude / 2.0) / pow_es;
 	} else {
 		double one_PLUS_es = 1.0 + _es;

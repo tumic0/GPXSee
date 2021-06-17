@@ -161,20 +161,16 @@ bool MapFile::parseMapFile(QIODevice &device, QList<CalibrationPoint> &points,
 	return (!el);
 }
 
-const GCS *MapFile::createGCS(const QString &datum)
-{
-	const GCS *gcs;
-
-	if (!(gcs = GCS::gcs(datum)))
-		_errorString = QString("%1: Unknown datum").arg(datum);
-
-	return gcs;
-}
-
-bool MapFile::createProjection(const GCS *gcs, const QString &name,
+bool MapFile::createProjection(const QString &datum, const QString &name,
   const Projection::Setup &setup)
 {
 	PCS pcs;
+
+	GCS gcs(GCS::gcs(datum));
+	if (gcs.isNull()) {
+		_errorString = QString("%1: Unknown datum").arg(datum);
+		return false;
+	}
 
 	if (name == "Latitude/Longitude") {
 		_projection = Projection(gcs);
@@ -230,7 +226,7 @@ bool MapFile::createProjection(const GCS *gcs, const QString &name,
 		return false;
 	}
 
-	_projection = Projection(&pcs);
+	_projection = Projection(pcs);
 
 	return true;
 }
@@ -256,13 +252,10 @@ MapFile::MapFile(QIODevice &file)
 	QList<CalibrationPoint> points;
 	QString ct, datum;
 	Projection::Setup setup;
-	const GCS *gcs;
 
 	if (!parseMapFile(file, points, ct, setup, datum))
 		return;
-	if (!(gcs = createGCS(datum)))
-		return;
-	if (!createProjection(gcs, ct, setup))
+	if (!createProjection(datum, ct, setup))
 		return;
 	if (!computeTransformation(points))
 		return;

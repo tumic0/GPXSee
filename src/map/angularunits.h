@@ -3,12 +3,14 @@
 
 #include <cmath>
 #include <QDebug>
+#include "common/coordinates.h"
 
 class AngularUnits
 {
 public:
 	AngularUnits() : _code(0), _f(NAN) {}
 	AngularUnits(int code);
+	AngularUnits(double val) : _code(0), _f(rad2deg(val)) {}
 
 	bool operator==(const AngularUnits &other) const
 	{

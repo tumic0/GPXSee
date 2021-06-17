@@ -1121,37 +1121,19 @@ void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 	reloadMap();
 }
 
-void MapView::setOutputProjection(int id)
+void MapView::setOutputProjection(const Projection &proj)
 {
-	const PCS *pcs;
-	const GCS *gcs;
+	_outputProjection = proj;
 	Coordinates center = _map->xy2ll(mapToScene(viewport()->rect().center()));
-
-	if ((pcs = PCS::pcs(id)))
-		_outputProjection = Projection(pcs);
-	else if ((gcs = GCS::gcs(id)))
-		_outputProjection = Projection(gcs);
-	else
-		qWarning("%d: Unknown PCS/GCS id", id);
-
 	_map->setOutputProjection(_outputProjection);
 	rescale();
 	centerOn(_map->ll2xy(center));
 }
 
-void MapView::setInputProjection(int id)
+void MapView::setInputProjection(const Projection &proj)
 {
-	const PCS *pcs;
-	const GCS *gcs;
+	_inputProjection = proj;
 	Coordinates center = _map->xy2ll(mapToScene(viewport()->rect().center()));
-
-	if ((pcs = PCS::pcs(id)))
-		_inputProjection = Projection(pcs);
-	else if ((gcs = GCS::gcs(id)))
-		_inputProjection = Projection(gcs);
-	else
-		qWarning("%d: Unknown PCS/GCS id", id);
-
 	_map->setInputProjection(_inputProjection);
 	rescale();
 	centerOn(_map->ll2xy(center));

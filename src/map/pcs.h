@@ -12,29 +12,31 @@
 class PCS
 {
 public:
-	PCS() : _gcs(0) {}
-	PCS(const GCS *gcs, const Projection::Method &method,
+	PCS() {}
+	PCS(const GCS &gcs, const Projection::Method &method,
 	  const Projection::Setup &setup, const LinearUnits &units,
 	  const CoordinateSystem &cs = CoordinateSystem())
 	  : _gcs(gcs), _method(method), _setup(setup), _units(units), _cs(cs) {}
-	PCS(const GCS *gcs, int proj);
+	PCS(const GCS &gcs, int proj);
 
-	const GCS *gcs() const {return _gcs;}
+	const GCS &gcs() const {return _gcs;}
 	const Projection::Method &method() const {return _method;}
 	const Projection::Setup &setup() const {return _setup;}
 	const LinearUnits &units() const {return _units;}
 	const CoordinateSystem &coordinateSystem() const {return _cs;}
 
-	bool isNull() const
-	  {return (!_gcs && _units.isNull() && _method.isNull() && _setup.isNull()
-	  && _cs.isNull());}
-	bool isValid() const
-	  {return (_gcs && _gcs->isValid() && _units.isValid()
-	  && _method.isValid() && _cs.isValid());}
+	bool isNull() const {
+		return (_gcs.isNull() && _units.isNull() && _method.isNull()
+		  && _setup.isNull() && _cs.isNull());
+	}
+	bool isValid() const {
+		return (_gcs.isValid() && _units.isValid() && _method.isValid()
+		  && _cs.isValid());
+	}
 
 	static void loadList(const QString &path);
-	static const PCS *pcs(int id);
-	static const PCS *pcs(const GCS *gcs, int proj);
+	static const PCS &pcs(int id);
+	static const PCS &pcs(const GCS &gcs, int proj);
 	static QList<KV<int, QString> > list();
 
 private:
@@ -42,7 +44,7 @@ private:
 
 	static QList<Entry> defaults();
 
-	const GCS *_gcs;
+	GCS _gcs;
 	Projection::Method _method;
 	Projection::Setup _setup;
 	LinearUnits _units;

@@ -44,10 +44,10 @@ Defense.
 #include "ellipsoid.h"
 #include "mercator.h"
 
-Mercator::Mercator(const Ellipsoid *ellipsoid, double latitudeOrigin,
+Mercator::Mercator(const Ellipsoid &ellipsoid, double latitudeOrigin,
   double longitudeOrigin, double falseEasting, double falseNorthing)
 {
-	double es = ellipsoid->es();
+	double es = ellipsoid.es();
 	double es2;
 	double es3;
 	double es4;
@@ -60,7 +60,7 @@ Mercator::Mercator(const Ellipsoid *ellipsoid, double latitudeOrigin,
 	_falseNorthing = falseNorthing;
 	_falseEasting = falseEasting;
 
-	_a = ellipsoid->radius();
+	_a = ellipsoid.radius();
 	_e = sqrt(es);
 
 	sin_olat = sin(_latitudeOrigin);

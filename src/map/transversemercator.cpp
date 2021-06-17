@@ -57,7 +57,7 @@ Defense.
 	((double)(_a * (1.e0 - _es) / pow(DENOM(lat), 3)))
 
 
-TransverseMercator::TransverseMercator(const Ellipsoid *ellipsoid,
+TransverseMercator::TransverseMercator(const Ellipsoid &ellipsoid,
   double latitudeOrigin, double longitudeOrigin, double scale,
   double falseEasting, double falseNorthing)
 {
@@ -65,16 +65,16 @@ TransverseMercator::TransverseMercator(const Ellipsoid *ellipsoid,
 	double b;
 
 
-	_a = ellipsoid->radius();
+	_a = ellipsoid.radius();
 	_longitudeOrigin = deg2rad(longitudeOrigin);
 	_latitudeOrigin = deg2rad(latitudeOrigin);
 	_scale = scale;
 	_falseEasting = falseEasting;
 	_falseNorthing = falseNorthing;
 
-	_es = ellipsoid->es();
+	_es = ellipsoid.es();
 	_ebs = (1 / (1 - _es)) - 1;
-	b = ellipsoid->b();
+	b = ellipsoid.b();
 
 	tn = (_a - b) / (_a + b);
 	tn2 = tn * tn;

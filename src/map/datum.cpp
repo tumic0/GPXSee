@@ -23,11 +23,11 @@ static Coordinates molodensky(const Coordinates &c, const Datum &from,
 	double dy = from.dy() - to.dy();
 	double dz = from.dz() - to.dz();
 
-	double from_f = from.ellipsoid()->flattening();
-	double to_f = to.ellipsoid()->flattening();
+	double from_f = from.ellipsoid().flattening();
+	double to_f = to.ellipsoid().flattening();
 	double df = to_f - from_f;
-	double from_a = from.ellipsoid()->radius();
-	double to_a = to.ellipsoid()->radius();
+	double from_a = from.ellipsoid().radius();
+	double to_a = to.ellipsoid().radius();
 	double da = to_a - from_a;
 	double from_esq = from_f * (2.0 - from_f);
 	double adb = 1.0 / (1.0 - from_f);
@@ -45,7 +45,7 @@ static Coordinates molodensky(const Coordinates &c, const Datum &from,
 
 const Datum &Datum::WGS84()
 {
-	static Datum d(&Ellipsoid::WGS84(), 0.0, 0.0, 0.0);
+	static Datum d(Ellipsoid::WGS84(), 0.0, 0.0, 0.0);
 	return d;
 }
 
@@ -66,12 +66,12 @@ Point3D Datum::helmertr(const Point3D &p) const
 	  * y + z);
 }
 
-Datum::Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz,
+Datum::Datum(const Ellipsoid &ellipsoid, double dx, double dy, double dz,
   double rx, double ry, double rz, double ds)
   : _ellipsoid(ellipsoid), _dx(dx), _dy(dy), _dz(dz), _rx(as2rad(rx)),
   _ry(as2rad(ry)), _rz(as2rad(rz)), _scale(ds2scale(ds))
 {
-	if (_ellipsoid->radius() == WGS84_RADIUS && _ellipsoid->flattening()
+	if (_ellipsoid.radius() == WGS84_RADIUS && _ellipsoid.flattening()
 	  == WGS84_FLATTENING && _dx == 0.0 && _dy == 0.0 && _dz == 0.0
 	  && _rx == 0.0 && _ry == 0.0 && _rz == 0.0 && ds == 0.0)
 		_transformation = None;
@@ -79,11 +79,11 @@ Datum::Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz,
 		_transformation = Helmert;
 }
 
-Datum::Datum(const Ellipsoid *ellipsoid, double dx, double dy, double dz)
+Datum::Datum(const Ellipsoid &ellipsoid, double dx, double dy, double dz)
   : _ellipsoid(ellipsoid), _dx(dx), _dy(dy), _dz(dz), _rx(0.0), _ry(0.0),
   _rz(0.0), _scale(1.0)
 {
-	if (_ellipsoid->radius() == WGS84_RADIUS && _ellipsoid->flattening()
+	if (_ellipsoid.radius() == WGS84_RADIUS && _ellipsoid.flattening()
 	  == WGS84_FLATTENING && _dx == 0.0 && _dy == 0.0 && _dz == 0.0)
 		_transformation = None;
 	else
@@ -119,7 +119,7 @@ Coordinates Datum::fromWGS84(const Coordinates &c) const
 #ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Datum &datum)
 {
-	dbg.nospace() << "Datum(" << *datum.ellipsoid() << ", " << datum.dx()
+	dbg.nospace() << "Datum(" << datum.ellipsoid() << ", " << datum.dx()
 	  << ", " << datum.dy() << ", " << datum.dz() << ", " << rad2as(datum.rx())
 	  << ", " << rad2as(datum.ry()) << ", " << rad2as(datum.rz()) << ", "
 	  << scale2ds(datum.scale()) << ")";

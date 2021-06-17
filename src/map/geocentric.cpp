@@ -47,23 +47,23 @@ Defense.
 
 #define AD_C 1.0026000
 
-Point3D Geocentric::fromGeodetic(const Coordinates &c, const Ellipsoid *e)
+Point3D Geocentric::fromGeodetic(const Coordinates &c, const Ellipsoid &e)
 {
 	double lat = deg2rad(c.lat());
 	double lon = deg2rad(c.lon());
 	double slat = sin(lat);
 	double slat2 = slat * slat;
 	double clat = cos(lat);
-	double Rn = e->radius() / (sqrt(1.0 - e->es() * slat2));
+	double Rn = e.radius() / (sqrt(1.0 - e.es() * slat2));
 
 	if (lon > M_PI)
 		lon -= 2 * M_PI;
 
 	return Point3D(Rn * clat * cos(lon), Rn * clat * sin(lon),
-	  (Rn * (1 - e->es())) * slat);
+	  (Rn * (1 - e.es())) * slat);
 }
 
-Coordinates Geocentric::toGeodetic(const Point3D &p, const Ellipsoid *e)
+Coordinates Geocentric::toGeodetic(const Point3D &p, const Ellipsoid &e)
 {
 	bool pole = false;
 	double lat, lon;
@@ -93,8 +93,8 @@ Coordinates Geocentric::toGeodetic(const Point3D &p, const Ellipsoid *e)
 	double Sin_B0 = T0 / S0;
 	double Cos_B0 = W / S0;
 	double Sin3_B0 = Sin_B0 * Sin_B0 * Sin_B0;
-	double T1 = p.z() + e->b() * e->e2s() * Sin3_B0;
-	double Sum = W - e->radius() * e->es() * Cos_B0 * Cos_B0 * Cos_B0;
+	double T1 = p.z() + e.b() * e.e2s() * Sin3_B0;
+	double Sum = W - e.radius() * e.es() * Cos_B0 * Cos_B0 * Cos_B0;
 	double S1 = sqrt(T1*T1 + Sum * Sum);
 	double Sin_p1 = T1 / S1;
 	double Cos_p1 = Sum / S1;

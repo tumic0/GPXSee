@@ -1,4 +1,3 @@
-#include "common/coordinates.h"
 #include "common/util.h"
 #include "angularunits.h"
 

@@ -5,7 +5,7 @@
 #define sin2(x) (sin(x) * sin(x))
 #define sqr(x) ((x) * (x))
 
-LambertAzimuthal::LambertAzimuthal(const Ellipsoid *ellipsoid,
+LambertAzimuthal::LambertAzimuthal(const Ellipsoid &ellipsoid,
   double latitudeOrigin, double longitudeOrigin, double falseEasting,
   double falseNorthing)
 {
@@ -15,8 +15,8 @@ LambertAzimuthal::LambertAzimuthal(const Ellipsoid *ellipsoid,
 	_fn = falseNorthing;
 	_lon0 = deg2rad(longitudeOrigin);
 
-	_a = ellipsoid->radius();
-	_es = ellipsoid->es();
+	_a = ellipsoid.radius();
+	_es = ellipsoid.es();
 	_e = sqrt(_es);
 
 	double q0 = (1.0 - _es) * ((sin(lat0) / (1.0 - _es * sin2(lat0)))

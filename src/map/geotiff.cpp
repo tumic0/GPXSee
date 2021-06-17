@@ -289,12 +289,13 @@ bool GeoTIFF::readGeoValue(TIFFFile &file, quint32 offset, quint16 index,
 	return true;
 }
 
-const GCS *GeoTIFF::gcs(QMap<quint16, Value> &kv)
+GCS GeoTIFF::gcs(QMap<quint16, Value> &kv)
 {
-	const GCS *gcs = 0;
+	GCS gcs;
 
 	if (IS_SET(kv, GeographicTypeGeoKey)) {
-		if (!(gcs = GCS::gcs(kv.value(GeographicTypeGeoKey).SHORT)))
+		gcs = GCS::gcs(kv.value(GeographicTypeGeoKey).SHORT);
+		if (gcs.isNull())
 			_errorString = QString("%1: unknown GCS")
 			  .arg(kv.value(GeographicTypeGeoKey).SHORT);
 	} else if (IS_SET(kv, GeogGeodeticDatumGeoKey)
@@ -310,7 +311,8 @@ const GCS *GeoTIFF::gcs(QMap<quint16, Value> &kv)
 		int gd = IS_SET(kv, GeogGeodeticDatumGeoKey)
 		  ? kv.value(GeogGeodeticDatumGeoKey).SHORT : 6326;
 
-		if (!(gcs = GCS::gcs(gd, pm, au)))
+		gcs = GCS::gcs(gd, pm, au);
+		if (gcs.isNull())
 			_errorString = QString("%1+%2+%3: unknown geodetic datum + prime"
 			  " meridian + units combination").arg(gd).arg(pm).arg(au);
 	} else
@@ -357,19 +359,19 @@ Projection::Method GeoTIFF::method(QMap<quint16, Value> &kv)
 bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 {
 	if (IS_SET(kv, ProjectedCSTypeGeoKey)) {
-		const PCS *pcs;
-		if (!(pcs = PCS::pcs(kv.value(ProjectedCSTypeGeoKey).SHORT))) {
+		const PCS &pcs = PCS::pcs(kv.value(ProjectedCSTypeGeoKey).SHORT);
+		if (pcs.isNull()) {
 			_errorString = QString("%1: unknown PCS")
 			  .arg(kv.value(ProjectedCSTypeGeoKey).SHORT);
 			return false;
 		}
 		_projection = Projection(pcs);
 	} else if (IS_SET(kv, ProjectionGeoKey)) {
-		const GCS *g = gcs(kv);
-		if (!g)
+		const GCS g(gcs(kv));
+		if (g.isNull())
 			return false;
-		const PCS *pcs = PCS::pcs(g, kv.value(ProjectionGeoKey).SHORT);
-		if (!pcs) {
+		const PCS &pcs = PCS::pcs(g, kv.value(ProjectionGeoKey).SHORT);
+		if (pcs.isNull()) {
 			_errorString = QString("%1: unknown projection code")
 			  .arg(kv.value(GeographicTypeGeoKey).SHORT)
 			  .arg(kv.value(ProjectionGeoKey).SHORT);
@@ -379,8 +381,8 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 	} else {
 		double lat0, lon0, scale, fe, fn, sp1, sp2;
 
-		const GCS *g = gcs(kv);
-		if (!g)
+		GCS g(gcs(kv));
+		if (g.isNull())
 			return false;
 		Projection::Method m(method(kv));
 		if (m.isNull())
@@ -453,7 +455,7 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 
 		Projection::Setup setup(lat0, lon0, scale, fe, fn, sp1, sp2);
 		PCS pcs(g, m, setup, lu, CoordinateSystem());
-		_projection = Projection(&pcs);
+		_projection = Projection(pcs);
 	}
 
 	return true;
@@ -461,8 +463,8 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 
 bool GeoTIFF::geographicModel(QMap<quint16, Value> &kv)
 {
-	const GCS *g = gcs(kv);
-	if (!g)
+	GCS g(gcs(kv));
+	if (g.isNull())
 		return false;
 
 	_projection = Projection(g);

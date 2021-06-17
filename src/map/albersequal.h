@@ -8,7 +8,7 @@ class Ellipsoid;
 class AlbersEqual : public CT
 {
 public:
-	AlbersEqual(const Ellipsoid *ellipsoid, double standardParallel1,
+	AlbersEqual(const Ellipsoid &ellipsoid, double standardParallel1,
 	  double standardParallel2, double latitudeOrigin, double longitudeOrigin,
 	  double falseEasting, double falseNorthing);
 

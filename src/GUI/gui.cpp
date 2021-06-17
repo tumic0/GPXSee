@@ -31,6 +31,7 @@
 #include "map/maplist.h"
 #include "map/emptymap.h"
 #include "map/downloader.h"
+#include "map/crs.h"
 #include "icons.h"
 #include "keys.h"
 #include "settings.h"
@@ -123,7 +124,8 @@ TreeNode<MapAction*> GUI::createMapActions()
 	if (mapDir.isNull())
 		return TreeNode<MapAction*>();
 
-	TreeNode<Map*> maps(MapList::loadMaps(mapDir));
+	TreeNode<Map*> maps(MapList::loadMaps(mapDir,
+	  CRS::projection(_options.inputProjection)));
 	return createMapActionsNode(maps);
 }
 
@@ -1006,8 +1008,19 @@ void GUI::openOptions()
 	SET_VIEW_OPTION(pathAntiAliasing, useAntiAliasing);
 	SET_VIEW_OPTION(useOpenGL, useOpenGL);
 	SET_VIEW_OPTION(sliderColor, setMarkerColor);
-	SET_VIEW_OPTION(outputProjection, setOutputProjection);
-	SET_VIEW_OPTION(inputProjection, setInputProjection);
+
+	if (options.hidpiMap != _options.hidpiMap)
+		_mapView->setDevicePixelRatio(devicePixelRatioF(),
+		  options.hidpiMap ? devicePixelRatioF() : 1.0);
+	if (options.outputProjection != _options.outputProjection)
+		_mapView->setOutputProjection(CRS::projection(options.outputProjection));
+	if (options.inputProjection != _options.inputProjection)
+		_mapView->setInputProjection(CRS::projection(options.inputProjection));
+	if (options.timeZone != _options.timeZone) {
+		_mapView->setTimeZone(options.timeZone.zone());
+		_dateRange.first = _dateRange.first.toTimeZone(options.timeZone.zone());
+		_dateRange.second = _dateRange.second.toTimeZone(options.timeZone.zone());
+	}
 
 	SET_TAB_OPTION(palette, setPalette);
 	SET_TAB_OPTION(graphWidth, setGraphWidth);
@@ -1046,16 +1059,6 @@ void GUI::openOptions()
 		Downloader::setTimeout(options.connectionTimeout);
 	if (options.enableHTTP2 != _options.enableHTTP2)
 		Downloader::enableHTTP2(options.enableHTTP2);
-
-	if (options.hidpiMap != _options.hidpiMap)
-		_mapView->setDevicePixelRatio(devicePixelRatioF(),
-		  options.hidpiMap ? devicePixelRatioF() : 1.0);
-
-	if (options.timeZone != _options.timeZone) {
-		_mapView->setTimeZone(options.timeZone.zone());
-		_dateRange.first = _dateRange.first.toTimeZone(options.timeZone.zone());
-		_dateRange.second = _dateRange.second.toTimeZone(options.timeZone.zone());
-	}
 
 	if (reload)
 		reloadFiles();
@@ -1561,7 +1564,8 @@ bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 
 bool GUI::loadMap(const QString &fileName, MapAction *&action, bool silent)
 {
-	TreeNode<Map*> maps(MapList::loadMaps(fileName));
+	TreeNode<Map*> maps(MapList::loadMaps(fileName,
+	  CRS::projection(_options.inputProjection)));
 	QList<QAction*> existingActions(_mapsActionGroup->actions());
 
 	return loadMapNode(maps, action, silent, existingActions);
@@ -1650,7 +1654,8 @@ void GUI::loadMapDir()
 		return;
 
 	QFileInfo fi(dir);
-	TreeNode<Map*> maps(MapList::loadMaps(dir));
+	TreeNode<Map*> maps(MapList::loadMaps(dir,
+	  CRS::projection(_options.inputProjection)));
 	QList<QAction*> existingActions(_mapsActionGroup->actions());
 	QList<MapAction*> actions;
 	QMenu *menu = new QMenu(maps.name());
@@ -2581,8 +2586,8 @@ void GUI::readSettings()
 		_mapView->useOpenGL(true);
 	_mapView->setDevicePixelRatio(devicePixelRatioF(),
 	  _options.hidpiMap ? devicePixelRatioF() : 1.0);
-	_mapView->setOutputProjection(_options.outputProjection);
-	_mapView->setInputProjection(_options.inputProjection);
+	_mapView->setOutputProjection(CRS::projection(_options.outputProjection));
+	_mapView->setInputProjection(CRS::projection(_options.inputProjection));
 	_mapView->setTimeZone(_options.timeZone.zone());
 
 	for (int i = 0; i < _tabs.count(); i++) {

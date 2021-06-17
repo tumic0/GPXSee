@@ -6,6 +6,7 @@
 namespace CRS
 {
 	Projection projection(const QString &crs);
+	Projection projection(int id);
 }
 
 #endif // CRS_H

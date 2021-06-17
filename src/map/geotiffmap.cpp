@@ -1,4 +1,3 @@
-#include <QFileInfo>
 #include <QPainter>
 #include <QImageReader>
 #include "common/util.h"

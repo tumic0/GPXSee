@@ -9,6 +9,7 @@ class PrimeMeridian
 public:
 	PrimeMeridian() : _pm(NAN) {}
 	PrimeMeridian(int code);
+	PrimeMeridian(double lon) : _pm(lon) {}
 
 	bool isNull() const {return std::isnan(_pm);}
 	bool isValid() const {return !std::isnan(_pm);}
