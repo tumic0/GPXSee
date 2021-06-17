@@ -151,27 +151,27 @@ void PRJFile::nextToken(CTX &ctx)
 					return;
 				}
 				if (isalpha(c)) {
-					ctx.string = c;
+					ctx.string = QChar(c);
 					state = 2;
 					break;
 				}
 				if (isdigit(c)) {
-					flstr += c;
+					flstr += QChar(c);
 					state = 3;
 					break;
 				}
 				if (c == '.') {
-					flstr += c;
+					flstr += QChar(c);
 					state = 4;
 					break;
 				}
 				if (c == '+') {
-					flstr += c;
+					flstr += QChar(c);
 					state = 3;
 					break;
 				}
 				if (c == '-') {
-					flstr += c;
+					flstr += QChar(c);
 					state = 3;
 					break;
 				}
@@ -189,7 +189,7 @@ void PRJFile::nextToken(CTX &ctx)
 
 			case 2:
 				if (isalnum(c)) {
-					ctx.string += c;
+					ctx.string += QChar(c);
 					break;
 				}
 				ctx.file.ungetChar(c);
@@ -198,17 +198,17 @@ void PRJFile::nextToken(CTX &ctx)
 
 			case 3:
 				if (c == '.') {
-					flstr += c;
+					flstr += QChar(c);
 					state = 4;
 					break;
 				}
 				if (c == 'e' || c == 'E') {
-					flstr += c;
+					flstr += QChar(c);
 					state = 5;
 					break;
 				}
 				if (isdigit(c)) {
-					flstr += c;
+					flstr += QChar(c);
 					break;
 				}
 				ctx.file.ungetChar(c);
@@ -218,11 +218,11 @@ void PRJFile::nextToken(CTX &ctx)
 
 			case 4:
 				if (isdigit(c)) {
-					flstr += c;
+					flstr += QChar(c);
 					break;
 				}
 				if (c == 'e' || c == 'E') {
-					flstr += c;
+					flstr += QChar(c);
 					state = 5;
 					break;
 				}
@@ -233,17 +233,17 @@ void PRJFile::nextToken(CTX &ctx)
 
 			case 5:
 				if (c == '+') {
-					flstr += c;
+					flstr += QChar(c);
 					state = 6;
 					break;
 				}
 				if (c == '-') {
-					flstr += c;
+					flstr += QChar(c);
 					state = 6;
 					break;
 				}
 				if (isdigit(c)) {
-					flstr += c;
+					flstr += QChar(c);
 					state = 6;
 					break;
 				}
@@ -252,7 +252,7 @@ void PRJFile::nextToken(CTX &ctx)
 
 			case 6:
 				if (isdigit(c)) {
-					flstr += c;
+					flstr += QChar(c);
 					break;
 				}
 				ctx.file.ungetChar(c);
@@ -269,7 +269,7 @@ void PRJFile::nextToken(CTX &ctx)
 					ctx.token = STRING;
 					return;
 				}
-				ctx.string += c;
+				ctx.string += QChar(c);
 				break;
 		}
 	}
