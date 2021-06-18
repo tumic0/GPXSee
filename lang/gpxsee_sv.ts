@@ -1073,7 +1073,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="137"/>
         <source>World-file georeferenced images</source>
-        <translation type="unfinished"></translation>
+        <translation>Georefererade bilder i världsfil</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="139"/>
@@ -1450,12 +1450,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="78"/>
         <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps)</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj rätt projektion för kartor utan projektionsdefinition (JNX-, KMZ- och världskartor)</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="80"/>
         <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj önskad projektion för vektorkartor (IMG- och Mapsforge-kartor). Projektionen måste vara giltig för hela kartområdet.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="196"/>
