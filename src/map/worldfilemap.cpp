@@ -15,7 +15,7 @@ WorldFileMap::WorldFileMap(const QString &fileName, const Projection &proj,
 {
 	QFileInfo fi(fileName);
 	QDir dir(fi.absoluteDir());
-	QString basename(fi.baseName());
+	QString basename(fi.completeBaseName());
 
 
 	// Get the transformation from the WLD file
