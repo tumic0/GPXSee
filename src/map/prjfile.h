@@ -30,8 +30,9 @@ private:
 		COMMA,      /* ',' */
 
 		/* Keywords */
-		PROJCS, PROJECTION, GEOGCS, DATUM, SPHEROID, PRIMEM, UNIT, AUTHORITY,
-		AXIS, TOWGS84, PARAMETER, NORTH, SOUTH, EAST, WEST, UP, DOWN, OTHER
+		COMPD_CS, PROJCS, PROJECTION, GEOGCS, DATUM, SPHEROID, PRIMEM, UNIT,
+		AUTHORITY, AXIS, TOWGS84, PARAMETER, NORTH, SOUTH, EAST, WEST, UP, DOWN,
+		OTHER, VERT_CS, VERT_DATUM, GEOCCS, FITTED_CS, LOCAL_CS
 	};
 
 	struct CTX {
@@ -49,12 +50,16 @@ private:
 	void nextToken(CTX &ctx);
 	void compare(CTX &ctx, Token token);
 
+	void CS(CTX &ctx);
 	void horizontalCS(CTX &ctx);
+	void verticalCS(CTX &ctx);
 	void geographicCS(CTX &ctx, GCS *gcs);
 	void projectedCS(CTX &ctx, PCS *pcs);
+	void compdCS(CTX &ctx);
 	void projection(CTX &ctx, Projection::Method *method);
 	void parameter(CTX &ctx, Projection::Setup *setup);
 	void datum(CTX &ctx, Datum *dtm, int *epsg);
+	void verticalDatum(CTX &ctx);
 	void unit(CTX &ctx, double *val, int *epsg);
 	void angularUnit(CTX &ctx, AngularUnits *au, int *epsg);
 	void primeMeridian(CTX &ctx, PrimeMeridian *pm, int *epsg);
@@ -75,6 +80,9 @@ private:
 	void optGeographicCS2(CTX &ctx, int *epsg);
 	void optProjectedCS(CTX &ctx, int *epsg);
 	void optProjectedCS2(CTX &ctx, int *epsg);
+	void optCS(CTX &ctx, int *epsg);
+	void optVerticalCS(CTX &ctx, int *epsg);
+	void optVerticalCS2(CTX &ctx, int *epsg);
 
 	Projection _projection;
 	QString _errorString;

@@ -78,6 +78,7 @@ PRJFile::Token PRJFile::keyword(CTX &ctx)
 		Token token;
 		QString name;
 	} keywords[] = {
+		{COMPD_CS, "COMPD_CS"},
 		{PROJCS, "PROJCS"},
 		{PROJECTION, "PROJECTION"},
 		{PARAMETER, "PARAMETER"},
@@ -95,7 +96,12 @@ PRJFile::Token PRJFile::keyword(CTX &ctx)
 		{WEST, "WEST"},
 		{UP, "UP"},
 		{DOWN, "DOWN"},
-		{OTHER, "OTHER"}
+		{OTHER, "OTHER"},
+		{VERT_CS, "VERT_CS"},
+		{VERT_DATUM, "VERT_DATUM"},
+		{GEOCCS, "GEOCCS"},
+		{FITTED_CS, "FITTED_CS"},
+		{LOCAL_CS, "LOCAL_CS"}
 	};
 
 	for (size_t i = 0; i < ARRAY_SIZE(keywords); i++)
@@ -188,7 +194,7 @@ void PRJFile::nextToken(CTX &ctx)
 				return;
 
 			case 2:
-				if (isalnum(c)) {
+				if (isalnum(c) || c == '_') {
 					ctx.string += QChar(c);
 					break;
 				}
@@ -531,6 +537,7 @@ void PRJFile::projectedCS(CTX &ctx, PCS *pcs)
 	parameter(ctx, &setup);
 	linearUnit(ctx, &lu);
 	optProjectedCS(ctx, &epsg);
+	compare(ctx, RBRK);
 
 	*pcs = (epsg > 0) ? PCS::pcs(epsg) : PCS(gcs, method, setup, lu, cs);
 }
@@ -648,6 +655,111 @@ void PRJFile::horizontalCS(CTX &ctx)
 	}
 }
 
+void PRJFile::verticalDatum(CTX &ctx)
+{
+	int epsg;
+
+	compare(ctx, VERT_DATUM);
+	compare(ctx, LBRK);
+	compare(ctx, STRING);
+	compare(ctx, COMMA);
+	compare(ctx, NUMBER);
+	optAuthority(ctx, &epsg);
+	compare(ctx, RBRK);
+}
+
+void PRJFile::optVerticalCS2(CTX &ctx, int *epsg)
+{
+	switch (ctx.token) {
+		case AXIS:
+			axis(ctx);
+			optAuthority(ctx, epsg);
+			break;
+		case AUTHORITY:
+			authority(ctx, epsg);
+			break;
+		default:
+			error(ctx);
+	}
+}
+
+void PRJFile::optVerticalCS(CTX &ctx, int *epsg)
+{
+	if (ctx.token == COMMA) {
+		nextToken(ctx);
+		optVerticalCS2(ctx, epsg);
+	}
+}
+
+void PRJFile::verticalCS(CTX &ctx)
+{
+	int luEpsg, vcsEpsg;
+	double lu;
+
+	compare(ctx, VERT_CS);
+	compare(ctx, LBRK);
+	compare(ctx, STRING);
+	compare(ctx, COMMA);
+	verticalDatum(ctx);
+	compare(ctx, COMMA);
+	unit(ctx, &lu, &luEpsg);
+	optVerticalCS(ctx, &vcsEpsg);
+	compare(ctx, RBRK);
+}
+
+void PRJFile::optCS(CTX &ctx, int *epsg)
+{
+	if (ctx.token == COMMA) {
+		nextToken(ctx);
+		authority(ctx, epsg);
+	}
+}
+
+void PRJFile::compdCS(CTX &ctx)
+{
+	int epsg = -1;
+
+	compare(ctx, COMPD_CS);
+	compare(ctx, LBRK);
+	compare(ctx, STRING);
+	compare(ctx, COMMA);
+	CS(ctx);
+	compare(ctx, COMMA);
+	CS(ctx);
+	optCS(ctx, &epsg);
+	compare(ctx, RBRK);
+}
+
+void PRJFile::CS(CTX &ctx)
+{
+	switch (ctx.token) {
+		case COMPD_CS:
+			compdCS(ctx);
+			break;
+		case PROJCS:
+		case GEOGCS:
+			horizontalCS(ctx);
+			break;
+		case VERT_CS:
+			verticalCS(ctx);
+			break;
+		case GEOCCS:
+			_errorString = "geocentric coordinate systems not supported";
+			ctx.token = ERROR;
+			break;
+		case FITTED_CS:
+			_errorString = "fitted coordinate systems not supported";
+			ctx.token = ERROR;
+			break;
+		case LOCAL_CS:
+			_errorString = "local coordinate systems not supported";
+			ctx.token = ERROR;
+			break;
+		default:
+			error(ctx);
+	}
+}
+
 PRJFile::PRJFile(const QString &fileName)
 {
 	CTX ctx(fileName);
@@ -658,7 +770,7 @@ PRJFile::PRJFile(const QString &fileName)
 	}
 
 	nextToken(ctx);
-	horizontalCS(ctx);
+	CS(ctx);
 
 	if (ctx.token != ERROR && !_projection.isValid())
 		_errorString = "invalid/incomplete projection";
