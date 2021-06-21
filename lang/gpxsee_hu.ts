@@ -841,6 +841,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fájl</numerusform>
+            <numerusform>%n fájl</numerusform>
         </translation>
     </message>
 </context>
@@ -1072,7 +1073,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="137"/>
         <source>World-file georeferenced images</source>
-        <translation type="unfinished"></translation>
+        <translation>Georeferált világ-fájlképek</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="139"/>
@@ -1109,12 +1110,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="78"/>
         <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps)</source>
-        <translation type="unfinished"></translation>
+        <translation>Válaszd ki a térképek megfelelő vetületét vetületi definíció nélkül (JNX, KMZ és világ fájltérképek)</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="80"/>
         <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Válaszd ki a vektortérképek kívánt vetületét (IMG és Mapsforge térképek). A vetületnek a térkép teljes területén érvényesnek kell lennie.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="112"/>
