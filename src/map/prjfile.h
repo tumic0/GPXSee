@@ -13,8 +13,8 @@ class PRJFile
 public:
 	PRJFile(const QString &fileName);
 
-	const Projection projection() const {return _projection;}
-	const QString errorString() const {return _errorString;}
+	const Projection &projection() const {return _projection;}
+	const QString &errorString() const {return _errorString;}
 
 private:
 	enum Token {
@@ -27,7 +27,7 @@ private:
 
 		LBRK,		/* '[' */
 		RBRK,		/* ']' */
-		COMMA,      /* ',' */
+		COMMA,		/* ',' */
 
 		/* Keywords */
 		COMPD_CS, PROJCS, PROJECTION, GEOGCS, DATUM, SPHEROID, PRIMEM, UNIT,
