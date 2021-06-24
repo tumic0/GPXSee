@@ -1074,7 +1074,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="137"/>
         <source>World-file georeferenced images</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Obrazy georeferencyjne z plikami ze świata</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="139"/>
@@ -1451,12 +1451,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="78"/>
         <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wybierz odpowiednie odwzorowanie map bez definicji odwzorowania (mapy JNX, KMZ i plików świata)</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="80"/>
         <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz żądane odwzorowanie map wektorowych (mapy IMG i Mapsforge). Rzut musi obowiązywać dla całego obszaru mapy.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="196"/>
