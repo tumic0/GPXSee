@@ -36,12 +36,13 @@ private:
 	};
 
 	struct CTX {
-		CTX(const QString &fileName) : file(fileName), token(START) {}
+		CTX(const QString &fileName) : file(fileName), token(START), line(1) {}
 
 		QFile file;
 		Token token;
 		QString string;
 		double number;
+		int line;
 	};
 
 	Token keyword(CTX &ctx);

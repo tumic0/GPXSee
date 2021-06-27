@@ -118,7 +118,7 @@ void PRJFile::error(CTX &ctx)
 	if (ctx.token == ERROR)
 		return;
 
-	_errorString = "parse error";
+	_errorString = QString("parse error on line: %1").arg(ctx.line);
 	ctx.token = ERROR;
 }
 
@@ -142,9 +142,11 @@ void PRJFile::nextToken(CTX &ctx)
 
 		switch (state) {
 			case 0:
-				if (isspace(c))
+				if (isspace(c)) {
+					if (c == '\n')
+						ctx.line++;
 					break;
-				if (c == '[') {
+				} if (c == '[') {
 					ctx.token = LBRK;
 					return;
 				}
@@ -522,7 +524,6 @@ void PRJFile::projectedCS(CTX &ctx, PCS *pcs)
 	int epsg = -1;
 	GCS gcs;
 	LinearUnits lu;
-	CoordinateSystem cs(CoordinateSystem::XY);
 	Projection::Method method;
 	Projection::Setup setup;
 
@@ -539,7 +540,9 @@ void PRJFile::projectedCS(CTX &ctx, PCS *pcs)
 	optProjectedCS(ctx, &epsg);
 	compare(ctx, RBRK);
 
-	*pcs = (epsg > 0) ? PCS::pcs(epsg) : PCS(gcs, method, setup, lu, cs);
+	*pcs = (epsg > 0)
+		? PCS::pcs(epsg)
+		: PCS(gcs, method, setup, lu, CoordinateSystem());
 }
 
 void PRJFile::axisType(CTX &ctx)
@@ -772,6 +775,9 @@ PRJFile::PRJFile(const QString &fileName)
 	nextToken(ctx);
 	CS(ctx);
 
-	if (ctx.token != ERROR && !_projection.isValid())
-		_errorString = "invalid/incomplete projection";
+	if (ctx.token == EOI) {
+		if (!_projection.isValid())
+			_errorString = "unknown/incomplete projection";
+	} else
+		_projection = Projection();
 }
