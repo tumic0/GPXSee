@@ -1074,7 +1074,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="137"/>
         <source>World-file georeferenced images</source>
-        <translation type="unfinished"></translation>
+        <translation>Georeferencované obrázky - world-file</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="139"/>
@@ -1451,12 +1451,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="78"/>
         <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps)</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekce map u kterých není informace o projekci uvedena (JNX, KMZ a World-file soubory)</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="80"/>
         <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekce vektorových map (IMG a Mapsforge). Projekce musí být platná přes celou oblast mapy.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="196"/>
