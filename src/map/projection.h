@@ -80,8 +80,16 @@ public:
 	Projection &operator=(const Projection &p);
 	bool operator==(const Projection &p) const;
 
-	bool isNull() const {return (_gcs.isNull() && _ct == 0 && _units.isNull());}
-	bool isValid() const {return _gcs.isValid() && _ct != 0 && _units.isValid();}
+	bool isNull() const
+	{
+		return (_gcs.isNull() && _ct == 0 && _units.isNull() && _cs.isNull());
+	}
+	bool isValid() const
+	{
+		// We do not check the CoordinateSystem here as it is not always defined
+		// and except of WMTS/WMS it is not needed.
+		return (_gcs.isValid() && _ct != 0 && _units.isValid());
+	}
 	bool isGeographic() const {return _geographic;}
 
 	PointD ll2xy(const Coordinates &c) const;

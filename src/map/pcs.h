@@ -30,8 +30,9 @@ public:
 		  && _setup.isNull() && _cs.isNull());
 	}
 	bool isValid() const {
-		return (_gcs.isValid() && _units.isValid() && _method.isValid()
-		  && _cs.isValid());
+		// We do not check the CoordinateSystem here as it is not always defined
+		// and except of WMTS/WMS it is not needed.
+		return (_gcs.isValid() && _units.isValid() && _method.isValid());
 	}
 
 	static void loadList(const QString &path);

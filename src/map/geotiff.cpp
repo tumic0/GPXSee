@@ -289,7 +289,7 @@ bool GeoTIFF::readGeoValue(TIFFFile &file, quint32 offset, quint16 index,
 	return true;
 }
 
-GCS GeoTIFF::gcs(QMap<quint16, Value> &kv)
+GCS GeoTIFF::geographicCS(QMap<quint16, Value> &kv)
 {
 	GCS gcs;
 
@@ -321,7 +321,7 @@ GCS GeoTIFF::gcs(QMap<quint16, Value> &kv)
 	return gcs;
 }
 
-Projection::Method GeoTIFF::method(QMap<quint16, Value> &kv)
+Projection::Method GeoTIFF::coordinateTransformation(QMap<quint16, Value> &kv)
 {
 	if (!IS_SET(kv, ProjCoordTransGeoKey)) {
 		_errorString = "Missing coordinate transformation method";
@@ -367,10 +367,10 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 		}
 		_projection = Projection(pcs);
 	} else if (IS_SET(kv, ProjectionGeoKey)) {
-		const GCS g(gcs(kv));
-		if (g.isNull())
+		GCS gcs(geographicCS(kv));
+		if (gcs.isNull())
 			return false;
-		const PCS &pcs = PCS::pcs(g, kv.value(ProjectionGeoKey).SHORT);
+		const PCS &pcs = PCS::pcs(gcs, kv.value(ProjectionGeoKey).SHORT);
 		if (pcs.isNull()) {
 			_errorString = QString("%1: unknown projection code")
 			  .arg(kv.value(GeographicTypeGeoKey).SHORT)
@@ -381,11 +381,11 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 	} else {
 		double lat0, lon0, scale, fe, fn, sp1, sp2;
 
-		GCS g(gcs(kv));
-		if (g.isNull())
+		GCS gcs(geographicCS(kv));
+		if (gcs.isNull())
 			return false;
-		Projection::Method m(method(kv));
-		if (m.isNull())
+		Projection::Method method(coordinateTransformation(kv));
+		if (method.isNull())
 			return false;
 
 		AngularUnits au(IS_SET(kv, GeogAngularUnitsGeoKey)
@@ -454,7 +454,7 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 			fe = NAN;
 
 		Projection::Setup setup(lat0, lon0, scale, fe, fn, sp1, sp2);
-		PCS pcs(g, m, setup, lu, CoordinateSystem());
+		PCS pcs(gcs, method, setup, lu, CoordinateSystem());
 		_projection = Projection(pcs);
 	}
 
@@ -463,11 +463,11 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 
 bool GeoTIFF::geographicModel(QMap<quint16, Value> &kv)
 {
-	GCS g(gcs(kv));
-	if (g.isNull())
+	GCS gcs(geographicCS(kv));
+	if (gcs.isNull())
 		return false;
 
-	_projection = Projection(g);
+	_projection = Projection(gcs);
 
 	return true;
 }

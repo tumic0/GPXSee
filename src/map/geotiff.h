@@ -48,8 +48,8 @@ private:
 	bool readGeoValue(TIFFFile &file, quint32 offset, quint16 index,
 	  double &val) const;
 
-	GCS gcs(QMap<quint16, Value> &kv);
-	Projection::Method method(QMap<quint16, Value> &kv);
+	GCS geographicCS(QMap<quint16, Value> &kv);
+	Projection::Method coordinateTransformation(QMap<quint16, Value> &kv);
 	bool geographicModel(QMap<quint16, Value> &kv);
 	bool projectedModel(QMap<quint16, Value> &kv);
 

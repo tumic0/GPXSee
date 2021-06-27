@@ -115,7 +115,7 @@ Projection::Projection(const PCS &pcs)
 }
 
 Projection::Projection(const GCS &gcs, const CoordinateSystem &cs)
-  : _gcs(gcs), _ct(0), _units(LinearUnits(9001)), _cs(cs), _geographic(true)
+  : _gcs(gcs), _units(LinearUnits(9001)), _cs(cs), _geographic(true)
 {
 	_ct = new LatLon(gcs.angularUnits());
 }
