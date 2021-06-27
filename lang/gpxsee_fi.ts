@@ -372,7 +372,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="288"/>
         <source>Unselect all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Poista kaikkien tiedostojen valinta</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="321"/>
