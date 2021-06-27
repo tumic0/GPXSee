@@ -778,6 +778,8 @@ PRJFile::PRJFile(const QString &fileName)
 	if (ctx.token == EOI) {
 		if (!_projection.isValid())
 			_errorString = "unknown/incomplete projection";
-	} else
+	} else {
+		error(ctx);
 		_projection = Projection();
+	}
 }
