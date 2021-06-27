@@ -10,6 +10,7 @@ public:
 	LimitedComboBox(int limit, QWidget *parent = 0)
 	  : QComboBox(parent), _limit(limit)
 	{
+		setSizeAdjustPolicy(AdjustToMinimumContentsLengthWithIcon);
 		setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 		setStyleSheet("combobox-popup: 0;");
 	}
