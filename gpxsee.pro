@@ -500,7 +500,8 @@ win32 {
         icons/formats/aqm.ico \
         icons/formats/sqlt.ico \
         icons/formats/ov2.ico \
-        icons/formats/itn.ico
+        icons/formats/itn.ico \
+        icons/formats/wld.ico
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }

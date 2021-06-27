@@ -260,4 +260,15 @@
 		<glob pattern="*.map"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.esri.wld">
+		<comment>ESRI World File</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text/plain"/>
+		<glob pattern="*.wld"/>
+		<glob pattern="*.jgw"/>
+		<glob pattern="*.gfw"/>
+		<glob pattern="*.pgw"/>
+		<glob pattern="*.tfw"/>
+	</mime-type>
+
 </mime-info>

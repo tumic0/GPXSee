@@ -132,7 +132,7 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "aqm" "AlpineQuest Map File" 16
   !insertmacro FILE_ASSOCIATION_ADD "sqlitedb" "RMAps SQLite Map File" 17
   !insertmacro FILE_ASSOCIATION_ADD "ov2" "TomTom POI File" 18
-  !insertmacro FILE_ASSOCIATION_ADD "itn" "TomTom Route File" 19    
+  !insertmacro FILE_ASSOCIATION_ADD "itn" "TomTom Route File" 19
   !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 20
   !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 21
   !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 21
