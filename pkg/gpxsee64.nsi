@@ -139,15 +139,20 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "aqm" "AlpineQuest Map File" 16
   !insertmacro FILE_ASSOCIATION_ADD "sqlitedb" "RMaps SQLite Map File" 17
   !insertmacro FILE_ASSOCIATION_ADD "ov2" "TomTom POI File" 18
-  !insertmacro FILE_ASSOCIATION_ADD "itn" "TomTom Route File" 19    
-  !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 20
-  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 21
-  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 21
-  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 22
-  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 23
-  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 24
-  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track File" 25
-  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 26
+  !insertmacro FILE_ASSOCIATION_ADD "itn" "TomTom Route File" 19
+  !insertmacro FILE_ASSOCIATION_ADD "wld" "ESRI World File" 20
+  !insertmacro FILE_ASSOCIATION_ADD "jgw" "ESRI World File" 20
+  !insertmacro FILE_ASSOCIATION_ADD "gfw" "ESRI World File" 20
+  !insertmacro FILE_ASSOCIATION_ADD "pgw" "ESRI World File" 20
+  !insertmacro FILE_ASSOCIATION_ADD "tfw" "ESRI World File" 20      
+  !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 21
+  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 22
+  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 22
+  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 23
+  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 24
+  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 25
+  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track File" 26
+  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 27
 
   WriteRegStr HKCR "Applications\GPXSee.exe\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
   WriteRegStr HKCR ".gpx\OpenWithList" "GPXSee.exe" ""
@@ -186,6 +191,11 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKCR ".kmz\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".aqm\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".sqlitedb\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".wld\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".jgw\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".gfw\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".pgw\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".tfw\OpenWithList" "GPXSee.exe" ""
 
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
@@ -321,6 +331,11 @@ Section "Uninstall"
   !insertmacro FILE_ASSOCIATION_REMOVE "sqlitedb"
   !insertmacro FILE_ASSOCIATION_REMOVE "ov2"
   !insertmacro FILE_ASSOCIATION_REMOVE "itn"
+  !insertmacro FILE_ASSOCIATION_REMOVE "wld"
+  !insertmacro FILE_ASSOCIATION_REMOVE "jgw"
+  !insertmacro FILE_ASSOCIATION_REMOVE "gfw"
+  !insertmacro FILE_ASSOCIATION_REMOVE "pgw"
+  !insertmacro FILE_ASSOCIATION_REMOVE "tfw"
 
   DeleteRegValue HKCR ".gpx\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".tcx\OpenWithList" "GPXSee.exe"
@@ -358,6 +373,11 @@ Section "Uninstall"
   DeleteRegValue HKCR ".kmz\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".aqm\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".sqlitedb\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".wld\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".jgw\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".gfw\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".pgw\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".tfw\OpenWithList" "GPXSee.exe"
   DeleteRegKey HKCR "Applications\GPXSee.exe"   
   
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
