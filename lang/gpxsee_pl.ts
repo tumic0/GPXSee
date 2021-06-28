@@ -1074,7 +1074,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="137"/>
         <source>World-file georeferenced images</source>
-        <translation type="unfinished">Obrazy georeferencyjne z plikami ze świata</translation>
+        <translation>Obrazy georeferencyjne z plikami ze świata</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="139"/>
@@ -1451,7 +1451,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="78"/>
         <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps)</source>
-        <translation type="unfinished">Wybierz odpowiednie odwzorowanie map bez definicji odwzorowania (mapy JNX, KMZ i plików świata)</translation>
+        <translation>Wybierz odpowiednie odwzorowanie map bez definicji odwzorowania (mapy JNX, KMZ i plików świata)</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="80"/>
