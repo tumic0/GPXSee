@@ -118,7 +118,7 @@ void PRJFile::error(CTX &ctx)
 	if (ctx.token == ERROR)
 		return;
 
-	_errorString = QString("parse error on line: %1").arg(ctx.line);
+	_errorString = QString("parse error on line %1").arg(ctx.line);
 	ctx.token = ERROR;
 }
 
