@@ -15,7 +15,7 @@ class QComboBox;
 class QCheckBox;
 class QRadioButton;
 class PercentSlider;
-class LimitedComboBox;
+class ProjectionComboBox;
 
 
 struct Options {
@@ -121,8 +121,8 @@ private:
 	ColorBox *_sliderColor;
 	QCheckBox *_graphAA;
 	// Map
-	LimitedComboBox *_outputProjection;
-	LimitedComboBox *_inputProjection;
+	ProjectionComboBox *_outputProjection;
+	ProjectionComboBox *_inputProjection;
 	QRadioButton *_hidpi;
 	QRadioButton *_lodpi;
 	// Data

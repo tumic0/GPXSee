@@ -209,7 +209,7 @@ HEADERS += src/common/config.h \
     src/map/IMG/subdiv.h \
     src/map/IMG/style.h \
     src/map/IMG/netfile.h \
-    src/GUI/limitedcombobox.h \
+    src/GUI/projectioncombobox.h \
     src/GUI/pathtickitem.h \
     src/map/textitem.h \
     src/map/IMG/label.h \
@@ -395,7 +395,8 @@ SOURCES += src/main.cpp \
     src/data/geojsonparser.cpp \
     src/map/aqmmap.cpp \
     src/map/mapsforgemap.cpp \
-    src/map/worldfilemap.cpp
+    src/map/worldfilemap.cpp \
+    src/GUI/projectioncombobox.cpp
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     QT_NO_DEPRECATED_WARNINGS

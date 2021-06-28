@@ -13,13 +13,12 @@
 #include <QLabel>
 #include <QSysInfo>
 #include <QButtonGroup>
-#include "map/pcs.h"
 #include "icons.h"
 #include "colorbox.h"
 #include "stylecombobox.h"
 #include "oddspinbox.h"
 #include "percentslider.h"
-#include "limitedcombobox.h"
+#include "projectioncombobox.h"
 #include "optionsdialog.h"
 
 
@@ -44,34 +43,12 @@ void OptionsDialog::automaticPauseDetectionSet(bool set)
 	_pauseSpeed->setEnabled(!set);
 }
 
-static LimitedComboBox *projectionBox()
-{
-	LimitedComboBox *box;
-	int last = -1;
-
-	box = new LimitedComboBox(200);
-	QList<KV<int, QString> > projections(GCS::list() + PCS::list());
-	std::sort(projections.begin(), projections.end());
-	for (int i = 0; i < projections.size(); i++) {
-		const KV<int, QString> &proj = projections.at(i);
-		// There may be same EPSG codes with different names
-		if (proj.key() == last)
-			continue;
-		else
-			last = proj.key();
-		QString text = QString::number(proj.key()) + " - " + proj.value();
-		box->addItem(text, QVariant(proj.key()));
-	}
-
-	return box;
-}
-
 QWidget *OptionsDialog::createMapPage()
 {
-	_outputProjection = projectionBox();
+	_outputProjection = new ProjectionComboBox();
 	_outputProjection->setCurrentIndex(_outputProjection->findData(
 	  _options.outputProjection));
-	_inputProjection = projectionBox();
+	_inputProjection = new ProjectionComboBox();
 	_inputProjection->setCurrentIndex(_inputProjection->findData(
 	  _options.inputProjection));
 
