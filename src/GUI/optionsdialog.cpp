@@ -53,7 +53,7 @@ QWidget *OptionsDialog::createMapPage()
 	  _options.inputProjection));
 
 	QLabel *inInfo = new QLabel(tr("Select the proper projection of maps"
-	  " without a projection definition (JNX, KMZ and world file maps)"));
+	  " without a projection definition (JNX, KMZ and world file maps)."));
 	QLabel *outInfo = new QLabel(tr("Select the desired projection of vector"
 	  " maps (IMG and Mapsforge maps). The projection must be valid for"
 	  " the whole map area."));
