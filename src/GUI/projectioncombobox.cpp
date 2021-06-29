@@ -5,7 +5,6 @@ ProjectionComboBox::ProjectionComboBox(QWidget *parent) : QComboBox(parent)
 {
 	setSizeAdjustPolicy(AdjustToMinimumContentsLengthWithIcon);
 	setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-	setStyleSheet("combobox-popup: 0;");
 
 	int last = -1;
 	QList<KV<int, QString> > projections(GCS::list() + PCS::list());
