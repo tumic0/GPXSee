@@ -526,6 +526,26 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>wld</string>
+				<string>jgw</string>
+				<string>gfw</string>
+				<string>pgw</string>
+				<string>tfw</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.esri.wld</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/wld.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>ESRI World File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
@@ -1185,6 +1205,31 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.tomtom.itn</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.esri.wld</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://webhelp.esri.com/arcims/9.3/General/topics/author_world_files.htm</string>
+			<key>UTTypeDescription</key>
+			<string>ESRI World File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>wld</string>
+					<string>jgw</string>
+					<string>gfw</string>
+					<string>pgw</string>
+					<string>tfw</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.esri.wld</string>
 			</dict>
 		</dict>
 	</array>
