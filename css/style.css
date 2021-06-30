@@ -208,6 +208,9 @@ h1.logo a span {
 	margin-bottom:8px;
 	margin-top:8px;
 }
+#content h4 {
+	color:#555
+}
 #content ul {
 	margin-left:30px;
 }
