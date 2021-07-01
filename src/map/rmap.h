@@ -35,6 +35,18 @@ public:
 	QString errorString() const {return _errorString;}
 
 private:
+	struct Header {
+		quint32 type;
+		quint32 width;
+		quint32 height;
+		quint32 bpp;
+		quint32 unknown;
+		quint32 tileWidth;
+		quint32 tileHeight;
+		quint32 paletteSize;
+		quint64 IMPOffset;
+	};
+
 	struct Zoom {
 		QSize size;
 		QSize dim;
@@ -42,6 +54,11 @@ private:
 		QVector<quint64> tiles;
 	};
 
+	bool readHeader(QDataStream &stream, Header &hdr);
+	bool readPalette(QDataStream &stream, quint32 paletteSize);
+	bool readZooms(QDataStream &stream, const QSize &imageSize);
+	bool readZoomLevel(quint64 offset, const QSize &imageSize);
+	QByteArray readIMP(quint64 IMPOffset);
 	bool parseIMP(const QByteArray &data);
 	QPixmap tile(int x, int y);
 

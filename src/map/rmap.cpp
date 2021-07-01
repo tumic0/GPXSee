@@ -15,11 +15,6 @@
 
 
 #define MAGIC "CompeGPSRasterImage"
-#define CHECK(condition) \
-	if (!(condition)) { \
-		_errorString = "Invalid/corrupted RMap file"; \
-		return; \
-	}
 
 static CalibrationPoint parseCalibrationPoint(const QString &str)
 {
@@ -149,6 +144,125 @@ bool RMap::parseIMP(const QByteArray &data)
 	return true;
 }
 
+bool RMap::readPalette(QDataStream &stream, quint32 paletteSize)
+{
+	quint32 bgr;
+
+	if (paletteSize > 256)
+		return false;
+
+	_palette.resize(256);
+	for (int i = 0; i < (int)paletteSize; i++) {
+		stream >> bgr;
+		_palette[i] = Color::bgr2rgb(bgr);
+	}
+
+	return (stream.status() == QDataStream::Ok);
+}
+
+bool RMap::readZoomLevel(quint64 offset, const QSize &imageSize)
+{
+	if (!_file.seek(offset))
+		return false;
+	QDataStream stream(&_file);
+	stream.setByteOrder(QDataStream::LittleEndian);
+
+	_zooms.append(Zoom());
+	Zoom &zoom = _zooms.last();
+
+	quint32 width, height;
+	stream >> width >> height;
+	zoom.size = QSize(width, -(int)height);
+	stream >> width >> height;
+	zoom.dim = QSize(width, height);
+	zoom.scale = QPointF((qreal)zoom.size.width() / (qreal)imageSize.width(),
+	  (qreal)zoom.size.height() / (qreal)imageSize.height());
+	if (stream.status() != QDataStream::Ok)
+		return false;
+
+	zoom.tiles.resize(zoom.dim.width() * zoom.dim.height());
+	for (int j = 0; j < zoom.tiles.size(); j++)
+		stream >> zoom.tiles[j];
+
+	return (stream.status() == QDataStream::Ok);
+}
+
+bool RMap::readZooms(QDataStream &stream, const QSize &imageSize)
+{
+	qint32 zoomCount;
+	stream >> zoomCount;
+	if (!(stream.status() == QDataStream::Ok && zoomCount))
+		return false;
+
+	QVector<quint64> zoomOffsets(zoomCount);
+	for (int i = 0; i < zoomCount; i++)
+		stream >> zoomOffsets[i];
+	if (stream.status() != QDataStream::Ok)
+		return false;
+
+	for (int i = 0; i < zoomOffsets.size(); i++)
+		if (!readZoomLevel(zoomOffsets.at(i), imageSize))
+			return false;
+
+	return true;
+}
+
+QByteArray RMap::readIMP(quint64 IMPOffset)
+{
+	if (!_file.seek(IMPOffset))
+		return QByteArray();
+
+	QDataStream stream(&_file);
+	stream.setByteOrder(QDataStream::LittleEndian);
+
+	quint32 IMPSize, unknown;
+	stream >> unknown >> IMPSize;
+	if (stream.status() != QDataStream::Ok)
+		return QByteArray();
+
+	QByteArray IMP;
+	IMP.resize(IMPSize);
+	return (stream.readRawData(IMP.data(), IMP.size()) == IMP.size())
+	  ? IMP : QByteArray();
+}
+
+bool RMap::readHeader(QDataStream &stream, Header &hdr)
+{
+	quint32 subtype, obfuscated;
+	char magic[sizeof(MAGIC) - 1];
+
+	if (stream.readRawData(magic, sizeof(magic)) != sizeof(magic)
+	  || memcmp(MAGIC, magic, sizeof(magic))) {
+		_errorString = "Not a raster RMap file";
+		return false;
+	}
+
+	stream >> hdr.type;
+	if (hdr.type > 5)
+		stream >> subtype;
+	if (hdr.type > 6)
+		stream >> obfuscated;
+	else
+		obfuscated = 0;
+	stream >> hdr.width >> hdr.height >> hdr.bpp >> hdr.unknown >> hdr.tileWidth
+	  >> hdr.tileHeight >> hdr.IMPOffset >> hdr.paletteSize;
+	if (stream.status() != QDataStream::Ok) {
+		_errorString = "Error reading RMap header";
+		return false;
+	}
+
+	if (hdr.type < 4 || hdr.type > 10) {
+		_errorString = QString::number(hdr.type) + ": unsupported map type";
+		return false;
+	}
+	if (obfuscated) {
+		_errorString = "Obfuscated maps not supported";
+		return false;
+	}
+
+	return true;
+}
+
 RMap::RMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _file(fileName), _mapRatio(1.0), _zoom(0),
   _valid(false)
@@ -161,86 +275,27 @@ RMap::RMap(const QString &fileName, QObject *parent)
 	QDataStream stream(&_file);
 	stream.setByteOrder(QDataStream::LittleEndian);
 
-	char magic[sizeof(MAGIC) - 1];
-	if (stream.readRawData(magic, sizeof(magic)) != sizeof(magic)
-	  || memcmp(MAGIC, magic, sizeof(magic))) {
-		_errorString = "Not a raster RMap file";
+	Header hdr;
+	if (!readHeader(stream, hdr))
+		return;
+
+	_tileSize = QSize(hdr.tileWidth, hdr.tileHeight);
+
+	if (hdr.paletteSize && !readPalette(stream, hdr.paletteSize)) {
+		_errorString = "Error reading color palette";
 		return;
 	}
 
-	quint32 unknown, type, subtype, obfuscated, width, height, bpp, tileWidth,
-	  tileHeight, paletteSize;
-	quint64 IMPOffset;
-
-	stream >> type;
-	if (type > 5)
-		stream >> subtype >> obfuscated;
-	else
-		obfuscated = 0;
-	stream >> width >> height >> bpp >> unknown >> tileWidth >> tileHeight
-	  >> IMPOffset >> paletteSize;
-	CHECK(stream.status() == QDataStream::Ok);
-
-	if (!(type == 5 || (type >= 8 && type <= 10))) {
-		_errorString = QString::number(type) + ": unsupported map type";
-		return;
-	}
-	if (obfuscated) {
-		_errorString = "Obfuscated maps not supported";
+	if (!readZooms(stream, QSize(hdr.width, -(int)hdr.height))) {
+		_errorString = "Error reading zoom levels";
 		return;
 	}
 
-	QSize imageSize(width, -(int)height);
-	_tileSize = QSize(tileWidth, tileHeight);
-
-	if (paletteSize) {
-		quint32 bgr;
-		CHECK(paletteSize <= 256);
-
-		_palette.resize(256);
-		for (int i = 0; i < (int)paletteSize; i++) {
-			stream >> bgr;
-			_palette[i] = Color::bgr2rgb(bgr);
-		}
+	QByteArray IMP(readIMP(hdr.IMPOffset));
+	if (IMP.isNull()) {
+		_errorString = "Error reading IMP data";
+		return;
 	}
-
-	qint32 zoomCount;
-	stream >> zoomCount;
-	CHECK(stream.status() == QDataStream::Ok && zoomCount);
-
-	QVector<quint64> zoomOffsets(zoomCount);
-	for (int i = 0; i < zoomCount; i++)
-		stream >> zoomOffsets[i];
-	CHECK(stream.status() == QDataStream::Ok);
-
-	for (int i = 0; i < zoomOffsets.size(); i++) {
-		_zooms.append(Zoom());
-		Zoom &zoom = _zooms.last();
-
-		CHECK(_file.seek(zoomOffsets.at(i)));
-
-		quint32 width, height;
-		stream >> width >> height;
-		zoom.size = QSize(width, -(int)height);
-		stream >> width >> height;
-		zoom.dim = QSize(width, height);
-		zoom.scale = QPointF((qreal)zoom.size.width() / (qreal)imageSize.width(),
-		  (qreal)zoom.size.height() / (qreal)imageSize.height());
-		CHECK(stream.status() == QDataStream::Ok);
-
-		zoom.tiles.resize(zoom.dim.width() * zoom.dim.height());
-		for (int j = 0; j < zoom.tiles.size(); j++)
-			stream >> zoom.tiles[j];
-		CHECK(stream.status() == QDataStream::Ok);
-	}
-
-	CHECK(_file.seek(IMPOffset));
-	quint32 IMPSize;
-	stream >> unknown >> IMPSize;
-	CHECK(stream.status() == QDataStream::Ok);
-
-	QByteArray IMP(IMPSize + 1, 0);
-	stream.readRawData(IMP.data(), IMP.size());
 	_valid = parseIMP(IMP);
 
 	_file.close();
@@ -358,7 +413,7 @@ QPixmap RMap::tile(int x, int y)
 		if (stream.readRawData(ba.data(), ba.size()) != ba.size())
 			return QPixmap();
 
-		QImage img(QImage::fromData(ba));
+		QImage img(QImage::fromData(ba, "JPG"));
 		return QPixmap::fromImage(img);
 	} else
 		return QPixmap();
