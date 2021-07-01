@@ -58,21 +58,17 @@ QList<GCS::Entry> GCS::defaults()
 	return list;
 }
 
-const GCS &GCS::gcs(int id)
+GCS GCS::gcs(int id)
 {
-	static const GCS null;
-
 	for (int i = 0; i < _gcss.size(); i++)
 		if (_gcss.at(i).id() == id)
 			return _gcss.at(i).gcs();
 
-	return null;
+	return GCS();
 }
 
-const GCS &GCS::gcs(int geodeticDatum, int primeMeridian, int angularUnits)
+GCS GCS::gcs(int geodeticDatum, int primeMeridian, int angularUnits)
 {
-	static const GCS null;
-
 	for (int i = 0; i < _gcss.size(); i++) {
 		const Entry &e = _gcss.at(i);
 		if (e.gd() == geodeticDatum && e.gcs().primeMeridian() == primeMeridian
@@ -80,18 +76,16 @@ const GCS &GCS::gcs(int geodeticDatum, int primeMeridian, int angularUnits)
 			return e.gcs();
 	}
 
-	return null;
+	return GCS();
 }
 
-const GCS &GCS::gcs(const QString &name)
+GCS GCS::gcs(const QString &name)
 {
-	static const GCS null;
-
 	for (int i = 0; i < _gcss.size(); i++)
 		if (_gcss.at(i).name() == name)
 			return _gcss.at(i).gcs();
 
-	return null;
+	return GCS();
 }
 
 void GCS::loadList(const QString &path)

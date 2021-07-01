@@ -117,26 +117,22 @@ static int projectionSetup(const QList<QByteArray> &list,
 }
 
 
-const PCS &PCS::pcs(int id)
+PCS PCS::pcs(int id)
 {
-	static const PCS null;
-
 	for (int i = 0; i < _pcss.size(); i++)
 		if (_pcss.at(i).id() == id)
 			return _pcss.at(i).pcs();
 
-	return null;
+	return PCS();
 }
 
-const PCS &PCS::pcs(const GCS &gcs, int proj)
+PCS PCS::pcs(const GCS &gcs, int proj)
 {
-	static const PCS null;
-
 	for (int i = 0; i < _pcss.size(); i++)
 		if (_pcss.at(i).proj() == proj && _pcss.at(i).pcs().gcs() == gcs)
 			return _pcss.at(i).pcs();
 
-	return null;
+	return PCS();
 }
 
 void PCS::loadList(const QString &path)
@@ -210,7 +206,7 @@ void PCS::loadList(const QString &path)
 			  ln);
 			continue;
 		}
-		const GCS &gcs = GCS::gcs(gcsid);
+		GCS gcs(GCS::gcs(gcsid));
 		if (gcs.isNull()) {
 			qWarning("%s:%d: Unknown GCS code", qPrintable(path), ln);
 			continue;

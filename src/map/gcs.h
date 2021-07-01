@@ -32,10 +32,9 @@ public:
 	Coordinates toWGS84(const Coordinates &c) const;
 	Coordinates fromWGS84(const Coordinates &c) const;
 
-	static const GCS &gcs(int id);
-	static const GCS &gcs(int geodeticDatum, int primeMeridian,
-	  int angularUnits);
-	static const GCS &gcs(const QString &name);
+	static GCS gcs(int id);
+	static GCS gcs(int geodeticDatum, int primeMeridian, int angularUnits);
+	static GCS gcs(const QString &name);
 	static const GCS &WGS84();
 
 	static void loadList(const QString &path);

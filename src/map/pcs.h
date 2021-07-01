@@ -36,8 +36,8 @@ public:
 	}
 
 	static void loadList(const QString &path);
-	static const PCS &pcs(int id);
-	static const PCS &pcs(const GCS &gcs, int proj);
+	static PCS pcs(int id);
+	static PCS pcs(const GCS &gcs, int proj);
 	static QList<KV<int, QString> > list();
 
 private:

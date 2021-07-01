@@ -359,7 +359,7 @@ Projection::Method GeoTIFF::coordinateTransformation(QMap<quint16, Value> &kv)
 bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 {
 	if (IS_SET(kv, ProjectedCSTypeGeoKey)) {
-		const PCS &pcs = PCS::pcs(kv.value(ProjectedCSTypeGeoKey).SHORT);
+		PCS pcs(PCS::pcs(kv.value(ProjectedCSTypeGeoKey).SHORT));
 		if (pcs.isNull()) {
 			_errorString = QString("%1: unknown PCS")
 			  .arg(kv.value(ProjectedCSTypeGeoKey).SHORT);
@@ -370,7 +370,7 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 		GCS gcs(geographicCS(kv));
 		if (gcs.isNull())
 			return false;
-		const PCS &pcs = PCS::pcs(gcs, kv.value(ProjectionGeoKey).SHORT);
+		PCS pcs(PCS::pcs(gcs, kv.value(ProjectionGeoKey).SHORT));
 		if (pcs.isNull()) {
 			_errorString = QString("%1: unknown projection code")
 			  .arg(kv.value(GeographicTypeGeoKey).SHORT)
@@ -454,8 +454,7 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 			fe = NAN;
 
 		Projection::Setup setup(lat0, lon0, scale, fe, fn, sp1, sp2);
-		PCS pcs(gcs, method, setup, lu, CoordinateSystem());
-		_projection = Projection(pcs);
+		_projection = Projection(PCS(gcs, method, setup, lu));
 	}
 
 	return true;

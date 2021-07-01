@@ -34,11 +34,11 @@ Projection CRS::projection(const QString &crs)
 		if (!res)
 			return Projection();
 
-		const PCS &pcs = PCS::pcs(epsg);
+		PCS pcs(PCS::pcs(epsg));
 		if (!pcs.isNull())
 			return Projection(pcs);
 
-		const GCS &gcs = GCS::gcs(epsg);
+		GCS gcs(GCS::gcs(epsg));
 		if (!gcs.isNull())
 			return Projection(gcs);
 
@@ -54,11 +54,11 @@ Projection CRS::projection(const QString &crs)
 
 Projection CRS::projection(int id)
 {
-	const PCS &pcs = PCS::pcs(id);
+	PCS pcs(PCS::pcs(id));
 	if (!pcs.isNull())
 		return Projection(pcs);
 
-	const GCS &gcs = GCS::gcs(id);
+	GCS gcs(GCS::gcs(id));
 	if (!gcs.isNull())
 		return Projection(gcs);
 

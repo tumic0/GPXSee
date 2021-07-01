@@ -125,7 +125,7 @@ bool RMap::parseIMP(const QByteArray &data)
 		}
 	}
 
-	const GCS &gcs = GCS::gcs(datum);
+	GCS gcs(GCS::gcs(datum));
 	if (gcs.isNull()) {
 		_errorString = datum + ": unknown/invalid datum";
 		return false;
