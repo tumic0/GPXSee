@@ -297,9 +297,13 @@ h1.logo a span {
 	width:100px;
 	font-style:italic;
 }
-#sidebar h5 {
-	margin-left:8px;
-}
 #outline {
 	margin:20px 0 0 20px;
+}
+#outline .h5l {
+	margin-left:10px;
+}
+#outline .h6l {
+	margin-left:20px;
+	font-size:12px;
 }

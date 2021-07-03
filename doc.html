@@ -268,13 +268,21 @@
           <p>You may easily create offline atlases from online map services by using
           <a href="http://mobac.sourceforge.net/">Mobile Atlas Creator (MOBAC)</a>.</p>
 
-          <h4>IMG maps</h4>
+          <h4 id="IMG">IMG maps</h4>
           <p>There is support for IMG maps overlay in GPXSee since version 7.30. If the map
           name is <i>mapname.img</i> and there is also a file named <i>mapname.img.1</i>
           (.2, .3, ... for additional layers) in the same path, than it will be automatically
           loaded as an overlay of <i>mapname.img</i>.</p>
 
-          <h4>World Files</h4>
+          <h4 id="JNXKML">JNX &amp; KMZ maps</h4>
+          <p>JNX &amp; KMZ maps do not contain any info about the projection of their
+          tile images, so it has to be provided externaly<sup><a href="#garmin">4</a></sup>.
+          Generally, only two projections are used for JNX/KMZ maps - EPSG:4326 and
+          EPSG:3857. If you see <a href="img/wrong_proj.png">background color stripes</a>
+          in your JNX/KMZ map, you have to switch to the propper input projection
+          in the preferences.</p>          
+
+          <h4 id="worldfiles">World Files</h4>
           <p>World-File georeferenced images require the projection info to be provided
           additionaly to the world file. This can be done either using a separete PRJ
           file in <a href="https://portal.ogc.org/files/?artifact_id=999">WKT1 format</a>
@@ -285,15 +293,6 @@
           info (the <code>AUTHORITY</code> info overrides any parameter values). The
           WKT data must follow the OGC naming convention. Generally, the OGC WKT entries
           from <a href="https://epsg.io/">epsg.io</a> should work.</p>
-          
-          <h4>JNX &amp; KMZ maps</h4>
-          <p>JNX &amp; KMZ maps do not contain any info about the projection of their
-          tile images, so it has to be provided externaly<sup><a href="#garmin">4</a></sup>.
-          Generally, only two projections are used for JNX/KMZ maps - EPSG:4326 and
-          EPSG:3857. If you see <a href="img/wrong_proj.png">background color stripes</a>
-          in your JNX/KMZ map, you have to switch to the propper input projection
-          in the preferences.</p>
-
 
           <h3 id="styles">Map styles</h3>
           <p>MVT(PBF), Mapsforge and Garmin IMG maps can be styled with user defined styles.
@@ -340,13 +339,21 @@
 
       <div id="sidebar">
         <div id="outline">
-          <h4><a href="#data">Data files</a></h4>
-          <h4><a href="#maps">Maps</a></h4>
-            <h5><a href="#online">Online maps</a></h5>
-            <h5><a href="#offline">Offline maps</a></h5>
-            <h5><a href="#styles">Map styles</a></h5>
-          <h4><a href="#poi">POI files</a></h4>
-          <h4><a href="#dem">DEM files</a></h4>
+          <div class="h4l"><a href="#data">Data files</a></div>
+          <div class="h4l"><a href="#maps">Maps</a></div>
+            <div class="h5l"><a href="#online">Online maps</a></div>
+              <div class="h6l"><a href="#OSM">OSM/Google tiles</a></div>
+              <div class="h6l"><a href="#TMS">TMS</a></div>
+              <div class="h6l"><a href="#QuadTiles">QuadTiles</a></div>
+              <div class="h6l"><a href="#WMTS">WMTS</a></div>
+              <div class="h6l"><a href="#WMS">WMS</a></div>
+            <div class="h5l"><a href="#offline">Offline maps</a></div>
+              <div class="h6l"><a href="#IMG">IMG maps</a></div>
+              <div class="h6l"><a href="#JNXKML">JNX &amp; KMZ maps</a></div>
+              <div class="h6l"><a href="#worldfiles">World Files</a></div>
+            <div class="h5l"><a href="#styles">Map styles</a></div>
+          <div class="h4l"><a href="#poi">POI files</a></div>
+          <div class="h4l"><a href="#dem">DEM files</a></div>
         </div>
       </div>
       <div class="cl">&nbsp;</div>
