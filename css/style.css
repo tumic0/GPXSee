@@ -227,7 +227,7 @@ h1.logo a span {
 }
 .latest-news {
 }
-.latest-news h3 {
+.latest-news h2 {
 	font-size:18px;
 	color:#000;
 	font-weight:normal;
@@ -255,7 +255,7 @@ h1.logo a span {
 	margin: 0;
 }
 
-.latest-news .news-item h4 {
+.latest-news .news-item h3 {
 	font-size:12px;
 }
 .latest-news ul {
