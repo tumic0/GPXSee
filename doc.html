@@ -285,6 +285,14 @@
           info (the <code>AUTHORITY</code> info overrides any parameter values). The
           WKT data must follow the OGC naming convention. Generally, the OGC WKT entries
           from <a href="https://epsg.io/">epsg.io</a> should work.</p>
+          
+          <h4>JNX &amp; KMZ maps</h4>
+          <p>JNX &amp; KMZ maps do not contain any info about the projection of their
+          tile images, so it has to be provided externaly<sup><a href="#garmin">4</a></sup>.
+          Generally, only two projections are used for JNX/KMZ maps - EPSG:4326 and
+          EPSG:3857. If you see <a href="img/wrong_proj.png">background color stripes</a>
+          in your JNX/KMZ map, you have to switch to the propper input projection
+          in the preferences.</p>
 
 
           <h3 id="styles">Map styles</h3>
@@ -323,6 +331,9 @@
           QtPBFImagePlugin</a> is required (included in the Windows and OS&nbsp;X builds).</i></p>
           <p id="unzip"><i>[3] For GPXSee versions older than 8.1, you have to unzip them
           too.</i></p>
+          <p id="garmin"><i>[4] Some tools like Garmin software &quot;solve&quot; this by
+          rescaling the images, but this introduces a small, but still visible distortion
+          to the map.</i></p>
           </div>
 
       </div>
