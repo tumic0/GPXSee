@@ -64,6 +64,16 @@
             <li>Temperature</li>
             <li>Gear ratio/shifts (Shimano Di2, SRAM eTap)</li>
           </ul>
+          
+          <h3 id="filtering">Data filtering</h3>
+          <p>Outlier elimination and data smoothing is implemented and enabled by default.
+          In most cases this improves the representation of the recorded data but in some
+          special cases you may get much worse results than without it. A typical example
+          of such data are ski mountaineering tracks or in general tracks that are composed
+          of parts with very different speed profiles.</p>
+          
+          <p>If you get unexpected results, try to disable the outlier elimination in
+          the preferences.</p>
 
 
           <h2 id="maps">Maps</h2>
@@ -340,6 +350,7 @@
       <div id="sidebar">
         <div id="outline">
           <div class="h4l"><a href="#data">Data files</a></div>
+            <div class="h5l"><a href="#filtering">Data filtering</a></div>
           <div class="h4l"><a href="#maps">Maps</a></div>
             <div class="h5l"><a href="#online">Online maps</a></div>
               <div class="h6l"><a href="#OSM">OSM/Google tiles</a></div>
