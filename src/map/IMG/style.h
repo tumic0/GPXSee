@@ -22,20 +22,6 @@ public:
 		ExtraSmall = 5
 	};
 
-	enum POIClass {
-		Unknown,
-		Food,
-		Accommodation,
-		Recreation,
-		Shopping,
-		Transport,
-		Services,
-		Community,
-		Elementary,
-		ManmadePlaces,
-		NaturePlaces
-	};
-
 	class Polygon {
 	public:
 		Polygon() : _brush(Qt::NoBrush), _pen(Qt::NoPen) {}
@@ -135,8 +121,6 @@ public:
 	  {return (type == TYPE(0x1e));}
 	static bool isRaster(quint32 type)
 	  {return (type == 0x10613);}
-
-	static POIClass poiClass(quint32 type);
 
 private:
 	struct Section {

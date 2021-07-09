@@ -27,27 +27,6 @@ static QString convertUnits(const QString &str)
 	return ok ? QString::number(qRound(number * 0.3048)) : str;
 }
 
-static int minPOIZoom(Style::POIClass cl)
-{
-	switch (cl) {
-		case Style::Food:
-		case Style::Shopping:
-		case Style::Services:
-			return 26;
-		case Style::Accommodation:
-		case Style::Recreation:
-			return 25;
-		case Style::ManmadePlaces:
-		case Style::NaturePlaces:
-		case Style::Transport:
-		case Style::Community:
-		case Style::Elementary:
-			return 23;
-		default:
-			return 0;
-	}
-}
-
 static QFont pixelSizeFont(int pixelSize)
 {
 	QFont f;
@@ -449,9 +428,6 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 		MapData::Point &point = _points[i];
 		const Style::Point &style = _style->point(point.type);
 		bool poi = Style::isPOI(point.type);
-
-		if (poi && _zoom < minPOIZoom(Style::poiClass(point.type)))
-			continue;
 
 		const QString *label = point.label.text().isEmpty()
 		  ? 0 : &(point.label.text());

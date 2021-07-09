@@ -1126,39 +1126,6 @@ const Style::Point &Style::point(quint32 type) const
 	return (it == _points.constEnd()) ? null : *it;
 }
 
-Style::POIClass Style::poiClass(quint32 type)
-{
-	if ((type >= 0x2a00 && type < 0x2b00) || type == 0x2c0a || type == 0x2d02
-	  || (type & 0xffff00) == TYPE(0x10b))
-		return Food;
-	else if ((type >= 0x2b00 && type < 0x2c00)
-	  || (type & 0xffff00) == TYPE(0x10c))
-		return Accommodation;
-	else if ((type >= 0x2c00 && type < 0x2e00)
-	  || (type & 0xffff00) == TYPE(0x10d) || (type & 0xffff00) == TYPE(0x10e))
-		return Recreation;
-	else if ((type >= 0x2e00 && type < 0x2f00)
-	  || (type & 0xffff00) == TYPE(0x10f))
-		return Shopping;
-	else if ((type >= 0x2f00 && type < 0x2f0f) || type == 0x2f17
-	  || (type >= 0x11001 && type < 0x1100f))
-		return Transport;
-	else if ((type >= 0x2f0f && type < 0x3000)
-	  || (type >= 0x1100f && type < 0x11100))
-		return Services;
-	else if ((type >= 0x3000 && type < 0x3100)
-	  || (type & 0xffff00) == TYPE(0x111))
-		return Community;
-	else if (type >= 0x4000 && type < 0x6000)
-		return Elementary;
-	else if (type >= 0x6400 && type < 0x6500)
-		return ManmadePlaces;
-	else if (type >= 0x6500 && type < 0x6700)
-		return NaturePlaces;
-	else
-		return Unknown;
-}
-
 #ifndef QT_NO_DEBUG
 static QString penColor(const QPen &pen)
 {
