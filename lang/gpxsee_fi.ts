@@ -434,7 +434,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
         <source>Marker only</source>
-        <translation type="unfinished"></translation>
+        <translation>Vain merkki</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="396"/>
@@ -541,7 +541,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="604"/>
         <source>Position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Sijaintitiedot</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="619"/>
@@ -586,7 +586,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="769"/>
         <source>Toggle position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaihda sijaintitiedot</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="773"/>
@@ -1450,12 +1450,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="55"/>
         <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="unfinished"></translation>
+        <translation>Valitse oikea karttojen projektio ilman projektion määritelmää (JNX, KMZ ja maailman tiedostokartat).</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="57"/>
         <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Valitse haluttu vektorikarttojen projektio (IMG- ja Mapsforge-kartat). Heijastuksen on oltava voimassa koko kartan alueella.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="173"/>
