@@ -205,5 +205,11 @@
 #define INPUT_PROJECTION_DEFAULT          4326
 #define HIDPI_MAP_SETTING                 "HiDPIMap"
 #define HIDPI_MAP_DEFAULT                 true
+#define DATA_PATH_SETTING                 "dataPath"
+#define DATA_PATH_DEFAULT                 QString()
+#define MAPS_PATH_SETTING                 "mapsPath"
+#define MAPS_PATH_DEFAULT                 QString()
+#define POI_PATH_SETTING                  "poiPath"
+#define POI_PATH_DEFAULT                  QString()
 
 #endif // SETTINGS_H

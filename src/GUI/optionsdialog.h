@@ -16,6 +16,7 @@ class QCheckBox;
 class QRadioButton;
 class PercentSlider;
 class ProjectionComboBox;
+class DirSelectWidget;
 
 
 struct Options {
@@ -65,6 +66,9 @@ struct Options {
 	bool enableHTTP2;
 	int pixmapCache;
 	int connectionTimeout;
+	QString dataPath;
+	QString mapsPath;
+	QString poiPath;
 	// Print/Export
 	bool hiresPrint;
 	bool printName;
@@ -154,6 +158,9 @@ private:
 	QSpinBox *_connectionTimeout;
 	QCheckBox *_useOpenGL;
 	QCheckBox *_enableHTTP2;
+	DirSelectWidget *_dataPath;
+	DirSelectWidget *_mapsPath;
+	DirSelectWidget *_poiPath;
 	// Print/Export
 	QRadioButton *_wysiwyg;
 	QRadioButton *_hires;

@@ -96,11 +96,11 @@ GUI::GUI()
 	_movingTime = 0;
 	_lastTab = 0;
 
-	_dataDir = QDir::homePath();
-	_mapDir = QDir::homePath();
-	_poiDir = QDir::homePath();
-
 	readSettings();
+
+	_dataDir = _options.dataPath;
+	_mapDir = _options.mapsPath;
+	_poiDir = _options.poiPath;
 
 	updateGraphTabs();
 	updateStatusBarInfo();
@@ -2262,6 +2262,13 @@ void GUI::writeSettings()
 		settings.setValue(INPUT_PROJECTION_SETTING, _options.inputProjection);
 	if (_options.hidpiMap != HIDPI_MAP_DEFAULT)
 		settings.setValue(HIDPI_MAP_SETTING, _options.hidpiMap);
+	if (_options.dataPath != DATA_PATH_DEFAULT)
+		settings.setValue(DATA_PATH_SETTING, _options.dataPath);
+	if (_options.mapsPath != MAPS_PATH_DEFAULT)
+		settings.setValue(MAPS_PATH_SETTING, _options.mapsPath);
+	if (_options.poiPath != POI_PATH_DEFAULT)
+		settings.setValue(POI_PATH_SETTING, _options.poiPath);
+
 	settings.endGroup();
 }
 
@@ -2563,8 +2570,14 @@ void GUI::readSettings()
 	  OUTPUT_PROJECTION_DEFAULT).toInt();
 	_options.inputProjection = settings.value(INPUT_PROJECTION_SETTING,
 	  INPUT_PROJECTION_DEFAULT).toInt();
-	_options.hidpiMap = settings.value(HIDPI_MAP_SETTING, HIDPI_MAP_SETTING)
+	_options.hidpiMap = settings.value(HIDPI_MAP_SETTING, HIDPI_MAP_DEFAULT)
 	  .toBool();
+	_options.dataPath = settings.value(DATA_PATH_SETTING, DATA_PATH_DEFAULT)
+	  .toString();
+	_options.mapsPath = settings.value(MAPS_PATH_SETTING, MAPS_PATH_DEFAULT)
+	  .toString();
+	_options.poiPath = settings.value(POI_PATH_SETTING, POI_PATH_DEFAULT)
+	  .toString();
 
 	_mapView->setPalette(_options.palette);
 	_mapView->setMapOpacity(_options.mapOpacity);

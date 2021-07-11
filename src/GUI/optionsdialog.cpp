@@ -19,6 +19,7 @@
 #include "oddspinbox.h"
 #include "percentslider.h"
 #include "projectioncombobox.h"
+#include "dirselectwidget.h"
 #include "optionsdialog.h"
 
 
@@ -539,12 +540,12 @@ QWidget *OptionsDialog::createDataPage()
 	sourceTab->setLayout(sourceTabLayout);
 
 
-	QTabWidget *filterPage = new QTabWidget();
-	filterPage->addTab(filterTab, tr("Filtering"));
-	filterPage->addTab(sourceTab, tr("Sources"));
-	filterPage->addTab(pauseTab, tr("Pause detection"));
+	QTabWidget *dataPage = new QTabWidget();
+	dataPage->addTab(filterTab, tr("Filtering"));
+	dataPage->addTab(sourceTab, tr("Sources"));
+	dataPage->addTab(pauseTab, tr("Pause detection"));
 
-	return filterPage;
+	return dataPage;
 }
 
 QWidget *OptionsDialog::createPOIPage()
@@ -683,8 +684,35 @@ QWidget *OptionsDialog::createSystemPage()
 	systemTabLayout->addStretch();
 	systemTab->setLayout(systemTabLayout);
 
+	_dataPath = new DirSelectWidget();
+	_dataPath->setDir(_options.dataPath);
+	_mapsPath = new DirSelectWidget();
+	_mapsPath->setDir(_options.mapsPath);
+	_poiPath = new DirSelectWidget();
+	_poiPath->setDir(_options.poiPath);
+
+	QLabel *info = new QLabel(tr("Select the initial paths of the file open"
+	  " dialogues. Leave the field empty for the system default."));
+	QFont f = info->font();
+	f.setPointSize(f.pointSize() - 1);
+	info->setFont(f);
+	info->setWordWrap(true);
+
+	QFormLayout *pathsFormLayout = new QFormLayout();
+	pathsFormLayout->addRow(tr("Data:"), _dataPath);
+	pathsFormLayout->addRow(tr("Maps:"), _mapsPath);
+	pathsFormLayout->addRow(tr("POI:"), _poiPath);
+
+	QWidget *pathsTab = new QWidget();
+	QVBoxLayout *pathsTabLayout = new QVBoxLayout();
+	pathsTabLayout->addWidget(info);
+	pathsTabLayout->addLayout(pathsFormLayout);
+	pathsTabLayout->addStretch();
+	pathsTab->setLayout(pathsTabLayout);
+
 	QTabWidget *systemPage = new QTabWidget();
 	systemPage->addTab(systemTab, tr("System"));
+	systemPage->addTab(pathsTab, tr("Initial paths"));
 
 	return systemPage;
 }
@@ -807,6 +835,9 @@ void OptionsDialog::accept()
 	_options.enableHTTP2 = _enableHTTP2->isChecked();
 	_options.pixmapCache = _pixmapCache->value();
 	_options.connectionTimeout = _connectionTimeout->value();
+	_options.dataPath = _dataPath->dir();
+	_options.mapsPath = _mapsPath->dir();
+	_options.poiPath = _poiPath->dir();
 
 	_options.hiresPrint = _hires->isChecked();
 	_options.printName = _name->isChecked();
