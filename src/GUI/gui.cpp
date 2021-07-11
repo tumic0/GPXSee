@@ -1635,9 +1635,9 @@ void GUI::loadMapDirNode(const TreeNode<Map *> &node, QList<MapAction*> &actions
 					actions.append(a);
 				} else
 					connect(a, &MapAction::loaded, this, &GUI::mapLoadedDir);
-			}
 
-			_areaCount++;
+				_areaCount++;
+			}
 		} else {
 			map = a->data().value<Map*>();
 			if (map->isReady())
