@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <QLineEdit>
 
+class QPushButton;
+class QToolButton;
+
 class DirSelectWidget : public QWidget
 {
 	Q_OBJECT
