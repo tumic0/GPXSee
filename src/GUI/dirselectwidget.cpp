@@ -13,6 +13,7 @@ DirSelectWidget::DirSelectWidget(QWidget *parent) : QWidget(parent)
 	_edit = new QLineEdit();
 	_edit->setMinimumWidth(fm.averageCharWidth() * (QDir::homePath().length()
 	  + 12));
+	_edit->setPlaceholderText(tr("System default"));
 #ifdef Q_OS_WIN32
 	_button = new QPushButton("...");
 	_button->setMaximumWidth(_button->sizeHint().width() / 2);
