@@ -143,6 +143,19 @@
     </message>
 </context>
 <context>
+    <name>DirSelectWidget</name>
+    <message>
+        <location filename="../src/GUI/dirselectwidget.cpp" line="16"/>
+        <source>System default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/dirselectwidget.cpp" line="38"/>
+        <source>Select directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ElevationGraph</name>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="40"/>
@@ -1085,542 +1098,567 @@
 <context>
     <name>OptionsDialog</name>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="67"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="68"/>
         <source>High-resolution</source>
         <translation>Висока роздільна здатність</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="68"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="69"/>
         <source>Standard</source>
         <translation>Стандартний</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="73"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="74"/>
         <source>Non-HiDPI maps are loaded as HiDPI maps. The map is sharp but map objects are small/hard to read.</source>
         <translation>Не-HiDPI мапи завантажуються як HiDPI мапи. Зображення такої мапи чітке, але об’єкти на ній замалі, або їх важко читати.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="75"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="76"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
         <translation>Не-HiDPI мапи завантажуються такими, якими вони є. Об’єкти на мапі мають очікуваний розмір, але сама мапа розмита та не чітка.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="55"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="56"/>
         <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="57"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="58"/>
         <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="89"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="90"/>
         <source>Input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="91"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="92"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="123"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="124"/>
         <source>HiDPI display mode</source>
         <translation>HiDPI режим відображення</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="138"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="139"/>
         <source>Track width:</source>
         <translation>Товщина треку:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="139"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="140"/>
         <source>Track style:</source>
         <translation>Стиль треку:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="141"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="158"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="177"/>
-        <source>Width:</source>
-        <translation>Товщина:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="142"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="159"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="178"/>
+        <source>Width:</source>
+        <translation>Товщина:</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="143"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="160"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="179"/>
         <source>Style:</source>
         <translation>Стиль:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="143"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="144"/>
         <source>Tracks</source>
         <translation>Треки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="155"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="156"/>
         <source>Route width:</source>
         <translation>Товщина маршруту:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="156"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="157"/>
         <source>Route style:</source>
         <translation>Стиль маршруту:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="160"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="161"/>
         <source>Routes</source>
         <translation>Маршрути</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="173"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="174"/>
         <source>Area border width:</source>
         <translation>Товщина межі області:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="174"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="175"/>
         <source>Area border style:</source>
         <translation>Стиль межі області:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="175"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="176"/>
         <source>Area fill opacity:</source>
         <translation>Непрозорість заливки області:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="179"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="180"/>
         <source>Fill opacity:</source>
         <translation>Непрозорість заливки:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="180"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="181"/>
         <source>Areas</source>
         <translation>Області</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="190"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="191"/>
         <source>Base color:</source>
         <translation>Основний колір:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="191"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="192"/>
         <source>Palette shift:</source>
         <translation>Зміщення палітри:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="193"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="276"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="194"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="277"/>
         <source>Use anti-aliasing</source>
         <translation>Використовувати згладжування</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="226"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="227"/>
         <source>Waypoint color:</source>
         <translation>Колір маршрутної точки:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="227"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="228"/>
         <source>Waypoint size:</source>
         <translation>Розмір маршрутної точки:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="229"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="245"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="230"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="246"/>
         <source>Color:</source>
         <translation>Колір:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="230"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="246"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="231"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="247"/>
         <source>Size:</source>
         <translation>Розмір:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="231"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="232"/>
         <source>Waypoints</source>
         <translation>Маршрутні точки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="242"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="243"/>
         <source>POI color:</source>
         <translation>Колір точки POI:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="243"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="244"/>
         <source>POI size:</source>
         <translation>Розмір точки POI:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="247"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="248"/>
         <source>POIs</source>
         <translation>Точки POI</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="273"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="274"/>
         <source>Line width:</source>
         <translation>Товщина лінії:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="274"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="275"/>
         <source>Slider color:</source>
         <translation>Колір повзунка:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="297"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="298"/>
         <source>Background color:</source>
         <translation>Колір фону:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="298"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="299"/>
         <source>Map opacity:</source>
         <translation>Прозорість мапи:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="308"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="309"/>
         <source>Paths</source>
         <translation>Шляхи</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="309"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="310"/>
         <source>Points</source>
         <translation>Точки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="310"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="647"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="311"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="648"/>
         <source>Graphs</source>
         <translation>Графіки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="311"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="312"/>
         <source>Map</source>
         <translation>Мапи</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="318"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="319"/>
         <source>Moving average window size</source>
         <translation>Ширина ковзного вікна усереднення</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="337"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="492"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="338"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="493"/>
         <source>Elevation:</source>
         <translation>Висота:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="338"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="491"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="339"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="492"/>
         <source>Speed:</source>
         <translation>Швидкість:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="339"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="340"/>
         <source>Heart rate:</source>
         <translation>Пульс:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="340"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="341"/>
         <source>Cadence:</source>
         <translation>Каденс:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="341"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="342"/>
         <source>Power:</source>
         <translation>Потужність:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="343"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="344"/>
         <source>Smoothing</source>
         <translation>Згладжування</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="347"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="348"/>
         <source>Eliminate GPS outliers</source>
         <translation>Виключати GPS викиди</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="356"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="357"/>
         <source>Smoothing:</source>
         <translation>Згладжування:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="367"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="368"/>
         <source>Automatic</source>
         <translation>Автоматичне</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="368"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="438"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="369"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="439"/>
         <source>Custom</source>
         <translation>Користувацьке</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="381"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="382"/>
         <source>mi/h</source>
         <translation>миль/год</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="384"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="385"/>
         <source>kn</source>
         <translation>вузол</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="387"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="388"/>
         <source>km/h</source>
         <translation>км/год</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="391"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="668"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="392"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="669"/>
         <source>s</source>
         <translation>с</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="407"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="408"/>
         <source>Minimal speed:</source>
         <translation>Мінімальна швидкість:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="408"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="409"/>
         <source>Minimal duration:</source>
         <translation>Мінімальна тривалість:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="418"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="419"/>
         <source>Computed from distance/time</source>
         <translation>Обчислено з відстань/час</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="419"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="420"/>
         <source>Recorded by device</source>
         <translation>Записано пристроєм</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="424"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="425"/>
         <source>Show secondary speed</source>
         <translation>Показувати обидві одночасно</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="427"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="428"/>
         <source>GPS data</source>
         <translation>GPS дані</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="428"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="429"/>
         <source>DEM data</source>
         <translation>DEM дані</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="433"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="434"/>
         <source>Show secondary elevation</source>
         <translation>Показувати обидві одночасно</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="436"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="437"/>
         <source>UTC</source>
         <translation>UTC</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="457"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="458"/>
         <source>Use segments</source>
         <translation>Використовувати сегменти</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="494"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="495"/>
         <source>Time zone:</source>
         <translation>Часовий пояс:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="513"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="514"/>
         <source>Speed</source>
         <translation>Швидкість</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="520"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="521"/>
         <source>Elevation</source>
         <translation>Висота</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="528"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="529"/>
         <source>Time zone</source>
         <translation>Часовий пояс</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="543"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="544"/>
         <source>Filtering</source>
         <translation>Фільтрування</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="544"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="545"/>
         <source>Sources</source>
         <translation>Джерела</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="545"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="546"/>
         <source>Pause detection</source>
         <translation>Виявлення пауз</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="557"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="558"/>
         <source>mi</source>
         <translation>миля</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="560"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="561"/>
         <source>nmi</source>
         <translation>мор.миля</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="563"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="564"/>
         <source>km</source>
         <translation>км</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="567"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="568"/>
         <source>Radius:</source>
         <translation>Радіус:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="573"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="709"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="574"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="737"/>
         <source>POI</source>
         <translation>Точки POI</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="580"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="581"/>
         <source>WYSIWYG</source>
         <translation>WYSIWYG (Візуальний редактор)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="581"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="582"/>
         <source>High-Resolution</source>
         <translation>Висока роздільна здатність</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="586"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="587"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
         <translation>Область друку є приблизною областю відображення. Рівень масштабування мапи не змінюється.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="588"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="589"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
         <translation>Масштаб буде змінено так, щоби весь зміст (треки/маршрутні точки) вмістився на друковану область, а роздільна здатність мапи була якомога наближеною до роздільної здатності друку.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="610"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="611"/>
         <source>Name</source>
         <translation>Ім’я</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="612"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="613"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="614"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="615"/>
         <source>Distance</source>
         <translation>Відстань</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="616"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="617"/>
         <source>Time</source>
         <translation>Час</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="618"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="619"/>
         <source>Moving time</source>
         <translation>Час руху</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="620"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="621"/>
         <source>Item count (&gt;1)</source>
         <translation>Кількість об’єктів (&gt;1)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="635"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="636"/>
         <source>Separate graph page</source>
         <translation>Окрема сторінка із графіком</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="646"/>
         <source>Print mode</source>
         <translation>Режим друку</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="646"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="647"/>
         <source>Header</source>
         <translation>Заголовок</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="654"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="655"/>
         <source>Use OpenGL</source>
         <translation>Використовувати OpenGL</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="656"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="657"/>
         <source>Enable HTTP/2</source>
         <translation>Дозволити HTTP/2</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="662"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="663"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="672"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="673"/>
         <source>Image cache size:</source>
         <translation>Розмір кешу зображень:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="673"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="674"/>
         <source>Connection timeout:</source>
         <translation>Час з’єднання вичерпаний:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="437"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="687"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="712"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="438"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="714"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="740"/>
         <source>System</source>
         <translation>Система</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="98"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="99"/>
         <source>Input:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="101"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="102"/>
         <source>Output:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="122"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="123"/>
         <source>Projection</source>
         <translation>Проєкція</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="705"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="694"/>
+        <source>Select the initial paths of the file open dialogues. Leave the field empty for the system default.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
+        <source>Data:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="703"/>
+        <source>Maps:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="704"/>
+        <source>POI:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="715"/>
+        <source>Initial paths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="733"/>
         <source>Appearance</source>
         <translation>Зовнішній вигляд</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="707"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="735"/>
         <source>Maps</source>
         <translation>Мапи</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="708"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="736"/>
         <source>Data</source>
         <translation>Дані</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="710"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="738"/>
         <source>Print &amp; Export</source>
         <translation>Друк та експорт</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="741"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="769"/>
         <source>Options</source>
         <translation>Налаштування</translation>
     </message>
