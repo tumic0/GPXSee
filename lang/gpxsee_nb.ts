@@ -89,7 +89,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="142"/>
         <source>ITN files</source>
-        <translation type="unfinished"></translation>
+        <translation>ITN-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="143"/>
@@ -114,7 +114,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="147"/>
         <source>OV2 files</source>
-        <translation type="unfinished"></translation>
+        <translation>OV2-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="148"/>
@@ -147,12 +147,12 @@
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="16"/>
         <source>System default</source>
-        <translation type="unfinished"></translation>
+        <translation>Systemforvalg</translation>
     </message>
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="38"/>
         <source>Select directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Velg mappe</translation>
     </message>
 </context>
 <context>
@@ -351,12 +351,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="283"/>
         <source>Select all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg alle filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="288"/>
         <source>Unselect all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fravelg alle filer</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="293"/>
@@ -1056,7 +1056,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="129"/>
         <source>Mapsforge maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapsforge-kart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="130"/>
@@ -1086,7 +1086,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="137"/>
         <source>World-file georeferenced images</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verdensfil for georefererte bilder</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="139"/>
@@ -1139,12 +1139,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="56"/>
         <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Velg rett kartprojeksjon for kart uten projeksjonsdefinisjon (JNX, KMZ, og verdensfilkart).</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="58"/>
         <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Velg rett kartprojeksjon for vektorielle kart (IMG- og Mapsforge-kart). Kartprojeksjonen må være gyldig for hele kartområdet.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="90"/>
@@ -1614,27 +1614,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="694"/>
         <source>Select the initial paths of the file open dialogues. Leave the field empty for the system default.</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg forvalgt sti for filåpningsdialoger. La stå tom for systemforvalg.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
         <source>Data:</source>
-        <translation type="unfinished"></translation>
+        <translation>Data:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="703"/>
         <source>Maps:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kart:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="704"/>
         <source>POI:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">POI:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="715"/>
         <source>Initial paths</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forvalgte stier</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="733"/>
@@ -2175,7 +2175,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="55"/>
         <source>Phone</source>
-        <translation type="unfinished"></translation>
+        <translation>Telefon</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="65"/>
