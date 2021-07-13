@@ -1060,6 +1060,13 @@ void GUI::openOptions()
 	if (options.enableHTTP2 != _options.enableHTTP2)
 		Downloader::enableHTTP2(options.enableHTTP2);
 
+	if (options.dataPath != _options.dataPath)
+		_dataDir = options.dataPath;
+	if (options.mapsPath != _options.mapsPath)
+		_mapDir = options.mapsPath;
+	if (options.poiPath != _options.poiPath)
+		_poiDir = options.poiPath;
+
 	if (reload)
 		reloadFiles();
 
