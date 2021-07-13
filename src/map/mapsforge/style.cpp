@@ -86,20 +86,36 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	const QXmlStreamAttributes &attr = reader.attributes();
 	QString file;
 	int height = 0, width = 0;
+	bool ok;
 
 	ri._area = true;
 	if (attr.hasAttribute("fill"))
 		ri._fillColor = QColor(attr.value("fill").toString());
 	if (attr.hasAttribute("stroke"))
 		ri._strokeColor = QColor(attr.value("stroke").toString());
-	if (attr.hasAttribute("stroke-width"))
-		ri._strokeWidth = attr.value("stroke-width").toFloat();
+	if (attr.hasAttribute("stroke-width")) {
+		ri._strokeWidth = attr.value("stroke-width").toFloat(&ok);
+		if (!ok || ri._strokeWidth < 0) {
+			reader.raiseError("invalid stroke-width value");
+			return;
+		}
+	}
 	if (attr.hasAttribute("src"))
 		file = resourcePath(attr.value("src").toString(), dir);
-	if (attr.hasAttribute("symbol-height"))
-		height = attr.value("symbol-height").toInt();
-	if (attr.hasAttribute("symbol-width"))
-		width = attr.value("symbol-width").toInt();
+	if (attr.hasAttribute("symbol-height")) {
+		height = attr.value("symbol-height").toInt(&ok);
+		if (!ok || height < 0) {
+			reader.raiseError("invalid symbol-height value");
+			return;
+		}
+	}
+	if (attr.hasAttribute("symbol-width")) {
+		width = attr.value("symbol-width").toInt(&ok);
+		if (!ok || width < 0) {
+			reader.raiseError("invalid symbol-width value");
+			return;
+		}
+	}
 
 	if (!file.isNull())
 		ri._fillImage = image(file, width, height, ratio);
@@ -113,11 +129,17 @@ void Style::line(QXmlStreamReader &reader, const Rule &rule)
 {
 	PathRender ri(rule, _paths.size());
 	const QXmlStreamAttributes &attr = reader.attributes();
+	bool ok;
 
 	if (attr.hasAttribute("stroke"))
 		ri._strokeColor = QColor(attr.value("stroke").toString());
-	if (attr.hasAttribute("stroke-width"))
-		ri._strokeWidth = attr.value("stroke-width").toFloat();
+	if (attr.hasAttribute("stroke-width")) {
+		ri._strokeWidth = attr.value("stroke-width").toFloat(&ok);
+		if (!ok || ri._strokeWidth < 0) {
+			reader.raiseError("invalid stroke-width value");
+			return;
+		}
+	}
 	if (attr.hasAttribute("stroke-dasharray")) {
 		QStringList l(attr.value("stroke-dasharray").toString().split(','));
 		ri._strokeDasharray.resize(l.size());
@@ -167,15 +189,14 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 	if (attr.hasAttribute("stroke-width")) {
 		ri._strokeWidth = attr.value("stroke-width").toFloat(&ok);
 		if (!ok || ri._strokeWidth < 0) {
-			reader.raiseError(attr.value("stroke-width")
-			  + ": invalid stroke-width");
+			reader.raiseError("invalid stroke-width value");
 			return;
 		}
 	}
 	if (attr.hasAttribute("font-size")) {
 		fontSize = attr.value("font-size").toFloat(&ok);
 		if (!ok || fontSize < 0) {
-			reader.raiseError(attr.value("font-size") + ": invalid font-size");
+			reader.raiseError("invalid font-size value");
 			return;
 		}
 	}
@@ -203,7 +224,6 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 	ri._font.setBold(bold);
 	ri._font.setItalic(italic);
 
-
 	if (fontSize)
 		for (int i = 0; i < lists.size(); i++)
 			lists[i]->append(ri);
@@ -218,13 +238,24 @@ void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	const QXmlStreamAttributes &attr = reader.attributes();
 	QString file;
 	int height = 0, width = 0;
+	bool ok;
 
 	if (attr.hasAttribute("src"))
 		file = resourcePath(attr.value("src").toString(), dir);
-	if (attr.hasAttribute("symbol-height"))
-		height = attr.value("symbol-height").toInt();
-	if (attr.hasAttribute("symbol-width"))
-		width = attr.value("symbol-width").toInt();
+	if (attr.hasAttribute("symbol-height")) {
+		height = attr.value("symbol-height").toInt(&ok);
+		if (!ok || height < 0) {
+			reader.raiseError("invalid symbol-height value");
+			return;
+		}
+	}
+	if (attr.hasAttribute("symbol-width")) {
+		width = attr.value("symbol-width").toInt(&ok);
+		if (!ok || width < 0) {
+			reader.raiseError("invalid symbol-width value");
+			return;
+		}
+	}
 
 	if (!file.isNull())
 		ri._img = image(file, width, height, ratio);
@@ -239,6 +270,7 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 {
 	Rule r(parent);
 	const QXmlStreamAttributes &attr = reader.attributes();
+	bool ok;
 
 	if (attr.hasAttribute("cat")
 	  && !cats.contains(attr.value("cat").toString())) {
@@ -251,10 +283,20 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	else if (attr.value("e").toString() == "node")
 		r.setType(Rule::NodeType);
 
-	if (attr.hasAttribute("zoom-min"))
-		r.setMinZoom(attr.value("zoom-min").toInt());
-	if (attr.hasAttribute("zoom-max"))
-		r.setMaxZoom(attr.value("zoom-max").toInt());
+	if (attr.hasAttribute("zoom-min")) {
+		r.setMinZoom(attr.value("zoom-min").toInt(&ok));
+		if (!ok || r._zooms.min() < 0) {
+			reader.raiseError("invalid zoom-min value");
+			return;
+		}
+	}
+	if (attr.hasAttribute("zoom-max")) {
+		r.setMaxZoom(attr.value("zoom-max").toInt(&ok));
+		if (!ok || r._zooms.max() < 0) {
+			reader.raiseError("invalid zoom-max value");
+			return;
+		}
+	}
 
 	if (attr.hasAttribute("closed")) {
 		if (attr.value("closed").toString() == "yes")
