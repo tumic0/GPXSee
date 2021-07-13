@@ -143,8 +143,13 @@ void Style::line(QXmlStreamReader &reader, const Rule &rule)
 	if (attr.hasAttribute("stroke-dasharray")) {
 		QStringList l(attr.value("stroke-dasharray").toString().split(','));
 		ri._strokeDasharray.resize(l.size());
-		for (int i = 0; i < l.size(); i++)
-			ri._strokeDasharray[i] = l.at(i).toDouble();
+		for (int i = 0; i < l.size(); i++) {
+			ri._strokeDasharray[i] = l.at(i).toDouble(&ok);
+			if (!ok || ri._strokeDasharray[i] < 0) {
+				reader.raiseError("invalid stroke-dasharray value");
+				return;
+			}
+		}
 	}
 	if (attr.hasAttribute("stroke-linecap")) {
 		QString cap(attr.value("stroke-linecap").toString());
