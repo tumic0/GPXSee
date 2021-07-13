@@ -156,6 +156,7 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 	int fontSize = 9;
 	bool bold = false, italic = false;
 	QString fontFamily("Helvetica");
+	bool ok;
 
 	if (attr.hasAttribute("k"))
 		ri._key = attr.value("k").toLatin1();
@@ -163,10 +164,21 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 		ri._fillColor = QColor(attr.value("fill").toString());
 	if (attr.hasAttribute("stroke"))
 		ri._strokeColor = QColor(attr.value("stroke").toString());
-	if (attr.hasAttribute("stroke-width"))
-		ri._strokeWidth = attr.value("stroke-width").toFloat();
-	if (attr.hasAttribute("font-size"))
-		fontSize = attr.value("font-size").toInt();
+	if (attr.hasAttribute("stroke-width")) {
+		ri._strokeWidth = attr.value("stroke-width").toFloat(&ok);
+		if (!ok || ri._strokeWidth < 0) {
+			reader.raiseError(attr.value("stroke-width")
+			  + ": invalid stroke-width");
+			return;
+		}
+	}
+	if (attr.hasAttribute("font-size")) {
+		fontSize = attr.value("font-size").toFloat(&ok);
+		if (!ok || fontSize < 0) {
+			reader.raiseError(attr.value("font-size") + ": invalid font-size");
+			return;
+		}
+	}
 	if (attr.hasAttribute("font-style")) {
 		QString style(attr.value("font-style").toString());
 		if (style == "bold")
@@ -192,8 +204,9 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 	ri._font.setItalic(italic);
 
 
-	for (int i = 0; i < lists.size(); i++)
-		lists[i]->append(ri);
+	if (fontSize)
+		for (int i = 0; i < lists.size(); i++)
+			lists[i]->append(ri);
 
 	reader.skipCurrentElement();
 }
