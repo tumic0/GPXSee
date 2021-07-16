@@ -147,12 +147,12 @@
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="16"/>
         <source>System default</source>
-        <translation type="unfinished"></translation>
+        <translation>Systemvorgabe</translation>
     </message>
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="38"/>
         <source>Select directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzeichnis auswählen</translation>
     </message>
 </context>
 <context>
@@ -1614,27 +1614,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="694"/>
         <source>Select the initial paths of the file open dialogues. Leave the field empty for the system default.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wählen Sie die Anfangspfade der Dateiöffnungsdialoge aus. Für die Systemvorgabe lassen Sie das Feld leer.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
         <source>Data:</source>
-        <translation type="unfinished"></translation>
+        <translation>Daten:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="703"/>
         <source>Maps:</source>
-        <translation type="unfinished"></translation>
+        <translation>Karten:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="704"/>
         <source>POI:</source>
-        <translation type="unfinished"></translation>
+        <translation>POI:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="715"/>
         <source>Initial paths</source>
-        <translation type="unfinished"></translation>
+        <translation>Anfangspfade</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="733"/>
