@@ -433,15 +433,15 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 	quint16 mask = 0;
 	quint32 size;
 
-	quint8 s68 = (linkInfo.flags >> 0x12) & 1;
-	quint8 s69 = (linkInfo.flags >> 0x11) & 1;
-	quint8 s6a = (linkInfo.flags >> 0x13) & 1;
+	bool firstIsShape = (linkInfo.flags >> 0x12) & 1;
+	bool singleTopology = (linkInfo.flags >> 0x11) & 1;
+	bool hasLevels = (linkInfo.flags >> 0x13) & 1;
 
-	if (s69 == 0 || s6a == 1) {
+	if (!singleTopology || hasLevels) {
 		if (!bs.readVUInt32(size))
 			return false;
 	}
-	if (s69 == 0) {
+	if (!singleTopology) {
 		if (!readAdjCounts(bs, ca, mask))
 			return false;
 	}
@@ -449,8 +449,8 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 	if (!subdiv->level()) {
 		NODFile::AdjacencyInfo adj(nod, blockInfo, linkId, linkInfo);
 
-		if (s69 == 1) {
-			if (s68 == 1) {
+		if (singleTopology) {
+			if (firstIsShape) {
 				if (!readShape(nod, nodHdl, adj, bs, _tp, subdiv, shift, poly))
 					return false;
 			} else {
@@ -461,7 +461,7 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 			quint16 mask2 = mask + 0xffff;
 			for (int i = 0; i <= ca.size(); i++) {
 				quint16 step = (i < ca.size()) ? ca.at(i) & mask2 : 0xFFFF;
-				bool shape = (i > 0) ? ca.at(i-1) & mask : (s68 == 1);
+				bool shape = (i > 0) ? ca.at(i-1) & mask : firstIsShape;
 				if (i == lineId) {
 					if (shape) {
 						bool check = (i < ca.size()) ? (ca.at(i) & mask) : false;
@@ -482,7 +482,9 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 			}
 		}
 	} else {
-		if (!skipAdjShapes(bs, ca, mask, s68 == 1))
+		Q_ASSERT(hasLevels);
+
+		if (!skipAdjShapes(bs, ca, mask, firstIsShape))
 			return false;
 
 		if (!seekToLevel(bs, subdiv->level()))
