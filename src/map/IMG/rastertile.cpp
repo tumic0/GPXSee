@@ -1,5 +1,6 @@
 #include <QFont>
 #include <QPainter>
+#include <QCache>
 #include "map/imgmap.h"
 #include "map/textpathitem.h"
 #include "map/textpointitem.h"
@@ -195,6 +196,8 @@ void RasterTile::ll2xy(QList<MapData::Point> &points)
 
 void RasterTile::drawPolygons(QPainter *painter)
 {
+	QCache<const LBLFile *, SubFile::Handle> hc(16);
+
 	for (int n = 0; n < _style->drawOrder().size(); n++) {
 		for (int i = 0; i < _polygons.size(); i++) {
 			const MapData::Poly &poly = _polygons.at(i);
@@ -207,8 +210,15 @@ void RasterTile::drawPolygons(QPainter *painter)
 				QPointF br(_map->ll2xy(r.bottomRight()));
 				QSizeF size(QRectF(tl, br).size());
 
-				SubFile::Handle hdl(poly.raster.lbl());
-				QPixmap pm(poly.raster.lbl()->image(hdl, poly.raster.id()));
+				bool insert = false;
+				SubFile::Handle *hdl = hc.object(poly.raster.lbl());
+				if (!hdl) {
+					hdl = new SubFile::Handle(poly.raster.lbl());
+					insert = true;
+				}
+				QPixmap pm(poly.raster.lbl()->image(*hdl, poly.raster.id()));
+				if (insert)
+					hc.insert(poly.raster.lbl(), hdl);
 				qreal sx = size.width() / (qreal)pm.width();
 				qreal sy = size.height() / (qreal)pm.height();
 
