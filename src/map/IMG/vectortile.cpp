@@ -104,10 +104,21 @@ void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
   QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
   QCache<const SubDiv *, MapData::Polys> *polyCache)
 {
-	SubFile::Handle rgnHdl(_rgn), lblHdl(_lbl), netHdl(_net), nodHdl(_nod);
+	SubFile::Handle *rgnHdl = 0, *lblHdl = 0, *netHdl = 0, *nodHdl = 0;
 
-	if (_loaded < 0 || (!_loaded && !load(rgnHdl, lblHdl, netHdl, nodHdl)))
+	if (_loaded < 0)
 		return;
+	if (!_loaded) {
+		rgnHdl = new SubFile::Handle(_rgn);
+		lblHdl = new SubFile::Handle(_lbl);
+		netHdl = new SubFile::Handle(_net);
+		nodHdl = new SubFile::Handle(_nod);
+
+		if (!load(*rgnHdl, *lblHdl, *netHdl, *nodHdl)) {
+			delete rgnHdl; delete lblHdl; delete netHdl; delete nodHdl;
+			return;
+		}
+	}
 
 	QList<SubDiv*> subdivs = _tre->subdivs(rect, bits, baseMap);
 	for (int i = 0; i < subdivs.size(); i++) {
@@ -118,19 +129,26 @@ void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
 			quint32 shift = _tre->shift(subdiv->bits());
 			QList<MapData::Poly> p, l;
 
-			if (!subdiv->initialized() && !_rgn->subdivInit(rgnHdl, subdiv))
+			if (!rgnHdl) {
+				rgnHdl = new SubFile::Handle(_rgn);
+				lblHdl = new SubFile::Handle(_lbl);
+				netHdl = new SubFile::Handle(_net);
+				nodHdl = new SubFile::Handle(_nod);
+			}
+
+			if (!subdiv->initialized() && !_rgn->subdivInit(*rgnHdl, subdiv))
 				continue;
 
-			_rgn->polyObjects(rgnHdl, subdiv, RGNFile::Polygon, _lbl, lblHdl,
-			  _net, netHdl, &p);
-			_rgn->polyObjects(rgnHdl, subdiv, RGNFile::Line, _lbl, lblHdl,
-			  _net, netHdl, &l);
-			_rgn->extPolyObjects(rgnHdl, subdiv, shift, RGNFile::Polygon, _lbl,
-			  lblHdl, &p);
-			_rgn->extPolyObjects(rgnHdl, subdiv, shift, RGNFile::Line, _lbl,
-			  lblHdl, &l);
-			_rgn->links(rgnHdl, subdiv, shift, _net, netHdl, _nod, nodHdl, _lbl,
-			  lblHdl, &l);
+			_rgn->polyObjects(*rgnHdl, subdiv, RGNFile::Polygon, _lbl, *lblHdl,
+			  _net, *netHdl, &p);
+			_rgn->polyObjects(*rgnHdl, subdiv, RGNFile::Line, _lbl, *lblHdl,
+			  _net, *netHdl, &l);
+			_rgn->extPolyObjects(*rgnHdl, subdiv, shift, RGNFile::Polygon, _lbl,
+			  *lblHdl, &p);
+			_rgn->extPolyObjects(*rgnHdl, subdiv, shift, RGNFile::Line, _lbl,
+			  *lblHdl, &l);
+			_rgn->links(*rgnHdl, subdiv, shift, _net, *netHdl, _nod, *nodHdl,
+			  _lbl, *lblHdl, &l);
 
 			copyPolys(rect, &p, polygons);
 			copyPolys(rect, &l, lines);
@@ -140,16 +158,29 @@ void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
 			copyPolys(rect, &(polys->lines), lines);
 		}
 	}
+
+	delete rgnHdl; delete lblHdl; delete netHdl; delete nodHdl;
 }
 
 void VectorTile::points(const RectC &rect, int bits, bool baseMap,
   QList<MapData::Point> *points, QCache<const SubDiv *,
   QList<MapData::Point> > *pointCache)
 {
-	SubFile::Handle rgnHdl(_rgn), lblHdl(_lbl), netHdl(_net), nodHdl(_nod);
+	SubFile::Handle *rgnHdl = 0, *lblHdl = 0;
 
-	if (_loaded < 0 || (!_loaded && !load(rgnHdl, lblHdl, netHdl, nodHdl)))
+	if (_loaded < 0)
 		return;
+	if (!_loaded) {
+		rgnHdl = new SubFile::Handle(_rgn);
+		lblHdl = new SubFile::Handle(_lbl);
+		SubFile::Handle nodHdl(_nod);
+		SubFile::Handle netHdl(_net);
+
+		if (!load(*rgnHdl, *lblHdl, netHdl, nodHdl)) {
+			delete rgnHdl; delete lblHdl;
+			return;
+		}
+	}
 
 	QList<SubDiv*> subdivs = _tre->subdivs(rect, bits, baseMap);
 	for (int i = 0; i < subdivs.size(); i++) {
@@ -159,20 +190,27 @@ void VectorTile::points(const RectC &rect, int bits, bool baseMap,
 		if (!pl) {
 			QList<MapData::Point> p;
 
-			if (!subdiv->initialized() && !_rgn->subdivInit(rgnHdl, subdiv))
+			if (!rgnHdl) {
+				rgnHdl = new SubFile::Handle(_rgn);
+				lblHdl = new SubFile::Handle(_lbl);
+			}
+
+			if (!subdiv->initialized() && !_rgn->subdivInit(*rgnHdl, subdiv))
 				continue;
 
-			_rgn->pointObjects(rgnHdl, subdiv, RGNFile::Point, _lbl, lblHdl,
+			_rgn->pointObjects(*rgnHdl, subdiv, RGNFile::Point, _lbl, *lblHdl,
 			  &p);
-			_rgn->pointObjects(rgnHdl, subdiv, RGNFile::IndexedPoint, _lbl,
-			  lblHdl, &p);
-			_rgn->extPointObjects(rgnHdl, subdiv, _lbl, lblHdl, &p);
+			_rgn->pointObjects(*rgnHdl, subdiv, RGNFile::IndexedPoint, _lbl,
+			  *lblHdl, &p);
+			_rgn->extPointObjects(*rgnHdl, subdiv, _lbl, *lblHdl, &p);
 
 			copyPoints(rect, &p, points);
 			pointCache->insert(subdiv, new QList<MapData::Point>(p));
 		} else
 			copyPoints(rect, pl, points);
 	}
+
+	delete rgnHdl; delete lblHdl;
 }
 
 #ifndef QT_NO_DEBUG
