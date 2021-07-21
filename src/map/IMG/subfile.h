@@ -24,14 +24,8 @@ public:
 			if (!subFile)
 				return;
 
-			if (subFile->_path) {
-				_file.setFileName(*(subFile->_path));
-				_data.resize(1U<<BLOCK_BITS);
-			} else {
-				_file.setFileName(subFile->_img->fileName());
-				_data.resize(1U<<subFile->_img->blockBits());
-			}
-
+			_data.resize(1U<<subFile->blockBits());
+			_file.setFileName(subFile->fileName());
 			_file.open(QIODevice::ReadOnly);
 		}
 
@@ -149,7 +143,8 @@ public:
 	bool readVUInt32(Handle &hdl, quint32 bytes, quint32 &val) const;
 	bool readVBitfield32(Handle &hdl, quint32 &bitfield) const;
 
-	QString fileName() const {return _path ? *_path : _img->fileName();}
+	const QString &fileName() const {return _path ? *_path : _img->fileName();}
+	unsigned blockBits() const {return _path ? BLOCK_BITS : _img->blockBits();}
 
 protected:
 	quint32 _gmpOffset;
