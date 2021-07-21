@@ -411,9 +411,9 @@ void NETFile::clear()
 }
 
 bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
-  const NODFile *nod, Handle &nodHdl, const LBLFile *lbl, Handle &lblHdl,
-  const NODFile::BlockInfo &blockInfo, quint8 linkId, quint8 lineId,
-  QList<MapData::Poly> *lines) const
+  const NODFile *nod, Handle &nodHdl2, Handle &nodHdl, const LBLFile *lbl,
+  Handle &lblHdl, const NODFile::BlockInfo &blockInfo, quint8 linkId,
+  quint8 lineId, QList<MapData::Poly> *lines) const
 {
 	MapData::Poly poly;
 	if (!nod->linkType(nodHdl, blockInfo, linkId, poly.type))
@@ -447,7 +447,7 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 	}
 
 	if (!subdiv->level()) {
-		NODFile::AdjacencyInfo adj(nod, blockInfo, linkId, linkInfo);
+		NODFile::AdjacencyInfo adj(nodHdl2, blockInfo, linkId, linkInfo);
 
 		if (singleTopology) {
 			if (firstIsShape) {

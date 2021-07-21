@@ -456,7 +456,8 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
 
 bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
   const NETFile *net, Handle &netHdl, const NODFile *nod, Handle &nodHdl,
-  const LBLFile *lbl, Handle &lblHdl, QList<MapData::Poly> *lines) const
+  Handle &nodHdl2, const LBLFile *lbl, Handle &lblHdl,
+  QList<MapData::Poly> *lines) const
 {
 	quint32 size, blockIndexId;
 	quint8 flags;
@@ -522,7 +523,7 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 				lineId = 0;
 			}
 
-			net->link(subdiv, shift, netHdl, nod, nodHdl, lbl, lblHdl,
+			net->link(subdiv, shift, netHdl, nod, nodHdl, nodHdl2, lbl, lblHdl,
 			  blockInfo, linkId, lineId, lines);
 		}
 

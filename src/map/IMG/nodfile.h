@@ -40,13 +40,13 @@ public:
 
 	struct AdjacencyInfo
 	{
-		AdjacencyInfo(const SubFile *file, const BlockInfo &blockInfo,
-		  quint32 linkId, const LinkInfo &linkInfo) : extHdl(file),
+		AdjacencyInfo(Handle &hdl, const BlockInfo &blockInfo,
+		  quint32 linkId, const LinkInfo &linkInfo) : extHdl(hdl),
 		  blockInfo(blockInfo), nodeOffset(linkInfo.nodeOffset),
 		  linkOffset(linkInfo.linkOffset), linkId(linkId)
 		{}
 
-		Handle extHdl;
+		Handle &extHdl;
 		BlockInfo blockInfo;
 		NodeInfo nodeInfo;
 		quint32 nodeOffset;

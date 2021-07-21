@@ -104,7 +104,8 @@ void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
   QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
   QCache<const SubDiv *, MapData::Polys> *polyCache)
 {
-	SubFile::Handle *rgnHdl = 0, *lblHdl = 0, *netHdl = 0, *nodHdl = 0;
+	SubFile::Handle *rgnHdl = 0, *lblHdl = 0, *netHdl = 0, *nodHdl = 0,
+	  *nodHdl2 = 0;
 
 	if (_loaded < 0)
 		return;
@@ -147,8 +148,13 @@ void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
 			  *lblHdl, &p);
 			_rgn->extPolyObjects(*rgnHdl, subdiv, shift, RGNFile::Line, _lbl,
 			  *lblHdl, &l);
-			_rgn->links(*rgnHdl, subdiv, shift, _net, *netHdl, _nod, *nodHdl,
-			  _lbl, *lblHdl, &l);
+
+			if (_net && _net->hasLinks()) {
+				if (!nodHdl2)
+					nodHdl2 = new SubFile::Handle(_nod);
+				_rgn->links(*rgnHdl, subdiv, shift, _net, *netHdl, _nod, *nodHdl,
+				  *nodHdl2, _lbl, *lblHdl, &l);
+			}
 
 			copyPolys(rect, &p, polygons);
 			copyPolys(rect, &l, lines);
@@ -159,7 +165,7 @@ void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
 		}
 	}
 
-	delete rgnHdl; delete lblHdl; delete netHdl; delete nodHdl;
+	delete rgnHdl; delete lblHdl; delete netHdl; delete nodHdl; delete nodHdl2;
 }
 
 void VectorTile::points(const RectC &rect, int bits, bool baseMap,

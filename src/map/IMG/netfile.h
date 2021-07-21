@@ -30,9 +30,10 @@ public:
 
 	bool lblOffset(Handle &hdl, quint32 netOffset, quint32 &lblOffset) const;
 	bool link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
-	  const NODFile *nod, Handle &nodHdl, const LBLFile *lbl, Handle &lblHdl,
-	  const NODFile::BlockInfo &blockInfo, quint8 linkId, quint8 lineId,
-	  QList<MapData::Poly> *lines) const;
+	  const NODFile *nod, Handle &nodHdl2, Handle &nodHdl, const LBLFile *lbl,
+	  Handle &lblHdl, const NODFile::BlockInfo &blockInfo, quint8 linkId,
+	  quint8 lineId, QList<MapData::Poly> *lines) const;
+	bool hasLinks() const {return (_linksSize > 0);}
 
 private:
 	bool linkLabel(Handle &hdl, quint32 offset, quint32 size,

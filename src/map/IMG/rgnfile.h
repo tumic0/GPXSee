@@ -51,7 +51,8 @@ public:
 	  Handle &lblHdl, QList<MapData::Point> *points) const;
 	bool links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 	  const NETFile *net, Handle &netHdl, const NODFile *nod, Handle &nodHdl,
-	  const LBLFile *lbl, Handle &lblHdl, QList<MapData::Poly> *lines) const;
+	  Handle &nodHdl2, const LBLFile *lbl, Handle &lblHdl,
+	  QList<MapData::Poly> *lines) const;
 
 	bool subdivInit(Handle &hdl, SubDiv *subdiv) const;
 
