@@ -134,7 +134,6 @@ void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
 				rgnHdl = new SubFile::Handle(_rgn);
 				lblHdl = new SubFile::Handle(_lbl);
 				netHdl = new SubFile::Handle(_net);
-				nodHdl = new SubFile::Handle(_nod);
 			}
 
 			if (!subdiv->initialized() && !_rgn->subdivInit(*rgnHdl, subdiv))
@@ -150,6 +149,8 @@ void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
 			  *lblHdl, &l);
 
 			if (_net && _net->hasLinks()) {
+				if (!nodHdl)
+					nodHdl = new SubFile::Handle(_nod);
 				if (!nodHdl2)
 					nodHdl2 = new SubFile::Handle(_nod);
 				_rgn->links(*rgnHdl, subdiv, shift, _net, *netHdl, _nod, *nodHdl,
