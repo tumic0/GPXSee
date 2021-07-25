@@ -64,7 +64,6 @@ QString WaypointItem::info() const
 		}
 		tt.insert(qApp->translate("WaypointItem", "Links"), links);
 	}
-	tt.setImages(_waypoint.images());
 
 	return tt.toString();
 }
@@ -182,7 +181,7 @@ void WaypointItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void WaypointItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	Popup::show(event->screenPos(), info(), event->widget());
+	Popup::show(event->screenPos(), _waypoint.images(), info(), event->widget());
 	/* Do not propagate the event any further as lower stacked items (path
 	   items) would replace the popup with their own popup */
 }
