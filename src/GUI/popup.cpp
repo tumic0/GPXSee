@@ -9,6 +9,8 @@
 #include <QApplication>
 #include <QImageReader>
 #include <QVBoxLayout>
+#include <QDesktopServices>
+#include <QFileInfo>
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 #include <QDesktopWidget>
 #endif // QT 5.15
@@ -29,6 +31,34 @@ static QSize thumbnailSize(const ImageInfo &img, int limit)
 	}
 
 	return QSize(width, height);
+}
+
+class ImageLabel : public QLabel {
+public:
+    ImageLabel(QString path, QSize size, QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    ~ImageLabel();
+
+protected:
+    void mousePressEvent(QMouseEvent* event);
+
+	QString path;
+
+};
+
+ImageLabel::ImageLabel(QString path, QSize size, QWidget* parent, Qt::WindowFlags f)
+    : QLabel(parent, f), path(path) {
+	QImageReader reader(path);
+	reader.setAutoTransform(true);
+	reader.setScaledSize(size);
+	QImage image = reader.read();
+	QPixmap pixmap = QPixmap::fromImage(image);
+	setPixmap(pixmap);
+}
+
+ImageLabel::~ImageLabel() {}
+
+void ImageLabel::mousePressEvent(QMouseEvent* event) {
+	QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(path).absoluteFilePath()));
 }
 
 class PopupWidget : public QFrame
@@ -81,15 +111,7 @@ PopupWidget::PopupWidget(const QVector<ImageInfo> &images, const QString &text, 
 		const ImageInfo &img = images.at(i);
 		QSize size(thumbnailSize(img, qMin(960/images.size(), 240)));
 
-		QImageReader reader(img.path());
-		reader.setAutoTransform(true);
-		reader.setScaledSize(size);
-		QImage image = reader.read();
-		QPixmap pixmap = QPixmap::fromImage(image);
-
-		QLabel *label = new QLabel();
-		label->setPixmap(pixmap);
-		layout->addWidget(label);
+		layout->addWidget(new ImageLabel(img.path(), size));
 	}
 
 	label = new QLabel(text, this);
