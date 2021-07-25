@@ -58,7 +58,7 @@ PopupWidget *PopupWidget::_instance = 0;
 
 PopupWidget::PopupWidget(const QVector<ImageInfo> &images, const QString &text, QWidget *parent)
   : QFrame(parent, Qt::ToolTip | Qt::BypassGraphicsProxyWidget
-	| Qt::WindowDoesNotAcceptFocus)
+	| Qt::WindowDoesNotAcceptFocus | Qt::FramelessWindowHint)
 {
 	delete _instance;
 	_instance = this;
