@@ -74,6 +74,8 @@ PopupWidget::PopupWidget(const QVector<ImageInfo> &images, const QString &text, 
 	setMouseTracking(true);
 
 	QVBoxLayout *layout = new QVBoxLayout();
+	int margin = 1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, this);
+	layout->setContentsMargins(margin, margin, margin, margin);
 
 	for (int i = 0; i < images.size(); i++) {
 		const ImageInfo &img = images.at(i);
@@ -91,8 +93,7 @@ PopupWidget::PopupWidget(const QVector<ImageInfo> &images, const QString &text, 
 	}
 
 	label = new QLabel(text, this);
-	label->setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0,
-	  this));
+	label->setMargin(0);
 	label->setAlignment(Qt::AlignLeft);
 	label->setIndent(1);
 	label->setTextInteractionFlags(Qt::TextBrowserInteraction);
