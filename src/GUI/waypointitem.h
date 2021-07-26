@@ -31,6 +31,7 @@ public:
 	  QWidget *widget);
 
 	QString info() const;
+	const QVector<ImageInfo> images() const;
 
 	static void setUnits(Units units) {_units = units;}
 	static void setCoordinatesFormat(CoordinatesFormat format)

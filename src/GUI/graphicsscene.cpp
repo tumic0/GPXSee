@@ -39,7 +39,7 @@ void GraphicsScene::helpEvent(QGraphicsSceneHelpEvent *event)
 	for (int i = 0; i < list.size(); i++) {
 		if (list.at(i)->type() == QGraphicsItem::UserType + 1) {
 			GraphicsItem *mi = static_cast<GraphicsItem*>(list.at(i));
-			Popup::show(event->screenPos(), mi->info(), event->widget());
+			Popup::show(event->screenPos(), mi->images(), mi->info(), event->widget());
 			return;
 		}
 	}

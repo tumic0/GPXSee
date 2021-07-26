@@ -11,7 +11,6 @@ class ImageInfo;
 class Popup
 {
 public:
-	static void show(const QPoint &pos, const QString &text, QWidget *w);
 	static void show(const QPoint &pos, const QVector<ImageInfo> &images, const QString &text, QWidget *w);
 	static void clear();
 };

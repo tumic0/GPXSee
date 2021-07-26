@@ -68,6 +68,11 @@ QString WaypointItem::info() const
 	return tt.toString();
 }
 
+const QVector<ImageInfo> WaypointItem::images() const
+{
+	return _waypoint.images();
+}
+
 WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
   QGraphicsItem *parent) : GraphicsItem(parent)
 {
@@ -181,7 +186,7 @@ void WaypointItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void WaypointItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	Popup::show(event->screenPos(), _waypoint.images(), info(), event->widget());
+	Popup::show(event->screenPos(), images(), info(), event->widget());
 	/* Do not propagate the event any further as lower stacked items (path
 	   items) would replace the popup with their own popup */
 }

@@ -189,12 +189,6 @@ void PopupWidget::deleteAfterTimer()
 		_timer.start(300, this);
 }
 
-void Popup::show(const QPoint &pos, const QString &text, QWidget *w)
-{
-	QVector<ImageInfo> images;
-	show(pos, images, text, w);
-}
-
 void Popup::show(const QPoint &pos, const QVector<ImageInfo> &images, const QString &text, QWidget *w)
 {
 	if (text.isEmpty())

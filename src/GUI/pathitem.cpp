@@ -445,6 +445,6 @@ void PathItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void PathItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	Popup::show(event->screenPos(), info(), event->widget());
+	Popup::show(event->screenPos(), images(), info(), event->widget());
 	GraphicsItem::mousePressEvent(event);
 }

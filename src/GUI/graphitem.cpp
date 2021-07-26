@@ -345,6 +345,6 @@ void GraphItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void GraphItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	Popup::show(event->screenPos(), info(), event->widget());
+	Popup::show(event->screenPos(), images(), info(), event->widget());
 	GraphicsItem::mousePressEvent(event);
 }
