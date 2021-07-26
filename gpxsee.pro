@@ -21,6 +21,7 @@ HEADERS += src/common/config.h \
     src/GUI/axislabelitem.h \
     src/GUI/dirselectwidget.h \
     src/GUI/graphicsscene.h \
+    src/GUI/imagelabel.h \
     src/GUI/mapaction.h \
     src/GUI/mapitem.h \
     src/GUI/marginswidget.h \
@@ -230,6 +231,7 @@ HEADERS += src/common/config.h \
 SOURCES += src/main.cpp \
     src/GUI/axislabelitem.cpp \
     src/GUI/dirselectwidget.cpp \
+    src/GUI/imagelabel.cpp \
     src/GUI/mapitem.cpp \
     src/GUI/marginswidget.cpp \
     src/GUI/markerinfoitem.cpp \
