@@ -44,6 +44,7 @@ public:
 
 	static PopupWidget *_instance;
 	QLabel *label;
+	QHBoxLayout *imagesLayout;
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -77,12 +78,18 @@ PopupWidget::PopupWidget(const QVector<ImageInfo> &images, const QString &text, 
 	int margin = 1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, this);
 	layout->setContentsMargins(margin, margin, margin, margin);
 
+	imagesLayout = new QHBoxLayout();
+	imagesLayout->setContentsMargins(0, 0, 0, 0);
+	imagesLayout->setSpacing(10);
+
 	for (int i = 0; i < images.size(); i++) {
 		const ImageInfo &img = images.at(i);
 		QSize size(thumbnailSize(img, qMin(960/images.size(), 240)));
 
-		layout->addWidget(new ImageLabel(img.path(), size));
+		imagesLayout->addWidget(new ImageLabel(img.path(), size));
 	}
+
+	layout->addItem(imagesLayout);
 
 	label = new QLabel(text, this);
 	label->setMargin(0);
