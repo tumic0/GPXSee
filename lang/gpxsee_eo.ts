@@ -152,7 +152,7 @@
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="38"/>
         <source>Select directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Elekti dosierujon</translation>
     </message>
 </context>
 <context>
@@ -1619,17 +1619,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
         <source>Data:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateno:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="703"/>
         <source>Maps:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapoj:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="704"/>
         <source>POI:</source>
-        <translation type="unfinished"></translation>
+        <translation>POI:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="715"/>

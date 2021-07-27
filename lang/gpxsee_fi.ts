@@ -147,12 +147,12 @@
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="16"/>
         <source>System default</source>
-        <translation type="unfinished"></translation>
+        <translation>Järjestelmän oletus</translation>
     </message>
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="38"/>
         <source>Select directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Valitse hakemisto</translation>
     </message>
 </context>
 <context>
@@ -1619,17 +1619,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
         <source>Data:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiedot:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="703"/>
         <source>Maps:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartat:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="704"/>
         <source>POI:</source>
-        <translation type="unfinished"></translation>
+        <translation>POI:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="715"/>

@@ -1615,7 +1615,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="694"/>
         <source>Select the initial paths of the file open dialogues. Leave the field empty for the system default.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите начальные пути диалогов открытия файлов. Оставьте поле пустым для системного значения по умолчанию.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
@@ -1635,7 +1635,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="715"/>
         <source>Initial paths</source>
-        <translation type="unfinished"></translation>
+        <translation>Начальные пути</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="733"/>
