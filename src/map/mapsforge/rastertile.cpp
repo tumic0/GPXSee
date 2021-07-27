@@ -146,7 +146,7 @@ void RasterTile::processAreaLabels(QList<TextItem*> &textItems)
 		const Style::TextRender *ti = 0;
 		const Style::Symbol *si = 0;
 
-		if (!path.closed || !path.path.elementCount())
+		if (!path.closed)
 			continue;
 
 		for (int j = 0; j < labels.size(); j++) {
@@ -169,6 +169,9 @@ void RasterTile::processAreaLabels(QList<TextItem*> &textItems)
 
 		if (!ti && !si)
 			continue;
+
+		if (!path.path.elementCount())
+			path.path = painterPath(path.poly);
 
 		const QImage *img = si ? &si->img() : 0;
 		const QFont *font = ti ? &ti->font() : 0;
