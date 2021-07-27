@@ -60,7 +60,7 @@ public:
 				QList<QByteArray> vc(vals);
 				if (vc.removeAll("~"))
 					_neg = true;
-				_vals = list(vals);
+				_vals = list(vc);
 			}
 
 			bool match(const QVector<MapData::Tag> &tags) const
