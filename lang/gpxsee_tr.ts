@@ -147,12 +147,12 @@
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="16"/>
         <source>System default</source>
-        <translation type="unfinished"></translation>
+        <translation>Sistem öntanımlı değeri</translation>
     </message>
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="38"/>
         <source>Select directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Dizin seç</translation>
     </message>
 </context>
 <context>
@@ -1085,7 +1085,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="137"/>
         <source>World-file georeferenced images</source>
-        <translation type="unfinished"></translation>
+        <translation>World-file coğrafi referanslı görüntüler</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="139"/>
@@ -1138,12 +1138,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="56"/>
         <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="unfinished"></translation>
+        <translation>İz düşümü tanımı olmayan haritaların uygun iz düşümünü seçin (JNX, KMZ ve world file haritaları).</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="58"/>
         <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vektör haritalarının (IMG ve Mapsforge haritaları) istenen iz düşümünü seçin. İz düşümü, tüm harita alanı için geçerli olmalıdır.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="90"/>
@@ -1613,27 +1613,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="694"/>
         <source>Select the initial paths of the file open dialogues. Leave the field empty for the system default.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya açma iletişim kutularının ilk yollarını seçin. Sistem öntanımlı değeri için alanı boş bırakın.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
         <source>Data:</source>
-        <translation type="unfinished"></translation>
+        <translation>Veri:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="703"/>
         <source>Maps:</source>
-        <translation type="unfinished"></translation>
+        <translation>Haritalar:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="704"/>
         <source>POI:</source>
-        <translation type="unfinished"></translation>
+        <translation>POI:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="715"/>
         <source>Initial paths</source>
-        <translation type="unfinished"></translation>
+        <translation>İlk yollar</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="733"/>
