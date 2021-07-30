@@ -7,12 +7,15 @@ os:
 dist: focal
 osx_image: xcode12
 
+addons:
+  homebrew:
+    packages:
+    - qt
+
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
 
 install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install qt; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install qtbase5-dev qtbase5-private-dev libqt5opengl5-dev qttools5-dev-tools; fi
 
 script:
