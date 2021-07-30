@@ -11,12 +11,12 @@ addons:
   homebrew:
     packages:
     - qt
-
-before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
-
-install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install qtbase5-dev qtbase5-private-dev libqt5opengl5-dev qttools5-dev-tools; fi
+  apt:
+    packages:
+    - qtbase5-dev
+    - qtbase5-private-dev
+    - libqt5opengl5-dev
+    - qttools5-dev-tools
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then PATH=/usr/local/opt/qt/bin/:${PATH}; fi
