@@ -121,7 +121,7 @@ void PopupWidget::setImages(const QVector<ImageInfo> &images)
 		if (imagesContain(images, imageLabel->path())) {
 			alreadyDisplayed.append(imageLabel->path());
 		} else {
-			imageLabel->deleteLater();
+			delete imageLabel;
 		}
 	}
 
