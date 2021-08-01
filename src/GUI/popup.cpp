@@ -120,8 +120,8 @@ void PopupWidget::setImages(const QVector<ImageInfo> &images)
 		QSize size(thumbnailSize(img, qMin(960/images.size(), 240)));
 
 		QWidget *imageLabel = new ImageLabel(img.path(), size, this);
-		imageLabel->show();
 		imagesLayout->addWidget(imageLabel);
+		imageLabel->show();
 	}
 }
 
