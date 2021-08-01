@@ -14,6 +14,7 @@
 #include "data/imageinfo.h"
 #include "imagelabel.h"
 #include "popup.h"
+#include <QDebug>
 
 static QSize thumbnailSize(const ImageInfo &img, int limit)
 {
@@ -41,10 +42,10 @@ public:
 	void place(const QPoint &pos, QWidget *w);
 	void deleteAfterTimer();
 	void stopTimer() {_timer.stop();}
+	void setImages(const QVector<ImageInfo> &images);
 
 	static PopupWidget *_instance;
 	QLabel *label;
-	QHBoxLayout *imagesLayout;
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -53,6 +54,7 @@ protected:
 
 private:
 	QBasicTimer _timer;
+	QHBoxLayout *imagesLayout;
 };
 
 PopupWidget *PopupWidget::_instance = 0;
@@ -89,7 +91,7 @@ PopupWidget::PopupWidget(const QVector<ImageInfo> &images, const QString &text, 
 		imagesLayout->addWidget(new ImageLabel(img.path(), size));
 	}
 
-	layout->addItem(imagesLayout);
+	layout->addLayout(imagesLayout);
 
 	label = new QLabel(text, this);
 	label->setMargin(0);
@@ -110,6 +112,22 @@ PopupWidget::PopupWidget(const QVector<ImageInfo> &images, const QString &text, 
 PopupWidget::~PopupWidget()
 {
 	_instance = 0;
+}
+
+void PopupWidget::setImages(const QVector<ImageInfo> &images)
+{
+	for (QLayoutItem *item = imagesLayout->takeAt(0); item != NULL; item = imagesLayout->takeAt(0)) {
+		item->widget()->deleteLater();
+	}
+
+	for (int i = 0; i < images.size(); i++) {
+		const ImageInfo &img = images.at(i);
+		QSize size(thumbnailSize(img, qMin(960/images.size(), 240)));
+
+		QWidget *imageLabel = new ImageLabel(img.path(), size, this);
+		imageLabel->show();
+		imagesLayout->addWidget(imageLabel);
+	}
 }
 
 void PopupWidget::paintEvent(QPaintEvent *event)
@@ -204,6 +222,7 @@ void Popup::show(const QPoint &pos, const QVector<ImageInfo> &images, const QStr
 	if (PopupWidget::_instance) {
 		PopupWidget::_instance->stopTimer();
 		PopupWidget::_instance->label->setText(text);
+		PopupWidget::_instance->setImages(images);
 	} else
 		PopupWidget::_instance = new PopupWidget(images, text);
 
