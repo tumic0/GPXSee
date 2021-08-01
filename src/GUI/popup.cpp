@@ -111,7 +111,7 @@ PopupWidget::~PopupWidget()
 
 void PopupWidget::setImages(const QVector<ImageInfo> &images)
 {
-	for (QLayoutItem *item = imagesLayout->takeAt(0); item != NULL; item = imagesLayout->takeAt(0)) {
+	for (QLayoutItem *item = imagesLayout->takeAt(0); item != 0; item = imagesLayout->takeAt(0)) {
 		item->widget()->deleteLater();
 	}
 
