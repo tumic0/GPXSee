@@ -14,7 +14,6 @@
 #include "data/imageinfo.h"
 #include "imagelabel.h"
 #include "popup.h"
-#include <QDebug>
 
 static QSize thumbnailSize(const ImageInfo &img, int limit)
 {
@@ -55,6 +54,8 @@ protected:
 private:
 	QBasicTimer _timer;
 	QHBoxLayout *imagesLayout;
+
+	bool imagesContain(const QVector<ImageInfo> &images, const QString &path);
 };
 
 PopupWidget *PopupWidget::_instance = 0;
@@ -111,18 +112,41 @@ PopupWidget::~PopupWidget()
 
 void PopupWidget::setImages(const QVector<ImageInfo> &images)
 {
-	for (QLayoutItem *item = imagesLayout->takeAt(0); item != 0; item = imagesLayout->takeAt(0)) {
-		item->widget()->deleteLater();
+	QVector<QString> alreadyDisplayed;
+
+	for (int i = imagesLayout->count() - 1; i >= 0; i--) {
+		QLayoutItem *item = imagesLayout->itemAt(i);
+		ImageLabel *imageLabel = static_cast<ImageLabel *>(item->widget());
+
+		if (imagesContain(images, imageLabel->path())) {
+			alreadyDisplayed.append(imageLabel->path());
+		} else {
+			imageLabel->deleteLater();
+		}
 	}
 
 	for (int i = 0; i < images.size(); i++) {
 		const ImageInfo &img = images.at(i);
-		QSize size(thumbnailSize(img, qMin(960/images.size(), 240)));
 
-		QWidget *imageLabel = new ImageLabel(img.path(), size, this);
-		imagesLayout->addWidget(imageLabel);
-		imageLabel->show();
+		if (!alreadyDisplayed.contains(img.path())) {
+			QSize size(thumbnailSize(img, qMin(960/images.size(), 240)));
+
+			QWidget *imageLabel = new ImageLabel(img.path(), size, this);
+			imagesLayout->addWidget(imageLabel);
+			imageLabel->show();
+		}
 	}
+}
+
+bool PopupWidget::imagesContain(const QVector<ImageInfo> &images, const QString &path)
+{
+	for (QVector<ImageInfo>::const_iterator it = images.begin(); it != images.end(); ++it) {
+		if (path == it->path()) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void PopupWidget::paintEvent(QPaintEvent *event)

@@ -6,10 +6,12 @@ public:
     ImageLabel(QString path, QSize size, QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
     ~ImageLabel();
 
+    const QString &path() const {return _path;}
+
 protected:
     void mousePressEvent(QMouseEvent* event);
 
-	QString path;
+	QString _path;
 
 };
 

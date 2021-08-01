@@ -6,7 +6,7 @@
 #include "imagelabel.h"
 
 ImageLabel::ImageLabel(QString path, QSize size, QWidget* parent, Qt::WindowFlags f)
-    : QLabel(parent, f), path(path) {
+    : QLabel(parent, f), _path(path) {
 	QImageReader reader(path);
 	reader.setAutoTransform(true);
 	reader.setScaledSize(size);
@@ -18,5 +18,5 @@ ImageLabel::ImageLabel(QString path, QSize size, QWidget* parent, Qt::WindowFlag
 ImageLabel::~ImageLabel() {}
 
 void ImageLabel::mousePressEvent(QMouseEvent* event) {
-	QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(path).absoluteFilePath()));
+	QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(_path).absoluteFilePath()));
 }
