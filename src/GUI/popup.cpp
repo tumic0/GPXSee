@@ -84,12 +84,7 @@ PopupWidget::PopupWidget(const QVector<ImageInfo> &images, const QString &text, 
 	imagesLayout->setContentsMargins(0, 0, 0, 0);
 	imagesLayout->setSpacing(10);
 
-	for (int i = 0; i < images.size(); i++) {
-		const ImageInfo &img = images.at(i);
-		QSize size(thumbnailSize(img, qMin(960/images.size(), 240)));
-
-		imagesLayout->addWidget(new ImageLabel(img.path(), size));
-	}
+	setImages(images);
 
 	layout->addLayout(imagesLayout);
 
