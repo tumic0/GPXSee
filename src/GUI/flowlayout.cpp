@@ -115,9 +115,6 @@ int FlowLayout::doLayout(const QRect &rect, bool testOnly) const
 	int lineHeight = 0;
 	QVector<QVector<FlowLayoutItem>> rows;
 
-	if (!_items.isEmpty())
-		rows.append(QVector<FlowLayoutItem>());
-
 	for (int i = 0; i < _items.size(); i++) {
 		QLayoutItem *item = _items.at(i);
 		const QWidget *wid = item->widget();
@@ -139,6 +136,8 @@ int FlowLayout::doLayout(const QRect &rect, bool testOnly) const
 			rows.append(QVector<FlowLayoutItem>());
 		}
 
+		if (rows.isEmpty())
+			rows.append(QVector<FlowLayoutItem>());
 		rows.last().append(FlowLayoutItem(item, x, y));
 
 		x = nextX;
