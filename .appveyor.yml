@@ -30,43 +30,29 @@ environment:
     NSISDEF: /DQT6
 
 install:
-- cmd: >-
+- cmd: |-
     set PATH=%QTDIR%\bin;%NSISDIR%;%PATH%
-
     call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\"%VCVARS%
 
 build_script:
-- cmd: >-
+- cmd: |-
     lrelease gpxsee.pro
-
     qmake gpxsee.pro
-
     nmake release
 
-
     md installer
-
     copy release\GPXSee.exe installer
-
     windeployqt --release installer\GPXSee.exe
-
     copy pkg\%NSI% installer
-
     copy pkg\macros.nsh installer
-
     xcopy pkg\csv installer\csv /i
-
     xcopy pkg\maps installer\maps /i
-
     xcopy lang\*.qm installer\translations\ /sy
-
     copy licence.txt installer
-
     copy %OPENSSLDIR%\%LIBCRYPTO% installer
-
     copy %OPENSSLDIR%\%LIBSSL% installer
 
-
     makensis.exe %NSISDEF% installer\%NSI%
+
 artifacts:
 - path: installer\GPXSee-*.exe
