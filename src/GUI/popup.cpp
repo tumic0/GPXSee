@@ -6,25 +6,31 @@
 #include <QMouseEvent>
 #include <QBasicTimer>
 #include <QScreen>
+#include <QVBoxLayout>
 #include <QApplication>
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 #include <QDesktopWidget>
 #endif // QT 5.15
+#include "tooltip.h"
+#include "thumbnail.h"
+#include "flowlayout.h"
 #include "popup.h"
 
 
-class PopupLabel : public QLabel
+class PopupFrame : public QFrame
 {
 public:
-	PopupLabel(const QString &text, QWidget *parent = 0);
-	~PopupLabel();
+	PopupFrame(const ToolTip &toolTip, QWidget *parent = 0);
+	~PopupFrame();
+
+	const ToolTip &toolTip() const {return _toolTip;}
 
 	bool eventFilter(QObject *o, QEvent *ev);
 	void place(const QPoint &pos, QWidget *w);
 	void deleteAfterTimer();
 	void stopTimer() {_timer.stop();}
 
-	static PopupLabel *_instance;
+	static PopupFrame *_instance;
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -32,14 +38,17 @@ protected:
 	void contextMenuEvent(QContextMenuEvent *) {}
 
 private:
+	void createLayout(const ToolTip &content);
+
 	QBasicTimer _timer;
+	ToolTip _toolTip;
 };
 
-PopupLabel *PopupLabel::_instance = 0;
+PopupFrame *PopupFrame::_instance = 0;
 
-PopupLabel::PopupLabel(const QString &text, QWidget *parent)
-  : QLabel(text, parent, Qt::ToolTip | Qt::BypassGraphicsProxyWidget
-	| Qt::WindowDoesNotAcceptFocus)
+PopupFrame::PopupFrame(const ToolTip &toolTip, QWidget *parent)
+  : QFrame(parent, Qt::ToolTip | Qt::BypassGraphicsProxyWidget
+    | Qt::WindowDoesNotAcceptFocus), _toolTip(toolTip)
 {
 	delete _instance;
 	_instance = this;
@@ -48,39 +57,73 @@ PopupLabel::PopupLabel(const QString &text, QWidget *parent)
 	setBackgroundRole(QPalette::ToolTipBase);
 	setPalette(QToolTip::palette());
 	ensurePolished();
-	setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0,
-	  this));
+
 	setFrameStyle(QFrame::NoFrame);
-	setAlignment(Qt::AlignLeft);
-	setIndent(1);
 	setWindowOpacity(style()->styleHint(QStyle::SH_ToolTipLabel_Opacity, 0,
 	  this) / 255.0);
 
-	setTextInteractionFlags(Qt::TextBrowserInteraction);
-	setOpenExternalLinks(true);
-	setWordWrap(true);
+	createLayout(toolTip);
 
 	setMouseTracking(true);
 
 	qApp->installEventFilter(this);
 }
 
-PopupLabel::~PopupLabel()
+PopupFrame::~PopupFrame()
 {
 	_instance = 0;
 }
 
-void PopupLabel::paintEvent(QPaintEvent *event)
+void PopupFrame::createLayout(const ToolTip &content)
+{
+	QVBoxLayout *layout = new QVBoxLayout();
+	int margin = 1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0,
+	  this);
+	layout->setContentsMargins(margin, margin, margin, margin);
+	layout->setSpacing(0);
+
+	if (!content.images().isEmpty()) {
+		FlowLayout *imagesLayout = new FlowLayout(0, 2, 2);
+		int size = qMin(960/content.images().size(), 240);
+
+		for (int i = 0; i < content.images().size(); i++)
+			imagesLayout->addWidget(new Thumbnail(content.images().at(i), size));
+
+		layout->addLayout(imagesLayout);
+	}
+
+	if (!content.list().isEmpty()) {
+		QString html = "<table>";
+		for (int i = 0; i < content.list().count(); i++)
+			html += "<tr><td align=\"right\"><b>" + content.list().at(i).key()
+			  + ":&nbsp;</b></td><td>" + content.list().at(i).value()
+			  + "</td></tr>";
+		html += "</table>";
+
+		QLabel *label = new QLabel(html);
+		label->setAlignment(Qt::AlignLeft);
+		label->setIndent(1);
+		label->setTextInteractionFlags(Qt::TextBrowserInteraction);
+		label->setOpenExternalLinks(true);
+		label->setWordWrap(true);
+
+		layout->addWidget(label);
+	}
+
+	setLayout(layout);
+}
+
+void PopupFrame::paintEvent(QPaintEvent *event)
 {
 	QStylePainter p(this);
 	QStyleOptionFrame opt;
 	opt.initFrom(this);
 	p.drawPrimitive(QStyle::PE_PanelTipLabel, opt);
 	p.end();
-	QLabel::paintEvent(event);
+	QFrame::paintEvent(event);
 }
 
-void PopupLabel::timerEvent(QTimerEvent *event)
+void PopupFrame::timerEvent(QTimerEvent *event)
 {
 	if (event->timerId() == _timer.timerId()) {
 		_timer.stop();
@@ -88,7 +131,7 @@ void PopupLabel::timerEvent(QTimerEvent *event)
 	}
 }
 
-bool PopupLabel::eventFilter(QObject *o, QEvent *ev)
+bool PopupFrame::eventFilter(QObject *o, QEvent *ev)
 {
 	Q_UNUSED(o);
 
@@ -123,7 +166,7 @@ bool PopupLabel::eventFilter(QObject *o, QEvent *ev)
 	return false;
 }
 
-void PopupLabel::place(const QPoint &pos, QWidget *w)
+void PopupFrame::place(const QPoint &pos, QWidget *w)
 {
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 	QRect screen = QApplication::desktop()->screenGeometry(w);
@@ -148,31 +191,34 @@ void PopupLabel::place(const QPoint &pos, QWidget *w)
 	this->move(p);
 }
 
-void PopupLabel::deleteAfterTimer()
+void PopupFrame::deleteAfterTimer()
 {
 	if (!_timer.isActive())
 		_timer.start(300, this);
 }
 
-
-void Popup::show(const QPoint &pos, const QString &text, QWidget *w)
+void Popup::show(const QPoint &pos, const ToolTip &toolTip, QWidget *w)
 {
-	if (text.isEmpty())
+	if (toolTip.isEmpty())
 		return;
 
-	if (PopupLabel::_instance) {
-		PopupLabel::_instance->stopTimer();
-		PopupLabel::_instance->setText(text);
+	if (PopupFrame::_instance) {
+		if (toolTip == PopupFrame::_instance->toolTip())
+			PopupFrame::_instance->stopTimer();
+		else {
+			delete PopupFrame::_instance;
+			PopupFrame::_instance = new PopupFrame(toolTip);
+		}
 	} else
-		PopupLabel::_instance = new PopupLabel(text);
+		PopupFrame::_instance = new PopupFrame(toolTip);
 
-	PopupLabel::_instance->resize(PopupLabel::_instance->sizeHint());
-	PopupLabel::_instance->place(pos, w);
-	PopupLabel::_instance->showNormal();
+	PopupFrame::_instance->resize(PopupFrame::_instance->sizeHint());
+	PopupFrame::_instance->place(pos, w);
+	PopupFrame::_instance->showNormal();
 }
 
 void Popup::clear()
 {
-	if (PopupLabel::_instance)
-		delete PopupLabel::_instance;
+	if (PopupFrame::_instance)
+		delete PopupFrame::_instance;
 }

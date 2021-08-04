@@ -9,7 +9,7 @@ HeartRateGraphItem::HeartRateGraphItem(const Graph &graph, GraphType type,
 {
 }
 
-QString HeartRateGraphItem::info() const
+ToolTip HeartRateGraphItem::info() const
 {
 	ToolTip tt;
 	QLocale l(QLocale::system());
@@ -19,5 +19,5 @@ QString HeartRateGraphItem::info() const
 	tt.insert(tr("Average"), l.toString(avg(), 'f', 0)
 	  + UNIT_SPACE + tr("bpm"));
 
-	return tt.toString();
+	return tt;
 }

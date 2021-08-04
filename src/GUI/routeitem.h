@@ -21,7 +21,7 @@ public:
 	void showWaypoints(bool show);
 	void showWaypointLabels(bool show);
 
-	QString info() const;
+	ToolTip info() const;
 	QDateTime date() const {return QDateTime();}
 
 private:

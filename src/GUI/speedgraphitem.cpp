@@ -15,7 +15,7 @@ SpeedGraphItem::SpeedGraphItem(const Graph &graph, GraphType type, int width,
 	_mavg = graph.last().last().s() / movingTime;
 }
 
-QString SpeedGraphItem::info() const
+ToolTip SpeedGraphItem::info() const
 {
 	ToolTip tt;
 	qreal scale = (_units == Imperial) ? MS2MIH : (_units == Nautical)
@@ -34,7 +34,7 @@ QString SpeedGraphItem::info() const
 	  ? avg() * scale : mavg() * scale, 'f', 1) + UNIT_SPACE + su);
 	tt.insert(tr("Pace"), pace + UNIT_SPACE + pu);
 
-	return tt.toString();
+	return tt;
 }
 
 void SpeedGraphItem::setTimeType(TimeType type)

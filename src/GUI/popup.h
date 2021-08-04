@@ -2,13 +2,13 @@
 #define POPUP_H
 
 class QPoint;
-class QString;
 class QWidget;
+class ToolTip;
 
 class Popup
 {
 public:
-	static void show(const QPoint &pos, const QString &text, QWidget *w);
+	static void show(const QPoint &pos, const ToolTip &toolTip, QWidget *w);
 	static void clear();
 };
 

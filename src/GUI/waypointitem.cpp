@@ -3,7 +3,6 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QLabel>
 #include "font.h"
-#include "tooltip.h"
 #include "popup.h"
 #include "waypointitem.h"
 
@@ -18,7 +17,7 @@ Units WaypointItem::_units = Metric;
 CoordinatesFormat WaypointItem::_format = DecimalDegrees;
 QTimeZone WaypointItem::_timeZone = QTimeZone::utc();
 
-QString WaypointItem::info() const
+ToolTip WaypointItem::info() const
 {
 	ToolTip tt;
 	QLocale l;
@@ -66,7 +65,7 @@ QString WaypointItem::info() const
 	}
 	tt.setImages(_waypoint.images());
 
-	return tt.toString();
+	return tt;
 }
 
 WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,

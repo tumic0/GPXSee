@@ -69,7 +69,7 @@ static QRectF bbox(const RectC &rect, Map *map, int samples = 100)
 	return prect;
 }
 
-QString MapItem::info() const
+ToolTip MapItem::info() const
 {
 	ToolTip tt;
 
@@ -78,7 +78,7 @@ QString MapItem::info() const
 	if (!_fileName.isEmpty())
 		tt.insert(tr("File"), _fileName);
 
-	return tt.toString();
+	return tt;
 }
 
 MapItem::MapItem(MapAction *action, Map *map, GraphicsItem *parent)

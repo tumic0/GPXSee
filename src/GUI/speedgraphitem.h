@@ -17,7 +17,7 @@ public:
 	qreal mavg() const {return _mavg;}
 	qreal max() const {return _max;}
 
-	QString info() const;
+	ToolTip info() const;
 
 	void setTimeType(TimeType type);
 

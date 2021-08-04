@@ -19,7 +19,10 @@ public:
 	void setDigitalZoom(int zoom) {setScale(pow(2, -zoom));}
 
 	int type() const {return parentItem()->type();}
-	QString info() const {return static_cast<GraphicsItem*>(parentItem())->info();}
+	ToolTip info() const
+	{
+		return static_cast<GraphicsItem*>(parentItem())->info();
+	}
 
 	static QRect tickRect(int value);
 

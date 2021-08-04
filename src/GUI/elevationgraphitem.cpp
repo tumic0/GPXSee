@@ -26,7 +26,7 @@ ElevationGraphItem::ElevationGraphItem(const Graph &graph, GraphType type,
 	}
 }
 
-QString ElevationGraphItem::info() const
+ToolTip ElevationGraphItem::info() const
 {
 	ToolTip tt;
 	qreal scale = (_units == Metric) ? 1.0 : M2FT;
@@ -42,6 +42,5 @@ QString ElevationGraphItem::info() const
 	tt.insert(tr("Minimum"), l.toString(min() * scale, 'f', 0)
 	  + UNIT_SPACE + su);
 
-
-	return tt.toString();
+	return tt;
 }

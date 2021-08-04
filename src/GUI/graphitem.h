@@ -16,7 +16,7 @@ public:
 	  const QColor &color, Qt::PenStyle style, QGraphicsItem *parent = 0);
 	virtual ~GraphItem() {}
 
-	virtual QString info() const = 0;
+	virtual ToolTip info() const = 0;
 
 	QPainterPath shape() const {return _shape;}
 	QRectF boundingRect() const {return _shape.boundingRect();}

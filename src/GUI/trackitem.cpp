@@ -6,7 +6,7 @@
 #include "trackitem.h"
 
 
-QString TrackItem::info() const
+ToolTip TrackItem::info() const
 {
 	ToolTip tt;
 	QLocale l;
@@ -37,7 +37,7 @@ QString TrackItem::info() const
 		tt.insert(tr("Links"), links);
 	}
 
-	return tt.toString();
+	return tt;
 }
 
 TrackItem::TrackItem(const Track &track, Map *map, QGraphicsItem *parent)

@@ -12,7 +12,7 @@ TemperatureGraphItem::TemperatureGraphItem(const Graph &graph, GraphType type,
 	_avg = GraphItem::avg();
 }
 
-QString TemperatureGraphItem::info() const
+ToolTip TemperatureGraphItem::info() const
 {
 	ToolTip tt;
 	qreal scale = (_units == Metric) ? 1.0 : C2FS;
@@ -28,5 +28,5 @@ QString TemperatureGraphItem::info() const
 	tt.insert(tr("Minimum"), l.toString(min() * scale + offset, 'f', 1)
 	  + UNIT_SPACE + su);
 
-	return tt.toString();
+	return tt;
 }

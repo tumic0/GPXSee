@@ -15,7 +15,7 @@ class TrackItem : public PathItem
 public:
 	TrackItem(const Track &track, Map *map, QGraphicsItem *parent = 0);
 
-	QString info() const;
+	ToolTip info() const;
 	QDateTime date() const {return _date;}
 
 private:

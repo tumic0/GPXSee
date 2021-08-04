@@ -8,7 +8,7 @@
 #include "routeitem.h"
 
 
-QString RouteItem::info() const
+ToolTip RouteItem::info() const
 {
 	ToolTip tt;
 
@@ -32,7 +32,7 @@ QString RouteItem::info() const
 		tt.insert(tr("Links"), links);
 	}
 
-	return tt.toString();
+	return tt;
 }
 
 RouteItem::RouteItem(const Route &route, Map *map, QGraphicsItem *parent)

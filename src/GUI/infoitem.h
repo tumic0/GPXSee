@@ -22,6 +22,7 @@ public:
 
 private:
 	void updateBoundingRect();
+	int indexOf(const QString &key) const;
 
 	QList<KV<QString, QString> > _list;
 	QRectF _boundingRect;

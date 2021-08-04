@@ -3,13 +3,14 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsItem>
+#include "tooltip.h"
 
 class GraphicsItem : public QGraphicsItem
 {
 public:
 	GraphicsItem(QGraphicsItem *parent = 0) : QGraphicsItem(parent) {}
 
-	virtual QString info() const = 0;
+	virtual ToolTip info() const = 0;
 	int type() const {return QGraphicsItem::UserType + 1;}
 };
 

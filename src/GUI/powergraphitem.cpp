@@ -9,7 +9,7 @@ PowerGraphItem::PowerGraphItem(const Graph &graph, GraphType type, int width,
 {
 }
 
-QString PowerGraphItem::info() const
+ToolTip PowerGraphItem::info() const
 {
 	ToolTip tt;
 	QLocale l(QLocale::system());
@@ -19,5 +19,5 @@ QString PowerGraphItem::info() const
 	tt.insert(tr("Average"), l.toString(avg(), 'f', 1)
 	  + UNIT_SPACE + tr("W"));
 
-	return tt.toString();
+	return tt;
 }

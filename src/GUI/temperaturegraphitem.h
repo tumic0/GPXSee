@@ -15,7 +15,7 @@ public:
 	qreal min() const {return _min;}
 	qreal avg() const {return _avg;}
 
-	QString info() const;
+	ToolTip info() const;
 
 private:
 	qreal _min, _max, _avg;

@@ -27,7 +27,7 @@ GearRatioGraphItem::GearRatioGraphItem(const Graph &graph, GraphType type,
 	_top = key;
 }
 
-QString GearRatioGraphItem::info() const
+ToolTip GearRatioGraphItem::info() const
 {
 	ToolTip tt;
 	QLocale l(QLocale::system());
@@ -36,5 +36,5 @@ QString GearRatioGraphItem::info() const
 	tt.insert(tr("Maximum"), l.toString(max(), 'f', 2));
 	tt.insert(tr("Most used"), l.toString(top(), 'f', 2));
 
-	return tt.toString();
+	return tt;
 }

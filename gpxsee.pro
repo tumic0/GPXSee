@@ -20,6 +20,7 @@ INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
     src/GUI/axislabelitem.h \
     src/GUI/dirselectwidget.h \
+    src/GUI/flowlayout.h \
     src/GUI/graphicsscene.h \
     src/GUI/mapaction.h \
     src/GUI/mapitem.h \
@@ -28,6 +29,7 @@ HEADERS += src/common/config.h \
     src/GUI/planeitem.h \
     src/GUI/poiaction.h \
     src/GUI/popup.h \
+    src/GUI/thumbnail.h \
     src/common/garmin.h \
     src/common/coordinates.h \
     src/common/range.h \
@@ -230,10 +232,12 @@ HEADERS += src/common/config.h \
 SOURCES += src/main.cpp \
     src/GUI/axislabelitem.cpp \
     src/GUI/dirselectwidget.cpp \
+    src/GUI/flowlayout.cpp \
     src/GUI/mapitem.cpp \
     src/GUI/marginswidget.cpp \
     src/GUI/markerinfoitem.cpp \
     src/GUI/popup.cpp \
+    src/GUI/thumbnail.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
     src/common/range.cpp \
@@ -261,7 +265,6 @@ SOURCES += src/main.cpp \
     src/GUI/fileselectwidget.cpp \
     src/GUI/temperaturegraph.cpp \
     src/GUI/trackitem.cpp \
-    src/GUI/tooltip.cpp \
     src/GUI/routeitem.cpp \
     src/GUI/graphitem.cpp \
     src/GUI/pathitem.cpp \

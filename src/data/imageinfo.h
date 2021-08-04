@@ -16,6 +16,11 @@ public:
 
 	bool isValid() const {return _size.isValid() && !_path.isEmpty();}
 
+	bool operator==(const ImageInfo &other) const
+	{
+		return (_path == other._path);
+	}
+
 private:
 	QString _path;
 	QSize _size;

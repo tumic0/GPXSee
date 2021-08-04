@@ -9,7 +9,7 @@ CadenceGraphItem::CadenceGraphItem(const Graph &graph, GraphType type,
 {
 }
 
-QString CadenceGraphItem::info() const
+ToolTip CadenceGraphItem::info() const
 {
 	ToolTip tt;
 	QLocale l(QLocale::system());
@@ -19,5 +19,5 @@ QString CadenceGraphItem::info() const
 	tt.insert(tr("Average"), l.toString(avg(), 'f', 1)
 	  + UNIT_SPACE + tr("rpm"));
 
-	return tt.toString();
+	return tt;
 }

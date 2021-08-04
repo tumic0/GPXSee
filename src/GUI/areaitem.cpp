@@ -9,7 +9,7 @@
 #include "areaitem.h"
 
 
-QString AreaItem::info() const
+ToolTip AreaItem::info() const
 {
 	ToolTip tt;
 
@@ -19,7 +19,7 @@ QString AreaItem::info() const
 		tt.insert(qApp->translate("PolygonItem", "Description"),
 		  _area.description());
 
-	return tt.toString();
+	return tt;
 }
 
 AreaItem::AreaItem(const Area &area, Map *map, GraphicsItem *parent)

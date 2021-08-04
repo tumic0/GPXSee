@@ -56,17 +56,25 @@ void InfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	//painter->drawRect(boundingRect());
 }
 
+int InfoItem::indexOf(const QString &key) const
+{
+	for (int i = 0; i < _list.size(); i++)
+		if (_list.at(i).key() == key)
+			return i;
+
+	return -1;
+}
+
 void InfoItem::insert(const QString &key, const QString &value)
 {
-	KV<QString, QString> kv(key, value);
 	int i;
 
 	prepareGeometryChange();
 
-	if ((i = _list.indexOf(kv)) < 0)
-		_list.append(kv);
+	if ((i = indexOf(key)) < 0)
+		_list.append(KV<QString, QString>(key, value));
 	else
-		_list[i] = kv;
+		_list[i] = KV<QString, QString>(key, value);
 
 	updateBoundingRect();
 	update();
