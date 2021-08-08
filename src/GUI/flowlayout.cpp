@@ -147,8 +147,9 @@ int FlowLayout::doLayout(const QRect &rect, bool testOnly) const
 	if (!testOnly) {
 		for (int i = 0; i < rows.size(); i++) {
 			const FlowLayoutItem &li = rows.at(i).last();
-			int width = li.item->sizeHint().width() + li.pos.x();
-			int offset = (rect.width() - width) / 2;
+			int width = li.item->sizeHint().width() + li.pos.x()
+			  - effectiveRect.x();
+			int offset = (effectiveRect.width() - width) / 2;
 
 			int height = 0;
 			for (int j = 0; j < rows.at(i).size(); j++)
