@@ -6,8 +6,6 @@
 
 using namespace IMG;
 
-typedef QMap<QByteArray, VectorTile*> TileMap;
-
 static SubFile::Type tileType(const char str[3])
 {
 	if (!memcmp(str, "TRE", 3))
@@ -26,25 +24,25 @@ static SubFile::Type tileType(const char str[3])
 		return SubFile::Unknown;
 }
 
-IMGData::IMGData(const QString &fileName) : _fileName(fileName)
+bool IMGData::readSubFileBlocks(QFile &file, quint64 offset, SubFile *subFile)
 {
-#define CHECK(condition) \
-	if (!(condition)) { \
-		_errorString = "Unsupported or invalid IMG file"; \
-		qDeleteAll(tileMap); \
-		return; \
+	quint16 block;
+
+	if (!file.seek(offset + 0x20))
+		return false;
+	for (int i = 0; i < 240; i++) {
+		if (!readValue(file, block))
+			return false;
+		if (block == 0xFFFF)
+			break;
+		subFile->addBlock(block);
 	}
 
-	QFile file(fileName);
-	TileMap tileMap;
-	QByteArray typFile;
+	return true;
+}
 
-	if (!file.open(QFile::ReadOnly)) {
-		_errorString = file.errorString();
-		return;
-	}
-
-	// Read IMG header
+bool IMGData::readIMGHeader(QFile &file)
+{
 	char signature[7], identifier[7];
 	file.read((char*)&_key, 1) && file.seek(0x10)
 	  && read(file, signature, sizeof(signature)) && file.seek(0x41)
@@ -52,24 +50,35 @@ IMGData::IMGData(const QString &fileName) : _fileName(fileName)
 	if (memcmp(signature, "DSKIMG", sizeof(signature))
 	  || memcmp(identifier, "GARMIN", sizeof(identifier))) {
 		_errorString = "Not a Garmin IMG file";
-		return;
+		return false;
 	}
+
 	char d1[20], d2[31];
 	quint8 e1, e2;
-	CHECK(file.seek(0x49) && read(file, d1, sizeof(d1)) && file.seek(0x61)
+	if (!(file.seek(0x49) && read(file, d1, sizeof(d1)) && file.seek(0x61)
 	  && readValue(file, e1) && readValue(file, e2) && file.seek(0x65)
-	  && read(file, d2, sizeof(d2)));
+	  && read(file, d2, sizeof(d2)))) {
+		_errorString = "Error reading IMG header";
+		return false;
+	}
 
 	QByteArray nba(QByteArray(d1, sizeof(d1)) + QByteArray(d2, sizeof(d2)));
 	_name = QString::fromLatin1(nba.constData(), nba.size()-1).trimmed();
 	_blockBits = e1 + e2;
 
-	// Read the FAT table
+	return true;
+}
+
+bool IMGData::readFAT(QFile &file, TileMap &tileMap)
+{
+	QByteArray typFile;
 	quint8 flag;
 	quint64 offset = 0x200;
+
 	// Skip unused FAT blocks if any
 	while (true) {
-		CHECK(file.seek(offset) && readValue(file, flag));
+		if (!(file.seek(offset) && readValue(file, flag)))
+			return false;
 		if (flag)
 			break;
 		offset += 512;
@@ -79,17 +88,18 @@ IMGData::IMGData(const QString &fileName) : _fileName(fileName)
 	char name[8], type[3];
 	quint32 size;
 	quint16 part;
-	CHECK(file.seek(offset + 12) && readValue(file, size));
+	if (!(file.seek(offset + 12) && readValue(file, size)))
+		return false;
 	offset += 512;
 	int cnt = (size - offset) / 512;
 
 	// Read FAT blocks describing the IMG sub-files
 	for (int i = 0; i < cnt; i++) {
-		quint16 block;
-		CHECK(file.seek(offset) && readValue(file, flag)
+		if (!(file.seek(offset) && readValue(file, flag)
 		  && read(file, name, sizeof(name))
 		  && read(file, type, sizeof(type)) && readValue(file, size)
-		  && readValue(file, part));
+		  && readValue(file, part)))
+			return false;
 		SubFile::Type tt = tileType(type);
 
 		QByteArray fn(name, sizeof(name));
@@ -104,15 +114,8 @@ IMGData::IMGData(const QString &fileName) : _fileName(fileName)
 
 			SubFile *subFile = part ? tile->file(tt)
 			  : tile->addFile(this, tt);
-			CHECK(subFile);
-
-			CHECK(file.seek(offset + 0x20));
-			for (int i = 0; i < 240; i++) {
-				CHECK(readValue(file, block));
-				if (block == 0xFFFF)
-					break;
-				subFile->addBlock(block);
-			}
+			if (!(subFile && readSubFileBlocks(file, offset, subFile)))
+				return false;
 		} else if (tt == SubFile::TYP) {
 			SubFile *typ = 0;
 			if (typFile.isNull()) {
@@ -122,28 +125,26 @@ IMGData::IMGData(const QString &fileName) : _fileName(fileName)
 			} else if (fn == typFile)
 				typ = _typ;
 
-			if (typ) {
-				CHECK(file.seek(offset + 0x20));
-				for (int i = 0; i < 240; i++) {
-					CHECK(readValue(file, block));
-					if (block == 0xFFFF)
-						break;
-					typ->addBlock(block);
-				}
-			}
+			if (typ && !readSubFileBlocks(file, offset, typ))
+				return false;
 		}
 
 		offset += 512;
 	}
 
-	// Create tile tree
+	return true;
+}
+
+bool IMGData::createTileTree(const TileMap &tileMap)
+{
 	int minMapZoom = 24;
+
 	for (TileMap::const_iterator it = tileMap.constBegin();
 	  it != tileMap.constEnd(); ++it) {
 		VectorTile *tile = it.value();
 
 		if (!tile->init()) {
-			qWarning("%s: %s: Invalid map tile", qPrintable(file.fileName()),
+			qWarning("%s: %s: Invalid map tile", qPrintable(_fileName),
 			  qPrintable(it.key()));
 			delete tile;
 			continue;
@@ -177,10 +178,32 @@ IMGData::IMGData(const QString &fileName) : _fileName(fileName)
 	if (!_baseMap)
 		_zooms.setMin(_zooms.min() - 2);
 
-	if (!_tileTree.Count())
+	return (_tileTree.Count() > 0);
+}
+
+IMGData::IMGData(const QString &fileName) : _fileName(fileName)
+{
+	QFile file(fileName);
+	TileMap tileMap;
+
+	if (!file.open(QFile::ReadOnly)) {
+		_errorString = file.errorString();
+		return;
+	}
+
+	if (!readIMGHeader(file))
+		return;
+	if (!readFAT(file, tileMap)) {
+		_errorString = "Error reading FAT data";
+		qDeleteAll(tileMap);
+		return;
+	}
+	if (!createTileTree(tileMap)) {
 		_errorString = "No usable map tile found";
-	else
-		_valid = true;
+		return;
+	}
+
+	_valid = true;
 }
 
 qint64 IMGData::read(QFile &file, char *data, qint64 maxSize) const
