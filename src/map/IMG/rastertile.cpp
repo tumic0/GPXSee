@@ -21,13 +21,6 @@ static const QColor shieldBgColor1("#dd3e3e");
 static const QColor shieldBgColor2("#379947");
 static const QColor shieldBgColor3("#4a7fc1");
 
-static QString convertUnits(const QString &str)
-{
-	bool ok;
-	int number = str.toInt(&ok);
-	return ok ? QString::number(qRound(number * 0.3048)) : str;
-}
-
 static QFont pixelSizeFont(int pixelSize)
 {
 	QFont f;
@@ -350,9 +343,6 @@ void RasterTile::processStreetNames(const QRect &tileRect,
 		  || style.textFontSize() == Style::None)
 			continue;
 
-		if (Style::isContourLine(poly.type))
-			poly.label.setText(convertUnits(poly.label.text()));
-
 		const QFont *fnt = font(style.textFontSize(), Style::Small);
 		const QColor *color = style.textColor().isValid()
 		  ? &style.textColor() : 0;
@@ -449,14 +439,6 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 
 		if ((!label || !fnt) && !img)
 			continue;
-
-		if (Style::isSpot(point.type))
-			point.label.setText(convertUnits(point.label.text()));
-		if (Style::isSummit(point.type) && !point.label.text().isEmpty()) {
-			QStringList list = point.label.text().split(" ");
-			list.last() = convertUnits(list.last());
-			point.label = list.join(" ");
-		}
 
 		TextPointItem *item = new TextPointItem(QPoint(point.coordinates.lon(),
 		  point.coordinates.lat()), label, fnt, img, color, &haloColor);

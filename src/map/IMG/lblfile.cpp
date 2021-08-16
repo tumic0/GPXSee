@@ -57,6 +57,12 @@ static QString capitalized(const QString &str)
 	return ret;
 }
 
+static QByteArray ft2m(const QByteArray &str)
+{
+	bool ok;
+	int number = str.toInt(&ok);
+	return ok ? QByteArray::number(qRound(number * 0.3048)) : str;
+}
 
 LBLFile::~LBLFile()
 {
@@ -130,13 +136,15 @@ void LBLFile::clear()
 	_rasters = 0;
 }
 
-Label LBLFile::label6b(Handle &hdl, quint32 offset, bool capitalize) const
+Label LBLFile::label6b(Handle &hdl, quint32 offset, bool capitalize,
+  bool convert) const
 {
 	Shield::Type shieldType = Shield::None;
 	QByteArray label, shieldLabel;
 	QByteArray *bap = &label;
 	Charset curCharSet = Normal;
 	quint8 b1, b2, b3;
+	int split = -1;
 
 	if (!seek(hdl, offset))
 		return Label();
@@ -149,6 +157,10 @@ Label LBLFile::label6b(Handle &hdl, quint32 offset, bool capitalize) const
 
 		for (int cpt = 0; cpt < 4; cpt++) {
 			if (c[cpt] > 0x2f || (curCharSet == Normal && c[cpt] == 0x1d)) {
+				if (split >= 0)
+					label = label.left(split) + ft2m(label.mid(split));
+				else if (convert)
+					label = ft2m(label);
 				QString text(QString::fromLatin1(label));
 				return Label(capitalize && isAllUpperCase(text)
 				  ? capitalized(text) : text, Shield(shieldType, shieldLabel));
@@ -159,7 +171,16 @@ Label LBLFile::label6b(Handle &hdl, quint32 offset, bool capitalize) const
 						curCharSet = Symbol;
 					else if (c[cpt] == 0x1b)
 						curCharSet = Special;
-					else if (c[cpt] >= 0x2a && c[cpt] <= 0x2f) {
+					else if (c[cpt] >= 0x1e && c[cpt] <= 0x1f) {
+						if (bap == &shieldLabel)
+							bap = &label;
+						else {
+							if (!bap->isEmpty())
+								bap->append('\n');
+							if (c[cpt] == 0x1f && split < 0)
+								split = bap->size();
+						}
+					} else if (c[cpt] >= 0x2a && c[cpt] <= 0x2f) {
 						shieldType = static_cast<Shield::Type>(c[cpt] - 0x29);
 						bap = &shieldLabel;
 					} else if (bap == &shieldLabel
@@ -181,11 +202,13 @@ Label LBLFile::label6b(Handle &hdl, quint32 offset, bool capitalize) const
 	}
 }
 
-Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize) const
+Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize,
+  bool convert) const
 {
 	Shield::Type shieldType = Shield::None;
 	QByteArray label, shieldLabel;
 	QByteArray *bap = &label;
+	int split = -1;
 
 	for (int i = 0; i < str.size(); i++) {
 		const quint8 &c = str.at(i);
@@ -198,8 +221,12 @@ Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize) const
 		else if ((c >= 0x1e && c <= 0x1f)) {
 			if (bap == &shieldLabel)
 				bap = &label;
-			else
-				bap->append(' ');
+			else {
+				if (!bap->isEmpty())
+					bap->append('\n');
+				if (c == 0x1f && split < 0)
+					split = bap->size();
+			}
 		} else if (c < 0x07) {
 			shieldType = static_cast<Shield::Type>(c);
 			bap = &shieldLabel;
@@ -209,13 +236,17 @@ Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize) const
 			bap->append(c);
 	}
 
+	if (split >= 0)
+		label = label.left(split) + ft2m(label.mid(split));
+	else if (convert)
+		label = ft2m(label);
 	QString text(_codec.toString(label));
-
 	return Label(capitalize && isAllUpperCase(text) ? capitalized(text) : text,
 	  Shield(shieldType, _codec.toString(shieldLabel)));
 }
 
-Label LBLFile::label8b(Handle &hdl, quint32 offset, bool capitalize) const
+Label LBLFile::label8b(Handle &hdl, quint32 offset, bool capitalize,
+  bool convert) const
 {
 	QVector<quint8> str;
 	quint8 c;
@@ -229,10 +260,11 @@ Label LBLFile::label8b(Handle &hdl, quint32 offset, bool capitalize) const
 		str.append(c);
 	} while (c);
 
-	return str2label(str, capitalize);
+	return str2label(str, capitalize, convert);
 }
 
-Label LBLFile::labelHuffman(Handle &hdl, quint32 offset, bool capitalize) const
+Label LBLFile::labelHuffman(Handle &hdl, quint32 offset, bool capitalize,
+  bool convert) const
 {
 	QVector<quint8> str;
 
@@ -241,7 +273,7 @@ Label LBLFile::labelHuffman(Handle &hdl, quint32 offset, bool capitalize) const
 	if (!_huffmanText->decode(this, hdl, str))
 		return Label();
 	if (!_table)
-		return str2label(str, capitalize);
+		return str2label(str, capitalize, convert);
 
 
 	QVector<quint8> str2;
@@ -268,10 +300,11 @@ Label LBLFile::labelHuffman(Handle &hdl, quint32 offset, bool capitalize) const
 		}
 	}
 
-	return str2label(str2, capitalize);
+	return str2label(str2, capitalize, convert);
 }
 
-Label LBLFile::label(Handle &hdl, quint32 offset, bool poi, bool capitalize) const
+Label LBLFile::label(Handle &hdl, quint32 offset, bool poi, bool capitalize,
+  bool convert) const
 {
 	quint32 labelOffset;
 	if (poi) {
@@ -289,12 +322,12 @@ Label LBLFile::label(Handle &hdl, quint32 offset, bool poi, bool capitalize) con
 
 	switch (_encoding) {
 		case 6:
-			return label6b(hdl, labelOffset, capitalize);
+			return label6b(hdl, labelOffset, capitalize, convert);
 		case 9:
 		case 10:
-			return label8b(hdl, labelOffset, capitalize);
+			return label8b(hdl, labelOffset, capitalize, convert);
 		case 11:
-			return labelHuffman(hdl, labelOffset, capitalize);
+			return labelHuffman(hdl, labelOffset, capitalize, convert);
 		default:
 			return Label();
 	}

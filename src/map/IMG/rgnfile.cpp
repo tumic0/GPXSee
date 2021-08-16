@@ -237,9 +237,11 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 				quint32 lblOff;
 				if (net && net->lblOffset(netHdl, labelPtr & 0x3FFFFF, lblOff)
 				  && lblOff)
-					poly.label = lbl->label(lblHdl, lblOff);
+					poly.label = lbl->label(lblHdl, lblOff, false, true,
+					  Style::isContourLine(poly.type));
 			} else
-				poly.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
+				poly.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, false,
+				  true, Style::isContourLine(poly.type));
 		}
 
 		polys->append(poly);
@@ -351,7 +353,8 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 			return false;
 
 		if (lbl && (labelPtr & 0x3FFFFF))
-			poly.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
+			poly.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, false, true,
+			  Style::isContourLine(poly.type));
 
 		polys->append(poly);
 	}
@@ -396,7 +399,7 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 		if (lbl && (labelPtr & 0x3FFFFF))
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF,
 			  labelPtr & 0x400000, !(Style::isCountry(point.type)
-			  || Style::isState(point.type)));
+			  || Style::isState(point.type)), Style::isSpot(point.type));
 
 		points->append(point);
 	}
@@ -446,7 +449,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
 		point.coordinates = Coordinates(toWGS24(pos.x()), toWGS24(pos.y()));
 		point.id = pointId(pos, point.type, labelPtr & 0x3FFFFF);
 		if (lbl && (labelPtr & 0x3FFFFF))
-			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF, false);
+			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
 
 		points->append(point);
 	}
