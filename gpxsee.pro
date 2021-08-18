@@ -478,7 +478,8 @@ macx {
         icons/formats/sqlt.icns \
         icons/formats/ov2.icns \
         icons/formats/itn.icns \
-        icons/formats/wld.icns
+        icons/formats/wld.icns \
+        icons/formats/omd.icns
     QMAKE_BUNDLE_DATA += locale maps icons csv
 }
 

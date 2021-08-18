@@ -546,6 +546,22 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>omd</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.onmove.omd</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/omd.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>ONmove Log File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
@@ -1230,6 +1246,27 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.esri.wld</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.geonaute.omd</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://github.com/ColinPitrat/kalenji-gps-watch-reader/files/6167863/OnMove500HR.cc.txt</string>
+			<key>UTTypeDescription</key>
+			<string>ONmove Log File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>omd</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.onmove.omd</string>
 			</dict>
 		</dict>
 	</array>
