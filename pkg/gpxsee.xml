@@ -142,6 +142,13 @@
 		<glob pattern="*.itn"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.onmove.omd">
+		<comment>ONmove Log File</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application/octet-stream"/>
+		<glob pattern="*.omd"/>
+	</mime-type>
+
 	<!-- Maps -->
 
 	<mime-type type="application/vnd.garmin.img">
