@@ -95,6 +95,7 @@ HEADERS += src/common/config.h \
     src/GUI/areaitem.h \
     src/data/itnparser.h \
     src/data/link.h \
+    src/data/omdparser.h \
     src/data/ov2parser.h \
     src/map/IMG/bitmapline.h \
     src/map/IMG/bitstream.h \
@@ -289,6 +290,7 @@ SOURCES += src/main.cpp \
     src/GUI/areaitem.cpp \
     src/data/address.cpp \
     src/data/itnparser.cpp \
+    src/data/omdparser.cpp \
     src/data/ov2parser.cpp \
     src/data/waypoint.cpp \
     src/map/IMG/bitmapline.cpp \
