@@ -4,17 +4,17 @@
 #include "omdparser.h"
 
 
-static quint16 u16(const char *buffer)
+static inline quint16 u16(const char *buffer)
 {
 	return qFromLittleEndian<quint16>(buffer);
 }
 
-static qint16 s16(const char *buffer)
+static inline qint16 s16(const char *buffer)
 {
 	return qFromLittleEndian<qint16>(buffer);
 }
 
-static qint32 s32(const char *buffer)
+static inline qint32 s32(const char *buffer)
 {
 	return qFromLittleEndian<qint32>(buffer);
 }
