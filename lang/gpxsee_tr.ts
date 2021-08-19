@@ -114,7 +114,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="152"/>
         <source>ONmove files</source>
-        <translation type="unfinished"></translation>
+        <translation>ONmove dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="153"/>
