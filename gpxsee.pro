@@ -479,7 +479,8 @@ macx {
         icons/formats/ov2.icns \
         icons/formats/itn.icns \
         icons/formats/wld.icns \
-        icons/formats/omd.icns
+        icons/formats/omd.icns \
+        icons/formats/ghp.icns
     QMAKE_BUNDLE_DATA += locale maps icons csv
 }
 

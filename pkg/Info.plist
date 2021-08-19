@@ -562,6 +562,22 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>ghp</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.onmove.ghp</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/ghp.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>ONmove Log File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
@@ -1252,7 +1268,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>com.geonaute.omd</string>
 			<key>UTTypeReferenceURL</key>
-			<string>https://github.com/ColinPitrat/kalenji-gps-watch-reader/files/6167863/OnMove500HR.cc.txt</string>
+			<string>https://github.com/ColinPitrat/kalenji-gps-watch-reader</string>
 			<key>UTTypeDescription</key>
 			<string>ONmove Log File</string>
 			<key>UTTypeConformsTo</key>
@@ -1267,6 +1283,27 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.onmove.omd</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.geonaute.ghp</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://github.com/ColinPitrat/kalenji-gps-watch-reader</string>
+			<key>UTTypeDescription</key>
+			<string>ONmove Log File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>ghp</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.onmove.ghp</string>
 			</dict>
 		</dict>
 	</array>
