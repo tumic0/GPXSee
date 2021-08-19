@@ -1,7 +1,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QtEndian>
-#include "omdparser.h"
+#include "onmoveparsers.h"
 
 
 static inline quint16 u16(const char *buffer)
@@ -159,6 +159,109 @@ bool OMDParser::parse(QFile *file, QList<TrackData> &tracks,
 				return false;
 		}
 	}
+
+	if (size < 0) {
+		_errorString = "I/O error";
+		return false;
+	} else if (size) {
+		_errorString = "unexpected end of file";
+		return false;
+	}
+
+	tracks.append(TrackData());
+	tracks.last().append(segment);
+
+	return true;
+}
+
+
+bool GHPParser::readHeaderFile(const QString &ghpPath, Header &hdr)
+{
+	QFileInfo fi(ghpPath);
+	QString path = fi.absoluteDir().filePath(fi.baseName() + ".GHT");
+	QFile file(path);
+	char buffer[96];
+
+	if (!file.open(QIODevice::ReadOnly)) {
+		qWarning("%s: %s", qPrintable(path), qPrintable(file.errorString()));
+		return false;
+	}
+	if (file.read(buffer, sizeof(buffer)) != sizeof(buffer)) {
+		qWarning("%s: invalid GHT file", qPrintable(path));
+		return false;
+	}
+
+	quint8 Y = buffer[0];
+	quint8 M = buffer[1];
+	quint8 D = buffer[2];
+	quint8 h = buffer[3];
+	quint8 m = buffer[4];
+	quint8 s = buffer[5];
+	quint8 avgHr = buffer[61];
+	quint8 maxHr = buffer[60];
+
+	QDateTime date(QDate(Y + 2000, M, D), QTime(h, m, s), Qt::UTC);
+	if (!date.isValid()) {
+		qWarning("%s: invalid date", qPrintable(path));
+		return false;
+	}
+
+	hdr.date = date;
+	hdr.hr = avgHr || maxHr;
+
+	return true;
+}
+
+bool GHPParser::readF0(const char *chunk, const Header &hdr, int &time,
+  SegmentData &segment)
+{
+	qint32 lat = s32(chunk);
+	qint32 lon = s32(chunk + 4);
+	qint16 alt = s16(chunk + 8);
+	quint16 speed = u16(chunk + 10);
+	quint8 hr = chunk[12];
+	quint8 fia = chunk[13];
+	quint8 ms = chunk[16];
+
+	if (fia == 3) {
+		Trackpoint t(Coordinates(lon / 1000000.0, lat / 1000000.0));
+		if (!t.coordinates().isValid()) {
+			_errorString = "invalid coordinates";
+			return false;
+		}
+		t.setTimestamp(QDateTime(hdr.date.date(),
+		  hdr.date.time().addMSecs(time * 100), Qt::UTC));
+		t.setSpeed(speed / 360.0);
+		t.setElevation(alt);
+		if (hdr.hr)
+			t.setHeartRate(hr);
+
+		segment.append(t);
+	}
+
+	time += ms;
+
+	return true;
+}
+
+bool GHPParser::parse(QFile *file, QList<TrackData> &tracks,
+  QList<RouteData> &routes, QList<Area> &polygons, QVector<Waypoint> &waypoints)
+{
+	Q_UNUSED(routes);
+	Q_UNUSED(waypoints);
+	Q_UNUSED(polygons);
+	SegmentData segment;
+	Header hdr;
+	int time = 0;
+	char chunk[20];
+	qint64 size;
+
+	// see OMD
+	readHeaderFile(file->fileName(), hdr);
+
+	while ((size = file->read(chunk, sizeof(chunk))) == sizeof(chunk))
+		if (!readF0(chunk, hdr, time, segment))
+			return false;
 
 	if (size < 0) {
 		_errorString = "I/O error";
