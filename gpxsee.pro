@@ -512,7 +512,8 @@ win32 {
         icons/formats/ov2.ico \
         icons/formats/itn.ico \
         icons/formats/wld.ico \
-        icons/formats/omd.ico
+        icons/formats/omd.ico \
+        icons/formats/ghp.ico
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }
