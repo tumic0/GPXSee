@@ -139,7 +139,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="152"/>
         <source>ONmove files</source>
-        <translation type="unfinished"></translation>
+        <translation>ONmove-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="158"/>
