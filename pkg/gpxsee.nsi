@@ -139,8 +139,8 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "pgw" "ESRI World File" 20
   !insertmacro FILE_ASSOCIATION_ADD "tfw" "ESRI World File" 20
   !insertmacro FILE_ASSOCIATION_ADD "omd" "ONmove Log File" 21
-  !insertmacro FILE_ASSOCIATION_ADD "ghp" "ONmove Log File" 22
-  !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 23
+  !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 22
+  !insertmacro FILE_ASSOCIATION_ADD "ghp" "ONmove Log File" 23
   !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 24
   !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 24
   !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 25
