@@ -433,9 +433,9 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 	quint16 mask = 0;
 	quint32 size;
 
-	bool firstIsShape = (linkInfo.flags >> 0x12) & 1;
-	bool singleTopology = (linkInfo.flags >> 0x11) & 1;
-	bool hasLevels = (linkInfo.flags >> 0x13) & 1;
+	bool firstIsShape = (linkInfo.flags >> 10) & 1;
+	bool singleTopology = (linkInfo.flags >> 9) & 1;
+	bool hasLevels = (linkInfo.flags >> 11) & 1;
 
 	if (!singleTopology || hasLevels) {
 		if (!bs.readVUInt32(size))

@@ -156,14 +156,12 @@ bool NODFile::linkInfo(Handle &hdl, const BlockInfo &blockInfo, quint32 linkId,
 	if (!seek(hdl, infoOffset))
 		return false;
 
-	quint32 unused, flags;
+	quint32 padding;
 	BitStream1 bs(*this, hdl, _blockOffset + _blockSize - infoOffset);
-	if (!(bs.read(skip, unused) && bs.read(0xc, flags)))
+	if (!(bs.read(skip, padding) && bs.read(0xc, linkInfo.flags)))
 		return false;
 
-	linkInfo.flags = ((flags << 8) & 0xf0000) | (flags & 0xff);
-
-	if (!(flags << 8 & 0x10000)) {
+	if (!(linkInfo.flags & 0x100)) {
 		if (!bs.read(s1, linkInfo.linkOffset))
 			return false;
 	} else {
@@ -221,10 +219,9 @@ bool NODFile::nodeInfo(Handle &hdl, const BlockInfo &blockInfo,
 		pos.setX(pos.x() | extraLon << 4); pos.setY(pos.y() | extraLat << 4);
 		nodeInfo.bytes++;
 	}
-	// TODO?: extra bits
+	// TODO?: check and adjust (shift) coordinates
 
 	nodeInfo.pos = pos;
-	nodeInfo.flags &= 0xf8;
 
 	return true;
 }
@@ -311,8 +308,9 @@ bool NODFile::absAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 		if (firstLoop) {
 			skip >>= (flags >> 5) & 1;
 			flags |= 0x20;
+			firstLoop = false;
 		}
-		firstLoop = false;
+
 		quint32 f4 = flags & 0x10;
 		quint32 f4sn = (f4 >> 4) ^ 1;
 		quint32 m1 = (flags >> 5) & f4sn;
@@ -416,8 +414,8 @@ bool NODFile::relAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 		if (firstLoop) {
 			skip >>= (flags >> 5) & 1;
 			flags = ((flags >> 1) & 0x20) | (flags & 0xffffffdf);
+			firstLoop = false;
 		}
-		firstLoop = false;
 		flagsBits >>= (flags >> 3) & 1;
 		quint32 m = (((flags & 0x70) == 0x30) << 1) | ((flags >> 6) & 1);
 		if (!m) {
