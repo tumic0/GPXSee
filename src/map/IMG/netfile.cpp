@@ -180,9 +180,9 @@ static bool readShape(const NODFile *nod, SubFile::Handle &nodHdl,
 		return false;
 	flags |= (v2 << 8);
 
-	bool hasCoordinatesAdjustBit = flags & (1 << (v2b + 7));
-	bool useEosBit = flags & (1 << (v2b + 5));
+	bool hasAdjustBit = flags & (1 << (v2b + 7));
 	bool startWithStream = flags & (1 << (v2b + 6));
+	bool useEosBit = flags & (1 << (v2b + 5));
 
 	quint32 extraBits;
 	int lonSign, latSign;
@@ -257,7 +257,7 @@ static bool readShape(const NODFile *nod, SubFile::Handle &nodHdl,
 		if (!stream.readNext(lonDelta, latDelta))
 			break;
 
-		if (hasCoordinatesAdjustBit && !stream.read(1, adjustBit))
+		if (hasAdjustBit && !stream.read(1, adjustBit))
 			return false;
 
 		stepsCnt++;
