@@ -9,8 +9,8 @@
 #include "common/config.h"
 #include "common/rectc.h"
 #include "common/kv.h"
+#include "common/downloader.h"
 #include "projection.h"
-#include "downloader.h"
 #include "coordinatesystem.h"
 
 class QXmlStreamReader;
@@ -154,13 +154,11 @@ private:
 	void contents(QXmlStreamReader &reader, CTX &ctx);
 	void capabilities(QXmlStreamReader &reader, CTX &ctx);
 	bool parseCapabilities(CTX &ctx);
-	bool downloadCapabilities(const QString &url);
 	void createZooms(const CTX &ctx);
 	bool init();
 
 	WMTS::Setup _setup;
 	QString _path;
-	Downloader *_downloader;
 	RectC _bbox;
 	QList<Zoom> _zooms;
 	Projection _projection;

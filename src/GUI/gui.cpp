@@ -26,11 +26,11 @@
 #include <QStyle>
 #include <QTabBar>
 #include "common/programpaths.h"
+#include "common/downloader.h"
 #include "data/data.h"
 #include "data/poi.h"
 #include "map/maplist.h"
 #include "map/emptymap.h"
-#include "map/downloader.h"
 #include "map/crs.h"
 #include "icons.h"
 #include "keys.h"

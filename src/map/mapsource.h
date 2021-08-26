@@ -5,7 +5,7 @@
 #include "common/range.h"
 #include "common/rectc.h"
 #include "common/kv.h"
-#include "downloader.h"
+#include "common/downloader.h"
 #include "coordinatesystem.h"
 
 class Map;

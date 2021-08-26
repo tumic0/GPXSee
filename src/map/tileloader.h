@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <QString>
+#include "common/downloader.h"
 #include "tile.h"
-#include "downloader.h"
 
 class TileLoader : public QObject
 {
@@ -38,4 +38,4 @@ private:
 	bool _quadTiles;
 };
 
-#endif // TILELOADER_Honlinemap
+#endif // TILELOADER_H

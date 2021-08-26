@@ -5,9 +5,9 @@
 #include <QNetworkReply>
 #include <QUrl>
 #include <QList>
-#include <QSet>
 #include <QHash>
 
+class QFile;
 
 class Download
 {
@@ -55,23 +55,26 @@ signals:
 
 private slots:
 	void emitFinished();
-	void downloadFinished(QNetworkReply *reply);
+	void emitReadReady();
 
 private:
-	class Redirect;
 	class ReplyTimeout;
 
 	void insertError(const QUrl &url, QNetworkReply::NetworkError error);
-	bool doDownload(const Download &dl, const QByteArray &authorization,
-	  const Redirect *redirect = 0);
-	bool saveToDisk(const QString &filename, QIODevice *data);
+	bool doDownload(const Download &dl, const QByteArray &authorization);
+	void downloadFinished(QNetworkReply *reply);
+	void readData(QNetworkReply *reply);
 
-	QSet<QUrl> _currentDownloads;
+	QHash<QUrl, QFile*> _currentDownloads;
 	QHash<QUrl, int> _errorDownloads;
 
 	static QNetworkAccessManager *_manager;
 	static int _timeout;
 	static bool _http2;
 };
+
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const Download &download);
+#endif // QT_NO_DEBUG
 
 #endif // DOWNLOADER_H

@@ -6,8 +6,8 @@
 #include "common/range.h"
 #include "common/rectc.h"
 #include "common/kv.h"
+#include "common/downloader.h"
 #include "projection.h"
-#include "downloader.h"
 #include "coordinatesystem.h"
 
 class QXmlStreamReader;
@@ -109,11 +109,9 @@ private:
 	void capability(QXmlStreamReader &reader, CTX &ctx);
 	void capabilities(QXmlStreamReader &reader, CTX &ctx);
 	bool parseCapabilities();
-	bool downloadCapabilities(const QString &url);
 
 	WMS::Setup _setup;
 	QString _path;
-	Downloader *_downloader;
 	Projection _projection;
 	RangeF _scaleDenominator;
 	RectC _bbox;

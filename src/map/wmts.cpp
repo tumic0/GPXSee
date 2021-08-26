@@ -6,7 +6,6 @@
 #include <QStringList>
 #include <QtAlgorithms>
 #include <QXmlStreamReader>
-#include "downloader.h"
 #include "pcs.h"
 #include "crs.h"
 #include "wmts.h"
@@ -302,20 +301,6 @@ bool WMTS::parseCapabilities(CTX &ctx)
 	return true;
 }
 
-bool WMTS::downloadCapabilities(const QString &url)
-{
-	if (!_downloader) {
-		_downloader = new Downloader(this);
-		connect(_downloader, &Downloader::finished, this,
-		  &WMTS::capabilitiesReady);
-	}
-
-	QList<Download> dl;
-	dl.append(Download(url, _path));
-
-	return _downloader->get(dl, _setup.authorization());
-}
-
 void WMTS::capabilitiesReady()
 {
 	if (!QFileInfo(_path).exists()) {
@@ -363,7 +348,7 @@ bool WMTS::init()
 }
 
 WMTS::WMTS(const QString &file, const WMTS::Setup &setup, QObject *parent)
-  : QObject(parent), _setup(setup), _downloader(0), _valid(false), _ready(false)
+  : QObject(parent), _setup(setup), _valid(false), _ready(false)
 {
 	QUrl url(setup.rest() ? setup.url() : QString(
 	  "%1%2service=WMTS&Version=1.0.0&request=GetCapabilities").arg(setup.url(),
@@ -371,9 +356,15 @@ WMTS::WMTS(const QString &file, const WMTS::Setup &setup, QObject *parent)
 
 	_path = url.isLocalFile() ? url.toLocalFile() : file;
 
-	if (!url.isLocalFile() && !QFileInfo(file).exists())
-		_valid = downloadCapabilities(url.toString());
-	else {
+	if (!url.isLocalFile() && !QFileInfo(file).exists()) {
+		Downloader *downloader = new Downloader(this);
+		connect(downloader, &Downloader::finished, this,
+		  &WMTS::capabilitiesReady);
+
+		QList<Download> dl;
+		dl.append(Download(url.toString(), _path));
+		_valid = downloader->get(dl, _setup.authorization());
+	} else {
 		_ready = true;
 		_valid = init();
 	}

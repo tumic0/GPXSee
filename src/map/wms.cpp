@@ -3,7 +3,6 @@
 #include <QEventLoop>
 #include <QXmlStreamReader>
 #include <QStringList>
-#include "downloader.h"
 #include "crs.h"
 #include "wms.h"
 
@@ -320,20 +319,6 @@ bool WMS::parseCapabilities()
 	return true;
 }
 
-bool WMS::downloadCapabilities(const QString &url)
-{
-	if (!_downloader) {
-		_downloader = new Downloader(this);
-		connect(_downloader, &Downloader::finished, this,
-		  &WMS::capabilitiesReady);
-	}
-
-	QList<Download> dl;
-	dl.append(Download(url, _path));
-
-	return _downloader->get(dl, _setup.authorization());
-}
-
 void WMS::capabilitiesReady()
 {
 	if (!QFileInfo(_path).exists()) {
@@ -348,15 +333,20 @@ void WMS::capabilitiesReady()
 }
 
 WMS::WMS(const QString &file, const WMS::Setup &setup, QObject *parent)
-  : QObject(parent), _setup(setup), _path(file), _downloader(0), _valid(false),
-  _ready(false)
+  : QObject(parent), _setup(setup), _path(file), _valid(false), _ready(false)
 {
 	QString url = QString("%1%2service=WMS&request=GetCapabilities")
 	  .arg(setup.url(), setup.url().contains('?') ? "&" : "?");
 
-	if (!QFileInfo(file).exists())
-		_valid = downloadCapabilities(url);
-	else {
+	if (!QFileInfo(file).exists()) {
+		Downloader *downloader = new Downloader(this);
+		connect(downloader, &Downloader::finished, this,
+		  &WMS::capabilitiesReady);
+
+		QList<Download> dl;
+		dl.append(Download(url, _path));
+		_valid = downloader->get(dl, _setup.authorization());
+	} else {
 		_ready = true;
 		_valid = parseCapabilities();
 	}

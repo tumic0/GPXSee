@@ -9,7 +9,7 @@
 #include <QSurfaceFormat>
 #include "common/programpaths.h"
 #include "common/config.h"
-#include "map/downloader.h"
+#include "common/downloader.h"
 #include "map/ellipsoid.h"
 #include "map/gcs.h"
 #include "map/pcs.h"

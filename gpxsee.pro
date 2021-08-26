@@ -43,6 +43,7 @@ HEADERS += src/common/config.h \
     src/common/greatcircle.h \
     src/common/programpaths.h \
     src/common/tifffile.h \
+    src/common/downloader.h \
     src/GUI/app.h \
     src/GUI/icons.h \
     src/GUI/gui.h \
@@ -135,7 +136,6 @@ HEADERS += src/common/config.h \
     src/map/map.h \
     src/map/maplist.h \
     src/map/onlinemap.h \
-    src/map/downloader.h \
     src/map/tile.h \
     src/map/emptymap.h \
     src/map/ozimap.h \
@@ -247,6 +247,7 @@ SOURCES += src/main.cpp \
     src/common/greatcircle.cpp \
     src/common/programpaths.cpp \
     src/common/tifffile.cpp \
+    src/common/downloader.cpp \
     src/GUI/app.cpp \
     src/GUI/gui.cpp \
     src/GUI/axisitem.cpp \
@@ -315,7 +316,6 @@ SOURCES += src/main.cpp \
     src/map/kmzmap.cpp \
     src/map/maplist.cpp \
     src/map/onlinemap.cpp \
-    src/map/downloader.cpp \
     src/map/emptymap.cpp \
     src/map/ozimap.cpp \
     src/map/polyconic.cpp \

@@ -3,7 +3,7 @@
 #include <QDir>
 #include "common/rectc.h"
 #include "common/programpaths.h"
-#include "downloader.h"
+#include "common/downloader.h"
 #include "osm.h"
 #include "onlinemap.h"
 
