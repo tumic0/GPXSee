@@ -3,6 +3,7 @@
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QBasicTimer>
 #include <QUrl>
 #include <QList>
 #include <QHash>
@@ -32,6 +33,23 @@ public:
 
 private:
 	QByteArray _header;
+};
+
+class NetworkTimeout : public QObject
+{
+	Q_OBJECT
+
+public:
+	NetworkTimeout(int timeout, QNetworkReply *reply);
+
+private slots:
+	void reset();
+
+private:
+	void timerEvent(QTimerEvent *ev);
+
+	QBasicTimer _timer;
+	int _timeout;
 };
 
 class Downloader : public QObject

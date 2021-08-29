@@ -1,7 +1,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QNetworkRequest>
-#include <QBasicTimer>
 #include <QDir>
 #include <QTimerEvent>
 #include "common/config.h"
@@ -51,33 +50,28 @@ Authorization::Authorization(const QString &username, const QString &password)
 	_header = "Basic " + data;
 }
 
-class Downloader::ReplyTimeout : public QObject
+NetworkTimeout::NetworkTimeout(int timeout, QNetworkReply *reply)
+  : QObject(reply), _timeout(timeout)
 {
-public:
-	static void setTimeout(QNetworkReply *reply, int timeout)
-	{
-		Q_ASSERT(reply);
-		new ReplyTimeout(reply, timeout);
-	}
+	connect(reply, &QIODevice::readyRead, this, &NetworkTimeout::reset);
+	_timer.start(timeout * 1000, this);
+}
 
-private:
-	ReplyTimeout(QNetworkReply *reply, int timeout) : QObject(reply)
-	{
-		_timer.start(timeout * 1000, this);
-	}
+void NetworkTimeout::reset()
+{
+	_timer.start(_timeout * 1000, this);
+}
 
-	void timerEvent(QTimerEvent *ev)
-	{
-		if (!_timer.isActive() || ev->timerId() != _timer.timerId())
-			return;
-		QNetworkReply *reply = static_cast<QNetworkReply*>(parent());
-		if (reply->isRunning())
-			reply->close();
-		_timer.stop();
-	}
+void NetworkTimeout::timerEvent(QTimerEvent *ev)
+{
+	if (!_timer.isActive() || ev->timerId() != _timer.timerId())
+		return;
+	QNetworkReply *reply = static_cast<QNetworkReply*>(parent());
+	if (reply->isRunning())
+		reply->close();
+	_timer.stop();
+}
 
-	QBasicTimer _timer;
-};
 
 QNetworkAccessManager *Downloader::_manager = 0;
 int Downloader::_timeout = 30;
@@ -108,7 +102,7 @@ bool Downloader::doDownload(const Download &dl, const QByteArray &authorization)
 		request.setRawHeader("Authorization", authorization);
 
 	QFile *file = new QFile(tmpName(dl.file()));
-	if (!file->open(QIODevice::ReadWrite)) {
+	if (!file->open(QIODevice::WriteOnly)) {
 		qWarning("%s: %s", qPrintable(file->fileName()),
 		  qPrintable(file->errorString()));
 		_errorDownloads.insert(url, RETRIES);
@@ -121,7 +115,9 @@ bool Downloader::doDownload(const Download &dl, const QByteArray &authorization)
 	_currentDownloads.insert(url, file);
 
 	if (reply->isRunning()) {
-		ReplyTimeout::setTimeout(reply, _timeout);
+		/* Starting with Qt 5.15 this can be replaced by
+		   QNetworkRequest::setTransferTimeout() */
+		new NetworkTimeout(_timeout, reply);
 		connect(reply, &QIODevice::readyRead, this, &Downloader::emitReadReady);
 		connect(reply, &QNetworkReply::finished, this, &Downloader::emitFinished);
 	} else {
@@ -134,12 +130,12 @@ bool Downloader::doDownload(const Download &dl, const QByteArray &authorization)
 
 void Downloader::emitFinished()
 {
-	downloadFinished(qobject_cast<QNetworkReply*>(sender()));
+	downloadFinished(static_cast<QNetworkReply*>(sender()));
 }
 
 void Downloader::emitReadReady()
 {
-	readData(qobject_cast<QNetworkReply*>(sender()));
+	readData(static_cast<QNetworkReply*>(sender()));
 }
 
 void Downloader::insertError(const QUrl &url, QNetworkReply::NetworkError error)
