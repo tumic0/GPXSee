@@ -29,6 +29,7 @@ public:
 	Authorization() {}
 	Authorization(const QString &username, const QString &password);
 
+	bool isNull() const {return _header.isNull();}
 	const QByteArray &header() const {return _header;}
 
 private:
@@ -79,7 +80,7 @@ private:
 	class ReplyTimeout;
 
 	void insertError(const QUrl &url, QNetworkReply::NetworkError error);
-	bool doDownload(const Download &dl, const QByteArray &authorization);
+	bool doDownload(const Download &dl, const Authorization &auth);
 	void downloadFinished(QNetworkReply *reply);
 	void readData(QNetworkReply *reply);
 

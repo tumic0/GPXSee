@@ -29,6 +29,7 @@
 #include "common/downloader.h"
 #include "data/data.h"
 #include "data/poi.h"
+#include "data/demloader.h"
 #include "map/maplist.h"
 #include "map/emptymap.h"
 #include "map/crs.h"
@@ -62,6 +63,8 @@ GUI::GUI()
 	TreeNode<POIAction*> poiActions;
 
 	_poi = new POI(this);
+	_dem = new DEMLoader(ProgramPaths::demDir(true), this);
+	connect(_dem, &DEMLoader::finished, this, &GUI::demLoaded);
 
 	createMapView();
 	createGraphTabs();
@@ -402,6 +405,12 @@ void GUI::createActions(TreeNode<MapAction*> &mapActions,
 	_showMarkerCoordinatesAction->setCheckable(true);
 	_showMarkerCoordinatesAction->setActionGroup(markerInfoGroup);
 
+	// DEM actions
+	_downloadDEMAction = new QAction(tr("Download DEM data"), this);
+	_downloadDEMAction->setMenuRole(QAction::NoRole);
+	_downloadDEMAction->setEnabled(false);
+	connect(_downloadDEMAction, &QAction::triggered, this, &GUI::downloadDEM);
+
 	// Graph actions
 	_showGraphsAction = new QAction(QIcon(SHOW_GRAPHS_ICON), tr("Show graphs"),
 	  this);
@@ -585,18 +594,6 @@ void GUI::createMenus(const TreeNode<MapAction*> &mapActions,
 	graphMenu->addSeparator();
 	graphMenu->addAction(_showGraphsAction);
 
-	_poiMenu = menuBar()->addMenu(tr("&POI"));
-	createPOINodeMenu(poiActions, _poiMenu);
-	_poisEnd = _poiMenu->addSeparator();
-	_poiMenu->addAction(_openPOIAction);
-	_poiMenu->addAction(_selectAllPOIAction);
-	_poiMenu->addAction(_unselectAllPOIAction);
-	_poiMenu->addSeparator();
-	_poiMenu->addAction(_showPOILabelsAction);
-	_poiMenu->addAction(_overlapPOIAction);
-	_poiMenu->addSeparator();
-	_poiMenu->addAction(_showPOIAction);
-
 	QMenu *dataMenu = menuBar()->addMenu(tr("&Data"));
 	dataMenu->addAction(_showWaypointLabelsAction);
 	dataMenu->addAction(_showRouteWaypointsAction);
@@ -611,6 +608,22 @@ void GUI::createMenus(const TreeNode<MapAction*> &mapActions,
 	dataMenu->addAction(_showRoutesAction);
 	dataMenu->addAction(_showAreasAction);
 	dataMenu->addAction(_showWaypointsAction);
+
+	_poiMenu = menuBar()->addMenu(tr("&POI"));
+	createPOINodeMenu(poiActions, _poiMenu);
+	_poisEnd = _poiMenu->addSeparator();
+	_poiMenu->addAction(_openPOIAction);
+	_poiMenu->addAction(_selectAllPOIAction);
+	_poiMenu->addAction(_unselectAllPOIAction);
+	_poiMenu->addSeparator();
+	_poiMenu->addAction(_showPOILabelsAction);
+	_poiMenu->addAction(_overlapPOIAction);
+	_poiMenu->addSeparator();
+	_poiMenu->addAction(_showPOIAction);
+
+	QMenu *demMenu = menuBar()->addMenu(tr("DEM"));
+	demMenu->addSeparator();
+	demMenu->addAction(_downloadDEMAction);
 
 	QMenu *settingsMenu = menuBar()->addMenu(tr("&Settings"));
 	QMenu *timeMenu = settingsMenu->addMenu(tr("Time"));
@@ -1051,6 +1064,16 @@ void GUI::openOptions()
 
 	if (options.poiRadius != _options.poiRadius)
 		_poi->setRadius(options.poiRadius);
+
+	if (options.demURL != _options.demURL)
+		_dem->setUrl(options.demURL);
+	if (options.demAuthorization != _options.demAuthorization
+	  || options.demUsername != _options.demUsername
+	  || options.demPassword != _options.demPassword)
+		_dem->setAuthorization(options.demAuthorization
+		  ? Authorization(options.demUsername, options.demPassword)
+		  : Authorization());
+	_downloadDEMAction->setEnabled(!options.demURL.isEmpty());
 
 	if (options.pixmapCache != _options.pixmapCache)
 		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
@@ -1688,6 +1711,26 @@ void GUI::clearMapCache()
 		_mapView->clearMapCache();
 }
 
+void GUI::downloadDEM()
+{
+	_demRect = _mapView->boundingRect();
+
+	if (_dem->loadTiles(_demRect))
+		_downloadDEMAction->setEnabled(false);
+	else
+		demLoaded();
+}
+
+void GUI::demLoaded()
+{
+	if (!_dem->checkTiles(_demRect))
+		QMessageBox::warning(this, APP_NAME,
+		  tr("Could not download all required DEM files."));
+
+	reloadFiles();
+	_downloadDEMAction->setEnabled(!_options.demURL.isEmpty());
+}
+
 void GUI::updateStatusBarInfo()
 {
 	if (_files.count() == 0)
@@ -2236,6 +2279,14 @@ void GUI::writeSettings()
 		settings.setValue(USE_SEGMENTS_SETTING, _options.useSegments);
 	if (_options.poiRadius != POI_RADIUS_DEFAULT)
 		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
+	if (_options.demURL != DEM_URL_DEFAULT)
+		settings.setValue(DEM_URL_SETTING, _options.demURL);
+	if (_options.demAuthorization != DEM_AUTH_DEFAULT)
+		settings.setValue(DEM_AUTH_SETTING, _options.demAuthorization);
+	if (_options.demUsername != DEM_USERNAME_DEFAULT)
+		settings.setValue(DEM_USERNAME_SETTING, _options.demUsername);
+	if (_options.demPassword != DEM_PASSWORD_DEFAULT)
+		settings.setValue(DEM_PASSWORD_SETTING, _options.demPassword);
 	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
 		settings.setValue(USE_OPENGL_SETTING, _options.useOpenGL);
 	if (_options.enableHTTP2 != ENABLE_HTTP2_DEFAULT)
@@ -2547,6 +2598,13 @@ void GUI::readSettings()
 	  PAUSE_INTERVAL_DEFAULT).toInt();
 	_options.poiRadius = settings.value(POI_RADIUS_SETTING, POI_RADIUS_DEFAULT)
 	  .toInt();
+	_options.demURL = settings.value(DEM_URL_SETTING, DEM_URL_DEFAULT).toString();
+	_options.demAuthorization = settings.value(DEM_AUTH_SETTING,
+	  DEM_AUTH_DEFAULT).toBool();
+	_options.demUsername = settings.value(DEM_USERNAME_SETTING,
+	  DEM_USERNAME_DEFAULT).toString();
+	_options.demPassword = settings.value(DEM_PASSWORD_SETTING,
+	  DEM_PASSWORD_DEFAULT).toString();
 	_options.useOpenGL = settings.value(USE_OPENGL_SETTING, USE_OPENGL_DEFAULT)
 	  .toBool();
 	_options.enableHTTP2 = settings.value(ENABLE_HTTP2_SETTING,
@@ -2640,6 +2698,13 @@ void GUI::readSettings()
 	Waypoint::showSecondaryElevation(_options.showSecondaryElevation);
 
 	_poi->setRadius(_options.poiRadius);
+
+	_dem->setUrl(_options.demURL);
+	if (_options.demAuthorization)
+		_dem->setAuthorization(Authorization(_options.demUsername,
+		  _options.demPassword));
+	if (!_options.demURL.isEmpty())
+		_downloadDEMAction->setEnabled(true);
 
 	QPixmapCache::setCacheLimit(_options.pixmapCache * 1024);
 

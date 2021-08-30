@@ -1,4 +1,4 @@
-version: 9.5.{build}
+version: 9.6.{build}
 
 configuration:
   - Release

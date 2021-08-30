@@ -26,5 +26,6 @@
 #define PRINT_EXPORT_ICON ":/document-print_32.png"
 #define DATA_ICON         ":/view-filter.png"
 #define MAPS_ICON         ":/applications-internet_32.png"
+#define DEM_ICON          ":/view-grid.png"
 
 #endif /* ICONS_H */

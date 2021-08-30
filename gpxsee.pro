@@ -3,7 +3,7 @@ unix:!macx {
 } else {
     TARGET = GPXSee
 }
-VERSION = 9.5
+VERSION = 9.6
 
 QT += core \
     gui \
@@ -18,10 +18,12 @@ greaterThan(QT_MAJOR_VERSION, 5) {QT += openglwidgets}
 CONFIG += object_parallel_to_source
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
+    src/GUI/authenticationwidget.h \
     src/GUI/axislabelitem.h \
     src/GUI/dirselectwidget.h \
     src/GUI/flowlayout.h \
     src/GUI/graphicsscene.h \
+    src/GUI/infolabel.h \
     src/GUI/mapaction.h \
     src/GUI/mapitem.h \
     src/GUI/marginswidget.h \
@@ -194,6 +196,7 @@ HEADERS += src/common/config.h \
     src/data/locparser.h \
     src/data/slfparser.h \
     src/data/dem.h \
+    src/data/demloader.h \
     src/common/polygon.h \
     src/data/area.h \
     src/map/obliquestereographic.h \
@@ -231,9 +234,11 @@ HEADERS += src/common/config.h \
     src/map/worldfilemap.h
 
 SOURCES += src/main.cpp \
+    src/GUI/authenticationwidget.cpp \
     src/GUI/axislabelitem.cpp \
     src/GUI/dirselectwidget.cpp \
     src/GUI/flowlayout.cpp \
+    src/GUI/infolabel.cpp \
     src/GUI/mapitem.cpp \
     src/GUI/marginswidget.cpp \
     src/GUI/markerinfoitem.cpp \
@@ -377,6 +382,7 @@ SOURCES += src/main.cpp \
     src/data/locparser.cpp \
     src/data/slfparser.cpp \
     src/data/dem.cpp \
+    src/data/demloader.cpp \
     src/map/obliquestereographic.cpp \
     src/GUI/coordinatesitem.cpp \
     src/map/rmap.cpp \

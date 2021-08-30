@@ -7,6 +7,7 @@
 #include <QDate>
 #include <QPrinter>
 #include "common/treenode.h"
+#include "common/rectc.h"
 #include "data/graph.h"
 #include "units.h"
 #include "timetype.h"
@@ -32,6 +33,7 @@ class QScreen;
 class MapAction;
 class POIAction;
 class Data;
+class DEMLoader;
 
 class GUI : public QMainWindow
 {
@@ -71,6 +73,7 @@ private slots:
 	void prevMap();
 	void openOptions();
 	void clearMapCache();
+	void downloadDEM();
 
 	void mapChanged(QAction *action);
 	void graphChanged(int);
@@ -101,6 +104,8 @@ private slots:
 	void mapLoaded();
 	void mapLoadedDir();
 	void mapInitialized();
+
+	void demLoaded();
 
 private:
 	typedef QPair<QDateTime, QDateTime> DateTimeRange;
@@ -224,6 +229,7 @@ private:
 	QAction *_showTicksAction;
 	QAction *_showCoordinatesAction;
 	QAction *_openOptionsAction;
+	QAction *_downloadDEMAction;
 	QAction *_mapsEnd;
 	QAction *_poisEnd;
 
@@ -239,6 +245,7 @@ private:
 
 	POI *_poi;
 	Map *_map;
+	DEMLoader *_dem;
 
 	FileBrowser *_browser;
 	QList<QString> _files;
@@ -260,6 +267,8 @@ private:
 	QString _dataDir, _mapDir, _poiDir;
 
 	Units _units;
+
+	RectC _demRect;
 };
 
 #endif // GUI_H

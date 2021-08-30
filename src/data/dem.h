@@ -8,18 +8,23 @@
 
 class QString;
 class Coordinates;
+class RectC;
 
 class DEM
 {
-private:
-	class Key {
+public:
+	class Tile {
 	public:
-		Key(int lon, int lat) : _lon(lon), _lat(lat) {}
+		Tile(int lon, int lat) : _lon(lon), _lat(lat) {}
 
 		int lon() const {return _lon;}
 		int lat() const {return _lat;}
 
-		bool operator==(const Key &other) const
+		QString lonStr() const;
+		QString latStr() const;
+		QString baseName() const;
+
+		bool operator==(const Tile &other) const
 		{
 			return (_lon == other._lon && _lat == other._lat);
 		}
@@ -28,22 +33,23 @@ private:
 		int _lon, _lat;
 	};
 
-	static QString baseName(const Key &key);
-	static QString fileName(const QString &baseName);
-
-	static QString _dir;
-	static QCache<Key, QByteArray> _data;
-
-public:
 	static void setDir(const QString &path);
 	static qreal elevation(const Coordinates &c);
 
-	friend HASH_T qHash(const Key &key);
+private:
+	static QString fileName(const QString &baseName);
+
+	static QString _dir;
+	static QCache<Tile, QByteArray> _data;
 };
 
-inline HASH_T qHash(const DEM::Key &key)
+inline HASH_T qHash(const DEM::Tile &tile)
 {
-	return (qHash(key.lon()) ^ qHash(key.lat()));
+	return (qHash(tile.lon()) ^ qHash(tile.lat()));
 }
+
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const DEM::Tile &tile);
+#endif // QT_NO_DEBUG
 
 #endif // DEM_H

@@ -43,6 +43,8 @@
 		<file alias="view-filter@2x.png">icons/GUI/view-filter@2x.png</file>
 		<file alias="applications-internet_32.png">icons/GUI/applications-internet_32.png</file>
 		<file alias="applications-internet_32@2x.png">icons/GUI/applications-internet_32@2x.png</file>
+		<file alias="view-grid.png">icons/GUI/view-grid.png</file>
+		<file alias="view-grid@2x.png">icons/GUI/view-grid@2x.png</file>
 	</qresource>
 	
 	<!-- POI icons for default IMG map style -->

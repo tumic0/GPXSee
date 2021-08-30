@@ -88,6 +88,8 @@ public:
 	void clearMapCache();
 	void fitContentToSize();
 
+	RectC boundingRect() const {return _tr | _rr | _wr | _ar;}
+
 public slots:
 	void showMap(bool show);
 	void showPOI(bool show);

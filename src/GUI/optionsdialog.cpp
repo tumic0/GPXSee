@@ -14,12 +14,14 @@
 #include <QSysInfo>
 #include <QButtonGroup>
 #include "icons.h"
+#include "infolabel.h"
 #include "colorbox.h"
 #include "stylecombobox.h"
 #include "oddspinbox.h"
 #include "percentslider.h"
 #include "projectioncombobox.h"
 #include "dirselectwidget.h"
+#include "authenticationwidget.h"
 #include "optionsdialog.h"
 
 
@@ -53,17 +55,11 @@ QWidget *OptionsDialog::createMapPage()
 	_inputProjection->setCurrentIndex(_inputProjection->findData(
 	  _options.inputProjection));
 
-	QLabel *inInfo = new QLabel(tr("Select the proper projection of maps"
+	InfoLabel *inInfo = new InfoLabel(tr("Select the proper projection of maps"
 	  " without a projection definition (JNX, KMZ and world file maps)."));
-	QLabel *outInfo = new QLabel(tr("Select the desired projection of vector"
-	  " maps (IMG and Mapsforge maps). The projection must be valid for"
+	InfoLabel *outInfo = new InfoLabel(tr("Select the desired projection of"
+	  " vector maps (IMG and Mapsforge maps). The projection must be valid for"
 	  " the whole map area."));
-	QFont f = inInfo->font();
-	f.setPointSize(f.pointSize() - 1);
-	inInfo->setWordWrap(true);
-	outInfo->setWordWrap(true);
-	inInfo->setFont(f);
-	outInfo->setFont(f);
 
 	_hidpi = new QRadioButton(tr("High-resolution"));
 	_lodpi = new QRadioButton(tr("Standard"));
@@ -71,14 +67,10 @@ QWidget *OptionsDialog::createMapPage()
 		_hidpi->setChecked(true);
 	else
 		_lodpi->setChecked(true);
-	QLabel *lhi = new QLabel(tr("Non-HiDPI maps are loaded as HiDPI maps. "
+	InfoLabel *lhi = new InfoLabel(tr("Non-HiDPI maps are loaded as HiDPI maps. "
 	  "The map is sharp but map objects are small/hard to read."));
-	QLabel *llo = new QLabel(tr("Non-HiDPI maps are loaded such as they are. "
+	InfoLabel *llo = new InfoLabel(tr("Non-HiDPI maps are loaded such as they are. "
 	  "Map objects have the expected size but the map is blurry."));
-	lhi->setWordWrap(true);
-	llo->setWordWrap(true);
-	lhi->setFont(f);
-	llo->setFont(f);
 
 	QVBoxLayout *inLayout = new QVBoxLayout();
 	inLayout->addWidget(_inputProjection);
@@ -576,6 +568,42 @@ QWidget *OptionsDialog::createPOIPage()
 	return poiPage;
 }
 
+QWidget *OptionsDialog::createDEMPage()
+{
+	_demURL = new QLineEdit();
+	_demURL->setText(_options.demURL);
+	_demAuth = new AuthenticationWidget();
+	_demAuth->setUsername(_options.demUsername);
+	_demAuth->setPassword(_options.demPassword);
+	_demAuth->setEnabled(_options.demAuthorization);
+
+	QCheckBox *useAuth = new QCheckBox(tr("Use HTTP authentication"));
+	useAuth->setChecked(_demAuth->isEnabled());
+	connect(useAuth, &QRadioButton::toggled, _demAuth,
+	  &AuthenticationWidget::setEnabled);
+
+	InfoLabel *info = new InfoLabel(tr("Use $lat and $lon for NYY/SYY and EXXX/WXXX in the URL."));
+
+	QFormLayout *urlLayout = new QFormLayout();
+	urlLayout->addRow(tr("URL:"), _demURL);
+	urlLayout->addRow(info);
+
+	QVBoxLayout *sourceLayout = new QVBoxLayout();
+	sourceLayout->addLayout(urlLayout);
+	sourceLayout->addSpacing(10);
+	sourceLayout->addWidget(useAuth);
+	sourceLayout->addWidget(_demAuth);
+	sourceLayout->addStretch();
+
+	QWidget *sourceTab = new QWidget();
+	sourceTab->setLayout(sourceLayout);
+
+	QTabWidget *demPage = new QTabWidget();
+	demPage->addTab(sourceTab, tr("Source"));
+
+	return demPage;
+}
+
 QWidget *OptionsDialog::createExportPage()
 {
 	_wysiwyg = new QRadioButton(tr("WYSIWYG"));
@@ -584,17 +612,11 @@ QWidget *OptionsDialog::createExportPage()
 		_hires->setChecked(true);
 	else
 		_wysiwyg->setChecked(true);
-	QLabel *lw = new QLabel(tr("The printed area is approximately the display"
-	  " area. The map zoom level does not change."));
-	QLabel *lh = new QLabel(tr("The zoom level will be changed so that"
+	InfoLabel *lw = new InfoLabel(tr("The printed area is approximately the "
+	  "display area. The map zoom level does not change."));
+	InfoLabel *lh = new InfoLabel(tr("The zoom level will be changed so that"
 	  " the whole content (tracks/waypoints) fits to the printed area and"
 	  " the map resolution is as close as possible to the print resolution."));
-	QFont f = lw->font();
-	f.setPointSize(f.pointSize() - 1);
-	lw->setWordWrap(true);
-	lh->setWordWrap(true);
-	lw->setFont(f);
-	lh->setFont(f);
 
 	QVBoxLayout *modeTabLayout = new QVBoxLayout();
 	modeTabLayout->addWidget(_wysiwyg);
@@ -691,12 +713,8 @@ QWidget *OptionsDialog::createSystemPage()
 	_poiPath = new DirSelectWidget();
 	_poiPath->setDir(_options.poiPath);
 
-	QLabel *info = new QLabel(tr("Select the initial paths of the file open"
-	  " dialogues. Leave the field empty for the system default."));
-	QFont f = info->font();
-	f.setPointSize(f.pointSize() - 1);
-	info->setFont(f);
-	info->setWordWrap(true);
+	InfoLabel *info = new InfoLabel(tr("Select the initial paths of the file"
+	  " open dialogues. Leave the field empty for the system default."));
 
 	QFormLayout *pathsFormLayout = new QFormLayout();
 	pathsFormLayout->addRow(tr("Data:"), _dataPath);
@@ -705,8 +723,8 @@ QWidget *OptionsDialog::createSystemPage()
 
 	QWidget *pathsTab = new QWidget();
 	QVBoxLayout *pathsTabLayout = new QVBoxLayout();
-	pathsTabLayout->addWidget(info);
 	pathsTabLayout->addLayout(pathsFormLayout);
+	pathsTabLayout->addWidget(info);
 	pathsTabLayout->addStretch();
 	pathsTab->setLayout(pathsTabLayout);
 
@@ -725,6 +743,7 @@ OptionsDialog::OptionsDialog(Options &options, Units units, QWidget *parent)
 	pages->addWidget(createMapPage());
 	pages->addWidget(createDataPage());
 	pages->addWidget(createPOIPage());
+	pages->addWidget(createDEMPage());
 	pages->addWidget(createExportPage());
 	pages->addWidget(createSystemPage());
 
@@ -735,6 +754,7 @@ OptionsDialog::OptionsDialog(Options &options, Units units, QWidget *parent)
 	new QListWidgetItem(QIcon(MAPS_ICON), tr("Maps"), menu);
 	new QListWidgetItem(QIcon(DATA_ICON), tr("Data"), menu);
 	new QListWidgetItem(QIcon(POI_ICON), tr("POI"), menu);
+	new QListWidgetItem(QIcon(DEM_ICON), tr("DEM"), menu);
 	new QListWidgetItem(QIcon(PRINT_EXPORT_ICON), tr("Print & Export"),
 	  menu);
 	new QListWidgetItem(QIcon(SYSTEM_ICON), tr("System"), menu);
@@ -830,6 +850,11 @@ void OptionsDialog::accept()
 		? _poiRadius->value() * NMIINM : _poiRadius->value() * KMINM;
 	if (qAbs(poiRadius - _options.poiRadius) > 0.01)
 		_options.poiRadius = poiRadius;
+
+	_options.demURL = _demURL->text();
+	_options.demAuthorization = _demAuth->isEnabled();
+	_options.demUsername = _demAuth->username();
+	_options.demPassword = _demAuth->password();
 
 	_options.useOpenGL = _useOpenGL->isChecked();
 	_options.enableHTTP2 = _enableHTTP2->isChecked();

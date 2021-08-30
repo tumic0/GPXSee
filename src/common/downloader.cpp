@@ -77,7 +77,7 @@ QNetworkAccessManager *Downloader::_manager = 0;
 int Downloader::_timeout = 30;
 bool Downloader::_http2 = true;
 
-bool Downloader::doDownload(const Download &dl, const QByteArray &authorization)
+bool Downloader::doDownload(const Download &dl, const Authorization &auth)
 {
 	const QUrl &url = dl.url();
 
@@ -98,8 +98,8 @@ bool Downloader::doDownload(const Download &dl, const QByteArray &authorization)
 	  QNetworkRequest::NoLessSafeRedirectPolicy);
 	request.setAttribute(ATTR_HTTP2_ALLOWED, QVariant(_http2));
 	request.setRawHeader("User-Agent", USER_AGENT);
-	if (!authorization.isNull())
-		request.setRawHeader("Authorization", authorization);
+	if (!auth.isNull())
+		request.setRawHeader("Authorization", auth.header());
 
 	QFile *file = new QFile(tmpName(dl.file()));
 	if (!file->open(QIODevice::WriteOnly)) {
@@ -182,7 +182,7 @@ bool Downloader::get(const QList<Download> &list,
 	bool finishEmitted = false;
 
 	for (int i = 0; i < list.count(); i++)
-		finishEmitted |= doDownload(list.at(i), authorization.header());
+		finishEmitted |= doDownload(list.at(i), authorization);
 
 	return finishEmitted;
 }

@@ -16,7 +16,7 @@
 #include <QDir>
 #include <QFile>
 #include <private/qzipreader_p.h>
-#include "common/coordinates.h"
+#include "common/rectc.h"
 #include "dem.h"
 
 
@@ -66,18 +66,25 @@ static qreal height(const Coordinates &c, const QByteArray *data)
 }
 
 
-QString DEM::_dir;
-QCache<DEM::Key, QByteArray> DEM::_data;
-
-QString DEM::baseName(const Key &key)
+QString DEM::Tile::latStr() const
 {
-	const char ns = (key.lat() >= 0) ? 'N' : 'S';
-	const char ew = (key.lon() >= 0) ? 'E' : 'W';
-
-	return QString("%1%2%3%4.hgt").arg(ns)
-	  .arg(qAbs(key.lat()), 2, 10, QChar('0')).arg(ew)
-	  .arg(qAbs(key.lon()), 3, 10, QChar('0'));
+	const char ns = (_lat >= 0) ? 'N' : 'S';
+	return QString("%1%2").arg(ns).arg(qAbs(_lat), 2, 10, QChar('0'));
 }
+
+QString DEM::Tile::lonStr() const
+{
+	const char ew = (_lon >= 0) ? 'E' : 'W';
+	return QString("%1%2").arg(ew).arg(qAbs(_lon), 3, 10, QChar('0'));
+}
+
+QString DEM::Tile::baseName() const
+{
+	return QString("%1%2.hgt").arg(latStr(), lonStr());
+}
+
+QString DEM::_dir;
+QCache<DEM::Tile, QByteArray> DEM::_data;
 
 QString DEM::fileName(const QString &baseName)
 {
@@ -87,6 +94,7 @@ QString DEM::fileName(const QString &baseName)
 void DEM::setDir(const QString &path)
 {
 	_dir = path;
+	_data.clear();
 }
 
 qreal DEM::elevation(const Coordinates &c)
@@ -94,11 +102,11 @@ qreal DEM::elevation(const Coordinates &c)
 	if (_dir.isEmpty())
 		return NAN;
 
-	Key k(qFloor(c.lon()), qFloor(c.lat()));
+	Tile tile(qFloor(c.lon()), qFloor(c.lat()));
 
-	QByteArray *ba = _data[k];
+	QByteArray *ba = _data[tile];
 	if (!ba) {
-		QString bn(baseName(k));
+		QString bn(tile.baseName());
 		QString fn(fileName(bn));
 		QString zn(fn + ".zip");
 
@@ -106,22 +114,30 @@ qreal DEM::elevation(const Coordinates &c)
 			QZipReader zip(zn, QIODevice::ReadOnly);
 			ba = new QByteArray(zip.fileData(bn));
 			qreal ele = height(c, ba);
-			_data.insert(k, ba);
+			_data.insert(tile, ba);
 			return ele;
 		} else {
 			QFile file(fn);
 			if (!file.open(QIODevice::ReadOnly)) {
 				qWarning("%s: %s", qPrintable(file.fileName()),
 				  qPrintable(file.errorString()));
-				_data.insert(k, new QByteArray());
+				_data.insert(tile, new QByteArray());
 				return NAN;
 			} else {
 				ba = new QByteArray(file.readAll());
 				qreal ele = height(c, ba);
-				_data.insert(k, ba);
+				_data.insert(tile, ba);
 				return ele;
 			}
 		}
 	} else
 		return height(c, ba);
 }
+
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const DEM::Tile &tile)
+{
+	dbg.nospace() << "Tile(" << tile.baseName() << ")";
+	return dbg.space();
+}
+#endif // QT_NO_DEBUG

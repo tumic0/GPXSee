@@ -6,18 +6,19 @@
 #include "units.h"
 #include "timezoneinfo.h"
 
-class ColorBox;
-class StyleComboBox;
-class OddSpinBox;
 class QSpinBox;
 class QDoubleSpinBox;
 class QComboBox;
 class QCheckBox;
 class QRadioButton;
+class QLineEdit;
+class ColorBox;
+class StyleComboBox;
+class OddSpinBox;
 class PercentSlider;
 class ProjectionComboBox;
 class DirSelectWidget;
-
+class AuthenticationWidget;
 
 struct Options {
 	// Appearance
@@ -61,6 +62,11 @@ struct Options {
 	bool useSegments;
 	// POI
 	int poiRadius;
+	// DEM
+	QString demURL;
+	QString demUsername;
+	QString demPassword;
+	bool demAuthorization;
 	// System
 	bool useOpenGL;
 	bool enableHTTP2;
@@ -100,6 +106,7 @@ private:
 	QWidget *createPOIPage();
 	QWidget *createSystemPage();
 	QWidget *createExportPage();
+	QWidget *createDEMPage();
 
 	Options &_options;
 
@@ -153,6 +160,9 @@ private:
 	QCheckBox *_useSegments;
 	// POI
 	QDoubleSpinBox *_poiRadius;
+	// DEM
+	QLineEdit *_demURL;
+	AuthenticationWidget *_demAuth;
 	// System
 	QSpinBox *_pixmapCache;
 	QSpinBox *_connectionTimeout;
