@@ -9,6 +9,7 @@ AuthenticationWidget::AuthenticationWidget(QWidget *parent) : QWidget(parent)
 	QFormLayout *layout = new QFormLayout();
 	layout->addRow(tr("Username:"), _username);
 	layout->addRow(tr("Password:"), _password);
+	layout->setContentsMargins(0, 0, 0, 0);
 
 	setLayout(layout);
 }
