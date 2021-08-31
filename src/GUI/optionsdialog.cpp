@@ -571,9 +571,11 @@ QWidget *OptionsDialog::createDEMPage()
 	QWidget *sourceTab = new QWidget();
 	sourceTab->setLayout(sourceLayout);
 #else // Q_OS_MAC
+	QVBoxLayout *urlValueLayout = new QVBoxLayout();
+	urlValueLayout->addWidget(_demURL);
+	urlValueLayout->addWidget(info);
 	QFormLayout *urlLayout = new QFormLayout();
-	urlLayout->addRow(tr("URL:"), _demURL);
-	urlLayout->addRow(info);
+	urlLayout->addRow(tr("URL:"), urlValueLayout);
 	QVBoxLayout *sourceLayout = new QVBoxLayout();
 	sourceLayout->addLayout(urlLayout);
 	sourceLayout->addSpacing(10);
