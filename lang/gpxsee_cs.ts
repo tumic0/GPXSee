@@ -6,12 +6,12 @@
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="10"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Uživatelské jméno:</translation>
     </message>
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="11"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Heslo:</translation>
     </message>
 </context>
 <context>
@@ -480,7 +480,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="409"/>
         <source>Download DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>Stáhnout DEM data</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="415"/>
@@ -582,7 +582,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="624"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="632"/>
@@ -704,7 +704,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1728"/>
         <source>Could not download all required DEM files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se stáhnout všechny DEM soubory.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1737"/>
@@ -1556,23 +1556,23 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="555"/>
         <source>Use HTTP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Použít HTTP autentizaci</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="561"/>
         <source>Use $lat and $lon for NYY/SYY and EXXX/WXXX in the URL.</source>
-        <translation type="unfinished"></translation>
+        <translation>NYY/SYY a EXXX/WXXX v URL nahraďte za $lat a $lon.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="565"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="575"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="588"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Zdroj dat</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="595"/>
@@ -1716,7 +1716,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="751"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="752"/>
