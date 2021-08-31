@@ -6,12 +6,12 @@
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="10"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn:</translation>
     </message>
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="11"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord:</translation>
     </message>
 </context>
 <context>
@@ -490,7 +490,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="409"/>
         <source>Download DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>Ladda ner DEM-data</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="415"/>
@@ -592,7 +592,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="624"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="632"/>
@@ -727,7 +727,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1728"/>
         <source>Could not download all required DEM files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte ladda ner alla nödvändiga DEM-filer.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1737"/>
@@ -1550,22 +1550,22 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="580"/>
         <source>Use HTTP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd HTTP-autentisering</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="585"/>
         <source>Use $lat and $lon for NYY/SYY and EXXX/WXXX in the URL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd $lat och $lon för NYY/SYYY och EXXX/WXXX i URL:en.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="588"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="602"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Källa</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="609"/>
@@ -1707,7 +1707,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="757"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="758"/>
