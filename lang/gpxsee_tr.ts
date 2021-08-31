@@ -6,12 +6,12 @@
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="10"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanıcı adı:</translation>
     </message>
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="11"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Parola:</translation>
     </message>
 </context>
 <context>
@@ -481,7 +481,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="409"/>
         <source>Download DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM verilerini indir</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="415"/>
@@ -623,7 +623,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="624"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="628"/>
@@ -875,7 +875,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1728"/>
         <source>Could not download all required DEM files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerekli tüm DEM dosyaları indirilemedi.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1737"/>
@@ -1452,7 +1452,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="392"/>
         <source>DEM data</source>
-        <translation>DEM verisi</translation>
+        <translation>DEM verileri</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="397"/>
@@ -1554,23 +1554,23 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="555"/>
         <source>Use HTTP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTP kimlik doğrulamasını kullan</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="561"/>
         <source>Use $lat and $lon for NYY/SYY and EXXX/WXXX in the URL.</source>
-        <translation type="unfinished"></translation>
+        <translation>URL&apos;de NYY/SYY ve EXXX/WXXX için $lat ve $lon kullan.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="565"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="575"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="588"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaynak</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="595"/>
@@ -1714,7 +1714,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="751"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="752"/>
