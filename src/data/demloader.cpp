@@ -63,7 +63,7 @@ bool DEMLoader::loadTiles(const RectC &rect)
 
 	if (dl.size() > DOWNLOAD_LIMIT) {
 		qWarning("DEM download limit exceeded. Limit/requested: %u/%u.",
-		  DOWNLOAD_LIMIT, dl.size());
+		  DOWNLOAD_LIMIT, (unsigned)dl.size());
 		return false;
 	}
 
