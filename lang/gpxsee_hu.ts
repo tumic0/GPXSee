@@ -6,12 +6,12 @@
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="10"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Felhasználónév:</translation>
     </message>
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="11"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelszó:</translation>
     </message>
 </context>
 <context>
@@ -481,7 +481,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="409"/>
         <source>Download DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM adat letöltése</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="415"/>
@@ -623,7 +623,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="624"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="628"/>
@@ -875,7 +875,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1728"/>
         <source>Could not download all required DEM files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem volt letölthető minden szükséges DEM fájl.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1737"/>
@@ -886,6 +886,7 @@
         <location filename="../src/GUI/gui.cpp" line="1741"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
@@ -1534,22 +1535,22 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="580"/>
         <source>Use HTTP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTP hitelesítés használata</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="585"/>
         <source>Use $lat and $lon for NYY/SYY and EXXX/WXXX in the URL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Használj az URL -ben $lat és $lon értékeket a NYY/SYY és az EXXX/WXXX-hez .</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="588"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="602"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrás</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="609"/>
@@ -1706,7 +1707,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="757"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="758"/>
