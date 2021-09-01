@@ -53,7 +53,7 @@ bool DEMLoader::loadTiles(const RectC &rect)
 		QString fn(tileFile(t));
 		QString zn(fn + ".zip");
 
-		if (!(QFileInfo(zn).exists() || QFileInfo(fn).exists())) {
+		if (!(QFileInfo::exists(zn) || QFileInfo::exists(fn))) {
 			QUrl url(tileUrl(t));
 			dl.append(Download(url, isZip(url) ? zn : fn));
 		}
@@ -77,7 +77,7 @@ bool DEMLoader::checkTiles(const RectC &rect) const
 		QString fn(tileFile(t));
 		QString zn(fn + ".zip");
 
-		if (!(QFileInfo(zn).exists() || QFileInfo(fn).exists()))
+		if (!(QFileInfo::exists(zn) || QFileInfo::exists(fn)))
 			return false;
 	}
 
