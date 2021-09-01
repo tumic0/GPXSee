@@ -1911,7 +1911,7 @@ bool GUI::updateGraphTabs()
 
 void GUI::updateDEMDownloadAction()
 {
-	_downloadDEMAction->setEnabled(!_options.demURL.isEmpty()
+	_downloadDEMAction->setEnabled(!_dem->url().isEmpty()
 	  && !_dem->checkTiles(_mapView->boundingRect()));
 }
 

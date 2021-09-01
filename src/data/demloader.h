@@ -22,6 +22,8 @@ public:
 	bool loadTiles(const RectC &rect);
 	bool checkTiles(const RectC &rect) const;
 
+	const QString &url() const {return _url;}
+
 signals:
 	void finished();
 
