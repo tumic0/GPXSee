@@ -6,12 +6,12 @@
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="10"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя пользователя:</translation>
     </message>
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="11"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль:</translation>
     </message>
 </context>
 <context>
@@ -1556,7 +1556,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="555"/>
         <source>Use HTTP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать HTTP-аутентификацию</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="561"/>
@@ -1567,12 +1567,12 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="565"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="575"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="588"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Источник</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="595"/>
