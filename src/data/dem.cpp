@@ -94,6 +94,10 @@ QString DEM::fileName(const QString &baseName)
 void DEM::setDir(const QString &path)
 {
 	_dir = path;
+}
+
+void DEM::clearCache()
+{
 	_data.clear();
 }
 

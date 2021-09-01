@@ -2,6 +2,7 @@
 #define DEMLOADER_H
 
 #include <QObject>
+#include <QDir>
 #include "common/downloader.h"
 #include "dem.h"
 
@@ -30,7 +31,7 @@ private:
 
 	Downloader *_downloader;
 	QString _url;
-	QString _dir;
+	QDir _dir;
 	Authorization _authorization;
 };
 

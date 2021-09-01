@@ -67,6 +67,8 @@ private slots:
 	void showFullscreen(bool show);
 	void showTracks(bool show);
 	void showRoutes(bool show);
+	void showAreas(bool show);
+	void showWaypoints(bool show);
 	void loadMap();
 	void loadMapDir();
 	void nextMap();
@@ -143,6 +145,7 @@ private:
 	void updateStatusBarInfo();
 	void updateWindowTitle();
 	bool updateGraphTabs();
+	void updateDEMDownloadAction();
 
 	TimeType timeType() const;
 	Units units() const;
@@ -268,7 +271,7 @@ private:
 
 	Units _units;
 
-	RectC _demRect;
+	QList<RectC> _demRects;
 };
 
 #endif // GUI_H

@@ -1,11 +1,10 @@
 #include <QtMath>
-#include <QDir>
 #include <QFileInfo>
 #include "common/rectc.h"
 #include "demloader.h"
 
 
-#define DOWNLOAD_LIMIT 32
+#define DOWNLOAD_LIMIT 16
 
 static QList<DEM::Tile> tiles(const RectC &rect)
 {
@@ -42,13 +41,12 @@ bool DEMLoader::loadTiles(const RectC &rect)
 
 	/* Create the user DEM dir only when a download is requested as it will
 	   override the global DEM dir. */
-	if (!QDir().mkpath(_dir)) {
-		qWarning("%s: %s", qPrintable(_dir), "Error creating DEM directory");
+	if (!_dir.mkpath(_dir.absolutePath())) {
+		qWarning("%s: %s", qPrintable(_dir.canonicalPath()),
+		  "Error creating DEM directory");
 		return false;
 	}
-	/* This also clears the DEM data cache which is necessary to use the data
-	   from the downloaded DEM tiles. */
-	DEM::setDir(_dir);
+	DEM::setDir(_dir.path());
 
 	for (int i = 0; i < tl.size(); i++) {
 		const DEM::Tile &t = tl.at(i);
@@ -62,8 +60,8 @@ bool DEMLoader::loadTiles(const RectC &rect)
 	}
 
 	if (dl.size() > DOWNLOAD_LIMIT) {
-		qWarning("DEM download limit exceeded. Limit/requested: %u/%u.",
-		  DOWNLOAD_LIMIT, (unsigned)dl.size());
+		qWarning("Requested DEM area is too large (%u tiles)",
+		  (unsigned)dl.size());
 		return false;
 	}
 
@@ -98,5 +96,5 @@ QUrl DEMLoader::tileUrl(const DEM::Tile &tile) const
 
 QString DEMLoader::tileFile(const DEM::Tile &tile) const
 {
-	return _dir + QLatin1Char('/') + tile.baseName();
+	return _dir.absoluteFilePath(tile.baseName());
 }

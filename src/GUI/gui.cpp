@@ -363,13 +363,12 @@ void GUI::createActions(TreeNode<MapAction*> &mapActions,
 	_showWaypointsAction = new QAction(tr("Show waypoints"), this);
 	_showWaypointsAction->setMenuRole(QAction::NoRole);
 	_showWaypointsAction->setCheckable(true);
-	connect(_showWaypointsAction, &QAction::triggered, _mapView,
-	  &MapView::showWaypoints);
+	connect(_showWaypointsAction, &QAction::triggered, this,
+	  &GUI::showWaypoints);
 	_showAreasAction = new QAction(tr("Show areas"), this);
 	_showAreasAction->setMenuRole(QAction::NoRole);
 	_showAreasAction->setCheckable(true);
-	connect(_showAreasAction, &QAction::triggered, _mapView,
-	  &MapView::showAreas);
+	connect(_showAreasAction, &QAction::triggered, this, &GUI::showAreas);
 	_showWaypointLabelsAction = new QAction(tr("Waypoint labels"), this);
 	_showWaypointLabelsAction->setMenuRole(QAction::NoRole);
 	_showWaypointLabelsAction->setCheckable(true);
@@ -867,6 +866,7 @@ bool GUI::loadFile(const QString &fileName, bool silent)
 		updateStatusBarInfo();
 		updateWindowTitle();
 		updateGraphTabs();
+		updateDEMDownloadAction();
 
 		QString error = tr("Error loading data file:") + "\n\n"
 		  + fileName + "\n\n" + data.errorString();
@@ -932,6 +932,8 @@ void GUI::loadData(const Data &data)
 			pi->setMarkerPosition(gt->sliderPosition());
 		}
 	}
+
+	updateDEMDownloadAction();
 }
 
 void GUI::openPOIFile()
@@ -1073,7 +1075,6 @@ void GUI::openOptions()
 		_dem->setAuthorization(options.demAuthorization
 		  ? Authorization(options.demUsername, options.demPassword)
 		  : Authorization());
-	_downloadDEMAction->setEnabled(!options.demURL.isEmpty());
 
 	if (options.pixmapCache != _options.pixmapCache)
 		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
@@ -1094,6 +1095,8 @@ void GUI::openOptions()
 		reloadFiles();
 
 	_options = options;
+
+	updateDEMDownloadAction();
 }
 
 void GUI::printFile()
@@ -1387,6 +1390,7 @@ void GUI::reloadFiles()
 		_fileActionGroup->setEnabled(false);
 	else
 		_browser->setCurrent(_files.last());
+	updateDEMDownloadAction();
 }
 
 void GUI::closeFiles()
@@ -1419,6 +1423,7 @@ void GUI::closeAll()
 	updateStatusBarInfo();
 	updateWindowTitle();
 	updateGraphTabs();
+	updateDEMDownloadAction();
 }
 
 void GUI::showGraphs(bool show)
@@ -1478,6 +1483,7 @@ void GUI::showTracks(bool show)
 
 	updateStatusBarInfo();
 	updateGraphTabs();
+	updateDEMDownloadAction();
 }
 
 void GUI::showRoutes(bool show)
@@ -1489,6 +1495,19 @@ void GUI::showRoutes(bool show)
 
 	updateStatusBarInfo();
 	updateGraphTabs();
+	updateDEMDownloadAction();
+}
+
+void GUI::showWaypoints(bool show)
+{
+	_mapView->showWaypoints(show);
+	updateDEMDownloadAction();
+}
+
+void GUI::showAreas(bool show)
+{
+	_mapView->showAreas(show);
+	updateDEMDownloadAction();
 }
 
 void GUI::showGraphGrids(bool show)
@@ -1713,22 +1732,26 @@ void GUI::clearMapCache()
 
 void GUI::downloadDEM()
 {
-	_demRect = _mapView->boundingRect();
+	RectC br(_mapView->boundingRect());
+	_demRects.append(br);
 
-	if (_dem->loadTiles(_demRect))
-		_downloadDEMAction->setEnabled(false);
-	else
+	if (!_dem->loadTiles(br) && _demRects.size() == 1)
 		demLoaded();
 }
 
 void GUI::demLoaded()
 {
-	if (!_dem->checkTiles(_demRect))
-		QMessageBox::warning(this, APP_NAME,
-		  tr("Could not download all required DEM files."));
+	for (int i = 0; i < _demRects.size(); i++) {
+		if (!_dem->checkTiles(_demRects.at(i))) {
+			QMessageBox::warning(this, APP_NAME,
+			  tr("Could not download all required DEM files."));
+			break;
+		}
+	}
 
+	DEM::clearCache();
+	_demRects.clear();
 	reloadFiles();
-	_downloadDEMAction->setEnabled(!_options.demURL.isEmpty());
 }
 
 void GUI::updateStatusBarInfo()
@@ -1884,6 +1907,12 @@ bool GUI::updateGraphTabs()
 	}
 
 	return (hidden != _graphTabWidget->isHidden());
+}
+
+void GUI::updateDEMDownloadAction()
+{
+	_downloadDEMAction->setEnabled(!_options.demURL.isEmpty()
+	  && !_dem->checkTiles(_mapView->boundingRect()));
 }
 
 void GUI::setTimeType(TimeType type)
@@ -2703,8 +2732,6 @@ void GUI::readSettings()
 	if (_options.demAuthorization)
 		_dem->setAuthorization(Authorization(_options.demUsername,
 		  _options.demPassword));
-	if (!_options.demURL.isEmpty())
-		_downloadDEMAction->setEnabled(true);
 
 	QPixmapCache::setCacheLimit(_options.pixmapCache * 1024);
 

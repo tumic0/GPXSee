@@ -559,6 +559,7 @@ QWidget *OptionsDialog::createDEMPage()
 
 	InfoLabel *info = new InfoLabel(
 	  tr("Use $lat and $lon for NYY/SYY and EXXX/WXXX in the URL."));
+	info->setMinimumWidth(_demURL->minimumWidth());
 
 #ifdef Q_OS_MAC
 	QFormLayout *sourceLayout = new QFormLayout();

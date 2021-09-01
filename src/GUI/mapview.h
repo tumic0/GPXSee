@@ -88,7 +88,7 @@ public:
 	void clearMapCache();
 	void fitContentToSize();
 
-	RectC boundingRect() const {return _tr | _rr | _wr | _ar;}
+	RectC boundingRect() const;
 
 public slots:
 	void showMap(bool show);

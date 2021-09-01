@@ -34,6 +34,7 @@ public:
 	};
 
 	static void setDir(const QString &path);
+	static void clearCache();
 	static qreal elevation(const Coordinates &c);
 
 private:

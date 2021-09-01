@@ -1147,3 +1147,19 @@ void MapView::fitContentToSize()
 
 	centerOn(contentCenter());
 }
+
+RectC MapView::boundingRect() const
+{
+	RectC rect;
+
+	if (_showTracks)
+		rect |= _tr;
+	if (_showRoutes)
+		rect |= _rr;
+	if (_showWaypoints)
+		rect |= _wr;
+	if (_showAreas)
+		rect |= _ar;
+
+	return rect;
+}
