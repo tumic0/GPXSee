@@ -1,7 +1,6 @@
 #include <QtGlobal>
 #include "infolabel.h"
 
-#include <QDebug>
 InfoLabel::InfoLabel(const QString &text, QWidget *parent)
   : QLabel(text, parent)
 {
