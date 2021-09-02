@@ -355,6 +355,7 @@ void GUI::createActions(TreeNode<MapAction*> &mapActions,
 	_showTracksAction = new QAction(tr("Show tracks"), this);
 	_showTracksAction->setMenuRole(QAction::NoRole);
 	_showTracksAction->setCheckable(true);
+	_showTracksAction->setShortcut(SHOW_TRACKS_SHORTCUT);
 	connect(_showTracksAction, &QAction::triggered, this, &GUI::showTracks);
 	_showRoutesAction = new QAction(tr("Show routes"), this);
 	_showRoutesAction->setMenuRole(QAction::NoRole);
@@ -408,6 +409,7 @@ void GUI::createActions(TreeNode<MapAction*> &mapActions,
 	_downloadDEMAction = new QAction(tr("Download DEM data"), this);
 	_downloadDEMAction->setMenuRole(QAction::NoRole);
 	_downloadDEMAction->setEnabled(false);
+	_downloadDEMAction->setShortcut(DOWNLOAD_DEM_SHORTCUT);
 	connect(_downloadDEMAction, &QAction::triggered, this, &GUI::downloadDEM);
 
 	// Graph actions
