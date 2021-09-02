@@ -664,7 +664,9 @@ void GUI::createToolBars()
 	_fileToolBar->addAction(_openFileAction);
 	_fileToolBar->addAction(_reloadFileAction);
 	_fileToolBar->addAction(_closeFileAction);
+#ifndef Q_OS_MAC
 	_fileToolBar->addAction(_printFileAction);
+#endif // Q_OS_MAC
 
 	_showToolBar = addToolBar(tr("Show"));
 	_showToolBar->setObjectName("Show");
