@@ -781,6 +781,9 @@ OptionsDialog::OptionsDialog(Options &options, Units units, QWidget *parent)
 	QVBoxLayout *layout = new QVBoxLayout;
 	layout->addLayout(contentLayout);
 	layout->addWidget(buttonBox);
+#ifdef Q_OS_MAC
+	layout->setSizeConstraint(QLayout::SetFixedSize);
+#endif // Q_OS_MAC
 	setLayout(layout);
 
 	setWindowTitle(tr("Options"));
