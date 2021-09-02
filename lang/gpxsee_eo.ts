@@ -6,12 +6,12 @@
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="10"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzantnomo:</translation>
     </message>
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="11"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pasvorto:</translation>
     </message>
 </context>
 <context>
@@ -623,7 +623,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="624"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="628"/>
@@ -1562,7 +1562,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="555"/>
         <source>Use HTTP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzi HTTP-aŭtentigon</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="561"/>
@@ -1573,12 +1573,12 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="565"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="575"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="588"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Fonto</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="595"/>
@@ -1715,7 +1715,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="751"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="752"/>
