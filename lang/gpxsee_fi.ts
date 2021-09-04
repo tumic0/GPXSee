@@ -6,12 +6,12 @@
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="10"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjätunnus:</translation>
     </message>
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="11"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Salasana:</translation>
     </message>
 </context>
 <context>
@@ -480,7 +480,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="409"/>
         <source>Download DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>Lataa DEM-tiedot</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="415"/>
@@ -582,7 +582,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="624"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="632"/>
@@ -1566,12 +1566,12 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="565"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="575"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="588"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Lähde</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="595"/>
@@ -1715,7 +1715,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="751"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="752"/>
