@@ -57,12 +57,11 @@ bool DEMLoader::loadTiles(const RectC &rect)
 			QUrl url(tileUrl(t));
 			dl.append(Download(url, isZip(url) ? zn : fn));
 		}
-	}
 
-	if (dl.size() > DOWNLOAD_LIMIT) {
-		qWarning("Requested DEM area is too large (%u tiles)",
-		  (unsigned)dl.size());
-		return false;
+		if (dl.size() > DOWNLOAD_LIMIT) {
+			qWarning("DEM download limit exceeded.");
+			return false;
+		}
 	}
 
 	return _downloader->get(dl, _authorization);
