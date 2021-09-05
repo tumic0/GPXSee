@@ -333,6 +333,18 @@
           <p>The DEM files must have the expected filename format of <code>NXXEYYY.hgt</code>
           or <code>NXXEYYY.hgt.zip</code> for GPXSee to use them.</p>
 
+          <h3 id="dem_downloads">DEM downloads</h3>
+          <p>Since GPXSee 9.6 you can download the required DEM files for the area covered
+          by the loaded data from the GPXSee GUI. You must however set a valid DEM data
+          server URL in the preferences for the downloads to work. The URL is specified
+          as a template where the NYY/SYY and EXXX/WXXX coordinates strings are replaced by
+          <code>$lat</code> and <code>$lon</code>:</p>
+
+          <pre>https://bailu.ch/dem3/$lat/$lat$lon.hgt.zip</pre>
+
+          <p>(The downloaded files are automatically renamed, if the file name is not in
+          the required format.)</p>
+
 
           <div id="footnote">
           <p id="legacyPaths"><i>[1] The user paths have changed in GPXSee 7.</i></p>
@@ -365,6 +377,7 @@
             <div class="h5l"><a href="#styles">Map styles</a></div>
           <div class="h4l"><a href="#poi">POI files</a></div>
           <div class="h4l"><a href="#dem">DEM files</a></div>
+            <div class="h5l"><a href="#dem_downloads">DEM downloads</a></div>
         </div>
       </div>
       <div class="cl">&nbsp;</div>
