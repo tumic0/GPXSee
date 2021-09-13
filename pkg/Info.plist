@@ -589,6 +589,8 @@
 			<string>http://www.topografix.com/GPX/1/1</string>
 			<key>UTTypeDescription</key>
 			<string>GPS Exchange Format</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/gpx.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.xml</string>
@@ -610,6 +612,8 @@
 			<string>http://www8.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd</string>
 			<key>UTTypeDescription</key>
 			<string>Training Center XML</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/tcx.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.xml</string>
@@ -631,6 +635,8 @@
 			<string>https://developers.google.com/kml/documentation/kmlreference</string>
 			<key>UTTypeDescription</key>
 			<string>Keyhole Markup Language</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/kml.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.xml</string>
@@ -652,6 +658,8 @@
 			<string>https://developers.google.com/kml/documentation/kmlreference</string>
 			<key>UTTypeDescription</key>
 			<string>KML geographic compressed data</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/kml.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.archive</string>
@@ -673,6 +681,8 @@
 			<string>https://www.geocaching.com</string>
 			<key>UTTypeDescription</key>
 			<string>Geocaching.com Waypoint File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/loc.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.xml</string>
@@ -694,6 +704,8 @@
 			<string>https://www.sigmasport.com</string>
 			<key>UTTypeDescription</key>
 			<string>Sigma Log Format</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/slf.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.xml</string>
@@ -715,6 +727,8 @@
 			<string>https://www.thisisant.com/resources/fit</string>
 			<key>UTTypeDescription</key>
 			<string>Flexible and Interoperable Data Transfer</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/fit.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -736,6 +750,8 @@
 			<string>http://www.fai.org/gnss-recording-devices/igc-approved-flight-recorders</string>
 			<key>UTTypeDescription</key>
 			<string>Flight Recorder Data Format</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/igc.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -757,6 +773,8 @@
 			<string>http://www.nmea.org/content/nmea_standards/nmea_0183_v_410.asp</string>
 			<key>UTTypeDescription</key>
 			<string>NMEA 0183 data</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/nmea.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -778,6 +796,8 @@
 			<string>http://www.oziexplorer3.com/eng/help/fileformats.html</string>
 			<key>UTTypeDescription</key>
 			<string>OziExplorer Track Point File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/plt.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -794,11 +814,13 @@
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
-			<string>com.oziexplorer3.plt</string>
+			<string>com.oziexplorer3.rte</string>
 			<key>UTTypeReferenceURL</key>
 			<string>http://www.oziexplorer3.com/eng/help/fileformats.html</string>
 			<key>UTTypeDescription</key>
 			<string>OziExplorer Route File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/rte.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -815,11 +837,13 @@
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
-			<string>com.oziexplorer3.plt</string>
+			<string>com.oziexplorer3.wpt</string>
 			<key>UTTypeReferenceURL</key>
 			<string>http://www.oziexplorer3.com/eng/help/fileformats.html</string>
 			<key>UTTypeDescription</key>
 			<string>OziExplorer Waypoint File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/wpt.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -841,6 +865,8 @@
 			<string>http://www.geojson.org</string>
 			<key>UTTypeDescription</key>
 			<string>GeoJSON</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/json.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.json</string>
@@ -862,6 +888,8 @@
 			<string>http://www.naviter.com</string>
 			<key>UTTypeDescription</key>
 			<string>SeeYou CUP File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/cup.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -883,6 +911,8 @@
 			<string>http://www.garmin.com</string>
 			<key>UTTypeDescription</key>
 			<string>Garmin POI File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/gpi.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -904,6 +934,8 @@
 			<string>https://www.suunto.com</string>
 			<key>UTTypeDescription</key>
 			<string>Suunto Markup Language</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/sml.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.xml</string>
@@ -969,6 +1001,8 @@
 			<string>https://sourceforge.net/projects/garmin-img/</string>
 			<key>UTTypeDescription</key>
 			<string>Garmin IMG map</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/img.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -990,6 +1024,8 @@
 			<string>http://whiter.brinkster.net/en/JNX.shtml</string>
 			<key>UTTypeDescription</key>
 			<string>Garmin JNX Map</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/jnx.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1011,6 +1047,8 @@
 			<string>https://sourceforge.net/projects/garmin-img/</string>
 			<key>UTTypeDescription</key>
 			<string>Garmin Map Product File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/img.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.xml</string>
@@ -1032,6 +1070,8 @@
 			<string>http://libbsb.sourceforge.net/bsb_file_format.html</string>
 			<key>UTTypeDescription</key>
 			<string>BSB Nautical Charts</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/kap.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.image</string>
@@ -1054,6 +1094,8 @@
 			<string>https://www.oziexplorer3.com/eng/help/map_file_format.html</string>
 			<key>UTTypeDescription</key>
 			<string>OziExplorer Map File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/map.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1075,6 +1117,8 @@
 			<string>https://github.com/mapbox/mbtiles-spec</string>
 			<key>UTTypeDescription</key>
 			<string>MBTiles Map File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/mbts.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1096,6 +1140,8 @@
 			<string>https://wiki.openstreetmap.org/wiki/TwoNav_RMAP</string>
 			<key>UTTypeDescription</key>
 			<string>TwoNav Raster Map File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/rmap.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1118,6 +1164,8 @@
 			<string>https://github.com/kruhc/trekbuddy</string>
 			<key>UTTypeDescription</key>
 			<string>TrekBuddy Atlas</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/tba.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1139,6 +1187,8 @@
 			<string>https://svn.code.sf.net/p/mobac/code/trunk/MOBAC</string>
 			<key>UTTypeDescription</key>
 			<string>AlpineQuest Map File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/aqm.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1160,6 +1210,8 @@
 			<string>https://svn.code.sf.net/p/mobac/code/trunk/MOBAC</string>
 			<key>UTTypeDescription</key>
 			<string>RMaps SQLite Map File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/sqlt.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1204,6 +1256,8 @@
 			<string>https://www.tomtom.com/lib/doc/ttnavsdk3_manual.pdf</string>
 			<key>UTTypeDescription</key>
 			<string>TomTom POI File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/ov2.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1225,6 +1279,8 @@
 			<string>https://www.tomtom.com/lib/doc/ttnavsdk3_manual.pdf</string>
 			<key>UTTypeDescription</key>
 			<string>TomTom Route File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/itn.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1246,6 +1302,8 @@
 			<string>http://webhelp.esri.com/arcims/9.3/General/topics/author_world_files.htm</string>
 			<key>UTTypeDescription</key>
 			<string>ESRI World File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/wld.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1271,6 +1329,8 @@
 			<string>https://github.com/ColinPitrat/kalenji-gps-watch-reader</string>
 			<key>UTTypeDescription</key>
 			<string>ONmove Log File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/omd.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1292,6 +1352,8 @@
 			<string>https://github.com/ColinPitrat/kalenji-gps-watch-reader</string>
 			<key>UTTypeDescription</key>
 			<string>ONmove Log File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/ghp.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
