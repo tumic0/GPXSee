@@ -16,15 +16,16 @@ class RasterTile
 {
 public:
 	RasterTile(const Projection &proj, const Transform &transform, int zoom,
-	  const QRect &rect, qreal ratio, const QString &key,
-	  const QList<MapData::Path> &paths, const QList<MapData::Point> &points)
-	  : _proj(proj), _transform(transform), _zoom(zoom), _rect(rect),
-	  _ratio(ratio), _key(key), _pixmap(rect.width() * ratio,
-	  rect.height() * ratio), _paths(paths), _points(points) {}
+	  const QRect &rect, qreal ratio, const QList<MapData::Path> &paths,
+	  const QList<MapData::Point> &points) : _proj(proj), _transform(transform),
+	  _zoom(zoom), _rect(rect), _ratio(ratio),
+	  _pixmap(rect.width() * ratio, rect.height() * ratio), _paths(paths),
+	  _points(points), _valid(false) {}
 
-	const QString &key() const {return _key;}
+	int zoom() const {return _zoom;}
 	QPoint xy() const {return _rect.topLeft();}
 	const QPixmap &pixmap() const {return _pixmap;}
+	bool isValid() const {return _valid;}
 
 	void render();
 
@@ -84,10 +85,10 @@ private:
 	int _zoom;
 	QRect _rect;
 	qreal _ratio;
-	QString _key;
 	QPixmap _pixmap;
 	QList<MapData::Path> _paths;
 	QList<MapData::Point> _points;
+	bool _valid;
 };
 
 inline HASH_T qHash(const RasterTile::Key &key)

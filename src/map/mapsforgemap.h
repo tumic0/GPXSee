@@ -26,26 +26,14 @@ public:
 		_future = QtConcurrent::map(_tiles, &Mapsforge::RasterTile::render);
 		_watcher.setFuture(_future);
 	}
+	void cancel() {_future.cancel();}
+	const QList<Mapsforge::RasterTile> &tiles() const {return _tiles;}
 
 signals:
-	void finished(const QList<Mapsforge::RasterTile> &);
+	void finished(MapsforgeMapJob *job);
 
 private slots:
-	void handleFinished()
-	{
-		for (int i = 0; i < _tiles.size(); i++) {
-			Mapsforge::RasterTile &mt = _tiles[i];
-			const QPixmap &pm = mt.pixmap();
-			if (pm.isNull())
-				continue;
-
-			QPixmapCache::insert(mt.key(), pm);
-		}
-
-		emit finished(_tiles);
-
-		deleteLater();
-	}
+	void handleFinished() {emit finished(this);}
 
 private:
 	QFutureWatcher<void> _watcher;
@@ -85,14 +73,15 @@ public:
 	QString errorString() const {return _data.errorString();}
 
 private slots:
-	void jobFinished(const QList<Mapsforge::RasterTile> &tiles);
+	void jobFinished(MapsforgeMapJob *job);
 
 private:
 	Transform transform(int zoom) const;
 	void updateTransform();
-	bool isRunning(const QString &key) const;
-	void addRunning(const QList<Mapsforge::RasterTile> &tiles);
-	void removeRunning(const QList<Mapsforge::RasterTile> &tiles);
+	bool isRunning(int zoom, const QPoint &xy) const;
+	void runJob(MapsforgeMapJob *job);
+	void removeJob(MapsforgeMapJob *job);
+	void cancelJobs();
 
 	Mapsforge::MapData _data;
 	int _zoom;
@@ -102,7 +91,7 @@ private:
 	QRectF _bounds;
 	qreal _tileRatio;
 
-	QSet<QString> _running;
+	QList<MapsforgeMapJob*> _jobs;
 };
 
 #endif // MAPSFORGEMAP_H

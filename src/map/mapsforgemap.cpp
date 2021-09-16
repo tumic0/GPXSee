@@ -60,6 +60,8 @@ int MapsforgeMap::zoomFit(const QSize &size, const RectC &rect)
 
 int MapsforgeMap::zoomIn()
 {
+	cancelJobs();
+
 	_zoom = qMin(_zoom + 1, _data.zooms().max());
 	updateTransform();
 	return _zoom;
@@ -67,6 +69,8 @@ int MapsforgeMap::zoomIn()
 
 int MapsforgeMap::zoomOut()
 {
+	cancelJobs();
+
 	_zoom = qMax(_zoom - 1, _data.zooms().min());
 	updateTransform();
 	return _zoom;
@@ -101,27 +105,57 @@ void MapsforgeMap::updateTransform()
 		_bounds.adjust(0.5, 0, -0.5, 0);
 }
 
-bool MapsforgeMap::isRunning(const QString &key) const
+bool MapsforgeMap::isRunning(int zoom, const QPoint &xy) const
 {
-	return _running.contains(key);
+	for (int i = 0; i < _jobs.size(); i++) {
+		const QList<Mapsforge::RasterTile> &tiles = _jobs.at(i)->tiles();
+		for (int j = 0; j < tiles.size(); j++) {
+			const Mapsforge::RasterTile &mt = tiles.at(j);
+			if (mt.zoom() == zoom && mt.xy() == xy)
+				return true;
+		}
+	}
+
+	return false;
 }
 
-void MapsforgeMap::addRunning(const QList<RasterTile> &tiles)
+void MapsforgeMap::runJob(MapsforgeMapJob *job)
 {
-	for (int i = 0; i < tiles.size(); i++)
-		_running.insert(tiles.at(i).key());
+	_jobs.append(job);
+
+	connect(job, &MapsforgeMapJob::finished, this, &MapsforgeMap::jobFinished);
+	job->run();
 }
 
-void MapsforgeMap::removeRunning(const QList<RasterTile> &tiles)
+void MapsforgeMap::removeJob(MapsforgeMapJob *job)
 {
-	for (int i = 0; i < tiles.size(); i++)
-		_running.remove(tiles.at(i).key());
+	_jobs.removeOne(job);
+	job->deleteLater();
 }
 
-void MapsforgeMap::jobFinished(const QList<RasterTile> &tiles)
+void MapsforgeMap::jobFinished(MapsforgeMapJob *job)
 {
-	removeRunning(tiles);
+	const QList<Mapsforge::RasterTile> &tiles = job->tiles();
+
+	for (int i = 0; i < tiles.size(); i++) {
+		const Mapsforge::RasterTile &mt = tiles.at(i);
+		if (!mt.isValid())
+			continue;
+
+		QString key = path() + "-" + QString::number(mt.zoom()) + "_"
+		  + QString::number(mt.xy().x()) + "_" + QString::number(mt.xy().y());
+		QPixmapCache::insert(key, mt.pixmap());
+	}
+
+	removeJob(job);
+
 	emit tilesLoaded();
+}
+
+void MapsforgeMap::cancelJobs()
+{
+	for (int i = 0; i < _jobs.size(); i++)
+		_jobs.at(i)->cancel();
 }
 
 void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
@@ -138,14 +172,14 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
-			QPixmap pm;
 			QPoint ttl(tl.x() + i * _data.tileSize(), tl.y() + j
 			  * _data.tileSize());
+			if (isRunning(_zoom, ttl))
+				continue;
+
+			QPixmap pm;
 			QString key = path() + "-" + QString::number(_zoom) + "_"
 			  + QString::number(ttl.x()) + "_" + QString::number(ttl.y());
-
-			if (isRunning(key))
-				continue;
 
 			if (QPixmapCache::find(key, &pm))
 				painter->drawPixmap(ttl, pm);
@@ -175,18 +209,13 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 				tiles.append(RasterTile(_projection, _transform, _zoom,
 				  QRect(ttl, QSize(_data.tileSize(), _data.tileSize())),
-				  _tileRatio, key, paths, points));
+				  _tileRatio, paths, points));
 			}
 		}
 	}
 
-	if (!tiles.isEmpty()) {
-		MapsforgeMapJob *job = new MapsforgeMapJob(tiles);
-		connect(job, &MapsforgeMapJob::finished, this,
-		  &MapsforgeMap::jobFinished);
-		addRunning(tiles);
-		job->run();
-	}
+	if (!tiles.isEmpty())
+		runJob(new MapsforgeMapJob(tiles));
 }
 
 void MapsforgeMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)

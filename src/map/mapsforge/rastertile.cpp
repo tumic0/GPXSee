@@ -344,4 +344,6 @@ void RasterTile::render()
 	//painter.drawRect(QRect(_rect.topLeft(), _pixmap.size()));
 
 	qDeleteAll(textItems);
+
+	_valid = true;
 }
