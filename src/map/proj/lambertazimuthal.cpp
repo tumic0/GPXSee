@@ -1,5 +1,5 @@
 #include <cmath>
-#include "ellipsoid.h"
+#include "map/ellipsoid.h"
 #include "lambertazimuthal.h"
 
 #define sin2(x) (sin(x) * sin(x))

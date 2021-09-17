@@ -1,7 +1,7 @@
 #ifndef OBLIQUESTEREOGRAPHIC_H
 #define OBLIQUESTEREOGRAPHIC_H
 
-#include "ct.h"
+#include "map/ct.h"
 
 class Ellipsoid;
 

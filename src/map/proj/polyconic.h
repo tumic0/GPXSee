@@ -1,7 +1,7 @@
 #ifndef POLYCONIC_H
 #define POLYCONIC_H
 
-#include "ct.h"
+#include "map/ct.h"
 
 class Ellipsoid;
 

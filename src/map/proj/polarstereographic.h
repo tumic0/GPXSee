@@ -1,7 +1,7 @@
 #ifndef POLARSTEREOGRAPHIC_H
 #define POLARSTEREOGRAPHIC_H
 
-#include "ct.h"
+#include "map/ct.h"
 
 class Ellipsoid;
 

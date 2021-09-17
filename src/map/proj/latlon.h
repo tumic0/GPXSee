@@ -1,8 +1,8 @@
 #ifndef LATLON_H
 #define LATLON_H
 
-#include "ct.h"
-#include "angularunits.h"
+#include "map/ct.h"
+#include "map/angularunits.h"
 
 class LatLon : public CT
 {

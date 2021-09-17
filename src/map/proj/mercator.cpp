@@ -41,7 +41,7 @@ Defense.
 
 */
 
-#include "ellipsoid.h"
+#include "map/ellipsoid.h"
 #include "mercator.h"
 
 Mercator::Mercator(const Ellipsoid &ellipsoid, double latitudeOrigin,

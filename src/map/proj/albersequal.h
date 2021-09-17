@@ -1,7 +1,7 @@
 #ifndef ALBERSEQUAL_H
 #define ALBERSEQUAL_H
 
-#include "ct.h"
+#include "map/ct.h"
 
 class Ellipsoid;
 

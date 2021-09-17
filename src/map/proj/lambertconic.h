@@ -1,7 +1,7 @@
 #ifndef LAMBERTCONIC_H
 #define LAMBERTCONIC_H
 
-#include "ct.h"
+#include "map/ct.h"
 
 class Ellipsoid;
 

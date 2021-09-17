@@ -1,7 +1,7 @@
 #ifndef WEBMERCATOR_H
 #define WEBMERCATOR_H
 
-#include "ct.h"
+#include "map/ct.h"
 
 class WebMercator : public CT
 {

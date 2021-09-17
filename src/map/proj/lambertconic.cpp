@@ -42,7 +42,7 @@ Defense.
 */
 
 #include <cmath>
-#include "ellipsoid.h"
+#include "map/ellipsoid.h"
 #include "lambertconic.h"
 
 

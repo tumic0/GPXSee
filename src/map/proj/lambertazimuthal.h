@@ -1,7 +1,7 @@
 #ifndef LAMBERTAZIMUTHAL_H
 #define LAMBERTAZIMUTHAL_H
 
-#include "ct.h"
+#include "map/ct.h"
 
 class Ellipsoid;
 

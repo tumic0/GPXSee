@@ -18,20 +18,6 @@ greaterThan(QT_MAJOR_VERSION, 5) {QT += openglwidgets}
 CONFIG += object_parallel_to_source
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
-    src/GUI/authenticationwidget.h \
-    src/GUI/axislabelitem.h \
-    src/GUI/dirselectwidget.h \
-    src/GUI/flowlayout.h \
-    src/GUI/graphicsscene.h \
-    src/GUI/infolabel.h \
-    src/GUI/mapaction.h \
-    src/GUI/mapitem.h \
-    src/GUI/marginswidget.h \
-    src/GUI/markerinfoitem.h \
-    src/GUI/planeitem.h \
-    src/GUI/poiaction.h \
-    src/GUI/popup.h \
-    src/GUI/thumbnail.h \
     src/common/garmin.h \
     src/common/coordinates.h \
     src/common/range.h \
@@ -46,6 +32,21 @@ HEADERS += src/common/config.h \
     src/common/programpaths.h \
     src/common/tifffile.h \
     src/common/downloader.h \
+    src/common/polygon.h \
+    src/GUI/authenticationwidget.h \
+    src/GUI/axislabelitem.h \
+    src/GUI/dirselectwidget.h \
+    src/GUI/flowlayout.h \
+    src/GUI/graphicsscene.h \
+    src/GUI/infolabel.h \
+    src/GUI/mapaction.h \
+    src/GUI/mapitem.h \
+    src/GUI/marginswidget.h \
+    src/GUI/markerinfoitem.h \
+    src/GUI/planeitem.h \
+    src/GUI/poiaction.h \
+    src/GUI/popup.h \
+    src/GUI/thumbnail.h \
     src/GUI/app.h \
     src/GUI/icons.h \
     src/GUI/gui.h \
@@ -96,10 +97,23 @@ HEADERS += src/common/config.h \
     src/GUI/mapview.h \
     src/GUI/font.h \
     src/GUI/areaitem.h \
-    src/data/itnparser.h \
-    src/data/link.h \
-    src/data/onmoveparsers.h \
-    src/data/ov2parser.h \
+    src/GUI/coordinatesitem.h \
+    src/GUI/projectioncombobox.h \
+    src/GUI/pathtickitem.h \
+    src/GUI/pdfexportdialog.h \
+    src/GUI/pngexportdialog.h \
+    src/GUI/timezoneinfo.h \
+    src/map/proj/polyconic.h \
+    src/map/proj/webmercator.h \
+    src/map/proj/transversemercator.h \
+    src/map/proj/latlon.h \
+    src/map/proj/lambertconic.h \
+    src/map/proj/lambertazimuthal.h \
+    src/map/proj/albersequal.h \
+    src/map/proj/mercator.h \
+    src/map/proj/krovak.h \
+    src/map/proj/polarstereographic.h \
+    src/map/proj/obliquestereographic.h \
     src/map/IMG/bitmapline.h \
     src/map/IMG/bitstream.h \
     src/map/IMG/deltastream.h \
@@ -113,28 +127,31 @@ HEADERS += src/common/config.h \
     src/map/IMG/raster.h \
     src/map/IMG/rastertile.h \
     src/map/IMG/shield.h \
+    src/map/IMG/imgdata.h \
+    src/map/IMG/subfile.h \
+    src/map/IMG/trefile.h \
+    src/map/IMG/rgnfile.h \
+    src/map/IMG/lblfile.h \
+    src/map/IMG/vectortile.h \
+    src/map/IMG/subdiv.h \
+    src/map/IMG/style.h \
+    src/map/IMG/netfile.h \
+    src/map/IMG/label.h \
     src/map/mapsforge/style.h \
-    src/map/prjfile.h \
-    src/map/textpathitem.h \
-    src/map/textpointitem.h \
     src/map/mapsforge/mapdata.h \
     src/map/mapsforge/rastertile.h \
     src/map/mapsforge/subfile.h \
+    src/map/textpathitem.h \
+    src/map/textpointitem.h \
+    src/map/prjfile.h \
     src/map/bsbmap.h \
     src/map/invalidmap.h \
     src/map/kmzmap.h \
-    src/map/polyconic.h \
     src/map/projection.h \
     src/map/ellipsoid.h \
     src/map/datum.h \
     src/map/sqlitemap.h \
-    src/map/webmercator.h \
-    src/map/transversemercator.h \
-    src/map/latlon.h \
     src/map/utm.h \
-    src/map/lambertconic.h \
-    src/map/lambertazimuthal.h \
-    src/map/albersequal.h \
     src/map/map.h \
     src/map/maplist.h \
     src/map/onlinemap.h \
@@ -166,14 +183,23 @@ HEADERS += src/common/config.h \
     src/map/pointd.h \
     src/map/rectd.h \
     src/map/geocentric.h \
-    src/map/mercator.h \
     src/map/jnxmap.h \
-    src/map/krovak.h \
     src/map/geotiffmap.h \
     src/map/image.h \
     src/map/mbtilesmap.h \
     src/map/osm.h \
-    src/map/polarstereographic.h \
+    src/map/rmap.h \
+    src/map/calibrationpoint.h \
+    src/map/color.h \
+    src/map/textitem.h \
+    src/map/aqmmap.h \
+    src/map/mapsforgemap.h \
+    src/map/worldfilemap.h \
+    src/map/imgmap.h \
+    src/data/itnparser.h \
+    src/data/link.h \
+    src/data/onmoveparsers.h \
+    src/data/ov2parser.h \
     src/data/graph.h \
     src/data/poi.h \
     src/data/waypoint.h \
@@ -197,43 +223,26 @@ HEADERS += src/common/config.h \
     src/data/slfparser.h \
     src/data/dem.h \
     src/data/demloader.h \
-    src/common/polygon.h \
     src/data/area.h \
-    src/map/obliquestereographic.h \
-    src/GUI/coordinatesitem.h \
-    src/map/rmap.h \
-    src/map/calibrationpoint.h \
-    src/map/color.h \
     src/data/exifparser.h \
     src/data/imageinfo.h \
-    src/map/imgmap.h \
-    src/map/IMG/imgdata.h \
-    src/map/IMG/subfile.h \
-    src/map/IMG/trefile.h \
-    src/map/IMG/rgnfile.h \
-    src/map/IMG/lblfile.h \
-    src/map/IMG/vectortile.h \
-    src/map/IMG/subdiv.h \
-    src/map/IMG/style.h \
-    src/map/IMG/netfile.h \
-    src/GUI/projectioncombobox.h \
-    src/GUI/pathtickitem.h \
-    src/map/textitem.h \
-    src/map/IMG/label.h \
     src/data/csv.h \
     src/data/cupparser.h \
     src/data/gpiparser.h \
     src/data/address.h \
     src/data/smlparser.h \
-    src/GUI/pdfexportdialog.h \
-    src/GUI/pngexportdialog.h \
-    src/data/geojsonparser.h \
-    src/GUI/timezoneinfo.h \
-    src/map/aqmmap.h \
-    src/map/mapsforgemap.h \
-    src/map/worldfilemap.h
+    src/data/geojsonparser.h
 
 SOURCES += src/main.cpp \
+    src/common/coordinates.cpp \
+    src/common/rectc.cpp \
+    src/common/range.cpp \
+    src/common/textcodec.cpp \
+    src/common/util.cpp \
+    src/common/greatcircle.cpp \
+    src/common/programpaths.cpp \
+    src/common/tifffile.cpp \
+    src/common/downloader.cpp \
     src/GUI/authenticationwidget.cpp \
     src/GUI/axislabelitem.cpp \
     src/GUI/dirselectwidget.cpp \
@@ -244,15 +253,6 @@ SOURCES += src/main.cpp \
     src/GUI/markerinfoitem.cpp \
     src/GUI/popup.cpp \
     src/GUI/thumbnail.cpp \
-    src/common/coordinates.cpp \
-    src/common/rectc.cpp \
-    src/common/range.cpp \
-    src/common/textcodec.cpp \
-    src/common/util.cpp \
-    src/common/greatcircle.cpp \
-    src/common/programpaths.cpp \
-    src/common/tifffile.cpp \
-    src/common/downloader.cpp \
     src/GUI/app.cpp \
     src/GUI/gui.cpp \
     src/GUI/axisitem.cpp \
@@ -294,11 +294,22 @@ SOURCES += src/main.cpp \
     src/GUI/gearratiographitem.cpp \
     src/GUI/mapview.cpp \
     src/GUI/areaitem.cpp \
-    src/data/address.cpp \
-    src/data/itnparser.cpp \
-    src/data/onmoveparsers.cpp \
-    src/data/ov2parser.cpp \
-    src/data/waypoint.cpp \
+    src/GUI/coordinatesitem.cpp \
+    src/GUI/pathtickitem.cpp \
+    src/GUI/graphicsscene.cpp \
+    src/GUI/pdfexportdialog.cpp \
+    src/GUI/pngexportdialog.cpp \
+    src/GUI/projectioncombobox.cpp \
+    src/map/proj/polyconic.cpp \
+    src/map/proj/webmercator.cpp \
+    src/map/proj/transversemercator.cpp \
+    src/map/proj/lambertconic.cpp \
+    src/map/proj/albersequal.cpp \
+    src/map/proj/lambertazimuthal.cpp \
+    src/map/proj/mercator.cpp \
+    src/map/proj/krovak.cpp \
+    src/map/proj/polarstereographic.cpp \
+    src/map/proj/obliquestereographic.cpp \
     src/map/IMG/bitmapline.cpp \
     src/map/IMG/bitstream.cpp \
     src/map/IMG/deltastream.cpp \
@@ -310,20 +321,28 @@ SOURCES += src/main.cpp \
     src/map/IMG/nodfile.cpp \
     src/map/IMG/mapdata.cpp \
     src/map/IMG/rastertile.cpp \
+    src/map/IMG/imgdata.cpp \
+    src/map/IMG/subfile.cpp \
+    src/map/IMG/trefile.cpp \
+    src/map/IMG/rgnfile.cpp \
+    src/map/IMG/lblfile.cpp \
+    src/map/IMG/vectortile.cpp \
+    src/map/IMG/style.cpp \
+    src/map/IMG/netfile.cpp \
     src/map/mapsforge/style.cpp \
-    src/map/prjfile.cpp \
-    src/map/textpathitem.cpp \
-    src/map/textpointitem.cpp \
     src/map/mapsforge/mapdata.cpp \
     src/map/mapsforge/rastertile.cpp \
     src/map/mapsforge/subfile.cpp \
+    src/map/imgmap.cpp \
+    src/map/prjfile.cpp \
+    src/map/textpathitem.cpp \
+    src/map/textpointitem.cpp \
     src/map/bsbmap.cpp \
     src/map/kmzmap.cpp \
     src/map/maplist.cpp \
     src/map/onlinemap.cpp \
     src/map/emptymap.cpp \
     src/map/ozimap.cpp \
-    src/map/polyconic.cpp \
     src/map/sqlitemap.cpp \
     src/map/tar.cpp \
     src/map/atlas.cpp \
@@ -331,12 +350,7 @@ SOURCES += src/main.cpp \
     src/map/matrix.cpp \
     src/map/ellipsoid.cpp \
     src/map/datum.cpp \
-    src/map/webmercator.cpp \
-    src/map/transversemercator.cpp \
     src/map/utm.cpp \
-    src/map/lambertconic.cpp \
-    src/map/albersequal.cpp \
-    src/map/lambertazimuthal.cpp \
     src/map/geotiff.cpp \
     src/map/pcs.cpp \
     src/map/transform.cpp \
@@ -356,16 +370,23 @@ SOURCES += src/main.cpp \
     src/map/crs.cpp \
     src/map/coordinatesystem.cpp \
     src/map/geocentric.cpp \
-    src/map/mercator.cpp \
     src/map/jnxmap.cpp \
-    src/map/krovak.cpp \
     src/map/map.cpp \
     src/map/geotiffmap.cpp \
     src/map/image.cpp \
     src/map/mbtilesmap.cpp \
     src/map/osm.cpp \
-    src/map/polarstereographic.cpp \
     src/map/rectd.cpp \
+    src/map/rmap.cpp \
+    src/map/textitem.cpp \
+    src/map/aqmmap.cpp \
+    src/map/mapsforgemap.cpp \
+    src/map/worldfilemap.cpp \
+    src/data/address.cpp \
+    src/data/itnparser.cpp \
+    src/data/onmoveparsers.cpp \
+    src/data/ov2parser.cpp \
+    src/data/waypoint.cpp \
     src/data/data.cpp \
     src/data/poi.cpp \
     src/data/track.cpp \
@@ -383,33 +404,12 @@ SOURCES += src/main.cpp \
     src/data/slfparser.cpp \
     src/data/dem.cpp \
     src/data/demloader.cpp \
-    src/map/obliquestereographic.cpp \
-    src/GUI/coordinatesitem.cpp \
-    src/map/rmap.cpp \
     src/data/exifparser.cpp \
-    src/map/imgmap.cpp \
-    src/map/IMG/imgdata.cpp \
-    src/map/IMG/subfile.cpp \
-    src/map/IMG/trefile.cpp \
-    src/map/IMG/rgnfile.cpp \
-    src/map/IMG/lblfile.cpp \
-    src/map/IMG/vectortile.cpp \
-    src/map/IMG/style.cpp \
-    src/map/IMG/netfile.cpp \
-    src/GUI/pathtickitem.cpp \
-    src/map/textitem.cpp \
     src/data/csv.cpp \
     src/data/cupparser.cpp \
-    src/GUI/graphicsscene.cpp \
     src/data/gpiparser.cpp \
     src/data/smlparser.cpp \
-    src/GUI/pdfexportdialog.cpp \
-    src/GUI/pngexportdialog.cpp \
-    src/data/geojsonparser.cpp \
-    src/map/aqmmap.cpp \
-    src/map/mapsforgemap.cpp \
-    src/map/worldfilemap.cpp \
-    src/GUI/projectioncombobox.cpp
+    src/data/geojsonparser.cpp
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     QT_NO_DEPRECATED_WARNINGS

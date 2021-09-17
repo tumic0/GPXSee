@@ -1,4 +1,4 @@
-#include "ellipsoid.h"
+#include "map/ellipsoid.h"
 #include "krovak.h"
 
 Krovak::Krovak(const Ellipsoid &ellipsoid, double standardParallel,

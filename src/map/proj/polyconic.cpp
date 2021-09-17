@@ -41,7 +41,7 @@ Defense.
 
 */
 
-#include "ellipsoid.h"
+#include "map/ellipsoid.h"
 #include "polyconic.h"
 
 #define POLY_COEFF_TIMES_SIN(coeff, x, latit) \
