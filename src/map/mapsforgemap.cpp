@@ -105,6 +105,12 @@ void MapsforgeMap::updateTransform()
 		_bounds.adjust(0.5, 0, -0.5, 0);
 }
 
+QString MapsforgeMap::key(int zoom, const QPoint &xy) const
+{
+	return path() + "-" + QString::number(zoom) + "_"
+	  + QString::number(xy.x()) + "_" + QString::number(xy.y());
+}
+
 bool MapsforgeMap::isRunning(int zoom, const QPoint &xy) const
 {
 	for (int i = 0; i < _jobs.size(); i++) {
@@ -139,12 +145,8 @@ void MapsforgeMap::jobFinished(MapsforgeMapJob *job)
 
 	for (int i = 0; i < tiles.size(); i++) {
 		const Mapsforge::RasterTile &mt = tiles.at(i);
-		if (!mt.isValid())
-			continue;
-
-		QString key = path() + "-" + QString::number(mt.zoom()) + "_"
-		  + QString::number(mt.xy().x()) + "_" + QString::number(mt.xy().y());
-		QPixmapCache::insert(key, mt.pixmap());
+		if (mt.isValid())
+			QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
 	}
 
 	removeJob(job);
@@ -178,10 +180,7 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				continue;
 
 			QPixmap pm;
-			QString key = path() + "-" + QString::number(_zoom) + "_"
-			  + QString::number(ttl.x()) + "_" + QString::number(ttl.y());
-
-			if (QPixmapCache::find(key, &pm))
+			if (QPixmapCache::find(key(_zoom, ttl), &pm))
 				painter->drawPixmap(ttl, pm);
 			else {
 				QList<MapData::Path> paths;

@@ -15,14 +15,13 @@ class MapsforgeMapJob : public QObject
 	Q_OBJECT
 
 public:
-	MapsforgeMapJob(const QList<Mapsforge::RasterTile> &tiles) : _tiles(tiles)
-	{
-		connect(&_watcher, &QFutureWatcher<void>::finished, this,
-		  &MapsforgeMapJob::handleFinished);
-	}
+	MapsforgeMapJob(const QList<Mapsforge::RasterTile> &tiles)
+	  : _tiles(tiles) {}
 
 	void run()
 	{
+		connect(&_watcher, &QFutureWatcher<void>::finished, this,
+		  &MapsforgeMapJob::handleFinished);
 		_future = QtConcurrent::map(_tiles, &Mapsforge::RasterTile::render);
 		_watcher.setFuture(_future);
 	}
@@ -76,6 +75,7 @@ private slots:
 	void jobFinished(MapsforgeMapJob *job);
 
 private:
+	QString key(int zoom, const QPoint &xy) const;
 	Transform transform(int zoom) const;
 	void updateTransform();
 	bool isRunning(int zoom, const QPoint &xy) const;
