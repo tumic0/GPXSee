@@ -50,9 +50,9 @@ licenses:
 * [Oxygen icons](icons/GUI) - LGPLv3
 * [Mapbox Maki icons](icons/POI) - CC0
 * [RTree implementation](src/common/rtree.h) - Public domain
-* [Albers](src/map/albersequal.cpp), [Geocentric](src/map/geocentric.cpp), [LCC](src/map/lambertconic.cpp),
-  [Mercator](src/map/mercator.cpp), [Polar Stereographic](src/map/polarstereographic.cpp),
-  [Polyconic](src/map/polyconic.cpp) and [Transverse Mercator](src/map/transversemercator.cpp)
+* [Albers](src/map/proj/albersequal.cpp), [Geocentric](src/map/geocentric.cpp), [LCC](src/map/proj/lambertconic.cpp),
+  [Mercator](src/map/proj/mercator.cpp), [Polar Stereographic](src/map/proj/polarstereographic.cpp),
+  [Polyconic](src/map/proj/polyconic.cpp) and [Transverse Mercator](src/map/proj/transversemercator.cpp)
   projections - NIMA Source Code Disclaimer
 * [Projection parameters CSV files](pkg/csv) - BSD/EPSG/Public domain
 * [Mapsforge render theme](data/default.xml) and its [icons](icons/mapsforge) - LGPLv3
