@@ -45,8 +45,12 @@
 		<file alias="applications-internet_32@2x.png">icons/GUI/applications-internet_32@2x.png</file>
 		<file alias="view-grid.png">icons/GUI/view-grid.png</file>
 		<file alias="view-grid@2x.png">icons/GUI/view-grid@2x.png</file>
+		<file alias="document-decrypt.png">icons/GUI/document-decrypt.png</file>
+		<file alias="document-decrypt@2x.png">icons/GUI/document-decrypt.png</file>
+		<file alias="document-encrypt.png">icons/GUI/document-encrypt.png</file>
+		<file alias="document-encrypt@2x.png">icons/GUI/document-encrypt.png</file>
 	</qresource>
-	
+
 	<!-- POI icons for default IMG map style -->
 	<qresource prefix="/POI">
 		<file alias="airfield-11.png">icons/POI/airfield-11.png</file>

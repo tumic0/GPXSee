@@ -4,7 +4,7 @@
 AuthenticationWidget::AuthenticationWidget(QWidget *parent) : QWidget(parent)
 {
 	_username = new QLineEdit();
-	_password = new QLineEdit();
+	_password = new PasswordEdit();
 
 	QFormLayout *layout = new QFormLayout();
 	layout->addRow(tr("Username:"), _username);

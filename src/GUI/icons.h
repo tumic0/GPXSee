@@ -28,4 +28,7 @@
 #define MAPS_ICON         ":/applications-internet_32.png"
 #define DEM_ICON          ":/view-grid.png"
 
+#define SHOW_PWD_ICON     ":/document-encrypt.png"
+#define HIDE_PWD_ICON     ":/document-decrypt.png"
+
 #endif /* ICONS_H */

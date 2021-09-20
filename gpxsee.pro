@@ -18,6 +18,7 @@ greaterThan(QT_MAJOR_VERSION, 5) {QT += openglwidgets}
 CONFIG += object_parallel_to_source
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
+    src/GUI/passwordedit.h \
     src/common/garmin.h \
     src/common/coordinates.h \
     src/common/range.h \
@@ -234,6 +235,7 @@ HEADERS += src/common/config.h \
     src/data/geojsonparser.h
 
 SOURCES += src/main.cpp \
+    src/GUI/passwordedit.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
     src/common/range.cpp \

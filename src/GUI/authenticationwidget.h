@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QLineEdit>
+#include "passwordedit.h"
 
 class AuthenticationWidget : public QWidget
 {
@@ -18,7 +19,8 @@ public:
 	void setPassword(const QString &password) {_password->setText(password);}
 
 private:
-	QLineEdit *_username, *_password;
+	QLineEdit *_username;
+	PasswordEdit *_password;
 };
 
 #endif // AUTHENTICATIONWIDGET_H
