@@ -8,6 +8,7 @@
 #include "nodfile.h"
 #include "rgnfile.h"
 
+using namespace Garmin;
 using namespace IMG;
 
 #define MASK(bits) ((1U << (bits)) - 1U)

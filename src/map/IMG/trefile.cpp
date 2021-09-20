@@ -2,6 +2,7 @@
 #include "subdiv.h"
 #include "trefile.h"
 
+using namespace Garmin;
 using namespace IMG;
 
 static inline double RB(qint32 val)

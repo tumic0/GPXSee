@@ -13,6 +13,7 @@
 #include "address.h"
 #include "gpiparser.h"
 
+using namespace Garmin;
 
 struct RecordHeader {
 	quint16 type;

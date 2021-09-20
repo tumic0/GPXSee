@@ -1,6 +1,7 @@
 #include "bitstream.h"
 #include "nodfile.h"
 
+using namespace Garmin;
 using namespace IMG;
 
 #define ARRAY_SIZE(array) \

@@ -2,6 +2,7 @@
 #include "subfile.h"
 #include "huffmantext.h"
 
+using namespace Garmin;
 using namespace IMG;
 
 static inline quint32 readVUint32(const quint8 *buffer, quint32 bytes)

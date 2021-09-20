@@ -2,6 +2,7 @@
 #include "rgnfile.h"
 #include "lblfile.h"
 
+using namespace Garmin;
 using namespace IMG;
 
 enum Charset {Normal, Symbol, Special};

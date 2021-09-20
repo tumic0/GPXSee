@@ -20,8 +20,9 @@ public:
 	quint32 id() const {return _id;}
 	const RectC rect() const
 	{
-		return RectC(Coordinates(toWGS32(_rect.left()), toWGS32(_rect.top())),
-		  Coordinates(toWGS32(_rect.right()), toWGS32(_rect.bottom())));
+		return RectC(Coordinates(Garmin::toWGS32(_rect.left()),
+		  Garmin::toWGS32(_rect.top())), Coordinates(
+		  Garmin::toWGS32(_rect.right()), Garmin::toWGS32(_rect.bottom())));
 	}
 	bool isValid() const {return (_lbl != 0);}
 
