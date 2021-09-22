@@ -119,16 +119,14 @@ private:
 	void plotGraphsPage(QPainter *painter, const QRectF &rect, qreal ratio);
 	qreal graphPlotHeight(const QRectF &rect, qreal ratio);
 
-	TreeNode<POIAction*> createPOIActions();
 	TreeNode<POIAction*> createPOIActionsNode(const TreeNode<QString> &node);
-	TreeNode<MapAction*> createMapActions();
 	TreeNode<MapAction*> createMapActionsNode(const TreeNode<Map*> &node);
-	void createActions(TreeNode<MapAction*> &mapActions,
-	  TreeNode<POIAction*> &poiActions);
-	void createMapNodeMenu(const TreeNode<MapAction*> &node, QMenu *menu);
-	void createPOINodeMenu(const TreeNode<POIAction*> &node, QMenu *menu);
-	void createMenus(const TreeNode<MapAction*> &mapActions,
-	  const TreeNode<POIAction*> &poiActions);
+	void createMapNodeMenu(const TreeNode<MapAction*> &node, QMenu *menu,
+	  QAction *action = 0);
+	void createPOINodeMenu(const TreeNode<POIAction*> &node, QMenu *menu,
+	  QAction *action = 0);
+	void createActions();
+	void createMenus();
 	void createToolBars();
 	void createStatusBar();
 	void createMapView();
@@ -158,8 +156,11 @@ private:
 	qreal time() const;
 	qreal movingTime() const;
 	QAction *mapAction(const QString &name);
-	void readSettings();
+	void readSettings(QString &activeMap, QStringList &disabledPOIs);
 	void writeSettings();
+
+	void loadInitialMaps(const QString &selected);
+	void loadInitialPOIs(const QStringList &disabled);
 
 	void keyPressEvent(QKeyEvent *event);
 	void closeEvent(QCloseEvent *event);

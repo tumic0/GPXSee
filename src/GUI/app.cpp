@@ -5,7 +5,6 @@
 #include <QNetworkProxyFactory>
 #include <QNetworkAccessManager>
 #include <QLibraryInfo>
-#include <QSettings>
 #include <QSurfaceFormat>
 #include "common/programpaths.h"
 #include "common/config.h"
@@ -59,14 +58,6 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 
 	loadDatums();
 	loadPCSs();
-
-	QSettings settings(qApp->applicationName(), qApp->applicationName());
-	settings.beginGroup(OPTIONS_SETTINGS_GROUP);
-	Downloader::enableHTTP2(settings.value(ENABLE_HTTP2_SETTING,
-	  ENABLE_HTTP2_DEFAULT).toBool());
-	Downloader::setTimeout(settings.value(CONNECTION_TIMEOUT_SETTING,
-	  CONNECTION_TIMEOUT_DEFAULT).toInt());
-	settings.endGroup();
 
 	_gui = new GUI();
 }

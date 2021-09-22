@@ -18,7 +18,6 @@ greaterThan(QT_MAJOR_VERSION, 5) {QT += openglwidgets}
 CONFIG += object_parallel_to_source
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
-    src/GUI/passwordedit.h \
     src/common/garmin.h \
     src/common/coordinates.h \
     src/common/range.h \
@@ -104,6 +103,7 @@ HEADERS += src/common/config.h \
     src/GUI/pdfexportdialog.h \
     src/GUI/pngexportdialog.h \
     src/GUI/timezoneinfo.h \
+    src/GUI/passwordedit.h \
     src/map/proj/polyconic.h \
     src/map/proj/webmercator.h \
     src/map/proj/transversemercator.h \
@@ -235,7 +235,6 @@ HEADERS += src/common/config.h \
     src/data/geojsonparser.h
 
 SOURCES += src/main.cpp \
-    src/GUI/passwordedit.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
     src/common/range.cpp \
@@ -302,6 +301,7 @@ SOURCES += src/main.cpp \
     src/GUI/pdfexportdialog.cpp \
     src/GUI/pngexportdialog.cpp \
     src/GUI/projectioncombobox.cpp \
+    src/GUI/passwordedit.cpp \
     src/map/proj/polyconic.cpp \
     src/map/proj/webmercator.cpp \
     src/map/proj/transversemercator.cpp \
