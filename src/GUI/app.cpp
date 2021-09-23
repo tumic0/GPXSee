@@ -14,7 +14,6 @@
 #include "map/pcs.h"
 #include "data/dem.h"
 #include "gui.h"
-#include "settings.h"
 #include "mapaction.h"
 #include "app.h"
 
