@@ -293,6 +293,23 @@ void MapView::loadMaps(const QList<MapAction *> &maps)
 	centerOn(contentCenter());
 }
 
+void MapView::loadDEMs(const QList<Area> &dems)
+{
+	int zoom = _map->zoom();
+
+	for (int i = 0; i < dems.size(); i++)
+		addArea(dems.at(i));
+
+	if (fitMapZoom() != zoom)
+		rescale();
+	else
+		updatePOIVisibility();
+
+	updateZValues(_areas);
+
+	centerOn(contentCenter());
+}
+
 int MapView::fitMapZoom() const
 {
 	RectC br = _tr | _rr | _wr | _ar;

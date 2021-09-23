@@ -52,6 +52,7 @@ public:
 
 	QList<PathItem *> loadData(const Data &data);
 	void loadMaps(const QList<MapAction*> &maps);
+	void loadDEMs(const QList<Area> &dems);
 
 	void setPalette(const Palette &palette);
 	void setPOI(POI *poi);

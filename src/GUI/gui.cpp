@@ -384,6 +384,9 @@ void GUI::createActions()
 	_downloadDEMAction->setEnabled(false);
 	_downloadDEMAction->setShortcut(DOWNLOAD_DEM_SHORTCUT);
 	connect(_downloadDEMAction, &QAction::triggered, this, &GUI::downloadDEM);
+	_showDEMTilesAction = new QAction(tr("Show local DEM tiles"));
+	_showDEMTilesAction->setMenuRole(QAction::NoRole);
+	connect(_showDEMTilesAction, &QAction::triggered, this, &GUI::showDEMTiles);
 
 	// Graph actions
 	_showGraphsAction = new QAction(QIcon(SHOW_GRAPHS_ICON), tr("Show graphs"),
@@ -595,7 +598,7 @@ void GUI::createMenus()
 	_poiMenu->addAction(_showPOIAction);
 
 	QMenu *demMenu = menuBar()->addMenu(tr("DEM"));
-	demMenu->addSeparator();
+	demMenu->addAction(_showDEMTilesAction);
 	demMenu->addAction(_downloadDEMAction);
 
 	QMenu *settingsMenu = menuBar()->addMenu(tr("&Settings"));
@@ -1728,6 +1731,14 @@ void GUI::demLoaded()
 	DEM::clearCache();
 	_demRects.clear();
 	reloadFiles();
+}
+
+void GUI::showDEMTiles()
+{
+	_mapView->loadDEMs(DEM::tiles());
+
+	_fileActionGroup->setEnabled(true);
+	_reloadFileAction->setEnabled(false);
 }
 
 void GUI::updateStatusBarInfo()

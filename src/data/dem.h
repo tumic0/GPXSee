@@ -5,6 +5,7 @@
 #include <QCache>
 #include <QByteArray>
 #include "common/config.h"
+#include "area.h"
 
 class QString;
 class Coordinates;
@@ -36,6 +37,8 @@ public:
 	static void setDir(const QString &path);
 	static void clearCache();
 	static qreal elevation(const Coordinates &c);
+
+	static QList<Area> tiles();
 
 private:
 	static QString fileName(const QString &baseName);

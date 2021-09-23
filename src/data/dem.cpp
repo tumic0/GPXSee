@@ -15,6 +15,7 @@
 #include <QtMath>
 #include <QDir>
 #include <QFile>
+#include <QRegularExpression>
 #include <private/qzipreader_p.h>
 #include "common/rectc.h"
 #include "dem.h"
@@ -136,6 +137,36 @@ qreal DEM::elevation(const Coordinates &c)
 		}
 	} else
 		return height(c, ba);
+}
+
+QList<Area> DEM::tiles()
+{
+	QDir dir(_dir);
+	QFileInfoList files(dir.entryInfoList(QDir::Files | QDir::Readable));
+	QRegularExpression re("([NS])([0-9]{2})([EW])([0-9]{3})");
+	QList<Area> list;
+
+	for (int i = 0; i < files.size(); i++) {
+		QString basename(files.at(i).baseName());
+		QRegularExpressionMatch match(re.match(basename));
+		if (!match.hasMatch())
+			continue;
+
+		int lat = match.captured(2).toInt();
+		int lon = match.captured(4).toInt();
+		if (match.captured(1) == "S")
+			lat = -lat;
+		if (match.captured(3) == "W")
+			lon = -lon;
+
+		Area area(RectC(Coordinates(lon, lat + 1), Coordinates(lon + 1, lat)));
+		area.setName(basename);
+		area.setDescription(files.at(i).canonicalFilePath());
+
+		list.append(area);
+	}
+
+	return list;
 }
 
 #ifndef QT_NO_DEBUG

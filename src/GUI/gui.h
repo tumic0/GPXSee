@@ -76,6 +76,7 @@ private slots:
 	void openOptions();
 	void clearMapCache();
 	void downloadDEM();
+	void showDEMTiles();
 
 	void mapChanged(QAction *action);
 	void graphChanged(int);
@@ -234,6 +235,7 @@ private:
 	QAction *_showCoordinatesAction;
 	QAction *_openOptionsAction;
 	QAction *_downloadDEMAction;
+	QAction *_showDEMTilesAction;
 	QAction *_mapsEnd;
 	QAction *_poisEnd;
 
