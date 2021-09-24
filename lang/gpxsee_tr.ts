@@ -618,7 +618,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1708"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; döşeme önbelleği temizlensin mi?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="574"/>
@@ -889,7 +889,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1741"/>
         <source>No local DEM tiles found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yerel DEM döşemesi bulunamadı.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1755"/>
