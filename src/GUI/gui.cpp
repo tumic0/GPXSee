@@ -1705,7 +1705,7 @@ void GUI::loadMapDir()
 void GUI::clearMapCache()
 {
 	if (QMessageBox::question(this, APP_NAME,
-	  tr("Clear the map tile cache?")) == QMessageBox::Yes)
+	  tr("Clear \"%1\" tile cache?").arg(_map->name())) == QMessageBox::Yes)
 		_mapView->clearMapCache();
 }
 
