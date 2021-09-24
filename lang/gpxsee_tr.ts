@@ -486,7 +486,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="387"/>
         <source>Show local DEM tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Yerel DEM döşemelerini göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>

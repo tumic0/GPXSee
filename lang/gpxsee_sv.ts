@@ -495,7 +495,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="387"/>
         <source>Show local DEM tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa lokala DEM-rutor</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
