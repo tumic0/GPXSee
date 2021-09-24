@@ -6,6 +6,7 @@
 
 #define RECORD_MESSAGE  20
 #define EVENT_MESSAGE   21
+#define LOCATION        29
 #define COURSE_POINT    32
 #define TIMESTAMP_FIELD 253
 
@@ -343,6 +344,26 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 					waypoint.setName(val.toString());
 					break;
 			}
+		} else if (def->globalId == LOCATION) {
+			switch (field->id) {
+				case 0:
+					waypoint.setName(val.toString());
+					break;
+				case 1:
+					waypoint.rcoordinates().setLat(
+					  (val.toInt() / (double)0x7fffffff) * 180);
+					break;
+				case 2:
+					waypoint.rcoordinates().setLon(
+					  (val.toInt() / (double)0x7fffffff) * 180);
+					break;
+				case 4:
+					waypoint.setElevation((val.toUInt() / 5.0) - 500);
+					break;
+				case 6:
+					waypoint.setDescription(val.toString());
+					break;
+			}
 		}
 	}
 
@@ -367,9 +388,16 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 			ctx.segment.append(ctx.trackpoint);
 			ctx.trackpoint = Trackpoint();
 		}
-	} else if (def->globalId == COURSE_POINT)
+	} else if (def->globalId == COURSE_POINT) {
 		if (waypoint.coordinates().isValid())
 			ctx.waypoints.append(waypoint);
+	} else if (def->globalId == LOCATION) {
+		if (waypoint.coordinates().isValid()) {
+			waypoint.setTimestamp(QDateTime::fromSecsSinceEpoch(ctx.timestamp
+			  + 631065600, Qt::UTC));
+			ctx.waypoints.append(waypoint);
+		}
+	}
 
 	return true;
 }
