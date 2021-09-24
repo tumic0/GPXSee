@@ -1735,10 +1735,18 @@ void GUI::demLoaded()
 
 void GUI::showDEMTiles()
 {
-	_mapView->loadDEMs(DEM::tiles());
+	QList<Area> tiles(DEM::tiles());
 
-	_fileActionGroup->setEnabled(true);
-	_reloadFileAction->setEnabled(false);
+	if (tiles.isEmpty()) {
+		QMessageBox::information(this, APP_NAME, tr("No local DEM tiles found."));
+	} else {
+		_mapView->loadDEMs(tiles);
+
+		_areaCount += tiles.size();
+
+		_fileActionGroup->setEnabled(true);
+		_reloadFileAction->setEnabled(false);
+	}
 }
 
 void GUI::updateStatusBarInfo()
