@@ -702,9 +702,8 @@
         <translation>Открыть файл карты</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1708"/>
         <source>Clear the map tile cache?</source>
-        <translation>Очистить кэш тайлов?</translation>
+        <translation type="vanished">Очистить кэш тайлов?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1726"/>
@@ -712,7 +711,7 @@
         <translation>Не удалось загрузить все необходимые DEM файлы.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1747"/>
+        <location filename="../src/GUI/gui.cpp" line="1755"/>
         <source>No files loaded</source>
         <translation>Нет загруженных файлов</translation>
     </message>
@@ -793,8 +792,18 @@
         <source>Select map directory</source>
         <translation>Выберите каталог с картами</translation>
     </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="1708"/>
+        <source>Clear &quot;%1&quot; tile cache?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="1741"/>
+        <source>No local DEM tiles found.</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1751"/>
+        <location filename="../src/GUI/gui.cpp" line="1759"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n файл</numerusform>

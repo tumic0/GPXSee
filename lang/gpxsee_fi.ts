@@ -702,9 +702,8 @@
         <translation>Avaa karttatiedosto</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1708"/>
         <source>Clear the map tile cache?</source>
-        <translation>Tyhjennetäänkö välimuisti?</translation>
+        <translation type="vanished">Tyhjennetäänkö välimuisti?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1726"/>
@@ -712,7 +711,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1747"/>
+        <location filename="../src/GUI/gui.cpp" line="1755"/>
         <source>No files loaded</source>
         <translation>Yhtään tiedostoa ei ladattu</translation>
     </message>
@@ -793,8 +792,18 @@
         <source>Select map directory</source>
         <translation>Valitse karttahakemisto</translation>
     </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="1708"/>
+        <source>Clear &quot;%1&quot; tile cache?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="1741"/>
+        <source>No local DEM tiles found.</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1751"/>
+        <location filename="../src/GUI/gui.cpp" line="1759"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n tiedosto</numerusform>

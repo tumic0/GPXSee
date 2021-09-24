@@ -616,6 +616,11 @@
         <translation>&amp;POI</translation>
     </message>
     <message>
+        <location filename="../src/GUI/gui.cpp" line="1708"/>
+        <source>Clear &quot;%1&quot; tile cache?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/GUI/gui.cpp" line="574"/>
         <source>&amp;Data</source>
         <translation>Da&amp;teno</translation>
@@ -873,22 +878,22 @@
         <translation>Elekti dosierujon kun mapoj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1708"/>
-        <source>Clear the map tile cache?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="1726"/>
         <source>Could not download all required DEM files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1747"/>
+        <location filename="../src/GUI/gui.cpp" line="1741"/>
+        <source>No local DEM tiles found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="1755"/>
         <source>No files loaded</source>
         <translation>Neniuj dosieroj estas ŝargitaj</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1751"/>
+        <location filename="../src/GUI/gui.cpp" line="1759"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n dosiero</numerusform>

@@ -616,6 +616,11 @@
         <translation>&amp;POI</translation>
     </message>
     <message>
+        <location filename="../src/GUI/gui.cpp" line="1708"/>
+        <source>Clear &quot;%1&quot; tile cache?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/GUI/gui.cpp" line="574"/>
         <source>&amp;Data</source>
         <translation>&amp;Veri</translation>
@@ -873,9 +878,8 @@
         <translation>Harita dizinini seç</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1708"/>
         <source>Clear the map tile cache?</source>
-        <translation>Harita döşemeleri önbelleği temizlensin mi?</translation>
+        <translation type="vanished">Harita döşemeleri önbelleği temizlensin mi?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1726"/>
@@ -883,12 +887,17 @@
         <translation>Gerekli tüm DEM dosyaları indirilemedi.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1747"/>
+        <location filename="../src/GUI/gui.cpp" line="1741"/>
+        <source>No local DEM tiles found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="1755"/>
         <source>No files loaded</source>
         <translation>Hiç dosya yüklenmedi</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1751"/>
+        <location filename="../src/GUI/gui.cpp" line="1759"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n dosya</numerusform>

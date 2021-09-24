@@ -726,8 +726,12 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1708"/>
+        <source>Clear &quot;%1&quot; tile cache?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Clear the map tile cache?</source>
-        <translation>Kachel-Cache bereinigen?</translation>
+        <translation type="vanished">Kachel-Cache bereinigen?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1726"/>
@@ -735,12 +739,17 @@
         <translation>Es konnten nicht alle erforderlichen DEM-Dateien heruntergeladen werden.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1747"/>
+        <location filename="../src/GUI/gui.cpp" line="1741"/>
+        <source>No local DEM tiles found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="1755"/>
         <source>No files loaded</source>
         <translation>Keine Dateien geladen</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1751"/>
+        <location filename="../src/GUI/gui.cpp" line="1759"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n Datei</numerusform>

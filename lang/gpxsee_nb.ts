@@ -616,6 +616,11 @@
         <translation>&amp;POI</translation>
     </message>
     <message>
+        <location filename="../src/GUI/gui.cpp" line="1708"/>
+        <source>Clear &quot;%1&quot; tile cache?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/GUI/gui.cpp" line="574"/>
         <source>&amp;Data</source>
         <translation>&amp;Data</translation>
@@ -873,9 +878,8 @@
         <translation>Feil ved innlasting av kart:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1708"/>
         <source>Clear the map tile cache?</source>
-        <translation>Fjern kartflis fra hurtiglager?</translation>
+        <translation type="vanished">Fjern kartflis fra hurtiglager?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1726"/>
@@ -883,12 +887,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1747"/>
+        <location filename="../src/GUI/gui.cpp" line="1741"/>
+        <source>No local DEM tiles found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="1755"/>
         <source>No files loaded</source>
         <translation>Ingen filer lastet opp</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1751"/>
+        <location filename="../src/GUI/gui.cpp" line="1759"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n fil</numerusform>
