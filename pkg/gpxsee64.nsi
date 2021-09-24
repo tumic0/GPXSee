@@ -269,6 +269,7 @@ SectionEnd
 !endif
 
 SectionGroup "Localization" SEC_LOCALIZATION
+  !insertmacro LOCALIZATION "Chinese (Simplified)" "zh"
   !insertmacro LOCALIZATION "Czech" "cs"
   !insertmacro LOCALIZATION "Danish" "da"
   !insertmacro LOCALIZATION "Esperanto" "eo"
