@@ -485,7 +485,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="387"/>
         <source>Show local DEM tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobrazit lokální DEM dlaždice</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
@@ -795,12 +795,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1708"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vymazat mezipaměť mapy &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1741"/>
         <source>No local DEM tiles found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nebyly nalezeny žádné lokální DEM dlaždice.</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1759"/>
