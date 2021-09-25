@@ -513,7 +513,7 @@ void GUI::createMapNodeMenu(const TreeNode<MapAction*> &node, QMenu *menu,
 {
 	for (int i = 0; i < node.childs().size(); i++) {
 		QMenu *cm = new QMenu(node.childs().at(i).name(), menu);
-		menu->addMenu(cm);
+		menu->insertMenu(action, cm);
 		createMapNodeMenu(node.childs().at(i), cm);
 	}
 
@@ -526,7 +526,7 @@ void GUI::createPOINodeMenu(const TreeNode<POIAction*> &node, QMenu *menu,
 {
 	for (int i = 0; i < node.childs().size(); i++) {
 		QMenu *cm = new QMenu(node.childs().at(i).name(), menu);
-		menu->addMenu(cm);
+		menu->insertMenu(action, cm);
 		createPOINodeMenu(node.childs().at(i), cm);
 	}
 
