@@ -495,7 +495,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="387"/>
         <source>Show local DEM tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokale DEM-Kacheln anzeigen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
@@ -727,7 +727,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1708"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Kachel-Cache von &quot;%1&quot; bereinigen?</translation>
     </message>
     <message>
         <source>Clear the map tile cache?</source>
@@ -741,7 +741,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1741"/>
         <source>No local DEM tiles found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine lokalen DEM-Kacheln gefunden.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1755"/>
