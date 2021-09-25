@@ -6,12 +6,12 @@
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="10"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Identifiant :</translation>
     </message>
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="11"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe :</translation>
     </message>
 </context>
 <context>
@@ -152,7 +152,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="152"/>
         <source>ONmove files</source>
-        <translation type="unfinished"></translation>
+        <translation>Données ONmove</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="158"/>
@@ -490,12 +490,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="382"/>
         <source>Download DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>Télécharger les données de terrain (MNT)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="387"/>
         <source>Show local DEM tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les tuiles MNT locales</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
@@ -597,7 +597,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="600"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>MNT</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="608"/>
@@ -727,7 +727,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1708"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vider le cache de tuiles &quot;%1&quot; ?</translation>
     </message>
     <message>
         <source>Clear the map tile cache?</source>
@@ -736,12 +736,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1726"/>
         <source>Could not download all required DEM files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le téléchargement de tout les fichiers MNT a échoué.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1741"/>
         <source>No local DEM tiles found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucune tuile MNT trouvée en local.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1755"/>
@@ -1569,23 +1569,23 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="555"/>
         <source>Use HTTP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Faire une identification HTTP</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="561"/>
         <source>Use $lat and $lon for NYY/SYY and EXXX/WXXX in the URL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettre dans l&apos;URL $lat et $lon pour NYY/SYY et EXXX/WXXX.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="566"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="579"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL :</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="591"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Source</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="598"/>
@@ -1729,7 +1729,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="754"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>MNT</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="755"/>
