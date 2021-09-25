@@ -426,17 +426,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="328"/>
         <source>Show tracks</source>
-        <translation>显示轨迹</translation>
+        <translation>显示航迹</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="333"/>
         <source>Show routes</source>
-        <translation>显示路线</translation>
+        <translation>显示航线</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="337"/>
         <source>Show waypoints</source>
-        <translation>显示路线点</translation>
+        <translation>显示航点</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="342"/>
@@ -446,12 +446,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="346"/>
         <source>Waypoint labels</source>
-        <translation>路线点标签</translation>
+        <translation>航点标签</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="351"/>
         <source>Route waypoints</source>
-        <translation>路线路线点</translation>
+        <translation>航线航点</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="356"/>
@@ -553,7 +553,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="463"/>
         <source>Decimal degrees (DD)</source>
-        <translation>十进制 (DD)</translation>
+        <translation>小数度数 (DD)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="469"/>
@@ -815,19 +815,19 @@
         <location filename="../src/GUI/gui.cpp" line="1157"/>
         <location filename="../src/GUI/gui.cpp" line="1229"/>
         <source>Tracks</source>
-        <translation>轨迹</translation>
+        <translation>航迹</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1160"/>
         <location filename="../src/GUI/gui.cpp" line="1231"/>
         <source>Routes</source>
-        <translation>路线</translation>
+        <translation>航线</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1163"/>
         <location filename="../src/GUI/gui.cpp" line="1233"/>
         <source>Waypoints</source>
-        <translation>路线点</translation>
+        <translation>航点</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1166"/>
@@ -875,7 +875,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1708"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>清除&quot;%1 &quot;瓦片缓存？</translation>
     </message>
     <message>
         <source>Clear the map tile cache?</source>
@@ -889,7 +889,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1741"/>
         <source>No local DEM tiles found.</source>
-        <translation type="unfinished"></translation>
+        <translation>未找到本地 DEM 瓦片。</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1755"/>
@@ -993,7 +993,7 @@
     <message>
         <location filename="../src/GUI/graphview.cpp" line="137"/>
         <source>min</source>
-        <translation>分</translation>
+        <translation>分钟</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="140"/>
@@ -1206,27 +1206,27 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="248"/>
         <source>Use anti-aliasing</source>
-        <translation>使用抗锯齿</translation>
+        <translation>启用抗锯齿</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="153"/>
         <source>Track width:</source>
-        <translation>轨迹宽度：</translation>
+        <translation>航迹宽度：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="154"/>
         <source>Track style:</source>
-        <translation>轨迹样式：</translation>
+        <translation>航迹样式：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="156"/>
         <source>Route width:</source>
-        <translation>路线宽度：</translation>
+        <translation>航线宽度：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="157"/>
         <source>Route style:</source>
-        <translation>路线样式：</translation>
+        <translation>航线样式：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="159"/>
@@ -1272,12 +1272,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="172"/>
         <source>Tracks</source>
-        <translation>轨迹</translation>
+        <translation>航迹</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="177"/>
         <source>Routes</source>
-        <translation>路线</translation>
+        <translation>航线</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="182"/>
@@ -1292,12 +1292,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="217"/>
         <source>Waypoint color:</source>
-        <translation>路线点颜色：</translation>
+        <translation>航点颜色：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="218"/>
         <source>Waypoint size:</source>
-        <translation>路线点大小：</translation>
+        <translation>航点大小：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="220"/>
@@ -1324,7 +1324,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="227"/>
         <source>Waypoints</source>
-        <translation>路线点</translation>
+        <translation>航点</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="232"/>
@@ -1499,7 +1499,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="421"/>
         <source>Use segments</source>
-        <translation>使用分段</translation>
+        <translation>启用分段</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="452"/>
@@ -1575,7 +1575,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="555"/>
         <source>Use HTTP authentication</source>
-        <translation>使用 HTTP 身份验证</translation>
+        <translation>启用 HTTP 验证</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="561"/>
@@ -1611,7 +1611,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="606"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
-        <translation>缩放级别将被改变以使整个内容（轨迹/路线点）适应打印区域，并且地图分辨率尽可能接近打印分辨率。</translation>
+        <translation>缩放级别将被改变以使整个内容（航迹/航点）适应打印区域，并且地图分辨率尽可能接近打印分辨率。</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="622"/>
@@ -1661,7 +1661,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="666"/>
         <source>Use OpenGL</source>
-        <translation>使用 OpenGL</translation>
+        <translation>启用 OpenGL</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="668"/>
@@ -1688,7 +1688,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="713"/>
         <source>Select the initial paths of the file open dialogues. Leave the field empty for the system default.</source>
-        <translation>为文件打开对话框的设置初始路径。留空则为系统默认。</translation>
+        <translation>为文件打开对话框设置初始路径。留空则为系统默认。</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="717"/>
@@ -1846,7 +1846,7 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="38"/>
         <source>Use anti-aliasing</source>
-        <translation>抗锯齿</translation>
+        <translation>启用抗锯齿</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="42"/>
