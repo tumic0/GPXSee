@@ -727,7 +727,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1708"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vill du rensa kartcachen &quot;%1&quot;?</translation>
     </message>
     <message>
         <source>Clear the map tile cache?</source>
@@ -741,7 +741,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1741"/>
         <source>No local DEM tiles found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inga lokala DEM -rutor hittades.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1755"/>
