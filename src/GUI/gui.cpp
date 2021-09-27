@@ -384,7 +384,7 @@ void GUI::createActions()
 	_downloadDEMAction->setEnabled(false);
 	_downloadDEMAction->setShortcut(DOWNLOAD_DEM_SHORTCUT);
 	connect(_downloadDEMAction, &QAction::triggered, this, &GUI::downloadDEM);
-	_showDEMTilesAction = new QAction(tr("Show local DEM tiles"));
+	_showDEMTilesAction = new QAction(tr("Show local DEM tiles"), this);
 	_showDEMTilesAction->setMenuRole(QAction::NoRole);
 	connect(_showDEMTilesAction, &QAction::triggered, this, &GUI::showDEMTiles);
 
