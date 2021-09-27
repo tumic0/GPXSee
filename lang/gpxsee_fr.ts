@@ -1574,7 +1574,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="561"/>
         <source>Use $lat and $lon for NYY/SYY and EXXX/WXXX in the URL.</source>
-        <translation>Mettre dans l&apos;URL $lat et $lon pour NYY/SYY et EXXX/WXXX.</translation>
+        <translation>Dans l&apos;URL, remplacer NYY/SYY et EXXX/WXXX par $lat et $lon.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="566"/>
