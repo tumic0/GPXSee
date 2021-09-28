@@ -19,7 +19,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="11"/>
         <source>rpm</source>
-        <translation>转/分钟</translation>
+        <translation>r/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="12"/>
@@ -30,12 +30,12 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="27"/>
         <source>Average</source>
-        <translation>平均值</translation>
+        <translation>平均</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="29"/>
         <source>Maximum</source>
-        <translation>最大值</translation>
+        <translation>最大</translation>
     </message>
 </context>
 <context>
@@ -43,18 +43,18 @@
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="17"/>
         <source>Maximum</source>
-        <translation>最大值</translation>
+        <translation>最大</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="18"/>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="20"/>
         <source>rpm</source>
-        <translation>转/分钟</translation>
+        <translation>r/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraphitem.cpp" line="19"/>
         <source>Average</source>
-        <translation>平均值</translation>
+        <translation>平均</translation>
     </message>
 </context>
 <context>
@@ -194,22 +194,22 @@
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="61"/>
         <source>Maximum</source>
-        <translation>最大值</translation>
+        <translation>最大</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="63"/>
         <source>Minimum</source>
-        <translation>最小值</translation>
+        <translation>最小</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="165"/>
         <source>m</source>
-        <translation>米</translation>
+        <translation>m</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="168"/>
         <source>ft</source>
-        <translation>英尺</translation>
+        <translation>ft</translation>
     </message>
 </context>
 <context>
@@ -217,12 +217,12 @@
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="33"/>
         <source>m</source>
-        <translation>米</translation>
+        <translation>m</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="33"/>
         <source>ft</source>
-        <translation>英尺</translation>
+        <translation>ft</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="36"/>
@@ -237,12 +237,12 @@
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="40"/>
         <source>Maximum</source>
-        <translation>最大值</translation>
+        <translation>最大</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraphitem.cpp" line="42"/>
         <source>Minimum</source>
-        <translation>最小值</translation>
+        <translation>最小</translation>
     </message>
 </context>
 <context>
@@ -275,28 +275,28 @@
         <location filename="../src/GUI/format.cpp" line="61"/>
         <location filename="../src/GUI/format.cpp" line="84"/>
         <source>ft</source>
-        <translation>英尺</translation>
+        <translation>ft</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="57"/>
         <source>mi</source>
-        <translation>英里</translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="64"/>
         <source>nmi</source>
-        <translation>海里</translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="68"/>
         <location filename="../src/GUI/format.cpp" line="81"/>
         <source>m</source>
-        <translation>米</translation>
+        <translation>m</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="71"/>
         <source>km</source>
-        <translation>公里</translation>
+        <translation>km</translation>
     </message>
 </context>
 <context>
@@ -456,7 +456,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="356"/>
         <source>km/mi markers</source>
-        <translation>公里/英里 标记</translation>
+        <translation>km/mi 标记</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="364"/>
@@ -920,12 +920,12 @@
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="29"/>
         <source>Minimum</source>
-        <translation>最小值</translation>
+        <translation>最小</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="31"/>
         <source>Maximum</source>
-        <translation>最大值</translation>
+        <translation>最大</translation>
     </message>
 </context>
 <context>
@@ -933,12 +933,12 @@
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="35"/>
         <source>Minimum</source>
-        <translation>最小值</translation>
+        <translation>最小</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="36"/>
         <source>Maximum</source>
-        <translation>最大值</translation>
+        <translation>最大</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="37"/>
@@ -963,42 +963,42 @@
         <location filename="../src/GUI/graphview.cpp" line="109"/>
         <location filename="../src/GUI/graphview.cpp" line="117"/>
         <source>ft</source>
-        <translation>英尺</translation>
+        <translation>ft</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="112"/>
         <source>mi</source>
-        <translation>英里</translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="120"/>
         <source>nmi</source>
-        <translation>海里</translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="125"/>
         <source>m</source>
-        <translation>米</translation>
+        <translation>m</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="128"/>
         <source>km</source>
-        <translation>公里</translation>
+        <translation>km</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="134"/>
         <source>s</source>
-        <translation>秒</translation>
+        <translation>s</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="137"/>
         <source>min</source>
-        <translation>分钟</translation>
+        <translation>min</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="140"/>
         <source>h</source>
-        <translation>小时</translation>
+        <translation>h</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="179"/>
@@ -1011,7 +1011,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="11"/>
         <source>bpm</source>
-        <translation>拍/分钟</translation>
+        <translation>b/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="12"/>
@@ -1022,12 +1022,12 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="27"/>
         <source>Average</source>
-        <translation>平均值</translation>
+        <translation>平均</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="29"/>
         <source>Maximum</source>
-        <translation>最大值</translation>
+        <translation>最大</translation>
     </message>
 </context>
 <context>
@@ -1035,18 +1035,18 @@
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="17"/>
         <source>Maximum</source>
-        <translation>最大值</translation>
+        <translation>最大</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="18"/>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="20"/>
         <source>bpm</source>
-        <translation>拍/分钟</translation>
+        <translation>b/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="19"/>
         <source>Average</source>
-        <translation>平均值</translation>
+        <translation>平均</translation>
     </message>
 </context>
 <context>
@@ -1200,7 +1200,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="116"/>
         <source>HiDPI display mode</source>
-        <translation>高DPI显示模式</translation>
+        <translation>HiDPI显示模式</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
@@ -1436,23 +1436,23 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="365"/>
         <source>mi/h</source>
-        <translation>英里/小时</translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="368"/>
         <source>kn</source>
-        <translation>千牛</translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="371"/>
         <source>km/h</source>
-        <translation>公里/小时</translation>
+        <translation>km/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="375"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="680"/>
         <source>s</source>
-        <translation>秒</translation>
+        <translation>s</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="382"/>
@@ -1472,7 +1472,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="391"/>
         <source>GPS data</source>
-        <translation>GPS数据</translation>
+        <translation>GPS 数据</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="392"/>
@@ -1549,17 +1549,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="524"/>
         <source>mi</source>
-        <translation>英里</translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="527"/>
         <source>nmi</source>
-        <translation>海里</translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="530"/>
         <source>km</source>
-        <translation>公里</translation>
+        <translation>km</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="534"/>
@@ -1766,12 +1766,12 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="60"/>
         <source>cm</source>
-        <translation>厘米</translation>
+        <translation>cm</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="60"/>
         <source>in</source>
-        <translation>英寸</translation>
+        <translation>in</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="66"/>
@@ -1923,12 +1923,12 @@
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="27"/>
         <source>Average</source>
-        <translation>平均值</translation>
+        <translation>平均</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="29"/>
         <source>Maximum</source>
-        <translation>最大值</translation>
+        <translation>最大</translation>
     </message>
 </context>
 <context>
@@ -1936,7 +1936,7 @@
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="17"/>
         <source>Maximum</source>
-        <translation>最大值</translation>
+        <translation>最大</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="18"/>
@@ -1947,7 +1947,7 @@
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="19"/>
         <source>Average</source>
-        <translation>平均值</translation>
+        <translation>平均</translation>
     </message>
 </context>
 <context>
@@ -1983,28 +1983,28 @@
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="108"/>
         <source>mi</source>
-        <translation>英里</translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="109"/>
         <location filename="../src/GUI/scaleitem.cpp" line="112"/>
         <source>ft</source>
-        <translation>英尺</translation>
+        <translation>ft</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="111"/>
         <source>nmi</source>
-        <translation>海里</translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="114"/>
         <source>km</source>
-        <translation>公里</translation>
+        <translation>km</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="115"/>
         <source>m</source>
-        <translation>米</translation>
+        <translation>m</translation>
     </message>
 </context>
 <context>
@@ -2018,27 +2018,27 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="31"/>
         <source>min/km</source>
-        <translation>分钟/公里</translation>
+        <translation>min/km</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="32"/>
         <source>min/mi</source>
-        <translation>分钟/英里</translation>
+        <translation>min/mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="32"/>
         <source>min/nmi</source>
-        <translation>分钟/海里</translation>
+        <translation>min/nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="34"/>
         <source>Average</source>
-        <translation>平均值</translation>
+        <translation>平均</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="36"/>
         <source>Maximum</source>
-        <translation>最大值</translation>
+        <translation>最大</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="38"/>
@@ -2048,17 +2048,17 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="127"/>
         <source>kn</source>
-        <translation>千牛</translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="130"/>
         <source>mi/h</source>
-        <translation>英里/小时</translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="133"/>
         <source>km/h</source>
-        <translation>公里/小时</translation>
+        <translation>km/h</translation>
     </message>
 </context>
 <context>
@@ -2066,42 +2066,42 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="23"/>
         <source>mi/h</source>
-        <translation>英里/小时</translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
         <source>kn</source>
-        <translation>千牛</translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
         <source>km/h</source>
-        <translation>公里/小时</translation>
+        <translation>km/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="27"/>
         <source>min/km</source>
-        <translation>分钟/公里</translation>
+        <translation>min/km</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="28"/>
         <source>min/mi</source>
-        <translation>分钟/英里</translation>
+        <translation>min/mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="28"/>
         <source>min/nmi</source>
-        <translation>分钟/海里</translation>
+        <translation>min/nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="31"/>
         <source>Maximum</source>
-        <translation>最大值</translation>
+        <translation>最大</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="33"/>
         <source>Average</source>
-        <translation>平均值</translation>
+        <translation>平均</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="35"/>
@@ -2120,27 +2120,27 @@
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="27"/>
         <source>Average</source>
-        <translation>平均值</translation>
+        <translation>平均</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="29"/>
         <source>Minimum</source>
-        <translation>最小值</translation>
+        <translation>最小</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="31"/>
         <source>Maximum</source>
-        <translation>最大值</translation>
+        <translation>最大</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="102"/>
         <source>C</source>
-        <translation>摄氏度</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="106"/>
         <source>F</source>
-        <translation>华氏度</translation>
+        <translation>F</translation>
     </message>
 </context>
 <context>
@@ -2148,12 +2148,12 @@
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="21"/>
         <source>C</source>
-        <translation>摄氏度</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="21"/>
         <source>F</source>
-        <translation>华氏度</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="24"/>
@@ -2163,12 +2163,12 @@
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="26"/>
         <source>Maximum</source>
-        <translation>最大值</translation>
+        <translation>最大</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="28"/>
         <source>Minimum</source>
-        <translation>最小值</translation>
+        <translation>最小</translation>
     </message>
 </context>
 <context>
