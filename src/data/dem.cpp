@@ -16,6 +16,7 @@
 #include <QDir>
 #include <QFile>
 #include <QRegularExpression>
+#include <QLocale>
 #include <private/qzipreader_p.h>
 #include "common/rectc.h"
 #include "dem.h"
@@ -65,7 +66,6 @@ static qreal height(const Coordinates &c, const QByteArray *data)
 
 	return interpolate(dx, dy, p0, p1, p2, p3);
 }
-
 
 QString DEM::Tile::latStr() const
 {
@@ -144,6 +144,7 @@ QList<Area> DEM::tiles()
 	QDir dir(_dir);
 	QFileInfoList files(dir.entryInfoList(QDir::Files | QDir::Readable));
 	QRegularExpression re("([NS])([0-9]{2})([EW])([0-9]{3})");
+	QLocale l(QLocale::system());
 	QList<Area> list;
 
 	for (int i = 0; i < files.size(); i++) {
@@ -161,7 +162,8 @@ QList<Area> DEM::tiles()
 
 		Area area(RectC(Coordinates(lon, lat + 1), Coordinates(lon + 1, lat)));
 		area.setName(basename);
-		area.setDescription(files.at(i).canonicalFilePath());
+		area.setDescription(files.at(i).suffix().toUpper() + ", "
+		  + l.formattedDataSize(files.at(i).size()));
 
 		list.append(area);
 	}
