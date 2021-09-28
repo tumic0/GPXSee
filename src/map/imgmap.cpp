@@ -155,8 +155,9 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			for (int j = 0; j < height; j++) {
 				QPixmap pm;
 				QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
-				QString key = _data.at(n)->fileName() + "-" + QString::number(_zoom)
-				  + "_" + QString::number(ttl.x()) + "_" + QString::number(ttl.y());
+				QString key(_data.at(n)->fileName() + "-" + QString::number(_zoom)
+				  + "_" + QString::number(ttl.x()) + "_" + QString::number(ttl.y()));
+
 				if (QPixmapCache::find(key, &pm))
 					painter->drawPixmap(ttl, pm);
 				else {
@@ -192,11 +193,8 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	future.waitForFinished();
 
 	for (int i = 0; i < tiles.size(); i++) {
-		RasterTile &mt = tiles[i];
+		const RasterTile &mt = tiles.at(i);
 		const QPixmap &pm = mt.pixmap();
-		if (pm.isNull())
-			continue;
-
 		painter->drawPixmap(mt.xy(), pm);
 		QPixmapCache::insert(mt.key(), pm);
 	}
