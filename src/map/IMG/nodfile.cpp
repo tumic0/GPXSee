@@ -116,14 +116,15 @@ bool NODFile::readBlock(Handle &hdl, quint32 blockOffset,
 {
 	blockInfo.offset = blockOffset;
 
-	if (!(seek(hdl, blockInfo.offset + _blockOffset)
-	  && readUInt16(hdl, blockInfo.hdr.s0) && readUInt32(hdl, blockInfo.hdr.s2)
-	  && readUInt32(hdl, blockInfo.hdr.s6) && readUInt32(hdl, blockInfo.hdr.sa)
-	  && readUInt16(hdl, blockInfo.hdr.se) && readByte(hdl, &blockInfo.hdr.s10)
-	  && readByte(hdl, &blockInfo.hdr.s11) && readByte(hdl, &blockInfo.hdr.s12)))
-		return false;
-
-	return true;
+	return (seek(hdl, blockInfo.offset + _blockOffset)
+	  && readUInt16(hdl, blockInfo.hdr.flags)
+	  && readUInt32(hdl, blockInfo.hdr.baseLon)
+	  && readUInt32(hdl, blockInfo.hdr.baseLat)
+	  && readUInt32(hdl, blockInfo.hdr.unk)
+	  && readUInt16(hdl, blockInfo.hdr.linkInfoSize)
+	  && readByte(hdl, &blockInfo.hdr.linksCount)
+	  && readByte(hdl, &blockInfo.hdr.nodesCount)
+	  && readByte(hdl, &blockInfo.hdr.linkTypesCount));
 }
 
 bool NODFile::blockInfo(Handle &hdl, quint32 blockId, BlockInfo &blockInfo) const
@@ -143,14 +144,14 @@ bool NODFile::blockInfo(Handle &hdl, quint32 blockId, BlockInfo &blockInfo) cons
 bool NODFile::linkInfo(Handle &hdl, const BlockInfo &blockInfo, quint32 linkId,
   LinkInfo &linkInfo) const
 {
-	if (linkId >= blockInfo.hdr.s10)
+	if (linkId >= blockInfo.hdr.linksCount)
 		return false;
 
-	quint32 infoOffset = ((blockInfo.hdr.se * linkId) >> 3) + 0x13
-	  + ((blockInfo.hdr.s0 >> 0xb) & 1) + blockInfo.offset + _blockOffset;
-	quint32 s1 = ((blockInfo.hdr.s0 >> 2) & 0x1f) + 8;
-	quint32 s2 = (blockInfo.hdr.s0 >> 7) & 0xf;
-	quint32 skip = (blockInfo.hdr.se * linkId) & 7;
+	quint32 infoOffset = _blockOffset + blockInfo.offset + blockInfo.hdr.size()
+	  + ((blockInfo.hdr.linkInfoSize * linkId) >> 3);
+	quint32 s1 = ((blockInfo.hdr.flags >> 2) & 0x1f) + 8;
+	quint32 s2 = (blockInfo.hdr.flags >> 7) & 0xf;
+	quint32 skip = (blockInfo.hdr.linkInfoSize * linkId) & 7;
 
 	if (infoOffset > _blockOffset + _blockSize || infoOffset < blockInfo.offset)
 		return false;
@@ -168,7 +169,7 @@ bool NODFile::linkInfo(Handle &hdl, const BlockInfo &blockInfo, quint32 linkId,
 	} else {
 		if (!bs.read(s1 - s2, linkInfo.linkOffset))
 			return false;
-		linkInfo.linkOffset += blockInfo.hdr.sa;
+		linkInfo.linkOffset += blockInfo.hdr.unk;
 	}
 
 	if (!bs.read(s2, linkInfo.nodeOffset))
@@ -207,8 +208,8 @@ bool NODFile::nodeInfo(Handle &hdl, const BlockInfo &blockInfo,
 	quint8 latShift = 0x20 - latBits;
 	quint8 shift = 0x20 - maxBits;
 	QPoint pos((((int)(lon << lonShift) >> lonShift) << shift)
-	  + blockInfo.hdr.s2, (((int)(lat << latShift) >> latShift) << shift)
-	  + blockInfo.hdr.s6);
+	  + blockInfo.hdr.baseLon, (((int)(lat << latShift) >> latShift) << shift)
+	  + blockInfo.hdr.baseLat);
 	nodeInfo.bytes = ((lonBits + latBits) >> 3) + 1;
 
 	if ((maxBits < 0x1c) && (nodeInfo.flags & 8)) {
@@ -230,17 +231,14 @@ bool NODFile::nodeInfo(Handle &hdl, const BlockInfo &blockInfo,
 bool NODFile::nodeOffset(Handle &hdl, const BlockInfo &blockInfo,
   quint8 nodeId, quint32 &nodeOffset) const
 {
-	if (nodeId >= blockInfo.hdr.s11)
+	if (nodeId >= blockInfo.hdr.nodesCount)
 		return false;
 
-	quint32 offset = ((blockInfo.hdr.s10 * blockInfo.hdr.se + 7) >> 3)
-	  + 0x13 + nodeId * 3 + _blockOffset + blockInfo.offset
-	  + ((blockInfo.hdr.s0 >> 0xb) & 1);
+	quint32 offset = _blockOffset + blockInfo.offset + blockInfo.hdr.size()
+	  + bs(blockInfo.hdr.linksCount * blockInfo.hdr.linkInfoSize)
+	  + nodeId * 3;
 
-	if (!(seek(hdl, offset) && readUInt24(hdl, nodeOffset)))
-		return false;
-
-	return true;
+	return (seek(hdl, offset) && readUInt24(hdl, nodeOffset));
 }
 
 bool NODFile::nodeBlock(Handle &hdl, quint32 nodeOffset,
@@ -290,7 +288,7 @@ bool NODFile::absAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 		return false;
 	BitStream1 bs(*this, hdl, _blockOffset + _blockSize - infoOffset);
 
-	quint8 linkId = adj.blockInfo.hdr.s10;
+	quint8 linkId = adj.blockInfo.hdr.linksCount;
 	quint32 m2p = 2;
 	quint32 skip = 8;
 	quint32 flags;
@@ -395,7 +393,7 @@ bool NODFile::relAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 
 	BitStream1 bs(*this, hdl, _blockOffset + _blockSize - infoOffset);
 
-	quint32 linkId = adj.blockInfo.hdr.s10;
+	quint32 linkId = adj.blockInfo.hdr.linksCount;
 	quint32 skip = 8;
 	quint32 flagsBits = 8;
 	quint32 flags;
@@ -499,11 +497,11 @@ int NODFile::nextNode(Handle &hdl, AdjacencyInfo &adjInfo) const
 bool NODFile::linkType(Handle &hdl, const BlockInfo &blockInfo, quint8 linkId,
   quint32 &type) const
 {
-	quint32 offset = ((blockInfo.hdr.s10 * blockInfo.hdr.se + 7) >> 3) + 0x13
-	  + blockInfo.offset + _blockOffset + ((blockInfo.hdr.s0 >> 0xb) & 1)
-	  + blockInfo.hdr.s11 * 3;
+	quint32 offset = _blockOffset + blockInfo.offset + blockInfo.hdr.size()
+	  + bs(blockInfo.hdr.linksCount * blockInfo.hdr.linkInfoSize)
+	  + blockInfo.hdr.nodesCount * 3;
 	int low = 0;
-	int high = blockInfo.hdr.s12 - 1;
+	int high = blockInfo.hdr.linkTypesCount - 1;
 	quint16 val;
 
 	while (low <= high) {
@@ -524,8 +522,8 @@ bool NODFile::linkType(Handle &hdl, const BlockInfo &blockInfo, quint8 linkId,
 
 	if (high < 0)
 		return false;
-	if (blockInfo.hdr.s12 > 1 && !(seek(hdl, offset + _blockRecordSize * high)
-	  && readUInt16(hdl, val)))
+	if ((blockInfo.hdr.linkTypesCount > 1)
+	  && !(seek(hdl, offset + _blockRecordSize * high) && readUInt16(hdl, val)))
 		return false;
 	type = (val & 0x3f) << 8;
 

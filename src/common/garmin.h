@@ -23,7 +23,7 @@ namespace Garmin
 		return sizes[b0 & 0x07];
 	}
 
-	inline quint8 bs(const quint8 val)
+	inline quint32 bs(const quint32 val)
 	{
 		return (val + 7) >> 3;
 	}

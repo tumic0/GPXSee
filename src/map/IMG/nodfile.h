@@ -10,18 +10,22 @@ class NODFile : public SubFile
 public:
 	struct BlockInfo
 	{
-		quint32 offset;
-		struct
+		struct BlockHeader
 		{
-			quint32 s2; // node lon base
-			quint32 s6; // node lat base
-			quint32 sa;
-			quint16 s0; // flags
-			quint16 se; // link info bit size
-			quint8 s10; // links count
-			quint8 s11; // nodes count
-			quint8 s12; // link types count
-		} hdr;
+			quint32 baseLon;
+			quint32 baseLat;
+			quint32 unk;
+			quint16 flags;
+			quint16 linkInfoSize;
+			quint8 linksCount;
+			quint8 nodesCount;
+			quint8 linkTypesCount;
+
+			quint32 size() const {return 0x13 + ((flags >> 0xb) & 1);}
+		};
+
+		quint32 offset;
+		BlockHeader hdr;
 	};
 
 	struct LinkInfo
