@@ -538,53 +538,52 @@ bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 	return true;
 }
 
-QMap<RGNFile::SegmentType, SubDiv::Segment> RGNFile::segments(Handle &hdl,
-  SubDiv *subdiv) const
+bool RGNFile::segments(Handle &hdl, SubDiv *subdiv, SubDiv::Segment seg[5]) const
 {
-	QMap<SegmentType, SubDiv::Segment> ret;
-
 	if (subdiv->offset() == subdiv->end() || !(subdiv->objects() & 0x1F))
-		return ret;
+		return true;
 
 	quint32 offset = _offset + subdiv->offset();
+	if (!seek(hdl, offset))
+		return false;
 
 	int no = 0;
-	for (quint8 mask = 0x1; mask <= 0x10; mask <<= 1)
-		if (subdiv->objects() & mask)
+	for (int i = 0; i < 5; i++)
+		if (subdiv->objects() & (1<<i))
 			no++;
-
-	if (!seek(hdl, offset))
-		return ret;
 
 	quint32 start = offset + 2 * (no - 1);
 	quint32 ls = 0;
-	SegmentType lt = (SegmentType)0;
+	int lt = 0;
 
-	for (quint8 mask = 0x1; mask <= 0x10; mask <<= 1) {
-		if (subdiv->objects() & mask) {
+	for (int i = 0; i < 5; i++) {
+		if (subdiv->objects() & (1<<i)) {
 			if (ls) {
 				quint16 po;
 				if (!readUInt16(hdl, po) || !po)
-					return QMap<RGNFile::SegmentType, SubDiv::Segment>();
+					return false;
 				start = offset + po;
-				ret.insert(lt, SubDiv::Segment(ls, start));
+				seg[lt] = SubDiv::Segment(ls, start);
 			}
 
-			lt = (SegmentType)mask;
+			lt = i;
 			ls = start;
 		}
 	}
 
-	ret.insert(lt, SubDiv::Segment(ls, subdiv->end()
-	  ? _offset + subdiv->end() : _offset + _size));
+	seg[lt] = SubDiv::Segment(ls,
+	  subdiv->end() ? _offset + subdiv->end() : _offset + _size);
 
-	return ret;
+	return true;
 }
 
 bool RGNFile::subdivInit(Handle &hdl, SubDiv *subdiv) const
 {
-	QMap<RGNFile::SegmentType, SubDiv::Segment> seg(segments(hdl, subdiv));
+	SubDiv::Segment seg[5];
 	SubDiv::Segment extPoints, extLines, extPolygons;
+
+	if (!segments(hdl, subdiv, seg))
+		return false;
 
 	if (subdiv->extPointsOffset() != subdiv->extPointsEnd()) {
 		quint32 start = _pointsOffset + subdiv->extPointsOffset();
@@ -608,9 +607,8 @@ bool RGNFile::subdivInit(Handle &hdl, SubDiv *subdiv) const
 		extLines = SubDiv::Segment(start, end);
 	}
 
-	subdiv->init(seg.value(Point), seg.value(IndexedPoint), seg.value(Line),
-	  seg.value(Polygon), seg.value(RoadReference), extPoints, extLines,
-	  extPolygons);
+	subdiv->init(seg[Point], seg[IndexedPoint], seg[Line], seg[Polygon],
+	  seg[RoadReference], extPoints, extLines, extPolygons);
 
 	return true;
 }

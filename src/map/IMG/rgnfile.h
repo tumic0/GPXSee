@@ -15,11 +15,11 @@ class RGNFile : public SubFile
 {
 public:
 	enum SegmentType {
-		Point = 0x1,
-		IndexedPoint = 0x2,
-		Line = 0x4,
-		Polygon = 0x8,
-		RoadReference = 0x10
+		Point,
+		IndexedPoint,
+		Line,
+		Polygon,
+		RoadReference
 	};
 
 	RGNFile(const IMGData *img)
@@ -61,8 +61,7 @@ public:
 	quint32 dictSize() const {return _dictSize;}
 
 private:
-	QMap<SegmentType, SubDiv::Segment> segments(Handle &hdl, SubDiv *subdiv)
-	  const;
+	bool segments(Handle &hdl, SubDiv *subdiv, SubDiv::Segment seg[5]) const;
 	bool readClassFields(Handle &hdl, SegmentType segmentType,
 	  MapData::Poly *poly = 0, const LBLFile *lbl = 0) const;
 	bool skipLclFields(Handle &hdl, const quint32 flags[3]) const;
