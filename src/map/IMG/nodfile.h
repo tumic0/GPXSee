@@ -12,9 +12,9 @@ public:
 	{
 		struct BlockHeader
 		{
-			quint32 baseLon;
-			quint32 baseLat;
-			quint32 unk;
+			quint32 nodeLonBase;
+			quint32 nodeLatBase;
+			quint32 linkInfoOffsetBase;
 			quint16 flags;
 			quint16 linkInfoSize;
 			quint8 linksCount;

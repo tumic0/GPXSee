@@ -118,9 +118,9 @@ bool NODFile::readBlock(Handle &hdl, quint32 blockOffset,
 
 	return (seek(hdl, blockInfo.offset + _blockOffset)
 	  && readUInt16(hdl, blockInfo.hdr.flags)
-	  && readUInt32(hdl, blockInfo.hdr.baseLon)
-	  && readUInt32(hdl, blockInfo.hdr.baseLat)
-	  && readUInt32(hdl, blockInfo.hdr.unk)
+	  && readUInt32(hdl, blockInfo.hdr.nodeLonBase)
+	  && readUInt32(hdl, blockInfo.hdr.nodeLatBase)
+	  && readUInt32(hdl, blockInfo.hdr.linkInfoOffsetBase)
 	  && readUInt16(hdl, blockInfo.hdr.linkInfoSize)
 	  && readByte(hdl, &blockInfo.hdr.linksCount)
 	  && readByte(hdl, &blockInfo.hdr.nodesCount)
@@ -169,7 +169,7 @@ bool NODFile::linkInfo(Handle &hdl, const BlockInfo &blockInfo, quint32 linkId,
 	} else {
 		if (!bs.read(s1 - s2, linkInfo.linkOffset))
 			return false;
-		linkInfo.linkOffset += blockInfo.hdr.unk;
+		linkInfo.linkOffset += blockInfo.hdr.linkInfoOffsetBase;
 	}
 
 	if (!bs.read(s2, linkInfo.nodeOffset))
@@ -207,9 +207,9 @@ bool NODFile::nodeInfo(Handle &hdl, const BlockInfo &blockInfo,
 	quint8 lonShift = 0x20 - lonBits;
 	quint8 latShift = 0x20 - latBits;
 	quint8 shift = 0x20 - maxBits;
-	QPoint pos((((int)(lon << lonShift) >> lonShift) << shift)
-	  + blockInfo.hdr.baseLon, (((int)(lat << latShift) >> latShift) << shift)
-	  + blockInfo.hdr.baseLat);
+	QPoint pos(
+	  (((int)(lon << lonShift) >> lonShift) << shift) + blockInfo.hdr.nodeLonBase,
+	  (((int)(lat << latShift) >> latShift) << shift) + blockInfo.hdr.nodeLatBase);
 	nodeInfo.bytes = ((lonBits + latBits) >> 3) + 1;
 
 	if ((maxBits < 0x1c) && (nodeInfo.flags & 8)) {
