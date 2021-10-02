@@ -111,7 +111,7 @@ bool GMAPData::loadTile(const QDir &dir, bool baseMap)
 	return true;
 }
 
-GMAPData::GMAPData(const QString &fileName) : _fileName(fileName)
+GMAPData::GMAPData(const QString &fileName) : MapData(fileName)
 {
 	QString dataDirPath, typFilePath, baseMapPath;
 	if (!readXML(fileName, dataDirPath, typFilePath, baseMapPath))

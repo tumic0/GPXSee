@@ -181,7 +181,7 @@ bool IMGData::createTileTree(const TileMap &tileMap)
 	return (_tileTree.Count() > 0);
 }
 
-IMGData::IMGData(const QString &fileName) : _fileName(fileName)
+IMGData::IMGData(const QString &fileName) : MapData(fileName)
 {
 	QFile file(fileName);
 	TileMap tileMap;

@@ -12,8 +12,6 @@ class IMGData : public MapData
 public:
 	IMGData(const QString &fileName);
 
-	const QString &fileName() const {return _fileName;}
-
 	unsigned blockBits() const {return _blockBits;}
 	bool readBlock(QFile &file, int blockNum, char *data) const;
 
@@ -27,7 +25,6 @@ private:
 	bool readIMGHeader(QFile &file);
 	bool createTileTree(const TileMap &tileMap);
 
-	QString _fileName;
 	quint8 _key;
 	unsigned _blockBits;
 };

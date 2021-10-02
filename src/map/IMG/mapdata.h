@@ -49,8 +49,8 @@ public:
 		  {return id < other.id;}
 	};
 
-	MapData();
-	virtual ~MapData();
+	MapData(const QString &fileName);
+	~MapData();
 
 	const QString &name() const {return _name;}
 	const RectC &bounds() const {return _bounds;}
@@ -63,7 +63,7 @@ public:
 	void load();
 	void clear();
 
-	virtual const QString &fileName() const = 0;
+	const QString &fileName() const {return _fileName;}
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
@@ -71,6 +71,7 @@ public:
 protected:
 	typedef RTree<VectorTile*, double, 2> TileTree;
 
+	QString _fileName;
 	QString _name;
 	RectC _bounds;
 	SubFile *_typ;

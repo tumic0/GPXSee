@@ -25,7 +25,8 @@ bool MapData::pointCb(VectorTile *tile, void *context)
 }
 
 
-MapData::MapData() : _typ(0), _style(0), _zooms(24, 28), _baseMap(false),
+MapData::MapData(const QString &fileName)
+  : _fileName(fileName), _typ(0), _style(0), _zooms(24, 28), _baseMap(false),
   _valid(false)
 {
 	_polyCache.setMaxCost(CACHED_SUBDIVS_COUNT);

@@ -14,8 +14,6 @@ public:
 	GMAPData(const QString &fileName);
 	~GMAPData();
 
-	const QString &fileName() const {return _fileName;}
-
 	static bool isGMAP(const QString &path);
 
 private:
@@ -27,7 +25,6 @@ private:
 	  QString &baseMap);
 	bool loadTile(const QDir &dir, bool baseMap);
 
-	QString _fileName;
 	QList<const QString*> _files;
 };
 
