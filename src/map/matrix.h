@@ -13,8 +13,6 @@ public:
 	Matrix(const Matrix& M);
 	~Matrix();
 
-	Matrix &operator=(const Matrix &M);
-
 	size_t h() const {return _h;}
 	size_t w() const {return _w;}
 	double &m(size_t i, size_t j) {return _m[_w * i + j];}

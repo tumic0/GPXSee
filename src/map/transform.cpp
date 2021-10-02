@@ -53,7 +53,7 @@ void Transform::affine(const QList<ReferencePoint> &points)
 				Q.m(i,j) += v[i] * v[j];
 	}
 
-	Matrix M = Q.augemented(c);
+	Matrix M(Q.augemented(c));
 	if (!M.eliminate()) {
 		_errorString = "Singular transformation matrix";
 		return;
