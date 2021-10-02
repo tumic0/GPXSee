@@ -50,7 +50,7 @@ public:
 	};
 
 	MapData(const QString &fileName);
-	~MapData();
+	virtual ~MapData();
 
 	const QString &name() const {return _name;}
 	const RectC &bounds() const {return _bounds;}
