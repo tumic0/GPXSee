@@ -44,10 +44,10 @@ bool IMGData::readSubFileBlocks(QFile &file, quint64 offset, SubFile *subFile)
 bool IMGData::readIMGHeader(QFile &file)
 {
 	char signature[7], identifier[7];
-	file.read((char*)&_key, 1) && file.seek(0x10)
+	if (!(file.read((char*)&_key, 1) && file.seek(0x10)
 	  && read(file, signature, sizeof(signature)) && file.seek(0x41)
-	  && read(file, identifier, sizeof(identifier));
-	if (memcmp(signature, "DSKIMG", sizeof(signature))
+	  && read(file, identifier, sizeof(identifier)))
+	  || memcmp(signature, "DSKIMG", sizeof(signature))
 	  || memcmp(identifier, "GARMIN", sizeof(identifier))) {
 		_errorString = "Not a Garmin IMG file";
 		return false;
