@@ -8,7 +8,7 @@ namespace IMG {
 class DeltaStream : public BitStream1 {
 public:
 	DeltaStream(const SubFile &file, SubFile::Handle &hdl, quint32 length)
-	  : BitStream1(file, hdl, length), _readBits(0xFFFFFFFF) {}
+	  : BitStream1(file, hdl, length) {}
 
 	bool init(quint8 info, bool extraBit, bool extended);
 	bool readNext(qint32 &lonDelta, qint32 &latDelta)
@@ -17,7 +17,7 @@ public:
 			? (readDelta(_lonBits, _lonSign, _extraBit, lonDelta)
 			  && readDelta(_latBits, _latSign, false, latDelta)) : false;
 	}
-	bool atEnd() const {return (_readBits != 0xFFFFFFFF && !hasNext());}
+	bool atEnd() const {return !hasNext();}
 
 private:
 	bool hasNext() const {return bitsAvailable() >= _readBits;}
