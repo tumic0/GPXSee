@@ -1,6 +1,5 @@
 #include "deltastream.h"
 
-
 using namespace IMG;
 
 static int bitSize(quint8 baseSize, bool variableSign, bool extraBit)
@@ -19,21 +18,21 @@ static int bitSize(quint8 baseSize, bool variableSign, bool extraBit)
 	return bits;
 }
 
-DeltaStream::DeltaStream(const SubFile &file, SubFile::Handle &hdl,
-  quint32 length, quint8 info, bool extraBit, bool extended)
-  : BitStream1(file, hdl, length), _readBits(0xFFFFFFFF)
+bool DeltaStream::init(quint8 info, bool extraBit, bool extended)
 {
 	_extraBit = extraBit ? 1 : 0;
 	if (!(sign(_lonSign) && sign(_latSign)))
-		return;
+		return false;
 	if (extended) {
 		quint32 b;
 		if (!read(1, b))
-			return;
+			return false;
 	}
 	_lonBits = bitSize(info & 0x0F, !_lonSign, extraBit);
 	_latBits = bitSize(info >> 4, !_latSign, false);
 	_readBits = _lonBits + _latBits;
+
+	return true;
 }
 
 bool DeltaStream::readDelta(int bits, int sign, int extraBit,

@@ -218,8 +218,9 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 		poly.points.append(QPointF(c.lon(), c.lat()));
 
 		qint32 lonDelta, latDelta;
-		DeltaStream stream(*this, hdl, len, bitstreamInfo, labelPtr & 0x400000,
-		  false);
+		DeltaStream stream(*this, hdl, len);
+		if (!stream.init(bitstreamInfo, labelPtr & 0x400000, false))
+			return false;
 		while (stream.readNext(lonDelta, latDelta)) {
 			pos.rx() += LS(lonDelta, (24-subdiv->bits()));
 			if (pos.rx() >= 0x800000 && subdiv->lon() >= 0)
@@ -325,8 +326,9 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 				return false;
 
 			qint32 lonDelta, latDelta;
-			DeltaStream stream(*this, hdl, len - 1, bitstreamInfo, false, true);
-
+			DeltaStream stream(*this, hdl, len - 1);
+			if (!stream.init(bitstreamInfo, false, true))
+				return false;
 			while (stream.readNext(lonDelta, latDelta)) {
 				pos.rx() += LS(lonDelta, 24-subdiv->bits());
 				if (pos.rx() >= 0x800000 && subdiv->lon() >= 0)
