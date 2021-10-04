@@ -72,13 +72,12 @@ bool TREFile::init()
 
 	// Levels & subdivs info
 	quint32 levelsOffset, levelsSize, subdivSize;
-	if (!(seek(hdl, _gmpOffset + 0x21) && readUInt32(hdl, levelsOffset)
-	  && readUInt32(hdl, levelsSize) && readUInt32(hdl, _subdivOffset)
-	  && readUInt32(hdl, subdivSize)))
+	if (!(readUInt32(hdl, levelsOffset) && readUInt32(hdl, levelsSize)
+	  && readUInt32(hdl, _subdivOffset) && readUInt32(hdl, subdivSize)))
 		return false;
 
 	if (hdrLen > 0x9A) {
-		// TRE7 info + flags
+		// Extended objects (TRE7) info
 		if (!(seek(hdl, _gmpOffset + 0x7C) && readUInt32(hdl, _extended.offset)
 		  && readUInt32(hdl, _extended.size)
 		  && readUInt16(hdl, _extended.itemSize) && readUInt32(hdl, _flags)))
@@ -91,15 +90,15 @@ bool TREFile::init()
 	}
 
 	// Tile levels
-	if (levelsSize > 64 || !seek(hdl, levelsOffset))
-		return false;
 	quint8 levels[64];
-	for (quint32 i = 0; i < levelsSize; i++)
-		if (!readByte(hdl, &levels[i]))
-			return false;
+	if (levelsSize > 64 || !(seek(hdl, levelsOffset)
+	  && read(hdl, (char*)levels, levelsSize)))
+		return false;
+
 	if (locked) {
 		quint32 key;
-		if (!seek(hdl, _gmpOffset + 0xAA) || !readUInt32(hdl, key))
+		if (hdrLen < 0xAE || !(seek(hdl, _gmpOffset + 0xAA)
+		  && readUInt32(hdl, key)))
 			return false;
 		demangle(levels, levelsSize, key);
 	}
