@@ -8,7 +8,7 @@ class ImageInfo;
 class Thumbnail : public QLabel
 {
 public:
-	Thumbnail(const ImageInfo &img, int size, QWidget *parent = 0);
+	Thumbnail(const QString &path, int limit, QWidget *parent = 0);
 
 protected:
 	void mousePressEvent(QMouseEvent *event);

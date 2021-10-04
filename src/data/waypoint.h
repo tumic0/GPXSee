@@ -8,7 +8,6 @@
 #include <QDebug>
 #include "common/config.h"
 #include "common/coordinates.h"
-#include "imageinfo.h"
 #include "link.h"
 
 class Waypoint
@@ -25,7 +24,7 @@ public:
 	const QString &comment() const {return _comment;}
 	const QString &address() const {return _address;}
 	const QString &phone() const {return _phone;}
-	const QVector<ImageInfo> &images() const {return _images;}
+	const QVector<QString> &images() const {return _images;}
 	const QVector<Link> &links() const {return _links;}
 	const QDateTime &timestamp() const {return _timestamp;}
 	qreal elevation() const {return _elevation;}
@@ -42,7 +41,7 @@ public:
 	void setPhone(const QString &phone) {_phone = phone;}
 	void setTimestamp(const QDateTime &timestamp) {_timestamp = timestamp;}
 	void setElevation(qreal elevation) {_elevation = elevation;}
-	void addImage(const ImageInfo &image) {_images.append(image);}
+	void addImage(const QString &path) {_images.append(path);}
 	void addLink(const Link &link) {_links.append(link);}
 
 	bool hasElevation() const {return !std::isnan(_elevation);}
@@ -62,7 +61,7 @@ private:
 	QString _comment;
 	QString _address;
 	QString _phone;
-	QVector<ImageInfo> _images;
+	QVector<QString> _images;
 	QVector<Link> _links;
 	QDateTime _timestamp;
 	qreal _elevation;

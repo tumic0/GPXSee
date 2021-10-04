@@ -5,13 +5,12 @@
 #include <QList>
 #include <QVector>
 #include "common/kv.h"
-#include "data/imageinfo.h"
 
 class ToolTip
 {
 public:
 	const QList<KV<QString, QString> > &list() const {return _list;}
-	const QVector<ImageInfo> &images() const {return _images;}
+	const QVector<QString> &images() const {return _images;}
 
 	bool isEmpty() const
 	{
@@ -31,14 +30,14 @@ public:
 	{
 		_list.append(KV<QString, QString>(key, value));
 	}
-	void setImages(const QVector<ImageInfo> &images)
+	void setImages(const QVector<QString> &images)
 	{
 		_images = images;
 	}
 
 private:
 	QList<KV<QString, QString> > _list;
-	QVector<ImageInfo> _images;
+	QVector<QString> _images;
 };
 
 #endif // TOOLTIP_H

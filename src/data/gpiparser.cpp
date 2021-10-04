@@ -434,7 +434,7 @@ static quint32 readImageInfo(DataStream &stream, Waypoint &waypoint,
 		imgFile.write(ba);
 		imgFile.close();
 
-		waypoint.addImage(ImageInfo(imgFile.fileName(), ir.size()));
+		waypoint.addImage(imgFile.fileName());
 	}
 
 	if (size + 5 != rh.size)

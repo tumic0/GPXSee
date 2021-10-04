@@ -226,7 +226,6 @@ HEADERS += src/common/config.h \
     src/data/demloader.h \
     src/data/area.h \
     src/data/exifparser.h \
-    src/data/imageinfo.h \
     src/data/csv.h \
     src/data/cupparser.h \
     src/data/gpiparser.h \

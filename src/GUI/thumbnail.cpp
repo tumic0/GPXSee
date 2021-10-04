@@ -2,38 +2,37 @@
 #include <QDesktopServices>
 #include <QFileInfo>
 #include <QMouseEvent>
-#include "data/imageinfo.h"
 #include "thumbnail.h"
 
-static QSize thumbnailSize(const ImageInfo &img, int limit)
+static QSize thumbnailSize(const QSize &size, int limit)
 {
 	int width, height;
-	if (img.size().width() > img.size().height()) {
-		width = qMin(img.size().width(), limit);
-		qreal ratio = img.size().width() / (qreal)img.size().height();
+	if (size.width() > size.height()) {
+		width = qMin(size.width(), limit);
+		qreal ratio = size.width() / (qreal)size.height();
 		height = (int)(width / ratio);
 	} else {
-		height = qMin(img.size().height(), limit);
-		qreal ratio = img.size().height() / (qreal)img.size().width();
+		height = qMin(size.height(), limit);
+		qreal ratio = size.height() / (qreal)size.width();
 		width = (int)(height / ratio);
 	}
 
 	return QSize(width, height);
 }
 
-Thumbnail::Thumbnail(const ImageInfo &img, int size, QWidget *parent)
+Thumbnail::Thumbnail(const QString &path, int limit, QWidget *parent)
   : QLabel(parent)
 {
-	QImageReader reader(img.path());
+	QImageReader reader(path);
 	reader.setAutoTransform(true);
-	reader.setScaledSize(thumbnailSize(img, size));
+	reader.setScaledSize(thumbnailSize(reader.size(), limit));
 	setPixmap(QPixmap::fromImage(reader.read()));
 
 	setCursor(Qt::PointingHandCursor);
 
 	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-	_path = QFileInfo(img.path()).absoluteFilePath();
+	_path = QFileInfo(path).absoluteFilePath();
 }
 
 void Thumbnail::mousePressEvent(QMouseEvent *event)
