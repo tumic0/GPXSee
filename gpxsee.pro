@@ -454,7 +454,35 @@ macx {
 
 win32 {
     RC_ICONS = icons/app/gpxsee.ico \
-        $$file(icons/formats/*.ico)
+        icons/formats/gpx.ico \
+        icons/formats/tcx.ico \
+        icons/formats/kml.ico \
+        icons/formats/fit.ico \
+        icons/formats/igc.ico \
+        icons/formats/nmea.ico \
+        icons/formats/plt.ico \
+        icons/formats/rte.ico \
+        icons/formats/wpt.ico \
+        icons/formats/loc.ico \
+        icons/formats/slf.ico \
+        icons/formats/json.ico \
+        icons/formats/cup.ico \
+        icons/formats/gpi.ico \
+        icons/formats/sml.ico \
+        icons/formats/img.ico \
+        icons/formats/jnx.ico \
+        icons/formats/kap.ico \
+        icons/formats/map.ico \
+        icons/formats/mbts.ico \
+        icons/formats/rmap.ico \
+        icons/formats/tba.ico \
+        icons/formats/aqm.ico \
+        icons/formats/sqlt.ico \
+        icons/formats/ov2.ico \
+        icons/formats/itn.ico \
+        icons/formats/wld.ico \
+        icons/formats/omd.ico \
+        icons/formats/ghp.ico
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }
