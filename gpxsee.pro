@@ -453,7 +453,7 @@ macx {
 }
 
 win32 {
-    RC_ICONS = icons/app/*.ico \
+    RC_ICONS = icons/app/gpxsee.ico \
         $$file(icons/formats/*.ico)
     DEFINES += _USE_MATH_DEFINES \
         NOGDI

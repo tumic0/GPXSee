@@ -85,6 +85,7 @@ Section "GPXSee" SEC_APP
   File "gpxsee.exe"
   File /r "maps"
   File /r "csv"
+  File /r "symbols"
 
   ; Create the uninstaller
   WriteUninstaller "$INSTDIR\uninstall.exe"  

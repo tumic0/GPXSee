@@ -48,6 +48,7 @@ build_script:
     xcopy pkg\csv installer\csv /i
     xcopy pkg\maps installer\maps /i
     xcopy lang\*.qm installer\translations\ /sy
+    xcopy icons\symbols installer\symbols /i
     copy licence.txt installer
     copy %OPENSSLDIR%\%LIBCRYPTO% installer
     copy %OPENSSLDIR%\%LIBSSL% installer
