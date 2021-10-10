@@ -6,12 +6,12 @@
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="15"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Brukernavn:</translation>
     </message>
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="16"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Passord:</translation>
     </message>
 </context>
 <context>
@@ -127,7 +127,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="152"/>
         <source>ONmove files</source>
-        <translation type="unfinished"></translation>
+        <translation>ONmove-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="153"/>
@@ -384,7 +384,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="272"/>
         <source>Show POI icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis POI-ikoner</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="277"/>
@@ -451,7 +451,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="351"/>
         <source>Waypoint icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Veipunktsikoner</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="356"/>
@@ -491,12 +491,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="392"/>
         <source>Download DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>Last ned DEM-data</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="397"/>
         <source>Show local DEM tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis lokale DEM-flis</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="402"/>
@@ -628,7 +628,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1720"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tøm «%1»-flishurtiglager?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="584"/>
@@ -643,7 +643,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="612"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="616"/>
@@ -894,12 +894,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1738"/>
         <source>Could not download all required DEM files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunne ikke laste ned alle påkrevde DEM-filer.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1753"/>
         <source>No local DEM tiles found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fant ingen lokale DEM-flis.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1767"/>
@@ -1579,23 +1579,23 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="555"/>
         <source>Use HTTP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Bruk HTTP-identitetsbekreftelse</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="561"/>
         <source>Use $lat and $lon for NYY/SYY and EXXX/WXXX in the URL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bruk $lat og $lon for NYY/SYY og EXXX/WXXX i nettadressen.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="566"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="579"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nettadresse:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="591"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Kilde</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="598"/>
@@ -1739,7 +1739,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="754"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="755"/>
@@ -2260,7 +2260,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="48"/>
         <source>Symbol</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbol</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="53"/>
