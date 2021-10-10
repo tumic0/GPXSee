@@ -21,8 +21,9 @@ private:
 	HuffmanBuffer _buffer;
 	quint8 _s0, _s1, _s2, _s3;
 	quint8 *_s10, *_s14, *_s18;
-	quint8 _s1c, _s1d, _s1e, _s1f, _s20;
+	quint8 _s1c, _s1d, _s1f, _s20;
 	quint16 _s22;
+	bool _s1e;
 };
 
 }

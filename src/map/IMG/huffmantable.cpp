@@ -20,7 +20,7 @@ bool HuffmanTable::load(const RGNFile *rgn, SubFile::Handle &rgnHdl)
 		return false;
 
 	_s0 = (quint8)_buffer.at(0) & 0x0F;
-	_s1e = (quint8)_buffer.at(0) & 0x10 ? 1 : 8;
+	_s1e = (quint8)_buffer.at(0) & 0x10;
 	_s2 = (quint8)_buffer.at(1);
 	_s3 = bs(_s2);
 	_s1d = (quint8)_buffer.at(2);
@@ -87,7 +87,7 @@ quint32 HuffmanTable::symbol(quint32 data, quint8 &size) const
 	size = *tp;
 	sym = (data - sym) >> (_s2 - *tp);
 
-	if (_s1e == 8)
+	if (!_s1e)
 		sym = readVUint32(tp, _s20);
 	else {
 		sym = (sym + ss) * _s1f;
