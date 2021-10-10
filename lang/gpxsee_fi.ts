@@ -4,12 +4,12 @@
 <context>
     <name>AuthenticationWidget</name>
     <message>
-        <location filename="../src/GUI/authenticationwidget.cpp" line="10"/>
+        <location filename="../src/GUI/authenticationwidget.cpp" line="15"/>
         <source>Username:</source>
         <translation>Käyttäjätunnus:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/authenticationwidget.cpp" line="11"/>
+        <location filename="../src/GUI/authenticationwidget.cpp" line="16"/>
         <source>Password:</source>
         <translation>Salasana:</translation>
     </message>
@@ -302,12 +302,12 @@
 <context>
     <name>GUI</name>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="805"/>
+        <location filename="../src/GUI/gui.cpp" line="817"/>
         <source>Open file</source>
         <translation>Avaa tiedosto</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="920"/>
+        <location filename="../src/GUI/gui.cpp" line="932"/>
         <source>Open POI file</source>
         <translation>Avaa POI-tiedosto</translation>
     </message>
@@ -318,8 +318,8 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="193"/>
-        <location filename="../src/GUI/gui.cpp" line="743"/>
-        <location filename="../src/GUI/gui.cpp" line="744"/>
+        <location filename="../src/GUI/gui.cpp" line="755"/>
+        <location filename="../src/GUI/gui.cpp" line="756"/>
         <source>Keyboard controls</source>
         <translation>Näppäimistön säätimet</translation>
     </message>
@@ -334,12 +334,12 @@
         <translation>Lataa uudelleen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="648"/>
+        <location filename="../src/GUI/gui.cpp" line="660"/>
         <source>Show</source>
         <translation>Näytä</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="638"/>
+        <location filename="../src/GUI/gui.cpp" line="650"/>
         <source>File</source>
         <translation>Tiedosto</translation>
     </message>
@@ -349,22 +349,22 @@
         <translation>Aseta POI:t limittäin</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="272"/>
+        <location filename="../src/GUI/gui.cpp" line="277"/>
         <source>Show POI labels</source>
         <translation>Näytä POI:n nimiöt</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="277"/>
+        <location filename="../src/GUI/gui.cpp" line="282"/>
         <source>Show POIs</source>
         <translation>Näytä POI:t</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="288"/>
+        <location filename="../src/GUI/gui.cpp" line="293"/>
         <source>Show map</source>
         <translation>Näytä kartta</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="306"/>
+        <location filename="../src/GUI/gui.cpp" line="311"/>
         <source>Clear tile cache</source>
         <translation>Tyhjennä välimuisti</translation>
     </message>
@@ -375,8 +375,8 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="190"/>
-        <location filename="../src/GUI/gui.cpp" line="782"/>
-        <location filename="../src/GUI/gui.cpp" line="783"/>
+        <location filename="../src/GUI/gui.cpp" line="794"/>
+        <location filename="../src/GUI/gui.cpp" line="795"/>
         <source>Paths</source>
         <translation>Tiedostopolut</translation>
     </message>
@@ -406,298 +406,308 @@
         <translation>Poista kaikkien tiedostojen valinta</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="297"/>
+        <location filename="../src/GUI/gui.cpp" line="272"/>
+        <source>Show POI icons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="302"/>
         <source>Load map...</source>
         <translation>Lataa kartta...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="303"/>
+        <location filename="../src/GUI/gui.cpp" line="308"/>
         <source>Load map directory...</source>
         <translation>Lataa karttahakemisto…</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="311"/>
         <location filename="../src/GUI/gui.cpp" line="316"/>
-        <location filename="../src/GUI/gui.cpp" line="762"/>
+        <location filename="../src/GUI/gui.cpp" line="321"/>
+        <location filename="../src/GUI/gui.cpp" line="774"/>
         <source>Next map</source>
         <translation>Seuraava kartta</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="321"/>
+        <location filename="../src/GUI/gui.cpp" line="326"/>
         <source>Show cursor coordinates</source>
         <translation>Näytä kohdistimen koordinaatit</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="328"/>
+        <location filename="../src/GUI/gui.cpp" line="333"/>
         <source>Show tracks</source>
         <translation>Näytä jäljet</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="333"/>
+        <location filename="../src/GUI/gui.cpp" line="338"/>
         <source>Show routes</source>
         <translation>Näytä reitit</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="337"/>
+        <location filename="../src/GUI/gui.cpp" line="342"/>
         <source>Show waypoints</source>
         <translation>Näytä reittipisteet</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="342"/>
+        <location filename="../src/GUI/gui.cpp" line="347"/>
         <source>Show areas</source>
         <translation>Näytä alueet</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="346"/>
+        <location filename="../src/GUI/gui.cpp" line="351"/>
+        <source>Waypoint icons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="356"/>
         <source>Waypoint labels</source>
         <translation>Reittipisteen nimiöt</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="356"/>
+        <location filename="../src/GUI/gui.cpp" line="366"/>
         <source>km/mi markers</source>
         <translation>km/mi merkit</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="364"/>
+        <location filename="../src/GUI/gui.cpp" line="374"/>
         <source>Do not show</source>
         <translation>Älä näytä</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="368"/>
+        <location filename="../src/GUI/gui.cpp" line="378"/>
         <source>Marker only</source>
         <translation>Vain merkki</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="372"/>
+        <location filename="../src/GUI/gui.cpp" line="382"/>
         <source>Date/time</source>
         <translation>Pvm/aika</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="376"/>
+        <location filename="../src/GUI/gui.cpp" line="386"/>
         <source>Coordinates</source>
         <translation>Koordinaatit</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="382"/>
+        <location filename="../src/GUI/gui.cpp" line="392"/>
         <source>Download DEM data</source>
         <translation>Lataa DEM-tiedot</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="387"/>
+        <location filename="../src/GUI/gui.cpp" line="397"/>
         <source>Show local DEM tiles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="392"/>
+        <location filename="../src/GUI/gui.cpp" line="402"/>
         <source>Show graphs</source>
         <translation>Näytä kaaviokuvat</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="414"/>
+        <location filename="../src/GUI/gui.cpp" line="424"/>
         <source>Show grid</source>
         <translation>Näytä ruudukko</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="419"/>
+        <location filename="../src/GUI/gui.cpp" line="429"/>
         <source>Show slider info</source>
         <translation>Näytä liukusäätimen arvo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="426"/>
+        <location filename="../src/GUI/gui.cpp" line="436"/>
         <source>Show toolbars</source>
         <translation>Näytä työkalupalkit</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="432"/>
+        <location filename="../src/GUI/gui.cpp" line="442"/>
         <source>Total time</source>
         <translation>Kokonaisaika</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="437"/>
-        <location filename="../src/GUI/gui.cpp" line="1188"/>
-        <location filename="../src/GUI/gui.cpp" line="1255"/>
+        <location filename="../src/GUI/gui.cpp" line="447"/>
+        <location filename="../src/GUI/gui.cpp" line="1200"/>
+        <location filename="../src/GUI/gui.cpp" line="1267"/>
         <source>Moving time</source>
         <translation>Liikkumisaika</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="444"/>
+        <location filename="../src/GUI/gui.cpp" line="454"/>
         <source>Metric</source>
         <translation>Metriset</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="449"/>
+        <location filename="../src/GUI/gui.cpp" line="459"/>
         <source>Imperial</source>
         <translation>Brittiläiset</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="455"/>
+        <location filename="../src/GUI/gui.cpp" line="465"/>
         <source>Nautical</source>
         <translation>Merelliset</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="463"/>
+        <location filename="../src/GUI/gui.cpp" line="473"/>
         <source>Decimal degrees (DD)</source>
         <translation>Desimaaliasteet (DD)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="469"/>
+        <location filename="../src/GUI/gui.cpp" line="479"/>
         <source>Degrees and decimal minutes (DMM)</source>
         <translation>Asteet, desimaaliminuutit (DMM)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="476"/>
+        <location filename="../src/GUI/gui.cpp" line="486"/>
         <source>Degrees, minutes, seconds (DMS)</source>
         <translation>Asteet, minuutit, sekunnit (DMS)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="482"/>
+        <location filename="../src/GUI/gui.cpp" line="492"/>
         <source>Fullscreen mode</source>
         <translation>Kokoruututila</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="488"/>
+        <location filename="../src/GUI/gui.cpp" line="498"/>
         <source>Options...</source>
         <translation>Valinnat...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="493"/>
+        <location filename="../src/GUI/gui.cpp" line="503"/>
         <source>Next</source>
         <translation>Seuraava</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="497"/>
+        <location filename="../src/GUI/gui.cpp" line="507"/>
         <source>Previous</source>
         <translation>Edellinen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="501"/>
+        <location filename="../src/GUI/gui.cpp" line="511"/>
         <source>Last</source>
         <translation>Viimeinen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="505"/>
+        <location filename="../src/GUI/gui.cpp" line="515"/>
         <source>First</source>
         <translation>Ensimmäinen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="578"/>
+        <location filename="../src/GUI/gui.cpp" line="589"/>
         <source>Position info</source>
         <translation>Sijaintitiedot</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="600"/>
+        <location filename="../src/GUI/gui.cpp" line="612"/>
         <source>DEM</source>
         <translation>DEM</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="608"/>
+        <location filename="../src/GUI/gui.cpp" line="620"/>
         <source>Units</source>
         <translation>Yksiköt</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="612"/>
+        <location filename="../src/GUI/gui.cpp" line="624"/>
         <source>Coordinates format</source>
         <translation>Koordinaattien muoto</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="722"/>
+        <location filename="../src/GUI/gui.cpp" line="734"/>
         <source>Version %1</source>
         <translation>Versio %1</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="726"/>
+        <location filename="../src/GUI/gui.cpp" line="738"/>
         <source>GPXSee is distributed under the terms of the GNU General Public License version 3. For more info about GPXSee visit the project homepage at %1.</source>
         <translation>GPXSee levitetään GNU yleisen lisenssin version 3 alaisena. Voit katsoa lisätietoja GPXSee:stä projektin kotisivulla %1.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="753"/>
+        <location filename="../src/GUI/gui.cpp" line="765"/>
         <source>Append file</source>
         <translation>Lisää tiedosto</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="754"/>
+        <location filename="../src/GUI/gui.cpp" line="766"/>
         <source>Next/Previous</source>
         <translation>Seuraava/edellinen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="756"/>
+        <location filename="../src/GUI/gui.cpp" line="768"/>
         <source>Toggle graph type</source>
         <translation>Vaihda kaaviokuvan tyyppi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="758"/>
+        <location filename="../src/GUI/gui.cpp" line="770"/>
         <source>Toggle time type</source>
         <translation>Vaihda ajan tyyppi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="760"/>
+        <location filename="../src/GUI/gui.cpp" line="772"/>
         <source>Toggle position info</source>
         <translation>Vaihda sijaintitiedot</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="764"/>
+        <location filename="../src/GUI/gui.cpp" line="776"/>
         <source>Previous map</source>
         <translation>Edellinen kartta</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="765"/>
+        <location filename="../src/GUI/gui.cpp" line="777"/>
         <source>Zoom in</source>
         <translation>Lähennä</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="767"/>
+        <location filename="../src/GUI/gui.cpp" line="779"/>
         <source>Zoom out</source>
         <translation>Loitonna</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="769"/>
+        <location filename="../src/GUI/gui.cpp" line="781"/>
         <source>Digital zoom</source>
         <translation>Digitaalinen zoomi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="770"/>
+        <location filename="../src/GUI/gui.cpp" line="782"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="771"/>
+        <location filename="../src/GUI/gui.cpp" line="783"/>
         <source>Copy coordinates</source>
         <translation>Kopioi koordinaatit</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="772"/>
+        <location filename="../src/GUI/gui.cpp" line="784"/>
         <source>Left Click</source>
         <translation>Vasen painallus</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="790"/>
+        <location filename="../src/GUI/gui.cpp" line="802"/>
         <source>GCS/PCS directory:</source>
         <translation>GCS/PCS:n hakemisto:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="792"/>
+        <location filename="../src/GUI/gui.cpp" line="804"/>
         <source>DEM directory:</source>
         <translation>DEM -tietojen hakemisto:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="794"/>
+        <location filename="../src/GUI/gui.cpp" line="806"/>
         <source>Styles directory:</source>
         <translation>Tyylitiedostoiden hakemisto:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1166"/>
-        <location filename="../src/GUI/gui.cpp" line="1235"/>
+        <location filename="../src/GUI/gui.cpp" line="1178"/>
+        <location filename="../src/GUI/gui.cpp" line="1247"/>
         <source>Areas</source>
         <translation>Alueet</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1209"/>
-        <location filename="../src/GUI/gui.cpp" line="1210"/>
+        <location filename="../src/GUI/gui.cpp" line="1221"/>
+        <location filename="../src/GUI/gui.cpp" line="1222"/>
         <source>Statistics</source>
         <translation>Tilasto</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1523"/>
+        <location filename="../src/GUI/gui.cpp" line="1535"/>
         <source>Open map file</source>
         <translation>Avaa karttatiedosto</translation>
     </message>
@@ -706,104 +716,104 @@
         <translation type="vanished">Tyhjennetäänkö välimuisti?</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1726"/>
+        <location filename="../src/GUI/gui.cpp" line="1738"/>
         <source>Could not download all required DEM files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1755"/>
+        <location filename="../src/GUI/gui.cpp" line="1767"/>
         <source>No files loaded</source>
         <translation>Yhtään tiedostoa ei ladattu</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1172"/>
-        <location filename="../src/GUI/gui.cpp" line="1176"/>
-        <location filename="../src/GUI/gui.cpp" line="1241"/>
-        <location filename="../src/GUI/gui.cpp" line="1244"/>
+        <location filename="../src/GUI/gui.cpp" line="1184"/>
+        <location filename="../src/GUI/gui.cpp" line="1188"/>
+        <location filename="../src/GUI/gui.cpp" line="1253"/>
+        <location filename="../src/GUI/gui.cpp" line="1256"/>
         <source>Date</source>
         <translation>Päivämäärä</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="539"/>
+        <location filename="../src/GUI/gui.cpp" line="549"/>
         <source>&amp;File</source>
         <translation>&amp;Tiedosto</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="555"/>
+        <location filename="../src/GUI/gui.cpp" line="565"/>
         <source>&amp;Map</source>
         <translation>&amp;Kartat</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="565"/>
+        <location filename="../src/GUI/gui.cpp" line="575"/>
         <source>&amp;Graph</source>
         <translation>Kaa&amp;viokuva</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="589"/>
+        <location filename="../src/GUI/gui.cpp" line="600"/>
         <source>&amp;POI</source>
         <translation>&amp;POI</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="574"/>
+        <location filename="../src/GUI/gui.cpp" line="584"/>
         <source>&amp;Data</source>
         <translation>Tie&amp;dot</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="604"/>
+        <location filename="../src/GUI/gui.cpp" line="616"/>
         <source>&amp;Settings</source>
         <translation>&amp;Asetukset</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="622"/>
+        <location filename="../src/GUI/gui.cpp" line="634"/>
         <source>&amp;Help</source>
         <translation>&amp;Ohje</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="786"/>
+        <location filename="../src/GUI/gui.cpp" line="798"/>
         <source>Map directory:</source>
         <translation>Karttojen hakemisto:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="788"/>
+        <location filename="../src/GUI/gui.cpp" line="800"/>
         <source>POI directory:</source>
         <translation>POI:n hakemisto:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="796"/>
+        <location filename="../src/GUI/gui.cpp" line="808"/>
         <source>Tile cache directory:</source>
         <translation>Välimuistin hakemisto:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1160"/>
-        <location filename="../src/GUI/gui.cpp" line="1231"/>
+        <location filename="../src/GUI/gui.cpp" line="1172"/>
+        <location filename="../src/GUI/gui.cpp" line="1243"/>
         <source>Routes</source>
         <translation>Reitit</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1567"/>
-        <location filename="../src/GUI/gui.cpp" line="1612"/>
-        <location filename="../src/GUI/gui.cpp" line="1631"/>
-        <location filename="../src/GUI/gui.cpp" line="1653"/>
+        <location filename="../src/GUI/gui.cpp" line="1579"/>
+        <location filename="../src/GUI/gui.cpp" line="1624"/>
+        <location filename="../src/GUI/gui.cpp" line="1643"/>
+        <location filename="../src/GUI/gui.cpp" line="1665"/>
         <source>Error loading map:</source>
         <translation>Virhe ladattaessa karttaa:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1680"/>
+        <location filename="../src/GUI/gui.cpp" line="1692"/>
         <source>Select map directory</source>
         <translation>Valitse karttahakemisto</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1708"/>
+        <location filename="../src/GUI/gui.cpp" line="1720"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1741"/>
+        <location filename="../src/GUI/gui.cpp" line="1753"/>
         <source>No local DEM tiles found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1759"/>
+        <location filename="../src/GUI/gui.cpp" line="1771"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n tiedosto</numerusform>
@@ -811,7 +821,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="747"/>
+        <location filename="../src/GUI/gui.cpp" line="759"/>
         <source>Next file</source>
         <translation>Seuraava tiedosto</translation>
     </message>
@@ -826,81 +836,81 @@
         <translation>Vie PDF:ksi...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1163"/>
-        <location filename="../src/GUI/gui.cpp" line="1233"/>
+        <location filename="../src/GUI/gui.cpp" line="1175"/>
+        <location filename="../src/GUI/gui.cpp" line="1245"/>
         <source>Waypoints</source>
         <translation>Reittipisteet</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="748"/>
+        <location filename="../src/GUI/gui.cpp" line="760"/>
         <source>Previous file</source>
         <translation>Edellinen tiedosto</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="351"/>
+        <location filename="../src/GUI/gui.cpp" line="361"/>
         <source>Route waypoints</source>
         <translation>Reittipisteet</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="750"/>
+        <location filename="../src/GUI/gui.cpp" line="762"/>
         <source>First file</source>
         <translation>Ensimmäinen tiedosto</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="752"/>
+        <location filename="../src/GUI/gui.cpp" line="764"/>
         <source>Last file</source>
         <translation>Viimeinen tiedosto</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="850"/>
+        <location filename="../src/GUI/gui.cpp" line="862"/>
         <source>Error loading data file:</source>
         <translation>Virhe ladattaessa datatiedostoa:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="853"/>
-        <location filename="../src/GUI/gui.cpp" line="949"/>
+        <location filename="../src/GUI/gui.cpp" line="865"/>
+        <location filename="../src/GUI/gui.cpp" line="961"/>
         <source>Line: %1</source>
         <translation>Rivi: %1</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="946"/>
+        <location filename="../src/GUI/gui.cpp" line="958"/>
         <source>Error loading POI file:</source>
         <translation>Virhe ladattaessa POI-tiedostoa:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1225"/>
+        <location filename="../src/GUI/gui.cpp" line="1237"/>
         <source>Name</source>
         <translation>Nimi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1157"/>
-        <location filename="../src/GUI/gui.cpp" line="1229"/>
+        <location filename="../src/GUI/gui.cpp" line="1169"/>
+        <location filename="../src/GUI/gui.cpp" line="1241"/>
         <source>Tracks</source>
         <translation>Jäljet</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="196"/>
-        <location filename="../src/GUI/gui.cpp" line="721"/>
+        <location filename="../src/GUI/gui.cpp" line="733"/>
         <source>About GPXSee</source>
         <translation>Tietoja GPXSee:stä</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="655"/>
+        <location filename="../src/GUI/gui.cpp" line="667"/>
         <source>Navigation</source>
         <translation>Navigointi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="401"/>
-        <location filename="../src/GUI/gui.cpp" line="1183"/>
-        <location filename="../src/GUI/gui.cpp" line="1251"/>
+        <location filename="../src/GUI/gui.cpp" line="411"/>
+        <location filename="../src/GUI/gui.cpp" line="1195"/>
+        <location filename="../src/GUI/gui.cpp" line="1263"/>
         <source>Distance</source>
         <translation>Etäisyys</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="408"/>
-        <location filename="../src/GUI/gui.cpp" line="605"/>
-        <location filename="../src/GUI/gui.cpp" line="1186"/>
-        <location filename="../src/GUI/gui.cpp" line="1253"/>
+        <location filename="../src/GUI/gui.cpp" line="418"/>
+        <location filename="../src/GUI/gui.cpp" line="617"/>
+        <location filename="../src/GUI/gui.cpp" line="1198"/>
+        <location filename="../src/GUI/gui.cpp" line="1265"/>
         <source>Time</source>
         <translation>Aika</translation>
     </message>
@@ -2248,17 +2258,22 @@
         <translation>Kommentti</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="51"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="48"/>
+        <source>Symbol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/waypointitem.cpp" line="53"/>
         <source>Address</source>
         <translation>Osoite</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="54"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="56"/>
         <source>Phone</source>
         <translation>Puhelin</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="64"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="66"/>
         <source>Links</source>
         <translation>Linkit</translation>
     </message>
