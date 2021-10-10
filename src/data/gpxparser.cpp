@@ -205,6 +205,8 @@ void GPXParser::waypointData(Waypoint &waypoint, SegmentData *autoRoute)
 			link10.setText(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("extensions"))
 			waypointExtensions(waypoint, autoRoute);
+		else if (_reader.name() == QLatin1String("sym"))
+			waypoint.setSymbol(_reader.readElementText());
 		else
 			_reader.skipCurrentElement();
 	}

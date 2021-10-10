@@ -40,6 +40,9 @@
 #define POI_SETTINGS_GROUP                "POI"
 #define OVERLAP_POI_SETTING               "overlap"
 #define OVERLAP_POI_DEFAULT               false
+
+#define SHOW_POI_ICONS_SETTING            "icons"
+#define SHOW_POI_ICONS_DEFAULT            true
 #define SHOW_POI_LABELS_SETTING           "labels"
 #define SHOW_POI_LABELS_DEFAULT           true
 #define SHOW_POI_SETTING                  "show"
@@ -58,6 +61,8 @@
 #define SHOW_AREAS_DEFAULT                true
 #define SHOW_ROUTE_WAYPOINTS_SETTING      "routeWaypoints"
 #define SHOW_ROUTE_WAYPOINTS_DEFAULT      true
+#define SHOW_WAYPOINT_ICONS_SETTING       "waypointIcons"
+#define SHOW_WAYPOINT_ICONS_DEFAULT       false
 #define SHOW_WAYPOINT_LABELS_SETTING      "waypointLabels"
 #define SHOW_WAYPOINT_LABELS_DEFAULT      true
 #define SHOW_MARKERS_SETTING              "positionMarkers"

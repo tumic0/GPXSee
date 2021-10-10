@@ -20,6 +20,7 @@ public:
 
 	void showWaypoints(bool show);
 	void showWaypointLabels(bool show);
+	void showWaypointIcons(bool show);
 
 	ToolTip info() const;
 	QDateTime date() const {return QDateTime();}

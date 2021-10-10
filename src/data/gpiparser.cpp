@@ -10,6 +10,7 @@
 #include <QTemporaryDir>
 #include "common/garmin.h"
 #include "common/textcodec.h"
+#include "common/color.h"
 #include "address.h"
 #include "gpiparser.h"
 
@@ -35,6 +36,14 @@ private:
 	QString _lang;
 	QString _str;
 };
+
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const TranslatedString &ts)
+{
+	dbg.nospace() << "TS(" << ts.lang() << ", " << ts.str() << ")";
+	return dbg.space();
+}
+#endif // QT_NO_DEBUG
 
 class CryptDevice : public QIODevice
 {
@@ -530,8 +539,22 @@ static quint32 readCamera(DataStream &stream, QVector<Waypoint> &waypoints,
 	return rs + rh.size;
 }
 
+static quint32 readIconId(DataStream &stream, quint16 &id)
+{
+	RecordHeader rh;
+	quint8 rs;
+
+	rs = stream.readRecordHeader(rh);
+	stream >> id;
+
+	if (2 != rh.size)
+		stream.setStatus(QDataStream::ReadCorruptData);
+
+	return rs + rh.size;
+}
+
 static quint32 readPOI(DataStream &stream, QVector<Waypoint> &waypoints,
-  const QString &fileName, int &imgId)
+  const QString &fileName, int &imgId, QVector<QPair<int, quint16> > &icons)
 {
 	RecordHeader rh;
 	quint8 rs;
@@ -551,7 +574,13 @@ static quint32 readPOI(DataStream &stream, QVector<Waypoint> &waypoints,
 		waypoints.last().setName(obj.first().str());
 
 	while (stream.status() == QDataStream::Ok && ds < rh.size) {
-		switch(stream.nextHeaderType()) {
+		quint16 type = stream.nextHeaderType();
+		switch(type) {
+			case 4:
+			    {quint16 id;
+				ds += readIconId(stream, id);
+				icons.append(QPair<int, quint16>(waypoints.size() - 1, id));}
+				break;
 			case 10:
 				ds += readDescription(stream, waypoints.last());
 				break;
@@ -579,7 +608,8 @@ static quint32 readPOI(DataStream &stream, QVector<Waypoint> &waypoints,
 }
 
 static quint32 readSpatialIndex(DataStream &stream, QVector<Waypoint> &waypoints,
-  QList<Area> &polygons, const QString &fileName, int &imgId)
+  QList<Area> &polygons, const QString &fileName, int &imgId,
+  QVector<QPair<int, quint16> > &icons)
 {
 	RecordHeader rh;
 	quint32 ds, s5;
@@ -595,11 +625,12 @@ static quint32 readSpatialIndex(DataStream &stream, QVector<Waypoint> &waypoints
 		while (stream.status() == QDataStream::Ok && ds < rh.size) {
 			switch(stream.nextHeaderType()) {
 				case 2:
-					ds += readPOI(stream, waypoints, fileName, imgId);
+					ds += readPOI(stream, waypoints, fileName, imgId,
+					  icons);
 					break;
 				case 8:
 					ds += readSpatialIndex(stream, waypoints, polygons,
-					  fileName, imgId);
+					  fileName, imgId, icons);
 					break;
 				case 19:
 					ds += readCamera(stream, waypoints, polygons);
@@ -616,29 +647,87 @@ static quint32 readSpatialIndex(DataStream &stream, QVector<Waypoint> &waypoints
 	return rs + rh.size;
 }
 
+static quint32 readSymbol(DataStream &stream, QPixmap &pixmap)
+{
+	RecordHeader rh;
+	quint8 rs, u8, bpp, transparent;
+	quint32 ds = 36, u32, imageSize, paletteSize, bgColor;
+	quint16 id, height, width, lineSize;
+	QByteArray data;
+	QVector<QRgb> palette;
+	QImage img;
+
+	rs = stream.readRecordHeader(rh);
+	stream >> id >> height >> width >> lineSize >> bpp >> u8 >> u8 >> u8
+	  >> imageSize >> u32 >> paletteSize >> bgColor >> transparent >> u8 >> u8
+	  >> u8 >> u32;
+	if (imageSize) {
+		data.resize(imageSize);
+		stream.readRawData(data.data(), data.size());
+		ds += data.size();
+	}
+	if (paletteSize) {
+		quint32 rgb;
+		palette.resize(paletteSize);
+		for (quint32 i = 0; i < paletteSize; i++) {
+			stream >> rgb;
+			palette[i] = (transparent && rgb == bgColor)
+			  ? QRgb(0)
+			  : Color::rgb((rgb & 0x000000FF), (rgb & 0x0000FF00) >> 8,
+			    (rgb & 0x00FF0000) >> 16);
+		}
+		ds += paletteSize * 4;
+	}
+
+	if (paletteSize) {
+		img = QImage((uchar*)data.data(), width, height, lineSize,
+		  QImage::Format_Indexed8);
+		img.setColorTable(palette);
+	} else
+		img = QImage((uchar*)data.data(), width, height, lineSize,
+		  QImage::Format_RGB32);
+	pixmap = QPixmap::fromImage(img);
+
+	if (ds != rh.size)
+		stream.setStatus(QDataStream::ReadCorruptData);
+
+	return rs + rh.size;
+}
+
 static void readPOIDatabase(DataStream &stream, QVector<Waypoint> &waypoints,
   QList<Area> &polygons, const QString &fileName, int &imgId)
 {
 	RecordHeader rh;
 	QList<TranslatedString> obj;
 	quint32 ds;
+	QVector<QPair<int, quint16> > il;
+	QVector<QPixmap> icons;
 
 	stream.readRecordHeader(rh);
 	ds = stream.readTranslatedObjects(obj);
-	ds += readSpatialIndex(stream, waypoints, polygons, fileName, imgId);
+	ds += readSpatialIndex(stream, waypoints, polygons, fileName, imgId, il);
 	if (rh.flags & 0x8) {
 		while (stream.status() == QDataStream::Ok && ds < rh.size) {
-			switch(stream.nextHeaderType()) {
+			quint16 type = stream.nextHeaderType();
+			switch(type) {
+				case 5:
+					icons.append(QPixmap());
+					ds += readSymbol(stream, icons.last());
+					break;
 				case 8:
 					ds += readSpatialIndex(stream, waypoints, polygons,
-					  fileName, imgId);
+					  fileName, imgId, il);
 					break;
-				case 5: // symbol
-				case 7: // category
 				default:
 					ds += stream.skipRecord();
 			}
 		}
+	}
+
+	for (int i = 0; i < il.size(); i++) {
+		const QPair<int, quint16> &e = il.at(i);
+		if (e.second < icons.size())
+			waypoints[e.first].setIcon(icons.at(e.second));
 	}
 
 	if (ds != rh.size)
@@ -652,7 +741,7 @@ bool GPIParser::readData(DataStream &stream, QVector<Waypoint> &waypoints,
 
 	while (stream.status() == QDataStream::Ok) {
 		switch (stream.nextHeaderType()) {
-			case 0x09:   // POI database
+			case 0x09:
 				readPOIDatabase(stream, waypoints, polygons, fileName,
 				  imgId);
 				break;
@@ -661,8 +750,6 @@ bool GPIParser::readData(DataStream &stream, QVector<Waypoint> &waypoints,
 				if (stream.status() == QDataStream::Ok)
 					return true;
 				break;
-			case 0x16:   // route
-			case 0x15:   // info header
 			default:
 				stream.skipRecord();
 		}

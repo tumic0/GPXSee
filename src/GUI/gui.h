@@ -196,6 +196,7 @@ private:
 	QAction *_showPOIAction;
 	QAction *_overlapPOIAction;
 	QAction *_showPOILabelsAction;
+	QAction *_showPOIIconsAction;
 	QAction *_showMapAction;
 	QAction *_fullscreenAction;
 	QAction *_loadMapAction;
@@ -225,6 +226,7 @@ private:
 	QAction *_showRoutesAction;
 	QAction *_showWaypointsAction;
 	QAction *_showWaypointLabelsAction;
+	QAction *_showWaypointIconsAction;
 	QAction *_showAreasAction;
 	QAction *_showRouteWaypointsAction;
 	QAction *_hideMarkersAction;

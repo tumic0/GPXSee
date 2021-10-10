@@ -11,6 +11,8 @@
 #define TILES_DIR        "tiles"
 #define TRANSLATIONS_DIR "translations"
 #define STYLE_DIR        "style"
+#define SYMBOLS_DIR      "symbols"
+
 #define ELLIPSOID_FILE   "ellipsoids.csv"
 #define GCS_FILE         "gcs.csv"
 #define PCS_FILE         "pcs.csv"
@@ -66,6 +68,16 @@ QString ProgramPaths::styleDir(bool writable)
 	else
 		return QStandardPaths::locate(QStandardPaths::AppDataLocation,
 		  STYLE_DIR, QStandardPaths::LocateDirectory);
+}
+
+QString ProgramPaths::symbolsDir(bool writable)
+{
+	if (writable)
+		return QDir(QStandardPaths::writableLocation(
+		  QStandardPaths::AppDataLocation)).filePath(SYMBOLS_DIR);
+	else
+		return QStandardPaths::locate(QStandardPaths::AppDataLocation,
+		  SYMBOLS_DIR, QStandardPaths::LocateDirectory);
 }
 
 QString ProgramPaths::tilesDir()

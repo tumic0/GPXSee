@@ -269,6 +269,11 @@ void GUI::createActions()
 	_overlapPOIAction->setCheckable(true);
 	connect(_overlapPOIAction, &QAction::triggered, _mapView,
 	  &MapView::showOverlappedPOIs);
+	_showPOIIconsAction = new QAction(tr("Show POI icons"), this);
+	_showPOIIconsAction->setMenuRole(QAction::NoRole);
+	_showPOIIconsAction->setCheckable(true);
+	connect(_showPOIIconsAction, &QAction::triggered, _mapView,
+	  &MapView::showPOIIcons);
 	_showPOILabelsAction = new QAction(tr("Show POI labels"), this);
 	_showPOILabelsAction->setMenuRole(QAction::NoRole);
 	_showPOILabelsAction->setCheckable(true);
@@ -343,6 +348,11 @@ void GUI::createActions()
 	_showAreasAction->setMenuRole(QAction::NoRole);
 	_showAreasAction->setCheckable(true);
 	connect(_showAreasAction, &QAction::triggered, this, &GUI::showAreas);
+	_showWaypointIconsAction = new QAction(tr("Waypoint icons"), this);
+	_showWaypointIconsAction->setMenuRole(QAction::NoRole);
+	_showWaypointIconsAction->setCheckable(true);
+	connect(_showWaypointIconsAction, &QAction::triggered, _mapView,
+	  &MapView::showWaypointIcons);
 	_showWaypointLabelsAction = new QAction(tr("Waypoint labels"), this);
 	_showWaypointLabelsAction->setMenuRole(QAction::NoRole);
 	_showWaypointLabelsAction->setCheckable(true);
@@ -572,6 +582,7 @@ void GUI::createMenus()
 	graphMenu->addAction(_showGraphsAction);
 
 	QMenu *dataMenu = menuBar()->addMenu(tr("&Data"));
+	dataMenu->addAction(_showWaypointIconsAction);
 	dataMenu->addAction(_showWaypointLabelsAction);
 	dataMenu->addAction(_showRouteWaypointsAction);
 	dataMenu->addAction(_showTicksAction);
@@ -592,6 +603,7 @@ void GUI::createMenus()
 	_poiMenu->addAction(_selectAllPOIAction);
 	_poiMenu->addAction(_unselectAllPOIAction);
 	_poiMenu->addSeparator();
+	_poiMenu->addAction(_showPOIIconsAction);
 	_poiMenu->addAction(_showPOILabelsAction);
 	_poiMenu->addAction(_overlapPOIAction);
 	_poiMenu->addSeparator();
@@ -2145,6 +2157,9 @@ void GUI::writeSettings()
 	if (_showPOILabelsAction->isChecked() != SHOW_POI_LABELS_DEFAULT)
 		settings.setValue(SHOW_POI_LABELS_SETTING,
 		  _showPOILabelsAction->isChecked());
+	if (_showPOIIconsAction->isChecked() != SHOW_POI_ICONS_DEFAULT)
+		settings.setValue(SHOW_POI_ICONS_SETTING,
+		  _showPOIIconsAction->isChecked());
 
 	int j = 0;
 	QList<QAction*> poiActions(_poisActionGroup->actions());
@@ -2171,6 +2186,9 @@ void GUI::writeSettings()
 		  _showWaypointsAction->isChecked());
 	if (_showAreasAction->isChecked() != SHOW_AREAS_DEFAULT)
 		settings.setValue(SHOW_AREAS_SETTING, _showAreasAction->isChecked());
+	if (_showWaypointIconsAction->isChecked() != SHOW_WAYPOINT_ICONS_DEFAULT)
+		settings.setValue(SHOW_WAYPOINT_ICONS_SETTING,
+		  _showWaypointIconsAction->isChecked());
 	if (_showWaypointLabelsAction->isChecked() != SHOW_WAYPOINT_LABELS_DEFAULT)
 		settings.setValue(SHOW_WAYPOINT_LABELS_SETTING,
 		  _showWaypointLabelsAction->isChecked());
@@ -2433,6 +2451,9 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 		_mapView->showOverlappedPOIs(false);
 	else
 		_overlapPOIAction->setChecked(true);
+	if (settings.value(SHOW_POI_ICONS_SETTING, SHOW_POI_ICONS_DEFAULT)
+	  .toBool())
+		_showPOIIconsAction->trigger();
 	if (!settings.value(SHOW_POI_LABELS_SETTING, SHOW_POI_LABELS_DEFAULT)
 	  .toBool())
 		_mapView->showPOILabels(false);
@@ -2473,6 +2494,9 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 		_mapView->showAreas(false);
 	else
 		_showAreasAction->setChecked(true);
+	if (settings.value(SHOW_WAYPOINT_ICONS_SETTING,
+	  SHOW_WAYPOINT_ICONS_DEFAULT).toBool())
+		_showWaypointIconsAction->trigger();
 	if (!settings.value(SHOW_WAYPOINT_LABELS_SETTING,
 	  SHOW_WAYPOINT_LABELS_DEFAULT).toBool())
 		_mapView->showWaypointLabels(false);

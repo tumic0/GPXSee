@@ -89,8 +89,10 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_showAreas = true;
 	_showWaypoints = true;
 	_showWaypointLabels = true;
+	_showWaypointIcons = false;
 	_showPOI = true;
 	_showPOILabels = true;
+	_showPOIIcons = false;
 	_overlapPOIs = true;
 	_showRouteWaypoints = true;
 	_showMarkers = true;
@@ -169,6 +171,7 @@ PathItem *MapView::addRoute(const Route &route)
 	ri->setVisible(_showRoutes);
 	ri->showWaypoints(_showRouteWaypoints);
 	ri->showWaypointLabels(_showWaypointLabels);
+	ri->showWaypointIcons(_showWaypointLabels);
 	ri->setDigitalZoom(_digitalZoom);
 	ri->setMarkerColor(_markerColor);
 	ri->showMarker(_showMarkers);
@@ -217,6 +220,7 @@ void MapView::addWaypoints(const QVector<Waypoint> &waypoints)
 		wi->setSize(_waypointSize);
 		wi->setColor(_waypointColor);
 		wi->showLabel(_showWaypointLabels);
+		wi->showIcon(_showWaypointIcons);
 		wi->setVisible(_showWaypoints);
 		wi->setDigitalZoom(_digitalZoom);
 		_scene->addItem(wi);
@@ -478,6 +482,7 @@ void MapView::addPOI(const QList<Waypoint> &waypoints)
 		pi->setSize(_poiSize);
 		pi->setColor(_poiColor);
 		pi->showLabel(_showPOILabels);
+		pi->showIcon(_showPOIIcons);
 		pi->setVisible(_showPOI);
 		pi->setDigitalZoom(_digitalZoom);
 		_scene->addItem(pi);
@@ -492,9 +497,9 @@ void MapView::setUnits(Units units)
 	PathItem::setUnits(units);
 
 	for (int i = 0; i < _tracks.count(); i++)
-		_tracks[i]->updateTicks();
+		_tracks.at(i)->updateTicks();
 	for (int i = 0; i < _routes.count(); i++)
-		_routes[i]->updateTicks();
+		_routes.at(i)->updateTicks();
 
 	_mapScale->setUnits(units);
 }
@@ -505,9 +510,9 @@ void MapView::setCoordinatesFormat(CoordinatesFormat format)
 	PathItem::setCoordinatesFormat(format);
 
 	for (int i = 0; i < _tracks.count(); i++)
-		_tracks[i]->updateMarkerInfo();
+		_tracks.at(i)->updateMarkerInfo();
 	for (int i = 0; i < _routes.count(); i++)
-		_routes[i]->updateMarkerInfo();
+		_routes.at(i)->updateMarkerInfo();
 
 	_coordinates->setFormat(format);
 }
@@ -518,9 +523,9 @@ void MapView::setTimeZone(const QTimeZone &zone)
 	PathItem::setTimeZone(zone);
 
 	for (int i = 0; i < _tracks.count(); i++)
-		_tracks[i]->updateMarkerInfo();
+		_tracks.at(i)->updateMarkerInfo();
 	for (int i = 0; i < _routes.count(); i++)
-		_routes[i]->updateMarkerInfo();
+		_routes.at(i)->updateMarkerInfo();
 }
 
 void MapView::clearMapCache()
@@ -819,6 +824,16 @@ void MapView::showWaypointLabels(bool show)
 		_routes.at(i)->showWaypointLabels(show);
 }
 
+void MapView::showWaypointIcons(bool show)
+{
+	_showWaypointIcons = show;
+
+	for (int i = 0; i < _waypoints.size(); i++)
+		_waypoints.at(i)->showIcon(show);
+	for (int i = 0; i < _routes.size(); i++)
+		_routes.at(i)->showWaypointIcons(show);
+}
+
 void MapView::showRouteWaypoints(bool show)
 {
 	_showRouteWaypoints = show;
@@ -880,6 +895,17 @@ void MapView::showPOILabels(bool show)
 	for (POIHash::const_iterator it = _pois.constBegin();
 	  it != _pois.constEnd(); it++)
 		it.value()->showLabel(show);
+
+	updatePOIVisibility();
+}
+
+void MapView::showPOIIcons(bool show)
+{
+	_showPOIIcons = show;
+
+	for (POIHash::const_iterator it = _pois.constBegin();
+	  it != _pois.constEnd(); it++)
+		it.value()->showIcon(show);
 
 	updatePOIVisibility();
 }

@@ -1,7 +1,7 @@
 #include <cstring>
 #include <QtEndian>
 #include <QFile>
-#include "color.h"
+#include "common/color.h"
 #include "ozf.h"
 
 

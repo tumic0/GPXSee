@@ -5,6 +5,7 @@
 #include <QDateTime>
 #include <QHash>
 #include <QVector>
+#include <QPixmap>
 #include <QDebug>
 #include "common/config.h"
 #include "common/coordinates.h"
@@ -24,10 +25,12 @@ public:
 	const QString &comment() const {return _comment;}
 	const QString &address() const {return _address;}
 	const QString &phone() const {return _phone;}
+	const QString &symbol() const {return _symbol;}
 	const QVector<QString> &images() const {return _images;}
 	const QVector<Link> &links() const {return _links;}
 	const QDateTime &timestamp() const {return _timestamp;}
 	qreal elevation() const {return _elevation;}
+	const QPixmap &icon() const {return _icon;}
 
 	QPair<qreal, qreal> elevations() const;
 
@@ -39,10 +42,12 @@ public:
 	void setComment(const QString &comment) {_comment = comment;}
 	void setAddress(const QString &address) {_address = address;}
 	void setPhone(const QString &phone) {_phone = phone;}
+	void setSymbol(const QString &symbol) {_symbol = symbol;}
 	void setTimestamp(const QDateTime &timestamp) {_timestamp = timestamp;}
 	void setElevation(qreal elevation) {_elevation = elevation;}
 	void addImage(const QString &path) {_images.append(path);}
 	void addLink(const Link &link) {_links.append(link);}
+	void setIcon(const QPixmap &icon) {_icon = icon;}
 
 	bool hasElevation() const {return !std::isnan(_elevation);}
 
@@ -54,6 +59,9 @@ public:
 	static void showSecondaryElevation(bool show)
 	  {_show2ndElevation = show;}
 
+	static const QPixmap *symbolIcon(const QString &symbol);
+	static void loadSymbolIcons(const QString &dir);
+
 private:
 	Coordinates _coordinates;
 	QString _name;
@@ -61,13 +69,16 @@ private:
 	QString _comment;
 	QString _address;
 	QString _phone;
+	QString _symbol;
 	QVector<QString> _images;
 	QVector<Link> _links;
 	QDateTime _timestamp;
 	qreal _elevation;
+	QPixmap _icon;
 
 	static bool _useDEM;
 	static bool _show2ndElevation;
+	static QHash<QString, QPixmap> _symbolIcons;
 };
 
 inline HASH_T qHash(const Waypoint &key)

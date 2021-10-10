@@ -95,12 +95,14 @@ public slots:
 	void showMap(bool show);
 	void showPOI(bool show);
 	void showPOILabels(bool show);
+	void showPOIIcons(bool show);
 	void showCoordinates(bool show);
 	void showTicks(bool show);
 	void showMarkers(bool show);
 	void showMarkerInfo(MarkerInfoItem::Type type);
 	void showOverlappedPOIs(bool show);
 	void showWaypointLabels(bool show);
+	void showWaypointIcons(bool show);
 	void showTracks(bool show);
 	void showRoutes(bool show);
 	void showAreas(bool show);
@@ -165,7 +167,7 @@ private:
 
 	bool _showMap, _showTracks, _showRoutes, _showAreas, _showWaypoints,
 	  _showWaypointLabels, _showPOI, _showPOILabels, _showRouteWaypoints,
-	  _showMarkers, _showPathTicks;
+	  _showMarkers, _showPathTicks, _showPOIIcons, _showWaypointIcons;
 	MarkerInfoItem::Type _markerInfoType;
 	bool _overlapPOIs;
 	int _trackWidth, _routeWidth, _areaWidth;

@@ -23,6 +23,7 @@ public:
 	void setSize(int size);
 	void setColor(const QColor &color);
 	void showLabel(bool show);
+	void showIcon(bool show);
 	void setDigitalZoom(int zoom) {setScale(pow(2, -zoom));}
 
 	QPainterPath shape() const {return _shape;}
@@ -50,8 +51,10 @@ private:
 	QColor _color;
 	int _size;
 	bool _showLabel;
+	bool _showIcon;
 	QFont _font;
 	QRect _labelBB;
+	const QPixmap *_icon;
 
 	static Units _units;
 	static CoordinatesFormat _format;

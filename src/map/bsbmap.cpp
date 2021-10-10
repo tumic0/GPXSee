@@ -1,11 +1,11 @@
 #include <cctype>
 #include <QFileInfo>
 #include <QPainter>
+#include "common/color.h"
 #include "image.h"
 #include "gcs.h"
 #include "pcs.h"
 #include "calibrationpoint.h"
-#include "color.h"
 #include "bsbmap.h"
 
 

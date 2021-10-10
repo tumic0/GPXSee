@@ -48,7 +48,8 @@ GPXSee uses [Weblate](https://hosted.weblate.org/projects/gpxsee/translations/) 
 GPXSee is licensed under GPL-3.0 (only). However, some 3rd party parts are using different, GPL compatible,
 licenses:
 * [Oxygen icons](icons/GUI) - LGPLv3
-* [Mapbox Maki icons](icons/POI) - CC0
+* [Mapbox Maki icons](icons/IMG) - CC0
+* [Map Icons Collection](icons/symbols) - CC BY SA 3.0
 * [RTree implementation](src/common/rtree.h) - Public domain
 * [Albers](src/map/proj/albersequal.cpp), [Geocentric](src/map/geocentric.cpp), [LCC](src/map/proj/lambertconic.cpp),
   [Mercator](src/map/proj/mercator.cpp), [Polar Stereographic](src/map/proj/polarstereographic.cpp),

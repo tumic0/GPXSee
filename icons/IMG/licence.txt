@@ -1,4 +1,4 @@
-The POI icons are Mapbox Maki icons (https://labs.mapbox.com/maki-icons/)
+The IMG style icons are Mapbox Maki icons (https://labs.mapbox.com/maki-icons/)
 licensed under CC0.
 
 -----

@@ -33,6 +33,7 @@ HEADERS += src/common/config.h \
     src/common/tifffile.h \
     src/common/downloader.h \
     src/common/polygon.h \
+    src/common/color.h \
     src/GUI/authenticationwidget.h \
     src/GUI/axislabelitem.h \
     src/GUI/dirselectwidget.h \
@@ -191,7 +192,6 @@ HEADERS += src/common/config.h \
     src/map/osm.h \
     src/map/rmap.h \
     src/map/calibrationpoint.h \
-    src/map/color.h \
     src/map/textitem.h \
     src/map/aqmmap.h \
     src/map/mapsforgemap.h \
@@ -439,58 +439,17 @@ macx {
     ICON = icons/app/gpxsee.icns
     QMAKE_INFO_PLIST = pkg/Info.plist
     locale.path = Contents/Resources/translations
-    locale.files = lang/gpxsee_en.qm \
-        lang/gpxsee_cs.qm \
-        lang/gpxsee_de.qm \
-        lang/gpxsee_fi.qm \
-        lang/gpxsee_fr.qm \
-        lang/gpxsee_ru.qm \
-        lang/gpxsee_sv.qm \
-        lang/gpxsee_pl.qm \
-        lang/gpxsee_nb.qm \
-        lang/gpxsee_da.qm \
-        lang/gpxsee_tr.qm \
-        lang/gpxsee_es.qm \
-        lang/gpxsee_pt_BR.qm \
-        lang/gpxsee_uk.qm \
-        lang/gpxsee_hu.qm \
-        lang/gpxsee_it.qm \
-        lang/gpxsee_eo.qm \
-        lang/gpxsee_zh.qm
+    locale.files = lang/*.qm
     csv.path = Contents/Resources
     csv.files = pkg/csv
     maps.path = Contents/Resources
     maps.files = pkg/maps
+    symbols.path = Contents/Resources/symbols
+    symbols.files = icons/symbols/*.png
     icons.path = Contents/Resources/icons
-    icons.files = icons/formats/gpx.icns \
-        icons/formats/tcx.icns \
-        icons/formats/kml.icns \
-        icons/formats/fit.icns \
-        icons/formats/igc.icns \
-        icons/formats/nmea.icns \
-        icons/formats/plt.icns \
-        icons/formats/rte.icns \
-        icons/formats/wpt.icns \
-        icons/formats/loc.icns \
-        icons/formats/slf.icns \
-        icons/formats/json.icns \
-        icons/formats/cup.icns \
-        icons/formats/gpi.icns \
-        icons/formats/sml.icns \
-        icons/formats/img.icns \
-        icons/formats/jnx.icns \
-        icons/formats/kap.icns \
-        icons/formats/mbts.icns \
-        icons/formats/rmap.icns \
-        icons/formats/tba.icns \
-        icons/formats/aqm.icns \
-        icons/formats/sqlt.icns \
-        icons/formats/ov2.icns \
-        icons/formats/itn.icns \
-        icons/formats/wld.icns \
-        icons/formats/omd.icns \
-        icons/formats/ghp.icns
-    QMAKE_BUNDLE_DATA += locale maps icons csv
+    icons.files = icons/formats/*.icns
+
+    QMAKE_BUNDLE_DATA += locale maps symbols icons csv
 }
 
 win32 {
@@ -535,6 +494,8 @@ unix:!macx {
     maps.path = $$PREFIX/share/gpxsee/maps
     csv.files = pkg/csv/*
     csv.path = $$PREFIX/share/gpxsee/csv
+    symbols.files = icons/symbols/*.png
+    symbols.path = $$PREFIX/share/gpxsee/symbols
     locale.files = lang/*.qm
     locale.path = $$PREFIX/share/gpxsee/translations
     icon.files = icons/app/hicolor/*
@@ -544,5 +505,5 @@ unix:!macx {
     mime.files = pkg/gpxsee.xml
     mime.path = $$PREFIX/share/mime/packages
     target.path = $$PREFIX/bin
-    INSTALLS += target maps csv locale icon desktop mime
+    INSTALLS += target maps csv symbols locale icon desktop mime
 }

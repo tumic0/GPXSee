@@ -6,11 +6,11 @@
 #include <QtEndian>
 #include "common/rectc.h"
 #include "common/wgs84.h"
+#include "common/color.h"
 #include "calibrationpoint.h"
 #include "utm.h"
 #include "pcs.h"
 #include "rectd.h"
-#include "color.h"
 #include "rmap.h"
 
 

@@ -53,7 +53,7 @@ RouteItem::RouteItem(const Route &route, Map *map, QGraphicsItem *parent)
 void RouteItem::setMap(Map *map)
 {
 	for (int i = 0; i < _waypoints.count(); i++)
-		_waypoints[i]->setMap(map);
+		_waypoints.at(i)->setMap(map);
 
 	PathItem::setMap(map);
 }
@@ -61,19 +61,25 @@ void RouteItem::setMap(Map *map)
 void RouteItem::showWaypoints(bool show)
 {
 	for (int i = 0; i < _waypoints.count(); i++)
-		_waypoints[i]->setVisible(show);
+		_waypoints.at(i)->setVisible(show);
 }
 
 void RouteItem::showWaypointLabels(bool show)
 {
 	for (int i = 0; i < _waypoints.count(); i++)
-		_waypoints[i]->showLabel(show);
+		_waypoints.at(i)->showLabel(show);
+}
+
+void RouteItem::showWaypointIcons(bool show)
+{
+	for (int i = 0; i < _waypoints.count(); i++)
+		_waypoints.at(i)->showIcon(show);
 }
 
 void RouteItem::setDigitalZoom(int zoom)
 {
 	for (int i = 0; i < _waypoints.count(); i++)
-		_waypoints[i]->setDigitalZoom(zoom);
+		_waypoints.at(i)->setDigitalZoom(zoom);
 
 	PathItem::setDigitalZoom(zoom);
 }

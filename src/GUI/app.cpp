@@ -13,6 +13,7 @@
 #include "map/gcs.h"
 #include "map/pcs.h"
 #include "data/dem.h"
+#include "data/waypoint.h"
 #include "gui.h"
 #include "mapaction.h"
 #include "app.h"
@@ -57,6 +58,7 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 
 	loadDatums();
 	loadPCSs();
+	Waypoint::loadSymbolIcons(ProgramPaths::symbolsDir());
 
 	_gui = new GUI();
 }
