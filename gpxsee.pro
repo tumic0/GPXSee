@@ -439,50 +439,22 @@ macx {
     ICON = icons/app/gpxsee.icns
     QMAKE_INFO_PLIST = pkg/Info.plist
     locale.path = Contents/Resources/translations
-    locale.files = lang/*.qm
+    locale.files = $$files(lang/*.qm)
     csv.path = Contents/Resources
     csv.files = pkg/csv
     maps.path = Contents/Resources
     maps.files = pkg/maps
     symbols.path = Contents/Resources/symbols
-    symbols.files = icons/symbols/*.png
+    symbols.files = $$files(icons/symbols/*.png)
     icons.path = Contents/Resources/icons
-    icons.files = icons/formats/*.icns
+    icons.files = $$files(icons/formats/*.icns)
 
     QMAKE_BUNDLE_DATA += locale maps symbols icons csv
 }
 
 win32 {
-    RC_ICONS = icons/app/gpxsee.ico \
-        icons/formats/gpx.ico \
-        icons/formats/tcx.ico \
-        icons/formats/kml.ico \
-        icons/formats/fit.ico \
-        icons/formats/igc.ico \
-        icons/formats/nmea.ico \
-        icons/formats/plt.ico \
-        icons/formats/rte.ico \
-        icons/formats/wpt.ico \
-        icons/formats/loc.ico \
-        icons/formats/slf.ico \
-        icons/formats/json.ico \
-        icons/formats/cup.ico \
-        icons/formats/gpi.ico \
-        icons/formats/sml.ico \
-        icons/formats/img.ico \
-        icons/formats/jnx.ico \
-        icons/formats/kap.ico \
-        icons/formats/map.ico \
-        icons/formats/mbts.ico \
-        icons/formats/rmap.ico \
-        icons/formats/tba.ico \
-        icons/formats/aqm.ico \
-        icons/formats/sqlt.ico \
-        icons/formats/ov2.ico \
-        icons/formats/itn.ico \
-        icons/formats/wld.ico \
-        icons/formats/omd.ico \
-        icons/formats/ghp.ico
+    RC_ICONS = icons/app/*.ico \
+        $$file(icons/formats/*.ico)
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }
@@ -490,15 +462,15 @@ win32 {
 unix:!macx {
     isEmpty(PREFIX):PREFIX = /usr/local
 
-    maps.files = pkg/maps/*
+    maps.files = $$files(pkg/maps/*)
     maps.path = $$PREFIX/share/gpxsee/maps
-    csv.files = pkg/csv/*
+    csv.files = $$files(pkg/csv/*)
     csv.path = $$PREFIX/share/gpxsee/csv
-    symbols.files = icons/symbols/*.png
+    symbols.files = $$files(icons/symbols/*.png)
     symbols.path = $$PREFIX/share/gpxsee/symbols
-    locale.files = lang/*.qm
+    locale.files = $$files(lang/*.qm)
     locale.path = $$PREFIX/share/gpxsee/translations
-    icon.files = icons/app/hicolor/*
+    icon.files = $files(icons/app/hicolor/*)
     icon.path = $$PREFIX/share/icons/hicolor
     desktop.files = pkg/gpxsee.desktop
     desktop.path = $$PREFIX/share/applications
