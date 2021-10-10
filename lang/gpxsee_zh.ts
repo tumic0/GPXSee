@@ -1366,7 +1366,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
         <source>Paths</source>
-        <translation>路径</translation>
+        <translation>线</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="290"/>
