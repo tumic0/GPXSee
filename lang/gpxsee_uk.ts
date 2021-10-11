@@ -11,7 +11,7 @@
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="16"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль:</translation>
     </message>
 </context>
 <context>
@@ -170,7 +170,7 @@
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="38"/>
         <source>Select directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Виберіть каталог</translation>
     </message>
 </context>
 <context>
@@ -648,7 +648,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="612"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="616"/>
@@ -1577,7 +1577,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="566"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="579"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="591"/>
@@ -1741,7 +1741,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="754"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="755"/>
@@ -2262,7 +2262,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="48"/>
         <source>Symbol</source>
-        <translation type="unfinished"></translation>
+        <translation>Символ</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="53"/>

@@ -384,7 +384,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="272"/>
         <source>Show POI icons</source>
-        <translation type="unfinished"></translation>
+        <translation>POI ikonok mutatása</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="277"/>
@@ -451,7 +451,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="351"/>
         <source>Waypoint icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Útpont ikonok</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="356"/>
@@ -915,6 +915,7 @@
         <location filename="../src/GUI/gui.cpp" line="1773"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
@@ -2264,7 +2265,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="48"/>
         <source>Symbol</source>
-        <translation type="unfinished"></translation>
+        <translation>Jel</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="53"/>

@@ -408,7 +408,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="272"/>
         <source>Show POI icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Näytä POI -kuvakkeet</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="302"/>
@@ -455,7 +455,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="351"/>
         <source>Waypoint icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Reittipisteen kuvakkeet</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="356"/>
@@ -2265,7 +2265,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="48"/>
         <source>Symbol</source>
-        <translation type="unfinished"></translation>
+        <translation>Symboli</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="53"/>
