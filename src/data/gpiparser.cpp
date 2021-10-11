@@ -232,47 +232,24 @@ static quint32 readFprsRecord(DataStream &stream)
 static quint32 readFileDataRecord(DataStream &stream)
 {
 	RecordHeader rh;
-	quint32 ds, s1;
+	quint32 ds, flags;
 	quint16 s2, s3;
 	quint8 rs;
 	QList<TranslatedString> obj;
 
 	rs = stream.readRecordHeader(rh);
-	stream >> s1 >> s2 >> s3;
+	stream >> flags >> s2 >> s3;
 	ds = 8;
+	// name
 	ds += stream.readTranslatedObjects(obj);
+	// copyright
 	ds += stream.readTranslatedObjects(obj);
-
-	if (s1 & 0x10) {
-		quint8 ss1, ss2;
-		quint16 ss3;
-		stream >> ss1 >> ss2 >> ss3;
-		ds += 4;
-	}
-	if (s1 & 0x100) {
-		quint32 ss1;
-		stream >> ss1;
-		if (ss1)
-			stream.skipRawData(ss1);
-		ds += ss1 + 4;
-	}
-	if (s1 & 0x400) {
-		QString str;
-		ds += stream.readString(str);
-	}
-	if (s1 & 0x400000) {
-		quint16 ss1;
-		stream >> ss1;
-		if (ss1)
-			stream.skipRawData(ss1);
-		ds += ss1 + 2;
-	}
-	// structure of higher fields not known
+	// additional stuff depending on flags
+	// ...
 
 	if (ds > rh.size)
 		stream.setStatus(QDataStream::ReadCorruptData);
 	else if (ds < rh.size)
-		// skip remaining unknown fields
 		stream.skipRawData(rh.size - ds);
 
 	return rs + rh.size;
@@ -299,18 +276,18 @@ static quint32 readDescription(DataStream &stream, Waypoint &waypoint)
 static quint32 readNotes(DataStream &stream, Waypoint &waypoint)
 {
 	RecordHeader rh;
-	quint8 rs, s1;
+	quint8 rs, flags;
 	quint32 ds = 1;
 
 	rs = stream.readRecordHeader(rh);
-	stream >> s1;
-	if (s1 & 0x1) {
+	stream >> flags;
+	if (flags & 0x1) {
 		QList<TranslatedString> obj;
 		ds += stream.readTranslatedObjects(obj);
 		if (!obj.isEmpty())
 			waypoint.setComment(obj.first().str());
 	}
-	if (s1 & 0x2) {
+	if (flags & 0x2) {
 		QString str;
 		ds += stream.readString(str);
 		if (!str.isEmpty())
@@ -560,7 +537,7 @@ static quint32 readPOI(DataStream &stream, QVector<Waypoint> &waypoints,
 	quint8 rs;
 	quint32 ds;
 	qint32 lat, lon;
-	quint16 s3;
+	quint16 s3, id;
 	QList<TranslatedString> obj;
 
 	rs = stream.readRecordHeader(rh);
@@ -574,12 +551,10 @@ static quint32 readPOI(DataStream &stream, QVector<Waypoint> &waypoints,
 		waypoints.last().setName(obj.first().str());
 
 	while (stream.status() == QDataStream::Ok && ds < rh.size) {
-		quint16 type = stream.nextHeaderType();
-		switch(type) {
+		switch (stream.nextHeaderType()) {
 			case 4:
-			    {quint16 id;
 				ds += readIconId(stream, id);
-				icons.append(QPair<int, quint16>(waypoints.size() - 1, id));}
+				icons.append(QPair<int, quint16>(waypoints.size() - 1, id));
 				break;
 			case 10:
 				ds += readDescription(stream, waypoints.last());
@@ -623,10 +598,9 @@ static quint32 readSpatialIndex(DataStream &stream, QVector<Waypoint> &waypoints
 	ds = 22 + s6;
 	if (rh.flags & 0x8) {
 		while (stream.status() == QDataStream::Ok && ds < rh.size) {
-			switch(stream.nextHeaderType()) {
+			switch (stream.nextHeaderType()) {
 				case 2:
-					ds += readPOI(stream, waypoints, fileName, imgId,
-					  icons);
+					ds += readPOI(stream, waypoints, fileName, imgId, icons);
 					break;
 				case 8:
 					ds += readSpatialIndex(stream, waypoints, polygons,
@@ -708,8 +682,7 @@ static void readPOIDatabase(DataStream &stream, QVector<Waypoint> &waypoints,
 	ds += readSpatialIndex(stream, waypoints, polygons, fileName, imgId, il);
 	if (rh.flags & 0x8) {
 		while (stream.status() == QDataStream::Ok && ds < rh.size) {
-			quint16 type = stream.nextHeaderType();
-			switch(type) {
+			switch (stream.nextHeaderType()) {
 				case 5:
 					icons.append(QPixmap());
 					ds += readSymbol(stream, icons.last());
