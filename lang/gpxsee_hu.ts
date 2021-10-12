@@ -628,7 +628,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="808"/>
         <source>Symbols directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Szimbólumkönyvtár:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1722"/>
@@ -2265,7 +2265,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="48"/>
         <source>Symbol</source>
-        <translation>Jel</translation>
+        <translation>Szimbólum</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="53"/>
