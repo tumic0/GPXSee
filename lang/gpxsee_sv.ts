@@ -707,7 +707,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="808"/>
         <source>Symbols directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbolmapp:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1180"/>
