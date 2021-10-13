@@ -324,8 +324,8 @@ void GraphView::redraw(const QSizeF &size)
 	updateSliderPosition();
 
 	_info->setPos(QPointF(r.width()/2 - IW(_info)/2 - (IW(_yAxisLabel)
-	  + IW(_yAxis))/2, r.top() - IH(_info) - my.height()));
-	_xAxisLabel->setPos(QPointF(r.width()/2 - IW(_xAxisLabel)/2,
+	  + IW(_yAxis))/2 + r.left(), r.top() - IH(_info) - my.height()));
+	_xAxisLabel->setPos(QPointF(r.width()/2 - IW(_xAxisLabel)/2 + r.left(),
 	  r.bottom() + mx.height()));
 	_yAxisLabel->setPos(QPointF(r.left() - my.width() - IW(_yAxisLabel),
 	  r.bottom() - (r.height()/2 + IH(_yAxisLabel)/2)));
