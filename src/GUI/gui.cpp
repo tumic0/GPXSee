@@ -860,6 +860,8 @@ bool GUI::loadFile(const QString &fileName, bool silent)
 		updateWindowTitle();
 		updateGraphTabs();
 		updateDEMDownloadAction();
+		if (_files.isEmpty())
+			_fileActionGroup->setEnabled(false);
 
 		QString error = tr("Error loading data file:") + "\n\n"
 		  + fileName + "\n\n" + data.errorString();
