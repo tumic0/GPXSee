@@ -35,6 +35,44 @@
     <div id="main">
       <div id="content">
 
+          <h2 id="paths">Paths</h2>
+          <p>Several aspects of GPXSee are controlled by data/configuration files
+          stored in either global(system) or user directories. The global paths to
+          those directories are as follows:</p>
+
+          <table class="config-files">
+            <tr>
+              <td class="os">Windows:</td>
+              <td class="file">C:\Program Files\GPXSee\</td>
+            </tr><tr>
+              <td class="os">Linux:</td>
+              <td class="file">/usr/share/gpxsee/</td>
+            </tr><tr>
+              <td class="os">OS X:</td>
+              <td class="file">/Applications/GPXSee.app/Contents/Resources/</td>
+            </tr>  
+          </table>
+
+          <p>User specific directories that - when present - override the global
+          directory have the following paths<sup><a href="#legacyPaths">1</a></sup>:</p>
+
+          <table class="config-files">
+            <tr>
+              <td class="os">Windows:</td>
+              <td class="file">%APPDATA%\GPXSee\</td>
+            </tr><tr>
+              <td class="os">Linux:</td>
+              <td class="file">~/.local/share/gpxsee/</td>
+            </tr><tr>
+              <td class="os">OS X:</td>
+              <td class="file">~/Library/Application Support/GPXSee/</td>
+            </tr>
+          </table>
+          
+          <p>The expanded user specific paths, including the actual configuration
+          directories, are also accesible from the GPXSee "Help" menu.</p>
+
+      
           <h2 id="data">Data files</h2>
           <p>GPXSee opens GPX, TCX, FIT, KML, NMEA, IGC, CUP, SIGMA SLF, Suunto SML,
           LOC, GeoJSON, OziExplorer (PLT, RTE, WPT), Garmin GPI,
@@ -75,44 +113,19 @@
           <p>If you get unexpected results, try to disable the outlier elimination in
           the preferences.</p>
 
+          <h3 id="symbols">Waypoint symbols</h3>
+          <p>Waypoints that have a symbol name (GPX <code>&lt;sym&gt;</code> tag) defined
+          can be shown with an icon corresponding to the name. The icons are searched
+          in the global/user <code>symbols</code> directory and the icon is selected when
+          the image basename (without extension) matches the symbol name.</p>
+          
 
           <h2 id="maps">Maps</h2>
           <p>Two kinds of maps are supported by GPXSee - online maps and offline maps.
           You may either load them "ad hoc" from the GUI or they can be loaded
-          automatically at program startup from the following directory:</p>
-
-          <table class="config-files">
-            <tr>
-              <td class="os">Windows:</td>
-              <td class="file">C:\Program Files\GPXSee\maps</td>
-            </tr><tr>
-              <td class="os">Linux:</td>
-              <td class="file">/usr/share/gpxsee/maps</td>
-            </tr><tr>
-              <td class="os">OS X:</td>
-              <td class="file">/Applications/GPXSee.app/Contents/Resources/maps</td>
-            </tr>  
-          </table>
-
-          <p>User specific map directories that - when present - override the global
-          map directory are also supported. The paths are as
-          follows<sup><a href="#legacyPaths">1</a></sup>:</p>
-
-          <table class="config-files">
-            <tr>
-              <td class="os">Windows:</td>
-              <td class="file">%APPDATA%\GPXSee\maps</td>
-            </tr><tr>
-              <td class="os">Linux:</td>
-              <td class="file">~/.local/share/gpxsee/maps</td>
-            </tr><tr>
-              <td class="os">OS X:</td>
-              <td class="file">~/Library/Application Support/GPXSee/maps</td>
-            </tr>
-          </table>
-
-          <p>The map directory is recursively searched when loading the maps, so it
-          may contain an arbitrary directory structure.</p>
+          automatically at program startup from the <code>maps</code> directory. The map
+          directory is recursively searched when loading the maps, so it may contain an
+          arbitrary directory structure (which will be preserved in the map menu).</p>
 
           <p>Supported map projections are Mercator (including Web Mercator),
           Transverse Mercator (including UTM), Lambert Conformal Conic, Albers Equal Area,
@@ -361,8 +374,10 @@
 
       <div id="sidebar">
         <div id="outline">
+          <div class="h4l"><a href="#paths">Paths</a></div>
           <div class="h4l"><a href="#data">Data files</a></div>
             <div class="h5l"><a href="#filtering">Data filtering</a></div>
+            <div class="h5l"><a href="#symbols">Waypoint symbols</a></div>
           <div class="h4l"><a href="#maps">Maps</a></div>
             <div class="h5l"><a href="#online">Online maps</a></div>
               <div class="h6l"><a href="#OSM">OSM/Google tiles</a></div>
