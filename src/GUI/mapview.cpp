@@ -586,17 +586,17 @@ void MapView::zoom(int zoom, const QPoint &pos, bool shift)
 
 void MapView::wheelEvent(QWheelEvent *event)
 {
-	static int deg = 0;
+	static int deg8 = 0;
 	bool shift = (event->modifiers() & MODIFIER) ? true : false;
 	// Shift inverts the wheel axis on OS X, so use scrolling in both axes for
 	// the zoom.
 	int delta = event->angleDelta().y()
 	  ? event->angleDelta().y() : event->angleDelta().x();
 
-	deg += delta / 8;
-	if (qAbs(deg) < 15)
+	deg8 += delta;
+	if (qAbs(deg8) < (15 * 8))
 		return;
-	deg = 0;
+	deg8 = deg8 % (15 * 8);
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 	zoom((delta > 0) ? 1 : -1, event->pos(), shift);

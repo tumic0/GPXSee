@@ -350,12 +350,12 @@ void GraphView::mousePressEvent(QMouseEvent *e)
 
 void GraphView::wheelEvent(QWheelEvent *e)
 {
-	static int deg = 0;
+	static int deg8 = 0;
 
-	deg += e->angleDelta().y() / 8;
-	if (qAbs(deg) < 15)
+	deg8 += e->angleDelta().y();
+	if (qAbs(deg8) < (15 * 8))
 		return;
-	deg = 0;
+	deg8 = deg8 % (15 * 8);
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 	QPointF pos = mapToScene(e->pos());
