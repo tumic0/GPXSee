@@ -1,11 +1,41 @@
 #include "greatcircle.h"
 
+#define DELTA 1e-5
+
+static bool antipodes(const Coordinates &c1, const Coordinates &c2)
+{
+	return ((qAbs(c1.lat() + c2.lat()) < DELTA)
+	  && (qAbs(180.0 - qAbs(c1.lon() - c2.lon())) < DELTA));
+}
+
 GreatCircle::GreatCircle(const Coordinates &c1, const Coordinates &c2)
 {
-	double lat1 = deg2rad(c1.lat());
-	double lon1 = deg2rad(c1.lon());
-	double lat2 = deg2rad(c2.lat());
-	double lon2 = deg2rad(c2.lon());
+	double lat1, lon1, lat2, lon2;
+
+	if (antipodes(c1, c2)) {
+		/* In case of antipodes (which would lead to garbage output without
+		   this hack), move the points DELTA degrees closer to each other in
+		   a way that the route never crosses the antimeridian. */
+		if (c1.lon() < c2.lon()) {
+			lon1 = deg2rad(c1.lon() + DELTA);
+			lon2 = deg2rad(c2.lon() - DELTA);
+		} else {
+			lon1 = deg2rad(c1.lon() - DELTA);
+			lon2 = deg2rad(c2.lon() + DELTA);
+		}
+		if (c1.lat() < c2.lat()) {
+			lat1 = deg2rad(c1.lat() + DELTA);
+			lat2 = deg2rad(c2.lat() - DELTA);
+		} else {
+			lat1 = deg2rad(c1.lat() - DELTA);
+			lat2 = deg2rad(c2.lat() + DELTA);
+		}
+	} else {
+		lat1 = deg2rad(c1.lat());
+		lon1 = deg2rad(c1.lon());
+		lat2 = deg2rad(c2.lat());
+		lon2 = deg2rad(c2.lon());
+	}
 
 	double cosLat1 = cos(lat1);
 	double cosLat2 = cos(lat2);
