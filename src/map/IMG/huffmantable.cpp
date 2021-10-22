@@ -8,8 +8,8 @@ static inline quint32 readVUint32(const quint8 *buffer, quint32 bytes)
 {
 	quint32 val = 0;
 
-	for (quint32 i = bytes; i; i--)
-		val |= ((quint32)*(buffer + i)) << ((i-1) * 8);
+	for (quint32 i = 0; i < bytes; i++)
+		val |= ((quint32)*(buffer + i)) << (i * 8);
 
 	return val;
 }
@@ -19,89 +19,87 @@ bool HuffmanTable::load(const RGNFile *rgn, SubFile::Handle &rgnHdl)
 	if (!_buffer.load(rgn, rgnHdl))
 		return false;
 
-	_s0 = (quint8)_buffer.at(0) & 0x0F;
-	_s1e = (quint8)_buffer.at(0) & 0x10;
-	_s2 = (quint8)_buffer.at(1);
-	_s3 = bs(_s2);
-	_s1d = (quint8)_buffer.at(2);
-	_s1f = (quint8)_buffer.at(3);
-	_s20 = bs(_s1f);
-	_s1 = _s20 + 1;
-	_s22 = vs(_buffer.at(4));
-	_s1c = _s3 + 1 + _s22;
-	_s14 = (quint8*)(_buffer.data()) + 4 + _s22;
-	_s10 = _s14 + _s1c * _s1d;
-	_s18 = _s10 + (_s1 << _s0);
+	_aclBits = (quint8)_buffer.at(0) & 0x0F;
+	_huffman = (quint8)_buffer.at(0) & 0x10;
+	_symBits = (quint8)_buffer.at(1);
+	_symBytes = bs(_symBits);
+	_bsrchEntries = (quint8)_buffer.at(2);
+	_symbolBits = (quint8)_buffer.at(3);
+	_symbolBytes = bs(_symbolBits);
+	_aclEntryBytes = _symbolBytes + 1;
+	_indexBytes = vs(_buffer.at(4));
+	_bsrchEntryBytes = _symBytes + 1 + _indexBytes;
+	_bsrchTable = (quint8*)(_buffer.data()) + 4 + _indexBytes;
+	_aclTable = _bsrchTable + _bsrchEntryBytes * _bsrchEntries;
+	_huffmanTable = _aclTable + (_aclEntryBytes << _aclBits);
 
 	return true;
 }
 
 quint32 HuffmanTable::symbol(quint32 data, quint8 &size) const
 {
-	quint32 ss, sym;
+	quint32 lo, hi;
 	quint8 *tp;
 
 
-	if (_s0 == 0) {
-		sym = _s1d - 1;
-		ss = 0;
+	if (!_aclBits) {
+		hi = _bsrchEntries - 1;
+		lo = 0;
 	} else {
-		quint32 offset = _s1 * (data >> (0x20U - _s0));
-		tp = _s10 + offset;
+		quint32 offset = _aclEntryBytes * (data >> (32 - _aclBits));
+		tp = _aclTable + offset;
 
-		if ((*tp & 1) != 0) {
-			sym = readVUint32(tp, _s20);
+		if (*tp & 1) {
 			size = *tp >> 1;
-			return sym;
+			return readVUint32(tp + 1, _symbolBytes);;
 		}
 
-		ss = *tp >> 1;
-		sym = tp[1];
+		lo = *tp >> 1;
+		hi = *(tp + 1);
 	}
 
-	tp = ss * _s1c + _s14;
-	data = data >> (0x20U - _s2);
+	tp = _bsrchTable + (lo * _bsrchEntryBytes);
+	data >>= 32 - _symBits;
 
-	quint8 *prev = tp;
-	while (ss < sym) {
-		quint32 cnt = (ss + 1 + sym) >> 1;
-		tp = _s14 + (cnt * _s1c);
-		quint32 nd = readVUint32(tp - 1, _s3);
+	while (lo < hi) {
+		quint8 *prev = tp;
+		quint32 m = (lo + 1 + hi) >> 1;
+		tp = _bsrchTable + (m * _bsrchEntryBytes);
+		quint32 nd = readVUint32(tp, _symBytes);
 
 		if (data <= nd) {
 			if (data == nd)
-				ss = cnt;
+				lo = m;
 			else
 				tp = prev;
 
-			sym = cnt - (data < nd);
-			cnt = ss;
+			hi = m - (data < nd);
+			m = lo;
 		}
-		ss = cnt;
-		prev = tp;
+		lo = m;
 	}
 
-	sym = readVUint32(tp - 1, _s3);
-	tp = tp + _s3;
-	ss = readVUint32(tp, _s22);
+	quint32 i = readVUint32(tp, _symBytes);
+	tp = tp + _symBytes;
 	size = *tp;
-	sym = (data - sym) >> (_s2 - *tp);
 
-	if (!_s1e)
-		sym = readVUint32(tp, _s20);
+	if (!_huffman)
+		return readVUint32(tp + 1, _symbolBytes);
 	else {
-		sym = (sym + ss) * _s1f;
-		ss = sym >> 3;
-		sym = sym & 7;
-		quint32 shift = 8 - sym;
-		sym = *(_s18 + ss) >> sym;
+		quint32 bi = readVUint32(tp + 1, _indexBytes);
+		quint32 ci = (data - i) >> (_symBits - size);
+		quint32 si = (ci + bi) * _symbolBits;
+		quint32 sby = si >> 3;
+		quint32 sbi = si & 7;
+		quint32 shift = 8 - sbi;
+		quint32 sym = *(_huffmanTable + sby) >> sbi;
 
-		if (shift < _s1f) {
-			tp = _s18 + ss;
-			ss = readVUint32(tp, ((_s1f + 7) - shift) >> 3);
-			sym = (ss << shift) | sym;
+		if (shift < _symbolBits) {
+			tp = _huffmanTable + sby;
+			quint32 val = readVUint32(tp + 1, bs(_symbolBits - shift));
+			sym = (val << shift) | sym;
 		}
-	}
 
-	return sym;
+		return sym;
+	}
 }

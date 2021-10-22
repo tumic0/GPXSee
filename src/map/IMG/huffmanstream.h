@@ -24,7 +24,7 @@ public:
 	}
 
 	bool atEnd() const
-	  {return _symbolDataSize + _bs.bitsAvailable() < _table.maxSymbolSize();}
+	  {return _symbolDataSize + _bs.bitsAvailable() < _table.maxDataBits();}
 	bool flush() {return _bs.flush();}
 
 protected:
