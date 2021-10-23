@@ -12,10 +12,12 @@ public:
 	HuffmanTable(quint8 id) : _buffer(id) {}
 
 	bool load(const RGNFile *rgn, SubFile::Handle &rgnHdl);
-	quint8 maxDataBits() const {return _symBits;}
-	quint32 symbol(quint32 data, quint8 &size) const;
 
+	quint32 symbol(quint32 data, quint8 &size) const;
 	quint8 id() const {return _buffer.id();}
+
+	quint8 symBits() const {return _symBits;}
+	quint8 symbolBits() const {return _symbolBits;}
 
 private:
 	HuffmanBuffer _buffer;
