@@ -1,8 +1,6 @@
-#include "common/garmin.h"
 #include "subfile.h"
 #include "huffmantext.h"
 
-using namespace Garmin;
 using namespace IMG;
 
 bool HuffmanText::fetch(const SubFile *file, SubFile::Handle &hdl,
