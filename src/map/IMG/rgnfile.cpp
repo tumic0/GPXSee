@@ -581,10 +581,9 @@ bool RGNFile::segments(Handle &hdl, SubDiv *subdiv, SubDiv::Segment seg[5]) cons
 
 bool RGNFile::subdivInit(Handle &hdl, SubDiv *subdiv) const
 {
-	SubDiv::Segment seg[5];
-	SubDiv::Segment extPoints, extLines, extPolygons;
+	SubDiv::Segment std[5], extPoints, extLines, extPolygons;
 
-	if (!segments(hdl, subdiv, seg))
+	if (!segments(hdl, subdiv, std))
 		return false;
 
 	if (subdiv->extPointsOffset() != subdiv->extPointsEnd()) {
@@ -609,8 +608,8 @@ bool RGNFile::subdivInit(Handle &hdl, SubDiv *subdiv) const
 		extLines = SubDiv::Segment(start, end);
 	}
 
-	subdiv->init(seg[Point], seg[IndexedPoint], seg[Line], seg[Polygon],
-	  seg[RoadReference], extPoints, extLines, extPolygons);
+	subdiv->init(std[Point], std[IndexedPoint], std[Line], std[Polygon],
+	  std[RoadReference], extPoints, extLines, extPolygons);
 
 	return true;
 }

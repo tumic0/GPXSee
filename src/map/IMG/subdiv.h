@@ -2,8 +2,6 @@
 #define IMG_SUBDIV_H
 
 #include <QtGlobal>
-#include "common/coordinates.h"
-#include "common/garmin.h"
 
 namespace IMG {
 
