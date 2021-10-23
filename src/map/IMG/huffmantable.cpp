@@ -28,12 +28,12 @@ bool HuffmanTable::load(const RGNFile *rgn, SubFile::Handle &rgnHdl)
 	_symbolBytes = bs(_symbolBits);
 	_aclEntryBytes = _symbolBytes + 1;
 	_indexBytes = vs(_buffer.at(4));
-	_bsrchEntryBytes = _symBytes + 1 + _indexBytes;
+	_bsrchEntryBytes = _symBytes + _indexBytes + 1;
 	_bsrchTable = (quint8*)(_buffer.data()) + 4 + _indexBytes;
 	_aclTable = _bsrchTable + _bsrchEntryBytes * _bsrchEntries;
 	_huffmanTable = _aclTable + (_aclEntryBytes << _aclBits);
 
-	return true;
+	return (_symBits <= 32 && _symbolBits <= 32 && _symbolBits >= 8);
 }
 
 quint32 HuffmanTable::symbol(quint32 data, quint8 &size) const
@@ -89,17 +89,11 @@ quint32 HuffmanTable::symbol(quint32 data, quint8 &size) const
 		quint32 bi = readVUint32(tp + 1, _indexBytes);
 		quint32 ci = (data - i) >> (_symBits - size);
 		quint32 si = (ci + bi) * _symbolBits;
-		quint32 sby = si >> 3;
 		quint32 sbi = si & 7;
 		quint32 shift = 8 - sbi;
-		quint32 sym = *(_huffmanTable + sby) >> sbi;
+		tp = _huffmanTable + (si >> 3);
+		quint32 val = readVUint32(tp + 1, bs(_symbolBits - shift));
 
-		if (shift < _symbolBits) {
-			tp = _huffmanTable + sby;
-			quint32 val = readVUint32(tp + 1, bs(_symbolBits - shift));
-			sym = (val << shift) | sym;
-		}
-
-		return sym;
+		return (val << shift) | (*tp >> sbi);
 	}
 }
