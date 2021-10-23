@@ -19,10 +19,9 @@ public:
 
 private:
 	HuffmanBuffer _buffer;
-	quint8 _aclBits, _aclEntryBytes, _symBits, _symBytes;
 	quint8 *_aclTable, *_bsrchTable, *_huffmanTable;
-	quint8 _bsrchEntryBytes, _bsrchEntries, _symbolBits, _symbolBytes;
-	quint16 _indexBytes;
+	quint8 _aclBits, _aclEntryBytes, _symBits, _symBytes, _indexBytes,
+	  _bsrchEntryBytes, _bsrchEntries, _symbolBits, _symbolBytes;
 	bool _huffman;
 };
 
