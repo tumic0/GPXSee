@@ -29,7 +29,7 @@ bool HuffmanTable::load(const RGNFile *rgn, SubFile::Handle &rgnHdl)
 	_aclEntryBytes = _symbolBytes + 1;
 	_indexBytes = vs(_buffer.at(4));
 	_bsrchEntryBytes = _symBytes + _indexBytes + 1;
-	_bsrchTable = (quint8*)(_buffer.data()) + 4 + _indexBytes;
+	_bsrchTable = (const quint8*)(_buffer.constData()) + 4 + _indexBytes;
 	_aclTable = _bsrchTable + _bsrchEntryBytes * _bsrchEntries;
 	_huffmanTable = _aclTable + (_aclEntryBytes << _aclBits);
 
@@ -39,7 +39,7 @@ bool HuffmanTable::load(const RGNFile *rgn, SubFile::Handle &rgnHdl)
 quint32 HuffmanTable::symbol(quint32 data, quint8 &size) const
 {
 	quint32 lo, hi;
-	quint8 *tp;
+	const quint8 *tp;
 
 
 	if (!_aclBits) {
@@ -62,7 +62,7 @@ quint32 HuffmanTable::symbol(quint32 data, quint8 &size) const
 	data >>= 32 - _symBits;
 
 	while (lo < hi) {
-		quint8 *prev = tp;
+		const quint8 *prev = tp;
 		quint32 m = (lo + 1 + hi) >> 1;
 		tp = _bsrchTable + (m * _bsrchEntryBytes);
 		quint32 nd = readVUint32(tp, _symBytes);
