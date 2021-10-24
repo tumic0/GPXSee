@@ -162,10 +162,12 @@ void RasterTile::render()
 	drawPolygons(&painter);
 	drawLines(&painter);
 	drawTextItems(&painter, textItems);
-	//painter.setPen(Qt::red);
-	//painter.drawRect(QRect(_xy, _img.size()));
 
 	qDeleteAll(textItems);
+
+	//painter.setPen(Qt::red);
+	//painter.setRenderHint(QPainter::Antialiasing, false);
+	//painter.drawRect(QRect(_xy, _pixmap.size()));
 }
 
 void RasterTile::ll2xy(QList<MapData::Poly> &polys)
