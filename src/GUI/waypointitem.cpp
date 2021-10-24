@@ -104,8 +104,12 @@ void WaypointItem::updateCache()
 		_labelBB = fm.tightBoundingRect(_waypoint.name());
 
 		if (_showIcon && _icon) {
-			p.addRect(-_icon->width()/2.0, -_icon->height(), _icon->width(),
-			  _icon->height());
+			if (_font.bold())
+				p.addRect(-_icon->width() * 0.625, -_icon->height() * 1.25,
+				  _icon->width() * 1.25, _icon->height() * 1.25);
+			else
+				p.addRect(-_icon->width()/2.0, -_icon->height(), _icon->width(),
+				  _icon->height());
 			p.addRect(0, 0, _labelBB.width(), _labelBB.height() + fm.descent());
 		} else {
 			p.addRect(-pointSize/2, -pointSize/2, pointSize, pointSize);
@@ -113,10 +117,14 @@ void WaypointItem::updateCache()
 			  _labelBB.height() + fm.descent());
 		}
 	} else {
-		if (_showIcon && _icon)
-			p.addRect(-_icon->width()/2, -_icon->height(), _icon->width(),
-			  _icon->height());
-		else
+		if (_showIcon && _icon) {
+			if (_font.bold())
+				p.addRect(-_icon->width() * 0.625, -_icon->height() * 1.25,
+				  _icon->width() * 1.25, _icon->height() * 1.25);
+			else
+				p.addRect(-_icon->width()/2, -_icon->height(), _icon->width(),
+				  _icon->height());
+		} else
 			p.addRect(-pointSize/2, -pointSize/2, pointSize, pointSize);
 	}
 
@@ -143,16 +151,19 @@ void WaypointItem::paint(QPainter *painter,
 	}
 
 	painter->setBrush(QBrush(_color, Qt::SolidPattern));
-	if (_showIcon && _icon)
-		painter->drawPixmap(-_icon->width()/2.0, -_icon->height(), *_icon);
-	else
+	if (_showIcon && _icon) {
+		if (_font.bold())
+			painter->drawPixmap(-_icon->width() * 0.625, -_icon->height() * 1.25,
+			  _icon->scaled(_icon->width() * 1.25, _icon->height() * 1.25,
+			  Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+		else
+			painter->drawPixmap(-_icon->width()/2.0, -_icon->height(), *_icon);
+	} else
 		painter->drawEllipse(-pointSize/2, -pointSize/2, pointSize, pointSize);
 
-/*
-	painter->setPen(Qt::red);
-	painter->setBrush(Qt::NoBrush);
-	painter->drawPath(_shape);
-*/
+	//painter->setPen(Qt::red);
+	//painter->setBrush(Qt::NoBrush);
+	//painter->drawPath(_shape);
 }
 
 void WaypointItem::setSize(int size)
