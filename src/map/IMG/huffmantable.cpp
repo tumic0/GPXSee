@@ -67,16 +67,15 @@ quint32 HuffmanTable::symbol(quint32 data, quint8 &size) const
 		tp = _bsrchTable + (m * _bsrchEntryBytes);
 		quint32 nd = readVUint32(tp, _symBytes);
 
-		if (data <= nd) {
-			if (data == nd)
-				lo = m;
-			else
-				tp = prev;
-
-			hi = m - (data < nd);
-			m = lo;
+		if (data < nd) {
+			tp = prev;
+			hi = m - 1;
+		} else if (data > nd) {
+			lo = m;
+		} else {
+			lo = m;
+			hi = m;
 		}
-		lo = m;
 	}
 
 	quint32 i = readVUint32(tp, _symBytes);
