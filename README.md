@@ -18,7 +18,7 @@ GPXSee is a Qt-based GPS log file viewer and analyzer that supports all common G
 
 ## Build
 Build requirements:
-* Qt5 >= 5.11 or Qt 6.x
+* Qt5 >= 5.11 or Qt 6.x*
 * C++11 or newer compiler (tested: msvc2017, gcc 7.5.0, clang/Apple LLVM version 10.0.0)
 
 Build steps:
@@ -27,6 +27,9 @@ lrelease gpxsee.pro
 qmake gpxsee.pro
 make # nmake on windows
 ```
+
+_* Qt6 builds do not support other encodings than UTF-X in XML files and East Asian
+encodings in Garmin file formats._
 
 ## Download
 * [Windows & OS X builds](http://sourceforge.net/projects/gpxsee)
