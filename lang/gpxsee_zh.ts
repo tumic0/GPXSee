@@ -384,7 +384,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="272"/>
         <source>Show POI icons</source>
-        <translation type="unfinished"></translation>
+        <translation>显示 POI 图标</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="277"/>
@@ -451,7 +451,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="351"/>
         <source>Waypoint icons</source>
-        <translation type="unfinished"></translation>
+        <translation>航点图标</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="356"/>
@@ -793,7 +793,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="808"/>
         <source>Symbols directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>符号目录：</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="810"/>
@@ -2264,7 +2264,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="48"/>
         <source>Symbol</source>
-        <translation type="unfinished"></translation>
+        <translation>符号</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="53"/>
