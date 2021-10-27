@@ -14,8 +14,9 @@ jobs:
         uses: actions/checkout@v2
       - name: Install dependencies
         run: brew install qt5
-      - name: Configure build
+      - name: Create localization
         run: lrelease gpxsee.pro
+      - name: Configure build
         run: qmake gpxsee.pro
       - name: Build project
         run: make -j3
