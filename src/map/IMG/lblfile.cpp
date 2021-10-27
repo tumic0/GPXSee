@@ -214,7 +214,7 @@ Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize,
 	for (int i = 0; i < str.size(); i++) {
 		const quint8 &c = str.at(i);
 
-		if (c == 0 || c == 0x1d)
+		if (c == 0 || c == 0x1d || c == 0x07)
 			break;
 
 		if (c == 0x1c)
