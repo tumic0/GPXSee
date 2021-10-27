@@ -1,8 +1,5 @@
 name: OS X
 
-env:
-  PATH: "/usr/local/opt/qt@5/bin:$PATH"
-
 on:
   push:
     branches:
@@ -13,6 +10,8 @@ jobs:
     name: GPXSee
     runs-on: macos-10.15
     steps:
+      - name: Set environment variables
+        run: echo "PATH=/usr/local/opt/qt@5/bin:$PATH" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependencies
