@@ -221,6 +221,7 @@ Section "QT framework" SEC_QT
   File "Qt6Sql.dll"
   File "Qt6Svg.dll"
   File "Qt6Widgets.dll"
+  File "Qt6Core5Compat.dll"
 !else
   File "Qt5Core.dll"
   File "Qt5Gui.dll"
