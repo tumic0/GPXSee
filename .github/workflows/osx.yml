@@ -1,8 +1,7 @@
 name: OS X
 
 env:
-  env:
-    PATH: "/usr/local/opt/qt@5/bin:$PATH"
+  PATH: "/usr/local/opt/qt@5/bin:$PATH"
 
 on:
   push:
