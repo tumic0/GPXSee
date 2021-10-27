@@ -13,7 +13,10 @@ QT += core \
     concurrent \
     widgets \
     printsupport
-greaterThan(QT_MAJOR_VERSION, 5) {QT += openglwidgets}
+greaterThan(QT_MAJOR_VERSION, 5) {
+    QT += openglwidgets \
+          core5compat
+}
 
 CONFIG += object_parallel_to_source
 INCLUDEPATH += ./src
