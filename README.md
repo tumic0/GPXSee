@@ -28,8 +28,8 @@ qmake gpxsee.pro
 make # nmake on windows
 ```
 
-_* Qt6 builds do not support other encodings than UTF-X in XML files and East Asian
-encodings in Garmin file formats._
+_* Qt6 builds do not support other encodings than UTF-X and iso8859-1 in XML files as support
+for such files was dropped in Qt6._
 
 ## Download
 * [Windows & OS X builds](http://sourceforge.net/projects/gpxsee)
