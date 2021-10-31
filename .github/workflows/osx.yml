@@ -22,3 +22,12 @@ jobs:
         run: qmake gpxsee.pro
       - name: Build project
         run: make -j3
+      - name: Create DMG
+        run: |
+          mkdir GPXSee-master
+          mv GPXSee.app GPXSee-master
+          hdiutil create -srcfolder GPXSee-master GPXSee-master.dmg
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          path: GPXSee-master.dmg
