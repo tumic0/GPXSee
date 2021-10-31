@@ -8,25 +8,16 @@ image:
 
 environment:
   NSISDIR: C:\Program Files (x86)\NSIS
+  OPENSSLDIR: C:\OpenSSL-v111-Win64\bin
   matrix:
   - QTDIR: C:\Qt\5.15\msvc2019_64
-    NSI: gpxsee64.nsi
-    VCVARS: vcvars64.bat
-    OPENSSLDIR: C:\OpenSSL-v111-Win64\bin
-    LIBCRYPTO: libssl-1_1-x64.dll
-    LIBSSL: libcrypto-1_1-x64.dll
   - QTDIR: C:\Qt\6.2\msvc2019_64
-    NSI: gpxsee64.nsi
-    VCVARS: vcvars64.bat
-    OPENSSLDIR: C:\OpenSSL-v111-Win64\bin
-    LIBCRYPTO: libssl-1_1-x64.dll
-    LIBSSL: libcrypto-1_1-x64.dll
     NSISDEF: /DQT6
 
 install:
 - cmd: |-
     set PATH=%QTDIR%\bin;%NSISDIR%;%PATH%
-    call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\"%VCVARS%
+    call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat
 
 build_script:
 - cmd: |-
@@ -37,16 +28,16 @@ build_script:
     md installer
     copy release\GPXSee.exe installer
     windeployqt --release installer\GPXSee.exe
-    copy pkg\%NSI% installer
+    copy pkg\gpxsee64.nsi installer
     xcopy pkg\csv installer\csv /i
     xcopy pkg\maps installer\maps /i
     xcopy lang\*.qm installer\translations\ /sy
     xcopy icons\symbols installer\symbols /i
     copy licence.txt installer
-    copy %OPENSSLDIR%\%LIBCRYPTO% installer
-    copy %OPENSSLDIR%\%LIBSSL% installer
+    copy %OPENSSLDIR%\libcrypto-1_1-x64.dll installer
+    copy %OPENSSLDIR%\libssl-1_1-x64.dll installer
 
-    makensis.exe %NSISDEF% installer\%NSI%
+    makensis.exe %NSISDEF% installer\gpxsee64.nsi
 
 artifacts:
 - path: installer\GPXSee-*.exe
