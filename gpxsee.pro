@@ -501,7 +501,7 @@ unix:!macx {
     symbols.path = $$PREFIX/share/gpxsee/symbols
     locale.files = $$files(lang/*.qm)
     locale.path = $$PREFIX/share/gpxsee/translations
-    icon.files = $files(icons/app/hicolor/*)
+    icon.files = $$files(icons/app/hicolor/*)
     icon.path = $$PREFIX/share/icons/hicolor
     desktop.files = pkg/gpxsee.desktop
     desktop.path = $$PREFIX/share/applications
