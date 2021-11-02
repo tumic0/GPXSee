@@ -435,7 +435,8 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 		  ? 0 : &(point.label.text());
 		const QImage *img = style.img().isNull() ? 0 : &style.img();
 		const QFont *fnt = poi
-		  ? poiFont(style.textFontSize()) : font(style.textFontSize());
+		  ? poiFont(_zoom > 25 ? Style::Normal : style.textFontSize())
+		  : font(style.textFontSize());
 		const QColor *color = style.textColor().isValid()
 		  ? &style.textColor() : &textColor;
 
