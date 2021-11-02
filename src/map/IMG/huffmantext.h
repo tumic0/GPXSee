@@ -10,15 +10,11 @@ class HuffmanText
 public:
 	HuffmanText() : _table(0) {}
 
-	bool load(const RGNFile *rgn, SubFile::Handle &rgnHdl)
-	  {return _table.load(rgn, rgnHdl);}
-	bool decode(const SubFile *file, SubFile::Handle &hdl,
+	bool load(const RGNFile *rgn, SubFile::Handle &rgnHdl);
+	bool decode(const SubFile *file, SubFile::Handle &hdl, quint32 size,
 	  QVector<quint8> &str) const;
 
 private:
-	bool fetch(const SubFile *file, SubFile::Handle &hdl, quint32 &data,
-	  quint32 &bits, quint32 &usedBits, quint32 &usedData) const;
-
 	HuffmanTable _table;
 };
 

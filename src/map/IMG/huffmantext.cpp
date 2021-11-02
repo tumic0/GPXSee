@@ -1,65 +1,33 @@
 #include "subfile.h"
+#include "huffmanstream.h"
 #include "huffmantext.h"
 
 using namespace IMG;
 
-bool HuffmanText::fetch(const SubFile *file, SubFile::Handle &hdl,
-  quint32 &data, quint32 &bits, quint32 &usedBits, quint32 &usedData) const
+bool HuffmanText::load(const RGNFile *rgn, SubFile::Handle &rgnHdl)
 {
-	quint32 rs, ls, old;
+	if (!_table.load(rgn, rgnHdl))
+		return false;
 
-	bits = _table.symBits() - bits;
-
-	if (usedBits < bits) {
-		old = usedBits ? usedData >> (32 - usedBits) : 0;
-		if (!file->readVUInt32SW(hdl, 4, usedData))
-			return false;
-		ls = bits - usedBits;
-		rs = 32 - (bits - usedBits);
-		old = usedData >> rs | old << ls;
-	} else {
-		ls = bits;
-		rs = usedBits - bits;
-		old = usedData >> (32 - bits);
-	}
-
-	usedData = usedData << ls;
-	data = data | old << (32 - _table.symBits());
-	usedBits = rs;
-
-	return true;
+	Q_ASSERT(!(_table.symbolBits() & 7));
+	return !(_table.symbolBits() & 7);
 }
 
 bool HuffmanText::decode(const SubFile *file, SubFile::Handle &hdl,
-  QVector<quint8> &str) const
+  quint32 size, QVector<quint8> &str) const
 {
-	quint32 bits = 0;
-	quint32 data = 0;
-	quint32 usedBits = 0;
-	quint32 usedData = 0;
+	BitStream4F bs(*file, hdl, size);
+	HuffmanStream<BitStream4F> hs(bs, _table);
+	quint32 sym;
 
-	while (true) {
-		if (!fetch(file, hdl, data, bits, usedBits, usedData))
-			return false;
-
-		quint8 size;
-		quint32 sym = _table.symbol(data, size);
-
-		if (_table.symBits() < size)
-			return false;
-		data = data << size;
-		bits = _table.symBits() - size;
-
-		if (!(_table.symbolBits() & 7)) {
-			for (quint32 i = 0; i < (_table.symbolBits() >> 3); i++) {
-				str.append((quint8)sym);
-				if (((quint8)sym == '\0'))
-					return true;
-				sym = sym >> 8;
-			}
-		} else {
-			Q_ASSERT(false);
-			return false;
+	while (hs.readSymbol(sym)) {
+		for (quint32 i = 0; i < (_table.symbolBits() >> 3); i++) {
+			str.append((quint8)sym);
+			if (((quint8)sym == '\0'))
+				return true;
+			sym = sym >> 8;
 		}
 	}
+
+	return false;
 }

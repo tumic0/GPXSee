@@ -268,10 +268,11 @@ Label LBLFile::labelHuffman(Handle &hdl, quint32 offset, bool capitalize,
   bool convert) const
 {
 	QVector<quint8> str;
+	quint32 end = _offset + _size;
 
 	if (!seek(hdl, offset))
 		return Label();
-	if (!_huffmanText->decode(this, hdl, str))
+	if (!_huffmanText->decode(this, hdl, end - offset, str))
 		return Label();
 	if (!_table)
 		return str2label(str, capitalize, convert);
@@ -281,14 +282,16 @@ Label LBLFile::labelHuffman(Handle &hdl, quint32 offset, bool capitalize,
 	for (int i = 0; i < str.size(); i++) {
 		quint32 val = _table[str.at(i)];
 		if (val) {
-			if (!seek(hdl, _offset + ((val & 0x7fffff) << _multiplier)))
+			quint32 off = _offset + ((val & 0x7fffff) << _multiplier);
+			if (!seek(hdl, off))
 				return Label();
 
 			if (str2.size() && str2.back() == '\0')
 				str2[str2.size() - 1] = ' ';
 			else if (str2.size())
 				str2.append(' ');
-			if (!_huffmanText->decode(this, hdl, str2))
+
+			if (!_huffmanText->decode(this, hdl, end - off, str2))
 				return Label();
 		} else {
 			if (str.at(i) == 7) {
