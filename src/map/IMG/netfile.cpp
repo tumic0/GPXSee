@@ -116,7 +116,7 @@ static bool readLine(BitStream4R &bs, const SubDiv *subdiv,
 	poly.boundingRect = RectC(c, c);
 	poly.points.append(QPointF(c.lon(), c.lat()));
 
-	HuffmanStreamR stream(bs, *table);
+	HuffmanDeltaStreamR stream(bs, *table);
 	if (!stream.init())
 		return false;
 	qint32 lonDelta, latDelta;
@@ -164,18 +164,6 @@ static bool skipNodes(const NODFile *nod, SubFile::Handle &nodHdl,
 	return true;
 }
 
-static int sign(quint32 flags, quint32 &bits)
-{
-	if (!((flags >> bits) & 1)) {
-		bits--;
-		return 0;
-	} else {
-		quint32 sb = bits - 1;
-		bits -= 2;
-		return ((flags >> sb) & 1) ? -1 : 1;
-	}
-}
-
 static bool readShape(const NODFile *nod, SubFile::Handle &nodHdl,
   NODFile::AdjacencyInfo &adj, BitStream4R &bs, const HuffmanTable *table,
   const SubDiv *subdiv, quint32 shift, MapData::Poly &poly,
@@ -197,12 +185,8 @@ static bool readShape(const NODFile *nod, SubFile::Handle &nodHdl,
 	bool startWithStream = flags & (1 << (v2b + 6));
 	bool useEosBit = flags & (1 << (v2b + 5));
 
-	quint32 extraBits = v2b + 4;
-	int lonSign = sign(flags, extraBits);
-	int latSign = sign(flags, extraBits);
-
-	HuffmanStreamR stream(bs, *table);
-	if (!stream.init(lonSign, latSign, flags, extraBits + 1))
+	HuffmanDeltaStreamR stream(bs, *table);
+	if (!stream.init(flags, v2b + 5))
 		return false;
 
 

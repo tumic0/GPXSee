@@ -2,7 +2,7 @@
 
 using namespace IMG;
 
-bool HuffmanStreamF::init(bool line)
+bool HuffmanDeltaStreamF::init(bool line)
 {
 	if (line) {
 		if (!(sign(_lonSign) && sign(_latSign)))
@@ -13,7 +13,7 @@ bool HuffmanStreamF::init(bool line)
 	}
 
 	quint32 eb;
-	if (!_bs.read(1, eb))
+	if (!read(1, eb))
 		return false;
 
 	Q_ASSERT(!eb);
@@ -23,7 +23,7 @@ bool HuffmanStreamF::init(bool line)
 	return true;
 }
 
-bool HuffmanStreamR::init()
+bool HuffmanDeltaStreamR::init()
 {
 	if (!(sign(_lonSign) && sign(_latSign)))
 		return false;
@@ -31,13 +31,13 @@ bool HuffmanStreamR::init()
 	return true;
 }
 
-bool HuffmanStreamR::init(int lonSign, int latSign, quint32 data,
-  quint32 dataSize)
+bool HuffmanDeltaStreamR::init(quint32 data, quint32 dataSize)
 {
-	_lonSign = lonSign;
-	_latSign = latSign;
 	_symbolData = data;
 	_symbolDataSize = dataSize;
+
+	if (!(sign(_lonSign) && sign(_latSign)))
+		return false;
 
 	return true;
 }

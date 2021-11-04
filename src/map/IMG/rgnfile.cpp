@@ -287,7 +287,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 
 			qint32 lonDelta, latDelta;
 			BitStream4F bs(*this, hdl, len);
-			HuffmanStreamF stream(bs, *_huffmanTable);
+			HuffmanDeltaStreamF stream(bs, *_huffmanTable);
 			if (!stream.init(segmentType == Line))
 				return false;
 
