@@ -78,11 +78,25 @@ void GraphItem::setWidth(int width)
 
 const GraphSegment *GraphItem::segment(qreal x, GraphType type) const
 {
-	for (int i = 0; i < _graph.size(); i++)
-		if (x <= _graph.at(i).last().x(type))
-			return &(_graph.at(i));
+	int low = 0;
+	int high = _graph.size() - 1;
+	int mid = 0;
 
-	return 0;
+	while (low <= high) {
+		mid = (high + low) / 2;
+		const GraphPoint &p = _graph.at(mid).last();
+		if (p.x(_type) > x)
+			high = mid - 1;
+		else if (p.x(_type) < x)
+			low = mid + 1;
+		else
+			return &(_graph.at(mid));
+	}
+
+	if (_graph.at(mid).last().x(type) < x)
+		return (mid == _graph.size() - 1) ? 0 : &(_graph.at(mid+1));
+	else
+		return &(_graph.at(mid));
 }
 
 qreal GraphItem::yAtX(qreal x) const
@@ -99,7 +113,7 @@ qreal GraphItem::yAtX(qreal x) const
 		return NAN;
 
 	while (low <= high) {
-		mid = low + ((high - low) / 2);
+		mid = (high + low) / 2;
 		const GraphPoint &p = seg->at(mid);
 		if (p.x(_type) > x)
 			high = mid - 1;
@@ -137,7 +151,7 @@ qreal GraphItem::distanceAtTime(qreal time) const
 		return NAN;
 
 	while (low <= high) {
-		mid = low + ((high - low) / 2);
+		mid = (high + low) / 2;
 		const GraphPoint &p = seg->at(mid);
 		if (p.t() > time)
 			high = mid - 1;
@@ -175,7 +189,7 @@ qreal GraphItem::timeAtDistance(qreal distance) const
 		return NAN;
 
 	while (low <= high) {
-		mid = low + ((high - low) / 2);
+		mid = (high + low) / 2;
 		const GraphPoint &p = seg->at(mid);
 		if (p.s() > distance)
 			high = mid - 1;
