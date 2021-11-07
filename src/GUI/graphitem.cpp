@@ -36,11 +36,8 @@ void GraphItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	painter->setPen(_pen);
 	painter->drawPath(_path);
 
-/*
-	QPen p = QPen(QBrush(Qt::red), 0);
-	painter->setPen(p);
-	painter->drawRect(boundingRect());
-*/
+	//painter->setPen(Qt::red);
+	//painter->drawRect(boundingRect());
 }
 
 void GraphItem::setGraphType(GraphType type)
