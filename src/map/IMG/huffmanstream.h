@@ -41,10 +41,10 @@ bool HuffmanStream<BitStream>::read(int bits, quint32 &val)
 
 		_symbolData = (_symbolData << nextSize) | next;
 		_symbolDataSize += nextSize;
-	}
 
-	if (_symbolDataSize < (quint32)bits)
-		return false;
+		if (_symbolDataSize < (quint32)bits)
+			return false;
+	}
 
 	val = (_symbolData << (32-_symbolDataSize)) >> (32 - bits);
 	_symbolDataSize -= bits;
@@ -56,14 +56,18 @@ template <class BitStream>
 bool HuffmanStream<BitStream>::readSymbol(quint32 &symbol)
 {
 	quint8 size;
-	quint32 next;
-	quint8 nextSize = qMin((quint64)(32 - _symbolDataSize), _bs.bitsAvailable());
 
-	if (!_bs.read(nextSize, next))
-		return false;
+	if (_symbolDataSize < _table.symBits()) {
+		quint32 next;
+		quint8 nextSize = qMin((quint64)(32 - _symbolDataSize),
+		  _bs.bitsAvailable());
 
-	_symbolData = (_symbolData << nextSize) | next;
-	_symbolDataSize += nextSize;
+		if (!_bs.read(nextSize, next))
+			return false;
+
+		_symbolData = (_symbolData << nextSize) | next;
+		_symbolDataSize += nextSize;
+	}
 
 	symbol = _table.symbol(_symbolData << (32 - _symbolDataSize), size);
 	if (size > _symbolDataSize)
