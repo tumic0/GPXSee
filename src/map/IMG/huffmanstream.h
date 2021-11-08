@@ -125,14 +125,12 @@ bool HuffmanDeltaStream<BitStream>::readDelta(int sign, qint32 &delta)
 		return false;
 
 	if (symbol && !sign) {
-		if (!this->_symbolDataSize)
+		quint32 bit;
+		if (!this->read(1, bit))
 			return false;
-		else {
-			sign = ((1U << (this->_symbolDataSize - 1)) & this->_symbolData)
-			  ? -1 : 1;
-			this->_symbolDataSize--;
-		}
+		sign = bit ? -1 : 1;
 	}
+
 	delta = sign * symbol;
 
 	return true;
