@@ -12,7 +12,7 @@ public:
 	HuffmanStream(BitStream &bitstream, const HuffmanTable &table)
 	  : _symbolDataSize(0), _symbolData(0), _bs(bitstream), _table(table) {}
 
-	bool read(int bits, quint32 &val);
+	bool read(quint32 bits, quint32 &val);
 	bool readSymbol(quint32 &symbol);
 
 	bool atEnd() const
@@ -24,29 +24,35 @@ protected:
 	quint32 _symbolData;
 
 private:
+	bool fetchData();
+
 	BitStream &_bs;
 	const HuffmanTable &_table;
 };
 
 template <class BitStream>
-bool HuffmanStream<BitStream>::read(int bits, quint32 &val)
+bool HuffmanStream<BitStream>::fetchData()
 {
-	if (_symbolDataSize < (quint32)bits) {
-		quint32 next;
-		quint8 nextSize = qMin((quint64)(32 - _symbolDataSize),
-		  _bs.bitsAvailable());
+	quint32 next;
+	quint8 nextSize = qMin((quint64)(32 - _symbolDataSize), _bs.bitsAvailable());
 
-		if (!_bs.read(nextSize, next))
+	if (!_bs.read(nextSize, next))
+		return false;
+
+	_symbolData = (nextSize < 32) ? (_symbolData << nextSize) | next : next;
+	_symbolDataSize += nextSize;
+
+	return true;
+}
+
+template <class BitStream>
+bool HuffmanStream<BitStream>::read(quint32 bits, quint32 &val)
+{
+	if (_symbolDataSize < bits)
+		if (!fetchData() || _symbolDataSize < bits)
 			return false;
 
-		_symbolData = (_symbolData << nextSize) | next;
-		_symbolDataSize += nextSize;
-
-		if (_symbolDataSize < (quint32)bits)
-			return false;
-	}
-
-	val = (_symbolData << (32-_symbolDataSize)) >> (32 - bits);
+	val = (_symbolData << (32 - _symbolDataSize)) >> (32 - bits);
 	_symbolDataSize -= bits;
 
 	return true;
@@ -57,17 +63,9 @@ bool HuffmanStream<BitStream>::readSymbol(quint32 &symbol)
 {
 	quint8 size;
 
-	if (_symbolDataSize < _table.symBits()) {
-		quint32 next;
-		quint8 nextSize = qMin((quint64)(32 - _symbolDataSize),
-		  _bs.bitsAvailable());
-
-		if (!_bs.read(nextSize, next))
+	if (_symbolDataSize < _table.symBits())
+		if (!fetchData() || !_symbolDataSize)
 			return false;
-
-		_symbolData = (_symbolData << nextSize) | next;
-		_symbolDataSize += nextSize;
-	}
 
 	symbol = _table.symbol(_symbolData << (32 - _symbolDataSize), size);
 	if (size > _symbolDataSize)

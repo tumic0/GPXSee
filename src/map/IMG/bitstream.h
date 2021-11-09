@@ -10,7 +10,7 @@ public:
 	BitStream1(const SubFile &file, SubFile::Handle &hdl, quint32 length)
 	  : _file(file), _hdl(hdl), _length(length), _remaining(0) {}
 
-	template<typename T> bool read(int bits, T &val);
+	template<typename T> bool read(quint32 bits, T &val);
 	bool flush();
 	quint64 bitsAvailable() const {return (quint64)_length * 8 + _remaining;}
 
@@ -44,7 +44,7 @@ public:
 	BitStream4F(const SubFile &file, SubFile::Handle &hdl, quint32 length)
 	  : BitStream4(file, hdl, length) {}
 
-	bool read(int bits, quint32 &val);
+	bool read(quint32 bits, quint32 &val);
 	bool flush();
 };
 
@@ -60,8 +60,8 @@ public:
 
 	BitStream4R(const SubFile &file, SubFile::Handle &hdl, quint32 length);
 
-	template<typename T> bool read(int bits, T &val);
-	bool readBytes(int bytes, quint32 &val);
+	template<typename T> bool read(quint32 bits, T &val);
+	bool readBytes(quint32 bytes, quint32 &val);
 	bool readVUInt32(quint32 &val);
 	bool readVuint32SM(quint32 &val1, quint32 &val2, quint32 &val2Bits);
 
@@ -73,11 +73,11 @@ public:
 
 
 template<typename T>
-bool BitStream1::read(int bits, T &val)
+bool BitStream1::read(quint32 bits, T &val)
 {
 	val = 0;
 
-	for (int pos = 0; pos < bits; ) {
+	for (quint32 pos = 0; pos < bits; ) {
 		if (!_remaining) {
 			if (!_length || !_file.readByte(_hdl, &_data))
 				return false;
@@ -103,16 +103,15 @@ bool BitStream1::read(int bits, T &val)
 }
 
 template<typename T>
-bool BitStream4R::read(int bits, T &val)
+bool BitStream4R::read(quint32 bits, T &val)
 {
-	if (bits <= 32 - (int)(_used + _unused)) {
+	if (bits <= 32 - (_used + _unused)) {
 		val = bits ? (_data << _used) >> (32 - bits) : 0;
 		_used += bits;
 		return true;
 	}
 
-	if (_unused)
-		return false;
+	Q_ASSERT(_length && !_unused);
 	quint32 old = (_used < 32) ? (_data << _used) >> (32 - bits) : 0;
 	quint32 bytes = qMin(_length, 4U);
 

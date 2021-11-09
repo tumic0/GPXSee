@@ -41,16 +41,15 @@ bool BitStream4F::flush()
 	return true;
 }
 
-bool BitStream4F::read(int bits, quint32 &val)
+bool BitStream4F::read(quint32 bits, quint32 &val)
 {
-	if (bits <= 32 - (int)(_used + _unused)) {
+	if (bits <= 32 - (_used + _unused)) {
 		val = bits ? (_data << _used) >> (32 - bits) : 0;
 		_used += bits;
 		return true;
 	}
 
-	if (_unused)
-		return false;
+	Q_ASSERT(_length && !_unused);
 	quint32 old = (_used < 32) ? (_data << _used) >> (32 - bits) : 0;
 	quint32 bytes = qMin(_length, 4U);
 
@@ -73,7 +72,7 @@ BitStream4R::BitStream4R(const SubFile &file, SubFile::Handle &hdl,
 	_file.seek(_hdl, _file.pos(_hdl) - 4);
 }
 
-bool BitStream4R::readBytes(int bytes, quint32 &val)
+bool BitStream4R::readBytes(quint32 bytes, quint32 &val)
 {
 	quint32 bits = _used % 8;
 	quint32 b;
@@ -85,7 +84,7 @@ bool BitStream4R::readBytes(int bytes, quint32 &val)
 	}
 
 	val = 0;
-	for (int i = 0; i < bytes; i++) {
+	for (quint32 i = 0; i < bytes; i++) {
 		if (!read(8, b))
 			return false;
 		val |= (b << (i * 8));
