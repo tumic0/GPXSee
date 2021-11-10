@@ -312,7 +312,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 				poly.boundingRect = poly.boundingRect.united(c);
 			}
 
-			if (!(stream.atEnd() && stream.flush()))
+			if (!(stream.atEnd() && bs.flush()))
 				return false;
 		} else {
 			pos = QPoint(subdiv->lon() + LS(lon, 24-subdiv->bits()),

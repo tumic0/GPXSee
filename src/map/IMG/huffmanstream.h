@@ -17,7 +17,6 @@ public:
 
 	bool atEnd() const
 	  {return _symbolDataSize + _bs.bitsAvailable() < _table.symBits();}
-	bool flush() {return _bs.flush();}
 
 protected:
 	quint32 _symbolDataSize;
