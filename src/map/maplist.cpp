@@ -16,6 +16,7 @@
 #include "sqlitemap.h"
 #include "mapsforgemap.h"
 #include "worldfilemap.h"
+#include "qctmap.h"
 #include "invalidmap.h"
 #include "maplist.h"
 
@@ -66,6 +67,8 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 	else if (suffix == "wld" || suffix == "jgw" || suffix == "gfw"
 	  || suffix == "pgw" || suffix == "tfw")
 		map = new WorldFileMap(path, proj);
+	else if (suffix == "qct")
+		map = new QCTMap(path);
 
 	return map ? map : new InvalidMap(path, "Unknown file format");
 }
@@ -129,6 +132,7 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "Mapsforge maps") + " (*.map);;"
 	  + qApp->translate("MapList", "OziExplorer maps") + " (*.map);;"
 	  + qApp->translate("MapList", "MBTiles maps") + " (*.mbtiles);;"
+	  + qApp->translate("MapList", "QuickChart maps") + " (*.qct);;"
 	  + qApp->translate("MapList", "TwoNav maps") + " (*.rmap *.rtmap);;"
 	  + qApp->translate("MapList", "Locus/OsmAnd/RMaps SQLite maps")
 		+ " (*.sqlitedb);;"
@@ -144,7 +148,7 @@ QStringList MapList::filter()
 	QStringList filter;
 	filter << "*.aqm" << "*.gfw" << "*.gmap" << "*.gmapi" << "*.img" << "*.jgw"
 	  << "*.jnx" << "*.kap" << "*.kmz" << "*.map" << "*.mbtiles" << "*.pgw"
-	  << "*.rmap" << "*.rtmap" << "*.sqlitedb" << "*.tar" << "*.tba" << "*.tfw"
-	  << "*.tif" << "*.tiff" << "*.wld" << "*.xml";
+	  << "*.qct" << "*.rmap" << "*.rtmap" << "*.sqlitedb" << "*.tar" << "*.tba"
+	  << "*.tfw" << "*.tif" << "*.tiff" << "*.wld" << "*.xml";
 	return filter;
 }

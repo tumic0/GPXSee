@@ -146,6 +146,7 @@ HEADERS += src/common/config.h \
     src/map/mapsforge/mapdata.h \
     src/map/mapsforge/rastertile.h \
     src/map/mapsforge/subfile.h \
+    src/map/qctmap.h \
     src/map/textpathitem.h \
     src/map/textpointitem.h \
     src/map/prjfile.h \
@@ -339,6 +340,7 @@ SOURCES += src/main.cpp \
     src/map/mapsforge/subfile.cpp \
     src/map/imgmap.cpp \
     src/map/prjfile.cpp \
+    src/map/qctmap.cpp \
     src/map/textpathitem.cpp \
     src/map/textpointitem.cpp \
     src/map/bsbmap.cpp \
