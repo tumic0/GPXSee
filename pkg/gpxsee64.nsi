@@ -230,6 +230,7 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKCR ".tfw\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".omd\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".ghp\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".qct\OpenWithList" "GPXSee.exe" ""
 
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
@@ -374,6 +375,7 @@ Section "Uninstall"
   !insertmacro FILE_ASSOCIATION_REMOVE "tfw"
   !insertmacro FILE_ASSOCIATION_REMOVE "omd"
   !insertmacro FILE_ASSOCIATION_REMOVE "ghp"
+  !insertmacro FILE_ASSOCIATION_REMOVE "qct"
 
   DeleteRegValue HKCR ".gpx\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".tcx\OpenWithList" "GPXSee.exe"
@@ -418,6 +420,7 @@ Section "Uninstall"
   DeleteRegValue HKCR ".tfw\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".omd\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".ghp\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".qct\OpenWithList" "GPXSee.exe"
   DeleteRegKey HKCR "Applications\GPXSee.exe"   
   
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
