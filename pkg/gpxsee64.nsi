@@ -177,13 +177,14 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "omd" "ONmove Log File" 21
   !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 22
   !insertmacro FILE_ASSOCIATION_ADD "ghp" "ONmove Log File" 23
-  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 24
-  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 24
-  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 25
-  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 26
-  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 27
-  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track File" 28
-  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 29
+  !insertmacro FILE_ASSOCIATION_ADD "qct" "QuickChart Map File" 24
+  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 25
+  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 25
+  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 26
+  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 27
+  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 28
+  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track File" 29
+  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 30
 
   WriteRegStr HKCR "Applications\GPXSee.exe\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
   WriteRegStr HKCR ".gpx\OpenWithList" "GPXSee.exe" ""

@@ -487,7 +487,8 @@ win32 {
         icons/formats/itn.ico \
         icons/formats/wld.ico \
         icons/formats/omd.ico \
-        icons/formats/ghp.ico
+        icons/formats/ghp.ico \
+        icons/formats/qct.ico
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }
