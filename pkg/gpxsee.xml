@@ -285,4 +285,14 @@
 		<glob pattern="*.tfw"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.memory-map.qct">
+		<comment>QuickChart Map File</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application/octet-stream"/>
+		<magic>
+			<match type="little32" offset="0" value="0x1423D5FF"/>
+		</magic>
+		<glob pattern="*.qct"/>
+	</mime-type>
+
 </mime-info>

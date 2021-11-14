@@ -21,7 +21,7 @@
 			<li>Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases,
 				TwoNav RMaps, Garmin IMG &amp; JNX maps, GeoTIFF images,
 				BSB nautical charts, KMZ maps, AlpineQuest maps,
-				Mapsforge maps), ESRI world files.</li>
+				Mapsforge maps, QCT maps, ESRI world files).</li>
 			<li>Elevation, speed, heart rate, cadence, power, temperature and
 				gear ratio graphs.</li>
 			<li>Support for multiple tracks in one view.</li>
@@ -97,5 +97,6 @@
 		<mimetype>application/vnd.esri.wld</mimetype>
 		<mimetype>application/vnd.onmove.omd</mimetype>
 		<mimetype>application/vnd.onmove.ghp</mimetype>
+		<mimetype>application/vnd.memory-map.qct</mimetype>
 	</mimetypes>
 </component>
