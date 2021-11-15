@@ -2,6 +2,7 @@
 #include <QDataStream>
 #include <QPixmapCache>
 #include <QPainter>
+#include "common/util.h"
 #include "common/color.h"
 #include "qctmap.h"
 
@@ -198,32 +199,84 @@ static bool readString(QDataStream &stream, quint32 offset, QString &str)
 	return false;
 }
 
-bool QCTMap::readHeader(QDataStream &stream)
+bool QCTMap::readName(QDataStream &stream)
 {
-	quint32 version, title, ext, shift;
+	quint32 title, name;
 
-	stream >> version >> _cols >> _rows >> title;
+	stream >> title >> name;
 	if (stream.status() != QDataStream::Ok)
 		return false;
 
-	if (!readString(stream, title, _name))
-		return false;
+	if (name) {
+		if (!readString(stream, name, _name))
+			return false;
+	} else if (title) {
+		if (!readString(stream, title, _name))
+			return false;
+	} else
+		_name = Util::file2name(path());
+
+	return true;
+}
+
+bool QCTMap::readSize(QDataStream &stream)
+{
+	stream >> _cols >> _rows;
+	return (stream.status() == QDataStream::Ok);
+}
+
+bool QCTMap::readDatumShift(QDataStream &stream)
+{
+	quint32 ext, shift;
 
 	if (!stream.device()->seek(0x54))
 		return false;
 	stream >> ext;
 	if (stream.status() != QDataStream::Ok)
 		return false;
+	if (!ext)
+		return true;
 	if (!stream.device()->seek(ext + 4))
 		return false;
 	stream >> shift;
 	if (stream.status() != QDataStream::Ok)
 		return false;
+	if (!shift)
+		return true;
 	if (!stream.device()->seek(shift))
 		return false;
 	stream >> _shiftN >> _shiftE;
 
 	return (stream.status() == QDataStream::Ok);
+}
+
+bool QCTMap::readHeader(QDataStream &stream)
+{
+	quint32 magic, version;
+	stream >> magic >> version;
+
+	if (stream.status() != QDataStream::Ok || magic != MAGIC) {
+		_errorString = "Not a QCT map";
+		return false;
+	}
+	if (version == 0x20000001) {
+		_errorString = "QC3 files not supported";
+		return false;
+	}
+	if (!readSize(stream)) {
+		_errorString = "Error reading map dimensions";
+		return false;
+	}
+	if (!readName(stream)) {
+		_errorString = "Error reading map name";
+		return false;
+	}
+	if (!readDatumShift(stream)) {
+		_errorString = "Error reading datum shift";
+		return false;
+	}
+
+	return true;
 }
 
 bool QCTMap::readGeoRef(QDataStream &stream)
@@ -270,7 +323,8 @@ bool QCTMap::readIndex(QDataStream &stream)
 }
 
 QCTMap::QCTMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _file(fileName), _mapRatio(1.0), _valid(false)
+  : Map(fileName, parent), _file(fileName), _shiftE(0), _shiftN(0),
+  _mapRatio(1.0), _valid(false)
 {
 	if (!_file.open(QIODevice::ReadOnly)) {
 		_errorString = fileName + ": " + _file.errorString();
@@ -279,17 +333,9 @@ QCTMap::QCTMap(const QString &fileName, QObject *parent)
 
 	QDataStream stream(&_file);
 	stream.setByteOrder(QDataStream::LittleEndian);
-	quint32 magic;
 
-	stream >> magic;
-	if (magic != MAGIC) {
-		_errorString = "Not a QCT map";
+	if (!readHeader(stream))
 		return;
-	}
-	if (!readHeader(stream)) {
-		_errorString = "Error reading QCT header";
-		return;
-	}
 	if (!readGeoRef(stream)) {
 		_errorString = "Error reading georeference info";
 		return;

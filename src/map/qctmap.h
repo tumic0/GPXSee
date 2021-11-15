@@ -31,6 +31,9 @@ public:
 	QString errorString() const {return _errorString;}
 
 private:
+	bool readName(QDataStream &stream);
+	bool readSize(QDataStream &stream);
+	bool readDatumShift(QDataStream &stream);
 	bool readHeader(QDataStream &stream);
 	bool readGeoRef(QDataStream &stream);
 	bool readIndex(QDataStream &stream);
