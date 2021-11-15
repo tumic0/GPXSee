@@ -578,6 +578,22 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>qct</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.memory-map.qct</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/qct.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>QuickChart Map File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
@@ -1366,6 +1382,29 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.onmove.ghp</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.memory-map.qct</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://raw.githubusercontent.com/craigshelley/QuickChart/master/Specification/The%20Quick%20Chart%20File%20Format%20Specification%201.03.pdf</string>
+			<key>UTTypeDescription</key>
+			<string>QuickChart Map File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/qct.icns</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>qct</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.memory-map.qct</string>
 			</dict>
 		</dict>
 	</array>
