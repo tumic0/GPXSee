@@ -307,7 +307,7 @@
         <translation>Otevřít soubor</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="934"/>
+        <location filename="../src/GUI/gui.cpp" line="936"/>
         <source>Open POI file</source>
         <translation>Otevřít POI soubor</translation>
     </message>
@@ -524,8 +524,8 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="447"/>
-        <location filename="../src/GUI/gui.cpp" line="1202"/>
-        <location filename="../src/GUI/gui.cpp" line="1269"/>
+        <location filename="../src/GUI/gui.cpp" line="1204"/>
+        <location filename="../src/GUI/gui.cpp" line="1271"/>
         <source>Moving time</source>
         <translation>Čistý čas</translation>
     </message>
@@ -700,19 +700,19 @@
         <translation>Adresář se symboly:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1180"/>
-        <location filename="../src/GUI/gui.cpp" line="1249"/>
+        <location filename="../src/GUI/gui.cpp" line="1182"/>
+        <location filename="../src/GUI/gui.cpp" line="1251"/>
         <source>Areas</source>
         <translation>Plochy</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1223"/>
-        <location filename="../src/GUI/gui.cpp" line="1224"/>
+        <location filename="../src/GUI/gui.cpp" line="1225"/>
+        <location filename="../src/GUI/gui.cpp" line="1226"/>
         <source>Statistics</source>
         <translation>Statistika</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1537"/>
+        <location filename="../src/GUI/gui.cpp" line="1539"/>
         <source>Open map file</source>
         <translation>Otevřít mapový soubor</translation>
     </message>
@@ -721,20 +721,20 @@
         <translation type="vanished">Vymazat mezipaměť mapových dlaždic?</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1740"/>
+        <location filename="../src/GUI/gui.cpp" line="1742"/>
         <source>Could not download all required DEM files.</source>
         <translation>Nepodařilo se stáhnout všechny DEM soubory.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1769"/>
+        <location filename="../src/GUI/gui.cpp" line="1771"/>
         <source>No files loaded</source>
         <translation>Nejsou načteny žádné soubory</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1186"/>
-        <location filename="../src/GUI/gui.cpp" line="1190"/>
-        <location filename="../src/GUI/gui.cpp" line="1255"/>
-        <location filename="../src/GUI/gui.cpp" line="1258"/>
+        <location filename="../src/GUI/gui.cpp" line="1188"/>
+        <location filename="../src/GUI/gui.cpp" line="1192"/>
+        <location filename="../src/GUI/gui.cpp" line="1257"/>
+        <location filename="../src/GUI/gui.cpp" line="1260"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
@@ -789,36 +789,36 @@
         <translation>Adresář mezipaměti dlaždic:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1174"/>
-        <location filename="../src/GUI/gui.cpp" line="1245"/>
+        <location filename="../src/GUI/gui.cpp" line="1176"/>
+        <location filename="../src/GUI/gui.cpp" line="1247"/>
         <source>Routes</source>
         <translation>Trasy</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1581"/>
-        <location filename="../src/GUI/gui.cpp" line="1626"/>
-        <location filename="../src/GUI/gui.cpp" line="1645"/>
-        <location filename="../src/GUI/gui.cpp" line="1667"/>
+        <location filename="../src/GUI/gui.cpp" line="1583"/>
+        <location filename="../src/GUI/gui.cpp" line="1628"/>
+        <location filename="../src/GUI/gui.cpp" line="1647"/>
+        <location filename="../src/GUI/gui.cpp" line="1669"/>
         <source>Error loading map:</source>
         <translation>Mapu nelze načíst:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1694"/>
+        <location filename="../src/GUI/gui.cpp" line="1696"/>
         <source>Select map directory</source>
         <translation>Vybrat adresář s mapami</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1722"/>
+        <location filename="../src/GUI/gui.cpp" line="1724"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
         <translation>Vymazat mezipaměť mapy &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1755"/>
+        <location filename="../src/GUI/gui.cpp" line="1757"/>
         <source>No local DEM tiles found.</source>
         <translation>Nebyly nalezeny žádné lokální DEM dlaždice.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1773"/>
+        <location filename="../src/GUI/gui.cpp" line="1775"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n soubor</numerusform>
@@ -842,8 +842,8 @@
         <translation>Exportovat do PDF...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1177"/>
-        <location filename="../src/GUI/gui.cpp" line="1247"/>
+        <location filename="../src/GUI/gui.cpp" line="1179"/>
+        <location filename="../src/GUI/gui.cpp" line="1249"/>
         <source>Waypoints</source>
         <translation>Navigační body</translation>
     </message>
@@ -868,29 +868,29 @@
         <translation>Poslední soubor</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="864"/>
+        <location filename="../src/GUI/gui.cpp" line="866"/>
         <source>Error loading data file:</source>
         <translation>Datový soubor nelze načíst:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="867"/>
-        <location filename="../src/GUI/gui.cpp" line="963"/>
+        <location filename="../src/GUI/gui.cpp" line="869"/>
+        <location filename="../src/GUI/gui.cpp" line="965"/>
         <source>Line: %1</source>
         <translation>Řádka: %1</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="960"/>
+        <location filename="../src/GUI/gui.cpp" line="962"/>
         <source>Error loading POI file:</source>
         <translation>Soubor POI nelze načíst:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1239"/>
+        <location filename="../src/GUI/gui.cpp" line="1241"/>
         <source>Name</source>
         <translation>Název</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1171"/>
-        <location filename="../src/GUI/gui.cpp" line="1243"/>
+        <location filename="../src/GUI/gui.cpp" line="1173"/>
+        <location filename="../src/GUI/gui.cpp" line="1245"/>
         <source>Tracks</source>
         <translation>Cesty</translation>
     </message>
@@ -907,16 +907,16 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="411"/>
-        <location filename="../src/GUI/gui.cpp" line="1197"/>
-        <location filename="../src/GUI/gui.cpp" line="1265"/>
+        <location filename="../src/GUI/gui.cpp" line="1199"/>
+        <location filename="../src/GUI/gui.cpp" line="1267"/>
         <source>Distance</source>
         <translation>Vzdálenost</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="418"/>
         <location filename="../src/GUI/gui.cpp" line="617"/>
-        <location filename="../src/GUI/gui.cpp" line="1200"/>
-        <location filename="../src/GUI/gui.cpp" line="1267"/>
+        <location filename="../src/GUI/gui.cpp" line="1202"/>
+        <location filename="../src/GUI/gui.cpp" line="1269"/>
         <source>Time</source>
         <translation>Čas</translation>
     </message>
@@ -1082,77 +1082,82 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="121"/>
+        <location filename="../src/map/maplist.cpp" line="124"/>
         <source>Supported files</source>
         <translation>Podporované soubory</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="131"/>
+        <location filename="../src/map/maplist.cpp" line="134"/>
         <source>MBTiles maps</source>
         <translation>MBTiles mapy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="126"/>
+        <location filename="../src/map/maplist.cpp" line="129"/>
         <source>Garmin JNX maps</source>
         <translation>Garmin JNX mapy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="123"/>
+        <location filename="../src/map/maplist.cpp" line="126"/>
         <source>AlpineQuest maps</source>
         <translation>AlpineQuest mapy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="124"/>
+        <location filename="../src/map/maplist.cpp" line="127"/>
         <source>Garmin IMG maps</source>
         <translation>Garmin IMG mapy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="127"/>
+        <location filename="../src/map/maplist.cpp" line="130"/>
         <source>BSB nautical charts</source>
         <translation>BSB námořní mapy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="128"/>
+        <location filename="../src/map/maplist.cpp" line="131"/>
         <source>KMZ maps</source>
         <translation>KMZ mapy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="129"/>
+        <location filename="../src/map/maplist.cpp" line="132"/>
         <source>Mapsforge maps</source>
         <translation>Mapsforge mapy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="130"/>
+        <location filename="../src/map/maplist.cpp" line="133"/>
         <source>OziExplorer maps</source>
         <translation>OziExplorer mapy</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="135"/>
+        <source>QuickChart maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="139"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>TrekBuddy mapy/atlasy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="136"/>
+        <location filename="../src/map/maplist.cpp" line="140"/>
         <source>GeoTIFF images</source>
         <translation>GeoTIFF obrázky</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="132"/>
+        <location filename="../src/map/maplist.cpp" line="136"/>
         <source>TwoNav maps</source>
         <translation>TwoNav mapy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="133"/>
+        <location filename="../src/map/maplist.cpp" line="137"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
         <translation>Locus/OsmAnd/RMaps SQLite mapy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="137"/>
+        <location filename="../src/map/maplist.cpp" line="141"/>
         <source>World-file georeferenced images</source>
         <translation>Georeferencované obrázky - world-file</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="139"/>
+        <location filename="../src/map/maplist.cpp" line="143"/>
         <source>Online map sources</source>
         <translation>Online mapové zdroje</translation>
     </message>
