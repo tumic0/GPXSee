@@ -9,7 +9,7 @@ common GPS log file formats.
 * User-definable online maps (OpenStreetMap/Google tiles, WMTS, WMS, TMS, QuadTiles).
 * Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases,
   Garmin IMG/GMAP & JNX maps, TwoNav RMaps, GeoTIFF images, BSB charts, KMZ maps,
-  AlpineQuest maps, Locus/OsmAnd/RMaps SQLite maps, Mapsforge vector maps, QCT maps
+  AlpineQuest maps, Locus/OsmAnd/RMaps SQLite maps, Mapsforge vector maps, QCT maps,
   ESRI World-File georeferenced images).
 * Elevation, speed, heart rate, cadence, power, temperature and gear ratio/shifts graphs.
 * Support for DEM files (SRTM HGT).
