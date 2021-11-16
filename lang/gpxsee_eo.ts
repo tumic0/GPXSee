@@ -1124,7 +1124,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="135"/>
         <source>QuickChart maps</source>
-        <translation type="unfinished"></translation>
+        <translation>QuickChart-mapoj</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="139"/>
