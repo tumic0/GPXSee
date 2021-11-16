@@ -916,6 +916,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fájl</numerusform>
+            <numerusform>%n fájl</numerusform>
         </translation>
     </message>
 </context>
@@ -1127,7 +1128,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="135"/>
         <source>QuickChart maps</source>
-        <translation type="unfinished"></translation>
+        <translation>QuickChart térképek</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="139"/>
