@@ -223,24 +223,28 @@ bool FITParser::readField(CTX &ctx, Field *field, QVariant &val, bool &valid)
 		case 0: // enum
 			VAL(quint8, 0xffU);
 			break;
+		case 3:
+		case 0x83: // sint16
+			VAL(qint16, 0x7fffU);
+			break;
+		case 4:
+		case 0x84: // uint16
+			VAL(quint16, 0xffffU);
+			break;
+		case 5:
+		case 0x85: // sint32
+			VAL(qint32, 0x7fffffffU);
+			break;
+		case 6:
+		case 0x86: // uint32
+			VAL(quint32, 0xffffffffU);
+			break;
 		case 7: // UTF8 nul terminated string
 			{QByteArray ba(ctx.file->read(field->size));
 			ctx.len -= field->size;
 			ret = (ba.size() == field->size);
 			val = ret ? ba : QString();
 			valid = !ba.isEmpty();}
-			break;
-		case 0x83: // sint16
-			VAL(qint16, 0x7fffU);
-			break;
-		case 0x84: // uint16
-			VAL(quint16, 0xffffU);
-			break;
-		case 0x85: // sint32
-			VAL(qint32, 0x7fffffffU);
-			break;
-		case 0x86: // uint32
-			VAL(quint32, 0xffffffffU);
 			break;
 		default:
 			ret = skipValue(ctx, field->size);
