@@ -42,14 +42,18 @@ void PluginParameters::setPlugin(const QString &plugin)
 		le->setObjectName(params.at(i));
 		le->setText(_params[plugin].value(params.at(i)).toString());
 		l->addRow(params.at(i) + ":", le);
-		connect(le, &QLineEdit::editingFinished, this,
-		  &PluginParameters::saveParameters);
 	}
 
 	deleteLayout(layout());
 	setLayout(l);
 
 	_plugin = plugin;
+}
+
+const QMap<QString, QVariantMap> &PluginParameters::parameters()
+{
+	saveParameters();
+	return _params;
 }
 
 void PluginParameters::saveParameters()

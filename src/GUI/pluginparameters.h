@@ -12,15 +12,14 @@ public:
 	PluginParameters(const QString &plugin,
 	  const QMap<QString, QVariantMap> &params, QWidget *parent = 0);
 
-	const QMap<QString, QVariantMap> &parameters() const {return _params;}
+	const QMap<QString, QVariantMap> &parameters();
 
 public slots:
 	void setPlugin(const QString &plugin);
 
-private slots:
+private:
 	void saveParameters();
 
-private:
 	QMap<QString, QVariantMap> _params;
 	QString _plugin;
 };
