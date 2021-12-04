@@ -1186,17 +1186,17 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="87"/>
         <source>kn</source>
-        <translation type="unfinished">kn</translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="90"/>
         <source>mi/h</source>
-        <translation type="unfinished">mi/h</translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="93"/>
         <source>km/h</source>
-        <translation type="unfinished">km/h</translation>
+        <translation>km/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="100"/>
