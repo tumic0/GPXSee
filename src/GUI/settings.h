@@ -3,6 +3,9 @@
 
 #define IMPERIAL_UNITS() \
 	(QLocale::system().measurementSystem() == QLocale::ImperialSystem)
+#define POSITION_PLUGIN() \
+	(QGeoPositionInfoSource::availableSources().isEmpty() \
+	  ? "" : QGeoPositionInfoSource::availableSources().first())
 
 #define WINDOW_SETTINGS_GROUP             "Window"
 #define WINDOW_GEOMETRY_SETTING           "geometry"
@@ -34,12 +37,22 @@
 #define CURRENT_MAP_SETTING               "map"
 #define SHOW_MAP_SETTING                  "show"
 #define SHOW_MAP_DEFAULT                  true
-#define SHOW_COORDINATES_SETTING          "coordinates"
-#define SHOW_COORDINATES_DEFAULT          false
+#define SHOW_CURSOR_COORDINATES_SETTING   "coordinates"
+#define SHOW_CURSOR_COORDINATES_DEFAULT   false
 
 #define POI_SETTINGS_GROUP                "POI"
 #define OVERLAP_POI_SETTING               "overlap"
 #define OVERLAP_POI_DEFAULT               false
+
+#define POSITION_SETTINGS_GROUP           "Position"
+#define SHOW_POSITION_SETTING             "show"
+#define SHOW_POSITION_DEFAULT             false
+#define FOLLOW_POSITION_SETTING           "follow"
+#define FOLLOW_POSITION_DEFAULT           true
+#define SHOW_POSITION_COORDINATES_SETTING "coordinates"
+#define SHOW_POSITION_COORDINATES_DEFAULT true
+#define SHOW_MOTION_INFO_SETTING          "motionInfo"
+#define SHOW_MOTION_INFO_DEFAULT          true
 
 #define SHOW_POI_ICONS_SETTING            "icons"
 #define SHOW_POI_ICONS_DEFAULT            true
@@ -119,6 +132,12 @@
 #define MAP_OPACITY_DEFAULT               100
 #define BACKGROUND_COLOR_SETTING          "backgroundColor"
 #define BACKGROUND_COLOR_DEFAULT          QColor(Qt::white)
+#define CROSSHAIR_COLOR_SETTING           "crosshairColor"
+#define CROSSHAIR_COLOR_DEFAULT           QColor(Qt::red)
+#define INFO_COLOR_SETTING                "infoColor"
+#define INFO_COLOR_DEFAULT                QColor(Qt::black)
+#define INFO_BACKGROUND_SETTING           "infoBackground"
+#define INFO_BACKGROUND_DEFAULT           false
 #define TRACK_WIDTH_SETTING               "trackWidth"
 #define TRACK_WIDTH_DEFAULT               3
 #define ROUTE_WIDTH_SETTING               "routeWidth"
@@ -186,6 +205,11 @@
 #define DEM_USERNAME_DEFAULT              ""
 #define DEM_PASSWORD_SETTING              "demPassword"
 #define DEM_PASSWORD_DEFAULT              ""
+#define POSITION_PLUGIN_SETTING           "positionPlugin"
+#define POSITION_PLUGIN_DEFAULT           POSITION_PLUGIN()
+#define POSITION_PLUGIN_PARAMS_PREFIX     "pluginParameters"
+#define POSITION_PLUGIN_PARAMS_PLUGIN     "plugin"
+#define POSITION_PLUGIN_PARAMS_PARAM      "parameters"
 #define USE_OPENGL_SETTING                "useOpenGL"
 #define USE_OPENGL_DEFAULT                false
 #define ENABLE_HTTP2_SETTING              "enableHTTP2"

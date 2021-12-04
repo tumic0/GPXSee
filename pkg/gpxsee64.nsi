@@ -37,7 +37,7 @@ Unicode true
 ; The name of the installer
 Name "GPXSee"
 ; Program version
-!define VERSION "9.12"
+!define VERSION "10.0"
 
 ; The file to write
 OutFile "GPXSee-${VERSION}_x64.exe"
@@ -252,6 +252,8 @@ Section "QT framework" SEC_QT
   File "Qt6Svg.dll"
   File "Qt6Widgets.dll"
   File "Qt6Core5Compat.dll"
+  File "Qt6Positioning.dll"
+  File "Qt6SerialPort.dll"
 !else
   File "Qt5Core.dll"
   File "Qt5Gui.dll"
@@ -261,12 +263,15 @@ Section "QT framework" SEC_QT
   File "Qt5Sql.dll"
   File "Qt5Svg.dll"
   File "Qt5Concurrent.dll"
+  File "Qt5Positioning.dll"
+  File "Qt5SerialPort.dll" 
   File /r "printsupport"
 !endif
   File /r "platforms"
   File /r "imageformats"
   File /r "styles"
   File /r "sqldrivers"
+  File /r "position"
 
 SectionEnd
 

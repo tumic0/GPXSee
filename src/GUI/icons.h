@@ -18,6 +18,7 @@
 #define LAST_FILE_ICON    ":/arrow-right-double.png"
 #define FIRST_FILE_ICON   ":/arrow-left-double.png"
 #define FULLSCREEN_ICON   ":/view-fullscreen.png"
+#define SHOW_POS_ICON     ":/transform-move.png"
 
 // Options dialog icons
 #define APPEARANCE_ICON   ":/format-stroke-color.png"
@@ -27,6 +28,7 @@
 #define DATA_ICON         ":/view-filter.png"
 #define MAPS_ICON         ":/applications-internet_32.png"
 #define DEM_ICON          ":/view-grid.png"
+#define POSITION_ICON     ":/transform-move_32.png"
 
 #define SHOW_PWD_ICON     ":/document-encrypt.png"
 #define HIDE_PWD_ICON     ":/document-decrypt.png"

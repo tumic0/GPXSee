@@ -3,7 +3,7 @@ unix:!macx {
 } else {
     TARGET = GPXSee
 }
-VERSION = 9.12
+VERSION = 10.0
 
 QT += core \
     gui \
@@ -12,7 +12,8 @@ QT += core \
     sql \
     concurrent \
     widgets \
-    printsupport
+    printsupport \
+    positioning
 greaterThan(QT_MAJOR_VERSION, 5) {
     QT += openglwidgets \
           core5compat
@@ -21,6 +22,9 @@ greaterThan(QT_MAJOR_VERSION, 5) {
 CONFIG += object_parallel_to_source
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
+    src/GUI/crosshairitem.h \
+    src/GUI/motioninfoitem.h \
+    src/GUI/pluginparameters.h \
     src/common/garmin.h \
     src/common/coordinates.h \
     src/common/range.h \
@@ -238,6 +242,9 @@ HEADERS += src/common/config.h \
     src/data/geojsonparser.h
 
 SOURCES += src/main.cpp \
+    src/GUI/crosshairitem.cpp \
+    src/GUI/motioninfoitem.cpp \
+    src/GUI/pluginparameters.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
     src/common/range.cpp \

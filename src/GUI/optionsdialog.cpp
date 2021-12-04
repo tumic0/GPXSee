@@ -13,6 +13,7 @@
 #include <QLabel>
 #include <QSysInfo>
 #include <QButtonGroup>
+#include <QGeoPositionInfoSource>
 #include "icons.h"
 #include "infolabel.h"
 #include "colorbox.h"
@@ -22,6 +23,7 @@
 #include "projectioncombobox.h"
 #include "dirselectwidget.h"
 #include "authenticationwidget.h"
+#include "pluginparameters.h"
 #include "optionsdialog.h"
 
 
@@ -38,7 +40,6 @@ static QFrame *line()
 	return l;
 }
 #endif // Q_OS_MAC
-
 
 void OptionsDialog::automaticPauseDetectionSet(bool set)
 {
@@ -275,10 +276,20 @@ QWidget *OptionsDialog::createAppearancePage()
 	_backgroundColor = new ColorBox();
 	_backgroundColor->setColor(_options.backgroundColor);
 	_backgroundColor->enableAlphaChannel(false);
+	_crosshairColor = new ColorBox();
+	_crosshairColor->setColor(_options.crosshairColor);
+	_infoColor = new ColorBox();
+	_infoColor->setColor(_options.infoColor);
+	_infoBackground = new QCheckBox(tr("Info background"));
+	_infoBackground->setChecked(_options.infoBackground);
 
 	QFormLayout *mapLayout = new QFormLayout();
 	mapLayout->addRow(tr("Background color:"), _backgroundColor);
 	mapLayout->addRow(tr("Map opacity:"), _mapOpacity);
+	mapLayout->addRow(tr("Crosshair color:"), _crosshairColor);
+	mapLayout->addRow(tr("Info color:"), _infoColor);
+	mapLayout->addWidget(_infoBackground);
+
 	QWidget *mapTab = new QWidget();
 	QVBoxLayout *mapTabLayout = new QVBoxLayout();
 	mapTabLayout->addLayout(mapLayout);
@@ -593,6 +604,35 @@ QWidget *OptionsDialog::createDEMPage()
 	return demPage;
 }
 
+QWidget *OptionsDialog::createPositionPage()
+{
+	QStringList plugins(QGeoPositionInfoSource::availableSources());
+
+	_positionPlugin = new QComboBox();
+	_positionPlugin->addItems(plugins);
+	_positionPlugin->setCurrentIndex(_positionPlugin->findText(_options.plugin));
+	_pluginParameters = new PluginParameters(_positionPlugin->currentText(),
+	  _options.pluginParams);
+	connect(_positionPlugin, &QComboBox::currentTextChanged, _pluginParameters,
+	  &PluginParameters::setPlugin);
+
+	QFormLayout *pluginLayout = new QFormLayout();
+	pluginLayout->addRow(tr("Plugin:"), _positionPlugin);
+
+	QVBoxLayout *sourceLayout = new QVBoxLayout();
+	sourceLayout->addLayout(pluginLayout);
+	sourceLayout->addWidget(_pluginParameters);
+	sourceLayout->addStretch();
+
+	QWidget *sourceTab = new QWidget();
+	sourceTab->setLayout(sourceLayout);
+
+	QTabWidget *positionPage = new QTabWidget();
+	positionPage->addTab(sourceTab, tr("Source"));
+
+	return positionPage;
+}
+
 QWidget *OptionsDialog::createExportPage()
 {
 	_wysiwyg = new QRadioButton(tr("WYSIWYG"));
@@ -741,6 +781,7 @@ OptionsDialog::OptionsDialog(Options &options, Units units, QWidget *parent)
 	pages->addWidget(createDataPage());
 	pages->addWidget(createPOIPage());
 	pages->addWidget(createDEMPage());
+	pages->addWidget(createPositionPage());
 	pages->addWidget(createExportPage());
 	pages->addWidget(createSystemPage());
 
@@ -752,6 +793,7 @@ OptionsDialog::OptionsDialog(Options &options, Units units, QWidget *parent)
 	new QListWidgetItem(QIcon(DATA_ICON), tr("Data"), menu);
 	new QListWidgetItem(QIcon(POI_ICON), tr("POI"), menu);
 	new QListWidgetItem(QIcon(DEM_ICON), tr("DEM"), menu);
+	new QListWidgetItem(QIcon(POSITION_ICON), tr("Position"), menu);
 	new QListWidgetItem(QIcon(PRINT_EXPORT_ICON), tr("Print & Export"),
 	  menu);
 	new QListWidgetItem(QIcon(SYSTEM_ICON), tr("System"), menu);
@@ -796,6 +838,9 @@ void OptionsDialog::accept()
 	_options.palette.setShift(_colorOffset->value() / 100.0);
 	_options.mapOpacity = _mapOpacity->value();
 	_options.backgroundColor = _backgroundColor->color();
+	_options.crosshairColor = _crosshairColor->color();
+	_options.infoColor = _infoColor->color();
+	_options.infoBackground = _infoBackground->isChecked();
 	_options.trackWidth = _trackWidth->value();
 	_options.trackStyle = (Qt::PenStyle) _trackStyle->itemData(
 	  _trackStyle->currentIndex()).toInt();
@@ -855,6 +900,9 @@ void OptionsDialog::accept()
 	_options.demAuthorization = _demAuth->isEnabled();
 	_options.demUsername = _demAuth->username();
 	_options.demPassword = _demAuth->password();
+
+	_options.plugin = _positionPlugin->currentText();
+	_options.pluginParams = _pluginParameters->parameters();
 
 	_options.useOpenGL = _useOpenGL->isChecked();
 	_options.enableHTTP2 = _enableHTTP2->isChecked();

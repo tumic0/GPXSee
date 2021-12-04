@@ -1,24 +1,19 @@
-#ifndef COORDINATESITEM_H
-#define COORDINATESITEM_H
+#ifndef MOTIONINFOITEM_H
+#define MOTIONINFOITEM_H
 
 #include <QGraphicsItem>
-#include <QFont>
-#include "common/coordinates.h"
-#include "format.h"
+#include "units.h"
 
-class CoordinatesItem : public QGraphicsItem
+class MotionInfoItem : public QGraphicsItem
 {
 public:
-	CoordinatesItem(QGraphicsItem *parent = 0);
+	MotionInfoItem(QGraphicsItem *parent = 0);
 
 	QRectF boundingRect() const {return _boundingRect;}
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-	CoordinatesFormat format() const {return _format;}
-
-	void setCoordinates(const Coordinates &c, qreal elevation = NAN);
-	void setFormat(CoordinatesFormat format);
+	void setInfo(qreal bearing, qreal speed, qreal verticalSpeed);
 	void setUnits(Units units);
 	void setDigitalZoom(qreal zoom);
 	void setColor(const QColor &color);
@@ -27,11 +22,11 @@ public:
 
 private:
 	void updateBoundingRect();
+	QString speed(const QLocale &l) const;
+	QString verticalSpeed(const QLocale &l) const;
 	QString text() const;
 
-	Coordinates _c;
-	qreal _ele;
-	CoordinatesFormat _format;
+	qreal _bearing, _speed, _verticalSpeed;
 	Units _units;
 	QRectF _boundingRect;
 	QFont _font;
@@ -40,4 +35,4 @@ private:
 	bool _drawBackground;
 };
 
-#endif // COORDINATESITEM_H
+#endif // MOTIONINFOITEM_H

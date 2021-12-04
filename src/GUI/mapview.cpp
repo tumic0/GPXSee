@@ -5,8 +5,10 @@
 #include <QScrollBar>
 #include <QClipboard>
 #include <QOpenGLWidget>
+#include <QGeoPositionInfoSource>
 #include "data/poi.h"
 #include "data/data.h"
+#include "data/dem.h"
 #include "map/map.h"
 #include "map/pcs.h"
 #include "trackitem.h"
@@ -20,6 +22,8 @@
 #include "graphicsscene.h"
 #include "mapaction.h"
 #include "markerinfoitem.h"
+#include "crosshairitem.h"
+#include "motioninfoitem.h"
 #include "mapview.h"
 
 
@@ -44,8 +48,8 @@ static void updateZValues(T &items)
 }
 
 
-MapView::MapView(Map *map, POI *poi, QWidget *parent)
-  : QGraphicsView(parent)
+MapView::MapView(Map *map, POI *poi, QGeoPositionInfoSource *source,
+  QWidget *parent) : QGraphicsView(parent)
 {
 	Q_ASSERT(map != 0);
 	Q_ASSERT(poi != 0);
@@ -63,10 +67,10 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_mapScale = new ScaleItem();
 	_mapScale->setZValue(2.0);
 	_scene->addItem(_mapScale);
-	_coordinates = new CoordinatesItem();
-	_coordinates->setZValue(2.0);
-	_coordinates->setVisible(false);
-	_scene->addItem(_coordinates);
+	_cursorCoordinates = new CoordinatesItem();
+	_cursorCoordinates->setZValue(2.0);
+	_cursorCoordinates->setVisible(false);
+	_scene->addItem(_cursorCoordinates);
 
 	_outputProjection = PCS::pcs(3857);
 	_inputProjection = GCS::gcs(4326);
@@ -78,6 +82,25 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 
 	_poi = poi;
 	connect(_poi, &POI::pointsChanged, this, &MapView::updatePOI);
+
+	_positionSource = source;
+	if (_positionSource)
+		connect(_positionSource, &QGeoPositionInfoSource::positionUpdated, this,
+		  &MapView::updatePosition);
+	_crosshair = new CrosshairItem();
+	_crosshair->setZValue(2.0);
+	_crosshair->setVisible(false);
+	_scene->addItem(_crosshair);
+
+	_positionCoordinates = new CoordinatesItem();
+	_positionCoordinates->setZValue(2.0);
+	_positionCoordinates->setVisible(false);
+	_scene->addItem(_positionCoordinates);
+
+	_motionInfo = new MotionInfoItem();
+	_motionInfo->setZValue(2.0);
+	_motionInfo->setVisible(false);
+	_scene->addItem(_motionInfo);
 
 	_mapOpacity = 1.0;
 	_backgroundColor = Qt::white;
@@ -106,6 +129,10 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_waypointColor = Qt::black;
 	_poiSize = 8;
 	_poiColor = Qt::black;
+	_followPosition = false;
+	_showPosition = false;
+	_showPositionCoordinates = false;
+	_showMotionInfo = false;
 
 	_deviceRatio = 1.0;
 	_mapRatio = 1.0;
@@ -125,7 +152,7 @@ void MapView::centerOn(const QPointF &pos)
 	QRectF vr(mapToScene(viewport()->rect()).boundingRect());
 	_res = _map->resolution(vr);
 	_mapScale->setResolution(_res);
-	_coordinates->setCoordinates(Coordinates());
+	_cursorCoordinates->setCoordinates(Coordinates());
 }
 
 PathItem *MapView::addTrack(const Track &track)
@@ -369,6 +396,8 @@ void MapView::rescale()
 	  it != _pois.constEnd(); it++)
 		it.value()->setMap(_map);
 
+	_crosshair->setMap(_map);
+
 	updatePOIVisibility();
 }
 
@@ -407,18 +436,20 @@ void MapView::setMap(Map *map)
 	_scene->setSceneRect(_map->bounds());
 
 	for (int i = 0; i < _tracks.size(); i++)
-		_tracks.at(i)->setMap(map);
+		_tracks.at(i)->setMap(_map);
 	for (int i = 0; i < _routes.size(); i++)
-		_routes.at(i)->setMap(map);
+		_routes.at(i)->setMap(_map);
 	for (int i = 0; i < _areas.size(); i++)
-		_areas.at(i)->setMap(map);
+		_areas.at(i)->setMap(_map);
 	for (int i = 0; i < _waypoints.size(); i++)
-		_waypoints.at(i)->setMap(map);
+		_waypoints.at(i)->setMap(_map);
 
 	for (POIHash::const_iterator it = _pois.constBegin();
 	  it != _pois.constEnd(); it++)
 		it.value()->setMap(_map);
 	updatePOIVisibility();
+
+	_crosshair->setMap(_map);
 
 	QPointF nc = QRectF(_map->ll2xy(cr.topLeft()),
 	  _map->ll2xy(cr.bottomRight())).center();
@@ -435,6 +466,20 @@ void MapView::setPOI(POI *poi)
 	_poi = poi;
 
 	updatePOI();
+}
+
+void MapView::setPositionSource(QGeoPositionInfoSource *source)
+{
+	if (_positionSource)
+		disconnect(_positionSource, &QGeoPositionInfoSource::positionUpdated,
+		  this, &MapView::updatePosition);
+	if (source)
+		connect(source, &QGeoPositionInfoSource::positionUpdated, this,
+		  &MapView::updatePosition);
+
+	_positionSource = source;
+
+	showPosition(_showPosition);
 }
 
 void MapView::setGraph(int index)
@@ -502,6 +547,8 @@ void MapView::setUnits(Units units)
 		_routes.at(i)->updateTicks();
 
 	_mapScale->setUnits(units);
+	_cursorCoordinates->setUnits(units);
+	_positionCoordinates->setUnits(units);
 }
 
 void MapView::setCoordinatesFormat(CoordinatesFormat format)
@@ -514,7 +561,8 @@ void MapView::setCoordinatesFormat(CoordinatesFormat format)
 	for (int i = 0; i < _routes.count(); i++)
 		_routes.at(i)->updateMarkerInfo();
 
-	_coordinates->setFormat(format);
+	_cursorCoordinates->setFormat(format);
+	_positionCoordinates->setFormat(format);
 }
 
 void MapView::setTimeZone(const QTimeZone &zone)
@@ -557,7 +605,10 @@ void MapView::digitalZoom(int zoom)
 		it.value()->setDigitalZoom(_digitalZoom);
 
 	_mapScale->setDigitalZoom(_digitalZoom);
-	_coordinates->setDigitalZoom(_digitalZoom);
+	_cursorCoordinates->setDigitalZoom(_digitalZoom);
+	_positionCoordinates->setDigitalZoom(_digitalZoom);
+	_motionInfo->setDigitalZoom(_digitalZoom);
+	_crosshair->setDigitalZoom(_digitalZoom);
 }
 
 void MapView::zoom(int zoom, const QPoint &pos, bool shift)
@@ -658,7 +709,7 @@ void MapView::mousePressEvent(QMouseEvent *event)
 {
 	if (event->button() == Qt::LeftButton && event->modifiers() & MODIFIER)
 		QApplication::clipboard()->setText(Format::coordinates(
-		  _map->xy2ll(mapToScene(event->pos())), _coordinates->format()));
+		  _map->xy2ll(mapToScene(event->pos())), _cursorCoordinates->format()));
 	else
 		QGraphicsView::mousePressEvent(event);
 }
@@ -756,10 +807,16 @@ void MapView::clear()
 	_waypoints.clear();
 
 	_scene->removeItem(_mapScale);
-	_scene->removeItem(_coordinates);
+	_scene->removeItem(_cursorCoordinates);
+	_scene->removeItem(_positionCoordinates);
+	_scene->removeItem(_crosshair);
+	_scene->removeItem(_motionInfo);
 	_scene->clear();
 	_scene->addItem(_mapScale);
-	_scene->addItem(_coordinates);
+	_scene->addItem(_cursorCoordinates);
+	_scene->addItem(_positionCoordinates);
+	_scene->addItem(_crosshair);
+	_scene->addItem(_motionInfo);
 
 	_palette.reset();
 
@@ -910,10 +967,31 @@ void MapView::showPOIIcons(bool show)
 	updatePOIVisibility();
 }
 
-void MapView::showCoordinates(bool show)
+void MapView::showCursorCoordinates(bool show)
 {
-	_coordinates->setVisible(show);
+	_cursorCoordinates->setVisible(show);
 	setMouseTracking(show);
+	_scene->invalidate();
+}
+
+void MapView::showPositionCoordinates(bool show)
+{
+	_showPositionCoordinates = show;
+
+	if (_crosshair->isVisible())
+		_positionCoordinates->setVisible(show);
+
+	_scene->invalidate();
+}
+
+void MapView::showMotionInfo(bool show)
+{
+	_showMotionInfo = show;
+
+	if (_crosshair->isVisible())
+		_motionInfo->setVisible(show);
+
+	_scene->invalidate();
 }
 
 void MapView::showOverlappedPOIs(bool show)
@@ -1022,6 +1100,10 @@ void MapView::setMapOpacity(int opacity)
 void MapView::setBackgroundColor(const QColor &color)
 {
 	_backgroundColor = color;
+	_cursorCoordinates->setBackgroundColor(color);
+	_positionCoordinates->setBackgroundColor(color);
+	_motionInfo->setBackgroundColor(color);
+
 	reloadMap();
 }
 
@@ -1053,11 +1135,27 @@ void MapView::paintEvent(QPaintEvent *event)
 	if (_mapScale->pos() != scaleScenePos && !_plot)
 		_mapScale->setPos(scaleScenePos);
 
-	if (_coordinates->isVisible()) {
+	if (_cursorCoordinates->isVisible()) {
 		QPointF coordinatesScenePos = mapToScene(rect().bottomLeft()
 		  + QPoint(COORDINATES_OFFSET, -COORDINATES_OFFSET));
-		if (_coordinates->pos() != coordinatesScenePos && !_plot)
-			_coordinates->setPos(coordinatesScenePos);
+		if (_cursorCoordinates->pos() != coordinatesScenePos && !_plot)
+			_cursorCoordinates->setPos(coordinatesScenePos);
+	}
+
+	if (_positionCoordinates->isVisible()) {
+		QPointF coordinatesScenePos = mapToScene(rect().topLeft()
+		  + QPoint(COORDINATES_OFFSET, COORDINATES_OFFSET
+		  + _positionCoordinates->boundingRect().height()));
+		if (_positionCoordinates->pos() != coordinatesScenePos)
+			_positionCoordinates->setPos(coordinatesScenePos);
+	}
+
+	if (_motionInfo->isVisible()) {
+		QPointF coordinatesScenePos = mapToScene(rect().topRight()
+		  + QPoint(-COORDINATES_OFFSET - _motionInfo->boundingRect().width(),
+		  COORDINATES_OFFSET + _motionInfo->boundingRect().height()));
+		if (_motionInfo->pos() != coordinatesScenePos)
+			_motionInfo->setPos(coordinatesScenePos);
 	}
 
 	QGraphicsView::paintEvent(event);
@@ -1078,15 +1176,17 @@ void MapView::scrollContentsBy(int dx, int dy)
 
 void MapView::mouseMoveEvent(QMouseEvent *event)
 {
-	if (_coordinates->isVisible())
-		_coordinates->setCoordinates(_map->xy2ll(mapToScene(event->pos())));
+	if (_cursorCoordinates->isVisible()) {
+		Coordinates c(_map->xy2ll(mapToScene(event->pos())));
+		_cursorCoordinates->setCoordinates(c, DEM::elevation(c));
+	}
 
 	QGraphicsView::mouseMoveEvent(event);
 }
 
 void MapView::leaveEvent(QEvent *event)
 {
-	_coordinates->setCoordinates(Coordinates());
+	_cursorCoordinates->setCoordinates(Coordinates());
 	QGraphicsView::leaveEvent(event);
 }
 
@@ -1157,6 +1257,8 @@ void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 		it.value()->setMap(_map);
 	updatePOIVisibility();
 
+	_crosshair->setMap(_map);
+
 	QPointF nc = QRectF(_map->ll2xy(cr.topLeft()),
 	  _map->ll2xy(cr.bottomRight())).center();
 	centerOn(nc);
@@ -1205,4 +1307,72 @@ RectC MapView::boundingRect() const
 		rect |= _ar;
 
 	return rect;
+}
+
+void MapView::showPosition(bool show)
+{
+	_showPosition = show;
+
+	if (!_positionSource) {
+		_crosshair->setVisible(false);
+		_positionCoordinates->setVisible(false);
+		_motionInfo->setVisible(false);
+	} else if (_showPosition) {
+		_crosshair->setVisible(true);
+		if (_showPositionCoordinates)
+			_positionCoordinates->setVisible(true);
+		if (_showMotionInfo)
+			_motionInfo->setVisible(true);
+		_positionSource->startUpdates();
+	} else {
+		_positionSource->stopUpdates();
+		_crosshair->setVisible(false);
+		_positionCoordinates->setVisible(false);
+		_motionInfo->setVisible(false);
+	}
+}
+
+void MapView::followPosition(bool follow)
+{
+	_followPosition = follow;
+
+	if (follow && _crosshair->isVisible())
+		centerOn(_map->ll2xy(_crosshair->coordinates()));
+}
+
+void MapView::updatePosition(const QGeoPositionInfo &pos)
+{
+	QGeoCoordinate gc(pos.coordinate());
+	if (!gc.isValid())
+		return;
+
+	Coordinates c(gc.longitude(), gc.latitude());
+	_crosshair->setCoordinates(c);
+	_crosshair->setMap(_map);
+	_positionCoordinates->setCoordinates(c, gc.altitude());
+	_motionInfo->setInfo(pos.attribute(QGeoPositionInfo::Direction),
+	  pos.attribute(QGeoPositionInfo::GroundSpeed),
+	  pos.attribute(QGeoPositionInfo::VerticalSpeed));
+
+	if (_followPosition)
+		centerOn(_map->ll2xy(c));
+}
+
+void MapView::setCrosshairColor(const QColor &color)
+{
+	_crosshair->setColor(color);
+}
+
+void MapView::setInfoColor(const QColor &color)
+{
+	_cursorCoordinates->setColor(color);
+	_positionCoordinates->setColor(color);
+	_motionInfo->setColor(color);
+}
+
+void MapView::drawInfoBackground(bool draw)
+{
+	_cursorCoordinates->drawBackground(draw);
+	_positionCoordinates->drawBackground(draw);
+	_motionInfo->drawBackground(draw);
 }

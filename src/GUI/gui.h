@@ -24,6 +24,7 @@ class QAction;
 class QLabel;
 class QSplitter;
 class QPrinter;
+class QGeoPositionInfoSource;
 class FileBrowser;
 class GraphTab;
 class MapView;
@@ -198,6 +199,10 @@ private:
 	QAction *_showPOILabelsAction;
 	QAction *_showPOIIconsAction;
 	QAction *_showMapAction;
+	QAction *_showPositionAction;
+	QAction *_followPositionAction;
+	QAction *_showPositionCoordinatesAction;
+	QAction *_showMotionInfo;
 	QAction *_fullscreenAction;
 	QAction *_loadMapAction;
 	QAction *_loadMapDirAction;
@@ -253,6 +258,7 @@ private:
 
 	POI *_poi;
 	Map *_map;
+	QGeoPositionInfoSource *_positionSource;
 	DEMLoader *_dem;
 
 	FileBrowser *_browser;

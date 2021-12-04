@@ -19,6 +19,7 @@ class PercentSlider;
 class ProjectionComboBox;
 class DirSelectWidget;
 class AuthenticationWidget;
+class PluginParameters;
 
 struct Options {
 	// Appearance
@@ -40,6 +41,9 @@ struct Options {
 	bool graphAntiAliasing;
 	int mapOpacity;
 	QColor backgroundColor;
+	QColor crosshairColor;
+	QColor infoColor;
+	bool infoBackground;
 	// Map
 	int outputProjection;
 	int inputProjection;
@@ -67,6 +71,9 @@ struct Options {
 	QString demUsername;
 	QString demPassword;
 	bool demAuthorization;
+	// Position
+	QString plugin;
+	QMap<QString, QVariantMap> pluginParams;
 	// System
 	bool useOpenGL;
 	bool enableHTTP2;
@@ -107,6 +114,7 @@ private:
 	QWidget *createSystemPage();
 	QWidget *createExportPage();
 	QWidget *createDEMPage();
+	QWidget *createPositionPage();
 
 	Options &_options;
 
@@ -116,6 +124,9 @@ private:
 	PercentSlider *_colorOffset;
 	PercentSlider *_mapOpacity;
 	ColorBox *_backgroundColor;
+	ColorBox *_crosshairColor;
+	ColorBox *_infoColor;
+	QCheckBox *_infoBackground;
 	QSpinBox *_trackWidth;
 	StyleComboBox *_trackStyle;
 	QSpinBox *_routeWidth;
@@ -163,6 +174,9 @@ private:
 	// DEM
 	QLineEdit *_demURL;
 	AuthenticationWidget *_demAuth;
+	// Position
+	QComboBox *_positionPlugin;
+	PluginParameters *_pluginParameters;
 	// System
 	QSpinBox *_pixmapCache;
 	QSpinBox *_connectionTimeout;

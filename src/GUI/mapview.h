@@ -17,6 +17,8 @@
 #include "palette.h"
 
 
+class QGeoPositionInfoSource;
+class QGeoPositionInfo;
 class Data;
 class POI;
 class Map;
@@ -35,6 +37,8 @@ class Area;
 class GraphicsScene;
 class QTimeZone;
 class MapAction;
+class CrosshairItem;
+class MotionInfoItem;
 
 class MapView : public QGraphicsView
 {
@@ -48,7 +52,8 @@ public:
 	};
 	Q_DECLARE_FLAGS(PlotFlags, Flag)
 
-	MapView(Map *map, POI *poi, QWidget *parent = 0);
+	MapView(Map *map, POI *poi, QGeoPositionInfoSource *source,
+	  QWidget *parent = 0);
 
 	QList<PathItem *> loadData(const Data &data);
 	void loadMaps(const QList<MapAction*> &maps);
@@ -57,6 +62,7 @@ public:
 	void setPalette(const Palette &palette);
 	void setPOI(POI *poi);
 	void setMap(Map *map);
+	void setPositionSource(QGeoPositionInfoSource *source);
 	void setGraph(int index);
 
 	void plot(QPainter *painter, const QRectF &target, qreal scale,
@@ -66,6 +72,9 @@ public:
 
 	void setUnits(Units units);
 	void setMarkerColor(const QColor &color);
+	void setCrosshairColor(const QColor &color);
+	void setInfoColor(const QColor &color);
+	void drawInfoBackground(bool draw);
 	void setTrackWidth(int width);
 	void setRouteWidth(int width);
 	void setAreaWidth(int width);
@@ -94,9 +103,11 @@ public:
 public slots:
 	void showMap(bool show);
 	void showPOI(bool show);
+	void showPosition(bool show);
 	void showPOILabels(bool show);
 	void showPOIIcons(bool show);
-	void showCoordinates(bool show);
+	void showCursorCoordinates(bool show);
+	void showPositionCoordinates(bool show);
 	void showTicks(bool show);
 	void showMarkers(bool show);
 	void showMarkerInfo(MarkerInfoItem::Type type);
@@ -109,10 +120,13 @@ public slots:
 	void showWaypoints(bool show);
 	void showRouteWaypoints(bool show);
 	void setMarkerPosition(qreal pos);
+	void followPosition(bool follow);
+	void showMotionInfo(bool show);
 
 private slots:
 	void updatePOI();
 	void reloadMap();
+	void updatePosition(const QGeoPositionInfo &pos);
 
 private:
 	typedef QHash<SearchPointer<Waypoint>, WaypointItem*> POIHash;
@@ -148,7 +162,9 @@ private:
 
 	GraphicsScene *_scene;
 	ScaleItem *_mapScale;
-	CoordinatesItem *_coordinates;
+	CoordinatesItem *_cursorCoordinates, *_positionCoordinates;
+	CrosshairItem *_crosshair;
+	MotionInfoItem *_motionInfo;
 	QList<TrackItem*> _tracks;
 	QList<RouteItem*> _routes;
 	QList<WaypointItem*> _waypoints;
@@ -160,6 +176,7 @@ private:
 
 	Map *_map;
 	POI *_poi;
+	QGeoPositionInfoSource *_positionSource;
 
 	Palette _palette;
 	qreal _mapOpacity;
@@ -167,9 +184,10 @@ private:
 
 	bool _showMap, _showTracks, _showRoutes, _showAreas, _showWaypoints,
 	  _showWaypointLabels, _showPOI, _showPOILabels, _showRouteWaypoints,
-	  _showMarkers, _showPathTicks, _showPOIIcons, _showWaypointIcons;
+	  _showMarkers, _showPathTicks, _showPOIIcons, _showWaypointIcons,
+	  _showPosition, _showPositionCoordinates, _showMotionInfo;
 	MarkerInfoItem::Type _markerInfoType;
-	bool _overlapPOIs;
+	bool _overlapPOIs, _followPosition;
 	int _trackWidth, _routeWidth, _areaWidth;
 	Qt::PenStyle _trackStyle, _routeStyle, _areaStyle;
 	int _waypointSize, _poiSize;

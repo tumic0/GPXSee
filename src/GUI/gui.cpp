@@ -25,6 +25,7 @@
 #include <QScreen>
 #include <QStyle>
 #include <QTabBar>
+#include <QGeoPositionInfoSource>
 #include "common/programpaths.h"
 #include "common/downloader.h"
 #include "data/data.h"
@@ -327,7 +328,32 @@ void GUI::createActions()
 	_showCoordinatesAction->setMenuRole(QAction::NoRole);
 	_showCoordinatesAction->setCheckable(true);
 	connect(_showCoordinatesAction, &QAction::triggered, _mapView,
-	  &MapView::showCoordinates);
+	  &MapView::showCursorCoordinates);
+
+	// Position
+	_showPositionAction = new QAction(QIcon(SHOW_POS_ICON),
+	  tr("Show position"), this);
+	_showPositionAction->setMenuRole(QAction::NoRole);
+	_showPositionAction->setCheckable(true);
+	_showPositionAction->setEnabled(false);
+	connect(_showPositionAction, &QAction::triggered, _mapView,
+	  &MapView::showPosition);
+	_followPositionAction = new QAction(tr("Follow position"), this);
+	_followPositionAction->setMenuRole(QAction::NoRole);
+	_followPositionAction->setCheckable(true);
+	connect(_followPositionAction, &QAction::triggered, _mapView,
+	  &MapView::followPosition);
+	_showPositionCoordinatesAction = new QAction(tr("Show coordinates"),
+	  this);
+	_showPositionCoordinatesAction->setMenuRole(QAction::NoRole);
+	_showPositionCoordinatesAction->setCheckable(true);
+	connect(_showPositionCoordinatesAction, &QAction::triggered, _mapView,
+	  &MapView::showPositionCoordinates);
+	_showMotionInfo = new QAction(tr("Show motion info"), this);
+	_showMotionInfo->setMenuRole(QAction::NoRole);
+	_showMotionInfo->setCheckable(true);
+	connect(_showMotionInfo, &QAction::triggered, _mapView,
+	  &MapView::showMotionInfo);
 
 	// Data actions
 	_showTracksAction = new QAction(tr("Show tracks"), this);
@@ -613,6 +639,13 @@ void GUI::createMenus()
 	demMenu->addAction(_showDEMTilesAction);
 	demMenu->addAction(_downloadDEMAction);
 
+	QMenu *positionMenu = menuBar()->addMenu(tr("Position"));
+	positionMenu->addAction(_showPositionCoordinatesAction);
+	positionMenu->addAction(_showMotionInfo);
+	positionMenu->addAction(_followPositionAction);
+	positionMenu->addSeparator();
+	positionMenu->addAction(_showPositionAction);
+
 	QMenu *settingsMenu = menuBar()->addMenu(tr("&Settings"));
 	QMenu *timeMenu = settingsMenu->addMenu(tr("Time"));
 	timeMenu->addAction(_totalTimeAction);
@@ -663,6 +696,7 @@ void GUI::createToolBars()
 	_showToolBar->addAction(_showPOIAction);
 	_showToolBar->addAction(_showMapAction);
 	_showToolBar->addAction(_showGraphsAction);
+	_showToolBar->addAction(_showPositionAction);
 
 	_navigationToolBar = addToolBar(tr("Navigation"));
 	_navigationToolBar->setObjectName("Navigation");
@@ -676,7 +710,7 @@ void GUI::createToolBars()
 void GUI::createMapView()
 {
 	_map = new EmptyMap(this);
-	_mapView = new MapView(_map, _poi, this);
+	_mapView = new MapView(_map, _poi, 0, this);
 	_mapView->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,
 	  QSizePolicy::Expanding));
 	_mapView->setMinimumHeight(200);
@@ -1018,6 +1052,20 @@ void GUI::openOptions()
 	SET_VIEW_OPTION(pathAntiAliasing, useAntiAliasing);
 	SET_VIEW_OPTION(useOpenGL, useOpenGL);
 	SET_VIEW_OPTION(sliderColor, setMarkerColor);
+	SET_VIEW_OPTION(crosshairColor, setCrosshairColor);
+	SET_VIEW_OPTION(infoColor, setInfoColor);
+	SET_VIEW_OPTION(infoBackground, drawInfoBackground);
+
+	if (options.plugin != _options.plugin
+	  || options.pluginParams.value(options.plugin)
+	  != _options.pluginParams.value(_options.plugin)) {
+		QGeoPositionInfoSource *source = QGeoPositionInfoSource::createSource(
+		  options.plugin, options.pluginParams.value(options.plugin), this);
+		_showPositionAction->setEnabled(source != 0);
+		_mapView->setPositionSource(source);
+		delete _positionSource;
+		_positionSource = source;
+	}
 
 	if (options.hidpiMap != _options.hidpiMap)
 		_mapView->setDevicePixelRatio(devicePixelRatioF(),
@@ -2098,6 +2146,8 @@ void GUI::dropEvent(QDropEvent *event)
 
 void GUI::writeSettings()
 {
+	int index;
+
 	QSettings settings(qApp->applicationName(), qApp->applicationName());
 	settings.clear();
 
@@ -2133,8 +2183,8 @@ void GUI::writeSettings()
 	settings.setValue(CURRENT_MAP_SETTING, _map->name());
 	if (_showMapAction->isChecked() != SHOW_MAP_DEFAULT)
 		settings.setValue(SHOW_MAP_SETTING, _showMapAction->isChecked());
-	if (_showCoordinatesAction->isChecked() != SHOW_COORDINATES_DEFAULT)
-		settings.setValue(SHOW_COORDINATES_SETTING,
+	if (_showCoordinatesAction->isChecked() != SHOW_CURSOR_COORDINATES_DEFAULT)
+		settings.setValue(SHOW_CURSOR_COORDINATES_SETTING,
 		  _showCoordinatesAction->isChecked());
 	settings.endGroup();
 
@@ -2165,19 +2215,35 @@ void GUI::writeSettings()
 		settings.setValue(SHOW_POI_ICONS_SETTING,
 		  _showPOIIconsAction->isChecked());
 
-	int j = 0;
+	index = 0;
 	QList<QAction*> poiActions(_poisActionGroup->actions());
 	for (int i = 0; i < poiActions.count(); i++) {
 		POIAction *a = static_cast<POIAction*>(poiActions.at(i));
 		if (!a->isChecked()) {
-			if (j == 0)
+			if (index == 0)
 				settings.beginWriteArray(DISABLED_POI_FILE_SETTINGS_PREFIX);
-			settings.setArrayIndex(j++);
+			settings.setArrayIndex(index++);
 			settings.setValue(DISABLED_POI_FILE_SETTING, a->data().toString());
 		}
 	}
-	if (j != 0)
+	if (index != 0)
 		settings.endArray();
+	settings.endGroup();
+
+	settings.beginGroup(POSITION_SETTINGS_GROUP);
+	if (_showPositionAction->isChecked() != SHOW_POSITION_DEFAULT)
+		settings.setValue(SHOW_POSITION_SETTING,
+		  _showPositionAction->isChecked());
+	if (_followPositionAction->isChecked() != FOLLOW_POSITION_DEFAULT)
+		settings.setValue(FOLLOW_POSITION_SETTING,
+		  _followPositionAction->isChecked());
+	if (_showPositionCoordinatesAction->isChecked()
+	  != SHOW_POSITION_COORDINATES_DEFAULT)
+		settings.setValue(SHOW_POSITION_COORDINATES_SETTING,
+		  _showPositionCoordinatesAction->isChecked());
+	if (_showMotionInfo->isChecked() != SHOW_MOTION_INFO_DEFAULT)
+		settings.setValue(SHOW_MOTION_INFO_SETTING,
+		  _showMotionInfo->isChecked());
 	settings.endGroup();
 
 	settings.beginGroup(DATA_SETTINGS_GROUP);
@@ -2262,6 +2328,12 @@ void GUI::writeSettings()
 		settings.setValue(MAP_OPACITY_SETTING, _options.mapOpacity);
 	if (_options.backgroundColor != BACKGROUND_COLOR_DEFAULT)
 		settings.setValue(BACKGROUND_COLOR_SETTING, _options.backgroundColor);
+	if (_options.crosshairColor != CROSSHAIR_COLOR_DEFAULT)
+		settings.setValue(CROSSHAIR_COLOR_SETTING, _options.crosshairColor);
+	if (_options.infoColor != INFO_COLOR_DEFAULT)
+		settings.setValue(INFO_COLOR_SETTING, _options.infoColor);
+	if (_options.infoBackground != INFO_BACKGROUND_DEFAULT)
+		settings.setValue(INFO_BACKGROUND_SETTING, _options.infoBackground);
 	if (_options.trackWidth != TRACK_WIDTH_DEFAULT)
 		settings.setValue(TRACK_WIDTH_SETTING, _options.trackWidth);
 	if (_options.routeWidth != ROUTE_WIDTH_DEFAULT)
@@ -2333,6 +2405,22 @@ void GUI::writeSettings()
 		settings.setValue(DEM_USERNAME_SETTING, _options.demUsername);
 	if (_options.demPassword != DEM_PASSWORD_DEFAULT)
 		settings.setValue(DEM_PASSWORD_SETTING, _options.demPassword);
+	// the plugins order is random so always store the value
+	settings.setValue(POSITION_PLUGIN_SETTING, _options.plugin);
+	index = 0;
+	for (QMap<QString, QVariantMap>::const_iterator it
+	  = _options.pluginParams.constBegin();
+	  it != _options.pluginParams.constEnd(); ++it) {
+		if (!it.value().isEmpty()) {
+			if (index == 0)
+				settings.beginWriteArray(POSITION_PLUGIN_PARAMS_PREFIX);
+			settings.setArrayIndex(index++);
+			settings.setValue(POSITION_PLUGIN_PARAMS_PLUGIN, it.key());
+			settings.setValue(POSITION_PLUGIN_PARAMS_PARAM, it.value());
+		}
+	}
+	if (index != 0)
+		settings.endArray();
 	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
 		settings.setValue(USE_OPENGL_SETTING, _options.useOpenGL);
 	if (_options.enableHTTP2 != ENABLE_HTTP2_DEFAULT)
@@ -2419,10 +2507,10 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 		_showMapAction->setChecked(true);
 	else
 		_mapView->showMap(false);
-	if (settings.value(SHOW_COORDINATES_SETTING, SHOW_COORDINATES_DEFAULT)
+	if (settings.value(SHOW_CURSOR_COORDINATES_SETTING, SHOW_CURSOR_COORDINATES_DEFAULT)
 	  .toBool()) {
 		_showCoordinatesAction->setChecked(true);
-		_mapView->showCoordinates(true);
+		_mapView->showCursorCoordinates(true);
 	}
 	activeMap = settings.value(CURRENT_MAP_SETTING).toString();
 	settings.endGroup();
@@ -2577,6 +2665,12 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 	  MAP_OPACITY_DEFAULT).toInt();
 	_options.backgroundColor = settings.value(BACKGROUND_COLOR_SETTING,
 	  BACKGROUND_COLOR_DEFAULT).value<QColor>();
+	_options.crosshairColor = settings.value(CROSSHAIR_COLOR_SETTING,
+	  CROSSHAIR_COLOR_DEFAULT).value<QColor>();
+	_options.infoColor = settings.value(INFO_COLOR_SETTING,
+	  INFO_COLOR_DEFAULT).value<QColor>();
+	_options.infoBackground = settings.value(INFO_BACKGROUND_SETTING,
+	  INFO_BACKGROUND_DEFAULT).toBool();
 	_options.trackWidth = settings.value(TRACK_WIDTH_SETTING,
 	  TRACK_WIDTH_DEFAULT).toInt();
 	_options.routeWidth = settings.value(ROUTE_WIDTH_SETTING,
@@ -2645,6 +2739,16 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 	  DEM_USERNAME_DEFAULT).toString();
 	_options.demPassword = settings.value(DEM_PASSWORD_SETTING,
 	  DEM_PASSWORD_DEFAULT).toString();
+	_options.plugin = settings.value(POSITION_PLUGIN_SETTING,
+	  POSITION_PLUGIN_DEFAULT).toString();
+	size = settings.beginReadArray(POSITION_PLUGIN_PARAMS_PREFIX);
+	for (int i = 0; i < size; i++) {
+		settings.setArrayIndex(i);
+		_options.pluginParams.insert(
+		  settings.value(POSITION_PLUGIN_PARAMS_PLUGIN).toString(),
+		  settings.value(POSITION_PLUGIN_PARAMS_PARAM).toMap());
+	}
+	settings.endArray();
 	_options.useOpenGL = settings.value(USE_OPENGL_SETTING, USE_OPENGL_DEFAULT)
 	  .toBool();
 	_options.enableHTTP2 = settings.value(ENABLE_HTTP2_SETTING,
@@ -2683,10 +2787,31 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 	  .toString();
 	_options.poiPath = settings.value(POI_PATH_SETTING, POI_PATH_DEFAULT)
 	  .toString();
+	settings.endGroup();
+
+	_positionSource = QGeoPositionInfoSource::createSource(_options.plugin,
+	  _options.pluginParams.value(_options.plugin), this);
+	_showPositionAction->setEnabled(_positionSource != 0);
+
+	settings.beginGroup(POSITION_SETTINGS_GROUP);
+	if (settings.value(SHOW_POSITION_SETTING, SHOW_POSITION_DEFAULT).toBool())
+		_showPositionAction->trigger();
+	if (settings.value(FOLLOW_POSITION_SETTING, FOLLOW_POSITION_DEFAULT).toBool())
+		_followPositionAction->trigger();
+	if (settings.value(SHOW_POSITION_COORDINATES_SETTING,
+	  SHOW_POSITION_COORDINATES_DEFAULT).toBool())
+		_showPositionCoordinatesAction->trigger();
+	if (settings.value(SHOW_MOTION_INFO_SETTING, SHOW_MOTION_INFO_DEFAULT)
+	  .toBool())
+		_showMotionInfo->trigger();
+	settings.endGroup();
 
 	_mapView->setPalette(_options.palette);
 	_mapView->setMapOpacity(_options.mapOpacity);
 	_mapView->setBackgroundColor(_options.backgroundColor);
+	_mapView->setCrosshairColor(_options.crosshairColor);
+	_mapView->setInfoColor(_options.infoColor);
+	_mapView->drawInfoBackground(_options.infoBackground);
 	_mapView->setTrackWidth(_options.trackWidth);
 	_mapView->setRouteWidth(_options.routeWidth);
 	_mapView->setAreaWidth(_options.areaWidth);
@@ -2707,6 +2832,7 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 	_mapView->setOutputProjection(CRS::projection(_options.outputProjection));
 	_mapView->setInputProjection(CRS::projection(_options.inputProjection));
 	_mapView->setTimeZone(_options.timeZone.zone());
+	_mapView->setPositionSource(_positionSource);
 
 	for (int i = 0; i < _tabs.count(); i++) {
 		_tabs.at(i)->setPalette(_options.palette);
@@ -2752,8 +2878,6 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 	_dataDir = _options.dataPath;
 	_mapDir = _options.mapsPath;
 	_poiDir = _options.poiPath;
-
-	settings.endGroup();
 }
 
 void GUI::loadInitialMaps(const QString &selected)
