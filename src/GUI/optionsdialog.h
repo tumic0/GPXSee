@@ -1,6 +1,7 @@
 #ifndef OPTIONSDIALOG_H
 #define OPTIONSDIALOG_H
 
+#include <QtGlobal>
 #include <QDialog>
 #include "palette.h"
 #include "units.h"
@@ -176,7 +177,9 @@ private:
 	AuthenticationWidget *_demAuth;
 	// Position
 	QComboBox *_positionPlugin;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 	PluginParameters *_pluginParameters;
+#endif // QT 5.14
 	// System
 	QSpinBox *_pixmapCache;
 	QSpinBox *_connectionTimeout;
