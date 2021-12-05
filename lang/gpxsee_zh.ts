@@ -431,22 +431,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="335"/>
         <source>Show position</source>
-        <translation type="unfinished"></translation>
+        <translation>显示位置</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="341"/>
         <source>Follow position</source>
-        <translation type="unfinished"></translation>
+        <translation>跟随位置</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="346"/>
         <source>Show coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>显示坐标</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>Show motion info</source>
-        <translation type="unfinished"></translation>
+        <translation>显示移动信息</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="359"/>
@@ -663,7 +663,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="642"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>位置</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="649"/>
@@ -1201,12 +1201,12 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="100"/>
         <source>ft/min</source>
-        <translation type="unfinished"></translation>
+        <translation>ft/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="103"/>
         <source>m/min</source>
-        <translation type="unfinished"></translation>
+        <translation>m/min</translation>
     </message>
 </context>
 <context>
@@ -1415,7 +1415,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="283"/>
         <source>Info background</source>
-        <translation type="unfinished"></translation>
+        <translation>信息背景</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="287"/>
@@ -1430,12 +1430,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
         <source>Crosshair color:</source>
-        <translation type="unfinished"></translation>
+        <translation>十字线颜色：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="290"/>
         <source>Info color:</source>
-        <translation type="unfinished"></translation>
+        <translation>信息颜色:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="300"/>
@@ -1681,7 +1681,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="620"/>
         <source>Plugin:</source>
-        <translation type="unfinished"></translation>
+        <translation>插件：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="638"/>
@@ -1823,7 +1823,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="796"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>位置</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="797"/>
