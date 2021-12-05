@@ -1,0 +1,22 @@
+name: Linux
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: GPXSee
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: apt-get install qtbase5-dev qtbase5-private-dev qtbase5-dev-tools qt5-qmake qttools5-dev-tools libqt5opengl5-dev
+      - name: Create localization
+        run: lrelease gpxsee.pro
+      - name: Configure build
+        run: qmake gpxsee.pro
+      - name: Build project
+        run: make -j3
