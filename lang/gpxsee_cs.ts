@@ -435,22 +435,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="335"/>
         <source>Show position</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobrazit pozici</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="341"/>
         <source>Follow position</source>
-        <translation type="unfinished"></translation>
+        <translation>Sledovat pozici</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="346"/>
         <source>Show coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobrazit souřadnice</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>Show motion info</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobrazit informace o pohybu</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="359"/>
@@ -622,7 +622,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="642"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozice</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="653"/>
@@ -1188,27 +1188,27 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="87"/>
         <source>kn</source>
-        <translation type="unfinished">kn</translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="90"/>
         <source>mi/h</source>
-        <translation type="unfinished">mi/h</translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="93"/>
         <source>km/h</source>
-        <translation type="unfinished">km/h</translation>
+        <translation>km/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="100"/>
         <source>ft/min</source>
-        <translation type="unfinished"></translation>
+        <translation>ft/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="103"/>
         <source>m/min</source>
-        <translation type="unfinished"></translation>
+        <translation>m/min</translation>
     </message>
 </context>
 <context>
@@ -1612,17 +1612,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="283"/>
         <source>Info background</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozadí textu</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
         <source>Crosshair color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Barva zaměřovače:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="290"/>
         <source>Info color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Barva textu:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="363"/>
@@ -1676,7 +1676,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="620"/>
         <source>Plugin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="638"/>
@@ -1825,7 +1825,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="796"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozice</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="797"/>
