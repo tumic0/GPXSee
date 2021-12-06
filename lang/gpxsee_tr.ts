@@ -431,22 +431,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="335"/>
         <source>Show position</source>
-        <translation type="unfinished"></translation>
+        <translation>Konumu göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="341"/>
         <source>Follow position</source>
-        <translation type="unfinished"></translation>
+        <translation>Konumu takip et</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="346"/>
         <source>Show coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Koordinatları göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>Show motion info</source>
-        <translation type="unfinished"></translation>
+        <translation>Hareket bilgilerini göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="359"/>
@@ -648,7 +648,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="642"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Konum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="842"/>
@@ -1186,27 +1186,27 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="87"/>
         <source>kn</source>
-        <translation type="unfinished">kn</translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="90"/>
         <source>mi/h</source>
-        <translation type="unfinished">mi/h</translation>
+        <translation>mi/sa</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="93"/>
         <source>km/h</source>
-        <translation type="unfinished">km/h</translation>
+        <translation>km/sa</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="100"/>
         <source>ft/min</source>
-        <translation type="unfinished"></translation>
+        <translation>ft/dak</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="103"/>
         <source>m/min</source>
-        <translation type="unfinished"></translation>
+        <translation>m/dak</translation>
     </message>
 </context>
 <context>
@@ -1484,7 +1484,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="376"/>
         <source>mi/h</source>
-        <translation>mi/h</translation>
+        <translation>mi/sa</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="379"/>
@@ -1494,7 +1494,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="382"/>
         <source>km/h</source>
-        <translation>km/h</translation>
+        <translation>km/sa</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="386"/>
@@ -1610,17 +1610,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="283"/>
         <source>Info background</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilgi arka planı</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
         <source>Crosshair color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Artı işareti rengi:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="290"/>
         <source>Info color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilgi rengi:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="363"/>
@@ -1674,7 +1674,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="620"/>
         <source>Plugin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Eklenti:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="638"/>
@@ -1823,7 +1823,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="796"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Konum</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="797"/>
@@ -2148,12 +2148,12 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="130"/>
         <source>mi/h</source>
-        <translation>mi/h</translation>
+        <translation>mi/sa</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="133"/>
         <source>km/h</source>
-        <translation>km/h</translation>
+        <translation>km/sa</translation>
     </message>
 </context>
 <context>
@@ -2161,7 +2161,7 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="23"/>
         <source>mi/h</source>
-        <translation>mi/h</translation>
+        <translation>mi/sa</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
@@ -2171,7 +2171,7 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
         <source>km/h</source>
-        <translation>km/h</translation>
+        <translation>km/sa</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="27"/>
