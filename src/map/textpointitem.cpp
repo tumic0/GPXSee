@@ -40,7 +40,7 @@ void TextPointItem::setPos(const QPoint &point, bool padding)
 	QPainterPath shape;
 	QRect iconRect;
 
-	if (_img) {
+	if (_img && !_img->isNull()) {
 		QSize s(_img->size() / _img->devicePixelRatioF());
 		int xOffset = padding ? s.width() : s.width() / 2;
 		iconRect = QRect(QPoint(point.x() - xOffset, point.y()
@@ -57,7 +57,7 @@ void TextPointItem::setPos(const QPoint &point, bool padding)
 
 void TextPointItem::paint(QPainter *painter) const
 {
-	if (_img) {
+	if (_img && !_img->isNull()) {
 		QSize s(_img->size() / _img->devicePixelRatioF());
 		painter->drawImage(QPoint(_rect.left(), _rect.center().y()
 		  - s.height()/2), *_img);
