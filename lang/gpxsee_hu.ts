@@ -431,22 +431,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="335"/>
         <source>Show position</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozíció mutatása</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="341"/>
         <source>Follow position</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozíció követése</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="346"/>
         <source>Show coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Koordináták mutatása</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>Show motion info</source>
-        <translation type="unfinished"></translation>
+        <translation>Mozgásadatok mutatása</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="359"/>
@@ -648,7 +648,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="642"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozíció</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="842"/>
@@ -937,6 +937,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fájl</numerusform>
+            <numerusform>%n fájl</numerusform>
         </translation>
     </message>
 </context>
@@ -1186,27 +1187,27 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="87"/>
         <source>kn</source>
-        <translation type="unfinished">csomó</translation>
+        <translation>csomó</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="90"/>
         <source>mi/h</source>
-        <translation type="unfinished">mph</translation>
+        <translation>mph</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="93"/>
         <source>km/h</source>
-        <translation type="unfinished">km/h</translation>
+        <translation>km/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="100"/>
         <source>ft/min</source>
-        <translation type="unfinished"></translation>
+        <translation>láb/perc</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="103"/>
         <source>m/min</source>
-        <translation type="unfinished"></translation>
+        <translation>m/perc</translation>
     </message>
 </context>
 <context>
@@ -1591,17 +1592,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="283"/>
         <source>Info background</source>
-        <translation type="unfinished"></translation>
+        <translation>Info háttérszín</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
         <source>Crosshair color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Szálkereszt színe:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="290"/>
         <source>Info color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Info színe:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="523"/>
@@ -1659,7 +1660,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="620"/>
         <source>Plugin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Beépülő:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="638"/>
@@ -1823,7 +1824,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="796"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozíció</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="797"/>
