@@ -648,7 +648,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="642"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Позиція</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="842"/>
@@ -1150,7 +1150,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="135"/>
         <source>QuickChart maps</source>
-        <translation type="unfinished"></translation>
+        <translation>QuickChart мапи</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="139"/>
@@ -1208,7 +1208,7 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="103"/>
         <source>m/min</source>
-        <translation type="unfinished"></translation>
+        <translation>м/хв</translation>
     </message>
 </context>
 <context>
@@ -1661,7 +1661,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="620"/>
         <source>Plugin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Плагін:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="638"/>
@@ -1825,7 +1825,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="796"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Позиція</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="797"/>
