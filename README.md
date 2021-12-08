@@ -20,6 +20,7 @@ GPS log file formats.
 * Print/export to PDF/PNG.
 * Full-screen mode.
 * HiDPI/Retina displays & maps support.
+* Real-time GPS position.
 * Native GUI for Windows, Mac OS X and Linux.
 
 ![GPXSee - Linux](https://a.fsdn.com/con/app/proj/gpxsee/screenshots/linux2.png)
