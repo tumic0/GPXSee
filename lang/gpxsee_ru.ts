@@ -435,12 +435,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="335"/>
         <source>Show position</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать позицию</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="341"/>
         <source>Follow position</source>
-        <translation type="unfinished"></translation>
+        <translation>Следовать позиции</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="346"/>
@@ -1188,17 +1188,17 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="87"/>
         <source>kn</source>
-        <translation type="unfinished">уз</translation>
+        <translation>уз</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="90"/>
         <source>mi/h</source>
-        <translation type="unfinished">мл/ч</translation>
+        <translation>мл/ч</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="93"/>
         <source>km/h</source>
-        <translation type="unfinished">км/ч</translation>
+        <translation>км/ч</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="100"/>
@@ -1612,17 +1612,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="283"/>
         <source>Info background</source>
-        <translation type="unfinished"></translation>
+        <translation>Фон текста</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
         <source>Crosshair color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Цвет прицела:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="290"/>
         <source>Info color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Цвет текста:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="363"/>
