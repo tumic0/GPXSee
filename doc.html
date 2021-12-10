@@ -359,6 +359,35 @@
           the required format.)</p>
 
 
+          <h2 id="positioning">Positioning</h2>
+          <p>Since version 10.0, GPXSee is able to show the real-time GPS position
+          using the Qt positioning API. To make it work, you have to select and setup
+          the positioning plugin used in the program preferences. See the Qt Positioning Plugins
+          <a href="https://doc.qt.io/qt-5/qtpositioning-plugins.html">documentation</a>
+          for more info.</p>
+
+          <h3 id="positioning_winmac">Windows &amp; OS X</h3>
+          <p>If your device/OS supports the platform positioning API (Core Location
+          / Windows.Devices.Geolocation) you may try that first. If you have an external
+          USB/serial GPS device connected, you can use the <code>serialnmea</code> plugin.
+          In such case you have to provide the serial port id/device in the plugin
+          parameters. Use something like <code>COM3</code> on Windows and
+          <code>/dev/tty.SerialPort-3</code> on Mac.</p>
+
+          <h3 id="positioning_linux">Linux</h3>
+          <p>On Linux, you can use Geoclue2 as the platform plugin, but that is "Gnome
+          quality" at its best and you will most probably not make it work. But
+          you can <a href="https://github.com/OpenOrienteering/mapper/issues/1569#issuecomment-611442924">try</a>...</p>
+
+          <p>Theoretically, you can also use the <code>serialnmea</code> plugin like on Windows/Mac,
+          but practically
+          <a href="https://bugzilla.opensuse.org/show_bug.cgi?id=1193604">almost</a>
+          <a href="https://bugzilla.redhat.com/show_bug.cgi?id=2030899">all</a> distributions
+          fail to build the plugin... The only exception are distributions using Qt6 like
+          ArchLinux. In Qt6, the <a href="https://doc-snapshots.qt.io/qt6-dev/position-plugin-nmea.html">NMEA
+          plugin</a> has been completely reworked and is much more powerfull than in Qt5. And
+          it compiles!</p>
+
           <div id="footnote">
           <p id="legacyPaths"><i>[1] The user paths have changed in GPXSee 7.</i></p>
           <p id="pbf"><i>[2] To display PBF(MVT) tiles, <a href="https://github.com/tumic0/QtPBFImagePlugin">
@@ -393,6 +422,9 @@
           <div class="h4l"><a href="#poi">POI files</a></div>
           <div class="h4l"><a href="#dem">DEM files</a></div>
             <div class="h5l"><a href="#dem_downloads">DEM downloads</a></div>
+          <div class="h4l"><a href="#positioning">Positioning</a></div>
+            <div class="h5l"><a href="#positioning_winmac">Windows &amp; OS X</a></div>
+            <div class="h5l"><a href="#positioning_linux">Linux</a></div>
         </div>
       </div>
       <div class="cl">&nbsp;</div>
