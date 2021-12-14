@@ -6,6 +6,7 @@
 #include <QHash>
 #include <QList>
 #include <QFlags>
+#include <QGestureEvent>
 #include "common/rectc.h"
 #include "common/config.h"
 #include "data/waypoint.h"
@@ -159,6 +160,10 @@ private:
 	void paintEvent(QPaintEvent *event);
 	void scrollContentsBy(int dx, int dy);
 	void leaveEvent(QEvent *event);
+	bool gestureEvent(QGestureEvent *ev);
+	bool tapAndHoldTriggered(QTapAndHoldGesture *ev);
+	bool pinchTriggered(QPinchGesture *ev);
+	bool event(QEvent *ev);
 
 	GraphicsScene *_scene;
 	ScaleItem *_mapScale;

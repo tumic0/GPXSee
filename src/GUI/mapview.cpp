@@ -57,6 +57,9 @@ MapView::MapView(Map *map, POI *poi, QGeoPositionInfoSource *source,
 	_scene = new GraphicsScene(this);
 	setScene(_scene);
 	setDragMode(QGraphicsView::ScrollHandDrag);
+	setAttribute(Qt::WA_AcceptTouchEvents);
+	grabGesture(Qt::PinchGesture);
+	grabGesture(Qt::TapAndHoldGesture);
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -712,6 +715,72 @@ void MapView::mousePressEvent(QMouseEvent *event)
 		  _map->xy2ll(mapToScene(event->pos())), _cursorCoordinates->format()));
 	else
 		QGraphicsView::mousePressEvent(event);
+}
+
+bool MapView::gestureEvent(QGestureEvent *ev)
+{
+	Q_FOREACH(QGesture* gst, ev->activeGestures()) {
+	switch (gst->gestureType()) {
+		case Qt::TapAndHoldGesture:
+			if (gst->state() == Qt::GestureFinished) {
+				QTapAndHoldGesture* taphold = qobject_cast<QTapAndHoldGesture*>(gst);
+				if (taphold == nullptr)
+					return false;
+				if (tapAndHoldTriggered(taphold)) {
+					ev->accept(gst);
+				}
+			}
+			break;
+		case Qt::PinchGesture: {
+				QPinchGesture* pinch = qobject_cast<QPinchGesture*>(gst);
+				if (pinch == nullptr)
+					return false;
+				if (pinchTriggered(pinch)) {
+					ev->accept(gst);
+				}
+			}
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	return true;
+}
+
+bool MapView::tapAndHoldTriggered(QTapAndHoldGesture *ev)
+{
+	QContextMenuEvent eev(QContextMenuEvent::Other,  ev->position().toPoint());
+	contextMenuEvent(&eev);
+	return true;
+}
+
+bool MapView::pinchTriggered(QPinchGesture *ev)
+{
+	QPinchGesture::ChangeFlags changeFlags = ev->changeFlags();
+	if (changeFlags & QPinchGesture::ScaleFactorChanged) {
+		qreal sc = ev->scaleFactor() ;
+		QPointF cnt = mapToScene(ev->centerPoint().toPoint());
+		translate(-cnt.x(), -cnt.y());
+		scale(sc, sc);
+		translate(cnt.x(), cnt.y());
+	}
+	if (changeFlags & QPinchGesture::CenterPointChanged) {
+		// no action required
+	}
+	if (ev->state() == Qt::GestureFinished) {
+		// no action required
+	}
+	return true;
+}
+
+bool MapView::event(QEvent *ev)
+{
+	if (ev->type() == QEvent::Gesture) {
+		return gestureEvent(static_cast<QGestureEvent*>(ev));
+	}
+	return QGraphicsView::event(ev);
 }
 
 void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
