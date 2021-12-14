@@ -554,8 +554,8 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="473"/>
-        <location filename="../src/GUI/gui.cpp" line="1252"/>
-        <location filename="../src/GUI/gui.cpp" line="1319"/>
+        <location filename="../src/GUI/gui.cpp" line="1257"/>
+        <location filename="../src/GUI/gui.cpp" line="1324"/>
         <source>Moving time</source>
         <translation>Bewegungszeit</translation>
     </message>
@@ -735,57 +735,57 @@
         <translation>Symbole-Verzeichnis:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1230"/>
-        <location filename="../src/GUI/gui.cpp" line="1299"/>
+        <location filename="../src/GUI/gui.cpp" line="1235"/>
+        <location filename="../src/GUI/gui.cpp" line="1304"/>
         <source>Areas</source>
         <translation>Flächen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1273"/>
-        <location filename="../src/GUI/gui.cpp" line="1274"/>
+        <location filename="../src/GUI/gui.cpp" line="1278"/>
+        <location filename="../src/GUI/gui.cpp" line="1279"/>
         <source>Statistics</source>
         <translation>Statistiken</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1587"/>
+        <location filename="../src/GUI/gui.cpp" line="1592"/>
         <source>Open map file</source>
         <translation>Kartendatei öffnen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1631"/>
-        <location filename="../src/GUI/gui.cpp" line="1676"/>
-        <location filename="../src/GUI/gui.cpp" line="1695"/>
-        <location filename="../src/GUI/gui.cpp" line="1717"/>
+        <location filename="../src/GUI/gui.cpp" line="1636"/>
+        <location filename="../src/GUI/gui.cpp" line="1681"/>
+        <location filename="../src/GUI/gui.cpp" line="1700"/>
+        <location filename="../src/GUI/gui.cpp" line="1722"/>
         <source>Error loading map:</source>
         <translation>Fehler beim Laden der Kartendatei:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1744"/>
+        <location filename="../src/GUI/gui.cpp" line="1749"/>
         <source>Select map directory</source>
         <translation>Kartenverzeichnis auswählen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1772"/>
+        <location filename="../src/GUI/gui.cpp" line="1777"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
         <translation>Kachel-Cache von &quot;%1&quot; bereinigen?</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1790"/>
+        <location filename="../src/GUI/gui.cpp" line="1795"/>
         <source>Could not download all required DEM files.</source>
         <translation>Es konnten nicht alle erforderlichen DEM-Dateien heruntergeladen werden.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1805"/>
+        <location filename="../src/GUI/gui.cpp" line="1810"/>
         <source>No local DEM tiles found.</source>
         <translation>Keine lokalen DEM-Kacheln gefunden.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1819"/>
+        <location filename="../src/GUI/gui.cpp" line="1824"/>
         <source>No files loaded</source>
         <translation>Keine Dateien geladen</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1823"/>
+        <location filename="../src/GUI/gui.cpp" line="1828"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n Datei</numerusform>
@@ -793,16 +793,16 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1236"/>
-        <location filename="../src/GUI/gui.cpp" line="1240"/>
-        <location filename="../src/GUI/gui.cpp" line="1305"/>
-        <location filename="../src/GUI/gui.cpp" line="1308"/>
+        <location filename="../src/GUI/gui.cpp" line="1241"/>
+        <location filename="../src/GUI/gui.cpp" line="1245"/>
+        <location filename="../src/GUI/gui.cpp" line="1310"/>
+        <location filename="../src/GUI/gui.cpp" line="1313"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1224"/>
-        <location filename="../src/GUI/gui.cpp" line="1295"/>
+        <location filename="../src/GUI/gui.cpp" line="1229"/>
+        <location filename="../src/GUI/gui.cpp" line="1300"/>
         <source>Routes</source>
         <translation>Routen</translation>
     </message>
@@ -822,8 +822,8 @@
         <translation>Als PDF exportieren …</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1227"/>
-        <location filename="../src/GUI/gui.cpp" line="1297"/>
+        <location filename="../src/GUI/gui.cpp" line="1232"/>
+        <location filename="../src/GUI/gui.cpp" line="1302"/>
         <source>Waypoints</source>
         <translation>Wegpunkte</translation>
     </message>
@@ -904,13 +904,13 @@
         <translation>Fehler beim Laden der POI-Datei:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1289"/>
+        <location filename="../src/GUI/gui.cpp" line="1294"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1221"/>
-        <location filename="../src/GUI/gui.cpp" line="1293"/>
+        <location filename="../src/GUI/gui.cpp" line="1226"/>
+        <location filename="../src/GUI/gui.cpp" line="1298"/>
         <source>Tracks</source>
         <translation>Strecken</translation>
     </message>
@@ -927,16 +927,16 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="437"/>
-        <location filename="../src/GUI/gui.cpp" line="1247"/>
-        <location filename="../src/GUI/gui.cpp" line="1315"/>
+        <location filename="../src/GUI/gui.cpp" line="1252"/>
+        <location filename="../src/GUI/gui.cpp" line="1320"/>
         <source>Distance</source>
         <translation>Distanz</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="444"/>
         <location filename="../src/GUI/gui.cpp" line="650"/>
-        <location filename="../src/GUI/gui.cpp" line="1250"/>
-        <location filename="../src/GUI/gui.cpp" line="1317"/>
+        <location filename="../src/GUI/gui.cpp" line="1255"/>
+        <location filename="../src/GUI/gui.cpp" line="1322"/>
         <source>Time</source>
         <translation>Zeit</translation>
     </message>
@@ -1288,7 +1288,7 @@
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="302"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="699"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="703"/>
         <source>Graphs</source>
         <translation>Graphen</translation>
     </message>
@@ -1479,7 +1479,7 @@
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="386"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="720"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="724"/>
         <source>s</source>
         <translation>sek</translation>
     </message>
@@ -1646,7 +1646,7 @@
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="551"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="794"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="798"/>
         <source>POI</source>
         <translation>POI</translation>
     </message>
@@ -1668,171 +1668,171 @@
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="602"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="631"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="635"/>
         <source>Source</source>
         <translation>Datenquelle</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="620"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="622"/>
         <source>Plugin:</source>
         <translation>Plugin:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="638"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>WYSIWYG</source>
         <translation>WYSIWYG</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="639"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="643"/>
         <source>High-Resolution</source>
         <translation>Hohe Auflösung</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="644"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="648"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
         <translation>Der Druckbereich entspricht ungefähr dem Anzeigebereich. Das Karten-Zoom ändert sich nicht.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="646"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="650"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
         <translation>Das Karten-Zoom ändert sich so, dass der ganze Inhalt (Strecken/Wegpunkte) in den Druckbereich passen und die Kartenauflösung so nah wie möglich an der Druckauflösung ist.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="662"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="666"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="664"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="668"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="666"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="670"/>
         <source>Distance</source>
         <translation>Distanz</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="668"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="672"/>
         <source>Time</source>
         <translation>Zeit</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="670"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="674"/>
         <source>Moving time</source>
         <translation>Bewegungszeit</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="672"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="676"/>
         <source>Item count (&gt;1)</source>
         <translation>Elementanzahl (&gt;1)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="687"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="691"/>
         <source>Separate graph page</source>
         <translation>Separate Seite für Graphen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="697"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="701"/>
         <source>Print mode</source>
         <translation>Druckmodus</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="698"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
         <source>Header</source>
         <translation>Kopfzeile</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="706"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="710"/>
         <source>Use OpenGL</source>
         <translation>OpenGL verwenden</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="708"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="712"/>
         <source>Enable HTTP/2</source>
         <translation>HTTP/2 verwenden</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="714"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="718"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="726"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="733"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="730"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="737"/>
         <source>Image cache size:</source>
         <translation>Bild-Cachegröße:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="727"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="734"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="731"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="738"/>
         <source>Connection timeout:</source>
         <translation>Verbindungs-Timeout:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="412"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="769"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="799"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="773"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="803"/>
         <source>System</source>
         <translation>System</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="753"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="757"/>
         <source>Select the initial paths of the file open dialogues. Leave the field empty for the system default.</source>
         <translation>Wählen Sie die Anfangspfade der Dateiöffnungsdialoge aus. Für die Systemvorgabe lassen Sie das Feld leer.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="757"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="761"/>
         <source>Data:</source>
         <translation>Daten:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="758"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="762"/>
         <source>Maps:</source>
         <translation>Karten:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="759"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="763"/>
         <source>POI:</source>
         <translation>POI:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="770"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="774"/>
         <source>Initial paths</source>
         <translation>Anfangspfade</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="790"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="794"/>
         <source>Appearance</source>
         <translation>Erscheinungsbild</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="792"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="796"/>
         <source>Maps</source>
         <translation>Karten</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="793"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="797"/>
         <source>Data</source>
         <translation>Daten</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="795"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="799"/>
         <source>DEM</source>
         <translation>DEM</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="796"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="800"/>
         <source>Position</source>
         <translation>Position</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="797"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="801"/>
         <source>Print &amp; Export</source>
         <translation>Druck / Export</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="831"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="835"/>
         <source>Options</source>
         <translation>Einstellungen</translation>
     </message>
