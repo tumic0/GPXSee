@@ -760,11 +760,29 @@ bool MapView::pinchTriggered(QPinchGesture *ev)
 {
 	QPinchGesture::ChangeFlags changeFlags = ev->changeFlags();
 	if (changeFlags & QPinchGesture::ScaleFactorChanged) {
-		qreal sc = ev->scaleFactor() ;
-		QPointF cnt = mapToScene(ev->centerPoint().toPoint());
-		translate(-cnt.x(), -cnt.y());
-		scale(sc, sc);
-		translate(cnt.x(), cnt.y());
+		//qreal sc = ev->scaleFactor();
+		//qreal lsc = ev->lastScaleFactor();
+		qreal tsc = ev->totalScaleFactor();
+		QPoint pos = viewport()->rect().center();
+		int z = 0;
+
+		//QPointF cnt = mapToScene(ev->centerPoint().toPoint());
+		//translate(-cnt.x(), -cnt.y());
+		//scale(sc, sc);
+		//translate(cnt.x(), cnt.y());
+
+		while ((tsc > 1.25) && (z < 5)) {
+			tsc *= 0.8;
+			z += 1;
+		}
+		while (tsc < 0.8 && (z > -5)) {
+			tsc *= 1.25;
+			z -= 1;
+		}
+		if (z) {
+			ev->setTotalScaleFactor(tsc);
+			zoom(z, pos, false);
+		}
 	}
 	if (changeFlags & QPinchGesture::CenterPointChanged) {
 		// no action required
