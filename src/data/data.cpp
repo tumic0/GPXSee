@@ -1,7 +1,6 @@
 #include <QApplication>
 #include <QFile>
 #include <QFileInfo>
-#include <QLineF>
 #include "gpxparser.h"
 #include "tcxparser.h"
 #include "csvparser.h"
@@ -20,6 +19,7 @@
 #include "ov2parser.h"
 #include "itnparser.h"
 #include "onmoveparsers.h"
+#include "twonavparser.h"
 #include "data.h"
 
 
@@ -44,10 +44,11 @@ static OV2Parser ov2;
 static ITNParser itn;
 static OMDParser omd;
 static GHPParser ghp;
+static TwoNavParser twonav;
 
-static QMap<QString, Parser*> parsers()
+static QMultiMap<QString, Parser*> parsers()
 {
-	QMap<QString, Parser*> map;
+	QMultiMap<QString, Parser*> map;
 
 	map.insert("gpx", &gpx);
 	map.insert("tcx", &tcx);
@@ -72,11 +73,14 @@ static QMap<QString, Parser*> parsers()
 	map.insert("itn", &itn);
 	map.insert("omd", &omd);
 	map.insert("ghp", &ghp);
+	map.insert("trk", &twonav);
+	map.insert("rte", &twonav);
+	map.insert("wpt", &twonav);
 
 	return map;
 }
 
-QMap<QString, Parser*> Data::_parsers = parsers();
+QMultiMap<QString, Parser*> Data::_parsers = parsers();
 
 void Data::processData(QList<TrackData> &trackData, QList<RouteData> &routeData)
 {
@@ -101,16 +105,21 @@ Data::Data(const QString &fileName, bool tryUnknown)
 		return;
 	}
 
-	QMap<QString, Parser*>::iterator it;
-	if ((it = _parsers.find(fi.suffix().toLower())) != _parsers.end()) {
-		if (it.value()->parse(&file, trackData, routeData, _polygons,
-		  _waypoints)) {
-			processData(trackData, routeData);
-			_valid = true;
-			return;
-		} else {
-			_errorLine = it.value()->errorLine();
-			_errorString = it.value()->errorString();
+	QMultiMap<QString, Parser*>::iterator it;
+	QString suffix(fi.suffix().toLower());
+	if ((it = _parsers.find(suffix)) != _parsers.end()) {
+		while (it != _parsers.end() && it.key() == suffix) {
+			if (it.value()->parse(&file, trackData, routeData, _polygons,
+			  _waypoints)) {
+				processData(trackData, routeData);
+				_valid = true;
+				return;
+			} else {
+				_errorLine = it.value()->errorLine();
+				_errorString = it.value()->errorString();
+			}
+			file.reset();
+			++it;
 		}
 	} else if (tryUnknown) {
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
@@ -137,6 +146,7 @@ QString Data::formats()
 {
 	return
 	  qApp->translate("Data", "Supported files") + " (" + filter().join(" ") + ");;"
+	  + qApp->translate("Data", "TwoNav files") + " (*.rte *.trk *.wpt);;"
 	  + qApp->translate("Data", "CSV files") + " (*.csv);;"
 	  + qApp->translate("Data", "CUP files") + " (*.cup);;"
 	  + qApp->translate("Data", "FIT files") + " (*.fit);;"
@@ -162,7 +172,7 @@ QStringList Data::filter()
 {
 	QStringList filter;
 
-	for (QMap<QString, Parser*>::iterator it = _parsers.begin();
+	for (QMultiMap<QString, Parser*>::iterator it = _parsers.begin();
 	  it != _parsers.end(); it++)
 		filter << "*." + it.key();
 
