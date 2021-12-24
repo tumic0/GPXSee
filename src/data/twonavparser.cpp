@@ -2,6 +2,13 @@
 #include "map/gcs.h"
 #include "twonavparser.h"
 
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+#define SKIP_EMPTY QString::SkipEmptyParts
+#else // Qt 5.14
+#define SKIP_EMPTY Qt::SkipEmptyParts
+#endif
+
 static double lon(const QString &str)
 {
 	QStringList l(str.split(QChar(0xBA)));
@@ -116,8 +123,7 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
 				}}
 				break;
 			case 'T':
-				{QStringList list(codec.toString(line).split(' ',
-				  Qt::SkipEmptyParts));
+			    {QStringList list(codec.toString(line).split(' ', SKIP_EMPTY));
 				if (list.size() < 4) {
 					_errorString = "Parse error";
 					return false;
@@ -156,8 +162,7 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
 				tracks.last().last().append(t);}
 				break;
 			case 'W':
-				{QStringList list(codec.toString(line).split(' ',
-				  Qt::SkipEmptyParts));
+			    {QStringList list(codec.toString(line).split(' ', SKIP_EMPTY));
 				if (list.size() < 5) {
 					_errorString = "Parse error";
 					return false;
@@ -198,8 +203,7 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
 				}}
 				break;
 			case 'R':
-				{QStringList list(codec.toString(line).split(',',
-				  Qt::SkipEmptyParts));
+			    {QStringList list(codec.toString(line).split(',', SKIP_EMPTY));
 				routes.append(RouteData());
 				routes.last().setName(list.at(1));
 				route = true;}
