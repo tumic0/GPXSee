@@ -123,7 +123,7 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
 				}}
 				break;
 			case 'T':
-			    {QStringList list(codec.toString(line).split(' ', SKIP_EMPTY));
+				{QStringList list(codec.toString(line).split(' ', SKIP_EMPTY));
 				if (list.size() < 4) {
 					_errorString = "Parse error";
 					return false;
@@ -162,7 +162,7 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
 				tracks.last().last().append(t);}
 				break;
 			case 'W':
-			    {QStringList list(codec.toString(line).split(' ', SKIP_EMPTY));
+				{QStringList list(codec.toString(line).split(' ', SKIP_EMPTY));
 				if (list.size() < 5) {
 					_errorString = "Parse error";
 					return false;
@@ -174,7 +174,8 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
 				}
 
 				Waypoint w(gcs.toWGS84(c));
-				w.setName(list.at(1));
+				QString name(list.at(1));
+				w.setName(name.replace('_', ' ').trimmed());
 
 				if (list.size() > 6) {
 					QDateTime ts(timestamp(list.at(5), list.at(6)));
@@ -203,7 +204,7 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
 				}}
 				break;
 			case 'R':
-			    {QStringList list(codec.toString(line).split(',', SKIP_EMPTY));
+				{QStringList list(codec.toString(line).split(',', SKIP_EMPTY));
 				routes.append(RouteData());
 				routes.last().setName(list.at(1));
 				route = true;}
