@@ -146,7 +146,6 @@ QString Data::formats()
 {
 	return
 	  qApp->translate("Data", "Supported files") + " (" + filter().join(" ") + ");;"
-	  + qApp->translate("Data", "TwoNav files") + " (*.rte *.trk *.wpt);;"
 	  + qApp->translate("Data", "CSV files") + " (*.csv);;"
 	  + qApp->translate("Data", "CUP files") + " (*.cup);;"
 	  + qApp->translate("Data", "FIT files") + " (*.fit);;"
@@ -165,6 +164,7 @@ QString Data::formats()
 	  + qApp->translate("Data", "SLF files") + " (*.slf);;"
 	  + qApp->translate("Data", "SML files") + " (*.sml);;"
 	  + qApp->translate("Data", "TCX files") + " (*.tcx);;"
+	  + qApp->translate("Data", "TwoNav files") + " (*.rte *.trk *.wpt);;"
 	  + qApp->translate("Data", "All files") + " (*)";
 }
 
