@@ -203,10 +203,17 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
 					waypoint = true;
 				}}
 				break;
+			case 'w':
+				{line.remove(0, 1);
+				QStringList list(codec.toString(line).split(','));
+				if (list.size() && waypoints.size())
+					waypoints.last().setSymbol(list.at(0).trimmed());}
+				break;
 			case 'R':
-				{QStringList list(codec.toString(line).split(',', SKIP_EMPTY));
+				{QStringList list(codec.toString(line).split(','));
 				routes.append(RouteData());
-				routes.last().setName(list.at(1));
+				if (list.size() > 1)
+					routes.last().setName(list.at(1));
 				route = true;}
 				break;
 		}
