@@ -1192,17 +1192,17 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="87"/>
         <source>kn</source>
-        <translation type="unfinished">kn</translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="90"/>
         <source>mi/h</source>
-        <translation type="unfinished">mph</translation>
+        <translation>mph</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="93"/>
         <source>km/h</source>
-        <translation type="unfinished">km/t</translation>
+        <translation>km/t</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="100"/>
@@ -1626,7 +1626,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="290"/>
         <source>Info color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekstin väri:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="363"/>
@@ -1680,7 +1680,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="622"/>
         <source>Plugin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisäosa:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
