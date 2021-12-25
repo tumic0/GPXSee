@@ -60,102 +60,107 @@
 <context>
     <name>Data</name>
     <message>
-        <location filename="../src/data/data.cpp" line="139"/>
+        <location filename="../src/data/data.cpp" line="148"/>
         <source>Supported files</source>
         <translation>Desteklenen dosyalar</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="140"/>
+        <location filename="../src/data/data.cpp" line="149"/>
         <source>CSV files</source>
         <translation>CSV dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="141"/>
+        <location filename="../src/data/data.cpp" line="150"/>
         <source>CUP files</source>
         <translation>CUP dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="142"/>
+        <location filename="../src/data/data.cpp" line="151"/>
         <source>FIT files</source>
         <translation>FIT dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="143"/>
+        <location filename="../src/data/data.cpp" line="152"/>
         <source>GeoJSON files</source>
         <translation>GeoJSON dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="144"/>
+        <location filename="../src/data/data.cpp" line="153"/>
         <source>GPI files</source>
         <translation>GPI dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="145"/>
+        <location filename="../src/data/data.cpp" line="154"/>
         <source>GPX files</source>
         <translation>GPX dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="146"/>
+        <location filename="../src/data/data.cpp" line="155"/>
         <source>IGC files</source>
         <translation>IGC dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="147"/>
+        <location filename="../src/data/data.cpp" line="156"/>
         <source>ITN files</source>
         <translation>ITN dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="148"/>
+        <location filename="../src/data/data.cpp" line="157"/>
         <source>JPEG images</source>
         <translation>JPEG görüntüleri</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="149"/>
+        <location filename="../src/data/data.cpp" line="158"/>
         <source>KML files</source>
         <translation>KML dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="150"/>
+        <location filename="../src/data/data.cpp" line="159"/>
         <source>LOC files</source>
         <translation>LOC dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="151"/>
+        <location filename="../src/data/data.cpp" line="160"/>
         <source>NMEA files</source>
         <translation>NMEA dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="152"/>
+        <location filename="../src/data/data.cpp" line="161"/>
         <source>ONmove files</source>
         <translation>ONmove dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="153"/>
+        <location filename="../src/data/data.cpp" line="162"/>
         <source>OV2 files</source>
         <translation>OV2 dostaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="154"/>
+        <location filename="../src/data/data.cpp" line="163"/>
         <source>OziExplorer files</source>
         <translation>OziExplorer dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="155"/>
+        <location filename="../src/data/data.cpp" line="164"/>
         <source>SLF files</source>
         <translation>SLF dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="156"/>
+        <location filename="../src/data/data.cpp" line="165"/>
         <source>SML files</source>
         <translation>SML dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="157"/>
+        <location filename="../src/data/data.cpp" line="166"/>
         <source>TCX files</source>
         <translation>TCX dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="158"/>
+        <location filename="../src/data/data.cpp" line="167"/>
+        <source>TwoNav files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="168"/>
         <source>All files</source>
         <translation>Tüm dosyalar</translation>
     </message>
