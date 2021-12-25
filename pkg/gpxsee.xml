@@ -156,6 +156,28 @@
 		<glob pattern="*.ghp"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.twonav.trk">
+		<comment>TwoNav Track File</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text/plain"/>
+		<glob pattern="*.trk"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.twonav.rte">
+		<comment>TwoNav Route File</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text/plain"/>
+		<glob pattern="*.rte"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.twonav.wpt">
+		<comment>TwoNav Waypoint File</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text/plain"/>
+		<glob pattern="*.wpt"/>
+	</mime-type>
+
+
 	<!-- Maps -->
 
 	<mime-type type="application/vnd.garmin.img">

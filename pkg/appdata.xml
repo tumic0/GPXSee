@@ -14,8 +14,8 @@
 		<ul>
 			<li>Opens GPX, TCX, FIT, KML, IGC, NMEA, SIGMA SLF, Suunto SML, LOC,
 				OziExplorer (PLT, WPT, RTE), GeoJSON, SeeYou CUP,
-				Garmin GPI &amp; CSV, TomTom OV2 &amp; ITN, ONmove OMD/GHP
-				and geotagged JPEG files.</li>
+				Garmin GPI &amp; CSV, TomTom OV2 &amp; ITN, ONmove OMD/GHP,
+				TwoNav (TRK, RTE, WPT) and geotagged JPEG files.</li>
 			<li>User-definable online maps (OpenStreetMap/Google tiles, WMTS,
 				WMS, TMS, QuadTiles).</li>
 			<li>Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases,
@@ -98,5 +98,8 @@
 		<mimetype>application/vnd.onmove.omd</mimetype>
 		<mimetype>application/vnd.onmove.ghp</mimetype>
 		<mimetype>application/vnd.memory-map.qct</mimetype>
+		<mimetype>application/vnd.twonav.trk</mimetype>
+		<mimetype>application/vnd.twonav.rte</mimetype>
+		<mimetype>application/vnd.twonav.wpt</mimetype>
 	</mimetypes>
 </component>
