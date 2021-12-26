@@ -157,7 +157,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="167"/>
         <source>TwoNav files</source>
-        <translation type="unfinished"></translation>
+        <translation>TwoNav 文件</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="168"/>
