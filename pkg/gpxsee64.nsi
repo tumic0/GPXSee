@@ -178,13 +178,14 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "tcx" "Training Center XML" 22
   !insertmacro FILE_ASSOCIATION_ADD "ghp" "ONmove Log File" 23
   !insertmacro FILE_ASSOCIATION_ADD "qct" "QuickChart Map File" 24
-  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 25
-  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 25
-  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 26
-  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 27
-  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 28
-  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track File" 29
-  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 30
+  !insertmacro FILE_ASSOCIATION_ADD "trk" "TwoNav Track File" 25
+  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 26
+  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 26
+  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 27
+  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 28
+  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 29
+  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track File" 30
+  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 31
 
   WriteRegStr HKCR "Applications\GPXSee.exe\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
   WriteRegStr HKCR ".gpx\OpenWithList" "GPXSee.exe" ""
@@ -231,6 +232,7 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKCR ".omd\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".ghp\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".qct\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".trk\OpenWithList" "GPXSee.exe" ""
 
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
@@ -381,6 +383,7 @@ Section "Uninstall"
   !insertmacro FILE_ASSOCIATION_REMOVE "omd"
   !insertmacro FILE_ASSOCIATION_REMOVE "ghp"
   !insertmacro FILE_ASSOCIATION_REMOVE "qct"
+  !insertmacro FILE_ASSOCIATION_REMOVE "trk"
 
   DeleteRegValue HKCR ".gpx\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".tcx\OpenWithList" "GPXSee.exe"
@@ -426,6 +429,7 @@ Section "Uninstall"
   DeleteRegValue HKCR ".omd\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".ghp\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".qct\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".trk\OpenWithList" "GPXSee.exe"
   DeleteRegKey HKCR "Applications\GPXSee.exe"   
   
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
