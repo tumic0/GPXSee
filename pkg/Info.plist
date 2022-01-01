@@ -1429,7 +1429,7 @@
 			<key>UTTypeReferenceURL</key>
 			<string>https://github.com/GPSBabel/gpsbabel/blob/master/deprecated/compegps.cc</string>
 			<key>UTTypeDescription</key>
-			<string>TvoNav Track File</string>
+			<string>TwoNav Track File</string>
 			<key>UTTypeIconFile</key>
 			<string>icons/trk.icns</string>
 			<key>UTTypeConformsTo</key>
