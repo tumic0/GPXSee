@@ -157,7 +157,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="167"/>
         <source>TwoNav files</source>
-        <translation type="unfinished"></translation>
+        <translation>TwoNav fájlok</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="168"/>
@@ -941,6 +941,7 @@
         <location filename="../src/GUI/gui.cpp" line="1828"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
