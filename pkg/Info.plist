@@ -594,6 +594,22 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>trk</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.twonav.trk</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/trk.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>TwoNav Track File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
@@ -1405,6 +1421,29 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.memory-map.qct</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.twonav.trk</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://github.com/GPSBabel/gpsbabel/blob/master/deprecated/compegps.cc</string>
+			<key>UTTypeDescription</key>
+			<string>TvoNav Track File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/trk.icns</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>trk</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.twonav.trk</string>
 			</dict>
 		</dict>
 	</array>
