@@ -171,10 +171,14 @@ QString Data::formats()
 QStringList Data::filter()
 {
 	QStringList filter;
+	QString last;
 
 	for (QMultiMap<QString, Parser*>::iterator it = _parsers.begin();
-	  it != _parsers.end(); it++)
-		filter << "*." + it.key();
+	  it != _parsers.end(); it++) {
+		if (it.key() != last)
+			filter << "*." + it.key();
+		last = it.key();
+	}
 
 	return filter;
 }
