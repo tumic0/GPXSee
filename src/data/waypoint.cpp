@@ -27,6 +27,9 @@ QPair<qreal, qreal> Waypoint::elevations() const
 
 void Waypoint::loadSymbolIcons(const QString &dir)
 {
+	if (dir.isEmpty())
+		return;
+
 	QDir d(dir);
 	QFileInfoList files(d.entryInfoList(QDir::Files | QDir::Readable));
 
