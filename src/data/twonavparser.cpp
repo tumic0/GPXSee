@@ -138,11 +138,8 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
 
 				if (list.size() > 5) {
 					QDateTime ts(timestamp(list.at(4), list.at(5)));
-					if (!ts.isValid()) {
-						_errorString = "Invalid date/time";
-						return false;
-					}
-					t.setTimestamp(ts);
+					if (ts.isValid())
+						t.setTimestamp(ts);
 				}
 				if (list.size() > 7) {
 					qreal elevation = list.at(7).toDouble(&ok);
