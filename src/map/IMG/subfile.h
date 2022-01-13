@@ -26,7 +26,7 @@ public:
 
 			_data.resize(1U<<subFile->blockBits());
 			_file.setFileName(subFile->fileName());
-			_file.open(QIODevice::ReadOnly);
+			_file.open(QIODevice::ReadOnly | QIODevice::Unbuffered);
 		}
 
 	private:
