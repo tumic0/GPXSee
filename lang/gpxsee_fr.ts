@@ -157,7 +157,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="167"/>
         <source>TwoNav files</source>
-        <translation type="unfinished"></translation>
+        <translation>Données TwoNav</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="168"/>
@@ -423,7 +423,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="273"/>
         <source>Show POI icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les icônes POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="303"/>
@@ -450,22 +450,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="335"/>
         <source>Show position</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la position</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="341"/>
         <source>Follow position</source>
-        <translation type="unfinished"></translation>
+        <translation>Suivre la position</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="346"/>
         <source>Show coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les coordonnées</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>Show motion info</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les infos de déplacement</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="359"/>
@@ -490,7 +490,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="377"/>
         <source>Waypoint icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Icônes de points de cheminement</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="382"/>
@@ -637,7 +637,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="642"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Position</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="653"/>
@@ -737,7 +737,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="842"/>
         <source>Symbols directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dossier de symboles :</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1235"/>
@@ -1154,7 +1154,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="135"/>
         <source>QuickChart maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartes QuickChart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="139"/>
@@ -1192,27 +1192,27 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="87"/>
         <source>kn</source>
-        <translation type="unfinished">nd</translation>
+        <translation>nd</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="90"/>
         <source>mi/h</source>
-        <translation type="unfinished">mi/h</translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="93"/>
         <source>km/h</source>
-        <translation type="unfinished">km/h</translation>
+        <translation>km/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="100"/>
         <source>ft/min</source>
-        <translation type="unfinished"></translation>
+        <translation>pied/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="103"/>
         <source>m/min</source>
-        <translation type="unfinished"></translation>
+        <translation>m/min</translation>
     </message>
 </context>
 <context>
@@ -1616,17 +1616,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="283"/>
         <source>Info background</source>
-        <translation type="unfinished"></translation>
+        <translation>Fond de l&apos;info</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
         <source>Crosshair color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Couleur du réticule :</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="290"/>
         <source>Info color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Couleur d&apos;info :</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="363"/>
@@ -1680,7 +1680,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="622"/>
         <source>Plugin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Module complémentaire :</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
@@ -1829,7 +1829,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="800"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Position</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="801"/>
@@ -2350,7 +2350,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="48"/>
         <source>Symbol</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbol</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="53"/>
