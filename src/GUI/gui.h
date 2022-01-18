@@ -158,6 +158,7 @@ private:
 	qreal time() const;
 	qreal movingTime() const;
 	QAction *mapAction(const QString &name);
+	QGeoPositionInfoSource *positionSource(const Options &options);
 	void readSettings(QString &activeMap, QStringList &disabledPOIs);
 	void writeSettings();
 

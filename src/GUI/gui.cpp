@@ -1059,13 +1059,7 @@ void GUI::openOptions()
 	if (options.plugin != _options.plugin
 	  || options.pluginParams.value(options.plugin)
 	  != _options.pluginParams.value(_options.plugin)) {
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-		QGeoPositionInfoSource *source = QGeoPositionInfoSource::createSource(
-		  options.plugin, this);
-#else // QT 5.14
-		QGeoPositionInfoSource *source = QGeoPositionInfoSource::createSource(
-		  options.plugin, options.pluginParams.value(options.plugin), this);
-#endif // QT 5.14
+		QGeoPositionInfoSource *source = positionSource(options);
 		_showPositionAction->setEnabled(source != 0);
 		_mapView->setPositionSource(source);
 		delete _positionSource;
@@ -2149,6 +2143,23 @@ void GUI::dropEvent(QDropEvent *event)
 	event->acceptProposedAction();
 }
 
+QGeoPositionInfoSource *GUI::positionSource(const Options &options)
+{
+	QGeoPositionInfoSource *source;
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+	source = QGeoPositionInfoSource::createSource(options.plugin, this);
+#else // QT 5.14
+	source = QGeoPositionInfoSource::createSource(options.plugin,
+	  options.pluginParams.value(options.plugin), this);
+#endif // QT 5.14
+	if (source)
+		source->setPreferredPositioningMethods(
+		  QGeoPositionInfoSource::SatellitePositioningMethods);
+
+	return source;
+}
+
 void GUI::writeSettings()
 {
 	int index;
@@ -2794,13 +2805,7 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 	  .toString();
 	settings.endGroup();
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-	_positionSource = QGeoPositionInfoSource::createSource(_options.plugin,
-	  this);
-#else // QT 5.14
-	_positionSource = QGeoPositionInfoSource::createSource(_options.plugin,
-	  _options.pluginParams.value(_options.plugin), this);
-#endif // QT 5.14
+	_positionSource = positionSource(_options);
 	_showPositionAction->setEnabled(_positionSource != 0);
 
 	settings.beginGroup(POSITION_SETTINGS_GROUP);
