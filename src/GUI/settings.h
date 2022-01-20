@@ -198,7 +198,7 @@
 #define POI_RADIUS_SETTING                "poiRadius"
 #define POI_RADIUS_DEFAULT                (int)(IMPERIAL_UNITS() ? MIINM : KMINM)
 #define DEM_URL_SETTING                   "demURL"
-#define DEM_URL_DEFAULT                   ""
+#define DEM_URL_DEFAULT                   "http://dem.gpxsee.org/$lat/$lat$lon.hgt.zip"
 #define DEM_AUTH_SETTING                  "demAuthentication"
 #define DEM_AUTH_DEFAULT                  false
 #define DEM_USERNAME_SETTING              "demUsername"
