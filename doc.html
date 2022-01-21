@@ -348,15 +348,20 @@
 
           <h3 id="dem_downloads">DEM downloads</h3>
           <p>Since GPXSee 9.6 you can download the required DEM files for the area covered
-          by the loaded data from the GPXSee GUI. You must however set a valid DEM data
-          server URL in the preferences for the downloads to work. The URL is specified
-          as a template where the NYY/SYY and EXXX/WXXX coordinates strings are replaced by
+          by the loaded data from the GPXSee GUI. The URL is specified as a template where
+          the NYY/SYY and EXXX/WXXX coordinates strings are replaced by
           <code>$lat</code> and <code>$lon</code>:</p>
 
           <pre>https://bailu.ch/dem3/$lat/$lat$lon.hgt.zip</pre>
 
-          <p>(The downloaded files are automatically renamed, if the file name is not in
-          the required format.)</p>
+          <p>The downloaded files are automatically renamed, if the file name is not in
+          the required format.</p>
+          
+          <p>Since version 10.2, there is a default DEM tiles download source hosted
+          by the GPXSee project predefined in the preferences. The data is the
+          <a href="http://viewfinderpanoramas.org/dem3.html">DEM3 data</a> originaly
+          provided by Jonathan de Ferranti and repacked by the
+          <a href="https://bailu.ch/aat/">AAT</a> project.</p>
 
 
           <h2 id="positioning">Positioning</h2>

@@ -262,6 +262,13 @@ h1.logo a span {
 	margin-left:20px;
 	font-size:12px;
 }
+.sponsor h2 {
+	font-size:18px;
+	color:#000;
+	font-weight:normal;
+	margin-bottom:21px;
+	margin-top:21px;
+}
 .footer {
 	font-size:10px;
 	padding-top:15px;
