@@ -654,13 +654,15 @@ static quint32 readSymbol(DataStream &stream, QPixmap &pixmap)
 		ds += paletteSize * 4;
 	}
 
-	if (paletteSize) {
-		img = QImage((uchar*)data.data(), width, height, lineSize,
-		  QImage::Format_Indexed8);
-		img.setColorTable(palette);
-	} else
-		img = QImage((uchar*)data.data(), width, height, lineSize,
-		  QImage::Format_RGBX8888).rgbSwapped();
+	if (imageSize >= lineSize * height) {
+		if (paletteSize) {
+			img = QImage((uchar*)data.data(), width, height, lineSize,
+			  QImage::Format_Indexed8);
+			img.setColorTable(palette);
+		} else
+			img = QImage((uchar*)data.data(), width, height, lineSize,
+			  QImage::Format_RGBX8888).rgbSwapped();
+	}
 	pixmap = QPixmap::fromImage(img);
 
 	/* There should be no more data left in the record, but broken GPI files
