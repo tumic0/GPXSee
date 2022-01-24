@@ -654,7 +654,7 @@ static quint32 readSymbol(DataStream &stream, QPixmap &pixmap)
 		ds += paletteSize * 4;
 	}
 
-	if (imageSize >= lineSize * height) {
+	if (data.size() >= lineSize * height) {
 		if (paletteSize) {
 			img = QImage((uchar*)data.data(), width, height, lineSize,
 			  QImage::Format_Indexed8);
