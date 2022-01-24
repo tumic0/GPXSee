@@ -431,26 +431,7 @@ static quint32 readImageInfo(DataStream &stream, Waypoint &waypoint,
 
 static int speed(quint8 flags)
 {
-	switch (flags >> 4) {
-		case 0x8:
-			return 40;
-		case 0x9:
-			return 30;
-		case 0xA:
-			return 50;
-		case 0xB:
-			return 70;
-		case 0xC:
-			return 80;
-		case 0xD:
-			return 90;
-		case 0xE:
-			return 100;
-		case 0xF:
-			return 120;
-		default:
-			return 0;
-	}
+	return ((flags >> 3) & 0x0F) * 10;
 }
 
 static quint32 readCamera(DataStream &stream, QVector<Waypoint> &waypoints,
