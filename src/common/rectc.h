@@ -30,6 +30,7 @@ public:
 		return (left() > right()) ? 360.0 - res : res;
 	}
 	double height() const {return (top() - bottom());}
+	double area() const {return qAbs(width()) * qAbs(height());}
 
 	double top() const {return _tl.lat();}
 	double bottom() const {return _br.lat();}

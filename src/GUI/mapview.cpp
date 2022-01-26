@@ -34,20 +34,6 @@
 #define COORDINATES_OFFSET SCALE_OFFSET
 
 
-template<typename T>
-static void updateZValues(T &items)
-{
-	for (int i = 0; i < items.size(); i++) {
-		const QGraphicsItem *ai = items.at(i);
-		for (int j = 0; j < items.size(); j++) {
-			QGraphicsItem *aj = items[j];
-			if (aj->boundingRect().contains(ai->boundingRect()))
-				aj->setZValue(qMin(ai->zValue() - 1, aj->zValue()));
-		}
-	}
-}
-
-
 MapView::MapView(Map *map, POI *poi, QGeoPositionInfoSource *source,
   QWidget *parent) : QGraphicsView(parent)
 {
@@ -226,6 +212,7 @@ void MapView::addArea(const Area &area)
 	ai->setOpacity(_areaOpacity);
 	ai->setDigitalZoom(_digitalZoom);
 	ai->setVisible(_showAreas);
+	ai->setZValue(-area.boundingRect().area());
 
 	_scene->addItem(ai);
 	_ar |= ai->bounds();
@@ -266,6 +253,7 @@ MapItem *MapView::addMap(MapAction *map)
 	mi->setOpacity(_areaOpacity);
 	mi->setDigitalZoom(_digitalZoom);
 	mi->setVisible(_showAreas);
+	mi->setZValue(-mi->bounds().area());
 
 	_scene->addItem(mi);
 	_ar |= mi->bounds();
@@ -299,9 +287,6 @@ QList<PathItem *> MapView::loadData(const Data &data)
 	else
 		updatePOIVisibility();
 
-	if (!data.areas().isEmpty())
-		updateZValues(_areas);
-
 	centerOn(contentCenter());
 
 	return paths;
@@ -319,8 +304,6 @@ void MapView::loadMaps(const QList<MapAction *> &maps)
 	else
 		updatePOIVisibility();
 
-	updateZValues(_areas);
-
 	centerOn(contentCenter());
 }
 
@@ -335,8 +318,6 @@ void MapView::loadDEMs(const QList<Area> &dems)
 		rescale();
 	else
 		updatePOIVisibility();
-
-	updateZValues(_areas);
 
 	centerOn(contentCenter());
 }
