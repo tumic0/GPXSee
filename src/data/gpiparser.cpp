@@ -429,41 +429,45 @@ static quint32 readImageInfo(DataStream &stream, Waypoint &waypoint,
 	return rs + rh.size;
 }
 
-static int speed(quint8 flags)
+static int speed(quint16 flags)
 {
 	return (((flags >> 3) & 0x0F) * 10) + (((flags >> 2) & 1) * 5);
 }
 
-static bool portable(quint8 flags)
+static QString units(quint16 flags)
+{
+	return (flags & (1<<8)) ? "km/h" : "mi/h";
+}
+
+static bool portable(quint16 flags)
 {
 	return (flags & 1);
 }
 
-static QString cameraDesc(quint8 type, quint8 flags)
+static bool redLight(quint16 flags)
 {
-	switch (type) {
-		case 8:
-			return portable(flags)
-			  ? QString("<i>%1&nbsp;mi/h</i>").arg(speed(flags))
-			  : QString("%1&nbsp;mi/h").arg(speed(flags));
-		case 9:
-			return portable(flags)
-			  ? QString("<i>%1&nbsp;km/h</i>").arg(speed(flags))
-			  : QString("%1&nbsp;km/h").arg(speed(flags));
-			break;
-		case 10:
-		case 11:
-			return "Red light camera";
-	}
+	return (flags & (1<<9));
+}
 
-	return QString();
+static QString cameraDesc(quint16 flags)
+{
+	if (redLight(flags))
+		return "Red light camera";
+	else {
+		QString desc(QString::number(speed(flags)) + "&nbsp;" + units(flags));
+		if (portable(flags))
+			return "<i>" + desc + "<i>";
+		else
+			return desc;
+	}
 }
 
 static quint32 readCamera(DataStream &stream, QVector<Waypoint> &waypoints,
   QList<Area> &polygons)
 {
 	RecordHeader rh;
-	quint8 flags, type, s7, rs;
+	quint8 s7, rs;
+	quint16 flags;
 	qint32 top, right, bottom, left, lat, lon;
 	quint32 ds = 15;
 
@@ -473,7 +477,7 @@ static quint32 readCamera(DataStream &stream, QVector<Waypoint> &waypoints,
 	right = stream.readInt24();
 	bottom = stream.readInt24();
 	left = stream.readInt24();
-	stream >> flags >> type >> s7;
+	stream >> flags >> s7;
 
 	if (s7) {
 		quint32 skip = s7 + 2 + s7/4;
@@ -494,7 +498,7 @@ static quint32 readCamera(DataStream &stream, QVector<Waypoint> &waypoints,
 
 	Area area(RectC(Coordinates(toWGS24(left), toWGS24(top)),
 	  Coordinates(toWGS24(right), toWGS24(bottom))));
-	area.setDescription(cameraDesc(type, flags));
+	area.setDescription(cameraDesc(flags));
 
 	waypoints.append(Coordinates(toWGS24(lon), toWGS24(lat)));
 	polygons.append(area);
