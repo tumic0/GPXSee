@@ -455,10 +455,7 @@ static QString cameraDesc(quint16 flags)
 		return "Red light camera";
 	else {
 		QString desc(QString::number(speed(flags)) + "&nbsp;" + units(flags));
-		if (portable(flags))
-			return "<i>" + desc + "<i>";
-		else
-			return desc;
+		return portable(flags) ? "<i>" + desc + "<i>" : desc;
 	}
 }
 
