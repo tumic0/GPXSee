@@ -197,6 +197,7 @@ h1.logo a span {
 	float:right;
 	display:inline;
 	width:243px;
+	margin-top:18px;
 }
 #content h2 {
 	font-size:22px;
@@ -232,6 +233,7 @@ h1.logo a span {
 	color:#000;
 	font-weight:normal;
 	margin-bottom:21px;
+	margin-top:21px;
 }
 .latest-news .news-item {
 	margin-bottom:20px;
@@ -267,7 +269,6 @@ h1.logo a span {
 	color:#000;
 	font-weight:normal;
 	margin-bottom:21px;
-	margin-top:21px;
 }
 .footer {
 	font-size:10px;
