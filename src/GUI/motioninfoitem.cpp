@@ -96,10 +96,10 @@ QString MotionInfoItem::speed(const QLocale &l) const
 QString MotionInfoItem::verticalSpeed(const QLocale &l) const
 {
 	if (_units == Nautical || _units == Imperial)
-		return l.toString(MS2FTMIN * _verticalSpeed, 'f', 1) + UNIT_SPACE
+		return l.toString(MS2FTMIN * _verticalSpeed, 'f', 0) + UNIT_SPACE
 		  + qApp->translate("MotionInfoItem", "ft/min");
 	else
-		return l.toString(MS2MMIN * _verticalSpeed, 'f', 1) + UNIT_SPACE
+		return l.toString(MS2MMIN * _verticalSpeed, 'f', 0) + UNIT_SPACE
 		  + qApp->translate("MotionInfoItem", "m/min");
 }
 
