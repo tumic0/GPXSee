@@ -530,6 +530,7 @@ void MapView::setUnits(Units units)
 	_mapScale->setUnits(units);
 	_cursorCoordinates->setUnits(units);
 	_positionCoordinates->setUnits(units);
+	_motionInfo->setUnits(units);
 }
 
 void MapView::setCoordinatesFormat(CoordinatesFormat format)
