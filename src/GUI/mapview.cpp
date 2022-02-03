@@ -700,8 +700,8 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
   PlotFlags flags)
 {
 	QRect orig, adj;
-	qreal ratio, diff, q;
-	QPointF origScene, origPos;
+	qreal ratio, diff, q, p;
+	QPointF scenePos, scalePos, posPos, motionPos;
 	int zoom;
 
 
@@ -712,7 +712,9 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 
 	// Compute sizes & ratios
 	orig = viewport()->rect();
-	origPos = _mapScale->pos();
+	scalePos = _mapScale->pos();
+	posPos = _positionCoordinates->pos();
+	motionPos = _motionInfo->pos();
 
 	if (orig.height() * (target.width() / target.height()) - orig.width() < 0) {
 		ratio = target.height() / target.width();
@@ -737,7 +739,7 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	if (flags & HiRes) {
 		zoom = _map->zoom();
 		QRectF vr(mapToScene(orig).boundingRect());
-		origScene = vr.center();
+		scenePos = vr.center();
 
 		QPointF s(painter->device()->logicalDpiX()
 		  / (qreal)metric(QPaintDevice::PdmDpiX),
@@ -751,16 +753,22 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 		centerOn(center);
 		adj.moveCenter(mapFromScene(center));
 
-		_mapScale->setDigitalZoom(_digitalZoom - log2(s.x() / q));
-		_mapScale->setPos(mapToScene(QPoint(adj.bottomRight() + QPoint(
-		  -(SCALE_OFFSET + _mapScale->boundingRect().width()) * (s.x() / q),
-		  -(SCALE_OFFSET + _mapScale->boundingRect().height()) * (s.x() / q)))));
-	} else {
-		_mapScale->setDigitalZoom(_digitalZoom - log2(1.0 / q));
-		_mapScale->setPos(mapToScene(QPoint(adj.bottomRight() + QPoint(
-		  -(SCALE_OFFSET + _mapScale->boundingRect().width()) / q ,
-		  -(SCALE_OFFSET + _mapScale->boundingRect().height()) / q))));
-	}
+		p = s.x() / q;
+	} else
+		p = 1 / q;
+
+	_mapScale->setDigitalZoom(_digitalZoom - log2(p));
+	_mapScale->setPos(mapToScene(adj.bottomRight() + QPoint(
+	  -(SCALE_OFFSET + _mapScale->boundingRect().width()) * p,
+	  -(SCALE_OFFSET + _mapScale->boundingRect().height()) * p)));
+	_positionCoordinates->setDigitalZoom(_digitalZoom - log2(p));
+	_positionCoordinates->setPos(mapToScene(adj.topLeft() + QPoint(
+	  COORDINATES_OFFSET * p,
+	  (COORDINATES_OFFSET + _positionCoordinates->boundingRect().height()) * p)));
+	_motionInfo->setDigitalZoom(_digitalZoom - log2(p));
+	_motionInfo->setPos(mapToScene(adj.topRight() + QPoint(
+	  (-COORDINATES_OFFSET - _motionInfo->boundingRect().width()) * p,
+	  (COORDINATES_OFFSET + _motionInfo->boundingRect().height()) * p)));
 
 	// Print the view
 	render(painter, target, adj);
@@ -769,10 +777,14 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	if (flags & HiRes) {
 		_map->setZoom(zoom);
 		rescale();
-		centerOn(origScene);
+		centerOn(scenePos);
 	}
 	_mapScale->setDigitalZoom(_digitalZoom);
-	_mapScale->setPos(origPos);
+	_mapScale->setPos(scalePos);
+	_positionCoordinates->setDigitalZoom(_digitalZoom);
+	_positionCoordinates->setPos(posPos);
+	_motionInfo->setDigitalZoom(_digitalZoom);
+	_motionInfo->setPos(motionPos);
 
 	// Exit plot mode
 	_map->setDevicePixelRatio(_deviceRatio, _mapRatio);
@@ -1111,33 +1123,35 @@ void MapView::drawBackground(QPainter *painter, const QRectF &rect)
 
 void MapView::paintEvent(QPaintEvent *event)
 {
-	QPointF scaleScenePos = mapToScene(rect().bottomRight() + QPoint(
-	  -(SCALE_OFFSET + _mapScale->boundingRect().width()),
-	  -(SCALE_OFFSET + _mapScale->boundingRect().height())));
-	if (_mapScale->pos() != scaleScenePos && !_plot)
-		_mapScale->setPos(scaleScenePos);
+	if (!_plot) {
+		QPointF scaleScenePos = mapToScene(rect().bottomRight() + QPoint(
+		  -(SCALE_OFFSET + _mapScale->boundingRect().width()),
+		  -(SCALE_OFFSET + _mapScale->boundingRect().height())));
+		if (_mapScale->pos() != scaleScenePos)
+			_mapScale->setPos(scaleScenePos);
 
-	if (_cursorCoordinates->isVisible()) {
-		QPointF coordinatesScenePos = mapToScene(rect().bottomLeft()
-		  + QPoint(COORDINATES_OFFSET, -COORDINATES_OFFSET));
-		if (_cursorCoordinates->pos() != coordinatesScenePos && !_plot)
-			_cursorCoordinates->setPos(coordinatesScenePos);
-	}
+		if (_cursorCoordinates->isVisible()) {
+			QPointF coordinatesScenePos = mapToScene(rect().bottomLeft()
+			  + QPoint(COORDINATES_OFFSET, -COORDINATES_OFFSET));
+			if (_cursorCoordinates->pos() != coordinatesScenePos)
+				_cursorCoordinates->setPos(coordinatesScenePos);
+		}
 
-	if (_positionCoordinates->isVisible()) {
-		QPointF coordinatesScenePos = mapToScene(rect().topLeft()
-		  + QPoint(COORDINATES_OFFSET, COORDINATES_OFFSET
-		  + _positionCoordinates->boundingRect().height()));
-		if (_positionCoordinates->pos() != coordinatesScenePos)
-			_positionCoordinates->setPos(coordinatesScenePos);
-	}
+		if (_positionCoordinates->isVisible()) {
+			QPointF coordinatesScenePos = mapToScene(rect().topLeft()
+			  + QPoint(COORDINATES_OFFSET, COORDINATES_OFFSET
+			  + _positionCoordinates->boundingRect().height()));
+			if (_positionCoordinates->pos() != coordinatesScenePos)
+				_positionCoordinates->setPos(coordinatesScenePos);
+		}
 
-	if (_motionInfo->isVisible()) {
-		QPointF coordinatesScenePos = mapToScene(rect().topRight()
-		  + QPoint(-COORDINATES_OFFSET - _motionInfo->boundingRect().width(),
-		  COORDINATES_OFFSET + _motionInfo->boundingRect().height()));
-		if (_motionInfo->pos() != coordinatesScenePos)
-			_motionInfo->setPos(coordinatesScenePos);
+		if (_motionInfo->isVisible()) {
+			QPointF coordinatesScenePos = mapToScene(rect().topRight()
+			  + QPoint(-COORDINATES_OFFSET - _motionInfo->boundingRect().width(),
+			  COORDINATES_OFFSET + _motionInfo->boundingRect().height()));
+			if (_motionInfo->pos() != coordinatesScenePos)
+				_motionInfo->setPos(coordinatesScenePos);
+		}
 	}
 
 	QGraphicsView::paintEvent(event);
