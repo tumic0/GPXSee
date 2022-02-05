@@ -1,5 +1,6 @@
 #include "bitstream.h"
 
+using namespace Garmin;
 using namespace IMG;
 
 bool BitStream1::flush()
@@ -22,7 +23,7 @@ bool BitStream1::readUInt24(quint32 &val)
 	for (int i = 0; i < 3; i++) {
 		if (!read(8, b))
 			return false;
-		val |= (b << (i * 8));
+		val |= (b << (i << 3));
 	}
 
 	return true;
@@ -43,22 +44,22 @@ bool BitStream4F::flush()
 
 bool BitStream4F::read(quint32 bits, quint32 &val)
 {
-	if (bits <= 32 - (_used + _unused)) {
-		val = bits ? (_data << _used) >> (32 - bits) : 0;
+	if (bits <= available()) {
+		val = bits ? (_data << _used) >> (32U - bits) : 0;
 		_used += bits;
 		return true;
 	}
 
 	Q_ASSERT(_length && !_unused);
-	quint32 old = (_used < 32) ? (_data << _used) >> (32 - bits) : 0;
+	quint32 old = (_used < 32U) ? (_data << _used) >> (32U - bits) : 0;
 	quint32 bytes = qMin(_length, 4U);
 
 	if (!_file.readVUInt32SW(_hdl, bytes, _data))
 		return false;
 
-	_used -= 32 - bits;
+	_used -= 32U - bits;
 	_length -= bytes;
-	_unused = (4 - bytes) * 8;
+	_unused = (4U - bytes) << 3;
 	_data <<= _unused;
 
 	val = _data >> (32 - _used) | old;
@@ -74,23 +75,27 @@ BitStream4R::BitStream4R(const SubFile &file, SubFile::Handle &hdl,
 
 bool BitStream4R::readBytes(quint32 bytes, quint32 &val)
 {
-	quint32 bits = _used % 8;
 	quint32 b;
-
-	if (bits) {
-		if (!read(8 - bits, b))
-			return false;
-		Q_ASSERT(!b);
-	}
 
 	val = 0;
 	for (quint32 i = 0; i < bytes; i++) {
 		if (!read(8, b))
 			return false;
-		val |= (b << (i * 8));
+		val |= (b << (i << 3));
 	}
 
 	return true;
+}
+
+bool BitStream4R::readBytesAligned(quint32 bytes, quint32 &val)
+{
+	quint32 bits = _used & 7U;
+	quint32 b;
+
+	if (bits && !read(8U - bits, b))
+		return false;
+
+	return readBytes(bytes, val);
 }
 
 bool BitStream4R::readVUInt32(quint32 &val)
@@ -98,7 +103,7 @@ bool BitStream4R::readVUInt32(quint32 &val)
 	quint32 b;
 	quint8 bytes, shift;
 
-	if (!readBytes(1, b))
+	if (!readBytesAligned(1, b))
 		return false;
 
 	if ((b & 1) == 0) {
@@ -125,11 +130,11 @@ bool BitStream4R::readVUInt32(quint32 &val)
 	return true;
 }
 
-bool BitStream4R::readVuint32SM(quint32 &val1, quint32 &val2, quint32 &val2Bits)
+bool BitStream4R::readVUint32SM(quint32 &val1, quint32 &val2, quint32 &val2Bits)
 {
 	quint32 b, eb;
 
-	if (!readBytes(1, b))
+	if (!readBytesAligned(1, b))
 		return false;
 
 	if (!(b & 1)) {
@@ -154,15 +159,16 @@ bool BitStream4R::readVuint32SM(quint32 &val1, quint32 &val2, quint32 &val2Bits)
 
 bool BitStream4R::skip(quint32 bytes)
 {
-	if (bytes * 8 > bitsAvailable())
-		return false;
+	quint32 ab = available() >> 3;
 
-	quint32 ab = (32 - (_used + _unused))/8;
 	if (bytes <= ab)
-		_used += bytes * 8;
+		_used += bytes << 3;
 	else {
-		quint32 seek = ((bytes - ab)/4)*4;
-		quint32 read = (bytes - ab)%4;
+		if (bytes > ab + _length)
+			return false;
+
+		quint32 seek = (bytes - ab) & 0xFFFFFFFC;
+		quint32 read = (bytes - ab) & 3U;
 		if (seek && !_file.seek(_hdl, _file.pos(_hdl) - seek))
 			return false;
 		_length -= seek;
@@ -170,13 +176,13 @@ bool BitStream4R::skip(quint32 bytes)
 			quint32 rb = qMin(_length, 4U);
 			if (!_file.readUInt32(_hdl, _data))
 				return false;
-			if (!_file.seek(_hdl, _file.pos(_hdl) - 8))
+			if (!_file.seek(_hdl, _file.pos(_hdl) - 8U))
 				return false;
 			_length -= rb;
-			_unused = (4 - rb) * 8;
-			_used = read * 8;
+			_unused = (4U - rb) << 3;
+			_used = read << 3;
 		} else
-			_used = 32;
+			_used = 32U;
 	}
 
 	return true;
@@ -184,13 +190,13 @@ bool BitStream4R::skip(quint32 bytes)
 
 void BitStream4R::resize(quint32 bytes)
 {
-	quint32 ab = (32 - (_used + _unused) + 7)/8;
+	quint32 ab = bs(available());
 
 	if (ab <= bytes)
 		_length = bytes - ab;
 	else {
 		_length = 0;
-		_unused += (ab - bytes) * 8;
+		_unused += (ab - bytes) << 3;
 	}
 }
 

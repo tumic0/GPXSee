@@ -33,7 +33,7 @@ template <class BitStream>
 bool HuffmanStream<BitStream>::fetchData()
 {
 	quint32 next;
-	quint8 nextSize = qMin((quint64)(32 - _symbolDataSize), _bs.bitsAvailable());
+	quint32 nextSize = qMin((quint64)(32 - _symbolDataSize), _bs.bitsAvailable());
 
 	if (!_bs.read(nextSize, next))
 		return false;

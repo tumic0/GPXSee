@@ -37,7 +37,7 @@ static bool skipShape(BitStream4R &bs)
 {
 	quint32 v1, v2, v2b;
 
-	if (!bs.readVuint32SM(v1, v2, v2b))
+	if (!bs.readVUint32SM(v1, v2, v2b))
 		return false;
 
 	return bs.skip(v1);
@@ -64,7 +64,7 @@ static bool seekToLevel(BitStream4R &bs, quint8 level)
 	quint32 v1, v2, v2b;
 
 	for (quint8 i = 1; i < level; ) {
-		if (!bs.readVuint32SM(v1, v2, v2b))
+		if (!bs.readVUint32SM(v1, v2, v2b))
 			return false;
 		if (!bs.skip(v1))
 			return false;
@@ -83,7 +83,7 @@ static bool seekToLine(BitStream4R &bs, quint8 line)
 	quint32 v1, v2, v2b;
 
 	for (quint8 i = 0; i < line; i++) {
-		if (!bs.readVuint32SM(v1, v2, v2b))
+		if (!bs.readVUint32SM(v1, v2, v2b))
 			return false;
 		if (!bs.skip(v1))
 			return false;
@@ -99,7 +99,7 @@ static bool readLine(BitStream4R &bs, const SubDiv *subdiv,
   const HuffmanTable *table, MapData::Poly &poly)
 {
 	quint32 v1, v2, v2b;
-	if (!bs.readVuint32SM(v1, v2, v2b))
+	if (!bs.readVUint32SM(v1, v2, v2b))
 		return false;
 	bs.resize(v1);
 
@@ -170,7 +170,7 @@ static bool readShape(const NODFile *nod, SubFile::Handle &nodHdl,
   quint16 cnt = 0xFFFF, bool check = false)
 {
 	quint32 v1, v2, v2b;
-	if (!bs.readVuint32SM(v1, v2, v2b))
+	if (!bs.readVUint32SM(v1, v2, v2b))
 		return false;
 	BitStream4R::State state;
 	bs.save(state);
@@ -298,7 +298,7 @@ static bool readShape(const NODFile *nod, SubFile::Handle &nodHdl,
 
 				if (check && nodes == cnt) {
 					if (!(bs.restore(state) && bs.skip(v1)
-					  && bs.readVuint32SM(v1, v2, v2b)))
+					  && bs.readVUint32SM(v1, v2, v2b)))
 						return false;
 					if (5 < v2b)
 						v2 >>= v2b - 2;
