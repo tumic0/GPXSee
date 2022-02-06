@@ -180,8 +180,8 @@ Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize,
 	  Shield(shieldType, _codec.toString(shieldLabel)));
 }
 
-Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, bool capitalize,
-  bool convert) const
+Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, quint32 size,
+  bool capitalize, bool convert) const
 {
 	Shield::Type shieldType = Shield::None;
 	QByteArray label, shieldLabel;
@@ -190,7 +190,7 @@ Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, bool capitalize,
 	quint8 b1, b2, b3;
 	int split = -1;
 
-	while (true) {
+	for (quint32 i = 0; i < size; i = i + 3) {
 		if (!(file->readByte(fileHdl, &b1) && file->readByte(fileHdl, &b2)
 		  && file->readByte(fileHdl, &b3)))
 			return Label();
@@ -242,29 +242,33 @@ Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, bool capitalize,
 			}
 		}
 	}
+
+	return Label();
 }
 
-Label LBLFile::label8b(const SubFile *file, Handle &fileHdl, bool capitalize,
-  bool convert) const
+Label LBLFile::label8b(const SubFile *file, Handle &fileHdl, quint32 size,
+  bool capitalize, bool convert) const
 {
 	QVector<quint8> str;
 	quint8 c;
 
-	do {
+	for (quint32 i = 0; i < size; i++) {
 		if (!file->readByte(fileHdl, &c))
-			return Label();
+			break;
 		str.append(c);
-	} while (c);
+		if (!c)
+			return str2label(str, capitalize, convert);
+	}
 
-	return str2label(str, capitalize, convert);
+	return Label();
 }
 
 Label LBLFile::labelHuffman(Handle &hdl, const SubFile *file, Handle &fileHdl,
-  bool capitalize, bool convert) const
+  quint32 size, bool capitalize, bool convert) const
 {
 	QVector<quint8> str;
 
-	if (!_huffmanText->decode(file, fileHdl, 0xFFFFFFFF, str))
+	if (!_huffmanText->decode(file, fileHdl, size, str))
 		return Label();
 	if (!_table)
 		return str2label(str, capitalize, convert);
@@ -319,20 +323,21 @@ Label LBLFile::label(Handle &hdl, quint32 offset, bool poi, bool capitalize,
 	if (!seek(hdl, labelOffset))
 		return Label();
 
-	return label(hdl, this, hdl, capitalize, convert);
+	return label(hdl, this, hdl, _offset + _size - labelOffset, capitalize,
+	  convert);
 }
 
 Label LBLFile::label(Handle &hdl, const SubFile *file, Handle &fileHdl,
-  bool capitalize, bool convert) const
+  quint32 size, bool capitalize, bool convert) const
 {
 	switch (_encoding) {
 		case 6:
-			return label6b(file, fileHdl, capitalize, convert);
+			return label6b(file, fileHdl, size, capitalize, convert);
 		case 9:
 		case 10:
-			return label8b(file, fileHdl, capitalize, convert);
+			return label8b(file, fileHdl, size, capitalize, convert);
 		case 11:
-			return labelHuffman(hdl, file, fileHdl, capitalize, convert);
+			return labelHuffman(hdl, file, fileHdl, size, capitalize, convert);
 		default:
 			return Label();
 	}

@@ -64,6 +64,8 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 			break;
 	}
 
+	quint32 off = pos(hdl);
+
 	if (poly && Style::isRaster(poly->type) && lbl && lbl->imageIdSize()) {
 		quint32 id;
 		quint32 top, right, bottom, left;
@@ -77,20 +79,14 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 
 		poly->raster = Raster(lbl, id, QRect(QPoint(left, top), QPoint(right,
 		  bottom)));
-
-		rs -= lbl->imageIdSize() + 16;
 	}
 
 	if (point && (flags & 1) && lbl) {
-		quint32 p = pos(hdl);
-		point->label = lbl->label(lblHdl, this, hdl);
+		point->label = lbl->label(lblHdl, this, hdl, rs);
 		point->classLabel = true;
-
-		Q_ASSERT(pos(hdl) - p <= rs + 4);
-		seek(hdl, p);
 	}
 
-	return seek(hdl, pos(hdl) + rs);
+	return seek(hdl, off + rs);
 }
 
 bool RGNFile::skipLclFields(Handle &hdl, const quint32 flags[3]) const
