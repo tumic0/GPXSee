@@ -33,7 +33,7 @@ RGNFile::~RGNFile()
 }
 
 bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
-  void *object, const LBLFile *lbl) const
+  void *object, const LBLFile *lbl, Handle &lblHdl) const
 {
 	quint8 flags;
 	quint32 rs;
@@ -83,10 +83,11 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 
 	if (point && (flags & 1) && lbl) {
 		quint32 p = pos(hdl);
-		point->label = lbl->label(this, hdl);
+		point->label = lbl->label(lblHdl, this, hdl);
 		point->classLabel = true;
 
-		rs -= (pos(hdl) - p);
+		Q_ASSERT(pos(hdl) - p <= rs + 4);
+		rs -= pos(hdl) - p;
 	}
 
 	return seek(hdl, pos(hdl) + rs);
@@ -356,7 +357,8 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 
 		if (subtype & 0x20 && !readUInt24(hdl, labelPtr))
 			return false;
-		if (subtype & 0x80 && !readClassFields(hdl, segmentType, &poly, lbl))
+		if (subtype & 0x80 && !readClassFields(hdl, segmentType, &poly, lbl,
+		  lblHdl))
 			return false;
 		if (subtype & 0x40 && !skipLclFields(hdl, segmentType == Line
 		  ? _linesLclFlags : _polygonsLclFlags))
@@ -446,7 +448,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
 
 		if (subtype & 0x20 && !readUInt24(hdl, labelPtr))
 			return false;
-		if (subtype & 0x80 && !readClassFields(hdl, Point, &point, lbl))
+		if (subtype & 0x80 && !readClassFields(hdl, Point, &point, lbl, lblHdl))
 			return false;
 		if (subtype & 0x40 && !skipLclFields(hdl, _pointsLclFlags))
 			return false;
