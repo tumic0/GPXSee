@@ -312,14 +312,13 @@ Label LBLFile::label(Handle &hdl, quint32 offset, bool poi, bool capitalize,
 		if (!(_poiSize >= (offset << _poiMultiplier)
 		  && seek(hdl, _poiOffset + (offset << _poiMultiplier))
 		  && readUInt24(hdl, poiOffset) && (poiOffset & 0x3FFFFF)))
-			return QString();
+			return Label();
 		labelOffset = _offset + ((poiOffset & 0x3FFFFF) << _multiplier);
 	} else
 		labelOffset = _offset + (offset << _multiplier);
 
 	if (labelOffset > _offset + _size)
-		return QString();
-
+		return Label();
 	if (!seek(hdl, labelOffset))
 		return Label();
 
