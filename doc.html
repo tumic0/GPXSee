@@ -380,18 +380,19 @@
           <code>/dev/tty.SerialPort-3</code> on Mac.</p>
 
           <h3 id="positioning_linux">Linux</h3>
-          <p>On Linux, you can use Geoclue2 as the platform plugin, but that is "Gnome
-          quality" at its best and you will most probably not make it work. But
-          you can <a href="https://github.com/OpenOrienteering/mapper/issues/1569#issuecomment-611442924">try</a>...</p>
+          <p>On Linux, you can use Geoclue2 as the platform plugin, but Geoclue is "Gnome
+          quality" software at its best and you will most probably not
+          <a href="https://github.com/OpenOrienteering/mapper/issues/1569#issuecomment-611442924">make
+          it work</a>.</p>
 
           <p>Theoretically, you can also use the <code>serialnmea</code> plugin like on Windows/Mac,
           but practically
           <a href="https://bugzilla.opensuse.org/show_bug.cgi?id=1193604">almost</a>
           <a href="https://bugzilla.redhat.com/show_bug.cgi?id=2030899">all</a> distributions
           fail to build the plugin... The only exception are distributions using Qt6 like
-          ArchLinux. In Qt6, the <a href="https://doc-snapshots.qt.io/qt6-dev/position-plugin-nmea.html">NMEA
-          plugin</a> has been completely reworked and is much more powerfull than in Qt5. And
-          it compiles!</p>
+          ArchLinux. The <a href="https://doc-snapshots.qt.io/qt6-dev/position-plugin-nmea.html">NMEA
+          plugin</a> has been completely reworked in Qt6, is much more powerfull than in Qt5 and
+          is compiled by default.</p>
 
           <div id="footnote">
           <p id="legacyPaths"><i>[1] The user paths have changed in GPXSee 7.</i></p>
