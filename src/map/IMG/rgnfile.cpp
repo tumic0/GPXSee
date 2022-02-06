@@ -18,7 +18,7 @@ static quint64 pointId(const QPoint &pos, quint32 type, quint32 labelPtr)
 	quint64 id;
 
 	uint hash = (uint)qHash(QPair<uint,uint>((uint)qHash(
-	  QPair<int, int>(pos.x(), pos.y())), labelPtr & 0x3FFFFF));
+	  QPair<int, int>(pos.x(), pos.y())), labelPtr));
 	id = ((quint64)type)<<32 | hash;
 	// Make country labels precedent over city labels
 	if (!Style::isCountry(type))
@@ -451,7 +451,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
 		if (_pointsGblFlags && !skipGblFields(hdl, _pointsGblFlags))
 			return false;
 
-		QPoint pos(subdiv->lon() + LS(lon, 24-subdiv->bits()),
+		QPoint p(subdiv->lon() + LS(lon, 24-subdiv->bits()),
 		  subdiv->lat() + LS(lat, 24-subdiv->bits()));
 
 		// Discard NT points breaking style draw order logic (and causing huge
@@ -459,8 +459,9 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
 		if (point.type == 0x11400)
 			continue;
 
-		point.coordinates = Coordinates(toWGS24(pos.x()), toWGS24(pos.y()));
-		point.id = pointId(pos, point.type, labelPtr & 0x3FFFFF);
+		point.coordinates = Coordinates(toWGS24(p.x()), toWGS24(p.y()));
+		point.id = pointId(p, point.type, point.classLabel ? pos(hdl)
+		  : labelPtr & 0x3FFFFF);
 		if (lbl && (labelPtr & 0x3FFFFF))
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
 
