@@ -54,9 +54,15 @@ static QFont *font(Style::FontSize size, Style::FontSize defaultSize
 	}
 }
 
-static QFont *poiFont(Style::FontSize size = Style::Normal)
+static QFont *poiFont(Style::FontSize size = Style::Normal, int zoom = -1,
+  bool extended = false)
 {
 	static QFont poi = pixelSizeFont(10);
+
+	if (zoom > 25)
+		size = Style::Normal;
+	else if (extended)
+		size = Style::None;
 
 	switch (size) {
 		case Style::None:
@@ -435,7 +441,7 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 		  ? 0 : &(point.label.text());
 		const QImage *img = style.img().isNull() ? 0 : &style.img();
 		const QFont *fnt = poi
-		  ? poiFont(_zoom > 25 ? Style::Normal : style.textFontSize())
+		  ? poiFont(style.textFontSize(), _zoom, point.classLabel)
 		  : font(style.textFontSize());
 		const QColor *color = style.textColor().isValid()
 		  ? &style.textColor() : &textColor;

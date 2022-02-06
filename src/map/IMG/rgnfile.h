@@ -62,8 +62,8 @@ public:
 
 private:
 	bool segments(Handle &hdl, SubDiv *subdiv, SubDiv::Segment seg[5]) const;
-	bool readClassFields(Handle &hdl, SegmentType segmentType,
-	  MapData::Poly *poly = 0, const LBLFile *lbl = 0) const;
+	bool readClassFields(Handle &hdl, SegmentType segmentType, void *object,
+	  const LBLFile *lbl) const;
 	bool skipLclFields(Handle &hdl, const quint32 flags[3]) const;
 	bool skipGblFields(Handle &hdl, quint32 flags) const;
 

@@ -38,12 +38,13 @@ public:
 	};
 
 	struct Point {
-		Point() : id(0) {}
+		Point() : id(0), classLabel(false) {}
 
 		Coordinates coordinates;
 		Label label;
 		quint32 type;
 		quint64 id;
+		bool classLabel;
 
 		bool operator<(const Point &other) const
 		  {return id < other.id;}

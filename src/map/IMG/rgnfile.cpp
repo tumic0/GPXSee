@@ -33,10 +33,14 @@ RGNFile::~RGNFile()
 }
 
 bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
-  MapData::Poly *poly, const LBLFile *lbl) const
+  void *object, const LBLFile *lbl) const
 {
 	quint8 flags;
 	quint32 rs;
+	MapData::Poly *poly = (segmentType == Polygon)
+	  ? (MapData::Poly *) object : 0;
+	MapData::Point *point = (segmentType == Point)
+	  ? (MapData::Point *) object : 0;
 
 	if (!readByte(hdl, &flags))
 		return false;
@@ -60,8 +64,7 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 			break;
 	}
 
-	if (segmentType == Polygon && Style::isRaster(poly->type) && lbl
-	  && lbl->imageIdSize()) {
+	if (poly && Style::isRaster(poly->type) && lbl && lbl->imageIdSize()) {
 		quint32 id;
 		quint32 top, right, bottom, left;
 
@@ -76,6 +79,14 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 		  bottom)));
 
 		rs -= lbl->imageIdSize() + 16;
+	}
+
+	if (point && (flags & 1) && lbl) {
+		quint32 p = pos(hdl);
+		point->label = lbl->label(this, hdl);
+		point->classLabel = true;
+
+		rs -= (pos(hdl) - p);
 	}
 
 	return seek(hdl, pos(hdl) + rs);
@@ -431,9 +442,11 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
 		  && readInt16(hdl, lon) && readInt16(hdl, lat)))
 			return false;
 
+		point.type = 0x10000 | (((quint32)type)<<8) | (subtype & 0x1F);
+
 		if (subtype & 0x20 && !readUInt24(hdl, labelPtr))
 			return false;
-		if (subtype & 0x80 && !readClassFields(hdl, Point))
+		if (subtype & 0x80 && !readClassFields(hdl, Point, &point, lbl))
 			return false;
 		if (subtype & 0x40 && !skipLclFields(hdl, _pointsLclFlags))
 			return false;
@@ -443,7 +456,6 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
 		QPoint pos(subdiv->lon() + LS(lon, 24-subdiv->bits()),
 		  subdiv->lat() + LS(lat, 24-subdiv->bits()));
 
-		point.type = 0x10000 | (((quint32)type)<<8) | (subtype & 0x1F);
 		// Discard NT points breaking style draw order logic (and causing huge
 		// performance drawback)
 		if (point.type == 0x11400)
