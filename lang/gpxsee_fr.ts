@@ -612,7 +612,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="533"/>
         <source>Previous</source>
-        <translation>Précédant</translation>
+        <translation>Précédent</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="537"/>
