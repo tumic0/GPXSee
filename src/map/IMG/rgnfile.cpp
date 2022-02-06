@@ -87,7 +87,7 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 		point->classLabel = true;
 
 		Q_ASSERT(pos(hdl) - p <= rs + 4);
-		rs -= pos(hdl) - p;
+		seek(hdl, p);
 	}
 
 	return seek(hdl, pos(hdl) + rs);
