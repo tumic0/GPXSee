@@ -11,7 +11,7 @@
 #define MIN_BOX_WIDTH 2
 
 
-static void expand(QRect &rect, int width)
+static void expand(QRectF &rect, int width)
 {
 	rect.adjust(-(width/2 - rect.width()/2), 0, width/2 - rect.width()/2, 0);
 }
@@ -38,14 +38,14 @@ TextPointItem::TextPointItem(const QPoint &point, const QString *text,
 void TextPointItem::setPos(const QPoint &point, bool padding)
 {
 	QPainterPath shape;
-	QRect iconRect;
+	QRectF iconRect;
 
 	if (_img && !_img->isNull()) {
-		QSize s(_img->size() / _img->devicePixelRatioF());
+		QSizeF s(_img->size() / _img->devicePixelRatioF());
 		int xOffset = padding ? s.width() : s.width() / 2;
-		iconRect = QRect(QPoint(point.x() - xOffset, point.y()
+		iconRect = QRectF(QPointF(point.x() - xOffset, point.y()
 		  - s.height()/2), s);
-		_textRect.moveTopLeft(QPoint(point.x() + s.width()/2, point.y()
+		_textRect.moveTopLeft(QPointF(point.x() + s.width()/2, point.y()
 		  - _textRect.height()/2));
 	} else
 		_textRect.moveCenter(point);
@@ -58,8 +58,8 @@ void TextPointItem::setPos(const QPoint &point, bool padding)
 void TextPointItem::paint(QPainter *painter) const
 {
 	if (_img && !_img->isNull()) {
-		QSize s(_img->size() / _img->devicePixelRatioF());
-		painter->drawImage(QPoint(_rect.left(), _rect.center().y()
+		QSizeF s(_img->size() / _img->devicePixelRatioF());
+		painter->drawImage(QPointF(_rect.left(), _rect.center().y()
 		  - s.height()/2), *_img);
 	}
 
@@ -100,5 +100,6 @@ void TextPointItem::paint(QPainter *painter) const
 	}
 
 	//painter->setPen(Qt::red);
+	//painter->setRenderHint(QPainter::Antialiasing, false);
 	//painter->drawRect(_rect);
 }

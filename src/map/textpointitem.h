@@ -31,7 +31,7 @@ private:
 	const QFont *_font;
 	const QImage *_img;
 	const QColor *_color, *_haloColor, *_bgColor;
-	QRect _rect, _textRect;
+	QRectF _rect, _textRect;
 	QPainterPath _shape;
 };
 
