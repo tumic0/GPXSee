@@ -2,7 +2,7 @@
 #define MBTILESMAP_H
 
 #include <QSqlDatabase>
-#include "common/range.h"
+#include <QVector>
 #include "map.h"
 
 class MBTilesMap : public Map
@@ -16,8 +16,8 @@ public:
 	RectC llBounds() {return _bounds;}
 	qreal resolution(const QRectF &rect);
 
-	int zoom() const {return _zoom;}
-	void setZoom(int zoom) {_zoom = zoom;}
+	int zoom() const {return _zi;}
+	void setZoom(int zoom) {_zi = zoom;}
 	int zoomFit(const QSize &size, const RectC &rect);
 	int zoomIn();
 	int zoomOut();
@@ -35,7 +35,6 @@ public:
 	QString errorString() const {return _errorString;}
 
 private:
-	int limitZoom(int zoom) const;
 	qreal tileSize() const;
 	qreal coordinatesRatio() const;
 	qreal imageRatio() const;
@@ -46,8 +45,8 @@ private:
 
 	QString _name;
 	RectC _bounds;
-	Range _zooms;
-	int _zoom;
+	QVector<int> _zooms;
+	int _zi;
 	int _tileSize;
 	qreal _mapRatio, _tileRatio;
 	bool _scalable;
