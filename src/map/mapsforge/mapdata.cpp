@@ -384,7 +384,7 @@ bool MapData::readHeader()
 
 MapData::MapData(const QString &fileName) : _file(fileName)
 {
-	if (!_file.open(QFile::ReadOnly)) {
+	if (!_file.open(QFile::ReadOnly | QIODevice::Unbuffered)) {
 		_errorString = _file.errorString();
 		return;
 	}
@@ -419,7 +419,7 @@ RectC MapData::bounds() const
 
 void MapData::load()
 {
-	if (_file.open(QIODevice::ReadOnly))
+	if (_file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
 		readSubFiles();
 }
 
