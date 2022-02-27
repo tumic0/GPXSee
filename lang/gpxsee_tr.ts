@@ -323,7 +323,7 @@
         <location filename="../src/GUI/gui.cpp" line="789"/>
         <location filename="../src/GUI/gui.cpp" line="790"/>
         <source>Keyboard controls</source>
-        <translation>Klavye kontrolleri</translation>
+        <translation>Klavye denetimleri</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="197"/>
@@ -578,7 +578,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="485"/>
         <source>Imperial</source>
-        <translation>Emperyal</translation>
+        <translation>İngiliz</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="491"/>
@@ -788,12 +788,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="815"/>
         <source>Digital zoom</source>
-        <translation>Sayısal zum</translation>
+        <translation>Dijital yakınlaştırma</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="816"/>
         <source>Zoom</source>
-        <translation>Zum</translation>
+        <translation>Yakınlaştırma</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="817"/>
@@ -992,7 +992,7 @@
     <message>
         <location filename="../src/GUI/graphview.cpp" line="55"/>
         <source>Data not available</source>
-        <translation>Data erişilemez</translation>
+        <translation>Veri yok</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="75"/>
@@ -1024,7 +1024,7 @@
     <message>
         <location filename="../src/GUI/graphview.cpp" line="128"/>
         <source>km</source>
-        <translation>Km</translation>
+        <translation>km</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="134"/>
@@ -1034,7 +1034,7 @@
     <message>
         <location filename="../src/GUI/graphview.cpp" line="137"/>
         <source>min</source>
-        <translation>dk</translation>
+        <translation>dak</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="140"/>
@@ -1113,12 +1113,12 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="134"/>
         <source>MBTiles maps</source>
-        <translation>MBTiles haritalar</translation>
+        <translation>MBTiles haritaları</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="129"/>
         <source>Garmin JNX maps</source>
-        <translation>Garmin JNX haritalar</translation>
+        <translation>Garmin JNX haritaları</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="126"/>
@@ -1148,7 +1148,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="133"/>
         <source>OziExplorer maps</source>
-        <translation>OziExplorer haritalar</translation>
+        <translation>OziExplorer haritaları</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="135"/>
@@ -1158,12 +1158,12 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="139"/>
         <source>TrekBuddy maps/atlases</source>
-        <translation>TrekBuddy haritalar/atlaslar</translation>
+        <translation>TrekBuddy haritaları/atlasları</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="140"/>
         <source>GeoTIFF images</source>
-        <translation>GeoTIFF görüntüler</translation>
+        <translation>GeoTIFF görüntüleri</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="136"/>
@@ -1178,12 +1178,12 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="141"/>
         <source>World-file georeferenced images</source>
-        <translation>World-file coğrafi referanslı görüntüler</translation>
+        <translation>World-file coğrafi referanslı görüntüleri</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="143"/>
         <source>Online map sources</source>
-        <translation>Online harita kaynakları</translation>
+        <translation>Çevrim içi harita kaynakları</translation>
     </message>
 </context>
 <context>
@@ -1515,7 +1515,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="510"/>
         <source>Minimal duration:</source>
-        <translation>Minimum süre:</translation>
+        <translation>Asgari süre:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="393"/>
@@ -1525,7 +1525,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="394"/>
         <source>Recorded by device</source>
-        <translation>Cihazdan kaydedilen</translation>
+        <translation>Aygıttan kaydedilen</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="399"/>
@@ -1646,7 +1646,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="541"/>
         <source>km</source>
-        <translation>Km</translation>
+        <translation>km</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="551"/>
@@ -1729,7 +1729,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="676"/>
         <source>Item count (&gt;1)</source>
-        <translation>Öğe sayısı (&gt;1)</translation>
+        <translation>Öge sayısı (&gt;1)</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="691"/>
@@ -1749,7 +1749,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="710"/>
         <source>Use OpenGL</source>
-        <translation>OpenGL Kullan</translation>
+        <translation>OpenGL kullan</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="712"/>
@@ -1833,7 +1833,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="801"/>
         <source>Print &amp; Export</source>
-        <translation>Yazdır &amp; Dışa ver</translation>
+        <translation>Yazdır &amp; Dışa aktar</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="835"/>
@@ -2099,7 +2099,7 @@
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="114"/>
         <source>km</source>
-        <translation>Km</translation>
+        <translation>km</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="115"/>
