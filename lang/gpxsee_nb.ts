@@ -25,7 +25,7 @@
         <location filename="../src/GUI/cadencegraph.cpp" line="12"/>
         <location filename="../src/GUI/cadencegraph.h" line="16"/>
         <source>Cadence</source>
-        <translation>Stegfrekvens</translation>
+        <translation>Kadens</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="27"/>
@@ -157,7 +157,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="167"/>
         <source>TwoNav files</source>
-        <translation type="unfinished"></translation>
+        <translation>TwoNav-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="168"/>
@@ -175,7 +175,7 @@
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="38"/>
         <source>Select directory</source>
-        <translation type="unfinished">Velg mappe</translation>
+        <translation>Velg mappe</translation>
     </message>
 </context>
 <context>
@@ -369,7 +369,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="253"/>
         <source>Load POI file...</source>
-        <translation>Last inn POI-fil…</translation>
+        <translation>Last inn interessepunkt-fil…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="258"/>
@@ -384,22 +384,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="268"/>
         <source>Overlap POIs</source>
-        <translation>Overlapp POI-er</translation>
+        <translation>Overlapp interessepunkter</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="273"/>
         <source>Show POI icons</source>
-        <translation>Vis POI-ikoner</translation>
+        <translation>Vis interessepunktikoner</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="278"/>
         <source>Show POI labels</source>
-        <translation>Vis POI-etiketter</translation>
+        <translation>Vis interessepunktetiketter</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="283"/>
         <source>Show POIs</source>
-        <translation>Vis POI-er</translation>
+        <translation>Vis interessepunkter</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="294"/>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="309"/>
         <source>Load map directory...</source>
-        <translation type="unfinished">Last inn kartmappe …</translation>
+        <translation>Last inn kartmappe…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="312"/>
@@ -436,22 +436,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="335"/>
         <source>Show position</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis posisjon</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="341"/>
         <source>Follow position</source>
-        <translation type="unfinished"></translation>
+        <translation>Følg posisjon</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="346"/>
         <source>Show coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis koordinater</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>Show motion info</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis bevegelsesinfo</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="359"/>
@@ -521,7 +521,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="423"/>
         <source>Show local DEM tiles</source>
-        <translation>Vis lokale DEM-flis</translation>
+        <translation>Vis lokale DEM-fliser</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="428"/>
@@ -533,7 +533,7 @@
         <location filename="../src/GUI/gui.cpp" line="1252"/>
         <location filename="../src/GUI/gui.cpp" line="1320"/>
         <source>Distance</source>
-        <translation>Avstand</translation>
+        <translation>Distanse</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="444"/>
@@ -551,7 +551,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="455"/>
         <source>Show slider info</source>
-        <translation>Vis linjalinfo</translation>
+        <translation>Vis skyverinfo</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="462"/>
@@ -578,7 +578,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="485"/>
         <source>Imperial</source>
-        <translation>Imperial</translation>
+        <translation>Britisk</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="491"/>
@@ -593,7 +593,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="505"/>
         <source>Degrees and decimal minutes (DMM)</source>
-        <translation>Desimalgrader og desimalminutter (DMM)</translation>
+        <translation>Grader og desimalminutter (DMM)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="512"/>
@@ -608,7 +608,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="524"/>
         <source>Options...</source>
-        <translation>Valg…</translation>
+        <translation>Alternativer…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="529"/>
@@ -648,17 +648,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="626"/>
         <source>&amp;POI</source>
-        <translation>&amp;POI</translation>
+        <translation>I&amp;nteressepunkt</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="642"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Posisjon</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="842"/>
         <source>Symbols directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbolmappe:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1777"/>
@@ -833,7 +833,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="834"/>
         <source>POI directory:</source>
-        <translation>POI-mappe:</translation>
+        <translation>Interessepunktmappe:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="836"/>
@@ -859,12 +859,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="970"/>
         <source>Open POI file</source>
-        <translation>Åpne POI-fil</translation>
+        <translation>Åpne interessepunktfil</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="996"/>
         <source>Error loading POI file:</source>
-        <translation>Kunne ikke laste inn POI-fil:</translation>
+        <translation>Kunne ikke laste inn interessepunktfil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1226"/>
@@ -930,7 +930,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1810"/>
         <source>No local DEM tiles found.</source>
-        <translation>Fant ingen lokale DEM-flis.</translation>
+        <translation>Fant ingen lokale DEM-fliser.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1824"/>
@@ -999,7 +999,7 @@
         <location filename="../src/GUI/graphview.cpp" line="75"/>
         <location filename="../src/GUI/graphview.cpp" line="177"/>
         <source>Distance</source>
-        <translation>Avsntand</translation>
+        <translation>Distanse</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="109"/>
@@ -1053,7 +1053,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="11"/>
         <source>bpm</source>
-        <translation>bpm</translation>
+        <translation>slag/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="12"/>
@@ -1083,7 +1083,7 @@
         <location filename="../src/GUI/heartrategraphitem.cpp" line="18"/>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="20"/>
         <source>bpm</source>
-        <translation>s/m</translation>
+        <translation>slag/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraphitem.cpp" line="19"/>
@@ -1154,7 +1154,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="135"/>
         <source>QuickChart maps</source>
-        <translation type="unfinished"></translation>
+        <translation>QuickChart-kart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="137"/>
@@ -1179,7 +1179,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="141"/>
         <source>World-file georeferenced images</source>
-        <translation type="unfinished">Verdensfil for georefererte bilder</translation>
+        <translation>World-file georefererte bilder</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="143"/>
@@ -1212,7 +1212,7 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="103"/>
         <source>m/min</source>
-        <translation type="unfinished"></translation>
+        <translation>m/min</translation>
     </message>
 </context>
 <context>
@@ -1379,17 +1379,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="221"/>
         <source>POI color:</source>
-        <translation>POI-farge:</translation>
+        <translation>Interessepunktfarge:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="222"/>
         <source>POI size:</source>
-        <translation>POI-størrelse:</translation>
+        <translation>Interessepunktstørrelse:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="233"/>
         <source>POIs</source>
-        <translation>POI-er</translation>
+        <translation>Interessepunkter</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="255"/>
@@ -1521,7 +1521,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="393"/>
         <source>Computed from distance/time</source>
-        <translation>Utregnet fra avstand/tid</translation>
+        <translation>Beregnet fra distanse/tid</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="394"/>
@@ -1616,17 +1616,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="283"/>
         <source>Info background</source>
-        <translation type="unfinished"></translation>
+        <translation>Info-bakgrunn</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
         <source>Crosshair color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Trådkorsfarge:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="290"/>
         <source>Info color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Info-farge:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="363"/>
@@ -1653,7 +1653,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="551"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="798"/>
         <source>POI</source>
-        <translation>POI</translation>
+        <translation>Interessepunkt</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="566"/>
@@ -1680,7 +1680,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="622"/>
         <source>Plugin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Programtillegg:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
@@ -1715,7 +1715,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="670"/>
         <source>Distance</source>
-        <translation>Avstand</translation>
+        <translation>Distanse</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="672"/>
@@ -1799,7 +1799,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="763"/>
         <source>POI:</source>
-        <translation type="unfinished">POI:</translation>
+        <translation>Interessepunkt:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="774"/>
@@ -1829,17 +1829,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="800"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Posisjon</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="801"/>
         <source>Print &amp; Export</source>
-        <translation>Utskrift og ekport</translation>
+        <translation>Utskrift og eksport</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="835"/>
         <source>Options</source>
-        <translation>Valg</translation>
+        <translation>Alternativer</translation>
     </message>
 </context>
 <context>
@@ -1947,7 +1947,7 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="38"/>
         <source>Use anti-aliasing</source>
-        <translation type="unfinished">Bruk kanutjevning</translation>
+        <translation>Bruk kantutjevning</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="42"/>
@@ -2071,7 +2071,7 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="21"/>
         <source>Distance</source>
-        <translation>Avstand</translation>
+        <translation>Distanse</translation>
     </message>
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="32"/>
@@ -2154,7 +2154,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="130"/>
         <source>mi/h</source>
-        <translation>mi/t</translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="133"/>
@@ -2167,7 +2167,7 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="23"/>
         <source>mi/h</source>
-        <translation>mi/t</translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
@@ -2292,7 +2292,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="20"/>
         <source>Distance</source>
-        <translation>Avstand</translation>
+        <translation>Distanse</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="23"/>
