@@ -10,6 +10,7 @@ class LBLFile;
 class RGNFile;
 class SubDiv;
 class HuffmanTable;
+class BitStream4R;
 
 class NETFile : public SubFile
 {
@@ -36,8 +37,13 @@ public:
 	bool hasLinks() const {return (_linksSize > 0);}
 
 private:
-	bool linkLabel(Handle &hdl, quint32 offset, quint32 size,
-	  const LBLFile *lbl, Handle &lblHdl, Label &label) const;
+	bool linkLabel(Handle &hdl, quint32 offset, const LBLFile *lbl,
+	  Handle &lblHdl, Label &label) const;
+	bool readShape(const NODFile *nod, SubFile::Handle &nodHdl,
+	  NODFile::AdjacencyInfo &adj, BitStream4R &bs, const SubDiv *subdiv,
+	  quint32 shift, quint16 cnt, bool check, MapData::Poly &poly) const;
+	bool readLine(BitStream4R &bs, const SubDiv *subdiv,
+	  MapData::Poly &poly) const;
 
 	HuffmanTable *_huffmanTable;
 	const HuffmanTable *_tp;

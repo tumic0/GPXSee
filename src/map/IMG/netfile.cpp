@@ -95,48 +95,8 @@ static bool seekToLine(BitStream4R &bs, quint8 line)
 	return true;
 }
 
-static bool readLine(BitStream4R &bs, const SubDiv *subdiv,
-  const HuffmanTable *table, MapData::Poly &poly)
-{
-	quint32 v1, v2, v2b;
-	if (!bs.readVUint32SM(v1, v2, v2b))
-		return false;
-	bs.resize(v1);
-
-	quint32 lon, lat;
-	if (!(bs.read(0x12 - v2b, lon) && bs.read(16, lat)))
-		return false;
-	if (2 < v2b)
-		lon |= (v2 >> 2) << (0x12U - v2b);
-
-	QPoint pos = QPoint(LS(subdiv->lon(), 8) + LS((qint16)lon, 32-subdiv->bits()),
-	  LS(subdiv->lat(), 8) + LS((qint16)lat, 32-subdiv->bits()));
-	Coordinates c(toWGS32(pos.x()), toWGS32(pos.y()));
-
-	poly.boundingRect = RectC(c, c);
-	poly.points.append(QPointF(c.lon(), c.lat()));
-
-	HuffmanDeltaStreamR stream(bs, *table);
-	if (!stream.init())
-		return false;
-	qint32 lonDelta, latDelta;
-
-	while (stream.readNext(lonDelta, latDelta)) {
-		pos.rx() += LS(lonDelta, 32-subdiv->bits());
-		if (pos.rx() < 0 && subdiv->lon() >= 0)
-			pos.rx() = 0x7fffffff;
-		pos.ry() += LS(latDelta, 32-subdiv->bits());
-
-		Coordinates c(toWGS32(pos.x()), toWGS32(pos.y()));
-		poly.points.append(QPointF(c.lon(), c.lat()));
-		poly.boundingRect = poly.boundingRect.united(c);
-	}
-
-	return stream.atEnd();
-}
-
 static bool readNodeGeometry(const NODFile *nod, SubFile::Handle &nodHdl,
-  NODFile::AdjacencyInfo &adj, MapData::Poly &poly, quint16 cnt = 0xFFFF)
+  NODFile::AdjacencyInfo &adj, quint16 cnt, MapData::Poly &poly)
 {
 	for (int i = 0; i <= cnt; i++) {
 		int ret = nod->nextNode(nodHdl, adj);
@@ -164,10 +124,50 @@ static bool skipNodes(const NODFile *nod, SubFile::Handle &nodHdl,
 	return true;
 }
 
-static bool readShape(const NODFile *nod, SubFile::Handle &nodHdl,
-  NODFile::AdjacencyInfo &adj, BitStream4R &bs, const HuffmanTable *table,
-  const SubDiv *subdiv, quint32 shift, MapData::Poly &poly,
-  quint16 cnt = 0xFFFF, bool check = false)
+
+bool NETFile::readLine(BitStream4R &bs, const SubDiv *subdiv,
+  MapData::Poly &poly) const
+{
+	quint32 v1, v2, v2b;
+	if (!bs.readVUint32SM(v1, v2, v2b))
+		return false;
+	bs.resize(v1);
+
+	quint32 lon, lat;
+	if (!(bs.read(0x12 - v2b, lon) && bs.read(16, lat)))
+		return false;
+	if (2 < v2b)
+		lon |= (v2 >> 2) << (0x12U - v2b);
+
+	QPoint pos = QPoint(LS(subdiv->lon(), 8) + LS((qint16)lon, 32-subdiv->bits()),
+	  LS(subdiv->lat(), 8) + LS((qint16)lat, 32-subdiv->bits()));
+	Coordinates c(toWGS32(pos.x()), toWGS32(pos.y()));
+
+	poly.boundingRect = RectC(c, c);
+	poly.points.append(QPointF(c.lon(), c.lat()));
+
+	HuffmanDeltaStreamR stream(bs, *_tp);
+	if (!stream.init())
+		return false;
+	qint32 lonDelta, latDelta;
+
+	while (stream.readNext(lonDelta, latDelta)) {
+		pos.rx() += LS(lonDelta, 32-subdiv->bits());
+		if (pos.rx() < 0 && subdiv->lon() >= 0)
+			pos.rx() = 0x7fffffff;
+		pos.ry() += LS(latDelta, 32-subdiv->bits());
+
+		Coordinates c(toWGS32(pos.x()), toWGS32(pos.y()));
+		poly.points.append(QPointF(c.lon(), c.lat()));
+		poly.boundingRect = poly.boundingRect.united(c);
+	}
+
+	return stream.atEnd();
+}
+
+bool NETFile::readShape(const NODFile *nod, SubFile::Handle &nodHdl,
+  NODFile::AdjacencyInfo &adj, BitStream4R &bs, const SubDiv *subdiv,
+  quint32 shift, quint16 cnt, bool check, MapData::Poly &poly) const
 {
 	quint32 v1, v2, v2b;
 	if (!bs.readVUint32SM(v1, v2, v2b))
@@ -185,7 +185,7 @@ static bool readShape(const NODFile *nod, SubFile::Handle &nodHdl,
 	bool startWithStream = flags & (1 << (v2b + 6));
 	bool useEosBit = flags & (1 << (v2b + 5));
 
-	HuffmanDeltaStreamR stream(bs, *table);
+	HuffmanDeltaStreamR stream(bs, *_tp);
 	if (!stream.init(flags, v2b + 5))
 		return false;
 
@@ -325,18 +325,12 @@ static bool readShape(const NODFile *nod, SubFile::Handle &nodHdl,
 	return true;
 }
 
-
-NETFile::~NETFile()
-{
-	delete _huffmanTable;
-}
-
-bool NETFile::linkLabel(Handle &hdl, quint32 offset, quint32 size,
+bool NETFile::linkLabel(Handle &hdl, quint32 offset,
   const LBLFile *lbl, Handle &lblHdl, Label &label) const
 {
 	if (!seek(hdl, offset))
 		return false;
-	BitStream1 bs(*this, hdl, size);
+	BitStream1 bs(*this, hdl, _linksSize - (offset - _linksOffset));
 
 	quint32 flags, labelPtr;
 	if (!bs.read(8, flags))
@@ -389,6 +383,11 @@ void NETFile::clear()
 	_huffmanTable = 0;
 }
 
+NETFile::~NETFile()
+{
+	delete _huffmanTable;
+}
+
 bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
   const NODFile *nod, Handle &nodHdl2, Handle &nodHdl, const LBLFile *lbl,
   Handle &lblHdl, const NODFile::BlockInfo &blockInfo, quint8 linkId,
@@ -430,10 +429,11 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 
 		if (singleTopology) {
 			if (firstIsShape) {
-				if (!readShape(nod, nodHdl, adj, bs, _tp, subdiv, shift, poly))
+				if (!readShape(nod, nodHdl, adj, bs, subdiv, shift, 0xFFFF,
+				  false, poly))
 					return false;
 			} else {
-				if (!readNodeGeometry(nod, nodHdl, adj, poly))
+				if (!readNodeGeometry(nod, nodHdl, adj, 0xFFFF, poly))
 					return false;
 			}
 		} else {
@@ -444,11 +444,11 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 				if (i == lineId) {
 					if (shape) {
 						bool check = (i < ca.size()) ? (ca.at(i) & mask) : false;
-						if (!readShape(nod, nodHdl, adj, bs, _tp, subdiv,
-						  shift, poly, step, check))
+						if (!readShape(nod, nodHdl, adj, bs, subdiv, shift,
+						  step, check, poly))
 							return false;
 					} else {
-						if (!readNodeGeometry(nod, nodHdl, adj, poly, step))
+						if (!readNodeGeometry(nod, nodHdl, adj, step, poly))
 							return false;
 					}
 					break;
@@ -470,13 +470,12 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 			return false;
 		if (!seekToLine(bs, lineId))
 			return false;
-		if (!readLine(bs, subdiv, _tp, poly))
+		if (!readLine(bs, subdiv, poly))
 			return false;
 	}
 
 	if (lbl)
-		linkLabel(hdl, linkOffset, _linksSize - (linkOffset - _linksOffset),
-		  lbl, lblHdl, poly.label);
+		linkLabel(hdl, linkOffset, lbl, lblHdl, poly.label);
 
 	lines->append(poly);
 
