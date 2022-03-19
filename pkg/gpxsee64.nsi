@@ -439,27 +439,31 @@ SectionEnd
 
 ;-------------------------------
 
-;Descriptions
+; Descriptions
 
-;Language strings
+; Language strings
 LangString DESC_QT ${LANG_ENGLISH} \
   "QT cross-platform application framework."
 LangString DESC_MSVC ${LANG_ENGLISH} \
   "Microsoft Visual C++ 2017 runtime. If already installed, will be skipped."
 LangString DESC_OPENSSL ${LANG_ENGLISH} \
   "OpenSSL library. Required for HTTPS to work."
+!ifndef QT6
 LangString DESC_ANGLE ${LANG_ENGLISH} \
   "ANGLE (OpenGL via Direct3D). Enables OpenGL on systems without native OpenGL drivers."
+!endif
 LangString DESC_APP ${LANG_ENGLISH} \
   "GPXSee application"
 LangString DESC_LOCALIZATION ${LANG_ENGLISH} \
   "Localization"
 
-;Assign language strings to sections
+; Assign language strings to sections
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_QT} $(DESC_QT)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_OPENSSL} $(DESC_OPENSSL)
+!ifndef QT6
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_ANGLE} $(DESC_ANGLE)
+!endif
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_MSVC} $(DESC_MSVC) 
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_APP} $(DESC_APP)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_LOCALIZATION} $(DESC_LOCALIZATION)
