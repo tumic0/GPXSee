@@ -608,7 +608,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="524"/>
         <source>Options...</source>
-        <translation>Valg…</translation>
+        <translation>Alternativer…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="529"/>
