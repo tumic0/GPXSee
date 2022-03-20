@@ -511,7 +511,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="412"/>
         <source>Coordinates</source>
-        <translation type="unfinished">Koordinater</translation>
+        <translation>Koordinater</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="418"/>
@@ -935,7 +935,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1824"/>
         <source>No files loaded</source>
-        <translation>Ingen filer lastet opp</translation>
+        <translation>Ingen filer lastet</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1828"/>
@@ -1096,12 +1096,12 @@
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="77"/>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="79"/>
         <source>File</source>
-        <translation type="unfinished">Fil</translation>
+        <translation>Fil</translation>
     </message>
 </context>
 <context>
@@ -1192,22 +1192,22 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="87"/>
         <source>kn</source>
-        <translation type="unfinished">kn</translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="90"/>
         <source>mi/h</source>
-        <translation type="unfinished">mi/t</translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="93"/>
         <source>km/h</source>
-        <translation type="unfinished">km/t</translation>
+        <translation>km/t</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="100"/>
         <source>ft/min</source>
-        <translation type="unfinished"></translation>
+        <translation>ft/min</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="103"/>
@@ -1262,22 +1262,22 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="59"/>
         <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="unfinished">Velg rett kartprojeksjon for kart uten projeksjonsdefinisjon (JNX, KMZ, og verdensfilkart).</translation>
+        <translation>Velg riktig projeksjon for kart uten projeksjonsdefinisjon (JNX, KMZ og World-file kart).</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="61"/>
         <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished">Velg rett kartprojeksjon for vektorielle kart (IMG- og Mapsforge-kart). Kartprojeksjonen må være gyldig for hele kartområdet.</translation>
+        <translation>Velg ønsket projeksjon for vektorkart (IMG og Mapsforge-kart). Projeksjonen må være gyldig for hele kartområdet.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="83"/>
         <source>Input</source>
-        <translation type="unfinished">Inndata</translation>
+        <translation>Inndata</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="85"/>
         <source>Output</source>
-        <translation type="unfinished">Utdata</translation>
+        <translation>Utdata</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="155"/>
