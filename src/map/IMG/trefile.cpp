@@ -235,6 +235,9 @@ bool TREFile::load(int idx)
 			totalSubdivs += _levels.at(i).subdivs;
 		quint32 extendedSubdivs = _extended.size / _extended.itemSize;
 		quint32 diff = totalSubdivs - extendedSubdivs + 1;
+		if (skip < diff)
+			return true;
+
 		if (!seek(hdl, _extended.offset + (skip - diff) * _extended.itemSize))
 			goto error;
 
