@@ -476,7 +476,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="377"/>
         <source>Waypoint icons</source>
-        <translation>Veipunktsikoner</translation>
+        <translation>Veipunktikoner</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="382"/>
@@ -603,7 +603,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="518"/>
         <source>Fullscreen mode</source>
-        <translation>Fullskjermsmodus</translation>
+        <translation>Fullskjermmodus</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="524"/>
@@ -1352,12 +1352,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="218"/>
         <source>Waypoint color:</source>
-        <translation>Veipunktsfarge:</translation>
+        <translation>Veipunktfarge:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="219"/>
         <source>Waypoint size:</source>
-        <translation>Veipunktsstørrelse:</translation>
+        <translation>Veipunktstørrelse:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="226"/>
@@ -1401,7 +1401,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="256"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="262"/>
         <source>Slider color:</source>
-        <translation>Farge på skyveregulering:</translation>
+        <translation>Skyverfarge:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="287"/>
@@ -1755,7 +1755,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="712"/>
         <source>Enable HTTP/2</source>
-        <translation>Skru på HTTP/2</translation>
+        <translation>Aktiver HTTP/2</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="718"/>
