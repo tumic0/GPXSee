@@ -290,7 +290,7 @@ void TREFile::clear()
 int TREFile::level(int bits, bool baseMap)
 {
 	if (baseMap) {
-		if (!_isBaseMap && _levels.first().bits > bits)
+		if (!_isBaseMap && _levels.at(_firstLevel).bits > bits)
 			return -1;
 		if (_isBaseMap && bits > _levels.last().bits)
 			return -1;
