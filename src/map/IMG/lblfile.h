@@ -3,6 +3,7 @@
 
 #include <QPixmap>
 #include "common/textcodec.h"
+#include "section.h"
 #include "subfile.h"
 #include "label.h"
 
@@ -15,17 +16,14 @@ class LBLFile : public SubFile
 {
 public:
 	LBLFile(const IMGData *img)
-	  : SubFile(img), _huffmanText(0), _table(0), _rasters(0), _offset(0),
-	  _size(0), _poiOffset(0), _poiSize(0), _imgOffsetIdSize(0),
-	  _poiMultiplier(0), _multiplier(0), _encoding(0) {}
+	  : SubFile(img), _huffmanText(0), _table(0), _rasters(0), _imgIdSize(0),
+	  _poiShift(0), _shift(0), _encoding(0) {}
 	LBLFile(const QString *path)
-	  : SubFile(path), _huffmanText(0), _table(0), _rasters(0), _offset(0),
-	  _size(0), _poiOffset(0), _poiSize(0), _imgOffsetIdSize(0),
-	  _poiMultiplier(0), _multiplier(0), _encoding(0) {}
-	LBLFile(const SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
-	  _huffmanText(0), _table(0), _rasters(0), _offset(0), _size(0),
-	  _poiOffset(0), _poiSize(0), _imgOffsetIdSize(0), _poiMultiplier(0),
-	  _multiplier(0), _encoding(0) {}
+	  : SubFile(path), _huffmanText(0), _table(0), _rasters(0), _imgIdSize(0),
+	  _poiShift(0), _shift(0), _encoding(0) {}
+	LBLFile(const SubFile *gmp, quint32 offset)
+	  : SubFile(gmp, offset), _huffmanText(0), _table(0), _rasters(0),
+	  _imgIdSize(0), _poiShift(0), _shift(0), _encoding(0) {}
 	~LBLFile();
 
 	bool load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl);
@@ -36,7 +34,7 @@ public:
 	Label label(Handle &hdl, const SubFile *file, Handle &fileHdl,
 	  quint32 size, bool capitalize = true, bool convert = false) const;
 
-	quint8 imageIdSize() const {return _imgOffsetIdSize;}
+	quint8 imageIdSize() const {return _imgIdSize;}
 	QPixmap image(Handle &hdl, quint32 id) const;
 
 private:
@@ -60,16 +58,11 @@ private:
 	quint32 *_table;
 	Image *_rasters;
 	TextCodec _codec;
-	quint32 _offset;
-	quint32 _size;
-	quint32 _poiOffset;
-	quint32 _poiSize;
-	quint32 _imgOffset;
-	quint32 _imgSize;
+	Section _base, _poi, _img;
 	quint32 _imgCount;
-	quint8 _imgOffsetIdSize;
-	quint8 _poiMultiplier;
-	quint8 _multiplier;
+	quint8 _imgIdSize;
+	quint8 _poiShift;
+	quint8 _shift;
 	quint8 _encoding;
 };
 

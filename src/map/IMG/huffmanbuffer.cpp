@@ -5,7 +5,7 @@ using namespace IMG;
 
 bool HuffmanBuffer::load(const RGNFile *rgn, SubFile::Handle &rgnHdl)
 {
-	quint32 recordSize, recordOffset = rgn->dictOffset();
+	quint32 recordSize, recordOffset = rgn->dict().offset;
 
 	for (int i = 0; i <= _id; i++) {
 		if (!rgn->seek(rgnHdl, recordOffset))
@@ -13,7 +13,7 @@ bool HuffmanBuffer::load(const RGNFile *rgn, SubFile::Handle &rgnHdl)
 		if (!rgn->readVUInt32(rgnHdl, recordSize))
 			return false;
 		recordOffset = rgn->pos(rgnHdl) + recordSize;
-		if (recordOffset > rgn->dictOffset() + rgn->dictSize())
+		if (recordOffset > rgn->dict().offset + rgn->dict().size)
 			return false;
 	};
 

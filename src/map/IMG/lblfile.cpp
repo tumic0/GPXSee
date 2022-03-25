@@ -77,11 +77,11 @@ bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 	quint16 hdrLen, codepage;
 
 	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)
-	  && seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _offset)
-	  && readUInt32(hdl, _size) && readByte(hdl, &_multiplier)
+	  && seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _base.offset)
+	  && readUInt32(hdl, _base.size) && readByte(hdl, &_shift)
 	  && readByte(hdl, &_encoding) && seek(hdl, _gmpOffset + 0x57)
-	  && readUInt32(hdl, _poiOffset) && readUInt32(hdl, _poiSize)
-	  && readByte(hdl, &_poiMultiplier) && seek(hdl, _gmpOffset + 0xAA)
+	  && readUInt32(hdl, _poi.offset) && readUInt32(hdl, _poi.size)
+	  && readByte(hdl, &_poiShift) && seek(hdl, _gmpOffset + 0xAA)
 	  && readUInt16(hdl, codepage)))
 		return false;
 
@@ -107,8 +107,8 @@ bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 		quint32 offset, recordSize, size, flags;
 		if (!(seek(hdl, _gmpOffset + 0x184) && readUInt32(hdl, offset)
 		  && readUInt32(hdl, size) && readUInt16(hdl, recordSize)
-		  && readUInt32(hdl, flags) && readUInt32(hdl, _imgOffset)
-		  && readUInt32(hdl, _imgSize)))
+		  && readUInt32(hdl, flags) && readUInt32(hdl, _img.offset)
+		  && readUInt32(hdl, _img.size)))
 			return false;
 
 		if (size && recordSize)
@@ -278,7 +278,7 @@ Label LBLFile::labelHuffman(Handle &hdl, const SubFile *file, Handle &fileHdl,
 	for (int i = 0; i < str.size(); i++) {
 		quint32 val = _table[str.at(i)];
 		if (val) {
-			quint32 off = _offset + ((val & 0x7fffff) << _multiplier);
+			quint32 off = _base.offset + ((val & 0x7fffff) << _shift);
 			if (!seek(hdl, off))
 				return Label();
 
@@ -287,7 +287,8 @@ Label LBLFile::labelHuffman(Handle &hdl, const SubFile *file, Handle &fileHdl,
 			else if (str2.size())
 				str2.append(' ');
 
-			if (!_huffmanText->decode(this, hdl, _offset + _size - off, str2))
+			if (!_huffmanText->decode(this, hdl, _base.offset + _base.size - off,
+			  str2))
 				return Label();
 		} else {
 			if (str.at(i) == 7) {
@@ -309,21 +310,21 @@ Label LBLFile::label(Handle &hdl, quint32 offset, bool poi, bool capitalize,
 	quint32 labelOffset;
 	if (poi) {
 		quint32 poiOffset;
-		if (!(_poiSize >= (offset << _poiMultiplier)
-		  && seek(hdl, _poiOffset + (offset << _poiMultiplier))
+		if (!(_poi.size >= (offset << _poiShift)
+		  && seek(hdl, _poi.offset + (offset << _poiShift))
 		  && readUInt24(hdl, poiOffset) && (poiOffset & 0x3FFFFF)))
 			return Label();
-		labelOffset = _offset + ((poiOffset & 0x3FFFFF) << _multiplier);
+		labelOffset = _base.offset + ((poiOffset & 0x3FFFFF) << _shift);
 	} else
-		labelOffset = _offset + (offset << _multiplier);
+		labelOffset = _base.offset + (offset << _shift);
 
-	if (labelOffset > _offset + _size)
+	if (labelOffset > _base.offset + _base.size)
 		return Label();
 	if (!seek(hdl, labelOffset))
 		return Label();
 
-	return label(hdl, this, hdl, _offset + _size - labelOffset, capitalize,
-	  convert);
+	return label(hdl, this, hdl, _base.offset + _base.size - labelOffset,
+	  capitalize, convert);
 }
 
 Label LBLFile::label(Handle &hdl, const SubFile *file, Handle &fileHdl,
@@ -348,7 +349,7 @@ bool LBLFile::loadRasterTable(Handle &hdl, quint32 offset, quint32 size,
 	quint32 prev, cur;
 
 	_imgCount = size / recordSize;
-	_imgOffsetIdSize = byteSize(_imgCount - 1);
+	_imgIdSize = byteSize(_imgCount - 1);
 	_rasters = new Image[_imgCount];
 
 	if (!(seek(hdl, offset) && readVUInt32(hdl, recordSize, prev)))
@@ -365,7 +366,7 @@ bool LBLFile::loadRasterTable(Handle &hdl, quint32 offset, quint32 size,
 	}
 
 	_rasters[_imgCount-1].offset = prev;
-	_rasters[_imgCount-1].size = _imgSize - prev;
+	_rasters[_imgCount-1].size = _img.size - prev;
 
 	return true;
 }
@@ -377,7 +378,7 @@ QPixmap LBLFile::image(Handle &hdl, quint32 id) const
 	if (id >= _imgCount)
 		return pm;
 
-	if (!seek(hdl, _imgOffset + _rasters[id].offset))
+	if (!seek(hdl, _img.offset + _rasters[id].offset))
 		return pm;
 	QByteArray ba;
 	ba.resize(_rasters[id].size);

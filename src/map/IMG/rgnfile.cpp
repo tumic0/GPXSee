@@ -136,22 +136,22 @@ bool RGNFile::load(Handle &hdl)
 	quint16 hdrLen;
 
 	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)
-	  && seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _offset)
-	  && readUInt32(hdl, _size)))
+	  && seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _base.offset)
+	  && readUInt32(hdl, _base.size)))
 		return false;
 
 	if (hdrLen >= 0x68) {
-		if (!(readUInt32(hdl, _polygonsOffset) && readUInt32(hdl, _polygonsSize)
+		if (!(readUInt32(hdl, _polygons.offset) && readUInt32(hdl, _polygons.size)
 		  && seek(hdl, _gmpOffset + 0x29) && readUInt32(hdl, _polygonsGblFlags)
 		  && readUInt32(hdl, _polygonsLclFlags[0])
 		  && readUInt32(hdl, _polygonsLclFlags[1])
 		  && readUInt32(hdl, _polygonsLclFlags[2])
-		  && readUInt32(hdl, _linesOffset) && readUInt32(hdl, _linesSize)
+		  && readUInt32(hdl, _lines.offset) && readUInt32(hdl, _lines.size)
 		  && seek(hdl, _gmpOffset + 0x45) && readUInt32(hdl, _linesGblFlags)
 		  && readUInt32(hdl, _linesLclFlags[0])
 		  && readUInt32(hdl, _linesLclFlags[1])
 		  && readUInt32(hdl, _linesLclFlags[2])
-		  && readUInt32(hdl, _pointsOffset) && readUInt32(hdl, _pointsSize)
+		  && readUInt32(hdl, _points.offset) && readUInt32(hdl, _points.size)
 		  && seek(hdl, _gmpOffset + 0x61) && readUInt32(hdl, _pointsGblFlags)
 		  && readUInt32(hdl, _pointsLclFlags[0])
 		  && readUInt32(hdl, _pointsLclFlags[1])
@@ -161,11 +161,11 @@ bool RGNFile::load(Handle &hdl)
 
 	if (hdrLen >= 0x7D) {
 		quint32 info;
-		if (!(seek(hdl, _gmpOffset + 0x71) && readUInt32(hdl, _dictOffset)
-		  && readUInt32(hdl, _dictSize) && readUInt32(hdl, info)))
+		if (!(seek(hdl, _gmpOffset + 0x71) && readUInt32(hdl, _dict.offset)
+		  && readUInt32(hdl, _dict.size) && readUInt32(hdl, info)))
 			return false;
 
-		if (_dictSize && _dictOffset && (info & 0x1E)) {
+		if (_dict.size && _dict.offset && (info & 0x1E)) {
 			_huffmanTable = new HuffmanTable(((info >> 1) & 0xF) - 1);
 			if (!_huffmanTable->load(this, hdl))
 				return false;
@@ -556,7 +556,7 @@ bool RGNFile::segments(Handle &hdl, SubDiv *subdiv, SubDiv::Segment seg[5]) cons
 	if (subdiv->offset() == subdiv->end() || !(subdiv->objects() & 0x1F))
 		return true;
 
-	quint32 offset = _offset + subdiv->offset();
+	quint32 offset = _base.offset + subdiv->offset();
 	if (!seek(hdl, offset))
 		return false;
 
@@ -585,7 +585,7 @@ bool RGNFile::segments(Handle &hdl, SubDiv *subdiv, SubDiv::Segment seg[5]) cons
 	}
 
 	seg[lt] = SubDiv::Segment(ls,
-	  subdiv->end() ? _offset + subdiv->end() : _offset + _size);
+	  subdiv->end() ? _base.offset + subdiv->end() : _base.offset + _base.size);
 
 	return true;
 }
@@ -598,24 +598,24 @@ bool RGNFile::subdivInit(Handle &hdl, SubDiv *subdiv) const
 		return false;
 
 	if (subdiv->extPointsOffset() != subdiv->extPointsEnd()) {
-		quint32 start = _pointsOffset + subdiv->extPointsOffset();
+		quint32 start = _points.offset + subdiv->extPointsOffset();
 		quint32 end = subdiv->extPointsEnd()
-		  ? _pointsOffset + subdiv->extPointsEnd()
-		  : _pointsOffset + _pointsSize;
+		  ? _points.offset + subdiv->extPointsEnd()
+		  : _points.offset + _points.size;
 		extPoints = SubDiv::Segment(start, end);
 	}
 	if (subdiv->extPolygonsOffset() != subdiv->extPolygonsEnd()) {
-		quint32 start = _polygonsOffset + subdiv->extPolygonsOffset();
+		quint32 start = _polygons.offset + subdiv->extPolygonsOffset();
 		quint32 end = subdiv->extPolygonsEnd()
-		  ? _polygonsOffset + subdiv->extPolygonsEnd()
-		  : _polygonsOffset + _polygonsSize;
+		  ? _polygons.offset + subdiv->extPolygonsEnd()
+		  : _polygons.offset + _polygons.size;
 		extPolygons = SubDiv::Segment(start, end);
 	}
 	if (subdiv->extLinesOffset() != subdiv->extLinesEnd()) {
-		quint32 start = _linesOffset + subdiv->extLinesOffset();
+		quint32 start = _lines.offset + subdiv->extLinesOffset();
 		quint32 end = subdiv->extLinesEnd()
-		  ? _linesOffset + subdiv->extLinesEnd()
-		  : _linesOffset + _linesSize;
+		  ? _lines.offset + subdiv->extLinesEnd()
+		  : _lines.offset + _lines.size;
 		extLines = SubDiv::Segment(start, end);
 	}
 

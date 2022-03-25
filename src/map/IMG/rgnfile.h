@@ -1,6 +1,7 @@
 #ifndef IMG_RGNFILE_H
 #define IMG_RGNFILE_H
 
+#include "section.h"
 #include "subfile.h"
 #include "subdiv.h"
 
@@ -22,18 +23,10 @@ public:
 		RoadReference
 	};
 
-	RGNFile(const IMGData *img)
-	  : SubFile(img), _huffmanTable(0), _offset(0), _size(0), _polygonsOffset(0),
-	  _polygonsSize(0), _linesOffset(0), _linesSize(0), _pointsOffset(0),
-	  _pointsSize(0) {}
-	RGNFile(const QString *path)
-	  : SubFile(path), _huffmanTable(0), _offset(0), _size(0), _polygonsOffset(0),
-	  _polygonsSize(0), _linesOffset(0), _linesSize(0), _pointsOffset(0),
-	  _pointsSize(0) {}
-	RGNFile(const SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
-	  _huffmanTable(0), _offset(0), _size(0), _polygonsOffset(0),
-	  _polygonsSize(0), _linesOffset(0), _linesSize(0), _pointsOffset(0),
-	  _pointsSize(0) {}
+	RGNFile(const IMGData *img) : SubFile(img), _huffmanTable(0) {}
+	RGNFile(const QString *path) : SubFile(path), _huffmanTable(0) {}
+	RGNFile(const SubFile *gmp, quint32 offset)
+	  : SubFile(gmp, offset), _huffmanTable(0) {}
 	~RGNFile();
 
 	void clear();
@@ -57,8 +50,7 @@ public:
 	bool subdivInit(Handle &hdl, SubDiv *subdiv) const;
 
 	const HuffmanTable *huffmanTable() const {return _huffmanTable;}
-	quint32 dictOffset() const {return _dictOffset;}
-	quint32 dictSize() const {return _dictSize;}
+	const Section &dict() const {return _dict;}
 
 private:
 	bool segments(Handle &hdl, SubDiv *subdiv, SubDiv::Segment seg[5]) const;
@@ -68,24 +60,9 @@ private:
 	bool skipGblFields(Handle &hdl, quint32 flags) const;
 
 	HuffmanTable *_huffmanTable;
-
-	quint32 _offset;
-	quint32 _size;
-	quint32 _dictOffset;
-	quint32 _dictSize;
-
-	quint32 _polygonsOffset;
-	quint32 _polygonsSize;
-	quint32 _polygonsLclFlags[3];
-	quint32 _polygonsGblFlags;
-	quint32 _linesOffset;
-	quint32 _linesSize;
-	quint32 _linesLclFlags[3];
-	quint32 _linesGblFlags;
-	quint32 _pointsOffset;
-	quint32 _pointsSize;
-	quint32 _pointsLclFlags[3];
-	quint32 _pointsGblFlags;
+	Section _base, _dict, _polygons, _lines, _points;
+	quint32 _polygonsGblFlags, _linesGblFlags, _pointsGblFlags;
+	quint32 _polygonsLclFlags[3], _linesLclFlags[3], _pointsLclFlags[3];
 };
 
 }

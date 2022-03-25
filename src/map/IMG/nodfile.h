@@ -1,6 +1,7 @@
 #ifndef IMG_NODFILE_H
 #define IMG_NODFILE_H
 
+#include "section.h"
 #include "subfile.h"
 
 namespace IMG {
@@ -59,16 +60,15 @@ public:
 		bool eog;
 	};
 
-	NODFile(const IMGData *img) : SubFile(img), _indexOffset(0), _indexSize(0),
-	  _indexFlags(0), _blockOffset(0), _blockSize(0), _indexRecordSize(0),
+	NODFile(const IMGData *img)
+	  : SubFile(img), _indexFlags(0), _indexRecordSize(0), _blockRecordSize(0),
+	  _blockShift(0), _nodeShift(0), _indexIdSize(0) {}
+	NODFile(const QString *path)
+	  : SubFile(path), _indexFlags(0), _indexRecordSize(0), _blockRecordSize(0),
+	  _blockShift(0), _nodeShift(0), _indexIdSize(0) {}
+	NODFile(const SubFile *gmp, quint32 offset)
+	  : SubFile(gmp, offset), _indexFlags(0), _indexRecordSize(0),
 	  _blockRecordSize(0), _blockShift(0), _nodeShift(0), _indexIdSize(0) {}
-	NODFile(const QString *path) : SubFile(path), _indexOffset(0), _indexSize(0),
-	  _indexFlags(0), _blockOffset(0), _blockSize(0), _indexRecordSize(0),
-	  _blockRecordSize(0), _blockShift(0), _nodeShift(0), _indexIdSize(0) {}
-	NODFile(const SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
-	  _indexOffset(0), _indexSize(0), _indexFlags(0), _blockOffset(0),
-	  _blockSize(0), _indexRecordSize(0), _blockRecordSize(0), _blockShift(0),
-	  _nodeShift(0), _indexIdSize(0) {}
 
 	bool load(Handle &hdl);
 
@@ -95,8 +95,8 @@ private:
 	bool nodeBlock(Handle &hdl, quint32 nodeOffset, BlockInfo &blockInfo) const;
 	bool readBlock(Handle &hdl, quint32 blockOffset, BlockInfo &blockInfo) const;
 
-	quint32 _flags, _indexOffset, _indexSize, _indexFlags, _blockOffset,
-	  _blockSize;
+	Section _block, _index;
+	quint32 _flags, _indexFlags;
 	quint16 _indexRecordSize, _blockRecordSize;
 	quint8 _blockShift, _nodeShift, _indexIdSize;
 };

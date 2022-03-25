@@ -6,6 +6,7 @@
 #include <QRect>
 #include "common/rectc.h"
 #include "common/rtree.h"
+#include "section.h"
 #include "subfile.h"
 
 namespace IMG {
@@ -15,9 +16,12 @@ class SubDiv;
 class TREFile : public SubFile
 {
 public:
-	TREFile(const IMGData *img) : SubFile(img) {}
-	TREFile(const QString *path) : SubFile(path) {}
-	TREFile(const SubFile *gmp, quint32 offset) : SubFile(gmp, offset) {}
+	TREFile(const IMGData *img)
+	  : SubFile(img), _flags(0), _extItemSize(0) {}
+	TREFile(const QString *path)
+	  : SubFile(path), _flags(0), _extItemSize(0) {}
+	TREFile(const SubFile *gmp, quint32 offset)
+	  : SubFile(gmp, offset), _flags(0), _extItemSize(0) {}
 	~TREFile();
 
 	bool init();
@@ -37,14 +41,9 @@ private:
 		quint8 bits;
 		quint16 subdivs;
 	};
-	struct Extended {
-		quint32 offset;
-		quint32 size;
-		quint16 itemSize;
-
-		Extended() : offset(0), size(0), itemSize(0) {}
-	};
 	typedef RTree<SubDiv*, double, 2> SubDivTree;
+
+	friend QDebug operator<<(QDebug dbg, const MapLevel &level);
 
 	bool load(int idx);
 	int level(int bits, bool baseMap);
@@ -53,15 +52,18 @@ private:
 
 	RectC _bounds;
 	QVector<MapLevel> _levels;
-	quint32 _subdivOffset;
-	Extended _extended;
-	int _firstLevel;
+	Section _subdivSec, _extSec;
 	quint32 _flags;
+	quint16 _extItemSize;
+	int _firstLevel;
 	bool _isBaseMap;
 
 	QMap<int, SubDivTree*> _subdivs;
 };
 
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const TREFile::MapLevel &level);
+#endif // QT_NO_DEBUG
 }
 
 #endif // IMG_TREFILE_H

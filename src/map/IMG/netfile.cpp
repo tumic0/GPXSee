@@ -330,7 +330,7 @@ bool NETFile::linkLabel(Handle &hdl, quint32 offset,
 {
 	if (!seek(hdl, offset))
 		return false;
-	BitStream1 bs(*this, hdl, _linksSize - (offset - _linksOffset));
+	BitStream1 bs(*this, hdl, _links.size - (offset - _links.offset));
 
 	quint32 flags, labelPtr;
 	if (!bs.read(8, flags))
@@ -351,20 +351,20 @@ bool NETFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 	quint16 hdrLen;
 
 	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)
-	  && seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _offset)
-	  && readUInt32(hdl, _size) && readByte(hdl, &_shift)))
+	  && seek(hdl, _gmpOffset + 0x15) && readUInt32(hdl, _base.offset)
+	  && readUInt32(hdl, _base.size) && readByte(hdl, &_netShift)))
 		return false;
 
 	if (hdrLen >= 0x4C) {
 		quint32 info;
 		if (!(seek(hdl, _gmpOffset + 0x37) && readUInt32(hdl, info)))
 			return false;
-		if (!(seek(hdl, _gmpOffset + 0x43) && readUInt32(hdl, _linksOffset)
-		  && readUInt32(hdl, _linksSize) && readByte(hdl, &_linksShift)))
+		if (!(seek(hdl, _gmpOffset + 0x43) && readUInt32(hdl, _links.offset)
+		  && readUInt32(hdl, _links.size) && readByte(hdl, &_linksShift)))
 			return false;
 
 		quint8 tableId = ((info >> 2) & 0x0F);
-		if (_linksSize && (!rgn->huffmanTable() || rgn->huffmanTable()->id()
+		if (_links.size && (!rgn->huffmanTable() || rgn->huffmanTable()->id()
 		  != tableId)) {
 			_huffmanTable = new HuffmanTable(tableId);
 			if (!_huffmanTable->load(rgn, rgnHdl))
@@ -401,12 +401,12 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 	if (!nod->linkInfo(nodHdl, blockInfo, linkId, linkInfo))
 		return false;
 
-	quint32 linkOffset = _linksOffset + (linkInfo.linkOffset << _linksShift);
-	if (linkOffset > _linksOffset + _linksSize)
+	quint32 linkOffset = _links.offset + (linkInfo.linkOffset << _linksShift);
+	if (linkOffset > _links.offset + _links.size)
 		return false;
 	if (!seek(hdl, linkOffset))
 		return false;
-	BitStream4R bs(*this, hdl, linkOffset - _linksOffset);
+	BitStream4R bs(*this, hdl, linkOffset - _links.offset);
 	QVector<quint16> ca;
 	quint16 mask = 0;
 	quint32 size;
@@ -484,7 +484,7 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 
 bool NETFile::lblOffset(Handle &hdl, quint32 netOffset, quint32 &lblOffset) const
 {
-	if (!(seek(hdl, _offset + (netOffset << _shift))
+	if (!(seek(hdl, _base.offset + (netOffset << _netShift))
 	  && readUInt24(hdl, lblOffset)))
 		return false;
 

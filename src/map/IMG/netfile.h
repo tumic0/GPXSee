@@ -1,6 +1,7 @@
 #ifndef IMG_NETFILE_H
 #define IMG_NETFILE_H
 
+#include "section.h"
 #include "subfile.h"
 #include "nodfile.h"
 
@@ -15,15 +16,13 @@ class BitStream4R;
 class NETFile : public SubFile
 {
 public:
-	NETFile(const IMGData *img) : SubFile(img), _huffmanTable(0), _tp(0),
-	  _offset(0), _size(0), _linksOffset(0), _linksSize(0), _shift(0),
+	NETFile(const IMGData *img)
+	  : SubFile(img), _huffmanTable(0), _tp(0), _netShift(0), _linksShift(0) {}
+	NETFile(const QString *path)
+	  : SubFile(path), _huffmanTable(0), _tp(0), _netShift(0), _linksShift(0) {}
+	NETFile(const SubFile *gmp, quint32 offset)
+	  : SubFile(gmp, offset), _huffmanTable(0), _tp(0), _netShift(0),
 	  _linksShift(0) {}
-	NETFile(const QString *path) : SubFile(path), _huffmanTable(0), _tp(0),
-	  _offset(0), _size(0), _linksOffset(0), _linksSize(0), _shift(0),
-	  _linksShift(0) {}
-	NETFile(const SubFile *gmp, quint32 offset) : SubFile(gmp, offset),
-	  _huffmanTable(0), _tp(0), _offset(0), _size(0), _linksOffset(0),
-	  _linksSize(0), _shift(0), _linksShift(0) {}
 	~NETFile();
 
 	bool load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl);
@@ -34,7 +33,7 @@ public:
 	  const NODFile *nod, Handle &nodHdl2, Handle &nodHdl, const LBLFile *lbl,
 	  Handle &lblHdl, const NODFile::BlockInfo &blockInfo, quint8 linkId,
 	  quint8 lineId, QList<MapData::Poly> *lines) const;
-	bool hasLinks() const {return (_linksSize > 0);}
+	bool hasLinks() const {return (_links.size > 0);}
 
 private:
 	bool linkLabel(Handle &hdl, quint32 offset, const LBLFile *lbl,
@@ -47,8 +46,8 @@ private:
 
 	HuffmanTable *_huffmanTable;
 	const HuffmanTable *_tp;
-	quint32 _offset, _size, _linksOffset, _linksSize;
-	quint8 _shift, _linksShift;
+	Section _base, _links;
+	quint8 _netShift, _linksShift;
 };
 
 }

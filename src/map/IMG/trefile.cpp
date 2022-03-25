@@ -52,8 +52,11 @@ TREFile::~TREFile()
 bool TREFile::init()
 {
 	Handle hdl(this);
-	quint8 locked;
+	quint8 locked, levels[64];
 	quint16 hdrLen;
+	qint32 north, east, south, west;
+	quint32 levelsCount;
+	Section levelSec;
 
 
 	if (!(seek(hdl, _gmpOffset) && readUInt16(hdl, hdrLen)
@@ -61,7 +64,6 @@ bool TREFile::init()
 		return false;
 
 	// Tile bounds
-	qint32 north, east, south, west;
 	if (!(seek(hdl, _gmpOffset + 0x15) && readInt24(hdl, north)
 	  && readInt24(hdl, east) && readInt24(hdl, south) && readInt24(hdl, west)))
 		return false;
@@ -71,39 +73,35 @@ bool TREFile::init()
 		return false;
 
 	// Levels & subdivs info
-	quint32 levelsOffset, levelsSize, subdivSize;
-	if (!(readUInt32(hdl, levelsOffset) && readUInt32(hdl, levelsSize)
-	  && readUInt32(hdl, _subdivOffset) && readUInt32(hdl, subdivSize)))
+	if (!(readUInt32(hdl, levelSec.offset) && readUInt32(hdl, levelSec.size)
+	  && readUInt32(hdl, _subdivSec.offset) && readUInt32(hdl, _subdivSec.size)))
 		return false;
 
+	// Extended objects (TRE7) info
 	if (hdrLen > 0x9A) {
-		// Extended objects (TRE7) info
-		if (!(seek(hdl, _gmpOffset + 0x7C) && readUInt32(hdl, _extended.offset)
-		  && readUInt32(hdl, _extended.size)
-		  && readUInt16(hdl, _extended.itemSize) && readUInt32(hdl, _flags)))
+		if (!(seek(hdl, _gmpOffset + 0x7C) && readUInt32(hdl, _extSec.offset)
+		  && readUInt32(hdl, _extSec.size) && readUInt16(hdl, _extItemSize)
+		  && readUInt32(hdl, _flags)))
 			return false;
-	} else {
-		_extended.offset = 0;
-		_extended.size = 0;
-		_extended.itemSize = 0;
-		_flags = 0;
 	}
 
 	// Tile levels
-	quint8 levels[64];
-	if (levelsSize > 64 || !(seek(hdl, levelsOffset)
-	  && read(hdl, (char*)levels, levelsSize)))
+	if (levelSec.size > 64)
+		return false;
+	if (!(seek(hdl, levelSec.offset) && read(hdl, (char*)levels, levelSec.size)))
 		return false;
 
 	if (locked) {
 		quint32 key;
-		if (hdrLen < 0xAE || !(seek(hdl, _gmpOffset + 0xAA)
-		  && readUInt32(hdl, key)))
+
+		if (hdrLen < 0xAE)
 			return false;
-		demangle(levels, levelsSize, key);
+		if (!(seek(hdl, _gmpOffset + 0xAA) && readUInt32(hdl, key)))
+			return false;
+		demangle(levels, levelSec.size, key);
 	}
 
-	quint32 levelsCount = levelsSize / 4;
+	levelsCount = levelSec.size / 4;
 	_levels = QVector<MapLevel>(levelsCount);
 
 	for (quint32 i = 0; i < levelsCount; i++) {
@@ -166,14 +164,13 @@ bool TREFile::load(int idx)
 	SubDivTree *tree = new SubDivTree();
 	const MapLevel &level = _levels.at(idx);
 
-
 	_subdivs.insert(level.bits, tree);
 
 	quint32 skip = 0;
 	for (int i = 0; i < idx; i++)
 		skip += _levels.at(i).subdivs;
 
-	if (!seek(hdl, _subdivOffset + skip * 16))
+	if (!seek(hdl, _subdivSec.offset + skip * 16))
 		return false;
 
 	for (int j = 0; j < level.subdivs; j++) {
@@ -229,16 +226,16 @@ bool TREFile::load(int idx)
 
 
 	// Objects with extended types (TRE7)
-	if (_extended.size && _extended.itemSize) {
+	if (_extSec.size && _extItemSize) {
 		quint32 totalSubdivs = 0;
 		for (int i = 0; i < _levels.size(); i++)
 			totalSubdivs += _levels.at(i).subdivs;
-		quint32 extendedSubdivs = _extended.size / _extended.itemSize;
+		quint32 extendedSubdivs = _extSec.size / _extItemSize;
 		quint32 diff = totalSubdivs - extendedSubdivs + 1;
 		if (skip < diff)
 			return true;
 
-		if (!seek(hdl, _extended.offset + (skip - diff) * _extended.itemSize))
+		if (!seek(hdl, _extSec.offset + (skip - diff) * _extItemSize))
 			goto error;
 
 		quint32 polygons, lines, points;
@@ -251,7 +248,7 @@ bool TREFile::load(int idx)
 			if (i)
 				sl.at(i-1)->setExtEnds(polygons, lines, points);
 
-			if (!seek(hdl, pos(hdl) + _extended.itemSize - rb))
+			if (!seek(hdl, pos(hdl) + _extItemSize - rb))
 				goto error;
 		}
 
@@ -333,3 +330,13 @@ QList<SubDiv*> TREFile::subdivs(const RectC &rect, int bits, bool baseMap)
 
 	return list;
 }
+
+#ifndef QT_NO_DEBUG
+QDebug IMG::operator<<(QDebug dbg, const TREFile::MapLevel &level)
+{
+	dbg.nospace() << "MapLevel(" << level.level << "," << level.bits << ", "
+	  << level.subdivs << ")";
+
+	return dbg.space();
+}
+#endif // QT_NO_DEBUG

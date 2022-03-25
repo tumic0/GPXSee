@@ -113,6 +113,7 @@ HEADERS += src/common/config.h \
     src/GUI/timezoneinfo.h \
     src/GUI/passwordedit.h \
     src/data/twonavparser.h \
+    src/map/IMG/section.h \
     src/map/proj/polyconic.h \
     src/map/proj/webmercator.h \
     src/map/proj/transversemercator.h \
