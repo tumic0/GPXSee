@@ -11,6 +11,8 @@
 
 using namespace IMG;
 
+#define ICON_PADDING 2
+
 #define AREA(rect) \
 	(rect.size().width() * rect.size().height())
 
@@ -450,7 +452,8 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 			continue;
 
 		TextPointItem *item = new TextPointItem(QPoint(point.coordinates.lon(),
-		  point.coordinates.lat()), label, fnt, img, color, &haloColor);
+		  point.coordinates.lat()), label, fnt, img, color, &haloColor, 0,
+		  ICON_PADDING);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
 		else
