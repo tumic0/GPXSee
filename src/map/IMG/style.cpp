@@ -117,6 +117,7 @@ void Style::defaultPolygonStyle()
 	_polygons[0x10101] = Polygon(QBrush("#e8e064"));
 	_polygons[0x10102] = Polygon(QBrush("#d98b21"));
 	_polygons[0x10104] = Polygon(QBrush("#ffffff"));
+	_polygons[0x10105] = Polygon(QBrush("#a58140"));
 	_polygons[0x10301] = Polygon(QBrush("#98c064"));
 	_polygons[0x10302] = Polygon(QBrush("#a0a0ff"));
 	_polygons[0x10303] = Polygon(QBrush("#b0b0ff"));
@@ -129,8 +130,8 @@ void Style::defaultPolygonStyle()
 	// Draw order
 	_drawOrder
 	  << TYPE(0x4b) << 0x10d01 << 0x10104 << 0x10613 << TYPE(0x4a)
-	  << 0x10101 << 0x10102 << 0x10301 << 0x10302 << 0x10303 << 0x10304
-	  << 0x10409 << 0x10503 << 0x10601 << 0x1060a
+	  << 0x10101 << 0x10102 << 0x10301 << 0x10302 << 0x10303
+	  << 0x10304 << 0x10105 << 0x10409 << 0x10503 << 0x10601 << 0x1060a
 	  << TYPE(0x01) << 0x10800 << TYPE(0x02) << 0x10801 << TYPE(0x03) << 0x10802
 	  << TYPE(0x17) << 0x10a04 << TYPE(0x18) << 0x1090c << TYPE(0x1a) << 0x1090e
 	  << TYPE(0x28) << 0x10b01 << TYPE(0x32) << 0x10b02 << TYPE(0x3c) << 0x10b03
@@ -237,6 +238,7 @@ void Style::defaultLineStyle()
 
 	// Marine stuff
 	_lines[0x10101] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
+	_lines[0x10107] = Line(QPen(QColor("#a58140"), 3, Qt::SolidLine));
 	_lines[0x10108] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
 	_lines[0x10301] = Line(QPen(QColor("#0e1087"), 1, Qt::SolidLine));
 	_lines[0x10307] = Line(QPen(QColor("#05620e"), 1, Qt::SolidLine));
@@ -502,6 +504,7 @@ void Style::defaultPointStyle()
 	_points[0x1040a] = Point(QImage(":/IMG/rock-dangerous.png"));
 	_points[0x1040c] = Point(QImage(":/IMG/rock-exposed.png"));
 	_points[0x10701] = Point(QImage(":/IMG/anchorage.png"));
+	_points[0x10705] = Point(QImage(":/IMG/anchoring-prohibited.png"));
 }
 
 static bool readBitmap(SubFile *file, SubFile::Handle &hdl, QImage &img,

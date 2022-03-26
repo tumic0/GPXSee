@@ -149,6 +149,7 @@
 		<file alias="pipeline.png">icons/IMG/marine/pipeline.png</file>
 		<file alias="cable.png">icons/IMG/marine/cable.png</file>
 		<file alias="anchorage.png">icons/IMG/marine/anchorage.png</file>
+		<file alias="anchoring-prohibited.png">icons/IMG/marine/anchoring-prohibited.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->
