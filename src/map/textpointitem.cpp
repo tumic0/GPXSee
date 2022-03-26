@@ -18,7 +18,7 @@ static void expand(QRectF &rect, int width)
 
 TextPointItem::TextPointItem(const QPoint &point, const QString *text,
   const QFont *font, const QImage *img, const QColor *color,
-  const QColor *haloColor, const QColor *bgColor, bool padding)
+  const QColor *haloColor, const QColor *bgColor)
   : TextItem(font ? text : 0), _font(font), _img(img), _color(color),
   _haloColor(haloColor), _bgColor(bgColor)
 {
@@ -32,19 +32,18 @@ TextPointItem::TextPointItem(const QPoint &point, const QString *text,
 			expand(_textRect, _font->pixelSize() * MIN_BOX_WIDTH);
 	}
 
-	setPos(point, padding);
+	setPos(point);
 }
 
-void TextPointItem::setPos(const QPoint &point, bool padding)
+void TextPointItem::setPos(const QPoint &point)
 {
 	QPainterPath shape;
 	QRectF iconRect;
 
 	if (_img && !_img->isNull()) {
 		QSizeF s(_img->size() / _img->devicePixelRatioF());
-		int xOffset = padding ? s.width() : s.width() / 2;
-		iconRect = QRectF(QPointF(point.x() - xOffset, point.y()
-		  - s.height()/2), s);
+		iconRect = QRectF(QPointF(point.x() - s.width() / 2,
+		  point.y() - s.height()/2), s);
 		_textRect.moveTopLeft(QPointF(point.x() + s.width()/2, point.y()
 		  - _textRect.height()/2));
 	} else

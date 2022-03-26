@@ -126,7 +126,7 @@ void RasterTile::processPointLabels(QList<TextItem*> &textItems)
 
 		TextPointItem *item = new TextPointItem(
 		  ll2xy(point.coordinates).toPoint(), label, font, img, color,
-		    hColor, 0, false);
+		    hColor, 0);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
 		else
@@ -181,7 +181,7 @@ void RasterTile::processAreaLabels(QList<TextItem*> &textItems)
 		  ? centroid(path.path) : ll2xy(path.labelPos);
 
 		TextPointItem *item = new TextPointItem(pos.toPoint(), label, font, img,
-		  color, hColor, 0, false);
+		  color, hColor, 0);
 		if (item->isValid() && _rect.contains(item->boundingRect().toRect())
 		  && !item->collides(textItems))
 			textItems.append(item);
