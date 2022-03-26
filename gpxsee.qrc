@@ -137,13 +137,16 @@
 
 		<file alias="light-major.png">icons/IMG/marine/light-major.png</file>
 		<file alias="light-platform.png">icons/IMG/marine/light-platform.png</file>
+		<file alias="buoy.png">icons/IMG/marine/buoy.png</file>
 		<file alias="beacon.png">icons/IMG/marine/beacon.png</file>
 		<file alias="rock.png">icons/IMG/marine/rock.png</file>
 		<file alias="wreck.png">icons/IMG/marine/wreck.png</file>
+		<file alias="wreck-exposed.png">icons/IMG/marine/wreck-exposed.png</file>
 		<file alias="obstruction.png">icons/IMG/marine/obstruction.png</file>
 		<file alias="anchor-line.png">icons/IMG/marine/anchor-line.png</file>
 		<file alias="pipeline.png">icons/IMG/marine/pipeline.png</file>
 		<file alias="cable.png">icons/IMG/marine/cable.png</file>
+		<file alias="anchorage.png">icons/IMG/marine/anchorage.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->
