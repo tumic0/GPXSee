@@ -134,6 +134,16 @@
 		<file alias="waterfall-11.png">icons/IMG/waterfall-11.png</file>
 		<file alias="wetland-11.png">icons/IMG/wetland-11.png</file>
 		<file alias="zoo-11.png">icons/IMG/zoo-11.png</file>
+
+		<file alias="light-major.png">icons/IMG/light-major.png</file>
+		<file alias="light-platform.png">icons/IMG/light-platform.png</file>
+		<file alias="beacon.png">icons/IMG/beacon.png</file>
+		<file alias="rock.png">icons/IMG/rock.png</file>
+		<file alias="wreck.png">icons/IMG/wreck.png</file>
+		<file alias="obstruction.png">icons/IMG/obstruction.png</file>
+		<file alias="anchor-line.png">icons/IMG/anchor-line.png</file>
+		<file alias="pipeline.png">icons/IMG/pipeline.png</file>
+		<file alias="cable.png">icons/IMG/cable.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->

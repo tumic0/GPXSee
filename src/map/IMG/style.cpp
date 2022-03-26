@@ -113,25 +113,40 @@ void Style::defaultPolygonStyle()
 	_polygons[0x10c04] = _polygons[TYPE(0x51)];
 	_polygons[0x10c05] = _polygons[TYPE(0x52)];
 
+	// Marine stuff
+	_polygons[0x10101] = Polygon(QBrush("#e8e064"));
+	_polygons[0x10102] = Polygon(QBrush("#d98b21"));
+	_polygons[0x10104] = Polygon(QBrush("#ffffff"));
+	_polygons[0x10301] = Polygon(QBrush("#98c064"));
+	_polygons[0x10302] = Polygon(QBrush("#a0a0ff"));
+	_polygons[0x10303] = Polygon(QBrush("#b0b0ff"));
+	_polygons[0x10304] = Polygon(QBrush("#c0c0ff"));
+	_polygons[0x10409] = Polygon(QBrush("#ff4040", Qt::FDiagPattern));
+	_polygons[0x10503] = Polygon(QBrush("#ff4040", Qt::FDiagPattern));
+	_polygons[0x1060a] = Polygon(QBrush("#fcb4fc"));
+
 	// Draw order
 	_drawOrder
-	  << TYPE(0x4b) << 0x10d01 << 0x10613 << TYPE(0x4a) << TYPE(0x01) << 0x10800
-	  << TYPE(0x02) << 0x10801 << TYPE(0x03) << 0x10802 << TYPE(0x17) << 0x10a04
-	  << TYPE(0x18) << 0x1090c << TYPE(0x1a) << 0x1090e << TYPE(0x28) << 0x10b01
-	  << TYPE(0x32) << 0x10b02 << TYPE(0x3c) << 0x10b03 << TYPE(0x3d) << 0x10b04
-	  << TYPE(0x3e) << 0x10b05 << TYPE(0x3f) << 0x10b06 << TYPE(0x40) << 0x10b07
-	  << TYPE(0x41) << 0x10b08 << TYPE(0x42) << 0x10b09 << TYPE(0x43) << 0x10b0a
-	  << TYPE(0x44) << 0x10b0b << TYPE(0x46) << 0x10b0c << TYPE(0x47) << 0x10b0d
-	  << TYPE(0x48) << 0x10b0e << TYPE(0x49) << 0x10b0f << TYPE(0x4c) << 0x10b10
-	  << TYPE(0x4d) << 0x10c00 << TYPE(0x4e) << 0x10c01 << TYPE(0x4f) << 0x10c02
-	  << TYPE(0x50) << 0x10c03 << TYPE(0x51) << 0x10c04 << TYPE(0x52) << 0x10c05
-	  << TYPE(0x14) << 0x10a01 << TYPE(0x15) << 0x10a02 << TYPE(0x16) << 0x10a03
-	  << TYPE(0x1e) << 0x10a05 << TYPE(0x1f) << 0x10a06 << TYPE(0x04) << 0x10901
-	  << TYPE(0x05) << 0x10902 << TYPE(0x06) << 0x10903 << TYPE(0x07) << 0x10904
-	  << TYPE(0x08) << 0x10905 << TYPE(0x09) << 0x10906 << TYPE(0x0a) << 0x10907
-	  << TYPE(0x0b) << 0x10908 << TYPE(0x0c) << 0x10909 << TYPE(0x0d) << 0x1090a
-	  << TYPE(0x0e) << 0x1090b << TYPE(0x0f) << TYPE(0x10) << TYPE(0x11)
-	  << TYPE(0x12) << TYPE(0x19) << 0x1090d << TYPE(0x13) << 0x10900;
+	  << TYPE(0x4b) << 0x10d01 << 0x10104 << 0x10613 << TYPE(0x4a)
+	  << 0x10101 << 0x10102 << 0x10301 << 0x10302 << 0x10303 << 0x10304
+	  << 0x10409 << 0x10503 << 0x1060a
+	  << TYPE(0x01) << 0x10800 << TYPE(0x02) << 0x10801 << TYPE(0x03) << 0x10802
+	  << TYPE(0x17) << 0x10a04 << TYPE(0x18) << 0x1090c << TYPE(0x1a) << 0x1090e
+	  << TYPE(0x28) << 0x10b01 << TYPE(0x32) << 0x10b02 << TYPE(0x3c) << 0x10b03
+	  << TYPE(0x3d) << 0x10b04 << TYPE(0x3e) << 0x10b05 << TYPE(0x3f) << 0x10b06
+	  << TYPE(0x40) << 0x10b07 << TYPE(0x41) << 0x10b08 << TYPE(0x42) << 0x10b09
+	  << TYPE(0x43) << 0x10b0a << TYPE(0x44) << 0x10b0b << TYPE(0x46) << 0x10b0c
+	  << TYPE(0x47) << 0x10b0d << TYPE(0x48) << 0x10b0e << TYPE(0x49) << 0x10b0f
+	  << TYPE(0x4c) << 0x10b10 << TYPE(0x4d) << 0x10c00 << TYPE(0x4e) << 0x10c01
+	  << TYPE(0x4f) << 0x10c02 << TYPE(0x50) << 0x10c03 << TYPE(0x51) << 0x10c04
+	  << TYPE(0x52) << 0x10c05 << TYPE(0x14) << 0x10a01 << TYPE(0x15) << 0x10a02
+	  << TYPE(0x16) << 0x10a03 << TYPE(0x1e) << 0x10a05 << TYPE(0x1f) << 0x10a06
+	  << TYPE(0x04) << 0x10901 << TYPE(0x05) << 0x10902 << TYPE(0x06) << 0x10903
+	  << TYPE(0x07) << 0x10904 << TYPE(0x08) << 0x10905 << TYPE(0x09) << 0x10906
+	  << TYPE(0x0a) << 0x10907 << TYPE(0x0b) << 0x10908 << TYPE(0x0c) << 0x10909
+	  << TYPE(0x0d) << 0x1090a << TYPE(0x0e) << 0x1090b << TYPE(0x0f)
+	  << TYPE(0x10) << TYPE(0x11) << TYPE(0x12) << TYPE(0x19) << 0x1090d
+	  << TYPE(0x13) << 0x10900;
 }
 
 static QImage railroad()
@@ -218,6 +233,21 @@ void Style::defaultLineStyle()
 	_lines[0x10c02] = _lines[TYPE(0x27)];
 	//_lines[0x10c03] = _lines[TYPE(0x28)];
 	_lines[0x10c04] = _lines[TYPE(0x29)];
+
+	// Marine stuff
+	_lines[0x10101] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
+	_lines[0x10108] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
+	_lines[0x10301] = Line(QPen(QColor("#0e1087"), 1, Qt::SolidLine));
+	_lines[0x10307] = Line(QPen(QColor("#05620e"), 1, Qt::SolidLine));
+	_lines[0x10401] = Line(QImage(":/IMG/cable.png"));
+	_lines[0x10402] = Line(QImage(":/IMG/pipeline.png"));
+	_lines[0x10409] = Line(QPen(QColor("#000000"), 1, Qt::DotLine));
+	_lines[0x10503] = Line(QPen(QColor("#e728e7"), 1, Qt::DashLine));
+	_lines[0x10507] = Line(QPen(QColor("#e728e7"), 1, Qt::DashLine));
+	_lines[0x10601] = Line(QPen(QColor("#000000"), 1, Qt::DashLine));
+	_lines[0x10606] = Line(QImage(":/IMG/anchor-line.png"));
+	_lines[0x1060d] = Line(QPen(QColor("#eb49eb"), 1, Qt::DashLine));
+	_lines[0x10611] = Line(QPen(QColor("#eb49eb"), 1, Qt::DashLine));
 }
 
 void Style::defaultPointStyle()
@@ -451,6 +481,20 @@ void Style::defaultPointStyle()
 	_points[0x11106] = _points[0x3006];
 	_points[0x11107] = _points[0x3007];
 	_points[0x11108] = _points[0x3008];
+
+	// Marine stuff
+	_points[0x10100] = Point(QImage(":/IMG/light-major.png"));
+	_points[0x10106] = Point(QImage(":/IMG/light-major.png"));
+	_points[0x10107] = Point(QImage(":/IMG/light-major.png"));
+	_points[0x10108] = Point(QImage(":/IMG/light-major.png"));
+	_points[0x10109] = Point(QImage(":/IMG/light-major.png"));
+	_points[0x1010a] = Point(QImage(":/IMG/light-major.png"));
+	_points[0x10206] = Point(QImage(":/IMG/beacon.png"));
+	_points[0x1020d] = Point(QImage(":/IMG/light-platform.png"));
+	_points[0x10401] = Point(QImage(":/IMG/obstruction.png"));
+	_points[0x10402] = Point(QImage(":/IMG/wreck.png"));
+	_points[0x1040a] = Point(QImage(":/IMG/rock.png"));
+
 }
 
 static bool readBitmap(SubFile *file, SubFile::Handle &hdl, QImage &img,
