@@ -489,6 +489,11 @@ void Style::defaultPointStyle()
 
 	// Marine stuff
 	_points[0x10100] = Point(QImage(":/IMG/light-major.png"));
+	_points[0x10101] = Point(QImage(":/IMG/light-major.png"));
+	_points[0x10102] = Point(QImage(":/IMG/light-major.png"));
+	_points[0x10103] = Point(QImage(":/IMG/light-major.png"));
+	_points[0x10104] = Point(QImage(":/IMG/light-major.png"));
+	_points[0x10105] = Point(QImage(":/IMG/light-major.png"));
 	_points[0x10106] = Point(QImage(":/IMG/light-major.png"));
 	_points[0x10107] = Point(QImage(":/IMG/light-major.png"));
 	_points[0x10108] = Point(QImage(":/IMG/light-major.png"));
@@ -496,9 +501,21 @@ void Style::defaultPointStyle()
 	_points[0x1010a] = Point(QImage(":/IMG/light-major.png"));
 	_points[0x10200] = Point(QImage(":/IMG/buoy.png"));
 	_points[0x10201] = Point(QImage(":/IMG/buoy.png"));
+	_points[0x10202] = Point(QImage(":/IMG/buoy.png"));
+	_points[0x10203] = Point(QImage(":/IMG/buoy.png"));
+	_points[0x10204] = Point(QImage(":/IMG/buoy.png"));
+	_points[0x10205] = Point(QImage(":/IMG/buoy.png"));
 	_points[0x10206] = Point(QImage(":/IMG/beacon.png"));
 	_points[0x1020b] = Point(QImage(":/IMG/buoy.png"));
 	_points[0x1020d] = Point(QImage(":/IMG/light-platform.png"));
+	_points[0x1020e] = Point(QImage(":/IMG/beacon.png"));
+	_points[0x1020f] = Point(QImage(":/IMG/beacon.png"));
+	_points[0x10210] = Point(QImage(":/IMG/beacon.png"));
+	_points[0x10211] = Point(QImage(":/IMG/beacon.png"));
+	_points[0x10212] = Point(QImage(":/IMG/beacon.png"));
+	_points[0x10213] = Point(QImage(":/IMG/beacon.png"));
+	_points[0x10214] = Point(QImage(":/IMG/beacon.png"));
+	_points[0x10215] = Point(QImage(":/IMG/beacon.png"));
 	_points[0x10306] = Point(QImage(":/IMG/church.png"));
 	_points[0x1030a] = Point(QImage(":/IMG/triangulation-point.png"));
 	_points[0x10401] = Point(QImage(":/IMG/obstruction.png"));
@@ -508,6 +525,7 @@ void Style::defaultPointStyle()
 	_points[0x1040a] = Point(QImage(":/IMG/rock-dangerous.png"));
 	_points[0x1040c] = Point(QImage(":/IMG/rock-exposed.png"));
 	_points[0x10701] = Point(QImage(":/IMG/anchorage.png"));
+	_points[0x10703] = Point(QImage(":/IMG/yacht-harbor.png"));
 	_points[0x10705] = Point(QImage(":/IMG/anchoring-prohibited.png"));
 }
 

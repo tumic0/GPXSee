@@ -153,6 +153,7 @@
 		<file alias="anchoring-prohibited.png">icons/IMG/marine/anchoring-prohibited.png</file>
 		<file alias="church.png">icons/IMG/marine/church.png</file>
 		<file alias="triangulation-point.png">icons/IMG/marine/triangulation-point.png</file>
+		<file alias="yacht-harbor.png">icons/IMG/marine/yacht-harbor.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->
