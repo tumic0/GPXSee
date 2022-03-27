@@ -146,6 +146,7 @@
 		<file alias="obstruction.png">icons/IMG/marine/obstruction.png</file>
 		<file alias="obstruction-covers.png">icons/IMG/marine/obstruction-covers.png</file>
 		<file alias="anchor-line.png">icons/IMG/marine/anchor-line.png</file>
+		<file alias="noanchor-line.png">icons/IMG/marine/noanchor-line.png</file>
 		<file alias="cable-line.png">icons/IMG/marine/cable-line.png</file>
 		<file alias="pipeline.png">icons/IMG/marine/pipeline.png</file>
 		<file alias="cable.png">icons/IMG/marine/cable.png</file>

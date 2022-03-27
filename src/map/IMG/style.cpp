@@ -247,6 +247,7 @@ void Style::defaultLineStyle()
 	_lines[0x10402] = Line(QImage(":/IMG/pipeline.png"));
 	_lines[0x10405] = Line(QPen(QColor("#e728e7"), 1, Qt::DashLine));
 	_lines[0x10409] = Line(QPen(QColor("#000000"), 1, Qt::DotLine));
+	_lines[0x10501] = Line(QImage(":/IMG/noanchor-line.png"));
 	_lines[0x10503] = Line(QPen(QColor("#e728e7"), 1, Qt::DashLine));
 	_lines[0x10507] = Line(QPen(QColor("#e728e7"), 1, Qt::DashLine));
 	_lines[0x10601] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
