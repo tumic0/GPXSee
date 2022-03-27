@@ -146,10 +146,13 @@
 		<file alias="obstruction.png">icons/IMG/marine/obstruction.png</file>
 		<file alias="obstruction-covers.png">icons/IMG/marine/obstruction-covers.png</file>
 		<file alias="anchor-line.png">icons/IMG/marine/anchor-line.png</file>
+		<file alias="cable-line.png">icons/IMG/marine/cable-line.png</file>
 		<file alias="pipeline.png">icons/IMG/marine/pipeline.png</file>
 		<file alias="cable.png">icons/IMG/marine/cable.png</file>
 		<file alias="anchorage.png">icons/IMG/marine/anchorage.png</file>
 		<file alias="anchoring-prohibited.png">icons/IMG/marine/anchoring-prohibited.png</file>
+		<file alias="church.png">icons/IMG/marine/church.png</file>
+		<file alias="triangulation-point.png">icons/IMG/marine/triangulation-point.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->

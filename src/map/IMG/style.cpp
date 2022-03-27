@@ -238,12 +238,14 @@ void Style::defaultLineStyle()
 
 	// Marine stuff
 	_lines[0x10101] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
+	_lines[0x10106] = Line(QImage(":/IMG/cable-line.png"));
 	_lines[0x10107] = Line(QPen(QColor("#a58140"), 3, Qt::SolidLine));
 	_lines[0x10108] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
 	_lines[0x10301] = Line(QPen(QColor("#0e1087"), 1, Qt::SolidLine));
 	_lines[0x10307] = Line(QPen(QColor("#05620e"), 1, Qt::SolidLine));
 	_lines[0x10401] = Line(QImage(":/IMG/cable.png"));
 	_lines[0x10402] = Line(QImage(":/IMG/pipeline.png"));
+	_lines[0x10405] = Line(QPen(QColor("#e728e7"), 1, Qt::DashLine));
 	_lines[0x10409] = Line(QPen(QColor("#000000"), 1, Qt::DotLine));
 	_lines[0x10503] = Line(QPen(QColor("#e728e7"), 1, Qt::DashLine));
 	_lines[0x10507] = Line(QPen(QColor("#e728e7"), 1, Qt::DashLine));
@@ -497,6 +499,8 @@ void Style::defaultPointStyle()
 	_points[0x10206] = Point(QImage(":/IMG/beacon.png"));
 	_points[0x1020b] = Point(QImage(":/IMG/buoy.png"));
 	_points[0x1020d] = Point(QImage(":/IMG/light-platform.png"));
+	_points[0x10306] = Point(QImage(":/IMG/church.png"));
+	_points[0x1030a] = Point(QImage(":/IMG/triangulation-point.png"));
 	_points[0x10401] = Point(QImage(":/IMG/obstruction.png"));
 	_points[0x10402] = Point(QImage(":/IMG/wreck.png"));
 	_points[0x10403] = Point(QImage(":/IMG/wreck-exposed.png"));
