@@ -112,7 +112,7 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 			point->label = QString::number(d2m(depth, units));
 	}
 
-	if (point && Style::isIsolatedDangerPoint(point->type) && rs) {
+	if (point && Style::isObstructionPoint(point->type) && rs) {
 		quint32 val, rb = rs;
 		quint32 units = (flags >> 3) & 3;
 
