@@ -528,6 +528,7 @@ void Style::defaultPointStyle()
 	_points[0x1040c] = Point(QImage(":/IMG/rock-exposed.png"));
 	_points[0x10701] = Point(QImage(":/IMG/anchorage.png"));
 	_points[0x10703] = Point(QImage(":/IMG/yacht-harbor.png"));
+	_points[0x10704] = Point(QImage(":/IMG/pile.png"));
 	_points[0x10705] = Point(QImage(":/IMG/anchoring-prohibited.png"));
 }
 
