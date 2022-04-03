@@ -27,6 +27,11 @@ static quint64 pointId(const QPoint &pos, quint32 type, quint32 labelPtr)
 	return id;
 }
 
+static double d2m(quint32 val, quint32 flags)
+{
+	return (flags & 1) ? val / 10.0 : val;
+}
+
 RGNFile::~RGNFile()
 {
 	delete _huffmanTable;
@@ -81,7 +86,48 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 		  bottom)));
 	}
 
-	if (point && (flags & 1) && lbl) {
+	if (point && Style::isDepthPoint(point->type)) {
+		quint32 depth = 0;
+		quint32 units = (flags >> 3) & 3;
+
+		if (rs == 0) {
+			depth = flags & 0x3f;
+			units = (flags >> 5) & 2;
+		} else if (rs == 1) {
+			quint32 val;
+
+			if (!readUInt8(hdl, val))
+				return false;
+			depth = val | ((quint32)flags & 7) << 8;
+		} else if (rs < 4) {
+			quint32 val;
+
+			Q_ASSERT(!(flags & 4));
+			if (!readVUInt32(hdl, rs, val))
+				return false;
+			depth = val | ((quint32)flags & 3) << (rs * 8);
+		}
+
+		if (depth)
+			point->label = QString::number(d2m(depth, units));
+	}
+
+	if (point && Style::isIsolatedDangerPoint(point->type) && rs) {
+		quint32 val, rb = rs;
+		quint32 units = (flags >> 3) & 3;
+
+		if ((flags & 7) == 7) {
+			if (!readUInt8(hdl, val))
+				return false;
+			rb--;
+		}
+		if (!readVUInt32(hdl, rb, val))
+			return false;
+
+		point->label = QString::number(d2m(val, units));
+	}
+
+	if (point && !Style::isMarinePoint(point->type) && (flags & 1) && lbl) {
 		point->label = lbl->label(lblHdl, this, hdl, rs);
 		point->classLabel = true;
 	}
