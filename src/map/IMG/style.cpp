@@ -252,6 +252,7 @@ void Style::defaultLineStyle()
 	_lines[0x10507] = Line(QPen(QColor("#e728e7"), 1, Qt::DashLine));
 	_lines[0x10601] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
 	_lines[0x10606] = Line(QImage(":/IMG/anchor-line.png"));
+	_lines[0x1060c] = Line(QPen(QColor("#e728e7"), 1, Qt::SolidLine));
 	_lines[0x1060d] = Line(QPen(QColor("#eb49eb"), 1, Qt::DashLine));
 	_lines[0x10611] = Line(QPen(QColor("#eb49eb"), 1, Qt::DashLine));
 }
