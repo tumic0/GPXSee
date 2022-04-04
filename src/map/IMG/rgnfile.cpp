@@ -37,11 +37,96 @@ RGNFile::~RGNFile()
 	delete _huffmanTable;
 }
 
+bool RGNFile::readRasterInfo(Handle &hdl, const LBLFile *lbl, quint32 size,
+  MapData::Poly *poly) const
+{
+	quint32 id;
+	quint32 top, right, bottom, left;
+
+	if (!(lbl && lbl->imageIdSize()))
+		return false;
+	if (size < lbl->imageIdSize() + 16U)
+		return false;
+
+	if (!(readVUInt32(hdl, lbl->imageIdSize(), id)
+	  && readUInt32(hdl, top) && readUInt32(hdl, right)
+	  && readUInt32(hdl, bottom) && readUInt32(hdl, left)))
+		return false;
+
+	poly->raster = Raster(lbl, id, QRect(QPoint(left, top), QPoint(right,
+	  bottom)));
+
+	return true;
+}
+
+bool RGNFile::readDepthInfo(Handle &hdl, quint8 flags, quint32 size,
+  MapData::Point *point) const
+{
+	quint32 depth = 0;
+	quint32 units = (flags >> 3) & 3;
+	quint32 val;
+
+	if (!size) {
+		depth = flags & 0x3f;
+		units = (flags >> 5) & 2;
+	} else if (size == 1) {
+		if (!readUInt8(hdl, val))
+			return false;
+		depth = val | ((quint32)flags & 7) << 8;
+	} else if (size < 4) {
+		Q_ASSERT(!(flags & 4));
+		if (!readVUInt32(hdl, size, val))
+			return false;
+		depth = val | ((quint32)flags & 3) << (size * 8);
+	} else
+		return false;
+
+	point->label = QString::number(d2m(depth, units));
+
+	return true;
+}
+
+bool RGNFile::readObstructionInfo(Handle &hdl, quint8 flags, quint32 size,
+  MapData::Point *point) const
+{
+	quint32 val, rb = size;
+	quint32 units = (flags >> 3) & 3;
+
+	if (!size)
+		return false;
+
+	if ((flags & 7) == 7) {
+		if (!readUInt8(hdl, val))
+			return false;
+		rb--;
+	}
+	if (!readVUInt32(hdl, rb, val))
+		return false;
+
+	point->label = QString::number(d2m(val, units));
+
+	return true;
+}
+
+bool RGNFile::readLabel(Handle &hdl, const LBLFile *lbl, Handle &lblHdl,
+  quint8 flags, quint32 size, MapData::Point *point) const
+{
+	if (!(flags & 1))
+		return true;
+	if (!lbl)
+		return false;
+
+	point->label = lbl->label(lblHdl, this, hdl, size);
+	point->classLabel = true;
+
+	return true;
+}
+
 bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
   void *object, const LBLFile *lbl, Handle &lblHdl) const
 {
 	quint8 flags;
-	quint32 rs;
+	quint32 rs = 0;
 	MapData::Poly *poly = (segmentType == Polygon)
 	  ? (MapData::Poly *) object : 0;
 	MapData::Point *point = (segmentType == Point)
@@ -64,73 +149,18 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 			if (!readVUInt32(hdl, rs))
 				return false;
 			break;
-		default:
-			rs = 0;
-			break;
 	}
 
 	quint32 off = pos(hdl);
 
-	if (poly && Style::isRaster(poly->type) && lbl && lbl->imageIdSize()) {
-		quint32 id;
-		quint32 top, right, bottom, left;
-
-		if (rs < lbl->imageIdSize() + 16U)
-			return false;
-		if (!(readVUInt32(hdl, lbl->imageIdSize(), id)
-		  && readUInt32(hdl, top) && readUInt32(hdl, right)
-		  && readUInt32(hdl, bottom) && readUInt32(hdl, left)))
-			return false;
-
-		poly->raster = Raster(lbl, id, QRect(QPoint(left, top), QPoint(right,
-		  bottom)));
-	}
-
-	if (point && Style::isDepthPoint(point->type)) {
-		quint32 depth = 0;
-		quint32 units = (flags >> 3) & 3;
-
-		if (rs == 0) {
-			depth = flags & 0x3f;
-			units = (flags >> 5) & 2;
-		} else if (rs == 1) {
-			quint32 val;
-
-			if (!readUInt8(hdl, val))
-				return false;
-			depth = val | ((quint32)flags & 7) << 8;
-		} else if (rs < 4) {
-			quint32 val;
-
-			Q_ASSERT(!(flags & 4));
-			if (!readVUInt32(hdl, rs, val))
-				return false;
-			depth = val | ((quint32)flags & 3) << (rs * 8);
-		}
-
-		if (depth)
-			point->label = QString::number(d2m(depth, units));
-	}
-
-	if (point && Style::isObstructionPoint(point->type) && rs) {
-		quint32 val, rb = rs;
-		quint32 units = (flags >> 3) & 3;
-
-		if ((flags & 7) == 7) {
-			if (!readUInt8(hdl, val))
-				return false;
-			rb--;
-		}
-		if (!readVUInt32(hdl, rb, val))
-			return false;
-
-		point->label = QString::number(d2m(val, units));
-	}
-
-	if (point && !Style::isMarinePoint(point->type) && (flags & 1) && lbl) {
-		point->label = lbl->label(lblHdl, this, hdl, rs);
-		point->classLabel = true;
-	}
+	if (poly && Style::isRaster(poly->type))
+		readRasterInfo(hdl, lbl, rs, poly);
+	if (point && Style::isDepthPoint(point->type))
+		readDepthInfo(hdl, flags, rs, point);
+	if (point && Style::isObstructionPoint(point->type))
+		readObstructionInfo(hdl, flags, rs, point);
+	if (point && !Style::isMarinePoint(point->type))
+		readLabel(hdl, lbl, lblHdl, flags, rs, point);
 
 	return seek(hdl, off + rs);
 }

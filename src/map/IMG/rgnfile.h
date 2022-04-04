@@ -58,6 +58,14 @@ private:
 	  const LBLFile *lbl, Handle &lblHdl) const;
 	bool skipLclFields(Handle &hdl, const quint32 flags[3]) const;
 	bool skipGblFields(Handle &hdl, quint32 flags) const;
+	bool readRasterInfo(Handle &hdl, const LBLFile *lbl, quint32 size,
+	  MapData::Poly *poly) const;
+	bool readDepthInfo(Handle &hdl, quint8 flags, quint32 size,
+	  MapData::Point *point) const;
+	bool readObstructionInfo(Handle &hdl, quint8 flags, quint32 size,
+	  MapData::Point *point) const;
+	bool readLabel(Handle &hdl, const LBLFile *lbl, Handle &lblHdl,
+	  quint8 flags, quint32 size, MapData::Point *point) const;
 
 	HuffmanTable *_huffmanTable;
 	Section _base, _dict, _polygons, _lines, _points;
