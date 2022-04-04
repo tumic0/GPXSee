@@ -156,6 +156,8 @@
 		<file alias="triangulation-point.png">icons/IMG/marine/triangulation-point.png</file>
 		<file alias="yacht-harbor.png">icons/IMG/marine/yacht-harbor.png</file>
 		<file alias="pile.png">icons/IMG/marine/pile.png</file>
+		<file alias="spar-buoy.png">icons/IMG/marine/spar-buoy.png</file>
+		<file alias="mooring-buoy.png">icons/IMG/marine/mooring-buoy.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->
