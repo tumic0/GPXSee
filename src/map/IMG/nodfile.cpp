@@ -170,12 +170,12 @@ bool NODFile::linkInfo(Handle &hdl, const BlockInfo &blockInfo, quint32 linkId,
 		if (!bs.read(s1 - s2, linkInfo.linkOffset))
 			return false;
 		linkInfo.linkOffset += blockInfo.hdr.linkInfoOffsetBase;
-	}
 
-	if (!bs.read(s2, linkInfo.nodeOffset))
-		return false;
-	linkInfo.nodeOffset = (blockInfo.offset - linkInfo.nodeOffset)
-	  >> _nodeShift;
+		if (!bs.read(s2, linkInfo.nodeOffset))
+			return false;
+		linkInfo.nodeOffset = (blockInfo.offset - linkInfo.nodeOffset)
+		  >> _nodeShift;
+	}
 
 	return true;
 }
