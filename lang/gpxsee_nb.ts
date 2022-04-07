@@ -1347,7 +1347,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="148"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="249"/>
         <source>Use anti-aliasing</source>
-        <translation>Bruk kanutjevning</translation>
+        <translation>Bruk kantutjevning</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="218"/>
