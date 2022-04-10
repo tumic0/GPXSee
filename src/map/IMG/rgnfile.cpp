@@ -20,8 +20,9 @@ static quint64 pointId(const QPoint &pos, quint32 type, quint32 labelPtr)
 	uint hash = (uint)qHash(QPair<uint,uint>((uint)qHash(
 	  QPair<int, int>(pos.x(), pos.y())), labelPtr));
 	id = ((quint64)type)<<32 | hash;
-	// Make country labels precedent over city labels
-	if (!Style::isCountry(type))
+
+	// Increase rendering priorities for some special items
+	if (!Style::isCountry(type) && !Style::isMarina(type))
 		id |= 1ULL<<63;
 
 	return id;

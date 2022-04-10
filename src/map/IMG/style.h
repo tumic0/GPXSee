@@ -125,6 +125,8 @@ public:
 	  {return (type >= 0x10400 && type <= 0x10401);}
 	static bool isMarinePoint(quint32 type)
 	  {return type >= 0x10100 && type < 0x10a00;}
+	static bool isMarina(quint32 type)
+	  {return type == 0x10703;}
 
 private:
 	struct Section {
