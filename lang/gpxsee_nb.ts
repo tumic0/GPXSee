@@ -864,7 +864,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="996"/>
         <source>Error loading POI file:</source>
-        <translation>Kunne ikke laste inn interessepunktfil:</translation>
+        <translation>Feil ved innlasting av interessepunktfil:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1226"/>
@@ -1129,7 +1129,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="127"/>
         <source>Garmin IMG maps</source>
-        <translation>Garming IMG-kart</translation>
+        <translation>Garmin IMG-kart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="130"/>
@@ -1164,7 +1164,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="139"/>
         <source>TrekBuddy maps/atlases</source>
-        <translation>TrekBuddy kart/atlas</translation>
+        <translation>TrekBuddy-kart/atlas</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="140"/>
@@ -1225,17 +1225,17 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="66"/>
         <source>Standard</source>
-        <translation>Forvalg</translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="71"/>
         <source>Non-HiDPI maps are loaded as HiDPI maps. The map is sharp but map objects are small/hard to read.</source>
-        <translation>Ikke-HiDPI -kart lastes som HiDPI-kart. Kartet er skarpt, men kartobjekter kan være små/vanskelige å lese.</translation>
+        <translation>Ikke-HiDPI-kart lastes som HiDPI-kart. Kartet er skarpt, men kartobjekter er små/vanskelige å lese.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="73"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
-        <translation>Ikke-HiDPI -kart lastes som de er. Kartobjekter har forventet størrelse, men kartet er uskarpt.</translation>
+        <translation>Ikke-HiDPI-kart lastes som de er. Kartobjekter har forventet størrelse, men kartet er uskarpt.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="117"/>
@@ -1347,7 +1347,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="148"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="249"/>
         <source>Use anti-aliasing</source>
-        <translation>Bruk kanutjevning</translation>
+        <translation>Bruk kantutjevning</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="218"/>
@@ -1437,7 +1437,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="310"/>
         <source>Moving average window size</source>
-        <translation>Flytter gjennomsnittlig kartstørrelse</translation>
+        <translation>Vindusstørrelse for glidende gjennomsnitt</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="335"/>
@@ -1463,7 +1463,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="338"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="348"/>
         <source>Cadence:</source>
-        <translation>Stegfrekvens:</translation>
+        <translation>Kadens:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="339"/>
@@ -1490,7 +1490,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="376"/>
         <source>mi/h</source>
-        <translation>mi/t</translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="379"/>
@@ -1586,7 +1586,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="523"/>
         <source>Pause detection</source>
-        <translation>Sett oppdagelse på pause</translation>
+        <translation>Pausedetektering</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="545"/>
@@ -1658,7 +1658,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="566"/>
         <source>Use HTTP authentication</source>
-        <translation>Bruk HTTP-identitetsbekreftelse</translation>
+        <translation>Bruk HTTP-autentisering</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="572"/>
@@ -1695,7 +1695,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="648"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
-        <translation>Det utskrevne området er omentrent det samme som visningsområdet. Kartforstørrelsesnivået endrer seg ikke.</translation>
+        <translation>Det utskrevne området er omtrent det samme som visningsområdet. Kartforstørrelsesnivået endrer seg ikke.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="650"/>
