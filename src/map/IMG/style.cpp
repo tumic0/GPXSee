@@ -520,7 +520,9 @@ void Style::defaultPointStyle()
 	_points[0x10214] = Point(QImage(":/IMG/beacon.png"));
 	_points[0x10215] = Point(QImage(":/IMG/beacon.png"));
 	_points[0x10216] = Point(QImage(":/IMG/mooring-buoy.png"));
+	_points[0x10305] = Point(QImage(":/IMG/chimney.png"));
 	_points[0x10306] = Point(QImage(":/IMG/church.png"));
+	_points[0x10308] = Point(QImage(":/IMG/tower.png"));
 	_points[0x1030a] = Point(QImage(":/IMG/triangulation-point.png"));
 	_points[0x10400] = Point(QImage(":/IMG/obstruction.png"));
 	_points[0x10401] = Point(QImage(":/IMG/obstruction.png"));

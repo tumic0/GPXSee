@@ -158,6 +158,8 @@
 		<file alias="pile.png">icons/IMG/marine/pile.png</file>
 		<file alias="spar-buoy.png">icons/IMG/marine/spar-buoy.png</file>
 		<file alias="mooring-buoy.png">icons/IMG/marine/mooring-buoy.png</file>
+		<file alias="tower.png">icons/IMG/marine/tower.png</file>
+		<file alias="chimney.png">icons/IMG/marine/chimney.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->
