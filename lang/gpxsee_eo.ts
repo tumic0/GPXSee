@@ -516,7 +516,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="418"/>
         <source>Download DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>Elŝuti DEM-datumojn</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="423"/>
@@ -1192,17 +1192,17 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="87"/>
         <source>kn</source>
-        <translation type="unfinished">kn</translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="90"/>
         <source>mi/h</source>
-        <translation type="unfinished">mi/h</translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="93"/>
         <source>km/h</source>
-        <translation type="unfinished">km/h</translation>
+        <translation>km/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="100"/>
@@ -1629,7 +1629,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="290"/>
         <source>Info color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Teksta koloro:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="523"/>
@@ -1687,7 +1687,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="622"/>
         <source>Plugin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kromprogramo:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
