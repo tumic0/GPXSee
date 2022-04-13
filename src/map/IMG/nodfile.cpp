@@ -6,6 +6,8 @@ using namespace IMG;
 
 #define ARRAY_SIZE(array) \
   (sizeof(array) / sizeof(array[0]))
+#define DELTA(val, s1, s2) \
+  (((int)((val) << (s1)) >> (s1)) << (s2))
 
 static const struct
 {
@@ -166,6 +168,7 @@ bool NODFile::linkInfo(Handle &hdl, const BlockInfo &blockInfo, quint32 linkId,
 	if (!(linkInfo.flags & 0x100)) {
 		if (!bs.read(s1, linkInfo.linkOffset))
 			return false;
+		linkInfo.nodeOffset = 0xFFFFFFFF;
 	} else {
 		if (!bs.read(s1 - s2, linkInfo.linkOffset))
 			return false;
@@ -180,50 +183,48 @@ bool NODFile::linkInfo(Handle &hdl, const BlockInfo &blockInfo, quint32 linkId,
 	return true;
 }
 
-bool NODFile::nodeInfo(Handle &hdl, const BlockInfo &blockInfo,
-  quint32 nodeOffset, NodeInfo &nodeInfo) const
+bool NODFile::nodeInfo(Handle &hdl, AdjacencyInfo &adj) const
 {
-	quint32 infoOffset = (nodeOffset << _nodeShift) + _block.offset;
-	if (infoOffset > _block.offset + _block.size || infoOffset < blockInfo.offset)
+	quint32 infoOffset = (adj.nodeOffset << _nodeShift) + _block.offset;
+	if (infoOffset > _block.offset + _block.size
+	  || infoOffset < adj.blockInfo.offset)
 		return false;
 	if (!seek(hdl, infoOffset))
 		return false;
 
 	BitStream1 bs(*this, hdl, _block.offset + _block.size - infoOffset);
 
-	if (!bs.read(8, nodeInfo.flags))
+	if (!bs.read(8, adj.nodeInfo.flags))
 		return false;
 
-	if ((nodeInfo.flags & 7) >= ARRAY_SIZE(LLBITS))
+	if ((adj.nodeInfo.flags & 7) >= ARRAY_SIZE(LLBITS))
 		return false;
-	quint8 lonBits = LLBITS[nodeInfo.flags & 7].lon;
-	quint8 latBits = LLBITS[nodeInfo.flags & 7].lat;
+	quint8 lonBits = LLBITS[adj.nodeInfo.flags & 7].lon;
+	quint8 latBits = LLBITS[adj.nodeInfo.flags & 7].lat;
 	quint8 maxBits = ((_flags >> 10) & 7) | 0x18;
 
 	quint32 lon, lat;
 	if (!(bs.read(lonBits, lon) && bs.read(latBits, lat)))
 		return false;
 
-	quint8 lonShift = 0x20 - lonBits;
-	quint8 latShift = 0x20 - latBits;
 	quint8 shift = 0x20 - maxBits;
 	QPoint pos(
-	  (((int)(lon << lonShift) >> lonShift) << shift) + blockInfo.hdr.nodeLonBase,
-	  (((int)(lat << latShift) >> latShift) << shift) + blockInfo.hdr.nodeLatBase);
-	nodeInfo.bytes = ((lonBits + latBits) >> 3) + 1;
+	  adj.blockInfo.hdr.nodeLonBase + DELTA(lon, 0x20 - lonBits, shift),
+	  adj.blockInfo.hdr.nodeLatBase + DELTA(lat, 0x20 - latBits, shift));
+	adj.nodeInfo.bytes = ((lonBits + latBits) >> 3) + 1;
 
-	if ((maxBits < 0x1c) && (nodeInfo.flags & 8)) {
+	if ((maxBits < 0x1c) && (adj.nodeInfo.flags & 8)) {
 		quint8 extraBits = 0x1c - maxBits;
 		quint32 extraLon, extraLat;
 
 		if (!(bs.read(extraBits, extraLon) && bs.read(extraBits, extraLat)))
 			return false;
 		pos.setX(pos.x() | extraLon << 4); pos.setY(pos.y() | extraLat << 4);
-		nodeInfo.bytes++;
+		adj.nodeInfo.bytes++;
 	}
 	// TODO?: check and adjust (shift) coordinates
 
-	nodeInfo.pos = pos;
+	adj.nodeInfo.pos = pos;
 
 	return true;
 }
@@ -480,14 +481,14 @@ bool NODFile::relAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 	return true;
 }
 
-int NODFile::nextNode(Handle &hdl, AdjacencyInfo &adjInfo) const
+int NODFile::nextNode(Handle &hdl, AdjacencyInfo &adj) const
 {
-	if (adjInfo.nodeOffset == 0xFFFFFFFF)
+	if (adj.nodeOffset == 0xFFFFFFFF)
 		return 1;
 
-	if (!nodeInfo(hdl, adjInfo.blockInfo, adjInfo.nodeOffset, adjInfo.nodeInfo))
+	if (!nodeInfo(hdl, adj))
 		return -1;
-	if (!adjacencyInfo(hdl, adjInfo))
+	if (!adjacencyInfo(hdl, adj))
 		return -1;
 
 	return 0;

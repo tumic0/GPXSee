@@ -78,13 +78,14 @@ public:
 	  LinkInfo &linkInfo) const;
 	bool linkType(Handle &hdl, const BlockInfo &blockInfo, quint8 linkId,
 	  quint32 &type) const;
-	int nextNode(Handle &hdl, AdjacencyInfo &adjInfo) const;
+	int nextNode(Handle &hdl, AdjacencyInfo &adj) const;
 
 private:
-	bool nodeInfo(Handle &hdl, const BlockInfo &blockInfo, quint32 nodeOffset,
-	  NodeInfo &nodeInfo) const;
 	bool nodeOffset(Handle &hdl, const BlockInfo &blockInfo, quint8 nodeId,
 	  quint32 &nodeOffset) const;
+	bool nodeBlock(Handle &hdl, quint32 nodeOffset, BlockInfo &blockInfo) const;
+	bool readBlock(Handle &hdl, quint32 blockOffset, BlockInfo &blockInfo) const;
+	bool nodeInfo(Handle &hdl, AdjacencyInfo &adj) const;
 	bool absAdjInfo(Handle &hdl, AdjacencyInfo &adj) const;
 	bool relAdjInfo(Handle &hdl, AdjacencyInfo &adj) const;
 	bool adjacencyInfo(Handle &hdl, AdjacencyInfo &adj) const
@@ -92,8 +93,6 @@ private:
 		return (adj.nodeInfo.flags & 0x20) ? absAdjInfo(hdl, adj)
 		  : relAdjInfo(hdl, adj);
 	}
-	bool nodeBlock(Handle &hdl, quint32 nodeOffset, BlockInfo &blockInfo) const;
-	bool readBlock(Handle &hdl, quint32 blockOffset, BlockInfo &blockInfo) const;
 
 	Section _block, _index;
 	quint32 _flags, _indexFlags;
