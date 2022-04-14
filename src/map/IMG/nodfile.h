@@ -40,7 +40,6 @@ public:
 	{
 		QPoint pos;
 		quint8 flags;
-		quint8 bytes;
 	};
 
 	struct AdjacencyInfo

@@ -210,7 +210,6 @@ bool NODFile::nodeInfo(Handle &hdl, AdjacencyInfo &adj) const
 	QPoint pos(
 	  adj.blockInfo.hdr.nodeLonBase + DELTA(lon, lonBits, maxBits),
 	  adj.blockInfo.hdr.nodeLatBase + DELTA(lat, latBits, maxBits));
-	adj.nodeInfo.bytes = ((lonBits + latBits) >> 3) + 1;
 
 	if ((maxBits < 0x1c) && (adj.nodeInfo.flags & 8)) {
 		quint8 extraBits = 0x1c - maxBits;
@@ -219,7 +218,6 @@ bool NODFile::nodeInfo(Handle &hdl, AdjacencyInfo &adj) const
 		if (!(bs.read(extraBits, extraLon) && bs.read(extraBits, extraLat)))
 			return false;
 		pos.setX(pos.x() | extraLon << 4); pos.setY(pos.y() | extraLat << 4);
-		adj.nodeInfo.bytes++;
 	}
 	// TODO?: check and adjust (shift) coordinates
 
@@ -282,11 +280,7 @@ bool NODFile::nodeBlock(Handle &hdl, quint32 nodeOffset,
 
 bool NODFile::absAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 {
-	quint32 infoOffset = (adj.nodeOffset << _nodeShift) + _block.offset
-	  + adj.nodeInfo.bytes;
-	if (!seek(hdl, infoOffset))
-		return false;
-	BitStream1 bs(*this, hdl, _block.offset + _block.size - infoOffset);
+	BitStream1 bs(*this, hdl, _block.offset + _block.size - pos(hdl));
 
 	quint8 linkId = adj.blockInfo.hdr.linksCount;
 	quint32 m2p = 2;
@@ -386,12 +380,7 @@ bool NODFile::absAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 
 bool NODFile::relAdjInfo(Handle &hdl, AdjacencyInfo &adj) const
 {
-	quint32 infoOffset = (adj.nodeOffset << _nodeShift) + _block.offset
-	  + adj.nodeInfo.bytes;
-	if (!seek(hdl, infoOffset))
-		return false;
-
-	BitStream1 bs(*this, hdl, _block.offset + _block.size - infoOffset);
+	BitStream1 bs(*this, hdl, _block.offset + _block.size - pos(hdl));
 
 	quint32 linkId = adj.blockInfo.hdr.linksCount;
 	quint32 skip = 8;
