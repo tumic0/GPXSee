@@ -6,7 +6,7 @@
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="15"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я користувача:</translation>
     </message>
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="16"/>
@@ -157,7 +157,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="167"/>
         <source>TwoNav files</source>
-        <translation type="unfinished"></translation>
+        <translation>TwoNav файли</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="168"/>
@@ -379,7 +379,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="263"/>
         <source>Unselect all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасування виділення всіх файлів</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="268"/>
@@ -436,7 +436,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="335"/>
         <source>Show position</source>
-        <translation type="unfinished"></translation>
+        <translation>Показати позицію</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="341"/>
@@ -446,7 +446,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="346"/>
         <source>Show coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Показати координати</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
@@ -516,7 +516,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="418"/>
         <source>Download DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантажити DEM дані</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="423"/>
@@ -1208,7 +1208,7 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="100"/>
         <source>ft/min</source>
-        <translation type="unfinished"></translation>
+        <translation>фут/хв</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="103"/>
@@ -1603,7 +1603,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
         <source>Crosshair color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Колір перехрестя:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="290"/>
