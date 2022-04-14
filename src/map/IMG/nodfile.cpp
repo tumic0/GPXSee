@@ -6,8 +6,8 @@ using namespace IMG;
 
 #define ARRAY_SIZE(array) \
   (sizeof(array) / sizeof(array[0]))
-#define DELTA(val, s1, s2) \
-  (((int)((val) << (s1)) >> (s1)) << (s2))
+#define DELTA(val, llBits, maxBits) \
+  (((int)((val) << (32 - (llBits))) >> (32 - (llBits))) << (32 - (maxBits)))
 
 static const struct
 {
@@ -207,10 +207,9 @@ bool NODFile::nodeInfo(Handle &hdl, AdjacencyInfo &adj) const
 	if (!(bs.read(lonBits, lon) && bs.read(latBits, lat)))
 		return false;
 
-	quint8 shift = 0x20 - maxBits;
 	QPoint pos(
-	  adj.blockInfo.hdr.nodeLonBase + DELTA(lon, 0x20 - lonBits, shift),
-	  adj.blockInfo.hdr.nodeLatBase + DELTA(lat, 0x20 - latBits, shift));
+	  adj.blockInfo.hdr.nodeLonBase + DELTA(lon, lonBits, maxBits),
+	  adj.blockInfo.hdr.nodeLatBase + DELTA(lat, latBits, maxBits));
 	adj.nodeInfo.bytes = ((lonBits + latBits) >> 3) + 1;
 
 	if ((maxBits < 0x1c) && (adj.nodeInfo.flags & 8)) {
