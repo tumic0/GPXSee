@@ -387,6 +387,9 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 			poly.points.append(QPointF(c.lon(), c.lat()));
 
 			while (stream.readNext(lonDelta, latDelta)) {
+				if (!(lonDelta | latDelta))
+					break;
+
 				pos.rx() += LS(lonDelta, 32-subdiv->bits()-shift);
 				if (pos.rx() < 0 && subdiv->lon() >= 0)
 					pos.rx() = 0x7fffffff;

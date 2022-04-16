@@ -84,10 +84,7 @@ public:
 
 	bool readNext(qint32 &lonDelta, qint32 &latDelta)
 	{
-		if (!(readDelta(_lonSign, lonDelta) && readDelta(_latSign, latDelta)))
-			return false;
-
-		return (lonDelta || latDelta);
+		return (readDelta(_lonSign, lonDelta) && readDelta(_latSign, latDelta));
 	}
 
 protected:

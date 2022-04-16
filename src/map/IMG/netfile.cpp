@@ -152,6 +152,9 @@ bool NETFile::readLine(BitStream4R &bs, const SubDiv *subdiv,
 	qint32 lonDelta, latDelta;
 
 	while (stream.readNext(lonDelta, latDelta)) {
+		if (!(lonDelta | latDelta))
+			break;
+
 		pos.rx() += LS(lonDelta, 32-subdiv->bits());
 		if (pos.rx() < 0 && subdiv->lon() >= 0)
 			pos.rx() = 0x7fffffff;
@@ -234,6 +237,8 @@ bool NETFile::readShape(const NODFile *nod, SubFile::Handle &nodHdl,
 		}
 
 		if (!stream.readNext(lonDelta, latDelta))
+			break;
+		if (!(lonDelta | latDelta) && !startWithStream)
 			break;
 
 		if (hasAdjustBit && !stream.read(1, adjustBit))
