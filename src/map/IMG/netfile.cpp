@@ -238,11 +238,11 @@ bool NETFile::readShape(const NODFile *nod, SubFile::Handle &nodHdl,
 
 		if (!stream.readNext(lonDelta, latDelta))
 			break;
-		if (!(lonDelta | latDelta) && !startWithStream)
-			break;
-
 		if (hasAdjustBit && !stream.read(1, adjustBit))
 			return false;
+
+		if (!(lonDelta | latDelta) && !startWithStream && !hasAdjustBit)
+			break;
 
 		stepsCnt++;
 
