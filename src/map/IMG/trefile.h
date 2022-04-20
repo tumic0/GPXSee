@@ -29,7 +29,7 @@ public:
 	void clear();
 
 	const RectC &bounds() const {return _bounds;}
-	QList<SubDiv*> subdivs(const RectC &rect, int bits, bool baseMap);
+	QList<SubDiv*> subdivs(const RectC &rect, int bits, const Range &baseMap);
 	quint32 shift(quint8 bits) const
 	  {return (bits == _levels.last().bits) ? (_flags >> 0xb) & 7 : 0;}
 	Range zooms() const
@@ -46,7 +46,7 @@ private:
 	friend QDebug operator<<(QDebug dbg, const MapLevel &level);
 
 	bool load(int idx);
-	int level(int bits, bool baseMap);
+	int level(int bits, const Range &baseMap);
 	int readExtEntry(Handle &hdl, quint32 &polygons, quint32 &lines,
 	  quint32 &points);
 

@@ -28,10 +28,10 @@ public:
 
 	SubFile *file(SubFile::Type type);
 
-	void polys(const RectC &rect, int bits, bool baseMap,
+	void polys(const RectC &rect, int bits, const Range &baseMap,
 	  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
 	  QCache<const SubDiv *, MapData::Polys> *polyCache);
-	void points(const RectC &rect, int bits, bool baseMap,
+	void points(const RectC &rect, int bits, const Range &baseMap,
 	  QList<MapData::Point> *points, QCache<const SubDiv*,
 	  QList<MapData::Point> > *pointCache);
 

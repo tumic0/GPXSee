@@ -284,12 +284,12 @@ void TREFile::clear()
 	_subdivs.clear();
 }
 
-int TREFile::level(int bits, bool baseMap)
+int TREFile::level(int bits, const Range &baseMap)
 {
-	if (baseMap) {
-		if (!_isBaseMap && _levels.at(_firstLevel).bits > bits)
+	if (!baseMap.isNull()) {
+		if (!_isBaseMap && bits <= baseMap.max())
 			return -1;
-		if (_isBaseMap && bits > _levels.last().bits)
+		if (_isBaseMap && bits > baseMap.max())
 			return -1;
 	}
 
@@ -314,7 +314,8 @@ static bool cb(SubDiv *subdiv, void *context)
 	return true;
 }
 
-QList<SubDiv*> TREFile::subdivs(const RectC &rect, int bits, bool baseMap)
+QList<SubDiv*> TREFile::subdivs(const RectC &rect, int bits,
+  const Range &baseMap)
 {
 	QList<SubDiv*> list;
 	SubDivTree *tree = _subdivs.value(level(bits, baseMap));

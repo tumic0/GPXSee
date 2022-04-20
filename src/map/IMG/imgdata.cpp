@@ -137,8 +137,6 @@ bool IMGData::readFAT(QFile &file, TileMap &tileMap)
 
 bool IMGData::createTileTree(const TileMap &tileMap)
 {
-	int minMapZoom = 24;
-
 	for (TileMap::const_iterator it = tileMap.constBegin();
 	  it != tileMap.constEnd(); ++it) {
 		VectorTile *tile = it.value();
@@ -160,23 +158,33 @@ bool IMGData::createTileTree(const TileMap &tileMap)
 		_bounds |= tile->bounds();
 		if (tile->zooms().min() < _zooms.min())
 			_zooms.setMin(tile->zooms().min());
-		if (tile->zooms().min() < minMapZoom)
-			minMapZoom = tile->zooms().min();
 	}
 
 	// Detect and mark basemap
 	TileTree::Iterator it;
+	bool baseMap = false;
+
 	for (_tileTree.GetFirst(it); !_tileTree.IsNull(it); _tileTree.GetNext(it)) {
 		VectorTile *tile = _tileTree.GetAt(it);
-		if (tile->zooms().min() > minMapZoom)
-			_baseMap = true;
-		if (tile->zooms().min() == minMapZoom)
-			tile->markAsBasemap();
+		if (tile->zooms().min() > _zooms.min()) {
+			baseMap = true;
+			break;
+		}
 	}
-	// Allow some extra zoom out on maps without basemaps, but not too much as
-	// this would kill the rendering performance
-	if (!_baseMap)
+	if (baseMap) {
+		for (_tileTree.GetFirst(it); !_tileTree.IsNull(it);
+		  _tileTree.GetNext(it)) {
+			VectorTile *tile = _tileTree.GetAt(it);
+			if (tile->zooms().min() == _zooms.min()) {
+				tile->markAsBasemap();
+				_baseMap = tile->zooms();
+			}
+		}
+	} else {
+		/* Allow some extra zoom out on maps without basemaps, but not too much
+		   as this would kill the rendering performance. */
 		_zooms.setMin(_zooms.min() - 2);
+	}
 
 	return (_tileTree.Count() > 0);
 }

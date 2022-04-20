@@ -100,7 +100,7 @@ void VectorTile::clear()
 	_loaded = 0;
 }
 
-void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
+void VectorTile::polys(const RectC &rect, int bits, const Range &baseMap,
   QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
   QCache<const SubDiv *, MapData::Polys> *polyCache)
 {
@@ -169,7 +169,7 @@ void VectorTile::polys(const RectC &rect, int bits, bool baseMap,
 	delete rgnHdl; delete lblHdl; delete netHdl; delete nodHdl; delete nodHdl2;
 }
 
-void VectorTile::points(const RectC &rect, int bits, bool baseMap,
+void VectorTile::points(const RectC &rect, int bits, const Range &baseMap,
   QList<MapData::Point> *points, QCache<const SubDiv *,
   QList<MapData::Point> > *pointCache)
 {

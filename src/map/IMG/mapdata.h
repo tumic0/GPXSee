@@ -79,7 +79,7 @@ protected:
 	Style *_style;
 	TileTree _tileTree;
 	Range _zooms;
-	bool _baseMap;
+	Range _baseMap;
 
 	bool _valid;
 	QString _errorString;
@@ -96,7 +96,7 @@ private:
 
 	struct PolyCTX
 	{
-		PolyCTX(const RectC &rect, int bits, bool baseMap,
+		PolyCTX(const RectC &rect, int bits, const Range &baseMap,
 		  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
 		  QCache<const SubDiv*, MapData::Polys> *polyCache)
 		  : rect(rect), bits(bits), baseMap(baseMap), polygons(polygons),
@@ -104,7 +104,7 @@ private:
 
 		const RectC &rect;
 		int bits;
-		bool baseMap;
+		const Range &baseMap;
 		QList<MapData::Poly> *polygons;
 		QList<MapData::Poly> *lines;
 		QCache<const SubDiv*, MapData::Polys> *polyCache;
@@ -112,7 +112,7 @@ private:
 
 	struct PointCTX
 	{
-		PointCTX(const RectC &rect, int bits, bool baseMap,
+		PointCTX(const RectC &rect, int bits, const Range &baseMap,
 		  QList<MapData::Point> *points,
 		  QCache<const SubDiv*, QList<MapData::Point> > *pointCache)
 		  : rect(rect), bits(bits), baseMap(baseMap), points(points),
@@ -120,7 +120,7 @@ private:
 
 		const RectC &rect;
 		int bits;
-		bool baseMap;
+		const Range &baseMap;
 		QList<MapData::Point> *points;
 		QCache<const SubDiv*, QList<MapData::Point> > *pointCache;
 	};

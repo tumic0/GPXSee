@@ -15,6 +15,7 @@ public:
 	int size() const {return (_max - _min);}
 
 	bool isValid() const {return size() >= 0;}
+	bool isNull() const {return _min == 0 && _max == 0;}
 
 	void setMin(int min) {_min = min;}
 	void setMax(int max) {_max = max;}

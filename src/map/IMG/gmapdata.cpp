@@ -94,8 +94,10 @@ bool GMAPData::loadTile(const QDir &dir, bool baseMap)
 		delete tile;
 		return false;
 	}
-	if (baseMap)
+	if (baseMap) {
 		tile->markAsBasemap();
+		_baseMap = tile->zooms();
+	}
 
 	double min[2], max[2];
 	min[0] = tile->bounds().left();
@@ -124,10 +126,7 @@ GMAPData::GMAPData(const QString &fileName) : MapData(fileName)
 	}
 	QDir dataDir(baseDir.filePath(dataDirPath));
 	QFileInfoList ml = dataDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
-
-
 	QFileInfo baseMap(dataDir.filePath(baseMapPath));
-	_baseMap = !baseMapPath.isEmpty() && baseMap.exists();
 
 	for (int i = 0; i < ml.size(); i++) {
 		const QFileInfo &fi = ml.at(i);
