@@ -391,8 +391,6 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 					break;
 
 				pos.rx() += LS(lonDelta, 32-subdiv->bits()-shift);
-				if (pos.rx() < 0 && subdiv->lon() >= 0)
-					pos.rx() = 0x7fffffff;
 				pos.ry() += LS(latDelta, 32-subdiv->bits()-shift);
 
 				Coordinates c(toWGS32(pos.x()), toWGS32(pos.y()));

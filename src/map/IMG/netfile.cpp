@@ -156,8 +156,6 @@ bool NETFile::readLine(BitStream4R &bs, const SubDiv *subdiv,
 			break;
 
 		pos.rx() += LS(lonDelta, 32-subdiv->bits());
-		if (pos.rx() < 0 && subdiv->lon() >= 0)
-			pos.rx() = 0x7fffffff;
 		pos.ry() += LS(latDelta, 32-subdiv->bits());
 
 		Coordinates c(toWGS32(pos.x()), toWGS32(pos.y()));
