@@ -4,6 +4,153 @@
 
 using namespace IMG;
 
+static bool readColor(SubFile *file, SubFile::Handle &hdl, QColor &color)
+{
+	quint8 b, g, r;
+
+	if (!(file->readByte(hdl, &b) && file->readByte(hdl, &g)
+	  && file->readByte(hdl, &r)))
+		return false;
+
+	color = qRgb(r, g, b);
+
+	return true;
+}
+
+static bool readColorTable(SubFile *file, SubFile::Handle &hdl, QImage& img,
+  int colors, int bpp, bool transparent)
+{
+	img.setColorCount(colors);
+
+	if (transparent) {
+		quint8 byte;
+		quint32 bits = 0, reg = 0, mask = 0x000000FF;
+
+		for (int i = 0; i < colors; i++) {
+			while (bits < 28) {
+				if (!file->readByte(hdl, &byte))
+					return false;
+
+				mask = 0x000000FF << bits;
+				reg  = reg & (~mask);
+				reg  = reg | (byte << bits);
+				bits += 8;
+			}
+
+			img.setColor(i, qRgba((reg >> 16) & 0x0FF, (reg >> 8) & 0x0FF,
+			  reg & 0x0FF, ~((reg >> 24) & 0x0F) << 4));
+
+			reg = reg >> 28;
+			bits -= 28;
+		}
+		for (int i = colors; i < 1<<bpp; i++)
+			img.setColor(i, qRgba(0, 0, 0, 0));
+	} else {
+		QColor color;
+
+		for (int i = 0; i < colors; i++) {
+			if (!readColor(file, hdl, color))
+				return false;
+			img.setColor(i, color.rgb());
+		}
+		for (int i = colors; i < 1<<bpp; i++)
+			img.setColor(i, qRgba(0, 0, 0, 0));
+	}
+
+	return true;
+}
+
+static bool readBitmap(SubFile *file, SubFile::Handle &hdl, QImage &img,
+  int bpp)
+{
+	if (!bpp)
+		return true;
+
+	for (int y = 0; y < img.height(); y++) {
+		for (int x = 0; x < img.width(); x += 8/bpp) {
+			quint8 color;
+			if (!file->readByte(hdl, &color))
+				return false;
+
+			for (int i = 0; i < 8/bpp && x + i < img.width(); i++) {
+				int value = (i > 0) ? (color >>= bpp) : color;
+
+				if (bpp == 4)
+					value = value & 0xf;
+				else if (bpp == 2)
+					value = value & 0x3;
+				else if (bpp == 1)
+					value = value & 0x1;
+
+				img.setPixel(x + i, y, value);
+			}
+		}
+	}
+
+	return true;
+}
+
+static int colors2bpp(quint8 colors, quint8 flags)
+{
+	switch (flags) {
+		case 0x00:
+			if (colors < 3)
+				return colors;
+			else if (colors == 3)
+				return 2;
+			else if (colors < 16)
+				return 4;
+			else
+				return 8;
+		case 0x10:
+			if (colors == 0)
+				return 1;
+			else if (colors < 3)
+				return 2;
+			else if (colors < 15)
+				return 4;
+			else
+				return 8;
+		case 0x20:
+			if (colors == 0)
+				return -1;
+			else if (colors < 3)
+				return colors;
+			else if (colors < 4)
+				return 2;
+			else if (colors < 16)
+				return 4;
+			else
+				return 8;
+		default:
+			return -1;
+	}
+}
+
+static bool skipLabel(SubFile *file, SubFile::Handle &hdl)
+{
+	quint32 len;
+
+	if (!file->readVUInt32(hdl, len))
+		return false;
+	if (!file->seek(hdl, file->pos(hdl) + len))
+		return false;
+
+	return true;
+}
+
+static QImage railroad()
+{
+	QImage img(16, 4, QImage::Format_ARGB32_Premultiplied);
+	img.fill(QColor("#717171"));
+	QPainter p(&img);
+	p.setPen(QPen(Qt::white, 2));
+	p.drawLine(9, 2, 15, 2);
+
+	return img;
+}
+
+
 void Style::defaultPolygonStyle()
 {
 	_polygons[TYPE(0x01)] = Polygon(QBrush("#dfd3b5"));
@@ -149,17 +296,6 @@ void Style::defaultPolygonStyle()
 	  << TYPE(0x0d) << 0x1090a << TYPE(0x0e) << 0x1090b << TYPE(0x0f)
 	  << TYPE(0x10) << TYPE(0x11) << TYPE(0x12) << TYPE(0x19) << 0x1090d
 	  << TYPE(0x13) << 0x10900;
-}
-
-static QImage railroad()
-{
-	QImage img(16, 4, QImage::Format_ARGB32_Premultiplied);
-	img.fill(QColor("#717171"));
-	QPainter p(&img);
-	p.setPen(QPen(Qt::white, 2));
-	p.drawLine(9, 2, 15, 2);
-
-	return img;
 }
 
 void Style::defaultLineStyle()
@@ -537,62 +673,6 @@ void Style::defaultPointStyle()
 	_points[0x10705] = Point(QImage(":/IMG/anchoring-prohibited.png"));
 }
 
-static bool readBitmap(SubFile *file, SubFile::Handle &hdl, QImage &img,
-  int bpp)
-{
-	if (!bpp)
-		return true;
-
-	for (int y = 0; y < img.height(); y++) {
-		for (int x = 0; x < img.width(); x += 8/bpp) {
-			quint8 color;
-			if (!file->readByte(hdl, &color))
-				return false;
-
-			for (int i = 0; i < 8/bpp && x + i < img.width(); i++) {
-				int value = (i > 0) ? (color >>= bpp) : color;
-
-				if (bpp == 4)
-					value = value & 0xf;
-				else if (bpp == 2)
-					value = value & 0x3;
-				else if (bpp == 1)
-					value = value & 0x1;
-
-				img.setPixel(x + i, y, value);
-			}
-		}
-	}
-
-	return true;
-}
-
-static bool readColor(SubFile *file, SubFile::Handle &hdl, QColor &color)
-{
-	quint8 b, g, r;
-
-	if (!(file->readByte(hdl, &b) && file->readByte(hdl, &g)
-	  && file->readByte(hdl, &r)))
-		return false;
-
-	color = qRgb(r, g, b);
-
-	return true;
-}
-
-static bool skipLabel(SubFile *file, SubFile::Handle &hdl)
-{
-	quint32 len;
-
-	if (!file->readVUInt32(hdl, len))
-		return false;
-	if (!file->seek(hdl, file->pos(hdl) + len))
-		return false;
-
-	return true;
-}
-
-
 bool Style::itemInfo(SubFile *file, SubFile::Handle &hdl,
   const Section &section, ItemInfo &info)
 {
@@ -623,6 +703,363 @@ bool Style::itemInfo(SubFile *file, SubFile::Handle &hdl,
 	return true;
 }
 
+bool Style::parsePolygon(SubFile *file, SubFile::Handle &hdl,
+  const Section &section, const ItemInfo &info, quint32 type)
+{
+	quint8 t8, flags;
+	if (!(file->seek(hdl, section.offset + info.offset)
+	  && file->readByte(hdl, &t8)))
+		return false;
+	flags = t8 & 0x0F;
+
+	QColor c1, c2, c3, c4;
+	QImage img(32, 32, QImage::Format_Indexed8);
+
+	switch (flags) {
+		case 0x01:
+			if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
+			  && readColor(file, hdl, c3) && readColor(file, hdl, c4)))
+				return false;
+			_polygons[type] = Polygon(QBrush(c1), QPen(c3, 2));
+			break;
+
+		case 0x06:
+		case 0x07:
+			if (!readColor(file, hdl, c1))
+				return false;
+			_polygons[type] = Polygon(QBrush(c1));
+			break;
+
+		case 0x08:
+			if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)))
+				return false;
+
+			img.setColorCount(2);
+			img.setColor(0, c2.rgb());
+			img.setColor(1, c1.rgb());
+			if (!readBitmap(file, hdl, img, 1))
+				return false;
+
+			_polygons[type] = Polygon(QBrush(img));
+			break;
+
+		case 0x09:
+			if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
+			  && readColor(file, hdl, c3) && readColor(file, hdl, c4)))
+				return false;
+
+			img.setColorCount(2);
+			img.setColor(0, c2.rgb());
+			img.setColor(1, c1.rgb());
+			if (!readBitmap(file, hdl, img, 1))
+				return false;
+
+			_polygons[type] = Polygon(QBrush(img));
+			break;
+
+		case 0x0B:
+		case 0x0D:
+			if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
+			  && readColor(file, hdl, c3)))
+				return false;
+
+			img.setColorCount(2);
+			img.setColor(0, (flags == 0x0B) ? qRgba(255, 255, 255, 0)
+			  : c2.rgb());
+			img.setColor(1, c1.rgb());
+			if (!readBitmap(file, hdl, img, 1))
+				return false;
+
+			_polygons[type] = Polygon(QBrush(img));
+			break;
+
+		case 0x0E:
+			if (!readColor(file, hdl, c1))
+				return false;
+
+			img.setColorCount(2);
+			img.setColor(0, qRgba(255, 255, 255, 0));
+			img.setColor(1, c1.rgb());
+			if (!readBitmap(file, hdl, img, 1))
+				return false;
+
+			_polygons[type] = Polygon(QBrush(img));
+			break;
+
+		case 0x0F:
+			if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)))
+				return false;
+
+			img.setColorCount(2);
+			img.setColor(0, qRgba(255, 255, 255, 0));
+			img.setColor(1, c1.rgb());
+			if (!readBitmap(file, hdl, img, 1))
+				return false;
+
+			_polygons[type] = Polygon(QBrush(img));
+			break;
+
+		default:
+			return false;
+	}
+
+	return true;
+}
+
+bool Style::parseLine(SubFile *file, SubFile::Handle &hdl,
+  const Section &section, const ItemInfo &info, quint32 type)
+{
+	quint8 t8_1, t8_2, flags, rows;
+	if (!(file->seek(hdl, section.offset + info.offset)
+	  && file->readByte(hdl, &t8_1) && file->readByte(hdl, &t8_2)))
+		return false;
+	flags = t8_1 & 0x07;
+	rows = t8_1 >> 3;
+	bool label = t8_2 & 0x01;
+	bool fontInfo = t8_2 & 0x04;
+
+	QColor c1, c2, c3, c4;
+	quint8 w1, w2;
+
+	switch (flags) {
+		case 0x00:
+			if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)))
+				return false;
+
+			if (rows) {
+				QImage img(32, rows, QImage::Format_Indexed8);
+				img.setColorCount(2);
+				img.setColor(0, c2.rgb());
+				img.setColor(1, c1.rgb());
+				if (!readBitmap(file, hdl, img, 1))
+					return false;
+
+				_lines[type] = Line(img);
+			} else {
+				if (!(file->readByte(hdl, &w1) && file->readByte(hdl, &w2)))
+					return false;
+
+				_lines[type] = (w2 > w1)
+				  ? Line(QPen(c1, w1, Qt::SolidLine, Qt::RoundCap,
+				    Qt::RoundJoin), QPen(c2, w2, Qt::SolidLine, Qt::RoundCap,
+				    Qt::RoundJoin))
+				  : Line(QPen(c1, w1, Qt::SolidLine, Qt::RoundCap,
+				    Qt::RoundJoin));
+			}
+			break;
+
+		case 0x01:
+			if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
+			  && readColor(file, hdl, c3) && readColor(file, hdl, c4)))
+				return false;
+
+			if (rows) {
+				QImage img(32, rows, QImage::Format_Indexed8);
+				img.setColorCount(2);
+				img.setColor(0, c2.rgb());
+				img.setColor(1, c1.rgb());
+				if (!readBitmap(file, hdl, img, 1))
+					return false;
+
+				_lines[type] = Line(img);
+			} else {
+				if (!(file->readByte(hdl, &w1) && file->readByte(hdl, &w2)))
+					return false;
+
+				_lines[type] = (w2 > w1)
+				  ? Line(QPen(c1, w1, Qt::SolidLine, Qt::RoundCap,
+				    Qt::RoundJoin), QPen(c2, w2, Qt::SolidLine, Qt::RoundCap,
+				    Qt::RoundJoin))
+				  : Line(QPen(c1, w1, Qt::SolidLine, Qt::RoundCap,
+				    Qt::RoundJoin));
+			}
+			break;
+
+		case 0x03:
+			if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
+			  && readColor(file, hdl, c3)))
+				return false;
+
+			if (rows) {
+				QImage img(32, rows, QImage::Format_Indexed8);
+				img.setColorCount(2);
+				img.setColor(0, qRgba(255, 255, 255, 0));
+				img.setColor(1, c1.rgb());
+				if (!readBitmap(file, hdl, img, 1))
+					return false;
+
+				_lines[type] = Line(img);
+			} else {
+				if (!(file->readByte(hdl, &w1) && file->readByte(hdl, &w2)))
+					return false;
+
+				_lines[type] = Line(QPen(c1, w1, Qt::SolidLine,
+				  Qt::RoundCap, Qt::RoundJoin));
+			}
+			break;
+
+		case 0x05:
+			if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
+			  && readColor(file, hdl, c3)))
+				return false;
+
+			if (rows) {
+				QImage img(32, rows, QImage::Format_Indexed8);
+				img.setColorCount(2);
+				img.setColor(0, c2.rgb());
+				img.setColor(1, c1.rgb());
+				if (!readBitmap(file, hdl, img, 1))
+					return false;
+
+				_lines[type] = Line(img);
+			} else {
+				if (!(file->readByte(hdl, &w1) && file->readByte(hdl, &w2)))
+					return false;
+
+				_lines[type] = (w2 > w1)
+				  ? Line(QPen(c1, w1, Qt::SolidLine, Qt::RoundCap,
+				    Qt::RoundJoin), QPen(c2, w2, Qt::SolidLine, Qt::RoundCap,
+				    Qt::RoundJoin))
+				  : Line(QPen(c1, w1, Qt::SolidLine, Qt::RoundCap,
+				    Qt::RoundJoin));
+			}
+			break;
+
+		case 0x06:
+			if (!readColor(file, hdl, c1))
+				return false;
+
+			if (rows) {
+				QImage img(32, rows, QImage::Format_Indexed8);
+				img.setColorCount(2);
+				img.setColor(0, qRgba(255, 255, 255, 0));
+				img.setColor(1, c1.rgb());
+				if (!readBitmap(file, hdl, img, 1))
+					return false;
+
+				_lines[type] = Line(img);
+			} else {
+				if (!file->readByte(hdl, &w1))
+					return false;
+
+				_lines[type] = Line(QPen(c1, w1, Qt::SolidLine,
+				  Qt::RoundCap, Qt::RoundJoin));
+			}
+			break;
+
+		case 0x07:
+			if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)))
+				return false;
+
+			if (rows) {
+				QImage img(32, rows, QImage::Format_Indexed8);
+				img.setColorCount(2);
+				img.setColor(0, qRgba(255,255,255,0));
+				img.setColor(1, c1.rgb());
+				if (!readBitmap(file, hdl, img, 1))
+					return false;
+
+				_lines[type] = Line(img);
+			} else {
+				if (!file->readByte(hdl, &w1))
+					return false;
+
+				_lines[type] = Line(QPen(c1, w1, Qt::SolidLine,
+				  Qt::RoundCap, Qt::RoundJoin));
+			}
+			break;
+
+		default:
+			return false;
+	}
+
+	if (isContourLine(type)) {
+		Line &l = _lines[type];
+		l.setTextColor(l.foreground().color());
+		l.setTextFontSize(Small);
+	}
+
+	if (label && !skipLabel(file, hdl))
+		return false;
+
+	if (fontInfo) {
+		quint8 labelFlags;
+		if (!file->readByte(hdl, &labelFlags))
+			return false;
+		if (labelFlags & 0x08) {
+			if (!readColor(file, hdl, c1))
+				return false;
+			_lines[type].setTextColor(c1);
+		}
+		_lines[type].setTextFontSize((FontSize)(labelFlags & 0x07));
+	}
+
+	return true;
+}
+
+bool Style::parsePoint(SubFile *file, SubFile::Handle &hdl,
+  const Section &section, const ItemInfo &info, quint32 type)
+{
+	quint8 t8_1, width, height, numColors, imgType;
+
+	if (!(file->seek(hdl, section.offset + info.offset)
+	  && file->readByte(hdl, &t8_1) && file->readByte(hdl, &width)
+	  && file->readByte(hdl, &height) && file->readByte(hdl, &numColors)
+	  && file->readByte(hdl, &imgType)))
+		return false;
+
+	bool label = t8_1 & 0x04;
+	bool fontInfo = t8_1 & 0x08;
+
+	int bpp = colors2bpp(numColors, imgType);
+	if (bpp <= 0)
+		return true;
+	QImage img(width, height, QImage::Format_Indexed8);
+	if (!readColorTable(file, hdl, img, numColors, bpp, imgType == 0x20))
+		return false;
+	if (!readBitmap(file, hdl, img, bpp))
+		return false;
+	_points[type] = Point(img);
+
+	if (t8_1 == 0x03) {
+		if (!(file->readByte(hdl, &numColors)
+		  && file->readByte(hdl, &imgType)))
+			return false;
+		if ((bpp = colors2bpp(numColors, imgType)) < 0)
+			return true;
+		if (!readColorTable(file, hdl, img, numColors, bpp, imgType == 0x20))
+			return false;
+		if (!readBitmap(file, hdl, img, bpp))
+			return false;
+	} else if (t8_1 == 0x02) {
+		if (!(file->readByte(hdl, &numColors)
+		  && file->readByte(hdl, &imgType)))
+			return false;
+		if ((bpp = colors2bpp(numColors, imgType)) < 0)
+			return true;
+		if (!readColorTable(file, hdl, img, numColors, bpp, imgType == 0x20))
+			return false;
+	}
+
+	if (label && !skipLabel(file, hdl))
+		return false;
+
+	if (fontInfo) {
+		quint8 labelFlags;
+		QColor color;
+		if (!file->readByte(hdl, &labelFlags))
+			return false;
+		if (labelFlags & 0x08) {
+			if (!readColor(file, hdl, color))
+				return false;
+			_points[type].setTextColor(color);
+		}
+		_points[type].setTextFontSize((FontSize)(labelFlags & 0x07));
+	}
+
+	return true;
+}
+
 bool Style::parsePolygons(SubFile *file, SubFile::Handle &hdl,
   const Section &section)
 {
@@ -638,102 +1075,9 @@ bool Style::parsePolygons(SubFile *file, SubFile::Handle &hdl,
 		quint32 type = info.extended
 		  ? 0x10000 | (info.type << 8) | info.subtype : (info.type << 8);
 
-		quint8 t8, flags;
-		if (!(file->seek(hdl, section.offset + info.offset)
-		  && file->readByte(hdl, &t8)))
-			return false;
-		flags = t8 & 0x0F;
-
-		QColor c1, c2, c3, c4;
-		QImage img(32, 32, QImage::Format_Indexed8);
-
-		switch (flags) {
-			case 0x01:
-				if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
-				  && readColor(file, hdl, c3) && readColor(file, hdl, c4)))
-					return false;
-				_polygons[type] = Polygon(QBrush(c1), QPen(c3, 2));
-				break;
-
-			case 0x06:
-			case 0x07:
-				if (!readColor(file, hdl, c1))
-					return false;
-				_polygons[type] = Polygon(QBrush(c1));
-				break;
-
-			case 0x08:
-				if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)))
-					return false;
-
-				img.setColorCount(2);
-				img.setColor(0, c2.rgb());
-				img.setColor(1, c1.rgb());
-				if (!readBitmap(file, hdl, img, 1))
-					return false;
-
-				_polygons[type] = Polygon(QBrush(img));
-				break;
-
-			case 0x09:
-				if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
-				  && readColor(file, hdl, c3) && readColor(file, hdl, c4)))
-					return false;
-
-				img.setColorCount(2);
-				img.setColor(0, c2.rgb());
-				img.setColor(1, c1.rgb());
-				if (!readBitmap(file, hdl, img, 1))
-					return false;
-
-				_polygons[type] = Polygon(QBrush(img));
-				break;
-
-			case 0x0B:
-			case 0x0D:
-				if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
-				  && readColor(file, hdl, c3)))
-					return false;
-
-				img.setColorCount(2);
-				img.setColor(0, (flags == 0x0B) ? qRgba(255, 255, 255, 0)
-				  : c2.rgb());
-				img.setColor(1, c1.rgb());
-				if (!readBitmap(file, hdl, img, 1))
-					return false;
-
-				_polygons[type] = Polygon(QBrush(img));
-				break;
-
-			case 0x0E:
-				if (!readColor(file, hdl, c1))
-					return false;
-
-				img.setColorCount(2);
-				img.setColor(0, qRgba(255, 255, 255, 0));
-				img.setColor(1, c1.rgb());
-				if (!readBitmap(file, hdl, img, 1))
-					return false;
-
-				_polygons[type] = Polygon(QBrush(img));
-				break;
-
-			case 0x0F:
-				if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)))
-					return false;
-
-				img.setColorCount(2);
-				img.setColor(0, qRgba(255, 255, 255, 0));
-				img.setColor(1, c1.rgb());
-				if (!readBitmap(file, hdl, img, 1))
-					return false;
-
-				_polygons[type] = Polygon(QBrush(img));
-				break;
-
-			default:
-				return false;
-		}
+		if (!parsePolygon(file, hdl, section, info, type))
+			qWarning("%s: %x: broken polygon style",
+			  qPrintable(file->fileName()), type);
 	}
 
 	return true;
@@ -748,276 +1092,17 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 	for (quint32 i = 0; i < section.arraySize / section.arrayItemSize; i++) {
 		if (!file->seek(hdl, section.arrayOffset + i * section.arrayItemSize))
 			return false;
+
 		ItemInfo info;
 		if (!itemInfo(file, hdl, section, info))
 			return false;
+
 		quint32 type = info.extended
 		  ? 0x10000 | (info.type << 8) | info.subtype : (info.type << 8);
 
-		quint8 t8_1, t8_2, flags, rows;
-		if (!(file->seek(hdl, section.offset + info.offset)
-		  && file->readByte(hdl, &t8_1) && file->readByte(hdl, &t8_2)))
-			return false;
-		flags = t8_1 & 0x07;
-		rows = t8_1 >> 3;
-		bool label = t8_2 & 0x01;
-		bool fontInfo = t8_2 & 0x04;
-
-		QColor c1, c2, c3, c4;
-		quint8 w1, w2;
-
-		switch (flags) {
-			case 0x00:
-				if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)))
-					return false;
-
-				if (rows) {
-					QImage img(32, rows, QImage::Format_Indexed8);
-					img.setColorCount(2);
-					img.setColor(0, c2.rgb());
-					img.setColor(1, c1.rgb());
-					if (!readBitmap(file, hdl, img, 1))
-						return false;
-
-					_lines[type] = Line(img);
-				} else {
-					if (!(file->readByte(hdl, &w1) && file->readByte(hdl, &w2)))
-						return false;
-
-					_lines[type] = (w2 > w1)
-					  ? Line(QPen(c1, w1, Qt::SolidLine, Qt::RoundCap,
-						Qt::RoundJoin), QPen(c2, w2, Qt::SolidLine, Qt::RoundCap,
-						Qt::RoundJoin))
-					  : Line(QPen(c1, w1, Qt::SolidLine, Qt::RoundCap,
-						Qt::RoundJoin));
-				}
-				break;
-
-			case 0x01:
-				if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
-				  && readColor(file, hdl, c3) && readColor(file, hdl, c4)))
-					return false;
-
-				if (rows) {
-					QImage img(32, rows, QImage::Format_Indexed8);
-					img.setColorCount(2);
-					img.setColor(0, c2.rgb());
-					img.setColor(1, c1.rgb());
-					if (!readBitmap(file, hdl, img, 1))
-						return false;
-
-					_lines[type] = Line(img);
-				} else {
-					if (!(file->readByte(hdl, &w1) && file->readByte(hdl, &w2)))
-						return false;
-
-					_lines[type] = (w2 > w1)
-					  ? Line(QPen(c1, w1, Qt::SolidLine, Qt::RoundCap,
-						Qt::RoundJoin), QPen(c2, w2, Qt::SolidLine, Qt::RoundCap,
-						Qt::RoundJoin))
-					  : Line(QPen(c1, w1, Qt::SolidLine, Qt::RoundCap,
-						Qt::RoundJoin));
-				}
-				break;
-
-			case 0x03:
-				if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
-				  && readColor(file, hdl, c3)))
-					return false;
-
-				if (rows) {
-					QImage img(32, rows, QImage::Format_Indexed8);
-					img.setColorCount(2);
-					img.setColor(0, qRgba(255, 255, 255, 0));
-					img.setColor(1, c1.rgb());
-					if (!readBitmap(file, hdl, img, 1))
-						return false;
-
-					_lines[type] = Line(img);
-				} else {
-					if (!(file->readByte(hdl, &w1) && file->readByte(hdl, &w2)))
-						return false;
-
-					_lines[type] = Line(QPen(c1, w1, Qt::SolidLine,
-					  Qt::RoundCap, Qt::RoundJoin));
-				}
-				break;
-
-			case 0x05:
-				if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
-				  && readColor(file, hdl, c3)))
-					return false;
-
-				if (rows) {
-					QImage img(32, rows, QImage::Format_Indexed8);
-					img.setColorCount(2);
-					img.setColor(0, c2.rgb());
-					img.setColor(1, c1.rgb());
-					if (!readBitmap(file, hdl, img, 1))
-						return false;
-
-					_lines[type] = Line(img);
-				} else {
-					if (!(file->readByte(hdl, &w1) && file->readByte(hdl, &w2)))
-						return false;
-
-					_lines[type] = (w2 > w1)
-					  ? Line(QPen(c1, w1, Qt::SolidLine, Qt::RoundCap,
-						Qt::RoundJoin), QPen(c2, w2, Qt::SolidLine, Qt::RoundCap,
-						Qt::RoundJoin))
-					  : Line(QPen(c1, w1, Qt::SolidLine, Qt::RoundCap,
-						Qt::RoundJoin));
-				}
-				break;
-
-			case 0x06:
-				if (!readColor(file, hdl, c1))
-					return false;
-
-				if (rows) {
-					QImage img(32, rows, QImage::Format_Indexed8);
-					img.setColorCount(2);
-					img.setColor(0, qRgba(255, 255, 255, 0));
-					img.setColor(1, c1.rgb());
-					if (!readBitmap(file, hdl, img, 1))
-						return false;
-
-					_lines[type] = Line(img);
-				} else {
-					if (!file->readByte(hdl, &w1))
-						return false;
-
-					_lines[type] = Line(QPen(c1, w1, Qt::SolidLine,
-					  Qt::RoundCap, Qt::RoundJoin));
-				}
-				break;
-
-			case 0x07:
-				if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)))
-					return false;
-
-				if (rows) {
-					QImage img(32, rows, QImage::Format_Indexed8);
-					img.setColorCount(2);
-					img.setColor(0, qRgba(255,255,255,0));
-					img.setColor(1, c1.rgb());
-					if (!readBitmap(file, hdl, img, 1))
-						return false;
-
-					_lines[type] = Line(img);
-				} else {
-					if (!file->readByte(hdl, &w1))
-						return false;
-
-					_lines[type] = Line(QPen(c1, w1, Qt::SolidLine,
-					  Qt::RoundCap, Qt::RoundJoin));
-				}
-				break;
-
-			default:
-				return false;
-		}
-
-		if (isContourLine(type)) {
-			Line &l = _lines[type];
-			l.setTextColor(l.foreground().color());
-			l.setTextFontSize(Small);
-		}
-
-		if (label && !skipLabel(file, hdl))
-			return false;
-
-		if (fontInfo) {
-			quint8 labelFlags;
-			if (!file->readByte(hdl, &labelFlags))
-				return false;
-			if (labelFlags & 0x08) {
-				if (!readColor(file, hdl, c1))
-					return false;
-				_lines[type].setTextColor(c1);
-			}
-			_lines[type].setTextFontSize((FontSize)(labelFlags & 0x07));
-		}
-	}
-
-	return true;
-}
-
-static int colors2bpp(quint8 colors, quint8 flags)
-{
-	switch (flags) {
-		case 0x00:
-			if (colors < 3)
-				return colors;
-			else if (colors == 3)
-				return 2;
-			else if (colors < 16)
-				return 4;
-			else
-				return 8;
-		case 0x10:
-			if (colors == 0)
-				return 1;
-			else if (colors < 3)
-				return 2;
-			else if (colors < 15)
-				return 4;
-			else
-				return 8;
-		case 0x20:
-			if (colors == 0)
-				return -1;
-			else if (colors < 3)
-				return colors;
-			else if (colors < 4)
-				return 2;
-			else if (colors < 16)
-				return 4;
-			else
-				return 8;
-		default:
-			return -1;
-	}
-}
-
-static bool readColorTable(SubFile *file, SubFile::Handle &hdl, QImage& img,
-  int colors, int bpp, bool transparent)
-{
-	img.setColorCount(colors);
-
-	if (transparent) {
-		quint8 byte;
-		quint32 bits = 0, reg = 0, mask = 0x000000FF;
-
-		for (int i = 0; i < colors; i++) {
-			while (bits < 28) {
-				if (!file->readByte(hdl, &byte))
-					return false;
-
-				mask = 0x000000FF << bits;
-				reg  = reg & (~mask);
-				reg  = reg | (byte << bits);
-				bits += 8;
-			}
-
-			img.setColor(i, qRgba((reg >> 16) & 0x0FF, (reg >> 8) & 0x0FF,
-			  reg & 0x0FF, ~((reg >> 24) & 0x0F) << 4));
-
-			reg = reg >> 28;
-			bits -= 28;
-		}
-		for (int i = colors; i < 1<<bpp; i++)
-			img.setColor(i, qRgba(0, 0, 0, 0));
-	} else {
-		QColor color;
-
-		for (int i = 0; i < colors; i++) {
-			if (!readColor(file, hdl, color))
-				return false;
-			img.setColor(i, color.rgb());
-		}
-		for (int i = colors; i < 1<<bpp; i++)
-			img.setColor(i, qRgba(0, 0, 0, 0));
+		if (!parseLine(file, hdl, section, info, type))
+			qWarning("%s: %x: broken line style", qPrintable(file->fileName()),
+			  type);
 	}
 
 	return true;
@@ -1032,68 +1117,18 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 	for (quint32 i = 0; i < section.arraySize / section.arrayItemSize; i++) {
 		if (!file->seek(hdl, section.arrayOffset + i * section.arrayItemSize))
 			return false;
+
 		ItemInfo info;
 		if (!itemInfo(file, hdl, section, info))
 			return false;
+
 		quint32 type = info.extended
 		  ? 0x10000 | (info.type << 8) | info.subtype
 		  : (info.type << 8) | info.subtype;
 
-		quint8 t8_1, width, height, numColors, imgType;
-		if (!(file->seek(hdl, section.offset + info.offset)
-		  && file->readByte(hdl, &t8_1) && file->readByte(hdl, &width)
-		  && file->readByte(hdl, &height) && file->readByte(hdl, &numColors)
-		  && file->readByte(hdl, &imgType)))
-			return false;
-
-		bool label = t8_1 & 0x04;
-		bool fontInfo = t8_1 & 0x08;
-
-		int bpp = colors2bpp(numColors, imgType);
-		if (bpp <= 0)
-			continue;
-		QImage img(width, height, QImage::Format_Indexed8);
-		if (!readColorTable(file, hdl, img, numColors, bpp, imgType == 0x20))
-			return false;
-		if (!readBitmap(file, hdl, img, bpp))
-			return false;
-		_points[type] = Point(img);
-
-		if (t8_1 == 0x03) {
-			if (!(file->readByte(hdl, &numColors)
-			  && file->readByte(hdl, &imgType)))
-				return false;
-			if ((bpp = colors2bpp(numColors, imgType)) < 0)
-				continue;
-			if (!readColorTable(file, hdl, img, numColors, bpp, imgType == 0x20))
-				return false;
-			if (!readBitmap(file, hdl, img, bpp))
-				return false;
-		} else if (t8_1 == 0x02) {
-			if (!(file->readByte(hdl, &numColors)
-			  && file->readByte(hdl, &imgType)))
-				return false;
-			if ((bpp = colors2bpp(numColors, imgType)) < 0)
-				continue;
-			if (!readColorTable(file, hdl, img, numColors, bpp, imgType == 0x20))
-				return false;
-		}
-
-		if (label && !skipLabel(file, hdl))
-			return false;
-
-		if (fontInfo) {
-			quint8 labelFlags;
-			QColor color;
-			if (!file->readByte(hdl, &labelFlags))
-				return false;
-			if (labelFlags & 0x08) {
-				if (!readColor(file, hdl, color))
-					return false;
-				_points[type].setTextColor(color);
-			}
-			_points[type].setTextFontSize((FontSize)(labelFlags & 0x07));
-		}
+		if (!parsePoint(file, hdl, section, info, type))
+			qWarning("%s: %x: broken point style", qPrintable(file->fileName()),
+			  type);
 	}
 
 	return true;

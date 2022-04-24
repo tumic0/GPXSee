@@ -147,17 +147,24 @@ private:
 	bool parseTYPFile(SubFile *file);
 	bool parsePoints(SubFile *file, SubFile::Handle &hdl,
 	  const Section &section);
+	bool parsePoint(SubFile *file, SubFile::Handle &hdl,
+	  const Section &section, const ItemInfo &info, quint32 type);
 	bool parseLines(SubFile *file, SubFile::Handle &hdl,
 	  const Section &section);
+	bool parseLine(SubFile *file, SubFile::Handle &hdl,
+	  const Section &section, const ItemInfo &info, quint32 type);
 	bool parsePolygons(SubFile *file, SubFile::Handle &hdl,
 	  const Section &section);
+	bool parsePolygon(SubFile *file, SubFile::Handle &hdl,
+	  const Section &section, const ItemInfo &info, quint32 type);
 	bool parseDrawOrder(SubFile *file, SubFile::Handle &hdl,
 	  const Section &section);
-	bool itemInfo(SubFile *file, SubFile::Handle &hdl,
-	  const Section &section, ItemInfo &info);
 	void defaultPolygonStyle();
 	void defaultLineStyle();
 	void defaultPointStyle();
+
+	static bool itemInfo(SubFile *file, SubFile::Handle &hdl,
+	  const Section &section, ItemInfo &info);
 
 	QMap<quint32, Line> _lines;
 	QMap<quint32, Polygon> _polygons;
