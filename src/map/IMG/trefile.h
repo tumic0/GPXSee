@@ -25,7 +25,6 @@ public:
 	~TREFile();
 
 	bool init();
-	void markAsBasemap() {_isBaseMap = true;}
 	void clear();
 
 	const RectC &bounds() const {return _bounds;}
@@ -56,7 +55,6 @@ private:
 	quint32 _flags;
 	quint16 _extItemSize;
 	int _firstLevel;
-	bool _isBaseMap;
 
 	QMap<int, SubDivTree*> _subdivs;
 };

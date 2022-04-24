@@ -94,10 +94,6 @@ bool GMAPData::loadTile(const QDir &dir, bool baseMap)
 		delete tile;
 		return false;
 	}
-	if (baseMap) {
-		tile->markAsBasemap();
-		_baseMap = tile->zooms();
-	}
 
 	double min[2], max[2];
 	min[0] = tile->bounds().left();
@@ -109,6 +105,9 @@ bool GMAPData::loadTile(const QDir &dir, bool baseMap)
 	_bounds |= tile->bounds();
 	if (tile->zooms().min() < _zooms.min())
 		_zooms.setMin(tile->zooms().min());
+
+	if (baseMap)
+		_baseMap = tile->zooms();
 
 	return true;
 }

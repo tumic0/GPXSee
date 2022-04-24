@@ -122,8 +122,6 @@ bool TREFile::init()
 		}
 	}
 
-	_isBaseMap = false;
-
 	return (_firstLevel >= 0);
 }
 
@@ -287,9 +285,9 @@ void TREFile::clear()
 int TREFile::level(int bits, const Range &baseMap)
 {
 	if (!baseMap.isNull()) {
-		if (!_isBaseMap && bits <= baseMap.max())
+		if (zooms() != baseMap && bits <= baseMap.max())
 			return -1;
-		if (_isBaseMap && bits > baseMap.max())
+		if (zooms() == baseMap && bits > baseMap.max())
 			return -1;
 	}
 

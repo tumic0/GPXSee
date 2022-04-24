@@ -175,10 +175,8 @@ bool IMGData::createTileTree(const TileMap &tileMap)
 		for (_tileTree.GetFirst(it); !_tileTree.IsNull(it);
 		  _tileTree.GetNext(it)) {
 			VectorTile *tile = _tileTree.GetAt(it);
-			if (tile->zooms().min() == _zooms.min()) {
-				tile->markAsBasemap();
+			if (tile->zooms().min() == _zooms.min())
 				_baseMap = tile->zooms();
-			}
 		}
 	} else {
 		/* Allow some extra zoom out on maps without basemaps, but not too much

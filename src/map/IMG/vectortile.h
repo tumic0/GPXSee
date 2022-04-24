@@ -20,7 +20,6 @@ public:
 	}
 
 	bool init();
-	void markAsBasemap() {_tre->markAsBasemap();}
 	void clear();
 
 	const RectC &bounds() const {return _tre->bounds();}

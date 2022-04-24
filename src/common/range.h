@@ -10,6 +10,11 @@ public:
 	Range() {_min = 0; _max = 0;}
 	Range(int min, int max) : _min(min), _max(max) {}
 
+	bool operator==(const Range &other) const
+	  {return _min == other._min && _max == other._max;}
+	bool operator!=(const Range &other) const
+	  {return _min != other._min || _max != other._max;}
+
 	int min() const {return _min;}
 	int max() const {return _max;}
 	int size() const {return (_max - _min);}
