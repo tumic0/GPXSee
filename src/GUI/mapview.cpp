@@ -1216,7 +1216,8 @@ bool MapView::event(QEvent *event)
 {
 	if (event->type() == QEvent::Gesture)
 		return gestureEvent(static_cast<QGestureEvent*>(event));
-	return QWidget::event(event);
+
+	return QGraphicsView::event(event);
 }
 
 bool MapView::gestureEvent(QGestureEvent *event)
