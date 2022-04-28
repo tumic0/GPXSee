@@ -1,6 +1,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QWheelEvent>
+#include <QGestureEvent>
 #include <QApplication>
 #include <QScrollBar>
 #include <QClipboard>
@@ -49,6 +50,8 @@ MapView::MapView(Map *map, POI *poi, QGeoPositionInfoSource *source,
 	setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 	setResizeAnchor(QGraphicsView::AnchorViewCenter);
 	setAcceptDrops(false);
+	viewport()->setAttribute(Qt::WA_AcceptTouchEvents);
+	grabGesture(Qt::PinchGesture);
 
 	_mapScale = new ScaleItem();
 	_mapScale->setZValue(2.0);
@@ -125,6 +128,8 @@ MapView::MapView(Map *map, POI *poi, QGeoPositionInfoSource *source,
 	_opengl = false;
 	_plot = false;
 	_digitalZoom = 0;
+	_pinchZoom = 0;
+	_wheelDelta = 0;
 
 	_res = _map->resolution(_map->bounds());
 	_scene->setSceneRect(_map->bounds());
@@ -617,19 +622,40 @@ void MapView::zoom(int zoom, const QPoint &pos, bool shift)
 	}
 }
 
+void MapView::pinchGesture(QPinchGesture *gesture)
+{
+	QPinchGesture::ChangeFlags changeFlags = gesture->changeFlags();
+	qreal scaleFactor = gesture->totalScaleFactor();
+
+	if (changeFlags & QPinchGesture::ScaleFactorChanged) {
+		int z = 0;
+
+		for (qreal sc = scaleFactor; sc > 1.25; sc *= 0.8)
+			z += 1;
+		for (qreal sc = scaleFactor; sc < 0.8; sc *= 1.25)
+			z -= 1;
+
+		if (_pinchZoom != z) {
+			zoom(z - _pinchZoom, gesture->centerPoint().toPoint(), false);
+			_pinchZoom = z;
+		}
+	}
+	if (gesture->state() == Qt::GestureFinished)
+		_pinchZoom = 0;
+}
+
 void MapView::wheelEvent(QWheelEvent *event)
 {
-	static int deg8 = 0;
 	bool shift = (event->modifiers() & MODIFIER) ? true : false;
 	// Shift inverts the wheel axis on OS X, so use scrolling in both axes for
 	// the zoom.
 	int delta = event->angleDelta().y()
 	  ? event->angleDelta().y() : event->angleDelta().x();
 
-	deg8 += delta;
-	if (qAbs(deg8) < (15 * 8))
+	_wheelDelta += delta;
+	if (qAbs(_wheelDelta) < (15 * 8))
 		return;
-	deg8 = deg8 % (15 * 8);
+	_wheelDelta = _wheelDelta % (15 * 8);
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 	zoom((delta > 0) ? 1 : -1, event->pos(), shift);
@@ -1184,6 +1210,21 @@ void MapView::leaveEvent(QEvent *event)
 {
 	_cursorCoordinates->setCoordinates(Coordinates());
 	QGraphicsView::leaveEvent(event);
+}
+
+bool MapView::event(QEvent *event)
+{
+	if (event->type() == QEvent::Gesture)
+		return gestureEvent(static_cast<QGestureEvent*>(event));
+	return QWidget::event(event);
+}
+
+bool MapView::gestureEvent(QGestureEvent *event)
+{
+	if (QGesture *pinch = event->gesture(Qt::PinchGesture))
+		pinchGesture(static_cast<QPinchGesture *>(pinch));
+
+	return true;
 }
 
 void MapView::useOpenGL(bool use)

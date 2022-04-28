@@ -19,6 +19,8 @@
 
 class QGeoPositionInfoSource;
 class QGeoPositionInfo;
+class QGestureEvent;
+class QPinchGesture;
 class Data;
 class POI;
 class Map;
@@ -147,6 +149,8 @@ private:
 	void zoom(int zoom, const QPoint &pos, bool shift);
 	void digitalZoom(int zoom);
 	void updatePOIVisibility();
+	bool gestureEvent(QGestureEvent *event);
+	void pinchGesture(QPinchGesture *gesture);
 	void skipColor() {_palette.nextColor();}
 
 	void mouseMoveEvent(QMouseEvent *event);
@@ -157,8 +161,9 @@ private:
 	void keyReleaseEvent(QKeyEvent *event);
 	void drawBackground(QPainter *painter, const QRectF &rect);
 	void paintEvent(QPaintEvent *event);
-	void scrollContentsBy(int dx, int dy);
 	void leaveEvent(QEvent *event);
+	bool event(QEvent *event);
+	void scrollContentsBy(int dx, int dy);
 
 	GraphicsScene *_scene;
 	ScaleItem *_mapScale;
@@ -201,6 +206,9 @@ private:
 	qreal _deviceRatio;
 	qreal _mapRatio;
 	bool _opengl;
+
+	int _pinchZoom;
+	int _wheelDelta;
 };
 
 #endif // MAPVIEW_H
