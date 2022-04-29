@@ -206,25 +206,15 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 	}
 }
 
-bool MapSource::isMap(const QString &path)
+Map *MapSource::create(const QString &path, const Projection &proj, bool *isDir)
 {
-	QFile file(path);
-
-	if (!file.open(QFile::ReadOnly | QFile::Text))
-		return false;
-
-	QXmlStreamReader reader(&file);
-	if (reader.readNextStartElement() && reader.name() == QLatin1String("map"))
-		return true;
-
-	return false;
-}
-
-Map *MapSource::loadMap(const QString &path)
-{
+	Q_UNUSED(proj);
 	Config config;
 	QFile file(path);
 
+
+	if (isDir)
+		*isDir = false;
 
 	if (!file.open(QFile::ReadOnly | QFile::Text))
 		return new InvalidMap(path, file.errorString());

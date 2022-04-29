@@ -458,3 +458,11 @@ void RMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 	Q_UNUSED(deviceRatio);
 	_mapRatio = mapRatio;
 }
+
+Map *RMap::create(const QString &path, const Projection &, bool *isDir)
+{
+	if (isDir)
+		*isDir = false;
+
+	return new RMap(path);
+}

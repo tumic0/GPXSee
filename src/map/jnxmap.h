@@ -42,6 +42,8 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
+	static Map *create(const QString &path, const Projection &proj, bool *isDir);
+
 private:
 	struct Tile {
 		qint32 top, right, bottom, left;

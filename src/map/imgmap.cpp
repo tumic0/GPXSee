@@ -222,3 +222,11 @@ void IMGMap::setOutputProjection(const Projection &projection)
 	updateTransform();
 	QPixmapCache::clear();
 }
+
+Map* IMGMap::create(const QString &path, const Projection &, bool *isDir)
+{
+	if (isDir)
+		*isDir = GMAPData::isGMAP(path);
+
+	return new IMGMap(path);
+}

@@ -81,8 +81,6 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static bool isMapsforge(const QString &path);
-
 private:
 	struct SubFileInfo {
 		quint8 base;

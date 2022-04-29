@@ -379,3 +379,11 @@ void OziMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 	if (_img)
 		_img->setDevicePixelRatio(_mapRatio);
 }
+
+Map *OziMap::create(const QString &path, const Projection &, bool *isDir)
+{
+	if (isDir)
+		*isDir = true;
+
+	return new OziMap(path);
+}

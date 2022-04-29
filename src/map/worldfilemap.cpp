@@ -121,3 +121,12 @@ void WorldFileMap::setInputProjection(const Projection &projection)
 
 	_projection = projection;
 }
+
+Map *WorldFileMap::create(const QString &path, const Projection &proj,
+  bool *isDir)
+{
+	if (isDir)
+		*isDir = false;
+
+	return new WorldFileMap(path, proj);
+}

@@ -71,6 +71,8 @@ public:
 	bool isValid() const {return _data.isValid();}
 	QString errorString() const {return _data.errorString();}
 
+	static Map *create(const QString &path, const Projection &, bool *isMap);
+
 private slots:
 	void jobFinished(MapsforgeMapJob *job);
 

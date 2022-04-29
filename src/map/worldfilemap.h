@@ -12,7 +12,8 @@ class WorldFileMap : public Map
 	Q_OBJECT
 
 public:
-	WorldFileMap(const QString &fileName, const Projection &proj, QObject *parent = 0);
+	WorldFileMap(const QString &fileName, const Projection &proj,
+	  QObject *parent = 0);
 	~WorldFileMap();
 
 	QRectF bounds();
@@ -28,6 +29,8 @@ public:
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
+
+	static Map *create(const QString &path, const Projection &proj, bool *isDir);
 
 private:
 	Projection _projection;

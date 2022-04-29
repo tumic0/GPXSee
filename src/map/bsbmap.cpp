@@ -461,3 +461,11 @@ void BSBMap::unload()
 	delete _img;
 	_img = 0;
 }
+
+Map *BSBMap::create(const QString &path, const Projection &, bool *isMap)
+{
+	if (isMap)
+		*isMap = false;
+
+	return new BSBMap(path);
+}

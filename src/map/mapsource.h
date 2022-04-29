@@ -10,12 +10,12 @@
 
 class Map;
 class QXmlStreamReader;
+class Projection;
 
 class MapSource
 {
 public:
-	static Map *loadMap(const QString &path);
-	static bool isMap(const QString &path);
+	static Map *create(const QString &path, const Projection &proj, bool *isDir);
 
 private:
 	enum Type {

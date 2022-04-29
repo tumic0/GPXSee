@@ -1,7 +1,6 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QApplication>
-#include "IMG/gmapdata.h"
 #include "atlas.h"
 #include "ozimap.h"
 #include "jnxmap.h"
@@ -21,54 +20,67 @@
 #include "maplist.h"
 
 
+MapList::ParserMap MapList::parsers()
+{
+	MapList::ParserMap map;
+
+	map.insert("tar", &Atlas::create);
+	map.insert("tar", &OziMap::create);
+	map.insert("tba", &Atlas::create);
+	map.insert("xml", &MapSource::create);
+	map.insert("xml", &IMGMap::create);
+	map.insert("img", &IMGMap::create);
+	map.insert("jnx", &JNXMap::create);
+	map.insert("tif", &GeoTIFFMap::create);
+	map.insert("tiff", &GeoTIFFMap::create);
+	map.insert("mbtiles", &MBTilesMap::create);
+	map.insert("rmap", &RMap::create);
+	map.insert("rtmap", &RMap::create);
+	map.insert("map", &MapsforgeMap::create);
+	map.insert("map", &OziMap::create);
+	map.insert("kap", &BSBMap::create);
+	map.insert("kmz", &KMZMap::create);
+	map.insert("aqm", &AQMMap::create);
+	map.insert("sqlitedb", &SqliteMap::create);
+	map.insert("wld", &WorldFileMap::create);
+	map.insert("jgw", &WorldFileMap::create);
+	map.insert("gfw", &WorldFileMap::create);
+	map.insert("pgw", &WorldFileMap::create);
+	map.insert("tfw", &WorldFileMap::create);
+	map.insert("qct", &QCTMap::create);
+
+	return map;
+}
+
+MapList::ParserMap MapList::_parsers = parsers();
+
 Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 {
+	ParserMap::iterator it;
 	QFileInfo fi(path);
-	QString suffix = fi.suffix().toLower();
+	QString suffix(fi.suffix().toLower());
 	Map *map = 0;
 
-	if (Atlas::isAtlas(path)) {
-		if (isDir)
-			*isDir = true;
-		map = new Atlas(path);
-	} else if (suffix == "xml") {
-		if (MapSource::isMap(path)) {
-			map = MapSource::loadMap(path);
-		} else if (IMG::GMAPData::isGMAP(path)) {
-			map = new IMGMap(path);
-			if (isDir)
-				*isDir = true;
+	if ((it = _parsers.find(suffix)) != _parsers.end()) {
+		while (it != _parsers.end() && it.key() == suffix) {
+			delete map;
+			map = it.value()(path, proj, isDir);
+			if (map->isValid())
+				break;
+
+			++it;
 		}
-	} else if (suffix == "jnx")
-		map = new JNXMap(path, proj);
-	else if (suffix == "tif" || suffix == "tiff")
-		map = new GeoTIFFMap(path);
-	else if (suffix == "mbtiles")
-		map = new MBTilesMap(path);
-	else if (suffix == "rmap" || suffix == "rtmap")
-		map = new RMap(path);
-	else if (suffix == "img")
-		map = new IMGMap(path);
-	else if (suffix == "map") {
-		if (Mapsforge::MapData::isMapsforge(path))
-			map = new MapsforgeMap(path);
-		else
-			map = new OziMap(path);
-	} else if (suffix == "tar")
-		map = new OziMap(path);
-	else if (suffix == "kap")
-		map = new BSBMap(path);
-	else if (suffix == "kmz")
-		map = new KMZMap(path, proj);
-	else if (suffix == "aqm")
-		map = new AQMMap(path);
-	else if (suffix == "sqlitedb")
-		map = new SqliteMap(path);
-	else if (suffix == "wld" || suffix == "jgw" || suffix == "gfw"
-	  || suffix == "pgw" || suffix == "tfw")
-		map = new WorldFileMap(path, proj);
-	else if (suffix == "qct")
-		map = new QCTMap(path);
+	} else {
+		for (it = _parsers.begin(); it != _parsers.end(); it++) {
+			map = it.value()(path, proj, isDir);
+			if (map->isValid())
+				break;
+			else {
+				delete map;
+				map = 0;
+			}
+		}
+	}
 
 	return map ? map : new InvalidMap(path, "Unknown file format");
 }
@@ -140,15 +152,20 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "GeoTIFF images") + " (*.tif *.tiff);;"
 	  + qApp->translate("MapList", "World-file georeferenced images")
 	    + " (*.wld *.jgw *.gfw *.pgw *.tfw);;"
-	  + qApp->translate("MapList", "Online map sources") + " (*.xml)";
+	  + qApp->translate("MapList", "Online map sources") + " (*.xml);;"
+	  + qApp->translate("MapList", "All files") + " (*)";
 }
 
 QStringList MapList::filter()
 {
 	QStringList filter;
-	filter << "*.aqm" << "*.gfw" << "*.gmap" << "*.gmapi" << "*.img" << "*.jgw"
-	  << "*.jnx" << "*.kap" << "*.kmz" << "*.map" << "*.mbtiles" << "*.pgw"
-	  << "*.qct" << "*.rmap" << "*.rtmap" << "*.sqlitedb" << "*.tar" << "*.tba"
-	  << "*.tfw" << "*.tif" << "*.tiff" << "*.wld" << "*.xml";
+	QString last;
+
+	for (ParserMap::iterator it = _parsers.begin(); it != _parsers.end(); it++) {
+		if (it.key() != last)
+			filter << "*." + it.key();
+		last = it.key();
+	}
+
 	return filter;
 }

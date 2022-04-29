@@ -23,8 +23,10 @@ MapsforgeMap::MapsforgeMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _data(fileName), _zoom(0),
   _projection(PCS::pcs(3857)), _tileRatio(1.0)
 {
-	_zoom = _data.zooms().min();
-	updateTransform();
+	if (_data.isValid()) {
+		_zoom = _data.zooms().min();
+		updateTransform();
+	}
 }
 
 void MapsforgeMap::load()
@@ -232,4 +234,12 @@ void MapsforgeMap::setOutputProjection(const Projection &projection)
 	_projection = projection;
 	updateTransform();
 	QPixmapCache::clear();
+}
+
+Map *MapsforgeMap::create(const QString &path, const Projection &, bool *isMap)
+{
+	if (isMap)
+		*isMap = false;
+
+	return new MapsforgeMap(path);
 }

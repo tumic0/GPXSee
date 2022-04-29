@@ -293,19 +293,10 @@ void Atlas::unload()
 		_maps.at(i)->unload();
 }
 
-bool Atlas::isAtlas(const QString &path)
+Map *Atlas::create(const QString &path, const Projection &, bool *isDir)
 {
-	QFileInfo fi(path);
-	QString suffix = fi.suffix().toLower();
+	if (isDir)
+		*isDir = true;
 
-	if (suffix == "tar") {
-		Tar tar(path);
-		if (!tar.open())
-			return false;
-		QString tbaFileName = fi.completeBaseName() + ".tba";
-		return tar.contains(tbaFileName);
-	} else if (suffix == "tba")
-		return true;
-
-	return false;
+	return new Atlas(path);
 }

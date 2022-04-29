@@ -28,6 +28,8 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
+	static Map *create(const QString &path, const Projection &, bool *isDir);
+
 private:
 	Projection _projection;
 	Transform _transform;

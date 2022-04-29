@@ -47,6 +47,8 @@ public:
 	QPointF pp2xy(const PointD &p) const
 	  {return _transform.proj2img(p) / _mapRatio;}
 
+	static Map *create(const QString &path, const Projection &, bool *isDir);
+
 private:
 	struct ImageInfo {
 		QSize size;

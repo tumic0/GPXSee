@@ -424,6 +424,14 @@ void AQMMap::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
 	painter->drawPixmap(tp, pixmap);
 }
 
+Map *AQMMap::create(const QString &path, const Projection &, bool *isDir)
+{
+	if (isDir)
+		*isDir = false;
+
+	return new AQMMap(path);
+}
+
 #ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const AQMMap::File &file)
 {

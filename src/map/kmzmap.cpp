@@ -513,3 +513,11 @@ void KMZMap::draw(QPainter *painter, const QRectF &rect, int mapIndex,
 	map.draw(painter, pr, flags);
 	painter->restore();
 }
+
+Map *KMZMap::create(const QString &path, const Projection &proj, bool *isDir)
+{
+	if (isDir)
+		*isDir = false;
+
+	return new KMZMap(path, proj);
+}

@@ -382,7 +382,7 @@ bool MapData::readHeader()
 	return true;
 }
 
-MapData::MapData(const QString &fileName) : _file(fileName)
+MapData::MapData(const QString &fileName) : _file(fileName), _valid(false)
 {
 	if (!_file.open(QFile::ReadOnly | QIODevice::Unbuffered)) {
 		_errorString = _file.errorString();
@@ -680,19 +680,6 @@ bool MapData::readPoints(const VectorTile *tile, int zoom, QList<Point> *list)
 	}
 
 	return true;
-}
-
-bool MapData::isMapsforge(const QString &path)
-{
-	QFile file(path);
-	char magic[sizeof(MAGIC) - 1];
-
-	if (!file.open(QFile::ReadOnly))
-		return false;
-	if (file.read(magic, sizeof(magic)) < (qint64)sizeof(magic))
-		return false;
-
-	return !memcmp(magic, MAGIC, sizeof(magic));
 }
 
 #ifndef QT_NO_DEBUG

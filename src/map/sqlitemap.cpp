@@ -271,3 +271,11 @@ Coordinates SqliteMap::xy2ll(const QPointF &p)
 	qreal scale = OSM::zoom2scale(_zoom, _tileSize);
 	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale) * _mapRatio);
 }
+
+Map *SqliteMap::create(const QString &path, const Projection &, bool *isDir)
+{
+	if (isDir)
+		*isDir = false;
+
+	return new SqliteMap(path);
+}

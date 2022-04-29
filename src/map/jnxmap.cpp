@@ -63,9 +63,12 @@ bool JNXMap::readTiles()
 	  && readValue(levels)))
 		return false;
 
+	if (version < 3 || version > 4)
+		return false;
+
 	_bounds = RectC(Coordinates(ic2dc(lon1), ic2dc(lat1)),
 	  Coordinates(ic2dc(lon2), ic2dc(lat2)));
-	if (!levels || !_bounds.isValid())
+	if (!levels || levels > 32 || !_bounds.isValid())
 		return false;
 
 	if (!_file.seek(version > 3 ? 0x34 : 0x30))
@@ -303,4 +306,12 @@ void JNXMap::setInputProjection(const Projection &projection)
 			z->tree.Insert(min, max, &tile);
 		}
 	}
+}
+
+Map *JNXMap::create(const QString &path, const Projection &proj, bool *isDir)
+{
+	if (isDir)
+		*isDir = false;
+
+	return new JNXMap(path, proj);
 }

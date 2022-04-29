@@ -74,3 +74,11 @@ void GeoTIFFMap::unload()
 	delete _img;
 	_img = 0;
 }
+
+Map *GeoTIFFMap::create(const QString &path, const Projection &, bool *isDir)
+{
+	if (isDir)
+		*isDir = false;
+
+	return new GeoTIFFMap(path);
+}

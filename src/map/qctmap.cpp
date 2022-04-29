@@ -485,3 +485,11 @@ void QCTMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		}
 	}
 }
+
+Map *QCTMap::create(const QString &path, const Projection &, bool *isDir)
+{
+	if (isDir)
+		*isDir = false;
+
+	return new QCTMap(path);
+}

@@ -15,10 +15,16 @@ public:
 	static QStringList filter();
 
 private:
+	typedef Map*(*ParserCb)(const QString &, const Projection &, bool *isDir);
+	typedef QMultiMap<QString, ParserCb> ParserMap;
+
 	static Map *loadFile(const QString &path, const Projection &proj,
 	  bool *isDir = 0);
 	static TreeNode<Map*> loadDir(const QString &path, const Projection &proj,
 	  TreeNode<Map *> *parent = 0);
+
+	static ParserMap parsers();
+	static ParserMap _parsers;
 };
 
 #endif // MAPLIST_H
