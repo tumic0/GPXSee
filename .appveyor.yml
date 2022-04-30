@@ -1,5 +1,4 @@
-version: 10.8
-.{build}
+version: 10.8.{build}
 
 configuration:
   - Release
