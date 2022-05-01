@@ -26,12 +26,19 @@ GPS log file formats.
 ![GPXSee - Linux](https://a.fsdn.com/con/app/proj/gpxsee/screenshots/linux2.png)
 
 ## Build
-Build requirements:
+
+### Build requirements:
 * Qt5 >= 5.11 or Qt 6.x*
 * C++11 or newer compiler (tested: msvc2017, gcc 7.5.0, clang/Apple LLVM version
   10.0.0)
 
-Build steps:
+Up-to-date build dependencies are on OBS, for example for Ubuntu: [gpxsee.dsc](https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.dsc). To install them on Ubuntu 22.04:
+
+```shell
+sudo apt install -y build-essential qttools5-dev-tools qtbase5-private-dev qtpositioning5-dev
+```
+
+### Build steps:
 ```shell
 lrelease gpxsee.pro
 qmake gpxsee.pro
@@ -44,6 +51,7 @@ files as support for such files was dropped in Qt6._
 ## Download
 * [Windows & OS X builds](http://sourceforge.net/projects/gpxsee)
 * [Linux packages](http://software.opensuse.org/download.html?project=home%3Atumic%3AGPXSee&package=gpxsee)
+
 
 ## Changelog
 [Changelog](https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes)
