@@ -16,14 +16,14 @@ class RasterTile
 {
 public:
 	RasterTile(IMGMap *map, const Style *style, int zoom, const QRect &rect,
-	  const QString &key, const QList<MapData::Poly> &polygons,
+	  qreal ratio, const QString &key, const QList<MapData::Poly> &polygons,
 	  const QList<MapData::Poly> &lines, QList<MapData::Point> &points)
-	  : _map(map), _style(style), _zoom(zoom), _xy(rect.topLeft()),
-	  _key(key), _pixmap(rect.size()), _polygons(polygons), _lines(lines),
-	  _points(points) {}
+	  : _map(map), _style(style), _zoom(zoom), _rect(rect), _ratio(ratio),
+	  _key(key), _pixmap(rect.width() * ratio, rect.height() * ratio),
+	  _polygons(polygons), _lines(lines), _points(points) {}
 
 	const QString &key() const {return _key;}
-	const QPoint &xy() const {return _xy;}
+	QPoint xy() const {return _rect.topLeft();}
 	const QPixmap &pixmap() const {return _pixmap;}
 
 	void render();
@@ -39,13 +39,14 @@ private:
 	void processPolygons(QList<TextItem *> &textItems);
 	void processLines(QList<TextItem*> &textItems);
 	void processPoints(QList<TextItem*> &textItems);
-	void processShields(const QRect &tileRect, QList<TextItem*> &textItems);
-	void processStreetNames(const QRect &tileRect, QList<TextItem*> &textItems);
+	void processShields(QList<TextItem*> &textItems);
+	void processStreetNames(QList<TextItem*> &textItems);
 
 	IMGMap *_map;
 	const Style *_style;
 	int _zoom;
-	QPoint _xy;
+	QRect _rect;
+	qreal _ratio;
 	QString _key;
 	QPixmap _pixmap;
 	QList<MapData::Poly> _polygons;

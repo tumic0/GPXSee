@@ -160,12 +160,13 @@ void RasterTile::render()
 	processPolygons(textItems);
 	processLines(textItems);
 
+	_pixmap.setDevicePixelRatio(_ratio);
 	_pixmap.fill(Qt::transparent);
 
 	QPainter painter(&_pixmap);
 	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 	painter.setRenderHint(QPainter::Antialiasing);
-	painter.translate(-_xy.x(), -_xy.y());
+	painter.translate(-_rect.x(), -_rect.y());
 
 	drawPolygons(&painter);
 	drawLines(&painter);
@@ -294,7 +295,6 @@ static void removeDuplicitLabel(QList<TextItem *> &labels, const QString &text,
 
 void RasterTile::processPolygons(QList<TextItem*> &textItems)
 {
-	QRectF tileRect(_xy, _pixmap.size());
 	QSet<QString> set;
 	QList<TextItem *> labels;
 
@@ -314,10 +314,10 @@ void RasterTile::processPolygons(QList<TextItem*> &textItems)
 			  0, &style.brush().color(), &haloColor);
 			if (item->isValid() && !item->collides(textItems)
 			  && !item->collides(labels)
-			  && !(exists && tileRect.contains(item->boundingRect()))
+			  && !(exists && _rect.contains(item->boundingRect().toRect()))
 			  && rectNearPolygon(poly.points, item->boundingRect())) {
 				if (exists)
-					removeDuplicitLabel(labels, poly.label.text(), tileRect);
+					removeDuplicitLabel(labels, poly.label.text(), _rect);
 				else
 					set.insert(poly.label.text());
 				labels.append(item);
@@ -331,17 +331,14 @@ void RasterTile::processPolygons(QList<TextItem*> &textItems)
 
 void RasterTile::processLines(QList<TextItem*> &textItems)
 {
-	QRect tileRect(_xy, _pixmap.size());
-
 	std::stable_sort(_lines.begin(), _lines.end());
 
 	if (_zoom >= 22)
-		processStreetNames(tileRect, textItems);
-	processShields(tileRect, textItems);
+		processStreetNames(textItems);
+	processShields(textItems);
 }
 
-void RasterTile::processStreetNames(const QRect &tileRect,
-  QList<TextItem*> &textItems)
+void RasterTile::processStreetNames(QList<TextItem*> &textItems)
 {
 	for (int i = 0; i < _lines.size(); i++) {
 		MapData::Poly &poly = _lines[i];
@@ -358,7 +355,7 @@ void RasterTile::processStreetNames(const QRect &tileRect,
 		  ? &style.textColor() : 0;
 
 		TextPathItem *item = new TextPathItem(poly.points,
-		  &poly.label.text(), tileRect, fnt, color);
+		  &poly.label.text(), _rect, fnt, color);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
 		else
@@ -366,8 +363,7 @@ void RasterTile::processStreetNames(const QRect &tileRect,
 	}
 }
 
-void RasterTile::processShields(const QRect &tileRect,
-  QList<TextItem*> &textItems)
+void RasterTile::processShields(QList<TextItem*> &textItems)
 {
 	for (int type = FIRST_SHIELD; type <= LAST_SHIELD; type++) {
 		if (minShieldZoom(static_cast<Shield::Type>(type)) > _zoom)
@@ -393,7 +389,7 @@ void RasterTile::processShields(const QRect &tileRect,
 		for (QHash<Shield, QPolygonF>::const_iterator it = shields.constBegin();
 		  it != shields.constEnd(); ++it) {
 			const QPolygonF &p = it.value();
-			QRectF rect(p.boundingRect() & tileRect);
+			QRectF rect(p.boundingRect() & _rect);
 			if (AREA(rect) < AREA(QRect(0, 0, _pixmap.width()/4, _pixmap.width()/4)))
 				continue;
 
@@ -413,7 +409,7 @@ void RasterTile::processShields(const QRect &tileRect,
 			bool valid = false;
 			while (true) {
 				if (!item->collides(textItems)
-				  && tileRect.contains(item->boundingRect().toRect())) {
+				  && _rect.contains(item->boundingRect().toRect())) {
 					valid = true;
 					break;
 				}

@@ -34,6 +34,7 @@ public:
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
 	void setOutputProjection(const Projection &projection);
+	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
 
 	void load();
 	void unload();
@@ -53,6 +54,7 @@ private:
 	Transform _transform;
 	QRectF _bounds;
 	RectC _dataBounds;
+	qreal _tileRatio;
 
 	bool _valid;
 	QString _errorString;

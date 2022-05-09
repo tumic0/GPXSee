@@ -41,7 +41,8 @@ static QList<MapData*> overlays(const QString &fileName)
 }
 
 IMGMap::IMGMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _projection(PCS::pcs(3857)), _valid(false)
+  : Map(fileName, parent), _projection(PCS::pcs(3857)), _tileRatio(1.0),
+  _valid(false)
 {
 	if (GMAPData::isGMAP(fileName))
 		_data.append(new GMAPData(fileName));
@@ -182,8 +183,8 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 					  _zoom, &points);
 
 					tiles.append(RasterTile(this, _data.at(n)->style(), _zoom,
-					  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), key, polygons,
-					  lines, points));
+					  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio, key,
+					  polygons, lines, points));
 				}
 			}
 		}
@@ -198,6 +199,13 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		painter->drawPixmap(mt.xy(), pm);
 		QPixmapCache::insert(mt.key(), pm);
 	}
+}
+
+void IMGMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
+{
+	Q_UNUSED(mapRatio);
+
+	_tileRatio = deviceRatio;
 }
 
 void IMGMap::setOutputProjection(const Projection &projection)
