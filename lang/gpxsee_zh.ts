@@ -530,16 +530,16 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="437"/>
-        <location filename="../src/GUI/gui.cpp" line="1252"/>
-        <location filename="../src/GUI/gui.cpp" line="1320"/>
+        <location filename="../src/GUI/gui.cpp" line="1246"/>
+        <location filename="../src/GUI/gui.cpp" line="1314"/>
         <source>Distance</source>
         <translation>距离</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="444"/>
         <location filename="../src/GUI/gui.cpp" line="650"/>
-        <location filename="../src/GUI/gui.cpp" line="1255"/>
-        <location filename="../src/GUI/gui.cpp" line="1322"/>
+        <location filename="../src/GUI/gui.cpp" line="1249"/>
+        <location filename="../src/GUI/gui.cpp" line="1316"/>
         <source>Time</source>
         <translation>时间</translation>
     </message>
@@ -565,8 +565,8 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="473"/>
-        <location filename="../src/GUI/gui.cpp" line="1257"/>
-        <location filename="../src/GUI/gui.cpp" line="1324"/>
+        <location filename="../src/GUI/gui.cpp" line="1251"/>
+        <location filename="../src/GUI/gui.cpp" line="1318"/>
         <source>Moving time</source>
         <translation>移动时长</translation>
     </message>
@@ -857,88 +857,88 @@
         <translation>加载POI文件出错：</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1226"/>
-        <location filename="../src/GUI/gui.cpp" line="1298"/>
+        <location filename="../src/GUI/gui.cpp" line="1220"/>
+        <location filename="../src/GUI/gui.cpp" line="1292"/>
         <source>Tracks</source>
         <translation>航迹</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1229"/>
-        <location filename="../src/GUI/gui.cpp" line="1300"/>
+        <location filename="../src/GUI/gui.cpp" line="1223"/>
+        <location filename="../src/GUI/gui.cpp" line="1294"/>
         <source>Routes</source>
         <translation>航线</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1232"/>
-        <location filename="../src/GUI/gui.cpp" line="1302"/>
+        <location filename="../src/GUI/gui.cpp" line="1226"/>
+        <location filename="../src/GUI/gui.cpp" line="1296"/>
         <source>Waypoints</source>
         <translation>航点</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1235"/>
-        <location filename="../src/GUI/gui.cpp" line="1304"/>
+        <location filename="../src/GUI/gui.cpp" line="1229"/>
+        <location filename="../src/GUI/gui.cpp" line="1298"/>
         <source>Areas</source>
         <translation>区域</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1241"/>
-        <location filename="../src/GUI/gui.cpp" line="1245"/>
-        <location filename="../src/GUI/gui.cpp" line="1310"/>
-        <location filename="../src/GUI/gui.cpp" line="1313"/>
+        <location filename="../src/GUI/gui.cpp" line="1235"/>
+        <location filename="../src/GUI/gui.cpp" line="1239"/>
+        <location filename="../src/GUI/gui.cpp" line="1304"/>
+        <location filename="../src/GUI/gui.cpp" line="1307"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1278"/>
-        <location filename="../src/GUI/gui.cpp" line="1279"/>
+        <location filename="../src/GUI/gui.cpp" line="1272"/>
+        <location filename="../src/GUI/gui.cpp" line="1273"/>
         <source>Statistics</source>
         <translation>统计</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1294"/>
+        <location filename="../src/GUI/gui.cpp" line="1288"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1592"/>
+        <location filename="../src/GUI/gui.cpp" line="1586"/>
         <source>Open map file</source>
         <translation>打开地图文件</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1636"/>
-        <location filename="../src/GUI/gui.cpp" line="1681"/>
-        <location filename="../src/GUI/gui.cpp" line="1700"/>
-        <location filename="../src/GUI/gui.cpp" line="1722"/>
+        <location filename="../src/GUI/gui.cpp" line="1630"/>
+        <location filename="../src/GUI/gui.cpp" line="1675"/>
+        <location filename="../src/GUI/gui.cpp" line="1694"/>
+        <location filename="../src/GUI/gui.cpp" line="1716"/>
         <source>Error loading map:</source>
         <translation>加载地图出错：</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1749"/>
+        <location filename="../src/GUI/gui.cpp" line="1743"/>
         <source>Select map directory</source>
         <translation>选择地图目录</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1777"/>
+        <location filename="../src/GUI/gui.cpp" line="1771"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
         <translation>清除&quot;%1 &quot;瓦片缓存？</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1795"/>
+        <location filename="../src/GUI/gui.cpp" line="1789"/>
         <source>Could not download all required DEM files.</source>
         <translation>无法下载所有需要的 DEM 文件。</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1810"/>
+        <location filename="../src/GUI/gui.cpp" line="1804"/>
         <source>No local DEM tiles found.</source>
         <translation>未找到本地 DEM 瓦片。</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1824"/>
+        <location filename="../src/GUI/gui.cpp" line="1818"/>
         <source>No files loaded</source>
         <translation>没有加载文件</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1828"/>
+        <location filename="../src/GUI/gui.cpp" line="1822"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n 文件</numerusform>
@@ -1106,84 +1106,89 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="124"/>
+        <location filename="../src/map/maplist.cpp" line="136"/>
         <source>Supported files</source>
         <translation>支持的文件</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="126"/>
+        <location filename="../src/map/maplist.cpp" line="138"/>
         <source>AlpineQuest maps</source>
         <translation>AlpineQuest 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="127"/>
+        <location filename="../src/map/maplist.cpp" line="139"/>
         <source>Garmin IMG maps</source>
         <translation>佳明 IMG 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="129"/>
+        <location filename="../src/map/maplist.cpp" line="141"/>
         <source>Garmin JNX maps</source>
         <translation>佳明 JNX 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="130"/>
+        <location filename="../src/map/maplist.cpp" line="142"/>
         <source>BSB nautical charts</source>
         <translation>BSB 海图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="131"/>
+        <location filename="../src/map/maplist.cpp" line="143"/>
         <source>KMZ maps</source>
         <translation>KMZ 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="132"/>
+        <location filename="../src/map/maplist.cpp" line="144"/>
         <source>Mapsforge maps</source>
         <translation>Mapsforge 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="133"/>
+        <location filename="../src/map/maplist.cpp" line="145"/>
         <source>OziExplorer maps</source>
         <translation>OziExplorer 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="134"/>
+        <location filename="../src/map/maplist.cpp" line="146"/>
         <source>MBTiles maps</source>
         <translation>MBTiles 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="135"/>
+        <location filename="../src/map/maplist.cpp" line="147"/>
         <source>QuickChart maps</source>
         <translation>QuickChart 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="136"/>
+        <location filename="../src/map/maplist.cpp" line="148"/>
         <source>TwoNav maps</source>
         <translation>TwoNav 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="137"/>
+        <location filename="../src/map/maplist.cpp" line="149"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
         <translation>Locus/OsmAnd/RMaps SQLite 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="139"/>
+        <location filename="../src/map/maplist.cpp" line="151"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>TrekBuddy 地图/地图集</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="140"/>
+        <location filename="../src/map/maplist.cpp" line="152"/>
         <source>GeoTIFF images</source>
         <translation>GeoTIFF 图像</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="141"/>
+        <location filename="../src/map/maplist.cpp" line="153"/>
         <source>World-file georeferenced images</source>
         <translation>World-file georeferenced 图像</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="143"/>
+        <location filename="../src/map/maplist.cpp" line="155"/>
         <source>Online map sources</source>
         <translation>在线地图源</translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="156"/>
+        <source>All files</source>
+        <translation type="unfinished">所有文件</translation>
     </message>
 </context>
 <context>
