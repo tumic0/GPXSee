@@ -170,7 +170,7 @@
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="16"/>
         <source>System default</source>
-        <translation type="unfinished"></translation>
+        <translation>Типові системні значення</translation>
     </message>
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="38"/>
@@ -389,7 +389,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="273"/>
         <source>Show POI icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Показувати піктограми POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="278"/>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="309"/>
         <source>Load map directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантажити каталог карт...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="312"/>
@@ -441,7 +441,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="341"/>
         <source>Follow position</source>
-        <translation type="unfinished"></translation>
+        <translation>Дотримуватися положення</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="346"/>
@@ -451,7 +451,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="352"/>
         <source>Show motion info</source>
-        <translation type="unfinished"></translation>
+        <translation>Показувати інформацію про рух</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="359"/>
@@ -476,7 +476,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="377"/>
         <source>Waypoint icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Піктограми точок шляху</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="382"/>
@@ -501,7 +501,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="404"/>
         <source>Marker only</source>
-        <translation type="unfinished"></translation>
+        <translation>Лише позначки</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="408"/>
@@ -521,7 +521,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="423"/>
         <source>Show local DEM tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Показувати локальні DEM тайли</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="428"/>
@@ -658,12 +658,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="842"/>
         <source>Symbols directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог символів:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1777"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистити кеш тайлів &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="610"/>
@@ -673,7 +673,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="615"/>
         <source>Position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Інформація про позицію</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="638"/>
@@ -768,7 +768,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="806"/>
         <source>Toggle position info</source>
-        <translation type="unfinished"></translation>
+        <translation>Перемкнути інформацію про позицію</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="810"/>
@@ -803,7 +803,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="818"/>
         <source>Left Click</source>
-        <translation type="unfinished"></translation>
+        <translation>Клацання лівою КМ</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="832"/>
@@ -920,17 +920,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1749"/>
         <source>Select map directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Оберіть каталог з картами</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1795"/>
         <source>Could not download all required DEM files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося завантажити всі необхідні DEM-файли.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1810"/>
         <source>No local DEM tiles found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не знайдено локальних DEM тайлів.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1824"/>
@@ -1180,7 +1180,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="141"/>
         <source>World-file georeferenced images</source>
-        <translation type="unfinished"></translation>
+        <translation>Зображення з геоприв’язками World-файлу</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="143"/>
@@ -1193,17 +1193,17 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="87"/>
         <source>kn</source>
-        <translation type="unfinished">вузол</translation>
+        <translation>вуз</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="90"/>
         <source>mi/h</source>
-        <translation type="unfinished">миль/год</translation>
+        <translation>миль/год</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="93"/>
         <source>km/h</source>
-        <translation type="unfinished">км/год</translation>
+        <translation>км/год</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="100"/>
@@ -1241,22 +1241,22 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="59"/>
         <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="unfinished"></translation>
+        <translation>Оберіть правильну проекцію для карт без наявної проекції (карти JNX, KMZ і з world-файлу).</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="61"/>
         <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Оберіть потрібну проекцію для векторних карт (карти IMG і Mapsforge). Проекція повинна бути дійсною для всієї області карти.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="83"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Ввід</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="85"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Вивід</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="117"/>
@@ -1502,7 +1502,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="379"/>
         <source>kn</source>
-        <translation>вузол</translation>
+        <translation>вуз</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="382"/>
@@ -1598,7 +1598,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="283"/>
         <source>Info background</source>
-        <translation type="unfinished"></translation>
+        <translation>Тло тексту</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
@@ -1608,7 +1608,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="290"/>
         <source>Info color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Колір тексту:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="523"/>
@@ -1644,12 +1644,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="566"/>
         <source>Use HTTP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Використовувати HTTP-автентифікацію</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="572"/>
         <source>Use $lat and $lon for NYY/SYY and EXXX/WXXX in the URL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Використовувати $lat і $lon для NYY/SYY та EXXX/WXXX в URL.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="577"/>
@@ -1661,7 +1661,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="602"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="635"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Джерело</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="622"/>
@@ -1770,12 +1770,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="92"/>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ввід:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="95"/>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Вивід:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="116"/>
@@ -1785,7 +1785,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="757"/>
         <source>Select the initial paths of the file open dialogues. Leave the field empty for the system default.</source>
-        <translation type="unfinished"></translation>
+        <translation>Оберіть початкові шляхи для діалогових вікон відкриття файлу. Залиште поле порожнім для типових значень.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="761"/>
@@ -1805,7 +1805,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="774"/>
         <source>Initial paths</source>
-        <translation type="unfinished"></translation>
+        <translation>Початкові шляхи</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="794"/>
@@ -2150,7 +2150,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="127"/>
         <source>kn</source>
-        <translation>вузол</translation>
+        <translation>вуз</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="130"/>
@@ -2173,7 +2173,7 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
         <source>kn</source>
-        <translation>вузол</translation>
+        <translation>вуз</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
