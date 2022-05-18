@@ -1188,7 +1188,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="156"/>
         <source>All files</source>
-        <translation type="unfinished">所有文件</translation>
+        <translation>所有文件</translation>
     </message>
 </context>
 <context>
