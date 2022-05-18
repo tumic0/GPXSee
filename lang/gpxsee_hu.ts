@@ -1168,7 +1168,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="156"/>
         <source>All files</source>
-        <translation type="unfinished">Minden fájl</translation>
+        <translation>Minden fájl</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="148"/>
