@@ -1170,7 +1170,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="156"/>
         <source>All files</source>
-        <translation type="unfinished">Всі файли</translation>
+        <translation>Всі файли</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="148"/>
