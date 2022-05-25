@@ -164,8 +164,6 @@ void MapsforgeMap::cancelJobs()
 
 void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	Q_UNUSED(flags);
-
 	QPointF tl(floor(rect.left() / _data.tileSize()) * _data.tileSize(),
 	  floor(rect.top() / _data.tileSize()) * _data.tileSize());
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
@@ -215,8 +213,20 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		}
 	}
 
-	if (!tiles.isEmpty())
-		runJob(new MapsforgeMapJob(tiles));
+	if (!tiles.isEmpty()) {
+		if (flags & Map::Block) {
+			QFuture<void> future = QtConcurrent::map(tiles, &RasterTile::render);
+			future.waitForFinished();
+
+			for (int i = 0; i < tiles.size(); i++) {
+				const RasterTile &mt = tiles.at(i);
+				const QPixmap &pm = mt.pixmap();
+				painter->drawPixmap(mt.xy(), pm);
+				QPixmapCache::insert(key(mt.zoom(), mt.xy()), pm);
+			}
+		} else
+			runJob(new MapsforgeMapJob(tiles));
+	}
 }
 
 void MapsforgeMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
