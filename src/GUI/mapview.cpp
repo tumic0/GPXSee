@@ -726,7 +726,7 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
   PlotFlags flags)
 {
 	QRect orig, adj;
-	qreal ratio, diff, q, p;
+	qreal mapRatio, ratio, diff, q, p;
 	QPointF scenePos, scalePos, posPos, motionPos;
 	int zoom;
 
@@ -734,7 +734,6 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	// Enter plot mode
 	setUpdatesEnabled(false);
 	_plot = true;
-	_map->setDevicePixelRatio(_deviceRatio, 1.0);
 
 	// Compute sizes & ratios
 	orig = viewport()->rect();
@@ -753,6 +752,9 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	}
 
 	// Expand the view if plotting into a bitmap
+	mapRatio = _mapRatio;
+	setDevicePixelRatio(_deviceRatio, 1.0);
+
 	if (flags & Expand) {
 		qreal xdiff = (target.width() - adj.width()) / 2.0;
 		qreal ydiff = (target.height() - adj.height()) / 2.0;
@@ -805,6 +807,9 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 		rescale();
 		centerOn(scenePos);
 	}
+
+	setDevicePixelRatio(_deviceRatio, mapRatio);
+
 	_mapScale->setDigitalZoom(_digitalZoom);
 	_mapScale->setPos(scalePos);
 	_positionCoordinates->setDigitalZoom(_digitalZoom);
@@ -813,7 +818,6 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	_motionInfo->setPos(motionPos);
 
 	// Exit plot mode
-	_map->setDevicePixelRatio(_deviceRatio, _mapRatio);
 	_plot = false;
 	setUpdatesEnabled(true);
 }
