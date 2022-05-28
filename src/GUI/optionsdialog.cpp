@@ -26,8 +26,11 @@
 #include "pluginparameters.h"
 #include "optionsdialog.h"
 
-
+#ifdef Q_OS_ANDROID
+#define MENU_MARGIN 0
+#else // Q_OS_ANDROID
 #define MENU_MARGIN 20
+#endif // Q_OS_ANDROID
 #define MENU_ICON_SIZE 32
 
 #ifdef Q_OS_MAC
@@ -779,6 +782,11 @@ QWidget *OptionsDialog::createSystemPage()
 OptionsDialog::OptionsDialog(Options &options, Units units, QWidget *parent)
   : QDialog(parent), _options(options), _units(units)
 {
+#ifdef Q_OS_ANDROID
+	setWindowFlags(Qt::Window);
+	setWindowState(Qt::WindowFullScreen);
+#endif /* Q_OS_ANDROID */
+
 	QStackedWidget *pages = new QStackedWidget();
 	pages->addWidget(createAppearancePage());
 	pages->addWidget(createMapPage());
@@ -791,16 +799,25 @@ OptionsDialog::OptionsDialog(Options &options, Units units, QWidget *parent)
 
 	QListWidget *menu = new QListWidget();
 	menu->setIconSize(QSize(MENU_ICON_SIZE, MENU_ICON_SIZE));
-	new QListWidgetItem(QIcon(APPEARANCE_ICON), tr("Appearance"),
-	  menu);
+#ifdef Q_OS_ANDROID
+	new QListWidgetItem(QIcon(APPEARANCE_ICON), QString(), menu);
+	new QListWidgetItem(QIcon(MAPS_ICON), QString(), menu);
+	new QListWidgetItem(QIcon(DATA_ICON), QString(), menu);
+	new QListWidgetItem(QIcon(POI_ICON), QString(), menu);
+	new QListWidgetItem(QIcon(DEM_ICON), QString(), menu);
+	new QListWidgetItem(QIcon(POSITION_ICON), QString(), menu);
+	new QListWidgetItem(QIcon(PRINT_EXPORT_ICON), QString(), menu);
+	new QListWidgetItem(QIcon(SYSTEM_ICON), QString(), menu);
+#else // Q_OS_ANDROID
+	new QListWidgetItem(QIcon(APPEARANCE_ICON), tr("Appearance"), menu);
 	new QListWidgetItem(QIcon(MAPS_ICON), tr("Maps"), menu);
 	new QListWidgetItem(QIcon(DATA_ICON), tr("Data"), menu);
 	new QListWidgetItem(QIcon(POI_ICON), tr("POI"), menu);
 	new QListWidgetItem(QIcon(DEM_ICON), tr("DEM"), menu);
 	new QListWidgetItem(QIcon(POSITION_ICON), tr("Position"), menu);
-	new QListWidgetItem(QIcon(PRINT_EXPORT_ICON), tr("Print & Export"),
-	  menu);
+	new QListWidgetItem(QIcon(PRINT_EXPORT_ICON), tr("Print & Export"), menu);
 	new QListWidgetItem(QIcon(SYSTEM_ICON), tr("System"), menu);
+#endif // Q_OS_ANDROID
 
 	QHBoxLayout *contentLayout = new QHBoxLayout();
 	contentLayout->addWidget(menu);

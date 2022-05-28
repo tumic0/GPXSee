@@ -14,9 +14,14 @@ class FileBrowser : public QObject
 public:
 	FileBrowser(QObject *parent = 0);
 
-	void setFilter(const QStringList &filter);
+#ifdef Q_OS_ANDROID
+	void setCurrentDir(const QString &path);
+#else // Q_OS_ANDROID
 	void setCurrent(const QString &path);
+#endif // Q_OS_ANDROID
+	void setFilter(const QStringList &filter);
 
+	QString current();
 	QString next();
 	QString prev();
 	QString last();
@@ -32,7 +37,9 @@ private slots:
 	void reloadDirectory(const QString &path);
 
 private:
+#ifndef Q_OS_ANDROID
 	QFileSystemWatcher *_watcher;
+#endif // Q_OS_ANDROID
 	QStringList _filter;
 	QFileInfoList _files;
 	int _index;

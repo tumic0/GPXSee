@@ -52,17 +52,19 @@ void ColorBox::paintEvent(QPaintEvent *event)
 
 void ColorBox::mousePressEvent(QMouseEvent *event)
 {
-	if (event->button() != Qt::LeftButton)
-		return;
-	QColorDialog::ColorDialogOptions options = _alpha
-	  ? QColorDialog::ColorDialogOptions(QColorDialog::ShowAlphaChannel)
-	  : QColorDialog::ColorDialogOptions();
-	QColor color = QColorDialog::getColor(_color, this, QString(), options);
-	if (color.isValid()) {
-		_color = color;
-		update();
-		emit colorChanged(_color);
+	if (event->button() == Qt::LeftButton) {
+		QColorDialog::ColorDialogOptions options = _alpha
+		  ? QColorDialog::ColorDialogOptions(QColorDialog::ShowAlphaChannel)
+		  : QColorDialog::ColorDialogOptions();
+		QColor color = QColorDialog::getColor(_color, this, QString(), options);
+		if (color.isValid()) {
+			_color = color;
+			update();
+			emit colorChanged(_color);
+		}
 	}
+
+	QWidget::mousePressEvent(event);
 }
 
 void ColorBox::setColor(const QColor &color)

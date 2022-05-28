@@ -19,65 +19,97 @@
 #define TYP_FILE         "style.typ"
 #define RENDERTHEME_FILE "style.xml"
 
+#ifdef Q_OS_ANDROID
+#define DATA_LOCATION QStandardPaths::GenericDataLocation
+#else // Q_OS_ANDROID
+#define DATA_LOCATION QStandardPaths::AppDataLocation
+#endif // Q_OS_ANDROID
+
+#ifdef Q_OS_ANDROID
+static QString assetsPath(const QString &path, const QString &dir)
+{
+	QDir pd(path);
+
+	if (pd.isAbsolute() && pd.exists())
+		return pd.absolutePath();
+	else
+		return QString("assets://") + dir;
+}
+#endif // Q_OS_ANDROID
 
 QString ProgramPaths::mapDir(bool writable)
 {
 	if (writable)
-		return QDir(QStandardPaths::writableLocation(
-		  QStandardPaths::AppDataLocation)).filePath(MAP_DIR);
+		return QDir(QStandardPaths::writableLocation(DATA_LOCATION))
+		  .filePath(MAP_DIR);
 	else
-		return QStandardPaths::locate(QStandardPaths::AppDataLocation,
+#ifdef Q_OS_ANDROID
+		return assetsPath(QStandardPaths::locate(DATA_LOCATION, MAP_DIR,
+		  QStandardPaths::LocateDirectory), MAP_DIR);
+#else // Q_OS_ANDROID
+		return QStandardPaths::locate(DATA_LOCATION,
 		  MAP_DIR, QStandardPaths::LocateDirectory);
+#endif // Q_OS_ANDROID
 }
 
 QString ProgramPaths::poiDir(bool writable)
 {
 	if (writable)
-		return QDir(QStandardPaths::writableLocation(
-		  QStandardPaths::AppDataLocation)).filePath(POI_DIR);
+		return QDir(QStandardPaths::writableLocation(DATA_LOCATION))
+		  .filePath(POI_DIR);
 	else
-		return QStandardPaths::locate(QStandardPaths::AppDataLocation,
-		  POI_DIR, QStandardPaths::LocateDirectory);
+		return QStandardPaths::locate(DATA_LOCATION, POI_DIR,
+		  QStandardPaths::LocateDirectory);
 }
 
 QString ProgramPaths::csvDir(bool writable)
 {
 	if (writable)
-		return QDir(QStandardPaths::writableLocation(
-		  QStandardPaths::AppDataLocation)).filePath(CSV_DIR);
+		return QDir(QStandardPaths::writableLocation(DATA_LOCATION))
+		  .filePath(CSV_DIR);
 	else
-		return QStandardPaths::locate(QStandardPaths::AppDataLocation,
-		  CSV_DIR, QStandardPaths::LocateDirectory);
+#ifdef Q_OS_ANDROID
+		return assetsPath(QStandardPaths::locate(DATA_LOCATION, CSV_DIR,
+		  QStandardPaths::LocateDirectory), CSV_DIR);
+#else // Q_OS_ANDROID
+		return QStandardPaths::locate(DATA_LOCATION, CSV_DIR,
+		  QStandardPaths::LocateDirectory);
+#endif // Q_OS_ANDROID
 }
 
 QString ProgramPaths::demDir(bool writable)
 {
 	if (writable)
-		return QDir(QStandardPaths::writableLocation(
-		  QStandardPaths::AppDataLocation)).filePath(DEM_DIR);
+		return QDir(QStandardPaths::writableLocation(DATA_LOCATION))
+		  .filePath(DEM_DIR);
 	else
-		return QStandardPaths::locate(QStandardPaths::AppDataLocation,
-		  DEM_DIR, QStandardPaths::LocateDirectory);
+		return QStandardPaths::locate(DATA_LOCATION, DEM_DIR,
+		  QStandardPaths::LocateDirectory);
 }
 
 QString ProgramPaths::styleDir(bool writable)
 {
 	if (writable)
-		return QDir(QStandardPaths::writableLocation(
-		  QStandardPaths::AppDataLocation)).filePath(STYLE_DIR);
+		return QDir(QStandardPaths::writableLocation(DATA_LOCATION))
+		  .filePath(STYLE_DIR);
 	else
-		return QStandardPaths::locate(QStandardPaths::AppDataLocation,
-		  STYLE_DIR, QStandardPaths::LocateDirectory);
+		return QStandardPaths::locate(DATA_LOCATION, STYLE_DIR,
+		  QStandardPaths::LocateDirectory);
 }
 
 QString ProgramPaths::symbolsDir(bool writable)
 {
 	if (writable)
-		return QDir(QStandardPaths::writableLocation(
-		  QStandardPaths::AppDataLocation)).filePath(SYMBOLS_DIR);
+		return QDir(QStandardPaths::writableLocation(DATA_LOCATION))
+		  .filePath(SYMBOLS_DIR);
 	else
-		return QStandardPaths::locate(QStandardPaths::AppDataLocation,
-		  SYMBOLS_DIR, QStandardPaths::LocateDirectory);
+#ifdef Q_OS_ANDROID
+		return assetsPath(QStandardPaths::locate(DATA_LOCATION, SYMBOLS_DIR,
+		  QStandardPaths::LocateDirectory), SYMBOLS_DIR);
+#else // Q_OS_ANDROID
+		return QStandardPaths::locate(DATA_LOCATION, SYMBOLS_DIR,
+		  QStandardPaths::LocateDirectory);
+#endif // Q_OS_ANDROID
 }
 
 QString ProgramPaths::tilesDir()
@@ -88,36 +120,31 @@ QString ProgramPaths::tilesDir()
 
 QString ProgramPaths::translationsDir()
 {
-	return QStandardPaths::locate(QStandardPaths::AppDataLocation,
-	  TRANSLATIONS_DIR, QStandardPaths::LocateDirectory);
+	return QStandardPaths::locate(DATA_LOCATION, TRANSLATIONS_DIR,
+	  QStandardPaths::LocateDirectory);
 }
 
 QString ProgramPaths::ellipsoidsFile()
 {
-	return QStandardPaths::locate(QStandardPaths::AppDataLocation,
-	  CSV_DIR "/" ELLIPSOID_FILE, QStandardPaths::LocateFile);
+	return QDir(csvDir()).filePath(ELLIPSOID_FILE);
 }
 
 QString ProgramPaths::gcsFile()
 {
-	return QStandardPaths::locate(QStandardPaths::AppDataLocation,
-	  CSV_DIR "/" GCS_FILE, QStandardPaths::LocateFile);
+	return QDir(csvDir()).filePath(GCS_FILE);
 }
 
 QString ProgramPaths::pcsFile()
 {
-	return QStandardPaths::locate(QStandardPaths::AppDataLocation,
-	  CSV_DIR "/" PCS_FILE, QStandardPaths::LocateFile);
+	return QDir(csvDir()).filePath(PCS_FILE);
 }
 
 QString ProgramPaths::typFile()
 {
-	return QStandardPaths::locate(QStandardPaths::AppDataLocation,
-	  STYLE_DIR "/" TYP_FILE, QStandardPaths::LocateFile);
+	return QDir(styleDir()).filePath(TYP_FILE);
 }
 
 QString ProgramPaths::renderthemeFile()
 {
-	return QStandardPaths::locate(QStandardPaths::AppDataLocation,
-	  STYLE_DIR "/" RENDERTHEME_FILE, QStandardPaths::LocateFile);
+	return QDir(styleDir()).filePath(RENDERTHEME_FILE);
 }

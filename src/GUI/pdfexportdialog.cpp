@@ -18,9 +18,16 @@ PDFExportDialog::PDFExportDialog(PDFExport &exp, Units units, QWidget *parent)
 {
 	int index;
 
+#ifdef Q_OS_ANDROID
+	setWindowFlags(Qt::Window);
+	setWindowState(Qt::WindowFullScreen);
+#endif /* Q_OS_ANDROID */
+
 	_fileSelect = new FileSelectWidget();
+#ifndef Q_OS_ANDROID
 	_fileSelect->setFilter(tr("PDF files") + " (*.pdf);;" + tr("All files")
 	  + " (*)");
+#endif // Q_OS_ANDROID
 	_fileSelect->setFile(_export.fileName);
 
 	_paperSize = new QComboBox();
@@ -102,6 +109,9 @@ PDFExportDialog::PDFExportDialog(PDFExport &exp, Units units, QWidget *parent)
 #else // Q_OS_MAC
 	layout->addWidget(pageSetupBox);
 	layout->addWidget(outputFileBox);
+#ifdef Q_OS_ANDROID
+	layout->addStretch();
+#endif // Q_OS_ANDROID
 #endif // Q_OS_MAC
 	layout->addWidget(buttonBox);
 	setLayout(layout);

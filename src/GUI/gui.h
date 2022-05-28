@@ -35,6 +35,7 @@ class MapAction;
 class POIAction;
 class Data;
 class DEMLoader;
+class NavigationWidget;
 
 class GUI : public QMainWindow
 {
@@ -47,15 +48,21 @@ public:
 	bool loadMap(const QString &fileName, MapAction *&action,
 	  bool silent = false);
 	void show();
+	void writeSettings();
 
 private slots:
 	void about();
+#ifndef Q_OS_ANDROID
 	void keys();
+#endif // Q_OS_ANDROID
 	void paths();
 	void printFile();
 	void exportPDFFile();
 	void exportPNGFile();
 	void openFile();
+#ifdef Q_OS_ANDROID
+	void openDir();
+#endif // Q_OS_ANDROID
 	void closeAll();
 	void reloadFiles();
 	void statistics();
@@ -64,8 +71,10 @@ private slots:
 	void showGraphGrids(bool show);
 	void showGraphSliderInfo(bool show);
 	void showPathMarkerInfo(QAction *action);
+#ifndef Q_OS_ANDROID
 	void showToolbars(bool show);
 	void showFullscreen(bool show);
+#endif // Q_OS_ANDROID
 	void showTracks(bool show);
 	void showRoutes(bool show);
 	void showAreas(bool show);
@@ -129,7 +138,11 @@ private:
 	  QAction *action = 0);
 	void createActions();
 	void createMenus();
+#ifdef Q_OS_ANDROID
+	void createNavigation();
+#else // Q_OS_ANDROID
 	void createToolBars();
+#endif // Q_OS_ANDROID
 	void createStatusBar();
 	void createMapView();
 	void createGraphTabs();
@@ -160,19 +173,24 @@ private:
 	QAction *mapAction(const QString &name);
 	QGeoPositionInfoSource *positionSource(const Options &options);
 	void readSettings(QString &activeMap, QStringList &disabledPOIs);
-	void writeSettings();
 
 	void loadInitialMaps(const QString &selected);
 	void loadInitialPOIs(const QStringList &disabled);
 
+#ifndef Q_OS_ANDROID
 	void keyPressEvent(QKeyEvent *event);
+#endif // Q_OS_ANDROID
 	void closeEvent(QCloseEvent *event);
 	void dragEnterEvent(QDragEnterEvent *event);
 	void dropEvent(QDropEvent *event);
 
+#ifdef Q_OS_ANDROID
+	NavigationWidget *_navigation;
+#else // Q_OS_ANDROID
 	QToolBar *_fileToolBar;
 	QToolBar *_showToolBar;
 	QToolBar *_navigationToolBar;
+#endif // Q_OS_ANDROID
 	QMenu *_poiMenu;
 	QMenu *_mapMenu;
 
@@ -180,15 +198,16 @@ private:
 	QActionGroup *_navigationActionGroup;
 	QActionGroup *_mapsActionGroup;
 	QActionGroup *_poisActionGroup;
+#if !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
 	QAction *_exitAction;
-	QAction *_keysAction;
+#endif // Q_OS_MAC + Q_OS_ANDROID
 	QAction *_pathsAction;
 	QAction *_aboutAction;
-	QAction *_aboutQtAction;
 	QAction *_printFileAction;
 	QAction *_exportPDFFileAction;
 	QAction *_exportPNGFileAction;
 	QAction *_openFileAction;
+	QAction *_openDirAction;
 	QAction *_closeFileAction;
 	QAction *_reloadFileAction;
 	QAction *_statisticsAction;
@@ -204,7 +223,6 @@ private:
 	QAction *_followPositionAction;
 	QAction *_showPositionCoordinatesAction;
 	QAction *_showMotionInfo;
-	QAction *_fullscreenAction;
 	QAction *_loadMapAction;
 	QAction *_loadMapDirAction;
 	QAction *_clearMapCacheAction;
@@ -213,11 +231,15 @@ private:
 	QAction *_showGraphSliderInfoAction;
 	QAction *_distanceGraphAction;
 	QAction *_timeGraphAction;
+#ifndef Q_OS_ANDROID
+	QAction *_keysAction;
+	QAction *_fullscreenAction;
 	QAction *_showToolbarsAction;
 	QAction *_nextAction;
 	QAction *_prevAction;
 	QAction *_lastAction;
 	QAction *_firstAction;
+#endif // Q_OS_ANDROID
 	QAction *_metricUnitsAction;
 	QAction *_imperialUnitsAction;
 	QAction *_nauticalUnitsAction;
@@ -271,9 +293,11 @@ private:
 	DateTimeRange _dateRange;
 	QString _pathName;
 
+#ifndef Q_OS_ANDROID
 	QList<QByteArray> _windowStates;
 	QList<QByteArray> _windowGeometries;
 	int _frameStyle;
+#endif // Q_OS_ANDROID
 
 	PDFExport _pdfExport;
 	PNGExport _pngExport;

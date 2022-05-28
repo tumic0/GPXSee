@@ -54,6 +54,16 @@ void ElevationGraph::setInfo()
 	else {
 		QLocale l(QLocale::system());
 
+#ifdef Q_OS_ANDROID
+		GraphView::addInfo(tr("Up"), l.toString(ascent() * yScale(), 'f', 0)
+		  + UNIT_SPACE + yUnits());
+		GraphView::addInfo(tr("Down"), l.toString(descent() * yScale(), 'f', 0)
+		  + UNIT_SPACE + yUnits());
+		GraphView::addInfo(tr("Max"), l.toString(max() * yScale(), 'f', 0)
+		  + UNIT_SPACE + yUnits());
+		GraphView::addInfo(tr("Min"), l.toString(min() * yScale(), 'f', 0)
+		  + UNIT_SPACE + yUnits());
+#else // Q_OS_ANDROID
 		GraphView::addInfo(tr("Ascent"), l.toString(ascent() * yScale(),
 		  'f', 0) + UNIT_SPACE + yUnits());
 		GraphView::addInfo(tr("Descent"), l.toString(descent() * yScale(),
@@ -62,6 +72,7 @@ void ElevationGraph::setInfo()
 		  0) + UNIT_SPACE + yUnits());
 		GraphView::addInfo(tr("Minimum"), l.toString(min() * yScale(), 'f',
 		  0) + UNIT_SPACE + yUnits());
+#endif // Q_OS_ANDROID
 	}
 }
 

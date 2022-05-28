@@ -5,14 +5,25 @@
 
 FileBrowser::FileBrowser(QObject *parent) : QObject(parent)
 {
+#ifndef Q_OS_ANDROID
 	_watcher = new QFileSystemWatcher(this);
-
 	connect(_watcher, &QFileSystemWatcher::directoryChanged, this,
 	  &FileBrowser::reloadDirectory);
+#endif // Q_OS_ANDROID
 
 	_index = -1;
 }
 
+#ifdef Q_OS_ANDROID
+void FileBrowser::setCurrentDir(const QString &path)
+{
+	QDir dir(path);
+	_files = dir.entryInfoList(_filter, QDir::Files);
+	_index = _files.empty() ? -1 : 0;
+
+	emit listChanged();
+}
+#else // Q_OS_ANDROID
 void FileBrowser::setCurrent(const QString &path)
 {
 	QFileInfo file(path);
@@ -28,6 +39,7 @@ void FileBrowser::setCurrent(const QString &path)
 
 	_index = _files.empty() ? -1 : _files.indexOf(file);
 }
+#endif // Q_OS_ANDROID
 
 void FileBrowser::setFilter(const QStringList &filter)
 {
@@ -44,6 +56,11 @@ bool FileBrowser::isLast() const
 bool FileBrowser::isFirst() const
 {
 	return (_files.size() > 0 && _index == 0);
+}
+
+QString FileBrowser::current()
+{
+	return (_index >= 0) ? _files.at(_index).absoluteFilePath() : QString();
 }
 
 QString FileBrowser::next()

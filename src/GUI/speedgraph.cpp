@@ -31,10 +31,17 @@ void SpeedGraph::setInfo()
 		QString pu = (_units == Metric) ? tr("min/km") : (_units == Imperial) ?
 		  tr("min/mi") : tr("min/nmi");
 
+#ifdef Q_OS_ANDROID
+		GraphView::addInfo(tr("Avg"), l.toString(avg() * yScale(), 'f', 1)
+		  + UNIT_SPACE + yUnits());
+		GraphView::addInfo(tr("Max"), l.toString(max() * yScale(), 'f', 1)
+		  + UNIT_SPACE + yUnits());
+#else // Q_OS_ANDROID
 		GraphView::addInfo(tr("Average"), l.toString(avg() * yScale(), 'f',
 		  1) + UNIT_SPACE + yUnits());
 		GraphView::addInfo(tr("Maximum"), l.toString(max() * yScale(), 'f',
 		  1) + UNIT_SPACE + yUnits());
+#endif // Q_OS_ANDROID
 		GraphView::addInfo(tr("Pace"), pace + UNIT_SPACE + pu);
 	} else
 		clearInfo();

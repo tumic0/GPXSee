@@ -15,9 +15,16 @@
 PNGExportDialog::PNGExportDialog(PNGExport &exp, QWidget *parent)
   : QDialog(parent), _export(exp)
 {
+#ifdef Q_OS_ANDROID
+	setWindowFlags(Qt::Window);
+	setWindowState(Qt::WindowFullScreen);
+#endif /* Q_OS_ANDROID */
+
 	_fileSelect = new FileSelectWidget();
+#ifndef Q_OS_ANDROID
 	_fileSelect->setFilter(tr("PNG files") + " (*.png);;" + tr("All files")
 	  + " (*)");
+#endif // Q_OS_ANDROID
 	_fileSelect->setFile(_export.fileName);
 
 	_width = new QSpinBox();
@@ -78,6 +85,9 @@ PNGExportDialog::PNGExportDialog(PNGExport &exp, QWidget *parent)
 #else // Q_OS_MAC
 	layout->addWidget(pageSetupBox);
 	layout->addWidget(outputFileBox);
+#ifdef Q_OS_ANDROID
+	layout->addStretch();
+#endif // Q_OS_ANDROID
 #endif // Q_OS_MAC
 	layout->addWidget(buttonBox);
 	setLayout(layout);

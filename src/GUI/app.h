@@ -5,7 +5,7 @@
 
 class GUI;
 
-class App : QApplication
+class App : public QApplication
 {
 	Q_OBJECT
 
@@ -16,6 +16,11 @@ public:
 
 protected:
 	bool event(QEvent *event);
+
+#ifdef Q_OS_ANDROID
+private slots:
+	void appStateChanged(Qt::ApplicationState state);
+#endif // Q_OS_ANDROID
 
 private:
 	void loadDatums();

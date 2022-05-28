@@ -61,6 +61,10 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	Waypoint::loadSymbolIcons(ProgramPaths::symbolsDir());
 
 	_gui = new GUI();
+
+#ifdef Q_OS_ANDROID
+	connect(this, &App::applicationStateChanged, this, &App::appStateChanged);
+#endif // Q_OS_ANDROID
 }
 
 App::~App()
@@ -92,6 +96,14 @@ int App::run()
 
 	return exec();
 }
+
+#ifdef Q_OS_ANDROID
+void App::appStateChanged(Qt::ApplicationState state)
+{
+	if (state == Qt::ApplicationSuspended)
+		_gui->writeSettings();
+}
+#endif // Q_OS_ANDROID
 
 bool App::event(QEvent *event)
 {

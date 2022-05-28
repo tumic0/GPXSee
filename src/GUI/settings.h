@@ -1,6 +1,8 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <QtGlobal>
+
 #define IMPERIAL_UNITS() \
 	(QLocale::system().measurementSystem() == QLocale::ImperialSystem)
 #define POSITION_PLUGIN() \

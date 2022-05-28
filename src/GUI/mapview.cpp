@@ -662,20 +662,8 @@ void MapView::wheelEvent(QWheelEvent *event)
 #else // QT 5.15
 	zoom((delta > 0) ? 1 : -1, event->position().toPoint(), shift);
 #endif // QT 5.15
-}
 
-void MapView::mouseDoubleClickEvent(QMouseEvent *event)
-{
-	bool shift = (event->modifiers() & MODIFIER) ? true : false;
-
-	QGraphicsView::mouseDoubleClickEvent(event);
-	if (event->isAccepted())
-		return;
-
-	if (event->button() != Qt::LeftButton && event->button() != Qt::RightButton)
-		return;
-
-	zoom((event->button() == Qt::LeftButton) ? 1 : -1, event->pos(), shift);
+	QGraphicsView::wheelEvent(event);
 }
 
 void MapView::keyPressEvent(QKeyEvent *event)
@@ -711,15 +699,6 @@ void MapView::keyReleaseEvent(QKeyEvent *event)
 		viewport()->setCursor(_cursor);
 
 	QGraphicsView::keyReleaseEvent(event);
-}
-
-void MapView::mousePressEvent(QMouseEvent *event)
-{
-	if (event->button() == Qt::LeftButton && event->modifiers() & MODIFIER)
-		QApplication::clipboard()->setText(Format::coordinates(
-		  _map->xy2ll(mapToScene(event->pos())), _cursorCoordinates->format()));
-	else
-		QGraphicsView::mousePressEvent(event);
 }
 
 void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
@@ -1200,6 +1179,12 @@ void MapView::scrollContentsBy(int dx, int dy)
 	}
 }
 
+void MapView::leaveEvent(QEvent *event)
+{
+	_cursorCoordinates->setCoordinates(Coordinates());
+	QGraphicsView::leaveEvent(event);
+}
+
 void MapView::mouseMoveEvent(QMouseEvent *event)
 {
 	if (_cursorCoordinates->isVisible()) {
@@ -1210,10 +1195,30 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
 	QGraphicsView::mouseMoveEvent(event);
 }
 
-void MapView::leaveEvent(QEvent *event)
+
+void MapView::mousePressEvent(QMouseEvent *event)
 {
-	_cursorCoordinates->setCoordinates(Coordinates());
-	QGraphicsView::leaveEvent(event);
+	if (event->button() == Qt::LeftButton) {
+		if (event->modifiers() & MODIFIER)
+			QApplication::clipboard()->setText(Format::coordinates(_map->xy2ll(
+			  mapToScene(event->pos())), _cursorCoordinates->format()));
+#ifdef Q_OS_ANDROID
+		else
+			emit clicked(event->pos());
+#endif // Q_OS_ANDROID
+	}
+
+	QGraphicsView::mousePressEvent(event);
+}
+
+void MapView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+	bool shift = (event->modifiers() & MODIFIER) ? true : false;
+
+	if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton)
+		zoom((event->button() == Qt::LeftButton) ? 1 : -1, event->pos(), shift);
+
+	QGraphicsView::mouseDoubleClickEvent(event);
 }
 
 bool MapView::event(QEvent *event)

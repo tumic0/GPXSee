@@ -32,11 +32,21 @@ Thumbnail::Thumbnail(const QString &path, int limit, QWidget *parent)
 
 	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
+#ifdef Q_OS_ANDROID
+	_path = path;
+#else //Q_OS_ANDROID
 	_path = QFileInfo(path).absoluteFilePath();
+#endif // Q_OS_ANDROID
 }
 
 void Thumbnail::mousePressEvent(QMouseEvent *event)
 {
 	if (event->button() == Qt::LeftButton)
+#ifdef Q_OS_ANDROID
+		QDesktopServices::openUrl(_path);
+#else // Q_OS_ANDROID
 		QDesktopServices::openUrl(QUrl::fromLocalFile(_path));
+#endif // Q_OS_ANDROID
+
+	QLabel::mousePressEvent(event);
 }

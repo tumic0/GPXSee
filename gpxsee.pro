@@ -1,9 +1,9 @@
-unix:!macx {
+unix:!macx:!android {
     TARGET = gpxsee
 } else {
     TARGET = GPXSee
 }
-VERSION = 10.8
+VERSION = 11.0
 
 QT += core \
     gui \
@@ -13,7 +13,8 @@ QT += core \
     concurrent \
     widgets \
     printsupport \
-    positioning
+    positioning \
+    svg
 greaterThan(QT_MAJOR_VERSION, 5) {
     QT += openglwidgets \
           core5compat
@@ -24,6 +25,7 @@ INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
     src/GUI/crosshairitem.h \
     src/GUI/motioninfoitem.h \
+    src/GUI/navigationwidget.h \
     src/GUI/pluginparameters.h \
     src/common/garmin.h \
     src/common/coordinates.h \
@@ -246,6 +248,7 @@ HEADERS += src/common/config.h \
 SOURCES += src/main.cpp \
     src/GUI/crosshairitem.cpp \
     src/GUI/motioninfoitem.cpp \
+    src/GUI/navigationwidget.cpp \
     src/GUI/pluginparameters.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
@@ -504,7 +507,7 @@ win32 {
         NOGDI
 }
 
-unix:!macx {
+unix:!macx:!android {
     isEmpty(PREFIX):PREFIX = /usr/local
 
     maps.files = $$files(pkg/maps/*)
@@ -523,4 +526,40 @@ unix:!macx {
     mime.path = $$PREFIX/share/mime/packages
     target.path = $$PREFIX/bin
     INSTALLS += target maps csv symbols locale icon desktop mime
+}
+
+android {
+    defineReplace(versionCode) {
+        segments = $$split(1, ".")
+        for (segment, segments): \
+            vCode = "$$first(vCode)$$format_number($$segment, width=3 zeropad)"
+        contains(ANDROID_TARGET_ARCH, armeabi-v7a): \
+            suffix = 0
+        contains(ANDROID_TARGET_ARCH, arm64-v8a): \
+            suffix = 1
+        contains(ANDROID_TARGET_ARCH, x86): \
+            suffix = 2
+        contains(ANDROID_TARGET_ARCH, x86_64): \
+            suffix = 3
+
+        return($$first(vCode)$$first(suffix))
+    }
+
+    include($$OPENSSL_PATH/openssl.pri)
+
+    ANDROID_VERSION_NAME = $$VERSION
+    ANDROID_VERSION_CODE = $$versionCode($$ANDROID_VERSION_NAME)
+    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/pkg/android
+    DISTFILES += \
+        pkg/android/AndroidManifest.xml \
+        pkg/android/build.gradle \
+        pkg/android/res/values/libs.xml
+
+    maps.files = $$files(pkg/maps/*)
+    maps.path = /assets/maps
+    csv.files = $$files(pkg/csv/*)
+    csv.path = /assets/csv
+    symbols.files = $$files(icons/symbols/*.png)
+    symbols.path = /assets/symbols
+    INSTALLS += maps csv symbols
 }

@@ -53,6 +53,7 @@
 #include "mapitem.h"
 #include "mapaction.h"
 #include "poiaction.h"
+#include "navigationwidget.h"
 #include "gui.h"
 
 
@@ -72,7 +73,11 @@ GUI::GUI()
 	createStatusBar();
 	createActions();
 	createMenus();
+#ifdef Q_OS_ANDROID
+	createNavigation();
+#else // Q_OS_ANDROID
 	createToolBars();
+#endif // Q_OS_ANDROID
 	createBrowser();
 
 	_splitter = new QSplitter();
@@ -83,6 +88,7 @@ GUI::GUI()
 	_splitter->setContentsMargins(0, 0, 0, 0);
 	_splitter->setStretchFactor(0, 255);
 	_splitter->setStretchFactor(1, 1);
+
 	setCentralWidget(_splitter);
 
 	setWindowIcon(QIcon(APP_ICON));
@@ -181,19 +187,23 @@ void GUI::createActions()
 	_navigationActionGroup->setEnabled(false);
 
 	// General actions
+#if !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
 	_exitAction = new QAction(QIcon(QUIT_ICON), tr("Quit"), this);
 	_exitAction->setShortcut(QUIT_SHORTCUT);
 	_exitAction->setMenuRole(QAction::QuitRole);
 	connect(_exitAction, &QAction::triggered, this, &GUI::close);
 	addAction(_exitAction);
+#endif // Q_OS_MAC + Q_OS_ANDROID
 
 	// Help & About
 	_pathsAction = new QAction(tr("Paths"), this);
 	_pathsAction->setMenuRole(QAction::NoRole);
 	connect(_pathsAction, &QAction::triggered, this, &GUI::paths);
+#ifndef Q_OS_ANDROID
 	_keysAction = new QAction(tr("Keyboard controls"), this);
 	_keysAction->setMenuRole(QAction::NoRole);
 	connect(_keysAction, &QAction::triggered, this, &GUI::keys);
+#endif // Q_OS_ANDROID
 	_aboutAction = new QAction(QIcon(APP_ICON), tr("About GPXSee"), this);
 	_aboutAction->setMenuRole(QAction::AboutRole);
 	connect(_aboutAction, &QAction::triggered, this, &GUI::about);
@@ -205,6 +215,12 @@ void GUI::createActions()
 	connect(_openFileAction, &QAction::triggered, this,
 	  QOverload<>::of(&GUI::openFile));
 	addAction(_openFileAction);
+#ifdef Q_OS_ANDROID
+	_openDirAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Open directory..."),
+	  this);
+	_openDirAction->setMenuRole(QAction::NoRole);
+	connect(_openDirAction, &QAction::triggered, this, &GUI::openDir);
+#endif // Q_OS_ANDROID
 	_printFileAction = new QAction(QIcon(PRINT_FILE_ICON), tr("Print..."),
 	  this);
 	_printFileAction->setMenuRole(QAction::NoRole);
@@ -459,10 +475,12 @@ void GUI::createActions()
 	  &GUI::showGraphSliderInfo);
 
 	// Settings actions
+#ifndef Q_OS_ANDROID
 	_showToolbarsAction = new QAction(tr("Show toolbars"), this);
 	_showToolbarsAction->setMenuRole(QAction::NoRole);
 	_showToolbarsAction->setCheckable(true);
 	connect(_showToolbarsAction, &QAction::triggered, this, &GUI::showToolbars);
+#endif // Q_OS_ANDROID
 	ag = new QActionGroup(this);
 	ag->setExclusive(true);
 	_totalTimeAction = new QAction(tr("Total time"), this);
@@ -514,6 +532,7 @@ void GUI::createActions()
 	_dmsAction->setCheckable(true);
 	_dmsAction->setActionGroup(ag);
 	connect(_dmsAction, &QAction::triggered, this, &GUI::setDMS);
+#ifndef Q_OS_ANDROID
 	_fullscreenAction = new QAction(QIcon(FULLSCREEN_ICON),
 	  tr("Fullscreen mode"), this);
 	_fullscreenAction->setMenuRole(QAction::NoRole);
@@ -521,11 +540,13 @@ void GUI::createActions()
 	_fullscreenAction->setShortcut(FULLSCREEN_SHORTCUT);
 	connect(_fullscreenAction, &QAction::triggered, this, &GUI::showFullscreen);
 	addAction(_fullscreenAction);
+#endif // Q_OS_ANDROID
 	_openOptionsAction = new QAction(tr("Options..."), this);
 	_openOptionsAction->setMenuRole(QAction::PreferencesRole);
 	connect(_openOptionsAction, &QAction::triggered, this, &GUI::openOptions);
 
 	// Navigation actions
+#ifndef Q_OS_ANDROID
 	_nextAction = new QAction(QIcon(NEXT_FILE_ICON), tr("Next"), this);
 	_nextAction->setActionGroup(_navigationActionGroup);
 	_nextAction->setMenuRole(QAction::NoRole);
@@ -542,6 +563,7 @@ void GUI::createActions()
 	_firstAction->setMenuRole(QAction::NoRole);
 	_firstAction->setActionGroup(_navigationActionGroup);
 	connect(_firstAction, &QAction::triggered, this, &GUI::first);
+#endif // Q_OS_ANDROID
 }
 
 void GUI::createMapNodeMenu(const TreeNode<MapAction*> &node, QMenu *menu,
@@ -574,8 +596,13 @@ void GUI::createMenus()
 {
 	QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 	fileMenu->addAction(_openFileAction);
+#ifdef Q_OS_ANDROID
+	fileMenu->addAction(_openDirAction);
+#endif // Q_OS_ANDROID
 	fileMenu->addSeparator();
+#ifndef Q_OS_ANDROID
 	fileMenu->addAction(_printFileAction);
+#endif // Q_OS_ANDROID
 	fileMenu->addAction(_exportPDFFileAction);
 	fileMenu->addAction(_exportPNGFileAction);
 	fileMenu->addSeparator();
@@ -583,10 +610,10 @@ void GUI::createMenus()
 	fileMenu->addSeparator();
 	fileMenu->addAction(_reloadFileAction);
 	fileMenu->addAction(_closeFileAction);
-#ifndef Q_OS_MAC
+#if !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
 	fileMenu->addSeparator();
 	fileMenu->addAction(_exitAction);
-#endif // Q_OS_MAC
+#endif // Q_OS_MAC + Q_OS_ANDROID
 
 	_mapMenu = menuBar()->addMenu(tr("&Map"));
 	_mapsEnd = _mapMenu->addSeparator();
@@ -659,18 +686,31 @@ void GUI::createMenus()
 	coordinatesMenu->addAction(_degreesMinutesAction);
 	coordinatesMenu->addAction(_dmsAction);
 	settingsMenu->addSeparator();
+#ifndef Q_OS_ANDROID
 	settingsMenu->addAction(_showToolbarsAction);
 	settingsMenu->addAction(_fullscreenAction);
 	settingsMenu->addSeparator();
+#endif // Q_OS_ANDROID
 	settingsMenu->addAction(_openOptionsAction);
 
 	QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
 	helpMenu->addAction(_pathsAction);
+#ifndef Q_OS_ANDROID
 	helpMenu->addAction(_keysAction);
+#endif // Q_OS_ANDROID
 	helpMenu->addSeparator();
 	helpMenu->addAction(_aboutAction);
 }
 
+#ifdef Q_OS_ANDROID
+void GUI::createNavigation()
+{
+	_navigation = new NavigationWidget(_mapView);
+
+	connect(_navigation, &NavigationWidget::next, this, &GUI::next);
+	connect(_navigation, &NavigationWidget::prev, this, &GUI::prev);
+}
+#else // Q_OS_ANDROID
 void GUI::createToolBars()
 {
 	int is = style()->pixelMetric(QStyle::PM_ToolBarIconSize);
@@ -706,6 +746,7 @@ void GUI::createToolBars()
 	_navigationToolBar->addAction(_nextAction);
 	_navigationToolBar->addAction(_lastAction);
 }
+#endif // Q_OS_ANDROID
 
 void GUI::createMapView()
 {
@@ -713,7 +754,11 @@ void GUI::createMapView()
 	_mapView = new MapView(_map, _poi, 0, this);
 	_mapView->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,
 	  QSizePolicy::Expanding));
+#ifdef Q_OS_ANDROID
+	_mapView->setMinimumHeight(100);
+#else // Q_OS_ANDROID
 	_mapView->setMinimumHeight(200);
+#endif // Q_OS_ANDROID
 #ifdef Q_OS_WIN32
 	_mapView->setFrameShape(QFrame::NoFrame);
 #endif // Q_OS_WIN32
@@ -765,7 +810,16 @@ void GUI::about()
 	QUrl homepage(APP_HOMEPAGE);
 
 	msgBox.setWindowTitle(tr("About GPXSee"));
-	msgBox.setText("<h2>" + QString(APP_NAME) + "</h2><p><p>" + tr("Version %1")
+#ifdef Q_OS_ANDROID
+	msgBox.setText("<h2>" + QString(APP_NAME) + "</h2><p>" + tr("Version %1")
+	  .arg(QString(APP_VERSION) + " (" + QSysInfo::buildCpuArchitecture()
+	  + ", Qt " + QT_VERSION_STR + ")") + "</p><p>"
+	  + tr("GPXSee is distributed under the terms of the GNU General Public "
+	  "License version 3. For more info about GPXSee visit the project "
+	  "homepage at %1.").arg("<a href=\"" + homepage.toString() + "\">"
+	  + homepage.toString(QUrl::RemoveScheme).mid(2) + "</a>") + "</p>");
+#else // Q_OS_ANDROID
+	msgBox.setText("<h2>" + QString(APP_NAME) + "</h2><p>" + tr("Version %1")
 	  .arg(QString(APP_VERSION) + " (" + QSysInfo::buildCpuArchitecture()
 	  + ", Qt " + QT_VERSION_STR + ")") + "</p>");
 	msgBox.setInformativeText("<table width=\"300\"><tr><td>"
@@ -778,10 +832,12 @@ void GUI::about()
 	QIcon icon = msgBox.windowIcon();
 	QSize size = icon.actualSize(QSize(64, 64));
 	msgBox.setIconPixmap(icon.pixmap(size));
+#endif // Q_OS_ANDROID
 
 	msgBox.exec();
 }
 
+#ifndef Q_OS_ANDROID
 void GUI::keys()
 {
 	QMessageBox msgBox(this);
@@ -820,12 +876,30 @@ void GUI::keys()
 
 	msgBox.exec();
 }
+#endif // Q_OS_ANDROID
 
 void GUI::paths()
 {
 	QMessageBox msgBox(this);
 
 	msgBox.setWindowTitle(tr("Paths"));
+#ifdef Q_OS_ANDROID
+	msgBox.setText(
+	  + "<small><b>" + tr("Map directory:") + "</b><br>"
+	  + QDir::cleanPath(ProgramPaths::mapDir(true))	+ "<br><br><b>"
+	  + tr("POI directory:") + "</b><br>"
+	  + QDir::cleanPath(ProgramPaths::poiDir(true)) + "<br><br><b>"
+	  + tr("GCS/PCS directory:") + "</b><br>"
+	  + QDir::cleanPath(ProgramPaths::csvDir(true)) + "<br><br><b>"
+	  + tr("DEM directory:") + "</b><br>"
+	  + QDir::cleanPath(ProgramPaths::demDir(true)) + "<br><br><b>"
+	  + tr("Styles directory:") + "</b><br>"
+	  + QDir::cleanPath(ProgramPaths::styleDir(true)) + "<br><br><b>"
+	  + tr("Symbols directory:") + "</b><br>"
+	  + QDir::cleanPath(ProgramPaths::symbolsDir(true)) + "<br><br><b>"
+	  + tr("Tile cache directory:") + "</b><br>"
+	  + QDir::cleanPath(ProgramPaths::tilesDir()) + "</small>");
+#else // Q_OS_ANDROID
 	msgBox.setText("<h3>" + tr("Paths") + "</h3>");
 	msgBox.setInformativeText(
 	  "<style>td {white-space: pre; padding-right: 1em;}</style><table><tr><td>"
@@ -844,20 +918,39 @@ void GUI::paths()
 	  + tr("Tile cache directory:") + "</td><td><code>"
 	  + QDir::cleanPath(ProgramPaths::tilesDir()) + "</code></td></tr></table>"
 	);
+#endif // Q_OS_ANDROID
 
 	msgBox.exec();
 }
 
 void GUI::openFile()
 {
+#ifdef Q_OS_ANDROID
+	QStringList files(QFileDialog::getOpenFileNames(this, tr("Open file"),
+	  _dataDir));
+#else // Q_OS_ANDROID
 	QStringList files(QFileDialog::getOpenFileNames(this, tr("Open file"),
 	  _dataDir, Data::formats()));
+#endif // Q_OS_ANDROID
 
 	for (int i = 0; i < files.size(); i++)
 		openFile(files.at(i));
 	if (!files.isEmpty())
 		_dataDir = QFileInfo(files.last()).path();
 }
+
+#ifdef Q_OS_ANDROID
+void GUI::openDir()
+{
+	QString dir(QFileDialog::getExistingDirectory(this, tr("Open directory"),
+	  _dataDir));
+
+	if (!dir.isEmpty()) {
+		_browser->setCurrentDir(dir);
+		openFile(_browser->current());
+	}
+}
+#endif // Q_OS_ANDROID
 
 bool GUI::openFile(const QString &fileName, bool silent)
 {
@@ -868,7 +961,9 @@ bool GUI::openFile(const QString &fileName, bool silent)
 		return false;
 
 	_files.append(fileName);
+#ifndef Q_OS_ANDROID
 	_browser->setCurrent(fileName);
+#endif // Q_OS_ANDROID
 	_fileActionGroup->setEnabled(true);
 	// Explicitly enable the reload action as it may be disabled by loadMapDir()
 	_reloadFileAction->setEnabled(true);
@@ -898,7 +993,7 @@ bool GUI::loadFile(const QString &fileName, bool silent)
 			_fileActionGroup->setEnabled(false);
 
 		QString error = tr("Error loading data file:") + "\n\n"
-		  + fileName + "\n\n" + data.errorString();
+		  + Util::displayName(fileName) + "\n\n" + data.errorString();
 		if (data.errorLine())
 			error.append("\n" + tr("Line: %1").arg(data.errorLine()));
 		QMessageBox::critical(this, APP_NAME, error);
@@ -967,8 +1062,13 @@ void GUI::loadData(const Data &data)
 
 void GUI::openPOIFile()
 {
+#ifdef Q_OS_ANDROID
+	QStringList files(QFileDialog::getOpenFileNames(this, tr("Open POI file"),
+	  _poiDir));
+#else // Q_OS_ANDROID
 	QStringList files(QFileDialog::getOpenFileNames(this, tr("Open POI file"),
 	  _poiDir, Data::formats()));
+#endif // Q_OS_ANDROID
 
 	for (int i = 0; i < files.size(); i++)
 		openPOIFile(files.at(i));
@@ -994,7 +1094,7 @@ bool GUI::openPOIFile(const QString &fileName)
 		return true;
 	} else {
 		QString error = tr("Error loading POI file:") + "\n\n"
-		  + fileName + "\n\n" + _poi->errorString();
+		  + Util::displayName(fileName) + "\n\n" + _poi->errorString();
 		if (_poi->errorLine())
 			error.append("\n" + tr("Line: %1").arg(_poi->errorLine()));
 		QMessageBox::critical(this, APP_NAME, error);
@@ -1207,12 +1307,72 @@ void GUI::exportPNGFile()
 void GUI::statistics()
 {
 	QLocale l(QLocale::system());
+	QMessageBox msgBox(this);
+	QString text;
 
+#ifdef Q_OS_ANDROID
+	if (_showTracksAction->isChecked() && _trackCount > 1)
+		text.append("<b>" + tr("Tracks") + ":</b> "
+		  + l.toString(_trackCount) + "<br>");
+	if (_showRoutesAction->isChecked() && _routeCount > 1)
+		text.append("<b>" + tr("Routes") + ":</b> "
+		  + l.toString(_routeCount) + "<br>");
+	if (_showWaypointsAction->isChecked() && _waypointCount > 1)
+		text.append("<b>" + tr("Waypoints") + ":</b> "
+		  + l.toString(_waypointCount) + "<br>");
+	if (_showAreasAction->isChecked() && _areaCount > 1)
+		text.append("<b>" + tr("Areas") + ":</b> "
+		  + l.toString(_areaCount) + "<br>");
+
+	if (_dateRange.first.isValid()) {
+		if (_dateRange.first == _dateRange.second) {
+			QString format = l.dateFormat(QLocale::LongFormat);
+			text.append("<b>" + tr("Date") + ":</b> "
+			  + _dateRange.first.toString(format) + "<br>");
+		} else {
+			QString format = l.dateFormat(QLocale::ShortFormat);
+			text.append("<b>" + tr("Date") + ":</b> "
+			  + QString("%1 - %2").arg(_dateRange.first.toString(format),
+			  _dateRange.second.toString(format)) + "<br>");
+		}
+	}
+
+	if (distance() > 0)
+		text.append("<b>" + tr("Distance") + ":</b> "
+		  + Format::distance(distance(), units()) + "<br>");
+	if (time() > 0) {
+		text.append("<b>" + tr("Time") + ":</b> "
+		  + Format::timeSpan(time()) + "<br>");
+		text.append("<b>" + tr("Moving time") + ":</b> "
+		  + Format::timeSpan(movingTime()) + "<br>");
+	}
+	text.append("<br>");
+
+	for (int i = 0; i < _tabs.count(); i++) {
+		const GraphTab *tab = _tabs.at(i);
+		if (tab->isEmpty())
+			continue;
+
+		text.append("<i>" + tab->label() + "</i><br>");
+		for (int j = 0; j < tab->info().size(); j++) {
+			const KV<QString, QString> &kv = tab->info().at(j);
+			text.append("<b>" + kv.key() + ":</b>&nbsp;" + kv.value());
+			if (j != tab->info().size() - 1)
+				text.append(" | ");
+		}
+		if (i != _tabs.count() - 1)
+			text.append("<br><br>");
+	}
+
+	msgBox.setWindowTitle(tr("Statistics"));
+	msgBox.setText(text);
+
+#else // Q_OS_ANDROID
 #ifdef Q_OS_WIN32
-	QString text = "<style>td {white-space: pre; padding-right: 4em;}"
+	text = "<style>td {white-space: pre; padding-right: 4em;}"
 	  "th {text-align: left; padding-top: 0.5em;}</style><table>";
 #else // Q_OS_WIN32
-	QString text = "<style>td {white-space: pre; padding-right: 2em;}"
+	text = "<style>td {white-space: pre; padding-right: 2em;}"
 	  "th {text-align: left; padding-top: 0.5em;}</style><table>";
 #endif // Q_OS_WIN32
 
@@ -1267,11 +1427,11 @@ void GUI::statistics()
 
 	text.append("</table>");
 
-
-	QMessageBox msgBox(this);
 	msgBox.setWindowTitle(tr("Statistics"));
 	msgBox.setText("<h3>" + tr("Statistics") + "</h3>");
 	msgBox.setInformativeText(text);
+#endif // Q_OS_ANDROID
+
 	msgBox.exec();
 }
 
@@ -1430,8 +1590,10 @@ void GUI::reloadFiles()
 	updateWindowTitle();
 	if (_files.isEmpty())
 		_fileActionGroup->setEnabled(false);
+#ifndef Q_OS_ANDROID
 	else
 		_browser->setCurrent(_files.last());
+#endif // Q_OS_ANDROID
 	updateDEMDownloadAction();
 }
 
@@ -1466,6 +1628,10 @@ void GUI::closeAll()
 	updateWindowTitle();
 	updateGraphTabs();
 	updateDEMDownloadAction();
+
+#ifdef Q_OS_ANDROID
+	_browser->setCurrentDir(QString());
+#endif // Q_OS_ANDROID
 }
 
 void GUI::showGraphs(bool show)
@@ -1473,6 +1639,7 @@ void GUI::showGraphs(bool show)
 	_graphTabWidget->setHidden(!show);
 }
 
+#ifndef Q_OS_ANDROID
 void GUI::showToolbars(bool show)
 {
 	if (show) {
@@ -1515,6 +1682,7 @@ void GUI::showFullscreen(bool show)
 		showNormal();
 	}
 }
+#endif // Q_OS_ANDROID
 
 void GUI::showTracks(bool show)
 {
@@ -1583,8 +1751,13 @@ void GUI::showPathMarkerInfo(QAction *action)
 
 void GUI::loadMap()
 {
+#ifdef Q_OS_ANDROID
+	QStringList files(QFileDialog::getOpenFileNames(this, tr("Open map file"),
+	  _mapDir));
+#else // Q_OS_ANDROID
 	QStringList files(QFileDialog::getOpenFileNames(this, tr("Open map file"),
 	  _mapDir, MapList::formats()));
+#endif // Q_OS_ANDROID
 	MapAction *a, *lastReady = 0;
 
 	for (int i = 0; i < files.size(); i++) {
@@ -1627,7 +1800,8 @@ bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 			if (!map->isValid()) {
 				if (!silent)
 					QMessageBox::critical(this, APP_NAME,
-					  tr("Error loading map:") + "\n\n" + map->path() + "\n\n"
+					  tr("Error loading map:") + "\n\n"
+					  + Util::displayName(map->path()) + "\n\n"
 					  + map->errorString());
 				delete map;
 			} else {
@@ -1672,8 +1846,8 @@ void GUI::mapLoaded()
 		_showMapAction->setEnabled(true);
 		_clearMapCacheAction->setEnabled(true);
 	} else {
-		QString error = tr("Error loading map:") + "\n\n" + map->path() + "\n\n"
-		  + map->errorString();
+		QString error = tr("Error loading map:") + "\n\n"
+		  + Util::displayName(map->path()) + "\n\n" + map->errorString();
 		QMessageBox::critical(this, APP_NAME, error);
 		action->deleteLater();
 	}
@@ -1691,8 +1865,8 @@ void GUI::mapLoadedDir()
 		actions.append(action);
 		_mapView->loadMaps(actions);
 	} else {
-		QString error = tr("Error loading map:") + "\n\n" + map->path() + "\n\n"
-		  + map->errorString();
+		QString error = tr("Error loading map:") + "\n\n"
+		  + Util::displayName(map->path()) + "\n\n" + map->errorString();
 		QMessageBox::critical(this, APP_NAME, error);
 		action->deleteLater();
 	}
@@ -1714,7 +1888,8 @@ void GUI::loadMapDirNode(const TreeNode<Map *> &node, QList<MapAction*> &actions
 		if (!(a = findMapAction(existingActions, map))) {
 			if (!map->isValid()) {
 				QMessageBox::critical(this, APP_NAME, tr("Error loading map:")
-				  + "\n\n" + map->path() + "\n\n" + map->errorString());
+				  + "\n\n" + Util::displayName(map->path()) + "\n\n"
+				  + map->errorString());
 				delete map;
 			} else {
 				a = new MapAction(map, _mapsActionGroup);
@@ -1817,7 +1992,7 @@ void GUI::updateStatusBarInfo()
 	if (_files.count() == 0)
 		_fileNameLabel->setText(tr("No files loaded"));
 	else if (_files.count() == 1)
-		_fileNameLabel->setText(_files.at(0));
+		_fileNameLabel->setText(Util::displayName(_files.at(0)));
 	else
 		_fileNameLabel->setText(tr("%n files", "", _files.count()));
 
@@ -1840,6 +2015,10 @@ void GUI::updateStatusBarInfo()
 		_timeLabel->clear();
 		_timeLabel->setToolTip(QString());
 	}
+
+#ifdef Q_OS_ANDROID
+	statusBar()->setVisible(!_files.isEmpty());
+#endif // Q_OS_ANDROID
 }
 
 void GUI::updateWindowTitle()
@@ -1929,10 +2108,17 @@ void GUI::graphChanged(int index)
 
 void GUI::updateNavigationActions()
 {
+#ifdef Q_OS_ANDROID
+	_navigation->enableNext(!_browser->isLast()
+	  && !_browser->current().isNull());
+	_navigation->enablePrev(!_browser->isFirst()
+	  && !_browser->current().isNull());
+#else // Q_OS_ANDROID
 	_lastAction->setEnabled(!_browser->isLast());
 	_nextAction->setEnabled(!_browser->isLast());
 	_firstAction->setEnabled(!_browser->isFirst());
 	_prevAction->setEnabled(!_browser->isFirst());
+#endif // Q_OS_ANDROID
 }
 
 bool GUI::updateGraphTabs()
@@ -2042,6 +2228,7 @@ void GUI::first()
 	openFile(file);
 }
 
+#ifndef Q_OS_ANDROID
 void GUI::keyPressEvent(QKeyEvent *event)
 {
 	QString file;
@@ -2096,11 +2283,12 @@ void GUI::keyPressEvent(QKeyEvent *event)
 
 	QMainWindow::keyPressEvent(event);
 }
+#endif // Q_OS_ANDROID
 
 void GUI::closeEvent(QCloseEvent *event)
 {
 	writeSettings();
-	event->accept();
+	QMainWindow::closeEvent(event);
 }
 
 void GUI::dragEnterEvent(QDragEnterEvent *event)
@@ -2167,6 +2355,7 @@ void GUI::writeSettings()
 	QSettings settings(qApp->applicationName(), qApp->applicationName());
 	settings.clear();
 
+#ifndef Q_OS_ANDROID
 	settings.beginGroup(WINDOW_SETTINGS_GROUP);
 	if (!_windowStates.isEmpty() && !_windowGeometries.isEmpty()) {
 		settings.setValue(WINDOW_STATE_SETTING, _windowStates.first());
@@ -2176,6 +2365,7 @@ void GUI::writeSettings()
 		settings.setValue(WINDOW_GEOMETRY_SETTING, saveGeometry());
 	}
 	settings.endGroup();
+#endif // Q_OS_ANDROID
 
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
 	if ((_movingTimeAction->isChecked() ? Moving : Total) !=
@@ -2190,9 +2380,11 @@ void GUI::writeSettings()
 	  : _degreesMinutesAction->isChecked() ? DegreesMinutes : DecimalDegrees;
 	if (format != COORDINATES_DEFAULT)
 		settings.setValue(COORDINATES_SETTING, format);
+#ifndef Q_OS_ANDROID
 	if (_showToolbarsAction->isChecked() != SHOW_TOOLBARS_DEFAULT)
 		settings.setValue(SHOW_TOOLBARS_SETTING,
 		  _showToolbarsAction->isChecked());
+#endif // Q_OS_ANDROID
 	settings.endGroup();
 
 	settings.beginGroup(MAP_SETTINGS_GROUP);
@@ -2485,10 +2677,12 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 	int value;
 	QSettings settings(qApp->applicationName(), qApp->applicationName());
 
+#ifndef Q_OS_ANDROID
 	settings.beginGroup(WINDOW_SETTINGS_GROUP);
 	restoreGeometry(settings.value(WINDOW_GEOMETRY_SETTING).toByteArray());
 	restoreState(settings.value(WINDOW_STATE_SETTING).toByteArray());
 	settings.endGroup();
+#endif // Q_OS_ANDROID
 
 	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
 	if (settings.value(TIME_TYPE_SETTING, TIME_TYPE_DEFAULT).toInt() == Moving)
@@ -2512,10 +2706,12 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 	else
 		_decimalDegreesAction->trigger();
 
+#ifndef Q_OS_ANDROID
 	if (!settings.value(SHOW_TOOLBARS_SETTING, SHOW_TOOLBARS_DEFAULT).toBool())
 		showToolbars(false);
 	else
 		_showToolbarsAction->setChecked(true);
+#endif // Q_OS_ANDROID
 	settings.endGroup();
 
 	settings.beginGroup(MAP_SETTINGS_GROUP);
@@ -2523,8 +2719,8 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 		_showMapAction->setChecked(true);
 	else
 		_mapView->showMap(false);
-	if (settings.value(SHOW_CURSOR_COORDINATES_SETTING, SHOW_CURSOR_COORDINATES_DEFAULT)
-	  .toBool()) {
+	if (settings.value(SHOW_CURSOR_COORDINATES_SETTING,
+	  SHOW_CURSOR_COORDINATES_DEFAULT).toBool()) {
 		_showCoordinatesAction->setChecked(true);
 		_mapView->showCursorCoordinates(true);
 	}

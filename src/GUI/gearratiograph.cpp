@@ -24,12 +24,21 @@ void GearRatioGraph::setInfo()
 	if (_showTracks) {
 		QLocale l(QLocale::system());
 
+#ifdef Q_OS_ANDROID
+		GraphView::addInfo(tr("Top"), l.toString(top() * yScale(), 'f', 2)
+		  + UNIT_SPACE + yUnits());
+		GraphView::addInfo(tr("Min"), l.toString(min() * yScale(), 'f', 2)
+		  + UNIT_SPACE + yUnits());
+		GraphView::addInfo(tr("Max"), l.toString(max() * yScale(), 'f', 2)
+		  + UNIT_SPACE + yUnits());
+#else // Q_OS_ANDROID
 		GraphView::addInfo(tr("Most used"), l.toString(top() * yScale(),
 		  'f', 2) + UNIT_SPACE + yUnits());
 		GraphView::addInfo(tr("Minimum"), l.toString(min() * yScale(), 'f',
 		  2) + UNIT_SPACE + yUnits());
 		GraphView::addInfo(tr("Maximum"), l.toString(max() * yScale(), 'f',
 		  2) + UNIT_SPACE + yUnits());
+#endif // Q_OS_ANDROID
 	} else
 		clearInfo();
 }

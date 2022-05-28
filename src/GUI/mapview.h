@@ -102,6 +102,11 @@ public:
 
 	RectC boundingRect() const;
 
+#ifdef Q_OS_ANDROID
+signals:
+	void clicked(const QPoint &pos);
+#endif // Q_OS_ANDROID
+
 public slots:
 	void showMap(bool show);
 	void showPOI(bool show);
@@ -162,6 +167,7 @@ private:
 	void drawBackground(QPainter *painter, const QRectF &rect);
 	void paintEvent(QPaintEvent *event);
 	void leaveEvent(QEvent *event);
+
 	bool event(QEvent *event);
 	void scrollContentsBy(int dx, int dy);
 

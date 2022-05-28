@@ -9,10 +9,12 @@
 
 DirSelectWidget::DirSelectWidget(QWidget *parent) : QWidget(parent)
 {
-	QFontMetrics fm(QApplication::font());
 	_edit = new QLineEdit();
+#ifndef Q_OS_ANDROID
+	QFontMetrics fm(QApplication::font());
 	_edit->setMinimumWidth(fm.averageCharWidth() * (QDir::homePath().length()
 	  + 12));
+#endif // Q_OS_ANDROID
 	_edit->setPlaceholderText(tr("System default"));
 #ifdef Q_OS_WIN32
 	_button = new QPushButton("...");

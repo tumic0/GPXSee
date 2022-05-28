@@ -24,12 +24,21 @@ void TemperatureGraph::setInfo()
 	if (_showTracks) {
 		QLocale l(QLocale::system());
 
+#ifdef Q_OS_ANDROID
+		GraphView::addInfo(tr("Avg"), l.toString(avg() * yScale() + yOffset(),
+		  'f', 1) + UNIT_SPACE + yUnits());
+		GraphView::addInfo(tr("Min"), l.toString(min() * yScale() + yOffset(),
+		  'f', 1) + UNIT_SPACE + yUnits());
+		GraphView::addInfo(tr("Max"), l.toString(max() * yScale() + yOffset(),
+		  'f', 1) + UNIT_SPACE + yUnits());
+#else // Q_OS_ANDROID
 		GraphView::addInfo(tr("Average"), l.toString(avg() * yScale()
 		  + yOffset(), 'f', 1) + UNIT_SPACE + yUnits());
 		GraphView::addInfo(tr("Minimum"), l.toString(min() * yScale()
 		  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
 		GraphView::addInfo(tr("Maximum"), l.toString(max() * yScale()
 		  + yOffset(),  'f', 1) + UNIT_SPACE + yUnits());
+#endif // Q_OS_ANDROID
 	} else
 		clearInfo();
 }
