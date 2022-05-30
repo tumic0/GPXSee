@@ -21,13 +21,13 @@ GPS log file formats.
 * Full-screen mode.
 * HiDPI/Retina displays & maps support.
 * Real-time GPS position.
-* Native GUI for Windows, Mac OS X and Linux.
+* Windows, macOS, Linux and Android builds.
 
 ![GPXSee - Linux](https://a.fsdn.com/con/app/proj/gpxsee/screenshots/linux2.png)
 
 ## Build
 Build requirements:
-* Qt5 >= 5.11 or Qt 6.x*
+* Qt5 >= 5.11 or Qt6* >= 6.2
 * C++11 or newer compiler (tested: msvc2017, gcc 7.5.0, clang/Apple LLVM version
   10.0.0)
 
@@ -42,8 +42,9 @@ _* Qt6 builds do not support other encodings than UTF-X and iso8859-1 in XML
 files as support for such files was dropped in Qt6._
 
 ## Download
-* [Windows & OS X builds](http://sourceforge.net/projects/gpxsee)
-* [Linux packages](http://software.opensuse.org/download.html?project=home%3Atumic%3AGPXSee&package=gpxsee)
+* [Windows & OS X builds](https://sourceforge.net/projects/gpxsee)
+* [Linux packages](https://software.opensuse.org/download.html?project=home%3Atumic%3AGPXSee&package=gpxsee)
+* [Android APKs](https://play.google.com/store/apps/details?id=org.gpxsee.gpxsee)
 
 ## Changelog
 [Changelog](https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes)
