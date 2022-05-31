@@ -50,11 +50,14 @@
             </tr><tr>
               <td class="os">OS X:</td>
               <td class="file">/Applications/GPXSee.app/Contents/Resources/</td>
-            </tr>  
+            </tr><tr>
+              <td class="os">Android<sup><a href="#androidGlobalConfig">1</a></sup>:</td>
+              <td class="file">assets://</td>
+            </tr>
           </table>
 
           <p>User specific directories that - when present - override the global
-          directory have the following paths<sup><a href="#legacyPaths">1</a></sup>:</p>
+          directory have the following paths:</p>
 
           <table class="config-files">
             <tr>
@@ -66,13 +69,16 @@
             </tr><tr>
               <td class="os">OS X:</td>
               <td class="file">~/Library/Application Support/GPXSee/</td>
+            </tr><tr>
+              <td class="os">Android:</td>
+              <td class="file">/storage/emulated/0/Android/data/org.gpxsee.gpxsee/files/</td>
             </tr>
           </table>
-          
+
           <p>The expanded user specific paths, including the actual configuration
           directories, are also accesible from the GPXSee "Help" menu.</p>
 
-      
+
           <h2 id="data">Data files</h2>
           <p>GPXSee opens GPX, TCX, FIT, KML, NMEA, IGC, CUP, SIGMA SLF, Suunto SML,
           LOC, GeoJSON, OziExplorer (PLT, RTE, WPT), Garmin GPI,
@@ -102,14 +108,14 @@
             <li>Temperature</li>
             <li>Gear ratio/shifts (Shimano Di2, SRAM eTap)</li>
           </ul>
-          
+
           <h3 id="filtering">Data filtering</h3>
           <p>Outlier elimination and data smoothing is implemented and enabled by default.
           In most cases this improves the representation of the recorded data but in some
           special cases you may get much worse results than without it. A typical example
           of such data are ski mountaineering tracks or in general tracks that are composed
           of parts with very different speed profiles.</p>
-          
+
           <p>If you get unexpected results, try to disable the outlier elimination in
           the preferences.</p>
 
@@ -118,7 +124,7 @@
           can be shown with an icon corresponding to the name. The icons are searched
           in the global/user <code>symbols</code> directory and the icon is selected when
           the image basename (without extension) matches the symbol name.</p>
-          
+
 
           <h2 id="maps">Maps</h2>
           <p>Two kinds of maps are supported by GPXSee - online maps and offline maps.
@@ -299,11 +305,11 @@
 
           <h4 id="JNXKML">JNX &amp; KMZ maps</h4>
           <p>JNX &amp; KMZ maps do not contain any info about the projection of their
-          tile images, so it has to be provided externaly<sup><a href="#garmin">4</a></sup>.
+          tile images, so it has to be provided externaly<sup><a href="#garmin">3</a></sup>.
           Generally, only two projections are used for JNX/KMZ maps - EPSG:4326 and
           EPSG:3857. If you see <a href="img/wrong_proj.png">background color stripes</a>
           in your JNX/KMZ map, you have to switch to the propper input projection
-          in the preferences.</p>          
+          in the preferences.</p>
 
           <h4 id="worldfiles">World Files</h4>
           <p>World-File georeferenced images require the projection info to be provided
@@ -340,8 +346,8 @@
           <p>Digital Elevation Model (DEM) files can be used as elevation source
           instead of the recorded GPS data. The format of the DEM data is the SRTM HGT
           file format (SRTM3 and SRTM1 are both supported). The DEM files must be
-          put<sup><a href="#unzip">3</a></sup> in the <code>DEM</code> directory in one
-          of the configuration paths for GPXSee to use them.</p>
+          put in the <code>DEM</code> directory in one of the configuration paths for GPXSee
+          to use them.</p>
 
           <p>The DEM files must have the expected filename format of <code>NXXEYYY.hgt</code>
           or <code>NXXEYYY.hgt.zip</code> for GPXSee to use them.</p>
@@ -356,7 +362,7 @@
 
           <p>The downloaded files are automatically renamed, if the file name is not in
           the required format.</p>
-          
+
           <p>Since version 10.2, there is a default DEM tiles download source hosted
           by the GPXSee project predefined in the preferences. The data is the
           <a href="http://viewfinderpanoramas.org/dem3.html">DEM3 data</a> originaly
@@ -395,12 +401,11 @@
           is compiled by default.</p>
 
           <div id="footnote">
-          <p id="legacyPaths"><i>[1] The user paths have changed in GPXSee 7.</i></p>
+          <p id="androidGlobalConfig"><i>[1] The Android global configuration is part of the APK
+          and is not accessible on an unrooted phone.</i></p>
           <p id="pbf"><i>[2] To display PBF(MVT) tiles, <a href="https://github.com/tumic0/QtPBFImagePlugin">
           QtPBFImagePlugin</a> is required (included in the Windows and OS&nbsp;X builds).</i></p>
-          <p id="unzip"><i>[3] For GPXSee versions older than 8.1, you have to unzip them
-          too.</i></p>
-          <p id="garmin"><i>[4] Some tools like Garmin software &quot;solve&quot; this by
+          <p id="garmin"><i>[3] Some tools like Garmin software &quot;solve&quot; this by
           rescaling the images, but this introduces a small, but still visible distortion
           to the map.</i></p>
           </div>
