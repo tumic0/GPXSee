@@ -100,6 +100,8 @@ int IMGMap::zoomFit(const QSize &size, const RectC &rect)
 
 int IMGMap::zoomIn()
 {
+	cancelJobs();
+
 	_zoom = qMin(_zoom + 1, _data.first()->zooms().max());
 	updateTransform();
 	return _zoom;
@@ -107,6 +109,8 @@ int IMGMap::zoomIn()
 
 int IMGMap::zoomOut()
 {
+	cancelJobs();
+
 	_zoom = qMax(_zoom - 1, _data.first()->zooms().min());
 	updateTransform();
 	return _zoom;
@@ -139,6 +143,53 @@ void IMGMap::updateTransform()
 		_bounds.adjust(0.5, 0, -0.5, 0);
 }
 
+bool IMGMap::isRunning(const QString &key) const
+{
+	for (int i = 0; i < _jobs.size(); i++) {
+		const QList<IMG::RasterTile> &tiles = _jobs.at(i)->tiles();
+		for (int j = 0; j < tiles.size(); j++)
+			if (tiles.at(j).key() == key)
+				return true;
+	}
+
+	return false;
+}
+
+void IMGMap::runJob(IMGMapJob *job)
+{
+	_jobs.append(job);
+
+	connect(job, &IMGMapJob::finished, this, &IMGMap::jobFinished);
+	job->run();
+}
+
+void IMGMap::removeJob(IMGMapJob *job)
+{
+	_jobs.removeOne(job);
+	job->deleteLater();
+}
+
+void IMGMap::jobFinished(IMGMapJob *job)
+{
+	const QList<IMG::RasterTile> &tiles = job->tiles();
+
+	for (int i = 0; i < tiles.size(); i++) {
+		const IMG::RasterTile &mt = tiles.at(i);
+		if (mt.isValid())
+			QPixmapCache::insert(mt.key(), mt.pixmap());
+	}
+
+	removeJob(job);
+
+	emit tilesLoaded();
+}
+
+void IMGMap::cancelJobs()
+{
+	for (int i = 0; i < _jobs.size(); i++)
+		_jobs.at(i)->cancel();
+}
+
 void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	Q_UNUSED(flags);
@@ -158,6 +209,9 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
 				QString key(_data.at(n)->fileName() + "-" + QString::number(_zoom)
 				  + "_" + QString::number(ttl.x()) + "_" + QString::number(ttl.y()));
+
+				if (isRunning(key))
+					continue;
 
 				if (QPixmapCache::find(key, &pm))
 					painter->drawPixmap(ttl, pm);
@@ -182,7 +236,8 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 					_data.at(n)->points(pointRectD.toRectC(_projection, 20),
 					  _zoom, &points);
 
-					tiles.append(RasterTile(this, _data.at(n)->style(), _zoom,
+					tiles.append(RasterTile(_projection, _transform,
+					  _data.at(n)->style(), _zoom,
 					  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio, key,
 					  polygons, lines, points));
 				}
@@ -190,14 +245,19 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		}
 	}
 
-	QFuture<void> future = QtConcurrent::map(tiles, &RasterTile::render);
-	future.waitForFinished();
+	if (!tiles.isEmpty()) {
+		if (flags & Map::Block) {
+			QFuture<void> future = QtConcurrent::map(tiles, &RasterTile::render);
+			future.waitForFinished();
 
-	for (int i = 0; i < tiles.size(); i++) {
-		const RasterTile &mt = tiles.at(i);
-		const QPixmap &pm = mt.pixmap();
-		painter->drawPixmap(mt.xy(), pm);
-		QPixmapCache::insert(mt.key(), pm);
+			for (int i = 0; i < tiles.size(); i++) {
+				const RasterTile &mt = tiles.at(i);
+				const QPixmap &pm = mt.pixmap();
+				painter->drawPixmap(mt.xy(), pm);
+				QPixmapCache::insert(mt.key(), pm);
+			}
+		} else
+			runJob(new IMGMapJob(tiles));
 	}
 }
 

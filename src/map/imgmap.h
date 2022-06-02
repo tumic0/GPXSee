@@ -1,11 +1,43 @@
 #ifndef IMGMAP_H
 #define IMGMAP_H
 
+#include <QtConcurrent>
 #include "map.h"
 #include "projection.h"
 #include "transform.h"
 #include "IMG/mapdata.h"
+#include "IMG/rastertile.h"
 
+
+class IMGMapJob : public QObject
+{
+	Q_OBJECT
+
+public:
+	IMGMapJob(const QList<IMG::RasterTile> &tiles)
+	  : _tiles(tiles) {}
+
+	void run()
+	{
+		connect(&_watcher, &QFutureWatcher<void>::finished, this,
+		  &IMGMapJob::handleFinished);
+		_future = QtConcurrent::map(_tiles, &IMG::RasterTile::render);
+		_watcher.setFuture(_future);
+	}
+	void cancel() {_future.cancel();}
+	const QList<IMG::RasterTile> &tiles() const {return _tiles;}
+
+signals:
+	void finished(IMGMapJob *job);
+
+private slots:
+	void handleFinished() {emit finished(this);}
+
+private:
+	QFutureWatcher<void> _watcher;
+	QFuture<void> _future;
+	QList<IMG::RasterTile> _tiles;
+};
 
 class IMGMap : public Map
 {
@@ -44,9 +76,16 @@ public:
 
 	static Map* create(const QString &path, const Projection &, bool *isDir);
 
+private slots:
+	void jobFinished(IMGMapJob *job);
+
 private:
 	Transform transform(int zoom) const;
 	void updateTransform();
+	bool isRunning(const QString &key) const;
+	void runJob(IMGMapJob *job);
+	void removeJob(IMGMapJob *job);
+	void cancelJobs();
 
 	QList<IMG::MapData *> _data;
 	int _zoom;
@@ -55,6 +94,8 @@ private:
 	QRectF _bounds;
 	RectC _dataBounds;
 	qreal _tileRatio;
+
+	QList<IMGMapJob*> _jobs;
 
 	bool _valid;
 	QString _errorString;

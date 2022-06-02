@@ -174,6 +174,8 @@ void RasterTile::render()
 
 	qDeleteAll(textItems);
 
+	_valid = true;
+
 	//painter.setPen(Qt::red);
 	//painter.setRenderHint(QPainter::Antialiasing, false);
 	//painter.drawRect(QRect(_xy, _pixmap.size()));
@@ -185,7 +187,7 @@ void RasterTile::ll2xy(QList<MapData::Poly> &polys)
 		MapData::Poly &poly = polys[i];
 		for (int j = 0; j < poly.points.size(); j++) {
 			QPointF &p = poly.points[j];
-			p = _map->ll2xy(Coordinates(p.x(), p.y()));
+			p = ll2xy(Coordinates(p.x(), p.y()));
 		}
 	}
 }
@@ -193,7 +195,7 @@ void RasterTile::ll2xy(QList<MapData::Poly> &polys)
 void RasterTile::ll2xy(QList<MapData::Point> &points)
 {
 	for (int i = 0; i < points.size(); i++) {
-		QPointF p(_map->ll2xy(points.at(i).coordinates));
+		QPointF p(ll2xy(points.at(i).coordinates));
 		points[i].coordinates = Coordinates(p.x(), p.y());
 	}
 }
@@ -210,8 +212,8 @@ void RasterTile::drawPolygons(QPainter *painter)
 
 			if (poly.raster.isValid()) {
 				RectC r(poly.raster.rect());
-				QPointF tl(_map->ll2xy(r.topLeft()));
-				QPointF br(_map->ll2xy(r.bottomRight()));
+				QPointF tl(ll2xy(r.topLeft()));
+				QPointF br(ll2xy(r.bottomRight()));
 				QSizeF size(QRectF(tl, br).size());
 
 				bool insert = false;
