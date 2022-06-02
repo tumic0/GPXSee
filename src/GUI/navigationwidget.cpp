@@ -1,7 +1,8 @@
-#include "navigationwidget.h"
 #include <QEvent>
 #include <QResizeEvent>
 #include <QPainter>
+#include "mapview.h"
+#include "navigationwidget.h"
 
 #define MARGIN 5
 #define SIZE   40
