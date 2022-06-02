@@ -663,7 +663,8 @@ void MapView::wheelEvent(QWheelEvent *event)
 	zoom((delta > 0) ? 1 : -1, event->position().toPoint(), shift);
 #endif // QT 5.15
 
-	QGraphicsView::wheelEvent(event);
+	/* Do not call QGraphicsView::wheelEvent() here as this would shift the
+	   view ! */
 }
 
 void MapView::keyPressEvent(QKeyEvent *event)
