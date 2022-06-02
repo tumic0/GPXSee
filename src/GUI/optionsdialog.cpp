@@ -717,7 +717,7 @@ QWidget *OptionsDialog::createSystemPage()
 
 	_pixmapCache = new QSpinBox();
 	_pixmapCache->setMinimum(16);
-	_pixmapCache->setMaximum(1024);
+	_pixmapCache->setMaximum(2048);
 	_pixmapCache->setSuffix(UNIT_SPACE + tr("MB"));
 	_pixmapCache->setValue(_options.pixmapCache);
 
