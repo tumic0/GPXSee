@@ -1,4 +1,5 @@
 #include <QPainter>
+#include <QPixmapCache>
 #include "common/wgs84.h"
 #include "pcs.h"
 #include "rectd.h"

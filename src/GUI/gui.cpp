@@ -2477,8 +2477,8 @@ void GUI::writeSettings()
 		settings.setValue(SHOW_TICKS_SETTING,
 		  _showTicksAction->isChecked());
 	bool sm = _showMarkersAction->isChecked()
-	  | _showMarkerDateAction->isChecked()
-	  | _showMarkerCoordinatesAction->isChecked();
+	  || _showMarkerDateAction->isChecked()
+	  || _showMarkerCoordinatesAction->isChecked();
 	if (sm != SHOW_MARKERS_DEFAULT)
 		settings.setValue(SHOW_MARKERS_SETTING, sm);
 	if (_showMarkerDateAction->isChecked()
