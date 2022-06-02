@@ -71,6 +71,8 @@ void IMGMap::load()
 
 void IMGMap::unload()
 {
+	cancelJobs(true);
+
 	for (int i = 0; i < _data.size(); i++)
 		_data.at(i)->clear();
 }
@@ -100,7 +102,7 @@ int IMGMap::zoomFit(const QSize &size, const RectC &rect)
 
 int IMGMap::zoomIn()
 {
-	cancelJobs();
+	cancelJobs(false);
 
 	_zoom = qMin(_zoom + 1, _data.first()->zooms().max());
 	updateTransform();
@@ -109,7 +111,7 @@ int IMGMap::zoomIn()
 
 int IMGMap::zoomOut()
 {
-	cancelJobs();
+	cancelJobs(false);
 
 	_zoom = qMax(_zoom - 1, _data.first()->zooms().min());
 	updateTransform();
@@ -184,10 +186,10 @@ void IMGMap::jobFinished(IMGMapJob *job)
 	emit tilesLoaded();
 }
 
-void IMGMap::cancelJobs()
+void IMGMap::cancelJobs(bool wait)
 {
 	for (int i = 0; i < _jobs.size(); i++)
-		_jobs.at(i)->cancel();
+		_jobs.at(i)->cancel(wait);
 }
 
 void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)

@@ -24,7 +24,12 @@ public:
 		_future = QtConcurrent::map(_tiles, &IMG::RasterTile::render);
 		_watcher.setFuture(_future);
 	}
-	void cancel() {_future.cancel();}
+	void cancel(bool wait)
+	{
+		_future.cancel();
+		if (wait)
+			_future.waitForFinished();
+	}
 	const QList<IMG::RasterTile> &tiles() const {return _tiles;}
 
 signals:
@@ -85,7 +90,7 @@ private:
 	bool isRunning(const QString &key) const;
 	void runJob(IMGMapJob *job);
 	void removeJob(IMGMapJob *job);
-	void cancelJobs();
+	void cancelJobs(bool wait);
 
 	QList<IMG::MapData *> _data;
 	int _zoom;
