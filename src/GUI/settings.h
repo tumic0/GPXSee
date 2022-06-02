@@ -217,7 +217,11 @@
 #define ENABLE_HTTP2_SETTING              "enableHTTP2"
 #define ENABLE_HTTP2_DEFAULT              true
 #define PIXMAP_CACHE_SETTING              "pixmapCache"
+#ifdef Q_OS_ANDROID
 #define PIXMAP_CACHE_DEFAULT              256 /* MB */
+#else // Q_OS_ANDROID
+#define PIXMAP_CACHE_DEFAULT              512 /* MB */
+#endif // Q_OS_ANDROID
 #define CONNECTION_TIMEOUT_SETTING        "connectionTimeout"
 #define CONNECTION_TIMEOUT_DEFAULT        30 /* s */
 #define HIRES_PRINT_SETTING               "hiresPrint"
