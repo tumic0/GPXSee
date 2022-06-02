@@ -192,8 +192,6 @@ void IMGMap::cancelJobs()
 
 void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	Q_UNUSED(flags);
-
 	QPointF tl(floor(rect.left() / TILE_SIZE)
 	  * TILE_SIZE, floor(rect.top() / TILE_SIZE) * TILE_SIZE);
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());

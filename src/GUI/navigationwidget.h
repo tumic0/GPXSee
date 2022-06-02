@@ -1,10 +1,10 @@
 #ifndef NAVIGATIONWIDGET_H
 #define NAVIGATIONWIDGET_H
 
+#ifdef Q_OS_ANDROID
 #include <QWidget>
 #include "mapview.h"
 
-#ifdef Q_OS_ANDROID
 class NavigationWidget : public QWidget
 {
 	Q_OBJECT
