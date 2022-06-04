@@ -38,6 +38,8 @@ jobs:
           arch: 'android_armv7'
           install-deps: 'true'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
+      - name: Debug
+        run: ls -l $Qt6_DIR/../ && ls -l $Qt6_DIR/../gcc_64/bin
       - name: Configure build
         run: qmake gpxsee.pro
       - name: Build project
