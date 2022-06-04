@@ -35,6 +35,7 @@ jobs:
           version: '6.3.0'
           host: 'linux'
           target: 'android'
+          arch: 'android_armv7'
           install-deps: 'true'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
       - name: Configure build
