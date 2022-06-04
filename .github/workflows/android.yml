@@ -22,12 +22,6 @@ jobs:
         run:  ${ANDROID_HOME}/tools/bin/sdkmanager --update
       - name: Install android platform, platform-tools, build-tools and ndk
         run:  ${ANDROID_HOME}/tools/bin/sdkmanager --install "cmdline-tools;latest" "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;22.1.7171670"
-      - name: Cache Qt
-        id: cache-qt
-        uses: actions/cache@v1
-        with:
-          path: ../Qt
-          key: ${{ runner.os }}-QtCache
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
@@ -36,8 +30,8 @@ jobs:
           host: 'linux'
           target: 'android'
           arch: 'android_armv7'
-          install-deps: 'true'
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+      - name: Debug
+        run ls -l $Qt6_DIR/../
       - name: Configure build
         run: $Qt6_DIR/bin/qmake gpxsee.pro
       - name: Build project
