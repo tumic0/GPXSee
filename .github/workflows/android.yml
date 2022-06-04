@@ -38,9 +38,7 @@ jobs:
           modules: android
           install-deps: 'true'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
-      - name: List Qt installation
-        run:  ls -l $Qt6_DIR/bin
       - name: Configure build
-        run: $Qt6_DIR/bin/qmake gpxsee.pro
+        run: $Qt6_DIR/bin/qmake gpxsee.pro -spec android-clang
       - name: Build project
         run: make -j2
