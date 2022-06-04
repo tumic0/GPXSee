@@ -34,6 +34,7 @@ jobs:
           version: '6.3.0'
           target: 'android'
           arch: 'android_armv7'
+          modules: qtpositioning qt5compat
       - name: Configure build
         run: qmake gpxsee.pro
       - name: Build project
