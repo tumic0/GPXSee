@@ -32,7 +32,6 @@ jobs:
         with:
           aqtversion: '==2.1.0'
           version: '6.3.0'
-          host: 'linux'
           target: 'android'
           arch: 'android_armv7'
       - name: Configure build

@@ -545,7 +545,9 @@ android {
         return($$first(vCode)$$first(suffix))
     }
 
-    include($$OPENSSL_PATH/openssl.pri)
+    !include($$OPENSSL_PATH/openssl.pri) {
+        message("OpenSSL not found, building without HTTPS support!")
+    }
 
     ANDROID_VERSION_NAME = $$VERSION
     ANDROID_VERSION_CODE = $$versionCode($$ANDROID_VERSION_NAME)
