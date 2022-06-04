@@ -31,6 +31,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
+          aqtversion: '==2.1.0'
           version: '6.3.0'
           host: 'linux'
           target: 'android'
@@ -39,6 +40,6 @@ jobs:
           install-deps: 'true'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
       - name: Configure build
-        run: $Qt6_DIR/bin/qmake gpxsee.pro -spec android-clang
+        run: $Qt6_DIR/bin/qmake gpxsee.pro
       - name: Build project
         run: make -j2
