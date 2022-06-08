@@ -14,8 +14,6 @@ public:
 	GMAPData(const QString &fileName);
 	~GMAPData();
 
-	static bool isGMAP(const QString &path);
-
 private:
 	bool readXML(const QString &path, QString &dataDir, QString &typFile,
 	  QString &baseMap);

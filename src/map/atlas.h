@@ -11,7 +11,7 @@ class Atlas : public Map
 	Q_OBJECT
 
 public:
-	Atlas(const QString &fileName, QObject *parent = 0);
+	Atlas(const QString &fileName, bool TAR, QObject *parent = 0);
 
 	QString name() const {return _name;}
 
@@ -34,7 +34,8 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map *create(const QString &path, const Projection &, bool *isDir);
+	static Map *createTAR(const QString &path, const Projection &, bool *isDir);
+	static Map *createTBA(const QString &path, const Projection &, bool *isDir);
 
 private:
 	struct Zoom {

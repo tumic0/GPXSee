@@ -149,18 +149,3 @@ GMAPData::~GMAPData()
 {
 	qDeleteAll(_files);
 }
-
-bool GMAPData::isGMAP(const QString &path)
-{
-	QFile file(path);
-
-	if (!file.open(QFile::ReadOnly | QFile::Text))
-		return false;
-
-	QXmlStreamReader reader(&file);
-	if (reader.readNextStartElement()
-	  && reader.name() == QLatin1String("MapProduct"))
-		return true;
-
-	return false;
-}

@@ -40,11 +40,11 @@ static QList<MapData*> overlays(const QString &fileName)
 	return list;
 }
 
-IMGMap::IMGMap(const QString &fileName, QObject *parent)
+IMGMap::IMGMap(const QString &fileName, bool GMAP, QObject *parent)
   : Map(fileName, parent), _projection(PCS::pcs(3857)), _tileRatio(1.0),
   _valid(false)
 {
-	if (GMAPData::isGMAP(fileName))
+	if (GMAP)
 		_data.append(new GMAPData(fileName));
 	else {
 		_data.append(new IMGData(fileName));
@@ -291,10 +291,18 @@ void IMGMap::setOutputProjection(const Projection &projection)
 	QPixmapCache::clear();
 }
 
-Map* IMGMap::create(const QString &path, const Projection &, bool *isDir)
+Map* IMGMap::createIMG(const QString &path, const Projection &, bool *isDir)
 {
 	if (isDir)
-		*isDir = GMAPData::isGMAP(path);
+		*isDir = false;
 
-	return new IMGMap(path);
+	return new IMGMap(path, false);
+}
+
+Map* IMGMap::createGMAP(const QString &path, const Projection &, bool *isDir)
+{
+	if (isDir)
+		*isDir = true;
+
+	return new IMGMap(path, true);
 }

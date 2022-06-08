@@ -24,12 +24,12 @@ MapList::ParserMap MapList::parsers()
 {
 	MapList::ParserMap map;
 
-	map.insert("tar", &Atlas::create);
+	map.insert("tar", &Atlas::createTAR);
 	map.insert("tar", &OziMap::create);
-	map.insert("tba", &Atlas::create);
+	map.insert("tba", &Atlas::createTBA);
 	map.insert("xml", &MapSource::create);
-	map.insert("xml", &IMGMap::create);
-	map.insert("img", &IMGMap::create);
+	map.insert("xml", &IMGMap::createGMAP);
+	map.insert("img", &IMGMap::createIMG);
 	map.insert("jnx", &JNXMap::create);
 	map.insert("tif", &GeoTIFFMap::create);
 	map.insert("tiff", &GeoTIFFMap::create);

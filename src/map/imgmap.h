@@ -49,7 +49,7 @@ class IMGMap : public Map
 	Q_OBJECT
 
 public:
-	IMGMap(const QString &fileName, QObject *parent = 0);
+	IMGMap(const QString &fileName, bool GMAP, QObject *parent = 0);
 	~IMGMap() {qDeleteAll(_data);}
 
 	QString name() const {return _data.first()->name();}
@@ -79,7 +79,8 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map* create(const QString &path, const Projection &, bool *isDir);
+	static Map* createIMG(const QString &path, const Projection &, bool *isDir);
+	static Map* createGMAP(const QString &path, const Projection &, bool *isDir);
 
 private slots:
 	void jobFinished(IMGMapJob *job);

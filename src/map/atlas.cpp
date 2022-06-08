@@ -77,25 +77,23 @@ void Atlas::computeBounds()
 		  QRectF(offsets.at(i), _maps.at(i)->bounds().size()));
 }
 
-Atlas::Atlas(const QString &fileName, QObject *parent)
+Atlas::Atlas(const QString &fileName, bool TAR, QObject *parent)
   : Map(fileName, parent), _zoom(0), _mapIndex(-1), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QByteArray ba;
-	QString suffix = fi.suffix().toLower();
 	Tar tar(fileName);
-
 
 	_name = fi.dir().dirName();
 
-	if (suffix == "tar") {
+	if (TAR) {
 		if (!tar.open()) {
 			_errorString = "Error reading tar file";
 			return;
 		}
 		QString tbaFileName = fi.completeBaseName() + ".tba";
 		ba = tar.file(tbaFileName);
-	} else if (suffix == "tba") {
+	} else {
 		QFile tbaFile(fileName);
 		if (!tbaFile.open(QIODevice::ReadOnly)) {
 			_errorString = QString("Error opening tba file: %1")
@@ -293,10 +291,18 @@ void Atlas::unload()
 		_maps.at(i)->unload();
 }
 
-Map *Atlas::create(const QString &path, const Projection &, bool *isDir)
+Map *Atlas::createTAR(const QString &path, const Projection &, bool *isDir)
 {
 	if (isDir)
 		*isDir = true;
 
-	return new Atlas(path);
+	return new Atlas(path, true);
+}
+
+Map *Atlas::createTBA(const QString &path, const Projection &, bool *isDir)
+{
+	if (isDir)
+		*isDir = true;
+
+	return new Atlas(path, false);
 }
