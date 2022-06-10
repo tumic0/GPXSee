@@ -41,3 +41,8 @@ jobs:
         run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl
       - name: Build project
         run:  make -j2 apk
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: GPXSee-armv7.apk
+          path: android-build/build/outputs/apk/debug/android-build-debug.apk
