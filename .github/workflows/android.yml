@@ -35,7 +35,9 @@ jobs:
           target: 'android'
           arch: 'android_armv7'
           modules: qtpositioning qt5compat
+      - name: Install Android OpenSSL
+        run:  git clone https://github.com/KDAB/android_openssl.git
       - name: Configure build
-        run: qmake gpxsee.pro
+        run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl
       - name: Build project
-        run: make -j2
+        run:  make -j2 apk
