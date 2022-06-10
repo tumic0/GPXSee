@@ -14,7 +14,7 @@ class OziMap : public Map
 	Q_OBJECT
 
 public:
-	OziMap(const QString &fileName, QObject *parent = 0);
+	OziMap(const QString &fileName, bool TAR, QObject *parent = 0);
 	OziMap(const QString &fileName, Tar &tar, QObject *parent = 0);
 	~OziMap();
 
@@ -47,7 +47,8 @@ public:
 	QPointF pp2xy(const PointD &p) const
 	  {return _transform.proj2img(p) / _mapRatio;}
 
-	static Map *create(const QString &path, const Projection &, bool *isDir);
+	static Map *createTAR(const QString &path, const Projection &, bool *isDir);
+	static Map *createMAP(const QString &path, const Projection &, bool *isDir);
 
 private:
 	struct ImageInfo {

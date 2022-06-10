@@ -96,8 +96,7 @@ Atlas::Atlas(const QString &fileName, bool TAR, QObject *parent)
 	} else {
 		QFile tbaFile(fileName);
 		if (!tbaFile.open(QIODevice::ReadOnly)) {
-			_errorString = QString("Error opening tba file: %1")
-			  .arg(tbaFile.errorString());
+			_errorString = tbaFile.errorString();
 			return;
 		}
 		ba = tbaFile.readAll();
@@ -121,7 +120,7 @@ Atlas::Atlas(const QString &fileName, bool TAR, QObject *parent)
 			if (tar.isOpen())
 				map = new OziMap(mapFile, tar, this);
 			else
-				map = new OziMap(mapFile, this);
+				map = new OziMap(mapFile, TAR, this);
 
 			if (map->isValid())
 				_maps.append(map);

@@ -25,7 +25,7 @@ MapList::ParserMap MapList::parsers()
 	MapList::ParserMap map;
 
 	map.insert("tar", &Atlas::createTAR);
-	map.insert("tar", &OziMap::create);
+	map.insert("tar", &OziMap::createTAR);
 	map.insert("tba", &Atlas::createTBA);
 	map.insert("xml", &MapSource::create);
 	map.insert("xml", &IMGMap::createGMAP);
@@ -37,7 +37,7 @@ MapList::ParserMap MapList::parsers()
 	map.insert("rmap", &RMap::create);
 	map.insert("rtmap", &RMap::create);
 	map.insert("map", &MapsforgeMap::create);
-	map.insert("map", &OziMap::create);
+	map.insert("map", &OziMap::createMAP);
 	map.insert("kap", &BSBMap::create);
 	map.insert("kmz", &KMZMap::create);
 	map.insert("aqm", &AQMMap::create);
@@ -71,14 +71,23 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 			++it;
 		}
 	} else {
+		QStringList errors;
+
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
 			map = it.value()(path, proj, isDir);
 			if (map->isValid())
 				break;
 			else {
+				errors.append(it.key() + ": " + map->errorString());
 				delete map;
 				map = 0;
 			}
+		}
+
+		if (!map) {
+			qWarning("Error loading map file: %s:", qPrintable(path));
+			for (int i = 0; i < errors.size(); i++)
+				qWarning(qPrintable(errors.at(i)));
 		}
 	}
 

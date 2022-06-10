@@ -10,6 +10,7 @@
 using namespace Mapsforge;
 
 #define MAGIC "mapsforge binary OSM"
+#define MAGIC_SIZE (sizeof(MAGIC) - 1)
 #define MD(val) ((val) / 1e6)
 #define OFFSET_MASK 0x7FFFFFFFFFL
 
@@ -282,42 +283,67 @@ bool MapData::readSubFiles()
 	return true;
 }
 
-bool MapData::readHeader()
+bool MapData::readZoomInfo(SubFile &subfile)
 {
-	char magic[sizeof(MAGIC) - 1];
-	quint32 hdrSize, version;
-	quint64 fileSize, date;
-	qint32 minLat, minLon, maxLat, maxLon;
+	quint8 zooms;
+
+	if (!subfile.readByte(zooms))
+		return false;
+
+	_subFiles.resize(zooms);
+	for (quint8 i = 0; i < zooms; i++) {
+		if (!(subfile.readByte(_subFiles[i].base)
+		  && subfile.readByte(_subFiles[i].min)
+		  && subfile.readByte(_subFiles[i].max)
+		  && subfile.readUInt64(_subFiles[i].offset)
+		  && subfile.readUInt64(_subFiles[i].size)))
+			return false;
+	}
+
+	return true;
+}
+
+bool MapData::readTagInfo(SubFile &subfile)
+{
 	quint16 tags;
-	quint8 flags, zooms;
-	QByteArray projection, tag;
+	QByteArray tag;
 
+	if (!subfile.readUInt16(tags))
+		return false;
+	_pointTags.resize(tags);
+	for (quint16 i = 0; i < tags; i++) {
+		if (!subfile.readString(tag))
+			return false;
+		_pointTags[i] = tag;
+	}
 
-	if (_file.read(magic, sizeof(magic)) < (int)sizeof(magic)
-	  || memcmp(magic, MAGIC, sizeof(magic)))
+	if (!subfile.readUInt16(tags))
 		return false;
-	if (_file.read((char*)&hdrSize, sizeof(hdrSize)) < (qint64)sizeof(hdrSize))
-		return false;
+	_pathTags.resize(tags);
+	for (quint16 i = 0; i < tags; i++) {
+		if (!subfile.readString(tag))
+			return false;
+		_pathTags[i] = tag;
+	}
 
-	SubFile subfile(_file, sizeof(magic) + sizeof(hdrSize),
-	  qFromBigEndian(hdrSize));
-	if (!subfile.seek(0))
-		return false;
-	if (!(subfile.readUInt32(version) && subfile.readUInt64(fileSize)
+	return true;
+}
+
+bool MapData::readMapInfo(SubFile &subfile, QByteArray &projection,
+  bool &debugMap)
+{
+	quint64 fileSize, date;
+	quint32 version;
+	qint32 minLat, minLon, maxLat, maxLon;
+	quint8 flags;
+
+	if (!(subfile.seek(MAGIC_SIZE + 4)
+	  && subfile.readUInt32(version) && subfile.readUInt64(fileSize)
 	  && subfile.readUInt64(date) && subfile.readInt32(minLat)
 	  && subfile.readInt32(minLon) && subfile.readInt32(maxLat)
 	  && subfile.readInt32(maxLon) && subfile.readUInt16(_tileSize)
 	  && subfile.readString(projection) && subfile.readByte(flags)))
 		return false;
-
-	if (projection != "Mercator") {
-		_errorString = projection + ": invalid/unsupported projection";
-		return false;
-	}
-	if (flags & 0x80) {
-		_errorString = "DEBUG maps not supported";
-		return false;
-	}
 
 	if (flags & 0x40) {
 		qint32 startLon, startLat;
@@ -345,39 +371,58 @@ bool MapData::readHeader()
 			return false;
 	}
 
-	if (!subfile.readUInt16(tags))
-		return false;
-	_pointTags.resize(tags);
-	for (quint16 i = 0; i < tags; i++) {
-		if (!subfile.readString(tag))
-			return false;
-		_pointTags[i] = tag;
-	}
-
-	if (!subfile.readUInt16(tags))
-		return false;
-	_pathTags.resize(tags);
-	for (quint16 i = 0; i < tags; i++) {
-		if (!subfile.readString(tag))
-			return false;
-		_pathTags[i] = tag;
-	}
-
-	if (!subfile.readByte(zooms))
-		return false;
-	_subFiles.resize(zooms);
-	for (quint8 i = 0; i < zooms; i++) {
-		if (!(subfile.readByte(_subFiles[i].base)
-		  && subfile.readByte(_subFiles[i].min)
-		  && subfile.readByte(_subFiles[i].max)
-		  && subfile.readUInt64(_subFiles[i].offset)
-		  && subfile.readUInt64(_subFiles[i].size)))
-			return false;
-	}
-
 	_bounds = RectC(Coordinates(MD(minLon), MD(maxLat)),
 	  Coordinates(MD(maxLon), MD(minLat)));
 	_bounds &= OSM::BOUNDS;
+	debugMap = flags & 0x80;
+
+	return true;
+}
+
+bool MapData::readHeader()
+{
+	char magic[MAGIC_SIZE];
+	quint32 hdrSize;
+	QByteArray projection;
+	bool debugMap;
+
+
+	if (_file.read(magic, MAGIC_SIZE) < (qint64)MAGIC_SIZE
+	  || memcmp(magic, MAGIC, MAGIC_SIZE)) {
+		_errorString = "Not a Mapsforge map";
+		return false;
+	}
+
+	if (_file.read((char*)&hdrSize, sizeof(hdrSize)) < (qint64)sizeof(hdrSize)) {
+		_errorString = "Unexpected EOF";
+		return false;
+	}
+
+	SubFile subfile(_file, 0, qFromBigEndian(hdrSize));
+
+	if (!readMapInfo(subfile, projection, debugMap)) {
+		_errorString = "Error reading map info";
+		return false;
+	}
+
+	if (!readTagInfo(subfile)) {
+		_errorString = "Error reading tags info";
+		return false;
+	}
+
+	if (!readZoomInfo(subfile)) {
+		_errorString = "Error reading zooms info";
+		return false;
+	}
+
+	if (projection != "Mercator") {
+		_errorString = projection + ": invalid/unsupported projection";
+		return false;
+	}
+	if (debugMap) {
+		_errorString = "DEBUG maps not supported";
+		return false;
+	}
 
 	return true;
 }

@@ -17,15 +17,13 @@
 #include "ozimap.h"
 
 
-OziMap::OziMap(const QString &fileName, QObject *parent)
+OziMap::OziMap(const QString &fileName, bool TAR, QObject *parent)
   : Map(fileName, parent), _img(0), _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0),
   _valid(false)
 {
 	QFileInfo fi(fileName);
-	QString suffix = fi.suffix().toLower();
 
-
-	if (suffix == "tar") {
+	if (TAR) {
 		_tar = new Tar(fileName);
 		if (!_tar->open()) {
 			_errorString = "Error reading tar file";
@@ -380,10 +378,18 @@ void OziMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 		_img->setDevicePixelRatio(_mapRatio);
 }
 
-Map *OziMap::create(const QString &path, const Projection &, bool *isDir)
+Map *OziMap::createTAR(const QString &path, const Projection &, bool *isDir)
 {
 	if (isDir)
 		*isDir = true;
 
-	return new OziMap(path);
+	return new OziMap(path, true);
+}
+
+Map *OziMap::createMAP(const QString &path, const Projection &, bool *isDir)
+{
+	if (isDir)
+		*isDir = true;
+
+	return new OziMap(path, false);
 }

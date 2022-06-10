@@ -148,8 +148,7 @@ bool MapFile::parseMapFile(QIODevice &device, QList<CalibrationPoint> &points,
 	int el;
 
 	if (!device.open(QIODevice::ReadOnly)) {
-		_errorString = QString("Error opening file: %1")
-		  .arg(device.errorString());
+		_errorString = device.errorString();
 		return false;
 	}
 

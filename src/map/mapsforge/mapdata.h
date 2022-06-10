@@ -13,6 +13,8 @@
 
 namespace Mapsforge {
 
+class SubFile;
+
 class MapData
 {
 public:
@@ -129,6 +131,9 @@ private:
 
 	typedef RTree<VectorTile *, double, 2> TileTree;
 
+	bool readZoomInfo(SubFile &subfile);
+	bool readTagInfo(SubFile &subfile);
+	bool readMapInfo(SubFile &subfile, QByteArray &projection, bool &debugMap);
 	bool readHeader();
 	bool readSubFiles();
 	void clearTiles();
