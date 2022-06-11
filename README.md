@@ -27,7 +27,7 @@ GPS log file formats.
 
 ## Build
 Build requirements:
-* Qt5 >= 5.11 or Qt6* >= 6.2
+* Qt5 >= 5.11 or Qt6 >= 6.2 (Android builds require Qt6)
 * C++11 or newer compiler (tested: msvc2017, gcc 7.5.0, clang/Apple LLVM version
   10.0.0)
 
@@ -38,8 +38,7 @@ qmake gpxsee.pro
 make # nmake on windows
 ```
 
-_* Qt6 builds do not support other encodings than UTF-X and iso8859-1 in XML
-files as support for such files was dropped in Qt6._
+
 
 ## Download
 * [Windows & OS X builds](https://sourceforge.net/projects/gpxsee)
