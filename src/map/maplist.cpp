@@ -87,7 +87,7 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 		if (!map) {
 			qWarning("Error loading map file: %s:", qPrintable(path));
 			for (int i = 0; i < errors.size(); i++)
-				qWarning(qPrintable(errors.at(i)));
+				qWarning("%s", qPrintable(errors.at(i)));
 		}
 	}
 
