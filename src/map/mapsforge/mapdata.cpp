@@ -283,45 +283,45 @@ bool MapData::readSubFiles()
 	return true;
 }
 
-bool MapData::readZoomInfo(SubFile &subfile)
+bool MapData::readZoomInfo(SubFile &hdr)
 {
 	quint8 zooms;
 
-	if (!subfile.readByte(zooms))
+	if (!hdr.readByte(zooms))
 		return false;
 
 	_subFiles.resize(zooms);
 	for (quint8 i = 0; i < zooms; i++) {
-		if (!(subfile.readByte(_subFiles[i].base)
-		  && subfile.readByte(_subFiles[i].min)
-		  && subfile.readByte(_subFiles[i].max)
-		  && subfile.readUInt64(_subFiles[i].offset)
-		  && subfile.readUInt64(_subFiles[i].size)))
+		if (!(hdr.readByte(_subFiles[i].base)
+		  && hdr.readByte(_subFiles[i].min)
+		  && hdr.readByte(_subFiles[i].max)
+		  && hdr.readUInt64(_subFiles[i].offset)
+		  && hdr.readUInt64(_subFiles[i].size)))
 			return false;
 	}
 
 	return true;
 }
 
-bool MapData::readTagInfo(SubFile &subfile)
+bool MapData::readTagInfo(SubFile &hdr)
 {
 	quint16 tags;
 	QByteArray tag;
 
-	if (!subfile.readUInt16(tags))
+	if (!hdr.readUInt16(tags))
 		return false;
 	_pointTags.resize(tags);
 	for (quint16 i = 0; i < tags; i++) {
-		if (!subfile.readString(tag))
+		if (!hdr.readString(tag))
 			return false;
 		_pointTags[i] = tag;
 	}
 
-	if (!subfile.readUInt16(tags))
+	if (!hdr.readUInt16(tags))
 		return false;
 	_pathTags.resize(tags);
 	for (quint16 i = 0; i < tags; i++) {
-		if (!subfile.readString(tag))
+		if (!hdr.readString(tag))
 			return false;
 		_pathTags[i] = tag;
 	}
@@ -329,7 +329,7 @@ bool MapData::readTagInfo(SubFile &subfile)
 	return true;
 }
 
-bool MapData::readMapInfo(SubFile &subfile, QByteArray &projection,
+bool MapData::readMapInfo(SubFile &hdr, QByteArray &projection,
   bool &debugMap)
 {
 	quint64 fileSize, date;
@@ -337,37 +337,36 @@ bool MapData::readMapInfo(SubFile &subfile, QByteArray &projection,
 	qint32 minLat, minLon, maxLat, maxLon;
 	quint8 flags;
 
-	if (!(subfile.seek(MAGIC_SIZE + 4)
-	  && subfile.readUInt32(version) && subfile.readUInt64(fileSize)
-	  && subfile.readUInt64(date) && subfile.readInt32(minLat)
-	  && subfile.readInt32(minLon) && subfile.readInt32(maxLat)
-	  && subfile.readInt32(maxLon) && subfile.readUInt16(_tileSize)
-	  && subfile.readString(projection) && subfile.readByte(flags)))
+	if (!(hdr.seek(4) && hdr.readUInt32(version) && hdr.readUInt64(fileSize)
+	  && hdr.readUInt64(date) && hdr.readInt32(minLat) && hdr.readInt32(minLon)
+	  && hdr.readInt32(maxLat) && hdr.readInt32(maxLon)
+	  && hdr.readUInt16(_tileSize) && hdr.readString(projection)
+	  && hdr.readByte(flags)))
 		return false;
 
 	if (flags & 0x40) {
 		qint32 startLon, startLat;
-		if (!(subfile.readInt32(startLat) && subfile.readInt32(startLon)))
+		if (!(hdr.readInt32(startLat) && hdr.readInt32(startLon)))
 			return false;
 	}
 	if (flags & 0x20) {
 		quint8 startZoom;
-		if (!subfile.readByte(startZoom))
+		if (!hdr.readByte(startZoom))
 			return false;
 	}
 	if (flags & 0x10) {
 		QByteArray lang;
-		if (!subfile.readString(lang))
+		if (!hdr.readString(lang))
 			return false;
 	}
 	if (flags & 0x08) {
 		QByteArray comment;
-		if (!subfile.readString(comment))
+		if (!hdr.readString(comment))
 			return false;
 	}
 	if (flags & 0x04) {
 		QByteArray createdBy;
-		if (!subfile.readString(createdBy))
+		if (!hdr.readString(createdBy))
 			return false;
 	}
 
@@ -398,19 +397,19 @@ bool MapData::readHeader()
 		return false;
 	}
 
-	SubFile subfile(_file, 0, qFromBigEndian(hdrSize));
+	SubFile hdr(_file, MAGIC_SIZE, qFromBigEndian(hdrSize));
 
-	if (!readMapInfo(subfile, projection, debugMap)) {
+	if (!readMapInfo(hdr, projection, debugMap)) {
 		_errorString = "Error reading map info";
 		return false;
 	}
 
-	if (!readTagInfo(subfile)) {
+	if (!readTagInfo(hdr)) {
 		_errorString = "Error reading tags info";
 		return false;
 	}
 
-	if (!readZoomInfo(subfile)) {
+	if (!readZoomInfo(hdr)) {
 		_errorString = "Error reading zooms info";
 		return false;
 	}

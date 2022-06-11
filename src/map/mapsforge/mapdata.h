@@ -131,9 +131,9 @@ private:
 
 	typedef RTree<VectorTile *, double, 2> TileTree;
 
-	bool readZoomInfo(SubFile &subfile);
-	bool readTagInfo(SubFile &subfile);
-	bool readMapInfo(SubFile &subfile, QByteArray &projection, bool &debugMap);
+	bool readZoomInfo(SubFile &hdr);
+	bool readTagInfo(SubFile &hdr);
+	bool readMapInfo(SubFile &hdr, QByteArray &projection, bool &debugMap);
 	bool readHeader();
 	bool readSubFiles();
 	void clearTiles();
