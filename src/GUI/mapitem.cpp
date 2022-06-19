@@ -76,7 +76,7 @@ ToolTip MapItem::info() const
 	if (!_name.isEmpty())
 		tt.insert(tr("Name"), _name);
 	if (!_fileName.isEmpty())
-		tt.insert(tr("File"), _fileName);
+		tt.insert(tr("File"), Util::displayName(_fileName));
 
 	return tt;
 }
@@ -212,6 +212,10 @@ void MapItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 	_pen.setWidthF((_width + 1) * pow(2, -_digitalZoom));
 	update();
+
+#ifdef Q_OS_ANDROID
+	Popup::show(event->screenPos(), info(), event->widget());
+#endif // Q_OS_ANDROID
 }
 
 void MapItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)

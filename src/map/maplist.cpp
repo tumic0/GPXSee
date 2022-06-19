@@ -101,7 +101,11 @@ TreeNode<Map *> MapList::loadDir(const QString &path, const Projection &proj,
 	md.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
 	md.setSorting(QDir::DirsLast);
 	QFileInfoList ml = md.entryInfoList();
-	TreeNode<Map*> tree(md.dirName());
+#ifdef Q_OS_ANDROID
+	TreeNode<Map*> tree(Util::displayName(path));
+#else // Q_OS_ANDROID
+	TreeNode<Map*> tree(Util::displayName(md.dirName()));
+#endif // Q_OS_ANDROID
 
 	for (int i = 0; i < ml.size(); i++) {
 		const QFileInfo &fi = ml.at(i);
