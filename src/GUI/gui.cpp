@@ -1325,16 +1325,14 @@ void GUI::statistics()
 		  + l.toString(_areaCount) + "<br>");
 
 	if (_dateRange.first.isValid()) {
-		if (_dateRange.first == _dateRange.second) {
-			QString format = l.dateFormat(QLocale::LongFormat);
+		QString format = l.dateFormat(QLocale::ShortFormat);
+		if (_dateRange.first == _dateRange.second)
 			text.append("<b>" + tr("Date") + ":</b> "
 			  + _dateRange.first.toString(format) + "<br>");
-		} else {
-			QString format = l.dateFormat(QLocale::ShortFormat);
+		else
 			text.append("<b>" + tr("Date") + ":</b> "
 			  + QString("%1 - %2").arg(_dateRange.first.toString(format),
 			  _dateRange.second.toString(format)) + "<br>");
-		}
 	}
 
 	if (distance() > 0)

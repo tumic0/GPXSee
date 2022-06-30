@@ -559,7 +559,9 @@ QWidget *OptionsDialog::createPOIPage()
 QWidget *OptionsDialog::createDEMPage()
 {
 	_demURL = new QLineEdit();
+#ifndef Q_OS_ANDROID
 	_demURL->setMinimumWidth(300);
+#endif // Q_OS_ANDROID
 	_demURL->setText(_options.demURL);
 	_demAuth = new AuthenticationWidget();
 	_demAuth->setUsername(_options.demUsername);
