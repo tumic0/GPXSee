@@ -1004,6 +1004,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fájl</numerusform>
+            <numerusform>%n fájlok</numerusform>
         </translation>
     </message>
 </context>
