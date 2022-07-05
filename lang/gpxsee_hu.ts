@@ -209,42 +209,44 @@
         <translation>Le</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="66"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="68"/>
         <source>Max</source>
+        <extracomment>Use an Unicode arrow (U+2912) when there is no abbreviation or extremly short term for &quot;Max&quot; in your language</extracomment>
         <translation>Max</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="68"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="72"/>
         <source>Min</source>
+        <extracomment>Use an Unicode arrow (U+2913) when there is no abbreviation or extremly short term for &quot;Min&quot; in your language</extracomment>
         <translation>Min</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="71"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="75"/>
         <source>Ascent</source>
         <translation>Emelkedés</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="73"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="77"/>
         <source>Descent</source>
         <translation>Süllyedés</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="75"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="79"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="77"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="81"/>
         <source>Minimum</source>
         <translation>Minimum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="180"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="184"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="183"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="187"/>
         <source>ft</source>
         <translation>láb</translation>
     </message>
