@@ -45,7 +45,7 @@ bool PLTParser::parse(QFile *file, QList<TrackData> &tracks,
 	SegmentData &segment = track.last();
 
 	while (!file->atEnd()) {
-		QByteArray line = file->readLine();
+		QByteArray line = file->readLine(4096);
 
 		if (_errorLine == 1) {
 			QString fileType(QString::fromUtf8(line).trimmed());
@@ -133,7 +133,7 @@ bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
 
 
 	while (!file->atEnd()) {
-		QByteArray line = file->readLine();
+		QByteArray line = file->readLine(4096);
 
 		if (_errorLine == 1) {
 			QString fileType(QString::fromUtf8(line).trimmed());
@@ -233,7 +233,7 @@ bool WPTParser::parse(QFile *file, QList<TrackData> &tracks,
 	_errorString.clear();
 
 	while (!file->atEnd()) {
-		QByteArray line = file->readLine();
+		QByteArray line = file->readLine(4096);
 
 		if (_errorLine == 1) {
 			QString fileType(QString::fromUtf8(line).trimmed());

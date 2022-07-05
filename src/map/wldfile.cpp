@@ -13,7 +13,7 @@ WLDFile::WLDFile(const QString &fileName)
 	}
 
 	for (int i = 0; i < 6; i++) {
-		QByteArray line(file.readLine().trimmed());
+		QByteArray line(file.readLine(128).trimmed());
 		val[i] = line.toDouble(&ok);
 		if (!ok) {
 			_errorString = line + ": invalid parameter";

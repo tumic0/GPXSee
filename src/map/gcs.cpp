@@ -104,7 +104,7 @@ void GCS::loadList(const QString &path)
 	while (!file.atEnd()) {
 		ln++;
 
-		QByteArray line = file.readLine();
+		QByteArray line = file.readLine(4096);
 		QList<QByteArray> list = line.split(',');
 		if (list.size() != 14) {
 			qWarning("%s:%d: Format error", qPrintable(path), ln);

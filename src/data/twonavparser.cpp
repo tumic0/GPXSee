@@ -90,7 +90,7 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
 	}
 
 	while (!file->atEnd()) {
-		QByteArray line(file->readLine().trimmed());
+		QByteArray line(file->readLine(4096).trimmed());
 		if (!line.size())
 			continue;
 

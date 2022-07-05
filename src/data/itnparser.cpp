@@ -18,7 +18,7 @@ bool ITNParser::parse(QFile *file, QList<TrackData> &tracks,
 	_errorString.clear();
 
 	while (!file->atEnd()) {
-		ba = file->readLine();
+		ba = file->readLine(4096);
 
 		QList<QByteArray> fields(ba.split('|'));
 		if (fields.size() < 4) {

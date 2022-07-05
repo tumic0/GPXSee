@@ -24,7 +24,7 @@ int MapFile::parse(QIODevice &device, QList<CalibrationPoint> &points,
 
 
 	while (!device.atEnd()) {
-		QByteArray line = device.readLine();
+		QByteArray line = device.readLine(4096);
 
 		if (ln == 1) {
 			QString fileType(QString::fromUtf8(line).trimmed());

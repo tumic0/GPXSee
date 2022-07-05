@@ -45,7 +45,7 @@ void Ellipsoid::loadList(const QString &path)
 	while (!file.atEnd()) {
 		ln++;
 
-		QByteArray line = file.readLine();
+		QByteArray line = file.readLine(4096);
 		QList<QByteArray> list = line.split(',');
 		if (list.size() != 4) {
 			qWarning("%s: %d: Format error", qPrintable(path), ln);
