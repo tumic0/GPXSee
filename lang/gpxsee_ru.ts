@@ -30,12 +30,12 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>Средн</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="30"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Макс</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="33"/>
@@ -210,23 +210,23 @@
         <location filename="../src/GUI/elevationgraph.cpp" line="60"/>
         <source>Up</source>
         <extracomment>Use an Unicode arrow (U+2B08) when there is no abbreviation or extremly short term for &quot;Up&quot; in your language</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>⬈</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="64"/>
         <source>Down</source>
         <extracomment>Use an Unicode arrow (U+2B0A) when there is no abbreviation or extremly short term for &quot;Down&quot; in your language</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>⬊</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="66"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Макс</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="68"/>
         <source>Min</source>
-        <translation type="unfinished"></translation>
+        <translation>Мин</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="73"/>
@@ -422,7 +422,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="219"/>
         <source>Open directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть каталог…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="238"/>
@@ -778,7 +778,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="945"/>
         <source>Open directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть каталог</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1324"/>
@@ -1027,12 +1027,12 @@
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="30"/>
         <source>Min</source>
-        <translation type="unfinished"></translation>
+        <translation>Мин</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="32"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Макс</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="35"/>
@@ -1144,12 +1144,12 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>Средн</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="30"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Макс</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="33"/>
@@ -2124,12 +2124,12 @@
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>Средн</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="30"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Макс</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="33"/>
@@ -2254,12 +2254,12 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="35"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>Средн</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="37"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Макс</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="42"/>
@@ -2341,17 +2341,17 @@
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>Средн</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="30"/>
         <source>Min</source>
-        <translation type="unfinished"></translation>
+        <translation>Мин</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="32"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Макс</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="35"/>
