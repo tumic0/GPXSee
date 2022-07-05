@@ -16,6 +16,7 @@
 #include "mapsforgemap.h"
 #include "worldfilemap.h"
 #include "qctmap.h"
+#include "osmdroidmap.h"
 #include "invalidmap.h"
 #include "maplist.h"
 
@@ -48,6 +49,7 @@ MapList::ParserMap MapList::parsers()
 	map.insert("pgw", &WorldFileMap::create);
 	map.insert("tfw", &WorldFileMap::create);
 	map.insert("qct", &QCTMap::create);
+	map.insert("sqlite", &OsmdroidMap::create);
 
 	return map;
 }
@@ -104,7 +106,7 @@ TreeNode<Map *> MapList::loadDir(const QString &path, const Projection &proj,
 #ifdef Q_OS_ANDROID
 	TreeNode<Map*> tree(Util::displayName(path));
 #else // Q_OS_ANDROID
-	TreeNode<Map*> tree(Util::displayName(md.dirName()));
+	TreeNode<Map*> tree(md.dirName());
 #endif // Q_OS_ANDROID
 
 	for (int i = 0; i < ml.size(); i++) {
@@ -159,6 +161,7 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "MBTiles maps") + " (*.mbtiles);;"
 	  + qApp->translate("MapList", "QuickChart maps") + " (*.qct);;"
 	  + qApp->translate("MapList", "TwoNav maps") + " (*.rmap *.rtmap);;"
+	  + qApp->translate("MapList", "Osmdroid SQLite maps") + " (*.sqlite);;"
 	  + qApp->translate("MapList", "Locus/OsmAnd/RMaps SQLite maps")
 		+ " (*.sqlitedb);;"
 	  + qApp->translate("MapList", "TrekBuddy maps/atlases") + " (*.tar *.tba);;"

@@ -116,6 +116,7 @@ HEADERS += src/common/config.h \
     src/GUI/passwordedit.h \
     src/data/twonavparser.h \
     src/map/IMG/section.h \
+    src/map/osmdroidmap.h \
     src/map/proj/polyconic.h \
     src/map/proj/webmercator.h \
     src/map/proj/transversemercator.h \
@@ -318,6 +319,7 @@ SOURCES += src/main.cpp \
     src/GUI/projectioncombobox.cpp \
     src/GUI/passwordedit.cpp \
     src/data/twonavparser.cpp \
+    src/map/osmdroidmap.cpp \
     src/map/proj/polyconic.cpp \
     src/map/proj/webmercator.cpp \
     src/map/proj/transversemercator.cpp \
