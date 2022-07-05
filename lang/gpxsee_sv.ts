@@ -1248,7 +1248,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="164"/>
         <source>Osmdroid SQLite maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Osmdroid SQLite-kartor</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="167"/>
