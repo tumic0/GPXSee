@@ -166,6 +166,7 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "rmap" "TwoNav Raster Map File" 14
   !insertmacro FILE_ASSOCIATION_ADD "tba" "TrekBuddy Atlas" 15
   !insertmacro FILE_ASSOCIATION_ADD "aqm" "AlpineQuest Map File" 16
+  !insertmacro FILE_ASSOCIATION_ADD "sqlite" "Osmdroid SQLite Map File" 17
   !insertmacro FILE_ASSOCIATION_ADD "sqlitedb" "RMaps SQLite Map File" 17
   !insertmacro FILE_ASSOCIATION_ADD "ov2" "TomTom POI File" 18
   !insertmacro FILE_ASSOCIATION_ADD "itn" "TomTom Route File" 19
@@ -223,6 +224,7 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKCR ".xml\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".kmz\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".aqm\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".sqlite\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".sqlitedb\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".wld\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".jgw\OpenWithList" "GPXSee.exe" ""
@@ -373,6 +375,7 @@ Section "Uninstall"
   !insertmacro FILE_ASSOCIATION_REMOVE "tba"
   !insertmacro FILE_ASSOCIATION_REMOVE "kmz"
   !insertmacro FILE_ASSOCIATION_REMOVE "aqm"
+  !insertmacro FILE_ASSOCIATION_REMOVE "sqlite"
   !insertmacro FILE_ASSOCIATION_REMOVE "sqlitedb"
   !insertmacro FILE_ASSOCIATION_REMOVE "ov2"
   !insertmacro FILE_ASSOCIATION_REMOVE "itn"
@@ -421,6 +424,7 @@ Section "Uninstall"
   DeleteRegValue HKCR ".xml\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".kmz\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".aqm\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".sqlite\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".sqlitedb\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".wld\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".jgw\OpenWithList" "GPXSee.exe"

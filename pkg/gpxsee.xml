@@ -286,6 +286,13 @@
 		<glob pattern="*.sqlitedb"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.osmdroid.sqlite">
+		<comment>Osmdroid SQLite Map File</comment>
+		<sub-class-of type="application/vnd.sqlite3"/>
+		<generic-icon name="application/octet-stream"/>
+		<glob pattern="*.sqlite"/>
+	</mime-type>
+
 	<mime-type type="application/vnd.mapsforge.map">
 		<comment>Mapsforge Map File</comment>
 		<sub-class-of type="application/octet-stream"/>
