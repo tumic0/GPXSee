@@ -55,11 +55,11 @@ void ElevationGraph::setInfo()
 		QLocale l(QLocale::system());
 
 #ifdef Q_OS_ANDROID
-		/*: Use an Unicode arrow (U+2B08) when there is no abbreviation or
+		/*: Use an Unicode arrow (U+2197) when there is no abbreviation or
 			extremly short term for "Up" in your language */
 		GraphView::addInfo(tr("Up"), l.toString(ascent() * yScale(), 'f', 0)
 		  + UNIT_SPACE + yUnits());
-		/*: Use an Unicode arrow (U+2B0A) when there is no abbreviation or
+		/*: Use an Unicode arrow (U+2198) when there is no abbreviation or
 			extremly short term for "Down" in your language */
 		GraphView::addInfo(tr("Down"), l.toString(descent() * yScale(), 'f', 0)
 		  + UNIT_SPACE + yUnits());

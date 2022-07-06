@@ -199,13 +199,13 @@
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="60"/>
         <source>Up</source>
-        <extracomment>Use an Unicode arrow (U+2B08) when there is no abbreviation or extremly short term for &quot;Up&quot; in your language</extracomment>
+        <extracomment>Use an Unicode arrow (U+2197) when there is no abbreviation or extremly short term for &quot;Up&quot; in your language</extracomment>
         <translation>上</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="64"/>
         <source>Down</source>
-        <extracomment>Use an Unicode arrow (U+2B0A) when there is no abbreviation or extremly short term for &quot;Down&quot; in your language</extracomment>
+        <extracomment>Use an Unicode arrow (U+2198) when there is no abbreviation or extremly short term for &quot;Down&quot; in your language</extracomment>
         <translation>下</translation>
     </message>
     <message>

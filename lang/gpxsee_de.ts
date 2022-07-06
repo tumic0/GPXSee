@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de">
+<TS version="2.1" language="de_DE">
 <context>
     <name>AuthenticationWidget</name>
     <message>
@@ -35,7 +35,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="30"/>
         <source>Max</source>
-        <translation>Max.</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="33"/>
@@ -209,26 +209,26 @@
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="60"/>
         <source>Up</source>
-        <extracomment>Use an Unicode arrow (U+2B08) when there is no abbreviation or extremly short term for &quot;Up&quot; in your language</extracomment>
-        <translation>⬈</translation>
+        <extracomment>Use an Unicode arrow (U+2197) when there is no abbreviation or extremly short term for &quot;Up&quot; in your language</extracomment>
+        <translation>Hinauf</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="64"/>
         <source>Down</source>
-        <extracomment>Use an Unicode arrow (U+2B0A) when there is no abbreviation or extremly short term for &quot;Down&quot; in your language</extracomment>
-        <translation>⬊</translation>
+        <extracomment>Use an Unicode arrow (U+2198) when there is no abbreviation or extremly short term for &quot;Down&quot; in your language</extracomment>
+        <translation>Hinab</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="68"/>
         <source>Max</source>
         <extracomment>Use an Unicode arrow (U+2912) when there is no abbreviation or extremly short term for &quot;Max&quot; in your language</extracomment>
-        <translation>Max.</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="72"/>
         <source>Min</source>
         <extracomment>Use an Unicode arrow (U+2913) when there is no abbreviation or extremly short term for &quot;Min&quot; in your language</extracomment>
-        <translation>Min.</translation>
+        <translation>Min</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="77"/>
@@ -436,12 +436,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="219"/>
         <source>Open directory...</source>
-        <translation>Verzeichnis öffnen...</translation>
+        <translation>Verzeichnis öffnen …</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="238"/>
         <source>Export to PNG...</source>
-        <translation>Als PNG exportieren ...</translation>
+        <translation>Als PNG exportieren …</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="257"/>
@@ -1023,17 +1023,17 @@
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="28"/>
         <source>Top</source>
-        <translation>Mst.</translation>
+        <translation>Mst</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="30"/>
         <source>Min</source>
-        <translation>Min.</translation>
+        <translation>Min</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="32"/>
         <source>Max</source>
-        <translation>Max.</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="35"/>
@@ -1150,7 +1150,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="30"/>
         <source>Max</source>
-        <translation>Max.</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="33"/>
@@ -2130,7 +2130,7 @@
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="30"/>
         <source>Max</source>
-        <translation>Max.</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="33"/>
@@ -2260,7 +2260,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="37"/>
         <source>Max</source>
-        <translation>Max.</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="42"/>
@@ -2347,12 +2347,12 @@
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="30"/>
         <source>Min</source>
-        <translation>Min.</translation>
+        <translation>Min</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="32"/>
         <source>Max</source>
-        <translation>Max.</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="35"/>
