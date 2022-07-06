@@ -63,12 +63,10 @@ void ElevationGraph::setInfo()
 			extremly short term for "Down" in your language */
 		GraphView::addInfo(tr("Down"), l.toString(descent() * yScale(), 'f', 0)
 		  + UNIT_SPACE + yUnits());
-		/*: Use an Unicode arrow (U+2912) when there is no abbreviation or
-			extremly short term for "Max" in your language */
+		/*: Use an abbreviation or a extremly short term */
 		GraphView::addInfo(tr("Max"), l.toString(max() * yScale(), 'f', 0)
 		  + UNIT_SPACE + yUnits());
-		/*: Use an Unicode arrow (U+2913) when there is no abbreviation or
-			extremly short term for "Min" in your language */
+		/*: Use an abbreviation or a extremly short term */
 		GraphView::addInfo(tr("Min"), l.toString(min() * yScale(), 'f', 0)
 		  + UNIT_SPACE + yUnits());
 #else // Q_OS_ANDROID

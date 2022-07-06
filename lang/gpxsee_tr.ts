@@ -209,44 +209,44 @@
         <translation>Aşağı</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="68"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="67"/>
         <source>Max</source>
-        <extracomment>Use an Unicode arrow (U+2912) when there is no abbreviation or extremly short term for &quot;Max&quot; in your language</extracomment>
+        <extracomment>Use an abbreviation or a extremly short term</extracomment>
         <translation>En yüksek</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="72"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="70"/>
         <source>Min</source>
-        <extracomment>Use an Unicode arrow (U+2913) when there is no abbreviation or extremly short term for &quot;Min&quot; in your language</extracomment>
+        <extracomment>Use an abbreviation or a extremly short term</extracomment>
         <translation>En düşük</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="75"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="73"/>
         <source>Ascent</source>
         <translation>Tırmanış</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="77"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="75"/>
         <source>Descent</source>
         <translation>İniş</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="79"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="77"/>
         <source>Maximum</source>
         <translation>Azami</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="81"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="79"/>
         <source>Minimum</source>
         <translation>Asgari</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="184"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="182"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="187"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="185"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
