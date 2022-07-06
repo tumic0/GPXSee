@@ -71,9 +71,9 @@ OsmdroidMap::OsmdroidMap(const QString &fileName, QObject *parent)
 		for (quint64 i = 0; i < (quint64)OSM::ZOOMS.max(); i++) {
 			quint64 key = ((i << i) << i);
 
-			if (key < min)
+			if (key <= min)
 				_zooms.setMin(i);
-			if (key < max)
+			if (key <= max)
 				_zooms.setMax(i);
 		}
 
@@ -139,6 +139,10 @@ OsmdroidMap::OsmdroidMap(const QString &fileName, QObject *parent)
 	tl.rlat() = -tl.lat();
 	Coordinates br(OSM::tile2ll(QPoint(r + 1, b + 1), z));
 	br.rlat() = -br.lat();
+	// Workaround of broken zoom levels 0 and 1 due to numerical
+	// instability
+	tl.rlat() = qMin(tl.lat(), OSM::BOUNDS.top());
+	br.rlat() = qMax(br.lat(), OSM::BOUNDS.bottom());
 	_bounds = RectC(tl, br);
 
 	{
