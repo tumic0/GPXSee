@@ -5,30 +5,11 @@
 #include <QBuffer>
 #include <QtConcurrent>
 #include "osm.h"
+#include "tile.h"
 #include "aqmmap.h"
 
 
 #define MAGIC "FLATPACK1"
-
-class AQTile
-{
-public:
-	AQTile(const QPoint &xy, const QByteArray &data, const QString &key)
-	  : _xy(xy), _data(data), _key(key) {}
-
-	const QPoint &xy() const {return _xy;}
-	const QString &key() const {return _key;}
-	const QPixmap &pixmap() const {return _pixmap;}
-
-	void load() {_pixmap.loadFromData(_data);}
-
-private:
-	QPoint _xy;
-	QByteArray _data;
-	QString _key;
-	QPixmap _pixmap;
-};
-
 
 static bool parseHeader(const QByteArray &data, QString &name)
 {
@@ -380,7 +361,7 @@ void AQMMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	int height = ceil(s.height() / tileSize());
 
 
-	QList<AQTile> tiles;
+	QList<RenderTile> tiles;
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
@@ -395,16 +376,16 @@ void AQMMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				  * tileSize());
 				drawTile(painter, pm, tp);
 			} else {
-				tiles.append(AQTile(t, tileData(t), key));
+				tiles.append(RenderTile(t, tileData(t), key));
 			}
 		}
 	}
 
-	QFuture<void> future = QtConcurrent::map(tiles, &AQTile::load);
+	QFuture<void> future = QtConcurrent::map(tiles, &RenderTile::load);
 	future.waitForFinished();
 
 	for (int i = 0; i < tiles.size(); i++) {
-		const AQTile &mt = tiles.at(i);
+		const RenderTile &mt = tiles.at(i);
 		QPixmap pm(mt.pixmap());
 		if (pm.isNull())
 			continue;

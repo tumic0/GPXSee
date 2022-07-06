@@ -7,30 +7,11 @@
 #include <QBuffer>
 #include <QtConcurrent>
 #include "osm.h"
+#include "tile.h"
 #include "osmdroidmap.h"
 
 
 #define META_TYPE(type) static_cast<QMetaType::Type>(type)
-
-class OsmdroidTile
-{
-public:
-	OsmdroidTile(const QPoint &xy, const QByteArray &data, const QString &key)
-	  : _xy(xy), _data(data), _key(key) {}
-
-	const QPoint &xy() const {return _xy;}
-	const QString &key() const {return _key;}
-	const QPixmap &pixmap() const {return _pixmap;}
-
-	void load() {_pixmap.loadFromData(_data);}
-
-private:
-	QPoint _xy;
-	QByteArray _data;
-	QString _key;
-	QPixmap _pixmap;
-};
-
 
 OsmdroidMap::OsmdroidMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _mapRatio(1.0), _valid(false)
@@ -268,7 +249,7 @@ void OsmdroidMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	int height = ceil(s.height() / tileSize());
 
 
-	QList<OsmdroidTile> tiles;
+	QList<RenderTile> tiles;
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
@@ -283,16 +264,16 @@ void OsmdroidMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				  * tileSize());
 				drawTile(painter, pm, tp);
 			} else {
-				tiles.append(OsmdroidTile(t, tileData(_zoom, t), key));
+				tiles.append(RenderTile(t, tileData(_zoom, t), key));
 			}
 		}
 	}
 
-	QFuture<void> future = QtConcurrent::map(tiles, &OsmdroidTile::load);
+	QFuture<void> future = QtConcurrent::map(tiles, &RenderTile::load);
 	future.waitForFinished();
 
 	for (int i = 0; i < tiles.size(); i++) {
-		const OsmdroidTile &mt = tiles.at(i);
+		const RenderTile &mt = tiles.at(i);
 		QPixmap pm(mt.pixmap());
 		if (pm.isNull())
 			continue;

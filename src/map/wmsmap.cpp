@@ -174,7 +174,7 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	QPoint br = QPoint(qCeil(rect.right() / tileSize()),
 	  qCeil(rect.bottom() / tileSize()));
 
-	QVector<Tile> tiles;
+	QVector<FetchTile> tiles;
 	tiles.reserve((br.x() - tl.x()) * (br.y() - tl.y()));
 	for (int i = tl.x(); i < br.x(); i++) {
 		for (int j = tl.y(); j < br.y(); j++) {
@@ -186,7 +186,7 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			  ? RectD(PointD(tbr.y(), tbr.x()), PointD(ttl.y(), ttl.x()))
 			  : RectD(ttl, tbr);
 
-			tiles.append(Tile(QPoint(i, j), _zoom, bbox));
+			tiles.append(FetchTile(QPoint(i, j), _zoom, bbox));
 		}
 	}
 
@@ -196,7 +196,7 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		_tileLoader->loadTilesAsync(tiles);
 
 	for (int i = 0; i < tiles.count(); i++) {
-		Tile &t = tiles[i];
+		FetchTile &t = tiles[i];
 		QPointF tp(t.xy().x() * tileSize(), t.xy().y() * tileSize());
 		if (!t.pixmap().isNull()) {
 			t.pixmap().setDevicePixelRatio(_mapRatio);

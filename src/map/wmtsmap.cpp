@@ -180,11 +180,11 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	QPoint br = QPoint(qCeil(rect.right() / ts.width()),
 	  qCeil(rect.bottom() / ts.height()));
 
-	QVector<Tile> tiles;
+	QVector<FetchTile> tiles;
 	tiles.reserve((br.x() - tl.x()) * (br.y() - tl.y()));
 	for (int i = tl.x(); i < br.x(); i++)
 		for (int j = tl.y(); j < br.y(); j++)
-			tiles.append(Tile(QPoint(i, j), z.id()));
+			tiles.append(FetchTile(QPoint(i, j), z.id()));
 
 	if (flags & Map::Block)
 		_tileLoader->loadTilesSync(tiles);
@@ -192,7 +192,7 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		_tileLoader->loadTilesAsync(tiles);
 
 	for (int i = 0; i < tiles.count(); i++) {
-		Tile &t = tiles[i];
+		FetchTile &t = tiles[i];
 		QPointF tp(t.xy().x() * ts.width(), t.xy().y() * ts.height());
 		if (!t.pixmap().isNull()) {
 			t.pixmap().setDevicePixelRatio(imageRatio());

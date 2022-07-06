@@ -108,11 +108,11 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	int width = _zoom ? qCeil(s.width() / tileSize()) : 1;
 	int height = _zoom ? qCeil(s.height() / tileSize()) : 1;
 
-	QVector<Tile> tiles;
+	QVector<FetchTile> tiles;
 	tiles.reserve(width * height);
 	for (int i = 0; i < width; i++)
 		for (int j = 0; j < height; j++)
-			tiles.append(Tile(QPoint(tile.x() + i, _invertY ? (1<<_zoom)
+			tiles.append(FetchTile(QPoint(tile.x() + i, _invertY ? (1<<_zoom)
 			  - (tile.y() + j) - 1 : tile.y() + j), _zoom));
 
 	if (flags & Map::Block)
@@ -121,7 +121,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		_tileLoader->loadTilesAsync(tiles);
 
 	for (int i = 0; i < tiles.count(); i++) {
-		Tile &t = tiles[i];
+		FetchTile &t = tiles[i];
 		QPointF tp = _zoom ? QPointF(tl.x() + (t.xy().x() - tile.x())
 		  * tileSize(), tl.y() + ((_invertY ? (1<<_zoom) - t.xy().y() - 1 :
 		  t.xy().y()) - tile.y()) * tileSize())

@@ -19,16 +19,16 @@ public:
 	void setScaledSize(int size);
 	void setQuadTiles(bool quadTiles) {_quadTiles = quadTiles;}
 
-	void loadTilesAsync(QVector<Tile> &list);
-	void loadTilesSync(QVector<Tile> &list);
+	void loadTilesAsync(QVector<FetchTile> &list);
+	void loadTilesSync(QVector<FetchTile> &list);
 	void clearCache();
 
 signals:
 	void finished();
 
 private:
-	QUrl tileUrl(const Tile &tile) const;
-	QString tileFile(const Tile &tile) const;
+	QUrl tileUrl(const FetchTile &tile) const;
+	QString tileFile(const FetchTile &tile) const;
 
 	Downloader *_downloader;
 	QString _url;
