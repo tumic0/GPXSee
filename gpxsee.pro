@@ -565,5 +565,7 @@ android {
     csv.path = /assets/csv
     symbols.files = $$files(icons/symbols/*.png)
     symbols.path = /assets/symbols
-    INSTALLS += maps csv symbols
+    translations.files = $$files(lang/*.qm)
+    translations.path = /assets/translations
+    INSTALLS += maps csv symbols translations
 }

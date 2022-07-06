@@ -120,8 +120,13 @@ QString ProgramPaths::tilesDir()
 
 QString ProgramPaths::translationsDir()
 {
+#ifdef Q_OS_ANDROID
+	return assetsPath(QStandardPaths::locate(DATA_LOCATION, TRANSLATIONS_DIR,
+	  QStandardPaths::LocateDirectory), TRANSLATIONS_DIR);
+#else // Q_OS_ANDROID
 	return QStandardPaths::locate(DATA_LOCATION, TRANSLATIONS_DIR,
 	  QStandardPaths::LocateDirectory);
+#endif // Q_OS_ANDROID
 }
 
 QString ProgramPaths::ellipsoidsFile()
