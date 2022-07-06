@@ -1022,7 +1022,7 @@
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="28"/>
         <source>Top</source>
-        <translation type="unfinished"></translation>
+        <translation>顶部</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="30"/>
@@ -1254,7 +1254,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="164"/>
         <source>Osmdroid SQLite maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Osmdroid SQLite 地图</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="165"/>
