@@ -16,7 +16,7 @@ WLDFile::WLDFile(const QString &fileName)
 		QByteArray line(file.readLine(128).trimmed());
 		val[i] = line.toDouble(&ok);
 		if (!ok) {
-			_errorString = line + ": invalid parameter";
+			_errorString = QString("Parse error on line %1").arg(i+1);
 			return;
 		}
 	}

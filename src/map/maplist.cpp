@@ -62,36 +62,35 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 	QFileInfo fi(path);
 	QString suffix(fi.suffix().toLower());
 	Map *map = 0;
+	QStringList errors;
 
 	if ((it = _parsers.find(suffix)) != _parsers.end()) {
 		while (it != _parsers.end() && it.key() == suffix) {
 			delete map;
 			map = it.value()(path, proj, isDir);
 			if (map->isValid())
-				break;
-
+				return map;
+			else
+				errors.append(it.key() + ": " + map->errorString());
 			++it;
 		}
-	} else {
-		QStringList errors;
 
+	} else {
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
 			map = it.value()(path, proj, isDir);
 			if (map->isValid())
-				break;
+				return map;
 			else {
 				errors.append(it.key() + ": " + map->errorString());
 				delete map;
 				map = 0;
 			}
 		}
-
-		if (!map) {
-			qWarning("Error loading map file: %s:", qPrintable(path));
-			for (int i = 0; i < errors.size(); i++)
-				qWarning("%s", qPrintable(errors.at(i)));
-		}
 	}
+
+	qWarning("%s:", qPrintable(path));
+	for (int i = 0; i < errors.size(); i++)
+		qWarning("  %s", qPrintable(errors.at(i)));
 
 	return map ? map : new InvalidMap(path, "Unknown file format");
 }

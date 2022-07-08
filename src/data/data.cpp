@@ -121,6 +121,13 @@ Data::Data(const QString &fileName, bool tryUnknown)
 			file.reset();
 			++it;
 		}
+
+		qWarning("%s:", qPrintable(fileName));
+		for (it = _parsers.find(suffix); it != _parsers.end()
+		  && it.key() == suffix; it++)
+			qWarning("  %s: line %d: %s", qPrintable(it.key()),
+			  it.value()->errorLine(), qPrintable(it.value()->errorString()));
+
 	} else if (tryUnknown) {
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
 			if (it.value()->parse(&file, trackData, routeData, _polygons,
@@ -132,9 +139,9 @@ Data::Data(const QString &fileName, bool tryUnknown)
 			file.reset();
 		}
 
-		qWarning("Error loading data file: %s:", qPrintable(fileName));
+		qWarning("%s:", qPrintable(fileName));
 		for (it = _parsers.begin(); it != _parsers.end(); it++)
-			qWarning("%s: line %d: %s", qPrintable(it.key()),
+			qWarning("  %s: line %d: %s", qPrintable(it.key()),
 			  it.value()->errorLine(), qPrintable(it.value()->errorString()));
 
 		_errorLine = 0;
