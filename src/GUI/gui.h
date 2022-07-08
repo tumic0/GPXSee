@@ -71,7 +71,9 @@ private slots:
 	void showGraphGrids(bool show);
 	void showGraphSliderInfo(bool show);
 	void showPathMarkerInfo(QAction *action);
-#ifndef Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
+	void showGraphTabs(bool show);
+#else // Q_OS_ANDROID
 	void showToolbars(bool show);
 	void showFullscreen(bool show);
 #endif // Q_OS_ANDROID
@@ -231,7 +233,9 @@ private:
 	QAction *_showGraphSliderInfoAction;
 	QAction *_distanceGraphAction;
 	QAction *_timeGraphAction;
-#ifndef Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
+	QAction *_showGraphTabsAction;
+#else // Q_OS_ANDROID
 	QAction *_keysAction;
 	QAction *_fullscreenAction;
 	QAction *_showToolbarsAction;

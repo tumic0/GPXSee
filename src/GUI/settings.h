@@ -32,6 +32,8 @@
 #define SHOW_GRAPH_GRIDS_DEFAULT          true
 #define SHOW_GRAPH_SLIDER_INFO_SETTING    "sliderInfo"
 #define SHOW_GRAPH_SLIDER_INFO_DEFAULT    true
+#define SHOW_GRAPH_TABS_SETTING           "tabs"
+#define SHOW_GRAPH_TABS_DEFAULT           true
 #define SHOW_TICKS_SETTING                "pathTicks"
 #define SHOW_TICKS_DEFAULT                false
 

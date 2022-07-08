@@ -473,6 +473,13 @@ void GUI::createActions()
 	_showGraphSliderInfoAction->setCheckable(true);
 	connect(_showGraphSliderInfoAction, &QAction::triggered, this,
 	  &GUI::showGraphSliderInfo);
+#ifdef Q_OS_ANDROID
+	_showGraphTabsAction = new QAction(tr("Show tabs"), this);
+	_showGraphTabsAction->setMenuRole(QAction::NoRole);
+	_showGraphTabsAction->setCheckable(true);
+	connect(_showGraphTabsAction, &QAction::triggered, this,
+	  &GUI::showGraphTabs);
+#endif // Q_OS_ANDROID
 
 	// Settings actions
 #ifndef Q_OS_ANDROID
@@ -631,6 +638,9 @@ void GUI::createMenus()
 	graphMenu->addSeparator();
 	graphMenu->addAction(_showGraphGridAction);
 	graphMenu->addAction(_showGraphSliderInfoAction);
+#ifdef Q_OS_ANDROID
+	graphMenu->addAction(_showGraphTabsAction);
+#endif // Q_OS_ANDROID
 	graphMenu->addSeparator();
 	graphMenu->addAction(_showGraphsAction);
 
@@ -1637,7 +1647,12 @@ void GUI::showGraphs(bool show)
 	_graphTabWidget->setHidden(!show);
 }
 
-#ifndef Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
+void GUI::showGraphTabs(bool show)
+{
+	_graphTabWidget->tabBar()->setVisible(show);
+}
+#else // Q_OS_ANDROID
 void GUI::showToolbars(bool show)
 {
 	if (show) {
@@ -2407,6 +2422,11 @@ void GUI::writeSettings()
 	  != SHOW_GRAPH_SLIDER_INFO_DEFAULT)
 		settings.setValue(SHOW_GRAPH_SLIDER_INFO_SETTING,
 		  _showGraphSliderInfoAction->isChecked());
+#ifdef Q_OS_ANDROID
+	if (_showGraphTabsAction->isChecked() != SHOW_GRAPH_TABS_DEFAULT)
+		settings.setValue(SHOW_GRAPH_TABS_SETTING,
+		  _showGraphTabsAction->isChecked());
+#endif // Q_OS_ANDROID
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);
@@ -2746,6 +2766,13 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 		showGraphSliderInfo(false);
 	else
 		_showGraphSliderInfoAction->setChecked(true);
+#ifdef Q_OS_ANDROID
+	if (!settings.value(SHOW_GRAPH_TABS_SETTING, SHOW_GRAPH_TABS_DEFAULT)
+	  .toBool())
+		showGraphTabs(false);
+	else
+		_showGraphTabsAction->setChecked(true);
+#endif // Q_OS_ANDROID
 	settings.endGroup();
 
 	settings.beginGroup(POI_SETTINGS_GROUP);
