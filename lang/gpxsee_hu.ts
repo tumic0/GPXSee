@@ -597,7 +597,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="477"/>
         <source>Show tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Fülek mutatása</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="486"/>
@@ -1012,6 +1012,7 @@
         <location filename="../src/GUI/gui.cpp" line="2010"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
