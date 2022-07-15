@@ -597,7 +597,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="477"/>
         <source>Show tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>显示选项卡</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="486"/>

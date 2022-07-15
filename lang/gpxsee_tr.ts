@@ -597,7 +597,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="477"/>
         <source>Show tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekmeleri göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="486"/>
