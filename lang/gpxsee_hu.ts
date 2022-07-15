@@ -1230,7 +1230,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="159"/>
         <source>GEMF maps</source>
-        <translation type="unfinished"></translation>
+        <translation>GEMF térképek</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="160"/>
