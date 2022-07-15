@@ -121,8 +121,6 @@ GEMFMap::GEMFMap(const QString &fileName, QObject *parent)
 		return;
 	}
 
-	qDebug() << _zooms;
-
 	_file.close();
 
 	_valid = true;
