@@ -1202,92 +1202,97 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="150"/>
+        <location filename="../src/map/maplist.cpp" line="152"/>
         <source>Supported files</source>
         <translation>支持的文件</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="152"/>
+        <location filename="../src/map/maplist.cpp" line="154"/>
         <source>AlpineQuest maps</source>
         <translation>AlpineQuest 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="153"/>
+        <location filename="../src/map/maplist.cpp" line="155"/>
         <source>Garmin IMG maps</source>
         <translation>佳明 IMG 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="155"/>
+        <location filename="../src/map/maplist.cpp" line="157"/>
         <source>Garmin JNX maps</source>
         <translation>佳明 JNX 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="156"/>
+        <location filename="../src/map/maplist.cpp" line="158"/>
         <source>BSB nautical charts</source>
         <translation>BSB 海图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="157"/>
+        <location filename="../src/map/maplist.cpp" line="159"/>
+        <source>GEMF maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="160"/>
         <source>KMZ maps</source>
         <translation>KMZ 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="158"/>
+        <location filename="../src/map/maplist.cpp" line="161"/>
         <source>Mapsforge maps</source>
         <translation>Mapsforge 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="159"/>
+        <location filename="../src/map/maplist.cpp" line="162"/>
         <source>OziExplorer maps</source>
         <translation>OziExplorer 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="160"/>
+        <location filename="../src/map/maplist.cpp" line="163"/>
         <source>MBTiles maps</source>
         <translation>MBTiles 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="161"/>
+        <location filename="../src/map/maplist.cpp" line="164"/>
         <source>QuickChart maps</source>
         <translation>QuickChart 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="162"/>
+        <location filename="../src/map/maplist.cpp" line="165"/>
         <source>TwoNav maps</source>
         <translation>TwoNav 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="163"/>
+        <location filename="../src/map/maplist.cpp" line="166"/>
         <source>Osmdroid SQLite maps</source>
         <translation>Osmdroid SQLite 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="164"/>
+        <location filename="../src/map/maplist.cpp" line="167"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
         <translation>Locus/OsmAnd/RMaps SQLite 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="166"/>
+        <location filename="../src/map/maplist.cpp" line="169"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>TrekBuddy 地图/地图集</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="167"/>
+        <location filename="../src/map/maplist.cpp" line="170"/>
         <source>GeoTIFF images</source>
         <translation>GeoTIFF 图像</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="168"/>
+        <location filename="../src/map/maplist.cpp" line="171"/>
         <source>World-file georeferenced images</source>
         <translation>World-file georeferenced 图像</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="170"/>
+        <location filename="../src/map/maplist.cpp" line="173"/>
         <source>Online map sources</source>
         <translation>在线地图源</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="171"/>
+        <location filename="../src/map/maplist.cpp" line="174"/>
         <source>All files</source>
         <translation>所有文件</translation>
     </message>

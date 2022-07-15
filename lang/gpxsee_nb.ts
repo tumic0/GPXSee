@@ -1203,92 +1203,97 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="150"/>
+        <location filename="../src/map/maplist.cpp" line="152"/>
         <source>Supported files</source>
         <translation>Støttede filer</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="160"/>
+        <location filename="../src/map/maplist.cpp" line="163"/>
         <source>MBTiles maps</source>
         <translation>MBTiles-kart</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="155"/>
+        <location filename="../src/map/maplist.cpp" line="157"/>
         <source>Garmin JNX maps</source>
         <translation>Garmin JNX-kart</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="152"/>
+        <location filename="../src/map/maplist.cpp" line="154"/>
         <source>AlpineQuest maps</source>
         <translation>AlpineQuest-kart</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="153"/>
+        <location filename="../src/map/maplist.cpp" line="155"/>
         <source>Garmin IMG maps</source>
         <translation>Garmin IMG-kart</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="156"/>
+        <location filename="../src/map/maplist.cpp" line="158"/>
         <source>BSB nautical charts</source>
         <translation>BSB-sjøkart</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="157"/>
+        <location filename="../src/map/maplist.cpp" line="159"/>
+        <source>GEMF maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="160"/>
         <source>KMZ maps</source>
         <translation>KMZ-kart</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="158"/>
+        <location filename="../src/map/maplist.cpp" line="161"/>
         <source>Mapsforge maps</source>
         <translation>Mapsforge-kart</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="159"/>
+        <location filename="../src/map/maplist.cpp" line="162"/>
         <source>OziExplorer maps</source>
         <translation>OziExplorer-kart</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="161"/>
+        <location filename="../src/map/maplist.cpp" line="164"/>
         <source>QuickChart maps</source>
         <translation>QuickChart-kart</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="163"/>
+        <location filename="../src/map/maplist.cpp" line="166"/>
         <source>Osmdroid SQLite maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="164"/>
+        <location filename="../src/map/maplist.cpp" line="167"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
         <translation>Locus/OsmAnd/RMaps-SQLite-kart</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="166"/>
+        <location filename="../src/map/maplist.cpp" line="169"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>TrekBuddy-kart/atlas</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="167"/>
+        <location filename="../src/map/maplist.cpp" line="170"/>
         <source>GeoTIFF images</source>
         <translation>GeoTIFF-bilder</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="171"/>
+        <location filename="../src/map/maplist.cpp" line="174"/>
         <source>All files</source>
         <translation type="unfinished">Alle filer</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="162"/>
+        <location filename="../src/map/maplist.cpp" line="165"/>
         <source>TwoNav maps</source>
         <translation>TwoNav-kart</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="168"/>
+        <location filename="../src/map/maplist.cpp" line="171"/>
         <source>World-file georeferenced images</source>
         <translation>World-file georefererte bilder</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="170"/>
+        <location filename="../src/map/maplist.cpp" line="173"/>
         <source>Online map sources</source>
         <translation>Nettbaserte kartkilder</translation>
     </message>
