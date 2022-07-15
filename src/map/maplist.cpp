@@ -17,6 +17,7 @@
 #include "worldfilemap.h"
 #include "qctmap.h"
 #include "osmdroidmap.h"
+#include "gemfmap.h"
 #include "invalidmap.h"
 #include "maplist.h"
 
@@ -50,6 +51,7 @@ MapList::ParserMap MapList::parsers()
 	map.insert("tfw", &WorldFileMap::create);
 	map.insert("qct", &QCTMap::create);
 	map.insert("sqlite", &OsmdroidMap::create);
+	map.insert("gemf", &GEMFMap::create);
 
 	return map;
 }
@@ -154,6 +156,7 @@ QString MapList::formats()
 		+ " (*.gmap *.gmapi *.img *.xml);;"
 	  + qApp->translate("MapList", "Garmin JNX maps") + " (*.jnx);;"
 	  + qApp->translate("MapList", "BSB nautical charts") + " (*.kap);;"
+	  + qApp->translate("MapList", "GEMF maps") + " (*.gemf);;"
 	  + qApp->translate("MapList", "KMZ maps") + " (*.kmz);;"
 	  + qApp->translate("MapList", "Mapsforge maps") + " (*.map);;"
 	  + qApp->translate("MapList", "OziExplorer maps") + " (*.map);;"
