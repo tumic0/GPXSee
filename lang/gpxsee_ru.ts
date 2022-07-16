@@ -581,7 +581,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="477"/>
         <source>Show tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать вкладки</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="486"/>
@@ -1236,7 +1236,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="159"/>
         <source>GEMF maps</source>
-        <translation type="unfinished"></translation>
+        <translation>GEMF карты</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="160"/>
