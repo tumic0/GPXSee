@@ -152,11 +152,11 @@ QString MapList::formats()
 	  qApp->translate("MapList", "Supported files")
 		+ " (" + filter().join(" ") + ");;"
 	  + qApp->translate("MapList", "AlpineQuest maps") + " (*.aqm);;"
+	  + qApp->translate("MapList", "GEMF maps") + " (*.gemf);;"
 	  + qApp->translate("MapList", "Garmin IMG maps")
 		+ " (*.gmap *.gmapi *.img *.xml);;"
 	  + qApp->translate("MapList", "Garmin JNX maps") + " (*.jnx);;"
 	  + qApp->translate("MapList", "BSB nautical charts") + " (*.kap);;"
-	  + qApp->translate("MapList", "GEMF maps") + " (*.gemf);;"
 	  + qApp->translate("MapList", "KMZ maps") + " (*.kmz);;"
 	  + qApp->translate("MapList", "Mapsforge maps") + " (*.map);;"
 	  + qApp->translate("MapList", "OziExplorer maps") + " (*.map);;"
