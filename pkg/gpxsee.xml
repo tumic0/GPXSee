@@ -279,6 +279,13 @@
 		<glob pattern="*.aqm"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.cgtk.gemf">
+		<comment>GEMF Map File</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application/octet-stream"/>
+		<glob pattern="*.gemf"/>
+	</mime-type>
+
 	<mime-type type="application/vnd.rmaps.sqlite">
 		<comment>RMaps SQLite Map File</comment>
 		<sub-class-of type="application/vnd.sqlite3"/>
