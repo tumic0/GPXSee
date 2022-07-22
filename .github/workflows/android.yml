@@ -37,6 +37,8 @@ jobs:
           modules: qtpositioning qt5compat
       - name: Install Android OpenSSL
         run:  git clone https://github.com/KDAB/android_openssl.git
+      - name: Create localization
+        run:  lrelease gpxsee.pro
       - name: Configure build
         run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl
       - name: Build project
