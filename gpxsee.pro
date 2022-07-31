@@ -506,7 +506,8 @@ win32 {
         icons/formats/omd.ico \
         icons/formats/ghp.ico \
         icons/formats/qct.ico \
-        icons/formats/trk.ico
+        icons/formats/trk.ico \
+        icons/formats/gemf.ico
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }
