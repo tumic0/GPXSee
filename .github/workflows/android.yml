@@ -23,15 +23,13 @@ jobs:
       - name: Install android platform, platform-tools, build-tools and ndk
         run:  ${ANDROID_HOME}/tools/bin/sdkmanager --install "cmdline-tools;latest" "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;22.1.7171670"
       - name: Install Qt (Desktop)
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
-          aqtversion: '==2.1.0'
-          version: '6.3.0'
+          version: '6.3.1'
       - name: Install Qt (Android)
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
-          aqtversion: '==2.1.0'
-          version: '6.3.0'
+          version: '6.3.1'
           target: 'android'
           arch: 'android_armv7'
           modules: qtpositioning qt5compat
