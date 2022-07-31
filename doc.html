@@ -291,8 +291,8 @@
           <h3 id="offline">Offline maps</h3>
           <p>OziExplorer maps, TrekBuddy maps/atlases, Garmin JNX &amp; IMG/GMAP maps,
           TwoNav RMaps, MBTiles, KMZ maps, AlpineQuest AQM maps, Locus/OsmAnd/RMaps SQLite
-          maps, Mapsforge maps, BSB charts, QCT maps, and GeoTIFF and World-File
-          georeferenced images are supported by GPXSee.</p>
+          maps, Mapsforge maps, BSB charts, QCT maps, GEMF maps, Osmdroid SQLite maps
+          and GeoTIFF and World-File georeferenced images are supported by GPXSee.</p>
 
           <p>You may easily create offline atlases from online map services by using
           <a href="http://mobac.sourceforge.net/">Mobile Atlas Creator (MOBAC)</a>.</p>
@@ -400,6 +400,22 @@
           plugin</a> has been completely reworked in Qt6, is much more powerfull than in Qt5 and
           is compiled by default.</p>
 
+
+          <h2 id="issues">Known issues</h2>
+
+          <h3>Android file system</h3>
+          <p>Due to the limited file system access on Android, all map formats that consist of
+          multiple files (eg. OziExplorer maps or World-file georeferenced images) will not load
+          properly when loaded from the application menu. You have to put such maps
+          to the GPXSee map directory to make them work.</p>
+
+          <h3>OpenGL</h3>
+          <p>There are numerous OpenGL issues in Qt that cause some kind of broken rendering
+          or even an application crash. OpenGL is thus disabled by default even if it can
+          significantly speed up rendering of big data sets. You may enable OpenGL in
+          the preferences, but be prepared that "strange things" may happen...</p>
+
+
           <div id="footnote">
           <p id="androidGlobalConfig"><i>[1] The Android global configuration is part of the APK
           and is not accessible on an unrooted phone.</i></p>
@@ -436,6 +452,7 @@
           <div class="h4l"><a href="#positioning">Positioning</a></div>
             <div class="h5l"><a href="#positioning_winmac">Windows &amp; OS X</a></div>
             <div class="h5l"><a href="#positioning_linux">Linux</a></div>
+          <div class="h4l"><a href="#issues">Known issues</a></div>
         </div>
       </div>
       <div class="cl">&nbsp;</div>
