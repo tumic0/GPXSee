@@ -41,9 +41,7 @@ jobs:
       - name: Create localization
         run:  lrelease gpxsee.pro
       - name: Configure build
-        env:
-          ANDROID_NDK_ROOT: ${ANDROID_HOME}/ndk/22.1.7171670/
-        run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl
+        run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl ANDROID_NDK_ROOT=${ANDROID_HOME}/ndk/22.1.7171670/
       - name: Build project
         run:  make -j2 apk
       - name: Upload artifacts
