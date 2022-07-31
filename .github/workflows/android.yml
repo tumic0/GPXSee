@@ -23,6 +23,8 @@ jobs:
         run:  ${ANDROID_HOME}/tools/bin/sdkmanager --update
       - name: Install android platform, platform-tools, build-tools and ndk
         run:  ${ANDROID_HOME}/tools/bin/sdkmanager --install "cmdline-tools;latest" "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;22.1.7171670"
+      - name: Setup NDK path
+        run: echo "ANDROID_NDK_ROOT=${ANDROID_HOME}/ndk/22.1.7171670/" >> $GITHUB_ENV
       - name: Install Qt (Desktop)
         uses: jurplel/install-qt-action@v2
         with:
@@ -41,7 +43,7 @@ jobs:
       - name: Create localization
         run:  lrelease gpxsee.pro
       - name: Configure build
-        run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl ANDROID_NDK_ROOT=${ANDROID_HOME}/ndk/22.1.7171670/
+        run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl 
       - name: Build project
         run:  make -j2 apk
       - name: Upload artifacts
