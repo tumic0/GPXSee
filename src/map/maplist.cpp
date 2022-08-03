@@ -18,6 +18,7 @@
 #include "qctmap.h"
 #include "osmdroidmap.h"
 #include "gemfmap.h"
+#include "oruxmap.h"
 #include "invalidmap.h"
 #include "maplist.h"
 
@@ -52,6 +53,7 @@ MapList::ParserMap MapList::parsers()
 	map.insert("qct", &QCTMap::create);
 	map.insert("sqlite", &OsmdroidMap::create);
 	map.insert("gemf", &GEMFMap::create);
+	map.insert("otrk2.xml", &OruxMap::create);
 
 	return map;
 }
@@ -62,7 +64,7 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 {
 	ParserMap::iterator it;
 	QFileInfo fi(path);
-	QString suffix(fi.suffix().toLower());
+	QString suffix(fi.completeSuffix().toLower());
 	Map *map = 0;
 	QStringList errors;
 
@@ -161,6 +163,7 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "Mapsforge maps") + " (*.map);;"
 	  + qApp->translate("MapList", "OziExplorer maps") + " (*.map);;"
 	  + qApp->translate("MapList", "MBTiles maps") + " (*.mbtiles);;"
+	  + qApp->translate("MapList", "Orux maps") + " (*.otrk2.xml);;"
 	  + qApp->translate("MapList", "QuickChart maps") + " (*.qct);;"
 	  + qApp->translate("MapList", "TwoNav maps") + " (*.rmap *.rtmap);;"
 	  + qApp->translate("MapList", "Osmdroid SQLite maps") + " (*.sqlite);;"
