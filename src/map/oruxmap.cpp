@@ -482,7 +482,7 @@ Coordinates OruxMap::xy2ll(const QPointF &p)
 Map *OruxMap::create(const QString &path, const Projection &, bool *isDir)
 {
 	if (isDir)
-		*isDir = false;
+		*isDir = true;
 
 	return new OruxMap(path);
 }
