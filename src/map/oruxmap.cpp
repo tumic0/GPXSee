@@ -206,7 +206,7 @@ void OruxMap::calibrationPoints(QXmlStreamReader &reader, const QSize &size,
 void OruxMap::mapCalibration(QXmlStreamReader &reader, int level)
 {
 	int zoom;
-	QSize tileSize, size;
+	QSize tileSize, size, calibrationSize;
 	QString datum, projection;
 	QList<CalibrationPoint> points;
 	Projection proj;
@@ -241,6 +241,8 @@ void OruxMap::mapCalibration(QXmlStreamReader &reader, int level)
 
 			tileSize = QSize(width, height);
 			size = QSize(xMax * width, yMax * height);
+			calibrationSize = size;
+
 			GCS gcs(createGCS(datum));
 			if (!gcs.isValid()) {
 				reader.raiseError(QString("%1: invalid/unknown datum")
@@ -255,8 +257,21 @@ void OruxMap::mapCalibration(QXmlStreamReader &reader, int level)
 			}
 
 			reader.readElementText();
+
+		} else if (reader.name() == QLatin1String("MapDimensions")) {
+			int height, width;
+
+			QXmlStreamAttributes attr = reader.attributes();
+			if (!intAttr(reader, attr, "height", height))
+				return;
+			if (!intAttr(reader, attr, "width", width))
+				return;
+
+			calibrationSize = QSize(width, height);
+
+			reader.readElementText();
 		} else if (reader.name() == QLatin1String("CalibrationPoints"))
-			calibrationPoints(reader, size, points);
+			calibrationPoints(reader, calibrationSize, points);
 		else
 			reader.skipCurrentElement();
 	}
