@@ -5,13 +5,16 @@
 #include <QFileInfo>
 #include <QApplication>
 #include <QFontMetrics>
+#include "common/util.h"
 #include "fileselectwidget.h"
 
 
 FileSelectWidget::FileSelectWidget(QWidget *parent) : QWidget(parent)
 {
 	_edit = new QLineEdit();
-#ifndef Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
+	_edit->setDisabled(true);
+#else // Q_OS_ANDROID
 	QFontMetrics fm(QApplication::font());
 	_edit->setMinimumWidth(fm.averageCharWidth() * (QDir::homePath().length()
 	  + 12));
@@ -37,39 +40,44 @@ FileSelectWidget::FileSelectWidget(QWidget *parent) : QWidget(parent)
 
 void FileSelectWidget::browse()
 {
+#ifdef Q_OS_ANDROID
+	_fileName = QFileDialog::getSaveFileName(this, tr("Select file"));
+	if (!_fileName.isEmpty())
+		_edit->setText(Util::displayName(_fileName));
+#else // Q_OS_ANDROID
 	QFileInfo fi(_edit->text());
 	QString fileName = QFileDialog::getSaveFileName(this, tr("Select file"),
 	  fi.dir().absolutePath(), _filter);
-
 	if (!fileName.isEmpty())
 		_edit->setText(fileName);
+#endif // Q_OS_ANDROID
 }
 
 bool FileSelectWidget::checkFile(QString &error) const
 {
-	if (_edit->text().isEmpty()) {
+	if (file().isEmpty()) {
 		error = tr("No output file selected.");
 		return false;
 	}
 
-	QFile file(_edit->text());
-	QFileInfo fi(file);
+	QFile f(file());
+	QFileInfo fi(f);
 	bool exists = fi.exists();
 	bool opened = false;
 
 	if (exists && fi.isDir()) {
-		error = tr("%1 is a directory.").arg(file.fileName());
+		error = tr("%1 is a directory.").arg(f.fileName());
 		return false;
 	} else if ((exists && !fi.isWritable())
-	  || !(opened = file.open(QFile::Append))) {
-		error = tr("%1 is not writable.").arg(file.fileName());
+	  || !(opened = f.open(QFile::Append))) {
+		error = tr("%1 is not writable.").arg(f.fileName());
 		return false;
 	}
 
 	if (opened) {
-		file.close();
+		f.close();
 		if (!exists)
-			file.remove();
+			f.remove();
 	}
 
 	return true;

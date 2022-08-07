@@ -14,9 +14,13 @@ class FileSelectWidget : public QWidget
 public:
 	FileSelectWidget(QWidget *parent = 0);
 
+#ifdef Q_OS_ANDROID
+	QString file() const {return _fileName;}
+#else // Q_OS_ANDROID
 	QString file() const {return _edit->text();}
 	void setFile(const QString &file) {_edit->setText(file);}
 	void setFilter(const QString &filter) {_filter = filter;}
+#endif // Q_OS_ANDROID
 	bool checkFile(QString &error) const;
 
 private slots:
@@ -29,8 +33,11 @@ private:
 #else // Q_OS_WIN32
 	QToolButton *_button;
 #endif // Q_OS_WIN32
-
+#ifdef Q_OS_ANDROID
+	QString _fileName;
+#else // Q_OS_ANDROID
 	QString _filter;
+#endif // Q_OS_ANDROID
 };
 
 #endif // FILESELECTWIDGET_H

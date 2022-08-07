@@ -27,8 +27,8 @@ PDFExportDialog::PDFExportDialog(PDFExport &exp, Units units, QWidget *parent)
 #ifndef Q_OS_ANDROID
 	_fileSelect->setFilter(tr("PDF files") + " (*.pdf);;" + tr("All files")
 	  + " (*)");
-#endif // Q_OS_ANDROID
 	_fileSelect->setFile(_export.fileName);
+#endif // Q_OS_ANDROID
 
 	_paperSize = new QComboBox();
 	_paperSize->addItem("A2", QPageSize::PageSizeId::A2);

@@ -24,8 +24,8 @@ PNGExportDialog::PNGExportDialog(PNGExport &exp, QWidget *parent)
 #ifndef Q_OS_ANDROID
 	_fileSelect->setFilter(tr("PNG files") + " (*.png);;" + tr("All files")
 	  + " (*)");
-#endif // Q_OS_ANDROID
 	_fileSelect->setFile(_export.fileName);
+#endif // Q_OS_ANDROID
 
 	_width = new QSpinBox();
 	_width->setMinimum(256);
