@@ -351,11 +351,12 @@ OruxMap::OruxMap(const QString &fileName, QObject *parent)
 {
 	if (!readXML(fileName))
 		return;
-
 	if (_zooms.isEmpty()) {
 		_errorString = "No usable zoom level found";
 		return;
 	}
+	std::sort(_zooms.begin(), _zooms.end());
+
 
 	QFileInfo fi(fileName);
 	QDir dir(fi.absoluteDir());

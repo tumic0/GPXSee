@@ -47,6 +47,8 @@ private:
 		  const Projection &proj, const Transform &transform)
 		  : zoom(zoom), tileSize(tileSize), size(size), projection(proj),
 		  transform(transform) {}
+		bool operator<(const Zoom &other) const
+		  {return zoom < other.zoom;}
 
 		int zoom;
 		QSize tileSize;
