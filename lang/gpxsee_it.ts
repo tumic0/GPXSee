@@ -287,22 +287,23 @@
 <context>
     <name>FileSelectWidget</name>
     <message>
-        <location filename="../src/GUI/fileselectwidget.cpp" line="41"/>
+        <location filename="../src/GUI/fileselectwidget.cpp" line="44"/>
+        <location filename="../src/GUI/fileselectwidget.cpp" line="49"/>
         <source>Select file</source>
         <translation>Seleziona file</translation>
     </message>
     <message>
-        <location filename="../src/GUI/fileselectwidget.cpp" line="51"/>
+        <location filename="../src/GUI/fileselectwidget.cpp" line="59"/>
         <source>No output file selected.</source>
         <translation>Nessun file di output selezionato.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/fileselectwidget.cpp" line="61"/>
+        <location filename="../src/GUI/fileselectwidget.cpp" line="69"/>
         <source>%1 is a directory.</source>
         <translation>%1 è una cartella.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/fileselectwidget.cpp" line="65"/>
+        <location filename="../src/GUI/fileselectwidget.cpp" line="73"/>
         <source>%1 is not writable.</source>
         <translation>%1 non è scrivibile.</translation>
     </message>
@@ -1203,97 +1204,102 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="152"/>
+        <location filename="../src/map/maplist.cpp" line="154"/>
         <source>Supported files</source>
         <translation>File supportati</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="154"/>
+        <location filename="../src/map/maplist.cpp" line="156"/>
         <source>AlpineQuest maps</source>
         <translation>Mappe AlpineQuest</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="155"/>
+        <location filename="../src/map/maplist.cpp" line="158"/>
         <source>Garmin IMG maps</source>
         <translation>Mappe Garmin IMG</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="157"/>
+        <location filename="../src/map/maplist.cpp" line="160"/>
         <source>Garmin JNX maps</source>
         <translation>Mappe Garmin JNX</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="158"/>
+        <location filename="../src/map/maplist.cpp" line="161"/>
         <source>BSB nautical charts</source>
         <translation>Carte nautiche BSB</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="159"/>
+        <location filename="../src/map/maplist.cpp" line="157"/>
         <source>GEMF maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="160"/>
+        <location filename="../src/map/maplist.cpp" line="162"/>
         <source>KMZ maps</source>
         <translation>Mappe KMZ</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="161"/>
+        <location filename="../src/map/maplist.cpp" line="163"/>
         <source>Mapsforge maps</source>
         <translation>Mappe Mapsforge</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="162"/>
+        <location filename="../src/map/maplist.cpp" line="164"/>
         <source>OziExplorer maps</source>
         <translation>Mappe OziExplorer</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="163"/>
+        <location filename="../src/map/maplist.cpp" line="165"/>
         <source>MBTiles maps</source>
         <translation>Mappe MBTiles</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="164"/>
+        <location filename="../src/map/maplist.cpp" line="166"/>
+        <source>Orux maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="167"/>
         <source>QuickChart maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="166"/>
+        <location filename="../src/map/maplist.cpp" line="169"/>
         <source>Osmdroid SQLite maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="169"/>
+        <location filename="../src/map/maplist.cpp" line="172"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>Mappe/Atlanti TrekBuddy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="170"/>
+        <location filename="../src/map/maplist.cpp" line="173"/>
         <source>GeoTIFF images</source>
         <translation>Immagini GeoTIFF</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="174"/>
+        <location filename="../src/map/maplist.cpp" line="177"/>
         <source>All files</source>
         <translation type="unfinished">Tutti i file</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="165"/>
+        <location filename="../src/map/maplist.cpp" line="168"/>
         <source>TwoNav maps</source>
         <translation>Mappe TwoNav</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="167"/>
+        <location filename="../src/map/maplist.cpp" line="170"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
         <translation>Mappe Locus/OsmAnd/RMaps o SQLite</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="171"/>
+        <location filename="../src/map/maplist.cpp" line="174"/>
         <source>World-file georeferenced images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="173"/>
+        <location filename="../src/map/maplist.cpp" line="176"/>
         <source>Online map sources</source>
         <translation>Mappe online</translation>
     </message>
