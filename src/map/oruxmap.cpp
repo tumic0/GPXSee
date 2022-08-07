@@ -75,21 +75,55 @@ static PointD corner2point(const QString &name, const QSize &size)
 		return PointD();
 }
 
-static Projection::Setup params2setup(const QStringList &list)
+static Projection::Setup polyconic2setup(const QStringList &list)
 {
-	double params[7] = {0, 0, 1, 0, 0, 0, 0};
+	double params[6];
 	bool ok;
 
-	for (int i = 1; i < list.size(); i++) {
-		if (!list.at(i).isEmpty()) {
-			params[i - 1] = list.at(i).toDouble(&ok);
-			if (!ok)
-				return Projection::Setup();
-		}
+	if (list.size() < 7)
+		return Projection::Setup();
+	for (int i = 1; i < 7; i++) {
+		params[i - 1] = list.at(i).toDouble(&ok);
+		if (!ok)
+			return Projection::Setup();
 	}
 
-	return Projection::Setup(params[0], params[1], params[2], params[3],
-	  params[4], params[5], params[6]);
+	return Projection::Setup(params[0], params[1], NAN, params[4],
+	  params[5], params[2], params[3]);
+}
+
+static Projection::Setup llc2setup(const QStringList &list)
+{
+	double params[3];
+	bool ok;
+
+	if (list.size() < 4)
+		return Projection::Setup();
+	for (int i = 1; i < 4; i++) {
+		params[i - 1] = list.at(i).toDouble(&ok);
+		if (!ok)
+			return Projection::Setup();
+	}
+
+	return Projection::Setup(NAN, params[0], NAN, params[1], params[2], NAN,
+	  NAN);
+}
+
+static Projection::Setup tm2setup(const QStringList &list)
+{
+	double params[5];
+	bool ok;
+
+	if (list.size() < 6)
+		return Projection::Setup();
+	for (int i = 1; i < 6; i++) {
+		params[i - 1] = list.at(i).toDouble(&ok);
+		if (!ok)
+			return Projection::Setup();
+	}
+
+	return Projection::Setup(params[1], params[0], params[2], params[3],
+	  params[4], NAN, NAN);
 }
 
 static Projection::Setup utm2setup(const QStringList &list)
@@ -119,15 +153,11 @@ static Projection createProjection(const GCS &gcs, const QString &name)
 	else if (pl.first() == "Mercator")
 		pcs = PCS(gcs, 1024, Projection::Setup(), 9001);
 	else if (pl.first() == "Transverse Mercator")
-		pcs = PCS(gcs, 9807, params2setup(pl), 9001);
+		pcs = PCS(gcs, 9807, tm2setup(pl), 9001);
 	else if (pl.first() == "Lambert Conformal Conic")
-		pcs = PCS(gcs, 9802, params2setup(pl), 9001);
-	else if (pl.first() == "Albers Equal Area")
-		pcs = PCS(gcs, 9822, params2setup(pl), 9001);
-	else if (pl.first() == "(A)Lambert Azimuthual Equal Area")
-		pcs = PCS(gcs, 9820, params2setup(pl), 9001);
+		pcs = PCS(gcs, 9802, llc2setup(pl), 9001);
 	else if (pl.first() == "Polyconic (American)")
-		pcs = PCS(gcs, 9818, params2setup(pl), 9001);
+		pcs = PCS(gcs, 9818, polyconic2setup(pl), 9001);
 	else if (pl.first() == "(NZTM2) New Zealand TM 2000")
 		pcs = PCS(gcs, 9807, Projection::Setup(0, 173.0, 0.9996, 1600000,
 		  10000000, NAN, NAN), 9001);
