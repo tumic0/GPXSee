@@ -465,6 +465,20 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>xml</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.orux.map+xml</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Orux Map File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>aqm</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
@@ -1522,6 +1536,27 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.twonav.trk</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.oruxmap.xml</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://www.oruxmaps.com/OruxMapsManual-9.0_en.pdf</string>
+			<key>UTTypeDescription</key>
+			<string>Orux Map File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.xml</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>xml</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.orux.map+xml</string>
 			</dict>
 		</dict>
 	</array>

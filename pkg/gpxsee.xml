@@ -331,4 +331,12 @@
 		<glob pattern="*.qct"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.orux.map+xml">
+		<comment>Orux Map File</comment>
+		<sub-class-of type="application/xml"/>
+		<generic-icon name="application-xml"/>
+		<root-XML namespaceURI="http://oruxtracker.com/app/res/calibration" localName="OruxTracker"/>
+		<glob pattern="*.otrk2.xml"/>
+	</mime-type>
+
 </mime-info>
