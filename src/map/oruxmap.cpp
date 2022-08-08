@@ -92,6 +92,22 @@ static Projection::Setup lcc2setup(const QStringList &list)
 	  params[5], params[2], params[3]);
 }
 
+static Projection::Setup laea2setup(const QStringList &list)
+{
+	double params[2];
+	bool ok;
+
+	if (list.size() < 3)
+		return Projection::Setup();
+	for (int i = 1; i < 3; i++) {
+		params[i - 1] = list.at(i).toDouble(&ok);
+		if (!ok)
+			return Projection::Setup();
+	}
+
+	return Projection::Setup(params[1], params[0], NAN, 0, 0, NAN, NAN);
+}
+
 static Projection::Setup polyconic2setup(const QStringList &list)
 {
 	double params[3];
@@ -156,6 +172,8 @@ static Projection createProjection(const GCS &gcs, const QString &name)
 		pcs = PCS(gcs, 9807, tm2setup(pl), 9001);
 	else if (pl.first() == "Lambert Conformal Conic")
 		pcs = PCS(gcs, 9802, lcc2setup(pl), 9001);
+	else if (pl.first() == "(A)Lambert Azimuthual Equal Area")
+		pcs = PCS(gcs, 9820, laea2setup(pl), 9001);
 	else if (pl.first() == "Polyconic (American)")
 		pcs = PCS(gcs, 9818, polyconic2setup(pl), 9001);
 	else if (pl.first() == "(NZTM2) New Zealand TM 2000")
