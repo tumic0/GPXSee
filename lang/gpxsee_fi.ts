@@ -1256,7 +1256,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="166"/>
         <source>Orux maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Orux-kartat</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="167"/>
