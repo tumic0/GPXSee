@@ -75,7 +75,7 @@ static PointD corner2point(const QString &name, const QSize &size)
 		return PointD();
 }
 
-static Projection::Setup polyconic2setup(const QStringList &list)
+static Projection::Setup lcc2setup(const QStringList &list)
 {
 	double params[6];
 	bool ok;
@@ -92,7 +92,7 @@ static Projection::Setup polyconic2setup(const QStringList &list)
 	  params[5], params[2], params[3]);
 }
 
-static Projection::Setup llc2setup(const QStringList &list)
+static Projection::Setup polyconic2setup(const QStringList &list)
 {
 	double params[3];
 	bool ok;
@@ -155,7 +155,7 @@ static Projection createProjection(const GCS &gcs, const QString &name)
 	else if (pl.first() == "Transverse Mercator")
 		pcs = PCS(gcs, 9807, tm2setup(pl), 9001);
 	else if (pl.first() == "Lambert Conformal Conic")
-		pcs = PCS(gcs, 9802, llc2setup(pl), 9001);
+		pcs = PCS(gcs, 9802, lcc2setup(pl), 9001);
 	else if (pl.first() == "Polyconic (American)")
 		pcs = PCS(gcs, 9818, polyconic2setup(pl), 9001);
 	else if (pl.first() == "(NZTM2) New Zealand TM 2000")
