@@ -151,6 +151,19 @@ static Projection::Setup utm2setup(const QStringList &list)
 	return ok ? UTM::setup(zone) : Projection::Setup();
 }
 
+static Projection::Setup mercator2setup(const QStringList &list)
+{
+	double lon;
+	bool ok;
+
+	if (list.size() < 2)
+		return Projection::Setup(0, 0, NAN, 0, 0, NAN, NAN);
+	lon = list.at(1).toDouble(&ok);
+
+	return ok ? Projection::Setup(0, lon, NAN, 0, 0, NAN, NAN)
+	  : Projection::Setup();
+}
+
 static GCS createGCS(const QString &datum)
 {
 	QStringList dl(datum.split(':'));
@@ -168,6 +181,8 @@ static Projection createProjection(const GCS &gcs, const QString &name)
 		pcs = PCS(gcs, 9807, utm2setup(pl), 9001);
 	else if (pl.first() == "Mercator")
 		pcs = PCS(gcs, 1024, Projection::Setup(), 9001);
+	else if (pl.first() == "Mercator Ellipsoidal")
+		pcs = PCS(gcs, 9804, mercator2setup(pl), 9001);
 	else if (pl.first() == "Transverse Mercator")
 		pcs = PCS(gcs, 9807, tm2setup(pl), 9001);
 	else if (pl.first() == "Lambert Conformal Conic")
@@ -176,39 +191,15 @@ static Projection createProjection(const GCS &gcs, const QString &name)
 		pcs = PCS(gcs, 9820, laea2setup(pl), 9001);
 	else if (pl.first() == "Polyconic (American)")
 		pcs = PCS(gcs, 9818, polyconic2setup(pl), 9001);
-	else if (pl.first() == "(NZTM2) New Zealand TM 2000")
-		pcs = PCS(gcs, 9807, Projection::Setup(0, 173.0, 0.9996, 1600000,
-		  10000000, NAN, NAN), 9001);
-	else if (pl.first() == "(BNG) British National Grid")
-		pcs = PCS(gcs, 9807, Projection::Setup(49, -2, 0.999601, 400000,
-		  -100000, NAN, NAN), 9001);
 	else if (pl.first() == "(IG) Irish Grid")
 		pcs = PCS(gcs, 9807, Projection::Setup(53.5, -8, 1.000035, 200000,
 		  250000, NAN, NAN), 9001);
-	else if (pl.first() == "(SG) Swedish Grid")
-		pcs = PCS(gcs, 9807, Projection::Setup(0, 15.808278, 1, 1500000, 0, NAN,
-		  NAN), 9001);
-	else if (pl.first() == "(I) France Zone I")
-		pcs = PCS(gcs, 9802, Projection::Setup(49.5, 2.337229, NAN, 600000,
-		  1200000, 48.598523, 50.395912), 9001);
-	else if (pl.first() == "(II) France Zone II")
-		pcs = PCS(gcs, 9802, Projection::Setup(46.8, 2.337229, NAN, 600000,
-		  2200000, 45.898919, 47.696014), 9001);
-	else if (pl.first() == "(III) France Zone III")
-		pcs = PCS(gcs, 9802, Projection::Setup(44.1, 2.337229, NAN, 600000,
-		  3200000, 43.199291, 44.996094), 9001);
-	else if (pl.first() == "(IV) France Zone IV")
-		pcs = PCS(gcs, 9802, Projection::Setup(42.165, 2.337229, NAN, 234.358,
-		  4185861.369, 41.560388, 42.767663), 9001);
-	else if (pl.first() == "(VICGRID) Victoria Australia")
-		pcs = PCS(gcs, 9802, Projection::Setup(-37, 145, NAN, 2500000, 4500000,
-		  -36, -38), 9001);
-	else if (pl.first() == "(VG94) VICGRID94 Victoria Australia")
-		pcs = PCS(gcs, 9802, Projection::Setup(-37, 145, NAN, 2500000, 2500000,
-		  -36, -38), 9001);
 	else if (pl.first() == "(SUI) Swiss Grid")
 		pcs = PCS(gcs, 9815, Projection::Setup(46.570866, 7.26225, 1.0, 600000,
 		  200000, 90.0, 90.0), 9001);
+	else if (pl.first() == "Rijksdriehoeksmeting")
+		pcs = PCS(gcs, 9809, Projection::Setup(52.1561605555556,
+		  5.38763888888889, 0.9999079, 155000, 463000, NAN, NAN), 9001);
 	else
 		return Projection();
 
