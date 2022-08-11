@@ -3,6 +3,7 @@
 
 #include <QDebug>
 #include <QSqlDatabase>
+#include <QDir>
 #include "map.h"
 #include "projection.h"
 #include "transform.h"
@@ -44,9 +45,10 @@ public:
 private:
 	struct Zoom {
 		Zoom(int zoom, const QSize &tileSize, const QSize &size,
-		  const Projection &proj, const Transform &transform)
+		  const Projection &proj, const Transform &transform,
+		  const QString &fileName, const QString &set)
 		  : zoom(zoom), tileSize(tileSize), size(size), projection(proj),
-		  transform(transform) {}
+		  transform(transform), fileName(fileName), set(set) {}
 		bool operator<(const Zoom &other) const
 		  {return zoom < other.zoom;}
 
@@ -55,14 +57,16 @@ private:
 		QSize size;
 		Projection projection;
 		Transform transform;
+		QString fileName;
+		QDir set;
 	};
 
-	bool readXML(const QString &path);
-	void oruxTracker(QXmlStreamReader &reader, int level);
-	void mapCalibration(QXmlStreamReader &reader, int level);
+	bool readXML(const QString &path, const QString &dir = QString());
+	void oruxTracker(QXmlStreamReader &reader, const QString &dir, int level);
+	void mapCalibration(QXmlStreamReader &reader, const QString &dir, int level);
 	void calibrationPoints(QXmlStreamReader &reader, const QSize &size,
 	  QList<CalibrationPoint> &points);
-	QPixmap tile(int zoom, int x, int y) const;
+	QPixmap tile(const Zoom &z, int x, int y) const;
 
 	friend QDebug operator<<(QDebug dbg, const Zoom &zoom);
 

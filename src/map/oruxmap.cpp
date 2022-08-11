@@ -234,6 +234,10 @@ void OruxMap::calibrationPoints(QXmlStreamReader &reader, const QSize &size,
 				return;
 
 			CalibrationPoint p(corner2point(corner, size), Coordinates(lon, lat));
+			if (!p.isValid()) {
+				reader.raiseError(QString("invalid calibration point"));
+				return;
+			}
 			points.append(p);
 
 			reader.readElementText();
@@ -242,13 +246,15 @@ void OruxMap::calibrationPoints(QXmlStreamReader &reader, const QSize &size,
 	}
 }
 
-void OruxMap::mapCalibration(QXmlStreamReader &reader, int level)
+void OruxMap::mapCalibration(QXmlStreamReader &reader, const QString &dir,
+  int level)
 {
 	int zoom;
 	QSize tileSize, size, calibrationSize;
-	QString datum, projection;
+	QString datum, projection, fileName;
 	QList<CalibrationPoint> points;
 	Projection proj;
+	Transform t;
 
 	QXmlStreamAttributes attr = reader.attributes();
 	if (!intAttr(reader, attr, "layerLevel", zoom))
@@ -256,10 +262,10 @@ void OruxMap::mapCalibration(QXmlStreamReader &reader, int level)
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("OruxTracker"))
-			oruxTracker(reader, level + 1);
+			oruxTracker(reader, dir, level + 1);
 		else if (reader.name() == QLatin1String("MapName")) {
 			QString name(reader.readElementText());
-			if (!level)
+			if (!level && dir.isEmpty())
 				_name = name;
 		} else if (reader.name() == QLatin1String("MapChunks")) {
 			int xMax, yMax, width, height;
@@ -276,6 +282,8 @@ void OruxMap::mapCalibration(QXmlStreamReader &reader, int level)
 			if (!strAttr(reader, attr, "datum", datum))
 				return;
 			if (!strAttr(reader, attr, "projection", projection))
+				return;
+			if (!strAttr(reader, attr, "file_name", fileName))
 				return;
 
 			tileSize = QSize(width, height);
@@ -309,29 +317,50 @@ void OruxMap::mapCalibration(QXmlStreamReader &reader, int level)
 			calibrationSize = QSize(width, height);
 
 			reader.readElementText();
-		} else if (reader.name() == QLatin1String("CalibrationPoints"))
+		} else if (reader.name() == QLatin1String("CalibrationPoints")) {
 			calibrationPoints(reader, calibrationSize, points);
-		else
+
+			t = computeTransformation(proj, points);
+			if (!t.isValid()) {
+				reader.raiseError(t.errorString());
+				return;
+			}
+		} else
 			reader.skipCurrentElement();
 	}
 
 	if (tileSize.isValid()) {
-		Transform t(computeTransformation(proj, points));
-		_zooms.append(Zoom(zoom, tileSize, size, proj, t));
+		if (!t.isValid()) {
+			reader.raiseError("Invalid map calibration");
+			return;
+		}
+
+		QDir mapDir(QFileInfo(path()).absoluteDir());
+		QDir subDir = dir.isEmpty()
+		  ? mapDir : QDir(mapDir.absoluteFilePath(dir));
+		QString set(subDir.absoluteFilePath("set"));
+
+		_zooms.append(Zoom(zoom, tileSize, size, proj, t, fileName, set));
 	}
 }
 
-void OruxMap::oruxTracker(QXmlStreamReader &reader, int level)
+void OruxMap::oruxTracker(QXmlStreamReader &reader, const QString &dir,
+  int level)
 {
+	if (level > 1 || (level && !dir.isEmpty())) {
+		reader.raiseError("invalid map nesting");
+		return;
+	}
+
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("MapCalibration"))
-			mapCalibration(reader, level);
+			mapCalibration(reader, dir, level);
 		else
 			reader.skipCurrentElement();
 	}
 }
 
-bool OruxMap::readXML(const QString &path)
+bool OruxMap::readXML(const QString &path, const QString &dir)
 {
 	QFile file(path);
 
@@ -341,7 +370,7 @@ bool OruxMap::readXML(const QString &path)
 	QXmlStreamReader reader(&file);
 	if (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("OruxTracker"))
-			oruxTracker(reader, 0);
+			oruxTracker(reader, dir, 0);
 		else
 			reader.raiseError("Not a Orux map calibration file");
 	}
@@ -354,51 +383,67 @@ bool OruxMap::readXML(const QString &path)
 	return true;
 }
 
-
 OruxMap::OruxMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _zoom(0), _mapRatio(1.0), _valid(false)
 {
+	QFileInfo fi(fileName);
+	QDir dir(fi.absoluteDir());
+
 	if (!readXML(fileName))
 		return;
 	if (_zooms.isEmpty()) {
-		_errorString = "No usable zoom level found";
-		return;
+		QStringList list(dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot));
+		for (int i = 0; i < list.size(); i++) {
+			QDir subDir(dir.absoluteFilePath(list.at(i)));
+			if (!readXML(subDir.absoluteFilePath(list.at(i) + ".otrk2.xml"),
+			  list.at(i))) {
+				_errorString = list.at(i) + ": " + _errorString;
+				return;
+			}
+		}
+		if (_zooms.isEmpty()) {
+			_errorString = "No usable zoom level found";
+			return;
+		}
 	}
 	std::sort(_zooms.begin(), _zooms.end());
 
 
-	QFileInfo fi(fileName);
-	QDir dir(fi.absoluteDir());
-	QString dbFile(dir.absoluteFilePath("OruxMapsImages.db"));
-	if (!QFileInfo::exists(dbFile)) {
-		_errorString = "Image DB file not found";
-		return;
+	if (dir.exists("OruxMapsImages.db")) {
+		QString dbFile(dir.absoluteFilePath("OruxMapsImages.db"));
+		_db = QSqlDatabase::addDatabase("QSQLITE", dbFile);
+		_db.setDatabaseName(dbFile);
+		_db.setConnectOptions("QSQLITE_OPEN_READONLY");
+		if (!_db.open()) {
+			_errorString = "Error opening database file";
+			return;
+		}
+
+		QSqlRecord r = _db.record("tiles");
+		if (r.isEmpty()
+		  || r.field(0).name() != "x"
+		  || META_TYPE(r.field(0).type()) != QMetaType::Int
+		  || r.field(1).name() != "y"
+		  || META_TYPE(r.field(1).type()) != QMetaType::Int
+		  || r.field(2).name() != "z"
+		  || META_TYPE(r.field(2).type()) != QMetaType::Int
+		  || r.field(3).name() != "image"
+		  || META_TYPE(r.field(3).type()) != QMetaType::QByteArray) {
+			_errorString = "Invalid table format";
+			return;
+		}
+
+		_db.close();
+	} else {
+		for (int i = 0; i < _zooms.size(); i++) {
+			if (!_zooms.at(i).set.exists()) {
+				_errorString = "missing set directory (level "
+				  + QString::number(_zooms.at(i).zoom) + ")";
+				return;
+			}
+		}
 	}
 
-	_db = QSqlDatabase::addDatabase("QSQLITE", dbFile);
-	_db.setDatabaseName(dbFile);
-	_db.setConnectOptions("QSQLITE_OPEN_READONLY");
-
-	if (!_db.open()) {
-		_errorString = "Error opening database file";
-		return;
-	}
-
-	QSqlRecord r = _db.record("tiles");
-	if (r.isEmpty()
-	  || r.field(0).name() != "x"
-	  || META_TYPE(r.field(0).type()) != QMetaType::Int
-	  || r.field(1).name() != "y"
-	  || META_TYPE(r.field(1).type()) != QMetaType::Int
-	  || r.field(2).name() != "z"
-	  || META_TYPE(r.field(2).type()) != QMetaType::Int
-	  || r.field(3).name() != "image"
-	  || META_TYPE(r.field(3).type()) != QMetaType::QByteArray) {
-		_errorString = "Invalid table format";
-		return;
-	}
-
-	_db.close();
 	_valid = true;
 }
 
@@ -436,12 +481,14 @@ int OruxMap::zoomOut()
 
 void OruxMap::load()
 {
-	_db.open();
+	if (_db.isValid())
+		_db.open();
 }
 
 void OruxMap::unload()
 {
-	_db.close();
+	if (_db.isValid())
+		_db.close();
 }
 
 void OruxMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
@@ -450,19 +497,37 @@ void OruxMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 	_mapRatio = mapRatio;
 }
 
-QPixmap OruxMap::tile(int zoom, int x, int y) const
+QPixmap OruxMap::tile(const Zoom &z, int x, int y) const
 {
-	QSqlQuery query(_db);
-	query.prepare("SELECT image FROM tiles WHERE z=:z AND x=:x AND y=:y");
-	query.bindValue(":z", zoom);
-	query.bindValue(":x", x);
-	query.bindValue(":y", y);
-	query.exec();
-	if (!query.first())
-		return QPixmap();
+	if (_db.isValid()) {
+		QSqlQuery query(_db);
+		query.prepare("SELECT image FROM tiles WHERE z=:z AND x=:x AND y=:y");
+		query.bindValue(":z", z.zoom);
+		query.bindValue(":x", x);
+		query.bindValue(":y", y);
+		query.exec();
 
-	QImage img(QImage::fromData(query.value(0).toByteArray()));
-	return QPixmap::fromImage(img);
+		if (!query.first()) {
+			qWarning("%s: SQL %d-%d-%d: not found", qPrintable(name()), z.zoom,
+			  x, y);
+			return QPixmap();
+		} else {
+			QImage img(QImage::fromData(query.value(0).toByteArray()));
+			return QPixmap::fromImage(img);
+		}
+	} else {
+		QString fileName(z.fileName + "_" + QString::number(x) + "_"
+		  + QString::number(y) + ".omc2");
+		QString path(z.set.absoluteFilePath(fileName));
+		if (!QFileInfo::exists(path)) {
+			qWarning("%s: %s: not found", qPrintable(name()),
+			  qPrintable(fileName));
+			return QPixmap();
+		} else {
+			QImage img(path);
+			return QPixmap::fromImage(img);
+		}
+	}
 }
 
 void OruxMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
@@ -484,14 +549,12 @@ void OruxMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			  + "_" + QString::number(x/z.tileSize.width())
 			  + "_" + QString::number(y/z.tileSize.height());
 			if (!QPixmapCache::find(key, &pixmap)) {
-				pixmap = tile(z.zoom, x/z.tileSize.width(), y/z.tileSize.height());
+				pixmap = tile(z, x/z.tileSize.width(), y/z.tileSize.height());
 				if (!pixmap.isNull())
 					QPixmapCache::insert(key, pixmap);
 			}
 
-			if (pixmap.isNull())
-				qWarning("%s: error loading tile image", qPrintable(key));
-			else {
+			if (!pixmap.isNull()) {
 				pixmap.setDevicePixelRatio(_mapRatio);
 				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
 				painter->drawPixmap(tp, pixmap);
