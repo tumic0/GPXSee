@@ -251,8 +251,7 @@ void OruxMap::mapCalibration(QXmlStreamReader &reader, const QString &dir,
 {
 	int zoom;
 	QSize tileSize, size, calibrationSize;
-	QString datum, projection, fileName;
-	QList<CalibrationPoint> points;
+	QString fileName;
 	Projection proj;
 	Transform t;
 
@@ -269,6 +268,7 @@ void OruxMap::mapCalibration(QXmlStreamReader &reader, const QString &dir,
 				_name = name;
 		} else if (reader.name() == QLatin1String("MapChunks")) {
 			int xMax, yMax, width, height;
+			QString datum, projection;
 
 			QXmlStreamAttributes attr = reader.attributes();
 			if (!intAttr(reader, attr, "xMax", xMax))
@@ -318,6 +318,8 @@ void OruxMap::mapCalibration(QXmlStreamReader &reader, const QString &dir,
 
 			reader.readElementText();
 		} else if (reader.name() == QLatin1String("CalibrationPoints")) {
+			QList<CalibrationPoint> points;
+
 			calibrationPoints(reader, calibrationSize, points);
 
 			t = computeTransformation(proj, points);
