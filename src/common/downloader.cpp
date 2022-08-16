@@ -68,7 +68,7 @@ void NetworkTimeout::timerEvent(QTimerEvent *ev)
 		return;
 	QNetworkReply *reply = static_cast<QNetworkReply*>(parent());
 	if (reply->isRunning())
-		reply->close();
+		reply->abort();
 	_timer.stop();
 }
 
