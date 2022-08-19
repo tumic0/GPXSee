@@ -598,7 +598,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="477"/>
         <source>Show tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis faner</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="486"/>
@@ -1236,7 +1236,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="157"/>
         <source>GEMF maps</source>
-        <translation type="unfinished"></translation>
+        <translation>GEMF-kart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="162"/>
@@ -1256,7 +1256,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="166"/>
         <source>Orux maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Orux-kart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="167"/>
@@ -1266,7 +1266,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="169"/>
         <source>Osmdroid SQLite maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Osmdroid SQLite-kart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="170"/>
@@ -1286,7 +1286,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="177"/>
         <source>All files</source>
-        <translation type="unfinished">Alle filer</translation>
+        <translation>Alle filer</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="168"/>
