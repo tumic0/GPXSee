@@ -200,13 +200,13 @@
         <location filename="../src/GUI/elevationgraph.cpp" line="60"/>
         <source>Up</source>
         <extracomment>Use an Unicode arrow (U+2197) when there is no abbreviation or extremly short term for &quot;Up&quot; in your language</extracomment>
-        <translation type="unfinished">Opp</translation>
+        <translation>Opp</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="64"/>
         <source>Down</source>
         <extracomment>Use an Unicode arrow (U+2198) when there is no abbreviation or extremly short term for &quot;Down&quot; in your language</extracomment>
-        <translation type="unfinished">Ned</translation>
+        <translation>Ned</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="67"/>
@@ -374,7 +374,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="219"/>
         <source>Open directory...</source>
-        <translation type="unfinished">Åpne mappe …</translation>
+        <translation>Åpne mappe …</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="224"/>
@@ -712,7 +712,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="955"/>
         <source>Open directory</source>
-        <translation type="unfinished">Åpne mappe</translation>
+        <translation>Åpne mappe</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1959"/>
@@ -1029,7 +1029,7 @@
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="28"/>
         <source>Top</source>
-        <translation type="unfinished">Topp</translation>
+        <translation>Topp</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="30"/>
@@ -1921,7 +1921,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="779"/>
         <source>Initial paths</source>
-        <translation type="unfinished">Forvalgte stier</translation>
+        <translation>Forvalgte stier</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="814"/>
