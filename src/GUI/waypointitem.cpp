@@ -99,18 +99,26 @@ void WaypointItem::updateCache()
 	QPainterPath p;
 	qreal pointSize = _font.bold() ? HS(_size) : _size;
 
-	if (_showLabel) {
+	if (_showLabel && !_waypoint.name().isEmpty()) {
 		QFontMetrics fm(_font);
 		_labelBB = fm.tightBoundingRect(_waypoint.name());
 
 		if (_showIcon && _icon) {
 			if (_font.bold())
-				p.addRect(-_icon->width() * 0.625, -_icon->height() * 1.25,
+				p.addRect(-_icon->width() * 0.625, _waypoint.icon().isNull()
+				  ? -_icon->height() * 1.25 : -_icon->height() * 0.625,
 				  _icon->width() * 1.25, _icon->height() * 1.25);
 			else
-				p.addRect(-_icon->width()/2.0, -_icon->height(), _icon->width(),
+				p.addRect(-_icon->width()/2.0, _waypoint.icon().isNull()
+				  ? -_icon->height() : -_icon->height()/2, _icon->width(),
 				  _icon->height());
-			p.addRect(0, 0, _labelBB.width(), _labelBB.height() + fm.descent());
+
+			if (_waypoint.icon().isNull())
+				p.addRect(0, 0, _labelBB.width(), _labelBB.height()
+				  + fm.descent());
+			else
+				p.addRect(_icon->width()/2, _icon->height()/2, _labelBB.width(),
+				  _labelBB.height() + fm.descent());
 		} else {
 			p.addRect(-pointSize/2, -pointSize/2, pointSize, pointSize);
 			p.addRect(pointSize/2, pointSize/2, _labelBB.width(),
@@ -119,10 +127,12 @@ void WaypointItem::updateCache()
 	} else {
 		if (_showIcon && _icon) {
 			if (_font.bold())
-				p.addRect(-_icon->width() * 0.625, -_icon->height() * 1.25,
+				p.addRect(-_icon->width() * 0.625, _waypoint.icon().isNull()
+				  ? -_icon->height() * 1.25 : -_icon->height() * 0.625,
 				  _icon->width() * 1.25, _icon->height() * 1.25);
 			else
-				p.addRect(-_icon->width()/2, -_icon->height(), _icon->width(),
+				p.addRect(-_icon->width()/2, _waypoint.icon().isNull()
+				  ? -_icon->height() : -_icon->height()/2, _icon->width(),
 				  _icon->height());
 		} else
 			p.addRect(-pointSize/2, -pointSize/2, pointSize, pointSize);
@@ -140,12 +150,16 @@ void WaypointItem::paint(QPainter *painter,
 
 	painter->setPen(_color);
 
-	if (_showLabel) {
+	if (_showLabel && !_waypoint.name().isEmpty()) {
 		painter->setFont(_font);
-		if (_showIcon && _icon)
-			painter->drawText(-qMax(_labelBB.x(), 0), _labelBB.height(),
-			  _waypoint.name());
-		else
+		if (_showIcon && _icon) {
+			if (_waypoint.icon().isNull())
+				painter->drawText(-qMax(_labelBB.x(), 0), _labelBB.height(),
+				  _waypoint.name());
+			else
+				painter->drawText(_icon->width()/2 - qMax(_labelBB.x(), 0),
+				  _icon->height()/2 + _labelBB.height(), _waypoint.name());
+		} else
 			painter->drawText(pointSize/2 - qMax(_labelBB.x(), 0), pointSize/2
 			  + _labelBB.height(), _waypoint.name());
 	}
@@ -153,11 +167,13 @@ void WaypointItem::paint(QPainter *painter,
 	painter->setBrush(QBrush(_color, Qt::SolidPattern));
 	if (_showIcon && _icon) {
 		if (_font.bold())
-			painter->drawPixmap(-_icon->width() * 0.625, -_icon->height() * 1.25,
+			painter->drawPixmap(-_icon->width() * 0.625, _waypoint.icon().isNull()
+			  ? -_icon->height() * 1.25 : -_icon->height() * 0.625,
 			  _icon->scaled(_icon->width() * 1.25, _icon->height() * 1.25,
 			  Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 		else
-			painter->drawPixmap(-_icon->width()/2.0, -_icon->height(), *_icon);
+			painter->drawPixmap(-_icon->width()/2.0, _waypoint.icon().isNull()
+			  ? -_icon->height() : -_icon->height()/2, *_icon);
 	} else
 		painter->drawEllipse(-pointSize/2, -pointSize/2, pointSize, pointSize);
 
