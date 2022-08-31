@@ -19,11 +19,11 @@ private:
 	void kml(const QDir &dir, QList<TrackData> &tracks, QList<Area> &areas,
 	  QVector<Waypoint> &waypoints);
 	void document(const QDir &dir, QList<TrackData> &tracks, QList<Area> &areas,
-	  QVector<Waypoint> &waypoints, QMap<QString, QPixmap> &icons);
+	  QVector<Waypoint> &waypoints);
 	void folder(const QDir &dir, QList<TrackData> &tracks, QList<Area> &areas,
-	  QVector<Waypoint> &waypoints, QMap<QString, QPixmap> &icons);
+	  QVector<Waypoint> &waypoints, const QMap<QString, QPixmap> &icons);
 	void placemark(QList<TrackData> &tracks, QList<Area> &areas,
-	  QVector<Waypoint> &waypoints, QMap<QString, QPixmap> &icons);
+	  QVector<Waypoint> &waypoints, const QMap<QString, QPixmap> &icons);
 	void multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
 	  QVector<Waypoint> &waypoints, const QString &name, const QString &desc,
 	  const QDateTime &timestamp);

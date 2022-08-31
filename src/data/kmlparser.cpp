@@ -513,7 +513,7 @@ void KMLParser::multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
 }
 
 void KMLParser::placemark(QList<TrackData> &tracks, QList<Area> &areas,
-  QVector<Waypoint> &waypoints, QMap<QString, QPixmap> &icons)
+  QVector<Waypoint> &waypoints, const QMap<QString, QPixmap> &icons)
 {
 	QString name, desc, phone, address, id;
 	QDateTime timestamp;
@@ -618,11 +618,11 @@ void KMLParser::style(const QDir &dir, QMap<QString, QPixmap> &icons)
 
 void KMLParser::folder(const QDir &dir, QList<TrackData> &tracks,
   QList<Area> &areas, QVector<Waypoint> &waypoints,
-  QMap<QString, QPixmap> &icons)
+  const QMap<QString, QPixmap> &icons)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Document"))
-			document(dir, tracks, areas, waypoints, icons);
+			document(dir, tracks, areas, waypoints);
 		else if (_reader.name() == QLatin1String("Placemark"))
 			placemark(tracks, areas, waypoints, icons);
 		else if (_reader.name() == QLatin1String("Folder"))
@@ -633,12 +633,13 @@ void KMLParser::folder(const QDir &dir, QList<TrackData> &tracks,
 }
 
 void KMLParser::document(const QDir &dir, QList<TrackData> &tracks,
-  QList<Area> &areas, QVector<Waypoint> &waypoints,
-  QMap<QString, QPixmap> &icons)
+  QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
+	QMap<QString, QPixmap> icons;
+
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Document"))
-			document(dir, tracks, areas, waypoints, icons);
+			document(dir, tracks, areas, waypoints);
 		else if (_reader.name() == QLatin1String("Placemark"))
 			placemark(tracks, areas, waypoints, icons);
 		else if (_reader.name() == QLatin1String("Folder"))
@@ -653,15 +654,13 @@ void KMLParser::document(const QDir &dir, QList<TrackData> &tracks,
 void KMLParser::kml(const QDir &dir, QList<TrackData> &tracks,
   QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
-	QMap<QString, QPixmap> icons;
-
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Document"))
-			document(dir, tracks, areas, waypoints, icons);
+			document(dir, tracks, areas, waypoints);
 		else if (_reader.name() == QLatin1String("Placemark"))
-			placemark(tracks, areas, waypoints, icons);
+			placemark(tracks, areas, waypoints, QMap<QString, QPixmap>());
 		else if (_reader.name() == QLatin1String("Folder"))
-			folder(dir, tracks, areas, waypoints, icons);
+			folder(dir, tracks, areas, waypoints, QMap<QString, QPixmap>());
 		else
 			_reader.skipCurrentElement();
 	}
