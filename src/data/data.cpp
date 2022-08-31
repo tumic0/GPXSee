@@ -53,6 +53,7 @@ static QMultiMap<QString, Parser*> parsers()
 	map.insert("gpx", &gpx);
 	map.insert("tcx", &tcx);
 	map.insert("kml", &kml);
+	map.insert("kmz", &kml);
 	map.insert("fit", &fit);
 	map.insert("csv", &csv);
 	map.insert("igc", &igc);
@@ -162,7 +163,7 @@ QString Data::formats()
 	  + qApp->translate("Data", "IGC files") + " (*.igc);;"
 	  + qApp->translate("Data", "ITN files") + " (*.itn);;"
 	  + qApp->translate("Data", "JPEG images") + " (*.jpg *.jpeg);;"
-	  + qApp->translate("Data", "KML files") + " (*.kml);;"
+	  + qApp->translate("Data", "KML files") + " (*.kml *.kmz);;"
 	  + qApp->translate("Data", "LOC files") + " (*.loc);;"
 	  + qApp->translate("Data", "NMEA files") + " (*.nmea);;"
 	  + qApp->translate("Data", "ONmove files") + " (*.omd *.ghp);;"

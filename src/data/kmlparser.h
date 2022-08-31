@@ -5,6 +5,8 @@
 #include <QDateTime>
 #include "parser.h"
 
+class QDir;
+
 class KMLParser : public Parser
 {
 public:
@@ -14,14 +16,14 @@ public:
 	int errorLine() const {return _reader.lineNumber();}
 
 private:
-	void kml(QList<TrackData> &tracks, QList<Area> &areas,
+	void kml(const QDir &dir, QList<TrackData> &tracks, QList<Area> &areas,
 	  QVector<Waypoint> &waypoints);
-	void document(QList<TrackData> &tracks, QList<Area> &areas,
-	  QVector<Waypoint> &waypoints);
-	void folder(QList<TrackData> &tracks, QList<Area> &areas,
-	  QVector<Waypoint> &waypoints);
+	void document(const QDir &dir, QList<TrackData> &tracks, QList<Area> &areas,
+	  QVector<Waypoint> &waypoints, QMap<QString, QPixmap> &icons);
+	void folder(const QDir &dir, QList<TrackData> &tracks, QList<Area> &areas,
+	  QVector<Waypoint> &waypoints, QMap<QString, QPixmap> &icons);
 	void placemark(QList<TrackData> &tracks, QList<Area> &areas,
-	  QVector<Waypoint> &waypoints);
+	  QVector<Waypoint> &waypoints, QMap<QString, QPixmap> &icons);
 	void multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
 	  QVector<Waypoint> &waypoints, const QString &name, const QString &desc,
 	  const QDateTime &timestamp);
@@ -45,6 +47,10 @@ private:
 	QDateTime timeStamp();
 	qreal number();
 	QDateTime time();
+	void style(const QDir &dir, QMap<QString, QPixmap> &icons);
+	void iconStyle(const QDir &dir, const QString &id,
+	  QMap<QString, QPixmap> &icons);
+	void icon(const QDir &dir, const QString &id, QMap<QString, QPixmap> &icons);
 
 	QXmlStreamReader _reader;
 };
