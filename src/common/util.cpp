@@ -1,6 +1,7 @@
 #include <cctype>
 #include <cmath>
 #include <QFileInfo>
+#include <QTemporaryDir>
 #ifdef Q_OS_ANDROID
 #include <QUrl>
 #include <QCoreApplication>
@@ -138,4 +139,10 @@ QString Util::displayName(const QString &path)
 #else
 	return path;
 #endif // Q_OS_ANDROID
+}
+
+const QTemporaryDir &Util::tempDir()
+{
+	static QTemporaryDir dir;
+	return dir;
 }

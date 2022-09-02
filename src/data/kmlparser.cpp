@@ -18,13 +18,8 @@
 #include <QUrl>
 #include <QRegularExpression>
 #include <private/qzipreader_p.h>
+#include "common/util.h"
 #include "kmlparser.h"
-
-static const QTemporaryDir &tempDir()
-{
-	static QTemporaryDir dir;
-	return dir;
-}
 
 static bool isZIP(QFile *file)
 {
@@ -496,6 +491,9 @@ void KMLParser::multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
   QVector<Waypoint> &waypoints, const QString &name, const QString &desc,
   const QDateTime &timestamp)
 {
+	TrackData *tp = 0;
+	Area *ap = 0;
+
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Point")) {
 			waypoints.append(Waypoint());
@@ -505,18 +503,22 @@ void KMLParser::multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
 			w.setTimestamp(timestamp);
 			point(w);
 		} else if (_reader.name() == QLatin1String("LineString")) {
-			tracks.append(TrackData());
-			TrackData &t = tracks.last();
-			t.append(SegmentData());
-			t.setName(name);
-			t.setDescription(desc);
-			lineString(t.last());
+			if (!tp) {
+				tracks.append(TrackData());
+				tp = &tracks.last();
+				tp->setName(name);
+				tp->setDescription(desc);
+			}
+			tp->append(SegmentData());
+			lineString(tp->last());
 		} else if (_reader.name() == QLatin1String("Polygon")) {
-			areas.append(Area());
-			Area &a = areas.last();
-			a.setName(name);
-			a.setDescription(desc);
-			polygon(a);
+			if (!ap) {
+				areas.append(Area());
+				ap = &areas.last();
+				ap->setName(name);
+				ap->setDescription(desc);
+			}
+			polygon(*ap);
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -525,64 +527,54 @@ void KMLParser::multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
 void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
   QMap<QString, QPixmap> &icons)
 {
-	QString name, desc, phone, address, path, link, id;
-	QDateTime timestamp;
+	QString img, id;
+	Waypoint w;
+	static QRegularExpression re("\\$\\[[^\\]]+\\]");
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("name"))
-			name = _reader.readElementText();
+			w.setName(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("description"))
-			desc = _reader.readElementText();
+			w.setDescription(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("phoneNumber"))
-			phone = _reader.readElementText();
+			w.setPhone(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("address"))
-			address = _reader.readElementText();
+			w.setAddress(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("TimeStamp"))
-			timestamp = timeStamp();
-		else if (_reader.name() == QLatin1String("Style"))
+			w.setTimestamp(timeStamp());
+		else if (_reader.name() == QLatin1String("Style")) {
 			style(ctx.dir, icons);
-		else if (_reader.name() == QLatin1String("Icon")) {
-			QString image(icon());
-
-			QRegularExpression re("\\$\\[[^\\]]+\\]");
-			image.replace(re, "0");
-			QUrl url(image);
-
-			if (url.scheme() == "http" || url.scheme() == "https")
-				link = image;
-			else {
-				if (ctx.zip) {
-					if (tempDir().isValid()) {
-						QFileInfo fi(image);
-						QByteArray id(ctx.path.toUtf8() + image.toUtf8());
-						path = tempDir().path() + "/" + QString("%0.%1").arg(
-						  QCryptographicHash::hash(id, QCryptographicHash::Sha1)
-						  .toHex(), QString(fi.suffix()));
-
-						QFile::rename(ctx.dir.absoluteFilePath(image), path);
-					}
-				} else
-					path = ctx.dir.absoluteFilePath(image);
-			}
-		} else if (_reader.name() == QLatin1String("Point")) {
-			waypoints.append(Waypoint());
-			Waypoint &w = waypoints.last();
-			w.setName(name);
-			w.setDescription(desc);
-			w.setTimestamp(timestamp);
-			w.setAddress(address);
-			w.setPhone(phone);
-			w.setIcon(icons.value(id));
-			if (!path.isNull())
-				w.addImage(path);
-			if (!link.isNull())
-				w.addLink(Link(link, "Photo Overlay"));
+			id = QString();
+		} else if (_reader.name() == QLatin1String("StyleMap"))
+			styleMap(icons);
+		else if (_reader.name() == QLatin1String("Icon"))
+			img = icon();
+		else if (_reader.name() == QLatin1String("Point"))
 			point(w);
-		} else if (_reader.name() == QLatin1String("styleUrl")) {
-			id = _reader.readElementText();
-			id = (id.at(0) == '#') ? id.right(id.size() - 1) : QString();
-		} else
+		else if (_reader.name() == QLatin1String("styleUrl"))
+			id = styleUrl();
+		else
 			_reader.skipCurrentElement();
+	}
+
+	if (!w.coordinates().isNull()) {
+		w.setIcon(icons.value(id));
+
+		img.replace(re, "0");
+		if (!QUrl(img).scheme().isEmpty())
+			w.addLink(Link(img, "Photo Overlay"));
+		else if (ctx.zip && Util::tempDir().isValid()) {
+			QFileInfo fi(img);
+			QByteArray id(ctx.path.toUtf8() + img.toUtf8());
+			QString path(Util::tempDir().path() + "/" + QString("%0.%1")
+			  .arg(QCryptographicHash::hash(id, QCryptographicHash::Sha1)
+			  .toHex(), QString(fi.suffix())));
+			QFile::rename(ctx.dir.absoluteFilePath(img), path);
+			w.addImage(path);
+		} else if (!ctx.zip)
+			w.addImage(ctx.dir.absoluteFilePath(img));
+
+		waypoints.append(w);
 	}
 }
 
@@ -592,6 +584,9 @@ void KMLParser::placemark(const Ctx &ctx, QList<TrackData> &tracks,
 {
 	QString name, desc, phone, address, id;
 	QDateTime timestamp;
+	Waypoint *wp = 0;
+	TrackData *tp = 0;
+	Area *ap = 0;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("name"))
@@ -604,52 +599,55 @@ void KMLParser::placemark(const Ctx &ctx, QList<TrackData> &tracks,
 			address = _reader.readElementText();
 		else if (_reader.name() == QLatin1String("TimeStamp"))
 			timestamp = timeStamp();
-		else if (_reader.name() == QLatin1String("Style"))
+		else if (_reader.name() == QLatin1String("Style")) {
 			style(ctx.dir, icons);
+			id = QString();
+		} else if (_reader.name() == QLatin1String("StyleMap"))
+			styleMap(icons);
 		else if (_reader.name() == QLatin1String("MultiGeometry"))
 			multiGeometry(tracks, areas, waypoints, name, desc, timestamp);
 		else if (_reader.name() == QLatin1String("Point")) {
 			waypoints.append(Waypoint());
-			Waypoint &w = waypoints.last();
-			w.setName(name);
-			w.setDescription(desc);
-			w.setTimestamp(timestamp);
-			w.setAddress(address);
-			w.setPhone(phone);
-			w.setIcon(icons.value(id));
-			point(w);
+			wp = &waypoints.last();
+			point(*wp);
 		} else if (_reader.name() == QLatin1String("LineString")
 		  || _reader.name() == QLatin1String("LinearRing")) {
 			tracks.append(TrackData());
-			TrackData &t = tracks.last();
-			t.append(SegmentData());
-			t.setName(name);
-			t.setDescription(desc);
-			lineString(t.last());
+			tp = &tracks.last();
+			tp->append(SegmentData());
+			lineString(tp->last());
 		} else if (_reader.name() == QLatin1String("Track")) {
 			tracks.append(TrackData());
-			TrackData &t = tracks.last();
-			t.append(SegmentData());
-			t.setName(name);
-			t.setDescription(desc);
-			track(t.last());
+			tp = &tracks.last();
+			tp->append(SegmentData());
+			track(tp->last());
 		} else if (_reader.name() == QLatin1String("MultiTrack")) {
 			tracks.append(TrackData());
-			TrackData &t = tracks.last();
-			t.setName(name);
-			t.setDescription(desc);
-			multiTrack(t);
+			tp = &tracks.last();
+			multiTrack(*tp);
 		} else if (_reader.name() == QLatin1String("Polygon")) {
 			areas.append(Area());
-			Area &a = areas.last();
-			a.setName(name);
-			a.setDescription(desc);
-			polygon(a);
-		} else if (_reader.name() == QLatin1String("styleUrl")) {
-			id = _reader.readElementText();
-			id = (id.at(0) == '#') ? id.right(id.size() - 1) : QString();
-		} else
+			ap = &areas.last();
+			polygon(*ap);
+		} else if (_reader.name() == QLatin1String("styleUrl"))
+			id = styleUrl();
+		else
 			_reader.skipCurrentElement();
+	}
+
+	if (wp) {
+		wp->setName(name);
+		wp->setDescription(desc);
+		wp->setTimestamp(timestamp);
+		wp->setAddress(address);
+		wp->setPhone(phone);
+		wp->setIcon(icons.value(id));
+	} else if (tp) {
+		tp->setName(name);
+		tp->setDescription(desc);
+	} else if (ap) {
+		ap->setName(name);
+		ap->setDescription(desc);
 	}
 }
 
@@ -667,12 +665,47 @@ QString KMLParser::icon()
 	return path;
 }
 
+QString KMLParser::styleUrl()
+{
+	QString id(_reader.readElementText());
+	return (id.at(0) == '#') ? id.right(id.size() - 1) : QString();
+}
+
 void KMLParser::iconStyle(const QDir &dir, const QString &id,
   QMap<QString, QPixmap> &icons)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Icon"))
 			icons.insert(id, QPixmap(dir.absoluteFilePath(icon())));
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
+void KMLParser::styleMapPair(const QString &id, QMap<QString, QPixmap> &icons)
+{
+	QString key, url;
+
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("key"))
+			key = _reader.readElementText();
+		else if (_reader.name() == QLatin1String("styleUrl"))
+			url = styleUrl();
+		else
+			_reader.skipCurrentElement();
+	}
+
+	if (key == "normal")
+		icons.insert(id, icons.value(url));
+}
+
+void KMLParser::styleMap(QMap<QString, QPixmap> &icons)
+{
+	QString id = _reader.attributes().value("id").toString();
+
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("Pair"))
+			styleMapPair(id, icons);
 		else
 			_reader.skipCurrentElement();
 	}
@@ -724,6 +757,8 @@ void KMLParser::document(const Ctx &ctx, QList<TrackData> &tracks,
 			photoOverlay(ctx, waypoints, icons);
 		else if (_reader.name() == QLatin1String("Style"))
 			style(ctx.dir, icons);
+		else if (_reader.name() == QLatin1String("StyleMap"))
+			styleMap(icons);
 		else
 			_reader.skipCurrentElement();
 	}

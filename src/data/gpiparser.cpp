@@ -11,6 +11,7 @@
 #include "common/garmin.h"
 #include "common/textcodec.h"
 #include "common/color.h"
+#include "common/util.h"
 #include "address.h"
 #include "gpiparser.h"
 
@@ -388,12 +389,6 @@ static quint32 readAddress(DataStream &stream, Waypoint &waypoint)
 	return rs + rh.size;
 }
 
-static const QTemporaryDir &tempDir()
-{
-	static QTemporaryDir dir;
-	return dir;
-}
-
 static quint32 readImageInfo(DataStream &stream, Waypoint &waypoint,
   const QString &fileName, int &imgId)
 {
@@ -408,12 +403,12 @@ static quint32 readImageInfo(DataStream &stream, Waypoint &waypoint,
 	ba.resize(size);
 	stream.readRawData(ba.data(), ba.size());
 
-	if (tempDir().isValid()) {
+	if (Util::tempDir().isValid()) {
 		QBuffer buf(&ba);
 		QImageReader ir(&buf);
 
 		QByteArray id(fileName.toUtf8() + QByteArray::number(imgId++));
-		QFile imgFile(tempDir().path() + "/" + QString("%0.%1").arg(
+		QFile imgFile(Util::tempDir().path() + "/" + QString("%0.%1").arg(
 		  QCryptographicHash::hash(id, QCryptographicHash::Sha1).toHex(),
 		  QString(ir.format())));
 		imgFile.open(QIODevice::WriteOnly);

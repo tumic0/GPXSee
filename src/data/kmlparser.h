@@ -58,7 +58,10 @@ private:
 	qreal number();
 	QDateTime time();
 	QString icon();
+	QString styleUrl();
 	void style(const QDir &dir, QMap<QString, QPixmap> &icons);
+	void styleMapPair(const QString &id, QMap<QString, QPixmap> &icons);
+	void styleMap(QMap<QString, QPixmap> &icons);
 	void iconStyle(const QDir &dir, const QString &id,
 	  QMap<QString, QPixmap> &icons);
 
