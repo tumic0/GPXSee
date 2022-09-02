@@ -3,9 +3,8 @@
 
 #include <QXmlStreamReader>
 #include <QDateTime>
+#include <QDir>
 #include "parser.h"
-
-class QDir;
 
 class KMLParser : public Parser
 {
@@ -16,17 +15,28 @@ public:
 	int errorLine() const {return _reader.lineNumber();}
 
 private:
-	void kml(const QDir &dir, QList<TrackData> &tracks, QList<Area> &areas,
+	struct Ctx {
+		Ctx(const QString &path, const QDir &dir, bool zip)
+		  : path(path), dir(dir), zip(zip) {}
+
+		QString path;
+		QDir dir;
+		bool zip;
+	};
+
+	void kml(const Ctx &ctx, QList<TrackData> &tracks, QList<Area> &areas,
 	  QVector<Waypoint> &waypoints);
-	void document(const QDir &dir, QList<TrackData> &tracks, QList<Area> &areas,
+	void document(const Ctx &ctx, QList<TrackData> &tracks, QList<Area> &areas,
 	  QVector<Waypoint> &waypoints);
-	void folder(const QDir &dir, QList<TrackData> &tracks, QList<Area> &areas,
-	  QVector<Waypoint> &waypoints, const QMap<QString, QPixmap> &icons);
-	void placemark(QList<TrackData> &tracks, QList<Area> &areas,
-	  QVector<Waypoint> &waypoints, const QMap<QString, QPixmap> &icons);
+	void folder(const Ctx &ctx, QList<TrackData> &tracks, QList<Area> &areas,
+	  QVector<Waypoint> &waypoints, QMap<QString, QPixmap> &icons);
+	void placemark(const Ctx &ctx, QList<TrackData> &tracks, QList<Area> &areas,
+	  QVector<Waypoint> &waypoints, QMap<QString, QPixmap> &icons);
 	void multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
 	  QVector<Waypoint> &waypoints, const QString &name, const QString &desc,
 	  const QDateTime &timestamp);
+	void photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
+	  QMap<QString, QPixmap> &icons);
 	void track(SegmentData &segment);
 	void multiTrack(TrackData &t);
 	void lineString(SegmentData &segment);
@@ -47,10 +57,10 @@ private:
 	QDateTime timeStamp();
 	qreal number();
 	QDateTime time();
+	QString icon();
 	void style(const QDir &dir, QMap<QString, QPixmap> &icons);
 	void iconStyle(const QDir &dir, const QString &id,
 	  QMap<QString, QPixmap> &icons);
-	void icon(const QDir &dir, const QString &id, QMap<QString, QPixmap> &icons);
 
 	QXmlStreamReader _reader;
 };
