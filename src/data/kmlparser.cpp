@@ -15,6 +15,8 @@
 #include <QTemporaryDir>
 #include <QCryptographicHash>
 #include <QtEndian>
+#include <QUrl>
+#include <QRegularExpression>
 #include <private/qzipreader_p.h>
 #include "kmlparser.h"
 
@@ -523,7 +525,7 @@ void KMLParser::multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
 void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
   QMap<QString, QPixmap> &icons)
 {
-	QString name, desc, phone, address, path, id;
+	QString name, desc, phone, address, path, link, id;
 	QDateTime timestamp;
 
 	while (_reader.readNextStartElement()) {
@@ -541,18 +543,27 @@ void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
 			style(ctx.dir, icons);
 		else if (_reader.name() == QLatin1String("Icon")) {
 			QString image(icon());
-			if (ctx.zip) {
-				if (tempDir().isValid()) {
-					QFileInfo fi(image);
-					QByteArray id(ctx.path.toUtf8() + image.toUtf8());
-					path = tempDir().path() + "/" + QString("%0.%1").arg(
-					  QCryptographicHash::hash(id, QCryptographicHash::Sha1)
-					  .toHex(), QString(fi.suffix()));
 
-					QFile::rename(ctx.dir.absoluteFilePath(image), path);
-				}
-			} else
-				path = ctx.dir.absoluteFilePath(image);
+			QRegularExpression re("\\$\\[[^\\]]+\\]");
+			image.replace(re, "0");
+			QUrl url(image);
+
+			if (url.scheme() == "http" || url.scheme() == "https")
+				link = image;
+			else {
+				if (ctx.zip) {
+					if (tempDir().isValid()) {
+						QFileInfo fi(image);
+						QByteArray id(ctx.path.toUtf8() + image.toUtf8());
+						path = tempDir().path() + "/" + QString("%0.%1").arg(
+						  QCryptographicHash::hash(id, QCryptographicHash::Sha1)
+						  .toHex(), QString(fi.suffix()));
+
+						QFile::rename(ctx.dir.absoluteFilePath(image), path);
+					}
+				} else
+					path = ctx.dir.absoluteFilePath(image);
+			}
 		} else if (_reader.name() == QLatin1String("Point")) {
 			waypoints.append(Waypoint());
 			Waypoint &w = waypoints.last();
@@ -562,7 +573,10 @@ void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
 			w.setAddress(address);
 			w.setPhone(phone);
 			w.setIcon(icons.value(id));
-			w.addImage(path);
+			if (!path.isNull())
+				w.addImage(path);
+			if (!link.isNull())
+				w.addLink(Link(link, "Photo Overlay"));
 			point(w);
 		} else if (_reader.name() == QLatin1String("styleUrl")) {
 			id = _reader.readElementText();
