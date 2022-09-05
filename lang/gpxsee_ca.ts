@@ -1615,348 +1615,348 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="340"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="350"/>
         <source>Heart rate:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ritme cardíac:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="341"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="351"/>
         <source>Cadence:</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadència:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="342"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="352"/>
         <source>Power:</source>
-        <translation type="unfinished"></translation>
+        <translation>Potència:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="365"/>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Automàtic</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="366"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="416"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Personalitzat</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="379"/>
         <source>mi/h</source>
-        <translation type="unfinished"></translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="382"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="385"/>
         <source>km/h</source>
-        <translation type="unfinished"></translation>
+        <translation>km/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="389"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="729"/>
         <source>s</source>
-        <translation type="unfinished"></translation>
+        <translation>s</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="396"/>
         <source>Computed from distance/time</source>
-        <translation type="unfinished"></translation>
+        <translation>Calculat a partir de la distància/temps</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="397"/>
         <source>Recorded by device</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrat amb dispositiu</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="402"/>
         <source>Show secondary speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra la velocitat secundària</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="405"/>
         <source>GPS data</source>
-        <translation type="unfinished"></translation>
+        <translation>Dades GPS</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="406"/>
         <source>DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>Dades DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="411"/>
         <source>Show secondary elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra elevació secundària</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="414"/>
         <source>UTC</source>
-        <translation type="unfinished"></translation>
+        <translation>UTC</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="415"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="778"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="821"/>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>Sistema</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="435"/>
         <source>Use segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilitzeu segments</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="466"/>
         <source>Time zone:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fus horari:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="480"/>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Velocitat</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="485"/>
         <source>Elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Elevació</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="491"/>
         <source>Time zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Fus horari</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="512"/>
         <source>Minimal speed:</source>
-        <translation type="unfinished"></translation>
+        <translation>Velocitat mínima:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="513"/>
         <source>Minimal duration:</source>
-        <translation type="unfinished"></translation>
+        <translation>Durada mínima:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="524"/>
         <source>Sources</source>
-        <translation type="unfinished"></translation>
+        <translation>Fonts</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="525"/>
         <source>Filtering</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtrat</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="526"/>
         <source>Pause detection</source>
-        <translation type="unfinished"></translation>
+        <translation>Detecció d&apos;aturades</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="538"/>
         <source>mi</source>
-        <translation type="unfinished"></translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="541"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="544"/>
         <source>km</source>
-        <translation type="unfinished"></translation>
+        <translation>km</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="548"/>
         <source>Radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Radi:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="554"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="817"/>
         <source>POI</source>
-        <translation type="unfinished"></translation>
+        <translation>POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="571"/>
         <source>Use HTTP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilitzeu l&apos;autenticació HTTP</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="577"/>
         <source>Use $lat and $lon for NYY/SYY and EXXX/WXXX in the URL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilitzeu $lat i $lon per a NYY/SYY i EXXX/WXXX a l&apos;URL.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="582"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="595"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="607"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="640"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Font</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="627"/>
         <source>Plugin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Connector:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="647"/>
         <source>WYSIWYG</source>
-        <translation type="unfinished"></translation>
+        <translation>WYSIWYG</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="648"/>
         <source>High-Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Alta resolució</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="653"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;àrea impresa és aproximadament l&apos;àrea de visualització. El nivell de zoom del mapa no canvia.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="655"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
-        <translation type="unfinished"></translation>
+        <translation>El nivell de zoom es canviarà de manera que tot el contingut (traces/punts de pas) s&apos;ajusti a l&apos;àrea impresa i la resolució del mapa sigui el més propera possible a la resolució d&apos;impressió.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="671"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="673"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Data</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="675"/>
         <source>Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Distància</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="677"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Temps</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="679"/>
         <source>Moving time</source>
-        <translation type="unfinished"></translation>
+        <translation>Temps en moviment</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="681"/>
         <source>Item count (&gt;1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Recompte d&apos;elements (&gt;1)</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="696"/>
         <source>Separate graph page</source>
-        <translation type="unfinished"></translation>
+        <translation>Pàgina de gràfic separada</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="706"/>
         <source>Print mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode d&apos;impressió</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="707"/>
         <source>Header</source>
-        <translation type="unfinished"></translation>
+        <translation>Capçalera</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="715"/>
         <source>Use OpenGL</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilitzeu OpenGL</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="717"/>
         <source>Enable HTTP/2</source>
-        <translation type="unfinished"></translation>
+        <translation>Activeu HTTP/2</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="723"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="735"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="742"/>
         <source>Image cache size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mida de la memòria cau d&apos;imatges:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="736"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="743"/>
         <source>Connection timeout:</source>
-        <translation type="unfinished"></translation>
+        <translation>Temps d&apos;espera de connexió:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="762"/>
         <source>Select the initial paths of the file open dialogues. Leave the field empty for the system default.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccioneu les rutes inicials dels diàlegs d&apos;obrir fitxers. Deixeu el camp buit per a l&apos;opció predeterminada del sistema.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="766"/>
         <source>Data:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dades:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="767"/>
         <source>Maps:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapes:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="768"/>
         <source>POI:</source>
-        <translation type="unfinished"></translation>
+        <translation>POI:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="779"/>
         <source>Initial paths</source>
-        <translation type="unfinished"></translation>
+        <translation>Rutes inicials</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="814"/>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspecte</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="815"/>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapes</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="816"/>
         <source>Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Dades</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="818"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="819"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Posició</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="820"/>
         <source>Print &amp; Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimeix i exporta</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="854"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opcions</translation>
     </message>
 </context>
 <context>
@@ -1964,82 +1964,82 @@
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="28"/>
         <source>PDF files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxers PDF</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="28"/>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>Tots els fitxers</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="56"/>
         <source>Portrait</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertical</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="57"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>Apaïsat</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="67"/>
         <source>cm</source>
-        <translation type="unfinished"></translation>
+        <translation>cm</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="67"/>
         <source>in</source>
-        <translation type="unfinished"></translation>
+        <translation>in</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="73"/>
         <source>Page Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuració de pàgina</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="76"/>
         <source>Page size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mida de la pàgina:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="77"/>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Resolució:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="78"/>
         <source>Orientation:</source>
-        <translation type="unfinished"></translation>
+        <translation>Orientació:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="79"/>
         <source>Margins:</source>
-        <translation type="unfinished"></translation>
+        <translation>Marges:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="85"/>
         <source>File:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxer:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="92"/>
         <source>Output file</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxer de sortida</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="99"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporta</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="119"/>
         <source>Export to PDF</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporta com PDF</translation>
     </message>
     <message>
         <location filename="../src/GUI/pdfexportdialog.cpp" line="127"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Error</translation>
     </message>
 </context>
 <context>
@@ -2047,69 +2047,69 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="25"/>
         <source>PNG files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxers PNG</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="25"/>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>Tots els fitxers</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="34"/>
         <location filename="../src/GUI/pngexportdialog.cpp" line="39"/>
         <location filename="../src/GUI/pngexportdialog.cpp" line="43"/>
         <source>px</source>
-        <translation type="unfinished"></translation>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="45"/>
         <source>Use anti-aliasing</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilitzeu anti-aliasing</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="49"/>
         <source>Image Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuració de la imatge</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="52"/>
         <source>Image width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplada de la imatge:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="53"/>
         <source>Image height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Alçada de la imatge:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="54"/>
         <source>Margins:</source>
-        <translation type="unfinished"></translation>
+        <translation>Marges:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="61"/>
         <source>File:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxer:</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="68"/>
         <source>Output file</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxer de sortida</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="75"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporta</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="95"/>
         <source>Export to PNG</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporta com PNG</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="103"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Error</translation>
     </message>
 </context>
 <context>
@@ -2117,12 +2117,12 @@
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="17"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../src/GUI/areaitem.cpp" line="19"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descripció</translation>
     </message>
 </context>
 <context>
@@ -2130,33 +2130,33 @@
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="11"/>
         <source>W</source>
-        <translation type="unfinished"></translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="12"/>
         <location filename="../src/GUI/powergraph.h" line="16"/>
         <source>Power</source>
-        <translation type="unfinished"></translation>
+        <translation>Potència</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>Mitjana</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="30"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Màx</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="33"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Mitjana</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="35"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Màxima</translation>
     </message>
 </context>
 <context>
@@ -2164,18 +2164,18 @@
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="17"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Màxima</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="18"/>
         <location filename="../src/GUI/powergraphitem.cpp" line="20"/>
         <source>W</source>
-        <translation type="unfinished"></translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraphitem.cpp" line="19"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Mitjana</translation>
     </message>
 </context>
 <context>
@@ -2183,27 +2183,27 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="16"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="18"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descripció</translation>
     </message>
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="20"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Comentari</translation>
     </message>
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="21"/>
         <source>Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Distància</translation>
     </message>
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="32"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Enllaços</translation>
     </message>
 </context>
 <context>
@@ -2211,28 +2211,28 @@
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="108"/>
         <source>mi</source>
-        <translation type="unfinished"></translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="109"/>
         <location filename="../src/GUI/scaleitem.cpp" line="112"/>
         <source>ft</source>
-        <translation type="unfinished"></translation>
+        <translation>peus</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="111"/>
         <source>nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="114"/>
         <source>km</source>
-        <translation type="unfinished"></translation>
+        <translation>km</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="115"/>
         <source>m</source>
-        <translation type="unfinished"></translation>
+        <translation>m</translation>
     </message>
 </context>
 <context>
@@ -2241,62 +2241,62 @@
         <location filename="../src/GUI/speedgraph.cpp" line="16"/>
         <location filename="../src/GUI/speedgraph.h" line="18"/>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Velocitat</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="31"/>
         <source>min/km</source>
-        <translation type="unfinished"></translation>
+        <translation>min/km</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="32"/>
         <source>min/mi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="32"/>
         <source>min/nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="35"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>Mitjana</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="37"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Màx</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="40"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Mitjana</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="42"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Màxima</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="45"/>
         <source>Pace</source>
-        <translation type="unfinished"></translation>
+        <translation>Ritme</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="134"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="137"/>
         <source>mi/h</source>
-        <translation type="unfinished"></translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="140"/>
         <source>km/h</source>
-        <translation type="unfinished"></translation>
+        <translation>km/h</translation>
     </message>
 </context>
 <context>
@@ -2304,47 +2304,47 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="23"/>
         <source>mi/h</source>
-        <translation type="unfinished"></translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
         <source>kn</source>
-        <translation type="unfinished"></translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="24"/>
         <source>km/h</source>
-        <translation type="unfinished"></translation>
+        <translation>km/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="27"/>
         <source>min/km</source>
-        <translation type="unfinished"></translation>
+        <translation>min/km</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="28"/>
         <source>min/mi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/mi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="28"/>
         <source>min/nmi</source>
-        <translation type="unfinished"></translation>
+        <translation>min/nmi</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="31"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Màxima</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="33"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Mitjana</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="35"/>
         <source>Pace</source>
-        <translation type="unfinished"></translation>
+        <translation>Ritme</translation>
     </message>
 </context>
 <context>
@@ -2353,47 +2353,47 @@
         <location filename="../src/GUI/temperaturegraph.cpp" line="12"/>
         <location filename="../src/GUI/temperaturegraph.h" line="16"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatura</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>Mitjana</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="30"/>
         <source>Min</source>
-        <translation type="unfinished"></translation>
+        <translation>Mín</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="32"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Màx</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="35"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Mitjana</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="37"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Mínima</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="39"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Màxima</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="111"/>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation>ºC</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="115"/>
         <source>F</source>
-        <translation type="unfinished"></translation>
+        <translation>ºF</translation>
     </message>
 </context>
 <context>
@@ -2401,27 +2401,27 @@
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="21"/>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation>°C</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="21"/>
         <source>F</source>
-        <translation type="unfinished"></translation>
+        <translation>°F</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="24"/>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Mitjana</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="26"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Màxima</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="28"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Mínima</translation>
     </message>
 </context>
 <context>
@@ -2429,42 +2429,42 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="15"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="17"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descripció</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="19"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Comentari</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="20"/>
         <source>Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Distància</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="23"/>
         <source>Total time</source>
-        <translation type="unfinished"></translation>
+        <translation>Temps total</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="25"/>
         <source>Moving time</source>
-        <translation type="unfinished"></translation>
+        <translation>Temps en moviment</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="27"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Data</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="37"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Enllaços</translation>
     </message>
 </context>
 <context>
@@ -2472,52 +2472,52 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="26"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="27"/>
         <source>Coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Coordenades</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="34"/>
         <source>Elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Elevació</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="37"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Data</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="41"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descripció</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="45"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Comentari</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="48"/>
         <source>Symbol</source>
-        <translation type="unfinished"></translation>
+        <translation>Símbol</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="53"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adreça</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="56"/>
         <source>Phone</source>
-        <translation type="unfinished"></translation>
+        <translation>Telèfon</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="66"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Enllaços</translation>
     </message>
 </context>
 </TS>
