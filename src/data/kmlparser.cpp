@@ -683,10 +683,10 @@ QColor KMLParser::color()
 		return QColor();
 
 	bool aok, bok, gok, rok;
-	int a = str.midRef(0, 2).toInt(&aok, 16);
-	int b = str.midRef(2, 2).toInt(&bok, 16);
-	int g = str.midRef(4, 2).toInt(&gok, 16);
-	int r = str.midRef(6, 2).toInt(&rok, 16);
+	int a = str.mid(0, 2).toInt(&aok, 16);
+	int b = str.mid(2, 2).toInt(&bok, 16);
+	int g = str.mid(4, 2).toInt(&gok, 16);
+	int r = str.mid(6, 2).toInt(&rok, 16);
 
 	return (aok && bok && gok && rok) ? QColor(r, g, b, a) : QColor();
 }
