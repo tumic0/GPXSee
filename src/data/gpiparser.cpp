@@ -695,7 +695,7 @@ static void readPOIDatabase(DataStream &stream, QVector<Waypoint> &waypoints,
 	for (int i = 0; i < il.size(); i++) {
 		const QPair<int, quint16> &e = il.at(i);
 		if (e.second < icons.size())
-			waypoints[e.first].setIcon(icons.at(e.second));
+			waypoints[e.first].setStyle(icons.at(e.second));
 	}
 
 	if (ds != rh.size)

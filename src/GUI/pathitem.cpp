@@ -32,15 +32,16 @@ static inline unsigned segments(qreal distance)
 Units PathItem::_units = Metric;
 QTimeZone PathItem::_timeZone = QTimeZone::utc();
 
-PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
-  : GraphicsItem(parent), _path(path), _map(map), _graph(0)
+PathItem::PathItem(const Path &path, const LineStyle &style, Map *map,
+  QGraphicsItem *parent) : GraphicsItem(parent), _path(path), _style(style),
+  _map(map), _graph(0)
 {
 	Q_ASSERT(_path.isValid());
 
 	_digitalZoom = 0;
-	_width = 3;
-	QBrush brush(Qt::SolidPattern);
-	_pen = QPen(brush, _width);
+	_width = (_style.width() >= 0) ? _style.width() : 3;
+	_pen = _style.color().isValid()
+	  ? QPen(_style.color(), _width) : QPen(QBrush(Qt::SolidPattern), _width);
 	_showMarker = true;
 	_showTicks = false;
 	_markerInfoType = MarkerInfoItem::None;
@@ -153,6 +154,8 @@ void PathItem::setMap(Map *map)
 
 void PathItem::setColor(const QColor &color)
 {
+	if (_style.color().isValid())
+		return;
 	if (_pen.color() == color)
 		return;
 
@@ -166,6 +169,8 @@ void PathItem::setColor(const QColor &color)
 
 void PathItem::setWidth(qreal width)
 {
+	if (_style.color().isValid())
+		return;
 	if (_width == width)
 		return;
 

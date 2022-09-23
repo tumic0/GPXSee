@@ -2,7 +2,6 @@
 #define TRACKITEM_H
 
 #include <QDateTime>
-#include "data/link.h"
 #include "pathitem.h"
 
 class Map;
@@ -19,10 +18,6 @@ public:
 	QDateTime date() const {return _date;}
 
 private:
-	QString _name;
-	QString _desc;
-	QString _comment;
-	QVector<Link> _links;
 	QDateTime _date;
 	qreal _time;
 	qreal _movingTime;

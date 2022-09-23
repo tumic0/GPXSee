@@ -11,7 +11,8 @@ GraphItem::GraphItem(const Graph &graph, GraphType type, int width,
 	Q_ASSERT(_graph.isValid());
 
 	_units = Metric;
-	_pen = QPen(color, width, style, Qt::FlatCap);
+	_pen = QPen(graph.color().isValid() ? graph.color() : color, width, style,
+	  Qt::FlatCap);
 	_sx = 0; _sy = 0;
 	_time = _graph.hasTime();
 	setZValue(2.0);
@@ -54,6 +55,8 @@ void GraphItem::setGraphType(GraphType type)
 
 void GraphItem::setColor(const QColor &color)
 {
+	if (_graph.color().isValid())
+		return;
 	if (_pen.color() == color)
 		return;
 

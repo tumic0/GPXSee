@@ -228,6 +228,26 @@ void GPXParser::trackpoints(SegmentData &segment)
 	}
 }
 
+void GPXParser::routeExtension(RouteData &route)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("DisplayColor"))
+			route.setStyle(LineStyle(QColor(_reader.readElementText())));
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
+void GPXParser::routeExtensions(RouteData &track)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("RouteExtension"))
+			routeExtension(track);
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
 void GPXParser::routepoints(RouteData &route, QList<TrackData> &tracks)
 {
 	TrackData autoRoute;
@@ -253,6 +273,8 @@ void GPXParser::routepoints(RouteData &route, QList<TrackData> &tracks)
 			link10.setURL(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("urlname"))
 			link10.setText(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("extensions"))
+			routeExtensions(route);
 		else
 			_reader.skipCurrentElement();
 	}
@@ -264,6 +286,26 @@ void GPXParser::routepoints(RouteData &route, QList<TrackData> &tracks)
 		autoRoute.setName(route.name());
 		autoRoute.setDescription(route.description());
 		tracks.append(autoRoute);
+	}
+}
+
+void GPXParser::trackExtension(TrackData &track)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("DisplayColor"))
+			track.setStyle(LineStyle(QColor(_reader.readElementText())));
+		else
+			_reader.skipCurrentElement();
+	}
+}
+
+void GPXParser::trackExtensions(TrackData &track)
+{
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("TrackExtension"))
+			trackExtension(track);
+		else
+			_reader.skipCurrentElement();
 	}
 }
 
@@ -289,6 +331,8 @@ void GPXParser::track(TrackData &track)
 			link10.setURL(_reader.readElementText());
 		else if (_reader.name() == QLatin1String("urlname"))
 			link10.setText(_reader.readElementText());
+		else if (_reader.name() == QLatin1String("extensions"))
+			trackExtensions(track);
 		else
 			_reader.skipCurrentElement();
 	}

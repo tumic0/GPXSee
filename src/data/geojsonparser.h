@@ -31,22 +31,22 @@ private:
 
 	Type type(const QJsonObject &json);
 	bool point(const QJsonArray &coordinates, Waypoint &waypoint,
-	  const QJsonObject &properties = QJsonObject());
+	  const QJsonValue &properties = QJsonValue());
 	bool multiPoint(const QJsonArray &coordinates,
-	  QVector<Waypoint> &waypoints, const QJsonObject &properties = QJsonObject());
+	  QVector<Waypoint> &waypoints, const QJsonValue &properties = QJsonValue());
 	bool lineString(const QJsonArray &coordinates, SegmentData &segment);
 	bool lineString(const QJsonArray &coordinates, TrackData &track,
-	  const QJsonObject &properties = QJsonObject());
+	  const QJsonValue &properties = QJsonValue());
 	bool multiLineString(const QJsonArray &coordinates,
-	  TrackData &track, const QJsonObject &properties = QJsonObject());
+	  TrackData &track, const QJsonValue &properties = QJsonValue());
 	bool polygon(const QJsonArray &coordinates, ::Polygon &pg);
 	bool polygon(const QJsonArray &coordinates, Area &area,
-	  const QJsonObject &properties = QJsonObject());
+	  const QJsonValue &properties = QJsonValue());
 	bool multiPolygon(const QJsonArray &coordinates, Area &area,
-	  const QJsonObject &properties = QJsonObject());
+	  const QJsonValue &properties = QJsonValue());
 	bool geometryCollection(const QJsonObject &json, QList<TrackData> &tracks,
 	  QList<Area> &areas, QVector<Waypoint> &waypoints,
-	  const QJsonObject &properties = QJsonObject());
+	  const QJsonValue &properties = QJsonValue());
 	bool feature(const QJsonObject &json, QList<TrackData> &tracks,
 	  QList<Area> &areas, QVector<Waypoint> &waypoints);
 	bool featureCollection(const QJsonObject &json, QList<TrackData> &tracks,

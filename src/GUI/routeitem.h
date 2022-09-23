@@ -1,7 +1,6 @@
 #ifndef ROUTEITEM_H
 #define ROUTEITEM_H
 
-#include "data/link.h"
 #include "pathitem.h"
 
 class Map;
@@ -26,11 +25,6 @@ public:
 	QDateTime date() const {return QDateTime();}
 
 private:
-	QString _name;
-	QString _desc;
-	QString _comment;
-	QVector<Link> _links;
-
 	QVector<WaypointItem*> _waypoints;
 };
 

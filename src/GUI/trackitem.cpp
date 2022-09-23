@@ -41,7 +41,7 @@ ToolTip TrackItem::info() const
 }
 
 TrackItem::TrackItem(const Track &track, Map *map, QGraphicsItem *parent)
-  : PathItem(track.path(), map, parent)
+  : PathItem(track.path(), track.style(), map, parent)
 {
 	_name = track.name();
 	_desc = track.description();

@@ -10,6 +10,7 @@
 #include "common/config.h"
 #include "common/coordinates.h"
 #include "link.h"
+#include "style.h"
 
 class Waypoint
 {
@@ -30,7 +31,7 @@ public:
 	const QVector<Link> &links() const {return _links;}
 	const QDateTime &timestamp() const {return _timestamp;}
 	qreal elevation() const {return _elevation;}
-	const QPixmap &icon() const {return _icon;}
+	const PointStyle &style() const {return _style;}
 
 	QPair<qreal, qreal> elevations() const;
 
@@ -47,7 +48,7 @@ public:
 	void setElevation(qreal elevation) {_elevation = elevation;}
 	void addImage(const QString &path) {_images.append(path);}
 	void addLink(const Link &link) {_links.append(link);}
-	void setIcon(const QPixmap &icon) {_icon = icon;}
+	void setStyle(const PointStyle &style) {_style = style;}
 
 	bool hasElevation() const {return !std::isnan(_elevation);}
 
@@ -74,7 +75,7 @@ private:
 	QVector<Link> _links;
 	QDateTime _timestamp;
 	qreal _elevation;
-	QPixmap _icon;
+	PointStyle _style;
 
 	static bool _useDEM;
 	static bool _show2ndElevation;

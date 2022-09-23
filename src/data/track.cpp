@@ -254,6 +254,9 @@ Graph Track::gpsElevation() const
 		ret.append(filter(gs, _elevationWindow));
 	}
 
+	if (_data.style().color().isValid())
+		ret.setColor(_data.style().color());
+
 	return ret;
 }
 
@@ -277,6 +280,9 @@ Graph Track::demElevation() const
 
 		ret.append(filter(gs, _elevationWindow));
 	}
+
+	if (_data.style().color().isValid())
+		ret.setColor(_data.style().color());
 
 	return ret;
 }
@@ -330,6 +336,9 @@ Graph Track::computedSpeed() const
 			filtered[stop.at(j)].setY(0);
 	}
 
+	if (_data.style().color().isValid())
+		ret.setColor(_data.style().color());
+
 	return ret;
 }
 
@@ -364,6 +373,9 @@ Graph Track::reportedSpeed() const
 		for (int j = 0; j < stop.size(); j++)
 			filtered[stop.at(j)].setY(0);
 	}
+
+	if (_data.style().color().isValid())
+		ret.setColor(_data.style().color());
 
 	return ret;
 }
@@ -406,6 +418,9 @@ Graph Track::heartRate() const
 		ret.append(filter(gs, _heartRateWindow));
 	}
 
+	if (_data.style().color().isValid())
+		ret.setColor(_data.style().color());
+
 	return ret;
 }
 
@@ -429,6 +444,9 @@ Graph Track::temperature() const
 		ret.append(gs);
 	}
 
+	if (_data.style().color().isValid())
+		ret.setColor(_data.style().color());
+
 	return ret;
 }
 
@@ -450,6 +468,9 @@ Graph Track::ratio() const
 
 		ret.append(gs);
 	}
+
+	if (_data.style().color().isValid())
+		ret.setColor(_data.style().color());
 
 	return ret;
 }
@@ -486,6 +507,9 @@ Graph Track::cadence() const
 			filtered[stop.at(j)].setY(0);
 	}
 
+	if (_data.style().color().isValid())
+		ret.setColor(_data.style().color());
+
 	return ret;
 }
 
@@ -521,6 +545,9 @@ Graph Track::power() const
 		for (int j = 0; j < stop.size(); j++)
 			filtered[stop.at(j)].setY(0);
 	}
+
+	if (_data.style().color().isValid())
+		ret.setColor(_data.style().color());
 
 	return ret;
 }

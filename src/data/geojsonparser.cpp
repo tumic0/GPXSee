@@ -2,6 +2,109 @@
 #include <QJsonArray>
 #include "geojsonparser.h"
 
+#define MARKER_SIZE_MEDIUM 12
+#define MARKER_SIZE_SMALL  8
+#define MARKER_SIZE_LARGE  16
+
+static int markerSize(const QString &str)
+{
+	if (str == "small")
+		return MARKER_SIZE_SMALL;
+	else if (str == "medium")
+		return MARKER_SIZE_MEDIUM;
+	else if (str == "large")
+		return MARKER_SIZE_LARGE;
+	else
+		return -1;
+}
+
+static void setAreaProperties(Area &area, const QJsonValue &properties)
+{
+	if (!properties.isObject())
+		return;
+	QJsonObject o(properties.toObject());
+
+	if (o["name"].isString())
+		area.setName(o["name"].toString());
+	if (o["title"].isString())
+		area.setName(o["title"].toString());
+	if (o["description"].isString())
+		area.setDescription(o["description"].toString());
+
+	QColor strokeColor(0x55, 0x55, 0x55);
+	QColor fillColor(0x55, 0x55, 0x55);
+	double strokeWidth = 2;
+
+	if (o["stroke"].isString())
+		strokeColor = QColor(o["stroke"].toString());
+	if (o["stroke-opacity"].isDouble())
+		strokeColor.setAlphaF(o["stroke-opacity"].toDouble());
+	if (o["stroke-width"].isDouble())
+		strokeWidth = o["stroke-width"].toDouble();
+	if (o["fill"].isString())
+		fillColor = QColor(o["fill"].toString());
+	if (o["fill-opacity"].isDouble())
+		fillColor.setAlphaF(o["fill-opacity"].toDouble());
+	else
+		fillColor.setAlphaF(0.6);
+
+	area.setStyle(PolygonStyle(QPen(strokeColor, strokeWidth),
+	  QBrush(fillColor)));
+}
+
+static void setTrackProperties(TrackData &track, const QJsonValue &properties)
+{
+	if (!properties.isObject())
+		return;
+	QJsonObject o(properties.toObject());
+
+	if (o["name"].isString())
+		track.setName(o["name"].toString());
+	if (o["title"].isString())
+		track.setName(o["title"].toString());
+	if (o["description"].isString())
+		track.setDescription(o["description"].toString());
+
+	QColor color(0x55, 0x55, 0x55);
+	double width = 2;
+
+	if (o["stroke"].isString())
+		color = QColor(o["stroke"].toString());
+	if (o["stroke-opacity"].isDouble())
+		color.setAlphaF(o["stroke-opacity"].toDouble());
+	if (o["stroke-width"].isDouble())
+		width = o["stroke-width"].toDouble();
+
+	track.setStyle(LineStyle(color, width));
+}
+
+static void setWaypointProperties(Waypoint &waypoint,
+  const QJsonValue &properties)
+{
+	if (!properties.isObject())
+		return;
+	QJsonObject o(properties.toObject());
+
+	if (o["name"].isString())
+		waypoint.setName(o["name"].toString());
+	if (o["title"].isString())
+		waypoint.setName(o["title"].toString());
+	if (o["description"].isString())
+		waypoint.setDescription(o["description"].toString());
+
+	QColor color(0x7e, 0x7e, 0x7e);
+	int size = MARKER_SIZE_MEDIUM;
+
+	if (o["marker-color"].isString())
+		color = QColor(o["marker-color"].toString());
+	if (o["marker-symbol"].isString())
+		waypoint.setSymbol(o["marker-symbol"].toString());
+	if (o["marker-size"].isString())
+		size = markerSize(o["marker-size"].toString());
+
+	waypoint.setStyle(PointStyle(QPixmap(), color, size));
+}
+
 
 GeoJSONParser::Type GeoJSONParser::type(const QJsonObject &json)
 {
@@ -30,7 +133,7 @@ GeoJSONParser::Type GeoJSONParser::type(const QJsonObject &json)
 }
 
 bool GeoJSONParser::point(const QJsonArray &coordinates, Waypoint &waypoint,
-  const QJsonObject &properties)
+  const QJsonValue &properties)
 {
 	if (coordinates.count() < 2 || !coordinates.at(0).isDouble()
 	  || !coordinates.at(1).isDouble()) {
@@ -38,23 +141,18 @@ bool GeoJSONParser::point(const QJsonArray &coordinates, Waypoint &waypoint,
 		return false;
 	}
 
+	setWaypointProperties(waypoint, properties);
+
 	waypoint.setCoordinates(Coordinates(coordinates.at(0).toDouble(),
 	  coordinates.at(1).toDouble()));
 	if (coordinates.count() == 3 && coordinates.at(2).isDouble())
 		waypoint.setElevation(coordinates.at(2).toDouble());
-	if (properties.contains("title") && properties["title"].isString())
-		waypoint.setName(properties["title"].toString());
-	if (properties.contains("name") && properties["name"].isString())
-		waypoint.setName(properties["name"].toString());
-	if (properties.contains("description")
-	  && properties["description"].isString())
-		waypoint.setDescription(properties["description"].toString());
 
 	return true;
 }
 
 bool GeoJSONParser::multiPoint(const QJsonArray &coordinates,
-  QVector<Waypoint> &waypoints, const QJsonObject &properties)
+  QVector<Waypoint> &waypoints, const QJsonValue &properties)
 {
 	for (int i = 0; i < coordinates.size(); i++) {
 		if (!coordinates.at(i).isArray()) {
@@ -92,15 +190,9 @@ bool GeoJSONParser::lineString(const QJsonArray &coordinates,
 }
 
 bool GeoJSONParser::lineString(const QJsonArray &coordinates, TrackData &track,
-  const QJsonObject &properties)
+  const QJsonValue &properties)
 {
-	if (properties.contains("title") && properties["title"].isString())
-		track.setName(properties["title"].toString());
-	if (properties.contains("name") && properties["name"].isString())
-		track.setName(properties["name"].toString());
-	if (properties.contains("description")
-	  && properties["description"].isString())
-		track.setDescription(properties["description"].toString());
+	setTrackProperties(track, properties);
 
 	track.append(SegmentData());
 
@@ -110,15 +202,9 @@ bool GeoJSONParser::lineString(const QJsonArray &coordinates, TrackData &track,
 }
 
 bool GeoJSONParser::multiLineString(const QJsonArray &coordinates,
-  TrackData &track, const QJsonObject &properties)
+  TrackData &track, const QJsonValue &properties)
 {
-	if (properties.contains("title") && properties["title"].isString())
-		track.setName(properties["title"].toString());
-	if (properties.contains("name") && properties["name"].isString())
-		track.setName(properties["name"].toString());
-	if (properties.contains("description")
-	  && properties["description"].isString())
-		track.setDescription(properties["description"].toString());
+	setTrackProperties(track, properties);
 
 	for (int i = 0; i < coordinates.size(); i++) {
 		if (!coordinates.at(i).isArray()) {
@@ -163,15 +249,9 @@ bool GeoJSONParser::polygon(const QJsonArray &coordinates, ::Polygon &pg)
 }
 
 bool GeoJSONParser::polygon(const QJsonArray &coordinates, Area &area,
-  const QJsonObject &properties)
+  const QJsonValue &properties)
 {
-	if (properties.contains("title") && properties["title"].isString())
-		area.setName(properties["title"].toString());
-	if (properties.contains("name") && properties["name"].isString())
-		area.setName(properties["name"].toString());
-	if (properties.contains("description")
-	  && properties["description"].isString())
-		area.setDescription(properties["description"].toString());
+	setAreaProperties(area, properties);
 
 	::Polygon p;
 	if (!polygon(coordinates, p))
@@ -182,15 +262,9 @@ bool GeoJSONParser::polygon(const QJsonArray &coordinates, Area &area,
 }
 
 bool GeoJSONParser::multiPolygon(const QJsonArray &coordinates,
-  Area &area, const QJsonObject &properties)
+  Area &area, const QJsonValue &properties)
 {
-	if (properties.contains("title") && properties["title"].isString())
-		area.setName(properties["title"].toString());
-	if (properties.contains("name") && properties["name"].isString())
-		area.setName(properties["name"].toString());
-	if (properties.contains("description")
-	  && properties["description"].isString())
-		area.setDescription(properties["description"].toString());
+	setAreaProperties(area, properties);
 
 	for (int i = 0; i < coordinates.size(); i++) {
 		if (!coordinates.at(i).isArray()) {
@@ -209,7 +283,7 @@ bool GeoJSONParser::multiPolygon(const QJsonArray &coordinates,
 
 bool GeoJSONParser::geometryCollection(const QJsonObject &json,
   QList<TrackData> &tracks, QList<Area> &areas,
-  QVector<Waypoint> &waypoints, const QJsonObject &properties)
+  QVector<Waypoint> &waypoints, const QJsonValue &properties)
 {
 	if (!json.contains("geometries") || !json["geometries"].isArray()) {
 		_errorString = "Invalid/missing GeometryCollection geometries array";
@@ -273,7 +347,7 @@ bool GeoJSONParser::geometryCollection(const QJsonObject &json,
 bool GeoJSONParser::feature(const QJsonObject &json, QList<TrackData> &tracks,
   QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
-	QJsonObject properties(json["properties"].toObject());
+	QJsonValue properties(json["properties"]);
 	QJsonObject geometry(json["geometry"].toObject());
 
 	switch (type(geometry)) {

@@ -38,6 +38,9 @@ Graph Route::gpsElevation() const
 		if (_data.at(i).hasElevation())
 			gs.append(GraphPoint(_distance.at(i), NAN, _data.at(i).elevation()));
 
+	if (_data.style().color().isValid())
+		graph.setColor(_data.style().color());
+
 	return graph;
 }
 
@@ -52,6 +55,9 @@ Graph Route::demElevation() const
 		if (!std::isnan(dem))
 			gs.append(GraphPoint(_distance.at(i), NAN, dem));
 	}
+
+	if (_data.style().color().isValid())
+		graph.setColor(_data.style().color());
 
 	return graph;
 }

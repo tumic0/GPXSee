@@ -34,6 +34,7 @@ public:
 	const QString &description() const {return _data.description();}
 	const QString &comment() const {return _data.comment();}
 	const QVector<Link> &links() const {return _data.links();}
+	const LineStyle &style() const {return _data.style();}
 
 	bool isValid() const;
 

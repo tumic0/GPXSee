@@ -36,7 +36,7 @@ ToolTip RouteItem::info() const
 }
 
 RouteItem::RouteItem(const Route &route, Map *map, QGraphicsItem *parent)
-  : PathItem(route.path(), map, parent)
+  : PathItem(route.path(), route.style(), map, parent)
 {
 	const RouteData &waypoints = route.data();
 

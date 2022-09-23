@@ -25,6 +25,10 @@ private:
 	void waypointExtensions(Waypoint &waypoint, SegmentData *autoRoute);
 	void area(Area &area);
 	void gpxExtensions(QList<Area> &areas);
+	void trackExtensions(TrackData &track);
+	void trackExtension(TrackData &track);
+	void routeExtensions(RouteData &route);
+	void routeExtension(RouteData &route);
 	void trackpointData(Trackpoint &trackpoint);
 	void waypointData(Waypoint &waypoint, SegmentData *autoRoute = 0);
 	void address(Waypoint &waypoint);

@@ -28,10 +28,17 @@ AreaItem::AreaItem(const Area &area, Map *map, GraphicsItem *parent)
 	_map = map;
 	_digitalZoom = 0;
 
-	_width = 2;
-	_opacity = 0.5;
-	QBrush brush(Qt::SolidPattern);
-	_pen = QPen(brush, _width);
+	if (_area.style().isValid()) {
+		_width = (_area.style().pen().style() == Qt::NoPen)
+		  ? 0 : _area.style().pen().width();
+		_pen = _area.style().pen();
+		_brush = _area.style().brush();
+	} else {
+		_width = 2;
+		_opacity = 0.5;
+		QBrush brush(Qt::SolidPattern);
+		_pen = QPen(brush, _width);
+	}
 
 	updatePainterPath();
 
@@ -91,6 +98,8 @@ void AreaItem::setMap(Map *map)
 
 void AreaItem::setColor(const QColor &color)
 {
+	if (_area.style().isValid())
+		return;
 	if (_pen.color() == color)
 		return;
 
@@ -104,6 +113,8 @@ void AreaItem::setColor(const QColor &color)
 
 void AreaItem::setOpacity(qreal opacity)
 {
+	if (_area.style().isValid())
+		return;
 	if (_opacity == opacity)
 		return;
 
@@ -117,6 +128,8 @@ void AreaItem::setOpacity(qreal opacity)
 
 void AreaItem::setWidth(qreal width)
 {
+	if (_area.style().isValid())
+		return;
 	if (_width == width)
 		return;
 
@@ -128,6 +141,8 @@ void AreaItem::setWidth(qreal width)
 
 void AreaItem::setStyle(Qt::PenStyle style)
 {
+	if (_area.style().isValid())
+		return;
 	if (_pen.style() == style)
 		return;
 

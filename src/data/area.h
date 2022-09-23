@@ -4,6 +4,7 @@
 #include <QString>
 #include <QList>
 #include "common/polygon.h"
+#include "style.h"
 
 class Area
 {
@@ -27,6 +28,7 @@ public:
 	const QString &description() const {return _desc;}
 	const QList<Polygon> &polygons() const {return _polygons;}
 	const RectC &boundingRect() const {return _boundingRect;}
+	const PolygonStyle &style() const {return _style;}
 
 	bool isValid() const
 	{
@@ -47,11 +49,13 @@ public:
 
 	void setName(const QString &name) {_name = name;}
 	void setDescription(const QString &desc) {_desc = desc;}
+	void setStyle(const PolygonStyle &style) {_style = style;}
 
 private:
 	QList<Polygon> _polygons;
 	QString _name;
 	QString _desc;
+	PolygonStyle _style;
 	RectC _boundingRect;
 };
 

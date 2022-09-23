@@ -65,6 +65,12 @@ public:
 		}
 		return true;
 	}
+
+	const QColor &color() const {return _color;}
+	void setColor(const QColor &color) {_color = color;}
+
+private:
+	QColor _color;
 };
 
 class GraphPair
