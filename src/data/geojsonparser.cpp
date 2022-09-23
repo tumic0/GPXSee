@@ -20,60 +20,59 @@ static int markerSize(const QString &str)
 
 static void setAreaProperties(Area &area, const QJsonValue &properties)
 {
-	if (!properties.isObject())
-		return;
-	QJsonObject o(properties.toObject());
-
-	if (o["name"].isString())
-		area.setName(o["name"].toString());
-	if (o["title"].isString())
-		area.setName(o["title"].toString());
-	if (o["description"].isString())
-		area.setDescription(o["description"].toString());
-
 	QColor strokeColor(0x55, 0x55, 0x55);
-	QColor fillColor(0x55, 0x55, 0x55);
+	QColor fillColor(0x55, 0x55, 0x55, 0x99);
 	double strokeWidth = 2;
 
-	if (o["stroke"].isString())
-		strokeColor = QColor(o["stroke"].toString());
-	if (o["stroke-opacity"].isDouble())
-		strokeColor.setAlphaF(o["stroke-opacity"].toDouble());
-	if (o["stroke-width"].isDouble())
-		strokeWidth = o["stroke-width"].toDouble();
-	if (o["fill"].isString())
-		fillColor = QColor(o["fill"].toString());
-	if (o["fill-opacity"].isDouble())
-		fillColor.setAlphaF(o["fill-opacity"].toDouble());
-	else
-		fillColor.setAlphaF(0.6);
+	if (properties.isObject()) {
+		QJsonObject o(properties.toObject());
 
-	area.setStyle(PolygonStyle(QPen(strokeColor, strokeWidth),
-	  QBrush(fillColor)));
+		if (o["name"].isString())
+			area.setName(o["name"].toString());
+		if (o["title"].isString())
+			area.setName(o["title"].toString());
+		if (o["description"].isString())
+			area.setDescription(o["description"].toString());
+
+		if (o["stroke"].isString())
+			strokeColor = QColor(o["stroke"].toString());
+		if (o["stroke-opacity"].isDouble())
+			strokeColor.setAlphaF(o["stroke-opacity"].toDouble());
+		if (o["stroke-width"].isDouble())
+			strokeWidth = o["stroke-width"].toDouble();
+		if (o["fill"].isString())
+			fillColor = QColor(o["fill"].toString());
+		if (o["fill-opacity"].isDouble())
+			fillColor.setAlphaF(o["fill-opacity"].toDouble());
+		else
+			fillColor.setAlphaF(0.6);
+	}
+
+	area.setStyle(PolygonStyle(fillColor, strokeColor, strokeWidth));
 }
 
 static void setTrackProperties(TrackData &track, const QJsonValue &properties)
 {
-	if (!properties.isObject())
-		return;
-	QJsonObject o(properties.toObject());
-
-	if (o["name"].isString())
-		track.setName(o["name"].toString());
-	if (o["title"].isString())
-		track.setName(o["title"].toString());
-	if (o["description"].isString())
-		track.setDescription(o["description"].toString());
-
 	QColor color(0x55, 0x55, 0x55);
 	double width = 2;
 
-	if (o["stroke"].isString())
-		color = QColor(o["stroke"].toString());
-	if (o["stroke-opacity"].isDouble())
-		color.setAlphaF(o["stroke-opacity"].toDouble());
-	if (o["stroke-width"].isDouble())
-		width = o["stroke-width"].toDouble();
+	if (properties.isObject()) {
+		QJsonObject o(properties.toObject());
+
+		if (o["name"].isString())
+			track.setName(o["name"].toString());
+		if (o["title"].isString())
+			track.setName(o["title"].toString());
+		if (o["description"].isString())
+			track.setDescription(o["description"].toString());
+
+		if (o["stroke"].isString())
+			color = QColor(o["stroke"].toString());
+		if (o["stroke-opacity"].isDouble())
+			color.setAlphaF(o["stroke-opacity"].toDouble());
+		if (o["stroke-width"].isDouble())
+			width = o["stroke-width"].toDouble();
+	}
 
 	track.setStyle(LineStyle(color, width));
 }
@@ -81,28 +80,28 @@ static void setTrackProperties(TrackData &track, const QJsonValue &properties)
 static void setWaypointProperties(Waypoint &waypoint,
   const QJsonValue &properties)
 {
-	if (!properties.isObject())
-		return;
-	QJsonObject o(properties.toObject());
-
-	if (o["name"].isString())
-		waypoint.setName(o["name"].toString());
-	if (o["title"].isString())
-		waypoint.setName(o["title"].toString());
-	if (o["description"].isString())
-		waypoint.setDescription(o["description"].toString());
-
 	QColor color(0x7e, 0x7e, 0x7e);
 	int size = MARKER_SIZE_MEDIUM;
 
-	if (o["marker-color"].isString())
-		color = QColor(o["marker-color"].toString());
-	if (o["marker-symbol"].isString())
-		waypoint.setSymbol(o["marker-symbol"].toString());
-	if (o["marker-size"].isString())
-		size = markerSize(o["marker-size"].toString());
+	if (!properties.isObject()) {
+		QJsonObject o(properties.toObject());
 
-	waypoint.setStyle(PointStyle(QPixmap(), color, size));
+		if (o["name"].isString())
+			waypoint.setName(o["name"].toString());
+		if (o["title"].isString())
+			waypoint.setName(o["title"].toString());
+		if (o["description"].isString())
+			waypoint.setDescription(o["description"].toString());
+
+		if (o["marker-color"].isString())
+			color = QColor(o["marker-color"].toString());
+		if (o["marker-symbol"].isString())
+			waypoint.setSymbol(o["marker-symbol"].toString());
+		if (o["marker-size"].isString())
+			size = markerSize(o["marker-size"].toString());
+	}
+
+	waypoint.setStyle(PointStyle(color, size));
 }
 
 

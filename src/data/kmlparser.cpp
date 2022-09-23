@@ -643,15 +643,22 @@ void KMLParser::placemark(const Ctx &ctx, QList<TrackData> &tracks,
 		wp->setTimestamp(timestamp);
 		wp->setAddress(address);
 		wp->setPhone(phone);
-		wp->setStyle(pointStyles.value(id));
+		PointStyleMap::iterator it = pointStyles.find(id);
+		wp->setStyle(it == pointStyles.end()
+		  ? PointStyle(QColor(0x55, 0x55, 0x55)) : *it);
 	} else if (tp) {
 		tp->setName(name);
 		tp->setDescription(desc);
-		tp->setStyle(lineStyles.value(id));
+		LineStyleMap::iterator it = lineStyles.find(id);
+		tp->setStyle(it == lineStyles.end()
+		  ? LineStyle(QColor(0x55, 0x55, 0x55), 2) : *it);
 	} else if (ap) {
 		ap->setName(name);
 		ap->setDescription(desc);
-		ap->setStyle(polyStyles.value(id));
+		PolygonStyleMap::iterator it = polyStyles.find(id);
+		ap->setStyle(it == polyStyles.end()
+		  ? PolygonStyle(QColor(0x55, 0x55, 0x55, 0x99),
+		  QColor(0x55, 0x55, 0x55, 0x99), 2) : *it);
 	}
 }
 
@@ -669,6 +676,21 @@ QString KMLParser::icon()
 	return path;
 }
 
+QColor KMLParser::color()
+{
+	QString str(_reader.readElementText());
+	if (str.size() != 8)
+		return QColor();
+
+	bool aok, bok, gok, rok;
+	int a = str.midRef(0, 2).toInt(&aok, 16);
+	int b = str.midRef(2, 2).toInt(&bok, 16);
+	int g = str.midRef(4, 2).toInt(&gok, 16);
+	int r = str.midRef(6, 2).toInt(&rok, 16);
+
+	return (aok && bok && gok && rok) ? QColor(r, g, b, a) : QColor();
+}
+
 QString KMLParser::styleUrl()
 {
 	QString id(_reader.readElementText());
@@ -679,28 +701,28 @@ void KMLParser::iconStyle(const QDir &dir, const QString &id,
   PointStyleMap &styles)
 {
 	QPixmap img;
-	QColor color(Qt::white);
+	QColor c(0x55, 0x55, 0x55);
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Icon"))
 			img = QPixmap(dir.absoluteFilePath(icon()));
 		else if (_reader.name() == QLatin1String("color"))
-			color = QColor("#" + _reader.readElementText());
+			c = color();
 		else
 			_reader.skipCurrentElement();
 	}
 
-	styles.insert(id, PointStyle(img, color));
+	styles.insert(id, PointStyle(img, c));
 }
 
 void KMLParser::polyStyle(const QString &id, PolygonStyleMap &styles)
 {
-	QColor color(Qt::white);
+	QColor c(0x55, 0x55, 0x55, 0x99);
 	uint fill = 1, outline = 1;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("color"))
-			color = QColor("#" + _reader.readElementText());
+			c = color();
 		else if (_reader.name() == QLatin1String("fill"))
 			fill = _reader.readElementText().toUInt();
 		else if (_reader.name() == QLatin1String("outline"))
@@ -709,29 +731,25 @@ void KMLParser::polyStyle(const QString &id, PolygonStyleMap &styles)
 			_reader.skipCurrentElement();
 	}
 
-	QPen pen = (color.isValid() && outline)
-	  ? QPen(color) : QPen(Qt::NoPen);
-	QBrush brush = (color.isValid() && fill)
-	  ? QBrush(color) : QBrush(Qt::NoBrush);
-
-	styles.insert(id, PolygonStyle(pen, brush));
+	styles.insert(id, PolygonStyle(fill ? c : QColor(),
+	  outline ? c : QColor(), 2));
 }
 
 void KMLParser::lineStyle(const QString &id, LineStyleMap &styles)
 {
-	QColor color(Qt::white);
-	uint width = 1;
+	QColor c(0x55, 0x55, 0x55);
+	double width = 2;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("color"))
-			color = QColor("#" + _reader.readElementText());
+			c = color();
 		else if (_reader.name() == QLatin1String("width"))
-			width = _reader.readElementText().toUInt();
+			width = _reader.readElementText().toDouble();
 		else
 			_reader.skipCurrentElement();
 	}
 
-	styles.insert(id, LineStyle(color, width));
+	styles.insert(id, LineStyle(c, width));
 }
 
 void KMLParser::styleMapPair(const QString &id, PointStyleMap &pointStyles,

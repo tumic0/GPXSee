@@ -29,10 +29,12 @@ AreaItem::AreaItem(const Area &area, Map *map, GraphicsItem *parent)
 	_digitalZoom = 0;
 
 	if (_area.style().isValid()) {
-		_width = (_area.style().pen().style() == Qt::NoPen)
-		  ? 0 : _area.style().pen().width();
-		_pen = _area.style().pen();
-		_brush = _area.style().brush();
+		_width = (_area.style().width() >= 0)
+		  ? _area.style().width() : 2;
+		_pen = _area.style().stroke().isValid()
+		  ? QPen(area.style().stroke(), _width) : QPen(Qt::NoPen);
+		_brush = _area.style().fill().isValid()
+		  ? QBrush(_area.style().fill()) : QBrush(Qt::NoBrush);
 	} else {
 		_width = 2;
 		_opacity = 0.5;
@@ -128,7 +130,7 @@ void AreaItem::setOpacity(qreal opacity)
 
 void AreaItem::setWidth(qreal width)
 {
-	if (_area.style().isValid())
+	if (_area.style().width() >= 0)
 		return;
 	if (_width == width)
 		return;

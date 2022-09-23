@@ -63,6 +63,7 @@ private:
 	QDateTime timeStamp();
 	qreal number();
 	QDateTime time();
+	QColor color();
 	QString icon();
 	QString styleUrl();
 	void style(const QDir &dir, PointStyleMap &pointStyles,

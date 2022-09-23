@@ -10,6 +10,8 @@ public:
 	PointStyle() : _size(-1) {}
 	PointStyle(const QPixmap &icon, const QColor &color = QColor(), int size = -1)
 	  : _icon(icon), _color(color), _size(size) {}
+	PointStyle(const QColor &color, int size = -1)
+	  : _color(color), _size(size) {}
 
 	const QColor &color() const {return _color;}
 	const QPixmap &icon() const {return _icon;}
@@ -23,34 +25,35 @@ private:
 
 class PolygonStyle {
 public:
-	PolygonStyle()
-	  : _pen(QPen(Qt::NoPen)), _brush(QBrush(Qt::NoBrush)) {}
-	PolygonStyle(const QPen &pen, const QBrush &brush)
-	  : _pen(pen), _brush(brush) {}
+	PolygonStyle() : _width(-1) {}
+	PolygonStyle(const QColor &fill, const QColor &stroke = QColor(),
+	  qreal width = -1) : _fill(fill), _stroke(stroke), _width(width) {}
 
-	const QPen &pen() const {return _pen;}
-	const QBrush &brush() const {return _brush;}
+	const QColor &fill() const {return _fill;}
+	const QColor &stroke() const {return _stroke;}
+	qreal width() const {return _width;}
 
 	bool isValid() const
-	  {return _pen.style() != Qt::NoPen || _brush.style() != Qt::NoBrush;}
+	  {return _fill.isValid() || _stroke.isValid();}
 
 private:
-	QPen _pen;
-	QBrush _brush;
+	QColor _fill;
+	QColor _stroke;
+	qreal _width;
 };
 
 class LineStyle {
 public:
 	LineStyle() : _width(-1) {}
-	LineStyle(const QColor &color, int width = -1)
+	LineStyle(const QColor &color, qreal width = -1)
 	  : _color(color), _width(width) {}
 
 	const QColor &color() const {return _color;}
-	int width() const {return _width;}
+	qreal width() const {return _width;}
 
 private:
 	QColor _color;
-	int _width;
+	qreal _width;
 };
 
 #endif // STYLE_H
