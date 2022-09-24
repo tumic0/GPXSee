@@ -39,8 +39,7 @@ private:
 	  QVector<Waypoint> &waypoints, PointStyleMap &pointStyles,
 	  PolygonStyleMap &polyStyles, LineStyleMap &lineStyles);
 	void multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
-	  QVector<Waypoint> &waypoints, const QString &name, const QString &desc,
-	  const QDateTime &timestamp);
+	  QVector<Waypoint> &waypoints);
 	void photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
 	  PointStyleMap &pointStyles);
 	void track(SegmentData &segment);

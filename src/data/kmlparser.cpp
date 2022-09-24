@@ -487,43 +487,6 @@ void KMLParser::multiTrack(TrackData &t)
 	}
 }
 
-void KMLParser::multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
-  QVector<Waypoint> &waypoints, const QString &name, const QString &desc,
-  const QDateTime &timestamp)
-{
-	TrackData *tp = 0;
-	Area *ap = 0;
-
-	while (_reader.readNextStartElement()) {
-		if (_reader.name() == QLatin1String("Point")) {
-			waypoints.append(Waypoint());
-			Waypoint &w = waypoints.last();
-			w.setName(name);
-			w.setDescription(desc);
-			w.setTimestamp(timestamp);
-			point(w);
-		} else if (_reader.name() == QLatin1String("LineString")) {
-			if (!tp) {
-				tracks.append(TrackData());
-				tp = &tracks.last();
-				tp->setName(name);
-				tp->setDescription(desc);
-			}
-			tp->append(SegmentData());
-			lineString(tp->last());
-		} else if (_reader.name() == QLatin1String("Polygon")) {
-			if (!ap) {
-				areas.append(Area());
-				ap = &areas.last();
-				ap->setName(name);
-				ap->setDescription(desc);
-			}
-			polygon(*ap);
-		} else
-			_reader.skipCurrentElement();
-	}
-}
-
 void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
   PointStyleMap &pointStyles)
 {
@@ -580,15 +543,44 @@ void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
 	}
 }
 
+void KMLParser::multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
+  QVector<Waypoint> &waypoints)
+{
+	TrackData *tp = 0;
+	Area *ap = 0;
+
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("Point")) {
+			waypoints.append(Waypoint());
+			Waypoint &w = waypoints.last();
+			point(w);
+		} else if (_reader.name() == QLatin1String("LineString")) {
+			if (!tp) {
+				tracks.append(TrackData());
+				tp = &tracks.last();
+			}
+			tp->append(SegmentData());
+			lineString(tp->last());
+		} else if (_reader.name() == QLatin1String("Polygon")) {
+			if (!ap) {
+				areas.append(Area());
+				ap = &areas.last();
+			}
+			polygon(*ap);
+		} else
+			_reader.skipCurrentElement();
+	}
+}
+
 void KMLParser::placemark(const Ctx &ctx, QList<TrackData> &tracks,
   QList<Area> &areas, QVector<Waypoint> &waypoints, PointStyleMap &pointStyles,
   PolygonStyleMap &polyStyles, LineStyleMap &lineStyles)
 {
 	QString name, desc, phone, address, id;
 	QDateTime timestamp;
-	Waypoint *wp = 0;
-	TrackData *tp = 0;
-	Area *ap = 0;
+	int trkIdx = tracks.size();
+	int wptIdx = waypoints.size();
+	int areaIdx = areas.size();
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("name"))
@@ -607,58 +599,59 @@ void KMLParser::placemark(const Ctx &ctx, QList<TrackData> &tracks,
 		} else if (_reader.name() == QLatin1String("StyleMap"))
 			styleMap(pointStyles, polyStyles, lineStyles);
 		else if (_reader.name() == QLatin1String("MultiGeometry"))
-			multiGeometry(tracks, areas, waypoints, name, desc, timestamp);
+			multiGeometry(tracks, areas, waypoints);
 		else if (_reader.name() == QLatin1String("Point")) {
 			waypoints.append(Waypoint());
-			wp = &waypoints.last();
-			point(*wp);
+			point(waypoints.last());
 		} else if (_reader.name() == QLatin1String("LineString")
 		  || _reader.name() == QLatin1String("LinearRing")) {
 			tracks.append(TrackData());
-			tp = &tracks.last();
-			tp->append(SegmentData());
-			lineString(tp->last());
+			tracks.last().append(SegmentData());
+			lineString(tracks.last().last());
 		} else if (_reader.name() == QLatin1String("Track")) {
 			tracks.append(TrackData());
-			tp = &tracks.last();
-			tp->append(SegmentData());
-			track(tp->last());
+			tracks.last().append(SegmentData());
+			track(tracks.last().last());
 		} else if (_reader.name() == QLatin1String("MultiTrack")) {
 			tracks.append(TrackData());
-			tp = &tracks.last();
-			multiTrack(*tp);
+			multiTrack(tracks.last());
 		} else if (_reader.name() == QLatin1String("Polygon")) {
 			areas.append(Area());
-			ap = &areas.last();
-			polygon(*ap);
+			polygon(areas.last());
 		} else if (_reader.name() == QLatin1String("styleUrl"))
 			id = styleUrl();
 		else
 			_reader.skipCurrentElement();
 	}
 
-	if (wp) {
-		wp->setName(name);
-		wp->setDescription(desc);
-		wp->setTimestamp(timestamp);
-		wp->setAddress(address);
-		wp->setPhone(phone);
-		PointStyleMap::iterator it = pointStyles.find(id);
-		wp->setStyle(it == pointStyles.end()
-		  ? PointStyle(QColor(0x55, 0x55, 0x55)) : *it);
-	} else if (tp) {
-		tp->setName(name);
-		tp->setDescription(desc);
-		LineStyleMap::iterator it = lineStyles.find(id);
-		tp->setStyle(it == lineStyles.end()
-		  ? LineStyle(QColor(0x55, 0x55, 0x55), 2) : *it);
-	} else if (ap) {
-		ap->setName(name);
-		ap->setDescription(desc);
-		PolygonStyleMap::iterator it = polyStyles.find(id);
-		ap->setStyle(it == polyStyles.end()
+	PointStyleMap::iterator pit = pointStyles.find(id);
+	LineStyleMap::iterator lit = lineStyles.find(id);
+	PolygonStyleMap::iterator ait = polyStyles.find(id);
+
+	for (int i = wptIdx; i < waypoints.size(); i++) {
+		Waypoint &w = waypoints[i];
+		w.setName(name);
+		w.setDescription(desc);
+		w.setTimestamp(timestamp);
+		w.setAddress(address);
+		w.setPhone(phone);
+		w.setStyle(pit == pointStyles.end()
+		  ? PointStyle(QColor(0x55, 0x55, 0x55)) : *pit);
+	}
+	for (int i = trkIdx; i < tracks.size(); i++) {
+		TrackData &t = tracks[i];
+		t.setName(name);
+		t.setDescription(desc);
+		t.setStyle(lit == lineStyles.end()
+		  ? LineStyle(QColor(0x55, 0x55, 0x55), 2) : *lit);
+	}
+	for (int i = areaIdx; i < areas.size(); i++) {
+		Area &a = areas[i];
+		a.setName(name);
+		a.setDescription(desc);
+		a.setStyle(ait == polyStyles.end()
 		  ? PolygonStyle(QColor(0x55, 0x55, 0x55, 0x99),
-		  QColor(0x55, 0x55, 0x55, 0x99), 2) : *it);
+		  QColor(0x55, 0x55, 0x55, 0x99), 2) : *ait);
 	}
 }
 
