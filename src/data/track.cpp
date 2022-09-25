@@ -607,6 +607,8 @@ Path Track::path() const
 				  seg.distance.at(j)));
 	}
 
+	ret.setStyle(_data.style());
+
 	return ret;
 }
 

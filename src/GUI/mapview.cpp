@@ -158,7 +158,7 @@ PathItem *MapView::addTrack(const Track &track)
 	_tr |= ti->path().boundingRect();
 	ti->setColor(_palette.nextColor());
 	ti->setWidth(_trackWidth);
-	ti->setStyle(_trackStyle);
+	ti->setPenStyle(_trackStyle);
 	ti->setVisible(_showTracks);
 	ti->setDigitalZoom(_digitalZoom);
 	ti->setMarkerColor(_markerColor);
@@ -185,7 +185,7 @@ PathItem *MapView::addRoute(const Route &route)
 	_rr |= ri->path().boundingRect();
 	ri->setColor(_palette.nextColor());
 	ri->setWidth(_routeWidth);
-	ri->setStyle(_routeStyle);
+	ri->setPenStyle(_routeStyle);
 	ri->setVisible(_showRoutes);
 	ri->showWaypoints(_showRouteWaypoints);
 	ri->showWaypointLabels(_showWaypointLabels);
@@ -213,7 +213,7 @@ void MapView::addArea(const Area &area)
 	AreaItem *ai = new AreaItem(area, _map);
 	ai->setColor(_palette.nextColor());
 	ai->setWidth(_areaWidth);
-	ai->setStyle(_areaStyle);
+	ai->setPenStyle(_areaStyle);
 	ai->setOpacity(_areaOpacity);
 	ai->setDigitalZoom(_digitalZoom);
 	ai->setVisible(_showAreas);
@@ -254,7 +254,7 @@ MapItem *MapView::addMap(MapAction *map)
 	MapItem *mi = new MapItem(map, _map);
 	mi->setColor(_palette.nextColor());
 	mi->setWidth(_areaWidth);
-	mi->setStyle(_areaStyle);
+	mi->setPenStyle(_areaStyle);
 	mi->setOpacity(_areaOpacity);
 	mi->setDigitalZoom(_digitalZoom);
 	mi->setVisible(_showAreas);
@@ -541,7 +541,7 @@ void MapView::setUnits(Units units)
 void MapView::setCoordinatesFormat(CoordinatesFormat format)
 {
 	WaypointItem::setCoordinatesFormat(format);
-	PathItem::setCoordinatesFormat(format);
+	MarkerInfoItem::setCoordinatesFormat(format);
 
 	for (int i = 0; i < _tracks.count(); i++)
 		_tracks.at(i)->updateMarkerInfo();
@@ -1034,7 +1034,7 @@ void MapView::setTrackStyle(Qt::PenStyle style)
 	_trackStyle = style;
 
 	for (int i = 0; i < _tracks.count(); i++)
-		_tracks.at(i)->setStyle(style);
+		_tracks.at(i)->setPenStyle(style);
 }
 
 void MapView::setRouteStyle(Qt::PenStyle style)
@@ -1042,7 +1042,7 @@ void MapView::setRouteStyle(Qt::PenStyle style)
 	_routeStyle = style;
 
 	for (int i = 0; i < _routes.count(); i++)
-		_routes.at(i)->setStyle(style);
+		_routes.at(i)->setPenStyle(style);
 }
 
 void MapView::setAreaStyle(Qt::PenStyle style)
@@ -1050,7 +1050,7 @@ void MapView::setAreaStyle(Qt::PenStyle style)
 	_areaStyle = style;
 
 	for (int i = 0; i < _areas.count(); i++)
-		_areas.at(i)->setStyle(style);
+		_areas.at(i)->setPenStyle(style);
 }
 
 void MapView::setAreaOpacity(int opacity)
@@ -1251,6 +1251,20 @@ void MapView::useOpenGL(bool use)
 void MapView::useAntiAliasing(bool use)
 {
 	setRenderHint(QPainter::Antialiasing, use);
+}
+
+void MapView::useStyles(bool use)
+{
+	GraphicsItem::useStyle(use);
+
+	for (int i = 0; i < _tracks.size(); i++)
+		_tracks.at(i)->updateStyle();
+	for (int i = 0; i < _routes.size(); i++)
+		_routes.at(i)->updateStyle();
+	for (int i = 0; i < _areas.size(); i++)
+		_areas.at(i)->updateStyle();
+	for (int i = 0; i < _waypoints.size(); i++)
+		_waypoints.at(i)->updateStyle();
 }
 
 void MapView::setMarkerColor(const QColor &color)

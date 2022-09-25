@@ -266,6 +266,7 @@ private:
 	QAction *_showMarkerDateAction;
 	QAction *_showMarkerCoordinatesAction;
 	QAction *_showTicksAction;
+	QAction *_useStylesAction;
 	QAction *_showCoordinatesAction;
 	QAction *_openOptionsAction;
 	QAction *_downloadDEMAction;

@@ -186,7 +186,7 @@ void MapItem::setWidth(qreal width)
 	_pen.setWidthF(_width * pow(2, -_digitalZoom));
 }
 
-void MapItem::setStyle(Qt::PenStyle style)
+void MapItem::setPenStyle(Qt::PenStyle style)
 {
 	if (_pen.style() == style)
 		return;

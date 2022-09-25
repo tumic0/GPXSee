@@ -17,8 +17,9 @@ public:
 	virtual void setColor(const QColor &color) = 0;
 	virtual void setOpacity(qreal opacity) = 0;
 	virtual void setWidth(qreal width) = 0;
-	virtual void setStyle(Qt::PenStyle style) = 0;
+	virtual void setPenStyle(Qt::PenStyle style) = 0;
 	virtual void setDigitalZoom(int zoom) = 0;
+	virtual void updateStyle() {}
 };
 
 #endif // PLANEITEM_H

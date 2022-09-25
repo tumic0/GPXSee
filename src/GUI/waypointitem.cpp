@@ -12,7 +12,6 @@
 #define FS(size) \
 	((int)((qreal)size * 1.41))
 
-
 Units WaypointItem::_units = Metric;
 CoordinatesFormat WaypointItem::_format = DecimalDegrees;
 QTimeZone WaypointItem::_timeZone = QTimeZone::utc();
@@ -77,16 +76,14 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
 	_waypoint = waypoint;
 	_showLabel = true;
 	_showIcon = false;
-	_size = (_waypoint.style().size() >= 0)
-	  ? _waypoint.style().size() : 8;
-	_color = (_waypoint.style().color().isValid())
-	  ? _waypoint.style().color() : Qt::black;
+	_size = 8;
+	_color = Qt::black;
 
 	_icon = (_waypoint.style().icon().isNull())
 	  ? Waypoint::symbolIcon(_waypoint.symbol())
 	  : &_waypoint.style().icon();
 
-	_font.setPixelSize(FS(_size));
+	_font.setPixelSize(FS(size()));
 	_font.setFamily(FONT_FAMILY);
 
 	updateCache();
@@ -99,7 +96,7 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
 void WaypointItem::updateCache()
 {
 	QPainterPath p;
-	qreal pointSize = _font.bold() ? HS(_size) : _size;
+	qreal pointSize = _font.bold() ? HS(size()) : size();
 	const QPixmap &icon = _waypoint.style().icon();
 
 	if (_showLabel && !_waypoint.name().isEmpty()) {
@@ -149,10 +146,10 @@ void WaypointItem::paint(QPainter *painter,
 {
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
-	qreal pointSize = _font.bold() ? HS(_size) : _size;
+	qreal pointSize = _font.bold() ? HS(size()) : size();
 	const QPixmap &icon = _waypoint.style().icon();
 
-	painter->setPen(_color);
+	painter->setPen(color());
 
 	if (_showLabel && !_waypoint.name().isEmpty()) {
 		painter->setFont(_font);
@@ -168,7 +165,7 @@ void WaypointItem::paint(QPainter *painter,
 			  + _labelBB.height(), _waypoint.name());
 	}
 
-	painter->setBrush(QBrush(_color, Qt::SolidPattern));
+	painter->setBrush(QBrush(color(), Qt::SolidPattern));
 	if (_showIcon && _icon) {
 		if (_font.bold())
 			painter->drawPixmap(-_icon->width() * 0.625, icon.isNull()
@@ -186,28 +183,46 @@ void WaypointItem::paint(QPainter *painter,
 	//painter->drawPath(_shape);
 }
 
+int WaypointItem::size() const
+{
+	return (_useStyle && _waypoint.style().size() > 0)
+	  ? _waypoint.style().size() : _size;
+}
+
 void WaypointItem::setSize(int size)
 {
-	if (_waypoint.style().size() >= 0)
-		return;
-	if (_size == size)
-		return;
-
-	prepareGeometryChange();
 	_size = size;
-	_font.setPixelSize(FS(_size));
+	updateSize();
+}
+
+void WaypointItem::updateSize()
+{
+	prepareGeometryChange();
+	_font.setPixelSize(FS(size()));
 	updateCache();
+}
+
+const QColor &WaypointItem::color() const
+{
+	return (_useStyle && _waypoint.style().color().isValid())
+	  ? _waypoint.style().color() : _color;
 }
 
 void WaypointItem::setColor(const QColor &color)
 {
-	if (_waypoint.style().color().isValid())
-		return;
-	if (_color == color)
-		return;
-
 	_color = color;
+	updateColor();
+}
+
+void WaypointItem::updateColor()
+{
 	update();
+}
+
+void WaypointItem::updateStyle()
+{
+	updateSize();
+	updateColor();
 }
 
 void WaypointItem::showLabel(bool show)

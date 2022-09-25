@@ -23,7 +23,7 @@ public:
 	void setColor(const QColor &color);
 	void setOpacity(qreal opacity);
 	void setWidth(qreal width);
-	void setStyle(Qt::PenStyle style);
+	void setPenStyle(Qt::PenStyle style);
 	void setDigitalZoom(int zoom);
 
 	ToolTip info() const;

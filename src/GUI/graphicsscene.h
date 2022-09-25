@@ -12,6 +12,11 @@ public:
 
 	virtual ToolTip info() const = 0;
 	int type() const {return QGraphicsItem::UserType + 1;}
+
+	static void useStyle(bool use) {_useStyle = use;}
+
+protected:
+	static bool _useStyle;
 };
 
 class GraphicsScene : public QGraphicsScene

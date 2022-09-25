@@ -35,6 +35,7 @@ public:
 	void setColor(const QColor &color);
 	void setWidth(int width);
 	void setUnits(Units units) {_units = units;}
+	void updateStyle();
 
 	GraphItem *secondaryGraph() const {return _secondaryGraph;}
 	void setSecondaryGraph(GraphItem *graph) {_secondaryGraph = graph;}
@@ -63,13 +64,18 @@ private:
 	void updatePath();
 	void updateShape();
 	void updateBounds();
+	void updateColor();
+	const QColor &color() const;
 
 	Graph _graph;
+
+	QColor _color;
 	GraphType _type;
+	qreal _sx, _sy;
+
 	QPainterPath _path;
 	QPainterPath _shape;
 	QRectF _bounds;
-	qreal _sx, _sy;
 	QPen _pen;
 	bool _time;
 

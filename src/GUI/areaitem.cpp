@@ -27,20 +27,13 @@ AreaItem::AreaItem(const Area &area, Map *map, GraphicsItem *parent)
 {
 	_map = map;
 	_digitalZoom = 0;
+	_width = 2;
+	_opacity = 0.5;
+	_color = Qt::black;
+	_penStyle = Qt::SolidLine;
 
-	if (_area.style().isValid()) {
-		_width = (_area.style().width() >= 0)
-		  ? _area.style().width() : 2;
-		_pen = _area.style().stroke().isValid()
-		  ? QPen(area.style().stroke(), _width) : QPen(Qt::NoPen);
-		_brush = _area.style().fill().isValid()
-		  ? QBrush(_area.style().fill()) : QBrush(Qt::NoBrush);
-	} else {
-		_width = 2;
-		_opacity = 0.5;
-		QBrush brush(Qt::SolidPattern);
-		_pen = QPen(brush, _width);
-	}
+	_pen = QPen(strokeColor(), width());
+	_brush = QBrush(fillColor());
 
 	updatePainterPath();
 
@@ -98,58 +91,83 @@ void AreaItem::setMap(Map *map)
 	updatePainterPath();
 }
 
+const QColor &AreaItem::strokeColor() const
+{
+	return (_useStyle && _area.style().isValid())
+	  ? _area.style().stroke() : _color;
+}
+
+QColor AreaItem::fillColor() const
+{
+	if (_useStyle && _area.style().isValid())
+		return _area.style().fill();
+	else {
+		QColor fc(_color);
+		fc.setAlphaF(_opacity * _color.alphaF());
+		return fc;
+	}
+}
+
 void AreaItem::setColor(const QColor &color)
 {
-	if (_area.style().isValid())
-		return;
-	if (_pen.color() == color)
-		return;
+	_color = color;
+	updateColor();
+}
 
-	QColor bc(color);
-	bc.setAlphaF(_opacity * color.alphaF());
-
-	_pen.setColor(color);
-	_brush = QBrush(bc);
+void AreaItem::updateColor()
+{
+	_pen.setColor(strokeColor());
+	_brush = QBrush(fillColor());
 	update();
 }
 
 void AreaItem::setOpacity(qreal opacity)
 {
-	if (_area.style().isValid())
-		return;
-	if (_opacity == opacity)
-		return;
-
 	_opacity = opacity;
-	QColor bc(_pen.color());
-	bc.setAlphaF(_opacity * _pen.color().alphaF());
-	_brush = QBrush(bc);
+	updateColor();
+}
 
-	update();
+qreal AreaItem::width() const
+{
+	return (_useStyle && _area.style().width() > 0)
+	  ? _area.style().width() : _width;
 }
 
 void AreaItem::setWidth(qreal width)
 {
-	if (_area.style().width() >= 0)
-		return;
-	if (_width == width)
-		return;
-
-	prepareGeometryChange();
-
 	_width = width;
-	_pen.setWidthF(_width * pow(2, -_digitalZoom));
+	updateWidth();
 }
 
-void AreaItem::setStyle(Qt::PenStyle style)
+void AreaItem::updateWidth()
 {
-	if (_area.style().isValid())
-		return;
-	if (_pen.style() == style)
-		return;
+	prepareGeometryChange();
 
-	_pen.setStyle(style);
+	_pen.setWidthF(width() * pow(2, -_digitalZoom));
+}
+
+Qt::PenStyle AreaItem::penStyle() const
+{
+	return _useStyle ? Qt::SolidLine : _penStyle;
+}
+
+void AreaItem::setPenStyle(Qt::PenStyle style)
+{
+	_penStyle = style;
+	updatePenStyle();
+}
+
+void AreaItem::updatePenStyle()
+{
+	_pen.setStyle(penStyle());
 	update();
+}
+
+void AreaItem::updateStyle()
+{
+	updateColor();
+	updateWidth();
+	updatePenStyle();
 }
 
 void AreaItem::setDigitalZoom(int zoom)

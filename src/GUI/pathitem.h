@@ -1,14 +1,12 @@
 #ifndef PATHITEM_H
 #define PATHITEM_H
 
-#include <QGraphicsObject>
 #include <QPen>
 #include <QTimeZone>
 #include "data/path.h"
-#include "data/link.h"
-#include "data/style.h"
 #include "graphicsscene.h"
 #include "markerinfoitem.h"
+#include "format.h"
 #include "units.h"
 
 class Map;
@@ -21,8 +19,7 @@ class PathItem : public QObject, public GraphicsItem
 	Q_OBJECT
 
 public:
-	PathItem(const Path &path, const LineStyle &style, Map *map,
-	  QGraphicsItem *parent = 0);
+	PathItem(const Path &path, Map *map, QGraphicsItem *parent = 0);
 	virtual ~PathItem() {}
 
 	QPainterPath shape() const {return _shape;}
@@ -41,7 +38,7 @@ public:
 
 	void setColor(const QColor &color);
 	void setWidth(qreal width);
-	void setStyle(Qt::PenStyle style);
+	void setPenStyle(Qt::PenStyle style);
 	void setDigitalZoom(int zoom);
 	void setMarkerColor(const QColor &color);
 	void showMarker(bool show);
@@ -52,11 +49,10 @@ public:
 
 	void updateTicks();
 	void updateMarkerInfo();
+	void updateStyle();
 
 	static void setUnits(Units units) {_units = units;}
 	static void setTimeZone(const QTimeZone &zone) {_timeZone = zone;}
-	static void setCoordinatesFormat(const CoordinatesFormat &format)
-	  {MarkerInfoItem::setCoordinatesFormat(format);}
 
 public slots:
 	void hover(bool hover);
@@ -69,11 +65,6 @@ protected:
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 	void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
-	QString _name;
-	QString _desc;
-	QString _comment;
-	QVector<Link> _links;
-
 	static Units _units;
 	static QTimeZone _timeZone;
 
@@ -84,29 +75,37 @@ private:
 	void updateShape();
 	void addSegment(const Coordinates &c1, const Coordinates &c2);
 	void setMarkerInfo(qreal pos);
+	void updateColor();
+	void updateWidth();
+	void updatePenStyle();
+	qreal width() const;
+	const QColor &color() const;
+	Qt::PenStyle penStyle() const;
 
 	qreal xInM() const;
 	unsigned tickSize() const;
 
 	Path _path;
-	LineStyle _style;
+
 	Map *_map;
 	QList<GraphItem *> _graphs;
 	GraphItem *_graph;
-	qreal _markerDistance;
-	int _digitalZoom;
-
-	qreal _width;
-	QPen _pen;
-	QPainterPath _shape;
-	QPainterPath _painterPath;
-	bool _showMarker;
-	bool _showTicks;
-	MarkerInfoItem::Type _markerInfoType;
-
 	MarkerItem *_marker;
 	MarkerInfoItem *_markerInfo;
 	QVector<PathTickItem*> _ticks;
+
+	QPen _pen;
+	QPainterPath _shape;
+	QPainterPath _painterPath;
+
+	qreal _width;
+	QColor _color;
+	Qt::PenStyle _penStyle;
+	bool _showMarker;
+	bool _showTicks;
+	MarkerInfoItem::Type _markerInfoType;
+	qreal _markerDistance;
+	int _digitalZoom;
 };
 
 #endif // PATHITEM_H

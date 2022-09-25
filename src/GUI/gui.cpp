@@ -429,6 +429,11 @@ void GUI::createActions()
 	_showMarkerCoordinatesAction->setMenuRole(QAction::NoRole);
 	_showMarkerCoordinatesAction->setCheckable(true);
 	_showMarkerCoordinatesAction->setActionGroup(markerInfoGroup);
+	_useStylesAction = new QAction(tr("Use styles"), this);
+	_useStylesAction->setMenuRole(QAction::NoRole);
+	_useStylesAction->setCheckable(true);
+	connect(_useStylesAction, &QAction::triggered, _mapView,
+	  &MapView::useStyles);
 
 	// DEM actions
 	_downloadDEMAction = new QAction(tr("Download DEM data"), this);
@@ -654,6 +659,8 @@ void GUI::createMenus()
 	markerMenu->addAction(_showMarkersAction);
 	markerMenu->addAction(_showMarkerDateAction);
 	markerMenu->addAction(_showMarkerCoordinatesAction);
+	dataMenu->addSeparator();
+	dataMenu->addAction(_useStylesAction);
 	dataMenu->addSeparator();
 	dataMenu->addAction(_showTracksAction);
 	dataMenu->addAction(_showRoutesAction);

@@ -129,6 +129,7 @@ public slots:
 	void setMarkerPosition(qreal pos);
 	void followPosition(bool follow);
 	void showMotionInfo(bool show);
+	void useStyles(bool use);
 
 private slots:
 	void updatePOI();

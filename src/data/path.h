@@ -5,6 +5,7 @@
 #include <QRectF>
 #include "common/coordinates.h"
 #include "common/rectc.h"
+#include "style.h"
 
 class PathPoint
 {
@@ -34,6 +35,12 @@ class Path : public QList<PathSegment>
 public:
 	bool isValid() const;
 	RectC boundingRect() const;
+
+	const LineStyle &style() const {return _style;}
+	void setStyle(const LineStyle &style) {_style = style;}
+
+private:
+	LineStyle _style;
 };
 
 #endif // PATH_H

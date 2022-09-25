@@ -4,6 +4,8 @@
 #include "graphicsscene.h"
 
 
+bool GraphicsItem::_useStyle = false;
+
 /* Standard GraphicsScene::items() is not pixel accurate, so we use the
    following function which has the same logic as used in the original
    QGraphicsScene::helpEvent() function. */

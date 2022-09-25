@@ -22,8 +22,9 @@ public:
 	void setColor(const QColor &color);
 	void setOpacity(qreal opacity);
 	void setWidth(qreal width);
-	void setStyle(Qt::PenStyle style);
+	void setPenStyle(Qt::PenStyle style);
 	void setDigitalZoom(int zoom);
+	void updateStyle();
 
 	ToolTip info() const;
 
@@ -34,16 +35,26 @@ protected:
 private:
 	QPainterPath painterPath(const Polygon &polygon);
 	void updatePainterPath();
+	void updateColor();
+	void updateWidth();
+	void updatePenStyle();
+	qreal width() const;
+	const QColor &strokeColor() const;
+	QColor fillColor() const;
+	Qt::PenStyle penStyle() const;
 
 	Area _area;
+
 	Map *_map;
-	int _digitalZoom;
 
 	qreal _width;
+	QColor _color;
+	qreal _opacity;
+	Qt::PenStyle _penStyle;
+	int _digitalZoom;
+
 	QPen _pen;
 	QBrush _brush;
-	qreal _opacity;
-
 	QPainterPath _painterPath;
 };
 

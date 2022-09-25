@@ -25,6 +25,8 @@ Path Route::path() const
 	for (int i = 0; i < _data.size(); i++)
 		ps.append(PathPoint(_data.at(i).coordinates(), _distance.at(i)));
 
+	ret.setStyle(_data.style());
+
 	return ret;
 }
 

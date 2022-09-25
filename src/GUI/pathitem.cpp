@@ -19,6 +19,9 @@
 
 #define GEOGRAPHICAL_MILE 1855.3248
 
+Units PathItem::_units = Metric;
+QTimeZone PathItem::_timeZone = QTimeZone::utc();
+
 static inline bool isValid(const QPointF &p)
 {
 	return (!std::isnan(p.x()) && !std::isnan(p.y()));
@@ -29,22 +32,20 @@ static inline unsigned segments(qreal distance)
 	return ceil(distance / GEOGRAPHICAL_MILE);
 }
 
-Units PathItem::_units = Metric;
-QTimeZone PathItem::_timeZone = QTimeZone::utc();
-
-PathItem::PathItem(const Path &path, const LineStyle &style, Map *map,
-  QGraphicsItem *parent) : GraphicsItem(parent), _path(path), _style(style),
-  _map(map), _graph(0)
+PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
+  : GraphicsItem(parent), _path(path), _map(map), _graph(0)
 {
 	Q_ASSERT(_path.isValid());
 
 	_digitalZoom = 0;
-	_width = (_style.width() >= 0) ? _style.width() : 3;
-	_pen = _style.color().isValid()
-	  ? QPen(_style.color(), _width) : QPen(QBrush(Qt::SolidPattern), _width);
+	_width = 3;
+	_color = Qt::black;
+	_penStyle = Qt::SolidLine;
 	_showMarker = true;
 	_showTicks = false;
 	_markerInfoType = MarkerInfoItem::None;
+
+	_pen = QPen(color(), width());
 
 	updatePainterPath();
 	updateShape();
@@ -152,42 +153,65 @@ void PathItem::setMap(Map *map)
 		_marker->setPos(pos);
 }
 
+const QColor &PathItem::color() const
+{
+	return (_useStyle && _path.style().color().isValid())
+	  ? _path.style().color() : _color;
+}
+
 void PathItem::setColor(const QColor &color)
 {
-	if (_style.color().isValid())
-		return;
-	if (_pen.color() == color)
-		return;
+	_color = color;
+	updateColor();
+}
 
-	_pen.setColor(color);
+void PathItem::updateColor()
+{
+	const QColor &c(color());
+
+	_pen.setColor(c);
 
 	for (int i = 0; i < _ticks.size(); i++)
-		_ticks[i]->setColor(color);
+		_ticks[i]->setColor(c);
 
 	update();
 }
 
+qreal PathItem::width() const
+{
+	return (_useStyle && _path.style().width() > 0)
+	  ? _path.style().width() : _width;
+}
+
 void PathItem::setWidth(qreal width)
 {
-	if (_style.color().isValid())
-		return;
-	if (_width == width)
-		return;
+	_width = width;
+	updateWidth();
+}
 
+void PathItem::updateWidth()
+{
 	prepareGeometryChange();
 
-	_width = width;
-	_pen.setWidthF(_width * pow(2, -_digitalZoom));
+	_pen.setWidthF(width() * pow(2, -_digitalZoom));
 
 	updateShape();
 }
 
-void PathItem::setStyle(Qt::PenStyle style)
+Qt::PenStyle PathItem::penStyle() const
 {
-	if (_pen.style() == style)
-		return;
+	return _useStyle ? Qt::SolidLine : _penStyle;
+}
 
-	_pen.setStyle(style);
+void PathItem::setPenStyle(Qt::PenStyle style)
+{
+	_penStyle = style;
+	updatePenStyle();
+}
+
+void PathItem::updatePenStyle()
+{
+	_pen.setStyle(penStyle());
 	update();
 }
 
@@ -199,12 +223,25 @@ void PathItem::setDigitalZoom(int zoom)
 	prepareGeometryChange();
 
 	_digitalZoom = zoom;
-	_pen.setWidthF(_width * pow(2, -_digitalZoom));
+	_pen.setWidthF(width() * pow(2, -_digitalZoom));
 	_marker->setScale(pow(2, -_digitalZoom));
 	for (int i = 0; i < _ticks.size(); i++)
 		_ticks.at(i)->setDigitalZoom(zoom);
 
 	updateShape();
+}
+
+void PathItem::updateStyle()
+{
+	updateColor();
+	updateWidth();
+	updatePenStyle();
+
+	for (int i = 0; i < _graphs.size(); i++) {
+		GraphItem *graph = _graphs.at(i);
+		if (graph)
+			graph->updateStyle();
+	}
 }
 
 const PathSegment *PathItem::segment(qreal x) const
@@ -324,10 +361,10 @@ void PathItem::setMarkerColor(const QColor &color)
 void PathItem::hover(bool hover)
 {
 	if (hover) {
-		_pen.setWidth((_width + 1) * pow(2, -_digitalZoom));
+		_pen.setWidth((width() + 1) * pow(2, -_digitalZoom));
 		setZValue(zValue() + 1.0);
 	} else {
-		_pen.setWidth(_width * pow(2, -_digitalZoom));
+		_pen.setWidth(width() * pow(2, -_digitalZoom));
 		setZValue(zValue() - 1.0);
 	}
 
@@ -418,6 +455,12 @@ void PathItem::addGraph(GraphItem *graph)
 	if (graph) {
 		connect(this, &PathItem::selected, graph, &GraphItem::hover);
 		connect(graph, &GraphItem::selected, this, &PathItem::hover);
+		if (graph->secondaryGraph()) {
+			connect(this, &PathItem::selected, graph->secondaryGraph(),
+			  &GraphItem::hover);
+			connect(graph->secondaryGraph(), &GraphItem::selected, this,
+			  &PathItem::hover);
+		}
 	}
 }
 
@@ -430,7 +473,7 @@ void PathItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
 	Q_UNUSED(event);
 
-	_pen.setWidthF((_width + 1) * pow(2, -_digitalZoom));
+	_pen.setWidthF((width() + 1) * pow(2, -_digitalZoom));
 	setZValue(zValue() + 1.0);
 	update();
 
@@ -441,7 +484,7 @@ void PathItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
 	Q_UNUSED(event);
 
-	_pen.setWidthF(_width * pow(2, -_digitalZoom));
+	_pen.setWidthF(width() * pow(2, -_digitalZoom));
 	setZValue(zValue() - 1.0);
 	update();
 

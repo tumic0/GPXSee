@@ -11,9 +11,11 @@ GraphItem::GraphItem(const Graph &graph, GraphType type, int width,
 	Q_ASSERT(_graph.isValid());
 
 	_units = Metric;
-	_pen = QPen(graph.color().isValid() ? graph.color() : color, width, style,
-	  Qt::FlatCap);
 	_sx = 0; _sy = 0;
+	_color = color;
+
+	_pen = QPen(GraphItem::color(), width, style, Qt::FlatCap);
+
 	_time = _graph.hasTime();
 	setZValue(2.0);
 	setAcceptHoverEvents(true);
@@ -53,14 +55,21 @@ void GraphItem::setGraphType(GraphType type)
 	updateBounds();
 }
 
+const QColor &GraphItem::color() const
+{
+	return (_useStyle && _graph.color().isValid())
+	  ? _graph.color() : _color;
+}
+
 void GraphItem::setColor(const QColor &color)
 {
-	if (_graph.color().isValid())
-		return;
-	if (_pen.color() == color)
-		return;
+	_color = color;
+	updateColor();
+}
 
-	_pen.setColor(color);
+void GraphItem::updateColor()
+{
+	_pen.setColor(color());
 	update();
 }
 
@@ -74,6 +83,13 @@ void GraphItem::setWidth(int width)
 	_pen.setWidth(width);
 
 	updateShape();
+}
+
+void GraphItem::updateStyle()
+{
+	updateColor();
+	if (_secondaryGraph)
+		_secondaryGraph->updateStyle();
 }
 
 const GraphSegment *GraphItem::segment(qreal x, GraphType type) const
