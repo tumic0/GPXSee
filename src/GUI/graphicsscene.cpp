@@ -4,7 +4,7 @@
 #include "graphicsscene.h"
 
 
-bool GraphicsItem::_useStyle = false;
+bool GraphicsItem::_useStyle = true;
 
 /* Standard GraphicsScene::items() is not pixel accurate, so we use the
    following function which has the same logic as used in the original

@@ -2512,6 +2512,8 @@ void GUI::writeSettings()
 	else if (_showMarkerCoordinatesAction->isChecked()
 	  && SHOW_MARKER_INFO_DEFAULT != MarkerInfoItem::Position)
 		settings.setValue(SHOW_MARKER_INFO_SETTING, MarkerInfoItem::Position);
+	if (_useStylesAction->isChecked() != USE_STYLES_DEFAULT)
+		settings.setValue(USE_STYLES_SETTING, _useStylesAction->isChecked());
 	settings.endGroup();
 
 	settings.beginGroup(PDF_EXPORT_SETTINGS_GROUP);
@@ -2859,6 +2861,10 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 			_showMarkersAction->trigger();
 	} else
 		_hideMarkersAction->trigger();
+	if (settings.value(USE_STYLES_SETTING, USE_STYLES_DEFAULT).toBool()) {
+		_useStylesAction->setChecked(true);
+	} else
+		_mapView->useStyles(false);
 	settings.endGroup();
 
 	settings.beginGroup(PDF_EXPORT_SETTINGS_GROUP);
