@@ -32,7 +32,12 @@ static bool isZIP(QFile *file)
 qreal KMLParser::number()
 {
 	bool res;
-	qreal ret = _reader.readElementText().toDouble(&res);
+	QString str(_reader.readElementText());
+
+	if (str.isEmpty())
+		return NAN;
+
+	qreal ret = str.toDouble(&res);
 	if (!res)
 		_reader.raiseError(QString("Invalid %1").arg(
 		  _reader.name().toString()));
@@ -59,6 +64,8 @@ bool KMLParser::coord(Trackpoint &trackpoint)
 	qreal val[3];
 	bool res;
 
+	if (data.isEmpty())
+		return true;
 
 	sp = data.constData();
 	ep = sp + data.size();
@@ -331,9 +338,9 @@ void KMLParser::point(Waypoint &waypoint)
 		_reader.raiseError("Missing Point coordinates");
 }
 
-void KMLParser::heartRate(SegmentData &segment, int start)
+void KMLParser::heartRate(SegmentData &segment)
 {
-	int i = start;
+	int i = 0;
 	const char error[] = "Heartrate data count mismatch";
 
 	while (_reader.readNextStartElement()) {
@@ -348,13 +355,13 @@ void KMLParser::heartRate(SegmentData &segment, int start)
 			_reader.skipCurrentElement();
 	}
 
-	if (i != segment.size())
+	if (!_reader.error() && i != segment.size())
 		_reader.raiseError(error);
 }
 
-void KMLParser::cadence(SegmentData &segment, int start)
+void KMLParser::cadence(SegmentData &segment)
 {
-	int i = start;
+	int i = 0;
 	const char error[] = "Cadence data count mismatch";
 
 	while (_reader.readNextStartElement()) {
@@ -369,13 +376,13 @@ void KMLParser::cadence(SegmentData &segment, int start)
 			_reader.skipCurrentElement();
 	}
 
-	if (i != segment.size())
+	if (!_reader.error() && i != segment.size())
 		_reader.raiseError(error);
 }
 
-void KMLParser::speed(SegmentData &segment, int start)
+void KMLParser::speed(SegmentData &segment)
 {
-	int i = start;
+	int i = 0;
 	const char error[] = "Speed data count mismatch";
 
 	while (_reader.readNextStartElement()) {
@@ -390,13 +397,13 @@ void KMLParser::speed(SegmentData &segment, int start)
 			_reader.skipCurrentElement();
 	}
 
-	if (i != segment.size())
+	if (!_reader.error() && i != segment.size())
 		_reader.raiseError(error);
 }
 
-void KMLParser::temperature(SegmentData &segment, int start)
+void KMLParser::temperature(SegmentData &segment)
 {
-	int i = start;
+	int i = 0;
 	const char error[] = "Temperature data count mismatch";
 
 	while (_reader.readNextStartElement()) {
@@ -411,25 +418,49 @@ void KMLParser::temperature(SegmentData &segment, int start)
 			_reader.skipCurrentElement();
 	}
 
-	if (i != segment.size())
+	if (!_reader.error() && i != segment.size())
 		_reader.raiseError(error);
 }
 
-void KMLParser::schemaData(SegmentData &segment, int start)
+void KMLParser::power(SegmentData &segment)
+{
+	int i = 0;
+	const char error[] = "Power data count mismatch";
+
+	while (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("value")) {
+			if (i < segment.size())
+				segment[i++].setPower(number());
+			else {
+				_reader.raiseError(error);
+				return;
+			}
+		} else
+			_reader.skipCurrentElement();
+	}
+
+	if (!_reader.error() && i != segment.size())
+		_reader.raiseError(error);
+}
+
+void KMLParser::schemaData(SegmentData &segment)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("SimpleArrayData")) {
 			QXmlStreamAttributes attr = _reader.attributes();
-			QString name(attr.value("name").toString());
+			// There are files using capitalized names in the wild!
+			QString name(attr.value("name").toString().toLower());
 
-			if (name == QLatin1String("Heartrate"))
-				heartRate(segment, start);
-			else if (name == QLatin1String("Cadence"))
-				cadence(segment, start);
-			else if (name == QLatin1String("Speed"))
-				speed(segment, start);
-			else if (name == QLatin1String("Temperature"))
-				temperature(segment, start);
+			if (name == QLatin1String("heartrate"))
+				heartRate(segment);
+			else if (name == QLatin1String("cadence"))
+				cadence(segment);
+			else if (name == QLatin1String("speed"))
+				speed(segment);
+			else if (name == QLatin1String("temperature"))
+				temperature(segment);
+			else if (name == QLatin1String("power"))
+				power(segment);
 			else
 				_reader.skipCurrentElement();
 		} else
@@ -437,11 +468,11 @@ void KMLParser::schemaData(SegmentData &segment, int start)
 	}
 }
 
-void KMLParser::extendedData(SegmentData &segment, int start)
+void KMLParser::extendedData(SegmentData &segment)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("SchemaData"))
-			schemaData(segment, start);
+			schemaData(segment);
 		else
 			_reader.skipCurrentElement();
 	}
@@ -450,8 +481,7 @@ void KMLParser::extendedData(SegmentData &segment, int start)
 void KMLParser::track(SegmentData &segment)
 {
 	const char error[] = "gx:coord/when element count mismatch";
-	int first = segment.size();
-	int i = first;
+	int i = 0;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("when")) {
@@ -467,13 +497,20 @@ void KMLParser::track(SegmentData &segment)
 			}
 			i++;
 		} else if (_reader.name() == QLatin1String("ExtendedData"))
-			extendedData(segment, first);
+			extendedData(segment);
 		else
 			_reader.skipCurrentElement();
 	}
 
-	if (i != segment.size())
+	if (i != segment.size()) {
 		_reader.raiseError(error);
+		return;
+	}
+
+	// empty (invalid) coordinates are allowed per KML specification!
+	for (int i = 0; i < segment.size(); i++)
+		if (segment.at(i).coordinates().isNull())
+			segment.remove(i);
 }
 
 void KMLParser::multiTrack(TrackData &t)
