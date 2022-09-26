@@ -2,7 +2,7 @@
 <map xmlns="http://www.gpxsee.org/map/1.4">
 	<name>USGS Imagery</name>
 	<url>https://basemap.nationalmap.gov/ArcGIS/rest/services/USGSImageryOnly/MapServer/tile/$z/$y/$x</url>
-	<zoom min="2" max="15"/>
+	<zoom min="2" max="16"/>
 	<bounds bottom="0" top="74"/>
 	<copyright>Map services and data available from U.S. Geological Survey, National Geospatial Program.</copyright>
 </map>

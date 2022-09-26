@@ -2,6 +2,6 @@
 <map xmlns="http://www.gpxsee.org/map/1.4">
 	<name>USGS Topo</name>
 	<url>https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/$z/$y/$x</url>
-	<zoom min="2" max="15"/>
+	<zoom min="2" max="16"/>
 	<copyright>Map services and data available from U.S. Geological Survey, National Geospatial Program.</copyright>
 </map>
