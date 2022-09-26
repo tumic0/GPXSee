@@ -569,7 +569,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="432"/>
         <source>Use styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Stile verwenden</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="439"/>
