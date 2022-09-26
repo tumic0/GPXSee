@@ -61,6 +61,9 @@ bool PLTParser::parse(QFile *file, QList<TrackData> &tracks,
 			}
 		} else if (_errorLine == 5) {
 			QList<QByteArray> list = line.split(',');
+			if (list.size() >= 3 && !list.at(2).isEmpty())
+				track.setStyle(LineStyle(QColor(list.at(2).toUInt()),
+				  list.at(1).toUInt()));
 			if (list.size() >= 4)
 				track.setName(list.at(3));
 		} else if (_errorLine > 6) {
@@ -166,6 +169,9 @@ bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
 					QByteArray description(list.at(3).trimmed());
 					routes.last().setDescription(decode(description));
 				}
+				if (list.size() >= 5 && !list.at(4).isEmpty())
+					routes.last().setStyle(
+					  LineStyle(QColor(list.at(4).toUInt())));
 			} else if (list.at(0).trimmed() == "W") {
 				if (!record || list.size() < 7) {
 					_errorString = "Parse error";
@@ -282,6 +288,8 @@ bool WPTParser::parse(QFile *file, QList<TrackData> &tracks,
 					  delphi2unixMS(date)));
 				}
 			}
+			if (list.size() >= 9 && !list.at(8).isEmpty())
+				wp.setStyle(PointStyle(QColor(list.at(8).toUInt())));
 			if (list.size() >= 11) {
 				QByteArray description(list.at(10).trimmed());
 				if (!description.isEmpty())
