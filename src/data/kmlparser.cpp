@@ -525,7 +525,7 @@ void KMLParser::multiTrack(TrackData &t)
 }
 
 void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
-  PointStyleMap &pointStyles)
+  PointStyleMap &pointStyles, QMap<QString, QString> &map)
 {
 	QString img, id;
 	Waypoint w;
@@ -548,7 +548,7 @@ void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
 			style(ctx.dir, pointStyles, unused, unused2);
 			id = QString();
 		} else if (_reader.name() == QLatin1String("StyleMap"))
-			styleMap(pointStyles, unused, unused2);
+			styleMap(map);
 		else if (_reader.name() == QLatin1String("Icon"))
 			img = icon();
 		else if (_reader.name() == QLatin1String("Point"))
@@ -560,7 +560,11 @@ void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
 	}
 
 	if (!w.coordinates().isNull()) {
-		w.setStyle(pointStyles.value(id));
+		PointStyleMap::iterator pit = pointStyles.find(id);
+		if (pit == pointStyles.end())
+			pit = pointStyles.find(map.value(id));
+		w.setStyle(pit == pointStyles.end()
+		  ? PointStyle(QColor(0x55, 0x55, 0x55)) : *pit);
 
 		img.replace(re, "0");
 		if (!QUrl(img).scheme().isEmpty())
@@ -611,7 +615,8 @@ void KMLParser::multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
 
 void KMLParser::placemark(const Ctx &ctx, QList<TrackData> &tracks,
   QList<Area> &areas, QVector<Waypoint> &waypoints, PointStyleMap &pointStyles,
-  PolygonStyleMap &polyStyles, LineStyleMap &lineStyles)
+  PolygonStyleMap &polyStyles, LineStyleMap &lineStyles,
+  QMap<QString, QString> &map)
 {
 	QString name, desc, phone, address, id;
 	QDateTime timestamp;
@@ -634,7 +639,7 @@ void KMLParser::placemark(const Ctx &ctx, QList<TrackData> &tracks,
 			style(ctx.dir, pointStyles, polyStyles, lineStyles);
 			id = QString();
 		} else if (_reader.name() == QLatin1String("StyleMap"))
-			styleMap(pointStyles, polyStyles, lineStyles);
+			styleMap(map);
 		else if (_reader.name() == QLatin1String("MultiGeometry"))
 			multiGeometry(tracks, areas, waypoints);
 		else if (_reader.name() == QLatin1String("Point")) {
@@ -662,8 +667,14 @@ void KMLParser::placemark(const Ctx &ctx, QList<TrackData> &tracks,
 	}
 
 	PointStyleMap::iterator pit = pointStyles.find(id);
+	if (pit == pointStyles.end())
+		pit = pointStyles.find(map.value(id));
 	LineStyleMap::iterator lit = lineStyles.find(id);
+	if (lit == lineStyles.end())
+		lit = lineStyles.find(map.value(id));
 	PolygonStyleMap::iterator ait = polyStyles.find(id);
+	if (ait == polyStyles.end())
+		ait = polyStyles.find(map.value(id));
 
 	for (int i = wptIdx; i < waypoints.size(); i++) {
 		Waypoint &w = waypoints[i];
@@ -782,8 +793,7 @@ void KMLParser::lineStyle(const QString &id, LineStyleMap &styles)
 	styles.insert(id, LineStyle(c, width));
 }
 
-void KMLParser::styleMapPair(const QString &id, PointStyleMap &pointStyles,
-  PolygonStyleMap &polyStyles, LineStyleMap &lineStyles)
+void KMLParser::styleMapPair(const QString &id, QMap<QString, QString> &map)
 {
 	QString key, url;
 
@@ -796,21 +806,17 @@ void KMLParser::styleMapPair(const QString &id, PointStyleMap &pointStyles,
 			_reader.skipCurrentElement();
 	}
 
-	if (key == "normal") {
-		pointStyles.insert(id, pointStyles.value(url));
-		polyStyles.insert(id, polyStyles.value(url));
-		lineStyles.insert(id, lineStyles.value(url));
-	}
+	if (key == "normal")
+		map.insert(id, url);
 }
 
-void KMLParser::styleMap(PointStyleMap &pointStyles,
-  PolygonStyleMap &polyStyles, LineStyleMap &lineStyles)
+void KMLParser::styleMap(QMap<QString, QString> &map)
 {
 	QString id = _reader.attributes().value("id").toString();
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Pair"))
-			styleMapPair(id, pointStyles, polyStyles, lineStyles);
+			styleMapPair(id, map);
 		else
 			_reader.skipCurrentElement();
 	}
@@ -836,19 +842,19 @@ void KMLParser::style(const QDir &dir, PointStyleMap &pointStyles,
 void KMLParser::folder(const Ctx &ctx, QList<TrackData> &tracks,
   QList<Area> &areas, QVector<Waypoint> &waypoints,
   PointStyleMap &pointStyles, PolygonStyleMap &polyStyles,
-  LineStyleMap &lineStyles)
+  LineStyleMap &lineStyles, QMap<QString, QString> &map)
 {
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Document"))
 			document(ctx, tracks, areas, waypoints);
 		else if (_reader.name() == QLatin1String("Folder"))
 			folder(ctx, tracks, areas, waypoints, pointStyles, polyStyles,
-			  lineStyles);
+			  lineStyles, map);
 		else if (_reader.name() == QLatin1String("Placemark"))
 			placemark(ctx, tracks, areas, waypoints, pointStyles, polyStyles,
-			  lineStyles);
+			  lineStyles, map);
 		else if (_reader.name() == QLatin1String("PhotoOverlay"))
-			photoOverlay(ctx, waypoints, pointStyles);
+			photoOverlay(ctx, waypoints, pointStyles, map);
 		else
 			_reader.skipCurrentElement();
 	}
@@ -860,22 +866,23 @@ void KMLParser::document(const Ctx &ctx, QList<TrackData> &tracks,
 	PointStyleMap pointStyles;
 	PolygonStyleMap polyStyles;
 	LineStyleMap lineStyles;
+	QMap<QString, QString> map;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Document"))
 			document(ctx, tracks, areas, waypoints);
 		else if (_reader.name() == QLatin1String("Folder"))
 			folder(ctx, tracks, areas, waypoints, pointStyles, polyStyles,
-			  lineStyles);
+			  lineStyles, map);
 		else if (_reader.name() == QLatin1String("Placemark"))
 			placemark(ctx, tracks, areas, waypoints, pointStyles, polyStyles,
-			  lineStyles);
+			  lineStyles, map);
 		else if (_reader.name() == QLatin1String("PhotoOverlay"))
-			photoOverlay(ctx, waypoints, pointStyles);
+			photoOverlay(ctx, waypoints, pointStyles, map);
 		else if (_reader.name() == QLatin1String("Style"))
 			style(ctx.dir, pointStyles, polyStyles, lineStyles);
 		else if (_reader.name() == QLatin1String("StyleMap"))
-			styleMap(pointStyles, polyStyles, lineStyles);
+			styleMap(map);
 		else
 			_reader.skipCurrentElement();
 	}
@@ -887,18 +894,19 @@ void KMLParser::kml(const Ctx &ctx, QList<TrackData> &tracks,
 	PointStyleMap pointStyles;
 	PolygonStyleMap polyStyles;
 	LineStyleMap lineStyles;
+	QMap<QString, QString> map;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Document"))
 			document(ctx, tracks, areas, waypoints);
 		else if (_reader.name() == QLatin1String("Folder"))
 			folder(ctx, tracks, areas, waypoints, pointStyles, polyStyles,
-			  lineStyles);
+			  lineStyles, map);
 		else if (_reader.name() == QLatin1String("Placemark"))
 			placemark(ctx, tracks, areas, waypoints, pointStyles, polyStyles,
-			  lineStyles);
+			  lineStyles, map);
 		else if (_reader.name() == QLatin1String("PhotoOverlay"))
-			photoOverlay(ctx, waypoints, pointStyles);
+			photoOverlay(ctx, waypoints, pointStyles, map);
 		else
 			_reader.skipCurrentElement();
 	}

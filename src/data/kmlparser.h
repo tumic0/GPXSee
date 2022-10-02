@@ -34,14 +34,16 @@ private:
 	  QVector<Waypoint> &waypoints);
 	void folder(const Ctx &ctx, QList<TrackData> &tracks, QList<Area> &areas,
 	  QVector<Waypoint> &waypoints, PointStyleMap &pointStyles,
-	  PolygonStyleMap &polyStyles, LineStyleMap &lineStyles);
+	  PolygonStyleMap &polyStyles, LineStyleMap &lineStyles,
+	  QMap<QString, QString> &map);
 	void placemark(const Ctx &ctx, QList<TrackData> &tracks, QList<Area> &areas,
 	  QVector<Waypoint> &waypoints, PointStyleMap &pointStyles,
-	  PolygonStyleMap &polyStyles, LineStyleMap &lineStyles);
+	  PolygonStyleMap &polyStyles, LineStyleMap &lineStyles,
+	  QMap<QString, QString> &map);
 	void multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
 	  QVector<Waypoint> &waypoints);
 	void photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
-	  PointStyleMap &pointStyles);
+	  PointStyleMap &pointStyles, QMap<QString, QString> &map);
 	void track(SegmentData &segment);
 	void multiTrack(TrackData &t);
 	void lineString(SegmentData &segment);
@@ -68,10 +70,8 @@ private:
 	QString styleUrl();
 	void style(const QDir &dir, PointStyleMap &pointStyles,
 	  PolygonStyleMap &polyStyles, LineStyleMap &lineStyles);
-	void styleMapPair(const QString &id, PointStyleMap &pointStyles,
-	  PolygonStyleMap &polyStyles, LineStyleMap &lineStyles);
-	void styleMap(PointStyleMap &pointStyles, PolygonStyleMap &polyStyles,
-	  LineStyleMap &lineStyles);
+	void styleMapPair(const QString &id, QMap<QString, QString> &map);
+	void styleMap(QMap<QString, QString> &map);
 	void iconStyle(const QDir &dir, const QString &id, PointStyleMap &style);
 	void polyStyle(const QString &id, PolygonStyleMap &styles);
 	void lineStyle(const QString &id, LineStyleMap &styles);
