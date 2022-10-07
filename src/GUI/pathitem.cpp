@@ -200,7 +200,8 @@ void PathItem::updateWidth()
 
 Qt::PenStyle PathItem::penStyle() const
 {
-	return _useStyle ? Qt::SolidLine : _penStyle;
+	return (_useStyle && _path.style().style() != Qt::NoPen)
+	  ? _path.style().style() : _penStyle;
 }
 
 void PathItem::setPenStyle(Qt::PenStyle style)

@@ -44,16 +44,19 @@ private:
 
 class LineStyle {
 public:
-	LineStyle() : _width(-1) {}
-	LineStyle(const QColor &color, qreal width = -1)
-	  : _color(color), _width(width) {}
+	LineStyle() : _width(-1), _style(Qt::NoPen) {}
+	LineStyle(const QColor &color, qreal width = -1,
+	  Qt::PenStyle style = Qt::NoPen)
+	  : _color(color), _width(width), _style(style) {}
 
 	const QColor &color() const {return _color;}
 	qreal width() const {return _width;}
+	Qt::PenStyle style() const {return _style;}
 
 private:
 	QColor _color;
 	qreal _width;
+	Qt::PenStyle _style;
 };
 
 #endif // STYLE_H

@@ -691,7 +691,7 @@ void KMLParser::placemark(const Ctx &ctx, QList<TrackData> &tracks,
 		t.setName(name);
 		t.setDescription(desc);
 		t.setStyle(lit == lineStyles.end()
-		  ? LineStyle(QColor(0x55, 0x55, 0x55), 2) : *lit);
+		  ? LineStyle(QColor(0x55, 0x55, 0x55), 2, Qt::SolidLine) : *lit);
 	}
 	for (int i = areaIdx; i < areas.size(); i++) {
 		Area &a = areas[i];
@@ -790,7 +790,7 @@ void KMLParser::lineStyle(const QString &id, LineStyleMap &styles)
 			_reader.skipCurrentElement();
 	}
 
-	styles.insert(id, LineStyle(c, width));
+	styles.insert(id, LineStyle(c, width, Qt::SolidLine));
 }
 
 void KMLParser::styleMapPair(const QString &id, QMap<QString, QString> &map)

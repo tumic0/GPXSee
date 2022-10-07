@@ -74,7 +74,7 @@ static void setTrackProperties(TrackData &track, const QJsonValue &properties)
 			width = o["stroke-width"].toDouble();
 	}
 
-	track.setStyle(LineStyle(color, width));
+	track.setStyle(LineStyle(color, width, Qt::SolidLine));
 }
 
 static void setWaypointProperties(Waypoint &waypoint,
