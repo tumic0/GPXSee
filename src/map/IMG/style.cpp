@@ -269,6 +269,8 @@ void Style::defaultPolygonStyle()
 	_polygons[0x10302] = Polygon(QBrush("#a0a0ff"));
 	_polygons[0x10303] = Polygon(QBrush("#b0b0ff"));
 	_polygons[0x10304] = Polygon(QBrush("#c0c0ff"));
+	_polygons[0x10305] = Polygon(QBrush("#c0d0ff"));
+	_polygons[0x10306] = Polygon(QBrush("#c0e0ff"));
 	_polygons[0x10409] = Polygon(QBrush("#ff4040", Qt::FDiagPattern));
 	_polygons[0x10503] = Polygon(QBrush("#ff4040", Qt::FDiagPattern));
 	_polygons[0x10601] = Polygon(QBrush("#aaaaaa"));
@@ -278,7 +280,8 @@ void Style::defaultPolygonStyle()
 	_drawOrder
 	  << TYPE(0x4b) << 0x10d01 << 0x10104 << 0x10613 << TYPE(0x4a)
 	  << 0x10101 << 0x10102 << 0x10301 << 0x10302 << 0x10303
-	  << 0x10304 << 0x10105 << 0x10409 << 0x10503 << 0x10601 << 0x1060a
+	  << 0x10304 << 0x10305 << 0x10306 << 0x10105 << 0x10409
+	  << 0x10503 << 0x10601 << 0x1060a
 	  << TYPE(0x01) << 0x10800 << TYPE(0x02) << 0x10801 << TYPE(0x03) << 0x10802
 	  << TYPE(0x17) << 0x10a04 << TYPE(0x18) << 0x1090c << TYPE(0x1a) << 0x1090e
 	  << TYPE(0x28) << 0x10b01 << TYPE(0x32) << 0x10b02 << TYPE(0x3c) << 0x10b03
@@ -633,8 +636,8 @@ void Style::defaultPointStyle()
 	_points[0x10104] = Point(QImage(":/IMG/light-major.png"));
 	_points[0x10105] = Point(QImage(":/IMG/light-major.png"));
 	_points[0x10106] = Point(QImage(":/IMG/light-major.png"));
-	_points[0x10107] = Point(QImage(":/IMG/light-major.png"));
-	_points[0x10108] = Point(QImage(":/IMG/light-major.png"));
+	_points[0x10107] = Point(QImage(":/IMG/light-major-port.png"));
+	_points[0x10108] = Point(QImage(":/IMG/light-major-starboard.png"));
 	_points[0x10109] = Point(QImage(":/IMG/light-major.png"));
 	_points[0x1010a] = Point(QImage(":/IMG/light-major.png"));
 	_points[0x10200] = Point(QImage(":/IMG/buoy.png"));
@@ -645,6 +648,8 @@ void Style::defaultPointStyle()
 	_points[0x10205] = Point(QImage(":/IMG/buoy.png"));
 	_points[0x10206] = Point(QImage(":/IMG/beacon.png"));
 	_points[0x10207] = Point(QImage(":/IMG/spar-buoy.png"));
+	_points[0x10209] = Point(QImage(":/IMG/buoy-port.png"));
+	_points[0x1020a] = Point(QImage(":/IMG/buoy-starboard.png"));
 	_points[0x1020b] = Point(QImage(":/IMG/buoy.png"));
 	_points[0x1020d] = Point(QImage(":/IMG/light-platform.png"));
 	_points[0x1020e] = Point(QImage(":/IMG/beacon.png"));
@@ -652,8 +657,8 @@ void Style::defaultPointStyle()
 	_points[0x10210] = Point(QImage(":/IMG/beacon.png"));
 	_points[0x10211] = Point(QImage(":/IMG/beacon.png"));
 	_points[0x10212] = Point(QImage(":/IMG/beacon.png"));
-	_points[0x10213] = Point(QImage(":/IMG/beacon.png"));
-	_points[0x10214] = Point(QImage(":/IMG/beacon.png"));
+	_points[0x10213] = Point(QImage(":/IMG/beacon-port.png"));
+	_points[0x10214] = Point(QImage(":/IMG/beacon-starboard.png"));
 	_points[0x10215] = Point(QImage(":/IMG/beacon.png"));
 	_points[0x10216] = Point(QImage(":/IMG/mooring-buoy.png"));
 	_points[0x10305] = Point(QImage(":/IMG/chimney.png"));

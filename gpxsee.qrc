@@ -136,9 +136,15 @@
 		<file alias="zoo-11.png">icons/IMG/POI/zoo-11.png</file>
 
 		<file alias="light-major.png">icons/IMG/marine/light-major.png</file>
+		<file alias="light-major-port.png">icons/IMG/marine/light-major-port.png</file>
+		<file alias="light-major-starboard.png">icons/IMG/marine/light-major-starboard.png</file>
 		<file alias="light-platform.png">icons/IMG/marine/light-platform.png</file>
 		<file alias="buoy.png">icons/IMG/marine/buoy.png</file>
+		<file alias="buoy-starboard.png">icons/IMG/marine/buoy-starboard.png</file>
+		<file alias="buoy-port.png">icons/IMG/marine/buoy-port.png</file>
 		<file alias="beacon.png">icons/IMG/marine/beacon.png</file>
+		<file alias="beacon-port.png">icons/IMG/marine/beacon-port.png</file>
+		<file alias="beacon-starboard.png">icons/IMG/marine/beacon-starboard.png</file>
 		<file alias="rock-exposed.png">icons/IMG/marine/rock-exposed.png</file>
 		<file alias="rock-dangerous.png">icons/IMG/marine/rock-dangerous.png</file>
 		<file alias="wreck.png">icons/IMG/marine/wreck.png</file>
