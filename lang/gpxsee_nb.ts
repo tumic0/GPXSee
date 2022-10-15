@@ -180,7 +180,7 @@
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="18"/>
         <source>System default</source>
-        <translation>Systemforvalg</translation>
+        <translation>Systemstandard</translation>
     </message>
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="40"/>
@@ -351,7 +351,7 @@
         <location filename="../src/GUI/gui.cpp" line="902"/>
         <location filename="../src/GUI/gui.cpp" line="920"/>
         <source>Paths</source>
-        <translation>Stier</translation>
+        <translation>Mappebaner</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="203"/>
@@ -556,7 +556,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="432"/>
         <source>Use styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Bruk stiler</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="439"/>
@@ -1906,7 +1906,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="762"/>
         <source>Select the initial paths of the file open dialogues. Leave the field empty for the system default.</source>
-        <translation>Velg forvalgt sti for filåpningsdialoger. La stå tom for systemforvalg.</translation>
+        <translation>Velg forvalgte mappebaner for filåpningsdialoger. La feltet stå tomt for systemstandard.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="766"/>
@@ -1926,7 +1926,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="779"/>
         <source>Initial paths</source>
-        <translation>Forvalgte stier</translation>
+        <translation>Forvalgte mappebaner</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="814"/>
