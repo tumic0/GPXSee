@@ -1,6 +1,8 @@
 #ifndef ENC_OBJECTS_H
 #define ENC_OBJECTS_H
 
+#define AIRARE 2
+#define ACHBRT 3
 #define ACHARE 4
 #define BCNCAR 5
 #define BCNISD 6

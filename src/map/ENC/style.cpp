@@ -31,14 +31,15 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(LAKARE)] = Polygon(QBrush("#9fc4e1"),
 	  QPen(QColor("#000000"), 1));
 	_polygons[TYPE(RIVERS)] = Polygon(QBrush("#9fc4e1"));
+	_polygons[TYPE(AIRARE)] = Polygon(QBrush("#aaaaaa"));
 
 	_drawOrder
 	  << TYPE(M_COVR) << TYPE(LNDARE) << TYPE(BUISGL) << SUBTYPE(DEPARE, 0)
 	  << SUBTYPE(DEPARE, 1) << SUBTYPE(DEPARE, 2) << SUBTYPE(DEPARE, 3)
 	  << SUBTYPE(DEPARE, 4) << SUBTYPE(DEPARE, 5) << SUBTYPE(DEPARE, 6)
-	  << TYPE(LAKARE) << TYPE(RIVERS) << TYPE(FAIRWY) << TYPE(BRIDGE)
-	  << TYPE(SLCONS) << TYPE(PONTON) << TYPE(DMPGRD) << TYPE(OBSTRN)
-	  << TYPE(ACHARE);
+	  << TYPE(LAKARE) << TYPE(RIVERS) << TYPE(FAIRWY) << TYPE(AIRARE)
+	  << TYPE(BRIDGE) << TYPE(SLCONS) << TYPE(PONTON) << TYPE(DMPGRD)
+	  << TYPE(OBSTRN) << TYPE(ACHARE);
 }
 
 void Style::defaultLineStyle()
@@ -89,6 +90,7 @@ void Style::defaultPointStyle()
 	_points[TYPE(UWTROC)] = Point(QImage(":/IMG/rock-dangerous.png"), Small);
 	_points[SUBTYPE(HRBFAC, 5)] = Point(QImage(":/IMG/yacht-harbor.png"));
 	_points[TYPE(PILPNT)] = Point(QImage(":/IMG/pile.png"), Small);
+	_points[TYPE(ACHBRT)] = Point(QImage(":/IMG/anchorage.png"));
 }
 
 Style::Style()

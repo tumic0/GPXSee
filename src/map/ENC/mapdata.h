@@ -132,6 +132,7 @@ private:
 	};
 
 	struct Sounding {
+		Sounding() : depth(NAN) {}
 		Sounding(const Coordinates &c, double depth) : c(c), depth(depth) {}
 
 		Coordinates c;
