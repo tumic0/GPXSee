@@ -449,11 +449,10 @@ bool MapData::processRecord(const ISO8211::Record &record)
 	const QByteArray &ba = f.tag();
 
 	if (ba == "VRID") {
-		int RCNM;
-		uint RCID;
-
-		if (!(f.subfield("RCNM", &RCNM) && f.subfield("RCID", &RCID)))
+		if (f.data().at(0).size() < 2)
 			return false;
+		int RCNM = f.data().at(0).at(0).toInt();
+		uint RCID = f.data().at(0).at(1).toUInt();
 
 		switch (RCNM) {
 			case RCNM_VI:
@@ -582,7 +581,7 @@ void MapData::load()
 		const ISO8211::Record &r = _fe.at(i);
 		const ISO8211::Field &f = r.at(1);
 
-		if (f.data().at(0).size() != 7)
+		if (f.data().at(0).size() < 5)
 			continue;
 		PRIM = f.data().at(0).at(2).toUInt();
 		OBJL = f.data().at(0).at(4).toUInt();
