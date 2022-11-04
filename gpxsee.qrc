@@ -149,6 +149,7 @@
 		<file alias="rock-dangerous.png">icons/IMG/marine/rock-dangerous.png</file>
 		<file alias="wreck.png">icons/IMG/marine/wreck.png</file>
 		<file alias="wreck-exposed.png">icons/IMG/marine/wreck-exposed.png</file>
+		<file alias="wreck-dangerous.png">icons/IMG/marine/wreck-dangerous.png</file>
 		<file alias="obstruction.png">icons/IMG/marine/obstruction.png</file>
 		<file alias="obstruction-covers.png">icons/IMG/marine/obstruction-covers.png</file>
 		<file alias="anchor-line.png">icons/IMG/marine/anchor-line.png</file>

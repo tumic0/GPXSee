@@ -37,7 +37,6 @@ public:
 	private:
 		QBrush _brush;
 		QPen _pen;
-		QColor _textColor;
 	};
 
 	class Line {

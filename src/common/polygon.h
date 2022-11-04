@@ -3,6 +3,7 @@
 
 #include <QList>
 #include <QVector>
+#include <QDebug>
 #include "common/rectc.h"
 
 class Polygon
@@ -55,8 +56,19 @@ private:
 		return rect;
 	}
 
+	friend QDebug operator<<(QDebug dbg, const Polygon &poly);
+
 	QList<QVector<Coordinates> > _paths;
 	RectC _boundingRect;
 };
+
+
+#ifndef QT_NO_DEBUG
+inline QDebug operator<<(QDebug dbg, const Polygon &poly)
+{
+	dbg.nospace() << "Polygon(" << poly._paths << ")";
+	return dbg.space();
+}
+#endif // QT_NO_DEBUG
 
 #endif // POLYGON_H

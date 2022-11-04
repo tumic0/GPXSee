@@ -113,6 +113,16 @@ double Util::niceNum(double x, bool round)
 	return nf * pow(10.0, expv);
 }
 
+int Util::log2i(unsigned val)
+{
+	int ret = 0;
+
+	while (val >>= 1)
+		ret++;
+
+	return ret;
+}
+
 QString Util::file2name(const QString &path)
 {
 	QFileInfo fi(displayName(path));

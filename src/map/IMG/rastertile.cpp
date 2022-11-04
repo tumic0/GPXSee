@@ -4,7 +4,7 @@
 #include "map/imgmap.h"
 #include "map/textpathitem.h"
 #include "map/textpointitem.h"
-#include "bitmapline.h"
+#include "map/bitmapline.h"
 #include "style.h"
 #include "lblfile.h"
 #include "rastertile.h"
@@ -357,7 +357,7 @@ void RasterTile::processStreetNames(QList<TextItem*> &textItems)
 		  ? &style.textColor() : 0;
 
 		TextPathItem *item = new TextPathItem(poly.points,
-		  &poly.label.text(), _rect, fnt, color);
+		  &poly.label.text(), _rect, fnt, color, &haloColor);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
 		else

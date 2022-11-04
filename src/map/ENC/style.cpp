@@ -1,0 +1,123 @@
+#include "objects.h"
+#include "style.h"
+
+using namespace ENC;
+
+#define TYPE(t) ((t)<<16)
+#define SUBTYPE(t, s) (((t)<<16)|(s))
+
+void Style::defaultPolygonStyle()
+{
+	_polygons[TYPE(M_COVR)] = Polygon(QBrush("#ffffff"));
+	_polygons[TYPE(LNDARE)] = Polygon(QBrush("#e8e064"));
+	_polygons[TYPE(BUISGL)] = Polygon(QBrush("#d98b21"));
+	_polygons[TYPE(BRIDGE)] = Polygon(QBrush("#a58140"));
+	_polygons[SUBTYPE(DEPARE, 0)] = Polygon(QBrush("#98c064"));
+	_polygons[SUBTYPE(DEPARE, 1)] = Polygon(QBrush("#a0a0ff"));
+	_polygons[SUBTYPE(DEPARE, 2)] = Polygon(QBrush("#b0b0ff"));
+	_polygons[SUBTYPE(DEPARE, 3)] = Polygon(QBrush("#c0c0ff"));
+	_polygons[SUBTYPE(DEPARE, 4)] = Polygon(QBrush("#c0d0ff"));
+	_polygons[SUBTYPE(DEPARE, 5)] = Polygon(QBrush("#c0e0ff"));
+	_polygons[SUBTYPE(DEPARE, 6)] = Polygon(QBrush("#ffffff"));
+	_polygons[TYPE(DMPGRD)] = Polygon(QBrush(QColor("#a3a3a3"), Qt::Dense3Pattern));
+	_polygons[TYPE(FAIRWY)] = Polygon(QBrush("#fcb4fc"));
+	_polygons[TYPE(OBSTRN)] = Polygon(Qt::NoBrush, QPen(QColor("#000000"), 1.5,
+	  Qt::DotLine));
+	_polygons[TYPE(PONTON)] = Polygon(QBrush("#333333"));
+	_polygons[TYPE(SLCONS)] = Polygon(Qt::NoBrush, QPen(QColor("#333333"), 1.5,
+	  Qt::DashLine));
+	_polygons[TYPE(ACHARE)] = Polygon(Qt::NoBrush, QPen(QColor("#e728e7"), 1,
+	  Qt::DashDotLine));
+	_polygons[TYPE(LAKARE)] = Polygon(QBrush("#9fc4e1"),
+	  QPen(QColor("#000000"), 1));
+	_polygons[TYPE(RIVERS)] = Polygon(QBrush("#9fc4e1"));
+
+	_drawOrder
+	  << TYPE(M_COVR) << TYPE(LNDARE) << TYPE(BUISGL) << SUBTYPE(DEPARE, 0)
+	  << SUBTYPE(DEPARE, 1) << SUBTYPE(DEPARE, 2) << SUBTYPE(DEPARE, 3)
+	  << SUBTYPE(DEPARE, 4) << SUBTYPE(DEPARE, 5) << SUBTYPE(DEPARE, 6)
+	  << TYPE(LAKARE) << TYPE(RIVERS) << TYPE(FAIRWY) << TYPE(BRIDGE)
+	  << TYPE(SLCONS) << TYPE(PONTON) << TYPE(DMPGRD) << TYPE(OBSTRN)
+	  << TYPE(ACHARE);
+}
+
+void Style::defaultLineStyle()
+{
+	_lines[TYPE(DEPCNT)] = Line(QPen(QColor("#659aef"), 1, Qt::SolidLine));
+	_lines[TYPE(DEPCNT)].setTextColor(QColor("#558adf"));
+	_lines[TYPE(DEPCNT)].setTextFontSize(Small);
+	_lines[TYPE(CBLOHD)] = Line(QImage(":/IMG/cable-line.png"));
+	_lines[TYPE(BRIDGE)] = Line(QPen(QColor("#a58140"), 3, Qt::SolidLine));
+	_lines[TYPE(CBLSUB)] = Line(QImage(":/IMG/cable.png"));
+	_lines[TYPE(CBLSUB)].setTextFontSize(Small);
+	_lines[TYPE(PIPSOL)] = Line(QImage(":/IMG/pipeline.png"));
+	_lines[TYPE(NAVLNE)] = Line(QPen(QColor("#eb49eb"), 1, Qt::DashLine));
+	_lines[TYPE(COALNE)] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
+	_lines[TYPE(SLCONS)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
+	_lines[TYPE(PONTON)] = Line(QPen(QColor("#333333"), 1, Qt::SolidLine));
+	_lines[TYPE(DYKCON)] = Line(QPen(QColor("#333333"), 2, Qt::SolidLine));
+	_lines[TYPE(RIVERS)] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
+}
+
+void Style::defaultPointStyle()
+{
+	_points[TYPE(BUAARE)].setTextFontSize(Large);
+	_points[TYPE(SOUNDG)].setTextFontSize(Small);
+	_points[TYPE(LIGHTS)] = Point(QImage(":/IMG/light-major.png"), Small);
+	_points[TYPE(BOYCAR)] = Point(QImage(":/IMG/buoy.png"), Small);
+	_points[TYPE(BOYINB)] = Point(QImage(":/IMG/buoy.png"), Small);
+	_points[TYPE(BOYISD)] = Point(QImage(":/IMG/buoy.png"), Small);
+	_points[TYPE(BOYLAT)] = Point(QImage(":/IMG/buoy.png"), Small);
+	_points[TYPE(BOYSAW)] = Point(QImage(":/IMG/buoy.png"), Small);
+	_points[TYPE(BOYSPP)] = Point(QImage(":/IMG/buoy.png"), Small);
+	_points[TYPE(BCNISD)] = Point(QImage(":/IMG/beacon.png"), Small);
+	_points[TYPE(BCNLAT)] = Point(QImage(":/IMG/beacon.png"), Small);
+	_points[TYPE(BCNSAW)] = Point(QImage(":/IMG/beacon.png"), Small);
+	_points[TYPE(BCNSPP)] = Point(QImage(":/IMG/beacon.png"), Small);
+	_points[SUBTYPE(LNDMRK, 3)] = Point(QImage(":/IMG/chimney.png"));
+	_points[SUBTYPE(LNDMRK, 20)] = Point(QImage(":/IMG/church.png"));
+	_points[SUBTYPE(LNDMRK, 17)] = Point(QImage(":/IMG/tower.png"));
+	_points[TYPE(LNDELV)] = Point(QImage(":/IMG/triangulation-point.png"));
+	_points[TYPE(OBSTRN)] = Point(QImage(":/IMG/obstruction.png"), Small);
+	_points[TYPE(WRECKS)] = Point(QImage(":/IMG/wreck.png"), Small);
+	_points[SUBTYPE(WRECKS, 1)] = Point(QImage(":/IMG/wreck.png"), Small);
+	_points[SUBTYPE(WRECKS, 2)] = Point(QImage(":/IMG/wreck-dangerous.png"),
+	  Small);
+	_points[SUBTYPE(WRECKS, 3)] = Point(QImage(":/IMG/wreck.png"), Small);
+	_points[SUBTYPE(WRECKS, 4)] = Point(QImage(":/IMG/wreck.png"), Small);
+	_points[SUBTYPE(WRECKS, 5)] = Point(QImage(":/IMG/wreck-exposed.png"));
+	_points[TYPE(UWTROC)] = Point(QImage(":/IMG/rock-dangerous.png"), Small);
+	_points[SUBTYPE(HRBFAC, 5)] = Point(QImage(":/IMG/yacht-harbor.png"));
+	_points[TYPE(PILPNT)] = Point(QImage(":/IMG/pile.png"), Small);
+}
+
+Style::Style()
+{
+	defaultPolygonStyle();
+	defaultLineStyle();
+	defaultPointStyle();
+}
+
+const Style::Line &Style::line(quint32 type) const
+{
+	static Line null;
+
+	QMap<uint, Line>::const_iterator it = _lines.find(type);
+	return (it == _lines.constEnd()) ? null : *it;
+}
+
+const Style::Polygon &Style::polygon(quint32 type) const
+{
+	static Polygon null;
+
+	QMap<uint, Polygon>::const_iterator it = _polygons.find(type);
+	return (it == _polygons.constEnd()) ? null : *it;
+}
+
+const Style::Point &Style::point(quint32 type) const
+{
+	static Point null;
+
+	QMap<uint, Point>::const_iterator it = _points.find(type);
+	return (it == _points.constEnd()) ? null : *it;
+}

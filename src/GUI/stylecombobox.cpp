@@ -1,14 +1,12 @@
 #include <QPen>
 #include <QPainter>
 #include <QResizeEvent>
+#include "common/util.h"
 #include "stylecombobox.h"
 
 
 #define MIN_LINE_LENGTH  60
 #define LINE_WIDTH_RATIO 7
-
-#define ARRAY_SIZE(a) (sizeof(a) / sizeof(*a))
-
 
 static Qt::PenStyle styles[] = {Qt::SolidLine, Qt::DashLine, Qt::DotLine,
   Qt::DashDotLine, Qt::DashDotDotLine};

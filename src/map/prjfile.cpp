@@ -1,11 +1,8 @@
 #include <QFile>
+#include "common/util.h"
 #include "gcs.h"
 #include "pcs.h"
 #include "prjfile.h"
-
-
-#define ARRAY_SIZE(array) \
-  (sizeof(array) / sizeof(array[0]))
 
 static Projection::Method projectionMethod(const QString &name)
 {

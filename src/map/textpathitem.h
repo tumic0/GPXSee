@@ -10,7 +10,8 @@ class TextPathItem : public TextItem
 public:
 	TextPathItem() : TextItem(0), _font(0), _color(0) {}
 	TextPathItem(const QPolygonF &line, const QString *label,
-	  const QRect &tileRect, const QFont *font, const QColor *color);
+	  const QRect &tileRect, const QFont *font, const QColor *color,
+	  const QColor *haloColor);
 	TextPathItem(const QPainterPath &line, const QString *label,
 	  const QRect &tileRect, const QFont *font, const QColor *color,
 	  const QColor *haloColor);

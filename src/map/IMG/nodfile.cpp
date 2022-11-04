@@ -1,11 +1,10 @@
+#include "common/util.h"
 #include "bitstream.h"
 #include "nodfile.h"
 
 using namespace Garmin;
 using namespace IMG;
 
-#define ARRAY_SIZE(array) \
-  (sizeof(array) / sizeof(array[0]))
 #define DELTA(val, llBits, maxBits) \
   (((int)((val) << (32 - (llBits))) >> (32 - (llBits))) << (32 - (maxBits)))
 

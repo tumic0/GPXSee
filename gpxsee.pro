@@ -116,7 +116,13 @@ HEADERS += src/common/config.h \
     src/GUI/passwordedit.h \
     src/data/style.h \
     src/data/twonavparser.h \
+    src/map/ENC/mapdata.h \
+    src/map/ENC/objects.h \
+    src/map/ENC/rastertile.h \
+    src/map/ENC/style.h \
     src/map/IMG/section.h \
+    src/map/encmap.h \
+    src/map/ENC/iso8211.h \
     src/map/gemfmap.h \
     src/map/oruxmap.h \
     src/map/osmdroidmap.h \
@@ -131,7 +137,7 @@ HEADERS += src/common/config.h \
     src/map/proj/krovak.h \
     src/map/proj/polarstereographic.h \
     src/map/proj/obliquestereographic.h \
-    src/map/IMG/bitmapline.h \
+    src/map/bitmapline.h \
     src/map/IMG/bitstream.h \
     src/map/IMG/deltastream.h \
     src/map/IMG/gmapdata.h \
@@ -322,6 +328,11 @@ SOURCES += src/main.cpp \
     src/GUI/projectioncombobox.cpp \
     src/GUI/passwordedit.cpp \
     src/data/twonavparser.cpp \
+    src/map/ENC/mapdata.cpp \
+    src/map/ENC/rastertile.cpp \
+    src/map/ENC/style.cpp \
+    src/map/encmap.cpp \
+    src/map/ENC/iso8211.cpp \
     src/map/gemfmap.cpp \
     src/map/oruxmap.cpp \
     src/map/osmdroidmap.cpp \
@@ -335,7 +346,7 @@ SOURCES += src/main.cpp \
     src/map/proj/krovak.cpp \
     src/map/proj/polarstereographic.cpp \
     src/map/proj/obliquestereographic.cpp \
-    src/map/IMG/bitmapline.cpp \
+    src/map/bitmapline.cpp \
     src/map/IMG/bitstream.cpp \
     src/map/IMG/deltastream.cpp \
     src/map/IMG/gmapdata.cpp \

@@ -1,6 +1,7 @@
 #include <QPainter>
 #include <QPixmapCache>
 #include "common/wgs84.h"
+#include "common/util.h"
 #include "pcs.h"
 #include "rectd.h"
 #include "mapsforgemap.h"
@@ -9,16 +10,6 @@
 using namespace Mapsforge;
 
 #define TEXT_EXTENT 160
-
-static int log2i(unsigned val)
-{
-	int ret = 0;
-
-	while (val >>= 1)
-		ret++;
-
-	return ret;
-}
 
 MapsforgeMap::MapsforgeMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _data(fileName), _zoom(0),
@@ -87,7 +78,7 @@ void MapsforgeMap::setZoom(int zoom)
 
 Transform MapsforgeMap::transform(int zoom) const
 {
-	int z = zoom + log2i(_data.tileSize());
+	int z = zoom + Util::log2i(_data.tileSize());
 
 	double scale = _projection.isGeographic()
 	  ? 360.0 / (1<<z) : (2.0 * M_PI * WGS84_RADIUS) / (1<<z);
