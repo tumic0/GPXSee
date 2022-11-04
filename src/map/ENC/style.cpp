@@ -31,7 +31,7 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(LAKARE)] = Polygon(QBrush("#9fc4e1"),
 	  QPen(QColor("#000000"), 1));
 	_polygons[TYPE(RIVERS)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(AIRARE)] = Polygon(QBrush("#aaaaaa"));
+	_polygons[TYPE(AIRARE)] = Polygon(QBrush("#333333"));
 
 	_drawOrder
 	  << TYPE(M_COVR) << TYPE(LNDARE) << TYPE(BUISGL) << SUBTYPE(DEPARE, 0)
