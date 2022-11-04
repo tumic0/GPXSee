@@ -116,6 +116,7 @@ HEADERS += src/common/config.h \
     src/GUI/passwordedit.h \
     src/data/style.h \
     src/data/twonavparser.h \
+    src/map/ENC/attributes.h \
     src/map/ENC/mapdata.h \
     src/map/ENC/objects.h \
     src/map/ENC/rastertile.h \

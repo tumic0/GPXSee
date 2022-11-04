@@ -19,8 +19,10 @@ void Style::defaultPolygonStyle()
 	_polygons[SUBTYPE(DEPARE, 4)] = Polygon(QBrush("#c0d0ff"));
 	_polygons[SUBTYPE(DEPARE, 5)] = Polygon(QBrush("#c0e0ff"));
 	_polygons[SUBTYPE(DEPARE, 6)] = Polygon(QBrush("#ffffff"));
-	_polygons[TYPE(DMPGRD)] = Polygon(QBrush(QColor("#a3a3a3"), Qt::Dense3Pattern));
-	_polygons[TYPE(FAIRWY)] = Polygon(QBrush("#fcb4fc"));
+	_polygons[TYPE(DMPGRD)] = Polygon(QBrush(QColor("#a3a3a3"),
+	  Qt::Dense3Pattern));
+	_polygons[TYPE(FAIRWY)] = Polygon(Qt::NoBrush, QPen(QColor("#888888"), 1,
+	  Qt::DashDotDotLine));
 	_polygons[TYPE(OBSTRN)] = Polygon(Qt::NoBrush, QPen(QColor("#000000"), 1.5,
 	  Qt::DotLine));
 	_polygons[TYPE(PONTON)] = Polygon(QBrush("#333333"));
@@ -32,6 +34,9 @@ void Style::defaultPolygonStyle()
 	  QPen(QColor("#000000"), 1));
 	_polygons[TYPE(RIVERS)] = Polygon(QBrush("#9fc4e1"));
 	_polygons[TYPE(AIRARE)] = Polygon(QBrush("#333333"));
+	_polygons[SUBTYPE(RESARE, 9)] = Polygon(QBrush(QColor("#ff0000"),
+	  Qt::BDiagPattern), QPen(QColor("#ff0000"), 1));
+	_polygons[TYPE(TSEZNE)] = Polygon(QBrush("#80fcb4fc"));
 
 	_drawOrder
 	  << TYPE(M_COVR) << TYPE(LNDARE) << TYPE(BUISGL) << SUBTYPE(DEPARE, 0)
@@ -39,7 +44,7 @@ void Style::defaultPolygonStyle()
 	  << SUBTYPE(DEPARE, 4) << SUBTYPE(DEPARE, 5) << SUBTYPE(DEPARE, 6)
 	  << TYPE(LAKARE) << TYPE(RIVERS) << TYPE(FAIRWY) << TYPE(AIRARE)
 	  << TYPE(BRIDGE) << TYPE(SLCONS) << TYPE(PONTON) << TYPE(DMPGRD)
-	  << TYPE(OBSTRN) << TYPE(ACHARE);
+	  << TYPE(TSEZNE) << TYPE(OBSTRN) << TYPE(ACHARE) << SUBTYPE(RESARE, 9);
 }
 
 void Style::defaultLineStyle()
@@ -58,6 +63,7 @@ void Style::defaultLineStyle()
 	_lines[TYPE(PONTON)] = Line(QPen(QColor("#333333"), 1, Qt::SolidLine));
 	_lines[TYPE(DYKCON)] = Line(QPen(QColor("#333333"), 2, Qt::SolidLine));
 	_lines[TYPE(RIVERS)] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
+	_lines[TYPE(TSSBND)] = Line(QPen(QColor("#eb49eb"), 2, Qt::DashLine));
 }
 
 void Style::defaultPointStyle()

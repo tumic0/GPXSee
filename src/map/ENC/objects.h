@@ -37,9 +37,12 @@
 #define PILPNT 90
 #define PIPSOL 94
 #define PONTON 95
+#define RESARE 112
 #define RIVERS 114
 #define SLCONS 122
 #define SOUNDG 129
+#define TSSBND 146
+#define TSEZNE 150
 #define UWTROC 153
 #define WRECKS 159
 #define M_COVR 302

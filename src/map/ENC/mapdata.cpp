@@ -1,6 +1,7 @@
 #include <QFile>
 #include "common/util.h"
 #include "objects.h"
+#include "attributes.h"
 #include "mapdata.h"
 
 using namespace ENC;
@@ -86,9 +87,8 @@ static bool polygonCb(MapData::Poly *polygon, void *context)
 	return true;
 }
 
-static uint depthLevel(const QVariant &DRVAL1)
+static uint depthLevel(const QString &str)
 {
-	QString str(DRVAL1.toString());
 	double minDepth = str.isEmpty() ? -1 : str.toDouble();
 
 	if (minDepth < 0)
@@ -362,10 +362,11 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 		const QVector<QVariant> &av = ATTF->data().at(i);
 		uint key = av.at(0).toUInt();
 
-		if (key == 116)
+		if (key == OBJNAM)
 			label = av.at(1).toString();
-		if ((OBJL == HRBFAC && key == 30) || (OBJL == LNDMRK && key == 35)
-		  || (OBJL == WRECKS && key == 71))
+		if ((OBJL == HRBFAC && key == CATHAF)
+		  || (OBJL == LNDMRK && key == CATLMK)
+		  || (OBJL == WRECKS && key == CATWRK))
 			subtype = av.at(1).toString().toUInt();
 	}
 
@@ -385,9 +386,9 @@ MapData::Attr MapData::lineAttr(const ISO8211::Record &r, uint OBJL)
 		const QVector<QVariant> &av = ATTF->data().at(i);
 		uint key = av.at(0).toUInt();
 
-		if (key == 116)
+		if (key == OBJNAM)
 			label = av.at(1).toString();
-		if ((OBJL == DEPCNT && key == 174))
+		if ((OBJL == DEPCNT && key == VALDCO))
 			label = av.at(1).toString();
 	}
 
@@ -396,8 +397,8 @@ MapData::Attr MapData::lineAttr(const ISO8211::Record &r, uint OBJL)
 
 MapData::Attr MapData::polyAttr(const ISO8211::Record &r, uint OBJL)
 {
-	if (OBJL != DEPARE)
-		return Attr();
+	QString label;
+	uint subtype = 0;
 
 	const ISO8211::Field *ATTF = r.field("ATTF");
 	if (!(ATTF && ATTF->data().at(0).size() == 2))
@@ -405,11 +406,15 @@ MapData::Attr MapData::polyAttr(const ISO8211::Record &r, uint OBJL)
 
 	for (int i = 0; i < ATTF->data().size(); i++) {
 		const QVector<QVariant> &av = ATTF->data().at(i);
-		if (av.at(0).toUInt() == 87)
-			return Attr(depthLevel(av.at(1)));
+		uint key = av.at(0).toUInt();
+
+		if (OBJL == DEPARE && key == DRVAL1)
+			subtype = depthLevel(av.at(1).toString());
+		else if (OBJL == RESARE && key == CATREA)
+			subtype = av.at(1).toString().toUInt();
 	}
 
-	return Attr();
+	return Attr(subtype, label);
 }
 
 MapData::Point *MapData::pointObject(const Sounding &s)
