@@ -62,11 +62,11 @@ void Style::defaultLineStyle()
 	_lines[TYPE(DEPCNT)] = Line(QPen(QColor("#659aef"), 1, Qt::SolidLine));
 	_lines[TYPE(DEPCNT)].setTextColor(QColor("#558adf"));
 	_lines[TYPE(DEPCNT)].setTextFontSize(Small);
-	_lines[TYPE(CBLOHD)] = Line(QImage(":/IMG/cable-line.png"));
+	_lines[TYPE(CBLOHD)] = Line(QImage(":/marine/cable-line.png"));
 	_lines[TYPE(BRIDGE)] = Line(QPen(QColor("#a58140"), 3, Qt::SolidLine));
-	_lines[TYPE(CBLSUB)] = Line(QImage(":/IMG/cable.png"));
+	_lines[TYPE(CBLSUB)] = Line(QImage(":/marine/cable.png"));
 	_lines[TYPE(CBLSUB)].setTextFontSize(Small);
-	_lines[TYPE(PIPSOL)] = Line(QImage(":/IMG/pipeline.png"));
+	_lines[TYPE(PIPSOL)] = Line(QImage(":/marine/pipeline.png"));
 	_lines[TYPE(NAVLNE)] = Line(QPen(QColor("#eb49eb"), 1, Qt::DashLine));
 	_lines[TYPE(COALNE)] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
 	_lines[TYPE(SLCONS)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
@@ -80,34 +80,34 @@ void Style::defaultPointStyle()
 {
 	_points[TYPE(BUAARE)].setTextFontSize(Large);
 	_points[TYPE(SOUNDG)].setTextFontSize(Small);
-	_points[TYPE(LIGHTS)] = Point(QImage(":/IMG/light-major.png"), Small);
-	_points[TYPE(BOYCAR)] = Point(QImage(":/IMG/buoy.png"), Small);
-	_points[TYPE(BOYINB)] = Point(QImage(":/IMG/buoy.png"), Small);
-	_points[TYPE(BOYISD)] = Point(QImage(":/IMG/buoy.png"), Small);
-	_points[TYPE(BOYLAT)] = Point(QImage(":/IMG/buoy.png"), Small);
-	_points[TYPE(BOYSAW)] = Point(QImage(":/IMG/buoy.png"), Small);
-	_points[TYPE(BOYSPP)] = Point(QImage(":/IMG/buoy.png"), Small);
-	_points[TYPE(BCNISD)] = Point(QImage(":/IMG/beacon.png"), Small);
-	_points[TYPE(BCNLAT)] = Point(QImage(":/IMG/beacon.png"), Small);
-	_points[TYPE(BCNSAW)] = Point(QImage(":/IMG/beacon.png"), Small);
-	_points[TYPE(BCNSPP)] = Point(QImage(":/IMG/beacon.png"), Small);
-	_points[SUBTYPE(LNDMRK, 3)] = Point(QImage(":/IMG/chimney.png"));
-	_points[SUBTYPE(LNDMRK, 20)] = Point(QImage(":/IMG/church.png"));
-	_points[SUBTYPE(LNDMRK, 17)] = Point(QImage(":/IMG/tower.png"));
-	_points[TYPE(LNDELV)] = Point(QImage(":/IMG/triangulation-point.png"));
-	_points[TYPE(OBSTRN)] = Point(QImage(":/IMG/obstruction.png"), Small);
-	_points[TYPE(WRECKS)] = Point(QImage(":/IMG/wreck.png"), Small);
-	_points[SUBTYPE(WRECKS, 1)] = Point(QImage(":/IMG/wreck.png"), Small);
-	_points[SUBTYPE(WRECKS, 2)] = Point(QImage(":/IMG/wreck-dangerous.png"),
+	_points[TYPE(LIGHTS)] = Point(QImage(":/marine/light-major.png"), Small);
+	_points[TYPE(BOYCAR)] = Point(QImage(":/marine/buoy.png"), Small);
+	_points[TYPE(BOYINB)] = Point(QImage(":/marine/buoy.png"), Small);
+	_points[TYPE(BOYISD)] = Point(QImage(":/marine/buoy.png"), Small);
+	_points[TYPE(BOYLAT)] = Point(QImage(":/marine/buoy.png"), Small);
+	_points[TYPE(BOYSAW)] = Point(QImage(":/marine/buoy.png"), Small);
+	_points[TYPE(BOYSPP)] = Point(QImage(":/marine/buoy.png"), Small);
+	_points[TYPE(BCNISD)] = Point(QImage(":/marine/beacon.png"), Small);
+	_points[TYPE(BCNLAT)] = Point(QImage(":/marine/beacon.png"), Small);
+	_points[TYPE(BCNSAW)] = Point(QImage(":/marine/beacon.png"), Small);
+	_points[TYPE(BCNSPP)] = Point(QImage(":/marine/beacon.png"), Small);
+	_points[SUBTYPE(LNDMRK, 3)] = Point(QImage(":/marine/chimney.png"));
+	_points[SUBTYPE(LNDMRK, 20)] = Point(QImage(":/marine/church.png"));
+	_points[SUBTYPE(LNDMRK, 17)] = Point(QImage(":/marine/tower.png"));
+	_points[TYPE(LNDELV)] = Point(QImage(":/marine/triangulation-point.png"));
+	_points[TYPE(OBSTRN)] = Point(QImage(":/marine/obstruction.png"), Small);
+	_points[TYPE(WRECKS)] = Point(QImage(":/marine/wreck.png"), Small);
+	_points[SUBTYPE(WRECKS, 1)] = Point(QImage(":/marine/wreck.png"), Small);
+	_points[SUBTYPE(WRECKS, 2)] = Point(QImage(":/marine/wreck-dangerous.png"),
 	  Small);
-	_points[SUBTYPE(WRECKS, 3)] = Point(QImage(":/IMG/wreck.png"), Small);
-	_points[SUBTYPE(WRECKS, 4)] = Point(QImage(":/IMG/wreck.png"), Small);
-	_points[SUBTYPE(WRECKS, 5)] = Point(QImage(":/IMG/wreck-exposed.png"));
-	_points[TYPE(UWTROC)] = Point(QImage(":/IMG/rock-dangerous.png"), Small);
-	_points[SUBTYPE(HRBFAC, 5)] = Point(QImage(":/IMG/yacht-harbor.png"));
-	_points[TYPE(PILPNT)] = Point(QImage(":/IMG/pile.png"), Small);
-	_points[TYPE(ACHBRT)] = Point(QImage(":/IMG/anchorage.png"));
-	_points[TYPE(OFSPLF)] = Point(QImage(":/IMG/platform.png"));
+	_points[SUBTYPE(WRECKS, 3)] = Point(QImage(":/marine/wreck.png"), Small);
+	_points[SUBTYPE(WRECKS, 4)] = Point(QImage(":/marine/wreck.png"), Small);
+	_points[SUBTYPE(WRECKS, 5)] = Point(QImage(":/marine/wreck-exposed.png"));
+	_points[TYPE(UWTROC)] = Point(QImage(":/marine/rock-dangerous.png"), Small);
+	_points[SUBTYPE(HRBFAC, 5)] = Point(QImage(":/marine/yacht-harbor.png"));
+	_points[TYPE(PILPNT)] = Point(QImage(":/marine/pile.png"), Small);
+	_points[TYPE(ACHBRT)] = Point(QImage(":/marine/anchorage.png"));
+	_points[TYPE(OFSPLF)] = Point(QImage(":/marine/platform.png"));
 }
 
 Style::Style()
