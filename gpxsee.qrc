@@ -171,6 +171,7 @@
 		<file alias="tower.png">icons/map/marine/tower.png</file>
 		<file alias="chimney.png">icons/map/marine/chimney.png</file>
 		<file alias="platform.png">icons/map/marine/platform.png</file>
+		<file alias="ferry-line.png">icons/map/marine/ferry-line.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->

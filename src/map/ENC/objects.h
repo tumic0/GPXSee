@@ -28,6 +28,7 @@
 #define DMPGRD 48
 #define DYKCON 49
 #define FAIRWY 51
+#define FERYRT 53
 #define HRBFAC 64
 #define LAKARE 69
 #define LNDARE 71
@@ -43,6 +44,7 @@
 #define RESARE 112
 #define RIVERS 114
 #define SLCONS 122
+#define SLOTOP 126
 #define SOUNDG 129
 #define TSSBND 146
 #define TSEZNE 150

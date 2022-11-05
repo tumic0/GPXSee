@@ -74,6 +74,12 @@ void Style::defaultLineStyle()
 	_lines[TYPE(DYKCON)] = Line(QPen(QColor("#333333"), 2, Qt::SolidLine));
 	_lines[TYPE(RIVERS)] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
 	_lines[TYPE(TSSBND)] = Line(QPen(QColor("#eb49eb"), 2, Qt::DashLine));
+	_lines[TYPE(LNDELV)] = Line(QPen(QColor("#999440"), 1, Qt::SolidLine));
+	_lines[TYPE(LNDELV)].setTextColor(QColor("#797420"));
+	_lines[TYPE(LNDELV)].setTextFontSize(Small);
+	_lines[TYPE(SLOTOP)] = Line(QPen(QColor("#797420"), 1, Qt::SolidLine));
+	_lines[TYPE(OBSTRN)] = Line(QPen(QColor("#000000"), 1.5, Qt::DotLine));
+	_lines[TYPE(FERYRT)] = Line(QImage(":/marine/ferry-line.png"));
 }
 
 void Style::defaultPointStyle()

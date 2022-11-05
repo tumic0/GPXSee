@@ -388,7 +388,8 @@ MapData::Attr MapData::lineAttr(const ISO8211::Record &r, uint OBJL)
 
 		if (key == OBJNAM)
 			label = av.at(1).toString();
-		if ((OBJL == DEPCNT && key == VALDCO))
+		if ((OBJL == DEPCNT && key == VALDCO)
+		  || (OBJL == LNDELV && key == ELEVAT))
 			label = av.at(1).toString();
 	}
 

@@ -6,6 +6,7 @@
 #define CATREA 56
 #define CATWRK 71
 #define DRVAL1 87
+#define ELEVAT 90
 #define OBJNAM 116
 #define VALDCO 174
 
