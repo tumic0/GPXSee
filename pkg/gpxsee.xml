@@ -339,4 +339,11 @@
 		<glob pattern="*.otrk2.xml"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.iho.s57">
+		<comment>IHO S-57 Electronic Navigation Chart</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application/octet-stream"/>
+		<glob pattern="*.000"/>
+	</mime-type>
+
 </mime-info>

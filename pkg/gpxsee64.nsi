@@ -454,7 +454,7 @@ SectionEnd
 LangString DESC_QT ${LANG_ENGLISH} \
   "QT cross-platform application framework."
 LangString DESC_MSVC ${LANG_ENGLISH} \
-  "Microsoft Visual C++ 2017 runtime. If already installed, will be skipped."
+  "Microsoft Visual C++ 2019 runtime. If already installed, will be skipped."
 LangString DESC_OPENSSL ${LANG_ENGLISH} \
   "OpenSSL library. Required for HTTPS to work."
 !ifndef QT6

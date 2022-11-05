@@ -23,7 +23,7 @@
 				BSB nautical charts, KMZ maps, AlpineQuest maps,
 				Locus/OsmAnd/RMaps SQLite maps, Osmdroid SQLite maps,
 				Mapsforge maps, QCT maps, GEMF maps, Orux maps,
-				ESRI world files).</li>
+				ESRI world files, ENC charts).</li>
 			<li>Elevation, speed, heart rate, cadence, power, temperature and
 				gear ratio graphs.</li>
 			<li>Support for multiple tracks in one view.</li>
@@ -107,5 +107,6 @@
 		<mimetype>application/vnd.twonav.wpt</mimetype>
 		<mimetype>application/vnd.cgtk.gemf</mimetype>
 		<mimetype>application/vnd.orux.map+xml</mimetype>
+		<mimetype>application/vnd.iho.s57</mimetype>
 	</mimetypes>
 </component>
