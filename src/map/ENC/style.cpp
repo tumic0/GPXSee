@@ -1,6 +1,18 @@
+#include <QPainter>
 #include "style.h"
 
 using namespace ENC;
+
+static QImage railroad()
+{
+	QImage img(16, 4, QImage::Format_ARGB32_Premultiplied);
+	img.fill(Qt::black);
+	QPainter p(&img);
+	p.setPen(QPen(Qt::white, 2));
+	p.drawLine(9, 2, 15, 2);
+
+	return img;
+}
 
 void Style::defaultPolygonStyle()
 {
@@ -76,6 +88,9 @@ void Style::defaultLineStyle()
 	_lines[TYPE(SLOTOP)] = Line(QPen(QColor("#797420"), 1, Qt::SolidLine));
 	_lines[TYPE(OBSTRN)] = Line(QPen(QColor("#000000"), 1.5, Qt::DotLine));
 	_lines[TYPE(FERYRT)] = Line(QImage(":/marine/ferry-line.png"));
+	_lines[TYPE(RAILWY)] = Line(railroad());
+	_lines[TYPE(ROADWY)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
+	_lines[TYPE(GATCON)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
 }
 
 void Style::defaultPointStyle()
@@ -107,9 +122,13 @@ void Style::defaultPointStyle()
 	_points[SUBTYPE(WRECKS, 5)] = Point(QImage(":/marine/wreck-exposed.png"));
 	_points[TYPE(UWTROC)] = Point(QImage(":/marine/rock-dangerous.png"), Small);
 	_points[SUBTYPE(HRBFAC, 5)] = Point(QImage(":/marine/yacht-harbor.png"));
-	_points[TYPE(PILPNT)] = Point(QImage(":/marine/pile.png"), Small);
 	_points[TYPE(ACHBRT)] = Point(QImage(":/marine/anchorage.png"));
 	_points[TYPE(OFSPLF)] = Point(QImage(":/marine/platform.png"));
+	_points[TYPE(PILPNT)] = Point(QImage(":/marine/pile.png"), Small);
+	_points[SUBTYPE(MORFAC, 1)] = Point(QImage(":/marine/pile.png"), Small);
+	_points[SUBTYPE(MORFAC, 5)] = Point(QImage(":/marine/pile.png"), Small);
+	_points[SUBTYPE(MORFAC, 7)] = Point(QImage(":/marine/mooring-buoy.png"),
+	  Small);
 }
 
 Style::Style()

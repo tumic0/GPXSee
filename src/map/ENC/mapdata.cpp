@@ -374,7 +374,8 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 			label = av.at(1).toString();
 		if ((OBJL == HRBFAC && key == CATHAF)
 		  || (OBJL == LNDMRK && key == CATLMK)
-		  || (OBJL == WRECKS && key == CATWRK))
+		  || (OBJL == WRECKS && key == CATWRK)
+		  || (OBJL == MORFAC && key == CATMOR))
 			subtype = av.at(1).toString().toUInt();
 	}
 

@@ -3,6 +3,7 @@
 
 #define CATHAF 30
 #define CATLMK 35
+#define CATMOR 40
 #define CATREA 56
 #define CATWRK 71
 #define DRVAL1 87
