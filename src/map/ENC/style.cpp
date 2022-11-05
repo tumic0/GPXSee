@@ -1,10 +1,6 @@
-#include "objects.h"
 #include "style.h"
 
 using namespace ENC;
-
-#define TYPE(t) ((t)<<16)
-#define SUBTYPE(t, s) (((t)<<16)|(s))
 
 void Style::defaultPolygonStyle()
 {

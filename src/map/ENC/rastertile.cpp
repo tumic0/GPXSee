@@ -133,12 +133,14 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 		const QImage *img = style.img().isNull() ? 0 : &style.img();
 		const QFont *fnt = font(style.textFontSize());
 		const QColor *color = &style.textColor();
+		const QColor *hColor = Style::isSounding(point->type())
+		  ? 0 : &haloColor;
 
 		if ((!label || !fnt) && !img)
 			continue;
 
 		TextPointItem *item = new TextPointItem(ll2xy(point->pos()).toPoint(),
-		  label, fnt, img, color, &haloColor, 0, ICON_PADDING);
+		  label, fnt, img, color, hColor, 0, ICON_PADDING);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
 		else

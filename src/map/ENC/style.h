@@ -4,8 +4,12 @@
 #include <QPen>
 #include <QBrush>
 #include <QMap>
+#include "objects.h"
 
 namespace ENC {
+
+#define TYPE(t) ((t)<<16)
+#define SUBTYPE(t, s) (((t)<<16)|(s))
 
 class Style
 {
@@ -82,6 +86,9 @@ public:
 	const Polygon &polygon(uint type) const;
 	const Point &point(quint32 type) const;
 	const QVector<uint> &drawOrder() const {return _drawOrder;}
+
+	static bool isSounding(quint32 type)
+	  {return type == TYPE(SOUNDG);}
 
 private:
 	void defaultPolygonStyle();
