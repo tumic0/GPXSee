@@ -20,9 +20,11 @@
 #define BOYSPP 19
 #define CBLOHD 21
 #define CBLSUB 22
+#define CANALS 23
 #define COALNE 30
 #define DEPARE 42
 #define DEPCNT 43
+#define DRGARE 46
 #define DMPGRD 48
 #define DYKCON 49
 #define FAIRWY 51
@@ -34,6 +36,7 @@
 #define LIGHTS 75
 #define NAVLNE 85
 #define OBSTRN 86
+#define OFSPLF 87
 #define PILPNT 90
 #define PIPSOL 94
 #define PONTON 95

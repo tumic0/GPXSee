@@ -10,7 +10,9 @@ void Style::defaultPolygonStyle()
 {
 	_polygons[TYPE(M_COVR)] = Polygon(QBrush("#ffffff"));
 	_polygons[TYPE(LNDARE)] = Polygon(QBrush("#e8e064"));
-	_polygons[TYPE(BUISGL)] = Polygon(QBrush("#d98b21"));
+	_polygons[TYPE(BUAARE)] = Polygon(QBrush("#d98b21"));
+	_polygons[TYPE(BUISGL)] = Polygon(QBrush("#d98b21"),
+	  QPen(QColor("#966118"), 1.5));
 	_polygons[TYPE(BRIDGE)] = Polygon(QBrush("#a58140"));
 	_polygons[SUBTYPE(DEPARE, 0)] = Polygon(QBrush("#98c064"));
 	_polygons[SUBTYPE(DEPARE, 1)] = Polygon(QBrush("#a0a0ff"));
@@ -32,19 +34,27 @@ void Style::defaultPolygonStyle()
 	  Qt::DashDotLine));
 	_polygons[TYPE(LAKARE)] = Polygon(QBrush("#9fc4e1"),
 	  QPen(QColor("#000000"), 1));
+	_polygons[TYPE(CANALS)] = Polygon(QBrush("#9fc4e1"),
+	  QPen(QColor("#000000"), 1));
 	_polygons[TYPE(RIVERS)] = Polygon(QBrush("#9fc4e1"));
+	_polygons[TYPE(DYKCON)] = Polygon(QBrush(QColor("#9fc4e1"),
+	  Qt::Dense4Pattern), QPen(QColor("#000000"), 1));
 	_polygons[TYPE(AIRARE)] = Polygon(QBrush("#333333"));
 	_polygons[SUBTYPE(RESARE, 9)] = Polygon(QBrush(QColor("#ff0000"),
 	  Qt::BDiagPattern), QPen(QColor("#ff0000"), 1));
 	_polygons[TYPE(TSEZNE)] = Polygon(QBrush("#80fcb4fc"));
+	_polygons[TYPE(DRGARE)] = Polygon(QBrush(QColor("#a0a0ff"),
+	  Qt::Dense4Pattern));
 
 	_drawOrder
-	  << TYPE(M_COVR) << TYPE(LNDARE) << TYPE(BUISGL) << SUBTYPE(DEPARE, 0)
+	  << TYPE(M_COVR) << TYPE(LNDARE) << SUBTYPE(DEPARE, 0)
 	  << SUBTYPE(DEPARE, 1) << SUBTYPE(DEPARE, 2) << SUBTYPE(DEPARE, 3)
 	  << SUBTYPE(DEPARE, 4) << SUBTYPE(DEPARE, 5) << SUBTYPE(DEPARE, 6)
-	  << TYPE(LAKARE) << TYPE(RIVERS) << TYPE(FAIRWY) << TYPE(AIRARE)
-	  << TYPE(BRIDGE) << TYPE(SLCONS) << TYPE(PONTON) << TYPE(DMPGRD)
-	  << TYPE(TSEZNE) << TYPE(OBSTRN) << TYPE(ACHARE) << SUBTYPE(RESARE, 9);
+	  << TYPE(LAKARE) << TYPE(CANALS) << TYPE(DYKCON) << TYPE(RIVERS)
+	  << TYPE(DRGARE) << TYPE(FAIRWY) << TYPE(BUAARE) << TYPE(BUISGL)
+	  << TYPE(AIRARE) << TYPE(BRIDGE) << TYPE(SLCONS) << TYPE(PONTON)
+	  << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN) << TYPE(ACHARE)
+	  << SUBTYPE(RESARE, 9);
 }
 
 void Style::defaultLineStyle()
@@ -97,6 +107,7 @@ void Style::defaultPointStyle()
 	_points[SUBTYPE(HRBFAC, 5)] = Point(QImage(":/IMG/yacht-harbor.png"));
 	_points[TYPE(PILPNT)] = Point(QImage(":/IMG/pile.png"), Small);
 	_points[TYPE(ACHBRT)] = Point(QImage(":/IMG/anchorage.png"));
+	_points[TYPE(OFSPLF)] = Point(QImage(":/IMG/platform.png"));
 }
 
 Style::Style()
