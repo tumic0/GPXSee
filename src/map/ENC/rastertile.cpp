@@ -103,21 +103,10 @@ void RasterTile::drawLines(QPainter *painter)
 		const MapData::Line *line = _lines.at(i);
 		const Style::Line &style = s.line(line->type());
 
-		if (style.background() == Qt::NoPen)
-			continue;
-
-		painter->setPen(style.background());
-		painter->drawPolyline(polyline(line->path()));
-	}
-
-	for (int i = 0; i < _lines.size(); i++) {
-		const MapData::Line *line = _lines.at(i);
-		const Style::Line &style = s.line(line->type());
-
 		if (!style.img().isNull()) {
 			BitmapLine::draw(painter, polyline(line->path()), style.img());
-		} else if (style.foreground() != Qt::NoPen) {
-			painter->setPen(style.foreground());
+		} else if (style.pen() != Qt::NoPen) {
+			painter->setPen(style.pen());
 			painter->drawPolyline(polyline(line->path()));
 		}
 	}
@@ -165,7 +154,7 @@ void RasterTile::processLines(QList<TextItem*> &textItems)
 		const MapData::Line *line = _lines.at(i);
 		const Style::Line &style = s.line(line->type());
 
-		if (style.img().isNull() && style.foreground() == Qt::NoPen)
+		if (style.img().isNull() && style.pen() == Qt::NoPen)
 			continue;
 		if (line->label().isEmpty() || style.textFontSize() == Style::None)
 			continue;

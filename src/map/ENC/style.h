@@ -36,27 +36,22 @@ public:
 
 	class Line {
 	public:
-		Line() : _foreground(Qt::NoPen), _background(Qt::NoPen),
-		  _textFontSize(None) {}
-		Line(const QPen &foreground, const QPen &background = Qt::NoPen)
-		  : _foreground(foreground), _background(background),
-		  _textFontSize(None) {}
+		Line() : _pen(Qt::NoPen), _textFontSize(None) {}
+		Line(const QPen &pen) : _pen(pen), _textFontSize(None) {}
 		Line(const QImage &img)
-		  : _foreground(Qt::NoPen), _background(Qt::NoPen),
-		  _textFontSize(None), _img(img.convertToFormat(
+		  : _pen(Qt::NoPen), _textFontSize(None), _img(img.convertToFormat(
 		  QImage::Format_ARGB32_Premultiplied)) {}
 
 		void setTextColor(const QColor &color) {_textColor = color;}
 		void setTextFontSize(FontSize size) {_textFontSize = size;}
 
-		const QPen &foreground() const {return _foreground;}
-		const QPen &background() const {return _background;}
+		const QPen &pen() const {return _pen;}
 		const QColor &textColor() const {return _textColor;}
 		FontSize textFontSize() const {return _textFontSize;}
 		const QImage &img() const {return _img;}
 
 	private:
-		QPen _foreground, _background;
+		QPen _pen;
 		QColor _textColor;
 		FontSize _textFontSize;
 		QImage _img;
