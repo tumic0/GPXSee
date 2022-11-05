@@ -33,6 +33,14 @@ static void warning(const ISO8211::Field &FRID, uint PRIM)
 	}
 }
 
+static void pointBounds(const Coordinates &c, double min[2], double max[2])
+{
+	min[0] = c.lon();
+	min[1] = c.lat();
+	max[0] = c.lon();
+	max[1] = c.lat();
+}
+
 static void rectcBounds(const RectC &rect, double min[2], double max[2])
 {
 	min[0] = rect.left();
@@ -598,18 +606,12 @@ void MapData::load()
 					QVector<Sounding> s(soundingGeometry(r));
 					for (int i = 0; i < s.size(); i++) {
 						point = pointObject(s.at(i));
-						min[0] = point->pos().lon();
-						min[1] = point->pos().lat();
-						max[0] = point->pos().lon();
-						max[1] = point->pos().lat();
+						pointBounds(point->pos(), min, max);
 						_points.Insert(min, max, point);
 					}
 				} else {
 					if ((point = pointObject(r, OBJL))) {
-						min[0] = point->pos().lon();
-						min[1] = point->pos().lat();
-						max[0] = point->pos().lon();
-						max[1] = point->pos().lat();
+						pointBounds(point->pos(), min, max);
 						_points.Insert(min, max, point);
 					} else
 						warning(f, PRIM);
@@ -655,11 +657,7 @@ void MapData::points(const RectC &rect, QList<Point*> *points)
 {
 	double min[2], max[2];
 
-	min[0] = rect.left();
-	min[1] = rect.bottom();
-	max[0] = rect.right();
-	max[1] = rect.top();
-
+	rectcBounds(rect, min, max);
 	_points.Search(min, max, pointCb, points);
 }
 
@@ -667,11 +665,7 @@ void MapData::lines(const RectC &rect, QList<Line*> *lines)
 {
 	double min[2], max[2];
 
-	min[0] = rect.left();
-	min[1] = rect.bottom();
-	max[0] = rect.right();
-	max[1] = rect.top();
-
+	rectcBounds(rect, min, max);
 	_lines.Search(min, max, lineCb, lines);
 }
 
@@ -679,10 +673,6 @@ void MapData::polygons(const RectC &rect, QList<Poly*> *polygons)
 {
 	double min[2], max[2];
 
-	min[0] = rect.left();
-	min[1] = rect.bottom();
-	max[0] = rect.right();
-	max[1] = rect.top();
-
+	rectcBounds(rect, min, max);
 	_areas.Search(min, max, polygonCb, polygons);
 }
