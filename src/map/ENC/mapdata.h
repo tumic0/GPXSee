@@ -2,7 +2,6 @@
 #define ENC_MAPDATA_H
 
 #include <climits>
-#include <QPainterPath>
 #include "common/rectc.h"
 #include "common/rtree.h"
 #include "common/polygon.h"
