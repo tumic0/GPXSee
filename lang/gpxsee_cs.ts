@@ -1247,7 +1247,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="158"/>
         <source>Electronic Navigational Charts</source>
-        <translation type="unfinished"></translation>
+        <translation>ENC námořní mapy</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="165"/>
