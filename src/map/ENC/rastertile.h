@@ -18,11 +18,12 @@ public:
 	  const QList<MapData::Poly*> &polygons, const QList<MapData::Point*> &points)
 	  : _proj(proj), _transform(transform), _zoom(zoom), _rect(rect),
 	  _ratio(ratio), _pixmap(rect.width() * ratio, rect.height() * ratio),
-	  _lines(lines), _polygons(polygons), _points(points) {}
+	  _lines(lines), _polygons(polygons), _points(points), _valid(false) {}
 
 	int zoom() const {return _zoom;}
 	QPoint xy() const {return _rect.topLeft();}
 	const QPixmap &pixmap() const {return _pixmap;}
+	bool isValid() const {return _valid;}
 
 	void render();
 
@@ -48,6 +49,7 @@ private:
 	QList<MapData::Line*> _lines;
 	QList<MapData::Poly*> _polygons;
 	QList<MapData::Point*> _points;
+	bool _valid;
 };
 
 }

@@ -1,12 +1,42 @@
 #ifndef ENCMAP_H
 #define ENCMAP_H
 
+#include <QtConcurrent>
 #include "map.h"
 #include "projection.h"
 #include "transform.h"
 #include "ENC/mapdata.h"
+#include "ENC/rastertile.h"
 
-class QFile;
+class ENCMapJob : public QObject
+{
+	Q_OBJECT
+
+public:
+	ENCMapJob(const QList<ENC::RasterTile> &tiles)
+	  : _tiles(tiles) {}
+
+	void run()
+	{
+		connect(&_watcher, &QFutureWatcher<void>::finished, this,
+		  &ENCMapJob::handleFinished);
+		_future = QtConcurrent::map(_tiles, &ENC::RasterTile::render);
+		_watcher.setFuture(_future);
+	}
+	void cancel() {_future.cancel();}
+	const QList<ENC::RasterTile> &tiles() const {return _tiles;}
+
+signals:
+	void finished(ENCMapJob *job);
+
+private slots:
+	void handleFinished() {emit finished(this);}
+
+private:
+	QFutureWatcher<void> _watcher;
+	QFuture<void> _future;
+	QList<ENC::RasterTile> _tiles;
+};
 
 class ENCMap : public Map
 {
@@ -43,9 +73,16 @@ public:
 
 	static Map *create(const QString &path, const Projection &, bool *isMap);
 
+private slots:
+	void jobFinished(ENCMapJob *job);
+
 private:
 	Transform transform(int zoom) const;
 	void updateTransform();
+	bool isRunning(int zoom, const QPoint &xy) const;
+	void runJob(ENCMapJob *job);
+	void removeJob(ENCMapJob *job);
+	void cancelJobs();
 	QString key(int zoom, const QPoint &xy) const;
 
 	ENC::MapData _data;
@@ -55,6 +92,8 @@ private:
 	RectC _llBounds;
 	QRectF _bounds;
 	int _zoom;
+
+	QList<ENCMapJob*> _jobs;
 
 	bool _valid;
 	QString _errorString;

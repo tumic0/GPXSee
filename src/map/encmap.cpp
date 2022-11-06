@@ -1,9 +1,7 @@
 #include <QPainter>
 #include <QPixmapCache>
-#include <QtConcurrent>
 #include "common/range.h"
 #include "common/wgs84.h"
-#include "ENC/rastertile.h"
 #include "rectd.h"
 #include "pcs.h"
 #include "encmap.h"
@@ -58,6 +56,8 @@ int ENCMap::zoomFit(const QSize &size, const RectC &rect)
 
 int ENCMap::zoomIn()
 {
+	cancelJobs();
+
 	_zoom = qMin(_zoom + 1, ZOOMS.max());
 	updateTransform();
 	return _zoom;
@@ -65,6 +65,8 @@ int ENCMap::zoomIn()
 
 int ENCMap::zoomOut()
 {
+	cancelJobs();
+
 	_zoom = qMax(_zoom - 1, ZOOMS.min());
 	updateTransform();
 	return _zoom;
@@ -96,6 +98,55 @@ void ENCMap::updateTransform()
 	  _transform.proj2img(prect.bottomRight()));
 }
 
+bool ENCMap::isRunning(int zoom, const QPoint &xy) const
+{
+	for (int i = 0; i < _jobs.size(); i++) {
+		const QList<ENC::RasterTile> &tiles = _jobs.at(i)->tiles();
+		for (int j = 0; j < tiles.size(); j++) {
+			const ENC::RasterTile &mt = tiles.at(j);
+			if (mt.zoom() == zoom && mt.xy() == xy)
+				return true;
+		}
+	}
+
+	return false;
+}
+
+void ENCMap::runJob(ENCMapJob *job)
+{
+	_jobs.append(job);
+
+	connect(job, &ENCMapJob::finished, this, &ENCMap::jobFinished);
+	job->run();
+}
+
+void ENCMap::removeJob(ENCMapJob *job)
+{
+	_jobs.removeOne(job);
+	job->deleteLater();
+}
+
+void ENCMap::jobFinished(ENCMapJob *job)
+{
+	const QList<ENC::RasterTile> &tiles = job->tiles();
+
+	for (int i = 0; i < tiles.size(); i++) {
+		const ENC::RasterTile &mt = tiles.at(i);
+		if (mt.isValid())
+			QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
+	}
+
+	removeJob(job);
+
+	emit tilesLoaded();
+}
+
+void ENCMap::cancelJobs()
+{
+	for (int i = 0; i < _jobs.size(); i++)
+		_jobs.at(i)->cancel();
+}
+
 QString ENCMap::key(int zoom, const QPoint &xy) const
 {
 	return path() + "-" + QString::number(zoom) + "_"
@@ -116,6 +167,8 @@ void ENCMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
+			if (isRunning(_zoom, ttl))
+				continue;
 
 			QPixmap pm;
 			if (QPixmapCache::find(key(_zoom, ttl), &pm))
@@ -149,14 +202,19 @@ void ENCMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		}
 	}
 
-	QFuture<void> future = QtConcurrent::map(tiles, &RasterTile::render);
-	future.waitForFinished();
+	if (!tiles.isEmpty()) {
+		if (flags & Map::Block) {
+			QFuture<void> future = QtConcurrent::map(tiles, &RasterTile::render);
+			future.waitForFinished();
 
-	for (int i = 0; i < tiles.size(); i++) {
-		const RasterTile &mt = tiles.at(i);
-		const QPixmap &pm = mt.pixmap();
-		painter->drawPixmap(mt.xy(), pm);
-		QPixmapCache::insert(key(mt.zoom(), mt.xy()), pm);
+			for (int i = 0; i < tiles.size(); i++) {
+				const RasterTile &mt = tiles.at(i);
+				const QPixmap &pm = mt.pixmap();
+				painter->drawPixmap(mt.xy(), pm);
+				QPixmapCache::insert(key(mt.zoom(), mt.xy()), pm);
+			}
+		} else
+			runJob(new ENCMapJob(tiles));
 	}
 }
 

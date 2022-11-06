@@ -200,4 +200,6 @@ void RasterTile::render()
 	//painter.setPen(Qt::red);
 	//painter.setBrush(Qt::NoBrush);
 	//painter.drawRect(QRect(_rect.topLeft(), _pixmap.size()));
+
+	_valid = true;
 }
