@@ -9,9 +9,9 @@ GPS log file formats.
 * User-definable online maps (OpenStreetMap/Google tiles, WMTS, WMS, TMS,
   QuadTiles).
 * Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases,
-  Garmin IMG/GMAP & JNX maps, TwoNav RMaps, GeoTIFF images, BSB charts, KMZ maps,
-  AlpineQuest maps, Locus/OsmAnd/RMaps SQLite maps, Mapsforge vector maps,
-  QCT maps, GEMF maps, Osmdroid SQLite maps, Orux maps,
+  Garmin IMG/GMAP & JNX maps, TwoNav RMaps, GeoTIFF images, BSB charts,
+  ENC charts KMZ maps, AlpineQuest maps, Locus/OsmAnd/RMaps SQLite maps,
+  Mapsforge vector maps, QCT maps, GEMF maps, Osmdroid SQLite maps, Orux maps,
   ESRI World-File georeferenced images).
 * Elevation, speed, heart rate, cadence, power, temperature and gear ratio/shifts
   graphs.
@@ -29,7 +29,7 @@ GPS log file formats.
 ## Build
 Build requirements:
 * Qt5 >= 5.11 or Qt6 >= 6.2 (Android builds require Qt6)
-* C++11 or newer compiler (tested: msvc2017, gcc 7.5.0, clang/Apple LLVM version
+* C++11 or newer compiler (tested: msvc2019, gcc 7.5.0, clang/Apple LLVM version
   10.0.0)
 
 Build steps:
