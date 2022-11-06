@@ -32,7 +32,15 @@ public:
 		Line(uint type, const QVector<Coordinates> &path, const QString &label)
 		  : _type(type), _path(path), _label(label) {}
 
-		RectC bounds() const;
+		RectC bounds() const
+		{
+			RectC b;
+
+			for (int i = 0; i < _path.size(); i++)
+				b = b.united(_path.at(i));
+
+			return b;
+		}
 		const QVector<Coordinates> &path() const {return _path;}
 		uint type() const {return _type;}
 		const QString &label() const {return _label;}
@@ -70,7 +78,7 @@ public:
 	~MapData();
 
 	const QString &name() const {return _name;}
-	RectC bounds() const;
+	RectC bounds() const {return _bounds;}
 
 	void polygons(const RectC &rect, QList<Poly*> *polygons);
 	void lines(const RectC &rect, QList<Line*> *lines);
@@ -79,7 +87,7 @@ public:
 	void load();
 	void clear();
 
-	bool isValid() const {return _valid;}
+	bool isValid() const {return _bounds.isValid();}
 	QString errorString() const {return _errorString;}
 
 private:
@@ -121,7 +129,7 @@ private:
 	public:
 		Attr() : _subtype(0) {}
 		Attr(uint subtype, const QString &label = QString())
-			: _subtype(subtype), _label(label) {}
+		    : _subtype(subtype), _label(label) {}
 
 		unsigned subtype() const {return _subtype;}
 		const QString &label() const {return _label;}
@@ -145,36 +153,42 @@ private:
 	typedef RTree<Line*, double, 2> LineTree;
 	typedef RTree<Point*, double, 2> PointTree;
 
-	bool processRecord(const ISO8211::Record &record);
-	Attr pointAttr(const ISO8211::Record &r, uint OBJL);
-	Attr lineAttr(const ISO8211::Record &r, uint OBJL);
-	Attr polyAttr(const ISO8211::Record &r, uint OBJL);
-	QVector<Sounding> soundingGeometry(const ISO8211::Record &r);
-	Coordinates pointGeometry(const ISO8211::Record &r);
-	QVector<Coordinates> lineGeometry(const ISO8211::Record &r);
-	Polygon polyGeometry(const ISO8211::Record &r);
-	Point *pointObject(const Sounding &s);
-	Point *pointObject(const ISO8211::Record &r, uint OBJL);
-	Line *lineObject(const ISO8211::Record &r, uint OBJL);
-	Poly *polyObject(const ISO8211::Record &r, uint OBJL);
-	Coordinates coordinates(int x, int y) const;
-	Coordinates point(const ISO8211::Record &r);
-	QVector<Sounding> soundings(const ISO8211::Record &r);
+	bool fetchBoundsAndName();
 
+	static QVector<Sounding> soundings(const ISO8211::Record &r, uint COMF,
+	  uint SOMF);
+	static QVector<Sounding> soundingGeometry(const ISO8211::Record &r,
+	  const RecordMap &vi, const RecordMap &vc, uint COMF, uint SOMF);
+	static Coordinates pointGeometry(const ISO8211::Record &r,
+	  const RecordMap &vi, const RecordMap &vc, uint COMF);
+	static QVector<Coordinates> lineGeometry(const ISO8211::Record &r,
+	  const RecordMap &vc, const RecordMap &ve, uint COMF);
+	static Polygon polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
+	  const RecordMap &ve, uint COMF);
+	static Attr pointAttr(const ISO8211::Record &r, uint OBJL);
+	static Attr lineAttr(const ISO8211::Record &r, uint OBJL);
+	static Attr polyAttr(const ISO8211::Record &r, uint OBJL);
+	static Point *pointObject(const Sounding &s);
+	static Point *pointObject(const ISO8211::Record &r, const RecordMap &vi,
+	  const RecordMap &vc, uint COMF, uint OBJL);
+	static Line *lineObject(const ISO8211::Record &r, const RecordMap &vc,
+	  const RecordMap &ve, uint COMF, uint OBJL);
+	static Poly *polyObject(const ISO8211::Record &r, const RecordMap &vc,
+	  const RecordMap &ve, uint COMF,uint OBJL);
 	static bool bounds(const ISO8211::Record &record, Rect &rect);
-	static Rect bounds(const RecordMap &map);
+	static bool bounds(const QVector<ISO8211::Record> &gv, Rect &b);
+	static bool processRecord(const ISO8211::Record &record,
+	  QVector<ISO8211::Record> &fe, RecordMap &vi, RecordMap &vc, RecordMap &ve,
+	  RecordMap &vf, uint &COMF, uint &SOMF);
+	static bool processRecord(const ISO8211::Record &record,
+	  QVector<ISO8211::Record> &rv, uint &COMF, QString &name);
 
+	QString _fileName;
 	QString _name;
-	RecordMap _vi, _vc, _ve, _vf;
-	QVector<ISO8211::Record> _fe;
-	uint _COMF, _SOMF;
-	ISO8211 _ddf;
-
+	RectC _bounds;
 	PolygonTree _areas;
 	LineTree _lines;
 	PointTree _points;
-
-	bool _valid;
 	QString _errorString;
 };
 

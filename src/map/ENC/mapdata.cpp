@@ -115,22 +115,12 @@ static uint depthLevel(const QString &str)
 		return 6;
 }
 
-RectC MapData::Line::bounds() const
+static Coordinates coordinates(int x, int y, uint COMF)
 {
-	RectC b;
-
-	for (int i = 0; i < _path.size(); i++)
-		b = b.united(_path.at(i));
-
-	return b;
+	return Coordinates(x / (double)COMF, y / (double)COMF);
 }
 
-Coordinates MapData::coordinates(int x, int y) const
-{
-	return Coordinates(x / (double)_COMF, y / (double)_COMF);
-}
-
-Coordinates MapData::point(const ISO8211::Record &r)
+static Coordinates point(const ISO8211::Record &r, uint COMF)
 {
 	const ISO8211::Field *f = SGXD(r);
 	if (!f)
@@ -139,10 +129,11 @@ Coordinates MapData::point(const ISO8211::Record &r)
 	int y = f->data().at(0).at(0).toInt();
 	int x = f->data().at(0).at(1).toInt();
 
-	return coordinates(x, y);
+	return coordinates(x, y, COMF);
 }
 
-QVector<MapData::Sounding> MapData::soundings(const ISO8211::Record &r)
+QVector<MapData::Sounding> MapData::soundings(const ISO8211::Record &r,
+  uint COMF, uint SOMF)
 {
 	QVector<Sounding> s;
 	const ISO8211::Field *f = r.field("SG3D");
@@ -154,13 +145,14 @@ QVector<MapData::Sounding> MapData::soundings(const ISO8211::Record &r)
 		int y = f->data().at(i).at(0).toInt();
 		int x = f->data().at(i).at(1).toInt();
 		int z = f->data().at(i).at(2).toInt();
-		s.append(Sounding(coordinates(x, y), z / (double)_SOMF));
+		s.append(Sounding(coordinates(x, y, COMF), z / (double)SOMF));
 	}
 
 	return s;
 }
 
-QVector<MapData::Sounding> MapData::soundingGeometry(const ISO8211::Record &r)
+QVector<MapData::Sounding> MapData::soundingGeometry(const ISO8211::Record &r,
+  const RecordMap &vi, const RecordMap &vc, uint COMF, uint SOMF)
 {
 	quint8 type;
 	quint32 id;
@@ -173,21 +165,22 @@ QVector<MapData::Sounding> MapData::soundingGeometry(const ISO8211::Record &r)
 	if (!parseNAME(FSPT, &type, &id))
 		return QVector<Sounding>();
 
-	if (type == RCNM_VI)
-		it = _vi.find(id);
-	else if (type == RCNM_VC)
-		it = _vc.find(id);
-	else
-		return QVector<Sounding>();
-	if (it == _ve.constEnd())
+	if (type == RCNM_VI) {
+		it = vi.find(id);
+		if (it == vi.constEnd())
+			return QVector<Sounding>();
+	} else if (type == RCNM_VC) {
+		it = vc.find(id);
+		if (it == vc.constEnd())
+			return QVector<Sounding>();
+	} else
 		return QVector<Sounding>();
 
-	const ISO8211::Record &FRID = it.value();
-
-	return soundings(FRID);
+	return soundings(it.value(), COMF, SOMF);
 }
 
-Coordinates MapData::pointGeometry(const ISO8211::Record &r)
+Coordinates MapData::pointGeometry(const ISO8211::Record &r,
+  const RecordMap &vi, const RecordMap &vc, uint COMF)
 {
 	quint8 type;
 	quint32 id;
@@ -200,21 +193,22 @@ Coordinates MapData::pointGeometry(const ISO8211::Record &r)
 	if (!parseNAME(FSPT, &type, &id))
 		return Coordinates();
 
-	if (type == RCNM_VI)
-		it = _vi.find(id);
-	else if (type == RCNM_VC)
-		it = _vc.find(id);
-	else
-		return Coordinates();
-	if (it == _ve.constEnd())
+	if (type == RCNM_VI) {
+		it = vi.find(id);
+		if (it == vi.constEnd())
+			return Coordinates();
+	} else if (type == RCNM_VC) {
+		it = vc.find(id);
+		if (it == vc.constEnd())
+			return Coordinates();
+	} else
 		return Coordinates();
 
-	const ISO8211::Record &FRID = it.value();
-
-	return point(FRID);
+	return point(it.value(), COMF);
 }
 
-QVector<Coordinates> MapData::lineGeometry(const ISO8211::Record &r)
+QVector<Coordinates> MapData::lineGeometry(const ISO8211::Record &r,
+  const RecordMap &vc, const RecordMap &ve, uint COMF)
 {
 	QVector<Coordinates> path;
 	Coordinates c[2];
@@ -233,8 +227,8 @@ QVector<Coordinates> MapData::lineGeometry(const ISO8211::Record &r)
 		MASK = FSPT->data().at(i).at(3).toUInt();
 		Q_ASSERT(MASK != 1);
 
-		RecordMapIterator it = _ve.find(id);
-		if (it == _ve.constEnd())
+		RecordMapIterator it = ve.find(id);
+		if (it == ve.constEnd())
 			return QVector<Coordinates>();
 		const ISO8211::Record &FRID = it.value();
 		const ISO8211::Field *VRPT = FRID.field("VRPT");
@@ -245,10 +239,10 @@ QVector<Coordinates> MapData::lineGeometry(const ISO8211::Record &r)
 			if (!parseNAME(VRPT, &type, &id, j) || type != RCNM_VC)
 				return QVector<Coordinates>();
 
-			RecordMapIterator jt = _vc.find(id);
-			if (jt == _vc.constEnd())
+			RecordMapIterator jt = vc.find(id);
+			if (jt == vc.constEnd())
 				return QVector<Coordinates>();
-			c[j] = point(jt.value());
+			c[j] = point(jt.value(), COMF);
 			if (c[j].isNull())
 				return QVector<Coordinates>();
 		}
@@ -259,7 +253,8 @@ QVector<Coordinates> MapData::lineGeometry(const ISO8211::Record &r)
 			if (vertexes) {
 				for (int j = vertexes->data().size() - 1; j >= 0; j--) {
 					const QVector<QVariant> &cv = vertexes->data().at(j);
-					path.append(coordinates(cv.at(1).toInt(), cv.at(0).toInt()));
+					path.append(coordinates(cv.at(1).toInt(), cv.at(0).toInt(),
+					  COMF));
 				}
 			}
 			path.append(c[0]);
@@ -268,7 +263,8 @@ QVector<Coordinates> MapData::lineGeometry(const ISO8211::Record &r)
 			if (vertexes) {
 				for (int j = 0; j < vertexes->data().size(); j++) {
 					const QVector<QVariant> &cv = vertexes->data().at(j);
-					path.append(coordinates(cv.at(1).toInt(), cv.at(0).toInt()));
+					path.append(coordinates(cv.at(1).toInt(), cv.at(0).toInt(),
+					  COMF));
 				}
 			}
 			path.append(c[1]);
@@ -278,7 +274,8 @@ QVector<Coordinates> MapData::lineGeometry(const ISO8211::Record &r)
 	return path;
 }
 
-Polygon MapData::polyGeometry(const ISO8211::Record &r)
+Polygon MapData::polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
+  const RecordMap &ve, uint COMF)
 {
 	Polygon path;
 	QVector<Coordinates> v;
@@ -304,8 +301,8 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r)
 			v.clear();
 		}
 
-		RecordMapIterator it = _ve.find(id);
-		if (it == _ve.constEnd())
+		RecordMapIterator it = ve.find(id);
+		if (it == ve.constEnd())
 			return Polygon();
 		const ISO8211::Record &FRID = it.value();
 		const ISO8211::Field *VRPT = FRID.field("VRPT");
@@ -316,10 +313,10 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r)
 			if (!parseNAME(VRPT, &type, &id, j) || type != RCNM_VC)
 				return Polygon();
 
-			RecordMapIterator jt = _vc.find(id);
-			if (jt == _vc.constEnd())
+			RecordMapIterator jt = vc.find(id);
+			if (jt == vc.constEnd())
 				return Polygon();
-			c[j] = point(jt.value());
+			c[j] = point(jt.value(), COMF);
 			if (c[j].isNull())
 				return Polygon();
 		}
@@ -330,7 +327,8 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r)
 			if (vertexes) {
 				for (int j = vertexes->data().size() - 1; j >= 0; j--) {
 					const QVector<QVariant> &cv = vertexes->data().at(j);
-					v.append(coordinates(cv.at(1).toInt(), cv.at(0).toInt()));
+					v.append(coordinates(cv.at(1).toInt(), cv.at(0).toInt(),
+					  COMF));
 				}
 			}
 			v.append(c[0]);
@@ -339,7 +337,8 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r)
 			if (vertexes) {
 				for (int j = 0; j < vertexes->data().size(); j++) {
 					const QVector<QVariant> &cv = vertexes->data().at(j);
-					v.append(coordinates(cv.at(1).toInt(), cv.at(0).toInt()));
+					v.append(coordinates(cv.at(1).toInt(), cv.at(0).toInt(),
+					  COMF));
 				}
 			}
 			v.append(c[1]);
@@ -432,33 +431,59 @@ MapData::Point *MapData::pointObject(const Sounding &s)
 	return new Point(SOUNDG<<16, s.c, QString::number(s.depth));
 }
 
-MapData::Point *MapData::pointObject(const ISO8211::Record &r, uint OBJL)
+MapData::Point *MapData::pointObject(const ISO8211::Record &r,
+  const RecordMap &vi, const RecordMap &vc, uint COMF, uint OBJL)
 {
-	Coordinates c(pointGeometry(r));
+	Coordinates c(pointGeometry(r, vi, vc, COMF));
 	Attr attr(pointAttr(r, OBJL));
 
 	return (c.isNull() ? 0 : new Point(OBJL<<16|attr.subtype(), c,
 	  attr.label()));
 }
 
-MapData::Line *MapData::lineObject(const ISO8211::Record &r, uint OBJL)
+MapData::Line *MapData::lineObject(const ISO8211::Record &r,
+  const RecordMap &vc, const RecordMap &ve, uint COMF, uint OBJL)
 {
-	QVector<Coordinates> path(lineGeometry(r));
+	QVector<Coordinates> path(lineGeometry(r, vc, ve, COMF));
 	Attr attr(lineAttr(r, OBJL));
 
 	return (path.isEmpty() ? 0 : new Line(OBJL<<16|attr.subtype(), path,
 	  attr.label()));
 }
 
-MapData::Poly *MapData::polyObject(const ISO8211::Record &r, uint OBJL)
+MapData::Poly *MapData::polyObject(const ISO8211::Record &r,
+  const RecordMap &vc, const RecordMap &ve, uint COMF, uint OBJL)
 {
-	Polygon path(polyGeometry(r));
+	Polygon path(polyGeometry(r, vc, ve, COMF));
 	Attr attr(polyAttr(r, OBJL));
 
 	return (path.isEmpty() ? 0 : new Poly(OBJL<<16|attr.subtype(), path));
 }
 
-bool MapData::processRecord(const ISO8211::Record &record)
+bool MapData::processRecord(const ISO8211::Record &record,
+  QVector<ISO8211::Record> &rv, uint &COMF, QString &name)
+{
+	const ISO8211::Field &f = record.at(1);
+	const QByteArray &ba = f.tag();
+
+	if (ba == "VRID") {
+		rv.append(record);
+	} else if (ba == "DSID") {
+		QByteArray DSNM;
+		if (!f.subfield("DSNM", &DSNM))
+			return false;
+		name = DSNM;
+	} else if (ba == "DSPM") {
+		if (!f.subfield("COMF", &COMF))
+			return false;
+	}
+
+	return true;
+}
+
+bool MapData::processRecord(const ISO8211::Record &record,
+  QVector<ISO8211::Record> &fe, RecordMap &vi, RecordMap &vc, RecordMap &ve,
+  RecordMap &vf, uint &COMF, uint &SOMF)
 {
 	const ISO8211::Field &f = record.at(1);
 	const QByteArray &ba = f.tag();
@@ -471,31 +496,24 @@ bool MapData::processRecord(const ISO8211::Record &record)
 
 		switch (RCNM) {
 			case RCNM_VI:
-				_vi.insert(RCID, record);
+				vi.insert(RCID, record);
 				break;
 			case RCNM_VC:
-				_vc.insert(RCID, record);
+				vc.insert(RCID, record);
 				break;
 			case RCNM_VE:
-				_ve.insert(RCID, record);
+				ve.insert(RCID, record);
 				break;
 			case RCNM_VF:
-				_vf.insert(RCID, record);
+				vf.insert(RCID, record);
 				break;
 			default:
 				return false;
 		}
 	} else if (ba == "FRID") {
-		_fe.append(record);
-	} else if (ba == "DSID") {
-		QByteArray DSNM;
-
-		if (!f.subfield("DSNM", &DSNM))
-			return false;
-
-		_name = DSNM;
+		fe.append(record);
 	} else if (ba == "DSPM") {
-		if (!(f.subfield("COMF", &_COMF) && f.subfield("SOMF", &_SOMF)))
+		if (!(f.subfield("COMF", &COMF) && f.subfield("SOMF", &SOMF)))
 			return false;
 	}
 
@@ -505,9 +523,10 @@ bool MapData::processRecord(const ISO8211::Record &record)
 bool MapData::bounds(const ISO8211::Record &record, Rect &rect)
 {
 	bool xok, yok;
+	// edge geometries can be empty!
 	const ISO8211::Field *f = SGXD(record);
 	if (!f)
-		return false;
+		return true;
 
 	for (int i = 0; i < f->data().size(); i++) {
 		const QVector<QVariant> &c = f->data().at(i);
@@ -519,54 +538,64 @@ bool MapData::bounds(const ISO8211::Record &record, Rect &rect)
 	return true;
 }
 
-MapData::Rect MapData::bounds(const RecordMap &map)
+bool MapData::bounds(const QVector<ISO8211::Record> &gv, Rect &b)
 {
-	Rect b, r;
+	Rect r;
 
-	for (RecordMapIterator it = map.constBegin(); it != map.constEnd(); ++it)
-		if (bounds(it.value(), r))
-			b |= r;
+	for (int i = 0; i < gv.size(); i++) {
+		if (!bounds(gv.at(i), r))
+			return false;
+		b |= r;
+	}
 
-	return b;
+	return true;
 }
 
-RectC MapData::bounds() const
+bool MapData::fetchBoundsAndName()
 {
-	const RecordMap *maps[] = {&_vi, &_vc, &_ve, &_vf};
-	Rect b;
-
-	for (size_t i = 0; i < ARRAY_SIZE(maps); i++)
-		b |= bounds(*maps[i]);
-
-	return RectC(
-	  Coordinates(b.minX() / (double)_COMF, b.maxY() / (double)_COMF),
-	  Coordinates(b.maxX() / (double)_COMF, b.minY() / (double)_COMF));
-}
-
-MapData::MapData(const QString &path): _valid(false)
-{
-	QFile file(path);
+	QFile file(_fileName);
+	QVector<ISO8211::Record> gv;
+	ISO8211 ddf;
+	uint COMF = 1;
 
 	if (!file.open(QIODevice::ReadOnly)) {
 		_errorString = file.errorString();
-		return;
+		return false;
 	}
 
-	if (!_ddf.readDDR(file)) {
-		_errorString = _ddf.errorString();
-		return;
+	if (!ddf.readDDR(file)) {
+		_errorString = ddf.errorString();
+		return false;
 	}
 	while (!file.atEnd()) {
 		ISO8211::Record record;
-		if (!_ddf.readRecord(file, record)) {
-			_errorString = _ddf.errorString();
-			return;
+		if (!ddf.readRecord(file, record)) {
+			_errorString = ddf.errorString();
+			return false;
 		}
-		if (!processRecord(record))
-			return;
+		if (!processRecord(record, gv, COMF, _name))
+			return false;
 	}
 
-	_valid = true;
+	Rect b;
+	if (!bounds(gv, b)) {
+		_errorString = "Error fetching geometries bounds";
+		return false;
+	}
+	RectC br(Coordinates(b.minX() / (double)COMF, b.maxY() / (double)COMF),
+	  Coordinates(b.maxX() / (double)COMF, b.minY() / (double)COMF));
+	if (!br.isValid()) {
+		_errorString = "Invalid geometries bounds";
+		return false;
+	} else
+		_bounds = br;
+
+	return true;
+}
+
+MapData::MapData(const QString &path): _fileName(path)
+{
+	fetchBoundsAndName();
 }
 
 MapData::~MapData()
@@ -586,14 +615,33 @@ MapData::~MapData()
 
 void MapData::load()
 {
+	QFile file(_fileName);
+	RecordMap vi, vc, ve, vf;
+	QVector<ISO8211::Record> fe;
+	uint COMF = 1, SOMF = 1;
+	ISO8211 ddf;
 	uint PRIM, OBJL;
 	Poly *poly;
 	Line *line;
 	Point *point;
 	double min[2], max[2];
 
-	for (int i = 0; i < _fe.size(); i++) {
-		const ISO8211::Record &r = _fe.at(i);
+
+	if (!file.open(QIODevice::ReadOnly))
+		return;
+
+	if (!ddf.readDDR(file))
+		return;
+	while (!file.atEnd()) {
+		ISO8211::Record record;
+		if (!ddf.readRecord(file, record))
+			return;
+		if (!processRecord(record, fe, vi, vc, ve, vf, COMF, SOMF))
+			return;
+	}
+
+	for (int i = 0; i < fe.size(); i++) {
+		const ISO8211::Record &r = fe.at(i);
 		const ISO8211::Field &f = r.at(1);
 
 		if (f.data().at(0).size() < 5)
@@ -604,14 +652,14 @@ void MapData::load()
 		switch (PRIM) {
 			case PRIM_P:
 				if (OBJL == SOUNDG) {
-					QVector<Sounding> s(soundingGeometry(r));
+					QVector<Sounding> s(soundingGeometry(r, vi, vc, COMF, SOMF));
 					for (int i = 0; i < s.size(); i++) {
 						point = pointObject(s.at(i));
 						pointBounds(point->pos(), min, max);
 						_points.Insert(min, max, point);
 					}
 				} else {
-					if ((point = pointObject(r, OBJL))) {
+					if ((point = pointObject(r, vi, vc, COMF, OBJL))) {
 						pointBounds(point->pos(), min, max);
 						_points.Insert(min, max, point);
 					} else
@@ -619,14 +667,14 @@ void MapData::load()
 				}
 				break;
 			case PRIM_L:
-				if ((line = lineObject(r, OBJL))) {
+				if ((line = lineObject(r, vc, ve, COMF, OBJL))) {
 					rectcBounds(line->bounds(), min, max);
 					_lines.Insert(min, max, line);
 				} else
 					warning(f, PRIM);
 				break;
 			case PRIM_A:
-				if ((poly = polyObject(r, OBJL))) {
+				if ((poly = polyObject(r, vc, ve, COMF, OBJL))) {
 					rectcBounds(poly->bounds(), min, max);
 					_areas.Insert(min, max, poly);
 				} else
