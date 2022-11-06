@@ -53,16 +53,17 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(TSEZNE)] = Polygon(QBrush("#80fcb4fc"));
 	_polygons[TYPE(DRGARE)] = Polygon(QBrush(QColor("#a0a0ff"),
 	  Qt::Dense4Pattern));
+	_polygons[TYPE(UNSARE)] = Polygon(QBrush("#999999"));
 
 	_drawOrder
 	  << TYPE(M_COVR) << TYPE(LNDARE) << SUBTYPE(DEPARE, 0)
 	  << SUBTYPE(DEPARE, 1) << SUBTYPE(DEPARE, 2) << SUBTYPE(DEPARE, 3)
-	  << SUBTYPE(DEPARE, 4) << SUBTYPE(DEPARE, 5) << SUBTYPE(DEPARE, 6)
-	  << TYPE(LAKARE) << TYPE(CANALS) << TYPE(DYKCON) << TYPE(RIVERS)
-	  << TYPE(DRGARE) << TYPE(FAIRWY) << TYPE(BUAARE) << TYPE(BUISGL)
-	  << TYPE(AIRARE) << TYPE(BRIDGE) << TYPE(SLCONS) << TYPE(PONTON)
-	  << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN) << TYPE(ACHARE)
-	  << SUBTYPE(RESARE, 9);
+	  << TYPE(UNSARE) << SUBTYPE(DEPARE, 4) << SUBTYPE(DEPARE, 5)
+	  << SUBTYPE(DEPARE, 6) << TYPE(LAKARE) << TYPE(CANALS) << TYPE(DYKCON)
+	  << TYPE(RIVERS) << TYPE(DRGARE) << TYPE(FAIRWY) << TYPE(BUAARE)
+	  << TYPE(BUISGL) << TYPE(AIRARE) << TYPE(BRIDGE) << TYPE(SLCONS)
+	  << TYPE(PONTON) << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN)
+	  << TYPE(ACHARE) << SUBTYPE(RESARE, 9) << TYPE(154);
 }
 
 void Style::defaultLineStyle()

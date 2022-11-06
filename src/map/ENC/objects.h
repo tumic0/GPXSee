@@ -53,6 +53,7 @@
 #define TSSBND 146
 #define TSEZNE 150
 #define UWTROC 153
+#define UNSARE 154
 #define WRECKS 159
 #define M_COVR 302
 
