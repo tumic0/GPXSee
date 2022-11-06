@@ -319,10 +319,5 @@ bool ISO8211::readRecord(QFile &file, Record &record)
 		}
 	}
 
-	if (file.pos() != pos + len) {
-		_errorString = "Record format error";
-		return false;
-	}
-
 	return true;
 }

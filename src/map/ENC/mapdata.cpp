@@ -463,6 +463,9 @@ MapData::Poly *MapData::polyObject(const ISO8211::Record &r,
 bool MapData::processRecord(const ISO8211::Record &record,
   QVector<ISO8211::Record> &rv, uint &COMF, QString &name)
 {
+	if (record.size() < 2)
+		return false;
+
 	const ISO8211::Field &f = record.at(1);
 	const QByteArray &ba = f.tag();
 
@@ -485,6 +488,9 @@ bool MapData::processRecord(const ISO8211::Record &record,
   QVector<ISO8211::Record> &fe, RecordMap &vi, RecordMap &vc, RecordMap &ve,
   RecordMap &vf, uint &COMF, uint &SOMF)
 {
+	if (record.size() < 2)
+		return false;
+
 	const ISO8211::Field &f = record.at(1);
 	const QByteArray &ba = f.tag();
 
