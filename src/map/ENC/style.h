@@ -29,13 +29,18 @@ public:
 		{
 			_pen = (pen == Qt::NoPen) ? QPen(_brush, 0) : pen;
 		}
+		Polygon(const QImage &img)
+		  : _brush(Qt::NoBrush), _pen(Qt::NoPen), _img(img.convertToFormat(
+		  QImage::Format_ARGB32_Premultiplied)) {}
 
 		const QPen &pen() const {return _pen;}
 		const QBrush &brush() const {return _brush;}
+		const QImage &img() const {return _img;}
 
 	private:
 		QBrush _brush;
 		QPen _pen;
+		QImage _img;
 	};
 
 	class Line {

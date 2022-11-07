@@ -88,9 +88,15 @@ void RasterTile::drawPolygons(QPainter *painter)
 				continue;
 			const Style::Polygon &style = s.polygon(ECDIS(poly->type()));
 
-			painter->setPen(style.pen());
-			painter->setBrush(style.brush());
-			painter->drawPath(painterPath(poly->path()));
+			if (!style.img().isNull()) {
+				for (int i = 0; i < poly->path().size(); i++)
+					BitmapLine::draw(painter, polyline(poly->path().at(i)),
+					  style.img());
+			} else {
+				painter->setPen(style.pen());
+				painter->setBrush(style.brush());
+				painter->drawPath(painterPath(poly->path()));
+			}
 		}
 	}
 }
