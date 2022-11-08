@@ -52,12 +52,7 @@ public:
 
 	class Point {
 	public:
-		Point(uint type, const Coordinates &c, const QString &label)
-		  : _type(type), _pos(c), _label(label)
-		{
-			uint hash = (uint)qHash(QPair<double,double>(c.lon(), c.lat()));
-			_id = ((quint64)type)<<32 | hash;
-		}
+		Point(uint type, const Coordinates &c, const QString &label);
 
 		const Coordinates &pos() const {return _pos;}
 		uint type() const {return _type;}

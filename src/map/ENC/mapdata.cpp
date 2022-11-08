@@ -15,6 +15,45 @@ using namespace ENC;
 #define PRIM_L 2
 #define PRIM_A 3
 
+static QMap<uint,uint> orderMapInit()
+{
+	QMap<uint,uint> map;
+
+	map.insert(BUAARE, 1);
+	map.insert(BCNISD, 2);
+	map.insert(BCNLAT, 3);
+	map.insert(BCNSAW, 4);
+	map.insert(BCNSPP, 5);
+	map.insert(BOYCAR, 6);
+	map.insert(BOYINB, 7);
+	map.insert(BOYISD, 8);
+	map.insert(BOYLAT, 9);
+	map.insert(BOYSAW, 10);
+	map.insert(BOYSPP, 11);
+	map.insert(MORFAC, 12);
+	map.insert(OFSPLF, 13);
+	map.insert(LIGHTS, 14);
+	map.insert(OBSTRN, 15);
+	map.insert(WRECKS, 16);
+	map.insert(UWTROC, 17);
+	map.insert(HRBFAC, 18);
+	map.insert(PILPNT, 19);
+	map.insert(ACHBRT, 20);
+	map.insert(LNDELV, 21);
+	map.insert(LNDMRK, 22);
+	map.insert(SOUNDG, 0xFFFFFFFF);
+
+	return map;
+}
+
+static QMap<uint,uint> orderMap = orderMapInit();
+
+static uint order(uint type)
+{
+	QMap<uint, uint>::const_iterator it = orderMap.find(type);
+	return (it == orderMap.constEnd()) ? type + 512 : it.value();
+}
+
 static void warning(const ISO8211::Field &FRID, uint PRIM)
 {
 	uint RCID = 0xFFFFFFFF;
@@ -130,6 +169,13 @@ static Coordinates point(const ISO8211::Record &r, uint COMF)
 	int x = f->data().at(0).at(1).toInt();
 
 	return coordinates(x, y, COMF);
+}
+
+MapData::Point::Point(uint type, const Coordinates &c, const QString &label)
+  : _type(type), _pos(c), _label(label)
+{
+	uint hash = (uint)qHash(QPair<double,double>(c.lon(), c.lat()));
+	_id = ((quint64)order(type>>16))<<32 | hash;
 }
 
 QVector<MapData::Sounding> MapData::soundings(const ISO8211::Record &r,
