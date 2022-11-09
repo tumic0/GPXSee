@@ -23,7 +23,12 @@ public:
 		_future = QtConcurrent::map(_tiles, &ENC::RasterTile::render);
 		_watcher.setFuture(_future);
 	}
-	void cancel() {_future.cancel();}
+	void cancel(bool wait)
+	{
+		_future.cancel();
+		if (wait)
+			_future.waitForFinished();
+	}
 	const QList<ENC::RasterTile> &tiles() const {return _tiles;}
 
 signals:
@@ -82,7 +87,7 @@ private:
 	bool isRunning(int zoom, const QPoint &xy) const;
 	void runJob(ENCMapJob *job);
 	void removeJob(ENCMapJob *job);
-	void cancelJobs();
+	void cancelJobs(bool wait);
 	QString key(int zoom, const QPoint &xy) const;
 
 	ENC::MapData _data;

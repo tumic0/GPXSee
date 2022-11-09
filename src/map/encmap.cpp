@@ -30,6 +30,7 @@ void ENCMap::load()
 
 void ENCMap::unload()
 {
+	cancelJobs(true);
 	_data.clear();
 }
 
@@ -56,7 +57,7 @@ int ENCMap::zoomFit(const QSize &size, const RectC &rect)
 
 int ENCMap::zoomIn()
 {
-	cancelJobs();
+	cancelJobs(false);
 
 	_zoom = qMin(_zoom + 1, ZOOMS.max());
 	updateTransform();
@@ -65,7 +66,7 @@ int ENCMap::zoomIn()
 
 int ENCMap::zoomOut()
 {
-	cancelJobs();
+	cancelJobs(false);
 
 	_zoom = qMax(_zoom - 1, ZOOMS.min());
 	updateTransform();
@@ -141,10 +142,10 @@ void ENCMap::jobFinished(ENCMapJob *job)
 	emit tilesLoaded();
 }
 
-void ENCMap::cancelJobs()
+void ENCMap::cancelJobs(bool wait)
 {
 	for (int i = 0; i < _jobs.size(); i++)
-		_jobs.at(i)->cancel();
+		_jobs.at(i)->cancel(wait);
 }
 
 QString ENCMap::key(int zoom, const QPoint &xy) const
