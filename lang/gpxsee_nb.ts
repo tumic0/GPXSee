@@ -1246,7 +1246,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="158"/>
         <source>Electronic Navigational Charts</source>
-        <translation type="unfinished"></translation>
+        <translation>Elektroniske sjøkart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="165"/>
