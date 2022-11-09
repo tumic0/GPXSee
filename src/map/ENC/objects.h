@@ -50,6 +50,7 @@
 #define SLCONS 122
 #define SLOTOP 126
 #define SOUNDG 129
+#define TSELNE 145
 #define TSSBND 146
 #define TSEZNE 150
 #define UWTROC 153

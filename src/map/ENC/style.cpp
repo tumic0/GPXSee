@@ -93,6 +93,7 @@ void Style::defaultLineStyle()
 	_lines[TYPE(RAILWY)] = Line(railroad());
 	_lines[TYPE(ROADWY)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
 	_lines[TYPE(GATCON)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
+	_lines[TYPE(TSELNE)] = Line(QPen(QColor("#80fcb4fc"), 4, Qt::SolidLine));
 }
 
 void Style::defaultPointStyle()
