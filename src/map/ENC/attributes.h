@@ -12,5 +12,6 @@
 #define OBJNAM 116
 #define RESTRN 131
 #define VALDCO 174
+#define WATLEV 187
 
 #endif // ENC_ATTRIBUTES_H

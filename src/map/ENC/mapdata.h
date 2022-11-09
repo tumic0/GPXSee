@@ -147,8 +147,6 @@ private:
 	typedef RTree<Line*, double, 2> LineTree;
 	typedef RTree<Point*, double, 2> PointTree;
 
-	bool fetchBoundsAndName();
-
 	static QVector<Sounding> soundings(const ISO8211::Record &r, uint COMF,
 	  uint SOMF);
 	static QVector<Sounding> soundingGeometry(const ISO8211::Record &r,

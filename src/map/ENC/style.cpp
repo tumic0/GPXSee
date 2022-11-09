@@ -115,14 +115,22 @@ void Style::defaultPointStyle()
 	_points[SUBTYPE(LNDMRK, 17)] = Point(QImage(":/marine/tower.png"));
 	_points[TYPE(LNDELV)] = Point(QImage(":/marine/triangulation-point.png"));
 	_points[TYPE(OBSTRN)] = Point(QImage(":/marine/obstruction.png"), Small);
-	_points[TYPE(WRECKS)] = Point(QImage(":/marine/wreck.png"), Small);
 	_points[SUBTYPE(WRECKS, 1)] = Point(QImage(":/marine/wreck.png"), Small);
 	_points[SUBTYPE(WRECKS, 2)] = Point(QImage(":/marine/wreck-dangerous.png"),
 	  Small);
 	_points[SUBTYPE(WRECKS, 3)] = Point(QImage(":/marine/wreck.png"), Small);
 	_points[SUBTYPE(WRECKS, 4)] = Point(QImage(":/marine/wreck.png"), Small);
 	_points[SUBTYPE(WRECKS, 5)] = Point(QImage(":/marine/wreck-exposed.png"));
-	_points[TYPE(UWTROC)] = Point(QImage(":/marine/rock-dangerous.png"), Small);
+	_points[SUBTYPE(UWTROC, 1)] = Point(QImage(":/marine/rock-exposed.png"),
+	  Small);
+	_points[SUBTYPE(UWTROC, 2)] = Point(QImage(":/marine/rock-exposed.png"),
+	  Small);
+	_points[SUBTYPE(UWTROC, 3)] = Point(QImage(":/marine/rock-dangerous.png"),
+	  Small);
+	_points[SUBTYPE(UWTROC, 4)] = Point(QImage(":/marine/rock-dangerous.png"),
+	  Small);
+	_points[SUBTYPE(UWTROC, 5)] = Point(QImage(":/marine/rock-dangerous.png"),
+	  Small);
 	_points[SUBTYPE(HRBFAC, 5)] = Point(QImage(":/marine/yacht-harbor.png"));
 	_points[TYPE(ACHBRT)] = Point(QImage(":/marine/anchorage.png"));
 	_points[TYPE(OFSPLF)] = Point(QImage(":/marine/platform.png"));

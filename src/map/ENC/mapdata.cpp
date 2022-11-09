@@ -258,7 +258,7 @@ QVector<Coordinates> MapData::lineGeometry(const ISO8211::Record &r,
 {
 	QVector<Coordinates> path;
 	Coordinates c[2];
-	uint ORNT, MASK;
+	uint ORNT;
 	quint8 type;
 	quint32 id;
 
@@ -270,8 +270,6 @@ QVector<Coordinates> MapData::lineGeometry(const ISO8211::Record &r,
 		if (!parseNAME(FSPT, &type, &id, i) || type != RCNM_VE)
 			return QVector<Coordinates>();
 		ORNT = FSPT->data().at(i).at(1).toUInt();
-		MASK = FSPT->data().at(i).at(3).toUInt();
-		Q_ASSERT(MASK != 1);
 
 		RecordMapIterator it = ve.find(id);
 		if (it == ve.constEnd())
@@ -326,7 +324,7 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
 	Polygon path;
 	QVector<Coordinates> v;
 	Coordinates c[2];
-	uint ORNT, USAG, MASK;
+	uint ORNT, USAG;
 	quint8 type;
 	quint32 id;
 
@@ -339,8 +337,6 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
 			return Polygon();
 		ORNT = FSPT->data().at(i).at(1).toUInt();
 		USAG = FSPT->data().at(i).at(2).toUInt();
-		MASK = FSPT->data().at(i).at(3).toUInt();
-		Q_ASSERT(MASK != 1);
 
 		if (USAG == 2 && path.isEmpty()) {
 			path.append(v);
@@ -420,7 +416,8 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 		if ((OBJL == HRBFAC && key == CATHAF)
 		  || (OBJL == LNDMRK && key == CATLMK)
 		  || (OBJL == WRECKS && key == CATWRK)
-		  || (OBJL == MORFAC && key == CATMOR))
+		  || (OBJL == MORFAC && key == CATMOR)
+		  || (OBJL == UWTROC && key == WATLEV))
 			subtype = av.at(1).toString().toUInt();
 	}
 
@@ -608,7 +605,7 @@ bool MapData::bounds(const QVector<ISO8211::Record> &gv, Rect &b)
 	return true;
 }
 
-bool MapData::fetchBoundsAndName()
+MapData::MapData(const QString &path): _fileName(path)
 {
 	QFile file(_fileName);
 	QVector<ISO8211::Record> gv;
@@ -617,42 +614,34 @@ bool MapData::fetchBoundsAndName()
 
 	if (!file.open(QIODevice::ReadOnly)) {
 		_errorString = file.errorString();
-		return false;
+		return;
 	}
 
 	if (!ddf.readDDR(file)) {
 		_errorString = ddf.errorString();
-		return false;
+		return;
 	}
 	while (!file.atEnd()) {
 		ISO8211::Record record;
 		if (!ddf.readRecord(file, record)) {
 			_errorString = ddf.errorString();
-			return false;
+			return;
 		}
 		if (!processRecord(record, gv, COMF, _name))
-			return false;
+			return;
 	}
 
 	Rect b;
 	if (!bounds(gv, b)) {
 		_errorString = "Error fetching geometries bounds";
-		return false;
+		return;
 	}
 	RectC br(Coordinates(b.minX() / (double)COMF, b.maxY() / (double)COMF),
 	  Coordinates(b.maxX() / (double)COMF, b.minY() / (double)COMF));
-	if (!br.isValid()) {
+	if (!br.isValid())
 		_errorString = "Invalid geometries bounds";
-		return false;
-	} else
+	else
 		_bounds = br;
-
-	return true;
-}
-
-MapData::MapData(const QString &path): _fileName(path)
-{
-	fetchBoundsAndName();
 }
 
 MapData::~MapData()
