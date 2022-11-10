@@ -442,6 +442,8 @@ MapData::Attr MapData::lineAttr(const ISO8211::Record &r, uint OBJL)
 		if ((OBJL == DEPCNT && key == VALDCO)
 		  || (OBJL == LNDELV && key == ELEVAT))
 			label = av.at(1).toString();
+		if (OBJL == RECTRC && key == CATTRK)
+			subtype = av.at(1).toString().toUInt();
 	}
 
 	return Attr(subtype, label);

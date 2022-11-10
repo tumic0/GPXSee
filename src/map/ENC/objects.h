@@ -44,6 +44,7 @@
 #define PIPSOL 94
 #define PONTON 95
 #define RAILWY 106
+#define RECTRC 109
 #define RESARE 112
 #define RIVERS 114
 #define ROADWY 116

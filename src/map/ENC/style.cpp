@@ -69,6 +69,7 @@ void Style::defaultPolygonStyle()
 
 void Style::defaultLineStyle()
 {
+	_lines[TYPE(BUISGL)] = Line(QPen(QColor("#966118"), 1.5));
 	_lines[TYPE(DEPCNT)] = Line(QPen(QColor("#659aef"), 1, Qt::SolidLine));
 	_lines[TYPE(DEPCNT)].setTextColor(QColor("#558adf"));
 	_lines[TYPE(DEPCNT)].setTextFontSize(Small);
@@ -94,6 +95,8 @@ void Style::defaultLineStyle()
 	_lines[TYPE(ROADWY)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
 	_lines[TYPE(GATCON)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
 	_lines[TYPE(TSELNE)] = Line(QPen(QColor("#80fcb4fc"), 4, Qt::SolidLine));
+	_lines[SUBTYPE(RECTRC, 1)] = Line(QPen(QColor("#000000"), 0, Qt::SolidLine));
+	_lines[SUBTYPE(RECTRC, 2)] = Line(QPen(QColor("#000000"), 0, Qt::DashLine));
 }
 
 void Style::defaultPointStyle()
