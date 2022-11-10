@@ -1240,7 +1240,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="158"/>
         <source>Electronic Navigational Charts</source>
-        <translation type="unfinished"></translation>
+        <translation>电子航海图</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="165"/>
