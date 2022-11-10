@@ -2,6 +2,7 @@
 #include "common/util.h"
 #include "objects.h"
 #include "attributes.h"
+#include "style.h"
 #include "mapdata.h"
 
 using namespace ENC;
@@ -19,29 +20,35 @@ static QMap<uint,uint> orderMapInit()
 {
 	QMap<uint,uint> map;
 
-	map.insert(BUAARE, 1);
-	map.insert(BCNISD, 2);
-	map.insert(BCNLAT, 3);
-	map.insert(BCNSAW, 4);
-	map.insert(BCNSPP, 5);
-	map.insert(BOYCAR, 6);
-	map.insert(BOYINB, 7);
-	map.insert(BOYISD, 8);
-	map.insert(BOYLAT, 9);
-	map.insert(BOYSAW, 10);
-	map.insert(BOYSPP, 11);
-	map.insert(MORFAC, 12);
-	map.insert(OFSPLF, 13);
-	map.insert(LIGHTS, 14);
-	map.insert(OBSTRN, 15);
-	map.insert(WRECKS, 16);
-	map.insert(UWTROC, 17);
-	map.insert(HRBFAC, 18);
-	map.insert(PILPNT, 19);
-	map.insert(ACHBRT, 20);
-	map.insert(LNDELV, 21);
-	map.insert(LNDMRK, 22);
-	map.insert(SOUNDG, 0xFFFFFFFF);
+	map.insert(SUBTYPE(BUAARE, 1), 1);
+	map.insert(SUBTYPE(BUAARE, 5), 2);
+	map.insert(SUBTYPE(BUAARE, 4), 2);
+	map.insert(SUBTYPE(BUAARE, 3), 3);
+	map.insert(SUBTYPE(BUAARE, 2), 4);
+	map.insert(SUBTYPE(BUAARE, 6), 5);
+	map.insert(SUBTYPE(BUAARE, 0), 6);
+	map.insert(TYPE(BCNISD), 7);
+	map.insert(TYPE(BCNLAT), 8);
+	map.insert(TYPE(BCNSAW), 9);
+	map.insert(TYPE(BCNSPP), 10);
+	map.insert(TYPE(BOYCAR), 11);
+	map.insert(TYPE(BOYINB), 12);
+	map.insert(TYPE(BOYISD), 13);
+	map.insert(TYPE(BOYLAT), 14);
+	map.insert(TYPE(BOYSAW), 15);
+	map.insert(TYPE(BOYSPP), 16);
+	map.insert(TYPE(MORFAC), 17);
+	map.insert(TYPE(OFSPLF), 18);
+	map.insert(TYPE(LIGHTS), 19);
+	map.insert(TYPE(OBSTRN), 20);
+	map.insert(TYPE(WRECKS), 21);
+	map.insert(TYPE(UWTROC), 22);
+	map.insert(TYPE(HRBFAC), 23);
+	map.insert(TYPE(PILPNT), 24);
+	map.insert(TYPE(ACHBRT), 25);
+	map.insert(TYPE(LNDELV), 26);
+	map.insert(TYPE(LNDMRK), 27);
+	map.insert(TYPE(SOUNDG), 0xFFFFFFFF);
 
 	return map;
 }
@@ -50,7 +57,8 @@ static QMap<uint,uint> orderMap = orderMapInit();
 
 static uint order(uint type)
 {
-	QMap<uint, uint>::const_iterator it = orderMap.find(type);
+	uint st = (type>>16 == BUAARE) ? type : type && 0xFFFF;
+	QMap<uint, uint>::const_iterator it = orderMap.find(st);
 	return (it == orderMap.constEnd()) ? type + 512 : it.value();
 }
 
@@ -175,7 +183,7 @@ MapData::Point::Point(uint type, const Coordinates &c, const QString &label)
   : _type(type), _pos(c), _label(label)
 {
 	uint hash = (uint)qHash(QPair<double,double>(c.lon(), c.lat()));
-	_id = ((quint64)order(type>>16))<<32 | hash;
+	_id = ((quint64)order(type))<<32 | hash;
 }
 
 QVector<MapData::Sounding> MapData::soundings(const ISO8211::Record &r,
@@ -417,7 +425,8 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 		  || (OBJL == LNDMRK && key == CATLMK)
 		  || (OBJL == WRECKS && key == CATWRK)
 		  || (OBJL == MORFAC && key == CATMOR)
-		  || (OBJL == UWTROC && key == WATLEV))
+		  || (OBJL == UWTROC && key == WATLEV)
+		  || (OBJL == BUAARE && key == CATBUA))
 			subtype = av.at(1).toString().toUInt();
 	}
 
@@ -772,4 +781,42 @@ void MapData::polygons(const RectC &rect, QList<Poly*> *polygons)
 
 	rectcBounds(rect, min, max);
 	_areas.Search(min, max, polygonCb, polygons);
+}
+
+Range MapData::zooms() const
+{
+	double size = qMin(_bounds.width(), _bounds.height());
+
+	if (size > 180)
+		return Range(0, 20);
+	else if (size > 90)
+		return Range(1, 20);
+	else if (size > 45)
+		return Range(2, 20);
+	else if (size > 22.5)
+		return Range(3, 20);
+	else if (size > 11.25)
+		return Range(4, 20);
+	else if (size > 5.625)
+		return Range(5, 20);
+	else if (size > 2.813)
+		return Range(6, 20);
+	else if (size > 1.406)
+		return Range(7, 20);
+	else if (size > 0.703)
+		return Range(8, 20);
+	else if (size > 0.352)
+		return Range(9, 20);
+	else if (size > 0.176)
+		return Range(10, 20);
+	else if (size > 0.088)
+		return Range(11, 20);
+	else if (size > 0.044)
+		return Range(12, 20);
+	else if (size > 0.022)
+		return Range(13, 20);
+	else if (size > 0.011)
+		return Range(14, 20);
+	else
+		return Range(15, 20);
 }

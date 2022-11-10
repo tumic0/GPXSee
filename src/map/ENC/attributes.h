@@ -2,6 +2,7 @@
 #define ENC_ATTRIBUTES_H
 
 #define CATACH 8
+#define CATBUA 10
 #define CATHAF 30
 #define CATLMK 35
 #define CATMOR 40

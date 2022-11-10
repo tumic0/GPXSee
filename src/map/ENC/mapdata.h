@@ -5,6 +5,7 @@
 #include "common/rectc.h"
 #include "common/rtree.h"
 #include "common/polygon.h"
+#include "common/range.h"
 #include "iso8211.h"
 
 namespace ENC {
@@ -73,6 +74,7 @@ public:
 
 	const QString &name() const {return _name;}
 	RectC bounds() const {return _bounds;}
+	Range zooms() const;
 
 	void polygons(const RectC &rect, QList<Poly*> *polygons);
 	void lines(const RectC &rect, QList<Line*> *lines);

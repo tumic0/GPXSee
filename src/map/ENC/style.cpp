@@ -101,7 +101,11 @@ void Style::defaultLineStyle()
 
 void Style::defaultPointStyle()
 {
-	_points[TYPE(BUAARE)].setTextFontSize(Large);
+	_points[SUBTYPE(BUAARE, 1)].setTextFontSize(Large);
+	_points[SUBTYPE(BUAARE, 5)].setTextFontSize(Large);
+	_points[SUBTYPE(BUAARE, 3)].setTextFontSize(Small);
+	_points[SUBTYPE(BUAARE, 6)].setTextFontSize(Small);
+	_points[SUBTYPE(BUAARE, 0)].setTextFontSize(Small);
 	_points[TYPE(SOUNDG)].setTextFontSize(Small);
 	_points[TYPE(LIGHTS)] = Point(QImage(":/marine/light-major.png"), Small);
 	_points[TYPE(BOYCAR)] = Point(QImage(":/marine/buoy.png"), Small);
@@ -140,6 +144,7 @@ void Style::defaultPointStyle()
 	_points[TYPE(OFSPLF)] = Point(QImage(":/marine/platform.png"));
 	_points[TYPE(PILPNT)] = Point(QImage(":/marine/pile.png"), Small);
 	_points[SUBTYPE(MORFAC, 1)] = Point(QImage(":/marine/pile.png"), Small);
+	_points[SUBTYPE(MORFAC, 3)] = Point(QImage(":/marine/pile.png"), Small);
 	_points[SUBTYPE(MORFAC, 5)] = Point(QImage(":/marine/pile.png"), Small);
 	_points[SUBTYPE(MORFAC, 7)] = Point(QImage(":/marine/mooring-buoy.png"),
 	  Small);

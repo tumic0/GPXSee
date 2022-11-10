@@ -11,7 +11,6 @@
 
 using namespace ENC;
 
-static Range ZOOMS = Range(0, 20);
 
 ENCMap::ENCMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _data(fileName), _projection(PCS::pcs(3857)),
@@ -39,8 +38,8 @@ int ENCMap::zoomFit(const QSize &size, const RectC &rect)
 	if (rect.isValid()) {
 		RectD pr(rect, _projection, 10);
 
-		_zoom = ZOOMS.min();
-		for (int i = ZOOMS.min() + 1; i <= ZOOMS.max(); i++) {
+		_zoom = _data.zooms().min();
+		for (int i = _data.zooms().min() + 1; i <= _data.zooms().max(); i++) {
 			Transform t(transform(i));
 			QRectF r(t.proj2img(pr.topLeft()), t.proj2img(pr.bottomRight()));
 			if (size.width() < r.width() || size.height() < r.height())
@@ -48,7 +47,7 @@ int ENCMap::zoomFit(const QSize &size, const RectC &rect)
 			_zoom = i;
 		}
 	} else
-		_zoom = ZOOMS.max();
+		_zoom = _data.zooms().max();
 
 	updateTransform();
 
@@ -59,7 +58,7 @@ int ENCMap::zoomIn()
 {
 	cancelJobs(false);
 
-	_zoom = qMin(_zoom + 1, ZOOMS.max());
+	_zoom = qMin(_zoom + 1, _data.zooms().max());
 	updateTransform();
 	return _zoom;
 }
@@ -68,7 +67,7 @@ int ENCMap::zoomOut()
 {
 	cancelJobs(false);
 
-	_zoom = qMax(_zoom - 1, ZOOMS.min());
+	_zoom = qMax(_zoom - 1, _data.zooms().min());
 	updateTransform();
 	return _zoom;
 }
