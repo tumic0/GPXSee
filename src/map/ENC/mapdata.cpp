@@ -57,7 +57,7 @@ static QMap<uint,uint> orderMap = orderMapInit();
 
 static uint order(uint type)
 {
-	uint st = (type>>16 == BUAARE) ? type : type && 0xFFFF;
+	uint st = (type>>16 == BUAARE) ? type : type & 0xFFFF;
 	QMap<uint, uint>::const_iterator it = orderMap.find(st);
 	return (it == orderMap.constEnd()) ? type + 512 : it.value();
 }
