@@ -52,9 +52,10 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(UNSARE)] = Polygon(QBrush("#999999"));
 	_polygons[SUBTYPE(RESARE, 9)] = Polygon(QBrush(QColor("#ff0000"),
 	  Qt::BDiagPattern));
-
 	_polygons[SUBTYPE(RESARE, 2)] = Polygon(QImage(":/marine/noanchor-line.png"));
 	_polygons[SUBTYPE(ACHARE, 1)] = Polygon(QImage(":/marine/anchor-line.png"));
+	_polygons[TYPE(PRCARE)] = Polygon(QBrush(QColor("#eb49eb"),
+	  Qt::BDiagPattern));
 
 	_drawOrder
 	  << TYPE(M_COVR) << TYPE(LNDARE) << SUBTYPE(DEPARE, 0)
@@ -64,7 +65,8 @@ void Style::defaultPolygonStyle()
 	  << TYPE(RIVERS) << TYPE(DRGARE) << TYPE(FAIRWY) << TYPE(BUAARE)
 	  << TYPE(BUISGL) << TYPE(AIRARE) << TYPE(BRIDGE) << TYPE(SLCONS)
 	  << TYPE(PONTON) << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN)
-	  << SUBTYPE(ACHARE, 1) << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2);
+	  << SUBTYPE(ACHARE, 1) << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2)
+	  << TYPE(PRCARE);
 }
 
 void Style::defaultLineStyle()

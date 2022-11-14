@@ -32,10 +32,12 @@ private:
 	  {return _transform.proj2img(_proj.ll2xy(c));}
 	QPainterPath painterPath(const Polygon &polygon) const;
 	QPolygonF polyline(const QVector<Coordinates> &path) const;
+	QPolygonF arrow(const Coordinates &c, qreal angle) const;
 	void processPoints(QList<TextItem*> &textItems);
 	void processLines(QList<TextItem*> &textItems);
 	void drawBitmapPath(QPainter *painter, const QImage &img,
 	  const Polygon &polygon);
+	void drawArrows(QPainter *painter);
 	void drawPolygons(QPainter *painter);
 	void drawLines(QPainter *painter);
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);

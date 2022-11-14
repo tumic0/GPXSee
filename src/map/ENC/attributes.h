@@ -12,6 +12,7 @@
 #define DRVAL1 87
 #define ELEVAT 90
 #define OBJNAM 116
+#define ORIENT 117
 #define RESTRN 131
 #define VALDCO 174
 #define WATLEV 187

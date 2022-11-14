@@ -479,6 +479,9 @@ MapData::Attr MapData::polyAttr(const ISO8211::Record &r, uint OBJL)
 		else if (OBJL == RESARE && key == RESTRN) {
 			if (av.at(1).toString().toUInt() == 1)
 				subtype = 2;
+		} else if (OBJL == TSSLPT && key == ORIENT) {
+			double angle = av.at(1).toString().toDouble();
+			subtype = (uint)(angle * 10);
 		}
 	}
 

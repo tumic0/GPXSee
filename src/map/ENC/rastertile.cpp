@@ -1,4 +1,6 @@
+#include <QtMath>
 #include <QPainter>
+#include "common/linec.h"
 #include "map/bitmapline.h"
 #include "map/textpointitem.h"
 #include "map/textpathitem.h"
@@ -8,8 +10,11 @@
 using namespace ENC;
 
 #define ICON_PADDING 2
+#define ARROW_SIZE 0.005
 
 #define ECDIS(x) (((x)>TYPE(17000))?((x)-TYPE(17000)):(x))
+
+const float C1 = 0.866025f; /* sqrt(3)/2 */
 
 static const QColor haloColor(Qt::white);
 
@@ -51,6 +56,36 @@ static const Style& style()
 	return s;
 }
 
+static double area(const QVector<Coordinates> &polygon)
+{
+	double area = 0;
+
+	for (int i = 0; i < polygon.size(); i++) {
+		int j = (i + 1) % polygon.size();
+		area += polygon.at(i).lon() * polygon.at(j).lat();
+		area -= polygon.at(i).lat() * polygon.at(j).lon();
+	}
+	area /= 2.0;
+
+	return area;
+}
+
+static Coordinates centroid(const QVector<Coordinates> &polygon)
+{
+	double cx = 0, cy = 0;
+	double factor = 1.0 / (6.0 * area(polygon));
+
+	for (int i = 0; i < polygon.size(); i++) {
+		int j = (i + 1) % polygon.size();
+		qreal f = (polygon.at(i).lon() * polygon.at(j).lat()
+		  - polygon.at(j).lon() * polygon.at(i).lat());
+		cx += (polygon.at(i).lon() + polygon.at(j).lon()) * f;
+		cy += (polygon.at(i).lat() + polygon.at(j).lat()) * f;
+	}
+
+	return Coordinates(cx * factor, cy * factor);
+}
+
 QPainterPath RasterTile::painterPath(const Polygon &polygon) const
 {
 	QPainterPath path;
@@ -75,6 +110,48 @@ QPolygonF RasterTile::polyline(const QVector<Coordinates> &path) const
 		polygon.append(ll2xy(path.at(i)));
 
 	return polygon;
+}
+
+QPolygonF RasterTile::arrow(const Coordinates &c, qreal angle) const
+{
+	Coordinates t[3], r[4];
+	QPolygonF polygon;
+
+	t[0] = c;
+	t[1] = Coordinates(t[0].lon() - qCos(angle - M_PI/3) * ARROW_SIZE,
+	  t[0].lat() - qSin(angle - M_PI/3) * ARROW_SIZE);
+	t[2] = Coordinates(t[0].lon() - qCos(angle - M_PI + M_PI/3) * ARROW_SIZE,
+	  t[0].lat() - qSin(angle - M_PI + M_PI/3) * ARROW_SIZE);
+
+	LineC l(t[1], t[2]);
+	r[0] = l.pointAt(0.25);
+	r[1] = l.pointAt(0.75);
+	r[2] = Coordinates(r[0].lon() - C1 * ARROW_SIZE * qCos(angle - M_PI/2),
+	  r[0].lat() - C1 * ARROW_SIZE * qSin(angle - M_PI/2));
+	r[3] = Coordinates(r[1].lon() - C1 * ARROW_SIZE * qCos(angle - M_PI/2),
+	  r[1].lat() - C1 * ARROW_SIZE * qSin(angle - M_PI/2));
+
+	polygon << ll2xy(t[0]) << ll2xy(t[2]) << ll2xy(r[1]) << ll2xy(r[3])
+	  << ll2xy(r[2]) << ll2xy(r[0]) << ll2xy(t[1]);
+
+	return polygon;
+}
+
+void RasterTile::drawArrows(QPainter *painter)
+{
+	painter->setPen(QPen(QColor("#eb49eb"), 1));
+	painter->setBrush(QBrush("#80eb49eb"));
+
+	for (int i = 0; i < _polygons.size(); i++) {
+		const MapData::Poly *poly = _polygons.at(i);
+
+		if (poly->type()>>16 == TSSLPT) {
+			qreal angle = (poly->type() & 0xFFFF) / 10.0;
+			QPolygonF polygon(arrow(centroid(poly->path().first()),
+			  deg2rad(180 - angle)));
+			painter->drawPolygon(polygon);
+		}
+	}
 }
 
 void RasterTile::drawPolygons(QPainter *painter)
@@ -198,6 +275,7 @@ void RasterTile::render()
 
 	drawPolygons(&painter);
 	drawLines(&painter);
+	drawArrows(&painter);
 
 	drawTextItems(&painter, textItems);
 

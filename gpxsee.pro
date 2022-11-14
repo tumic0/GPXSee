@@ -29,6 +29,7 @@ HEADERS += src/common/config.h \
     src/GUI/pluginparameters.h \
     src/common/garmin.h \
     src/common/coordinates.h \
+    src/common/linec.h \
     src/common/range.h \
     src/common/rectc.h \
     src/common/textcodec.h \

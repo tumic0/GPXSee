@@ -43,6 +43,7 @@
 #define PILPNT 90
 #define PIPSOL 94
 #define PONTON 95
+#define PRCARE 96
 #define RAILWY 106
 #define RECTRC 109
 #define RESARE 112
@@ -53,6 +54,7 @@
 #define SOUNDG 129
 #define TSELNE 145
 #define TSSBND 146
+#define TSSLPT 148
 #define TSEZNE 150
 #define UWTROC 153
 #define UNSARE 154
