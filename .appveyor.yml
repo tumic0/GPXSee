@@ -1,4 +1,4 @@
-version: 11.8.{build}
+version: 11.9.{build}
 
 configuration:
   - Release
