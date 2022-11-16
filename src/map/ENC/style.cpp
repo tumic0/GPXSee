@@ -56,6 +56,10 @@ void Style::defaultPolygonStyle()
 	_polygons[SUBTYPE(ACHARE, 1)] = Polygon(QImage(":/marine/anchor-line.png"));
 	_polygons[TYPE(PRCARE)] = Polygon(QBrush(QColor("#eb49eb"),
 	  Qt::BDiagPattern));
+	_polygons[TYPE(DAMCON)] = Polygon(QBrush("#d98b21"), QPen(QColor("#000000"),
+	  1));
+	_polygons[TYPE(PYLONS)] = Polygon(QBrush("#a58140"), QPen(QColor("#000000"),
+	  1));
 
 	_drawOrder
 	  << TYPE(M_COVR) << TYPE(LNDARE) << SUBTYPE(DEPARE, 0)
@@ -66,7 +70,7 @@ void Style::defaultPolygonStyle()
 	  << TYPE(BUISGL) << TYPE(AIRARE) << TYPE(BRIDGE) << TYPE(SLCONS)
 	  << TYPE(PONTON) << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN)
 	  << SUBTYPE(ACHARE, 1) << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2)
-	  << TYPE(PRCARE);
+	  << TYPE(PRCARE) << TYPE(DAMCON) << TYPE(PYLONS);
 }
 
 void Style::defaultLineStyle()

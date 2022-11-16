@@ -22,6 +22,7 @@
 #define CBLSUB 22
 #define CANALS 23
 #define COALNE 30
+#define DAMCON 38
 #define DEPARE 42
 #define DEPCNT 43
 #define DRGARE 46
@@ -44,6 +45,7 @@
 #define PIPSOL 94
 #define PONTON 95
 #define PRCARE 96
+#define PYLONS 98
 #define RAILWY 106
 #define RECTRC 109
 #define RESARE 112
