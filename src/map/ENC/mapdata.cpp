@@ -420,14 +420,14 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 		uint key = av.at(0).toUInt();
 
 		if (key == OBJNAM)
-			label = av.at(1).toString();
+			label = QString::fromLatin1(av.at(1).toByteArray());
 		if ((OBJL == HRBFAC && key == CATHAF)
 		  || (OBJL == LNDMRK && key == CATLMK)
 		  || (OBJL == WRECKS && key == CATWRK)
 		  || (OBJL == MORFAC && key == CATMOR)
 		  || (OBJL == UWTROC && key == WATLEV)
 		  || (OBJL == BUAARE && key == CATBUA))
-			subtype = av.at(1).toString().toUInt();
+			subtype = av.at(1).toByteArray().toUInt();
 	}
 
 	return Attr(subtype, label);
@@ -447,12 +447,12 @@ MapData::Attr MapData::lineAttr(const ISO8211::Record &r, uint OBJL)
 		uint key = av.at(0).toUInt();
 
 		if (key == OBJNAM)
-			label = av.at(1).toString();
+			label = QString::fromLatin1(av.at(1).toByteArray());
 		if ((OBJL == DEPCNT && key == VALDCO)
 		  || (OBJL == LNDELV && key == ELEVAT))
-			label = av.at(1).toString();
+			label = QString::fromLatin1(av.at(1).toByteArray());
 		if (OBJL == RECTRC && key == CATTRK)
-			subtype = av.at(1).toString().toUInt();
+			subtype = av.at(1).toByteArray().toUInt();
 	}
 
 	return Attr(subtype, label);
@@ -472,15 +472,15 @@ MapData::Attr MapData::polyAttr(const ISO8211::Record &r, uint OBJL)
 		uint key = av.at(0).toUInt();
 
 		if (OBJL == DEPARE && key == DRVAL1)
-			subtype = depthLevel(av.at(1).toString());
+			subtype = depthLevel(av.at(1).toByteArray());
 		else if ((OBJL == RESARE && key == CATREA)
 		  || (OBJL == ACHARE && key == CATACH))
-			subtype = av.at(1).toString().toUInt();
+			subtype = av.at(1).toByteArray().toUInt();
 		else if (OBJL == RESARE && key == RESTRN) {
-			if (av.at(1).toString().toUInt() == 1)
+			if (av.at(1).toByteArray().toUInt() == 1)
 				subtype = 2;
 		} else if (OBJL == TSSLPT && key == ORIENT) {
-			double angle = av.at(1).toString().toDouble();
+			double angle = av.at(1).toByteArray().toDouble();
 			subtype = (uint)(angle * 10);
 		}
 	}
