@@ -36,6 +36,7 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(OBSTRN)] = Polygon(Qt::NoBrush, QPen(QColor("#000000"), 1.5,
 	  Qt::DotLine));
 	_polygons[TYPE(PONTON)] = Polygon(QBrush("#333333"));
+	_polygons[TYPE(DRYDOC)] = Polygon(QBrush("#333333"));
 	_polygons[TYPE(SLCONS)] = Polygon(Qt::NoBrush, QPen(QColor("#333333"), 1.5,
 	  Qt::DashLine));
 	_polygons[TYPE(LAKARE)] = Polygon(QBrush("#9fc4e1"),
@@ -58,7 +59,11 @@ void Style::defaultPolygonStyle()
 	  Qt::BDiagPattern));
 	_polygons[TYPE(DAMCON)] = Polygon(QBrush("#d98b21"), QPen(QColor("#000000"),
 	  1));
+	_polygons[TYPE(DRYDOC)] = Polygon(QBrush("#ebab54"), QPen(QColor("#000000"),
+	  1));
 	_polygons[TYPE(PYLONS)] = Polygon(QBrush("#a58140"), QPen(QColor("#000000"),
+	  1));
+	_polygons[TYPE(FLODOC)] = Polygon(QBrush("#333333"), QPen(QColor("#000000"),
 	  1));
 
 	_drawOrder
@@ -68,9 +73,10 @@ void Style::defaultPolygonStyle()
 	  << SUBTYPE(DEPARE, 6) << TYPE(LAKARE) << TYPE(CANALS) << TYPE(DYKCON)
 	  << TYPE(RIVERS) << TYPE(DRGARE) << TYPE(FAIRWY) << TYPE(BUAARE)
 	  << TYPE(BUISGL) << TYPE(AIRARE) << TYPE(BRIDGE) << TYPE(SLCONS)
-	  << TYPE(PONTON) << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN)
+	  << TYPE(PONTON) << TYPE(FLODOC) << TYPE(DRYDOC) << TYPE(DAMCON)
+	  << TYPE(PYLONS) << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN)
 	  << SUBTYPE(ACHARE, 1) << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2)
-	  << TYPE(PRCARE) << TYPE(DAMCON) << TYPE(PYLONS);
+	  << TYPE(PRCARE);
 }
 
 void Style::defaultLineStyle()

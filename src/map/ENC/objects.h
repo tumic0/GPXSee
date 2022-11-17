@@ -27,10 +27,12 @@
 #define DEPARE 42
 #define DEPCNT 43
 #define DRGARE 46
+#define DRYDOC 47
 #define DMPGRD 48
 #define DYKCON 49
 #define FAIRWY 51
 #define FERYRT 53
+#define FLODOC 57
 #define GATCON 61
 #define HRBFAC 64
 #define LAKARE 69
