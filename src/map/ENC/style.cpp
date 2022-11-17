@@ -103,6 +103,8 @@ void Style::defaultLineStyle()
 	_lines[TYPE(TSELNE)] = Line(QPen(QColor("#80fcb4fc"), 4, Qt::SolidLine));
 	_lines[SUBTYPE(RECTRC, 1)] = Line(QPen(QColor("#000000"), 0, Qt::SolidLine));
 	_lines[SUBTYPE(RECTRC, 2)] = Line(QPen(QColor("#000000"), 0, Qt::DashLine));
+	_lines[TYPE(FAIRWY)] = Line(QPen(QColor("#888888"), 1, Qt::DashDotDotLine));
+	_lines[TYPE(BERTHS)] = Line(QPen(QColor("#333333"), 2));
 }
 
 void Style::defaultPointStyle()

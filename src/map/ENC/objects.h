@@ -9,6 +9,7 @@
 #define BCNLAT 7
 #define BCNSAW 8
 #define BCNSPP 9
+#define BERTHS 10
 #define BRIDGE 11
 #define BUISGL 12
 #define BUAARE 13
