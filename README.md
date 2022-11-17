@@ -10,7 +10,7 @@ GPS log file formats.
   QuadTiles).
 * Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases,
   Garmin IMG/GMAP & JNX maps, TwoNav RMaps, GeoTIFF images, BSB charts,
-  ENC charts KMZ maps, AlpineQuest maps, Locus/OsmAnd/RMaps SQLite maps,
+  ENC charts, KMZ maps, AlpineQuest maps, Locus/OsmAnd/RMaps SQLite maps,
   Mapsforge vector maps, QCT maps, GEMF maps, Osmdroid SQLite maps, Orux maps,
   ESRI World-File georeferenced images).
 * Elevation, speed, heart rate, cadence, power, temperature and gear ratio/shifts
