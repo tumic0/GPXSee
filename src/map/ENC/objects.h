@@ -50,6 +50,7 @@
 #define PRCARE 96
 #define PYLONS 98
 #define RAILWY 106
+#define RCRTCL 108
 #define RECTRC 109
 #define RESARE 112
 #define RIVERS 114

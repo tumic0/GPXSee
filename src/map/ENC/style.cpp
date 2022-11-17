@@ -65,6 +65,7 @@ void Style::defaultPolygonStyle()
 	  1));
 	_polygons[TYPE(FLODOC)] = Polygon(QBrush("#333333"), QPen(QColor("#000000"),
 	  1));
+	_polygons[TYPE(41)] = Polygon(QImage(":/marine/dw-route-line"));
 
 	_drawOrder
 	  << TYPE(M_COVR) << TYPE(LNDARE) << SUBTYPE(DEPARE, 0)
@@ -76,7 +77,7 @@ void Style::defaultPolygonStyle()
 	  << TYPE(PONTON) << TYPE(FLODOC) << TYPE(DRYDOC) << TYPE(DAMCON)
 	  << TYPE(PYLONS) << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN)
 	  << SUBTYPE(ACHARE, 1) << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2)
-	  << TYPE(PRCARE);
+	  << TYPE(PRCARE) << TYPE(41);
 }
 
 void Style::defaultLineStyle()
@@ -109,6 +110,8 @@ void Style::defaultLineStyle()
 	_lines[TYPE(TSELNE)] = Line(QPen(QColor("#80fcb4fc"), 4, Qt::SolidLine));
 	_lines[SUBTYPE(RECTRC, 1)] = Line(QPen(QColor("#000000"), 0, Qt::SolidLine));
 	_lines[SUBTYPE(RECTRC, 2)] = Line(QPen(QColor("#000000"), 0, Qt::DashLine));
+	_lines[SUBTYPE(RCRTCL, 1)] = Line(QPen(QColor("#eb49eb"), 0, Qt::SolidLine));
+	_lines[SUBTYPE(RCRTCL, 2)] = Line(QPen(QColor("#eb49eb"), 0, Qt::DashLine));
 	_lines[TYPE(FAIRWY)] = Line(QPen(QColor("#888888"), 1, Qt::DashDotDotLine));
 	_lines[TYPE(BERTHS)] = Line(QPen(QColor("#333333"), 2));
 }

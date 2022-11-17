@@ -451,7 +451,7 @@ MapData::Attr MapData::lineAttr(const ISO8211::Record &r, uint OBJL)
 		if ((OBJL == DEPCNT && key == VALDCO)
 		  || (OBJL == LNDELV && key == ELEVAT))
 			label = QString::fromLatin1(av.at(1).toByteArray());
-		if (OBJL == RECTRC && key == CATTRK)
+		if ((OBJL == RECTRC || OBJL == RCRTCL) && key == CATTRK)
 			subtype = av.at(1).toByteArray().toUInt();
 	}
 
