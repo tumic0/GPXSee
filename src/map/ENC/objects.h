@@ -24,6 +24,7 @@
 #define CANALS 23
 #define COALNE 30
 #define DAMCON 38
+#define DWRTPT 41
 #define DEPARE 42
 #define DEPCNT 43
 #define DRGARE 46

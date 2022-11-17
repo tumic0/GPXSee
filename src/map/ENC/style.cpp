@@ -65,7 +65,7 @@ void Style::defaultPolygonStyle()
 	  1));
 	_polygons[TYPE(FLODOC)] = Polygon(QBrush("#333333"), QPen(QColor("#000000"),
 	  1));
-	_polygons[TYPE(41)] = Polygon(QImage(":/marine/dw-route-line"));
+	_polygons[TYPE(DWRTPT)] = Polygon(QImage(":/marine/dw-route-line"));
 
 	_drawOrder
 	  << TYPE(M_COVR) << TYPE(LNDARE) << SUBTYPE(DEPARE, 0)
@@ -76,8 +76,8 @@ void Style::defaultPolygonStyle()
 	  << TYPE(BUISGL) << TYPE(AIRARE) << TYPE(BRIDGE) << TYPE(SLCONS)
 	  << TYPE(PONTON) << TYPE(FLODOC) << TYPE(DRYDOC) << TYPE(DAMCON)
 	  << TYPE(PYLONS) << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN)
-	  << SUBTYPE(ACHARE, 1) << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2)
-	  << TYPE(PRCARE) << TYPE(41);
+	  << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1) << SUBTYPE(RESARE, 9)
+	  << SUBTYPE(RESARE, 2) << TYPE(PRCARE);
 }
 
 void Style::defaultLineStyle()
