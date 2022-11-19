@@ -23,6 +23,7 @@
 #define CBLSUB 22
 #define CANALS 23
 #define COALNE 30
+#define CRANES 35
 #define DAMCON 38
 #define DWRTPT 41
 #define DEPARE 42

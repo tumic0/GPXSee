@@ -66,6 +66,8 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(FLODOC)] = Polygon(QBrush("#333333"), QPen(QColor("#000000"),
 	  1));
 	_polygons[TYPE(DWRTPT)] = Polygon(QImage(":/marine/dw-route-line"));
+	_polygons[TYPE(MORFAC)] = Polygon(QBrush("#e8e064"), QPen(QColor("#000000"),
+	  2));
 
 	_drawOrder
 	  << TYPE(M_COVR) << TYPE(LNDARE) << SUBTYPE(DEPARE, 0)
@@ -75,9 +77,9 @@ void Style::defaultPolygonStyle()
 	  << TYPE(RIVERS) << TYPE(DRGARE) << TYPE(FAIRWY) << TYPE(BUAARE)
 	  << TYPE(BUISGL) << TYPE(AIRARE) << TYPE(BRIDGE) << TYPE(SLCONS)
 	  << TYPE(PONTON) << TYPE(FLODOC) << TYPE(DRYDOC) << TYPE(DAMCON)
-	  << TYPE(PYLONS) << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN)
-	  << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1) << SUBTYPE(RESARE, 9)
-	  << SUBTYPE(RESARE, 2) << TYPE(PRCARE);
+	  << TYPE(PYLONS) << TYPE(MORFAC) << TYPE(DMPGRD) << TYPE(TSEZNE)
+	  << TYPE(OBSTRN) << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1)
+	  << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2) << TYPE(PRCARE);
 }
 
 void Style::defaultLineStyle()
@@ -166,6 +168,7 @@ void Style::defaultPointStyle()
 	_points[SUBTYPE(MORFAC, 5)] = Point(QImage(":/marine/pile.png"), Small);
 	_points[SUBTYPE(MORFAC, 7)] = Point(QImage(":/marine/mooring-buoy.png"),
 	  Small);
+	_points[TYPE(CRANES)] = Point(QImage(":/marine/crane.png"));
 }
 
 Style::Style()
