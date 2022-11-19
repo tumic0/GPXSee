@@ -173,6 +173,7 @@
 		<file alias="platform.png">icons/map/marine/platform.png</file>
 		<file alias="ferry-line.png">icons/map/marine/ferry-line.png</file>
 		<file alias="dw-route-line.png">icons/map/marine/dw-route-line.png</file>
+		<file alias="fence-line.png">icons/map/marine/fence-line.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->

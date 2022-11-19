@@ -114,6 +114,7 @@ void Style::defaultLineStyle()
 	_lines[SUBTYPE(RCRTCL, 2)] = Line(QPen(QColor("#eb49eb"), 0, Qt::DashLine));
 	_lines[TYPE(FAIRWY)] = Line(QPen(QColor("#888888"), 1, Qt::DashDotDotLine));
 	_lines[TYPE(BERTHS)] = Line(QPen(QColor("#333333"), 2));
+	_lines[TYPE(FNCLNE)] = Line(QImage(":/marine/fence-line.png"));
 }
 
 void Style::defaultPointStyle()

@@ -32,6 +32,7 @@
 #define DMPGRD 48
 #define DYKCON 49
 #define FAIRWY 51
+#define FNCLNE 52
 #define FERYRT 53
 #define FLODOC 57
 #define GATCON 61
