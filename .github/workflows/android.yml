@@ -26,12 +26,12 @@ jobs:
       - name: Setup NDK path
         run: echo "ANDROID_NDK_ROOT=${ANDROID_HOME}/ndk/23.1.7779620/" >> $GITHUB_ENV
       - name: Install Qt (Desktop)
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           aqtversion: '==2.1.0'
           version: '6.4.0'
       - name: Install Qt (Android)
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           aqtversion: '==2.1.0'
           version: '6.4.0'
@@ -47,7 +47,7 @@ jobs:
       - name: Build project
         run:  make -j2 apk
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: GPXSee-armv7.apk
           path: android-build/build/outputs/apk/debug/android-build-debug.apk
