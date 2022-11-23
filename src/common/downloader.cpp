@@ -7,12 +7,18 @@
 #include "downloader.h"
 
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_ANDROID)
+#define PLATFORM_STR "Android"
+#elif defined(Q_OS_LINUX)
 #define PLATFORM_STR "Linux"
 #elif defined(Q_OS_WIN32)
 #define PLATFORM_STR "Windows"
 #elif defined(Q_OS_MAC)
 #define PLATFORM_STR "OS X"
+#elif defined(Q_OS_BSD4)
+#define PLATFORM_STR "BSD"
+#elif defined(Q_OS_HAIKU)
+#define PLATFORM_STR "Haiku"
 #else
 #define PLATFORM_STR "Unknown"
 #endif
