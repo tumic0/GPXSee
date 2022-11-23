@@ -29,12 +29,12 @@ jobs:
         uses: jurplel/install-qt-action@v3
         with:
           aqtversion: '==2.1.0'
-          version: '6.4.1'
+          version: '6.4.0'
       - name: Install Qt (Android)
         uses: jurplel/install-qt-action@v3
         with:
           aqtversion: '==2.1.0'
-          version: '6.4.1'
+          version: '6.4.0'
           target: 'android'
           arch: 'android_armv7'
           modules: qtpositioning qt5compat
