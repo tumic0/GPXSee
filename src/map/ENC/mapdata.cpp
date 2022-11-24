@@ -474,9 +474,12 @@ MapData::Attr MapData::polyAttr(const ISO8211::Record &r, uint OBJL)
 		if (OBJL == DEPARE && key == DRVAL1)
 			subtype = depthLevel(av.at(1).toByteArray());
 		else if ((OBJL == RESARE && key == CATREA)
-		  || (OBJL == ACHARE && key == CATACH))
+		  || (OBJL == I_RESARE && key == CATREA)
+		  || (OBJL == ACHARE && key == CATACH)
+		  || (OBJL == I_ACHARE && key == I_CATACH))
 			subtype = av.at(1).toByteArray().toUInt();
-		else if (OBJL == RESARE && key == RESTRN) {
+		else if ((OBJL == RESARE && key == RESTRN)
+		  || (OBJL == I_RESARE && key == I_RESTRN)) {
 			if (av.at(1).toByteArray().toUInt() == 1)
 				subtype = 2;
 		} else if (OBJL == TSSLPT && key == ORIENT) {

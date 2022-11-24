@@ -17,4 +17,7 @@
 #define VALDCO 174
 #define WATLEV 187
 
+#define I_CATACH 17000
+#define I_RESTRN 17004
+
 #endif // ENC_ATTRIBUTES_H

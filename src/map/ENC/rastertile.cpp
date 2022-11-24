@@ -12,8 +12,6 @@ using namespace ENC;
 #define ICON_PADDING 2
 #define ARROW_SIZE 0.005
 
-#define ECDIS(x) (((x)>TYPE(17000))?((x)-TYPE(17000)):(x))
-
 const float C1 = 0.866025f; /* sqrt(3)/2 */
 
 static const QColor haloColor(Qt::white);
@@ -161,9 +159,9 @@ void RasterTile::drawPolygons(QPainter *painter)
 	for (int n = 0; n < s.drawOrder().size(); n++) {
 		for (int i = 0; i < _polygons.size(); i++) {
 			const MapData::Poly *poly = _polygons.at(i);
-			if (ECDIS(poly->type()) != s.drawOrder().at(n))
+			if (poly->type() != s.drawOrder().at(n))
 				continue;
-			const Style::Polygon &style = s.polygon(ECDIS(poly->type()));
+			const Style::Polygon &style = s.polygon(poly->type());
 
 			if (!style.img().isNull()) {
 				for (int i = 0; i < poly->path().size(); i++)
@@ -186,7 +184,7 @@ void RasterTile::drawLines(QPainter *painter)
 
 	for (int i = 0; i < _lines.size(); i++) {
 		const MapData::Line *line = _lines.at(i);
-		const Style::Line &style = s.line(ECDIS(line->type()));
+		const Style::Line &style = s.line(line->type());
 
 		if (!style.img().isNull()) {
 			BitmapLine::draw(painter, polyline(line->path()), style.img());
@@ -212,13 +210,13 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 
 	for (int i = 0; i < _points.size(); i++) {
 		const MapData::Point *point = _points.at(i);
-		const Style::Point &style = s.point(ECDIS(point->type()));
+		const Style::Point &style = s.point(point->type());
 
 		const QString *label = point->label().isEmpty() ? 0 : &(point->label());
 		const QImage *img = style.img().isNull() ? 0 : &style.img();
 		const QFont *fnt = font(style.textFontSize());
 		const QColor *color = &style.textColor();
-		const QColor *hColor = Style::isSounding(ECDIS(point->type()))
+		const QColor *hColor = Style::isSounding(point->type())
 		  ? 0 : &haloColor;
 
 		if ((!label || !fnt) && !img)
@@ -239,7 +237,7 @@ void RasterTile::processLines(QList<TextItem*> &textItems)
 
 	for (int i = 0; i < _lines.size(); i++) {
 		const MapData::Line *line = _lines.at(i);
-		const Style::Line &style = s.line(ECDIS(line->type()));
+		const Style::Line &style = s.line(line->type());
 
 		if (style.img().isNull() && style.pen() == Qt::NoPen)
 			continue;

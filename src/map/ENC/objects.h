@@ -70,4 +70,13 @@
 #define WRECKS 159
 #define M_COVR 302
 
+#define I_ACHBRT 17000
+#define I_ACHARE 17001
+#define I_RESARE 17005
+#define I_BERTHS 17010
+#define I_BRIDGE 17011
+#define I_CBLOHD 17012
+#define I_FERYRT 17013
+#define I_WTWAXS 17051
+
 #endif // ENC_OBJECTS_H

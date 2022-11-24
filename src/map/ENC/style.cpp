@@ -22,6 +22,7 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(BUISGL)] = Polygon(QBrush("#d98b21"),
 	  QPen(QColor("#966118"), 1.5));
 	_polygons[TYPE(BRIDGE)] = Polygon(QBrush("#a58140"));
+	_polygons[TYPE(I_BRIDGE)] = Polygon(QBrush("#a58140"));
 	_polygons[SUBTYPE(DEPARE, 0)] = Polygon(QBrush("#98c064"));
 	_polygons[SUBTYPE(DEPARE, 1)] = Polygon(QBrush("#a0a0ff"));
 	_polygons[SUBTYPE(DEPARE, 2)] = Polygon(QBrush("#b0b0ff"));
@@ -54,7 +55,9 @@ void Style::defaultPolygonStyle()
 	_polygons[SUBTYPE(RESARE, 9)] = Polygon(QBrush(QColor("#ff0000"),
 	  Qt::BDiagPattern));
 	_polygons[SUBTYPE(RESARE, 2)] = Polygon(QImage(":/marine/noanchor-line.png"));
+	_polygons[SUBTYPE(I_RESARE, 2)] = Polygon(QImage(":/marine/noanchor-line.png"));
 	_polygons[SUBTYPE(ACHARE, 1)] = Polygon(QImage(":/marine/anchor-line.png"));
+	_polygons[SUBTYPE(I_ACHARE, 1)] = Polygon(QImage(":/marine/anchor-line.png"));
 	_polygons[TYPE(PRCARE)] = Polygon(QBrush(QColor("#eb49eb"),
 	  Qt::BDiagPattern));
 	_polygons[TYPE(DAMCON)] = Polygon(QBrush("#d98b21"), QPen(QColor("#000000"),
@@ -75,11 +78,12 @@ void Style::defaultPolygonStyle()
 	  << TYPE(UNSARE) << SUBTYPE(DEPARE, 4) << SUBTYPE(DEPARE, 5)
 	  << SUBTYPE(DEPARE, 6) << TYPE(LAKARE) << TYPE(CANALS) << TYPE(DYKCON)
 	  << TYPE(RIVERS) << TYPE(DRGARE) << TYPE(FAIRWY) << TYPE(BUAARE)
-	  << TYPE(BUISGL) << TYPE(AIRARE) << TYPE(BRIDGE) << TYPE(SLCONS)
-	  << TYPE(PONTON) << TYPE(FLODOC) << TYPE(DRYDOC) << TYPE(DAMCON)
-	  << TYPE(PYLONS) << TYPE(MORFAC) << TYPE(DMPGRD) << TYPE(TSEZNE)
-	  << TYPE(OBSTRN) << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1)
-	  << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2) << TYPE(PRCARE);
+	  << TYPE(BUISGL) << TYPE(AIRARE) << TYPE(BRIDGE) << TYPE(I_BRIDGE)
+	  << TYPE(SLCONS) << TYPE(PONTON) << TYPE(FLODOC) << TYPE(DRYDOC)
+	  << TYPE(DAMCON) << TYPE(PYLONS) << TYPE(MORFAC) << TYPE(DMPGRD)
+	  << TYPE(TSEZNE) << TYPE(OBSTRN) << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1)
+	  << SUBTYPE(I_ACHARE, 1) << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2)
+	  << SUBTYPE(I_RESARE, 2) << TYPE(PRCARE);
 }
 
 void Style::defaultLineStyle()
@@ -89,7 +93,9 @@ void Style::defaultLineStyle()
 	_lines[TYPE(DEPCNT)].setTextColor(QColor("#558adf"));
 	_lines[TYPE(DEPCNT)].setTextFontSize(Small);
 	_lines[TYPE(CBLOHD)] = Line(QImage(":/marine/cable-line.png"));
+	_lines[TYPE(I_CBLOHD)] = Line(QImage(":/marine/cable-line.png"));
 	_lines[TYPE(BRIDGE)] = Line(QPen(QColor("#a58140"), 3, Qt::SolidLine));
+	_lines[TYPE(I_BRIDGE)] = Line(QPen(QColor("#a58140"), 3, Qt::SolidLine));
 	_lines[TYPE(CBLSUB)] = Line(QImage(":/marine/cable.png"));
 	_lines[TYPE(CBLSUB)].setTextFontSize(Small);
 	_lines[TYPE(PIPSOL)] = Line(QImage(":/marine/pipeline.png"));
@@ -106,16 +112,19 @@ void Style::defaultLineStyle()
 	_lines[TYPE(SLOTOP)] = Line(QPen(QColor("#797420"), 1, Qt::SolidLine));
 	_lines[TYPE(OBSTRN)] = Line(QPen(QColor("#000000"), 1.5, Qt::DotLine));
 	_lines[TYPE(FERYRT)] = Line(QImage(":/marine/ferry-line.png"));
+	_lines[TYPE(I_FERYRT)] = Line(QImage(":/marine/ferry-line.png"));
 	_lines[TYPE(RAILWY)] = Line(railroad());
 	_lines[TYPE(ROADWY)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
 	_lines[TYPE(GATCON)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
 	_lines[TYPE(TSELNE)] = Line(QPen(QColor("#80fcb4fc"), 4, Qt::SolidLine));
+	_lines[TYPE(I_WTWAXS)] = Line(QPen(QColor("#000000"), 0, Qt::DashLine));
 	_lines[SUBTYPE(RECTRC, 1)] = Line(QPen(QColor("#000000"), 0, Qt::SolidLine));
 	_lines[SUBTYPE(RECTRC, 2)] = Line(QPen(QColor("#000000"), 0, Qt::DashLine));
 	_lines[SUBTYPE(RCRTCL, 1)] = Line(QPen(QColor("#eb49eb"), 0, Qt::SolidLine));
 	_lines[SUBTYPE(RCRTCL, 2)] = Line(QPen(QColor("#eb49eb"), 0, Qt::DashLine));
 	_lines[TYPE(FAIRWY)] = Line(QPen(QColor("#888888"), 1, Qt::DashDotDotLine));
 	_lines[TYPE(BERTHS)] = Line(QPen(QColor("#333333"), 2));
+	_lines[TYPE(I_BERTHS)] = Line(QPen(QColor("#333333"), 2));
 	_lines[TYPE(FNCLNE)] = Line(QImage(":/marine/fence-line.png"));
 }
 
@@ -161,6 +170,7 @@ void Style::defaultPointStyle()
 	  Small);
 	_points[SUBTYPE(HRBFAC, 5)] = Point(QImage(":/marine/yacht-harbor.png"));
 	_points[TYPE(ACHBRT)] = Point(QImage(":/marine/anchorage.png"));
+	_points[TYPE(I_ACHBRT)] = Point(QImage(":/marine/anchorage.png"));
 	_points[TYPE(OFSPLF)] = Point(QImage(":/marine/platform.png"));
 	_points[TYPE(PILPNT)] = Point(QImage(":/marine/pile.png"), Small);
 	_points[SUBTYPE(MORFAC, 1)] = Point(QImage(":/marine/pile.png"), Small);
