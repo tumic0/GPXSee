@@ -20,6 +20,7 @@ static QMap<uint,uint> orderMapInit()
 {
 	QMap<uint,uint> map;
 
+	map.insert(TYPE(CGUSTA), 0);
 	map.insert(SUBTYPE(BUAARE, 1), 1);
 	map.insert(SUBTYPE(BUAARE, 5), 2);
 	map.insert(SUBTYPE(BUAARE, 4), 3);
