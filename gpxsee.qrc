@@ -175,6 +175,7 @@
 		<file alias="dw-route-line.png">icons/map/marine/dw-route-line.png</file>
 		<file alias="fence-line.png">icons/map/marine/fence-line.png</file>
 		<file alias="crane.png">icons/map/marine/crane.png</file>
+		<file alias="distance-mark.png">icons/map/marine/distance-mark.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->

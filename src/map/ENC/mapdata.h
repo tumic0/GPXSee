@@ -15,8 +15,7 @@ class MapData
 public:
 	class Poly {
 	public:
-		Poly(uint type, const Polygon &path)
-		  : _type(type), _path(path) {}
+		Poly(uint type, const Polygon &path, const QByteArray &param);
 
 		RectC bounds() const {return _path.boundingRect();}
 		const Polygon &path() const {return _path;}
@@ -29,18 +28,10 @@ public:
 
 	class Line {
 	public:
-		Line(uint type, const QVector<Coordinates> &path, const QString &label)
-		  : _type(type), _path(path), _label(label) {}
+		Line(uint type, const QVector<Coordinates> &path, const QString &label,
+		  const QByteArray &param);
 
-		RectC bounds() const
-		{
-			RectC b;
-
-			for (int i = 0; i < _path.size(); i++)
-				b = b.united(_path.at(i));
-
-			return b;
-		}
+		RectC bounds() const;
 		const QVector<Coordinates> &path() const {return _path;}
 		uint type() const {return _type;}
 		const QString &label() const {return _label;}
@@ -53,7 +44,8 @@ public:
 
 	class Point {
 	public:
-		Point(uint type, const Coordinates &c, const QString &label);
+		Point(uint type, const Coordinates &c, const QString &label,
+		  const QByteArray &param);
 
 		const Coordinates &pos() const {return _pos;}
 		uint type() const {return _type;}
@@ -124,15 +116,17 @@ private:
 	class Attr {
 	public:
 		Attr() : _subtype(0) {}
-		Attr(uint subtype, const QString &label = QString())
-		    : _subtype(subtype), _label(label) {}
+		Attr(uint subtype, const QString &label, const QByteArray &param)
+			: _subtype(subtype), _label(label), _param(param) {}
 
 		unsigned subtype() const {return _subtype;}
 		const QString &label() const {return _label;}
+		const QByteArray &param() const {return _param;}
 
 	private:
 		unsigned _subtype;
 		QString _label;
+		QByteArray _param;
 	};
 
 	struct Sounding {

@@ -38,6 +38,7 @@
 #define FLODOC 57
 #define GATCON 61
 #define HRBFAC 64
+#define HULKES 65
 #define LAKARE 69
 #define LNDARE 71
 #define LNDELV 72
@@ -72,11 +73,21 @@
 
 #define I_ACHBRT 17000
 #define I_ACHARE 17001
+#define I_DISMAR 17004
 #define I_RESARE 17005
 #define I_BERTHS 17010
 #define I_BRIDGE 17011
 #define I_CBLOHD 17012
 #define I_FERYRT 17013
+#define I_HULKES 17020
+#define I_PONTON 17021
+#define I_FLODOC 17025
+#define I_BCNLAT 17028
+#define I_BOYLAT 17029
+#define I_CRANES 17030
+#define I_GATCON 17031
+#define I_SLCONS 17032
 #define I_WTWAXS 17051
+#define I_TERMNL 17064
 
 #endif // ENC_OBJECTS_H

@@ -89,11 +89,13 @@ public:
 
 	const Line &line(uint type) const;
 	const Polygon &polygon(uint type) const;
-	const Point &point(quint32 type) const;
+	const Point &point(uint type) const;
 	const QVector<uint> &drawOrder() const {return _drawOrder;}
 
-	static bool isSounding(quint32 type)
+	static bool isSounding(uint type)
 	  {return type == TYPE(SOUNDG);}
+	static bool isDistanceMark(uint type)
+	  {return (type & 0xFFFF0000) == TYPE(I_DISMAR);}
 
 private:
 	void defaultPolygonStyle();

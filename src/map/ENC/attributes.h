@@ -3,6 +3,7 @@
 
 #define CATACH 8
 #define CATBUA 10
+#define CATDIS 21
 #define CATHAF 30
 #define CATLMK 35
 #define CATMOR 40
@@ -19,5 +20,7 @@
 
 #define I_CATACH 17000
 #define I_RESTRN 17004
+#define I_WTWDIS 17064
+#define I_HUNITS 17103
 
 #endif // ENC_ATTRIBUTES_H

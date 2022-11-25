@@ -216,8 +216,8 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 		const QImage *img = style.img().isNull() ? 0 : &style.img();
 		const QFont *fnt = font(style.textFontSize());
 		const QColor *color = &style.textColor();
-		const QColor *hColor = Style::isSounding(point->type())
-		  ? 0 : &haloColor;
+		const QColor *hColor = (Style::isSounding(point->type())
+		  || Style::isDistanceMark(point->type())) ? 0 : &haloColor;
 
 		if ((!label || !fnt) && !img)
 			continue;
