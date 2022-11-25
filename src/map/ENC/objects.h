@@ -22,7 +22,9 @@
 #define CBLOHD 21
 #define CBLSUB 22
 #define CANALS 23
+#define CGUSTA 29
 #define COALNE 30
+#define CONVYR 34
 #define CRANES 35
 #define DAMCON 38
 #define DWRTPT 41
@@ -49,6 +51,7 @@
 #define OBSTRN 86
 #define OFSPLF 87
 #define PILPNT 90
+#define PIPOHD 93
 #define PIPSOL 94
 #define PONTON 95
 #define PRCARE 96
@@ -60,6 +63,7 @@
 #define RIVERS 114
 #define ROADWY 116
 #define SLCONS 122
+#define SILTNK 125
 #define SLOTOP 126
 #define SOUNDG 129
 #define TSELNE 145
@@ -81,6 +85,7 @@
 #define I_FERYRT 17013
 #define I_HULKES 17020
 #define I_PONTON 17021
+#define I_PIPOHD 17024
 #define I_FLODOC 17025
 #define I_BCNLAT 17028
 #define I_BOYLAT 17029

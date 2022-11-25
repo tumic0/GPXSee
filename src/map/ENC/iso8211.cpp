@@ -194,7 +194,7 @@ bool ISO8211::readDDR(QFile &file)
 	int len = readDR(file, fields);
 
 	if (len < 0) {
-		_errorString = "Not a ENC file";
+		_errorString = "Not a ISO8211 file";
 		return false;
 	}
 

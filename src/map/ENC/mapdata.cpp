@@ -717,8 +717,10 @@ MapData::MapData(const QString &path): _fileName(path)
 			_errorString = ddf.errorString();
 			return;
 		}
-		if (!processRecord(record, gv, COMF, _name))
+		if (!processRecord(record, gv, COMF, _name)) {
+			_errorString = "Invalid S-57 record";
 			return;
+		}
 	}
 
 	Rect b;
