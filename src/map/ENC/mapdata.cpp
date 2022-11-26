@@ -558,6 +558,8 @@ MapData::Attr MapData::polyAttr(const ISO8211::Record &r, uint OBJL)
 		  || (OBJL == I_RESARE && key == I_RESTRN)) {
 			if (av.at(1).toByteArray().toUInt() == 1)
 				subtype = 2;
+			if (av.at(1).toByteArray().toUInt() == 7)
+				subtype = 17;
 		}
 
 		if ((OBJL == TSSLPT && key == ORIENT)

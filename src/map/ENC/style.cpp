@@ -63,6 +63,10 @@ void Style::defaultPolygonStyle()
 	  Qt::BDiagPattern));
 	_polygons[SUBTYPE(RESARE, 2)] = Polygon(QImage(":/marine/noanchor-line.png"));
 	_polygons[SUBTYPE(I_RESARE, 2)] = Polygon(QImage(":/marine/noanchor-line.png"));
+	_polygons[SUBTYPE(RESARE, 17)] = Polygon(
+	  QImage(":/marine/entry-prohibited-line.png"));
+	_polygons[SUBTYPE(I_RESARE, 17)] = Polygon(
+	  QImage(":/marine/entry-prohibited-line.png"));
 	_polygons[SUBTYPE(ACHARE, 1)] = Polygon(QImage(":/marine/anchor-line.png"));
 	_polygons[SUBTYPE(I_ACHARE, 1)] = Polygon(QImage(":/marine/anchor-line.png"));
 	_polygons[TYPE(PRCARE)] = Polygon(QBrush(QColor("#eb49eb"),
@@ -77,7 +81,7 @@ void Style::defaultPolygonStyle()
 	  1));
 	_polygons[TYPE(I_FLODOC)] = Polygon(QBrush("#333333"),
 	  QPen(QColor("#000000"), 1));
-	_polygons[TYPE(DWRTPT)] = Polygon(QImage(":/marine/dw-route-line"));
+	_polygons[TYPE(DWRTPT)] = Polygon(QImage(":/marine/dw-route-line.png"));
 	_polygons[TYPE(MORFAC)] = Polygon(QBrush("#e8e064"), QPen(QColor("#000000"),
 	  2));
 	_polygons[TYPE(GATCON)] = Polygon(QBrush("#000000"));
@@ -105,7 +109,8 @@ void Style::defaultPolygonStyle()
 	  << TYPE(GATCON) << TYPE(I_GATCON) << TYPE(DMPGRD) << TYPE(TSEZNE)
 	  << TYPE(OBSTRN) << TYPE(UWTROC) << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1)
 	  << SUBTYPE(I_ACHARE, 1) << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2)
-	  << SUBTYPE(I_RESARE, 2) << TYPE(PRCARE);
+	  << SUBTYPE(I_RESARE, 2) << SUBTYPE(RESARE, 17) << SUBTYPE(I_RESARE, 17)
+	  << TYPE(PRCARE);
 }
 
 void Style::defaultLineStyle()
