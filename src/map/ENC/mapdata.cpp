@@ -28,33 +28,36 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(SUBTYPE(BUAARE, 2), 5);
 	map.insert(SUBTYPE(BUAARE, 6), 6);
 	map.insert(SUBTYPE(BUAARE, 0), 7);
-	map.insert(TYPE(BCNISD), 8);
-	map.insert(TYPE(BCNLAT), 9);
-	map.insert(TYPE(I_BCNLAT), 9);
-	map.insert(TYPE(BCNSAW), 10);
-	map.insert(TYPE(BCNSPP), 11);
-	map.insert(TYPE(BOYCAR), 12);
-	map.insert(TYPE(BOYINB), 13);
-	map.insert(TYPE(BOYISD), 14);
-	map.insert(TYPE(BOYLAT), 15);
-	map.insert(TYPE(I_BOYLAT), 15);
-	map.insert(TYPE(BOYSAW), 16);
-	map.insert(TYPE(BOYSPP), 17);
-	map.insert(TYPE(MORFAC), 18);
-	map.insert(TYPE(OFSPLF), 19);
-	map.insert(TYPE(LIGHTS), 20);
-	map.insert(TYPE(OBSTRN), 21);
-	map.insert(TYPE(WRECKS), 22);
-	map.insert(TYPE(UWTROC), 23);
-	map.insert(TYPE(HRBFAC), 24);
-	map.insert(TYPE(PILPNT), 25);
-	map.insert(TYPE(ACHBRT), 26);
-	map.insert(TYPE(I_ACHBRT), 26);
-	map.insert(TYPE(CRANES), 27);
-	map.insert(TYPE(I_CRANES), 27);
-	map.insert(TYPE(LNDMRK), 28);
-	map.insert(TYPE(LNDELV), 29);
-	map.insert(TYPE(I_DISMAR), 30);
+	map.insert(TYPE(RDOSTA), 8);
+	map.insert(TYPE(RADSTA), 9);
+	map.insert(TYPE(RTPBCN), 10);
+	map.insert(TYPE(BCNISD), 11);
+	map.insert(TYPE(BCNLAT), 12);
+	map.insert(TYPE(I_BCNLAT), 12);
+	map.insert(TYPE(BCNSAW), 13);
+	map.insert(TYPE(BCNSPP), 14);
+	map.insert(TYPE(BOYCAR), 15);
+	map.insert(TYPE(BOYINB), 16);
+	map.insert(TYPE(BOYISD), 17);
+	map.insert(TYPE(BOYLAT), 18);
+	map.insert(TYPE(I_BOYLAT), 18);
+	map.insert(TYPE(BOYSAW), 19);
+	map.insert(TYPE(BOYSPP), 20);
+	map.insert(TYPE(MORFAC), 21);
+	map.insert(TYPE(OFSPLF), 22);
+	map.insert(TYPE(LIGHTS), 23);
+	map.insert(TYPE(OBSTRN), 24);
+	map.insert(TYPE(WRECKS), 25);
+	map.insert(TYPE(UWTROC), 26);
+	map.insert(TYPE(HRBFAC), 27);
+	map.insert(TYPE(PILPNT), 28);
+	map.insert(TYPE(ACHBRT), 29);
+	map.insert(TYPE(I_ACHBRT), 29);
+	map.insert(TYPE(CRANES), 30);
+	map.insert(TYPE(I_CRANES), 30);
+	map.insert(TYPE(LNDMRK), 31);
+	map.insert(TYPE(LNDELV), 32);
+	map.insert(TYPE(I_DISMAR), 0xFFFFFFFE);
 	map.insert(TYPE(SOUNDG), 0xFFFFFFFF);
 
 	return map;
@@ -870,25 +873,25 @@ Range MapData::zooms() const
 	double size = qMin(_bounds.width(), _bounds.height());
 
 	if (size > 180)
-		return Range(0, 20);
+		return Range(0, 10);
 	else if (size > 90)
-		return Range(1, 20);
+		return Range(1, 11);
 	else if (size > 45)
-		return Range(2, 20);
+		return Range(2, 12);
 	else if (size > 22.5)
-		return Range(3, 20);
+		return Range(3, 13);
 	else if (size > 11.25)
-		return Range(4, 20);
+		return Range(4, 14);
 	else if (size > 5.625)
-		return Range(5, 20);
+		return Range(5, 15);
 	else if (size > 2.813)
-		return Range(6, 20);
+		return Range(6, 16);
 	else if (size > 1.406)
-		return Range(7, 20);
+		return Range(7, 17);
 	else if (size > 0.703)
-		return Range(8, 20);
+		return Range(8, 18);
 	else if (size > 0.352)
-		return Range(9, 20);
+		return Range(9, 19);
 	else if (size > 0.176)
 		return Range(10, 20);
 	else if (size > 0.088)

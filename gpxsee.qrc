@@ -179,6 +179,10 @@
 		<file alias="conveyor-line.png">icons/map/marine/conveyor-line.png</file>
 		<file alias="pipeline-overhead.png">icons/map/marine/pipeline-overhead.png</file>
 		<file alias="coast-guard.png">icons/map/marine/coast-guard.png</file>
+		<file alias="monument.png">icons/map/marine/monument.png</file>
+		<file alias="radio.png">icons/map/marine/radio.png</file>
+		<file alias="radar.png">icons/map/marine/radar.png</file>
+		<file alias="radar-transponder.png">icons/map/marine/radar-transponder.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->

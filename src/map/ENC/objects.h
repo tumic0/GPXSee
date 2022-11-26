@@ -46,6 +46,7 @@
 #define LNDELV 72
 #define LNDMRK 74
 #define LIGHTS 75
+#define LOKBSN 79
 #define MORFAC 84
 #define NAVLNE 85
 #define OBSTRN 86
@@ -56,6 +57,9 @@
 #define PONTON 95
 #define PRCARE 96
 #define PYLONS 98
+#define RADSTA 102
+#define RTPBCN 103
+#define RDOSTA 105
 #define RAILWY 106
 #define RCRTCL 108
 #define RECTRC 109
@@ -83,6 +87,7 @@
 #define I_BRIDGE 17011
 #define I_CBLOHD 17012
 #define I_FERYRT 17013
+#define I_LOKBSN 17016
 #define I_HULKES 17020
 #define I_PONTON 17021
 #define I_PIPOHD 17024

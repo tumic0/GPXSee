@@ -86,22 +86,26 @@ void Style::defaultPolygonStyle()
 	  QPen(QColor("#966118")));
 	_polygons[TYPE(SILTNK)] = Polygon(QBrush("#d98b21"), QPen(QColor("#966118"),
 	  2));
+	_polygons[TYPE(LOKBSN)] = Polygon(QBrush(QColor("#333333"),
+	  Qt::Dense7Pattern));
+	_polygons[TYPE(I_LOKBSN)] = Polygon(QBrush(QColor("#333333"),
+	  Qt::Dense7Pattern));
 
 	_drawOrder
 	  << TYPE(M_COVR) << TYPE(LNDARE) << SUBTYPE(DEPARE, 0)
 	  << SUBTYPE(DEPARE, 1) << SUBTYPE(DEPARE, 2) << SUBTYPE(DEPARE, 3)
 	  << TYPE(UNSARE) << SUBTYPE(DEPARE, 4) << SUBTYPE(DEPARE, 5)
 	  << SUBTYPE(DEPARE, 6) << TYPE(LAKARE) << TYPE(CANALS) << TYPE(DYKCON)
-	  << TYPE(RIVERS) << TYPE(DRGARE) << TYPE(FAIRWY) << TYPE(BUAARE)
-	  << TYPE(BUISGL) << TYPE(SILTNK) << TYPE(AIRARE) << TYPE(BRIDGE)
-	  << TYPE(I_BRIDGE) << TYPE(I_TERMNL) << TYPE(SLCONS) << TYPE(I_SLCONS)
-	  << TYPE(PONTON) << TYPE(I_PONTON) << TYPE(HULKES) << TYPE(I_HULKES)
-	  << TYPE(FLODOC) << TYPE(I_FLODOC) << TYPE(DRYDOC) << TYPE(DAMCON)
-	  << TYPE(PYLONS) << TYPE(MORFAC) << TYPE(GATCON) << TYPE(I_GATCON)
-	  << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN) << TYPE(UWTROC)
-	  << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1) << SUBTYPE(I_ACHARE, 1)
-	  << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2) << SUBTYPE(I_RESARE, 2)
-	  << TYPE(PRCARE);
+	  << TYPE(RIVERS) << TYPE(DRGARE) << TYPE(FAIRWY) << TYPE(LOKBSN)
+	  << TYPE(I_LOKBSN) << TYPE(BUAARE) << TYPE(BUISGL) << TYPE(SILTNK)
+	  << TYPE(AIRARE) << TYPE(BRIDGE) << TYPE(I_BRIDGE) << TYPE(I_TERMNL)
+	  << TYPE(SLCONS) << TYPE(I_SLCONS) << TYPE(PONTON) << TYPE(I_PONTON)
+	  << TYPE(HULKES) << TYPE(I_HULKES) << TYPE(FLODOC) << TYPE(I_FLODOC)
+	  << TYPE(DRYDOC) << TYPE(DAMCON) << TYPE(PYLONS) << TYPE(MORFAC)
+	  << TYPE(GATCON) << TYPE(I_GATCON) << TYPE(DMPGRD) << TYPE(TSEZNE)
+	  << TYPE(OBSTRN) << TYPE(UWTROC) << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1)
+	  << SUBTYPE(I_ACHARE, 1) << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2)
+	  << SUBTYPE(I_RESARE, 2) << TYPE(PRCARE);
 }
 
 void Style::defaultLineStyle()
@@ -149,6 +153,7 @@ void Style::defaultLineStyle()
 	_lines[TYPE(CONVYR)] = Line(QImage(":/marine/conveyor-line.png"));
 	_lines[TYPE(PIPOHD)] = Line(QImage(":/marine/pipeline-overhead.png"));
 	_lines[TYPE(I_PIPOHD)] = Line(QImage(":/marine/pipeline-overhead.png"));
+	_lines[TYPE(CANALS)] = Line(QPen(QColor("#9fc4e1"), 2));
 }
 
 void Style::defaultPointStyle()
@@ -173,6 +178,7 @@ void Style::defaultPointStyle()
 	_points[TYPE(BCNSAW)] = Point(QImage(":/marine/beacon.png"), Small);
 	_points[TYPE(BCNSPP)] = Point(QImage(":/marine/beacon.png"), Small);
 	_points[SUBTYPE(LNDMRK, 3)] = Point(QImage(":/marine/chimney.png"));
+	_points[SUBTYPE(LNDMRK, 9)] = Point(QImage(":/marine/monument.png"));
 	_points[SUBTYPE(LNDMRK, 20)] = Point(QImage(":/marine/church.png"));
 	_points[SUBTYPE(LNDMRK, 17)] = Point(QImage(":/marine/tower.png"));
 	_points[TYPE(LNDELV)] = Point(QImage(":/marine/triangulation-point.png"));
@@ -209,6 +215,9 @@ void Style::defaultPointStyle()
 	_points[SUBTYPE(I_DISMAR, 1)].setTextColor(QColor("#ffffff"));
 	_points[SUBTYPE(I_DISMAR, 1)].setTextFontSize(Small);
 	_points[TYPE(CGUSTA)] = Point(QImage(":/marine/coast-guard.png"));
+	_points[TYPE(RDOSTA)] = Point(QImage(":/marine/radio.png"));
+	_points[TYPE(RADSTA)] = Point(QImage(":/marine/radar.png"));
+	_points[TYPE(RTPBCN)] = Point(QImage(":/marine/radar-transponder.png"));
 }
 
 Style::Style()
