@@ -218,6 +218,7 @@ void Style::defaultPointStyle()
 	_points[TYPE(RDOSTA)] = Point(QImage(":/marine/radio.png"));
 	_points[TYPE(RADSTA)] = Point(QImage(":/marine/radar.png"));
 	_points[TYPE(RTPBCN)] = Point(QImage(":/marine/radar-transponder.png"));
+	_points[TYPE(SILTNK)] = Point(QImage(":/marine/silo.png"));
 }
 
 Style::Style()

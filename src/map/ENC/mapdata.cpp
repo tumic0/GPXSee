@@ -56,7 +56,8 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(CRANES), 30);
 	map.insert(TYPE(I_CRANES), 30);
 	map.insert(TYPE(LNDMRK), 31);
-	map.insert(TYPE(LNDELV), 32);
+	map.insert(TYPE(SILTNK), 32);
+	map.insert(TYPE(LNDELV), 33);
 	map.insert(TYPE(I_DISMAR), 0xFFFFFFFE);
 	map.insert(TYPE(SOUNDG), 0xFFFFFFFF);
 
