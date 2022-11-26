@@ -184,6 +184,7 @@
 		<file alias="radar.png">icons/map/marine/radar.png</file>
 		<file alias="radar-transponder.png">icons/map/marine/radar-transponder.png</file>
 		<file alias="silo.png">icons/map/marine/silo.png</file>
+		<file alias="turning-basin.png">icons/map/marine/turning-basin.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->

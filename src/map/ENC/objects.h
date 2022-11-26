@@ -99,5 +99,6 @@
 #define I_SLCONS 17032
 #define I_WTWAXS 17051
 #define I_TERMNL 17064
+#define I_TRNBSN 17065
 
 #endif // ENC_OBJECTS_H
