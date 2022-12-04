@@ -19,6 +19,7 @@
 #define BOYLAT 17
 #define BOYSAW 18
 #define BOYSPP 19
+#define CBLARE 20
 #define CBLOHD 21
 #define CBLSUB 22
 #define CANALS 23
@@ -52,6 +53,7 @@
 #define OBSTRN 86
 #define OFSPLF 87
 #define PILPNT 90
+#define PIPARE 92
 #define PIPOHD 93
 #define PIPSOL 94
 #define PONTON 95
@@ -69,11 +71,13 @@
 #define SLCONS 122
 #define SILTNK 125
 #define SLOTOP 126
+#define SMCFAC 128
 #define SOUNDG 129
 #define TSELNE 145
 #define TSSBND 146
 #define TSSLPT 148
 #define TSEZNE 150
+#define TUNNEL 151
 #define UWTROC 153
 #define UNSARE 154
 #define WRECKS 159

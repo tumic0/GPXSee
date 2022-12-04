@@ -9,9 +9,11 @@
 #define CATMOR 40
 #define CATTRK 54
 #define CATREA 56
+#define CATSCF 65
 #define CATWRK 71
 #define DRVAL1 87
 #define ELEVAT 90
+#define FUNCTN 94
 #define OBJNAM 116
 #define ORIENT 117
 #define RESTRN 131

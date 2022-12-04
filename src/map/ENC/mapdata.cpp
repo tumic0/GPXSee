@@ -493,7 +493,9 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 		  || (OBJL == WRECKS && key == CATWRK)
 		  || (OBJL == MORFAC && key == CATMOR)
 		  || (OBJL == UWTROC && key == WATLEV)
-		  || (OBJL == BUAARE && key == CATBUA))
+		  || (OBJL == BUAARE && key == CATBUA)
+		  || (OBJL == SMCFAC && key == CATSCF)
+		  || (OBJL == BUISGL && key == FUNCTN))
 			subtype = av.at(1).toByteArray().toUInt();
 		else if (OBJL == I_DISMAR && key == CATDIS)
 			subtype |= av.at(1).toByteArray().toUInt();
@@ -552,7 +554,8 @@ MapData::Attr MapData::polyAttr(const ISO8211::Record &r, uint OBJL)
 		if ((OBJL == RESARE && key == CATREA)
 		  || (OBJL == I_RESARE && key == CATREA)
 		  || (OBJL == ACHARE && key == CATACH)
-		  || (OBJL == I_ACHARE && key == I_CATACH))
+		  || (OBJL == I_ACHARE && key == I_CATACH)
+		  || (OBJL == HRBFAC && key == CATHAF))
 			subtype = av.at(1).toByteArray().toUInt();
 		else if ((OBJL == RESARE && key == RESTRN)
 		  || (OBJL == I_RESARE && key == I_RESTRN)) {

@@ -94,6 +94,10 @@ void Style::defaultPolygonStyle()
 	  Qt::Dense7Pattern));
 	_polygons[TYPE(I_LOKBSN)] = Polygon(QBrush(QColor("#333333"),
 	  Qt::Dense7Pattern));
+	_polygons[TYPE(TUNNEL)] = Polygon(Qt::NoBrush, QPen(QColor("#a3a3a3"), 1,
+	  Qt::DashLine));
+	_polygons[TYPE(CBLARE)] = Polygon(QImage(":/marine/cable-area-line.png"));
+	_polygons[TYPE(PIPARE)] = Polygon(QImage(":/marine/pipeline-area-line.png"));
 
 	_drawOrder
 	  << TYPE(M_COVR) << TYPE(LNDARE) << SUBTYPE(DEPARE, 0)
@@ -102,15 +106,15 @@ void Style::defaultPolygonStyle()
 	  << SUBTYPE(DEPARE, 6) << TYPE(LAKARE) << TYPE(CANALS) << TYPE(DYKCON)
 	  << TYPE(RIVERS) << TYPE(DRGARE) << TYPE(FAIRWY) << TYPE(LOKBSN)
 	  << TYPE(I_LOKBSN) << TYPE(BUAARE) << TYPE(BUISGL) << TYPE(SILTNK)
-	  << TYPE(AIRARE) << TYPE(BRIDGE) << TYPE(I_BRIDGE) << TYPE(I_TERMNL)
-	  << TYPE(SLCONS) << TYPE(I_SLCONS) << TYPE(PONTON) << TYPE(I_PONTON)
-	  << TYPE(HULKES) << TYPE(I_HULKES) << TYPE(FLODOC) << TYPE(I_FLODOC)
-	  << TYPE(DRYDOC) << TYPE(DAMCON) << TYPE(PYLONS) << TYPE(MORFAC)
-	  << TYPE(GATCON) << TYPE(I_GATCON) << TYPE(DMPGRD) << TYPE(TSEZNE)
-	  << TYPE(OBSTRN) << TYPE(UWTROC) << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1)
-	  << SUBTYPE(I_ACHARE, 1) << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2)
-	  << SUBTYPE(I_RESARE, 2) << SUBTYPE(RESARE, 17) << SUBTYPE(I_RESARE, 17)
-	  << TYPE(PRCARE);
+	  << TYPE(AIRARE) << TYPE(BRIDGE) << TYPE(I_BRIDGE) << TYPE(TUNNEL)
+	  << TYPE(I_TERMNL) << TYPE(SLCONS) << TYPE(I_SLCONS) << TYPE(PONTON)
+	  << TYPE(I_PONTON) << TYPE(HULKES) << TYPE(I_HULKES) << TYPE(FLODOC)
+	  << TYPE(I_FLODOC) << TYPE(DRYDOC) << TYPE(DAMCON) << TYPE(PYLONS)
+	  << TYPE(MORFAC) << TYPE(GATCON) << TYPE(I_GATCON) << TYPE(DMPGRD)
+	  << TYPE(TSEZNE) << TYPE(OBSTRN) << TYPE(UWTROC) << TYPE(DWRTPT)
+	  << SUBTYPE(ACHARE, 1) << SUBTYPE(I_ACHARE, 1) << SUBTYPE(RESARE, 9)
+	  << SUBTYPE(RESARE, 2) << SUBTYPE(I_RESARE, 2) << SUBTYPE(RESARE, 17)
+	  << SUBTYPE(I_RESARE, 17) << TYPE(CBLARE) << TYPE(PIPARE) << TYPE(PRCARE);
 }
 
 void Style::defaultLineStyle()
@@ -204,6 +208,7 @@ void Style::defaultPointStyle()
 	  Small);
 	_points[SUBTYPE(UWTROC, 5)] = Point(QImage(":/marine/rock-dangerous.png"),
 	  Small);
+	_points[SUBTYPE(HRBFAC, 4)] = Point(QImage(":/marine/fishing-harbor.png"));
 	_points[SUBTYPE(HRBFAC, 5)] = Point(QImage(":/marine/yacht-harbor.png"));
 	_points[TYPE(ACHBRT)] = Point(QImage(":/marine/anchorage.png"));
 	_points[TYPE(I_ACHBRT)] = Point(QImage(":/marine/anchorage.png"));
@@ -225,6 +230,26 @@ void Style::defaultPointStyle()
 	_points[TYPE(RTPBCN)] = Point(QImage(":/marine/radar-transponder.png"));
 	_points[TYPE(SILTNK)] = Point(QImage(":/marine/silo.png"));
 	_points[TYPE(I_TRNBSN)] = Point(QImage(":/marine/turning-basin.png"));
+
+	_points[SUBTYPE(SMCFAC, 7)] = Point(QImage(":/POI/restaurant-11.png"));
+	_points[SUBTYPE(SMCFAC, 11)] = Point(QImage(":/POI/pharmacy-11.png"));
+	_points[SUBTYPE(SMCFAC, 12)] = Point(QImage(":/POI/drinking-water-11.png"));
+	_points[SUBTYPE(SMCFAC, 13)] = Point(QImage(":/POI/fuel-11.png"));
+	_points[SUBTYPE(SMCFAC, 18)] = Point(QImage(":/POI/toilet-11.png"));
+	_points[SUBTYPE(SMCFAC, 20)] = Point(QImage(":/POI/telephone-11.png"));
+	_points[SUBTYPE(SMCFAC, 22)] = Point(QImage(":/POI/parking-11.png"));
+	_points[SUBTYPE(SMCFAC, 25)] = Point(QImage(":/POI/campsite-11.png"));
+	_points[SUBTYPE(BUISGL, 2)] = Point(QImage(":/POI/harbor-11.png"));
+	_points[SUBTYPE(BUISGL, 5)] = Point(QImage(":/POI/hospital-11.png"));
+	_points[SUBTYPE(BUISGL, 6)] = Point(QImage(":/POI/post-11.png"));
+	_points[SUBTYPE(BUISGL, 7)] = Point(QImage(":/POI/lodging-11.png"));
+	_points[SUBTYPE(BUISGL, 9)] = Point(QImage(":/POI/police-11.png"));
+	_points[SUBTYPE(BUISGL, 13)] = Point(QImage(":/POI/bank-11.png"));
+	_points[SUBTYPE(BUISGL, 19)] = Point(QImage(":/POI/school-11.png"));
+	_points[SUBTYPE(BUISGL, 20)] = Point(QImage(":/POI/religious-christian-11.png"));
+	_points[SUBTYPE(BUISGL, 22)] = Point(QImage(":/POI/religious-jewish-11.png"));
+	_points[SUBTYPE(BUISGL, 26)] = Point(QImage(":/POI/religious-muslim-11.png"));
+	_points[SUBTYPE(BUISGL, 42)] = Point(QImage(":/POI/bus-11.png"));
 }
 
 Style::Style()
