@@ -177,6 +177,7 @@
 		<file alias="fence-line.png">icons/map/marine/fence-line.png</file>
 		<file alias="crane.png">icons/map/marine/crane.png</file>
 		<file alias="distance-mark.png">icons/map/marine/distance-mark.png</file>
+		<file alias="distance-mark-land.png">icons/map/marine/distance-mark-land.png</file>
 		<file alias="conveyor-line.png">icons/map/marine/conveyor-line.png</file>
 		<file alias="pipeline-overhead.png">icons/map/marine/pipeline-overhead.png</file>
 		<file alias="coast-guard.png">icons/map/marine/coast-guard.png</file>
@@ -189,6 +190,7 @@
 		<file alias="entry-prohibited-line.png">icons/map/marine/entry-prohibited-line.png</file>
 		<file alias="cable-area-line.png">icons/map/marine/cable-area-line.png</file>
 		<file alias="pipeline-area-line.png">icons/map/marine/pipeline-area-line.png</file>
+		<file alias="windmotor.png">icons/map/marine/windmotor.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->

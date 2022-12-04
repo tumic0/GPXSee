@@ -94,7 +94,7 @@ void Style::defaultPolygonStyle()
 	  Qt::Dense7Pattern));
 	_polygons[TYPE(I_LOKBSN)] = Polygon(QBrush(QColor("#333333"),
 	  Qt::Dense7Pattern));
-	_polygons[TYPE(TUNNEL)] = Polygon(Qt::NoBrush, QPen(QColor("#a3a3a3"), 1,
+	_polygons[TYPE(TUNNEL)] = Polygon(Qt::NoBrush, QPen(QColor("#a58140"), 1.5,
 	  Qt::DashLine));
 	_polygons[TYPE(CBLARE)] = Polygon(QImage(":/marine/cable-area-line.png"));
 	_polygons[TYPE(PIPARE)] = Polygon(QImage(":/marine/pipeline-area-line.png"));
@@ -190,6 +190,7 @@ void Style::defaultPointStyle()
 	_points[SUBTYPE(LNDMRK, 9)] = Point(QImage(":/marine/monument.png"));
 	_points[SUBTYPE(LNDMRK, 20)] = Point(QImage(":/marine/church.png"));
 	_points[SUBTYPE(LNDMRK, 17)] = Point(QImage(":/marine/tower.png"));
+	_points[SUBTYPE(LNDMRK, 19)] = Point(QImage(":/marine/windmotor.png"));
 	_points[TYPE(LNDELV)] = Point(QImage(":/marine/triangulation-point.png"));
 	_points[TYPE(OBSTRN)] = Point(QImage(":/marine/obstruction.png"), Small);
 	_points[SUBTYPE(WRECKS, 1)] = Point(QImage(":/marine/wreck.png"), Small);
@@ -224,6 +225,10 @@ void Style::defaultPointStyle()
 	_points[SUBTYPE(I_DISMAR, 1)] = Point(QImage(":/marine/distance-mark.png"));
 	_points[SUBTYPE(I_DISMAR, 1)].setTextColor(QColor("#ffffff"));
 	_points[SUBTYPE(I_DISMAR, 1)].setTextFontSize(Small);
+	_points[SUBTYPE(I_DISMAR, 2)] = Point(QImage(":/marine/distance-mark-land.png"));
+	_points[SUBTYPE(I_DISMAR, 2)].setTextFontSize(Small);
+	_points[SUBTYPE(I_DISMAR, 3)] = Point(QImage(":/marine/distance-mark-land.png"));
+	_points[SUBTYPE(I_DISMAR, 3)].setTextFontSize(Small);
 	_points[TYPE(CGUSTA)] = Point(QImage(":/marine/coast-guard.png"));
 	_points[TYPE(RDOSTA)] = Point(QImage(":/marine/radio.png"));
 	_points[TYPE(RADSTA)] = Point(QImage(":/marine/radar.png"));

@@ -208,6 +208,26 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 
 	std::sort(_points.begin(), _points.end(), pointLess);
 
+	for (int i = 0; i < _polygons.size(); i++) {
+		const MapData::Poly *poly = _polygons.at(i);
+		uint type = poly->type()>>16;
+
+		if (!(type == HRBFAC || type == I_TRNBSN))
+			continue;
+		const Style::Point &style = s.point(poly->type());
+		const QImage *img = style.img().isNull() ? 0 : &style.img();
+		if (!img)
+			continue;
+
+		TextPointItem *item = new TextPointItem(
+		  ll2xy(centroid(poly->path().first())).toPoint(),
+		  0, 0, img, 0, 0, 0, 0);
+		if (item->isValid() && !item->collides(textItems))
+			textItems.append(item);
+		else
+			delete item;
+	}
+
 	for (int i = 0; i < _points.size(); i++) {
 		const MapData::Point *point = _points.at(i);
 		const Style::Point &style = s.point(point->type());
@@ -228,25 +248,6 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 			textItems.append(item);
 		else
 			delete item;
-	}
-
-	for (int i = 0; i < _polygons.size(); i++) {
-		const MapData::Poly *poly = _polygons.at(i);
-
-		if (poly->type()>>16 == HRBFAC) {
-			const Style::Point &style = s.point(poly->type());
-			const QImage *img = style.img().isNull() ? 0 : &style.img();
-			if (!img)
-				continue;
-
-			TextPointItem *item = new TextPointItem(
-			  ll2xy(centroid(poly->path().first())).toPoint(), 0, 0,
-			  &style.img(), 0, 0, 0, 0);
-			if (item->isValid() && !item->collides(textItems))
-				textItems.append(item);
-			else
-				delete item;
-		}
 	}
 }
 
