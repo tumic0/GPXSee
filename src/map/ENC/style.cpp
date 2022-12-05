@@ -14,7 +14,7 @@ static QImage railroad()
 	return img;
 }
 
-void Style::defaultPolygonStyle()
+void Style::polygonStyle()
 {
 	_polygons[TYPE(M_COVR)] = Polygon(QBrush("#ffffff"));
 	_polygons[TYPE(LNDARE)] = Polygon(QBrush("#e8e064"));
@@ -117,7 +117,7 @@ void Style::defaultPolygonStyle()
 	  << SUBTYPE(I_RESARE, 17) << TYPE(CBLARE) << TYPE(PIPARE) << TYPE(PRCARE);
 }
 
-void Style::defaultLineStyle()
+void Style::lineStyle()
 {
 	_lines[TYPE(BUISGL)] = Line(QPen(QColor("#966118"), 1.5));
 	_lines[TYPE(DEPCNT)] = Line(QPen(QColor("#659aef"), 1, Qt::SolidLine));
@@ -130,6 +130,7 @@ void Style::defaultLineStyle()
 	_lines[TYPE(CBLSUB)] = Line(QImage(":/marine/cable.png"));
 	_lines[TYPE(CBLSUB)].setTextFontSize(Small);
 	_lines[TYPE(PIPSOL)] = Line(QImage(":/marine/pipeline.png"));
+	_lines[TYPE(PIPSOL)].setTextFontSize(Small);
 	_lines[TYPE(NAVLNE)] = Line(QPen(QColor("#eb49eb"), 1, Qt::DashLine));
 	_lines[TYPE(COALNE)] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
 	_lines[TYPE(SLCONS)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
@@ -165,7 +166,7 @@ void Style::defaultLineStyle()
 	_lines[TYPE(CANALS)] = Line(QPen(QColor("#9fc4e1"), 2));
 }
 
-void Style::defaultPointStyle()
+void Style::pointStyle()
 {
 	_points[SUBTYPE(BUAARE, 1)].setTextFontSize(Large);
 	_points[SUBTYPE(BUAARE, 5)].setTextFontSize(Large);
@@ -259,9 +260,9 @@ void Style::defaultPointStyle()
 
 Style::Style()
 {
-	defaultPolygonStyle();
-	defaultLineStyle();
-	defaultPointStyle();
+	polygonStyle();
+	lineStyle();
+	pointStyle();
 }
 
 const Style::Line &Style::line(uint type) const

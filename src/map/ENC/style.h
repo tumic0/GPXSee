@@ -98,9 +98,9 @@ public:
 	  {return (type & 0xFFFF0000) == TYPE(I_DISMAR);}
 
 private:
-	void defaultPolygonStyle();
-	void defaultLineStyle();
-	void defaultPointStyle();
+	void polygonStyle();
+	void lineStyle();
+	void pointStyle();
 
 	QMap<uint, Line> _lines;
 	QMap<uint, Polygon> _polygons;

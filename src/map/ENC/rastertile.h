@@ -35,6 +35,7 @@ private:
 	QPolygonF arrow(const Coordinates &c, qreal angle) const;
 	void processPoints(QList<TextItem*> &textItems);
 	void processLines(QList<TextItem*> &textItems);
+	void processPolygons(QList<TextItem*> &textItems);
 	void drawBitmapPath(QPainter *painter, const QImage &img,
 	  const Polygon &polygon);
 	void drawArrows(QPainter *painter);

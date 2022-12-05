@@ -202,11 +202,9 @@ void RasterTile::drawTextItems(QPainter *painter,
 		textItems.at(i)->paint(painter);
 }
 
-void RasterTile::processPoints(QList<TextItem*> &textItems)
+void RasterTile::processPolygons(QList<TextItem*> &textItems)
 {
 	const Style &s = style();
-
-	std::sort(_points.begin(), _points.end(), pointLess);
 
 	for (int i = 0; i < _polygons.size(); i++) {
 		const MapData::Poly *poly = _polygons.at(i);
@@ -227,6 +225,13 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 		else
 			delete item;
 	}
+}
+
+void RasterTile::processPoints(QList<TextItem*> &textItems)
+{
+	const Style &s = style();
+
+	std::sort(_points.begin(), _points.end(), pointLess);
 
 	for (int i = 0; i < _points.size(); i++) {
 		const MapData::Point *point = _points.at(i);
@@ -283,6 +288,7 @@ void RasterTile::render()
 	_pixmap.setDevicePixelRatio(_ratio);
 	_pixmap.fill(Qt::transparent);
 
+	processPolygons(textItems);
 	processPoints(textItems);
 	processLines(textItems);
 
