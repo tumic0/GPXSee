@@ -91,7 +91,9 @@
 #define I_BRIDGE 17011
 #define I_CBLOHD 17012
 #define I_FERYRT 17013
+#define I_HRBFAC 17015
 #define I_LOKBSN 17016
+#define I_RDOCAL 17017
 #define I_HULKES 17020
 #define I_PONTON 17021
 #define I_PIPOHD 17024
@@ -104,5 +106,6 @@
 #define I_WTWAXS 17051
 #define I_TERMNL 17064
 #define I_TRNBSN 17065
+#define I_WTWGAG 17067
 
 #endif // ENC_OBJECTS_H

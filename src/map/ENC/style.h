@@ -68,19 +68,23 @@ public:
 
 	class Point {
 	public:
-		Point() : _textColor(Qt::black), _textFontSize(Normal) {}
+		Point() : _textColor(Qt::black), _haloColor(Qt::white),
+		  _textFontSize(Normal) {}
 		Point(const QImage &img, FontSize fontSize = Normal)
-		  : _textColor(Qt::black), _textFontSize(fontSize), _img(img) {}
+		  : _textColor(Qt::black), _haloColor(Qt::white),
+		  _textFontSize(fontSize), _img(img) {}
 
 		void setTextColor(const QColor &color) {_textColor = color;}
+		void setHaloColor(const QColor &color) {_haloColor = color;}
 		void setTextFontSize(FontSize size) {_textFontSize = size;}
 
 		const QColor &textColor() const {return _textColor;}
+		const QColor &haloColor() const {return _haloColor;}
 		FontSize textFontSize() const {return _textFontSize;}
 		const QImage &img() const {return _img;}
 
 	private:
-		QColor _textColor;
+		QColor _textColor, _haloColor;
 		FontSize _textFontSize;
 		QImage _img;
 	};
@@ -91,11 +95,6 @@ public:
 	const Polygon &polygon(uint type) const;
 	const Point &point(uint type) const;
 	const QVector<uint> &drawOrder() const {return _drawOrder;}
-
-	static bool isSounding(uint type)
-	  {return type == TYPE(SOUNDG);}
-	static bool isDistanceMark(uint type)
-	  {return (type & 0xFFFF0000) == TYPE(I_DISMAR);}
 
 private:
 	void polygonStyle();

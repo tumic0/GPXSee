@@ -49,18 +49,20 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(OBSTRN), 24);
 	map.insert(TYPE(WRECKS), 25);
 	map.insert(TYPE(UWTROC), 26);
-	map.insert(TYPE(I_TRNBSN), 27);
-	map.insert(TYPE(HRBFAC), 28);
-	map.insert(TYPE(PILPNT), 29);
-	map.insert(TYPE(ACHBRT), 30);
-	map.insert(TYPE(I_ACHBRT), 30);
-	map.insert(TYPE(CRANES), 31);
-	map.insert(TYPE(I_CRANES), 31);
-	map.insert(TYPE(LNDMRK), 32);
-	map.insert(TYPE(SILTNK), 33);
-	map.insert(TYPE(LNDELV), 34);
-	map.insert(TYPE(SMCFAC), 35);
-	map.insert(TYPE(BUISGL), 36);
+	map.insert(TYPE(I_RDOCAL), 27);
+	map.insert(TYPE(I_TRNBSN), 28);
+	map.insert(TYPE(HRBFAC), 29);
+	map.insert(TYPE(PILPNT), 30);
+	map.insert(TYPE(ACHBRT), 31);
+	map.insert(TYPE(I_ACHBRT), 31);
+	map.insert(TYPE(CRANES), 32);
+	map.insert(TYPE(I_CRANES), 32);
+	map.insert(TYPE(LNDMRK), 33);
+	map.insert(TYPE(SILTNK), 34);
+	map.insert(TYPE(LNDELV), 35);
+	map.insert(TYPE(SMCFAC), 36);
+	map.insert(TYPE(BUISGL), 37);
+	map.insert(TYPE(I_WTWGAG), 38);
 	map.insert(TYPE(I_DISMAR), 0xFFFFFFFE);
 	map.insert(TYPE(SOUNDG), 0xFFFFFFFF);
 
@@ -214,34 +216,36 @@ static QString hUnits(uint type)
 }
 
 MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
-  const QByteArray &param) : _type(type), _pos(c), _label(label)
+  const QVector<QByteArray> &params) : _type(type), _pos(c), _label(label)
 {
 	uint hash = (uint)qHash(QPair<double,double>(c.lon(), c.lat()));
 	_id = ((quint64)order(type))<<32 | hash;
 
-	if ((type & 0xFFFF0000) == TYPE(I_DISMAR)) {
-		_label = hUnits((type>>8)&0xFF) + " " + QString::fromLatin1(param);
+	if (type>>16 == I_DISMAR) {
+		_label = hUnits((type>>8)&0xFF) + " " + QString::fromLatin1(params.at(0));
 		_type = SUBTYPE(I_DISMAR, type & 0xFF);
+	} else if (type == TYPE(I_RDOCAL)) {
+		if (!params.at(1).isEmpty())
+			_label = QString("VHF ") + QString::fromLatin1(params.at(1));
+		_param = QVariant(params.at(0).toDouble());
 	}
 }
 
-MapData::Poly::Poly(uint type, const Polygon &path, const QByteArray &param)
-  : _type(type), _path(path)
+MapData::Poly::Poly(uint type, const Polygon &path,
+  const QVector<QByteArray> &params) : _type(type), _path(path)
 {
 	if (type == TYPE(DEPARE))
-		_type = SUBTYPE(DEPARE, depthLevel(param));
-	else if (type == TYPE(TSSLPT)) {
-		double angle = param.toDouble();
-		_type = SUBTYPE(TSSLPT, (uint)(angle * 10));
-	}
+		_type = SUBTYPE(DEPARE, depthLevel(params.at(0)));
+	else if (type == TYPE(TSSLPT))
+		_param = QVariant(params.at(0).toDouble());
 }
 
 MapData::Line::Line(uint type, const QVector<Coordinates> &path,
-  const QString &label, const QByteArray &param) : _type(type), _path(path),
-  _label(label)
+  const QString &label, const QVector<QByteArray> &params)
+  : _type(type), _path(path), _label(label)
 {
 	if (type == TYPE(DEPCNT) || type == TYPE(LNDELV))
-		_label = QString::fromLatin1(param);
+		_label = QString::fromLatin1(params.at(0));
 }
 
 RectC MapData::Line::bounds() const
@@ -477,7 +481,7 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
 MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 {
 	QString label;
-	QByteArray param;
+	QVector<QByteArray> params(2);
 	uint subtype = 0;
 
 	const ISO8211::Field *ATTF = r.field("ATTF");
@@ -492,6 +496,7 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 			label = QString::fromLatin1(av.at(1).toByteArray());
 
 		if ((OBJL == HRBFAC && key == CATHAF)
+		  || (OBJL == I_HRBFAC && key == I_CATHAF)
 		  || (OBJL == LNDMRK && key == CATLMK)
 		  || (OBJL == WRECKS && key == CATWRK)
 		  || (OBJL == MORFAC && key == CATMOR)
@@ -505,17 +510,20 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 		else if (OBJL == I_DISMAR && key == I_HUNITS)
 			subtype |= av.at(1).toByteArray().toUInt() << 8;
 
-		if (OBJL == I_DISMAR && key == I_WTWDIS)
-			param = av.at(1).toByteArray();
+		if ((OBJL == I_DISMAR && key == I_WTWDIS)
+		  || (OBJL == I_RDOCAL && key == ORIENT))
+			params[0] = av.at(1).toByteArray();
+		if (OBJL == I_RDOCAL && key == COMCHA)
+			params[1] = av.at(1).toByteArray();
 	}
 
-	return Attr(subtype, label, param);
+	return Attr(subtype, label, params);
 }
 
 MapData::Attr MapData::lineAttr(const ISO8211::Record &r, uint OBJL)
 {
 	QString label;
-	QByteArray param;
+	QVector<QByteArray> params(1);
 	uint subtype = 0;
 
 	const ISO8211::Field *ATTF = r.field("ATTF");
@@ -534,16 +542,16 @@ MapData::Attr MapData::lineAttr(const ISO8211::Record &r, uint OBJL)
 
 		if ((OBJL == DEPCNT && key == VALDCO)
 		  || (OBJL == LNDELV && key == ELEVAT))
-			param = av.at(1).toByteArray();
+			params[0] = av.at(1).toByteArray();
 	}
 
-	return Attr(subtype, label, param);
+	return Attr(subtype, label, params);
 }
 
 MapData::Attr MapData::polyAttr(const ISO8211::Record &r, uint OBJL)
 {
 	QString label;
-	QByteArray param;
+	QVector<QByteArray> params(1);
 	uint subtype = 0;
 
 	const ISO8211::Field *ATTF = r.field("ATTF");
@@ -570,15 +578,16 @@ MapData::Attr MapData::polyAttr(const ISO8211::Record &r, uint OBJL)
 
 		if ((OBJL == TSSLPT && key == ORIENT)
 		  || (OBJL == DEPARE && key == DRVAL1))
-			param = av.at(1).toByteArray();
+			params[0] = av.at(1).toByteArray();
 	}
 
-	return Attr(subtype, label, param);
+	return Attr(subtype, label, params);
 }
 
 MapData::Point *MapData::pointObject(const Sounding &s)
 {
-	return new Point(TYPE(SOUNDG), s.c, QString::number(s.depth), QByteArray());
+	return new Point(TYPE(SOUNDG), s.c, QString::number(s.depth),
+	  QVector<QByteArray>());
 }
 
 MapData::Point *MapData::pointObject(const ISO8211::Record &r,
@@ -588,7 +597,7 @@ MapData::Point *MapData::pointObject(const ISO8211::Record &r,
 	Attr attr(pointAttr(r, OBJL));
 
 	return (c.isNull() ? 0 : new Point(SUBTYPE(OBJL,attr.subtype()), c,
-	  attr.label(), attr.param()));
+	  attr.label(), attr.params()));
 }
 
 MapData::Line *MapData::lineObject(const ISO8211::Record &r,
@@ -598,7 +607,7 @@ MapData::Line *MapData::lineObject(const ISO8211::Record &r,
 	Attr attr(lineAttr(r, OBJL));
 
 	return (path.isEmpty() ? 0 : new Line(SUBTYPE(OBJL, attr.subtype()), path,
-	  attr.label(), attr.param()));
+	  attr.label(), attr.params()));
 }
 
 MapData::Poly *MapData::polyObject(const ISO8211::Record &r,
@@ -608,7 +617,7 @@ MapData::Poly *MapData::polyObject(const ISO8211::Record &r,
 	Attr attr(polyAttr(r, OBJL));
 
 	return (path.isEmpty() ? 0 : new Poly(SUBTYPE(OBJL, attr.subtype()), path,
-	  attr.param()));
+	  attr.params()));
 }
 
 bool MapData::processRecord(const ISO8211::Record &record,

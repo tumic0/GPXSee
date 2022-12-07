@@ -174,6 +174,7 @@ void Style::pointStyle()
 	_points[SUBTYPE(BUAARE, 6)].setTextFontSize(Small);
 	_points[SUBTYPE(BUAARE, 0)].setTextFontSize(Small);
 	_points[TYPE(SOUNDG)].setTextFontSize(Small);
+	_points[TYPE(SOUNDG)].setHaloColor(QColor());
 	_points[TYPE(LIGHTS)] = Point(QImage(":/marine/light-major.png"), Small);
 	_points[TYPE(BOYCAR)] = Point(QImage(":/marine/buoy.png"), Small);
 	_points[TYPE(BOYINB)] = Point(QImage(":/marine/buoy.png"), Small);
@@ -226,16 +227,19 @@ void Style::pointStyle()
 	_points[SUBTYPE(I_DISMAR, 1)] = Point(QImage(":/marine/distance-mark.png"));
 	_points[SUBTYPE(I_DISMAR, 1)].setTextColor(QColor("#ffffff"));
 	_points[SUBTYPE(I_DISMAR, 1)].setTextFontSize(Small);
+	_points[SUBTYPE(I_DISMAR, 1)].setHaloColor(QColor());
 	_points[SUBTYPE(I_DISMAR, 2)] = Point(QImage(":/marine/distance-mark-land.png"));
 	_points[SUBTYPE(I_DISMAR, 2)].setTextFontSize(Small);
-	_points[SUBTYPE(I_DISMAR, 3)] = Point(QImage(":/marine/distance-mark-land.png"));
-	_points[SUBTYPE(I_DISMAR, 3)].setTextFontSize(Small);
+	_points[SUBTYPE(I_DISMAR, 2)].setHaloColor(QColor());
+	_points[SUBTYPE(I_DISMAR, 3)] = _points[SUBTYPE(I_DISMAR, 2)];
 	_points[TYPE(CGUSTA)] = Point(QImage(":/marine/coast-guard.png"));
 	_points[TYPE(RDOSTA)] = Point(QImage(":/marine/radio.png"));
 	_points[TYPE(RADSTA)] = Point(QImage(":/marine/radar.png"));
 	_points[TYPE(RTPBCN)] = Point(QImage(":/marine/radar-transponder.png"));
 	_points[TYPE(SILTNK)] = Point(QImage(":/marine/silo.png"));
 	_points[TYPE(I_TRNBSN)] = Point(QImage(":/marine/turning-basin.png"));
+	_points[TYPE(I_WTWGAG)] = Point(QImage(":/marine/gauge.png"));
+	_points[TYPE(I_RDOCAL)].setTextColor(QColor("#eb49eb"));
 
 	_points[SUBTYPE(SMCFAC, 7)] = Point(QImage(":/POI/restaurant-11.png"));
 	_points[SUBTYPE(SMCFAC, 11)] = Point(QImage(":/POI/pharmacy-11.png"));

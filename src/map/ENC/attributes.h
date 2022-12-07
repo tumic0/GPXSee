@@ -11,6 +11,7 @@
 #define CATREA 56
 #define CATSCF 65
 #define CATWRK 71
+#define COMCHA 77
 #define DRVAL1 87
 #define ELEVAT 90
 #define FUNCTN 94
@@ -22,6 +23,8 @@
 
 #define I_CATACH 17000
 #define I_RESTRN 17004
+#define I_CATHAF 17008
+#define I_RDOCAL 17017
 #define I_WTWDIS 17064
 #define I_HUNITS 17103
 
