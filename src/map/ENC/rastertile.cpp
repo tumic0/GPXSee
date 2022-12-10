@@ -243,7 +243,8 @@ void RasterTile::processPolygons(QList<TextItem*> &textItems)
 		const MapData::Poly *poly = _polygons.at(i);
 		uint type = poly->type()>>16;
 
-		if (!(type == HRBFAC || type == I_TRNBSN))
+		if (!(type == HRBFAC || type == I_TRNBSN
+		  || poly->type() == SUBTYPE(I_BERTHS, 6)))
 			continue;
 		const Style::Point &style = s.point(poly->type());
 		const QImage *img = style.img().isNull() ? 0 : &style.img();

@@ -192,6 +192,10 @@
 		<file alias="pipeline-area-line.png">icons/map/marine/pipeline-area-line.png</file>
 		<file alias="windmotor.png">icons/map/marine/windmotor.png</file>
 		<file alias="gauge.png">icons/map/marine/gauge.png</file>
+		<file alias="fishing-farm-line.png">icons/map/marine/fishing-farm-line.png</file>
+		<file alias="shipyard.png">icons/map/marine/shipyard.png</file>
+		<file alias="pylon.png">icons/map/marine/pylon.png</file>
+		<file alias="fleeting-area.png">icons/map/marine/fleeting-area.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->

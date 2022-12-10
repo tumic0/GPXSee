@@ -6,6 +6,7 @@
 #define CATDIS 21
 #define CATHAF 30
 #define CATLMK 35
+#define CATMFA 38
 #define CATMOR 40
 #define CATTRK 54
 #define CATREA 56
@@ -26,6 +27,7 @@
 #define I_CATHAF 17008
 #define I_RDOCAL 17017
 #define I_WTWDIS 17064
+#define I_CATBRT 17066
 #define I_HUNITS 17103
 
 #endif // ENC_ATTRIBUTES_H

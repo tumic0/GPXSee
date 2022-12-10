@@ -52,6 +52,7 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(I_RDOCAL), 27);
 	map.insert(TYPE(I_TRNBSN), 28);
 	map.insert(TYPE(HRBFAC), 29);
+	map.insert(TYPE(I_HRBFAC), 29);
 	map.insert(TYPE(PILPNT), 30);
 	map.insert(TYPE(ACHBRT), 31);
 	map.insert(TYPE(I_ACHBRT), 31);
@@ -221,10 +222,10 @@ MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
 	uint hash = (uint)qHash(QPair<double,double>(c.lon(), c.lat()));
 	_id = ((quint64)order(type))<<32 | hash;
 
-	if (type>>16 == I_DISMAR) {
+	if (type>>16 == I_DISMAR && params.size()) {
 		_label = hUnits((type>>8)&0xFF) + " " + QString::fromLatin1(params.at(0));
 		_type = SUBTYPE(I_DISMAR, type & 0xFF);
-	} else if (type == TYPE(I_RDOCAL)) {
+	} else if (type == TYPE(I_RDOCAL) && params.size() > 1) {
 		if (!params.at(1).isEmpty())
 			_label = QString("VHF ") + QString::fromLatin1(params.at(1));
 		_param = QVariant(params.at(0).toDouble());
@@ -234,9 +235,9 @@ MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
 MapData::Poly::Poly(uint type, const Polygon &path,
   const QVector<QByteArray> &params) : _type(type), _path(path)
 {
-	if (type == TYPE(DEPARE))
+	if (type == TYPE(DEPARE) && params.size())
 		_type = SUBTYPE(DEPARE, depthLevel(params.at(0)));
-	else if (type == TYPE(TSSLPT))
+	else if (type == TYPE(TSSLPT) && params.size())
 		_param = QVariant(params.at(0).toDouble());
 }
 
@@ -244,7 +245,7 @@ MapData::Line::Line(uint type, const QVector<Coordinates> &path,
   const QString &label, const QVector<QByteArray> &params)
   : _type(type), _path(path), _label(label)
 {
-	if (type == TYPE(DEPCNT) || type == TYPE(LNDELV))
+	if ((type == TYPE(DEPCNT) || type == TYPE(LNDELV)) && params.size())
 		_label = QString::fromLatin1(params.at(0));
 }
 
@@ -566,7 +567,9 @@ MapData::Attr MapData::polyAttr(const ISO8211::Record &r, uint OBJL)
 		  || (OBJL == I_RESARE && key == CATREA)
 		  || (OBJL == ACHARE && key == CATACH)
 		  || (OBJL == I_ACHARE && key == I_CATACH)
-		  || (OBJL == HRBFAC && key == CATHAF))
+		  || (OBJL == HRBFAC && key == CATHAF)
+		  || (OBJL == MARKUL && key == CATMFA)
+		  || (OBJL == I_BERTHS && key == I_CATBRT))
 			subtype = av.at(1).toByteArray().toUInt();
 		else if ((OBJL == RESARE && key == RESTRN)
 		  || (OBJL == I_RESARE && key == I_RESTRN)) {

@@ -48,6 +48,7 @@
 #define LNDMRK 74
 #define LIGHTS 75
 #define LOKBSN 79
+#define MARKUL 82
 #define MORFAC 84
 #define NAVLNE 85
 #define OBSTRN 86

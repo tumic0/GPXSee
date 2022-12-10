@@ -98,6 +98,9 @@ void Style::polygonStyle()
 	  Qt::DashLine));
 	_polygons[TYPE(CBLARE)] = Polygon(QImage(":/marine/cable-area-line.png"));
 	_polygons[TYPE(PIPARE)] = Polygon(QImage(":/marine/pipeline-area-line.png"));
+	_polygons[SUBTYPE(MARKUL, 3)] = Polygon(QImage(":/marine/fishing-farm-line.png"));
+	_polygons[SUBTYPE(I_BERTHS, 6)] = Polygon(Qt::NoBrush, QPen(QColor("#eb49eb"),
+	  1, Qt::DashLine));
 
 	_drawOrder
 	  << TYPE(M_COVR) << TYPE(LNDARE) << SUBTYPE(DEPARE, 0)
@@ -110,11 +113,12 @@ void Style::polygonStyle()
 	  << TYPE(I_TERMNL) << TYPE(SLCONS) << TYPE(I_SLCONS) << TYPE(PONTON)
 	  << TYPE(I_PONTON) << TYPE(HULKES) << TYPE(I_HULKES) << TYPE(FLODOC)
 	  << TYPE(I_FLODOC) << TYPE(DRYDOC) << TYPE(DAMCON) << TYPE(PYLONS)
-	  << TYPE(MORFAC) << TYPE(GATCON) << TYPE(I_GATCON) << TYPE(DMPGRD)
-	  << TYPE(TSEZNE) << TYPE(OBSTRN) << TYPE(UWTROC) << TYPE(DWRTPT)
-	  << SUBTYPE(ACHARE, 1) << SUBTYPE(I_ACHARE, 1) << SUBTYPE(RESARE, 9)
-	  << SUBTYPE(RESARE, 2) << SUBTYPE(I_RESARE, 2) << SUBTYPE(RESARE, 17)
-	  << SUBTYPE(I_RESARE, 17) << TYPE(CBLARE) << TYPE(PIPARE) << TYPE(PRCARE);
+	  << TYPE(MORFAC) << TYPE(GATCON) << TYPE(I_GATCON) << SUBTYPE(I_BERTHS, 6)
+	  << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN) << TYPE(UWTROC)
+	  << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1) << SUBTYPE(I_ACHARE, 1)
+	  << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2) << SUBTYPE(I_RESARE, 2)
+	  << SUBTYPE(RESARE, 17) << SUBTYPE(I_RESARE, 17) << TYPE(CBLARE)
+	  << TYPE(PIPARE) << TYPE(PRCARE) << SUBTYPE(MARKUL, 3);
 }
 
 void Style::lineStyle()
@@ -213,6 +217,10 @@ void Style::pointStyle()
 	  Small);
 	_points[SUBTYPE(HRBFAC, 4)] = Point(QImage(":/marine/fishing-harbor.png"));
 	_points[SUBTYPE(HRBFAC, 5)] = Point(QImage(":/marine/yacht-harbor.png"));
+	_points[SUBTYPE(HRBFAC, 9)] = Point(QImage(":/marine/shipyard.png"));
+	_points[SUBTYPE(I_HRBFAC, 4)] = Point(QImage(":/marine/fishing-harbor.png"));
+	_points[SUBTYPE(I_HRBFAC, 5)] = Point(QImage(":/marine/yacht-harbor.png"));
+	_points[SUBTYPE(I_HRBFAC, 9)] = Point(QImage(":/marine/shipyard.png"));
 	_points[TYPE(ACHBRT)] = Point(QImage(":/marine/anchorage.png"));
 	_points[TYPE(I_ACHBRT)] = Point(QImage(":/marine/anchorage.png"));
 	_points[TYPE(OFSPLF)] = Point(QImage(":/marine/platform.png"));
@@ -240,6 +248,8 @@ void Style::pointStyle()
 	_points[TYPE(I_TRNBSN)] = Point(QImage(":/marine/turning-basin.png"));
 	_points[TYPE(I_WTWGAG)] = Point(QImage(":/marine/gauge.png"));
 	_points[TYPE(I_RDOCAL)].setTextColor(QColor("#eb49eb"));
+	_points[TYPE(PYLONS)] = Point(QImage(":/marine/pylon.png"));
+	_points[SUBTYPE(I_BERTHS, 6)] = Point(QImage(":/marine/fleeting-area.png"));
 
 	_points[SUBTYPE(SMCFAC, 7)] = Point(QImage(":/POI/restaurant-11.png"));
 	_points[SUBTYPE(SMCFAC, 11)] = Point(QImage(":/POI/pharmacy-11.png"));
