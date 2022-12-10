@@ -49,21 +49,25 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(OBSTRN), 24);
 	map.insert(TYPE(WRECKS), 25);
 	map.insert(TYPE(UWTROC), 26);
-	map.insert(TYPE(I_RDOCAL), 27);
-	map.insert(TYPE(I_TRNBSN), 28);
-	map.insert(TYPE(HRBFAC), 29);
-	map.insert(TYPE(I_HRBFAC), 29);
-	map.insert(TYPE(PILPNT), 30);
-	map.insert(TYPE(ACHBRT), 31);
-	map.insert(TYPE(I_ACHBRT), 31);
-	map.insert(TYPE(CRANES), 32);
-	map.insert(TYPE(I_CRANES), 32);
-	map.insert(TYPE(LNDMRK), 33);
-	map.insert(TYPE(SILTNK), 34);
-	map.insert(TYPE(LNDELV), 35);
-	map.insert(TYPE(SMCFAC), 36);
-	map.insert(TYPE(BUISGL), 37);
-	map.insert(TYPE(I_WTWGAG), 38);
+	map.insert(TYPE(WATTUR), 27);
+	map.insert(TYPE(PILBOP), 28);
+	map.insert(TYPE(I_RDOCAL), 29);
+	map.insert(TYPE(I_TRNBSN), 30);
+	map.insert(TYPE(HRBFAC), 31);
+	map.insert(TYPE(I_HRBFAC), 31);
+	map.insert(TYPE(PILPNT), 32);
+	map.insert(TYPE(ACHBRT), 33);
+	map.insert(TYPE(I_ACHBRT), 33);
+	map.insert(TYPE(CRANES), 34);
+	map.insert(TYPE(I_CRANES), 34);
+	map.insert(TYPE(I_WTWGAG), 35);
+	map.insert(TYPE(PYLONS), 36);
+	map.insert(TYPE(LNDMRK), 37);
+	map.insert(TYPE(SILTNK), 38);
+	map.insert(TYPE(LNDELV), 39);
+	map.insert(TYPE(SMCFAC), 40);
+	map.insert(TYPE(BUISGL), 41);
+
 	map.insert(TYPE(I_DISMAR), 0xFFFFFFFE);
 	map.insert(TYPE(SOUNDG), 0xFFFFFFFF);
 
@@ -504,7 +508,8 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 		  || (OBJL == UWTROC && key == WATLEV)
 		  || (OBJL == BUAARE && key == CATBUA)
 		  || (OBJL == SMCFAC && key == CATSCF)
-		  || (OBJL == BUISGL && key == FUNCTN))
+		  || (OBJL == BUISGL && key == FUNCTN)
+		  || (OBJL == WATTUR && key == CATWAT))
 			subtype = av.at(1).toByteArray().toUInt();
 		else if (OBJL == I_DISMAR && key == CATDIS)
 			subtype |= av.at(1).toByteArray().toUInt();

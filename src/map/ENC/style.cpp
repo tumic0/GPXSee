@@ -199,6 +199,7 @@ void Style::pointStyle()
 	_points[SUBTYPE(LNDMRK, 19)] = Point(QImage(":/marine/windmotor.png"));
 	_points[TYPE(LNDELV)] = Point(QImage(":/marine/triangulation-point.png"));
 	_points[TYPE(OBSTRN)] = Point(QImage(":/marine/obstruction.png"), Small);
+	_points[SUBTYPE(WRECKS, 0)] = Point(QImage(":/marine/wreck.png"), Small);
 	_points[SUBTYPE(WRECKS, 1)] = Point(QImage(":/marine/wreck.png"), Small);
 	_points[SUBTYPE(WRECKS, 2)] = Point(QImage(":/marine/wreck-dangerous.png"),
 	  Small);
@@ -250,6 +251,10 @@ void Style::pointStyle()
 	_points[TYPE(I_RDOCAL)].setTextColor(QColor("#eb49eb"));
 	_points[TYPE(PYLONS)] = Point(QImage(":/marine/pylon.png"));
 	_points[SUBTYPE(I_BERTHS, 6)] = Point(QImage(":/marine/fleeting-area.png"));
+	_points[SUBTYPE(WATTUR, 1)] = Point(QImage(":/marine/breakers.png"));
+	_points[SUBTYPE(WATTUR, 3)] = Point(QImage(":/marine/overfalls.png"));
+	_points[SUBTYPE(WATTUR, 4)] = Point(QImage(":/marine/overfalls.png"));
+	_points[TYPE(PILBOP)] = Point(QImage(":/marine/boarding-place.png"));
 
 	_points[SUBTYPE(SMCFAC, 7)] = Point(QImage(":/POI/restaurant-11.png"));
 	_points[SUBTYPE(SMCFAC, 11)] = Point(QImage(":/POI/pharmacy-11.png"));

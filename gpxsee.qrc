@@ -196,6 +196,9 @@
 		<file alias="shipyard.png">icons/map/marine/shipyard.png</file>
 		<file alias="pylon.png">icons/map/marine/pylon.png</file>
 		<file alias="fleeting-area.png">icons/map/marine/fleeting-area.png</file>
+		<file alias="breakers.png">icons/map/marine/breakers.png</file>
+		<file alias="overfalls.png">icons/map/marine/overfalls.png</file>
+		<file alias="boarding-place.png">icons/map/marine/boarding-place.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->

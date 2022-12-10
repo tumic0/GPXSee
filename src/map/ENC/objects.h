@@ -54,6 +54,7 @@
 #define OBSTRN 86
 #define OFSPLF 87
 #define PILPNT 90
+#define PILBOP 91
 #define PIPARE 92
 #define PIPOHD 93
 #define PIPSOL 94
@@ -81,6 +82,7 @@
 #define TUNNEL 151
 #define UWTROC 153
 #define UNSARE 154
+#define WATTUR 156
 #define WRECKS 159
 #define M_COVR 302
 
