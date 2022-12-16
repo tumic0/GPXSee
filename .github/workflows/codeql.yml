@@ -42,6 +42,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Install dependencies
+      run: |
+          sudo apt-get update
+          sudo apt-get install qtbase5-dev qtbase5-private-dev qtbase5-dev-tools qt5-qmake qttools5-dev-tools libqt5opengl5-dev qtpositioning5-dev libqt5svg5-dev
+
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
