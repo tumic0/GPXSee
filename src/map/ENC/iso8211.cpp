@@ -97,6 +97,7 @@ int ISO8211::readDR(QFile &file, QVector<FieldDefinition> &fields) const
 	QByteArray fieldLen, fieldPos;
 	int len, lenSize, posSize, tagSize, offset;
 
+	static_assert(sizeof(ddr) == 24, "Invalid DR alignment");
 	if (file.read((char*)&ddr, sizeof(ddr)) != sizeof(ddr))
 		return -1;
 
