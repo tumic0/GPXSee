@@ -2397,12 +2397,12 @@
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="111"/>
         <source>C</source>
-        <translation>°C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="115"/>
         <source>F</source>
-        <translation>°F</translation>
+        <translation>F</translation>
     </message>
 </context>
 <context>
@@ -2410,12 +2410,12 @@
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="21"/>
         <source>C</source>
-        <translation>°C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="21"/>
         <source>F</source>
-        <translation>°F</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="24"/>
