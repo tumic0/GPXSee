@@ -1,5 +1,5 @@
-#ifndef SECTION_H
-#define SECTION_H
+#ifndef IMG_SECTION_H
+#define IMG_SECTION_H
 
 #include <QtGlobal>
 
@@ -14,4 +14,4 @@ struct Section {
 
 }
 
-#endif // SECTION_H
+#endif // IMG_SECTION_H
