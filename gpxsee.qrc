@@ -188,6 +188,7 @@
 		<file alias="silo.png">icons/map/marine/silo.png</file>
 		<file alias="turning-basin.png">icons/map/marine/turning-basin.png</file>
 		<file alias="entry-prohibited-line.png">icons/map/marine/entry-prohibited-line.png</file>
+		<file alias="safety-zone-line.png">icons/map/marine/safety-zone-line.png</file>
 		<file alias="cable-area-line.png">icons/map/marine/cable-area-line.png</file>
 		<file alias="pipeline-area-line.png">icons/map/marine/pipeline-area-line.png</file>
 		<file alias="windmotor.png">icons/map/marine/windmotor.png</file>

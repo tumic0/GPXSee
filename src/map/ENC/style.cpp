@@ -67,6 +67,9 @@ void Style::polygonStyle()
 	  QImage(":/marine/entry-prohibited-line.png"));
 	_polygons[SUBTYPE(I_RESARE, 17)] = Polygon(
 	  QImage(":/marine/entry-prohibited-line.png"));
+	_polygons[SUBTYPE(RESARE, 12)] = Polygon(QImage(":/marine/safety-zone-line.png"));
+	_polygons[SUBTYPE(I_RESARE, 12)] = Polygon(QImage(":/marine/safety-zone-line.png"));
+	_polygons[SUBTYPE(RESARE, 1)] = Polygon(QImage(":/marine/safety-zone-line.png"));
 	_polygons[SUBTYPE(ACHARE, 1)] = Polygon(QImage(":/marine/anchor-line.png"));
 	_polygons[SUBTYPE(I_ACHARE, 1)] = Polygon(QImage(":/marine/anchor-line.png"));
 	_polygons[TYPE(PRCARE)] = Polygon(QBrush(QColor("#eb49eb"),
@@ -117,7 +120,8 @@ void Style::polygonStyle()
 	  << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN) << TYPE(UWTROC)
 	  << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1) << SUBTYPE(I_ACHARE, 1)
 	  << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2) << SUBTYPE(I_RESARE, 2)
-	  << SUBTYPE(RESARE, 17) << SUBTYPE(I_RESARE, 17) << TYPE(CBLARE)
+	  << SUBTYPE(RESARE, 17) << SUBTYPE(I_RESARE, 17) << SUBTYPE(RESARE, 12)
+	  << SUBTYPE(I_RESARE, 12) << SUBTYPE(RESARE, 1) << TYPE(CBLARE)
 	  << TYPE(PIPARE) << TYPE(PRCARE) << SUBTYPE(MARKUL, 3);
 }
 
