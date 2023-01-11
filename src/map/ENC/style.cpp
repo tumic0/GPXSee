@@ -245,6 +245,7 @@ void Style::pointStyle()
 	_points[SUBTYPE(I_DISMAR, 2)].setTextFontSize(Small);
 	_points[SUBTYPE(I_DISMAR, 2)].setHaloColor(QColor());
 	_points[SUBTYPE(I_DISMAR, 3)] = _points[SUBTYPE(I_DISMAR, 2)];
+	_points[SUBTYPE(I_DISMAR, 4)] = _points[SUBTYPE(I_DISMAR, 2)];
 	_points[TYPE(CGUSTA)] = Point(QImage(":/marine/coast-guard.png"));
 	_points[TYPE(RDOSTA)] = Point(QImage(":/marine/radio.png"));
 	_points[TYPE(RADSTA)] = Point(QImage(":/marine/radar.png"));
@@ -259,6 +260,7 @@ void Style::pointStyle()
 	_points[SUBTYPE(WATTUR, 3)] = Point(QImage(":/marine/overfalls.png"));
 	_points[SUBTYPE(WATTUR, 4)] = Point(QImage(":/marine/overfalls.png"));
 	_points[TYPE(PILBOP)] = Point(QImage(":/marine/boarding-place.png"));
+	_points[TYPE(SISTAT)] = Point(QImage(":/marine/pylon.png"));
 
 	_points[SUBTYPE(SMCFAC, 7)] = Point(QImage(":/POI/restaurant-11.png"));
 	_points[SUBTYPE(SMCFAC, 11)] = Point(QImage(":/POI/pharmacy-11.png"));

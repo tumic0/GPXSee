@@ -10,6 +10,7 @@
 #define CATMOR 40
 #define CATTRK 54
 #define CATREA 56
+#define CATSIT 61
 #define CATSCF 65
 #define CATWAT 69
 #define CATWRK 71
@@ -24,6 +25,7 @@
 #define WATLEV 187
 
 #define I_CATACH 17000
+#define I_CATSIT 17002
 #define I_RESTRN 17004
 #define I_CATHAF 17008
 #define I_RDOCAL 17017

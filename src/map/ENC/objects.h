@@ -71,6 +71,7 @@
 #define RIVERS 114
 #define ROADWY 116
 #define SLCONS 122
+#define SISTAT 123
 #define SILTNK 125
 #define SLOTOP 126
 #define SMCFAC 128
@@ -90,6 +91,7 @@
 #define I_ACHARE 17001
 #define I_DISMAR 17004
 #define I_RESARE 17005
+#define I_SISTAT 17007
 #define I_BERTHS 17010
 #define I_BRIDGE 17011
 #define I_CBLOHD 17012

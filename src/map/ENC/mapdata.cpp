@@ -51,22 +51,24 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(UWTROC), 26);
 	map.insert(TYPE(WATTUR), 27);
 	map.insert(TYPE(PILBOP), 28);
-	map.insert(TYPE(I_RDOCAL), 29);
-	map.insert(TYPE(I_TRNBSN), 30);
-	map.insert(TYPE(HRBFAC), 31);
-	map.insert(TYPE(I_HRBFAC), 31);
-	map.insert(TYPE(PILPNT), 32);
-	map.insert(TYPE(ACHBRT), 33);
-	map.insert(TYPE(I_ACHBRT), 33);
-	map.insert(TYPE(CRANES), 34);
-	map.insert(TYPE(I_CRANES), 34);
-	map.insert(TYPE(I_WTWGAG), 35);
-	map.insert(TYPE(PYLONS), 36);
-	map.insert(TYPE(LNDMRK), 37);
-	map.insert(TYPE(SILTNK), 38);
-	map.insert(TYPE(LNDELV), 39);
-	map.insert(TYPE(SMCFAC), 40);
-	map.insert(TYPE(BUISGL), 41);
+	map.insert(TYPE(SISTAT), 29);
+	map.insert(TYPE(I_SISTAT), 29);
+	map.insert(TYPE(I_RDOCAL), 30);
+	map.insert(TYPE(I_TRNBSN), 31);
+	map.insert(TYPE(HRBFAC), 32);
+	map.insert(TYPE(I_HRBFAC), 32);
+	map.insert(TYPE(PILPNT), 33);
+	map.insert(TYPE(ACHBRT), 34);
+	map.insert(TYPE(I_ACHBRT), 34);
+	map.insert(TYPE(CRANES), 35);
+	map.insert(TYPE(I_CRANES), 35);
+	map.insert(TYPE(I_WTWGAG), 36);
+	map.insert(TYPE(PYLONS), 37);
+	map.insert(TYPE(LNDMRK), 38);
+	map.insert(TYPE(SILTNK), 39);
+	map.insert(TYPE(LNDELV), 40);
+	map.insert(TYPE(SMCFAC), 41);
+	map.insert(TYPE(BUISGL), 42);
 
 	map.insert(TYPE(I_DISMAR), 0xFFFFFFFE);
 	map.insert(TYPE(SOUNDG), 0xFFFFFFFF);
@@ -220,6 +222,22 @@ static QString hUnits(uint type)
 	}
 }
 
+static QString sistat(uint type)
+{
+	switch (type) {
+		case 1:
+			return "SS (Port Control)";
+		case 3:
+			return "SS (INT)";
+		case 6:
+			return "SS (Lock)";
+		case 8:
+			return "SS (Bridge)";
+		default:
+			return "SS";
+	}
+}
+
 MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
   const QVector<QByteArray> &params) : _type(type), _pos(c), _label(label)
 {
@@ -233,6 +251,10 @@ MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
 		if (!params.at(1).isEmpty())
 			_label = QString("VHF ") + QString::fromLatin1(params.at(1));
 		_param = QVariant(params.at(0).toDouble());
+	} else if (type>>16 == I_SISTAT || type>>16 == SISTAT) {
+		if (_label.isEmpty())
+			_label = sistat(type && 0xFF);
+		_type = TYPE(SISTAT);
 	}
 }
 
@@ -509,7 +531,9 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 		  || (OBJL == BUAARE && key == CATBUA)
 		  || (OBJL == SMCFAC && key == CATSCF)
 		  || (OBJL == BUISGL && key == FUNCTN)
-		  || (OBJL == WATTUR && key == CATWAT))
+		  || (OBJL == WATTUR && key == CATWAT)
+		  || (OBJL == SISTAT && key == CATSIT)
+		  || (OBJL == I_SISTAT && key == I_CATSIT))
 			subtype = av.at(1).toByteArray().toUInt();
 		else if (OBJL == I_DISMAR && key == CATDIS)
 			subtype |= av.at(1).toByteArray().toUInt();
