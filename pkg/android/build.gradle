@@ -34,7 +34,8 @@ android {
      * Changing them manually might break the compilation!
      *******************************************************/
 
-    compileSdkVersion androidCompileSdkVersion.toInteger()
+    //compileSdkVersion androidCompileSdkVersion.toInteger()
+    compileSdkVersion 31
     //buildToolsVersion androidBuildToolsVersion
     buildToolsVersion '31.0.0'
     ndkVersion androidNdkVersion
