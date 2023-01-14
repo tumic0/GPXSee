@@ -384,10 +384,13 @@ void Style::defaultLineStyle()
 	_lines[0x10307] = Line(QPen(QColor("#05620e"), 1, Qt::SolidLine));
 	_lines[0x10401] = Line(QImage(":/marine/cable.png"));
 	_lines[0x10402] = Line(QImage(":/marine/pipeline.png"));
-	_lines[0x10405] = Line(QPen(QColor("#e728e7"), 1, Qt::DashLine));
+	_lines[0x10404] = Line(QImage(":/marine/fishing-farm-line.png"));
+	_lines[0x10405] = Line(QImage(":/marine/pipeline-area-line.png"));
+	_lines[0x10406] = Line(QImage(":/marine/cable-area-line.png"));
 	_lines[0x10409] = Line(QPen(QColor("#000000"), 1, Qt::DotLine));
 	_lines[0x10501] = Line(QImage(":/marine/noanchor-line.png"));
 	_lines[0x10503] = Line(QPen(QColor("#e728e7"), 1, Qt::DashLine));
+	_lines[0x10505] = Line(QImage(":/marine/safety-zone-line.png"));
 	_lines[0x10507] = Line(QPen(QColor("#e728e7"), 1, Qt::DashLine));
 	_lines[0x10601] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
 	_lines[0x10606] = Line(QImage(":/marine/anchor-line.png"));
@@ -663,8 +666,10 @@ void Style::defaultPointStyle()
 	_points[0x10216] = Point(QImage(":/marine/mooring-buoy.png"));
 	_points[0x10305] = Point(QImage(":/marine/chimney.png"));
 	_points[0x10306] = Point(QImage(":/marine/church.png"));
+	_points[0x10307] = Point(QImage(":/marine/silo.png"));
 	_points[0x10308] = Point(QImage(":/marine/tower.png"));
 	_points[0x1030a] = Point(QImage(":/marine/triangulation-point.png"));
+	_points[0x1030b] = Point(QImage(":/marine/radio.png"));
 	_points[0x10400] = Point(QImage(":/marine/obstruction.png"));
 	_points[0x10401] = Point(QImage(":/marine/obstruction.png"));
 	_points[0x10402] = Point(QImage(":/marine/wreck.png"));
@@ -673,9 +678,12 @@ void Style::defaultPointStyle()
 	_points[0x1040a] = Point(QImage(":/marine/rock-dangerous.png"));
 	_points[0x1040c] = Point(QImage(":/marine/rock-exposed.png"));
 	_points[0x10701] = Point(QImage(":/marine/anchorage.png"));
+	_points[0x10702] = Point(QImage(":/marine/boarding-place.png"));
 	_points[0x10703] = Point(QImage(":/marine/yacht-harbor.png"));
 	_points[0x10704] = Point(QImage(":/marine/pile.png"));
 	_points[0x10705] = Point(QImage(":/marine/anchoring-prohibited.png"));
+	_points[0x1070a] = Point(QImage(":/marine/coast-guard.png"));
+	_points[0x1070b] = Point(QImage(":/marine/fishing-harbor.png"));
 }
 
 bool Style::itemInfo(SubFile *file, SubFile::Handle &hdl,
