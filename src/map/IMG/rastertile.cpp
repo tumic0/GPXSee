@@ -301,7 +301,7 @@ void RasterTile::processPolygons(QList<TextItem*> &textItems)
 	QList<TextItem *> labels;
 
 	for (int i = 0; i < _polygons.size(); i++) {
-		MapData::Poly &poly = _polygons[i];
+		const MapData::Poly &poly = _polygons.at(i);
 		bool exists = set.contains(poly.label.text());
 
 		if (poly.label.text().isEmpty())
@@ -343,7 +343,7 @@ void RasterTile::processLines(QList<TextItem*> &textItems)
 void RasterTile::processStreetNames(QList<TextItem*> &textItems)
 {
 	for (int i = 0; i < _lines.size(); i++) {
-		MapData::Poly &poly = _lines[i];
+		const MapData::Poly &poly = _lines.at(i);
 		const Style::Line &style = _style->line(poly.type);
 
 		if (style.img().isNull() && style.foreground() == Qt::NoPen)
@@ -433,7 +433,7 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 	std::sort(_points.begin(), _points.end());
 
 	for (int i = 0; i < _points.size(); i++) {
-		MapData::Point &point = _points[i];
+		const MapData::Point &point = _points.at(i);
 		const Style::Point &style = _style->point(point.type);
 		bool poi = Style::isPOI(point.type);
 
