@@ -579,6 +579,7 @@ android {
     DISTFILES += \
         pkg/android/AndroidManifest.xml \
         pkg/android/build.gradle \
+        pkg/android/gradle.properties \
         pkg/android/res/values/libs.xml
 
     maps.files = $$files(pkg/maps/*)
