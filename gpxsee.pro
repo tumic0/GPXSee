@@ -572,6 +572,7 @@ android {
         message("OpenSSL not found, building without HTTPS support!")
     }
 
+    ANDROID_COMPILE_SDK_VERSION = 31
     ANDROID_TARGET_SDK_VERSION = 31
     ANDROID_VERSION_NAME = $$VERSION
     ANDROID_VERSION_CODE = $$versionCode($$ANDROID_VERSION_NAME)
