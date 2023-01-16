@@ -253,7 +253,7 @@ MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
 		_param = QVariant(params.at(0).toDouble());
 	} else if (type>>16 == I_SISTAT || type>>16 == SISTAT) {
 		if (_label.isEmpty())
-			_label = sistat(type && 0xFF);
+			_label = sistat(type & 0xFF);
 		_type = TYPE(SISTAT);
 	}
 }
