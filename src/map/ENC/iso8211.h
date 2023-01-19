@@ -1,11 +1,10 @@
 #ifndef ENC_ISO8211_H
 #define ENC_ISO8211_H
 
+#include <QFile>
 #include <QByteArray>
 #include <QVariant>
 #include <QDebug>
-
-class QFile;
 
 #define UINT32(x) \
   (((quint32)*(const uchar*)(x)) \
@@ -102,8 +101,9 @@ public:
 		}
 	};
 
-	bool readDDR(QFile &file);
-	bool readRecord(QFile &file, Record &record);
+	ISO8211(const QString &path) : _file(path) {}
+	bool readDDR();
+	bool readRecord(Record &record);
 
 	const QString &errorString() const {return _errorString;}
 
@@ -118,6 +118,7 @@ private:
 	bool readUDA(QFile &file, quint64 pos, const FieldDefinition &def,
 	  const SubFields &fields, Data &data) const;
 
+	QFile _file;
 	FieldsMap _map;
 	QString _errorString;
 };

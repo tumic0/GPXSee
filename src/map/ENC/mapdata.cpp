@@ -1,4 +1,3 @@
-#include <QFile>
 #include "common/util.h"
 #include "objects.h"
 #include "attributes.h"
@@ -751,30 +750,24 @@ bool MapData::bounds(const QVector<ISO8211::Record> &gv, Rect &b)
 
 MapData::MapData(const QString &path): _fileName(path)
 {
-	QFile file(_fileName);
 	QVector<ISO8211::Record> gv;
-	ISO8211 ddf;
+	ISO8211 ddf(_fileName);
+	ISO8211::Record record;
 	uint COMF = 1;
 
-	if (!file.open(QIODevice::ReadOnly)) {
-		_errorString = file.errorString();
-		return;
-	}
-
-	if (!ddf.readDDR(file)) {
+	if (!ddf.readDDR()) {
 		_errorString = ddf.errorString();
 		return;
 	}
-	while (!file.atEnd()) {
-		ISO8211::Record record;
-		if (!ddf.readRecord(file, record)) {
-			_errorString = ddf.errorString();
-			return;
-		}
+	while (ddf.readRecord(record)) {
 		if (!processRecord(record, gv, COMF, _name)) {
 			_errorString = "Invalid S-57 record";
 			return;
 		}
+	}
+	if (!ddf.errorString().isNull()) {
+		_errorString = ddf.errorString();
+		return;
 	}
 
 	Rect b;
@@ -807,30 +800,22 @@ MapData::~MapData()
 
 void MapData::load()
 {
-	QFile file(_fileName);
 	RecordMap vi, vc, ve, vf;
 	QVector<ISO8211::Record> fe;
-	uint COMF = 1, SOMF = 1;
-	ISO8211 ddf;
-	uint PRIM, OBJL;
+	ISO8211 ddf(_fileName);
+	ISO8211::Record record;
+	uint PRIM, OBJL, COMF = 1, SOMF = 1;
 	Poly *poly;
 	Line *line;
 	Point *point;
 	double min[2], max[2];
 
 
-	if (!file.open(QIODevice::ReadOnly))
+	if (!ddf.readDDR())
 		return;
-
-	if (!ddf.readDDR(file))
-		return;
-	while (!file.atEnd()) {
-		ISO8211::Record record;
-		if (!ddf.readRecord(file, record))
-			return;
+	while (ddf.readRecord(record))
 		if (!processRecord(record, fe, vi, vc, ve, vf, COMF, SOMF))
-			return;
-	}
+			qWarning("Invalid S-57 record");
 
 	for (int i = 0; i < fe.size(); i++) {
 		const ISO8211::Record &r = fe.at(i);

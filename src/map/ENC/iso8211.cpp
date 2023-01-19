@@ -188,12 +188,16 @@ bool ISO8211::readDDA(QFile &file, const FieldDefinition &def, SubFields &fields
 	return true;
 }
 
-bool ISO8211::readDDR(QFile &file)
+bool ISO8211::readDDR()
 {
 	QVector<FieldDefinition> fields;
-	qint64 pos = file.pos();
-	int len = readDR(file, fields);
 
+	if (!_file.open(QIODevice::ReadOnly)) {
+		_errorString = _file.errorString();
+		return false;
+	}
+
+	int len = readDR(_file, fields);
 	if (len < 0) {
 		_errorString = "Not a ISO8211 file";
 		return false;
@@ -201,7 +205,7 @@ bool ISO8211::readDDR(QFile &file)
 
 	for (int i = 0; i < fields.size(); i++) {
 		SubFields def;
-		if (!readDDA(file, fields.at(i), def)) {
+		if (!readDDA(_file, fields.at(i), def)) {
 			_errorString = QString("Error reading %1 DDA field")
 			  .arg(QString(fields.at(i).tag));
 			return false;
@@ -209,7 +213,7 @@ bool ISO8211::readDDR(QFile &file)
 		_map.insert(fields.at(i).tag, def);
 	}
 
-	if (file.pos() != pos + len || fields.size() < 2) {
+	if (_file.pos() != len || fields.size() < 2) {
 		_errorString = "DDR format error";
 		return false;
 	}
@@ -231,6 +235,7 @@ bool ISO8211::readUDA(QFile &file, quint64 pos, const FieldDefinition &def,
 	const char *dp = ba.constData();
 	const char *ep = ba.constData() + ba.size() - 1;
 
+	data.clear();
 	data.setFields(&fields);
 
 	do {
@@ -287,11 +292,14 @@ bool ISO8211::readUDA(QFile &file, quint64 pos, const FieldDefinition &def,
 	return true;
 }
 
-bool ISO8211::readRecord(QFile &file, Record &record)
+bool ISO8211::readRecord(Record &record)
 {
+	if (_file.atEnd())
+		return false;
+
 	QVector<FieldDefinition> fields;
-	qint64 pos = file.pos();
-	int len = readDR(file, fields);
+	qint64 pos = _file.pos();
+	int len = readDR(_file, fields);
 
 	if (len < 0) {
 		_errorString = "Error reading DR";
@@ -313,7 +321,7 @@ bool ISO8211::readRecord(QFile &file, Record &record)
 
 		f.setTag(def.tag);
 
-		if (!readUDA(file, pos, def, it.value(), f.rdata())) {
+		if (!readUDA(_file, pos, def, it.value(), f.rdata())) {
 			_errorString = QString("Error reading %1 record")
 			  .arg(QString(def.tag));
 			return false;
