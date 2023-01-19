@@ -381,7 +381,7 @@ void OziMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 Map *OziMap::createTAR(const QString &path, const Projection &, bool *isDir)
 {
 	if (isDir)
-		*isDir = true;
+		*isDir = false;
 
 	return new OziMap(path, true);
 }
@@ -389,7 +389,7 @@ Map *OziMap::createTAR(const QString &path, const Projection &, bool *isDir)
 Map *OziMap::createMAP(const QString &path, const Projection &, bool *isDir)
 {
 	if (isDir)
-		*isDir = true;
+		*isDir = false;
 
 	return new OziMap(path, false);
 }
