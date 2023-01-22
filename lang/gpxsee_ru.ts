@@ -557,7 +557,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="432"/>
         <source>Use styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать стили</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="439"/>
@@ -1247,7 +1247,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="158"/>
         <source>Electronic Navigational Charts</source>
-        <translation type="unfinished"></translation>
+        <translation>Морские карты ENC</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="165"/>
