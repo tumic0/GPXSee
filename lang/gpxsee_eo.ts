@@ -556,7 +556,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="432"/>
         <source>Use styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzi stilojn</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="439"/>
@@ -603,7 +603,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="482"/>
         <source>Show tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Montri langetojn</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="491"/>
@@ -1241,7 +1241,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="158"/>
         <source>Electronic Navigational Charts</source>
-        <translation type="unfinished"></translation>
+        <translation>ENC-mapoj</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="165"/>
