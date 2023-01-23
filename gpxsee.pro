@@ -476,19 +476,21 @@ TRANSLATIONS = lang/gpxsee_en.ts \
 
 macx {
     ICON = icons/app/gpxsee.icns
-    QMAKE_INFO_PLIST = pkg/Info.plist
+    QMAKE_INFO_PLIST = pkg/mac/Info.plist
     locale.path = Contents/Resources/translations
     locale.files = $$files(lang/*.qm)
     csv.path = Contents/Resources
-    csv.files = pkg/csv
+    csv.files = pkg/common/csv
     maps.path = Contents/Resources
-    maps.files = pkg/maps
+    maps.files = pkg/common/maps
     symbols.path = Contents/Resources/symbols
     symbols.files = $$files(icons/symbols/*.png)
     icons.path = Contents/Resources/icons
     icons.files = $$files(icons/formats/*.icns)
+    lproj.path = Contents/Resources
+    lproj.files = $$files(pkg/mac/lproj/*)
 
-    QMAKE_BUNDLE_DATA += locale maps symbols icons csv
+    QMAKE_BUNDLE_DATA += locale maps symbols icons csv lproj
 }
 
 win32 {
@@ -533,9 +535,9 @@ win32 {
 unix:!macx:!android {
     isEmpty(PREFIX):PREFIX = /usr/local
 
-    maps.files = $$files(pkg/maps/*)
+    maps.files = $$files(pkg/common/maps/*)
     maps.path = $$PREFIX/share/gpxsee/maps
-    csv.files = $$files(pkg/csv/*)
+    csv.files = $$files(pkg/common/csv/*)
     csv.path = $$PREFIX/share/gpxsee/csv
     symbols.files = $$files(icons/symbols/*.png)
     symbols.path = $$PREFIX/share/gpxsee/symbols
@@ -543,12 +545,14 @@ unix:!macx:!android {
     locale.path = $$PREFIX/share/gpxsee/translations
     icon.files = $$files(icons/app/hicolor/*)
     icon.path = $$PREFIX/share/icons/hicolor
-    desktop.files = pkg/gpxsee.desktop
+    desktop.files = pkg/linux/gpxsee.desktop
     desktop.path = $$PREFIX/share/applications
-    mime.files = pkg/gpxsee.xml
+    mime.files = pkg/linux/gpxsee.xml
     mime.path = $$PREFIX/share/mime/packages
+    appdata.files = pkg/linux/gpxsee.appdata.xml
+    appdata.path = $$PREFIX/share/metainfo
     target.path = $$PREFIX/bin
-    INSTALLS += target maps csv symbols locale icon desktop mime
+    INSTALLS += target maps csv symbols locale icon desktop mime appdata
 }
 
 android {
@@ -581,9 +585,9 @@ android {
         pkg/android/build.gradle \
         pkg/android/res/values/libs.xml
 
-    maps.files = $$files(pkg/maps/*)
+    maps.files = $$files(pkg/common/maps/*)
     maps.path = /assets/maps
-    csv.files = $$files(pkg/csv/*)
+    csv.files = $$files(pkg/common/csv/*)
     csv.path = /assets/csv
     symbols.files = $$files(icons/symbols/*.png)
     symbols.path = /assets/symbols
