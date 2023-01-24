@@ -1,7 +1,7 @@
 #/bin/bash
 
 for QM in ../../../lang/*.qm; do
-	LANG=`echo $QM | cut -d'_' -f2 | cut -d. -f1`
+	LANG=`echo $QM | sed s/.\*gpxsee_// | cut -d. -f1`
 	DIR=../lproj/$LANG.lproj
 	mkdir -p $DIR
 	echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
