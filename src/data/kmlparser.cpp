@@ -482,6 +482,7 @@ void KMLParser::track(SegmentData &segment)
 {
 	const char error[] = "gx:coord/when element count mismatch";
 	int i = 0;
+	bool empty = false;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("when")) {
@@ -495,6 +496,8 @@ void KMLParser::track(SegmentData &segment)
 				_reader.raiseError("Invalid coordinates");
 				return;
 			}
+			if (segment.at(i).coordinates().isNull())
+				empty = true;
 			i++;
 		} else if (_reader.name() == QLatin1String("ExtendedData"))
 			extendedData(segment);
@@ -507,10 +510,15 @@ void KMLParser::track(SegmentData &segment)
 		return;
 	}
 
-	// empty (invalid) coordinates are allowed per KML specification!
-	for (int i = 0; i < segment.size(); i++)
-		if (segment.at(i).coordinates().isNull())
-			segment.remove(i);
+	/* empty (invalid) coordinates are allowed per KML specification, but
+	   invalid in our data representation so get rid of the segment entries */
+	if (empty) {
+		SegmentData filtered;
+		for (int i = 0; i < segment.size(); i++)
+			if (!segment.at(i).coordinates().isNull())
+				filtered.append(segment.at(i));
+		segment = filtered;
+	}
 }
 
 void KMLParser::multiTrack(TrackData &t)
