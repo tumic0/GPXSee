@@ -482,9 +482,9 @@ macx {
     locale.path = Contents/Resources/translations
     locale.files = $$files(lang/*.qm)
     csv.path = Contents/Resources
-    csv.files = pkg/common/csv
+    csv.files = data/csv
     maps.path = Contents/Resources
-    maps.files = pkg/common/maps
+    maps.files = data/maps
     symbols.path = Contents/Resources/symbols
     symbols.files = $$files(icons/symbols/*.png)
     icons.path = Contents/Resources/icons
@@ -537,9 +537,9 @@ win32 {
 unix:!macx:!android {
     isEmpty(PREFIX):PREFIX = /usr/local
 
-    maps.files = $$files(pkg/common/maps/*)
+    maps.files = $$files(data/maps/*)
     maps.path = $$PREFIX/share/gpxsee/maps
-    csv.files = $$files(pkg/common/csv/*)
+    csv.files = $$files(data/csv/*)
     csv.path = $$PREFIX/share/gpxsee/csv
     symbols.files = $$files(icons/symbols/*.png)
     symbols.path = $$PREFIX/share/gpxsee/symbols
@@ -587,9 +587,9 @@ android {
         pkg/android/build.gradle \
         pkg/android/res/values/libs.xml
 
-    maps.files = $$files(pkg/common/maps/*)
+    maps.files = $$files(data/maps/*)
     maps.path = /assets/maps
-    csv.files = $$files(pkg/common/csv/*)
+    csv.files = $$files(data/csv/*)
     csv.path = /assets/csv
     symbols.files = $$files(icons/symbols/*.png)
     symbols.path = /assets/symbols

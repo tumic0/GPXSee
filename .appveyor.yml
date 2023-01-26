@@ -29,8 +29,8 @@ build_script:
     copy release\GPXSee.exe installer
     windeployqt --release installer\GPXSee.exe
     copy pkg\windows\gpxsee64.nsi installer
-    xcopy pkg\common\csv installer\csv /i
-    xcopy pkg\common\maps installer\maps /i
+    xcopy data\csv installer\csv /i
+    xcopy data\maps installer\maps /i
     xcopy lang\*.qm installer\translations\ /sy
     xcopy icons\symbols installer\symbols /i
     copy licence.txt installer

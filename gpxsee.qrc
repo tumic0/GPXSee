@@ -204,7 +204,7 @@
 
 	<!-- Mapsforge rendertheme -->
 	<qresource prefix="/mapsforge">
-		<file alias="default.xml">data/default.xml</file>
+		<file alias="default.xml">data/mapsforge/default.xml</file>
 
 		<file alias="patterns/hills.svg">icons/map/mapsforge/patterns/hills.svg</file>
 		<file alias="patterns/farmland.svg">icons/map/mapsforge/patterns/farmland.svg</file>
