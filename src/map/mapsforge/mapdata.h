@@ -4,7 +4,7 @@
 #include <QFile>
 #include <QCache>
 #include <QPainterPath>
-#include "common/config.h"
+#include "common/hash.h"
 #include "common/rectc.h"
 #include "common/rtree.h"
 #include "common/range.h"

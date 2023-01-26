@@ -4,7 +4,6 @@
 #include <QDebug>
 #include <QFile>
 #include <QHash>
-#include "common/config.h"
 #include "map.h"
 
 class AQMMap : public Map

@@ -7,7 +7,7 @@
 #include <QVector>
 #include <QPixmap>
 #include <QDebug>
-#include "common/config.h"
+#include "common/hash.h"
 #include "common/coordinates.h"
 #include "link.h"
 #include "style.h"

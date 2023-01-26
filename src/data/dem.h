@@ -4,7 +4,7 @@
 #include <QString>
 #include <QCache>
 #include <QByteArray>
-#include "common/config.h"
+#include "common/hash.h"
 #include "area.h"
 
 class QString;

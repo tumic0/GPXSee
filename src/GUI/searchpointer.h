@@ -1,7 +1,7 @@
 #ifndef SEARCHPOINTER_H
 #define SEARCHPOINTER_H
 
-#include "common/config.h"
+#include "common/hash.h"
 
 template <class T>
 class SearchPointer

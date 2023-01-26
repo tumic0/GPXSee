@@ -7,7 +7,6 @@
 #include <QList>
 #include <QFlags>
 #include "common/rectc.h"
-#include "common/config.h"
 #include "data/waypoint.h"
 #include "map/projection.h"
 #include "searchpointer.h"

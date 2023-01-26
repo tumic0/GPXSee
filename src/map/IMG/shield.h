@@ -2,7 +2,7 @@
 #define IMG_SHIELD_H
 
 #include <QString>
-#include "common/config.h"
+#include "common/hash.h"
 
 #define FIRST_SHIELD Shield::USInterstate
 #define LAST_SHIELD  Shield::Oval

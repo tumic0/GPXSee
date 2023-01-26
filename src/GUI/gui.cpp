@@ -26,6 +26,7 @@
 #include <QStyle>
 #include <QTabBar>
 #include <QGeoPositionInfoSource>
+#include "common/config.h"
 #include "common/programpaths.h"
 #include "common/downloader.h"
 #include "data/data.h"

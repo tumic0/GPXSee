@@ -28,10 +28,10 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 #endif
 	setApplicationVersion(APP_VERSION);
 
-	QTranslator *gpxsee = new QTranslator(this);
-	if (gpxsee->load(QLocale::system(), "gpxsee", "_",
+	QTranslator *app = new QTranslator(this);
+	if (app->load(QLocale::system(), "gpxsee", "_",
 	  ProgramPaths::translationsDir()))
-		installTranslator(gpxsee);
+		installTranslator(app);
 
 	QTranslator *qt = new QTranslator(this);
 #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)

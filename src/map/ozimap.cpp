@@ -8,7 +8,6 @@
 #include <QRegularExpression>
 #include "common/coordinates.h"
 #include "common/rectc.h"
-#include "common/config.h"
 #include "tar.h"
 #include "ozf.h"
 #include "image.h"

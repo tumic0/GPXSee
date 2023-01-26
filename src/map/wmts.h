@@ -6,7 +6,7 @@
 #include <QSet>
 #include <QList>
 #include <QHash>
-#include "common/config.h"
+#include "common/hash.h"
 #include "common/rectc.h"
 #include "common/kv.h"
 #include "common/downloader.h"
