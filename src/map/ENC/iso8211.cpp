@@ -5,6 +5,13 @@
 
 using namespace ENC;
 
+#define UINT16(x) \
+  (((quint16)*(const uchar*)(x)) \
+  | ((quint16)(*((const uchar*)(x) + 1)) << 8))
+
+#define INT32(x) ((qint32)UINT32(x))
+#define INT16(x) ((qint16)UINT16(x))
+
 struct DR {
 	char RecordLength[5];
 	char InterchangeLevel;
@@ -91,14 +98,14 @@ bool ISO8211::fieldType(const QString &str, int cnt, FieldType &type, int &size)
 	return true;
 }
 
-int ISO8211::readDR(QFile &file, QVector<FieldDefinition> &fields) const
+int ISO8211::readDR(QVector<FieldDefinition> &fields)
 {
 	DR ddr;
 	QByteArray fieldLen, fieldPos;
 	int len, lenSize, posSize, tagSize, offset;
 
 	static_assert(sizeof(ddr) == 24, "Invalid DR alignment");
-	if (file.read((char*)&ddr, sizeof(ddr)) != sizeof(ddr))
+	if (_file.read((char*)&ddr, sizeof(ddr)) != sizeof(ddr))
 		return -1;
 
 	len = Util::str2int(ddr.RecordLength, sizeof(ddr.RecordLength));
@@ -119,9 +126,9 @@ int ISO8211::readDR(QFile &file, QVector<FieldDefinition> &fields) const
 
 		r.tag.resize(tagSize);
 
-		if (file.read(r.tag.data(), tagSize) != tagSize
-		  || file.read(fieldLen.data(), lenSize) != lenSize
-		  || file.read(fieldPos.data(), posSize) != posSize)
+		if (_file.read(r.tag.data(), tagSize) != tagSize
+		  || _file.read(fieldLen.data(), lenSize) != lenSize
+		  || _file.read(fieldPos.data(), posSize) != posSize)
 			return -1;
 
 		r.pos = offset + Util::str2int(fieldPos.constData(), posSize);
@@ -134,13 +141,13 @@ int ISO8211::readDR(QFile &file, QVector<FieldDefinition> &fields) const
 	return len;
 }
 
-bool ISO8211::readDDA(QFile &file, const FieldDefinition &def, SubFields &fields)
+bool ISO8211::readDDA(const FieldDefinition &def, SubFields &fields)
 {
 	static QRegularExpression re("(\\d*)(\\w+)\\(*(\\d*)\\)*");
 	QByteArray ba;
 
 	ba.resize(def.size);
-	if (!(file.seek(def.pos) && file.read(ba.data(), ba.size()) == ba.size()))
+	if (!(_file.seek(def.pos) && _file.read(ba.data(), ba.size()) == ba.size()))
 		return false;
 
 	QList<QByteArray> list(ba.split('\x1f'));
@@ -197,7 +204,7 @@ bool ISO8211::readDDR()
 		return false;
 	}
 
-	int len = readDR(_file, fields);
+	int len = readDR(fields);
 	if (len < 0) {
 		_errorString = "Not a ISO8211 file";
 		return false;
@@ -205,7 +212,7 @@ bool ISO8211::readDDR()
 
 	for (int i = 0; i < fields.size(); i++) {
 		SubFields def;
-		if (!readDDA(_file, fields.at(i), def)) {
+		if (!readDDA(fields.at(i), def)) {
 			_errorString = QString("Error reading %1 DDA field")
 			  .arg(QString(fields.at(i).tag));
 			return false;
@@ -221,14 +228,14 @@ bool ISO8211::readDDR()
 	return true;
 }
 
-bool ISO8211::readUDA(QFile &file, quint64 pos, const FieldDefinition &def,
-  const SubFields &fields, Data &data) const
+bool ISO8211::readUDA(quint64 pos, const FieldDefinition &def,
+  const SubFields &fields, Data &data)
 {
 	QByteArray ba;
 
 	ba.resize(def.size);
-	if (!(file.seek(pos + def.pos)
-	  && file.read(ba.data(), ba.size()) == ba.size()))
+	if (!(_file.seek(pos + def.pos)
+	  && _file.read(ba.data(), ba.size()) == ba.size()))
 		return false;
 
 	const char *sp;
@@ -299,7 +306,7 @@ bool ISO8211::readRecord(Record &record)
 
 	QVector<FieldDefinition> fields;
 	qint64 pos = _file.pos();
-	int len = readDR(_file, fields);
+	int len = readDR(fields);
 
 	if (len < 0) {
 		_errorString = "Error reading DR";
@@ -321,7 +328,7 @@ bool ISO8211::readRecord(Record &record)
 
 		f.setTag(def.tag);
 
-		if (!readUDA(_file, pos, def, it.value(), f.rdata())) {
+		if (!readUDA(pos, def, it.value(), f.rdata())) {
 			_errorString = QString("Error reading %1 record")
 			  .arg(QString(def.tag));
 			return false;

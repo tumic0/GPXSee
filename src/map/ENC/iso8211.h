@@ -12,13 +12,6 @@
   | ((quint32)(*((const uchar*)(x) + 2)) << 16) \
   | ((quint32)(*((const uchar*)(x) + 3)) << 24))
 
-#define UINT16(x) \
-  (((quint16)*(const uchar*)(x)) \
-  | ((quint16)(*((const uchar*)(x) + 1)) << 8))
-
-#define INT32(x) ((qint32)UINT32(x))
-#define INT16(x) ((qint16)UINT16(x))
-
 namespace ENC {
 
 class ISO8211
@@ -113,10 +106,10 @@ private:
 	static bool fieldType(const QString &str, int cnt, FieldType &type,
 	  int &size);
 
-	int readDR(QFile &file, QVector<FieldDefinition> &fields) const;
-	bool readDDA(QFile &file, const FieldDefinition &def, SubFields &fields);
-	bool readUDA(QFile &file, quint64 pos, const FieldDefinition &def,
-	  const SubFields &fields, Data &data) const;
+	int readDR(QVector<FieldDefinition> &fields);
+	bool readDDA(const FieldDefinition &def, SubFields &fields);
+	bool readUDA(quint64 pos, const FieldDefinition &def,
+	  const SubFields &fields, Data &data);
 
 	QFile _file;
 	FieldsMap _map;
