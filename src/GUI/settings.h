@@ -2,12 +2,16 @@
 #define SETTINGS_H
 
 #include <QtGlobal>
+#include "common/config.h"
 
 #define IMPERIAL_UNITS() \
 	(QLocale::system().measurementSystem() == QLocale::ImperialSystem)
 #define POSITION_PLUGIN() \
 	(QGeoPositionInfoSource::availableSources().isEmpty() \
 	  ? "" : QGeoPositionInfoSource::availableSources().first())
+#define CURRENT_PATH(filename) \
+	QString("%1/" filename).arg(QDir::currentPath())
+
 
 #define WINDOW_SETTINGS_GROUP             "Window"
 #define WINDOW_GEOMETRY_SETTING           "geometry"
@@ -105,8 +109,7 @@
 #define PDF_MARGIN_BOTTOM_SETTING         "marginBottom"
 #define PDF_MARGIN_BOTTOM_DEFAULT         5 /* mm */
 #define PDF_FILENAME_SETTING              "fileName"
-#define PDF_FILENAME_DEFAULT              QString("%1/export.pdf"). \
-                                            arg(QDir::currentPath())
+#define PDF_FILENAME_DEFAULT              CURRENT_PATH("export.pdf")
 #define RESOLUTION_SETTING                "resolution"
 #define RESOLUTION_DEFAULT                600
 
@@ -126,8 +129,7 @@
 #define PNG_ANTIALIASING_SETTING          "antialiasing"
 #define PNG_ANTIALIASING_DEFAULT          true
 #define PNG_FILENAME_SETTING              "fileName"
-#define PNG_FILENAME_DEFAULT              QString("%1/export.png"). \
-											arg(QDir::currentPath())
+#define PNG_FILENAME_DEFAULT              CURRENT_PATH("export.png")
 
 #define OPTIONS_SETTINGS_GROUP            "Options"
 #define PALETTE_COLOR_SETTING             "paletteColor"
@@ -204,7 +206,7 @@
 #define POI_RADIUS_SETTING                "poiRadius"
 #define POI_RADIUS_DEFAULT                (int)(IMPERIAL_UNITS() ? MIINM : KMINM)
 #define DEM_URL_SETTING                   "demURL"
-#define DEM_URL_DEFAULT                   "http://dem.gpxsee.org/$lat/$lat$lon.hgt.zip"
+#define DEM_URL_DEFAULT                   DEM_TILES_URL
 #define DEM_AUTH_SETTING                  "demAuthentication"
 #define DEM_AUTH_DEFAULT                  false
 #define DEM_USERNAME_SETTING              "demUsername"
