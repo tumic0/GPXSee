@@ -37,7 +37,7 @@ jobs:
           version: '6.4.0'
           target: 'android'
           arch: 'android_armv7'
-          modules: qtpositioning qt5compat
+          modules: qtpositioning qt5compat serialport
       - name: Install Android OpenSSL
         run:  git clone https://github.com/KDAB/android_openssl.git
       - name: Create localization
