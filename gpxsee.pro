@@ -14,7 +14,8 @@ QT += core \
     widgets \
     printsupport \
     positioning \
-    svg
+    svg \
+    serialport
 greaterThan(QT_MAJOR_VERSION, 5) {
     QT += openglwidgets \
           core5compat
