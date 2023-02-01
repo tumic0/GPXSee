@@ -10,7 +10,7 @@
 	(QGeoPositionInfoSource::availableSources().isEmpty() \
 	  ? "" : QGeoPositionInfoSource::availableSources().first())
 #define CURRENT_PATH(filename) \
-	QString("%1/" filename).arg(QDir::currentPath())
+	QDir::current().filePath(filename)
 
 
 #define WINDOW_SETTINGS_GROUP             "Window"
