@@ -2641,8 +2641,8 @@ void GUI::writeSettings()
 		settings.setValue(DEM_USERNAME_SETTING, _options.demUsername);
 	if (_options.demPassword != DEM_PASSWORD_DEFAULT)
 		settings.setValue(DEM_PASSWORD_SETTING, _options.demPassword);
-	// the plugins order is random so always store the value
-	settings.setValue(POSITION_PLUGIN_SETTING, _options.plugin);
+	if (_options.plugin != POSITION_PLUGIN_DEFAULT)
+		settings.setValue(POSITION_PLUGIN_SETTING, _options.plugin);
 	index = 0;
 	for (QMap<QString, QVariantMap>::const_iterator it
 	  = _options.pluginParams.constBegin();

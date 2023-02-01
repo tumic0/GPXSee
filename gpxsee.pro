@@ -263,6 +263,7 @@ SOURCES += src/main.cpp \
     src/GUI/motioninfoitem.cpp \
     src/GUI/navigationwidget.cpp \
     src/GUI/pluginparameters.cpp \
+    src/GUI/settings.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
     src/common/range.cpp \

@@ -2,6 +2,7 @@
 #define MARKERINFOITEM_H
 
 #include <QGraphicsItem>
+#include <QFont>
 #include "format.h"
 
 class Coordinates;

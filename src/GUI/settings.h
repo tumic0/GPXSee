@@ -1,14 +1,21 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <QtGlobal>
+#include <QLocale>
+#include <QDir>
+#include <QPageLayout>
+#include <QPageSize>
 #include "common/config.h"
+#include "common/util.h"
+#include "data/graph.h"
+#include "format.h"
+#include "units.h"
+#include "timetype.h"
+#include "markerinfoitem.h"
+
 
 #define IMPERIAL_UNITS() \
 	(QLocale::system().measurementSystem() == QLocale::ImperialSystem)
-#define POSITION_PLUGIN() \
-	(QGeoPositionInfoSource::availableSources().isEmpty() \
-	  ? "" : QGeoPositionInfoSource::availableSources().first())
 #define CURRENT_PATH(filename) \
 	QDir::current().filePath(filename)
 
@@ -214,7 +221,7 @@
 #define DEM_PASSWORD_SETTING              "demPassword"
 #define DEM_PASSWORD_DEFAULT              ""
 #define POSITION_PLUGIN_SETTING           "positionPlugin"
-#define POSITION_PLUGIN_DEFAULT           POSITION_PLUGIN()
+#define POSITION_PLUGIN_DEFAULT           Settings::positionPlugin()
 #define POSITION_PLUGIN_PARAMS_PREFIX     "pluginParameters"
 #define POSITION_PLUGIN_PARAMS_PLUGIN     "plugin"
 #define POSITION_PLUGIN_PARAMS_PARAM      "parameters"
@@ -255,10 +262,15 @@
 #define HIDPI_MAP_SETTING                 "HiDPIMap"
 #define HIDPI_MAP_DEFAULT                 true
 #define DATA_PATH_SETTING                 "dataPath"
-#define DATA_PATH_DEFAULT                 QString()
+#define DATA_PATH_DEFAULT                 ""
 #define MAPS_PATH_SETTING                 "mapsPath"
-#define MAPS_PATH_DEFAULT                 QString()
+#define MAPS_PATH_DEFAULT                 ""
 #define POI_PATH_SETTING                  "poiPath"
-#define POI_PATH_DEFAULT                  QString()
+#define POI_PATH_DEFAULT                  ""
+
+namespace Settings
+{
+    const QString &positionPlugin();
+}
 
 #endif // SETTINGS_H

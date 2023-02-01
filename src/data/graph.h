@@ -3,6 +3,7 @@
 
 #include <QList>
 #include <QVector>
+#include <QColor>
 #include <QDebug>
 #include <cmath>
 
