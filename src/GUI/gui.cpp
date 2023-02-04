@@ -366,10 +366,10 @@ void GUI::createActions()
 	_showPositionCoordinatesAction->setCheckable(true);
 	connect(_showPositionCoordinatesAction, &QAction::triggered, _mapView,
 	  &MapView::showPositionCoordinates);
-	_showMotionInfo = new QAction(tr("Show motion info"), this);
-	_showMotionInfo->setMenuRole(QAction::NoRole);
-	_showMotionInfo->setCheckable(true);
-	connect(_showMotionInfo, &QAction::triggered, _mapView,
+	_showMotionInfoAction = new QAction(tr("Show motion info"), this);
+	_showMotionInfoAction->setMenuRole(QAction::NoRole);
+	_showMotionInfoAction->setCheckable(true);
+	connect(_showMotionInfoAction, &QAction::triggered, _mapView,
 	  &MapView::showMotionInfo);
 
 	// Data actions
@@ -686,7 +686,7 @@ void GUI::createMenus()
 
 	QMenu *positionMenu = menuBar()->addMenu(tr("Position"));
 	positionMenu->addAction(_showPositionCoordinatesAction);
-	positionMenu->addAction(_showMotionInfo);
+	positionMenu->addAction(_showMotionInfoAction);
 	positionMenu->addAction(_followPositionAction);
 	positionMenu->addSeparator();
 	positionMenu->addAction(_showPositionAction);
@@ -769,7 +769,7 @@ void GUI::createToolBars()
 void GUI::createMapView()
 {
 	_map = new EmptyMap(this);
-	_mapView = new MapView(_map, _poi, 0, this);
+	_mapView = new MapView(_map, _poi, this);
 	_mapView->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,
 	  QSizePolicy::Expanding));
 #ifdef Q_OS_ANDROID
@@ -1123,140 +1123,13 @@ bool GUI::openPOIFile(const QString &fileName)
 
 void GUI::openOptions()
 {
-#define SET_VIEW_OPTION(option, action) \
-	if (options.option != _options.option) \
-		_mapView->action(options.option)
-#define SET_TAB_OPTION(option, action) \
-	if (options.option != _options.option) \
-		for (int i = 0; i < _tabs.count(); i++) \
-			_tabs.at(i)->action(options.option)
-#define SET_TRACK_OPTION(option, action) \
-	if (options.option != _options.option) { \
-		Track::action(options.option); \
-		reload = true; \
-	}
-#define SET_ROUTE_OPTION(option, action) \
-	if (options.option != _options.option) { \
-		Route::action(options.option); \
-		reload = true; \
-	}
-#define SET_WAYPOINT_OPTION(option, action) \
-	if (options.option != _options.option) { \
-		Waypoint::action(options.option); \
-		reload = true; \
-	}
-
 	Options options(_options);
-	bool reload = false;
-
 	OptionsDialog dialog(options, _units, this);
+
 	if (dialog.exec() != QDialog::Accepted)
 		return;
 
-	SET_VIEW_OPTION(palette, setPalette);
-	SET_VIEW_OPTION(mapOpacity, setMapOpacity);
-	SET_VIEW_OPTION(backgroundColor, setBackgroundColor);
-	SET_VIEW_OPTION(trackWidth, setTrackWidth);
-	SET_VIEW_OPTION(routeWidth, setRouteWidth);
-	SET_VIEW_OPTION(areaWidth, setAreaWidth);
-	SET_VIEW_OPTION(trackStyle, setTrackStyle);
-	SET_VIEW_OPTION(routeStyle, setRouteStyle);
-	SET_VIEW_OPTION(areaStyle, setAreaStyle);
-	SET_VIEW_OPTION(areaOpacity, setAreaOpacity);
-	SET_VIEW_OPTION(waypointSize, setWaypointSize);
-	SET_VIEW_OPTION(waypointColor, setWaypointColor);
-	SET_VIEW_OPTION(poiSize, setPOISize);
-	SET_VIEW_OPTION(poiColor, setPOIColor);
-	SET_VIEW_OPTION(pathAntiAliasing, useAntiAliasing);
-	SET_VIEW_OPTION(useOpenGL, useOpenGL);
-	SET_VIEW_OPTION(sliderColor, setMarkerColor);
-	SET_VIEW_OPTION(crosshairColor, setCrosshairColor);
-	SET_VIEW_OPTION(infoColor, setInfoColor);
-	SET_VIEW_OPTION(infoBackground, drawInfoBackground);
-
-	if (options.plugin != _options.plugin
-	  || options.pluginParams.value(options.plugin)
-	  != _options.pluginParams.value(_options.plugin)) {
-		QGeoPositionInfoSource *source = positionSource(options);
-		_showPositionAction->setEnabled(source != 0);
-		_mapView->setPositionSource(source);
-		delete _positionSource;
-		_positionSource = source;
-	}
-
-	if (options.hidpiMap != _options.hidpiMap)
-		_mapView->setDevicePixelRatio(devicePixelRatioF(),
-		  options.hidpiMap ? devicePixelRatioF() : 1.0);
-	if (options.outputProjection != _options.outputProjection)
-		_mapView->setOutputProjection(CRS::projection(options.outputProjection));
-	if (options.inputProjection != _options.inputProjection)
-		_mapView->setInputProjection(CRS::projection(options.inputProjection));
-	if (options.timeZone != _options.timeZone) {
-		_mapView->setTimeZone(options.timeZone.zone());
-		_dateRange.first = _dateRange.first.toTimeZone(options.timeZone.zone());
-		_dateRange.second = _dateRange.second.toTimeZone(options.timeZone.zone());
-	}
-
-	SET_TAB_OPTION(palette, setPalette);
-	SET_TAB_OPTION(graphWidth, setGraphWidth);
-	SET_TAB_OPTION(graphAntiAliasing, useAntiAliasing);
-	SET_TAB_OPTION(useOpenGL, useOpenGL);
-	SET_TAB_OPTION(sliderColor, setSliderColor);
-
-	SET_TRACK_OPTION(elevationFilter, setElevationFilter);
-	SET_TRACK_OPTION(speedFilter, setSpeedFilter);
-	SET_TRACK_OPTION(heartRateFilter, setHeartRateFilter);
-	SET_TRACK_OPTION(cadenceFilter, setCadenceFilter);
-	SET_TRACK_OPTION(powerFilter, setPowerFilter);
-	SET_TRACK_OPTION(outlierEliminate, setOutlierElimination);
-	SET_TRACK_OPTION(automaticPause, setAutomaticPause);
-	SET_TRACK_OPTION(pauseSpeed, setPauseSpeed);
-	SET_TRACK_OPTION(pauseInterval, setPauseInterval);
-	SET_TRACK_OPTION(useReportedSpeed, useReportedSpeed);
-	SET_TRACK_OPTION(dataUseDEM, useDEM);
-	SET_TRACK_OPTION(showSecondaryElevation, showSecondaryElevation);
-	SET_TRACK_OPTION(showSecondarySpeed, showSecondarySpeed);
-	SET_TRACK_OPTION(useSegments, useSegments);
-
-	SET_ROUTE_OPTION(dataUseDEM, useDEM);
-	SET_ROUTE_OPTION(showSecondaryElevation, showSecondaryElevation);
-
-	SET_WAYPOINT_OPTION(dataUseDEM, useDEM);
-	SET_WAYPOINT_OPTION(showSecondaryElevation, showSecondaryElevation);
-
-	if (options.poiRadius != _options.poiRadius)
-		_poi->setRadius(options.poiRadius);
-
-	if (options.demURL != _options.demURL)
-		_dem->setUrl(options.demURL);
-	if (options.demAuthorization != _options.demAuthorization
-	  || options.demUsername != _options.demUsername
-	  || options.demPassword != _options.demPassword)
-		_dem->setAuthorization(options.demAuthorization
-		  ? Authorization(options.demUsername, options.demPassword)
-		  : Authorization());
-
-	if (options.pixmapCache != _options.pixmapCache)
-		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
-
-	if (options.connectionTimeout != _options.connectionTimeout)
-		Downloader::setTimeout(options.connectionTimeout);
-	if (options.enableHTTP2 != _options.enableHTTP2)
-		Downloader::enableHTTP2(options.enableHTTP2);
-
-	if (options.dataPath != _options.dataPath)
-		_dataDir = options.dataPath;
-	if (options.mapsPath != _options.mapsPath)
-		_mapDir = options.mapsPath;
-	if (options.poiPath != _options.poiPath)
-		_poiDir = options.poiPath;
-
-	if (reload)
-		reloadFiles();
-
-	_options = options;
-
-	updateDEMDownloadAction();
+	updateOptions(options);
 }
 
 void GUI::printFile()
@@ -1384,6 +1257,7 @@ void GUI::statistics()
 	msgBox.setText(text);
 
 #else // Q_OS_ANDROID
+
 #ifdef Q_OS_WIN32
 	text = "<style>td {white-space: pre; padding-right: 4em;}"
 	  "th {text-align: left; padding-top: 0.5em;}</style><table>";
@@ -2371,690 +2245,483 @@ QGeoPositionInfoSource *GUI::positionSource(const Options &options)
 
 void GUI::writeSettings()
 {
-	int index;
+#define WRITE(name, value) \
+	Settings::name.write(settings, value);
 
 	QSettings settings(qApp->applicationName(), qApp->applicationName());
 	settings.clear();
 
+	/* Window */
 #ifndef Q_OS_ANDROID
-	settings.beginGroup(WINDOW_SETTINGS_GROUP);
+	settings.beginGroup(SETTINGS_WINDOW);
 	if (!_windowStates.isEmpty() && !_windowGeometries.isEmpty()) {
-		settings.setValue(WINDOW_STATE_SETTING, _windowStates.first());
-		settings.setValue(WINDOW_GEOMETRY_SETTING, _windowGeometries.first());
+		WRITE(windowState, _windowStates.first());
+		WRITE(windowGeometry, _windowGeometries.first());
 	} else {
-		settings.setValue(WINDOW_STATE_SETTING, saveState());
-		settings.setValue(WINDOW_GEOMETRY_SETTING, saveGeometry());
+		WRITE(windowState, saveState());
+		WRITE(windowGeometry, saveGeometry());
 	}
 	settings.endGroup();
 #endif // Q_OS_ANDROID
 
-	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
-	if ((_movingTimeAction->isChecked() ? Moving : Total) !=
-	  TIME_TYPE_DEFAULT)
-		settings.setValue(TIME_TYPE_SETTING, _movingTimeAction->isChecked()
-		  ? Moving : Total);
-	Units units = _imperialUnitsAction->isChecked() ? Imperial
-	  : _nauticalUnitsAction->isChecked() ? Nautical : Metric;
-	if (units != UNITS_DEFAULT)
-		settings.setValue(UNITS_SETTING, units);
-	CoordinatesFormat format = _dmsAction->isChecked() ? DMS
-	  : _degreesMinutesAction->isChecked() ? DegreesMinutes : DecimalDegrees;
-	if (format != COORDINATES_DEFAULT)
-		settings.setValue(COORDINATES_SETTING, format);
+	/* Settings */
+	settings.beginGroup(SETTINGS_SETTINGS);
+	WRITE(timeType, _movingTimeAction->isChecked() ? Moving : Total);
+	WRITE(units, _imperialUnitsAction->isChecked()
+	  ? Imperial : _nauticalUnitsAction->isChecked()
+	  ? Nautical : Metric);
+	WRITE(coordinatesFormat, _dmsAction->isChecked()
+	  ? DMS : _degreesMinutesAction->isChecked()
+	  ? DegreesMinutes : DecimalDegrees);
 #ifndef Q_OS_ANDROID
-	if (_showToolbarsAction->isChecked() != SHOW_TOOLBARS_DEFAULT)
-		settings.setValue(SHOW_TOOLBARS_SETTING,
-		  _showToolbarsAction->isChecked());
+	WRITE(showToolbars, _showToolbarsAction->isChecked());
 #endif // Q_OS_ANDROID
 	settings.endGroup();
 
-	settings.beginGroup(MAP_SETTINGS_GROUP);
-	settings.setValue(CURRENT_MAP_SETTING, _map->name());
-	if (_showMapAction->isChecked() != SHOW_MAP_DEFAULT)
-		settings.setValue(SHOW_MAP_SETTING, _showMapAction->isChecked());
-	if (_showCoordinatesAction->isChecked() != SHOW_CURSOR_COORDINATES_DEFAULT)
-		settings.setValue(SHOW_CURSOR_COORDINATES_SETTING,
-		  _showCoordinatesAction->isChecked());
+	/* Map */
+	settings.beginGroup(SETTINGS_MAP);
+	WRITE(activeMap, _map->name());
+	WRITE(showMap, _showMapAction->isChecked());
+	WRITE(cursorCoordinates, _showCoordinatesAction->isChecked());
 	settings.endGroup();
 
-	settings.beginGroup(GRAPH_SETTINGS_GROUP);
-	if (_showGraphsAction->isChecked() != SHOW_GRAPHS_DEFAULT)
-		settings.setValue(SHOW_GRAPHS_SETTING, _showGraphsAction->isChecked());
-	if ((_timeGraphAction->isChecked() ? Time : Distance) != GRAPH_TYPE_DEFAULT)
-		settings.setValue(GRAPH_TYPE_SETTING, _timeGraphAction->isChecked()
-		  ? Time : Distance);
-	if (_showGraphGridAction->isChecked() != SHOW_GRAPH_GRIDS_DEFAULT)
-		settings.setValue(SHOW_GRAPH_GRIDS_SETTING,
-		  _showGraphGridAction->isChecked());
-	if (_showGraphSliderInfoAction->isChecked()
-	  != SHOW_GRAPH_SLIDER_INFO_DEFAULT)
-		settings.setValue(SHOW_GRAPH_SLIDER_INFO_SETTING,
-		  _showGraphSliderInfoAction->isChecked());
+	/* Graph */
+	settings.beginGroup(SETTINGS_GRAPH);
+	WRITE(showGraphs, _showGraphsAction->isChecked());
+	WRITE(graphType, _timeGraphAction->isChecked() ? Time : Distance);
+	WRITE(showGrid, _showGraphGridAction->isChecked());
+	WRITE(sliderInfo, _showGraphSliderInfoAction->isChecked());
 #ifdef Q_OS_ANDROID
-	if (_showGraphTabsAction->isChecked() != SHOW_GRAPH_TABS_DEFAULT)
-		settings.setValue(SHOW_GRAPH_TABS_SETTING,
-		  _showGraphTabsAction->isChecked());
+	WRITE(showGraphTabs, _showGraphTabsAction->isChecked());
 #endif // Q_OS_ANDROID
 	settings.endGroup();
 
-	settings.beginGroup(POI_SETTINGS_GROUP);
-	if (_showPOIAction->isChecked() != SHOW_POI_DEFAULT)
-		settings.setValue(SHOW_POI_SETTING, _showPOIAction->isChecked());
-	if (_overlapPOIAction->isChecked() != OVERLAP_POI_DEFAULT)
-		settings.setValue(OVERLAP_POI_SETTING, _overlapPOIAction->isChecked());
-	if (_showPOILabelsAction->isChecked() != SHOW_POI_LABELS_DEFAULT)
-		settings.setValue(SHOW_POI_LABELS_SETTING,
-		  _showPOILabelsAction->isChecked());
-	if (_showPOIIconsAction->isChecked() != SHOW_POI_ICONS_DEFAULT)
-		settings.setValue(SHOW_POI_ICONS_SETTING,
-		  _showPOIIconsAction->isChecked());
+	/* POI */
+	QList<QAction*> actions(_poisActionGroup->actions());
+	QStringList disabled;
+	for (int i = 0; i < actions.size(); i++)
+		if (!actions.at(i)->isChecked())
+			disabled.append(actions.at(i)->data().toString());
 
-	index = 0;
-	QList<QAction*> poiActions(_poisActionGroup->actions());
-	for (int i = 0; i < poiActions.count(); i++) {
-		POIAction *a = static_cast<POIAction*>(poiActions.at(i));
-		if (!a->isChecked()) {
-			if (index == 0)
-				settings.beginWriteArray(DISABLED_POI_FILE_SETTINGS_PREFIX);
-			settings.setArrayIndex(index++);
-			settings.setValue(DISABLED_POI_FILE_SETTING, a->data().toString());
-		}
-	}
-	if (index != 0)
-		settings.endArray();
+	settings.beginGroup(SETTINGS_POI);
+	WRITE(showPoi, _showPOIAction->isChecked());
+	WRITE(poiOverlap, _overlapPOIAction->isChecked());
+	WRITE(poiLabels, _showPOILabelsAction->isChecked());
+	WRITE(poiIcons, _showPOIIconsAction->isChecked());
+	WRITE(disabledPoiFiles, disabled);
 	settings.endGroup();
 
-	settings.beginGroup(POSITION_SETTINGS_GROUP);
-	if (_showPositionAction->isChecked() != SHOW_POSITION_DEFAULT)
-		settings.setValue(SHOW_POSITION_SETTING,
-		  _showPositionAction->isChecked());
-	if (_followPositionAction->isChecked() != FOLLOW_POSITION_DEFAULT)
-		settings.setValue(FOLLOW_POSITION_SETTING,
-		  _followPositionAction->isChecked());
-	if (_showPositionCoordinatesAction->isChecked()
-	  != SHOW_POSITION_COORDINATES_DEFAULT)
-		settings.setValue(SHOW_POSITION_COORDINATES_SETTING,
-		  _showPositionCoordinatesAction->isChecked());
-	if (_showMotionInfo->isChecked() != SHOW_MOTION_INFO_DEFAULT)
-		settings.setValue(SHOW_MOTION_INFO_SETTING,
-		  _showMotionInfo->isChecked());
-	settings.endGroup();
+	/* Data */
+	MarkerInfoItem::Type mi;
+	if (_showMarkerDateAction->isChecked())
+		mi = MarkerInfoItem::Date;
+	else if (_showMarkerCoordinatesAction->isChecked())
+		mi = MarkerInfoItem::Position;
+	else
+		mi = MarkerInfoItem::None;
 
-	settings.beginGroup(DATA_SETTINGS_GROUP);
-	if (_showTracksAction->isChecked() != SHOW_TRACKS_DEFAULT)
-		settings.setValue(SHOW_TRACKS_SETTING, _showTracksAction->isChecked());
-	if (_showRoutesAction->isChecked() != SHOW_ROUTES_DEFAULT)
-		settings.setValue(SHOW_ROUTES_SETTING, _showRoutesAction->isChecked());
-	if (_showWaypointsAction->isChecked() != SHOW_WAYPOINTS_DEFAULT)
-		settings.setValue(SHOW_WAYPOINTS_SETTING,
-		  _showWaypointsAction->isChecked());
-	if (_showAreasAction->isChecked() != SHOW_AREAS_DEFAULT)
-		settings.setValue(SHOW_AREAS_SETTING, _showAreasAction->isChecked());
-	if (_showWaypointIconsAction->isChecked() != SHOW_WAYPOINT_ICONS_DEFAULT)
-		settings.setValue(SHOW_WAYPOINT_ICONS_SETTING,
-		  _showWaypointIconsAction->isChecked());
-	if (_showWaypointLabelsAction->isChecked() != SHOW_WAYPOINT_LABELS_DEFAULT)
-		settings.setValue(SHOW_WAYPOINT_LABELS_SETTING,
-		  _showWaypointLabelsAction->isChecked());
-	if (_showRouteWaypointsAction->isChecked() != SHOW_ROUTE_WAYPOINTS_DEFAULT)
-		settings.setValue(SHOW_ROUTE_WAYPOINTS_SETTING,
-		  _showRouteWaypointsAction->isChecked());
-	if (_showTicksAction->isChecked() != SHOW_TICKS_DEFAULT)
-		settings.setValue(SHOW_TICKS_SETTING,
-		  _showTicksAction->isChecked());
-	bool sm = _showMarkersAction->isChecked()
+	settings.beginGroup(SETTINGS_DATA);
+	WRITE(tracks, _showTracksAction->isChecked());
+	WRITE(routes, _showRoutesAction->isChecked());
+	WRITE(waypoints, _showWaypointsAction->isChecked());
+	WRITE(areas, _showAreasAction->isChecked());
+	WRITE(waypointIcons, _showWaypointIconsAction->isChecked());
+	WRITE(waypointLabels, _showWaypointLabelsAction->isChecked());
+	WRITE(routeWaypoints, _showRouteWaypointsAction->isChecked());
+	WRITE(pathTicks, _showTicksAction->isChecked());
+	WRITE(positionMarkers, _showMarkersAction->isChecked()
 	  || _showMarkerDateAction->isChecked()
-	  || _showMarkerCoordinatesAction->isChecked();
-	if (sm != SHOW_MARKERS_DEFAULT)
-		settings.setValue(SHOW_MARKERS_SETTING, sm);
-	if (_showMarkerDateAction->isChecked()
-	  && SHOW_MARKER_INFO_DEFAULT != MarkerInfoItem::Date)
-		settings.setValue(SHOW_MARKER_INFO_SETTING, MarkerInfoItem::Date);
-	else if (_showMarkerCoordinatesAction->isChecked()
-	  && SHOW_MARKER_INFO_DEFAULT != MarkerInfoItem::Position)
-		settings.setValue(SHOW_MARKER_INFO_SETTING, MarkerInfoItem::Position);
-	if (_useStylesAction->isChecked() != USE_STYLES_DEFAULT)
-		settings.setValue(USE_STYLES_SETTING, _useStylesAction->isChecked());
+	  || _showMarkerCoordinatesAction->isChecked());
+	WRITE(markerInfo, mi);
+	WRITE(useStyles, _useStylesAction->isChecked());
 	settings.endGroup();
 
-	settings.beginGroup(PDF_EXPORT_SETTINGS_GROUP);
-	if (_pdfExport.orientation != PAPER_ORIENTATION_DEFAULT)
-		settings.setValue(PAPER_ORIENTATION_SETTING, _pdfExport.orientation);
-	if (_pdfExport.resolution != RESOLUTION_DEFAULT)
-		settings.setValue(RESOLUTION_SETTING, _pdfExport.resolution);
-	if (_pdfExport.paperSize != PAPER_SIZE_DEFAULT)
-		settings.setValue(PAPER_SIZE_SETTING, _pdfExport.paperSize);
-	if (_pdfExport.margins.left() != PDF_MARGIN_LEFT_DEFAULT)
-		settings.setValue(PDF_MARGIN_LEFT_SETTING, _pdfExport.margins.left());
-	if (_pdfExport.margins.top() != PDF_MARGIN_TOP_DEFAULT)
-		settings.setValue(PDF_MARGIN_TOP_SETTING, _pdfExport.margins.top());
-	if (_pdfExport.margins.right() != PDF_MARGIN_RIGHT_DEFAULT)
-		settings.setValue(PDF_MARGIN_RIGHT_SETTING, _pdfExport.margins.right());
-	if (_pdfExport.margins.bottom() != PDF_MARGIN_BOTTOM_DEFAULT)
-		settings.setValue(PDF_MARGIN_BOTTOM_SETTING, _pdfExport.margins.bottom());
-	if (_pdfExport.fileName != PDF_FILENAME_DEFAULT)
-		settings.setValue(PDF_FILENAME_SETTING, _pdfExport.fileName);
+	/* Position */
+	settings.beginGroup(SETTINGS_POSITION);
+	WRITE(showPosition, _showPositionAction->isChecked());
+	WRITE(followPosition, _followPositionAction->isChecked());
+	WRITE(positionCoordinates, _showPositionCoordinatesAction->isChecked());
+	WRITE(motionInfo, _showMotionInfoAction->isChecked());
 	settings.endGroup();
 
-	settings.beginGroup(PNG_EXPORT_SETTINGS_GROUP);
-	if (_pngExport.size.width() != PNG_WIDTH_DEFAULT)
-		settings.setValue(PNG_WIDTH_SETTING, _pngExport.size.width());
-	if (_pngExport.size.height() != PNG_HEIGHT_DEFAULT)
-		settings.setValue(PNG_HEIGHT_SETTING, _pngExport.size.height());
-	if (_pngExport.margins.left() != PNG_MARGIN_LEFT_DEFAULT)
-		settings.setValue(PNG_MARGIN_LEFT_SETTING, _pngExport.margins.left());
-	if (_pngExport.margins.top() != PNG_MARGIN_TOP_DEFAULT)
-		settings.setValue(PNG_MARGIN_TOP_SETTING, _pngExport.margins.top());
-	if (_pngExport.margins.right() != PNG_MARGIN_RIGHT_DEFAULT)
-		settings.setValue(PNG_MARGIN_RIGHT_SETTING, _pngExport.margins.right());
-	if (_pngExport.margins.bottom() != PNG_MARGIN_BOTTOM_DEFAULT)
-		settings.setValue(PNG_MARGIN_BOTTOM_SETTING, _pngExport.margins.bottom());
-	if (_pngExport.antialiasing != PNG_ANTIALIASING_DEFAULT)
-		settings.setValue(PNG_ANTIALIASING_SETTING, _pngExport.antialiasing);
-	if (_pngExport.fileName != PNG_FILENAME_DEFAULT)
-		settings.setValue(PNG_FILENAME_SETTING, _pngExport.fileName);
+	/* PDF export */
+	settings.beginGroup(SETTINGS_PDF_EXPORT);
+	WRITE(pdfOrientation, _pdfExport.orientation);
+	WRITE(pdfResolution, _pdfExport.resolution);
+	WRITE(pdfSize, _pdfExport.paperSize);
+	WRITE(pdfMarginLeft, _pdfExport.margins.left());
+	WRITE(pdfMarginTop, _pdfExport.margins.top());
+	WRITE(pdfMarginRight, _pdfExport.margins.right());
+	WRITE(pdfMarginBottom, _pdfExport.margins.bottom());
+	WRITE(pdfFileName, _pdfExport.fileName);
 	settings.endGroup();
 
-	settings.beginGroup(OPTIONS_SETTINGS_GROUP);
-	if (_options.palette.color() != PALETTE_COLOR_DEFAULT)
-		settings.setValue(PALETTE_COLOR_SETTING, _options.palette.color());
-	if (_options.palette.shift() != PALETTE_SHIFT_DEFAULT)
-		settings.setValue(PALETTE_SHIFT_SETTING, _options.palette.shift());
-	if (_options.mapOpacity != MAP_OPACITY_DEFAULT)
-		settings.setValue(MAP_OPACITY_SETTING, _options.mapOpacity);
-	if (_options.backgroundColor != BACKGROUND_COLOR_DEFAULT)
-		settings.setValue(BACKGROUND_COLOR_SETTING, _options.backgroundColor);
-	if (_options.crosshairColor != CROSSHAIR_COLOR_DEFAULT)
-		settings.setValue(CROSSHAIR_COLOR_SETTING, _options.crosshairColor);
-	if (_options.infoColor != INFO_COLOR_DEFAULT)
-		settings.setValue(INFO_COLOR_SETTING, _options.infoColor);
-	if (_options.infoBackground != INFO_BACKGROUND_DEFAULT)
-		settings.setValue(INFO_BACKGROUND_SETTING, _options.infoBackground);
-	if (_options.trackWidth != TRACK_WIDTH_DEFAULT)
-		settings.setValue(TRACK_WIDTH_SETTING, _options.trackWidth);
-	if (_options.routeWidth != ROUTE_WIDTH_DEFAULT)
-		settings.setValue(ROUTE_WIDTH_SETTING, _options.routeWidth);
-	if (_options.areaWidth != AREA_WIDTH_DEFAULT)
-		settings.setValue(AREA_WIDTH_SETTING, _options.areaWidth);
-	if (_options.trackStyle != TRACK_STYLE_DEFAULT)
-		settings.setValue(TRACK_STYLE_SETTING, (int)_options.trackStyle);
-	if (_options.routeStyle != ROUTE_STYLE_DEFAULT)
-		settings.setValue(ROUTE_STYLE_SETTING, (int)_options.routeStyle);
-	if (_options.areaStyle != AREA_STYLE_DEFAULT)
-		settings.setValue(AREA_STYLE_SETTING, (int)_options.areaStyle);
-	if (_options.areaOpacity != AREA_OPACITY_DEFAULT)
-		settings.setValue(AREA_OPACITY_SETTING, (int)_options.areaOpacity);
-	if (_options.waypointSize != WAYPOINT_SIZE_DEFAULT)
-		settings.setValue(WAYPOINT_SIZE_SETTING, _options.waypointSize);
-	if (_options.waypointColor != WAYPOINT_COLOR_DEFAULT)
-		settings.setValue(WAYPOINT_COLOR_SETTING, _options.waypointColor);
-	if (_options.poiSize != POI_SIZE_DEFAULT)
-		settings.setValue(POI_SIZE_SETTING, _options.poiSize);
-	if (_options.poiColor != POI_COLOR_DEFAULT)
-		settings.setValue(POI_COLOR_SETTING, _options.poiColor);
-	if (_options.graphWidth != GRAPH_WIDTH_DEFAULT)
-		settings.setValue(GRAPH_WIDTH_SETTING, _options.graphWidth);
-	if (_options.pathAntiAliasing != PATH_AA_DEFAULT)
-		settings.setValue(PATH_AA_SETTING, _options.pathAntiAliasing);
-	if (_options.graphAntiAliasing != GRAPH_AA_DEFAULT)
-		settings.setValue(GRAPH_AA_SETTING, _options.graphAntiAliasing);
-	if (_options.elevationFilter != ELEVATION_FILTER_DEFAULT)
-		settings.setValue(ELEVATION_FILTER_SETTING, _options.elevationFilter);
-	if (_options.speedFilter != SPEED_FILTER_DEFAULT)
-		settings.setValue(SPEED_FILTER_SETTING, _options.speedFilter);
-	if (_options.heartRateFilter != HEARTRATE_FILTER_DEFAULT)
-		settings.setValue(HEARTRATE_FILTER_SETTING, _options.heartRateFilter);
-	if (_options.cadenceFilter != CADENCE_FILTER_DEFAULT)
-		settings.setValue(CADENCE_FILTER_SETTING, _options.cadenceFilter);
-	if (_options.powerFilter != POWER_FILTER_DEFAULT)
-		settings.setValue(POWER_FILTER_SETTING, _options.powerFilter);
-	if (_options.outlierEliminate != OUTLIER_ELIMINATE_DEFAULT)
-		settings.setValue(OUTLIER_ELIMINATE_SETTING, _options.outlierEliminate);
-	if (_options.automaticPause != AUTOMATIC_PAUSE_DEFAULT)
-		settings.setValue(AUTOMATIC_PAUSE_SETTING, _options.automaticPause);
-	if (_options.pauseSpeed != PAUSE_SPEED_DEFAULT)
-		settings.setValue(PAUSE_SPEED_SETTING, _options.pauseSpeed);
-	if (_options.pauseInterval != PAUSE_INTERVAL_DEFAULT)
-		settings.setValue(PAUSE_INTERVAL_SETTING, _options.pauseInterval);
-	if (_options.useReportedSpeed != USE_REPORTED_SPEED_DEFAULT)
-		settings.setValue(USE_REPORTED_SPEED_SETTING, _options.useReportedSpeed);
-	if (_options.dataUseDEM != DATA_USE_DEM_DEFAULT)
-		settings.setValue(DATA_USE_DEM_SETTING, _options.dataUseDEM);
-	if (_options.showSecondaryElevation != SHOW_SECONDARY_ELEVATION_DEFAULT)
-		settings.setValue(SHOW_SECONDARY_ELEVATION_SETTING,
-		  _options.showSecondaryElevation);
-	if (_options.showSecondarySpeed != SHOW_SECONDARY_SPEED_DEFAULT)
-		settings.setValue(SHOW_SECONDARY_SPEED_SETTING,
-		  _options.showSecondarySpeed);
-	if (_options.timeZone != TimeZoneInfo())
-		settings.setValue(TIME_ZONE_SETTING, QVariant::fromValue(
-		  _options.timeZone));
-	if (_options.useSegments != USE_SEGMENTS_DEFAULT)
-		settings.setValue(USE_SEGMENTS_SETTING, _options.useSegments);
-	if (_options.poiRadius != POI_RADIUS_DEFAULT)
-		settings.setValue(POI_RADIUS_SETTING, _options.poiRadius);
-	if (_options.demURL != DEM_URL_DEFAULT)
-		settings.setValue(DEM_URL_SETTING, _options.demURL);
-	if (_options.demAuthorization != DEM_AUTH_DEFAULT)
-		settings.setValue(DEM_AUTH_SETTING, _options.demAuthorization);
-	if (_options.demUsername != DEM_USERNAME_DEFAULT)
-		settings.setValue(DEM_USERNAME_SETTING, _options.demUsername);
-	if (_options.demPassword != DEM_PASSWORD_DEFAULT)
-		settings.setValue(DEM_PASSWORD_SETTING, _options.demPassword);
-	if (_options.plugin != POSITION_PLUGIN_DEFAULT)
-		settings.setValue(POSITION_PLUGIN_SETTING, _options.plugin);
-	index = 0;
-	for (QMap<QString, QVariantMap>::const_iterator it
-	  = _options.pluginParams.constBegin();
-	  it != _options.pluginParams.constEnd(); ++it) {
-		if (!it.value().isEmpty()) {
-			if (index == 0)
-				settings.beginWriteArray(POSITION_PLUGIN_PARAMS_PREFIX);
-			settings.setArrayIndex(index++);
-			settings.setValue(POSITION_PLUGIN_PARAMS_PLUGIN, it.key());
-			settings.setValue(POSITION_PLUGIN_PARAMS_PARAM, it.value());
-		}
-	}
-	if (index != 0)
-		settings.endArray();
-	if (_options.useOpenGL != USE_OPENGL_DEFAULT)
-		settings.setValue(USE_OPENGL_SETTING, _options.useOpenGL);
-	if (_options.enableHTTP2 != ENABLE_HTTP2_DEFAULT)
-		settings.setValue(ENABLE_HTTP2_SETTING, _options.enableHTTP2);
-	if (_options.pixmapCache != PIXMAP_CACHE_DEFAULT)
-		settings.setValue(PIXMAP_CACHE_SETTING, _options.pixmapCache);
-	if (_options.connectionTimeout != CONNECTION_TIMEOUT_DEFAULT)
-		settings.setValue(CONNECTION_TIMEOUT_SETTING, _options.connectionTimeout);
-	if (_options.hiresPrint != HIRES_PRINT_DEFAULT)
-		settings.setValue(HIRES_PRINT_SETTING, _options.hiresPrint);
-	if (_options.printName != PRINT_NAME_DEFAULT)
-		settings.setValue(PRINT_NAME_SETTING, _options.printName);
-	if (_options.printDate != PRINT_DATE_DEFAULT)
-		settings.setValue(PRINT_DATE_SETTING, _options.printDate);
-	if (_options.printDistance != PRINT_DISTANCE_DEFAULT)
-		settings.setValue(PRINT_DISTANCE_SETTING, _options.printDistance);
-	if (_options.printTime != PRINT_TIME_DEFAULT)
-		settings.setValue(PRINT_TIME_SETTING, _options.printTime);
-	if (_options.printMovingTime != PRINT_MOVING_TIME_DEFAULT)
-		settings.setValue(PRINT_MOVING_TIME_SETTING, _options.printMovingTime);
-	if (_options.printItemCount != PRINT_ITEM_COUNT_DEFAULT)
-		settings.setValue(PRINT_ITEM_COUNT_SETTING, _options.printItemCount);
-	if (_options.separateGraphPage != SEPARATE_GRAPH_PAGE_DEFAULT)
-		settings.setValue(SEPARATE_GRAPH_PAGE_SETTING,
-		  _options.separateGraphPage);
-	if (_options.sliderColor != SLIDER_COLOR_DEFAULT)
-		settings.setValue(SLIDER_COLOR_SETTING, _options.sliderColor);
-	if (_options.outputProjection != OUTPUT_PROJECTION_DEFAULT)
-		settings.setValue(OUTPUT_PROJECTION_SETTING, _options.outputProjection);
-	if (_options.inputProjection != INPUT_PROJECTION_DEFAULT)
-		settings.setValue(INPUT_PROJECTION_SETTING, _options.inputProjection);
-	if (_options.hidpiMap != HIDPI_MAP_DEFAULT)
-		settings.setValue(HIDPI_MAP_SETTING, _options.hidpiMap);
-	if (_options.dataPath != DATA_PATH_DEFAULT)
-		settings.setValue(DATA_PATH_SETTING, _options.dataPath);
-	if (_options.mapsPath != MAPS_PATH_DEFAULT)
-		settings.setValue(MAPS_PATH_SETTING, _options.mapsPath);
-	if (_options.poiPath != POI_PATH_DEFAULT)
-		settings.setValue(POI_PATH_SETTING, _options.poiPath);
+	/* PNG export */
+	settings.beginGroup(SETTINGS_PNG_EXPORT);
+	WRITE(pngWidth, _pngExport.size.width());
+	WRITE(pngHeight, _pngExport.size.height());
+	WRITE(pngMarginLeft, _pngExport.margins.left());
+	WRITE(pngMarginTop, _pngExport.margins.top());
+	WRITE(pngMarginRight, _pngExport.margins.right());
+	WRITE(pngMarginBottom, _pngExport.margins.bottom());
+	WRITE(pngAntialiasing, _pngExport.antialiasing);
+	WRITE(pngFileName, _pngExport.fileName);
+	settings.endGroup();
 
+	/* Options */
+	settings.beginGroup(SETTINGS_OPTIONS);
+	WRITE(paletteColor, _options.palette.color());
+	WRITE(paletteShift, _options.palette.shift());
+	WRITE(mapOpacity, _options.mapOpacity);
+	WRITE(backgroundColor, _options.backgroundColor);
+	WRITE(crosshairColor, _options.crosshairColor);
+	WRITE(infoColor, _options.infoColor);
+	WRITE(infoBackground, _options.infoBackground);
+	WRITE(trackWidth, _options.trackWidth);
+	WRITE(routeWidth, _options.routeWidth);
+	WRITE(areaWidth, _options.areaWidth);
+	WRITE(trackStyle, (int)_options.trackStyle);
+	WRITE(routeStyle, (int)_options.routeStyle);
+	WRITE(areaStyle, (int)_options.areaStyle);
+	WRITE(areaOpacity, _options.areaOpacity);
+	WRITE(waypointSize, _options.waypointSize);
+	WRITE(waypointColor, _options.waypointColor);
+	WRITE(poiSize, _options.poiSize);
+	WRITE(poiColor, _options.poiColor);
+	WRITE(graphWidth, _options.graphWidth);
+	WRITE(pathAntiAliasing, _options.pathAntiAliasing);
+	WRITE(graphAntiAliasing, _options.graphAntiAliasing);
+	WRITE(elevationFilter, _options.elevationFilter);
+	WRITE(speedFilter, _options.speedFilter);
+	WRITE(heartRateFilter, _options.heartRateFilter);
+	WRITE(cadenceFilter, _options.cadenceFilter);
+	WRITE(powerFilter, _options.powerFilter);
+	WRITE(outlierEliminate, _options.outlierEliminate);
+	WRITE(automaticPause, _options.automaticPause);
+	WRITE(pauseSpeed, _options.pauseSpeed);
+	WRITE(pauseInterval, _options.pauseInterval);
+	WRITE(useReportedSpeed, _options.useReportedSpeed);
+	WRITE(dataUseDEM, _options.dataUseDEM);
+	WRITE(secondaryElevation, _options.showSecondaryElevation);
+	WRITE(secondarySpeed, _options.showSecondarySpeed);
+	WRITE(timeZone, QVariant::fromValue(_options.timeZone));
+	WRITE(useSegments, _options.useSegments);
+	WRITE(poiRadius, _options.poiRadius);
+	WRITE(demURL, _options.demURL);
+	WRITE(demAuthentication, _options.demAuthorization);
+	WRITE(demUsername, _options.demUsername);
+	WRITE(demPassword, _options.demPassword);
+	WRITE(positionPlugin(), _options.plugin);
+	WRITE(positionPluginParameters, _options.pluginParams);
+	WRITE(useOpenGL, _options.useOpenGL);
+	WRITE(enableHTTP2, _options.enableHTTP2);
+	WRITE(pixmapCache, _options.pixmapCache);
+	WRITE(connectionTimeout, _options.connectionTimeout);
+	WRITE(hiresPrint, _options.hiresPrint);
+	WRITE(printName, _options.printName);
+	WRITE(printDate, _options.printDate);
+	WRITE(printDistance, _options.printDistance);
+	WRITE(printTime, _options.printTime);
+	WRITE(printMovingTime, _options.printMovingTime);
+	WRITE(printItemCount, _options.printItemCount);
+	WRITE(separateGraphPage, _options.separateGraphPage);
+	WRITE(sliderColor, _options.sliderColor);
+	WRITE(outputProjection, _options.outputProjection);
+	WRITE(inputProjection, _options.inputProjection);
+	WRITE(hidpiMap, _options.hidpiMap);
+	WRITE(dataPath, _options.dataPath);
+	WRITE(mapsPath, _options.mapsPath);
+	WRITE(poiPath, _options.poiPath);
 	settings.endGroup();
 }
 
 void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 {
-	int value;
+#define READ(name) \
+	(Settings::name.read(settings))
+
 	QSettings settings(qApp->applicationName(), qApp->applicationName());
 
 #ifndef Q_OS_ANDROID
-	settings.beginGroup(WINDOW_SETTINGS_GROUP);
-	restoreGeometry(settings.value(WINDOW_GEOMETRY_SETTING).toByteArray());
-	restoreState(settings.value(WINDOW_STATE_SETTING).toByteArray());
+	settings.beginGroup(SETTINGS_WINDOW);
+	restoreGeometry(READ(windowGeometry).toByteArray());
+	restoreState(READ(windowState).toByteArray());
 	settings.endGroup();
 #endif // Q_OS_ANDROID
 
-	settings.beginGroup(SETTINGS_SETTINGS_GROUP);
-	if (settings.value(TIME_TYPE_SETTING, TIME_TYPE_DEFAULT).toInt() == Moving)
-		_movingTimeAction->trigger();
+	/* Settings */
+	settings.beginGroup(SETTINGS_SETTINGS);
+	TimeType tt = (TimeType)READ(timeType).toInt();
+	if (tt == Moving)
+		_movingTimeAction->setChecked(true);
 	else
-		_totalTimeAction->trigger();
+		_totalTimeAction->setChecked(true);
+	setTimeType(tt);
 
-	value = settings.value(UNITS_SETTING, UNITS_DEFAULT).toInt();
-	if (value == Imperial)
-		_imperialUnitsAction->trigger();
-	else if (value == Nautical)
-		_nauticalUnitsAction->trigger();
+	Units u = (Units)READ(units).toInt();
+	if (u == Imperial)
+		_imperialUnitsAction->setChecked(true);
+	else if (u == Nautical)
+		_nauticalUnitsAction->setChecked(true);
 	else
-		_metricUnitsAction->trigger();
+		_metricUnitsAction->setChecked(true);
+	setUnits(u);
 
-	value = settings.value(COORDINATES_SETTING, COORDINATES_DEFAULT).toInt();
-	if (value == DMS)
-		_dmsAction->trigger();
-	else if (value == DegreesMinutes)
-		_degreesMinutesAction->trigger();
+	CoordinatesFormat cf = (CoordinatesFormat)READ(coordinatesFormat).toInt();
+	if (cf == DMS)
+		_dmsAction->setChecked(true);
+	else if (cf == DegreesMinutes)
+		_degreesMinutesAction->setChecked(true);
 	else
-		_decimalDegreesAction->trigger();
+		_decimalDegreesAction->setChecked(true);
+	setCoordinatesFormat(cf);
 
 #ifndef Q_OS_ANDROID
-	if (!settings.value(SHOW_TOOLBARS_SETTING, SHOW_TOOLBARS_DEFAULT).toBool())
-		showToolbars(false);
-	else
+	if (READ(showToolbars).toBool())
 		_showToolbarsAction->setChecked(true);
+	else
+		showToolbars(false);
 #endif // Q_OS_ANDROID
 	settings.endGroup();
 
-	settings.beginGroup(MAP_SETTINGS_GROUP);
-	if (settings.value(SHOW_MAP_SETTING, SHOW_MAP_DEFAULT).toBool())
+	/* Map */
+	settings.beginGroup(SETTINGS_MAP);
+	if (READ(showMap).toBool()) {
 		_showMapAction->setChecked(true);
-	else
-		_mapView->showMap(false);
-	if (settings.value(SHOW_CURSOR_COORDINATES_SETTING,
-	  SHOW_CURSOR_COORDINATES_DEFAULT).toBool()) {
+		_mapView->showMap(true);
+	}
+	if (READ(cursorCoordinates).toBool()) {
 		_showCoordinatesAction->setChecked(true);
 		_mapView->showCursorCoordinates(true);
 	}
-	activeMap = settings.value(CURRENT_MAP_SETTING).toString();
+	activeMap = READ(activeMap).toString();
 	settings.endGroup();
 
-	settings.beginGroup(GRAPH_SETTINGS_GROUP);
-	if (!settings.value(SHOW_GRAPHS_SETTING, SHOW_GRAPHS_DEFAULT).toBool())
-		showGraphs(false);
-	else
+	/* Graph */
+	settings.beginGroup(SETTINGS_GRAPH);
+	if (READ(showGraphs).toBool())
 		_showGraphsAction->setChecked(true);
-	if (settings.value(GRAPH_TYPE_SETTING, GRAPH_TYPE_DEFAULT).toInt()
-	  == Time) {
-		setTimeGraph();
+	else
+		showGraphs(false);
+
+	GraphType gt = (GraphType)READ(graphType).toInt();
+	if (gt == Time)
 		_timeGraphAction->setChecked(true);
-	} else
+	else
 		_distanceGraphAction->setChecked(true);
-	if (!settings.value(SHOW_GRAPH_GRIDS_SETTING, SHOW_GRAPH_GRIDS_DEFAULT)
-	  .toBool())
-		showGraphGrids(false);
-	else
+	setGraphType(gt);
+
+	if (READ(showGrid).toBool())
 		_showGraphGridAction->setChecked(true);
-	if (!settings.value(SHOW_GRAPH_SLIDER_INFO_SETTING,
-	  SHOW_GRAPH_SLIDER_INFO_DEFAULT).toBool())
-		showGraphSliderInfo(false);
 	else
+		showGraphGrids(false);
+
+	if (READ(sliderInfo).toBool())
 		_showGraphSliderInfoAction->setChecked(true);
-#ifdef Q_OS_ANDROID
-	if (!settings.value(SHOW_GRAPH_TABS_SETTING, SHOW_GRAPH_TABS_DEFAULT)
-	  .toBool())
-		showGraphTabs(false);
 	else
-		_showGraphTabsAction->setChecked(true);
+		showGraphSliderInfo(false);
+
+#ifdef Q_OS_ANDROID
+	if (READ(showGraphTabs)).toBool())
+	    _showGraphTabsAction->setChecked(true);
+	else
+		showGraphTabs(false);
 #endif // Q_OS_ANDROID
 	settings.endGroup();
 
-	settings.beginGroup(POI_SETTINGS_GROUP);
-	if (!settings.value(OVERLAP_POI_SETTING, OVERLAP_POI_DEFAULT).toBool())
-		_mapView->showOverlappedPOIs(false);
-	else
+	/* POI */
+	settings.beginGroup(SETTINGS_POI);
+	if (READ(poiOverlap).toBool()) {
 		_overlapPOIAction->setChecked(true);
-	if (settings.value(SHOW_POI_ICONS_SETTING, SHOW_POI_ICONS_DEFAULT)
-	  .toBool())
-		_showPOIIconsAction->trigger();
-	if (!settings.value(SHOW_POI_LABELS_SETTING, SHOW_POI_LABELS_DEFAULT)
-	  .toBool())
-		_mapView->showPOILabels(false);
-	else
+		_mapView->showOverlappedPOIs(true);
+	}
+	if (READ(poiIcons).toBool()) {
+		_showPOIIconsAction->setChecked(true);
+		_mapView->showPOIIcons(true);
+	}
+	if (READ(poiLabels).toBool()) {
 		_showPOILabelsAction->setChecked(true);
-	if (settings.value(SHOW_POI_SETTING, SHOW_POI_DEFAULT).toBool())
+		_mapView->showPOILabels(true);
+	}
+	if (READ(showPoi).toBool()) {
 		_showPOIAction->setChecked(true);
-	else
-		_mapView->showPOI(false);
-
-	int size = settings.beginReadArray(DISABLED_POI_FILE_SETTINGS_PREFIX);
-	for (int i = 0; i < size; i++) {
-		settings.setArrayIndex(i);
-		disabledPOIs.append(settings.value(DISABLED_POI_FILE_SETTING).toString());
+		_mapView->showPOI(true);
 	}
-	settings.endArray();
+	disabledPOIs = READ(disabledPoiFiles);
 	settings.endGroup();
 
-	settings.beginGroup(DATA_SETTINGS_GROUP);
-	if (!settings.value(SHOW_TRACKS_SETTING, SHOW_TRACKS_DEFAULT).toBool()) {
-		_mapView->showTracks(false);
-		for (int i = 0; i < _tabs.count(); i++)
-			_tabs.at(i)->showTracks(false);
-	} else
+	/* Data */
+	settings.beginGroup(SETTINGS_DATA);
+	if (READ(tracks).toBool()) {
 		_showTracksAction->setChecked(true);
-	if (!settings.value(SHOW_ROUTES_SETTING, SHOW_ROUTES_DEFAULT).toBool()) {
-		_mapView->showRoutes(false);
+		_mapView->showTracks(true);
 		for (int i = 0; i < _tabs.count(); i++)
-			_tabs.at(i)->showRoutes(false);
-	} else
+			_tabs.at(i)->showTracks(true);
+	}
+	if (READ(routes).toBool()) {
 		_showRoutesAction->setChecked(true);
-	if (!settings.value(SHOW_WAYPOINTS_SETTING, SHOW_WAYPOINTS_DEFAULT)
-	  .toBool())
-		_mapView->showWaypoints(false);
-	else
+		_mapView->showRoutes(true);
+		for (int i = 0; i < _tabs.count(); i++)
+			_tabs.at(i)->showRoutes(true);
+	}
+	if (READ(waypoints).toBool()) {
 		_showWaypointsAction->setChecked(true);
-	if (!settings.value(SHOW_AREAS_SETTING, SHOW_AREAS_DEFAULT).toBool())
-		_mapView->showAreas(false);
-	else
+		_mapView->showWaypoints(true);
+	}
+	if (READ(areas).toBool()) {
 		_showAreasAction->setChecked(true);
-	if (settings.value(SHOW_WAYPOINT_ICONS_SETTING,
-	  SHOW_WAYPOINT_ICONS_DEFAULT).toBool())
-		_showWaypointIconsAction->trigger();
-	if (!settings.value(SHOW_WAYPOINT_LABELS_SETTING,
-	  SHOW_WAYPOINT_LABELS_DEFAULT).toBool())
-		_mapView->showWaypointLabels(false);
-	else
+		_mapView->showAreas(true);
+	}
+	if (READ(waypointIcons).toBool()) {
+		_showWaypointIconsAction->setChecked(true);
+		_mapView->showWaypointIcons(true);
+	}
+	if (READ(waypointLabels).toBool()) {
 		_showWaypointLabelsAction->setChecked(true);
-	if (!settings.value(SHOW_ROUTE_WAYPOINTS_SETTING,
-	  SHOW_ROUTE_WAYPOINTS_SETTING).toBool())
-		_mapView->showRouteWaypoints(false);
-	else
+		_mapView->showWaypointLabels(true);
+	}
+	if (READ(routeWaypoints).toBool()) {
 		_showRouteWaypointsAction->setChecked(true);
-	if (settings.value(SHOW_TICKS_SETTING, SHOW_TICKS_DEFAULT).toBool()) {
-		_mapView->showTicks(true);
+		_mapView->showRouteWaypoints(true);
+	}
+	if (READ(pathTicks).toBool()) {
 		_showTicksAction->setChecked(true);
+		_mapView->showTicks(true);
 	}
-	if (settings.value(SHOW_MARKERS_SETTING, SHOW_MARKERS_DEFAULT).toBool()) {
-		MarkerInfoItem::Type mt = static_cast<MarkerInfoItem::Type>
-		  (settings.value(SHOW_MARKER_INFO_SETTING,
-		  SHOW_MARKER_INFO_DEFAULT).toInt());
-		if (mt == MarkerInfoItem::Position)
-			_showMarkerCoordinatesAction->trigger();
-		else if (mt == MarkerInfoItem::Date)
-			_showMarkerDateAction->trigger();
-		else
-			_showMarkersAction->trigger();
-	} else
-		_hideMarkersAction->trigger();
-	if (settings.value(USE_STYLES_SETTING, USE_STYLES_DEFAULT).toBool()) {
+	if (READ(useStyles).toBool()) {
 		_useStylesAction->setChecked(true);
-	} else
-		_mapView->useStyles(false);
-	settings.endGroup();
-
-	settings.beginGroup(PDF_EXPORT_SETTINGS_GROUP);
-	_pdfExport.orientation = (QPageLayout::Orientation) settings.value(
-	  PAPER_ORIENTATION_SETTING, PAPER_ORIENTATION_DEFAULT).toInt();
-	_pdfExport.resolution = settings.value(RESOLUTION_SETTING,
-	  RESOLUTION_DEFAULT).toInt();
-	_pdfExport.paperSize = (QPageSize::PageSizeId) settings.value(
-	  PAPER_SIZE_SETTING, PAPER_SIZE_DEFAULT).toInt();
-	qreal ml = settings.value(PDF_MARGIN_LEFT_SETTING, PDF_MARGIN_LEFT_DEFAULT)
-	  .toReal();
-	qreal mt = settings.value(PDF_MARGIN_TOP_SETTING, PDF_MARGIN_TOP_DEFAULT)
-	  .toReal();
-	qreal mr = settings.value(PDF_MARGIN_RIGHT_SETTING,
-	  PDF_MARGIN_RIGHT_DEFAULT).toReal();
-	qreal mb = settings.value(PDF_MARGIN_BOTTOM_SETTING,
-	  PDF_MARGIN_BOTTOM_DEFAULT).toReal();
-	_pdfExport.margins = QMarginsF(ml, mt, mr, mb);
-	_pdfExport.fileName = settings.value(PDF_FILENAME_SETTING,
-	 PDF_FILENAME_DEFAULT).toString();
-	settings.endGroup();
-
-	settings.beginGroup(PNG_EXPORT_SETTINGS_GROUP);
-	_pngExport.size = QSize(settings.value(PNG_WIDTH_SETTING, PNG_WIDTH_DEFAULT)
-	  .toInt(), settings.value(PNG_HEIGHT_SETTING, PNG_HEIGHT_DEFAULT).toInt());
-	int mli = settings.value(PNG_MARGIN_LEFT_SETTING, PNG_MARGIN_LEFT_DEFAULT)
-	  .toInt();
-	int mti = settings.value(PNG_MARGIN_TOP_SETTING, PNG_MARGIN_TOP_DEFAULT)
-	  .toInt();
-	int mri = settings.value(PNG_MARGIN_RIGHT_SETTING, PNG_MARGIN_RIGHT_DEFAULT)
-	  .toInt();
-	int mbi = settings.value(PNG_MARGIN_BOTTOM_SETTING,
-	  PNG_MARGIN_BOTTOM_DEFAULT).toInt();
-	_pngExport.margins = QMargins(mli, mti, mri, mbi);
-	_pngExport.antialiasing = settings.value(PNG_ANTIALIASING_SETTING,
-	  PNG_ANTIALIASING_DEFAULT).toBool();
-	_pngExport.fileName = settings.value(PNG_FILENAME_SETTING,
-	  PNG_FILENAME_DEFAULT).toString();
-	settings.endGroup();
-
-	settings.beginGroup(OPTIONS_SETTINGS_GROUP);
-	QColor pc = settings.value(PALETTE_COLOR_SETTING, PALETTE_COLOR_DEFAULT)
-	  .value<QColor>();
-	qreal ps = settings.value(PALETTE_SHIFT_SETTING, PALETTE_SHIFT_DEFAULT)
-	  .toDouble();
-	_options.palette = Palette(pc, ps);
-	_options.mapOpacity = settings.value(MAP_OPACITY_SETTING,
-	  MAP_OPACITY_DEFAULT).toInt();
-	_options.backgroundColor = settings.value(BACKGROUND_COLOR_SETTING,
-	  BACKGROUND_COLOR_DEFAULT).value<QColor>();
-	_options.crosshairColor = settings.value(CROSSHAIR_COLOR_SETTING,
-	  CROSSHAIR_COLOR_DEFAULT).value<QColor>();
-	_options.infoColor = settings.value(INFO_COLOR_SETTING,
-	  INFO_COLOR_DEFAULT).value<QColor>();
-	_options.infoBackground = settings.value(INFO_BACKGROUND_SETTING,
-	  INFO_BACKGROUND_DEFAULT).toBool();
-	_options.trackWidth = settings.value(TRACK_WIDTH_SETTING,
-	  TRACK_WIDTH_DEFAULT).toInt();
-	_options.routeWidth = settings.value(ROUTE_WIDTH_SETTING,
-	  ROUTE_WIDTH_DEFAULT).toInt();
-	_options.areaWidth = settings.value(AREA_WIDTH_SETTING,
-	  AREA_WIDTH_DEFAULT).toInt();
-	_options.trackStyle = (Qt::PenStyle) settings.value(TRACK_STYLE_SETTING,
-	  (int)TRACK_STYLE_DEFAULT).toInt();
-	_options.routeStyle = (Qt::PenStyle) settings.value(ROUTE_STYLE_SETTING,
-	  (int)ROUTE_STYLE_DEFAULT).toInt();
-	_options.areaStyle = (Qt::PenStyle) settings.value(AREA_STYLE_SETTING,
-	  (int)AREA_STYLE_DEFAULT).toInt();
-	_options.areaOpacity = settings.value(AREA_OPACITY_SETTING,
-	  AREA_OPACITY_DEFAULT).toInt();
-	_options.pathAntiAliasing = settings.value(PATH_AA_SETTING, PATH_AA_DEFAULT)
-	  .toBool();
-	_options.waypointSize = settings.value(WAYPOINT_SIZE_SETTING,
-	  WAYPOINT_SIZE_DEFAULT).toInt();
-	_options.waypointColor = settings.value(WAYPOINT_COLOR_SETTING,
-	  WAYPOINT_COLOR_DEFAULT).value<QColor>();
-	_options.poiSize = settings.value(POI_SIZE_SETTING, POI_SIZE_DEFAULT)
-	  .toInt();
-	_options.poiColor = settings.value(POI_COLOR_SETTING, POI_COLOR_DEFAULT)
-	  .value<QColor>();
-	_options.graphWidth = settings.value(GRAPH_WIDTH_SETTING,
-	  GRAPH_WIDTH_DEFAULT).toInt();
-	_options.graphAntiAliasing = settings.value(GRAPH_AA_SETTING,
-	  GRAPH_AA_DEFAULT).toBool();
-	_options.elevationFilter = settings.value(ELEVATION_FILTER_SETTING,
-	  ELEVATION_FILTER_DEFAULT).toInt();
-	_options.speedFilter = settings.value(SPEED_FILTER_SETTING,
-	  SPEED_FILTER_DEFAULT).toInt();
-	_options.heartRateFilter = settings.value(HEARTRATE_FILTER_SETTING,
-	  HEARTRATE_FILTER_DEFAULT).toInt();
-	_options.cadenceFilter = settings.value(CADENCE_FILTER_SETTING,
-	  CADENCE_FILTER_DEFAULT).toInt();
-	_options.powerFilter = settings.value(POWER_FILTER_SETTING,
-	  POWER_FILTER_DEFAULT).toInt();
-	_options.outlierEliminate = settings.value(OUTLIER_ELIMINATE_SETTING,
-	  OUTLIER_ELIMINATE_DEFAULT).toBool();
-	_options.pauseSpeed = settings.value(PAUSE_SPEED_SETTING,
-	  PAUSE_SPEED_DEFAULT).toFloat();
-	_options.useReportedSpeed = settings.value(USE_REPORTED_SPEED_SETTING,
-	  USE_REPORTED_SPEED_DEFAULT).toBool();
-	_options.dataUseDEM = settings.value(DATA_USE_DEM_SETTING,
-	  DATA_USE_DEM_DEFAULT).toBool();
-	_options.showSecondaryElevation = settings.value(
-	  SHOW_SECONDARY_ELEVATION_SETTING,
-	  SHOW_SECONDARY_ELEVATION_DEFAULT).toBool();
-	_options.showSecondarySpeed = settings.value(
-	  SHOW_SECONDARY_SPEED_SETTING,
-	  SHOW_SECONDARY_SPEED_DEFAULT).toBool();
-	_options.timeZone = settings.value(TIME_ZONE_SETTING).value<TimeZoneInfo>();
-	_options.useSegments = settings.value(USE_SEGMENTS_SETTING,
-	  USE_SEGMENTS_DEFAULT).toBool();
-	_options.automaticPause = settings.value(AUTOMATIC_PAUSE_SETTING,
-	  AUTOMATIC_PAUSE_DEFAULT).toBool();
-	_options.pauseInterval = settings.value(PAUSE_INTERVAL_SETTING,
-	  PAUSE_INTERVAL_DEFAULT).toInt();
-	_options.poiRadius = settings.value(POI_RADIUS_SETTING, POI_RADIUS_DEFAULT)
-	  .toInt();
-	_options.demURL = settings.value(DEM_URL_SETTING, DEM_URL_DEFAULT).toString();
-	_options.demAuthorization = settings.value(DEM_AUTH_SETTING,
-	  DEM_AUTH_DEFAULT).toBool();
-	_options.demUsername = settings.value(DEM_USERNAME_SETTING,
-	  DEM_USERNAME_DEFAULT).toString();
-	_options.demPassword = settings.value(DEM_PASSWORD_SETTING,
-	  DEM_PASSWORD_DEFAULT).toString();
-	_options.plugin = settings.value(POSITION_PLUGIN_SETTING,
-	  POSITION_PLUGIN_DEFAULT).toString();
-	size = settings.beginReadArray(POSITION_PLUGIN_PARAMS_PREFIX);
-	for (int i = 0; i < size; i++) {
-		settings.setArrayIndex(i);
-		_options.pluginParams.insert(
-		  settings.value(POSITION_PLUGIN_PARAMS_PLUGIN).toString(),
-		  settings.value(POSITION_PLUGIN_PARAMS_PARAM).toMap());
+		_mapView->useStyles(true);
 	}
-	settings.endArray();
-	_options.useOpenGL = settings.value(USE_OPENGL_SETTING, USE_OPENGL_DEFAULT)
-	  .toBool();
-	_options.enableHTTP2 = settings.value(ENABLE_HTTP2_SETTING,
-	  ENABLE_HTTP2_DEFAULT).toBool();
-	_options.pixmapCache = settings.value(PIXMAP_CACHE_SETTING,
-	  PIXMAP_CACHE_DEFAULT).toInt();
-	_options.connectionTimeout = settings.value(CONNECTION_TIMEOUT_SETTING,
-	  CONNECTION_TIMEOUT_DEFAULT).toInt();
-	_options.hiresPrint = settings.value(HIRES_PRINT_SETTING,
-	  HIRES_PRINT_DEFAULT).toBool();
-	_options.printName = settings.value(PRINT_NAME_SETTING, PRINT_NAME_DEFAULT)
-	  .toBool();
-	_options.printDate = settings.value(PRINT_DATE_SETTING, PRINT_DATE_DEFAULT)
-	  .toBool();
-	_options.printDistance = settings.value(PRINT_DISTANCE_SETTING,
-	  PRINT_DISTANCE_DEFAULT).toBool();
-	_options.printTime = settings.value(PRINT_TIME_SETTING, PRINT_TIME_DEFAULT)
-	  .toBool();
-	_options.printMovingTime = settings.value(PRINT_MOVING_TIME_SETTING,
-	  PRINT_MOVING_TIME_DEFAULT).toBool();
-	_options.printItemCount = settings.value(PRINT_ITEM_COUNT_SETTING,
-	  PRINT_ITEM_COUNT_DEFAULT).toBool();
-	_options.separateGraphPage = settings.value(SEPARATE_GRAPH_PAGE_SETTING,
-	  SEPARATE_GRAPH_PAGE_DEFAULT).toBool();
-	_options.sliderColor = settings.value(SLIDER_COLOR_SETTING,
-	  SLIDER_COLOR_DEFAULT).value<QColor>();
-	_options.outputProjection = settings.value(OUTPUT_PROJECTION_SETTING,
-	  OUTPUT_PROJECTION_DEFAULT).toInt();
-	_options.inputProjection = settings.value(INPUT_PROJECTION_SETTING,
-	  INPUT_PROJECTION_DEFAULT).toInt();
-	_options.hidpiMap = settings.value(HIDPI_MAP_SETTING, HIDPI_MAP_DEFAULT)
-	  .toBool();
-	_options.dataPath = settings.value(DATA_PATH_SETTING, DATA_PATH_DEFAULT)
-	  .toString();
-	_options.mapsPath = settings.value(MAPS_PATH_SETTING, MAPS_PATH_DEFAULT)
-	  .toString();
-	_options.poiPath = settings.value(POI_PATH_SETTING, POI_PATH_DEFAULT)
-	  .toString();
+	if (READ(positionMarkers).toBool()) {
+		MarkerInfoItem::Type mt = (MarkerInfoItem::Type)READ(markerInfo).toInt();
+		if (mt == MarkerInfoItem::Position)
+			_showMarkerCoordinatesAction->setChecked(true);
+		else if (mt == MarkerInfoItem::Date)
+			_showMarkerDateAction->setChecked(true);
+		else
+			_showMarkersAction->setChecked(true);
+
+		_mapView->showMarkers(true);
+		_mapView->showMarkerInfo(mt);
+	} else
+		_hideMarkersAction->setChecked(true);
 	settings.endGroup();
 
+	/* Position */
+	settings.beginGroup(SETTINGS_POSITION);
+	if (READ(showPosition).toBool()) {
+		_showPositionAction->setChecked(true);
+		_mapView->showPosition(true);
+	}
+	if (READ(followPosition).toBool()) {
+		_followPositionAction->setChecked(true);
+		_mapView->followPosition(true);
+	}
+	if (READ(positionCoordinates).toBool()) {
+		_showPositionCoordinatesAction->setChecked(true);
+		_mapView->showPositionCoordinates(true);
+	}
+	if (READ(motionInfo).toBool()) {
+		_showMotionInfoAction->setChecked(true);
+		_mapView->showMotionInfo(true);
+	}
+	settings.endGroup();
+
+	/* PDF export */
+	settings.beginGroup(SETTINGS_PDF_EXPORT);
+	_pdfExport.orientation = (QPageLayout::Orientation)READ(pdfOrientation)
+	  .toInt();
+	_pdfExport.resolution = READ(pdfResolution).toInt();
+	_pdfExport.paperSize = (QPageSize::PageSizeId)READ(pdfSize).toInt();
+	_pdfExport.margins = QMarginsF(READ(pdfMarginLeft).toReal(),
+	  READ(pdfMarginTop).toReal(), READ(pdfMarginRight).toReal(),
+	  READ(pdfMarginBottom).toReal());
+	_pdfExport.fileName = READ(pdfFileName).toString();
+	settings.endGroup();
+
+	/* PNG export */
+	settings.beginGroup(SETTINGS_PNG_EXPORT);
+	_pngExport.size = QSize(READ(pngWidth).toInt(), READ(pngHeight).toInt());
+	_pngExport.margins = QMargins(READ(pngMarginLeft).toInt(),
+	  READ(pngMarginTop).toInt(), READ(pngMarginRight).toInt(),
+	  READ(pngMarginBottom).toInt());
+	_pngExport.antialiasing = READ(pngAntialiasing).toBool();
+	_pngExport.fileName = READ(pngFileName).toString();
+	settings.endGroup();
+
+	/* Options */
+	settings.beginGroup(SETTINGS_OPTIONS);
+	_options.palette = Palette(READ(paletteColor).value<QColor>(),
+	  READ(paletteShift).toDouble());
+	_options.mapOpacity = READ(mapOpacity).toInt();
+	_options.backgroundColor = READ(backgroundColor).value<QColor>();
+	_options.crosshairColor = READ(crosshairColor).value<QColor>();
+	_options.infoColor = READ(infoColor).value<QColor>();
+	_options.infoBackground = READ(infoBackground).toBool();
+	_options.trackWidth = READ(trackWidth).toInt();
+	_options.routeWidth = READ(routeWidth).toInt();
+	_options.areaWidth = READ(areaWidth).toInt();
+	_options.trackStyle = (Qt::PenStyle)READ(trackStyle).toInt();
+	_options.routeStyle = (Qt::PenStyle)READ(routeStyle).toInt();
+	_options.areaStyle = (Qt::PenStyle)READ(areaStyle).toInt();
+	_options.areaOpacity = READ(areaOpacity).toInt();
+	_options.pathAntiAliasing = READ(pathAntiAliasing).toBool();
+	_options.waypointSize = READ(waypointSize).toInt();
+	_options.waypointColor = READ(waypointColor).value<QColor>();
+	_options.poiSize = READ(poiSize).toInt();
+	_options.poiColor = READ(poiColor).value<QColor>();
+	_options.graphWidth = READ(graphWidth).toInt();
+	_options.graphAntiAliasing = READ(graphAntiAliasing).toBool();
+	_options.elevationFilter = READ(elevationFilter).toInt();
+	_options.speedFilter = READ(speedFilter).toInt();
+	_options.heartRateFilter = READ(heartRateFilter).toInt();
+	_options.cadenceFilter = READ(cadenceFilter).toInt();
+	_options.powerFilter = READ(powerFilter).toInt();
+	_options.outlierEliminate = READ(outlierEliminate).toBool();
+	_options.pauseSpeed = READ(pauseSpeed).toFloat();
+	_options.automaticPause = READ(automaticPause).toBool();
+	_options.pauseInterval = READ(pauseInterval).toInt();
+	_options.useReportedSpeed = READ(useReportedSpeed).toBool();
+	_options.dataUseDEM = READ(dataUseDEM).toBool();
+	_options.showSecondaryElevation = READ(secondaryElevation).toBool();
+	_options.showSecondarySpeed = READ(secondarySpeed).toBool();
+	_options.timeZone = READ(timeZone).value<TimeZoneInfo>();
+	_options.useSegments = READ(useSegments).toBool();
+	_options.poiRadius = READ(poiRadius).toInt();
+	_options.demURL = READ(demURL).toString();
+	_options.demAuthorization = READ(demAuthentication).toBool();
+	_options.demUsername = READ(demUsername).toString();
+	_options.demPassword = READ(demPassword).toString();
+	_options.plugin = READ(positionPlugin()).toString();
+	_options.pluginParams = READ(positionPluginParameters);
+	_options.useOpenGL = READ(useOpenGL).toBool();
+	_options.enableHTTP2 = READ(enableHTTP2).toBool();
+	_options.pixmapCache = READ(pixmapCache).toInt();
+	_options.connectionTimeout = READ(connectionTimeout).toInt();
+	_options.hiresPrint = READ(hiresPrint).toBool();
+	_options.printName = READ(printName).toBool();
+	_options.printDate = READ(printDate).toBool();
+	_options.printDistance = READ(printDistance).toBool();
+	_options.printTime = READ(printTime).toBool();
+	_options.printMovingTime = READ(printMovingTime).toBool();
+	_options.printItemCount = READ(printItemCount).toBool();
+	_options.separateGraphPage = READ(separateGraphPage).toBool();
+	_options.sliderColor = READ(sliderColor).value<QColor>();
+	_options.outputProjection = READ(outputProjection).toInt();
+	_options.inputProjection = READ(inputProjection).toInt();
+	_options.hidpiMap = READ(hidpiMap).toBool();
+	_options.dataPath = READ(dataPath).toString();
+	_options.mapsPath = READ(mapsPath).toString();
+	_options.poiPath = READ(poiPath).toString();
+	settings.endGroup();
+
+	loadOptions();
+}
+
+void GUI::loadOptions()
+{
 	_positionSource = positionSource(_options);
 	_showPositionAction->setEnabled(_positionSource != 0);
-
-	settings.beginGroup(POSITION_SETTINGS_GROUP);
-	if (settings.value(SHOW_POSITION_SETTING, SHOW_POSITION_DEFAULT).toBool())
-		_showPositionAction->trigger();
-	if (settings.value(FOLLOW_POSITION_SETTING, FOLLOW_POSITION_DEFAULT).toBool())
-		_followPositionAction->trigger();
-	if (settings.value(SHOW_POSITION_COORDINATES_SETTING,
-	  SHOW_POSITION_COORDINATES_DEFAULT).toBool())
-		_showPositionCoordinatesAction->trigger();
-	if (settings.value(SHOW_MOTION_INFO_SETTING, SHOW_MOTION_INFO_DEFAULT)
-	  .toBool())
-		_showMotionInfo->trigger();
-	settings.endGroup();
 
 	_mapView->setPalette(_options.palette);
 	_mapView->setMapOpacity(_options.mapOpacity);
@@ -3128,6 +2795,139 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 	_dataDir = _options.dataPath;
 	_mapDir = _options.mapsPath;
 	_poiDir = _options.poiPath;
+}
+
+void GUI::updateOptions(const Options &options)
+{
+#define SET_VIEW_OPTION(option, action) \
+	if (options.option != _options.option) \
+	    _mapView->action(options.option)
+#define SET_TAB_OPTION(option, action) \
+	if (options.option != _options.option) \
+	    for (int i = 0; i < _tabs.count(); i++) \
+	        _tabs.at(i)->action(options.option)
+#define SET_TRACK_OPTION(option, action) \
+	if (options.option != _options.option) { \
+	    Track::action(options.option); \
+	    reload = true; \
+    }
+#define SET_ROUTE_OPTION(option, action) \
+	if (options.option != _options.option) { \
+	    Route::action(options.option); \
+	    reload = true; \
+    }
+#define SET_WAYPOINT_OPTION(option, action) \
+	if (options.option != _options.option) { \
+	    Waypoint::action(options.option); \
+	    reload = true; \
+    }
+
+	bool reload = false;
+
+	SET_VIEW_OPTION(palette, setPalette);
+	SET_VIEW_OPTION(mapOpacity, setMapOpacity);
+	SET_VIEW_OPTION(backgroundColor, setBackgroundColor);
+	SET_VIEW_OPTION(trackWidth, setTrackWidth);
+	SET_VIEW_OPTION(routeWidth, setRouteWidth);
+	SET_VIEW_OPTION(areaWidth, setAreaWidth);
+	SET_VIEW_OPTION(trackStyle, setTrackStyle);
+	SET_VIEW_OPTION(routeStyle, setRouteStyle);
+	SET_VIEW_OPTION(areaStyle, setAreaStyle);
+	SET_VIEW_OPTION(areaOpacity, setAreaOpacity);
+	SET_VIEW_OPTION(waypointSize, setWaypointSize);
+	SET_VIEW_OPTION(waypointColor, setWaypointColor);
+	SET_VIEW_OPTION(poiSize, setPOISize);
+	SET_VIEW_OPTION(poiColor, setPOIColor);
+	SET_VIEW_OPTION(pathAntiAliasing, useAntiAliasing);
+	SET_VIEW_OPTION(useOpenGL, useOpenGL);
+	SET_VIEW_OPTION(sliderColor, setMarkerColor);
+	SET_VIEW_OPTION(crosshairColor, setCrosshairColor);
+	SET_VIEW_OPTION(infoColor, setInfoColor);
+	SET_VIEW_OPTION(infoBackground, drawInfoBackground);
+
+	if (options.plugin != _options.plugin
+	  || options.pluginParams.value(options.plugin)
+	  != _options.pluginParams.value(_options.plugin)) {
+		QGeoPositionInfoSource *source = positionSource(options);
+		_showPositionAction->setEnabled(source != 0);
+		_mapView->setPositionSource(source);
+		delete _positionSource;
+		_positionSource = source;
+	}
+
+	if (options.hidpiMap != _options.hidpiMap)
+		_mapView->setDevicePixelRatio(devicePixelRatioF(),
+		  options.hidpiMap ? devicePixelRatioF() : 1.0);
+	if (options.outputProjection != _options.outputProjection)
+		_mapView->setOutputProjection(CRS::projection(options.outputProjection));
+	if (options.inputProjection != _options.inputProjection)
+		_mapView->setInputProjection(CRS::projection(options.inputProjection));
+	if (options.timeZone != _options.timeZone) {
+		_mapView->setTimeZone(options.timeZone.zone());
+		_dateRange.first = _dateRange.first.toTimeZone(options.timeZone.zone());
+		_dateRange.second = _dateRange.second.toTimeZone(options.timeZone.zone());
+	}
+
+	SET_TAB_OPTION(palette, setPalette);
+	SET_TAB_OPTION(graphWidth, setGraphWidth);
+	SET_TAB_OPTION(graphAntiAliasing, useAntiAliasing);
+	SET_TAB_OPTION(useOpenGL, useOpenGL);
+	SET_TAB_OPTION(sliderColor, setSliderColor);
+
+	SET_TRACK_OPTION(elevationFilter, setElevationFilter);
+	SET_TRACK_OPTION(speedFilter, setSpeedFilter);
+	SET_TRACK_OPTION(heartRateFilter, setHeartRateFilter);
+	SET_TRACK_OPTION(cadenceFilter, setCadenceFilter);
+	SET_TRACK_OPTION(powerFilter, setPowerFilter);
+	SET_TRACK_OPTION(outlierEliminate, setOutlierElimination);
+	SET_TRACK_OPTION(automaticPause, setAutomaticPause);
+	SET_TRACK_OPTION(pauseSpeed, setPauseSpeed);
+	SET_TRACK_OPTION(pauseInterval, setPauseInterval);
+	SET_TRACK_OPTION(useReportedSpeed, useReportedSpeed);
+	SET_TRACK_OPTION(dataUseDEM, useDEM);
+	SET_TRACK_OPTION(showSecondaryElevation, showSecondaryElevation);
+	SET_TRACK_OPTION(showSecondarySpeed, showSecondarySpeed);
+	SET_TRACK_OPTION(useSegments, useSegments);
+
+	SET_ROUTE_OPTION(dataUseDEM, useDEM);
+	SET_ROUTE_OPTION(showSecondaryElevation, showSecondaryElevation);
+
+	SET_WAYPOINT_OPTION(dataUseDEM, useDEM);
+	SET_WAYPOINT_OPTION(showSecondaryElevation, showSecondaryElevation);
+
+	if (options.poiRadius != _options.poiRadius)
+		_poi->setRadius(options.poiRadius);
+
+	if (options.demURL != _options.demURL)
+		_dem->setUrl(options.demURL);
+	if (options.demAuthorization != _options.demAuthorization
+	  || options.demUsername != _options.demUsername
+	  || options.demPassword != _options.demPassword)
+		_dem->setAuthorization(options.demAuthorization
+		  ? Authorization(options.demUsername, options.demPassword)
+		  : Authorization());
+
+	if (options.pixmapCache != _options.pixmapCache)
+		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
+
+	if (options.connectionTimeout != _options.connectionTimeout)
+		Downloader::setTimeout(options.connectionTimeout);
+	if (options.enableHTTP2 != _options.enableHTTP2)
+		Downloader::enableHTTP2(options.enableHTTP2);
+
+	if (options.dataPath != _options.dataPath)
+		_dataDir = options.dataPath;
+	if (options.mapsPath != _options.mapsPath)
+		_mapDir = options.mapsPath;
+	if (options.poiPath != _options.poiPath)
+		_poiDir = options.poiPath;
+
+	if (reload)
+		reloadFiles();
+
+	_options = options;
+
+	updateDEMDownloadAction();
 }
 
 void GUI::loadInitialMaps(const QString &selected)

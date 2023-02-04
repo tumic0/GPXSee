@@ -38,7 +38,10 @@ public:
 		else
 			return (other._type == Custom && _customZone == other._customZone);
 	}
-	bool operator!=(const TimeZoneInfo &other) {return !(*this == other);}
+	bool operator!=(const TimeZoneInfo &other) const
+	{
+		return !(*this == other);
+	}
 
 private:
 	friend QDataStream& operator<<(QDataStream &out, const TimeZoneInfo &info);

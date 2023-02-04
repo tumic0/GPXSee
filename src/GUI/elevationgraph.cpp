@@ -33,8 +33,8 @@ ElevationGraph::ElevationGraph(QWidget *parent) : GraphTab(parent)
 	_routeMin = NAN;
 	_routeMax = NAN;
 
-	_showRoutes = true;
-	_showTracks = true;
+	_showRoutes = false;
+	_showTracks = false;
 
 	setYUnits(Metric);
 	setYLabel(tr("Elevation"));

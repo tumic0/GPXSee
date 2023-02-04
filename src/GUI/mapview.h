@@ -53,8 +53,7 @@ public:
 	};
 	Q_DECLARE_FLAGS(PlotFlags, Flag)
 
-	MapView(Map *map, POI *poi, QGeoPositionInfoSource *source,
-	  QWidget *parent = 0);
+	MapView(Map *map, POI *poi, QWidget *parent = 0);
 
 	QList<PathItem *> loadData(const Data &data);
 	void loadMaps(const QList<MapAction*> &maps);

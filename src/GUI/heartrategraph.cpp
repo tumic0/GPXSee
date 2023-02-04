@@ -6,7 +6,7 @@
 
 HeartRateGraph::HeartRateGraph(QWidget *parent) : GraphTab(parent)
 {
-	_showTracks = true;
+	_showTracks = false;
 
 	GraphView::setYUnits(tr("bpm"));
 	setYLabel(tr("Heart rate"));

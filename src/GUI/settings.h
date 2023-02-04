@@ -1,276 +1,212 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <QLocale>
-#include <QDir>
-#include <QPageLayout>
-#include <QPageSize>
-#include "common/config.h"
-#include "common/util.h"
-#include "data/graph.h"
-#include "format.h"
-#include "units.h"
-#include "timetype.h"
-#include "markerinfoitem.h"
+#include <QMap>
+#include <QVariant>
+#include <QSettings>
 
+#define SETTINGS_WINDOW     "Window"
+#define SETTINGS_SETTINGS   "Settings"
+#define SETTINGS_MAP        "Map"
+#define SETTINGS_GRAPH      "Graph"
+#define SETTINGS_POI        "POI"
+#define SETTINGS_DATA       "Data"
+#define SETTINGS_POSITION   "Position"
+#define SETTINGS_PDF_EXPORT "Export"
+#define SETTINGS_PNG_EXPORT "PNGExport"
+#define SETTINGS_OPTIONS    "Options"
 
-#define IMPERIAL_UNITS() \
-	(QLocale::system().measurementSystem() == QLocale::ImperialSystem)
-#define CURRENT_PATH(filename) \
-	QDir::current().filePath(filename)
-
-
-#define WINDOW_SETTINGS_GROUP             "Window"
-#define WINDOW_GEOMETRY_SETTING           "geometry"
-#define WINDOW_STATE_SETTING              "state"
-
-#define SETTINGS_SETTINGS_GROUP           "Settings"
-#define TIME_TYPE_SETTING                 "timeType"
-#define TIME_TYPE_DEFAULT                 Total
-#define UNITS_SETTING                     "units"
-#define UNITS_DEFAULT                     (IMPERIAL_UNITS() ? Imperial : Metric)
-#define COORDINATES_SETTING               "coordinates"
-#define COORDINATES_DEFAULT               DecimalDegrees
-#define SHOW_TOOLBARS_SETTING             "toolbar"
-#define SHOW_TOOLBARS_DEFAULT             true
-
-#define GRAPH_SETTINGS_GROUP              "Graph"
-#define SHOW_GRAPHS_SETTING               "show"
-#define SHOW_GRAPHS_DEFAULT               true
-#define GRAPH_TYPE_SETTING                "type"
-#define GRAPH_TYPE_DEFAULT                Distance
-#define SHOW_GRAPH_GRIDS_SETTING          "grid"
-#define SHOW_GRAPH_GRIDS_DEFAULT          true
-#define SHOW_GRAPH_SLIDER_INFO_SETTING    "sliderInfo"
-#define SHOW_GRAPH_SLIDER_INFO_DEFAULT    true
-#define SHOW_GRAPH_TABS_SETTING           "tabs"
-#define SHOW_GRAPH_TABS_DEFAULT           true
-#define SHOW_TICKS_SETTING                "pathTicks"
-#define SHOW_TICKS_DEFAULT                false
-
-#define MAP_SETTINGS_GROUP                "Map"
-#define CURRENT_MAP_SETTING               "map"
-#define SHOW_MAP_SETTING                  "show"
-#define SHOW_MAP_DEFAULT                  true
-#define SHOW_CURSOR_COORDINATES_SETTING   "coordinates"
-#define SHOW_CURSOR_COORDINATES_DEFAULT   false
-
-#define POI_SETTINGS_GROUP                "POI"
-#define OVERLAP_POI_SETTING               "overlap"
-#define OVERLAP_POI_DEFAULT               false
-
-#define POSITION_SETTINGS_GROUP           "Position"
-#define SHOW_POSITION_SETTING             "show"
-#define SHOW_POSITION_DEFAULT             false
-#define FOLLOW_POSITION_SETTING           "follow"
-#define FOLLOW_POSITION_DEFAULT           true
-#define SHOW_POSITION_COORDINATES_SETTING "coordinates"
-#define SHOW_POSITION_COORDINATES_DEFAULT true
-#define SHOW_MOTION_INFO_SETTING          "motionInfo"
-#define SHOW_MOTION_INFO_DEFAULT          true
-
-#define SHOW_POI_ICONS_SETTING            "icons"
-#define SHOW_POI_ICONS_DEFAULT            true
-#define SHOW_POI_LABELS_SETTING           "labels"
-#define SHOW_POI_LABELS_DEFAULT           true
-#define SHOW_POI_SETTING                  "show"
-#define SHOW_POI_DEFAULT                  false
-#define DISABLED_POI_FILE_SETTINGS_PREFIX "disabled"
-#define DISABLED_POI_FILE_SETTING         "file"
-
-#define DATA_SETTINGS_GROUP               "Data"
-#define SHOW_TRACKS_SETTING               "tracks"
-#define SHOW_TRACKS_DEFAULT               true
-#define SHOW_ROUTES_SETTING               "routes"
-#define SHOW_ROUTES_DEFAULT               true
-#define SHOW_WAYPOINTS_SETTING            "waypoints"
-#define SHOW_WAYPOINTS_DEFAULT            true
-#define SHOW_AREAS_SETTING                "areas"
-#define SHOW_AREAS_DEFAULT                true
-#define SHOW_ROUTE_WAYPOINTS_SETTING      "routeWaypoints"
-#define SHOW_ROUTE_WAYPOINTS_DEFAULT      true
-#define SHOW_WAYPOINT_ICONS_SETTING       "waypointIcons"
-#define SHOW_WAYPOINT_ICONS_DEFAULT       false
-#define SHOW_WAYPOINT_LABELS_SETTING      "waypointLabels"
-#define SHOW_WAYPOINT_LABELS_DEFAULT      true
-#define SHOW_MARKERS_SETTING              "positionMarkers"
-#define SHOW_MARKERS_DEFAULT              true
-#define SHOW_MARKER_INFO_SETTING          "markerInfo"
-#define SHOW_MARKER_INFO_DEFAULT          MarkerInfoItem::None
-#define USE_STYLES_SETTING                "styles"
-#define USE_STYLES_DEFAULT                true
-
-#define PDF_EXPORT_SETTINGS_GROUP         "Export"
-#define PAPER_ORIENTATION_SETTING         "orientation"
-#define PAPER_ORIENTATION_DEFAULT         QPageLayout::Orientation::Portrait
-#define PAPER_SIZE_SETTING                "size"
-#define PAPER_SIZE_DEFAULT                (IMPERIAL_UNITS() \
-	                                        ? QPageSize::PageSizeId::Letter \
-	                                        : QPageSize::PageSizeId::A4)
-#define PDF_MARGIN_LEFT_SETTING           "marginLeft"
-#define PDF_MARGIN_LEFT_DEFAULT           5 /* mm */
-#define PDF_MARGIN_TOP_SETTING            "marginTop"
-#define PDF_MARGIN_TOP_DEFAULT            5 /* mm */
-#define PDF_MARGIN_RIGHT_SETTING          "marginRight"
-#define PDF_MARGIN_RIGHT_DEFAULT          5 /* mm */
-#define PDF_MARGIN_BOTTOM_SETTING         "marginBottom"
-#define PDF_MARGIN_BOTTOM_DEFAULT         5 /* mm */
-#define PDF_FILENAME_SETTING              "fileName"
-#define PDF_FILENAME_DEFAULT              CURRENT_PATH("export.pdf")
-#define RESOLUTION_SETTING                "resolution"
-#define RESOLUTION_DEFAULT                600
-
-#define PNG_EXPORT_SETTINGS_GROUP         "PNGExport"
-#define PNG_WIDTH_SETTING                 "width"
-#define PNG_WIDTH_DEFAULT                 600
-#define PNG_HEIGHT_SETTING                "height"
-#define PNG_HEIGHT_DEFAULT                800
-#define PNG_MARGIN_LEFT_SETTING           "marginLeft"
-#define PNG_MARGIN_LEFT_DEFAULT           5 /* px */
-#define PNG_MARGIN_TOP_SETTING            "marginTop"
-#define PNG_MARGIN_TOP_DEFAULT            5 /* px */
-#define PNG_MARGIN_RIGHT_SETTING          "marginRight"
-#define PNG_MARGIN_RIGHT_DEFAULT          5 /* px */
-#define PNG_MARGIN_BOTTOM_SETTING         "marginBottom"
-#define PNG_MARGIN_BOTTOM_DEFAULT         5 /* px */
-#define PNG_ANTIALIASING_SETTING          "antialiasing"
-#define PNG_ANTIALIASING_DEFAULT          true
-#define PNG_FILENAME_SETTING              "fileName"
-#define PNG_FILENAME_DEFAULT              CURRENT_PATH("export.png")
-
-#define OPTIONS_SETTINGS_GROUP            "Options"
-#define PALETTE_COLOR_SETTING             "paletteColor"
-#define PALETTE_COLOR_DEFAULT             QColor(Qt::blue)
-#define PALETTE_SHIFT_SETTING             "paletteShift"
-#define PALETTE_SHIFT_DEFAULT             0.62
-#define MAP_OPACITY_SETTING               "mapOpacity"
-#define MAP_OPACITY_DEFAULT               100
-#define BACKGROUND_COLOR_SETTING          "backgroundColor"
-#define BACKGROUND_COLOR_DEFAULT          QColor(Qt::white)
-#define CROSSHAIR_COLOR_SETTING           "crosshairColor"
-#define CROSSHAIR_COLOR_DEFAULT           QColor(Qt::red)
-#define INFO_COLOR_SETTING                "infoColor"
-#define INFO_COLOR_DEFAULT                QColor(Qt::black)
-#define INFO_BACKGROUND_SETTING           "infoBackground"
-#define INFO_BACKGROUND_DEFAULT           false
-#define TRACK_WIDTH_SETTING               "trackWidth"
-#define TRACK_WIDTH_DEFAULT               3
-#define ROUTE_WIDTH_SETTING               "routeWidth"
-#define ROUTE_WIDTH_DEFAULT               3
-#define AREA_WIDTH_SETTING                "areaWidth"
-#define AREA_WIDTH_DEFAULT                2
-#define TRACK_STYLE_SETTING               "trackStyle"
-#define TRACK_STYLE_DEFAULT               Qt::SolidLine
-#define ROUTE_STYLE_SETTING               "routeStyle"
-#define ROUTE_STYLE_DEFAULT               Qt::DotLine
-#define AREA_STYLE_SETTING                "areaStyle"
-#define AREA_STYLE_DEFAULT                Qt::SolidLine
-#define AREA_OPACITY_SETTING              "areaOpacity"
-#define AREA_OPACITY_DEFAULT              50
-#define WAYPOINT_SIZE_SETTING             "waypointSize"
-#define WAYPOINT_SIZE_DEFAULT             8
-#define WAYPOINT_COLOR_SETTING            "waypointColor"
-#define WAYPOINT_COLOR_DEFAULT            QColor(Qt::black)
-#define POI_SIZE_SETTING                  "poiSize"
-#define POI_SIZE_DEFAULT                  8
-#define POI_COLOR_SETTING                 "poiColor"
-#define POI_COLOR_DEFAULT                 QColor(Qt::black)
-#define GRAPH_WIDTH_SETTING               "graphWidth"
-#define GRAPH_WIDTH_DEFAULT               1
-#define PATH_AA_SETTING                   "pathAntiAliasing"
-#define PATH_AA_DEFAULT                   true
-#define GRAPH_AA_SETTING                  "graphAntiAliasing"
-#define GRAPH_AA_DEFAULT                  true
-#define ELEVATION_FILTER_SETTING          "elevationFilter"
-#define ELEVATION_FILTER_DEFAULT          3
-#define SPEED_FILTER_SETTING              "speedFilter"
-#define SPEED_FILTER_DEFAULT              5
-#define HEARTRATE_FILTER_SETTING          "heartrateFilter"
-#define HEARTRATE_FILTER_DEFAULT          3
-#define CADENCE_FILTER_SETTING            "cadenceFilter"
-#define CADENCE_FILTER_DEFAULT            3
-#define POWER_FILTER_SETTING              "powerFilter"
-#define POWER_FILTER_DEFAULT              3
-#define OUTLIER_ELIMINATE_SETTING         "outlierEliminate"
-#define OUTLIER_ELIMINATE_DEFAULT         true
-#define AUTOMATIC_PAUSE_SETTING           "automaticPause"
-#define AUTOMATIC_PAUSE_DEFAULT           true
-#define PAUSE_SPEED_SETTING               "pauseSpeed"
-#define PAUSE_SPEED_DEFAULT               0.5 /* m/s */
-#define PAUSE_INTERVAL_SETTING            "pauseInterval"
-#define PAUSE_INTERVAL_DEFAULT            10 /* s */
-#define USE_REPORTED_SPEED_SETTING        "useReportedSpeed"
-#define USE_REPORTED_SPEED_DEFAULT        false
-#define DATA_USE_DEM_SETTING              "dataUseDEM"
-#define DATA_USE_DEM_DEFAULT              false
-#define SHOW_SECONDARY_ELEVATION_SETTING  "showSecondaryElevation"
-#define SHOW_SECONDARY_ELEVATION_DEFAULT  false
-#define SHOW_SECONDARY_SPEED_SETTING      "showSecondarySpeed"
-#define SHOW_SECONDARY_SPEED_DEFAULT      false
-#define TIME_ZONE_SETTING                 "timeZone"
-#define USE_SEGMENTS_SETTING              "useSegments"
-#define USE_SEGMENTS_DEFAULT              true
-#define POI_RADIUS_SETTING                "poiRadius"
-#define POI_RADIUS_DEFAULT                (int)(IMPERIAL_UNITS() ? MIINM : KMINM)
-#define DEM_URL_SETTING                   "demURL"
-#define DEM_URL_DEFAULT                   DEM_TILES_URL
-#define DEM_AUTH_SETTING                  "demAuthentication"
-#define DEM_AUTH_DEFAULT                  false
-#define DEM_USERNAME_SETTING              "demUsername"
-#define DEM_USERNAME_DEFAULT              ""
-#define DEM_PASSWORD_SETTING              "demPassword"
-#define DEM_PASSWORD_DEFAULT              ""
-#define POSITION_PLUGIN_SETTING           "positionPlugin"
-#define POSITION_PLUGIN_DEFAULT           Settings::positionPlugin()
-#define POSITION_PLUGIN_PARAMS_PREFIX     "pluginParameters"
-#define POSITION_PLUGIN_PARAMS_PLUGIN     "plugin"
-#define POSITION_PLUGIN_PARAMS_PARAM      "parameters"
-#define USE_OPENGL_SETTING                "useOpenGL"
-#define USE_OPENGL_DEFAULT                false
-#define ENABLE_HTTP2_SETTING              "enableHTTP2"
-#define ENABLE_HTTP2_DEFAULT              true
-#define PIXMAP_CACHE_SETTING              "pixmapCache"
-#ifdef Q_OS_ANDROID
-#define PIXMAP_CACHE_DEFAULT              256 /* MB */
-#else // Q_OS_ANDROID
-#define PIXMAP_CACHE_DEFAULT              512 /* MB */
-#endif // Q_OS_ANDROID
-#define CONNECTION_TIMEOUT_SETTING        "connectionTimeout"
-#define CONNECTION_TIMEOUT_DEFAULT        30 /* s */
-#define HIRES_PRINT_SETTING               "hiresPrint"
-#define HIRES_PRINT_DEFAULT               false
-#define PRINT_NAME_SETTING                "printName"
-#define PRINT_NAME_DEFAULT                true
-#define PRINT_DATE_SETTING                "printDate"
-#define PRINT_DATE_DEFAULT                true
-#define PRINT_DISTANCE_SETTING            "printDistance"
-#define PRINT_DISTANCE_DEFAULT            true
-#define PRINT_TIME_SETTING                "printTime"
-#define PRINT_TIME_DEFAULT                true
-#define PRINT_MOVING_TIME_SETTING         "printMovingTime"
-#define PRINT_MOVING_TIME_DEFAULT         false
-#define PRINT_ITEM_COUNT_SETTING          "printItemCount"
-#define PRINT_ITEM_COUNT_DEFAULT          true
-#define SEPARATE_GRAPH_PAGE_SETTING       "separateGraphPage"
-#define SEPARATE_GRAPH_PAGE_DEFAULT       false
-#define SLIDER_COLOR_SETTING              "sliderColor"
-#define SLIDER_COLOR_DEFAULT              QColor(Qt::red)
-#define OUTPUT_PROJECTION_SETTING         "outputProjection"
-#define OUTPUT_PROJECTION_DEFAULT         3857
-#define INPUT_PROJECTION_SETTING          "inputProjection"
-#define INPUT_PROJECTION_DEFAULT          4326
-#define HIDPI_MAP_SETTING                 "HiDPIMap"
-#define HIDPI_MAP_DEFAULT                 true
-#define DATA_PATH_SETTING                 "dataPath"
-#define DATA_PATH_DEFAULT                 ""
-#define MAPS_PATH_SETTING                 "mapsPath"
-#define MAPS_PATH_DEFAULT                 ""
-#define POI_PATH_SETTING                  "poiPath"
-#define POI_PATH_DEFAULT                  ""
-
-namespace Settings
+class Settings
 {
-    const QString &positionPlugin();
-}
+public:
+	class Setting
+	{
+	public:
+		Setting(const QString &name, const QVariant &defVal)
+		  : _name(name), _defVal(defVal) {}
+
+		void write(QSettings &settings, const QVariant &value) const
+		{
+			if (value != _defVal)
+				settings.setValue(_name, value);
+		}
+		QVariant read(const QSettings &settings) const
+		{
+			return settings.value(_name, _defVal);
+		}
+
+	private:
+		QString _name;
+		QVariant _defVal;
+	};
+
+	class SettingMap
+	{
+	public:
+		SettingMap(const QString &prefix, const QString &key, const QString &value)
+		  : _prefix(prefix), _key(key), _value(value) {}
+
+		void write(QSettings &settings, const QMap<QString, QVariantMap> &map) const;
+		QMap<QString, QVariantMap> read(QSettings &settings) const;
+
+	private:
+		QString _prefix;
+		QString _key;
+		QString _value;
+	};
+
+	class SettingList
+	{
+	public:
+		SettingList(const QString &prefix, const QString &value)
+		  : _prefix(prefix), _value(value) {}
+
+		void write(QSettings &settings, const QStringList &list) const;
+		QStringList read(QSettings &settings) const;
+
+	private:
+		QString _prefix;
+		QString _value;
+	};
+
+
+	/* Window */
+#ifndef Q_OS_ANDROID
+	static const Setting windowGeometry;
+	static const Setting windowState;
+#endif // Q_OS_ANDROID
+
+	/* Settings */
+	static const Setting timeType;
+	static const Setting units;
+	static const Setting coordinatesFormat;
+#ifndef Q_OS_ANDROID
+	static const Setting showToolbars;
+#endif // Q_OS_ANDROID
+
+	/* Map */
+	static const Setting activeMap;
+	static const Setting showMap;
+	static const Setting cursorCoordinates;
+
+	/* Graph */
+	static const Setting showGraphs;
+	static const Setting graphType;
+	static const Setting showGrid;
+	static const Setting sliderInfo;
+#ifdef Q_OS_ANDROID
+	static const Setting showGraphTabs;
+#endif // Q_OS_ANDROID
+
+	/* POI */
+	static const Setting poiIcons;
+	static const Setting poiLabels;
+	static const Setting showPoi;
+	static const Setting poiOverlap;
+	static const SettingList disabledPoiFiles;
+
+	/* Data */
+	static const Setting tracks;
+	static const Setting routes;
+	static const Setting waypoints;
+	static const Setting areas;
+	static const Setting routeWaypoints;
+	static const Setting waypointIcons;
+	static const Setting waypointLabels;
+	static const Setting pathTicks;
+	static const Setting positionMarkers;
+	static const Setting markerInfo;
+	static const Setting useStyles;
+
+	/* Position */
+	static const Setting showPosition;
+	static const Setting followPosition;
+	static const Setting positionCoordinates;
+	static const Setting motionInfo;
+
+	/* PDF export */
+	static const Setting pdfOrientation;
+	static const Setting pdfSize;
+	static const Setting pdfMarginLeft;
+	static const Setting pdfMarginTop;
+	static const Setting pdfMarginRight;
+	static const Setting pdfMarginBottom;
+	static const Setting pdfFileName;
+	static const Setting pdfResolution;
+
+	/* PNG export */
+	static const Setting pngWidth;
+	static const Setting pngHeight;
+	static const Setting pngMarginLeft;
+	static const Setting pngMarginTop;
+	static const Setting pngMarginRight;
+	static const Setting pngMarginBottom;
+	static const Setting pngAntialiasing;
+	static const Setting pngFileName;
+
+	/* Options */
+	static const Setting paletteColor;
+	static const Setting paletteShift;
+	static const Setting mapOpacity;
+	static const Setting backgroundColor;
+	static const Setting crosshairColor;
+	static const Setting infoColor;
+	static const Setting infoBackground;
+	static const Setting trackWidth;
+	static const Setting routeWidth;
+	static const Setting areaWidth;
+	static const Setting trackStyle;
+	static const Setting routeStyle;
+	static const Setting areaStyle;
+	static const Setting areaOpacity;
+	static const Setting waypointSize;
+	static const Setting waypointColor;
+	static const Setting poiSize;
+	static const Setting poiColor;
+	static const Setting graphWidth;
+	static const Setting pathAntiAliasing;
+	static const Setting graphAntiAliasing;
+	static const Setting elevationFilter;
+	static const Setting speedFilter;
+	static const Setting heartRateFilter;
+	static const Setting cadenceFilter;
+	static const Setting powerFilter;
+	static const Setting outlierEliminate;
+	static const Setting automaticPause;
+	static const Setting pauseSpeed;
+	static const Setting pauseInterval;
+	static const Setting useReportedSpeed;
+	static const Setting dataUseDEM;
+	static const Setting secondaryElevation;
+	static const Setting secondarySpeed;
+	static const Setting timeZone;
+	static const Setting useSegments;
+	static const Setting poiRadius;
+	static const Setting demURL;
+	static const Setting demAuthentication;
+	static const Setting demUsername;
+	static const Setting demPassword;
+	static const Setting useOpenGL;
+	static const Setting enableHTTP2;
+	static const Setting pixmapCache;
+	static const Setting connectionTimeout;
+	static const Setting hiresPrint;
+	static const Setting printName;
+	static const Setting printDate;
+	static const Setting printDistance;
+	static const Setting printTime;
+	static const Setting printMovingTime;
+	static const Setting printItemCount;
+	static const Setting separateGraphPage;
+	static const Setting sliderColor;
+	static const Setting outputProjection;
+	static const Setting inputProjection;
+	static const Setting hidpiMap;
+	static const Setting poiPath;
+	static const Setting mapsPath;
+	static const Setting dataPath;
+	static const Setting &positionPlugin();
+	static const SettingMap positionPluginParameters;
+};
 
 #endif // SETTINGS_H

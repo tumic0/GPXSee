@@ -10,7 +10,7 @@ SpeedGraph::SpeedGraph(QWidget *parent) : GraphTab(parent)
 {
 	_units = Metric;
 	_timeType = Total;
-	_showTracks = true;
+	_showTracks = false;
 
 	setYUnits();
 	setYLabel(tr("Speed"));

@@ -6,7 +6,7 @@
 
 TemperatureGraph::TemperatureGraph(QWidget *parent) : GraphTab(parent)
 {
-	_showTracks = true;
+	_showTracks = false;
 
 	setYUnits(Metric);
 	setYLabel(tr("Temperature"));

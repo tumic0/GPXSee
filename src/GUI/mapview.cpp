@@ -35,8 +35,7 @@
 #define COORDINATES_OFFSET SCALE_OFFSET
 
 
-MapView::MapView(Map *map, POI *poi, QGeoPositionInfoSource *source,
-  QWidget *parent) : QGraphicsView(parent)
+MapView::MapView(Map *map, POI *poi, QWidget *parent) : QGraphicsView(parent)
 {
 	Q_ASSERT(map != 0);
 	Q_ASSERT(poi != 0);
@@ -72,10 +71,7 @@ MapView::MapView(Map *map, POI *poi, QGeoPositionInfoSource *source,
 	_poi = poi;
 	connect(_poi, &POI::pointsChanged, this, &MapView::updatePOI);
 
-	_positionSource = source;
-	if (_positionSource)
-		connect(_positionSource, &QGeoPositionInfoSource::positionUpdated, this,
-		  &MapView::updatePosition);
+	_positionSource = 0;
 	_crosshair = new CrosshairItem();
 	_crosshair->setZValue(2.0);
 	_crosshair->setVisible(false);
@@ -95,19 +91,19 @@ MapView::MapView(Map *map, POI *poi, QGeoPositionInfoSource *source,
 	_backgroundColor = Qt::white;
 	_markerColor = Qt::red;
 
-	_showMap = true;
-	_showTracks = true;
-	_showRoutes = true;
-	_showAreas = true;
-	_showWaypoints = true;
-	_showWaypointLabels = true;
+	_showMap = false;
+	_showTracks = false;
+	_showRoutes = false;
+	_showAreas = false;
+	_showWaypoints = false;
+	_showWaypointLabels = false;
 	_showWaypointIcons = false;
-	_showPOI = true;
-	_showPOILabels = true;
+	_showPOI = false;
+	_showPOILabels = false;
 	_showPOIIcons = false;
-	_overlapPOIs = true;
-	_showRouteWaypoints = true;
-	_showMarkers = true;
+	_overlapPOIs = false;
+	_showRouteWaypoints = false;
+	_showMarkers = false;
 	_markerInfoType = MarkerInfoItem::None;
 	_showPathTicks = false;
 	_trackWidth = 3;
@@ -1375,19 +1371,21 @@ void MapView::showPosition(bool show)
 {
 	_showPosition = show;
 
-	if (!_positionSource) {
-		_crosshair->setVisible(false);
-		_positionCoordinates->setVisible(false);
-		_motionInfo->setVisible(false);
-	} else if (_showPosition) {
-		_crosshair->setVisible(true);
-		if (_showPositionCoordinates)
-			_positionCoordinates->setVisible(true);
-		if (_showMotionInfo)
-			_motionInfo->setVisible(true);
-		_positionSource->startUpdates();
+	if (_positionSource) {
+		if (_showPosition) {
+			_crosshair->setVisible(true);
+			if (_showPositionCoordinates)
+				_positionCoordinates->setVisible(true);
+			if (_showMotionInfo)
+				_motionInfo->setVisible(true);
+			_positionSource->startUpdates();
+		} else {
+			_positionSource->stopUpdates();
+			_crosshair->setVisible(false);
+			_positionCoordinates->setVisible(false);
+			_motionInfo->setVisible(false);
+		}
 	} else {
-		_positionSource->stopUpdates();
 		_crosshair->setVisible(false);
 		_positionCoordinates->setVisible(false);
 		_motionInfo->setVisible(false);

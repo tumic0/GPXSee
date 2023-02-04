@@ -6,7 +6,7 @@
 
 GearRatioGraph::GearRatioGraph(QWidget *parent) : GraphTab(parent)
 {
-	_showTracks = true;
+	_showTracks = false;
 
 	GraphView::setYUnits("");
 	setYLabel(tr("Gear ratio"));

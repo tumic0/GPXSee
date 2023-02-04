@@ -179,6 +179,9 @@ private:
 	void loadInitialMaps(const QString &selected);
 	void loadInitialPOIs(const QStringList &disabled);
 
+	void loadOptions();
+	void updateOptions(const Options &options);
+
 #ifndef Q_OS_ANDROID
 	void keyPressEvent(QKeyEvent *event);
 #endif // Q_OS_ANDROID
@@ -224,7 +227,7 @@ private:
 	QAction *_showPositionAction;
 	QAction *_followPositionAction;
 	QAction *_showPositionCoordinatesAction;
-	QAction *_showMotionInfo;
+	QAction *_showMotionInfoAction;
 	QAction *_loadMapAction;
 	QAction *_loadMapDirAction;
 	QAction *_clearMapCacheAction;

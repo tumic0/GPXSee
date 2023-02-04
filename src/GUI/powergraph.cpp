@@ -6,7 +6,7 @@
 
 PowerGraph::PowerGraph(QWidget *parent) : GraphTab(parent)
 {
-	_showTracks = true;
+	_showTracks = false;
 
 	GraphView::setYUnits(tr("W"));
 	setYLabel(tr("Power"));
