@@ -2522,8 +2522,8 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 		showGraphSliderInfo(false);
 
 #ifdef Q_OS_ANDROID
-	if (READ(showGraphTabs)).toBool())
-	    _showGraphTabsAction->setChecked(true);
+	if (READ(showGraphTabs).toBool())
+		_showGraphTabsAction->setChecked(true);
 	else
 		showGraphTabs(false);
 #endif // Q_OS_ANDROID
