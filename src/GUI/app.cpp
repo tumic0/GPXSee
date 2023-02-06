@@ -6,6 +6,11 @@
 #include <QNetworkAccessManager>
 #include <QLibraryInfo>
 #include <QSurfaceFormat>
+#ifdef Q_OS_ANDROID
+#include <QCoreApplication>
+#include <QJniObject>
+#endif // Q_OS_ANDROID
+
 #include "common/programpaths.h"
 #include "common/config.h"
 #include "common/downloader.h"
@@ -102,6 +107,21 @@ void App::appStateChanged(Qt::ApplicationState state)
 {
 	if (state == Qt::ApplicationSuspended)
 		_gui->writeSettings();
+	else if (state == Qt::ApplicationActive) {
+		QJniObject activity = QNativeInterface::QAndroidApplication::context();
+		QString path(activity.callObjectMethod<jstring>("intentPath").toString());
+		if (!path.isEmpty()) {
+			if (!_gui->openFile(path, true)) {
+				MapAction *a;
+				if (!_gui->loadMap(path, a, true))
+					_gui->openFile(path, false);
+				else {
+					if (a)
+						a->trigger();
+				}
+			}
+		}
+	}
 }
 #endif // Q_OS_ANDROID
 
