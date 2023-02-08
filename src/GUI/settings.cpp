@@ -140,7 +140,7 @@ SETTING(showToolbars,        "toolbar",                true                   );
 #endif // Q_OS_ANDROID
 
 /* Map */
-SETTING(activeMap,           "map",                    ""                     );
+SETTING(activeMap,           "map",                    "Open Street Map"      );
 SETTING(showMap,             "show",                   true                   );
 SETTING(cursorCoordinates,   "coordinates",            false                  );
 
