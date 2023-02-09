@@ -185,7 +185,7 @@ PathItem *MapView::addRoute(const Route &route)
 	ri->setVisible(_showRoutes);
 	ri->showWaypoints(_showRouteWaypoints);
 	ri->showWaypointLabels(_showWaypointLabels);
-	ri->showWaypointIcons(_showWaypointLabels);
+	ri->showWaypointIcons(_showWaypointIcons);
 	ri->setDigitalZoom(_digitalZoom);
 	ri->setMarkerColor(_markerColor);
 	ri->showMarker(_showMarkers);

@@ -74,7 +74,7 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
   QGraphicsItem *parent) : GraphicsItem(parent)
 {
 	_waypoint = waypoint;
-	_showLabel = true;
+	_showLabel = false;
 	_showIcon = false;
 	_size = 8;
 	_color = Qt::black;
