@@ -10,7 +10,6 @@
 #include <QCoreApplication>
 #include <QJniObject>
 #endif // Q_OS_ANDROID
-
 #include "common/programpaths.h"
 #include "common/config.h"
 #include "common/downloader.h"
