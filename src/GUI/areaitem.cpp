@@ -185,7 +185,7 @@ void AreaItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
 	Q_UNUSED(event);
 
-	_pen.setWidthF((_width + 1) * pow(2, -_digitalZoom));
+	_pen.setWidthF((width() + 1) * pow(2, -_digitalZoom));
 	update();
 }
 
@@ -193,6 +193,6 @@ void AreaItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
 	Q_UNUSED(event);
 
-	_pen.setWidthF(_width * pow(2, -_digitalZoom));
+	_pen.setWidthF(width() * pow(2, -_digitalZoom));
 	update();
 }
