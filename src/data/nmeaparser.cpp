@@ -486,7 +486,7 @@ bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
 	Q_UNUSED(routes);
 	Q_UNUSED(polygons);
 	qint64 len;
-	char line[80 + 2 + 1 + 1];
+	char line[80 + 2/*CRLF*/ + 1/*'\0'*/ + 1/*extra byte for limit check*/];
 	SegmentData segment;
 	CTX ctx;
 
@@ -500,7 +500,7 @@ bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
 		if (len < 0) {
 			_errorString = "I/O error";
 			return false;
-		} else if (len > (qint64)sizeof(line) - 1) {
+		} else if (len >= (qint64)sizeof(line) - 1) {
 			_errorString = "Line limit exceeded";
 			return false;
 		}
