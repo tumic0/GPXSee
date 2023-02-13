@@ -104,6 +104,26 @@ static void setWaypointProperties(Waypoint &waypoint,
 	waypoint.setStyle(PointStyle(color, size));
 }
 
+static bool isWS(char c)
+{
+	return (c == 0x20 || c == 0x09 || c == 0x0A || c == 0x0D) ? true : false;
+}
+
+static bool isJSONObject(QFile *file)
+{
+	char c;
+
+	while (file->getChar(&c)) {
+		if (isWS(c))
+			continue;
+		else if (c == '{')
+			return true;
+		else
+			return false;
+	}
+
+	return false;
+}
 
 GeoJSONParser::Type GeoJSONParser::type(const QJsonObject &json)
 {
@@ -404,6 +424,13 @@ bool GeoJSONParser::parse(QFile *file, QList<TrackData> &tracks,
   QList<RouteData> &routes, QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(routes);
+
+	if (!isJSONObject(file)) {
+		_errorString = "Not a GeoJSON file";
+		return false;
+	} else
+		file->reset();
+
 	QJsonParseError error;
 	QJsonDocument doc(QJsonDocument::fromJson(file->readAll(), &error));
 
