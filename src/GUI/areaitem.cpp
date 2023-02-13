@@ -178,7 +178,7 @@ void AreaItem::setDigitalZoom(int zoom)
 	prepareGeometryChange();
 
 	_digitalZoom = zoom;
-	_pen.setWidthF(_width * pow(2, -_digitalZoom));
+	_pen.setWidthF(width() * pow(2, -_digitalZoom));
 }
 
 void AreaItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
