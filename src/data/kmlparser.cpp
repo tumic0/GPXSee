@@ -488,6 +488,8 @@ void KMLParser::track(SegmentData &segment)
 		if (_reader.name() == QLatin1String("when")) {
 			segment.append(Trackpoint());
 			segment.last().setTimestamp(time());
+			if (_reader.error())
+				return;
 		} else if (_reader.name() == QLatin1String("coord")) {
 			if (i == segment.size()) {
 				_reader.raiseError(error);
