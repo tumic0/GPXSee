@@ -83,7 +83,7 @@ static void setWaypointProperties(Waypoint &waypoint,
 	QColor color(0x7e, 0x7e, 0x7e);
 	int size = MARKER_SIZE_MEDIUM;
 
-	if (!properties.isObject()) {
+	if (properties.isObject()) {
 		QJsonObject o(properties.toObject());
 
 		if (o["name"].isString())
