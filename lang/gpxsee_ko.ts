@@ -25,7 +25,7 @@
         <location filename="../src/GUI/cadencegraph.cpp" line="12"/>
         <location filename="../src/GUI/cadencegraph.h" line="16"/>
         <source>Cadence</source>
-        <translation>보조</translation>
+        <translation>케이던스</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="27"/>
@@ -578,7 +578,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="485"/>
         <source>Imperial</source>
-        <translation>야드</translation>
+        <translation>야드·파운드법</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="491"/>
@@ -1551,7 +1551,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="393"/>
         <source>Computed from distance/time</source>
-        <translation>거리/시간에서 계산됨</translation>
+        <translation>거리/시간으로 계산됨</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="394"/>
@@ -1813,7 +1813,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="794"/>
         <source>Appearance</source>
-        <translation>모양</translation>
+        <translation>모양새</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="796"/>
