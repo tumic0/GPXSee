@@ -6,12 +6,12 @@
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="15"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Utente:</translation>
     </message>
     <message>
         <location filename="../src/GUI/authenticationwidget.cpp" line="16"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Password:</translation>
     </message>
 </context>
 <context>
@@ -137,7 +137,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="169"/>
         <source>ONmove files</source>
-        <translation type="unfinished"></translation>
+        <translation>File ONmove</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="170"/>
@@ -167,7 +167,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="175"/>
         <source>TwoNav files</source>
-        <translation type="unfinished"></translation>
+        <translation>File TwoNav</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="176"/>
@@ -180,12 +180,12 @@
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="18"/>
         <source>System default</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurazione predefinita</translation>
     </message>
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="40"/>
         <source>Select directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona cartella</translation>
     </message>
 </context>
 <context>
@@ -429,7 +429,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="289"/>
         <source>Show POI icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra icone POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="294"/>
@@ -476,22 +476,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="351"/>
         <source>Show position</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizza posizione</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="357"/>
         <source>Follow position</source>
-        <translation type="unfinished"></translation>
+        <translation>Segui posizione</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="362"/>
         <source>Show coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizza coordinate</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="368"/>
         <source>Show motion info</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizza informazioni movimento</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="375"/>
@@ -516,7 +516,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="393"/>
         <source>Waypoint icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Icone punti</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="398"/>
@@ -541,7 +541,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="420"/>
         <source>Marker only</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo indicatori</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="424"/>
@@ -561,7 +561,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="439"/>
         <source>Download DEM data</source>
-        <translation type="unfinished"></translation>
+        <translation>Scarica DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="444"/>
@@ -706,13 +706,13 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="686"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Posizione</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="915"/>
         <location filename="../src/GUI/gui.cpp" line="933"/>
         <source>Symbols directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartella simboli</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="962"/>
@@ -737,7 +737,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="682"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="693"/>
@@ -1002,12 +1002,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1984"/>
         <source>Could not download all required DEM files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile scaricare tutti i file DEM.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1999"/>
         <source>No local DEM tiles found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun file DEM trovato.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="2013"/>
@@ -1291,7 +1291,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="180"/>
         <source>All files</source>
-        <translation type="unfinished">Tutti i file</translation>
+        <translation>Tutti i file</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="171"/>
@@ -1319,17 +1319,17 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="87"/>
         <source>kn</source>
-        <translation type="unfinished">kn</translation>
+        <translation>kn</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="90"/>
         <source>mi/h</source>
-        <translation type="unfinished">mi/h</translation>
+        <translation>mi/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="93"/>
         <source>km/h</source>
-        <translation type="unfinished">km/h</translation>
+        <translation>km/h</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="100"/>
@@ -1792,7 +1792,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="571"/>
         <source>Use HTTP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa HTTP autentificazione</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="577"/>
@@ -1803,7 +1803,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="582"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="595"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="607"/>
@@ -1956,7 +1956,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="819"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Posizione</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="820"/>
@@ -2074,7 +2074,7 @@
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="45"/>
         <source>Use anti-aliasing</source>
-        <translation type="unfinished">Usa anti-alias</translation>
+        <translation>Usa anti-alias</translation>
     </message>
     <message>
         <location filename="../src/GUI/pngexportdialog.cpp" line="49"/>
