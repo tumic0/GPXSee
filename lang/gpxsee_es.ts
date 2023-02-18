@@ -2522,7 +2522,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="55"/>
         <source>Phone</source>
-        <translation type="unfinished"></translation>
+        <translation>Teléfono</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="65"/>
