@@ -59,10 +59,11 @@ static double area(const QVector<Coordinates> &polygon)
 {
 	double area = 0;
 
-	for (int i = 0; i < polygon.size(); i++) {
-		int j = (i + 1) % polygon.size();
-		area += polygon.at(i).lon() * polygon.at(j).lat();
-		area -= polygon.at(i).lat() * polygon.at(j).lon();
+	for (int i = 0; i < polygon.size() - 1; i++) {
+		const Coordinates &pi = polygon.at(i);
+		const Coordinates &pj = polygon.at(i+1);
+		area += pi.lon() * pj.lat();
+		area -= pi.lat() * pj.lon();
 	}
 	area /= 2.0;
 
@@ -71,15 +72,18 @@ static double area(const QVector<Coordinates> &polygon)
 
 static Coordinates centroid(const QVector<Coordinates> &polygon)
 {
+	Q_ASSERT(polygon.size() > 3);
+	Q_ASSERT(polygon.first() == polygon.last());
+
 	double cx = 0, cy = 0;
 	double factor = 1.0 / (6.0 * area(polygon));
 
-	for (int i = 0; i < polygon.size(); i++) {
-		int j = (i + 1) % polygon.size();
-		qreal f = (polygon.at(i).lon() * polygon.at(j).lat()
-		  - polygon.at(j).lon() * polygon.at(i).lat());
-		cx += (polygon.at(i).lon() + polygon.at(j).lon()) * f;
-		cy += (polygon.at(i).lat() + polygon.at(j).lat()) * f;
+	for (int i = 0; i < polygon.size() - 1; i++) {
+		const Coordinates &pi = polygon.at(i);
+		const Coordinates &pj = polygon.at(i+1);
+		double f = (pi.lon() * pj.lat() - pj.lon() * pi.lat());
+		cx += (pi.lon() + pj.lon()) * f;
+		cy += (pi.lat() + pj.lat()) * f;
 	}
 
 	return Coordinates(cx * factor, cy * factor);
