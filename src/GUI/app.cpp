@@ -6,6 +6,7 @@
 #include <QNetworkAccessManager>
 #include <QLibraryInfo>
 #include <QSurfaceFormat>
+#include <QImageReader>
 #ifdef Q_OS_ANDROID
 #include <QCoreApplication>
 #include <QJniObject>
@@ -59,6 +60,9 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	fmt.setStencilBufferSize(8);
 	fmt.setSamples(4);
 	QSurfaceFormat::setDefaultFormat(fmt);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	QImageReader::setAllocationLimit(0);
+#endif // QT6
 
 	loadDatums();
 	loadPCSs();
