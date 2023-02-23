@@ -42,8 +42,6 @@ private:
 	};
 	typedef RTree<SubDiv*, double, 2> SubDivTree;
 
-	friend QDebug operator<<(QDebug dbg, const MapLevel &level);
-
 	bool load(int idx);
 	int level(int bits, const Range &baseMap);
 	int readExtEntry(Handle &hdl, quint32 &polygons, quint32 &lines,
@@ -59,9 +57,6 @@ private:
 	QMap<int, SubDivTree*> _subdivs;
 };
 
-#ifndef QT_NO_DEBUG
-QDebug operator<<(QDebug dbg, const TREFile::MapLevel &level);
-#endif // QT_NO_DEBUG
 }
 
 #endif // IMG_TREFILE_H

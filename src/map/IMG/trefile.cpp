@@ -329,13 +329,3 @@ QList<SubDiv*> TREFile::subdivs(const RectC &rect, int bits,
 
 	return list;
 }
-
-#ifndef QT_NO_DEBUG
-QDebug IMG::operator<<(QDebug dbg, const TREFile::MapLevel &level)
-{
-	dbg.nospace() << "MapLevel(" << level.level << "," << level.bits << ", "
-	  << level.subdivs << ")";
-
-	return dbg.space();
-}
-#endif // QT_NO_DEBUG
