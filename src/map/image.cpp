@@ -1,7 +1,6 @@
 #include <QPainter>
 #include "image.h"
 
-
 #define TILE_SIZE 256
 
 void Image::draw(QPainter *painter, const QRectF &rect, Map::Flags flags)
@@ -17,9 +16,9 @@ void Image::draw(QPainter *painter, const QRectF &rect, Map::Flags flags)
 			for (int j = sr.top()/TILE_SIZE; j <= sr.bottom()/TILE_SIZE; j++) {
 				QPoint tl(i * TILE_SIZE, j * TILE_SIZE);
 				QRect tile(tl, QSize(TILE_SIZE, TILE_SIZE));
-				QPixmap pm(QPixmap::fromImage(_img.copy(tile)));
-				pm.setDevicePixelRatio(ratio);
-				painter->drawPixmap(tl/ratio, pm);
+				QImage img(_img.copy(tile));
+				img.setDevicePixelRatio(ratio);
+				painter->drawImage(tl/ratio, img);
 			}
 		}
 	} else
