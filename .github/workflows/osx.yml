@@ -15,7 +15,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install dependencies
-        run: brew install qt5
+        run: |
+          brew update
+          brew install qt5
       - name: Create localization
         run: lrelease gpxsee.pro
       - name: Configure build
@@ -39,7 +41,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install dependencies
-        run: brew install qt6
+        run: |
+           brew update
+           brew install qt6
       - name: Create localization
         run: lrelease gpxsee.pro
       - name: Configure build
