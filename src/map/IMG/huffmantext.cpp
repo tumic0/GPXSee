@@ -21,7 +21,7 @@ bool HuffmanText::decode(const SubFile *file, SubFile::Handle &hdl,
 	quint32 sym;
 
 	while (hs.readSymbol(sym)) {
-		for (quint32 i = 0; i < (_table.symbolBits() >> 3); i++) {
+		for (int i = 0; i < (_table.symbolBits() >> 3); i++) {
 			str.append((quint8)sym);
 			if (((quint8)sym == '\0'))
 				return true;

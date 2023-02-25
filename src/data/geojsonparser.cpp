@@ -45,7 +45,7 @@ static void setAreaProperties(Area &area, const QJsonValue &properties)
 		if (o["fill-opacity"].isDouble())
 			fillColor.setAlphaF(o["fill-opacity"].toDouble());
 		else
-			fillColor.setAlphaF(0.6);
+			fillColor.setAlphaF(0.6f);
 	}
 
 	area.setStyle(PolygonStyle(fillColor, strokeColor, strokeWidth));

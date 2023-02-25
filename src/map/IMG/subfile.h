@@ -24,7 +24,7 @@ public:
 			if (!subFile)
 				return;
 
-			_data.resize(1U<<subFile->blockBits());
+			_data.resize(subFile->blockSize());
 			_file.setFileName(subFile->fileName());
 			_file.open(QIODevice::ReadOnly | QIODevice::Unbuffered);
 		}
@@ -144,7 +144,10 @@ public:
 	bool readVBitfield32(Handle &hdl, quint32 &bitfield) const;
 
 	const QString &fileName() const {return _path ? *_path : _img->fileName();}
-	unsigned blockBits() const {return _path ? BLOCK_BITS : _img->blockBits();}
+	int blockSize() const
+	{
+		return _path ? 1U<<BLOCK_BITS : 1U<<_img->blockBits();
+	}
 
 protected:
 	quint32 _gmpOffset;
