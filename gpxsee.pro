@@ -26,7 +26,6 @@ INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
     src/GUI/crosshairitem.h \
     src/GUI/motioninfoitem.h \
-    src/GUI/navigationwidget.h \
     src/GUI/pluginparameters.h \
     src/common/garmin.h \
     src/common/coordinates.h \
@@ -262,7 +261,6 @@ HEADERS += src/common/config.h \
 SOURCES += src/main.cpp \
     src/GUI/crosshairitem.cpp \
     src/GUI/motioninfoitem.cpp \
-    src/GUI/navigationwidget.cpp \
     src/GUI/pluginparameters.cpp \
     src/GUI/settings.cpp \
     src/common/coordinates.cpp \
@@ -560,6 +558,9 @@ unix:!macx:!android {
 }
 
 android {
+    HEADERS += src/GUI/navigationwidget.h
+    SOURCES += src/GUI/navigationwidget.cpp
+
     defineReplace(versionCode) {
         segments = $$split(1, ".")
         for (segment, segments): \
