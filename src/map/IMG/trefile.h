@@ -28,11 +28,10 @@ public:
 	void clear();
 
 	const RectC &bounds() const {return _bounds;}
-	QList<SubDiv*> subdivs(const RectC &rect, int bits, const Range &baseMap);
+	QList<SubDiv*> subdivs(const RectC &rect, const Zoom &zoom);
 	quint32 shift(quint8 bits) const
 	  {return (bits == _levels.last().bits) ? (_flags >> 0xb) & 7 : 0;}
-	Range zooms() const
-	  {return Range(_levels.at(_firstLevel).bits, _levels.last().bits);}
+	QVector<Zoom> zooms() const;
 
 private:
 	struct MapLevel {
@@ -43,7 +42,7 @@ private:
 	typedef RTree<SubDiv*, double, 2> SubDivTree;
 
 	bool load(int idx);
-	int level(int bits, const Range &baseMap);
+	const SubDivTree *subdivs(const Zoom &zoom);
 	int readExtEntry(Handle &hdl, quint32 &polygons, quint32 &lines,
 	  quint32 &points);
 

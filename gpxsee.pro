@@ -124,6 +124,7 @@ HEADERS += src/common/config.h \
     src/map/ENC/rastertile.h \
     src/map/ENC/style.h \
     src/map/IMG/section.h \
+    src/map/IMG/zoom.h \
     src/map/encmap.h \
     src/map/ENC/iso8211.h \
     src/map/gemfmap.h \

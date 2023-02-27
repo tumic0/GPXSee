@@ -15,13 +15,10 @@ public:
 	~GMAPData();
 
 private:
-	bool readXML(const QString &path, QString &dataDir, QString &typFile,
-	  QString &baseMap);
-	void mapProduct(QXmlStreamReader &reader, QString &dataDir,
-	  QString &typFile, QString &baseMap);
-	void subProduct(QXmlStreamReader &reader, QString &dataDir,
-	  QString &baseMap);
-	bool loadTile(const QDir &dir, bool baseMap);
+	bool readXML(const QString &path, QString &dataDir, QString &typFile);
+	void mapProduct(QXmlStreamReader &reader, QString &dataDir, QString &typFile);
+	void subProduct(QXmlStreamReader &reader, QString &dataDir);
+	bool loadTile(const QDir &dir);
 
 	QList<const QString*> _files;
 };

@@ -8,9 +8,10 @@
 #include "common/rectc.h"
 #include "common/rtree.h"
 #include "common/range.h"
+#include "common/hash.h"
 #include "label.h"
 #include "raster.h"
-
+#include "zoom.h"
 
 namespace IMG {
 
@@ -55,7 +56,7 @@ public:
 
 	const QString &name() const {return _name;}
 	const RectC &bounds() const {return _bounds;}
-	const Range &zooms() const {return _zooms;}
+	const Range &zooms() const {return _zoomLevels;}
 	const Style *style() const {return _style;}
 	void polys(const RectC &rect, int bits, QList<Poly> *polygons,
 	  QList<Poly> *lines);
@@ -72,14 +73,16 @@ public:
 protected:
 	typedef RTree<VectorTile*, double, 2> TileTree;
 
+	void computeZooms();
+
 	QString _fileName;
 	QString _name;
 	RectC _bounds;
 	SubFile *_typ;
 	Style *_style;
 	TileTree _tileTree;
-	Range _zooms;
-	Range _baseMap;
+	QList<Zoom> _zooms;
+	Range _zoomLevels;
 
 	bool _valid;
 	QString _errorString;
@@ -96,15 +99,14 @@ private:
 
 	struct PolyCTX
 	{
-		PolyCTX(const RectC &rect, int bits, const Range &baseMap,
+		PolyCTX(const RectC &rect, const Zoom &zoom,
 		  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
 		  QCache<const SubDiv*, MapData::Polys> *polyCache)
-		  : rect(rect), bits(bits), baseMap(baseMap), polygons(polygons),
-		  lines(lines), polyCache(polyCache) {}
+		  : rect(rect), zoom(zoom), polygons(polygons), lines(lines),
+		  polyCache(polyCache) {}
 
 		const RectC &rect;
-		int bits;
-		const Range &baseMap;
+		const Zoom &zoom;
 		QList<MapData::Poly> *polygons;
 		QList<MapData::Poly> *lines;
 		QCache<const SubDiv*, MapData::Polys> *polyCache;
@@ -112,18 +114,18 @@ private:
 
 	struct PointCTX
 	{
-		PointCTX(const RectC &rect, int bits, const Range &baseMap,
+		PointCTX(const RectC &rect, const Zoom &zoom,
 		  QList<MapData::Point> *points,
 		  QCache<const SubDiv*, QList<MapData::Point> > *pointCache)
-		  : rect(rect), bits(bits), baseMap(baseMap), points(points),
-		  pointCache(pointCache) {}
+		  : rect(rect), zoom(zoom), points(points), pointCache(pointCache) {}
 
 		const RectC &rect;
-		int bits;
-		const Range &baseMap;
+		const Zoom &zoom;
 		QList<MapData::Point> *points;
 		QCache<const SubDiv*, QList<MapData::Point> > *pointCache;
 	};
+
+	const Zoom &zoom(int bits) const;
 
 	static bool polyCb(VectorTile *tile, void *context);
 	static bool pointCb(VectorTile *tile, void *context);
@@ -132,7 +134,6 @@ private:
 	QCache<const SubDiv*, QList<Point> > _pointCache;
 
 	friend class VectorTile;
-	friend struct PolyCTX;
 };
 
 }

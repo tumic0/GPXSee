@@ -156,32 +156,6 @@ bool IMGData::createTileTree(const TileMap &tileMap)
 		_tileTree.Insert(min, max, tile);
 
 		_bounds |= tile->bounds();
-		if (tile->zooms().min() < _zooms.min())
-			_zooms.setMin(tile->zooms().min());
-	}
-
-	// Detect and mark basemap
-	TileTree::Iterator it;
-	bool baseMap = false;
-
-	for (_tileTree.GetFirst(it); !_tileTree.IsNull(it); _tileTree.GetNext(it)) {
-		VectorTile *tile = _tileTree.GetAt(it);
-		if (tile->zooms().min() > _zooms.min()) {
-			baseMap = true;
-			break;
-		}
-	}
-	if (baseMap) {
-		for (_tileTree.GetFirst(it); !_tileTree.IsNull(it);
-		  _tileTree.GetNext(it)) {
-			VectorTile *tile = _tileTree.GetAt(it);
-			if (tile->zooms().min() == _zooms.min())
-				_baseMap = tile->zooms();
-		}
-	} else {
-		/* Allow some extra zoom out on maps without basemaps, but not too much
-		   as this would kill the rendering performance. */
-		_zooms.setMin(_zooms.min() - 2);
 	}
 
 	return (_tileTree.Count() > 0);
@@ -208,6 +182,8 @@ IMGData::IMGData(const QString &fileName) : MapData(fileName)
 		_errorString = "No usable map tile found";
 		return;
 	}
+
+	computeZooms();
 
 	_valid = true;
 }

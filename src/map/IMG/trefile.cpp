@@ -162,7 +162,7 @@ bool TREFile::load(int idx)
 	SubDivTree *tree = new SubDivTree();
 	const MapLevel &level = _levels.at(idx);
 
-	_subdivs.insert(level.bits, tree);
+	_subdivs.insert(level.level, tree);
 
 	quint32 skip = 0;
 	for (int i = 0; i < idx; i++)
@@ -282,27 +282,24 @@ void TREFile::clear()
 	_subdivs.clear();
 }
 
-int TREFile::level(int bits, const Range &baseMap)
+const TREFile::SubDivTree *TREFile::subdivs(const Zoom &zoom)
 {
-	if (!baseMap.isNull()) {
-		if (zooms() != baseMap && bits <= baseMap.max())
-			return -1;
-		if (zooms() == baseMap && bits > baseMap.max())
-			return -1;
-	}
+	int idx = -1;
 
-	int idx = _firstLevel;
-
-	for (int i = idx + 1; i < _levels.size(); i++) {
-		if (_levels.at(i).bits > bits)
+	for (int i = _firstLevel; i < _levels.size(); i++) {
+		if (_levels.at(i).level == zoom.level()
+		  && _levels.at(i).bits == zoom.bits()) {
+			idx = i;
 			break;
-		idx++;
+		}
 	}
+	if (idx < 0)
+		return 0;
 
-	if (!_subdivs.contains(_levels.at(idx).bits) && !load(idx))
-		return -1;
+	if (!_subdivs.contains(_levels.at(idx).level) && !load(idx))
+		return 0;
 
-	return _levels.at(idx).bits;
+	return _subdivs.value(_levels.at(idx).level);
 }
 
 static bool cb(SubDiv *subdiv, void *context)
@@ -312,11 +309,10 @@ static bool cb(SubDiv *subdiv, void *context)
 	return true;
 }
 
-QList<SubDiv*> TREFile::subdivs(const RectC &rect, int bits,
-  const Range &baseMap)
+QList<SubDiv*> TREFile::subdivs(const RectC &rect, const Zoom &zoom)
 {
 	QList<SubDiv*> list;
-	SubDivTree *tree = _subdivs.value(level(bits, baseMap));
+	const SubDivTree *tree = subdivs(zoom);
 	double min[2], max[2];
 
 	min[0] = rect.left();
@@ -328,4 +324,14 @@ QList<SubDiv*> TREFile::subdivs(const RectC &rect, int bits,
 		tree->Search(min, max, cb, &list);
 
 	return list;
+}
+
+QVector<Zoom> TREFile::zooms() const
+{
+	QVector<Zoom> ret;
+
+	for (int i = _firstLevel; i < _levels.size(); i++)
+		ret.append(Zoom(_levels.at(i).level, _levels.at(i).bits));
+
+	return ret;
 }

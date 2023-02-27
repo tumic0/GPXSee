@@ -23,21 +23,18 @@ static SubFile::Type tileType(const QString &suffix)
 		return SubFile::Unknown;
 }
 
-void GMAPData::subProduct(QXmlStreamReader &reader, QString &dataDir,
-  QString &baseMap)
+void GMAPData::subProduct(QXmlStreamReader &reader, QString &dataDir)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("Directory"))
 			dataDir = reader.readElementText();
-		else if (reader.name() == QLatin1String("BaseMap"))
-			baseMap = reader.readElementText();
 		else
 			reader.skipCurrentElement();
 	}
 }
 
 void GMAPData::mapProduct(QXmlStreamReader &reader, QString &dataDir,
-  QString &typFile, QString &baseMap)
+  QString &typFile)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("Name"))
@@ -45,14 +42,13 @@ void GMAPData::mapProduct(QXmlStreamReader &reader, QString &dataDir,
 		else if (reader.name() == QLatin1String("TYP"))
 			typFile = reader.readElementText();
 		else if (reader.name() == QLatin1String("SubProduct"))
-			subProduct(reader, dataDir, baseMap);
+			subProduct(reader, dataDir);
 		else
 			reader.skipCurrentElement();
 	}
 }
 
-bool GMAPData::readXML(const QString &path, QString &dataDir, QString &typFile,
-  QString &baseMap)
+bool GMAPData::readXML(const QString &path, QString &dataDir, QString &typFile)
 {
 	QFile file(path);
 
@@ -62,7 +58,7 @@ bool GMAPData::readXML(const QString &path, QString &dataDir, QString &typFile,
 	QXmlStreamReader reader(&file);
 	if (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("MapProduct"))
-			mapProduct(reader, dataDir, typFile, baseMap);
+			mapProduct(reader, dataDir, typFile);
 		else
 			reader.raiseError("Not a GMAP XML file");
 	}
@@ -75,7 +71,7 @@ bool GMAPData::readXML(const QString &path, QString &dataDir, QString &typFile,
 	return true;
 }
 
-bool GMAPData::loadTile(const QDir &dir, bool baseMap)
+bool GMAPData::loadTile(const QDir &dir)
 {
 	VectorTile *tile = new VectorTile();
 
@@ -103,19 +99,14 @@ bool GMAPData::loadTile(const QDir &dir, bool baseMap)
 	_tileTree.Insert(min, max, tile);
 
 	_bounds |= tile->bounds();
-	if (tile->zooms().min() < _zooms.min())
-		_zooms.setMin(tile->zooms().min());
-
-	if (baseMap)
-		_baseMap = tile->zooms();
 
 	return true;
 }
 
 GMAPData::GMAPData(const QString &fileName) : MapData(fileName)
 {
-	QString dataDirPath, typFilePath, baseMapPath;
-	if (!readXML(fileName, dataDirPath, typFilePath, baseMapPath))
+	QString dataDirPath, typFilePath;
+	if (!readXML(fileName, dataDirPath, typFilePath))
 		return;
 
 	QDir baseDir(QFileInfo(fileName).absoluteDir());
@@ -125,13 +116,11 @@ GMAPData::GMAPData(const QString &fileName) : MapData(fileName)
 	}
 	QDir dataDir(baseDir.filePath(dataDirPath));
 	QFileInfoList ml = dataDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
-	QFileInfo baseMap(dataDir.filePath(baseMapPath));
 
 	for (int i = 0; i < ml.size(); i++) {
 		const QFileInfo &fi = ml.at(i);
 		if (fi.isDir())
-			loadTile(QDir(fi.absoluteFilePath()),
-			  fi.absoluteFilePath() == baseMap.absoluteFilePath());
+			loadTile(QDir(fi.absoluteFilePath()));
 	}
 
 	if (baseDir.exists(typFilePath)) {
@@ -143,6 +132,8 @@ GMAPData::GMAPData(const QString &fileName) : MapData(fileName)
 		_errorString = "No usable map tile found";
 	else
 		_valid = true;
+
+	computeZooms();
 }
 
 GMAPData::~GMAPData()

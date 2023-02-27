@@ -11,7 +11,7 @@ using namespace IMG;
 bool MapData::polyCb(VectorTile *tile, void *context)
 {
 	PolyCTX *ctx = (PolyCTX*)context;
-	tile->polys(ctx->rect, ctx->bits, ctx->baseMap, ctx->polygons, ctx->lines,
+	tile->polys(ctx->rect, ctx->zoom, ctx->polygons, ctx->lines,
 	  ctx->polyCache);
 	return true;
 }
@@ -19,14 +19,13 @@ bool MapData::polyCb(VectorTile *tile, void *context)
 bool MapData::pointCb(VectorTile *tile, void *context)
 {
 	PointCTX *ctx = (PointCTX*)context;
-	tile->points(ctx->rect, ctx->bits, ctx->baseMap, ctx->points,
-	  ctx->pointCache);
+	tile->points(ctx->rect, ctx->zoom, ctx->points, ctx->pointCache);
 	return true;
 }
 
 
 MapData::MapData(const QString &fileName)
-  : _fileName(fileName), _typ(0), _style(0), _zooms(24, 28), _valid(false)
+  : _fileName(fileName), _typ(0), _style(0), _valid(false)
 {
 	_polyCache.setMaxCost(CACHED_SUBDIVS_COUNT);
 	_pointCache.setMaxCost(CACHED_SUBDIVS_COUNT);
@@ -45,7 +44,7 @@ MapData::~MapData()
 void MapData::polys(const RectC &rect, int bits, QList<Poly> *polygons,
   QList<Poly> *lines)
 {
-	PolyCTX ctx(rect, bits, _baseMap, polygons, lines, &_polyCache);
+	PolyCTX ctx(rect, zoom(bits), polygons, lines, &_polyCache);
 	double min[2], max[2];
 
 	min[0] = rect.left();
@@ -58,7 +57,7 @@ void MapData::polys(const RectC &rect, int bits, QList<Poly> *polygons,
 
 void MapData::points(const RectC &rect, int bits, QList<Point> *points)
 {
-	PointCTX ctx(rect, bits, _baseMap, points, &_pointCache);
+	PointCTX ctx(rect, zoom(bits), points, &_pointCache);
 	double min[2], max[2];
 
 	min[0] = rect.left();
@@ -96,4 +95,42 @@ void MapData::clear()
 
 	_polyCache.clear();
 	_pointCache.clear();
+}
+
+void MapData::computeZooms()
+{
+	TileTree::Iterator it;
+	QSet<Zoom> zooms;
+
+	for (_tileTree.GetFirst(it); !_tileTree.IsNull(it); _tileTree.GetNext(it)) {
+		const QVector<Zoom> &z = _tileTree.GetAt(it)->zooms();
+		for (int i = 0; i < z.size(); i++)
+			zooms.insert(z.at(i));
+	}
+
+	_zooms = zooms.values();
+	std::sort(_zooms.begin(), _zooms.end());
+
+	bool baseMap = false;
+	for (int i = 1; i < _zooms.size(); i++) {
+		if (_zooms.at(i).level() > _zooms.at(i-1).level()) {
+			baseMap = true;
+			break;
+		}
+	}
+	_zoomLevels = Range(baseMap ? _zooms.first().bits()
+	  : qMax(0, _zooms.first().bits() - 2), 28);
+}
+
+const Zoom &MapData::zoom(int bits) const
+{
+	int id = 0;
+
+	for (int i = 1; i < _zooms.size(); i++) {
+		if (_zooms.at(i).bits() > bits)
+			break;
+		id++;
+	}
+
+	return _zooms.at(id);
 }

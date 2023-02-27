@@ -100,7 +100,7 @@ void VectorTile::clear()
 	_loaded = 0;
 }
 
-void VectorTile::polys(const RectC &rect, int bits, const Range &baseMap,
+void VectorTile::polys(const RectC &rect, const Zoom &zoom,
   QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
   QCache<const SubDiv *, MapData::Polys> *polyCache)
 {
@@ -121,7 +121,7 @@ void VectorTile::polys(const RectC &rect, int bits, const Range &baseMap,
 		}
 	}
 
-	QList<SubDiv*> subdivs = _tre->subdivs(rect, bits, baseMap);
+	QList<SubDiv*> subdivs = _tre->subdivs(rect, zoom);
 	for (int i = 0; i < subdivs.size(); i++) {
 		SubDiv *subdiv = subdivs.at(i);
 
@@ -169,7 +169,7 @@ void VectorTile::polys(const RectC &rect, int bits, const Range &baseMap,
 	delete rgnHdl; delete lblHdl; delete netHdl; delete nodHdl; delete nodHdl2;
 }
 
-void VectorTile::points(const RectC &rect, int bits, const Range &baseMap,
+void VectorTile::points(const RectC &rect, const Zoom &zoom,
   QList<MapData::Point> *points, QCache<const SubDiv *,
   QList<MapData::Point> > *pointCache)
 {
@@ -189,7 +189,7 @@ void VectorTile::points(const RectC &rect, int bits, const Range &baseMap,
 		}
 	}
 
-	QList<SubDiv*> subdivs = _tre->subdivs(rect, bits, baseMap);
+	QList<SubDiv*> subdivs = _tre->subdivs(rect, zoom);
 	for (int i = 0; i < subdivs.size(); i++) {
 		SubDiv *subdiv = subdivs.at(i);
 
