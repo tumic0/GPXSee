@@ -21,9 +21,11 @@
 #include "common/rectc.h"
 #include "dem.h"
 
+#define CACHE_SIZE 536870912 /* 512MB */
 
-#define SRTM3_SAMPLES 1201
-#define SRTM1_SAMPLES 3601
+#define SRTM3_SAMPLES  1201
+#define SRTM1_SAMPLES  3601
+#define SRTM05_SAMPLES 7201
 
 #define SRTM_SIZE(samples) \
 	((samples) * (samples) * 2)
@@ -51,6 +53,8 @@ static qreal height(const Coordinates &c, const QByteArray *data)
 		samples = SRTM3_SAMPLES;
 	else if (data->size() == SRTM_SIZE(SRTM1_SAMPLES))
 		samples = SRTM1_SAMPLES;
+	else if (data->size() == SRTM_SIZE(SRTM05_SAMPLES))
+		samples = SRTM05_SAMPLES;
 	else
 		return NAN;
 
@@ -85,7 +89,7 @@ QString DEM::Tile::baseName() const
 }
 
 QString DEM::_dir;
-QCache<DEM::Tile, QByteArray> DEM::_data;
+DEM::TileCache DEM::_data = DEM::TileCache(CACHE_SIZE);
 
 QString DEM::fileName(const QString &baseName)
 {
@@ -119,7 +123,7 @@ qreal DEM::elevation(const Coordinates &c)
 			QZipReader zip(zn, QIODevice::ReadOnly);
 			ba = new QByteArray(zip.fileData(bn));
 			qreal ele = height(c, ba);
-			_data.insert(tile, ba);
+			_data.insert(tile, ba, ba->size());
 			return ele;
 		} else {
 			QFile file(fn);
@@ -131,7 +135,7 @@ qreal DEM::elevation(const Coordinates &c)
 			} else {
 				ba = new QByteArray(file.readAll());
 				qreal ele = height(c, ba);
-				_data.insert(tile, ba);
+				_data.insert(tile, ba, ba->size());
 				return ele;
 			}
 		}

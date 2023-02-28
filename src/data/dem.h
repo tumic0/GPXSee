@@ -41,10 +41,12 @@ public:
 	static QList<Area> tiles();
 
 private:
+	typedef QCache<DEM::Tile, QByteArray> TileCache;
+
 	static QString fileName(const QString &baseName);
 
 	static QString _dir;
-	static QCache<Tile, QByteArray> _data;
+	static TileCache _data;
 };
 
 inline HASH_T qHash(const DEM::Tile &tile)
