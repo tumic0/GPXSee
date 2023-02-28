@@ -56,6 +56,7 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	   "QThreadStorage: Thread X exited after QThreadStorage Y destroyed" */
 	Downloader::setNetworkManager(new QNetworkAccessManager(this));
 	DEM::setDir(ProgramPaths::demDir());
+	DEM::setCacheSize(536870912/*512MB*/);
 	QSurfaceFormat fmt;
 	fmt.setStencilBufferSize(8);
 	fmt.setSamples(4);

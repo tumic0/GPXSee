@@ -21,8 +21,6 @@
 #include "common/rectc.h"
 #include "dem.h"
 
-#define CACHE_SIZE 536870912 /* 512MB */
-
 #define SRTM3_SAMPLES  1201
 #define SRTM1_SAMPLES  3601
 #define SRTM05_SAMPLES 7201
@@ -89,11 +87,16 @@ QString DEM::Tile::baseName() const
 }
 
 QString DEM::_dir;
-DEM::TileCache DEM::_data = DEM::TileCache(CACHE_SIZE);
+DEM::TileCache DEM::_data;
 
 QString DEM::fileName(const QString &baseName)
 {
 	return QDir(_dir).absoluteFilePath(baseName);
+}
+
+void DEM::setCacheSize(int size)
+{
+	_data.setMaxCost(size);
 }
 
 void DEM::setDir(const QString &path)
