@@ -189,6 +189,7 @@ public:
 	static const Setting useOpenGL;
 	static const Setting enableHTTP2;
 	static const Setting pixmapCache;
+	static const Setting demCache;
 	static const Setting connectionTimeout;
 	static const Setting hiresPrint;
 	static const Setting printName;

@@ -723,6 +723,12 @@ QWidget *OptionsDialog::createSystemPage()
 	_pixmapCache->setSuffix(UNIT_SPACE + tr("MB"));
 	_pixmapCache->setValue(_options.pixmapCache);
 
+	_demCache = new QSpinBox();
+	_demCache->setMinimum(64);
+	_demCache->setMaximum(2048);
+	_demCache->setSuffix(UNIT_SPACE + tr("MB"));
+	_demCache->setValue(_options.demCache);
+
 	_connectionTimeout = new QSpinBox();
 	_connectionTimeout->setMinimum(30);
 	_connectionTimeout->setMaximum(120);
@@ -740,6 +746,7 @@ QWidget *OptionsDialog::createSystemPage()
 #else // Q_OS_MAC
 	QFormLayout *formLayout = new QFormLayout();
 	formLayout->addRow(tr("Image cache size:"), _pixmapCache);
+	formLayout->addRow(tr("DEM cache size:"), _demCache);
 	formLayout->addRow(tr("Connection timeout:"), _connectionTimeout);
 	QFormLayout *checkboxLayout = new QFormLayout();
 	checkboxLayout->addWidget(_enableHTTP2);
@@ -932,6 +939,7 @@ void OptionsDialog::accept()
 	_options.useOpenGL = _useOpenGL->isChecked();
 	_options.enableHTTP2 = _enableHTTP2->isChecked();
 	_options.pixmapCache = _pixmapCache->value();
+	_options.demCache = _demCache->value();
 	_options.connectionTimeout = _connectionTimeout->value();
 	_options.dataPath = _dataPath->dir();
 	_options.mapsPath = _mapsPath->dir();

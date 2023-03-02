@@ -34,8 +34,10 @@
 
 #ifdef Q_OS_ANDROID
 #define PIXMAP_CACHE 256
+#define DEM_CACHE    128
 #else // Q_OS_ANDROID
 #define PIXMAP_CACHE 512
+#define DEM_CACHE    256
 #endif // Q_OS_ANDROID
 
 
@@ -243,6 +245,7 @@ SETTING(demPassword,         "demPassword",            ""                     );
 SETTING(useOpenGL,           "useOpenGL",              false                  );
 SETTING(enableHTTP2,         "enableHTTP2",            true                   );
 SETTING(pixmapCache,         "pixmapCache",            PIXMAP_CACHE           );
+SETTING(demCache,            "demCache",               DEM_CACHE              );
 SETTING(connectionTimeout,   "connectionTimeout",      30                     );
 SETTING(hiresPrint,          "hiresPrint",             false                  );
 SETTING(printName,           "printName",              true                   );

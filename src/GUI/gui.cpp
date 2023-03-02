@@ -2416,6 +2416,7 @@ void GUI::writeSettings()
 	WRITE(useOpenGL, _options.useOpenGL);
 	WRITE(enableHTTP2, _options.enableHTTP2);
 	WRITE(pixmapCache, _options.pixmapCache);
+	WRITE(demCache, _options.demCache);
 	WRITE(connectionTimeout, _options.connectionTimeout);
 	WRITE(hiresPrint, _options.hiresPrint);
 	WRITE(printName, _options.printName);
@@ -2697,6 +2698,7 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 	_options.useOpenGL = READ(useOpenGL).toBool();
 	_options.enableHTTP2 = READ(enableHTTP2).toBool();
 	_options.pixmapCache = READ(pixmapCache).toInt();
+	_options.demCache = READ(demCache).toInt();
 	_options.connectionTimeout = READ(connectionTimeout).toInt();
 	_options.hiresPrint = READ(hiresPrint).toBool();
 	_options.printName = READ(printName).toBool();
@@ -2784,6 +2786,7 @@ void GUI::loadOptions()
 	Downloader::setTimeout(_options.connectionTimeout);
 
 	QPixmapCache::setCacheLimit(_options.pixmapCache * 1024);
+	DEM::setCacheSize(_options.demCache * 1024);
 
 	_poi->setRadius(_options.poiRadius);
 
@@ -2909,6 +2912,8 @@ void GUI::updateOptions(const Options &options)
 
 	if (options.pixmapCache != _options.pixmapCache)
 		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
+	if (options.demCache != _options.demCache)
+		DEM::setCacheSize(options.demCache * 1024);
 
 	if (options.connectionTimeout != _options.connectionTimeout)
 		Downloader::setTimeout(options.connectionTimeout);

@@ -79,6 +79,7 @@ struct Options {
 	bool useOpenGL;
 	bool enableHTTP2;
 	int pixmapCache;
+	int demCache;
 	int connectionTimeout;
 	QString dataPath;
 	QString mapsPath;
@@ -182,6 +183,7 @@ private:
 #endif // QT 5.14
 	// System
 	QSpinBox *_pixmapCache;
+	QSpinBox *_demCache;
 	QSpinBox *_connectionTimeout;
 	QCheckBox *_useOpenGL;
 	QCheckBox *_enableHTTP2;
