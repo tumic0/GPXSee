@@ -96,7 +96,7 @@ QString DEM::fileName(const QString &baseName)
 
 void DEM::setCacheSize(int size)
 {
-	_data.setMaxCost(size);
+	_data.setMaxCost(size * 1024);
 }
 
 void DEM::setDir(const QString &path)
