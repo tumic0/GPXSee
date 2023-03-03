@@ -1912,7 +1912,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="749"/>
         <source>DEM cache size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mida de la memòria cau MDE:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="769"/>
