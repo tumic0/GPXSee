@@ -1666,7 +1666,7 @@
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="389"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="729"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="735"/>
         <source>s</source>
         <translation>초</translation>
     </message>
@@ -1707,8 +1707,8 @@
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="415"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="778"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="821"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="785"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="828"/>
         <source>System</source>
         <translation>시스템</translation>
     </message>
@@ -1784,7 +1784,7 @@
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="554"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="817"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="824"/>
         <source>POI</source>
         <translation>POI</translation>
     </message>
@@ -1892,78 +1892,84 @@
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="723"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="729"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="735"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="742"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="741"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="748"/>
         <source>Image cache size:</source>
         <translation>이미지 캐시 크기:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="736"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="743"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="742"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="750"/>
         <source>Connection timeout:</source>
         <translation>연결 시간 초과:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="762"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="749"/>
+        <source>DEM cache size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="769"/>
         <source>Select the initial paths of the file open dialogues. Leave the field empty for the system default.</source>
         <translation>파일 열기 대화 상자의 초기 경로를 선택합니다. 시스템 기본값의 경우 필드를 비워 둡니다.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="766"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="773"/>
         <source>Data:</source>
         <translation>날짜:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="767"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="774"/>
         <source>Maps:</source>
         <translation>지도:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="768"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="775"/>
         <source>POI:</source>
         <translation>POI:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="779"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="786"/>
         <source>Initial paths</source>
         <translation>초기 경로</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="814"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="821"/>
         <source>Appearance</source>
         <translation>모양새</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="815"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="822"/>
         <source>Maps</source>
         <translation>지도</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="816"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="823"/>
         <source>Data</source>
         <translation>데이터</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="818"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="825"/>
         <source>DEM</source>
         <translation>DEM</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="819"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="826"/>
         <source>Position</source>
         <translation>위치</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="820"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="827"/>
         <source>Print &amp; Export</source>
         <translation>인쇄 및 내보내기</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="854"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="861"/>
         <source>Options</source>
         <translation>옵션</translation>
     </message>
