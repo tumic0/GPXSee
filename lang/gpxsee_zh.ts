@@ -1911,7 +1911,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="749"/>
         <source>DEM cache size:</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM 缓存大小：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="769"/>
