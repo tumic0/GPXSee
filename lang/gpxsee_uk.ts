@@ -1913,7 +1913,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="749"/>
         <source>DEM cache size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Розмір кешу DEM:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="769"/>
