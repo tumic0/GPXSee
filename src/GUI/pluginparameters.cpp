@@ -3,7 +3,7 @@
 #include "pluginparameters.h"
 
 static const QMap<QString, QStringList> pluginParams = {
-	{"nmea", {"nmea.source"}},
+	{"nmea", {"nmea.source", "nmea.baudrate"}},
 	{"serialnmea", {"serialnmea.serial_port"}},
 	{"geoclue2", {"desktopId"}}
 };
