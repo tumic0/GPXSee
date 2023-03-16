@@ -217,7 +217,7 @@ bool RGNFile::load(Handle &hdl)
 	  && readUInt32(hdl, _base.size)))
 		return false;
 
-	if (hdrLen >= 0x68) {
+	if (hdrLen >= 0x71) {
 		if (!(readUInt32(hdl, _polygons.offset) && readUInt32(hdl, _polygons.size)
 		  && seek(hdl, _gmpOffset + 0x29) && readUInt32(hdl, _polygonsGblFlags)
 		  && readUInt32(hdl, _polygonsLclFlags[0])
