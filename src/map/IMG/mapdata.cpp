@@ -1,3 +1,4 @@
+#include <QFileInfo>
 #include "common/programpaths.h"
 #include "vectortile.h"
 #include "style.h"
@@ -76,7 +77,7 @@ void MapData::load()
 		_style = new Style(_typ);
 	else {
 		QString typFile(ProgramPaths::typFile());
-		if (!typFile.isEmpty()) {
+		if (QFileInfo::exists(typFile)) {
 			SubFile typ(&typFile);
 			_style = new Style(&typ);
 		} else
