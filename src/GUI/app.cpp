@@ -7,6 +7,7 @@
 #include <QLibraryInfo>
 #include <QSurfaceFormat>
 #include <QImageReader>
+#include <QFileInfo>
 #ifdef Q_OS_ANDROID
 #include <QCoreApplication>
 #include <QJniObject>
@@ -154,10 +155,13 @@ void App::loadDatums()
 	QString ellipsoidsFile(ProgramPaths::ellipsoidsFile());
 	QString gcsFile(ProgramPaths::gcsFile());
 
-	if (ellipsoidsFile.isNull())
+	if (!QFileInfo::exists(ellipsoidsFile)) {
 		qWarning("No ellipsoids file found.");
-	if (gcsFile.isNull())
+		ellipsoidsFile = QString();
+	} if (!QFileInfo::exists(gcsFile)) {
 		qWarning("No GCS file found.");
+		gcsFile = QString();
+	}
 
 	if (!ellipsoidsFile.isNull() && !gcsFile.isNull()) {
 		Ellipsoid::loadList(ellipsoidsFile);
@@ -170,8 +174,9 @@ void App::loadPCSs()
 {
 	QString pcsFile(ProgramPaths::pcsFile());
 
-	if (pcsFile.isNull())
+	if (!QFileInfo::exists(pcsFile)) {
 		qWarning("No PCS file found.");
-	else
+		qWarning("Maps based on a projection different from EPSG:3857 won't work.");
+	} else
 		PCS::loadList(pcsFile);
 }
