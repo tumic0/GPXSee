@@ -80,7 +80,6 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 				errors.append(it.key() + ": " + map->errorString());
 			++it;
 		}
-
 	} else {
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
 			map = it.value()(path, proj, isDir);

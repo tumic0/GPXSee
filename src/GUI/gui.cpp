@@ -137,11 +137,8 @@ TreeNode<MapAction*> GUI::createMapActionsNode(const TreeNode<Map*> &node)
 			MapAction *a = new MapAction(map, _mapsActionGroup);
 			connect(a, &MapAction::loaded, this, &GUI::mapInitialized);
 			tree.addItem(a);
-		} else {
-			qWarning("%s: %s", qPrintable(map->path()),
-			  qPrintable(map->errorString()));
+		} else
 			delete map;
-		}
 	}
 
 	return tree;
