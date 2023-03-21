@@ -38,6 +38,15 @@ inline bool operator==(const Coordinates &c1, const Coordinates &c2)
   {return (c1.lat() == c2.lat() && c1.lon() == c2.lon());}
 inline bool operator!=(const Coordinates &c1, const Coordinates &c2)
   {return !(c1 == c2);}
+inline bool operator<(const Coordinates &c1, const Coordinates &c2)
+{
+	if (c1.lon() < c2.lon())
+		return true;
+	else if (c1.lon() > c2.lon())
+		return false;
+	else
+		return (c1.lat() < c2.lat());
+}
 
 #ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Coordinates &c);

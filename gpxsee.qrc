@@ -194,6 +194,7 @@
 		<file alias="breakers.png">icons/map/marine/breakers.png</file>
 		<file alias="overfalls.png">icons/map/marine/overfalls.png</file>
 		<file alias="boarding-place.png">icons/map/marine/boarding-place.png</file>
+		<file alias="light.png">icons/map/marine/light.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->

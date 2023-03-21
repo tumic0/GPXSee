@@ -33,7 +33,8 @@ private:
 	QPainterPath painterPath(const Polygon &polygon) const;
 	QPolygonF polyline(const QVector<Coordinates> &path) const;
 	QPolygonF tsslptArrow(const Coordinates &c, qreal angle) const;
-	void processPoints(QList<TextItem*> &textItems, QList<QImage*> &images);
+	void processPoints(QList<TextItem*> &textItems, QList<TextItem *> &lights,
+	  QList<QImage*> &images);
 	void processLines(QList<TextItem*> &textItems);
 	void processPolygons(QList<TextItem*> &textItems);
 	void drawBitmapPath(QPainter *painter, const QImage &img,

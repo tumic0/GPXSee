@@ -13,6 +13,8 @@ using namespace ENC;
 #define TSSLPT_SIZE 0.005 /* ll */
 #define RDOCAL_SIZE 12 /* px */
 
+typedef QMap<Coordinates, const MapData::Point*> PointMap;
+
 const float C1 = 0.866025f; /* sqrt(3)/2 */
 
 static const QColor haloColor(Qt::white);
@@ -47,6 +49,12 @@ static QFont *font(Style::FontSize size)
 		default:
 			return &normal;
 	}
+}
+
+static const QImage *light()
+{
+	static QImage img(":/marine/light.png");
+	return &img;
 }
 
 static const Style& style()
@@ -266,13 +274,25 @@ void RasterTile::processPolygons(QList<TextItem*> &textItems)
 }
 
 void RasterTile::processPoints(QList<TextItem*> &textItems,
-  QList<QImage*> &images)
+  QList<TextItem*> &lights, QList<QImage*> &images)
 {
 	const Style &s = style();
+	PointMap lightsMap;
+	int i;
 
 	std::sort(_points.begin(), _points.end(), pointLess);
 
-	for (int i = 0; i < _points.size(); i++) {
+	/* Lights */
+	for (i = 0; i < _points.size(); i++) {
+		const MapData::Point *point = _points.at(i);
+		if (point->type()>>16 == LIGHTS)
+			lightsMap.insert(point->pos(), point);
+		else
+			break;
+	}
+
+	/* Everything else */
+	for ( ; i < _points.size(); i++) {
 		const MapData::Point *point = _points.at(i);
 		const Style::Point &style = s.point(point->type());
 
@@ -288,12 +308,17 @@ void RasterTile::processPoints(QList<TextItem*> &textItems,
 		if ((!label || !fnt) && !img)
 			continue;
 
-		TextPointItem *item = new TextPointItem(ll2xy(point->pos()).toPoint(),
-		  label, fnt, img, color, hColor, 0, ICON_PADDING);
+		QPoint pos(ll2xy(point->pos()).toPoint());
+		TextPointItem *item = new TextPointItem(pos, label, fnt, img, color,
+		  hColor, 0, ICON_PADDING);
 		if (item->isValid() && !item->collides(textItems)) {
 			textItems.append(item);
 			if (rimg)
 				images.append(rimg);
+			const PointMap::const_iterator it = lightsMap.find(point->pos());
+			if (it != lightsMap.constEnd())
+				lights.append(new TextPointItem(pos, 0, 0, light(), 0, 0, 0,
+				  ICON_PADDING));
 		} else {
 			delete item;
 			delete rimg;
@@ -328,14 +353,14 @@ void RasterTile::processLines(QList<TextItem*> &textItems)
 
 void RasterTile::render()
 {
-	QList<TextItem*> textItems;
+	QList<TextItem*> textItems, lights;
 	QList<QImage*> images;
 
 	_pixmap.setDevicePixelRatio(_ratio);
 	_pixmap.fill(Qt::transparent);
 
 	processPolygons(textItems);
-	processPoints(textItems, images);
+	processPoints(textItems, lights, images);
 	processLines(textItems);
 
 	QPainter painter(&_pixmap);
@@ -347,9 +372,11 @@ void RasterTile::render()
 	drawLines(&painter);
 	drawArrows(&painter);
 
+	drawTextItems(&painter, lights);
 	drawTextItems(&painter, textItems);
 
 	qDeleteAll(textItems);
+	qDeleteAll(lights);
 	qDeleteAll(images);
 
 	//painter.setPen(Qt::red);
