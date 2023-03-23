@@ -20,6 +20,7 @@ static QMap<uint,uint> orderMapInit()
 	QMap<uint,uint> map;
 
 	map.insert(TYPE(LIGHTS), 0);
+	map.insert(TYPE(FOGSIG), 0);
 
 	map.insert(TYPE(CGUSTA), 1);
 	map.insert(SUBTYPE(BUAARE, 1), 2);

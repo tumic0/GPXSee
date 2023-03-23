@@ -195,6 +195,8 @@
 		<file alias="overfalls.png">icons/map/marine/overfalls.png</file>
 		<file alias="boarding-place.png">icons/map/marine/boarding-place.png</file>
 		<file alias="light.png">icons/map/marine/light.png</file>
+		<file alias="building.png">icons/map/marine/building.png</file>
+		<file alias="fog-signal.png">icons/map/marine/fog-signal.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->

@@ -183,7 +183,6 @@ void Style::pointStyle()
 	_points[SUBTYPE(BUAARE, 0)].setTextFontSize(Small);
 	_points[TYPE(SOUNDG)].setTextFontSize(Small);
 	_points[TYPE(SOUNDG)].setHaloColor(QColor());
-	_points[TYPE(LIGHTS)] = Point(QImage(":/marine/light-major.png"), Small);
 	_points[TYPE(BOYCAR)] = Point(QImage(":/marine/buoy.png"), Small);
 	_points[TYPE(BOYINB)] = Point(QImage(":/marine/buoy.png"), Small);
 	_points[TYPE(BOYISD)] = Point(QImage(":/marine/buoy.png"), Small);
@@ -270,6 +269,7 @@ void Style::pointStyle()
 	_points[SUBTYPE(SMCFAC, 20)] = Point(QImage(":/POI/telephone-11.png"));
 	_points[SUBTYPE(SMCFAC, 22)] = Point(QImage(":/POI/parking-11.png"));
 	_points[SUBTYPE(SMCFAC, 25)] = Point(QImage(":/POI/campsite-11.png"));
+	_points[TYPE(BUISGL)] = Point(QImage(":/marine/building.png"));
 	_points[SUBTYPE(BUISGL, 2)] = Point(QImage(":/POI/harbor-11.png"));
 	_points[SUBTYPE(BUISGL, 5)] = Point(QImage(":/POI/hospital-11.png"));
 	_points[SUBTYPE(BUISGL, 6)] = Point(QImage(":/POI/post-11.png"));
@@ -280,6 +280,7 @@ void Style::pointStyle()
 	_points[SUBTYPE(BUISGL, 20)] = Point(QImage(":/POI/religious-christian-11.png"));
 	_points[SUBTYPE(BUISGL, 22)] = Point(QImage(":/POI/religious-jewish-11.png"));
 	_points[SUBTYPE(BUISGL, 26)] = Point(QImage(":/POI/religious-muslim-11.png"));
+	_points[SUBTYPE(BUISGL, 33)] = Point(QImage(":/marine/pylon.png"));
 	_points[SUBTYPE(BUISGL, 42)] = Point(QImage(":/POI/bus-11.png"));
 }
 

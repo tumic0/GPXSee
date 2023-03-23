@@ -39,6 +39,7 @@
 #define FNCLNE 52
 #define FERYRT 53
 #define FLODOC 57
+#define FOGSIG 58
 #define GATCON 61
 #define HRBFAC 64
 #define HULKES 65

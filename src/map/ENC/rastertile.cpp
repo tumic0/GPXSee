@@ -57,6 +57,12 @@ static const QImage *light()
 	return &img;
 }
 
+static const QImage *signal()
+{
+	static QImage img(":/marine/fog-signal.png");
+	return &img;
+}
+
 static const Style& style()
 {
 	static Style s;
@@ -277,16 +283,18 @@ void RasterTile::processPoints(QList<TextItem*> &textItems,
   QList<TextItem*> &lights, QList<QImage*> &images)
 {
 	const Style &s = style();
-	PointMap lightsMap;
+	PointMap lightsMap, signalsMap;
 	int i;
 
 	std::sort(_points.begin(), _points.end(), pointLess);
 
-	/* Lights */
+	/* Lights & Signals */
 	for (i = 0; i < _points.size(); i++) {
 		const MapData::Point *point = _points.at(i);
 		if (point->type()>>16 == LIGHTS)
 			lightsMap.insert(point->pos(), point);
+		else if (point->type()>>16 == FOGSIG)
+			signalsMap.insert(point->pos(), point);
 		else
 			break;
 	}
@@ -315,10 +323,10 @@ void RasterTile::processPoints(QList<TextItem*> &textItems,
 			textItems.append(item);
 			if (rimg)
 				images.append(rimg);
-			const PointMap::const_iterator it = lightsMap.find(point->pos());
-			if (it != lightsMap.constEnd())
-				lights.append(new TextPointItem(pos, 0, 0, light(), 0, 0, 0,
-				  ICON_PADDING));
+			if (lightsMap.contains(point->pos()))
+				lights.append(new TextPointItem(pos, 0, 0, light(), 0, 0, 0, 0));
+			if (signalsMap.contains(point->pos()))
+				lights.append(new TextPointItem(pos, 0, 0, signal(), 0, 0, 0, 0));
 		} else {
 			delete item;
 			delete rimg;
