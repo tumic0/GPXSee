@@ -178,9 +178,9 @@ void Style::pointStyle()
 {
 	_points[SUBTYPE(BUAARE, 1)].setTextFontSize(Large);
 	_points[SUBTYPE(BUAARE, 5)].setTextFontSize(Large);
-	_points[SUBTYPE(BUAARE, 3)].setTextFontSize(Small);
+	_points[SUBTYPE(BUAARE, 4)].setTextFontSize(Large);
+	_points[SUBTYPE(BUAARE, 2)].setTextFontSize(Small);
 	_points[SUBTYPE(BUAARE, 6)].setTextFontSize(Small);
-	_points[SUBTYPE(BUAARE, 0)].setTextFontSize(Small);
 	_points[TYPE(SOUNDG)].setTextFontSize(Small);
 	_points[TYPE(SOUNDG)].setHaloColor(QColor());
 	_points[TYPE(BOYCAR)] = Point(QImage(":/marine/buoy.png"), Small);
@@ -234,8 +234,8 @@ void Style::pointStyle()
 	_points[SUBTYPE(MORFAC, 5)] = Point(QImage(":/marine/pile.png"), Small);
 	_points[SUBTYPE(MORFAC, 7)] = Point(QImage(":/marine/mooring-buoy.png"),
 	  Small);
-	_points[TYPE(CRANES)] = Point(QImage(":/marine/crane.png"));
-	_points[TYPE(I_CRANES)] = Point(QImage(":/marine/crane.png"));
+	_points[TYPE(CRANES)] = Point(QImage(":/marine/crane.png"), Small);
+	_points[TYPE(I_CRANES)] = Point(QImage(":/marine/crane.png"), Small);
 	_points[SUBTYPE(I_DISMAR, 1)] = Point(QImage(":/marine/distance-mark.png"),
 	  Small);
 	_points[SUBTYPE(I_DISMAR, 1)].setTextColor(QColor("#ffffff"));
@@ -251,7 +251,7 @@ void Style::pointStyle()
 	_points[TYPE(RTPBCN)] = Point(QImage(":/marine/radar-transponder.png"));
 	_points[TYPE(SILTNK)] = Point(QImage(":/marine/silo.png"));
 	_points[TYPE(I_TRNBSN)] = Point(QImage(":/marine/turning-basin.png"));
-	_points[TYPE(I_WTWGAG)] = Point(QImage(":/marine/gauge.png"));
+	_points[TYPE(I_WTWGAG)] = Point(QImage(":/marine/gauge.png"), Small);
 	_points[TYPE(I_RDOCAL)].setTextColor(QColor("#eb49eb"));
 	_points[TYPE(PYLONS)] = Point(QImage(":/marine/pylon.png"));
 	_points[SUBTYPE(I_BERTHS, 6)] = Point(QImage(":/marine/fleeting-area.png"));
@@ -260,7 +260,7 @@ void Style::pointStyle()
 	_points[SUBTYPE(WATTUR, 4)] = Point(QImage(":/marine/overfalls.png"));
 	_points[TYPE(PILBOP)] = Point(QImage(":/marine/boarding-place.png"));
 	_points[TYPE(SISTAT)] = Point(QImage(":/marine/pylon.png"));
-	_points[TYPE(SLCONS)] = Point(QImage(":/marine/construction.png"));
+	_points[TYPE(SLCONS)] = Point(QImage(":/marine/construction.png"), Small);
 
 	_points[SUBTYPE(SMCFAC, 7)] = Point(QImage(":/POI/restaurant-11.png"), Small);
 	_points[SUBTYPE(SMCFAC, 11)] = Point(QImage(":/POI/pharmacy-11.png"), Small);
