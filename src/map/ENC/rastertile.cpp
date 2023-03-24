@@ -136,6 +136,27 @@ static QImage *image(uint type, const QVariant &param)
 		return 0;
 }
 
+static TextPointItem *pointItem(const QPoint &pos, const QString *label,
+  const QFont *fnt, const QImage *img, const QColor *color,
+  const QColor *hColor, const QList<TextItem*> &textItems)
+{
+	TextPointItem *item = new TextPointItem(pos, label, fnt, img, color,
+	  hColor, 0, ICON_PADDING);
+	if (item->isValid() && !item->collides(textItems))
+		return item;
+	delete item;
+
+	if (!img)
+		return 0;
+
+	item = new TextPointItem(pos, 0, 0, img, 0, 0, 0, 0);
+	if (item->isValid() && !item->collides(textItems))
+		return item;
+	delete item;
+
+	return 0;
+}
+
 QPainterPath RasterTile::painterPath(const Polygon &polygon) const
 {
 	QPainterPath path;
@@ -317,9 +338,9 @@ void RasterTile::processPoints(QList<TextItem*> &textItems,
 			continue;
 
 		QPoint pos(ll2xy(point->pos()).toPoint());
-		TextPointItem *item = new TextPointItem(pos, label, fnt, img, color,
-		  hColor, 0, ICON_PADDING);
-		if (item->isValid() && !item->collides(textItems)) {
+		TextPointItem *item = pointItem(pos, label, fnt, img, color, hColor,
+		  textItems);
+		if (item) {
 			textItems.append(item);
 			if (rimg)
 				images.append(rimg);
@@ -327,10 +348,8 @@ void RasterTile::processPoints(QList<TextItem*> &textItems,
 				lights.append(new TextPointItem(pos, 0, 0, light(), 0, 0, 0, 0));
 			if (signalsMap.contains(point->pos()))
 				lights.append(new TextPointItem(pos, 0, 0, signal(), 0, 0, 0, 0));
-		} else {
-			delete item;
+		} else
 			delete rimg;
-		}
 	}
 }
 
