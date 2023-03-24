@@ -1894,7 +1894,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="741"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="748"/>
         <source>Image cache size:</source>
-        <translation>Bildehurtiglagringstørrelse:</translation>
+        <translation>Bildehurtiglagerstørrelse:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="742"/>
@@ -1912,7 +1912,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="749"/>
         <source>DEM cache size:</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM-hurtiglagerstørrelse:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="769"/>
