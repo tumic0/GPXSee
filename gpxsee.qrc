@@ -197,6 +197,7 @@
 		<file alias="light.png">icons/map/marine/light.png</file>
 		<file alias="building.png">icons/map/marine/building.png</file>
 		<file alias="fog-signal.png">icons/map/marine/fog-signal.png</file>
+		<file alias="construction.png">icons/map/marine/construction.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->

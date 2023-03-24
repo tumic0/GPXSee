@@ -195,8 +195,8 @@ void ENCMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				  _transform.img2proj(pointRect.bottomRight()));
 				_data.points(pointRectD.toRectC(_projection, 20), &points);
 
-				tiles.append(RasterTile(_projection, _transform, _zoom,
-				  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio,
+				tiles.append(RasterTile(_projection, _transform, _data.zooms(),
+				  _zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio,
 				  lines, polygons, points));
 			}
 		}

@@ -64,6 +64,7 @@
 #define PYLONS 98
 #define RADSTA 102
 #define RTPBCN 103
+#define RDOCAL 104
 #define RDOSTA 105
 #define RAILWY 106
 #define RCRTCL 108

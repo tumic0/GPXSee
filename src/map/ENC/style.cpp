@@ -236,12 +236,12 @@ void Style::pointStyle()
 	  Small);
 	_points[TYPE(CRANES)] = Point(QImage(":/marine/crane.png"));
 	_points[TYPE(I_CRANES)] = Point(QImage(":/marine/crane.png"));
-	_points[SUBTYPE(I_DISMAR, 1)] = Point(QImage(":/marine/distance-mark.png"));
+	_points[SUBTYPE(I_DISMAR, 1)] = Point(QImage(":/marine/distance-mark.png"),
+	  Small);
 	_points[SUBTYPE(I_DISMAR, 1)].setTextColor(QColor("#ffffff"));
-	_points[SUBTYPE(I_DISMAR, 1)].setTextFontSize(Small);
 	_points[SUBTYPE(I_DISMAR, 1)].setHaloColor(QColor());
-	_points[SUBTYPE(I_DISMAR, 2)] = Point(QImage(":/marine/distance-mark-land.png"));
-	_points[SUBTYPE(I_DISMAR, 2)].setTextFontSize(Small);
+	_points[SUBTYPE(I_DISMAR, 2)] = Point(QImage(":/marine/distance-mark-land.png"),
+	  Small);
 	_points[SUBTYPE(I_DISMAR, 2)].setHaloColor(QColor());
 	_points[SUBTYPE(I_DISMAR, 3)] = _points[SUBTYPE(I_DISMAR, 2)];
 	_points[SUBTYPE(I_DISMAR, 4)] = _points[SUBTYPE(I_DISMAR, 2)];
@@ -260,28 +260,33 @@ void Style::pointStyle()
 	_points[SUBTYPE(WATTUR, 4)] = Point(QImage(":/marine/overfalls.png"));
 	_points[TYPE(PILBOP)] = Point(QImage(":/marine/boarding-place.png"));
 	_points[TYPE(SISTAT)] = Point(QImage(":/marine/pylon.png"));
+	_points[TYPE(SLCONS)] = Point(QImage(":/marine/construction.png"));
 
-	_points[SUBTYPE(SMCFAC, 7)] = Point(QImage(":/POI/restaurant-11.png"));
-	_points[SUBTYPE(SMCFAC, 11)] = Point(QImage(":/POI/pharmacy-11.png"));
-	_points[SUBTYPE(SMCFAC, 12)] = Point(QImage(":/POI/drinking-water-11.png"));
-	_points[SUBTYPE(SMCFAC, 13)] = Point(QImage(":/POI/fuel-11.png"));
-	_points[SUBTYPE(SMCFAC, 18)] = Point(QImage(":/POI/toilet-11.png"));
-	_points[SUBTYPE(SMCFAC, 20)] = Point(QImage(":/POI/telephone-11.png"));
-	_points[SUBTYPE(SMCFAC, 22)] = Point(QImage(":/POI/parking-11.png"));
-	_points[SUBTYPE(SMCFAC, 25)] = Point(QImage(":/POI/campsite-11.png"));
-	_points[TYPE(BUISGL)] = Point(QImage(":/marine/building.png"));
-	_points[SUBTYPE(BUISGL, 2)] = Point(QImage(":/POI/harbor-11.png"));
-	_points[SUBTYPE(BUISGL, 5)] = Point(QImage(":/POI/hospital-11.png"));
-	_points[SUBTYPE(BUISGL, 6)] = Point(QImage(":/POI/post-11.png"));
-	_points[SUBTYPE(BUISGL, 7)] = Point(QImage(":/POI/lodging-11.png"));
-	_points[SUBTYPE(BUISGL, 9)] = Point(QImage(":/POI/police-11.png"));
-	_points[SUBTYPE(BUISGL, 13)] = Point(QImage(":/POI/bank-11.png"));
-	_points[SUBTYPE(BUISGL, 19)] = Point(QImage(":/POI/school-11.png"));
-	_points[SUBTYPE(BUISGL, 20)] = Point(QImage(":/POI/religious-christian-11.png"));
-	_points[SUBTYPE(BUISGL, 22)] = Point(QImage(":/POI/religious-jewish-11.png"));
-	_points[SUBTYPE(BUISGL, 26)] = Point(QImage(":/POI/religious-muslim-11.png"));
-	_points[SUBTYPE(BUISGL, 33)] = Point(QImage(":/marine/pylon.png"));
-	_points[SUBTYPE(BUISGL, 42)] = Point(QImage(":/POI/bus-11.png"));
+	_points[SUBTYPE(SMCFAC, 7)] = Point(QImage(":/POI/restaurant-11.png"), Small);
+	_points[SUBTYPE(SMCFAC, 11)] = Point(QImage(":/POI/pharmacy-11.png"), Small);
+	_points[SUBTYPE(SMCFAC, 12)] = Point(QImage(":/POI/drinking-water-11.png"),
+	  Small);
+	_points[SUBTYPE(SMCFAC, 13)] = Point(QImage(":/POI/fuel-11.png"), Small);
+	_points[SUBTYPE(SMCFAC, 18)] = Point(QImage(":/POI/toilet-11.png"), Small);
+	_points[SUBTYPE(SMCFAC, 20)] = Point(QImage(":/POI/telephone-11.png"), Small);
+	_points[SUBTYPE(SMCFAC, 22)] = Point(QImage(":/POI/parking-11.png"), Small);
+	_points[SUBTYPE(SMCFAC, 25)] = Point(QImage(":/POI/campsite-11.png"), Small);
+	_points[TYPE(BUISGL)] = Point(QImage(":/marine/building.png"), Small);
+	_points[SUBTYPE(BUISGL, 2)] = Point(QImage(":/POI/harbor-11.png"), Small);
+	_points[SUBTYPE(BUISGL, 5)] = Point(QImage(":/POI/hospital-11.png"), Small);
+	_points[SUBTYPE(BUISGL, 6)] = Point(QImage(":/POI/post-11.png"), Small);
+	_points[SUBTYPE(BUISGL, 7)] = Point(QImage(":/POI/lodging-11.png"), Small);
+	_points[SUBTYPE(BUISGL, 9)] = Point(QImage(":/POI/police-11.png"), Small);
+	_points[SUBTYPE(BUISGL, 13)] = Point(QImage(":/POI/bank-11.png"), Small);
+	_points[SUBTYPE(BUISGL, 19)] = Point(QImage(":/POI/school-11.png"), Small);
+	_points[SUBTYPE(BUISGL, 20)] = Point(QImage(":/POI/religious-christian-11.png"),
+	  Small);
+	_points[SUBTYPE(BUISGL, 22)] = Point(QImage(":/POI/religious-jewish-11.png"),
+	  Small);
+	_points[SUBTYPE(BUISGL, 26)] = Point(QImage(":/POI/religious-muslim-11.png"),
+	  Small);
+	_points[SUBTYPE(BUISGL, 33)] = Point(QImage(":/marine/pylon.png"), Small);
+	_points[SUBTYPE(BUISGL, 42)] = Point(QImage(":/POI/bus-11.png"), Small);
 }
 
 Style::Style()

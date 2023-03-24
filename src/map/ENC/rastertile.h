@@ -13,12 +13,14 @@ namespace ENC {
 class RasterTile
 {
 public:
-	RasterTile(const Projection &proj, const Transform &transform, int zoom,
-	  const QRect &rect, qreal ratio, const QList<MapData::Line*> &lines,
-	  const QList<MapData::Poly*> &polygons, const QList<MapData::Point*> &points)
-	  : _proj(proj), _transform(transform), _zoom(zoom), _rect(rect),
-	  _ratio(ratio), _pixmap(rect.width() * ratio, rect.height() * ratio),
-	  _lines(lines), _polygons(polygons), _points(points), _valid(false) {}
+	RasterTile(const Projection &proj, const Transform &transform,
+	  const Range &zooms, int zoom, const QRect &rect, qreal ratio,
+	  const QList<MapData::Line*> &lines, const QList<MapData::Poly*> &polygons,
+	  const QList<MapData::Point*> &points)
+	  : _proj(proj), _transform(transform), _zooms(zooms), _zoom(zoom),
+	  _rect(rect), _ratio(ratio),
+	  _pixmap(rect.width() * ratio, rect.height() * ratio), _lines(lines),
+	  _polygons(polygons), _points(points), _valid(false) {}
 
 	int zoom() const {return _zoom;}
 	QPoint xy() const {return _rect.topLeft();}
@@ -33,8 +35,7 @@ private:
 	QPainterPath painterPath(const Polygon &polygon) const;
 	QPolygonF polyline(const QVector<Coordinates> &path) const;
 	QPolygonF tsslptArrow(const Coordinates &c, qreal angle) const;
-	void processPoints(QList<TextItem*> &textItems, QList<TextItem *> &lights,
-	  QList<QImage*> &images);
+	void processPoints(QList<TextItem*> &textItems, QList<TextItem *> &lights);
 	void processLines(QList<TextItem*> &textItems);
 	void processPolygons(QList<TextItem*> &textItems);
 	void drawBitmapPath(QPainter *painter, const QImage &img,
@@ -46,6 +47,7 @@ private:
 
 	Projection _proj;
 	Transform _transform;
+	Range _zooms;
 	int _zoom;
 	QRect _rect;
 	qreal _ratio;

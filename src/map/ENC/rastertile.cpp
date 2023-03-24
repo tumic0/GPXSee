@@ -13,6 +13,19 @@ using namespace ENC;
 #define TSSLPT_SIZE 0.005 /* ll */
 #define RDOCAL_SIZE 12 /* px */
 
+class PointItem : public TextPointItem
+{
+public:
+	PointItem(const QPoint &point, const QString *text, const QFont *font,
+	  const QImage *img, const QImage *rimg, const QColor *color,
+	  const QColor *haloColor) : TextPointItem(point, text, font, img, color,
+	  haloColor, 0, ICON_PADDING), _rimg(rimg) {}
+	~PointItem() {delete _rimg;}
+
+private:
+	const QImage *_rimg;
+};
+
 typedef QMap<Coordinates, const MapData::Point*> PointMap;
 
 const float C1 = 0.866025f; /* sqrt(3)/2 */
@@ -130,31 +143,21 @@ static QImage *rdocalArrow(qreal angle)
 
 static QImage *image(uint type, const QVariant &param)
 {
-	if (type>>16 == I_RDOCAL)
+	if (type>>16 == RDOCAL || type>>16 == I_RDOCAL)
 		return rdocalArrow(deg2rad(90 - param.toDouble()));
 	else
 		return 0;
 }
 
-static TextPointItem *pointItem(const QPoint &pos, const QString *label,
-  const QFont *fnt, const QImage *img, const QColor *color,
-  const QColor *hColor, const QList<TextItem*> &textItems)
+static bool showLabel(const QImage *img, const Range &range, int zoom, int type)
 {
-	TextPointItem *item = new TextPointItem(pos, label, fnt, img, color,
-	  hColor, 0, ICON_PADDING);
-	if (item->isValid() && !item->collides(textItems))
-		return item;
-	delete item;
+	if (type>>16 == I_DISMAR)
+		return true;
 
-	if (!img)
-		return 0;
+	if ((img || type>>16 == SOUNDG) && zoom < range.mid())
+		return false;
 
-	item = new TextPointItem(pos, 0, 0, img, 0, 0, 0, 0);
-	if (item->isValid() && !item->collides(textItems))
-		return item;
-	delete item;
-
-	return 0;
+	return true;
 }
 
 QPainterPath RasterTile::painterPath(const Polygon &polygon) const
@@ -301,7 +304,7 @@ void RasterTile::processPolygons(QList<TextItem*> &textItems)
 }
 
 void RasterTile::processPoints(QList<TextItem*> &textItems,
-  QList<TextItem*> &lights, QList<QImage*> &images)
+  QList<TextItem*> &lights)
 {
 	const Style &s = style();
 	PointMap lightsMap, signalsMap;
@@ -323,13 +326,15 @@ void RasterTile::processPoints(QList<TextItem*> &textItems,
 	/* Everything else */
 	for ( ; i < _points.size(); i++) {
 		const MapData::Point *point = _points.at(i);
+		QPoint pos(ll2xy(point->pos()).toPoint());
 		const Style::Point &style = s.point(point->type());
 
 		const QString *label = point->label().isEmpty() ? 0 : &(point->label());
 		QImage *rimg = style.img().isNull()
 		  ? image(point->type(), point->param()) : 0;
 		const QImage *img = style.img().isNull() ? rimg : &style.img();
-		const QFont *fnt = font(style.textFontSize());
+		const QFont *fnt = showLabel(img, _zooms, _zoom, point->type())
+		  ? font(style.textFontSize()) : 0;
 		const QColor *color = &style.textColor();
 		const QColor *hColor = style.haloColor().isValid()
 		  ? &style.haloColor() : 0;
@@ -337,19 +342,16 @@ void RasterTile::processPoints(QList<TextItem*> &textItems,
 		if ((!label || !fnt) && !img)
 			continue;
 
-		QPoint pos(ll2xy(point->pos()).toPoint());
-		TextPointItem *item = pointItem(pos, label, fnt, img, color, hColor,
-		  textItems);
-		if (item) {
+		PointItem *item = new PointItem(pos, label, fnt, img, rimg, color,
+		  hColor);
+		if (item->isValid() && !item->collides(textItems)) {
 			textItems.append(item);
-			if (rimg)
-				images.append(rimg);
 			if (lightsMap.contains(point->pos()))
 				lights.append(new TextPointItem(pos, 0, 0, light(), 0, 0, 0, 0));
 			if (signalsMap.contains(point->pos()))
 				lights.append(new TextPointItem(pos, 0, 0, signal(), 0, 0, 0, 0));
 		} else
-			delete rimg;
+			delete item;
 	}
 }
 
@@ -381,13 +383,12 @@ void RasterTile::processLines(QList<TextItem*> &textItems)
 void RasterTile::render()
 {
 	QList<TextItem*> textItems, lights;
-	QList<QImage*> images;
 
 	_pixmap.setDevicePixelRatio(_ratio);
 	_pixmap.fill(Qt::transparent);
 
 	processPolygons(textItems);
-	processPoints(textItems, lights, images);
+	processPoints(textItems, lights);
 	processLines(textItems);
 
 	QPainter painter(&_pixmap);
@@ -404,7 +405,6 @@ void RasterTile::render()
 
 	qDeleteAll(textItems);
 	qDeleteAll(lights);
-	qDeleteAll(images);
 
 	//painter.setPen(Qt::red);
 	//painter.setBrush(Qt::NoBrush);

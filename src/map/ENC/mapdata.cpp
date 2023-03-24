@@ -54,6 +54,7 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(PILBOP), 28);
 	map.insert(TYPE(SISTAT), 29);
 	map.insert(TYPE(I_SISTAT), 29);
+	map.insert(TYPE(RDOCAL), 30);
 	map.insert(TYPE(I_RDOCAL), 30);
 	map.insert(TYPE(I_TRNBSN), 31);
 	map.insert(TYPE(HRBFAC), 32);
@@ -65,11 +66,12 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(I_CRANES), 35);
 	map.insert(TYPE(I_WTWGAG), 36);
 	map.insert(TYPE(PYLONS), 37);
-	map.insert(TYPE(LNDMRK), 38);
-	map.insert(TYPE(SILTNK), 39);
-	map.insert(TYPE(LNDELV), 40);
-	map.insert(TYPE(SMCFAC), 41);
-	map.insert(TYPE(BUISGL), 42);
+	map.insert(TYPE(SLCONS), 38);
+	map.insert(TYPE(LNDMRK), 39);
+	map.insert(TYPE(SILTNK), 40);
+	map.insert(TYPE(LNDELV), 41);
+	map.insert(TYPE(SMCFAC), 42);
+	map.insert(TYPE(BUISGL), 43);
 
 	map.insert(TYPE(I_DISMAR), 0xFFFFFFFE);
 	map.insert(TYPE(SOUNDG), 0xFFFFFFFF);
@@ -248,7 +250,8 @@ MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
 	if (type>>16 == I_DISMAR && params.size()) {
 		_label = hUnits((type>>8)&0xFF) + " " + QString::fromLatin1(params.at(0));
 		_type = SUBTYPE(I_DISMAR, type & 0xFF);
-	} else if (type == TYPE(I_RDOCAL) && params.size() > 1) {
+	} else if ((type == TYPE(I_RDOCAL) || type == TYPE(RDOCAL))
+	  && params.size() > 1) {
 		if (!params.at(1).isEmpty())
 			_label = QString("VHF ") + QString::fromLatin1(params.at(1));
 		_param = QVariant(params.at(0).toDouble());
@@ -542,9 +545,11 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 			subtype |= av.at(1).toByteArray().toUInt() << 8;
 
 		if ((OBJL == I_DISMAR && key == I_WTWDIS)
+		  || (OBJL == RDOCAL && key == ORIENT)
 		  || (OBJL == I_RDOCAL && key == ORIENT))
 			params[0] = av.at(1).toByteArray();
-		if (OBJL == I_RDOCAL && key == COMCHA)
+		if ((OBJL == I_RDOCAL && key == COMCHA)
+		  || (OBJL == RDOCAL && key == COMCHA))
 			params[1] = av.at(1).toByteArray();
 	}
 
