@@ -15,6 +15,7 @@
 #define CATWAT 69
 #define CATWRK 71
 #define COMCHA 77
+#define CURVEL 84
 #define DRVAL1 87
 #define ELEVAT 90
 #define FUNCTN 94

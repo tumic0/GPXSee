@@ -27,6 +27,7 @@
 #define COALNE 30
 #define CONVYR 34
 #define CRANES 35
+#define CURENT 36
 #define DAMCON 38
 #define DWRTPT 41
 #define DEPARE 42

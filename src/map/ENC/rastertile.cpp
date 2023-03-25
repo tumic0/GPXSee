@@ -10,8 +10,9 @@
 using namespace ENC;
 
 #define ICON_PADDING 2
-#define TSSLPT_SIZE 0.005 /* ll */
-#define RDOCAL_SIZE 12 /* px */
+#define TSSLPT_SIZE  0.005 /* ll */
+#define RDOCAL_SIZE  12 /* px */
+#define CURENT_SIZE  12 /* px */
 
 class PointItem : public TextPointItem
 {
@@ -122,6 +123,7 @@ static QImage *rdocalArrow(qreal angle)
 	  QImage::Format_ARGB32_Premultiplied);
 	img->fill(Qt::transparent);
 	QPainter p(img);
+	p.setRenderHint(QPainter::Antialiasing);
 	p.setPen(QPen(QColor("#eb49eb"), 1));
 
 	QPointF arrow[3];
@@ -141,10 +143,39 @@ static QImage *rdocalArrow(qreal angle)
 	return img;
 }
 
+static QImage *currentArrow(qreal angle)
+{
+	QImage *img = new QImage(CURENT_SIZE*2, CURENT_SIZE*2,
+	  QImage::Format_ARGB32_Premultiplied);
+	img->fill(Qt::transparent);
+	QPainter p(img);
+	p.setRenderHint(QPainter::Antialiasing);
+	p.setPen(QPen(Qt::black, 1));
+
+	QPointF arrow[3];
+	arrow[0] = QPointF(img->width()/2, img->height()/2);
+	arrow[1] = arrow[0] + QPointF(qSin(angle - M_PI/3) * CURENT_SIZE,
+	  qCos(angle - M_PI/3) * CURENT_SIZE);
+	arrow[2] = arrow[0] + QPointF(qSin(angle - M_PI + M_PI/3) * CURENT_SIZE,
+	  qCos(angle - M_PI + M_PI/3) * CURENT_SIZE);
+
+	QLineF l(arrow[1], arrow[2]);
+	QPointF pt(l.pointAt(0.5));
+	QLineF l2(arrow[0], pt);
+
+	p.translate(arrow[0] - pt);
+	p.drawPolyline(QPolygonF() << arrow[1] << arrow[0] << arrow[2]);
+	p.drawLine(arrow[0], l2.pointAt(2));
+
+	return img;
+}
+
 static QImage *image(uint type, const QVariant &param)
 {
 	if (type>>16 == RDOCAL || type>>16 == I_RDOCAL)
 		return rdocalArrow(deg2rad(90 - param.toDouble()));
+	else if (type>>16 == CURENT)
+		return currentArrow(deg2rad(90 - param.toDouble()));
 	else
 		return 0;
 }
