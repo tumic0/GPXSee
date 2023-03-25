@@ -196,6 +196,7 @@ void Style::pointStyle()
 	_points[TYPE(BCNSAW)] = Point(QImage(":/marine/beacon.png"), Small);
 	_points[TYPE(BCNSPP)] = Point(QImage(":/marine/beacon.png"), Small);
 	_points[SUBTYPE(LNDMRK, 3)] = Point(QImage(":/marine/chimney.png"));
+	_points[SUBTYPE(LNDMRK, 7)] = Point(QImage(":/marine/pylon.png"));
 	_points[SUBTYPE(LNDMRK, 9)] = Point(QImage(":/marine/monument.png"));
 	_points[SUBTYPE(LNDMRK, 20)] = Point(QImage(":/marine/church.png"));
 	_points[SUBTYPE(LNDMRK, 17)] = Point(QImage(":/marine/tower.png"));
