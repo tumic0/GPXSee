@@ -190,6 +190,7 @@ void Style::pointStyle()
 	_points[TYPE(I_BOYLAT)] = Point(QImage(":/marine/buoy.png"), Small);
 	_points[TYPE(BOYSAW)] = Point(QImage(":/marine/buoy.png"), Small);
 	_points[TYPE(BOYSPP)] = Point(QImage(":/marine/buoy.png"), Small);
+	_points[TYPE(BCNCAR)] = Point(QImage(":/marine/beacon.png"), Small);
 	_points[TYPE(BCNISD)] = Point(QImage(":/marine/beacon.png"), Small);
 	_points[TYPE(BCNLAT)] = Point(QImage(":/marine/beacon.png"), Small);
 	_points[TYPE(I_BCNLAT)] = Point(QImage(":/marine/beacon.png"), Small);
