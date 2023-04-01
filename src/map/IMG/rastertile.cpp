@@ -357,7 +357,8 @@ void RasterTile::processStreetNames(QList<TextItem*> &textItems)
 		  ? &style.textColor() : 0;
 
 		TextPathItem *item = new TextPathItem(poly.points,
-		  &poly.label.text(), _rect, fnt, color, &haloColor);
+		  &poly.label.text(), _rect, fnt, color, Style::isContourLine(poly.type)
+		  ? 0 : &haloColor);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
 		else
