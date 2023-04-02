@@ -14,10 +14,11 @@ jobs:
         run: echo "PATH=/usr/local/opt/qt@5/bin:$PATH" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install dependencies
-        run: |
-          brew update
-          brew install qt5
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '5.15.8'
+          modules: qtpositioning qt5compat qtserialport
       - name: Create localization
         run: lrelease gpxsee.pro
       - name: Configure build
@@ -40,10 +41,11 @@ jobs:
         run: echo "PATH=/usr/local/opt/qt@6/bin:$PATH" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install dependencies
-        run: |
-           brew update
-           brew install qt6
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.4.3'
+          modules: qtpositioning qt5compat qtserialport
       - name: Create localization
         run: lrelease gpxsee.pro
       - name: Configure build
