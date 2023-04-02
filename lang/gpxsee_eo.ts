@@ -30,7 +30,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>Mez</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="30"/>
@@ -1156,7 +1156,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>Mez</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="30"/>
@@ -2157,7 +2157,7 @@
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>Mez</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="30"/>
@@ -2277,7 +2277,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="35"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>Mez</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="37"/>
@@ -2374,7 +2374,7 @@
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>Mez</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="30"/>
