@@ -10,8 +10,6 @@ jobs:
     name: GPXSee Qt5 build
     runs-on: macos-latest
     steps:
-      - name: Set environment variables
-        run: echo "PATH=/usr/local/opt/qt@5/bin:$PATH" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install Qt
@@ -36,8 +34,6 @@ jobs:
     name: GPXSee Qt6 build
     runs-on: macos-latest
     steps:
-      - name: Set environment variables
-        run: echo "PATH=/usr/local/opt/qt@6/bin:$PATH" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install Qt
