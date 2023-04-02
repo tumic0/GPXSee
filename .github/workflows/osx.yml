@@ -18,7 +18,6 @@ jobs:
         uses: jurplel/install-qt-action@v3
         with:
           version: '5.15.2'
-          modules: qtpositioning qtserialport
       - name: Create localization
         run: lrelease gpxsee.pro
       - name: Configure build
