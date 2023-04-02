@@ -23,7 +23,7 @@ jobs:
       - name: Build project
         run: make -j3
       - name: Create DMG
-        run: macdeployqt GPXSee.app -dmg
+        run: macdeployqt GPXSee.app -dmg -appstore-compliant
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -48,7 +48,7 @@ jobs:
       - name: Build project
         run: make -j3
       - name: Create DMG
-        run: macdeployqt GPXSee.app -dmg
+        run: macdeployqt GPXSee.app -dmg -appstore-compliant
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
