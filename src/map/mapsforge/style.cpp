@@ -188,6 +188,7 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 	int fontSize = 9;
 	bool bold = false, italic = false;
 	QString fontFamily("Helvetica");
+	QFont::Capitalization capitalization = QFont::MixedCase;
 	bool ok;
 
 	if (attr.hasAttribute("k"))
@@ -228,11 +229,21 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 		else if (family == "serif")
 			fontFamily = "Times New Roman";
 	}
+	if (attr.hasAttribute("text-transform")) {
+		QString transform(attr.value("text-transform").toString());
+		if (transform == "uppercase")
+			capitalization = QFont::AllUppercase;
+		else if (transform == "lowercase")
+			capitalization = QFont::AllLowercase;
+		else if (transform == "capitalize")
+			capitalization = QFont::Capitalize;
+	}
 
 	ri._font.setFamily(fontFamily);
 	ri._font.setPixelSize(fontSize);
 	ri._font.setBold(bold);
 	ri._font.setItalic(italic);
+	ri._font.setCapitalization(capitalization);
 
 	if (fontSize)
 		for (int i = 0; i < lists.size(); i++)
