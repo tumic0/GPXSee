@@ -171,7 +171,7 @@ void RasterTile::processAreaLabels(QList<TextItem*> &textItems)
 			continue;
 
 		if (!path.path.elementCount())
-			path.path = painterPath(path.poly);
+			path.path = painterPath(path.poly, false);
 
 		const QImage *img = si ? &si->img() : 0;
 		const QFont *font = ti ? &ti->font() : 0;
@@ -232,16 +232,31 @@ void RasterTile::drawTextItems(QPainter *painter,
 		textItems.at(i)->paint(painter);
 }
 
-QPainterPath RasterTile::painterPath(const Polygon &polygon) const
+QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
 {
 	QPainterPath path;
 
 	for (int i = 0; i < polygon.size(); i++) {
 		const QVector<Coordinates> &subpath = polygon.at(i);
 
-		path.moveTo(ll2xy(subpath.first()));
-		for (int j = 1; j < subpath.size(); j++)
-			path.lineTo(ll2xy(subpath.at(j)));
+		if (curve) {
+			QPointF p1(ll2xy(subpath.first()));
+			QPointF p2(0, 0);
+			QPointF p3(0, 0);
+
+			path.moveTo(p1);
+			for (int j = 1; j < subpath.size(); j++) {
+				p3 = ll2xy(subpath.at(j));
+				p2 = QPointF((p1.x() + p3.x()) / 2.0, (p1.y() + p3.y()) / 2.0);
+				path.quadTo(p1, p2);
+				p1 = p3;
+			}
+			path.quadTo(p2, p3);
+		} else {
+			path.moveTo(ll2xy(subpath.first()));
+			for (int j = 1; j < subpath.size(); j++)
+				path.lineTo(ll2xy(subpath.at(j)));
+		}
 	}
 
 	return path;
@@ -300,7 +315,7 @@ void RasterTile::drawPaths(QPainter *painter)
 		}
 
 		if (!is.path()->path.elementCount())
-			is.path()->path = painterPath(is.path()->poly);
+			is.path()->path = painterPath(is.path()->poly, ri->curve());
 
 		if (ri->area()) {
 			lp.setPen(ri->pen(_zoom));

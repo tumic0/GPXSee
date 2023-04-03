@@ -169,6 +169,11 @@ void Style::line(QXmlStreamReader &reader, const Rule &rule)
 		else if (join == "bevel")
 			ri._strokeJoin = Qt::BevelJoin;
 	}
+	if (attr.hasAttribute("curve")) {
+		QString curve(attr.value("curve").toString());
+		if (curve == "cubic")
+			ri._curve = true;
+	}
 
 	_paths.append(ri);
 

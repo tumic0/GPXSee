@@ -76,7 +76,7 @@ private:
 	void processPointLabels(QList<TextItem*> &textItems);
 	void processAreaLabels(QList<TextItem*> &textItems);
 	void processLineLabels(QList<TextItem*> &textItems);
-	QPainterPath painterPath(const Polygon &polygon) const;
+	QPainterPath painterPath(const Polygon &polygon, bool curve) const;
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
 	void drawPaths(QPainter *painter);
 

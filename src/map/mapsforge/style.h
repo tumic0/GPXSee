@@ -163,12 +163,13 @@ public:
 	public:
 		PathRender(const Rule &rule, int zOrder) : Render(rule),
 		  _zOrder(zOrder), _strokeWidth(0), _strokeCap(Qt::RoundCap),
-		  _strokeJoin(Qt::RoundJoin), _area(false) {}
+		  _strokeJoin(Qt::RoundJoin), _area(false), _curve(false) {}
 
 		int zOrder() const {return _zOrder;}
 		QPen pen(int zoom) const;
 		QBrush brush() const;
 		bool area() const {return _area;}
+		bool curve() const {return _curve;}
 
 	private:
 		friend class Style;
@@ -180,7 +181,7 @@ public:
 		Qt::PenCapStyle _strokeCap;
 		Qt::PenJoinStyle _strokeJoin;
 		QImage _fillImage;
-		bool _area;
+		bool _area, _curve;
 	};
 
 	class TextRender : public Render
