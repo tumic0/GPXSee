@@ -109,6 +109,9 @@ void MapData::computeZooms()
 			zooms.insert(z.at(i));
 	}
 
+	if (zooms.isEmpty())
+		return;
+
 	_zooms = zooms.values();
 	std::sort(_zooms.begin(), _zooms.end());
 
