@@ -264,7 +264,7 @@ QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
 
 QVector<RasterTile::PathInstruction> RasterTile::pathInstructions()
 {
-	QCache<Key, QVector<const Style::PathRender *> > cache(1024);
+	QCache<Key, QVector<const Style::PathRender *> > cache(8192);
 	QVector<PathInstruction> instructions;
 	const Style &s = style(_ratio);
 	QVector<const Style::PathRender*> *ri;
