@@ -791,7 +791,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="963"/>
         <source>Open directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Avaa hakemisto</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1215"/>
@@ -1790,7 +1790,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="577"/>
         <source>Use $lat and $lon for NYY/SYY and EXXX/WXXX in the URL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Käytä $lat ja $lon kohdissa NYY/SYY ja EXXX/WXXX URL-osoitteessa.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="582"/>
