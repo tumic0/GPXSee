@@ -44,20 +44,12 @@ static QPointF centroid(const QPainterPath &polygon)
 }
 
 static const QByteArray *label(const QByteArray &key,
-  const QVector<MapData::Tag> &tags, bool *limit = 0)
+  const QVector<MapData::Tag> &tags)
 {
 	for (int i = 0; i < tags.size(); i++) {
 		const MapData::Tag &tag = tags.at(i);
-
-		if (tag.key == key) {
-			if (tag.value.isEmpty())
-				return 0;
-			else {
-				if (limit)
-					*limit = (tag.key == "ref");
-				return &tag.value;
-			}
-		}
+		if (tag.key == key)
+			return tag.value.isEmpty() ? 0 : &tag.value;
 	}
 
 	return 0;
@@ -78,14 +70,14 @@ void RasterTile::processPointLabels(QList<TextItem*> &textItems)
 
 	for (int i = 0; i < _points.size(); i++) {
 		MapData::Point &point = _points[i];
-		const QByteArray *l = 0;
+		const QByteArray *lbl = 0;
 		const Style::TextRender *ti = 0;
 		const Style::Symbol *si = 0;
 
 		for (int j = 0; j < labels.size(); j++) {
 			const Style::TextRender *ri = labels.at(j);
 			if (ri->rule().match(point.tags)) {
-				if ((l = label(ri->key(), point.tags))) {
+				if ((lbl = label(ri->key(), point.tags))) {
 					ti = ri;
 					break;
 				}
@@ -109,7 +101,7 @@ void RasterTile::processPointLabels(QList<TextItem*> &textItems)
 		const QColor *hColor = ti ? haloColor(ti) : 0;
 
 		PointItem *item = new PointItem(ll2xy(point.coordinates).toPoint(),
-		  l ? new QString(*l) : 0, font, img, color, hColor);
+		  lbl ? new QString(*lbl) : 0, font, img, color, hColor);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
 		else
@@ -135,9 +127,9 @@ void RasterTile::processAreaLabels(QList<TextItem*> &textItems,
 		for (int j = 0; j < labels.size(); j++) {
 			const Style::TextRender *ri = labels.at(j);
 			if (ri->rule().match(path.path->closed, path.path->tags)) {
-				const QByteArray *l;
-				if ((l = label(ri->key(), path.path->tags))) {
-					path.label = *l;
+				const QByteArray *lbl;
+				if ((lbl = label(ri->key(), path.path->tags))) {
+					path.label = *lbl;
 					ti = ri;
 				}
 				break;
@@ -178,31 +170,30 @@ void RasterTile::processLineLabels(QList<TextItem*> &textItems,
 	const Style &s = style(_ratio);
 	QList<const Style::TextRender*> instructions(s.pathLabels(_zoom));
 	QSet<QByteArray> set;
-	bool limit;
 
 	for (int i = 0; i < instructions.size(); i++) {
 		const Style::TextRender *ri = instructions.at(i);
 
 		for (int i = 0; i < renderPaths.size(); i++) {
 			RenderPath &path = renderPaths[i];
-			const QByteArray *l = label(ri->key(), path.path->tags,
-			  &limit);
+			const QByteArray *lbl = label(ri->key(), path.path->tags);
 
-			if (!l)
+			if (!lbl)
 				continue;
 			if (!ri->rule().match(path.path->closed, path.path->tags))
 				continue;
-			if (limit && set.contains(*l))
+			bool limit = (ri->key() == "ref");
+			if (limit && set.contains(*lbl))
 				continue;
 
-			path.label = *l;
+			path.label = *lbl;
 
 			TextPathItem *item = new TextPathItem(path.pp, &path.label, _rect,
 			  &ri->font(), &ri->fillColor(), haloColor(ri));
 			if (item->isValid() && !item->collides(textItems)) {
 				textItems.append(item);
 				if (limit)
-					set.insert(*l);
+					set.insert(*lbl);
 			} else
 				delete item;
 		}
