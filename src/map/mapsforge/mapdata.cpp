@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QDataStream>
 #include <QColor>
+#include "common/hash.h"
 #include "map/osm.h"
 #include "subfile.h"
 #include "mapdata.h"
@@ -14,7 +15,7 @@ using namespace Mapsforge;
 #define MD(val) ((val) / 1e6)
 #define OFFSET_MASK 0x7FFFFFFFFFL
 
-static uint pointType(const QVector<MapData::Tag> &tags)
+static quint8 pointType(const QVector<MapData::Tag> &tags)
 {
 	for (int i = 0; i < tags.size(); i++) {
 		const MapData::Tag &tag = tags.at(i);
@@ -37,20 +38,19 @@ static uint pointType(const QVector<MapData::Tag> &tags)
 
 static void setPointId(MapData::Point &p)
 {
-	uint hash = (uint)qHash(QPair<double,double>((uint)qHash(
-	  QPair<double, double>(p.coordinates.lon(), p.coordinates.lat())),
-	  (uint)qHash(p.label)));
-	uint type = pointType(p.tags);
+	HASH_T hash = qHash(QPair<double, double>(p.coordinates.lon(),
+	  p.coordinates.lat()));
+	quint8 type = pointType(p.tags);
 
-	p.id = ((quint64)type)<<32 | hash;
+	p.id = ((quint64)type)<<56 | (quint64)hash;
 }
 
 static void copyPaths(const RectC &rect, const QList<MapData::Path> *src,
-  QList<MapData::Path> *dst)
+  QSet<MapData::Path> *dst)
 {
 	for (int i = 0; i < src->size(); i++)
 		if (rect.intersects(src->at(i).poly.boundingRect()))
-			dst->append(src->at(i));
+			dst->insert(src->at(i));
 }
 
 static void copyPoints(const RectC &rect, const QList<MapData::Point> *src,
@@ -194,7 +194,7 @@ static bool readDoubleDelta(SubFile &subfile, const Coordinates &c,
 	return true;
 }
 
-static bool readPolygon(SubFile &subfile, const Coordinates &c,
+static bool readPolygonPath(SubFile &subfile, const Coordinates &c,
   bool doubleDelta, Polygon &polygon)
 {
 	quint32 blocks, nodes;
@@ -202,7 +202,7 @@ static bool readPolygon(SubFile &subfile, const Coordinates &c,
 	if (!subfile.readVUInt32(blocks))
 		return false;
 
-	polygon.reserve(blocks);
+	polygon.reserve(polygon.size() + blocks);
 	for (quint32 i = 0; i < blocks; i++) {
 		if (!subfile.readVUInt32(nodes) || !nodes)
 			return false;
@@ -494,7 +494,7 @@ void MapData::clearTiles()
 bool MapData::pathCb(VectorTile *tile, void *context)
 {
 	PathCTX *ctx = (PathCTX*)context;
-	ctx->data->paths(tile, ctx->rect, ctx->zoom, ctx->list);
+	ctx->data->paths(tile, ctx->rect, ctx->zoom, ctx->set);
 	return true;
 }
 
@@ -545,10 +545,10 @@ void MapData::points(const VectorTile *tile, const RectC &rect, int zoom,
 		copyPoints(rect, cached, list);
 }
 
-void MapData::paths(const RectC &rect, int zoom, QList<Path> *list)
+void MapData::paths(const RectC &rect, int zoom, QSet<Path> *set)
 {
 	int l(level(zoom));
-	PathCTX ctx(this, rect, zoom, list);
+	PathCTX ctx(this, rect, zoom, set);
 	double min[2], max[2];
 
 	min[0] = rect.left();
@@ -560,7 +560,7 @@ void MapData::paths(const RectC &rect, int zoom, QList<Path> *list)
 }
 
 void MapData::paths(const VectorTile *tile, const RectC &rect, int zoom,
-  QList<Path> *list)
+  QSet<Path> *set)
 {
 	Key key(tile, zoom);
 	QList<Path> *cached = _pathCache.object(key);
@@ -568,12 +568,12 @@ void MapData::paths(const VectorTile *tile, const RectC &rect, int zoom,
 	if (!cached) {
 		QList<Path> *p = new QList<Path>();
 		if (readPaths(tile, zoom, p)) {
-			copyPaths(rect, p, list);
+			copyPaths(rect, p, set);
 			_pathCache.insert(key, p);
 		} else
 			delete p;
 	} else
-		copyPaths(rect, cached, list);
+		copyPaths(rect, cached, set);
 }
 
 bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
@@ -604,7 +604,7 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 		return false;
 
 	for (unsigned i = 0; i < paths[zoom - info.min]; i++) {
-		Path p;
+		Path p(subfile.offset() + subfile.pos());
 		qint32 lon = 0, lat = 0;
 
 		if (!(subfile.readVUInt32(unused) && subfile.readUInt16(bitmap)
@@ -646,15 +646,15 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 
 		Q_ASSERT(blocks);
 		for (unsigned j = 0; j < blocks; j++) {
-			if (!readPolygon(subfile, tile->pos, flags & 0x04, p.poly))
+			if (!readPolygonPath(subfile, tile->pos, flags & 0x04, p.poly))
 				return false;
-			p.closed = isClosed(p.poly);
-			if (flags & 0x10)
-				p.labelPos = Coordinates(p.poly.first().first().lon() + MD(lon),
-				  p.poly.first().first().lat() + MD(lat));
-
-			list->append(p);
 		}
+		p.closed = isClosed(p.poly);
+		if (flags & 0x10)
+			p.labelPos = Coordinates(p.poly.first().first().lon() + MD(lon),
+			  p.poly.first().first().lat() + MD(lat));
+
+		list->append(p);
 	}
 
 	return true;
@@ -720,6 +720,7 @@ bool MapData::readPoints(const VectorTile *tile, int zoom, QList<Point> *list)
 		}
 
 		setPointId(p);
+
 		list->append(p);
 	}
 
@@ -735,15 +736,14 @@ QDebug operator<<(QDebug dbg, const Mapsforge::MapData::Tag &tag)
 
 QDebug operator<<(QDebug dbg, const MapData::Path &path)
 {
-	dbg.nospace() << "Path(" << path.poly.boundingRect() << ", " << path.label
-	  << ", " << path.tags << ")";
+	dbg.nospace() << "Path(" << path.poly.boundingRect() << ", "
+	  << path.tags << ")";
 	return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, const MapData::Point &point)
 {
-	dbg.nospace() << "Point(" << point.coordinates << "," << point.label
-	  << ", " << point.tags << ")";
+	dbg.nospace() << "Point(" << point.coordinates << ", " << point.tags << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG

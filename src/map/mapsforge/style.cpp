@@ -432,10 +432,10 @@ Style::Style(const QString &path, qreal ratio)
 		loadXml(":/mapsforge/default.xml", ratio);
 }
 
-QVector<const Style::PathRender *> Style::paths(int zoom, bool closed,
+QList<const Style::PathRender *> Style::paths(int zoom, bool closed,
   const QVector<MapData::Tag> &tags) const
 {
-	QVector<const PathRender*> ri;
+	QList<const PathRender*> ri;
 
 	for (int i = 0; i < _paths.size(); i++)
 		if (_paths.at(i).rule().match(zoom, closed, tags))

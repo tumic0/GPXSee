@@ -14,6 +14,7 @@ public:
 	  : _file(file), _offset(offset), _size(size), _pos(-1),
 	  _blockNum(-1), _blockPos(-1) {}
 
+	quint64 offset() const {return _offset;}
 	quint64 pos() const {return _pos;}
 	bool seek(quint64 pos);
 

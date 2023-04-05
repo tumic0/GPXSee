@@ -221,7 +221,7 @@ public:
 
 	Style(const QString &path, qreal ratio);
 
-	QVector<const PathRender *> paths(int zoom, bool closed,
+	QList<const PathRender *> paths(int zoom, bool closed,
 	  const QVector<MapData::Tag> &tags) const;
 	QList<const TextRender*> pathLabels(int zoom) const;
 	QList<const TextRender*> pointLabels(int zoom) const;

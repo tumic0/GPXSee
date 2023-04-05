@@ -44,29 +44,29 @@ public:
 	struct Point {
 		Point(const Coordinates &c) : coordinates(c) {}
 
+		quint64 id;
 		Coordinates coordinates;
 		QVector<Tag> tags;
 		int layer;
-		quint64 id;
-
-		QString label;
 
 		bool operator<(const Point &other) const
 		  {return id > other.id;}
 	};
 
 	struct Path {
+		Path(quint64 id) : id(id) {}
+
+		quint64 id;
 		Polygon poly;
 		QVector<Tag> tags;
 		Coordinates labelPos;
 		int layer;
 		bool closed;
 
-		QString label;
-		QPainterPath path;
-
 		bool operator<(const Path &other) const
 		  {return layer < other.layer;}
+		bool operator==(const Path &other) const
+		  {return (id == other.id);}
 	};
 
 	RectC bounds() const;
@@ -75,7 +75,7 @@ public:
 	int tileSize() const {return _tileSize;}
 
 	void points(const RectC &rect, int zoom, QList<Point> *list);
-	void paths(const RectC &rect, int zoom, QList<Path> *list);
+	void paths(const RectC &rect, int zoom, QSet<Path> *set);
 
 	void load();
 	void clear();
@@ -101,13 +101,13 @@ private:
 	};
 
 	struct PathCTX {
-		PathCTX(MapData *data, const RectC &rect, int zoom, QList<Path> *list)
-		  : data(data), rect(rect), zoom(zoom), list(list) {}
+		PathCTX(MapData *data, const RectC &rect, int zoom, QSet<Path> *set)
+		  : data(data), rect(rect), zoom(zoom), set(set) {}
 
 		MapData *data;
 		const RectC &rect;
 		int zoom;
-		QList<Path> *list;
+		QSet<Path> *set;
 	};
 
 	struct PointCTX {
@@ -140,7 +140,7 @@ private:
 
 	int level(int zoom) const;
 	void paths(const VectorTile *tile, const RectC &rect, int zoom,
-	  QList<Path> *list);
+	  QSet<Path> *set);
 	void points(const VectorTile *tile, const RectC &rect, int zoom,
 	  QList<Point> *list);
 	bool readPaths(const VectorTile *tile, int zoom, QList<Path> *list);
@@ -173,6 +173,11 @@ inline HASH_T qHash(const MapData::Key &key)
 inline HASH_T qHash(const MapData::Tag &tag)
 {
 	return ::qHash(tag.key) ^ ::qHash(tag.value);
+}
+
+inline HASH_T qHash(const MapData::Path &path)
+{
+	return ::qHash(path.id);
 }
 
 }
