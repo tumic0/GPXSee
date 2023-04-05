@@ -4,6 +4,7 @@
 #include <QPixmap>
 #include "map/projection.h"
 #include "map/transform.h"
+#include "map/textpointitem.h"
 #include "mapdata.h"
 
 class TextItem;
@@ -30,6 +31,19 @@ public:
 	void render();
 
 private:
+	class PointItem : public TextPointItem
+	{
+	public:
+		PointItem(const QPoint &point, const QString *text, const QFont *font,
+		  const QImage *img, const QImage *rimg, const QColor *color,
+		  const QColor *haloColor) : TextPointItem(point, text, font, img, color,
+		  haloColor, 0, 2), _rimg(rimg) {}
+		~PointItem() {delete _rimg;}
+
+	private:
+		const QImage *_rimg;
+	};
+
 	QPointF ll2xy(const Coordinates &c) const
 	  {return _transform.proj2img(_proj.ll2xy(c));}
 	QPainterPath painterPath(const Polygon &polygon) const;

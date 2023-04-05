@@ -2,30 +2,15 @@
 #include <QPainter>
 #include "common/linec.h"
 #include "map/bitmapline.h"
-#include "map/textpointitem.h"
 #include "map/textpathitem.h"
 #include "style.h"
 #include "rastertile.h"
 
 using namespace ENC;
 
-#define ICON_PADDING 2
 #define TSSLPT_SIZE  0.005 /* ll */
 #define RDOCAL_SIZE  12 /* px */
 #define CURENT_SIZE  12 /* px */
-
-class PointItem : public TextPointItem
-{
-public:
-	PointItem(const QPoint &point, const QString *text, const QFont *font,
-	  const QImage *img, const QImage *rimg, const QColor *color,
-	  const QColor *haloColor) : TextPointItem(point, text, font, img, color,
-	  haloColor, 0, ICON_PADDING), _rimg(rimg) {}
-	~PointItem() {delete _rimg;}
-
-private:
-	const QImage *_rimg;
-};
 
 typedef QMap<Coordinates, const MapData::Point*> PointMap;
 
