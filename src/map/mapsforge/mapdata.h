@@ -3,7 +3,6 @@
 
 #include <QFile>
 #include <QCache>
-#include <QPainterPath>
 #include "common/hash.h"
 #include "common/rectc.h"
 #include "common/rtree.h"
