@@ -175,7 +175,7 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			if (QPixmapCache::find(key(_zoom, ttl), &pm))
 				painter->drawPixmap(ttl, pm);
 			else {
-				QSet<MapData::Path> paths;
+				QList<MapData::Path> paths;
 				QList<MapData::Point> points;
 
 				/* Add a "sub-pixel" margin to assure the tile areas do not

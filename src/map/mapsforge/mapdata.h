@@ -41,15 +41,15 @@ public:
 	};
 
 	struct Point {
-		Point(const Coordinates &c) : coordinates(c) {}
+		Point(const Coordinates &c) : coordinates(c)
+		{
+			id = (quint64)qHash(QPair<double, double>(c.lon(), c.lat()));
+		}
 
 		quint64 id;
 		Coordinates coordinates;
 		QVector<Tag> tags;
 		int layer;
-
-		bool operator<(const Point &other) const
-		  {return id > other.id;}
 	};
 
 	struct Path {
@@ -74,7 +74,7 @@ public:
 	int tileSize() const {return _tileSize;}
 
 	void points(const RectC &rect, int zoom, QList<Point> *list);
-	void paths(const RectC &rect, int zoom, QSet<Path> *set);
+	void paths(const RectC &rect, int zoom, QList<Path> *set);
 
 	void load();
 	void clear();
@@ -100,13 +100,13 @@ private:
 	};
 
 	struct PathCTX {
-		PathCTX(MapData *data, const RectC &rect, int zoom, QSet<Path> *set)
-		  : data(data), rect(rect), zoom(zoom), set(set) {}
+		PathCTX(MapData *data, const RectC &rect, int zoom, QList<Path> *list)
+		  : data(data), rect(rect), zoom(zoom), list(list) {}
 
 		MapData *data;
 		const RectC &rect;
 		int zoom;
-		QSet<Path> *set;
+		QList<Path> *list;
 	};
 
 	struct PointCTX {
@@ -139,7 +139,7 @@ private:
 
 	int level(int zoom) const;
 	void paths(const VectorTile *tile, const RectC &rect, int zoom,
-	  QSet<Path> *set);
+	  QList<Path> *list);
 	void points(const VectorTile *tile, const RectC &rect, int zoom,
 	  QList<Point> *list);
 	bool readPaths(const VectorTile *tile, int zoom, QList<Path> *list);

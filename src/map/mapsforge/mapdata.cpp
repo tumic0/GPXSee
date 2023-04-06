@@ -15,42 +15,12 @@ using namespace Mapsforge;
 #define MD(val) ((val) / 1e6)
 #define OFFSET_MASK 0x7FFFFFFFFFL
 
-static quint8 pointType(const QVector<MapData::Tag> &tags)
-{
-	for (int i = 0; i < tags.size(); i++) {
-		const MapData::Tag &tag = tags.at(i);
-		if (tag.key == "place") {
-			if (tag.value == "country")
-				return 4;
-			else if (tag.value == "city")
-				return 3;
-			else if (tag.value == "town")
-				return 2;
-			else if (tag.value == "village")
-				return 1;
-			else
-				return 0;
-		}
-	}
-
-	return 0;
-}
-
-static void setPointId(MapData::Point &p)
-{
-	HASH_T hash = qHash(QPair<double, double>(p.coordinates.lon(),
-	  p.coordinates.lat()));
-	quint8 type = pointType(p.tags);
-
-	p.id = ((quint64)type)<<56 | (quint64)hash;
-}
-
 static void copyPaths(const RectC &rect, const QList<MapData::Path> *src,
-  QSet<MapData::Path> *dst)
+  QList<MapData::Path> *dst)
 {
 	for (int i = 0; i < src->size(); i++)
 		if (rect.intersects(src->at(i).poly.boundingRect()))
-			dst->insert(src->at(i));
+			dst->append(src->at(i));
 }
 
 static void copyPoints(const RectC &rect, const QList<MapData::Point> *src,
@@ -494,7 +464,7 @@ void MapData::clearTiles()
 bool MapData::pathCb(VectorTile *tile, void *context)
 {
 	PathCTX *ctx = (PathCTX*)context;
-	ctx->data->paths(tile, ctx->rect, ctx->zoom, ctx->set);
+	ctx->data->paths(tile, ctx->rect, ctx->zoom, ctx->list);
 	return true;
 }
 
@@ -545,10 +515,10 @@ void MapData::points(const VectorTile *tile, const RectC &rect, int zoom,
 		copyPoints(rect, cached, list);
 }
 
-void MapData::paths(const RectC &rect, int zoom, QSet<Path> *set)
+void MapData::paths(const RectC &rect, int zoom, QList<Path> *list)
 {
 	int l(level(zoom));
-	PathCTX ctx(this, rect, zoom, set);
+	PathCTX ctx(this, rect, zoom, list);
 	double min[2], max[2];
 
 	min[0] = rect.left();
@@ -560,7 +530,7 @@ void MapData::paths(const RectC &rect, int zoom, QSet<Path> *set)
 }
 
 void MapData::paths(const VectorTile *tile, const RectC &rect, int zoom,
-  QSet<Path> *set)
+  QList<Path> *list)
 {
 	Key key(tile, zoom);
 	QList<Path> *cached = _pathCache.object(key);
@@ -568,12 +538,12 @@ void MapData::paths(const VectorTile *tile, const RectC &rect, int zoom,
 	if (!cached) {
 		QList<Path> *p = new QList<Path>();
 		if (readPaths(tile, zoom, p)) {
-			copyPaths(rect, p, set);
+			copyPaths(rect, p, list);
 			_pathCache.insert(key, p);
 		} else
 			delete p;
 	} else
-		copyPaths(rect, cached, set);
+		copyPaths(rect, cached, list);
 }
 
 bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
@@ -718,8 +688,6 @@ bool MapData::readPoints(const VectorTile *tile, int zoom, QList<Point> *list)
 				return false;
 			p.tags.append(Tag("ele", QByteArray::number(elevation)));
 		}
-
-		setPointId(p);
 
 		list->append(p);
 	}

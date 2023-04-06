@@ -188,18 +188,20 @@ public:
 	{
 	public:
 		TextRender(const Rule &rule)
-		  : Render(rule), _fillColor(Qt::black), _strokeColor(Qt::black),
-		  _strokeWidth(0) {}
+		  : Render(rule), _priority(0), _fillColor(Qt::black),
+		  _strokeColor(Qt::black), _strokeWidth(0) {}
 
 		const QFont &font() const {return _font;}
 		const QColor &fillColor() const {return _fillColor;}
 		const QColor &strokeColor() const {return _strokeColor;}
 		qreal strokeWidth() const {return _strokeWidth;}
 		const QByteArray &key() const {return _key;}
+		int priority() const {return _priority;}
 
 	private:
 		friend class Style;
 
+		int _priority;
 		QColor _fillColor, _strokeColor;
 		qreal _strokeWidth;
 		QFont _font;
@@ -209,13 +211,15 @@ public:
 	class Symbol : public Render
 	{
 	public:
-		Symbol(const Rule &rule) : Render(rule) {}
+		Symbol(const Rule &rule) : Render(rule), _priority(0) {}
 
 		const QImage &img() const {return _img;}
+		int priority() const {return _priority;}
 
 	private:
 		friend class Style;
 
+		int _priority;
 		QImage _img;
 	};
 

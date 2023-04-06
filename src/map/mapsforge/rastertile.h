@@ -5,11 +5,9 @@
 #include "map/projection.h"
 #include "map/transform.h"
 #include "map/textpointitem.h"
+#include "map/textpathitem.h"
 #include "style.h"
 #include "mapdata.h"
-
-class MapsforgeMap;
-class TextItem;
 
 namespace Mapsforge {
 
@@ -17,7 +15,7 @@ class RasterTile
 {
 public:
 	RasterTile(const Projection &proj, const Transform &transform, int zoom,
-	  const QRect &rect, qreal ratio, const QSet<MapData::Path> &paths,
+	  const QRect &rect, qreal ratio, const QList<MapData::Path> &paths,
 	  const QList<MapData::Point> &points) : _proj(proj), _transform(transform),
 	  _zoom(zoom), _rect(rect), _ratio(ratio),
 	  _pixmap(rect.width() * ratio, rect.height() * ratio), _paths(paths),
@@ -31,19 +29,41 @@ public:
 	void render();
 
 private:
-	struct RenderPath {
-		RenderPath() : path(0) {}
+	struct PainterPath {
+		PainterPath() : path(0) {}
 
 		QPainterPath pp;
-		QString label;
 		const MapData::Path *path;
+	};
+
+	struct PainterPoint {
+		PainterPoint(const MapData::Point *p, const QByteArray *lbl,
+		  const Style::Symbol *si, const Style::TextRender *ti)
+		  : p(p), lbl(lbl), ti(ti), si(si)
+		{
+			Q_ASSERT(si || ti);
+		}
+
+		bool operator<(const PainterPoint &other) const
+		{
+			if (priority() == other.priority())
+				return p->id < other.p->id;
+			else
+				return (priority() > other.priority());
+		}
+		int priority() const {return si ? si->priority() : ti->priority();}
+
+		const MapData::Point *p;
+		const QByteArray *lbl;
+		const Style::TextRender *ti;
+		const Style::Symbol *si;
 	};
 
 	class PathInstruction
 	{
 	public:
 		PathInstruction() : _render(0), _path(0) {}
-		PathInstruction(const Style::PathRender *render, RenderPath *path)
+		PathInstruction(const Style::PathRender *render, PainterPath *path)
 		  : _render(render), _path(path) {}
 
 		bool operator<(const PathInstruction &other) const
@@ -55,11 +75,11 @@ private:
 		}
 
 		const Style::PathRender *render() const {return _render;}
-		RenderPath *path() const {return _path;}
+		PainterPath *path() const {return _path;}
 
 	private:
 		const Style::PathRender *_render;
-		RenderPath *_path;
+		PainterPath *_path;
 	};
 
 	struct Key {
@@ -79,29 +99,36 @@ private:
 	class PointItem : public TextPointItem
 	{
 	public:
-		PointItem(const QPoint &point, QString *text, const QFont *font,
-		  const QImage *img, const QColor *color, const QColor *haloColor)
-		  : TextPointItem(point, text, font, img, color, haloColor, 0),
-		  _label(text) {}
-		~PointItem() {delete _label;}
+		PointItem(const QPoint &point, const QByteArray *label,
+		  const QFont *font, const QImage *img, const QColor *color,
+		  const QColor *haloColor) : TextPointItem(point,
+		  label ? new QString(*label) : 0, font, img, color, haloColor, 0) {}
+		~PointItem() {delete _text;}
+	};
 
-	private:
-		QString *_label;
+	class PathItem : public TextPathItem
+	{
+	public:
+		PathItem(const QPainterPath &line, const QByteArray *label,
+		  const QRect &tileRect, const QFont *font, const QColor *color,
+		  const QColor *haloColor) : TextPathItem(line,
+		  label ? new QString(*label) : 0, tileRect, font, color, haloColor) {}
+		~PathItem() {delete _text;}
 	};
 
 	friend HASH_T qHash(const RasterTile::Key &key);
 
-	QVector<PathInstruction> pathInstructions(QVector<RenderPath> &renderPaths);
+	QVector<PathInstruction> pathInstructions(QVector<PainterPath> &paths);
 	QPointF ll2xy(const Coordinates &c) const
 	  {return _transform.proj2img(_proj.ll2xy(c));}
 	void processPointLabels(QList<TextItem*> &textItems);
 	void processAreaLabels(QList<TextItem*> &textItems,
-	  QVector<RenderPath> &renderPaths);
+	  QVector<PainterPath> &paths);
 	void processLineLabels(QList<TextItem*> &textItems,
-	  QVector<RenderPath> &renderPaths);
+	  QVector<PainterPath> &paths);
 	QPainterPath painterPath(const Polygon &polygon, bool curve) const;
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
-	void drawPaths(QPainter *painter, QVector<RenderPath> &renderPaths);
+	void drawPaths(QPainter *painter, QVector<PainterPath> &paths);
 
 	Projection _proj;
 	Transform _transform;
@@ -109,7 +136,7 @@ private:
 	QRect _rect;
 	qreal _ratio;
 	QPixmap _pixmap;
-	QSet<MapData::Path> _paths;
+	QList<MapData::Path> _paths;
 	QList<MapData::Point> _points;
 
 	bool _valid;

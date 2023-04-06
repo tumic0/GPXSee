@@ -238,6 +238,13 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 		else if (transform == "capitalize")
 			capitalization = QFont::Capitalize;
 	}
+	if (attr.hasAttribute("priority")) {
+		ri._priority = attr.value("priority").toInt(&ok);
+		if (!ok) {
+			reader.raiseError("invalid priority value");
+			return;
+		}
+	}
 
 	ri._font.setFamily(fontFamily);
 	ri._font.setPixelSize(fontSize);
@@ -274,6 +281,13 @@ void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 		width = attr.value("symbol-width").toInt(&ok);
 		if (!ok || width < 0) {
 			reader.raiseError("invalid symbol-width value");
+			return;
+		}
+	}
+	if (attr.hasAttribute("priority")) {
+		ri._priority = attr.value("priority").toInt(&ok);
+		if (!ok) {
+			reader.raiseError("invalid priority value");
 			return;
 		}
 	}
