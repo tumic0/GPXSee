@@ -182,7 +182,9 @@ void RasterTile::processLineLabels(QList<TextItem*> &textItems,
 				continue;
 			if (!ri->rule().match(path.path->closed, path.path->tags))
 				continue;
-			bool limit = (ri->key() == "ref");
+			bool limit = (ri->key() == "ref" || ri->key() == "ele"
+			  || ri->key() == "ref_hike" || ri->key() == "ref_cycle"
+			  || ri->key() == "ref_mtb");
 			if (limit && set.contains(*lbl))
 				continue;
 
