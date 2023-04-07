@@ -59,33 +59,47 @@ private:
 		const Style::Symbol *si;
 	};
 
-	class PathInstruction
+	class RenderInstruction
 	{
 	public:
-		PathInstruction() : _render(0), _path(0) {}
-		PathInstruction(const Style::PathRender *render, PainterPath *path)
-		  : _render(render), _path(path) {}
+		RenderInstruction() : _pathRender(0), _circleRender(0), _path(0),
+		  _point(0) {}
+		RenderInstruction(const Style::PathRender *render, PainterPath *path)
+		  : _pathRender(render), _circleRender(0), _path(path), _point(0) {}
+		RenderInstruction(const Style::CircleRender *render,
+		  const MapData::Point *point) : _pathRender(0), _circleRender(render),
+		  _path(0), _point(point) {}
 
-		bool operator<(const PathInstruction &other) const
+		bool operator<(const RenderInstruction &other) const
 		{
-			if (_path->path->layer == other._path->path->layer)
-				return _render->zOrder() < other._render->zOrder();
+			if (layer() == other.layer())
+				return zOrder() < other.zOrder();
 			else
-				return (_path->path->layer < other._path->path->layer);
+				return (layer() < other.layer());
 		}
 
-		const Style::PathRender *render() const {return _render;}
+		const Style::PathRender *pathRender() const {return _pathRender;}
+		const Style::CircleRender *circleRender() const {return _circleRender;}
 		PainterPath *path() const {return _path;}
+		const MapData::Point *point() const {return _point;}
 
 	private:
-		const Style::PathRender *_render;
+		int layer() const {return _path ? _path->path->layer : _point->layer;}
+		int zOrder() const
+		{
+			return _pathRender ? _pathRender->zOrder() : _circleRender->zOrder();
+		}
+
+		const Style::PathRender *_pathRender;
+		const Style::CircleRender *_circleRender;
 		PainterPath *_path;
+		const MapData::Point *_point;
 	};
 
-	struct Key {
-		Key(int zoom, bool closed, const QVector<MapData::Tag> &tags)
+	struct PathKey {
+		PathKey(int zoom, bool closed, const QVector<MapData::Tag> &tags)
 		  : zoom(zoom), closed(closed), tags(tags) {}
-		bool operator==(const Key &other) const
+		bool operator==(const PathKey &other) const
 		{
 			return zoom == other.zoom && closed == other.closed
 			  && tags == other.tags;
@@ -93,6 +107,18 @@ private:
 
 		int zoom;
 		bool closed;
+		const QVector<MapData::Tag> &tags;
+	};
+
+	struct PointKey {
+		PointKey(int zoom, const QVector<MapData::Tag> &tags)
+		  : zoom(zoom), tags(tags) {}
+		bool operator==(const PointKey &other) const
+		{
+			return zoom == other.zoom && tags == other.tags;
+		}
+
+		int zoom;
 		const QVector<MapData::Tag> &tags;
 	};
 
@@ -116,9 +142,12 @@ private:
 		~PathItem() {delete _text;}
 	};
 
-	friend HASH_T qHash(const RasterTile::Key &key);
+	friend HASH_T qHash(const RasterTile::PathKey &key);
+	friend HASH_T qHash(const RasterTile::PointKey &key);
 
-	QVector<PathInstruction> pathInstructions(QVector<PainterPath> &paths);
+	void pathInstructions(QVector<PainterPath> &paths,
+	  QVector<RasterTile::RenderInstruction> &instructions);
+	void circleInstructions(QVector<RasterTile::RenderInstruction> &instructions);
 	QPointF ll2xy(const Coordinates &c) const
 	  {return _transform.proj2img(_proj.ll2xy(c));}
 	void processPointLabels(QList<TextItem*> &textItems);
@@ -142,7 +171,12 @@ private:
 	bool _valid;
 };
 
-inline HASH_T qHash(const RasterTile::Key &key)
+inline HASH_T qHash(const RasterTile::PathKey &key)
+{
+	return ::qHash(key.zoom) ^ ::qHash(key.tags);
+}
+
+inline HASH_T qHash(const RasterTile::PointKey &key)
 {
 	return ::qHash(key.zoom) ^ ::qHash(key.tags);
 }

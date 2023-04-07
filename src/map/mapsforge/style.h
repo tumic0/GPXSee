@@ -33,6 +33,7 @@ public:
 		bool match(bool closed, const QVector<MapData::Tag> &tags) const;
 		bool match(int zoom, bool closed,
 		  const QVector<MapData::Tag> &tags) const;
+		bool match(int zoom, const QVector<MapData::Tag> &tags) const;
 
 	private:
 		enum Type {
@@ -184,6 +185,28 @@ public:
 		bool _area, _curve;
 	};
 
+	class CircleRender : public Render
+	{
+	public:
+		CircleRender(const Rule &rule, int zOrder) : Render(rule),
+		  _zOrder(zOrder), _pen(Qt::NoPen), _brush(Qt::NoBrush),
+		  _scale(false) {}
+
+		int zOrder() const {return _zOrder;}
+		const QPen &pen() const {return _pen;}
+		const QBrush &brush() const {return _brush;}
+		qreal radius(int zoom) const;
+
+	private:
+		friend class Style;
+
+		int _zOrder;
+		QPen _pen;
+		QBrush _brush;
+		qreal _radius;
+		bool _scale;
+	};
+
 	class TextRender : public Render
 	{
 	public:
@@ -227,6 +250,8 @@ public:
 
 	QList<const PathRender *> paths(int zoom, bool closed,
 	  const QVector<MapData::Tag> &tags) const;
+	QList<const CircleRender *> circles(int zoom,
+	  const QVector<MapData::Tag> &tags) const;
 	QList<const TextRender*> pathLabels(int zoom) const;
 	QList<const TextRender*> pointLabels(int zoom) const;
 	QList<const TextRender*> areaLabels(int zoom) const;
@@ -235,6 +260,7 @@ public:
 
 private:
 	QList<PathRender> _paths;
+	QList<CircleRender> _circles;
 	QList<TextRender> _pathLabels, _pointLabels, _areaLabels;
 	QList<Symbol> _symbols;
 
@@ -248,6 +274,7 @@ private:
 	void area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	  const Rule &rule);
 	void line(QXmlStreamReader &reader, const Rule &rule);
+	void circle(QXmlStreamReader &reader, const Rule &rule);
 	void text(QXmlStreamReader &reader, const Rule &rule,
 	  QList<QList<TextRender> *> &lists);
 	void symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,

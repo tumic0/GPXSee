@@ -238,18 +238,17 @@ QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
 	return path;
 }
 
-QVector<RasterTile::PathInstruction> RasterTile::pathInstructions(
-  QVector<PainterPath> &paths)
+void RasterTile::pathInstructions(QVector<PainterPath> &paths,
+  QVector<RasterTile::RenderInstruction> &instructions)
 {
-	QCache<Key, QList<const Style::PathRender *> > cache(8192);
-	QVector<PathInstruction> instructions;
+	QCache<PathKey, QList<const Style::PathRender *> > cache(8192);
 	const Style &s = style(_ratio);
 	QList<const Style::PathRender*> *ri;
 
 	for (int i = 0; i < _paths.size(); i++) {
 		const MapData::Path &path = _paths.at(i);
 		PainterPath &rp = paths[i];
-		Key key(_zoom, path.closed, path.tags);
+		PathKey key(_zoom, path.closed, path.tags);
 
 		rp.path = &path;
 
@@ -257,34 +256,66 @@ QVector<RasterTile::PathInstruction> RasterTile::pathInstructions(
 			ri = new QList<const Style::PathRender*>(s.paths(_zoom, path.closed,
 			  path.tags));
 			for (int j = 0; j < ri->size(); j++)
-				instructions.append(PathInstruction(ri->at(j), &rp));
+				instructions.append(RenderInstruction(ri->at(j), &rp));
 			cache.insert(key, ri);
 		} else {
 			for (int j = 0; j < ri->size(); j++)
-				instructions.append(PathInstruction(ri->at(j), &rp));
+				instructions.append(RenderInstruction(ri->at(j), &rp));
 		}
 	}
+}
 
-	std::sort(instructions.begin(), instructions.end());
+void RasterTile::circleInstructions(
+  QVector<RasterTile::RenderInstruction> &instructions)
+{
+	QCache<PointKey, QList<const Style::CircleRender *> > cache(8192);
+	const Style &s = style(_ratio);
+	QList<const Style::CircleRender*> *ri;
 
-	return instructions;
+	for (int i = 0; i < _points.size(); i++) {
+		const MapData::Point &point = _points.at(i);
+		PointKey key(_zoom, point.tags);
+
+		if (!(ri = cache.object(key))) {
+			ri = new QList<const Style::CircleRender*>(s.circles(_zoom, point.tags));
+			for (int j = 0; j < ri->size(); j++)
+				instructions.append(RenderInstruction(ri->at(j), &point));
+			cache.insert(key, ri);
+		} else {
+			for (int j = 0; j < ri->size(); j++)
+				instructions.append(RenderInstruction(ri->at(j), &point));
+		}
+	}
 }
 
 void RasterTile::drawPaths(QPainter *painter, QVector<PainterPath> &paths)
 {
-	QVector<PathInstruction> instructions(pathInstructions(paths));
+	QVector<RenderInstruction> instructions;
+	pathInstructions(paths, instructions);
+	circleInstructions(instructions);
+	std::sort(instructions.begin(), instructions.end());
 
 	for (int i = 0; i < instructions.size(); i++) {
-		const PathInstruction &is = instructions.at(i);
-		const Style::PathRender *ri = is.render();
+		const RenderInstruction &is = instructions.at(i);
 		PainterPath *path = is.path();
 
-		if (!path->pp.elementCount())
-			path->pp = painterPath(path->path->poly, ri->curve());
+		if (path) {
+			const Style::PathRender *ri = is.pathRender();
 
-		painter->setPen(ri->pen(_zoom));
-		painter->setBrush(ri->brush());
-		painter->drawPath(path->pp);
+			if (!path->pp.elementCount())
+				path->pp = painterPath(path->path->poly, ri->curve());
+
+			painter->setPen(ri->pen(_zoom));
+			painter->setBrush(ri->brush());
+			painter->drawPath(path->pp);
+		} else {
+			const Style::CircleRender *ri = is.circleRender();
+			qreal radius = ri->radius(_zoom);
+
+			painter->setPen(ri->pen());
+			painter->setBrush(ri->brush());
+			painter->drawEllipse(ll2xy(is.point()->coordinates), radius, radius);
+		}
 	}
 }
 

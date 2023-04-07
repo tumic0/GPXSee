@@ -79,10 +79,24 @@ bool Style::Rule::match(int zoom, bool closed,
 	return true;
 }
 
+bool Style::Rule::match(int zoom, const QVector<MapData::Tag> &tags) const
+{
+	if (_type && NodeType != _type)
+		return false;
+	if (!_zooms.contains(zoom))
+		return false;
+
+	for (int i = 0; i < _filters.size(); i++)
+		if (!_filters.at(i).match(tags))
+			return false;
+
+	return true;
+}
+
 void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
   const Rule &rule)
 {
-	PathRender ri(rule, _paths.size());
+	PathRender ri(rule, _paths.size() + _circles.size());
 	const QXmlStreamAttributes &attr = reader.attributes();
 	QString file;
 	int height = 0, width = 0;
@@ -127,7 +141,7 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 
 void Style::line(QXmlStreamReader &reader, const Rule &rule)
 {
-	PathRender ri(rule, _paths.size());
+	PathRender ri(rule, _paths.size() + _circles.size());
 	const QXmlStreamAttributes &attr = reader.attributes();
 	bool ok;
 
@@ -176,6 +190,49 @@ void Style::line(QXmlStreamReader &reader, const Rule &rule)
 	}
 
 	_paths.append(ri);
+
+	reader.skipCurrentElement();
+}
+
+void Style::circle(QXmlStreamReader &reader, const Rule &rule)
+{
+	CircleRender ri(rule, _paths.size() + _circles.size());
+	const QXmlStreamAttributes &attr = reader.attributes();
+	bool ok;
+	QColor fillColor, strokeColor;
+	qreal strokeWidth = 0;
+
+	if (attr.hasAttribute("fill"))
+		fillColor = QColor(attr.value("fill").toString());
+	if (attr.hasAttribute("stroke"))
+		strokeColor = QColor(attr.value("stroke").toString());
+	if (attr.hasAttribute("stroke-width")) {
+		strokeWidth = attr.value("stroke-width").toFloat(&ok);
+		if (!ok || strokeWidth < 0) {
+			reader.raiseError("invalid stroke-width value");
+			return;
+		}
+	}
+	if (attr.hasAttribute("radius")) {
+		ri._radius = attr.value("radius").toDouble(&ok);
+		if (!ok || ri._radius <= 0) {
+			reader.raiseError("invalid radius value");
+			return;
+		}
+	} else {
+		reader.raiseError("missing radius");
+		return;
+	}
+	if (attr.hasAttribute("scale-radius")) {
+		if (attr.value("scale-radius").toString() == "true")
+			ri._scale = true;
+	}
+
+	ri._pen = (strokeColor.isValid() && strokeWidth > 0)
+	  ? QPen(QBrush(strokeColor), strokeWidth) : Qt::NoPen;
+	ri._brush = fillColor.isValid() ? QBrush(fillColor) : Qt::NoBrush;
+
+	_circles.append(ri);
 
 	reader.skipCurrentElement();
 }
@@ -351,6 +408,8 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 			area(reader, dir, ratio, r);
 		else if (reader.name() == QLatin1String("line"))
 			line(reader, r);
+		else if (reader.name() == QLatin1String("circle"))
+			circle(reader, r);
 		else if (reader.name() == QLatin1String("pathText")) {
 			QList<QList<TextRender>*> list;
 			list.append(&_pathLabels);
@@ -458,6 +517,18 @@ QList<const Style::PathRender *> Style::paths(int zoom, bool closed,
 	return ri;
 }
 
+QList<const Style::CircleRender *> Style::circles(int zoom,
+  const QVector<MapData::Tag> &tags) const
+{
+	QList<const CircleRender*> ri;
+
+	for (int i = 0; i < _circles.size(); i++)
+		if (_circles.at(i).rule().match(zoom, tags))
+			ri.append(&_circles.at(i));
+
+	return ri;
+}
+
 QList<const Style::TextRender*> Style::pathLabels(int zoom) const
 {
 	QList<const TextRender*> list;
@@ -548,4 +619,9 @@ QBrush Style::PathRender::brush() const
 		return QBrush(_fillColor);
 	else
 		return Qt::NoBrush;
+}
+
+qreal Style::CircleRender::radius(int zoom) const
+{
+	return (_scale && zoom >= 12) ? pow(1.5, zoom - 12) * _radius : _radius;
 }
