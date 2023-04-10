@@ -50,7 +50,7 @@ void SpeedGraph::setInfo()
 GraphItem *SpeedGraph::loadGraph(const Graph &graph, const Track &track,
   const QColor &color, bool primary)
 {
-	if (!graph.isValid())
+	if (graph.isEmpty())
 		return 0;
 
 	SpeedGraphItem *gi = new SpeedGraphItem(graph, _graphType, _width,

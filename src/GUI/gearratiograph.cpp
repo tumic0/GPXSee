@@ -50,7 +50,7 @@ QList<GraphItem*> GearRatioGraph::loadData(const Data &data)
 	for (int i = 0; i < data.tracks().count(); i++) {
 		const Graph &graph = data.tracks().at(i).ratio();
 
-		if (!graph.isValid()) {
+		if (graph.isEmpty()) {
 			_palette.nextColor();
 			graphs.append(0);
 		} else {

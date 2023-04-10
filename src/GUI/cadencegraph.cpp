@@ -47,7 +47,7 @@ QList<GraphItem*> CadenceGraph::loadData(const Data &data)
 		const Track &track = data.tracks().at(i);
 		const Graph &graph = track.cadence();
 
-		if (!graph.isValid()) {
+		if (graph.isEmpty()) {
 			_palette.nextColor();
 			graphs.append(0);
 		} else {

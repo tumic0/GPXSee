@@ -85,7 +85,7 @@ void ElevationGraph::setInfo()
 GraphItem *ElevationGraph::loadGraph(const Graph &graph, PathType type,
   const QColor &color, bool primary)
 {
-	if (!graph.isValid())
+	if (graph.isEmpty())
 		return 0;
 
 	ElevationGraphItem *gi = new ElevationGraphItem(graph, _graphType, _width,

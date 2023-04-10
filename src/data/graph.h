@@ -46,16 +46,6 @@ typedef QVector<GraphPoint> GraphSegment;
 class Graph : public QList<GraphSegment>
 {
 public:
-	bool isValid() const
-	{
-		if (isEmpty())
-			return false;
-		for (int i = 0; i < size(); i++)
-			if (at(i).size() < 2)
-				return false;
-		return true;
-	}
-
 	bool hasTime() const
 	{
 		for (int i = 0; i < size(); i++) {

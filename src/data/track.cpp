@@ -266,7 +266,8 @@ Graph Track::gpsElevation() const
 			  sd.at(j).elevation()));
 		}
 
-		ret.append(filter(gs, _elevationWindow));
+		if (gs.size() >= 2)
+			ret.append(filter(gs, _elevationWindow));
 	}
 
 	if (_data.style().color().isValid())
@@ -293,7 +294,8 @@ Graph Track::demElevation() const
 			gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j), dem));
 		}
 
-		ret.append(filter(gs, _elevationWindow));
+		if (gs.size() >= 2)
+			ret.append(filter(gs, _elevationWindow));
 	}
 
 	if (_data.style().color().isValid())
@@ -306,16 +308,14 @@ GraphPair Track::elevation() const
 {
 	if (_useDEM) {
 		Graph dem(demElevation());
-		if (dem.isValid())
-			return GraphPair(dem, _show2ndElevation ? gpsElevation() : Graph());
-		else
-			return GraphPair(gpsElevation(), Graph());
+		return (dem.isEmpty())
+		  ? GraphPair(gpsElevation(), Graph())
+		  : GraphPair(dem, _show2ndElevation ? gpsElevation() : Graph());
 	} else {
 		Graph gps(gpsElevation());
-		if (gps.isValid())
-			return GraphPair(gps, _show2ndElevation ? demElevation() : Graph());
-		else
-			return GraphPair(demElevation(), Graph());
+		return (gps.isEmpty())
+		  ? GraphPair(demElevation(), Graph())
+		  : GraphPair(gps, _show2ndElevation ? demElevation() : Graph());
 	}
 }
 
@@ -344,11 +344,13 @@ Graph Track::computedSpeed() const
 			gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j), v));
 		}
 
-		ret.append(filter(gs, _speedWindow));
-		GraphSegment &filtered = ret.last();
+		if (gs.size() >= 2) {
+			ret.append(filter(gs, _speedWindow));
+			GraphSegment &filtered = ret.last();
 
-		for (int j = 0; j < stop.size(); j++)
-			filtered[stop.at(j)].setY(0);
+			for (int j = 0; j < stop.size(); j++)
+				filtered[stop.at(j)].setY(0);
+		}
 	}
 
 	if (_data.style().color().isValid())
@@ -382,11 +384,13 @@ Graph Track::reportedSpeed() const
 			gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j), v));
 		}
 
-		ret.append(filter(gs, _speedWindow));
-		GraphSegment &filtered = ret.last();
+		if (gs.size() >= 2) {
+			ret.append(filter(gs, _speedWindow));
+			GraphSegment &filtered = ret.last();
 
-		for (int j = 0; j < stop.size(); j++)
-			filtered[stop.at(j)].setY(0);
+			for (int j = 0; j < stop.size(); j++)
+				filtered[stop.at(j)].setY(0);
+		}
 	}
 
 	if (_data.style().color().isValid())
@@ -399,18 +403,14 @@ GraphPair Track::speed() const
 {
 	if (_useReportedSpeed) {
 		Graph reported(reportedSpeed());
-		if (reported.isValid())
-			return GraphPair(reported, _show2ndSpeed ? computedSpeed()
-			  : Graph());
-		else
-			return GraphPair(computedSpeed(), Graph());
+		return (reported.isEmpty())
+		  ? GraphPair(computedSpeed(), Graph())
+		  : GraphPair(reported, _show2ndSpeed ? computedSpeed() : Graph());
 	} else {
 		Graph computed(computedSpeed());
-		if (computed.isValid())
-			return GraphPair(computed, _show2ndSpeed ? reportedSpeed()
-			  : Graph());
-		else
-			return GraphPair(reportedSpeed(), Graph());
+		return (computed.isEmpty())
+		  ? GraphPair(reportedSpeed(), Graph())
+		  : GraphPair(computed, _show2ndSpeed ? reportedSpeed() : Graph());
 	}
 }
 
@@ -430,7 +430,8 @@ Graph Track::heartRate() const
 				gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j),
 				  sd.at(j).heartRate()));
 
-		ret.append(filter(gs, _heartRateWindow));
+		if (gs.size() >= 2)
+			ret.append(filter(gs, _heartRateWindow));
 	}
 
 	if (_data.style().color().isValid())
@@ -456,7 +457,8 @@ Graph Track::temperature() const
 				  sd.at(j).temperature()));
 		}
 
-		ret.append(gs);
+		if (gs.size() >= 2)
+			ret.append(gs);
 	}
 
 	if (_data.style().color().isValid())
@@ -481,7 +483,8 @@ Graph Track::ratio() const
 				gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j),
 				  sd.at(j).ratio()));
 
-		ret.append(gs);
+		if (gs.size() >= 2)
+			ret.append(gs);
 	}
 
 	if (_data.style().color().isValid())
@@ -515,11 +518,13 @@ Graph Track::cadence() const
 			gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j), c));
 		}
 
-		ret.append(filter(gs, _cadenceWindow));
-		GraphSegment &filtered = ret.last();
+		if (gs.size() >= 2) {
+			ret.append(filter(gs, _cadenceWindow));
+			GraphSegment &filtered = ret.last();
 
-		for (int j = 0; j < stop.size(); j++)
-			filtered[stop.at(j)].setY(0);
+			for (int j = 0; j < stop.size(); j++)
+				filtered[stop.at(j)].setY(0);
+		}
 	}
 
 	if (_data.style().color().isValid())
@@ -554,11 +559,13 @@ Graph Track::power() const
 			gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j), p));
 		}
 
-		ret.append(filter(gs, _powerWindow));
-		GraphSegment &filtered = ret.last();
+		if (gs.size() >= 2) {
+			ret.append(filter(gs, _powerWindow));
+			GraphSegment &filtered = ret.last();
 
-		for (int j = 0; j < stop.size(); j++)
-			filtered[stop.at(j)].setY(0);
+			for (int j = 0; j < stop.size(); j++)
+				filtered[stop.at(j)].setY(0);
+		}
 	}
 
 	if (_data.style().color().isValid())

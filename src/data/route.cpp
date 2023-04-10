@@ -68,16 +68,14 @@ GraphPair Route::elevation() const
 {
 	if (_useDEM) {
 		Graph dem(demElevation());
-		if (dem.isValid())
-			return GraphPair(dem, _show2ndElevation ? gpsElevation() : Graph());
-		else
-			return GraphPair(gpsElevation(), Graph());
+		return (dem.isEmpty())
+		  ? GraphPair(gpsElevation(), Graph())
+		  : GraphPair(dem, _show2ndElevation ? gpsElevation() : Graph());
 	} else {
 		Graph gps(gpsElevation());
-		if (gps.isValid())
-			return GraphPair(gps, _show2ndElevation ? demElevation() : Graph());
-		else
-			return GraphPair(demElevation(), Graph());
+		return (gps.isEmpty())
+		  ? GraphPair(gps, _show2ndElevation ? demElevation() : Graph())
+		  : GraphPair(demElevation(), Graph());
 	}
 }
 

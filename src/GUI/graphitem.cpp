@@ -8,8 +8,6 @@ GraphItem::GraphItem(const Graph &graph, GraphType type, int width,
   const QColor &color, Qt::PenStyle style, QGraphicsItem *parent)
   : GraphicsItem(parent), _graph(graph), _type(type), _secondaryGraph(0)
 {
-	Q_ASSERT(_graph.isValid());
-
 	_units = Metric;
 	_sx = 0; _sy = 0;
 	_color = color;
