@@ -74,8 +74,8 @@ GraphPair Route::elevation() const
 	} else {
 		Graph gps(gpsElevation());
 		return (gps.isEmpty())
-		  ? GraphPair(gps, _show2ndElevation ? demElevation() : Graph())
-		  : GraphPair(demElevation(), Graph());
+		  ? GraphPair(demElevation(), Graph())
+		  : GraphPair(gps, _show2ndElevation ? demElevation() : Graph());
 	}
 }
 
