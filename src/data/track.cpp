@@ -88,6 +88,24 @@ static GraphSegment filter(const GraphSegment &g, int window)
 }
 
 
+qreal Track::lastDistance(int seg)
+{
+	for (int i = seg - 1; i >= 0; i--)
+		if (!_segments.at(i).distance.isEmpty())
+			return _segments.at(i).distance.last();
+
+	return 0;
+}
+
+qreal Track::lastTime(int seg)
+{
+	for (int i = seg - 1; i >= 0; i--)
+		if (!_segments.at(i).time.isEmpty())
+			return _segments.at(i).time.last();
+
+	return 0;
+}
+
 Track::Track(const TrackData &data) : _pause(0)
 {
 	qreal ds, dt;
@@ -113,11 +131,8 @@ Track::Track(const TrackData &data) : _pause(0)
 
 		Segment &seg = _segments.last();
 
-		seg.distance.append(i && !_segments.at(i-1).distance.isEmpty()
-		  ? _segments.at(i-1).distance.last() : 0);
-		seg.time.append(i && !_segments.at(i-1).time.isEmpty()
-		  ? _segments.at(i-1).time.last() :
-		  sd.first().hasTimestamp() ? 0 : NAN);
+		seg.distance.append(lastDistance(i));
+		seg.time.append(sd.first().hasTimestamp() ? lastTime(i) : NAN);
 		seg.speed.append(sd.first().hasTimestamp() ? 0 : NAN);
 		acceleration.append(sd.first().hasTimestamp() ? 0 : NAN);
 		bool hasTime = !std::isnan(seg.time.first());

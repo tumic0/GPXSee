@@ -63,6 +63,8 @@ private:
 		QSet<int> stop;
 	};
 
+	qreal lastDistance(int seg);
+	qreal lastTime(int seg);
 	bool discardStopPoint(const Segment &seg, int i) const;
 
 	Graph demElevation() const;
