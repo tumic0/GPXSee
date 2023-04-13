@@ -70,8 +70,8 @@ QString ProgramPaths::crsDir(bool writable)
 		  .filePath(CRS_DIR);
 	else
 #ifdef Q_OS_ANDROID
-		return assetsPath(QStandardPaths::locate(DATA_LOCATION, CSV_DIR,
-		  QStandardPaths::LocateDirectory), CSV_DIR);
+		return assetsPath(QStandardPaths::locate(DATA_LOCATION, CRS_DIR,
+		  QStandardPaths::LocateDirectory), CRS_DIR);
 #else // Q_OS_ANDROID
 		return QStandardPaths::locate(DATA_LOCATION, CRS_DIR,
 		  QStandardPaths::LocateDirectory);
