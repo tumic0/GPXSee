@@ -484,8 +484,8 @@ macx {
     QMAKE_INFO_PLIST = pkg/mac/Info.plist
     locale.path = Contents/Resources/translations
     locale.files = $$files(lang/*.qm)
-    csv.path = Contents/Resources
-    csv.files = data/csv
+    crs.path = Contents/Resources
+    crs.files = data/CRS
     maps.path = Contents/Resources
     maps.files = data/maps
     symbols.path = Contents/Resources/symbols
@@ -495,7 +495,7 @@ macx {
     lproj.path = Contents/Resources
     lproj.files = $$files(pkg/mac/lproj/*)
 
-    QMAKE_BUNDLE_DATA += locale maps symbols icons csv lproj
+    QMAKE_BUNDLE_DATA += locale maps symbols icons crs lproj
 }
 
 win32 {
@@ -542,8 +542,8 @@ unix:!macx:!android {
 
     maps.files = $$files(data/maps/*)
     maps.path = $$PREFIX/share/gpxsee/maps
-    csv.files = $$files(data/csv/*)
-    csv.path = $$PREFIX/share/gpxsee/csv
+    crs.files = $$files(data/CRS/*)
+    crs.path = $$PREFIX/share/gpxsee/CRS
     symbols.files = $$files(icons/symbols/*.png)
     symbols.path = $$PREFIX/share/gpxsee/symbols
     locale.files = $$files(lang/*.qm)
@@ -557,7 +557,7 @@ unix:!macx:!android {
     appdata.files = pkg/linux/gpxsee.appdata.xml
     appdata.path = $$PREFIX/share/metainfo
     target.path = $$PREFIX/bin
-    INSTALLS += target maps csv symbols locale icon desktop mime appdata
+    INSTALLS += target maps crs symbols locale icon desktop mime appdata
 }
 
 android {
@@ -595,11 +595,11 @@ android {
 
     maps.files = $$files(data/maps/*)
     maps.path = /assets/maps
-    csv.files = $$files(data/csv/*)
-    csv.path = /assets/csv
+    crs.files = $$files(data/CRS/*)
+    crs.path = /assets/CRS
     symbols.files = $$files(icons/symbols/*.png)
     symbols.path = /assets/symbols
     translations.files = $$files(lang/*.qm)
     translations.path = /assets/translations
-    INSTALLS += maps csv symbols translations
+    INSTALLS += maps crs symbols translations
 }

@@ -119,7 +119,7 @@ Section "GPXSee" SEC_APP
   ; Put the files there
   File "gpxsee.exe"
   File /r "maps"
-  File /r "csv"
+  File /r "CRS"
   File /r "symbols"
 
   ; Create the uninstaller

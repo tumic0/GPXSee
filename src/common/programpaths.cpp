@@ -6,7 +6,7 @@
 
 #define MAP_DIR          "maps"
 #define POI_DIR          "POI"
-#define CSV_DIR          "csv"
+#define CRS_DIR          "CRS"
 #define DEM_DIR          "DEM"
 #define TILES_DIR        "tiles"
 #define TRANSLATIONS_DIR "translations"
@@ -63,17 +63,17 @@ QString ProgramPaths::poiDir(bool writable)
 		  QStandardPaths::LocateDirectory);
 }
 
-QString ProgramPaths::csvDir(bool writable)
+QString ProgramPaths::crsDir(bool writable)
 {
 	if (writable)
 		return QDir(QStandardPaths::writableLocation(DATA_LOCATION))
-		  .filePath(CSV_DIR);
+		  .filePath(CRS_DIR);
 	else
 #ifdef Q_OS_ANDROID
 		return assetsPath(QStandardPaths::locate(DATA_LOCATION, CSV_DIR,
 		  QStandardPaths::LocateDirectory), CSV_DIR);
 #else // Q_OS_ANDROID
-		return QStandardPaths::locate(DATA_LOCATION, CSV_DIR,
+		return QStandardPaths::locate(DATA_LOCATION, CRS_DIR,
 		  QStandardPaths::LocateDirectory);
 #endif // Q_OS_ANDROID
 }
@@ -132,22 +132,22 @@ QString ProgramPaths::translationsDir()
 
 QString ProgramPaths::ellipsoidsFile()
 {
-	return QDir(csvDir()).filePath(ELLIPSOIDS_FILE);
+	return QDir(crsDir()).filePath(ELLIPSOIDS_FILE);
 }
 
 QString ProgramPaths::gcsFile()
 {
-	return QDir(csvDir()).filePath(GCS_FILE);
+	return QDir(crsDir()).filePath(GCS_FILE);
 }
 
 QString ProgramPaths::projectionsFile()
 {
-	return QDir(csvDir()).filePath(PROJECTIONS_FILE);
+	return QDir(crsDir()).filePath(PROJECTIONS_FILE);
 }
 
 QString ProgramPaths::pcsFile()
 {
-	return QDir(csvDir()).filePath(PCS_FILE);
+	return QDir(crsDir()).filePath(PCS_FILE);
 }
 
 QString ProgramPaths::typFile()
