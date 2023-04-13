@@ -370,14 +370,13 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 		GCS gcs(geographicCS(kv));
 		if (gcs.isNull())
 			return false;
-		PCS pcs(PCS::pcs(gcs, kv.value(ProjectionGeoKey).SHORT));
-		if (pcs.isNull()) {
+		Conversion c(Conversion::conversion(kv.value(ProjectionGeoKey).SHORT));
+		if (c.isNull()) {
 			_errorString = QString("%1: unknown projection code")
-			  .arg(kv.value(GeographicTypeGeoKey).SHORT)
 			  .arg(kv.value(ProjectionGeoKey).SHORT);
 			return false;
 		}
-		_projection = Projection(pcs);
+		_projection = Projection(PCS(gcs, c));
 	} else {
 		double lat0, lon0, scale, fe, fn, sp1, sp2;
 
@@ -454,7 +453,7 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 			fe = NAN;
 
 		Projection::Setup setup(lat0, lon0, scale, fe, fn, sp1, sp2);
-		_projection = Projection(PCS(gcs, method, setup, lu));
+		_projection = Projection(PCS(gcs, Conversion(method, setup, lu)));
 	}
 
 	return true;

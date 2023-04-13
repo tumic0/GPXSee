@@ -125,6 +125,7 @@ HEADERS += src/common/config.h \
     src/map/ENC/style.h \
     src/map/IMG/section.h \
     src/map/IMG/zoom.h \
+    src/map/conversion.h \
     src/map/encmap.h \
     src/map/ENC/iso8211.h \
     src/map/gemfmap.h \
@@ -335,6 +336,7 @@ SOURCES += src/main.cpp \
     src/map/ENC/mapdata.cpp \
     src/map/ENC/rastertile.cpp \
     src/map/ENC/style.cpp \
+    src/map/conversion.cpp \
     src/map/encmap.cpp \
     src/map/ENC/iso8211.cpp \
     src/map/gemfmap.cpp \

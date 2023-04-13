@@ -235,11 +235,21 @@ QList<KV<int, QString> > GCS::list()
 {
 	QList<KV<int, QString> > list;
 
-	for (int i = 0; i < _gcss.size(); i++)
-		if (_gcss.at(i).id())
-			list.append(KV<int, QString>(_gcss.at(i).id(), _gcss.at(i).name()
-			  + " / Geographic 2D"));
+	for (int i = 0; i < _gcss.size(); i++) {
+		const Entry &e = _gcss.at(i);
+		if (!e.id() || (i && e.id() == list.last().key()))
+			continue;
 
+		list.append(KV<int, QString>(e.id(), e.name() + " / Geographic 2D"));
+	}
+
+	return list;
+}
+
+QList<KV<int, QString> > GCS::WGS84List()
+{
+	QList<KV<int, QString> > list;
+	list.append(KV<int, QString>(4326, "Geographic 2D"));
 	return list;
 }
 

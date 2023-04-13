@@ -17,6 +17,7 @@
 #include "common/downloader.h"
 #include "map/ellipsoid.h"
 #include "map/gcs.h"
+#include "map/conversion.h"
 #include "map/pcs.h"
 #include "data/dem.h"
 #include "data/waypoint.h"
@@ -172,11 +173,21 @@ void App::loadDatums()
 
 void App::loadPCSs()
 {
+	QString projectionsFile(ProgramPaths::projectionsFile());
 	QString pcsFile(ProgramPaths::pcsFile());
 
+	if (!QFileInfo::exists(projectionsFile)) {
+		qWarning("No projections file found.");
+		projectionsFile = QString();
+	}
 	if (!QFileInfo::exists(pcsFile)) {
 		qWarning("No PCS file found.");
-		qWarning("Maps based on a projection different from EPSG:3857 won't work.");
-	} else
+		pcsFile = QString();
+	}
+
+	if (!projectionsFile.isNull() && !pcsFile.isNull()) {
+		Conversion::loadList(projectionsFile);
 		PCS::loadList(pcsFile);
+	} else
+		qWarning("Maps based on a projection different from EPSG:3857 won't work.");
 }

@@ -15,6 +15,7 @@ namespace ProgramPaths
 	QString translationsDir();
 	QString ellipsoidsFile();
 	QString gcsFile();
+	QString projectionsFile();
 	QString pcsFile();
 	QString typFile();
 	QString renderthemeFile();

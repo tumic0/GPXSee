@@ -37,7 +37,7 @@ static CalibrationPoint parseCalibrationPoint(const QString &str)
 
 static Projection parseProjection(const QString &str, const GCS &gcs)
 {
-	QStringList fields(str.split(","));
+	QStringList fields(str.split(','));
 	if (fields.isEmpty())
 		return Projection();
 	bool ret;
@@ -55,40 +55,42 @@ static Projection parseProjection(const QString &str, const GCS &gcs)
 				return Projection();
 			if (fields.at(3) == "S")
 				zone = -zone;
-			return Projection(PCS(gcs, 9807, UTM::setup(zone), 9001));
+			return Projection(PCS(gcs, Conversion(9807, UTM::setup(zone), 9001)));
 		case 1: // LatLon
 			return Projection(gcs);
 		case 2: // Mercator
-			return Projection(PCS(gcs, 1024, Projection::Setup(), 9001));
+			return Projection(PCS(gcs, Conversion(1024, Projection::Setup(),
+			  9001)));
 		case 3: // Transversal Mercator
 			if (fields.size() < 7)
 				return Projection();
-			return Projection(PCS(gcs, 9807, Projection::Setup(
+			return Projection(PCS(gcs, Conversion(9807, Projection::Setup(
 			  fields.at(3).toDouble(), fields.at(2).toDouble(),
 			  fields.at(6).toDouble(), fields.at(5).toDouble(),
-			  fields.at(4).toDouble(), NAN, NAN), 9001));
+			  fields.at(4).toDouble(), NAN, NAN), 9001)));
 		case 4: // Lambert 2SP
 			if (fields.size() < 8)
 				return Projection();
-			return Projection(PCS(gcs, 9802, Projection::Setup(
+			return Projection(PCS(gcs, Conversion(9802, Projection::Setup(
 			  fields.at(4).toDouble(), fields.at(5).toDouble(), NAN,
 			  fields.at(6).toDouble(), fields.at(7).toDouble(),
-			  fields.at(3).toDouble(), fields.at(2).toDouble()), 9001));
+			  fields.at(3).toDouble(), fields.at(2).toDouble()), 9001)));
 		case 6: // BGN (British National Grid)
-			return Projection(PCS(gcs, 9807, Projection::Setup(49, -2, 0.999601,
-			  400000, -100000, NAN, NAN), 9001));
+			return Projection(PCS(gcs, Conversion(9807, Projection::Setup(49,
+			  -2, 0.999601, 400000, -100000, NAN, NAN), 9001)));
 		case 12: // France Lambert II etendu
-			return Projection(PCS(gcs, 9801, Projection::Setup(52, 0,
-			  0.99987742, 600000, 2200000, NAN, NAN), 9001));
+			return Projection(PCS(gcs, Conversion(9801, Projection::Setup(52, 0,
+			  0.99987742, 600000, 2200000, NAN, NAN), 9001)));
 		case 14: // Swiss Grid
-			return Projection(PCS(gcs, 9815, Projection::Setup(46.570866,
-			  7.26225, 1.0, 600000, 200000, 90.0, 90.0), 9001));
+			return Projection(PCS(gcs, Conversion(9815, Projection::Setup(
+			  46.570866, 7.26225, 1.0, 600000, 200000, 90.0, 90.0), 9001)));
 		case 108: // Dutch RD grid
-			return Projection(PCS(gcs, 9809, Projection::Setup(52.15616055555555,
-			  5.38763888888889, 0.9999079, 155000, 463000, NAN, NAN), 9001));
+			return Projection(PCS(gcs, Conversion(9809, Projection::Setup(
+			  52.15616055555555, 5.38763888888889, 0.9999079, 155000, 463000,
+			  NAN, NAN), 9001)));
 		case 184: // Swedish Grid
-			return Projection(PCS(gcs, 9807, Projection::Setup(0, 15.808278, 1,
-			  1500000, 0, NAN, NAN), 9001));
+			return Projection(PCS(gcs, Conversion(9807, Projection::Setup(0,
+			  15.808278, 1, 1500000, 0, NAN, NAN), 9001)));
 		default:
 			return Projection();
 	}

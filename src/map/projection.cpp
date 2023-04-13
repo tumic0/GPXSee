@@ -39,13 +39,13 @@ Projection::Method::Method(int id)
 }
 
 Projection::Projection(const PCS &pcs)
-  : _gcs(pcs.gcs()), _ct(0), _units(pcs.units()), _cs(pcs.coordinateSystem()),
-  _geographic(false)
+	: _gcs(pcs.gcs()), _ct(0), _units(pcs.conversion().units()),
+	_cs(pcs.conversion().cs()), _geographic(false)
 {
 	const Ellipsoid &ellipsoid = _gcs.datum().ellipsoid();
-	const Projection::Setup &setup = pcs.setup();
+	const Projection::Setup &setup = pcs.conversion().setup();
 
-	switch (pcs.method().id()) {
+	switch (pcs.conversion().method().id()) {
 		case 1024:
 			_ct = new WebMercator();
 			break;

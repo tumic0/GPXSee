@@ -13,7 +13,8 @@
 #define STYLE_DIR        "style"
 #define SYMBOLS_DIR      "symbols"
 
-#define ELLIPSOID_FILE   "ellipsoids.csv"
+#define ELLIPSOIDS_FILE  "ellipsoids.csv"
+#define PROJECTIONS_FILE "projections.csv"
 #define GCS_FILE         "gcs.csv"
 #define PCS_FILE         "pcs.csv"
 #define TYP_FILE         "style.typ"
@@ -131,12 +132,17 @@ QString ProgramPaths::translationsDir()
 
 QString ProgramPaths::ellipsoidsFile()
 {
-	return QDir(csvDir()).filePath(ELLIPSOID_FILE);
+	return QDir(csvDir()).filePath(ELLIPSOIDS_FILE);
 }
 
 QString ProgramPaths::gcsFile()
 {
 	return QDir(csvDir()).filePath(GCS_FILE);
+}
+
+QString ProgramPaths::projectionsFile()
+{
+	return QDir(csvDir()).filePath(PROJECTIONS_FILE);
 }
 
 QString ProgramPaths::pcsFile()

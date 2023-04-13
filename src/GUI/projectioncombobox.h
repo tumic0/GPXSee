@@ -2,11 +2,13 @@
 #define PROJECTIONCOMBOBOX_H
 
 #include <QComboBox>
+#include <QList>
+#include "common/kv.h"
 
 class ProjectionComboBox : public QComboBox
 {
 public:
-	ProjectionComboBox(QWidget *parent = 0);
+	ProjectionComboBox(const QList<KV<int, QString> > &list, QWidget *parent = 0);
 };
 
 #endif // PROJECTIONCOMBOBOX_H

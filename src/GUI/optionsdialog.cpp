@@ -14,6 +14,7 @@
 #include <QSysInfo>
 #include <QButtonGroup>
 #include <QGeoPositionInfoSource>
+#include "map/pcs.h"
 #include "icons.h"
 #include "infolabel.h"
 #include "colorbox.h"
@@ -52,18 +53,20 @@ void OptionsDialog::automaticPauseDetectionSet(bool set)
 
 QWidget *OptionsDialog::createMapPage()
 {
-	_outputProjection = new ProjectionComboBox();
+	_outputProjection = new ProjectionComboBox(GCS::WGS84List()
+	  + Conversion::list());
 	_outputProjection->setCurrentIndex(_outputProjection->findData(
 	  _options.outputProjection));
-	_inputProjection = new ProjectionComboBox();
+	_inputProjection = new ProjectionComboBox(GCS::list() + PCS::list());
 	_inputProjection->setCurrentIndex(_inputProjection->findData(
 	  _options.inputProjection));
 
-	InfoLabel *inInfo = new InfoLabel(tr("Select the proper projection of maps"
-	  " without a projection definition (JNX, KMZ and world file maps)."));
-	InfoLabel *outInfo = new InfoLabel(tr("Select the desired projection of"
-	  " vector maps (IMG and Mapsforge maps). The projection must be valid for"
-	  " the whole map area."));
+	InfoLabel *inInfo = new InfoLabel(tr("Select the proper coordinate "
+	  "reference system (CRS) of maps without a CRS definition "
+	  "(JNX, KMZ and World file maps)."));
+	InfoLabel *outInfo = new InfoLabel(tr("Select the desired projection of "
+	  "vector maps (IMG, Mapsforge and ENC maps). The projection must be valid "
+	  "for the whole map area."));
 
 	_hidpi = new QRadioButton(tr("High-resolution"));
 	_lodpi = new QRadioButton(tr("Standard"));

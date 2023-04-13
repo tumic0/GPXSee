@@ -471,7 +471,7 @@ void KMZMap::unload()
 
 void KMZMap::setInputProjection(const Projection &projection)
 {
-	if (projection == _projection)
+	if (!projection.isValid() || projection == _projection)
 		return;
 
 	_projection = projection;

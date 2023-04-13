@@ -256,7 +256,7 @@ SETTING(printMovingTime,     "printMovingTime",        false                  );
 SETTING(printItemCount,      "printItemCount",         true                   );
 SETTING(separateGraphPage,   "separateGraphPage",      false                  );
 SETTING(sliderColor,         "sliderColor",            QColor(Qt::red)        );
-SETTING(outputProjection,    "outputProjection",       3857                   );
+SETTING(outputProjection,    "outputProjection",       3856                   );
 SETTING(inputProjection,     "inputProjection",        4326                   );
 SETTING(hidpiMap,            "HiDPIMap",               true                   );
 SETTING(poiPath,             "poiPath",                ""                     );

@@ -39,6 +39,7 @@ public:
 
 	static void loadList(const QString &path);
 	static QList<KV<int, QString> > list();
+	static QList<KV<int, QString> > WGS84List();
 
 private:
 	class Entry;

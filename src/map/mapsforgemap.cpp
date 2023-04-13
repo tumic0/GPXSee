@@ -230,7 +230,7 @@ void MapsforgeMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 
 void MapsforgeMap::setOutputProjection(const Projection &projection)
 {
-	if (projection == _projection)
+	if (!projection.isValid() || projection == _projection)
 		return;
 
 	_projection = projection;

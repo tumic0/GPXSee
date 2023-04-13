@@ -58,7 +58,22 @@ Projection CRS::projection(int id)
 	if (!pcs.isNull())
 		return Projection(pcs);
 
+	// Geographic 2D projections
 	GCS gcs(GCS::gcs(id));
+	if (!gcs.isNull())
+		return Projection(gcs);
+
+	return Projection();
+}
+
+Projection CRS::projection(int gcsId, int projId)
+{
+	Conversion proj(Conversion::conversion(projId));
+	if (!proj.isNull())
+		return Projection(PCS(GCS::gcs(gcsId), proj));
+
+	// Geographic 2D projections
+	GCS gcs(GCS::gcs(projId));
 	if (!gcs.isNull())
 		return Projection(gcs);
 

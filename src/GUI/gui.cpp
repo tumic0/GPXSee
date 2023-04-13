@@ -2745,7 +2745,8 @@ void GUI::loadOptions()
 		_mapView->useOpenGL(true);
 	_mapView->setDevicePixelRatio(devicePixelRatioF(),
 	  _options.hidpiMap ? devicePixelRatioF() : 1.0);
-	_mapView->setOutputProjection(CRS::projection(_options.outputProjection));
+	_mapView->setOutputProjection(CRS::projection(4326,
+	  _options.outputProjection));
 	_mapView->setInputProjection(CRS::projection(_options.inputProjection));
 	_mapView->setTimeZone(_options.timeZone.zone());
 	_mapView->setPositionSource(_positionSource);
@@ -2859,7 +2860,8 @@ void GUI::updateOptions(const Options &options)
 		_mapView->setDevicePixelRatio(devicePixelRatioF(),
 		  options.hidpiMap ? devicePixelRatioF() : 1.0);
 	if (options.outputProjection != _options.outputProjection)
-		_mapView->setOutputProjection(CRS::projection(options.outputProjection));
+		_mapView->setOutputProjection(CRS::projection(4326,
+		  options.outputProjection));
 	if (options.inputProjection != _options.inputProjection)
 		_mapView->setInputProjection(CRS::projection(options.inputProjection));
 	if (options.timeZone != _options.timeZone) {

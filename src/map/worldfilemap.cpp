@@ -116,7 +116,7 @@ void WorldFileMap::unload()
 
 void WorldFileMap::setInputProjection(const Projection &projection)
 {
-	if (_hasPRJ || projection == _projection)
+	if (_hasPRJ || !projection.isValid() || projection == _projection)
 		return;
 
 	_projection = projection;

@@ -269,7 +269,7 @@ void JNXMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 void JNXMap::setInputProjection(const Projection &projection)
 {
-	if (projection == _projection)
+	if (!projection.isValid() || projection == _projection)
 		return;
 
 	_projection = projection;

@@ -537,7 +537,7 @@ void PRJFile::projectedCS(CTX &ctx, PCS *pcs)
 	optProjectedCS(ctx, &epsg);
 	compare(ctx, RBRK);
 
-	*pcs = (epsg > 0) ? PCS::pcs(epsg) : PCS(gcs, method, setup, lu);
+	*pcs = (epsg > 0) ? PCS::pcs(epsg) : PCS(gcs, Conversion(method, setup, lu));
 }
 
 void PRJFile::axisType(CTX &ctx)

@@ -304,20 +304,20 @@ bool BSBMap::createProjection(const QString &datum, const QString &proj,
 
 	if (!proj.compare("MERCATOR", Qt::CaseInsensitive)) {
 		Projection::Setup setup(0, c.lon(), NAN, 0, 0, NAN, NAN);
-		pcs = PCS(gcs, 9804, setup, 9001);
+		pcs = PCS(gcs, Conversion(9804, setup, 9001));
 	} else if (!proj.compare("TRANSVERSE MERCATOR", Qt::CaseInsensitive)) {
 		Projection::Setup setup(0, params[1], params[2], 0, 0, NAN, NAN);
-		pcs = PCS(gcs, 9807, setup, 9001);
+		pcs = PCS(gcs, Conversion(9807, setup, 9001));
 	} else if (!proj.compare("UNIVERSAL TRANSVERSE MERCATOR",
 	  Qt::CaseInsensitive)) {
 		Projection::Setup setup(0, params[0], 0.9996, 500000, 0, NAN, NAN);
-		pcs = PCS(gcs, 9807, setup, 9001);
+		pcs = PCS(gcs, Conversion(9807, setup, 9001));
 	} else if (!proj.compare("LAMBERT CONFORMAL CONIC", Qt::CaseInsensitive)) {
 		Projection::Setup setup(0, params[0], NAN, 0, 0, params[2], params[3]);
-		pcs = PCS(gcs, 9802, setup, 9001);
+		pcs = PCS(gcs, Conversion(9802, setup, 9001));
 	} else if (!proj.compare("POLYCONIC", Qt::CaseInsensitive)) {
 		Projection::Setup setup(0, params[0], NAN, 0, 0, NAN, NAN);
-		pcs = PCS(gcs, 9818, setup, 9001);
+		pcs = PCS(gcs, Conversion(9818, setup, 9001));
 	} else {
 		_errorString = proj + ": Unknown/missing projection";
 		return false;

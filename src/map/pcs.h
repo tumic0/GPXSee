@@ -2,56 +2,51 @@
 #define PCS_H
 
 #include <QDebug>
-#include <QList>
+#include <QMap>
 #include "common/kv.h"
 #include "gcs.h"
 #include "linearunits.h"
 #include "coordinatesystem.h"
-#include "projection.h"
+#include "conversion.h"
 
 class PCS
 {
 public:
 	PCS() {}
-	PCS(const GCS &gcs, const Projection::Method &method,
-	  const Projection::Setup &setup, const LinearUnits &units,
-	  const CoordinateSystem &cs = CoordinateSystem())
-	  : _gcs(gcs), _method(method), _setup(setup), _units(units), _cs(cs) {}
-	PCS(const GCS &gcs, int proj);
+	PCS(const GCS &gcs, const Conversion &conversion)
+	  : _gcs(gcs), _conversion(conversion) {}
 
 	const GCS &gcs() const {return _gcs;}
-	const Projection::Method &method() const {return _method;}
-	const Projection::Setup &setup() const {return _setup;}
-	const LinearUnits &units() const {return _units;}
-	const CoordinateSystem &coordinateSystem() const {return _cs;}
+	const Conversion &conversion() const {return _conversion;}
 
-	bool isNull() const {
-		return (_gcs.isNull() && _units.isNull() && _method.isNull()
-		  && _setup.isNull() && _cs.isNull());
-	}
-	bool isValid() const {
-		// We do not check the CoordinateSystem here as it is not always defined
-		// and except of WMTS/WMS it is not needed.
-		return (_gcs.isValid() && _units.isValid() && _method.isValid());
-	}
+	bool isNull() const {return (_gcs.isNull() && _conversion.isNull());}
+	bool isValid() const {return (_gcs.isValid() && _conversion.isValid());}
 
 	static void loadList(const QString &path);
 	static PCS pcs(int id);
-	static PCS pcs(const GCS &gcs, int proj);
 	static QList<KV<int, QString> > list();
 
 private:
-	class Entry;
+	class Entry {
+	public:
+		Entry(const QString &name, int gcs, int proj)
+			: _name(name), _gcs(gcs), _proj(proj) {}
 
-	static QList<Entry> defaults();
+		const QString &name() const {return _name;}
+		int proj() const {return _proj;}
+		int gcs() const {return _gcs;}
+
+	private:
+		QString _name;
+		int _gcs, _proj;
+	};
+
+	static QMap<int, Entry> defaults();
 
 	GCS _gcs;
-	Projection::Method _method;
-	Projection::Setup _setup;
-	LinearUnits _units;
-	CoordinateSystem _cs;
+	Conversion _conversion;
 
-	static QList<Entry> _pcss;
+	static QMap<int, Entry> _pcss;
 };
 
 #ifndef QT_NO_DEBUG

@@ -178,28 +178,28 @@ static Projection createProjection(const GCS &gcs, const QString &name)
 	if (pl.first() == "Latitude/Longitude")
 		return Projection(gcs);
 	else if (pl.first() == "UTM")
-		pcs = PCS(gcs, 9807, utm2setup(pl), 9001);
+		pcs = PCS(gcs, Conversion(9807, utm2setup(pl), 9001));
 	else if (pl.first() == "Mercator")
-		pcs = PCS(gcs, 1024, Projection::Setup(), 9001);
+		pcs = PCS(gcs, Conversion(1024, Projection::Setup(), 9001));
 	else if (pl.first() == "Mercator Ellipsoidal")
-		pcs = PCS(gcs, 9804, mercator2setup(pl), 9001);
+		pcs = PCS(gcs, Conversion(9804, mercator2setup(pl), 9001));
 	else if (pl.first() == "Transverse Mercator")
-		pcs = PCS(gcs, 9807, tm2setup(pl), 9001);
+		pcs = PCS(gcs, Conversion(9807, tm2setup(pl), 9001));
 	else if (pl.first() == "Lambert Conformal Conic")
-		pcs = PCS(gcs, 9802, lcc2setup(pl), 9001);
+		pcs = PCS(gcs, Conversion(9802, lcc2setup(pl), 9001));
 	else if (pl.first() == "(A)Lambert Azimuthual Equal Area")
-		pcs = PCS(gcs, 9820, laea2setup(pl), 9001);
+		pcs = PCS(gcs, Conversion(9820, laea2setup(pl), 9001));
 	else if (pl.first() == "Polyconic (American)")
-		pcs = PCS(gcs, 9818, polyconic2setup(pl), 9001);
+		pcs = PCS(gcs, Conversion(9818, polyconic2setup(pl), 9001));
 	else if (pl.first() == "(IG) Irish Grid")
-		pcs = PCS(gcs, 9807, Projection::Setup(53.5, -8, 1.000035, 200000,
-		  250000, NAN, NAN), 9001);
+		pcs = PCS(gcs, Conversion(9807, Projection::Setup(53.5, -8, 1.000035,
+		  200000, 250000, NAN, NAN), 9001));
 	else if (pl.first() == "(SUI) Swiss Grid")
-		pcs = PCS(gcs, 9815, Projection::Setup(46.570866, 7.26225, 1.0, 600000,
-		  200000, 90.0, 90.0), 9001);
+		pcs = PCS(gcs, Conversion(9815, Projection::Setup(46.570866, 7.26225,
+		  1.0, 600000, 200000, 90.0, 90.0), 9001));
 	else if (pl.first() == "Rijksdriehoeksmeting")
-		pcs = PCS(gcs, 9809, Projection::Setup(52.1561605555556,
-		  5.38763888888889, 0.9999079, 155000, 463000, NAN, NAN), 9001);
+		pcs = PCS(gcs, Conversion(9809, Projection::Setup(52.1561605555556,
+		  5.38763888888889, 0.9999079, 155000, 463000, NAN, NAN), 9001));
 	else
 		return Projection();
 
