@@ -1354,12 +1354,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="64"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
-        <translation type="unfinished"></translation>
+        <translation>为没有CRS定义的地图（JNX、KMZ和世界文件地图）选择适合的坐标参考系（CRS）。</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="67"/>
         <source>Select the desired projection of vector maps (IMG, Mapsforge and ENC maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>选择所需的矢量地图投影（IMG、Mapsforge和ENC地图）。该投影必须对整个地图区域有效。</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="71"/>
