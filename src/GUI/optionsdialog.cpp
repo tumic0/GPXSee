@@ -45,6 +45,8 @@ static QFrame *line()
 }
 #endif // Q_OS_MAC
 
+typedef QList<KV<int, QString> > ProjectionList;
+
 void OptionsDialog::automaticPauseDetectionSet(bool set)
 {
 	_pauseInterval->setEnabled(!set);
@@ -53,11 +55,15 @@ void OptionsDialog::automaticPauseDetectionSet(bool set)
 
 QWidget *OptionsDialog::createMapPage()
 {
-	_outputProjection = new ProjectionComboBox(GCS::WGS84List()
-	  + Conversion::list());
+	ProjectionList outputProjections(GCS::WGS84List() + Conversion::list());
+	ProjectionList inputProjections(GCS::list() + PCS::list());
+	std::sort(outputProjections.begin(), outputProjections.end());
+	std::sort(inputProjections.begin(), inputProjections.end());
+
+	_outputProjection = new ProjectionComboBox(outputProjections);
 	_outputProjection->setCurrentIndex(_outputProjection->findData(
 	  _options.outputProjection));
-	_inputProjection = new ProjectionComboBox(GCS::list() + PCS::list());
+	_inputProjection = new ProjectionComboBox(inputProjections);
 	_inputProjection->setCurrentIndex(_inputProjection->findData(
 	  _options.inputProjection));
 
