@@ -1355,12 +1355,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="64"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccioneu el sistema de referència de coordenades (CRS) adequat dels mapes sense un CRS definit (JNX, KMZ i fitxers World).</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="67"/>
         <source>Select the desired projection of vector maps (IMG, Mapsforge and ENC maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccioneu la projecció desitjada de mapes vectorials (mapes IMG, Mapsforge i ENC). La projecció ha de ser vàlida per a tota l&apos;àrea del mapa.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="71"/>
