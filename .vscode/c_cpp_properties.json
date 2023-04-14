@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "defines": ["APP_VERSION"],
+            "compilerPath": "/usr/bin/g++",
+            "compileCommands": "./compile_commands.json",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64",
+        "includePath": [
+            "${workspaceFolder}/src/**",
+            "/usr/include/x86_64-linux-gnu/qt6/**",
+            "/usr/local/include",
+            "/usr/include"
+        ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "${default}"
+            }
+        }
+    ],
+    "version": 4
+}
