@@ -1721,12 +1721,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="64"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
-        <translation type="unfinished"></translation>
+        <translation>Válassza ki a megfelelő koordináta referenciarendszert (CRS) a CRS-definíció nélküli térképekhez (JNX, KMZ és világfájltérképek).</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="67"/>
         <source>Select the desired projection of vector maps (IMG, Mapsforge and ENC maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Válassza ki a vektoros térképek kívánt vetületét (IMG, Mapsforge és ENC térképek). A vetületnek a térkép teljes területére érvényesnek kell lennie.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
