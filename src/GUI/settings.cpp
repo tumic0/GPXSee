@@ -3,6 +3,7 @@
 #include <QPageLayout>
 #include <QPageSize>
 #include <QGeoPositionInfoSource>
+#include <QPainter>
 #include "common/config.h"
 #include "common/util.h"
 #include "data/graph.h"
@@ -127,6 +128,7 @@ const Settings::Setting &Settings::positionPlugin()
 	return s;
 }
 
+// Each setting is mapped to its key string in eg ~/.config/gpxsee/gpxsee.conf
 /* Window */
 #ifndef Q_OS_ANDROID
 SETTING(windowGeometry,      "geometry",               QByteArray()           );
@@ -143,6 +145,7 @@ SETTING(showToolbars,        "toolbar",                true                   );
 
 /* Map */
 SETTING(activeMap,           "map",                    "Open Street Map"      );
+SETTING(activeOverlay,       "overlay",                ""                     ); // should eventually be a QList? and use map name
 SETTING(showMap,             "show",                   true                   );
 SETTING(cursorCoordinates,   "coordinates",            false                  );
 
@@ -204,6 +207,8 @@ SETTING(pngFileName,         "fileName",               CWD("export.png")      );
 SETTING(paletteColor,        "paletteColor",           QColor(Qt::blue)       );
 SETTING(paletteShift,        "paletteShift",           0.62                   );
 SETTING(mapOpacity,          "mapOpacity",             100                    );
+SETTING(overlayOpacity,      "overlayOpacity",         50                     );
+SETTING(overlayMode,         "overlayMode",            QPainter::CompositionMode::CompositionMode_Multiply);
 SETTING(backgroundColor,     "backgroundColor",        QColor(Qt::white)      );
 SETTING(crosshairColor,      "crosshairColor",         QColor(Qt::red)        );
 SETTING(infoColor,           "infoColor",              QColor(Qt::black)      );

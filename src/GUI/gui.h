@@ -177,9 +177,9 @@ private:
 	QAction *mapAction(const QString &name);
 	QAction *overlayAction(const QString &name);
 	QGeoPositionInfoSource *positionSource(const Options &options);
-	void readSettings(QString &activeMap, QStringList &disabledPOIs);
+	void readSettings(QString &activeMap, QString &overlayMap, QStringList &disabledPOIs);
 
-	void loadInitialMaps(const QString &selected);
+	void loadInitialMaps(const QString &selected, const QString &selectedOvr);
 	void loadInitialPOIs(const QStringList &disabled);
 
 	void loadOptions();
@@ -295,6 +295,7 @@ private:
 
 	POI *_poi;
 	Map *_map;
+	Map *_overlay;
 	QGeoPositionInfoSource *_positionSource;
 	DEMLoader *_dem;
 

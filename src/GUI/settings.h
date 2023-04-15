@@ -86,6 +86,7 @@ public:
 
 	/* Map */
 	static const Setting activeMap;
+	static const Setting activeOverlay;
 	static const Setting showMap;
 	static const Setting cursorCoordinates;
 
@@ -148,6 +149,8 @@ public:
 	static const Setting paletteColor;
 	static const Setting paletteShift;
 	static const Setting mapOpacity;
+	static const Setting overlayOpacity;
+	static const Setting overlayMode;
 	static const Setting backgroundColor;
 	static const Setting crosshairColor;
 	static const Setting infoColor;

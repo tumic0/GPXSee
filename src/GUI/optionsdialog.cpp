@@ -279,6 +279,12 @@ QWidget *OptionsDialog::createAppearancePage()
 	// Map
 	_mapOpacity = new PercentSlider();
 	_mapOpacity->setValue(_options.mapOpacity);
+	_overlayOpacity = new PercentSlider();
+	_overlayOpacity->setValue(_options.overlayOpacity);
+	_overlayMode = new QSpinBox();
+	_overlayMode->setMinimum(0);
+	_overlayMode->setMaximum(23); // CompositionMode_Exclusion
+	_overlayMode->setValue(_options.overlayMode);
 	_backgroundColor = new ColorBox();
 	_backgroundColor->setColor(_options.backgroundColor);
 	_backgroundColor->enableAlphaChannel(false);
@@ -292,6 +298,8 @@ QWidget *OptionsDialog::createAppearancePage()
 	QFormLayout *mapLayout = new QFormLayout();
 	mapLayout->addRow(tr("Background color:"), _backgroundColor);
 	mapLayout->addRow(tr("Map opacity:"), _mapOpacity);
+	mapLayout->addRow(tr("Overlay opacity:"), _overlayOpacity);
+	mapLayout->addRow(tr("Overlay composition mode:"), _overlayMode);
 	mapLayout->addRow(tr("Crosshair color:"), _crosshairColor);
 	mapLayout->addRow(tr("Info color:"), _infoColor);
 	mapLayout->addWidget(_infoBackground);
@@ -870,6 +878,8 @@ void OptionsDialog::accept()
 	_options.palette.setColor(_baseColor->color());
 	_options.palette.setShift(_colorOffset->value() / 100.0);
 	_options.mapOpacity = _mapOpacity->value();
+	_options.overlayOpacity = _overlayOpacity->value();
+	_options.overlayMode = static_cast<QPainter::CompositionMode>(_overlayMode->value());
 	_options.backgroundColor = _backgroundColor->color();
 	_options.crosshairColor = _crosshairColor->color();
 	_options.infoColor = _infoColor->color();

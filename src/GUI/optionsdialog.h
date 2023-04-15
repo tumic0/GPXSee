@@ -3,6 +3,7 @@
 
 #include <QtGlobal>
 #include <QDialog>
+#include <QPainter>
 #include "palette.h"
 #include "units.h"
 #include "timezoneinfo.h"
@@ -41,6 +42,8 @@ struct Options {
 	bool pathAntiAliasing;
 	bool graphAntiAliasing;
 	int mapOpacity;
+	int overlayOpacity;
+	QPainter::CompositionMode overlayMode;
 	QColor backgroundColor;
 	QColor crosshairColor;
 	QColor infoColor;
@@ -125,6 +128,8 @@ private:
 	ColorBox *_baseColor;
 	PercentSlider *_colorOffset;
 	PercentSlider *_mapOpacity;
+	PercentSlider *_overlayOpacity;
+	QSpinBox *_overlayMode;
 	ColorBox *_backgroundColor;
 	ColorBox *_crosshairColor;
 	ColorBox *_infoColor;
