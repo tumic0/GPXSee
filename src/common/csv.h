@@ -9,7 +9,7 @@ public:
 	CSV(QIODevice *device, char delimiter = ',')
 	  : _device(device), _delimiter(delimiter), _line(1) {}
 
-	bool readEntry(QStringList &list);
+	bool readEntry(QByteArrayList &list);
 	bool atEnd() const {return _device->atEnd();}
 	int line() const {return _line;}
 

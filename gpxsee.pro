@@ -45,6 +45,7 @@ HEADERS += src/common/config.h \
     src/common/downloader.h \
     src/common/polygon.h \
     src/common/color.h \
+    src/common/csv.h \
     src/GUI/authenticationwidget.h \
     src/GUI/axislabelitem.h \
     src/GUI/dirselectwidget.h \
@@ -253,7 +254,6 @@ HEADERS += src/common/config.h \
     src/data/demloader.h \
     src/data/area.h \
     src/data/exifparser.h \
-    src/data/csv.h \
     src/data/cupparser.h \
     src/data/gpiparser.h \
     src/data/address.h \
@@ -274,6 +274,7 @@ SOURCES += src/main.cpp \
     src/common/programpaths.cpp \
     src/common/tifffile.cpp \
     src/common/downloader.cpp \
+    src/common/csv.cpp \
     src/GUI/authenticationwidget.cpp \
     src/GUI/axislabelitem.cpp \
     src/GUI/dirselectwidget.cpp \
@@ -448,7 +449,6 @@ SOURCES += src/main.cpp \
     src/data/dem.cpp \
     src/data/demloader.cpp \
     src/data/exifparser.cpp \
-    src/data/csv.cpp \
     src/data/cupparser.cpp \
     src/data/gpiparser.cpp \
     src/data/smlparser.cpp \

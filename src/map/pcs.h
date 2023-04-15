@@ -22,7 +22,7 @@ public:
 	bool isNull() const {return (_gcs.isNull() && _conversion.isNull());}
 	bool isValid() const {return (_gcs.isValid() && _conversion.isValid());}
 
-	static void loadList(const QString &path);
+	static bool loadList(const QString &path);
 	static PCS pcs(int id);
 	static QList<KV<int, QString> > list();
 

@@ -1,4 +1,5 @@
 #include <QFile>
+#include "common/csv.h"
 #include "angularunits.h"
 #include "pcs.h"
 
@@ -23,52 +24,51 @@ PCS PCS::pcs(int id)
 	}
 }
 
-void PCS::loadList(const QString &path)
+bool PCS::loadList(const QString &path)
 {
 	QFile file(path);
+	CSV csv(&file);
+	QByteArrayList entry;
 	bool res;
-	int ln = 0;
 
 	if (!file.open(QFile::ReadOnly)) {
 		qWarning("Error opening PCS file: %s: %s", qPrintable(path),
 		  qPrintable(file.errorString()));
-		return;
+		return false;
 	}
 
-	while (!file.atEnd()) {
-		ln++;
-
-		QByteArray line = file.readLine(4096);
-		QList<QByteArray> list = line.split(',');
-		if (list.size() != 4) {
-			qWarning("%s:%d: Format error", qPrintable(path), ln);
+	while (!csv.atEnd()) {
+		if (!csv.readEntry(entry) || entry.size() < 4) {
+			qWarning("%s:%d: Parse error", qPrintable(path), csv.line());
+			return false;
+		}
+		QString name(entry.at(0));
+		int id = entry.at(1).toInt(&res);
+		if (!res) {
+			qWarning("%s:%d: Invalid PCS code", qPrintable(path), csv.line());
 			continue;
 		}
-
-		QString name(list.at(0).trimmed());
-		int id = list.at(1).trimmed().toInt(&res);
+		int gcs = entry.at(2).toInt(&res);
 		if (!res) {
-			qWarning("%s:%d: Invalid PCS code", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid GCS code", qPrintable(path), csv.line());
 			continue;
 		}
-		int gcs = list.at(2).trimmed().toInt(&res);
+		int proj = entry.at(3).toInt(&res);
 		if (!res) {
-			qWarning("%s:%d: Invalid GCS code", qPrintable(path), ln);
-			continue;
-		}
-		int proj = list.at(3).trimmed().toInt(&res);
-		if (!res) {
-			qWarning("%s:%d: Invalid projection code", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid projection code", qPrintable(path),
+			  csv.line());
 			continue;
 		}
 
 		if (GCS::gcs(gcs).isNull()) {
-			qWarning("%s:%d: Unknown GCS code", qPrintable(path), ln);
+			qWarning("%s:%d: Unknown GCS code", qPrintable(path), csv.line());
 			continue;
 		}
 
 		_pcss.insert(id, Entry(name, gcs, proj));
 	}
+
+	return true;
 }
 
 QList<KV<int, QString> > PCS::list()

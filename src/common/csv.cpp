@@ -1,4 +1,4 @@
-#include <QStringList>
+#include <QByteArrayList>
 #include "csv.h"
 
 /*
@@ -7,11 +7,13 @@ RFC 4180 parser with the following enchancements:
  - allows LF line ends in addition to CRLF line ends
 */
 
-bool CSV::readEntry(QStringList &list)
+bool CSV::readEntry(QByteArrayList &list)
 {
 	int state = 0;
 	char c;
 	QByteArray field;
+
+	list.clear();
 
 	while (_device->getChar(&c)) {
 		switch (state) {

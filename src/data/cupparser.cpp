@@ -1,6 +1,6 @@
 #include <cmath>
 #include <QStringList>
-#include "csv.h"
+#include "common/csv.h"
 #include "cupparser.h"
 
 
@@ -58,7 +58,8 @@ static double elevation(const QString &str)
 }
 
 
-bool CUPParser::waypoint(const QStringList &entry, QVector<Waypoint> &waypoints)
+bool CUPParser::waypoint(const QByteArrayList &entry,
+  QVector<Waypoint> &waypoints)
 {
 	if (entry.size() < 11) {
 		_errorString = "Invalid number of fields";
@@ -85,7 +86,7 @@ bool CUPParser::waypoint(const QStringList &entry, QVector<Waypoint> &waypoints)
 	return true;
 }
 
-bool CUPParser::task(const QStringList &entry,
+bool CUPParser::task(const QByteArrayList &entry,
   const QVector<Waypoint> &waypoints, QList<RouteData> &routes)
 {
 	if (entry.size() < 3) {
@@ -125,9 +126,8 @@ bool CUPParser::parse(QFile *file, QList<TrackData> &tracks,
 	Q_UNUSED(tracks);
 	Q_UNUSED(polygons);
 	CSV csv(file);
-	QStringList entry;
+	QByteArrayList entry;
 	SegmentType segment = Header;
-
 
 	while (!csv.atEnd()) {
 		if (!csv.readEntry(entry)) {
@@ -159,7 +159,6 @@ bool CUPParser::parse(QFile *file, QList<TrackData> &tracks,
 				return false;
 		}
 
-		entry.clear();
 		_errorLine = csv.line();
 	}
 

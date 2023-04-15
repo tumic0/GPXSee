@@ -1,5 +1,6 @@
 #include <QFile>
 #include "common/wgs84.h"
+#include "common/csv.h"
 #include "gcs.h"
 
 
@@ -19,26 +20,24 @@ private:
 	GCS _gcs;
 };
 
-static int parameter(const QString &str, bool *res)
+static int parameter(const QByteArray &str, bool *res)
 {
-	QString field = str.trimmed();
-	if (field.isEmpty()) {
+	if (str.isEmpty()) {
 		*res = true;
 		return 0;
 	}
 
-	return field.toInt(res);
+	return str.toInt(res);
 }
 
-static double parameterd(const QString &str, bool *res)
+static double parameterd(const QByteArray &str, bool *res)
 {
-	QString field = str.trimmed();
-	if (field.isEmpty()) {
+	if (str.isEmpty()) {
 		*res = true;
 		return NAN;
 	}
 
-	return field.toDouble(res);
+	return str.toDouble(res);
 }
 
 
@@ -89,102 +88,100 @@ GCS GCS::gcs(const QString &name)
 	return GCS();
 }
 
-void GCS::loadList(const QString &path)
+bool GCS::loadList(const QString &path)
 {
 	QFile file(path);
+	CSV csv(&file);
+	QByteArrayList entry;
 	bool res;
-	int ln = 0;
-
 
 	if (!file.open(QFile::ReadOnly)) {
-		qWarning("Error opening PCS file: %s: %s", qPrintable(path),
+		qWarning("Error opening GCS file: %s: %s", qPrintable(path),
 		  qPrintable(file.errorString()));
-		return;
+		return false;
 	}
 
-	while (!file.atEnd()) {
-		ln++;
-
-		QByteArray line = file.readLine(4096);
-		QList<QByteArray> list = line.split(',');
-		if (list.size() != 14) {
-			qWarning("%s:%d: Format error", qPrintable(path), ln);
-			continue;
+	while (!csv.atEnd()) {
+		if (!csv.readEntry(entry) || entry.size() < 14) {
+			qWarning("%s:%d: Parse error", qPrintable(path), csv.line());
+			return false;
 		}
 
-		int id = parameter(list[1], &res);
+		int id = parameter(entry.at(1), &res);
 		if (!res) {
-			qWarning("%s:%d: Invalid GCS code", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid GCS code", qPrintable(path), csv.line());
 			continue;
 		}
-		int gd = parameter(list[2], &res);
+		int gd = parameter(entry.at(2), &res);
 		if (!res) {
 			qWarning("%s:%d: Invalid geodetic datum code", qPrintable(path),
-			  ln);
+			  csv.line());
 			continue;
 		}
-		int au = list[3].trimmed().toInt(&res);
+		int au = entry.at(3).toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid angular units code", qPrintable(path),
-			  ln);
+			  csv.line());
 			continue;
 		}
-		int el = list[4].trimmed().toInt(&res);
+		int el = entry.at(4).toInt(&res);
 		if (!res) {
-			qWarning("%s:%d: Invalid ellipsoid code", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid ellipsoid code", qPrintable(path),
+			  csv.line());
 			continue;
 		}
-		int pm = list[5].trimmed().toInt(&res);
+		int pm = entry.at(5).toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid prime meridian code", qPrintable(path),
-			  ln);
+			  csv.line());
 			continue;
 		}
-		int ct = list[6].trimmed().toInt(&res);
+		int ct = entry.at(6).toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid coordinates transformation code",
-			  qPrintable(path), ln);
+			  qPrintable(path), csv.line());
 			continue;
 		}
-		double dx = list[7].trimmed().toDouble(&res);
+		double dx = entry.at(7).toDouble(&res);
 		if (!res) {
-			qWarning("%s:%d: Invalid dx", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid dx", qPrintable(path), csv.line());
 			continue;
 		}
-		double dy = list[8].trimmed().toDouble(&res);
+		double dy = entry.at(8).toDouble(&res);
 		if (!res) {
-			qWarning("%s:%d: Invalid dy", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid dy", qPrintable(path), csv.line());
 			continue;
 		}
-		double dz = list[9].trimmed().toDouble(&res);
+		double dz = entry.at(9).toDouble(&res);
 		if (!res) {
-			qWarning("%s:%d: Invalid dz", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid dz", qPrintable(path), csv.line());
 			continue;
 		}
-		double rx = parameterd(list[10], &res);
+		double rx = parameterd(entry.at(10), &res);
 		if (!res) {
-			qWarning("%s:%d: Invalid rx", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid rx", qPrintable(path), csv.line());
 			continue;
 		}
-		double ry = parameterd(list[11], &res);
+		double ry = parameterd(entry.at(11), &res);
 		if (!res) {
-			qWarning("%s:%d: Invalid ry", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid ry", qPrintable(path), csv.line());
 			continue;
 		}
-		double rz = parameterd(list[12], &res);
+		double rz = parameterd(entry.at(12), &res);
 		if (!res) {
-			qWarning("%s:%d: Invalid rz", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid rz", qPrintable(path), csv.line());
 			continue;
 		}
-		double ds = parameterd(list[13], &res);
+		double ds = parameterd(entry.at(13), &res);
 		if (!res) {
-			qWarning("%s:%d: Invalid ds", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid ds", qPrintable(path), csv.line());
 			continue;
 		}
 
 		const Ellipsoid &e = Ellipsoid::ellipsoid(el);
 		if (e.isNull()) {
-			qWarning("%s:%d: Unknown ellipsoid code", qPrintable(path), ln);
+			qWarning("%s:%d: Unknown ellipsoid code", qPrintable(path),
+			  csv.line());
 			continue;
 		}
 
@@ -201,22 +198,24 @@ void GCS::loadList(const QString &path)
 				break;
 			default:
 				qWarning("%s:%d: Unknown coordinates transformation method",
-				  qPrintable(path), ln);
+				  qPrintable(path), csv.line());
 				continue;
 		}
 		if (!datum.isValid()) {
 			qWarning("%s:%d: Invalid coordinates transformation parameters",
-			  qPrintable(path), ln);
+			  qPrintable(path), csv.line());
 			continue;
 		}
 
 		GCS gcs(datum, pm, au);
 		if (gcs.isValid())
-			_gcss.append(Entry(id, gd, list[0].trimmed(), gcs));
+			_gcss.append(Entry(id, gd, entry.at(0), gcs));
 		else
 			qWarning("%s:%d: Unknown prime meridian/angular units code",
-			  qPrintable(path), ln);
+			  qPrintable(path), csv.line());
 	}
+
+	return true;
 }
 
 Coordinates GCS::toWGS84(const Coordinates &c) const

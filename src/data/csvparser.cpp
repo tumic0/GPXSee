@@ -1,5 +1,5 @@
-#include <QStringList>
-#include "csv.h"
+#include <QByteArrayList>
+#include "common/csv.h"
 #include "csvparser.h"
 
 bool CSVParser::parse(QFile *file, QList<TrackData> &tracks,
@@ -10,9 +10,8 @@ bool CSVParser::parse(QFile *file, QList<TrackData> &tracks,
 	Q_UNUSED(routes);
 	Q_UNUSED(polygons);
 	CSV csv(file);
-	QStringList entry;
+	QByteArrayList entry;
 	bool ok;
-
 
 	while (!csv.atEnd()) {
 		if (!csv.readEntry(entry) || entry.size() < 3) {
@@ -21,26 +20,24 @@ bool CSVParser::parse(QFile *file, QList<TrackData> &tracks,
 			return false;
 		}
 
-		double lon = entry.at(0).trimmed().toDouble(&ok);
+		double lon = entry.at(0).toDouble(&ok);
 		if (!ok || (lon < -180.0 || lon > 180.0)) {
 			_errorString = "Invalid longitude";
 			_errorLine = csv.line();
 			return false;
 		}
-		double lat = entry.at(1).trimmed().toDouble(&ok);
+		double lat = entry.at(1).toDouble(&ok);
 		if (!ok || (lat < -90.0 || lat > 90.0)) {
 			_errorString = "Invalid latitude";
 			_errorLine = csv.line();
 			return false;
 		}
 		Waypoint wp(Coordinates(lon, lat));
-		wp.setName(entry.at(2).trimmed());
+		wp.setName(entry.at(2));
 		if (entry.size() > 3)
-			wp.setDescription(entry.at(3).trimmed());
+			wp.setDescription(entry.at(3));
 
 		waypoints.append(wp);
-
-		entry.clear();
 	}
 
 	return true;

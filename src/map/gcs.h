@@ -37,7 +37,7 @@ public:
 	static GCS gcs(const QString &name);
 	static const GCS &WGS84();
 
-	static void loadList(const QString &path);
+	static bool loadList(const QString &path);
 	static QList<KV<int, QString> > list();
 	static QList<KV<int, QString> > WGS84List();
 

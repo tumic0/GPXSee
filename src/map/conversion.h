@@ -27,7 +27,7 @@ public:
 		return (_units.isValid() && _method.isValid());
 	}
 
-	static void loadList(const QString &path);
+	static bool loadList(const QString &path);
 	static Conversion conversion(int id);
 	static QList<KV<int, QString> > list();
 

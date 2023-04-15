@@ -1,6 +1,7 @@
 #include <QFile>
 #include <QDebug>
 #include "common/wgs84.h"
+#include "common/csv.h"
 #include "ellipsoid.h"
 
 QMap<int, Ellipsoid> Ellipsoid::_ellipsoids = defaults();
@@ -29,48 +30,47 @@ const Ellipsoid &Ellipsoid::ellipsoid(int id)
 		return it.value();
 }
 
-void Ellipsoid::loadList(const QString &path)
+bool Ellipsoid::loadList(const QString &path)
 {
 	QFile file(path);
+	CSV csv(&file);
+	QByteArrayList entry;
 	bool res;
-	int ln = 0;
-
 
 	if (!file.open(QFile::ReadOnly)) {
 		qWarning("Error opening ellipsoids file: %s: %s", qPrintable(path),
 		  qPrintable(file.errorString()));
-		return;
+		return false;
 	}
 
-	while (!file.atEnd()) {
-		ln++;
-
-		QByteArray line = file.readLine(4096);
-		QList<QByteArray> list = line.split(',');
-		if (list.size() != 4) {
-			qWarning("%s: %d: Format error", qPrintable(path), ln);
-			continue;
+	while (!csv.atEnd()) {
+		if (!csv.readEntry(entry) || entry.size() < 4) {
+			qWarning("%s:%d: Parse error", qPrintable(path), csv.line());
+			return false;
 		}
 
-		int id = list.at(1).trimmed().toInt(&res);
+		int id = entry.at(1).toInt(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid ellipsoid code", qPrintable(path), ln);
+			qWarning("%s: %d: Invalid ellipsoid code", qPrintable(path),
+			  csv.line());
 			continue;
 		}
-		double radius = list.at(2).trimmed().toDouble(&res);
+		double radius = entry.at(2).toDouble(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid radius", qPrintable(path), ln);
+			qWarning("%s: %d: Invalid radius", qPrintable(path), csv.line());
 			continue;
 		}
-		double flattening = list.at(3).trimmed().toDouble(&res);
+		double flattening = entry.at(3).toDouble(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid flattening", qPrintable(path), ln);
+			qWarning("%s: %d: Invalid flattening", qPrintable(path), csv.line());
 			continue;
 		}
 
 		Ellipsoid e(radius, 1.0/flattening);
 		_ellipsoids.insert(id, e);
 	}
+
+	return true;
 }
 
 Ellipsoid::Ellipsoid(double radius, double flattening)

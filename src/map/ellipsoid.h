@@ -25,7 +25,7 @@ public:
 
 	static const Ellipsoid &WGS84();
 	static const Ellipsoid &ellipsoid(int id);
-	static void loadList(const QString &path);
+	static bool loadList(const QString &path);
 
 private:
 	double _radius;

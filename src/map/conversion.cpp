@@ -1,4 +1,5 @@
 #include <QFile>
+#include "common/csv.h"
 #include "conversion.h"
 
 static bool parameter(int key, double val, int units, Projection::Setup &setup)
@@ -64,19 +65,18 @@ static bool parameter(int key, double val, int units, Projection::Setup &setup)
 	}
 }
 
-static int projectionSetup(const QList<QByteArray> &list,
-  Projection::Setup &setup)
+static int projectionSetup(const QByteArrayList &list, Projection::Setup &setup)
 {
 	bool r1, r2, r3;
 
 	for (int i = 5; i < 26; i += 3) {
-		QString ks = list[i].trimmed();
+		const QByteArray &ks = list.at(i);
 		if (ks.isEmpty())
 			break;
 
 		int key = ks.toInt(&r1);
-		double val = list[i+1].trimmed().toDouble(&r2);
-		int un = list[i+2].trimmed().toInt(&r3);
+		double val = list.at(i+1).toDouble(&r2);
+		int un = list.at(i+2).toInt(&r3);
 		if (!r1 || !r2 || !r3)
 			return (i - 5)/3 + 1;
 
@@ -109,77 +109,79 @@ Conversion Conversion::conversion(int id)
 	}
 }
 
-void Conversion::loadList(const QString &path)
+bool Conversion::loadList(const QString &path)
 {
 	QFile file(path);
+	CSV csv(&file);
+	QByteArrayList entry;
 	bool res;
-	int ln = 0, pn;
-
 
 	if (!file.open(QFile::ReadOnly)) {
 		qWarning("Error opening projections file: %s: %s", qPrintable(path),
 		  qPrintable(file.errorString()));
-		return;
+		return false;
 	}
 
-	while (!file.atEnd()) {
-		ln++;
-
-		QByteArray line = file.readLine(4096);
-		QList<QByteArray> list = line.split(',');
-		if (list.size() != 26) {
-			qWarning("%s:%d: Format error", qPrintable(path), ln);
-			continue;
+	while (!csv.atEnd()) {
+		if (!csv.readEntry(entry) || entry.size() < 26) {
+			qWarning("%s:%d: Parse error", qPrintable(path), csv.line());
+			return false;
 		}
 
-		QString name(list.at(0).trimmed());
-		int proj = list.at(1).trimmed().toInt(&res);
+		QString name(entry.at(0));
+		int proj = entry.at(1).toInt(&res);
 		if (!res) {
-			qWarning("%s:%d: Invalid projection code", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid projection code", qPrintable(path),
+			  csv.line());
 			continue;
 		}
-		int units = list.at(2).trimmed().toInt(&res);
+		int units = entry.at(2).toInt(&res);
 		if (!res) {
-			qWarning("%s:%d: Invalid linear units code", qPrintable(path), ln);
+			qWarning("%s:%d: Invalid linear units code", qPrintable(path),
+			  csv.line());
 			continue;
 		}
-		int transform = list.at(3).trimmed().toInt(&res);
+		int transform = entry.at(3).toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid coordinate transformation code",
-			  qPrintable(path), ln);
+			  qPrintable(path), csv.line());
 			continue;
 		}
-		int cs = list.at(4).trimmed().toInt(&res);
+		int cs = entry.at(4).toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid coordinate system code",
-			  qPrintable(path), ln);
+			  qPrintable(path), csv.line());
 			continue;
 		}
 
 		if (!LinearUnits(units).isValid()) {
-			qWarning("%s:%d: Unknown linear units code", qPrintable(path), ln);
+			qWarning("%s:%d: Unknown linear units code", qPrintable(path),
+			  csv.line());
 			continue;
 		}
 		if (!Projection::Method(transform).isValid()) {
 			qWarning("%s:%d: Unknown coordinate transformation code",
-			  qPrintable(path), ln);
+			  qPrintable(path), csv.line());
 			continue;
 		}
 		if (!CoordinateSystem(cs).isValid()) {
 			qWarning("%s:%d: Unknown coordinate system code", qPrintable(path),
-			  ln);
+			  csv.line());
 			continue;
 		}
 
 		Projection::Setup setup;
-		if ((pn = projectionSetup(list, setup))) {
+		int pn = projectionSetup(entry, setup);
+		if (pn) {
 			qWarning("%s: %d: Invalid projection parameter #%d",
-			  qPrintable(path), ln, pn);
+			  qPrintable(path), csv.line(), pn);
 			continue;
 		}
 
 		_conversions.insert(proj, Entry(name, transform, setup, units, cs));
 	}
+
+	return true;
 }
 
 QList<KV<int, QString> > Conversion::list()
