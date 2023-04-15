@@ -61,6 +61,7 @@ public:
 
 	void setPalette(const Palette &palette);
 	void setPOI(POI *poi);
+	void setOverlay(Map *map);
 	void setMap(Map *map);
 	void setPositionSource(QGeoPositionInfoSource *source);
 	void setGraph(int index);
@@ -87,6 +88,8 @@ public:
 	void setPOISize(int size);
 	void setPOIColor(const QColor &color);
 	void setMapOpacity(int opacity);
+	void setOverlayOpacity(int opacity);
+	void setOverlayMode(QPainter::CompositionMode mode);
 	void setBackgroundColor(const QColor &color);
 	void useOpenGL(bool use);
 	void useAntiAliasing(bool use);
@@ -185,11 +188,14 @@ private:
 	qreal _res;
 
 	Map *_map;
+	Map* _overlay;
 	POI *_poi;
 	QGeoPositionInfoSource *_positionSource;
 
 	Palette _palette;
 	qreal _mapOpacity;
+	qreal _overlayOpacity;
+	QPainter::CompositionMode _overlayMode;
 	Projection _outputProjection, _inputProjection;
 
 	bool _showMap, _showTracks, _showRoutes, _showAreas, _showWaypoints,

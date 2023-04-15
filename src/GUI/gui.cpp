@@ -1943,6 +1943,12 @@ void GUI::mapChanged(QAction *action)
 	_mapView->setMap(_map);
 }
 
+void GUI::overlayChanged(QAction *action)
+{
+	_overlay = action->data().value<Map*>();
+	_mapView->setOverlay(action->isChecked()? _overlay : nullptr);
+}
+
 void GUI::nextMap()
 {
 	QAction *checked = _mapsActionGroup->checkedAction();

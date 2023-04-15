@@ -37,7 +37,7 @@
 
 MapView::MapView(Map *map, POI *poi, QWidget *parent) : QGraphicsView(parent)
 {
-	Q_ASSERT(map != 0);
+    Q_ASSERT(map != 0);
 	Q_ASSERT(poi != 0);
 
 	_scene = new GraphicsScene(this);
@@ -67,6 +67,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent) : QGraphicsView(parent)
 	_map->setOutputProjection(_outputProjection);
 	_map->setInputProjection(_inputProjection);
 	connect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
+	_overlay = nullptr;
 
 	_poi = poi;
 	connect(_poi, &POI::pointsChanged, this, &MapView::updatePOI);
@@ -327,8 +328,10 @@ int MapView::fitMapZoom() const
 {
 	RectC br = _tr | _rr | _wr | _ar;
 
-	return _map->zoomFit(viewport()->size() - QSize(2*MARGIN, 2*MARGIN),
+	int z = _map->zoomFit(viewport()->size() - QSize(2*MARGIN, 2*MARGIN),
 	  br.isNull() ? _map->llBounds() : br);
+	_overlay->setZoom(z);
+	return z;
 }
 
 QPointF MapView::contentCenter() const
@@ -396,14 +399,41 @@ void MapView::setPalette(const Palette &palette)
 		_areas.at(i)->setColor(_palette.nextColor());
 }
 
+void MapView::setOverlay(Map *map)
+{
+
+	if (_overlay && _overlay != _map) { // nothings prevents map == overlay
+		_overlay->unload();
+		// qInfo("_overlay unloaded %s", qPrintable(_overlay->name()));
+		// disconnect(_overlay, &Map::tilesLoaded, this, &MapView::reloadMap);
+	}
+	_overlay = map;
+
+	if (_overlay) {
+
+		_overlay->load();
+		_overlay->setOutputProjection(_outputProjection);
+		_overlay->setInputProjection(_inputProjection);
+		_overlay->setDevicePixelRatio(_deviceRatio, _mapRatio);
+		// connect(_overlay, &Map::tilesLoaded, this, &MapView::reloadMap);
+
+		_overlay->setZoom(_map->zoom());
+		// qInfo("_overlay loaded %s", qPrintable(_overlay->name()));
+	}
+	reloadMap();
+}
+
 void MapView::setMap(Map *map)
 {
+
 	QRectF vr(mapToScene(viewport()->rect()).boundingRect()
 	  .intersected(_map->bounds()));
 	RectC cr(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
 
-	_map->unload();
-	disconnect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
+	if (_overlay != _map) {
+		_map->unload();
+		disconnect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
+	}
 
 	_map = map;
 	_map->load();
@@ -415,6 +445,7 @@ void MapView::setMap(Map *map)
 	digitalZoom(0);
 
 	_map->zoomFit(viewport()->rect().size(), cr);
+	if (_overlay) _overlay->setZoom(_map->zoom());
 	_scene->setSceneRect(_map->bounds());
 
 	for (int i = 0; i < _tracks.size(); i++)
@@ -607,6 +638,9 @@ void MapView::zoom(int zoom, const QPoint &pos, bool shift)
 		Coordinates c = _map->xy2ll(mapToScene(pos));
 		int oz = _map->zoom();
 		int nz = (zoom > 0) ? _map->zoomIn() : _map->zoomOut();
+		if (_overlay) {
+			_overlay->setZoom(_map->zoom());
+		}
 
 		if (nz != oz) {
 			rescale();
@@ -1097,6 +1131,18 @@ void MapView::setMapOpacity(int opacity)
 	reloadMap();
 }
 
+void MapView::setOverlayOpacity(int opacity)
+{
+	_overlayOpacity = opacity / 100.0;
+	reloadMap();
+}
+
+void MapView::setOverlayMode(QPainter::CompositionMode mode)
+{
+	_overlayMode = mode;
+	reloadMap();
+}
+
 void MapView::setBackgroundColor(const QColor &color)
 {
 	_backgroundColor = color;
@@ -1124,6 +1170,12 @@ void MapView::drawBackground(QPainter *painter, const QRectF &rect)
 			flags = Map::OpenGL;
 
 		_map->draw(painter, ir, flags);
+
+		if (_overlay) {
+			painter->setOpacity(_overlayOpacity);
+			painter->setCompositionMode(_overlayMode); //QPainter::CompositionMode::CompositionMode_Multiply
+			_overlay->draw(painter, ir, flags);
+		}
 	}
 }
 
@@ -1299,6 +1351,7 @@ void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
 	RectC cr(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
 
 	_map->setDevicePixelRatio(_deviceRatio, _mapRatio);
+	if (_overlay) _overlay->setDevicePixelRatio(_deviceRatio, _mapRatio);
 	_scene->setSceneRect(_map->bounds());
 
 	for (int i = 0; i < _tracks.size(); i++)
