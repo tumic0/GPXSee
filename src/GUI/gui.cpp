@@ -124,17 +124,17 @@ void GUI::createBrowser()
 	  &GUI::updateNavigationActions);
 }
 
-TreeNode<MapAction*> GUI::createMapActionsNode(const TreeNode<Map*> &node)
+TreeNode<MapAction*> GUI::createMapActionsNode(const TreeNode<Map*> &node, QActionGroup* actionGroup)
 {
 	TreeNode<MapAction*> tree(node.name());
 
 	for (int i = 0; i < node.childs().size(); i++)
-		tree.addChild(createMapActionsNode(node.childs().at(i)));
+		tree.addChild(createMapActionsNode(node.childs().at(i), actionGroup));
 
 	for (int i = 0; i < node.items().size(); i++) {
 		Map *map = node.items().at(i);
 		if (map->isValid()) {
-			MapAction *a = new MapAction(map, _mapsActionGroup);
+			MapAction *a = new MapAction(map, actionGroup);
 			connect(a, &MapAction::loaded, this, &GUI::mapInitialized);
 			tree.addItem(a);
 		} else
@@ -305,6 +305,9 @@ void GUI::createActions()
 	_mapsActionGroup = new QActionGroup(this);
 	_mapsActionGroup->setExclusive(true);
 	connect(_mapsActionGroup, &QActionGroup::triggered, this, &GUI::mapChanged);
+	_overlaysActionGroup = new QActionGroup(this);
+	_overlaysActionGroup->setExclusionPolicy(QActionGroup::ExclusionPolicy::ExclusiveOptional);
+	connect(_overlaysActionGroup, &QActionGroup::triggered, this, &GUI::overlayChanged);
 	_showMapAction = new QAction(QIcon(SHOW_MAP_ICON), tr("Show map"),
 	  this);
 	_showMapAction->setEnabled(false);
@@ -626,7 +629,9 @@ void GUI::createMenus()
 #endif // Q_OS_MAC + Q_OS_ANDROID
 
 	_mapMenu = menuBar()->addMenu(tr("&Map"));
-	_mapsEnd = _mapMenu->addSeparator();
+	_mapsEnd = _mapMenu->addSeparator(); // separates map list from the following static items
+	_overlayMenu = _mapMenu->addMenu(tr("Overlay"));
+	_overlaysEnd = _overlayMenu->addSeparator();
 	_mapMenu->addAction(_loadMapAction);
 	_mapMenu->addAction(_loadMapDirAction);
 	_mapMenu->addAction(_clearMapCacheAction);
@@ -1686,9 +1691,9 @@ bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 
 	for (int i = 0; i < node.items().size(); i++) {
 		Map *map = node.items().at(i);
-		MapAction *a;
+		MapAction *a, *oa;
 
-		if (!(a = findMapAction(existingActions, map))) {
+		if (!(a = findMapAction(existingActions, map))) { // map not loaded yet
 			if (!map->isValid()) {
 				if (!silent)
 					QMessageBox::critical(this, APP_NAME,
@@ -1696,10 +1701,12 @@ bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 					  + Util::displayName(map->path()) + "\n\n"
 					  + map->errorString());
 				delete map;
-			} else {
+			} else {  // new valid map
 				valid = true;
 				a = new MapAction(map, _mapsActionGroup);
-				_mapMenu->insertAction(_mapsEnd, a);
+				_mapMenu->insertAction(_mapsEnd, a);  // add it to the QMenu
+				oa = new MapAction(map, _overlaysActionGroup);
+				_overlayMenu->addAction(oa);
 
 				if (map->isReady()) {
 					action = a;
@@ -1708,7 +1715,7 @@ bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 				} else
 					connect(a, &MapAction::loaded, this, &GUI::mapLoaded);
 			}
-		} else {
+		} else { // duplicate map
 			valid = true;
 			map = a->data().value<Map*>();
 			if (map->isReady())
@@ -1765,17 +1772,19 @@ void GUI::mapLoadedDir()
 }
 
 void GUI::loadMapDirNode(const TreeNode<Map *> &node, QList<MapAction*> &actions,
-  QMenu *menu, const QList<QAction*> &existingActions)
+  QMenu *menu, QMenu *omenu, const QList<QAction*> &existingActions)
 {
 	for (int i = 0; i < node.childs().size(); i++) {
-		QMenu *cm = new QMenu(node.childs().at(i).name(), menu);
+		QMenu *cm = new QMenu(node.childs().at(i).name(), menu); // submenu
+		QMenu *ocm = new QMenu(node.childs().at(i).name(), menu); // submenu
 		menu->addMenu(cm);
-		loadMapDirNode(node.childs().at(i), actions, cm, existingActions);
+		omenu->addMenu(ocm);
+		loadMapDirNode(node.childs().at(i), actions, cm, ocm, existingActions);
 	}
 
 	for (int i = 0; i < node.items().size(); i++) {
 		Map *map = node.items().at(i);
-		MapAction *a;
+		MapAction *a, *oa;
 
 		if (!(a = findMapAction(existingActions, map))) {
 			if (!map->isValid()) {
@@ -1786,6 +1795,8 @@ void GUI::loadMapDirNode(const TreeNode<Map *> &node, QList<MapAction*> &actions
 			} else {
 				a = new MapAction(map, _mapsActionGroup);
 				menu->addAction(a);
+				oa = new MapAction(map, _overlaysActionGroup);
+				omenu->addAction(oa);
 
 				if (map->isReady()) {
 					_showMapAction->setEnabled(true);
@@ -1817,17 +1828,21 @@ void GUI::loadMapDir()
 	QList<QAction*> existingActions(_mapsActionGroup->actions());
 	QList<MapAction*> actions;
 	QMenu *menu = new QMenu(maps.name());
+	QMenu *omenu = new QMenu(maps.name());
 
-	loadMapDirNode(maps, actions, menu, existingActions);
+	loadMapDirNode(maps, actions, menu, omenu, existingActions);
 
 	_mapView->loadMaps(actions);
 
-	if (menu->isEmpty())
+	if (menu->isEmpty()) {
 		delete menu;
-	else
+		delete omenu;
+	} else {
 		_mapMenu->insertMenu(_mapsEnd, menu);
-
+		_overlayMenu->addMenu(omenu);
+	}
 	_mapDir = fi.absolutePath();
+
 	_fileActionGroup->setEnabled(true);
 	_reloadFileAction->setEnabled(false);
 }
@@ -2934,7 +2949,7 @@ void GUI::updateOptions(const Options &options)
 	updateDEMDownloadAction();
 }
 
-void GUI::loadInitialMaps(const QString &selected)
+void GUI::loadInitialMaps(const QString &selected, const QString &selectedOverlay)
 {
 	// Load the maps
 	QString mapDir(ProgramPaths::mapDir());
@@ -2943,7 +2958,8 @@ void GUI::loadInitialMaps(const QString &selected)
 
 	TreeNode<Map*> maps(MapList::loadMaps(mapDir,
 	  CRS::projection(_options.inputProjection)));
-	createMapNodeMenu(createMapActionsNode(maps), _mapMenu, _mapsEnd);
+	createMapNodeMenu(createMapActionsNode(maps, _mapsActionGroup), _mapMenu, _mapsEnd);
+	createMapNodeMenu(createMapActionsNode(maps, _overlaysActionGroup), _overlayMenu, _overlaysEnd);
 
 	// Select the active map according to the user settings
 	QAction *ma = mapAction(selected);
@@ -2951,6 +2967,13 @@ void GUI::loadInitialMaps(const QString &selected)
 		ma->trigger();
 		_showMapAction->setEnabled(true);
 		_clearMapCacheAction->setEnabled(true);
+
+		// Select the active overlay according to the user settings
+		if (selectedOverlay.size()) {
+			QAction *moa = overlayAction(selectedOverlay);
+			if (moa)
+				moa->trigger();
+		}
 	}
 }
 
@@ -3000,6 +3023,18 @@ QAction *GUI::mapAction(const QString &name)
 	}
 
 	return 0;
+}
+
+QAction *GUI::overlayAction(const QString &name)
+{
+	QList<QAction *> maps(_overlaysActionGroup->actions());
+
+	for (int i = 0; i < maps.count(); i++) {
+		Map *map = maps.at(i)->data().value<Map*>();
+		if (map->name() == name && map->isReady())
+			return maps.at(i);
+	}
+	return nullptr;
 }
 
 Units GUI::units() const

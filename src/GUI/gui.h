@@ -91,6 +91,7 @@ private slots:
 	void showDEMTiles();
 
 	void mapChanged(QAction *action);
+	void overlayChanged(QAction *action);
 	void graphChanged(int);
 	void poiFileChecked(QAction *action);
 	void selectAllPOIs();
@@ -133,7 +134,8 @@ private:
 	qreal graphPlotHeight(const QRectF &rect, qreal ratio);
 
 	TreeNode<POIAction*> createPOIActionsNode(const TreeNode<QString> &node);
-	TreeNode<MapAction*> createMapActionsNode(const TreeNode<Map*> &node);
+	TreeNode<MapAction*> createMapActionsNode(const TreeNode<Map*> &node, QActionGroup* actionGroup);
+
 	void createMapNodeMenu(const TreeNode<MapAction*> &node, QMenu *menu,
 	  QAction *action = 0);
 	void createPOINodeMenu(const TreeNode<POIAction*> &node, QMenu *menu,
@@ -156,7 +158,7 @@ private:
 	bool loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 	  bool silent, const QList<QAction*> &existingActions);
 	void loadMapDirNode(const TreeNode<Map*> &node, QList<MapAction*> &actions,
-	  QMenu *menu, const QList<QAction*> &existingActions);
+	  QMenu *menu, QMenu *ovrmenu, const QList<QAction*> &existingActions);
 	void updateStatusBarInfo();
 	void updateWindowTitle();
 	bool updateGraphTabs();
@@ -173,6 +175,7 @@ private:
 	qreal time() const;
 	qreal movingTime() const;
 	QAction *mapAction(const QString &name);
+	QAction *overlayAction(const QString &name);
 	QGeoPositionInfoSource *positionSource(const Options &options);
 	void readSettings(QString &activeMap, QStringList &disabledPOIs);
 
@@ -198,10 +201,12 @@ private:
 #endif // Q_OS_ANDROID
 	QMenu *_poiMenu;
 	QMenu *_mapMenu;
+	QMenu *_overlayMenu;
 
 	QActionGroup *_fileActionGroup;
 	QActionGroup *_navigationActionGroup;
 	QActionGroup *_mapsActionGroup;
+	QActionGroup *_overlaysActionGroup;
 	QActionGroup *_poisActionGroup;
 #if !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
 	QAction *_exitAction;
@@ -275,6 +280,7 @@ private:
 	QAction *_downloadDEMAction;
 	QAction *_showDEMTilesAction;
 	QAction *_mapsEnd;
+	QAction *_overlaysEnd;
 	QAction *_poisEnd;
 
 	QLabel *_fileNameLabel;
