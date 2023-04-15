@@ -16,8 +16,14 @@ public:
 	RectC llBounds() {return _bounds;}
 	qreal resolution(const QRectF &rect);
 
-	int zoom() const {return _zi;}
-	void setZoom(int zoom) {_zi = zoom;}
+	int zoom() const {return _zooms.at(_zi);}
+	void setZoom(int zoom) {
+		for (int i = 1; i < _zooms.size(); i++) {
+			if (_zooms.at(i) > zoom)
+				break;
+			_zi = i;
+		}
+	}
 	int zoomFit(const QSize &size, const RectC &rect);
 	int zoomIn();
 	int zoomOut();
