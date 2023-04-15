@@ -261,7 +261,8 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	int zoom = _zooms.at(_zi);
 	qreal scale = OSM::zoom2scale(zoom, _tileSize);
 	QRectF b(bounds());
-
+	// qInfo("MBT %s with _zi=%d z=%d :: draw rect = (%f, %f, %f, %f ) -> scale %f, bounds (%f, %f, %f, %f )",
+	// 	qPrintable(name()), _zi, _zooms.at(_zi), rect.left(), rect.bottom(), rect.right(), rect.top(), scale, b.left(), b.bottom(), b.right(), b.top());
 
 	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * coordinatesRatio(), zoom);
