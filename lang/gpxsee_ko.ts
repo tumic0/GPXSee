@@ -30,12 +30,12 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>평균</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="30"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>최대</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="33"/>
@@ -200,25 +200,25 @@
         <location filename="../src/GUI/elevationgraph.cpp" line="60"/>
         <source>Up</source>
         <extracomment>Use an Unicode arrow (U+2197) when there is no abbreviation or extremly short term for &quot;Up&quot; in your language</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>위</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="64"/>
         <source>Down</source>
         <extracomment>Use an Unicode arrow (U+2198) when there is no abbreviation or extremly short term for &quot;Down&quot; in your language</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>아래</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="67"/>
         <source>Max</source>
         <extracomment>Use an abbreviation or a extremly short term</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>최대</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="70"/>
         <source>Min</source>
         <extracomment>Use an abbreviation or a extremly short term</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>최소</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="73"/>
@@ -374,7 +374,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="217"/>
         <source>Open directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>디렉터리 열기...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="222"/>
@@ -556,7 +556,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="430"/>
         <source>Use styles</source>
-        <translation type="unfinished"></translation>
+        <translation>스타일 사용</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="437"/>
@@ -603,7 +603,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
         <source>Show tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>탭 표시</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="489"/>
@@ -901,7 +901,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="960"/>
         <source>Open directory</source>
-        <translation type="unfinished"></translation>
+        <translation>디렉터리 열기</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1010"/>
@@ -1033,17 +1033,17 @@
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="28"/>
         <source>Top</source>
-        <translation type="unfinished"></translation>
+        <translation>상단</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="30"/>
         <source>Min</source>
-        <translation type="unfinished"></translation>
+        <translation>최소</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="32"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>최대</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="35"/>
@@ -1155,12 +1155,12 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>평균</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="30"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>최대</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="33"/>
@@ -1215,7 +1215,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="157"/>
         <source>Electronic Navigational Charts</source>
-        <translation type="unfinished"></translation>
+        <translation>전자 항법 차트</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="158"/>
@@ -1225,7 +1225,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="159"/>
         <source>GEMF maps</source>
-        <translation type="unfinished"></translation>
+        <translation>GEMF 지도</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="160"/>
@@ -1265,7 +1265,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="168"/>
         <source>Orux maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Orux 지도</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="169"/>
@@ -1280,7 +1280,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="171"/>
         <source>Osmdroid SQLite maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Osmdroid SQLite 지도</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="172"/>
@@ -1354,12 +1354,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="64"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
-        <translation type="unfinished"></translation>
+        <translation>CRS 정의가 없는 지도 (JNX, KMZ 및 World 파일 맵)의 적절한 좌표 참조 시스템(CRS)을 선택합니다.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="67"/>
         <source>Select the desired projection of vector maps (IMG, Mapsforge and ENC maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>원하는 벡터 지도 투영(IMG, Mapsforge 및 ENC 지도)을 선택합니다. 투영은 전체 지도 영역에 대해 유효해야 합니다.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="71"/>
@@ -1919,7 +1919,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="752"/>
         <source>DEM cache size:</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM 캐시 크기:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="772"/>
@@ -2164,12 +2164,12 @@
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>평균</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="30"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>최대</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="33"/>
@@ -2284,12 +2284,12 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="35"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>평균</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="37"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>최대</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="40"/>
@@ -2381,17 +2381,17 @@
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>평균</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="30"/>
         <source>Min</source>
-        <translation type="unfinished"></translation>
+        <translation>최소</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="32"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>최대</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="35"/>
