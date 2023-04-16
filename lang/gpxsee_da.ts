@@ -1718,12 +1718,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="64"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
-        <translation type="unfinished"></translation>
+        <translation>Vælg det korrekte koordinatreferencesystem (KRS) for kort uden en KRS-definition (JNX-, KMZ- og World-filkort).</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="67"/>
         <source>Select the desired projection of vector maps (IMG, Mapsforge and ENC maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vælg den ønskede projektion af vektorkort (IMG-, Mapsforge- og ENC-kort). Projektionen skal være gyldig for hele kortområdet.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="98"/>
@@ -1920,7 +1920,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="752"/>
         <source>DEM cache size:</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM-cachestørrelse:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="772"/>
