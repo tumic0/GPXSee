@@ -253,6 +253,7 @@ void Style::pointStyle()
 	_points[TYPE(RTPBCN)] = Point(QImage(":/marine/radar-transponder.png"));
 	_points[TYPE(SILTNK)] = Point(QImage(":/marine/silo.png"));
 	_points[TYPE(I_TRNBSN)] = Point(QImage(":/marine/turning-basin.png"));
+	_points[TYPE(I_TRNBSN)].setTextColor(QColor("#eb49eb"));
 	_points[TYPE(I_WTWGAG)] = Point(QImage(":/marine/gauge.png"), Small);
 	_points[TYPE(RDOCAL)].setTextColor(QColor("#eb49eb"));
 	_points[TYPE(I_RDOCAL)].setTextColor(QColor("#eb49eb"));
