@@ -144,7 +144,8 @@ void GPXParser::trkptExtensions(Trackpoint &trackpoint)
 			trackpoint.setTemperature(number());
 		else if (_reader.name() == QLatin1String("cadence"))
 			trackpoint.setCadence(number());
-		else if (_reader.name() == QLatin1String("power"))
+		else if (_reader.name() == QLatin1String("power")
+		  || _reader.name() == QLatin1String("PowerInWatts"))
 			trackpoint.setPower(number());
 		else if (_reader.name() == QLatin1String("TrackPointExtension"))
 			tpExtension(trackpoint);
