@@ -73,5 +73,5 @@ different, GPL compatible, licenses:
   [Polyconic](src/map/proj/polyconic.cpp) and
   [Transverse Mercator](src/map/proj/transversemercator.cpp) projections - NIMA
   Source Code Disclaimer
-* [Projection parameters CSV files](pkg/csv) - BSD/EPSG/Public domain
-* [Mapsforge render theme](data/default.xml) and its [icons](icons/map/mapsforge) - LGPLv3
+* [Projection parameters CSV files](data/CRS) - BSD/EPSG/Public domain
+* [Mapsforge render theme](data/mapsforge/default.xml) and its [icons](icons/map/mapsforge) - LGPLv3
