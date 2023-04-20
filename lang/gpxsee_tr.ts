@@ -1725,12 +1725,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="64"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
-        <translation type="unfinished"></translation>
+        <translation>CRS tanımı olmayan haritaların (JNX, KMZ ve Dünya dosya haritaları) uygun koordinat referans sistemini (CRS) seçin.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="67"/>
         <source>Select the desired projection of vector maps (IMG, Mapsforge and ENC maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vektör haritalarının (IMG, Mapsforge ve ENC haritaları) istenen iz düşümünü seçin. İz düşümü tüm harita alanı için geçerli olmalıdır.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="98"/>
