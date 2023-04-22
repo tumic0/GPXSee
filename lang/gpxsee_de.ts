@@ -1427,12 +1427,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="64"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
-        <translation type="unfinished"></translation>
+        <translation>Wählen Sie das richtige Koordinatenbezugssystem (CRS) von Karten, die kein CRS enthalten (JNX, KMZ und World-File Karten).</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="67"/>
         <source>Select the desired projection of vector maps (IMG, Mapsforge and ENC maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wählen Sie die gewünschte Projektion von Vektorkarten (IMG, Mapsforge und ENC-Karten). Die Projektion muss im gesamten Kartenbereich gültig sein.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="71"/>
