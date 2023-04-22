@@ -709,6 +709,12 @@
         <translation>Pozíció</translation>
     </message>
     <message>
+        <location filename="../src/GUI/gui.cpp" line="907"/>
+        <location filename="../src/GUI/gui.cpp" line="925"/>
+        <source>CRS directory:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/GUI/gui.cpp" line="913"/>
         <location filename="../src/GUI/gui.cpp" line="931"/>
         <source>Symbols directory:</source>
@@ -879,10 +885,8 @@
         <translation>POI mappa:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="907"/>
-        <location filename="../src/GUI/gui.cpp" line="925"/>
         <source>GCS/PCS directory:</source>
-        <translation>GCS/PCS mappa:</translation>
+        <translation type="vanished">GCS/PCS mappa:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="909"/>
@@ -1344,22 +1348,22 @@
 <context>
     <name>OptionsDialog</name>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="71"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="77"/>
         <source>High-resolution</source>
         <translation>Nagy felbontás</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="72"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="78"/>
         <source>Standard</source>
         <translation>Alap</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="77"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="83"/>
         <source>Non-HiDPI maps are loaded as HiDPI maps. The map is sharp but map objects are small/hard to read.</source>
         <translation>A nem HiDPI térképek HiDPI térképként töltődnek be. A térkép éles lesz, de a térképobjektumok kicsik / nehezen olvashatóak lesznek.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="79"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="85"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
         <translation>A nem HiDPI térképek változatlan formában töltődnek be. A térképobjektumok a várt méretűek, de a térkép kissé homályos lesz.</translation>
     </message>
@@ -1372,612 +1376,612 @@
         <translation type="vanished">Válaszd ki a vektortérképek kívánt vetületét (IMG és Mapsforge térképek). A vetületnek a térkép teljes területén érvényesnek kell lennie.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="89"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="95"/>
         <source>Input</source>
         <translation>Bemenet</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="91"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="97"/>
         <source>Output</source>
         <translation>Kimenet</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="123"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="129"/>
         <source>HiDPI display mode</source>
         <translation>HiDPI megjelenítési mód</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="160"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="166"/>
         <source>Track width:</source>
         <translation>Nyomvonalak vonalvastagsága:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="161"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="167"/>
         <source>Track style:</source>
         <translation>Nyomvonalak stílusa:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="177"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="182"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="187"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="183"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="188"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="193"/>
         <source>Width:</source>
         <translation>Vastagság:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="178"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="183"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="188"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="184"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="189"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="194"/>
         <source>Style:</source>
         <translation>Stílus:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="179"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="185"/>
         <source>Tracks</source>
         <translation>Nyomvonalak</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="163"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="169"/>
         <source>Route width:</source>
         <translation>Útvonalak vonalvastagsága:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="164"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="170"/>
         <source>Route style:</source>
         <translation>Útvonalak vonalstílusa:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="184"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="190"/>
         <source>Routes</source>
         <translation>Útvonalak</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="166"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="172"/>
         <source>Area border width:</source>
         <translation>Terület szegélyszélessége:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="167"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="173"/>
         <source>Area border style:</source>
         <translation>Területhatár stílusa:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="168"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="174"/>
         <source>Area fill opacity:</source>
         <translation>Átlátszóság:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="189"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="195"/>
         <source>Fill opacity:</source>
         <translation>Átlátszóság:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="190"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="196"/>
         <source>Areas</source>
         <translation>Területek határvonala</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="170"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="193"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="176"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="199"/>
         <source>Base color:</source>
         <translation>Alapszín (egy nyomvonal):</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="171"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="194"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="177"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="200"/>
         <source>Palette shift:</source>
         <translation>Színhasonlóság (továbbiak):</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="154"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="255"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="160"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="261"/>
         <source>Use anti-aliasing</source>
         <translation>Élsimítás be</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="224"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="230"/>
         <source>Waypoint color:</source>
         <translation>Köztespont szín:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="225"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="231"/>
         <source>Waypoint size:</source>
         <translation>Köztespont méret:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="232"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="237"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="238"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="243"/>
         <source>Color:</source>
         <translation>Szín:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="233"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="238"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="239"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="244"/>
         <source>Size:</source>
         <translation>Méret:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="234"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="240"/>
         <source>Waypoints</source>
         <translation>Köztespontok</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="227"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="233"/>
         <source>POI color:</source>
         <translation>POI szín:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="228"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="234"/>
         <source>POI size:</source>
         <translation>POI méret:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="239"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="245"/>
         <source>POIs</source>
         <translation>POI-k</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="261"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="267"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="273"/>
         <source>Line width:</source>
         <translation>Vonalvastagság:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="262"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="268"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="274"/>
         <source>Slider color:</source>
         <translation>Csúszka színe:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="293"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="299"/>
         <source>Background color:</source>
         <translation>Háttérszín:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="294"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="300"/>
         <source>Map opacity:</source>
         <translation>Térkép átlátszatlansága:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="312"/>
         <source>Paths</source>
         <translation>Utak</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="307"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="313"/>
         <source>Points</source>
         <translation>Pontok</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="308"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="711"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="314"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="717"/>
         <source>Graphs</source>
         <translation>Grafikonok</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="309"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="315"/>
         <source>Map</source>
         <translation>Térkép</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="316"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="322"/>
         <source>Moving average window size</source>
         <translation>Interpoláció ablakmérete</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="341"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="351"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="468"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="347"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="357"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="474"/>
         <source>Elevation:</source>
         <translation>Magasság:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="342"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="352"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="467"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="348"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="358"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="473"/>
         <source>Speed:</source>
         <translation>Sebesség:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="343"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="353"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="349"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="359"/>
         <source>Heart rate:</source>
         <translation>Pulzusszám:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="344"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="354"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="350"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="360"/>
         <source>Cadence:</source>
         <translation>Ütem:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="345"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="355"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="351"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="361"/>
         <source>Power:</source>
         <translation>Teljesítmény:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="340"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="358"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="346"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="364"/>
         <source>Smoothing</source>
         <translation>Grafikon simítása</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="334"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="340"/>
         <source>Eliminate GPS outliers</source>
         <translation>Kiugró GPS adatok figyelmen kívül hagyása</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="368"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="374"/>
         <source>Automatic</source>
         <translation>Automatikus</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="369"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="419"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="375"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="425"/>
         <source>Custom</source>
         <translation>Egyéni</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="382"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="388"/>
         <source>mi/h</source>
         <translation>mph</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="385"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="391"/>
         <source>kn</source>
         <translation>csomó</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="388"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="394"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="392"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="738"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="398"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="744"/>
         <source>s</source>
         <translation>mp</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="515"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="521"/>
         <source>Minimal speed:</source>
         <translation>Ennél kisebb sebesség:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="516"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="522"/>
         <source>Minimal duration:</source>
         <translation>legalább ennyi ideig:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="399"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="405"/>
         <source>Computed from distance/time</source>
         <translation>Számított sebesség</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="400"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="406"/>
         <source>Recorded by device</source>
         <translation>Az eszköz által rögzített</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="405"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="411"/>
         <source>Show secondary speed</source>
         <translation>Másodlagos sebesség mutatása</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="408"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="414"/>
         <source>GPS data</source>
         <translation>GPS adat</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="409"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="415"/>
         <source>DEM data</source>
         <translation>DEM adat</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="414"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="420"/>
         <source>Show secondary elevation</source>
         <translation>Másodlagos emelkedés mutatása</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="417"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="423"/>
         <source>UTC</source>
         <translation>UTC</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="438"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="444"/>
         <source>Use segments</source>
         <translation>Szakaszok használata</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="469"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="475"/>
         <source>Time zone:</source>
         <translation>Időzóna:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="483"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="489"/>
         <source>Speed</source>
         <translation>Sebesség</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="488"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="494"/>
         <source>Elevation</source>
         <translation>Magasság</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="494"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="500"/>
         <source>Time zone</source>
         <translation>Időzóna</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="528"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="534"/>
         <source>Filtering</source>
         <translation>Részletesség</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="527"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="533"/>
         <source>Sources</source>
         <translation>Adatforrások</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="64"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="70"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
         <translation>Válassza ki a megfelelő koordináta referenciarendszert (CRS) a CRS-definíció nélküli térképekhez (JNX, KMZ és világfájltérképek).</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="67"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="73"/>
         <source>Select the desired projection of vector maps (IMG, Mapsforge and ENC maps). The projection must be valid for the whole map area.</source>
         <translation>Válassza ki a vektoros térképek kívánt vetületét (IMG, Mapsforge és ENC térképek). A vetületnek a térkép teljes területére érvényesnek kell lennie.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="295"/>
         <source>Info background</source>
         <translation>Info háttérszín</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="295"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="301"/>
         <source>Crosshair color:</source>
         <translation>Szálkereszt színe:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="296"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="302"/>
         <source>Info color:</source>
         <translation>Info színe:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="529"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="535"/>
         <source>Pause detection</source>
         <translation>Megállás érzékelés</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="541"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="547"/>
         <source>mi</source>
         <translation>mérföld</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="544"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="550"/>
         <source>nmi</source>
         <translation>tengeri mérföld</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="547"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="553"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="551"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="557"/>
         <source>Radius:</source>
         <translation>Láthatóság sugara:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="557"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="827"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="563"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="833"/>
         <source>POI</source>
         <translation>POI</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="574"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="580"/>
         <source>Use HTTP authentication</source>
         <translation>HTTP hitelesítés használata</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="580"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="586"/>
         <source>Use $lat and $lon for NYY/SYY and EXXX/WXXX in the URL.</source>
         <translation>Használj az URL -ben $lat és $lon értékeket a NYY/SYY és az EXXX/WXXX-hez .</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="585"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="598"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="591"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="604"/>
         <source>URL:</source>
         <translation>URL:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="610"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="643"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="616"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="649"/>
         <source>Source</source>
         <translation>Forrás</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="630"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="636"/>
         <source>Plugin:</source>
         <translation>Beépülő:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="650"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="656"/>
         <source>WYSIWYG</source>
         <translation>Alakhű</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="651"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="657"/>
         <source>High-Resolution</source>
         <translation>Nagy felbontás</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="656"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="662"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
         <translation>A nyomtatott terület megközelítőleg a megjelenítési terület. A térképnagyítás mértéke nem változik.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="658"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="664"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
         <translation>A nagyítás mértéke megváltozik, hogy a teljes tartalom (nyomvonal / köztespontok) illeszkedjen a nyomtatott területhez, és a térkép felbontása a lehető legközelebb legyen a nyomtatási felbontáshoz.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="674"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="680"/>
         <source>Name</source>
         <translation>Név</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="676"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="682"/>
         <source>Date</source>
         <translation>Dátum</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="678"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="684"/>
         <source>Distance</source>
         <translation>Távolság</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="680"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="686"/>
         <source>Time</source>
         <translation>Idő</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="682"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="688"/>
         <source>Moving time</source>
         <translation>Mozgásban töltött idő</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="684"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="690"/>
         <source>Item count (&gt;1)</source>
         <translation>nyomvonalak száma (ha&gt;1)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="699"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="705"/>
         <source>Separate graph page</source>
         <translation>A grafikon külön oldalra</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="709"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="715"/>
         <source>Print mode</source>
         <translation>Nyomtatási mód</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="710"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="716"/>
         <source>Header</source>
         <translation>Fejléc</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="718"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="724"/>
         <source>Use OpenGL</source>
         <translation>OpenGL használata</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="720"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="726"/>
         <source>Enable HTTP/2</source>
         <translation>HTTP/2 engedélyezése</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="726"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="732"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="738"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="744"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="751"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="750"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="757"/>
         <source>Image cache size:</source>
         <translation>Kép gyorsítótár mérete:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="745"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="753"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="751"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="759"/>
         <source>Connection timeout:</source>
         <translation>Kapcsolat időtúllépés:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="418"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="788"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="831"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="424"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="794"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="837"/>
         <source>System</source>
         <translation>Rendszer</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="98"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="104"/>
         <source>Input:</source>
         <translation>Bemenet:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="101"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="107"/>
         <source>Output:</source>
         <translation>Kimenet:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="122"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="128"/>
         <source>Projection</source>
         <translation>Vetület</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="752"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="758"/>
         <source>DEM cache size:</source>
         <translation>DEM gyorsítótár:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="772"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="778"/>
         <source>Select the initial paths of the file open dialogues. Leave the field empty for the system default.</source>
         <translation>Alapértelmezetten megnyíló mappa a lenti elemekhez. Üresen hagyva a mezőt, a program által alapértelmezett.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="776"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="782"/>
         <source>Data:</source>
         <translation>Adat:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="777"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="783"/>
         <source>Maps:</source>
         <translation>Térképek:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="778"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="784"/>
         <source>POI:</source>
         <translation>POI:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="789"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="795"/>
         <source>Initial paths</source>
         <translation>Könyvtárak</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="824"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="830"/>
         <source>Appearance</source>
         <translation>Megjelenés</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="825"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="831"/>
         <source>Maps</source>
         <translation>Térképek</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="826"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="832"/>
         <source>Data</source>
         <translation>Adatok</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="828"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="834"/>
         <source>DEM</source>
         <translation>DEM</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="829"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="835"/>
         <source>Position</source>
         <translation>Pozíció</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="830"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="836"/>
         <source>Print &amp; Export</source>
         <translation>Kimenet</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="864"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="870"/>
         <source>Options</source>
         <translation>Beállítások</translation>
     </message>
