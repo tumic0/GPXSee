@@ -3,6 +3,7 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QImageReader>
+#include "common/programpaths.h"
 #include "style.h"
 
 using namespace Mapsforge;
@@ -35,6 +36,48 @@ static QImage image(const QString &path, int width, int height, qreal ratio)
 		return img;
 	} else
 		return QImage(path);
+}
+
+static QList<unsigned> keyList(const MapData &data, const QList<QByteArray> &in)
+{
+	QList<unsigned> out;
+
+	for (int i = 0; i < in.size(); i++) {
+		if (in.at(i) == "*")
+			out.append(0);
+		else {
+			unsigned key = data.tagId(in.at(i));
+			if (key)
+				out.append(key);
+		}
+	}
+
+	return out;
+}
+
+static QList<QByteArray> valList(const QList<QByteArray> &in)
+{
+	QList<QByteArray> out;
+
+	for (int i = 0; i < in.size(); i++) {
+		if (in.at(i) == "*")
+			out.append(QByteArray());
+		else
+			out.append(in.at(i));
+	}
+
+	return out;
+}
+
+Style::Rule::Filter::Filter(const MapData &data, const QList<QByteArray> &keys,
+  const QList<QByteArray> &vals) : _neg(false)
+{
+	_keys = keyList(data, keys);
+
+	QList<QByteArray> vc(vals);
+	if (vc.removeAll("~"))
+		_neg = true;
+	_vals = valList(vc);
 }
 
 bool Style::Rule::match(const QVector<MapData::Tag> &tags) const
@@ -237,7 +280,7 @@ void Style::circle(QXmlStreamReader &reader, const Rule &rule)
 	reader.skipCurrentElement();
 }
 
-void Style::text(QXmlStreamReader &reader, const Rule &rule,
+void Style::text(QXmlStreamReader &reader, const MapData &data, const Rule &rule,
   QList<QList<TextRender>*> &lists)
 {
 	TextRender ri(rule);
@@ -249,7 +292,7 @@ void Style::text(QXmlStreamReader &reader, const Rule &rule,
 	bool ok;
 
 	if (attr.hasAttribute("k"))
-		ri._key = attr.value("k").toLatin1();
+		ri._key = data.tagId(attr.value("k").toLatin1());
 	if (attr.hasAttribute("fill"))
 		ri._fillColor = QColor(attr.value("fill").toString());
 	if (attr.hasAttribute("stroke"))
@@ -357,8 +400,9 @@ void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	reader.skipCurrentElement();
 }
 
-void Style::rule(QXmlStreamReader &reader, const QString &dir, qreal ratio,
-  const QSet<QString> &cats, const Rule &parent)
+void Style::rule(QXmlStreamReader &reader, const QString &dir,
+  const MapData &data, qreal ratio, const QSet<QString> &cats,
+  const Rule &parent)
 {
 	Rule r(parent);
 	const QXmlStreamAttributes &attr = reader.attributes();
@@ -399,11 +443,11 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 
 	QList<QByteArray> keys(attr.value("k").toLatin1().split('|'));
 	QList<QByteArray> vals(attr.value("v").toLatin1().split('|'));
-	r.addFilter(Rule::Filter(keys, vals));
+	r.addFilter(Rule::Filter(data, keys, vals));
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("rule"))
-			rule(reader, dir, ratio, cats, r);
+			rule(reader, dir, data, ratio, cats, r);
 		else if (reader.name() == QLatin1String("area"))
 			area(reader, dir, ratio, r);
 		else if (reader.name() == QLatin1String("line"))
@@ -413,14 +457,14 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 		else if (reader.name() == QLatin1String("pathText")) {
 			QList<QList<TextRender>*> list;
 			list.append(&_pathLabels);
-			text(reader, r, list);
+			text(reader, data, r, list);
 		} else if (reader.name() == QLatin1String("caption")) {
 			QList<QList<TextRender>*> list;
 			if (r._type == Rule::WayType || r._type == Rule::AnyType)
 				list.append(&_areaLabels);
 			if (r._type == Rule::NodeType || r._type == Rule::AnyType)
 				list.append(&_pointLabels);
-			text(reader, r, list);
+			text(reader, data, r, list);
 		}
 		else if (reader.name() == QLatin1String("symbol"))
 			symbol(reader, dir, ratio, r);
@@ -462,14 +506,14 @@ void Style::stylemenu(QXmlStreamReader &reader, QSet<QString> &cats)
 }
 
 void Style::rendertheme(QXmlStreamReader &reader, const QString &dir,
-  qreal ratio)
+  const MapData &data, qreal ratio)
 {
 	Rule r;
 	QSet<QString> cats;
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("rule"))
-			rule(reader, dir, ratio, cats, r);
+			rule(reader, dir, data, ratio, cats, r);
 		else if (reader.name() == QLatin1String("stylemenu"))
 			stylemenu(reader, cats);
 		else
@@ -477,7 +521,7 @@ void Style::rendertheme(QXmlStreamReader &reader, const QString &dir,
 	}
 }
 
-bool Style::loadXml(const QString &path, qreal ratio)
+bool Style::loadXml(const QString &path, const MapData &data, qreal ratio)
 {
 	QFile file(path);
 	if (!file.open(QFile::ReadOnly))
@@ -487,7 +531,7 @@ bool Style::loadXml(const QString &path, qreal ratio)
 
 	if (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("rendertheme"))
-			rendertheme(reader, fi.absolutePath(), ratio);
+			rendertheme(reader, fi.absolutePath(), data, ratio);
 		else
 			reader.raiseError("Not a Mapsforge style file");
 	}
@@ -499,10 +543,22 @@ bool Style::loadXml(const QString &path, qreal ratio)
 	return !reader.error();
 }
 
-Style::Style(const QString &path, qreal ratio)
+void Style::load(const MapData &data, qreal ratio)
 {
-	if (!QFileInfo::exists(path) || !loadXml(path, ratio))
-		loadXml(":/mapsforge/default.xml", ratio);
+	QString path(ProgramPaths::renderthemeFile());
+
+	if (!QFileInfo::exists(path) || !loadXml(path, data, ratio))
+		loadXml(":/mapsforge/default.xml", data, ratio);
+}
+
+void Style::clear()
+{
+	_paths.clear();
+	_circles.clear();
+	_pathLabels.clear();
+	_pointLabels.clear();
+	_areaLabels.clear();
+	_symbols.clear();
 }
 
 QList<const Style::PathRender *> Style::paths(int zoom, bool closed,

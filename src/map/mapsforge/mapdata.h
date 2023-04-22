@@ -9,6 +9,10 @@
 #include "common/range.h"
 #include "common/polygon.h"
 
+#define ID_NAME   1
+#define ID_HOUSE  2
+#define ID_REF    3
+#define ID_ELE    4
 
 namespace Mapsforge {
 
@@ -22,21 +26,12 @@ public:
 
 	struct Tag {
 		Tag() {}
-		Tag(const QByteArray &key, const QByteArray &value)
-		  : key(key), value(value) {}
-		Tag(const QByteArray &str)
-		{
-			QList<QByteArray> l(str.split('='));
-			if (l.size() == 2) {
-				key = l.at(0);
-				value = l.at(1);
-			}
-		}
+		Tag(unsigned key, const QByteArray &value) : key(key), value(value) {}
 
 		bool operator==(const Tag &other) const
 		  {return (key == other.key && value == other.value);}
 
-		QByteArray key;
+		unsigned key;
 		QByteArray value;
 	};
 
@@ -75,6 +70,7 @@ public:
 
 	void points(const RectC &rect, int zoom, QList<Point> *list);
 	void paths(const RectC &rect, int zoom, QList<Path> *set);
+	unsigned tagId(const QByteArray &name) const {return _keys.value(name);}
 
 	void load();
 	void clear();
@@ -128,10 +124,27 @@ private:
 		int zoom;
 	};
 
+	struct TagSource {
+		TagSource() {}
+		TagSource(const QByteArray &str)
+		{
+			QList<QByteArray> l(str.split('='));
+			if (l.size() == 2) {
+				key = l.at(0);
+				value = l.at(1);
+			}
+		}
+
+		QByteArray key;
+		QByteArray value;
+		unsigned id;
+	};
+
 	typedef RTree<VectorTile *, double, 2> TileTree;
 
 	bool readZoomInfo(SubFile &hdr);
 	bool readTagInfo(SubFile &hdr);
+	bool readTagInfo(SubFile &hdr, QVector<TagSource> &tags);
 	bool readMapInfo(SubFile &hdr, QByteArray &projection, bool &debugMap);
 	bool readHeader();
 	bool readSubFiles();
@@ -145,6 +158,8 @@ private:
 	bool readPaths(const VectorTile *tile, int zoom, QList<Path> *list);
 	bool readPoints(const VectorTile *tile, int zoom, QList<Point> *list);
 
+	static bool readTags(SubFile &subfile, int count,
+	  const QVector<TagSource> &tags, QVector<Tag> &list);
 	static bool pathCb(VectorTile *tile, void *context);
 	static bool pointCb(VectorTile *tile, void *context);
 
@@ -153,9 +168,10 @@ private:
 	QFile _file;
 	RectC _bounds;
 	quint16 _tileSize;
-	QVector<Tag> _pointTags, _pathTags;
 	QVector<SubFileInfo> _subFiles;
+	QVector<TagSource> _pointTags, _pathTags;
 	QList<TileTree*> _tiles;
+	QHash<QByteArray, unsigned> _keys;
 
 	QCache<Key, QList<Path> > _pathCache;
 	QCache<Key, QList<Point> > _pointCache;

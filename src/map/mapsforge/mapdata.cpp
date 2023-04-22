@@ -15,6 +15,11 @@ using namespace Mapsforge;
 #define MD(val) ((val) / 1e6)
 #define OFFSET_MASK 0x7FFFFFFFFFL
 
+#define KEY_NAME  "name"
+#define KEY_HOUSE "addr:housenumber"
+#define KEY_REF   "ref"
+#define KEY_ELE   "ele"
+
 static void copyPaths(const RectC &rect, const QList<MapData::Path> *src,
   QList<MapData::Path> *dst)
 {
@@ -41,65 +46,6 @@ static bool isClosed(const Polygon &poly)
 	if (poly.isEmpty() || poly.first().isEmpty())
 		return false;
 	return (distance(poly.first().first(), poly.first().last()) < 0.000000001);
-}
-
-static bool readTags(SubFile &subfile, int count,
-  const QVector<MapData::Tag> &tags, QVector<MapData::Tag> &list)
-{
-	QVector<quint32> ids(count);
-
-	list.resize(count);
-
-	for (int i = 0; i < count; i++) {
-		if (!subfile.readVUInt32(ids[i]))
-			return false;
-		if (ids[i] >= (quint32)tags.size())
-			return false;
-	}
-
-	for (int i = 0; i < count; i++) {
-		const MapData::Tag &tag = tags.at(ids.at(i));
-
-		if (tag.value.length() == 2 && tag.value.at(0) == '%') {
-			QByteArray value;
-
-			if (tag.value.at(1) == 'b') {
-				quint8 b;
-				if (!subfile.readByte(b))
-					return false;
-				value.setNum(b);
-			} else if (tag.value.at(1) == 'i') {
-				qint32 u;
-				if (!subfile.readInt32(u))
-					return false;
-
-				if (tag.key.contains(":colour"))
-					value = QColor((quint32)u).name().toLatin1();
-				else
-					value.setNum(u);
-			} else if (tag.value.at(1) == 'f') {
-				quint32 u;
-				if (!subfile.readUInt32(u))
-					return false;
-				float *f = (float *)&u;
-				value.setNum(*f);
-			} else if (tag.value.at(1) == 'h') {
-				quint16 s;
-				if (!subfile.readUInt16(s))
-					return false;
-				value.setNum(s);
-			} else if (tag.value.at(1) == 's') {
-				if (!subfile.readString(value))
-					return false;
-			} else
-				value = tag.value;
-
-			list[i] = MapData::Tag(tag.key, value);
-		} else
-			list[i] = tag;
-	}
-
-	return true;
 }
 
 static bool readSingleDelta(SubFile &subfile, const Coordinates &c,
@@ -204,6 +150,64 @@ static bool readOffset(QDataStream &stream, quint64 &offset)
 	return (stream.status() == QDataStream::Ok);
 }
 
+bool MapData::readTags(SubFile &subfile, int count,
+  const QVector<TagSource> &tags, QVector<Tag> &list)
+{
+	QVector<quint32> ids(count);
+
+	list.resize(count);
+
+	for (int i = 0; i < count; i++) {
+		if (!subfile.readVUInt32(ids[i]))
+			return false;
+		if (ids[i] >= (quint32)tags.size())
+			return false;
+	}
+
+	for (int i = 0; i < count; i++) {
+		const TagSource &tag = tags.at(ids.at(i));
+
+		if (tag.value.length() == 2 && tag.value.at(0) == '%') {
+			QByteArray value;
+
+			if (tag.value.at(1) == 'b') {
+				quint8 b;
+				if (!subfile.readByte(b))
+					return false;
+				value.setNum(b);
+			} else if (tag.value.at(1) == 'i') {
+				qint32 u;
+				if (!subfile.readInt32(u))
+					return false;
+				if (tag.key.contains(":colour"))
+					value = QColor((quint32)u).name().toLatin1();
+				else
+					value.setNum(u);
+			} else if (tag.value.at(1) == 'f') {
+				quint32 u;
+				if (!subfile.readUInt32(u))
+					return false;
+				float *f = (float *)&u;
+				value.setNum(*f);
+			} else if (tag.value.at(1) == 'h') {
+				quint16 s;
+				if (!subfile.readUInt16(s))
+					return false;
+				value.setNum(s);
+			} else if (tag.value.at(1) == 's') {
+				if (!subfile.readString(value))
+					return false;
+			} else
+				value = tag.value;
+
+			list[i] = MapData::Tag(tag.id, value);
+		} else
+			list[i] = MapData::Tag(tag.id, tag.value);
+	}
+
+	return true;
+}
+
 bool MapData::readSubFiles()
 {
 	QDataStream stream(&_file);
@@ -273,34 +277,43 @@ bool MapData::readZoomInfo(SubFile &hdr)
 	return true;
 }
 
-bool MapData::readTagInfo(SubFile &hdr)
+bool MapData::readTagInfo(SubFile &hdr, QVector<TagSource> &tags)
 {
-	quint16 tags;
-	QByteArray tag;
+	quint16 size;
+	QByteArray str;
 
-	if (!hdr.readUInt16(tags))
+	if (!hdr.readUInt16(size))
 		return false;
-	_pointTags.resize(tags);
-	for (quint16 i = 0; i < tags; i++) {
-		if (!hdr.readString(tag))
-			return false;
-		_pointTags[i] = tag;
-	}
+	tags.resize(size);
 
-	if (!hdr.readUInt16(tags))
-		return false;
-	_pathTags.resize(tags);
-	for (quint16 i = 0; i < tags; i++) {
-		if (!hdr.readString(tag))
+	for (quint16 i = 0; i < size; i++) {
+		TagSource &tag = tags[i];
+		if (!hdr.readString(str))
 			return false;
-		_pathTags[i] = tag;
+		tag = str;
+		unsigned key = _keys.value(tag.key);
+		if (key)
+			tag.id = key;
+		else {
+			tag.id = _keys.size() + 1;
+			_keys.insert(tag.key, tag.id);
+		}
 	}
 
 	return true;
 }
 
-bool MapData::readMapInfo(SubFile &hdr, QByteArray &projection,
-  bool &debugMap)
+bool MapData::readTagInfo(SubFile &hdr)
+{
+	_keys.insert(KEY_NAME, ID_NAME);
+	_keys.insert(KEY_HOUSE, ID_HOUSE);
+	_keys.insert(KEY_REF, ID_REF);
+	_keys.insert(KEY_ELE, ID_ELE);
+
+	return (readTagInfo(hdr, _pointTags) && readTagInfo(hdr, _pathTags));
+}
+
+bool MapData::readMapInfo(SubFile &hdr, QByteArray &projection, bool &debugMap)
 {
 	quint64 fileSize, date;
 	quint32 version;
@@ -592,17 +605,17 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 			if (!subfile.readString(name))
 				return false;
 			name = name.split('\r').first();
-			p.tags.append(Tag("name", name));
+			p.tags.append(Tag(ID_NAME, name));
 		}
 		if (flags & 0x40) {
 			if (!subfile.readString(houseNumber))
 				return false;
-			p.tags.append(Tag("addr:housenumber", houseNumber));
+			p.tags.append(Tag(ID_HOUSE, houseNumber));
 		}
 		if (flags & 0x20) {
 			if (!subfile.readString(reference))
 				return false;
-			p.tags.append(Tag("ref", reference));
+			p.tags.append(Tag(ID_REF, reference));
 		}
 		if (flags & 0x10) {
 			if (!(subfile.readVInt32(lat) && subfile.readVInt32(lon)))
@@ -675,18 +688,18 @@ bool MapData::readPoints(const VectorTile *tile, int zoom, QList<Point> *list)
 			if (!subfile.readString(name))
 				return false;
 			name = name.split('\r').first();
-			p.tags.append(Tag("name", name));
+			p.tags.append(Tag(ID_NAME, name));
 		}
 		if (flags & 0x40) {
 			if (!subfile.readString(houseNumber))
 				return false;
-			p.tags.append(Tag("addr:housenumber", houseNumber));
+			p.tags.append(Tag(ID_HOUSE, houseNumber));
 		}
 		if (flags & 0x20) {
 			qint32 elevation;
 			if (!subfile.readVInt32(elevation))
 				return false;
-			p.tags.append(Tag("ele", QByteArray::number(elevation)));
+			p.tags.append(Tag(ID_ELE, QByteArray::number(elevation)));
 		}
 
 		list->append(p);

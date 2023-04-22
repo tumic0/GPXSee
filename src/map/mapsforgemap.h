@@ -24,7 +24,12 @@ public:
 		_future = QtConcurrent::map(_tiles, &Mapsforge::RasterTile::render);
 		_watcher.setFuture(_future);
 	}
-	void cancel() {_future.cancel();}
+	void cancel(bool wait)
+	{
+		_future.cancel();
+		if (wait)
+			_future.waitForFinished();
+	}
 	const QList<Mapsforge::RasterTile> &tiles() const {return _tiles;}
 
 signals:
@@ -82,9 +87,10 @@ private:
 	bool isRunning(int zoom, const QPoint &xy) const;
 	void runJob(MapsforgeMapJob *job);
 	void removeJob(MapsforgeMapJob *job);
-	void cancelJobs();
+	void cancelJobs(bool wait);
 
 	Mapsforge::MapData _data;
+	Mapsforge::Style _style;
 	int _zoom;
 
 	Projection _projection;

@@ -53,16 +53,8 @@ public:
 		class Filter {
 		public:
 			Filter() : _neg(false) {}
-			Filter(const QList<QByteArray> &keys, const QList<QByteArray> &vals)
-			  : _neg(false)
-			{
-				_keys = list(keys);
-
-				QList<QByteArray> vc(vals);
-				if (vc.removeAll("~"))
-					_neg = true;
-				_vals = list(vc);
-			}
+			Filter(const MapData &data, const QList<QByteArray> &keys,
+			  const QList<QByteArray> &vals);
 
 			bool match(const QVector<MapData::Tag> &tags) const
 			{
@@ -76,30 +68,15 @@ public:
 
 			bool isTautology() const
 			{
-				return (!_neg && _keys.contains(QByteArray())
-				  && _vals.contains(QByteArray()));
+				return (!_neg && _keys.contains(0u) && _vals.contains(QByteArray()));
 			}
 
 		private:
-			static QList<QByteArray> list(const QList<QByteArray> &in)
-			{
-				QList<QByteArray> out;
-
-				for (int i = 0; i < in.size(); i++) {
-					if (in.at(i) == "*")
-						out.append(QByteArray());
-					else
-						out.append(in.at(i));
-				}
-
-				return out;
-			}
-
 			bool keyMatches(const QVector<MapData::Tag> &tags) const
 			{
 				for (int i = 0; i < _keys.size(); i++)
 					for (int j = 0; j < tags.size(); j++)
-						if (wcmp(_keys.at(i), tags.at(j).key))
+						if (!_keys.at(i) || _keys.at(i) == tags.at(j).key)
 							return true;
 
 				return false;
@@ -115,7 +92,7 @@ public:
 				return false;
 			}
 
-			QList<QByteArray> _keys;
+			QList<unsigned> _keys;
 			QList<QByteArray> _vals;
 			bool _neg;
 		};
@@ -218,7 +195,7 @@ public:
 		const QColor &fillColor() const {return _fillColor;}
 		const QColor &strokeColor() const {return _strokeColor;}
 		qreal strokeWidth() const {return _strokeWidth;}
-		const QByteArray &key() const {return _key;}
+		unsigned key() const {return _key;}
 		int priority() const {return _priority;}
 
 	private:
@@ -228,7 +205,7 @@ public:
 		QColor _fillColor, _strokeColor;
 		qreal _strokeWidth;
 		QFont _font;
-		QByteArray _key;
+		unsigned _key;
 	};
 
 	class Symbol : public Render
@@ -246,7 +223,8 @@ public:
 		QImage _img;
 	};
 
-	Style(const QString &path, qreal ratio);
+	void load(const MapData &data, qreal ratio);
+	void clear();
 
 	QList<const PathRender *> paths(int zoom, bool closed,
 	  const QVector<MapData::Tag> &tags) const;
@@ -264,18 +242,19 @@ private:
 	QList<TextRender> _pathLabels, _pointLabels, _areaLabels;
 	QList<Symbol> _symbols;
 
-	bool loadXml(const QString &path, qreal ratio);
-	void rendertheme(QXmlStreamReader &reader, const QString &dir, qreal ratio);
+	bool loadXml(const QString &path, const MapData &data, qreal ratio);
+	void rendertheme(QXmlStreamReader &reader, const QString &dir,
+	  const MapData &data, qreal ratio);
 	void layer(QXmlStreamReader &reader, QSet<QString> &cats);
 	void stylemenu(QXmlStreamReader &reader, QSet<QString> &cats);
 	void cat(QXmlStreamReader &reader, QSet<QString> &cats);
-	void rule(QXmlStreamReader &reader, const QString &dir, qreal ratio,
-	  const QSet<QString> &cats, const Rule &parent);
+	void rule(QXmlStreamReader &reader, const QString &dir, const MapData &data,
+	  qreal ratio, const QSet<QString> &cats, const Rule &parent);
 	void area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	  const Rule &rule);
 	void line(QXmlStreamReader &reader, const Rule &rule);
 	void circle(QXmlStreamReader &reader, const Rule &rule);
-	void text(QXmlStreamReader &reader, const Rule &rule,
+	void text(QXmlStreamReader &reader, const MapData &data, const Rule &rule,
 	  QList<QList<TextRender> *> &lists);
 	void symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	  const Rule &rule);

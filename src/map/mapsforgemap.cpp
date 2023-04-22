@@ -24,11 +24,15 @@ MapsforgeMap::MapsforgeMap(const QString &fileName, QObject *parent)
 void MapsforgeMap::load()
 {
 	_data.load();
+	_style.load(_data, _tileRatio);
 }
 
 void MapsforgeMap::unload()
 {
+	cancelJobs(true);
+
 	_data.clear();
+	_style.clear();
 }
 
 int MapsforgeMap::zoomFit(const QSize &size, const RectC &rect)
@@ -54,7 +58,7 @@ int MapsforgeMap::zoomFit(const QSize &size, const RectC &rect)
 
 int MapsforgeMap::zoomIn()
 {
-	cancelJobs();
+	cancelJobs(false);
 
 	_zoom = qMin(_zoom + 1, _data.zooms().max());
 	updateTransform();
@@ -63,7 +67,7 @@ int MapsforgeMap::zoomIn()
 
 int MapsforgeMap::zoomOut()
 {
-	cancelJobs();
+	cancelJobs(false);
 
 	_zoom = qMax(_zoom - 1, _data.zooms().min());
 	updateTransform();
@@ -148,10 +152,10 @@ void MapsforgeMap::jobFinished(MapsforgeMapJob *job)
 	emit tilesLoaded();
 }
 
-void MapsforgeMap::cancelJobs()
+void MapsforgeMap::cancelJobs(bool wait)
 {
 	for (int i = 0; i < _jobs.size(); i++)
-		_jobs.at(i)->cancel();
+		_jobs.at(i)->cancel(wait);
 }
 
 void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
@@ -198,7 +202,7 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				_data.points(pointRectD.toRectC(_projection, 20), _zoom,
 				  &points);
 
-				tiles.append(RasterTile(_projection, _transform, _zoom,
+				tiles.append(RasterTile(_projection, _transform, &_style, _zoom,
 				  QRect(ttl, QSize(_data.tileSize(), _data.tileSize())),
 				  _tileRatio, paths, points));
 			}

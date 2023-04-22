@@ -14,12 +14,12 @@ namespace Mapsforge {
 class RasterTile
 {
 public:
-	RasterTile(const Projection &proj, const Transform &transform, int zoom,
-	  const QRect &rect, qreal ratio, const QList<MapData::Path> &paths,
-	  const QList<MapData::Point> &points) : _proj(proj), _transform(transform),
-	  _zoom(zoom), _rect(rect), _ratio(ratio),
-	  _pixmap(rect.width() * ratio, rect.height() * ratio), _paths(paths),
-	  _points(points), _valid(false) {}
+	RasterTile(const Projection &proj, const Transform &transform,
+	  const Style *style, int zoom, const QRect &rect, qreal ratio,
+	  const QList<MapData::Path> &paths, const QList<MapData::Point> &points)
+	  : _proj(proj), _transform(transform), _style(style),
+	  _zoom(zoom), _rect(rect), _ratio(ratio), _pixmap(rect.width() * ratio,
+	  rect.height() * ratio), _paths(paths), _points(points), _valid(false) {}
 
 	int zoom() const {return _zoom;}
 	QPoint xy() const {return _rect.topLeft();}
@@ -159,8 +159,10 @@ private:
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
 	void drawPaths(QPainter *painter, QVector<PainterPath> &paths);
 
+
 	Projection _proj;
 	Transform _transform;
+	const Style *_style;
 	int _zoom;
 	QRect _rect;
 	qreal _ratio;

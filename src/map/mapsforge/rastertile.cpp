@@ -5,12 +5,6 @@
 
 using namespace Mapsforge;
 
-static const Style& style(qreal ratio)
-{
-	static Style s(ProgramPaths::renderthemeFile(), ratio);
-	return s;
-}
-
 static qreal area(const QPainterPath &polygon)
 {
 	qreal area = 0;
@@ -41,8 +35,7 @@ static QPointF centroid(const QPainterPath &polygon)
 	return QPointF(cx * factor, cy * factor);
 }
 
-static const QByteArray *label(const QByteArray &key,
-  const QVector<MapData::Tag> &tags)
+static const QByteArray *label(unsigned key, const QVector<MapData::Tag> &tags)
 {
 	for (int i = 0; i < tags.size(); i++) {
 		const MapData::Tag &tag = tags.at(i);
@@ -61,9 +54,8 @@ static const QColor *haloColor(const Style::TextRender *ti)
 
 void RasterTile::processPointLabels(QList<TextItem*> &textItems)
 {
-	const Style &s = style(_ratio);
-	QList<const Style::TextRender*> labels(s.pointLabels(_zoom));
-	QList<const Style::Symbol*> symbols(s.pointSymbols(_zoom));
+	QList<const Style::TextRender*> labels(_style->pointLabels(_zoom));
+	QList<const Style::Symbol*> symbols(_style->pointSymbols(_zoom));
 	QList<PainterPoint> points;
 
 	for (int i = 0; i < _points.size(); i++) {
@@ -115,9 +107,8 @@ void RasterTile::processPointLabels(QList<TextItem*> &textItems)
 void RasterTile::processAreaLabels(QList<TextItem*> &textItems,
   QVector<PainterPath> &paths)
 {
-	const Style &s = style(_ratio);
-	QList<const Style::TextRender*> labels(s.areaLabels(_zoom));
-	QList<const Style::Symbol*> symbols(s.areaSymbols(_zoom));
+	QList<const Style::TextRender*> labels(_style->areaLabels(_zoom));
+	QList<const Style::Symbol*> symbols(_style->areaSymbols(_zoom));
 
 	for (int i = 0; i < paths.size(); i++) {
 		PainterPath &path = paths[i];
@@ -168,8 +159,7 @@ void RasterTile::processAreaLabels(QList<TextItem*> &textItems,
 void RasterTile::processLineLabels(QList<TextItem*> &textItems,
   QVector<PainterPath> &paths)
 {
-	const Style &s = style(_ratio);
-	QList<const Style::TextRender*> instructions(s.pathLabels(_zoom));
+	QList<const Style::TextRender*> instructions(_style->pathLabels(_zoom));
 	QSet<QByteArray> set;
 
 	for (int i = 0; i < instructions.size(); i++) {
@@ -183,9 +173,7 @@ void RasterTile::processLineLabels(QList<TextItem*> &textItems,
 				continue;
 			if (!ri->rule().match(path.path->closed, path.path->tags))
 				continue;
-			bool limit = (ri->key() == "ref" || ri->key() == "ele"
-			  || ri->key() == "ref_hike" || ri->key() == "ref_cycle"
-			  || ri->key() == "ref_mtb");
+			bool limit = (ri->key() == ID_ELE || ri->key() == ID_REF);
 			if (limit && set.contains(*lbl))
 				continue;
 
@@ -242,7 +230,6 @@ void RasterTile::pathInstructions(QVector<PainterPath> &paths,
   QVector<RasterTile::RenderInstruction> &instructions)
 {
 	QCache<PathKey, QList<const Style::PathRender *> > cache(8192);
-	const Style &s = style(_ratio);
 	QList<const Style::PathRender*> *ri;
 
 	for (int i = 0; i < _paths.size(); i++) {
@@ -253,8 +240,8 @@ void RasterTile::pathInstructions(QVector<PainterPath> &paths,
 		rp.path = &path;
 
 		if (!(ri = cache.object(key))) {
-			ri = new QList<const Style::PathRender*>(s.paths(_zoom, path.closed,
-			  path.tags));
+			ri = new QList<const Style::PathRender*>(_style->paths(_zoom,
+			  path.closed, path.tags));
 			for (int j = 0; j < ri->size(); j++)
 				instructions.append(RenderInstruction(ri->at(j), &rp));
 			cache.insert(key, ri);
@@ -269,7 +256,6 @@ void RasterTile::circleInstructions(
   QVector<RasterTile::RenderInstruction> &instructions)
 {
 	QCache<PointKey, QList<const Style::CircleRender *> > cache(8192);
-	const Style &s = style(_ratio);
 	QList<const Style::CircleRender*> *ri;
 
 	for (int i = 0; i < _points.size(); i++) {
@@ -277,7 +263,8 @@ void RasterTile::circleInstructions(
 		PointKey key(_zoom, point.tags);
 
 		if (!(ri = cache.object(key))) {
-			ri = new QList<const Style::CircleRender*>(s.circles(_zoom, point.tags));
+			ri = new QList<const Style::CircleRender*>(_style->circles(_zoom,
+			  point.tags));
 			for (int j = 0; j < ri->size(); j++)
 				instructions.append(RenderInstruction(ri->at(j), &point));
 			cache.insert(key, ri);
