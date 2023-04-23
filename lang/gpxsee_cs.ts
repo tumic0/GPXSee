@@ -882,7 +882,7 @@
         <location filename="../src/GUI/gui.cpp" line="907"/>
         <location filename="../src/GUI/gui.cpp" line="925"/>
         <source>CRS directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresář s CRS daty:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="915"/>
