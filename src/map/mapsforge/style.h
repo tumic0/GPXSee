@@ -74,10 +74,13 @@ public:
 		private:
 			bool keyMatches(const QVector<MapData::Tag> &tags) const
 			{
-				for (int i = 0; i < _keys.size(); i++)
-					for (int j = 0; j < tags.size(); j++)
-						if (!_keys.at(i) || _keys.at(i) == tags.at(j).key)
+				for (int i = 0; i < _keys.size(); i++) {
+					for (int j = 0; j < tags.size(); j++) {
+						unsigned key = _keys.at(i);
+						if (!key || key == tags.at(j).key)
 							return true;
+					}
+				}
 
 				return false;
 			}

@@ -108,8 +108,6 @@ bool Style::Rule::match(int zoom, bool closed,
 {
 	Closed cl = closed ? YesClosed : NoClosed;
 
-	if (_type && WayType != _type)
-		return false;
 	if (!_zooms.contains(zoom))
 		return false;
 	if (_closed && cl != _closed)
@@ -124,8 +122,6 @@ bool Style::Rule::match(int zoom, bool closed,
 
 bool Style::Rule::match(int zoom, const QVector<MapData::Tag> &tags) const
 {
-	if (_type && NodeType != _type)
-		return false;
 	if (!_zooms.contains(zoom))
 		return false;
 
@@ -177,7 +173,8 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	if (!file.isNull())
 		ri._fillImage = image(file, width, height, ratio);
 
-	_paths.append(ri);
+	if (ri.rule()._type == Rule::AnyType || ri.rule()._type == Rule::WayType)
+		_paths.append(ri);
 
 	reader.skipCurrentElement();
 }
@@ -232,7 +229,8 @@ void Style::line(QXmlStreamReader &reader, const Rule &rule)
 			ri._curve = true;
 	}
 
-	_paths.append(ri);
+	if (ri.rule()._type == Rule::AnyType || ri.rule()._type == Rule::WayType)
+		_paths.append(ri);
 
 	reader.skipCurrentElement();
 }
@@ -275,7 +273,8 @@ void Style::circle(QXmlStreamReader &reader, const Rule &rule)
 	  ? QPen(QBrush(strokeColor), strokeWidth) : Qt::NoPen;
 	ri._brush = fillColor.isValid() ? QBrush(fillColor) : Qt::NoBrush;
 
-	_circles.append(ri);
+	if (ri.rule()._type == Rule::AnyType || ri.rule()._type == Rule::NodeType)
+		_circles.append(ri);
 
 	reader.skipCurrentElement();
 }
@@ -370,6 +369,10 @@ void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 
 	if (attr.hasAttribute("src"))
 		file = resourcePath(attr.value("src").toString(), dir);
+	else {
+		reader.raiseError("missing src value");
+		return;
+	}
 	if (attr.hasAttribute("symbol-height")) {
 		height = attr.value("symbol-height").toInt(&ok);
 		if (!ok || height < 0) {
@@ -392,8 +395,7 @@ void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 		}
 	}
 
-	if (!file.isNull())
-		ri._img = image(file, width, height, ratio);
+	ri._img = image(file, width, height, ratio);
 
 	_symbols.append(ri);
 
@@ -639,7 +641,7 @@ QList<const Style::Symbol*> Style::areaSymbols(int zoom) const
 
 	for (int i = 0; i < _symbols.size(); i++) {
 		const Symbol &symbol = _symbols.at(i);
-		const Rule & rule = symbol.rule();
+		const Rule &rule = symbol.rule();
 		if (rule._zooms.contains(zoom) && (rule._type == Rule::AnyType
 		  || rule._type == Rule::WayType))
 			list.append(&symbol);
