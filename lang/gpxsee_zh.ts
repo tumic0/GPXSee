@@ -866,7 +866,7 @@
         <location filename="../src/GUI/gui.cpp" line="907"/>
         <location filename="../src/GUI/gui.cpp" line="925"/>
         <source>CRS directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>CRS 目录：</translation>
     </message>
     <message>
         <source>GCS/PCS directory:</source>
