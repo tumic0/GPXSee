@@ -62,13 +62,12 @@ private:
 	class RenderInstruction
 	{
 	public:
-		RenderInstruction() : _pathRender(0), _circleRender(0), _path(0),
-		  _point(0) {}
+		RenderInstruction() : _render(0), _path(0), _point(0) {}
 		RenderInstruction(const Style::PathRender *render, PainterPath *path)
-		  : _pathRender(render), _circleRender(0), _path(path), _point(0) {}
+		  : _render(render), _path(path), _point(0) {}
 		RenderInstruction(const Style::CircleRender *render,
-		  const MapData::Point *point) : _pathRender(0), _circleRender(render),
-		  _path(0), _point(point) {}
+		  const MapData::Point *point) : _render(render), _path(0),
+		  _point(point) {}
 
 		bool operator<(const RenderInstruction &other) const
 		{
@@ -78,8 +77,10 @@ private:
 				return (layer() < other.layer());
 		}
 
-		const Style::PathRender *pathRender() const {return _pathRender;}
-		const Style::CircleRender *circleRender() const {return _circleRender;}
+		const Style::PathRender *pathRender() const
+		  {return static_cast<const Style::PathRender*>(_render);}
+		const Style::CircleRender *circleRender() const
+		  {return static_cast<const Style::CircleRender*>(_render);}
 		PainterPath *path() const {return _path;}
 		const MapData::Point *point() const {return _point;}
 
@@ -87,11 +88,12 @@ private:
 		int layer() const {return _path ? _path->path->layer : _point->layer;}
 		int zOrder() const
 		{
-			return _pathRender ? _pathRender->zOrder() : _circleRender->zOrder();
+			return _path
+			  ? static_cast<const Style::PathRender*>(_render)->zOrder()
+			  : static_cast<const Style::CircleRender*>(_render)->zOrder();
 		}
 
-		const Style::PathRender *_pathRender;
-		const Style::CircleRender *_circleRender;
+		const Style::Render *_render;
 		PainterPath *_path;
 		const MapData::Point *_point;
 	};

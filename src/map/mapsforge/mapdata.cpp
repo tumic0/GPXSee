@@ -41,11 +41,9 @@ static double distance(const Coordinates &c1, const Coordinates &c2)
 	return hypot(c1.lon() - c2.lon(), c1.lat() - c2.lat());
 }
 
-static bool isClosed(const Polygon &poly)
+static bool isClosed(const QVector<Coordinates> &poly)
 {
-	if (poly.isEmpty() || poly.first().isEmpty())
-		return false;
-	return (distance(poly.first().first(), poly.first().last()) < 0.000000001);
+	return (distance(poly.first(), poly.last()) < 0.000000001);
 }
 
 static bool readSingleDelta(SubFile &subfile, const Coordinates &c,
@@ -622,20 +620,20 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 				return false;
 		}
 		if (flags & 0x08) {
-			if (!subfile.readVUInt32(blocks))
+			if (!subfile.readVUInt32(blocks) || !blocks)
 				return false;
 		} else
 			blocks = 1;
 
-		Q_ASSERT(blocks);
 		for (unsigned j = 0; j < blocks; j++) {
 			if (!readPolygonPath(subfile, tile->pos, flags & 0x04, p.poly))
 				return false;
 		}
-		p.closed = isClosed(p.poly);
+		const QVector<Coordinates> &outline = p.poly.first();
+		p.closed = isClosed(outline);
 		if (flags & 0x10)
-			p.labelPos = Coordinates(p.poly.first().first().lon() + MD(lon),
-			  p.poly.first().first().lat() + MD(lat));
+			p.labelPos = Coordinates(outline.first().lon() + MD(lon),
+			  outline.first().lat() + MD(lat));
 
 		list->append(p);
 	}
