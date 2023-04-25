@@ -138,12 +138,13 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	PathRender ri(rule, _paths.size() + _circles.size());
 	const QXmlStreamAttributes &attr = reader.attributes();
 	QString file;
+	QColor fillColor;
 	int height = 0, width = 0;
 	bool ok;
 
 	ri._area = true;
 	if (attr.hasAttribute("fill"))
-		ri._fillColor = QColor(attr.value("fill").toString());
+		fillColor = QColor(attr.value("fill").toString());
 	if (attr.hasAttribute("stroke"))
 		ri._strokeColor = QColor(attr.value("stroke").toString());
 	if (attr.hasAttribute("stroke-width")) {
@@ -171,7 +172,9 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	}
 
 	if (!file.isNull())
-		ri._fillImage = image(file, width, height, ratio);
+		ri._brush = QBrush(image(file, width, height, ratio));
+	else if (fillColor.isValid())
+		ri._brush = QBrush(fillColor);
 
 	if (ri.rule()._type == Rule::AnyType || ri.rule()._type == Rule::WayType)
 		_paths.append(ri);
@@ -652,10 +655,9 @@ QList<const Style::Symbol*> Style::areaSymbols(int zoom) const
 
 QPen Style::PathRender::pen(int zoom) const
 {
-	qreal width = (zoom >= 12)
-	  ? pow(1.5, zoom - 12) * _strokeWidth : _strokeWidth;
-
 	if (_strokeColor.isValid()) {
+		qreal width = (zoom >= 12)
+		  ? pow(1.5, zoom - 12) * _strokeWidth : _strokeWidth;
 		QPen p(QBrush(_strokeColor), width, Qt::SolidLine, _strokeCap,
 		  _strokeJoin);
 		if (!_strokeDasharray.isEmpty()) {
@@ -667,16 +669,6 @@ QPen Style::PathRender::pen(int zoom) const
 		return p;
 	} else
 		return Qt::NoPen;
-}
-
-QBrush Style::PathRender::brush() const
-{
-	if (!_fillImage.isNull())
-		return QBrush(_fillImage);
-	else if (_fillColor.isValid())
-		return QBrush(_fillColor);
-	else
-		return Qt::NoBrush;
 }
 
 qreal Style::CircleRender::radius(int zoom) const

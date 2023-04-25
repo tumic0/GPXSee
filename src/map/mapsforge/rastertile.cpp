@@ -200,6 +200,11 @@ QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
 {
 	QPainterPath path;
 
+	int size = 0;
+	for (int i = 0; i < polygon.size(); i++)
+		size += polygon.at(i).size();
+	path.reserve(size);
+
 	for (int i = 0; i < polygon.size(); i++) {
 		const QVector<Coordinates> &subpath = polygon.at(i);
 

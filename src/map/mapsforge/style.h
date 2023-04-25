@@ -11,17 +11,6 @@ class QXmlStreamReader;
 
 namespace Mapsforge {
 
-inline bool wcmp(const QByteArray &b1, const QByteArray &b2)
-{
-	int len = b1.length();
-
-	if (!len)
-		return true;
-	if (len != b2.length())
-		return false;
-	return !memcmp(b1.constData(), b2.constData(), len);
-}
-
 class Style
 {
 public:
@@ -87,10 +76,13 @@ public:
 
 			bool valueMatches(const QVector<MapData::Tag> &tags) const
 			{
-				for (int i = 0; i < _vals.size(); i++)
-					for (int j = 0; j < tags.size(); j++)
-						if (wcmp(_vals.at(i), tags.at(j).value))
+				for (int i = 0; i < _vals.size(); i++) {
+					for (int j = 0; j < tags.size(); j++) {
+						const QByteArray &ba = _vals.at(i);
+						if (!ba.size() || ba == tags.at(j).value)
 							return true;
+					}
+				}
 
 				return false;
 			}
@@ -148,7 +140,7 @@ public:
 
 		int zOrder() const {return _zOrder;}
 		QPen pen(int zoom) const;
-		QBrush brush() const;
+		const QBrush &brush() const {return _brush;}
 		bool area() const {return _area;}
 		bool curve() const {return _curve;}
 
@@ -156,12 +148,12 @@ public:
 		friend class Style;
 
 		int _zOrder;
-		QColor _fillColor, _strokeColor;
+		QColor _strokeColor;
 		qreal _strokeWidth;
 		QVector<qreal> _strokeDasharray;
 		Qt::PenCapStyle _strokeCap;
 		Qt::PenJoinStyle _strokeJoin;
-		QImage _fillImage;
+		QBrush _brush;
 		bool _area, _curve;
 	};
 
