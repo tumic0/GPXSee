@@ -10,6 +10,7 @@
 #endif // Q_OS_ANDROID
 #include "util.h"
 
+#define SQLITE_DB_MAGIC "SQLite format 3"
 
 #ifdef Q_OS_ANDROID
 static QString documentName(const QString &path)
@@ -155,4 +156,22 @@ const QTemporaryDir &Util::tempDir()
 {
 	static QTemporaryDir dir;
 	return dir;
+}
+
+bool Util::isSQLiteDB(const QString &path, QString &errorString)
+{
+	QFile file(path);
+	char magic[sizeof(SQLITE_DB_MAGIC)];
+
+	if (!file.open(QFile::ReadOnly)) {
+		errorString = file.errorString();
+		return false;
+	}
+	if ((file.read(magic, sizeof(magic)) < (qint64)sizeof(magic))
+	  || memcmp(SQLITE_DB_MAGIC, magic, sizeof(SQLITE_DB_MAGIC))) {
+		errorString = "Not a SQLite database file";
+		return false;
+	}
+
+	return true;
 }

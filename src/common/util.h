@@ -16,6 +16,7 @@ namespace Util
 	QString file2name(const QString &path);
 	QString displayName(const QString &path);
 	const QTemporaryDir &tempDir();
+	bool isSQLiteDB(const QString &path, QString &errorString);
 }
 
 #endif // UTIL_H

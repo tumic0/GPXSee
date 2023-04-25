@@ -413,6 +413,12 @@ OruxMap::OruxMap(const QString &fileName, QObject *parent)
 
 	if (dir.exists("OruxMapsImages.db")) {
 		QString dbFile(dir.absoluteFilePath("OruxMapsImages.db"));
+
+		if (!Util::isSQLiteDB(dbFile, _errorString)) {
+			_errorString = "OruxMapsImages.db: " + _errorString;
+			return;
+		}
+
 		_db = QSqlDatabase::addDatabase("QSQLITE", dbFile);
 		_db.setDatabaseName(dbFile);
 		_db.setConnectOptions("QSQLITE_OPEN_READONLY");

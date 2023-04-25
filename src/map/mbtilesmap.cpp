@@ -1,6 +1,7 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlField>
+#include <QSqlError>
 #include <QPainter>
 #include <QPixmapCache>
 #include <QImageReader>
@@ -48,12 +49,15 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _mapRatio(1.0), _tileRatio(1.0), _scalable(false),
   _scaledSize(0), _valid(false)
 {
+	if (!Util::isSQLiteDB(fileName, _errorString))
+		return;
+
 	_db = QSqlDatabase::addDatabase("QSQLITE", fileName);
 	_db.setDatabaseName(fileName);
 	_db.setConnectOptions("QSQLITE_OPEN_READONLY");
 
 	if (!_db.open()) {
-		_errorString = "Error opening database file";
+		_errorString = _db.lastError().text();
 		return;
 	}
 

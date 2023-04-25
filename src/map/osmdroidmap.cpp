@@ -1,6 +1,7 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlField>
+#include <QSqlError>
 #include <QPainter>
 #include <QPixmapCache>
 #include <QImageReader>
@@ -18,12 +19,15 @@ OsmdroidMap::OsmdroidMap(const QString &fileName, QObject *parent)
 {
 	quint64 z, l = 0, r = 0, t = 0, b = 0;
 
+	if (!Util::isSQLiteDB(fileName, _errorString))
+		return;
+
 	_db = QSqlDatabase::addDatabase("QSQLITE", fileName);
 	_db.setDatabaseName(fileName);
 	_db.setConnectOptions("QSQLITE_OPEN_READONLY");
 
 	if (!_db.open()) {
-		_errorString = "Error opening database file";
+		_errorString = _db.lastError().text();
 		return;
 	}
 
