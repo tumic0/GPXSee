@@ -223,8 +223,6 @@ void WMTS::createZooms(const CTX &ctx)
 	  mi != ctx.matrixes.constEnd(); ++mi) {
 		QSet<MatrixLimits>::const_iterator li = ctx.limits.find(
 		  MatrixLimits(mi->id));
-		if (!ctx.limits.isEmpty() && li == ctx.limits.constEnd())
-			continue;
 		_zooms.append(Zoom(mi->id, mi->scaleDenominator, mi->topLeft, mi->tile,
 		  mi->matrix, li == ctx.limits.constEnd() ? QRect() : li->rect));
 	}
