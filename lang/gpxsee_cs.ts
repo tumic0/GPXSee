@@ -765,10 +765,6 @@
         <translation>Levý klik myši</translation>
     </message>
     <message>
-        <source>GCS/PCS directory:</source>
-        <translation type="vanished">Adresář s GCS/PCS daty:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="909"/>
         <location filename="../src/GUI/gui.cpp" line="927"/>
         <source>DEM directory:</source>
@@ -1719,14 +1715,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="489"/>
         <source>Speed</source>
         <translation>Rychlost</translation>
-    </message>
-    <message>
-        <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="vanished">Projekce map u kterých není informace o projekci uvedena (JNX, KMZ a World-file soubory).</translation>
-    </message>
-    <message>
-        <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="vanished">Projekce vektorových map (IMG a Mapsforge). Projekce musí být platná přes celou oblast mapy.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="172"/>

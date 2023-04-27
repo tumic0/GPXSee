@@ -765,10 +765,6 @@
         <translation>Vasen painallus</translation>
     </message>
     <message>
-        <source>GCS/PCS directory:</source>
-        <translation type="vanished">GCS/PCS:n hakemisto:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="909"/>
         <location filename="../src/GUI/gui.cpp" line="927"/>
         <source>DEM directory:</source>
@@ -1718,14 +1714,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="489"/>
         <source>Speed</source>
         <translation>Vauhti</translation>
-    </message>
-    <message>
-        <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="vanished">Valitse oikea karttojen projektio ilman projektion määritelmää (JNX, KMZ ja maailman tiedostokartat).</translation>
-    </message>
-    <message>
-        <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="vanished">Valitse haluttu vektorikarttojen projektio (IMG- ja Mapsforge-kartat). Heijastuksen on oltava voimassa koko kartan alueella.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="172"/>

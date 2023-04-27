@@ -885,10 +885,6 @@
         <translation>Cartella POI:</translation>
     </message>
     <message>
-        <source>GCS/PCS directory:</source>
-        <translation type="vanished">Cartella GCS/PCS:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="909"/>
         <location filename="../src/GUI/gui.cpp" line="927"/>
         <source>DEM directory:</source>

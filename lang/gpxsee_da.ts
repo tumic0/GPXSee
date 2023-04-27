@@ -908,10 +908,6 @@
         <translation>IP-mappe:</translation>
     </message>
     <message>
-        <source>GCS/PCS directory:</source>
-        <translation type="vanished">GCS/PSC-mappe:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="944"/>
         <location filename="../src/GUI/gui.cpp" line="947"/>
         <source>Open file</source>
@@ -1912,14 +1908,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="837"/>
         <source>System</source>
         <translation>System</translation>
-    </message>
-    <message>
-        <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="vanished">Vælg den korrekte projektion for kort uden en projektionsdefinition (JNX-, KMZ- og world file-kort).</translation>
-    </message>
-    <message>
-        <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="vanished">Vælg den ønskede projektion af vektorkort (IMG- og Mapsforge-kort). Projektionen skal være gyldig for hele kortområdet.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="758"/>

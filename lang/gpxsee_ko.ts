@@ -869,10 +869,6 @@
         <translation>CRS 디렉토리:</translation>
     </message>
     <message>
-        <source>GCS/PCS directory:</source>
-        <translation type="vanished">GCS/PCS 디렉터리:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="909"/>
         <location filename="../src/GUI/gui.cpp" line="927"/>
         <source>DEM directory:</source>
@@ -1347,14 +1343,6 @@
 </context>
 <context>
     <name>OptionsDialog</name>
-    <message>
-        <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="vanished">투영 정의가 없는 지도의 적절한 투영(JNX, KMZ 및 월드 파일 지도)을 선택합니다.</translation>
-    </message>
-    <message>
-        <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="vanished">원하는 벡터 맵 투영 (IMG 및 Mapsorge 지도)을 선택합니다. 투영은 전체 지도 영역에 대해 유효해야 합니다.</translation>
-    </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="70"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>

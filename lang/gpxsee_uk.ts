@@ -885,10 +885,6 @@
         <translation>Каталог POI:</translation>
     </message>
     <message>
-        <source>GCS/PCS directory:</source>
-        <translation type="vanished">Каталог GCS/PCS:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="909"/>
         <location filename="../src/GUI/gui.cpp" line="927"/>
         <source>DEM directory:</source>
@@ -1368,14 +1364,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="85"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
         <translation>Не-HiDPI мапи завантажуються такими, якими вони є. Об’єкти на мапі мають очікуваний розмір, але сама мапа розмита та не чітка.</translation>
-    </message>
-    <message>
-        <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="vanished">Оберіть правильну проекцію для карт без наявної проекції (карти JNX, KMZ і з world-файлу).</translation>
-    </message>
-    <message>
-        <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="vanished">Оберіть потрібну проекцію для векторних карт (карти IMG і Mapsforge). Проекція повинна бути дійсною для всієї області карти.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="95"/>

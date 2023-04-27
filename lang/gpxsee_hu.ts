@@ -885,10 +885,6 @@
         <translation>POI mappa:</translation>
     </message>
     <message>
-        <source>GCS/PCS directory:</source>
-        <translation type="vanished">GCS/PCS mappa:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="909"/>
         <location filename="../src/GUI/gui.cpp" line="927"/>
         <source>DEM directory:</source>
@@ -1366,14 +1362,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="85"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
         <translation>A nem HiDPI térképek változatlan formában töltődnek be. A térképobjektumok a várt méretűek, de a térkép kissé homályos lesz.</translation>
-    </message>
-    <message>
-        <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="vanished">Válaszd ki a térképek megfelelő vetületét vetületi definíció nélkül (JNX, KMZ és világ fájltérképek).</translation>
-    </message>
-    <message>
-        <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="vanished">Válaszd ki a vektortérképek kívánt vetületét (IMG és Mapsforge térképek). A vetületnek a térkép teljes területén érvényesnek kell lennie.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="95"/>

@@ -908,10 +908,6 @@
         <translation>Interessepunktmappe:</translation>
     </message>
     <message>
-        <source>GCS/PCS directory:</source>
-        <translation type="vanished">GCS-/PCS-mappe:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="944"/>
         <location filename="../src/GUI/gui.cpp" line="947"/>
         <source>Open file</source>
@@ -1389,14 +1385,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="166"/>
         <source>Track width:</source>
         <translation>Sporbredde:</translation>
-    </message>
-    <message>
-        <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="vanished">Velg riktig projeksjon for kart uten projeksjonsdefinisjon (JNX, KMZ og World-file kart).</translation>
-    </message>
-    <message>
-        <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="vanished">Velg ønsket projeksjon for vektorkart (IMG og Mapsforge-kart). Projeksjonen må være gyldig for hele kartområdet.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="95"/>

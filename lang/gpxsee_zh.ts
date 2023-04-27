@@ -869,10 +869,6 @@
         <translation>CRS 目录：</translation>
     </message>
     <message>
-        <source>GCS/PCS directory:</source>
-        <translation type="vanished">GCS/PCS 目录：</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="909"/>
         <location filename="../src/GUI/gui.cpp" line="927"/>
         <source>DEM directory:</source>
@@ -1347,14 +1343,6 @@
 </context>
 <context>
     <name>OptionsDialog</name>
-    <message>
-        <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="vanished">为无投影定义地图选择适当的投影（JNX、KMZ 和 world file 地图）。</translation>
-    </message>
-    <message>
-        <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="vanished">为矢量地图（IMG和Mapsforge地图）选择所需的投影。该投影对整个地图区域有效。</translation>
-    </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="70"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>

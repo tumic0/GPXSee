@@ -765,10 +765,6 @@
         <translation>Lewy przycisk myszy</translation>
     </message>
     <message>
-        <source>GCS/PCS directory:</source>
-        <translation type="vanished">Katalog plików GCS/PCS:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="909"/>
         <location filename="../src/GUI/gui.cpp" line="927"/>
         <source>DEM directory:</source>
@@ -1719,14 +1715,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="489"/>
         <source>Speed</source>
         <translation>Prędkość</translation>
-    </message>
-    <message>
-        <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="vanished">Wybierz odpowiednie odwzorowanie map bez definicji odwzorowania (mapy JNX, KMZ i plików świata).</translation>
-    </message>
-    <message>
-        <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="vanished">Wybierz żądane odwzorowanie map wektorowych (mapy IMG i Mapsforge). Rzut musi obowiązywać dla całego obszaru mapy.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="172"/>

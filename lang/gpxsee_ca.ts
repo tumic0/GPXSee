@@ -869,10 +869,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>GCS/PCS directory:</source>
-        <translation type="vanished">Directori GCS/PCS:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/gui.cpp" line="909"/>
         <location filename="../src/GUI/gui.cpp" line="927"/>
         <source>DEM directory:</source>
@@ -1348,14 +1344,6 @@
 </context>
 <context>
     <name>OptionsDialog</name>
-    <message>
-        <source>Select the proper projection of maps without a projection definition (JNX, KMZ and world file maps).</source>
-        <translation type="vanished">Seleccioneu la projecció adequada dels mapes sense una definició de projecció (JNX, KMZ i mapes del món).</translation>
-    </message>
-    <message>
-        <source>Select the desired projection of vector maps (IMG and Mapsforge maps). The projection must be valid for the whole map area.</source>
-        <translation type="vanished">Seleccioneu la projecció desitjada de mapes vectorials (mapes IMG i Mapsforge). La projecció ha de ser vàlida per a tota l&apos;àrea del mapa.</translation>
-    </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="70"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
