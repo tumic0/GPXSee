@@ -476,7 +476,6 @@ void KMZMap::draw(QPainter *painter, const QRectF &rect, int mapIndex)
 		pm.setDevicePixelRatio(_mapRatio);
 		painter->drawPixmap(pr.topLeft(), pm, sr);
 		QPixmapCache::insert(key, pm);
-		qDebug() << key;
 	}
 
 	//painter->setPen(Qt::red);
