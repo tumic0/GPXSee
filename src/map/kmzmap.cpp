@@ -157,7 +157,7 @@ void KMZMap::computeBounds()
 	_adjust = 0;
 	_bounds = QVector<Bounds>(_tiles.count());
 	for (int i = 0; i < _tiles.count(); i++) {
-		QRectF xy(offsets.at(i), _tiles.at(i).bounds().size());
+		QRectF xy(offsets.at(i), _tiles.at(i).bounds().size() / _mapRatio);
 		_bounds[i] = Bounds(_tiles.at(i).bbox(), xy);
 		_adjust = qMin(qMin(_tiles.at(i).bounds().left(),
 		  _tiles.at(i).bounds().top()), _adjust);
