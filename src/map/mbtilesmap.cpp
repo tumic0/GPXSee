@@ -165,8 +165,19 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
-void MBTilesMap::load()
+void MBTilesMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
+	Q_UNUSED(in);
+	Q_UNUSED(out);
+
+	_mapRatio = hidpi ? deviceRatio : 1.0;
+
+	if (_scalable) {
+		_scaledSize = _tileSize * deviceRatio;
+		_tileRatio = deviceRatio;
+	}
+
 	_db.open();
 }
 
@@ -216,16 +227,6 @@ int MBTilesMap::zoomOut()
 {
 	_zi = qMax(_zi - 1, 0);
 	return _zi;
-}
-
-void MBTilesMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
-{
-	_mapRatio = mapRatio;
-
-	if (_scalable) {
-		_scaledSize = _tileSize * deviceRatio;
-		_tileRatio = deviceRatio;
-	}
 }
 
 qreal MBTilesMap::coordinatesRatio() const
@@ -337,7 +338,7 @@ Coordinates MBTilesMap::xy2ll(const QPointF &p)
 	  * coordinatesRatio());
 }
 
-Map *MBTilesMap::create(const QString &path, const Projection &, bool *isDir)
+Map *MBTilesMap::create(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;

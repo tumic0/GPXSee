@@ -15,16 +15,25 @@ MapsforgeMap::MapsforgeMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _data(fileName), _zoom(0),
   _projection(PCS::pcs(3857)), _tileRatio(1.0)
 {
-	if (_data.isValid()) {
+	if (_data.isValid())
 		_zoom = _data.zooms().min();
-		updateTransform();
-	}
 }
 
-void MapsforgeMap::load()
+void MapsforgeMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
+	Q_UNUSED(in);
+	Q_UNUSED(hidpi);
+
+	_tileRatio = deviceRatio;
+	_projection = out;
+
 	_data.load();
 	_style.load(_data, _tileRatio);
+
+	updateTransform();
+
+	QPixmapCache::clear();
 }
 
 void MapsforgeMap::unload()
@@ -225,24 +234,7 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 }
 
-void MapsforgeMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
-{
-	Q_UNUSED(mapRatio);
-
-	_tileRatio = deviceRatio;
-}
-
-void MapsforgeMap::setOutputProjection(const Projection &projection)
-{
-	if (!projection.isValid() || projection == _projection)
-		return;
-
-	_projection = projection;
-	updateTransform();
-	QPixmapCache::clear();
-}
-
-Map *MapsforgeMap::create(const QString &path, const Projection &, bool *isMap)
+Map *MapsforgeMap::create(const QString &path, bool *isMap)
 {
 	if (isMap)
 		*isMap = false;

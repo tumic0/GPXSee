@@ -14,12 +14,7 @@
 
 static bool resCmp(OziMap *m1, OziMap *m2)
 {
-	qreal r1, r2;
-
-	r1 = m1->resolution(m1->bounds());
-	r2 = m2->resolution(m2->bounds());
-
-	return r1 > r2;
+	return m1->resolution(m1->bounds()) > m2->resolution(m2->bounds());
 }
 
 static bool xCmp(OziMap *m1, OziMap *m2)
@@ -38,7 +33,7 @@ void Atlas::computeZooms()
 
 	_zooms.append(Zoom(0, _maps.count() - 1));
 	for (int i = 1; i < _maps.count(); i++) {
-		qreal last = _maps.at(i-1)->resolution(_maps.at(i)->bounds());
+		qreal last = _maps.at(i-1)->resolution(_maps.at(i-1)->bounds());
 		qreal cur = _maps.at(i)->resolution(_maps.at(i)->bounds());
 		if (cur < last * ZOOM_THRESHOLD) {
 			_zooms.last().last = i-1;
@@ -136,18 +131,17 @@ Atlas::Atlas(const QString &fileName, bool TAR, QObject *parent)
 		return;
 	}
 
-	computeZooms();
-	computeBounds();
-
 	_valid = true;
 }
 
-void Atlas::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
+RectC Atlas::llBounds(const Projection &proj)
 {
-	for (int i = 0; i < _maps.size(); i++)
-		_maps[i]->setDevicePixelRatio(deviceRatio, mapRatio);
+	RectC bounds;
 
-	computeBounds();
+	for (int i = 0; i < _maps.size(); i++)
+		bounds |= _maps.at(i)->llBounds(proj);
+
+	return bounds;
 }
 
 QRectF Atlas::bounds()
@@ -277,20 +271,31 @@ void Atlas::draw(QPainter *painter, const QRectF &rect, int mapIndex,
 	const QPointF offset = _bounds.at(mapIndex).xy.topLeft();
 	QRectF pr = QRectF(rect.topLeft() - offset, rect.size());
 
-	map->load();
-
 	painter->translate(offset);
 	map->draw(painter, pr, flags);
 	painter->translate(-offset);
+}
+
+void Atlas::load(const Projection &in, const Projection &out, qreal deviceRatio,
+  bool hidpi)
+{
+	for (int i = 0; i < _maps.count(); i++)
+		_maps.at(i)->load(in, out, deviceRatio, hidpi);
+
+	computeZooms();
+	computeBounds();
 }
 
 void Atlas::unload()
 {
 	for (int i = 0; i < _maps.count(); i++)
 		_maps.at(i)->unload();
+
+	_zooms.clear();
+	_bounds.clear();
 }
 
-Map *Atlas::createTAR(const QString &path, const Projection &, bool *isDir)
+Map *Atlas::createTAR(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = true;
@@ -298,7 +303,7 @@ Map *Atlas::createTAR(const QString &path, const Projection &, bool *isDir)
 	return new Atlas(path, true);
 }
 
-Map *Atlas::createTBA(const QString &path, const Projection &, bool *isDir)
+Map *Atlas::createTBA(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = true;

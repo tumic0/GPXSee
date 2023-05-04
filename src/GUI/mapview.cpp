@@ -60,12 +60,12 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent) : QGraphicsView(parent)
 	_cursorCoordinates->setVisible(false);
 	_scene->addItem(_cursorCoordinates);
 
+	_deviceRatio = devicePixelRatioF();
 	_outputProjection = PCS::pcs(3857);
 	_inputProjection = GCS::gcs(4326);
+	_hidpi = true;
 	_map = map;
-	_map->load();
-	_map->setOutputProjection(_outputProjection);
-	_map->setInputProjection(_inputProjection);
+	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi);
 	connect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
 
 	_poi = poi;
@@ -119,8 +119,6 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent) : QGraphicsView(parent)
 	_showPositionCoordinates = false;
 	_showMotionInfo = false;
 
-	_deviceRatio = 1.0;
-	_mapRatio = 1.0;
 	_opengl = false;
 	_plot = false;
 	_digitalZoom = 0;
@@ -247,7 +245,7 @@ void MapView::addWaypoints(const QVector<Waypoint> &waypoints)
 
 MapItem *MapView::addMap(MapAction *map)
 {
-	MapItem *mi = new MapItem(map, _map);
+	MapItem *mi = new MapItem(map, _map, _inputProjection);
 	mi->setColor(_palette.nextColor());
 	mi->setWidth(_areaWidth);
 	mi->setPenStyle(_areaStyle);
@@ -328,7 +326,7 @@ int MapView::fitMapZoom() const
 	RectC br = _tr | _rr | _wr | _ar;
 
 	return _map->zoomFit(viewport()->size() - QSize(2*MARGIN, 2*MARGIN),
-	  br.isNull() ? _map->llBounds() : br);
+	  br.isNull() ? _map->llBounds(_inputProjection) : br);
 }
 
 QPointF MapView::contentCenter() const
@@ -402,36 +400,18 @@ void MapView::setMap(Map *map)
 	  .intersected(_map->bounds()));
 	RectC cr(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
 
-	_map->unload();
 	disconnect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
+	_map->unload();
 
 	_map = map;
-	_map->load();
-	_map->setOutputProjection(_outputProjection);
-	_map->setInputProjection(_inputProjection);
-	_map->setDevicePixelRatio(_deviceRatio, _mapRatio);
+	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi);
 	connect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
 
 	digitalZoom(0);
 
 	_map->zoomFit(viewport()->rect().size(), cr);
-	_scene->setSceneRect(_map->bounds());
 
-	for (int i = 0; i < _tracks.size(); i++)
-		_tracks.at(i)->setMap(_map);
-	for (int i = 0; i < _routes.size(); i++)
-		_routes.at(i)->setMap(_map);
-	for (int i = 0; i < _areas.size(); i++)
-		_areas.at(i)->setMap(_map);
-	for (int i = 0; i < _waypoints.size(); i++)
-		_waypoints.at(i)->setMap(_map);
-
-	for (POIHash::const_iterator it = _pois.constBegin();
-	  it != _pois.constEnd(); it++)
-		it.value()->setMap(_map);
-	updatePOIVisibility();
-
-	_crosshair->setMap(_map);
+	rescale();
 
 	QPointF nc = QRectF(_map->ll2xy(cr.topLeft()),
 	  _map->ll2xy(cr.bottomRight())).center();
@@ -702,8 +682,9 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
   PlotFlags flags)
 {
 	QRect orig, adj;
-	qreal mapRatio, ratio, diff, q, p;
+	qreal ratio, diff, q, p;
 	QPointF scenePos, scalePos, posPos, motionPos;
+	bool hidpi = _hidpi && _deviceRatio > 1.0;
 	int zoom;
 
 
@@ -728,8 +709,8 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 	}
 
 	// Expand the view if plotting into a bitmap
-	mapRatio = _mapRatio;
-	setDevicePixelRatio(_deviceRatio, 1.0);
+	if (hidpi)
+		setHidpi(false);
 
 	if (flags & Expand) {
 		qreal xdiff = (target.width() - adj.width()) / 2.0;
@@ -784,7 +765,8 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 		centerOn(scenePos);
 	}
 
-	setDevicePixelRatio(_deviceRatio, mapRatio);
+	if (hidpi)
+		setHidpi(true);
 
 	_mapScale->setDigitalZoom(_digitalZoom);
 	_mapScale->setPos(scalePos);
@@ -1236,6 +1218,9 @@ bool MapView::gestureEvent(QGestureEvent *event)
 
 void MapView::useOpenGL(bool use)
 {
+	if (_opengl == use)
+		return;
+
 	_opengl = use;
 
 	if (use)
@@ -1286,60 +1271,21 @@ void MapView::reloadMap()
 	_scene->invalidate();
 }
 
-void MapView::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
+void MapView::setMapConfig(const Projection &in, const Projection &out,
+  bool hidpi)
 {
-	if (_deviceRatio == deviceRatio && _mapRatio == mapRatio)
-		return;
+	_inputProjection = in;
+	_outputProjection = out;
+	_hidpi = hidpi;
 
-	_deviceRatio = deviceRatio;
-	_mapRatio = mapRatio;
-
-	QRectF vr(mapToScene(viewport()->rect()).boundingRect()
-	  .intersected(_map->bounds()));
-	RectC cr(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
-
-	_map->setDevicePixelRatio(_deviceRatio, _mapRatio);
-	_scene->setSceneRect(_map->bounds());
-
-	for (int i = 0; i < _tracks.size(); i++)
-		_tracks.at(i)->setMap(_map);
-	for (int i = 0; i < _routes.size(); i++)
-		_routes.at(i)->setMap(_map);
-	for (int i = 0; i < _areas.size(); i++)
-		_areas.at(i)->setMap(_map);
-	for (int i = 0; i < _waypoints.size(); i++)
-		_waypoints.at(i)->setMap(_map);
-
-	for (POIHash::const_iterator it = _pois.constBegin();
-	  it != _pois.constEnd(); it++)
-		it.value()->setMap(_map);
-	updatePOIVisibility();
-
-	_crosshair->setMap(_map);
-
-	QPointF nc = QRectF(_map->ll2xy(cr.topLeft()),
-	  _map->ll2xy(cr.bottomRight())).center();
-	centerOn(nc);
-
-	reloadMap();
+	setMap(_map);
 }
 
-void MapView::setOutputProjection(const Projection &proj)
+void MapView::setDevicePixelRatio(qreal ratio)
 {
-	_outputProjection = proj;
-	Coordinates center = _map->xy2ll(mapToScene(viewport()->rect().center()));
-	_map->setOutputProjection(_outputProjection);
-	rescale();
-	centerOn(_map->ll2xy(center));
-}
+	_deviceRatio = ratio;
 
-void MapView::setInputProjection(const Projection &proj)
-{
-	_inputProjection = proj;
-	Coordinates center = _map->xy2ll(mapToScene(viewport()->rect().center()));
-	_map->setInputProjection(_inputProjection);
-	rescale();
-	centerOn(_map->ll2xy(center));
+	setMap(_map);
 }
 
 void MapView::fitContentToSize()
@@ -1435,4 +1381,21 @@ void MapView::drawInfoBackground(bool draw)
 	_cursorCoordinates->drawBackground(draw);
 	_positionCoordinates->drawBackground(draw);
 	_motionInfo->drawBackground(draw);
+}
+
+void MapView::setHidpi(bool hidpi)
+{
+	QRectF vr(mapToScene(viewport()->rect()).boundingRect()
+	  .intersected(_map->bounds()));
+	RectC cr(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
+
+	_map->unload();
+	_map->load(_inputProjection, _outputProjection, _deviceRatio, hidpi);
+	rescale();
+
+	QPointF nc = QRectF(_map->ll2xy(cr.topLeft()),
+	  _map->ll2xy(cr.bottomRight())).center();
+	centerOn(nc);
+
+	reloadMap();
 }

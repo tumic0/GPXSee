@@ -81,19 +81,18 @@ ToolTip MapItem::info() const
 	return tt;
 }
 
-MapItem::MapItem(MapAction *action, Map *map, GraphicsItem *parent)
-  : PlaneItem(parent)
+MapItem::MapItem(MapAction *action, Map *map, const Projection &proj,
+  GraphicsItem *parent) : PlaneItem(parent)
 {
 	Map *src = action->data().value<Map*>();
 	Q_ASSERT(map->isReady());
 
 	_name = src->name();
 	_fileName = src->path();
-	_bounds = src->llBounds();
+	_bounds = src->llBounds(proj);
 
 	connect(this, &MapItem::triggered, action, &MapAction::trigger);
 
-	_map = map;
 	_digitalZoom = 0;
 
 	_width = 2;
@@ -101,23 +100,23 @@ MapItem::MapItem(MapAction *action, Map *map, GraphicsItem *parent)
 	QBrush brush(Qt::SolidPattern);
 	_pen = QPen(brush, _width);
 
-	updatePainterPath();
+	updatePainterPath(map);
 
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
 }
 
-void MapItem::updatePainterPath()
+void MapItem::updatePainterPath(Map *map)
 {
 	_painterPath = QPainterPath();
 
-	QRectF r(bbox(_bounds, _map));
+	QRectF r(bbox(_bounds, map));
 
 	if (r.left() > r.right()) {
 		QRectF r1(bbox(RectC(_bounds.topLeft(),
-		  Coordinates(180, _bounds.bottomRight().lat())), _map));
+		  Coordinates(180, _bounds.bottomRight().lat())), map));
 		QRectF r2(bbox(RectC(Coordinates(-180, _bounds.topLeft().lat()),
-		  _bounds.bottomRight()), _map));
+		  _bounds.bottomRight()), map));
 
 		_painterPath.addRect(r1);
 		_painterPath.addRect(r2);
@@ -143,10 +142,7 @@ void MapItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 void MapItem::setMap(Map *map)
 {
 	prepareGeometryChange();
-
-	_map = map;
-
-	updatePainterPath();
+	updatePainterPath(map);
 }
 
 void MapItem::setColor(const QColor &color)

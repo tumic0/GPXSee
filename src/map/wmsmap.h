@@ -20,7 +20,7 @@ public:
 	QString name() const {return _name;}
 
 	QRectF bounds();
-	RectC llBounds() {return _wms->bbox();}
+	RectC llBounds(const Projection &) {return _wms->bbox();}
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);
@@ -33,8 +33,8 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
-	void setDevicePixelRatio(qreal /*deviceRatio*/, qreal mapRatio)
-	  {_mapRatio = mapRatio;}
+	void load(const Projection &in, const Projection &out, qreal deviceRatio,
+	  bool hidpi);
 	void clearCache();
 
 	bool isReady() const {return _wms->isReady();}

@@ -13,8 +13,8 @@ OnlineMap::OnlineMap(const QString &fileName, const QString &name,
   const Authorization &authorization, int tileSize, bool scalable, bool invertY,
   bool quadTiles, QObject *parent)
     : Map(fileName, parent), _name(name), _zooms(zooms), _bounds(bounds),
-	_zoom(_zooms.max()), _mapRatio(1.0), _tileRatio(tileRatio),
-	_tileSize(tileSize), _scalable(scalable), _invertY(invertY)
+	_zoom(_zooms.max()), _tileSize(tileSize), _mapRatio(1.0),
+	_tileRatio(tileRatio), _scalable(scalable), _invertY(invertY)
 {
 	_tileLoader = new TileLoader(QDir(ProgramPaths::tilesDir()).filePath(_name),
 	  this);
@@ -70,9 +70,13 @@ int OnlineMap::zoomOut()
 	return _zoom;
 }
 
-void OnlineMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
+void OnlineMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
-	_mapRatio = mapRatio;
+	Q_UNUSED(in);
+	Q_UNUSED(out);
+
+	_mapRatio = hidpi ? deviceRatio : 1.0;
 
 	if (_scalable) {
 		_tileLoader->setScaledSize(_tileSize * deviceRatio);

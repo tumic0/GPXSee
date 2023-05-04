@@ -354,8 +354,13 @@ QCTMap::QCTMap(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
-void QCTMap::load()
+void QCTMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
+	Q_UNUSED(in);
+	Q_UNUSED(out);
+
+	_mapRatio = hidpi ? deviceRatio : 1.0;
 	_file.open(QIODevice::ReadOnly);
 }
 
@@ -486,7 +491,7 @@ void QCTMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 }
 
-Map *QCTMap::create(const QString &path, const Projection &, bool *isDir)
+Map *QCTMap::create(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;

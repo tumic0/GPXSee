@@ -13,7 +13,7 @@ public:
 	QString name() const {return _name;}
 
 	QRectF bounds();
-	RectC llBounds() {return _bounds;}
+	RectC llBounds(const Projection &) {return _bounds;}
 	qreal resolution(const QRectF &rect);
 
 	int zoom() const {return _zi;}
@@ -27,14 +27,14 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
-	void load();
+	void load(const Projection &in, const Projection &out, qreal deviceRatio,
+	  bool hidpi);
 	void unload();
-	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map *create(const QString &path, const Projection &, bool *isDir);
+	static Map *create(const QString &path, bool *isDir);
 
 private:
 	qreal tileSize() const;

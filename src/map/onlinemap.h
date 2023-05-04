@@ -19,7 +19,7 @@ public:
 	QString name() const {return _name;}
 
 	QRectF bounds();
-	RectC llBounds() {return _bounds;}
+	RectC llBounds(const Projection &) {return _bounds;}
 	qreal resolution(const QRectF &rect);
 
 	int zoom() const {return _zoom;}
@@ -33,7 +33,8 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
-	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
+	void load(const Projection &in, const Projection &out, qreal deviceRatio,
+	  bool hidpi);
 	void clearCache() {_tileLoader->clearCache();}
 
 private:
@@ -47,8 +48,8 @@ private:
 	Range _zooms;
 	RectC _bounds;
 	int _zoom;
-	qreal _mapRatio, _tileRatio;
 	int _tileSize;
+	qreal _mapRatio, _tileRatio;
 	bool _scalable;
 	bool _invertY;
 };

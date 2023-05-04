@@ -182,8 +182,13 @@ Coordinates GEMFMap::xy2ll(const QPointF &p)
 	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale) * _mapRatio);
 }
 
-void GEMFMap::load()
+void GEMFMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
+	Q_UNUSED(in);
+	Q_UNUSED(out);
+
+	_mapRatio = hidpi ? deviceRatio : 1.0;
 	_file.open(QIODevice::ReadOnly);
 }
 
@@ -296,7 +301,7 @@ void GEMFMap::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
 	painter->drawPixmap(tp, pixmap);
 }
 
-Map *GEMFMap::create(const QString &path, const Projection &, bool *isDir)
+Map *GEMFMap::create(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;

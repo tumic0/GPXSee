@@ -92,9 +92,8 @@ public:
 	void useAntiAliasing(bool use);
 	void setCoordinatesFormat(CoordinatesFormat format);
 	void setTimeZone(const QTimeZone &zone);
-	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
-	void setOutputProjection(const Projection &proj);
-	void setInputProjection(const Projection &proj);
+	void setMapConfig(const Projection &in, const Projection &out, bool hidpi);
+	void setDevicePixelRatio(qreal ratio);
 	void clearMapCache();
 	void fitContentToSize();
 
@@ -156,6 +155,7 @@ private:
 	bool gestureEvent(QGestureEvent *event);
 	void pinchGesture(QPinchGesture *gesture);
 	void skipColor() {_palette.nextColor();}
+	void setHidpi(bool hidpi);
 
 	void mouseMoveEvent(QMouseEvent *event);
 	void mousePressEvent(QMouseEvent *event);
@@ -209,7 +209,7 @@ private:
 	QCursor _cursor;
 
 	qreal _deviceRatio;
-	qreal _mapRatio;
+	bool _hidpi;
 	bool _opengl;
 
 	int _pinchZoom;

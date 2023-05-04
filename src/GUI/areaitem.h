@@ -33,8 +33,8 @@ protected:
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 private:
-	QPainterPath painterPath(const Polygon &polygon);
-	void updatePainterPath();
+	QPainterPath painterPath(Map *map, const Polygon &polygon);
+	void updatePainterPath(Map *map);
 	void updateColor();
 	void updateWidth();
 	void updatePenStyle();
@@ -44,8 +44,6 @@ private:
 	Qt::PenStyle penStyle() const;
 
 	Area _area;
-
-	Map *_map;
 
 	qreal _width;
 	QColor _color;

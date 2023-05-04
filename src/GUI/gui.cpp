@@ -1721,8 +1721,7 @@ bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 
 bool GUI::loadMap(const QString &fileName, MapAction *&action, bool silent)
 {
-	TreeNode<Map*> maps(MapList::loadMaps(fileName,
-	  CRS::projection(_options.inputProjection)));
+	TreeNode<Map*> maps(MapList::loadMaps(fileName));
 	QList<QAction*> existingActions(_mapsActionGroup->actions());
 
 	return loadMapNode(maps, action, silent, existingActions);
@@ -1812,8 +1811,7 @@ void GUI::loadMapDir()
 		return;
 
 	QFileInfo fi(dir);
-	TreeNode<Map*> maps(MapList::loadMaps(dir,
-	  CRS::projection(_options.inputProjection)));
+	TreeNode<Map*> maps(MapList::loadMaps(dir));
 	QList<QAction*> existingActions(_mapsActionGroup->actions());
 	QList<MapAction*> actions;
 	QMenu *menu = new QMenu(maps.name());
@@ -2741,13 +2739,9 @@ void GUI::loadOptions()
 	_mapView->setPOIColor(_options.poiColor);
 	_mapView->setRenderHint(QPainter::Antialiasing, _options.pathAntiAliasing);
 	_mapView->setMarkerColor(_options.sliderColor);
-	if (_options.useOpenGL)
-		_mapView->useOpenGL(true);
-	_mapView->setDevicePixelRatio(devicePixelRatioF(),
-	  _options.hidpiMap ? devicePixelRatioF() : 1.0);
-	_mapView->setOutputProjection(CRS::projection(4326,
-	  _options.outputProjection));
-	_mapView->setInputProjection(CRS::projection(_options.inputProjection));
+	_mapView->useOpenGL(_options.useOpenGL);
+	_mapView->setMapConfig(CRS::projection(_options.inputProjection),
+	  CRS::projection(4326, _options.outputProjection), _options.hidpiMap);
 	_mapView->setTimeZone(_options.timeZone.zone());
 	_mapView->setPositionSource(_positionSource);
 
@@ -2856,14 +2850,12 @@ void GUI::updateOptions(const Options &options)
 		_positionSource = source;
 	}
 
-	if (options.hidpiMap != _options.hidpiMap)
-		_mapView->setDevicePixelRatio(devicePixelRatioF(),
-		  options.hidpiMap ? devicePixelRatioF() : 1.0);
-	if (options.outputProjection != _options.outputProjection)
-		_mapView->setOutputProjection(CRS::projection(4326,
-		  options.outputProjection));
-	if (options.inputProjection != _options.inputProjection)
-		_mapView->setInputProjection(CRS::projection(options.inputProjection));
+	if (options.hidpiMap != _options.hidpiMap
+	  || options.outputProjection != _options.outputProjection
+	  || options.inputProjection != _options.inputProjection)
+		_mapView->setMapConfig(CRS::projection(options.inputProjection),
+		  CRS::projection(4326, options.outputProjection), options.hidpiMap);
+
 	if (options.timeZone != _options.timeZone) {
 		_mapView->setTimeZone(options.timeZone.zone());
 		_dateRange.first = _dateRange.first.toTimeZone(options.timeZone.zone());
@@ -2941,8 +2933,7 @@ void GUI::loadInitialMaps(const QString &selected)
 	if (mapDir.isNull())
 		return;
 
-	TreeNode<Map*> maps(MapList::loadMaps(mapDir,
-	  CRS::projection(_options.inputProjection)));
+	TreeNode<Map*> maps(MapList::loadMaps(mapDir));
 	createMapNodeMenu(createMapActionsNode(maps), _mapMenu, _mapsEnd);
 
 	// Select the active map according to the user settings
@@ -3044,8 +3035,7 @@ void GUI::show()
 
 void GUI::screenChanged(QScreen *screen)
 {
-	_mapView->setDevicePixelRatio(devicePixelRatioF(),
-	  _options.hidpiMap ? devicePixelRatioF() : 1.0);
+	_mapView->setDevicePixelRatio(devicePixelRatioF());
 
 	disconnect(SIGNAL(logicalDotsPerInchChanged(qreal)), this,
 	  SLOT(logicalDotsPerInchChanged(qreal)));
@@ -3057,6 +3047,5 @@ void GUI::logicalDotsPerInchChanged(qreal dpi)
 {
 	Q_UNUSED(dpi)
 
-	_mapView->setDevicePixelRatio(devicePixelRatioF(),
-	  _options.hidpiMap ? devicePixelRatioF() : 1.0);
+	_mapView->setDevicePixelRatio(devicePixelRatioF());
 }

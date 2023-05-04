@@ -182,6 +182,9 @@ bool OZF::open()
 	if (!_file.open(QIODevice::ReadOnly))
 		return false;
 
+	if (!_zooms.isEmpty())
+		return true;
+
 	if (!readHeaders()) {
 		qWarning("%s: Invalid header", qPrintable(_file.fileName()));
 		_file.close();
@@ -232,7 +235,6 @@ QPixmap OZF::tile(int zoom, int x, int y)
 
 QSize OZF::size(int zoom) const
 {
-	Q_ASSERT(_file.isOpen());
 	Q_ASSERT(0 <= zoom && zoom < _zooms.count());
 
 	return _zooms.at(zoom).size;

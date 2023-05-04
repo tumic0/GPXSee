@@ -18,6 +18,21 @@ using namespace IMG;
 #define TILE_SIZE   384
 #define TEXT_EXTENT 160
 
+static RectC limitBounds(const RectC &bounds, const Projection &proj)
+{
+	/* Limit the bounds for some well known projections
+	   (world maps have N/S bounds up to 90/-90!) */
+
+	if (proj == PCS::pcs(3857) || proj == PCS::pcs(3395))
+		return bounds & OSM::BOUNDS;
+	else if (proj == PCS::pcs(3031) || proj == PCS::pcs(3976))
+		return bounds & RectC(Coordinates(-180, -60), Coordinates(180, -90));
+	else if (proj == PCS::pcs(3995) || proj == PCS::pcs(3413))
+		return bounds & RectC(Coordinates(-180, 90), Coordinates(180, 60));
+	else
+		return bounds;
+}
+
 static QList<MapData*> overlays(const QString &fileName)
 {
 	QList<MapData*> list;
@@ -56,17 +71,27 @@ IMGMap::IMGMap(const QString &fileName, bool GMAP, QObject *parent)
 		return;
 	}
 
-	_dataBounds = _data.first()->bounds() & OSM::BOUNDS;
 	_zoom = _data.first()->zooms().min();
-	updateTransform();
 
 	_valid = true;
 }
 
-void IMGMap::load()
+void IMGMap::load(const Projection &in, const Projection &out,
+  qreal devicelRatio, bool hidpi)
 {
+	Q_UNUSED(in);
+	Q_UNUSED(hidpi);
+
+	_tileRatio = devicelRatio;
+	_projection = out;
+	_dataBounds = limitBounds(_data.first()->bounds(), _projection);
+
 	for (int i = 0; i < _data.size(); i++)
 		_data.at(i)->load();
+
+	updateTransform();
+
+	QPixmapCache::clear();
 }
 
 void IMGMap::unload()
@@ -261,37 +286,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 }
 
-void IMGMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
-{
-	Q_UNUSED(mapRatio);
-
-	_tileRatio = deviceRatio;
-}
-
-void IMGMap::setOutputProjection(const Projection &projection)
-{
-	if (!projection.isValid() || projection == _projection)
-		return;
-
-	_projection = projection;
-	// Limit the bounds for some well known projections
-	// (world maps have N/S bounds up to 90/-90!)
-	if (_projection == PCS::pcs(3857) || _projection == PCS::pcs(3395))
-		_dataBounds = _data.first()->bounds() & OSM::BOUNDS;
-	else if (_projection == PCS::pcs(3031) || _projection == PCS::pcs(3976))
-		_dataBounds = _data.first()->bounds() & RectC(Coordinates(-180, -60),
-		  Coordinates(180, -90));
-	else if (_projection == PCS::pcs(3995) || _projection == PCS::pcs(3413))
-		_dataBounds = _data.first()->bounds() & RectC(Coordinates(-180, 90),
-		  Coordinates(180, 60));
-	else
-		_dataBounds = _data.first()->bounds();
-
-	updateTransform();
-	QPixmapCache::clear();
-}
-
-Map* IMGMap::createIMG(const QString &path, const Projection &, bool *isDir)
+Map* IMGMap::createIMG(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;
@@ -299,7 +294,7 @@ Map* IMGMap::createIMG(const QString &path, const Projection &, bool *isDir)
 	return new IMGMap(path, false);
 }
 
-Map* IMGMap::createGMAP(const QString &path, const Projection &, bool *isDir)
+Map* IMGMap::createGMAP(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = true;

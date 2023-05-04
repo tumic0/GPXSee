@@ -33,8 +33,8 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
-	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
-	void load();
+	void load(const Projection &in, const Projection &out, qreal deviceRatio,
+	  bool hidpi);
 	void unload();
 
 	bool isValid() const {return _valid;}
@@ -47,8 +47,8 @@ public:
 	QPointF pp2xy(const PointD &p) const
 	  {return _transform.proj2img(p) / _mapRatio;}
 
-	static Map *createTAR(const QString &path, const Projection &, bool *isDir);
-	static Map *createMAP(const QString &path, const Projection &, bool *isDir);
+	static Map *createTAR(const QString &path, bool *isDir);
+	static Map *createMAP(const QString &path, bool *isDir);
 
 private:
 	struct ImageInfo {

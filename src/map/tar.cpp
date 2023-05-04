@@ -49,6 +49,9 @@ bool Tar::open()
 	if (!_file.open(QIODevice::ReadOnly))
 		return false;
 
+	if (!_index.isEmpty())
+		return true;
+
 	QFileInfo fi(_file.fileName());
 	QString tmiPath = fi.path() + "/" + fi.completeBaseName() + ".tmi";
 

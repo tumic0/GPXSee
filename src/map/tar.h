@@ -11,6 +11,7 @@ public:
 	Tar(const QString &name) : _file(name) {}
 
 	bool open();
+	void close() {_file.close();}
 
 	QStringList files() const {return _index.keys();}
 	QByteArray file(const QString &name);

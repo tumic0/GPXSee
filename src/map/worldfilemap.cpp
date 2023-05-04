@@ -9,9 +9,8 @@
 #include "worldfilemap.h"
 
 
-WorldFileMap::WorldFileMap(const QString &fileName, const Projection &proj,
-  QObject *parent) : Map(fileName, parent), _projection(proj), _img(0),
-  _ratio(1.0), _hasPRJ(false), _valid(false)
+WorldFileMap::WorldFileMap(const QString &fileName, QObject *parent)
+  : Map(fileName, parent), _img(0), _mapRatio(1.0), _hasPRJ(false), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QDir dir(fi.absoluteDir());
@@ -74,17 +73,25 @@ WorldFileMap::~WorldFileMap()
 
 QPointF WorldFileMap::ll2xy(const Coordinates &c)
 {
-	return QPointF(_transform.proj2img(_projection.ll2xy(c))) / _ratio;
+	return QPointF(_transform.proj2img(_projection.ll2xy(c))) / _mapRatio;
 }
 
 Coordinates WorldFileMap::xy2ll(const QPointF &p)
 {
-	return _projection.xy2ll(_transform.img2proj(p * _ratio));
+	return _projection.xy2ll(_transform.img2proj(p * _mapRatio));
+}
+
+RectC WorldFileMap::llBounds(const Projection &proj)
+{
+	if (_projection.isNull())
+		_projection = proj;
+
+	return Map::llBounds(proj);
 }
 
 QRectF WorldFileMap::bounds()
 {
-	return QRectF(QPointF(0, 0), _size / _ratio);
+	return QRectF(QPointF(0, 0), _size / _mapRatio);
 }
 
 void WorldFileMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
@@ -93,19 +100,20 @@ void WorldFileMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		_img->draw(painter, rect, flags);
 }
 
-void WorldFileMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
+void WorldFileMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
-	Q_UNUSED(deviceRatio);
+	Q_UNUSED(out);
 
-	_ratio = mapRatio;
+	if (!_hasPRJ)
+		_projection = in;
+
+	_mapRatio = hidpi ? deviceRatio : 1.0;
+
+	Q_ASSERT(!_img);
+	_img = new Image(_imgFile);
 	if (_img)
-		_img->setDevicePixelRatio(_ratio);
-}
-
-void WorldFileMap::load()
-{
-	if (!_img)
-		_img = new Image(_imgFile);
+		_img->setDevicePixelRatio(_mapRatio);
 }
 
 void WorldFileMap::unload()
@@ -114,19 +122,10 @@ void WorldFileMap::unload()
 	_img = 0;
 }
 
-void WorldFileMap::setInputProjection(const Projection &projection)
-{
-	if (_hasPRJ || !projection.isValid() || projection == _projection)
-		return;
-
-	_projection = projection;
-}
-
-Map *WorldFileMap::create(const QString &path, const Projection &proj,
-  bool *isDir)
+Map *WorldFileMap::create(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;
 
-	return new WorldFileMap(path, proj);
+	return new WorldFileMap(path);
 }

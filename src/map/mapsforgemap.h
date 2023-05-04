@@ -52,7 +52,7 @@ public:
 	MapsforgeMap(const QString &fileName, QObject *parent = 0);
 
 	QRectF bounds() {return _bounds;}
-	RectC llBounds() {return _data.bounds();}
+	RectC llBounds(const Projection &) {return _data.bounds();}
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);
@@ -60,10 +60,9 @@ public:
 	int zoomIn();
 	int zoomOut();
 
-	void load();
+	void load(const Projection &in, const Projection &out, qreal deviceRatio,
+	  bool hidpi);
 	void unload();
-	void setOutputProjection(const Projection &projection);
-	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
 
 	QPointF ll2xy(const Coordinates &c)
 	  {return _transform.proj2img(_projection.ll2xy(c));}
@@ -75,7 +74,7 @@ public:
 	bool isValid() const {return _data.isValid();}
 	QString errorString() const {return _data.errorString();}
 
-	static Map *create(const QString &path, const Projection &, bool *isMap);
+	static Map *create(const QString &path, bool *isMap);
 
 private slots:
 	void jobFinished(MapsforgeMapJob *job);

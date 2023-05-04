@@ -99,6 +99,15 @@ void WMSMap::wmsReady()
 	emit mapLoaded();
 }
 
+void WMSMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
+{
+	Q_UNUSED(in);
+	Q_UNUSED(out);
+
+	_mapRatio = hidpi ? deviceRatio : 1.0;
+}
+
 void WMSMap::clearCache()
 {
 	_tileLoader->clearCache();

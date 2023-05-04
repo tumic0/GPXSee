@@ -62,7 +62,7 @@ MapList::ParserMap MapList::parsers()
 
 MapList::ParserMap MapList::_parsers = parsers();
 
-Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
+Map *MapList::loadFile(const QString &path, bool *isDir)
 {
 	ParserMap::iterator it;
 	QFileInfo fi(path);
@@ -73,7 +73,7 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 	if ((it = _parsers.find(suffix)) != _parsers.end()) {
 		while (it != _parsers.end() && it.key() == suffix) {
 			delete map;
-			map = it.value()(path, proj, isDir);
+			map = it.value()(path, isDir);
 			if (map->isValid())
 				return map;
 			else
@@ -82,7 +82,7 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 		}
 	} else {
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
-			map = it.value()(path, proj, isDir);
+			map = it.value()(path, isDir);
 			if (map->isValid())
 				return map;
 			else {
@@ -100,8 +100,7 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 	return map ? map : new InvalidMap(path, "Unknown file format");
 }
 
-TreeNode<Map *> MapList::loadDir(const QString &path, const Projection &proj,
-  TreeNode<Map *> *parent)
+TreeNode<Map*> MapList::loadDir(const QString &path, TreeNode<Map*> *parent)
 {
 	QDir md(path);
 	md.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
@@ -118,12 +117,12 @@ TreeNode<Map *> MapList::loadDir(const QString &path, const Projection &proj,
 		QString suffix = fi.suffix().toLower();
 
 		if (fi.isDir()) {
-			TreeNode<Map*> child(loadDir(fi.absoluteFilePath(), proj, &tree));
+			TreeNode<Map*> child(loadDir(fi.absoluteFilePath(), &tree));
 			if (!child.isEmpty())
 				tree.addChild(child);
 		} else if (filter().contains("*." + suffix)) {
 			bool isDir = false;
-			Map *map = loadFile(fi.absoluteFilePath(), proj, &isDir);
+			Map *map = loadFile(fi.absoluteFilePath(), &isDir);
 			if (isDir) {
 				if (parent)
 					parent->addItem(map);
@@ -138,13 +137,13 @@ TreeNode<Map *> MapList::loadDir(const QString &path, const Projection &proj,
 	return tree;
 }
 
-TreeNode<Map *> MapList::loadMaps(const QString &path, const Projection &proj)
+TreeNode<Map *> MapList::loadMaps(const QString &path)
 {
 	if (QFileInfo(path).isDir())
-		return loadDir(path, proj);
+		return loadDir(path);
 	else {
 		TreeNode<Map*> tree;
-		tree.addItem(loadFile(path, proj));
+		tree.addItem(loadFile(path));
 		return tree;
 	}
 }

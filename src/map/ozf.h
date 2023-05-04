@@ -16,6 +16,7 @@ public:
 	  _file(name) {}
 
 	bool open();
+	void close() {_file.close();}
 
 	QString fileName() const {return _file.fileName();}
 	bool isOpen() const {return _file.isOpen();}

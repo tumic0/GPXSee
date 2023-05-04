@@ -15,7 +15,7 @@ class Projection;
 class MapSource
 {
 public:
-	static Map *create(const QString &path, const Projection &proj, bool *isDir);
+	static Map *create(const QString &path, bool *isDir);
 
 private:
 	enum Type {

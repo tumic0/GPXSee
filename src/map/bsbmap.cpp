@@ -390,7 +390,7 @@ QImage BSBMap::readImage()
 }
 
 BSBMap::BSBMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _img(0), _ratio(1.0), _dataOffset(-1), _valid(false)
+  : Map(fileName, parent), _img(0), _mapRatio(1.0), _dataOffset(-1), _valid(false)
 {
 	QFile file(fileName);
 
@@ -414,19 +414,19 @@ BSBMap::~BSBMap()
 
 QPointF BSBMap::ll2xy(const Coordinates &c)
 {
-	return QPointF(_transform.proj2img(_projection.ll2xy(c))) / _ratio;
+	return QPointF(_transform.proj2img(_projection.ll2xy(c))) / _mapRatio;
 }
 
 Coordinates BSBMap::xy2ll(const QPointF &p)
 {
-	return _projection.xy2ll(_transform.img2proj(p * _ratio));
+	return _projection.xy2ll(_transform.img2proj(p * _mapRatio));
 }
 
 QRectF BSBMap::bounds()
 {
 	return _skewSize.isValid()
-	  ? QRectF(QPointF(0, 0), _skewSize / _ratio)
-	  : QRectF(QPointF(0, 0), _size / _ratio);
+	  ? QRectF(QPointF(0, 0), _skewSize / _mapRatio)
+	  : QRectF(QPointF(0, 0), _size / _mapRatio);
 }
 
 void BSBMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
@@ -435,17 +435,14 @@ void BSBMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		_img->draw(painter, rect, flags);
 }
 
-void BSBMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
+void BSBMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
-	Q_UNUSED(deviceRatio);
+	Q_UNUSED(in);
+	Q_UNUSED(out);
 
-	_ratio = mapRatio;
-	if (_img)
-		_img->setDevicePixelRatio(_ratio);
-}
+	_mapRatio = hidpi ? deviceRatio : 1.0;
 
-void BSBMap::load()
-{
 	if (!_img) {
 		if (_skew > 0.0 && _skew < 360.0) {
 			QTransform matrix;
@@ -454,6 +451,9 @@ void BSBMap::load()
 		} else
 			_img = new Image(readImage());
 	}
+
+	if (_img)
+		_img->setDevicePixelRatio(_mapRatio);
 }
 
 void BSBMap::unload()
@@ -462,7 +462,7 @@ void BSBMap::unload()
 	_img = 0;
 }
 
-Map *BSBMap::create(const QString &path, const Projection &, bool *isMap)
+Map *BSBMap::create(const QString &path, bool *isMap)
 {
 	if (isMap)
 		*isMap = false;

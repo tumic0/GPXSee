@@ -15,11 +15,11 @@ public:
 	Q_OBJECT
 
 public:
-	JNXMap(const QString &fileName, const Projection &proj, QObject *parent = 0);
+	JNXMap(const QString &fileName, QObject *parent = 0);
 	~JNXMap();
 
 	QRectF bounds();
-	RectC llBounds() {return _bounds;}
+	RectC llBounds(const Projection &) {return _bounds;}
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom) {_zoom = zoom;}
@@ -30,19 +30,16 @@ public:
 	QPointF ll2xy(const Coordinates &c);
 	Coordinates xy2ll(const QPointF &p);
 
-	void load();
+	void load(const Projection &in, const Projection &out, qreal deviceRatio,
+	  bool hidpi);
 	void unload();
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
-	void setInputProjection(const Projection &projection);
-	void setDevicePixelRatio(qreal /*deviceRatio*/, qreal mapRatio)
-	  {_mapRatio = mapRatio;}
-
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map *create(const QString &path, const Projection &proj, bool *isDir);
+	static Map *create(const QString &path, bool *isDir);
 
 private:
 	struct Tile {
@@ -54,15 +51,37 @@ private:
 		QPointF pos;
 	};
 
+	struct Level {
+		quint32 count;
+		quint32 offset;
+		quint32 scale;
+	};
+
 	struct Zoom {
+		Zoom() {}
+		Zoom(const Level &level) : level(level) {}
+
+		Level level;
 		Transform transform;
 		QVector<Tile> tiles;
 		RTree<Tile*, qreal, 2> tree;
 	};
 
+	struct Ctx {
+		QPainter *painter;
+		QFile *file;
+		qreal ratio;
+
+		Ctx(QPainter *painter, QFile *file, qreal ratio)
+		  : painter(painter), file(file), ratio(ratio) {}
+	};
+
+
 	template<class T> bool readValue(T &val);
 	bool readString(QByteArray &ba);
+	bool readHeader();
 	bool readTiles();
+	void clearTiles();
 
 	static bool cb(Tile *tile, void *context);
 	static QPixmap pixmap(const Tile *tile, QFile *file);

@@ -13,14 +13,12 @@
 
 #include <QFileInfo>
 #include <QXmlStreamReader>
-#include <QImage>
-#include <QImageReader>
 #include <QBuffer>
+#include <QImageReader>
 #include <QPainter>
+#include <QPixmapCache>
 #include <private/qzipreader_p.h>
-#include"common/util.h"
-#include "pcs.h"
-#include "image.h"
+#include "common/util.h"
 #include "kmzmap.h"
 
 
@@ -29,162 +27,140 @@
 #define TL(m) ((m).bbox().topLeft())
 #define BR(m) ((m).bbox().bottomRight())
 
-
-KMZMap::Overlay::Overlay(const QString &path, const QSize &size,
-  const RectC &bbox, double rotation, const Projection *proj, qreal ratio)
-  : _path(path), _size(size), _bbox(bbox), _rotation(rotation), _img(0),
-  _proj(proj), _ratio(ratio)
+bool KMZMap::resCmp(const Tile &m1, const Tile &m2)
 {
-	ReferencePoint tl(PointD(0, 0), _proj->ll2xy(bbox.topLeft()));
-	ReferencePoint br(PointD(size.width(), size.height()),
-	  _proj->ll2xy(bbox.bottomRight()));
-
-	QTransform t;
-	t.rotate(-rotation);
-	QRectF b(0, 0, size.width(), size.height());
-	QPolygonF ma = t.map(b);
-	_bounds = ma.boundingRect();
-
-	_transform = Transform(tl, br);
+	return m1.resolution() > m2.resolution();
 }
 
-qreal KMZMap::Overlay::resolution(const QRectF &rect) const
-{
-	qreal cy = rect.center().y();
-	QPointF cl(rect.left(), cy);
-	QPointF cr(rect.right(), cy);
-
-	qreal ds = xy2ll(cl).distanceTo(xy2ll(cr));
-	qreal ps = QLineF(cl, cr).length();
-
-	return ds/ps;
-}
-
-void KMZMap::Overlay::draw(QPainter *painter, const QRectF &rect, Flags flags)
-{
-	if (_img) {
-		QRectF rr(rect.topLeft() / _ratio, rect.size());
-
-		if (_rotation) {
-			painter->save();
-			painter->rotate(-_rotation);
-			_img->draw(painter, rr, flags);
-			painter->restore();
-		} else
-			_img->draw(painter, rr, flags);
-	}
-
-	//painter->setPen(Qt::red);
-	//painter->drawRect(_bounds);
-}
-
-void KMZMap::Overlay::load(QZipReader *zip)
-{
-	if (!_img) {
-		QByteArray ba(zip->fileData(_path));
-		_img = new Image(QImage::fromData(ba));
-		_img->setDevicePixelRatio(_ratio);
-	}
-}
-
-void KMZMap::Overlay::unload()
-{
-	delete _img;
-	_img = 0;
-}
-
-void KMZMap::Overlay::setProjection(const Projection *proj)
-{
-	_proj = proj;
-
-	ReferencePoint tl(PointD(0, 0), _proj->ll2xy(_bbox.topLeft()));
-	ReferencePoint br(PointD(_size.width(), _size.height()),
-	  _proj->ll2xy(_bbox.bottomRight()));
-
-	QTransform t;
-	t.rotate(-_rotation);
-	QRectF b(0, 0, _size.width(), _size.height());
-	QPolygonF ma = t.map(b);
-	_bounds = ma.boundingRect();
-
-	_transform = Transform(tl, br);
-}
-
-void KMZMap::Overlay::setDevicePixelRatio(qreal ratio)
-{
-	_ratio = ratio;
-
-	if (_img)
-		_img->setDevicePixelRatio(_ratio);
-}
-
-
-bool KMZMap::resCmp(const Overlay &m1, const Overlay &m2)
-{
-	qreal r1, r2;
-
-	r1 = m1.resolution(m1.bounds());
-	r2 = m2.resolution(m2.bounds());
-
-	return r1 > r2;
-}
-
-bool KMZMap::xCmp(const Overlay &m1, const Overlay &m2)
+bool KMZMap::xCmp(const Tile &m1, const Tile &m2)
 {
 	return TL(m1).lon() < TL(m2).lon();
 }
 
-bool KMZMap::yCmp(const Overlay &m1, const Overlay &m2)
+bool KMZMap::yCmp(const Tile &m1, const Tile &m2)
 {
 	return TL(m1).lat() > TL(m2).lat();
 }
 
+
+KMZMap::Tile::Tile(const Overlay &overlay, QZipReader &zip)
+  : _overlay(overlay)
+{
+	QByteArray ba(zip.fileData(overlay.path()));
+	QBuffer img(&ba);
+	QImageReader ir(&img);
+	_size = ir.size();
+}
+
+void KMZMap::Tile::configure(const Projection &proj)
+{
+	ReferencePoint tl(PointD(0, 0), proj.ll2xy(bbox().topLeft()));
+	ReferencePoint br(PointD(_size.width(), _size.height()),
+	  proj.ll2xy(bbox().bottomRight()));
+	_transform = Transform(tl, br);
+}
+
+QRectF KMZMap::Tile::bounds() const
+{
+	QTransform t;
+	t.rotate(-rotation());
+	QRectF b(0, 0, _size.width(), _size.height());
+	QPolygonF ma(t.map(b));
+	return ma.boundingRect();
+}
+
+qreal KMZMap::Tile::resolution() const
+{
+	QRectF d(0, 0, _size.width(), _size.height());
+	qreal dy = d.center().y();
+	QPointF dl(d.left(), dy);
+	QPointF dr(d.right(), dy);
+
+	double cy = bbox().center().lat();
+	Coordinates cl(bbox().left(), cy);
+	Coordinates cr(bbox().right(), cy);
+
+	qreal ds = cl.distanceTo(cr);
+	qreal ps = QLineF(dl, dr).length();
+
+	return ds/ps;
+}
+
+bool KMZMap::createTiles(const QList<Overlay> &overlays, QZipReader &zip)
+{
+	if (overlays.isEmpty()) {
+		_errorString = "No usable overlay found";
+		return false;
+	}
+
+	_tiles.reserve(overlays.size());
+
+	for (int i = 0; i < overlays.size(); i++) {
+		const Overlay &ol = overlays.at(i);
+		Tile tile(ol, zip);
+		if (tile.isValid())
+			_tiles.append(tile);
+		else {
+			_errorString = ol.path() + ": invalid/missing overlay image";
+			return false;
+		}
+	}
+
+	return true;
+}
+
+void KMZMap::computeLLBounds()
+{
+	for (int i = 0; i < _tiles.size(); i++)
+		_llbounds |= _tiles.at(i).bbox();
+}
+
 void KMZMap::computeZooms()
 {
-	std::sort(_maps.begin(), _maps.end(), resCmp);
+	std::sort(_tiles.begin(), _tiles.end(), resCmp);
 
-	_zooms.append(Zoom(0, _maps.count() - 1));
-	for (int i = 1; i < _maps.count(); i++) {
-		qreal last = _maps.at(i-1).resolution(_maps.at(i).bounds());
-		qreal cur = _maps.at(i).resolution(_maps.at(i).bounds());
+	_zooms.append(Zoom(0, _tiles.count() - 1));
+	for (int i = 1; i < _tiles.count(); i++) {
+		qreal last = _tiles.at(i-1).resolution();
+		qreal cur = _tiles.at(i).resolution();
 		if (cur < last * ZOOM_THRESHOLD) {
 			_zooms.last().last = i-1;
-			_zooms.append(Zoom(i, _maps.count() - 1));
+			_zooms.append(Zoom(i, _tiles.count() - 1));
 		}
 	}
 }
 
 void KMZMap::computeBounds()
 {
-	QVector<QPointF> offsets(_maps.count());
+	QVector<QPointF> offsets(_tiles.count());
 
 	for (int z = 0; z < _zooms.count(); z++) {
-		QList<Overlay> m;
+		QList<Tile> m;
 		for (int i = _zooms.at(z).first; i <= _zooms.at(z).last; i++)
-			m.append(_maps.at(i));
+			m.append(_tiles.at(i));
 
 		std::sort(m.begin(), m.end(), xCmp);
-		offsets[_maps.indexOf(m.first())].setX(m.first().bounds().left());
+		offsets[_tiles.indexOf(m.first())].setX(m.first().bounds().left());
 		for (int i = 1; i < m.size(); i++) {
-			qreal w = m.first().ll2xy(TL(m.at(i))).x();
-			offsets[_maps.indexOf(m.at(i))].setX(w + m.at(i).bounds().left());
+			qreal w = ll2xy(TL(m.at(i)), m.first().transform()).x();
+			offsets[_tiles.indexOf(m.at(i))].setX(w + m.at(i).bounds().left());
 		}
 
 		std::sort(m.begin(), m.end(), yCmp);
-		offsets[_maps.indexOf(m.first())].setY(m.first().bounds().top());
+		offsets[_tiles.indexOf(m.first())].setY(m.first().bounds().top());
 		for (int i = 1; i < m.size(); i++) {
-			qreal h = m.first().ll2xy(TL(m.at(i))).y();
-			offsets[_maps.indexOf(m.at(i))].setY(h + m.at(i).bounds().top());
+			qreal h = ll2xy(TL(m.at(i)), m.first().transform()).y();
+			offsets[_tiles.indexOf(m.at(i))].setY(h + m.at(i).bounds().top());
 		}
 	}
 
 	_adjust = 0;
-	_bounds = QVector<Bounds>(_maps.count());
-	for (int i = 0; i < _maps.count(); i++) {
-		QRectF xy(offsets.at(i), _maps.at(i).bounds().size());
-		_bounds[i] = Bounds(_maps.at(i).bbox(), xy);
-		_adjust = qMin(qMin(_maps.at(i).bounds().left(),
-		  _maps.at(i).bounds().top()), _adjust);
+	_bounds = QVector<Bounds>(_tiles.count());
+	for (int i = 0; i < _tiles.count(); i++) {
+		QRectF xy(offsets.at(i), _tiles.at(i).bounds().size());
+		_bounds[i] = Bounds(_tiles.at(i).bbox(), xy);
+		_adjust = qMin(qMin(_tiles.at(i).bounds().left(),
+		  _tiles.at(i).bounds().top()), _adjust);
 	}
 	_adjust = -_adjust;
 }
@@ -236,7 +212,7 @@ RectC KMZMap::latLonBox(QXmlStreamReader &reader, double *rotation)
 	return RectC(Coordinates(left, top), Coordinates(right, bottom));
 }
 
-void KMZMap::groundOverlay(QXmlStreamReader &reader, QZipReader &zip)
+void KMZMap::groundOverlay(QXmlStreamReader &reader, QList<Overlay> &overlays)
 {
 	QString image;
 	RectC rect;
@@ -251,91 +227,85 @@ void KMZMap::groundOverlay(QXmlStreamReader &reader, QZipReader &zip)
 			reader.skipCurrentElement();
 	}
 
-	if (rect.isValid()) {
-		QByteArray ba(zip.fileData(image));
-		QBuffer img(&ba);
-		QImageReader ir(&img);
-		QSize size(ir.size());
-
-		if (size.isValid())
-			_maps.append(Overlay(image, size, rect, rotation, &_projection,
-			  _ratio));
-		else
-			reader.raiseError(image + ": Invalid image file");
-	} else
+	if (rect.isValid())
+		overlays.append(Overlay(image, rect, rotation));
+	else
 		reader.raiseError("Invalid LatLonBox");
 }
 
-void KMZMap::document(QXmlStreamReader &reader, QZipReader &zip)
+void KMZMap::document(QXmlStreamReader &reader, QList<Overlay> &overlays)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("Document"))
-			document(reader, zip);
+			document(reader, overlays);
 		else if (reader.name() == QLatin1String("GroundOverlay"))
-			groundOverlay(reader, zip);
+			groundOverlay(reader, overlays);
 		else if (reader.name() == QLatin1String("Folder"))
-			folder(reader, zip);
+			folder(reader, overlays);
 		else
 			reader.skipCurrentElement();
 	}
 }
 
-void KMZMap::folder(QXmlStreamReader &reader, QZipReader &zip)
+void KMZMap::folder(QXmlStreamReader &reader, QList<Overlay> &overlays)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("GroundOverlay"))
-			groundOverlay(reader, zip);
+			groundOverlay(reader, overlays);
 		else if (reader.name() == QLatin1String("Folder"))
-			folder(reader, zip);
+			folder(reader, overlays);
 		else
 			reader.skipCurrentElement();
 	}
 }
 
-void KMZMap::kml(QXmlStreamReader &reader, QZipReader &zip)
+void KMZMap::kml(QXmlStreamReader &reader, QList<Overlay> &overlays)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("Document"))
-			document(reader, zip);
+			document(reader, overlays);
 		else if (reader.name() == QLatin1String("GroundOverlay"))
-			groundOverlay(reader, zip);
+			groundOverlay(reader, overlays);
 		else if (reader.name() == QLatin1String("Folder"))
-			folder(reader, zip);
+			folder(reader, overlays);
 		else
 			reader.skipCurrentElement();
 	}
 }
 
 
-KMZMap::KMZMap(const QString &fileName, const Projection &proj, QObject *parent)
-  : Map(fileName, parent), _zoom(0), _mapIndex(-1), _zip(0), _projection(proj),
-  _ratio(1.0), _valid(false)
+KMZMap::KMZMap(const QString &fileName, QObject *parent)
+  : Map(fileName, parent), _zoom(0), _mapIndex(-1), _zip(0), _mapRatio(1.0),
+  _valid(false)
 {
 	QZipReader zip(fileName, QIODevice::ReadOnly);
 	QByteArray xml(zip.fileData("doc.kml"));
 	QXmlStreamReader reader(xml);
+	QList<Overlay> overlays;
 
 	if (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("kml"))
-			kml(reader, zip);
+			kml(reader, overlays);
 		else
 			reader.raiseError("Not a KMZ file");
 	}
-
 	if (reader.error()) {
 		_errorString = "doc.kml:" + QString::number(reader.lineNumber()) + ": "
 		  + reader.errorString();
 		return;
 	}
-	if (_maps.isEmpty()) {
-		_errorString = "No usable GroundOverlay found";
-		return;
-	}
 
+	if (!createTiles(overlays, zip))
+		return;
+	computeLLBounds();
 	computeZooms();
-	computeBounds();
 
 	_valid = true;
+}
+
+KMZMap::~KMZMap()
+{
+	delete _zip;
 }
 
 QRectF KMZMap::bounds()
@@ -364,8 +334,9 @@ int KMZMap::zoomFit(const QSize &size, const RectC &br)
 			if (!_bounds.at(i).ll.contains(br.center()))
 				continue;
 
-			QRect sbr = QRectF(_maps.at(i).ll2xy(br.topLeft()),
-			  _maps.at(i).ll2xy(br.bottomRight())).toRect().normalized();
+			QRect sbr = QRectF(ll2xy(br.topLeft(), _tiles.at(i).transform()),
+			  ll2xy(br.bottomRight(), _tiles.at(i).transform()))
+			  .toRect().normalized();
 
 			if (sbr.size().width() > size.width()
 			  || sbr.size().height() > size.height())
@@ -413,10 +384,10 @@ QPointF KMZMap::ll2xy(const Coordinates &c)
 		}
 	}
 
-	QPointF p = _maps.at(_mapIndex).ll2xy(c);
-	if (_maps.at(_mapIndex).rotation()) {
+	QPointF p = ll2xy(c, _tiles.at(_mapIndex).transform());
+	if (_tiles.at(_mapIndex).rotation()) {
 		QTransform matrix;
-		matrix.rotate(-_maps.at(_mapIndex).rotation());
+		matrix.rotate(-_tiles.at(_mapIndex).rotation());
 		return matrix.map(p) + _bounds.at(_mapIndex).xy.topLeft();
 	} else
 		return p + _bounds.at(_mapIndex).xy.topLeft();
@@ -434,90 +405,90 @@ Coordinates KMZMap::xy2ll(const QPointF &p)
 	}
 
 	QPointF p2 = p - _bounds.at(idx).xy.topLeft();
-	if (_maps.at(idx).rotation()) {
+	if (_tiles.at(idx).rotation()) {
 		QTransform matrix;
-		matrix.rotate(_maps.at(idx).rotation());
-		return _maps.at(idx).xy2ll(matrix.map(p2));
+		matrix.rotate(_tiles.at(idx).rotation());
+		return xy2ll(matrix.map(p2), _tiles.at(idx).transform());
 	} else
-		return _maps.at(idx).xy2ll(p2);
+		return xy2ll(p2, _tiles.at(idx).transform());
 }
 
 void KMZMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	QRectF er = rect.adjusted(-_adjust * _ratio, -_adjust * _ratio,
-	  _adjust * _ratio, _adjust * _ratio);
+	Q_UNUSED(flags);
+
+	QRectF er = rect.adjusted(-_adjust * _mapRatio, -_adjust * _mapRatio,
+	  _adjust * _mapRatio, _adjust * _mapRatio);
 
 	for (int i = _zooms.at(_zoom).first; i <= _zooms.at(_zoom).last; i++) {
 		QRectF ir = er.intersected(_bounds.at(i).xy);
 		if (!ir.isNull())
-			draw(painter, ir, i, flags);
+			draw(painter, ir, i);
 	}
 }
 
-void KMZMap::load()
+void KMZMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
+	Q_UNUSED(out);
+
+	_projection = in;
+	_mapRatio = hidpi ? deviceRatio : 1.0;
+
+	for (int i = 0; i < _tiles.size(); i++)
+		_tiles[i].configure(_projection);
+
+	computeBounds();
+
 	Q_ASSERT(!_zip);
 	_zip = new QZipReader(path(), QIODevice::ReadOnly);
 }
 
 void KMZMap::unload()
 {
-	for (int i = 0; i < _maps.count(); i++)
-		_maps[i].unload();
+	_bounds.clear();
 
 	delete _zip;
 	_zip = 0;
 }
 
-void KMZMap::setInputProjection(const Projection &projection)
+void KMZMap::draw(QPainter *painter, const QRectF &rect, int mapIndex)
 {
-	if (!projection.isValid() || projection == _projection)
-		return;
-
-	_projection = projection;
-
-	for (int i = 0; i < _maps.size(); i++)
-		_maps[i].setProjection(&_projection);
-
-	_bounds.clear();
-	computeBounds();
-}
-
-void KMZMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
-{
-	Q_UNUSED(deviceRatio);
-
-	if (mapRatio == _ratio)
-		return;
-
-	_ratio = mapRatio;
-
-	for (int i = 0; i < _maps.size(); i++)
-		_maps[i].setDevicePixelRatio(_ratio);
-
-	_bounds.clear();
-	computeBounds();
-}
-
-void KMZMap::draw(QPainter *painter, const QRectF &rect, int mapIndex,
-  Flags flags)
-{
-	Overlay &map = _maps[mapIndex];
+	const Tile &map = _tiles.at(mapIndex);
 	const QPointF offset = _bounds.at(mapIndex).xy.topLeft();
 	QRectF pr = QRectF(rect.topLeft() - offset, rect.size());
-
-	map.load(_zip);
+	QRectF sr(pr.topLeft() * _mapRatio, pr.size() * _mapRatio);
+	QString key(path() + "/" + map.path());
+	QPixmap pm;
 
 	painter->save();
 	painter->translate(offset);
-	map.draw(painter, pr, flags);
+	if (map.rotation())
+		painter->rotate(-map.rotation());
+
+	if (QPixmapCache::find(key, &pm)) {
+		pm.setDevicePixelRatio(_mapRatio);
+		painter->drawPixmap(pr.topLeft(), pm, sr);
+	} else {
+		QByteArray ba(_zip->fileData(map.path()));
+		QImage img(QImage::fromData(ba));
+		pm = QPixmap::fromImage(img);
+		pm.setDevicePixelRatio(_mapRatio);
+		painter->drawPixmap(pr.topLeft(), pm, sr);
+		QPixmapCache::insert(key, pm);
+		qDebug() << key;
+	}
+
+	//painter->setPen(Qt::red);
+	//painter->drawRect(map.bounds());
+
 	painter->restore();
 }
 
-Map *KMZMap::create(const QString &path, const Projection &proj, bool *isDir)
+Map *KMZMap::create(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;
 
-	return new KMZMap(path, proj);
+	return new KMZMap(path);
 }

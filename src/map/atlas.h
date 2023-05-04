@@ -3,6 +3,7 @@
 
 #include "map.h"
 #include "rectd.h"
+#include "projection.h"
 
 class OziMap;
 
@@ -16,6 +17,7 @@ public:
 	QString name() const {return _name;}
 
 	QRectF bounds();
+	RectC llBounds(const Projection &proj);
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);
@@ -28,14 +30,15 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
-	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
+	void load(const Projection &in, const Projection &out, qreal deviceRatio,
+	  bool hidpi);
 	void unload();
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map *createTAR(const QString &path, const Projection &, bool *isDir);
-	static Map *createTBA(const QString &path, const Projection &, bool *isDir);
+	static Map *createTAR(const QString &path, bool *isDir);
+	static Map *createTBA(const QString &path, bool *isDir);
 
 private:
 	struct Zoom {

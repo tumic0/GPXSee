@@ -22,9 +22,16 @@ ENCMap::ENCMap(const QString &fileName, QObject *parent)
 	}
 }
 
-void ENCMap::load()
+void ENCMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
+	Q_UNUSED(in);
+	Q_UNUSED(hidpi);
+
+	_tileRatio = deviceRatio;
+	_projection = out;
 	_data.load();
+	QPixmapCache::clear();
 }
 
 void ENCMap::unload()
@@ -218,24 +225,7 @@ void ENCMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 }
 
-void ENCMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
-{
-	Q_UNUSED(mapRatio);
-
-	_tileRatio = deviceRatio;
-}
-
-void ENCMap::setOutputProjection(const Projection &projection)
-{
-	if (!projection.isValid() || projection == _projection)
-		return;
-
-	_projection = projection;
-	updateTransform();
-	QPixmapCache::clear();
-}
-
-Map *ENCMap::create(const QString &path, const Projection &, bool *isMap)
+Map *ENCMap::create(const QString &path, bool *isMap)
 {
 	if (isMap)
 		*isMap = false;

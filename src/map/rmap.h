@@ -25,8 +25,8 @@ public:
 	QPointF ll2xy(const Coordinates &c);
 	Coordinates xy2ll(const QPointF &p);
 
-	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
-	void load();
+	void load(const Projection &in, const Projection &out, qreal deviceRatio,
+	  bool hidpi);
 	void unload();
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
@@ -34,7 +34,7 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map *create(const QString &path, const Projection &, bool *isDir);
+	static Map *create(const QString &path, bool *isDir);
 
 private:
 	struct Header {

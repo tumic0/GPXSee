@@ -252,8 +252,13 @@ AQMMap::AQMMap(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
-void AQMMap::load()
+void AQMMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
+	Q_UNUSED(in);
+	Q_UNUSED(out);
+
+	_mapRatio = hidpi ? deviceRatio : 1.0;
 	_file.open(QIODevice::ReadOnly);
 }
 
@@ -303,12 +308,6 @@ int AQMMap::zoomOut()
 {
 	_zoom = qMax(_zoom - 1, 0);
 	return _zoom;
-}
-
-void AQMMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
-{
-	Q_UNUSED(deviceRatio);
-	_mapRatio = mapRatio;
 }
 
 QPointF AQMMap::ll2xy(const Coordinates &c)
@@ -406,7 +405,7 @@ void AQMMap::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
 	painter->drawPixmap(tp, pixmap);
 }
 
-Map *AQMMap::create(const QString &path, const Projection &, bool *isDir)
+Map *AQMMap::create(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;

@@ -152,8 +152,13 @@ OsmdroidMap::OsmdroidMap(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
-void OsmdroidMap::load()
+void OsmdroidMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
+	Q_UNUSED(in);
+	Q_UNUSED(out);
+
+	_mapRatio = hidpi ? deviceRatio : 1.0;
 	_db.open();
 }
 
@@ -206,12 +211,6 @@ int OsmdroidMap::zoomOut()
 {
 	_zoom = qMax(_zoom - 1, _zooms.min());
 	return _zoom;
-}
-
-void OsmdroidMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
-{
-	Q_UNUSED(deviceRatio);
-	_mapRatio = mapRatio;
 }
 
 qreal OsmdroidMap::tileSize() const
@@ -310,7 +309,7 @@ Coordinates OsmdroidMap::xy2ll(const QPointF &p)
 	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale) * _mapRatio);
 }
 
-Map *OsmdroidMap::create(const QString &path, const Projection &, bool *isDir)
+Map *OsmdroidMap::create(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;

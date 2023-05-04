@@ -50,6 +50,8 @@ OziMap::OziMap(const QString &fileName, bool TAR, QObject *parent)
 
 		if (!setTileInfo(_tar->files()))
 			return;
+
+		_tar->close();
 	} else {
 		QFile file(fileName);
 		MapFile mf(file);
@@ -105,6 +107,16 @@ OziMap::OziMap(const QString &fileName, Tar &tar, QObject *parent)
 	_transform = mf.transform();
 	_tar = new Tar(fi.absolutePath() + "/" + fi.completeBaseName() + ".tar");
 
+	if (!_tar->open()) {
+		_errorString = _tar->fileName() + ": error reading tar file";
+		return;
+	}
+	if (!setTileInfo(_tar->files())) {
+		_errorString = _tar->fileName() + ": " + _errorString;
+		return;
+	}
+	_tar->close();
+
 	_valid = true;
 }
 
@@ -144,6 +156,7 @@ bool OziMap::setImageInfo(const QString &path)
 			return false;
 		}
 		_scale = _ozf->scale(_zoom);
+		_ozf->close();
 	} else {
 		QImageReader ir(_map.path);
 		if (!ir.canRead()) {
@@ -192,28 +205,42 @@ bool OziMap::setTileInfo(const QStringList &tiles, const QString &path)
 	return false;
 }
 
-void OziMap::load()
+void OziMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
-	if (_tar && !_tar->isOpen()) {
-		if (!_tar->open()) {
-			qWarning("%s: error loading tar file",
-			  qPrintable(_tar->fileName()));
-			return;
-		}
-		if (!setTileInfo(_tar->files()))
-			qWarning("%s: %s", qPrintable(_tar->fileName()),
-			  qPrintable(_errorString));
-		return;
-	}
+	Q_UNUSED(in);
+	Q_UNUSED(out);
 
-	if (!_tile.isValid() && !_ozf && !_img)
+	_mapRatio = hidpi ? deviceRatio : 1.0;
+
+	if (_tar) {
+		Q_ASSERT(!_tar->isOpen());
+		if (!_tar->open())
+			return;
+	}
+	if (_ozf) {
+		Q_ASSERT(!_ozf->isOpen());
+		if (!_ozf->open())
+			return;
+	}
+	if (!_tile.isValid() && !_ozf) {
+		Q_ASSERT(!_img);
 		_img = new Image(_map.path);
+		if (_img)
+			_img->setDevicePixelRatio(_mapRatio);
+	}
 }
 
 void OziMap::unload()
 {
 	delete _img;
 	_img = 0;
+
+	if (_tar && _tar->isOpen())
+		_tar->close();
+
+	if (_ozf && _ozf->isOpen())
+		_ozf->close();
 }
 
 void OziMap::drawTiled(QPainter *painter, const QRectF &rect) const
@@ -368,16 +395,7 @@ void OziMap::rescale(int zoom)
 	_scale = _ozf->scale(zoom);
 }
 
-void OziMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
-{
-	Q_UNUSED(deviceRatio);
-
-	_mapRatio = mapRatio;
-	if (_img)
-		_img->setDevicePixelRatio(_mapRatio);
-}
-
-Map *OziMap::createTAR(const QString &path, const Projection &, bool *isDir)
+Map *OziMap::createTAR(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;
@@ -385,7 +403,7 @@ Map *OziMap::createTAR(const QString &path, const Projection &, bool *isDir)
 	return new OziMap(path, true);
 }
 
-Map *OziMap::createMAP(const QString &path, const Projection &, bool *isDir)
+Map *OziMap::createMAP(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;

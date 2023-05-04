@@ -11,22 +11,6 @@
 
 #define ic2dc(x) ((x) * 180.0 / 0x7FFFFFFF)
 
-struct Level {
-	quint32 count;
-	quint32 offset;
-	quint32 scale;
-};
-
-struct Ctx {
-	QPainter *painter;
-	QFile *file;
-	qreal ratio;
-
-	Ctx(QPainter *painter, QFile *file, qreal ratio)
-	  : painter(painter), file(file), ratio(ratio) {}
-};
-
-
 template<class T> bool JNXMap::readValue(T &val)
 {
 	T data;
@@ -53,7 +37,7 @@ bool JNXMap::readString(QByteArray& ba)
 	}
 }
 
-bool JNXMap::readTiles()
+bool JNXMap::readHeader()
 {
 	qint32 lat1, lon2, lat2, lon1;
 	quint32 version, dummy, levels;
@@ -88,16 +72,22 @@ bool JNXMap::readTiles()
 	}
 
 	_zooms.reserve(lh.size());
-	for (int i = 0; i < lh.count(); i++) {
-		_zooms.append(new Zoom());
-		Zoom *z = _zooms.last();
-		const Level &l = lh.at(i);
+	for (int i = 0; i < lh.count(); i++)
+		_zooms.append(new Zoom(lh.at(i)));
 
-		if (!_file.seek(l.offset))
+	return true;
+}
+
+bool JNXMap::readTiles()
+{
+	for (int i = 0; i < _zooms.size(); i++) {
+		Zoom *z = _zooms[i];
+
+		if (!_file.seek(z->level.offset))
 			return false;
 
-		z->tiles = QVector<Tile>(l.count);
-		for (quint32 j = 0; j < l.count; j++) {
+		z->tiles = QVector<Tile>(z->level.count);
+		for (quint32 j = 0; j < z->level.count; j++) {
 			Tile &tile = z->tiles[j];
 
 			if (!(readValue(tile.top) && readValue(tile.right)
@@ -134,16 +124,25 @@ bool JNXMap::readTiles()
 	return true;
 }
 
-JNXMap::JNXMap(const QString &fileName, const Projection &proj, QObject *parent)
-  : Map(fileName, parent), _file(fileName), _zoom(0), _projection(proj),
-  _mapRatio(1.0), _valid(false)
+void JNXMap::clearTiles()
+{
+	for (int i = 0; i < _zooms.size(); i++) {
+		Zoom *z = _zooms[i];
+		z->tiles.clear();
+		z->tree.RemoveAll();
+	}
+}
+
+JNXMap::JNXMap(const QString &fileName, QObject *parent)
+  : Map(fileName, parent), _file(fileName), _zoom(0), _mapRatio(1.0),
+  _valid(false)
 {
 	if (!_file.open(QIODevice::ReadOnly)) {
-		_errorString = fileName + ": " + _file.errorString();
+		_errorString = _file.errorString();
 		return;
 	}
 
-	if (!readTiles()) {
+	if (!readHeader()) {
 		_errorString = "JNX file format error";
 		return;
 	}
@@ -158,14 +157,22 @@ JNXMap::~JNXMap()
 	qDeleteAll(_zooms);
 }
 
-void JNXMap::load()
+void JNXMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
-	_file.open(QIODevice::ReadOnly);
+	Q_UNUSED(out);
+
+	_projection = in;
+	_mapRatio = hidpi ? deviceRatio : 1.0;
+
+	if (_file.open(QIODevice::ReadOnly))
+		readTiles();
 }
 
 void JNXMap::unload()
 {
 	_file.close();
+	clearTiles();
 }
 
 QPointF JNXMap::ll2xy(const Coordinates &c)
@@ -267,51 +274,10 @@ void JNXMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	tree.Search(min, max, cb, &ctx);
 }
 
-void JNXMap::setInputProjection(const Projection &projection)
-{
-	if (!projection.isValid() || projection == _projection)
-		return;
-
-	_projection = projection;
-
-	for (int i = 0; i < _zooms.size(); i++) {
-		Zoom *z = _zooms[i];
-
-		z->tree.RemoveAll();
-
-		for (int j = 0; j < z->tiles.size(); j++) {
-			Tile &tile = z->tiles[j];
-
-			RectC llrect(Coordinates(ic2dc(tile.left), ic2dc(tile.top)),
-			  Coordinates(ic2dc(tile.right), ic2dc(tile.bottom)));
-			RectD rect(_projection.ll2xy(llrect.topLeft()),
-			  _projection.ll2xy(llrect.bottomRight()));
-
-			if (j == 0) {
-				ReferencePoint tl(PointD(0, 0), rect.topLeft());
-				ReferencePoint br(PointD(tile.width, tile.height),
-				  rect.bottomRight());
-				z->transform = Transform(tl, br);
-			}
-
-			QRectF trect(z->transform.proj2img(rect.topLeft()),
-			  z->transform.proj2img(rect.bottomRight()));
-			tile.pos = trect.topLeft();
-
-			qreal min[2], max[2];
-			min[0] = trect.left();
-			min[1] = trect.top();
-			max[0] = trect.right();
-			max[1] = trect.bottom();
-			z->tree.Insert(min, max, &tile);
-		}
-	}
-}
-
-Map *JNXMap::create(const QString &path, const Projection &proj, bool *isDir)
+Map *JNXMap::create(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;
 
-	return new JNXMap(path, proj);
+	return new JNXMap(path);
 }

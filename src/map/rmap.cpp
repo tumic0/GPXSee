@@ -355,8 +355,13 @@ Coordinates RMap::xy2ll(const QPointF &p)
 	  p.y() / scale.y()) * _mapRatio));
 }
 
-void RMap::load()
+void RMap::load(const Projection &in, const Projection &out, qreal deviceRatio,
+  bool hidpi)
 {
+	Q_UNUSED(in);
+	Q_UNUSED(out);
+
+	_mapRatio = hidpi ? deviceRatio : 1.0;
 	_file.open(QIODevice::ReadOnly);
 }
 
@@ -455,13 +460,7 @@ void RMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 }
 
-void RMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
-{
-	Q_UNUSED(deviceRatio);
-	_mapRatio = mapRatio;
-}
-
-Map *RMap::create(const QString &path, const Projection &, bool *isDir)
+Map *RMap::create(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;

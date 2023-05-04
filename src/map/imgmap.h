@@ -55,7 +55,7 @@ public:
 	QString name() const {return _data.first()->name();}
 
 	QRectF bounds() {return _bounds;}
-	RectC llBounds() {return _dataBounds;}
+	RectC llBounds(const Projection &) {return _data.first()->bounds();}
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);
@@ -70,17 +70,15 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
-	void setOutputProjection(const Projection &projection);
-	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
-
-	void load();
+	void load(const Projection &in, const Projection &out, qreal devicelRatio,
+	  bool hidpi);
 	void unload();
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map* createIMG(const QString &path, const Projection &, bool *isDir);
-	static Map* createGMAP(const QString &path, const Projection &, bool *isDir);
+	static Map* createIMG(const QString &path, bool *isDir);
+	static Map* createGMAP(const QString &path, bool *isDir);
 
 private slots:
 	void jobFinished(IMGMapJob *job);

@@ -28,10 +28,19 @@ public:
 	  : QObject(parent), _path(path) {}
 	virtual ~Map() {}
 
+	/* Functions available since map creation */
 	const QString &path() const {return _path;}
 	virtual QString name() const {return Util::file2name(path());}
+	virtual RectC llBounds(const Projection &proj);
 
-	virtual RectC llBounds();
+	virtual bool isValid() const {return true;}
+	virtual bool isReady() const {return true;}
+	virtual QString errorString() const {return QString();}
+
+	/* Functions that shall be called after load() */
+	virtual void load(const Projection &, const Projection &, qreal, bool) {}
+	virtual void unload() {}
+
 	virtual QRectF bounds() = 0;
 	virtual qreal resolution(const QRectF &rect);
 
@@ -47,15 +56,6 @@ public:
 	virtual void draw(QPainter *painter, const QRectF &rect, Flags flags) = 0;
 
 	virtual void clearCache() {}
-	virtual void load() {}
-	virtual void unload() {}
-	virtual void setDevicePixelRatio(qreal, qreal) {}
-	virtual void setOutputProjection(const Projection &) {}
-	virtual void setInputProjection(const Projection &) {}
-
-	virtual bool isValid() const {return true;}
-	virtual bool isReady() const {return true;}
-	virtual QString errorString() const {return QString();}
 
 signals:
 	void tilesLoaded();

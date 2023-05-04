@@ -487,8 +487,14 @@ int OruxMap::zoomOut()
 	return _zoom;
 }
 
-void OruxMap::load()
+void OruxMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
+	Q_UNUSED(in);
+	Q_UNUSED(out);
+
+	_mapRatio = hidpi ? deviceRatio : 1.0;
+
 	if (_db.isValid())
 		_db.open();
 }
@@ -497,12 +503,6 @@ void OruxMap::unload()
 {
 	if (_db.isValid())
 		_db.close();
-}
-
-void OruxMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
-{
-	Q_UNUSED(deviceRatio);
-	_mapRatio = mapRatio;
 }
 
 QPixmap OruxMap::tile(const Zoom &z, int x, int y) const
@@ -590,7 +590,7 @@ Coordinates OruxMap::xy2ll(const QPointF &p)
 	return z.projection.xy2ll(z.transform.img2proj(p * _mapRatio));
 }
 
-Map *OruxMap::create(const QString &path, const Projection &, bool *isDir)
+Map *OruxMap::create(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = true;

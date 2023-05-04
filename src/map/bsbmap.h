@@ -25,14 +25,14 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
-	void load();
+	void load(const Projection &in, const Projection &out, qreal deviceRatio,
+	  bool hidpi);
 	void unload();
-	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map *create(const QString &path, const Projection &, bool *isMap);
+	static Map *create(const QString &path, bool *isMap);
 
 private:
 	bool parseBSB(const QByteArray &line);
@@ -56,7 +56,7 @@ private:
 	Image *_img;
 	QSize _size;
 	QSize _skewSize;
-	qreal _ratio;
+	qreal _mapRatio;
 	qint64 _dataOffset;
 	QVector<QRgb> _palette;
 

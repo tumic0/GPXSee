@@ -4,13 +4,15 @@
 #include "planeitem.h"
 
 class MapAction;
+class Projection;
 
 class MapItem : public QObject, public PlaneItem
 {
 	Q_OBJECT
 
 public:
-	MapItem(MapAction *action, Map *map, GraphicsItem *parent = 0);
+	MapItem(MapAction *action, Map *map, const Projection &proj,
+	  GraphicsItem *parent = 0);
 
 	QPainterPath shape() const {return _painterPath;}
 	QRectF boundingRect() const {return _painterPath.boundingRect();}
@@ -37,13 +39,12 @@ protected:
 	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 
 private:
-	void updatePainterPath();
+	void updatePainterPath(Map *map);
 
 	RectC _bounds;
 	QString _name;
 	QString _fileName;
 
-	Map *_map;
 	int _digitalZoom;
 
 	qreal _width;

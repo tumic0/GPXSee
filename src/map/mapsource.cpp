@@ -206,9 +206,8 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 	}
 }
 
-Map *MapSource::create(const QString &path, const Projection &proj, bool *isDir)
+Map *MapSource::create(const QString &path, bool *isDir)
 {
-	Q_UNUSED(proj);
 	Config config;
 	QFile file(path);
 

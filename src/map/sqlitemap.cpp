@@ -100,8 +100,13 @@ SqliteMap::SqliteMap(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
-void SqliteMap::load()
+void SqliteMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
+	Q_UNUSED(in);
+	Q_UNUSED(out);
+
+	_mapRatio = hidpi ? deviceRatio : 1.0;
 	_db.open();
 }
 
@@ -154,12 +159,6 @@ int SqliteMap::zoomOut()
 {
 	_zoom = qMax(_zoom - 1, _zooms.min());
 	return _zoom;
-}
-
-void SqliteMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
-{
-	Q_UNUSED(deviceRatio);
-	_mapRatio = mapRatio;
 }
 
 qreal SqliteMap::tileSize() const
@@ -257,7 +256,7 @@ Coordinates SqliteMap::xy2ll(const QPointF &p)
 	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale) * _mapRatio);
 }
 
-Map *SqliteMap::create(const QString &path, const Projection &, bool *isDir)
+Map *SqliteMap::create(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;

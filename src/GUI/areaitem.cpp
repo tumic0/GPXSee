@@ -25,7 +25,6 @@ ToolTip AreaItem::info() const
 AreaItem::AreaItem(const Area &area, Map *map, GraphicsItem *parent)
   : PlaneItem(parent), _area(area)
 {
-	_map = map;
 	_digitalZoom = 0;
 	_width = 2;
 	_opacity = 0.5;
@@ -35,34 +34,34 @@ AreaItem::AreaItem(const Area &area, Map *map, GraphicsItem *parent)
 	_pen = QPen(strokeColor(), width());
 	_brush = QBrush(fillColor());
 
-	updatePainterPath();
+	updatePainterPath(map);
 
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
 }
 
-QPainterPath AreaItem::painterPath(const Polygon &polygon)
+QPainterPath AreaItem::painterPath(Map *map, const Polygon &polygon)
 {
 	QPainterPath path;
 
 	for (int i = 0; i < polygon.size(); i++) {
 		const QVector<Coordinates> &subpath = polygon.at(i);
 
-		path.moveTo(_map->ll2xy(subpath.first()));
+		path.moveTo(map->ll2xy(subpath.first()));
 		for (int j = 1; j < subpath.size(); j++)
-			path.lineTo(_map->ll2xy(subpath.at(j)));
+			path.lineTo(map->ll2xy(subpath.at(j)));
 		path.closeSubpath();
 	}
 
 	return path;
 }
 
-void AreaItem::updatePainterPath()
+void AreaItem::updatePainterPath(Map *map)
 {
 	_painterPath = QPainterPath();
 
 	for (int i = 0; i < _area.polygons().size(); i++)
-		_painterPath.addPath(painterPath(_area.polygons().at(i)));
+		_painterPath.addPath(painterPath(map, _area.polygons().at(i)));
 }
 
 void AreaItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -85,10 +84,7 @@ void AreaItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 void AreaItem::setMap(Map *map)
 {
 	prepareGeometryChange();
-
-	_map = map;
-
-	updatePainterPath();
+	updatePainterPath(map);
 }
 
 const QColor &AreaItem::strokeColor() const

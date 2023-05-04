@@ -54,19 +54,17 @@ void GeoTIFFMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		_img->draw(painter, rect, flags);
 }
 
-void GeoTIFFMap::setDevicePixelRatio(qreal deviceRatio, qreal mapRatio)
+void GeoTIFFMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
 {
-	Q_UNUSED(deviceRatio);
+	Q_UNUSED(in);
+	Q_UNUSED(out);
 
-	_ratio = mapRatio;
+	_ratio = hidpi ? deviceRatio : 1.0;
+
+	_img = new Image(path());
 	if (_img)
 		_img->setDevicePixelRatio(_ratio);
-}
-
-void GeoTIFFMap::load()
-{
-	if (!_img)
-		_img = new Image(path());
 }
 
 void GeoTIFFMap::unload()
@@ -75,7 +73,7 @@ void GeoTIFFMap::unload()
 	_img = 0;
 }
 
-Map *GeoTIFFMap::create(const QString &path, const Projection &, bool *isDir)
+Map *GeoTIFFMap::create(const QString &path, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;

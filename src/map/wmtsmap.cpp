@@ -44,6 +44,15 @@ void WMTSMap::wmtsReady()
 	emit mapLoaded();
 }
 
+void WMTSMap::load(const Projection &in, const Projection &out,
+  qreal deviceRatio, bool hidpi)
+{
+	Q_UNUSED(in);
+	Q_UNUSED(out);
+
+	_mapRatio = hidpi ? deviceRatio : 1.0;
+}
+
 void WMTSMap::clearCache()
 {
 	_tileLoader->clearCache();
@@ -97,7 +106,7 @@ QRectF WMTSMap::bounds()
 	return lb.isValid() ? lb & tb : tb;
 }
 
-RectC WMTSMap::llBounds()
+RectC WMTSMap::llBounds(const Projection &)
 {
 	if (_wmts->bbox().isValid())
 		return _wmts->bbox();

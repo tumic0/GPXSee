@@ -12,32 +12,31 @@ class WorldFileMap : public Map
 	Q_OBJECT
 
 public:
-	WorldFileMap(const QString &fileName, const Projection &proj,
-	  QObject *parent = 0);
+	WorldFileMap(const QString &fileName, QObject *parent = 0);
 	~WorldFileMap();
 
+	RectC llBounds(const Projection &proj);
 	QRectF bounds();
 	QPointF ll2xy(const Coordinates &c);
 	Coordinates xy2ll(const QPointF &p);
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
-	void load();
+	void load(const Projection &in, const Projection &out, qreal deviceRatio,
+	  bool hidpi);
 	void unload();
-	void setDevicePixelRatio(qreal deviceRatio, qreal mapRatio);
-	void setInputProjection(const Projection &projection);
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map *create(const QString &path, const Projection &proj, bool *isDir);
+	static Map *create(const QString &path, bool *isDir);
 
 private:
 	Projection _projection;
 	Transform _transform;
 	Image *_img;
 	QSize _size;
-	qreal _ratio;
+	qreal _mapRatio;
 	QString _imgFile;
 	bool _hasPRJ;
 
