@@ -66,10 +66,10 @@ static QSet<int> eliminate(const QVector<qreal> &v)
 static GraphSegment filter(const GraphSegment &g, int window)
 {
 	if (g.size() < window || window < 2)
-		return GraphSegment(g);
+		return g;
 
 	qreal acc = 0;
-	GraphSegment ret(g.size());
+	GraphSegment ret(g.size(), g.start());
 
 	for (int i = 0; i < window; i++)
 		acc += g.at(i).y();
@@ -131,6 +131,7 @@ Track::Track(const TrackData &data) : _pause(0)
 
 		Segment &seg = _segments.last();
 
+		seg.start = sd.first().timestamp();
 		seg.distance.append(lastDistance(i));
 		seg.time.append(sd.first().hasTimestamp() ? lastTime(i) : NAN);
 		seg.speed.append(sd.first().hasTimestamp() ? 0 : NAN);
@@ -257,7 +258,7 @@ Graph Track::gpsElevation() const
 		if (sd.size() < 2)
 			continue;
 		const Segment &seg = _segments.at(i);
-		GraphSegment gs;
+		GraphSegment gs(seg.start);
 
 		for (int j = 0; j < sd.size(); j++) {
 			if (!sd.at(j).hasElevation() || seg.outliers.contains(j))
@@ -285,7 +286,7 @@ Graph Track::demElevation() const
 		if (sd.size() < 2)
 			continue;
 		const Segment &seg = _segments.at(i);
-		GraphSegment gs;
+		GraphSegment gs(seg.start);
 
 		for (int j = 0; j < sd.size(); j++) {
 			qreal dem = DEM::elevation(sd.at(j).coordinates());
@@ -328,7 +329,7 @@ Graph Track::computedSpeed() const
 		if (sd.size() < 2)
 			continue;
 		const Segment &seg = _segments.at(i);
-		GraphSegment gs;
+		GraphSegment gs(seg.start);
 		QList<int> stop;
 		qreal v;
 
@@ -368,7 +369,7 @@ Graph Track::reportedSpeed() const
 		if (sd.size() < 2)
 			continue;
 		const Segment &seg = _segments.at(i);
-		GraphSegment gs;
+		GraphSegment gs(seg.start);
 		QList<int> stop;
 		qreal v;
 
@@ -423,7 +424,7 @@ Graph Track::heartRate() const
 		if (sd.size() < 2)
 			continue;
 		const Segment &seg = _segments.at(i);
-		GraphSegment gs;
+		GraphSegment gs(seg.start);
 
 		for (int j = 0; j < sd.size(); j++)
 			if (sd.at(j).hasHeartRate() && !seg.outliers.contains(j))
@@ -449,7 +450,7 @@ Graph Track::temperature() const
 		if (sd.size() < 2)
 			continue;
 		const Segment &seg = _segments.at(i);
-		GraphSegment gs;
+		GraphSegment gs(seg.start);
 
 		for (int j = 0; j < sd.count(); j++) {
 			if (sd.at(j).hasTemperature() && !seg.outliers.contains(j))
@@ -476,7 +477,7 @@ Graph Track::ratio() const
 		if (sd.size() < 2)
 			continue;
 		const Segment &seg = _segments.at(i);
-		GraphSegment gs;
+		GraphSegment gs(seg.start);
 
 		for (int j = 0; j < sd.size(); j++)
 			if (sd.at(j).hasRatio() && !seg.outliers.contains(j))
@@ -502,7 +503,7 @@ Graph Track::cadence() const
 		if (sd.size() < 2)
 			continue;
 		const Segment &seg = _segments.at(i);
-		GraphSegment gs;
+		GraphSegment gs(seg.start);
 		QList<int> stop;
 		qreal c;
 
@@ -545,7 +546,7 @@ Graph Track::power() const
 		if (sd.size() < 2)
 			continue;
 		const Segment &seg = _segments.at(i);
-		GraphSegment gs;
+		GraphSegment gs(seg.start);
 
 		for (int j = 0; j < sd.size(); j++) {
 			if (sd.at(j).hasPower() && seg.stop.contains(j)) {

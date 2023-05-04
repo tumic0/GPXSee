@@ -12,6 +12,16 @@ class GraphItem : public QObject, public GraphicsItem
 	Q_OBJECT
 
 public:
+	struct SegmentTime
+	{
+		SegmentTime() : time(NAN) {}
+		SegmentTime(const QDateTime &date, qreal time)
+		  : date(date), time(time) {}
+
+		QDateTime date;
+		qreal time;
+	};
+
 	GraphItem(const Graph &graph, GraphType type, int width,
 	  const QColor &color, Qt::PenStyle style, QGraphicsItem *parent = 0);
 	virtual ~GraphItem() {}
@@ -43,6 +53,7 @@ public:
 	qreal yAtX(qreal x) const;
 	qreal distanceAtTime(qreal time) const;
 	qreal timeAtDistance(qreal distance) const;
+	SegmentTime date(qreal x);
 
 	void redraw();
 

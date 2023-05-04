@@ -33,7 +33,7 @@ Path Route::path() const
 Graph Route::gpsElevation() const
 {
 	Graph graph;
-	graph.append(GraphSegment());
+	graph.append(GraphSegment(QDateTime()));
 	GraphSegment &gs = graph.last();
 
 	for (int i = 0; i < _data.size(); i++)
@@ -49,7 +49,7 @@ Graph Route::gpsElevation() const
 Graph Route::demElevation() const
 {
 	Graph graph;
-	graph.append(GraphSegment());
+	graph.append(GraphSegment(QDateTime()));
 	GraphSegment &gs = graph.last();
 
 	for (int i = 0; i < _data.size(); i++) {

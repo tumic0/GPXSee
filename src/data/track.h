@@ -56,6 +56,7 @@ public:
 
 private:
 	struct Segment {
+		QDateTime start;
 		QVector<qreal> distance;
 		QVector<qreal> time;
 		QVector<qreal> speed;

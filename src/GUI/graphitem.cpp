@@ -224,6 +224,12 @@ qreal GraphItem::timeAtDistance(qreal distance) const
 	return l.pointAt((distance - l.p1().x()) / (l.p2().x() - l.p1().x())).y();
 }
 
+GraphItem::SegmentTime GraphItem::date(qreal x)
+{
+	const GraphSegment *seg = segment(x, _type);
+	return seg ? SegmentTime(seg->start(), seg->first().t()) : SegmentTime();
+}
+
 void GraphItem::hover(bool hover)
 {
 	if (hover) {

@@ -4,6 +4,7 @@
 #include <QList>
 #include <QVector>
 #include <QColor>
+#include <QDateTime>
 #include <QDebug>
 #include <cmath>
 
@@ -41,7 +42,19 @@ inline QDebug operator<<(QDebug dbg, const GraphPoint &point)
 }
 #endif // QT_NO_DEBUG
 
-typedef QVector<GraphPoint> GraphSegment;
+class GraphSegment : public QVector<GraphPoint>
+{
+public:
+	GraphSegment(const QDateTime &start)
+	  : _start(start) {}
+	GraphSegment(int size, const QDateTime &start)
+	  : QVector<GraphPoint>(size), _start(start) {}
+
+	const QDateTime &start() const {return _start;}
+
+private:
+	QDateTime _start;
+};
 
 class Graph : public QList<GraphSegment>
 {

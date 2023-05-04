@@ -334,12 +334,18 @@ void PathItem::setMarkerPosition(qreal pos)
 void PathItem::setMarkerInfo(qreal pos)
 {
 	if (_markerInfoType == MarkerInfoItem::Date) {
-		qreal time = _graph
-		  ? (_graph->graphType() == Time) ? pos : _graph->timeAtDistance(pos)
-		  : NAN;
-		QDateTime d(date());
-		if (!std::isnan(time) && d.isValid())
-			_markerInfo->setDate(d.addSecs(time).toTimeZone(_timeZone));
+		QDateTime date;
+
+		if (_graph) {
+			qreal time = (_graph->graphType() == Time)
+			  ? pos : _graph->timeAtDistance(pos);
+			GraphItem::SegmentTime st(_graph->date(pos));
+			if (st.date.isValid() && !std::isnan(time))
+				date = st.date.addSecs(time - st.time);
+		}
+
+		if (date.isValid())
+			_markerInfo->setDate(date.toTimeZone(_timeZone));
 		else
 			_markerInfo->setDate(QDateTime());
 	} else if (_markerInfoType == MarkerInfoItem::Position)
