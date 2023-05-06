@@ -17,7 +17,7 @@ public:
 	const QVariant &zoom() const {return _zoom;}
 	const QPoint &xy() const {return _xy;}
 	const RectD &bbox() const {return _bbox;}
-	QPixmap& pixmap() {return _pixmap;}
+	QPixmap &pixmap() {return _pixmap;}
 
 private:
 	QPoint _xy;

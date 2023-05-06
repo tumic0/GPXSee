@@ -61,6 +61,7 @@ TileLoader::TileLoader(const QString &dir, QObject *parent)
 	connect(_downloader, &Downloader::finished, this, &TileLoader::finished);
 }
 
+
 void TileLoader::loadTilesAsync(QVector<FetchTile> &list)
 {
 	QList<Download> dl;
@@ -142,6 +143,11 @@ void TileLoader::loadTilesSync(QVector<FetchTile> &list)
 
 	QFuture<void> future = QtConcurrent::map(imgs, &TileImage::load);
 	future.waitForFinished();
+
+	for (int i = 0; i < imgs.size(); i++) {
+		TileImage &ti = imgs[i];
+		QPixmapCache::insert(ti.file(), ti.tile()->pixmap());
+	}
 }
 
 void TileLoader::clearCache()
