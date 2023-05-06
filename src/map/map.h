@@ -62,11 +62,6 @@ signals:
 	void mapLoaded();
 
 private:
-	void growLeft(const QPointF &p, RectC &rect);
-	void growRight(const QPointF &p, RectC &rect);
-	void growTop(const QPointF &p, RectC &rect);
-	void growBottom(const QPointF &p, RectC &rect);
-
 	QString _path;
 };
 
