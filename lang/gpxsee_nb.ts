@@ -712,7 +712,7 @@
         <location filename="../src/GUI/gui.cpp" line="907"/>
         <location filename="../src/GUI/gui.cpp" line="925"/>
         <source>CRS directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>CRS-mappe:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="913"/>
@@ -1718,12 +1718,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="70"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg riktig koordinatreferansesystem (CRS) for kart uten en CRS-definisjon (JNX, KMZ og World-file kart).</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="73"/>
         <source>Select the desired projection of vector maps (IMG, Mapsforge and ENC maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg ønsket projeksjon for vektorkart (IMG, Mapsforge og ENC-kart). Projeksjonen må være gyldig for hele kartområdet.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="104"/>
