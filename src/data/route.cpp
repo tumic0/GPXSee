@@ -33,12 +33,15 @@ Path Route::path() const
 Graph Route::gpsElevation() const
 {
 	Graph graph;
-	graph.append(GraphSegment(QDateTime()));
-	GraphSegment &gs = graph.last();
+	QDateTime date;
+	GraphSegment gs(date);
 
 	for (int i = 0; i < _data.size(); i++)
 		if (_data.at(i).hasElevation())
 			gs.append(GraphPoint(_distance.at(i), NAN, _data.at(i).elevation()));
+
+	if (gs.size() >= 2)
+		graph.append(gs);
 
 	if (_data.style().color().isValid())
 		graph.setColor(_data.style().color());
@@ -49,14 +52,17 @@ Graph Route::gpsElevation() const
 Graph Route::demElevation() const
 {
 	Graph graph;
-	graph.append(GraphSegment(QDateTime()));
-	GraphSegment &gs = graph.last();
+	QDateTime date;
+	GraphSegment gs(date);
 
 	for (int i = 0; i < _data.size(); i++) {
 		qreal dem = DEM::elevation(_data.at(i).coordinates());
 		if (!std::isnan(dem))
 			gs.append(GraphPoint(_distance.at(i), NAN, dem));
 	}
+
+	if (gs.size() >= 2)
+		graph.append(gs);
 
 	if (_data.style().color().isValid())
 		graph.setColor(_data.style().color());
