@@ -866,7 +866,7 @@
         <location filename="../src/GUI/gui.cpp" line="907"/>
         <location filename="../src/GUI/gui.cpp" line="925"/>
         <source>CRS directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Directori CRS:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="909"/>
@@ -1019,6 +1019,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fitxer</numerusform>
+            <numerusform>%n fitxers</numerusform>
             <numerusform>%n fitxers</numerusform>
         </translation>
     </message>
