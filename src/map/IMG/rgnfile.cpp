@@ -1,5 +1,6 @@
 #include "common/rectc.h"
 #include "common/garmin.h"
+#include "common/hash.h"
 #include "deltastream.h"
 #include "huffmanstream.h"
 #include "style.h"
@@ -15,10 +16,8 @@ using namespace IMG;
 
 static quint64 pointId(const QPoint &pos, quint32 type)
 {
-	quint64 id;
-
-	uint hash = (uint)qHash(QPair<int, int>(pos.x(), pos.y()));
-	id = ((quint64)type)<<32 | hash;
+	quint64 hash = qHash(pos);
+	quint64 id = ((quint64)type)<<40 | (hash & 0xFFFFFFFFFF);
 
 	// Increase rendering priorities for some special items
 	if (!Style::isCountry(type) && !Style::isMarina(type))
