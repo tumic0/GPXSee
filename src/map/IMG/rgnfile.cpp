@@ -14,9 +14,9 @@ using namespace IMG;
 
 #define MASK(bits) ((1U << (bits)) - 1U)
 
-static quint64 pointId(const QPoint &pos, quint32 type)
+static quint64 pointId(const QPoint &pos, quint32 type, const QString &label)
 {
-	quint64 hash = qHash(pos);
+	quint64 hash = qHash(pos) ^ qHash(label);
 	quint64 id = ((quint64)type)<<40 | (hash & 0xFFFFFFFFFF);
 
 	// Increase rendering priorities for some special items
@@ -483,11 +483,11 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 
 		point.type = (quint16)type<<8 | subtype;
 		point.coordinates = Coordinates(toWGS24(pos.x()), toWGS24(pos.y()));
-		point.id = pointId(pos, point.type);
 		if (lbl && (labelPtr & 0x3FFFFF))
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF,
 			  labelPtr & 0x400000, !(Style::isCountry(point.type)
 			  || Style::isState(point.type)), Style::isSpot(point.type));
+		point.id = pointId(pos, point.type, point.label.text());
 
 		points->append(point);
 	}
@@ -536,9 +536,9 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
 			continue;
 
 		point.coordinates = Coordinates(toWGS24(p.x()), toWGS24(p.y()));
-		point.id = pointId(p, point.type);
 		if (lbl && (labelPtr & 0x3FFFFF))
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF);
+		point.id = pointId(p, point.type, point.label.text());
 
 		points->append(point);
 	}
