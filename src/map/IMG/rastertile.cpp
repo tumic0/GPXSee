@@ -446,12 +446,14 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 		  : font(style.textFontSize());
 		const QColor *color = style.textColor().isValid()
 		  ? &style.textColor() : &textColor;
+		const QColor *hcolor = Style::isDepthPoint(point.type)
+		  ? 0 : &haloColor;
 
 		if ((!label || !fnt) && !img)
 			continue;
 
 		TextPointItem *item = new TextPointItem(QPoint(point.coordinates.lon(),
-		  point.coordinates.lat()), label, fnt, img, color, &haloColor, 0,
+		  point.coordinates.lat()), label, fnt, img, color, hcolor, 0,
 		  ICON_PADDING);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
