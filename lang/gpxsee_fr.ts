@@ -958,7 +958,7 @@
         <location filename="../src/GUI/gui.cpp" line="907"/>
         <location filename="../src/GUI/gui.cpp" line="925"/>
         <source>CRS directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dossier CRS :</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="915"/>
@@ -1427,12 +1427,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="70"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sélectionnez le système de référence de coordonnée (CRS) approprié pour les cartes sans définition de CRS (JNX, KMZ et World file maps).</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="73"/>
         <source>Select the desired projection of vector maps (IMG, Mapsforge and ENC maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez la projection désirée de la carte vectorielle (IMG, Mapsforge et carte ENC). La projection doit être valide pour la totalité de la zone de la carte.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="77"/>
@@ -1912,7 +1912,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="758"/>
         <source>DEM cache size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille du cache DEM :</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="778"/>
