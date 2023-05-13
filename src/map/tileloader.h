@@ -14,8 +14,7 @@ public:
 	TileLoader(const QString &dir, QObject *parent = 0);
 
 	void setUrl(const QString &url) {_url = url;}
-	void setAuthorization(const Authorization &authorization)
-	  {_authorization = authorization;}
+	void setHeaders(const QList<HTTPHeader> &headers) {_headers = headers;}
 	void setScaledSize(int size);
 	void setQuadTiles(bool quadTiles) {_quadTiles = quadTiles;}
 
@@ -33,7 +32,7 @@ private:
 	Downloader *_downloader;
 	QString _url;
 	QString _dir;
-	Authorization _authorization;
+	QList<HTTPHeader> _headers;
 	int _scaledSize;
 	bool _quadTiles;
 };

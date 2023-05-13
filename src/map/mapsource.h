@@ -40,7 +40,7 @@ private:
 		CoordinateSystem coordinateSystem;
 		bool rest;
 		QList<KV<QString, QString> > dimensions;
-		Authorization authorization;
+		QList<HTTPHeader> headers;
 		qreal tileRatio;
 		int tileSize;
 		bool scalable;

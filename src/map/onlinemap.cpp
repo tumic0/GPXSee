@@ -10,7 +10,7 @@
 
 OnlineMap::OnlineMap(const QString &fileName, const QString &name,
   const QString &url, const Range &zooms, const RectC &bounds, qreal tileRatio,
-  const Authorization &authorization, int tileSize, bool scalable, bool invertY,
+  const QList<HTTPHeader> &headers, int tileSize, bool scalable, bool invertY,
   bool quadTiles, QObject *parent)
     : Map(fileName, parent), _name(name), _zooms(zooms), _bounds(bounds),
 	_zoom(_zooms.max()), _tileSize(tileSize), _mapRatio(1.0),
@@ -19,7 +19,7 @@ OnlineMap::OnlineMap(const QString &fileName, const QString &name,
 	_tileLoader = new TileLoader(QDir(ProgramPaths::tilesDir()).filePath(_name),
 	  this);
 	_tileLoader->setUrl(url);
-	_tileLoader->setAuthorization(authorization);
+	_tileLoader->setHeaders(headers);
 	_tileLoader->setQuadTiles(quadTiles);
 	connect(_tileLoader, &TileLoader::finished, this, &OnlineMap::tilesLoaded);
 }

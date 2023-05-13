@@ -16,8 +16,7 @@ public:
 	DEMLoader(const QString &dir, QObject *parent = 0);
 
 	void setUrl(const QString &url) {_url = url;}
-	void setAuthorization(const Authorization &authorization)
-	  {_authorization = authorization;}
+	void setAuthorization(const Authorization &authorization);
 
 	bool loadTiles(const RectC &rect);
 	bool checkTiles(const RectC &rect) const;
@@ -34,7 +33,7 @@ private:
 	Downloader *_downloader;
 	QString _url;
 	QDir _dir;
-	Authorization _authorization;
+	QList<HTTPHeader> _headers;
 };
 
 #endif // DEMLOADER_H

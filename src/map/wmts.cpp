@@ -361,7 +361,7 @@ WMTS::WMTS(const QString &file, const WMTS::Setup &setup, QObject *parent)
 
 		QList<Download> dl;
 		dl.append(Download(url.toString(), _path));
-		_valid = downloader->get(dl, _setup.authorization());
+		_valid = downloader->get(dl, _setup.headers());
 	} else {
 		_ready = true;
 		_valid = init();

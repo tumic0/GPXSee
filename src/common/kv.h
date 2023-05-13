@@ -4,6 +4,7 @@
 template <class KEY, class VALUE>
 class KV {
 public:
+	KV() {}
 	KV(const KEY &key, const VALUE &value) : _key(key), _value(value) {}
 
 	const KEY &key() const {return _key;}

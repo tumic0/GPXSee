@@ -27,13 +27,13 @@ public:
 		  const QString &style, const QString &format, bool rest,
 		  const CoordinateSystem &cs,
 		  const QList<KV<QString, QString> > &dimensions,
-		  const Authorization &authorization = Authorization())
+		  const QList<HTTPHeader> &headers)
 			: _url(url), _layer(layer), _set(set), _style(style),
 			  _format(format), _rest(rest), _cs(cs), _dimensions(dimensions),
-			  _authorization(authorization) {}
+			  _headers(headers) {}
 
 		const QString &url() const {return _url;}
-		const Authorization &authorization() const {return _authorization;}
+		const QList<HTTPHeader> &headers() const {return _headers;}
 		const QString &layer() const {return _layer;}
 		const QString &set() const {return _set;}
 		const QString &style() const {return _style;}
@@ -52,7 +52,7 @@ public:
 		bool _rest;
 		CoordinateSystem _cs;
 		QList<KV<QString, QString> > _dimensions;
-		Authorization _authorization;
+		QList<HTTPHeader> _headers;
 	};
 
 	class Zoom

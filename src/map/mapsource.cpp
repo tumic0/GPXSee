@@ -189,14 +189,22 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 			else
 				config.dimensions.append(KV<QString, QString>
 				  (attr.value("id").toString(), reader.readElementText()));
+		} else if (reader.name() == QLatin1String("header")) {
+			QXmlStreamAttributes attr = reader.attributes();
+			if (!attr.hasAttribute("name"))
+				reader.raiseError("Missing header name");
+			else
+				config.headers.append(HTTPHeader(
+				  attr.value("name").toString().toLatin1(),
+				  reader.readElementText().toLatin1()));
 		} else if (reader.name() == QLatin1String("crs")) {
 			config.coordinateSystem = coordinateSystem(reader);
 			config.crs = reader.readElementText();
 		} else if (reader.name() == QLatin1String("authorization")) {
 			QXmlStreamAttributes attr = reader.attributes();
-			config.authorization = Authorization(
-			  attr.value("username").toString(),
+			Authorization auth(attr.value("username").toString(),
 			  attr.value("password").toString());
+			config.headers.append(auth.header());
 			reader.skipCurrentElement();
 		} else if (reader.name() == QLatin1String("tile")) {
 			tile(reader, config);
@@ -252,24 +260,24 @@ Map *MapSource::create(const QString &path, bool *isDir)
 		case WMTS:
 			return new WMTSMap(path, config.name, WMTS::Setup(config.url,
 			  config.layer, config.set, config.style, config.format, config.rest,
-			  config.coordinateSystem, config.dimensions, config.authorization),
+			  config.coordinateSystem, config.dimensions, config.headers),
 			  config.tileRatio);
 		case WMS:
 			return new WMSMap(path, config.name, WMS::Setup(config.url,
 			  config.layer, config.style, config.format, config.crs,
-			  config.coordinateSystem, config.dimensions, config.authorization),
+			  config.coordinateSystem, config.dimensions, config.headers),
 			  config.tileSize);
 		case TMS:
 			return new OnlineMap(path, config.name, config.url, config.zooms,
-			  config.bounds, config.tileRatio, config.authorization,
+			  config.bounds, config.tileRatio, config.headers,
 			  config.tileSize, config.scalable, true, false);
 		case OSM:
 			return new OnlineMap(path, config.name, config.url, config.zooms,
-			 config.bounds, config.tileRatio, config.authorization,
+			 config.bounds, config.tileRatio, config.headers,
 			 config.tileSize, config.scalable, false, false);
 		case QuadTiles:
 			return new OnlineMap(path, config.name, config.url, config.zooms,
-			 config.bounds, config.tileRatio, config.authorization,
+			 config.bounds, config.tileRatio, config.headers,
 			 config.tileSize, config.scalable, false, true);
 		default:
 			return new InvalidMap(path, "Invalid map type");

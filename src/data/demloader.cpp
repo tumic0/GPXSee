@@ -64,7 +64,7 @@ bool DEMLoader::loadTiles(const RectC &rect)
 		}
 	}
 
-	return _downloader->get(dl, _authorization);
+	return _downloader->get(dl, _headers);
 }
 
 bool DEMLoader::checkTiles(const RectC &rect) const
@@ -96,4 +96,12 @@ QUrl DEMLoader::tileUrl(const DEM::Tile &tile) const
 QString DEMLoader::tileFile(const DEM::Tile &tile) const
 {
 	return _dir.absoluteFilePath(tile.baseName());
+}
+
+void DEMLoader::setAuthorization(const Authorization &authorization)
+{
+	QList<HTTPHeader> headers;
+	if (!authorization.isNull())
+		headers.append(authorization.header());
+	_headers = headers;
 }

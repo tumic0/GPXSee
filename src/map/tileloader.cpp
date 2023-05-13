@@ -88,7 +88,7 @@ void TileLoader::loadTilesAsync(QVector<FetchTile> &list)
 	}
 
 	if (!dl.empty())
-		_downloader->get(dl, _authorization);
+		_downloader->get(dl, _headers);
 
 	QFuture<void> future = QtConcurrent::map(imgs, &TileImage::load);
 	future.waitForFinished();
@@ -130,7 +130,7 @@ void TileLoader::loadTilesSync(QVector<FetchTile> &list)
 	if (!dl.empty()) {
 		QEventLoop wait;
 		connect(_downloader, &Downloader::finished, &wait, &QEventLoop::quit);
-		if (_downloader->get(dl, _authorization))
+		if (_downloader->get(dl, _headers))
 			wait.exec();
 
 		for (int i = 0; i < tl.size(); i++) {

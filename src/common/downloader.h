@@ -7,8 +7,11 @@
 #include <QUrl>
 #include <QList>
 #include <QHash>
+#include "common/kv.h"
 
 class QFile;
+
+typedef KV<QByteArray, QByteArray> HTTPHeader;
 
 class Download
 {
@@ -29,11 +32,11 @@ public:
 	Authorization() {}
 	Authorization(const QString &username, const QString &password);
 
-	bool isNull() const {return _header.isNull();}
-	const QByteArray &header() const {return _header;}
+	const HTTPHeader &header() const {return _header;}
+	bool isNull() const {return _header.key().isNull();}
 
 private:
-	QByteArray _header;
+	HTTPHeader _header;
 };
 
 class NetworkTimeout : public QObject
@@ -60,8 +63,7 @@ class Downloader : public QObject
 public:
 	Downloader(QObject *parent = 0) : QObject(parent) {}
 
-	bool get(const QList<Download> &list, const Authorization &authorization
-	  = Authorization());
+	bool get(const QList<Download> &list, const QList<HTTPHeader> &headers);
 	void clearErrors() {_errorDownloads.clear();}
 
 	static void setNetworkManager(QNetworkAccessManager *manager)
@@ -80,7 +82,7 @@ private:
 	class ReplyTimeout;
 
 	void insertError(const QUrl &url, QNetworkReply::NetworkError error);
-	bool doDownload(const Download &dl, const Authorization &auth);
+	bool doDownload(const Download &dl, const QList<HTTPHeader> &headers);
 	void downloadFinished(QNetworkReply *reply);
 	void readData(QNetworkReply *reply);
 

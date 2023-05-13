@@ -74,7 +74,7 @@ WMSMap::WMSMap(const QString &fileName, const QString &name,
 	QString tilesDir(QDir(ProgramPaths::tilesDir()).filePath(_name));
 
 	_tileLoader = new TileLoader(tilesDir, this);
-	_tileLoader->setAuthorization(setup.authorization());
+	_tileLoader->setHeaders(setup.headers());
 	connect(_tileLoader, &TileLoader::finished, this, &WMSMap::tilesLoaded);
 
 	_wms = new WMS(QDir(tilesDir).filePath(CAPABILITIES_FILE), setup, this);

@@ -23,13 +23,13 @@ public:
 		Setup(const QString &url, const QString &layer, const QString &style,
 		  const QString &format, const QString &crs, const CoordinateSystem &cs,
 		  const QList<KV<QString, QString> > &dimensions,
-		  const Authorization &authorization = Authorization())
+		  const QList<HTTPHeader> &headers)
 			: _url(url), _layer(layer), _style(style), _format(format),
 			  _crs(crs), _cs(cs), _dimensions(dimensions),
-			  _authorization(authorization) {}
+			  _headers(headers) {}
 
 		const QString &url() const {return _url;}
-		const Authorization &authorization() const {return _authorization;}
+		const QList<HTTPHeader> &headers() const {return _headers;}
 		const QString &layer() const {return _layer;}
 		const QString &style() const {return _style;}
 		const QString &format() const {return _format;}
@@ -46,7 +46,7 @@ public:
 		QString _crs;
 		CoordinateSystem _cs;
 		QList<KV<QString, QString> > _dimensions;
-		Authorization _authorization;
+		QList<HTTPHeader> _headers;
 	};
 
 

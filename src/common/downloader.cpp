@@ -53,7 +53,7 @@ Authorization::Authorization(const QString &username, const QString &password)
 {
 	QString concatenated = username + ":" + password;
 	QByteArray data = concatenated.toLocal8Bit().toBase64();
-	_header = "Basic " + data;
+	_header = HTTPHeader("Authorization", "Basic " + data);
 }
 
 NetworkTimeout::NetworkTimeout(int timeout, QNetworkReply *reply)
@@ -83,9 +83,10 @@ QNetworkAccessManager *Downloader::_manager = 0;
 int Downloader::_timeout = 30;
 bool Downloader::_http2 = true;
 
-bool Downloader::doDownload(const Download &dl, const Authorization &auth)
+bool Downloader::doDownload(const Download &dl, const QList<HTTPHeader> &headers)
 {
 	const QUrl &url = dl.url();
+	bool userAgent = false;
 
 	if (!url.isValid() || !(url.scheme() == QLatin1String("http")
 	  || url.scheme() == QLatin1String("https"))) {
@@ -103,9 +104,15 @@ bool Downloader::doDownload(const Download &dl, const Authorization &auth)
 	request.setAttribute(ATTR_REDIRECT_POLICY,
 	  QNetworkRequest::NoLessSafeRedirectPolicy);
 	request.setAttribute(ATTR_HTTP2_ALLOWED, QVariant(_http2));
-	request.setRawHeader("User-Agent", USER_AGENT);
-	if (!auth.isNull())
-		request.setRawHeader("Authorization", auth.header());
+
+	for (int i = 0; i < headers.size(); i++) {
+		const HTTPHeader &hdr = headers.at(i);
+		request.setRawHeader(hdr.key(), hdr.value());
+		if (hdr.key() == "User-Agent")
+			userAgent = true;
+	}
+	if (!userAgent)
+		request.setRawHeader("User-Agent", USER_AGENT);
 
 	QFile *file = new QFile(tmpName(dl.file()));
 	if (!file->open(QIODevice::WriteOnly)) {
@@ -183,12 +190,12 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 }
 
 bool Downloader::get(const QList<Download> &list,
-  const Authorization &authorization)
+  const QList<HTTPHeader> &headers)
 {
 	bool finishEmitted = false;
 
 	for (int i = 0; i < list.count(); i++)
-		finishEmitted |= doDownload(list.at(i), authorization);
+		finishEmitted |= doDownload(list.at(i), headers);
 
 	return finishEmitted;
 }

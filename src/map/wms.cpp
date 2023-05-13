@@ -345,7 +345,7 @@ WMS::WMS(const QString &file, const WMS::Setup &setup, QObject *parent)
 
 		QList<Download> dl;
 		dl.append(Download(url, _path));
-		_valid = downloader->get(dl, _setup.authorization());
+		_valid = downloader->get(dl, _setup.headers());
 	} else {
 		_ready = true;
 		_valid = parseCapabilities();

@@ -20,7 +20,7 @@ WMTSMap::WMTSMap(const QString &fileName, const QString &name,
 	QString tilesDir(QDir(ProgramPaths::tilesDir()).filePath(_name));
 
 	_tileLoader = new TileLoader(tilesDir, this);
-	_tileLoader->setAuthorization(setup.authorization());
+	_tileLoader->setHeaders(setup.headers());
 	connect(_tileLoader, &TileLoader::finished, this, &WMTSMap::tilesLoaded);
 
 	_wmts = new WMTS(QDir(tilesDir).filePath(CAPABILITIES_FILE), setup, this);
