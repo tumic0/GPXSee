@@ -712,7 +712,7 @@
         <location filename="../src/GUI/gui.cpp" line="907"/>
         <location filename="../src/GUI/gui.cpp" line="925"/>
         <source>CRS directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>CRS-katalog:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="913"/>
