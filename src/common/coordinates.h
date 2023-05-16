@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <QDebug>
+#include "hash.h"
 
 #define deg2rad(d) (((d)*M_PI)/180.0)
 #define rad2deg(d) (((d)*180.0)/M_PI)
@@ -46,6 +47,11 @@ inline bool operator<(const Coordinates &c1, const Coordinates &c2)
 		return false;
 	else
 		return (c1.lat() < c2.lat());
+}
+
+inline HASH_T qHash(const Coordinates &c)
+{
+	return qHash(QPair<double, double>(c.lon(), c.lat()));
 }
 
 #ifndef QT_NO_DEBUG

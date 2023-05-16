@@ -36,10 +36,7 @@ public:
 	};
 
 	struct Point {
-		Point(const Coordinates &c) : coordinates(c)
-		{
-			id = (quint64)qHash(QPair<double, double>(c.lon(), c.lat()));
-		}
+		Point(const Coordinates &c) : id(qHash(c)), coordinates(c) {}
 
 		quint64 id;
 		Coordinates coordinates;
@@ -48,9 +45,6 @@ public:
 	};
 
 	struct Path {
-		Path(quint64 id) : id(id) {}
-
-		quint64 id;
 		Polygon poly;
 		QVector<Tag> tags;
 		Coordinates labelPos;
@@ -59,8 +53,6 @@ public:
 
 		bool operator<(const Path &other) const
 		  {return layer < other.layer;}
-		bool operator==(const Path &other) const
-		  {return (id == other.id);}
 	};
 
 	RectC bounds() const;
@@ -188,11 +180,6 @@ inline HASH_T qHash(const MapData::Key &key)
 inline HASH_T qHash(const MapData::Tag &tag)
 {
 	return ::qHash(tag.key) ^ ::qHash(tag.value);
-}
-
-inline HASH_T qHash(const MapData::Path &path)
-{
-	return ::qHash(path.id);
 }
 
 }

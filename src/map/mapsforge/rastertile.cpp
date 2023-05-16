@@ -224,9 +224,10 @@ QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
 			}
 			path.quadTo(p2, p3);
 		} else {
-			path.moveTo(ll2xy(subpath.first()));
-			for (int j = 1; j < subpath.size(); j++)
-				path.lineTo(ll2xy(subpath.at(j)));
+			QVector<QPointF> p(subpath.size());
+			for (int j = 0; j < subpath.size(); j++)
+				p[j] = ll2xy(subpath.at(j));
+			path.addPolygon(p);
 		}
 	}
 

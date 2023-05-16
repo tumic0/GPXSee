@@ -584,8 +584,10 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 	if (!subfile.seek(subfile.pos() + val))
 		return false;
 
+	paths.reserve(paths[zoom - info.min]);
+
 	for (unsigned i = 0; i < paths[zoom - info.min]; i++) {
-		Path p(subfile.offset() + subfile.pos());
+		Path p;
 		qint32 lon = 0, lat = 0;
 
 		if (!(subfile.readVUInt32(unused) && subfile.readUInt16(bitmap)
@@ -664,6 +666,8 @@ bool MapData::readPoints(const VectorTile *tile, int zoom, QList<Point> *list)
 
 	if (!subfile.readVUInt32(unused))
 		return false;
+
+	list->reserve(points[zoom - info.min]);
 
 	for (unsigned i = 0; i < points[zoom - info.min]; i++) {
 		qint32 lat, lon;
