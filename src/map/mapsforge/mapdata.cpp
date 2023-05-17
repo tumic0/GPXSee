@@ -497,6 +497,9 @@ int MapData::level(int zoom) const
 
 void MapData::points(const RectC &rect, int zoom, QList<Point> *list)
 {
+	if (!rect.isValid())
+		return;
+
 	int l(level(zoom));
 	PointCTX ctx(this, rect, zoom, list);
 	double min[2], max[2];
@@ -528,6 +531,9 @@ void MapData::points(const VectorTile *tile, const RectC &rect, int zoom,
 
 void MapData::paths(const RectC &rect, int zoom, QList<Path> *list)
 {
+	if (!rect.isValid())
+		return;
+
 	int l(level(zoom));
 	PathCTX ctx(this, rect, zoom, list);
 	double min[2], max[2];

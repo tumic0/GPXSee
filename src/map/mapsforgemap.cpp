@@ -211,9 +211,10 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				_data.points(pointRectD.toRectC(_projection, 20), _zoom,
 				  &points);
 
-				tiles.append(RasterTile(_projection, _transform, &_style, _zoom,
-				  QRect(ttl, QSize(_data.tileSize(), _data.tileSize())),
-				  _tileRatio, paths, points));
+				if (paths.size() || points.size())
+					tiles.append(RasterTile(_projection, _transform, &_style,
+					  _zoom, QRect(ttl, QSize(_data.tileSize(), _data.tileSize())),
+					  _tileRatio, paths, points));
 			}
 		}
 	}
