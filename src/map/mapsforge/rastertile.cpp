@@ -200,17 +200,17 @@ QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
 {
 	QPainterPath path;
 
+	if (curve) {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
-	int size = 0;
-	for (int i = 0; i < polygon.size(); i++)
-		size += polygon.at(i).size();
-	path.reserve(size);
+		int size = 0;
+		for (int i = 0; i < polygon.size(); i++)
+			size += polygon.at(i).size();
+		path.reserve(size);
 #endif // QT 5.13
 
-	for (int i = 0; i < polygon.size(); i++) {
-		const QVector<Coordinates> &subpath = polygon.at(i);
+		for (int i = 0; i < polygon.size(); i++) {
+			const QVector<Coordinates> &subpath = polygon.at(i);
 
-		if (curve) {
 			QPointF p1(ll2xy(subpath.first()));
 			QPointF p2(0, 0);
 			QPointF p3(0, 0);
@@ -223,7 +223,11 @@ QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
 				p1 = p3;
 			}
 			path.quadTo(p2, p3);
-		} else {
+		}
+	} else {
+		for (int i = 0; i < polygon.size(); i++) {
+			const QVector<Coordinates> &subpath = polygon.at(i);
+
 			QVector<QPointF> p(subpath.size());
 			for (int j = 0; j < subpath.size(); j++)
 				p[j] = ll2xy(subpath.at(j));
