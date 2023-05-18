@@ -136,7 +136,8 @@ public:
 	public:
 		PathRender(const Rule &rule, int zOrder) : Render(rule),
 		  _zOrder(zOrder), _strokeWidth(0), _strokeCap(Qt::RoundCap),
-		  _strokeJoin(Qt::RoundJoin), _area(false), _curve(false) {}
+			_strokeJoin(Qt::RoundJoin), _area(false), _curve(false),
+			_scale(Stroke) {}
 
 		int zOrder() const {return _zOrder;}
 		QPen pen(int zoom) const;
@@ -147,6 +148,8 @@ public:
 	private:
 		friend class Style;
 
+		enum Scale {None, Stroke, All};
+
 		int _zOrder;
 		QColor _strokeColor;
 		qreal _strokeWidth;
@@ -155,6 +158,7 @@ public:
 		Qt::PenJoinStyle _strokeJoin;
 		QBrush _brush;
 		bool _area, _curve;
+		Scale _scale;
 	};
 
 	class CircleRender : public Render

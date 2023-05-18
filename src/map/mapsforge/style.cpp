@@ -154,6 +154,13 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 			return;
 		}
 	}
+	if (attr.hasAttribute("scale")) {
+		QString scale(attr.value("scale").toString());
+		if (scale == "all")
+			ri._scale = PathRender::Scale::All;
+		else if (scale == "none")
+			ri._scale = PathRender::Scale::None;
+	}
 	if (attr.hasAttribute("src"))
 		file = resourcePath(attr.value("src").toString(), dir);
 	if (attr.hasAttribute("symbol-height")) {
@@ -225,6 +232,13 @@ void Style::line(QXmlStreamReader &reader, const Rule &rule)
 			ri._strokeJoin = Qt::RoundJoin;
 		else if (join == "bevel")
 			ri._strokeJoin = Qt::BevelJoin;
+	}
+	if (attr.hasAttribute("scale")) {
+		QString scale(attr.value("scale").toString());
+		if (scale == "all")
+			ri._scale = PathRender::Scale::All;
+		else if (scale == "none")
+			ri._scale = PathRender::Scale::None;
 	}
 	if (attr.hasAttribute("curve")) {
 		QString curve(attr.value("curve").toString());
@@ -656,14 +670,18 @@ QList<const Style::Symbol*> Style::areaSymbols(int zoom) const
 QPen Style::PathRender::pen(int zoom) const
 {
 	if (_strokeColor.isValid()) {
-		qreal width = (zoom >= 12)
+		qreal width = (_scale > None && zoom >= 12)
 		  ? pow(1.5, zoom - 12) * _strokeWidth : _strokeWidth;
 		QPen p(QBrush(_strokeColor), width, Qt::SolidLine, _strokeCap,
 		  _strokeJoin);
 		if (!_strokeDasharray.isEmpty()) {
 			QVector<qreal>pattern(_strokeDasharray);
-			for (int i = 0; i < _strokeDasharray.size(); i++)
+			for (int i = 0; i < _strokeDasharray.size(); i++) {
+				if (_scale > Stroke && zoom >= 12)
+					pattern[i] = (pow(1.5, zoom - 12) * pattern[i]);
+				// QPainter pattern is specified in units of the pens width!
 				pattern[i] /= width;
+			}
 			p.setDashPattern(pattern);
 		}
 		return p;
