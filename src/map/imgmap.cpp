@@ -16,7 +16,6 @@
 using namespace IMG;
 
 #define TILE_SIZE   384
-#define TEXT_EXTENT 160
 
 static RectC limitBounds(const RectC &bounds, const Projection &proj)
 {
@@ -241,30 +240,9 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				if (QPixmapCache::find(key, &pm))
 					painter->drawPixmap(ttl, pm);
 				else {
-					QList<MapData::Poly> polygons, lines;
-					QList<MapData::Point> points;
-
-					QRectF polyRect(ttl, QPointF(ttl.x() + TILE_SIZE,
-					  ttl.y() + TILE_SIZE));
-					polyRect &= _bounds;
-					RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
-					  _transform.img2proj(polyRect.bottomRight()));
-					_data.at(n)->polys(polyRectD.toRectC(_projection, 20), _zoom,
-					  &polygons, &lines);
-
-					QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT,
-					  ttl.y() - TEXT_EXTENT), QPointF(ttl.x() + TILE_SIZE
-					  + TEXT_EXTENT, ttl.y() + TILE_SIZE + TEXT_EXTENT));
-					pointRect &= _bounds;
-					RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
-					  _transform.img2proj(pointRect.bottomRight()));
-					_data.at(n)->points(pointRectD.toRectC(_projection, 20),
-					  _zoom, &points);
-
-					tiles.append(RasterTile(_projection, _transform,
-					  _data.at(n)->style(), _zoom,
-					  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio, key,
-					  polygons, lines, points));
+					tiles.append(RasterTile(_projection, _transform, _data.at(n),
+					_zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio,
+					key));
 				}
 			}
 		}

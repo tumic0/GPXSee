@@ -2,14 +2,12 @@
 #include <QPixmapCache>
 #include "common/wgs84.h"
 #include "common/util.h"
-#include "pcs.h"
 #include "rectd.h"
+#include "pcs.h"
 #include "mapsforgemap.h"
 
 
 using namespace Mapsforge;
-
-#define TEXT_EXTENT 160
 
 MapsforgeMap::MapsforgeMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _data(fileName), _zoom(0),
@@ -188,33 +186,9 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			if (QPixmapCache::find(key(_zoom, ttl), &pm))
 				painter->drawPixmap(ttl, pm);
 			else {
-				QList<MapData::Path> paths;
-				QList<MapData::Point> points;
-
-				/* Add a "sub-pixel" margin to assure the tile areas do not
-				   overlap on the border lines. This prevents areas overlap
-				   artifacts at least when using the EPSG:3857 projection. */
-				QRectF pathRect(QPointF(ttl.x() + 0.5, ttl.y() + 0.5),
-				  QPointF(ttl.x() + _data.tileSize() - 0.5, ttl.y()
-				  + _data.tileSize() - 0.5));
-				pathRect &= _bounds;
-				RectD pathRectD(_transform.img2proj(pathRect.topLeft()),
-				  _transform.img2proj(pathRect.bottomRight()));
-				_data.paths(pathRectD.toRectC(_projection, 20), _zoom, &paths);
-
-				QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT, ttl.y()
-				  - TEXT_EXTENT), QPointF(ttl.x() + _data.tileSize()
-				  + TEXT_EXTENT, ttl.y() + _data.tileSize() + TEXT_EXTENT));
-				pointRect &= _bounds;
-				RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
-				  _transform.img2proj(pointRect.bottomRight()));
-				_data.points(pointRectD.toRectC(_projection, 20), _zoom,
-				  &points);
-
-				if (paths.size() || points.size())
-					tiles.append(RasterTile(_projection, _transform, &_style,
-					  _zoom, QRect(ttl, QSize(_data.tileSize(), _data.tileSize())),
-					  _tileRatio, paths, points));
+				tiles.append(RasterTile(_projection, _transform, &_style, &_data,
+				  _zoom, QRect(ttl, QSize(_data.tileSize(), _data.tileSize())),
+				  _tileRatio));
 			}
 		}
 	}

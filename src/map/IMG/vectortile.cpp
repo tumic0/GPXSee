@@ -102,13 +102,16 @@ void VectorTile::clear()
 
 void VectorTile::polys(const RectC &rect, const Zoom &zoom,
   QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
-  QCache<const SubDiv *, MapData::Polys> *polyCache)
+  MapData::PolyCache *polyCache)
 {
 	SubFile::Handle *rgnHdl = 0, *lblHdl = 0, *netHdl = 0, *nodHdl = 0,
 	  *nodHdl2 = 0;
 
 	if (_loaded < 0)
 		return;
+
+	//polyCache->lock.lock();
+
 	if (!_loaded) {
 		rgnHdl = new SubFile::Handle(_rgn);
 		lblHdl = new SubFile::Handle(_lbl);
@@ -116,6 +119,7 @@ void VectorTile::polys(const RectC &rect, const Zoom &zoom,
 		nodHdl = new SubFile::Handle(_nod);
 
 		if (!load(*rgnHdl, *lblHdl, *netHdl, *nodHdl)) {
+			//polyCache->lock.unlock();
 			delete rgnHdl; delete lblHdl; delete netHdl; delete nodHdl;
 			return;
 		}
@@ -165,6 +169,8 @@ void VectorTile::polys(const RectC &rect, const Zoom &zoom,
 			copyPolys(rect, &(polys->lines), lines);
 		}
 	}
+
+	//polyCache->lock.unlock();
 
 	delete rgnHdl; delete lblHdl; delete netHdl; delete nodHdl; delete nodHdl2;
 }

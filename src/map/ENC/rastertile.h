@@ -15,13 +15,10 @@ class RasterTile
 {
 public:
 	RasterTile(const Projection &proj, const Transform &transform,
-	  const Range &zooms, int zoom, const QRect &rect, qreal ratio,
-	  const QList<MapData::Line*> &lines, const QList<MapData::Poly*> &polygons,
-	  const QList<MapData::Point*> &points)
-	  : _proj(proj), _transform(transform), _zooms(zooms), _zoom(zoom),
+	  const MapData *data, int zoom, const QRect &rect, qreal ratio)
+	  : _proj(proj), _transform(transform), _data(data), _zoom(zoom),
 	  _rect(rect), _ratio(ratio),
-	  _pixmap(rect.width() * ratio, rect.height() * ratio), _lines(lines),
-	  _polygons(polygons), _points(points), _valid(false) {}
+	  _pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false) {}
 
 	int zoom() const {return _zoom;}
 	QPoint xy() const {return _rect.topLeft();}
@@ -44,31 +41,33 @@ private:
 		const QImage *_rimg;
 	};
 
+	void fetchData(QList<MapData::Poly*> &polygons, QList<MapData::Line*> &lines,
+	  QList<MapData::Point*> &points);
 	QPointF ll2xy(const Coordinates &c) const
 	  {return _transform.proj2img(_proj.ll2xy(c));}
 	QPainterPath painterPath(const Polygon &polygon) const;
 	QPolygonF polyline(const QVector<Coordinates> &path) const;
 	QPolygonF tsslptArrow(const Coordinates &c, qreal angle) const;
-	void processPoints(QList<TextItem*> &textItems, QList<TextItem *> &lights);
-	void processLines(QList<TextItem*> &textItems);
-	void processPolygons(QList<TextItem*> &textItems);
+	void processPoints(QList<MapData::Point *> &points,
+	  QList<TextItem*> &textItems, QList<TextItem *> &lights);
+	void processLines(const QList<MapData::Line *> &lines,
+	  QList<TextItem*> &textItems);
+	void processPolygons(const QList<MapData::Poly *> &polygons,
+	  QList<TextItem*> &textItems);
 	void drawBitmapPath(QPainter *painter, const QImage &img,
 	  const Polygon &polygon);
-	void drawArrows(QPainter *painter);
-	void drawPolygons(QPainter *painter);
-	void drawLines(QPainter *painter);
+	void drawArrows(QPainter *painter, const QList<MapData::Poly*> &polygons);
+	void drawPolygons(QPainter *painter, const QList<MapData::Poly *> &polygons);
+	void drawLines(QPainter *painter, const QList<MapData::Line *> &lines);
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
 
 	Projection _proj;
 	Transform _transform;
-	Range _zooms;
+	const MapData *_data;
 	int _zoom;
 	QRect _rect;
 	qreal _ratio;
 	QPixmap _pixmap;
-	QList<MapData::Line*> _lines;
-	QList<MapData::Poly*> _polygons;
-	QList<MapData::Point*> _points;
 	bool _valid;
 };
 

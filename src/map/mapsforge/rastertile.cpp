@@ -1,9 +1,12 @@
 #include <QPainter>
 #include <QCache>
 #include "common/programpaths.h"
+#include "map/rectd.h"
 #include "rastertile.h"
 
 using namespace Mapsforge;
+
+#define TEXT_EXTENT 160
 
 static qreal area(const QPainterPath &polygon)
 {
@@ -52,14 +55,15 @@ static const QColor *haloColor(const Style::TextRender *ti)
 	  ? &ti->strokeColor() : 0;
 }
 
-void RasterTile::processPointLabels(QList<TextItem*> &textItems)
+void RasterTile::processPointLabels(const QList<MapData::Point> &points,
+  QList<TextItem*> &textItems)
 {
 	QList<const Style::TextRender*> labels(_style->pointLabels(_zoom));
 	QList<const Style::Symbol*> symbols(_style->pointSymbols(_zoom));
-	QList<PainterPoint> points;
+	QList<PainterPoint> painterPoints;
 
-	for (int i = 0; i < _points.size(); i++) {
-		const MapData::Point &point = _points.at(i);
+	for (int i = 0; i < points.size(); i++) {
+		const MapData::Point &point = points.at(i);
 		const QByteArray *lbl = 0;
 		const Style::TextRender *ti = 0;
 		const Style::Symbol *si = 0;
@@ -83,13 +87,13 @@ void RasterTile::processPointLabels(QList<TextItem*> &textItems)
 		}
 
 		if (ti || si)
-			points.append(PainterPoint(&point, lbl, si, ti));
+			painterPoints.append(PainterPoint(&point, lbl, si, ti));
 	}
 
-	std::sort(points.begin(), points.end());
+	std::sort(painterPoints.begin(), painterPoints.end());
 
-	for (int i = 0; i < points.size(); i++) {
-		const PainterPoint &p = points.at(i);
+	for (int i = 0; i < painterPoints.size(); i++) {
+		const PainterPoint &p = painterPoints.at(i);
 		const QImage *img = p.si ? &p.si->img() : 0;
 		const QFont *font = p.ti ? &p.ti->font() : 0;
 		const QColor *color = p.ti ? &p.ti->fillColor() : 0;
@@ -238,15 +242,16 @@ QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
 	return path;
 }
 
-void RasterTile::pathInstructions(QVector<PainterPath> &paths,
+void RasterTile::pathInstructions(const QList<MapData::Path> &paths,
+  QVector<PainterPath> &painterPaths,
   QVector<RasterTile::RenderInstruction> &instructions)
 {
 	QCache<PathKey, QList<const Style::PathRender *> > cache(8192);
 	QList<const Style::PathRender*> *ri;
 
-	for (int i = 0; i < _paths.size(); i++) {
-		const MapData::Path &path = _paths.at(i);
-		PainterPath &rp = paths[i];
+	for (int i = 0; i < paths.size(); i++) {
+		const MapData::Path &path = paths.at(i);
+		PainterPath &rp = painterPaths[i];
 		PathKey key(_zoom, path.closed, path.tags);
 
 		rp.path = &path;
@@ -264,14 +269,14 @@ void RasterTile::pathInstructions(QVector<PainterPath> &paths,
 	}
 }
 
-void RasterTile::circleInstructions(
+void RasterTile::circleInstructions(const QList<MapData::Point> &points,
   QVector<RasterTile::RenderInstruction> &instructions)
 {
 	QCache<PointKey, QList<const Style::CircleRender *> > cache(8192);
 	QList<const Style::CircleRender*> *ri;
 
-	for (int i = 0; i < _points.size(); i++) {
-		const MapData::Point &point = _points.at(i);
+	for (int i = 0; i < points.size(); i++) {
+		const MapData::Point &point = points.at(i);
 		PointKey key(_zoom, point.tags);
 
 		if (!(ri = cache.object(key))) {
@@ -287,11 +292,12 @@ void RasterTile::circleInstructions(
 	}
 }
 
-void RasterTile::drawPaths(QPainter *painter, QVector<PainterPath> &paths)
+void RasterTile::drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
+  const QList<MapData::Point> &points, QVector<PainterPath> &painterPaths)
 {
 	QVector<RenderInstruction> instructions;
-	pathInstructions(paths, instructions);
-	circleInstructions(instructions);
+	pathInstructions(paths, painterPaths, instructions);
+	circleInstructions(points, instructions);
 	std::sort(instructions.begin(), instructions.end());
 
 	for (int i = 0; i < instructions.size(); i++) {
@@ -318,10 +324,37 @@ void RasterTile::drawPaths(QPainter *painter, QVector<PainterPath> &paths)
 	}
 }
 
+void RasterTile::fetchData(QList<MapData::Path> &paths,
+  QList<MapData::Point> &points)
+{
+	QPoint ttl(_rect.topLeft());
+
+	/* Add a "sub-pixel" margin to assure the tile areas do not
+	   overlap on the border lines. This prevents areas overlap
+	   artifacts at least when using the EPSG:3857 projection. */
+	QRectF pathRect(QPointF(ttl.x() + 0.5, ttl.y() + 0.5),
+	  QPointF(ttl.x() + _rect.width() - 0.5, ttl.y() + _rect.height() - 0.5));
+	RectD pathRectD(_transform.img2proj(pathRect.topLeft()),
+	  _transform.img2proj(pathRect.bottomRight()));
+	_data->paths(pathRectD.toRectC(_proj, 20), _zoom, &paths);
+
+	QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT, ttl.y() - TEXT_EXTENT),
+	  QPointF(ttl.x() + _rect.width() + TEXT_EXTENT, ttl.y() + _rect.height()
+	  + TEXT_EXTENT));
+	RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
+	  _transform.img2proj(pointRect.bottomRight()));
+	_data->points(pointRectD.toRectC(_proj, 20), _zoom, &points);
+}
+
 void RasterTile::render()
 {
+	QList<MapData::Path> paths;
+	QList<MapData::Point> points;
+
+	fetchData(paths, points);
+
 	QList<TextItem*> textItems;
-	QVector<PainterPath> renderPaths(_paths.size());
+	QVector<PainterPath> renderPaths(paths.size());
 
 	_pixmap.setDevicePixelRatio(_ratio);
 	_pixmap.fill(Qt::transparent);
@@ -330,9 +363,9 @@ void RasterTile::render()
 	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-_rect.x(), -_rect.y());
 
-	drawPaths(&painter, renderPaths);
+	drawPaths(&painter, paths, points, renderPaths);
 
-	processPointLabels(textItems);
+	processPointLabels(points, textItems);
 	processAreaLabels(textItems, renderPaths);
 	processLineLabels(textItems, renderPaths);
 	drawTextItems(&painter, textItems);

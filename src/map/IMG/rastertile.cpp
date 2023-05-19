@@ -5,12 +5,14 @@
 #include "map/textpathitem.h"
 #include "map/textpointitem.h"
 #include "map/bitmapline.h"
+#include "map/rectd.h"
 #include "style.h"
 #include "lblfile.h"
 #include "rastertile.h"
 
 using namespace IMG;
 
+#define TEXT_EXTENT 160
 #define ICON_PADDING 2
 
 #define AREA(rect) \
@@ -147,40 +149,6 @@ static bool rectNearPolygon(const QPolygonF &polygon, const QRectF &rect)
 	  || polygon.containsPoint(rect.bottomRight(), Qt::OddEvenFill)));
 }
 
-
-void RasterTile::render()
-{
-	QList<TextItem*> textItems;
-
-	ll2xy(_polygons);
-	ll2xy(_lines);
-	ll2xy(_points);
-
-	processPoints(textItems);
-	processPolygons(textItems);
-	processLines(textItems);
-
-	_pixmap.setDevicePixelRatio(_ratio);
-	_pixmap.fill(Qt::transparent);
-
-	QPainter painter(&_pixmap);
-	painter.setRenderHint(QPainter::SmoothPixmapTransform);
-	painter.setRenderHint(QPainter::Antialiasing);
-	painter.translate(-_rect.x(), -_rect.y());
-
-	drawPolygons(&painter);
-	drawLines(&painter);
-	drawTextItems(&painter, textItems);
-
-	qDeleteAll(textItems);
-
-	_valid = true;
-
-	//painter.setPen(Qt::red);
-	//painter.setRenderHint(QPainter::Antialiasing, false);
-	//painter.drawRect(QRect(_xy, _pixmap.size()));
-}
-
 void RasterTile::ll2xy(QList<MapData::Poly> &polys)
 {
 	for (int i = 0; i < polys.size(); i++) {
@@ -200,14 +168,15 @@ void RasterTile::ll2xy(QList<MapData::Point> &points)
 	}
 }
 
-void RasterTile::drawPolygons(QPainter *painter)
+void RasterTile::drawPolygons(QPainter *painter,
+  const QList<MapData::Poly> &polygons)
 {
 	QCache<const LBLFile *, SubFile::Handle> hc(16);
 
-	for (int n = 0; n < _style->drawOrder().size(); n++) {
-		for (int i = 0; i < _polygons.size(); i++) {
-			const MapData::Poly &poly = _polygons.at(i);
-			if (poly.type != _style->drawOrder().at(n))
+	for (int n = 0; n < _data->style()->drawOrder().size(); n++) {
+		for (int i = 0; i < polygons.size(); i++) {
+			const MapData::Poly &poly = polygons.at(i);
+			if (poly.type != _data->style()->drawOrder().at(n))
 				continue;
 
 			if (poly.raster.isValid()) {
@@ -237,7 +206,7 @@ void RasterTile::drawPolygons(QPainter *painter)
 				//painter->setBrush(Qt::NoBrush);
 				//painter->drawRect(QRectF(tl, br));
 			} else {
-				const Style::Polygon &style = _style->polygon(poly.type);
+				const Style::Polygon &style = _data->style()->polygon(poly.type);
 
 				painter->setPen(style.pen());
 				painter->setBrush(style.brush());
@@ -247,13 +216,13 @@ void RasterTile::drawPolygons(QPainter *painter)
 	}
 }
 
-void RasterTile::drawLines(QPainter *painter)
+void RasterTile::drawLines(QPainter *painter, const QList<MapData::Poly> &lines)
 {
 	painter->setBrush(Qt::NoBrush);
 
-	for (int i = 0; i < _lines.size(); i++) {
-		const MapData::Poly &poly = _lines.at(i);
-		const Style::Line &style = _style->line(poly.type);
+	for (int i = 0; i < lines.size(); i++) {
+		const MapData::Poly &poly = lines.at(i);
+		const Style::Line &style = _data->style()->line(poly.type);
 
 		if (style.background() == Qt::NoPen)
 			continue;
@@ -262,9 +231,9 @@ void RasterTile::drawLines(QPainter *painter)
 		painter->drawPolyline(poly.points);
 	}
 
-	for (int i = 0; i < _lines.size(); i++) {
-		const MapData::Poly &poly = _lines.at(i);
-		const Style::Line &style = _style->line(poly.type);
+	for (int i = 0; i < lines.size(); i++) {
+		const MapData::Poly &poly = lines.at(i);
+		const Style::Line &style = _data->style()->line(poly.type);
 
 		if (!style.img().isNull())
 			BitmapLine::draw(painter, poly.points, style.img());
@@ -295,13 +264,14 @@ static void removeDuplicitLabel(QList<TextItem *> &labels, const QString &text,
 	}
 }
 
-void RasterTile::processPolygons(QList<TextItem*> &textItems)
+void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
+  QList<TextItem*> &textItems)
 {
 	QSet<QString> set;
 	QList<TextItem *> labels;
 
-	for (int i = 0; i < _polygons.size(); i++) {
-		const MapData::Poly &poly = _polygons.at(i);
+	for (int i = 0; i < polygons.size(); i++) {
+		const MapData::Poly &poly = polygons.at(i);
 		bool exists = set.contains(poly.label.text());
 
 		if (poly.label.text().isEmpty())
@@ -310,7 +280,7 @@ void RasterTile::processPolygons(QList<TextItem*> &textItems)
 		if (_zoom <= 23 && (Style::isWaterArea(poly.type)
 		  || Style::isMilitaryArea(poly.type)
 		  || Style::isNatureReserve(poly.type))) {
-			const Style::Polygon &style = _style->polygon(poly.type);
+			const Style::Polygon &style = _data->style()->polygon(poly.type);
 			TextPointItem *item = new TextPointItem(
 			  centroid(poly.points).toPoint(), &poly.label.text(), poiFont(),
 			  0, &style.brush().color(), &haloColor);
@@ -331,20 +301,22 @@ void RasterTile::processPolygons(QList<TextItem*> &textItems)
 	textItems.append(labels);
 }
 
-void RasterTile::processLines(QList<TextItem*> &textItems)
+void RasterTile::processLines(QList<MapData::Poly> &lines,
+  QList<TextItem*> &textItems)
 {
-	std::stable_sort(_lines.begin(), _lines.end());
+	std::stable_sort(lines.begin(), lines.end());
 
 	if (_zoom >= 22)
-		processStreetNames(textItems);
-	processShields(textItems);
+		processStreetNames(lines, textItems);
+	processShields(lines, textItems);
 }
 
-void RasterTile::processStreetNames(QList<TextItem*> &textItems)
+void RasterTile::processStreetNames(const QList<MapData::Poly> &lines,
+  QList<TextItem*> &textItems)
 {
-	for (int i = 0; i < _lines.size(); i++) {
-		const MapData::Poly &poly = _lines.at(i);
-		const Style::Line &style = _style->line(poly.type);
+	for (int i = 0; i < lines.size(); i++) {
+		const MapData::Poly &poly = lines.at(i);
+		const Style::Line &style = _data->style()->line(poly.type);
 
 		if (style.img().isNull() && style.foreground() == Qt::NoPen)
 			continue;
@@ -366,7 +338,8 @@ void RasterTile::processStreetNames(QList<TextItem*> &textItems)
 	}
 }
 
-void RasterTile::processShields(QList<TextItem*> &textItems)
+void RasterTile::processShields(const QList<MapData::Poly> &lines,
+  QList<TextItem*> &textItems)
 {
 	for (int type = FIRST_SHIELD; type <= LAST_SHIELD; type++) {
 		if (minShieldZoom(static_cast<Shield::Type>(type)) > _zoom)
@@ -375,8 +348,8 @@ void RasterTile::processShields(QList<TextItem*> &textItems)
 		QHash<Shield, QPolygonF> shields;
 		QHash<Shield, const Shield*> sp;
 
-		for (int i = 0; i < _lines.size(); i++) {
-			const MapData::Poly &poly = _lines.at(i);
+		for (int i = 0; i < lines.size(); i++) {
+			const MapData::Poly &poly = lines.at(i);
 			const Shield &shield = poly.label.shield();
 			if (!shield.isValid() || shield.type() != type
 			  || !Style::isMajorRoad(poly.type))
@@ -429,13 +402,14 @@ void RasterTile::processShields(QList<TextItem*> &textItems)
 	}
 }
 
-void RasterTile::processPoints(QList<TextItem*> &textItems)
+void RasterTile::processPoints(QList<MapData::Point> &points,
+  QList<TextItem*> &textItems)
 {
-	std::sort(_points.begin(), _points.end());
+	std::sort(points.begin(), points.end());
 
-	for (int i = 0; i < _points.size(); i++) {
-		const MapData::Point &point = _points.at(i);
-		const Style::Point &style = _style->point(point.type);
+	for (int i = 0; i < points.size(); i++) {
+		const MapData::Point &point = points.at(i);
+		const Style::Point &style = _data->style()->point(point.type);
 		bool poi = Style::isPOI(point.type);
 
 		const QString *label = point.label.text().isEmpty()
@@ -460,4 +434,61 @@ void RasterTile::processPoints(QList<TextItem*> &textItems)
 		else
 			delete item;
 	}
+}
+
+void RasterTile::fetchData(QList<MapData::Poly> &polygons,
+  QList<MapData::Poly> &lines, QList<MapData::Point> &points)
+{
+	QPoint ttl(_rect.topLeft());
+
+	QRectF polyRect(ttl, QPointF(ttl.x() + _rect.width(), ttl.y()
+	  + _rect.height()));
+	RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
+	  _transform.img2proj(polyRect.bottomRight()));
+	_data->polys(polyRectD.toRectC(_proj, 20), _zoom,
+	  &polygons, &lines);
+
+	QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT, ttl.y() - TEXT_EXTENT),
+	  QPointF(ttl.x() + _rect.width() + TEXT_EXTENT, ttl.y() + _rect.height()
+	  + TEXT_EXTENT));
+	RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
+	  _transform.img2proj(pointRect.bottomRight()));
+	_data->points(pointRectD.toRectC(_proj, 20), _zoom, &points);
+}
+
+void RasterTile::render()
+{
+	QList<MapData::Poly> polygons;
+	QList<MapData::Poly> lines;
+	QList<MapData::Point> points;
+	QList<TextItem*> textItems;
+
+	fetchData(polygons, lines, points);
+	ll2xy(polygons);
+	ll2xy(lines);
+	ll2xy(points);
+
+	processPoints(points, textItems);
+	processPolygons(polygons, textItems);
+	processLines(lines, textItems);
+
+	_pixmap.setDevicePixelRatio(_ratio);
+	_pixmap.fill(Qt::transparent);
+
+	QPainter painter(&_pixmap);
+	painter.setRenderHint(QPainter::SmoothPixmapTransform);
+	painter.setRenderHint(QPainter::Antialiasing);
+	painter.translate(-_rect.x(), -_rect.y());
+
+	drawPolygons(&painter, polygons);
+	drawLines(&painter, lines);
+	drawTextItems(&painter, textItems);
+
+	qDeleteAll(textItems);
+
+	_valid = true;
+
+	//painter.setPen(Qt::red);
+	//painter.setRenderHint(QPainter::Antialiasing, false);
+	//painter.drawRect(QRect(_xy, _pixmap.size()));
 }

@@ -72,9 +72,9 @@ public:
 	RectC bounds() const {return _bounds;}
 	Range zooms() const;
 
-	void polygons(const RectC &rect, QList<Poly*> *polygons);
-	void lines(const RectC &rect, QList<Line*> *lines);
-	void points(const RectC &rect, QList<Point*> *points);
+	void polygons(const RectC &rect, QList<Poly*> *polygons) const;
+	void lines(const RectC &rect, QList<Line*> *lines) const;
+	void points(const RectC &rect, QList<Point*> *points) const;
 
 	void load();
 	void clear();

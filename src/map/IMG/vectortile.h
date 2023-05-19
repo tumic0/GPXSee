@@ -29,7 +29,7 @@ public:
 
 	void polys(const RectC &rect, const Zoom &zoom,
 	  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
-	  QCache<const SubDiv *, MapData::Polys> *polyCache);
+	  MapData::PolyCache *polyCache);
 	void points(const RectC &rect, const Zoom &zoom,
 	  QList<MapData::Point> *points, QCache<const SubDiv*,
 	  QList<MapData::Point> > *pointCache);

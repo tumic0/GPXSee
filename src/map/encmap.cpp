@@ -6,11 +6,10 @@
 #include "pcs.h"
 #include "encmap.h"
 
-#define TILE_SIZE 512
-#define TEXT_EXTENT 160
 
 using namespace ENC;
 
+#define TILE_SIZE 512
 
 ENCMap::ENCMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _data(fileName), _projection(PCS::pcs(3857)),
@@ -180,32 +179,9 @@ void ENCMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			QPixmap pm;
 			if (QPixmapCache::find(key(_zoom, ttl), &pm))
 				painter->drawPixmap(ttl, pm);
-			else {
-				QList<MapData::Poly*> polygons;
-				QList<MapData::Line*> lines;
-				QList<MapData::Point*> points;
-
-				QRectF polyRect(ttl, QPointF(ttl.x() + TILE_SIZE,
-				  ttl.y() + TILE_SIZE));
-				polyRect &= _bounds;
-				RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
-				  _transform.img2proj(polyRect.bottomRight()));
-				RectC polyRectC(polyRectD.toRectC(_projection, 20));
-				_data.lines(polyRectC, &lines);
-				_data.polygons(polyRectC, &polygons);
-
-				QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT,
-				  ttl.y() - TEXT_EXTENT), QPointF(ttl.x() + TILE_SIZE
-				  + TEXT_EXTENT, ttl.y() + TILE_SIZE + TEXT_EXTENT));
-				pointRect &= _bounds;
-				RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
-				  _transform.img2proj(pointRect.bottomRight()));
-				_data.points(pointRectD.toRectC(_projection, 20), &points);
-
-				tiles.append(RasterTile(_projection, _transform, _data.zooms(),
-				  _zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio,
-				  lines, polygons, points));
-			}
+			else
+				tiles.append(RasterTile(_projection, _transform, &_data,
+				  _zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio));
 		}
 	}
 

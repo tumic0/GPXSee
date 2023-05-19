@@ -3,10 +3,13 @@
 #include "common/linec.h"
 #include "map/bitmapline.h"
 #include "map/textpathitem.h"
+#include "map/rectd.h"
 #include "style.h"
 #include "rastertile.h"
 
 using namespace ENC;
+
+#define TEXT_EXTENT 160
 
 #define TSSLPT_SIZE  0.005 /* ll */
 #define RDOCAL_SIZE  12 /* px */
@@ -227,10 +230,11 @@ QPolygonF RasterTile::tsslptArrow(const Coordinates &c, qreal angle) const
 	return polygon;
 }
 
-void RasterTile::drawArrows(QPainter *painter)
+void RasterTile::drawArrows(QPainter *painter,
+  const QList<MapData::Poly*> &polygons)
 {
-	for (int i = 0; i < _polygons.size(); i++) {
-		const MapData::Poly *poly = _polygons.at(i);
+	for (int i = 0; i < polygons.size(); i++) {
+		const MapData::Poly *poly = polygons.at(i);
 
 		if (poly->type()>>16 == TSSLPT) {
 			QPolygonF polygon(tsslptArrow(centroid(poly->path().first()),
@@ -243,13 +247,14 @@ void RasterTile::drawArrows(QPainter *painter)
 	}
 }
 
-void RasterTile::drawPolygons(QPainter *painter)
+void RasterTile::drawPolygons(QPainter *painter,
+  const QList<MapData::Poly*> &polygons)
 {
 	const Style &s = style();
 
 	for (int n = 0; n < s.drawOrder().size(); n++) {
-		for (int i = 0; i < _polygons.size(); i++) {
-			const MapData::Poly *poly = _polygons.at(i);
+		for (int i = 0; i < polygons.size(); i++) {
+			const MapData::Poly *poly = polygons.at(i);
 			if (poly->type() != s.drawOrder().at(n))
 				continue;
 			const Style::Polygon &style = s.polygon(poly->type());
@@ -267,14 +272,14 @@ void RasterTile::drawPolygons(QPainter *painter)
 	}
 }
 
-void RasterTile::drawLines(QPainter *painter)
+void RasterTile::drawLines(QPainter *painter, const QList<MapData::Line*> &lines)
 {
 	const Style &s = style();
 
 	painter->setBrush(Qt::NoBrush);
 
-	for (int i = 0; i < _lines.size(); i++) {
-		const MapData::Line *line = _lines.at(i);
+	for (int i = 0; i < lines.size(); i++) {
+		const MapData::Line *line = lines.at(i);
 		const Style::Line &style = s.line(line->type());
 
 		if (!style.img().isNull()) {
@@ -293,12 +298,13 @@ void RasterTile::drawTextItems(QPainter *painter,
 		textItems.at(i)->paint(painter);
 }
 
-void RasterTile::processPolygons(QList<TextItem*> &textItems)
+void RasterTile::processPolygons(const QList<MapData::Poly*> &polygons,
+  QList<TextItem*> &textItems)
 {
 	const Style &s = style();
 
-	for (int i = 0; i < _polygons.size(); i++) {
-		const MapData::Poly *poly = _polygons.at(i);
+	for (int i = 0; i < polygons.size(); i++) {
+		const MapData::Poly *poly = polygons.at(i);
 		uint type = poly->type()>>16;
 
 		if (!(type == HRBFAC || type == I_TRNBSN
@@ -319,18 +325,18 @@ void RasterTile::processPolygons(QList<TextItem*> &textItems)
 	}
 }
 
-void RasterTile::processPoints(QList<TextItem*> &textItems,
-  QList<TextItem*> &lights)
+void RasterTile::processPoints(QList<MapData::Point*> &points,
+  QList<TextItem*> &textItems, QList<TextItem*> &lights)
 {
 	const Style &s = style();
 	PointMap lightsMap, signalsMap;
 	int i;
 
-	std::sort(_points.begin(), _points.end(), pointLess);
+	std::sort(points.begin(), points.end(), pointLess);
 
 	/* Lights & Signals */
-	for (i = 0; i < _points.size(); i++) {
-		const MapData::Point *point = _points.at(i);
+	for (i = 0; i < points.size(); i++) {
+		const MapData::Point *point = points.at(i);
 		if (point->type()>>16 == LIGHTS)
 			lightsMap.insert(point->pos(), point);
 		else if (point->type()>>16 == FOGSIG)
@@ -340,8 +346,8 @@ void RasterTile::processPoints(QList<TextItem*> &textItems,
 	}
 
 	/* Everything else */
-	for ( ; i < _points.size(); i++) {
-		const MapData::Point *point = _points.at(i);
+	for ( ; i < points.size(); i++) {
+		const MapData::Point *point = points.at(i);
 		QPoint pos(ll2xy(point->pos()).toPoint());
 		const Style::Point &style = s.point(point->type());
 
@@ -349,7 +355,7 @@ void RasterTile::processPoints(QList<TextItem*> &textItems,
 		QImage *rimg = style.img().isNull()
 		  ? image(point->type(), point->param()) : 0;
 		const QImage *img = style.img().isNull() ? rimg : &style.img();
-		const QFont *fnt = showLabel(img, _zooms, _zoom, point->type())
+		const QFont *fnt = showLabel(img, _data->zooms(), _zoom, point->type())
 		  ? font(style.textFontSize()) : 0;
 		const QColor *color = &style.textColor();
 		const QColor *hColor = style.haloColor().isValid()
@@ -371,12 +377,13 @@ void RasterTile::processPoints(QList<TextItem*> &textItems,
 	}
 }
 
-void RasterTile::processLines(QList<TextItem*> &textItems)
+void RasterTile::processLines(const QList<MapData::Line*> &lines,
+  QList<TextItem*> &textItems)
 {
 	const Style &s = style();
 
-	for (int i = 0; i < _lines.size(); i++) {
-		const MapData::Line *line = _lines.at(i);
+	for (int i = 0; i < lines.size(); i++) {
+		const MapData::Line *line = lines.at(i);
 		const Style::Line &style = s.line(line->type());
 
 		if (style.img().isNull() && style.pen() == Qt::NoPen)
@@ -396,25 +403,51 @@ void RasterTile::processLines(QList<TextItem*> &textItems)
 	}
 }
 
+void RasterTile::fetchData(QList<MapData::Poly*> &polygons,
+  QList<MapData::Line*> &lines, QList<MapData::Point*> &points)
+{
+	QPoint ttl(_rect.topLeft());
+
+	QRectF polyRect(ttl, QPointF(ttl.x() + _rect.width(), ttl.y()
+	  + _rect.height()));
+	RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
+	  _transform.img2proj(polyRect.bottomRight()));
+	RectC polyRectC(polyRectD.toRectC(_proj, 20));
+	_data->lines(polyRectC, &lines);
+	_data->polygons(polyRectC, &polygons);
+
+	QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT, ttl.y() - TEXT_EXTENT),
+	  QPointF(ttl.x() + _rect.width() + TEXT_EXTENT, ttl.y() + _rect.height()
+	  + TEXT_EXTENT));
+	RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
+	  _transform.img2proj(pointRect.bottomRight()));
+	_data->points(pointRectD.toRectC(_proj, 20), &points);
+}
+
 void RasterTile::render()
 {
+	QList<MapData::Line*> lines;
+	QList<MapData::Poly*> polygons;
+	QList<MapData::Point*> points;
 	QList<TextItem*> textItems, lights;
 
 	_pixmap.setDevicePixelRatio(_ratio);
 	_pixmap.fill(Qt::transparent);
 
-	processPolygons(textItems);
-	processPoints(textItems, lights);
-	processLines(textItems);
+	fetchData(polygons, lines, points);
+
+	processPolygons(polygons, textItems);
+	processPoints(points, textItems, lights);
+	processLines(lines, textItems);
 
 	QPainter painter(&_pixmap);
 	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-_rect.x(), -_rect.y());
 
-	drawPolygons(&painter);
-	drawLines(&painter);
-	drawArrows(&painter);
+	drawPolygons(&painter, polygons);
+	drawLines(&painter, lines);
+	drawArrows(&painter, polygons);
 
 	drawTextItems(&painter, lights);
 	drawTextItems(&painter, textItems);

@@ -15,11 +15,10 @@ class RasterTile
 {
 public:
 	RasterTile(const Projection &proj, const Transform &transform,
-	  const Style *style, int zoom, const QRect &rect, qreal ratio,
-	  const QList<MapData::Path> &paths, const QList<MapData::Point> &points)
-	  : _proj(proj), _transform(transform), _style(style),
-	  _zoom(zoom), _rect(rect), _ratio(ratio), _pixmap(rect.width() * ratio,
-	  rect.height() * ratio), _paths(paths), _points(points), _valid(false) {}
+	  const Style *style, MapData *data, int zoom, const QRect &rect,
+	  qreal ratio) : _proj(proj), _transform(transform), _style(style),
+	  _data(data), _zoom(zoom), _rect(rect), _ratio(ratio),
+	  _pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false) {}
 
 	int zoom() const {return _zoom;}
 	QPoint xy() const {return _rect.topLeft();}
@@ -147,31 +146,33 @@ private:
 	friend HASH_T qHash(const RasterTile::PathKey &key);
 	friend HASH_T qHash(const RasterTile::PointKey &key);
 
-	void pathInstructions(QVector<PainterPath> &paths,
+	void fetchData(QList<MapData::Path> &paths, QList<MapData::Point> &points);
+	void pathInstructions(const QList<MapData::Path> &paths,
+	  QVector<PainterPath> &painterPaths,
 	  QVector<RasterTile::RenderInstruction> &instructions);
-	void circleInstructions(QVector<RasterTile::RenderInstruction> &instructions);
+	void circleInstructions(const QList<MapData::Point> &points,
+	  QVector<RasterTile::RenderInstruction> &instructions);
 	QPointF ll2xy(const Coordinates &c) const
 	  {return _transform.proj2img(_proj.ll2xy(c));}
-	void processPointLabels(QList<TextItem*> &textItems);
+	void processPointLabels(const QList<MapData::Point> &points,
+	  QList<TextItem*> &textItems);
 	void processAreaLabels(QList<TextItem*> &textItems,
 	  QVector<PainterPath> &paths);
 	void processLineLabels(QList<TextItem*> &textItems,
 	  QVector<PainterPath> &paths);
 	QPainterPath painterPath(const Polygon &polygon, bool curve) const;
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
-	void drawPaths(QPainter *painter, QVector<PainterPath> &paths);
-
+	void drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
+	  const QList<MapData::Point> &points, QVector<PainterPath> &painterPaths);
 
 	Projection _proj;
 	Transform _transform;
 	const Style *_style;
+	MapData *_data;
 	int _zoom;
 	QRect _rect;
 	qreal _ratio;
 	QPixmap _pixmap;
-	QList<MapData::Path> _paths;
-	QList<MapData::Point> _points;
-
 	bool _valid;
 };
 

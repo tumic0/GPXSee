@@ -53,7 +53,9 @@ void MapData::polys(const RectC &rect, int bits, QList<Poly> *polygons,
 	max[0] = rect.right();
 	max[1] = rect.top();
 
+	_lock.lock();
 	_tileTree.Search(min, max, polyCb, &ctx);
+	_lock.unlock();
 }
 
 void MapData::points(const RectC &rect, int bits, QList<Point> *points)
@@ -66,7 +68,9 @@ void MapData::points(const RectC &rect, int bits, QList<Point> *points)
 	max[0] = rect.right();
 	max[1] = rect.top();
 
+	_lock.lock();
 	_tileTree.Search(min, max, pointCb, &ctx);
+	_lock.unlock();
 }
 
 void MapData::load()

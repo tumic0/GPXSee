@@ -3,6 +3,7 @@
 
 #include <QFile>
 #include <QCache>
+#include <QMutex>
 #include "common/hash.h"
 #include "common/rectc.h"
 #include "common/rtree.h"
@@ -138,7 +139,7 @@ private:
 	bool readTagInfo(SubFile &hdr);
 	bool readTagInfo(SubFile &hdr, QVector<TagSource> &tags);
 	bool readMapInfo(SubFile &hdr, QByteArray &projection, bool &debugMap);
-	bool readHeader();
+	bool readHeader(QFile &file);
 	bool readSubFiles();
 	void clearTiles();
 
@@ -157,7 +158,7 @@ private:
 
 	friend HASH_T qHash(const MapData::Key &key);
 
-	QFile _file;
+	QFile _pointFile, _pathFile;
 	RectC _bounds;
 	quint16 _tileSize;
 	QVector<SubFileInfo> _subFiles;
@@ -167,6 +168,7 @@ private:
 
 	QCache<Key, QList<Path> > _pathCache;
 	QCache<Key, QList<Point> > _pointCache;
+	QMutex _pathLock, _pointLock;
 
 	bool _valid;
 	QString _errorString;

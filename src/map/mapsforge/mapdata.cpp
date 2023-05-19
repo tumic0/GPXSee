@@ -208,13 +208,15 @@ bool MapData::readTags(SubFile &subfile, int count,
 
 bool MapData::readSubFiles()
 {
-	QDataStream stream(&_file);
+	/* both _pointFile and _pathFile can be used here */
+	QDataStream stream(&_pointFile);
 
 	for (int i = 0; i < _subFiles.size(); i++) {
 		const SubFileInfo &f = _subFiles.at(i);
 		quint64 offset, nextOffset;
 
-		stream.device()->seek(f.offset);
+		if (!stream.device()->seek(f.offset))
+			return false;
 
 		QPoint tl(OSM::ll2tile(_bounds.topLeft(), f.base));
 		QPoint br(OSM::ll2tile(_bounds.bottomRight(), f.base));
@@ -359,7 +361,7 @@ bool MapData::readMapInfo(SubFile &hdr, QByteArray &projection, bool &debugMap)
 	return true;
 }
 
-bool MapData::readHeader()
+bool MapData::readHeader(QFile &file)
 {
 	char magic[MAGIC_SIZE];
 	quint32 hdrSize;
@@ -367,18 +369,18 @@ bool MapData::readHeader()
 	bool debugMap;
 
 
-	if (_file.read(magic, MAGIC_SIZE) < (qint64)MAGIC_SIZE
+	if (file.read(magic, MAGIC_SIZE) < (qint64)MAGIC_SIZE
 	  || memcmp(magic, MAGIC, MAGIC_SIZE)) {
 		_errorString = "Not a Mapsforge map";
 		return false;
 	}
 
-	if (_file.read((char*)&hdrSize, sizeof(hdrSize)) < (qint64)sizeof(hdrSize)) {
+	if (file.read((char*)&hdrSize, sizeof(hdrSize)) < (qint64)sizeof(hdrSize)) {
 		_errorString = "Unexpected EOF";
 		return false;
 	}
 
-	SubFile hdr(_file, MAGIC_SIZE, qFromBigEndian(hdrSize));
+	SubFile hdr(file, MAGIC_SIZE, qFromBigEndian(hdrSize));
 
 	if (!readMapInfo(hdr, projection, debugMap)) {
 		_errorString = "Error reading map info";
@@ -407,17 +409,18 @@ bool MapData::readHeader()
 	return true;
 }
 
-MapData::MapData(const QString &fileName) : _file(fileName), _valid(false)
+MapData::MapData(const QString &fileName)
+  : _pointFile(fileName), _pathFile(fileName), _valid(false)
 {
-	if (!_file.open(QFile::ReadOnly | QIODevice::Unbuffered)) {
-		_errorString = _file.errorString();
+	QFile file(fileName);
+
+	if (!file.open(QFile::ReadOnly | QIODevice::Unbuffered)) {
+		_errorString = file.errorString();
 		return;
 	}
 
-	if (!readHeader())
+	if (!readHeader(file))
 		return;
-
-	_file.close();
 
 	_pathCache.setMaxCost(256);
 	_pointCache.setMaxCost(256);
@@ -444,13 +447,16 @@ RectC MapData::bounds() const
 
 void MapData::load()
 {
-	if (_file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
-		readSubFiles();
+	_pointFile.open(QIODevice::ReadOnly | QIODevice::Unbuffered);
+	_pathFile.open(QIODevice::ReadOnly | QIODevice::Unbuffered);
+
+	readSubFiles();
 }
 
 void MapData::clear()
 {
-	_file.close();
+	_pointFile.close();
+	_pathFile.close();
 
 	_pathCache.clear();
 	_pointCache.clear();
@@ -516,6 +522,9 @@ void MapData::points(const VectorTile *tile, const RectC &rect, int zoom,
   QList<Point> *list)
 {
 	Key key(tile, zoom);
+
+	_pointLock.lock();
+
 	QList<Point> *cached = _pointCache.object(key);
 
 	if (!cached) {
@@ -527,6 +536,8 @@ void MapData::points(const VectorTile *tile, const RectC &rect, int zoom,
 			delete p;
 	} else
 		copyPoints(rect, cached, list);
+
+	_pointLock.unlock();
 }
 
 void MapData::paths(const RectC &rect, int zoom, QList<Path> *list)
@@ -550,6 +561,9 @@ void MapData::paths(const VectorTile *tile, const RectC &rect, int zoom,
   QList<Path> *list)
 {
 	Key key(tile, zoom);
+
+	_pathLock.lock();
+
 	QList<Path> *cached = _pathCache.object(key);
 
 	if (!cached) {
@@ -561,12 +575,14 @@ void MapData::paths(const VectorTile *tile, const RectC &rect, int zoom,
 			delete p;
 	} else
 		copyPaths(rect, cached, list);
+
+	_pathLock.unlock();
 }
 
 bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 {
 	const SubFileInfo &info = _subFiles.at(level(zoom));
-	SubFile subfile(_file, info.offset, info.size);
+	SubFile subfile(_pathFile, info.offset, info.size);
 	int rows = info.max - info.min + 1;
 	QVector<unsigned> paths(rows);
 	quint32 blocks, unused, val, cnt = 0;
@@ -652,7 +668,7 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 bool MapData::readPoints(const VectorTile *tile, int zoom, QList<Point> *list)
 {
 	const SubFileInfo &info = _subFiles.at(level(zoom));
-	SubFile subfile(_file, info.offset, info.size);
+	SubFile subfile(_pointFile, info.offset, info.size);
 	int rows = info.max - info.min + 1;
 	QVector<unsigned> points(rows);
 	quint32 val, unused, cnt = 0;

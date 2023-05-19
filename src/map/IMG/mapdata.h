@@ -4,6 +4,7 @@
 #include <QList>
 #include <QPointF>
 #include <QCache>
+#include <QMutex>
 #include <QDebug>
 #include "common/rectc.h"
 #include "common/rtree.h"
@@ -97,11 +98,14 @@ private:
 		QList<Poly> lines;
 	};
 
+	typedef QCache<const SubDiv*, Polys> PolyCache;
+	typedef QCache<const SubDiv*, QList<Point> > PointCache;
+
 	struct PolyCTX
 	{
 		PolyCTX(const RectC &rect, const Zoom &zoom,
 		  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
-		  QCache<const SubDiv*, MapData::Polys> *polyCache)
+		  PolyCache *polyCache)
 		  : rect(rect), zoom(zoom), polygons(polygons), lines(lines),
 		  polyCache(polyCache) {}
 
@@ -109,20 +113,19 @@ private:
 		const Zoom &zoom;
 		QList<MapData::Poly> *polygons;
 		QList<MapData::Poly> *lines;
-		QCache<const SubDiv*, MapData::Polys> *polyCache;
+		PolyCache *polyCache;
 	};
 
 	struct PointCTX
 	{
 		PointCTX(const RectC &rect, const Zoom &zoom,
-		  QList<MapData::Point> *points,
-		  QCache<const SubDiv*, QList<MapData::Point> > *pointCache)
+		  QList<MapData::Point> *points, PointCache *pointCache)
 		  : rect(rect), zoom(zoom), points(points), pointCache(pointCache) {}
 
 		const RectC &rect;
 		const Zoom &zoom;
 		QList<MapData::Point> *points;
-		QCache<const SubDiv*, QList<MapData::Point> > *pointCache;
+		PointCache *pointCache;
 	};
 
 	const Zoom &zoom(int bits) const;
@@ -130,8 +133,9 @@ private:
 	static bool polyCb(VectorTile *tile, void *context);
 	static bool pointCb(VectorTile *tile, void *context);
 
-	QCache<const SubDiv*, Polys> _polyCache;
-	QCache<const SubDiv*, QList<Point> > _pointCache;
+	PolyCache _polyCache;
+	PointCache _pointCache;
+	QMutex _lock;
 
 	friend class VectorTile;
 };
