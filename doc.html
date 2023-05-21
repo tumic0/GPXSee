@@ -147,7 +147,7 @@
           <h3 id="online">Online maps</h3>
 
           <p>Online maps are represented by map source definition XML files. For the formal
-          map source file syntax see the <a href="map/1.4/map.xsd">map source
+          map source file syntax see the <a href="map/1.5/map.xsd">map source
           XSD file</a>. The paragraphs below are a "human-readable" summary of the XSD
           syntax/semantics divided by map type.</p>
 
@@ -160,7 +160,7 @@
 
 <pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;map xmlns="http://www.gpxsee.org/map/1.4" type="OSM"&gt;
+&lt;map xmlns="http://www.gpxsee.org/map/1.5" type="OSM"&gt;
   &lt;name&gt;USGS Imagery&lt;/name&gt;
   &lt;url&gt;https://navigator.er.usgs.gov/tiles/aerial_Imagery.cgi/$z/$x/$y&lt;/url&gt;
   &lt;zoom min="2" max="15"/&gt;
@@ -179,7 +179,7 @@
 
 <pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;map xmlns="http://www.gpxsee.org/map/1.4"&gt;
+&lt;map xmlns="http://www.gpxsee.org/map/1.5"&gt;
   &lt;name&gt;OSM - HiDPI&lt;/name&gt;
   &lt;url&gt;https://a.osm.rrze.fau.de/osmhd/$z/$x/$y.png&lt;/url&gt;
   &lt;tile pixelRatio="2"/&gt;
@@ -193,7 +193,7 @@
 
 <pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;map xmlns="http://www.gpxsee.org/map/1.4"&gt;
+&lt;map xmlns="http://www.gpxsee.org/map/1.5"&gt;
   &lt;name>MapTiler&lt;/name&gt;
   &lt;url>https://maps.tilehosting.com/data/v3/$z/$x/$y.pbf?key=apikey&lt;/url>
   &lt;tile type="vector" size="512"/&gt;
@@ -228,7 +228,7 @@
 
 <pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;map xmlns="http://www.gpxsee.org/map/1.4" type="WMTS"&gt;
+&lt;map xmlns="http://www.gpxsee.org/map/1.5" type="WMTS"&gt;
   &lt;name&gt;CUZK&lt;/name&gt;
   &lt;url&gt;http://geoportal.cuzk.cz/WMTS_ZM_900913/WMTService.aspx&lt;/url&gt;
   &lt;layer&gt;zm&lt;/layer&gt;
@@ -242,7 +242,7 @@
 
 <pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;map xmlns="http://www.gpxsee.org/map/1.4" type="WMTS"&gt;
+&lt;map xmlns="http://www.gpxsee.org/map/1.5" type="WMTS"&gt;
   &lt;name&gt;Wien - Ortho&lt;/name&gt;
   &lt;url type="REST"&gt;http://maps1.wien.gv.at/wmts/1.0.0/WMTSCapabilities.xml&lt;/url&gt;
   &lt;layer&gt;lb&lt;/layer&gt;
@@ -280,13 +280,19 @@
 
 <pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;map xmlns="http://www.gpxsee.org/map/1.4" type="WMS"&gt;
+&lt;map xmlns="http://www.gpxsee.org/map/1.5" type="WMS"&gt;
   &lt;name&gt;Katastr nemovitostí&lt;/name&gt;
   &lt;url&gt;http://services.cuzk.cz/wms/wms.asp&lt;/url&gt;
   &lt;layer&gt;polygony_parcel,polygony_budov,polygony_k_u&lt;/layer&gt;
   &lt;crs axis="yx"&gt;EPSG:3034&lt;/crs&gt;
 &lt;/map&gt;
 </pre>
+
+          <h4 id="headers">Server access</h4>
+          <p>If the map server requires HTTP authentication, you can use the <i>authorization</i>
+          element to specify HTTP basic authorization credentials. Since version 13.3 you may
+          also specify additional HTTP request headers using the <i>header</i> element.</p>
+     
 
           <h3 id="offline">Offline maps</h3>
           <p>OziExplorer maps, TrekBuddy maps/atlases, Garmin JNX &amp; IMG/GMAP maps,
@@ -444,6 +450,7 @@
               <div class="h6l"><a href="#QuadTiles">QuadTiles</a></div>
               <div class="h6l"><a href="#WMTS">WMTS</a></div>
               <div class="h6l"><a href="#WMS">WMS</a></div>
+              <div class="h6l"><a href="#headers">Server access</a></div>
             <div class="h5l"><a href="#offline">Offline maps</a></div>
               <div class="h6l"><a href="#IMG">IMG maps</a></div>
               <div class="h6l"><a href="#JNXKML">JNX &amp; KMZ maps</a></div>
