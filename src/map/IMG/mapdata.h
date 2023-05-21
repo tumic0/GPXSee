@@ -105,27 +105,30 @@ private:
 	{
 		PolyCTX(const RectC &rect, const Zoom &zoom,
 		  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
-		  PolyCache *polyCache)
+		  PolyCache *polyCache, QMutex *lock)
 		  : rect(rect), zoom(zoom), polygons(polygons), lines(lines),
-		  polyCache(polyCache) {}
+		  polyCache(polyCache), lock(lock) {}
 
 		const RectC &rect;
 		const Zoom &zoom;
 		QList<MapData::Poly> *polygons;
 		QList<MapData::Poly> *lines;
 		PolyCache *polyCache;
+		QMutex *lock;
 	};
 
 	struct PointCTX
 	{
 		PointCTX(const RectC &rect, const Zoom &zoom,
-		  QList<MapData::Point> *points, PointCache *pointCache)
-		  : rect(rect), zoom(zoom), points(points), pointCache(pointCache) {}
+		  QList<MapData::Point> *points, PointCache *pointCache, QMutex *lock)
+		  : rect(rect), zoom(zoom), points(points), pointCache(pointCache),
+		  lock(lock) {}
 
 		const RectC &rect;
 		const Zoom &zoom;
 		QList<MapData::Point> *points;
 		PointCache *pointCache;
+		QMutex *lock;
 	};
 
 	const Zoom &zoom(int bits) const;

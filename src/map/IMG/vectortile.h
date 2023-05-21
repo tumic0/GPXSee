@@ -29,10 +29,10 @@ public:
 
 	void polys(const RectC &rect, const Zoom &zoom,
 	  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
-	  MapData::PolyCache *polyCache);
+	  MapData::PolyCache *polyCache, QMutex *lock);
 	void points(const RectC &rect, const Zoom &zoom,
 	  QList<MapData::Point> *points, QCache<const SubDiv*,
-	  QList<MapData::Point> > *pointCache);
+	  QList<MapData::Point> > *pointCache, QMutex *lock);
 
 	static bool isTileFile(SubFile::Type type)
 	{

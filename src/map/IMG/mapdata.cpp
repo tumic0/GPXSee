@@ -13,14 +13,14 @@ bool MapData::polyCb(VectorTile *tile, void *context)
 {
 	PolyCTX *ctx = (PolyCTX*)context;
 	tile->polys(ctx->rect, ctx->zoom, ctx->polygons, ctx->lines,
-	  ctx->polyCache);
+	  ctx->polyCache, ctx->lock);
 	return true;
 }
 
 bool MapData::pointCb(VectorTile *tile, void *context)
 {
 	PointCTX *ctx = (PointCTX*)context;
-	tile->points(ctx->rect, ctx->zoom, ctx->points, ctx->pointCache);
+	tile->points(ctx->rect, ctx->zoom, ctx->points, ctx->pointCache, ctx->lock);
 	return true;
 }
 
@@ -45,7 +45,7 @@ MapData::~MapData()
 void MapData::polys(const RectC &rect, int bits, QList<Poly> *polygons,
   QList<Poly> *lines)
 {
-	PolyCTX ctx(rect, zoom(bits), polygons, lines, &_polyCache);
+	PolyCTX ctx(rect, zoom(bits), polygons, lines, &_polyCache, &_lock);
 	double min[2], max[2];
 
 	min[0] = rect.left();
@@ -53,14 +53,12 @@ void MapData::polys(const RectC &rect, int bits, QList<Poly> *polygons,
 	max[0] = rect.right();
 	max[1] = rect.top();
 
-	_lock.lock();
 	_tileTree.Search(min, max, polyCb, &ctx);
-	_lock.unlock();
 }
 
 void MapData::points(const RectC &rect, int bits, QList<Point> *points)
 {
-	PointCTX ctx(rect, zoom(bits), points, &_pointCache);
+	PointCTX ctx(rect, zoom(bits), points, &_pointCache, &_lock);
 	double min[2], max[2];
 
 	min[0] = rect.left();
@@ -68,9 +66,7 @@ void MapData::points(const RectC &rect, int bits, QList<Point> *points)
 	max[0] = rect.right();
 	max[1] = rect.top();
 
-	_lock.lock();
 	_tileTree.Search(min, max, pointCb, &ctx);
-	_lock.unlock();
 }
 
 void MapData::load()
