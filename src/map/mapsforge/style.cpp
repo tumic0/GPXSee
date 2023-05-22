@@ -245,6 +245,13 @@ void Style::line(QXmlStreamReader &reader, const Rule &rule)
 		if (curve == "cubic")
 			ri._curve = true;
 	}
+	if (attr.hasAttribute("dy")) {
+		ri._dy = attr.value("dy").toDouble(&ok);
+		if (!ok) {
+			reader.raiseError("invalid dy value");
+			return;
+		}
+	}
 
 	if (ri.rule()._type == Rule::AnyType || ri.rule()._type == Rule::WayType)
 		_paths.append(ri);
@@ -687,6 +694,11 @@ QPen Style::PathRender::pen(int zoom) const
 		return p;
 	} else
 		return Qt::NoPen;
+}
+
+qreal Style::PathRender::dy(int zoom) const
+{
+	return (_scale && zoom >= 12) ? pow(1.5, zoom - 12) * _dy : _dy;
 }
 
 qreal Style::CircleRender::radius(int zoom) const

@@ -137,13 +137,14 @@ public:
 		PathRender(const Rule &rule, int zOrder) : Render(rule),
 		  _zOrder(zOrder), _strokeWidth(0), _strokeCap(Qt::RoundCap),
 			_strokeJoin(Qt::RoundJoin), _area(false), _curve(false),
-			_scale(Stroke) {}
+			_scale(Stroke), _dy(0) {}
 
 		int zOrder() const {return _zOrder;}
 		QPen pen(int zoom) const;
 		const QBrush &brush() const {return _brush;}
 		bool area() const {return _area;}
 		bool curve() const {return _curve;}
+		qreal dy(int zoom) const;
 
 	private:
 		friend class Style;
@@ -159,6 +160,7 @@ public:
 		QBrush _brush;
 		bool _area, _curve;
 		Scale _scale;
+		qreal _dy;
 	};
 
 	class CircleRender : public Render

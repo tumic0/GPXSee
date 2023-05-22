@@ -1,3 +1,4 @@
+#include <cmath>
 #include <QPainter>
 #include <QCache>
 #include "common/programpaths.h"
@@ -7,6 +8,8 @@
 using namespace Mapsforge;
 
 #define TEXT_EXTENT 160
+
+static double limit = cos(deg2rad(170));
 
 static qreal area(const QPainterPath &polygon)
 {
@@ -53,6 +56,47 @@ static const QColor *haloColor(const Style::TextRender *ti)
 {
 	return (ti->strokeColor() != ti->fillColor() && ti->strokeWidth() > 0)
 	  ? &ti->strokeColor() : 0;
+}
+
+static QPainterPath parallelPath(const QPainterPath &p, double dy)
+{
+	int n = p.elementCount() - 1;
+	QVector<QPointF> u(n);
+	QPainterPath h;
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+	h.reserve(p.elementCount());
+#endif // QT 5.13
+
+	for (int k = 0; k < n; k++) {
+		qreal c = p.elementAt(k + 1).x - p.elementAt(k).x;
+		qreal s = p.elementAt(k + 1).y - p.elementAt(k).y;
+		qreal l = sqrt(c * c + s * s);
+
+		u[k] = (l == 0) ? QPointF(0, 0) : QPointF(c / l, s / l);
+
+		if (k == 0)
+			continue;
+		if (u.at(k).x() * u.at(k-1).x() + u.at(k).y() * u.at(k-1).y() < limit)
+			return p;
+	}
+
+	h.moveTo(QPointF(p.elementAt(0).x - dy * u.at(0).y(),
+	  p.elementAt(0).y + dy * u.at(0).x()));
+
+	for (int k = 1; k < n; k++) {
+		qreal l = dy / (1 + u.at(k).x() * u.at(k-1).x()
+		  + u.at(k).y() * u.at(k-1).y());
+		QPainterPath::Element e(p.elementAt(k));
+
+		h.lineTo(QPointF(e.x - l * (u.at(k).y() + u.at(k-1).y()),
+		  e.y + l * (u.at(k).x() + u.at(k-1).x())));
+	}
+
+	h.lineTo(QPointF(p.elementAt(n).x - dy * u.at(n-1).y(),
+	  p.elementAt(n).y + dy * u.at(n-1).x()));
+
+	return h;
 }
 
 void RasterTile::processPointLabels(const QList<MapData::Point> &points,
@@ -306,13 +350,17 @@ void RasterTile::drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
 
 		if (path) {
 			const Style::PathRender *ri = is.pathRender();
+			qreal dy = ri->dy(_zoom);
 
 			if (!path->pp.elementCount())
 				path->pp = painterPath(path->path->poly, ri->curve());
 
 			painter->setPen(ri->pen(_zoom));
 			painter->setBrush(ri->brush());
-			painter->drawPath(path->pp);
+			if (dy != 0)
+				painter->drawPath(parallelPath(path->pp, dy));
+			else
+				painter->drawPath(path->pp);
 		} else {
 			const Style::CircleRender *ri = is.circleRender();
 			qreal radius = ri->radius(_zoom);
