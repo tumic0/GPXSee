@@ -18,9 +18,9 @@ static void expand(QRectF &rect, int width)
 
 TextPointItem::TextPointItem(const QPoint &point, const QString *text,
   const QFont *font, const QImage *img, const QColor *color,
-  const QColor *haloColor, const QColor *bgColor, int padding)
+  const QColor *haloColor, const QColor *bgColor, int padding, double rotate)
   : TextItem(font ? text : 0), _font(font), _img(img), _color(color),
-  _haloColor(haloColor), _bgColor(bgColor)
+  _haloColor(haloColor), _bgColor(bgColor), _rotate(rotate)
 {
 	if (_text) {
 		QFontMetrics fm(*_font);
@@ -58,8 +58,17 @@ void TextPointItem::paint(QPainter *painter) const
 {
 	if (_img && !_img->isNull()) {
 		QSizeF s(_img->size() / _img->devicePixelRatioF());
-		painter->drawImage(QPointF(_rect.left(), _rect.center().y()
-		  - s.height()/2), *_img);
+		if (std::isnan(_rotate))
+			painter->drawImage(QPointF(_rect.left(), _rect.center().y()
+			  - s.height()/2), *_img);
+		else {
+			painter->save();
+			painter->translate(QPointF(_rect.left() + s.width()/2,
+			  _rect.center().y()));
+			painter->rotate(_rotate);
+			painter->drawImage(QPointF(-s.width()/2, -s.height()/2), *_img);
+			painter->restore();
+		}
 	}
 
 	if (_text) {

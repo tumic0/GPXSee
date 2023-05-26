@@ -28,19 +28,6 @@ public:
 	void render();
 
 private:
-	class PointItem : public TextPointItem
-	{
-	public:
-		PointItem(const QPoint &point, const QString *text, const QFont *font,
-		  const QImage *img, const QImage *rimg, const QColor *color,
-		  const QColor *haloColor) : TextPointItem(point, text, font, img, color,
-		  haloColor, 0, 2), _rimg(rimg) {}
-		~PointItem() {delete _rimg;}
-
-	private:
-		const QImage *_rimg;
-	};
-
 	void fetchData(QList<MapData::Poly*> &polygons, QList<MapData::Line*> &lines,
 	  QList<MapData::Point*> &points);
 	QPointF ll2xy(const Coordinates &c) const

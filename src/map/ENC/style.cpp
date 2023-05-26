@@ -255,7 +255,9 @@ void Style::pointStyle()
 	_points[TYPE(I_TRNBSN)] = Point(QImage(":/marine/turning-basin.png"));
 	_points[TYPE(I_TRNBSN)].setTextColor(QColor("#eb49eb"));
 	_points[TYPE(I_WTWGAG)] = Point(QImage(":/marine/gauge.png"), Small);
+	_points[TYPE(RDOCAL)] = Point(QImage(":/marine/radio-call.png"));
 	_points[TYPE(RDOCAL)].setTextColor(QColor("#eb49eb"));
+	_points[TYPE(I_RDOCAL)] = Point(QImage(":/marine/radio-call.png"));
 	_points[TYPE(I_RDOCAL)].setTextColor(QColor("#eb49eb"));
 	_points[TYPE(PYLONS)] = Point(QImage(":/marine/pylon.png"));
 	_points[SUBTYPE(I_BERTHS, 6)] = Point(QImage(":/marine/fleeting-area.png"));
@@ -265,6 +267,7 @@ void Style::pointStyle()
 	_points[TYPE(PILBOP)] = Point(QImage(":/marine/boarding-place.png"));
 	_points[TYPE(SISTAT)] = Point(QImage(":/marine/pylon.png"));
 	_points[TYPE(SLCONS)] = Point(QImage(":/marine/construction.png"), Small);
+	_points[TYPE(CURENT)] = Point(QImage(":/marine/current.png"));
 
 	_points[SUBTYPE(SMCFAC, 7)] = Point(QImage(":/POI/restaurant-11.png"), Small);
 	_points[SUBTYPE(SMCFAC, 11)] = Point(QImage(":/POI/pharmacy-11.png"), Small);

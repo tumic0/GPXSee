@@ -10,15 +10,11 @@
 using namespace ENC;
 
 #define TEXT_EXTENT 160
-
 #define TSSLPT_SIZE  0.005 /* ll */
-#define RDOCAL_SIZE  12 /* px */
-#define CURENT_SIZE  12 /* px */
 
 typedef QMap<Coordinates, const MapData::Point*> PointMap;
 
-const float C1 = 0.866025f; /* sqrt(3)/2 */
-
+static const float C1 = 0.866025f; /* sqrt(3)/2 */
 static const QColor haloColor(Qt::white);
 
 static struct {
@@ -105,67 +101,14 @@ static Coordinates centroid(const QVector<Coordinates> &polygon)
 	return Coordinates(cx * factor, cy * factor);
 }
 
-static QImage *rdocalArrow(qreal angle)
-{
-	QImage *img = new QImage(RDOCAL_SIZE*2, RDOCAL_SIZE*2,
-	  QImage::Format_ARGB32_Premultiplied);
-	img->fill(Qt::transparent);
-	QPainter p(img);
-	p.setRenderHint(QPainter::Antialiasing);
-	p.setPen(QPen(QColor("#eb49eb"), 1));
-
-	QPointF arrow[3];
-	arrow[0] = QPointF(img->width()/2, img->height()/2);
-	arrow[1] = arrow[0] + QPointF(qSin(angle - M_PI/3) * RDOCAL_SIZE,
-	  qCos(angle - M_PI/3) * RDOCAL_SIZE);
-	arrow[2] = arrow[0] + QPointF(qSin(angle - M_PI + M_PI/3) * RDOCAL_SIZE,
-	  qCos(angle - M_PI + M_PI/3) * RDOCAL_SIZE);
-
-	QLineF l(arrow[1], arrow[2]);
-	QPointF pt(l.pointAt(0.5));
-
-	p.translate(arrow[0] - pt);
-	p.drawPolyline(QPolygonF() << arrow[1] << arrow[0] << arrow[2]);
-	p.drawEllipse(pt, RDOCAL_SIZE/2, RDOCAL_SIZE/2);
-
-	return img;
-}
-
-static QImage *currentArrow(qreal angle)
-{
-	QImage *img = new QImage(CURENT_SIZE*2, CURENT_SIZE*2,
-	  QImage::Format_ARGB32_Premultiplied);
-	img->fill(Qt::transparent);
-	QPainter p(img);
-	p.setRenderHint(QPainter::Antialiasing);
-	p.setPen(QPen(Qt::black, 1));
-
-	QPointF arrow[3];
-	arrow[0] = QPointF(img->width()/2, img->height()/2);
-	arrow[1] = arrow[0] + QPointF(qSin(angle - M_PI/3) * CURENT_SIZE,
-	  qCos(angle - M_PI/3) * CURENT_SIZE);
-	arrow[2] = arrow[0] + QPointF(qSin(angle - M_PI + M_PI/3) * CURENT_SIZE,
-	  qCos(angle - M_PI + M_PI/3) * CURENT_SIZE);
-
-	QLineF l(arrow[1], arrow[2]);
-	QPointF pt(l.pointAt(0.5));
-	QLineF l2(arrow[0], pt);
-
-	p.translate(arrow[0] - pt);
-	p.drawPolyline(QPolygonF() << arrow[1] << arrow[0] << arrow[2]);
-	p.drawLine(arrow[0], l2.pointAt(2));
-
-	return img;
-}
-
-static QImage *image(uint type, const QVariant &param)
+static double angle(uint type, const QVariant &param)
 {
 	if (type>>16 == RDOCAL || type>>16 == I_RDOCAL)
-		return rdocalArrow(deg2rad(90 - param.toDouble()));
+		return 90 + param.toDouble();
 	else if (type>>16 == CURENT)
-		return currentArrow(deg2rad(90 - param.toDouble()));
+		return 90 + param.toDouble();
 	else
-		return 0;
+		return NAN;
 }
 
 static bool showLabel(const QImage *img, const Range &range, int zoom, int type)
@@ -352,20 +295,19 @@ void RasterTile::processPoints(QList<MapData::Point*> &points,
 		const Style::Point &style = s.point(point->type());
 
 		const QString *label = point->label().isEmpty() ? 0 : &(point->label());
-		QImage *rimg = style.img().isNull()
-		  ? image(point->type(), point->param()) : 0;
-		const QImage *img = style.img().isNull() ? rimg : &style.img();
+		const QImage *img = style.img().isNull() ? 0 : &style.img();
 		const QFont *fnt = showLabel(img, _data->zooms(), _zoom, point->type())
 		  ? font(style.textFontSize()) : 0;
 		const QColor *color = &style.textColor();
 		const QColor *hColor = style.haloColor().isValid()
 		  ? &style.haloColor() : 0;
+		double rotate = angle(point->type(), point->param());
 
 		if ((!label || !fnt) && !img)
 			continue;
 
-		PointItem *item = new PointItem(pos, label, fnt, img, rimg, color,
-		  hColor);
+		TextPointItem *item = new TextPointItem(pos, label, fnt, img, color,
+		  hColor, 0, 2, rotate);
 		if (item->isValid() && !item->collides(textItems)) {
 			textItems.append(item);
 			if (lightsMap.contains(point->pos()))
