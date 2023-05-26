@@ -129,9 +129,10 @@ QPainterPath RasterTile::painterPath(const Polygon &polygon) const
 	for (int i = 0; i < polygon.size(); i++) {
 		const QVector<Coordinates> &subpath = polygon.at(i);
 
-		path.moveTo(ll2xy(subpath.first()));
-		for (int j = 1; j < subpath.size(); j++)
-			path.lineTo(ll2xy(subpath.at(j)));
+		QVector<QPointF> p(subpath.size());
+		for (int j = 0; j < subpath.size(); j++)
+			p[j] = ll2xy(subpath.at(j));
+		path.addPolygon(p);
 	}
 
 	return path;
