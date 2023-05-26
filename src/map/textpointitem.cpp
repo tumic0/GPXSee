@@ -1,3 +1,4 @@
+#include <cmath>
 #include <QFont>
 #include <QFontMetrics>
 #include <QImage>
