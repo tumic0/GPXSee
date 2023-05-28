@@ -264,6 +264,13 @@ MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
 		if (_label.isEmpty())
 			_label = sistat(type & 0xFF);
 		_type = TYPE(SISTAT);
+	} else if (type>>16 == LNDELV && params.size()) {
+		if (_label.isEmpty())
+			_label = QString::fromLatin1(params.at(0))
+			  + QString::fromUtf8("\xE2\x80\x89m");
+		else
+			_label += "\n(" + QString::fromLatin1(params.at(0))
+			  + "\xE2\x80\x89m)";
 	}
 }
 
@@ -552,7 +559,8 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 		if ((OBJL == I_DISMAR && key == I_WTWDIS)
 		  || (OBJL == RDOCAL && key == ORIENT)
 		  || (OBJL == I_RDOCAL && key == ORIENT)
-		  || (OBJL == CURENT && key == ORIENT))
+		  || (OBJL == CURENT && key == ORIENT)
+		  || (OBJL == LNDELV && key == ELEVAT))
 			params[0] = av.at(1).toByteArray();
 		if ((OBJL == I_RDOCAL && key == COMCHA)
 		  || (OBJL == RDOCAL && key == COMCHA)
