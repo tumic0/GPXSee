@@ -23,6 +23,7 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(FOGSIG), 0);
 
 	map.insert(TYPE(CGUSTA), 1);
+	map.insert(TYPE(RSCSTA), 1);
 	map.insert(SUBTYPE(BUAARE, 1), 2);
 	map.insert(SUBTYPE(BUAARE, 5), 3);
 	map.insert(SUBTYPE(BUAARE, 4), 4);

@@ -248,6 +248,7 @@ void Style::pointStyle()
 	_points[SUBTYPE(I_DISMAR, 3)] = _points[SUBTYPE(I_DISMAR, 2)];
 	_points[SUBTYPE(I_DISMAR, 4)] = _points[SUBTYPE(I_DISMAR, 2)];
 	_points[TYPE(CGUSTA)] = Point(QImage(":/marine/coast-guard.png"));
+	_points[TYPE(RSCSTA)] = Point(QImage(":/marine/rescue-station.png"));
 	_points[TYPE(RDOSTA)] = Point(QImage(":/marine/radio.png"));
 	_points[TYPE(RADSTA)] = Point(QImage(":/marine/radar.png"));
 	_points[TYPE(RTPBCN)] = Point(QImage(":/marine/radar-transponder.png"));

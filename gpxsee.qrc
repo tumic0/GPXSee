@@ -200,6 +200,7 @@
 		<file alias="construction.png">icons/map/marine/construction.png</file>
 		<file alias="radio-call.png">icons/map/marine/radio-call.png</file>
 		<file alias="current.png">icons/map/marine/current.png</file>
+		<file alias="rescue-station.png">icons/map/marine/rescue-station.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->
