@@ -103,12 +103,10 @@ static Coordinates centroid(const QVector<Coordinates> &polygon)
 
 static double angle(uint type, const QVariant &param)
 {
-	if (type>>16 == RDOCAL || type>>16 == I_RDOCAL)
-		return 90 + param.toDouble();
-	else if (type>>16 == CURENT)
-		return 90 + param.toDouble();
-	else
-		return NAN;
+	uint bt = type>>16;
+
+	return (bt == RDOCAL || bt == I_RDOCAL || bt == CURENT)
+	  ? 90 + param.toDouble() : NAN;
 }
 
 static bool showLabel(const QImage *img, const Range &range, int zoom, int type)
