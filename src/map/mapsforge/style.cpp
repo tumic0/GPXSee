@@ -69,6 +69,42 @@ static QList<QByteArray> valList(const QList<QByteArray> &in)
 	return out;
 }
 
+const Style::Menu::Layer *Style::Menu::findLayer(const QString &id) const
+{
+	for (int i = 0; i < _layers.size(); i++)
+		if (_layers.at(i).id() == id)
+			return &_layers.at(i);
+
+	qWarning("%s: layer not found", qPrintable(id));
+
+	return 0;
+}
+
+void Style::Menu::addCats(const Layer *layer, QSet<QString> &cats) const
+{
+	if (!layer)
+		return;
+
+	if (!layer->parent().isNull())
+		addCats(findLayer(layer->parent()), cats);
+
+	for (int i = 0; i < layer->cats().size(); i++)
+		cats.insert(layer->cats().at(i));
+
+	for (int i = 0; i < layer->overlays().size(); i++) {
+		const Layer *overlay = findLayer(layer->overlays().at(i));
+		if (overlay && overlay->enabled())
+			addCats(overlay, cats);
+	}
+}
+
+QSet<QString> Style::Menu::cats() const
+{
+	QSet<QString> c;
+	addCats(findLayer(_defaultvalue), c);
+	return c;
+}
+
 Style::Rule::Filter::Filter(const MapData &data, const QList<QByteArray> &keys,
   const QList<QByteArray> &vals) : _neg(false)
 {
@@ -499,36 +535,65 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir,
 	}
 }
 
-void Style::cat(QXmlStreamReader &reader, QSet<QString> &cats)
+QString Style::cat(QXmlStreamReader &reader)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
 
-	cats.insert(attr.value("id").toString());
+	if (!attr.hasAttribute("id")) {
+		reader.raiseError("Missing id attribute");
+		return QString();
+	}
 
+	QString id(attr.value("id").toString());
 	reader.skipCurrentElement();
+
+	return id;
 }
 
-void Style::layer(QXmlStreamReader &reader, QSet<QString> &cats)
+Style::Menu::Layer Style::layer(QXmlStreamReader &reader)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
-	bool enabled = (attr.value("enabled").toString() == "true");
+	if (!attr.hasAttribute("id")) {
+		reader.raiseError("Missing id attribute");
+		return Menu::Layer();
+	}
+
+	Menu::Layer l(attr.value("id").toString(),
+	  attr.value("enabled").toString() == "true");
+
+	if (attr.hasAttribute("parent"))
+		l.setParent(attr.value("parent").toString());
 
 	while (reader.readNextStartElement()) {
-		if (enabled && reader.name() == QLatin1String("cat"))
-			cat(reader, cats);
+		if (reader.name() == QLatin1String("cat"))
+			l.addCat(cat(reader));
+		else if (reader.name() == QLatin1String("overlay"))
+			l.addOverlay(cat(reader));
 		else
 			reader.skipCurrentElement();
 	}
+
+	return l;
 }
 
-void Style::stylemenu(QXmlStreamReader &reader, QSet<QString> &cats)
+Style::Menu Style::stylemenu(QXmlStreamReader &reader)
 {
+	const QXmlStreamAttributes &attr = reader.attributes();
+	if (!attr.hasAttribute("defaultvalue")) {
+		reader.raiseError("Missing defaultvalue attribute");
+		return Menu();
+	}
+
+	Style::Menu menu(attr.value("defaultvalue").toString());
+
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("layer"))
-			layer(reader, cats);
+			menu.addLayer(layer(reader));
 		else
 			reader.skipCurrentElement();
 	}
+
+	return menu;
 }
 
 void Style::rendertheme(QXmlStreamReader &reader, const QString &dir,
@@ -540,9 +605,10 @@ void Style::rendertheme(QXmlStreamReader &reader, const QString &dir,
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("rule"))
 			rule(reader, dir, data, ratio, cats, r);
-		else if (reader.name() == QLatin1String("stylemenu"))
-			stylemenu(reader, cats);
-		else
+		else if (reader.name() == QLatin1String("stylemenu")) {
+			Menu menu(stylemenu(reader));
+			cats = menu.cats();
+		} else
 			reader.skipCurrentElement();
 	}
 }

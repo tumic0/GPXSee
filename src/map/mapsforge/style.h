@@ -238,6 +238,46 @@ public:
 	QList<const Symbol*> areaSymbols(int zoom) const;
 
 private:
+	class Menu {
+	public:
+		class Layer {
+		public:
+			Layer() : _enabled(false) {}
+			Layer(const QString &id, bool enabled)
+			  : _id(id), _enabled(enabled) {}
+
+			const QStringList &cats() const {return _cats;}
+			const QStringList &overlays() const {return _overlays;}
+			const QString &id() const {return _id;}
+			const QString &parent() const {return _parent;}
+			bool enabled() const {return _enabled;}
+
+			void setParent(const QString &parent) {_parent = parent;}
+			void addCat(const QString &cat) {_cats.append(cat);}
+			void addOverlay(const QString &overlay) {_overlays.append(overlay);}
+
+		private:
+			QStringList _cats;
+			QStringList _overlays;
+			QString _id;
+			QString _parent;
+			bool _enabled;
+		};
+
+		Menu() {}
+		Menu(const QString &defaultValue) : _defaultvalue(defaultValue) {}
+
+		void addLayer(const Layer &layer) {_layers.append(layer);}
+		QSet<QString> cats() const;
+
+	private:
+		const Layer *findLayer(const QString &id) const;
+		void addCats(const Layer *layer, QSet<QString> &cats) const;
+
+		QString _defaultvalue;
+		QList<Layer> _layers;
+	};
+
 	QList<PathRender> _paths;
 	QList<CircleRender> _circles;
 	QList<TextRender> _pathLabels, _pointLabels, _areaLabels;
@@ -246,9 +286,9 @@ private:
 	bool loadXml(const QString &path, const MapData &data, qreal ratio);
 	void rendertheme(QXmlStreamReader &reader, const QString &dir,
 	  const MapData &data, qreal ratio);
-	void layer(QXmlStreamReader &reader, QSet<QString> &cats);
-	void stylemenu(QXmlStreamReader &reader, QSet<QString> &cats);
-	void cat(QXmlStreamReader &reader, QSet<QString> &cats);
+	Menu::Layer layer(QXmlStreamReader &reader);
+	Menu stylemenu(QXmlStreamReader &reader);
+	QString cat(QXmlStreamReader &reader);
 	void rule(QXmlStreamReader &reader, const QString &dir, const MapData &data,
 	  qreal ratio, const QSet<QString> &cats, const Rule &parent);
 	void area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
