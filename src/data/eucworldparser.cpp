@@ -1,6 +1,6 @@
 #include <QByteArrayList>
 #include "common/csv.h"
-#include "csvparser.h"
+#include "eucworldparser.h"
 
 bool EUCWORLDParser::parse(QFile *file, QList<TrackData> &tracks,
   QList<RouteData> &routes, QList<Area> &polygons,
