@@ -258,7 +258,8 @@ HEADERS += src/common/config.h \
     src/data/gpiparser.h \
     src/data/address.h \
     src/data/smlparser.h \
-    src/data/geojsonparser.h
+    src/data/geojsonparser.h \
+    src/data/eucworldparser.h
 
 SOURCES += src/main.cpp \
     src/GUI/crosshairitem.cpp \
@@ -452,7 +453,8 @@ SOURCES += src/main.cpp \
     src/data/cupparser.cpp \
     src/data/gpiparser.cpp \
     src/data/smlparser.cpp \
-    src/data/geojsonparser.cpp
+    src/data/geojsonparser.cpp \
+    src/data/eucworldparser.cpp
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     QT_NO_DEPRECATED_WARNINGS

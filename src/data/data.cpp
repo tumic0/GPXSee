@@ -20,6 +20,7 @@
 #include "itnparser.h"
 #include "onmoveparsers.h"
 #include "twonavparser.h"
+#include "eucworldparser.h"
 #include "data.h"
 
 
@@ -45,6 +46,7 @@ static ITNParser itn;
 static OMDParser omd;
 static GHPParser ghp;
 static TwoNavParser twonav;
+static EUCWORLDParser euc;
 
 static QMultiMap<QString, Parser*> parsers()
 {
@@ -77,6 +79,7 @@ static QMultiMap<QString, Parser*> parsers()
 	map.insert("trk", &twonav);
 	map.insert("rte", &twonav);
 	map.insert("wpt", &twonav);
+	map.insert("log", &euc);
 
 	return map;
 }
@@ -173,6 +176,7 @@ QString Data::formats()
 	  + qApp->translate("Data", "SML files") + " (*.sml);;"
 	  + qApp->translate("Data", "TCX files") + " (*.tcx);;"
 	  + qApp->translate("Data", "TwoNav files") + " (*.rte *.trk *.wpt);;"
+	  + qApp->translate("Data", "Euc.world files") + " (*.log);;"
 	  + qApp->translate("Data", "All files") + " (*)";
 }
 
