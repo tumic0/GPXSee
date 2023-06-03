@@ -100,7 +100,7 @@ static QPainterPath parallelPath(const QPainterPath &p, double dy)
 }
 
 void RasterTile::processPointLabels(const QList<MapData::Point> &points,
-  QList<TextItem*> &textItems)
+  QList<TextItem*> &textItems) const
 {
 	QList<const Style::TextRender*> labels(_style->pointLabels(_zoom));
 	QList<const Style::Symbol*> symbols(_style->pointSymbols(_zoom));
@@ -152,14 +152,14 @@ void RasterTile::processPointLabels(const QList<MapData::Point> &points,
 	}
 }
 
-void RasterTile::processAreaLabels(QList<TextItem*> &textItems,
-  QVector<PainterPath> &paths)
+void RasterTile::processAreaLabels(const QVector<PainterPath> &paths,
+  QList<TextItem*> &textItems) const
 {
 	QList<const Style::TextRender*> labels(_style->areaLabels(_zoom));
 	QList<const Style::Symbol*> symbols(_style->areaSymbols(_zoom));
 
 	for (int i = 0; i < paths.size(); i++) {
-		PainterPath &path = paths[i];
+		const PainterPath &path = paths.at(i);
 		const Style::TextRender *ti = 0;
 		const Style::Symbol *si = 0;
 		const QByteArray *lbl = 0;
@@ -204,8 +204,8 @@ void RasterTile::processAreaLabels(QList<TextItem*> &textItems,
 	}
 }
 
-void RasterTile::processLineLabels(QList<TextItem*> &textItems,
-  QVector<PainterPath> &paths)
+void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
+  QList<TextItem*> &textItems) const
 {
 	QList<const Style::TextRender*> instructions(_style->pathLabels(_zoom));
 	QSet<QByteArray> set;
@@ -214,7 +214,7 @@ void RasterTile::processLineLabels(QList<TextItem*> &textItems,
 		const Style::TextRender *ri = instructions.at(i);
 
 		for (int i = 0; i < paths.size(); i++) {
-			PainterPath &path = paths[i];
+			const PainterPath &path = paths.at(i);
 			const QByteArray *lbl = label(ri->key(), path.path->tags);
 
 			if (!lbl)
@@ -288,7 +288,7 @@ QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
 
 void RasterTile::pathInstructions(const QList<MapData::Path> &paths,
   QVector<PainterPath> &painterPaths,
-  QVector<RasterTile::RenderInstruction> &instructions)
+  QVector<RasterTile::RenderInstruction> &instructions) const
 {
 	QCache<PathKey, QList<const Style::PathRender *> > cache(8192);
 	QList<const Style::PathRender*> *ri;
@@ -314,7 +314,7 @@ void RasterTile::pathInstructions(const QList<MapData::Path> &paths,
 }
 
 void RasterTile::circleInstructions(const QList<MapData::Point> &points,
-  QVector<RasterTile::RenderInstruction> &instructions)
+  QVector<RasterTile::RenderInstruction> &instructions) const
 {
 	QCache<PointKey, QList<const Style::CircleRender *> > cache(8192);
 	QList<const Style::CircleRender*> *ri;
@@ -373,7 +373,7 @@ void RasterTile::drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
 }
 
 void RasterTile::fetchData(QList<MapData::Path> &paths,
-  QList<MapData::Point> &points)
+  QList<MapData::Point> &points) const
 {
 	QPoint ttl(_rect.topLeft());
 
@@ -414,8 +414,8 @@ void RasterTile::render()
 	drawPaths(&painter, paths, points, renderPaths);
 
 	processPointLabels(points, textItems);
-	processAreaLabels(textItems, renderPaths);
-	processLineLabels(textItems, renderPaths);
+	processAreaLabels(renderPaths, textItems);
+	processLineLabels(renderPaths, textItems);
 	drawTextItems(&painter, textItems);
 
 	//painter.setPen(Qt::red);

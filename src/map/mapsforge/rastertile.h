@@ -146,20 +146,21 @@ private:
 	friend HASH_T qHash(const RasterTile::PathKey &key);
 	friend HASH_T qHash(const RasterTile::PointKey &key);
 
-	void fetchData(QList<MapData::Path> &paths, QList<MapData::Point> &points);
+	void fetchData(QList<MapData::Path> &paths,
+	  QList<MapData::Point> &points) const;
 	void pathInstructions(const QList<MapData::Path> &paths,
 	  QVector<PainterPath> &painterPaths,
-	  QVector<RasterTile::RenderInstruction> &instructions);
+	  QVector<RasterTile::RenderInstruction> &instructions) const;
 	void circleInstructions(const QList<MapData::Point> &points,
-	  QVector<RasterTile::RenderInstruction> &instructions);
+	  QVector<RasterTile::RenderInstruction> &instructions) const;
 	QPointF ll2xy(const Coordinates &c) const
 	  {return _transform.proj2img(_proj.ll2xy(c));}
 	void processPointLabels(const QList<MapData::Point> &points,
-	  QList<TextItem*> &textItems);
-	void processAreaLabels(QList<TextItem*> &textItems,
-	  QVector<PainterPath> &paths);
-	void processLineLabels(QList<TextItem*> &textItems,
-	  QVector<PainterPath> &paths);
+	  QList<TextItem*> &textItems) const;
+	void processAreaLabels(const QVector<PainterPath> &paths,
+	  QList<TextItem*> &textItems) const;
+	void processLineLabels(const QVector<PainterPath> &paths,
+	  QList<TextItem*> &textItems) const;
 	QPainterPath painterPath(const Polygon &polygon, bool curve) const;
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
 	void drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
