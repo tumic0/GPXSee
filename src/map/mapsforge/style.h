@@ -236,6 +236,7 @@ public:
 	QList<const TextRender*> areaLabels(int zoom) const;
 	QList<const Symbol*> pointSymbols(int zoom) const;
 	QList<const Symbol*> areaSymbols(int zoom) const;
+	QList<const Symbol*> lineSymbols(int zoom) const;
 
 private:
 	class Menu {
@@ -282,6 +283,7 @@ private:
 	QList<CircleRender> _circles;
 	QList<TextRender> _pathLabels, _pointLabels, _areaLabels;
 	QList<Symbol> _symbols;
+	QList<Symbol> _lineSymbols;
 
 	bool loadXml(const QString &path, const MapData &data, qreal ratio);
 	void rendertheme(QXmlStreamReader &reader, const QString &dir,
@@ -298,7 +300,7 @@ private:
 	void text(QXmlStreamReader &reader, const MapData &data, const Rule &rule,
 	  QList<QList<TextRender> *> &lists);
 	void symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
-	  const Rule &rule);
+	  const Rule &rule, QList<Symbol> &list);
 };
 
 }

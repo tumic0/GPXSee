@@ -207,33 +207,58 @@ void RasterTile::processAreaLabels(const QVector<PainterPath> &paths,
 void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
   QList<TextItem*> &textItems) const
 {
-	QList<const Style::TextRender*> instructions(_style->pathLabels(_zoom));
+	QList<const Style::TextRender*> labels(_style->pathLabels(_zoom));
+	QList<const Style::Symbol*> symbols(_style->lineSymbols(_zoom));
 	QSet<QByteArray> set;
 
-	for (int i = 0; i < instructions.size(); i++) {
-		const Style::TextRender *ri = instructions.at(i);
+	for (int i = 0; i < paths.size(); i++) {
+		const PainterPath &path = paths.at(i);
+		const Style::TextRender *ti = 0;
+		const Style::Symbol *si = 0;
+		const QByteArray *lbl = 0;
+		bool limit = false;
 
-		for (int i = 0; i < paths.size(); i++) {
-			const PainterPath &path = paths.at(i);
-			const QByteArray *lbl = label(ri->key(), path.path->tags);
+		if (path.path->closed)
+			continue;
 
-			if (!lbl)
-				continue;
-			if (!ri->rule().match(path.path->closed, path.path->tags))
-				continue;
-			bool limit = (ri->key() == ID_ELE || ri->key() == ID_REF);
+		for (int j = 0; j < labels.size(); j++) {
+			const Style::TextRender *ri = labels.at(j);
+			if (ri->rule().match(path.path->closed, path.path->tags)) {
+				if ((lbl = label(ri->key(), path.path->tags)))
+					ti = ri;
+				break;
+			}
+		}
+
+		for (int j = 0; j < symbols.size(); j++) {
+			const Style::Symbol *ri = symbols.at(j);
+			if (ri->rule().match(path.path->tags)) {
+				si = ri;
+				break;
+			}
+		}
+
+		if (!ti && !si)
+			continue;
+		if (ti) {
+			limit = (ti->key() == ID_ELE || ti->key() == ID_REF);
 			if (limit && set.contains(*lbl))
 				continue;
-
-			PathItem *item = new PathItem(path.pp, lbl, _rect, &ri->font(),
-			  &ri->fillColor(), haloColor(ri));
-			if (item->isValid() && !item->collides(textItems)) {
-				textItems.append(item);
-				if (limit)
-					set.insert(*lbl);
-			} else
-				delete item;
 		}
+
+		const QImage *img = si ? &si->img() : 0;
+		const QFont *font = ti ? &ti->font() : 0;
+		const QColor *color = ti ? &ti->fillColor() : 0;
+		const QColor *hColor = ti ? haloColor(ti) : 0;
+
+		PathItem *item = new PathItem(path.pp, lbl, img, _rect, font, color,
+		  hColor);
+		if (item->isValid() && !item->collides(textItems)) {
+			textItems.append(item);
+			if (limit)
+				set.insert(*lbl);
+		} else
+			delete item;
 	}
 }
 
@@ -409,6 +434,7 @@ void RasterTile::render()
 
 	QPainter painter(&_pixmap);
 	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 	painter.translate(-_rect.x(), -_rect.y());
 
 	drawPaths(&painter, paths, points, renderPaths);
@@ -420,7 +446,8 @@ void RasterTile::render()
 
 	//painter.setPen(Qt::red);
 	//painter.setBrush(Qt::NoBrush);
-	//painter.drawRect(QRect(_rect.topLeft(), _pixmap.size()));
+	//painter.setRenderHint(QPainter::Antialiasing, false);
+	//painter.drawRect(_rect);
 
 	qDeleteAll(textItems);
 

@@ -419,7 +419,7 @@ void Style::text(QXmlStreamReader &reader, const MapData &data, const Rule &rule
 }
 
 void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
-  const Rule &rule)
+  const Rule &rule, QList<Symbol> &list)
 {
 	Symbol ri(rule);
 	const QXmlStreamAttributes &attr = reader.attributes();
@@ -457,7 +457,7 @@ void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 
 	ri._img = image(file, width, height, ratio);
 
-	_symbols.append(ri);
+	list.append(ri);
 
 	reader.skipCurrentElement();
 }
@@ -529,7 +529,9 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir,
 			text(reader, data, r, list);
 		}
 		else if (reader.name() == QLatin1String("symbol"))
-			symbol(reader, dir, ratio, r);
+			symbol(reader, dir, ratio, r, _symbols);
+		else if (reader.name() == QLatin1String("lineSymbol"))
+			symbol(reader, dir, ratio, r, _lineSymbols);
 		else
 			reader.skipCurrentElement();
 	}
@@ -716,9 +718,22 @@ QList<const Style::Symbol*> Style::pointSymbols(int zoom) const
 
 	for (int i = 0; i < _symbols.size(); i++) {
 		const Symbol &symbol = _symbols.at(i);
-		const Rule & rule = symbol.rule();
+		const Rule &rule = symbol.rule();
 		if (rule._zooms.contains(zoom) && (rule._type == Rule::AnyType
 		  || rule._type == Rule::NodeType))
+			list.append(&symbol);
+	}
+
+	return list;
+}
+
+QList<const Style::Symbol*> Style::lineSymbols(int zoom) const
+{
+	QList<const Symbol*> list;
+
+	for (int i = 0; i < _lineSymbols.size(); i++) {
+		const Symbol &symbol = _lineSymbols.at(i);
+		if (symbol.rule()._zooms.contains(zoom))
 			list.append(&symbol);
 	}
 

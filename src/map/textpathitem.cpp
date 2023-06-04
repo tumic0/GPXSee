@@ -2,8 +2,9 @@
 #include <QPainter>
 #include "textpathitem.h"
 
-
+#define CHAR_RATIO     0.55
 #define MAX_TEXT_ANGLE 30
+#define PADDING        2
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 #define INTERSECTS intersect
@@ -11,6 +12,22 @@
 #define INTERSECTS intersects
 #endif // QT 5.15
 
+
+static void swap(const QLineF &line, QPointF *p1, QPointF *p2)
+{
+
+	QPointF lp1(line.p1());
+	QPointF lp2(line.p2());
+
+	if ((lp1.rx() < lp2.rx() && p1->rx() > p2->rx())
+	  || (lp1.ry() < lp2.ry() && p1->ry() > p2->ry())
+	  || (lp1.rx() > lp2.rx() && p1->rx() < p2->rx())
+	  || (lp1.ry() > lp2.ry() && p1->ry() < p2->ry())) {
+		QPointF tmp(*p2);
+		*p2 = *p1;
+		*p1 = tmp;
+	}
+}
 
 static bool intersection(const QLineF &line, const QRectF &rect, QPointF *p)
 {
@@ -40,20 +57,26 @@ static bool intersection(const QLineF &line, const QRectF &rect, QPointF *p1,
 		p = p2;
 	if (line.INTERSECTS(QLineF(rect.topLeft(), rect.bottomLeft()), p)
 	  == QLineF::BoundedIntersection) {
-		if (p == p2)
+		if (p == p2) {
+			swap(line, p1, p2);
 			return true;
+		}
 		p = p2;
 	}
 	if (line.INTERSECTS(QLineF(rect.bottomRight(), rect.bottomLeft()), p)
 	  == QLineF::BoundedIntersection) {
-		if (p == p2)
+		if (p == p2) {
+			swap(line, p1, p2);
 			return true;
+		}
 		p = p2;
 	}
 	if (line.INTERSECTS(QLineF(rect.bottomRight(), rect.topRight()), p)
 	  == QLineF::BoundedIntersection) {
-		if (p == p2)
+		if (p == p2) {
+			swap(line, p1, p2);
 			return true;
+		}
 	}
 
 	Q_ASSERT(p != p2);
@@ -197,6 +220,13 @@ static QList<QLineF> lineString(const QPainterPath &path,
 	return lines;
 }
 
+static bool reverse(const QPainterPath &path)
+{
+	QLineF l(path.elementAt(0), path.elementAt(1));
+	qreal angle = l.angle();
+	return (angle > 90 && angle < 270) ? true : false;
+}
+
 template<class T>
 static QPainterPath textPath(const T &path, qreal textWidth,
   qreal charWidth, const QRectF &tileRect)
@@ -229,109 +259,128 @@ static QPainterPath textPath(const T &path, qreal textWidth,
 	  : QPainterPath();
 }
 
-static bool reverse(const QPainterPath &path)
+template<class T>
+void TextPathItem::init(const T &line, const QRect &tileRect)
 {
-	QLineF l(path.elementAt(0), path.elementAt(1));
-	qreal angle = l.angle();
-	return (angle > 90 && angle < 270) ? true : false;
+	qreal cw, mw, textWidth;
+
+	if (_text && _img) {
+		cw = _font->pixelSize() * CHAR_RATIO;
+		mw = _font->pixelSize() / 2;
+		textWidth = _text->size() * cw + _img->width() + PADDING;
+	} else if (_text) {
+		cw = _font->pixelSize() * CHAR_RATIO;
+		mw = _font->pixelSize() / 2;
+		textWidth = _text->size() * cw;
+	} else {
+		cw = _img->width();
+		mw = _img->height() / 2;
+		textWidth = _img->width();
+	}
+
+	_path = textPath(line, textWidth, cw, tileRect.adjusted(mw, mw, -mw, -mw));
+	if (_path.isEmpty())
+		return;
+
+	if (reverse(_path)) {
+		_path = _path.toReversed();
+		_reverse = true;
+	}
+
+	QPainterPathStroker s;
+	s.setWidth(mw * 2);
+	s.setCapStyle(Qt::FlatCap);
+	_shape = s.createStroke(_path).simplified();
+	_rect = _shape.boundingRect();
 }
 
 TextPathItem::TextPathItem(const QPolygonF &line, const QString *label,
   const QRect &tileRect, const QFont *font, const QColor *color,
-  const QColor *haloColor) : TextItem(label), _font(font), _color(color),
-  _haloColor(haloColor)
+  const QColor *haloColor, const QImage *img) : TextItem(label), _font(font),
+	_color(color), _haloColor(haloColor), _img(img), _reverse(false)
 {
-	qreal cw = font->pixelSize() * 0.6;
-	qreal textWidth = _text->size() * cw;
-	qreal mw = font->pixelSize() / 2;
-	_path = textPath(line, textWidth, cw, tileRect.adjusted(mw, mw, -mw, -mw));
-	if (_path.isEmpty())
-		return;
-
-	if (reverse(_path))
-		_path = _path.toReversed();
-
-	QPainterPathStroker s;
-	s.setWidth(font->pixelSize());
-	s.setCapStyle(Qt::FlatCap);
-	_shape = s.createStroke(_path).simplified();
-	_rect = _shape.boundingRect();
+	init(line, tileRect);
 }
 
 TextPathItem::TextPathItem(const QPainterPath &line, const QString *label,
   const QRect &tileRect, const QFont *font, const QColor *color,
-  const QColor *haloColor) : TextItem(label), _font(font), _color(color),
-  _haloColor(haloColor)
+  const QColor *haloColor, const QImage *img) : TextItem(label), _font(font),
+	_color(color), _haloColor(haloColor), _img(img), _reverse(false)
 {
-	qreal cw = font->pixelSize() * 0.6;
-	qreal textWidth = _text->size() * cw;
-	qreal mw = font->pixelSize() / 2;
-	_path = textPath(line, textWidth, cw, tileRect.adjusted(mw, mw, -mw, -mw));
-	if (_path.isEmpty())
-		return;
-
-	if (reverse(_path))
-		_path = _path.toReversed();
-
-	QPainterPathStroker s;
-	s.setWidth(font->pixelSize());
-	s.setCapStyle(Qt::FlatCap);
-	_shape = s.createStroke(_path).simplified();
-	_rect = _shape.boundingRect();
+	init(line, tileRect);
 }
 
 void TextPathItem::paint(QPainter *painter) const
 {
-	QFontMetrics fm(*_font);
-	int textWidth = fm.boundingRect(*_text).width();
+	if (_img) {
+		QSizeF s(_img->size() / _img->devicePixelRatioF());
 
-	qreal factor = (textWidth) / qMax(_path.length(), (qreal)textWidth);
-	qreal percent = (1.0 - factor) / 2.0;
+		painter->save();
+		painter->translate(QPointF(_path.elementAt(0).x, _path.elementAt(0).y));
+		painter->rotate(360 - _path.angleAtPercent(0));
 
-	QTransform t = painter->transform();
+		if (_reverse)
+			painter->drawImage(QPointF(0, -s.height()/2),
+			  _img->transformed(QTransform().rotate(180.0)));
+		else
+			painter->drawImage(QPointF(0, -s.height()/2), *_img);
 
-	painter->setFont(*_font);
+		painter->restore();
+	}
 
-	if (_haloColor) {
-		painter->setPen(*_haloColor);
+	if (_text) {
+		QFontMetrics fm(*_font);
+		int textWidth = fm.boundingRect(*_text).width();
+		int imgWidth = _img ? _img->width() + PADDING : 0;
+		qreal imgPercent = imgWidth / _path.length();
+		qreal factor = textWidth / qMax(_path.length(), (qreal)(textWidth));
+		qreal percent = ((1.0 - factor) + imgPercent) / 2.0;
+		QTransform t = painter->transform();
 
+		painter->setFont(*_font);
+
+		if (_haloColor) {
+			painter->setPen(*_haloColor);
+
+			for (int i = 0; i < _text->size(); i++) {
+				QPointF point = _path.pointAtPercent(percent);
+				qreal angle = _path.angleAtPercent(percent);
+				QChar c = _text->at(i);
+
+				painter->translate(point);
+				painter->rotate(-angle);
+				painter->drawText(QPoint(-1, fm.descent() - 1), c);
+				painter->drawText(QPoint(1, fm.descent() + 1), c);
+				painter->drawText(QPoint(-1, fm.descent() + 1), c);
+				painter->drawText(QPoint(1, fm.descent() -1), c);
+				painter->drawText(QPoint(0, fm.descent() - 1), c);
+				painter->drawText(QPoint(0, fm.descent() + 1), c);
+				painter->drawText(QPoint(-1, fm.descent()), c);
+				painter->drawText(QPoint(1, fm.descent()), c);
+				painter->setTransform(t);
+
+				int width = fm.horizontalAdvance(_text->at(i));
+				percent += ((qreal)width / (qreal)textWidth) * factor;
+			}
+			percent = ((1.0 - factor) + imgPercent) / 2.0;
+		}
+
+		painter->setPen(_color ? *_color : Qt::black);
 		for (int i = 0; i < _text->size(); i++) {
 			QPointF point = _path.pointAtPercent(percent);
 			qreal angle = _path.angleAtPercent(percent);
-			QChar c = _text->at(i);
 
 			painter->translate(point);
 			painter->rotate(-angle);
-			painter->drawText(QPoint(-1, fm.descent() - 1), c);
-			painter->drawText(QPoint(1, fm.descent() + 1), c);
-			painter->drawText(QPoint(-1, fm.descent() + 1), c);
-			painter->drawText(QPoint(1, fm.descent() -1), c);
-			painter->drawText(QPoint(0, fm.descent() - 1), c);
-			painter->drawText(QPoint(0, fm.descent() + 1), c);
-			painter->drawText(QPoint(-1, fm.descent()), c);
-			painter->drawText(QPoint(1, fm.descent()), c);
+			painter->drawText(QPoint(0, fm.descent()), _text->at(i));
 			painter->setTransform(t);
 
 			int width = fm.horizontalAdvance(_text->at(i));
 			percent += ((qreal)width / (qreal)textWidth) * factor;
 		}
-		percent = (1.0 - factor) / 2.0;
 	}
 
-	painter->setPen(_color ? *_color : Qt::black);
-	for (int i = 0; i < _text->size(); i++) {
-		QPointF point = _path.pointAtPercent(percent);
-		qreal angle = _path.angleAtPercent(percent);
-
-		painter->translate(point);
-		painter->rotate(-angle);
-		painter->drawText(QPoint(0, fm.descent()), _text->at(i));
-		painter->setTransform(t);
-
-		int width = fm.horizontalAdvance(_text->at(i));
-		percent += ((qreal)width / (qreal)textWidth) * factor;
-	}
-
+	//painter->setBrush(Qt::NoBrush);
 	//painter->setPen(Qt::red);
 	//painter->drawPath(_shape);
 }
