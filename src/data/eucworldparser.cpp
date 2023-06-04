@@ -63,12 +63,12 @@ bool EUCWORLDParser::parse(QFile *file, QList<TrackData> &tracks,
 			wp.setElevation(el);
 		}
 
-		if (lat != lastlat || lon != lastlon) {
+		if (lat != _lastLat || lon != _lastLon) {
 			waypoints.append(wp);
 		}
 
-		lastlat = lat;
-		lastlon = lon;
+		_lastLat = lat;
+		_lastLon = lon;
 	}
 
 	return true;
