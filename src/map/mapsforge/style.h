@@ -212,15 +212,17 @@ public:
 	class Symbol : public Render
 	{
 	public:
-		Symbol(const Rule &rule) : Render(rule), _priority(0) {}
+		Symbol(const Rule &rule) : Render(rule), _priority(0), _rotate(true) {}
 
 		const QImage &img() const {return _img;}
 		int priority() const {return _priority;}
+		bool rotate() const {return _rotate;}
 
 	private:
 		friend class Style;
 
 		int _priority;
+		bool _rotate;
 		QImage _img;
 	};
 
@@ -282,8 +284,7 @@ private:
 	QList<PathRender> _paths;
 	QList<CircleRender> _circles;
 	QList<TextRender> _pathLabels, _pointLabels, _areaLabels;
-	QList<Symbol> _symbols;
-	QList<Symbol> _lineSymbols;
+	QList<Symbol> _symbols, _lineSymbols;
 
 	bool loadXml(const QString &path, const MapData &data, qreal ratio);
 	void rendertheme(QXmlStreamReader &reader, const QString &dir,

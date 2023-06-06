@@ -1,12 +1,8 @@
 #ifndef TEXTPOINTITEM_H
 #define TEXTPOINTITEM_H
 
-#include <QRect>
-#include <QString>
-#include <QVector>
 #include "textitem.h"
 
-class QPainter;
 class QFont;
 class QImage;
 class QColor;
@@ -14,7 +10,6 @@ class QColor;
 class TextPointItem : public TextItem
 {
 public:
-	TextPointItem() : TextItem(0), _font(0), _img(0) {}
 	TextPointItem(const QPoint &point, const QString *text, const QFont *font,
 	  const QImage *img, const QColor *color, const QColor *haloColor,
 	  const QColor *bgColor = 0, int padding = 0, double rotate = NAN);

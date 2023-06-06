@@ -138,9 +138,9 @@ private:
 	public:
 		PathItem(const QPainterPath &line, const QByteArray *label,
 		  const QImage *img, const QRect &tileRect, const QFont *font,
-		  const QColor *color, const QColor *haloColor) : TextPathItem(line,
-		  label ? new QString(*label) : 0, tileRect, font, color, haloColor,
-		  img) {}
+		  const QColor *color, const QColor *haloColor, bool rotate)
+		  : TextPathItem(line, label ? new QString(*label) : 0, tileRect, font,
+		  color, haloColor, img, rotate) {}
 		~PathItem() {delete _text;}
 	};
 

@@ -23,17 +23,21 @@ using namespace Mapsforge;
 static void copyPaths(const RectC &rect, const QList<MapData::Path> *src,
   QList<MapData::Path> *dst)
 {
-	for (int i = 0; i < src->size(); i++)
-		if (rect.intersects(src->at(i).poly.boundingRect()))
-			dst->append(src->at(i));
+	for (int i = 0; i < src->size(); i++) {
+		const MapData::Path &path = src->at(i);
+		if (rect.intersects(path.poly.boundingRect()))
+			dst->append(path);
+	}
 }
 
 static void copyPoints(const RectC &rect, const QList<MapData::Point> *src,
   QList<MapData::Point> *dst)
 {
-	for (int i = 0; i < src->size(); i++)
-		if (rect.contains(src->at(i).coordinates))
-			dst->append(src->at(i));
+	for (int i = 0; i < src->size(); i++) {
+		const MapData::Point &point = src->at(i);
+		if (rect.contains(point.coordinates))
+			dst->append(point);
+	}
 }
 
 static double distance(const Coordinates &c1, const Coordinates &c2)
@@ -540,19 +544,20 @@ void MapData::points(const VectorTile *tile, const RectC &rect, int zoom,
 	_pointLock.unlock();
 }
 
-void MapData::paths(const RectC &rect, int zoom, QList<Path> *list)
+void MapData::paths(const RectC &searchRect, const RectC &boundsRect, int zoom,
+  QList<Path> *list)
 {
-	if (!rect.isValid())
+	if (!searchRect.isValid())
 		return;
 
 	int l(level(zoom));
-	PathCTX ctx(this, rect, zoom, list);
+	PathCTX ctx(this, boundsRect, zoom, list);
 	double min[2], max[2];
 
-	min[0] = rect.left();
-	min[1] = rect.bottom();
-	max[0] = rect.right();
-	max[1] = rect.top();
+	min[0] = searchRect.left();
+	min[1] = searchRect.bottom();
+	max[0] = searchRect.right();
+	max[1] = searchRect.top();
 
 	_tiles.at(l)->Search(min, max, pathCb, &ctx);
 }

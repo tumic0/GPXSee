@@ -8,6 +8,8 @@
 using namespace Mapsforge;
 
 #define TEXT_EXTENT 160
+#define PATHS_EXTENT 20
+#define SEARCH_EXTENT -0.5
 
 static double limit = cos(deg2rad(170));
 
@@ -250,15 +252,28 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 		const QFont *font = ti ? &ti->font() : 0;
 		const QColor *color = ti ? &ti->fillColor() : 0;
 		const QColor *hColor = ti ? haloColor(ti) : 0;
+		bool rotate = si ? si->rotate() : false;
 
 		PathItem *item = new PathItem(path.pp, lbl, img, _rect, font, color,
-		  hColor);
+		  hColor, rotate);
 		if (item->isValid() && !item->collides(textItems)) {
 			textItems.append(item);
 			if (limit)
 				set.insert(*lbl);
-		} else
+		} else {
 			delete item;
+
+			if (img && lbl) {
+				PathItem *item = new PathItem(path.pp, 0, img, _rect, 0, 0, 0,
+				  rotate);
+				if (item->isValid() && !item->collides(textItems)) {
+					textItems.append(item);
+					if (limit)
+						set.insert(*lbl);
+				} else
+					delete item;
+			}
+		}
 	}
 }
 
@@ -382,6 +397,7 @@ void RasterTile::drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
 
 			painter->setPen(ri->pen(_zoom));
 			painter->setBrush(ri->brush());
+
 			if (dy != 0)
 				painter->drawPath(parallelPath(path->pp, dy));
 			else
@@ -402,14 +418,18 @@ void RasterTile::fetchData(QList<MapData::Path> &paths,
 {
 	QPoint ttl(_rect.topLeft());
 
-	/* Add a "sub-pixel" margin to assure the tile areas do not
-	   overlap on the border lines. This prevents areas overlap
-	   artifacts at least when using the EPSG:3857 projection. */
-	QRectF pathRect(QPointF(ttl.x() + 0.5, ttl.y() + 0.5),
-	  QPointF(ttl.x() + _rect.width() - 0.5, ttl.y() + _rect.height() - 0.5));
+	QRectF pathRect(QPointF(ttl.x() - PATHS_EXTENT, ttl.y() - PATHS_EXTENT),
+	  QPointF(ttl.x() + _rect.width() + PATHS_EXTENT, ttl.y() + _rect.height()
+	  + PATHS_EXTENT));
+	QRectF searchRect(QPointF(ttl.x() - SEARCH_EXTENT, ttl.y() - SEARCH_EXTENT),
+	  QPointF(ttl.x() + _rect.width() + SEARCH_EXTENT, ttl.y() + _rect.height()
+	  + SEARCH_EXTENT));
 	RectD pathRectD(_transform.img2proj(pathRect.topLeft()),
 	  _transform.img2proj(pathRect.bottomRight()));
-	_data->paths(pathRectD.toRectC(_proj, 20), _zoom, &paths);
+	RectD searchRectD(_transform.img2proj(searchRect.topLeft()),
+	  _transform.img2proj(searchRect.bottomRight()));
+	_data->paths(searchRectD.toRectC(_proj, 20), pathRectD.toRectC(_proj, 20),
+	  _zoom, &paths);
 
 	QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT, ttl.y() - TEXT_EXTENT),
 	  QPointF(ttl.x() + _rect.width() + TEXT_EXTENT, ttl.y() + _rect.height()

@@ -17,18 +17,26 @@ static QString resourcePath(const QString &src, const QString &dir)
 		return dir + "/" + url.toLocalFile();
 }
 
-static QImage image(const QString &path, int width, int height, qreal ratio)
+static QImage image(const QString &path, int width, int height, int percent,
+  qreal ratio)
 {
 	QImageReader ir(path, "svg");
 
 	if (ir.canRead()) {
+		QSize s(ir.size());
+
 		if (!height && !width) {
 			height = 20;
 			width = 20;
 		} else if (!width) {
-			width = ir.size().height() / (ir.size().height() / (double)height);
+			width = s.height() / (s.height() / (double)height);
 		} else if (!height)
-			height = ir.size().width() / (ir.size().width() / (double)width);
+			height = s.width() / (s.width() / (double)width);
+
+		if (percent != 100) {
+			width *= percent / 100.0;
+			height *= percent / 100.0;
+		}
 
 		ir.setScaledSize(QSize(width * ratio, height * ratio));
 		QImage img(ir.read());
@@ -175,7 +183,7 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	const QXmlStreamAttributes &attr = reader.attributes();
 	QString file;
 	QColor fillColor;
-	int height = 0, width = 0;
+	int height = 0, width = 0, percent = 100;
 	bool ok;
 
 	ri._area = true;
@@ -213,9 +221,16 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 			return;
 		}
 	}
+	if (attr.hasAttribute("symbol-percent")) {
+		percent = attr.value("symbol-percent").toInt(&ok);
+		if (!ok || percent < 0) {
+			reader.raiseError("invalid symbol-percent value");
+			return;
+		}
+	}
 
 	if (!file.isNull())
-		ri._brush = QBrush(image(file, width, height, ratio));
+		ri._brush = QBrush(image(file, width, height, percent, ratio));
 	else if (fillColor.isValid())
 		ri._brush = QBrush(fillColor);
 
@@ -230,6 +245,8 @@ void Style::line(QXmlStreamReader &reader, const Rule &rule)
 	PathRender ri(rule, _paths.size() + _circles.size());
 	const QXmlStreamAttributes &attr = reader.attributes();
 	bool ok;
+
+	ri._brush = Qt::NoBrush;
 
 	if (attr.hasAttribute("stroke"))
 		ri._strokeColor = QColor(attr.value("stroke").toString());
@@ -424,7 +441,7 @@ void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	Symbol ri(rule);
 	const QXmlStreamAttributes &attr = reader.attributes();
 	QString file;
-	int height = 0, width = 0;
+	int height = 0, width = 0, percent = 100;
 	bool ok;
 
 	if (attr.hasAttribute("src"))
@@ -447,6 +464,13 @@ void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 			return;
 		}
 	}
+	if (attr.hasAttribute("symbol-percent")) {
+		percent = attr.value("symbol-percent").toInt(&ok);
+		if (!ok || percent < 0) {
+			reader.raiseError("invalid symbol-percent value");
+			return;
+		}
+	}
 	if (attr.hasAttribute("priority")) {
 		ri._priority = attr.value("priority").toInt(&ok);
 		if (!ok) {
@@ -454,8 +478,12 @@ void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 			return;
 		}
 	}
+	if (attr.hasAttribute("rotate")) {
+		if (attr.value("rotate").toString() == "false")
+			ri._rotate = false;
+	}
 
-	ri._img = image(file, width, height, ratio);
+	ri._img = image(file, width, height, percent, ratio);
 
 	list.append(ri);
 

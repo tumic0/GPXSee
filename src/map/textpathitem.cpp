@@ -266,15 +266,15 @@ void TextPathItem::init(const T &line, const QRect &tileRect)
 
 	if (_text && _img) {
 		cw = _font->pixelSize() * CHAR_RATIO;
-		mw = _font->pixelSize() / 2;
+		mw = _font->pixelSize() / 2.0;
 		textWidth = _text->size() * cw + _img->width() + PADDING;
 	} else if (_text) {
 		cw = _font->pixelSize() * CHAR_RATIO;
-		mw = _font->pixelSize() / 2;
+		mw = _font->pixelSize() / 2.0;
 		textWidth = _text->size() * cw;
 	} else {
 		cw = _img->width();
-		mw = _img->height() / 2;
+		mw = _img->height() / 2.0;
 		textWidth = _img->width();
 	}
 
@@ -296,16 +296,18 @@ void TextPathItem::init(const T &line, const QRect &tileRect)
 
 TextPathItem::TextPathItem(const QPolygonF &line, const QString *label,
   const QRect &tileRect, const QFont *font, const QColor *color,
-  const QColor *haloColor, const QImage *img) : TextItem(label), _font(font),
-	_color(color), _haloColor(haloColor), _img(img), _reverse(false)
+  const QColor *haloColor, const QImage *img, bool rotate)
+  : TextItem(label), _font(font), _color(color), _haloColor(haloColor),
+  _img(img), _rotate(rotate), _reverse(false)
 {
 	init(line, tileRect);
 }
 
 TextPathItem::TextPathItem(const QPainterPath &line, const QString *label,
   const QRect &tileRect, const QFont *font, const QColor *color,
-  const QColor *haloColor, const QImage *img) : TextItem(label), _font(font),
-	_color(color), _haloColor(haloColor), _img(img), _reverse(false)
+  const QColor *haloColor, const QImage *img, bool rotate)
+  : TextItem(label), _font(font), _color(color), _haloColor(haloColor),
+	_img(img), _rotate(rotate), _reverse(false)
 {
 	init(line, tileRect);
 }
@@ -318,13 +320,11 @@ void TextPathItem::paint(QPainter *painter) const
 		painter->save();
 		painter->translate(QPointF(_path.elementAt(0).x, _path.elementAt(0).y));
 		painter->rotate(360 - _path.angleAtPercent(0));
-
-		if (_reverse)
-			painter->drawImage(QPointF(0, -s.height()/2),
-			  _img->transformed(QTransform().rotate(180.0)));
-		else
-			painter->drawImage(QPointF(0, -s.height()/2), *_img);
-
+		if (_reverse && _rotate) {
+			painter->rotate(180);
+			painter->translate(-s.width(), 0);
+		}
+		painter->drawImage(QPointF(0, -s.height()/2), *_img);
 		painter->restore();
 	}
 

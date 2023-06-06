@@ -62,7 +62,8 @@ public:
 	int tileSize() const {return _tileSize;}
 
 	void points(const RectC &rect, int zoom, QList<Point> *list);
-	void paths(const RectC &rect, int zoom, QList<Path> *set);
+	void paths(const RectC &searchRect, const RectC &boundsRect, int zoom,
+	  QList<Path> *set);
 	unsigned tagId(const QByteArray &name) const {return _keys.value(name);}
 
 	void load();
