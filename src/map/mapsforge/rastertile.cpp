@@ -266,11 +266,9 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 			if (img && lbl) {
 				PathItem *item = new PathItem(path.pp, 0, img, _rect, 0, 0, 0,
 				  rotate);
-				if (item->isValid() && !item->collides(textItems)) {
+				if (item->isValid() && !item->collides(textItems))
 					textItems.append(item);
-					if (limit)
-						set.insert(*lbl);
-				} else
+				else
 					delete item;
 			}
 		}
