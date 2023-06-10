@@ -106,40 +106,43 @@ void RasterTile::processPointLabels(const QList<MapData::Point> &points,
 {
 	QList<const Style::TextRender*> labels(_style->pointLabels(_zoom));
 	QList<const Style::Symbol*> symbols(_style->pointSymbols(_zoom));
-	QList<PainterPoint> painterPoints;
+	QList<PointText> items;
 
 	for (int i = 0; i < points.size(); i++) {
 		const MapData::Point &point = points.at(i);
-		const QByteArray *lbl = 0;
 		const Style::TextRender *ti = 0;
 		const Style::Symbol *si = 0;
+		const QByteArray *lbl = 0;
+
+		for (int j = 0; j < symbols.size(); j++) {
+			const Style::Symbol *ri = symbols.at(j);
+
+			if (ri->rule().match(point.tags))
+				if (!si || si->priority() < ri->priority())
+					si = ri;
+		}
 
 		for (int j = 0; j < labels.size(); j++) {
 			const Style::TextRender *ri = labels.at(j);
 			if (ri->rule().match(point.tags)) {
 				if ((lbl = label(ri->key(), point.tags))) {
+					if (si && si->id() != ri->symbolId())
+						continue;
+
 					ti = ri;
 					break;
 				}
 			}
 		}
 
-		for (int j = 0; j < symbols.size(); j++) {
-			const Style::Symbol *ri = symbols.at(j);
-			if (ri->rule().match(point.tags)) {
-				si = ri;
-				break;
-			}
-		}
-
 		if (ti || si)
-			painterPoints.append(PainterPoint(&point, lbl, si, ti));
+			items.append(PointText(&point, lbl, si, ti));
 	}
 
-	std::sort(painterPoints.begin(), painterPoints.end());
+	std::sort(items.begin(), items.end());
 
-	for (int i = 0; i < painterPoints.size(); i++) {
-		const PainterPoint &p = painterPoints.at(i);
+	for (int i = 0; i < items.size(); i++) {
+		const PointText &p = items.at(i);
 		const QImage *img = p.si ? &p.si->img() : 0;
 		const QFont *font = p.ti ? &p.ti->font() : 0;
 		const QColor *color = p.ti ? &p.ti->fillColor() : 0;
@@ -159,6 +162,7 @@ void RasterTile::processAreaLabels(const QVector<PainterPath> &paths,
 {
 	QList<const Style::TextRender*> labels(_style->areaLabels(_zoom));
 	QList<const Style::Symbol*> symbols(_style->areaSymbols(_zoom));
+	QList<PathText> items;
 
 	for (int i = 0; i < paths.size(); i++) {
 		const PainterPath &path = paths.at(i);
@@ -169,34 +173,43 @@ void RasterTile::processAreaLabels(const QVector<PainterPath> &paths,
 		if (!path.path->closed)
 			continue;
 
+		for (int j = 0; j < symbols.size(); j++) {
+			const Style::Symbol *ri = symbols.at(j);
+
+			if (ri->rule().match(path.path->closed, path.path->tags))
+				if (!si || si->priority() < ri->priority())
+					si = ri;
+		}
+
 		for (int j = 0; j < labels.size(); j++) {
 			const Style::TextRender *ri = labels.at(j);
 			if (ri->rule().match(path.path->closed, path.path->tags)) {
-				if ((lbl = label(ri->key(), path.path->tags)))
+				if ((lbl = label(ri->key(), path.path->tags))) {
+					if (si && si->id() != ri->symbolId())
+						continue;
+
 					ti = ri;
-				break;
+					break;
+				}
 			}
 		}
 
-		for (int j = 0; j < symbols.size(); j++) {
-			const Style::Symbol *ri = symbols.at(j);
-			if (ri->rule().match(path.path->tags)) {
-				si = ri;
-				break;
-			}
-		}
+		if (ti || si)
+			items.append(PathText(&path, lbl, si, ti));
+	}
 
-		if (!ti && !si)
-			continue;
+	std::sort(items.begin(), items.end());
 
-		const QImage *img = si ? &si->img() : 0;
-		const QFont *font = ti ? &ti->font() : 0;
-		const QColor *color = ti ? &ti->fillColor() : 0;
-		const QColor *hColor = ti ? haloColor(ti) : 0;
-		QPointF pos = path.path->labelPos.isNull()
-		  ? centroid(path.pp) : ll2xy(path.path->labelPos);
+	for (int i = 0; i < items.size(); i++) {
+		const PathText &p = items.at(i);
+		const QImage *img = p.si ? &p.si->img() : 0;
+		const QFont *font = p.ti ? &p.ti->font() : 0;
+		const QColor *color = p.ti ? &p.ti->fillColor() : 0;
+		const QColor *hColor = p.ti ? haloColor(p.ti) : 0;
+		QPointF pos = p.p->path->labelPos.isNull()
+		  ? centroid(p.p->pp) : ll2xy(p.p->path->labelPos);
 
-		PointItem *item = new PointItem(pos.toPoint(), lbl, font, img, color,
+		PointItem *item = new PointItem(pos.toPoint(), p.lbl, font, img, color,
 		  hColor);
 		if (item->isValid() && _rect.contains(item->boundingRect().toRect())
 		  && !item->collides(textItems))
@@ -211,6 +224,7 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 {
 	QList<const Style::TextRender*> labels(_style->pathLabels(_zoom));
 	QList<const Style::Symbol*> symbols(_style->lineSymbols(_zoom));
+	QList<PathText> items;
 	QSet<QByteArray> set;
 
 	for (int i = 0; i < paths.size(); i++) {
@@ -218,7 +232,6 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 		const Style::TextRender *ti = 0;
 		const Style::Symbol *si = 0;
 		const QByteArray *lbl = 0;
-		bool limit = false;
 
 		if (path.path->closed)
 			continue;
@@ -234,37 +247,44 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 
 		for (int j = 0; j < symbols.size(); j++) {
 			const Style::Symbol *ri = symbols.at(j);
-			if (ri->rule().match(path.path->tags)) {
+			if (ri->rule().match(path.path->closed, path.path->tags)) {
 				si = ri;
 				break;
 			}
 		}
 
-		if (!ti && !si)
-			continue;
-		if (ti) {
-			limit = (ti->key() == ID_ELE || ti->key() == ID_REF);
-			if (limit && set.contains(*lbl))
+		if (ti || si)
+			items.append(PathText(&path, lbl, si, ti));
+	}
+
+	std::sort(items.begin(), items.end());
+
+	for (int i = 0; i < items.size(); i++) {
+		const PathText &p = items.at(i);
+		const QImage *img = p.si ? &p.si->img() : 0;
+		const QFont *font = p.ti ? &p.ti->font() : 0;
+		const QColor *color = p.ti ? &p.ti->fillColor() : 0;
+		const QColor *hColor = p.ti ? haloColor(p.ti) : 0;
+		bool rotate = p.si ? p.si->rotate() : false;
+		bool limit = false;
+
+		if (p.ti) {
+			limit = (p.ti->key() == ID_ELE || p.ti->key() == ID_REF);
+			if (limit && set.contains(*p.lbl))
 				continue;
 		}
 
-		const QImage *img = si ? &si->img() : 0;
-		const QFont *font = ti ? &ti->font() : 0;
-		const QColor *color = ti ? &ti->fillColor() : 0;
-		const QColor *hColor = ti ? haloColor(ti) : 0;
-		bool rotate = si ? si->rotate() : false;
-
-		PathItem *item = new PathItem(path.pp, lbl, img, _rect, font, color,
+		PathItem *item = new PathItem(p.p->pp, p.lbl, img, _rect, font, color,
 		  hColor, rotate);
 		if (item->isValid() && !item->collides(textItems)) {
 			textItems.append(item);
 			if (limit)
-				set.insert(*lbl);
+				set.insert(*p.lbl);
 		} else {
 			delete item;
 
-			if (img && lbl) {
-				PathItem *item = new PathItem(path.pp, 0, img, _rect, 0, 0, 0,
+			if (img && p.lbl) {
+				PathItem *item = new PathItem(p.p->pp, 0, img, _rect, 0, 0, 0,
 				  rotate);
 				if (item->isValid() && !item->collides(textItems))
 					textItems.append(item);

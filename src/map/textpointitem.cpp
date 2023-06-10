@@ -109,6 +109,7 @@ void TextPointItem::paint(QPainter *painter) const
 	}
 
 	//painter->setPen(Qt::red);
+	//painter.setBrush(Qt::NoBrush);
 	//painter->setRenderHint(QPainter::Antialiasing, false);
 	//painter->drawRect(_rect);
 }

@@ -382,5 +382,6 @@ void TextPathItem::paint(QPainter *painter) const
 
 	//painter->setBrush(Qt::NoBrush);
 	//painter->setPen(Qt::red);
+	//painter->setRenderHint(QPainter::Antialiasing, false);
 	//painter->drawPath(_shape);
 }

@@ -35,15 +35,15 @@ private:
 		const MapData::Path *path;
 	};
 
-	struct PainterPoint {
-		PainterPoint(const MapData::Point *p, const QByteArray *lbl,
+	struct PointText {
+		PointText(const MapData::Point *p, const QByteArray *lbl,
 		  const Style::Symbol *si, const Style::TextRender *ti)
 		  : p(p), lbl(lbl), ti(ti), si(si)
 		{
 			Q_ASSERT(si || ti);
 		}
 
-		bool operator<(const PainterPoint &other) const
+		bool operator<(const PointText &other) const
 		{
 			if (priority() == other.priority())
 				return p->id < other.p->id;
@@ -53,6 +53,26 @@ private:
 		int priority() const {return si ? si->priority() : ti->priority();}
 
 		const MapData::Point *p;
+		const QByteArray *lbl;
+		const Style::TextRender *ti;
+		const Style::Symbol *si;
+	};
+
+	struct PathText {
+		PathText(const PainterPath *p, const QByteArray *lbl,
+		  const Style::Symbol *si, const Style::TextRender *ti)
+		  : p(p), lbl(lbl), ti(ti), si(si)
+		{
+			Q_ASSERT(si || ti);
+		}
+
+		bool operator<(const PathText &other) const
+		{
+			return (priority() > other.priority());
+		}
+		int priority() const {return si ? si->priority() : ti->priority();}
+
+		const PainterPath *p;
 		const QByteArray *lbl;
 		const Style::TextRender *ti;
 		const Style::Symbol *si;

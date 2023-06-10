@@ -421,6 +421,8 @@ void Style::text(QXmlStreamReader &reader, const MapData &data, const Rule &rule
 			return;
 		}
 	}
+	if (attr.hasAttribute("symbol-id"))
+		ri._symbolId = attr.value("symbol-id").toString();
 
 	ri._font.setFamily(fontFamily);
 	ri._font.setPixelSize(fontSize);
@@ -482,6 +484,8 @@ void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 		if (attr.value("rotate").toString() == "false")
 			ri._rotate = false;
 	}
+	if (attr.hasAttribute("id"))
+		ri._id = attr.value("id").toString();
 
 	ri._img = image(file, width, height, percent, ratio);
 

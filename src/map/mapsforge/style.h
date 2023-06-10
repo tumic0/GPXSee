@@ -192,6 +192,7 @@ public:
 		  : Render(rule), _priority(0), _fillColor(Qt::black),
 		  _strokeColor(Qt::black), _strokeWidth(0) {}
 
+		const QString &symbolId() const {return _symbolId;}
 		const QFont &font() const {return _font;}
 		const QColor &fillColor() const {return _fillColor;}
 		const QColor &strokeColor() const {return _strokeColor;}
@@ -202,6 +203,7 @@ public:
 	private:
 		friend class Style;
 
+		QString _symbolId;
 		int _priority;
 		QColor _fillColor, _strokeColor;
 		qreal _strokeWidth;
@@ -212,15 +214,18 @@ public:
 	class Symbol : public Render
 	{
 	public:
-		Symbol(const Rule &rule) : Render(rule), _priority(0), _rotate(true) {}
+		Symbol(const Rule &rule)
+		  : Render(rule), _priority(0), _rotate(true) {}
 
+		const QString &id() const {return _id;}
 		const QImage &img() const {return _img;}
-		int priority() const {return _priority;}
 		bool rotate() const {return _rotate;}
+		int priority() const {return _priority;}
 
 	private:
 		friend class Style;
 
+		QString _id;
 		int _priority;
 		bool _rotate;
 		QImage _img;
