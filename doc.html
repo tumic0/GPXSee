@@ -290,8 +290,21 @@
 
           <h4 id="headers">Server access</h4>
           <p>If the map server requires HTTP authentication, you can use the <i>authorization</i>
-          element to specify HTTP basic authorization credentials. Since version 13.3 you may
-          also specify additional HTTP request headers using the <i>header</i> element.</p>
+          element to specify HTTP basic authorization credentials:</p>
+
+<pre>
+...
+&lt;authorization username="joe" password="123456"/&gt;
+</pre>
+
+          <p>Since version 13.3 you may also specify additional HTTP request headers using
+          the <i>header</i> element:</p>
+
+<pre>
+...
+&lt;header name="Referer">https://referer.limited/&lt;/header&gt;
+&lt;header name="User-Agent">Mozilla/5.0 (GNU Hurd)&lt;/header&gt;
+</pre>
      
 
           <h3 id="offline">Offline maps</h3>
