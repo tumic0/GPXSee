@@ -11,7 +11,7 @@ environment:
   OPENSSLDIR: C:\OpenSSL-v111-Win64\bin
   matrix:
   - QTDIR: C:\Qt\5.15\msvc2019_64
-  - QTDIR: C:\Qt\6.4\msvc2019_64
+  - QTDIR: C:\Qt\6.5\msvc2019_64
     NSISDEF: /DQT6
 
 install:
