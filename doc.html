@@ -427,9 +427,15 @@
           <p>Due to the limited file system access on Android, all map formats that consist of
           multiple files (eg. OziExplorer maps or World-file georeferenced images) will not load
           properly when loaded from the application menu. You have to put such maps
-          to the GPXSee map directory to make them work.</p>
+          to the GPXSee map directory to make them work. The same applies to all SQLite-based
+          map formats because of a Qt bug/limitation.</p>
 
-          <p>The same applies to all SQLite-based map formats.</p>
+          <p>Even though all other maps will load from the application menu, it is strongly
+          recommended for all offline maps to be also moved to the GPXSee map directory as the file
+          access on Android is two orders of magnitude (100x!) slower when the file is located
+          and opened from some "user folder" than if it is accessed/opened in the application folder.
+          Especially IMG maps on new Android versions (>=11) are almost unusable when opened from
+          the application menu.</p>
 
           <h3>OpenGL</h3>
           <p>There are numerous OpenGL issues in Qt that cause some kind of broken rendering
