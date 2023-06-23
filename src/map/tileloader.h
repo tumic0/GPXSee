@@ -11,12 +11,17 @@ class TileLoader : public QObject
 	Q_OBJECT
 
 public:
+	enum UrlType {
+		XYZ,
+		QuadTiles,
+		BoundingBox
+	};
+
 	TileLoader(const QString &dir, QObject *parent = 0);
 
-	void setUrl(const QString &url) {_url = url;}
+	void setUrl(const QString &url, UrlType type) {_url = url; _urlType = type;}
 	void setHeaders(const QList<HTTPHeader> &headers) {_headers = headers;}
 	void setScaledSize(int size);
-	void setQuadTiles(bool quadTiles) {_quadTiles = quadTiles;}
 
 	void loadTilesAsync(QVector<FetchTile> &list);
 	void loadTilesSync(QVector<FetchTile> &list);
@@ -31,10 +36,10 @@ private:
 
 	Downloader *_downloader;
 	QString _url;
+	UrlType _urlType;
 	QString _dir;
 	QList<HTTPHeader> _headers;
 	int _scaledSize;
-	bool _quadTiles;
 };
 
 #endif // TILELOADER_H

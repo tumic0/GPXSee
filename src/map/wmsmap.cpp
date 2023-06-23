@@ -85,7 +85,7 @@ WMSMap::WMSMap(const QString &fileName, const QString &name,
 
 void WMSMap::init()
 {
-	_tileLoader->setUrl(tileUrl());
+	_tileLoader->setUrl(tileUrl(), TileLoader::BoundingBox);
 	_bounds = RectD(_wms->bbox(), _wms->projection());
 	computeZooms();
 	updateTransform();

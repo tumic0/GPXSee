@@ -52,7 +52,7 @@ static QString quadKey(const QPoint &xy, int zoom)
 }
 
 TileLoader::TileLoader(const QString &dir, QObject *parent)
-  : QObject(parent), _dir(dir), _scaledSize(0), _quadTiles(false)
+  : QObject(parent), _urlType(XYZ), _dir(dir), _scaledSize(0)
 {
 	if (!QDir().mkpath(_dir))
 		qWarning("%s: %s", qPrintable(_dir), "Error creating tiles directory");
@@ -176,19 +176,21 @@ QUrl TileLoader::tileUrl(const FetchTile &tile) const
 {
 	QString url(_url);
 
-	if (!tile.bbox().isNull()) {
-		QString bbox = QString("%1,%2,%3,%4").arg(
-		  QString::number(tile.bbox().left(), 'f', 6),
-		  QString::number(tile.bbox().bottom(), 'f', 6),
-		  QString::number(tile.bbox().right(), 'f', 6),
-		  QString::number(tile.bbox().top(), 'f', 6));
-		url.replace("$bbox", bbox);
-	} else if (_quadTiles) {
-		url.replace("$quadkey", quadKey(tile.xy(), tile.zoom().toInt()));
-	} else {
-		url.replace("$z", tile.zoom().toString());
-		url.replace("$x", QString::number(tile.xy().x()));
-		url.replace("$y", QString::number(tile.xy().y()));
+	switch (_urlType) {
+		case BoundingBox:
+			url.replace("$bbox", QString("%1,%2,%3,%4").arg(
+			  QString::number(tile.bbox().left(), 'f', 6),
+			  QString::number(tile.bbox().bottom(), 'f', 6),
+			  QString::number(tile.bbox().right(), 'f', 6),
+			  QString::number(tile.bbox().top(), 'f', 6)));
+			break;
+		case QuadTiles:
+			url.replace("$quadkey", quadKey(tile.xy(), tile.zoom().toInt()));
+			break;
+		default:
+			url.replace("$z", tile.zoom().toString());
+			url.replace("$x", QString::number(tile.xy().x()));
+			url.replace("$y", QString::number(tile.xy().y()));
 	}
 
 	return QUrl(url);

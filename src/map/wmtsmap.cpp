@@ -31,7 +31,7 @@ WMTSMap::WMTSMap(const QString &fileName, const QString &name,
 
 void WMTSMap::init()
 {
-	_tileLoader->setUrl(_wmts->tileUrl());
+	_tileLoader->setUrl(_wmts->tileUrl(), TileLoader::XYZ);
 	_bounds = RectD(_wmts->bbox(), _wmts->projection());
 	updateTransform();
 }
