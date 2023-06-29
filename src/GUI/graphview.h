@@ -18,6 +18,8 @@ class PathItem;
 class GridItem;
 class QGraphicsSimpleTextItem;
 class GraphicsScene;
+class QGestureEvent;
+class QPinchGesture;
 
 class GraphView : public QGraphicsView
 {
@@ -59,6 +61,7 @@ protected:
 	void wheelEvent(QWheelEvent *e);
 	void changeEvent(QEvent *e);
 	void paintEvent(QPaintEvent *e);
+	bool event(QEvent *event);
 
 	const QString &yLabel() const {return _yLabel;}
 	const QString &yUnits() const {return _yUnits;}
@@ -94,6 +97,8 @@ private:
 	void removeItem(QGraphicsItem *item);
 	void addItem(QGraphicsItem *item);
 	bool singleGraph() const;
+	bool gestureEvent(QGestureEvent *event);
+	void pinchGesture(QPinchGesture *gesture);
 
 	GraphicsScene *_scene;
 

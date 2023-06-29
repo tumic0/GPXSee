@@ -2,6 +2,7 @@
 #include <QGraphicsScene>
 #include <QEvent>
 #include <QMouseEvent>
+#include <QGestureEvent>
 #include <QScrollBar>
 #include <QGraphicsSimpleTextItem>
 #include <QPalette>
@@ -37,6 +38,8 @@ GraphView::GraphView(QWidget *parent)
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setBackgroundBrush(QBrush(palette().brush(QPalette::Base)));
+	viewport()->setAttribute(Qt::WA_AcceptTouchEvents);
+	grabGesture(Qt::PinchGesture);
 
 	_xAxis = new AxisItem(AxisItem::X);
 	_xAxis->setZValue(1.0);
@@ -381,6 +384,27 @@ void GraphView::wheelEvent(QWheelEvent *e)
 	QGraphicsView::wheelEvent(e);
 }
 
+void GraphView::pinchGesture(QPinchGesture *gesture)
+{
+	QPinchGesture::ChangeFlags changeFlags = gesture->changeFlags();
+
+	if (changeFlags & QPinchGesture::ScaleFactorChanged) {
+		QPointF pos = mapToScene(gesture->centerPoint().toPoint());
+		QRectF gr(_grid->boundingRect());
+		QPointF r(pos.x() / gr.width(), pos.y() / gr.height());
+
+		_zoom = qMax(_zoom * gesture->scaleFactor(), 1.0);
+		redraw();
+
+		QRectF ngr(_grid->boundingRect());
+		QPointF npos(mapFromScene(QPointF(r.x() * ngr.width(),
+		  r.y() * ngr.height())));
+		QScrollBar *sb = horizontalScrollBar();
+		sb->setSliderPosition(sb->sliderPosition() + npos.x()
+		  - gesture->centerPoint().x());
+	}
+}
+
 void GraphView::paintEvent(QPaintEvent *e)
 {
 	QRectF viewRect(mapToScene(rect()).boundingRect());
@@ -576,4 +600,20 @@ void GraphView::changeEvent(QEvent *e)
 	}
 
 	QGraphicsView::changeEvent(e);
+}
+
+bool GraphView::event(QEvent *event)
+{
+	if (event->type() == QEvent::Gesture)
+		return gestureEvent(static_cast<QGestureEvent*>(event));
+
+	return QGraphicsView::event(event);
+}
+
+bool GraphView::gestureEvent(QGestureEvent *event)
+{
+	if (QGesture *pinch = event->gesture(Qt::PinchGesture))
+		pinchGesture(static_cast<QPinchGesture *>(pinch));
+
+	return true;
 }
