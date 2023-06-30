@@ -1,7 +1,6 @@
 #include <cmath>
 #include <QPainter>
 #include <QCache>
-#include "common/programpaths.h"
 #include "map/rectd.h"
 #include "rastertile.h"
 
