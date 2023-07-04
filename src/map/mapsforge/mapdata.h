@@ -59,8 +59,7 @@ public:
 	RectC bounds() const;
 	Range zooms() const
 	  {return Range(_subFiles.first().min, _subFiles.last().max);}
-	int tileSize() const
-	  {return _tileSize < 384 ? _tileSize << 1 : _tileSize;}
+	int tileSize() const {return _tileSize;}
 
 	void points(const RectC &rect, int zoom, QList<Point> *list);
 	void paths(const RectC &searchRect, const RectC &boundsRect, int zoom,

@@ -167,18 +167,19 @@ void MapsforgeMap::cancelJobs(bool wait)
 
 void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	QPointF tl(floor(rect.left() / _data.tileSize()) * _data.tileSize(),
-	  floor(rect.top() / _data.tileSize()) * _data.tileSize());
+	int tileSize = (_data.tileSize() < 384)
+	  ? _data.tileSize() << 1 : _data.tileSize();
+	QPointF tl(floor(rect.left() / tileSize) * tileSize,
+	  floor(rect.top() / tileSize) * tileSize);
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
-	int width = ceil(s.width() / _data.tileSize());
-	int height = ceil(s.height() / _data.tileSize());
+	int width = ceil(s.width() / tileSize);
+	int height = ceil(s.height() / tileSize);
 
 	QList<RasterTile> tiles;
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
-			QPoint ttl(tl.x() + i * _data.tileSize(), tl.y() + j
-			  * _data.tileSize());
+			QPoint ttl(tl.x() + i * tileSize, tl.y() + j * tileSize);
 			if (isRunning(_zoom, ttl))
 				continue;
 
@@ -187,8 +188,7 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				painter->drawPixmap(ttl, pm);
 			else {
 				tiles.append(RasterTile(_projection, _transform, &_style, &_data,
-				  _zoom, QRect(ttl, QSize(_data.tileSize(), _data.tileSize())),
-				  _tileRatio));
+				  _zoom, QRect(ttl, QSize(tileSize, tileSize)), _tileRatio));
 			}
 		}
 	}
