@@ -44,7 +44,7 @@ jobs:
       - name: Create localization
         run: lrelease gpxsee.pro
       - name: Configure build
-        run: qmake gpxsee.pro
+        run: qmake gpxsee.pro QMAKE_APPLE_DEVICE_ARCHS="x86_64h arm64"
       - name: Build project
         run: make -j3
       - name: Create DMG
