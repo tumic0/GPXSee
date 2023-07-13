@@ -25,6 +25,12 @@ static const QColor shieldBgColor1("#dd3e3e");
 static const QColor shieldBgColor2("#379947");
 static const QColor shieldBgColor3("#4a7fc1");
 
+static const QImage *arrow()
+{
+	static QImage img(":/map/arrow.png");
+	return &img;
+}
+
 static QFont pixelSizeFont(int pixelSize)
 {
 	QFont f;
@@ -327,14 +333,25 @@ void RasterTile::processStreetNames(const QList<MapData::Poly> &lines,
 		const QFont *fnt = font(style.textFontSize(), Style::Small);
 		const QColor *color = style.textColor().isValid()
 		  ? &style.textColor() : 0;
+		const QColor *hColor = Style::isContourLine(poly.type) ? 0 : &haloColor;
+		const QImage *img = poly.oneway ? arrow() : 0;
 
 		TextPathItem *item = new TextPathItem(poly.points,
-		  &poly.label.text(), _rect, fnt, color, Style::isContourLine(poly.type)
-		  ? 0 : &haloColor);
+		  &poly.label.text(), _rect, fnt, color, hColor, img);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
-		else
+		else {
 			delete item;
+
+			if (img) {
+				TextPathItem *item = new TextPathItem(poly.points, 0, _rect, 0,
+				  0, 0, img);
+				if (item->isValid() && !item->collides(textItems))
+					textItems.append(item);
+				else
+					delete item;
+			}
+		}
 	}
 }
 

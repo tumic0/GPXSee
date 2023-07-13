@@ -25,6 +25,8 @@ class MapData
 {
 public:
 	struct Poly {
+		Poly() : oneway(false) {}
+
 		/* QPointF insted of Coordinates for performance reasons (no need to
 		   duplicate all the vectors for drawing). Note, that we do not want to
 		   ll2xy() the points in the MapData class as this can not be done in
@@ -34,6 +36,7 @@ public:
 		Raster raster;
 		quint32 type;
 		RectC boundingRect;
+		bool oneway;
 
 		bool operator<(const Poly &other) const
 		  {return type > other.type;}

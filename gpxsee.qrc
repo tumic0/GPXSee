@@ -55,6 +55,11 @@
 		<file alias="transform-move_32@2x.png">icons/GUI/transform-move_32@2x.png</file>
 	</qresource>
 
+	<!-- Common map stuff -->
+	<qresource prefix="/map">
+		<file alias="arrow.png">icons/map/arrow.png</file>
+	</qresource>
+
 	<!-- POIs (IMG & ENC style) -->
 	<qresource prefix="/POI">
 		<file alias="airfield-11.png">icons/map/POI/airfield-11.png</file>

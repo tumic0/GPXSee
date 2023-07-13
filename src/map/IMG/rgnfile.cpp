@@ -292,6 +292,8 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 
 		poly.type = (segmentType == Polygon)
 		  ? ((quint32)(type & 0x7F)) << 8 : ((quint32)(type & 0x3F)) << 8;
+		if (segmentType == Line && type & 0x40)
+			poly.oneway = true;
 
 
 		QPoint pos(subdiv->lon() + LS(lon, 24-subdiv->bits()),
