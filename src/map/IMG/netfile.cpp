@@ -479,6 +479,8 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 
 	if (lbl)
 		linkLabel(hdl, linkOffset, lbl, lblHdl, poly.label);
+	if ((linkInfo.flags >> 3) & 1)
+		poly.oneway = true;
 
 	lines->append(poly);
 
