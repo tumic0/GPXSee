@@ -1320,7 +1320,7 @@
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="87"/>
         <source>kn</source>
-        <translation>km</translation>
+        <translation>nus</translation>
     </message>
     <message>
         <location filename="../src/GUI/motioninfoitem.cpp" line="90"/>
