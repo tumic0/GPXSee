@@ -712,13 +712,13 @@
         <location filename="../src/GUI/gui.cpp" line="907"/>
         <location filename="../src/GUI/gui.cpp" line="925"/>
         <source>CRS directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>CRS-dosierujo:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="913"/>
         <location filename="../src/GUI/gui.cpp" line="931"/>
         <source>Symbols directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosierujo de simboloj:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="960"/>
