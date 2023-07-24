@@ -425,7 +425,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="217"/>
         <source>Open directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Avaa hakemisto…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="236"/>
@@ -878,7 +878,7 @@
         <location filename="../src/GUI/gui.cpp" line="907"/>
         <location filename="../src/GUI/gui.cpp" line="925"/>
         <source>CRS directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>CRS-hakemisto:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="915"/>
