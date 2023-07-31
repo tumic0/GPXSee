@@ -25,12 +25,6 @@ static const QColor shieldBgColor1("#dd3e3e");
 static const QColor shieldBgColor2("#379947");
 static const QColor shieldBgColor3("#4a7fc1");
 
-static const QImage *arrow()
-{
-	static QImage img(":/map/arrow.png");
-	return &img;
-}
-
 static QFont pixelSizeFont(int pixelSize)
 {
 	QFont f;
@@ -308,17 +302,17 @@ void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
 }
 
 void RasterTile::processLines(QList<MapData::Poly> &lines,
-  QList<TextItem*> &textItems)
+  QList<TextItem*> &textItems, const QImage &arrow, const QImage &waterArrow)
 {
 	std::stable_sort(lines.begin(), lines.end());
 
 	if (_zoom >= 22)
-		processStreetNames(lines, textItems);
+		processStreetNames(lines, textItems, arrow, waterArrow);
 	processShields(lines, textItems);
 }
 
 void RasterTile::processStreetNames(const QList<MapData::Poly> &lines,
-  QList<TextItem*> &textItems)
+  QList<TextItem*> &textItems, const QImage &arrow, const QImage &waterArrow)
 {
 	for (int i = 0; i < lines.size(); i++) {
 		const MapData::Poly &poly = lines.at(i);
@@ -334,7 +328,9 @@ void RasterTile::processStreetNames(const QList<MapData::Poly> &lines,
 		const QColor *color = style.textColor().isValid()
 		  ? &style.textColor() : 0;
 		const QColor *hColor = Style::isContourLine(poly.type) ? 0 : &haloColor;
-		const QImage *img = poly.oneway ? arrow() : 0;
+		const QImage *img = poly.oneway
+		  ? Style::isWaterLine(poly.type)
+			? &waterArrow : &arrow : 0;
 
 		TextPathItem *item = new TextPathItem(poly.points,
 		  &poly.label.text(), _rect, fnt, color, hColor, img);
@@ -479,6 +475,10 @@ void RasterTile::render()
 	QList<MapData::Poly> lines;
 	QList<MapData::Point> points;
 	QList<TextItem*> textItems;
+	QImage arrow = (_ratio >= 2)
+	  ? QImage(":/map/arrow@2x.png") : QImage(":/map/arrow.png");
+	QImage waterArrow = (_ratio >= 2)
+	  ? QImage(":/map/water-arrow@2x.png") : QImage(":/map/water-arrow.png");
 
 	fetchData(polygons, lines, points);
 	ll2xy(polygons);
@@ -487,7 +487,7 @@ void RasterTile::render()
 
 	processPoints(points, textItems);
 	processPolygons(polygons, textItems);
-	processLines(lines, textItems);
+	processLines(lines, textItems, arrow, waterArrow);
 
 	_pixmap.setDevicePixelRatio(_ratio);
 	_pixmap.fill(Qt::transparent);

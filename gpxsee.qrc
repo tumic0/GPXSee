@@ -58,6 +58,9 @@
 	<!-- Common map stuff -->
 	<qresource prefix="/map">
 		<file alias="arrow.png">icons/map/arrow.png</file>
+		<file alias="arrow@2x.png">icons/map/arrow@2x.png</file>
+		<file alias="water-arrow.png">icons/map/water-arrow.png</file>
+		<file alias="water-arrow@2x.png">icons/map/water-arrow@2x.png</file>
 	</qresource>
 
 	<!-- POIs (IMG & ENC style) -->

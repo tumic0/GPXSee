@@ -104,6 +104,9 @@ public:
 	static bool isWaterArea(quint32 type)
 	  {return ((type >= TYPE(0x3c) && type <= TYPE(0x44))
 	  || (type & 0xffff00) == TYPE(0x10b));}
+	static bool isWaterLine(quint32 type)
+	  {return (type == TYPE(0x26) || type == TYPE(0x18)
+	  || type == TYPE(0x1f));}
 	static bool isMilitaryArea(quint32 type)
 	  {return (type == TYPE(0x04) || type == 0x10901);}
 	static bool isNatureReserve(quint32 type)
