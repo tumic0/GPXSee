@@ -263,12 +263,15 @@ template<class T>
 void TextPathItem::init(const T &line, const QRect &tileRect)
 {
 	qreal cw, mw, textWidth;
+	bool label = _text && _font;
 
-	if (_text && _img) {
+	Q_ASSERT(label || _img);
+
+	if (label && _img) {
 		cw = _font->pixelSize() * CHAR_RATIO;
 		mw = _font->pixelSize() / 2.0;
 		textWidth = _text->size() * cw + _img->width() + PADDING;
-	} else if (_text) {
+	} else if (label) {
 		cw = _font->pixelSize() * CHAR_RATIO;
 		mw = _font->pixelSize() / 2.0;
 		textWidth = _text->size() * cw;
@@ -328,7 +331,7 @@ void TextPathItem::paint(QPainter *painter) const
 		painter->restore();
 	}
 
-	if (_text) {
+	if (_text && _font) {
 		QFontMetrics fm(*_font);
 		int textWidth = fm.boundingRect(*_text).width();
 		int imgWidth = _img ? _img->width() + PADDING : 0;

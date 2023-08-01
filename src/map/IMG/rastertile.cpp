@@ -320,9 +320,6 @@ void RasterTile::processStreetNames(const QList<MapData::Poly> &lines,
 
 		if (style.img().isNull() && style.foreground() == Qt::NoPen)
 			continue;
-		if (poly.label.text().isEmpty()
-		  || style.textFontSize() == Style::None)
-			continue;
 
 		const QFont *fnt = font(style.textFontSize(), Style::Small);
 		const QColor *color = style.textColor().isValid()
@@ -331,9 +328,14 @@ void RasterTile::processStreetNames(const QList<MapData::Poly> &lines,
 		const QImage *img = poly.oneway
 		  ? Style::isWaterLine(poly.type)
 			? &waterArrow : &arrow : 0;
+		const QString *label = poly.label.text().isEmpty()
+		  ? 0 : &poly.label.text();
 
-		TextPathItem *item = new TextPathItem(poly.points,
-		  &poly.label.text(), _rect, fnt, color, hColor, img);
+		if (!img && (!label || !fnt))
+			continue;
+
+		TextPathItem *item = new TextPathItem(poly.points, label, _rect, fnt,
+		  color, hColor, img);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
 		else {
