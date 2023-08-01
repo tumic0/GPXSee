@@ -302,17 +302,17 @@ void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
 }
 
 void RasterTile::processLines(QList<MapData::Poly> &lines,
-  QList<TextItem*> &textItems, const QImage &arrow, const QImage &waterArrow)
+  QList<TextItem*> &textItems, const QImage (&arrows)[2])
 {
 	std::stable_sort(lines.begin(), lines.end());
 
 	if (_zoom >= 22)
-		processStreetNames(lines, textItems, arrow, waterArrow);
+		processStreetNames(lines, textItems, arrows);
 	processShields(lines, textItems);
 }
 
 void RasterTile::processStreetNames(const QList<MapData::Poly> &lines,
-  QList<TextItem*> &textItems, const QImage &arrow, const QImage &waterArrow)
+  QList<TextItem*> &textItems, const QImage (&arrows)[2])
 {
 	for (int i = 0; i < lines.size(); i++) {
 		const MapData::Poly &poly = lines.at(i);
@@ -327,7 +327,7 @@ void RasterTile::processStreetNames(const QList<MapData::Poly> &lines,
 		const QColor *hColor = Style::isContourLine(poly.type) ? 0 : &haloColor;
 		const QImage *img = poly.oneway
 		  ? Style::isWaterLine(poly.type)
-			? &waterArrow : &arrow : 0;
+			? &arrows[1] : &arrows[0] : 0;
 		const QString *label = poly.label.text().isEmpty()
 		  ? 0 : &poly.label.text();
 
@@ -477,9 +477,11 @@ void RasterTile::render()
 	QList<MapData::Poly> lines;
 	QList<MapData::Point> points;
 	QList<TextItem*> textItems;
-	QImage arrow = (_ratio >= 2)
+	QImage arrows[2];
+
+	arrows[0] = (_ratio >= 2)
 	  ? QImage(":/map/arrow@2x.png") : QImage(":/map/arrow.png");
-	QImage waterArrow = (_ratio >= 2)
+	arrows[1] = (_ratio >= 2)
 	  ? QImage(":/map/water-arrow@2x.png") : QImage(":/map/water-arrow.png");
 
 	fetchData(polygons, lines, points);
@@ -489,7 +491,7 @@ void RasterTile::render()
 
 	processPoints(points, textItems);
 	processPolygons(polygons, textItems);
-	processLines(lines, textItems, arrow, waterArrow);
+	processLines(lines, textItems, arrows);
 
 	_pixmap.setDevicePixelRatio(_ratio);
 	_pixmap.fill(Qt::transparent);

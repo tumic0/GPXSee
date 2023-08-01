@@ -44,14 +44,14 @@ private:
 
 	void processPolygons(const QList<MapData::Poly> &polygons,
 	  QList<TextItem *> &textItems);
-	void processLines(QList<MapData::Poly> &lines,
-	  QList<TextItem*> &textItems, const QImage &arrow, const QImage &waterArrow);
+	void processLines(QList<MapData::Poly> &lines, QList<TextItem*> &textItems,
+	  const QImage (&arrows)[2]);
 	void processPoints(QList<MapData::Point> &points,
 	  QList<TextItem*> &textItems);
 	void processShields(const QList<MapData::Poly> &lines,
 	  QList<TextItem*> &textItems);
 	void processStreetNames(const QList<MapData::Poly> &lines,
-	  QList<TextItem*> &textItems, const QImage &arrow, const QImage &waterArrow);
+	  QList<TextItem*> &textItems, const QImage (&arrows)[2]);
 
 	Projection _proj;
 	Transform _transform;
