@@ -845,22 +845,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="882"/>
         <source>Zoom in</source>
-        <translation>Forstørr</translation>
+        <translation>Zoom inn</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="884"/>
         <source>Zoom out</source>
-        <translation>Forminsk</translation>
+        <translation>Zoom ut</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="886"/>
         <source>Digital zoom</source>
-        <translation>Digital forstørrelse</translation>
+        <translation>Digital zoom</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="887"/>
         <source>Zoom</source>
-        <translation>Forstørr</translation>
+        <translation>Zoom</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="888"/>
@@ -1822,12 +1822,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="662"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
-        <translation>Det utskrevne området er omtrent det samme som visningsområdet. Kartforstørrelsesnivået endrer seg ikke.</translation>
+        <translation>Det utskrevne området er omtrent det samme som visningsområdet. Kartets zoomnivå endres ikke.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="664"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
-        <translation>Forstørrelsesnivået vil endres slik at hele innholdet (spor/veipunkter) passer med utskrevet område, og kartoppløsningen er så lik utskriftsoppløsningen som mulig.</translation>
+        <translation>Zoomnivået vil endres slik at hele innholdet (spor/veipunkter) passer med utskrevet område og kartoppløsningen er så lik utskriftsoppløsningen som mulig.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="680"/>
