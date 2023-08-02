@@ -18,6 +18,9 @@ using namespace IMG;
 #define AREA(rect) \
 	(rect.size().width() * rect.size().height())
 
+#define ROAD  0
+#define WATER 1
+
 static const QColor textColor(Qt::black);
 static const QColor haloColor(Qt::white);
 static const QColor shieldColor(Qt::white);
@@ -327,7 +330,7 @@ void RasterTile::processStreetNames(const QList<MapData::Poly> &lines,
 		const QColor *hColor = Style::isContourLine(poly.type) ? 0 : &haloColor;
 		const QImage *img = poly.oneway
 		  ? Style::isWaterLine(poly.type)
-			? &arrows[1] : &arrows[0] : 0;
+			? &arrows[WATER] : &arrows[ROAD] : 0;
 		const QString *label = poly.label.text().isEmpty()
 		  ? 0 : &poly.label.text();
 
@@ -479,9 +482,9 @@ void RasterTile::render()
 	QList<TextItem*> textItems;
 	QImage arrows[2];
 
-	arrows[0] = (_ratio >= 2)
+	arrows[ROAD] = (_ratio >= 2)
 	  ? QImage(":/map/arrow@2x.png") : QImage(":/map/arrow.png");
-	arrows[1] = (_ratio >= 2)
+	arrows[WATER] = (_ratio >= 2)
 	  ? QImage(":/map/water-arrow@2x.png") : QImage(":/map/water-arrow.png");
 
 	fetchData(polygons, lines, points);
