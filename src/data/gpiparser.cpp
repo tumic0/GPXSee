@@ -218,18 +218,6 @@ quint32 DataStream::readTranslatedObjects(QList<TranslatedString> &objects)
 }
 
 
-static quint32 readFprsRecord(DataStream &stream)
-{
-	RecordHeader rh;
-	quint16 s1;
-	quint8 rs, s2, s3, s4;
-
-	rs = stream.readRecordHeader(rh);
-	stream >> s1 >> s2 >> s3 >> s4;
-
-	return rs + 5;
-}
-
 static quint32 readFileDataRecord(DataStream &stream)
 {
 	RecordHeader rh;
@@ -771,12 +759,15 @@ bool GPIParser::readFileHeader(DataStream &stream, quint32 &ebs)
 	stream >> s5 >> s6 >> s7 >> s8 >> s9 >> s10;
 	stream.skipRawData(s10);
 	ds = sizeof(magic) + 10 + s10;
-	if (rh.flags & 8)
-		ds += readFprsRecord(stream);
 
 	ebs = (s8 & 0x4) ? s9 * 8 + 8 : 0;
 
-	if (stream.status() != QDataStream::Ok || ds != rh.size) {
+	if (ds > rh.size)
+		stream.setStatus(QDataStream::ReadCorruptData);
+	else if (ds < rh.size)
+		stream.skipRawData(rh.size - ds);
+
+	if (stream.status() != QDataStream::Ok) {
 		_errorString = "Invalid file header";
 		return false;
 	} else
