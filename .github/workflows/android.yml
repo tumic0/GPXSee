@@ -25,17 +25,15 @@ jobs:
         run:  ${ANDROID_HOME}/tools/bin/sdkmanager --install "cmdline-tools;latest" "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;23.1.7779620"
       - name: Setup NDK path
         run: echo "ANDROID_NDK_ROOT=${ANDROID_HOME}/ndk/23.1.7779620/" >> $GITHUB_ENV
-      - name: Install Qt (Desktop)
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: '6.4.0'
       - name: Install Qt (Android)
         uses: jurplel/install-qt-action@v3
         with:
+          aqtversion: '==3.1.*'
           version: '6.4.0'
+          host: 'linux'
           target: 'android'
-          arch: 'android_armv7'
-          modules: qtpositioning qt5compat qtserialport
+          arch: 'android_arm64_v8a'
+          modules: qtimageformats qtpositioning qtserialport qt5compat
       - name: Install Android OpenSSL
         run:  git clone https://github.com/KDAB/android_openssl.git
       - name: Create localization
@@ -47,5 +45,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: GPXSee-armv7.apk
+          name: GPXSee-arm64_v8a.apk
           path: android-build/build/outputs/apk/debug/android-build-debug.apk
