@@ -686,22 +686,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="607"/>
         <source>&amp;File</source>
-        <translation>&amp;文件</translation>
+        <translation>文件(&amp;F)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="628"/>
         <source>&amp;Map</source>
-        <translation>&amp;地图</translation>
+        <translation>地图(&amp;M)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="638"/>
         <source>&amp;Graph</source>
-        <translation>&amp;图表</translation>
+        <translation>图表(&amp;G)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="650"/>
         <source>&amp;Data</source>
-        <translation>&amp;数据</translation>
+        <translation>数据(&amp;D)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="655"/>
@@ -711,7 +711,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="668"/>
         <source>&amp;POI</source>
-        <translation>&amp;POI</translation>
+        <translation>POI(&amp;P)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="680"/>
@@ -726,7 +726,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="691"/>
         <source>&amp;Settings</source>
-        <translation>&amp;设置</translation>
+        <translation>设置(&amp;S)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="695"/>
@@ -741,7 +741,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="711"/>
         <source>&amp;Help</source>
-        <translation>&amp;帮助</translation>
+        <translation>帮助(&amp;H)</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="738"/>
