@@ -298,11 +298,13 @@ private:
 	Menu stylemenu(QXmlStreamReader &reader);
 	QString cat(QXmlStreamReader &reader);
 	void rule(QXmlStreamReader &reader, const QString &dir, const MapData &data,
-	  qreal ratio, const QSet<QString> &cats, const Rule &parent);
+	  qreal ratio, qreal baseStrokeWidth, const QSet<QString> &cats,
+	  const Rule &parent);
 	void area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
+	  qreal baseStrokeWidth, const Rule &rule);
+	void line(QXmlStreamReader &reader, qreal baseStrokeWidth, const Rule &rule);
+	void circle(QXmlStreamReader &reader, qreal baseStrokeWidth,
 	  const Rule &rule);
-	void line(QXmlStreamReader &reader, const Rule &rule);
-	void circle(QXmlStreamReader &reader, const Rule &rule);
 	void text(QXmlStreamReader &reader, const MapData &data, const Rule &rule,
 	  QList<QList<TextRender> *> &lists);
 	void symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,

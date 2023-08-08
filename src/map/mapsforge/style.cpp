@@ -177,7 +177,7 @@ bool Style::Rule::match(int zoom, const QVector<MapData::Tag> &tags) const
 }
 
 void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
-  const Rule &rule)
+  qreal baseStrokeWidth, const Rule &rule)
 {
 	PathRender ri(rule, _paths.size() + _circles.size());
 	const QXmlStreamAttributes &attr = reader.attributes();
@@ -192,7 +192,8 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	if (attr.hasAttribute("stroke"))
 		ri._strokeColor = QColor(attr.value("stroke").toString());
 	if (attr.hasAttribute("stroke-width")) {
-		ri._strokeWidth = attr.value("stroke-width").toFloat(&ok);
+		ri._strokeWidth = attr.value("stroke-width").toFloat(&ok)
+		  * baseStrokeWidth;
 		if (!ok || ri._strokeWidth < 0) {
 			reader.raiseError("invalid stroke-width value");
 			return;
@@ -240,7 +241,8 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	reader.skipCurrentElement();
 }
 
-void Style::line(QXmlStreamReader &reader, const Rule &rule)
+void Style::line(QXmlStreamReader &reader, qreal baseStrokeWidth,
+  const Rule &rule)
 {
 	PathRender ri(rule, _paths.size() + _circles.size());
 	const QXmlStreamAttributes &attr = reader.attributes();
@@ -251,7 +253,8 @@ void Style::line(QXmlStreamReader &reader, const Rule &rule)
 	if (attr.hasAttribute("stroke"))
 		ri._strokeColor = QColor(attr.value("stroke").toString());
 	if (attr.hasAttribute("stroke-width")) {
-		ri._strokeWidth = attr.value("stroke-width").toFloat(&ok);
+		ri._strokeWidth = attr.value("stroke-width").toFloat(&ok)
+		  * baseStrokeWidth;
 		if (!ok || ri._strokeWidth < 0) {
 			reader.raiseError("invalid stroke-width value");
 			return;
@@ -299,7 +302,7 @@ void Style::line(QXmlStreamReader &reader, const Rule &rule)
 			ri._curve = true;
 	}
 	if (attr.hasAttribute("dy")) {
-		ri._dy = attr.value("dy").toDouble(&ok);
+		ri._dy = attr.value("dy").toDouble(&ok) * baseStrokeWidth;
 		if (!ok) {
 			reader.raiseError("invalid dy value");
 			return;
@@ -312,7 +315,8 @@ void Style::line(QXmlStreamReader &reader, const Rule &rule)
 	reader.skipCurrentElement();
 }
 
-void Style::circle(QXmlStreamReader &reader, const Rule &rule)
+void Style::circle(QXmlStreamReader &reader, qreal baseStrokeWidth,
+  const Rule &rule)
 {
 	CircleRender ri(rule, _paths.size() + _circles.size());
 	const QXmlStreamAttributes &attr = reader.attributes();
@@ -325,14 +329,14 @@ void Style::circle(QXmlStreamReader &reader, const Rule &rule)
 	if (attr.hasAttribute("stroke"))
 		strokeColor = QColor(attr.value("stroke").toString());
 	if (attr.hasAttribute("stroke-width")) {
-		strokeWidth = attr.value("stroke-width").toFloat(&ok);
+		strokeWidth = attr.value("stroke-width").toFloat(&ok) * baseStrokeWidth;
 		if (!ok || strokeWidth < 0) {
 			reader.raiseError("invalid stroke-width value");
 			return;
 		}
 	}
 	if (attr.hasAttribute("radius")) {
-		ri._radius = attr.value("radius").toDouble(&ok);
+		ri._radius = attr.value("radius").toDouble(&ok) * baseStrokeWidth;
 		if (!ok || ri._radius <= 0) {
 			reader.raiseError("invalid radius value");
 			return;
@@ -495,8 +499,8 @@ void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 }
 
 void Style::rule(QXmlStreamReader &reader, const QString &dir,
-  const MapData &data, qreal ratio, const QSet<QString> &cats,
-  const Rule &parent)
+  const MapData &data, qreal ratio, qreal baseStrokeWidth,
+  const QSet<QString> &cats, const Rule &parent)
 {
 	Rule r(parent);
 	const QXmlStreamAttributes &attr = reader.attributes();
@@ -541,13 +545,13 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir,
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("rule"))
-			rule(reader, dir, data, ratio, cats, r);
+			rule(reader, dir, data, ratio, baseStrokeWidth, cats, r);
 		else if (reader.name() == QLatin1String("area"))
-			area(reader, dir, ratio, r);
+			area(reader, dir, ratio, baseStrokeWidth, r);
 		else if (reader.name() == QLatin1String("line"))
-			line(reader, r);
+			line(reader, baseStrokeWidth, r);
 		else if (reader.name() == QLatin1String("circle"))
-			circle(reader, r);
+			circle(reader, baseStrokeWidth, r);
 		else if (reader.name() == QLatin1String("pathText")) {
 			QList<QList<TextRender>*> list;
 			list.append(&_pathLabels);
@@ -635,10 +639,21 @@ void Style::rendertheme(QXmlStreamReader &reader, const QString &dir,
 {
 	Rule r;
 	QSet<QString> cats;
+	qreal baseStrokeWidth = 1.0;
+
+	const QXmlStreamAttributes &attr = reader.attributes();
+	if (attr.hasAttribute("base-stroke-width")) {
+		bool ok;
+		baseStrokeWidth = attr.value("base-stroke-width").toFloat(&ok);
+		if (!ok || baseStrokeWidth < 0) {
+			reader.raiseError("invalid base-stroke-width value");
+			return;
+		}
+	}
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("rule"))
-			rule(reader, dir, data, ratio, cats, r);
+			rule(reader, dir, data, ratio, baseStrokeWidth, cats, r);
 		else if (reader.name() == QLatin1String("stylemenu")) {
 			Menu menu(stylemenu(reader));
 			cats = menu.cats();
