@@ -14,16 +14,13 @@ namespace Mapsforge {
 class RasterTile
 {
 public:
-	/* Mapsforge maps zoom levels are offset by one against the standard OSM
-	   zoom levels! We decrease the zoom level internaly here when initializing
-	   _zoom and return the propper/increased value back in zoom() */
 	RasterTile(const Projection &proj, const Transform &transform,
 	  const Style *style, MapData *data, int zoom, const QRect &rect,
 	  qreal ratio) : _proj(proj), _transform(transform), _style(style),
-	  _data(data), _zoom(zoom - 1), _rect(rect), _ratio(ratio),
+	  _data(data), _zoom(zoom), _rect(rect), _ratio(ratio),
 	  _pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false) {}
 
-	int zoom() const {return _zoom + 1;}
+	int zoom() const {return _zoom;}
 	QPoint xy() const {return _rect.topLeft();}
 	const QPixmap &pixmap() const {return _pixmap;}
 	bool isValid() const {return _valid;}
