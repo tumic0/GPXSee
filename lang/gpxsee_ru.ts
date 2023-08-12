@@ -790,7 +790,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1022"/>
         <source>Don&apos;t show again</source>
-        <translation type="unfinished"></translation>
+        <translation>Больше не показывать</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1227"/>
@@ -950,7 +950,7 @@
         <location filename="../src/GUI/gui.cpp" line="1288"/>
         <location filename="../src/GUI/gui.cpp" line="1358"/>
         <source>Waypoints</source>
-        <translation>Точки</translation>
+        <translation>Путевые точки</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="866"/>
