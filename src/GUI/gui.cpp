@@ -2188,7 +2188,7 @@ void GUI::keyPressEvent(QKeyEvent *event)
 	if (!file.isNull()) {
 		if (!(event->modifiers() & MODIFIER))
 			closeFiles();
-		openFile(file, false, showError);
+		openFile(file, true, showError);
 		return;
 	}
 
