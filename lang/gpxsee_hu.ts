@@ -728,7 +728,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1022"/>
         <source>Don&apos;t show again</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne mutassa újra</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1852"/>
@@ -1023,6 +1023,7 @@
         <location filename="../src/GUI/gui.cpp" line="1903"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
