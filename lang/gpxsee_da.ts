@@ -233,7 +233,7 @@
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="77"/>
         <source>Maximum</source>
-        <translation>Maks</translation>
+        <translation>Maksimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="79"/>
@@ -728,7 +728,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1022"/>
         <source>Don&apos;t show again</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis ikke igen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1852"/>
@@ -1059,7 +1059,7 @@
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="37"/>
         <source>Minimum</source>
-        <translation>Min</translation>
+        <translation>Minimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="39"/>
@@ -1072,7 +1072,7 @@
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="35"/>
         <source>Minimum</source>
-        <translation>Min</translation>
+        <translation>Minimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiographitem.cpp" line="36"/>
@@ -2399,7 +2399,7 @@
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="37"/>
         <source>Minimum</source>
-        <translation>Min</translation>
+        <translation>Minimum</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="39"/>
@@ -2442,7 +2442,7 @@
     <message>
         <location filename="../src/GUI/temperaturegraphitem.cpp" line="28"/>
         <source>Minimum</source>
-        <translation>Min</translation>
+        <translation>Minimum</translation>
     </message>
 </context>
 <context>
