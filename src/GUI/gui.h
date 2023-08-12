@@ -44,7 +44,7 @@ class GUI : public QMainWindow
 public:
 	GUI();
 
-	bool openFile(const QString &fileName, bool silent = false);
+	bool openFile(const QString &fileName, bool tryUnknown, int &showError);
 	bool loadMap(const QString &fileName, MapAction *&action,
 	  bool silent = false);
 	void show();
@@ -151,7 +151,7 @@ private:
 	void createBrowser();
 
 	bool openPOIFile(const QString &fileName);
-	bool loadFile(const QString &fileName, bool silent = false);
+	bool loadFile(const QString &fileName, bool tryUnknown, int &showError);
 	void loadData(const Data &data);
 	bool loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 	  bool silent, const QList<QAction*> &existingActions);

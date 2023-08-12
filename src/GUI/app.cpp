@@ -86,14 +86,16 @@ int App::run()
 {
 	MapAction *lastReady = 0;
 	QStringList args(arguments());
+	int silent = 0;
+	int showError = (args.count() - 1 > 1) ? 2 : 1;
 
 	_gui->show();
 
 	for (int i = 1; i < args.count(); i++) {
-		if (!_gui->openFile(args.at(i), true)) {
+		if (!_gui->openFile(args.at(i), false, silent)) {
 			MapAction *a;
 			if (!_gui->loadMap(args.at(i), a, true))
-				_gui->openFile(args.at(i), false);
+				_gui->openFile(args.at(i), true, showError);
 			else {
 				if (a)
 					lastReady = a;
@@ -116,10 +118,13 @@ void App::appStateChanged(Qt::ApplicationState state)
 		QJniObject activity = QNativeInterface::QAndroidApplication::context();
 		QString path(activity.callObjectMethod<jstring>("intentPath").toString());
 		if (!path.isEmpty()) {
-			if (!_gui->openFile(path, true)) {
+			int silent = 0;
+			int showError = 1;
+
+			if (!_gui->openFile(path, false, silent)) {
 				MapAction *a;
 				if (!_gui->loadMap(path, a, true))
-					_gui->openFile(path, false);
+					_gui->openFile(path, true, showError);
 				else {
 					if (a)
 						a->trigger();
@@ -132,13 +137,16 @@ void App::appStateChanged(Qt::ApplicationState state)
 
 bool App::event(QEvent *event)
 {
+	int silent = 0;
+	int showError = 1;
+
 	if (event->type() == QEvent::FileOpen) {
 		QFileOpenEvent *e = static_cast<QFileOpenEvent *>(event);
 
-		if (!_gui->openFile(e->file(), true)) {
+		if (!_gui->openFile(e->file(), false, silent)) {
 			MapAction *a;
 			if (!_gui->loadMap(e->file(), a, true))
-				return _gui->openFile(e->file(), false);
+				return _gui->openFile(e->file(), true, showError);
 			else {
 				if (a)
 					a->trigger();

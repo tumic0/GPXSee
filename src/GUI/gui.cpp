@@ -4,6 +4,7 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QMessageBox>
+#include <QCheckBox>
 #include <QFileDialog>
 #include <QPrintDialog>
 #include <QPainter>
@@ -947,9 +948,10 @@ void GUI::openFile()
 	QStringList files(QFileDialog::getOpenFileNames(this, tr("Open file"),
 	  _dataDir, Data::formats()));
 #endif // Q_OS_ANDROID
+	int showError = (files.size() > 1) ? 2 : 1;
 
 	for (int i = 0; i < files.size(); i++)
-		openFile(files.at(i));
+		openFile(files.at(i), true, showError);
 	if (!files.isEmpty())
 		_dataDir = QFileInfo(files.last()).path();
 }
@@ -959,20 +961,21 @@ void GUI::openDir()
 {
 	QString dir(QFileDialog::getExistingDirectory(this, tr("Open directory"),
 	  _dataDir));
+	int showError = 1;
 
 	if (!dir.isEmpty()) {
 		_browser->setCurrentDir(dir);
-		openFile(_browser->current());
+		openFile(_browser->current(), true, showError);
 	}
 }
 #endif // Q_OS_ANDROID
 
-bool GUI::openFile(const QString &fileName, bool silent)
+bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 {
 	if (_files.contains(fileName))
 		return true;
 
-	if (!loadFile(fileName, silent))
+	if (!loadFile(fileName, tryUnknown, showError))
 		return false;
 
 	_files.append(fileName);
@@ -991,14 +994,14 @@ bool GUI::openFile(const QString &fileName, bool silent)
 	return true;
 }
 
-bool GUI::loadFile(const QString &fileName, bool silent)
+bool GUI::loadFile(const QString &fileName, bool tryUnknown, int &showError)
 {
-	Data data(fileName, !silent);
+	Data data(fileName, tryUnknown);
 
 	if (data.isValid()) {
 		loadData(data);
 		return true;
-	} else if (!silent) {
+	} else {
 		updateNavigationActions();
 		updateStatusBarInfo();
 		updateWindowTitle();
@@ -1007,14 +1010,26 @@ bool GUI::loadFile(const QString &fileName, bool silent)
 		if (_files.isEmpty())
 			_fileActionGroup->setEnabled(false);
 
-		QString error = tr("Error loading data file:") + "\n\n"
-		  + Util::displayName(fileName) + "\n\n" + data.errorString();
-		if (data.errorLine())
-			error.append("\n" + tr("Line: %1").arg(data.errorLine()));
-		QMessageBox::critical(this, APP_NAME, error);
+		if (showError) {
+			QString error = tr("Error loading data file:") + "\n"
+			  + Util::displayName(fileName) + ": " + data.errorString();
+			if (data.errorLine())
+				error.append("\n" + tr("Line: %1").arg(data.errorLine()));
+
+			if (showError > 1) {
+				QMessageBox message(QMessageBox::Critical, APP_NAME, error,
+				  QMessageBox::Ok, this);
+				QCheckBox checkBox(tr("Don't show again"));
+				message.setCheckBox(&checkBox);
+				message.exec();
+				if (checkBox.isChecked())
+					showError = 0;
+			} else
+				QMessageBox::critical(this, APP_NAME, error);
+		}
+
 		return false;
-	} else
-		return false;
+	}
 }
 
 void GUI::loadData(const Data &data)
@@ -1108,8 +1123,8 @@ bool GUI::openPOIFile(const QString &fileName)
 
 		return true;
 	} else {
-		QString error = tr("Error loading POI file:") + "\n\n"
-		  + Util::displayName(fileName) + "\n\n" + _poi->errorString();
+		QString error = tr("Error loading POI file:") + "\n"
+		  + Util::displayName(fileName) + ": " + _poi->errorString();
 		if (_poi->errorLine())
 			error.append("\n" + tr("Line: %1").arg(_poi->errorLine()));
 		QMessageBox::critical(this, APP_NAME, error);
@@ -1466,8 +1481,9 @@ void GUI::reloadFiles()
 		_tabs.at(i)->clear();
 	_mapView->clear();
 
+	int showError = 2;
 	for (int i = 0; i < _files.size(); i++) {
-		if (!loadFile(_files.at(i))) {
+		if (!loadFile(_files.at(i), true, showError)) {
 			_files.removeAt(i);
 			i--;
 		}
@@ -1692,8 +1708,8 @@ bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 			if (!map->isValid()) {
 				if (!silent)
 					QMessageBox::critical(this, APP_NAME,
-					  tr("Error loading map:") + "\n\n"
-					  + Util::displayName(map->path()) + "\n\n"
+					  tr("Error loading map:") + "\n"
+					  + Util::displayName(map->path()) + ": "
 					  + map->errorString());
 				delete map;
 			} else {
@@ -1737,8 +1753,8 @@ void GUI::mapLoaded()
 		_showMapAction->setEnabled(true);
 		_clearMapCacheAction->setEnabled(true);
 	} else {
-		QString error = tr("Error loading map:") + "\n\n"
-		  + Util::displayName(map->path()) + "\n\n" + map->errorString();
+		QString error = tr("Error loading map:") + "\n"
+		  + Util::displayName(map->path()) + ": " + map->errorString();
 		QMessageBox::critical(this, APP_NAME, error);
 		action->deleteLater();
 	}
@@ -1756,8 +1772,8 @@ void GUI::mapLoadedDir()
 		actions.append(action);
 		_mapView->loadMaps(actions);
 	} else {
-		QString error = tr("Error loading map:") + "\n\n"
-		  + Util::displayName(map->path()) + "\n\n" + map->errorString();
+		QString error = tr("Error loading map:") + "\n"
+		  + Util::displayName(map->path()) + ": " + map->errorString();
 		QMessageBox::critical(this, APP_NAME, error);
 		action->deleteLater();
 	}
@@ -1779,7 +1795,7 @@ void GUI::loadMapDirNode(const TreeNode<Map *> &node, QList<MapAction*> &actions
 		if (!(a = findMapAction(existingActions, map))) {
 			if (!map->isValid()) {
 				QMessageBox::critical(this, APP_NAME, tr("Error loading map:")
-				  + "\n\n" + Util::displayName(map->path()) + "\n\n"
+				  + "\n" + Util::displayName(map->path()) + ": "
 				  + map->errorString());
 				delete map;
 			} else {
@@ -2080,48 +2096,53 @@ void GUI::setGraphType(GraphType type)
 
 void GUI::next()
 {
+	int showError = 1;
 	QString file = _browser->next();
 	if (file.isNull())
 		return;
 
 	closeFiles();
-	openFile(file);
+	openFile(file, true, showError);
 }
 
 void GUI::prev()
 {
+	int showError = 1;
 	QString file = _browser->prev();
 	if (file.isNull())
 		return;
 
 	closeFiles();
-	openFile(file);
+	openFile(file, true, showError);
 }
 
 void GUI::last()
 {
+	int showError = 1;
 	QString file = _browser->last();
 	if (file.isNull())
 		return;
 
 	closeFiles();
-	openFile(file);
+	openFile(file, true, showError);
 }
 
 void GUI::first()
 {
+	int showError = 1;
 	QString file = _browser->first();
 	if (file.isNull())
 		return;
 
 	closeFiles();
-	openFile(file);
+	openFile(file, true, showError);
 }
 
 #ifndef Q_OS_ANDROID
 void GUI::keyPressEvent(QKeyEvent *event)
 {
 	QString file;
+	int showError = 1;
 
 	switch (event->key()) {
 		case PREV_KEY:
@@ -2167,7 +2188,7 @@ void GUI::keyPressEvent(QKeyEvent *event)
 	if (!file.isNull()) {
 		if (!(event->modifiers() & MODIFIER))
 			closeFiles();
-		openFile(file);
+		openFile(file, false, showError);
 		return;
 	}
 
@@ -2200,14 +2221,16 @@ void GUI::dropEvent(QDropEvent *event)
 {
 	MapAction *lastReady = 0;
 	QList<QUrl> urls(event->mimeData()->urls());
+	int silent = 0;
+	int showError = (urls.size() > 1) ? 2 : 1;
 
 	for (int i = 0; i < urls.size(); i++) {
 		QString file(urls.at(i).toLocalFile());
 
-		if (!openFile(file, true)) {
+		if (!openFile(file, false, silent)) {
 			MapAction *a;
 			if (!loadMap(file, a, true))
-				openFile(file, false);
+				openFile(file, true, showError);
 			else {
 				if (a)
 					lastReady = a;
