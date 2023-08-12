@@ -728,7 +728,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1022"/>
         <source>Don&apos;t show again</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekrar gösterme</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1852"/>
