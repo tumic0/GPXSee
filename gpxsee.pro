@@ -585,7 +585,7 @@ android {
         message("OpenSSL not found, building without HTTPS support!")
     }
 
-    ANDROID_TARGET_SDK_VERSION = 31
+    ANDROID_TARGET_SDK_VERSION = 33
     ANDROID_VERSION_NAME = $$VERSION
     ANDROID_VERSION_CODE = $$versionCode($$ANDROID_VERSION_NAME)
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/pkg/android
