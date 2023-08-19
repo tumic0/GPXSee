@@ -41,6 +41,8 @@ public:
 	void setPenStyle(Qt::PenStyle style);
 	void setDigitalZoom(int zoom);
 	void setMarkerColor(const QColor &color);
+	void setMarkerBackgroundColor(const QColor &color);
+	void drawMarkerBackground(bool draw);
 	void showMarker(bool show);
 	void showMarkerInfo(MarkerInfoItem::Type type);
 	void showTicks(bool show);

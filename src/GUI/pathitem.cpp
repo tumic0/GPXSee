@@ -365,6 +365,16 @@ void PathItem::setMarkerColor(const QColor &color)
 	_markerInfo->setColor(color);
 }
 
+void PathItem::setMarkerBackgroundColor(const QColor &color)
+{
+	_markerInfo->setBackgroundColor(color);
+}
+
+void PathItem::drawMarkerBackground(bool draw)
+{
+	_markerInfo->drawBackground(draw);
+}
+
 void PathItem::hover(bool hover)
 {
 	if (hover) {

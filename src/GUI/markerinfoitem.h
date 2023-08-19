@@ -26,6 +26,8 @@ public:
 	void setCoordinates(const Coordinates &c);
 
 	void setColor(const QColor &color);
+	void setBackgroundColor(const QColor &color);
+	void drawBackground(bool draw);
 
 	static void setCoordinatesFormat(const CoordinatesFormat &format)
 	  {_format = format;}
@@ -35,8 +37,9 @@ private:
 
 	QString _s1, _s2;
 	QRectF _boundingRect;
-	QColor _color;
+	QColor _color, _bgColor;
 	QFont _font;
+	bool _drawBackground;
 
 	static CoordinatesFormat _format;
 };

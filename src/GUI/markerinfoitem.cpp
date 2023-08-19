@@ -13,6 +13,8 @@ CoordinatesFormat MarkerInfoItem::_format = DecimalDegrees;
 MarkerInfoItem::MarkerInfoItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
 	_color = Qt::red;
+	_bgColor = Qt::white;
+	_drawBackground = false;
 
 	_font.setPixelSize(FONT_SIZE);
 	_font.setFamily(FONT_FAMILY);
@@ -62,13 +64,15 @@ void MarkerInfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 	QRectF r2(OFFSET, 0, fm.boundingRect(_s2).width(), fm.height()
 	  - fm.descent());
 
-	painter->setPen(Qt::NoPen);
-	QColor bc(painter->background().color());
-	bc.setAlpha(196);
-	painter->setBrush(QBrush(bc));
-	painter->drawRect(r2);
-	painter->drawRect(r1);
-	painter->setBrush(Qt::NoBrush);
+	if (_drawBackground) {
+		painter->setPen(Qt::NoPen);
+		QColor bc(_bgColor);
+		bc.setAlpha(196);
+		painter->setBrush(QBrush(bc));
+		painter->drawRect(r2);
+		painter->drawRect(r1);
+		painter->setBrush(Qt::NoBrush);
+	}
 
 	painter->setFont(_font);
 	painter->setPen(_color);
@@ -82,5 +86,17 @@ void MarkerInfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 void MarkerInfoItem::setColor(const QColor &color)
 {
 	_color = color;
+	update();
+}
+
+void MarkerInfoItem::setBackgroundColor(const QColor &color)
+{
+	_bgColor = color;
+	update();
+}
+
+void MarkerInfoItem::drawBackground(bool draw)
+{
+	_drawBackground = draw;
 	update();
 }

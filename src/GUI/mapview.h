@@ -203,6 +203,7 @@ private:
 	int _waypointSize, _poiSize;
 	QColor _backgroundColor, _waypointColor, _poiColor, _markerColor;
 	qreal _areaOpacity;
+	bool _infoBackground;
 
 	int _digitalZoom;
 	bool _plot;

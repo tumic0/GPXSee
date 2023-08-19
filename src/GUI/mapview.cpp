@@ -118,6 +118,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent) : QGraphicsView(parent)
 	_showPosition = false;
 	_showPositionCoordinates = false;
 	_showMotionInfo = false;
+	_infoBackground = false;
 
 	_opengl = false;
 	_plot = false;
@@ -156,6 +157,8 @@ PathItem *MapView::addTrack(const Track &track)
 	ti->setVisible(_showTracks);
 	ti->setDigitalZoom(_digitalZoom);
 	ti->setMarkerColor(_markerColor);
+	ti->setMarkerBackgroundColor(_backgroundColor);
+	ti->drawMarkerBackground(_infoBackground);
 	ti->showMarker(_showMarkers);
 	ti->showMarkerInfo(_markerInfoType);
 	ti->showTicks(_showPathTicks);
@@ -186,6 +189,8 @@ PathItem *MapView::addRoute(const Route &route)
 	ri->showWaypointIcons(_showWaypointIcons);
 	ri->setDigitalZoom(_digitalZoom);
 	ri->setMarkerColor(_markerColor);
+	ri->setMarkerBackgroundColor(_backgroundColor);
+	ri->drawMarkerBackground(_infoBackground);
 	ri->showMarker(_showMarkers);
 	ri->showMarkerInfo(_markerInfoType);
 	ri->showTicks(_showPathTicks);
@@ -1086,6 +1091,11 @@ void MapView::setBackgroundColor(const QColor &color)
 	_positionCoordinates->setBackgroundColor(color);
 	_motionInfo->setBackgroundColor(color);
 
+	for (int i = 0; i < _tracks.size(); i++)
+		_tracks.at(i)->setMarkerBackgroundColor(color);
+	for (int i = 0; i < _routes.size(); i++)
+		_routes.at(i)->setMarkerBackgroundColor(color);
+
 	reloadMap();
 }
 
@@ -1378,9 +1388,16 @@ void MapView::setInfoColor(const QColor &color)
 
 void MapView::drawInfoBackground(bool draw)
 {
+	_infoBackground = draw;
+
 	_cursorCoordinates->drawBackground(draw);
 	_positionCoordinates->drawBackground(draw);
 	_motionInfo->drawBackground(draw);
+
+	for (int i = 0; i < _tracks.size(); i++)
+		_tracks.at(i)->drawMarkerBackground(draw);
+	for (int i = 0; i < _routes.size(); i++)
+		_routes.at(i)->drawMarkerBackground(draw);
 }
 
 void MapView::setHidpi(bool hidpi)
