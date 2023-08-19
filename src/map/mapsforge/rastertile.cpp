@@ -10,7 +10,7 @@ using namespace Mapsforge;
 #define PATHS_EXTENT 20
 #define SEARCH_EXTENT -0.5
 
-static double limit = cos(deg2rad(170));
+static double LIMIT = cos(deg2rad(170));
 
 static qreal area(const QPainterPath &polygon)
 {
@@ -78,7 +78,7 @@ static QPainterPath parallelPath(const QPainterPath &p, double dy)
 
 		if (k == 0)
 			continue;
-		if (u.at(k).x() * u.at(k-1).x() + u.at(k).y() * u.at(k-1).y() < limit)
+		if (u.at(k).x() * u.at(k-1).x() + u.at(k).y() * u.at(k-1).y() < LIMIT)
 			return p;
 	}
 
@@ -127,9 +127,8 @@ void RasterTile::processPointLabels(const QList<MapData::Point> &points,
 				if ((lbl = label(ri->key(), point.tags))) {
 					if (si && si->id() != ri->symbolId())
 						continue;
-
-					ti = ri;
-					break;
+					if (!ti || ti->priority() < ri->priority())
+						ti = ri;
 				}
 			}
 		}
