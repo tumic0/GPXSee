@@ -142,6 +142,7 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKLM "${REGENTRY}" "Publisher" "Martin Tůma"
   WriteRegStr HKLM "${REGENTRY}" "DisplayVersion" "${VERSION}"
   WriteRegStr HKLM "${REGENTRY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
+  WriteRegStr HKLM "${REGENTRY}" "QuietUninstallString" "$\"$INSTDIR\uninstall.exe$\" /S"
   WriteRegStr HKLM "${REGENTRY}" "DisplayIcon" '"$INSTDIR\gpxsee.exe"'
   WriteRegStr HKLM "${REGENTRY}" "InstallLocation" '"$INSTDIR"'
   WriteRegStr HKLM "${REGENTRY}" "URLInfoAbout" "https://www.gpxsee.org"
