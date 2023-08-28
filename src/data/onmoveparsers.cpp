@@ -270,6 +270,10 @@ bool GHPParser::parse(QFile *file, QList<TrackData> &tracks,
 		_errorString = "unexpected end of file";
 		return false;
 	}
+	if (!segment.size()) {
+		_errorString = "No usable data found";
+		return false;
+	}
 
 	tracks.append(TrackData());
 	tracks.last().append(segment);
