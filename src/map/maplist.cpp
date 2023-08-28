@@ -65,7 +65,7 @@ MapList::ParserMap MapList::_parsers = parsers();
 Map *MapList::loadFile(const QString &path, bool *isDir)
 {
 	ParserMap::iterator it;
-	QFileInfo fi(path);
+	QFileInfo fi(Util::displayName(path));
 	QString suffix(fi.completeSuffix().toLower());
 	Map *map = 0;
 	QStringList errors;

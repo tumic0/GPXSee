@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QFileInfo>
+#include "common/util.h"
 #include "gpxparser.h"
 #include "tcxparser.h"
 #include "csvparser.h"
@@ -94,7 +95,7 @@ void Data::processData(QList<TrackData> &trackData, QList<RouteData> &routeData)
 Data::Data(const QString &fileName, bool tryUnknown)
 {
 	QFile file(fileName);
-	QFileInfo fi(fileName);
+	QFileInfo fi(Util::displayName(fileName));
 	QList<TrackData> trackData;
 	QList<RouteData> routeData;
 
