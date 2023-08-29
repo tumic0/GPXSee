@@ -917,7 +917,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1022"/>
         <source>Don&apos;t show again</source>
-        <translation type="unfinished"></translation>
+        <translation>No ho tornis a mostrar</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1096"/>
@@ -1024,6 +1024,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fitxer</numerusform>
+            <numerusform>%n fitxers</numerusform>
             <numerusform>%n fitxers</numerusform>
         </translation>
     </message>
