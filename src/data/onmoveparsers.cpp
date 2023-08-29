@@ -221,7 +221,7 @@ bool GHPParser::readF0(const char *chunk, const Header &hdr, int &time,
 	quint16 speed = u16(chunk + 10);
 	quint8 hr = chunk[12];
 	quint8 fia = chunk[13];
-	quint8 ms = chunk[16];
+	qint32 ms = s32(chunk + 16);
 
 	if (fia == 3) {
 		Trackpoint t(Coordinates(lon / 1000000.0, lat / 1000000.0));
