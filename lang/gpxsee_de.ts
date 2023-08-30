@@ -70,107 +70,107 @@
 <context>
     <name>Data</name>
     <message>
-        <location filename="../src/data/data.cpp" line="156"/>
+        <location filename="../src/data/data.cpp" line="157"/>
         <source>Supported files</source>
         <translation>Unterstützte Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="157"/>
+        <location filename="../src/data/data.cpp" line="158"/>
         <source>CSV files</source>
         <translation>CSV-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="158"/>
+        <location filename="../src/data/data.cpp" line="159"/>
         <source>CUP files</source>
         <translation>CUP-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="159"/>
+        <location filename="../src/data/data.cpp" line="160"/>
         <source>FIT files</source>
         <translation>FIT-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="160"/>
+        <location filename="../src/data/data.cpp" line="161"/>
         <source>GeoJSON files</source>
         <translation>GeoJSON-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="161"/>
+        <location filename="../src/data/data.cpp" line="162"/>
         <source>GPI files</source>
         <translation>GPI-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="162"/>
+        <location filename="../src/data/data.cpp" line="163"/>
         <source>GPX files</source>
         <translation>GPX-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="163"/>
+        <location filename="../src/data/data.cpp" line="164"/>
         <source>IGC files</source>
         <translation>IGC-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="164"/>
+        <location filename="../src/data/data.cpp" line="165"/>
         <source>ITN files</source>
         <translation>ITN-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="165"/>
+        <location filename="../src/data/data.cpp" line="166"/>
         <source>JPEG images</source>
         <translation>JPEG-Bilder</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="166"/>
+        <location filename="../src/data/data.cpp" line="167"/>
         <source>KML files</source>
         <translation>KML-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="167"/>
+        <location filename="../src/data/data.cpp" line="168"/>
         <source>LOC files</source>
         <translation>LOC-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="168"/>
+        <location filename="../src/data/data.cpp" line="169"/>
         <source>NMEA files</source>
         <translation>NMEA-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="170"/>
+        <location filename="../src/data/data.cpp" line="171"/>
         <source>OV2 files</source>
         <translation>OV2-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="171"/>
+        <location filename="../src/data/data.cpp" line="172"/>
         <source>OziExplorer files</source>
         <translation>OziExplorer-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="173"/>
+        <location filename="../src/data/data.cpp" line="174"/>
         <source>SML files</source>
         <translation>SML-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="174"/>
+        <location filename="../src/data/data.cpp" line="175"/>
         <source>TCX files</source>
         <translation>TCX-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="172"/>
+        <location filename="../src/data/data.cpp" line="173"/>
         <source>SLF files</source>
         <translation>SLF-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="169"/>
+        <location filename="../src/data/data.cpp" line="170"/>
         <source>ONmove files</source>
         <translation>ONmove-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="175"/>
+        <location filename="../src/data/data.cpp" line="176"/>
         <source>TwoNav files</source>
         <translation>TwoNav-Dateien</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="176"/>
+        <location filename="../src/data/data.cpp" line="177"/>
         <source>All files</source>
         <translation>Alle Dateien</translation>
     </message>
@@ -801,6 +801,8 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1022"/>
+        <location filename="../src/GUI/gui.cpp" line="1718"/>
+        <location filename="../src/GUI/gui.cpp" line="1818"/>
         <source>Don&apos;t show again</source>
         <translation>Nicht wieder anzeigen</translation>
     </message>
@@ -825,40 +827,40 @@
         <translation>Kartendatei öffnen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1711"/>
-        <location filename="../src/GUI/gui.cpp" line="1756"/>
-        <location filename="../src/GUI/gui.cpp" line="1775"/>
-        <location filename="../src/GUI/gui.cpp" line="1797"/>
+        <location filename="../src/GUI/gui.cpp" line="1712"/>
+        <location filename="../src/GUI/gui.cpp" line="1769"/>
+        <location filename="../src/GUI/gui.cpp" line="1788"/>
+        <location filename="../src/GUI/gui.cpp" line="1812"/>
         <source>Error loading map:</source>
         <translation>Fehler beim Laden der Kartendatei:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1825"/>
+        <location filename="../src/GUI/gui.cpp" line="1852"/>
         <source>Select map directory</source>
         <translation>Kartenverzeichnis auswählen</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1852"/>
+        <location filename="../src/GUI/gui.cpp" line="1881"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
         <translation>Kachel-Cache von &quot;%1&quot; bereinigen?</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1870"/>
+        <location filename="../src/GUI/gui.cpp" line="1899"/>
         <source>Could not download all required DEM files.</source>
         <translation>Es konnten nicht alle erforderlichen DEM-Dateien heruntergeladen werden.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1885"/>
+        <location filename="../src/GUI/gui.cpp" line="1914"/>
         <source>No local DEM tiles found.</source>
         <translation>Keine lokalen DEM-Kacheln gefunden.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1899"/>
+        <location filename="../src/GUI/gui.cpp" line="1928"/>
         <source>No files loaded</source>
         <translation>Keine Dateien geladen</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1903"/>
+        <location filename="../src/GUI/gui.cpp" line="1932"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n Datei</numerusform>

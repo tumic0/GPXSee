@@ -70,107 +70,107 @@
 <context>
     <name>Data</name>
     <message>
-        <location filename="../src/data/data.cpp" line="156"/>
+        <location filename="../src/data/data.cpp" line="157"/>
         <source>Supported files</source>
         <translation>Támogatott fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="157"/>
+        <location filename="../src/data/data.cpp" line="158"/>
         <source>CSV files</source>
         <translation>CSV fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="158"/>
+        <location filename="../src/data/data.cpp" line="159"/>
         <source>CUP files</source>
         <translation>CUP fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="159"/>
+        <location filename="../src/data/data.cpp" line="160"/>
         <source>FIT files</source>
         <translation>FIT fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="160"/>
+        <location filename="../src/data/data.cpp" line="161"/>
         <source>GeoJSON files</source>
         <translation>GeoJSON fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="161"/>
+        <location filename="../src/data/data.cpp" line="162"/>
         <source>GPI files</source>
         <translation>GPI fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="162"/>
+        <location filename="../src/data/data.cpp" line="163"/>
         <source>GPX files</source>
         <translation>GPX fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="163"/>
+        <location filename="../src/data/data.cpp" line="164"/>
         <source>IGC files</source>
         <translation>IGC fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="164"/>
+        <location filename="../src/data/data.cpp" line="165"/>
         <source>ITN files</source>
         <translation>ITN fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="165"/>
+        <location filename="../src/data/data.cpp" line="166"/>
         <source>JPEG images</source>
         <translation>JPEG fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="166"/>
+        <location filename="../src/data/data.cpp" line="167"/>
         <source>KML files</source>
         <translation>KML fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="167"/>
+        <location filename="../src/data/data.cpp" line="168"/>
         <source>LOC files</source>
         <translation>LOC fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="168"/>
+        <location filename="../src/data/data.cpp" line="169"/>
         <source>NMEA files</source>
         <translation>NMEA fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="169"/>
+        <location filename="../src/data/data.cpp" line="170"/>
         <source>ONmove files</source>
         <translation>ONmove fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="170"/>
+        <location filename="../src/data/data.cpp" line="171"/>
         <source>OV2 files</source>
         <translation>OV2 fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="171"/>
+        <location filename="../src/data/data.cpp" line="172"/>
         <source>OziExplorer files</source>
         <translation>OziExplorer fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="172"/>
+        <location filename="../src/data/data.cpp" line="173"/>
         <source>SLF files</source>
         <translation>SLF fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="173"/>
+        <location filename="../src/data/data.cpp" line="174"/>
         <source>SML files</source>
         <translation>SML fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="174"/>
+        <location filename="../src/data/data.cpp" line="175"/>
         <source>TCX files</source>
         <translation>TCX fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="175"/>
+        <location filename="../src/data/data.cpp" line="176"/>
         <source>TwoNav files</source>
         <translation>TwoNav fájlok</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="176"/>
+        <location filename="../src/data/data.cpp" line="177"/>
         <source>All files</source>
         <translation>Minden fájl</translation>
     </message>
@@ -727,11 +727,13 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1022"/>
+        <location filename="../src/GUI/gui.cpp" line="1718"/>
+        <location filename="../src/GUI/gui.cpp" line="1818"/>
         <source>Don&apos;t show again</source>
         <translation>Ne mutassa újra</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1852"/>
+        <location filename="../src/GUI/gui.cpp" line="1881"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
         <translation>&quot;%1&quot; csempe gyorsítótár törlése?</translation>
     </message>
@@ -992,38 +994,37 @@
         <translation>Térképfájl megnyitása</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1711"/>
-        <location filename="../src/GUI/gui.cpp" line="1756"/>
-        <location filename="../src/GUI/gui.cpp" line="1775"/>
-        <location filename="../src/GUI/gui.cpp" line="1797"/>
+        <location filename="../src/GUI/gui.cpp" line="1712"/>
+        <location filename="../src/GUI/gui.cpp" line="1769"/>
+        <location filename="../src/GUI/gui.cpp" line="1788"/>
+        <location filename="../src/GUI/gui.cpp" line="1812"/>
         <source>Error loading map:</source>
         <translation>Térképbetöltési hiba:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1825"/>
+        <location filename="../src/GUI/gui.cpp" line="1852"/>
         <source>Select map directory</source>
         <translation>Térképmappa választása</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1870"/>
+        <location filename="../src/GUI/gui.cpp" line="1899"/>
         <source>Could not download all required DEM files.</source>
         <translation>Nem volt letölthető minden szükséges DEM fájl.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1885"/>
+        <location filename="../src/GUI/gui.cpp" line="1914"/>
         <source>No local DEM tiles found.</source>
         <translation>Nem található helyi DEM csempe.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1899"/>
+        <location filename="../src/GUI/gui.cpp" line="1928"/>
         <source>No files loaded</source>
         <translation>Nincs betöltött fájl</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1903"/>
+        <location filename="../src/GUI/gui.cpp" line="1932"/>
         <source>%n files</source>
         <translation>
-            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
