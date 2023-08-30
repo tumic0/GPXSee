@@ -94,7 +94,7 @@ int App::run()
 	for (int i = 1; i < args.count(); i++) {
 		if (!_gui->openFile(args.at(i), false, silent)) {
 			MapAction *a;
-			if (!_gui->loadMap(args.at(i), a, true))
+			if (!_gui->loadMap(args.at(i), a, silent))
 				_gui->openFile(args.at(i), true, showError);
 			else {
 				if (a)
@@ -145,7 +145,7 @@ bool App::event(QEvent *event)
 
 		if (!_gui->openFile(e->file(), false, silent)) {
 			MapAction *a;
-			if (!_gui->loadMap(e->file(), a, true))
+			if (!_gui->loadMap(e->file(), a, silent))
 				return _gui->openFile(e->file(), true, showError);
 			else {
 				if (a)

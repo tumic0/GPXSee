@@ -1667,9 +1667,10 @@ void GUI::loadMap()
 	  _mapDir, MapList::formats()));
 #endif // Q_OS_ANDROID
 	MapAction *a, *lastReady = 0;
+	int showError = (files.size() > 1) ? 2 : 1;
 
 	for (int i = 0; i < files.size(); i++) {
-		if (loadMap(files.at(i), a) && a)
+		if (loadMap(files.at(i), a, showError) && a)
 			lastReady = a;
 	}
 	if (!files.isEmpty())
@@ -1691,14 +1692,15 @@ static MapAction *findMapAction(const QList<QAction*> &mapActions,
 }
 
 bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
-  bool silent, const QList<QAction*> &existingActions)
+  const QList<QAction*> &existingActions, int &showError)
 {
 	bool valid = false;
 
 	action = 0;
 
 	for (int i = 0; i < node.childs().size(); i++)
-		valid = loadMapNode(node.childs().at(i), action, silent, existingActions);
+		valid = loadMapNode(node.childs().at(i), action, existingActions,
+		  showError);
 
 	for (int i = 0; i < node.items().size(); i++) {
 		Map *map = node.items().at(i);
@@ -1706,11 +1708,22 @@ bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 
 		if (!(a = findMapAction(existingActions, map))) {
 			if (!map->isValid()) {
-				if (!silent)
-					QMessageBox::critical(this, APP_NAME,
-					  tr("Error loading map:") + "\n"
-					  + Util::displayName(map->path()) + ": "
-					  + map->errorString());
+				if (showError) {
+					QString error = tr("Error loading map:") + "\n"
+					  + Util::displayName(map->path()) + ": " + map->errorString();
+
+					if (showError > 1) {
+						QMessageBox message(QMessageBox::Critical, APP_NAME,
+						  error, QMessageBox::Ok, this);
+						QCheckBox checkBox(tr("Don't show again"));
+						message.setCheckBox(&checkBox);
+						message.exec();
+						if (checkBox.isChecked())
+							showError = 0;
+					} else
+						QMessageBox::critical(this, APP_NAME, error);
+				}
+
 				delete map;
 			} else {
 				valid = true;
@@ -1735,12 +1748,12 @@ bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 	return valid;
 }
 
-bool GUI::loadMap(const QString &fileName, MapAction *&action, bool silent)
+bool GUI::loadMap(const QString &fileName, MapAction *&action, int &showError)
 {
 	TreeNode<Map*> maps(MapList::loadMaps(fileName));
 	QList<QAction*> existingActions(_mapsActionGroup->actions());
 
-	return loadMapNode(maps, action, silent, existingActions);
+	return loadMapNode(maps, action, existingActions, showError);
 }
 
 void GUI::mapLoaded()
@@ -1780,12 +1793,13 @@ void GUI::mapLoadedDir()
 }
 
 void GUI::loadMapDirNode(const TreeNode<Map *> &node, QList<MapAction*> &actions,
-  QMenu *menu, const QList<QAction*> &existingActions)
+  QMenu *menu, const QList<QAction*> &existingActions, int &showError)
 {
 	for (int i = 0; i < node.childs().size(); i++) {
 		QMenu *cm = new QMenu(node.childs().at(i).name(), menu);
 		menu->addMenu(cm);
-		loadMapDirNode(node.childs().at(i), actions, cm, existingActions);
+		loadMapDirNode(node.childs().at(i), actions, cm, existingActions,
+		  showError);
 	}
 
 	for (int i = 0; i < node.items().size(); i++) {
@@ -1794,9 +1808,22 @@ void GUI::loadMapDirNode(const TreeNode<Map *> &node, QList<MapAction*> &actions
 
 		if (!(a = findMapAction(existingActions, map))) {
 			if (!map->isValid()) {
-				QMessageBox::critical(this, APP_NAME, tr("Error loading map:")
-				  + "\n" + Util::displayName(map->path()) + ": "
-				  + map->errorString());
+				if (showError) {
+					QString error = tr("Error loading map:") + "\n"
+					  + Util::displayName(map->path()) + ": " + map->errorString();
+
+					if (showError > 1) {
+						QMessageBox message(QMessageBox::Critical, APP_NAME,
+						  error, QMessageBox::Ok, this);
+						QCheckBox checkBox(tr("Don't show again"));
+						message.setCheckBox(&checkBox);
+						message.exec();
+						if (checkBox.isChecked())
+							showError = 0;
+					} else
+						QMessageBox::critical(this, APP_NAME, error);
+				}
+
 				delete map;
 			} else {
 				a = new MapAction(map, _mapsActionGroup);
@@ -1831,8 +1858,10 @@ void GUI::loadMapDir()
 	QList<QAction*> existingActions(_mapsActionGroup->actions());
 	QList<MapAction*> actions;
 	QMenu *menu = new QMenu(maps.name());
+	int showError = (maps.items().size() > 1 || !maps.childs().isEmpty())
+	  ? 2 : 1;
 
-	loadMapDirNode(maps, actions, menu, existingActions);
+	loadMapDirNode(maps, actions, menu, existingActions, showError);
 
 	_mapView->loadMaps(actions);
 
@@ -2229,7 +2258,7 @@ void GUI::dropEvent(QDropEvent *event)
 
 		if (!openFile(file, false, silent)) {
 			MapAction *a;
-			if (!loadMap(file, a, true))
+			if (!loadMap(file, a, silent))
 				openFile(file, true, showError);
 			else {
 				if (a)

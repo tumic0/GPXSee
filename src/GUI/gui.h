@@ -45,8 +45,7 @@ public:
 	GUI();
 
 	bool openFile(const QString &fileName, bool tryUnknown, int &showError);
-	bool loadMap(const QString &fileName, MapAction *&action,
-	  bool silent = false);
+	bool loadMap(const QString &fileName, MapAction *&action, int &showError);
 	void show();
 	void writeSettings();
 
@@ -154,9 +153,9 @@ private:
 	bool loadFile(const QString &fileName, bool tryUnknown, int &showError);
 	void loadData(const Data &data);
 	bool loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
-	  bool silent, const QList<QAction*> &existingActions);
+	  const QList<QAction*> &existingActions, int &showError);
 	void loadMapDirNode(const TreeNode<Map*> &node, QList<MapAction*> &actions,
-	  QMenu *menu, const QList<QAction*> &existingActions);
+	  QMenu *menu, const QList<QAction*> &existingActions, int &showError);
 	void updateStatusBarInfo();
 	void updateWindowTitle();
 	bool updateGraphTabs();
