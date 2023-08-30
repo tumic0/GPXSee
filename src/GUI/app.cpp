@@ -123,7 +123,7 @@ void App::appStateChanged(Qt::ApplicationState state)
 
 			if (!_gui->openFile(path, false, silent)) {
 				MapAction *a;
-				if (!_gui->loadMap(path, a, true))
+				if (!_gui->loadMap(path, a, silent))
 					_gui->openFile(path, true, showError);
 				else {
 					if (a)
