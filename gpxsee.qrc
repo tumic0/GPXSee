@@ -207,6 +207,7 @@
 		<file alias="fog-signal.png">icons/map/marine/fog-signal.png</file>
 		<file alias="construction.png">icons/map/marine/construction.png</file>
 		<file alias="radio-call.png">icons/map/marine/radio-call.png</file>
+		<file alias="radio-call-2w.png">icons/map/marine/radio-call-2w.png</file>
 		<file alias="current.png">icons/map/marine/current.png</file>
 		<file alias="rescue-station.png">icons/map/marine/rescue-station.png</file>
 		<file alias="windmill.png">icons/map/marine/windmill.png</file>

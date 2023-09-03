@@ -22,6 +22,7 @@
 #define OBJNAM 116
 #define ORIENT 117
 #define RESTRN 131
+#define TRAFIC 172
 #define VALDCO 174
 #define WATLEV 187
 

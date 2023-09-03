@@ -550,7 +550,9 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 		  || (OBJL == BUISGL && key == FUNCTN)
 		  || (OBJL == WATTUR && key == CATWAT)
 		  || (OBJL == SISTAT && key == CATSIT)
-		  || (OBJL == I_SISTAT && key == I_CATSIT))
+		  || (OBJL == I_SISTAT && key == I_CATSIT)
+		  || (OBJL == RDOCAL && key == TRAFIC)
+		  || (OBJL == I_RDOCAL && key == TRAFIC))
 			subtype = av.at(1).toByteArray().toUInt();
 		else if (OBJL == I_DISMAR && key == CATDIS)
 			subtype |= av.at(1).toByteArray().toUInt();
