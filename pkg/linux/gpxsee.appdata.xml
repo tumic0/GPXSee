@@ -107,6 +107,7 @@
 		<mimetype>application/vnd.twonav.wpt</mimetype>
 		<mimetype>application/vnd.cgtk.gemf</mimetype>
 		<mimetype>application/vnd.orux.map+xml</mimetype>
-		<mimetype>application/vnd.iho.s57</mimetype>
+		<mimetype>application/vnd.iho.s57-data</mimetype>
+		<mimetype>application/vnd.iho.s57-catalogue</mimetype>
 	</mimetypes>
 </component>
