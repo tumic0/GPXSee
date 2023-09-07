@@ -39,3 +39,10 @@ void BitmapLine::draw(QPainter *painter, const QPolygonF &line,
 		painter->restore();
 	}
 }
+
+void BitmapLine::draw(QPainter *painter, const QVector<QPolygonF> &lines,
+  const QImage &img)
+{
+	for (int i = 0; i < lines.size(); i++)
+		draw(painter, lines.at(i), img);
+}

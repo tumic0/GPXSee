@@ -141,32 +141,32 @@ static const ISO8211::Field *SGXD(const ISO8211::Record &r)
 {
 	const ISO8211::Field *f;
 
-	if ((f = r.field("SG2D")))
+	if ((f = ISO8211::field(r, "SG2D")))
 		return f;
-	else if ((f = r.field("SG3D")))
+	else if ((f = ISO8211::field(r, "SG3D")))
 		return f;
 	else
 		return 0;
 }
 
-static bool pointCb(MapData::Point *point, void *context)
+static bool pointCb(const MapData::Point *point, void *context)
 {
-	QList<MapData::Point*> *points = (QList<MapData::Point*>*)context;
-	points->append(point);
+	QList<MapData::Point> *points = (QList<MapData::Point>*)context;
+	points->append(*point);
 	return true;
 }
 
-static bool lineCb(MapData::Line *line, void *context)
+static bool lineCb(const MapData::Line *line, void *context)
 {
-	QList<MapData::Line*> *lines = (QList<MapData::Line*>*)context;
-	lines->append(line);
+	QList<MapData::Line> *lines = (QList<MapData::Line>*)context;
+	lines->append(*line);
 	return true;
 }
 
-static bool polygonCb(MapData::Poly *polygon, void *context)
+static bool polygonCb(const MapData::Poly *polygon, void *context)
 {
-	QList<MapData::Poly*> *polygons = (QList<MapData::Poly*>*)context;
-	polygons->append(polygon);
+	QList<MapData::Poly> *polygons = (QList<MapData::Poly>*)context;
+	polygons->append(*polygon);
 	return true;
 }
 
@@ -306,7 +306,7 @@ QVector<MapData::Sounding> MapData::soundings(const ISO8211::Record &r,
   uint COMF, uint SOMF)
 {
 	QVector<Sounding> s;
-	const ISO8211::Field *f = r.field("SG3D");
+	const ISO8211::Field *f = ISO8211::field(r, "SG3D");
 	if (!f)
 		return QVector<Sounding>();
 
@@ -328,7 +328,7 @@ QVector<MapData::Sounding> MapData::soundingGeometry(const ISO8211::Record &r,
 	quint32 id;
 	RecordMapIterator it;
 
-	const ISO8211::Field *FSPT = r.field("FSPT");
+	const ISO8211::Field *FSPT = ISO8211::field(r, "FSPT");
 	if (!FSPT || FSPT->data().at(0).size() != 4)
 		return QVector<Sounding>();
 
@@ -356,7 +356,7 @@ Coordinates MapData::pointGeometry(const ISO8211::Record &r,
 	quint32 id;
 	RecordMapIterator it;
 
-	const ISO8211::Field *FSPT = r.field("FSPT");
+	const ISO8211::Field *FSPT = ISO8211::field(r, "FSPT");
 	if (!FSPT || FSPT->data().at(0).size() != 4)
 		return Coordinates();
 
@@ -386,7 +386,7 @@ QVector<Coordinates> MapData::lineGeometry(const ISO8211::Record &r,
 	quint8 type;
 	quint32 id;
 
-	const ISO8211::Field *FSPT = r.field("FSPT");
+	const ISO8211::Field *FSPT = ISO8211::field(r, "FSPT");
 	if (!FSPT || FSPT->data().at(0).size() != 4)
 		return QVector<Coordinates>();
 
@@ -399,7 +399,7 @@ QVector<Coordinates> MapData::lineGeometry(const ISO8211::Record &r,
 		if (it == ve.constEnd())
 			return QVector<Coordinates>();
 		const ISO8211::Record &FRID = it.value();
-		const ISO8211::Field *VRPT = FRID.field("VRPT");
+		const ISO8211::Field *VRPT = ISO8211::field(FRID, "VRPT");
 		if (!VRPT || VRPT->data().size() != 2)
 			return QVector<Coordinates>();
 
@@ -452,7 +452,7 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
 	quint8 type;
 	quint32 id;
 
-	const ISO8211::Field *FSPT = r.field("FSPT");
+	const ISO8211::Field *FSPT = ISO8211::field(r, "FSPT");
 	if (!FSPT || FSPT->data().at(0).size() != 4)
 		return Polygon();
 
@@ -471,7 +471,7 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
 		if (it == ve.constEnd())
 			return Polygon();
 		const ISO8211::Record &FRID = it.value();
-		const ISO8211::Field *VRPT = FRID.field("VRPT");
+		const ISO8211::Field *VRPT = ISO8211::field(FRID, "VRPT");
 		if (!VRPT || VRPT->data().size() != 2)
 			return Polygon();
 
@@ -490,6 +490,8 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
 		const ISO8211::Field *vertexes = SGXD(FRID);
 		if (ORNT == 2) {
 			v.append(c[1]);
+			if (USAG == 3)
+				v.append(Coordinates());
 			if (vertexes) {
 				for (int j = vertexes->data().size() - 1; j >= 0; j--) {
 					const QVector<QVariant> &cv = vertexes->data().at(j);
@@ -497,9 +499,13 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
 					  COMF));
 				}
 			}
+			if (USAG == 3)
+				v.append(Coordinates());
 			v.append(c[0]);
 		} else {
 			v.append(c[0]);
+			if (USAG == 3)
+				v.append(Coordinates());
 			if (vertexes) {
 				for (int j = 0; j < vertexes->data().size(); j++) {
 					const QVector<QVariant> &cv = vertexes->data().at(j);
@@ -507,6 +513,8 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
 					  COMF));
 				}
 			}
+			if (USAG == 3)
+				v.append(Coordinates());
 			v.append(c[1]);
 		}
 
@@ -528,7 +536,7 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 	QVector<QByteArray> params(2);
 	uint subtype = 0;
 
-	const ISO8211::Field *ATTF = r.field("ATTF");
+	const ISO8211::Field *ATTF = ISO8211::field(r, "ATTF");
 	if (!(ATTF && ATTF->data().at(0).size() == 2))
 		return Attr();
 
@@ -580,7 +588,7 @@ MapData::Attr MapData::lineAttr(const ISO8211::Record &r, uint OBJL)
 	QVector<QByteArray> params(1);
 	uint subtype = 0;
 
-	const ISO8211::Field *ATTF = r.field("ATTF");
+	const ISO8211::Field *ATTF = ISO8211::field(r, "ATTF");
 	if (!(ATTF && ATTF->data().at(0).size() == 2))
 		return Attr();
 
@@ -608,7 +616,7 @@ MapData::Attr MapData::polyAttr(const ISO8211::Record &r, uint OBJL)
 	QVector<QByteArray> params(1);
 	uint subtype = 0;
 
-	const ISO8211::Field *ATTF = r.field("ATTF");
+	const ISO8211::Field *ATTF = ISO8211::field(r, "ATTF");
 	if (!(ATTF && ATTF->data().at(0).size() == 2))
 		return Attr();
 
@@ -677,30 +685,6 @@ MapData::Poly *MapData::polyObject(const ISO8211::Record &r,
 }
 
 bool MapData::processRecord(const ISO8211::Record &record,
-  QVector<ISO8211::Record> &rv, uint &COMF, QString &name)
-{
-	if (record.size() < 2)
-		return false;
-
-	const ISO8211::Field &f = record.at(1);
-	const QByteArray &ba = f.tag();
-
-	if (ba == "VRID") {
-		rv.append(record);
-	} else if (ba == "DSID") {
-		QByteArray DSNM;
-		if (!f.subfield("DSNM", &DSNM))
-			return false;
-		name = DSNM;
-	} else if (ba == "DSPM") {
-		if (!f.subfield("COMF", &COMF))
-			return false;
-	}
-
-	return true;
-}
-
-bool MapData::processRecord(const ISO8211::Record &record,
   QVector<ISO8211::Record> &fe, RecordMap &vi, RecordMap &vc, RecordMap &ve,
   RecordMap &vf, uint &COMF, uint &SOMF)
 {
@@ -742,92 +726,11 @@ bool MapData::processRecord(const ISO8211::Record &record,
 	return true;
 }
 
-bool MapData::bounds(const ISO8211::Record &record, Rect &rect)
-{
-	bool xok, yok;
-	// edge geometries can be empty!
-	const ISO8211::Field *f = SGXD(record);
-	if (!f)
-		return true;
-
-	for (int i = 0; i < f->data().size(); i++) {
-		const QVector<QVariant> &c = f->data().at(i);
-		rect.unite(c.at(1).toInt(&xok), c.at(0).toInt(&yok));
-		if (!(xok && yok))
-			return false;
-	}
-
-	return true;
-}
-
-bool MapData::bounds(const QVector<ISO8211::Record> &gv, Rect &b)
-{
-	Rect r;
-
-	for (int i = 0; i < gv.size(); i++) {
-		if (!bounds(gv.at(i), r))
-			return false;
-		b |= r;
-	}
-
-	return true;
-}
-
-MapData::MapData(const QString &path): _fileName(path)
-{
-	QVector<ISO8211::Record> gv;
-	ISO8211 ddf(_fileName);
-	ISO8211::Record record;
-	uint COMF = 1;
-
-	if (!ddf.readDDR()) {
-		_errorString = ddf.errorString();
-		return;
-	}
-	while (ddf.readRecord(record)) {
-		if (!processRecord(record, gv, COMF, _name)) {
-			_errorString = "Invalid S-57 record";
-			return;
-		}
-	}
-	if (!ddf.errorString().isNull()) {
-		_errorString = ddf.errorString();
-		return;
-	}
-
-	Rect b;
-	if (!bounds(gv, b)) {
-		_errorString = "Error fetching geometries bounds";
-		return;
-	}
-	RectC br(Coordinates(b.minX() / (double)COMF, b.maxY() / (double)COMF),
-	  Coordinates(b.maxX() / (double)COMF, b.minY() / (double)COMF));
-	if (!br.isValid())
-		_errorString = "Invalid geometries bounds";
-	else
-		_bounds = br;
-}
-
-MapData::~MapData()
-{
-	LineTree::Iterator lit;
-	for (_lines.GetFirst(lit); !_lines.IsNull(lit); _lines.GetNext(lit))
-		delete _lines.GetAt(lit);
-
-	PolygonTree::Iterator ait;
-	for (_areas.GetFirst(ait); !_areas.IsNull(ait); _areas.GetNext(ait))
-		delete _areas.GetAt(ait);
-
-	PointTree::Iterator pit;
-	for (_points.GetFirst(pit); !_points.IsNull(pit); _points.GetNext(pit))
-		delete _points.GetAt(pit);
-}
-
-void MapData::load()
+MapData::MapData(const QString &path)
 {
 	RecordMap vi, vc, ve, vf;
 	QVector<ISO8211::Record> fe;
-	ISO8211 ddf(_fileName);
+	ISO8211 ddf(path);
 	ISO8211::Record record;
 	uint PRIM, OBJL, COMF = 1, SOMF = 1;
 	Poly *poly;
@@ -886,25 +789,22 @@ void MapData::load()
 	}
 }
 
-void MapData::clear()
+MapData::~MapData()
 {
 	LineTree::Iterator lit;
 	for (_lines.GetFirst(lit); !_lines.IsNull(lit); _lines.GetNext(lit))
 		delete _lines.GetAt(lit);
-	_lines.RemoveAll();
 
 	PolygonTree::Iterator ait;
 	for (_areas.GetFirst(ait); !_areas.IsNull(ait); _areas.GetNext(ait))
 		delete _areas.GetAt(ait);
-	_areas.RemoveAll();
 
 	PointTree::Iterator pit;
 	for (_points.GetFirst(pit); !_points.IsNull(pit); _points.GetNext(pit))
 		delete _points.GetAt(pit);
-	_points.RemoveAll();
 }
 
-void MapData::points(const RectC &rect, QList<Point*> *points) const
+void MapData::points(const RectC &rect, QList<Point> *points) const
 {
 	double min[2], max[2];
 
@@ -912,7 +812,7 @@ void MapData::points(const RectC &rect, QList<Point*> *points) const
 	_points.Search(min, max, pointCb, points);
 }
 
-void MapData::lines(const RectC &rect, QList<Line*> *lines) const
+void MapData::lines(const RectC &rect, QList<Line> *lines) const
 {
 	double min[2], max[2];
 
@@ -920,48 +820,10 @@ void MapData::lines(const RectC &rect, QList<Line*> *lines) const
 	_lines.Search(min, max, lineCb, lines);
 }
 
-void MapData::polygons(const RectC &rect, QList<Poly*> *polygons) const
+void MapData::polygons(const RectC &rect, QList<Poly> *polygons) const
 {
 	double min[2], max[2];
 
 	rectcBounds(rect, min, max);
 	_areas.Search(min, max, polygonCb, polygons);
-}
-
-Range MapData::zooms() const
-{
-	double size = qMin(_bounds.width(), _bounds.height());
-
-	if (size > 180)
-		return Range(0, 10);
-	else if (size > 90)
-		return Range(1, 11);
-	else if (size > 45)
-		return Range(2, 12);
-	else if (size > 22.5)
-		return Range(3, 13);
-	else if (size > 11.25)
-		return Range(4, 14);
-	else if (size > 5.625)
-		return Range(5, 15);
-	else if (size > 2.813)
-		return Range(6, 16);
-	else if (size > 1.406)
-		return Range(7, 17);
-	else if (size > 0.703)
-		return Range(8, 18);
-	else if (size > 0.352)
-		return Range(9, 19);
-	else if (size > 0.176)
-		return Range(10, 20);
-	else if (size > 0.088)
-		return Range(11, 20);
-	else if (size > 0.044)
-		return Range(12, 20);
-	else if (size > 0.022)
-		return Range(13, 20);
-	else if (size > 0.011)
-		return Range(14, 20);
-	else
-		return Range(15, 20);
 }

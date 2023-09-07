@@ -66,36 +66,27 @@ bool ISO8211::Field::subfield(const char *name, QByteArray *val, int idx) const
 	return true;
 }
 
-bool ISO8211::fieldType(const QString &str, int cnt, FieldType &type, int &size)
+ISO8211::SubFieldDefinition ISO8211::fieldType(const QString &str, int cnt,
+  const QByteArray &tag)
 {
-	if (str == "A" || str == "I" || str == "R") {
-		type = String;
-		size = cnt;
-	} else if (str == "B") {
-		type = Array;
-		size = cnt / 8;
-	} else if (str == "b11") {
-		type = U8;
-		size = 1;
-	} else if (str == "b12") {
-		type = U16;
-		size = 2;
-	} else if (str == "b14") {
-		type = U32;
-		size = 4;
-	} else if (str == "b21") {
-		type = S8;
-		size = 1;
-	} else if (str == "b22") {
-		type = S16;
-		size = 2;
-	} else if (str == "b24") {
-		type = S32;
-		size = 4;
-	} else
-		return false;
-
-	return true;
+	if (str == "A" || str == "I" || str == "R")
+		return SubFieldDefinition(tag, String, cnt);
+	else if (str == "B")
+		return SubFieldDefinition(tag, Array, cnt / 8);
+	else if (str == "b11")
+		return SubFieldDefinition(tag, U8, 1);
+	else if (str == "b12")
+		return SubFieldDefinition(tag, U16, 2);
+	else if (str == "b14")
+		return SubFieldDefinition(tag, U32, 4);
+	else if (str == "b21")
+		return SubFieldDefinition(tag, S8, 1);
+	else if (str == "b22")
+		return SubFieldDefinition(tag, S16, 2);
+	else if (str == "b24")
+		return SubFieldDefinition(tag, S32, 4);
+	else
+		return SubFieldDefinition();
 }
 
 int ISO8211::readDR(QVector<FieldDefinition> &fields)
@@ -145,6 +136,8 @@ bool ISO8211::readDDA(const FieldDefinition &def, SubFields &fields)
 {
 	static QRegularExpression re("(\\d*)(\\w+)\\(*(\\d*)\\)*");
 	QByteArray ba;
+	bool repeat = false;
+	QVector<SubFieldDefinition> defs;
 
 	ba.resize(def.size);
 	if (!(_file.seek(def.pos) && _file.read(ba.data(), ba.size()) == ba.size()))
@@ -152,7 +145,7 @@ bool ISO8211::readDDA(const FieldDefinition &def, SubFields &fields)
 
 	QList<QByteArray> list(ba.split('\x1f'));
 	if (!list.at(1).isEmpty() && list.at(1).front() == '*') {
-		fields.setRepeat(true);
+		repeat = true;
 		list[1].remove(0, 1);
 	}
 	QList<QByteArray> tags(list.at(1).split('!'));
@@ -161,7 +154,7 @@ bool ISO8211::readDDA(const FieldDefinition &def, SubFields &fields)
 		QRegularExpressionMatchIterator it = re.globalMatch(list.at(2));
 		int tag = 0;
 
-		fields.resize(tags.size());
+		defs.resize(tags.size());
 
 		while (it.hasNext()) {
 			QRegularExpressionMatch match = it.next();
@@ -183,14 +176,16 @@ bool ISO8211::readDDA(const FieldDefinition &def, SubFields &fields)
 			}
 
 			for (uint i = 0; i < cnt; i++) {
-				SubFieldDefinition &f = fields[tag];
-				f.tag = tags.at(tag);
-				if (!fieldType(typeStr, size, f.type, f.size))
+				SubFieldDefinition sfd(fieldType(typeStr, size, tags.at(tag)));
+				if (sfd.type() == Unknown)
 					return false;
+				defs[tag] = sfd;
 				tag++;
 			}
 		}
 	}
+
+	fields = SubFields(defs, repeat);
 
 	return true;
 }
@@ -228,8 +223,7 @@ bool ISO8211::readDDR()
 	return true;
 }
 
-bool ISO8211::readUDA(quint64 pos, const FieldDefinition &def,
-  const SubFields &fields, Data &data)
+bool ISO8211::readUDA(quint64 pos, const FieldDefinition &def, Data &data)
 {
 	QByteArray ba;
 
@@ -242,22 +236,19 @@ bool ISO8211::readUDA(quint64 pos, const FieldDefinition &def,
 	const char *dp = ba.constData();
 	const char *ep = ba.constData() + ba.size() - 1;
 
-	data.clear();
-	data.setFields(&fields);
-
 	do {
 		QVector<QVariant> row;
-		row.resize(fields.size());
+		row.resize(data.fields()->size());
 
-		for (int i = 0; i < fields.size(); i++) {
-			const SubFieldDefinition &f = fields.at(i);
+		for (int i = 0; i < data.fields()->size(); i++) {
+			const SubFieldDefinition &f = data.fields()->at(i);
 
-			switch (f.type) {
+			switch (f.type()) {
 				case String:
 				case Array:
-					if (f.size) {
-						row[i] = QVariant(QByteArray(dp, f.size));
-						dp += f.size;
+					if (f.size()) {
+						row[i] = QVariant(QByteArray(dp, f.size()));
+						dp += f.size();
 					} else {
 						sp = dp;
 						while (dp < ep && *dp != '\x1f')
@@ -290,11 +281,13 @@ bool ISO8211::readUDA(quint64 pos, const FieldDefinition &def,
 					row[i] = QVariant(UINT32(dp));
 					dp += 4;
 					break;
+				default:
+					return false;
 			}
 		}
 
 		data.append(row);
-	} while (fields.repeat() && dp < ep);
+	} while (data.fields()->repeat() && dp < ep);
 
 	return true;
 }
@@ -317,23 +310,33 @@ bool ISO8211::readRecord(Record &record)
 
 	for (int i = 0; i < fields.size(); i++) {
 		const FieldDefinition &def = fields.at(i);
-		Field &f = record[i];
 
 		FieldsMap::const_iterator it = _map.find(def.tag);
 		if (it == _map.constEnd()) {
-			_errorString = QString("%1: unknown record")
-			  .arg(QString(def.tag));
+			_errorString = QString("%1: unknown record").arg(QString(def.tag));
 			return false;
 		}
 
-		f.setTag(def.tag);
+		Data data(&it.value());
 
-		if (!readUDA(pos, def, it.value(), f.rdata())) {
+		if (!readUDA(pos, def, data)) {
 			_errorString = QString("Error reading %1 record")
 			  .arg(QString(def.tag));
 			return false;
 		}
+
+		record[i] = Field(def.tag, data);
 	}
 
 	return true;
+}
+
+
+const ISO8211::Field *ISO8211::field(const Record &record, const QByteArray &name)
+{
+	for (int i = 0; i < record.size(); i++)
+		if (record.at(i).tag() == name)
+			return &record.at(i);
+
+	return 0;
 }

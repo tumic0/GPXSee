@@ -1,11 +1,9 @@
 #ifndef ENC_MAPDATA_H
 #define ENC_MAPDATA_H
 
-#include <climits>
 #include "common/rectc.h"
 #include "common/rtree.h"
 #include "common/polygon.h"
-#include "common/range.h"
 #include "iso8211.h"
 
 namespace ENC {
@@ -68,55 +66,11 @@ public:
 	MapData(const QString &path);
 	~MapData();
 
-	const QString &name() const {return _name;}
-	RectC bounds() const {return _bounds;}
-	Range zooms() const;
-
-	void polygons(const RectC &rect, QList<Poly*> *polygons) const;
-	void lines(const RectC &rect, QList<Line*> *lines) const;
-	void points(const RectC &rect, QList<Point*> *points) const;
-
-	void load();
-	void clear();
-
-	bool isValid() const {return _bounds.isValid();}
-	QString errorString() const {return _errorString;}
+	void polygons(const RectC &rect, QList<Poly> *polygons) const;
+	void lines(const RectC &rect, QList<Line> *lines) const;
+	void points(const RectC &rect, QList<Point> *points) const;
 
 private:
-	class Rect {
-	public:
-		Rect()
-		  : _minX(INT_MAX), _maxX(INT_MIN), _minY(INT_MAX), _maxY(INT_MIN) {}
-		Rect(int minX, int maxX, int minY, int maxY)
-		  : _minX(minX), _maxX(maxX), _minY(minY), _maxY(maxY) {}
-
-		int minX() const {return _minX;}
-		int maxX() const {return _maxX;}
-		int minY() const {return _minY;}
-		int maxY() const {return _maxY;}
-
-		void unite(int x, int y) {
-			if (x < _minX)
-				_minX = x;
-			if (x > _maxX)
-				_maxX = x;
-			if (y < _minY)
-				_minY = y;
-			if (y > _maxY)
-				_maxY = y;
-		}
-
-		Rect &operator|=(const Rect &r) {*this = *this | r; return *this;}
-		Rect operator|(const Rect &r) const
-		{
-			return Rect(qMin(_minX, r._minX), qMax(_maxX, r._maxX),
-			  qMin(_minY, r._minY), qMax(_maxY, r._maxY));
-		}
-
-	private:
-		int _minX, _maxX, _minY, _maxY;
-	};
-
 	class Attr {
 	public:
 		Attr() : _subtype(0) {}
@@ -144,9 +98,9 @@ private:
 
 	typedef QMap<uint, ISO8211::Record> RecordMap;
 	typedef QMap<uint, ISO8211::Record>::const_iterator RecordMapIterator;
-	typedef RTree<Poly*, double, 2> PolygonTree;
-	typedef RTree<Line*, double, 2> LineTree;
-	typedef RTree<Point*, double, 2> PointTree;
+	typedef RTree<const Poly*, double, 2> PolygonTree;
+	typedef RTree<const Line*, double, 2> LineTree;
+	typedef RTree<const Point*, double, 2> PointTree;
 
 	static QVector<Sounding> soundings(const ISO8211::Record &r, uint COMF,
 	  uint SOMF);
@@ -168,21 +122,14 @@ private:
 	  const RecordMap &ve, uint COMF, uint OBJL);
 	static Poly *polyObject(const ISO8211::Record &r, const RecordMap &vc,
 	  const RecordMap &ve, uint COMF,uint OBJL);
-	static bool bounds(const ISO8211::Record &record, Rect &rect);
-	static bool bounds(const QVector<ISO8211::Record> &gv, Rect &b);
+
 	static bool processRecord(const ISO8211::Record &record,
 	  QVector<ISO8211::Record> &fe, RecordMap &vi, RecordMap &vc, RecordMap &ve,
 	  RecordMap &vf, uint &COMF, uint &SOMF);
-	static bool processRecord(const ISO8211::Record &record,
-	  QVector<ISO8211::Record> &rv, uint &COMF, QString &name);
 
-	QString _fileName;
-	QString _name;
-	RectC _bounds;
 	PolygonTree _areas;
 	LineTree _lines;
 	PointTree _points;
-	QString _errorString;
 };
 
 }

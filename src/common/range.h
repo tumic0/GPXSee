@@ -18,7 +18,6 @@ public:
 	int size() const {return (_max - _min);}
 	int min() const {return _min;}
 	int max() const {return _max;}
-	int mid() const {return _min + size()/2;}
 
 	bool isValid() const {return size() >= 0;}
 	bool isNull() const {return _min == 0 && _max == 0;}

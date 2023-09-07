@@ -17,60 +17,87 @@ namespace ENC {
 class ISO8211
 {
 public:
-	enum FieldType {String, Array, S8, S16, S32, U8, U16, U32};
+	enum FieldType {Unknown, String, Array, S8, S16, S32, U8, U16, U32};
 
-	struct FieldDefinition {
+	struct FieldDefinition
+	{
 		QByteArray tag;
 		int pos;
 		int size;
 	};
 
-	struct SubFieldDefinition {
-		QByteArray tag;
-		FieldType type;
-		int size;
-	};
-
-	class SubFields : public QVector<SubFieldDefinition>
+	class SubFieldDefinition
 	{
 	public:
-		SubFields() : QVector<SubFieldDefinition>(), _repeat(false) {}
+		SubFieldDefinition() : _type(Unknown), _size(0) {}
+		SubFieldDefinition(const QByteArray &tag, FieldType type, int size)
+		  : _tag(tag), _type(type), _size(size) {}
 
-		bool repeat() const {return _repeat;}
-		void setRepeat(bool repeat) {_repeat = repeat;}
+		const QByteArray &tag() const {return _tag;}
+		FieldType type() const {return _type;}
+		int size() const {return _size;}
 
 	private:
+		QByteArray _tag;
+		FieldType _type;
+		int _size;
+	};
+
+	class SubFields
+	{
+	public:
+		SubFields() : _repeat(false) {}
+		SubFields(const QVector<SubFieldDefinition> &defs, bool repeat)
+		  : _defs(defs), _repeat(repeat) {}
+
+		int size() const {return _defs.size();}
+		const SubFieldDefinition &at(int i) const {return _defs.at(i);}
+
+		bool repeat() const {return _repeat;}
+
+	private:
+		QVector<SubFieldDefinition> _defs;
 		bool _repeat;
 	};
 
-	class Data : public QVector<QVector<QVariant> >
+	class Data
 	{
 	public:
-		Data() : QVector<QVector<QVariant> >(), _fields(0) {}
+		Data() : _fields(0) {}
+		Data(const SubFields *fields) : _fields(fields) {}
 
-		void setFields(const SubFields *fields) {_fields = fields;}
+		int size() const {return _data.size();}
+		const QVector<QVariant> &at(int i) const {return _data.at(i);}
 
+		const SubFields *fields() const {return _fields;}
 		const QVariant *field(const QByteArray &name, int idx = 0) const
 		{
-			const QVector<QVariant> &v = at(idx);
+			const QVector<QVariant> &v = _data.at(idx);
 
 			for (int i = 0; i < _fields->size(); i++)
-				if (_fields->at(i).tag == name)
+				if (_fields->at(i).tag() == name)
 					return &v.at(i);
 
 			return 0;
 		}
 
 	private:
+		friend class ISO8211;
+
+		void append(QVector<QVariant> &row) {_data.append(row);}
+
+		QVector<QVector<QVariant> > _data;
 		const SubFields *_fields;
 	};
 
 	class Field
 	{
 	public:
+		Field() {}
+		Field(const QByteArray &tag, const Data &data)
+		  : _tag(tag), _data(data) {}
+
 		const QByteArray &tag() const {return _tag;}
-		void setTag(const QByteArray &tag) {_tag = tag;}
-		Data &rdata() {return _data;}
 		const Data &data() const {return _data;}
 
 		bool subfield(const char *name, int *val, int idx = 0) const;
@@ -82,17 +109,7 @@ public:
 		Data _data;
 	};
 
-	class Record : public QVector<Field>
-	{
-	public:
-		const Field *field(const QByteArray &name) const
-		{
-			for (int i = 0; i < size(); i++)
-				if (at(i).tag() == name)
-					return &at(i);
-			return 0;
-		}
-	};
+	typedef QVector<Field> Record;
 
 	ISO8211(const QString &path) : _file(path) {}
 	bool readDDR();
@@ -100,16 +117,17 @@ public:
 
 	const QString &errorString() const {return _errorString;}
 
+	static const Field *field(const Record &record, const QByteArray &name);
+
 private:
 	typedef QMap<QByteArray, SubFields> FieldsMap;
 
-	static bool fieldType(const QString &str, int cnt, FieldType &type,
-	  int &size);
+	static SubFieldDefinition fieldType(const QString &str, int cnt,
+	  const QByteArray &tag);
 
 	int readDR(QVector<FieldDefinition> &fields);
 	bool readDDA(const FieldDefinition &def, SubFields &fields);
-	bool readUDA(quint64 pos, const FieldDefinition &def,
-	  const SubFields &fields, Data &data);
+	bool readUDA(quint64 pos, const FieldDefinition &def, Data &data);
 
 	QFile _file;
 	FieldsMap _map;
@@ -119,20 +137,20 @@ private:
 #ifndef QT_NO_DEBUG
 inline QDebug operator<<(QDebug dbg, const ISO8211::FieldDefinition &def)
 {
-	dbg.nospace() << "Field(" << def.tag << ", " << def.size << ")";
+	dbg.nospace() << "FieldDefinition(" << def.tag << ", " << def.size << ")";
 	return dbg.space();
 }
 
 inline QDebug operator<<(QDebug dbg, const ISO8211::SubFieldDefinition &def)
 {
-	dbg.nospace() << "SubField(" << def.tag << ", " << def.type << ", "
-	  << def.size << ")";
+	dbg.nospace() << "SubField(" << def.tag() << ", " << def.type() << ", "
+	  << def.size() << ")";
 	return dbg.space();
 }
 
 inline QDebug operator<<(QDebug dbg, const ISO8211::Field &field)
 {
-	dbg.nospace() << "Field(" << field.tag() /*<< ", " << field.data()*/ << ")";
+	dbg.nospace() << "Field(" << field.tag() << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG

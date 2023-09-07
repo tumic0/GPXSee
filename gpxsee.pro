@@ -122,12 +122,15 @@ HEADERS += src/common/config.h \
     src/data/twonavparser.h \
     src/map/ENC/attributes.h \
     src/map/ENC/mapdata.h \
+    src/map/ENC/atlasdata.h \
     src/map/ENC/objects.h \
     src/map/ENC/rastertile.h \
     src/map/ENC/style.h \
     src/map/IMG/section.h \
     src/map/IMG/zoom.h \
     src/map/conversion.h \
+    src/map/encatlas.h \
+    src/map/encjob.h \
     src/map/encmap.h \
     src/map/ENC/iso8211.h \
     src/map/gemfmap.h \
@@ -335,10 +338,12 @@ SOURCES += src/main.cpp \
     src/GUI/projectioncombobox.cpp \
     src/GUI/passwordedit.cpp \
     src/data/twonavparser.cpp \
+    src/map/ENC/atlasdata.cpp \
     src/map/ENC/mapdata.cpp \
     src/map/ENC/rastertile.cpp \
     src/map/ENC/style.cpp \
     src/map/conversion.cpp \
+    src/map/encatlas.cpp \
     src/map/encmap.cpp \
     src/map/ENC/iso8211.cpp \
     src/map/gemfmap.cpp \

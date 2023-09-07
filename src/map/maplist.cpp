@@ -20,6 +20,7 @@
 #include "gemfmap.h"
 #include "oruxmap.h"
 #include "encmap.h"
+#include "encatlas.h"
 #include "invalidmap.h"
 #include "maplist.h"
 
@@ -56,6 +57,7 @@ MapList::ParserMap MapList::parsers()
 	map.insert("gemf", &GEMFMap::create);
 	map.insert("otrk2.xml", &OruxMap::create);
 	map.insert("000", &ENCMap::create);
+	map.insert("031", &ENCAtlas::create);
 
 	return map;
 }
@@ -153,7 +155,8 @@ QString MapList::formats()
 	return
 	  qApp->translate("MapList", "Supported files")
 		+ " (" + filter().join(" ") + ");;"
-	  + qApp->translate("MapList", "Electronic Navigational Charts") + " (*.000);;"
+	  + qApp->translate("MapList", "Electronic Navigational Charts")
+		+ " (*.000 *.031);;"
 	  + qApp->translate("MapList", "AlpineQuest maps") + " (*.aqm);;"
 	  + qApp->translate("MapList", "GEMF maps") + " (*.gemf);;"
 	  + qApp->translate("MapList", "Garmin IMG maps")
