@@ -695,12 +695,28 @@
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
-				<string>application/vnd.iho.s57</string>
+				<string>application/vnd.iho.s57-data</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>icons/000.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>IHO S-57 Electronic Navigation Chart</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>031</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.iho.s57-catalogue</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/031.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>IHO S-57 Electronic Navigation Catalogue</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
@@ -1609,7 +1625,7 @@
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
-			<string>int.iho.s57</string>
+			<string>int.iho.s57-data</string>
 			<key>UTTypeReferenceURL</key>
 			<string>https://iho.int/uploads/user/pubs/standards/s-57/31Main.pdf</string>
 			<key>UTTypeDescription</key>
@@ -1625,7 +1641,28 @@
 					<string>000</string>
 				</array>
 				<key>public.mime-type</key>
-				<string>application/vnd.iho.s57</string>
+				<string>application/vnd.iho.s57-data</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>int.iho.s57-catalogue</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://iho.int/uploads/user/pubs/standards/s-57/31Main.pdf</string>
+			<key>UTTypeDescription</key>
+			<string>IHO S-57 Electronic Navigation Catalogue</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>031</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.iho.s57-catalogue</string>
 			</dict>
 		</dict>
 	</array>
