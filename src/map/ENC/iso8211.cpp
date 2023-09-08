@@ -28,12 +28,23 @@ struct DR {
 	char FieldTagSize;
 };
 
+
+const QVariant *ISO8211::Field::data(const QByteArray &name, int idx) const
+{
+	const QVector<QVariant> &v = _data.at(idx);
+
+	for (int i = 0; i < _subFields.size(); i++)
+		if (_subFields.at(i) == name)
+			return &v.at(i);
+
+	return 0;
+}
+
 bool ISO8211::Field::subfield(const char *name, int *val, int idx) const
 {
-	const QVariant *v;
 	bool ok;
 
-	v = data().field(name, idx);
+	const QVariant *v = data(name, idx);
 	if (!v)
 		return false;
 	*val = v->toInt(&ok);
@@ -43,10 +54,9 @@ bool ISO8211::Field::subfield(const char *name, int *val, int idx) const
 
 bool ISO8211::Field::subfield(const char *name, uint *val, int idx) const
 {
-	const QVariant *v;
 	bool ok;
 
-	v = data().field(name, idx);
+	const QVariant *v = data(name, idx);
 	if (!v)
 		return false;
 	*val = v->toUInt(&ok);
@@ -56,9 +66,7 @@ bool ISO8211::Field::subfield(const char *name, uint *val, int idx) const
 
 bool ISO8211::Field::subfield(const char *name, QByteArray *val, int idx) const
 {
-	const QVariant *v;
-
-	v = data().field(name, idx);
+	const QVariant *v = data(name, idx);
 	if (!v)
 		return false;
 	*val = v->toByteArray();
@@ -66,25 +74,24 @@ bool ISO8211::Field::subfield(const char *name, QByteArray *val, int idx) const
 	return true;
 }
 
-ISO8211::SubFieldDefinition ISO8211::fieldType(const QString &str, int cnt,
-  const QByteArray &tag)
+ISO8211::SubFieldDefinition ISO8211::fieldType(const QString &str, int cnt)
 {
 	if (str == "A" || str == "I" || str == "R")
-		return SubFieldDefinition(tag, String, cnt);
+		return SubFieldDefinition(String, cnt);
 	else if (str == "B")
-		return SubFieldDefinition(tag, Array, cnt / 8);
+		return SubFieldDefinition(Array, cnt / 8);
 	else if (str == "b11")
-		return SubFieldDefinition(tag, U8, 1);
+		return SubFieldDefinition(U8, 1);
 	else if (str == "b12")
-		return SubFieldDefinition(tag, U16, 2);
+		return SubFieldDefinition(U16, 2);
 	else if (str == "b14")
-		return SubFieldDefinition(tag, U32, 4);
+		return SubFieldDefinition(U32, 4);
 	else if (str == "b21")
-		return SubFieldDefinition(tag, S8, 1);
+		return SubFieldDefinition(S8, 1);
 	else if (str == "b22")
-		return SubFieldDefinition(tag, S16, 2);
+		return SubFieldDefinition(S16, 2);
 	else if (str == "b24")
-		return SubFieldDefinition(tag, S32, 4);
+		return SubFieldDefinition(S32, 4);
 	else
 		return SubFieldDefinition();
 }
@@ -138,6 +145,7 @@ bool ISO8211::readDDA(const FieldDefinition &def, SubFields &fields)
 	QByteArray ba;
 	bool repeat = false;
 	QVector<SubFieldDefinition> defs;
+	QVector<QByteArray> defTags;
 
 	ba.resize(def.size);
 	if (!(_file.seek(def.pos) && _file.read(ba.data(), ba.size()) == ba.size()))
@@ -155,6 +163,7 @@ bool ISO8211::readDDA(const FieldDefinition &def, SubFields &fields)
 		int tag = 0;
 
 		defs.resize(tags.size());
+		defTags.resize(tags.size());
 
 		while (it.hasNext()) {
 			QRegularExpressionMatch match = it.next();
@@ -176,16 +185,17 @@ bool ISO8211::readDDA(const FieldDefinition &def, SubFields &fields)
 			}
 
 			for (uint i = 0; i < cnt; i++) {
-				SubFieldDefinition sfd(fieldType(typeStr, size, tags.at(tag)));
+				SubFieldDefinition sfd(fieldType(typeStr, size));
 				if (sfd.type() == Unknown)
 					return false;
 				defs[tag] = sfd;
+				defTags[tag] = tags.at(tag);
 				tag++;
 			}
 		}
 	}
 
-	fields = SubFields(defs, repeat);
+	fields = SubFields(defTags, defs, repeat);
 
 	return true;
 }
@@ -223,7 +233,8 @@ bool ISO8211::readDDR()
 	return true;
 }
 
-bool ISO8211::readUDA(quint64 pos, const FieldDefinition &def, Data &data)
+bool ISO8211::readUDA(quint64 pos, const FieldDefinition &def,
+  const QVector<SubFieldDefinition> &fields, bool repeat, Data &data)
 {
 	QByteArray ba;
 
@@ -238,10 +249,10 @@ bool ISO8211::readUDA(quint64 pos, const FieldDefinition &def, Data &data)
 
 	do {
 		QVector<QVariant> row;
-		row.resize(data.fields()->size());
+		row.resize(fields.size());
 
-		for (int i = 0; i < data.fields()->size(); i++) {
-			const SubFieldDefinition &f = data.fields()->at(i);
+		for (int i = 0; i < fields.size(); i++) {
+			const SubFieldDefinition &f = fields.at(i);
 
 			switch (f.type()) {
 				case String:
@@ -287,7 +298,7 @@ bool ISO8211::readUDA(quint64 pos, const FieldDefinition &def, Data &data)
 		}
 
 		data.append(row);
-	} while (data.fields()->repeat() && dp < ep);
+	} while (repeat && dp < ep);
 
 	return true;
 }
@@ -299,9 +310,9 @@ bool ISO8211::readRecord(Record &record)
 
 	QVector<FieldDefinition> fields;
 	qint64 pos = _file.pos();
-	int len = readDR(fields);
 
-	if (len < 0) {
+
+	if (readDR(fields) < 0) {
 		_errorString = "Error reading DR";
 		return false;
 	}
@@ -310,6 +321,7 @@ bool ISO8211::readRecord(Record &record)
 
 	for (int i = 0; i < fields.size(); i++) {
 		const FieldDefinition &def = fields.at(i);
+		Data data;
 
 		FieldsMap::const_iterator it = _map.find(def.tag);
 		if (it == _map.constEnd()) {
@@ -317,15 +329,13 @@ bool ISO8211::readRecord(Record &record)
 			return false;
 		}
 
-		Data data(&it.value());
-
-		if (!readUDA(pos, def, data)) {
+		if (!readUDA(pos, def, it->defs(), it->repeat(), data)) {
 			_errorString = QString("Error reading %1 record")
 			  .arg(QString(def.tag));
 			return false;
 		}
 
-		record[i] = Field(def.tag, data);
+		record[i] = Field(def.tag, it->tags(), data);
 	}
 
 	return true;

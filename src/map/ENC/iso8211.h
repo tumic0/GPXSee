@@ -17,87 +17,17 @@ namespace ENC {
 class ISO8211
 {
 public:
-	enum FieldType {Unknown, String, Array, S8, S16, S32, U8, U16, U32};
-
-	struct FieldDefinition
-	{
-		QByteArray tag;
-		int pos;
-		int size;
-	};
-
-	class SubFieldDefinition
-	{
-	public:
-		SubFieldDefinition() : _type(Unknown), _size(0) {}
-		SubFieldDefinition(const QByteArray &tag, FieldType type, int size)
-		  : _tag(tag), _type(type), _size(size) {}
-
-		const QByteArray &tag() const {return _tag;}
-		FieldType type() const {return _type;}
-		int size() const {return _size;}
-
-	private:
-		QByteArray _tag;
-		FieldType _type;
-		int _size;
-	};
-
-	class SubFields
-	{
-	public:
-		SubFields() : _repeat(false) {}
-		SubFields(const QVector<SubFieldDefinition> &defs, bool repeat)
-		  : _defs(defs), _repeat(repeat) {}
-
-		int size() const {return _defs.size();}
-		const SubFieldDefinition &at(int i) const {return _defs.at(i);}
-
-		bool repeat() const {return _repeat;}
-
-	private:
-		QVector<SubFieldDefinition> _defs;
-		bool _repeat;
-	};
-
-	class Data
-	{
-	public:
-		Data() : _fields(0) {}
-		Data(const SubFields *fields) : _fields(fields) {}
-
-		int size() const {return _data.size();}
-		const QVector<QVariant> &at(int i) const {return _data.at(i);}
-
-		const SubFields *fields() const {return _fields;}
-		const QVariant *field(const QByteArray &name, int idx = 0) const
-		{
-			const QVector<QVariant> &v = _data.at(idx);
-
-			for (int i = 0; i < _fields->size(); i++)
-				if (_fields->at(i).tag() == name)
-					return &v.at(i);
-
-			return 0;
-		}
-
-	private:
-		friend class ISO8211;
-
-		void append(QVector<QVariant> &row) {_data.append(row);}
-
-		QVector<QVector<QVariant> > _data;
-		const SubFields *_fields;
-	};
+	typedef QVector<QVector<QVariant> > Data;
 
 	class Field
 	{
 	public:
 		Field() {}
-		Field(const QByteArray &tag, const Data &data)
-		  : _tag(tag), _data(data) {}
+		Field(const QByteArray &tag, const QVector<QByteArray> &subFields,
+		  const Data &data) : _tag(tag), _subFields(subFields), _data(data) {}
 
 		const QByteArray &tag() const {return _tag;}
+		const QVector<QByteArray> subFields() const {return _subFields;}
 		const Data &data() const {return _data;}
 
 		bool subfield(const char *name, int *val, int idx = 0) const;
@@ -105,7 +35,10 @@ public:
 		bool subfield(const char *name, QByteArray *val, int idx = 0) const;
 
 	private:
+		const QVariant *data(const QByteArray &name, int idx = 0) const;
+
 		QByteArray _tag;
+		QVector<QByteArray> _subFields;
 		Data _data;
 	};
 
@@ -120,14 +53,57 @@ public:
 	static const Field *field(const Record &record, const QByteArray &name);
 
 private:
+	enum FieldType {Unknown, String, Array, S8, S16, S32, U8, U16, U32};
+
+	struct FieldDefinition
+	{
+		QByteArray tag;
+		int pos;
+		int size;
+	};
+
+	class SubFieldDefinition
+	{
+	public:
+		SubFieldDefinition() : _type(Unknown), _size(0) {}
+		SubFieldDefinition(FieldType type, int size)
+		  : _type(type), _size(size) {}
+
+		FieldType type() const {return _type;}
+		int size() const {return _size;}
+
+	private:
+		FieldType _type;
+		int _size;
+	};
+
+	class SubFields
+	{
+	public:
+		SubFields() : _repeat(false) {}
+		SubFields(const QVector<QByteArray> &tags,
+		  const QVector<SubFieldDefinition> &defs, bool repeat)
+		  : _tags(tags), _defs(defs), _repeat(repeat) {}
+
+		const QVector<QByteArray> &tags() const {return _tags;}
+		const QVector<SubFieldDefinition> &defs() const {return _defs;}
+
+		bool repeat() const {return _repeat;}
+
+	private:
+		QVector<QByteArray> _tags;
+		QVector<SubFieldDefinition> _defs;
+		bool _repeat;
+	};
+
 	typedef QMap<QByteArray, SubFields> FieldsMap;
 
-	static SubFieldDefinition fieldType(const QString &str, int cnt,
-	  const QByteArray &tag);
+	static SubFieldDefinition fieldType(const QString &str, int cnt);
 
 	int readDR(QVector<FieldDefinition> &fields);
 	bool readDDA(const FieldDefinition &def, SubFields &fields);
-	bool readUDA(quint64 pos, const FieldDefinition &def, Data &data);
+	bool readUDA(quint64 pos, const FieldDefinition &def,
+	  const QVector<SubFieldDefinition> &fields, bool repeat, Data &data);
 
 	QFile _file;
 	FieldsMap _map;
@@ -135,22 +111,9 @@ private:
 };
 
 #ifndef QT_NO_DEBUG
-inline QDebug operator<<(QDebug dbg, const ISO8211::FieldDefinition &def)
-{
-	dbg.nospace() << "FieldDefinition(" << def.tag << ", " << def.size << ")";
-	return dbg.space();
-}
-
-inline QDebug operator<<(QDebug dbg, const ISO8211::SubFieldDefinition &def)
-{
-	dbg.nospace() << "SubField(" << def.tag() << ", " << def.type() << ", "
-	  << def.size() << ")";
-	return dbg.space();
-}
-
 inline QDebug operator<<(QDebug dbg, const ISO8211::Field &field)
 {
-	dbg.nospace() << "Field(" << field.tag() << ")";
+	dbg.nospace() << "Field(" << field.tag() << ", " << field.subFields() << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG
