@@ -188,6 +188,7 @@
 		<file alias="radar.png">icons/map/marine/radar.png</file>
 		<file alias="radar-transponder.png">icons/map/marine/radar-transponder.png</file>
 		<file alias="silo.png">icons/map/marine/silo.png</file>
+		<file alias="tank.png">icons/map/marine/tank.png</file>
 		<file alias="turning-basin.png">icons/map/marine/turning-basin.png</file>
 		<file alias="entry-prohibited-line.png">icons/map/marine/entry-prohibited-line.png</file>
 		<file alias="safety-zone-line.png">icons/map/marine/safety-zone-line.png</file>

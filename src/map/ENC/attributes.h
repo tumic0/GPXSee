@@ -11,6 +11,7 @@
 #define CATTRK 54
 #define CATREA 56
 #define CATSIT 61
+#define CATSIL 63
 #define CATSCF 65
 #define CATWAT 69
 #define CATWRK 71

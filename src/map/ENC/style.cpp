@@ -254,7 +254,11 @@ void Style::pointStyle()
 	_points[TYPE(RDOSTA)] = Point(QImage(":/marine/radio.png"));
 	_points[TYPE(RADSTA)] = Point(QImage(":/marine/radar.png"));
 	_points[TYPE(RTPBCN)] = Point(QImage(":/marine/radar-transponder.png"));
-	_points[TYPE(SILTNK)] = Point(QImage(":/marine/silo.png"));
+	_points[SUBTYPE(SILTNK, 0)] = Point(QImage(":/marine/silo.png"));
+	_points[SUBTYPE(SILTNK, 1)] = Point(QImage(":/marine/silo.png"));
+	_points[SUBTYPE(SILTNK, 2)] = Point(QImage(":/marine/tank.png"));
+	_points[SUBTYPE(SILTNK, 3)] = Point(QImage(":/marine/silo.png"));
+	_points[SUBTYPE(SILTNK, 4)] = Point(QImage(":/marine/silo.png"));
 	_points[TYPE(I_TRNBSN)] = Point(QImage(":/marine/turning-basin.png"));
 	_points[TYPE(I_TRNBSN)].setTextColor(QColor("#eb49eb"));
 	_points[TYPE(I_WTWGAG)] = Point(QImage(":/marine/gauge.png"), Small);
