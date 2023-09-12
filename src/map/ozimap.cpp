@@ -16,6 +16,17 @@
 #include "ozimap.h"
 
 
+static QString mapFile(const QStringList &files)
+{
+	for (int i = 0; i < files.size(); i++) {
+		QFileInfo fi(files.at(i));
+		if (fi.path() == "." && fi.suffix() == "map")
+			return files.at(i);
+	}
+
+	return QString();
+}
+
 OziMap::OziMap(const QString &fileName, bool TAR, QObject *parent)
   : Map(fileName, parent), _img(0), _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0),
   _valid(false)
@@ -29,12 +40,14 @@ OziMap::OziMap(const QString &fileName, bool TAR, QObject *parent)
 			return;
 		}
 
-		QString mapFileName = fi.completeBaseName() + ".map";
-		QByteArray ba = _tar->file(mapFileName);
-		if (ba.isNull()) {
-			_errorString = "Map file not found";
+		QStringList files(_tar->files());
+		QString mapFileName(mapFile(files));
+		if (mapFileName.isNull()) {
+			_errorString = "No map file found in tar file";
 			return;
 		}
+
+		QByteArray ba(_tar->file(mapFileName));
 		QBuffer buffer(&ba);
 		MapFile mf(buffer);
 		if (!mf.isValid()) {
@@ -48,7 +61,7 @@ OziMap::OziMap(const QString &fileName, bool TAR, QObject *parent)
 			_transform = mf.transform();
 		}
 
-		if (!setTileInfo(_tar->files()))
+		if (!setTileInfo(files))
 			return;
 
 		_tar->close();
