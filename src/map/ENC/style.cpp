@@ -104,6 +104,8 @@ void Style::polygonStyle()
 	_polygons[SUBTYPE(MARKUL, 3)] = Polygon(QImage(":/marine/fishing-farm-line.png"));
 	_polygons[SUBTYPE(I_BERTHS, 6)] = Polygon(Qt::NoBrush, QPen(QColor("#eb49eb"),
 	  1, Qt::DashLine));
+	_polygons[TYPE(CONZNE)] = Polygon(Qt::NoBrush, QPen(QColor("#eb49eb"), 1,
+	  Qt::DashDotLine));
 
 	_drawOrder
 	  << TYPE(M_COVR) << TYPE(LNDARE) << SUBTYPE(DEPARE, 0)
@@ -122,7 +124,7 @@ void Style::polygonStyle()
 	  << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2) << SUBTYPE(I_RESARE, 2)
 	  << SUBTYPE(RESARE, 17) << SUBTYPE(I_RESARE, 17) << SUBTYPE(RESARE, 12)
 	  << SUBTYPE(I_RESARE, 12) << SUBTYPE(RESARE, 1) << TYPE(CBLARE)
-	  << TYPE(PIPARE) << TYPE(PRCARE) << SUBTYPE(MARKUL, 3);
+	  << TYPE(PIPARE) << TYPE(PRCARE) << SUBTYPE(MARKUL, 3) << TYPE(CONZNE);
 }
 
 void Style::lineStyle()

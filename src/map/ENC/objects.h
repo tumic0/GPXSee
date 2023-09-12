@@ -25,6 +25,7 @@
 #define CANALS 23
 #define CGUSTA 29
 #define COALNE 30
+#define CONZNE 31
 #define CONVYR 34
 #define CRANES 35
 #define CURENT 36
