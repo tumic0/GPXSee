@@ -27,6 +27,34 @@ static bool yCmp(OziMap *m1, OziMap *m2)
 	return TL(m1).y() > TL(m2).y();
 }
 
+static QString calibrationFile(const QString &path)
+{
+	QDir dir(path);
+	QFileInfoList files = dir.entryInfoList(QDir::Files);
+
+	for (int i = 0; i < files.size(); i++) {
+		const QFileInfo &fi = files.at(i);
+		QString suffix(fi.suffix().toLower());
+
+		if (suffix == "map" || suffix == "gmi")
+			return fi.absoluteFilePath();
+	}
+
+	return QString();
+}
+
+static QString tbaFile(const QStringList &files)
+{
+	for (int i = 0; i < files.size(); i++) {
+		QFileInfo fi(files.at(i));
+
+		if (fi.path() == "." && fi.suffix().toLower() == "tba")
+			return files.at(i);
+	}
+
+	return QString();
+}
+
 void Atlas::computeZooms()
 {
 	std::sort(_maps.begin(), _maps.end(), resCmp);
@@ -86,7 +114,11 @@ Atlas::Atlas(const QString &fileName, bool TAR, QObject *parent)
 			_errorString = "Error reading tar file";
 			return;
 		}
-		QString tbaFileName = fi.completeBaseName() + ".tba";
+		QString tbaFileName(tbaFile(tar.files()));
+		if (tbaFileName.isNull()) {
+			_errorString = "No tba file found";
+			return;
+		}
 		ba = tar.file(tbaFileName);
 	} else {
 		QFile tbaFile(fileName);
@@ -97,7 +129,7 @@ Atlas::Atlas(const QString &fileName, bool TAR, QObject *parent)
 		ba = tbaFile.readAll();
 	}
 	if (!ba.startsWith("Atlas 1.0")) {
-		_errorString = "Missing or invalid tba file";
+		_errorString = "Invalid tba file";
 		return;
 	}
 
@@ -108,20 +140,23 @@ Atlas::Atlas(const QString &fileName, bool TAR, QObject *parent)
 		QFileInfoList maps = zdir.entryInfoList(QDir::Dirs
 		  | QDir::NoDotAndDotDot);
 		for (int i = 0; i < maps.count(); i++) {
-			QString mapFile = maps.at(i).absoluteFilePath() + "/"
-			  + maps.at(i).fileName() + ".map";
-
 			OziMap *map;
-			if (tar.isOpen())
-				map = new OziMap(mapFile, tar, this);
-			else
-				map = new OziMap(mapFile, TAR, this);
+			if (TAR)
+				map = new OziMap(maps.at(i).absoluteFilePath(), tar, this);
+			else {
+				QString cf(calibrationFile(maps.at(i).absoluteFilePath()));
+				if (cf.isNull()) {
+					_errorString = "No calibration file found";
+					return;
+				}
+				map = new OziMap(cf, this);
+			}
 
 			if (map->isValid())
 				_maps.append(map);
 			else {
-				_errorString = QString("Error loading map: %1: %2")
-				  .arg(mapFile, map->errorString());
+				_errorString = QString("%1: %2")
+				  .arg(map->path(), map->errorString());
 				return;
 			}
 		}

@@ -134,6 +134,7 @@ HEADERS += src/common/config.h \
     src/map/encmap.h \
     src/map/ENC/iso8211.h \
     src/map/gemfmap.h \
+    src/map/gmifile.h \
     src/map/oruxmap.h \
     src/map/osmdroidmap.h \
     src/map/proj/polyconic.h \
@@ -347,6 +348,7 @@ SOURCES += src/main.cpp \
     src/map/encmap.cpp \
     src/map/ENC/iso8211.cpp \
     src/map/gemfmap.cpp \
+    src/map/gmifile.cpp \
     src/map/oruxmap.cpp \
     src/map/osmdroidmap.cpp \
     src/map/proj/polyconic.cpp \

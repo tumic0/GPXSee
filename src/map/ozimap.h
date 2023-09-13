@@ -14,8 +14,8 @@ class OziMap : public Map
 	Q_OBJECT
 
 public:
-	OziMap(const QString &fileName, bool TAR, QObject *parent = 0);
-	OziMap(const QString &fileName, Tar &tar, QObject *parent = 0);
+	OziMap(const QString &fileName, QObject *parent = 0);
+	OziMap(const QString &dirName, Tar &tar, QObject *parent = 0);
 	~OziMap();
 
 	QString name() const {return _name;}
@@ -51,6 +51,10 @@ public:
 	static Map *createMAP(const QString &path, bool *isDir);
 
 private:
+	enum CalibrationType {
+		Unknown, MAP, GMI
+	};
+
 	struct ImageInfo {
 		QSize size;
 		QString path;
@@ -67,6 +71,9 @@ private:
 
 	void rescale(int zoom);
 
+	static QString calibrationFile(const QStringList &files, const QString path,
+	  CalibrationType &type);
+
 	QString _name;
 	Projection _projection;
 	Transform _transform;
@@ -77,6 +84,7 @@ private:
 	int _zoom;
 	QPointF _scale;
 	qreal _mapRatio;
+	bool _hasProj;
 
 	bool _valid;
 	QString _errorString;

@@ -43,6 +43,7 @@ MapList::ParserMap MapList::parsers()
 	map.insert("rtmap", &RMap::create);
 	map.insert("map", &MapsforgeMap::create);
 	map.insert("map", &OziMap::createMAP);
+	map.insert("gmi", &OziMap::createMAP);
 	map.insert("kap", &BSBMap::create);
 	map.insert("kmz", &KMZMap::create);
 	map.insert("aqm", &AQMMap::create);
@@ -173,7 +174,8 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "Osmdroid SQLite maps") + " (*.sqlite);;"
 	  + qApp->translate("MapList", "Locus/OsmAnd/RMaps SQLite maps")
 		+ " (*.sqlitedb);;"
-	  + qApp->translate("MapList", "TrekBuddy maps/atlases") + " (*.tar *.tba);;"
+	  + qApp->translate("MapList", "TrekBuddy maps/atlases")
+		+ " (*.tar *.tba *.gmi *.map);;"
 	  + qApp->translate("MapList", "GeoTIFF images") + " (*.tif *.tiff);;"
 	  + qApp->translate("MapList", "World-file georeferenced images")
 	    + " (*.wld *.jgw *.gfw *.pgw *.tfw);;"

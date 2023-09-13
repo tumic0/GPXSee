@@ -12,53 +12,83 @@
 #include "ozf.h"
 #include "image.h"
 #include "mapfile.h"
+#include "gmifile.h"
 #include "rectd.h"
 #include "ozimap.h"
 
 
-static QString mapFile(const QStringList &files)
+QString OziMap::calibrationFile(const QStringList &files, const QString path,
+  CalibrationType &type)
 {
 	for (int i = 0; i < files.size(); i++) {
 		QFileInfo fi(files.at(i));
-		if (fi.path() == "." && fi.suffix() == "map")
-			return files.at(i);
+		QString suffix(fi.suffix().toLower());
+
+		if (path.endsWith(fi.path())) {
+			if (suffix == "map") {
+				type = MAP;
+				return files.at(i);
+			} else if (suffix == "gmi") {
+				type = GMI;
+				return files.at(i);
+			}
+		}
 	}
 
+	type = Unknown;
 	return QString();
 }
 
-OziMap::OziMap(const QString &fileName, bool TAR, QObject *parent)
+OziMap::OziMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _img(0), _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0),
-  _valid(false)
+  _hasProj(true), _valid(false)
 {
 	QFileInfo fi(fileName);
+	QString suffix(fi.suffix().toLower());
 
-	if (TAR) {
+	if (suffix == "tar") {
+		CalibrationType type;
+
 		_tar = new Tar(fileName);
 		if (!_tar->open()) {
 			_errorString = "Error reading tar file";
 			return;
 		}
-
 		QStringList files(_tar->files());
-		QString mapFileName(mapFile(files));
-		if (mapFileName.isNull()) {
-			_errorString = "No map file found in tar file";
-			return;
-		}
+		QString cf(calibrationFile(files, ".", type));
 
-		QByteArray ba(_tar->file(mapFileName));
-		QBuffer buffer(&ba);
-		MapFile mf(buffer);
-		if (!mf.isValid()) {
-			_errorString = mf.errorString();
-			return;
+		if (type == GMI) {
+			QByteArray ba(_tar->file(cf));
+			QBuffer buffer(&ba);
+			GmiFile gmi(buffer);
+			if (!gmi.isValid()) {
+				_errorString = gmi.errorString();
+				return;
+			} else {
+				_name = Util::file2name(fileName);
+				_map.size = gmi.size();
+				_map.path = gmi.image();
+				_transform = gmi.transform();
+				_projection = Projection(GCS::WGS84());
+				_hasProj = false;
+			}
+		} else if (type == MAP) {
+			QByteArray ba(_tar->file(cf));
+			QBuffer buffer(&ba);
+			MapFile mf(buffer);
+			if (!mf.isValid()) {
+				_errorString = mf.errorString();
+				return;
+			} else {
+				_name = mf.name();
+				_map.size = mf.size();
+				_map.path = mf.image();
+				_projection = mf.projection();
+				_transform = mf.transform();
+			}
 		} else {
-			_name = mf.name();
-			_map.size = mf.size();
-			_map.path = mf.image();
-			_projection = mf.projection();
-			_transform = mf.transform();
+			_errorString = "No calibration file found";
+			return;
 		}
 
 		if (!setTileInfo(files))
@@ -67,16 +97,35 @@ OziMap::OziMap(const QString &fileName, bool TAR, QObject *parent)
 		_tar->close();
 	} else {
 		QFile file(fileName);
-		MapFile mf(file);
-		if (!mf.isValid()) {
-			_errorString = mf.errorString();
-			return;
+
+		if (suffix == "map") {
+			MapFile mf(file);
+			if (!mf.isValid()) {
+				_errorString = mf.errorString();
+				return;
+			} else {
+				_name = mf.name();
+				_map.size = mf.size();
+				_map.path = mf.image();
+				_projection = mf.projection();
+				_transform = mf.transform();
+			}
+		} else if (suffix == "gmi") {
+			GmiFile gmi(file);
+			if (!gmi.isValid()) {
+				_errorString = gmi.errorString();
+				return;
+			} else {
+				_name = Util::file2name(fileName);
+				_map.size = gmi.size();
+				_map.path = gmi.image();
+				_transform = gmi.transform();
+				_projection = Projection(GCS::WGS84());
+				_hasProj = false;
+			}
 		} else {
-			_name = mf.name();
-			_map.size = mf.size();
-			_map.path = mf.image();
-			_projection = mf.projection();
-			_transform = mf.transform();
+			_errorString = "Unknown file type";
+			return;
 		}
 
 		QDir set(fi.absolutePath() + "/" + "set");
@@ -92,33 +141,48 @@ OziMap::OziMap(const QString &fileName, bool TAR, QObject *parent)
 	_valid = true;
 }
 
-OziMap::OziMap(const QString &fileName, Tar &tar, QObject *parent)
-  : Map(fileName, parent), _img(0), _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0),
-  _valid(false)
+OziMap::OziMap(const QString &dirName, Tar &tar, QObject *parent)
+  : Map(dirName, parent), _img(0), _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0),
+  _hasProj(true), _valid(false)
 {
-	QFileInfo fi(fileName);
-	QFileInfo map(fi.absolutePath());
-	QFileInfo layer(map.absolutePath());
-	QString mapFile = layer.fileName() + "/" + map.fileName() + "/"
-	  + fi.fileName();
+	CalibrationType type;
+	QString cf(calibrationFile(tar.files(), dirName, type));
 
-	QByteArray ba = tar.file(mapFile);
-	if (ba.isNull()) {
-		_errorString = "Map file not found";
+	if (type == MAP) {
+		QByteArray ba = tar.file(cf);
+		QBuffer buffer(&ba);
+		MapFile mf(buffer);
+		if (!mf.isValid()) {
+			_errorString = mf.errorString();
+			return;
+		}
+
+		_name = mf.name();
+		_map.size = mf.size();
+		_projection = mf.projection();
+		_transform = mf.transform();
+	} else if (type == GMI) {
+		QByteArray ba = tar.file(cf);
+		QBuffer buffer(&ba);
+		GmiFile gmi(buffer);
+		if (!gmi.isValid()) {
+			_errorString = gmi.errorString();
+			return;
+		}
+
+		_name = Util::file2name(cf);
+		_map.size = gmi.size();
+		_transform = gmi.transform();
+		_projection = Projection(GCS::WGS84());
+		_hasProj = false;
+	} else {
+		_errorString = "No calibration file found";
 		return;
 	}
-	QBuffer buffer(&ba);
-	MapFile mf(buffer);
-	if (!mf.isValid()) {
-		_errorString = mf.errorString();
-		return;
-	}
 
-	_name = mf.name();
-	_map.size = mf.size();
-	_projection = mf.projection();
-	_transform = mf.transform();
-	_tar = new Tar(fi.absolutePath() + "/" + fi.completeBaseName() + ".tar");
+	QFileInfo fi(cf);
+	QDir dir(dirName);
+	_tar = new Tar(dir.absoluteFilePath(fi.completeBaseName() + ".tar"));
 
 	if (!_tar->open()) {
 		_errorString = _tar->fileName() + ": error reading tar file";
@@ -221,10 +285,11 @@ bool OziMap::setTileInfo(const QStringList &tiles, const QString &path)
 void OziMap::load(const Projection &in, const Projection &out,
   qreal deviceRatio, bool hidpi)
 {
-	Q_UNUSED(in);
 	Q_UNUSED(out);
 
 	_mapRatio = hidpi ? deviceRatio : 1.0;
+	if (!_hasProj)
+		_projection = in;
 
 	if (_tar) {
 		Q_ASSERT(!_tar->isOpen());
@@ -413,7 +478,7 @@ Map *OziMap::createTAR(const QString &path, bool *isDir)
 	if (isDir)
 		*isDir = false;
 
-	return new OziMap(path, true);
+	return new OziMap(path);
 }
 
 Map *OziMap::createMAP(const QString &path, bool *isDir)
@@ -421,5 +486,5 @@ Map *OziMap::createMAP(const QString &path, bool *isDir)
 	if (isDir)
 		*isDir = false;
 
-	return new OziMap(path, false);
+	return new OziMap(path);
 }
