@@ -4,6 +4,7 @@
 
 
 #define SAMPLES 100
+#define DELTA 1e-6
 
 static void growLeft(const Coordinates &c, RectC &rect)
 {
@@ -54,6 +55,11 @@ RectC Map::llBounds(const Projection &proj)
 		growLeft(xy2ll(QPointF(b.left(), y)), rect);
 		growRight(xy2ll(QPointF(b.right(), y)), rect);
 	}
+
+	if (rect.right() <= -180.0 + DELTA)
+		rect.setRight(180.0);
+	if (rect.left() >= 180.0 - DELTA)
+		rect.setLeft(-180.0);
 
 	return rect;
 }
