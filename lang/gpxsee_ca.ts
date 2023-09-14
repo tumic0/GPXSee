@@ -1027,6 +1027,7 @@
         <translation>
             <numerusform>%n fitxer</numerusform>
             <numerusform>%n fitxers</numerusform>
+            <numerusform>%n fitxers</numerusform>
         </translation>
     </message>
 </context>
