@@ -1,3 +1,4 @@
+#include <QIODevice>
 #include "gmifile.h"
 
 static CalibrationPoint calibrationPoint(const QByteArray line)
