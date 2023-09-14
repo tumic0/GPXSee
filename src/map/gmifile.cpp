@@ -1,5 +1,3 @@
-#include "common/csv.h"
-#include "pcs.h"
 #include "gmifile.h"
 
 static CalibrationPoint calibrationPoint(const QByteArray line)
@@ -19,7 +17,7 @@ static CalibrationPoint calibrationPoint(const QByteArray line)
 	  : CalibrationPoint();
 }
 
-bool GmiFile::parse(QIODevice &device, QList<CalibrationPoint> &points)
+bool GmiFile::parse(QIODevice &device)
 {
 	int ln = 1;
 	int width, height;
@@ -56,7 +54,7 @@ bool GmiFile::parse(QIODevice &device, QList<CalibrationPoint> &points)
 		} else {
 			CalibrationPoint cp(calibrationPoint(line));
 			if (cp.isValid())
-				points.append(cp);
+				_points.append(cp);
 			else
 				break;
 		}
@@ -66,32 +64,10 @@ bool GmiFile::parse(QIODevice &device, QList<CalibrationPoint> &points)
 
 	device.close();
 
-	return (points.size() >= 2);
-}
-
-bool GmiFile::computeTransformation(const QList<CalibrationPoint> &points)
-{
-	QList<ReferencePoint> rp;
-	Projection proj(GCS::WGS84());
-
-	for (int i = 0; i < points.size(); i++)
-		rp.append(points.at(i).rp(proj));
-
-	_transform = Transform(rp);
-	if (!_transform.isValid()) {
-		_errorString = _transform.errorString();
-		return false;
-	}
-
-	return true;
+	return (_points.size() >= 2);
 }
 
 GmiFile::GmiFile(QIODevice &file)
 {
-	QList<CalibrationPoint> points;
-
-	if (!parse(file, points))
-		return;
-	if (!computeTransformation(points))
-		return;
+	_valid = parse(file);
 }

@@ -264,16 +264,20 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 }
 
-Map* IMGMap::createIMG(const QString &path, bool *isDir)
+Map* IMGMap::createIMG(const QString &path, const Projection &proj, bool *isDir)
 {
+	Q_UNUSED(proj);
+
 	if (isDir)
 		*isDir = false;
 
 	return new IMGMap(path, false);
 }
 
-Map* IMGMap::createGMAP(const QString &path, bool *isDir)
+Map* IMGMap::createGMAP(const QString &path, const Projection &proj, bool *isDir)
 {
+	Q_UNUSED(proj);
+
 	if (isDir)
 		*isDir = true;
 

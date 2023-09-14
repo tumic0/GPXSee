@@ -9,8 +9,9 @@
 #include "worldfilemap.h"
 
 
-WorldFileMap::WorldFileMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _img(0), _mapRatio(1.0), _hasPRJ(false), _valid(false)
+WorldFileMap::WorldFileMap(const QString &fileName, const Projection &proj,
+  QObject *parent) : Map(fileName, parent), _img(0), _mapRatio(1.0),
+  _hasPRJ(false), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QDir dir(fi.absoluteDir());
@@ -37,7 +38,8 @@ WorldFileMap::WorldFileMap(const QString &fileName, QObject *parent)
 			_errorString = prjFile + ": " + prj.errorString();
 			return;
 		}
-	}
+	} else
+		_projection = proj;
 
 	// Find the corresponding image file
 	QList<QByteArray> formats(QImageReader::supportedImageFormats());
@@ -81,14 +83,6 @@ Coordinates WorldFileMap::xy2ll(const QPointF &p)
 	return _projection.xy2ll(_transform.img2proj(p * _mapRatio));
 }
 
-RectC WorldFileMap::llBounds(const Projection &proj)
-{
-	if (_projection.isNull())
-		_projection = proj;
-
-	return Map::llBounds(proj);
-}
-
 QRectF WorldFileMap::bounds()
 {
 	return QRectF(QPointF(0, 0), _size / _mapRatio);
@@ -122,10 +116,11 @@ void WorldFileMap::unload()
 	_img = 0;
 }
 
-Map *WorldFileMap::create(const QString &path, bool *isDir)
+Map *WorldFileMap::create(const QString &path, const Projection &proj,
+  bool *isDir)
 {
 	if (isDir)
 		*isDir = false;
 
-	return new WorldFileMap(path);
+	return new WorldFileMap(path, proj);
 }

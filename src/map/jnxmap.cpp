@@ -274,8 +274,10 @@ void JNXMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	tree.Search(min, max, cb, &ctx);
 }
 
-Map *JNXMap::create(const QString &path, bool *isDir)
+Map *JNXMap::create(const QString &path, const Projection &proj, bool *isDir)
 {
+	Q_UNUSED(proj);
+
 	if (isDir)
 		*isDir = false;
 

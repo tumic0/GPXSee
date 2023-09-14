@@ -81,15 +81,15 @@ ToolTip MapItem::info() const
 	return tt;
 }
 
-MapItem::MapItem(MapAction *action, Map *map, const Projection &proj,
-  GraphicsItem *parent) : PlaneItem(parent)
+MapItem::MapItem(MapAction *action, Map *map, GraphicsItem *parent)
+  : PlaneItem(parent)
 {
 	Map *src = action->data().value<Map*>();
 	Q_ASSERT(map->isReady());
 
 	_name = src->name();
 	_fileName = src->path();
-	_bounds = src->llBounds(proj);
+	_bounds = src->llBounds();
 
 	connect(this, &MapItem::triggered, action, &MapAction::trigger);
 

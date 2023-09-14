@@ -23,7 +23,7 @@ public:
 	QString name() const {return _name;}
 
 	QRectF bounds() {return _bounds;}
-	RectC llBounds(const Projection &) {return _llBounds;}
+	RectC llBounds() {return _llBounds;}
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);
@@ -45,7 +45,7 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map *create(const QString &path, bool *isMap);
+	static Map *create(const QString &path, const Projection &proj, bool *isMap);
 
 private slots:
 	void jobFinished(ENCJob *job);

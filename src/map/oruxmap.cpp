@@ -590,8 +590,10 @@ Coordinates OruxMap::xy2ll(const QPointF &p)
 	return z.projection.xy2ll(z.transform.img2proj(p * _mapRatio));
 }
 
-Map *OruxMap::create(const QString &path, bool *isDir)
+Map *OruxMap::create(const QString &path, const Projection &proj, bool *isDir)
 {
+	Q_UNUSED(proj);
+
 	if (isDir)
 		*isDir = true;
 

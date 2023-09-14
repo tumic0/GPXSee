@@ -484,8 +484,10 @@ void KMZMap::draw(QPainter *painter, const QRectF &rect, int mapIndex)
 	painter->restore();
 }
 
-Map *KMZMap::create(const QString &path, bool *isDir)
+Map *KMZMap::create(const QString &path, const Projection &proj, bool *isDir)
 {
+	Q_UNUSED(proj);
+
 	if (isDir)
 		*isDir = false;
 

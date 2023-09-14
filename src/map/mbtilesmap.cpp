@@ -338,8 +338,10 @@ Coordinates MBTilesMap::xy2ll(const QPointF &p)
 	  * coordinatesRatio());
 }
 
-Map *MBTilesMap::create(const QString &path, bool *isDir)
+Map *MBTilesMap::create(const QString &path, const Projection &proj, bool *isDir)
 {
+	Q_UNUSED(proj);
+
 	if (isDir)
 		*isDir = false;
 

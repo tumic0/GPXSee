@@ -73,8 +73,10 @@ void GeoTIFFMap::unload()
 	_img = 0;
 }
 
-Map *GeoTIFFMap::create(const QString &path, bool *isDir)
+Map *GeoTIFFMap::create(const QString &path, const Projection &proj, bool *isDir)
 {
+	Q_UNUSED(proj);
+
 	if (isDir)
 		*isDir = false;
 

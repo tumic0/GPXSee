@@ -250,7 +250,7 @@ void MapView::addWaypoints(const QVector<Waypoint> &waypoints)
 
 MapItem *MapView::addMap(MapAction *map)
 {
-	MapItem *mi = new MapItem(map, _map, _inputProjection);
+	MapItem *mi = new MapItem(map, _map);
 	mi->setColor(_palette.nextColor());
 	mi->setWidth(_areaWidth);
 	mi->setPenStyle(_areaStyle);
@@ -331,7 +331,7 @@ int MapView::fitMapZoom() const
 	RectC br = _tr | _rr | _wr | _ar;
 
 	return _map->zoomFit(viewport()->size() - QSize(2*MARGIN, 2*MARGIN),
-	  br.isNull() ? _map->llBounds(_inputProjection) : br);
+	  br.isNull() ? _map->llBounds() : br);
 }
 
 QPointF MapView::contentCenter() const

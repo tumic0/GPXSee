@@ -460,8 +460,10 @@ void RMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 }
 
-Map *RMap::create(const QString &path, bool *isDir)
+Map *RMap::create(const QString &path, const Projection &proj, bool *isDir)
 {
+	Q_UNUSED(proj);
+
 	if (isDir)
 		*isDir = false;
 

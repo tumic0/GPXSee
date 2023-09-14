@@ -32,7 +32,7 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map *create(const QString &path, bool *isMap);
+	static Map *create(const QString &path, const Projection &proj, bool *isMap);
 
 private:
 	bool parseBSB(const QByteArray &line);

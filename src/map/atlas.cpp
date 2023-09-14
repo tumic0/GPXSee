@@ -100,8 +100,9 @@ void Atlas::computeBounds()
 		  QRectF(offsets.at(i), _maps.at(i)->bounds().size()));
 }
 
-Atlas::Atlas(const QString &fileName, bool TAR, QObject *parent)
-  : Map(fileName, parent), _zoom(0), _mapIndex(-1), _valid(false)
+Atlas::Atlas(const QString &fileName, bool TAR, const Projection &proj,
+  QObject *parent) : Map(fileName, parent), _zoom(0), _mapIndex(-1),
+  _valid(false)
 {
 	QFileInfo fi(fileName);
 	QByteArray ba;
@@ -142,39 +143,39 @@ Atlas::Atlas(const QString &fileName, bool TAR, QObject *parent)
 		for (int i = 0; i < maps.count(); i++) {
 			OziMap *map;
 			if (TAR)
-				map = new OziMap(maps.at(i).absoluteFilePath(), tar, this);
+				map = new OziMap(maps.at(i).absoluteFilePath(), tar, proj, this);
 			else {
 				QString cf(calibrationFile(maps.at(i).absoluteFilePath()));
 				if (cf.isNull()) {
 					_errorString = "No calibration file found";
 					return;
 				}
-				map = new OziMap(cf, this);
+				map = new OziMap(cf, proj, this);
 			}
 
 			if (map->isValid())
 				_maps.append(map);
 			else {
-				_errorString = QString("%1: %2")
-				  .arg(map->path(), map->errorString());
-				return;
+				qWarning("%s: %s",  qPrintable(map->path()),
+				  qPrintable(map->errorString()));
+				delete map;
 			}
 		}
 	}
 	if (_maps.isEmpty()) {
-		_errorString = "No maps found in atlas";
+		_errorString = "No usable map found in atlas";
 		return;
 	}
 
 	_valid = true;
 }
 
-RectC Atlas::llBounds(const Projection &proj)
+RectC Atlas::llBounds()
 {
 	RectC bounds;
 
 	for (int i = 0; i < _maps.size(); i++)
-		bounds |= _maps.at(i)->llBounds(proj);
+		bounds |= _maps.at(i)->llBounds();
 
 	return bounds;
 }
@@ -330,18 +331,34 @@ void Atlas::unload()
 	_bounds.clear();
 }
 
-Map *Atlas::createTAR(const QString &path, bool *isDir)
+Map *Atlas::createTAR(const QString &path, const Projection &proj, bool *isDir)
 {
 	if (isDir)
 		*isDir = true;
 
-	return new Atlas(path, true);
+	return new Atlas(path, true, proj);
 }
 
-Map *Atlas::createTBA(const QString &path, bool *isDir)
+Map *Atlas::createTBA(const QString &path, const Projection &proj, bool *isDir)
 {
 	if (isDir)
 		*isDir = true;
 
-	return new Atlas(path, false);
+	return new Atlas(path, false, proj);
 }
+
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const Atlas::Bounds &bounds)
+{
+	dbg.nospace() << "Bounds(" << bounds.xy << ", " << bounds.pp << ")";
+
+	return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const Atlas::Zoom &zoom)
+{
+	dbg.nospace() << "Zoom(" << zoom.first << ", " << zoom.last << ")";
+
+	return dbg.space();
+}
+#endif // QT_NO_DEBUG

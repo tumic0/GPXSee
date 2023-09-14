@@ -12,10 +12,10 @@ class WorldFileMap : public Map
 	Q_OBJECT
 
 public:
-	WorldFileMap(const QString &fileName, QObject *parent = 0);
+	WorldFileMap(const QString &fileName, const Projection &proj,
+	  QObject *parent = 0);
 	~WorldFileMap();
 
-	RectC llBounds(const Projection &proj);
 	QRectF bounds();
 	QPointF ll2xy(const Coordinates &c);
 	Coordinates xy2ll(const QPointF &p);
@@ -29,7 +29,7 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map *create(const QString &path, bool *isDir);
+	static Map *create(const QString &path, const Projection &proj, bool *isDir);
 
 private:
 	Projection _projection;

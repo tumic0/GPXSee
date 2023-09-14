@@ -1,32 +1,30 @@
 #ifndef GMIFILE_H
 #define GMIFILE_H
 
-#include "transform.h"
 #include "calibrationpoint.h"
 
 class QIODevice;
-class GCS;
 
 class GmiFile
 {
 public:
 	GmiFile(QIODevice &file);
 
-	bool isValid() const {return !_image.isNull() && _transform.isValid();}
+	bool isValid() const {return _valid;}
 	const QString &errorString() const {return _errorString;}
 
-	const Transform &transform() const {return _transform;}
 	const QString &image() const {return _image;}
 	const QSize &size() const {return _size;}
+	const QList<CalibrationPoint> &calibrationPoints() const {return _points;}
 
 private:
-	bool parse(QIODevice &device, QList<CalibrationPoint> &points);
-	bool computeTransformation(const QList<CalibrationPoint> &points);
+	bool parse(QIODevice &device);
 
 	QString _image;
 	QSize _size;
-	Transform _transform;
+	QList<CalibrationPoint> _points;
 
+	bool _valid;
 	QString _errorString;
 };
 

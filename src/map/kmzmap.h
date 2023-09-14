@@ -18,7 +18,7 @@ public:
 	KMZMap(const QString &fileName, QObject *parent = 0);
 	~KMZMap();
 
-	RectC llBounds(const Projection &) {return _llbounds;}
+	RectC llBounds() {return _llbounds;}
 	QRectF bounds();
 
 	int zoom() const {return _zoom;}
@@ -39,7 +39,7 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map *create(const QString &path, bool *isDir);
+	static Map *create(const QString &path, const Projection &proj, bool *isDir);
 
 private:
 	class Overlay {

@@ -12,12 +12,13 @@ class Atlas : public Map
 	Q_OBJECT
 
 public:
-	Atlas(const QString &fileName, bool TAR, QObject *parent = 0);
+	Atlas(const QString &fileName, bool TAR, const Projection &proj,
+	  QObject *parent = 0);
 
 	QString name() const {return _name;}
 
 	QRectF bounds();
-	RectC llBounds(const Projection &proj);
+	RectC llBounds();
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);
@@ -37,8 +38,10 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map *createTAR(const QString &path, bool *isDir);
-	static Map *createTBA(const QString &path, bool *isDir);
+	static Map *createTAR(const QString &path, const Projection &proj,
+	  bool *isDir);
+	static Map *createTBA(const QString &path, const Projection &proj,
+	  bool *isDir);
 
 private:
 	struct Zoom {
@@ -61,6 +64,9 @@ private:
 	void computeZooms();
 	void computeBounds();
 
+	friend QDebug operator<<(QDebug dbg, const Bounds &bounds);
+	friend QDebug operator<<(QDebug dbg, const Zoom &zoom);
+
 	QString _name;
 
 	QList<OziMap*> _maps;
@@ -72,5 +78,10 @@ private:
 	bool _valid;
 	QString _errorString;
 };
+
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const Atlas::Zoom &zoom);
+QDebug operator<<(QDebug dbg, const Atlas::Bounds &bounds);
+#endif // QT_NO_DEBUG
 
 #endif // ATLAS_H

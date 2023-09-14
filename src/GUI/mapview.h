@@ -98,6 +98,7 @@ public:
 	void fitContentToSize();
 
 	RectC boundingRect() const;
+	const Projection &inputProjection() const {return _inputProjection;}
 
 #ifdef Q_OS_ANDROID
 signals:

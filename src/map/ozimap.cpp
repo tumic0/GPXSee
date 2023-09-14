@@ -17,6 +17,21 @@
 #include "ozimap.h"
 
 
+static QString tarFile(const QString &path)
+{
+	QDir dir(path);
+	QFileInfoList files = dir.entryInfoList(QDir::Files);
+
+	for (int i = 0; i < files.size(); i++) {
+		const QFileInfo &fi = files.at(i);
+
+		if (fi.suffix().toLower() == "tar")
+			return fi.absoluteFilePath();
+	}
+
+	return QString();
+}
+
 QString OziMap::calibrationFile(const QStringList &files, const QString path,
   CalibrationType &type)
 {
@@ -39,9 +54,9 @@ QString OziMap::calibrationFile(const QStringList &files, const QString path,
 	return QString();
 }
 
-OziMap::OziMap(const QString &fileName, QObject *parent)
+OziMap::OziMap(const QString &fileName, const Projection &proj, QObject *parent)
   : Map(fileName, parent), _img(0), _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0),
-  _hasProj(true), _valid(false)
+  _valid(false)
 {
 	QFileInfo fi(fileName);
 	QString suffix(fi.suffix().toLower());
@@ -68,9 +83,9 @@ OziMap::OziMap(const QString &fileName, QObject *parent)
 				_name = Util::file2name(fileName);
 				_map.size = gmi.size();
 				_map.path = gmi.image();
-				_transform = gmi.transform();
-				_projection = Projection(GCS::WGS84());
-				_hasProj = false;
+				_calibrationPoints = gmi.calibrationPoints();
+				_projection = proj;
+				computeTransform();
 			}
 		} else if (type == MAP) {
 			QByteArray ba(_tar->file(cf));
@@ -119,9 +134,9 @@ OziMap::OziMap(const QString &fileName, QObject *parent)
 				_name = Util::file2name(fileName);
 				_map.size = gmi.size();
 				_map.path = gmi.image();
-				_transform = gmi.transform();
-				_projection = Projection(GCS::WGS84());
-				_hasProj = false;
+				_calibrationPoints = gmi.calibrationPoints();
+				_projection = proj;
+				computeTransform();
 			}
 		} else {
 			_errorString = "Unknown file type";
@@ -141,9 +156,9 @@ OziMap::OziMap(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
-OziMap::OziMap(const QString &dirName, Tar &tar, QObject *parent)
-  : Map(dirName, parent), _img(0), _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0),
-  _hasProj(true), _valid(false)
+OziMap::OziMap(const QString &dirName, Tar &tar, const Projection &proj,
+  QObject *parent) : Map(dirName, parent), _img(0), _tar(0), _ozf(0), _zoom(0),
+  _mapRatio(1.0), _valid(false)
 {
 	CalibrationType type;
 	QString cf(calibrationFile(tar.files(), dirName, type));
@@ -172,18 +187,20 @@ OziMap::OziMap(const QString &dirName, Tar &tar, QObject *parent)
 
 		_name = Util::file2name(cf);
 		_map.size = gmi.size();
-		_transform = gmi.transform();
-		_projection = Projection(GCS::WGS84());
-		_hasProj = false;
+		_calibrationPoints = gmi.calibrationPoints();
+		_projection = proj;
+		computeTransform();
 	} else {
 		_errorString = "No calibration file found";
 		return;
 	}
 
-	QFileInfo fi(cf);
-	QDir dir(dirName);
-	_tar = new Tar(dir.absoluteFilePath(fi.completeBaseName() + ".tar"));
-
+	QString tf(tarFile(dirName));
+	if (tf.isNull()) {
+		_errorString = "No map tar file found";
+		return;
+	}
+	_tar = new Tar(tf);
 	if (!_tar->open()) {
 		_errorString = _tar->fileName() + ": error reading tar file";
 		return;
@@ -288,8 +305,10 @@ void OziMap::load(const Projection &in, const Projection &out,
 	Q_UNUSED(out);
 
 	_mapRatio = hidpi ? deviceRatio : 1.0;
-	if (!_hasProj)
+	if (!_calibrationPoints.isEmpty()) {
 		_projection = in;
+		computeTransform();
+	}
 
 	if (_tar) {
 		Q_ASSERT(!_tar->isOpen());
@@ -473,18 +492,28 @@ void OziMap::rescale(int zoom)
 	_scale = _ozf->scale(zoom);
 }
 
-Map *OziMap::createTAR(const QString &path, bool *isDir)
+void OziMap::computeTransform()
 {
-	if (isDir)
-		*isDir = false;
+	QList<ReferencePoint> rp;
 
-	return new OziMap(path);
+	for (int i = 0; i < _calibrationPoints.size(); i++)
+		rp.append(_calibrationPoints.at(i).rp(_projection));
+
+	_transform = Transform(rp);
 }
 
-Map *OziMap::createMAP(const QString &path, bool *isDir)
+Map *OziMap::createTAR(const QString &path, const Projection &proj, bool *isDir)
 {
 	if (isDir)
 		*isDir = false;
 
-	return new OziMap(path);
+	return new OziMap(path, proj);
+}
+
+Map *OziMap::createMAP(const QString &path, const Projection &proj, bool *isDir)
+{
+	if (isDir)
+		*isDir = false;
+
+	return new OziMap(path, proj);
 }

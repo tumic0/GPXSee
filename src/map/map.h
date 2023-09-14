@@ -28,19 +28,19 @@ public:
 	  : QObject(parent), _path(path) {}
 	virtual ~Map() {}
 
-	/* Functions available since map creation */
 	const QString &path() const {return _path;}
 	virtual QString name() const {return Util::file2name(path());}
-	virtual RectC llBounds(const Projection &proj);
 
 	virtual bool isValid() const {return true;}
 	virtual bool isReady() const {return true;}
 	virtual QString errorString() const {return QString();}
 
-	/* Functions that shall be called after load() */
 	virtual void load(const Projection &, const Projection &, qreal, bool) {}
 	virtual void unload() {}
 
+	/* llBounds() is mandatory for maps that do not provide bounds() until
+	   load() is called! */
+	virtual RectC llBounds();
 	virtual QRectF bounds() = 0;
 	virtual qreal resolution(const QRectF &rect);
 

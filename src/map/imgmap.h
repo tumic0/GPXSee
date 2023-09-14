@@ -55,7 +55,7 @@ public:
 	QString name() const {return _data.first()->name();}
 
 	QRectF bounds() {return _bounds;}
-	RectC llBounds(const Projection &) {return _data.first()->bounds();}
+	RectC llBounds() {return _data.first()->bounds();}
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);
@@ -77,8 +77,10 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map* createIMG(const QString &path, bool *isDir);
-	static Map* createGMAP(const QString &path, bool *isDir);
+	static Map* createIMG(const QString &path, const Projection &proj,
+	  bool *isDir);
+	static Map* createGMAP(const QString &path, const Projection &proj,
+	  bool *isDir);
 
 private slots:
 	void jobFinished(IMGMapJob *job);

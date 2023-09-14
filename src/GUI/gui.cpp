@@ -1750,7 +1750,7 @@ bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 
 bool GUI::loadMap(const QString &fileName, MapAction *&action, int &showError)
 {
-	TreeNode<Map*> maps(MapList::loadMaps(fileName));
+	TreeNode<Map*> maps(MapList::loadMaps(fileName, _mapView->inputProjection()));
 	QList<QAction*> existingActions(_mapsActionGroup->actions());
 
 	return loadMapNode(maps, action, existingActions, showError);
@@ -1854,7 +1854,7 @@ void GUI::loadMapDir()
 		return;
 
 	QFileInfo fi(dir);
-	TreeNode<Map*> maps(MapList::loadMaps(dir));
+	TreeNode<Map*> maps(MapList::loadMaps(dir, _mapView->inputProjection()));
 	QList<QAction*> existingActions(_mapsActionGroup->actions());
 	QList<MapAction*> actions;
 	QMenu *menu = new QMenu(maps.name());
@@ -2985,7 +2985,7 @@ void GUI::loadInitialMaps(const QString &selected)
 	if (mapDir.isNull())
 		return;
 
-	TreeNode<Map*> maps(MapList::loadMaps(mapDir));
+	TreeNode<Map*> maps(MapList::loadMaps(mapDir, _mapView->inputProjection()));
 	createMapNodeMenu(createMapActionsNode(maps), _mapMenu, _mapsEnd);
 
 	// Select the active map according to the user settings

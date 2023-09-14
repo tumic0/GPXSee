@@ -309,8 +309,11 @@ Coordinates OsmdroidMap::xy2ll(const QPointF &p)
 	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale) * _mapRatio);
 }
 
-Map *OsmdroidMap::create(const QString &path, bool *isDir)
+Map *OsmdroidMap::create(const QString &path, const Projection &proj,
+  bool *isDir)
 {
+	Q_UNUSED(proj);
+
 	if (isDir)
 		*isDir = false;
 

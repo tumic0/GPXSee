@@ -209,8 +209,11 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 }
 
-Map *MapsforgeMap::create(const QString &path, bool *isMap)
+Map *MapsforgeMap::create(const QString &path, const Projection &proj,
+  bool *isMap)
 {
+	Q_UNUSED(proj);
+
 	if (isMap)
 		*isMap = false;
 

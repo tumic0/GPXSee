@@ -13,7 +13,7 @@ public:
 	QString name() const {return _name;}
 
 	QRectF bounds();
-	RectC llBounds(const Projection &) {return _bounds;}
+	RectC llBounds() {return _bounds;}
 	qreal resolution(const QRectF &rect);
 
 	int zoom() const {return _zi;}
@@ -34,7 +34,7 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map *create(const QString &path, bool *isDir);
+	static Map *create(const QString &path, const Projection &proj, bool *isDir);
 
 private:
 	qreal tileSize() const;

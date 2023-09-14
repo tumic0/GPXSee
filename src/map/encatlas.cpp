@@ -378,8 +378,10 @@ void ENCAtlas::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 }
 
-Map *ENCAtlas::create(const QString &path, bool *isDir)
+Map *ENCAtlas::create(const QString &path, const Projection &proj, bool *isDir)
 {
+	Q_UNUSED(proj);
+
 	if (isDir)
 		*isDir = true;
 

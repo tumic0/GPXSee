@@ -3,6 +3,7 @@
 
 #include "transform.h"
 #include "projection.h"
+#include "calibrationpoint.h"
 #include "map.h"
 
 class Tar;
@@ -14,8 +15,10 @@ class OziMap : public Map
 	Q_OBJECT
 
 public:
-	OziMap(const QString &fileName, QObject *parent = 0);
-	OziMap(const QString &dirName, Tar &tar, QObject *parent = 0);
+	OziMap(const QString &fileName, const Projection &proj,
+	  QObject *parent = 0);
+	OziMap(const QString &dirName, Tar &tar, const Projection &proj,
+	  QObject *parent = 0);
 	~OziMap();
 
 	QString name() const {return _name;}
@@ -47,8 +50,10 @@ public:
 	QPointF pp2xy(const PointD &p) const
 	  {return _transform.proj2img(p) / _mapRatio;}
 
-	static Map *createTAR(const QString &path, bool *isDir);
-	static Map *createMAP(const QString &path, bool *isDir);
+	static Map *createTAR(const QString &path, const Projection &proj,
+	  bool *isDir);
+	static Map *createMAP(const QString &path, const Projection &proj,
+	  bool *isDir);
 
 private:
 	enum CalibrationType {
@@ -70,6 +75,7 @@ private:
 	void drawImage(QPainter *painter, const QRectF &rect, Flags flags) const;
 
 	void rescale(int zoom);
+	void computeTransform();
 
 	static QString calibrationFile(const QStringList &files, const QString path,
 	  CalibrationType &type);
@@ -84,7 +90,7 @@ private:
 	int _zoom;
 	QPointF _scale;
 	qreal _mapRatio;
-	bool _hasProj;
+	QList<CalibrationPoint> _calibrationPoints;
 
 	bool _valid;
 	QString _errorString;

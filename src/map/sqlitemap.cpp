@@ -256,8 +256,10 @@ Coordinates SqliteMap::xy2ll(const QPointF &p)
 	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale) * _mapRatio);
 }
 
-Map *SqliteMap::create(const QString &path, bool *isDir)
+Map *SqliteMap::create(const QString &path, const Projection &proj, bool *isDir)
 {
+	Q_UNUSED(proj);
+
 	if (isDir)
 		*isDir = false;
 

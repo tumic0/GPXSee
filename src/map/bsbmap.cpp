@@ -462,8 +462,10 @@ void BSBMap::unload()
 	_img = 0;
 }
 
-Map *BSBMap::create(const QString &path, bool *isMap)
+Map *BSBMap::create(const QString &path, const Projection &proj, bool *isMap)
 {
+	Q_UNUSED(proj);
+
 	if (isMap)
 		*isMap = false;
 

@@ -52,7 +52,7 @@ public:
 	MapsforgeMap(const QString &fileName, QObject *parent = 0);
 
 	QRectF bounds() {return _bounds;}
-	RectC llBounds(const Projection &) {return _data.bounds();}
+	RectC llBounds() {return _data.bounds();}
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);
@@ -74,7 +74,7 @@ public:
 	bool isValid() const {return _data.isValid();}
 	QString errorString() const {return _data.errorString();}
 
-	static Map *create(const QString &path, bool *isMap);
+	static Map *create(const QString &path, const Projection &proj, bool *isMap);
 
 private slots:
 	void jobFinished(MapsforgeMapJob *job);

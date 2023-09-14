@@ -301,8 +301,10 @@ void GEMFMap::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
 	painter->drawPixmap(tp, pixmap);
 }
 
-Map *GEMFMap::create(const QString &path, bool *isDir)
+Map *GEMFMap::create(const QString &path, const Projection &proj, bool *isDir)
 {
+	Q_UNUSED(proj);
+
 	if (isDir)
 		*isDir = false;
 

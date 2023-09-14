@@ -14,7 +14,7 @@ public:
 	GEMFMap(const QString &fileName, QObject *parent = 0);
 
 	QRectF bounds();
-	RectC llBounds(const Projection &) {return _bounds;}
+	RectC llBounds() {return _bounds;}
 
 	int zoom() const {return _zi;}
 	void setZoom(int zoom) {_zi = zoom;}
@@ -35,7 +35,7 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map *create(const QString &path, bool *isDir);
+	static Map *create(const QString &path, const Projection &proj, bool *isDir);
 
 private:
 	struct Region {

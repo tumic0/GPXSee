@@ -345,8 +345,10 @@ void ENCMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 }
 
-Map *ENCMap::create(const QString &path, bool *isMap)
+Map *ENCMap::create(const QString &path, const Projection &proj, bool *isMap)
 {
+	Q_UNUSED(proj);
+
 	if (isMap)
 		*isMap = false;
 

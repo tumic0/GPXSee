@@ -30,12 +30,8 @@ static void growBottom(const Coordinates &c, RectC &rect)
 		rect.setBottom(c.lat());
 }
 
-RectC Map::llBounds(const Projection &proj)
+RectC Map::llBounds()
 {
-	Q_UNUSED(proj);
-
-	/* We use bounds() and xy2ll() here as this fallback implementation is
-	   used ONLY for maps providing those functions since map creation. */
 	QRectF b(bounds());
 	double dx = b.width() / SAMPLES;
 	double dy = b.height() / SAMPLES;
