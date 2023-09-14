@@ -302,8 +302,13 @@ Section "OpenSSL" SEC_OPENSSL
 
   SectionIn RO
 
+!ifdef QT6
+  File "libcrypto-3-x64.dll"
+  File "libssl-3-x64.dll"
+!else
   File "libcrypto-1_1-x64.dll"
   File "libssl-1_1-x64.dll"
+!endif
 
 SectionEnd
 
