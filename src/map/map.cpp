@@ -62,9 +62,17 @@ RectC Map::llBounds()
 
 qreal Map::resolution(const QRectF &rect)
 {
-	qreal cy = rect.center().y();
-	QPointF cl(rect.left(), cy);
-	QPointF cr(rect.right(), cy);
+	/* The haversine formula used in Coordinates::distanceTo() only gives
+	   "half world" distances and shorter so we have to use only the center
+	   "half rectangle" in case e.g. world map bounds are on the input */
+	QRectF halfRect(QPointF(rect.left() + (rect.width() / 4.0),
+	  rect.top() + (rect.height() / 4.0)),
+	  QPointF(rect.right() - (rect.width() / 4.0),
+	  rect.bottom() - (rect.height() / 4.0)));
+
+	qreal cy = halfRect.center().y();
+	QPointF cl(halfRect.left(), cy);
+	QPointF cr(halfRect.right(), cy);
 
 	qreal ds = xy2ll(cl).distanceTo(xy2ll(cr));
 	qreal ps = QLineF(cl, cr).length();
