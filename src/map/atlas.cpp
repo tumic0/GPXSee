@@ -7,7 +7,7 @@
 #include "atlas.h"
 
 
-#define ZOOM_THRESHOLD 0.9
+#define ZOOM_THRESHOLD 0.8
 
 #define TL(m) ((m)->xy2pp((m)->bounds().topLeft()))
 #define BR(m) ((m)->xy2pp((m)->bounds().bottomRight()))
