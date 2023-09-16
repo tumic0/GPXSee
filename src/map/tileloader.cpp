@@ -6,6 +6,7 @@
 #include <QtConcurrent>
 #include "tileloader.h"
 
+#define SUBSTITUTE_CHAR '$'
 
 class TileImage
 {
@@ -33,6 +34,27 @@ private:
 	FetchTile *_tile;
 	int _scaledSize;
 };
+
+static QString fsSafeStr(const QString &str)
+{
+	QString ret(str);
+
+#ifdef Q_OS_WIN32
+	ret.replace('<', SUBSTITUTE_CHAR);
+	ret.replace('>', SUBSTITUTE_CHAR);
+	ret.replace(':', SUBSTITUTE_CHAR);
+	ret.replace('"', SUBSTITUTE_CHAR);
+	ret.replace('/', SUBSTITUTE_CHAR);
+	ret.replace('\\', SUBSTITUTE_CHAR);
+	ret.replace('|', SUBSTITUTE_CHAR);
+	ret.replace('?', SUBSTITUTE_CHAR);
+	ret.replace('*', SUBSTITUTE_CHAR);
+#else // Q_OS_WIN32
+	ret.replace('/', SUBSTITUTE_CHAR);
+#endif // Q_OS_WIN32
+
+	return ret;
+}
 
 static QString quadKey(const QPoint &xy, int zoom)
 {
@@ -198,7 +220,10 @@ QUrl TileLoader::tileUrl(const FetchTile &tile) const
 
 QString TileLoader::tileFile(const FetchTile &tile) const
 {
-	return _dir + QLatin1Char('/') + tile.zoom().toString() + QLatin1Char('-')
+	QString zoom(((QMetaType::Type)(tile.zoom().type()) == QMetaType::Int)
+	  ? tile.zoom().toString() : fsSafeStr(tile.zoom().toString()));
+
+	return _dir + QLatin1Char('/') + zoom + QLatin1Char('-')
 	  + QString::number(tile.xy().x()) + QLatin1Char('-')
 	  + QString::number(tile.xy().y());
 }
