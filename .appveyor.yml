@@ -1,4 +1,4 @@
-version: 13.9.{build}
+version: 13.10.{build}
 
 configuration:
   - Release
