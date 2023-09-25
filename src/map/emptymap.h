@@ -14,7 +14,7 @@ public:
 	QString name() const {return QString();}
 
 	QRectF bounds();
-	RectC llBounds(const Projection &) {return OSM::BOUNDS;}
+	RectC llBounds() {return OSM::BOUNDS;}
 	qreal resolution(const QRectF &rect);
 
 	int zoom() const {return _zoom;}

@@ -20,7 +20,7 @@ public:
 	QString name() const {return _name;}
 
 	QRectF bounds();
-	RectC llBounds(const Projection &);
+	RectC llBounds();
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);

@@ -106,7 +106,7 @@ QRectF WMTSMap::bounds()
 	return lb.isValid() ? lb & tb : tb;
 }
 
-RectC WMTSMap::llBounds(const Projection &)
+RectC WMTSMap::llBounds()
 {
 	if (_wmts->bbox().isValid())
 		return _wmts->bbox();
