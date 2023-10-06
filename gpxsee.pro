@@ -508,7 +508,7 @@ macx {
 
 win32 {
     QMAKE_TARGET_DESCRIPTION = GPXSee
-    QMAKE_TARGET_COPYRIGHT = Copyright (c) 2023 Martin Tůma
+    QMAKE_TARGET_COPYRIGHT = Copyright (c) 2023 Martin Tuma
     RC_ICONS = icons/app/gpxsee.ico \
         icons/formats/gpx.ico \
         icons/formats/tcx.ico \
