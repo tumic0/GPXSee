@@ -29,24 +29,6 @@ static void swap(const QLineF &line, QPointF *p1, QPointF *p2)
 	}
 }
 
-static bool intersection(const QLineF &line, const QRectF &rect, QPointF *p)
-{
-	if (line.INTERSECTS(QLineF(rect.topLeft(), rect.topRight()), p)
-	  == QLineF::BoundedIntersection)
-		return true;
-	if (line.INTERSECTS(QLineF(rect.topLeft(), rect.bottomLeft()), p)
-	  == QLineF::BoundedIntersection)
-		return true;
-	if (line.INTERSECTS(QLineF(rect.bottomRight(), rect.bottomLeft()), p)
-	  == QLineF::BoundedIntersection)
-		return true;
-	if (line.INTERSECTS(QLineF(rect.bottomRight(), rect.topRight()), p)
-	  == QLineF::BoundedIntersection)
-		return true;
-
-	return false;
-}
-
 static bool intersection(const QLineF &line, const QRectF &rect, QPointF *p1,
   QPointF *p2)
 {
@@ -84,22 +66,42 @@ static bool intersection(const QLineF &line, const QRectF &rect, QPointF *p1,
 	return false;
 }
 
-static QPainterPath subpath(const QList<QLineF> &lines, int start, int end,
+static bool intersection(const QLineF &line, const QRectF &rect, QPointF *p)
+{
+	if (line.INTERSECTS(QLineF(rect.topLeft(), rect.topRight()), p)
+	  == QLineF::BoundedIntersection)
+		return true;
+	if (line.INTERSECTS(QLineF(rect.topLeft(), rect.bottomLeft()), p)
+	  == QLineF::BoundedIntersection)
+		return true;
+	if (line.INTERSECTS(QLineF(rect.bottomRight(), rect.bottomLeft()), p)
+	  == QLineF::BoundedIntersection)
+		return true;
+	if (line.INTERSECTS(QLineF(rect.bottomRight(), rect.topRight()), p)
+	  == QLineF::BoundedIntersection)
+		return true;
+
+	return false;
+}
+
+static QPainterPath subpath(const QPolygonF &path, int start, int end,
   qreal cut)
 {
 	qreal ss = 0, es = 0;
 	int si = start, ei = end;
 
-	for (int i = start; i <= end; i++) {
-		qreal len = lines.at(i).length();
+	for (int i = start; i < end; i++) {
+		QLineF l(path.at(i), path.at(i+1));
+		qreal len = l.length();
 		if (ss + len < cut / 2) {
 			ss += len;
 			si++;
 		} else
 			break;
 	}
-	for (int i = end; i >= start; i--) {
-		qreal len = lines.at(i).length();
+	for (int i = end; i > start; i--) {
+		QLineF l(path.at(i), path.at(i-1));
+		qreal len = l.length();
 		if (es + len < cut / 2) {
 			es += len;
 			ei--;
@@ -107,115 +109,117 @@ static QPainterPath subpath(const QList<QLineF> &lines, int start, int end,
 			break;
 	}
 
-	QLineF sl(lines.at(si).p2(), lines.at(si).p1());
+	QLineF sl(path.at(si+1), path.at(si));
 	sl.setLength(sl.length() - (cut / 2 - ss));
-	QLineF el(lines.at(ei));
+	QLineF el(path.at(ei-1), path.at(ei));
 	el.setLength(el.length() - (cut / 2 - es));
 
 	QPainterPath p(sl.p2());
-	for (int i = si; i <= ei; i++)
-		p.lineTo(lines.at(i).p2());
-	p.setElementPositionAt(p.elementCount() - 1, el.p2().x(), el.p2().y());
+	for (int i = si + 1; i < ei; i++)
+		p.lineTo(path.at(i));
+	p.lineTo(el.p2());
 
 	return p;
 }
 
-static QList<QLineF> lineString(const QPolygonF &path,
-  const QRectF &boundingRect)
+static QList<QPolygonF> polyLines(const QPolygonF &path, const QRectF &rect)
 {
-	QList<QLineF> lines;
-	int start = -1, end = -1;
+	QList<QPolygonF> lines;
+	QPolygonF line;
+	bool lastIn = rect.contains(path.first());
 
+	for (int i = 1; i < path.size(); i++) {
+		if (rect.contains(path.at(i))) {
+			if (lastIn) {
+				if (line.isEmpty())
+					line.append(path.at(i-1));
+				line.append(path.at(i));
+			} else {
+				QPointF p;
+				QLineF l(path.at(i-1), path.at(i));
 
-	for (int i = 0; i < path.count(); i++) {
-		if (boundingRect.contains(path.at(i))) {
-			start = i;
-			break;
-		}
-	}
-	for (int i = path.count() - 1; i >= 0; i--) {
-		if (boundingRect.contains(path.at(i))) {
-			end = i;
-			break;
-		}
-	}
-
-	if (start < 0) {
-		QPointF p1, p2;
-
-		for (int i = 1; i < path.count(); i++) {
-			QLineF l(path.at(i-1), path.at(i));
-			if (intersection(l, boundingRect, &p1, &p2)) {
-				lines.append(QLineF(p1, p2));
-				break;
+				if (intersection(l, rect, &p))
+					line.append(p);
+				line.append(path.at(i));
 			}
-		}
-	} else {
-		QPointF p;
 
-		if (start > 0) {
-			QLineF l(path.at(start-1), path.at(start));
-			if (intersection(l, boundingRect, &p))
-				lines.append(QLineF(p, path.at(start)));
-		}
-		for (int i = start + 1; i <= end; i++)
-			lines.append(QLineF(path.at(i-1), path.at(i)));
-		if (end < path.count() - 1) {
-			QLineF l(path.at(end), path.at(end+1));
-			if (intersection(l, boundingRect, &p))
-				lines.append(QLineF(path.at(end), p));
+			lastIn = true;
+		} else {
+			QLineF l(path.at(i-1), path.at(i));
+
+			if (lastIn) {
+				QPointF p;
+				if (intersection(l, rect, &p))
+					line.append(p);
+				lines.append(line);
+				line.clear();
+			} else {
+				QPointF p1, p2;
+				if (intersection(l, rect, &p1, &p2)) {
+					line.append(p1);
+					line.append(p2);
+					lines.append(line);
+					line.clear();
+				}
+			}
+
+			lastIn = false;
 		}
 	}
+
+	if (!line.isEmpty())
+		lines.append(line);
 
 	return lines;
 }
 
-static QList<QLineF> lineString(const QPainterPath &path,
-  const QRectF &boundingRect)
+static QList<QPolygonF> polyLines(const QPainterPath &path, const QRectF &rect)
 {
-	QList<QLineF> lines;
-	int start = -1, end = -1;
+	QList<QPolygonF> lines;
+	QPolygonF line;
+	bool lastIn = rect.contains(path.elementAt(0));
 
+	for (int i = 1; i < path.elementCount(); i++) {
+		if (rect.contains(path.elementAt(i))) {
+			if (lastIn) {
+				if (line.isEmpty())
+					line.append(path.elementAt(i-1));
+				line.append(path.elementAt(i));
+			} else {
+				QPointF p;
+				QLineF l(path.elementAt(i-1), path.elementAt(i));
 
-	for (int i = 0; i < path.elementCount(); i++) {
-		if (boundingRect.contains(path.elementAt(i))) {
-			start = i;
-			break;
-		}
-	}
-	for (int i = path.elementCount() - 1; i >= 0; i--) {
-		if (boundingRect.contains(path.elementAt(i))) {
-			end = i;
-			break;
-		}
-	}
-
-	if (start < 0) {
-		QPointF p1, p2;
-
-		for (int i = 1; i < path.elementCount(); i++) {
-			QLineF l(path.elementAt(i-1), path.elementAt(i));
-			if (intersection(l, boundingRect, &p1, &p2)) {
-				lines.append(QLineF(p1, p2));
-				break;
+				if (intersection(l, rect, &p))
+					line.append(p);
+				line.append(path.elementAt(i));
 			}
-		}
-	} else {
-		QPointF p;
 
-		if (start > 0) {
-			QLineF l(path.elementAt(start-1), path.elementAt(start));
-			if (intersection(l, boundingRect, &p))
-				lines.append(QLineF(p, path.elementAt(start)));
-		}
-		for (int i = start + 1; i <= end; i++)
-			lines.append(QLineF(path.elementAt(i-1), path.elementAt(i)));
-		if (end < path.elementCount() - 1) {
-			QLineF l(path.elementAt(end), path.elementAt(end+1));
-			if (intersection(l, boundingRect, &p))
-				lines.append(QLineF(path.elementAt(end), p));
+			lastIn = true;
+		} else {
+			QLineF l(path.elementAt(i-1), path.elementAt(i));
+
+			if (lastIn) {
+				QPointF p;
+				if (intersection(l, rect, &p))
+					line.append(p);
+				lines.append(line);
+				line.clear();
+			} else {
+				QPointF p1, p2;
+				if (intersection(l, rect, &p1, &p2)) {
+					line.append(p1);
+					line.append(p2);
+					lines.append(line);
+					line.clear();
+				}
+			}
+
+			lastIn = false;
 		}
 	}
+
+	if (!line.isEmpty())
+		lines.append(line);
 
 	return lines;
 }
@@ -228,35 +232,40 @@ static bool reverse(const QPainterPath &path)
 }
 
 template<class T>
-static QPainterPath textPath(const T &path, qreal textWidth,
-  qreal charWidth, const QRectF &tileRect)
+static QPainterPath textPath(const T &path, qreal textWidth, qreal charWidth,
+  const QRectF &tileRect)
 {
-	QList<QLineF> lines(lineString(path, tileRect));
-	if (lines.isEmpty())
+	if (path.isEmpty())
 		return QPainterPath();
-	qreal length = 0;
-	qreal angle = lines.first().angle();
-	int last = 0;
+
+	QList<QPolygonF> lines(polyLines(path, tileRect));
 
 	for (int i = 0; i < lines.size(); i++) {
-		qreal sl = lines.at(i).length();
-		qreal a = lines.at(i).angle();
+		const QPolygonF &pl = lines.at(i);
+		qreal angle, length = 0;
+		int last = 0;
 
-		if (!tileRect.contains(lines.at(i).p2()) || sl < charWidth
-		  || qAbs(angle - a) > MAX_TEXT_ANGLE) {
-			if (length > textWidth)
-				return subpath(lines, last, i - 1, length - textWidth);
-			last = i;
-			length = 0;
-		} else
-			length += sl;
+		for (int j = 1; j < pl.size(); j ++) {
+			QLineF l(pl.at(j-1), pl.at(j));
+			qreal sl = l.length();
+			qreal a = l.angle();
 
-		angle = a;
+			if ((sl < charWidth) || (j > 1 && qAbs(angle - a) > MAX_TEXT_ANGLE)) {
+				if (length > textWidth)
+					return subpath(pl, last, j - 1, length - textWidth);
+				last = j;
+				length = 0;
+			} else
+				length += sl;
+
+			angle = a;
+		}
+
+		if (length > textWidth)
+			return subpath(pl, last, pl.size() - 1, length - textWidth);
 	}
 
-	return (length > textWidth)
-	  ? subpath(lines, last, lines.size() - 1, length - textWidth)
-	  : QPainterPath();
+	return QPainterPath();
 }
 
 template<class T>
