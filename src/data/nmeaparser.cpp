@@ -429,7 +429,7 @@ bool NMEAParser::readZDA(CTX &ctx, const char *line, int len)
 {
 	int col = 1;
 	const char *vp = line;
-	int d, m, y;
+	int d = 0, m = 0, y = 0;
 
 	for (const char *lp = line; lp < line + len; lp++) {
 		if (*lp == ',' || *lp == '*') {

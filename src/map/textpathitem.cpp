@@ -246,7 +246,7 @@ static QPainterPath textPath(const T &path, qreal textWidth, qreal charWidth,
 
 	for (int i = 0; i < lines.size(); i++) {
 		const QPolygonF &pl = lines.at(i);
-		qreal angle, length = 0;
+		qreal angle = 0, length = 0;
 		int last = 0;
 
 		for (int j = 1; j < pl.size(); j ++) {
