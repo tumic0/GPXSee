@@ -3,7 +3,7 @@
 #include "textpathitem.h"
 
 #define CHAR_RATIO     0.55
-#define MAX_TEXT_ANGLE 30
+#define MAX_ANGLE      30
 #define PADDING        2
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
@@ -149,6 +149,8 @@ static QList<QPolygonF> polyLines(const QPolygonF &path, const QRectF &rect)
 
 			if (lastIn) {
 				QPointF p;
+				if (line.isEmpty())
+					line.append(path.at(i-1));
 				if (intersection(l, rect, &p))
 					line.append(p);
 				lines.append(line);
@@ -200,6 +202,8 @@ static QList<QPolygonF> polyLines(const QPainterPath &path, const QRectF &rect)
 
 			if (lastIn) {
 				QPointF p;
+				if (line.isEmpty())
+					line.append(path.elementAt(i-1));
 				if (intersection(l, rect, &p))
 					line.append(p);
 				lines.append(line);
@@ -250,7 +254,7 @@ static QPainterPath textPath(const T &path, qreal textWidth, qreal charWidth,
 			qreal sl = l.length();
 			qreal a = l.angle();
 
-			if ((sl < charWidth) || (j > 1 && qAbs(angle - a) > MAX_TEXT_ANGLE)) {
+			if ((sl < charWidth) || (j > 1 && qAbs(angle - a) > MAX_ANGLE)) {
 				if (length > textWidth)
 					return subpath(pl, last, j - 1, length - textWidth);
 				last = j;
