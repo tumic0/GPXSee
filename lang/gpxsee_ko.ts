@@ -919,7 +919,7 @@
         <location filename="../src/GUI/gui.cpp" line="1718"/>
         <location filename="../src/GUI/gui.cpp" line="1818"/>
         <source>Don&apos;t show again</source>
-        <translation type="unfinished"></translation>
+        <translation>다시 표시 안 함</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1096"/>
