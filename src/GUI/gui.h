@@ -59,9 +59,7 @@ private slots:
 	void exportPDFFile();
 	void exportPNGFile();
 	void openFile();
-#ifdef Q_OS_ANDROID
 	void openDir();
-#endif // Q_OS_ANDROID
 	void closeAll();
 	void reloadFiles();
 	void statistics();
@@ -149,6 +147,9 @@ private:
 	void createGraphTabs();
 	void createBrowser();
 
+#ifndef Q_OS_ANDROID
+	void openDir(const QString &path, int &showError);
+#endif // Q_OS_ANDROID
 	bool openPOIFile(const QString &fileName);
 	bool loadFile(const QString &fileName, bool tryUnknown, int &showError);
 	void loadData(const Data &data);

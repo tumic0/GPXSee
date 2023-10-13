@@ -214,12 +214,11 @@ void GUI::createActions()
 	connect(_openFileAction, &QAction::triggered, this,
 	  QOverload<>::of(&GUI::openFile));
 	addAction(_openFileAction);
-#ifdef Q_OS_ANDROID
 	_openDirAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Open directory..."),
 	  this);
 	_openDirAction->setMenuRole(QAction::NoRole);
-	connect(_openDirAction, &QAction::triggered, this, &GUI::openDir);
-#endif // Q_OS_ANDROID
+	connect(_openDirAction, &QAction::triggered, this,
+	  QOverload<>::of(&GUI::openDir));
 	_printFileAction = new QAction(QIcon(PRINT_FILE_ICON), tr("Print..."),
 	  this);
 	_printFileAction->setMenuRole(QAction::NoRole);
@@ -607,9 +606,7 @@ void GUI::createMenus()
 {
 	QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 	fileMenu->addAction(_openFileAction);
-#ifdef Q_OS_ANDROID
 	fileMenu->addAction(_openDirAction);
-#endif // Q_OS_ANDROID
 	fileMenu->addSeparator();
 #ifndef Q_OS_ANDROID
 	fileMenu->addAction(_printFileAction);
@@ -956,19 +953,42 @@ void GUI::openFile()
 		_dataDir = QFileInfo(files.last()).path();
 }
 
-#ifdef Q_OS_ANDROID
+#ifndef Q_OS_ANDROID
+void GUI::openDir(const QString &path, int &showError)
+{
+	QDir md(path);
+	md.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+	md.setSorting(QDir::DirsLast);
+	QFileInfoList ml = md.entryInfoList();
+
+	for (int i = 0; i < ml.size(); i++) {
+		const QFileInfo &fi = ml.at(i);
+
+		if (fi.isDir())
+			openDir(fi.absoluteFilePath(), showError);
+		else
+			openFile(fi.absoluteFilePath(), true, showError);
+	}
+}
+#endif // Q_OS_ANDROID
+
 void GUI::openDir()
 {
 	QString dir(QFileDialog::getExistingDirectory(this, tr("Open directory"),
 	  _dataDir));
-	int showError = 1;
 
 	if (!dir.isEmpty()) {
+#ifdef Q_OS_ANDROID
+		int showError = 1;
 		_browser->setCurrentDir(dir);
 		openFile(_browser->current(), true, showError);
+#else // Q_OS_ANDROID
+		int showError = 2;
+		openDir(dir, showError);
+		_dataDir = dir;
+#endif // Q_OS_ANDROID
 	}
 }
-#endif // Q_OS_ANDROID
 
 bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 {
