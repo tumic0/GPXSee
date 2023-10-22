@@ -235,6 +235,12 @@ static bool reverse(const QPainterPath &path)
 	return (angle > 90 && angle < 270) ? true : false;
 }
 
+static qreal diff(qreal a1, qreal a2)
+{
+	qreal d = qAbs(a1 - a2);
+	return (d > 180) ? 360 - d : d;
+}
+
 template<class T>
 static QPainterPath textPath(const T &path, qreal textWidth, qreal charWidth,
   const QRectF &tileRect)
@@ -254,11 +260,16 @@ static QPainterPath textPath(const T &path, qreal textWidth, qreal charWidth,
 			qreal sl = l.length();
 			qreal a = l.angle();
 
-			if ((sl < charWidth) || (j > 1 && qAbs(angle - a) > MAX_ANGLE)) {
+			if (sl < charWidth) {
 				if (length > textWidth)
 					return subpath(pl, last, j - 1, length - textWidth);
 				last = j;
 				length = 0;
+			} else if (j > 1 && diff(angle, a) > MAX_ANGLE) {
+				if (length > textWidth)
+					return subpath(pl, last, j - 1, length - textWidth);
+				last = j - 1;
+				length = sl;
 			} else
 				length += sl;
 
