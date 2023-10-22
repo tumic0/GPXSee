@@ -307,6 +307,8 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 		if (!stream.init(bitstreamInfo, labelPtr & 0x400000, false))
 			return false;
 		while (stream.readNext(lonDelta, latDelta)) {
+			if (!(lonDelta || latDelta))
+				continue;
 			pos.rx() += LS(lonDelta, (24-subdiv->bits()));
 			if (pos.rx() >= 0x800000 && subdiv->lon() >= 0)
 				pos.rx() = 0x7fffff;
@@ -416,6 +418,8 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 			if (!stream.init(bitstreamInfo, false, true))
 				return false;
 			while (stream.readNext(lonDelta, latDelta)) {
+				if (!(lonDelta || latDelta))
+					continue;
 				pos.rx() += LS(lonDelta, 24-subdiv->bits());
 				if (pos.rx() >= 0x800000 && subdiv->lon() >= 0)
 					pos.rx() = 0x7fffff;
