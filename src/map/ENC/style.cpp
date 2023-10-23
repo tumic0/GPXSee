@@ -155,7 +155,9 @@ void Style::lineStyle()
 	_lines[TYPE(SLOTOP)] = Line(QPen(QColor("#797420"), 1, Qt::SolidLine));
 	_lines[TYPE(OBSTRN)] = Line(QPen(QColor("#000000"), 1.5, Qt::DotLine));
 	_lines[TYPE(FERYRT)] = Line(QImage(":/marine/ferry-line.png"));
+	_lines[TYPE(FERYRT)].setTextFontSize(Small);
 	_lines[TYPE(I_FERYRT)] = Line(QImage(":/marine/ferry-line.png"));
+	_lines[TYPE(I_FERYRT)].setTextFontSize(Small);
 	_lines[TYPE(RAILWY)] = Line(railroad());
 	_lines[TYPE(ROADWY)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
 	_lines[TYPE(GATCON)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
