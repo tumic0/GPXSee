@@ -792,7 +792,7 @@
         <location filename="../src/GUI/gui.cpp" line="1718"/>
         <location filename="../src/GUI/gui.cpp" line="1818"/>
         <source>Don&apos;t show again</source>
-        <translation type="unfinished"></translation>
+        <translation>Älä näytä uudelleen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1227"/>
