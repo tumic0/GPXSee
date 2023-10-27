@@ -1,0 +1,10 @@
+[Icon Theme]
+Name=GPXSee
+Inherits=hicolor
+Directories=actions/22x22,preferences/48x48
+
+[actions/22x22]
+Size=22
+
+[preferences/48x48]
+Size=48

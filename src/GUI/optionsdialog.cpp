@@ -827,14 +827,22 @@ OptionsDialog::OptionsDialog(Options &options, Units units, QWidget *parent)
 	new QListWidgetItem(QIcon(PRINT_EXPORT_ICON), QString(), menu);
 	new QListWidgetItem(QIcon(SYSTEM_ICON), QString(), menu);
 #else // Q_OS_ANDROID
-	new QListWidgetItem(QIcon(APPEARANCE_ICON), tr("Appearance"), menu);
-	new QListWidgetItem(QIcon(MAPS_ICON), tr("Maps"), menu);
-	new QListWidgetItem(QIcon(DATA_ICON), tr("Data"), menu);
-	new QListWidgetItem(QIcon(POI_ICON), tr("POI"), menu);
-	new QListWidgetItem(QIcon(DEM_ICON), tr("DEM"), menu);
-	new QListWidgetItem(QIcon(POSITION_ICON), tr("Position"), menu);
-	new QListWidgetItem(QIcon(PRINT_EXPORT_ICON), tr("Print & Export"), menu);
-	new QListWidgetItem(QIcon(SYSTEM_ICON), tr("System"), menu);
+	new QListWidgetItem(QIcon::fromTheme(APPEARANCE_NAME, QIcon(APPEARANCE_ICON)),
+	  tr("Appearance"), menu);
+	new QListWidgetItem(QIcon::fromTheme(MAPS_NAME, QIcon(MAPS_ICON)),
+	  tr("Maps"), menu);
+	new QListWidgetItem(QIcon::fromTheme(DATA_NAME, QIcon(DATA_ICON)),
+	  tr("Data"), menu);
+	new QListWidgetItem(QIcon::fromTheme(POI_NAME, QIcon(POI_ICON)), tr("POI"),
+	  menu);
+	new QListWidgetItem(QIcon::fromTheme(DEM_NAME, QIcon(DEM_ICON)), tr("DEM"),
+	  menu);
+	new QListWidgetItem(QIcon::fromTheme(POSITION_NAME, QIcon(POSITION_ICON)),
+	  tr("Position"), menu);
+	new QListWidgetItem(QIcon::fromTheme(PRINT_EXPORT_NAME,
+	  QIcon(PRINT_EXPORT_ICON)), tr("Print & Export"), menu);
+	new QListWidgetItem(QIcon::fromTheme(SYSTEM_NAME, QIcon(SYSTEM_ICON)),
+	  tr("System"), menu);
 #endif // Q_OS_ANDROID
 
 	QHBoxLayout *contentLayout = new QHBoxLayout();

@@ -70,6 +70,8 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	loadPCSs();
 	Waypoint::loadSymbolIcons(ProgramPaths::symbolsDir());
 
+	QIcon::setFallbackThemeName(APP_NAME);
+
 	_gui = new GUI();
 
 #ifdef Q_OS_ANDROID

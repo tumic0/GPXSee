@@ -1,0 +1,34 @@
+<RCC>
+	<qresource prefix="/icons/GPXSee">
+		<file alias="actions/22x22/document-open.svg">icons/GUI/FlatColor/actions/22x22/document-open.svg</file>
+		<file alias="actions/22x22/document-open-folder.svg">icons/GUI/FlatColor/actions/22x22/document-open-folder.svg</file>
+		<file alias="actions/22x22/document-export.svg">icons/GUI/FlatColor/actions/22x22/document-export.svg</file>
+		<file alias="actions/22x22/document-print.svg">icons/GUI/FlatColor/actions/22x22/document-print.svg</file>
+		<file alias="actions/22x22/document-close.svg">icons/GUI/FlatColor/actions/22x22/document-close.svg</file>
+		<file alias="actions/22x22/view-refresh.svg">icons/GUI/FlatColor/actions/22x22/view-refresh.svg</file>
+		<file alias="actions/22x22/flag.svg">icons/GUI/FlatColor/actions/22x22/flag.svg</file>
+		<file alias="actions/22x22/map-globe.svg">icons/GUI/FlatColor/actions/22x22/map-globe.svg</file>
+		<file alias="actions/22x22/office-chart-area-stacked.svg">icons/GUI/FlatColor//actions/22x22/office-chart-area-stacked.svg</file>
+		<file alias="actions/22x22/transform-move.svg">icons/GUI/FlatColor/actions/22x22/transform-move.svg</file>
+		<file alias="actions/22x22/go-next.svg">icons/GUI/FlatColor/actions/22x22/go-next.svg</file>
+		<file alias="actions/22x22/go-previous.svg">icons/GUI/FlatColor/actions/22x22/go-previous.svg</file>
+		<file alias="actions/22x22/go-first.svg">icons/GUI/FlatColor/actions/22x22/go-first.svg</file>
+		<file alias="actions/22x22/go-last.svg">icons/GUI/FlatColor/actions/22x22/go-last.svg</file>
+		<file alias="actions/22x22/application-exit.svg">icons/GUI/FlatColor/actions/22x22/application-exit.svg</file>
+		<file alias="actions/22x22/view-fullscreen.svg">icons/GUI/FlatColor/actions/22x22/view-fullscreen.svg</file>
+
+		<file alias="actions/22x22/show-hidden.svg">icons/GUI/FlatColor/actions/22x22/show-hidden.svg</file>
+		<file alias="actions/22x22/hint.svg">icons/GUI/FlatColor/actions/22x22/hint.svg</file>
+
+		<file alias="preferences/48x48/gpxsee_appearance.svg">icons/GUI/FlatColor/preferences/48x48/gpxsee_appearance.svg</file>
+		<file alias="preferences/48x48/gpxsee_system.svg">icons/GUI/FlatColor/preferences/48x48/gpxsee_system.svg</file>
+		<file alias="preferences/48x48/gpxsee_dem.svg">icons/GUI/FlatColor/preferences/48x48/gpxsee_dem.svg</file>
+		<file alias="preferences/48x48/gpxsee_data.svg">icons/GUI/FlatColor/preferences/48x48/gpxsee_data.svg</file>
+		<file alias="preferences/48x48/gpxsee_poi.svg">icons/GUI/FlatColor/preferences/48x48/gpxsee_poi.svg</file>
+		<file alias="preferences/48x48/gpxsee_maps.svg">icons/GUI/FlatColor/preferences/48x48/gpxsee_maps.svg</file>
+		<file alias="preferences/48x48/gpxsee_print+export.svg">icons/GUI/FlatColor/preferences/48x48/gpxsee_print+export.svg</file>
+		<file alias="preferences/48x48/gpxsee_position.svg">icons/GUI/FlatColor/preferences/48x48/gpxsee_position.svg</file>
+
+		<file alias="index.theme">icons/GUI/FlatColor/index.theme</file>
+	</qresource>
+</RCC>

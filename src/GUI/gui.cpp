@@ -187,7 +187,8 @@ void GUI::createActions()
 
 	// General actions
 #if !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
-	_exitAction = new QAction(QIcon(QUIT_ICON), tr("Quit"), this);
+	_exitAction = new QAction(QIcon::fromTheme(QUIT_NAME, QIcon(QUIT_ICON)),
+	  tr("Quit"), this);
 	_exitAction->setShortcut(QUIT_SHORTCUT);
 	_exitAction->setMenuRole(QAction::QuitRole);
 	connect(_exitAction, &QAction::triggered, this, &GUI::close);
@@ -208,45 +209,47 @@ void GUI::createActions()
 	connect(_aboutAction, &QAction::triggered, this, &GUI::about);
 
 	// File actions
-	_openFileAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Open..."), this);
+	_openFileAction = new QAction(QIcon::fromTheme(OPEN_FILE_NAME,
+	  QIcon(OPEN_FILE_ICON)), tr("Open..."), this);
 	_openFileAction->setMenuRole(QAction::NoRole);
 	_openFileAction->setShortcut(OPEN_SHORTCUT);
 	connect(_openFileAction, &QAction::triggered, this,
 	  QOverload<>::of(&GUI::openFile));
 	addAction(_openFileAction);
-	_openDirAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Open directory..."),
-	  this);
+	_openDirAction = new QAction(QIcon::fromTheme(OPEN_DIR_NAME,
+	  QIcon(OPEN_DIR_ICON)), tr("Open directory..."), this);
 	_openDirAction->setMenuRole(QAction::NoRole);
 	connect(_openDirAction, &QAction::triggered, this,
 	  QOverload<>::of(&GUI::openDir));
-	_printFileAction = new QAction(QIcon(PRINT_FILE_ICON), tr("Print..."),
-	  this);
+	_printFileAction = new QAction(QIcon::fromTheme(PRINT_FILE_NAME,
+	  QIcon(PRINT_FILE_ICON)), tr("Print..."), this);
 	_printFileAction->setMenuRole(QAction::NoRole);
 	_printFileAction->setActionGroup(_fileActionGroup);
 	connect(_printFileAction, &QAction::triggered, this, &GUI::printFile);
 	addAction(_printFileAction);
-	_exportPDFFileAction = new QAction(QIcon(EXPORT_FILE_ICON),
-	  tr("Export to PDF..."), this);
+	_exportPDFFileAction = new QAction(QIcon::fromTheme(EXPORT_FILE_NAME,
+	  QIcon(EXPORT_FILE_ICON)), tr("Export to PDF..."), this);
 	_exportPDFFileAction->setMenuRole(QAction::NoRole);
 	_exportPDFFileAction->setShortcut(PDF_EXPORT_SHORTCUT);
 	_exportPDFFileAction->setActionGroup(_fileActionGroup);
 	connect(_exportPDFFileAction, &QAction::triggered, this, &GUI::exportPDFFile);
 	addAction(_exportPDFFileAction);
-	_exportPNGFileAction = new QAction(QIcon(EXPORT_FILE_ICON),
-	  tr("Export to PNG..."), this);
+	_exportPNGFileAction = new QAction(QIcon::fromTheme(EXPORT_FILE_NAME,
+	  QIcon(EXPORT_FILE_ICON)), tr("Export to PNG..."), this);
 	_exportPNGFileAction->setMenuRole(QAction::NoRole);
 	_exportPNGFileAction->setShortcut(PNG_EXPORT_SHORTCUT);
 	_exportPNGFileAction->setActionGroup(_fileActionGroup);
 	connect(_exportPNGFileAction, &QAction::triggered, this, &GUI::exportPNGFile);
 	addAction(_exportPNGFileAction);
-	_closeFileAction = new QAction(QIcon(CLOSE_FILE_ICON), tr("Close"), this);
+	_closeFileAction = new QAction(QIcon::fromTheme(CLOSE_FILE_NAME,
+	  QIcon(CLOSE_FILE_ICON)), tr("Close"), this);
 	_closeFileAction->setMenuRole(QAction::NoRole);
 	_closeFileAction->setShortcut(CLOSE_SHORTCUT);
 	_closeFileAction->setActionGroup(_fileActionGroup);
 	connect(_closeFileAction, &QAction::triggered, this, &GUI::closeAll);
 	addAction(_closeFileAction);
-	_reloadFileAction = new QAction(QIcon(RELOAD_FILE_ICON), tr("Reload"),
-	  this);
+	_reloadFileAction = new QAction(QIcon::fromTheme(RELOAD_FILE_NAME,
+	  QIcon(RELOAD_FILE_ICON)), tr("Reload"), this);
 	_reloadFileAction->setMenuRole(QAction::NoRole);
 	_reloadFileAction->setShortcut(RELOAD_SHORTCUT);
 	_reloadFileAction->setActionGroup(_fileActionGroup);
@@ -264,8 +267,8 @@ void GUI::createActions()
 	_poisActionGroup->setExclusive(false);
 	connect(_poisActionGroup, &QActionGroup::triggered, this,
 	  &GUI::poiFileChecked);
-	_openPOIAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Load POI file..."),
-	  this);
+	_openPOIAction = new QAction(QIcon::fromTheme(OPEN_FILE_NAME,
+	  QIcon(OPEN_FILE_ICON)), tr("Load POI file..."), this);
 	_openPOIAction->setMenuRole(QAction::NoRole);
 	connect(_openPOIAction, &QAction::triggered, this,
 	  QOverload<>::of(&GUI::openPOIFile));
@@ -294,7 +297,8 @@ void GUI::createActions()
 	_showPOILabelsAction->setCheckable(true);
 	connect(_showPOILabelsAction, &QAction::triggered, _mapView,
 	  &MapView::showPOILabels);
-	_showPOIAction = new QAction(QIcon(SHOW_POI_ICON), tr("Show POIs"), this);
+	_showPOIAction = new QAction(QIcon::fromTheme(SHOW_POI_NAME,
+	  QIcon(SHOW_POI_ICON)), tr("Show POIs"), this);
 	_showPOIAction->setMenuRole(QAction::NoRole);
 	_showPOIAction->setCheckable(true);
 	_showPOIAction->setShortcut(SHOW_POI_SHORTCUT);
@@ -305,8 +309,8 @@ void GUI::createActions()
 	_mapsActionGroup = new QActionGroup(this);
 	_mapsActionGroup->setExclusive(true);
 	connect(_mapsActionGroup, &QActionGroup::triggered, this, &GUI::mapChanged);
-	_showMapAction = new QAction(QIcon(SHOW_MAP_ICON), tr("Show map"),
-	  this);
+	_showMapAction = new QAction(QIcon::fromTheme(SHOW_MAP_NAME,
+	  QIcon(SHOW_MAP_ICON)), tr("Show map"), this);
 	_showMapAction->setEnabled(false);
 	_showMapAction->setMenuRole(QAction::NoRole);
 	_showMapAction->setCheckable(true);
@@ -314,13 +318,13 @@ void GUI::createActions()
 	connect(_showMapAction, &QAction::triggered, _mapView,
 	  &MapView::showMap);
 	addAction(_showMapAction);
-	_loadMapAction = new QAction(QIcon(OPEN_FILE_ICON), tr("Load map..."),
-	  this);
+	_loadMapAction = new QAction(QIcon::fromTheme(OPEN_FILE_NAME,
+	  QIcon(OPEN_FILE_ICON)), tr("Load map..."), this);
 	_loadMapAction->setMenuRole(QAction::NoRole);
 	connect(_loadMapAction, &QAction::triggered, this,
 	  QOverload<>::of(&GUI::loadMap));
-	_loadMapDirAction = new QAction(QIcon(OPEN_FILE_ICON),
-	  tr("Load map directory..."), this);
+	_loadMapDirAction = new QAction(QIcon::fromTheme(OPEN_DIR_NAME,
+	  QIcon(OPEN_DIR_ICON)), tr("Load map directory..."), this);
 	_loadMapDirAction->setMenuRole(QAction::NoRole);
 	connect(_loadMapDirAction, &QAction::triggered, this, &GUI::loadMapDir);
 	_clearMapCacheAction = new QAction(tr("Clear tile cache"), this);
@@ -345,8 +349,8 @@ void GUI::createActions()
 	  &MapView::showCursorCoordinates);
 
 	// Position
-	_showPositionAction = new QAction(QIcon(SHOW_POS_ICON),
-	  tr("Show position"), this);
+	_showPositionAction = new QAction(QIcon::fromTheme(SHOW_POS_NAME,
+	  QIcon(SHOW_POS_ICON)), tr("Show position"), this);
 	_showPositionAction->setMenuRole(QAction::NoRole);
 	_showPositionAction->setCheckable(true);
 	_showPositionAction->setEnabled(false);
@@ -444,8 +448,8 @@ void GUI::createActions()
 	connect(_showDEMTilesAction, &QAction::triggered, this, &GUI::showDEMTiles);
 
 	// Graph actions
-	_showGraphsAction = new QAction(QIcon(SHOW_GRAPHS_ICON), tr("Show graphs"),
-	  this);
+	_showGraphsAction = new QAction(QIcon::fromTheme(SHOW_GRAPHS_NAME,
+	  QIcon(SHOW_GRAPHS_ICON)), tr("Show graphs"), this);
 	_showGraphsAction->setMenuRole(QAction::NoRole);
 	_showGraphsAction->setCheckable(true);
 	_showGraphsAction->setShortcut(SHOW_GRAPHS_SHORTCUT);
@@ -543,8 +547,8 @@ void GUI::createActions()
 	_dmsAction->setActionGroup(ag);
 	connect(_dmsAction, &QAction::triggered, this, &GUI::setDMS);
 #ifndef Q_OS_ANDROID
-	_fullscreenAction = new QAction(QIcon(FULLSCREEN_ICON),
-	  tr("Fullscreen mode"), this);
+	_fullscreenAction = new QAction(QIcon::fromTheme(FULLSCREEN_NAME,
+	  QIcon(FULLSCREEN_ICON)), tr("Fullscreen mode"), this);
 	_fullscreenAction->setMenuRole(QAction::NoRole);
 	_fullscreenAction->setCheckable(true);
 	_fullscreenAction->setShortcut(FULLSCREEN_SHORTCUT);
@@ -557,19 +561,23 @@ void GUI::createActions()
 
 	// Navigation actions
 #ifndef Q_OS_ANDROID
-	_nextAction = new QAction(QIcon(NEXT_FILE_ICON), tr("Next"), this);
+	_nextAction = new QAction(QIcon::fromTheme(NEXT_FILE_NAME,
+	  QIcon(NEXT_FILE_ICON)), tr("Next"), this);
 	_nextAction->setActionGroup(_navigationActionGroup);
 	_nextAction->setMenuRole(QAction::NoRole);
 	connect(_nextAction, &QAction::triggered, this, &GUI::next);
-	_prevAction = new QAction(QIcon(PREV_FILE_ICON), tr("Previous"), this);
+	_prevAction = new QAction(QIcon::fromTheme(PREV_FILE_NAME,
+	  QIcon(PREV_FILE_ICON)), tr("Previous"), this);
 	_prevAction->setMenuRole(QAction::NoRole);
 	_prevAction->setActionGroup(_navigationActionGroup);
 	connect(_prevAction, &QAction::triggered, this, &GUI::prev);
-	_lastAction = new QAction(QIcon(LAST_FILE_ICON), tr("Last"), this);
+	_lastAction = new QAction(QIcon::fromTheme(LAST_FILE_NAME,
+	  QIcon(LAST_FILE_ICON)), tr("Last"), this);
 	_lastAction->setMenuRole(QAction::NoRole);
 	_lastAction->setActionGroup(_navigationActionGroup);
 	connect(_lastAction, &QAction::triggered, this, &GUI::last);
-	_firstAction = new QAction(QIcon(FIRST_FILE_ICON), tr("First"), this);
+	_firstAction = new QAction(QIcon::fromTheme(FIRST_FILE_NAME,
+	  QIcon(FIRST_FILE_ICON)), tr("First"), this);
 	_firstAction->setMenuRole(QAction::NoRole);
 	_firstAction->setActionGroup(_navigationActionGroup);
 	connect(_firstAction, &QAction::triggered, this, &GUI::first);

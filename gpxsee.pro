@@ -488,6 +488,8 @@ TRANSLATIONS = lang/gpxsee_en.ts \
     lang/gpxsee_ko.ts
 
 macx {
+    RESOURCES += theme-default.qrc
+
     ICON = icons/app/gpxsee.icns
     QMAKE_INFO_PLIST = pkg/mac/Info.plist
     locale.path = Contents/Resources/translations
@@ -502,11 +504,12 @@ macx {
     icons.files = $$files(icons/formats/*.icns)
     lproj.path = Contents/Resources
     lproj.files = $$files(pkg/mac/lproj/*)
-
     QMAKE_BUNDLE_DATA += locale maps symbols icons crs lproj
 }
 
 win32 {
+    RESOURCES += theme-default.qrc
+
     QMAKE_TARGET_DESCRIPTION = GPXSee
     QMAKE_TARGET_COPYRIGHT = Copyright (c) 2023 Martin Tuma
     RC_ICONS = icons/app/gpxsee.ico \
@@ -549,8 +552,9 @@ win32 {
 }
 
 unix:!macx:!android {
-    isEmpty(PREFIX):PREFIX = /usr/local
+    RESOURCES += theme-unix.qrc
 
+    isEmpty(PREFIX):PREFIX = /usr/local
     maps.files = $$files(data/maps/*)
     maps.path = $$PREFIX/share/gpxsee/maps
     crs.files = $$files(data/CRS/*)
@@ -572,6 +576,8 @@ unix:!macx:!android {
 }
 
 android {
+    RESOURCES += theme-default.qrc
+
     HEADERS += src/GUI/navigationwidget.h
     SOURCES += src/GUI/navigationwidget.cpp
 
