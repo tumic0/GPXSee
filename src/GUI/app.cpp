@@ -70,7 +70,9 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	loadPCSs();
 	Waypoint::loadSymbolIcons(ProgramPaths::symbolsDir());
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
 	QIcon::setFallbackThemeName(APP_NAME);
+#endif // QT 5.12
 
 	_gui = new GUI();
 
