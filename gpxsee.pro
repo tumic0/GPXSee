@@ -488,7 +488,7 @@ TRANSLATIONS = lang/gpxsee_en.ts \
     lang/gpxsee_ko.ts
 
 macx {
-    RESOURCES += theme-default.qrc
+    RESOURCES += theme-unix.qrc
 
     ICON = icons/app/gpxsee.icns
     QMAKE_INFO_PLIST = pkg/mac/Info.plist
