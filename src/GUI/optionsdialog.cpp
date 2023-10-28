@@ -748,6 +748,7 @@ QWidget *OptionsDialog::createSystemPage()
 	QWidget *systemTab = new QWidget();
 	QFormLayout *systemTabLayout = new QFormLayout();
 	systemTabLayout->addRow(tr("Image cache size:"), _pixmapCache);
+	systemTabLayout->addRow(tr("DEM cache size:"), _demCache);
 	systemTabLayout->addRow(tr("Connection timeout:"), _connectionTimeout);
 	systemTabLayout->addWidget(_enableHTTP2);
 	systemTabLayout->addWidget(_useOpenGL);
