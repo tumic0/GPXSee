@@ -24,7 +24,7 @@ GPS log file formats.
 * Real-time GPS position.
 * Windows, macOS, Linux and Android builds.
 
-![GPXSee - Linux](https://a.fsdn.com/con/app/proj/gpxsee/screenshots/linux2.png)
+![GPXSee - Linux](https://www.gpxsee.org/gallery/linux.png)
 
 ## Build
 Build requirements:
