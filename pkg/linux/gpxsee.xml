@@ -177,6 +177,16 @@
 		<glob pattern="*.wpt"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.gpsdump.wpt">
+		<comment>GPSDump Waypoint File</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text/plain"/>
+		<magic>
+			<match type="string" offset="0" value="$FormatGEO"/>
+			<match type="string" offset="0" value="$FormatUTM"/>
+		</magic>
+		<glob pattern="*.wpt"/>
+	</mime-type>
 
 	<!-- Maps -->
 

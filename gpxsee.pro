@@ -118,6 +118,7 @@ HEADERS += src/common/config.h \
     src/GUI/pngexportdialog.h \
     src/GUI/timezoneinfo.h \
     src/GUI/passwordedit.h \
+    src/data/gpsdumpparser.h \
     src/data/style.h \
     src/data/twonavparser.h \
     src/map/ENC/attributes.h \
@@ -338,6 +339,7 @@ SOURCES += src/main.cpp \
     src/GUI/pngexportdialog.cpp \
     src/GUI/projectioncombobox.cpp \
     src/GUI/passwordedit.cpp \
+    src/data/gpsdumpparser.cpp \
     src/data/twonavparser.cpp \
     src/map/ENC/atlasdata.cpp \
     src/map/ENC/mapdata.cpp \
