@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="180"/>
         <source>GPSDump files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSDump filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="181"/>
