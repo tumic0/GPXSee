@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="180"/>
         <source>GPSDump files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSDump fájlok</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="181"/>
@@ -1040,6 +1040,7 @@
         <location filename="../src/GUI/gui.cpp" line="1984"/>
         <source>%n files</source>
         <translation>
+            <numerusform>%n fájl</numerusform>
             <numerusform>%n fájl</numerusform>
         </translation>
     </message>
