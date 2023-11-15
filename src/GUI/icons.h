@@ -7,6 +7,7 @@
 
 // Toolbar/menu icons
 #define OPEN_FILE_ICON    ":/icons/" APP_NAME "/actions/22x22/document-open.svg"
+#define OPEN_RECENT_ICON  ":/icons/" APP_NAME "/actions/22x22/document-open-recent.svg"
 #define OPEN_DIR_ICON     ":/icons/" APP_NAME "/actions/22x22/document-open-folder.svg"
 #define EXPORT_FILE_ICON  ":/icons/" APP_NAME "/actions/22x22/document-export.svg"
 #define PRINT_FILE_ICON   ":/icons/" APP_NAME "/actions/22x22/document-print.svg"
@@ -40,6 +41,7 @@
 
 // Desktop theme names
 #define OPEN_FILE_NAME    "document-open"
+#define OPEN_RECENT_NAME  "document-open-recent"
 #define OPEN_DIR_NAME     "document-open-folder"
 #define EXPORT_FILE_NAME  "document-export"
 #define PRINT_FILE_NAME   "document-print"

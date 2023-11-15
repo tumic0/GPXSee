@@ -59,12 +59,13 @@
 #include "gui.h"
 
 
+#define MAX_RECENT_FILES  10
 #define TOOLBAR_ICON_SIZE 22
 
 GUI::GUI()
 {
 	QString activeMap;
-	QStringList disabledPOIs;
+	QStringList disabledPOIs, recentFiles;
 
 	_poi = new POI(this);
 	_dem = new DEMLoader(ProgramPaths::demDir(true), this);
@@ -108,10 +109,13 @@ GUI::GUI()
 	_movingTime = 0;
 	_lastTab = 0;
 
-	readSettings(activeMap, disabledPOIs);
+	readSettings(activeMap, disabledPOIs, recentFiles);
 
 	loadInitialMaps(activeMap);
 	loadInitialPOIs(disabledPOIs);
+#ifndef Q_OS_ANDROID
+	loadRecentFiles(recentFiles);
+#endif // Q_OS_ANDROID
 
 	updateGraphTabs();
 	updateStatusBarInfo();
@@ -261,6 +265,15 @@ void GUI::createActions()
 	_statisticsAction->setActionGroup(_fileActionGroup);
 	connect(_statisticsAction, &QAction::triggered, this, &GUI::statistics);
 	addAction(_statisticsAction);
+#ifndef Q_OS_ANDROID
+	_recentFilesActionGroup = new QActionGroup(this);
+	connect(_recentFilesActionGroup, &QActionGroup::triggered, this,
+	  &GUI::recentFileSelected);
+	_clearRecentFilesAction = new QAction(tr("Clear list"), this);
+	_clearRecentFilesAction->setMenuRole(QAction::NoRole);
+	connect(_clearRecentFilesAction, &QAction::triggered, this,
+	  &GUI::clearRecentFiles);
+#endif // Q_OS_ANDROID
 
 	// POI actions
 	_poisActionGroup = new QActionGroup(this);
@@ -614,6 +627,14 @@ void GUI::createMenus()
 {
 	QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 	fileMenu->addAction(_openFileAction);
+#ifndef Q_OS_ANDROID
+	_recentFilesMenu = fileMenu->addMenu(tr("Open recent"));
+	_recentFilesMenu->setIcon(QIcon::fromTheme(OPEN_RECENT_NAME,
+	  QIcon(OPEN_RECENT_ICON)));
+	_recentFilesMenu->setEnabled(false);
+	_recentFilesEnd = _recentFilesMenu->addSeparator();
+	_recentFilesMenu->addAction(_clearRecentFilesAction);
+#endif // Q_OS_ANDROID
 	fileMenu->addAction(_openDirAction);
 	fileMenu->addSeparator();
 #ifndef Q_OS_ANDROID
@@ -1018,6 +1039,9 @@ bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 	updateNavigationActions();
 	updateStatusBarInfo();
 	updateWindowTitle();
+#ifndef Q_OS_ANDROID
+	updateRecentFiles(fileName);
+#endif // Q_OS_ANDROID
 
 	return true;
 }
@@ -1992,6 +2016,48 @@ void GUI::updateWindowTitle()
 		setWindowTitle(APP_NAME);
 }
 
+#ifndef Q_OS_ANDROID
+void GUI::updateRecentFiles(const QString &fileName)
+{
+	QAction *a = 0;
+
+	QList<QAction *> actions(_recentFilesActionGroup->actions());
+	for (int i = 0; i < actions.size(); i++) {
+		if (actions.at(i)->text() == fileName) {
+			a = actions.at(i);
+			break;
+		}
+	}
+
+	if (a)
+		delete a;
+	else if (actions.size() == MAX_RECENT_FILES)
+		delete actions.last();
+
+	actions = _recentFilesActionGroup->actions();
+	QAction *before = actions.size() ? actions.last() : _recentFilesEnd;
+	_recentFilesMenu->insertAction(before,
+	  new QAction(fileName, _recentFilesActionGroup));
+	_recentFilesMenu->setEnabled(true);
+}
+
+void GUI::clearRecentFiles()
+{
+	QList<QAction *> actions(_recentFilesActionGroup->actions());
+
+	for (int i = 0; i < actions.size(); i++)
+		delete actions.at(i);
+
+	_recentFilesMenu->setEnabled(false);
+}
+
+void GUI::recentFileSelected(QAction *action)
+{
+	int showError = 1;
+	openFile(action->text(), true, showError);
+}
+#endif // Q_OS_ANDROID
+
 void GUI::mapChanged(QAction *action)
 {
 	_map = action->data().value<Map*>();
@@ -2353,6 +2419,18 @@ void GUI::writeSettings()
 #endif // Q_OS_ANDROID
 	settings.endGroup();
 
+	/* File */
+#ifndef Q_OS_ANDROID
+	QList<QAction*> recentActions(_recentFilesActionGroup->actions());
+	QStringList recent;
+	for (int i = 0; i < recentActions.size(); i++)
+		recent.append(recentActions.at(i)->text());
+
+	settings.beginGroup(SETTINGS_FILE);
+	WRITE(recentDataFiles, recent);
+	settings.endGroup();
+#endif // Q_OS_ANDROID
+
 	/* Map */
 	settings.beginGroup(SETTINGS_MAP);
 	WRITE(activeMap, _map->name());
@@ -2372,11 +2450,11 @@ void GUI::writeSettings()
 	settings.endGroup();
 
 	/* POI */
-	QList<QAction*> actions(_poisActionGroup->actions());
+	QList<QAction*> disabledActions(_poisActionGroup->actions());
 	QStringList disabled;
-	for (int i = 0; i < actions.size(); i++)
-		if (!actions.at(i)->isChecked())
-			disabled.append(actions.at(i)->data().toString());
+	for (int i = 0; i < disabledActions.size(); i++)
+		if (!disabledActions.at(i)->isChecked())
+			disabled.append(disabledActions.at(i)->data().toString());
 
 	settings.beginGroup(SETTINGS_POI);
 	WRITE(showPoi, _showPOIAction->isChecked());
@@ -2511,7 +2589,8 @@ void GUI::writeSettings()
 	settings.endGroup();
 }
 
-void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
+void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
+  QStringList &recentFiles)
 {
 #define READ(name) \
 	(Settings::name.read(settings))
@@ -2559,6 +2638,15 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs)
 		showToolbars(false);
 #endif // Q_OS_ANDROID
 	settings.endGroup();
+
+	/* File */
+#ifndef Q_OS_ANDROID
+	settings.beginGroup(SETTINGS_FILE);
+	recentFiles = READ(recentDataFiles);
+	settings.endGroup();
+#else // Q_OS_ANDROID
+	Q_UNUSED(recentFiles);
+#endif // Q_OS_ANDROID
 
 	/* Map */
 	settings.beginGroup(SETTINGS_MAP);
@@ -3051,6 +3139,22 @@ void GUI::loadInitialPOIs(const QStringList &disabled)
 	_selectAllPOIAction->setEnabled(!poiActions.isEmpty());
 	_unselectAllPOIAction->setEnabled(!poiActions.isEmpty());
 }
+
+#ifndef Q_OS_ANDROID
+void GUI::loadRecentFiles(const QStringList &files)
+{
+	QAction *before = _recentFilesEnd;
+
+	for (int i = 0; i < files.size(); i++) {
+		QAction *a = new QAction(files.at(i), _recentFilesActionGroup);
+		_recentFilesMenu->insertAction(before, a);
+		before = a;
+	}
+
+	if (!files.isEmpty())
+		_recentFilesMenu->setEnabled(true);
+}
+#endif // Q_OS_ANDROID
 
 QAction *GUI::mapAction(const QString &name)
 {

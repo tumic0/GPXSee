@@ -268,3 +268,8 @@ const Settings::SettingMap Settings::positionPluginParameters
 
 const Settings::SettingList Settings::disabledPoiFiles
   = Settings::SettingList("disabled", "file");
+
+#ifndef Q_OS_ANDROID
+const Settings::SettingList Settings::recentDataFiles
+  = Settings::SettingList("recent", "file");
+#endif // Q_OS_ANDROID

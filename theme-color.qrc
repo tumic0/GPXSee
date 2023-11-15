@@ -1,6 +1,7 @@
 <RCC>
 	<qresource prefix="/icons/GPXSee">
 		<file alias="actions/22x22/document-open.svg">icons/GUI/FlatColor/actions/22x22/document-open.svg</file>
+		<file alias="actions/22x22/document-open-recent.svg">icons/GUI/FlatColor/actions/22x22/document-open-recent.svg</file>
 		<file alias="actions/22x22/document-open-folder.svg">icons/GUI/FlatColor/actions/22x22/document-open-folder.svg</file>
 		<file alias="actions/22x22/document-export.svg">icons/GUI/FlatColor/actions/22x22/document-export.svg</file>
 		<file alias="actions/22x22/document-print.svg">icons/GUI/FlatColor/actions/22x22/document-print.svg</file>

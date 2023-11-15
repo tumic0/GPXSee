@@ -7,6 +7,7 @@
 
 #define SETTINGS_WINDOW     "Window"
 #define SETTINGS_SETTINGS   "Settings"
+#define SETTINGS_FILE       "File"
 #define SETTINGS_MAP        "Map"
 #define SETTINGS_GRAPH      "Graph"
 #define SETTINGS_POI        "POI"
@@ -82,6 +83,11 @@ public:
 	static const Setting coordinatesFormat;
 #ifndef Q_OS_ANDROID
 	static const Setting showToolbars;
+#endif // Q_OS_ANDROID
+
+	/* File */
+#ifndef Q_OS_ANDROID
+	static const SettingList recentDataFiles;
 #endif // Q_OS_ANDROID
 
 	/* Map */

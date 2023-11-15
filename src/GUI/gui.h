@@ -92,6 +92,10 @@ private slots:
 	void poiFileChecked(QAction *action);
 	void selectAllPOIs();
 	void unselectAllPOIs();
+#ifndef Q_OS_ANDROID
+	void recentFileSelected(QAction *action);
+	void clearRecentFiles();
+#endif // Q_OS_ANDROID
 
 	void next();
 	void prev();
@@ -161,6 +165,9 @@ private:
 	void updateWindowTitle();
 	bool updateGraphTabs();
 	void updateDEMDownloadAction();
+#ifndef Q_OS_ANDROID
+	void updateRecentFiles(const QString &fileName);
+#endif // Q_OS_ANDROID
 
 	TimeType timeType() const;
 	Units units() const;
@@ -174,10 +181,14 @@ private:
 	qreal movingTime() const;
 	QAction *mapAction(const QString &name);
 	QGeoPositionInfoSource *positionSource(const Options &options);
-	void readSettings(QString &activeMap, QStringList &disabledPOIs);
+	void readSettings(QString &activeMap, QStringList &disabledPOIs,
+	  QStringList &recentFiles);
 
 	void loadInitialMaps(const QString &selected);
 	void loadInitialPOIs(const QStringList &disabled);
+#ifndef Q_OS_ANDROID
+	void loadRecentFiles(const QStringList &files);
+#endif // Q_OS_ANDROID
 
 	void loadOptions();
 	void updateOptions(const Options &options);
@@ -198,11 +209,17 @@ private:
 #endif // Q_OS_ANDROID
 	QMenu *_poiMenu;
 	QMenu *_mapMenu;
+#ifndef Q_OS_ANDROID
+	QMenu *_recentFilesMenu;
+#endif // Q_OS_ANDROID
 
 	QActionGroup *_fileActionGroup;
 	QActionGroup *_navigationActionGroup;
 	QActionGroup *_mapsActionGroup;
 	QActionGroup *_poisActionGroup;
+#ifndef Q_OS_ANDROID
+	QActionGroup *_recentFilesActionGroup;
+#endif // Q_OS_ANDROID
 #if !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
 	QAction *_exitAction;
 #endif // Q_OS_MAC + Q_OS_ANDROID
@@ -276,6 +293,10 @@ private:
 	QAction *_showDEMTilesAction;
 	QAction *_mapsEnd;
 	QAction *_poisEnd;
+#ifndef Q_OS_ANDROID
+	QAction *_clearRecentFilesAction;
+	QAction *_recentFilesEnd;
+#endif // Q_OS_ANDROID
 
 	QLabel *_fileNameLabel;
 	QLabel *_distanceLabel;
