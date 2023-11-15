@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="180"/>
         <source>GPSDump files</source>
-        <translation type="unfinished"></translation>
+        <translation>Ffitxers d&apos;abocament de GPS</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="181"/>
@@ -1041,6 +1041,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fitxer</numerusform>
+            <numerusform>%n fitxers</numerusform>
             <numerusform>%n fitxers</numerusform>
         </translation>
     </message>
