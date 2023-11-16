@@ -701,7 +701,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="631"/>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Abierto reciente</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="655"/>
