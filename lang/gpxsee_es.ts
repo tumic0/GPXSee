@@ -414,7 +414,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="272"/>
         <source>Clear list</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar la lista</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="284"/>
@@ -1041,6 +1041,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n archivo</numerusform>
+            <numerusform>%n archivos</numerusform>
             <numerusform>%n archivos</numerusform>
         </translation>
     </message>
