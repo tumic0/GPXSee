@@ -4,8 +4,6 @@
 #include <QSqlError>
 #include <QPainter>
 #include <QPixmapCache>
-#include <QImageReader>
-#include <QBuffer>
 #include <QtConcurrent>
 #include "common/util.h"
 #include "osm.h"
@@ -13,37 +11,6 @@
 
 
 #define META_TYPE(type) static_cast<QMetaType::Type>(type)
-
-class MBTile
-{
-public:
-	MBTile(int zoom, int scaledSize, const QPoint &xy, const QByteArray &data,
-	  const QString &key) : _zoom(zoom), _scaledSize(scaledSize), _xy(xy),
-	  _data(data), _key(key) {}
-
-	const QPoint &xy() const {return _xy;}
-	const QString &key() const {return _key;}
-	const QPixmap &pixmap() const {return _pixmap;}
-
-	void load() {
-		QByteArray z(QString::number(_zoom).toLatin1());
-
-		QBuffer buffer(&_data);
-		QImageReader reader(&buffer, z);
-		if (_scaledSize)
-			reader.setScaledSize(QSize(_scaledSize, _scaledSize));
-		_pixmap = QPixmap::fromImage(reader.read());
-	}
-
-private:
-	int _zoom;
-	int _scaledSize;
-	QPoint _xy;
-	QByteArray _data;
-	QString _key;
-	QPixmap _pixmap;
-};
-
 
 MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _mapRatio(1.0), _tileRatio(1.0), _scalable(false),
@@ -183,6 +150,7 @@ void MBTilesMap::load(const Projection &in, const Projection &out,
 
 void MBTilesMap::unload()
 {
+	cancelJobs(true);
 	_db.close();
 }
 
@@ -219,12 +187,16 @@ qreal MBTilesMap::resolution(const QRectF &rect)
 
 int MBTilesMap::zoomIn()
 {
+	cancelJobs(false);
+
 	_zi = qMin(_zi + 1, _zooms.size() - 1);
 	return _zi;
 }
 
 int MBTilesMap::zoomOut()
 {
+	cancelJobs(false);
+
 	_zi = qMax(_zi - 1, 0);
 	return _zi;
 }
@@ -260,6 +232,53 @@ QByteArray MBTilesMap::tileData(int zoom, const QPoint &tile) const
 	return QByteArray();
 }
 
+bool MBTilesMap::isRunning(const QString &key) const
+{
+	for (int i = 0; i < _jobs.size(); i++) {
+		const QList<MBTile> &tiles = _jobs.at(i)->tiles();
+		for (int j = 0; j < tiles.size(); j++)
+			if (tiles.at(j).key() == key)
+				return true;
+	}
+
+	return false;
+}
+
+void MBTilesMap::runJob(MBTilesMapJob *job)
+{
+	_jobs.append(job);
+
+	connect(job, &MBTilesMapJob::finished, this, &MBTilesMap::jobFinished);
+	job->run();
+}
+
+void MBTilesMap::removeJob(MBTilesMapJob *job)
+{
+	_jobs.removeOne(job);
+	job->deleteLater();
+}
+
+void MBTilesMap::jobFinished(MBTilesMapJob *job)
+{
+	const QList<MBTile> &tiles = job->tiles();
+
+	for (int i = 0; i < tiles.size(); i++) {
+		const MBTile &mt = tiles.at(i);
+		if (!mt.pixmap().isNull())
+			QPixmapCache::insert(mt.key(), mt.pixmap());
+	}
+
+	removeJob(job);
+
+	emit tilesLoaded();
+}
+
+void MBTilesMap::cancelJobs(bool wait)
+{
+	for (int i = 0; i < _jobs.size(); i++)
+		_jobs.at(i)->cancel(wait);
+}
+
 void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	Q_UNUSED(flags);
@@ -288,6 +307,9 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			QString key = path() + "-" + QString::number(zoom) + "_"
 			  + QString::number(t.x()) + "_" + QString::number(t.y());
 
+			if (isRunning(key))
+				continue;
+
 			if (QPixmapCache::find(key, &pm)) {
 				QPointF tp(qMax(tl.x(), b.left()) + (t.x() - tile.x())
 				  * tileSize(), qMax(tl.y(), b.top()) + (t.y() - tile.y())
@@ -300,21 +322,26 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		}
 	}
 
-	QFuture<void> future = QtConcurrent::map(tiles, &MBTile::load);
-	future.waitForFinished();
+	if (!tiles.isEmpty()) {
+		if (flags & Map::Block || !_scalable) {
+			QFuture<void> future = QtConcurrent::map(tiles, &MBTile::load);
+			future.waitForFinished();
 
-	for (int i = 0; i < tiles.size(); i++) {
-		const MBTile &mt = tiles.at(i);
-		QPixmap pm(mt.pixmap());
-		if (pm.isNull())
-			continue;
+			for (int i = 0; i < tiles.size(); i++) {
+				const MBTile &mt = tiles.at(i);
+				QPixmap pm(mt.pixmap());
+				if (pm.isNull())
+					continue;
 
-		QPixmapCache::insert(mt.key(), pm);
+				QPixmapCache::insert(mt.key(), pm);
 
-		QPointF tp(qMax(tl.x(), b.left()) + (mt.xy().x() - tile.x())
-		  * tileSize(), qMax(tl.y(), b.top()) + (mt.xy().y() - tile.y())
-		  * tileSize());
-		drawTile(painter, pm, tp);
+				QPointF tp(qMax(tl.x(), b.left()) + (mt.xy().x() - tile.x())
+				  * tileSize(), qMax(tl.y(), b.top()) + (mt.xy().y() - tile.y())
+				  * tileSize());
+				drawTile(painter, pm, tp);
+			}
+		} else
+			runJob(new MBTilesMapJob(tiles));
 	}
 }
 
