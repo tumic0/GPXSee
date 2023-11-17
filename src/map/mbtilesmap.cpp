@@ -23,7 +23,7 @@ public:
 
 	const QPoint &xy() const {return _xy;}
 	const QString &key() const {return _key;}
-	QPixmap pixmap() const {return QPixmap::fromImage(_image);}
+	const QPixmap &pixmap() const {return _pixmap;}
 
 	void load() {
 		QByteArray z(QString::number(_zoom).toLatin1());
@@ -32,7 +32,7 @@ public:
 		QImageReader reader(&buffer, z);
 		if (_scaledSize)
 			reader.setScaledSize(QSize(_scaledSize, _scaledSize));
-		reader.read(&_image);
+		_pixmap = QPixmap::fromImage(reader.read());
 	}
 
 private:
@@ -41,7 +41,7 @@ private:
 	QPoint _xy;
 	QByteArray _data;
 	QString _key;
-	QImage _image;
+	QPixmap _pixmap;
 };
 
 
