@@ -631,6 +631,7 @@ void GUI::createMenus()
 	_recentFilesMenu = fileMenu->addMenu(tr("Open recent"));
 	_recentFilesMenu->setIcon(QIcon::fromTheme(OPEN_RECENT_NAME,
 	  QIcon(OPEN_RECENT_ICON)));
+	_recentFilesMenu->menuAction()->setMenuRole(QAction::NoRole);
 	_recentFilesMenu->setEnabled(false);
 	_recentFilesEnd = _recentFilesMenu->addSeparator();
 	_recentFilesMenu->addAction(_clearRecentFilesAction);
@@ -680,6 +681,7 @@ void GUI::createMenus()
 	dataMenu->addAction(_showRouteWaypointsAction);
 	dataMenu->addAction(_showTicksAction);
 	QMenu *markerMenu = dataMenu->addMenu(tr("Position info"));
+	markerMenu->menuAction()->setMenuRole(QAction::NoRole);
 	markerMenu->addAction(_hideMarkersAction);
 	markerMenu->addAction(_showMarkersAction);
 	markerMenu->addAction(_showMarkerDateAction);
@@ -717,13 +719,16 @@ void GUI::createMenus()
 
 	QMenu *settingsMenu = menuBar()->addMenu(tr("&Settings"));
 	QMenu *timeMenu = settingsMenu->addMenu(tr("Time"));
+	timeMenu->menuAction()->setMenuRole(QAction::NoRole);
 	timeMenu->addAction(_totalTimeAction);
 	timeMenu->addAction(_movingTimeAction);
 	QMenu *unitsMenu = settingsMenu->addMenu(tr("Units"));
+	unitsMenu->menuAction()->setMenuRole(QAction::NoRole);
 	unitsMenu->addAction(_metricUnitsAction);
 	unitsMenu->addAction(_imperialUnitsAction);
 	unitsMenu->addAction(_nauticalUnitsAction);
 	QMenu *coordinatesMenu = settingsMenu->addMenu(tr("Coordinates format"));
+	coordinatesMenu->menuAction()->setMenuRole(QAction::NoRole);
 	coordinatesMenu->addAction(_decimalDegreesAction);
 	coordinatesMenu->addAction(_degreesMinutesAction);
 	coordinatesMenu->addAction(_dmsAction);
