@@ -1,4 +1,3 @@
-#include <QtCore>
 #include <QPainter>
 #include <QDir>
 #include "common/rectc.h"
@@ -101,15 +100,11 @@ qreal OnlineMap::tileSize() const
 void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	qreal scale = OSM::zoom2scale(_zoom, _tileSize);
-	QRectF b(bounds());
-
 	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * coordinatesRatio(), _zoom);
-	QPointF tl(floor(rect.left() / tileSize())
-	  * tileSize(), floor(rect.top() / tileSize()) * tileSize());
-
-	QSizeF s(qMin(rect.right() - tl.x(), b.width()),
-	  qMin(rect.bottom() - tl.y(), b.height()));
+	Coordinates ctl(OSM::tile2ll(tile, _zoom));
+	QPointF tl(ll2xy(Coordinates(ctl.lon(), -ctl.lat())));
+	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	int width = ceil(s.width() / tileSize());
 	int height = ceil(s.height() / tileSize());
 
@@ -127,9 +122,10 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 	for (int i = 0; i < tiles.count(); i++) {
 		FetchTile &t = tiles[i];
-		QPointF tp(qMax(tl.x(), b.left()) + (t.xy().x() - tile.x()) * tileSize(),
-		  qMax(tl.y(), b.top()) + ((_invertY ? (1<<_zoom) - t.xy().y() - 1 :
-		  t.xy().y()) - tile.y()) * tileSize());
+		QPointF tp(tl.x() + (t.xy().x() - tile.x()) * tileSize(),
+		  tl.y() + ((_invertY
+			? (1<<_zoom) - t.xy().y() - 1
+			: t.xy().y()) - tile.y()) * tileSize());
 
 		if (!t.pixmap().isNull()) {
 			t.pixmap().setDevicePixelRatio(imageRatio());
