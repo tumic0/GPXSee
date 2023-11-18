@@ -12,6 +12,170 @@
 
 #define META_TYPE(type) static_cast<QMetaType::Type>(type)
 
+static RectC str2bounds(const QString &str)
+{
+	QStringList list(str.split(','));
+	if (list.size() != 4)
+		return RectC();
+
+	bool lok, rok, bok, tok;
+	double left = list.at(0).toDouble(&lok);
+	double bottom = list.at(1).toDouble(&bok);
+	double right = list.at(2).toDouble(&rok);
+	double top = list.at(3).toDouble(&tok);
+
+	return (lok && rok && bok && tok)
+	  ? RectC(Coordinates(left, top), Coordinates(right, bottom))
+	  : RectC();
+}
+
+bool MBTilesMap::getMinZoom(int &zoom)
+{
+	QSqlQuery query("SELECT value FROM metadata WHERE name = 'minzoom'", _db);
+
+	if (query.first()) {
+		bool ok;
+		zoom = query.value(0).toString().toInt(&ok);
+		if (!ok || zoom < 0) {
+			_errorString = "Invalid minzoom metadata";
+			return false;
+		}
+	} else {
+		qWarning("%s: missing minzoom metadata", qPrintable(path()));
+		zoom = 0;
+	}
+
+	return true;
+}
+
+bool MBTilesMap::getMaxZoom(int &zoom)
+{
+	QSqlQuery query("SELECT value FROM metadata WHERE name = 'maxzoom'", _db);
+
+	if (query.first()) {
+		bool ok;
+		zoom = query.value(0).toString().toInt(&ok);
+		if (!ok && zoom < 0) {
+			_errorString = "Invalid maxzoom metadata";
+			return false;
+		}
+	} else {
+		qWarning("%s: missing maxzoom metadata", qPrintable(path()));
+		zoom = 20;
+	}
+
+	return true;
+}
+
+bool MBTilesMap::getZooms()
+{
+	int minZoom, maxZoom;
+
+	if (!(getMinZoom(minZoom) && getMaxZoom(maxZoom)))
+		return false;
+
+	for (int i = minZoom; i <= maxZoom; i++) {
+		QString sql = QString("SELECT zoom_level FROM tiles"
+		  " WHERE zoom_level = %1 LIMIT 1").arg(i);
+		QSqlQuery query(sql, _db);
+		if (query.first())
+			_zooms.append(i);
+	}
+
+	_zi = _zooms.size() - 1;
+
+	return true;
+}
+
+bool MBTilesMap::getBounds()
+{
+	QSqlQuery query("SELECT value FROM metadata WHERE name = 'bounds'", _db);
+	if (query.first()) {
+		RectC b(str2bounds(query.value(0).toString()));
+		if (!b.isValid()) {
+			_errorString = "Invalid bounds metadata";
+			return false;
+		}
+		_bounds = b;
+	} else {
+		qWarning("%s: missing bounds metadata", qPrintable(path()));
+
+		int z = _zooms.first();
+		QString sql = QString("SELECT min(tile_column), min(tile_row), "
+		  "max(tile_column), max(tile_row) FROM tiles WHERE zoom_level = %1")
+		  .arg(z);
+		QSqlQuery query(sql, _db);
+		query.first();
+
+		int minX = qMin((1<<z) - 1, qMax(0, query.value(0).toInt()));
+		int minY = qMin((1<<z) - 1, qMax(0, query.value(1).toInt()));
+		int maxX = qMin((1<<z) - 1, qMax(0, query.value(2).toInt())) + 1;
+		int maxY = qMin((1<<z) - 1, qMax(0, query.value(3).toInt())) + 1;
+		Coordinates tl(OSM::tile2ll(QPoint(minX, maxY), z));
+		Coordinates br(OSM::tile2ll(QPoint(maxX, minY), z));
+		// Workaround of broken zoom levels 0 and 1 due to numerical instability
+		tl.rlat() = qMin(tl.lat(), OSM::BOUNDS.top());
+		br.rlat() = qMax(br.lat(), OSM::BOUNDS.bottom());
+		_bounds = RectC(tl, br);
+	}
+
+	return true;
+}
+
+bool MBTilesMap::getTileSize()
+{
+	QString sql("SELECT tile_data FROM tiles LIMIT 1");
+	QSqlQuery query(sql, _db);
+	query.first();
+
+	QByteArray data = query.value(0).toByteArray();
+	QBuffer buffer(&data);
+	QImageReader reader(&buffer);
+	QSize tileSize(reader.size());
+
+	if (!tileSize.isValid() || tileSize.width() != tileSize.height()) {
+		_errorString = "Unsupported/invalid tile images";
+		return false;
+	}
+
+	_tileSize = tileSize.width();
+
+	return true;
+}
+
+void MBTilesMap::getTileFormat()
+{
+	QSqlQuery query("SELECT value FROM metadata WHERE name = 'format'", _db);
+	if (query.first()) {
+		if (query.value(0).toString() == "pbf")
+			_scalable = true;
+	} else
+		qWarning("%s: missing tiles format metadata", qPrintable(path()));
+}
+
+void MBTilesMap::getTilePixelRatio()
+{
+	QSqlQuery query("SELECT value FROM metadata WHERE name = 'tilepixelratio'",
+	  _db);
+	if (query.first()) {
+		bool ok;
+		double ratio = query.value(0).toString().toDouble(&ok);
+		if (ok)
+			_tileRatio = ratio;
+	}
+}
+
+void MBTilesMap::getName()
+{
+	QSqlQuery query("SELECT value FROM metadata WHERE name = 'name'", _db);
+	if (query.first())
+		_name = query.value(0).toString();
+	else {
+		qWarning("%s: missing map name", qPrintable(path()));
+		_name = Util::file2name(path());
+	}
+}
+
 MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _mapRatio(1.0), _tileRatio(1.0), _scalable(false),
   _scaledSize(0), _valid(false)
@@ -42,90 +206,15 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 		return;
 	}
 
-	{
-		QSqlQuery query("SELECT DISTINCT zoom_level FROM tiles"
-		  " ORDER BY zoom_level", _db);
-		while (query.next())
-			_zooms.append(query.value(0).toInt());
-		if (_zooms.isEmpty()) {
-			_errorString = "Empty tile set";
-			return;
-		}
-		if (_zooms.first() < 0) {
-			_errorString = "Invalid zoom levels";
-			return;
-		}
-	}
-	_zi = _zooms.size() - 1;
-
-	{
-		int z = _zooms.first();
-		QString sql = QString("SELECT min(tile_column), min(tile_row), "
-		  "max(tile_column), max(tile_row) FROM tiles WHERE zoom_level = %1")
-		  .arg(z);
-		QSqlQuery query(sql, _db);
-		query.first();
-
-		int minX = qMin((1<<z) - 1, qMax(0, query.value(0).toInt()));
-		int minY = qMin((1<<z) - 1, qMax(0, query.value(1).toInt()));
-		int maxX = qMin((1<<z) - 1, qMax(0, query.value(2).toInt())) + 1;
-		int maxY = qMin((1<<z) - 1, qMax(0, query.value(3).toInt())) + 1;
-		Coordinates tl(OSM::tile2ll(QPoint(minX, maxY), z));
-		Coordinates br(OSM::tile2ll(QPoint(maxX, minY), z));
-		// Workaround of broken zoom levels 0 and 1 due to numerical instability
-		tl.rlat() = qMin(tl.lat(), OSM::BOUNDS.top());
-		br.rlat() = qMax(br.lat(), OSM::BOUNDS.bottom());
-		_bounds = RectC(tl, br);
-	}
-
-	{
-		QString sql = QString("SELECT tile_data FROM tiles LIMIT 1");
-		QSqlQuery query(sql, _db);
-		query.first();
-
-		QByteArray data = query.value(0).toByteArray();
-		QBuffer buffer(&data);
-		QImageReader reader(&buffer);
-		QSize tileSize(reader.size());
-
-		if (!tileSize.isValid() || tileSize.width() != tileSize.height()) {
-			_errorString = "Unsupported/invalid tile images";
-			return;
-		}
-		_tileSize = tileSize.width();
-	}
-
-	{
-		QSqlQuery query("SELECT value FROM metadata WHERE name = 'format'", _db);
-		if (query.first()) {
-			if (query.value(0).toString() == "pbf")
-				_scalable = true;
-		} else
-			qWarning("%s: missing tiles format", qPrintable(fileName));
-	}
-
-	{
-		QSqlQuery query("SELECT value FROM metadata WHERE name = 'name'", _db);
-		if (query.first())
-			_name = query.value(0).toString();
-		else {
-			qWarning("%s: missing map name", qPrintable(fileName));
-			_name = Util::file2name(fileName);
-		}
-	}
-
-	{
-		QSqlQuery query(
-		  "SELECT value FROM metadata WHERE name = 'tilepixelratio'", _db);
-		if (query.first()) {
-			bool ok;
-			_tileRatio = query.value(0).toString().toDouble(&ok);
-			if (!ok) {
-				_errorString = "Invalid tile pixel ratio";
-				return;
-			}
-		}
-	}
+	if (!getZooms())
+		return;
+	if (!getBounds())
+		return;
+	if (!getTileSize())
+		return;
+	getTileFormat();
+	getTilePixelRatio();
+	getName();
 
 	_db.close();
 
@@ -281,22 +370,15 @@ void MBTilesMap::cancelJobs(bool wait)
 
 void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	Q_UNUSED(flags);
 	int zoom = _zooms.at(_zi);
 	qreal scale = OSM::zoom2scale(zoom, _tileSize);
-	QRectF b(bounds());
-
-
 	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * coordinatesRatio(), zoom);
-	QPointF tl(floor(rect.left() / tileSize())
-	  * tileSize(), floor(rect.top() / tileSize()) * tileSize());
-
-	QSizeF s(qMin(rect.right() - tl.x(), b.width()),
-	  qMin(rect.bottom() - tl.y(), b.height()));
+	Coordinates ctl(OSM::tile2ll(tile, zoom));
+	QPointF tl(ll2xy(Coordinates(ctl.lon(), -ctl.lat())));
+	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	int width = ceil(s.width() / tileSize());
 	int height = ceil(s.height() / tileSize());
-
 
 	QList<MBTile> tiles;
 
@@ -311,9 +393,8 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				continue;
 
 			if (QPixmapCache::find(key, &pm)) {
-				QPointF tp(qMax(tl.x(), b.left()) + (t.x() - tile.x())
-				  * tileSize(), qMax(tl.y(), b.top()) + (t.y() - tile.y())
-				  * tileSize());
+				QPointF tp(tl.x() + (t.x() - tile.x()) * tileSize(),
+				  tl.y() + (t.y() - tile.y()) * tileSize());
 				drawTile(painter, pm, tp);
 			} else {
 				tiles.append(MBTile(zoom, _scaledSize, t, tileData(zoom, t),
@@ -335,9 +416,8 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 				QPixmapCache::insert(mt.key(), pm);
 
-				QPointF tp(qMax(tl.x(), b.left()) + (mt.xy().x() - tile.x())
-				  * tileSize(), qMax(tl.y(), b.top()) + (mt.xy().y() - tile.y())
-				  * tileSize());
+				QPointF tp(tl.x() + (mt.xy().x() - tile.x()) * tileSize(),
+				  tl.y() + (mt.xy().y() - tile.y()) * tileSize());
 				drawTile(painter, pm, tp);
 			}
 		} else

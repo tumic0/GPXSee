@@ -110,6 +110,14 @@ private slots:
 	void jobFinished(MBTilesMapJob *job);
 
 private:
+	bool getMinZoom(int &zoom);
+	bool getMaxZoom(int &zoom);
+	bool getZooms();
+	bool getBounds();
+	bool getTileSize();
+	void getTileFormat();
+	void getTilePixelRatio();
+	void getName();
 	qreal tileSize() const;
 	qreal coordinatesRatio() const;
 	qreal imageRatio() const;
