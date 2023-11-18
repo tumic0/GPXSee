@@ -238,19 +238,13 @@ void OsmdroidMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	Q_UNUSED(flags);
 	qreal scale = OSM::zoom2scale(_zoom, _tileSize);
-	QRectF b(bounds());
-
-
 	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * _mapRatio, _zoom);
-	QPointF tl(floor(rect.left() / tileSize())
-	  * tileSize(), floor(rect.top() / tileSize()) * tileSize());
-
-	QSizeF s(qMin(rect.right() - tl.x(), b.width()),
-	  qMin(rect.bottom() - tl.y(), b.height()));
+	Coordinates ctl(OSM::tile2ll(tile, _zoom));
+	QPointF tl(ll2xy(Coordinates(ctl.lon(), -ctl.lat())));
+	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	int width = ceil(s.width() / tileSize());
 	int height = ceil(s.height() / tileSize());
-
 
 	QList<RenderTile> tiles;
 
@@ -262,13 +256,11 @@ void OsmdroidMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			  + QString::number(t.x()) + "_" + QString::number(t.y());
 
 			if (QPixmapCache::find(key, &pm)) {
-				QPointF tp(qMax(tl.x(), b.left()) + (t.x() - tile.x())
-				  * tileSize(), qMax(tl.y(), b.top()) + (t.y() - tile.y())
-				  * tileSize());
+				QPointF tp(tl.x() + (t.x() - tile.x()) * tileSize(),
+				  tl.y() + (t.y() - tile.y()) * tileSize());
 				drawTile(painter, pm, tp);
-			} else {
+			} else
 				tiles.append(RenderTile(t, tileData(_zoom, t), key));
-			}
 		}
 	}
 
@@ -283,9 +275,8 @@ void OsmdroidMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 		QPixmapCache::insert(mt.key(), pm);
 
-		QPointF tp(qMax(tl.x(), b.left()) + (mt.xy().x() - tile.x())
-		  * tileSize(), qMax(tl.y(), b.top()) + (mt.xy().y() - tile.y())
-		  * tileSize());
+		QPointF tp(tl.x() + (mt.xy().x() - tile.x()) * tileSize(),
+		  tl.y() + (mt.xy().y() - tile.y()) * tileSize());
 		drawTile(painter, pm, tp);
 	}
 }
