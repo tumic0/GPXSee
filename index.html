@@ -88,8 +88,8 @@
           <ul>
             <li>Opens GPX, TCX, FIT, KML, NMEA, IGC, CUP, SIGMA SLF, Suunto SML, LOC,
                 GeoJSON, OziExplorer (PLT, RTE, WPT), Garmin GPI &amp; CSV,
-                TomTom OV2 &amp; ITN, ONmove OMD/GHP, TwoNav (TRK, RTE, WPT)
-                and geotagged JPEG files.</li>
+                TomTom OV2 &amp; ITN, ONmove OMD/GHP, TwoNav (TRK, RTE, WPT),
+                GPSDump WPT and geotagged JPEG files.</li>
             <li>User-definable online maps (OpenStreetMap/Google tiles, WMTS,
                 WMS, TMS, QuadTiles).</li>
             <li>Offline maps (OziExplorer maps, TrekBuddy maps/atlases, Garmin IMG/GMAP
@@ -201,6 +201,18 @@
         <div class="latest-news">
           <h2>Releases</h2>
           <div class="news-item">
+            <p class="date">Nov 19 2023</p>
+            <h3>Version 13.11</h3>
+            <ul>
+              <li>Added support for GPSDump WPT files.</li>
+              <li>Added "Open recent" menu.</li>
+              <li>Fixed broken menu items placement (Mac).</li>
+              <li>Huge MBTiles maps now load in a "geologically short" time.</li>
+              <li>Vector MBTiles maps now rendered asynchronous.</li>
+              <li>Fixed map bounds limiting.</li>
+            </ul>
+          </div>
+          <div class="news-item">
             <p class="date">Oct 28 2023</p>
             <h3>Version 13.10</h3>
             <ul>
@@ -235,15 +247,6 @@
               <li>Improved Mapsforge and ENC maps rendering.</li>
               <li>Switched to Android SDK 33.</li>
               <li>Added missing Windows quiet uninstaller entry.</li>
-            </ul>
-          </div>
-          <div class="news-item">
-            <p class="date">Aug 13 2023</p>
-            <h3>Version 13.6</h3>
-            <ul>
-              <li>Fixed Garmin GPI parser rejecting some valid files.</li>
-              <li>Improved Mapsforge and Garmin IMG maps rendering.</li>
-              <li>Added option to suppress file open errors.</li>
             </ul>
           </div>
         </div>
