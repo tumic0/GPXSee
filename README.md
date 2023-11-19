@@ -5,7 +5,7 @@ GPS log file formats.
 ## Features
 * Opens GPX, TCX, FIT, KML, NMEA, IGC, CUP, SIGMA SLF, Suunto SML, LOC, GeoJSON,
   OziExplorer (PLT, RTE, WPT), Garmin GPI&CSV, TomTom OV2&ITN, ONmove OMD/GHP,
-  TwoNav (TRK, RTE, WPT) and geotagged JPEG files.
+  TwoNav (TRK, RTE, WPT), GPSDump and geotagged JPEG files.
 * User-definable online maps (OpenStreetMap/Google tiles, WMTS, WMS, TMS,
   QuadTiles).
 * Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases,
@@ -38,8 +38,6 @@ lrelease gpxsee.pro
 qmake gpxsee.pro
 make # nmake on windows
 ```
-
-
 
 ## Download
 * [Windows & OS X builds](https://sourceforge.net/projects/gpxsee)
@@ -75,4 +73,5 @@ different, GPL compatible, licenses:
   [Transverse Mercator](src/map/proj/transversemercator.cpp) projections - NIMA
   Source Code Disclaimer
 * [Projection parameters CSV files](data/CRS) - BSD/EPSG/Public domain
-* [Mapsforge render theme](data/mapsforge/default.xml) and its [icons](icons/map/mapsforge) - LGPLv3
+* [Mapsforge render theme](data/mapsforge/default.xml) and its
+  [icons](icons/map/mapsforge) - LGPLv3
