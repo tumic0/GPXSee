@@ -42,7 +42,7 @@ bool MBTilesMap::getMinZoom(int &zoom)
 		}
 	} else {
 		qWarning("%s: missing minzoom metadata", qPrintable(path()));
-		zoom = 0;
+		zoom = OSM::ZOOMS.min();
 	}
 
 	return true;
@@ -61,7 +61,7 @@ bool MBTilesMap::getMaxZoom(int &zoom)
 		}
 	} else {
 		qWarning("%s: missing maxzoom metadata", qPrintable(path()));
-		zoom = 20;
+		zoom = OSM::ZOOMS.max();
 	}
 
 	return true;
