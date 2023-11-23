@@ -457,7 +457,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="272"/>
         <source>Clear list</source>
-        <translation type="unfinished"></translation>
+        <translation>Rensa lista</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="284"/>
@@ -692,7 +692,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="631"/>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna senaste</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="683"/>

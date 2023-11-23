@@ -414,7 +414,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="272"/>
         <source>Clear list</source>
-        <translation type="unfinished"></translation>
+        <translation>Esborrar la llista</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="284"/>
@@ -701,7 +701,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="631"/>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Obert fa poc</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="656"/>
@@ -1041,6 +1041,7 @@
         <source>%n files</source>
         <translation>
             <numerusform>%n fitxer</numerusform>
+            <numerusform>%n fitxers</numerusform>
             <numerusform>%n fitxers</numerusform>
         </translation>
     </message>
