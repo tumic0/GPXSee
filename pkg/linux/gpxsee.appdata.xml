@@ -15,7 +15,8 @@
 			<li>Opens GPX, TCX, FIT, KML, IGC, NMEA, SIGMA SLF, Suunto SML, LOC,
 				OziExplorer (PLT, WPT, RTE), GeoJSON, SeeYou CUP,
 				Garmin GPI &amp; CSV, TomTom OV2 &amp; ITN, ONmove OMD/GHP,
-				TwoNav (TRK, RTE, WPT) and geotagged JPEG files.</li>
+				TwoNav (TRK, RTE, WPT), GPSDump WPT and geotagged JPEG
+				files.</li>
 			<li>User-definable online maps (OpenStreetMap/Google tiles, WMTS,
 				WMS, TMS, QuadTiles).</li>
 			<li>Offline maps (MBTiles, OziExplorer maps, TrekBuddy maps/atlases,
@@ -41,7 +42,7 @@
 			<image>https://www.gpxsee.org/gallery/linux.png</image>
 		</screenshot>
 		<screenshot>
-			<image>https://www.gpxsee.org/gallery/poi2.png</image>
+			<image>https://www.gpxsee.org/gallery/gear_ratio.png</image>
 		</screenshot>
 	</screenshots>
 
@@ -109,5 +110,6 @@
 		<mimetype>application/vnd.orux.map+xml</mimetype>
 		<mimetype>application/vnd.iho.s57-data</mimetype>
 		<mimetype>application/vnd.iho.s57-catalogue</mimetype>
+		<mimetype>application/vnd.gpsdump.wpt</mimetype>
 	</mimetypes>
 </component>
