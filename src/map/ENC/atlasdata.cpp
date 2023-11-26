@@ -13,8 +13,7 @@ bool AtlasData::pointCb(const QString *map, void *context)
 	if (!cached) {
 		MapData *data = new MapData(*map);
 		data->points(ctx->rect, ctx->points);
-		if (!ctx->cache.insert(map, data))
-			delete data;
+		ctx->cache.insert(map, data);
 	} else
 		cached->points(ctx->rect, ctx->points);
 
@@ -35,8 +34,7 @@ bool AtlasData::polyCb(const QString *map, void *context)
 		MapData *data = new MapData(*map);
 		data->polygons(ctx->rect, ctx->polygons);
 		data->lines(ctx->rect, ctx->lines);
-		if (!ctx->cache.insert(map, data))
-			delete data;
+		ctx->cache.insert(map, data);
 	} else {
 		cached->polygons(ctx->rect, ctx->polygons);
 		cached->lines(ctx->rect, ctx->lines);
