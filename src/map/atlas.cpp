@@ -112,7 +112,7 @@ Atlas::Atlas(const QString &fileName, bool TAR, const Projection &proj,
 
 	if (TAR) {
 		if (!tar.open()) {
-			_errorString = "Error reading tar file";
+			_errorString = "Error reading tar file: " + tar.errorString();
 			return;
 		}
 		QString tbaFileName(tbaFile(tar.files()));

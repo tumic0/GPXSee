@@ -12,6 +12,7 @@ public:
 
 	bool open();
 	void close() {_file.close();}
+	const QString &errorString() const {return _error;}
 
 	QStringList files() const {return _index.keys();}
 	QByteArray file(const QString &name);
@@ -26,6 +27,7 @@ private:
 
 	QFile _file;
 	QMap<QString, quint64> _index;
+	QString _error;
 };
 
 #endif // TAR_H

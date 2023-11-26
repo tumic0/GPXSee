@@ -17,6 +17,7 @@ public:
 
 	bool open();
 	void close() {_file.close();}
+	const QString &errorString() const {return _error;}
 
 	QString fileName() const {return _file.fileName();}
 	bool isOpen() const {return _file.isOpen();}
@@ -49,6 +50,7 @@ private:
 	quint8 _key;
 	QList<Zoom> _zooms;
 	QFile _file;
+	QString _error;
 };
 
 #endif // OZF_H

@@ -179,20 +179,22 @@ bool OZF::readTileTable()
 
 bool OZF::open()
 {
-	if (!_file.open(QIODevice::ReadOnly))
+	if (!_file.open(QIODevice::ReadOnly)) {
+		_error = _file.errorString();
 		return false;
+	}
 
 	if (!_zooms.isEmpty())
 		return true;
 
 	if (!readHeaders()) {
-		qWarning("%s: Invalid header", qPrintable(_file.fileName()));
+		_error = "Invalid header";
 		_file.close();
 		return false;
 	}
 
 	if (!readTileTable()) {
-		qWarning("%s: Invalid tile table", qPrintable(_file.fileName()));
+		_error = "Invalid tile table";
 		_file.close();
 		return false;
 	}

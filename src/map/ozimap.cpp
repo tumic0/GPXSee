@@ -66,7 +66,7 @@ OziMap::OziMap(const QString &fileName, const Projection &proj, QObject *parent)
 
 		_tar = new Tar(fileName);
 		if (!_tar->open()) {
-			_errorString = "Error reading tar file";
+			_errorString = "Error reading tar file: " + _tar->errorString();
 			return;
 		}
 		QStringList files(_tar->files());
@@ -202,7 +202,7 @@ OziMap::OziMap(const QString &dirName, Tar &tar, const Projection &proj,
 	}
 	_tar = new Tar(tf);
 	if (!_tar->open()) {
-		_errorString = _tar->fileName() + ": error reading tar file";
+		_errorString = _tar->fileName() + ": " + _tar->errorString();
 		return;
 	}
 	if (!setTileInfo(_tar->files())) {
@@ -245,8 +245,8 @@ bool OziMap::setImageInfo(const QString &path)
 
 	if (OZF::isOZF(_map.path)) {
 		_ozf = new OZF(_map.path);
-		if (!_ozf || !_ozf->open()) {
-			_errorString = QString("%1: Error loading OZF file").arg(_map.path);
+		if (!_ozf->open()) {
+			_errorString = QString("%1: %2").arg(_map.path, _ozf->errorString());
 			return false;
 		}
 		_scale = _ozf->scale(_zoom);
@@ -312,19 +312,24 @@ void OziMap::load(const Projection &in, const Projection &out,
 
 	if (_tar) {
 		Q_ASSERT(!_tar->isOpen());
-		if (!_tar->open())
+		if (!_tar->open()) {
+			qWarning("%s: %s", qPrintable(_tar->fileName()),
+			  qPrintable(_tar->errorString()));
 			return;
+		}
 	}
 	if (_ozf) {
 		Q_ASSERT(!_ozf->isOpen());
-		if (!_ozf->open())
+		if (!_ozf->open()) {
+			qWarning("%s: %s", qPrintable(_ozf->fileName()),
+			  qPrintable(_ozf->errorString()));
 			return;
+		}
 	}
 	if (!_tile.isValid() && !_ozf) {
 		Q_ASSERT(!_img);
 		_img = new Image(_map.path);
-		if (_img)
-			_img->setDevicePixelRatio(_mapRatio);
+		_img->setDevicePixelRatio(_mapRatio);
 	}
 }
 
