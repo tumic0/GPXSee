@@ -82,6 +82,11 @@ bool MBTilesMap::getZooms()
 			_zooms.append(i);
 	}
 
+	if (!_zooms.size()) {
+		_errorString = "Empty tile set";
+		return false;
+	}
+
 	_zi = _zooms.size() - 1;
 
 	return true;
