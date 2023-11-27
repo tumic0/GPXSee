@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="180"/>
         <source>GPSDump files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSDump-dosieroj</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="181"/>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="272"/>
         <source>Clear list</source>
-        <translation type="unfinished"></translation>
+        <translation>Vakigi liston</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="284"/>
@@ -701,7 +701,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="631"/>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Malfermi lastatempajn</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="656"/>
@@ -745,7 +745,7 @@
         <location filename="../src/GUI/gui.cpp" line="1775"/>
         <location filename="../src/GUI/gui.cpp" line="1875"/>
         <source>Don&apos;t show again</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne montri denove</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1938"/>
