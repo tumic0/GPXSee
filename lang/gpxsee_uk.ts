@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="180"/>
         <source>GPSDump files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSDump файли</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="181"/>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="272"/>
         <source>Clear list</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистити список</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="284"/>
@@ -566,7 +566,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="447"/>
         <source>Use styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Використовувати стилі</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="454"/>
@@ -701,7 +701,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="631"/>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкрити недавні</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="656"/>
@@ -745,7 +745,7 @@
         <location filename="../src/GUI/gui.cpp" line="1775"/>
         <location filename="../src/GUI/gui.cpp" line="1875"/>
         <source>Don&apos;t show again</source>
-        <translation type="unfinished"></translation>
+        <translation>Більше не показувати</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1938"/>
@@ -1264,7 +1264,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="160"/>
         <source>Electronic Navigational Charts</source>
-        <translation type="unfinished"></translation>
+        <translation>Морські карти ENC</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="168"/>
