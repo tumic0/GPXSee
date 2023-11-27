@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="180"/>
         <source>GPSDump files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSDump файлы</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="181"/>
@@ -445,7 +445,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="272"/>
         <source>Clear list</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистить список</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="284"/>
@@ -680,7 +680,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="631"/>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть недавние</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="683"/>
