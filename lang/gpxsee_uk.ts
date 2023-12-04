@@ -1737,12 +1737,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="70"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
-        <translation type="unfinished"></translation>
+        <translation>Виберіть правильну систему координат (CRS) для карт без визначеного CRS (JNX, KMZ і World-файли).</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="73"/>
         <source>Select the desired projection of vector maps (IMG, Mapsforge and ENC maps). The projection must be valid for the whole map area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Виберіть необхідну проєкцію векторних карт (IMG, Mapsforge та ENC мапи). Проєкція має бути дійсною для всієї області карти.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="295"/>
