@@ -135,7 +135,9 @@ bool MBTilesMap::getTileSize()
 
 	QByteArray data = query.value(0).toByteArray();
 	QBuffer buffer(&data);
-	QImageReader reader(&buffer);
+	/* Explicitly specify the image plugin in case of vector tiles
+	   (QTBUG-119910 workaround) */
+	QImageReader reader(&buffer, _scalable ? QByteArray("mvt") : QByteArray());
 	QSize tileSize(reader.size());
 
 	if (!tileSize.isValid() || tileSize.width() != tileSize.height()) {
@@ -215,9 +217,9 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 		return;
 	if (!getBounds())
 		return;
+	getTileFormat();
 	if (!getTileSize())
 		return;
-	getTileFormat();
 	getTilePixelRatio();
 	getName();
 
