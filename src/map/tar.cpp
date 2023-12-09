@@ -47,7 +47,7 @@ static quint64 number(const char* data, size_t size, int base = 8)
 bool Tar::open()
 {
 	if (!_file.open(QIODevice::ReadOnly)) {
-		_error = _file.errorString();
+		_errorString = _file.errorString();
 		return false;
 	}
 
@@ -74,7 +74,7 @@ bool Tar::loadTar()
 		if (ret < BLOCKSIZE) {
 			_file.close();
 			_index.clear();
-			_error = "Error reading header block";
+			_errorString = "Error reading header block";
 			return false;
 		}
 		size = number(hdr->size, sizeof(hdr->size));
@@ -82,7 +82,7 @@ bool Tar::loadTar()
 		if (!_file.seek(_file.pos() + BLOCKCOUNT(size) * BLOCKSIZE)) {
 			_file.close();
 			_index.clear();
-			_error = "Error skipping data blocks";
+			_errorString = "Error skipping data blocks";
 			return false;
 		}
 	}

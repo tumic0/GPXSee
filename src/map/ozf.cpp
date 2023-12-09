@@ -180,7 +180,7 @@ bool OZF::readTileTable()
 bool OZF::open()
 {
 	if (!_file.open(QIODevice::ReadOnly)) {
-		_error = _file.errorString();
+		_errorString = _file.errorString();
 		return false;
 	}
 
@@ -188,13 +188,13 @@ bool OZF::open()
 		return true;
 
 	if (!readHeaders()) {
-		_error = "Invalid header";
+		_errorString = "Invalid header";
 		_file.close();
 		return false;
 	}
 
 	if (!readTileTable()) {
-		_error = "Invalid tile table";
+		_errorString = "Invalid tile table";
 		_file.close();
 		return false;
 	}
