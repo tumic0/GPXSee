@@ -7,6 +7,8 @@
 #include "tileloader.h"
 
 #define SUBSTITUTE_CHAR '$'
+#define IS_INT(zoom) \
+	((QMetaType::Type)((zoom).type()) == QMetaType::Int)
 
 class TileImage
 {
@@ -18,7 +20,8 @@ public:
 	void load()
 	{
 		QImage img;
-		QByteArray z(_tile->zoom().toString().toLatin1());
+		QByteArray z(IS_INT(_tile->zoom())
+		  ? QByteArray::number(_tile->zoom().toInt()) : QByteArray());
 		QImageReader reader(_file, z);
 		if (_scaledSize)
 			reader.setScaledSize(QSize(_scaledSize, _scaledSize));
@@ -220,7 +223,7 @@ QUrl TileLoader::tileUrl(const FetchTile &tile) const
 
 QString TileLoader::tileFile(const FetchTile &tile) const
 {
-	QString zoom(((QMetaType::Type)(tile.zoom().type()) == QMetaType::Int)
+	QString zoom(IS_INT(tile.zoom())
 	  ? tile.zoom().toString() : fsSafeStr(tile.zoom().toString()));
 
 	return _dir + QLatin1Char('/') + zoom + QLatin1Char('-')
