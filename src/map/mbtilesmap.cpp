@@ -9,7 +9,7 @@
 #include "osm.h"
 #include "mbtilesmap.h"
 
-
+#define MAX_OVERZOOM 3
 #define META_TYPE(type) static_cast<QMetaType::Type>(type)
 
 static RectC str2bounds(const QString &str)
@@ -88,8 +88,12 @@ bool MBTilesMap::getZooms()
 	}
 
 	if (_scalable) {
-		for (int i = _zooms.last().base + 1; i <= OSM::ZOOMS.max(); i++)
+		for (int i = _zooms.last().base + 1; i <= OSM::ZOOMS.max(); i++) {
+			Zoom z(i, _zooms.last().base);
+			if (z.z - z.base > MAX_OVERZOOM)
+				break;
 			_zooms.append(Zoom(i, _zooms.last().base));
+		}
 	}
 
 	_zi = _zooms.size() - 1;
