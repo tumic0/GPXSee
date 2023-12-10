@@ -1,6 +1,7 @@
 #ifndef MBTILESMAP_H
 #define MBTILESMAP_H
 
+#include <QDebug>
 #include <QSqlDatabase>
 #include <QVector>
 #include <QImageReader>
@@ -12,17 +13,21 @@
 class MBTile
 {
 public:
-	MBTile(int zoom, int scaledSize, const QPoint &xy, const QByteArray &data,
-	  const QString &key) : _zoom(zoom), _scaledSize(scaledSize), _xy(xy),
-	  _data(data), _key(key) {}
+	MBTile(int zoom, int overzoom, int scaledSize, const QPoint &xy,
+	  const QByteArray &data, const QString &key) : _zoom(zoom),
+	  _overzoom(overzoom), _scaledSize(scaledSize), _xy(xy), _data(data),
+	  _key(key) {}
 
 	const QPoint &xy() const {return _xy;}
 	const QString &key() const {return _key;}
 	const QPixmap &pixmap() const {return _pixmap;}
 
 	void load() {
+		QByteArray format(_overzoom
+		  ? QByteArray::number(_zoom) + ';' + QByteArray::number(_overzoom)
+		  : QByteArray::number(_zoom));
 		QBuffer buffer(&_data);
-		QImageReader reader(&buffer, QByteArray::number(_zoom));
+		QImageReader reader(&buffer, format);
 		if (_scaledSize)
 			reader.setScaledSize(QSize(_scaledSize, _scaledSize));
 		_pixmap = QPixmap::fromImage(reader.read());
@@ -30,6 +35,7 @@ public:
 
 private:
 	int _zoom;
+	int _overzoom;
 	int _scaledSize;
 	QPoint _xy;
 	QByteArray _data;
@@ -108,6 +114,14 @@ private slots:
 	void jobFinished(MBTilesMapJob *job);
 
 private:
+	struct Zoom {
+		Zoom() : z(-1), base(-1)  {}
+		Zoom(int z, int base) : z(z), base(base) {}
+
+		int z;
+		int base;
+	};
+
 	bool getMinZoom(int &zoom);
 	bool getMaxZoom(int &zoom);
 	bool getZooms();
@@ -126,11 +140,13 @@ private:
 	void removeJob(MBTilesMapJob *job);
 	void cancelJobs(bool wait);
 
+	friend QDebug operator<<(QDebug dbg, const Zoom &zoom);
+
 	QSqlDatabase _db;
 
 	QString _name;
 	RectC _bounds;
-	QVector<int> _zooms;
+	QVector<Zoom> _zooms;
 	int _zi;
 	int _tileSize;
 	qreal _mapRatio, _tileRatio;

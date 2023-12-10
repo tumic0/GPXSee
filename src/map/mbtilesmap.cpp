@@ -79,12 +79,17 @@ bool MBTilesMap::getZooms()
 		  " WHERE zoom_level = %1 LIMIT 1").arg(i);
 		QSqlQuery query(sql, _db);
 		if (query.first())
-			_zooms.append(i);
+			_zooms.append(Zoom(i, i));
 	}
 
 	if (!_zooms.size()) {
 		_errorString = "Empty tile set";
 		return false;
+	}
+
+	if (_scalable) {
+		for (int i = _zooms.last().base + 1; i <= OSM::ZOOMS.max(); i++)
+			_zooms.append(Zoom(i, _zooms.last().base));
 	}
 
 	_zi = _zooms.size() - 1;
@@ -105,7 +110,7 @@ bool MBTilesMap::getBounds()
 	} else {
 		qWarning("%s: missing bounds metadata", qPrintable(path()));
 
-		int z = _zooms.first();
+		int z = _zooms.first().z;
 		QString sql = QString("SELECT min(tile_column), min(tile_row), "
 		  "max(tile_column), max(tile_row) FROM tiles WHERE zoom_level = %1")
 		  .arg(z);
@@ -212,13 +217,13 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 		return;
 	}
 
+	getTileFormat();
 	if (!getZooms())
 		return;
 	if (!getBounds())
 		return;
 	if (!getTileSize())
 		return;
-	getTileFormat();
 	getTilePixelRatio();
 	getName();
 
@@ -266,7 +271,7 @@ int MBTilesMap::zoomFit(const QSize &size, const RectC &rect)
 
 		_zi = 0;
 		for (int i = 1; i < _zooms.size(); i++) {
-			if (_zooms.at(i) > zoom)
+			if (_zooms.at(i).z > zoom)
 				break;
 			_zi = i;
 		}
@@ -277,7 +282,7 @@ int MBTilesMap::zoomFit(const QSize &size, const RectC &rect)
 
 qreal MBTilesMap::resolution(const QRectF &rect)
 {
-	return OSM::resolution(rect.center(), _zooms.at(_zi), _tileSize);
+	return OSM::resolution(rect.center(), _zooms.at(_zi).z, _tileSize);
 }
 
 int MBTilesMap::zoomIn()
@@ -376,15 +381,17 @@ void MBTilesMap::cancelJobs(bool wait)
 
 void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	int zoom = _zooms.at(_zi);
-	qreal scale = OSM::zoom2scale(zoom, _tileSize);
+	const Zoom &zoom = _zooms.at(_zi);
+	unsigned overzoom = zoom.z - zoom.base;
+	unsigned f = 1U<<overzoom;
+	qreal scale = OSM::zoom2scale(zoom.base, _tileSize * f);
 	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
-	  -rect.topLeft().y() * scale) * coordinatesRatio(), zoom);
-	Coordinates ctl(OSM::tile2ll(tile, zoom));
+	  -rect.topLeft().y() * scale) * coordinatesRatio(), zoom.base);
+	Coordinates ctl(OSM::tile2ll(tile, zoom.base));
 	QPointF tl(ll2xy(Coordinates(ctl.lon(), -ctl.lat())));
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
-	int width = ceil(s.width() / tileSize());
-	int height = ceil(s.height() / tileSize());
+	int width = ceil(s.width() / (tileSize() * f));
+	int height = ceil(s.height() / (tileSize() * f));
 
 	QList<MBTile> tiles;
 
@@ -392,20 +399,19 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		for (int j = 0; j < height; j++) {
 			QPixmap pm;
 			QPoint t(tile.x() + i, tile.y() + j);
-			QString key = path() + "-" + QString::number(zoom) + "_"
+			QString key = path() + "-" + QString::number(zoom.z) + "_"
 			  + QString::number(t.x()) + "_" + QString::number(t.y());
 
 			if (isRunning(key))
 				continue;
 
 			if (QPixmapCache::find(key, &pm)) {
-				QPointF tp(tl.x() + (t.x() - tile.x()) * tileSize(),
-				  tl.y() + (t.y() - tile.y()) * tileSize());
+				QPointF tp(tl.x() + (t.x() - tile.x()) * tileSize() * f,
+				  tl.y() + (t.y() - tile.y()) * tileSize() * f);
 				drawTile(painter, pm, tp);
-			} else {
-				tiles.append(MBTile(zoom, _scaledSize, t, tileData(zoom, t),
-				  key));
-			}
+			} else
+				tiles.append(MBTile(zoom.z, overzoom, _scaledSize, t,
+				  tileData(zoom.base, t), key));
 		}
 	}
 
@@ -422,8 +428,8 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 				QPixmapCache::insert(mt.key(), pm);
 
-				QPointF tp(tl.x() + (mt.xy().x() - tile.x()) * tileSize(),
-				  tl.y() + (mt.xy().y() - tile.y()) * tileSize());
+				QPointF tp(tl.x() + (mt.xy().x() - tile.x()) * tileSize() * f,
+				  tl.y() + (mt.xy().y() - tile.y()) * tileSize() * f);
 				drawTile(painter, pm, tp);
 			}
 		} else
@@ -439,14 +445,14 @@ void MBTilesMap::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
 
 QPointF MBTilesMap::ll2xy(const Coordinates &c)
 {
-	qreal scale = OSM::zoom2scale(_zooms.at(_zi), _tileSize);
+	qreal scale = OSM::zoom2scale(_zooms.at(_zi).z, _tileSize);
 	QPointF m = OSM::ll2m(c);
 	return QPointF(m.x() / scale, m.y() / -scale) / coordinatesRatio();
 }
 
 Coordinates MBTilesMap::xy2ll(const QPointF &p)
 {
-	qreal scale = OSM::zoom2scale(_zooms.at(_zi), _tileSize);
+	qreal scale = OSM::zoom2scale(_zooms.at(_zi).z, _tileSize);
 	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale)
 	  * coordinatesRatio());
 }
@@ -460,3 +466,11 @@ Map *MBTilesMap::create(const QString &path, const Projection &proj, bool *isDir
 
 	return new MBTilesMap(path);
 }
+
+#ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const MBTilesMap::Zoom &zoom)
+{
+	dbg.nospace() << "Zoom(" << zoom.z << ", " << zoom.base << ")";
+	return dbg.space();
+}
+#endif // QT_NO_DEBUG
