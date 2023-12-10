@@ -129,15 +129,14 @@ bool MBTilesMap::getBounds()
 
 bool MBTilesMap::getTileSize()
 {
-	QString sql("SELECT tile_data FROM tiles LIMIT 1");
+	QString sql("SELECT zoom_level, tile_data FROM tiles LIMIT 1");
 	QSqlQuery query(sql, _db);
 	query.first();
 
-	QByteArray data = query.value(0).toByteArray();
+	QByteArray z(QByteArray::number(query.value(0).toInt()));
+	QByteArray data = query.value(1).toByteArray();
 	QBuffer buffer(&data);
-	/* Explicitly specify the image plugin in case of vector tiles
-	   (QTBUG-119910 workaround) */
-	QImageReader reader(&buffer, _scalable ? QByteArray("mvt") : QByteArray());
+	QImageReader reader(&buffer, z);
 	QSize tileSize(reader.size());
 
 	if (!tileSize.isValid() || tileSize.width() != tileSize.height()) {
@@ -217,9 +216,9 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 		return;
 	if (!getBounds())
 		return;
-	getTileFormat();
 	if (!getTileSize())
 		return;
+	getTileFormat();
 	getTilePixelRatio();
 	getName();
 

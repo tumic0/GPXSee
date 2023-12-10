@@ -21,10 +21,8 @@ public:
 	const QPixmap &pixmap() const {return _pixmap;}
 
 	void load() {
-		QByteArray z(QString::number(_zoom).toLatin1());
-
 		QBuffer buffer(&_data);
-		QImageReader reader(&buffer, z);
+		QImageReader reader(&buffer, QByteArray::number(_zoom));
 		if (_scaledSize)
 			reader.setScaledSize(QSize(_scaledSize, _scaledSize));
 		_pixmap = QPixmap::fromImage(reader.read());
