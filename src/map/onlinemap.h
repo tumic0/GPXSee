@@ -128,7 +128,7 @@ private:
 	RectC _bounds;
 	int _zoom;
 	int _tileSize;
-	int _base;
+	int _baseZoom;
 	qreal _mapRatio, _tileRatio;
 	bool _scalable;
 	int _scaledSize;

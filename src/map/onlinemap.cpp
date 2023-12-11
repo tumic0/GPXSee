@@ -15,7 +15,7 @@ OnlineMap::OnlineMap(const QString &fileName, const QString &name,
   const QList<HTTPHeader> &headers, int tileSize, bool scalable, bool invertY,
   bool quadTiles, QObject *parent)
     : Map(fileName, parent), _name(name), _zooms(zooms), _bounds(bounds),
-	_zoom(_zooms.max()), _tileSize(tileSize), _base(0), _mapRatio(1.0),
+	_zoom(_zooms.max()), _tileSize(tileSize), _baseZoom(0), _mapRatio(1.0),
 	_tileRatio(tileRatio), _scalable(scalable), _scaledSize(0), _invertY(invertY)
 {
 	_tileLoader = new TileLoader(QDir(ProgramPaths::tilesDir()).filePath(_name),
@@ -25,7 +25,7 @@ OnlineMap::OnlineMap(const QString &fileName, const QString &name,
 	connect(_tileLoader, &TileLoader::finished, this, &OnlineMap::tilesLoaded);
 
 	if (_scalable) {
-		_base = _zooms.max();
+		_baseZoom = _zooms.max();
 		_zooms.setMax(qMin(_zooms.max() + MAX_OVERZOOM, OSM::ZOOMS.max()));
 	}
 }
@@ -168,14 +168,14 @@ void OnlineMap::cancelJobs(bool wait)
 
 void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	int base = _scalable ? qMin(_base, _zoom) : _zoom;
-	unsigned overzoom = _zoom - base;
+	int baseZoom = _scalable ? qMin(_baseZoom, _zoom) : _zoom;
+	unsigned overzoom = _zoom - baseZoom;
 	unsigned f = 1U<<overzoom;
 
-	qreal scale = OSM::zoom2scale(base, _tileSize * f);
+	qreal scale = OSM::zoom2scale(baseZoom, _tileSize * f);
 	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
-	  -rect.topLeft().y() * scale) * coordinatesRatio(), base);
-	Coordinates ctl(OSM::tile2ll(tile, base));
+	  -rect.topLeft().y() * scale) * coordinatesRatio(), baseZoom);
+	Coordinates ctl(OSM::tile2ll(tile, baseZoom));
 	QPointF tl(ll2xy(Coordinates(ctl.lon(), -ctl.lat())));
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	int width = ceil(s.width() / (tileSize() * f));
@@ -185,8 +185,8 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	fetchTiles.reserve(width * height);
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
-			QPoint tc(tileCoordinates(tile.x() + i, tile.y() + j, base));
-			fetchTiles.append(TileLoader::Tile(tc, base));
+			QPoint tc(tileCoordinates(tile.x() + i, tile.y() + j, baseZoom));
+			fetchTiles.append(TileLoader::Tile(tc, baseZoom));
 		}
 	}
 
@@ -208,7 +208,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 		QPixmap pm;
 		if (QPixmapCache::find(key, &pm)) {
-			QPoint tc(tileCoordinates(t.xy().x(), t.xy().y(), base));
+			QPoint tc(tileCoordinates(t.xy().x(), t.xy().y(), baseZoom));
 			QPointF tp(tl.x() + (tc.x() - tile.x()) * tileSize() * f,
 			  tl.y() + (tc.y() - tile.y()) * tileSize() * f);
 			drawTile(painter, pm, tp);
@@ -231,7 +231,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 				QPixmapCache::insert(mt.key(), pm);
 
-				QPoint tc(tileCoordinates(mt.xy().x(), mt.xy().y(), base));
+				QPoint tc(tileCoordinates(mt.xy().x(), mt.xy().y(), baseZoom));
 				QPointF tp(tl.x() + (tc.x() - tile.x()) * tileSize() * f,
 				  tl.y() + (tc.y() - tile.y()) * tileSize() * f);
 				drawTile(painter, pm, tp);
