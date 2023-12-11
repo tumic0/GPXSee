@@ -1,7 +1,6 @@
 #include <QPainter>
 #include <QDir>
 #include <QPixmapCache>
-#include <QtConcurrent>
 #include "common/rectc.h"
 #include "common/programpaths.h"
 #include "common/downloader.h"
@@ -11,18 +10,13 @@
 
 #define MAX_OVERZOOM 3
 
-static QString cacheName(const QString &file, unsigned overzoom)
-{
-	return overzoom ? file + ":" + QString::number(overzoom) : file;
-}
-
 OnlineMap::OnlineMap(const QString &fileName, const QString &name,
   const QString &url, const Range &zooms, const RectC &bounds, qreal tileRatio,
   const QList<HTTPHeader> &headers, int tileSize, bool scalable, bool invertY,
   bool quadTiles, QObject *parent)
     : Map(fileName, parent), _name(name), _zooms(zooms), _bounds(bounds),
 	_zoom(_zooms.max()), _tileSize(tileSize), _base(0), _mapRatio(1.0),
-	_tileRatio(tileRatio), _scalable(scalable), _invertY(invertY)
+	_tileRatio(tileRatio), _scalable(scalable), _scaledSize(0), _invertY(invertY)
 {
 	_tileLoader = new TileLoader(QDir(ProgramPaths::tilesDir()).filePath(_name),
 	  this);
@@ -72,12 +66,16 @@ qreal OnlineMap::resolution(const QRectF &rect)
 
 int OnlineMap::zoomIn()
 {
+	cancelJobs(false);
+
 	_zoom = qMin(_zoom + 1, _zooms.max());
 	return _zoom;
 }
 
 int OnlineMap::zoomOut()
 {
+	cancelJobs(false);
+
 	_zoom = qMax(_zoom - 1, _zooms.min());
 	return _zoom;
 }
@@ -94,6 +92,11 @@ void OnlineMap::load(const Projection &in, const Projection &out,
 		_scaledSize = _tileSize * deviceRatio;
 		_tileRatio = deviceRatio;
 	}
+}
+
+void OnlineMap::unload()
+{
+	cancelJobs(true);
 }
 
 qreal OnlineMap::coordinatesRatio() const
@@ -114,6 +117,53 @@ qreal OnlineMap::tileSize() const
 QPoint OnlineMap::tileCoordinates(int x, int y, int zoom)
 {
 	return QPoint(x, _invertY ? (1<<zoom) - y - 1 : y);
+}
+
+bool OnlineMap::isRunning(const QString &key) const
+{
+	for (int i = 0; i < _jobs.size(); i++) {
+		const QList<OnlineMapTile> &tiles = _jobs.at(i)->tiles();
+		for (int j = 0; j < tiles.size(); j++)
+			if (tiles.at(j).key() == key)
+				return true;
+	}
+
+	return false;
+}
+
+void OnlineMap::runJob(OnlineMapJob *job)
+{
+	_jobs.append(job);
+
+	connect(job, &OnlineMapJob::finished, this, &OnlineMap::jobFinished);
+	job->run();
+}
+
+void OnlineMap::removeJob(OnlineMapJob *job)
+{
+	_jobs.removeOne(job);
+	job->deleteLater();
+}
+
+void OnlineMap::jobFinished(OnlineMapJob *job)
+{
+	const QList<OnlineMapTile> &tiles = job->tiles();
+
+	for (int i = 0; i < tiles.size(); i++) {
+		const OnlineMapTile &mt = tiles.at(i);
+		if (!mt.pixmap().isNull())
+			QPixmapCache::insert(mt.key(), mt.pixmap());
+	}
+
+	removeJob(job);
+
+	emit tilesLoaded();
+}
+
+void OnlineMap::cancelJobs(bool wait)
+{
+	for (int i = 0; i < _jobs.size(); i++)
+		_jobs.at(i)->cancel(wait);
 }
 
 void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
@@ -145,36 +195,47 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	else
 		_tileLoader->loadTilesAsync(fetchTiles);
 
-	QList<OnlineTile> renderTiles;
+	QList<OnlineMapTile> renderTiles;
 	for (int i = 0; i < fetchTiles.count(); i++) {
 		const TileLoader::Tile &t = fetchTiles.at(i);
 		if (t.file().isNull())
 			continue;
 
+		QString key(overzoom
+		  ? t.file() + ":" + QString::number(overzoom) : t.file());
+		if (isRunning(key))
+			continue;
+
 		QPixmap pm;
-		if (QPixmapCache::find(cacheName(t.file(), overzoom), &pm)) {
+		if (QPixmapCache::find(key, &pm)) {
 			QPointF tp(tl.x() + (t.xy().x() - tile.x()) * tileSize() * f,
 			  tl.y() + (t.xy().y() - tile.y()) * tileSize() * f);
 			drawTile(painter, pm, tp);
 		} else
-			renderTiles.append(OnlineTile(t.xy(), t.file(), _zoom, overzoom,
-			  _scaledSize));
+			renderTiles.append(OnlineMapTile(t.xy(), t.file(), _zoom, overzoom,
+			  _scaledSize, key));
 	}
 
-	QFuture<void> future = QtConcurrent::map(renderTiles, &OnlineTile::load);
-	future.waitForFinished();
+	if (!renderTiles.isEmpty()) {
+		if (flags & Map::Block || !_scalable) {
+			QFuture<void> future = QtConcurrent::map(renderTiles,
+			  &OnlineMapTile::load);
+			future.waitForFinished();
 
-	for (int i = 0; i < renderTiles.size(); i++) {
-		const OnlineTile &mt = renderTiles.at(i);
-		QPixmap pm(mt.pixmap());
-		if (pm.isNull())
-			continue;
+			for (int i = 0; i < renderTiles.size(); i++) {
+				const OnlineMapTile &mt = renderTiles.at(i);
+				QPixmap pm(mt.pixmap());
+				if (pm.isNull())
+					continue;
 
-		QPixmapCache::insert(cacheName(mt.file(), overzoom), pm);
+				QPixmapCache::insert(mt.key(), pm);
 
-		QPointF tp(tl.x() + (mt.xy().x() - tile.x()) * tileSize() * f,
-		  tl.y() + (mt.xy().y() - tile.y()) * tileSize() * f);
-		drawTile(painter, pm, tp);
+				QPointF tp(tl.x() + (mt.xy().x() - tile.x()) * tileSize() * f,
+				  tl.y() + (mt.xy().y() - tile.y()) * tileSize() * f);
+				drawTile(painter, pm, tp);
+			}
+		} else
+			runJob(new OnlineMapJob(renderTiles));
 	}
 }
 

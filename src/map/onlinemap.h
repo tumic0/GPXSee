@@ -3,17 +3,18 @@
 
 #include <QImageReader>
 #include <QPixmap>
+#include <QtConcurrent>
 #include "common/range.h"
 #include "common/rectc.h"
 #include "map.h"
 #include "tileloader.h"
 
-class OnlineTile
+class OnlineMapTile
 {
 public:
-	OnlineTile(const QPoint &xy, const QString &file, int zoom, int overzoom,
-	  int scaledSize) : _xy(xy), _file(file), _zoom(zoom), _overzoom(overzoom),
-	  _scaledSize(scaledSize) {}
+	OnlineMapTile(const QPoint &xy, const QString &file, int zoom, int overzoom,
+	  int scaledSize, const QString &key) : _zoom(zoom), _overzoom(overzoom),
+	  _scaledSize(scaledSize), _xy(xy), _file(file), _key(key) {}
 
 	void load()
 	{
@@ -27,16 +28,51 @@ public:
 	}
 
 	const QPoint &xy() const {return _xy;}
-	const QString &file() const {return _file;}
 	const QPixmap &pixmap() const {return _pixmap;}
+	const QString &key() const {return _key;}
 
 private:
-	QPoint _xy;
-	QString _file;
 	int _zoom;
 	int _overzoom;
 	int _scaledSize;
+	QPoint _xy;
+	QString _file;
+	QString _key;
 	QPixmap _pixmap;
+};
+
+class OnlineMapJob : public QObject
+{
+	Q_OBJECT
+
+public:
+	OnlineMapJob(const QList<OnlineMapTile> &tiles) : _tiles(tiles) {}
+
+	void run()
+	{
+		connect(&_watcher, &QFutureWatcher<void>::finished, this,
+		  &OnlineMapJob::handleFinished);
+		_future = QtConcurrent::map(_tiles, &OnlineMapTile::load);
+		_watcher.setFuture(_future);
+	}
+	void cancel(bool wait)
+	{
+		_future.cancel();
+		if (wait)
+			_future.waitForFinished();
+	}
+	const QList<OnlineMapTile> &tiles() const {return _tiles;}
+
+signals:
+	void finished(OnlineMapJob *job);
+
+private slots:
+	void handleFinished() {emit finished(this);}
+
+private:
+	QFutureWatcher<void> _watcher;
+	QFuture<void> _future;
+	QList<OnlineMapTile> _tiles;
 };
 
 class OnlineMap : public Map
@@ -68,7 +104,11 @@ public:
 
 	void load(const Projection &in, const Projection &out, qreal deviceRatio,
 	  bool hidpi);
+	void unload();
 	void clearCache();
+
+private slots:
+	void jobFinished(OnlineMapJob *job);
 
 private:
 	int limitZoom(int zoom) const;
@@ -77,6 +117,10 @@ private:
 	qreal imageRatio() const;
 	QPoint tileCoordinates(int x, int y, int zoom);
 	void drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp);
+	bool isRunning(const QString &key) const;
+	void runJob(OnlineMapJob *job);
+	void removeJob(OnlineMapJob *job);
+	void cancelJobs(bool wait);
 
 	TileLoader *_tileLoader;
 	QString _name;
@@ -89,6 +133,8 @@ private:
 	bool _scalable;
 	int _scaledSize;
 	bool _invertY;
+
+	QList<OnlineMapJob*> _jobs;
 };
 
 #endif // ONLINEMAP_H
