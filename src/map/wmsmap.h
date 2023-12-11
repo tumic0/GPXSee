@@ -51,6 +51,7 @@ private:
 	void updateTransform();
 	qreal tileSize() const;
 	void init();
+	void drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp);
 
 	QString _name;
 	WMS *_wms;

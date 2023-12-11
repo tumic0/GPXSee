@@ -53,6 +53,7 @@ private:
 	qreal coordinatesRatio() const;
 	qreal imageRatio() const;
 	void init();
+	void drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp);
 
 	QString _name;
 	WMTS *_wmts;

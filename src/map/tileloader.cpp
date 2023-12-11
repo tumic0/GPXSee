@@ -1,42 +1,12 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QEventLoop>
-#include <QPixmapCache>
-#include <QImageReader>
-#include <QtConcurrent>
 #include "tileloader.h"
 
 #define SUBSTITUTE_CHAR '$'
 #define IS_INT(zoom) \
 	((QMetaType::Type)((zoom).type()) == QMetaType::Int)
 
-class TileImage
-{
-public:
-	TileImage() : _tile(0), _scaledSize(0) {}
-	TileImage(const QString &file, FetchTile *tile, int scaledSize)
-	  : _file(file), _tile(tile), _scaledSize(scaledSize) {}
-
-	void load()
-	{
-		QImage img;
-		QByteArray z(IS_INT(_tile->zoom())
-		  ? QByteArray::number(_tile->zoom().toInt()) : QByteArray());
-		QImageReader reader(_file, z);
-		if (_scaledSize)
-			reader.setScaledSize(QSize(_scaledSize, _scaledSize));
-		reader.read(&img);
-		_tile->pixmap().convertFromImage(img);
-	}
-
-	const QString &file() const {return _file;}
-	FetchTile *tile() {return _tile;}
-
-private:
-	QString _file;
-	FetchTile *_tile;
-	int _scaledSize;
-};
 
 static QString fsSafeStr(const QString &str)
 {
@@ -77,7 +47,7 @@ static QString quadKey(const QPoint &xy, int zoom)
 }
 
 TileLoader::TileLoader(const QString &dir, QObject *parent)
-  : QObject(parent), _urlType(XYZ), _dir(dir), _scaledSize(0)
+  : QObject(parent), _urlType(XYZ), _dir(dir)
 {
 	if (!QDir().mkpath(_dir))
 		qWarning("%s: %s", qPrintable(_dir), "Error creating tiles directory");
@@ -87,26 +57,20 @@ TileLoader::TileLoader(const QString &dir, QObject *parent)
 }
 
 
-void TileLoader::loadTilesAsync(QVector<FetchTile> &list)
+void TileLoader::loadTilesAsync(QVector<Tile> &list)
 {
 	QList<Download> dl;
-	QList<TileImage> imgs;
 
 	for (int i = 0; i < list.size(); i++) {
-		FetchTile &t = list[i];
+		Tile &t = list[i];
 		QString file(tileFile(t));
 
-		if (QPixmapCache::find(file, &t.pixmap()))
-			continue;
-
-		QFileInfo fi(file);
-
-		if (fi.exists())
-			imgs.append(TileImage(file, &t, _scaledSize));
+		if (QFileInfo::exists(file))
+			t.setFile(file);
 		else {
 			QUrl url(tileUrl(t));
 			if (url.isLocalFile())
-				imgs.append(TileImage(url.toLocalFile(), &t, _scaledSize));
+				t.setFile(url.toLocalFile());
 			else
 				dl.append(Download(url, file));
 		}
@@ -114,37 +78,23 @@ void TileLoader::loadTilesAsync(QVector<FetchTile> &list)
 
 	if (!dl.empty())
 		_downloader->get(dl, _headers);
-
-	QFuture<void> future = QtConcurrent::map(imgs, &TileImage::load);
-	future.waitForFinished();
-
-	for (int i = 0; i < imgs.size(); i++) {
-		TileImage &ti = imgs[i];
-		QPixmapCache::insert(ti.file(), ti.tile()->pixmap());
-	}
 }
 
-void TileLoader::loadTilesSync(QVector<FetchTile> &list)
+void TileLoader::loadTilesSync(QVector<Tile> &list)
 {
 	QList<Download> dl;
-	QList<FetchTile *> tl;
-	QList<TileImage> imgs;
+	QList<Tile *> tl;
 
 	for (int i = 0; i < list.size(); i++) {
-		FetchTile &t = list[i];
+		Tile &t = list[i];
 		QString file(tileFile(t));
 
-		if (QPixmapCache::find(file, &t.pixmap()))
-			continue;
-
-		QFileInfo fi(file);
-
-		if (fi.exists())
-			imgs.append(TileImage(file, &t, _scaledSize));
+		if (QFileInfo::exists(file))
+			t.setFile(file);
 		else {
 			QUrl url(tileUrl(t));
 			if (url.isLocalFile())
-				imgs.append(TileImage(url.toLocalFile(), &t, _scaledSize));
+				t.setFile(url.toLocalFile());
 			else {
 				dl.append(Download(url, file));
 				tl.append(&t);
@@ -159,19 +109,11 @@ void TileLoader::loadTilesSync(QVector<FetchTile> &list)
 			wait.exec();
 
 		for (int i = 0; i < tl.size(); i++) {
-			FetchTile *t = tl[i];
+			Tile *t = tl[i];
 			QString file = tileFile(*t);
 			if (QFileInfo(file).exists())
-				imgs.append(TileImage(file, t, _scaledSize));
+				t->setFile(file);
 		}
-	}
-
-	QFuture<void> future = QtConcurrent::map(imgs, &TileImage::load);
-	future.waitForFinished();
-
-	for (int i = 0; i < imgs.size(); i++) {
-		TileImage &ti = imgs[i];
-		QPixmapCache::insert(ti.file(), ti.tile()->pixmap());
 	}
 }
 
@@ -184,20 +126,9 @@ void TileLoader::clearCache()
 		dir.remove(list.at(i));
 
 	_downloader->clearErrors();
-
-	QPixmapCache::clear();
 }
 
-void TileLoader::setScaledSize(int size)
-{
-	if (_scaledSize == size)
-		return;
-
-	_scaledSize = size;
-	QPixmapCache::clear();
-}
-
-QUrl TileLoader::tileUrl(const FetchTile &tile) const
+QUrl TileLoader::tileUrl(const Tile &tile) const
 {
 	QString url(_url);
 
@@ -221,7 +152,7 @@ QUrl TileLoader::tileUrl(const FetchTile &tile) const
 	return QUrl(url);
 }
 
-QString TileLoader::tileFile(const FetchTile &tile) const
+QString TileLoader::tileFile(const Tile &tile) const
 {
 	QString zoom(IS_INT(tile.zoom())
 	  ? tile.zoom().toString() : fsSafeStr(tile.zoom().toString()));

@@ -355,7 +355,7 @@ void AQMMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	int width = ceil(s.width() / tileSize());
 	int height = ceil(s.height() / tileSize());
 
-	QList<RenderTile> tiles;
+	QList<DataTile> tiles;
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
@@ -369,15 +369,15 @@ void AQMMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				  tl.y() + (t.y() - tile.y()) * tileSize());
 				drawTile(painter, pm, tp);
 			} else
-				tiles.append(RenderTile(t, tileData(t), key));
+				tiles.append(DataTile(t, tileData(t), key));
 		}
 	}
 
-	QFuture<void> future = QtConcurrent::map(tiles, &RenderTile::load);
+	QFuture<void> future = QtConcurrent::map(tiles, &DataTile::load);
 	future.waitForFinished();
 
 	for (int i = 0; i < tiles.size(); i++) {
-		const RenderTile &mt = tiles.at(i);
+		const DataTile &mt = tiles.at(i);
 		QPixmap pm(mt.pixmap());
 		if (pm.isNull())
 			continue;
