@@ -208,8 +208,9 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 		QPixmap pm;
 		if (QPixmapCache::find(key, &pm)) {
-			QPointF tp(tl.x() + (t.xy().x() - tile.x()) * tileSize() * f,
-			  tl.y() + (t.xy().y() - tile.y()) * tileSize() * f);
+			QPoint tc(tileCoordinates(t.xy().x(), t.xy().y(), base));
+			QPointF tp(tl.x() + (tc.x() - tile.x()) * tileSize() * f,
+			  tl.y() + (tc.y() - tile.y()) * tileSize() * f);
 			drawTile(painter, pm, tp);
 		} else
 			renderTiles.append(OnlineMapTile(t.xy(), t.file(), _zoom, overzoom,
@@ -230,8 +231,9 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 				QPixmapCache::insert(mt.key(), pm);
 
-				QPointF tp(tl.x() + (mt.xy().x() - tile.x()) * tileSize() * f,
-				  tl.y() + (mt.xy().y() - tile.y()) * tileSize() * f);
+				QPoint tc(tileCoordinates(mt.xy().x(), mt.xy().y(), base));
+				QPointF tp(tl.x() + (tc.x() - tile.x()) * tileSize() * f,
+				  tl.y() + (tc.y() - tile.y()) * tileSize() * f);
 				drawTile(painter, pm, tp);
 			}
 		} else
