@@ -295,7 +295,7 @@ int AQMMap::zoomFit(const QSize &size, const RectC &rect)
 qreal AQMMap::resolution(const QRectF &rect)
 {
 	const Zoom &z = _zooms.at(_zoom);
-	return OSM::resolution(rect.center(), z.zoom, z.tileSize);
+	return OSM::resolution(rect.center(), z.zoom, tileSize());
 }
 
 int AQMMap::zoomIn()

@@ -128,7 +128,7 @@ GEMFMap::GEMFMap(const QString &fileName, QObject *parent)
 
 qreal GEMFMap::resolution(const QRectF &rect)
 {
-	return OSM::resolution(rect.center(), _zooms.at(_zi).level, _tileSize);
+	return OSM::resolution(rect.center(), _zooms.at(_zi).level, tileSize());
 }
 
 int GEMFMap::zoomFit(const QSize &size, const RectC &rect)

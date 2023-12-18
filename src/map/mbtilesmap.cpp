@@ -285,7 +285,7 @@ int MBTilesMap::zoomFit(const QSize &size, const RectC &rect)
 
 qreal MBTilesMap::resolution(const QRectF &rect)
 {
-	return OSM::resolution(rect.center(), _zooms.at(_zi).z, _tileSize);
+	return OSM::resolution(rect.center(), _zooms.at(_zi).z, tileSize());
 }
 
 int MBTilesMap::zoomIn()

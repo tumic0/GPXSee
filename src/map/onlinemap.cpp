@@ -58,7 +58,7 @@ int OnlineMap::zoomFit(const QSize &size, const RectC &rect)
 
 qreal OnlineMap::resolution(const QRectF &rect)
 {
-	return OSM::resolution(rect.center(), _zoom, _tileSize);
+	return OSM::resolution(rect.center(), _zoom, tileSize());
 }
 
 int OnlineMap::zoomIn()

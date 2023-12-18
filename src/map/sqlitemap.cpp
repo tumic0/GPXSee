@@ -146,7 +146,7 @@ int SqliteMap::zoomFit(const QSize &size, const RectC &rect)
 
 qreal SqliteMap::resolution(const QRectF &rect)
 {
-	return OSM::resolution(rect.center(), _zoom, _tileSize);
+	return OSM::resolution(rect.center(), _zoom, tileSize());
 }
 
 int SqliteMap::zoomIn()

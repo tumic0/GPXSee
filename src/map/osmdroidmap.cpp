@@ -198,7 +198,7 @@ int OsmdroidMap::zoomFit(const QSize &size, const RectC &rect)
 
 qreal OsmdroidMap::resolution(const QRectF &rect)
 {
-	return OSM::resolution(rect.center(), _zoom, _tileSize);
+	return OSM::resolution(rect.center(), _zoom, tileSize());
 }
 
 int OsmdroidMap::zoomIn()
