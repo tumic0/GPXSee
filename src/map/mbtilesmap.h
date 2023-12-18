@@ -146,7 +146,7 @@ private:
 
 	QString _name;
 	RectC _bounds;
-	QVector<Zoom> _zooms;
+	QVector<Zoom> _zooms, _zoomsBase;
 	int _zi;
 	int _tileSize;
 	qreal _mapRatio, _tileRatio;

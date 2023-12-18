@@ -8,7 +8,7 @@
 #include "onlinemap.h"
 
 
-#define MAX_OVERZOOM 3
+#define MAX_TILE_SIZE 4096
 
 OnlineMap::OnlineMap(const QString &fileName, const QString &name,
   const QString &url, const Range &zooms, const RectC &bounds, qreal tileRatio,
@@ -24,10 +24,7 @@ OnlineMap::OnlineMap(const QString &fileName, const QString &name,
 	_tileLoader->setHeaders(headers);
 	connect(_tileLoader, &TileLoader::finished, this, &OnlineMap::tilesLoaded);
 
-	if (_scalable) {
-		_baseZoom = _zooms.max();
-		_zooms.setMax(qMin(_zooms.max() + MAX_OVERZOOM, OSM::ZOOMS.max()));
-	}
+	_baseZoom = _zooms.max();
 }
 
 QRectF OnlineMap::bounds()
@@ -87,10 +84,17 @@ void OnlineMap::load(const Projection &in, const Projection &out,
 	Q_UNUSED(out);
 
 	_mapRatio = hidpi ? deviceRatio : 1.0;
+	_zooms.setMax(_baseZoom);
 
 	if (_scalable) {
 		_scaledSize = _tileSize * deviceRatio;
 		_tileRatio = deviceRatio;
+
+		for (int i = _baseZoom + 1; i <= OSM::ZOOMS.max(); i++) {
+			if (_tileSize * _tileRatio * (1U<<(i - _baseZoom)) > MAX_TILE_SIZE)
+				break;
+			_zooms.setMax(i);
+		}
 	}
 }
 
@@ -168,7 +172,7 @@ void OnlineMap::cancelJobs(bool wait)
 
 void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	int baseZoom = _scalable ? qMin(_baseZoom, _zoom) : _zoom;
+	int baseZoom = qMin(_baseZoom, _zoom);
 	unsigned overzoom = _zoom - baseZoom;
 	unsigned f = 1U<<overzoom;
 

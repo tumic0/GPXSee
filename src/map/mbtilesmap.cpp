@@ -9,7 +9,7 @@
 #include "osm.h"
 #include "mbtilesmap.h"
 
-#define MAX_OVERZOOM 3
+#define MAX_TILE_SIZE 4096
 #define META_TYPE(type) static_cast<QMetaType::Type>(type)
 
 static RectC str2bounds(const QString &str)
@@ -79,24 +79,15 @@ bool MBTilesMap::getZooms()
 		  " WHERE zoom_level = %1 LIMIT 1").arg(i);
 		QSqlQuery query(sql, _db);
 		if (query.first())
-			_zooms.append(Zoom(i, i));
+			_zoomsBase.append(Zoom(i, i));
 	}
 
-	if (!_zooms.size()) {
+	if (!_zoomsBase.size()) {
 		_errorString = "Empty tile set";
 		return false;
 	}
 
-	if (_scalable) {
-		for (int i = _zooms.last().base + 1; i <= OSM::ZOOMS.max(); i++) {
-			Zoom z(i, _zooms.last().base);
-			if (z.z - z.base > MAX_OVERZOOM)
-				break;
-			_zooms.append(Zoom(i, _zooms.last().base));
-		}
-	}
-
-	_zi = _zooms.size() - 1;
+	_zi = _zoomsBase.size() - 1;
 
 	return true;
 }
@@ -114,7 +105,7 @@ bool MBTilesMap::getBounds()
 	} else {
 		qWarning("%s: missing bounds metadata", qPrintable(path()));
 
-		int z = _zooms.first().z;
+		int z = _zoomsBase.first().z;
 		QString sql = QString("SELECT min(tile_column), min(tile_row), "
 		  "max(tile_column), max(tile_row) FROM tiles WHERE zoom_level = %1")
 		  .arg(z);
@@ -222,11 +213,11 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 	}
 
 	getTileFormat();
+	if (!getTileSize())
+		return;
 	if (!getZooms())
 		return;
 	if (!getBounds())
-		return;
-	if (!getTileSize())
 		return;
 	getTilePixelRatio();
 	getName();
@@ -243,10 +234,18 @@ void MBTilesMap::load(const Projection &in, const Projection &out,
 	Q_UNUSED(out);
 
 	_mapRatio = hidpi ? deviceRatio : 1.0;
+	_zooms = _zoomsBase;
 
 	if (_scalable) {
 		_scaledSize = _tileSize * deviceRatio;
 		_tileRatio = deviceRatio;
+
+		for (int i = _zooms.last().base + 1; i <= OSM::ZOOMS.max(); i++) {
+			Zoom z(i, _zooms.last().base);
+			if (_tileSize * _tileRatio * (1U<<(z.z - z.base)) > MAX_TILE_SIZE)
+				break;
+			_zooms.append(Zoom(i, _zooms.last().base));
+		}
 	}
 
 	_db.open();
