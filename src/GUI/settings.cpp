@@ -33,7 +33,7 @@
 	  : QPageSize::PageSizeId::A4)
 
 #ifdef Q_OS_ANDROID
-#define PIXMAP_CACHE 256
+#define PIXMAP_CACHE 384
 #define DEM_CACHE    128
 #else // Q_OS_ANDROID
 #define PIXMAP_CACHE 512
