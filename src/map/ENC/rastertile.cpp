@@ -17,6 +17,12 @@ typedef QSet<Coordinates> PointSet;
 static const float C1 = 0.866025f; /* sqrt(3)/2 */
 static const QColor haloColor(Qt::white);
 
+static const Style *style()
+{
+	static ENC::Style s;
+	return &s;
+}
+
 static double area(const QVector<Coordinates> &polygon)
 {
 	double area = 0;
@@ -396,4 +402,24 @@ void RasterTile::render()
 	//painter.drawRect(QRect(_rect.topLeft(), _pixmap.size()));
 
 	_valid = true;
+}
+
+RasterTile::RasterTile(const Projection &proj, const Transform &transform,
+  const MapData *data, int zoom, const Range &zoomRange, const QRect &rect,
+  qreal ratio) :
+	_proj(proj), _transform(transform), _map(data), _atlas(0), _zoom(zoom),
+	_zoomRange(zoomRange), _rect(rect), _ratio(ratio),
+	_pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false)
+{
+	_style = style();
+}
+
+RasterTile::RasterTile(const Projection &proj, const Transform &transform,
+  AtlasData *data, int zoom, const Range &zoomRange, const QRect &rect,
+  qreal ratio) :
+	_proj(proj), _transform(transform), _map(0), _atlas(data), _zoom(zoom),
+	_zoomRange(zoomRange), _rect(rect), _ratio(ratio),
+	_pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false)
+{
+	_style = style();
 }

@@ -18,17 +18,11 @@ class RasterTile
 {
 public:
 	RasterTile(const Projection &proj, const Transform &transform,
-	  const Style *style, const MapData *data, int zoom, const Range &zoomRange,
-	  const QRect &rect, qreal ratio) : _proj(proj), _transform(transform),
-	  _style(style), _map(data), _atlas(0), _zoom(zoom), _zoomRange(zoomRange),
-	  _rect(rect), _ratio(ratio), _pixmap(rect.width() * ratio, rect.height()
-	  * ratio), _valid(false) {}
+	  const MapData *data, int zoom, const Range &zoomRange, const QRect &rect,
+	  qreal ratio);
 	RasterTile(const Projection &proj, const Transform &transform,
-	  const Style *style, AtlasData *data, int zoom, const Range &zoomRange,
-	  const QRect &rect, qreal ratio) : _proj(proj), _transform(transform),
-	  _style(style), _map(0), _atlas(data), _zoom(zoom), _zoomRange(zoomRange),
-	  _rect(rect), _ratio(ratio), _pixmap(rect.width() * ratio, rect.height()
-	  * ratio), _valid(false) {}
+	  AtlasData *data, int zoom, const Range &zoomRange, const QRect &rect,
+	  qreal ratio);
 
 	int zoom() const {return _zoom;}
 	QPoint xy() const {return _rect.topLeft();}

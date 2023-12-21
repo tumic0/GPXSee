@@ -5,7 +5,6 @@
 #include "rectd.h"
 #include "pcs.h"
 #include "encjob.h"
-#include "encstyle.h"
 #include "encatlas.h"
 
 using namespace ENC;
@@ -358,7 +357,7 @@ void ENCAtlas::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				painter->drawPixmap(ttl, pm);
 			else
 				tiles.append(RasterTile(_projection, _transform,
-				  ENCStyle::style(), _data.value(_usage), _zoom, zooms(_usage),
+				  _data.value(_usage), _zoom, zooms(_usage),
 				  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio));
 		}
 	}
