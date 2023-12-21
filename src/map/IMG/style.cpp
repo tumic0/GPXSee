@@ -1272,6 +1272,8 @@ const Style::Point &Style::point(quint32 type) const
 
 const QFont *Style::font(Style::FontSize size, Style::FontSize defaultSize) const
 {
+	Q_ASSERT(defaultSize != Style::NotSet);
+
 	switch (size) {
 		case Style::None:
 			return 0;
