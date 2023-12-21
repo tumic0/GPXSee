@@ -16,14 +16,14 @@ class LBLFile : public SubFile
 {
 public:
 	LBLFile(const IMGData *img)
-	  : SubFile(img), _huffmanText(0), _table(0), _rasters(0), _imgIdSize(0),
-	  _poiShift(0), _shift(0), _encoding(0) {}
+	  : SubFile(img), _huffmanText(0), _table(0), _rasters(0), _codec(1252),
+	  _imgIdSize(0), _poiShift(0), _shift(0), _encoding(0) {}
 	LBLFile(const QString *path)
-	  : SubFile(path), _huffmanText(0), _table(0), _rasters(0), _imgIdSize(0),
-	  _poiShift(0), _shift(0), _encoding(0) {}
+	  : SubFile(path), _huffmanText(0), _table(0), _rasters(0), _codec(1252),
+	  _imgIdSize(0), _poiShift(0), _shift(0), _encoding(0) {}
 	LBLFile(const SubFile *gmp, quint32 offset)
 	  : SubFile(gmp, offset), _huffmanText(0), _table(0), _rasters(0),
-	  _imgIdSize(0), _poiShift(0), _shift(0), _encoding(0) {}
+	  _codec(1252), _imgIdSize(0), _poiShift(0), _shift(0), _encoding(0) {}
 	~LBLFile();
 
 	bool load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl);

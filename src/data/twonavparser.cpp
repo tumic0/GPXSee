@@ -75,7 +75,7 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
   QVector<Waypoint> &waypoints)
 {
 	Q_UNUSED(polygons);
-	TextCodec codec;
+	TextCodec codec(1252);
 	GCS gcs;
 	bool ok, route = false, track = false, waypoint = false;
 

@@ -2,19 +2,22 @@
 #define TEXTCODEC_H
 
 #include <QString>
+#include <QMap>
 
 class QTextCodec;
 
 class TextCodec
 {
 public:
-	TextCodec();
+	TextCodec() : _codec(0) {}
 	TextCodec(int codepage);
 
 	QString toString(const QByteArray &ba) const;
 
 private:
 	QTextCodec *_codec;
+
+	static const QMap<int, QTextCodec *> &codecs();
 };
 
 #endif // TEXTCODEC_H
