@@ -5,14 +5,13 @@
 #include "mapdata.h"
 #include "map/projection.h"
 #include "map/transform.h"
+#include "style.h"
 
 class QPainter;
 class IMGMap;
 class TextItem;
 
 namespace IMG {
-
-class Style;
 
 class RasterTile
 {
@@ -52,6 +51,9 @@ private:
 	  QList<TextItem*> &textItems);
 	void processStreetNames(const QList<MapData::Poly> &lines,
 	  QList<TextItem*> &textItems, const QImage (&arrows)[2]);
+
+	const QFont *poiFont(Style::FontSize size = Style::Normal,
+	  int zoom = -1, bool extended = false);
 
 	Projection _proj;
 	Transform _transform;

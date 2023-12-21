@@ -5,6 +5,7 @@
 #include "rectd.h"
 #include "pcs.h"
 #include "encjob.h"
+#include "encstyle.h"
 #include "encmap.h"
 
 
@@ -323,9 +324,9 @@ void ENCMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			if (QPixmapCache::find(key(_zoom, ttl), &pm))
 				painter->drawPixmap(ttl, pm);
 			else
-				tiles.append(RasterTile(_projection, _transform, _data,
-				  _zoom, _zooms, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)),
-				  _tileRatio));
+				tiles.append(RasterTile(_projection, _transform,
+				  ENCStyle::style(), _data, _zoom, _zooms,
+				  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio));
 		}
 	}
 

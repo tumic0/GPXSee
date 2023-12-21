@@ -28,57 +28,6 @@ static const QColor shieldBgColor1("#dd3e3e");
 static const QColor shieldBgColor2("#379947");
 static const QColor shieldBgColor3("#4a7fc1");
 
-static QFont pixelSizeFont(int pixelSize)
-{
-	QFont f;
-	f.setPixelSize(pixelSize);
-	return f;
-}
-
-static QFont *font(Style::FontSize size, Style::FontSize defaultSize
-  = Style::Normal)
-{
-	/* The fonts must be initialized on first usage (after the QGuiApplication
-	   instance is created) */
-	static QFont large = pixelSizeFont(16);
-	static QFont normal = pixelSizeFont(14);
-	static QFont small = pixelSizeFont(12);
-	static QFont extraSmall = pixelSizeFont(10);
-
-	switch (size) {
-		case Style::None:
-			return 0;
-		case Style::Large:
-			return &large;
-		case Style::Normal:
-			return &normal;
-		case Style::Small:
-			return &small;
-		case Style::ExtraSmall:
-			return &extraSmall;
-		default:
-			return font(defaultSize);
-	}
-}
-
-static QFont *poiFont(Style::FontSize size = Style::Normal, int zoom = -1,
-  bool extended = false)
-{
-	static QFont poi = pixelSizeFont(10);
-
-	if (zoom > 25)
-		size = Style::Normal;
-	else if (extended)
-		size = Style::None;
-
-	switch (size) {
-		case Style::None:
-			return 0;
-		default:
-			return &poi;
-	}
-}
-
 static const QColor *shieldBgColor(Shield::Type type)
 {
 	switch (type) {
@@ -150,6 +99,21 @@ static bool rectNearPolygon(const QPolygonF &polygon, const QRectF &rect)
 	  || polygon.containsPoint(rect.topRight(), Qt::OddEvenFill)
 	  || polygon.containsPoint(rect.bottomLeft(), Qt::OddEvenFill)
 	  || polygon.containsPoint(rect.bottomRight(), Qt::OddEvenFill)));
+}
+
+const QFont *RasterTile::poiFont(Style::FontSize size, int zoom, bool extended)
+{
+	if (zoom > 25)
+		size = Style::Normal;
+	else if (extended)
+		size = Style::None;
+
+	switch (size) {
+		case Style::None:
+			return 0;
+		default:
+			return _data->style()->font(Style::ExtraSmall);
+	}
 }
 
 void RasterTile::ll2xy(QList<MapData::Poly> &polys)
@@ -324,7 +288,8 @@ void RasterTile::processStreetNames(const QList<MapData::Poly> &lines,
 		if (style.img().isNull() && style.foreground() == Qt::NoPen)
 			continue;
 
-		const QFont *fnt = font(style.textFontSize(), Style::Small);
+		const QFont *fnt = _data->style()->font(style.textFontSize(),
+		  Style::Small);
 		const QColor *color = style.textColor().isValid()
 		  ? &style.textColor() : 0;
 		const QColor *hColor = Style::isContourLine(poly.type) ? 0 : &haloColor;
@@ -435,7 +400,7 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		const QImage *img = style.img().isNull() ? 0 : &style.img();
 		const QFont *fnt = poi
 		  ? poiFont(style.textFontSize(), _zoom, point.classLabel)
-		  : font(style.textFontSize());
+		  : _data->style()->font(style.textFontSize());
 		const QColor *color = style.textColor().isValid()
 		  ? &style.textColor() : &textColor;
 		const QColor *hcolor = Style::isDepthPoint(point.type)

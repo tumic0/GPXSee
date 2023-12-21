@@ -3,6 +3,7 @@
 
 #include <QPen>
 #include <QBrush>
+#include <QFont>
 #include <QMap>
 #include "objects.h"
 
@@ -96,6 +97,10 @@ public:
 	const Point &point(uint type) const;
 	const QVector<uint> &drawOrder() const {return _drawOrder;}
 
+	const QFont *font(Style::FontSize size) const;
+	const QImage *light() const {return &_light;}
+	const QImage *signal() const {return &_signal;}
+
 private:
 	void polygonStyle();
 	void lineStyle();
@@ -105,6 +110,9 @@ private:
 	QMap<uint, Polygon> _polygons;
 	QMap<uint, Point> _points;
 	QVector<uint> _drawOrder;
+
+	QFont _small, _normal, _large;
+	QImage _light, _signal;
 };
 
 }

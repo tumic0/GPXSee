@@ -3,6 +3,7 @@
 
 #include <QPen>
 #include <QBrush>
+#include <QFont>
 #include <QDebug>
 #include "subfile.h"
 
@@ -94,6 +95,8 @@ public:
 	const Polygon &polygon(quint32 type) const;
 	const Point &point(quint32 type) const;
 	const QList<quint32> &drawOrder() const {return _drawOrder;}
+	const QFont *font(Style::FontSize size, Style::FontSize defaultSize
+	  = Style::Normal) const;
 
 	static bool isPOI(quint32 type)
 	  {return !((type >= TYPE(0x01) && type <= TYPE(0x1f))
@@ -172,6 +175,8 @@ private:
 	QMap<quint32, Polygon> _polygons;
 	QMap<quint32, Point> _points;
 	QList<quint32> _drawOrder;
+
+	QFont _large, _normal, _small, _extraSmall;
 };
 
 }

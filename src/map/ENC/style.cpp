@@ -14,6 +14,13 @@ static QImage railroad()
 	return img;
 }
 
+static QFont pixelSizeFont(int pixelSize)
+{
+	QFont f;
+	f.setPixelSize(pixelSize);
+	return f;
+}
+
 void Style::polygonStyle()
 {
 	_polygons[TYPE(M_COVR)] = Polygon(QBrush("#ffffff"));
@@ -321,6 +328,13 @@ void Style::pointStyle()
 
 Style::Style()
 {
+	_light = QImage(":/marine/light.png");
+	_signal = QImage(":/marine/fog-signal.png");
+
+	_large = pixelSizeFont(16);
+	_normal = pixelSizeFont(12);
+	_small = pixelSizeFont(10);
+
 	polygonStyle();
 	lineStyle();
 	pointStyle();
@@ -348,4 +362,18 @@ const Style::Point &Style::point(uint type) const
 
 	QMap<uint, Point>::const_iterator it = _points.find(type);
 	return (it == _points.constEnd()) ? null : *it;
+}
+
+const QFont *Style::font(Style::FontSize size) const
+{
+	switch (size) {
+		case Style::None:
+			return 0;
+		case Style::Large:
+			return &_large;
+		case Style::Small:
+			return &_small;
+		default:
+			return &_normal;
+	}
 }

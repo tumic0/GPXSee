@@ -4,6 +4,13 @@
 
 using namespace IMG;
 
+static QFont pixelSizeFont(int pixelSize)
+{
+	QFont f;
+	f.setPixelSize(pixelSize);
+	return f;
+}
+
 static bool readColor(SubFile *file, SubFile::Handle &hdl, QColor &color)
 {
 	quint8 b, g, r;
@@ -1226,6 +1233,11 @@ bool Style::parseTYPFile(SubFile *file)
 
 Style::Style(SubFile *typ)
 {
+	_large = pixelSizeFont(16);
+	_normal = pixelSizeFont(14);
+	_small = pixelSizeFont(12);
+	_extraSmall = pixelSizeFont(10);
+
 	defaultLineStyle();
 	defaultPolygonStyle();
 	defaultPointStyle();
@@ -1256,6 +1268,24 @@ const Style::Point &Style::point(quint32 type) const
 
 	QMap<quint32, Point>::const_iterator it = _points.find(type);
 	return (it == _points.constEnd()) ? null : *it;
+}
+
+const QFont *Style::font(Style::FontSize size, Style::FontSize defaultSize) const
+{
+	switch (size) {
+		case Style::None:
+			return 0;
+		case Style::Large:
+			return &_large;
+		case Style::Normal:
+			return &_normal;
+		case Style::Small:
+			return &_small;
+		case Style::ExtraSmall:
+			return &_extraSmall;
+		default:
+			return font(defaultSize);
+	}
 }
 
 #ifndef QT_NO_DEBUG

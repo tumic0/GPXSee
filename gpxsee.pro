@@ -134,6 +134,7 @@ HEADERS += src/common/config.h \
     src/map/encjob.h \
     src/map/encmap.h \
     src/map/ENC/iso8211.h \
+    src/map/encstyle.h \
     src/map/gemfmap.h \
     src/map/gmifile.h \
     src/map/oruxmap.h \
@@ -349,6 +350,7 @@ SOURCES += src/main.cpp \
     src/map/encatlas.cpp \
     src/map/encmap.cpp \
     src/map/ENC/iso8211.cpp \
+    src/map/encstyle.cpp \
     src/map/gemfmap.cpp \
     src/map/gmifile.cpp \
     src/map/oruxmap.cpp \

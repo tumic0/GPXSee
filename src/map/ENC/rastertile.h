@@ -7,6 +7,7 @@
 #include "map/transform.h"
 #include "map/textpointitem.h"
 #include "mapdata.h"
+#include "style.h"
 #include "atlasdata.h"
 
 class TextItem;
@@ -17,15 +18,17 @@ class RasterTile
 {
 public:
 	RasterTile(const Projection &proj, const Transform &transform,
-	  const MapData *data, int zoom, const Range &zoomRange, const QRect &rect,
-	  qreal ratio) : _proj(proj), _transform(transform), _map(data), _atlas(0),
-		_zoom(zoom), _zoomRange(zoomRange), _rect(rect), _ratio(ratio),
-	  _pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false) {}
+	  const Style *style, const MapData *data, int zoom, const Range &zoomRange,
+	  const QRect &rect, qreal ratio) : _proj(proj), _transform(transform),
+	  _style(style), _map(data), _atlas(0), _zoom(zoom), _zoomRange(zoomRange),
+	  _rect(rect), _ratio(ratio), _pixmap(rect.width() * ratio, rect.height()
+	  * ratio), _valid(false) {}
 	RasterTile(const Projection &proj, const Transform &transform,
-	  AtlasData *data, int zoom, const Range &zoomRange, const QRect &rect,
-	  qreal ratio) : _proj(proj), _transform(transform), _map(0), _atlas(data),
-	  _zoom(zoom), _zoomRange(zoomRange), _rect(rect), _ratio(ratio),
-	  _pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false) {}
+	  const Style *style, AtlasData *data, int zoom, const Range &zoomRange,
+	  const QRect &rect, qreal ratio) : _proj(proj), _transform(transform),
+	  _style(style), _map(0), _atlas(data), _zoom(zoom), _zoomRange(zoomRange),
+	  _rect(rect), _ratio(ratio), _pixmap(rect.width() * ratio, rect.height()
+	  * ratio), _valid(false) {}
 
 	int zoom() const {return _zoom;}
 	QPoint xy() const {return _rect.topLeft();}
@@ -61,6 +64,7 @@ private:
 
 	Projection _proj;
 	Transform _transform;
+	const Style *_style;
 	const MapData *_map;
 	AtlasData *_atlas;
 	int _zoom;

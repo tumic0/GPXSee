@@ -17,51 +17,6 @@ typedef QSet<Coordinates> PointSet;
 static const float C1 = 0.866025f; /* sqrt(3)/2 */
 static const QColor haloColor(Qt::white);
 
-static QFont pixelSizeFont(int pixelSize)
-{
-	QFont f;
-	f.setPixelSize(pixelSize);
-	return f;
-}
-
-static QFont *font(Style::FontSize size)
-{
-	/* The fonts must be initialized on first usage (after the QGuiApplication
-	   instance is created) */
-	static QFont large = pixelSizeFont(16);
-	static QFont normal = pixelSizeFont(12);
-	static QFont small = pixelSizeFont(10);
-
-	switch (size) {
-		case Style::None:
-			return 0;
-		case Style::Large:
-			return &large;
-		case Style::Small:
-			return &small;
-		default:
-			return &normal;
-	}
-}
-
-static const QImage *light()
-{
-	static QImage img(":/marine/light.png");
-	return &img;
-}
-
-static const QImage *signal()
-{
-	static QImage img(":/marine/fog-signal.png");
-	return &img;
-}
-
-static const Style& style()
-{
-	static Style s;
-	return s;
-}
-
 static double area(const QVector<Coordinates> &polygon)
 {
 	double area = 0;
@@ -223,14 +178,12 @@ void RasterTile::drawArrows(QPainter *painter,
 void RasterTile::drawPolygons(QPainter *painter,
   const QList<MapData::Poly> &polygons)
 {
-	const Style &s = style();
-
-	for (int n = 0; n < s.drawOrder().size(); n++) {
+	for (int n = 0; n < _style->drawOrder().size(); n++) {
 		for (int i = 0; i < polygons.size(); i++) {
 			const MapData::Poly &poly = polygons.at(i);
-			if (poly.type() != s.drawOrder().at(n))
+			if (poly.type() != _style->drawOrder().at(n))
 				continue;
-			const Style::Polygon &style = s.polygon(poly.type());
+			const Style::Polygon &style = _style->polygon(poly.type());
 
 			if (!style.img().isNull()) {
 				for (int i = 0; i < poly.path().size(); i++)
@@ -257,13 +210,11 @@ void RasterTile::drawPolygons(QPainter *painter,
 
 void RasterTile::drawLines(QPainter *painter, const QList<MapData::Line> &lines)
 {
-	const Style &s = style();
-
 	painter->setBrush(Qt::NoBrush);
 
 	for (int i = 0; i < lines.size(); i++) {
 		const MapData::Line &line = lines.at(i);
-		const Style::Line &style = s.line(line.type());
+		const Style::Line &style = _style->line(line.type());
 
 		if (!style.img().isNull()) {
 			BitmapLine::draw(painter, polyline(line.path()), style.img());
@@ -284,8 +235,6 @@ void RasterTile::drawTextItems(QPainter *painter,
 void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
   QList<TextItem*> &textItems)
 {
-	const Style &s = style();
-
 	for (int i = 0; i < polygons.size(); i++) {
 		const MapData::Poly &poly = polygons.at(i);
 		uint type = poly.type()>>16;
@@ -293,7 +242,7 @@ void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
 		if (!(type == HRBFAC || type == I_TRNBSN
 		  || poly.type() == SUBTYPE(I_BERTHS, 6)))
 			continue;
-		const Style::Point &style = s.point(poly.type());
+		const Style::Point &style = _style->point(poly.type());
 		const QImage *img = style.img().isNull() ? 0 : &style.img();
 		if (!img)
 			continue;
@@ -311,7 +260,6 @@ void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
 void RasterTile::processPoints(QList<MapData::Point> &points,
   QList<TextItem*> &textItems, QList<TextItem*> &lights)
 {
-	const Style &s = style();
 	PointSet lightsSet, signalsSet;
 	int i;
 
@@ -332,12 +280,12 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 	for ( ; i < points.size(); i++) {
 		const MapData::Point &point = points.at(i);
 		QPoint pos(ll2xy(point.pos()).toPoint());
-		const Style::Point &style = s.point(point.type());
+		const Style::Point &style = _style->point(point.type());
 
 		const QString *label = point.label().isEmpty() ? 0 : &(point.label());
 		const QImage *img = style.img().isNull() ? 0 : &style.img();
 		const QFont *fnt = showLabel(img, _zoomRange, _zoom, point.type())
-		  ? font(style.textFontSize()) : 0;
+		  ? _style->font(style.textFontSize()) : 0;
 		const QColor *color = &style.textColor();
 		const QColor *hColor = style.haloColor().isValid()
 		  ? &style.haloColor() : 0;
@@ -351,9 +299,11 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		if (item->isValid() && !item->collides(textItems)) {
 			textItems.append(item);
 			if (lightsSet.contains(point.pos()))
-				lights.append(new TextPointItem(pos, 0, 0, light(), 0, 0, 0, 0));
+				lights.append(new TextPointItem(pos, 0, 0, _style->light(), 0,
+				  0, 0, 0));
 			if (signalsSet.contains(point.pos()))
-				lights.append(new TextPointItem(pos, 0, 0, signal(), 0, 0, 0, 0));
+				lights.append(new TextPointItem(pos, 0, 0, _style->signal(), 0,
+				  0, 0, 0));
 		} else
 			delete item;
 	}
@@ -362,18 +312,16 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 void RasterTile::processLines(const QList<MapData::Line> &lines,
   QList<TextItem*> &textItems)
 {
-	const Style &s = style();
-
 	for (int i = 0; i < lines.size(); i++) {
 		const MapData::Line &line = lines.at(i);
-		const Style::Line &style = s.line(line.type());
+		const Style::Line &style = _style->line(line.type());
 
 		if (style.img().isNull() && style.pen() == Qt::NoPen)
 			continue;
 		if (line.label().isEmpty() || style.textFontSize() == Style::None)
 			continue;
 
-		const QFont *fnt = font(style.textFontSize());
+		const QFont *fnt = _style->font(style.textFontSize());
 		const QColor *color = &style.textColor();
 
 		TextPathItem *item = new TextPathItem(polyline(line.path()),
