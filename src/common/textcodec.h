@@ -16,8 +16,6 @@ public:
 
 private:
 	QTextCodec *_codec;
-
-	static const QMap<int, QTextCodec *> &codecs();
 };
 
 #endif // TEXTCODEC_H

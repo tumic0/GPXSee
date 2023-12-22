@@ -1,48 +1,67 @@
 #include <QTextCodec>
 #include "textcodec.h"
 
-/* When Qt is compiled with ICU support, QTextCodec::codecForName() is very
-   slow due to broken codec name caching (the function does dozens of
-   comparisons and only then asks the cache...), so we use our own map. */
-static QMap<int, QTextCodec *> initCodecs()
+static QTextCodec *codec(int mib)
 {
-	QMap<int, QTextCodec *> map;
+	QTextCodec *c = QTextCodec::codecForMib(mib);
+	if (!c)
+		qWarning("MIB-%d: No such QTextCodec, using UTF-8", mib);
 
-	map.insert(65001, 0);
-	map.insert(874, QTextCodec::codecForName("Windows-874"));
-	map.insert(932, QTextCodec::codecForName("Shift-JIS"));
-	map.insert(936, QTextCodec::codecForName("GB18030"));
-	map.insert(949, QTextCodec::codecForName("EUC-KR"));
-	map.insert(950, QTextCodec::codecForName("Big5"));
-	map.insert(1250, QTextCodec::codecForName("Windows-1250"));
-	map.insert(1251, QTextCodec::codecForName("Windows-1251"));
-	map.insert(1252, QTextCodec::codecForName("Windows-1252"));
-	map.insert(1253, QTextCodec::codecForName("Windows-1253"));
-	map.insert(1254, QTextCodec::codecForName("Windows-1254"));
-	map.insert(1255, QTextCodec::codecForName("Windows-1255"));
-	map.insert(1256, QTextCodec::codecForName("Windows-1256"));
-	map.insert(1257, QTextCodec::codecForName("Windows-1257"));
-	map.insert(1258, QTextCodec::codecForName("Windows-1258"));
-
-	return map;
-}
-
-const QMap<int, QTextCodec *> &TextCodec::codecs()
-{
-	static QMap<int, QTextCodec *> map = initCodecs();
-	return map;
+	return c;
 }
 
 TextCodec::TextCodec(int codepage)
 {
-	const QMap<int, QTextCodec *> &map = codecs();
-
-	QMap<int, QTextCodec *>::const_iterator it(map.find(codepage));
-	if (it == map.cend()) {
-		qWarning("%d: Unsupported codepage, using UTF-8", codepage);
-		_codec = 0;
-	} else
-		_codec = *it;
+	switch (codepage) {
+		case 874:
+			_codec = codec(2109);
+			break;
+		case 932:
+			_codec = codec(17);
+			break;
+		case 936:
+			_codec = codec(114);
+			break;
+		case 949:
+			_codec = codec(38);
+			break;
+		case 950:
+			_codec = codec(2026);
+			break;
+		case 1250:
+			_codec = codec(2250);
+			break;
+		case 1251:
+			_codec = codec(2251);
+			break;
+		case 1252:
+			_codec = codec(2252);
+			break;
+		case 1253:
+			_codec = codec(2253);
+			break;
+		case 1254:
+			_codec = codec(2254);
+			break;
+		case 1255:
+			_codec = codec(2255);
+			break;
+		case 1256:
+			_codec = codec(2256);
+			break;
+		case 1257:
+			_codec = codec(2257);
+			break;
+		case 1258:
+			_codec = codec(2258);
+			break;
+		case 65001:
+			_codec = 0;
+			break;
+		default:
+			qWarning("%d: Unknown codepage, using UTF-8", codepage);
+			_codec = 0;
+	}
 }
 
 QString TextCodec::toString(const QByteArray &ba) const
