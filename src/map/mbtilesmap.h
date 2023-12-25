@@ -139,6 +139,8 @@ private:
 	void runJob(MBTilesMapJob *job);
 	void removeJob(MBTilesMapJob *job);
 	void cancelJobs(bool wait);
+	QPointF tilePos(const QPointF &tl, const QPoint &tc, const QPoint &tile,
+	  unsigned overzoom) const;
 
 	friend QDebug operator<<(QDebug dbg, const Zoom &zoom);
 

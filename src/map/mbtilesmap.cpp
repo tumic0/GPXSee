@@ -382,12 +382,19 @@ void MBTilesMap::cancelJobs(bool wait)
 		_jobs.at(i)->cancel(wait);
 }
 
+QPointF MBTilesMap::tilePos(const QPointF &tl, const QPoint &tc,
+  const QPoint &tile, unsigned overzoom) const
+{
+	return QPointF(tl.x() + ((tc.x() - tile.x()) << overzoom) * tileSize(),
+	  tl.y() + ((tc.y() - tile.y()) << overzoom) * tileSize());
+}
+
 void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	const Zoom &zoom = _zooms.at(_zi);
 	unsigned overzoom = zoom.z - zoom.base;
 	unsigned f = 1U<<overzoom;
-	qreal scale = OSM::zoom2scale(zoom.base, _tileSize * f);
+	qreal scale = OSM::zoom2scale(zoom.base, _tileSize << overzoom);
 	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * coordinatesRatio(), zoom.base);
 	Coordinates ctl(OSM::tile2ll(tile, zoom.base));
@@ -409,8 +416,7 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				continue;
 
 			if (QPixmapCache::find(key, &pm)) {
-				QPointF tp(tl.x() + (t.x() - tile.x()) * tileSize() * f,
-				  tl.y() + (t.y() - tile.y()) * tileSize() * f);
+				QPointF tp(tilePos(tl, t, tile, overzoom));
 				drawTile(painter, pm, tp);
 			} else
 				tiles.append(MBTile(zoom.z, overzoom, _scaledSize, t,
@@ -431,8 +437,7 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 				QPixmapCache::insert(mt.key(), pm);
 
-				QPointF tp(tl.x() + (mt.xy().x() - tile.x()) * tileSize() * f,
-				  tl.y() + (mt.xy().y() - tile.y()) * tileSize() * f);
+				QPointF tp(tilePos(tl, mt.xy(), tile, overzoom));
 				drawTile(painter, pm, tp);
 			}
 		} else
