@@ -115,7 +115,9 @@ private:
 	qreal tileSize() const;
 	qreal coordinatesRatio() const;
 	qreal imageRatio() const;
-	QPoint tileCoordinates(int x, int y, int zoom);
+	QPoint tileCoordinates(int x, int y, int zoom) const;
+	QPointF tilePos(const QPointF &tl, const QPoint &tc, const QPoint &tile,
+	  unsigned overzoom) const;
 	void drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp);
 	bool isRunning(const QString &key) const;
 	void runJob(OnlineMapJob *job);

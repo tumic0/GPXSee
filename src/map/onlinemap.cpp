@@ -118,9 +118,16 @@ qreal OnlineMap::tileSize() const
 	return (_tileSize / coordinatesRatio());
 }
 
-QPoint OnlineMap::tileCoordinates(int x, int y, int zoom)
+QPoint OnlineMap::tileCoordinates(int x, int y, int zoom) const
 {
 	return QPoint(x, _invertY ? (1<<zoom) - y - 1 : y);
+}
+
+QPointF OnlineMap::tilePos(const QPointF &tl, const QPoint &tc,
+  const QPoint &tile, unsigned overzoom) const
+{
+	return QPointF(tl.x() + ((tc.x() - tile.x()) << overzoom) * tileSize(),
+	  tl.y() + ((tc.y() - tile.y()) << overzoom) * tileSize());
 }
 
 bool OnlineMap::isRunning(const QString &key) const
@@ -174,14 +181,14 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	int baseZoom = qMin(_baseZoom, _zoom);
 	unsigned overzoom = _zoom - baseZoom;
-	unsigned f = 1U<<overzoom;
 
-	qreal scale = OSM::zoom2scale(baseZoom, _tileSize * f);
+	qreal scale = OSM::zoom2scale(baseZoom, _tileSize << overzoom);
 	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * coordinatesRatio(), baseZoom);
 	Coordinates ctl(OSM::tile2ll(tile, baseZoom));
 	QPointF tl(ll2xy(Coordinates(ctl.lon(), -ctl.lat())));
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
+	unsigned f = 1U<<overzoom;
 	int width = ceil(s.width() / (tileSize() * f));
 	int height = ceil(s.height() / (tileSize() * f));
 
@@ -213,8 +220,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		QPixmap pm;
 		if (QPixmapCache::find(key, &pm)) {
 			QPoint tc(tileCoordinates(t.xy().x(), t.xy().y(), baseZoom));
-			QPointF tp(tl.x() + (tc.x() - tile.x()) * tileSize() * f,
-			  tl.y() + (tc.y() - tile.y()) * tileSize() * f);
+			QPointF tp(tilePos(tl, tc, tile, overzoom));
 			drawTile(painter, pm, tp);
 		} else
 			renderTiles.append(OnlineMapTile(t.xy(), t.file(), _zoom, overzoom,
@@ -236,8 +242,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				QPixmapCache::insert(mt.key(), pm);
 
 				QPoint tc(tileCoordinates(mt.xy().x(), mt.xy().y(), baseZoom));
-				QPointF tp(tl.x() + (tc.x() - tile.x()) * tileSize() * f,
-				  tl.y() + (tc.y() - tile.y()) * tileSize() * f);
+				QPointF tp(tilePos(tl, tc, tile, overzoom));
 				drawTile(painter, pm, tp);
 			}
 		} else
