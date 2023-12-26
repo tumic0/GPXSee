@@ -23,10 +23,12 @@ private:
 		qreal cadence, temperature, hr, power, speed;
 	};
 
+	typedef QMap<QDateTime, Sensors> SensorsMap;
+
 	void sml(QList<TrackData> &tracks);
 	void deviceLog(TrackData &track);
 	void samples(SegmentData &segment);
-	void sample(SegmentData &segment, QMap<QDateTime, Sensors> &map);
+	void sample(SegmentData &segment, SensorsMap &map);
 
 #ifndef QT_NO_DEBUG
 	friend QDebug operator<<(QDebug dbg, const Sensors &sensors);

@@ -13,7 +13,7 @@ QDebug operator<<(QDebug dbg, const SMLParser::Sensors &sensors)
 #endif // QT_NO_DEBUG
 
 
-void SMLParser::sample(SegmentData &segment, QMap<QDateTime, Sensors> &map)
+void SMLParser::sample(SegmentData &segment, SensorsMap &map)
 {
 	QDateTime timestamp;
 	Sensors sensors;
@@ -97,19 +97,20 @@ void SMLParser::sample(SegmentData &segment, QMap<QDateTime, Sensors> &map)
 
 void SMLParser::samples(SegmentData &segment)
 {
-	QMap<QDateTime, Sensors> sensors;
-	QMap<QDateTime, Sensors>::const_iterator it;
+	SensorsMap map;
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Sample")) {
-			sample(segment, sensors);
+			sample(segment, map);
 		} else
 			_reader.skipCurrentElement();
 	}
 
 	for (int i = 0; i < segment.size(); i++) {
 		Trackpoint &t = segment[i];
-		if ((it = sensors.lowerBound(t.timestamp())) != sensors.constEnd()) {
+		SensorsMap::const_iterator it(map.lowerBound(t.timestamp()));
+
+		if (it != map.constEnd()) {
 			t.setCadence(it->cadence * 60);
 			t.setTemperature(it->temperature - 273.15);
 			t.setHeartRate(it->hr * 60);
