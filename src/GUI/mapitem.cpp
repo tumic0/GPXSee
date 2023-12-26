@@ -5,10 +5,10 @@
 #include "map/map.h"
 #include "mapaction.h"
 #include "tooltip.h"
+#include "mapitem.h"
 #ifdef Q_OS_ANDROID
 #include "popup.h"
 #endif // Q_OS_ANDROID
-#include "mapitem.h"
 
 
 static void growLeft(Map *map, const Coordinates &c, QRectF &rect)

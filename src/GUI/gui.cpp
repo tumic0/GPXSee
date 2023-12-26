@@ -54,8 +54,11 @@
 #include "pathitem.h"
 #include "mapaction.h"
 #include "poiaction.h"
-#include "navigationwidget.h"
 #include "gui.h"
+#ifdef Q_OS_ANDROID
+#include "common/util.h"
+#include "navigationwidget.h"
+#endif // Q_OS_ANDROID
 
 
 #define MAX_RECENT_FILES  10
