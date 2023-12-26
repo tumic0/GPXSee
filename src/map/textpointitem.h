@@ -1,6 +1,7 @@
 #ifndef TEXTPOINTITEM_H
 #define TEXTPOINTITEM_H
 
+#include <cmath>
 #include "textitem.h"
 
 class QFont;

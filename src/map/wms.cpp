@@ -321,7 +321,7 @@ bool WMS::parseCapabilities()
 
 void WMS::capabilitiesReady()
 {
-	if (!QFileInfo(_path).exists()) {
+	if (!QFileInfo::exists(_path)) {
 		_errorString = "Error downloading capabilities XML file";
 		_valid = false;
 	} else {
@@ -338,7 +338,7 @@ WMS::WMS(const QString &file, const WMS::Setup &setup, QObject *parent)
 	QString url = QString("%1%2service=WMS&request=GetCapabilities")
 	  .arg(setup.url(), setup.url().contains('?') ? "&" : "?");
 
-	if (!QFileInfo(file).exists()) {
+	if (!QFileInfo::exists(file)) {
 		Downloader *downloader = new Downloader(this);
 		connect(downloader, &Downloader::finished, this,
 		  &WMS::capabilitiesReady);

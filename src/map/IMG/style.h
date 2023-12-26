@@ -176,6 +176,7 @@ private:
 	QMap<quint32, Point> _points;
 	QList<quint32> _drawOrder;
 
+	/* Fonts and images must be initialized after QGuiApplication! */
 	QFont _large, _normal, _small, _extraSmall;
 };
 

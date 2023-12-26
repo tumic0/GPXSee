@@ -5,7 +5,6 @@
 #include <QRegularExpression>
 #include <QtEndian>
 #include "common/rectc.h"
-#include "common/wgs84.h"
 #include "common/color.h"
 #include "calibrationpoint.h"
 #include "utm.h"

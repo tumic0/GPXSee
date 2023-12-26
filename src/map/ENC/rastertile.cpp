@@ -15,7 +15,8 @@ using namespace ENC;
 typedef QSet<Coordinates> PointSet;
 
 static const float C1 = 0.866025f; /* sqrt(3)/2 */
-static const QColor haloColor(Qt::white);
+static const QColor tsslptPen = QColor("#eb49eb");
+static const QColor tsslptBrush = QColor("#80eb49eb");
 
 static const Style *style()
 {
@@ -174,8 +175,8 @@ void RasterTile::drawArrows(QPainter *painter,
 			QPolygonF polygon(tsslptArrow(centroid(poly.path().first()),
 			  deg2rad(180 - poly.param().toDouble())));
 
-			painter->setPen(QPen(QColor("#eb49eb"), 1));
-			painter->setBrush(QBrush("#80eb49eb"));
+			painter->setPen(QPen(tsslptPen, 1));
+			painter->setBrush(QBrush(tsslptBrush));
 			painter->drawPolygon(polygon);
 		}
 	}

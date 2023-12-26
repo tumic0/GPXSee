@@ -105,7 +105,7 @@ bool IMGData::readFAT(QFile &file, TileMap &tileMap)
 		QByteArray fn(name, sizeof(name));
 		if (VectorTile::isTileFile(tt)) {
 			VectorTile *tile;
-			TileMap::const_iterator it = tileMap.find(fn);
+			TileMap::const_iterator it(tileMap.find(fn));
 			if (it == tileMap.constEnd()) {
 				tile = new VectorTile();
 				tileMap.insert(fn, tile);

@@ -1,6 +1,5 @@
 #include <QFile>
 #include "common/csv.h"
-#include "angularunits.h"
 #include "pcs.h"
 
 QMap<int, PCS::Entry> PCS::_pcss = defaults();
@@ -14,7 +13,7 @@ QMap<int, PCS::Entry> PCS::defaults()
 
 PCS PCS::pcs(int id)
 {
-	QMap<int, Entry>::const_iterator it = _pcss.find(id);
+	QMap<int, Entry>::const_iterator it(_pcss.find(id));
 
 	if (it == _pcss.constEnd())
 		return PCS();

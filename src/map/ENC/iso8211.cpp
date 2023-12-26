@@ -323,7 +323,7 @@ bool ISO8211::readRecord(Record &record)
 		const FieldDefinition &def = fields.at(i);
 		Data data;
 
-		FieldsMap::const_iterator it = _map.find(def.tag);
+		FieldsMap::const_iterator it(_map.find(def.tag));
 		if (it == _map.constEnd()) {
 			_errorString = QString("%1: unknown record").arg(QString(def.tag));
 			return false;

@@ -99,7 +99,7 @@ QMap<int, Conversion::Entry> Conversion::defaults()
 
 Conversion Conversion::conversion(int id)
 {
-	QMap<int, Entry>::const_iterator it = _conversions.find(id);
+	QMap<int, Entry>::const_iterator it(_conversions.find(id));
 
 	if (it == _conversions.constEnd())
 		return Conversion();
@@ -189,7 +189,7 @@ QList<KV<int, QString> > Conversion::list()
 	QList<KV<int, QString> > list;
 
 	for (QMap<int, Entry>::const_iterator it = _conversions.constBegin();
-		 it != _conversions.constEnd(); ++it)
+	  it != _conversions.constEnd(); ++it)
 		list.append(KV<int, QString>(it.key(), it.value().name()));
 
 	return list;

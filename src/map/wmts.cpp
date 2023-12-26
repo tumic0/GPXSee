@@ -6,7 +6,6 @@
 #include <QStringList>
 #include <QtAlgorithms>
 #include <QXmlStreamReader>
-#include "pcs.h"
 #include "crs.h"
 #include "wmts.h"
 
@@ -301,7 +300,7 @@ bool WMTS::parseCapabilities(CTX &ctx)
 
 void WMTS::capabilitiesReady()
 {
-	if (!QFileInfo(_path).exists()) {
+	if (!QFileInfo::exists(_path)) {
 		_errorString = "Error downloading capabilities XML file";
 		_valid = false;
 	} else {
@@ -354,7 +353,7 @@ WMTS::WMTS(const QString &file, const WMTS::Setup &setup, QObject *parent)
 
 	_path = url.isLocalFile() ? url.toLocalFile() : file;
 
-	if (!url.isLocalFile() && !QFileInfo(file).exists()) {
+	if (!url.isLocalFile() && !QFileInfo::exists(file)) {
 		Downloader *downloader = new Downloader(this);
 		connect(downloader, &Downloader::finished, this,
 		  &WMTS::capabilitiesReady);

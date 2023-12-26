@@ -111,6 +111,7 @@ private:
 	QMap<uint, Point> _points;
 	QVector<uint> _drawOrder;
 
+	/* Fonts and images must be initialized after QGuiApplication! */
 	QFont _small, _normal, _large;
 	QImage _light, _signal;
 };

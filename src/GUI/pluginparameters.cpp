@@ -2,12 +2,6 @@
 #include <QLineEdit>
 #include "pluginparameters.h"
 
-static const QMap<QString, QStringList> pluginParams = {
-	{"nmea", {"nmea.source", "nmea.baudrate"}},
-	{"serialnmea", {"serialnmea.serial_port"}},
-	{"geoclue2", {"desktopId"}}
-};
-
 static void deleteLayout(QLayout *layout)
 {
 	if (!layout)
@@ -32,6 +26,12 @@ PluginParameters::PluginParameters(const QString &plugin,
 
 void PluginParameters::setPlugin(const QString &plugin)
 {
+	static const QMap<QString, QStringList> pluginParams = {
+		{"nmea", {"nmea.source", "nmea.baudrate"}},
+		{"serialnmea", {"serialnmea.serial_port"}},
+		{"geoclue2", {"desktopId"}}
+	};
+
 	saveParameters();
 
 	QStringList params = pluginParams.value(plugin);
