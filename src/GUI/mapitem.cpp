@@ -5,6 +5,9 @@
 #include "map/map.h"
 #include "mapaction.h"
 #include "tooltip.h"
+#ifdef Q_OS_ANDROID
+#include "popup.h"
+#endif // Q_OS_ANDROID
 #include "mapitem.h"
 
 
