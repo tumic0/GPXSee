@@ -6,6 +6,9 @@
 #include <QApplication>
 #include <QFontMetrics>
 #include "fileselectwidget.h"
+#ifdef Q_OS_ANDROID
+#include "common/util.h"
+#endif // Q_OS_ANDROID
 
 
 FileSelectWidget::FileSelectWidget(QWidget *parent) : QWidget(parent)
