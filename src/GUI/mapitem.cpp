@@ -4,7 +4,6 @@
 #include <QGraphicsSceneMouseEvent>
 #include "map/map.h"
 #include "mapaction.h"
-#include "popup.h"
 #include "tooltip.h"
 #include "mapitem.h"
 

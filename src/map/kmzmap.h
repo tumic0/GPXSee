@@ -4,7 +4,6 @@
 #include <QImage>
 #include "projection.h"
 #include "transform.h"
-#include "rectd.h"
 #include "map.h"
 
 class QXmlStreamReader;

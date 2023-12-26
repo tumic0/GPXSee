@@ -3,7 +3,6 @@
 #include <QFile>
 #include <QDataStream>
 #include <QColor>
-#include "common/hash.h"
 #include "map/osm.h"
 #include "subfile.h"
 #include "mapdata.h"

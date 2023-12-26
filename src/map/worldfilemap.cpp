@@ -3,7 +3,6 @@
 #include <QPainter>
 #include <QImageReader>
 #include "image.h"
-#include "gcs.h"
 #include "prjfile.h"
 #include "wldfile.h"
 #include "worldfilemap.h"

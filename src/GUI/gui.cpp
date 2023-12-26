@@ -52,7 +52,6 @@
 #include "graphtab.h"
 #include "graphitem.h"
 #include "pathitem.h"
-#include "mapitem.h"
 #include "mapaction.h"
 #include "poiaction.h"
 #include "navigationwidget.h"

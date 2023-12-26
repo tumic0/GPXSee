@@ -1,5 +1,4 @@
 #include <QFile>
-#include "common/wgs84.h"
 #include "common/csv.h"
 #include "gcs.h"
 

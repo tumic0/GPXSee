@@ -1,6 +1,5 @@
 #include <QPainter>
 #include <QImageReader>
-#include "common/util.h"
 #include "geotiff.h"
 #include "image.h"
 #include "geotiffmap.h"

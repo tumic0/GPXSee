@@ -4,7 +4,6 @@
 #include <QImageReader>
 #include <QBuffer>
 #include <QtConcurrent>
-#include "common/hash.h"
 #include "osm.h"
 #include "tile.h"
 #include "aqmmap.h"

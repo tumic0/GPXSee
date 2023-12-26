@@ -5,7 +5,6 @@
 #include <QFileInfo>
 #include <QApplication>
 #include <QFontMetrics>
-#include "common/util.h"
 #include "fileselectwidget.h"
 
 

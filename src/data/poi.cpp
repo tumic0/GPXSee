@@ -2,11 +2,9 @@
 #include <QDir>
 #include "common/rectc.h"
 #include "common/greatcircle.h"
-#include "data.h"
-#include "dem.h"
-#include "path.h"
-#include "area.h"
 #include "common/wgs84.h"
+#include "data.h"
+#include "path.h"
 #include "poi.h"
 
 

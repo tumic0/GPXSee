@@ -18,7 +18,6 @@
 #include <QPainter>
 #include <QPixmapCache>
 #include <private/qzipreader_p.h>
-#include "common/util.h"
 #include "kmzmap.h"
 
 

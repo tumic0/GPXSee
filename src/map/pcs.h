@@ -5,8 +5,6 @@
 #include <QMap>
 #include "common/kv.h"
 #include "gcs.h"
-#include "linearunits.h"
-#include "coordinatesystem.h"
 #include "conversion.h"
 
 class PCS

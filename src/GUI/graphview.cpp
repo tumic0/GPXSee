@@ -16,7 +16,6 @@
 #include "infoitem.h"
 #include "griditem.h"
 #include "graphitem.h"
-#include "pathitem.h"
 #include "format.h"
 #include "graphicsscene.h"
 #include "graphview.h"

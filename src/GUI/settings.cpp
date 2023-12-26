@@ -4,7 +4,6 @@
 #include <QPageSize>
 #include <QGeoPositionInfoSource>
 #include "common/config.h"
-#include "common/util.h"
 #include "data/graph.h"
 #include "format.h"
 #include "units.h"
