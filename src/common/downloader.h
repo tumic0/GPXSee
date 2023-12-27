@@ -3,7 +3,9 @@
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 #include <QBasicTimer>
+#endif // QT 5.15
 #include <QUrl>
 #include <QList>
 #include <QHash>
@@ -81,8 +83,6 @@ private slots:
 	void emitReadReady();
 
 private:
-	class ReplyTimeout;
-
 	void insertError(const QUrl &url, QNetworkReply::NetworkError error);
 	bool doDownload(const Download &dl, const QList<HTTPHeader> &headers);
 	void downloadFinished(QNetworkReply *reply);

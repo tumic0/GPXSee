@@ -1,5 +1,4 @@
 #include <QFile>
-#include <QFileInfo>
 #include <QNetworkRequest>
 #include <QDir>
 #include <QTimerEvent>
