@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map xmlns="http://www.gpxsee.org/map/1.4">
+	<name>mtbmap.cz</name>
+	<url>https://tile.mtbmap.cz/mtbmap_tiles/$z/$x/$y.png</url>
+	<copyright>Map data: OpenStreetMap, USGS | Rendering: Martin Tesař</copyright>
+</map>
