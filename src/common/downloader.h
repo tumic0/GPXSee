@@ -39,6 +39,7 @@ private:
 	HTTPHeader _header;
 };
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 class NetworkTimeout : public QObject
 {
 	Q_OBJECT
@@ -55,6 +56,7 @@ private:
 	QBasicTimer _timer;
 	int _timeout;
 };
+#endif // QT 5.15
 
 class Downloader : public QObject
 {

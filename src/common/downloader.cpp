@@ -56,6 +56,7 @@ Authorization::Authorization(const QString &username, const QString &password)
 	_header = HTTPHeader("Authorization", "Basic " + data);
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 NetworkTimeout::NetworkTimeout(int timeout, QNetworkReply *reply)
   : QObject(reply), _timeout(timeout)
 {
@@ -77,6 +78,7 @@ void NetworkTimeout::timerEvent(QTimerEvent *ev)
 		reply->abort();
 	_timer.stop();
 }
+#endif // QT 5.15
 
 
 QNetworkAccessManager *Downloader::_manager = 0;
@@ -104,11 +106,15 @@ bool Downloader::doDownload(const Download &dl, const QList<HTTPHeader> &headers
 	request.setAttribute(ATTR_REDIRECT_POLICY,
 	  QNetworkRequest::NoLessSafeRedirectPolicy);
 	request.setAttribute(ATTR_HTTP2_ALLOWED, QVariant(_http2));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+	request.setTransferTimeout(_timeout * 1000);
+#endif // QT 5.15
 
 	for (int i = 0; i < headers.size(); i++) {
 		const HTTPHeader &hdr = headers.at(i);
 		request.setRawHeader(hdr.key(), hdr.value());
-		if (hdr.key() == "User-Agent")
+		// QByteArray::compare() not available in Qt < 5.12
+		if (!QString(hdr.key()).compare("User-Agent", Qt::CaseInsensitive))
 			userAgent = true;
 	}
 	if (!userAgent)
@@ -128,9 +134,9 @@ bool Downloader::doDownload(const Download &dl, const QList<HTTPHeader> &headers
 	_currentDownloads.insert(url, file);
 
 	if (reply->isRunning()) {
-		/* Starting with Qt 5.15 this can be replaced by
-		   QNetworkRequest::setTransferTimeout() */
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 		new NetworkTimeout(_timeout, reply);
+#endif // QT 5.15
 		connect(reply, &QIODevice::readyRead, this, &Downloader::emitReadReady);
 		connect(reply, &QNetworkReply::finished, this, &Downloader::emitFinished);
 	} else {
