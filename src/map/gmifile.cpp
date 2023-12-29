@@ -41,13 +41,13 @@ bool GmiFile::parse(QIODevice &device)
 			_image = line.trimmed();
 		else if (ln == 3) {
 			width = line.toInt(&ok);
-			if (!ok || ok <= 0) {
+			if (!ok || width <= 0) {
 				_errorString = "Invalid image width";
 				return false;
 			}
 		} else if (ln == 4) {
 			height = line.toInt(&ok);
-			if (!ok || ok <= 0) {
+			if (!ok || height <= 0) {
 				_errorString = "Invalid image height";
 				return false;
 			}
