@@ -70,11 +70,11 @@ bool Tar::loadTar()
 	quint64 size;
 	qint64 ret;
 
-	while ((ret = _file.read(buffer, BLOCKSIZE)) > 0) {
+	while ((ret = _file.read(buffer, BLOCKSIZE))) {
 		if (ret < BLOCKSIZE) {
 			_file.close();
 			_index.clear();
-			_errorString = "Error reading header block";
+			_errorString = "Error reading TAR header block";
 			return false;
 		}
 		size = number(hdr->size, sizeof(hdr->size));
@@ -100,7 +100,7 @@ bool Tar::loadTmi(const QString &path)
 		return false;
 
 	while (!file.atEnd()) {
-		QByteArray line = file.readLine(4096);
+		QByteArray line(file.readLine(4096));
 		int pos = line.indexOf(':');
 		if (line.size() < 10 || pos < 7 || !line.startsWith("block")) {
 			qWarning("%s:%d: syntax error", qPrintable(path), ln);
