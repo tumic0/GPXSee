@@ -54,16 +54,12 @@ QString OziMap::calibrationFile(const QStringList &files, const QString path,
 	return QString();
 }
 
-OziMap::OziMap(const QString &fileName, const Projection &proj, QObject *parent)
-  : Map(fileName, parent), _img(0), _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0),
-  _valid(false)
+OziMap::OziMap(const QString &fileName, CalibrationType type,
+  const Projection &proj, QObject *parent) : Map(fileName, parent), _img(0),
+  _tar(0), _ozf(0), _zoom(0), _mapRatio(1.0), _valid(false)
 {
-	QFileInfo fi(fileName);
-	QString suffix(fi.suffix().toLower());
-
-	if (suffix == "tar") {
-		CalibrationType type;
-
+	// TAR maps
+	if (type == Unknown) {
 		_tar = new Tar(fileName);
 		if (!_tar->open()) {
 			_errorString = "Error reading tar file: " + _tar->errorString();
@@ -110,10 +106,12 @@ OziMap::OziMap(const QString &fileName, const Projection &proj, QObject *parent)
 			return;
 
 		_tar->close();
+
+	// regular MAP or GMI maps
 	} else {
 		QFile file(fileName);
 
-		if (suffix == "map") {
+		if (type == MAP) {
 			MapFile mf(file);
 			if (!mf.isValid()) {
 				_errorString = mf.errorString();
@@ -125,7 +123,7 @@ OziMap::OziMap(const QString &fileName, const Projection &proj, QObject *parent)
 				_projection = mf.projection();
 				_transform = mf.transform();
 			}
-		} else if (suffix == "gmi") {
+		} else if (type == GMI) {
 			GmiFile gmi(file);
 			if (!gmi.isValid()) {
 				_errorString = gmi.errorString();
@@ -138,11 +136,9 @@ OziMap::OziMap(const QString &fileName, const Projection &proj, QObject *parent)
 				_projection = proj;
 				computeTransform();
 			}
-		} else {
-			_errorString = "Unknown file type";
-			return;
 		}
 
+		QFileInfo fi(fileName);
 		QDir set(fi.absolutePath() + "/" + "set");
 		if (set.exists()) {
 			if (!setTileInfo(set.entryList(), set.absolutePath()))
@@ -373,8 +369,7 @@ void OziMap::drawTiled(QPainter *painter, const QRectF &rect) const
 				pixmap = QPixmap(tileName);
 
 			if (pixmap.isNull())
-				qWarning("%s: error loading tile image", qPrintable(
-				  _tile.path.arg(QString::number(x), QString::number(y))));
+				qWarning("%s: error loading tile image", qPrintable(tileName));
 			else {
 				pixmap.setDevicePixelRatio(_mapRatio);
 				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
@@ -512,7 +507,7 @@ Map *OziMap::createTAR(const QString &path, const Projection &proj, bool *isDir)
 	if (isDir)
 		*isDir = false;
 
-	return new OziMap(path, proj);
+	return new OziMap(path, Unknown, proj);
 }
 
 Map *OziMap::createMAP(const QString &path, const Projection &proj, bool *isDir)
@@ -520,5 +515,13 @@ Map *OziMap::createMAP(const QString &path, const Projection &proj, bool *isDir)
 	if (isDir)
 		*isDir = false;
 
-	return new OziMap(path, proj);
+	return new OziMap(path, MAP, proj);
+}
+
+Map *OziMap::createGMI(const QString &path, const Projection &proj, bool *isDir)
+{
+	if (isDir)
+		*isDir = false;
+
+	return new OziMap(path, GMI, proj);
 }

@@ -15,7 +15,11 @@ class OziMap : public Map
 	Q_OBJECT
 
 public:
-	OziMap(const QString &fileName, const Projection &proj,
+	enum CalibrationType {
+		Unknown, MAP, GMI
+	};
+
+	OziMap(const QString &fileName, CalibrationType type, const Projection &proj,
 	  QObject *parent = 0);
 	OziMap(const QString &dirName, Tar &tar, const Projection &proj,
 	  QObject *parent = 0);
@@ -54,12 +58,10 @@ public:
 	  bool *isDir);
 	static Map *createMAP(const QString &path, const Projection &proj,
 	  bool *isDir);
+	static Map *createGMI(const QString &path, const Projection &proj,
+	  bool *isDir);
 
 private:
-	enum CalibrationType {
-		Unknown, MAP, GMI
-	};
-
 	struct ImageInfo {
 		QSize size;
 		QString path;

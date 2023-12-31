@@ -43,7 +43,7 @@ MapList::ParserMap MapList::parsers()
 	map.insert("rtmap", &RMap::create);
 	map.insert("map", &MapsforgeMap::create);
 	map.insert("map", &OziMap::createMAP);
-	map.insert("gmi", &OziMap::createMAP);
+	map.insert("gmi", &OziMap::createGMI);
 	map.insert("kap", &BSBMap::create);
 	map.insert("kmz", &KMZMap::create);
 	map.insert("aqm", &AQMMap::create);

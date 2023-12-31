@@ -27,19 +27,25 @@ static bool yCmp(OziMap *m1, OziMap *m2)
 	return TL(m1).y() > TL(m2).y();
 }
 
-static QString calibrationFile(const QString &path)
+static QString calibrationFile(const QString &path, OziMap::CalibrationType &type)
 {
 	QDir dir(path);
-	QFileInfoList files = dir.entryInfoList(QDir::Files);
+	QFileInfoList files(dir.entryInfoList(QDir::Files));
 
 	for (int i = 0; i < files.size(); i++) {
 		const QFileInfo &fi = files.at(i);
 		QString suffix(fi.suffix().toLower());
 
-		if (suffix == "map" || suffix == "gmi")
+		if (suffix == "map") {
+			type = OziMap::MAP;
 			return fi.absoluteFilePath();
+		} else if (suffix == "gmi") {
+			type = OziMap::GMI;
+			return fi.absoluteFilePath();
+		}
 	}
 
+	type = OziMap::Unknown;
 	return QString();
 }
 
@@ -141,16 +147,19 @@ Atlas::Atlas(const QString &fileName, bool TAR, const Projection &proj,
 		QFileInfoList maps = zdir.entryInfoList(QDir::Dirs
 		  | QDir::NoDotAndDotDot);
 		for (int i = 0; i < maps.count(); i++) {
+			QString path(maps.at(i).absoluteFilePath());
 			OziMap *map;
+
 			if (TAR)
-				map = new OziMap(maps.at(i).absoluteFilePath(), tar, proj, this);
+				map = new OziMap(path, tar, proj, this);
 			else {
-				QString cf(calibrationFile(maps.at(i).absoluteFilePath()));
+				OziMap::CalibrationType type;
+				QString cf(calibrationFile(path, type));
 				if (cf.isNull()) {
-					_errorString = "No calibration file found";
-					return;
+					qWarning("%s: no calibration file found", qPrintable(path));
+					continue;
 				}
-				map = new OziMap(cf, proj, this);
+				map = new OziMap(cf, type, proj, this);
 			}
 
 			if (map->isValid())
