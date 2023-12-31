@@ -62,7 +62,7 @@ OziMap::OziMap(const QString &fileName, CalibrationType type,
 	if (type == Unknown) {
 		_tar = new Tar(fileName);
 		if (!_tar->open()) {
-			_errorString = "Error reading tar file: " + _tar->errorString();
+			_errorString = _tar->errorString();
 			return;
 		}
 		QStringList files(_tar->files());
@@ -262,27 +262,30 @@ bool OziMap::setImageInfo(const QString &path)
 
 bool OziMap::setTileInfo(const QStringList &tiles, const QString &path)
 {
+	static QRegularExpression rx("_[0-9]+_[0-9]+\\.");
+
 	if (!_map.size.isValid()) {
 		_errorString = "Missing total image size (IWH)";
 		return false;
 	}
 
-	QRegularExpression rx("_[0-9]+_[0-9]+\\.");
 	for (int i = 0; i < tiles.size(); i++) {
-		if (tiles.at(i).contains(rx)) {
-			_tile.path = QString(tiles.at(i)).replace(rx, "_%1_%2.");
+		const QString &tile = tiles.at(i);
+
+		if (tile.startsWith("set/") && tile.contains(rx)) {
+			_tile.path = QString(tile).replace(rx, "_%1_%2.");
 
 			if (_tar) {
-				QByteArray ba = _tar->file(tiles.at(i));
+				QByteArray ba(_tar->file(tile));
 				QBuffer buffer(&ba);
 				_tile.size = QImageReader(&buffer).size();
 			} else {
 				_tile.path = path + "/" + _tile.path;
-				_tile.size = QImageReader(path + "/" + tiles.at(i)).size();
+				_tile.size = QImageReader(path + "/" + tile).size();
 			}
 			if (!_tile.size.isValid()) {
 				_errorString = QString("Error retrieving tile size: "
-				  "%1: Invalid image").arg(QFileInfo(tiles.at(i)).fileName());
+				  "%1: Invalid image").arg(QFileInfo(tile).fileName());
 				return false;
 			}
 
@@ -393,8 +396,9 @@ void OziMap::drawOZF(QPainter *painter, const QRectF &rect) const
 			int y = round(tl.y() * _mapRatio + j * _ozf->tileSize().height());
 
 			QPixmap pixmap;
-			QString key = _ozf->fileName() + "/" + QString::number(_zoom) + "_"
-			  + QString::number(x) + "_" + QString::number(y);
+			QString key(_ozf->fileName() + "/" + QString::number(_zoom) + "_"
+			  + QString::number(x) + "_" + QString::number(y));
+
 			if (!QPixmapCache::find(key, &pixmap)) {
 				pixmap = _ozf->tile(_zoom, x, y);
 				if (!pixmap.isNull())
