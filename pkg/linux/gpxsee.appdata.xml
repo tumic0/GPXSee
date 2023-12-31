@@ -111,5 +111,6 @@
 		<mimetype>application/vnd.iho.s57-data</mimetype>
 		<mimetype>application/vnd.iho.s57-catalogue</mimetype>
 		<mimetype>application/vnd.gpsdump.wpt</mimetype>
+		<mimetype>application/vnd.gpstuner.gmi</mimetype>
 	</mimetypes>
 </component>

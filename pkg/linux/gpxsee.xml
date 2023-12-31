@@ -363,4 +363,14 @@
 		<glob pattern="*.031"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.gpstuner.gmi">
+		<comment>GPS Tuner Map Calibration File</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text/plain"/>
+		<magic>
+			<match type="string" offset="0" value="Map Calibration data file"/>
+		</magic>
+		<glob pattern="*.gmi"/>
+	</mime-type>
+
 </mime-info>

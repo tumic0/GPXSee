@@ -163,6 +163,7 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "kap" "BSB Nautical Chart" 10
   !insertmacro FILE_ASSOCIATION_ADD "gpx" "GPS Exchange Format" 11
   !insertmacro FILE_ASSOCIATION_ADD "map" "OziExplorer Map File" 12
+  !insertmacro FILE_ASSOCIATION_ADD "gmi" "GPS Tuner Map Calibration File" 12
   !insertmacro FILE_ASSOCIATION_ADD "mbtiles" "MBTiles Map File" 13
   !insertmacro FILE_ASSOCIATION_ADD "rmap" "TwoNav Raster Map File" 14
   !insertmacro FILE_ASSOCIATION_ADD "tba" "TrekBuddy Atlas" 15
@@ -218,6 +219,7 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKCR ".jnx\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".kap\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".map\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".gmi\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".mbtiles\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".rmap\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".rtmap\OpenWithList" "GPXSee.exe" ""
@@ -384,6 +386,7 @@ Section "Uninstall"
   !insertmacro FILE_ASSOCIATION_REMOVE "jnx"
   !insertmacro FILE_ASSOCIATION_REMOVE "kap"
   !insertmacro FILE_ASSOCIATION_REMOVE "map"
+  !insertmacro FILE_ASSOCIATION_REMOVE "gmi"
   !insertmacro FILE_ASSOCIATION_REMOVE "mbtiles"
   !insertmacro FILE_ASSOCIATION_REMOVE "rmap"
   !insertmacro FILE_ASSOCIATION_REMOVE "tba"
@@ -431,6 +434,7 @@ Section "Uninstall"
   DeleteRegValue HKCR ".jnx\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".kap\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".map\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".gmi\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".mbtiles\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".rmap\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".rtmap\OpenWithList" "GPXSee.exe"

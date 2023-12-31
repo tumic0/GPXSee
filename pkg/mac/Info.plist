@@ -420,6 +420,22 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>gmi</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.gpstuner.gmi</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/map.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>GPS Tuner Map Calibration File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>rmap</string>
 				<string>rtmap</string>
 			</array>
@@ -1250,6 +1266,29 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.oziexplorer.map</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.gpstuner.gmi</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://github.com/tumic0/GPXSee/blob/master/src/map/gmifile.cpp</string>
+			<key>UTTypeDescription</key>
+			<string>GPS Tuner Map Calibration File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/map.icns</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>gmi</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.gpstuner.gmi</string>
 			</dict>
 		</dict>
 		<dict>
