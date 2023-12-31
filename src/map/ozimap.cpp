@@ -262,7 +262,7 @@ bool OziMap::setImageInfo(const QString &path)
 
 bool OziMap::setTileInfo(const QStringList &tiles, const QString &path)
 {
-	static QRegularExpression rx("_[0-9]+_[0-9]+\\.");
+	static const QRegularExpression rx("_[0-9]+_[0-9]+\\.");
 
 	if (!_map.size.isValid()) {
 		_errorString = "Missing total image size (IWH)";

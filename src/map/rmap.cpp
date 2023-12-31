@@ -97,10 +97,10 @@ static Projection parseProjection(const QString &str, const GCS &gcs)
 
 bool RMap::parseIMP(const QByteArray &data)
 {
-	QStringList lines = QString(data).split("\r\n");
+	static const QRegularExpression re("^P[0-9]+=");
+	QStringList lines(QString(data).split("\r\n"));
 	QVector<CalibrationPoint> calibrationPoints;
 	QString projection, datum;
-	QRegularExpression re("^P[0-9]+=");
 
 	for (int i = 0; i < lines.count(); i++) {
 		const QString &line = lines.at(i);

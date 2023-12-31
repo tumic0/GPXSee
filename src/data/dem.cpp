@@ -148,9 +148,9 @@ qreal DEM::elevation(const Coordinates &c)
 
 QList<Area> DEM::tiles()
 {
+	static const QRegularExpression re("([NS])([0-9]{2})([EW])([0-9]{3})");
 	QDir dir(_dir);
 	QFileInfoList files(dir.entryInfoList(QDir::Files | QDir::Readable));
-	QRegularExpression re("([NS])([0-9]{2})([EW])([0-9]{3})");
 	QLocale l(QLocale::system());
 	QList<Area> list;
 

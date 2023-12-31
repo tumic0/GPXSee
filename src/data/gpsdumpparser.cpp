@@ -88,6 +88,7 @@ static Coordinates parseUTM(const QString &zone, const QString &easting,
 bool GPSDumpParser::parse(QFile *file, QList<TrackData> &tracks,
   QList<RouteData> &routes, QList<Area> &polygons, QVector<Waypoint> &waypoints)
 {
+	static const QRegularExpression dm("[ ]{2,}");
 	Q_UNUSED(tracks);
 	Q_UNUSED(routes);
 	Q_UNUSED(polygons);
@@ -95,7 +96,6 @@ bool GPSDumpParser::parse(QFile *file, QList<TrackData> &tracks,
 	_errorLine = 1;
 	_errorString.clear();
 	Type type = Unknown;
-	QRegularExpression dm("[ ]{2,}");
 
 	while (!file->atEnd()) {
 		QByteArray ba(file->readLine(4096).trimmed());
