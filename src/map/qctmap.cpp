@@ -327,7 +327,7 @@ QCTMap::QCTMap(const QString &fileName, QObject *parent)
   _mapRatio(1.0), _valid(false)
 {
 	if (!_file.open(QIODevice::ReadOnly)) {
-		_errorString = fileName + ": " + _file.errorString();
+		_errorString = _file.errorString();
 		return;
 	}
 

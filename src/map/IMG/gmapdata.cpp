@@ -52,8 +52,10 @@ bool GMAPData::readXML(const QString &path, QString &dataDir, QString &typFile)
 {
 	QFile file(path);
 
-	if (!file.open(QFile::ReadOnly | QFile::Text))
+	if (!file.open(QFile::ReadOnly | QFile::Text)) {
+		_errorString = file.errorString();
 		return false;
+	}
 
 	QXmlStreamReader reader(&file);
 	if (reader.readNextStartElement()) {

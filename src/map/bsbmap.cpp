@@ -395,7 +395,7 @@ BSBMap::BSBMap(const QString &fileName, QObject *parent)
 	QFile file(fileName);
 
 	if (!file.open(QIODevice::ReadOnly)) {
-		_errorString = fileName + ": " + file.errorString();
+		_errorString = file.errorString();
 		return;
 	}
 

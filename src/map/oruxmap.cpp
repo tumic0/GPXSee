@@ -366,8 +366,10 @@ bool OruxMap::readXML(const QString &path, const QString &dir)
 {
 	QFile file(path);
 
-	if (!file.open(QFile::ReadOnly | QFile::Text))
+	if (!file.open(QFile::ReadOnly | QFile::Text)) {
+		_errorString = file.errorString();
 		return false;
+	}
 
 	QXmlStreamReader reader(&file);
 	if (reader.readNextStartElement()) {
