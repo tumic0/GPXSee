@@ -273,21 +273,21 @@ bool OziMap::setTileInfo(const QStringList &tiles, const QString &path)
 		const QString &tile = tiles.at(i);
 
 		if (tile.contains(rx)) {
-			_tile.path = QString(tile).replace(rx, "_%1_%2.");
+			QString pattern(QString(tile).replace(rx, "_%1_%2."));
 
 			if (_tar) {
 				QByteArray ba(_tar->file(tile));
 				QBuffer buffer(&ba);
+				_tile.path = pattern;
 				_tile.size = QImageReader(&buffer).size();
 			} else {
-				_tile.path = path + "/" + _tile.path;
+				_tile.path = path + "/" + pattern;
 				_tile.size = QImageReader(path + "/" + tile).size();
 			}
 
-			if (_tile.size.isValid()) {
-				_map.path = QString();
+			if (_tile.size.isValid())
 				return true;
-			} else
+			else
 				qWarning("%s: error reading tile image", qPrintable(tile));
 		}
 	}
