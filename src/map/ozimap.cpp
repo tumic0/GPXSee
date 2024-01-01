@@ -272,7 +272,7 @@ bool OziMap::setTileInfo(const QStringList &tiles, const QString &path)
 	for (int i = 0; i < tiles.size(); i++) {
 		const QString &tile = tiles.at(i);
 
-		if (tile.startsWith("set/") && tile.contains(rx)) {
+		if (tile.contains(rx)) {
 			_tile.path = QString(tile).replace(rx, "_%1_%2.");
 
 			if (_tar) {
@@ -284,9 +284,8 @@ bool OziMap::setTileInfo(const QStringList &tiles, const QString &path)
 				_tile.size = QImageReader(path + "/" + tile).size();
 			}
 			if (!_tile.size.isValid()) {
-				_errorString = QString("Error retrieving tile size: "
-				  "%1: Invalid image").arg(QFileInfo(tile).fileName());
-				return false;
+				qWarning("%s: error reading tile image", qPrintable(tile));
+				continue;
 			}
 
 			_map.path = QString();
