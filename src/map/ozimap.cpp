@@ -283,13 +283,12 @@ bool OziMap::setTileInfo(const QStringList &tiles, const QString &path)
 				_tile.path = path + "/" + _tile.path;
 				_tile.size = QImageReader(path + "/" + tile).size();
 			}
-			if (!_tile.size.isValid()) {
-				qWarning("%s: error reading tile image", qPrintable(tile));
-				continue;
-			}
 
-			_map.path = QString();
-			return true;
+			if (_tile.size.isValid()) {
+				_map.path = QString();
+				return true;
+			} else
+				qWarning("%s: error reading tile image", qPrintable(tile));
 		}
 	}
 
