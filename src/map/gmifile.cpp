@@ -24,11 +24,6 @@ bool GmiFile::parse(QIODevice &device)
 	int width, height;
 	bool ok;
 
-	if (!device.open(QIODevice::ReadOnly)) {
-		_errorString = device.errorString();
-		return false;
-	}
-
 	while (!device.atEnd()) {
 		QByteArray line = device.readLine(4096);
 
@@ -42,13 +37,13 @@ bool GmiFile::parse(QIODevice &device)
 		else if (ln == 3) {
 			width = line.toInt(&ok);
 			if (!ok || width <= 0) {
-				_errorString = "Invalid image width";
+				_errorString = line + ": invalid image width";
 				return false;
 			}
 		} else if (ln == 4) {
 			height = line.toInt(&ok);
 			if (!ok || height <= 0) {
-				_errorString = "Invalid image height";
+				_errorString = line + ": invalid image height";
 				return false;
 			}
 			_size = QSize(width, height);
@@ -56,19 +51,34 @@ bool GmiFile::parse(QIODevice &device)
 			CalibrationPoint cp(calibrationPoint(line));
 			if (cp.isValid())
 				_points.append(cp);
-			else
-				break;
+			else {
+				if (_points.size() < 2) {
+					_errorString = line + ": invalid calibration point";
+					return false;
+				} else
+					break;
+			}
 		}
 
 		ln++;
 	}
 
-	device.close();
+	if (ln < 6) {
+		_errorString = "Unexpected EOF";
+		return false;
+	}
 
-	return (_points.size() >= 2);
+	return true;
 }
 
-GmiFile::GmiFile(QIODevice &file)
+GmiFile::GmiFile(QIODevice &file) : _valid(false)
 {
+	if (!file.open(QIODevice::ReadOnly)) {
+		_errorString = file.errorString();
+		return;
+	}
+
 	_valid = parse(file);
+
+	file.close();
 }
