@@ -128,7 +128,7 @@ qint64 CryptDevice::readData(char *data, qint64 maxSize)
 class DataStream : public QDataStream
 {
 public:
-	DataStream(QIODevice *d) : QDataStream(d), _codec(1252) {}
+	DataStream(QIODevice *d) : QDataStream(d) {}
 
 	void setCodepage(quint16 codepage) {_codec = TextCodec(codepage);}
 
