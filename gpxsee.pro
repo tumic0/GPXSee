@@ -513,7 +513,7 @@ win32 {
     RESOURCES += theme-color.qrc
 
     QMAKE_TARGET_DESCRIPTION = GPXSee
-    QMAKE_TARGET_COPYRIGHT = Copyright (c) 2023 Martin Tuma
+    QMAKE_TARGET_COPYRIGHT = Copyright (c) 2015-2024 Martin Tuma
     RC_ICONS = icons/app/gpxsee.ico \
         icons/formats/gpx.ico \
         icons/formats/tcx.ico \
