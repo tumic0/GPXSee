@@ -2,6 +2,7 @@
 #define MOTIONINFOITEM_H
 
 #include <QGraphicsItem>
+#include <QFont>
 #include "units.h"
 
 class MotionInfoItem : public QGraphicsItem

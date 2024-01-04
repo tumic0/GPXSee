@@ -3,6 +3,7 @@
 
 #include <QFont>
 #include <QGraphicsItem>
+#include <QtMath>
 #include "graphicsscene.h"
 
 class PathTickItem : public GraphicsItem
@@ -16,7 +17,7 @@ public:
 
 	void setPos(const QPointF &pos);
 	void setColor(const QColor &color) {_brush = QBrush(color);}
-	void setDigitalZoom(int zoom) {setScale(pow(2, -zoom));}
+	void setDigitalZoom(int zoom) {setScale(qPow(2, -zoom));}
 
 	int type() const {return parentItem()->type();}
 	ToolTip info() const

@@ -4,6 +4,7 @@
 #include <QGraphicsItem>
 #include <QVector>
 #include <QLocale>
+#include <QFont>
 #include "common/range.h"
 
 class AxisItem : public QGraphicsItem

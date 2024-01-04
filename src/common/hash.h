@@ -2,9 +2,12 @@
 #define HASH_H
 
 #include <QtGlobal>
-#include <QPoint>
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QPoint>
+#include <QPair>
+#include <QHash>
+
 #define HASH_T uint
 
 inline uint qHash(const QPoint &p)

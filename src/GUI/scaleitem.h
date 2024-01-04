@@ -2,6 +2,7 @@
 #define SCALEITEM_H
 
 #include <QGraphicsItem>
+#include <QFont>
 #include "units.h"
 
 class ScaleItem : public QGraphicsItem

@@ -2,6 +2,7 @@
 #define SLIDERINFOITEM_H
 
 #include <QGraphicsItem>
+#include <QFont>
 
 class SliderInfoItem : public QGraphicsItem
 {

@@ -2,6 +2,7 @@
 #define IMG_SHIELD_H
 
 #include <QString>
+#include <QDebug>
 #include "common/hash.h"
 
 #define FIRST_SHIELD Shield::USInterstate
