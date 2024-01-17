@@ -7,6 +7,7 @@
 #include <QBasicTimer>
 #include <QScreen>
 #include <QVBoxLayout>
+#include <QFormLayout>
 #include <QApplication>
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 #include <QDesktopWidget>
@@ -93,21 +94,29 @@ void PopupFrame::createLayout(const ToolTip &content)
 	}
 
 	if (!content.list().isEmpty()) {
-		QString html = "<table>";
-		for (int i = 0; i < content.list().count(); i++)
-			html += "<tr><td align=\"right\"><b>" + content.list().at(i).key()
-			  + ":&nbsp;</b></td><td>" + content.list().at(i).value()
-			  + "</td></tr>";
-		html += "</table>";
+		QFormLayout *textLayout = new QFormLayout();
+		textLayout->setLabelAlignment(Qt::AlignRight);
+		textLayout->setHorizontalSpacing(5);
+		textLayout->setVerticalSpacing(2);
 
-		QLabel *label = new QLabel(html);
-		label->setAlignment(Qt::AlignLeft);
-		label->setIndent(1);
-		label->setTextInteractionFlags(Qt::TextBrowserInteraction);
-		label->setOpenExternalLinks(true);
-		label->setWordWrap(true);
+		for (int i = 0; i < content.list().count(); i++) {
+			QLabel *key = new QLabel(content.list().at(i).key() + ":");
+			key->setTextFormat(Qt::PlainText);
+			key->setAlignment(Qt::AlignTop);
+			key->setStyleSheet("font-weight: bold");
+			QLabel *value = new QLabel(content.list().at(i).value());
+			value->setSizePolicy(QSizePolicy::MinimumExpanding,
+			  QSizePolicy::Preferred);
+			value->setTextFormat(Qt::RichText);
+			value->setAlignment(Qt::AlignTop);
+			value->setTextInteractionFlags(Qt::TextBrowserInteraction);
+			value->setOpenExternalLinks(true);
+			value->setWordWrap(true);
 
-		layout->addWidget(label);
+			textLayout->addRow(key, value);
+		}
+
+		layout->addLayout(textLayout);
 	}
 
 	setLayout(layout);
