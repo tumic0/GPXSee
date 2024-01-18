@@ -2,7 +2,6 @@
 #define TEXTCODEC_H
 
 #include <QString>
-#include <QMap>
 #if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
 #include <QTextCodec>
 #else // QT 6.5
