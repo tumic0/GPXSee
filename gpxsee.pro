@@ -19,9 +19,9 @@ QT += core \
     serialport
 greaterThan(QT_MAJOR_VERSION, 5) {
     QT += openglwidgets
-	lessThan(QT_MINOR_VERSION, 5) {
-	    QT += core5compat
-	}
+    lessThan(QT_MINOR_VERSION, 5) {
+        QT += core5compat
+    }
 }
 
 CONFIG += object_parallel_to_source
