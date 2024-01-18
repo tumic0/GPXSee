@@ -19,10 +19,10 @@ jobs:
           java-version: '11'
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-      - name: Run sdkmanager update
-        run:  ${ANDROID_HOME}/cmdline-tools/latest/bin --update
-      - name: Install android platform, platform-tools, build-tools and ndk
-        run:  ${ANDROID_HOME}/cmdline-tools/latest/bin --install "cmdline-tools;latest" "platform-tools" "platforms;android-33" "build-tools;33.0.0" "ndk;23.1.7779620"
+        with:
+          cmdline-tools-version: 9862592
+      - name: Install android platform, build-tools and ndk
+        run:  ${ANDROID_HOME}/cmdline-tools/latest/bin --install "platforms;android-33" "build-tools;33.0.0" "ndk;23.1.7779620"
       - name: Setup NDK path
         run: echo "ANDROID_NDK_ROOT=${ANDROID_HOME}/ndk/23.1.7779620/" >> $GITHUB_ENV
       - name: Install Qt (Desktop)
