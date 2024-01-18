@@ -264,7 +264,6 @@ Section "QT framework" SEC_QT
   File "Qt6Sql.dll"
   File "Qt6Svg.dll"
   File "Qt6Widgets.dll"
-  File "Qt6Core5Compat.dll"
   File "Qt6Positioning.dll"
   File "Qt6SerialPort.dll"
   File /r "tls"
