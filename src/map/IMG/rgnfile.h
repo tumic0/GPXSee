@@ -33,18 +33,18 @@ public:
 	bool load(Handle &hdl);
 
 	bool polyObjects(Handle &hdl, const SubDiv *subdiv, SegmentType segmentType,
-	  const LBLFile *lbl, Handle &lblHdl, NETFile *net, Handle &netHdl,
+	  LBLFile *lbl, Handle &lblHdl, NETFile *net, Handle &netHdl,
 	  QList<MapData::Poly> *polys) const;
 	bool pointObjects(Handle &hdl, const SubDiv *subdiv, SegmentType segmentType,
-	  const LBLFile *lbl, Handle &lblHdl, QList<MapData::Point> *points) const;
+	  LBLFile *lbl, Handle &lblHdl, QList<MapData::Point> *points) const;
 	bool extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
-	  SegmentType segmentType, const LBLFile *lbl, Handle &lblHdl,
+	  SegmentType segmentType, LBLFile *lbl, Handle &lblHdl,
 	  QList<MapData::Poly> *polys) const;
-	bool extPointObjects(Handle &hdl, const SubDiv *subdiv, const LBLFile *lbl,
+	bool extPointObjects(Handle &hdl, const SubDiv *subdiv, LBLFile *lbl,
 	  Handle &lblHdl, QList<MapData::Point> *points) const;
 	bool links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 	  const NETFile *net, Handle &netHdl, const NODFile *nod, Handle &nodHdl,
-	  Handle &nodHdl2, const LBLFile *lbl, Handle &lblHdl,
+	  Handle &nodHdl2, LBLFile *lbl, Handle &lblHdl,
 	  QList<MapData::Poly> *lines) const;
 
 	bool subdivInit(Handle &hdl, SubDiv *subdiv) const;
@@ -55,7 +55,7 @@ public:
 private:
 	bool segments(Handle &hdl, SubDiv *subdiv, SubDiv::Segment seg[5]) const;
 	bool readClassFields(Handle &hdl, SegmentType segmentType, void *object,
-	  const LBLFile *lbl, Handle &lblHdl) const;
+	  LBLFile *lbl, Handle &lblHdl) const;
 	bool skipLclFields(Handle &hdl, const quint32 flags[3]) const;
 	bool skipGblFields(Handle &hdl, quint32 flags) const;
 	bool readRasterInfo(Handle &hdl, const LBLFile *lbl, quint32 size,
@@ -64,7 +64,7 @@ private:
 	  MapData::Point *point) const;
 	bool readObstructionInfo(Handle &hdl, quint8 flags, quint32 size,
 	  MapData::Point *point) const;
-	bool readLabel(Handle &hdl, const LBLFile *lbl, Handle &lblHdl,
+	bool readLabel(Handle &hdl, LBLFile *lbl, Handle &lblHdl,
 	  quint8 flags, quint32 size, MapData::Point *point) const;
 
 	HuffmanTable *_huffmanTable;

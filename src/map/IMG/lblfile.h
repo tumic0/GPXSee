@@ -30,9 +30,9 @@ public:
 	void clear();
 
 	Label label(Handle &hdl, quint32 offset, bool poi = false,
-	  bool capitalize = true, bool convert = false) const;
+	  bool capitalize = true, bool convert = false);
 	Label label(Handle &hdl, const SubFile *file, Handle &fileHdl,
-	  quint32 size, bool capitalize = true, bool convert = false) const;
+	  quint32 size, bool capitalize = true, bool convert = false);
 
 	quint8 imageIdSize() const {return _imgIdSize;}
 	QPixmap image(Handle &hdl, quint32 id) const;
@@ -44,13 +44,13 @@ private:
 	};
 
 	Label str2label(const QVector<quint8> &str, bool capitalize,
-	  bool convert) const;
+	  bool convert);
 	Label label6b(const SubFile *file, Handle &fileHdl, quint32 size,
 	  bool capitalize, bool convert) const;
 	Label label8b(const SubFile *file, Handle &fileHdl, quint32 size,
-	  bool capitalize, bool convert) const;
+	  bool capitalize, bool convert);
 	Label labelHuffman(Handle &hdl, const SubFile *file, Handle &fileHdl,
-	  quint32 size, bool capitalize, bool convert) const;
+	  quint32 size, bool capitalize, bool convert);
 	bool loadRasterTable(Handle &hdl, quint32 offset, quint32 size,
 	  quint32 recordSize);
 

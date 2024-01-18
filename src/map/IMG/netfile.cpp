@@ -329,7 +329,7 @@ bool NETFile::readShape(const NODFile *nod, SubFile::Handle &nodHdl,
 }
 
 bool NETFile::linkLabel(Handle &hdl, quint32 offset,
-  const LBLFile *lbl, Handle &lblHdl, Label &label) const
+  LBLFile *lbl, Handle &lblHdl, Label &label) const
 {
 	if (!seek(hdl, offset))
 		return false;
@@ -392,7 +392,7 @@ NETFile::~NETFile()
 }
 
 bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
-  const NODFile *nod, Handle &nodHdl2, Handle &nodHdl, const LBLFile *lbl,
+  const NODFile *nod, Handle &nodHdl2, Handle &nodHdl, LBLFile *lbl,
   Handle &lblHdl, const NODFile::BlockInfo &blockInfo, quint8 linkId,
   quint8 lineId, QList<MapData::Poly> *lines) const
 {

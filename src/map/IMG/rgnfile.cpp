@@ -107,7 +107,7 @@ bool RGNFile::readObstructionInfo(Handle &hdl, quint8 flags, quint32 size,
 	return true;
 }
 
-bool RGNFile::readLabel(Handle &hdl, const LBLFile *lbl, Handle &lblHdl,
+bool RGNFile::readLabel(Handle &hdl, LBLFile *lbl, Handle &lblHdl,
   quint8 flags, quint32 size, MapData::Point *point) const
 {
 	if (!(flags & 1))
@@ -122,7 +122,7 @@ bool RGNFile::readLabel(Handle &hdl, const LBLFile *lbl, Handle &lblHdl,
 }
 
 bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
-  void *object, const LBLFile *lbl, Handle &lblHdl) const
+  void *object, LBLFile *lbl, Handle &lblHdl) const
 {
 	quint8 flags;
 	quint32 rs = 0;
@@ -257,7 +257,7 @@ void RGNFile::clear()
 }
 
 bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
-  SegmentType segmentType, const LBLFile *lbl, Handle &lblHdl, NETFile *net,
+  SegmentType segmentType, LBLFile *lbl, Handle &lblHdl, NETFile *net,
   Handle &netHdl, QList<MapData::Poly> *polys) const
 {
 	const SubDiv::Segment &segment = (segmentType == Line)
@@ -340,7 +340,7 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 }
 
 bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
-  SegmentType segmentType, const LBLFile *lbl, Handle &lblHdl,
+  SegmentType segmentType, LBLFile *lbl, Handle &lblHdl,
   QList<MapData::Poly> *polys) const
 {
 	quint32 labelPtr, len;
@@ -457,7 +457,7 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 }
 
 bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
-  SegmentType segmentType, const LBLFile *lbl, Handle &lblHdl,
+  SegmentType segmentType, LBLFile *lbl, Handle &lblHdl,
   QList<MapData::Point> *points) const
 {
 	const SubDiv::Segment &segment = (segmentType == IndexedPoint)
@@ -502,7 +502,7 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 }
 
 bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
-  const LBLFile *lbl, Handle &lblHdl, QList<MapData::Point> *points) const
+  LBLFile *lbl, Handle &lblHdl, QList<MapData::Point> *points) const
 {
 	const SubDiv::Segment &segment = subdiv->extPoints();
 
@@ -554,7 +554,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
 
 bool RGNFile::links(Handle &hdl, const SubDiv *subdiv, quint32 shift,
   const NETFile *net, Handle &netHdl, const NODFile *nod, Handle &nodHdl,
-  Handle &nodHdl2, const LBLFile *lbl, Handle &lblHdl,
+  Handle &nodHdl2, LBLFile *lbl, Handle &lblHdl,
   QList<MapData::Poly> *lines) const
 {
 	quint32 size, blockIndexId;

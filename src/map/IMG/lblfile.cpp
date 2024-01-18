@@ -138,7 +138,7 @@ void LBLFile::clear()
 }
 
 Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize,
-  bool convert) const
+  bool convert)
 {
 	Shield::Type shieldType = Shield::None;
 	QByteArray label, shieldLabel;
@@ -247,7 +247,7 @@ Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, quint32 size,
 }
 
 Label LBLFile::label8b(const SubFile *file, Handle &fileHdl, quint32 size,
-  bool capitalize, bool convert) const
+  bool capitalize, bool convert)
 {
 	QVector<quint8> str;
 	quint8 c;
@@ -264,7 +264,7 @@ Label LBLFile::label8b(const SubFile *file, Handle &fileHdl, quint32 size,
 }
 
 Label LBLFile::labelHuffman(Handle &hdl, const SubFile *file, Handle &fileHdl,
-  quint32 size, bool capitalize, bool convert) const
+  quint32 size, bool capitalize, bool convert)
 {
 	QVector<quint8> str;
 
@@ -305,7 +305,7 @@ Label LBLFile::labelHuffman(Handle &hdl, const SubFile *file, Handle &fileHdl,
 }
 
 Label LBLFile::label(Handle &hdl, quint32 offset, bool poi, bool capitalize,
-  bool convert) const
+  bool convert)
 {
 	quint32 labelOffset;
 	if (poi) {
@@ -328,7 +328,7 @@ Label LBLFile::label(Handle &hdl, quint32 offset, bool poi, bool capitalize,
 }
 
 Label LBLFile::label(Handle &hdl, const SubFile *file, Handle &fileHdl,
-  quint32 size, bool capitalize, bool convert) const
+  quint32 size, bool capitalize, bool convert)
 {
 	switch (_encoding) {
 		case 6:

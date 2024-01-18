@@ -1,5 +1,6 @@
-#include <QTextCodec>
 #include "textcodec.h"
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
 
 static QTextCodec *codec(int mib)
 {
@@ -8,6 +9,10 @@ static QTextCodec *codec(int mib)
 		qWarning("MIB-%d: No such QTextCodec, using UTF-8", mib);
 
 	return c;
+}
+
+TextCodec::TextCodec() : _codec(0)
+{
 }
 
 TextCodec::TextCodec(int codepage)
@@ -64,7 +69,30 @@ TextCodec::TextCodec(int codepage)
 	}
 }
 
-QString TextCodec::toString(const QByteArray &ba) const
+QString TextCodec::toString(const QByteArray &ba)
 {
 	return _codec ? _codec->toUnicode(ba) : QString::fromUtf8(ba);
 }
+
+#else // QT 6.5
+
+TextCodec::TextCodec()
+{
+}
+
+TextCodec::TextCodec(int codepage)
+{
+	if (codepage != 65001) {
+		QByteArray cp(QByteArray("CP") + QByteArray::number(codepage));
+		_decoder = QStringDecoder(cp.constData());
+
+		if (!_decoder.isValid())
+			qWarning("%d: Unknown codepage, using UTF-8", codepage);
+	}
+}
+
+QString TextCodec::toString(const QByteArray &ba)
+{
+	return _decoder.isValid() ? _decoder.decode(ba) : QString::fromUtf8(ba);
+}
+#endif // QT 6.5
