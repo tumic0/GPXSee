@@ -2026,11 +2026,13 @@ void GUI::updateWindowTitle()
 #ifndef Q_OS_ANDROID
 void GUI::updateRecentFiles(const QString &fileName)
 {
+	QFileInfo fi(fileName);
+	QString canonicalFileName(fi.canonicalFilePath());
 	QAction *a = 0;
 
 	QList<QAction *> actions(_recentFilesActionGroup->actions());
 	for (int i = 0; i < actions.size(); i++) {
-		if (actions.at(i)->text() == fileName) {
+		if (actions.at(i)->text() == canonicalFileName) {
 			a = actions.at(i);
 			break;
 		}
@@ -2044,7 +2046,7 @@ void GUI::updateRecentFiles(const QString &fileName)
 	actions = _recentFilesActionGroup->actions();
 	QAction *before = actions.size() ? actions.last() : _recentFilesEnd;
 	_recentFilesMenu->insertAction(before,
-	  new QAction(fileName, _recentFilesActionGroup));
+	  new QAction(canonicalFileName, _recentFilesActionGroup));
 	_recentFilesMenu->setEnabled(true);
 }
 
