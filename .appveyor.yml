@@ -11,10 +11,10 @@ environment:
   matrix:
   - QTDIR: C:\Qt\5.15\msvc2019_64
     OPENSSLDIR: C:\OpenSSL-v111-Win64\bin
-    NSISDEF: /OPENSSL /ANGLE
+    NSISDEF: /DOPENSSL /DANGLE
   - QTDIR: C:\Qt\6.5\msvc2019_64
     OPENSSLDIR: C:\OpenSSL-v30-Win64\bin
-    NSISDEF: /DQT6 /OPENSSL
+    NSISDEF: /DQT6 /DOPENSSL
 
 install:
 - cmd: |-
