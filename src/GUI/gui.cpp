@@ -1028,13 +1028,16 @@ void GUI::openDir()
 
 bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 {
-	if (_files.contains(fileName))
+	QFileInfo fi(fileName);
+	QString canonicalFileName(fi.canonicalFilePath());
+
+	if (_files.contains(canonicalFileName))
 		return true;
 
 	if (!loadFile(fileName, tryUnknown, showError))
 		return false;
 
-	_files.append(fileName);
+	_files.append(canonicalFileName);
 #ifndef Q_OS_ANDROID
 	_browser->setCurrent(fileName);
 #endif // Q_OS_ANDROID
@@ -1047,7 +1050,7 @@ bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 	updateStatusBarInfo();
 	updateWindowTitle();
 #ifndef Q_OS_ANDROID
-	updateRecentFiles(fileName);
+	updateRecentFiles(canonicalFileName);
 #endif // Q_OS_ANDROID
 
 	return true;
@@ -2026,13 +2029,11 @@ void GUI::updateWindowTitle()
 #ifndef Q_OS_ANDROID
 void GUI::updateRecentFiles(const QString &fileName)
 {
-	QFileInfo fi(fileName);
-	QString canonicalFileName(fi.canonicalFilePath());
 	QAction *a = 0;
 
 	QList<QAction *> actions(_recentFilesActionGroup->actions());
 	for (int i = 0; i < actions.size(); i++) {
-		if (actions.at(i)->text() == canonicalFileName) {
+		if (actions.at(i)->text() == fileName) {
 			a = actions.at(i);
 			break;
 		}
@@ -2046,7 +2047,7 @@ void GUI::updateRecentFiles(const QString &fileName)
 	actions = _recentFilesActionGroup->actions();
 	QAction *before = actions.size() ? actions.last() : _recentFilesEnd;
 	_recentFilesMenu->insertAction(before,
-	  new QAction(canonicalFileName, _recentFilesActionGroup));
+	  new QAction(fileName, _recentFilesActionGroup));
 	_recentFilesMenu->setEnabled(true);
 }
 
