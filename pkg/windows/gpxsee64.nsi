@@ -95,10 +95,17 @@ Var StartMenuFolder
 !insertmacro MUI_LANGUAGE "English"
 
 Function .onInit
+!ifdef QT6
+  ${IfNot} ${AtLeastWin10}
+    MessageBox MB_OK "GPXSee can only be installed on Windows 10 or later."
+    Abort
+  ${EndIf}
+!else
   ${IfNot} ${AtLeastWin7}
     MessageBox MB_OK "GPXSee can only be installed on Windows 7 or later."
     Abort
   ${EndIf}
+!endif
 
   ${If} ${RunningX64}
     SetRegView 64
