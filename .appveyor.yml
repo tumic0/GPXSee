@@ -11,11 +11,10 @@ environment:
   matrix:
   - QTDIR: C:\Qt\5.15\msvc2019_64
     OPENSSLDIR: C:\OpenSSL-v111-Win64\bin
-    OPENSSLVERSION: 1_1
+    NSISDEF: /OPENSSL /ANGLE
   - QTDIR: C:\Qt\6.5\msvc2019_64
     OPENSSLDIR: C:\OpenSSL-v30-Win64\bin
-    OPENSSLVERSION: 3
-    NSISDEF: /DQT6
+    NSISDEF: /DQT6 /OPENSSL
 
 install:
 - cmd: |-
@@ -37,8 +36,8 @@ build_script:
     xcopy lang\*.qm installer\translations\ /sy
     xcopy icons\symbols installer\symbols /i
     copy licence.txt installer
-    copy %OPENSSLDIR%\libcrypto-%OPENSSLVERSION%-x64.dll installer
-    copy %OPENSSLDIR%\libssl-%OPENSSLVERSION%-x64.dll installer
+    copy %OPENSSLDIR%\libcrypto-*-x64.dll installer
+    copy %OPENSSLDIR%\libssl-*-x64.dll installer
 
     makensis.exe %NSISDEF% installer\gpxsee64.nsi
 

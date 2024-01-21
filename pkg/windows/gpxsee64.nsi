@@ -249,7 +249,7 @@ Section "GPXSee" SEC_APP
 
 SectionEnd
 
-Section "QT framework" SEC_QT
+Section "Qt framework" SEC_QT
 
   SectionIn RO
 
@@ -281,6 +281,7 @@ Section "QT framework" SEC_QT
   File /r "printsupport"
 !endif
   File /r "platforms"
+  File /r "iconengines"
   File /r "imageformats"
   File /r "styles"
   File /r "sqldrivers"
@@ -299,21 +300,30 @@ Section "MSVC runtime" SEC_MSVC
 
 SectionEnd
 
+!ifdef ICU
+Section "ICU" SEC_ICU
+
+  SectionIn RO
+
+  File "icudt*.dll"
+  File "icuin*.dll"
+  File "icuuc*.dll"
+
+SectionEnd
+!endif
+
+!ifdef OPENSSL
 Section "OpenSSL" SEC_OPENSSL
 
   SectionIn RO
 
-!ifdef QT6
-  File "libcrypto-3-x64.dll"
-  File "libssl-3-x64.dll"
-!else
-  File "libcrypto-1_1-x64.dll"
-  File "libssl-1_1-x64.dll"
-!endif
+  File "libcrypto-*-x64.dll"
+  File "libssl-*-x64.dll"
 
 SectionEnd
+!endif
 
-!ifndef QT6
+!ifdef ANGLE
 Section "ANGLE" SEC_ANGLE
 
   File "libGLESv2.dll"
@@ -469,13 +479,24 @@ SectionEnd
 ; Descriptions
 
 ; Language strings
+!ifdef QT6
 LangString DESC_QT ${LANG_ENGLISH} \
-  "QT cross-platform application framework."
+  "Qt6 cross-platform application framework."
+!else
+LangString DESC_QT ${LANG_ENGLISH} \
+  "Qt5 cross-platform application framework."
+!endif
 LangString DESC_MSVC ${LANG_ENGLISH} \
-  "Microsoft Visual C++ 2019 runtime. If already installed, will be skipped."
+  "Microsoft Visual C++ runtime. If already installed, will be skipped."
+!ifdef ICU
+LangString DESC_ICU ${LANG_ENGLISH} \
+  "ICU library. Required for character set/encoding conversions."
+!endif
+!ifdef OPENSSL
 LangString DESC_OPENSSL ${LANG_ENGLISH} \
-  "OpenSSL library. Required for HTTPS to work."
-!ifndef QT6
+  "OpenSSL library. Qt SSL/TLS backend for HTTPS."
+!endif
+!ifdef ANGLE
 LangString DESC_ANGLE ${LANG_ENGLISH} \
   "ANGLE (OpenGL via Direct3D). Enables OpenGL on systems without native OpenGL drivers."
 !endif
@@ -487,8 +508,13 @@ LangString DESC_LOCALIZATION ${LANG_ENGLISH} \
 ; Assign language strings to sections
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_QT} $(DESC_QT)
+!ifdef ICU
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_ICU} $(DESC_ICU)
+!endif
+!ifdef OPENSSL
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_OPENSSL} $(DESC_OPENSSL)
-!ifndef QT6
+!endif
+!ifdef ANGLE
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_ANGLE} $(DESC_ANGLE)
 !endif
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_MSVC} $(DESC_MSVC) 
