@@ -12,7 +12,7 @@ public class Activity extends org.qtproject.qt.android.bindings.QtActivity
 
 	public String intentPath()
 	{
-		String path = "";
+		String path = null;
 
 		Intent intent = getIntent();
 		if (intent != null) {
