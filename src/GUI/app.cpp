@@ -5,7 +5,6 @@
 #include <QNetworkProxyFactory>
 #include <QNetworkAccessManager>
 #include <QLibraryInfo>
-#include <QSurfaceFormat>
 #include <QImageReader>
 #include <QFileInfo>
 #ifdef Q_OS_ANDROID
@@ -58,10 +57,6 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	   "QThreadStorage: Thread X exited after QThreadStorage Y destroyed" */
 	Downloader::setNetworkManager(new QNetworkAccessManager(this));
 	DEM::setDir(ProgramPaths::demDir());
-	QSurfaceFormat fmt;
-	fmt.setStencilBufferSize(8);
-	fmt.setSamples(4);
-	QSurfaceFormat::setDefaultFormat(fmt);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	QImageReader::setAllocationLimit(0);
 #endif // QT6
