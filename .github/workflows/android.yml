@@ -8,12 +8,12 @@ on:
 jobs:
   build:
     name: GPXSee
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: set up JDK 11
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -47,7 +47,7 @@ jobs:
       - name: Build project
         run:  make -j2 apk
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: GPXSee-arm64_v8a.apk
           path: android-build/build/outputs/apk/debug/android-build-debug.apk
