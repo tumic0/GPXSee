@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -25,7 +25,7 @@ jobs:
       - name: Create DMG
         run: macdeployqt GPXSee.app -dmg -appstore-compliant
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: GPXSee-qt5.dmg
           path: GPXSee.dmg
@@ -35,7 +35,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -50,7 +50,7 @@ jobs:
       - name: Create DMG
         run: macdeployqt GPXSee.app -dmg -appstore-compliant
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: GPXSee-qt6.dmg
           path: GPXSee.dmg
