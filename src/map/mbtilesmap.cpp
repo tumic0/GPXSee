@@ -393,13 +393,13 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	const Zoom &zoom = _zooms.at(_zi);
 	unsigned overzoom = zoom.z - zoom.base;
-	unsigned f = 1U<<overzoom;
 	qreal scale = OSM::zoom2scale(zoom.base, _tileSize << overzoom);
 	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * coordinatesRatio(), zoom.base);
-	Coordinates ctl(OSM::tile2ll(tile, zoom.base));
-	QPointF tl(ll2xy(Coordinates(ctl.lon(), -ctl.lat())));
+	QPointF tlm(OSM::tile2mercator(tile, zoom.base));
+	QPointF tl(QPointF(tlm.x() / scale, tlm.y() / scale) / coordinatesRatio());
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
+	unsigned f = 1U<<overzoom;
 	int width = ceil(s.width() / (tileSize() * f));
 	int height = ceil(s.height() / (tileSize() * f));
 

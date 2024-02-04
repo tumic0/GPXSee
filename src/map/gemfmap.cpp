@@ -245,8 +245,8 @@ void GEMFMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	qreal scale = OSM::zoom2scale(z.level, _tileSize);
 	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * _mapRatio, z.level);
-	Coordinates ctl(OSM::tile2ll(tile, z.level));
-	QPointF tl(ll2xy(Coordinates(ctl.lon(), -ctl.lat())));
+	QPointF tlm(OSM::tile2mercator(tile, z.level));
+	QPointF tl(QPointF(tlm.x() / scale, tlm.y() / scale) / _mapRatio);
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	int width = ceil(s.width() / tileSize());
 	int height = ceil(s.height() / tileSize());
