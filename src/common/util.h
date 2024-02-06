@@ -2,6 +2,7 @@
 #define UTIL_H
 
 #include <QString>
+#include <QImage>
 
 class QTemporaryDir;
 
@@ -17,6 +18,7 @@ namespace Util
 	QString displayName(const QString &path);
 	const QTemporaryDir &tempDir();
 	bool isSQLiteDB(const QString &path, QString &errorString);
+	QImage svg2img(const QString &path, qreal ratio);
 }
 
 #endif // UTIL_H

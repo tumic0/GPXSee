@@ -66,7 +66,7 @@ public:
 	  QList<Poly> *lines);
 	void points(const RectC &rect, int bits, QList<Point> *points);
 
-	void load();
+	void load(qreal ratio);
 	void clear();
 
 	const QString &fileName() const {return _fileName;}

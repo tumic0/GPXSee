@@ -2,6 +2,7 @@
 #include <cmath>
 #include <QFileInfo>
 #include <QTemporaryDir>
+#include <QImageReader>
 #ifdef Q_OS_ANDROID
 #include <QUrl>
 #include <QCoreApplication>
@@ -174,4 +175,18 @@ bool Util::isSQLiteDB(const QString &path, QString &errorString)
 	}
 
 	return true;
+}
+
+QImage Util::svg2img(const QString &path, qreal ratio)
+{
+	QImageReader ir(path, "svg");
+	QSize s(ir.size());
+	if (!s.isValid())
+		return QImage();
+
+	ir.setScaledSize(QSize(s.width() * ratio, s.height() * ratio));
+	QImage img(ir.read());
+	img.setDevicePixelRatio(ratio);
+
+	return img;
 }

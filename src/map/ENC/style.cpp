@@ -1,12 +1,15 @@
 #include <QPainter>
+#include "common/util.h"
 #include "style.h"
 
 using namespace ENC;
+using namespace Util;
 
-static QImage railroad()
+static QImage railroad(qreal ratio)
 {
-	QImage img(16, 4, QImage::Format_ARGB32_Premultiplied);
-	img.fill(Qt::black);
+	QImage img(16 * ratio, 4 * ratio, QImage::Format_ARGB32_Premultiplied);
+	img.setDevicePixelRatio(ratio);
+	img.fill(QColor("#717171"));
 	QPainter p(&img);
 	p.setPen(QPen(Qt::white, 2));
 	p.drawLine(9, 2, 15, 2);
@@ -134,7 +137,7 @@ void Style::polygonStyle()
 	  << TYPE(PIPARE) << TYPE(PRCARE) << SUBTYPE(MARKUL, 3) << TYPE(CONZNE);
 }
 
-void Style::lineStyle()
+void Style::lineStyle(qreal ratio)
 {
 	_lines[TYPE(BUISGL)] = Line(QPen(QColor("#966118"), 1.5));
 	_lines[TYPE(DEPCNT)] = Line(QPen(QColor("#659aef"), 1, Qt::SolidLine));
@@ -165,7 +168,7 @@ void Style::lineStyle()
 	_lines[TYPE(FERYRT)].setTextFontSize(Small);
 	_lines[TYPE(I_FERYRT)] = Line(QImage(":/marine/ferry-line.png"));
 	_lines[TYPE(I_FERYRT)].setTextFontSize(Small);
-	_lines[TYPE(RAILWY)] = Line(railroad());
+	_lines[TYPE(RAILWY)] = Line(railroad(ratio));
 	_lines[TYPE(ROADWY)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
 	_lines[TYPE(GATCON)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
 	_lines[TYPE(I_GATCON)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
@@ -185,7 +188,7 @@ void Style::lineStyle()
 	_lines[TYPE(CANALS)] = Line(QPen(QColor("#9fc4e1"), 2));
 }
 
-void Style::pointStyle()
+void Style::pointStyle(qreal ratio)
 {
 	_points[SUBTYPE(BUAARE, 1)].setTextFontSize(Large);
 	_points[SUBTYPE(BUAARE, 5)].setTextFontSize(Large);
@@ -299,34 +302,49 @@ void Style::pointStyle()
 	_points[TYPE(SLCONS)] = Point(QImage(":/marine/construction.png"), Small);
 	_points[TYPE(CURENT)] = Point(QImage(":/marine/current.png"));
 
-	_points[SUBTYPE(SMCFAC, 7)] = Point(QImage(":/POI/restaurant-11.png"), Small);
-	_points[SUBTYPE(SMCFAC, 11)] = Point(QImage(":/POI/pharmacy-11.png"), Small);
-	_points[SUBTYPE(SMCFAC, 12)] = Point(QImage(":/POI/drinking-water-11.png"),
+	_points[SUBTYPE(SMCFAC, 7)] = Point(svg2img(":/POI/restaurant-11.svg",
+	  ratio), Small);
+	_points[SUBTYPE(SMCFAC, 11)] = Point(svg2img(":/POI/pharmacy-11.svg",
+	  ratio), Small);
+	_points[SUBTYPE(SMCFAC, 12)] = Point(svg2img(":/POI/drinking-water-11.svg",
+	  ratio), Small);
+	_points[SUBTYPE(SMCFAC, 13)] = Point(svg2img(":/POI/fuel-11.svg", ratio),
 	  Small);
-	_points[SUBTYPE(SMCFAC, 13)] = Point(QImage(":/POI/fuel-11.png"), Small);
-	_points[SUBTYPE(SMCFAC, 18)] = Point(QImage(":/POI/toilet-11.png"), Small);
-	_points[SUBTYPE(SMCFAC, 20)] = Point(QImage(":/POI/telephone-11.png"), Small);
-	_points[SUBTYPE(SMCFAC, 22)] = Point(QImage(":/POI/parking-11.png"), Small);
-	_points[SUBTYPE(SMCFAC, 25)] = Point(QImage(":/POI/campsite-11.png"), Small);
+	_points[SUBTYPE(SMCFAC, 18)] = Point(svg2img(":/POI/toilet-11.svg", ratio),
+	  Small);
+	_points[SUBTYPE(SMCFAC, 20)] = Point(svg2img(":/POI/telephone-11.svg",
+	  ratio), Small);
+	_points[SUBTYPE(SMCFAC, 22)] = Point(svg2img(":/POI/parking-11.svg", ratio),
+	  Small);
+	_points[SUBTYPE(SMCFAC, 25)] = Point(svg2img(":/POI/campsite-11.svg",
+	  ratio), Small);
 	_points[TYPE(BUISGL)] = Point(QImage(":/marine/building.png"), Small);
-	_points[SUBTYPE(BUISGL, 2)] = Point(QImage(":/POI/harbor-11.png"), Small);
-	_points[SUBTYPE(BUISGL, 5)] = Point(QImage(":/POI/hospital-11.png"), Small);
-	_points[SUBTYPE(BUISGL, 6)] = Point(QImage(":/POI/post-11.png"), Small);
-	_points[SUBTYPE(BUISGL, 7)] = Point(QImage(":/POI/lodging-11.png"), Small);
-	_points[SUBTYPE(BUISGL, 9)] = Point(QImage(":/POI/police-11.png"), Small);
-	_points[SUBTYPE(BUISGL, 13)] = Point(QImage(":/POI/bank-11.png"), Small);
-	_points[SUBTYPE(BUISGL, 19)] = Point(QImage(":/POI/school-11.png"), Small);
-	_points[SUBTYPE(BUISGL, 20)] = Point(QImage(":/POI/religious-christian-11.png"),
+	_points[SUBTYPE(BUISGL, 2)] = Point(svg2img(":/POI/harbor-11.svg", ratio),
 	  Small);
-	_points[SUBTYPE(BUISGL, 22)] = Point(QImage(":/POI/religious-jewish-11.png"),
+	_points[SUBTYPE(BUISGL, 5)] = Point(svg2img(":/POI/hospital-11.svg", ratio),
 	  Small);
-	_points[SUBTYPE(BUISGL, 26)] = Point(QImage(":/POI/religious-muslim-11.png"),
+	_points[SUBTYPE(BUISGL, 6)] = Point(svg2img(":/POI/post-11.svg", ratio),
 	  Small);
+	_points[SUBTYPE(BUISGL, 7)] = Point(svg2img(":/POI/lodging-11.svg", ratio),
+	  Small);
+	_points[SUBTYPE(BUISGL, 9)] = Point(svg2img(":/POI/police-11.svg", ratio),
+	  Small);
+	_points[SUBTYPE(BUISGL, 13)] = Point(svg2img(":/POI/bank-11.svg", ratio),
+	  Small);
+	_points[SUBTYPE(BUISGL, 19)] = Point(svg2img(":/POI/school-11.svg", ratio),
+	  Small);
+	_points[SUBTYPE(BUISGL, 20)] = Point(svg2img(":/POI/religious-christian-11.svg",
+	  ratio), Small);
+	_points[SUBTYPE(BUISGL, 22)] = Point(svg2img(":/POI/religious-jewish-11.svg",
+	  ratio), Small);
+	_points[SUBTYPE(BUISGL, 26)] = Point(svg2img(":/POI/religious-muslim-11.svg",
+	  ratio), Small);
 	_points[SUBTYPE(BUISGL, 33)] = Point(QImage(":/marine/pylon.png"), Small);
-	_points[SUBTYPE(BUISGL, 42)] = Point(QImage(":/POI/bus-11.png"), Small);
+	_points[SUBTYPE(BUISGL, 42)] = Point(svg2img(":/POI/bus-11.svg", ratio),
+	  Small);
 }
 
-Style::Style()
+Style::Style(qreal ratio)
 {
 	_light = QImage(":/marine/light.png");
 	_signal = QImage(":/marine/fog-signal.png");
@@ -336,8 +354,8 @@ Style::Style()
 	_small = pixelSizeFont(10);
 
 	polygonStyle();
-	lineStyle();
-	pointStyle();
+	lineStyle(ratio);
+	pointStyle(ratio);
 }
 
 const Style::Line &Style::line(uint type) const

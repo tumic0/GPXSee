@@ -89,7 +89,7 @@ public:
 	};
 
 
-	Style(SubFile *typ = 0);
+	Style(qreal ratio, SubFile *typ = 0);
 
 	const Line &line(quint32 type) const;
 	const Polygon &polygon(quint32 type) const;
@@ -165,8 +165,8 @@ private:
 	bool parseDrawOrder(SubFile *file, SubFile::Handle &hdl,
 	  const Section &section);
 	void defaultPolygonStyle();
-	void defaultLineStyle();
-	void defaultPointStyle();
+	void defaultLineStyle(qreal ratio);
+	void defaultPointStyle(qreal ratio);
 
 	static bool itemInfo(SubFile *file, SubFile::Handle &hdl,
 	  const Section &section, ItemInfo &info);

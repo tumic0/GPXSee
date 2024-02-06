@@ -90,7 +90,7 @@ public:
 		QImage _img;
 	};
 
-	Style();
+	Style(qreal ratio);
 
 	const Line &line(uint type) const;
 	const Polygon &polygon(uint type) const;
@@ -103,8 +103,8 @@ public:
 
 private:
 	void polygonStyle();
-	void lineStyle();
-	void pointStyle();
+	void lineStyle(qreal ratio);
+	void pointStyle(qreal ratio);
 
 	QMap<uint, Line> _lines;
 	QMap<uint, Polygon> _polygons;

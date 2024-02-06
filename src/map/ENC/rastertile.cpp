@@ -18,9 +18,9 @@ static const float C1 = 0.866025f; /* sqrt(3)/2 */
 static const QColor tsslptPen = QColor("#eb49eb");
 static const QColor tsslptBrush = QColor("#80eb49eb");
 
-static const Style *style()
+static const Style *style(qreal ratio)
 {
-	static ENC::Style s;
+	static ENC::Style s(ratio);
 	return &s;
 }
 
@@ -412,7 +412,7 @@ RasterTile::RasterTile(const Projection &proj, const Transform &transform,
 	_zoomRange(zoomRange), _rect(rect), _ratio(ratio),
 	_pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false)
 {
-	_style = style();
+	_style = style(ratio);
 }
 
 RasterTile::RasterTile(const Projection &proj, const Transform &transform,
@@ -422,5 +422,5 @@ RasterTile::RasterTile(const Projection &proj, const Transform &transform,
 	_zoomRange(zoomRange), _rect(rect), _ratio(ratio),
 	_pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false)
 {
-	_style = style();
+	_style = style(ratio);
 }

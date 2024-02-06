@@ -1,8 +1,11 @@
 #include <QImage>
+#include <QImageReader>
 #include <QPainter>
+#include "common/util.h"
 #include "style.h"
 
 using namespace IMG;
+using namespace Util;
 
 static QFont pixelSizeFont(int pixelSize)
 {
@@ -146,9 +149,10 @@ static bool skipLabel(SubFile *file, SubFile::Handle &hdl)
 	return true;
 }
 
-static QImage railroad()
+static QImage railroad(qreal ratio)
 {
-	QImage img(16, 4, QImage::Format_ARGB32_Premultiplied);
+	QImage img(16 * ratio, 4 * ratio, QImage::Format_ARGB32_Premultiplied);
+	img.setDevicePixelRatio(ratio);
 	img.fill(QColor("#717171"));
 	QPainter p(&img);
 	p.setPen(QPen(Qt::white, 2));
@@ -156,7 +160,6 @@ static QImage railroad()
 
 	return img;
 }
-
 
 void Style::defaultPolygonStyle()
 {
@@ -307,7 +310,7 @@ void Style::defaultPolygonStyle()
 	  << TYPE(0x13) << 0x10900 << 0x10613 << 0x10409 << 0x10503 << 0x1060a;
 }
 
-void Style::defaultLineStyle()
+void Style::defaultLineStyle(qreal ratio)
 {
 	_lines[TYPE(0x01)] = Line(QPen(QColor("#9bd772"), 2, Qt::SolidLine),
 	  QPen(QColor("#72a35a"), 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
@@ -332,7 +335,7 @@ void Style::defaultLineStyle()
 	  QPen(QColor("#e8a541"), 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 	_lines[TYPE(0x0c)] = Line(QPen(QColor("#ffffff"), 3, Qt::SolidLine),
 	  QPen(QColor("#d5cdc0"), 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	_lines[TYPE(0x14)] = Line(railroad());
+	_lines[TYPE(0x14)] = Line(railroad(ratio));
 	_lines[TYPE(0x16)] = Line(QPen(QColor("#aba083"), 1, Qt::DotLine));
 	_lines[TYPE(0x18)] = Line(QPen(QColor("#9fc4e1"), 2, Qt::SolidLine));
 	_lines[TYPE(0x18)].setTextColor(QColor("#9fc4e1"));
@@ -406,7 +409,7 @@ void Style::defaultLineStyle()
 	_lines[0x10611] = Line(QPen(QColor("#eb49eb"), 1, Qt::DashLine));
 }
 
-void Style::defaultPointStyle()
+void Style::defaultPointStyle(qreal ratio)
 {
 	// Countries
 	_points[TYPE(0x14)].setTextColor(QColor("#505145"));
@@ -425,137 +428,137 @@ void Style::defaultPointStyle()
 	_points[TYPE(0x03)].setTextFontSize(Large);
 
 	// POI
-	_points[0x2a00] = Point(QImage(":/POI/restaurant-11.png"));
-	_points[0x2a01] = Point(QImage(":/POI/restaurant-11.png"));
-	_points[0x2a02] = Point(QImage(":/POI/restaurant-noodle-11.png"));
-	_points[0x2a03] = Point(QImage(":/POI/bbq-11.png"));
-	_points[0x2a04] = Point(QImage(":/POI/restaurant-noodle-11.png"));
-	_points[0x2a05] = Point(QImage(":/POI/bakery-11.png"));
-	_points[0x2a06] = Point(QImage(":/POI/restaurant-11.png"));
-	_points[0x2a07] = Point(QImage(":/POI/fast-food-11.png"));
-	_points[0x2a08] = Point(QImage(":/POI/restaurant-pizza-11.png"));
-	_points[0x2a09] = Point(QImage(":/POI/restaurant-11.png"));
-	_points[0x2a0a] = Point(QImage(":/POI/restaurant-pizza-11.png"));
-	_points[0x2a0b] = Point(QImage(":/POI/restaurant-seafood-11.png"));
-	_points[0x2a0c] = Point(QImage(":/POI/restaurant-11.png"));
-	_points[0x2a0d] = Point(QImage(":/POI/bakery-11.png"));
-	_points[0x2a0e] = Point(QImage(":/POI/cafe-11.png"));
-	_points[0x2a0f] = Point(QImage(":/POI/restaurant-11.png"));
-	_points[0x2a10] = Point(QImage(":/POI/restaurant-11.png"));
-	_points[0x2a11] = Point(QImage(":/POI/restaurant-11.png"));
-	_points[0x2a12] = Point(QImage(":/POI/restaurant-11.png"));
-	_points[0x2a13] = Point(QImage(":/POI/restaurant-11.png"));
+	_points[0x2a00] = Point(svg2img(":/POI/restaurant-11.svg", ratio));
+	_points[0x2a01] = Point(svg2img(":/POI/restaurant-11.svg", ratio));
+	_points[0x2a02] = Point(svg2img(":/POI/restaurant-noodle-11.svg", ratio));
+	_points[0x2a03] = Point(svg2img(":/POI/bbq-11-11.svg", ratio));
+	_points[0x2a04] = Point(svg2img(":/POI/restaurant-noodle-11.svg", ratio));
+	_points[0x2a05] = Point(svg2img(":/POI/bakery-11.svg", ratio));
+	_points[0x2a06] = Point(svg2img(":/POI/restaurant-11.svg", ratio));
+	_points[0x2a07] = Point(svg2img(":/POI/fast-food-11.svg", ratio));
+	_points[0x2a08] = Point(svg2img(":/POI/restaurant-pizza-11.svg", ratio));
+	_points[0x2a09] = Point(svg2img(":/POI/restaurant-11.svg", ratio));
+	_points[0x2a0a] = Point(svg2img(":/POI/restaurant-pizza-11.svg", ratio));
+	_points[0x2a0b] = Point(svg2img(":/POI/restaurant-seafood-11.svg", ratio));
+	_points[0x2a0c] = Point(svg2img(":/POI/restaurant-11.svg", ratio));
+	_points[0x2a0d] = Point(svg2img(":/POI/bakery-11.svg", ratio));
+	_points[0x2a0e] = Point(svg2img(":/POI/cafe-11.svg", ratio));
+	_points[0x2a0f] = Point(svg2img(":/POI/restaurant-11.svg", ratio));
+	_points[0x2a10] = Point(svg2img(":/POI/restaurant-11.svg", ratio));
+	_points[0x2a11] = Point(svg2img(":/POI/restaurant-11.svg", ratio));
+	_points[0x2a12] = Point(svg2img(":/POI/restaurant-11.svg", ratio));
+	_points[0x2a13] = Point(svg2img(":/POI/restaurant-11.svg", ratio));
 
-	_points[0x2b01] = Point(QImage(":/POI/lodging-11.png"));
-	_points[0x2b02] = Point(QImage(":/POI/lodging-11.png"));
-	_points[0x2b03] = Point(QImage(":/POI/campsite-11.png"));
-	_points[0x2b04] = Point(QImage(":/POI/village-11.png"));
-	_points[0x2b06] = Point(QImage(":/POI/shelter-11.png"));
+	_points[0x2b01] = Point(svg2img(":/POI/lodging-11.svg", ratio));
+	_points[0x2b02] = Point(svg2img(":/POI/lodging-11.svg", ratio));
+	_points[0x2b03] = Point(svg2img(":/POI/campsite-11.svg", ratio));
+	_points[0x2b04] = Point(svg2img(":/POI/village-11.svg", ratio));
+	_points[0x2b06] = Point(svg2img(":/POI/shelter-11.svg", ratio));
 
-	_points[0x2c01] = Point(QImage(":/POI/amusement-park-11.png"));
-	_points[0x2c02] = Point(QImage(":/POI/museum-11.png"));
-	_points[0x2c03] = Point(QImage(":/POI/library-11.png"));
-	_points[0x2c04] = Point(QImage(":/POI/landmark-11.png"));
-	_points[0x2c05] = Point(QImage(":/POI/school-11.png"));
-	_points[0x2c06] = Point(QImage(":/POI/garden-11.png"));
-	_points[0x2c07] = Point(QImage(":/POI/zoo-11.png"));
-	_points[0x2c08] = Point(QImage(":/POI/soccer-11.png"));
-	_points[0x2c0a] = Point(QImage(":/POI/bar-11.png"));
-	_points[0x2c0b] = Point(QImage(":/POI/place-of-worship-11.png"));
-	_points[0x2c0d] = Point(QImage(":/POI/religious-muslim-11.png"));
-	_points[0x2c0e] = Point(QImage(":/POI/religious-christian-11.png"));
-	_points[0x2c10] = Point(QImage(":/POI/religious-jewish-11.png"));
-	_points[0x2d01] = Point(QImage(":/POI/theatre-11.png"));
-	_points[0x2d02] = Point(QImage(":/POI/bar-11.png"));
-	_points[0x2d03] = Point(QImage(":/POI/cinema-11.png"));
-	_points[0x2d04] = Point(QImage(":/POI/casino-11.png"));
-	_points[0x2d05] = Point(QImage(":/POI/golf-11.png"));
-	_points[0x2d06] = Point(QImage(":/POI/skiing-11.png"));
-	_points[0x2d07] = Point(QImage(":/POI/bowling-alley-11.png"));
-	_points[0x2d09] = Point(QImage(":/POI/swimming-11.png"));
-	_points[0x2d0a] = Point(QImage(":/POI/fitness-centre-11.png"));
-	_points[0x2d0b] = Point(QImage(":/POI/airfield-11.png"));
+	_points[0x2c01] = Point(svg2img(":/POI/amusement-park-11.svg", ratio));
+	_points[0x2c02] = Point(svg2img(":/POI/museum-11.svg", ratio));
+	_points[0x2c03] = Point(svg2img(":/POI/library-11-11.svg", ratio));
+	_points[0x2c04] = Point(svg2img(":/POI/landmark-11.svg", ratio));
+	_points[0x2c05] = Point(svg2img(":/POI/school-11.svg", ratio));
+	_points[0x2c06] = Point(svg2img(":/POI/garden-11.svg", ratio));
+	_points[0x2c07] = Point(svg2img(":/POI/zoo-11.svg", ratio));
+	_points[0x2c08] = Point(svg2img(":/POI/soccer-11.svg", ratio));
+	_points[0x2c0a] = Point(svg2img(":/POI/bar-11.svg", ratio));
+	_points[0x2c0b] = Point(svg2img(":/POI/place-of-worship-11.svg", ratio));
+	_points[0x2c0d] = Point(svg2img(":/POI/religious-muslim-11.svg", ratio));
+	_points[0x2c0e] = Point(svg2img(":/POI/religious-christian-11.svg", ratio));
+	_points[0x2c10] = Point(svg2img(":/POI/religious-jewish-11.svg", ratio));
+	_points[0x2d01] = Point(svg2img(":/POI/theatre-11.svg", ratio));
+	_points[0x2d02] = Point(svg2img(":/POI/bar-11.svg", ratio));
+	_points[0x2d03] = Point(svg2img(":/POI/cinema-11.svg", ratio));
+	_points[0x2d04] = Point(svg2img(":/POI/casino-11.svg", ratio));
+	_points[0x2d05] = Point(svg2img(":/POI/golf-11.svg", ratio));
+	_points[0x2d06] = Point(svg2img(":/POI/skiing-11.svg", ratio));
+	_points[0x2d07] = Point(svg2img(":/POI/bowling-alley-11.svg", ratio));
+	_points[0x2d09] = Point(svg2img(":/POI/swimming-11.svg", ratio));
+	_points[0x2d0a] = Point(svg2img(":/POI/fitness-centre-11.svg", ratio));
+	_points[0x2d0b] = Point(svg2img(":/POI/airfield-11-11.svg", ratio));
 
-	_points[0x2e02] = Point(QImage(":/POI/grocery-11.png"));
-	_points[0x2e03] = Point(QImage(":/POI/shop-11.png"));
-	_points[0x2e05] = Point(QImage(":/POI/pharmacy-11.png"));
-	_points[0x2e06] = Point(QImage(":/POI/convenience-11.png"));
-	_points[0x2e07] = Point(QImage(":/POI/clothing-store-11.png"));
-	_points[0x2e08] = Point(QImage(":/POI/garden-centre-11.png"));
-	_points[0x2e09] = Point(QImage(":/POI/furniture-11.png"));
-	_points[0x2e0a] = Point(QImage(":/POI/shop-11.png"));
-	_points[0x2e0c] = Point(QImage(":/POI/shop-11.png"));
+	_points[0x2e02] = Point(svg2img(":/POI/grocery-11.svg", ratio));
+	_points[0x2e03] = Point(svg2img(":/POI/shop-11.svg", ratio));
+	_points[0x2e05] = Point(svg2img(":/POI/pharmacy-11.svg", ratio));
+	_points[0x2e06] = Point(svg2img(":/POI/convenience-11.svg", ratio));
+	_points[0x2e07] = Point(svg2img(":/POI/clothing-store-11.svg", ratio));
+	_points[0x2e08] = Point(svg2img(":/POI/garden-centre-11.svg", ratio));
+	_points[0x2e09] = Point(svg2img(":/POI/furniture-11.svg", ratio));
+	_points[0x2e0a] = Point(svg2img(":/POI/shop-11.svg", ratio));
+	_points[0x2e0c] = Point(svg2img(":/POI/shop-11.svg", ratio));
 
-	_points[0x2f01] = Point(QImage(":/POI/fuel-11.png"));
-	_points[0x2f02] = Point(QImage(":/POI/car-rental-11.png"));
-	_points[0x2f03] = Point(QImage(":/POI/car-repair-11.png"));
-	_points[0x2f04] = Point(QImage(":/POI/airport-11.png"));
-	_points[0x2f05] = Point(QImage(":/POI/post-11.png"));
-	_points[0x2f06] = Point(QImage(":/POI/bank-11.png"));
-	_points[0x2f07] = Point(QImage(":/POI/car-11.png"));
-	_points[0x2f08] = Point(QImage(":/POI/bus-11.png"));
-	_points[0x2f09] = Point(QImage(":/POI/harbor-11.png"));
-	_points[0x2f0b] = Point(QImage(":/POI/parking-11.png"));
+	_points[0x2f01] = Point(svg2img(":/POI/fuel-11.svg", ratio));
+	_points[0x2f02] = Point(svg2img(":/POI/car-rental-11.svg", ratio));
+	_points[0x2f03] = Point(svg2img(":/POI/car-repair-11.svg", ratio));
+	_points[0x2f04] = Point(svg2img(":/POI/airport-11.svg", ratio));
+	_points[0x2f05] = Point(svg2img(":/POI/post-11.svg", ratio));
+	_points[0x2f06] = Point(svg2img(":/POI/bank-11.svg", ratio));
+	_points[0x2f07] = Point(svg2img(":/POI/car-11.svg", ratio));
+	_points[0x2f08] = Point(svg2img(":/POI/bus-11.svg", ratio));
+	_points[0x2f09] = Point(svg2img(":/POI/harbor-11.svg", ratio));
+	_points[0x2f0b] = Point(svg2img(":/POI/parking-11.svg", ratio));
 	_points[0x2f0b].setTextFontSize(None);
-	_points[0x2f0c] = Point(QImage(":/POI/toilet-11.png"));
+	_points[0x2f0c] = Point(svg2img(":/POI/toilet-11.svg", ratio));
 	_points[0x2f0c].setTextFontSize(None);
-	_points[0x2f10] = Point(QImage(":/POI/hairdresser-11.png"));
+	_points[0x2f10] = Point(svg2img(":/POI/hairdresser-11.svg", ratio));
 	_points[0x2f12].setTextFontSize(None);
-	_points[0x2f13] = Point(QImage(":/POI/hardware-11.png"));
-	_points[0x2f17] = Point(QImage(":/POI/bus-11.png"));
+	_points[0x2f13] = Point(svg2img(":/POI/hardware-11.svg", ratio));
+	_points[0x2f17] = Point(svg2img(":/POI/bus-11.svg", ratio));
 
-	_points[0x3001] = Point(QImage(":/POI/police-11.png"));
-	_points[0x3002] = Point(QImage(":/POI/hospital-11.png"));
-	_points[0x3003] = Point(QImage(":/POI/town-hall-11.png"));
-	_points[0x3006] = Point(QImage(":/POI/entrance-alt1-11.png"));
-	_points[0x3007] = Point(QImage(":/POI/town-hall-11.png"));
-	_points[0x3008] = Point(QImage(":/POI/fire-station-11.png"));
+	_points[0x3001] = Point(svg2img(":/POI/police-11.svg", ratio));
+	_points[0x3002] = Point(svg2img(":/POI/hospital-11.svg", ratio));
+	_points[0x3003] = Point(svg2img(":/POI/town-hall-11.svg", ratio));
+	_points[0x3006] = Point(svg2img(":/POI/entrance-alt1-11.svg", ratio));
+	_points[0x3007] = Point(svg2img(":/POI/town-hall-11.svg", ratio));
+	_points[0x3008] = Point(svg2img(":/POI/fire-station-11.svg", ratio));
 
-	_points[0x4000] = Point(QImage(":/POI/golf-11.png"));
-	_points[0x4300] = Point(QImage(":/POI/harbor-11.png"));
-	_points[0x4400] = Point(QImage(":/POI/fuel-11.png"));
-	_points[0x4500] = Point(QImage(":/POI/restaurant-11.png"));
-	_points[0x4600] = Point(QImage(":/POI/bar-11.png"));
-	_points[0x4900] = Point(QImage(":/POI/park-11.png"));
-	_points[0x4a00] = Point(QImage(":/POI/picnic-site-11.png"));
-	_points[0x4c00] = Point(QImage(":/POI/information-11.png"));
-	_points[0x4800] = Point(QImage(":/POI/campsite-11.png"));
-	_points[0x4a00] = Point(QImage(":/POI/picnic-site-11.png"));
-	_points[0x4b00] = Point(QImage(":/POI/hospital-11.png"));
-	_points[0x4c00] = Point(QImage(":/POI/information-11.png"));
-	_points[0x4d00] = Point(QImage(":/POI/parking-11.png"));
+	_points[0x4000] = Point(svg2img(":/POI/golf-11.svg", ratio));
+	_points[0x4300] = Point(svg2img(":/POI/harbor-11.svg", ratio));
+	_points[0x4400] = Point(svg2img(":/POI/fuel-11.svg", ratio));
+	_points[0x4500] = Point(svg2img(":/POI/restaurant-11.svg", ratio));
+	_points[0x4600] = Point(svg2img(":/POI/bar-11.svg", ratio));
+	_points[0x4900] = Point(svg2img(":/POI/park-11.svg", ratio));
+	_points[0x4a00] = Point(svg2img(":/POI/picnic-site-11.svg", ratio));
+	_points[0x4c00] = Point(svg2img(":/POI/information-11.svg", ratio));
+	_points[0x4800] = Point(svg2img(":/POI/campsite-11.svg", ratio));
+	_points[0x4a00] = Point(svg2img(":/POI/picnic-site-11.svg", ratio));
+	_points[0x4b00] = Point(svg2img(":/POI/hospital-11.svg", ratio));
+	_points[0x4c00] = Point(svg2img(":/POI/information-11.svg", ratio));
+	_points[0x4d00] = Point(svg2img(":/POI/parking-11.svg", ratio));
 	_points[0x4d00].setTextFontSize(None);
-	_points[0x4e00] = Point(QImage(":/POI/toilet-11.png"));
+	_points[0x4e00] = Point(svg2img(":/POI/toilet-11.svg", ratio));
 	_points[0x4e00].setTextFontSize(None);
-	_points[0x5000] = Point(QImage(":/POI/drinking-water-11.png"));
+	_points[0x5000] = Point(svg2img(":/POI/drinking-water-11.svg", ratio));
 	_points[0x5000].setTextFontSize(None);
-	_points[0x5100] = Point(QImage(":/POI/telephone-11.png"));
-	_points[0x5200] = Point(QImage(":/POI/viewpoint-11.png"));
-	_points[0x5300] = Point(QImage(":/POI/skiing-11.png"));
-	_points[0x5400] = Point(QImage(":/POI/swimming-11.png"));
-	_points[0x5500] = Point(QImage(":/POI/dam-11.png"));
-	_points[0x5700] = Point(QImage(":/POI/danger-11.png"));
-	_points[0x5800] = Point(QImage(":/POI/roadblock-11.png"));
-	_points[0x5900] = Point(QImage(":/POI/airport-11.png"));
-	_points[0x5901] = Point(QImage(":/POI/airport-11.png"));
-	_points[0x5904] = Point(QImage(":/POI/heliport-11.png"));
+	_points[0x5100] = Point(svg2img(":/POI/telephone-11.svg", ratio));
+	_points[0x5200] = Point(svg2img(":/POI/viewpoint-11.svg", ratio));
+	_points[0x5300] = Point(svg2img(":/POI/skiing-11.svg", ratio));
+	_points[0x5400] = Point(svg2img(":/POI/swimming-11.svg", ratio));
+	_points[0x5500] = Point(svg2img(":/POI/dam-11.svg", ratio));
+	_points[0x5700] = Point(svg2img(":/POI/danger-11.svg", ratio));
+	_points[0x5800] = Point(svg2img(":/POI/roadblock-11.svg", ratio));
+	_points[0x5900] = Point(svg2img(":/POI/airport-11.svg", ratio));
+	_points[0x5901] = Point(svg2img(":/POI/airport-11.svg", ratio));
+	_points[0x5904] = Point(svg2img(":/POI/heliport-11.svg", ratio));
 
-	_points[0x6401] = Point(QImage(":/POI/bridge-11.png"));
-	_points[0x6402] = Point(QImage(":/POI/building-alt1-11.png"));
-	_points[0x6403] = Point(QImage(":/POI/cemetery-11.png"));
-	_points[0x6404] = Point(QImage(":/POI/religious-christian-11.png"));
-	_points[0x6407] = Point(QImage(":/POI/dam-11.png"));
-	_points[0x6408] = Point(QImage(":/POI/hospital-11.png"));
-	_points[0x6409] = Point(QImage(":/POI/dam-11.png"));
-	_points[0x640d] = Point(QImage(":/POI/communications-tower-11.png"));
-	_points[0x640e] = Point(QImage(":/POI/park-11.png"));
-	_points[0x640f] = Point(QImage(":/POI/post-11.png"));
-	_points[0x6411] = Point(QImage(":/POI/communications-tower-11.png"));
+	_points[0x6401] = Point(svg2img(":/POI/bridge-11.svg", ratio));
+	_points[0x6402] = Point(svg2img(":/POI/building-alt1-11.svg", ratio));
+	_points[0x6403] = Point(svg2img(":/POI/cemetery-11.svg", ratio));
+	_points[0x6404] = Point(svg2img(":/POI/religious-christian-11.svg", ratio));
+	_points[0x6407] = Point(svg2img(":/POI/dam-11.svg", ratio));
+	_points[0x6408] = Point(svg2img(":/POI/hospital-11.svg", ratio));
+	_points[0x6409] = Point(svg2img(":/POI/dam-11.svg", ratio));
+	_points[0x640d] = Point(svg2img(":/POI/communications-tower-11.svg", ratio));
+	_points[0x640e] = Point(svg2img(":/POI/park-11.svg", ratio));
+	_points[0x640f] = Point(svg2img(":/POI/post-11.svg", ratio));
+	_points[0x6411] = Point(svg2img(":/POI/communications-tower-11.svg", ratio));
 
-	_points[0x6508] = Point(QImage(":/POI/waterfall-11.png"));
-	_points[0x6513] = Point(QImage(":/POI/wetland-11.png"));
-	_points[0x6604] = Point(QImage(":/POI/beach-11.png"));
-	_points[0x6616] = Point(QImage(":/POI/mountain-11.png"));
+	_points[0x6508] = Point(svg2img(":/POI/waterfall-11.svg", ratio));
+	_points[0x6513] = Point(svg2img(":/POI/wetland-11.svg", ratio));
+	_points[0x6604] = Point(svg2img(":/POI/beach-11.svg", ratio));
+	_points[0x6616] = Point(svg2img(":/POI/mountain-11.svg", ratio));
 
 
 	// NT types
@@ -1231,16 +1234,16 @@ bool Style::parseTYPFile(SubFile *file)
 	return true;
 }
 
-Style::Style(SubFile *typ)
+Style::Style(qreal ratio, SubFile *typ)
 {
 	_large = pixelSizeFont(16);
 	_normal = pixelSizeFont(14);
 	_small = pixelSizeFont(12);
 	_extraSmall = pixelSizeFont(10);
 
-	defaultLineStyle();
+	defaultLineStyle(ratio);
 	defaultPolygonStyle();
-	defaultPointStyle();
+	defaultPointStyle(ratio);
 
 	if (typ)
 		parseTYPFile(typ);

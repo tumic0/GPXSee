@@ -69,19 +69,19 @@ void MapData::points(const RectC &rect, int bits, QList<Point> *points)
 	_tileTree.Search(min, max, pointCb, &ctx);
 }
 
-void MapData::load()
+void MapData::load(qreal ratio)
 {
 	Q_ASSERT(!_style);
 
 	if (_typ)
-		_style = new Style(_typ);
+		_style = new Style(ratio, _typ);
 	else {
 		QString typFile(ProgramPaths::typFile());
 		if (QFileInfo::exists(typFile)) {
 			SubFile typ(&typFile);
-			_style = new Style(&typ);
+			_style = new Style(ratio, &typ);
 		} else
-			_style = new Style();
+			_style = new Style(ratio);
 	}
 }
 

@@ -86,7 +86,7 @@ void IMGMap::load(const Projection &in, const Projection &out,
 	_dataBounds = limitBounds(_data.first()->bounds(), _projection);
 
 	for (int i = 0; i < _data.size(); i++)
-		_data.at(i)->load();
+		_data.at(i)->load(devicelRatio);
 
 	updateTransform();
 
