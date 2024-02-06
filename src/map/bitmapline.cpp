@@ -7,7 +7,8 @@
 static QImage img2line(const QImage &img, int width)
 {
 	Q_ASSERT(img.format() == QImage::Format_ARGB32_Premultiplied);
-	QImage res(width, img.height(), QImage::Format_ARGB32_Premultiplied);
+	QImage res(width * img.devicePixelRatio(), img.height(),
+	  QImage::Format_ARGB32_Premultiplied);
 	const int srcBpl = img.bytesPerLine();
 	const int dstBpl = res.bytesPerLine();
 	const uchar *srcBits = img.bits();
@@ -20,6 +21,8 @@ static QImage img2line(const QImage &img, int width)
 		for (int j = dstBpl; j > 0; j -= srcBpl, dstLine += srcBpl)
 			memcpy(dstLine, srcLine, qMin(j, srcBpl));
 	}
+
+	res.setDevicePixelRatio(img.devicePixelRatio());
 
 	return res;
 }

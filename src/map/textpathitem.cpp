@@ -294,15 +294,16 @@ void TextPathItem::init(const T &line, const QRect &tileRect)
 	if (label && _img) {
 		cw = _font->pixelSize() * CHAR_RATIO;
 		mw = _font->pixelSize() / 2.0;
-		textWidth = _text->size() * cw + _img->width() + PADDING;
+		textWidth = _text->size() * cw
+		  + (_img->width() / _img->devicePixelRatioF()) + PADDING;
 	} else if (label) {
 		cw = _font->pixelSize() * CHAR_RATIO;
 		mw = _font->pixelSize() / 2.0;
 		textWidth = _text->size() * cw;
 	} else {
-		cw = _img->width();
-		mw = _img->height() / 2.0;
-		textWidth = _img->width();
+		cw = _img->width() / _img->devicePixelRatioF();
+		mw = _img->height() / _img->devicePixelRatioF() / 2.0;
+		textWidth = _img->width() / _img->devicePixelRatioF();
 	}
 
 	_path = textPath(line, textWidth, cw, tileRect.adjusted(mw, mw, -mw, -mw));
@@ -358,7 +359,8 @@ void TextPathItem::paint(QPainter *painter) const
 	if (_text && _font) {
 		QFontMetrics fm(*_font);
 		int textWidth = fm.boundingRect(*_text).width();
-		int imgWidth = _img ? _img->width() + PADDING : 0;
+		int imgWidth = _img
+		  ? (_img->width() / _img->devicePixelRatioF()) + PADDING : 0;
 		qreal imgPercent = imgWidth / _path.length();
 		qreal factor = textWidth / qMax(_path.length(), (qreal)(textWidth));
 		qreal percent = ((1.0 - factor) + imgPercent) / 2.0;
