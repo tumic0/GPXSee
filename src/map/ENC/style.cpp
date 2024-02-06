@@ -9,7 +9,7 @@ static QImage railroad(qreal ratio)
 {
 	QImage img(16 * ratio, 4 * ratio, QImage::Format_ARGB32_Premultiplied);
 	img.setDevicePixelRatio(ratio);
-	img.fill(QColor("#717171"));
+	img.fill(Qt::black);
 	QPainter p(&img);
 	p.setPen(QPen(Qt::white, 2));
 	p.drawLine(9, 2, 15, 2);
