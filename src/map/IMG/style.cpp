@@ -453,11 +453,12 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x2b02] = Point(svg2img(":/POI/lodging-11.svg", ratio));
 	_points[0x2b03] = Point(svg2img(":/POI/campsite-11.svg", ratio));
 	_points[0x2b04] = Point(svg2img(":/POI/village-11.svg", ratio));
+	_points[0x2b05] = Point(svg2img(":/POI/campsite-11.svg", ratio));
 	_points[0x2b06] = Point(svg2img(":/POI/shelter-11.svg", ratio));
 
 	_points[0x2c01] = Point(svg2img(":/POI/amusement-park-11.svg", ratio));
 	_points[0x2c02] = Point(svg2img(":/POI/museum-11.svg", ratio));
-	_points[0x2c03] = Point(svg2img(":/POI/library-11-11.svg", ratio));
+	_points[0x2c03] = Point(svg2img(":/POI/library-11.svg", ratio));
 	_points[0x2c04] = Point(svg2img(":/POI/landmark-11.svg", ratio));
 	_points[0x2c05] = Point(svg2img(":/POI/school-11.svg", ratio));
 	_points[0x2c06] = Point(svg2img(":/POI/garden-11.svg", ratio));
@@ -465,6 +466,7 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x2c08] = Point(svg2img(":/POI/soccer-11.svg", ratio));
 	_points[0x2c0a] = Point(svg2img(":/POI/bar-11.svg", ratio));
 	_points[0x2c0b] = Point(svg2img(":/POI/place-of-worship-11.svg", ratio));
+	_points[0x2c0c] = Point(svg2img(":/POI/volcano-11.svg", ratio));
 	_points[0x2c0d] = Point(svg2img(":/POI/religious-muslim-11.svg", ratio));
 	_points[0x2c0e] = Point(svg2img(":/POI/religious-christian-11.svg", ratio));
 	_points[0x2c10] = Point(svg2img(":/POI/religious-jewish-11.svg", ratio));
@@ -488,6 +490,7 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x2e09] = Point(svg2img(":/POI/furniture-11.svg", ratio));
 	_points[0x2e0a] = Point(svg2img(":/POI/shop-11.svg", ratio));
 	_points[0x2e0c] = Point(svg2img(":/POI/shop-11.svg", ratio));
+	_points[0x2e13] = Point(svg2img(":/POI/alcohol-shop-11.svg", ratio));
 
 	_points[0x2f01] = Point(svg2img(":/POI/fuel-11.svg", ratio));
 	_points[0x2f02] = Point(svg2img(":/POI/car-rental-11.svg", ratio));
@@ -513,6 +516,8 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x3006] = Point(svg2img(":/POI/entrance-alt1-11.svg", ratio));
 	_points[0x3007] = Point(svg2img(":/POI/town-hall-11.svg", ratio));
 	_points[0x3008] = Point(svg2img(":/POI/fire-station-11.svg", ratio));
+	_points[0x3200] = Point(svg2img(":/POI/barrier-11.svg", ratio));
+	_points[0x3200].setTextFontSize(None);
 
 	_points[0x4000] = Point(svg2img(":/POI/golf-11.svg", ratio));
 	_points[0x4300] = Point(svg2img(":/POI/harbor-11.svg", ratio));
@@ -587,6 +592,7 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x10c02] = _points[0x2b02];
 	_points[0x10c03] = _points[0x2b03];
 	_points[0x10c04] = _points[0x2b04];
+	_points[0x10c05] = _points[0x2b05];
 	_points[0x10d01] = _points[0x2c01];
 	_points[0x10d02] = _points[0x2c02];
 	_points[0x10d03] = _points[0x2c03];
@@ -597,6 +603,7 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x10d08] = _points[0x2c08];
 	_points[0x10d0a] = _points[0x2c0a];
 	_points[0x10d0b] = _points[0x2c0b];
+	_points[0x10d0c] = _points[0x2c0c];
 	_points[0x10d0d] = _points[0x2c0d];
 	_points[0x10d0e] = _points[0x2c0e];
 	_points[0x10d10] = _points[0x2c10];
@@ -619,6 +626,7 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x10f08] = _points[0x2e08];
 	_points[0x10f09] = _points[0x2e09];
 	_points[0x10f0a] = _points[0x2e0a];
+	_points[0x10f13] = _points[0x2e13];
 	_points[0x11001] = _points[0x2f01];
 	_points[0x11002] = _points[0x2f02];
 	_points[0x11003] = _points[0x2f03];

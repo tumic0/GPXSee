@@ -16,10 +16,12 @@
 	<qresource prefix="/POI">
 		<file alias="airfield-11.svg">icons/map/POI/airfield-11.svg</file>
 		<file alias="airport-11.svg">icons/map/POI/airport-11.svg</file>
+		<file alias="alcohol-shop-11.svg">icons/map/POI/alcohol-shop-11.svg</file>
 		<file alias="amusement-park-11.svg">icons/map/POI/amusement-park-11.svg</file>
 		<file alias="bakery-11.svg">icons/map/POI/bakery-11.svg</file>
 		<file alias="bank-11.svg">icons/map/POI/bank-11.svg</file>
 		<file alias="bar-11.svg">icons/map/POI/bar-11.svg</file>
+		<file alias="barrier-11.svg">icons/map/POI/barrier-11.svg</file>
 		<file alias="bbq-11.svg">icons/map/POI/bbq-11.svg</file>
 		<file alias="beach-11.svg">icons/map/POI/beach-11.svg</file>
 		<file alias="bowling-alley-11.svg">icons/map/POI/bowling-alley-11.svg</file>
@@ -88,6 +90,7 @@
 		<file alias="town-hall-11.svg">icons/map/POI/town-hall-11.svg</file>
 		<file alias="viewpoint-11.svg">icons/map/POI/viewpoint-11.svg</file>
 		<file alias="village-11.svg">icons/map/POI/village-11.svg</file>
+		<file alias="volcano-11.svg">icons/map/POI/volcano-11.svg</file>
 		<file alias="waterfall-11.svg">icons/map/POI/waterfall-11.svg</file>
 		<file alias="wetland-11.svg">icons/map/POI/wetland-11.svg</file>
 		<file alias="zoo-11.svg">icons/map/POI/zoo-11.svg</file>
