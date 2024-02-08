@@ -326,10 +326,10 @@ void Style::defaultLineStyle(qreal ratio)
 	  QPen(QColor("#d5cdc0"), 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 	_lines[TYPE(0x07)] = Line(QPen(QColor("#ffffff"), 2, Qt::SolidLine),
 	  QPen(QColor("#d5cdc0"), 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	_lines[TYPE(0x08)] = Line(QPen(QColor("#ffcc78"), 2, Qt::SolidLine),
+	_lines[TYPE(0x08)] = Line(QPen(QColor("#faef75"), 3, Qt::SolidLine),
+	  QPen(QColor("#dbd27b"), 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+	_lines[TYPE(0x09)] = Line(QPen(QColor("#ffcc78"), 2, Qt::SolidLine),
 	  QPen(QColor("#e8a541"), 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	_lines[TYPE(0x09)] = Line(QPen(QColor("#9bd772"), 2, Qt::SolidLine),
-	  QPen(QColor("#72a35a"), 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 	_lines[TYPE(0x0a)] = Line(QPen(QColor("#aba083"), 1, Qt::DashLine));
 	_lines[TYPE(0x0b)] = Line(QPen(QColor("#ffcc78"), 2, Qt::SolidLine),
 	  QPen(QColor("#e8a541"), 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
