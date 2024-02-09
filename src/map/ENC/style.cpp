@@ -26,50 +26,50 @@ static QFont pixelSizeFont(int pixelSize)
 
 void Style::polygonStyle()
 {
-	_polygons[TYPE(M_COVR)] = Polygon(QBrush("#ffffff"));
-	_polygons[TYPE(LNDARE)] = Polygon(QBrush("#e8e064"));
-	_polygons[TYPE(BUAARE)] = Polygon(QBrush("#d98b21"));
-	_polygons[TYPE(BUISGL)] = Polygon(QBrush("#d98b21"),
-	  QPen(QColor("#966118"), 1.5));
-	_polygons[TYPE(BRIDGE)] = Polygon(QBrush("#a58140"));
-	_polygons[TYPE(I_BRIDGE)] = Polygon(QBrush("#a58140"));
-	_polygons[SUBTYPE(DEPARE, 0)] = Polygon(QBrush("#98c064"));
-	_polygons[SUBTYPE(DEPARE, 1)] = Polygon(QBrush("#a0a0ff"));
-	_polygons[SUBTYPE(DEPARE, 2)] = Polygon(QBrush("#b0b0ff"));
-	_polygons[SUBTYPE(DEPARE, 3)] = Polygon(QBrush("#c0c0ff"));
-	_polygons[SUBTYPE(DEPARE, 4)] = Polygon(QBrush("#c0d0ff"));
-	_polygons[SUBTYPE(DEPARE, 5)] = Polygon(QBrush("#c0e0ff"));
-	_polygons[SUBTYPE(DEPARE, 6)] = Polygon(QBrush("#ffffff"));
-	_polygons[TYPE(DMPGRD)] = Polygon(QBrush(QColor("#a3a3a3"),
+	_polygons[TYPE(M_COVR)] = Polygon(QBrush(QColor(0xff, 0xff, 0xff)));
+	_polygons[TYPE(LNDARE)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64)));
+	_polygons[TYPE(BUAARE)] = Polygon(QBrush(QColor(0xd9, 0x8b, 0x21)));
+	_polygons[TYPE(BUISGL)] = Polygon(QBrush(QColor(0xd9, 0x8b, 0x21)),
+	  QPen(QColor(0x96, 0x61, 0x18), 1.5));
+	_polygons[TYPE(BRIDGE)] = Polygon(QBrush(QColor(0xa5, 0x81, 0x40)));
+	_polygons[TYPE(I_BRIDGE)] = Polygon(QBrush(QColor(0xa5, 0x81, 0x40)));
+	_polygons[SUBTYPE(DEPARE, 0)] = Polygon(QBrush(QColor(0x98, 0xc0, 0x64)));
+	_polygons[SUBTYPE(DEPARE, 1)] = Polygon(QBrush(QColor(0xa0, 0xa0, 0xff)));
+	_polygons[SUBTYPE(DEPARE, 2)] = Polygon(QBrush(QColor(0xb0, 0xb0, 0xff)));
+	_polygons[SUBTYPE(DEPARE, 3)] = Polygon(QBrush(QColor(0xc0, 0xc0, 0xff)));
+	_polygons[SUBTYPE(DEPARE, 4)] = Polygon(QBrush(QColor(0xc0, 0xd0, 0xff)));
+	_polygons[SUBTYPE(DEPARE, 5)] = Polygon(QBrush(QColor(0xc0, 0xe0, 0xff)));
+	_polygons[SUBTYPE(DEPARE, 6)] = Polygon(QBrush(QColor(0xff, 0xff, 0xff)));
+	_polygons[TYPE(DMPGRD)] = Polygon(QBrush(QColor(0xa3, 0xa3, 0xa3),
 	  Qt::Dense3Pattern));
-	_polygons[TYPE(FAIRWY)] = Polygon(Qt::NoBrush, QPen(QColor("#888888"), 1,
-	  Qt::DashDotDotLine));
-	_polygons[TYPE(OBSTRN)] = Polygon(Qt::NoBrush, QPen(QColor("#000000"), 1.5,
+	_polygons[TYPE(FAIRWY)] = Polygon(Qt::NoBrush, QPen(QColor(0x88, 0x88, 0x88),
+	  1, Qt::DashDotDotLine));
+	_polygons[TYPE(OBSTRN)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 1.5,
 	  Qt::DotLine));
-	_polygons[TYPE(UWTROC)] = Polygon(Qt::NoBrush, QPen(QColor("#000000"), 1.5,
+	_polygons[TYPE(UWTROC)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 1.5,
 	  Qt::DotLine));
-	_polygons[TYPE(PONTON)] = Polygon(QBrush("#333333"));
-	_polygons[TYPE(I_PONTON)] = Polygon(QBrush("#333333"));
-	_polygons[TYPE(HULKES)] = Polygon(QBrush("#333333"));
-	_polygons[TYPE(I_HULKES)] = Polygon(QBrush("#333333"));
-	_polygons[TYPE(DRYDOC)] = Polygon(QBrush("#333333"));
-	_polygons[TYPE(SLCONS)] = Polygon(Qt::NoBrush, QPen(QColor("#333333"), 1.5,
-	  Qt::DashLine));
-	_polygons[TYPE(I_SLCONS)] = Polygon(Qt::NoBrush, QPen(QColor("#333333"), 1.5,
-	  Qt::DashLine));
-	_polygons[TYPE(LAKARE)] = Polygon(QBrush("#9fc4e1"),
-	  QPen(QColor("#000000"), 1));
-	_polygons[TYPE(CANALS)] = Polygon(QBrush("#9fc4e1"),
-	  QPen(QColor("#000000"), 1));
-	_polygons[TYPE(RIVERS)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(DYKCON)] = Polygon(QBrush(QColor("#9fc4e1"),
-	  Qt::Dense4Pattern), QPen(QColor("#000000"), 1));
-	_polygons[TYPE(AIRARE)] = Polygon(QBrush("#333333"));
-	_polygons[TYPE(TSEZNE)] = Polygon(QBrush("#80fcb4fc"));
-	_polygons[TYPE(DRGARE)] = Polygon(QBrush(QColor("#a0a0ff"),
+	_polygons[TYPE(PONTON)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33)));
+	_polygons[TYPE(I_PONTON)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33)));
+	_polygons[TYPE(HULKES)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33)));
+	_polygons[TYPE(I_HULKES)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33)));
+	_polygons[TYPE(DRYDOC)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33)));
+	_polygons[TYPE(SLCONS)] = Polygon(Qt::NoBrush,
+	  QPen(QColor(0x33, 0x33, 0x33), 1.5, Qt::DashLine));
+	_polygons[TYPE(I_SLCONS)] = Polygon(Qt::NoBrush,
+	  QPen(QColor(0x33, 0x33, 0x33), 1.5, Qt::DashLine));
+	_polygons[TYPE(LAKARE)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)),
+	  QPen(QColor(0, 0, 0), 1));
+	_polygons[TYPE(CANALS)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)),
+	  QPen(QColor(0, 0, 0), 1));
+	_polygons[TYPE(RIVERS)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(DYKCON)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1),
+	  Qt::Dense4Pattern), QPen(QColor(0, 0, 0), 1));
+	_polygons[TYPE(AIRARE)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33)));
+	_polygons[TYPE(TSEZNE)] = Polygon(QBrush(QColor(0xfc, 0xb4, 0xfc, 0x80)));
+	_polygons[TYPE(DRGARE)] = Polygon(QBrush(QColor(0xa0, 0xa0, 0xff),
 	  Qt::Dense4Pattern));
-	_polygons[TYPE(UNSARE)] = Polygon(QBrush("#999999"));
-	_polygons[SUBTYPE(RESARE, 9)] = Polygon(QBrush(QColor("#ff0000"),
+	_polygons[TYPE(UNSARE)] = Polygon(QBrush(QColor(0x99, 0x99, 0x99)));
+	_polygons[SUBTYPE(RESARE, 9)] = Polygon(QBrush(QColor(0xff, 0x00, 0x00),
 	  Qt::BDiagPattern));
 	_polygons[SUBTYPE(RESARE, 2)] = Polygon(QImage(":/marine/noanchor-line.png"));
 	_polygons[SUBTYPE(I_RESARE, 2)] = Polygon(QImage(":/marine/noanchor-line.png"));
@@ -82,40 +82,40 @@ void Style::polygonStyle()
 	_polygons[SUBTYPE(RESARE, 1)] = Polygon(QImage(":/marine/safety-zone-line.png"));
 	_polygons[SUBTYPE(ACHARE, 1)] = Polygon(QImage(":/marine/anchor-line.png"));
 	_polygons[SUBTYPE(I_ACHARE, 1)] = Polygon(QImage(":/marine/anchor-line.png"));
-	_polygons[TYPE(PRCARE)] = Polygon(QBrush(QColor("#eb49eb"),
+	_polygons[TYPE(PRCARE)] = Polygon(QBrush(QColor(0xeb, 0x49, 0xeb),
 	  Qt::BDiagPattern));
-	_polygons[TYPE(DAMCON)] = Polygon(QBrush("#d98b21"), QPen(QColor("#000000"),
-	  1));
-	_polygons[TYPE(DRYDOC)] = Polygon(QBrush("#ebab54"), QPen(QColor("#000000"),
-	  1));
-	_polygons[TYPE(PYLONS)] = Polygon(QBrush("#a58140"), QPen(QColor("#000000"),
-	  1));
-	_polygons[TYPE(FLODOC)] = Polygon(QBrush("#333333"), QPen(QColor("#000000"),
-	  1));
-	_polygons[TYPE(I_FLODOC)] = Polygon(QBrush("#333333"),
-	  QPen(QColor("#000000"), 1));
+	_polygons[TYPE(DAMCON)] = Polygon(QBrush(QColor(0xd9, 0x8b, 0x21)),
+	  QPen(QColor(0, 0, 0), 1));
+	_polygons[TYPE(DRYDOC)] = Polygon(QBrush(QColor(0xeb, 0xab, 0x54)),
+	  QPen(QColor(0, 0, 0), 1));
+	_polygons[TYPE(PYLONS)] = Polygon(QBrush(QColor(0xa5, 0x81, 0x40)),
+	  QPen(QColor(0, 0, 0), 1));
+	_polygons[TYPE(FLODOC)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33)),
+	  QPen(QColor(0, 0, 0), 1));
+	_polygons[TYPE(I_FLODOC)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33)),
+	  QPen(QColor(0, 0, 0), 1));
 	_polygons[TYPE(DWRTPT)] = Polygon(QImage(":/marine/dw-route-line.png"));
-	_polygons[TYPE(MORFAC)] = Polygon(QBrush("#e8e064"), QPen(QColor("#000000"),
-	  2));
-	_polygons[TYPE(GATCON)] = Polygon(QBrush("#000000"));
-	_polygons[TYPE(I_GATCON)] = Polygon(QBrush("#000000"));
-	_polygons[TYPE(I_TERMNL)] = Polygon(QBrush(QColor("#b8b04b")),
-	  QPen(QColor("#966118")));
-	_polygons[TYPE(SILTNK)] = Polygon(QBrush("#d98b21"), QPen(QColor("#966118"),
-	  2));
-	_polygons[TYPE(LOKBSN)] = Polygon(QBrush(QColor("#333333"),
+	_polygons[TYPE(MORFAC)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64)),
+	  QPen(QColor(0, 0, 0), 2));
+	_polygons[TYPE(GATCON)] = Polygon(QBrush(QColor(0, 0, 0)));
+	_polygons[TYPE(I_GATCON)] = Polygon(QBrush(QColor(0, 0, 0)));
+	_polygons[TYPE(I_TERMNL)] = Polygon(QBrush(QColor(0xb8, 0xb0, 0x4b)),
+	  QPen(QColor(0x96, 0x61, 0x18)));
+	_polygons[TYPE(SILTNK)] = Polygon(QBrush(QColor(0xd9, 0x8b, 0x21)),
+	  QPen(QColor(0x96, 0x61, 0x18), 2));
+	_polygons[TYPE(LOKBSN)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33),
 	  Qt::Dense7Pattern));
-	_polygons[TYPE(I_LOKBSN)] = Polygon(QBrush(QColor("#333333"),
+	_polygons[TYPE(I_LOKBSN)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33),
 	  Qt::Dense7Pattern));
-	_polygons[TYPE(TUNNEL)] = Polygon(Qt::NoBrush, QPen(QColor("#a58140"), 1.5,
-	  Qt::DashLine));
+	_polygons[TYPE(TUNNEL)] = Polygon(Qt::NoBrush, QPen(QColor(0xa5, 0x81, 0x40),
+	  1.5, Qt::DashLine));
 	_polygons[TYPE(CBLARE)] = Polygon(QImage(":/marine/cable-area-line.png"));
 	_polygons[TYPE(PIPARE)] = Polygon(QImage(":/marine/pipeline-area-line.png"));
 	_polygons[SUBTYPE(MARKUL, 3)] = Polygon(QImage(":/marine/fishing-farm-line.png"));
-	_polygons[SUBTYPE(I_BERTHS, 6)] = Polygon(Qt::NoBrush, QPen(QColor("#eb49eb"),
-	  1, Qt::DashLine));
-	_polygons[TYPE(CONZNE)] = Polygon(Qt::NoBrush, QPen(QColor("#eb49eb"), 1,
-	  Qt::DashDotLine));
+	_polygons[SUBTYPE(I_BERTHS, 6)] = Polygon(Qt::NoBrush,
+	  QPen(QColor(0xeb, 0x49, 0xeb), 1, Qt::DashLine));
+	_polygons[TYPE(CONZNE)] = Polygon(Qt::NoBrush, QPen(QColor(0xeb, 0x49, 0xeb),
+	  1, Qt::DashDotLine));
 
 	_drawOrder
 	  << TYPE(M_COVR) << TYPE(LNDARE) << SUBTYPE(DEPARE, 0)
@@ -139,53 +139,57 @@ void Style::polygonStyle()
 
 void Style::lineStyle(qreal ratio)
 {
-	_lines[TYPE(BUISGL)] = Line(QPen(QColor("#966118"), 1.5));
-	_lines[TYPE(DEPCNT)] = Line(QPen(QColor("#659aef"), 1, Qt::SolidLine));
-	_lines[TYPE(DEPCNT)].setTextColor(QColor("#558adf"));
+	_lines[TYPE(BUISGL)] = Line(QPen(QColor(0x96, 0x61, 0x18), 1.5));
+	_lines[TYPE(DEPCNT)] = Line(QPen(QColor(0x65, 0x9a, 0xef), 1, Qt::SolidLine));
+	_lines[TYPE(DEPCNT)].setTextColor(QColor(0x55, 0x8a, 0xdf));
 	_lines[TYPE(DEPCNT)].setTextFontSize(Small);
 	_lines[TYPE(CBLOHD)] = Line(QImage(":/marine/cable-line.png"));
 	_lines[TYPE(I_CBLOHD)] = Line(QImage(":/marine/cable-line.png"));
-	_lines[TYPE(BRIDGE)] = Line(QPen(QColor("#a58140"), 3, Qt::SolidLine));
-	_lines[TYPE(I_BRIDGE)] = Line(QPen(QColor("#a58140"), 3, Qt::SolidLine));
+	_lines[TYPE(BRIDGE)] = Line(QPen(QColor(0xa5, 0x81, 0x40), 3, Qt::SolidLine));
+	_lines[TYPE(I_BRIDGE)] = Line(QPen(QColor(0xa5, 0x81, 0x40), 3, Qt::SolidLine));
 	_lines[TYPE(CBLSUB)] = Line(QImage(":/marine/cable.png"));
 	_lines[TYPE(CBLSUB)].setTextFontSize(Small);
 	_lines[TYPE(PIPSOL)] = Line(QImage(":/marine/pipeline.png"));
 	_lines[TYPE(PIPSOL)].setTextFontSize(Small);
-	_lines[TYPE(NAVLNE)] = Line(QPen(QColor("#eb49eb"), 1, Qt::DashLine));
-	_lines[TYPE(COALNE)] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
-	_lines[TYPE(SLCONS)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
-	_lines[TYPE(I_SLCONS)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
-	_lines[TYPE(PONTON)] = Line(QPen(QColor("#333333"), 1, Qt::SolidLine));
-	_lines[TYPE(DYKCON)] = Line(QPen(QColor("#333333"), 2, Qt::SolidLine));
-	_lines[TYPE(RIVERS)] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
-	_lines[TYPE(TSSBND)] = Line(QPen(QColor("#eb49eb"), 2, Qt::DashLine));
-	_lines[TYPE(LNDELV)] = Line(QPen(QColor("#999440"), 1, Qt::SolidLine));
-	_lines[TYPE(LNDELV)].setTextColor(QColor("#797420"));
+	_lines[TYPE(NAVLNE)] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1, Qt::DashLine));
+	_lines[TYPE(COALNE)] = Line(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
+	_lines[TYPE(SLCONS)] = Line(QPen(QColor(0, 0, 0), 2, Qt::SolidLine));
+	_lines[TYPE(I_SLCONS)] = Line(QPen(QColor(0, 0, 0), 2, Qt::SolidLine));
+	_lines[TYPE(PONTON)] = Line(QPen(QColor(0x33, 0x33, 0x33), 1, Qt::SolidLine));
+	_lines[TYPE(DYKCON)] = Line(QPen(QColor(0x33, 0x33, 0x33), 2, Qt::SolidLine));
+	_lines[TYPE(RIVERS)] = Line(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
+	_lines[TYPE(TSSBND)] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 2, Qt::DashLine));
+	_lines[TYPE(LNDELV)] = Line(QPen(QColor(0x99, 0x94, 0x40), 1, Qt::SolidLine));
+	_lines[TYPE(LNDELV)].setTextColor(QColor(0x79, 0x74, 0x20));
 	_lines[TYPE(LNDELV)].setTextFontSize(Small);
-	_lines[TYPE(SLOTOP)] = Line(QPen(QColor("#797420"), 1, Qt::SolidLine));
-	_lines[TYPE(OBSTRN)] = Line(QPen(QColor("#000000"), 1.5, Qt::DotLine));
+	_lines[TYPE(SLOTOP)] = Line(QPen(QColor(0x79, 0x74, 0x20), 1, Qt::SolidLine));
+	_lines[TYPE(OBSTRN)] = Line(QPen(QColor(0, 0, 0), 1.5, Qt::DotLine));
 	_lines[TYPE(FERYRT)] = Line(QImage(":/marine/ferry-line.png"));
 	_lines[TYPE(FERYRT)].setTextFontSize(Small);
 	_lines[TYPE(I_FERYRT)] = Line(QImage(":/marine/ferry-line.png"));
 	_lines[TYPE(I_FERYRT)].setTextFontSize(Small);
 	_lines[TYPE(RAILWY)] = Line(railroad(ratio));
-	_lines[TYPE(ROADWY)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
-	_lines[TYPE(GATCON)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
-	_lines[TYPE(I_GATCON)] = Line(QPen(QColor("#000000"), 2, Qt::SolidLine));
-	_lines[TYPE(TSELNE)] = Line(QPen(QColor("#80fcb4fc"), 4, Qt::SolidLine));
-	_lines[TYPE(I_WTWAXS)] = Line(QPen(QColor("#000000"), 0, Qt::DashLine));
-	_lines[SUBTYPE(RECTRC, 1)] = Line(QPen(QColor("#000000"), 0, Qt::SolidLine));
-	_lines[SUBTYPE(RECTRC, 2)] = Line(QPen(QColor("#000000"), 0, Qt::DashLine));
-	_lines[SUBTYPE(RCRTCL, 1)] = Line(QPen(QColor("#eb49eb"), 0, Qt::SolidLine));
-	_lines[SUBTYPE(RCRTCL, 2)] = Line(QPen(QColor("#eb49eb"), 0, Qt::DashLine));
-	_lines[TYPE(FAIRWY)] = Line(QPen(QColor("#888888"), 1, Qt::DashDotDotLine));
-	_lines[TYPE(BERTHS)] = Line(QPen(QColor("#333333"), 2));
-	_lines[TYPE(I_BERTHS)] = Line(QPen(QColor("#333333"), 2));
+	_lines[TYPE(ROADWY)] = Line(QPen(QColor(0, 0, 0), 2, Qt::SolidLine));
+	_lines[TYPE(GATCON)] = Line(QPen(QColor(0, 0, 0), 2, Qt::SolidLine));
+	_lines[TYPE(I_GATCON)] = Line(QPen(QColor(0, 0, 0), 2, Qt::SolidLine));
+	_lines[TYPE(TSELNE)] = Line(QPen(QColor(0xfc, 0xb4, 0xfc, 0x80), 4,
+	  Qt::SolidLine));
+	_lines[TYPE(I_WTWAXS)] = Line(QPen(QColor(0, 0, 0), 0, Qt::DashLine));
+	_lines[SUBTYPE(RECTRC, 1)] = Line(QPen(QColor(0, 0, 0), 0, Qt::SolidLine));
+	_lines[SUBTYPE(RECTRC, 2)] = Line(QPen(QColor(0, 0, 0), 0, Qt::DashLine));
+	_lines[SUBTYPE(RCRTCL, 1)] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 0,
+	  Qt::SolidLine));
+	_lines[SUBTYPE(RCRTCL, 2)] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 0,
+	  Qt::DashLine));
+	_lines[TYPE(FAIRWY)] = Line(QPen(QColor(0x88, 0x88, 0x88), 1,
+	  Qt::DashDotDotLine));
+	_lines[TYPE(BERTHS)] = Line(QPen(QColor(0x33, 0x33, 0x33), 2));
+	_lines[TYPE(I_BERTHS)] = Line(QPen(QColor(0x33, 0x33, 0x33), 2));
 	_lines[TYPE(FNCLNE)] = Line(QImage(":/marine/fence-line.png"));
 	_lines[TYPE(CONVYR)] = Line(QImage(":/marine/conveyor-line.png"));
 	_lines[TYPE(PIPOHD)] = Line(QImage(":/marine/pipeline-overhead.png"));
 	_lines[TYPE(I_PIPOHD)] = Line(QImage(":/marine/pipeline-overhead.png"));
-	_lines[TYPE(CANALS)] = Line(QPen(QColor("#9fc4e1"), 2));
+	_lines[TYPE(CANALS)] = Line(QPen(QColor(0x9f, 0xc4, 0xe1), 2));
 }
 
 void Style::pointStyle(qreal ratio)
@@ -256,7 +260,7 @@ void Style::pointStyle(qreal ratio)
 	_points[TYPE(I_CRANES)] = Point(QImage(":/marine/crane.png"), Small);
 	_points[SUBTYPE(I_DISMAR, 1)] = Point(QImage(":/marine/distance-mark.png"),
 	  Small);
-	_points[SUBTYPE(I_DISMAR, 1)].setTextColor(QColor("#ffffff"));
+	_points[SUBTYPE(I_DISMAR, 1)].setTextColor(QColor(0xff, 0xff, 0xff));
 	_points[SUBTYPE(I_DISMAR, 1)].setHaloColor(QColor());
 	_points[SUBTYPE(I_DISMAR, 2)] = Point(QImage(":/marine/distance-mark-land.png"),
 	  Small);
@@ -274,24 +278,24 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(SILTNK, 3)] = Point(QImage(":/marine/silo.png"));
 	_points[SUBTYPE(SILTNK, 4)] = Point(QImage(":/marine/silo.png"));
 	_points[TYPE(I_TRNBSN)] = Point(QImage(":/marine/turning-basin.png"));
-	_points[TYPE(I_TRNBSN)].setTextColor(QColor("#eb49eb"));
+	_points[TYPE(I_TRNBSN)].setTextColor(QColor(0xeb, 0x49, 0xeb));
 	_points[TYPE(I_WTWGAG)] = Point(QImage(":/marine/gauge.png"), Small);
 	_points[SUBTYPE(RDOCAL, 1)] = Point(QImage(":/marine/radio-call.png"));
 	_points[SUBTYPE(RDOCAL, 2)] = Point(QImage(":/marine/radio-call.png"));
 	_points[SUBTYPE(RDOCAL, 3)] = Point(QImage(":/marine/radio-call.png"));
 	_points[SUBTYPE(RDOCAL, 4)] = Point(QImage(":/marine/radio-call-2w.png"));
-	_points[SUBTYPE(RDOCAL, 1)].setTextColor(QColor("#eb49eb"));
-	_points[SUBTYPE(RDOCAL, 2)].setTextColor(QColor("#eb49eb"));
-	_points[SUBTYPE(RDOCAL, 3)].setTextColor(QColor("#eb49eb"));
-	_points[SUBTYPE(RDOCAL, 4)].setTextColor(QColor("#eb49eb"));
+	_points[SUBTYPE(RDOCAL, 1)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(RDOCAL, 2)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(RDOCAL, 3)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(RDOCAL, 4)].setTextColor(QColor(0xeb, 0x49, 0xeb));
 	_points[SUBTYPE(I_RDOCAL, 1)] = Point(QImage(":/marine/radio-call.png"));
 	_points[SUBTYPE(I_RDOCAL, 2)] = Point(QImage(":/marine/radio-call.png"));
 	_points[SUBTYPE(I_RDOCAL, 3)] = Point(QImage(":/marine/radio-call.png"));
 	_points[SUBTYPE(I_RDOCAL, 4)] = Point(QImage(":/marine/radio-call-2w.png"));
-	_points[SUBTYPE(I_RDOCAL, 1)].setTextColor(QColor("#eb49eb"));
-	_points[SUBTYPE(I_RDOCAL, 2)].setTextColor(QColor("#eb49eb"));
-	_points[SUBTYPE(I_RDOCAL, 3)].setTextColor(QColor("#eb49eb"));
-	_points[SUBTYPE(I_RDOCAL, 4)].setTextColor(QColor("#eb49eb"));
+	_points[SUBTYPE(I_RDOCAL, 1)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(I_RDOCAL, 2)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(I_RDOCAL, 3)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(I_RDOCAL, 4)].setTextColor(QColor(0xeb, 0x49, 0xeb));
 	_points[TYPE(PYLONS)] = Point(QImage(":/marine/pylon.png"));
 	_points[SUBTYPE(I_BERTHS, 6)] = Point(QImage(":/marine/fleeting-area.png"));
 	_points[SUBTYPE(WATTUR, 1)] = Point(QImage(":/marine/breakers.png"));

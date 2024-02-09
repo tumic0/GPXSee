@@ -15,8 +15,8 @@ using namespace ENC;
 typedef QSet<Coordinates> PointSet;
 
 static const float C1 = 0.866025f; /* sqrt(3)/2 */
-static const QColor tsslptPen = QColor("#eb49eb");
-static const QColor tsslptBrush = QColor("#80eb49eb");
+static const QColor tsslptPen = QColor(0xeb, 0x49, 0xeb);
+static const QColor tsslptBrush = QColor(0xeb, 0x49, 0xeb, 0x80);
 
 static const Style *style(qreal ratio)
 {
