@@ -321,7 +321,7 @@ void Style::defaultPolygonStyle()
 void Style::defaultLineStyle(qreal ratio)
 {
 	_lines[TYPE(0x01)] = Line(QPen(QColor(0x9b, 0xd7, 0x72), 2, Qt::SolidLine),
-	  QPen(QColor(0x72, 0xa, 0x35a), 6, Qt::SolidLine, Qt::RoundCap,
+	  QPen(QColor(0x72, 0xa3, 0x5a), 6, Qt::SolidLine, Qt::RoundCap,
 	  Qt::RoundJoin));
 	_lines[TYPE(0x02)] = Line(QPen(QColor(0xff, 0xcc, 0x78), 2, Qt::SolidLine),
 	  QPen(QColor(0xe8, 0xa5, 0x41), 6, Qt::SolidLine, Qt::RoundCap,
