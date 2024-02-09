@@ -23,9 +23,9 @@ using namespace IMG;
 static const QColor textColor(Qt::black);
 static const QColor haloColor(Qt::white);
 static const QColor shieldColor(Qt::white);
-static const QColor shieldBgColor1("#dd3e3e");
-static const QColor shieldBgColor2("#379947");
-static const QColor shieldBgColor3("#4a7fc1");
+static const QColor shieldBgColor1(0xdd, 0x3e, 0x3e);
+static const QColor shieldBgColor2(0x37, 0x99, 0x47);
+static const QColor shieldBgColor3(0x4a, 0x7f, 0xc1);
 
 static const QColor *shieldBgColor(Shield::Type type)
 {

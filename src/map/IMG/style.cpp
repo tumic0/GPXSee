@@ -153,7 +153,7 @@ static QImage railroad(qreal ratio)
 {
 	QImage img(16 * ratio, 4 * ratio, QImage::Format_ARGB32_Premultiplied);
 	img.setDevicePixelRatio(ratio);
-	img.fill(QColor("#717171"));
+	img.fill(QColor(0x71, 0x71, 0x71));
 	QPainter p(&img);
 	p.setPen(QPen(Qt::white, 2));
 	p.drawLine(9, 2, 15, 2);
@@ -163,63 +163,69 @@ static QImage railroad(qreal ratio)
 
 void Style::defaultPolygonStyle()
 {
-	_polygons[TYPE(0x01)] = Polygon(QBrush("#dfd3b5"));
-	_polygons[TYPE(0x02)] = Polygon(QBrush("#dfd3b5"));
-	_polygons[TYPE(0x03)] = Polygon(QBrush("#dfd3b5"));
-	_polygons[TYPE(0x04)] = Polygon(QBrush("#ff4040", Qt::BDiagPattern));
-	_polygons[TYPE(0x05)] = Polygon(QBrush("#d6d4ce"));
-	_polygons[TYPE(0x06)] = Polygon(QBrush("#d6d4ce"));
-	_polygons[TYPE(0x07)] = Polygon(QBrush("#d6d4ce"));
-	_polygons[TYPE(0x08)] = Polygon(QBrush("#d6d4ce"));
-	_polygons[TYPE(0x09)] = Polygon(QBrush("#d6d4ce"));
-	_polygons[TYPE(0x0a)] = Polygon(QBrush("#d6d4ce"));
-	_polygons[TYPE(0x0b)] = Polygon(QBrush("#d6d4ce"));
-	_polygons[TYPE(0x0c)] = Polygon(QBrush("#d6d4ce"));
-	_polygons[TYPE(0x0d)] = Polygon(QBrush("#f8e3be"));
-	_polygons[TYPE(0x0e)] = Polygon(QBrush("#ffffff"));
-	_polygons[TYPE(0x0f)] = Polygon(QBrush("#e6e2d9"));
-	_polygons[TYPE(0x10)] = Polygon(QBrush("#e6e2d9"));
-	_polygons[TYPE(0x11)] = Polygon(QBrush("#e6e2d9"));
-	_polygons[TYPE(0x12)] = Polygon(QBrush("#e6e2d9"));
-	_polygons[TYPE(0x13)] = Polygon(QBrush("#dbd0b6"),
-	  QPen(QColor("#cdccc4"), 1));
-	_polygons[TYPE(0x14)] = Polygon(QBrush("#cadfaf"));
-	_polygons[TYPE(0x15)] = Polygon(QBrush("#cadfaf"));
-	_polygons[TYPE(0x16)] = Polygon(QBrush(QColor("#9ac269"),
+	_polygons[TYPE(0x01)] = Polygon(QBrush(QColor(0xdf, 0xd3, 0xb5)));
+	_polygons[TYPE(0x02)] = Polygon(QBrush(QColor(0xdf, 0xd3, 0xb5)));
+	_polygons[TYPE(0x03)] = Polygon(QBrush(QColor(0xdf, 0xd3, 0xb5)));
+	_polygons[TYPE(0x04)] = Polygon(QBrush(QColor(0xff, 0x40, 0x40),
 	  Qt::BDiagPattern));
-	_polygons[TYPE(0x17)] = Polygon(QBrush("#e4efcf"));
-	_polygons[TYPE(0x18)] = Polygon(QBrush("#e3edc6"));
-	_polygons[TYPE(0x19)] = Polygon(QBrush("#e3edc6"), QPen("#c9d3a5"));
-	_polygons[TYPE(0x1a)] = Polygon(QBrush("#000000", Qt::Dense6Pattern),
-	  QPen(QColor("#cdccc4"), 1));
-	_polygons[TYPE(0x1e)] = Polygon(QBrush(QColor("#9ac269"),
+	_polygons[TYPE(0x05)] = Polygon(QBrush(QColor(0xd6, 0xd4, 0xce)));
+	_polygons[TYPE(0x06)] = Polygon(QBrush(QColor(0xd6, 0xd4, 0xce)));
+	_polygons[TYPE(0x07)] = Polygon(QBrush(QColor(0xd6, 0xd4, 0xce)));
+	_polygons[TYPE(0x08)] = Polygon(QBrush(QColor(0xd6, 0xd4, 0xce)));
+	_polygons[TYPE(0x09)] = Polygon(QBrush(QColor(0xd6, 0xd4, 0xce)));
+	_polygons[TYPE(0x0a)] = Polygon(QBrush(QColor(0xd6, 0xd4, 0xce)));
+	_polygons[TYPE(0x0b)] = Polygon(QBrush(QColor(0xd6, 0xd4, 0xce)));
+	_polygons[TYPE(0x0c)] = Polygon(QBrush(QColor(0xd6, 0xd4, 0xce)));
+	_polygons[TYPE(0x0d)] = Polygon(QBrush(QColor(0xf8, 0xe3, 0xbe)));
+	_polygons[TYPE(0x0e)] = Polygon(QBrush(QColor(0xff, 0xff, 0xff)));
+	_polygons[TYPE(0x0f)] = Polygon(QBrush(QColor(0xe6, 0xe2, 0xd9)));
+	_polygons[TYPE(0x10)] = Polygon(QBrush(QColor(0xe6, 0xe2, 0xd9)));
+	_polygons[TYPE(0x11)] = Polygon(QBrush(QColor(0xe6, 0xe2, 0xd9)));
+	_polygons[TYPE(0x12)] = Polygon(QBrush(QColor(0xe6, 0xe2, 0xd9)));
+	_polygons[TYPE(0x13)] = Polygon(QBrush(QColor(0xdb, 0xd0, 0xb6)),
+	  QPen(QColor(0xcd, 0xcc, 0xc4), 1));
+	_polygons[TYPE(0x14)] = Polygon(QBrush(QColor(0xca, 0xdf, 0xaf)));
+	_polygons[TYPE(0x15)] = Polygon(QBrush(QColor(0xca, 0xdf, 0xaf)));
+	_polygons[TYPE(0x16)] = Polygon(QBrush(QColor(0x9a, 0xc2, 0x69),
 	  Qt::BDiagPattern));
-	_polygons[TYPE(0x1f)] = Polygon(QBrush(QColor("#9ac269"),
+	_polygons[TYPE(0x17)] = Polygon(QBrush(QColor(0xe4, 0xef, 0xcf)));
+	_polygons[TYPE(0x18)] = Polygon(QBrush(QColor(0xe3, 0xed, 0xc6)));
+	_polygons[TYPE(0x19)] = Polygon(QBrush(QColor(0xe3, 0xed, 0xc6)),
+	  QPen(QColor(0xc9, 0xd3, 0xa5)));
+	_polygons[TYPE(0x1a)] = Polygon(QBrush(QColor(0, 0, 0), Qt::Dense6Pattern),
+	  QPen(QColor(0xcd, 0xcc, 0xc4), 1));
+	_polygons[TYPE(0x1e)] = Polygon(QBrush(QColor(0x9a, 0xc2, 0x69),
 	  Qt::BDiagPattern));
-	_polygons[TYPE(0x28)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x32)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x3c)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x3d)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x3e)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x3f)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x40)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x41)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x42)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x43)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x44)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x46)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x47)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x48)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x49)] = Polygon(QBrush("#9fc4e1"));
-	_polygons[TYPE(0x4a)] = Polygon(QBrush("#f1f0e5"), QPen("#f1f0e5"));
-	_polygons[TYPE(0x4b)] = Polygon(QBrush("#f1f0e5"), QPen("#f1f0e5"));
-	_polygons[TYPE(0x4c)] = Polygon(QBrush("#9fc4e1", Qt::Dense6Pattern));
-	_polygons[TYPE(0x4d)] = Polygon(QBrush("#ddf1fd"));
-	_polygons[TYPE(0x4e)] = Polygon(QBrush("#f8f8f8"));
-	_polygons[TYPE(0x4f)] = Polygon(QBrush("#e4efcf"));
-	_polygons[TYPE(0x50)] = Polygon(QBrush("#cadfaf"));
-	_polygons[TYPE(0x51)] = Polygon(QBrush("#9fc4e1", Qt::Dense4Pattern));
-	_polygons[TYPE(0x52)] = Polygon(QBrush("#cadfaf"));
+	_polygons[TYPE(0x1f)] = Polygon(QBrush(QColor(0x9a, 0xc2, 0x69),
+	  Qt::BDiagPattern));
+	_polygons[TYPE(0x28)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x32)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x3c)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x3d)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x3e)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x3f)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x40)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x41)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x42)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x43)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x44)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x46)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x47)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x48)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x49)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
+	_polygons[TYPE(0x4a)] = Polygon(QBrush(QColor(0xf1, 0xf0, 0xe5)),
+	  QPen(QColor(0xf1, 0xf0, 0xe5)));
+	_polygons[TYPE(0x4b)] = Polygon(QBrush(QColor(0xf1, 0xf0, 0xe5)),
+	  QPen(QColor(0xf1, 0xf0, 0xe5)));
+	_polygons[TYPE(0x4c)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1),
+	  Qt::Dense6Pattern));
+	_polygons[TYPE(0x4d)] = Polygon(QBrush(QColor(0xdd, 0xf1, 0xfd)));
+	_polygons[TYPE(0x4e)] = Polygon(QBrush(QColor(0xf8, 0xf8, 0xf8)));
+	_polygons[TYPE(0x4f)] = Polygon(QBrush(QColor(0xe4, 0xef, 0xcf)));
+	_polygons[TYPE(0x50)] = Polygon(QBrush(QColor(0xca, 0xdf, 0xaf)));
+	_polygons[TYPE(0x51)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1),
+	  Qt::Dense4Pattern));
+	_polygons[TYPE(0x52)] = Polygon(QBrush(QColor(0xca, 0xdf, 0xaf)));
 
 	// NT types
 	_polygons[0x10800] = _polygons[TYPE(0x01)];
@@ -271,20 +277,22 @@ void Style::defaultPolygonStyle()
 	_polygons[0x10c05] = _polygons[TYPE(0x52)];
 
 	// Marine stuff
-	_polygons[0x10101] = Polygon(QBrush("#e8e064"));
-	_polygons[0x10102] = Polygon(QBrush("#d98b21"));
-	_polygons[0x10104] = Polygon(QBrush("#ffffff"));
-	_polygons[0x10105] = Polygon(QBrush("#a58140"));
-	_polygons[0x10301] = Polygon(QBrush("#98c064"));
-	_polygons[0x10302] = Polygon(QBrush("#a0a0ff"));
-	_polygons[0x10303] = Polygon(QBrush("#b0b0ff"));
-	_polygons[0x10304] = Polygon(QBrush("#c0c0ff"));
-	_polygons[0x10305] = Polygon(QBrush("#c0d0ff"));
-	_polygons[0x10306] = Polygon(QBrush("#c0e0ff"));
-	_polygons[0x10409] = Polygon(QBrush("#ff4040", Qt::FDiagPattern));
-	_polygons[0x10503] = Polygon(QBrush("#ff4040", Qt::FDiagPattern));
-	_polygons[0x10601] = Polygon(QBrush("#aaaaaa"));
-	_polygons[0x1060a] = Polygon(QBrush("#fcb4fc"));
+	_polygons[0x10101] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64)));
+	_polygons[0x10102] = Polygon(QBrush(QColor(0xd9, 0x8b, 0x21)));
+	_polygons[0x10104] = Polygon(QBrush(QColor(0xff, 0xff, 0xff)));
+	_polygons[0x10105] = Polygon(QBrush(QColor(0xa5, 0x81, 0x40)));
+	_polygons[0x10301] = Polygon(QBrush(QColor(0x98, 0xc0, 0x64)));
+	_polygons[0x10302] = Polygon(QBrush(QColor(0xa0, 0xa0, 0xff)));
+	_polygons[0x10303] = Polygon(QBrush(QColor(0xb0, 0xb0, 0xff)));
+	_polygons[0x10304] = Polygon(QBrush(QColor(0xc0, 0xc0, 0xff)));
+	_polygons[0x10305] = Polygon(QBrush(QColor(0xc0, 0xd0, 0xff)));
+	_polygons[0x10306] = Polygon(QBrush(QColor(0xc0, 0xe0, 0xff)));
+	_polygons[0x10409] = Polygon(QBrush(QColor(0xff, 0x40, 0x40),
+	  Qt::FDiagPattern));
+	_polygons[0x10503] = Polygon(QBrush(QColor(0xff, 0x40, 0x40),
+	  Qt::FDiagPattern));
+	_polygons[0x10601] = Polygon(QBrush(QColor(0xaa, 0xaa, 0xaa)));
+	_polygons[0x1060a] = Polygon(QBrush(QColor(0xfc, 0xb4, 0xfc)));
 
 	// Draw order
 	_drawOrder
@@ -312,60 +320,72 @@ void Style::defaultPolygonStyle()
 
 void Style::defaultLineStyle(qreal ratio)
 {
-	_lines[TYPE(0x01)] = Line(QPen(QColor("#9bd772"), 2, Qt::SolidLine),
-	  QPen(QColor("#72a35a"), 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	_lines[TYPE(0x02)] = Line(QPen(QColor("#ffcc78"), 2, Qt::SolidLine),
-	  QPen(QColor("#e8a541"), 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	_lines[TYPE(0x03)] = Line(QPen(QColor("#ffcc78"), 2, Qt::SolidLine),
-	  QPen(QColor("#e8a541"), 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	_lines[TYPE(0x04)] = Line(QPen(QColor("#faef75"), 3, Qt::SolidLine),
-	  QPen(QColor("#dbd27b"), 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	_lines[TYPE(0x05)] = Line(QPen(QColor("#ffffff"), 3, Qt::SolidLine),
-	  QPen(QColor("#d5cdc0"), 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	_lines[TYPE(0x06)] = Line(QPen(QColor("#ffffff"), 3, Qt::SolidLine),
-	  QPen(QColor("#d5cdc0"), 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	_lines[TYPE(0x07)] = Line(QPen(QColor("#ffffff"), 2, Qt::SolidLine),
-	  QPen(QColor("#d5cdc0"), 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	_lines[TYPE(0x08)] = Line(QPen(QColor("#faef75"), 3, Qt::SolidLine),
-	  QPen(QColor("#dbd27b"), 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	_lines[TYPE(0x09)] = Line(QPen(QColor("#ffcc78"), 2, Qt::SolidLine),
-	  QPen(QColor("#e8a541"), 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	_lines[TYPE(0x0a)] = Line(QPen(QColor("#aba083"), 1, Qt::DashLine));
-	_lines[TYPE(0x0b)] = Line(QPen(QColor("#ffcc78"), 2, Qt::SolidLine),
-	  QPen(QColor("#e8a541"), 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	_lines[TYPE(0x0c)] = Line(QPen(QColor("#ffffff"), 3, Qt::SolidLine),
-	  QPen(QColor("#d5cdc0"), 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+	_lines[TYPE(0x01)] = Line(QPen(QColor(0x9b, 0xd7, 0x72), 2, Qt::SolidLine),
+	  QPen(QColor(0x72, 0xa, 0x35a), 6, Qt::SolidLine, Qt::RoundCap,
+	  Qt::RoundJoin));
+	_lines[TYPE(0x02)] = Line(QPen(QColor(0xff, 0xcc, 0x78), 2, Qt::SolidLine),
+	  QPen(QColor(0xe8, 0xa5, 0x41), 6, Qt::SolidLine, Qt::RoundCap,
+	  Qt::RoundJoin));
+	_lines[TYPE(0x03)] = Line(QPen(QColor(0xff, 0xcc, 0x78), 2, Qt::SolidLine),
+	  QPen(QColor(0xe8, 0xa5, 0x41), 6, Qt::SolidLine, Qt::RoundCap,
+	  Qt::RoundJoin));
+	_lines[TYPE(0x04)] = Line(QPen(QColor(0xfa, 0xef, 0x75), 3, Qt::SolidLine),
+	  QPen(QColor(0xdb, 0xd2, 0x7b), 5, Qt::SolidLine, Qt::RoundCap,
+	  Qt::RoundJoin));
+	_lines[TYPE(0x05)] = Line(QPen(QColor(0xff, 0xff, 0xff), 3, Qt::SolidLine),
+	  QPen(QColor(0xd5, 0xcd, 0xc0), 5, Qt::SolidLine, Qt::RoundCap,
+	  Qt::RoundJoin));
+	_lines[TYPE(0x06)] = Line(QPen(QColor(0xff, 0xff, 0xff), 3, Qt::SolidLine),
+	  QPen(QColor(0xd5, 0xcd, 0xc0), 5, Qt::SolidLine, Qt::RoundCap,
+	  Qt::RoundJoin));
+	_lines[TYPE(0x07)] = Line(QPen(QColor(0xff, 0xff, 0xff), 2, Qt::SolidLine),
+	  QPen(QColor(0xd5, 0xcd, 0xc0), 4, Qt::SolidLine, Qt::RoundCap,
+	  Qt::RoundJoin));
+	_lines[TYPE(0x08)] = Line(QPen(QColor(0xfa, 0xef, 0x75), 3, Qt::SolidLine),
+	  QPen(QColor(0xdb, 0xd2, 0x7b), 5, Qt::SolidLine, Qt::RoundCap,
+	  Qt::RoundJoin));
+	_lines[TYPE(0x09)] = Line(QPen(QColor(0xff, 0xcc, 0x78), 2, Qt::SolidLine),
+	  QPen(QColor(0xe8, 0xa5, 0x41), 6, Qt::SolidLine, Qt::RoundCap,
+	  Qt::RoundJoin));
+	_lines[TYPE(0x0a)] = Line(QPen(QColor(0xab, 0xa0, 0x83), 1, Qt::DashLine));
+	_lines[TYPE(0x0b)] = Line(QPen(QColor(0xff, 0xcc, 0x78), 2, Qt::SolidLine),
+	  QPen(QColor(0xe8, 0xa5, 0x41), 6, Qt::SolidLine, Qt::RoundCap,
+	  Qt::RoundJoin));
+	_lines[TYPE(0x0c)] = Line(QPen(QColor(0xff, 0xff, 0xff), 3, Qt::SolidLine),
+	  QPen(QColor(0xd5, 0xcd, 0xc0), 5, Qt::SolidLine, Qt::RoundCap,
+	  Qt::RoundJoin));
 	_lines[TYPE(0x14)] = Line(railroad(ratio));
-	_lines[TYPE(0x16)] = Line(QPen(QColor("#aba083"), 1, Qt::DotLine));
-	_lines[TYPE(0x18)] = Line(QPen(QColor("#9fc4e1"), 2, Qt::SolidLine));
-	_lines[TYPE(0x18)].setTextColor(QColor("#9fc4e1"));
-	//_lines[TYPE(0x1a)] = Line(QPen(QColor("#7697b7"), 1, Qt::DashLine));
-	_lines[TYPE(0x1b)] = Line(QPen(QColor("#7697b7"), 1, Qt::DashLine));
-	_lines[TYPE(0x1c)] = Line(QPen(QColor("#505145"), 1, Qt::DashLine));
-	_lines[TYPE(0x1e)] = Line(QPen(QColor("#505145"), 2, Qt::DashDotLine));
-	_lines[TYPE(0x1f)] = Line(QPen(QColor("#9fc4e1"), 3, Qt::SolidLine));
-	_lines[TYPE(0x1f)].setTextColor(QColor("#9fc4e1"));
-	_lines[TYPE(0x20)] = Line(QPen(QColor("#cfcfcf"), 1, Qt::SolidLine));
+	_lines[TYPE(0x16)] = Line(QPen(QColor(0xab, 0xa0, 0x83), 1, Qt::DotLine));
+	_lines[TYPE(0x18)] = Line(QPen(QColor(0x9f, 0xc4, 0xe1), 2, Qt::SolidLine));
+	_lines[TYPE(0x18)].setTextColor(QColor(0x9f, 0xc4, 0xe1));
+	//_lines[TYPE(0x1a)] = Line(QPen(QColor(0x76, 0x97, 0xb7), 1, Qt::DashLine));
+	_lines[TYPE(0x1b)] = Line(QPen(QColor(0x76, 0x97, 0xb7), 1, Qt::DashLine));
+	_lines[TYPE(0x1c)] = Line(QPen(QColor(0x50, 0x51, 0x45), 1, Qt::DashLine));
+	_lines[TYPE(0x1e)] = Line(QPen(QColor(0x50, 0x51, 0x45), 2, Qt::DashDotLine));
+	_lines[TYPE(0x1f)] = Line(QPen(QColor(0x9f, 0xc4, 0xe1), 3, Qt::SolidLine));
+	_lines[TYPE(0x1f)].setTextColor(QColor(0x9f, 0xc4, 0xe1));
+	_lines[TYPE(0x20)] = Line(QPen(QColor(0xcf, 0xcf, 0xcf), 1, Qt::SolidLine));
 	_lines[TYPE(0x20)].setTextFontSize(None);
-	_lines[TYPE(0x21)] = Line(QPen(QColor("#bfbfbf"), 1, Qt::SolidLine));
-	_lines[TYPE(0x21)].setTextColor(QColor("#666666"));
+	_lines[TYPE(0x21)] = Line(QPen(QColor(0xbf, 0xbf, 0xbf), 1, Qt::SolidLine));
+	_lines[TYPE(0x21)].setTextColor(QColor(0x66, 0x66, 0x66));
 	_lines[TYPE(0x21)].setTextFontSize(Small);
-	_lines[TYPE(0x22)] = Line(QPen(QColor("#afafaf"), 1, Qt::SolidLine));
-	_lines[TYPE(0x22)].setTextColor(QColor("#666666"));
+	_lines[TYPE(0x22)] = Line(QPen(QColor(0xaf, 0xaf, 0xaf), 1, Qt::SolidLine));
+	_lines[TYPE(0x22)].setTextColor(QColor(0x66, 0x66, 0x66));
 	_lines[TYPE(0x22)].setTextFontSize(Small);
-	_lines[TYPE(0x23)] = Line(QPen(QColor("#55aaff"), 1, Qt::SolidLine));
+	_lines[TYPE(0x23)] = Line(QPen(QColor(0x55, 0xaa, 0xff), 1, Qt::SolidLine));
 	_lines[TYPE(0x23)].setTextFontSize(None);
-	_lines[TYPE(0x24)] = Line(QPen(QColor("#659aef"), 1, Qt::SolidLine));
-	_lines[TYPE(0x24)].setTextColor(QColor("#558adf"));
+	_lines[TYPE(0x24)] = Line(QPen(QColor(0x65, 0x9a, 0xef), 1, Qt::SolidLine));
+	_lines[TYPE(0x24)].setTextColor(QColor(0x55, 0x8a, 0xdf));
 	_lines[TYPE(0x24)].setTextFontSize(Small);
-	_lines[TYPE(0x25)] = Line(QPen(QColor("#558adf"), 1, Qt::SolidLine));
-	_lines[TYPE(0x25)].setTextColor(QColor("#558adf"));
+	_lines[TYPE(0x25)] = Line(QPen(QColor(0x55, 0x8a, 0xdf), 1, Qt::SolidLine));
+	_lines[TYPE(0x25)].setTextColor(QColor(0x55, 0x8a, 0xdf));
 	_lines[TYPE(0x25)].setTextFontSize(Small);
-	_lines[TYPE(0x26)] = Line(QPen(QColor("#9fc4e1"), 2, Qt::DotLine));
-	_lines[TYPE(0x27)] = Line(QPen(QColor("#ffffff"), 4, Qt::SolidLine),
-	  QPen(QColor("#d5cdc0"), 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	//_lines[TYPE(0x28)] = Line(QPen(QColor("#5a5a5a"), 1, Qt::SolidLine));
-	_lines[TYPE(0x29)] = Line(QPen(QColor("#5a5a5a"), 1, Qt::SolidLine));
+	_lines[TYPE(0x26)] = Line(QPen(QColor(0x9f, 0xc4, 0xe1), 2, Qt::DotLine));
+	_lines[TYPE(0x27)] = Line(QPen(QColor(0xff, 0xff, 0xff), 4, Qt::SolidLine),
+	  QPen(QColor(0xd5, 0xcd, 0xc0), 5, Qt::SolidLine, Qt::RoundCap,
+	  Qt::RoundJoin));
+	//_lines[TYPE(0x28)] = Line(QPen(QColor(0x5a, 0x5a, 0x5a"), 1, Qt::SolidLine));
+	_lines[TYPE(0x29)] = Line(QPen(QColor(0x5a, 0x5a, 0x5a), 1, Qt::SolidLine));
 	_lines[TYPE(0x29)].setTextFontSize(None);
 
 	// NT types
@@ -385,40 +405,40 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[0x10c04] = _lines[TYPE(0x29)];
 
 	// Marine stuff
-	_lines[0x10101] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
+	_lines[0x10101] = Line(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
 	_lines[0x10106] = Line(QImage(":/marine/cable-line.png"));
-	_lines[0x10107] = Line(QPen(QColor("#a58140"), 3, Qt::SolidLine));
-	_lines[0x10108] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
-	_lines[0x10301] = Line(QPen(QColor("#0e1087"), 1, Qt::SolidLine));
-	_lines[0x10307] = Line(QPen(QColor("#05620e"), 1, Qt::SolidLine));
+	_lines[0x10107] = Line(QPen(QColor(0xa5, 0x81, 0x40), 3, Qt::SolidLine));
+	_lines[0x10108] = Line(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
+	_lines[0x10301] = Line(QPen(QColor(0x0e, 0x10, 0x87), 1, Qt::SolidLine));
+	_lines[0x10307] = Line(QPen(QColor(0x05, 0x62, 0x0e), 1, Qt::SolidLine));
 	_lines[0x10401] = Line(QImage(":/marine/cable.png"));
 	_lines[0x10402] = Line(QImage(":/marine/pipeline.png"));
 	_lines[0x10404] = Line(QImage(":/marine/fishing-farm-line.png"));
 	_lines[0x10405] = Line(QImage(":/marine/pipeline-area-line.png"));
 	_lines[0x10406] = Line(QImage(":/marine/cable-area-line.png"));
-	_lines[0x10409] = Line(QPen(QColor("#000000"), 1, Qt::DotLine));
+	_lines[0x10409] = Line(QPen(QColor(0, 0, 0), 1, Qt::DotLine));
 	_lines[0x10501] = Line(QImage(":/marine/noanchor-line.png"));
-	_lines[0x10503] = Line(QPen(QColor("#e728e7"), 1, Qt::DashLine));
+	_lines[0x10503] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashLine));
 	_lines[0x10505] = Line(QImage(":/marine/safety-zone-line.png"));
-	_lines[0x10507] = Line(QPen(QColor("#e728e7"), 1, Qt::DashLine));
-	_lines[0x10601] = Line(QPen(QColor("#000000"), 1, Qt::SolidLine));
-	_lines[0x10603] = Line(QPen(QColor("#e728e7"), 2, Qt::DashDotLine));
+	_lines[0x10507] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashLine));
+	_lines[0x10601] = Line(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
+	_lines[0x10603] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 2, Qt::DashDotLine));
 	_lines[0x10606] = Line(QImage(":/marine/anchor-line.png"));
-	_lines[0x1060c] = Line(QPen(QColor("#e728e7"), 1, Qt::SolidLine));
-	_lines[0x1060d] = Line(QPen(QColor("#eb49eb"), 1, Qt::DashLine));
-	_lines[0x10611] = Line(QPen(QColor("#eb49eb"), 1, Qt::DashLine));
+	_lines[0x1060c] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::SolidLine));
+	_lines[0x1060d] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1, Qt::DashLine));
+	_lines[0x10611] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1, Qt::DashLine));
 }
 
 void Style::defaultPointStyle(qreal ratio)
 {
 	// Countries
-	_points[TYPE(0x14)].setTextColor(QColor("#505145"));
+	_points[TYPE(0x14)].setTextColor(QColor(0x50, 0x51, 0x45));
 	_points[TYPE(0x14)].setTextFontSize(Small);
-	_points[TYPE(0x15)].setTextColor(QColor("#505145"));
+	_points[TYPE(0x15)].setTextColor(QColor(0x50, 0x51, 0x45));
 	_points[TYPE(0x15)].setTextFontSize(Small);
 
 	// Regions
-	_points[TYPE(0x1e)].setTextColor(QColor("#505145"));
+	_points[TYPE(0x1e)].setTextColor(QColor(0x50, 0x51, 0x45));
 	_points[TYPE(0x1e)].setTextFontSize(ExtraSmall);
 	_points[TYPE(0x28)].setTextFontSize(Small);
 
