@@ -700,6 +700,7 @@ void Style::clear()
 	_pointLabels.clear();
 	_areaLabels.clear();
 	_symbols.clear();
+	_lineSymbols.clear();
 }
 
 QList<const Style::PathRender *> Style::paths(int zoom, bool closed,
