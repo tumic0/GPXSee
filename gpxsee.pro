@@ -17,12 +17,9 @@ QT += core \
     positioning \
     svg \
     serialport
-greaterThan(QT_MAJOR_VERSION, 5) {
-    QT += openglwidgets
-    lessThan(QT_MINOR_VERSION, 5) {
-        QT += core5compat
+	greaterThan(QT_MAJOR_VERSION, 5) {
+	    QT += openglwidgets
     }
-}
 
 CONFIG += object_parallel_to_source
 INCLUDEPATH += ./src
@@ -581,10 +578,12 @@ unix:!macx:!android {
 }
 
 android {
-    RESOURCES += theme-color.qrc
+    QT += core5compat
 
     HEADERS += src/GUI/navigationwidget.h
     SOURCES += src/GUI/navigationwidget.cpp
+
+    RESOURCES += theme-color.qrc
 
     defineReplace(versionCode) {
         segments = $$split(1, ".")
