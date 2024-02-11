@@ -446,9 +446,9 @@ void RasterTile::render()
 	QList<TextItem*> textItems;
 	QImage arrows[2];
 
-	arrows[ROAD] = (_ratio >= 2)
+	arrows[ROAD] = (_ratio > 1.0)
 	  ? QImage(":/map/arrow@2x.png") : QImage(":/map/arrow.png");
-	arrows[WATER] = (_ratio >= 2)
+	arrows[WATER] = (_ratio > 1.0)
 	  ? QImage(":/map/water-arrow@2x.png") : QImage(":/map/water-arrow.png");
 
 	fetchData(polygons, lines, points);
