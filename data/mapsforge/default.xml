@@ -1006,7 +1006,7 @@
         <rule e="any" k="amenity" v="police" zoom-min="17">
             <symbol src=":/mapsforge/symbols/amenity/police2.svg" />
         </rule>
-        <rule e="any" k="amenity" v="fire_station" zoom-min="17">
+        <rule e="any" k="amenity|building" v="fire_station" zoom-min="17">
             <symbol src=":/mapsforge/symbols/amenity/firestation3.svg" />
         </rule>
     </rule>
