@@ -121,8 +121,8 @@ void ENCAtlas::addMap(const QDir &dir, const QByteArray &file,
 }
 
 ENCAtlas::ENCAtlas(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _projection(PCS::pcs(3857)),
-  _tileRatio(1.0), _zoom(0), _valid(false)
+  : Map(fileName, parent), _projection(PCS::pcs(3857)),  _tileRatio(1.0),
+  _style(0), _zoom(0), _valid(false)
 {
 	QDir dir(QFileInfo(fileName).absoluteDir());
 	ISO8211 ddf(fileName);
@@ -160,6 +160,7 @@ ENCAtlas::ENCAtlas(const QString &fileName, QObject *parent)
 ENCAtlas::~ENCAtlas()
 {
 	qDeleteAll(_data);
+	delete _style;
 }
 
 void ENCAtlas::load(const Projection &in, const Projection &out,
@@ -171,6 +172,9 @@ void ENCAtlas::load(const Projection &in, const Projection &out,
 	_tileRatio = deviceRatio;
 	_projection = out;
 
+	Q_ASSERT(!_style);
+	_style = new Style(deviceRatio);
+
 	QPixmapCache::clear();
 }
 
@@ -179,6 +183,9 @@ void ENCAtlas::unload()
 	cancelJobs(true);
 
 	_cache.clear();
+
+	delete _style;
+	_style = 0;
 }
 
 int ENCAtlas::zoomFit(const QSize &size, const RectC &rect)
@@ -356,7 +363,7 @@ void ENCAtlas::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			if (QPixmapCache::find(key(_zoom, ttl), &pm))
 				painter->drawPixmap(ttl, pm);
 			else
-				tiles.append(RasterTile(_projection, _transform,
+				tiles.append(RasterTile(_projection, _transform, _style,
 				  _data.value(_usage), _zoom, zooms(_usage),
 				  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio));
 		}

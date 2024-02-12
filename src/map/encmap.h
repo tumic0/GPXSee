@@ -7,8 +7,9 @@
 #include "map.h"
 #include "projection.h"
 #include "transform.h"
-#include "ENC/mapdata.h"
 #include "ENC/iso8211.h"
+#include "ENC/mapdata.h"
+#include "ENC/style.h"
 
 class ENCJob;
 
@@ -18,7 +19,7 @@ class ENCMap : public Map
 
 public:
 	ENCMap(const QString &fileName, QObject *parent = 0);
-	~ENCMap() {delete _data;}
+	~ENCMap();
 
 	QString name() const {return _name;}
 
@@ -100,6 +101,7 @@ private:
 
 	QString _name;
 	ENC::MapData *_data;
+	ENC::Style *_style;
 	Projection _projection;
 	Transform _transform;
 	qreal _tileRatio;

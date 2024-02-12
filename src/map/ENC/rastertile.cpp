@@ -3,7 +3,9 @@
 #include "common/linec.h"
 #include "map/bitmapline.h"
 #include "map/textpathitem.h"
+#include "map/textpointitem.h"
 #include "map/rectd.h"
+#include "objects.h"
 #include "style.h"
 #include "rastertile.h"
 
@@ -17,12 +19,6 @@ typedef QSet<Coordinates> PointSet;
 static const float C1 = 0.866025f; /* sqrt(3)/2 */
 static const QColor tsslptPen = QColor(0xeb, 0x49, 0xeb);
 static const QColor tsslptBrush = QColor(0xeb, 0x49, 0xeb, 0x80);
-
-static const Style *style(qreal ratio)
-{
-	static ENC::Style s(ratio);
-	return &s;
-}
 
 static double area(const QVector<Coordinates> &polygon)
 {
@@ -406,21 +402,19 @@ void RasterTile::render()
 }
 
 RasterTile::RasterTile(const Projection &proj, const Transform &transform,
-  const MapData *data, int zoom, const Range &zoomRange, const QRect &rect,
-  qreal ratio) :
-	_proj(proj), _transform(transform), _map(data), _atlas(0), _zoom(zoom),
-	_zoomRange(zoomRange), _rect(rect), _ratio(ratio),
+  const Style *style, const MapData *data, int zoom, const Range &zoomRange,
+  const QRect &rect, qreal ratio) :
+	_proj(proj), _transform(transform), _style(style), _map(data), _atlas(0),
+	_zoom(zoom), _zoomRange(zoomRange), _rect(rect), _ratio(ratio),
 	_pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false)
 {
-	_style = style(ratio);
 }
 
 RasterTile::RasterTile(const Projection &proj, const Transform &transform,
-  AtlasData *data, int zoom, const Range &zoomRange, const QRect &rect,
-  qreal ratio) :
-	_proj(proj), _transform(transform), _map(0), _atlas(data), _zoom(zoom),
-	_zoomRange(zoomRange), _rect(rect), _ratio(ratio),
+  const Style *style, AtlasData *data, int zoom, const Range &zoomRange,
+  const QRect &rect, qreal ratio) :
+	_proj(proj), _transform(transform), _style(style), _map(0), _atlas(data),
+	_zoom(zoom), _zoomRange(zoomRange), _rect(rect), _ratio(ratio),
 	_pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false)
 {
-	_style = style(ratio);
 }

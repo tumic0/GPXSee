@@ -5,7 +5,6 @@
 #include "common/range.h"
 #include "map/projection.h"
 #include "map/transform.h"
-#include "map/textpointitem.h"
 #include "mapdata.h"
 #include "style.h"
 #include "atlasdata.h"
@@ -18,11 +17,11 @@ class RasterTile
 {
 public:
 	RasterTile(const Projection &proj, const Transform &transform,
-	  const MapData *data, int zoom, const Range &zoomRange, const QRect &rect,
-	  qreal ratio);
+	  const Style *style, const MapData *data, int zoom, const Range &zoomRange,
+	  const QRect &rect, qreal ratio);
 	RasterTile(const Projection &proj, const Transform &transform,
-	  AtlasData *data, int zoom, const Range &zoomRange, const QRect &rect,
-	  qreal ratio);
+	  const Style *style, AtlasData *data, int zoom, const Range &zoomRange,
+	  const QRect &rect, qreal ratio);
 
 	int zoom() const {return _zoom;}
 	QPoint xy() const {return _rect.topLeft();}

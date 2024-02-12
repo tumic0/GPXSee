@@ -1,6 +1,9 @@
 #ifndef ENC_OBJECTS_H
 #define ENC_OBJECTS_H
 
+#define TYPE(t) ((t)<<16)
+#define SUBTYPE(t, s) (((t)<<16)|(s))
+
 #define AIRARE 2
 #define ACHBRT 3
 #define ACHARE 4

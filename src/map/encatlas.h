@@ -1,12 +1,15 @@
 #ifndef ENCATLAS_H
 #define ENCATLAS_H
 
+#include <QMap>
+#include <QMutex>
 #include "common/range.h"
 #include "map.h"
 #include "projection.h"
 #include "transform.h"
 #include "ENC/iso8211.h"
 #include "ENC/atlasdata.h"
+#include "ENC/style.h"
 
 class ENCJob;
 class QDir;
@@ -84,6 +87,7 @@ private:
 	Transform _transform;
 	qreal _tileRatio;
 	QMap<IntendedUsage, ENC::AtlasData*> _data;
+	ENC::Style *_style;
 	ENC::MapCache _cache;
 	QMutex _lock;
 	IntendedUsage _usage;

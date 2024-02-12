@@ -5,12 +5,8 @@
 #include <QBrush>
 #include <QFont>
 #include <QMap>
-#include "objects.h"
 
 namespace ENC {
-
-#define TYPE(t) ((t)<<16)
-#define SUBTYPE(t, s) (((t)<<16)|(s))
 
 class Style
 {

@@ -2,6 +2,8 @@
 #include <QPixmapCache>
 #include "common/range.h"
 #include "common/wgs84.h"
+#include "ENC/mapdata.h"
+#include "ENC/style.h"
 #include "rectd.h"
 #include "pcs.h"
 #include "encjob.h"
@@ -118,7 +120,7 @@ bool ENCMap::processRecord(const ISO8211::Record &record,
 }
 
 ENCMap::ENCMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _data(0), _projection(PCS::pcs(3857)),
+  : Map(fileName, parent), _data(0), _style(0), _projection(PCS::pcs(3857)),
   _tileRatio(1.0), _valid(false)
 {
 	QVector<ISO8211::Record> gv;
@@ -161,6 +163,12 @@ ENCMap::ENCMap(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
+ENCMap::~ENCMap()
+{
+	delete _data;
+	delete _style;
+}
+
 void ENCMap::load(const Projection &in, const Projection &out,
   qreal deviceRatio, bool hidpi)
 {
@@ -171,6 +179,9 @@ void ENCMap::load(const Projection &in, const Projection &out,
 	_projection = out;
 	Q_ASSERT(!_data);
 	_data = new MapData(path());
+	Q_ASSERT(!_style);
+	_style = new Style(deviceRatio);
+
 	QPixmapCache::clear();
 }
 
@@ -180,6 +191,8 @@ void ENCMap::unload()
 
 	delete _data;
 	_data = 0;
+	delete _style;
+	_style = 0;
 }
 
 int ENCMap::zoomFit(const QSize &size, const RectC &rect)
@@ -323,8 +336,9 @@ void ENCMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			if (QPixmapCache::find(key(_zoom, ttl), &pm))
 				painter->drawPixmap(ttl, pm);
 			else
-				tiles.append(RasterTile(_projection, _transform, _data, _zoom,
-				  _zooms, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio));
+				tiles.append(RasterTile(_projection, _transform, _style,  _data,
+				  _zoom, _zooms, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)),
+				  _tileRatio));
 		}
 	}
 
