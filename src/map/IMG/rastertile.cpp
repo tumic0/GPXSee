@@ -17,6 +17,11 @@ using namespace IMG;
 #define AREA(rect) \
 	(rect.size().width() * rect.size().height())
 
+#define HIDPI_IMG(dir, basename, ratio) \
+	(((ratio) > 1.0) \
+		? QImage(dir "/" basename "@2x.png") \
+		: QImage(dir "/" basename ".png"))
+
 #define ROAD  0
 #define WATER 1
 
@@ -446,10 +451,8 @@ void RasterTile::render()
 	QList<TextItem*> textItems;
 	QImage arrows[2];
 
-	arrows[ROAD] = (_ratio > 1.0)
-	  ? QImage(":/map/arrow@2x.png") : QImage(":/map/arrow.png");
-	arrows[WATER] = (_ratio > 1.0)
-	  ? QImage(":/map/water-arrow@2x.png") : QImage(":/map/water-arrow.png");
+	arrows[ROAD] = HIDPI_IMG(":/map", "arrow", _ratio);
+	arrows[WATER] = HIDPI_IMG(":/map", "water-arrow", _ratio);
 
 	fetchData(polygons, lines, points);
 	ll2xy(polygons);
