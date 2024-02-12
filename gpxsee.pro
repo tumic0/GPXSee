@@ -17,9 +17,9 @@ QT += core \
     positioning \
     svg \
     serialport
-	greaterThan(QT_MAJOR_VERSION, 5) {
-	    QT += openglwidgets
-    }
+greaterThan(QT_MAJOR_VERSION, 5) {
+    QT += openglwidgets
+}
 
 CONFIG += object_parallel_to_source
 INCLUDEPATH += ./src
