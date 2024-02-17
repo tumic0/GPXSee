@@ -23,7 +23,6 @@ void Transform::simple(const ReferencePoint &p1, const ReferencePoint &p2)
 void Transform::affine(const QList<ReferencePoint> &points)
 {
 	Matrix c(3, 2);
-	c.zeroize();
 	for (size_t i = 0; i < c.h(); i++) {
 		for (size_t j = 0; j < c.w(); j++) {
 			for (int k = 0; k < points.size(); k++) {
@@ -40,7 +39,6 @@ void Transform::affine(const QList<ReferencePoint> &points)
 	}
 
 	Matrix Q(3, 3);
-	Q.zeroize();
 	for (int qi = 0; qi < points.size(); qi++) {
 		double v[3];
 
@@ -62,7 +60,6 @@ void Transform::affine(const QList<ReferencePoint> &points)
 	  M.m(2,4));
 	_img2proj = _proj2img.inverted();
 }
-
 
 Transform::Transform()
   : _proj2img(NULL_QTRANSFORM), _img2proj(NULL_QTRANSFORM)

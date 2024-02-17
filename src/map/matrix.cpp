@@ -3,33 +3,11 @@
 
 #define abs(x) ((x)<0 ? -(x) : (x))
 
-Matrix::~Matrix()
-{
-	delete[] _m;
-}
-
 Matrix::Matrix(size_t h, size_t w)
 {
-	_h = h; _w = w;
-
-	if (isNull())
-		_m = 0;
-	else
-		_m = new double[_h * _w];
-}
-
-Matrix::Matrix(const Matrix& M)
-{
-	_h = M._h; _w = M._w;
-
-	if (isNull())
-		_m = 0;
-	else
-		_m = new double[_h * _w];
-
-	for (size_t i = 0; i < _h; i++)
-		for (size_t j = 0; j < _w; j++)
-			m(i,j) = M.m(i,j);
+	_h = h;
+	_w = w;
+	_m.resize(_h * _w);
 }
 
 bool Matrix::eliminate(double epsilon)
@@ -85,12 +63,6 @@ Matrix Matrix::augemented(const Matrix &M) const
 			A.m(i, j) = M.m(i, j-_w);
 
 	return A;
-}
-
-void Matrix::zeroize()
-{
-	for (size_t i = 0; i < _h * _w; i++)
-		_m[i] = 0;
 }
 
 #ifndef QT_NO_DEBUG
