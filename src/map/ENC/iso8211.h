@@ -27,7 +27,7 @@ public:
 		  const Data &data) : _tag(tag), _subFields(subFields), _data(data) {}
 
 		const QByteArray &tag() const {return _tag;}
-		const QVector<QByteArray> subFields() const {return _subFields;}
+		const QVector<QByteArray> &subFields() const {return _subFields;}
 		const Data &data() const {return _data;}
 
 		bool subfield(const char *name, int *val, int idx = 0) const;
