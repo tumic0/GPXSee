@@ -116,7 +116,6 @@ void ENCAtlas::addMap(const QDir &dir, const QByteArray &file,
 
 	it.value()->addMap(bounds, path);
 
-	_name = "ENC (" + Format::coordinates(bounds.center(), DecimalDegrees) + ")";
 	_llBounds |= bounds;
 }
 
@@ -148,6 +147,8 @@ ENCAtlas::ENCAtlas(const QString &fileName, QObject *parent)
 		return;
 	}
 
+	_name = "ENC (" + Format::coordinates(_llBounds.center(), DecimalDegrees)
+	  + ")";
 	_usage = _data.firstKey();
 	_zoom = zooms(_usage).min();
 	updateTransform();
