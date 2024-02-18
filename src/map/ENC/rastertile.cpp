@@ -396,6 +396,7 @@ void RasterTile::render()
 
 	//painter.setPen(Qt::red);
 	//painter.setBrush(Qt::NoBrush);
+	//painter.setRenderHint(QPainter::Antialiasing, false);
 	//painter.drawRect(QRect(_rect.topLeft(), _pixmap.size()));
 
 	_valid = true;
