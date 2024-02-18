@@ -345,7 +345,8 @@ QString ENCAtlas::key(int zoom, const QPoint &xy) const
 
 void ENCAtlas::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	Q_UNUSED(flags);
+	AtlasData *data = _data.value(_usage);
+	Range zr(zooms(_usage));
 	QPointF tl(floor(rect.left() / TILE_SIZE) * TILE_SIZE,
 	  floor(rect.top() / TILE_SIZE) * TILE_SIZE);
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
@@ -365,8 +366,8 @@ void ENCAtlas::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				painter->drawPixmap(ttl, pm);
 			else
 				tiles.append(RasterTile(_projection, _transform, _style,
-				  _data.value(_usage), _zoom, zooms(_usage),
-				  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio));
+				  data, _zoom, zr, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)),
+				  _tileRatio));
 		}
 	}
 
