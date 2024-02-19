@@ -3,7 +3,7 @@
 
 #define abs(x) ((x)<0 ? -(x) : (x))
 
-Matrix::Matrix(size_t h, size_t w)
+Matrix::Matrix(int h, int w)
 {
 	_h = h;
 	_w = w;
@@ -12,35 +12,33 @@ Matrix::Matrix(size_t h, size_t w)
 
 bool Matrix::eliminate(double epsilon)
 {
-	size_t i, j, k, maxrow;
 	double temp;
 
-
-	for (i = 0; i < _h; i++) {
-		maxrow = i;
-		for (j = i+1; j < _h; j++)
+	for (int i = 0; i < _h; i++) {
+		int maxrow = i;
+		for (int j = i+1; j < _h; j++)
 			if (abs(m(j, i)) > abs(m(maxrow, i)))
 				maxrow = j;
-		for (j = 0; j < _w; j++) {
+		for (int j = 0; j < _w; j++) {
 			temp = m(i, j);
 			m(i, j) = m(maxrow, j);
 			m(maxrow, j) = temp;
 		}
 		if (abs(m(i, i)) <= epsilon)
 			return false;
-		for (j = i+1; j<_h; j++) {
+		for (int j = i+1; j<_h; j++) {
 			temp = m(j, i) / m(i, i);
-			for (k = i; k < _w; k++)
+			for (int k = i; k < _w; k++)
 				m(j, k) -= m(i, k) * temp;
 		}
 	}
-	for (i = _h-1; i < i+1; i--) {
+	for (int i = _h-1; i >= 0; i--) {
 		temp  = m(i, i);
-		for (j = 0; j < i; j++)
-			for (k = _w-1; k >= i; k--)
+		for (int j = 0; j < i; j++)
+			for (int k = _w-1; k >= i; k--)
 				m(j, k) -=  m(i, k) * m(j, i) / temp;
 		m(i, i) /= temp;
-		for (j = _h; j < _w; j++)
+		for (int j = _h; j < _w; j++)
 			m(i, j) /= temp;
 	}
 
@@ -54,12 +52,12 @@ Matrix Matrix::augemented(const Matrix &M) const
 
 	Matrix A(_h, _w + M._w);
 
-	for (size_t i = 0; i < _h; i++)
-		for (size_t j = 0; j < _w; j++)
+	for (int i = 0; i < _h; i++)
+		for (int j = 0; j < _w; j++)
 			A.m(i, j) = m(i, j);
 
-	for (size_t i = 0; i < _h; i++)
-		for (size_t j = _w; j < A._w; j++)
+	for (int i = 0; i < _h; i++)
+		for (int j = _w; j < A._w; j++)
 			A.m(i, j) = M.m(i, j-_w);
 
 	return A;
@@ -69,8 +67,8 @@ Matrix Matrix::augemented(const Matrix &M) const
 QDebug operator<<(QDebug dbg, const Matrix &matrix)
 {
 	dbg.nospace() << "Matrix(" << "\n";
-	for (size_t i = 0; i < matrix.h(); i++) {
-		for (size_t j = 0; j < matrix.w(); j++)
+	for (int i = 0; i < matrix.h(); i++) {
+		for (int j = 0; j < matrix.w(); j++)
 			dbg << "\t" << matrix.m(i, j);
 		dbg << "\n";
 	}
