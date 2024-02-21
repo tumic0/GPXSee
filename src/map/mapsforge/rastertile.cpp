@@ -480,11 +480,16 @@ Matrix RasterTile::elevation() const
 	int top = _rect.top() - 1;
 	int bottom = _rect.bottom() + 1;
 
-	DEM::lock();
+	QVector<Coordinates> ll;
+	ll.reserve(m.w() * m.h());
 	for (int y = top; y <= bottom; y++) {
 		for (int x = left; x <= right; x++)
-			m.m(y - top, x - left) = DEM::elevation(xy2ll(QPointF(x, y)));
+			ll.append(xy2ll(QPointF(x, y)));
 	}
+
+	DEM::lock();
+	for (int i = 0; i < ll.size(); i++)
+		m.m(i) = DEM::elevation(ll.at(i));
 	DEM::unlock();
 
 	return m;

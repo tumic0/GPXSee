@@ -13,6 +13,7 @@ public:
 
 	int h() const {return _h;}
 	int w() const {return _w;}
+	double &m(int n) {return _m[n];}
 	double &m(int i, int j) {return _m[_w * i + j];}
 	double const &m(int i, int j) const {return _m.at(_w * i + j);}
 
