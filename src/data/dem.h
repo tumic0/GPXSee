@@ -4,12 +4,11 @@
 #include <QString>
 #include <QCache>
 #include <QByteArray>
+#include <QMutex>
 #include "common/hash.h"
 #include "area.h"
 
-class QString;
 class Coordinates;
-class RectC;
 
 class DEM
 {
@@ -37,7 +36,10 @@ public:
 	static void setCacheSize(int size);
 	static void setDir(const QString &path);
 	static void clearCache();
+
 	static qreal elevation(const Coordinates &c);
+	static void lock() {_lock.lock();}
+	static void unlock() {_lock.unlock();}
 
 	static QList<Area> tiles();
 
@@ -48,6 +50,7 @@ private:
 
 	static QString _dir;
 	static TileCache _data;
+	static QMutex _lock;
 };
 
 inline HASH_T qHash(const DEM::Tile &tile)

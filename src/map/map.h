@@ -20,7 +20,8 @@ public:
 	enum Flag {
 		NoFlags = 0,
 		Block = 1,
-		OpenGL = 2
+		OpenGL = 2,
+		HillShading = 4
 	};
 	Q_DECLARE_FLAGS(Flags, Flag)
 

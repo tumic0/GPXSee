@@ -291,6 +291,7 @@ private:
 	QAction *_openOptionsAction;
 	QAction *_downloadDEMAction;
 	QAction *_showDEMTilesAction;
+	QAction *_drawHillShadingAction;
 	QAction *_mapsEnd;
 	QAction *_poisEnd;
 #ifndef Q_OS_ANDROID

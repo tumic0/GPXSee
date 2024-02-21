@@ -64,6 +64,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent) : QGraphicsView(parent)
 	_outputProjection = PCS::pcs(3857);
 	_inputProjection = GCS::gcs(4326);
 	_hidpi = true;
+	_hillShading = false;
 	_map = map;
 	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi);
 	connect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
@@ -1114,6 +1115,8 @@ void MapView::drawBackground(QPainter *painter, const QRectF &rect)
 			flags = Map::Block;
 		else if (_opengl)
 			flags = Map::OpenGL;
+		if (_hillShading)
+			flags |= Map::HillShading;
 
 		_map->draw(painter, ir, flags);
 	}
@@ -1178,7 +1181,9 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
 {
 	if (_cursorCoordinates->isVisible()) {
 		Coordinates c(_map->xy2ll(mapToScene(event->pos())));
+		DEM::lock();
 		_cursorCoordinates->setCoordinates(c, DEM::elevation(c));
+		DEM::unlock();
 	}
 
 	QGraphicsView::mouseMoveEvent(event);
@@ -1242,6 +1247,13 @@ void MapView::useOpenGL(bool use)
 void MapView::useAntiAliasing(bool use)
 {
 	setRenderHint(QPainter::Antialiasing, use);
+}
+
+void MapView::drawHillShading(bool draw)
+{
+	_hillShading = draw;
+
+	setMap(_map);
 }
 
 void MapView::useStyles(bool use)

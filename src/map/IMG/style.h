@@ -23,6 +23,21 @@ public:
 		ExtraSmall = 5
 	};
 
+	class Font {
+	public:
+		Font() :_size(NotSet) {}
+		Font(const QColor &color, FontSize size) : _color(color), _size(size) {}
+
+		const QColor &color() const {return _color;}
+		FontSize size() const {return _size;}
+		void setColor(const QColor &color) {_color = color;}
+		void setSize(FontSize size) {_size = size;}
+
+	private:
+		QColor _color;
+		FontSize _size;
+	};
+
 	class Polygon {
 	public:
 		Polygon() : _brush(Qt::NoBrush), _pen(Qt::NoPen) {}
@@ -42,49 +57,46 @@ public:
 
 	class Line {
 	public:
-		Line() : _foreground(Qt::NoPen), _background(Qt::NoPen),
-		  _textFontSize(NotSet) {}
+		Line() : _foreground(Qt::NoPen), _background(Qt::NoPen) {}
 		Line(const QPen &foreground, const QPen &background = Qt::NoPen)
-		  : _foreground(foreground), _background(background),
-		  _textFontSize(NotSet) {}
+		  : _foreground(foreground), _background(background) {}
 		Line(const QImage &img)
 		  : _foreground(Qt::NoPen), _background(Qt::NoPen),
-		  _textFontSize(NotSet), _img(img.convertToFormat(
-		  QImage::Format_ARGB32_Premultiplied)) {}
-
-		void setTextColor(const QColor &color) {_textColor = color;}
-		void setTextFontSize(FontSize size) {_textFontSize = size;}
+		  _img(img.convertToFormat(QImage::Format_ARGB32_Premultiplied)) {}
 
 		const QPen &foreground() const {return _foreground;}
 		const QPen &background() const {return _background;}
-		const QColor &textColor() const {return _textColor;}
-		FontSize textFontSize() const {return _textFontSize;}
+		const Font &text() const {return _text;}
 		const QImage &img() const {return _img;}
 
 	private:
+		friend class Style;
+
+		void setTextColor(const QColor &color) {_text.setColor(color);}
+		void setTextFontSize(FontSize size) {_text.setSize(size);}
+
 		QPen _foreground, _background;
-		QColor _textColor;
-		FontSize _textFontSize;
+		Font _text;
 		QImage _img;
 	};
 
 	class Point {
 	public:
-		Point() : _textFontSize(NotSet) {}
+		Point() {}
 		Point(FontSize fontSize, const QColor &textColor = QColor())
-		  : _textColor(textColor), _textFontSize(fontSize) {}
-		Point(const QImage &img) : _textFontSize(NotSet), _img(img) {}
+		  : _text(textColor, fontSize) {}
+		Point(const QImage &img) : _img(img) {}
 
-		void setTextColor(const QColor &color) {_textColor = color;}
-		void setTextFontSize(FontSize size) {_textFontSize = size;}
-
-		const QColor &textColor() const {return _textColor;}
-		FontSize textFontSize() const {return _textFontSize;}
+		const Font &text() const {return _text;}
 		const QImage &img() const {return _img;}
 
 	private:
-		QColor _textColor;
-		FontSize _textFontSize;
+		friend class Style;
+
+		void setTextColor(const QColor &color) {_text.setColor(color);}
+		void setTextFontSize(FontSize size) {_text.setSize(size);}
+
+		Font _text;
 		QImage _img;
 	};
 
@@ -183,6 +195,7 @@ private:
 }
 
 #ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const IMG::Style::Font &font);
 QDebug operator<<(QDebug dbg, const IMG::Style::Polygon &polygon);
 QDebug operator<<(QDebug dbg, const IMG::Style::Line &line);
 QDebug operator<<(QDebug dbg, const IMG::Style::Point &point);

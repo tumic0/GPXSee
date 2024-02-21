@@ -6,8 +6,17 @@
 #include "map/transform.h"
 #include "map/textpointitem.h"
 #include "map/textpathitem.h"
+#include "map/matrix.h"
 #include "style.h"
 #include "mapdata.h"
+
+
+#define HILLSHADING_RENDER(ptr) \
+	static_cast<const Style::HillShadingRender*>(ptr)
+#define PATH_RENDER(ptr) \
+	static_cast<const Style::PathRender*>(ptr)
+#define POINT_RENDER(ptr) \
+	static_cast<const Style::CircleRender*>(ptr)
 
 namespace Mapsforge {
 
@@ -20,14 +29,13 @@ public:
 	   back in zoom() */
 	RasterTile(const Projection &proj, const Transform &transform,
 	  const Style *style, MapData *data, int zoom, const QRect &rect,
-	  qreal ratio) : _proj(proj), _transform(transform), _style(style),
-	  _data(data), _zoom(zoom - 1), _rect(rect), _ratio(ratio),
-	  _pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false) {}
+	  qreal ratio, bool hillShading)
+		: _proj(proj), _transform(transform), _style(style), _data(data),
+		_zoom(zoom - 1), _rect(rect), _ratio(ratio), _hillShading(hillShading) {}
 
 	int zoom() const {return _zoom + 1;}
 	QPoint xy() const {return _rect.topLeft();}
 	const QPixmap &pixmap() const {return _pixmap;}
-	bool isValid() const {return _valid;}
 
 	void render();
 
@@ -91,6 +99,8 @@ private:
 		RenderInstruction(const Style::CircleRender *render,
 		  const MapData::Point *point) : _render(render), _path(0),
 		  _point(point) {}
+		RenderInstruction(const Style::HillShadingRender *render)
+		  : _render(render), _path(0), _point(0) {}
 
 		bool operator<(const RenderInstruction &other) const
 		{
@@ -101,19 +111,33 @@ private:
 		}
 
 		const Style::PathRender *pathRender() const
-		  {return static_cast<const Style::PathRender*>(_render);}
+		  {return PATH_RENDER(_render);}
 		const Style::CircleRender *circleRender() const
-		  {return static_cast<const Style::CircleRender*>(_render);}
+		  {return POINT_RENDER(_render);}
+		const Style::HillShadingRender *hillShadingRender() const
+		  {return HILLSHADING_RENDER(_render);}
+
 		PainterPath *path() const {return _path;}
 		const MapData::Point *point() const {return _point;}
 
 	private:
-		int layer() const {return _path ? _path->path->layer : _point->layer;}
+		int layer() const
+		{
+			if (_path)
+				return _path->path->layer;
+			else if (_point)
+				return _point->layer;
+			else
+				return HILLSHADING_RENDER(_render)->layer();
+		}
 		int zOrder() const
 		{
-			return _path
-			  ? static_cast<const Style::PathRender*>(_render)->zOrder()
-			  : static_cast<const Style::CircleRender*>(_render)->zOrder();
+			if (_path)
+				return PATH_RENDER(_render)->zOrder();
+			else if (_point)
+				return POINT_RENDER(_render)->zOrder();
+			else
+				return HILLSHADING_RENDER(_render)->zOrder();
 		}
 
 		const Style::Render *_render;
@@ -178,8 +202,12 @@ private:
 	  QVector<RasterTile::RenderInstruction> &instructions) const;
 	void circleInstructions(const QList<MapData::Point> &points,
 	  QVector<RasterTile::RenderInstruction> &instructions) const;
+	void hillShadingInstructions(
+	  QVector<RasterTile::RenderInstruction> &instructions) const;
 	QPointF ll2xy(const Coordinates &c) const
 	  {return _transform.proj2img(_proj.ll2xy(c));}
+	Coordinates xy2ll(const QPointF &p) const
+	  {return _proj.xy2ll(_transform.img2proj(p));}
 	void processPointLabels(const QList<MapData::Point> &points,
 	  QList<TextItem*> &textItems) const;
 	void processAreaLabels(const QVector<PainterPath> &paths,
@@ -191,6 +219,8 @@ private:
 	void drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
 	  const QList<MapData::Point> &points, QVector<PainterPath> &painterPaths);
 
+	Matrix elevation() const;
+
 	Projection _proj;
 	Transform _transform;
 	const Style *_style;
@@ -199,7 +229,7 @@ private:
 	QRect _rect;
 	qreal _ratio;
 	QPixmap _pixmap;
-	bool _valid;
+	bool _hillShading;
 };
 
 inline HASH_T qHash(const RasterTile::PathKey &key)

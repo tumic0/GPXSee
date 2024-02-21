@@ -128,6 +128,7 @@ public slots:
 	void followPosition(bool follow);
 	void showMotionInfo(bool show);
 	void useStyles(bool use);
+	void drawHillShading(bool draw);
 
 private slots:
 	void updatePOI();
@@ -205,6 +206,8 @@ private:
 	QColor _backgroundColor, _waypointColor, _poiColor, _markerColor;
 	qreal _areaOpacity;
 	bool _infoBackground;
+
+	bool _hillShading;
 
 	int _digitalZoom;
 	bool _plot;

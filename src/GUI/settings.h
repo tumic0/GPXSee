@@ -12,6 +12,7 @@
 #define SETTINGS_GRAPH      "Graph"
 #define SETTINGS_POI        "POI"
 #define SETTINGS_DATA       "Data"
+#define SETTINGS_DEM        "DEM"
 #define SETTINGS_POSITION   "Position"
 #define SETTINGS_PDF_EXPORT "Export"
 #define SETTINGS_PNG_EXPORT "PNGExport"
@@ -123,6 +124,9 @@ public:
 	static const Setting positionMarkers;
 	static const Setting markerInfo;
 	static const Setting useStyles;
+
+	/* DEM */
+	static const Setting drawHillShading;
 
 	/* Position */
 	static const Setting showPosition;

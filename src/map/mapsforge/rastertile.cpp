@@ -1,7 +1,9 @@
 #include <cmath>
 #include <QPainter>
 #include <QCache>
+#include "data/dem.h"
 #include "map/rectd.h"
+#include "map/hillshading.h"
 #include "rastertile.h"
 
 using namespace Mapsforge;
@@ -392,17 +394,27 @@ void RasterTile::circleInstructions(const QList<MapData::Point> &points,
 	}
 }
 
+void RasterTile::hillShadingInstructions(
+  QVector<RasterTile::RenderInstruction> &instructions) const
+{
+	const Style::HillShadingRender *hs = _style->hillShading(_zoom);
+	if (hs)
+		instructions.append(RenderInstruction(hs));
+}
+
 void RasterTile::drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
   const QList<MapData::Point> &points, QVector<PainterPath> &painterPaths)
 {
 	QVector<RenderInstruction> instructions;
 	pathInstructions(paths, painterPaths, instructions);
 	circleInstructions(points, instructions);
+	hillShadingInstructions(instructions);
 	std::sort(instructions.begin(), instructions.end());
 
 	for (int i = 0; i < instructions.size(); i++) {
 		const RenderInstruction &is = instructions.at(i);
 		PainterPath *path = is.path();
+		const MapData::Point *point = is.point();
 
 		if (path) {
 			const Style::PathRender *ri = is.pathRender();
@@ -418,13 +430,17 @@ void RasterTile::drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
 				painter->drawPath(parallelPath(path->pp, dy));
 			else
 				painter->drawPath(path->pp);
-		} else {
+		} else if (point) {
 			const Style::CircleRender *ri = is.circleRender();
 			qreal radius = ri->radius(_zoom);
 
 			painter->setPen(ri->pen());
 			painter->setBrush(ri->brush());
-			painter->drawEllipse(ll2xy(is.point()->coordinates), radius, radius);
+			painter->drawEllipse(ll2xy(point->coordinates), radius, radius);
+		} else {
+			if (_hillShading)
+				painter->drawImage(_rect.x(), _rect.y(),
+				  HillShading::render(elevation()));
 		}
 	}
 }
@@ -455,8 +471,29 @@ void RasterTile::fetchData(QList<MapData::Path> &paths,
 	_data->points(pointRectD.toRectC(_proj, 20), _zoom, &points);
 }
 
+Matrix RasterTile::elevation() const
+{
+	Matrix m(_rect.height() + 2, _rect.width() + 2);
+
+	int left = _rect.left() - 1;
+	int right = _rect.right() + 1;
+	int top = _rect.top() - 1;
+	int bottom = _rect.bottom() + 1;
+
+	DEM::lock();
+	for (int y = top; y <= bottom; y++) {
+		for (int x = left; x <= right; x++)
+			m.m(y - top, x - left) = DEM::elevation(xy2ll(QPointF(x, y)));
+	}
+	DEM::unlock();
+
+	return m;
+}
+
 void RasterTile::render()
 {
+	QImage img(_rect.width() * _ratio, _rect.height() * _ratio,
+	  QImage::Format_ARGB32_Premultiplied);
 	QList<MapData::Path> paths;
 	QList<MapData::Point> points;
 
@@ -465,10 +502,10 @@ void RasterTile::render()
 	QList<TextItem*> textItems;
 	QVector<PainterPath> renderPaths(paths.size());
 
-	_pixmap.setDevicePixelRatio(_ratio);
-	_pixmap.fill(Qt::transparent);
+	img.setDevicePixelRatio(_ratio);
+	img.fill(Qt::transparent);
 
-	QPainter painter(&_pixmap);
+	QPainter painter(&img);
 	painter.setRenderHint(QPainter::Antialiasing);
 	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 	painter.translate(-_rect.x(), -_rect.y());
@@ -487,5 +524,5 @@ void RasterTile::render()
 
 	qDeleteAll(textItems);
 
-	_valid = true;
+	_pixmap = QPixmap::fromImage(img);
 }

@@ -461,6 +461,11 @@ void GUI::createActions()
 	_showDEMTilesAction = new QAction(tr("Show local DEM tiles"), this);
 	_showDEMTilesAction->setMenuRole(QAction::NoRole);
 	connect(_showDEMTilesAction, &QAction::triggered, this, &GUI::showDEMTiles);
+	_drawHillShadingAction = new QAction(tr("Show hillshading"), this);
+	_drawHillShadingAction->setMenuRole(QAction::NoRole);
+	_drawHillShadingAction->setCheckable(true);
+	connect(_drawHillShadingAction, &QAction::triggered, _mapView,
+	  &MapView::drawHillShading);
 
 	// Graph actions
 	_showGraphsAction = new QAction(QIcon::fromTheme(SHOW_GRAPHS_NAME,
@@ -711,6 +716,8 @@ void GUI::createMenus()
 	QMenu *demMenu = menuBar()->addMenu(tr("DEM"));
 	demMenu->addAction(_showDEMTilesAction);
 	demMenu->addAction(_downloadDEMAction);
+	demMenu->addSeparator();
+	demMenu->addAction(_drawHillShadingAction);
 
 	QMenu *positionMenu = menuBar()->addMenu(tr("Position"));
 	positionMenu->addAction(_showPositionCoordinatesAction);
@@ -2499,6 +2506,11 @@ void GUI::writeSettings()
 	WRITE(useStyles, _useStylesAction->isChecked());
 	settings.endGroup();
 
+	/* DEM */
+	settings.beginGroup(SETTINGS_DEM);
+	WRITE(drawHillShading, _drawHillShadingAction->isChecked());
+	settings.endGroup();
+
 	/* Position */
 	settings.beginGroup(SETTINGS_POSITION);
 	WRITE(showPosition, _showPositionAction->isChecked());
@@ -2779,6 +2791,14 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 		_mapView->showMarkerInfo(mt);
 	} else
 		_hideMarkersAction->setChecked(true);
+	settings.endGroup();
+
+	/* DEM */
+	settings.beginGroup(SETTINGS_DEM);
+	if (READ(drawHillShading).toBool()) {
+		_drawHillShadingAction->setChecked(true);
+		_mapView->drawHillShading(true);
+	}
 	settings.endGroup();
 
 	/* Position */

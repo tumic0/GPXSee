@@ -10,17 +10,21 @@ QHash<QString, QPixmap> Waypoint::_symbolIcons;
 QPair<qreal, qreal> Waypoint::elevations() const
 {
 	if (_useDEM) {
+		DEM::lock();
 		qreal dem = DEM::elevation(coordinates());
+		DEM::unlock();
 		if (!std::isnan(dem))
 			return QPair<qreal, qreal>(dem, _show2ndElevation ? elevation()
 			  : NAN);
 		else
 			return QPair<qreal, qreal>(elevation(), NAN);
 	} else {
-		if (hasElevation())
-			return QPair<qreal, qreal>(elevation(), _show2ndElevation
-			  ? DEM::elevation(coordinates()) : NAN);
-		else
+		if (hasElevation()) {
+			DEM::lock();
+			qreal dem = _show2ndElevation ? DEM::elevation(coordinates()) : NAN;
+			DEM::unlock();
+			return QPair<qreal, qreal>(elevation(), dem);
+		} else
 			return QPair<qreal, qreal>(DEM::elevation(coordinates()), NAN);
 	}
 }

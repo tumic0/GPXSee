@@ -281,6 +281,7 @@ Graph Track::demElevation() const
 {
 	Graph ret;
 
+	DEM::lock();
 	for (int i = 0; i < _data.size(); i++) {
 		const SegmentData &sd = _data.at(i);
 		if (sd.size() < 2)
@@ -298,6 +299,7 @@ Graph Track::demElevation() const
 		if (gs.size() >= 2)
 			ret.append(filter(gs, _elevationWindow));
 	}
+	DEM::unlock();
 
 	if (_data.style().color().isValid())
 		ret.setColor(_data.style().color());

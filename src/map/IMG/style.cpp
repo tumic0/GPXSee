@@ -1332,6 +1332,12 @@ static QString brushColor(const QBrush &brush)
 	return (brush == Qt::NoBrush) ? "None" : brush.color().name();
 }
 
+QDebug operator<<(QDebug dbg, const Style::Font &font)
+{
+	dbg.nospace() << "Font(" << font.color() << ", " << font.size() << ")";
+	return dbg.space();
+}
+
 QDebug operator<<(QDebug dbg, const Style::Polygon &polygon)
 {
 	dbg.nospace() << "Polygon(" << brushColor(polygon.brush()) << ", "
@@ -1342,14 +1348,15 @@ QDebug operator<<(QDebug dbg, const Style::Polygon &polygon)
 QDebug operator<<(QDebug dbg, const Style::Line &line)
 {
 	dbg.nospace() << "Line(" << penColor(line.foreground()) << ", "
-	  << penColor(line.background()) << ", " << !line.img().isNull() << ")";
+	  << penColor(line.background()) << ", " << !line.img().isNull() << ", "
+	  << line.text() << ")";
 	return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, const Style::Point &point)
 {
-	dbg.nospace() << "Point(" << point.textFontSize() << ", "
-	  << point.textColor() << ", " << !point.img().isNull() << ")";
+	dbg.nospace() << "Point(" << point.text() << ", " << !point.img().isNull()
+	  << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG

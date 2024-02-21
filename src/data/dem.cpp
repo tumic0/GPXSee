@@ -69,6 +69,8 @@ static qreal height(const Coordinates &c, const QByteArray *data)
 	return interpolate(dx, dy, p0, p1, p2, p3);
 }
 
+QMutex DEM::_lock;
+
 QString DEM::Tile::latStr() const
 {
 	const char ns = (_lat >= 0) ? 'N' : 'S';

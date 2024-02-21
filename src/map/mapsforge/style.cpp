@@ -179,7 +179,7 @@ bool Style::Rule::match(int zoom, const QVector<MapData::Tag> &tags) const
 void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
   qreal baseStrokeWidth, const Rule &rule)
 {
-	PathRender ri(rule, _paths.size() + _circles.size());
+	PathRender ri(rule, _paths.size() + _circles.size() + _hillShading.isValid());
 	const QXmlStreamAttributes &attr = reader.attributes();
 	QString file;
 	QColor fillColor;
@@ -244,7 +244,7 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 void Style::line(QXmlStreamReader &reader, qreal baseStrokeWidth,
   const Rule &rule)
 {
-	PathRender ri(rule, _paths.size() + _circles.size());
+	PathRender ri(rule, _paths.size() + _circles.size() + _hillShading.isValid());
 	const QXmlStreamAttributes &attr = reader.attributes();
 	bool ok;
 
@@ -318,7 +318,7 @@ void Style::line(QXmlStreamReader &reader, qreal baseStrokeWidth,
 void Style::circle(QXmlStreamReader &reader, qreal baseStrokeWidth,
   const Rule &rule)
 {
-	CircleRender ri(rule, _paths.size() + _circles.size());
+	CircleRender ri(rule, _paths.size() + _circles.size() + _hillShading.isValid());
 	const QXmlStreamAttributes &attr = reader.attributes();
 	bool ok;
 	QColor fillColor, strokeColor;
@@ -573,6 +573,45 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir,
 	}
 }
 
+void Style::hillshading(QXmlStreamReader &reader, const QSet<QString> &cats)
+{
+	Rule r;
+	const QXmlStreamAttributes &attr = reader.attributes();
+	bool ok;
+	int layer = 5;
+
+	if (attr.hasAttribute("cat")
+		&& !cats.contains(attr.value("cat").toString())) {
+		reader.skipCurrentElement();
+		return;
+	}
+	if (attr.hasAttribute("zoom-min")) {
+		r.setMinZoom(attr.value("zoom-min").toInt(&ok));
+		if (!ok || r._zooms.min() < 0) {
+			reader.raiseError("invalid zoom-min value");
+			return;
+		}
+	}
+	if (attr.hasAttribute("zoom-max")) {
+		r.setMaxZoom(attr.value("zoom-max").toInt(&ok));
+		if (!ok || r._zooms.max() < 0) {
+			reader.raiseError("invalid zoom-max value");
+			return;
+		}
+	}
+	if (attr.hasAttribute("layer")) {
+		layer = attr.value("layer").toInt(&ok);
+		if (!ok || layer < 0) {
+			reader.raiseError("invalid layer value");
+			return;
+		}
+	}
+
+	_hillShading = HillShadingRender(r, _paths.size() + _circles.size(), layer);
+
+	reader.skipCurrentElement();
+}
+
 QString Style::cat(QXmlStreamReader &reader)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
@@ -654,6 +693,8 @@ void Style::rendertheme(QXmlStreamReader &reader, const QString &dir,
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("rule"))
 			rule(reader, dir, data, ratio, baseStrokeWidth, cats, r);
+		else if (reader.name() == QLatin1String("hillshading"))
+			hillshading(reader, cats);
 		else if (reader.name() == QLatin1String("stylemenu")) {
 			Menu menu(stylemenu(reader));
 			cats = menu.cats();
@@ -725,6 +766,12 @@ QList<const Style::CircleRender *> Style::circles(int zoom,
 			ri.append(&_circles.at(i));
 
 	return ri;
+}
+
+const Style::HillShadingRender *Style::hillShading(int zoom) const
+{
+	return (_hillShading.isValid() && _hillShading.rule()._zooms.contains(zoom))
+	  ? &_hillShading : 0;
 }
 
 QList<const Style::TextRender*> Style::pathLabels(int zoom) const

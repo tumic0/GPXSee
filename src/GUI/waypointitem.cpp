@@ -25,11 +25,11 @@ ToolTip WaypointItem::info() const
 		tt.insert(qApp->translate("WaypointItem", "Name"), _waypoint.name());
 	tt.insert(qApp->translate("WaypointItem", "Coordinates"),
 	  Format::coordinates(_waypoint.coordinates(), _format));
-	if (!std::isnan(_waypoint.elevations().first)) {
-		QString val = Format::elevation(_waypoint.elevations().first, _units);
-		if (!std::isnan(_waypoint.elevations().second))
-			val += " (" + Format::elevation(_waypoint.elevations().second,
-			  _units) + ")";
+	QPair<qreal, qreal> elevations(_waypoint.elevations());
+	if (!std::isnan(elevations.first)) {
+		QString val = Format::elevation(elevations.first, _units);
+		if (!std::isnan(elevations.second))
+			val += " (" + Format::elevation(elevations.second, _units) + ")";
 		tt.insert(qApp->translate("WaypointItem", "Elevation"), val);
 	}
 	if (_waypoint.timestamp().isValid())

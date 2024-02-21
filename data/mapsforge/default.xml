@@ -376,7 +376,7 @@
 
 
     <!-- hillshading -->
-    <hillshading />
+    <hillshading zoom-min="10" zoom-max="16"/>
 
 
     <!-- buildings -->

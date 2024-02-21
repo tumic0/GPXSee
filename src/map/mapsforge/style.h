@@ -131,6 +131,22 @@ public:
 		Rule _rule;
 	};
 
+	class HillShadingRender : public Render
+	{
+	public:
+		HillShadingRender() : Render(Rule()), _zOrder(-1), _layer(-1) {}
+		HillShadingRender(const Rule &rule, int zOrder, int layer)
+		  : Render(rule), _zOrder(zOrder), _layer(layer) {}
+
+		bool isValid() const {return _zOrder >= 0;}
+		int zOrder() const {return _zOrder;}
+		int layer() const {return _layer;}
+
+	private:
+		int _zOrder;
+		int _layer;
+	};
+
 	class PathRender : public Render
 	{
 	public:
@@ -244,6 +260,7 @@ public:
 	QList<const Symbol*> pointSymbols(int zoom) const;
 	QList<const Symbol*> areaSymbols(int zoom) const;
 	QList<const Symbol*> lineSymbols(int zoom) const;
+	const HillShadingRender *hillShading(int zoom) const;
 
 private:
 	class Menu {
@@ -286,6 +303,7 @@ private:
 		QList<Layer> _layers;
 	};
 
+	HillShadingRender _hillShading;
 	QList<PathRender> _paths;
 	QList<CircleRender> _circles;
 	QList<TextRender> _pathLabels, _pointLabels, _areaLabels;
@@ -305,6 +323,7 @@ private:
 	void line(QXmlStreamReader &reader, qreal baseStrokeWidth, const Rule &rule);
 	void circle(QXmlStreamReader &reader, qreal baseStrokeWidth,
 	  const Rule &rule);
+	void hillshading(QXmlStreamReader &reader, const QSet<QString> &cats);
 	void text(QXmlStreamReader &reader, const MapData &data, const Rule &rule,
 	  QList<QList<TextRender> *> &lists);
 	void symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,

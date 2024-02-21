@@ -5,6 +5,7 @@
 #include "mapdata.h"
 #include "map/projection.h"
 #include "map/transform.h"
+#include "map/matrix.h"
 #include "style.h"
 
 class QPainter;
@@ -17,15 +18,14 @@ class RasterTile
 {
 public:
 	RasterTile(const Projection &proj, const Transform &transform, MapData *data,
-	  int zoom, const QRect &rect, qreal ratio, const QString &key)
+	  int zoom, const QRect &rect, qreal ratio, const QString &key,
+	  bool hillShading)
 		: _proj(proj), _transform(transform), _data(data), _zoom(zoom),
-		_rect(rect), _ratio(ratio), _key(key),
-		_pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false) {}
+		_rect(rect), _ratio(ratio), _key(key), _hillShading(hillShading) {}
 
 	const QString &key() const {return _key;}
 	QPoint xy() const {return _rect.topLeft();}
 	const QPixmap &pixmap() const {return _pixmap;}
-	bool isValid() const {return _valid;}
 
 	void render();
 
@@ -34,6 +34,8 @@ private:
 	  QList<MapData::Point> &points);
 	QPointF ll2xy(const Coordinates &c) const
 	  {return _transform.proj2img(_proj.ll2xy(c));}
+	Coordinates xy2ll(const QPointF &p) const
+	  {return _proj.xy2ll(_transform.img2proj(p));}
 	void ll2xy(QList<MapData::Poly> &polys);
 	void ll2xy(QList<MapData::Point> &points);
 
@@ -55,6 +57,8 @@ private:
 	const QFont *poiFont(Style::FontSize size = Style::Normal,
 	  int zoom = -1, bool extended = false);
 
+	Matrix elevation() const;
+
 	Projection _proj;
 	Transform _transform;
 	MapData *_data;
@@ -63,7 +67,7 @@ private:
 	qreal _ratio;
 	QString _key;
 	QPixmap _pixmap;
-	bool _valid;
+	bool _hillShading;
 };
 
 }

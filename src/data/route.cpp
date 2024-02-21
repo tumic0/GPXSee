@@ -55,11 +55,13 @@ Graph Route::demElevation() const
 	QDateTime date;
 	GraphSegment gs(date);
 
+	DEM::lock();
 	for (int i = 0; i < _data.size(); i++) {
 		qreal dem = DEM::elevation(_data.at(i).coordinates());
 		if (!std::isnan(dem))
 			gs.append(GraphPoint(_distance.at(i), NAN, dem));
 	}
+	DEM::unlock();
 
 	if (gs.size() >= 2)
 		graph.append(gs);

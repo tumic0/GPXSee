@@ -230,6 +230,7 @@ HEADERS += src/common/config.h \
     src/map/mapsforgemap.h \
     src/map/worldfilemap.h \
     src/map/imgmap.h \
+    src/map/hillshading.h \
     src/data/itnparser.h \
     src/data/link.h \
     src/data/onmoveparsers.h \
@@ -435,6 +436,7 @@ SOURCES += src/main.cpp \
     src/map/aqmmap.cpp \
     src/map/mapsforgemap.cpp \
     src/map/worldfilemap.cpp \
+    src/map/hillshading.cpp \
     src/data/address.cpp \
     src/data/itnparser.cpp \
     src/data/onmoveparsers.cpp \

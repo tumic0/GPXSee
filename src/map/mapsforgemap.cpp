@@ -150,7 +150,7 @@ void MapsforgeMap::jobFinished(MapsforgeMapJob *job)
 
 	for (int i = 0; i < tiles.size(); i++) {
 		const Mapsforge::RasterTile &mt = tiles.at(i);
-		if (mt.isValid())
+		if (!mt.pixmap().isNull())
 			QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
 	}
 
@@ -188,7 +188,8 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				painter->drawPixmap(ttl, pm);
 			else {
 				tiles.append(RasterTile(_projection, _transform, &_style, &_data,
-				  _zoom, QRect(ttl, QSize(tileSize, tileSize)), _tileRatio));
+				  _zoom, QRect(ttl, QSize(tileSize, tileSize)), _tileRatio,
+				  flags & Map::HillShading));
 			}
 		}
 	}
