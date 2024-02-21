@@ -28,14 +28,14 @@
 #define SRTM_SIZE(samples) \
 	((samples) * (samples) * 2)
 
-static qreal interpolate(qreal dx, qreal dy, qreal p0, qreal p1, qreal p2,
-  qreal p3)
+static double interpolate(double dx, double dy, double p0, double p1, double p2,
+  double p3)
 {
-	return p0 * (1 - dx) * (1 - dy) + p1 * dx * (1 - dy) + p2 * dy * (1 - dx)
-	  + p3 * dx * dy;
+	return p0 * (1.0 - dx) * (1.0 - dy) + p1 * dx * (1.0 - dy)
+	  + p2 * dy * (1.0 - dx) + p3 * dx * dy;
 }
 
-static qreal value(int col, int row, int samples, const QByteArray *data)
+static double value(int col, int row, int samples, const QByteArray *data)
 {
 	int pos = ((samples - 1 - row) * samples + col) * 2;
 	qint16 val = qFromBigEndian(*((const qint16*)(data->constData() + pos)));
@@ -43,7 +43,7 @@ static qreal value(int col, int row, int samples, const QByteArray *data)
 	return (val == -32768) ? NAN : val;
 }
 
-static qreal height(const Coordinates &c, const QByteArray *data)
+static double height(const Coordinates &c, const QByteArray *data)
 {
 	int samples;
 
@@ -56,17 +56,17 @@ static qreal height(const Coordinates &c, const QByteArray *data)
 	else
 		return NAN;
 
-	int row = (int)((c.lat() - qFloor(c.lat())) * (samples - 1));
-	int col = (int)((c.lon() - qFloor(c.lon())) * (samples - 1));
-	qreal dx = ((c.lon() - qFloor(c.lon())) * (samples - 1)) - col;
-	qreal dy = ((c.lat() - qFloor(c.lat())) * (samples - 1)) - row;
+	double lat = (c.lat() - floor(c.lat())) * (samples - 1);
+	double lon = (c.lon() - floor(c.lon())) * (samples - 1);
+	int row = (int)lat;
+	int col = (int)lon;
 
-	qreal p0 = value(col, row, samples, data);
-	qreal p1 = value(col + 1, row, samples, data);
-	qreal p2 = value(col, row + 1, samples, data);
-	qreal p3 = value(col + 1, row + 1, samples, data);
+	double p0 = value(col, row, samples, data);
+	double p1 = value(col + 1, row, samples, data);
+	double p2 = value(col, row + 1, samples, data);
+	double p3 = value(col + 1, row + 1, samples, data);
 
-	return interpolate(dx, dy, p0, p1, p2, p3);
+	return interpolate(lon - col, lat - row, p0, p1, p2, p3);
 }
 
 QMutex DEM::_lock;
@@ -111,7 +111,7 @@ void DEM::clearCache()
 	_data.clear();
 }
 
-qreal DEM::elevation(const Coordinates &c)
+double DEM::elevation(const Coordinates &c)
 {
 	if (_dir.isEmpty())
 		return NAN;
@@ -127,7 +127,7 @@ qreal DEM::elevation(const Coordinates &c)
 		if (QFileInfo::exists(zn)) {
 			QZipReader zip(zn, QIODevice::ReadOnly);
 			ba = new QByteArray(zip.fileData(bn));
-			qreal ele = height(c, ba);
+			double ele = height(c, ba);
 			_data.insert(tile, ba, ba->size());
 			return ele;
 		} else {
@@ -139,7 +139,7 @@ qreal DEM::elevation(const Coordinates &c)
 				return NAN;
 			} else {
 				ba = new QByteArray(file.readAll());
-				qreal ele = height(c, ba);
+				double ele = height(c, ba);
 				_data.insert(tile, ba, ba->size());
 				return ele;
 			}

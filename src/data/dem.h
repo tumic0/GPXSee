@@ -37,7 +37,7 @@ public:
 	static void setDir(const QString &path);
 	static void clearCache();
 
-	static qreal elevation(const Coordinates &c);
+	static double elevation(const Coordinates &c);
 	static void lock() {_lock.lock();}
 	static void unlock() {_lock.unlock();}
 
