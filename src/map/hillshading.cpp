@@ -81,18 +81,14 @@ QImage HillShading::render(const Matrix &m, quint8 alpha, double azimuth,
 			double L = (c.a1 - c.a2 * d.dzdx - c.a3 * d.dzdy)
 			  / sqrt(1.0 + d.dzdx * d.dzdx + d.dzdy * d.dzdy);
 
-			quint8 a, val;
-			if (std::isnan(L)) {
-				a = 0;
-				val = 0;
-			} else {
-				if (L < 0)
-					L = 0;
-				val = L * alpha;
-				a = alpha;
+			quint32 pixel;
+			if (std::isnan(L))
+				pixel = 0;
+			else {
+				quint8 val = (L < 0) ? 0 : L * alpha;
+				pixel = alpha<<24 | val<<16 | val<<8 | val;
 			}
 
-			quint32 pixel = a<<24 | val<<16 | val<<8 | val;
 			*(quint32*)(bits + (y - 1) * bpl + (x - 1) * 4) = pixel;
 		}
 	}
