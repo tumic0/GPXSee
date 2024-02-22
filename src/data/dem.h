@@ -46,7 +46,7 @@ public:
 private:
 	typedef QCache<DEM::Tile, QByteArray> TileCache;
 
-	static QString fileName(const QString &baseName);
+	static QByteArray *loadTile(const Tile &tile);
 
 	static QString _dir;
 	static TileCache _data;

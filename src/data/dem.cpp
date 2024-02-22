@@ -91,11 +91,6 @@ QString DEM::Tile::baseName() const
 QString DEM::_dir;
 DEM::TileCache DEM::_data;
 
-QString DEM::fileName(const QString &baseName)
-{
-	return QDir(_dir).absoluteFilePath(baseName);
-}
-
 void DEM::setCacheSize(int size)
 {
 	_data.setMaxCost(size * 1024);
@@ -111,41 +106,43 @@ void DEM::clearCache()
 	_data.clear();
 }
 
+QByteArray *DEM::loadTile(const Tile &tile)
+{
+	QString bn(tile.baseName());
+	QString fn(QDir(_dir).absoluteFilePath(bn));
+	QString zn(fn + ".zip");
+
+	if (QFileInfo::exists(zn)) {
+		QZipReader zip(zn, QIODevice::ReadOnly);
+		return new QByteArray(zip.fileData(bn));
+	} else {
+		QFile file(fn);
+		if (!file.open(QIODevice::ReadOnly)) {
+			qWarning("%s: %s", qPrintable(file.fileName()),
+			  qPrintable(file.errorString()));
+			return new QByteArray();
+		} else
+			return new QByteArray(file.readAll());
+	}
+}
+
 double DEM::elevation(const Coordinates &c)
 {
 	if (_dir.isEmpty())
 		return NAN;
 
 	Tile tile(qFloor(c.lon()), qFloor(c.lat()));
+	QByteArray *ba = _data.object(tile);
+	double ele;
 
-	QByteArray *ba = _data[tile];
 	if (!ba) {
-		QString bn(tile.baseName());
-		QString fn(fileName(bn));
-		QString zn(fn + ".zip");
-
-		if (QFileInfo::exists(zn)) {
-			QZipReader zip(zn, QIODevice::ReadOnly);
-			ba = new QByteArray(zip.fileData(bn));
-			double ele = height(c, ba);
-			_data.insert(tile, ba, ba->size());
-			return ele;
-		} else {
-			QFile file(fn);
-			if (!file.open(QIODevice::ReadOnly)) {
-				qWarning("%s: %s", qPrintable(file.fileName()),
-				  qPrintable(file.errorString()));
-				_data.insert(tile, new QByteArray());
-				return NAN;
-			} else {
-				ba = new QByteArray(file.readAll());
-				double ele = height(c, ba);
-				_data.insert(tile, ba, ba->size());
-				return ele;
-			}
-		}
+		ba = loadTile(tile);
+		ele = height(c, ba);
+		_data.insert(tile, ba, ba->size());
 	} else
-		return height(c, ba);
+		ele = height(c, ba);
+
+	return ele;
 }
 
 QList<Area> DEM::tiles()
