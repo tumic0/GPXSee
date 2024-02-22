@@ -9,6 +9,8 @@
 
 using namespace Mapsforge;
 
+#define EPSILON     1e-6
+
 MapsforgeMap::MapsforgeMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _data(fileName), _zoom(0),
   _projection(PCS::pcs(3857)), _tileRatio(1.0)
@@ -51,7 +53,8 @@ int MapsforgeMap::zoomFit(const QSize &size, const RectC &rect)
 		for (int i = _data.zooms().min() + 1; i <= _data.zooms().max(); i++) {
 			Transform t(transform(i));
 			QRectF r(t.proj2img(pr.topLeft()), t.proj2img(pr.bottomRight()));
-			if (size.width() < r.width() || size.height() < r.height())
+			if (size.width() + EPSILON < r.width()
+			  || size.height() + EPSILON < r.height())
 				break;
 			_zoom = i;
 		}

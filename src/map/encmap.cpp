@@ -12,6 +12,7 @@
 
 using namespace ENC;
 
+#define EPSILON   1e-6
 #define TILE_SIZE 512
 
 static Range zooms(const RectC &bounds)
@@ -204,7 +205,8 @@ int ENCMap::zoomFit(const QSize &size, const RectC &rect)
 		for (int i = _zooms.min() + 1; i <= _zooms.max(); i++) {
 			Transform t(transform(i));
 			QRectF r(t.proj2img(pr.topLeft()), t.proj2img(pr.bottomRight()));
-			if (size.width() < r.width() || size.height() < r.height())
+			if (size.width() + EPSILON < r.width()
+			  || size.height() + EPSILON < r.height())
 				break;
 			_zoom = i;
 		}
