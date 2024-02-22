@@ -1,7 +1,7 @@
 #include <cmath>
 #include <QPainter>
 #include <QCache>
-#include "data/dem.h"
+#include "common/dem.h"
 #include "map/rectd.h"
 #include "map/hillshading.h"
 #include "rastertile.h"

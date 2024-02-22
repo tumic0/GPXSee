@@ -1,6 +1,6 @@
 #include <QDir>
 #include <QFileInfo>
-#include "dem.h"
+#include "common/dem.h"
 #include "waypoint.h"
 
 bool Waypoint::_useDEM = false;

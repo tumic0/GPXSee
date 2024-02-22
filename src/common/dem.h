@@ -6,7 +6,7 @@
 #include <QByteArray>
 #include <QMutex>
 #include "common/hash.h"
-#include "area.h"
+#include "data/area.h"
 
 class Coordinates;
 

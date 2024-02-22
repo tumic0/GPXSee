@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QDir>
 #include "common/downloader.h"
-#include "dem.h"
+#include "common/dem.h"
 
 class RectC;
 

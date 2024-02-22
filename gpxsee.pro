@@ -24,9 +24,6 @@ greaterThan(QT_MAJOR_VERSION, 5) {
 CONFIG += object_parallel_to_source
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
-    src/GUI/crosshairitem.h \
-    src/GUI/motioninfoitem.h \
-    src/GUI/pluginparameters.h \
     src/common/garmin.h \
     src/common/coordinates.h \
     src/common/hash.h \
@@ -46,6 +43,10 @@ HEADERS += src/common/config.h \
     src/common/polygon.h \
     src/common/color.h \
     src/common/csv.h \
+    src/common/dem.h \
+    src/GUI/crosshairitem.h \
+    src/GUI/motioninfoitem.h \
+    src/GUI/pluginparameters.h \
     src/GUI/authenticationwidget.h \
     src/GUI/axislabelitem.h \
     src/GUI/dirselectwidget.h \
@@ -256,7 +257,6 @@ HEADERS += src/common/config.h \
     src/data/oziparsers.h \
     src/data/locparser.h \
     src/data/slfparser.h \
-    src/data/dem.h \
     src/data/demloader.h \
     src/data/area.h \
     src/data/exifparser.h \
@@ -267,10 +267,6 @@ HEADERS += src/common/config.h \
     src/data/geojsonparser.h
 
 SOURCES += src/main.cpp \
-    src/GUI/crosshairitem.cpp \
-    src/GUI/motioninfoitem.cpp \
-    src/GUI/pluginparameters.cpp \
-    src/GUI/settings.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \
     src/common/range.cpp \
@@ -281,6 +277,11 @@ SOURCES += src/main.cpp \
     src/common/tifffile.cpp \
     src/common/downloader.cpp \
     src/common/csv.cpp \
+    src/common/dem.cpp \
+    src/GUI/crosshairitem.cpp \
+    src/GUI/motioninfoitem.cpp \
+    src/GUI/pluginparameters.cpp \
+    src/GUI/settings.cpp \
     src/GUI/authenticationwidget.cpp \
     src/GUI/axislabelitem.cpp \
     src/GUI/dirselectwidget.cpp \
@@ -339,8 +340,6 @@ SOURCES += src/main.cpp \
     src/GUI/pngexportdialog.cpp \
     src/GUI/projectioncombobox.cpp \
     src/GUI/passwordedit.cpp \
-    src/data/gpsdumpparser.cpp \
-    src/data/twonavparser.cpp \
     src/map/ENC/atlasdata.cpp \
     src/map/ENC/mapdata.cpp \
     src/map/ENC/rastertile.cpp \
@@ -437,6 +436,8 @@ SOURCES += src/main.cpp \
     src/map/mapsforgemap.cpp \
     src/map/worldfilemap.cpp \
     src/map/hillshading.cpp \
+    src/data/gpsdumpparser.cpp \
+    src/data/twonavparser.cpp \
     src/data/address.cpp \
     src/data/itnparser.cpp \
     src/data/onmoveparsers.cpp \
@@ -457,7 +458,6 @@ SOURCES += src/main.cpp \
     src/data/oziparsers.cpp \
     src/data/locparser.cpp \
     src/data/slfparser.cpp \
-    src/data/dem.cpp \
     src/data/demloader.cpp \
     src/data/exifparser.cpp \
     src/data/cupparser.cpp \

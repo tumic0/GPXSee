@@ -1,12 +1,12 @@
 #include <QFont>
 #include <QPainter>
 #include <QCache>
+#include "common/dem.h"
 #include "map/textpathitem.h"
 #include "map/textpointitem.h"
 #include "map/bitmapline.h"
 #include "map/rectd.h"
 #include "map/hillshading.h"
-#include "data/dem.h"
 #include "style.h"
 #include "lblfile.h"
 #include "rastertile.h"

@@ -7,9 +7,9 @@
 #include <QClipboard>
 #include <QOpenGLWidget>
 #include <QGeoPositionInfoSource>
+#include "common/dem.h"
 #include "data/poi.h"
 #include "data/data.h"
-#include "data/dem.h"
 #include "map/map.h"
 #include "map/pcs.h"
 #include "trackitem.h"
