@@ -365,13 +365,15 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 
 void RasterTile::render()
 {
+	QImage img(_rect.width() * _ratio, _rect.height() * _ratio,
+	  QImage::Format_ARGB32_Premultiplied);
 	QList<MapData::Line> lines;
 	QList<MapData::Poly> polygons;
 	QList<MapData::Point> points;
 	QList<TextItem*> textItems, lights;
 
-	_pixmap.setDevicePixelRatio(_ratio);
-	_pixmap.fill(Qt::transparent);
+	img.setDevicePixelRatio(_ratio);
+	img.fill(Qt::transparent);
 
 	fetchData(polygons, lines, points);
 
@@ -379,7 +381,7 @@ void RasterTile::render()
 	processPoints(points, textItems, lights);
 	processLines(lines, textItems);
 
-	QPainter painter(&_pixmap);
+	QPainter painter(&img);
 	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-_rect.x(), -_rect.y());
@@ -399,23 +401,5 @@ void RasterTile::render()
 	//painter.setRenderHint(QPainter::Antialiasing, false);
 	//painter.drawRect(QRect(_rect.topLeft(), _pixmap.size()));
 
-	_valid = true;
-}
-
-RasterTile::RasterTile(const Projection &proj, const Transform &transform,
-  const Style *style, const MapData *data, int zoom, const Range &zoomRange,
-  const QRect &rect, qreal ratio) :
-	_proj(proj), _transform(transform), _style(style), _map(data), _atlas(0),
-	_zoom(zoom), _zoomRange(zoomRange), _rect(rect), _ratio(ratio),
-	_pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false)
-{
-}
-
-RasterTile::RasterTile(const Projection &proj, const Transform &transform,
-  const Style *style, AtlasData *data, int zoom, const Range &zoomRange,
-  const QRect &rect, qreal ratio) :
-	_proj(proj), _transform(transform), _style(style), _map(0), _atlas(data),
-	_zoom(zoom), _zoomRange(zoomRange), _rect(rect), _ratio(ratio),
-	_pixmap(rect.width() * ratio, rect.height() * ratio), _valid(false)
-{
+	_pixmap.convertFromImage(img);
 }

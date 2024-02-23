@@ -296,7 +296,7 @@ void ENCMap::jobFinished(ENCJob *job)
 
 	for (int i = 0; i < tiles.size(); i++) {
 		const ENC::RasterTile &mt = tiles.at(i);
-		if (mt.isValid())
+		if (!mt.pixmap().isNull())
 			QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
 	}
 

@@ -529,5 +529,5 @@ void RasterTile::render()
 
 	qDeleteAll(textItems);
 
-	_pixmap = QPixmap::fromImage(img);
+	_pixmap.convertFromImage(img);
 }

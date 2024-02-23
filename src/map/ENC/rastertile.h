@@ -18,15 +18,18 @@ class RasterTile
 public:
 	RasterTile(const Projection &proj, const Transform &transform,
 	  const Style *style, const MapData *data, int zoom, const Range &zoomRange,
-	  const QRect &rect, qreal ratio);
+	  const QRect &rect, qreal ratio) :
+		_proj(proj), _transform(transform), _style(style), _map(data), _atlas(0),
+		_zoom(zoom), _zoomRange(zoomRange), _rect(rect), _ratio(ratio) {}
 	RasterTile(const Projection &proj, const Transform &transform,
 	  const Style *style, AtlasData *data, int zoom, const Range &zoomRange,
-	  const QRect &rect, qreal ratio);
+	  const QRect &rect, qreal ratio) :
+		_proj(proj), _transform(transform), _style(style), _map(0), _atlas(data),
+		_zoom(zoom), _zoomRange(zoomRange), _rect(rect), _ratio(ratio) {}
 
 	int zoom() const {return _zoom;}
 	QPoint xy() const {return _rect.topLeft();}
 	const QPixmap &pixmap() const {return _pixmap;}
-	bool isValid() const {return _valid;}
 
 	void render();
 
@@ -65,7 +68,6 @@ private:
 	QRect _rect;
 	qreal _ratio;
 	QPixmap _pixmap;
-	bool _valid;
 };
 
 }

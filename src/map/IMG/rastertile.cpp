@@ -511,5 +511,5 @@ void RasterTile::render()
 	//painter.setRenderHint(QPainter::Antialiasing, false);
 	//painter.drawRect(_rect);
 
-	_pixmap = QPixmap::fromImage(img);
+	_pixmap.convertFromImage(img);
 }
