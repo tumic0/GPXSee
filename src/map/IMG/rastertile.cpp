@@ -507,9 +507,9 @@ void RasterTile::render()
 
 	qDeleteAll(textItems);
 
-	_pixmap = QPixmap::fromImage(img);
-
 	//painter.setPen(Qt::red);
 	//painter.setRenderHint(QPainter::Antialiasing, false);
 	//painter.drawRect(_rect);
+
+	_pixmap = QPixmap::fromImage(img);
 }
