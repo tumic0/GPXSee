@@ -12,13 +12,12 @@
 */
 
 #include <QtEndian>
-#include <QtMath>
 #include <QDir>
 #include <QFile>
 #include <QRegularExpression>
 #include <QLocale>
 #include <private/qzipreader_p.h>
-#include "common/rectc.h"
+#include "rectc.h"
 #include "dem.h"
 
 #define SRTM3_SAMPLES  1201
@@ -131,7 +130,7 @@ double DEM::elevation(const Coordinates &c)
 	if (_dir.isEmpty())
 		return NAN;
 
-	Tile tile(qFloor(c.lon()), qFloor(c.lat()));
+	Tile tile(floor(c.lon()), floor(c.lat()));
 	QByteArray *ba = _data.object(tile);
 	double ele;
 
