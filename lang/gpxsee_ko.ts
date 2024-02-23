@@ -196,62 +196,62 @@
 <context>
     <name>ElevationGraph</name>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="40"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="39"/>
         <location filename="../src/GUI/elevationgraph.h" line="16"/>
         <source>Elevation</source>
         <translation>고도</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="60"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="59"/>
         <source>Up</source>
         <extracomment>Use an Unicode arrow (U+2197) when there is no abbreviation or extremly short term for &quot;Up&quot; in your language</extracomment>
         <translation>위</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="64"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="63"/>
         <source>Down</source>
         <extracomment>Use an Unicode arrow (U+2198) when there is no abbreviation or extremly short term for &quot;Down&quot; in your language</extracomment>
         <translation>아래</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="67"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="66"/>
         <source>Max</source>
         <extracomment>Use an abbreviation or a extremly short term</extracomment>
         <translation>최대</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="70"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="69"/>
         <source>Min</source>
         <extracomment>Use an abbreviation or a extremly short term</extracomment>
         <translation>최소</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="73"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="72"/>
         <source>Ascent</source>
         <translation>상승</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="75"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="74"/>
         <source>Descent</source>
         <translation>하강</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="77"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="76"/>
         <source>Maximum</source>
         <translation>최대</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="79"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="78"/>
         <source>Minimum</source>
         <translation>최소</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="182"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="181"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../src/GUI/elevationgraph.cpp" line="185"/>
+        <location filename="../src/GUI/elevationgraph.cpp" line="184"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
@@ -292,23 +292,23 @@
 <context>
     <name>FileSelectWidget</name>
     <message>
-        <location filename="../src/GUI/fileselectwidget.cpp" line="44"/>
-        <location filename="../src/GUI/fileselectwidget.cpp" line="49"/>
+        <location filename="../src/GUI/fileselectwidget.cpp" line="46"/>
+        <location filename="../src/GUI/fileselectwidget.cpp" line="51"/>
         <source>Select file</source>
         <translation>파일 선택</translation>
     </message>
     <message>
-        <location filename="../src/GUI/fileselectwidget.cpp" line="59"/>
+        <location filename="../src/GUI/fileselectwidget.cpp" line="61"/>
         <source>No output file selected.</source>
         <translation>출력 파일을 선택하지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/fileselectwidget.cpp" line="69"/>
+        <location filename="../src/GUI/fileselectwidget.cpp" line="71"/>
         <source>%1 is a directory.</source>
         <translation>%1은 디렉터리입니다.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/fileselectwidget.cpp" line="73"/>
+        <location filename="../src/GUI/fileselectwidget.cpp" line="75"/>
         <source>%1 is not writable.</source>
         <translation>%1을 쓸 수 없습니다.</translation>
     </message>
@@ -347,697 +347,702 @@
 <context>
     <name>GUI</name>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="195"/>
+        <location filename="../src/GUI/gui.cpp" line="197"/>
         <source>Quit</source>
         <translation>종료</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="203"/>
-        <location filename="../src/GUI/gui.cpp" line="932"/>
-        <location filename="../src/GUI/gui.cpp" line="950"/>
+        <location filename="../src/GUI/gui.cpp" line="205"/>
+        <location filename="../src/GUI/gui.cpp" line="941"/>
+        <location filename="../src/GUI/gui.cpp" line="959"/>
         <source>Paths</source>
         <translation>경로</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="207"/>
-        <location filename="../src/GUI/gui.cpp" line="892"/>
-        <location filename="../src/GUI/gui.cpp" line="893"/>
+        <location filename="../src/GUI/gui.cpp" line="209"/>
+        <location filename="../src/GUI/gui.cpp" line="901"/>
+        <location filename="../src/GUI/gui.cpp" line="902"/>
         <source>Keyboard controls</source>
         <translation>키보드 제어</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="211"/>
-        <location filename="../src/GUI/gui.cpp" line="859"/>
+        <location filename="../src/GUI/gui.cpp" line="213"/>
+        <location filename="../src/GUI/gui.cpp" line="868"/>
         <source>About GPXSee</source>
         <translation>GPXSee 정보</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="217"/>
+        <location filename="../src/GUI/gui.cpp" line="219"/>
         <source>Open...</source>
         <translation>열기...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="224"/>
+        <location filename="../src/GUI/gui.cpp" line="226"/>
         <source>Open directory...</source>
         <translation>디렉터리 열기...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="229"/>
+        <location filename="../src/GUI/gui.cpp" line="231"/>
         <source>Print...</source>
         <translation>인쇄...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="235"/>
+        <location filename="../src/GUI/gui.cpp" line="237"/>
         <source>Export to PDF...</source>
         <translation>PDF로 내보내기...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="242"/>
+        <location filename="../src/GUI/gui.cpp" line="244"/>
         <source>Export to PNG...</source>
         <translation>PNG로 내보내기...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="249"/>
+        <location filename="../src/GUI/gui.cpp" line="251"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="256"/>
+        <location filename="../src/GUI/gui.cpp" line="258"/>
         <source>Reload</source>
         <translation>다시 불러오기</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="262"/>
+        <location filename="../src/GUI/gui.cpp" line="264"/>
         <source>Statistics...</source>
         <translation>통계...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="272"/>
+        <location filename="../src/GUI/gui.cpp" line="274"/>
         <source>Clear list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="284"/>
+        <location filename="../src/GUI/gui.cpp" line="286"/>
         <source>Load POI file...</source>
         <translation>POI 파일 불러오기...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="288"/>
+        <location filename="../src/GUI/gui.cpp" line="290"/>
         <source>Select all files</source>
         <translation>모든 파일 선택</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="293"/>
+        <location filename="../src/GUI/gui.cpp" line="295"/>
         <source>Unselect all files</source>
         <translation>모든 파일 선택 취소</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="298"/>
+        <location filename="../src/GUI/gui.cpp" line="300"/>
         <source>Overlap POIs</source>
         <translation>중첩 POI</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="303"/>
+        <location filename="../src/GUI/gui.cpp" line="305"/>
         <source>Show POI icons</source>
         <translation>POI 아이콘 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="308"/>
+        <location filename="../src/GUI/gui.cpp" line="310"/>
         <source>Show POI labels</source>
         <translation>POI 레이블 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="314"/>
+        <location filename="../src/GUI/gui.cpp" line="316"/>
         <source>Show POIs</source>
         <translation>POI 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="326"/>
+        <location filename="../src/GUI/gui.cpp" line="328"/>
         <source>Show map</source>
         <translation>지도 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="335"/>
+        <location filename="../src/GUI/gui.cpp" line="337"/>
         <source>Load map...</source>
         <translation>지도 불러오기...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="340"/>
+        <location filename="../src/GUI/gui.cpp" line="342"/>
         <source>Load map directory...</source>
         <translation>지도 디렉터리 불러오기...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="343"/>
+        <location filename="../src/GUI/gui.cpp" line="345"/>
         <source>Clear tile cache</source>
         <translation>타일 캐시 지우기</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="348"/>
-        <location filename="../src/GUI/gui.cpp" line="353"/>
-        <location filename="../src/GUI/gui.cpp" line="911"/>
+        <location filename="../src/GUI/gui.cpp" line="350"/>
+        <location filename="../src/GUI/gui.cpp" line="355"/>
+        <location filename="../src/GUI/gui.cpp" line="920"/>
         <source>Next map</source>
         <translation>다음 지도</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="358"/>
+        <location filename="../src/GUI/gui.cpp" line="360"/>
         <source>Show cursor coordinates</source>
         <translation>커서 좌표 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="366"/>
+        <location filename="../src/GUI/gui.cpp" line="368"/>
         <source>Show position</source>
         <translation>위치 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="372"/>
+        <location filename="../src/GUI/gui.cpp" line="374"/>
         <source>Follow position</source>
         <translation>추종 위치</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="377"/>
+        <location filename="../src/GUI/gui.cpp" line="379"/>
         <source>Show coordinates</source>
         <translation>좌표 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="383"/>
+        <location filename="../src/GUI/gui.cpp" line="385"/>
         <source>Show motion info</source>
         <translation>모션 정보 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="390"/>
+        <location filename="../src/GUI/gui.cpp" line="392"/>
         <source>Show tracks</source>
         <translation>트랙 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="395"/>
+        <location filename="../src/GUI/gui.cpp" line="397"/>
         <source>Show routes</source>
         <translation>경로 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="399"/>
+        <location filename="../src/GUI/gui.cpp" line="401"/>
         <source>Show waypoints</source>
         <translation>경유지 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="404"/>
+        <location filename="../src/GUI/gui.cpp" line="406"/>
         <source>Show areas</source>
         <translation>영역 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="408"/>
+        <location filename="../src/GUI/gui.cpp" line="410"/>
         <source>Waypoint icons</source>
         <translation>경유지 아이콘</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="413"/>
+        <location filename="../src/GUI/gui.cpp" line="415"/>
         <source>Waypoint labels</source>
         <translation>경유지 레이블</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="418"/>
+        <location filename="../src/GUI/gui.cpp" line="420"/>
         <source>Route waypoints</source>
         <translation>경유지 경로</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="423"/>
+        <location filename="../src/GUI/gui.cpp" line="425"/>
         <source>km/mi markers</source>
         <translation>km/mi 마커</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="431"/>
+        <location filename="../src/GUI/gui.cpp" line="433"/>
         <source>Do not show</source>
         <translation>표시 안 함</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="435"/>
+        <location filename="../src/GUI/gui.cpp" line="437"/>
         <source>Marker only</source>
         <translation>마커만</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="439"/>
+        <location filename="../src/GUI/gui.cpp" line="441"/>
         <source>Date/time</source>
         <translation>날짜/시간</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="443"/>
+        <location filename="../src/GUI/gui.cpp" line="445"/>
         <source>Coordinates</source>
         <translation>좌표</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="447"/>
+        <location filename="../src/GUI/gui.cpp" line="449"/>
         <source>Use styles</source>
         <translation>스타일 사용</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="454"/>
+        <location filename="../src/GUI/gui.cpp" line="456"/>
         <source>Download DEM data</source>
         <translation>DEM 데이터 다운로드</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="459"/>
+        <location filename="../src/GUI/gui.cpp" line="461"/>
         <source>Show local DEM tiles</source>
         <translation>로컬 DEM 타일 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="465"/>
+        <location filename="../src/GUI/gui.cpp" line="464"/>
+        <source>Show hillshading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="472"/>
         <source>Show graphs</source>
         <translation>그래프 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="473"/>
-        <location filename="../src/GUI/gui.cpp" line="1299"/>
-        <location filename="../src/GUI/gui.cpp" line="1365"/>
-        <location filename="../src/GUI/gui.cpp" line="1433"/>
+        <location filename="../src/GUI/gui.cpp" line="480"/>
+        <location filename="../src/GUI/gui.cpp" line="1311"/>
+        <location filename="../src/GUI/gui.cpp" line="1377"/>
+        <location filename="../src/GUI/gui.cpp" line="1445"/>
         <source>Distance</source>
         <translation>거리</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="480"/>
-        <location filename="../src/GUI/gui.cpp" line="721"/>
-        <location filename="../src/GUI/gui.cpp" line="1302"/>
-        <location filename="../src/GUI/gui.cpp" line="1368"/>
-        <location filename="../src/GUI/gui.cpp" line="1435"/>
+        <location filename="../src/GUI/gui.cpp" line="487"/>
+        <location filename="../src/GUI/gui.cpp" line="730"/>
+        <location filename="../src/GUI/gui.cpp" line="1314"/>
+        <location filename="../src/GUI/gui.cpp" line="1380"/>
+        <location filename="../src/GUI/gui.cpp" line="1447"/>
         <source>Time</source>
         <translation>시간</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="486"/>
+        <location filename="../src/GUI/gui.cpp" line="493"/>
         <source>Show grid</source>
         <translation>격자 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="491"/>
+        <location filename="../src/GUI/gui.cpp" line="498"/>
         <source>Show slider info</source>
         <translation>슬라이더 정보 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="497"/>
+        <location filename="../src/GUI/gui.cpp" line="504"/>
         <source>Show tabs</source>
         <translation>탭 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="506"/>
+        <location filename="../src/GUI/gui.cpp" line="513"/>
         <source>Show toolbars</source>
         <translation>도구 모음 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="513"/>
+        <location filename="../src/GUI/gui.cpp" line="520"/>
         <source>Total time</source>
         <translation>총 시간</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="518"/>
-        <location filename="../src/GUI/gui.cpp" line="1304"/>
-        <location filename="../src/GUI/gui.cpp" line="1370"/>
-        <location filename="../src/GUI/gui.cpp" line="1437"/>
+        <location filename="../src/GUI/gui.cpp" line="525"/>
+        <location filename="../src/GUI/gui.cpp" line="1316"/>
+        <location filename="../src/GUI/gui.cpp" line="1382"/>
+        <location filename="../src/GUI/gui.cpp" line="1449"/>
         <source>Moving time</source>
         <translation>이동시간</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="525"/>
+        <location filename="../src/GUI/gui.cpp" line="532"/>
         <source>Metric</source>
         <translation>미터법</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="530"/>
+        <location filename="../src/GUI/gui.cpp" line="537"/>
         <source>Imperial</source>
         <translation>야드·파운드법</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="536"/>
+        <location filename="../src/GUI/gui.cpp" line="543"/>
         <source>Nautical</source>
         <translation>항해</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="544"/>
+        <location filename="../src/GUI/gui.cpp" line="551"/>
         <source>Decimal degrees (DD)</source>
         <translation>십진법 (DD)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="550"/>
+        <location filename="../src/GUI/gui.cpp" line="557"/>
         <source>Degrees and decimal minutes (DMM)</source>
         <translation>도 및 소수 분 (DMM)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="557"/>
+        <location filename="../src/GUI/gui.cpp" line="564"/>
         <source>Degrees, minutes, seconds (DMS)</source>
         <translation>도, 분, 초 (DMS)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="564"/>
+        <location filename="../src/GUI/gui.cpp" line="571"/>
         <source>Fullscreen mode</source>
         <translation>전체 화면 모드</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="571"/>
+        <location filename="../src/GUI/gui.cpp" line="578"/>
         <source>Options...</source>
         <translation>옵션...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="578"/>
+        <location filename="../src/GUI/gui.cpp" line="585"/>
         <source>Next</source>
         <translation>다음</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="583"/>
+        <location filename="../src/GUI/gui.cpp" line="590"/>
         <source>Previous</source>
         <translation>이전</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="588"/>
+        <location filename="../src/GUI/gui.cpp" line="595"/>
         <source>Last</source>
         <translation>마지막</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="593"/>
+        <location filename="../src/GUI/gui.cpp" line="600"/>
         <source>First</source>
         <translation>처음</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="628"/>
+        <location filename="../src/GUI/gui.cpp" line="635"/>
         <source>&amp;File</source>
         <translation>파일(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="631"/>
+        <location filename="../src/GUI/gui.cpp" line="638"/>
         <source>Open recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="656"/>
+        <location filename="../src/GUI/gui.cpp" line="663"/>
         <source>&amp;Map</source>
         <translation>지도(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="666"/>
+        <location filename="../src/GUI/gui.cpp" line="673"/>
         <source>&amp;Graph</source>
         <translation>그래프(&amp;G)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="678"/>
+        <location filename="../src/GUI/gui.cpp" line="685"/>
         <source>&amp;Data</source>
         <translation>데이터(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="683"/>
+        <location filename="../src/GUI/gui.cpp" line="690"/>
         <source>Position info</source>
         <translation>위치 정보</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="697"/>
+        <location filename="../src/GUI/gui.cpp" line="704"/>
         <source>&amp;POI</source>
         <translation>POI(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="709"/>
+        <location filename="../src/GUI/gui.cpp" line="716"/>
         <source>DEM</source>
         <translation>DEM</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="713"/>
+        <location filename="../src/GUI/gui.cpp" line="722"/>
         <source>Position</source>
         <translation>위치</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="720"/>
+        <location filename="../src/GUI/gui.cpp" line="729"/>
         <source>&amp;Settings</source>
         <translation>설정(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="725"/>
+        <location filename="../src/GUI/gui.cpp" line="734"/>
         <source>Units</source>
         <translation>단위</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="730"/>
+        <location filename="../src/GUI/gui.cpp" line="739"/>
         <source>Coordinates format</source>
         <translation>좌표 형식</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="743"/>
+        <location filename="../src/GUI/gui.cpp" line="752"/>
         <source>&amp;Help</source>
         <translation>도움말(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="770"/>
+        <location filename="../src/GUI/gui.cpp" line="779"/>
         <source>File</source>
         <translation>파일</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="780"/>
+        <location filename="../src/GUI/gui.cpp" line="789"/>
         <source>Show</source>
         <translation>표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="788"/>
+        <location filename="../src/GUI/gui.cpp" line="797"/>
         <source>Navigation</source>
         <translation>네비게이션</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="861"/>
-        <location filename="../src/GUI/gui.cpp" line="869"/>
+        <location filename="../src/GUI/gui.cpp" line="870"/>
+        <location filename="../src/GUI/gui.cpp" line="878"/>
         <source>Version %1</source>
         <translation>버전 %1</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="864"/>
         <location filename="../src/GUI/gui.cpp" line="873"/>
+        <location filename="../src/GUI/gui.cpp" line="882"/>
         <source>GPXSee is distributed under the terms of the GNU General Public License version 3. For more info about GPXSee visit the project homepage at %1.</source>
         <translation>GPXSee는 GNU General Public License 버전 3의 조건에 따라 배포됩니다. GPX에 대한 자세한 내용은 %1의 프로젝트 홈페이지를 참조하십시오.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="896"/>
+        <location filename="../src/GUI/gui.cpp" line="905"/>
         <source>Next file</source>
         <translation>다음 파일</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="897"/>
+        <location filename="../src/GUI/gui.cpp" line="906"/>
         <source>Previous file</source>
         <translation>이전 파일</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="899"/>
+        <location filename="../src/GUI/gui.cpp" line="908"/>
         <source>First file</source>
         <translation>첫 번째 파일</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="901"/>
+        <location filename="../src/GUI/gui.cpp" line="910"/>
         <source>Last file</source>
         <translation>마지막 파일</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="902"/>
+        <location filename="../src/GUI/gui.cpp" line="911"/>
         <source>Append file</source>
         <translation>파일 추가</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="903"/>
+        <location filename="../src/GUI/gui.cpp" line="912"/>
         <source>Next/Previous</source>
         <translation>다음/이전</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="905"/>
+        <location filename="../src/GUI/gui.cpp" line="914"/>
         <source>Toggle graph type</source>
         <translation>그래프 유형 전환</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="907"/>
+        <location filename="../src/GUI/gui.cpp" line="916"/>
         <source>Toggle time type</source>
         <translation>시간 유형 전환</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="909"/>
+        <location filename="../src/GUI/gui.cpp" line="918"/>
         <source>Toggle position info</source>
         <translation>위치 정보 전환</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="913"/>
+        <location filename="../src/GUI/gui.cpp" line="922"/>
         <source>Previous map</source>
         <translation>이전 지도</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="914"/>
+        <location filename="../src/GUI/gui.cpp" line="923"/>
         <source>Zoom in</source>
         <translation>확대</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="916"/>
+        <location filename="../src/GUI/gui.cpp" line="925"/>
         <source>Zoom out</source>
         <translation>축소</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="918"/>
+        <location filename="../src/GUI/gui.cpp" line="927"/>
         <source>Digital zoom</source>
         <translation>디지털 줌</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="919"/>
+        <location filename="../src/GUI/gui.cpp" line="928"/>
         <source>Zoom</source>
         <translation>확대/축소</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="920"/>
+        <location filename="../src/GUI/gui.cpp" line="929"/>
         <source>Copy coordinates</source>
         <translation>좌표 복사</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="921"/>
+        <location filename="../src/GUI/gui.cpp" line="930"/>
         <source>Left Click</source>
         <translation>왼쪽 클릭</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="935"/>
-        <location filename="../src/GUI/gui.cpp" line="953"/>
+        <location filename="../src/GUI/gui.cpp" line="944"/>
+        <location filename="../src/GUI/gui.cpp" line="962"/>
         <source>Map directory:</source>
         <translation>지도 디렉터리:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="937"/>
-        <location filename="../src/GUI/gui.cpp" line="955"/>
+        <location filename="../src/GUI/gui.cpp" line="946"/>
+        <location filename="../src/GUI/gui.cpp" line="964"/>
         <source>POI directory:</source>
         <translation>POI 디렉터리:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="939"/>
-        <location filename="../src/GUI/gui.cpp" line="957"/>
+        <location filename="../src/GUI/gui.cpp" line="948"/>
+        <location filename="../src/GUI/gui.cpp" line="966"/>
         <source>CRS directory:</source>
         <translation>CRS 디렉토리:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="941"/>
-        <location filename="../src/GUI/gui.cpp" line="959"/>
+        <location filename="../src/GUI/gui.cpp" line="950"/>
+        <location filename="../src/GUI/gui.cpp" line="968"/>
         <source>DEM directory:</source>
         <translation>DEM 디렉터리:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="943"/>
-        <location filename="../src/GUI/gui.cpp" line="961"/>
+        <location filename="../src/GUI/gui.cpp" line="952"/>
+        <location filename="../src/GUI/gui.cpp" line="970"/>
         <source>Styles directory:</source>
         <translation>스타일 디렉터리:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="945"/>
-        <location filename="../src/GUI/gui.cpp" line="963"/>
+        <location filename="../src/GUI/gui.cpp" line="954"/>
+        <location filename="../src/GUI/gui.cpp" line="972"/>
         <source>Symbols directory:</source>
         <translation>기호 디렉터리:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="947"/>
-        <location filename="../src/GUI/gui.cpp" line="965"/>
+        <location filename="../src/GUI/gui.cpp" line="956"/>
+        <location filename="../src/GUI/gui.cpp" line="974"/>
         <source>Tile cache directory:</source>
         <translation>타일 캐시 디렉터리:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="976"/>
-        <location filename="../src/GUI/gui.cpp" line="979"/>
+        <location filename="../src/GUI/gui.cpp" line="985"/>
+        <location filename="../src/GUI/gui.cpp" line="988"/>
         <source>Open file</source>
         <translation>파일 열기</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1011"/>
+        <location filename="../src/GUI/gui.cpp" line="1020"/>
         <source>Open directory</source>
         <translation>디렉터리 열기</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1071"/>
+        <location filename="../src/GUI/gui.cpp" line="1083"/>
         <source>Error loading data file:</source>
         <translation>데이터 파일 불어오는 중 오류 발생:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1074"/>
-        <location filename="../src/GUI/gui.cpp" line="1186"/>
+        <location filename="../src/GUI/gui.cpp" line="1086"/>
+        <location filename="../src/GUI/gui.cpp" line="1198"/>
         <source>Line: %1</source>
         <translation>줄: %1</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1079"/>
-        <location filename="../src/GUI/gui.cpp" line="1775"/>
-        <location filename="../src/GUI/gui.cpp" line="1875"/>
+        <location filename="../src/GUI/gui.cpp" line="1091"/>
+        <location filename="../src/GUI/gui.cpp" line="1787"/>
+        <location filename="../src/GUI/gui.cpp" line="1887"/>
         <source>Don&apos;t show again</source>
         <translation>다시 표시 안 함</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1153"/>
-        <location filename="../src/GUI/gui.cpp" line="1156"/>
+        <location filename="../src/GUI/gui.cpp" line="1165"/>
+        <location filename="../src/GUI/gui.cpp" line="1168"/>
         <source>Open POI file</source>
         <translation>POI 파일 열기</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1183"/>
+        <location filename="../src/GUI/gui.cpp" line="1195"/>
         <source>Error loading POI file:</source>
         <translation>POI 파일 불어오는 중 오류 발생:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1275"/>
-        <location filename="../src/GUI/gui.cpp" line="1339"/>
-        <location filename="../src/GUI/gui.cpp" line="1411"/>
+        <location filename="../src/GUI/gui.cpp" line="1287"/>
+        <location filename="../src/GUI/gui.cpp" line="1351"/>
+        <location filename="../src/GUI/gui.cpp" line="1423"/>
         <source>Tracks</source>
         <translation>트랙</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1278"/>
-        <location filename="../src/GUI/gui.cpp" line="1342"/>
-        <location filename="../src/GUI/gui.cpp" line="1413"/>
+        <location filename="../src/GUI/gui.cpp" line="1290"/>
+        <location filename="../src/GUI/gui.cpp" line="1354"/>
+        <location filename="../src/GUI/gui.cpp" line="1425"/>
         <source>Routes</source>
         <translation>경로</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1281"/>
-        <location filename="../src/GUI/gui.cpp" line="1345"/>
-        <location filename="../src/GUI/gui.cpp" line="1415"/>
+        <location filename="../src/GUI/gui.cpp" line="1293"/>
+        <location filename="../src/GUI/gui.cpp" line="1357"/>
+        <location filename="../src/GUI/gui.cpp" line="1427"/>
         <source>Waypoints</source>
         <translation>경유지</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1284"/>
-        <location filename="../src/GUI/gui.cpp" line="1348"/>
-        <location filename="../src/GUI/gui.cpp" line="1417"/>
+        <location filename="../src/GUI/gui.cpp" line="1296"/>
+        <location filename="../src/GUI/gui.cpp" line="1360"/>
+        <location filename="../src/GUI/gui.cpp" line="1429"/>
         <source>Areas</source>
         <translation>영역</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1290"/>
-        <location filename="../src/GUI/gui.cpp" line="1293"/>
-        <location filename="../src/GUI/gui.cpp" line="1354"/>
-        <location filename="../src/GUI/gui.cpp" line="1358"/>
-        <location filename="../src/GUI/gui.cpp" line="1423"/>
-        <location filename="../src/GUI/gui.cpp" line="1426"/>
+        <location filename="../src/GUI/gui.cpp" line="1302"/>
+        <location filename="../src/GUI/gui.cpp" line="1305"/>
+        <location filename="../src/GUI/gui.cpp" line="1366"/>
+        <location filename="../src/GUI/gui.cpp" line="1370"/>
+        <location filename="../src/GUI/gui.cpp" line="1435"/>
+        <location filename="../src/GUI/gui.cpp" line="1438"/>
         <source>Date</source>
         <translation>날짜</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1325"/>
-        <location filename="../src/GUI/gui.cpp" line="1389"/>
-        <location filename="../src/GUI/gui.cpp" line="1390"/>
+        <location filename="../src/GUI/gui.cpp" line="1337"/>
+        <location filename="../src/GUI/gui.cpp" line="1401"/>
+        <location filename="../src/GUI/gui.cpp" line="1402"/>
         <source>Statistics</source>
         <translation>통계</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1407"/>
+        <location filename="../src/GUI/gui.cpp" line="1419"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1720"/>
-        <location filename="../src/GUI/gui.cpp" line="1723"/>
+        <location filename="../src/GUI/gui.cpp" line="1732"/>
+        <location filename="../src/GUI/gui.cpp" line="1735"/>
         <source>Open map file</source>
         <translation>지도 파일 열기</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1769"/>
-        <location filename="../src/GUI/gui.cpp" line="1826"/>
-        <location filename="../src/GUI/gui.cpp" line="1845"/>
-        <location filename="../src/GUI/gui.cpp" line="1869"/>
+        <location filename="../src/GUI/gui.cpp" line="1781"/>
+        <location filename="../src/GUI/gui.cpp" line="1838"/>
+        <location filename="../src/GUI/gui.cpp" line="1857"/>
+        <location filename="../src/GUI/gui.cpp" line="1881"/>
         <source>Error loading map:</source>
         <translation>지도 불러오는 중 오류 발생:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1909"/>
+        <location filename="../src/GUI/gui.cpp" line="1921"/>
         <source>Select map directory</source>
         <translation>지도 디렉터리 선택</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1938"/>
+        <location filename="../src/GUI/gui.cpp" line="1950"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
         <translation>%1 타일 캐시를 지우시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1956"/>
+        <location filename="../src/GUI/gui.cpp" line="1968"/>
         <source>Could not download all required DEM files.</source>
         <translation>필요한 모든 DEM 파일을 다운로드할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1971"/>
+        <location filename="../src/GUI/gui.cpp" line="1983"/>
         <source>No local DEM tiles found.</source>
         <translation>로컬 DEM 타일을 찾을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1985"/>
+        <location filename="../src/GUI/gui.cpp" line="1997"/>
         <source>No files loaded</source>
         <translation>불러온 파일이 없습니다</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="1989"/>
+        <location filename="../src/GUI/gui.cpp" line="2001"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n개 파일</numerusform>
@@ -1104,59 +1109,59 @@
 <context>
     <name>GraphView</name>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="58"/>
+        <location filename="../src/GUI/graphview.cpp" line="57"/>
         <source>Data not available</source>
         <translation>데이터를 사용할 수 없음</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="78"/>
-        <location filename="../src/GUI/graphview.cpp" line="180"/>
+        <location filename="../src/GUI/graphview.cpp" line="77"/>
+        <location filename="../src/GUI/graphview.cpp" line="179"/>
         <source>Distance</source>
         <translation>거리</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="112"/>
-        <location filename="../src/GUI/graphview.cpp" line="120"/>
+        <location filename="../src/GUI/graphview.cpp" line="111"/>
+        <location filename="../src/GUI/graphview.cpp" line="119"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="115"/>
+        <location filename="../src/GUI/graphview.cpp" line="114"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="123"/>
+        <location filename="../src/GUI/graphview.cpp" line="122"/>
         <source>nmi</source>
         <translation>nmi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="128"/>
+        <location filename="../src/GUI/graphview.cpp" line="127"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="131"/>
+        <location filename="../src/GUI/graphview.cpp" line="130"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="137"/>
+        <location filename="../src/GUI/graphview.cpp" line="136"/>
         <source>s</source>
         <translation>초</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="140"/>
+        <location filename="../src/GUI/graphview.cpp" line="139"/>
         <source>min</source>
         <translation>분</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="143"/>
+        <location filename="../src/GUI/graphview.cpp" line="142"/>
         <source>h</source>
         <translation>시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/graphview.cpp" line="182"/>
+        <location filename="../src/GUI/graphview.cpp" line="181"/>
         <source>Time</source>
         <translation>시간</translation>
     </message>
@@ -1217,12 +1222,12 @@
 <context>
     <name>MapItem</name>
     <message>
-        <location filename="../src/GUI/mapitem.cpp" line="77"/>
+        <location filename="../src/GUI/mapitem.cpp" line="79"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
     <message>
-        <location filename="../src/GUI/mapitem.cpp" line="79"/>
+        <location filename="../src/GUI/mapitem.cpp" line="81"/>
         <source>File</source>
         <translation>파일</translation>
     </message>
@@ -2276,63 +2281,63 @@
 <context>
     <name>SpeedGraph</name>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="16"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="15"/>
         <location filename="../src/GUI/speedgraph.h" line="18"/>
         <source>Speed</source>
         <translation>속도</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="31"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="30"/>
         <source>min/km</source>
         <translation>min/km</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="32"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="31"/>
         <source>min/mi</source>
         <translation>min/mi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="32"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="31"/>
         <source>min/nmi</source>
         <translation>min/nmi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="35"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="34"/>
         <source>Avg</source>
         <translation>평균</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="37"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="36"/>
         <source>Max</source>
         <translation>최대</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="40"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="39"/>
         <source>Average</source>
         <translation>평균</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="42"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="41"/>
         <source>Maximum</source>
         <translation>최대</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="45"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="44"/>
         <source>Pace</source>
         <translation>속도</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="134"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="133"/>
         <source>kn</source>
         <translation>kn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="137"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="136"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="140"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="139"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
