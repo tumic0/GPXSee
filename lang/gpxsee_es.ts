@@ -581,7 +581,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="464"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar el sombreado</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
