@@ -59,8 +59,8 @@ static void getSubmatrix(int x, int y, const Matrix &m, SubMatrix &sm)
 	sm.z9 = m.m(bottom, right);
 }
 
-QImage HillShading::render(const Matrix &m, quint8 alpha, double azimuth,
-  double elevation)
+QImage HillShading::render(const Matrix &m, quint8 alpha, double z,
+  double azimuth, double elevation)
 {
 	QImage img(m.w() - 2, m.h() - 2, QImage::Format_ARGB32_Premultiplied);
 	uchar *bits = img.bits();
@@ -69,7 +69,6 @@ QImage HillShading::render(const Matrix &m, quint8 alpha, double azimuth,
 	Constants c;
 	SubMatrix sm;
 	Derivatives d;
-	double z = (double)alpha / 0xFF;
 
 	getConstants(azimuth, elevation, c);
 
