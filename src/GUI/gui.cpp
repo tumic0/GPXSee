@@ -1985,7 +1985,7 @@ void GUI::downloadDEM(const RectC &rect)
 		  tr("DEM tiles download limit exceeded. If you really need data for "
 		  "such a huge area, download the files manually."));
 	else if (cnt < DEM_DOWNLOAD_WARNING || QMessageBox::question(this, APP_NAME,
-	  tr("Download %1 DEM tiles?").arg(cnt)) == QMessageBox::Yes) {
+	  tr("Download %n DEM tiles?", "", cnt)) == QMessageBox::Yes) {
 		_demRects.append(rect);
 		if (!_dem->loadTiles(rect) && _demRects.size() == 1)
 			demLoaded();
