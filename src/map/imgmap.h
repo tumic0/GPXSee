@@ -74,6 +74,8 @@ public:
 	  bool hidpi);
 	void unload();
 
+	bool usesDEM() const {return true;}
+
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 

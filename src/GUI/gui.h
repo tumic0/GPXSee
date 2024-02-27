@@ -84,7 +84,8 @@ private slots:
 	void prevMap();
 	void openOptions();
 	void clearMapCache();
-	void downloadDEM();
+	void downloadDataDEM();
+	void downloadMapDEM();
 	void showDEMTiles();
 
 	void mapChanged(QAction *action);
@@ -164,7 +165,8 @@ private:
 	void updateStatusBarInfo();
 	void updateWindowTitle();
 	bool updateGraphTabs();
-	void updateDEMDownloadAction();
+	void updateDataDEMDownloadAction();
+	void updateMapDEMDownloadAction();
 #ifndef Q_OS_ANDROID
 	void updateRecentFiles(const QString &fileName);
 #endif // Q_OS_ANDROID
@@ -184,11 +186,14 @@ private:
 	void readSettings(QString &activeMap, QStringList &disabledPOIs,
 	  QStringList &recentFiles);
 
+	void reloadMap();
 	void loadInitialMaps(const QString &selected);
 	void loadInitialPOIs(const QStringList &disabled);
 #ifndef Q_OS_ANDROID
 	void loadRecentFiles(const QStringList &files);
 #endif // Q_OS_ANDROID
+
+	void downloadDEM(const RectC &rect);
 
 	void loadOptions();
 	void updateOptions(const Options &options);
@@ -289,7 +294,8 @@ private:
 	QAction *_useStylesAction;
 	QAction *_showCoordinatesAction;
 	QAction *_openOptionsAction;
-	QAction *_downloadDEMAction;
+	QAction *_downloadDataDEMAction;
+	QAction *_downloadMapDEMAction;
 	QAction *_showDEMTilesAction;
 	QAction *_drawHillShadingAction;
 	QAction *_mapsEnd;

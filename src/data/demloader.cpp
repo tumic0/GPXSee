@@ -4,8 +4,6 @@
 #include "demloader.h"
 
 
-#define DOWNLOAD_LIMIT 16
-
 static QList<DEM::Tile> tiles(const RectC &rect)
 {
 	QList<DEM::Tile> list;
@@ -34,6 +32,23 @@ DEMLoader::DEMLoader(const QString &dir, QObject *parent)
 	connect(_downloader, &Downloader::finished, this, &DEMLoader::finished);
 }
 
+int DEMLoader::numTiles(const RectC &rect) const
+{
+	QList<DEM::Tile> tl(tiles(rect));
+	int cnt = 0;
+
+	for (int i = 0; i < tl.size(); i++) {
+		const DEM::Tile &t = tl.at(i);
+		QString fn(tileFile(t));
+		QString zn(fn + ".zip");
+
+		if (!(QFileInfo::exists(zn) || QFileInfo::exists(fn)))
+			cnt++;
+	}
+
+	return cnt;
+}
+
 bool DEMLoader::loadTiles(const RectC &rect)
 {
 	QList<DEM::Tile> tl(tiles(rect));
@@ -58,8 +73,8 @@ bool DEMLoader::loadTiles(const RectC &rect)
 			dl.append(Download(url, isZip(url) ? zn : fn));
 		}
 
-		if (dl.size() > DOWNLOAD_LIMIT) {
-			qWarning("DEM download limit exceeded.");
+		if (dl.size() > DEM_DOWNLOAD_LIMIT) {
+			qWarning("DEM download limit (%d) exceeded.", DEM_DOWNLOAD_LIMIT);
 			return false;
 		}
 	}

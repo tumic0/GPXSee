@@ -71,6 +71,8 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
+	bool usesDEM() const {return true;}
+
 	bool isValid() const {return _data.isValid();}
 	QString errorString() const {return _data.errorString();}
 

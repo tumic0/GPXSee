@@ -121,6 +121,7 @@ GUI::GUI()
 
 	updateGraphTabs();
 	updateStatusBarInfo();
+	updateMapDEMDownloadAction();
 }
 
 void GUI::createBrowser()
@@ -453,11 +454,17 @@ void GUI::createActions()
 	  &MapView::useStyles);
 
 	// DEM actions
-	_downloadDEMAction = new QAction(tr("Download DEM data"), this);
-	_downloadDEMAction->setMenuRole(QAction::NoRole);
-	_downloadDEMAction->setEnabled(false);
-	_downloadDEMAction->setShortcut(DOWNLOAD_DEM_SHORTCUT);
-	connect(_downloadDEMAction, &QAction::triggered, this, &GUI::downloadDEM);
+	_downloadDataDEMAction = new QAction(tr("Download data DEM"), this);
+	_downloadDataDEMAction->setMenuRole(QAction::NoRole);
+	_downloadDataDEMAction->setEnabled(false);
+	_downloadDataDEMAction->setShortcut(DOWNLOAD_DEM_SHORTCUT);
+	connect(_downloadDataDEMAction, &QAction::triggered, this,
+	  &GUI::downloadDataDEM);
+	_downloadMapDEMAction = new QAction(tr("Download map DEM"), this);
+	_downloadMapDEMAction->setMenuRole(QAction::NoRole);
+	_downloadMapDEMAction->setEnabled(false);
+	connect(_downloadMapDEMAction, &QAction::triggered, this,
+	  &GUI::downloadMapDEM);
 	_showDEMTilesAction = new QAction(tr("Show local DEM tiles"), this);
 	_showDEMTilesAction->setMenuRole(QAction::NoRole);
 	connect(_showDEMTilesAction, &QAction::triggered, this, &GUI::showDEMTiles);
@@ -715,7 +722,9 @@ void GUI::createMenus()
 
 	QMenu *demMenu = menuBar()->addMenu(tr("DEM"));
 	demMenu->addAction(_showDEMTilesAction);
-	demMenu->addAction(_downloadDEMAction);
+	demMenu->addSeparator();
+	demMenu->addAction(_downloadDataDEMAction);
+	demMenu->addAction(_downloadMapDEMAction);
 	demMenu->addSeparator();
 	demMenu->addAction(_drawHillShadingAction);
 
@@ -1075,7 +1084,7 @@ bool GUI::loadFile(const QString &fileName, bool tryUnknown, int &showError)
 		updateStatusBarInfo();
 		updateWindowTitle();
 		updateGraphTabs();
-		updateDEMDownloadAction();
+		updateDataDEMDownloadAction();
 		if (_files.isEmpty())
 			_fileActionGroup->setEnabled(false);
 
@@ -1156,7 +1165,7 @@ void GUI::loadData(const Data &data)
 		}
 	}
 
-	updateDEMDownloadAction();
+	updateDataDEMDownloadAction();
 }
 
 void GUI::openPOIFile()
@@ -1566,7 +1575,7 @@ void GUI::reloadFiles()
 	else
 		_browser->setCurrent(_files.last());
 #endif // Q_OS_ANDROID
-	updateDEMDownloadAction();
+	updateDataDEMDownloadAction();
 }
 
 void GUI::closeFiles()
@@ -1599,7 +1608,7 @@ void GUI::closeAll()
 	updateStatusBarInfo();
 	updateWindowTitle();
 	updateGraphTabs();
-	updateDEMDownloadAction();
+	updateDataDEMDownloadAction();
 
 #ifdef Q_OS_ANDROID
 	_browser->setCurrentDir(QString());
@@ -1670,7 +1679,7 @@ void GUI::showTracks(bool show)
 
 	updateStatusBarInfo();
 	updateGraphTabs();
-	updateDEMDownloadAction();
+	updateDataDEMDownloadAction();
 }
 
 void GUI::showRoutes(bool show)
@@ -1682,19 +1691,19 @@ void GUI::showRoutes(bool show)
 
 	updateStatusBarInfo();
 	updateGraphTabs();
-	updateDEMDownloadAction();
+	updateDataDEMDownloadAction();
 }
 
 void GUI::showWaypoints(bool show)
 {
 	_mapView->showWaypoints(show);
-	updateDEMDownloadAction();
+	updateDataDEMDownloadAction();
 }
 
 void GUI::showAreas(bool show)
 {
 	_mapView->showAreas(show);
-	updateDEMDownloadAction();
+	updateDataDEMDownloadAction();
 }
 
 void GUI::showGraphGrids(bool show)
@@ -1746,6 +1755,12 @@ void GUI::loadMap()
 		_mapDir = QFileInfo(files.last()).path();
 	if (lastReady)
 		lastReady->trigger();
+}
+
+void GUI::reloadMap()
+{
+	_mapView->setMap(_map);
+	updateMapDEMDownloadAction();
 }
 
 static MapAction *findMapAction(const QList<QAction*> &mapActions,
@@ -1951,14 +1966,32 @@ void GUI::clearMapCache()
 		_mapView->clearMapCache();
 }
 
-void GUI::downloadDEM()
+void GUI::downloadDataDEM()
 {
-	RectC br(_mapView->boundingRect());
-	_demRects.append(br);
-
-	if (!_dem->loadTiles(br) && _demRects.size() == 1)
-		demLoaded();
+	downloadDEM(_mapView->boundingRect());
 }
+
+void GUI::downloadMapDEM()
+{
+	downloadDEM(_map->llBounds());
+}
+
+void GUI::downloadDEM(const RectC &rect)
+{
+	int cnt = _dem->numTiles(rect);
+
+	if (cnt > DEM_DOWNLOAD_LIMIT)
+		QMessageBox::information(this, APP_NAME,
+		  tr("DEM tiles download limit exceeded. If you really need data for "
+		  "such a huge area, download the files manually."));
+	else if (cnt < DEM_DOWNLOAD_WARNING || QMessageBox::question(this, APP_NAME,
+	  tr("Download %1 DEM tiles?").arg(cnt)) == QMessageBox::Yes) {
+		_demRects.append(rect);
+		if (!_dem->loadTiles(rect) && _demRects.size() == 1)
+			demLoaded();
+	}
+}
+
 
 void GUI::demLoaded()
 {
@@ -1970,9 +2003,14 @@ void GUI::demLoaded()
 		}
 	}
 
-	DEM::clearCache();
 	_demRects.clear();
+
+	DEM::lock();
+	DEM::clearCache();
+	DEM::unlock();
+
 	reloadFiles();
+	reloadMap();
 }
 
 void GUI::showDEMTiles()
@@ -2079,6 +2117,7 @@ void GUI::mapChanged(QAction *action)
 {
 	_map = action->data().value<Map*>();
 	_mapView->setMap(_map);
+	updateMapDEMDownloadAction();
 }
 
 void GUI::nextMap()
@@ -2199,10 +2238,16 @@ bool GUI::updateGraphTabs()
 	return (hidden != _graphTabWidget->isHidden());
 }
 
-void GUI::updateDEMDownloadAction()
+void GUI::updateDataDEMDownloadAction()
 {
-	_downloadDEMAction->setEnabled(!_dem->url().isEmpty()
+	_downloadDataDEMAction->setEnabled(!_dem->url().isEmpty()
 	  && !_dem->checkTiles(_mapView->boundingRect()));
+}
+
+void GUI::updateMapDEMDownloadAction()
+{
+	_downloadMapDEMAction->setEnabled(!_dem->url().isEmpty()
+	  && _map->usesDEM() && !_dem->checkTiles(_map->llBounds()));
 }
 
 void GUI::setTimeType(TimeType type)
@@ -2976,7 +3021,9 @@ void GUI::loadOptions()
 	Downloader::setTimeout(_options.connectionTimeout);
 
 	QPixmapCache::setCacheLimit(_options.pixmapCache * 1024);
+	DEM::lock();
 	DEM::setCacheSize(_options.demCache * 1024);
+	DEM::unlock();
 
 	_poi->setRadius(_options.poiRadius);
 
@@ -3101,8 +3148,11 @@ void GUI::updateOptions(const Options &options)
 
 	if (options.pixmapCache != _options.pixmapCache)
 		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
-	if (options.demCache != _options.demCache)
+	if (options.demCache != _options.demCache) {
+		DEM::lock();
 		DEM::setCacheSize(options.demCache * 1024);
+		DEM::unlock();
+	}
 
 	if (options.connectionTimeout != _options.connectionTimeout)
 		Downloader::setTimeout(options.connectionTimeout);
@@ -3121,7 +3171,7 @@ void GUI::updateOptions(const Options &options)
 
 	_options = options;
 
-	updateDEMDownloadAction();
+	updateDataDEMDownloadAction();
 }
 
 void GUI::loadInitialMaps(const QString &selected)

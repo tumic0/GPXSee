@@ -57,6 +57,7 @@ public:
 	virtual void draw(QPainter *painter, const QRectF &rect, Flags flags) = 0;
 
 	virtual void clearCache() {}
+	virtual bool usesDEM() const {return false;}
 
 signals:
 	void tilesLoaded();

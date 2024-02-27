@@ -8,6 +8,9 @@
 
 class RectC;
 
+#define DEM_DOWNLOAD_WARNING 4
+#define DEM_DOWNLOAD_LIMIT   1024
+
 class DEMLoader : public QObject
 {
 	Q_OBJECT
@@ -18,6 +21,7 @@ public:
 	void setUrl(const QString &url) {_url = url;}
 	void setAuthorization(const Authorization &authorization);
 
+	int numTiles(const RectC &rect) const;
 	bool loadTiles(const RectC &rect);
 	bool checkTiles(const RectC &rect) const;
 
