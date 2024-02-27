@@ -72,7 +72,7 @@ void TextPointItem::paint(QPainter *painter) const
 		}
 	}
 
-	if (_text) {
+	if (_text && _font && _color) {
 		if (_bgColor) {
 			painter->setPen(*_color);
 			painter->setBrush(*_bgColor);

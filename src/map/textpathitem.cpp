@@ -356,7 +356,7 @@ void TextPathItem::paint(QPainter *painter) const
 		painter->restore();
 	}
 
-	if (_text && _font) {
+	if (_text && _font && _color) {
 		QFontMetrics fm(*_font);
 		int textWidth = fm.boundingRect(*_text).width();
 		int imgWidth = _img
@@ -394,7 +394,7 @@ void TextPathItem::paint(QPainter *painter) const
 			percent = ((1.0 - factor) + imgPercent) / 2.0;
 		}
 
-		painter->setPen(_color ? *_color : Qt::black);
+		painter->setPen(*_color);
 		for (int i = 0; i < _text->size(); i++) {
 			QPointF point = _path.pointAtPercent(percent);
 			qreal angle = _path.angleAtPercent(percent);

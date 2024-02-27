@@ -1026,7 +1026,8 @@ bool Style::parseLine(SubFile *file, SubFile::Handle &hdl,
 
 	if (isContourLine(type)) {
 		Line &l = _lines[type];
-		l.setTextColor(l.foreground().color());
+		if (l.img().isNull())
+			l.setTextColor(l.foreground().color());
 		l.setTextFontSize(Small);
 	}
 
