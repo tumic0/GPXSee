@@ -20,12 +20,16 @@
 #include "rectc.h"
 #include "dem.h"
 
-#define SRTM3_SAMPLES  1201
-#define SRTM1_SAMPLES  3601
-#define SRTM05_SAMPLES 7201
 
-#define SRTM_SIZE(samples) \
-	((samples) * (samples) * 2)
+static unsigned int isqrt(unsigned int x)
+{
+	unsigned int r = 0;
+
+	while ((r + 1) * (r + 1) <= x)
+		r++;
+
+	return r;
+}
 
 static double interpolate(double dx, double dy, double p0, double p1, double p2,
   double p3)
@@ -34,41 +38,20 @@ static double interpolate(double dx, double dy, double p0, double p1, double p2,
 	  + p2 * dy * (1.0 - dx) + p3 * dx * dy;
 }
 
-static double value(int col, int row, int samples, const QByteArray *data)
+static double value(int col, int row, int samples, const QByteArray &data)
 {
 	int pos = ((samples - 1 - row) * samples + col) * 2;
-	qint16 val = qFromBigEndian(*((const qint16*)(data->constData() + pos)));
+	qint16 val = qFromBigEndian(*((const qint16*)(data.constData() + pos)));
 
 	return (val == -32768) ? NAN : val;
 }
 
-static double height(const Coordinates &c, const QByteArray *data)
-{
-	int samples;
-
-	if (data->size() == SRTM_SIZE(SRTM3_SAMPLES))
-		samples = SRTM3_SAMPLES;
-	else if (data->size() == SRTM_SIZE(SRTM1_SAMPLES))
-		samples = SRTM1_SAMPLES;
-	else if (data->size() == SRTM_SIZE(SRTM05_SAMPLES))
-		samples = SRTM05_SAMPLES;
-	else
-		return NAN;
-
-	double lat = (c.lat() - floor(c.lat())) * (samples - 1);
-	double lon = (c.lon() - floor(c.lon())) * (samples - 1);
-	int row = (int)lat;
-	int col = (int)lon;
-
-	double p0 = value(col, row, samples, data);
-	double p1 = value(col + 1, row, samples, data);
-	double p2 = value(col, row + 1, samples, data);
-	double p3 = value(col + 1, row + 1, samples, data);
-
-	return interpolate(lon - col, lat - row, p0, p1, p2, p3);
-}
-
 QMutex DEM::_lock;
+
+DEM::Entry::Entry(const QByteArray &data) : _data(data)
+{
+	_samples = isqrt(_data.size() / 2);
+}
 
 QString DEM::Tile::latStr() const
 {
@@ -105,7 +88,25 @@ void DEM::clearCache()
 	_data.clear();
 }
 
-QByteArray *DEM::loadTile(const Tile &tile)
+double DEM::height(const Coordinates &c, const Entry *e)
+{
+	if (!e->samples())
+		return NAN;
+
+	double lat = (c.lat() - floor(c.lat())) * (e->samples() - 1);
+	double lon = (c.lon() - floor(c.lon())) * (e->samples() - 1);
+	int row = (int)lat;
+	int col = (int)lon;
+
+	double p0 = value(col, row, e->samples(), e->data());
+	double p1 = value(col + 1, row, e->samples(), e->data());
+	double p2 = value(col, row + 1, e->samples(), e->data());
+	double p3 = value(col + 1, row + 1, e->samples(), e->data());
+
+	return interpolate(lon - col, lat - row, p0, p1, p2, p3);
+}
+
+DEM::Entry *DEM::loadTile(const Tile &tile)
 {
 	QString bn(tile.baseName());
 	QString fn(QDir(_dir).absoluteFilePath(bn));
@@ -113,15 +114,15 @@ QByteArray *DEM::loadTile(const Tile &tile)
 
 	if (QFileInfo::exists(zn)) {
 		QZipReader zip(zn, QIODevice::ReadOnly);
-		return new QByteArray(zip.fileData(bn));
+		return new Entry(zip.fileData(bn));
 	} else {
 		QFile file(fn);
 		if (!file.open(QIODevice::ReadOnly)) {
 			qWarning("%s: %s", qPrintable(file.fileName()),
 			  qPrintable(file.errorString()));
-			return new QByteArray();
+			return new Entry();
 		} else
-			return new QByteArray(file.readAll());
+			return new Entry(file.readAll());
 	}
 }
 
@@ -131,15 +132,15 @@ double DEM::elevation(const Coordinates &c)
 		return NAN;
 
 	Tile tile(floor(c.lon()), floor(c.lat()));
-	QByteArray *ba = _data.object(tile);
+	Entry *e = _data.object(tile);
 	double ele;
 
-	if (!ba) {
-		ba = loadTile(tile);
-		ele = height(c, ba);
-		_data.insert(tile, ba, ba->size());
+	if (!e) {
+		e = loadTile(tile);
+		ele = height(c, e);
+		_data.insert(tile, e, e->data().size());
 	} else
-		ele = height(c, ba);
+		ele = height(c, e);
 
 	return ele;
 }

@@ -44,9 +44,23 @@ public:
 	static QList<Area> tiles();
 
 private:
-	typedef QCache<DEM::Tile, QByteArray> TileCache;
+	class Entry {
+	public:
+		Entry() : _samples(0) {}
+		Entry(const QByteArray &data);
 
-	static QByteArray *loadTile(const Tile &tile);
+		const QByteArray &data() const {return _data;}
+		int samples() const {return _samples;}
+
+	private:
+		unsigned int _samples;
+		QByteArray _data;
+	};
+
+	typedef QCache<DEM::Tile, Entry> TileCache;
+
+	static double height(const Coordinates &c, const Entry *e);
+	static Entry *loadTile(const Tile &tile);
 
 	static QString _dir;
 	static TileCache _data;
