@@ -576,7 +576,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Tepe gölgelendirmesini göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="479"/>
@@ -755,8 +755,8 @@
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1988"/>
         <source>Download %n DEM tiles?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n DEM döşemesi indirilsin mi?</numerusform>
         </translation>
     </message>
     <message>
@@ -767,12 +767,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="457"/>
         <source>Download data DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM verisini indir</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="463"/>
         <source>Download map DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM haritasını indir</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="697"/>
@@ -1041,7 +1041,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1985"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM döşemeleri indirme sınırı aşıldı. Bu kadar büyük bir alan için gerçekten veriye ihtiyacınız varsa, dosyaları elle indirin.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="2001"/>
