@@ -170,6 +170,8 @@ QList<Area> DEM::tiles()
 		area.setName(basename);
 		area.setDescription(files.at(i).suffix().toUpper() + ", "
 		  + l.formattedDataSize(files.at(i).size()));
+		area.setStyle(PolygonStyle(QColor(0xFF, 0, 0, 0x40),
+		  QColor(0xFF, 0, 0, 0x80), 2));
 
 		list.append(area);
 	}
