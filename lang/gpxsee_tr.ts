@@ -576,7 +576,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Tepe gölgelendirmesini göster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="479"/>
