@@ -74,7 +74,7 @@ QWidget *OptionsDialog::createMapPage()
 	  "vector maps (IMG, Mapsforge and ENC maps). The projection must be valid "
 	  "for the whole map area."));
 
-	_hidpi = new QRadioButton(tr("High-resolution"));
+	_hidpi = new QRadioButton(tr("High-Resolution"));
 	_lodpi = new QRadioButton(tr("Standard"));
 	if (_options.hidpiMap)
 		_hidpi->setChecked(true);
