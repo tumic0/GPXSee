@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <QDir>
-#include "common/downloader.h"
-#include "common/dem.h"
+#include "downloader.h"
+#include "dem.h"
 
 class RectC;
 

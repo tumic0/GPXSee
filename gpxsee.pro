@@ -44,6 +44,7 @@ HEADERS += src/common/config.h \
     src/common/color.h \
     src/common/csv.h \
     src/common/dem.h \
+    src/common/demloader.h \
     src/GUI/crosshairitem.h \
     src/GUI/motioninfoitem.h \
     src/GUI/pluginparameters.h \
@@ -257,7 +258,6 @@ HEADERS += src/common/config.h \
     src/data/oziparsers.h \
     src/data/locparser.h \
     src/data/slfparser.h \
-    src/data/demloader.h \
     src/data/area.h \
     src/data/exifparser.h \
     src/data/cupparser.h \
@@ -278,6 +278,7 @@ SOURCES += src/main.cpp \
     src/common/downloader.cpp \
     src/common/csv.cpp \
     src/common/dem.cpp \
+    src/common/demloader.cpp \
     src/GUI/crosshairitem.cpp \
     src/GUI/motioninfoitem.cpp \
     src/GUI/pluginparameters.cpp \
@@ -458,7 +459,6 @@ SOURCES += src/main.cpp \
     src/data/oziparsers.cpp \
     src/data/locparser.cpp \
     src/data/slfparser.cpp \
-    src/data/demloader.cpp \
     src/data/exifparser.cpp \
     src/data/cupparser.cpp \
     src/data/gpiparser.cpp \
