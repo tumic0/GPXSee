@@ -576,7 +576,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar el sombreado</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
@@ -755,9 +755,9 @@
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1989"/>
         <source>Download %n DEM tiles?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>¿Descargar %n mosaico DEM?</numerusform>
+            <numerusform>¿Descargar %n mosaicos DEM?</numerusform>
         </translation>
     </message>
     <message>
@@ -768,12 +768,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="457"/>
         <source>Download data DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Descargar los datos DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="463"/>
         <source>Download map DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Descargar el mapa DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="698"/>
@@ -1042,7 +1042,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1986"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>Límite de descarga de mosaicos DEM superado. Si realmente necesitas datos para un área tan grande, descarga los archivos manualmente.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="2002"/>

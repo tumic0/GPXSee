@@ -576,7 +576,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Domborzatárnyékolás</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
@@ -755,8 +755,8 @@
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1989"/>
         <source>Download %n DEM tiles?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n DEM csempe letöltése?</numerusform>
         </translation>
     </message>
     <message>
@@ -767,12 +767,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="457"/>
         <source>Download data DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM adat letöltése</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="463"/>
         <source>Download map DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM térkép letöltése</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="698"/>
@@ -1041,7 +1041,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1986"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM csempe letöltési limit túllépve. Ha valóban szüksége van ilyen nagy területre vonatkozó adatokra, töltse le a fájlokat kézzel.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="2002"/>
