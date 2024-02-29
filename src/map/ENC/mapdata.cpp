@@ -246,8 +246,7 @@ static QString sistat(uint type)
 MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
   const QVector<QByteArray> &params) : _type(type), _pos(c), _label(label)
 {
-	uint hash = (uint)qHash(QPair<double,double>(c.lon(), c.lat()));
-	_id = ((quint64)order(type))<<32 | hash;
+	_id = ((quint64)order(type))<<32 | (uint)qHash(c);
 
 	if (type>>16 == I_DISMAR && params.size()) {
 		_label = hUnits((type>>8)&0xFF) + " " + QString::fromLatin1(params.at(0));
