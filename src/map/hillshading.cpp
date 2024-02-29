@@ -84,6 +84,7 @@ QImage HillShading::render(const Matrix &m, quint8 alpha, double z,
 			if (std::isnan(L))
 				pixel = 0;
 			else {
+				L = sqrt(L * 0.8 + 0.2);
 				quint8 val = (L < 0) ? 0 : L * alpha;
 				pixel = (alpha - val)<<24;
 			}
