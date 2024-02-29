@@ -589,7 +589,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa bergsskuggning</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="479"/>
