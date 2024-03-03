@@ -2092,8 +2092,9 @@ void GUI::updateRecentFiles(const QString &fileName)
 
 	actions = _recentFilesActionGroup->actions();
 	QAction *before = actions.size() ? actions.last() : _recentFilesEnd;
-	_recentFilesMenu->insertAction(before,
-	  new QAction(fileName, _recentFilesActionGroup));
+	a = new QAction(fileName, _recentFilesActionGroup);
+	a->setData(fileName);
+	_recentFilesMenu->insertAction(before, a);
 	_recentFilesMenu->setEnabled(true);
 }
 
@@ -2110,7 +2111,7 @@ void GUI::clearRecentFiles()
 void GUI::recentFileSelected(QAction *action)
 {
 	int showError = 1;
-	openFile(action->text(), true, showError);
+	openFile(action->data().toString(), true, showError);
 }
 #endif // Q_OS_ANDROID
 
@@ -3229,6 +3230,7 @@ void GUI::loadRecentFiles(const QStringList &files)
 
 	for (int i = 0; i < files.size(); i++) {
 		QAction *a = new QAction(files.at(i), _recentFilesActionGroup);
+		a->setData(files.at(i));
 		_recentFilesMenu->insertAction(before, a);
 		before = a;
 	}
