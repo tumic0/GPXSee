@@ -571,12 +571,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="457"/>
         <source>Download data DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Descarregar dades DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="463"/>
         <source>Download map DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Descarregar mapa DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="468"/>
@@ -586,7 +586,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra l&apos;ombrejat</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
@@ -1034,14 +1034,14 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1986"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>S&apos;ha superat el límit de descàrrega de tessel·les DEM. Si realment necessiteu dades per a una àrea tan gran, descarregueu els fitxers manualment.</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1989"/>
         <source>Download %n DEM tiles?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Descarregar %n tessel·la DEM?</numerusform>
+            <numerusform>Descarregar %n tessel·les DEM?</numerusform>
         </translation>
     </message>
     <message>
