@@ -2489,7 +2489,7 @@ void GUI::writeSettings()
 	QList<QAction*> recentActions(_recentFilesActionGroup->actions());
 	QStringList recent;
 	for (int i = 0; i < recentActions.size(); i++)
-		recent.append(recentActions.at(i)->text());
+		recent.append(recentActions.at(i)->data().toString());
 
 	settings.beginGroup(SETTINGS_FILE);
 	WRITE(recentDataFiles, recent);
