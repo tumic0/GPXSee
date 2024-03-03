@@ -2079,7 +2079,7 @@ void GUI::updateRecentFiles(const QString &fileName)
 
 	QList<QAction *> actions(_recentFilesActionGroup->actions());
 	for (int i = 0; i < actions.size(); i++) {
-		if (actions.at(i)->text() == fileName) {
+		if (actions.at(i)->data().toString() == fileName) {
 			a = actions.at(i);
 			break;
 		}
