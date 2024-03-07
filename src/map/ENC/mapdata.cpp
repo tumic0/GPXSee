@@ -1,7 +1,5 @@
-#include "common/util.h"
 #include "objects.h"
 #include "attributes.h"
-#include "style.h"
 #include "mapdata.h"
 
 using namespace ENC;
