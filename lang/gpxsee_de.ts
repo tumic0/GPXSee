@@ -589,7 +589,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Schummerung anzeigen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
@@ -862,14 +862,14 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1986"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Download-Limit für die DEM-Kacheln wurde überschritten. Wenn Sie wirklich Daten für so ein großes Gebiet benötigen, laden Sie die Dateien manuell herunter.</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1989"/>
         <source>Download %n DEM tiles?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n DEM-Kachel herunterladen?</numerusform>
+            <numerusform>%n DEM-Kacheln herunterladen?</numerusform>
         </translation>
     </message>
     <message>
@@ -972,12 +972,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="457"/>
         <source>Download data DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM für Daten herunterladen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="463"/>
         <source>Download map DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM für die Karte herunterladen</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="739"/>
