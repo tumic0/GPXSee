@@ -170,8 +170,7 @@ void MapsforgeMap::cancelJobs(bool wait)
 
 void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	int tileSize = (_data.tileSize() < 384)
-	  ? _data.tileSize() << 1 : _data.tileSize();
+	int tileSize = _data.tileSize();
 	QPointF tl(floor(rect.left() / tileSize) * tileSize,
 	  floor(rect.top() / tileSize) * tileSize);
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
