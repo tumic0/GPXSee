@@ -6,6 +6,7 @@
 
 class QJsonObject;
 class QJsonArray;
+class Projection;
 
 class GeoJSONParser : public Parser
 {
@@ -30,27 +31,27 @@ private:
 	};
 
 	Type type(const QJsonObject &json);
-	bool point(const QJsonArray &coordinates, Waypoint &waypoint,
-	  const QJsonValue &properties = QJsonValue());
-	bool multiPoint(const QJsonArray &coordinates,
-	  QVector<Waypoint> &waypoints, const QJsonValue &properties = QJsonValue());
-	bool lineString(const QJsonArray &coordinates, SegmentData &segment);
-	bool lineString(const QJsonArray &coordinates, TrackData &track,
-	  const QJsonValue &properties = QJsonValue());
-	bool multiLineString(const QJsonArray &coordinates,
-	  TrackData &track, const QJsonValue &properties = QJsonValue());
-	bool polygon(const QJsonArray &coordinates, ::Polygon &pg);
-	bool polygon(const QJsonArray &coordinates, Area &area,
-	  const QJsonValue &properties = QJsonValue());
-	bool multiPolygon(const QJsonArray &coordinates, Area &area,
-	  const QJsonValue &properties = QJsonValue());
-	bool geometryCollection(const QJsonObject &json, QList<TrackData> &tracks,
-	  QList<Area> &areas, QVector<Waypoint> &waypoints,
-	  const QJsonValue &properties = QJsonValue());
-	bool feature(const QJsonObject &json, QList<TrackData> &tracks,
+	bool crs(const QJsonObject &object, Projection &proj);
+	bool point(const QJsonObject &object, const Projection &parent,
+	  const QJsonValue &properties, Waypoint &waypoint);
+	bool multiPoint(const QJsonObject &object, const Projection &parent,
+	  const QJsonValue &properties, QVector<Waypoint> &waypoints);
+	bool lineString(const QJsonObject &coordinates, const Projection &parent,
+	  const QJsonValue &properties, TrackData &track);
+	bool multiLineString(const QJsonObject &object, const Projection &proj,
+	  const QJsonValue &properties, TrackData &track);
+	bool polygon(const QJsonObject &object, const Projection &parent,
+	  const QJsonValue &properties, Area &area);
+	bool multiPolygon(const QJsonObject &object, const Projection &proj,
+	  const QJsonValue &properties, Area &area);
+	bool geometryCollection(const QJsonObject &json, const Projection &parent,
+	  const QJsonValue &properties, QList<TrackData> &tracks,
 	  QList<Area> &areas, QVector<Waypoint> &waypoints);
-	bool featureCollection(const QJsonObject &json, QList<TrackData> &tracks,
-	  QList<Area> &areas, QVector<Waypoint> &waypoints);
+	bool feature(const QJsonObject &json, const Projection &parent,
+	  QList<TrackData> &tracks, QList<Area> &areas,
+	  QVector<Waypoint> &waypoints);
+	bool featureCollection(const QJsonObject &object, const Projection &parent,
+	  QList<TrackData> &tracks, QList<Area> &areas, QVector<Waypoint> &waypoints);
 
 	QString _errorString;
 };
