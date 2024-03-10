@@ -247,8 +247,7 @@ bool IGCParser::parse(QFile *file, QList<TrackData> &tracks,
 					ctx.date = QDate(1970, 1, 1);
 				}
 				if (!track) {
-					tracks.append(TrackData());
-					tracks.last().append(SegmentData());
+					tracks.append(SegmentData());
 					ctx.time = QTime(0, 0);
 					track = true;
 				}

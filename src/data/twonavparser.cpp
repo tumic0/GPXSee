@@ -151,8 +151,7 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
 				}
 
 				if (!track) {
-					tracks.append(TrackData());
-					tracks.last().append(SegmentData());
+					tracks.append(SegmentData());
 					track = true;
 				}
 
