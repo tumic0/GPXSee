@@ -33,17 +33,17 @@ private:
 	Type type(const QJsonObject &json);
 	bool crs(const QJsonObject &object, Projection &proj);
 	bool point(const QJsonObject &object, const Projection &parent,
-	  const QJsonValue &properties, Waypoint &waypoint);
+	  const QJsonValue &properties, QVector<Waypoint> &waypoints);
 	bool multiPoint(const QJsonObject &object, const Projection &parent,
 	  const QJsonValue &properties, QVector<Waypoint> &waypoints);
 	bool lineString(const QJsonObject &coordinates, const Projection &parent,
-	  const QJsonValue &properties, TrackData &track);
+	  const QJsonValue &properties, QList<TrackData> &tracks);
 	bool multiLineString(const QJsonObject &object, const Projection &proj,
-	  const QJsonValue &properties, TrackData &track);
+	  const QJsonValue &properties, QList<TrackData> &tracks);
 	bool polygon(const QJsonObject &object, const Projection &parent,
-	  const QJsonValue &properties, Area &area);
+	  const QJsonValue &properties, QList<Area> &areas);
 	bool multiPolygon(const QJsonObject &object, const Projection &proj,
-	  const QJsonValue &properties, Area &area);
+	  const QJsonValue &properties, QList<Area> &areas);
 	bool geometryCollection(const QJsonObject &json, const Projection &parent,
 	  const QJsonValue &properties, QList<TrackData> &tracks,
 	  QList<Area> &areas, QVector<Waypoint> &waypoints);

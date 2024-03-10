@@ -13,6 +13,13 @@ typedef QVector<Trackpoint> SegmentData;
 class TrackData : public QList<SegmentData>
 {
 public:
+	TrackData() {}
+	TrackData(const SegmentData &segment)
+	{
+		reserve(1);
+		append(segment);
+	}
+
 	const QString &name() const {return _name;}
 	const QString &description() const {return _desc;}
 	const QString &comment() const {return _comment;}

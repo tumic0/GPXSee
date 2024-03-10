@@ -182,7 +182,7 @@ GeoJSONParser::Type GeoJSONParser::type(const QJsonObject &json)
 }
 
 bool GeoJSONParser::point(const QJsonObject &object, const Projection &parent,
-  const QJsonValue &properties, Waypoint &waypoint)
+  const QJsonValue &properties, QVector<Waypoint> &waypoints)
 {
 	if (!object.contains("coordinates")) {
 		_errorString = "Missing Point coordinates array";
@@ -203,11 +203,11 @@ bool GeoJSONParser::point(const QJsonObject &object, const Projection &parent,
 		return false;
 	}
 
-	waypoint.setCoordinates(c);
+	Waypoint waypoint(c);
 	if (coordinates.count() == 3 && coordinates.at(2).isDouble())
 		waypoint.setElevation(coordinates.at(2).toDouble());
-
 	setWaypointProperties(waypoint, properties);
+	waypoints.append(waypoint);
 
 	return true;
 }
@@ -223,8 +223,6 @@ bool GeoJSONParser::multiPoint(const QJsonObject &object,
 	if (object["coordinates"].isNull())
 		return true;
 	QJsonArray coordinates(object["coordinates"].toArray());
-	if (coordinates.isEmpty())
-		return true;
 	Projection proj;
 	if (!crs(object, proj))
 		return false;
@@ -234,8 +232,6 @@ bool GeoJSONParser::multiPoint(const QJsonObject &object,
 			_errorString = "Invalid MultiPoint data";
 			return false;
 		} else {
-			waypoints.resize(waypoints.size() + 1);
-
 			QJsonArray data(coordinates.at(i).toArray());
 			Coordinates c(::coordinates(data, proj.isNull() ? parent : proj));
 			if (!c.isValid()) {
@@ -243,11 +239,11 @@ bool GeoJSONParser::multiPoint(const QJsonObject &object,
 				return false;
 			}
 
-			waypoints.last().setCoordinates(c);
+			Waypoint waypoint(c);
 			if (data.count() == 3 && data.at(2).isDouble())
-				waypoints.last().setElevation(data.at(2).toDouble());
-
-			setWaypointProperties(waypoints.last(), properties);
+				waypoint.setElevation(data.at(2).toDouble());
+			setWaypointProperties(waypoint, properties);
+			waypoints.append(waypoint);
 		}
 	}
 
@@ -255,7 +251,8 @@ bool GeoJSONParser::multiPoint(const QJsonObject &object,
 }
 
 bool GeoJSONParser::lineString(const QJsonObject &object,
-  const Projection &parent, const QJsonValue &properties, TrackData &track)
+  const Projection &parent, const QJsonValue &properties,
+  QList<TrackData> &tracks)
 {
 	if (!object.contains("coordinates")) {
 		_errorString = "Missing LineString coordinates array";
@@ -269,8 +266,7 @@ bool GeoJSONParser::lineString(const QJsonObject &object,
 	Projection proj;
 	if (!crs(object, proj))
 		return false;
-
-	track.append(SegmentData());
+	SegmentData sd;
 
 	for (int i = 0; i < coordinates.size(); i++) {
 		if (!coordinates.at(i).isArray()) {
@@ -288,16 +284,19 @@ bool GeoJSONParser::lineString(const QJsonObject &object,
 		Trackpoint t(c);
 		if (data.count() == 3 && data.at(2).isDouble())
 			t.setElevation(data.at(2).toDouble());
-		track.last().append(t);
+		sd.append(t);
 	}
 
+	TrackData track(sd);
 	setTrackProperties(track, properties);
+	tracks.append(track);
 
 	return true;
 }
 
 bool GeoJSONParser::multiLineString(const QJsonObject &object,
-  const Projection &parent, const QJsonValue &properties, TrackData &track)
+  const Projection &parent, const QJsonValue &properties,
+  QList<TrackData> &tracks)
 {
 	if (!object.contains("coordinates")) {
 		_errorString = "Missing MultiLineString coordinates array";
@@ -311,13 +310,14 @@ bool GeoJSONParser::multiLineString(const QJsonObject &object,
 	Projection proj;
 	if (!crs(object, proj))
 		return false;
+	TrackData track;
 
 	for (int i = 0; i < coordinates.size(); i++) {
 		if (!coordinates.at(i).isArray()) {
 			_errorString = "Invalid MultiLineString data";
 			return false;
 		} else {
-			track.append(SegmentData());
+			SegmentData sd;
 
 			QJsonArray ls(coordinates.at(i).toArray());
 			for (int j = 0; j < ls.size(); j++) {
@@ -336,18 +336,21 @@ bool GeoJSONParser::multiLineString(const QJsonObject &object,
 				Trackpoint t(c);
 				if (data.count() == 3 && data.at(2).isDouble())
 					t.setElevation(data.at(2).toDouble());
-				track.last().append(t);
+				sd.append(t);
 			}
+
+			track.append(sd);
 		}
 	}
 
 	setTrackProperties(track, properties);
+	tracks.append(track);
 
 	return true;
 }
 
 bool GeoJSONParser::polygon(const QJsonObject &object, const Projection &parent,
-  const QJsonValue &properties, Area &area)
+  const QJsonValue &properties, QList<Area> &areas)
 {
 	if (!object.contains("coordinates")) {
 		_errorString = "Missing Polygon coordinates array";
@@ -390,14 +393,15 @@ bool GeoJSONParser::polygon(const QJsonObject &object, const Projection &parent,
 		pg.append(data);
 	}
 
-	area.append(pg);
+	Area area(pg);
 	setAreaProperties(area, properties);
+	areas.append(area);
 
 	return true;
 }
 
 bool GeoJSONParser::multiPolygon(const QJsonObject &object,
-  const Projection &parent, const QJsonValue &properties, Area &area)
+  const Projection &parent, const QJsonValue &properties, QList<Area> &areas)
 {
 	if (!object.contains("coordinates")) {
 		_errorString = "Missing MultiPolygon coordinates array";
@@ -411,6 +415,8 @@ bool GeoJSONParser::multiPolygon(const QJsonObject &object,
 	Projection proj;
 	if (!crs(object, proj))
 		return false;
+	Area area;
+
 
 	for (int i = 0; i < coordinates.size(); i++) {
 		if (!coordinates.at(i).isArray()) {
@@ -452,6 +458,7 @@ bool GeoJSONParser::multiPolygon(const QJsonObject &object,
 	}
 
 	setAreaProperties(area, properties);
+	areas.append(area);
 
 	return true;
 }
@@ -475,9 +482,8 @@ bool GeoJSONParser::geometryCollection(const QJsonObject &object,
 
 		switch (type(geometry)) {
 			case Point:
-				waypoints.resize(waypoints.size() + 1);
 				if (!point(geometry, proj.isNull() ? parent : proj, properties,
-				  waypoints.last()))
+				  waypoints))
 					return false;
 				break;
 			case MultiPoint:
@@ -486,27 +492,23 @@ bool GeoJSONParser::geometryCollection(const QJsonObject &object,
 					return false;
 				break;
 			case LineString:
-				tracks.append(TrackData());
 				if (!lineString(geometry, proj.isNull() ? parent : proj,
-				  properties, tracks.last()))
+				  properties, tracks))
 					return false;
 				break;
 			case MultiLineString:
-				tracks.append(TrackData());
 				if (!multiLineString(geometry, proj.isNull() ? parent : proj,
-				  properties, tracks.last()))
+				  properties, tracks))
 					return false;
 				break;
 			case Polygon:
-				areas.append(Area());
 				if (!polygon(geometry, proj.isNull() ? parent : proj, properties,
-				  areas.last()))
+				  areas))
 					return false;
 				break;
 			case MultiPolygon:
-				areas.append(Area());
 				if (!multiPolygon(geometry, proj.isNull() ? parent : proj,
-				  properties, areas.last()))
+				  properties, areas))
 					return false;
 				break;
 			case GeometryCollection:
@@ -540,31 +542,26 @@ bool GeoJSONParser::feature(const QJsonObject &object, const Projection &parent,
 
 	switch (type(geometry)) {
 		case Point:
-			waypoints.resize(waypoints.size() + 1);
 			return point(geometry, proj.isNull() ? parent : proj, properties,
-			  waypoints.last());
+			  waypoints);
 		case MultiPoint:
 			return multiPoint(geometry, proj.isNull() ? parent : proj,
 			  properties, waypoints);
 		case LineString:
-			tracks.append(TrackData());
 			return lineString(geometry, proj.isNull() ? parent : proj,
-			  properties, tracks.last());
+			  properties, tracks);
 		case MultiLineString:
-			tracks.append(TrackData());
 			return multiLineString(geometry, proj.isNull() ? parent : proj,
-			  properties, tracks.last());
+			  properties, tracks);
 		case GeometryCollection:
 			return geometryCollection(geometry, proj.isNull() ? parent : proj,
 			  properties, tracks, areas, waypoints);
 		case Polygon:
-			areas.append(Area());
 			return polygon(geometry, proj.isNull() ? parent : proj, properties,
-			  areas.last());
+			  areas);
 		case MultiPolygon:
-			areas.append(Area());
 			return multiPolygon(geometry, proj.isNull() ? parent : proj,
-			  properties, areas.last());
+			  properties, areas);
 		default:
 			_errorString = geometry["type"].toString()
 			  + ": invalid/missing Feature geometry";
@@ -620,16 +617,13 @@ bool GeoJSONParser::parse(QFile *file, QList<TrackData> &tracks,
 
 	switch (type(object)) {
 		case Point:
-			waypoints.resize(waypoints.size() + 1);
-			return point(object, proj, QJsonValue(), waypoints.last());
+			return point(object, proj, QJsonValue(), waypoints);
 		case MultiPoint:
 			return multiPoint(object, proj, QJsonValue(), waypoints);
 		case LineString:
-			tracks.append(TrackData());
-			return lineString(object, proj, QJsonValue(), tracks.last());
+			return lineString(object, proj, QJsonValue(), tracks);
 		case MultiLineString:
-			tracks.append(TrackData());
-			return multiLineString(object, proj, QJsonValue(), tracks.last());
+			return multiLineString(object, proj, QJsonValue(), tracks);
 		case GeometryCollection:
 			return geometryCollection(object, proj, QJsonValue(), tracks, areas,
 			  waypoints);
@@ -638,11 +632,9 @@ bool GeoJSONParser::parse(QFile *file, QList<TrackData> &tracks,
 		case FeatureCollection:
 			return featureCollection(object, proj, tracks, areas, waypoints);
 		case Polygon:
-			areas.append(Area());
-			return polygon(object, proj, QJsonValue(), areas.last());
+			return polygon(object, proj, QJsonValue(), areas);
 		case MultiPolygon:
-			areas.append(Area());
-			return multiPolygon(object, proj, QJsonValue(), areas.last());
+			return multiPolygon(object, proj, QJsonValue(), areas);
 		case Unknown:
 			if (object["type"].toString().isNull())
 				_errorString = "Not a GeoJSON file";
