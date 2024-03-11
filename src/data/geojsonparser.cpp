@@ -7,6 +7,9 @@
 #define MARKER_SIZE_SMALL  8
 #define MARKER_SIZE_LARGE  16
 
+#define PROJ(object, parent) \
+	((object).isNull() ? (parent) : (object))
+
 static int markerSize(const QString &str)
 {
 	if (str == "small")
@@ -110,7 +113,7 @@ static bool isWS(char c)
 	return (c == 0x20 || c == 0x09 || c == 0x0A || c == 0x0D) ? true : false;
 }
 
-static bool isJSONObject(QFile *file)
+static bool possiblyJSONObject(QFile *file)
 {
 	char c;
 
@@ -126,12 +129,21 @@ static bool isJSONObject(QFile *file)
 	return false;
 }
 
-static Coordinates coordinates(const QJsonArray &data, const Projection &proj)
+bool GeoJSONParser::a2c(const QJsonArray &data, const Projection &proj,
+  Coordinates &c)
 {
-	if (data.count() >= 2 && data.at(0).isDouble() && data.at(1).isDouble())
-		return proj.xy2ll(PointD(data.at(0).toDouble(), data.at(1).toDouble()));
-	else
-		return Coordinates();
+	c = (data.count() >= 2 && data.at(0).isDouble() && data.at(1).isDouble())
+	  ? proj.xy2ll(PointD(data.at(0).toDouble(), data.at(1).toDouble()))
+	  : Coordinates();
+
+	if (c.isValid())
+		return true;
+	else {
+		QJsonDocument doc(QJsonDocument::fromVariant(data.toVariantList()));
+		_errorString = QString("%1: invalid coordinates")
+		  .arg(QString::fromUtf8(doc.toJson(QJsonDocument::Compact)));
+		return false;
+	}
 }
 
 bool GeoJSONParser::crs(const QJsonObject &object, Projection &proj)
@@ -197,11 +209,9 @@ bool GeoJSONParser::point(const QJsonObject &object, const Projection &parent,
 	if (!crs(object, proj))
 		return false;
 
-	Coordinates c(::coordinates(coordinates, proj.isNull() ? parent : proj));
-	if (!c.isValid()) {
-		_errorString = "Invalid Point coordinates";
+	Coordinates c;
+	if (!a2c(coordinates, PROJ(proj, parent), c))
 		return false;
-	}
 
 	Waypoint waypoint(c);
 	if (coordinates.count() == 3 && coordinates.at(2).isDouble())
@@ -226,6 +236,7 @@ bool GeoJSONParser::multiPoint(const QJsonObject &object,
 	Projection proj;
 	if (!crs(object, proj))
 		return false;
+	Coordinates c;
 
 	for (int i = 0; i < coordinates.size(); i++) {
 		if (!coordinates.at(i).isArray()) {
@@ -233,11 +244,8 @@ bool GeoJSONParser::multiPoint(const QJsonObject &object,
 			return false;
 		} else {
 			QJsonArray data(coordinates.at(i).toArray());
-			Coordinates c(::coordinates(data, proj.isNull() ? parent : proj));
-			if (!c.isValid()) {
-				_errorString = "Invalid MultiPoint coordinates";
+			if (!a2c(data, PROJ(proj, parent), c))
 				return false;
-			}
 
 			Waypoint waypoint(c);
 			if (data.count() == 3 && data.at(2).isDouble())
@@ -266,7 +274,8 @@ bool GeoJSONParser::lineString(const QJsonObject &object,
 	Projection proj;
 	if (!crs(object, proj))
 		return false;
-	SegmentData sd;
+	SegmentData segment;
+	Coordinates c;
 
 	for (int i = 0; i < coordinates.size(); i++) {
 		if (!coordinates.at(i).isArray()) {
@@ -275,19 +284,16 @@ bool GeoJSONParser::lineString(const QJsonObject &object,
 		}
 
 		QJsonArray data(coordinates.at(i).toArray());
-		Coordinates c(::coordinates(data, proj.isNull() ? parent : proj));
-		if (!c.isValid()) {
-			_errorString = "Invalid LineString coordinates";
+		if (!a2c(data, PROJ(proj, parent), c))
 			return false;
-		}
 
 		Trackpoint t(c);
 		if (data.count() == 3 && data.at(2).isDouble())
 			t.setElevation(data.at(2).toDouble());
-		sd.append(t);
+		segment.append(t);
 	}
 
-	TrackData track(sd);
+	TrackData track(segment);
 	setTrackProperties(track, properties);
 	tracks.append(track);
 
@@ -311,6 +317,7 @@ bool GeoJSONParser::multiLineString(const QJsonObject &object,
 	if (!crs(object, proj))
 		return false;
 	TrackData track;
+	Coordinates c;
 
 	for (int i = 0; i < coordinates.size(); i++) {
 		if (!coordinates.at(i).isArray()) {
@@ -327,11 +334,8 @@ bool GeoJSONParser::multiLineString(const QJsonObject &object,
 				}
 
 				QJsonArray data(ls.at(j).toArray());
-				Coordinates c(::coordinates(data, proj.isNull() ? parent : proj));
-				if (!c.isValid()) {
-					_errorString = "Invalid MultiLineString coordinates";
+				if (!a2c(data, PROJ(proj, parent), c))
 					return false;
-				}
 
 				Trackpoint t(c);
 				if (data.count() == 3 && data.at(2).isDouble())
@@ -364,7 +368,8 @@ bool GeoJSONParser::polygon(const QJsonObject &object, const Projection &parent,
 	Projection proj;
 	if (!crs(object, proj))
 		return false;
-	::Polygon pg;
+	::Polygon poly;
+	Coordinates c;
 
 	for (int i = 0; i < coordinates.size(); i++) {
 		if (!coordinates.at(i).isArray()) {
@@ -382,18 +387,16 @@ bool GeoJSONParser::polygon(const QJsonObject &object, const Projection &parent,
 			}
 
 			QJsonArray point(lr.at(j).toArray());
-			Coordinates c(::coordinates(point, proj.isNull() ? parent : proj));
-			if (!c.isValid()) {
-				_errorString = "Invalid Polygon linear ring coordinates";
+			if (!a2c(point, PROJ(proj, parent), c))
 				return false;
-			}
+
 			data.append(c);
 		}
 
-		pg.append(data);
+		poly.append(data);
 	}
 
-	Area area(pg);
+	Area area(poly);
 	setAreaProperties(area, properties);
 	areas.append(area);
 
@@ -416,14 +419,14 @@ bool GeoJSONParser::multiPolygon(const QJsonObject &object,
 	if (!crs(object, proj))
 		return false;
 	Area area;
-
+	Coordinates c;
 
 	for (int i = 0; i < coordinates.size(); i++) {
 		if (!coordinates.at(i).isArray()) {
 			_errorString = "Invalid MultiPolygon data";
 			return false;
 		} else {
-			::Polygon pg;
+			::Polygon poly;
 
 			QJsonArray polygon(coordinates.at(i).toArray());
 			for (int j = 0; j < polygon.size(); j++) {
@@ -442,18 +445,16 @@ bool GeoJSONParser::multiPolygon(const QJsonObject &object,
 					}
 
 					QJsonArray point(lr.at(k).toArray());
-					Coordinates c(::coordinates(point, proj.isNull() ? parent : proj));
-					if (!c.isValid()) {
-						_errorString = "Invalid MultiPolygon linear ring coordinates";
+					if (!a2c(point, PROJ(proj, parent), c))
 						return false;
-					}
+
 					data.append(c);
 				}
 
-				pg.append(data);
+				poly.append(data);
 			}
 
-			area.append(pg);
+			area.append(poly);
 		}
 	}
 
@@ -482,37 +483,36 @@ bool GeoJSONParser::geometryCollection(const QJsonObject &object,
 
 		switch (type(geometry)) {
 			case Point:
-				if (!point(geometry, proj.isNull() ? parent : proj, properties,
+				if (!point(geometry, PROJ(proj, parent), properties,
 				  waypoints))
 					return false;
 				break;
 			case MultiPoint:
-				if (!multiPoint(geometry, proj.isNull() ? parent : proj,
-				  properties, waypoints))
+				if (!multiPoint(geometry, PROJ(proj, parent), properties,
+				  waypoints))
 					return false;
 				break;
 			case LineString:
-				if (!lineString(geometry, proj.isNull() ? parent : proj,
-				  properties, tracks))
+				if (!lineString(geometry, PROJ(proj, parent), properties,
+				  tracks))
 					return false;
 				break;
 			case MultiLineString:
-				if (!multiLineString(geometry, proj.isNull() ? parent : proj,
-				  properties, tracks))
+				if (!multiLineString(geometry, PROJ(proj, parent), properties,
+				  tracks))
 					return false;
 				break;
 			case Polygon:
-				if (!polygon(geometry, proj.isNull() ? parent : proj, properties,
-				  areas))
+				if (!polygon(geometry, PROJ(proj, parent), properties, areas))
 					return false;
 				break;
 			case MultiPolygon:
-				if (!multiPolygon(geometry, proj.isNull() ? parent : proj,
-				  properties, areas))
+				if (!multiPolygon(geometry, PROJ(proj, parent), properties,
+				  areas))
 					return false;
 				break;
 			case GeometryCollection:
-				if (!geometryCollection(geometry, proj.isNull() ? parent : proj,
+				if (!geometryCollection(geometry, PROJ(proj, parent),
 				  properties, tracks, areas, waypoints))
 					return false;
 				break;
@@ -542,26 +542,22 @@ bool GeoJSONParser::feature(const QJsonObject &object, const Projection &parent,
 
 	switch (type(geometry)) {
 		case Point:
-			return point(geometry, proj.isNull() ? parent : proj, properties,
-			  waypoints);
+			return point(geometry, PROJ(proj, parent), properties, waypoints);
 		case MultiPoint:
-			return multiPoint(geometry, proj.isNull() ? parent : proj,
-			  properties, waypoints);
+			return multiPoint(geometry, PROJ(proj, parent), properties,
+			  waypoints);
 		case LineString:
-			return lineString(geometry, proj.isNull() ? parent : proj,
-			  properties, tracks);
+			return lineString(geometry, PROJ(proj, parent), properties, tracks);
 		case MultiLineString:
-			return multiLineString(geometry, proj.isNull() ? parent : proj,
-			  properties, tracks);
+			return multiLineString(geometry, PROJ(proj, parent), properties,
+			  tracks);
 		case GeometryCollection:
-			return geometryCollection(geometry, proj.isNull() ? parent : proj,
-			  properties, tracks, areas, waypoints);
+			return geometryCollection(geometry, PROJ(proj, parent), properties,
+			  tracks, areas, waypoints);
 		case Polygon:
-			return polygon(geometry, proj.isNull() ? parent : proj, properties,
-			  areas);
+			return polygon(geometry, PROJ(proj, parent), properties, areas);
 		case MultiPolygon:
-			return multiPolygon(geometry, proj.isNull() ? parent : proj,
-			  properties, areas);
+			return multiPolygon(geometry, PROJ(proj, parent), properties, areas);
 		default:
 			_errorString = geometry["type"].toString()
 			  + ": invalid/missing Feature geometry";
@@ -584,8 +580,8 @@ bool GeoJSONParser::featureCollection(const QJsonObject &object,
 		return false;
 
 	for (int i = 0; i < features.size(); i++)
-		if (!feature(features.at(i).toObject(), proj.isNull() ? parent : proj,
-		  tracks, areas, waypoints))
+		if (!feature(features.at(i).toObject(), PROJ(proj, parent), tracks,
+		  areas, waypoints))
 			return false;
 
 	return true;
@@ -597,8 +593,8 @@ bool GeoJSONParser::parse(QFile *file, QList<TrackData> &tracks,
 {
 	Q_UNUSED(routes);
 
-	if (!isJSONObject(file)) {
-		_errorString = "Not a JSON file";
+	if (!possiblyJSONObject(file)) {
+		_errorString = "Not a GeoJSON file";
 		return false;
 	} else
 		file->reset();
@@ -607,8 +603,8 @@ bool GeoJSONParser::parse(QFile *file, QList<TrackData> &tracks,
 	QJsonDocument doc(QJsonDocument::fromJson(file->readAll(), &error));
 
 	if (doc.isNull()) {
-		_errorString = "JSON parse error: " + error.errorString() + " ["
-		  + QString::number(error.offset) + "]";
+		_errorString = QString("JSON parse error on offset %1: %2")
+		  .arg(QString::number(error.offset), error.errorString());
 		return false;
 	}
 

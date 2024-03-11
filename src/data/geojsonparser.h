@@ -30,6 +30,7 @@ private:
 		FeatureCollection
 	};
 
+	bool a2c(const QJsonArray &data, const Projection &proj, Coordinates &c);
 	Type type(const QJsonObject &json);
 	bool crs(const QJsonObject &object, Projection &proj);
 	bool point(const QJsonObject &object, const Projection &parent,
