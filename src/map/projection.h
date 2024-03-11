@@ -7,6 +7,7 @@
 #include "linearunits.h"
 #include "coordinatesystem.h"
 #include "gcs.h"
+#include "proj/latlon.h"
 
 class PCS;
 class CT;
@@ -70,7 +71,7 @@ public:
 		int _id;
 	};
 
-	Projection() : _ct(0), _geographic(false) {}
+	Projection() : _ct(0) {}
 	Projection(const Projection &p);
 	Projection(const PCS &pcs);
 	Projection(const GCS &gcs, const CoordinateSystem &cs
@@ -90,7 +91,10 @@ public:
 		// and except of WMTS/WMS it is not needed.
 		return (_gcs.isValid() && _ct != 0 && _units.isValid());
 	}
-	bool isGeographic() const {return _geographic;}
+	bool isGeographic() const
+	{
+		return (dynamic_cast<const LatLon*>(_ct) != 0);
+	}
 
 	PointD ll2xy(const Coordinates &c) const;
 	Coordinates xy2ll(const PointD &p) const;
@@ -103,7 +107,6 @@ private:
 	const CT *_ct;
 	LinearUnits _units;
 	CoordinateSystem _cs;
-	bool _geographic;
 };
 
 #ifndef QT_NO_DEBUG

@@ -8,7 +8,6 @@
 #include "proj/polarstereographic.h"
 #include "proj/obliquestereographic.h"
 #include "proj/polyconic.h"
-#include "proj/latlon.h"
 #include "datum.h"
 #include "gcs.h"
 #include "pcs.h"
@@ -40,7 +39,7 @@ Projection::Method::Method(int id)
 
 Projection::Projection(const PCS &pcs)
 	: _gcs(pcs.gcs()), _ct(0), _units(pcs.conversion().units()),
-	_cs(pcs.conversion().cs()), _geographic(false)
+	_cs(pcs.conversion().cs())
 {
 	const Ellipsoid &ellipsoid = _gcs.datum().ellipsoid();
 	const Projection::Setup &setup = pcs.conversion().setup();
@@ -115,7 +114,7 @@ Projection::Projection(const PCS &pcs)
 }
 
 Projection::Projection(const GCS &gcs, const CoordinateSystem &cs)
-  : _gcs(gcs), _units(LinearUnits(9001)), _cs(cs), _geographic(true)
+  : _gcs(gcs), _units(LinearUnits(9001)), _cs(cs)
 {
 	_ct = new LatLon(gcs.angularUnits());
 }
@@ -125,7 +124,6 @@ Projection::Projection(const Projection &p)
 	_gcs = p._gcs;
 	_units = p._units;
 	_ct = p._ct ? p._ct->clone() : 0;
-	_geographic = p._geographic;
 	_cs = p._cs;
 }
 
@@ -142,7 +140,6 @@ Projection &Projection::operator=(const Projection &p)
 		_gcs = p._gcs;
 		_units = p._units;
 		_ct = p._ct ? p._ct->clone() : 0;
-		_geographic = p._geographic;
 		_cs = p._cs;
 	}
 
@@ -155,7 +152,7 @@ bool Projection::operator==(const Projection &p) const
 		return false;
 
 	return (*_ct == *p._ct && _gcs == p._gcs && _units == p._units
-	  && _cs == p._cs && _geographic == p._geographic);
+	  && _cs == p._cs);
 }
 
 PointD Projection::ll2xy(const Coordinates &c) const
