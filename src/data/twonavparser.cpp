@@ -1,4 +1,4 @@
-﻿#include "common/textcodec.h"
+#include "common/textcodec.h"
 #include "map/gcs.h"
 #include "twonavparser.h"
 
