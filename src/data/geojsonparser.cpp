@@ -10,6 +10,10 @@
 #define PROJ(object, parent) \
 	((object).isNull() ? (parent) : (object))
 
+/*
+ * Mapbox Simple Style
+ * https://github.com/mapbox/simplestyle-spec
+ */
 static int markerSize(const QString &str)
 {
 	if (str == "small")
@@ -107,6 +111,74 @@ static void setWaypointProperties(Waypoint &waypoint,
 
 	waypoint.setStyle(PointStyle(color, size));
 }
+
+/*
+ * Mapbox Coordinate Properties
+ * https://github.com/mapbox/geojson-coordinate-properties
+ */
+static QDateTime timestamp(const QJsonValue &data)
+{
+	if (data.isString())
+		return QDateTime::fromString(data.toString(), Qt::ISODate);
+	else if (data.isDouble())
+		return QDateTime::fromMSecsSinceEpoch((qint64)data.toDouble());
+	else
+		return QDateTime();
+}
+
+static double hr(const QJsonValue &data)
+{
+	return data.isDouble() ? data.toDouble() : NAN;
+}
+
+static void setSegmentProperties(SegmentData &segment, int segno,
+  const QJsonValue &properties)
+{
+	if (properties.isObject()) {
+		QJsonObject o(properties.toObject());
+
+		if (o["coordinateProperties"].isObject()) {
+			QJsonObject cp(o["coordinateProperties"].toObject());
+			if (cp["times"].isArray()) {
+				QJsonArray times(cp["times"].toArray());
+
+				if (segno >= 0) {
+					if (times.size() > segno) {
+						QJsonArray seg(times.at(segno).toArray());
+						if (seg.size() == segment.size()) {
+							for (int i = 0; i < seg.size(); i++)
+								segment[i].setTimestamp(timestamp(seg.at(i)));
+						}
+					}
+				} else {
+					if (times.size() == segment.size()) {
+						for (int i = 0; i < times.size(); i++)
+							segment[i].setTimestamp(timestamp(times.at(i)));
+					}
+				}
+			}
+			if (cp["heart"].isArray()) {
+				QJsonArray heart(cp["heart"].toArray());
+
+				if (segno >= 0) {
+					if (heart.size() > segno) {
+						QJsonArray seg(heart.at(segno).toArray());
+						if (seg.size() == segment.size()) {
+							for (int i = 0; i < seg.size(); i++)
+								segment[i].setHeartRate(hr(seg.at(i)));
+						}
+					}
+				} else {
+					if (heart.size() == segment.size()) {
+						for (int i = 0; i < heart.size(); i++)
+							segment[i].setHeartRate(hr(heart.at(i)));
+					}
+				}
+			}
+		}
+	}
+}
+
 
 static bool isWS(char c)
 {
@@ -293,6 +365,7 @@ bool GeoJSONParser::lineString(const QJsonObject &object,
 		segment.append(t);
 	}
 
+	setSegmentProperties(segment, -1, properties);
 	TrackData track(segment);
 	setTrackProperties(track, properties);
 	tracks.append(track);
@@ -324,7 +397,7 @@ bool GeoJSONParser::multiLineString(const QJsonObject &object,
 			_errorString = "Invalid MultiLineString data";
 			return false;
 		} else {
-			SegmentData sd;
+			SegmentData segment;
 
 			QJsonArray ls(coordinates.at(i).toArray());
 			for (int j = 0; j < ls.size(); j++) {
@@ -340,10 +413,11 @@ bool GeoJSONParser::multiLineString(const QJsonObject &object,
 				Trackpoint t(c);
 				if (data.count() == 3 && data.at(2).isDouble())
 					t.setElevation(data.at(2).toDouble());
-				sd.append(t);
+				segment.append(t);
 			}
 
-			track.append(sd);
+			setSegmentProperties(segment, track.size(), properties);
+			track.append(segment);
 		}
 	}
 
@@ -468,7 +542,7 @@ bool GeoJSONParser::geometryCollection(const QJsonObject &object,
   const Projection &parent, const QJsonValue &properties,
   QList<TrackData> &tracks, QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
-	if (!object.contains("geometries") || !object["geometries"].isArray()) {
+	if (!object["geometries"].isArray()) {
 		_errorString = "Invalid/missing GeometryCollection geometries array";
 		return false;
 	}
@@ -529,7 +603,7 @@ bool GeoJSONParser::geometryCollection(const QJsonObject &object,
 bool GeoJSONParser::feature(const QJsonObject &object, const Projection &parent,
   QList<TrackData> &tracks, QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
-	if (!object.contains("geometry") || !object["geometry"].isObject()) {
+	if (!object["geometry"].isObject()) {
 		_errorString = "Invalid/missing Feature geometry object";
 		return false;
 	}
@@ -569,7 +643,7 @@ bool GeoJSONParser::featureCollection(const QJsonObject &object,
   const Projection &parent, QList<TrackData> &tracks, QList<Area> &areas,
   QVector<Waypoint> &waypoints)
 {
-	if (!object.contains("features") || !object["features"].isArray()) {
+	if (!object["features"].isArray()) {
 		_errorString = "Invalid/missing FeatureCollection features array";
 		return false;
 	}
