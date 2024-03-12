@@ -1,4 +1,4 @@
-﻿/*
+/*
 	WARNING: This code uses internal Qt API - the QZipReader class for reading
 	ZIP files - and things may break if Qt changes the API. For Qt5 this is not
 	a problem as we can "see the future" now and there are no changes in all
