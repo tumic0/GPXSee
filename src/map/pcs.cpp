@@ -63,6 +63,11 @@ bool PCS::loadList(const QString &path)
 			qWarning("%s:%d: Unknown GCS code", qPrintable(path), csv.line());
 			continue;
 		}
+		if (Conversion::conversion(proj).isNull()) {
+			qWarning("%s:%d: Unknown projection code", qPrintable(path),
+			  csv.line());
+			continue;
+		}
 
 		_pcss.insert(id, Entry(name, gcs, proj));
 	}
