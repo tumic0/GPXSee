@@ -2,6 +2,7 @@
 #include "map/pcs.h"
 #include "map/gcs.h"
 #include "map/utm.h"
+#include "map/projection.h"
 #include "gpsdumpparser.h"
 
 static double dms2dd(const QStringList &dms)

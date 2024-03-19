@@ -75,93 +75,93 @@ static PointD corner2point(const QString &name, const QSize &size)
 		return PointD();
 }
 
-static Projection::Setup lcc2setup(const QStringList &list)
+static Conversion::Setup lcc2setup(const QStringList &list)
 {
 	double params[6];
 	bool ok;
 
 	if (list.size() < 7)
-		return Projection::Setup();
+		return Conversion::Setup();
 	for (int i = 1; i < 7; i++) {
 		params[i - 1] = list.at(i).toDouble(&ok);
 		if (!ok)
-			return Projection::Setup();
+			return Conversion::Setup();
 	}
 
-	return Projection::Setup(params[0], params[1], NAN, params[4],
+	return Conversion::Setup(params[0], params[1], NAN, params[4],
 	  params[5], params[2], params[3]);
 }
 
-static Projection::Setup laea2setup(const QStringList &list)
+static Conversion::Setup laea2setup(const QStringList &list)
 {
 	double params[2];
 	bool ok;
 
 	if (list.size() < 3)
-		return Projection::Setup();
+		return Conversion::Setup();
 	for (int i = 1; i < 3; i++) {
 		params[i - 1] = list.at(i).toDouble(&ok);
 		if (!ok)
-			return Projection::Setup();
+			return Conversion::Setup();
 	}
 
-	return Projection::Setup(params[1], params[0], NAN, 0, 0, NAN, NAN);
+	return Conversion::Setup(params[1], params[0], NAN, 0, 0, NAN, NAN);
 }
 
-static Projection::Setup polyconic2setup(const QStringList &list)
+static Conversion::Setup polyconic2setup(const QStringList &list)
 {
 	double params[3];
 	bool ok;
 
 	if (list.size() < 4)
-		return Projection::Setup();
+		return Conversion::Setup();
 	for (int i = 1; i < 4; i++) {
 		params[i - 1] = list.at(i).toDouble(&ok);
 		if (!ok)
-			return Projection::Setup();
+			return Conversion::Setup();
 	}
 
-	return Projection::Setup(NAN, params[0], NAN, params[1], params[2], NAN,
+	return Conversion::Setup(NAN, params[0], NAN, params[1], params[2], NAN,
 	  NAN);
 }
 
-static Projection::Setup tm2setup(const QStringList &list)
+static Conversion::Setup tm2setup(const QStringList &list)
 {
 	double params[5];
 	bool ok;
 
 	if (list.size() < 6)
-		return Projection::Setup();
+		return Conversion::Setup();
 	for (int i = 1; i < 6; i++) {
 		params[i - 1] = list.at(i).toDouble(&ok);
 		if (!ok)
-			return Projection::Setup();
+			return Conversion::Setup();
 	}
 
-	return Projection::Setup(params[1], params[0], params[2], params[3],
+	return Conversion::Setup(params[1], params[0], params[2], params[3],
 	  params[4], NAN, NAN);
 }
 
-static Projection::Setup utm2setup(const QStringList &list)
+static Conversion::Setup utm2setup(const QStringList &list)
 {
 	bool ok;
 	if (list.size() < 2)
-		return Projection::Setup();
+		return Conversion::Setup();
 	int zone = list.at(1).toInt(&ok);
-	return ok ? UTM::setup(zone) : Projection::Setup();
+	return ok ? UTM::setup(zone) : Conversion::Setup();
 }
 
-static Projection::Setup mercator2setup(const QStringList &list)
+static Conversion::Setup mercator2setup(const QStringList &list)
 {
 	double lon;
 	bool ok;
 
 	if (list.size() < 2)
-		return Projection::Setup(0, 0, NAN, 0, 0, NAN, NAN);
+		return Conversion::Setup(0, 0, NAN, 0, 0, NAN, NAN);
 	lon = list.at(1).toDouble(&ok);
 
-	return ok ? Projection::Setup(0, lon, NAN, 0, 0, NAN, NAN)
-	  : Projection::Setup();
+	return ok ? Conversion::Setup(0, lon, NAN, 0, 0, NAN, NAN)
+	  : Conversion::Setup();
 }
 
 static GCS createGCS(const QString &datum)
@@ -180,7 +180,7 @@ static Projection createProjection(const GCS &gcs, const QString &name)
 	else if (pl.first() == "UTM")
 		pcs = PCS(gcs, Conversion(9807, utm2setup(pl), 9001));
 	else if (pl.first() == "Mercator")
-		pcs = PCS(gcs, Conversion(1024, Projection::Setup(), 9001));
+		pcs = PCS(gcs, Conversion(1024, Conversion::Setup(), 9001));
 	else if (pl.first() == "Mercator Ellipsoidal")
 		pcs = PCS(gcs, Conversion(9804, mercator2setup(pl), 9001));
 	else if (pl.first() == "Transverse Mercator")
@@ -192,13 +192,13 @@ static Projection createProjection(const GCS &gcs, const QString &name)
 	else if (pl.first() == "Polyconic (American)")
 		pcs = PCS(gcs, Conversion(9818, polyconic2setup(pl), 9001));
 	else if (pl.first() == "(IG) Irish Grid")
-		pcs = PCS(gcs, Conversion(9807, Projection::Setup(53.5, -8, 1.000035,
+		pcs = PCS(gcs, Conversion(9807, Conversion::Setup(53.5, -8, 1.000035,
 		  200000, 250000, NAN, NAN), 9001));
 	else if (pl.first() == "(SUI) Swiss Grid")
-		pcs = PCS(gcs, Conversion(9815, Projection::Setup(46.570866, 7.26225,
+		pcs = PCS(gcs, Conversion(9815, Conversion::Setup(46.570866, 7.26225,
 		  1.0, 600000, 200000, 90.0, 90.0), 9001));
 	else if (pl.first() == "Rijksdriehoeksmeting")
-		pcs = PCS(gcs, Conversion(9809, Projection::Setup(52.1561605555556,
+		pcs = PCS(gcs, Conversion(9809, Conversion::Setup(52.1561605555556,
 		  5.38763888888889, 0.9999079, 155000, 463000, NAN, NAN), 9001));
 	else
 		return Projection();

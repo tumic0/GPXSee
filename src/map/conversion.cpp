@@ -1,71 +1,72 @@
 #include <QFile>
 #include "common/csv.h"
+#include "angularunits.h"
 #include "conversion.h"
 
-static bool parameter(int key, double val, int units, Projection::Setup &setup)
+static bool parameter(int key, double val, int units, Conversion::Setup &setup)
 {
 	switch (key) {
-	case 8801:
-	case 8811:
-	case 8821:
-	case 8832:
-	{AngularUnits au(units);
-		if (au.isNull())
+		case 8801:
+		case 8811:
+		case 8821:
+		case 8832:
+			{AngularUnits au(units);
+			if (au.isNull())
+				return false;
+			setup.setLatitudeOrigin(au.toDegrees(val));}
+			return true;
+		case 8802:
+		case 8812:
+		case 8822:
+		case 8833:
+			{AngularUnits au(units);
+			if (au.isNull())
+				return false;
+			setup.setLongitudeOrigin(au.toDegrees(val));}
+			return true;
+		case 8805:
+		case 8815:
+		case 8819:
+			setup.setScale(val);
+			return true;
+		case 8806:
+		case 8816:
+		case 8826:
+			{LinearUnits lu(units);
+			if (lu.isNull())
+				return false;
+			setup.setFalseEasting(lu.toMeters(val));}
+			return true;
+		case 8807:
+		case 8817:
+		case 8827:
+			{LinearUnits lu(units);
+			if (lu.isNull())
+				return false;
+			setup.setFalseNorthing(lu.toMeters(val));}
+			return true;
+		case 8813:
+		case 8818:
+		case 8823:
+			{AngularUnits au(units);
+			if (au.isNull())
+				return false;
+			setup.setStandardParallel1(au.toDegrees(val));}
+			return true;
+		case 1036:
+		case 8814:
+		case 8824:
+			{AngularUnits au(units);
+			if (au.isNull())
+				return false;
+			setup.setStandardParallel2(au.toDegrees(val));}
+			return true;
+		default:
 			return false;
-		setup.setLatitudeOrigin(au.toDegrees(val));}
-		return true;
-	case 8802:
-	case 8812:
-	case 8822:
-	case 8833:
-	{AngularUnits au(units);
-		if (au.isNull())
-			return false;
-		setup.setLongitudeOrigin(au.toDegrees(val));}
-		return true;
-	case 8805:
-	case 8815:
-	case 8819:
-		setup.setScale(val);
-		return true;
-	case 8806:
-	case 8816:
-	case 8826:
-	{LinearUnits lu(units);
-		if (lu.isNull())
-			return false;
-		setup.setFalseEasting(lu.toMeters(val));}
-		return true;
-	case 8807:
-	case 8817:
-	case 8827:
-	{LinearUnits lu(units);
-		if (lu.isNull())
-			return false;
-		setup.setFalseNorthing(lu.toMeters(val));}
-		return true;
-	case 8813:
-	case 8818:
-	case 8823:
-	{AngularUnits au(units);
-		if (au.isNull())
-			return false;
-		setup.setStandardParallel1(au.toDegrees(val));}
-		return true;
-	case 1036:
-	case 8814:
-	case 8824:
-	{AngularUnits au(units);
-		if (au.isNull())
-			return false;
-		setup.setStandardParallel2(au.toDegrees(val));}
-		return true;
-	default:
-		return false;
 	}
 }
 
-static int projectionSetup(const QByteArrayList &list, Projection::Setup &setup)
+static int projectionSetup(const QByteArrayList &list, Conversion::Setup &setup)
 {
 	bool r1, r2, r3;
 
@@ -87,13 +88,36 @@ static int projectionSetup(const QByteArrayList &list, Projection::Setup &setup)
 	return 0;
 }
 
+Conversion::Method::Method(int id)
+{
+	switch (id) {
+		case 1024:
+		case 1041:
+		case 9801:
+		case 9802:
+		case 9804:
+		case 9807:
+		case 9809:
+		case 9815:
+		case 9818:
+		case 9819:
+		case 9820:
+		case 9822:
+		case 9829:
+			_id = id;
+			break;
+		default:
+			_id = 0;
+	}
+}
+
 QMap<int, Conversion::Entry> Conversion::_conversions = defaults();
 
 QMap<int, Conversion::Entry> Conversion::defaults()
 {
 	QMap<int, Conversion::Entry> map;
 	map.insert(3856, Entry("Popular Visualisation Pseudo-Mercator", 1024,
-	  Projection::Setup(), 9001, 4400));
+	  Setup(), 9001, 4400));
 	return map;
 }
 
@@ -159,7 +183,7 @@ bool Conversion::loadList(const QString &path)
 			  csv.line());
 			continue;
 		}
-		if (!Projection::Method(transform).isValid()) {
+		if (!Method(transform).isValid()) {
 			qWarning("%s:%d: Unknown coordinate transformation code",
 			  qPrintable(path), csv.line());
 			continue;
@@ -170,7 +194,7 @@ bool Conversion::loadList(const QString &path)
 			continue;
 		}
 
-		Projection::Setup setup;
+		Setup setup;
 		int pn = projectionSetup(entry, setup);
 		if (pn) {
 			qWarning("%s: %d: Invalid projection parameter #%d",
@@ -196,6 +220,21 @@ QList<KV<int, QString> > Conversion::list()
 }
 
 #ifndef QT_NO_DEBUG
+QDebug operator<<(QDebug dbg, const Conversion::Setup &setup)
+{
+	dbg.nospace() << "Setup(" << setup.latitudeOrigin() << ", "
+	  << setup.longitudeOrigin() << ", " << setup.scale() << ", "
+	  << setup.falseEasting() << ", " << setup.falseNorthing() << ", "
+	  << setup.standardParallel1() << ", " << setup.standardParallel2() << ")";
+	return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const Conversion::Method &method)
+{
+	dbg.nospace() << "Method(" << method.id() << ")";
+	return dbg.space();
+}
+
 QDebug operator<<(QDebug dbg, const Conversion &conversion)
 {
 	dbg.nospace() << "Conversion(" << conversion.method() << ", "

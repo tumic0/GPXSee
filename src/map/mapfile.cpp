@@ -17,7 +17,7 @@ static double parameter(const QString &str, bool *res, double dflt = 0.0)
 }
 
 int MapFile::parse(QIODevice &device, QList<CalibrationPoint> &points,
-  QString &projection, Projection::Setup &setup, QString &datum)
+  QString &projection, Conversion::Setup &setup, QString &datum)
 {
 	bool res, utm = false;
 	int ln = 1, zone = 0;
@@ -123,7 +123,7 @@ int MapFile::parse(QIODevice &device, QList<CalibrationPoint> &points,
 					setup = UTM::setup(zone);
 				else {
 					bool r[8];
-					setup = Projection::Setup(
+					setup = Conversion::Setup(
 					  parameter(list[1], &r[1]), parameter(list[2], &r[2]),
 					  parameter(list[3], &r[3], 1.0), parameter(list[4], &r[4]),
 					  parameter(list[5], &r[5]), parameter(list[6], &r[6]),
@@ -143,7 +143,7 @@ int MapFile::parse(QIODevice &device, QList<CalibrationPoint> &points,
 }
 
 bool MapFile::parseMapFile(QIODevice &device, QList<CalibrationPoint> &points,
-  QString &projection, Projection::Setup &setup, QString &datum)
+  QString &projection, Conversion::Setup &setup, QString &datum)
 {
 	int el;
 
@@ -161,7 +161,7 @@ bool MapFile::parseMapFile(QIODevice &device, QList<CalibrationPoint> &points,
 }
 
 bool MapFile::createProjection(const QString &datum, const QString &name,
-  const Projection::Setup &setup)
+  const Conversion::Setup &setup)
 {
 	PCS pcs;
 
@@ -188,37 +188,37 @@ bool MapFile::createProjection(const QString &datum, const QString &name,
 	else if (name == "Polyconic (American)")
 		pcs = PCS(gcs, Conversion(9818, setup, 9001));
 	else if (name == "(NZTM2) New Zealand TM 2000")
-		pcs = PCS(gcs, Conversion(9807, Projection::Setup(0, 173.0, 0.9996,
+		pcs = PCS(gcs, Conversion(9807, Conversion::Setup(0, 173.0, 0.9996,
 		  1600000, 10000000, NAN, NAN), 9001));
 	else if (name == "(BNG) British National Grid")
-		pcs = PCS(gcs, Conversion(9807, Projection::Setup(49, -2, 0.999601,
+		pcs = PCS(gcs, Conversion(9807, Conversion::Setup(49, -2, 0.999601,
 		  400000, -100000, NAN, NAN), 9001));
 	else if (name == "(IG) Irish Grid")
-		pcs = PCS(gcs, Conversion(9807, Projection::Setup(53.5, -8, 1.000035,
+		pcs = PCS(gcs, Conversion(9807, Conversion::Setup(53.5, -8, 1.000035,
 		  200000, 250000, NAN, NAN), 9001));
 	else if (name == "(SG) Swedish Grid")
-		pcs = PCS(gcs, Conversion(9807, Projection::Setup(0, 15.808278, 1,
+		pcs = PCS(gcs, Conversion(9807, Conversion::Setup(0, 15.808278, 1,
 		  1500000, 0, NAN, NAN), 9001));
 	else if (name == "(I) France Zone I")
-		pcs = PCS(gcs, Conversion(9802, Projection::Setup(49.5, 2.337229, NAN,
+		pcs = PCS(gcs, Conversion(9802, Conversion::Setup(49.5, 2.337229, NAN,
 		  600000, 1200000, 48.598523, 50.395912), 9001));
 	else if (name == "(II) France Zone II")
-		pcs = PCS(gcs, Conversion(9802, Projection::Setup(46.8, 2.337229, NAN,
+		pcs = PCS(gcs, Conversion(9802, Conversion::Setup(46.8, 2.337229, NAN,
 		  600000, 2200000, 45.898919, 47.696014), 9001));
 	else if (name == "(III) France Zone III")
-		pcs = PCS(gcs, Conversion(9802, Projection::Setup(44.1, 2.337229, NAN,
+		pcs = PCS(gcs, Conversion(9802, Conversion::Setup(44.1, 2.337229, NAN,
 		  600000, 3200000, 43.199291, 44.996094), 9001));
 	else if (name == "(IV) France Zone IV")
-		pcs = PCS(gcs, Conversion(9802, Projection::Setup(42.165, 2.337229, NAN,
+		pcs = PCS(gcs, Conversion(9802, Conversion::Setup(42.165, 2.337229, NAN,
 		  234.358, 4185861.369, 41.560388, 42.767663), 9001));
 	else if (name == "(VICGRID) Victoria Australia")
-		pcs = PCS(gcs, Conversion(9802, Projection::Setup(-37, 145, NAN,
+		pcs = PCS(gcs, Conversion(9802, Conversion::Setup(-37, 145, NAN,
 		  2500000, 4500000, -36, -38), 9001));
 	else if (name == "(VG94) VICGRID94 Victoria Australia")
-		pcs = PCS(gcs, Conversion(9802, Projection::Setup(-37, 145, NAN,
+		pcs = PCS(gcs, Conversion(9802, Conversion::Setup(-37, 145, NAN,
 		  2500000, 2500000, -36, -38), 9001));
 	else if (name == "(SUI) Swiss Grid")
-		pcs = PCS(gcs, Conversion(9815, Projection::Setup(46.570866, 7.26225,
+		pcs = PCS(gcs, Conversion(9815, Conversion::Setup(46.570866, 7.26225,
 		  1.0, 600000, 200000, 90.0, 90.0), 9001));
 	else {
 		_errorString = QString("%1: Unknown map projection").arg(name);
@@ -250,7 +250,7 @@ MapFile::MapFile(QIODevice &file)
 {
 	QList<CalibrationPoint> points;
 	QString ct, datum;
-	Projection::Setup setup;
+	Conversion::Setup setup;
 
 	if (!parseMapFile(file, points, ct, setup, datum))
 		return;

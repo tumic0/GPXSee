@@ -1,9 +1,10 @@
+#include "common/coordinates.h"
 #include "ellipsoid.h"
 #include "utm.h"
 
-Projection::Setup UTM::setup(int zone)
+Conversion::Setup UTM::setup(int zone)
 {
-	return Projection::Setup(0, (qAbs(zone) - 1)*6 - 180 + 3, 0.9996, 500000,
+	return Conversion::Setup(0, (qAbs(zone) - 1)*6 - 180 + 3, 0.9996, 500000,
 	  zone < 0 ? 10000000 : 0, 0, 0);
 }
 

@@ -2,6 +2,7 @@
 #define PRJFILE_H
 
 #include <QFile>
+#include "conversion.h"
 #include "projection.h"
 
 class Datum;
@@ -57,8 +58,8 @@ private:
 	void geographicCS(CTX &ctx, GCS *gcs);
 	void projectedCS(CTX &ctx, PCS *pcs);
 	void compdCS(CTX &ctx);
-	void projection(CTX &ctx, Projection::Method *method);
-	void parameter(CTX &ctx, Projection::Setup *setup);
+	void projection(CTX &ctx, Conversion::Method *method);
+	void parameter(CTX &ctx, Conversion::Setup *setup);
 	void datum(CTX &ctx, Datum *dtm, int *epsg);
 	void verticalDatum(CTX &ctx);
 	void unit(CTX &ctx, double *val, int *epsg);

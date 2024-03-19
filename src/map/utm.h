@@ -1,12 +1,14 @@
 #ifndef UTM_H
 #define UTM_H
 
-#include "projection.h"
+#include "conversion.h"
+
+class Coordinates;
 
 namespace UTM
 {
 	int zone(const Coordinates &c);
-	Projection::Setup setup(int zone);
+	Conversion::Setup setup(int zone);
 }
 
 #endif // UTM_H

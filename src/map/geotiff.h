@@ -5,6 +5,7 @@
 #include <QList>
 #include "transform.h"
 #include "projection.h"
+#include "conversion.h"
 
 class TIFFFile;
 class GCS;
@@ -49,7 +50,7 @@ private:
 	  double &val) const;
 
 	GCS geographicCS(QMap<quint16, Value> &kv);
-	Projection::Method coordinateTransformation(QMap<quint16, Value> &kv);
+	Conversion::Method coordinateTransformation(QMap<quint16, Value> &kv);
 	bool geographicModel(QMap<quint16, Value> &kv);
 	bool projectedModel(QMap<quint16, Value> &kv);
 

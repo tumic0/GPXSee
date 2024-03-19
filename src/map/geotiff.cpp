@@ -321,38 +321,38 @@ GCS GeoTIFF::geographicCS(QMap<quint16, Value> &kv)
 	return gcs;
 }
 
-Projection::Method GeoTIFF::coordinateTransformation(QMap<quint16, Value> &kv)
+Conversion::Method GeoTIFF::coordinateTransformation(QMap<quint16, Value> &kv)
 {
 	if (!IS_SET(kv, ProjCoordTransGeoKey)) {
 		_errorString = "Missing coordinate transformation method";
-		return Projection::Method();
+		return Conversion::Method();
 	}
 
 	switch (kv.value(ProjCoordTransGeoKey).SHORT) {
 		case CT_TransverseMercator:
-			return Projection::Method(9807);
+			return Conversion::Method(9807);
 		case CT_ObliqueMercator:
-			return Projection::Method(9815);
+			return Conversion::Method(9815);
 		case CT_Mercator:
-			return Projection::Method(9804);
+			return Conversion::Method(9804);
 		case CT_LambertConfConic_2SP:
-			return Projection::Method(9802);
+			return Conversion::Method(9802);
 		case CT_LambertConfConic_1SP:
-			return Projection::Method(9801);
+			return Conversion::Method(9801);
 		case CT_LambertAzimEqualArea:
-			return Projection::Method(9820);
+			return Conversion::Method(9820);
 		case CT_AlbersEqualArea:
-			return Projection::Method(9822);
+			return Conversion::Method(9822);
 		case CT_PolarStereographic:
-			return Projection::Method(9829);
+			return Conversion::Method(9829);
 		case CT_ObliqueStereographic:
-			return Projection::Method(9809);
+			return Conversion::Method(9809);
 		case CT_Polyconic:
-			return Projection::Method(9818);
+			return Conversion::Method(9818);
 		default:
 			_errorString = QString("%1: unknown coordinate transformation method")
 			  .arg(kv.value(ProjCoordTransGeoKey).SHORT);
-			return Projection::Method();
+			return Conversion::Method();
 	}
 }
 
@@ -383,7 +383,7 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 		GCS gcs(geographicCS(kv));
 		if (gcs.isNull())
 			return false;
-		Projection::Method method(coordinateTransformation(kv));
+		Conversion::Method method(coordinateTransformation(kv));
 		if (method.isNull())
 			return false;
 
@@ -452,7 +452,7 @@ bool GeoTIFF::projectedModel(QMap<quint16, Value> &kv)
 		else
 			fe = NAN;
 
-		Projection::Setup setup(lat0, lon0, scale, fe, fn, sp1, sp2);
+		Conversion::Setup setup(lat0, lon0, scale, fe, fn, sp1, sp2);
 		_projection = Projection(PCS(gcs, Conversion(method, setup, lu)));
 	}
 

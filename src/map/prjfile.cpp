@@ -4,7 +4,7 @@
 #include "pcs.h"
 #include "prjfile.h"
 
-static Projection::Method projectionMethod(const QString &name)
+static Conversion::Method projectionMethod(const QString &name)
 {
 	static const struct {
 		int id;
@@ -30,10 +30,10 @@ static Projection::Method projectionMethod(const QString &name)
 
 	qWarning("%s: unknown projection", qPrintable(name));
 
-	return Projection::Method();
+	return Conversion::Method();
 }
 
-static void setParameter(Projection::Setup *setup, const QString &name,
+static void setParameter(Conversion::Setup *setup, const QString &name,
   double val)
 {
 	// latitude origin
@@ -460,7 +460,7 @@ void PRJFile::primeMeridian(CTX &ctx, PrimeMeridian *pm, int *epsg)
 	*pm = PrimeMeridian(lon);
 }
 
-void PRJFile::parameter(CTX &ctx, Projection::Setup *setup)
+void PRJFile::parameter(CTX &ctx, Conversion::Setup *setup)
 {
 	QString name;
 
@@ -478,7 +478,7 @@ void PRJFile::parameter(CTX &ctx, Projection::Setup *setup)
 	}
 }
 
-void PRJFile::projection(CTX &ctx, Projection::Method *method)
+void PRJFile::projection(CTX &ctx, Conversion::Method *method)
 {
 	int epsg = -1;
 	QString proj;
@@ -490,7 +490,7 @@ void PRJFile::projection(CTX &ctx, Projection::Method *method)
 	optAuthority(ctx, &epsg);
 	compare(ctx, RBRK);
 
-	*method = (epsg > 0) ? Projection::Method(epsg) : projectionMethod(proj);
+	*method = (epsg > 0) ? Conversion::Method(epsg) : projectionMethod(proj);
 }
 
 void PRJFile::optProjectedCS2(CTX &ctx, int *epsg)
@@ -521,8 +521,8 @@ void PRJFile::projectedCS(CTX &ctx, PCS *pcs)
 	int epsg = -1;
 	GCS gcs;
 	LinearUnits lu;
-	Projection::Method method;
-	Projection::Setup setup;
+	Conversion::Method method;
+	Conversion::Setup setup;
 
 	compare(ctx, PROJCS);
 	compare(ctx, LBRK);

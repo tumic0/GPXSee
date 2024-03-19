@@ -3,6 +3,7 @@
 
 #include "transform.h"
 #include "projection.h"
+#include "conversion.h"
 #include "calibrationpoint.h"
 
 class QIODevice;
@@ -26,11 +27,11 @@ public:
 
 private:
 	int parse(QIODevice &device, QList<CalibrationPoint> &points,
-	  QString &projection, Projection::Setup &setup, QString &datum);
+	  QString &projection, Conversion::Setup &setup, QString &datum);
 	bool parseMapFile(QIODevice &device, QList<CalibrationPoint> &points,
-	  QString &projection, Projection::Setup &setup, QString &datum);
+	  QString &projection, Conversion::Setup &setup, QString &datum);
 	bool createProjection(const QString &datum, const QString &projection,
-	  const Projection::Setup &setup);
+	  const Conversion::Setup &setup);
 	bool computeTransformation(const QList<CalibrationPoint> &points);
 
 	QString _name;
