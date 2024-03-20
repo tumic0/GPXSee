@@ -220,6 +220,12 @@ bool MapFile::createProjection(const QString &datum, const QString &name,
 	else if (name == "(SUI) Swiss Grid")
 		pcs = PCS(gcs, Conversion(9815, Conversion::Setup(46.570866, 7.26225,
 		  1.0, 600000, 200000, 90.0, 90.0), 9001));
+	else if (name == "(ITA1) Italy Grid Zone 1")
+		pcs = PCS(gcs, Conversion(9807, Conversion::Setup(0, 9, 0.9996, 1500000,
+		  0, NAN, NAN), 9001));
+	else if (name == "(ITA2) Italy Grid Zone 2")
+		pcs = PCS(gcs, Conversion(9807, Conversion::Setup(0, 15, 0.9996,
+		  2520000, 0, NAN, NAN), 9001));
 	else {
 		_errorString = QString("%1: Unknown map projection").arg(name);
 		return false;
