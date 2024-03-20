@@ -27,16 +27,16 @@ public:
 private:
 	class Entry {
 	public:
-		Entry(const QString &name, int gcs, int proj)
-			: _name(name), _gcs(gcs), _proj(proj) {}
+		Entry(const QString &name, int gcs, int conversion)
+		  : _name(name), _gcs(gcs), _conversion(conversion) {}
 
 		const QString &name() const {return _name;}
-		int proj() const {return _proj;}
+		int conversion() const {return _conversion;}
 		int gcs() const {return _gcs;}
 
 	private:
 		QString _name;
-		int _gcs, _proj;
+		int _gcs, _conversion;
 	};
 
 	static QMap<int, Entry> defaults();

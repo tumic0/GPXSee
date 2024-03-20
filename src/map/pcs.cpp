@@ -19,7 +19,7 @@ PCS PCS::pcs(int id)
 		return PCS();
 	else {
 		const Entry &e = it.value();
-		return PCS(GCS::gcs(e.gcs()), Conversion::conversion(e.proj()));
+		return PCS(GCS::gcs(e.gcs()), Conversion::conversion(e.conversion()));
 	}
 }
 
