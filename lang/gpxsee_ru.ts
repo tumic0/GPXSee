@@ -577,7 +577,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать отмывку рельефа</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
@@ -832,7 +832,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1986"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>Превышен лимит загрузки DEM тайлов. Если вам действительно нужны данные для такой огромной области, загрузите файлы вручную.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="2002"/>
@@ -882,12 +882,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="457"/>
         <source>Download data DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачать данные DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="463"/>
         <source>Download map DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачать карту DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="739"/>
@@ -951,10 +951,10 @@
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1989"/>
         <source>Download %n DEM tiles?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Скачать %n DEM тайл?</numerusform>
+            <numerusform>Скачать %n DEM тайла?</numerusform>
+            <numerusform>Скачать %n DEM тайлов?</numerusform>
         </translation>
     </message>
     <message>
