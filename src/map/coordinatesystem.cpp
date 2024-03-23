@@ -46,6 +46,7 @@ CoordinateSystem::CoordinateSystem(int code)
 		case 4499:
 			_axisOrder = XY;
 			break;
+		case 1053:
 		case 4500:
 		case 4530:
 		case 4531:
