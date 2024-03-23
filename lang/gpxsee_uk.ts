@@ -769,12 +769,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="457"/>
         <source>Download data DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантажити дані DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="463"/>
         <source>Download map DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантажити карту DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="698"/>
