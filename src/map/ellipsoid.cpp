@@ -56,19 +56,19 @@ bool Ellipsoid::loadList(const QString &path)
 
 		int id = entry.at(1).toInt(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid ellipsoid code", qPrintable(path),
+			qWarning("%s:%d: Invalid ellipsoid code", qPrintable(path),
 			  csv.line() - 1);
 			continue;
 		}
 		double radius = entry.at(2).toDouble(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid radius", qPrintable(path),
+			qWarning("%s:%d: Invalid radius", qPrintable(path),
 			  csv.line() - 1);
 			continue;
 		}
 		double flattening = entry.at(3).toDouble(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid flattening", qPrintable(path),
+			qWarning("%s:%d: Invalid flattening", qPrintable(path),
 			  csv.line() - 1);
 			continue;
 		}
