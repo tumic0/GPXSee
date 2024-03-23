@@ -44,25 +44,32 @@ bool Ellipsoid::loadList(const QString &path)
 	}
 
 	while (!csv.atEnd()) {
-		if (!csv.readEntry(entry) || entry.size() < 4) {
+		if (!csv.readEntry(entry)) {
 			qWarning("%s:%d: Parse error", qPrintable(path), csv.line());
+			return false;
+		}
+		if (entry.size() < 4) {
+			qWarning("%s:%d: Invalid column count", qPrintable(path),
+			  csv.line() - 1);
 			return false;
 		}
 
 		int id = entry.at(1).toInt(&res);
 		if (!res) {
 			qWarning("%s: %d: Invalid ellipsoid code", qPrintable(path),
-			  csv.line());
+			  csv.line() - 1);
 			continue;
 		}
 		double radius = entry.at(2).toDouble(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid radius", qPrintable(path), csv.line());
+			qWarning("%s: %d: Invalid radius", qPrintable(path),
+			  csv.line() - 1);
 			continue;
 		}
 		double flattening = entry.at(3).toDouble(&res);
 		if (!res) {
-			qWarning("%s: %d: Invalid flattening", qPrintable(path), csv.line());
+			qWarning("%s: %d: Invalid flattening", qPrintable(path),
+			  csv.line() - 1);
 			continue;
 		}
 

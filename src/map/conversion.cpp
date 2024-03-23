@@ -147,8 +147,13 @@ bool Conversion::loadList(const QString &path)
 	}
 
 	while (!csv.atEnd()) {
-		if (!csv.readEntry(entry) || entry.size() < 26) {
+		if (!csv.readEntry(entry)) {
 			qWarning("%s:%d: Parse error", qPrintable(path), csv.line());
+			return false;
+		}
+		if (entry.size() < 26) {
+			qWarning("%s:%d: Invalid column count", qPrintable(path),
+			  csv.line() - 1);
 			return false;
 		}
 
@@ -156,41 +161,41 @@ bool Conversion::loadList(const QString &path)
 		int proj = entry.at(1).toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid projection code", qPrintable(path),
-			  csv.line());
+			  csv.line() - 1);
 			continue;
 		}
 		int units = entry.at(2).toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid linear units code", qPrintable(path),
-			  csv.line());
+			  csv.line() - 1);
 			continue;
 		}
 		int transform = entry.at(3).toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid coordinate transformation code",
-			  qPrintable(path), csv.line());
+			  qPrintable(path), csv.line() - 1);
 			continue;
 		}
 		int cs = entry.at(4).toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid coordinate system code",
-			  qPrintable(path), csv.line());
+			  qPrintable(path), csv.line() - 1);
 			continue;
 		}
 
 		if (!LinearUnits(units).isValid()) {
 			qWarning("%s:%d: Unknown linear units code", qPrintable(path),
-			  csv.line());
+			  csv.line() - 1);
 			continue;
 		}
 		if (!Method(transform).isValid()) {
 			qWarning("%s:%d: Unknown coordinate transformation code",
-			  qPrintable(path), csv.line());
+			  qPrintable(path), csv.line() - 1);
 			continue;
 		}
 		if (!CoordinateSystem(cs).isValid()) {
 			qWarning("%s:%d: Unknown coordinate system code", qPrintable(path),
-			  csv.line());
+			  csv.line() - 1);
 			continue;
 		}
 

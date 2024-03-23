@@ -159,7 +159,7 @@ bool CUPParser::parse(QFile *file, QList<TrackData> &tracks,
 				return false;
 		}
 
-		_errorLine = csv.line();
+		_errorLine = csv.line() - 1;
 	}
 
 	return true;

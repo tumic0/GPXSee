@@ -37,35 +37,44 @@ bool PCS::loadList(const QString &path)
 	}
 
 	while (!csv.atEnd()) {
-		if (!csv.readEntry(entry) || entry.size() < 4) {
+		if (!csv.readEntry(entry)) {
 			qWarning("%s:%d: Parse error", qPrintable(path), csv.line());
 			return false;
 		}
+		if (entry.size() < 4) {
+			qWarning("%s:%d: Invalid column count", qPrintable(path),
+			  csv.line() - 1);
+			return false;
+		}
+
 		QString name(entry.at(0));
 		int id = entry.at(1).toInt(&res);
 		if (!res) {
-			qWarning("%s:%d: Invalid PCS code", qPrintable(path), csv.line());
+			qWarning("%s:%d: Invalid PCS code", qPrintable(path),
+			  csv.line() - 1);
 			continue;
 		}
 		int gcs = entry.at(2).toInt(&res);
 		if (!res) {
-			qWarning("%s:%d: Invalid GCS code", qPrintable(path), csv.line());
+			qWarning("%s:%d: Invalid GCS code", qPrintable(path),
+			  csv.line() - 1);
 			continue;
 		}
 		int proj = entry.at(3).toInt(&res);
 		if (!res) {
 			qWarning("%s:%d: Invalid projection code", qPrintable(path),
-			  csv.line());
+			  csv.line() - 1);
 			continue;
 		}
 
 		if (GCS::gcs(gcs).isNull()) {
-			qWarning("%s:%d: Unknown GCS code", qPrintable(path), csv.line());
+			qWarning("%s:%d: Unknown GCS code", qPrintable(path),
+			  csv.line() - 1);
 			continue;
 		}
 		if (Conversion::conversion(proj).isNull()) {
 			qWarning("%s:%d: Unknown projection code", qPrintable(path),
-			  csv.line());
+			  csv.line() - 1);
 			continue;
 		}
 

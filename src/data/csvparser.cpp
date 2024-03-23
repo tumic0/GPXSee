@@ -14,22 +14,27 @@ bool CSVParser::parse(QFile *file, QList<TrackData> &tracks,
 	bool ok;
 
 	while (!csv.atEnd()) {
-		if (!csv.readEntry(entry) || entry.size() < 3) {
+		if (!csv.readEntry(entry)) {
 			_errorString = "Parse error";
 			_errorLine = csv.line();
+			return false;
+		}
+		if (entry.size() < 3) {
+			_errorString = "Invalid column count";
+			_errorLine = csv.line() - 1;
 			return false;
 		}
 
 		double lon = entry.at(0).toDouble(&ok);
 		if (!ok || (lon < -180.0 || lon > 180.0)) {
 			_errorString = "Invalid longitude";
-			_errorLine = csv.line();
+			_errorLine = csv.line() - 1;
 			return false;
 		}
 		double lat = entry.at(1).toDouble(&ok);
 		if (!ok || (lat < -90.0 || lat > 90.0)) {
 			_errorString = "Invalid latitude";
-			_errorLine = csv.line();
+			_errorLine = csv.line() - 1;
 			return false;
 		}
 		Waypoint wp(Coordinates(lon, lat));
