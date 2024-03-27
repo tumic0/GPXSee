@@ -603,6 +603,8 @@ bool GeoJSONParser::geometryCollection(const QJsonObject &object,
 bool GeoJSONParser::feature(const QJsonObject &object, const Projection &parent,
   QList<TrackData> &tracks, QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
+	if (object["geometry"].isNull())
+		return true;
 	if (!object["geometry"].isObject()) {
 		_errorString = "Invalid/missing Feature geometry object";
 		return false;
