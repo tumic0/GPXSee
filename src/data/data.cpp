@@ -106,7 +106,7 @@ Data::Data(const QString &fileName, bool tryUnknown)
 	_errorLine = 0;
 
 	if (!file.open(QFile::ReadOnly)) {
-		_errorString = qPrintable(file.errorString());
+		_errorString = file.errorString();
 		return;
 	}
 
