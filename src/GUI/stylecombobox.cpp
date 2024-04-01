@@ -13,15 +13,18 @@ static Qt::PenStyle styles[] = {Qt::SolidLine, Qt::DashLine, Qt::DotLine,
 
 QIcon StyleComboBox::icon(Qt::PenStyle style)
 {
-	QPixmap pm(iconSize());
+	qreal ratio(devicePixelRatioF());
+	QSize size(iconSize());
+	QPixmap pm(size * ratio);
+	pm.setDevicePixelRatio(ratio);
 	pm.fill(Qt::transparent);
 
 	QBrush brush(QPalette().brush(QPalette::Active, QPalette::WindowText));
-	QPen pen(brush, pm.height() / LINE_WIDTH_RATIO, style);
+	QPen pen(brush, size.height() / LINE_WIDTH_RATIO, style);
 
 	QPainter painter(&pm);
 	painter.setPen(pen);
-	painter.drawLine(0, pm.height() / 2, pm.width(), pm.height() / 2);
+	painter.drawLine(0, size.height() / 2, size.width(), size.height() / 2);
 
 	return QIcon(pm);
 }
