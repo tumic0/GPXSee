@@ -64,7 +64,7 @@ public:
 	SegmentData segment;
 };
 
-static QMap<int, QString> coursePointDescInit()
+static QMap<int, QString> coursePointSymbolsInit()
 {
 	QMap<int, QString> map;
 
@@ -76,28 +76,55 @@ static QMap<int, QString> coursePointDescInit()
 	map.insert(6, "Left");
 	map.insert(7, "Right");
 	map.insert(8, "Straight");
-	map.insert(9, "First aid");
-	map.insert(10, "Fourth category");
-	map.insert(11, "Third category");
-	map.insert(12, "Second category");
-	map.insert(13, "First category");
-	map.insert(14, "Hors category");
+	map.insert(9, "First Aid");
+	map.insert(10, "Fourth Category");
+	map.insert(11, "Third Category");
+	map.insert(12, "Second Category");
+	map.insert(13, "First Category");
+	map.insert(14, "Hors Category");
 	map.insert(15, "Sprint");
-	map.insert(16, "Left fork");
-	map.insert(17, "Right fork");
-	map.insert(18, "Middle fork");
-	map.insert(19, "Slight left");
-	map.insert(20, "Sharp left");
-	map.insert(21, "Slight right");
-	map.insert(22, "Sharp right");
+	map.insert(16, "Left Fork");
+	map.insert(17, "Right Fork");
+	map.insert(18, "Middle Fork");
+	map.insert(19, "Slight Left");
+	map.insert(20, "Sharp Left");
+	map.insert(21, "Slight Right");
+	map.insert(22, "Sharp Right");
 	map.insert(23, "U-Turn");
-	map.insert(24, "Segment start");
-	map.insert(25, "Segment end");
+	map.insert(24, "Segment Start");
+	map.insert(25, "Segment End");
+	map.insert(27, "Campground");
+	map.insert(28, "Aid Station");
+	map.insert(29, "Rest Area");
+	map.insert(30, "General Distance");
+	map.insert(31, "Service");
+	map.insert(32, "Energy Gel");
+	map.insert(33, "Sports Drink");
+	map.insert(34, "Mile Marker");
+	map.insert(35, "Checkpoint");
+	map.insert(36, "Shelter");
+	map.insert(37, "Meeting Spot");
+	map.insert(38, "Overlook");
+	map.insert(39, "Toilet");
+	map.insert(40, "Shower");
+	map.insert(41, "Gear");
+	map.insert(42, "Sharp Curve");
+	map.insert(43, "Steep Incline");
+	map.insert(44, "Tunnel");
+	map.insert(45, "Bridge");
+	map.insert(46, "Obstacle");
+	map.insert(47, "Crossing");
+	map.insert(48, "Store");
+	map.insert(49, "Transition");
+	map.insert(50, "Navaid");
+	map.insert(51, "Transport");
+	map.insert(52, "Alert");
+	map.insert(53, "Info");
 
 	return map;
 }
 
-static QMap<int, QString> coursePointDesc = coursePointDescInit();
+static QMap<int, QString> coursePointSymbols = coursePointSymbolsInit();
 
 
 bool FITParser::readData(QFile *file, char *data, size_t size)
@@ -342,7 +369,7 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 					  (val.toInt() / (double)0x7fffffff) * 180);
 					break;
 				case 5:
-					waypoint.setDescription(coursePointDesc.value(val.toUInt()));
+					waypoint.setSymbol(coursePointSymbols.value(val.toUInt()));
 					break;
 				case 6:
 					waypoint.setName(val.toString());
