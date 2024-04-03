@@ -170,8 +170,7 @@ void WaypointItem::paint(QPainter *painter,
 		if (_font.bold())
 			painter->drawPixmap(-_icon->width() * 0.625, icon.isNull()
 			  ? -_icon->height() * 1.25 : -_icon->height() * 0.625,
-			  _icon->scaled(_icon->width() * 1.25, _icon->height() * 1.25,
-			  Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+			  _icon->scaled(_icon->width() * 1.25, _icon->height() * 1.25));
 		else
 			painter->drawPixmap(-_icon->width()/2.0, icon.isNull()
 			  ? -_icon->height() : -_icon->height()/2, *_icon);
