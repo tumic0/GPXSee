@@ -124,7 +124,22 @@ static QMap<int, QString> coursePointSymbolsInit()
 	return map;
 }
 
+static QMap<int, QString> locationPointSymbolsInit()
+{
+	QMap<int, QString> map;
+
+	/* The location symbols are a typical GARMIN mess. Every GPS unit
+	   has probably its own list, so we only add a few generic icons seen
+	   "in the wild" most often. */
+	map.insert(94, "Flag, Blue");
+	map.insert(95, "Flag, Green");
+	map.insert(96, "Flag, Red");
+
+	return map;
+}
+
 static QMap<int, QString> coursePointSymbols = coursePointSymbolsInit();
+static QMap<int, QString> locationPointSymbols = locationPointSymbolsInit();
 
 
 bool FITParser::readData(QFile *file, char *data, size_t size)
@@ -271,7 +286,7 @@ bool FITParser::readField(CTX &ctx, Field *field, QVariant &val, bool &valid)
 			ctx.len -= field->size;
 			ret = (ba.size() == field->size);
 			val = ret ? ba : QString();
-			valid = !ba.isEmpty();}
+			valid = (!ba.isEmpty() && ba.at(0) != 0);}
 			break;
 		default:
 			ret = skipValue(ctx, field->size);
@@ -387,6 +402,9 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 				case 2:
 					waypoint.rcoordinates().setLon(
 					  (val.toInt() / (double)0x7fffffff) * 180);
+					break;
+				case 3:
+					waypoint.setSymbol(locationPointSymbols.value(val.toUInt()));
 					break;
 				case 4:
 					waypoint.setElevation((val.toUInt() / 5.0) - 500);
