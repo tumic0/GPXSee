@@ -13,7 +13,7 @@ environment:
     OPENSSLDIR: C:\OpenSSL-v111-Win64\bin
     NSISDEF: /DOPENSSL /DANGLE
   - QTDIR: C:\Qt\6.5\msvc2019_64
-    OPENSSLDIR: C:\OpenSSL-v30-Win64\bin
+    OPENSSLDIR: C:\OpenSSL-v32-Win64\bin
     NSISDEF: /DQT6 /DOPENSSL
 
 install:
