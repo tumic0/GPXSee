@@ -187,7 +187,7 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(0x14)] = Polygon(QBrush(QColor(0xca, 0xdf, 0xaf)));
 	_polygons[TYPE(0x15)] = Polygon(QBrush(QColor(0xca, 0xdf, 0xaf)));
 	_polygons[TYPE(0x16)] = Polygon(QBrush(QColor(0x9a, 0xc2, 0x69),
-	  Qt::Dense5Pattern));
+	  Qt::BDiagPattern));
 	_polygons[TYPE(0x17)] = Polygon(QBrush(QColor(0xe4, 0xef, 0xcf)));
 	_polygons[TYPE(0x18)] = Polygon(QBrush(QColor(0xe3, 0xed, 0xc6)));
 	_polygons[TYPE(0x19)] = Polygon(QBrush(QColor(0xe3, 0xed, 0xc6)),
@@ -195,9 +195,9 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(0x1a)] = Polygon(QBrush(QColor(0, 0, 0), Qt::Dense6Pattern),
 	  QPen(QColor(0xcd, 0xcc, 0xc4), 1));
 	_polygons[TYPE(0x1e)] = Polygon(QBrush(QColor(0x9a, 0xc2, 0x69),
-	  Qt::Dense5Pattern));
+	  Qt::BDiagPattern));
 	_polygons[TYPE(0x1f)] = Polygon(QBrush(QColor(0x9a, 0xc2, 0x69),
-	  Qt::Dense5Pattern));
+	  Qt::BDiagPattern));
 	_polygons[TYPE(0x28)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
 	_polygons[TYPE(0x32)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
 	_polygons[TYPE(0x3c)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)));
