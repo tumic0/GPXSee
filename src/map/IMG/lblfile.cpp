@@ -50,7 +50,7 @@ static QString capitalized(const QString &str)
 {
 	QString ret(str);
 	for (int i = 0; i < str.size(); i++)
-		if (i && !str.at(i-1).isSpace())
+		if (i && !(str.at(i-1).isSpace() || str.at(i-1) == '('))
 			ret[i] = str.at(i).toLower();
 		else
 			ret[i] = str.at(i);
