@@ -4,7 +4,7 @@ while read e; do
 	IFS=":"; set $e
 
 	EXT=`echo $1 | tr /a-z/ /A-Z/`
-	sed -e "s/\$EXTENSION/$EXT/" -e "s/\$COLOR/$2/" icon-template.svg > $1.svg
+	sed -e "s/\$EXT/$EXT/" -e "s/\$COLOR/$2/" icon-template.svg > $1.svg
 
 	ICONSET=$1.iconset
 	mkdir $ICONSET
