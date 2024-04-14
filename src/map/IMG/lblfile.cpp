@@ -38,10 +38,12 @@ static bool isAllUpperCase(const QString &str)
 {
 	if (str.isEmpty())
 		return false;
-	for (int i = 0; i < str.size(); i++)
-		if (str.at(i).isLetter() && !(str.at(i).isUpper()
-		  || str.at(i) == QChar(0x00DF)))
+
+	for (int i = 0; i < str.size(); i++) {
+		QChar c(str.at(i));
+		if (c.isLetter() && !(c.isUpper() || c == QChar(0x00DF)))
 			return false;
+	}
 
 	return true;
 }
