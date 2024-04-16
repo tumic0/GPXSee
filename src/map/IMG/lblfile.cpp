@@ -41,6 +41,7 @@ static bool isAllUpperCase(const QString &str)
 
 	for (int i = 0; i < str.size(); i++) {
 		QChar c(str.at(i));
+
 		if (c.isLetter() && !(c.isUpper() || c == QChar(0x00DF)))
 			return false;
 	}
@@ -59,12 +60,9 @@ static QString capitalized(const QString &str)
 
 	for (int i = 1; i < str.size(); i++) {
 		QChar last(str.at(i-1));
-		QChar current(str.at(i));
+		QChar c(str.at(i));
 
-		if (!(last.isSpace() || last == '('))
-			ret[i] = current.toLower();
-		else
-			ret[i] = current;
+		ret[i] = (last.isSpace() || last == '(') ? c : c.toLower();
 	}
 
 	return ret;
