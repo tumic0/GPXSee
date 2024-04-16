@@ -78,8 +78,6 @@ static QByteArray ft2m(const QByteArray &str)
 LBLFile::~LBLFile()
 {
 	delete _huffmanText;
-	delete[] _table;
-	delete[] _rasters;
 }
 
 bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
@@ -103,10 +101,10 @@ bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 			return false;
 
 		if (size && recordSize) {
-			_table = new quint32[size / recordSize];
+			_table.resize(size / recordSize);
 			if (!seek(hdl, offset))
 				return false;
-			for (quint32 i = 0; i < size / recordSize; i++) {
+			for (quint32 i = 0; i < _table.size(); i++) {
 				if (!readVUInt32(hdl, recordSize, _table[i]))
 					return false;
 			}
@@ -139,12 +137,10 @@ bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 
 void LBLFile::clear()
 {
+	_table = QVector<quint32>();
+	_rasters = QVector<Image>();
 	delete _huffmanText;
-	delete[] _table;
-	delete[] _rasters;
 	_huffmanText = 0;
-	_table = 0;
-	_rasters = 0;
 }
 
 Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize,
@@ -280,13 +276,15 @@ Label LBLFile::labelHuffman(Handle &hdl, const SubFile *file, Handle &fileHdl,
 
 	if (!_huffmanText->decode(file, fileHdl, size, str))
 		return Label();
-	if (!_table)
+	if (!_table.size())
 		return str2label(str, capitalize, convert);
 
 
 	QVector<quint8> str2;
 	for (int i = 0; i < str.size(); i++) {
-		quint32 val = _table[str.at(i)];
+		quint8 c(str.at(i));
+		quint32 val = (c < _table.size()) ? _table.at(c) : 0;
+
 		if (val) {
 			quint32 off = _base.offset + ((val & 0x7fffff) << _shift);
 			if (!seek(hdl, off))
@@ -301,13 +299,13 @@ Label LBLFile::labelHuffman(Handle &hdl, const SubFile *file, Handle &fileHdl,
 			  str2))
 				return Label();
 		} else {
-			if (str.at(i) == 7) {
+			if (c == 7) {
 				str2.append(0);
 				break;
 			}
 			if (str2.size() && str2.back() == '\0')
 				str2[str2.size() - 1] = ' ';
-			str2.append(str.at(i));
+			str2.append(c);
 		}
 	}
 
@@ -357,15 +355,15 @@ bool LBLFile::loadRasterTable(Handle &hdl, quint32 offset, quint32 size,
   quint32 recordSize)
 {
 	quint32 prev, cur;
+	quint32 imgCount = size / recordSize;
 
-	_imgCount = size / recordSize;
-	_imgIdSize = byteSize(_imgCount - 1);
-	_rasters = new Image[_imgCount];
+	_imgIdSize = byteSize(imgCount - 1);
+	_rasters.resize(imgCount);
 
 	if (!(seek(hdl, offset) && readVUInt32(hdl, recordSize, prev)))
 		return false;
 
-	for (quint32 i = 1; i < _imgCount; i++) {
+	for (quint32 i = 1; i < imgCount; i++) {
 		if (!readVUInt32(hdl, recordSize, cur))
 			return false;
 
@@ -375,8 +373,8 @@ bool LBLFile::loadRasterTable(Handle &hdl, quint32 offset, quint32 size,
 		prev = cur;
 	}
 
-	_rasters[_imgCount-1].offset = prev;
-	_rasters[_imgCount-1].size = _img.size - prev;
+	_rasters[imgCount-1].offset = prev;
+	_rasters[imgCount-1].size = _img.size - prev;
 
 	return true;
 }
@@ -385,14 +383,14 @@ QPixmap LBLFile::image(Handle &hdl, quint32 id) const
 {
 	QPixmap pm;
 
-	if (id >= _imgCount)
+	if (id >= _rasters.size())
 		return pm;
 
-	if (!seek(hdl, _img.offset + _rasters[id].offset))
+	if (!seek(hdl, _img.offset + _rasters.at(id).offset))
 		return pm;
 	QByteArray ba;
-	ba.resize(_rasters[id].size);
-	if (!read(hdl, ba.data(), _rasters[id].size))
+	ba.resize(_rasters.at(id).size);
+	if (!read(hdl, ba.data(), ba.size()))
 		return pm;
 
 	pm.loadFromData(ba, "jpeg");

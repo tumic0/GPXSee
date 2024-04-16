@@ -16,14 +16,14 @@ class LBLFile : public SubFile
 {
 public:
 	LBLFile(const IMGData *img)
-	  : SubFile(img), _huffmanText(0), _table(0), _rasters(0), _imgIdSize(0),
-	  _poiShift(0), _shift(0), _encoding(0) {}
+	  : SubFile(img), _huffmanText(0), _imgIdSize(0), _poiShift(0), _shift(0),
+	  _encoding(0) {}
 	LBLFile(const QString *path)
-	  : SubFile(path), _huffmanText(0), _table(0), _rasters(0), _imgIdSize(0),
-	  _poiShift(0), _shift(0), _encoding(0) {}
+	  : SubFile(path), _huffmanText(0), _imgIdSize(0), _poiShift(0), _shift(0),
+	  _encoding(0) {}
 	LBLFile(const SubFile *gmp, quint32 offset)
-	  : SubFile(gmp, offset), _huffmanText(0), _table(0), _rasters(0),
-	  _imgIdSize(0), _poiShift(0), _shift(0), _encoding(0) {}
+	  : SubFile(gmp, offset), _huffmanText(0), _imgIdSize(0), _poiShift(0),
+	  _shift(0), _encoding(0) {}
 	~LBLFile();
 
 	bool load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl);
@@ -55,11 +55,10 @@ private:
 	  quint32 recordSize);
 
 	HuffmanText *_huffmanText;
-	quint32 *_table;
-	Image *_rasters;
+	QVector<Image> _rasters;
+	QVector<quint32> _table;
 	TextCodec _codec;
 	Section _base, _poi, _img;
-	quint32 _imgCount;
 	quint8 _imgIdSize;
 	quint8 _poiShift;
 	quint8 _shift;
