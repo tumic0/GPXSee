@@ -54,11 +54,14 @@ static QString capitalized(const QString &str)
 
 	ret.resize(str.size());
 
-	for (int i = 0; i < str.size(); i++) {
+	if (!str.isEmpty())
+		ret[0] = str.at(0);
+
+	for (int i = 1; i < str.size(); i++) {
 		QChar last(str.at(i-1));
 		QChar current(str.at(i));
 
-		if (i && !(last.isSpace() || last == '('))
+		if (!(last.isSpace() || last == '('))
 			ret[i] = current.toLower();
 		else
 			ret[i] = current;
