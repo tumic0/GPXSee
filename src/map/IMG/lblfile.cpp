@@ -272,44 +272,41 @@ Label LBLFile::label8b(const SubFile *file, Handle &fileHdl, quint32 size,
 Label LBLFile::labelHuffman(Handle &hdl, const SubFile *file, Handle &fileHdl,
   quint32 size, bool capitalize, bool convert)
 {
-	QVector<quint8> str;
+	QVector<quint8> tpl;
 
-	if (!_huffmanText->decode(file, fileHdl, size, str))
+	if (!_huffmanText->decode(file, fileHdl, size, tpl))
 		return Label();
 	if (!_table.size())
-		return str2label(str, capitalize, convert);
+		return str2label(tpl, capitalize, convert);
 
 
-	QVector<quint8> str2;
-	for (int i = 0; i < str.size(); i++) {
-		quint8 c(str.at(i));
+	QVector<quint8> str;
+
+	for (int i = 0; i < tpl.size(); i++) {
+		quint8 c(tpl.at(i));
 		quint32 val = (c < _table.size()) ? _table.at(c) : 0;
 
 		if (val) {
-			quint32 off = _base.offset + ((val & 0x7fffff) << _shift);
-			if (!seek(hdl, off))
+			if (str.size() && str.back() == '\0')
+				str.back() = ' ';
+			else if (str.size())
+				str.append(' ');
+
+			quint32 offset = _base.offset + ((val & 0x7fffff) << _shift);
+			quint32 limit = _base.offset + _base.size - offset;
+			if (!seek(hdl, offset))
 				return Label();
-
-			if (str2.size() && str2.back() == '\0')
-				str2[str2.size() - 1] = ' ';
-			else if (str2.size())
-				str2.append(' ');
-
-			if (!_huffmanText->decode(this, hdl, _base.offset + _base.size - off,
-			  str2))
+			if (!_huffmanText->decode(this, hdl, limit, str))
 				return Label();
 		} else {
-			if (c == 7) {
-				str2.append(0);
-				break;
-			}
-			if (str2.size() && str2.back() == '\0')
-				str2[str2.size() - 1] = ' ';
-			str2.append(c);
+			if (str.size() && str.back() == '\0')
+				str.back() = ' ';
+
+			str.append(c);
 		}
 	}
 
-	return str2label(str2, capitalize, convert);
+	return str2label(str, capitalize, convert);
 }
 
 Label LBLFile::label(Handle &hdl, quint32 offset, bool poi, bool capitalize,
