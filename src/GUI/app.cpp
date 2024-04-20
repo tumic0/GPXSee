@@ -29,9 +29,9 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 {
 #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
 	setApplicationName(APP_NAME);
-#else
+#else // Q_OS_WIN32 || Q_OS_MAC
 	setApplicationName(QString(APP_NAME).toLower());
-#endif
+#endif // Q_OS_WIN32 || Q_OS_MAC
 	setApplicationVersion(APP_VERSION);
 
 	QTranslator *app = new QTranslator(this);
@@ -65,6 +65,9 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	loadPCSs();
 	Waypoint::loadSymbolIcons(ProgramPaths::symbolsDir());
 
+#if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
+	QIcon::setThemeName(APP_NAME);
+#endif // Q_OS_WIN32 || Q_OS_MAC
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
 	QIcon::setFallbackThemeName(APP_NAME);
 #endif // QT 5.12
