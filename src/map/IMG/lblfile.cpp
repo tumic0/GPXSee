@@ -5,8 +5,6 @@
 using namespace Garmin;
 using namespace IMG;
 
-enum Charset {Normal, Symbol, Special};
-
 static bool isAllUpperCase(const QString &str)
 {
 	if (str.isEmpty())
@@ -163,6 +161,7 @@ Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize,
 Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, quint32 size,
   bool capitalize, bool convert) const
 {
+	enum Charset {Normal, Symbol, Special};
 	static const quint8 NORMAL_CHARS[] = {
 		' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
 		'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
@@ -190,7 +189,7 @@ Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, quint32 size,
 	Shield::Type shieldType = Shield::None;
 	QByteArray label, shieldLabel;
 	QByteArray *bap = &label;
-	Charset curCharSet = Normal;
+	Charset charset = Normal;
 	quint8 b1, b2, b3;
 	int split = -1;
 
@@ -202,7 +201,7 @@ Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, quint32 size,
 		int c[]= {b1>>2, (b1&0x3)<<4|b2>>4, (b2&0xF)<<2|b3>>6, b3&0x3F};
 
 		for (int cpt = 0; cpt < 4; cpt++) {
-			if (c[cpt] > 0x2f || (curCharSet == Normal && c[cpt] == 0x1d)) {
+			if (c[cpt] > 0x2f || (charset == Normal && c[cpt] == 0x1d)) {
 				if (split >= 0)
 					label = label.left(split) + ft2m(label.mid(split));
 				else if (convert)
@@ -211,12 +210,12 @@ Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, quint32 size,
 				return Label(capitalize && isAllUpperCase(text)
 				  ? capitalized(text) : text, Shield(shieldType, shieldLabel));
 			}
-			switch (curCharSet) {
+			switch (charset) {
 				case Normal:
 					if (c[cpt] == 0x1c)
-						curCharSet = Symbol;
+						charset = Symbol;
 					else if (c[cpt] == 0x1b)
-						curCharSet = Special;
+						charset = Special;
 					else if (c[cpt] >= 0x1e && c[cpt] <= 0x1f) {
 						if (bap == &shieldLabel)
 							bap = &label;
@@ -237,11 +236,11 @@ Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, quint32 size,
 					break;
 				case Symbol:
 					bap->append(SYMBOL_CHARS[c[cpt]]);
-					curCharSet = Normal;
+					charset = Normal;
 					break;
 				case Special:
 					bap->append(SPECIAL_CHARS[c[cpt]]);
-					curCharSet = Normal;
+					charset = Normal;
 					break;
 			}
 		}
