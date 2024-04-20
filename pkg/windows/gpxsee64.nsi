@@ -37,7 +37,7 @@ Unicode true
 ; The name of the installer
 Name "GPXSee"
 ; Program version
-!define VERSION "13.19"
+!define VERSION "13.20"
 
 ; The file to write
 OutFile "GPXSee-${VERSION}_x64.exe"
