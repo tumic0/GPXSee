@@ -7,33 +7,6 @@ using namespace IMG;
 
 enum Charset {Normal, Symbol, Special};
 
-static const quint8 NORMAL_CHARS[] = {
-	' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
-	'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-	'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-	'X', 'Y', 'Z',  '~', '~', '~', ' ', ' ',
-	'0', '1', '2', '3', '4', '5', '6', '7',
-	'8', '9', '~', '~', '~', '~', '~', '~'
-};
-
-static const quint8 SYMBOL_CHARS[] = {
-	'@', '!', '"', '#', '$', '%', '&', '\'',
-	'(', ')', '*', '+', ',', '-', '.', '/',
-	'~', '~', '~', '~', '~', '~', '~', '~',
-	'~', '~', ':', ';', '<', '=', '>', '?',
-	'~', '~', '~', '~', '~', '~', '~', '~',
-	'~', '~', '~', '[', '\\', ']', '^', '_'
-};
-
-static const quint8 SPECIAL_CHARS[] = {
-	'`', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
-	'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-	'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
-	'x', 'y', 'z', '~', '~', '~', '~', '~',
-	'0', '1', '2', '3', '4', '5', '6', '7',
-	'8', '9', '~', '~', '~', '~', '~', '~'
-};
-
 static bool isAllUpperCase(const QString &str)
 {
 	if (str.isEmpty())
@@ -74,6 +47,7 @@ static QByteArray ft2m(const QByteArray &str)
 	int number = str.toInt(&ok);
 	return ok ? QByteArray::number(qRound(number * 0.3048)) : str;
 }
+
 
 LBLFile::~LBLFile()
 {
@@ -189,6 +163,30 @@ Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize,
 Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, quint32 size,
   bool capitalize, bool convert) const
 {
+	static const quint8 NORMAL_CHARS[] = {
+		' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
+		'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+		'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
+		'X', 'Y', 'Z',  '~', '~', '~', ' ', ' ',
+		'0', '1', '2', '3', '4', '5', '6', '7',
+		'8', '9', '~', '~', '~', '~', '~', '~'
+	};
+	static const quint8 SYMBOL_CHARS[] = {
+		'@', '!', '"', '#', '$', '%', '&', '\'',
+		'(', ')', '*', '+', ',', '-', '.', '/',
+		'~', '~', '~', '~', '~', '~', '~', '~',
+		'~', '~', ':', ';', '<', '=', '>', '?',
+		'~', '~', '~', '~', '~', '~', '~', '~',
+		'~', '~', '~', '[', '\\', ']', '^', '_'
+	};
+	static const quint8 SPECIAL_CHARS[] = {
+		'`', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+		'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+		'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
+		'x', 'y', 'z', '~', '~', '~', '~', '~',
+		'0', '1', '2', '3', '4', '5', '6', '7',
+		'8', '9', '~', '~', '~', '~', '~', '~'
+	};
 	Shield::Type shieldType = Shield::None;
 	QByteArray label, shieldLabel;
 	QByteArray *bap = &label;
