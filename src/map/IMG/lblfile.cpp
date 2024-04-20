@@ -7,7 +7,7 @@ using namespace IMG;
 
 enum Charset {Normal, Symbol, Special};
 
-static quint8 NORMAL_CHARS[] = {
+static const quint8 NORMAL_CHARS[] = {
 	' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
 	'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
 	'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
@@ -16,7 +16,7 @@ static quint8 NORMAL_CHARS[] = {
 	'8', '9', '~', '~', '~', '~', '~', '~'
 };
 
-static quint8 SYMBOL_CHARS[] = {
+static const quint8 SYMBOL_CHARS[] = {
 	'@', '!', '"', '#', '$', '%', '&', '\'',
 	'(', ')', '*', '+', ',', '-', '.', '/',
 	'~', '~', '~', '~', '~', '~', '~', '~',
@@ -25,7 +25,7 @@ static quint8 SYMBOL_CHARS[] = {
 	'~', '~', '~', '[', '\\', ']', '^', '_'
 };
 
-static quint8 SPECIAL_CHARS[] = {
+static const quint8 SPECIAL_CHARS[] = {
 	'`', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
 	'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
 	'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
