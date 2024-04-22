@@ -76,7 +76,7 @@ bool LBLFile::load(Handle &hdl, const RGNFile *rgn, Handle &rgnHdl)
 			_table.resize(size / recordSize);
 			if (!seek(hdl, offset))
 				return false;
-			for (quint32 i = 0; i < _table.size(); i++) {
+			for (int i = 0; i < _table.size(); i++) {
 				if (!readVUInt32(hdl, recordSize, _table[i]))
 					return false;
 			}
@@ -377,7 +377,7 @@ QPixmap LBLFile::image(Handle &hdl, quint32 id) const
 {
 	QPixmap pm;
 
-	if (id >= _rasters.size())
+	if ((int)id >= _rasters.size())
 		return pm;
 
 	if (!seek(hdl, _img.offset + _rasters.at(id).offset))
