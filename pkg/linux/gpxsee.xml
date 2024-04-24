@@ -269,6 +269,7 @@
 		<root-XML namespaceURI="http://www.gpxsee.org/map/1.2" localName="map"/>
 		<root-XML namespaceURI="http://www.gpxsee.org/map/1.3" localName="map"/>
 		<root-XML namespaceURI="http://www.gpxsee.org/map/1.4" localName="map"/>
+		<root-XML namespaceURI="http://www.gpxsee.org/map/1.5" localName="map"/>
 		<glob pattern="*.xml"/>
 	</mime-type>
 
