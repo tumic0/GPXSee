@@ -1712,7 +1712,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.gpxsee.map</string>
 			<key>UTTypeReferenceURL</key>
-			<string>http://www.gpxsee.org/map/1.4/</string>
+			<string>http://www.gpxsee.org/map/1.5/</string>
 			<key>UTTypeDescription</key>
 			<string>GPXSee Map Definition File</string>
 			<key>UTTypeConformsTo</key>
