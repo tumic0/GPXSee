@@ -110,7 +110,7 @@ QUrl DEMLoader::tileUrl(const DEM::Tile &tile) const
 
 QString DEMLoader::tileFile(const DEM::Tile &tile) const
 {
-	return _dir.absoluteFilePath(tile.baseName());
+	return _dir.absoluteFilePath(tile.fileName());
 }
 
 void DEMLoader::setAuthorization(const Authorization &authorization)

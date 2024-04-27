@@ -22,7 +22,7 @@ public:
 
 		QString lonStr() const;
 		QString latStr() const;
-		QString baseName() const;
+		QString fileName() const;
 
 		bool operator==(const Tile &other) const
 		{

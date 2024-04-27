@@ -65,7 +65,7 @@ QString DEM::Tile::lonStr() const
 	return QString("%1%2").arg(ew).arg(qAbs(_lon), 3, 10, QChar('0'));
 }
 
-QString DEM::Tile::baseName() const
+QString DEM::Tile::fileName() const
 {
 	return QString("%1%2.hgt").arg(latStr(), lonStr());
 }
@@ -108,15 +108,15 @@ double DEM::height(const Coordinates &c, const Entry *e)
 
 DEM::Entry *DEM::loadTile(const Tile &tile)
 {
-	QString bn(tile.baseName());
-	QString fn(QDir(_dir).absoluteFilePath(bn));
-	QString zn(fn + ".zip");
+	QString fileName(tile.fileName());
+	QString path(QDir(_dir).absoluteFilePath(fileName));
+	QString zipPath(path + ".zip");
 
-	if (QFileInfo::exists(zn)) {
-		QZipReader zip(zn, QIODevice::ReadOnly);
-		return new Entry(zip.fileData(bn));
+	if (QFileInfo::exists(zipPath)) {
+		QZipReader zip(zipPath, QIODevice::ReadOnly);
+		return new Entry(zip.fileData(fileName));
 	} else {
-		QFile file(fn);
+		QFile file(path);
 		if (!file.open(QIODevice::ReadOnly)) {
 			qWarning("%s: %s", qPrintable(file.fileName()),
 			  qPrintable(file.errorString()));
@@ -147,15 +147,15 @@ double DEM::elevation(const Coordinates &c)
 
 QList<Area> DEM::tiles()
 {
-	static const QRegularExpression re("([NS])([0-9]{2})([EW])([0-9]{3})");
+	static const QRegularExpression re(
+	  "([NS])([0-9]{2})([EW])([0-9]{3})(\\.hgt|\\.hgt\\.zip)");
 	QDir dir(_dir);
 	QFileInfoList files(dir.entryInfoList(QDir::Files | QDir::Readable));
 	QLocale l(QLocale::system());
 	QList<Area> list;
 
 	for (int i = 0; i < files.size(); i++) {
-		QString basename(files.at(i).baseName());
-		QRegularExpressionMatch match(re.match(basename));
+		QRegularExpressionMatch match(re.match(files.at(i).fileName()));
 		if (!match.hasMatch())
 			continue;
 
@@ -167,7 +167,7 @@ QList<Area> DEM::tiles()
 			lon = -lon;
 
 		Area area(RectC(Coordinates(lon, lat + 1), Coordinates(lon + 1, lat)));
-		area.setName(basename);
+		area.setName(files.at(i).baseName());
 		area.setDescription(files.at(i).suffix().toUpper() + ", "
 		  + l.formattedDataSize(files.at(i).size()));
 		area.setStyle(PolygonStyle(QColor(0xFF, 0, 0, 0x40),
