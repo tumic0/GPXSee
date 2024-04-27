@@ -75,7 +75,7 @@ DEM::TileCache DEM::_data;
 
 void DEM::setCacheSize(int size)
 {
-	_data.setMaxCost(size * 1024);
+	_data.setMaxCost(size);
 }
 
 void DEM::setDir(const QString &path)
@@ -138,7 +138,7 @@ double DEM::elevation(const Coordinates &c)
 	if (!e) {
 		e = loadTile(tile);
 		ele = height(c, e);
-		_data.insert(tile, e, e->data().size());
+		_data.insert(tile, e, e->data().size() / 1024);
 	} else
 		ele = height(c, e);
 
