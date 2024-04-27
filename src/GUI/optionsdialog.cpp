@@ -727,14 +727,14 @@ QWidget *OptionsDialog::createSystemPage()
 	_enableHTTP2->setChecked(_options.enableHTTP2);
 
 	_pixmapCache = new QSpinBox();
-	_pixmapCache->setMinimum(16);
-	_pixmapCache->setMaximum(2048);
+	_pixmapCache->setMinimum(64);
+	_pixmapCache->setMaximum(4096);
 	_pixmapCache->setSuffix(UNIT_SPACE + tr("MB"));
 	_pixmapCache->setValue(_options.pixmapCache);
 
 	_demCache = new QSpinBox();
 	_demCache->setMinimum(64);
-	_demCache->setMaximum(2048);
+	_demCache->setMaximum(4096);
 	_demCache->setSuffix(UNIT_SPACE + tr("MB"));
 	_demCache->setValue(_options.demCache);
 
