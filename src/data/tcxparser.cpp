@@ -123,6 +123,8 @@ void TCXParser::waypointData(Waypoint &waypoint)
 			waypoint.setElevation(number());
 		else if (_reader.name() == QLatin1String("Time"))
 			waypoint.setTimestamp(time());
+		else if (_reader.name() == QLatin1String("PointType"))
+			waypoint.setSymbol(_reader.readElementText());
 		else
 			_reader.skipCurrentElement();
 	}
