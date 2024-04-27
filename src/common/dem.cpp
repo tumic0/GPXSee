@@ -148,7 +148,7 @@ double DEM::elevation(const Coordinates &c)
 QList<Area> DEM::tiles()
 {
 	static const QRegularExpression re(
-	  "([NS])([0-9]{2})([EW])([0-9]{3})(\\.hgt|\\.hgt\\.zip)");
+	  "^([NS])([0-9]{2})([EW])([0-9]{3})(\\.hgt|\\.hgt\\.zip)$");
 	QDir dir(_dir);
 	QFileInfoList files(dir.entryInfoList(QDir::Files | QDir::Readable));
 	QLocale l(QLocale::system());
