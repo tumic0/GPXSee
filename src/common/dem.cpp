@@ -182,7 +182,7 @@ QList<Area> DEM::tiles()
 #ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const DEM::Tile &tile)
 {
-	dbg.nospace() << "Tile(" << tile.baseName() << ")";
+	dbg.nospace() << "Tile(" << tile.fileName() << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG
