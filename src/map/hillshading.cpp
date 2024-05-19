@@ -42,24 +42,24 @@ static void getDerivativesHorn(const SubMatrix &sm, double z, Derivatives &d)
 	d.dzdy = (z * (sm.z1 + 2 * sm.z2 + sm.z3 - sm.z7 - 2 * sm.z8 - sm.z9)) / 8;
 }
 
-static void getSubmatrix(int x, int y, const Matrix &m, SubMatrix &sm)
+static void getSubmatrix(int x, int y, const MatrixD &m, SubMatrix &sm)
 {
 	int left = x - 1;
 	int right = x + 1;
 	int top = y - 1;
 	int bottom = y + 1;
 
-	sm.z1 = m.m(top, left);
-	sm.z2 = m.m(top, x);
-	sm.z3 = m.m(top, right);
-	sm.z4 = m.m(y, left);
-	sm.z6 = m.m(y, right);
-	sm.z7 = m.m(bottom, left);
-	sm.z8 = m.m(bottom, x);
-	sm.z9 = m.m(bottom, right);
+	sm.z1 = m.at(top, left);
+	sm.z2 = m.at(top, x);
+	sm.z3 = m.at(top, right);
+	sm.z4 = m.at(y, left);
+	sm.z6 = m.at(y, right);
+	sm.z7 = m.at(bottom, left);
+	sm.z8 = m.at(bottom, x);
+	sm.z9 = m.at(bottom, right);
 }
 
-QImage HillShading::render(const Matrix &m, quint8 alpha, double z,
+QImage HillShading::render(const MatrixD &m, quint8 alpha, double z,
   double azimuth, double elevation)
 {
 	QImage img(m.w() - 2, m.h() - 2, QImage::Format_ARGB32_Premultiplied);

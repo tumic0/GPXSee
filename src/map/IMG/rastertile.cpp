@@ -27,6 +27,7 @@ using namespace IMG;
 #define ROAD  0
 #define WATER 1
 
+
 static const QColor textColor(Qt::black);
 static const QColor haloColor(Qt::white);
 static const QColor shieldColor(Qt::white);
@@ -107,7 +108,22 @@ static bool rectNearPolygon(const QPolygonF &polygon, const QRectF &rect)
 	  || polygon.containsPoint(rect.bottomRight(), Qt::OddEvenFill)));
 }
 
-const QFont *RasterTile::poiFont(Style::FontSize size, int zoom, bool extended)
+static double interpolate(double dx, double dy, double p0, double p1, double p2,
+  double p3)
+{
+	return p0 * (1.0 - dx) * (1.0 - dy) + p1 * dx * (1.0 - dy)
+	  + p2 * dy * (1.0 - dx) + p3 * dx * dy;
+}
+
+static double val(const Matrix<qint16> &m, int row, int col)
+{
+	qint16 v = m.at(row, col);
+	return (v == -32768) ? NAN : (double)v;
+}
+
+
+const QFont *RasterTile::poiFont(Style::FontSize size, int zoom,
+  bool extended) const
 {
 	if (zoom > 25)
 		size = Style::Normal;
@@ -122,7 +138,7 @@ const QFont *RasterTile::poiFont(Style::FontSize size, int zoom, bool extended)
 	}
 }
 
-void RasterTile::ll2xy(QList<MapData::Poly> &polys)
+void RasterTile::ll2xy(QList<MapData::Poly> &polys) const
 {
 	for (int i = 0; i < polys.size(); i++) {
 		MapData::Poly &poly = polys[i];
@@ -133,7 +149,7 @@ void RasterTile::ll2xy(QList<MapData::Poly> &polys)
 	}
 }
 
-void RasterTile::ll2xy(QList<MapData::Point> &points)
+void RasterTile::ll2xy(QList<MapData::Point> &points) const
 {
 	for (int i = 0; i < points.size(); i++) {
 		QPointF p(ll2xy(points.at(i).coordinates));
@@ -142,7 +158,7 @@ void RasterTile::ll2xy(QList<MapData::Point> &points)
 }
 
 void RasterTile::drawPolygons(QPainter *painter,
-  const QList<MapData::Poly> &polygons)
+  const QList<MapData::Poly> &polygons) const
 {
 	QCache<const LBLFile *, SubFile::Handle> hc(16);
 
@@ -177,7 +193,9 @@ void RasterTile::drawPolygons(QPainter *painter,
 
 				//painter->setPen(Qt::blue);
 				//painter->setBrush(Qt::NoBrush);
+				//painter->setRenderHint(QPainter::Antialiasing, false);
 				//painter->drawRect(QRectF(tl, br));
+				//painter->setRenderHint(QPainter::Antialiasing);
 			} else {
 				const Style::Polygon &style = _data->style()->polygon(poly.type);
 
@@ -189,7 +207,8 @@ void RasterTile::drawPolygons(QPainter *painter,
 	}
 }
 
-void RasterTile::drawLines(QPainter *painter, const QList<MapData::Poly> &lines)
+void RasterTile::drawLines(QPainter *painter,
+  const QList<MapData::Poly> &lines) const
 {
 	painter->setBrush(Qt::NoBrush);
 
@@ -218,7 +237,7 @@ void RasterTile::drawLines(QPainter *painter, const QList<MapData::Poly> &lines)
 }
 
 void RasterTile::drawTextItems(QPainter *painter,
-  const QList<TextItem*> &textItems)
+  const QList<TextItem*> &textItems) const
 {
 	for (int i = 0; i < textItems.size(); i++)
 		textItems.at(i)->paint(painter);
@@ -446,28 +465,145 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 	_data->points(pointRectD.toRectC(_proj, 20), _zoom, &points);
 }
 
-Matrix RasterTile::elevation() const
+bool RasterTile::edgeCb(const MapData::Elevation *e, void *context)
 {
-	Matrix m(_rect.height() + 2, _rect.width() + 2);
+	EdgeCTX *ctx = (EdgeCTX*)context;
+
+	double x = (ctx->c.lon() - e->rect.left()) / e->xr;
+	double y = (e->rect.top() - ctx->c.lat()) / e->yr;
+	int row = qMin((int)y, e->m.h() - 1);
+	int col = qMin((int)x, e->m.w() - 1);
+
+	ctx->ele = val(e->m, row, col);
+
+	return std::isnan(ctx->ele);
+}
+
+double RasterTile::edge(const DEMTRee &tree, const Coordinates &c)
+{
+	double min[2], max[2];
+	double ele = NAN;
+	EdgeCTX ctx(c, ele);
+
+	min[0] = c.lon();
+	min[1] = c.lat();
+	max[0] = c.lon();
+	max[1] = c.lat();
+
+	tree.Search(min, max, edgeCb, &ctx);
+
+	return ele;
+}
+
+double RasterTile::elevation(const DEMTRee &tree, const MapData::Elevation *e,
+  const Coordinates &c)
+{
+	double x = (c.lon() - e->rect.left()) / e->xr;
+	double y = (e->rect.top() - c.lat()) / e->yr;
+	int row = qMin((int)y, e->m.h() - 1);
+	int col = qMin((int)x, e->m.w() - 1);
+
+	double p0 = val(e->m, row, col);
+	double p1 = (col == e->m.w() - 1)
+	  ? edge(tree, Coordinates(e->rect.left() + (col + 1) * e->xr + e->xr/2,
+		e->rect.top() - row * e->yr))
+	  : val(e->m, row, col + 1);
+	double p2 = (row == e->m.h() - 1)
+	  ? edge(tree, Coordinates(e->rect.left() + col * e->xr,
+		e->rect.top() - (row + 1) * e->yr - e->yr/2))
+	  : val(e->m, row + 1, col);
+	double p3 = ((col == e->m.w() - 1) || (row == e->m.h() - 1))
+	  ? edge(tree, Coordinates(e->rect.left() + (col + 1) * e->xr + e->xr/2,
+		e->rect.top() - (row + 1) * e->yr - e->yr/2))
+	  : val(e->m, row + 1, col + 1);
+
+	return interpolate(x - col, y - row, p0, p1, p2, p3);
+}
+
+void RasterTile::buildTree(const QList<MapData::Elevation> &tiles, DEMTRee &tree)
+{
+	double min[2], max[2];
+
+	for (int i = 0; i < tiles.size(); i++) {
+		const MapData::Elevation &e = tiles.at(i);
+
+		min[0] = e.rect.left();
+		min[1] = e.rect.bottom();
+		max[0] = e.rect.right();
+		max[1] = e.rect.top();
+
+		tree.Insert(min, max, &e);
+	}
+}
+
+bool RasterTile::elevationCb(const MapData::Elevation *e, void *context)
+{
+	ElevationCTX *ctx = (ElevationCTX*)context;
+
+	ctx->ele = elevation(ctx->tree, e, ctx->c);
+	return std::isnan(ctx->ele);
+}
+
+void RasterTile::searchTree(const DEMTRee &tree, const Coordinates &c,
+  double &ele)
+{
+	double min[2], max[2];
+	ElevationCTX ctx(tree, c, ele);
+
+	min[0] = c.lon();
+	min[1] = c.lat();
+	max[0] = c.lon();
+	max[1] = c.lat();
+
+	ele = NAN;
+	tree.Search(min, max, elevationCb, &ctx);
+}
+
+MatrixD RasterTile::elevation() const
+{
+	MatrixD m(_rect.height() + 2, _rect.width() + 2);
+	QVector<Coordinates> ll;
 
 	int left = _rect.left() - 1;
 	int right = _rect.right() + 1;
 	int top = _rect.top() - 1;
 	int bottom = _rect.bottom() + 1;
 
-	QVector<Coordinates> ll;
 	ll.reserve(m.w() * m.h());
-	for (int y = top; y <= bottom; y++) {
+	for (int y = top; y <= bottom; y++)
 		for (int x = left; x <= right; x++)
 			ll.append(xy2ll(QPointF(x, y)));
+
+	if (_data->hasDEM()) {
+		RectC rect;
+		QList<MapData::Elevation> tiles;
+		DEMTRee tree;
+
+		for (int i = 0; i < ll.size(); i++)
+			rect = rect.united(ll.at(i));
+		// Extra margin for edge()
+		rect = rect.united(xy2ll(QPointF(right + 1, bottom + 1)));
+
+		_data->elevations(rect, _zoom, &tiles);
+
+		buildTree(tiles, tree);
+		for (int i = 0; i < ll.size(); i++)
+			searchTree(tree, ll.at(i), m.at(i));
+	} else {
+		DEM::lock();
+		for (int i = 0; i < ll.size(); i++)
+			m.at(i) = DEM::elevation(ll.at(i));
+		DEM::unlock();
 	}
 
-	DEM::lock();
-	for (int i = 0; i < ll.size(); i++)
-		m.m(i) = DEM::elevation(ll.at(i));
-	DEM::unlock();
-
 	return m;
+}
+
+void RasterTile::drawHillShading(QPainter *painter) const
+{
+	if (_hillShading && _zoom >= 18 && _zoom <= 24)
+		painter->drawImage(_rect.x(), _rect.y(),
+		  HillShading::render(elevation()));
 }
 
 void RasterTile::render()
@@ -501,14 +637,14 @@ void RasterTile::render()
 	painter.translate(-_rect.x(), -_rect.y());
 
 	drawPolygons(&painter, polygons);
-	if (_hillShading && _zoom >= 18 && _zoom <= 24)
-		painter.drawImage(_rect.x(), _rect.y(), HillShading::render(elevation()));
+	drawHillShading(&painter);
 	drawLines(&painter, lines);
 	drawTextItems(&painter, textItems);
 
 	qDeleteAll(textItems);
 
 	//painter.setPen(Qt::red);
+	//painter.setBrush(Qt::NoBrush);
 	//painter.setRenderHint(QPainter::Antialiasing, false);
 	//painter.drawRect(_rect);
 

@@ -18,7 +18,6 @@ static void copyPoints(const RectC &rect, QList<MapData::Point> *src,
 			dst->append(src->at(j));
 }
 
-
 SubFile *VectorTile::file(SubFile::Type type)
 {
 	switch (type) {
@@ -32,6 +31,8 @@ SubFile *VectorTile::file(SubFile::Type type)
 			return _net;
 		case SubFile::NOD:
 			return _nod;
+		case SubFile::DEM:
+			return _dem;
 		case SubFile::GMP:
 			return _gmp;
 		default:
@@ -53,11 +54,12 @@ bool VectorTile::init()
 bool VectorTile::initGMP()
 {
 	SubFile::Handle hdl(_gmp);
-	quint32 tre, rgn, lbl, net, nod;
+	quint32 tre, rgn, lbl, net, nod, dem;
 
 	if (!(_gmp->seek(hdl, 0x19) && _gmp->readUInt32(hdl, tre)
 	  && _gmp->readUInt32(hdl, rgn) && _gmp->readUInt32(hdl, lbl)
-	  && _gmp->readUInt32(hdl, net) && _gmp->readUInt32(hdl, nod)))
+	  && _gmp->readUInt32(hdl, net) && _gmp->readUInt32(hdl, nod)
+	  && _gmp->readUInt32(hdl, dem)))
 		return false;
 
 	_tre = tre ? new TREFile(_gmp, tre) : 0;
@@ -65,6 +67,7 @@ bool VectorTile::initGMP()
 	_lbl = lbl ? new LBLFile(_gmp, lbl) : 0;
 	_net = net ? new NETFile(_gmp, net) : 0;
 	_nod = nod ? new NODFile(_gmp, nod) : 0;
+	_dem = dem ? new DEMFile(_gmp, dem) : 0;
 
 	return true;
 }
@@ -88,6 +91,18 @@ bool VectorTile::load(SubFile::Handle &rgnHdl, SubFile::Handle &lblHdl,
 	return true;
 }
 
+bool VectorTile::loadDem(SubFile::Handle &hdl)
+{
+	_demLoaded = -1;
+
+	if (!_dem || !_dem->load(hdl))
+		return false;
+
+	_demLoaded = 1;
+
+	return true;
+}
+
 void VectorTile::clear()
 {
 	_tre->clear();
@@ -96,13 +111,16 @@ void VectorTile::clear()
 		_lbl->clear();
 	if (_net)
 		_net->clear();
+	if (_dem)
+		_dem->clear();
 
 	_loaded = 0;
+	_demLoaded = 0;
 }
 
 void VectorTile::polys(const RectC &rect, const Zoom &zoom,
   QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
-  MapData::PolyCache *polyCache, QMutex *lock)
+  MapData::PolyCache *cache, QMutex *lock)
 {
 	SubFile::Handle *rgnHdl = 0, *lblHdl = 0, *netHdl = 0, *nodHdl = 0,
 	  *nodHdl2 = 0;
@@ -131,7 +149,7 @@ void VectorTile::polys(const RectC &rect, const Zoom &zoom,
 	for (int i = 0; i < subdivs.size(); i++) {
 		SubDiv *subdiv = subdivs.at(i);
 
-		MapData::Polys *polys = polyCache->object(subdiv);
+		MapData::Polys *polys = cache->object(subdiv);
 		if (!polys) {
 			quint32 shift = _tre->shift(subdiv->bits());
 			QList<MapData::Poly> p, l;
@@ -165,7 +183,7 @@ void VectorTile::polys(const RectC &rect, const Zoom &zoom,
 
 			copyPolys(rect, &p, polygons);
 			copyPolys(rect, &l, lines);
-			polyCache->insert(subdiv, new MapData::Polys(p, l));
+			cache->insert(subdiv, new MapData::Polys(p, l));
 		} else {
 			copyPolys(rect, &(polys->polygons), polygons);
 			copyPolys(rect, &(polys->lines), lines);
@@ -178,8 +196,7 @@ void VectorTile::polys(const RectC &rect, const Zoom &zoom,
 }
 
 void VectorTile::points(const RectC &rect, const Zoom &zoom,
-  QList<MapData::Point> *points, QCache<const SubDiv *,
-  QList<MapData::Point> > *pointCache, QMutex *lock)
+  QList<MapData::Point> *points, MapData::PointCache *cache, QMutex *lock)
 {
 	SubFile::Handle *rgnHdl = 0, *lblHdl = 0;
 
@@ -207,7 +224,7 @@ void VectorTile::points(const RectC &rect, const Zoom &zoom,
 	for (int i = 0; i < subdivs.size(); i++) {
 		SubDiv *subdiv = subdivs.at(i);
 
-		QList<MapData::Point> *pl = pointCache->object(subdiv);
+		QList<MapData::Point> *pl = cache->object(subdiv);
 		if (!pl) {
 			QList<MapData::Point> p;
 
@@ -226,7 +243,7 @@ void VectorTile::points(const RectC &rect, const Zoom &zoom,
 			_rgn->extPointObjects(*rgnHdl, subdiv, _lbl, *lblHdl, &p);
 
 			copyPoints(rect, &p, points);
-			pointCache->insert(subdiv, new QList<MapData::Point>(p));
+			cache->insert(subdiv, new QList<MapData::Point>(p));
 		} else
 			copyPoints(rect, pl, points);
 	}
@@ -234,6 +251,54 @@ void VectorTile::points(const RectC &rect, const Zoom &zoom,
 	lock->unlock();
 
 	delete rgnHdl; delete lblHdl;
+}
+
+void VectorTile::elevations(const RectC &rect, const Zoom &zoom,
+  QList<MapData::Elevation> *elevations, MapData::ElevationCache *cache,
+  QMutex *lock)
+{
+	SubFile::Handle *hdl = 0;
+
+	lock->lock();
+
+	if (_demLoaded < 0) {
+		lock->unlock();
+		return;
+	}
+
+	if (!_demLoaded) {
+		hdl = new SubFile::Handle(_dem);
+
+		if (!loadDem(*hdl)) {
+			lock->unlock();
+			delete hdl;
+			return;
+		}
+	}
+
+	int level = _dem->level(zoom);
+	QList<const DEMTile*> tiles(_dem->tiles(rect, level));
+	for (int i = 0; i < tiles.size(); i++) {
+		const DEMTile *tile = tiles.at(i);
+		MapData::Elevation *el = cache->object(tile);
+
+		if (!el) {
+			if (!hdl)
+				hdl = new SubFile::Handle(_dem);
+
+			el = _dem->elevations(*hdl, level, tile);
+			if (!el->m.isNull())
+				elevations->append(*el);
+			cache->insert(tile, el);
+		} else {
+			if (!el->m.isNull())
+				elevations->append(*el);
+		}
+	}
+
+	lock->unlock();
+
+	delete hdl;
 }
 
 #ifndef QT_NO_DEBUG

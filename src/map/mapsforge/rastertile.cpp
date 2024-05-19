@@ -471,9 +471,9 @@ void RasterTile::fetchData(QList<MapData::Path> &paths,
 	_data->points(pointRectD.toRectC(_proj, 20), _zoom, &points);
 }
 
-Matrix RasterTile::elevation() const
+MatrixD RasterTile::elevation() const
 {
-	Matrix m(_rect.height() + 2, _rect.width() + 2);
+	MatrixD m(_rect.height() + 2, _rect.width() + 2);
 
 	int left = _rect.left() - 1;
 	int right = _rect.right() + 1;
@@ -489,7 +489,7 @@ Matrix RasterTile::elevation() const
 
 	DEM::lock();
 	for (int i = 0; i < ll.size(); i++)
-		m.m(i) = DEM::elevation(ll.at(i));
+		m.at(i) = DEM::elevation(ll.at(i));
 	DEM::unlock();
 
 	return m;

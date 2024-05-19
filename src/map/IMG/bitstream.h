@@ -76,7 +76,6 @@ private:
 	bool readBytesAligned(quint32 bytes, quint32 &val);
 };
 
-
 template<typename T>
 bool BitStream1::read(quint32 bits, T &val)
 {

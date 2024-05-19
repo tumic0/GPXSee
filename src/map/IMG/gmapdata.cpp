@@ -7,6 +7,9 @@ using namespace IMG;
 
 static SubFile::Type tileType(const QString &suffix)
 {
+	/* Note: we do not load NOD files from non-NT maps as we have no usage
+	   for them */
+
 	if (!suffix.compare("TRE"))
 		return SubFile::TRE;
 	else if (!suffix.compare("RGN"))
@@ -15,10 +18,12 @@ static SubFile::Type tileType(const QString &suffix)
 		return SubFile::LBL;
 	else if (!suffix.compare("TYP"))
 		return SubFile::TYP;
-	else if (!suffix.compare("GMP"))
-		return SubFile::GMP;
 	else if (!suffix.compare("NET"))
 		return SubFile::NET;
+	else if (!suffix.compare("DEM"))
+		return SubFile::DEM;
+	else if (!suffix.compare("GMP"))
+		return SubFile::GMP;
 	else
 		return SubFile::Unknown;
 }
@@ -101,6 +106,7 @@ bool GMAPData::loadTile(const QDir &dir)
 	_tileTree.Insert(min, max, tile);
 
 	_bounds |= tile->bounds();
+	_hasDEM |= tile->hasDem();
 
 	return true;
 }

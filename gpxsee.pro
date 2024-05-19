@@ -128,6 +128,9 @@ HEADERS += src/common/config.h \
     src/map/ENC/objects.h \
     src/map/ENC/rastertile.h \
     src/map/ENC/style.h \
+    src/map/IMG/demfile.h \
+    src/map/IMG/demtile.h \
+    src/map/IMG/jls.h \
     src/map/IMG/section.h \
     src/map/IMG/zoom.h \
     src/map/conversion.h \
@@ -345,6 +348,8 @@ SOURCES += src/main.cpp \
     src/map/ENC/mapdata.cpp \
     src/map/ENC/rastertile.cpp \
     src/map/ENC/style.cpp \
+    src/map/IMG/demfile.cpp \
+    src/map/IMG/jls.cpp \
     src/map/conversion.cpp \
     src/map/encatlas.cpp \
     src/map/encmap.cpp \

@@ -8,6 +8,9 @@ using namespace IMG;
 
 static SubFile::Type tileType(const char str[3])
 {
+	/* Note: we do not load NOD files from non-NT maps as we have no usage
+	   for them */
+
 	if (!memcmp(str, "TRE", 3))
 		return SubFile::TRE;
 	else if (!memcmp(str, "RGN", 3))
@@ -16,10 +19,12 @@ static SubFile::Type tileType(const char str[3])
 		return SubFile::LBL;
 	else if (!memcmp(str, "TYP", 3))
 		return SubFile::TYP;
-	else if (!memcmp(str, "GMP", 3))
-		return SubFile::GMP;
 	else if (!memcmp(str, "NET", 3))
 		return SubFile::NET;
+	else if (!memcmp(str, "DEM", 3))
+		return SubFile::DEM;
+	else if (!memcmp(str, "GMP", 3))
+		return SubFile::GMP;
 	else
 		return SubFile::Unknown;
 }
@@ -156,6 +161,7 @@ bool IMGData::createTileTree(const TileMap &tileMap)
 		_tileTree.Insert(min, max, tile);
 
 		_bounds |= tile->bounds();
+		_hasDEM |= tile->hasDem();
 	}
 
 	return (_tileTree.Count() > 0);

@@ -7,29 +7,37 @@
 
 using namespace IMG;
 
-#define CACHED_SUBDIVS_COUNT 2048 // ~32MB for both caches together
+#define CACHED_SUBDIVS_COUNT  2048 // ~32MB for both caches together
+#define CACHED_DEMTILES_COUNT 1024 // ~32MB
 
 bool MapData::polyCb(VectorTile *tile, void *context)
 {
 	PolyCTX *ctx = (PolyCTX*)context;
 	tile->polys(ctx->rect, ctx->zoom, ctx->polygons, ctx->lines,
-	  ctx->polyCache, ctx->lock);
+	  ctx->cache, ctx->lock);
 	return true;
 }
 
 bool MapData::pointCb(VectorTile *tile, void *context)
 {
 	PointCTX *ctx = (PointCTX*)context;
-	tile->points(ctx->rect, ctx->zoom, ctx->points, ctx->pointCache, ctx->lock);
+	tile->points(ctx->rect, ctx->zoom, ctx->points, ctx->cache, ctx->lock);
 	return true;
 }
 
+bool MapData::elevationCb(VectorTile *tile, void *context)
+{
+	ElevationCTX *ctx = (ElevationCTX*)context;
+	tile->elevations(ctx->rect, ctx->zoom, ctx->elevations, ctx->cache, ctx->lock);
+	return true;
+}
 
 MapData::MapData(const QString &fileName)
-  : _fileName(fileName), _typ(0), _style(0), _valid(false)
+  : _fileName(fileName), _typ(0), _style(0), _hasDEM(false), _valid(false)
 {
 	_polyCache.setMaxCost(CACHED_SUBDIVS_COUNT);
 	_pointCache.setMaxCost(CACHED_SUBDIVS_COUNT);
+	_demCache.setMaxCost(CACHED_DEMTILES_COUNT);
 }
 
 MapData::~MapData()
@@ -67,6 +75,19 @@ void MapData::points(const RectC &rect, int bits, QList<Point> *points)
 	max[1] = rect.top();
 
 	_tileTree.Search(min, max, pointCb, &ctx);
+}
+
+void MapData::elevations(const RectC &rect, int bits, QList<Elevation> *elevations)
+{
+	ElevationCTX ctx(rect, zoom(bits), elevations, &_demCache, &_demLock);
+	double min[2], max[2];
+
+	min[0] = rect.left();
+	min[1] = rect.bottom();
+	max[0] = rect.right();
+	max[1] = rect.top();
+
+	_tileTree.Search(min, max, elevationCb, &ctx);
 }
 
 void MapData::load(qreal ratio)

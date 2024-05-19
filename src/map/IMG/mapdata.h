@@ -10,6 +10,7 @@
 #include "common/rtree.h"
 #include "common/range.h"
 #include "common/hash.h"
+#include "map/matrix.h"
 #include "label.h"
 #include "raster.h"
 #include "zoom.h"
@@ -20,6 +21,7 @@ class Style;
 class SubDiv;
 class SubFile;
 class VectorTile;
+class DEMTile;
 
 class MapData
 {
@@ -55,6 +57,13 @@ public:
 		  {return id < other.id;}
 	};
 
+	struct Elevation {
+		Matrix<qint16> m;
+		RectC rect;
+		double xr;
+		double yr;
+	};
+
 	MapData(const QString &fileName);
 	virtual ~MapData();
 
@@ -65,9 +74,12 @@ public:
 	void polys(const RectC &rect, int bits, QList<Poly> *polygons,
 	  QList<Poly> *lines);
 	void points(const RectC &rect, int bits, QList<Point> *points);
+	void elevations(const RectC &rect, int bits, QList<Elevation> *elevations);
 
 	void load(qreal ratio);
 	void clear();
+
+	bool hasDEM() const {return _hasDEM;}
 
 	const QString &fileName() const {return _fileName;}
 
@@ -87,6 +99,7 @@ protected:
 	TileTree _tileTree;
 	QList<Zoom> _zooms;
 	Range _zoomLevels;
+	bool _hasDEM;
 
 	bool _valid;
 	QString _errorString;
@@ -103,34 +116,48 @@ private:
 
 	typedef QCache<const SubDiv*, Polys> PolyCache;
 	typedef QCache<const SubDiv*, QList<Point> > PointCache;
+	typedef QCache<const DEMTile*, Elevation> ElevationCache;
 
 	struct PolyCTX
 	{
 		PolyCTX(const RectC &rect, const Zoom &zoom,
 		  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
-		  PolyCache *polyCache, QMutex *lock)
+		  PolyCache *cache, QMutex *lock)
 		  : rect(rect), zoom(zoom), polygons(polygons), lines(lines),
-		  polyCache(polyCache), lock(lock) {}
+		  cache(cache), lock(lock) {}
 
 		const RectC &rect;
 		const Zoom &zoom;
 		QList<MapData::Poly> *polygons;
 		QList<MapData::Poly> *lines;
-		PolyCache *polyCache;
+		PolyCache *cache;
 		QMutex *lock;
 	};
 
 	struct PointCTX
 	{
 		PointCTX(const RectC &rect, const Zoom &zoom,
-		  QList<MapData::Point> *points, PointCache *pointCache, QMutex *lock)
-		  : rect(rect), zoom(zoom), points(points), pointCache(pointCache),
-		  lock(lock) {}
+		  QList<MapData::Point> *points, PointCache *cache, QMutex *lock)
+		  : rect(rect), zoom(zoom), points(points), cache(cache), lock(lock) {}
 
 		const RectC &rect;
 		const Zoom &zoom;
 		QList<MapData::Point> *points;
-		PointCache *pointCache;
+		PointCache *cache;
+		QMutex *lock;
+	};
+
+	struct ElevationCTX
+	{
+		ElevationCTX(const RectC &rect, const Zoom &zoom,
+		  QList<Elevation> *elevations, ElevationCache *cache, QMutex *lock)
+		  : rect(rect), zoom(zoom), elevations(elevations), cache(cache),
+		  lock(lock) {}
+
+		const RectC &rect;
+		const Zoom &zoom;
+		QList<Elevation> *elevations;
+		ElevationCache *cache;
 		QMutex *lock;
 	};
 
@@ -138,10 +165,12 @@ private:
 
 	static bool polyCb(VectorTile *tile, void *context);
 	static bool pointCb(VectorTile *tile, void *context);
+	static bool elevationCb(VectorTile *tile, void *context);
 
 	PolyCache _polyCache;
 	PointCache _pointCache;
-	QMutex _lock;
+	ElevationCache _demCache;
+	QMutex _lock, _demLock;
 
 	friend class VectorTile;
 };

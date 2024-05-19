@@ -22,7 +22,7 @@ void Transform::simple(const ReferencePoint &p1, const ReferencePoint &p2)
 
 void Transform::affine(const QList<ReferencePoint> &points)
 {
-	Matrix c(3, 2);
+	MatrixD c(3, 2);
 	for (int i = 0; i < c.h(); i++) {
 		for (int j = 0; j < c.w(); j++) {
 			for (int k = 0; k < points.size(); k++) {
@@ -33,12 +33,12 @@ void Transform::affine(const QList<ReferencePoint> &points)
 				f[2] = 1.0;
 				t[0] = points.at(k).xy().x();
 				t[1] = points.at(k).xy().y();
-				c.m(i,j) += f[i] * t[j];
+				c.at(i,j) += f[i] * t[j];
 			}
 		}
 	}
 
-	Matrix Q(3, 3);
+	MatrixD Q(3, 3);
 	for (int qi = 0; qi < points.size(); qi++) {
 		double v[3];
 
@@ -47,17 +47,17 @@ void Transform::affine(const QList<ReferencePoint> &points)
 		v[2] = 1.0;
 		for (int i = 0; i < Q.h(); i++)
 			for (int j = 0; j < Q.w(); j++)
-				Q.m(i,j) += v[i] * v[j];
+				Q.at(i,j) += v[i] * v[j];
 	}
 
-	Matrix M(Q.augemented(c));
+	MatrixD M(Q.augemented(c));
 	if (!M.eliminate()) {
 		_errorString = "Singular transformation matrix";
 		return;
 	}
 
-	_proj2img = QTransform(M.m(0,3), M.m(0,4), M.m(1,3), M.m(1,4), M.m(2,3),
-	  M.m(2,4));
+	_proj2img = QTransform(M.at(0,3), M.at(0,4), M.at(1,3), M.at(1,4), M.at(2,3),
+	  M.at(2,4));
 	_img2proj = _proj2img.inverted();
 }
 

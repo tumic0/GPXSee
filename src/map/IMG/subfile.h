@@ -13,7 +13,7 @@ namespace IMG {
 class SubFile
 {
 public:
-	enum Type {Unknown, TRE, RGN, LBL, NET, NOD, TYP, GMP};
+	enum Type {Unknown, TRE, RGN, LBL, NET, NOD, DEM, TYP, GMP};
 
 	class Handle
 	{
@@ -77,6 +77,16 @@ public:
 	}
 
 	template<typename T>
+	bool readInt8(Handle &handle, T &val) const
+	{
+		quint8 b;
+		if (!readByte(handle, &b))
+			return false;
+		val = (qint8)b;
+		return true;
+	}
+
+	template<typename T>
 	bool readUInt16(Handle &handle, T &val) const
 	{
 		quint8 b0, b1;
@@ -90,7 +100,7 @@ public:
 	{
 		if (!readUInt16(handle, (quint16&)val))
 			return false;
-		if((quint16)val > 0x7FFF)
+		if ((quint16)val > 0x7FFF)
 			val = (val & 0x7FFF) - 0x8000;
 		return true;
 	}
@@ -123,6 +133,11 @@ public:
 		val = b0 | ((quint32)b1) << 8 | ((quint32)b2) << 16
 		  | ((quint32)b3) << 24;
 		return true;
+	}
+
+	bool readInt32(Handle &handle, qint32 &val) const
+	{
+		return readUInt32(handle, (quint32&)val);
 	}
 
 	bool readVUInt32SW(Handle &hdl, quint32 bytes, quint32 &val) const

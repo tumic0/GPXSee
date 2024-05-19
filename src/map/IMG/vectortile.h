@@ -6,17 +6,19 @@
 #include "lblfile.h"
 #include "netfile.h"
 #include "nodfile.h"
+#include "demfile.h"
 
 namespace IMG {
 
 class VectorTile {
 public:
 	VectorTile()
-	  : _tre(0), _rgn(0), _lbl(0), _net(0), _nod(0), _gmp(0), _loaded(0) {}
+	  : _tre(0), _rgn(0), _lbl(0), _net(0), _nod(0), _dem(0), _gmp(0),
+		_loaded(0), _demLoaded(0) {}
 	~VectorTile()
 	{
 		delete _tre; delete _rgn; delete _lbl; delete _net; delete _nod;
-		delete _gmp;
+		delete _dem; delete _gmp;
 	}
 
 	bool init();
@@ -24,21 +26,25 @@ public:
 
 	const RectC &bounds() const {return _tre->bounds();}
 	QVector<Zoom> zooms() const {return _tre->zooms();}
+	bool hasDem() const {return _dem != 0;}
 
 	SubFile *file(SubFile::Type type);
 
 	void polys(const RectC &rect, const Zoom &zoom,
 	  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
-	  MapData::PolyCache *polyCache, QMutex *lock);
+	  MapData::PolyCache *cache, QMutex *lock);
 	void points(const RectC &rect, const Zoom &zoom,
-	  QList<MapData::Point> *points, QCache<const SubDiv*,
-	  QList<MapData::Point> > *pointCache, QMutex *lock);
+	  QList<MapData::Point> *points, MapData::PointCache *cache, QMutex *lock);
+	void elevations(const RectC &rect, const Zoom &zoom,
+	  QList<MapData::Elevation> *elevations, MapData::ElevationCache *cache,
+	  QMutex *lock);
 
 	static bool isTileFile(SubFile::Type type)
 	{
 		return (type == SubFile::TRE || type == SubFile::LBL
 		  || type == SubFile::RGN || type == SubFile::NET
-		  || type == SubFile::NOD || type == SubFile::GMP);
+		  || type == SubFile::NOD || type == SubFile::DEM
+		  || type == SubFile::GMP);
 	}
 
 	template<typename T>
@@ -60,6 +66,9 @@ public:
 			case SubFile::NOD:
 				_nod = new NODFile(container);
 				return _nod;
+			case SubFile::DEM:
+				_dem = new DEMFile(container);
+				return _dem;
 			case SubFile::GMP:
 				_gmp = new SubFile(container);
 				return _gmp;
@@ -72,15 +81,17 @@ private:
 	bool initGMP();
 	bool load(SubFile::Handle &rgnHdl, SubFile::Handle &lblHdl,
 	  SubFile::Handle &netHdl, SubFile::Handle &nodHdl);
+	bool loadDem(SubFile::Handle &demHdl);
 
 	TREFile *_tre;
 	RGNFile *_rgn;
 	LBLFile *_lbl;
 	NETFile *_net;
 	NODFile *_nod;
+	DEMFile *_dem;
 	SubFile *_gmp;
 
-	int _loaded;
+	int _loaded, _demLoaded;
 };
 
 }
