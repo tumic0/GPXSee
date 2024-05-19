@@ -2,6 +2,8 @@
 
 using namespace IMG;
 
+#define DELTA 1e-9 /* ensure col+1/row+1 is in the next tile */
+
 static double interpolate(double dx, double dy, double p0, double p1, double p2,
   double p3)
 {
@@ -55,16 +57,16 @@ double DEM::elevation(const DEMTRee &tree, const MapData::Elevation *e,
 
 	double p0 = val(e->m, row, col);
 	double p1 = (col == e->m.w() - 1)
-	  ? edge(tree, Coordinates(e->rect.left() + (col + 1) * e->xr + e->xr/2,
+	  ? edge(tree, Coordinates(e->rect.left() + (col + 1) * e->xr + DELTA,
 		e->rect.top() - row * e->yr))
 	  : val(e->m, row, col + 1);
 	double p2 = (row == e->m.h() - 1)
 	  ? edge(tree, Coordinates(e->rect.left() + col * e->xr,
-		e->rect.top() - (row + 1) * e->yr - e->yr/2))
+		e->rect.top() - (row + 1) * e->yr - DELTA))
 	  : val(e->m, row + 1, col);
 	double p3 = ((col == e->m.w() - 1) || (row == e->m.h() - 1))
-	  ? edge(tree, Coordinates(e->rect.left() + (col + 1) * e->xr + e->xr/2,
-		e->rect.top() - (row + 1) * e->yr - e->yr/2))
+	  ? edge(tree, Coordinates(e->rect.left() + (col + 1) * e->xr + DELTA,
+		e->rect.top() - (row + 1) * e->yr - DELTA))
 	  : val(e->m, row + 1, col + 1);
 
 	return interpolate(x - col, y - row, p0, p1, p2, p3);

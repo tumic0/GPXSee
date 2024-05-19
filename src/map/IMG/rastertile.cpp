@@ -28,6 +28,7 @@ using namespace IMG;
 #define ROAD  0
 #define WATER 1
 
+#define DELTA 0.05 /* DEM3 resolution in degrees */
 
 static const QColor textColor(Qt::black);
 static const QColor haloColor(Qt::white);
@@ -475,7 +476,8 @@ MatrixD RasterTile::elevation() const
 		for (int i = 0; i < ll.size(); i++)
 			rect = rect.united(ll.at(i));
 		// Extra margin for edge()
-		rect = rect.united(xy2ll(QPointF(right + 1, bottom + 1)));
+		rect = rect.united(Coordinates(rect.right() + DELTA,
+		  rect.bottom() - DELTA));
 
 		_data->elevations(rect, _zoom, &tiles);
 
