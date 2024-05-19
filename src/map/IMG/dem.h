@@ -32,8 +32,6 @@ private:
 		double &ele;
 	};
 
-	MatrixD elevation() const;
-
 	static double edge(const DEMTRee &tree, const Coordinates &c);
 	static double elevation(const DEMTRee &tree, const MapData::Elevation *e,
 	  const Coordinates &c);
