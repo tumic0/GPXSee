@@ -23,6 +23,7 @@ public:
 
 private:
 	struct Level {
+		Level() {}
 		Level(const RectC &rect, double xr, double yr, double txr, double tyr,
 		  quint32 data, quint32 rows, quint32 cols, quint16 factor,
 		  quint8 level, qint16 minHeight, qint16 maxHeight,
