@@ -7,7 +7,6 @@
 #include <QClipboard>
 #include <QOpenGLWidget>
 #include <QGeoPositionInfoSource>
-#include "common/dem.h"
 #include "data/poi.h"
 #include "data/data.h"
 #include "map/map.h"
@@ -1181,9 +1180,7 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
 {
 	if (_cursorCoordinates->isVisible()) {
 		Coordinates c(_map->xy2ll(mapToScene(event->pos())));
-		DEM::lock();
-		_cursorCoordinates->setCoordinates(c, DEM::elevation(c));
-		DEM::unlock();
+		_cursorCoordinates->setCoordinates(c, _map->elevation(c));
 	}
 
 	QGraphicsView::mouseMoveEvent(event);

@@ -471,7 +471,6 @@ void GUI::createActions()
 	_drawHillShadingAction = new QAction(tr("Show hillshading"), this);
 	_drawHillShadingAction->setMenuRole(QAction::NoRole);
 	_drawHillShadingAction->setCheckable(true);
-	_drawHillShadingAction->setEnabled(false);
 	connect(_drawHillShadingAction, &QAction::triggered, _mapView,
 	  &MapView::drawHillShading);
 
@@ -2249,8 +2248,7 @@ void GUI::updateDataDEMDownloadAction()
 void GUI::updateMapDEMDownloadAction()
 {
 	_downloadMapDEMAction->setEnabled(!_dem->url().isEmpty()
-	  && _map->usesDEM() && !_dem->checkTiles(_map->llBounds()));
-	_drawHillShadingAction->setEnabled(_map->usesDEM());
+	  && !_dem->checkTiles(_map->llBounds()));
 }
 
 void GUI::setTimeType(TimeType type)

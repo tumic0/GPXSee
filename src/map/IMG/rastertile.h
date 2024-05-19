@@ -77,15 +77,6 @@ private:
 
 	MatrixD elevation() const;
 
-	static double edge(const DEMTRee &tree, const Coordinates &c);
-	static double elevation(const DEMTRee &tree, const MapData::Elevation *e,
-	  const Coordinates &c);
-	static void buildTree(const QList<MapData::Elevation> &tiles, DEMTRee &tree);
-	static void searchTree(const DEMTRee &tree, const Coordinates &c,
-	  double &ele);
-	static bool elevationCb(const MapData::Elevation *e, void *context);
-	static bool edgeCb(const MapData::Elevation *e, void *context);
-
 	Projection _proj;
 	Transform _transform;
 	MapData *_data;

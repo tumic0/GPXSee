@@ -74,7 +74,7 @@ public:
 	  bool hidpi);
 	void unload();
 
-	bool usesDEM() const {return true;}
+	double elevation(const Coordinates &c);
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}

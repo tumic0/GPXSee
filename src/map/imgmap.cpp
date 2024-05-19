@@ -8,6 +8,7 @@
 #include "IMG/imgdata.h"
 #include "IMG/gmapdata.h"
 #include "IMG/rastertile.h"
+#include "IMG/dem.h"
 #include "osm.h"
 #include "pcs.h"
 #include "rectd.h"
@@ -264,6 +265,22 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		} else
 			runJob(new IMGMapJob(tiles));
 	}
+}
+
+double IMGMap::elevation(const Coordinates &c)
+{
+	QList<MapData::Elevation> tiles;
+	DEM::DEMTRee tree;
+	MapData *d = _data.first();
+	double ele = NAN;
+
+	d->elevations(RectC(Coordinates(c), Coordinates(c)), d->zooms().max(),
+	  &tiles);
+
+	DEM::buildTree(tiles, tree);
+	DEM::searchTree(tree, c, ele);
+
+	return ele;
 }
 
 Map* IMGMap::createIMG(const QString &path, const Projection &proj, bool *isDir)
