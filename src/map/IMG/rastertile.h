@@ -75,7 +75,7 @@ private:
 	const QFont *poiFont(Style::FontSize size = Style::Normal,
 	  int zoom = -1, bool extended = false) const;
 
-	MatrixD elevation() const;
+	MatrixD elevation(int extend) const;
 
 	Projection _proj;
 	Transform _transform;

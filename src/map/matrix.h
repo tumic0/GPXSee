@@ -15,6 +15,7 @@ public:
 
 	int h() const {return _h;}
 	int w() const {return _w;}
+	const T &at(int n) const {return _m.at(n);}
 	T &at(int n) {return _m[n];}
 	T &at(int i, int j) {return _m[_w * i + j];}
 	T const &at(int i, int j) const {return _m.at(_w * i + j);}

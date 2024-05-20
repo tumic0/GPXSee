@@ -7,6 +7,7 @@
 #include "map/bitmapline.h"
 #include "map/rectd.h"
 #include "map/hillshading.h"
+#include "map/filter.h"
 #include "style.h"
 #include "lblfile.h"
 #include "dem.h"
@@ -28,6 +29,7 @@ using namespace IMG;
 #define ROAD  0
 #define WATER 1
 
+#define BLUR_RADIUS 3
 #define DELTA 0.05 /* DEM3 resolution in degrees */
 
 static const QColor textColor(Qt::black);
@@ -453,15 +455,15 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 	_data->points(pointRectD.toRectC(_proj, 20), _zoom, &points);
 }
 
-MatrixD RasterTile::elevation() const
+MatrixD RasterTile::elevation(int extend) const
 {
-	MatrixD m(_rect.height() + 2, _rect.width() + 2);
+	MatrixD m(_rect.height() + 2 * extend, _rect.width() + 2 * extend);
 	QVector<Coordinates> ll;
 
-	int left = _rect.left() - 1;
-	int right = _rect.right() + 1;
-	int top = _rect.top() - 1;
-	int bottom = _rect.bottom() + 1;
+	int left = _rect.left() - extend;
+	int right = _rect.right() + extend;
+	int top = _rect.top() - extend;
+	int bottom = _rect.bottom() + extend;
 
 	ll.reserve(m.w() * m.h());
 	for (int y = top; y <= bottom; y++)
@@ -496,9 +498,11 @@ MatrixD RasterTile::elevation() const
 
 void RasterTile::drawHillShading(QPainter *painter) const
 {
-	if (_hillShading && _zoom >= 18 && _zoom <= 24)
-		painter->drawImage(_rect.x(), _rect.y(),
-		  HillShading::render(elevation()));
+	if (_hillShading && _zoom >= 18 && _zoom <= 24) {
+		MatrixD dem(Filter::blur(elevation(BLUR_RADIUS), BLUR_RADIUS));
+		QImage img(HillShading::render(dem, BLUR_RADIUS));
+		painter->drawImage(_rect.x(), _rect.y(), img);
+	}
 }
 
 void RasterTile::render()

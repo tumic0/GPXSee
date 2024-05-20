@@ -4,6 +4,7 @@
 #include "common/dem.h"
 #include "map/rectd.h"
 #include "map/hillshading.h"
+#include "map/filter.h"
 #include "rastertile.h"
 
 using namespace Mapsforge;
@@ -11,6 +12,8 @@ using namespace Mapsforge;
 #define TEXT_EXTENT 160
 #define PATHS_EXTENT 20
 #define SEARCH_EXTENT -0.5
+
+#define BLUR_RADIUS 3
 
 static double LIMIT = cos(deg2rad(170));
 
@@ -438,9 +441,11 @@ void RasterTile::drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
 			painter->setBrush(ri->brush());
 			painter->drawEllipse(ll2xy(point->coordinates), radius, radius);
 		} else {
-			if (_hillShading)
-				painter->drawImage(_rect.x(), _rect.y(),
-				  HillShading::render(elevation()));
+			if (_hillShading) {
+				MatrixD dem(Filter::blur(elevation(BLUR_RADIUS), BLUR_RADIUS));
+				QImage img(HillShading::render(dem, BLUR_RADIUS));
+				painter->drawImage(_rect.x(), _rect.y(), img);
+			}
 		}
 	}
 }
@@ -471,14 +476,14 @@ void RasterTile::fetchData(QList<MapData::Path> &paths,
 	_data->points(pointRectD.toRectC(_proj, 20), _zoom, &points);
 }
 
-MatrixD RasterTile::elevation() const
+MatrixD RasterTile::elevation(int extend) const
 {
-	MatrixD m(_rect.height() + 2, _rect.width() + 2);
+	MatrixD m(_rect.height() + 2 * extend, _rect.width() + 2 * extend);
 
-	int left = _rect.left() - 1;
-	int right = _rect.right() + 1;
-	int top = _rect.top() - 1;
-	int bottom = _rect.bottom() + 1;
+	int left = _rect.left() - extend;
+	int right = _rect.right() + extend;
+	int top = _rect.top() - extend;
+	int bottom = _rect.bottom() + extend;
 
 	QVector<Coordinates> ll;
 	ll.reserve(m.w() * m.h());

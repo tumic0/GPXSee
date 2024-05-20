@@ -215,7 +215,7 @@ private:
 	void drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
 	  const QList<MapData::Point> &points, QVector<PainterPath> &painterPaths);
 
-	MatrixD elevation() const;
+	MatrixD elevation(int extend) const;
 
 	Projection _proj;
 	Transform _transform;

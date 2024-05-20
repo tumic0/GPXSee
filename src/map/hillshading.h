@@ -7,8 +7,8 @@
 class HillShading
 {
 public:
-	static QImage render(const MatrixD &m, quint8 alpha = 96, double z = 0.3,
-	  double azimuth = 315, double elevation = 25);
+	static QImage render(const MatrixD &m, int extend, quint8 alpha = 96,
+	  double z = 0.3, double azimuth = 315, double elevation = 25);
 };
 
 #endif // HILLSHADING_H

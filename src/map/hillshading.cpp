@@ -59,10 +59,11 @@ static void getSubmatrix(int x, int y, const MatrixD &m, SubMatrix &sm)
 	sm.z9 = m.at(bottom, right);
 }
 
-QImage HillShading::render(const MatrixD &m, quint8 alpha, double z,
+QImage HillShading::render(const MatrixD &m, int extend, quint8 alpha, double z,
   double azimuth, double elevation)
 {
-	QImage img(m.w() - 2, m.h() - 2, QImage::Format_ARGB32_Premultiplied);
+	QImage img(m.w() - 2 * extend, m.h() - 2 * extend,
+	  QImage::Format_ARGB32_Premultiplied);
 	uchar *bits = img.bits();
 	int bpl = img.bytesPerLine();
 
@@ -72,8 +73,8 @@ QImage HillShading::render(const MatrixD &m, quint8 alpha, double z,
 
 	getConstants(azimuth, elevation, c);
 
-	for (int y = 1; y < m.h() - 1; y++) {
-		for (int x = 1; x < m.w() - 1; x++) {
+	for (int y = extend; y < m.h() - extend; y++) {
+		for (int x = extend; x < m.w() - extend; x++) {
 			getSubmatrix(x, y, m, sm);
 			getDerivativesHorn(sm, z, d);
 
@@ -89,7 +90,7 @@ QImage HillShading::render(const MatrixD &m, quint8 alpha, double z,
 				pixel = (alpha - val)<<24;
 			}
 
-			*(quint32*)(bits + (y - 1) * bpl + (x - 1) * 4) = pixel;
+			*(quint32*)(bits + (y - extend) * bpl + (x - extend) * 4) = pixel;
 		}
 	}
 
