@@ -21,10 +21,8 @@ static const int J[] = {
 	4,  4,  5,  5,  6,  6,  7,  7,  8,  9, 10, 11, 12, 13, 14, 15
 };
 
-JLS::JLS(quint16 diff, quint16 factor, quint16 cols)
-  : _data((cols + 3) * 2)
+JLS::JLS(quint16 diff, quint16 factor)
 {
-	_w = cols;
 	_maxval = diff;
 	_near = factor;
 
@@ -33,21 +31,6 @@ JLS::JLS(quint16 diff, quint16 factor, quint16 cols)
 	quint8 bpp = max(2, ceil(log2(_maxval + 1)));
 	quint8 LIMIT = 2 * (bpp + max(8, bpp));
 	_limit = LIMIT - _qbpp - 1;
-
-	_runIndex = 0;
-	_rk = 0;
-	_rg = 1;
-	_lrk = 0;
-
-	quint16 A = max(2, (_range + 32) / 64);
-	for (int i = 0; i < 4; i++) {
-		_a[i] = A;
-		_b[i] = 0;
-		_n[i] = 1;
-	}
-
-	_last = _data.data();
-	_current = _data.data() + (cols + 3);
 }
 
 bool JLS::processRunMode(BitStream &bs, quint16 col, quint16 &samples)
@@ -308,11 +291,28 @@ bool JLS::decode(const SubFile *file, SubFile::Handle &hdl, Matrix<qint16> &img)
 	if (!bs.init())
 		return false;
 
+	_w = img.w();
+	_data = QVector<quint16>((_w + 3) * 2);
+	_last = _data.data();
+	_current = _data.data() + (_w + 3);
+
+	_runIndex = 0;
+	_rk = 0;
+	_rg = 1;
+	_lrk = 0;
+
+	quint16 A = max(2, (_range + 32) / 64);
+	for (int i = 0; i < 4; i++) {
+		_a[i] = A;
+		_b[i] = 0;
+		_n[i] = 1;
+	}
+
 	for (int i = 0; i < img.h(); i++) {
 		if (!readLine(bs))
 			return false;
 
-		memcpy(&img.at(i, 0), _current + 1, img.w() * sizeof(quint16));
+		memcpy(&img.at(i, 0), _current + 1, _w * sizeof(quint16));
 
 		quint16 *tmp = _last;
 		_last = _current;

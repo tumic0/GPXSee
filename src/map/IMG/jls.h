@@ -10,7 +10,7 @@ namespace IMG {
 class JLS
 {
 public:
-	JLS(quint16 diff, quint16 factor, quint16 cols);
+	JLS(quint16 diff, quint16 factor);
 
 	bool decode(const SubFile *file, SubFile::Handle &hdl, Matrix<qint16> &img);
 
@@ -36,7 +36,7 @@ private:
 			_value <<= bits;
 			_shift += bits;
 
-			while (-1 < (char)_shift) {
+			while (-1 < (qint8)_shift) {
 				if (!_file->readByte(_hdl, &data))
 					return false;
 
@@ -60,10 +60,8 @@ private:
 	bool processRunMode(BitStream &bs, quint16 col, quint16 &samples);
 	bool decodeError(BitStream &bs, quint8 limit, quint8 k, uint &MErrval);
 
-	quint16 _w;
 	quint16 _maxval;
 	quint16 _near;
-
 	quint16 _range;
 	quint8 _qbpp;
 	quint8 _limit;
@@ -76,6 +74,7 @@ private:
 	qint16 _b[4];
 	quint8 _lrk;
 
+	quint16 _w;
 	QVector<quint16> _data;
 	quint16 *_current;
 	quint16 *_last;

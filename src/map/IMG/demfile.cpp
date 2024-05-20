@@ -138,16 +138,11 @@ QList<const DEMTile*> DEMFile::tiles(const RectC &rect, int level) const
 
 int DEMFile::level(const Zoom &zoom) const
 {
-/*
 	for (int i = 0; i < _levels.size(); i++)
 		if (_levels.at(i).level >= zoom.level())
 			return i;
 
 	return _levels.size() - 1;
-*/
-
-	Q_UNUSED(zoom);
-	return 0;
 }
 
 MapData::Elevation *DEMFile::elevations(Handle &hdl, int level,
@@ -170,7 +165,7 @@ MapData::Elevation *DEMFile::elevations(Handle &hdl, int level,
 
 	quint16 lim = limit(tile, l.factor);
 	Matrix<qint16> m(tile->h(), tile->w());
-	JLS jls(tile->diff(), l.factor, tile->w());
+	JLS jls(tile->diff(), l.factor);
 	if (jls.decode(this, hdl, m)) {
 		for (int i = 0; i < m.size(); i++) {
 			if (m.at(i) >= lim)
