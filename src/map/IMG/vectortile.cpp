@@ -276,7 +276,10 @@ void VectorTile::elevations(const RectC &rect, const Zoom &zoom,
 		}
 	}
 
-	int level = _dem->level(zoom);
+	// Shift the DEM level to get better data then what the map defines for
+	// the given zoom (we prefer rendering quality rather than speed). For
+	// maps with a single level this has no effect.
+	int level = _dem->level(zoom) / 2;
 	QList<const DEMTile*> tiles(_dem->tiles(rect, level));
 	for (int i = 0; i < tiles.size(); i++) {
 		const DEMTile *tile = tiles.at(i);
