@@ -41,4 +41,4 @@ private:
 
 }
 
-#endif // IMG_ELEVATIONTREE_H
+#endif // IMG_DEM_H
