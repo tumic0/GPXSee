@@ -30,7 +30,6 @@ using namespace IMG;
 #define WATER 1
 
 #define BLUR_RADIUS 3
-#define DELTA 0.05 /* DEM3 resolution in degrees */
 
 static const QColor textColor(Qt::black);
 static const QColor haloColor(Qt::white);
@@ -477,9 +476,11 @@ MatrixD RasterTile::elevation(int extend) const
 
 		for (int i = 0; i < ll.size(); i++)
 			rect = rect.united(ll.at(i));
-		// Extra margin for edge()
-		rect = rect.united(Coordinates(rect.right() + DELTA,
-		  rect.bottom() - DELTA));
+		// Extra margin for always including the next DEM tile on the map tile
+		// edges (the DEM tile resolution is usally < 5% of the map tile)
+		double delta = rect.width() / 16;
+		rect = rect.united(Coordinates(rect.right() + delta,
+		  rect.bottom() - delta));
 
 		_data->elevations(rect, _zoom, &tiles);
 
