@@ -129,16 +129,17 @@ bool JLS::readLine(BitStream &bs)
 	quint8 k;
 	uint MErrval;
 	int Errval;
-	int Rx = _last[1];
-	int last0 = _last[0];
-	int last1 = _last[1];
+	int Rx;
+	int Ra = _last[1];
+	int Rb = _last[1];
+	int Rc = _last[0];
 	uint col = 1;
 
 	*_current = _last[1];
 
 	do {
-		if (abs(last1 - Rx) > _near) {
-			int Px = Rx + last1 - last0;
+		if (abs(Rb - Ra) > _near) {
+			int Px = Ra + Rb - Rc;
 			if (Px < 0)
 				Px = 0;
 			else if (Px > _maxval)
@@ -166,7 +167,7 @@ bool JLS::readLine(BitStream &bs)
 			} else
 				mes = mes * (_near * 2 + 1);
 
-			Errval = (Rx < last1) ? mes : -mes;
+			Errval = (Ra < Rb) ? mes : -mes;
 			Rx = Px + Errval;
 
 			if (Rx < -_near)
@@ -196,8 +197,8 @@ bool JLS::readLine(BitStream &bs)
 			} else if (_b[1] > 0)
 				_b[1] = ((_b[1] - _n[1]) >> 0xf) & (_b[1] - _n[1]);
 
-			last0 = last1;
-			last1 = _last[col + 1];
+			Rc = Rb;
+			Rb = _last[col + 1];
 		} else {
 			quint16 samples;
 			if (!processRunMode(bs, _w - col + 1, samples))
@@ -207,21 +208,21 @@ bool JLS::readLine(BitStream &bs)
 				for (int i = 0; i < samples; i++) {
 					if (col > _w)
 						return false;
-					_current[col] = Rx;
+					_current[col] = Ra;
 					col++;
 				}
 
 				if (col > _w)
 					break;
 
-				last0 = _last[col];
-				last1 = _last[col + 1];
+				Rc = _last[col];
+				Rb = _last[col + 1];
 			} else {
-				last0 = last1;
-				last1 = _last[col + 1];
+				Rc = Rb;
+				Rb = _last[col + 1];
 			}
 
-			rctx = (abs(last0 - Rx) <= _near);
+			rctx = (abs(Rc - Ra) <= _near);
 			quint16 TEMP = _a[rctx + 2];
 			if (rctx)
 				TEMP += _n[rctx + 2] >> 1;
@@ -249,15 +250,15 @@ bool JLS::readLine(BitStream &bs)
 
 			Errval *= (_near * 2 + 1);
 			if (!rctx) {
-				if (Rx == last0)
+				if (Ra == Rc)
 					return false;
 
-				if (Rx < last0)
-					Rx = last0 + Errval;
+				if (Ra < Rc)
+					Rx = Rc + Errval;
 				else
-					Rx = last0 - Errval;
+					Rx = Rc - Errval;
 			} else
-				Rx = Rx + Errval;
+				Rx = Ra + Errval;
 
 			if (Rx < -_near)
 				Rx += (_near * 2 + 1) * _range;
@@ -279,6 +280,8 @@ bool JLS::readLine(BitStream &bs)
 		}
 
 		_current[col] = Rx;
+
+		Ra = Rx;
 		col = col + 1;
 	} while (col <= _w);
 
