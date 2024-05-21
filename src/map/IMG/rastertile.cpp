@@ -500,8 +500,8 @@ MatrixD RasterTile::elevation(int extend) const
 void RasterTile::drawHillShading(QPainter *painter) const
 {
 	if (_hillShading && _zoom >= 18 && _zoom <= 24) {
-		MatrixD dem(Filter::blur(elevation(BLUR_RADIUS), BLUR_RADIUS));
-		QImage img(HillShading::render(dem, BLUR_RADIUS));
+		MatrixD dem(Filter::blur(elevation(BLUR_RADIUS + 1), BLUR_RADIUS));
+		QImage img(HillShading::render(dem, BLUR_RADIUS + 1));
 		painter->drawImage(_rect.x(), _rect.y(), img);
 	}
 }
