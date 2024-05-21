@@ -174,7 +174,7 @@ SETTING(markerInfo,          "markerInfo",             MarkerInfoItem::None   );
 SETTING(useStyles,           "styles",                 true                   );
 
 /* DEM */
-SETTING(drawHillShading,     "hillshading",            false                   );
+SETTING(drawHillShading,     "hillshading",            true                   );
 
 /* Position */
 SETTING(showPosition,        "show",                   false                  );
