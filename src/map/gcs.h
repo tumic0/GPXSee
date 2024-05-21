@@ -29,8 +29,16 @@ public:
 	bool isValid() const {return _datum.isValid() && _angularUnits.isValid()
 	  && _primeMeridian.isValid();}
 
-	Coordinates toWGS84(const Coordinates &c) const;
-	Coordinates fromWGS84(const Coordinates &c) const;
+	Coordinates toWGS84(const Coordinates &c) const
+	{
+		return datum().toWGS84(Coordinates(_primeMeridian.toGreenwich(c.lon()),
+		  c.lat()));
+	}
+	Coordinates fromWGS84(const Coordinates &c) const
+	{
+		Coordinates ds(datum().fromWGS84(c));
+		return Coordinates(_primeMeridian.fromGreenwich(ds.lon()), ds.lat());
+	}
 
 	static GCS gcs(int id);
 	static GCS gcs(int geodeticDatum, int primeMeridian, int angularUnits);
