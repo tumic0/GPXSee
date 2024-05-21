@@ -184,7 +184,10 @@ bool JLS::readLine(BitStream &bs)
 			_b[1] = _b[1] + mes;
 			if (_n[1] == 0x40) {
 				_a[1] = _a[1] >> 1;
-				_b[1] = _b[1] >> 1;
+				if (_b[1] >= 0)
+					_b[1] = _b[1] >> 1;
+				else
+					_b[1] = -((1 - _b[1]) >> 1);
 				_n[1] = 0x21;
 			} else {
 				_n[1] = _n[1] + 1;
@@ -273,7 +276,10 @@ bool JLS::readLine(BitStream &bs)
 			_a[ictx] = _a[ictx] + (evh - rctx);
 			if (_n[ictx] == 0x40) {
 				_a[ictx] = _a[ictx] >> 1;
-				_b[ictx] = _b[ictx] >> 1;
+				if (_b[ictx] >= 0)
+					_b[ictx] = _b[ictx] >> 1;
+				else
+					_b[ictx] = -((1 - _b[ictx]) >> 1);
 				_n[ictx] = 0x21;
 			} else
 				_n[ictx] = _n[ictx] + 1;
