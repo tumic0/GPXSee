@@ -223,18 +223,6 @@ bool GCS::loadList(const QString &path)
 	return true;
 }
 
-Coordinates GCS::toWGS84(const Coordinates &c) const
-{
-	return datum().toWGS84(Coordinates(_primeMeridian.toGreenwich(c.lon()),
-	  c.lat()));
-}
-
-Coordinates GCS::fromWGS84(const Coordinates &c) const
-{
-	Coordinates ds(datum().fromWGS84(c));
-	return Coordinates(_primeMeridian.fromGreenwich(ds.lon()), ds.lat());
-}
-
 QList<KV<int, QString> > GCS::list()
 {
 	QList<KV<int, QString> > list;
