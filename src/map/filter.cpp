@@ -99,16 +99,31 @@ MatrixD Filter::blur(const MatrixD &m, int radius)
 {
 	MatrixD src(m);
 	MatrixD dst(m.h(), m.w());
+	double sum = 0;
+	int cnt = 0;
 
-	for (int i = 0; i < m.size(); i++)
-		if (std::isnan(m.at(i)))
-			src.at(i) = -500;
+	for (int i = 0; i < m.size(); i++) {
+		if (!std::isnan(m.at(i))) {
+			sum += m.at(i);
+			cnt++;
+		}
+	}
+
+	if (cnt != m.size()) {
+		double avg = sum / cnt;
+
+		for (int i = 0; i < m.size(); i++)
+			if (std::isnan(m.at(i)))
+				src.at(i) = avg;
+	}
 
 	gaussBlur4(src, dst, radius);
 
-	for (int i = 0; i < dst.size(); i++)
-		if (std::isnan(m.at(i)))
-			dst.at(i) = NAN;
+	if (cnt != m.size()) {
+		for (int i = 0; i < dst.size(); i++)
+			if (std::isnan(m.at(i)))
+				dst.at(i) = NAN;
+	}
 
 	return dst;
 }
