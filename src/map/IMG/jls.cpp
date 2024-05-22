@@ -16,15 +16,15 @@ static const quint8 Z[] = {
 	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 };
 
-static const int J[] = {
+static const quint8 J[] = {
 	0,  0,  0,  0,  1,  1,  1,  1,  2,  2,  2,  2,  3,  3,  3,  3,
 	4,  4,  5,  5,  6,  6,  7,  7,  8,  9, 10, 11, 12, 13, 14, 15
 };
 
-JLS::JLS(quint16 diff, quint16 factor)
+JLS::JLS(quint16 maxval, quint16 near)
 {
-	_maxval = diff;
-	_near = factor;
+	_maxval = maxval;
+	_near = near;
 
 	_range = ((_maxval + _near * 2) / (_near * 2 + 1)) + 1;
 	_qbpp = ceil(log2(_range));
@@ -189,16 +189,18 @@ bool JLS::readLine(BitStream &bs)
 				else
 					_b[1] = -((1 - _b[1]) >> 1);
 				_n[1] = 0x21;
-			} else {
+			} else
 				_n[1] = _n[1] + 1;
-			}
 
 			if (_b[1] <= -_n[1]) {
 				_b[1] = _b[1] + _n[1];
 				if (_b[1] <= -_n[1])
 					_b[1] = 1 - _n[1];
-			} else if (_b[1] > 0)
-				_b[1] = ((_b[1] - _n[1]) >> 0xf) & (_b[1] - _n[1]);
+			} else if (_b[1] > 0) {
+				_b[1] = _b[1] - _n[1];
+				if (_b[1] > 0)
+					_b[1] = 0;
+			}
 
 			Rc = Rb;
 			Rb = _last[col + 1];

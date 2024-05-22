@@ -2,15 +2,15 @@
 #define IMG_JLS_H
 
 #include <QVector>
-#include "bitstream.h"
 #include "map/matrix.h"
+#include "subfile.h"
 
 namespace IMG {
 
 class JLS
 {
 public:
-	JLS(quint16 diff, quint16 factor);
+	JLS(quint16 maxval, quint16 near);
 
 	bool decode(const SubFile *file, SubFile::Handle &hdl, Matrix<qint16> &img);
 
