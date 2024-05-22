@@ -477,12 +477,10 @@ MatrixD RasterTile::elevation(int extend) const
 		for (int i = 0; i < ll.size(); i++)
 			rect = rect.united(ll.at(i));
 		// Extra margin for always including the next DEM tile on the map tile
-		// edges (the DEM tile resolution is usally < 5% of the map tile)
-		double delta = rect.width() / 16;
-		rect = rect.united(Coordinates(rect.right() + delta,
-		  rect.bottom() - delta));
-
-		_data->elevations(rect, _zoom, &tiles);
+		// edges (the DEM tile resolution is usally 0.5-15% of the map tile)
+		double factor = 6 - (_zoom - 24) * 1.7;
+		_data->elevations(rect.adjusted(0, 0, rect.width() / factor,
+		  -rect.height() / factor), _zoom, &tiles);
 
 		DEM::buildTree(tiles, tree);
 		for (int i = 0; i < ll.size(); i++)
