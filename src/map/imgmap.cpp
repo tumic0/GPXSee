@@ -269,18 +269,22 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 double IMGMap::elevation(const Coordinates &c)
 {
-	QList<MapData::Elevation> tiles;
-	DEM::DEMTRee tree;
 	MapData *d = _data.first();
-	double ele = NAN;
 
-	d->elevations(RectC(Coordinates(c), Coordinates(c)), d->zooms().max(),
-	  &tiles);
+	if (d->hasDEM()) {
+		QList<MapData::Elevation> tiles;
+		DEM::DEMTRee tree;
+		double ele = NAN;
 
-	DEM::buildTree(tiles, tree);
-	DEM::searchTree(tree, c, ele);
+		d->elevations(RectC(Coordinates(c), Coordinates(c)), d->zooms().max(),
+		  &tiles);
 
-	return ele;
+		DEM::buildTree(tiles, tree);
+		DEM::searchTree(tree, c, ele);
+
+		return ele;
+	} else
+		return Map::elevation(c);
 }
 
 Map* IMGMap::createIMG(const QString &path, const Projection &proj, bool *isDir)
