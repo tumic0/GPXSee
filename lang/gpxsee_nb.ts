@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="180"/>
         <source>GPSDump files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSDump-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="181"/>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="275"/>
         <source>Clear list</source>
-        <translation type="unfinished"></translation>
+        <translation>Tøm liste</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="287"/>
@@ -576,7 +576,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="471"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis relieffskygge</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
@@ -701,7 +701,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="646"/>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Åpne nylige</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="671"/>
@@ -755,9 +755,9 @@
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1989"/>
         <source>Download %n DEM tiles?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Laste ned %n DEM-flis?</numerusform>
+            <numerusform>Laste ned %n DEM-fliser?</numerusform>
         </translation>
     </message>
     <message>
@@ -768,12 +768,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="457"/>
         <source>Download data DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Last ned data-DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="463"/>
         <source>Download map DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Last ned kart-DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="698"/>
