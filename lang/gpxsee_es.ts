@@ -199,7 +199,7 @@
         <location filename="../src/GUI/elevationgraph.cpp" line="39"/>
         <location filename="../src/GUI/elevationgraph.h" line="16"/>
         <source>Elevation</source>
-        <translation>Altitud</translation>
+        <translation>Elevación</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="59"/>
@@ -228,12 +228,12 @@
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="72"/>
         <source>Ascent</source>
-        <translation>Ascenso</translation>
+        <translation>Ascendente</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="74"/>
         <source>Descent</source>
-        <translation>Descenso</translation>
+        <translation>Descendente</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="76"/>
@@ -1789,7 +1789,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="265"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="626"/>
         <source>px</source>
-        <translation type="unfinished">px</translation>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="301"/>
@@ -1852,27 +1852,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Opacidad:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="643"/>
         <source>Blur radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Radio de desenfoque:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
         <source>Azimuth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Azimuth:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="646"/>
         <source>Altitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Altitud:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="647"/>
         <source>Z Factor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Factor z:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="652"/>
@@ -1883,7 +1883,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="653"/>
         <source>Hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Sombreado</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="673"/>
