@@ -442,10 +442,14 @@ void RasterTile::drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
 			painter->drawEllipse(ll2xy(point->coordinates), radius, radius);
 		} else {
 			if (_hillShading) {
-				MatrixD dem(Filter::blur(elevation(BLUR_RADIUS + 1),
-				  BLUR_RADIUS));
-				QImage img(HillShading::render(dem, BLUR_RADIUS + 1));
-				painter->drawImage(_rect.x(), _rect.y(), img);
+				if (HillShading::blur()) {
+					MatrixD dem(Filter::blur(elevation(HillShading::blur() + 1),
+					  HillShading::blur()));
+					QImage img(HillShading::render(dem, HillShading::blur() + 1));
+					painter->drawImage(_rect.x(), _rect.y(), img);
+				} else
+					painter->drawImage(_rect.x(), _rect.y(),
+					  HillShading::render(elevation(1), 1));
 			}
 		}
 	}

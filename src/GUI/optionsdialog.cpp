@@ -135,18 +135,21 @@ QWidget *OptionsDialog::createAppearancePage()
 {
 	// Tracks
 	_trackWidth = new QSpinBox();
-	_trackWidth->setValue(_options.trackWidth);
 	_trackWidth->setMinimum(1);
+	_trackWidth->setSuffix(UNIT_SPACE + tr("px"));
+	_trackWidth->setValue(_options.trackWidth);
 	_trackStyle = new StyleComboBox();
 	_trackStyle->setValue(_options.trackStyle);
 	// Routes
 	_routeWidth = new QSpinBox();
-	_routeWidth->setValue(_options.routeWidth);
 	_routeWidth->setMinimum(1);
+	_routeWidth->setSuffix(UNIT_SPACE + tr("px"));
+	_routeWidth->setValue(_options.routeWidth);
 	_routeStyle = new StyleComboBox();
 	_routeStyle->setValue(_options.routeStyle);
 	// Areas
 	_areaWidth = new QSpinBox();
+	_areaWidth->setSuffix(UNIT_SPACE + tr("px"));
 	_areaWidth->setValue(_options.areaWidth);
 	_areaStyle = new StyleComboBox();
 	_areaStyle->setValue(_options.areaStyle);
@@ -214,12 +217,14 @@ QWidget *OptionsDialog::createAppearancePage()
 	// Waypoints
 	_waypointSize = new QSpinBox();
 	_waypointSize->setMinimum(1);
+	_waypointSize->setSuffix(UNIT_SPACE + tr("px"));
 	_waypointSize->setValue(_options.waypointSize);
 	_waypointColor = new ColorBox();
 	_waypointColor->setColor(_options.waypointColor);
 	// POI
 	_poiSize = new QSpinBox();
 	_poiSize->setMinimum(1);
+	_poiSize->setSuffix(UNIT_SPACE + tr("px"));
 	_poiSize->setValue(_options.poiSize);
 	_poiColor = new ColorBox();
 	_poiColor->setColor(_options.poiColor);
@@ -256,8 +261,9 @@ QWidget *OptionsDialog::createAppearancePage()
 	_sliderColor = new ColorBox();
 	_sliderColor->setColor(_options.sliderColor);
 	_graphWidth = new QSpinBox();
-	_graphWidth->setValue(_options.graphWidth);
 	_graphWidth->setMinimum(1);
+	_graphWidth->setSuffix(UNIT_SPACE + tr("px"));
+	_graphWidth->setValue(_options.graphWidth);
 	_graphAA = new QCheckBox(tr("Use anti-aliasing"));
 	_graphAA->setChecked(_options.graphAntiAliasing);
 
@@ -612,8 +618,39 @@ QWidget *OptionsDialog::createDEMPage()
 	sourceTab->setLayout(sourceLayout);
 #endif // Q_OS_MAC
 
+	_hillshadingAlpha = new PercentSlider();
+	_hillshadingAlpha->setValue(qRound((_options.hillshadingAlpha / 255.0)
+	  * 100));
+	_hillshadingBlur = new QSpinBox();
+	_hillshadingBlur->setMaximum(10);
+	_hillshadingBlur->setSuffix(UNIT_SPACE + tr("px"));
+	_hillshadingBlur->setValue(_options.hillshadingBlur);
+	_hillshadingAzimuth = new QSpinBox();
+	_hillshadingAzimuth->setMaximum(360);
+	_hillshadingAzimuth->setSuffix(UNIT_SPACE + QChar(0x00B0));
+	_hillshadingAzimuth->setValue(_options.hillshadingAzimuth);
+	_hillshadingAltitude = new QSpinBox();
+	_hillshadingAltitude->setMaximum(90);
+	_hillshadingAltitude->setSuffix(UNIT_SPACE + QChar(0x00B0));
+	_hillshadingAltitude->setValue(_options.hillshadingAltitude);
+	_hillshadingZFactor = new QDoubleSpinBox();
+	_hillshadingZFactor->setDecimals(1);
+	_hillshadingZFactor->setSingleStep(0.1);
+	_hillshadingZFactor->setValue(_options.hillshadingZFactor);
+
+	QFormLayout *hillshadingLayout = new QFormLayout();
+	hillshadingLayout->addRow(tr("Opacity:"), _hillshadingAlpha);
+	hillshadingLayout->addRow(tr("Blur radius:"), _hillshadingBlur);
+	hillshadingLayout->addItem(new QSpacerItem(10, 10));
+	hillshadingLayout->addRow(tr("Azimuth:"), _hillshadingAzimuth);
+	hillshadingLayout->addRow(tr("Altitude:"), _hillshadingAltitude);
+	hillshadingLayout->addRow(tr("Z Factor:"), _hillshadingZFactor);
+	QWidget *hillshadingTab = new QWidget();
+	hillshadingTab->setLayout(hillshadingLayout);
+
 	QTabWidget *demPage = new QTabWidget();
 	demPage->addTab(sourceTab, tr("Source"));
+	demPage->addTab(hillshadingTab, tr("Hillshading"));
 
 	return demPage;
 }
@@ -948,6 +985,12 @@ void OptionsDialog::accept()
 	_options.demAuthorization = _demAuth->isEnabled();
 	_options.demUsername = _demAuth->username();
 	_options.demPassword = _demAuth->password();
+	_options.hillshadingAlpha = qRound((_hillshadingAlpha->value() / 100.0)
+	  * 255);
+	_options.hillshadingBlur = _hillshadingBlur->value();
+	_options.hillshadingAzimuth = _hillshadingAzimuth->value();
+	_options.hillshadingAltitude = _hillshadingAltitude->value();
+	_options.hillshadingZFactor = _hillshadingZFactor->value();
 
 	_options.plugin = _positionPlugin->currentText();
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)

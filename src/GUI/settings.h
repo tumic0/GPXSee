@@ -196,6 +196,11 @@ public:
 	static const Setting demAuthentication;
 	static const Setting demUsername;
 	static const Setting demPassword;
+	static const Setting hillshadingAlpha;
+	static const Setting hillshadingBlur;
+	static const Setting hillshadingAzimuth;
+	static const Setting hillshadingAltitude;
+	static const Setting hillshadingZFactor;
 	static const Setting useOpenGL;
 	static const Setting enableHTTP2;
 	static const Setting pixmapCache;

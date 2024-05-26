@@ -29,8 +29,6 @@ using namespace IMG;
 #define ROAD  0
 #define WATER 1
 
-#define BLUR_RADIUS 3
-
 static const QColor textColor(Qt::black);
 static const QColor haloColor(Qt::white);
 static const QColor shieldColor(Qt::white);
@@ -498,9 +496,14 @@ MatrixD RasterTile::elevation(int extend) const
 void RasterTile::drawHillShading(QPainter *painter) const
 {
 	if (_hillShading && _zoom >= 18 && _zoom <= 24) {
-		MatrixD dem(Filter::blur(elevation(BLUR_RADIUS + 1), BLUR_RADIUS));
-		QImage img(HillShading::render(dem, BLUR_RADIUS + 1));
-		painter->drawImage(_rect.x(), _rect.y(), img);
+		if (HillShading::blur()) {
+			MatrixD dem(Filter::blur(elevation(HillShading::blur() + 1),
+			  HillShading::blur()));
+			QImage img(HillShading::render(dem, HillShading::blur() + 1));
+			painter->drawImage(_rect.x(), _rect.y(), img);
+		} else
+			painter->drawImage(_rect.x(), _rect.y(),
+			  HillShading::render(elevation(1), 1));
 	}
 }
 

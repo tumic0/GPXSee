@@ -72,6 +72,11 @@ struct Options {
 	QString demUsername;
 	QString demPassword;
 	bool demAuthorization;
+	int hillshadingAlpha;
+	int hillshadingBlur;
+	int hillshadingAzimuth;
+	int hillshadingAltitude;
+	double hillshadingZFactor;
 	// Position
 	QString plugin;
 	QMap<QString, QVariantMap> pluginParams;
@@ -176,6 +181,11 @@ private:
 	// DEM
 	QLineEdit *_demURL;
 	AuthenticationWidget *_demAuth;
+	PercentSlider *_hillshadingAlpha;
+	QSpinBox *_hillshadingBlur;
+	QSpinBox *_hillshadingAzimuth;
+	QSpinBox *_hillshadingAltitude;
+	QDoubleSpinBox *_hillshadingZFactor;
 	// Position
 	QComboBox *_positionPlugin;
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)

@@ -26,6 +26,12 @@ struct Derivatives
 	double dzdy;
 };
 
+int HillShading::_alpha = 96;
+int HillShading::_blur = 3;
+int HillShading::_azimuth = 315;
+int HillShading::_altitude = 45;
+double HillShading::_z = 0.6;
+
 static void getConstants(double azimuth, double elevation, Constants &c)
 {
 	double alpha = (M_PI / 180.0) * azimuth;
@@ -59,8 +65,7 @@ static void getSubmatrix(int x, int y, const MatrixD &m, SubMatrix &sm)
 	sm.z9 = m.at(bottom, right);
 }
 
-QImage HillShading::render(const MatrixD &m, int extend, quint8 alpha, double z,
-  double azimuth, double elevation)
+QImage HillShading::render(const MatrixD &m, int extend)
 {
 	QImage img(m.w() - 2 * extend, m.h() - 2 * extend,
 	  QImage::Format_ARGB32_Premultiplied);
@@ -71,12 +76,12 @@ QImage HillShading::render(const MatrixD &m, int extend, quint8 alpha, double z,
 	SubMatrix sm;
 	Derivatives d;
 
-	getConstants(azimuth, elevation, c);
+	getConstants(_azimuth, _altitude, c);
 
 	for (int y = extend; y < m.h() - extend; y++) {
 		for (int x = extend; x < m.w() - extend; x++) {
 			getSubmatrix(x, y, m, sm);
-			getDerivativesHorn(sm, z, d);
+			getDerivativesHorn(sm, _z, d);
 
 			double L = (c.a1 - c.a2 * d.dzdx - c.a3 * d.dzdy)
 			  / sqrt(1.0 + d.dzdx * d.dzdx + d.dzdy * d.dzdy);
@@ -86,8 +91,8 @@ QImage HillShading::render(const MatrixD &m, int extend, quint8 alpha, double z,
 				pixel = 0;
 			else {
 				L = sqrt(L * 0.8 + 0.2);
-				quint8 val = (L < 0) ? 0 : L * alpha;
-				pixel = (alpha - val)<<24;
+				quint8 val = (L < 0) ? 0 : L * _alpha;
+				pixel = (_alpha - val)<<24;
 			}
 
 			*(quint32*)(bits + (y - extend) * bpl + (x - extend) * 4) = pixel;

@@ -36,6 +36,7 @@
 #include "map/maplist.h"
 #include "map/emptymap.h"
 #include "map/crs.h"
+#include "map/hillshading.h"
 #include "icons.h"
 #include "keys.h"
 #include "settings.h"
@@ -2632,6 +2633,11 @@ void GUI::writeSettings()
 	WRITE(demAuthentication, _options.demAuthorization);
 	WRITE(demUsername, _options.demUsername);
 	WRITE(demPassword, _options.demPassword);
+	WRITE(hillshadingAlpha, _options.hillshadingAlpha);
+	WRITE(hillshadingBlur, _options.hillshadingBlur);
+	WRITE(hillshadingAzimuth, _options.hillshadingAzimuth);
+	WRITE(hillshadingAltitude, _options.hillshadingAltitude);
+	WRITE(hillshadingZFactor, _options.hillshadingZFactor);
 	WRITE(positionPlugin(), _options.plugin);
 	WRITE(positionPluginParameters, _options.pluginParams);
 	WRITE(useOpenGL, _options.useOpenGL);
@@ -2932,6 +2938,11 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 	_options.demAuthorization = READ(demAuthentication).toBool();
 	_options.demUsername = READ(demUsername).toString();
 	_options.demPassword = READ(demPassword).toString();
+	_options.hillshadingAlpha = READ(hillshadingAlpha).toInt();
+	_options.hillshadingBlur = READ(hillshadingBlur).toInt();
+	_options.hillshadingAzimuth = READ(hillshadingAzimuth).toInt();
+	_options.hillshadingAltitude = READ(hillshadingAltitude).toInt();
+	_options.hillshadingZFactor = READ(hillshadingZFactor).toDouble();
 	_options.plugin = READ(positionPlugin()).toString();
 	_options.pluginParams = READ(positionPluginParameters);
 	_options.useOpenGL = READ(useOpenGL).toBool();
@@ -3026,6 +3037,12 @@ void GUI::loadOptions()
 	DEM::setCacheSize(_options.demCache * 1024);
 	DEM::unlock();
 
+	HillShading::setAlpha(_options.hillshadingAlpha);
+	HillShading::setBlur(_options.hillshadingBlur);
+	HillShading::setAzimuth(_options.hillshadingAzimuth);
+	HillShading::setAltitude(_options.hillshadingAltitude);
+	HillShading::setZFactor(_options.hillshadingZFactor);
+
 	_poi->setRadius(_options.poiRadius);
 
 	_dem->setUrl(_options.demURL);
@@ -3062,8 +3079,14 @@ void GUI::updateOptions(const Options &options)
 	    Waypoint::action(options.option); \
 	    reload = true; \
     }
+#define SET_HS_OPTION(option, action) \
+	if (options.option != _options.option) { \
+		HillShading::action(options.option); \
+		redraw = true; \
+	}
 
 	bool reload = false;
+	bool redraw = false;
 
 	SET_VIEW_OPTION(palette, setPalette);
 	SET_VIEW_OPTION(mapOpacity, setMapOpacity);
@@ -3155,6 +3178,12 @@ void GUI::updateOptions(const Options &options)
 		DEM::unlock();
 	}
 
+	SET_HS_OPTION(hillshadingAlpha, setAlpha);
+	SET_HS_OPTION(hillshadingBlur, setBlur);
+	SET_HS_OPTION(hillshadingAzimuth, setAzimuth);
+	SET_HS_OPTION(hillshadingAltitude, setAltitude);
+	SET_HS_OPTION(hillshadingZFactor, setZFactor);
+
 	if (options.connectionTimeout != _options.connectionTimeout)
 		Downloader::setTimeout(options.connectionTimeout);
 	if (options.enableHTTP2 != _options.enableHTTP2)
@@ -3169,6 +3198,8 @@ void GUI::updateOptions(const Options &options)
 
 	if (reload)
 		reloadFiles();
+	if (redraw)
+		_mapView->setMap(_map);
 
 	_options = options;
 
