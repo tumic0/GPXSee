@@ -1766,7 +1766,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="265"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="626"/>
         <source>px</source>
-        <translation type="unfinished">px</translation>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="175"/>
@@ -1854,27 +1854,27 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Neprůhlednost:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="643"/>
         <source>Blur radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Poloměr rozostření:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
         <source>Azimuth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Azimut:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="646"/>
         <source>Altitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Výška:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="647"/>
         <source>Z Factor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Z-faktor:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="652"/>
@@ -1885,7 +1885,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="653"/>
         <source>Hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Stínování kopců</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="673"/>
