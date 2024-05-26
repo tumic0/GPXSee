@@ -1456,11 +1456,6 @@
         <translation>Треки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
-        <source>Map opacity:</source>
-        <translation>Прозрачность карты:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="321"/>
         <source>Map</source>
         <translation>Карты</translation>
@@ -1784,11 +1779,6 @@
         <translation>Непрозрачность заливки области:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
-        <source>Fill opacity:</source>
-        <translation>Непрозрачность заливки:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="199"/>
         <source>Areas</source>
         <translation>Области</translation>
@@ -1852,6 +1842,8 @@
         <translation>URL:</translation>
     </message>
     <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Opacity:</source>
         <translation type="unfinished"></translation>

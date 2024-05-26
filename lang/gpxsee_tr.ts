@@ -1489,11 +1489,6 @@
         <translation>Alan dolgusu opaklığı:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
-        <source>Fill opacity:</source>
-        <translation>Opaklığı doldur:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="199"/>
         <source>Areas</source>
         <translation>Alanlar</translation>
@@ -1562,11 +1557,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="305"/>
         <source>Background color:</source>
         <translation>Arka plan rengi:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
-        <source>Map opacity:</source>
-        <translation>Harita opaklığı:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="318"/>
@@ -1848,6 +1838,8 @@
         <translation>URL:</translation>
     </message>
     <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Opacity:</source>
         <translation type="unfinished"></translation>

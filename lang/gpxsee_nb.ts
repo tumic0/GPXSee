@@ -1491,11 +1491,6 @@
         <translation>Ugjennomsiktighet for område:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
-        <source>Fill opacity:</source>
-        <translation>Fylldekkevne:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="199"/>
         <source>Areas</source>
         <translation>Områder</translation>
@@ -1564,11 +1559,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="305"/>
         <source>Background color:</source>
         <translation>Bakgrunnsfarge:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
-        <source>Map opacity:</source>
-        <translation>Kartdekkevne:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="318"/>
@@ -1850,6 +1840,8 @@
         <translation>Nettadresse:</translation>
     </message>
     <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Opacity:</source>
         <translation type="unfinished"></translation>

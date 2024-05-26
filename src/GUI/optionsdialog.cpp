@@ -195,7 +195,7 @@ QWidget *OptionsDialog::createAppearancePage()
 	QFormLayout *areaLayout = new QFormLayout();
 	areaLayout->addRow(tr("Width:"), _areaWidth);
 	areaLayout->addRow(tr("Style:"), _areaStyle);
-	areaLayout->addRow(tr("Fill opacity:"), _areaOpacity);
+	areaLayout->addRow(tr("Opacity:"), _areaOpacity);
 	QGroupBox *areaBox = new QGroupBox(tr("Areas"));
 	areaBox->setLayout(areaLayout);
 	QFormLayout *paletteLayout = new QFormLayout();
@@ -303,7 +303,7 @@ QWidget *OptionsDialog::createAppearancePage()
 
 	QFormLayout *mapLayout = new QFormLayout();
 	mapLayout->addRow(tr("Background color:"), _backgroundColor);
-	mapLayout->addRow(tr("Map opacity:"), _mapOpacity);
+	mapLayout->addRow(tr("Opacity:"), _mapOpacity);
 	mapLayout->addRow(tr("Crosshair color:"), _crosshairColor);
 	mapLayout->addRow(tr("Info color:"), _infoColor);
 	mapLayout->addWidget(_infoBackground);

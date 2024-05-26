@@ -1531,11 +1531,6 @@
         <translation>航线</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
-        <source>Fill opacity:</source>
-        <translation>填充不透明度：</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="199"/>
         <source>Areas</source>
         <translation>区域</translation>
@@ -1603,11 +1598,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="305"/>
         <source>Background color:</source>
         <translation>背景颜色：</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
-        <source>Map opacity:</source>
-        <translation>地图不透明度：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="307"/>
@@ -1855,6 +1845,8 @@
         <translation>网址：</translation>
     </message>
     <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Opacity:</source>
         <translation type="unfinished"></translation>

@@ -1494,11 +1494,6 @@
         <translation>Opacità riempimento area:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
-        <source>Fill opacity:</source>
-        <translation>Opacità riempimento:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="199"/>
         <source>Areas</source>
         <translation>Aree</translation>
@@ -1579,11 +1574,6 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="305"/>
         <source>Background color:</source>
         <translation>Colore di sfondo:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
-        <source>Map opacity:</source>
-        <translation>Opacità della mappa:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="318"/>
@@ -1857,6 +1847,8 @@
         <translation>URL:</translation>
     </message>
     <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Opacity:</source>
         <translation type="unfinished"></translation>

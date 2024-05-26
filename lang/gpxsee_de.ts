@@ -1454,11 +1454,6 @@
         <translation>Pfade</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
-        <source>Map opacity:</source>
-        <translation>Kartendeckkraft:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="321"/>
         <source>Map</source>
         <translation>Karte</translation>
@@ -1782,11 +1777,6 @@
         <translation>Flächendeckkraft:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
-        <source>Fill opacity:</source>
-        <translation>Deckkraft:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="199"/>
         <source>Areas</source>
         <translation>Flächen</translation>
@@ -1850,6 +1840,8 @@
         <translation>URL:</translation>
     </message>
     <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Opacity:</source>
         <translation>Deckkraft:</translation>

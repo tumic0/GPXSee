@@ -1456,11 +1456,6 @@
         <translation>Trasy</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
-        <source>Map opacity:</source>
-        <translation>Neprůhlednost mapy:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="321"/>
         <source>Map</source>
         <translation>Mapa</translation>
@@ -1784,11 +1779,6 @@
         <translation>Neprůhlednost výplně ploch:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
-        <source>Fill opacity:</source>
-        <translation>Neprůhlednost výplně:</translation>
-    </message>
-    <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="199"/>
         <source>Areas</source>
         <translation>Plochy</translation>
@@ -1852,6 +1842,8 @@
         <translation>URL:</translation>
     </message>
     <message>
+        <location filename="../src/GUI/optionsdialog.cpp" line="198"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Opacity:</source>
         <translation>Neprůhlednost:</translation>
