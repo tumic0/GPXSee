@@ -78,6 +78,8 @@ QImage HillShading::render(const MatrixD &m, int extend)
 
 	getConstants(_azimuth, _altitude, c);
 
+	Q_ASSERT(extend > 0);
+
 	for (int y = extend; y < m.h() - extend; y++) {
 		for (int x = extend; x < m.w() - extend; x++) {
 			getSubmatrix(x, y, m, sm);
