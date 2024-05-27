@@ -1827,27 +1827,27 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Átlátszatlanság:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="643"/>
         <source>Blur radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Elhomályosítási sugár:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
         <source>Azimuth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Azimut:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="646"/>
         <source>Altitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Magasság:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="647"/>
         <source>Z Factor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Z-tényező:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="652"/>
@@ -1858,7 +1858,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="653"/>
         <source>Hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Dombárnyékolás</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="673"/>
