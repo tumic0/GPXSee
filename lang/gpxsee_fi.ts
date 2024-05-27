@@ -1759,7 +1759,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="265"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="626"/>
         <source>px</source>
-        <translation type="unfinished">px</translation>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="175"/>
@@ -1844,17 +1844,17 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Peittävyys:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="643"/>
         <source>Blur radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sumennuksen säde:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
         <source>Azimuth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Atsimuutti:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="646"/>
