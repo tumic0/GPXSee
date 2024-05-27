@@ -1782,7 +1782,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="265"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="626"/>
         <source>px</source>
-        <translation type="unfinished">px</translation>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="301"/>
@@ -1851,7 +1851,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Opakeco:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="643"/>
@@ -1861,7 +1861,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
         <source>Azimuth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Azimuto:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="646"/>
