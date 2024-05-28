@@ -442,6 +442,15 @@ void GraphView::clear()
 	_sliderPos = 0;
 	_zoom = 1.0;
 
+	removeItem(_xAxis);
+	removeItem(_yAxis);
+	removeItem(_xAxisLabel);
+	removeItem(_yAxisLabel);
+	removeItem(_slider);
+	removeItem(_info);
+	removeItem(_grid);
+	removeItem(_message);
+
 	_scene->setSceneRect(0, 0, 0, 0);
 }
 
