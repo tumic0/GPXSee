@@ -1307,14 +1307,14 @@ void GUI::statistics()
 		  + l.toString(_areaCount) + "<br>");
 
 	if (_dateRange.first.isValid()) {
-		QString format = l.dateFormat(QLocale::ShortFormat);
 		if (_dateRange.first == _dateRange.second)
 			text.append("<b>" + tr("Date") + ":</b> "
-			  + _dateRange.first.toString(format) + "<br>");
+			  + l.toString(_dateRange.first, QLocale::ShortFormat) + "<br>");
 		else
 			text.append("<b>" + tr("Date") + ":</b> "
-			  + QString("%1 - %2").arg(_dateRange.first.toString(format),
-			  _dateRange.second.toString(format)) + "<br>");
+			  + QString("%1 - %2").arg(l.toString(_dateRange.first,
+			  QLocale::NarrowFormat), l.toString(_dateRange.second,
+			  QLocale::NarrowFormat)) + "<br>");
 	}
 
 	if (distance() > 0)
@@ -1372,14 +1372,13 @@ void GUI::statistics()
 
 	if (_dateRange.first.isValid()) {
 		if (_dateRange.first == _dateRange.second) {
-			QString format = l.dateFormat(QLocale::LongFormat);
 			text.append("<tr><td>" + tr("Date") + ":</td><td>"
-			  + _dateRange.first.toString(format) + "</td></tr>");
+			  + l.toString(_dateRange.first, QLocale::ShortFormat) + "</td></tr>");
 		} else {
-			QString format = l.dateFormat(QLocale::ShortFormat);
 			text.append("<tr><td>" + tr("Date") + ":</td><td>"
-			  + QString("%1 - %2").arg(_dateRange.first.toString(format),
-			  _dateRange.second.toString(format)) + "</td></tr>");
+			  + QString("%1 - %2").arg(l.toString(_dateRange.first,
+			  QLocale::NarrowFormat), l.toString(_dateRange.second,
+			  QLocale::NarrowFormat)) + "</td></tr>");
 		}
 	}
 

@@ -24,7 +24,8 @@ ToolTip TrackItem::info() const
 	if  (_movingTime > 0)
 		tt.insert(tr("Moving time"), Format::timeSpan(_movingTime));
 	if (!_date.isNull())
-		tt.insert(tr("Date"), l.toString(_date.toTimeZone(_timeZone)));
+		tt.insert(tr("Date"), l.toString(_date.toTimeZone(_timeZone),
+		  QLocale::ShortFormat));
 	if (!_links.isEmpty()) {
 		QString links;
 		for (int i = 0; i < _links.size(); i++) {
