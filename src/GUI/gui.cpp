@@ -1371,15 +1371,15 @@ void GUI::statistics()
 		  + l.toString(_areaCount) + "</td></tr>");
 
 	if (_dateRange.first.isValid()) {
-		if (_dateRange.first == _dateRange.second) {
+		if (_dateRange.first == _dateRange.second)
 			text.append("<tr><td>" + tr("Date") + ":</td><td>"
-			  + l.toString(_dateRange.first, QLocale::ShortFormat) + "</td></tr>");
-		} else {
+			  + l.toString(_dateRange.first, QLocale::ShortFormat)
+			  + "</td></tr>");
+		else
 			text.append("<tr><td>" + tr("Date") + ":</td><td>"
 			  + QString("%1 - %2").arg(l.toString(_dateRange.first,
 			  QLocale::NarrowFormat), l.toString(_dateRange.second,
 			  QLocale::NarrowFormat)) + "</td></tr>");
-		}
 	}
 
 	if (distance() > 0)
@@ -1439,14 +1439,12 @@ void GUI::plotMainPage(QPainter *painter, const QRectF &rect, qreal ratio,
 	}
 
 	if (_dateRange.first.isValid() && _options.printDate) {
-		if (_dateRange.first == _dateRange.second) {
-			QString format = l.dateFormat(QLocale::LongFormat);
-			info.insert(tr("Date"), _dateRange.first.toString(format));
-		} else {
-			QString format = l.dateFormat(QLocale::ShortFormat);
+		if (_dateRange.first == _dateRange.second)
+			info.insert(tr("Date"), l.toString(_dateRange.first.date()));
+		else {
 			info.insert(tr("Date"), QString("%1 - %2")
-			  .arg(_dateRange.first.toString(format),
-			  _dateRange.second.toString(format)));
+			  .arg(l.toString(_dateRange.first.date(), QLocale::ShortFormat),
+			  l.toString(_dateRange.second.date(), QLocale::ShortFormat)));
 		}
 	}
 
