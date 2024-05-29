@@ -1286,69 +1286,11 @@ void GUI::exportPNGFile()
 	}
 }
 
-void GUI::statistics()
+static void header(QString &text)
 {
-	QLocale l(QLocale::system());
-	QMessageBox msgBox(this);
-	QString text;
-
 #ifdef Q_OS_ANDROID
-	if (_showTracksAction->isChecked() && _trackCount > 1)
-		text.append("<b>" + tr("Tracks") + ":</b> "
-		  + l.toString(_trackCount) + "<br>");
-	if (_showRoutesAction->isChecked() && _routeCount > 1)
-		text.append("<b>" + tr("Routes") + ":</b> "
-		  + l.toString(_routeCount) + "<br>");
-	if (_showWaypointsAction->isChecked() && _waypointCount > 1)
-		text.append("<b>" + tr("Waypoints") + ":</b> "
-		  + l.toString(_waypointCount) + "<br>");
-	if (_showAreasAction->isChecked() && _areaCount > 1)
-		text.append("<b>" + tr("Areas") + ":</b> "
-		  + l.toString(_areaCount) + "<br>");
-
-	if (_dateRange.first.isValid()) {
-		if (_dateRange.first == _dateRange.second)
-			text.append("<b>" + tr("Date") + ":</b> "
-			  + l.toString(_dateRange.first, QLocale::ShortFormat) + "<br>");
-		else
-			text.append("<b>" + tr("Date") + ":</b> "
-			  + QString("%1 - %2").arg(l.toString(_dateRange.first,
-			  QLocale::NarrowFormat), l.toString(_dateRange.second,
-			  QLocale::NarrowFormat)) + "<br>");
-	}
-
-	if (distance() > 0)
-		text.append("<b>" + tr("Distance") + ":</b> "
-		  + Format::distance(distance(), units()) + "<br>");
-	if (time() > 0) {
-		text.append("<b>" + tr("Time") + ":</b> "
-		  + Format::timeSpan(time()) + "<br>");
-		text.append("<b>" + tr("Moving time") + ":</b> "
-		  + Format::timeSpan(movingTime()) + "<br>");
-	}
-	text.append("<br>");
-
-	for (int i = 0; i < _tabs.count(); i++) {
-		const GraphTab *tab = _tabs.at(i);
-		if (tab->isEmpty())
-			continue;
-
-		text.append("<i>" + tab->label() + "</i><br>");
-		for (int j = 0; j < tab->info().size(); j++) {
-			const KV<QString, QString> &kv = tab->info().at(j);
-			text.append("<b>" + kv.key() + ":</b>&nbsp;" + kv.value());
-			if (j != tab->info().size() - 1)
-				text.append(" | ");
-		}
-		if (i != _tabs.count() - 1)
-			text.append("<br><br>");
-	}
-
-	msgBox.setWindowTitle(tr("Statistics"));
-	msgBox.setText(text);
-
+	Q_UNUSED(text);
 #else // Q_OS_ANDROID
-
 #ifdef Q_OS_WIN32
 	text = "<style>td {white-space: pre; padding-right: 4em;}"
 	  "th {text-align: left; padding-top: 0.5em;}</style><table>";
@@ -1356,57 +1298,93 @@ void GUI::statistics()
 	text = "<style>td {white-space: pre; padding-right: 2em;}"
 	  "th {text-align: left; padding-top: 0.5em;}</style><table>";
 #endif // Q_OS_WIN32
+#endif // Q_OS_ANDROID
+}
+
+static void footer(QString &text)
+{
+#ifdef Q_OS_ANDROID
+	Q_UNUSED(text);
+#else // Q_OS_ANDROID
+	text.append("</table>");
+#endif // Q_OS_ANDROID
+}
+
+static void appendRow(const QString &key, const QString &value, QString &text)
+{
+#ifdef Q_OS_ANDROID
+	text.append("<b>" + key + ":</b> " + value + "<br>");
+#else // Q_OS_ANDROID
+	text.append("<tr><td>" + key + ":</td><td>" + value + "</td></tr>");
+#endif // Q_OS_ANDROID
+}
+
+static void appendGraphInfo(const GraphTab *tab, QString &text)
+{
+#ifdef Q_OS_ANDROID
+	text.append("<br><i>" + tab->label() + "</i><br>");
+	for (int j = 0; j < tab->info().size(); j++) {
+		const KV<QString, QString> &kv = tab->info().at(j);
+		if (j)
+			text.append(" | ");
+		text.append("<b>" + kv.key() + ":</b>&nbsp;" + kv.value());
+	}
+	text.append("<br>");
+#else // Q_OS_ANDROID
+	text.append("<tr><th colspan=\"2\">" + tab->label() + "</th></tr>");
+	for (int j = 0; j < tab->info().size(); j++) {
+		const KV<QString, QString> &kv = tab->info().at(j);
+		text.append("<tr><td>" + kv.key() + ":</td><td>" + kv.value()
+		  + "</td></tr>");
+	}
+#endif // Q_OS_ANDROID
+}
+
+void GUI::statistics()
+{
+	QLocale l(QLocale::system());
+	QMessageBox msgBox(this);
+	QString text;
+
+	header(text);
 
 	if (_showTracksAction->isChecked() && _trackCount > 1)
-		text.append("<tr><td>" + tr("Tracks") + ":</td><td>"
-		  + l.toString(_trackCount) + "</td></tr>");
+		appendRow(tr("Tracks"), l.toString(_trackCount), text);
 	if (_showRoutesAction->isChecked() && _routeCount > 1)
-		text.append("<tr><td>" + tr("Routes") + ":</td><td>"
-		  + l.toString(_routeCount) + "</td></tr>");
+		appendRow(tr("Routes"), l.toString(_routeCount), text);
 	if (_showWaypointsAction->isChecked() && _waypointCount > 1)
-		text.append("<tr><td>" + tr("Waypoints") + ":</td><td>"
-		  + l.toString(_waypointCount) + "</td></tr>");
+		appendRow(tr("Waypoints"), l.toString(_waypointCount), text);
 	if (_showAreasAction->isChecked() && _areaCount > 1)
-		text.append("<tr><td>" + tr("Areas") + ":</td><td>"
-		  + l.toString(_areaCount) + "</td></tr>");
+		appendRow(tr("Areas"), l.toString(_areaCount), text);
 
 	if (_dateRange.first.isValid()) {
 		if (_dateRange.first == _dateRange.second)
-			text.append("<tr><td>" + tr("Date") + ":</td><td>"
-			  + l.toString(_dateRange.first, QLocale::ShortFormat)
-			  + "</td></tr>");
+			appendRow(tr("Date"), l.toString(_dateRange.first.date()), text);
 		else
-			text.append("<tr><td>" + tr("Date") + ":</td><td>"
-			  + QString("%1 - %2").arg(l.toString(_dateRange.first,
-			  QLocale::NarrowFormat), l.toString(_dateRange.second,
-			  QLocale::NarrowFormat)) + "</td></tr>");
+			appendRow(tr("Date"), QString("%1 - %2").arg(
+			  l.toString(_dateRange.first.date(), QLocale::ShortFormat),
+			  l.toString(_dateRange.second.date(), QLocale::ShortFormat)), text);
 	}
 
 	if (distance() > 0)
-		text.append("<tr><td>" + tr("Distance") + ":</td><td>"
-		  + Format::distance(distance(), units()) + "</td></tr>");
+		appendRow(tr("Distance"), Format::distance(distance(), units()), text);
 	if (time() > 0) {
-		text.append("<tr><td>" + tr("Time") + ":</td><td>"
-		  + Format::timeSpan(time()) + "</td></tr>");
-		text.append("<tr><td>" + tr("Moving time") + ":</td><td>"
-		  + Format::timeSpan(movingTime()) + "</td></tr>");
+		appendRow(tr("Time"), Format::timeSpan(time()), text);
+		appendRow(tr("Moving time"), Format::timeSpan(movingTime()), text);
 	}
 
 	for (int i = 0; i < _tabs.count(); i++) {
 		const GraphTab *tab = _tabs.at(i);
-		if (tab->isEmpty())
-			continue;
-
-		text.append("<tr><th colspan=\"2\">" + tab->label() + "</th></tr>");
-		for (int j = 0; j < tab->info().size(); j++) {
-			const KV<QString, QString> &kv = tab->info().at(j);
-			text.append("<tr><td>" + kv.key() + ":</td><td>" + kv.value()
-			  + "</td></tr>");
-		}
+		if (!tab->isEmpty())
+			appendGraphInfo(tab, text);
 	}
 
-	text.append("</table>");
+	footer(text);
 
+#ifdef Q_OS_ANDROID
+	msgBox.setWindowTitle(tr("Statistics"));
+	msgBox.setText(text);
+#else // Q_OS_ANDROID
 	msgBox.setWindowTitle(tr("Statistics"));
 	msgBox.setText("<h3>" + tr("Statistics") + "</h3>");
 	msgBox.setInformativeText(text);
