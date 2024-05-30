@@ -790,7 +790,7 @@
         <location filename="../src/GUI/gui.cpp" line="883"/>
         <location filename="../src/GUI/gui.cpp" line="892"/>
         <source>GPXSee is distributed under the terms of the GNU General Public License version 3. For more info about GPXSee visit the project homepage at %1.</source>
-        <translation>GPXSee 遵循 GNU 通用公共许可证第3版之条款发布。有关GPXSee 的详细信息，请访问项目主页 %1 。</translation>
+        <translation>GPXSee 依照《GNU 通用公共许可证 v3.0》之条款发布。有关 GPXSee 的详细信息，请访问项目主页 %1 。</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="915"/>
@@ -1396,12 +1396,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="83"/>
         <source>Non-HiDPI maps are loaded as HiDPI maps. The map is sharp but map objects are small/hard to read.</source>
-        <translation>非HiDPI地图将作为HiDPI地图加载。地图会比较清晰，但地图对象会变得很小/很难阅读。</translation>
+        <translation>非HiDPI地图将作为HiDPI地图加载。地图显示将较清晰，但其中的对象可能极小以难以阅读。</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="85"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
-        <translation>非HiDPI地图按原样加载。地图对象为预设大小，但地图会模糊。</translation>
+        <translation>非HiDPI地图将按原样加载。地图对象将以预设大小显示，但地图会模糊。</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="95"/>
@@ -1442,7 +1442,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="265"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="626"/>
         <source>px</source>
-        <translation type="unfinished">像素</translation>
+        <translation>像素</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="163"/>
@@ -1598,7 +1598,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="308"/>
         <source>Info color:</source>
-        <translation>信息颜色:</translation>
+        <translation>信息颜色：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="318"/>
@@ -1840,27 +1840,27 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>透明度：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="643"/>
         <source>Blur radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>模糊半径：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
         <source>Azimuth:</source>
-        <translation type="unfinished"></translation>
+        <translation>方位角：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="646"/>
         <source>Altitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>海拔：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="647"/>
         <source>Z Factor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Z 因子：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="652"/>
@@ -1871,7 +1871,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="653"/>
         <source>Hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>山体阴影</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="673"/>
