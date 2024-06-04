@@ -57,6 +57,7 @@ protected:
 	void setUnits(Units units);
 
 	void resizeEvent(QResizeEvent *e);
+	void mouseMoveEvent(QMouseEvent *e);
 	void mousePressEvent(QMouseEvent *e);
 	void wheelEvent(QWheelEvent *e);
 	void changeEvent(QEvent *e);
@@ -122,6 +123,7 @@ private:
 	qreal _minYRange;
 
 	qreal _zoom;
+	int _xStartDrag;
 };
 
 #endif // GRAPHVIEW_H
