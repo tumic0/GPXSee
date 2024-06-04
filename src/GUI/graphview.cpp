@@ -346,11 +346,7 @@ void GraphView::mouseMoveEvent(QMouseEvent *e)
 {
 	if (e->buttons() & Qt::MiddleButton) {
 		QScrollBar *sb = horizontalScrollBar();
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 		int x = e->x();
-#else // QT 5.15
-		int x = e->position().toPoint().x();
-#endif // QT 5.15
 		sb->setSliderPosition(sb->sliderPosition() - (x - _xStartDrag));
 		_xStartDrag = x;
 	}
@@ -360,17 +356,10 @@ void GraphView::mouseMoveEvent(QMouseEvent *e)
 
 void GraphView::mousePressEvent(QMouseEvent *e)
 {
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 	if (e->button() == Qt::LeftButton)
 		newSliderPosition(mapToScene(e->pos()));
 	else if (e->button() == Qt::MiddleButton)
 		_xStartDrag = e->x();
-#else // QT 5.15
-	if (e->button() == Qt::LeftButton)
-		newSliderPosition(mapToScene(e->position().toPoint()));
-	else if (e->button() == Qt::MiddleButton)
-		_xStartDrag = e->position().toPoint().x();
-#endif // QT 5.15
 
 	QGraphicsView::mousePressEvent(e);
 }
