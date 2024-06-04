@@ -53,7 +53,7 @@ bool JLS::processRunMode(BitStream &bs, quint16 col, quint16 &samples)
 
 				if (cnt >= col) {
 					if (!bs.read(i + 1))
-						return 3;
+						return false;
 
 					samples = col;
 					return true;
