@@ -58,6 +58,7 @@ protected:
 
 	void resizeEvent(QResizeEvent *e);
 	void mousePressEvent(QMouseEvent *e);
+	void mouseMoveEvent(QMouseEvent *e);
 	void wheelEvent(QWheelEvent *e);
 	void changeEvent(QEvent *e);
 	void paintEvent(QPaintEvent *e);
@@ -122,6 +123,9 @@ private:
 	qreal _minYRange;
 
 	qreal _zoom;
+
+	int _angleDelta;
+	int _dragStart;
 };
 
 #endif // GRAPHVIEW_H

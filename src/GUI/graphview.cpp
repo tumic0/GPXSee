@@ -20,11 +20,28 @@
 #include "graphicsscene.h"
 #include "graphview.h"
 
-
 #define MARGIN 10.0
 
 #define IW(item) ((item)->boundingRect().width())
 #define IH(item) ((item)->boundingRect().height())
+
+static inline QPoint POS(QWheelEvent *e)
+{
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+	return e->pos();
+#else // QT 5.15
+	return e->position().toPoint();
+#endif // QT 5.15
+}
+
+static inline QPoint POS(QMouseEvent *e)
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	return e->pos();
+#else // QT 5.15
+	return e->position().toPoint();
+#endif // QT 5.15
+}
 
 GraphView::GraphView(QWidget *parent)
 	: QGraphicsView(parent)
@@ -77,6 +94,9 @@ GraphView::GraphView(QWidget *parent)
 	_xLabel = tr("Distance");
 
 	_zoom = 1.0;
+
+	_angleDelta = 0;
+	_dragStart = 0;
 }
 
 GraphView::~GraphView()
@@ -345,25 +365,33 @@ void GraphView::resizeEvent(QResizeEvent *e)
 void GraphView::mousePressEvent(QMouseEvent *e)
 {
 	if (e->button() == Qt::LeftButton)
-		newSliderPosition(mapToScene(e->pos()));
+		newSliderPosition(mapToScene(POS(e)));
+	else if (e->button() == Qt::RightButton)
+		_dragStart = POS(e).x();
 
 	QGraphicsView::mousePressEvent(e);
 }
 
+void GraphView::mouseMoveEvent(QMouseEvent *e)
+{
+	if (e->buttons() & Qt::RightButton) {
+		QScrollBar *sb = horizontalScrollBar();
+		int x = POS(e).x();
+		sb->setSliderPosition(sb->sliderPosition() - (x - _dragStart));
+		_dragStart = x;
+	}
+
+	QGraphicsView::mouseMoveEvent(e);
+}
+
 void GraphView::wheelEvent(QWheelEvent *e)
 {
-	static int deg8 = 0;
-
-	deg8 += e->angleDelta().y();
-	if (qAbs(deg8) < (15 * 8))
+	_angleDelta += e->angleDelta().y();
+	if (qAbs(_angleDelta) < (15 * 8))
 		return;
-	deg8 = deg8 % (15 * 8);
+	_angleDelta = _angleDelta % (15 * 8);
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-	QPointF pos = mapToScene(e->pos());
-#else // QT 5.15
-	QPointF pos = mapToScene(e->position().toPoint());
-#endif // QT 5.15
+	QPointF pos = mapToScene(POS(e));
 	QRectF gr(_grid->boundingRect());
 	QPointF r(pos.x() / gr.width(), pos.y() / gr.height());
 
@@ -374,11 +402,7 @@ void GraphView::wheelEvent(QWheelEvent *e)
 	QPointF npos(mapFromScene(QPointF(r.x() * ngr.width(),
 	  r.y() * ngr.height())));
 	QScrollBar *sb = horizontalScrollBar();
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-	sb->setSliderPosition(sb->sliderPosition() + npos.x() - e->pos().x());
-#else // QT 5.15
-	sb->setSliderPosition(sb->sliderPosition() + npos.x() - e->position().x());
-#endif // QT 5.15
+	sb->setSliderPosition(sb->sliderPosition() + npos.x() - POS(e).x());
 
 	QGraphicsView::wheelEvent(e);
 }
