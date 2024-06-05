@@ -43,8 +43,13 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
 	if (qt->load(QLocale::system(), "qt", "_", ProgramPaths::translationsDir()))
 #else // Q_OS_WIN32 || Q_OS_MAC
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	if (qt->load(QLocale::system(), "qt", "_", QLibraryInfo::location(
 	  QLibraryInfo::TranslationsPath)))
+#else // QT 6
+	if (qt->load(QLocale::system(), "qt", "_", QLibraryInfo::path(
+	  QLibraryInfo::TranslationsPath)))
+#endif // QT 6
 #endif // Q_OS_WIN32 || Q_OS_MAC
 		installTranslator(qt);
 
