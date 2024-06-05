@@ -9,10 +9,9 @@
 #include <QtConcurrent>
 #include "osm.h"
 #include "tile.h"
+#include "metatype.h"
 #include "sqlitemap.h"
 
-
-#define META_TYPE(type) static_cast<QMetaType::Type>(type)
 
 SqliteMap::SqliteMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _mapRatio(1.0), _valid(false)
@@ -32,13 +31,13 @@ SqliteMap::SqliteMap(const QString &fileName, QObject *parent)
 	QSqlRecord r = _db.record("tiles");
 	if (r.isEmpty()
 	  || r.field(0).name() != "x"
-	  || META_TYPE(r.field(0).type()) != QMetaType::Int
+	  || METATYPE(r.field(0)) != QMetaType::Int
 	  || r.field(1).name() != "y"
-	  || META_TYPE(r.field(1).type()) != QMetaType::Int
+	  || METATYPE(r.field(1)) != QMetaType::Int
 	  || r.field(2).name() != "z"
-	  || META_TYPE(r.field(2).type()) != QMetaType::Int
+	  || METATYPE(r.field(2)) != QMetaType::Int
 	  || r.field(4).name() != "image"
-	  || META_TYPE(r.field(4).type()) != QMetaType::QByteArray) {
+	  || METATYPE(r.field(4)) != QMetaType::QByteArray) {
 		_errorString = "Invalid table format";
 		return;
 	}

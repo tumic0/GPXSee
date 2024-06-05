@@ -4,9 +4,15 @@
 #include "tileloader.h"
 
 #define SUBSTITUTE_CHAR '$'
-#define IS_INT(zoom) \
-	((QMetaType::Type)((zoom).type()) == QMetaType::Int)
 
+static bool inline IS_INT(const QVariant &v)
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	return (static_cast<QMetaType::Type>(v.type()) == QMetaType::Int);
+#else // QT 6
+	return (static_cast<QMetaType::Type>((v.typeId()) == QMetaType::Int));
+#endif // QT 6
+}
 
 static QString fsSafeStr(const QString &str)
 {

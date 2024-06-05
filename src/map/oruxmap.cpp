@@ -9,10 +9,9 @@
 #include <QXmlStreamReader>
 #include "pcs.h"
 #include "utm.h"
+#include "metatype.h"
 #include "oruxmap.h"
 
-
-#define META_TYPE(type) static_cast<QMetaType::Type>(type)
 
 static bool intAttr(QXmlStreamReader &reader, const QXmlStreamAttributes &attr,
   const QString &name, int &val)
@@ -431,14 +430,11 @@ OruxMap::OruxMap(const QString &fileName, QObject *parent)
 
 		QSqlRecord r = _db.record("tiles");
 		if (r.isEmpty()
-		  || r.field(0).name() != "x"
-		  || META_TYPE(r.field(0).type()) != QMetaType::Int
-		  || r.field(1).name() != "y"
-		  || META_TYPE(r.field(1).type()) != QMetaType::Int
-		  || r.field(2).name() != "z"
-		  || META_TYPE(r.field(2).type()) != QMetaType::Int
+		  || r.field(0).name() != "x" || METATYPE(r.field(0)) != QMetaType::Int
+		  || r.field(1).name() != "y" || METATYPE(r.field(1)) != QMetaType::Int
+		  || r.field(2).name() != "z" || METATYPE(r.field(2)) != QMetaType::Int
 		  || r.field(3).name() != "image"
-		  || META_TYPE(r.field(3).type()) != QMetaType::QByteArray) {
+		  || METATYPE(r.field(3)) != QMetaType::QByteArray) {
 			_errorString = "Invalid table format";
 			return;
 		}

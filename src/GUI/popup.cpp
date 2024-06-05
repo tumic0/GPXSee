@@ -17,6 +17,14 @@
 #include "flowlayout.h"
 #include "popup.h"
 
+static inline QPointF mousePos(QEvent *ev)
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	return static_cast<QMouseEvent*>(ev)->globalPos();
+#else // QT 6
+	return static_cast<QMouseEvent*>(ev)->globalPosition();
+#endif // QT 6
+}
 
 class PopupFrame : public QFrame
 {
@@ -163,8 +171,7 @@ bool PopupFrame::eventFilter(QObject *o, QEvent *ev)
 			break;
 		case QEvent::MouseMove: {
 			QRectF r(geometry().adjusted(-5, -20, 5, 20));
-			QPointF p(static_cast<QMouseEvent*>(ev)->globalPos());
-			if (!r.contains(p))
+			if (!r.contains(mousePos(ev)))
 				deleteAfterTimer();
 			break;
 		}

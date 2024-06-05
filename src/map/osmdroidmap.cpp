@@ -9,10 +9,9 @@
 #include <QtConcurrent>
 #include "osm.h"
 #include "tile.h"
+#include "metatype.h"
 #include "osmdroidmap.h"
 
-
-#define META_TYPE(type) static_cast<QMetaType::Type>(type)
 
 OsmdroidMap::OsmdroidMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _mapRatio(1.0), _valid(false)
@@ -34,11 +33,11 @@ OsmdroidMap::OsmdroidMap(const QString &fileName, QObject *parent)
 	QSqlRecord rcrd = _db.record("tiles");
 	if (rcrd.isEmpty()
 	  || rcrd.field(0).name() != "key"
-	  || META_TYPE(rcrd.field(0).type()) != QMetaType::Int
+	  || METATYPE(rcrd.field(0)) != QMetaType::Int
 	  || rcrd.field(1).name() != "provider"
-	  || META_TYPE(rcrd.field(1).type()) != QMetaType::QString
+	  || METATYPE(rcrd.field(1)) != QMetaType::QString
 	  || rcrd.field(2).name() != "tile"
-	  || META_TYPE(rcrd.field(2).type()) != QMetaType::QByteArray) {
+	  || METATYPE(rcrd.field(2)) != QMetaType::QByteArray) {
 		_errorString = "Invalid table format";
 		return;
 	}

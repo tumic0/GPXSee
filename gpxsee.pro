@@ -142,6 +142,7 @@ HEADERS += src/common/config.h \
     src/map/filter.h \
     src/map/gemfmap.h \
     src/map/gmifile.h \
+    src/map/metatype.h \
     src/map/oruxmap.h \
     src/map/osmdroidmap.h \
     src/map/proj/polyconic.h \
@@ -474,8 +475,7 @@ SOURCES += src/main.cpp \
     src/data/smlparser.cpp \
     src/data/geojsonparser.cpp
 
-DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
-    QT_NO_DEPRECATED_WARNINGS
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 RESOURCES += gpxsee.qrc
 TRANSLATIONS = lang/gpxsee_en.ts \

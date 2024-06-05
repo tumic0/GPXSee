@@ -38,9 +38,9 @@ static inline QPoint POS(QMouseEvent *e)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	return e->pos();
-#else // QT 5.15
+#else // QT 6
 	return e->position().toPoint();
-#endif // QT 5.15
+#endif // QT 6
 }
 
 GraphView::GraphView(QWidget *parent)

@@ -7,10 +7,10 @@
 #include <QtConcurrent>
 #include "common/util.h"
 #include "osm.h"
+#include "metatype.h"
 #include "mbtilesmap.h"
 
 #define MAX_TILE_SIZE 4096
-#define META_TYPE(type) static_cast<QMetaType::Type>(type)
 
 static RectC str2bounds(const QString &str)
 {
@@ -201,13 +201,13 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 	QSqlRecord r = _db.record("tiles");
 	if (r.isEmpty()
 	  || r.field(0).name() != "zoom_level"
-	  || META_TYPE(r.field(0).type()) != QMetaType::Int
+	  || METATYPE(r.field(0)) != QMetaType::Int
 	  || r.field(1).name() != "tile_column"
-	  || META_TYPE(r.field(1).type()) != QMetaType::Int
+	  || METATYPE(r.field(1)) != QMetaType::Int
 	  || r.field(2).name() != "tile_row"
-	  || META_TYPE(r.field(2).type()) != QMetaType::Int
+	  || METATYPE(r.field(2)) != QMetaType::Int
 	  || r.field(3).name() != "tile_data"
-	  || META_TYPE(r.field(3).type()) != QMetaType::QByteArray) {
+	  || METATYPE(r.field(3)) != QMetaType::QByteArray) {
 		_errorString = "Invalid table format";
 		return;
 	}
