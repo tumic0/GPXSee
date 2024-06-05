@@ -1,4 +1,4 @@
-Only localization contributions are accepted at the moment, code pull requests will be rejected.
+__Only localization contributions are accepted at the moment, code pull requests will be rejected.__
 
 The rationale is, that I want leave the possibility to distribute GPXsee builds in the OS X/Windows
 stores under a non-GPL licence open. In the future, code pull requests under a
