@@ -8,7 +8,7 @@
 #include "IMG/imgdata.h"
 #include "IMG/gmapdata.h"
 #include "IMG/rastertile.h"
-#include "IMG/dem.h"
+#include "IMG/demtree.h"
 #include "osm.h"
 #include "pcs.h"
 #include "rectd.h"
@@ -273,16 +273,12 @@ double IMGMap::elevation(const Coordinates &c)
 
 	if (d->hasDEM()) {
 		QList<MapData::Elevation> tiles;
-		DEM::DEMTRee tree;
-		double ele = NAN;
 
 		d->elevations(RectC(Coordinates(c), Coordinates(c)), d->zooms().max(),
 		  &tiles);
+		DEMTree tree(tiles);
 
-		DEM::buildTree(tiles, tree);
-		DEM::searchTree(tree, c, ele);
-
-		return ele;
+		return tree.elevation(c);
 	} else
 		return Map::elevation(c);
 }

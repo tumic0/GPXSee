@@ -1,4 +1,4 @@
-#include "dem.h"
+#include "demtree.h"
 
 using namespace IMG;
 
@@ -17,7 +17,15 @@ static double val(const Matrix<qint16> &m, int row, int col)
 	return (v == -32768) ? NAN : (double)v;
 }
 
-bool DEM::edgeCb(const MapData::Elevation *e, void *context)
+bool DEMTree::elevationCb(const MapData::Elevation *e, void *context)
+{
+	ElevationCTX *ctx = (ElevationCTX*)context;
+
+	ctx->ele = elevation(ctx->tree, e, ctx->c);
+	return std::isnan(ctx->ele);
+}
+
+bool DEMTree::edgeCb(const MapData::Elevation *e, void *context)
 {
 	EdgeCTX *ctx = (EdgeCTX*)context;
 
@@ -31,10 +39,10 @@ bool DEM::edgeCb(const MapData::Elevation *e, void *context)
 	return std::isnan(ctx->ele);
 }
 
-double DEM::edge(const DEMTRee &tree, const Coordinates &c)
+double DEMTree::edge(const Tree &tree, const Coordinates &c)
 {
-	double min[2], max[2];
 	double ele = NAN;
+	double min[2], max[2];
 	EdgeCTX ctx(c, ele);
 
 	min[0] = c.lon();
@@ -47,7 +55,7 @@ double DEM::edge(const DEMTRee &tree, const Coordinates &c)
 	return ele;
 }
 
-double DEM::elevation(const DEMTRee &tree, const MapData::Elevation *e,
+double DEMTree::elevation(const Tree &tree, const MapData::Elevation *e,
   const Coordinates &c)
 {
 	double x = (c.lon() - e->rect.left()) / e->xr;
@@ -72,7 +80,7 @@ double DEM::elevation(const DEMTRee &tree, const MapData::Elevation *e,
 	return interpolate(x - col, y - row, p0, p1, p2, p3);
 }
 
-void DEM::buildTree(const QList<MapData::Elevation> &tiles, DEMTRee &tree)
+DEMTree::DEMTree(const QList<MapData::Elevation> &tiles)
 {
 	double min[2], max[2];
 
@@ -84,29 +92,22 @@ void DEM::buildTree(const QList<MapData::Elevation> &tiles, DEMTRee &tree)
 		max[0] = e.rect.right();
 		max[1] = e.rect.top();
 
-		tree.Insert(min, max, &e);
+		_tree.Insert(min, max, &e);
 	}
 }
 
-bool DEM::elevationCb(const MapData::Elevation *e, void *context)
+double DEMTree::elevation(const Coordinates &c) const
 {
-	ElevationCTX *ctx = (ElevationCTX*)context;
-
-	ctx->ele = elevation(ctx->tree, e, ctx->c);
-	return std::isnan(ctx->ele);
-}
-
-void DEM::searchTree(const DEMTRee &tree, const Coordinates &c,
-  double &ele)
-{
+	double ele = NAN;
 	double min[2], max[2];
-	ElevationCTX ctx(tree, c, ele);
+	ElevationCTX ctx(_tree, c, ele);
 
 	min[0] = c.lon();
 	min[1] = c.lat();
 	max[0] = c.lon();
 	max[1] = c.lat();
 
-	ele = NAN;
-	tree.Search(min, max, elevationCb, &ctx);
+	_tree.Search(min, max, elevationCb, &ctx);
+
+	return ele;
 }

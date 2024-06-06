@@ -10,7 +10,7 @@
 #include "map/filter.h"
 #include "style.h"
 #include "lblfile.h"
-#include "dem.h"
+#include "demtree.h"
 #include "rastertile.h"
 
 using namespace IMG;
@@ -470,7 +470,6 @@ MatrixD RasterTile::elevation(int extend) const
 	if (_data->hasDEM()) {
 		RectC rect;
 		QList<MapData::Elevation> tiles;
-		DEMTRee tree;
 
 		for (int i = 0; i < ll.size(); i++)
 			rect = rect.united(ll.at(i));
@@ -480,14 +479,14 @@ MatrixD RasterTile::elevation(int extend) const
 		_data->elevations(rect.adjusted(0, 0, rect.width() / factor,
 		  -rect.height() / factor), _zoom, &tiles);
 
-		DEM::buildTree(tiles, tree);
+		DEMTree tree(tiles);
 		for (int i = 0; i < ll.size(); i++)
-			DEM::searchTree(tree, ll.at(i), m.at(i));
+			m.at(i) = tree.elevation(ll.at(i));
 	} else {
-		::DEM::lock();
+		DEM::lock();
 		for (int i = 0; i < ll.size(); i++)
-			m.at(i) = ::DEM::elevation(ll.at(i));
-		::DEM::unlock();
+			m.at(i) = DEM::elevation(ll.at(i));
+		DEM::unlock();
 	}
 
 	return m;
