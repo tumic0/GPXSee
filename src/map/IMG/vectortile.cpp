@@ -2,7 +2,7 @@
 
 using namespace IMG;
 
-static void copyPolys(const RectC &rect, QList<MapData::Poly> *src,
+static void copyPolys(const RectC &rect, const QList<MapData::Poly> *src,
   QList<MapData::Poly> *dst)
 {
 	for (int i = 0; i < src->size(); i++)
@@ -10,7 +10,7 @@ static void copyPolys(const RectC &rect, QList<MapData::Poly> *src,
 			dst->append(src->at(i));
 }
 
-static void copyPoints(const RectC &rect, QList<MapData::Point> *src,
+static void copyPoints(const RectC &rect, const QList<MapData::Point> *src,
   QList<MapData::Point> *dst)
 {
 	for (int j = 0; j < src->size(); j++)
@@ -152,7 +152,6 @@ void VectorTile::polys(const RectC &rect, const Zoom &zoom,
 		MapData::Polys *polys = cache->object(subdiv);
 		if (!polys) {
 			quint32 shift = _tre->shift(subdiv->bits());
-			QList<MapData::Poly> p, l;
 
 			if (!rgnHdl) {
 				rgnHdl = new SubFile::Handle(_rgn);
@@ -163,14 +162,16 @@ void VectorTile::polys(const RectC &rect, const Zoom &zoom,
 			if (!subdiv->initialized() && !_rgn->subdivInit(*rgnHdl, subdiv))
 				continue;
 
+			polys = new MapData::Polys();
+
 			_rgn->polyObjects(*rgnHdl, subdiv, RGNFile::Polygon, _lbl, *lblHdl,
-			  _net, *netHdl, &p);
+			  _net, *netHdl, &polys->polygons);
 			_rgn->polyObjects(*rgnHdl, subdiv, RGNFile::Line, _lbl, *lblHdl,
-			  _net, *netHdl, &l);
+			  _net, *netHdl, &polys->lines);
 			_rgn->extPolyObjects(*rgnHdl, subdiv, shift, RGNFile::Polygon, _lbl,
-			  *lblHdl, &p);
+			  *lblHdl, &polys->polygons);
 			_rgn->extPolyObjects(*rgnHdl, subdiv, shift, RGNFile::Line, _lbl,
-			  *lblHdl, &l);
+			  *lblHdl, &polys->lines);
 
 			if (_net && _net->hasLinks()) {
 				if (!nodHdl)
@@ -178,15 +179,16 @@ void VectorTile::polys(const RectC &rect, const Zoom &zoom,
 				if (!nodHdl2)
 					nodHdl2 = new SubFile::Handle(_nod);
 				_rgn->links(*rgnHdl, subdiv, shift, _net, *netHdl, _nod, *nodHdl,
-				  *nodHdl2, _lbl, *lblHdl, &l);
+				  *nodHdl2, _lbl, *lblHdl, &polys->lines);
 			}
 
-			copyPolys(rect, &p, polygons);
-			copyPolys(rect, &l, lines);
-			cache->insert(subdiv, new MapData::Polys(p, l));
+			copyPolys(rect, &polys->polygons, polygons);
+			copyPolys(rect, &polys->lines, lines);
+
+			cache->insert(subdiv, polys);
 		} else {
-			copyPolys(rect, &(polys->polygons), polygons);
-			copyPolys(rect, &(polys->lines), lines);
+			copyPolys(rect, &polys->polygons, polygons);
+			copyPolys(rect, &polys->lines, lines);
 		}
 	}
 
@@ -226,8 +228,6 @@ void VectorTile::points(const RectC &rect, const Zoom &zoom,
 
 		QList<MapData::Point> *pl = cache->object(subdiv);
 		if (!pl) {
-			QList<MapData::Point> p;
-
 			if (!rgnHdl) {
 				rgnHdl = new SubFile::Handle(_rgn);
 				lblHdl = new SubFile::Handle(_lbl);
@@ -236,14 +236,17 @@ void VectorTile::points(const RectC &rect, const Zoom &zoom,
 			if (!subdiv->initialized() && !_rgn->subdivInit(*rgnHdl, subdiv))
 				continue;
 
-			_rgn->pointObjects(*rgnHdl, subdiv, RGNFile::Point, _lbl, *lblHdl,
-			  &p);
-			_rgn->pointObjects(*rgnHdl, subdiv, RGNFile::IndexedPoint, _lbl,
-			  *lblHdl, &p);
-			_rgn->extPointObjects(*rgnHdl, subdiv, _lbl, *lblHdl, &p);
+			pl = new QList<MapData::Point>;
 
-			copyPoints(rect, &p, points);
-			cache->insert(subdiv, new QList<MapData::Point>(p));
+			_rgn->pointObjects(*rgnHdl, subdiv, RGNFile::Point, _lbl, *lblHdl,
+			  pl);
+			_rgn->pointObjects(*rgnHdl, subdiv, RGNFile::IndexedPoint, _lbl,
+			  *lblHdl, pl);
+			_rgn->extPointObjects(*rgnHdl, subdiv, _lbl, *lblHdl, pl);
+
+			copyPoints(rect, pl, points);
+
+			cache->insert(subdiv, pl);
 		} else
 			copyPoints(rect, pl, points);
 	}
@@ -280,6 +283,7 @@ void VectorTile::elevations(const RectC &rect, const Zoom &zoom,
 	// the given zoom (we prefer rendering quality rather than speed). For
 	// maps with a single level this has no effect.
 	int level = qMax(0, _dem->level(zoom) - 1);
+
 	QList<const DEMTile*> tiles(_dem->tiles(rect, level));
 	for (int i = 0; i < tiles.size(); i++) {
 		const DEMTile *tile = tiles.at(i);

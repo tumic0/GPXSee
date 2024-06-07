@@ -106,10 +106,6 @@ protected:
 
 private:
 	struct Polys {
-		Polys() {}
-		Polys(const QList<Poly> &polygons, const QList<Poly> &lines)
-			: polygons(polygons), lines(lines) {}
-
 		QList<Poly> polygons;
 		QList<Poly> lines;
 	};
