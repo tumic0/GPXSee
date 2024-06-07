@@ -13,8 +13,6 @@ using namespace Mapsforge;
 #define PATHS_EXTENT 20
 #define SEARCH_EXTENT -0.5
 
-#define BLUR_RADIUS 3
-
 static double LIMIT = cos(deg2rad(170));
 
 static qreal area(const QPainterPath &polygon)
