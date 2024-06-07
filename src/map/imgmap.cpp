@@ -18,6 +18,7 @@ using namespace IMG;
 
 #define EPSILON     1e-6
 #define TILE_SIZE   384
+#define DELTA       1e-3
 
 static RectC limitBounds(const RectC &bounds, const Projection &proj)
 {
@@ -274,8 +275,8 @@ double IMGMap::elevation(const Coordinates &c)
 	if (d->hasDEM()) {
 		QList<MapData::Elevation> tiles;
 
-		d->elevations(RectC(Coordinates(c), Coordinates(c)), d->zooms().max(),
-		  &tiles);
+		d->elevations(RectC(c, Coordinates(c.lon() + DELTA, c.lat() - DELTA)),
+		  d->zooms().max(), &tiles);
 		DEMTree tree(tiles);
 
 		return tree.elevation(c);
