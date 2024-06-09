@@ -8,13 +8,13 @@
 
 namespace ENC {
 
-typedef QCache<const QString*, MapData> MapCache;
+typedef QCache<QString, MapData> MapCache;
 
 class AtlasData
 {
 public:
-	AtlasData(MapCache &cache, QMutex &lock)
-	  : _cache(cache), _lock(lock) {}
+	AtlasData(MapCache &cache, QMutex &cacheLock)
+	  : _cache(cache), _cacheLock(cacheLock) {}
 	~AtlasData();
 
 	void addMap(const RectC &bounds, const QString &path);
@@ -24,40 +24,47 @@ public:
 	void points(const RectC &rect, QList<MapData::Point> *points);
 
 private:
-	typedef RTree<const QString*, double, 2> MapTree;
+	struct MapEntry {
+		MapEntry(const QString &path) : path(path) {}
+
+		QString path;
+		QMutex lock;
+	};
+
+	typedef RTree<MapEntry*, double, 2> MapTree;
 
 	struct PolyCTX
 	{
 		PolyCTX(const RectC &rect,  QList<MapData::Poly> *polygons,
-		  QList<MapData::Line> *lines, MapCache &cache, QMutex &lock)
+		  QList<MapData::Line> *lines, MapCache &cache, QMutex &cacheLock)
 		  : rect(rect), polygons(polygons), lines(lines), cache(cache),
-		  lock(lock) {}
+		  cacheLock(cacheLock) {}
 
 		const RectC &rect;
 		QList<MapData::Poly> *polygons;
 		QList<MapData::Line> *lines;
 		MapCache &cache;
-		QMutex &lock;
+		QMutex &cacheLock;
 	};
 
 	struct PointCTX
 	{
 		PointCTX(const RectC &rect, QList<MapData::Point> *points,
-		  MapCache &cache, QMutex &lock) : rect(rect), points(points),
-		  cache(cache), lock(lock) {}
+		  MapCache &cache, QMutex &cacheLock)
+		  : rect(rect), points(points), cache(cache), cacheLock(cacheLock) {}
 
 		const RectC &rect;
 		QList<MapData::Point> *points;
 		MapCache &cache;
-		QMutex &lock;
+		QMutex &cacheLock;
 	};
 
-	static bool polyCb(const QString *map, void *context);
-	static bool pointCb(const QString *map, void *context);
+	static bool polyCb(MapEntry *map, void *context);
+	static bool pointCb(MapEntry *map, void *context);
 
 	MapTree _tree;
 	MapCache &_cache;
-	QMutex &_lock;
+	QMutex &_cacheLock;
 };
 
 }

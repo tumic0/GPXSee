@@ -89,7 +89,7 @@ private:
 	QMap<IntendedUsage, ENC::AtlasData*> _data;
 	ENC::Style *_style;
 	ENC::MapCache _cache;
-	QMutex _lock;
+	QMutex _cacheLock;
 	IntendedUsage _usage;
 	int _zoom;
 

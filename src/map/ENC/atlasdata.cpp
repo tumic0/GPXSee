@@ -2,45 +2,71 @@
 
 using namespace ENC;
 
-bool AtlasData::pointCb(const QString *map, void *context)
+bool AtlasData::pointCb(MapEntry *map, void *context)
 {
 	PointCTX *ctx = (PointCTX*)context;
 
-	ctx->lock.lock();
+start:
+	ctx->cacheLock.lock();
 
-	MapData *cached = ctx->cache.object(map);
+	MapData *cached = ctx->cache.object(map->path);
 
 	if (!cached) {
-		MapData *data = new MapData(*map);
-		data->points(ctx->rect, ctx->points);
-		ctx->cache.insert(map, data);
+		ctx->cacheLock.unlock();
+
+		if (map->lock.tryLock()) {
+			MapData *data = new MapData(map->path);
+			data->points(ctx->rect, ctx->points);
+
+			ctx->cacheLock.lock();
+			ctx->cache.insert(map->path, data);
+
+			map->lock.unlock();
+		} else {
+			map->lock.lock();
+			map->lock.unlock();
+			goto start;
+		}
 	} else
 		cached->points(ctx->rect, ctx->points);
 
-	ctx->lock.unlock();
+	ctx->cacheLock.unlock();
 
 	return true;
 }
 
-bool AtlasData::polyCb(const QString *map, void *context)
+bool AtlasData::polyCb(MapEntry *map, void *context)
 {
 	PolyCTX *ctx = (PolyCTX*)context;
 
-	ctx->lock.lock();
+start:
+	ctx->cacheLock.lock();
 
-	MapData *cached = ctx->cache.object(map);
+	MapData *cached = ctx->cache.object(map->path);
 
 	if (!cached) {
-		MapData *data = new MapData(*map);
-		data->polygons(ctx->rect, ctx->polygons);
-		data->lines(ctx->rect, ctx->lines);
-		ctx->cache.insert(map, data);
+		ctx->cacheLock.unlock();
+
+		if (map->lock.tryLock()) {
+			MapData *data = new MapData(map->path);
+			data->polygons(ctx->rect, ctx->polygons);
+			data->lines(ctx->rect, ctx->lines);
+
+			ctx->cacheLock.lock();
+			ctx->cache.insert(map->path, data);
+
+			map->lock.unlock();
+		} else {
+			map->lock.lock();
+			map->lock.unlock();
+			goto start;
+		}
 	} else {
 		cached->polygons(ctx->rect, ctx->polygons);
 		cached->lines(ctx->rect, ctx->lines);
 	}
 
-	ctx->lock.unlock();
+	ctx->cacheLock.unlock();
 
 	return true;
 }
@@ -61,14 +87,14 @@ void AtlasData::addMap(const RectC &bounds, const QString &path)
 	max[0] = bounds.right();
 	max[1] = bounds.top();
 
-	_tree.Insert(min, max, new QString(path));
+	_tree.Insert(min, max, new MapEntry(path));
 }
 
 void AtlasData::polys(const RectC &rect, QList<MapData::Poly> *polygons,
   QList<MapData::Line> *lines)
 {
 	double min[2], max[2];
-	PolyCTX polyCtx(rect, polygons, lines, _cache, _lock);
+	PolyCTX polyCtx(rect, polygons, lines, _cache, _cacheLock);
 
 	min[0] = rect.left();
 	min[1] = rect.bottom();
@@ -81,7 +107,7 @@ void AtlasData::polys(const RectC &rect, QList<MapData::Poly> *polygons,
 void AtlasData::points(const RectC &rect, QList<MapData::Point> *points)
 {
 	double min[2], max[2];
-	PointCTX pointCtx(rect, points, _cache, _lock);
+	PointCTX pointCtx(rect, points, _cache, _cacheLock);
 
 	min[0] = rect.left();
 	min[1] = rect.bottom();

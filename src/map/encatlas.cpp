@@ -113,7 +113,7 @@ void ENCAtlas::addMap(const QDir &dir, const QByteArray &file,
 	IntendedUsage iu = usage(path);
 	auto it = _data.find(iu);
 	if (it == _data.end())
-		it = _data.insert(iu, new AtlasData(_cache, _lock));
+		it = _data.insert(iu, new AtlasData(_cache, _cacheLock));
 
 	it.value()->addMap(bounds, path);
 
