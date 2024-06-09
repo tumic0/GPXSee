@@ -37,6 +37,80 @@
 
 #define TMP_SUFFIX ".download"
 
+// QNetworkReply::errorString() returns bullshit, use our own reporting
+static const char *errorString(QNetworkReply::NetworkError error)
+{
+	switch (error) {
+		case QNetworkReply::ConnectionRefusedError:
+			return "Connection refused";
+		case QNetworkReply::RemoteHostClosedError:
+			return "Connection closed";
+		case QNetworkReply::HostNotFoundError:
+			return "Host not found";
+		case QNetworkReply::TimeoutError:
+			return "Connection timeout";
+		case QNetworkReply::OperationCanceledError:
+			return "Operation canceled";
+		case QNetworkReply::SslHandshakeFailedError:
+			return "SSL handshake failed";
+		case QNetworkReply::TemporaryNetworkFailureError:
+			return "Temporary network failure";
+		case QNetworkReply::NetworkSessionFailedError:
+			return "Network session failed";
+		case QNetworkReply::BackgroundRequestNotAllowedError:
+			return "Background request not allowed";
+		case QNetworkReply::TooManyRedirectsError:
+			return "Too many redirects";
+		case QNetworkReply::InsecureRedirectError:
+			return "Insecure redirect";
+		case QNetworkReply::ProxyConnectionRefusedError:
+			return "Proxy connection refused";
+		case QNetworkReply::ProxyConnectionClosedError:
+			return "Proxy connection closed";
+		case QNetworkReply::ProxyNotFoundError:
+			return "Proxy not found";
+		case QNetworkReply::ProxyTimeoutError:
+			return "Proxy timeout error";
+		case QNetworkReply::ProxyAuthenticationRequiredError:
+			return "Proxy authentication required";
+		case QNetworkReply::ContentAccessDenied:
+			return "Content access denied";
+		case QNetworkReply::ContentOperationNotPermittedError:
+			return "Content operation not permitted";
+		case QNetworkReply::ContentNotFoundError:
+			return "Content not found";
+		case QNetworkReply::AuthenticationRequiredError:
+			return "Authentication required";
+		case QNetworkReply::ContentReSendError:
+			return "Content re-send error";
+		case QNetworkReply::ContentConflictError:
+			return "Content conflict";
+		case QNetworkReply::ContentGoneError:
+			return "Content gone";
+		case QNetworkReply::InternalServerError:
+			return "Internal server error";
+		case QNetworkReply::OperationNotImplementedError:
+			return "Operation not implemented";
+		case QNetworkReply::ServiceUnavailableError:
+			return "Service unavailable";
+		case QNetworkReply::ProtocolUnknownError:
+			return "Protocol unknown";
+		case QNetworkReply::ProtocolInvalidOperationError:
+			return "Protocol invalid operation";
+		case QNetworkReply::UnknownNetworkError:
+			return "Unknown network error";
+		case QNetworkReply::UnknownProxyError:
+			return "Unknown proxy error";
+		case QNetworkReply::UnknownContentError:
+			return "Unknown content error";
+		case QNetworkReply::ProtocolFailure:
+			return "Protocol failure";
+		case QNetworkReply::UnknownServerError:
+			return "Unknown server error";
+		default:
+			return "Unknown error";
+	}
+}
 
 static QString tmpName(const QString &origName)
 {
@@ -179,8 +253,7 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 	QFile *file = _currentDownloads.value(reply->request().url());
 	if (error) {
 		insertError(url, error);
-		qWarning("%s: %s", url.toEncoded().constData(),
-		  qPrintable(reply->errorString()));
+		qWarning("%s: %s", url.toEncoded().constData(), errorString(error));
 		file->remove();
 	} else {
 		file->close();
