@@ -232,10 +232,16 @@ void Downloader::emitReadReady()
 
 void Downloader::insertError(const QUrl &url, QNetworkReply::NetworkError error)
 {
-	if (error == QNetworkReply::OperationCanceledError)
-		_errorDownloads.insert(url, _errorDownloads.value(url) + 1);
-	else
-		_errorDownloads.insert(url, RETRIES);
+	switch (error) {
+		case QNetworkReply::OperationCanceledError:
+		case QNetworkReply::TimeoutError:
+		case QNetworkReply::RemoteHostClosedError:
+		case QNetworkReply::ConnectionRefusedError:
+			_errorDownloads.insert(url, _errorDownloads.value(url) + 1);
+			break;
+		default:
+			_errorDownloads.insert(url, RETRIES);
+	}
 }
 
 void Downloader::readData(QNetworkReply *reply)
