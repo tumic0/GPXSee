@@ -85,10 +85,12 @@ public:
 		Point() {}
 		Point(FontSize fontSize, const QColor &textColor = QColor())
 		  : _text(textColor, fontSize) {}
-		Point(const QImage &img) : _img(img) {}
+		Point(const QImage &img, const QPoint &offset = QPoint(0, 0))
+		  : _img(img), _offset(offset) {}
 
 		const Font &text() const {return _text;}
 		const QImage &img() const {return _img;}
+		const QPoint &offset() const {return _offset;}
 
 	private:
 		friend class Style;
@@ -98,6 +100,7 @@ public:
 
 		Font _text;
 		QImage _img;
+		QPoint _offset;
 	};
 
 

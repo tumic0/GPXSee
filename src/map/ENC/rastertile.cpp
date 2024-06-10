@@ -297,16 +297,18 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		if ((!label || !fnt) && !img)
 			continue;
 
-		TextPointItem *item = new TextPointItem(pos, label, fnt, img, color,
-		  hColor, 0, 2, rotate);
+		QPoint offset = img ? style.offset() : QPoint(0, 0);
+
+		TextPointItem *item = new TextPointItem(pos + offset, label, fnt, img,
+		  color, hColor, 0, 2, rotate);
 		if (item->isValid() && !item->collides(textItems)) {
 			textItems.append(item);
 			if (lightsSet.contains(point.pos()))
-				lights.append(new TextPointItem(pos, 0, 0, _style->light(), 0,
-				  0, 0, 0));
+				lights.append(new TextPointItem(pos + _style->lightOffset(),
+				  0, 0, _style->light(), 0, 0, 0, 0));
 			if (signalsSet.contains(point.pos()))
-				lights.append(new TextPointItem(pos, 0, 0, _style->signal(), 0,
-				  0, 0, 0));
+				lights.append(new TextPointItem(pos + _style->signalOffset(),
+				  0, 0, _style->signal(), 0, 0, 0, 0));
 		} else
 			delete item;
 	}

@@ -422,8 +422,10 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		if ((!label || !fnt) && !img)
 			continue;
 
+		QPoint offset = img ? style.offset() : QPoint(0, 0);
+
 		TextPointItem *item = new TextPointItem(QPoint(point.coordinates.lon(),
-		  point.coordinates.lat()), label, fnt, img, color, hcolor, 0,
+		  point.coordinates.lat()) + offset, label, fnt, img, color, hcolor, 0,
 		  ICON_PADDING);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);

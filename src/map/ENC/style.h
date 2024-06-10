@@ -67,9 +67,10 @@ public:
 	public:
 		Point() : _textColor(Qt::black), _haloColor(Qt::white),
 		  _textFontSize(Normal) {}
-		Point(const QImage &img, FontSize fontSize = Normal)
+		Point(const QImage &img, FontSize fontSize = Normal,
+		  const QPoint &offset = QPoint(0, 0))
 		  : _textColor(Qt::black), _haloColor(Qt::white),
-		  _textFontSize(fontSize), _img(img) {}
+		  _textFontSize(fontSize), _img(img), _offset(offset) {}
 
 		void setTextColor(const QColor &color) {_textColor = color;}
 		void setHaloColor(const QColor &color) {_haloColor = color;}
@@ -79,11 +80,13 @@ public:
 		const QColor &haloColor() const {return _haloColor;}
 		FontSize textFontSize() const {return _textFontSize;}
 		const QImage &img() const {return _img;}
+		const QPoint &offset() const {return _offset;}
 
 	private:
 		QColor _textColor, _haloColor;
 		FontSize _textFontSize;
 		QImage _img;
+		QPoint _offset;
 	};
 
 	Style(qreal ratio);
@@ -96,6 +99,8 @@ public:
 	const QFont *font(Style::FontSize size) const;
 	const QImage *light() const {return &_light;}
 	const QImage *signal() const {return &_signal;}
+	const QPoint &lightOffset() const {return _lightOffset;}
+	const QPoint &signalOffset() const {return _signalOffset;}
 
 private:
 	void polygonStyle();
@@ -110,6 +115,7 @@ private:
 	/* Fonts and images must be initialized after QGuiApplication! */
 	QFont _small, _normal, _large;
 	QImage _light, _signal;
+	QPoint _lightOffset, _signalOffset;
 };
 
 }

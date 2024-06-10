@@ -202,27 +202,45 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(BUAARE, 6)].setTextFontSize(Small);
 	_points[TYPE(SOUNDG)].setTextFontSize(Small);
 	_points[TYPE(SOUNDG)].setHaloColor(QColor());
-	_points[TYPE(BOYCAR)] = Point(QImage(":/marine/buoy.png"), Small);
-	_points[TYPE(BOYINB)] = Point(QImage(":/marine/buoy.png"), Small);
-	_points[TYPE(BOYISD)] = Point(QImage(":/marine/buoy.png"), Small);
-	_points[TYPE(BOYLAT)] = Point(QImage(":/marine/buoy.png"), Small);
-	_points[TYPE(I_BOYLAT)] = Point(QImage(":/marine/buoy.png"), Small);
-	_points[TYPE(BOYSAW)] = Point(QImage(":/marine/buoy.png"), Small);
-	_points[TYPE(BOYSPP)] = Point(QImage(":/marine/buoy.png"), Small);
-	_points[TYPE(BCNCAR)] = Point(QImage(":/marine/beacon.png"), Small);
-	_points[TYPE(BCNISD)] = Point(QImage(":/marine/beacon.png"), Small);
-	_points[TYPE(BCNLAT)] = Point(QImage(":/marine/beacon.png"), Small);
-	_points[TYPE(I_BCNLAT)] = Point(QImage(":/marine/beacon.png"), Small);
-	_points[TYPE(BCNSAW)] = Point(QImage(":/marine/beacon.png"), Small);
-	_points[TYPE(BCNSPP)] = Point(QImage(":/marine/beacon.png"), Small);
-	_points[SUBTYPE(LNDMRK, 3)] = Point(QImage(":/marine/chimney.png"));
-	_points[SUBTYPE(LNDMRK, 5)] = Point(QImage(":/marine/flagstaff.png"));
-	_points[SUBTYPE(LNDMRK, 7)] = Point(QImage(":/marine/pylon.png"));
-	_points[SUBTYPE(LNDMRK, 9)] = Point(QImage(":/marine/monument.png"));
-	_points[SUBTYPE(LNDMRK, 17)] = Point(QImage(":/marine/tower.png"));
-	_points[SUBTYPE(LNDMRK, 18)] = Point(QImage(":/marine/windmill.png"));
-	_points[SUBTYPE(LNDMRK, 19)] = Point(QImage(":/marine/windmotor.png"));
-	_points[SUBTYPE(LNDMRK, 20)] = Point(QImage(":/marine/church.png"));
+	_points[TYPE(BOYCAR)] = Point(QImage(":/marine/buoy.png"), Small,
+	  QPoint(6, -6));
+	_points[TYPE(BOYINB)] = Point(QImage(":/marine/buoy.png"), Small,
+	  QPoint(6, -6));
+	_points[TYPE(BOYISD)] = Point(QImage(":/marine/buoy.png"), Small,
+	  QPoint(6, -6));
+	_points[TYPE(BOYLAT)] = Point(QImage(":/marine/buoy.png"), Small,
+	  QPoint(6, -6));
+	_points[TYPE(I_BOYLAT)] = Point(QImage(":/marine/buoy.png"), Small,
+	  QPoint(6, -6));
+	_points[TYPE(BOYSAW)] = Point(QImage(":/marine/buoy.png"), Small,
+	  QPoint(6, -6));
+	_points[TYPE(BOYSPP)] = Point(QImage(":/marine/buoy.png"), Small,
+	  QPoint(6, -6));
+	_points[TYPE(BCNCAR)] = Point(QImage(":/marine/beacon.png"), Small,
+	  QPoint(0, -8));
+	_points[TYPE(BCNISD)] = Point(QImage(":/marine/beacon.png"), Small,
+	  QPoint(0, -8));
+	_points[TYPE(BCNLAT)] = Point(QImage(":/marine/beacon.png"), Small,
+	  QPoint(0, -8));
+	_points[TYPE(I_BCNLAT)] = Point(QImage(":/marine/beacon.png"), Small,
+	  QPoint(0, -8));
+	_points[TYPE(BCNSAW)] = Point(QImage(":/marine/beacon.png"), Small,
+	  QPoint(0, -8));
+	_points[TYPE(BCNSPP)] = Point(QImage(":/marine/beacon.png"), Small,
+	  QPoint(0, -8));
+	_points[SUBTYPE(LNDMRK, 3)] = Point(QImage(":/marine/chimney.png"),
+	  Small, QPoint(0, -11));
+	_points[SUBTYPE(LNDMRK, 5)] = Point(QImage(":/marine/flagstaff.png"),
+	  Small, QPoint(2, -11));
+	_points[SUBTYPE(LNDMRK, 7)] = Point(QImage(":/marine/pylon.png"), Small);
+	_points[SUBTYPE(LNDMRK, 9)] = Point(QImage(":/marine/monument.png"), Small,
+	 QPoint(0, -7));
+	_points[SUBTYPE(LNDMRK, 17)] = Point(QImage(":/marine/tower.png"), Small,
+	  QPoint(0, -11));
+	_points[SUBTYPE(LNDMRK, 18)] = Point(QImage(":/marine/windmill.png"), Small);
+	_points[SUBTYPE(LNDMRK, 19)] = Point(QImage(":/marine/windmotor.png"),
+	  Small, QPoint(0, -11));
+	_points[SUBTYPE(LNDMRK, 20)] = Point(QImage(":/marine/church.png"), Small);
 	_points[TYPE(LNDELV)] = Point(QImage(":/marine/triangulation-point.png"));
 	_points[TYPE(OBSTRN)] = Point(QImage(":/marine/obstruction.png"), Small);
 	_points[SUBTYPE(WRECKS, 0)] = Point(QImage(":/marine/wreck.png"), Small);
@@ -231,7 +249,8 @@ void Style::pointStyle(qreal ratio)
 	  Small);
 	_points[SUBTYPE(WRECKS, 3)] = Point(QImage(":/marine/wreck.png"), Small);
 	_points[SUBTYPE(WRECKS, 4)] = Point(QImage(":/marine/wreck.png"), Small);
-	_points[SUBTYPE(WRECKS, 5)] = Point(QImage(":/marine/wreck-exposed.png"));
+	_points[SUBTYPE(WRECKS, 5)] = Point(QImage(":/marine/wreck-exposed.png"),
+	  Small, QPoint(0, -4));
 	_points[SUBTYPE(UWTROC, 1)] = Point(QImage(":/marine/rock-exposed.png"),
 	  Small);
 	_points[SUBTYPE(UWTROC, 2)] = Point(QImage(":/marine/rock-exposed.png"),
@@ -256,9 +275,11 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(MORFAC, 3)] = Point(QImage(":/marine/pile.png"), Small);
 	_points[SUBTYPE(MORFAC, 5)] = Point(QImage(":/marine/pile.png"), Small);
 	_points[SUBTYPE(MORFAC, 7)] = Point(QImage(":/marine/mooring-buoy.png"),
-	  Small);
-	_points[TYPE(CRANES)] = Point(QImage(":/marine/crane.png"), Small);
-	_points[TYPE(I_CRANES)] = Point(QImage(":/marine/crane.png"), Small);
+	  Small, QPoint(0, -5));
+	_points[TYPE(CRANES)] = Point(QImage(":/marine/crane.png"), Small,
+	  QPoint(0, -5));
+	_points[TYPE(I_CRANES)] = Point(QImage(":/marine/crane.png"), Small,
+	  QPoint(0, -5));
 	_points[SUBTYPE(I_DISMAR, 1)] = Point(QImage(":/marine/distance-mark.png"),
 	  Small);
 	_points[SUBTYPE(I_DISMAR, 1)].setTextColor(QColor(0xff, 0xff, 0xff));
@@ -352,7 +373,9 @@ void Style::pointStyle(qreal ratio)
 Style::Style(qreal ratio)
 {
 	_light = QImage(":/marine/light.png");
+	_lightOffset = QPoint(11, 11);
 	_signal = QImage(":/marine/fog-signal.png");
+	_signalOffset = QPoint(-9, 9);
 
 	_large = pixelSizeFont(16);
 	_normal = pixelSizeFont(12);
