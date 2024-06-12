@@ -92,6 +92,7 @@
 #define UWTROC 153
 #define UNSARE 154
 #define WATTUR 156
+#define WEDKLP 158
 #define WRECKS 159
 #define M_COVR 302
 

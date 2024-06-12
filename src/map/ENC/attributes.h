@@ -14,6 +14,7 @@
 #define CATSIL 63
 #define CATSCF 65
 #define CATWAT 69
+#define CATWED 70
 #define CATWRK 71
 #define COMCHA 77
 #define CURVEL 84

@@ -241,6 +241,18 @@ static QString sistat(uint type)
 	}
 }
 
+static QString weed(uint type)
+{
+	switch (type) {
+		case 2:
+			return "Wd";
+		case 3:
+			return "Sg";
+		default:
+			return QString();
+	}
+}
+
 MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
   const QVector<QByteArray> &params) : _type(type), _pos(c), _label(label)
 {
@@ -262,6 +274,9 @@ MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
 		if (_label.isEmpty())
 			_label = sistat(type & 0xFF);
 		_type = TYPE(SISTAT);
+	} else if (type>>16 == WEDKLP) {
+		if (_label.isEmpty())
+			_label = weed(type & 0xFF);
 	} else if (type>>16 == LNDELV && params.size()) {
 		if (_label.isEmpty())
 			_label = QString::fromLatin1(params.at(0))
@@ -558,7 +573,8 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 		  || (OBJL == I_SISTAT && key == I_CATSIT)
 		  || (OBJL == RDOCAL && key == TRAFIC)
 		  || (OBJL == I_RDOCAL && key == TRAFIC)
-		  || (OBJL == SILTNK && key == CATSIL))
+		  || (OBJL == SILTNK && key == CATSIL)
+		  || (OBJL == WEDKLP && key == CATWED))
 			subtype = av.at(1).toByteArray().toUInt();
 		else if (OBJL == I_DISMAR && key == CATDIS)
 			subtype |= av.at(1).toByteArray().toUInt();

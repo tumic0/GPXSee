@@ -323,12 +323,15 @@ void Style::pointStyle(qreal ratio)
 	_points[TYPE(PYLONS)] = Point(QImage(":/marine/pylon.png"));
 	_points[SUBTYPE(I_BERTHS, 6)] = Point(QImage(":/marine/fleeting-area.png"));
 	_points[SUBTYPE(WATTUR, 1)] = Point(QImage(":/marine/breakers.png"));
+	_points[SUBTYPE(WATTUR, 2)] = Point(QImage(":/marine/eddies.png"));
 	_points[SUBTYPE(WATTUR, 3)] = Point(QImage(":/marine/overfalls.png"));
 	_points[SUBTYPE(WATTUR, 4)] = Point(QImage(":/marine/overfalls.png"));
 	_points[TYPE(PILBOP)] = Point(QImage(":/marine/boarding-place.png"));
 	_points[TYPE(SISTAT)] = Point(QImage(":/marine/pylon.png"));
 	_points[TYPE(SLCONS)] = Point(QImage(":/marine/construction.png"), Small);
 	_points[TYPE(CURENT)] = Point(QImage(":/marine/current.png"));
+	_points[SUBTYPE(WEDKLP, 0)] = Point(QImage(":/marine/kelp.png"));
+	_points[SUBTYPE(WEDKLP, 1)] = Point(QImage(":/marine/kelp.png"));
 
 	_points[SUBTYPE(SMCFAC, 7)] = Point(svg2img(":/POI/restaurant-11.svg",
 	  ratio), Small);
