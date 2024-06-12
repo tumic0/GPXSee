@@ -165,6 +165,7 @@
 		<file alias="rescue-station.png">icons/map/marine/rescue-station.png</file>
 		<file alias="windmill.png">icons/map/marine/windmill.png</file>
 		<file alias="flagstaff.png">icons/map/marine/flagstaff.png</file>
+		<file alias="deviation-dolphin.png">icons/map/marine/deviation-dolphin.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->

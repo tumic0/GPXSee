@@ -272,6 +272,8 @@ void Style::pointStyle(qreal ratio)
 	_points[TYPE(OFSPLF)] = Point(QImage(":/marine/platform.png"));
 	_points[TYPE(PILPNT)] = Point(QImage(":/marine/pile.png"), Small);
 	_points[SUBTYPE(MORFAC, 1)] = Point(QImage(":/marine/pile.png"), Small);
+	_points[SUBTYPE(MORFAC, 2)] = Point(QImage(":/marine/deviation-dolphin.png"),
+	  Small, QPoint(0, -6));
 	_points[SUBTYPE(MORFAC, 3)] = Point(QImage(":/marine/pile.png"), Small);
 	_points[SUBTYPE(MORFAC, 5)] = Point(QImage(":/marine/pile.png"), Small);
 	_points[SUBTYPE(MORFAC, 7)] = Point(QImage(":/marine/mooring-buoy.png"),

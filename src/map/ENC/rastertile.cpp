@@ -265,6 +265,7 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 {
 	PointSet lightsSet, signalsSet;
 	int i;
+	QSet<uint> set;
 
 	std::sort(points.begin(), points.end());
 
@@ -294,8 +295,10 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		  ? &style.haloColor() : 0;
 		double rotate = angle(point.type(), point.param());
 
-		if ((!label || !fnt) && !img)
+		if ((!label || !fnt) && !img) {
+			set.insert(point.type());
 			continue;
+		}
 
 		QPoint offset = img ? style.offset() : QPoint(0, 0);
 
@@ -312,6 +315,9 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		} else
 			delete item;
 	}
+
+	for (auto i = set.cbegin(), end = set.cend(); i != end; ++i)
+		qDebug() << (*i>>16) << (*i & 0xFFFF);
 }
 
 void RasterTile::processLines(const QList<MapData::Line> &lines,
