@@ -1889,7 +1889,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
         <source>Lightening:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zesvětlení:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
