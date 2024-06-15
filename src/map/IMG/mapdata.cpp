@@ -117,6 +117,7 @@ void MapData::clear()
 
 	_polyCache.clear();
 	_pointCache.clear();
+	_demCache.clear();
 }
 
 void MapData::computeZooms()
