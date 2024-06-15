@@ -16,7 +16,7 @@ public:
 	static void setAzimuth(int azimuth) {_azimuth = azimuth;}
 	static void setAltitude(int altitude) {_altitude = altitude;}
 	static void setZFactor(double z) {_z = z;}
-	static void setLightening(double b) {_l = b;}
+	static void setLightening(double l) {_l = l;}
 
 private:
 	static int _alpha;
