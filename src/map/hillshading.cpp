@@ -31,6 +31,7 @@ int HillShading::_blur = 3;
 int HillShading::_azimuth = 315;
 int HillShading::_altitude = 45;
 double HillShading::_z = 0.6;
+double HillShading::_l = 0.2;
 
 static void getConstants(double azimuth, double elevation, Constants &c)
 {
@@ -92,7 +93,7 @@ QImage HillShading::render(const MatrixD &m, int extend)
 			if (std::isnan(L))
 				pixel = 0;
 			else {
-				L = sqrt(L * 0.8 + 0.2);
+				L = sqrt(L * (1.0 - _l) + _l);
 				quint8 val = (L < 0) ? 0 : L * _alpha;
 				pixel = (_alpha - val)<<24;
 			}

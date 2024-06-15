@@ -16,6 +16,7 @@ public:
 	static void setAzimuth(int azimuth) {_azimuth = azimuth;}
 	static void setAltitude(int altitude) {_altitude = altitude;}
 	static void setZFactor(double z) {_z = z;}
+	static void setLightening(double b) {_l = b;}
 
 private:
 	static int _alpha;
@@ -23,6 +24,7 @@ private:
 	static int _azimuth;
 	static int _altitude;
 	static double _z;
+	static double _l;
 };
 
 #endif // HILLSHADING_H

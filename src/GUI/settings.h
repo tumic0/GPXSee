@@ -197,6 +197,7 @@ public:
 	static const Setting demUsername;
 	static const Setting demPassword;
 	static const Setting hillshadingAlpha;
+	static const Setting hillshadingLightening;
 	static const Setting hillshadingBlur;
 	static const Setting hillshadingAzimuth;
 	static const Setting hillshadingAltitude;

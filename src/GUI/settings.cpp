@@ -245,6 +245,7 @@ SETTING(demAuthentication,   "demAuthentication",      false                  );
 SETTING(demUsername,         "demUsername",            ""                     );
 SETTING(demPassword,         "demPassword",            ""                     );
 SETTING(hillshadingAlpha,    "hillshadingAlpha",       102                    );
+SETTING(hillshadingLightening,"hillshadingLightening", 0.2                    );
 SETTING(hillshadingBlur,     "hillshadingBlur",        3                      );
 SETTING(hillshadingAzimuth,  "hillshadingAzimuth",     315                    );
 SETTING(hillshadingAltitude, "hillshadingAltitude",    45                     );

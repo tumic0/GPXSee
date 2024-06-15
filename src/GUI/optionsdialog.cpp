@@ -621,6 +621,8 @@ QWidget *OptionsDialog::createDEMPage()
 	_hillshadingAlpha = new PercentSlider();
 	_hillshadingAlpha->setValue(qRound((_options.hillshadingAlpha / 255.0)
 	  * 100));
+	_hillshadingLightening = new PercentSlider();
+	_hillshadingLightening->setValue(_options.hillshadingLightening * 100);
 	_hillshadingBlur = new QSpinBox();
 	_hillshadingBlur->setMaximum(10);
 	_hillshadingBlur->setSuffix(UNIT_SPACE + tr("px"));
@@ -640,6 +642,7 @@ QWidget *OptionsDialog::createDEMPage()
 
 	QFormLayout *hillshadingLayout = new QFormLayout();
 	hillshadingLayout->addRow(tr("Opacity:"), _hillshadingAlpha);
+	hillshadingLayout->addRow(tr("Lightening:"), _hillshadingLightening);
 	hillshadingLayout->addRow(tr("Blur radius:"), _hillshadingBlur);
 	hillshadingLayout->addItem(new QSpacerItem(10, 10));
 	hillshadingLayout->addRow(tr("Azimuth:"), _hillshadingAzimuth);
@@ -987,6 +990,7 @@ void OptionsDialog::accept()
 	_options.demPassword = _demAuth->password();
 	_options.hillshadingAlpha = qRound((_hillshadingAlpha->value() / 100.0)
 	  * 255);
+	_options.hillshadingLightening = _hillshadingLightening->value() / 100.0;
 	_options.hillshadingBlur = _hillshadingBlur->value();
 	_options.hillshadingAzimuth = _hillshadingAzimuth->value();
 	_options.hillshadingAltitude = _hillshadingAltitude->value();

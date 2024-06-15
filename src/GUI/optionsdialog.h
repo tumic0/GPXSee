@@ -77,6 +77,7 @@ struct Options {
 	int hillshadingAzimuth;
 	int hillshadingAltitude;
 	double hillshadingZFactor;
+	double hillshadingLightening;
 	// Position
 	QString plugin;
 	QMap<QString, QVariantMap> pluginParams;
@@ -182,6 +183,7 @@ private:
 	QLineEdit *_demURL;
 	AuthenticationWidget *_demAuth;
 	PercentSlider *_hillshadingAlpha;
+	PercentSlider *_hillshadingLightening;
 	QSpinBox *_hillshadingBlur;
 	QSpinBox *_hillshadingAzimuth;
 	QSpinBox *_hillshadingAltitude;

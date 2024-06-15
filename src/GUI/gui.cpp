@@ -2609,6 +2609,7 @@ void GUI::writeSettings()
 	WRITE(demUsername, _options.demUsername);
 	WRITE(demPassword, _options.demPassword);
 	WRITE(hillshadingAlpha, _options.hillshadingAlpha);
+	WRITE(hillshadingLightening, _options.hillshadingLightening);
 	WRITE(hillshadingBlur, _options.hillshadingBlur);
 	WRITE(hillshadingAzimuth, _options.hillshadingAzimuth);
 	WRITE(hillshadingAltitude, _options.hillshadingAltitude);
@@ -2914,6 +2915,7 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 	_options.demUsername = READ(demUsername).toString();
 	_options.demPassword = READ(demPassword).toString();
 	_options.hillshadingAlpha = READ(hillshadingAlpha).toInt();
+	_options.hillshadingLightening = READ(hillshadingLightening).toDouble();
 	_options.hillshadingBlur = READ(hillshadingBlur).toInt();
 	_options.hillshadingAzimuth = READ(hillshadingAzimuth).toInt();
 	_options.hillshadingAltitude = READ(hillshadingAltitude).toInt();
@@ -3017,6 +3019,7 @@ void GUI::loadOptions()
 	HillShading::setAzimuth(_options.hillshadingAzimuth);
 	HillShading::setAltitude(_options.hillshadingAltitude);
 	HillShading::setZFactor(_options.hillshadingZFactor);
+	HillShading::setLightening(_options.hillshadingLightening);
 
 	_poi->setRadius(_options.poiRadius);
 
@@ -3158,6 +3161,7 @@ void GUI::updateOptions(const Options &options)
 	SET_HS_OPTION(hillshadingAzimuth, setAzimuth);
 	SET_HS_OPTION(hillshadingAltitude, setAltitude);
 	SET_HS_OPTION(hillshadingZFactor, setZFactor);
+	SET_HS_OPTION(hillshadingLightening, setLightening);
 
 	if (options.connectionTimeout != _options.connectionTimeout)
 		Downloader::setTimeout(options.connectionTimeout);
