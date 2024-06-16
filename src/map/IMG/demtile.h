@@ -1,5 +1,5 @@
-#ifndef DEMTILE_H
-#define DEMTILE_H
+#ifndef IMG_DEMTILE_H
+#define IMG_DEMTILE_H
 
 #include "common/rectc.h"
 
@@ -33,4 +33,4 @@ private:
 
 }
 
-#endif // DEMTILE_H
+#endif // IMG_DEMTILE_H

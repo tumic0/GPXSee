@@ -1,5 +1,5 @@
-#ifndef DEMFILE_H
-#define DEMFILE_H
+#ifndef IMG_DEMFILE_H
+#define IMG_DEMFILE_H
 
 #include "common/rtree.h"
 #include "subfile.h"
@@ -55,4 +55,4 @@ private:
 
 }
 
-#endif // DEMFILE_H
+#endif // IMG_DEMFILE_H
