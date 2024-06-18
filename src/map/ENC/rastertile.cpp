@@ -241,18 +241,30 @@ void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
 	for (int i = 0; i < polygons.size(); i++) {
 		const MapData::Poly &poly = polygons.at(i);
 		uint type = poly.type()>>16;
+		const QImage *img = 0;
+		const QString *label = 0;
+		const QFont *fnt = 0;
+		const QColor *color = 0, *hColor = 0;
 
-		if (!(type == HRBFAC || type == I_TRNBSN
-		  || poly.type() == SUBTYPE(I_BERTHS, 6)))
-			continue;
-		const Style::Point &style = _style->point(poly.type());
-		const QImage *img = style.img().isNull() ? 0 : &style.img();
-		if (!img)
+		if (!poly.label().isEmpty()) {
+			const Style::Point &style = _style->point(poly.type());
+			fnt = _style->font(style.textFontSize());
+			color = &style.textColor();
+			hColor = style.haloColor().isValid() ? &style.haloColor() : 0;
+			label = &poly.label();
+		}
+		if (type == HRBFAC || type == I_TRNBSN
+		  || poly.type() == SUBTYPE(I_BERTHS, 6)) {
+			const Style::Point &style = _style->point(poly.type());
+			img = style.img().isNull() ? 0 : &style.img();
+		}
+
+		if ((!label || !fnt) && !img)
 			continue;
 
 		TextPointItem *item = new TextPointItem(
 		  ll2xy(centroid(poly.path().first())).toPoint(),
-		  0, 0, img, 0, 0, 0, 0);
+		  label, fnt, img, color, hColor, 0, 0);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
 		else

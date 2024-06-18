@@ -26,6 +26,7 @@
 #define RESTRN 131
 #define TRAFIC 172
 #define VALDCO 174
+#define VERCLR 181
 #define WATLEV 187
 
 #define I_CATACH 17000

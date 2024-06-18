@@ -1,3 +1,4 @@
+#include "GUI/units.h"
 #include "objects.h"
 #include "attributes.h"
 #include "mapdata.h"
@@ -288,12 +289,20 @@ MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
 }
 
 MapData::Poly::Poly(uint type, const Polygon &path,
-  const QVector<QByteArray> &params) : _type(type), _path(path)
+  const QVector<QByteArray> &params, uint HUNI) : _type(type), _path(path)
 {
 	if (type == TYPE(DEPARE) && params.size())
 		_type = SUBTYPE(DEPARE, depthLevel(params.at(0)));
 	else if (type == TYPE(TSSLPT) && params.size())
 		_param = QVariant(params.at(0).toDouble());
+	else if ((type == TYPE(BRIDGE) || type == TYPE(I_BRIDGE))
+	  && params.size()) {
+		double clr = params.at(0).toDouble();
+		if (clr > 0) {
+			_label = QString::fromUtf8("\xE2\x86\x95") + UNIT_SPACE
+			  + QString::number(clr) + UNIT_SPACE + hUnits(HUNI);
+		}
+	}
 }
 
 MapData::Line::Line(uint type, const QVector<Coordinates> &path,
@@ -657,6 +666,9 @@ MapData::Attr MapData::polyAttr(const ISO8211::Record &r, uint OBJL)
 		if ((OBJL == TSSLPT && key == ORIENT)
 		  || (OBJL == DEPARE && key == DRVAL1))
 			params[0] = av.at(1).toByteArray();
+		if ((OBJL == BRIDGE && key == VERCLR)
+		  || (OBJL == I_BRIDGE && key == VERCLR))
+			params[0] = av.at(1).toByteArray();
 	}
 
 	return Attr(subtype, label, params);
@@ -689,18 +701,18 @@ MapData::Line *MapData::lineObject(const ISO8211::Record &r,
 }
 
 MapData::Poly *MapData::polyObject(const ISO8211::Record &r,
-  const RecordMap &vc, const RecordMap &ve, uint COMF, uint OBJL)
+  const RecordMap &vc, const RecordMap &ve, uint COMF, uint OBJL, uint HUNI)
 {
 	Polygon path(polyGeometry(r, vc, ve, COMF));
 	Attr attr(polyAttr(r, OBJL));
 
 	return (path.isEmpty() ? 0 : new Poly(SUBTYPE(OBJL, attr.subtype()), path,
-	  attr.params()));
+	  attr.params(), HUNI));
 }
 
 bool MapData::processRecord(const ISO8211::Record &record,
   QVector<ISO8211::Record> &fe, RecordMap &vi, RecordMap &vc, RecordMap &ve,
-  RecordMap &vf, uint &COMF, uint &SOMF)
+  RecordMap &vf, uint &COMF, uint &SOMF, uint &HUNI)
 {
 	if (record.size() < 2)
 		return false;
@@ -735,6 +747,8 @@ bool MapData::processRecord(const ISO8211::Record &record,
 	} else if (ba == "DSPM") {
 		if (!(f.subfield("COMF", &COMF) && f.subfield("SOMF", &SOMF)))
 			return false;
+		if (!f.subfield("HUNI", &HUNI))
+			return false;
 	}
 
 	return true;
@@ -746,7 +760,7 @@ MapData::MapData(const QString &path)
 	QVector<ISO8211::Record> fe;
 	ISO8211 ddf(path);
 	ISO8211::Record record;
-	uint PRIM, OBJL, COMF = 1, SOMF = 1;
+	uint PRIM, OBJL, COMF = 1, SOMF = 1, HUNI = 1;
 	Poly *poly;
 	Line *line;
 	Point *point;
@@ -756,7 +770,7 @@ MapData::MapData(const QString &path)
 	if (!ddf.readDDR())
 		return;
 	while (ddf.readRecord(record))
-		if (!processRecord(record, fe, vi, vc, ve, vf, COMF, SOMF))
+		if (!processRecord(record, fe, vi, vc, ve, vf, COMF, SOMF, HUNI))
 			qWarning("Invalid S-57 record");
 
 	for (int i = 0; i < fe.size(); i++) {
@@ -793,7 +807,7 @@ MapData::MapData(const QString &path)
 					warning(f, PRIM);
 				break;
 			case PRIM_A:
-				if ((poly = polyObject(r, vc, ve, COMF, OBJL))) {
+				if ((poly = polyObject(r, vc, ve, COMF, OBJL, HUNI))) {
 					rectcBounds(poly->bounds(), min, max);
 					_areas.Insert(min, max, poly);
 				} else

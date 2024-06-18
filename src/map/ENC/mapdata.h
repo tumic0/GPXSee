@@ -13,16 +13,19 @@ class MapData
 public:
 	class Poly {
 	public:
-		Poly(uint type, const Polygon &path, const QVector<QByteArray> &params);
+		Poly(uint type, const Polygon &path, const QVector<QByteArray> &params,
+		  uint HUNI);
 
 		RectC bounds() const {return _path.boundingRect();}
 		const Polygon &path() const {return _path;}
 		uint type() const {return _type;}
+		const QString &label() const {return _label;}
 		const QVariant &param() const {return _param;}
 
 	private:
 		uint _type;
 		Polygon _path;
+		QString _label;
 		QVariant _param;
 	};
 
@@ -121,11 +124,11 @@ private:
 	static Line *lineObject(const ISO8211::Record &r, const RecordMap &vc,
 	  const RecordMap &ve, uint COMF, uint OBJL);
 	static Poly *polyObject(const ISO8211::Record &r, const RecordMap &vc,
-	  const RecordMap &ve, uint COMF,uint OBJL);
+	  const RecordMap &ve, uint COMF, uint OBJL, uint HUNI);
 
 	static bool processRecord(const ISO8211::Record &record,
 	  QVector<ISO8211::Record> &fe, RecordMap &vi, RecordMap &vc, RecordMap &ve,
-	  RecordMap &vf, uint &COMF, uint &SOMF);
+	  RecordMap &vf, uint &COMF, uint &SOMF, uint &HUNI);
 
 	PolygonTree _areas;
 	LineTree _lines;
