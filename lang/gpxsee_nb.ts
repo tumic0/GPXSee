@@ -1033,7 +1033,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1961"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nedlastingsgrensen for DEM-fliser er overskredet. Hvis du virkelig trenger data for et så stort område, last ned filene manuelt.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1977"/>
@@ -1770,7 +1770,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="265"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="628"/>
         <source>px</source>
-        <translation type="unfinished">px</translation>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="301"/>
@@ -1887,7 +1887,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
         <source>Lightening:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bleking:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
