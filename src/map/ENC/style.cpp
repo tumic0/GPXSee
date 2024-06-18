@@ -235,6 +235,8 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(LNDMRK, 7)] = Point(QImage(":/marine/pylon.png"), Small);
 	_points[SUBTYPE(LNDMRK, 9)] = Point(QImage(":/marine/monument.png"), Small,
 	 QPoint(0, -7));
+	_points[SUBTYPE(LNDMRK, 15)] = Point(QImage(":/marine/dome.png"), Small,
+	 QPoint(0, -5));
 	_points[SUBTYPE(LNDMRK, 17)] = Point(QImage(":/marine/tower.png"), Small,
 	  QPoint(0, -11));
 	_points[SUBTYPE(LNDMRK, 18)] = Point(QImage(":/marine/windmill.png"), Small);

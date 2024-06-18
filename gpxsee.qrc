@@ -168,6 +168,7 @@
 		<file alias="deviation-dolphin.png">icons/map/marine/deviation-dolphin.png</file>
 		<file alias="kelp.png">icons/map/marine/kelp.png</file>
 		<file alias="eddies.png">icons/map/marine/eddies.png</file>
+		<file alias="dome.png">icons/map/marine/dome.png</file>
 	</qresource>
 
 	<!-- Mapsforge rendertheme -->
