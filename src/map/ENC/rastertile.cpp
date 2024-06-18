@@ -265,7 +265,8 @@ void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
 		TextPointItem *item = new TextPointItem(
 		  ll2xy(centroid(poly.path().first())).toPoint(),
 		  label, fnt, img, color, hColor, 0, 0);
-		if (item->isValid() && !item->collides(textItems))
+		if (item->isValid() && _rect.contains(item->boundingRect().toRect())
+		  && !item->collides(textItems))
 			textItems.append(item);
 		else
 			delete item;
@@ -391,8 +392,8 @@ void RasterTile::render()
 
 	fetchData(polygons, lines, points);
 
-	processPolygons(polygons, textItems);
 	processPoints(points, textItems, lights);
+	processPolygons(polygons, textItems);
 	processLines(lines, textItems);
 
 	QPainter painter(&img);
