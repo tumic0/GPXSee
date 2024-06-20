@@ -197,6 +197,7 @@ bool Downloader::doDownload(const Download &dl, const QList<HTTPHeader> &headers
 	if (!file->open(QIODevice::WriteOnly)) {
 		qWarning("%s: %s", qPrintable(file->fileName()),
 		  qPrintable(file->errorString()));
+		delete file;
 		_errorDownloads.insert(url, RETRIES);
 		return false;
 	}
