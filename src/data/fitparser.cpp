@@ -1,7 +1,6 @@
 #include <QtEndian>
 #include "fitparser.h"
 
-
 #define FIT_MAGIC 0x5449462E // .FIT
 
 #define RECORD_MESSAGE  20
@@ -9,60 +8,6 @@
 #define LOCATION        29
 #define COURSE_POINT    32
 #define TIMESTAMP_FIELD 253
-
-class Event {
-public:
-	Event() : id(0), type(0), data(0) {}
-
-	quint8 id;
-	quint8 type;
-	quint32 data;
-};
-
-struct FileHeader {
-	quint8 headerSize;
-	quint8 protocolVersion;
-	quint16 profileVersion;
-	quint32 dataSize;
-	quint32 magic;
-};
-
-struct FITParser::Field {
-	quint8 id;
-	quint8 size;
-	quint8 type;
-};
-
-class FITParser::MessageDefinition {
-public:
-	MessageDefinition() : endian(0), globalId(0), numFields(0), fields(0),
-	  numDevFields(0), devFields(0) {}
-	~MessageDefinition() {delete[] fields; delete[] devFields;}
-
-	quint8 endian;
-	quint16 globalId;
-	quint8 numFields;
-	Field *fields;
-	quint8 numDevFields;
-	Field *devFields;
-};
-
-class FITParser::CTX {
-public:
-	CTX(QFile *file, QVector<Waypoint> &waypoints)
-	  : file(file), waypoints(waypoints), len(0), endian(0), timestamp(0),
-	  ratio(NAN) {}
-
-	QFile *file;
-	QVector<Waypoint> &waypoints;
-	quint32 len;
-	quint8 endian;
-	quint32 timestamp;
-	MessageDefinition defs[16];
-	qreal ratio;
-	Trackpoint trackpoint;
-	SegmentData segment;
-};
 
 static QMap<int, QString> coursePointSymbolsInit()
 {
@@ -178,22 +123,14 @@ bool FITParser::skipValue(CTX &ctx, quint8 size)
 
 bool FITParser::parseDefinitionMessage(CTX &ctx, quint8 header)
 {
-	int local_id = header & 0x0f;
-	MessageDefinition *def = &(ctx.defs[local_id]);
-	quint8 i;
+	MessageDefinition *def = &(ctx.defs[header & 0x0f]);
+	quint8 numFields;
 
-
-	if (def->fields) {
-		delete[] def->fields;
-		def->fields = 0;
-	}
-	if (def->devFields) {
-		delete[] def->devFields;
-		def->devFields = 0;
-	}
+	def->fields.clear();
+	def->devFields.clear();
 
 	// reserved/unused
-	if (!readValue(ctx, i))
+	if (!skipValue(ctx, 1))
 		return false;
 
 	// endianness
@@ -209,40 +146,35 @@ bool FITParser::parseDefinitionMessage(CTX &ctx, quint8 header)
 	if (!readValue(ctx, def->globalId))
 		return false;
 
-	// number of records
-	if (!readValue(ctx, def->numFields))
+	// definition records
+	if (!readValue(ctx, numFields))
 		return false;
 
-	// definition records
-	def->fields = new Field[def->numFields];
-	for (i = 0; i < def->numFields; i++) {
-		static_assert(sizeof(def->fields[i]) == 3, "Invalid Field alignment");
-		if (!readData(ctx.file, (char*)&(def->fields[i]),
-		  sizeof(def->fields[i])))
+	def->fields.resize(numFields);
+	for (int i = 0; i < def->fields.size(); i++) {
+		if (!readData(ctx.file, (char*)&(def->fields[i]), sizeof(Field)))
 			return false;
-		ctx.len -= sizeof(def->fields[i]);
+		ctx.len -= sizeof(Field);
 	}
 
 	// developer definition records
 	if (header & 0x20) {
-		if (!readValue(ctx, def->numDevFields))
+		if (!readValue(ctx, numFields))
 			return false;
 
-		def->devFields = new Field[def->numDevFields];
-		for (i = 0; i < def->numDevFields; i++) {
-			static_assert(sizeof(def->fields[i]) == 3, "Invalid Field alignment");
-			if (!readData(ctx.file, (char*)&(def->devFields[i]),
-			  sizeof(def->devFields[i])))
+		def->devFields.resize(numFields);
+		for (int i = 0; i < def->devFields.size(); i++) {
+			if (!readData(ctx.file, (char*)&(def->devFields[i]), sizeof(Field)))
 				return false;
-			ctx.len -= sizeof(def->devFields[i]);
+			ctx.len -= sizeof(Field);
 		}
-	} else
-		def->numDevFields = 0;
+	}
 
 	return true;
 }
 
-bool FITParser::readField(CTX &ctx, Field *field, QVariant &val, bool &valid)
+bool FITParser::readField(CTX &ctx, const Field *field, QVariant &val,
+  bool &valid)
 {
 	bool ret;
 
@@ -299,22 +231,20 @@ bool FITParser::readField(CTX &ctx, Field *field, QVariant &val, bool &valid)
 
 bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 {
-	Field *field;
 	QVariant val;
 	bool valid;
 	Event event;
 	Waypoint waypoint;
 
-
-	if (!def->fields && !def->devFields) {
+	if (!def->fields.size() && !def->devFields.size()) {
 		_errorString = "Undefined data message";
 		return false;
 	}
 
 	ctx.endian = def->endian;
 
-	for (int i = 0; i < def->numFields; i++) {
-		field = &def->fields[i];
+	for (int i = 0; i < def->fields.size(); i++) {
+		const Field *field = &def->fields.at(i);
 		if (!readField(ctx, field, val, valid))
 			return false;
 		if (!valid)
@@ -416,12 +346,9 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 		}
 	}
 
-	for (int i = 0; i < def->numDevFields; i++) {
-		field = &def->devFields[i];
-		if (!readField(ctx, field, val, valid))
+	for (int i = 0; i < def->devFields.size(); i++)
+		if (!readField(ctx, &def->devFields.at(i), val, valid))
 			return false;
-	}
-
 
 	if (def->globalId == EVENT_MESSAGE) {
 		if ((event.id == 42 || event.id == 43)  && event.type == 3) {
@@ -453,15 +380,15 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 
 bool FITParser::parseDataMessage(CTX &ctx, quint8 header)
 {
-	int local_id = header & 0xf;
-	MessageDefinition *def = &(ctx.defs[local_id]);
+	int localId = header & 0xf;
+	MessageDefinition *def = &(ctx.defs[localId]);
 	return parseData(ctx, def);
 }
 
 bool FITParser::parseCompressedMessage(CTX &ctx, quint8 header)
 {
-	int local_id = (header >> 5) & 3;
-	MessageDefinition *def = &(ctx.defs[local_id]);
+	int localId = (header >> 5) & 3;
+	MessageDefinition *def = &(ctx.defs[localId]);
 	ctx.timestamp += header & 0x1f;
 	return parseData(ctx, def);
 }
@@ -487,7 +414,6 @@ bool FITParser::parseHeader(CTX &ctx)
 	quint16 crc;
 	qint64 len;
 
-	static_assert(sizeof(hdr) == 12, "Invalid FileHeader alignment");
 	len = ctx.file->read((char*)&hdr, sizeof(hdr));
 	if (len < 0) {
 		_errorString = "I/O error";
@@ -514,7 +440,6 @@ bool FITParser::parse(QFile *file, QList<TrackData> &tracks,
 	Q_UNUSED(routes);
 	Q_UNUSED(polygons);
 	CTX ctx(file, waypoints);
-
 
 	if (!parseHeader(ctx))
 		return false;

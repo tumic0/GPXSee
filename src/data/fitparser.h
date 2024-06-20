@@ -3,25 +3,72 @@
 
 #include "parser.h"
 
-class QFile;
-
 class FITParser : public Parser
 {
 public:
+	FITParser()
+	{
+		static_assert(sizeof(Field) == 3, "Invalid Field alignment");
+		static_assert(sizeof(FileHeader) == 12, "Invalid FileHeader alignment");
+	}
+
 	bool parse(QFile *file, QList<TrackData> &tracks, QList<RouteData> &routes,
 	  QList<Area> &polygons, QVector<Waypoint> &waypoints);
 	QString errorString() const {return _errorString;}
 	int errorLine() const {return 0;}
 
 private:
-	struct Field;
-	class MessageDefinition;
-	class CTX;
+	struct Event
+	{
+		Event() : data(0), id(0), type(0) {}
+
+		quint32 data;
+		quint8 id;
+		quint8 type;
+	};
+	struct FileHeader
+	{
+		quint8 headerSize;
+		quint8 protocolVersion;
+		quint16 profileVersion;
+		quint32 dataSize;
+		quint32 magic;
+	};
+	struct Field
+	{
+		quint8 id;
+		quint8 size;
+		quint8 type;
+	};
+	struct MessageDefinition
+	{
+		MessageDefinition() : globalId(0), endian(0) {}
+
+		QVector<Field> fields;
+		QVector<Field> devFields;
+		quint16 globalId;
+		quint8 endian;
+	};
+	struct CTX {
+		CTX(QFile *file, QVector<Waypoint> &waypoints)
+		  : file(file), waypoints(waypoints), len(0), endian(0), timestamp(0),
+		  ratio(NAN) {}
+
+		QFile *file;
+		QVector<Waypoint> &waypoints;
+		quint32 len;
+		quint8 endian;
+		quint32 timestamp;
+		MessageDefinition defs[16];
+		qreal ratio;
+		Trackpoint trackpoint;
+		SegmentData segment;
+	};
 
 	bool readData(QFile *file, char *data, size_t size);
 	template<class T> bool readValue(CTX &ctx, T &val);
 	bool skipValue(CTX &ctx, quint8 size);
-	bool readField(CTX &ctx, Field *field, QVariant &val, bool &valid);
+	bool readField(CTX &ctx, const Field *field, QVariant &val, bool &valid);
 
 	bool parseHeader(CTX &ctx);
 	bool parseRecord(CTX &ctx);
