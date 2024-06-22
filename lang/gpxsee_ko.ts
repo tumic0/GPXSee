@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="180"/>
         <source>GPSDump files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSDump 파일</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="181"/>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="276"/>
         <source>Clear list</source>
-        <translation type="unfinished"></translation>
+        <translation>목록 지우기</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="288"/>
@@ -571,12 +571,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="458"/>
         <source>Download data DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>데이터 DEM 다운로드</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="464"/>
         <source>Download map DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>지도 DEM 다운로드</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="469"/>
@@ -586,7 +586,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>언덕 음영 표시</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
@@ -708,7 +708,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="646"/>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>최근 열기</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="671"/>
@@ -1025,13 +1025,13 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1961"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM 타일 다운로드 제한을 초과했습니다. 이렇게 넓은 지역에 대한 데이터가 정말 필요하다면 수동으로 파일을 다운로드하세요.</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1964"/>
         <source>Download %n DEM tiles?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n개의 DEM 타일을 다운로드하시겠습니까?</numerusform>
         </translation>
     </message>
     <message>
@@ -1442,7 +1442,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="265"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="628"/>
         <source>px</source>
-        <translation type="unfinished">px</translation>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="163"/>
@@ -1840,27 +1840,27 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="644"/>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>불투명:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="646"/>
         <source>Blur radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>흐림 반경:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="648"/>
         <source>Azimuth:</source>
-        <translation type="unfinished"></translation>
+        <translation>방위:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="649"/>
         <source>Altitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>고도:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="650"/>
         <source>Z Factor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Z 요인:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="655"/>
@@ -1871,7 +1871,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="656"/>
         <source>Hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>언덕 음영</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="676"/>
@@ -1892,7 +1892,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
         <source>Lightening:</source>
-        <translation type="unfinished"></translation>
+        <translation>라이트닝:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
