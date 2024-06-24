@@ -15,32 +15,21 @@ using namespace Mapsforge;
 
 static double LIMIT = cos(deg2rad(170));
 
-static qreal area(const QPainterPath &polygon)
-{
-	qreal area = 0;
-
-	for (int i = 0; i < polygon.elementCount(); i++) {
-		int j = (i + 1) % polygon.elementCount();
-		area += polygon.elementAt(i).x * polygon.elementAt(j).y;
-		area -= polygon.elementAt(i).y * polygon.elementAt(j).x;
-	}
-	area /= 2.0;
-
-	return area;
-}
-
 static QPointF centroid(const QPainterPath &polygon)
 {
+	qreal area = 0;
 	qreal cx = 0, cy = 0;
-	qreal factor = 1.0 / (6.0 * area(polygon));
 
 	for (int i = 0; i < polygon.elementCount(); i++) {
-		int j = (i + 1) % polygon.elementCount();
+		int j = (i == polygon.elementCount() - 1) ? 0 : i + 1;
 		qreal f = (polygon.elementAt(i).x * polygon.elementAt(j).y
 		  - polygon.elementAt(j).x * polygon.elementAt(i).y);
+		area += f;
 		cx += (polygon.elementAt(i).x + polygon.elementAt(j).x) * f;
 		cy += (polygon.elementAt(i).y + polygon.elementAt(j).y) * f;
 	}
+
+	qreal factor = 1.0 / (3.0 * area);
 
 	return QPointF(cx * factor, cy * factor);
 }

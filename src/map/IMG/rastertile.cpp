@@ -70,32 +70,21 @@ static int minShieldZoom(Shield::Type type)
 	}
 }
 
-static qreal area(const QVector<QPointF> &polygon)
-{
-	qreal area = 0;
-
-	for (int i = 0; i < polygon.size(); i++) {
-		int j = (i + 1) % polygon.size();
-		area += polygon.at(i).x() * polygon.at(j).y();
-		area -= polygon.at(i).y() * polygon.at(j).x();
-	}
-	area /= 2.0;
-
-	return area;
-}
-
 static QPointF centroid(const QVector<QPointF> &polygon)
 {
+	qreal area = 0;
 	qreal cx = 0, cy = 0;
-	qreal factor = 1.0 / (6.0 * area(polygon));
 
 	for (int i = 0; i < polygon.size(); i++) {
-		int j = (i + 1) % polygon.size();
+		int j = (i == polygon.size() - 1) ? 0 : i + 1;
 		qreal f = (polygon.at(i).x() * polygon.at(j).y() - polygon.at(j).x()
 		  * polygon.at(i).y());
+		area += f;
 		cx += (polygon.at(i).x() + polygon.at(j).x()) * f;
 		cy += (polygon.at(i).y() + polygon.at(j).y()) * f;
 	}
+
+	qreal factor = 1.0 / (3.0 * area);
 
 	return QPointF(cx * factor, cy * factor);
 }
