@@ -12,47 +12,13 @@
 using namespace ENC;
 
 #define TEXT_EXTENT 160
-#define TSSLPT_SIZE  0.005 /* ll */
+#define TSSLPT_SIZE 24
 
 typedef QSet<Coordinates> PointSet;
 
 static const float C1 = 0.866025f; /* sqrt(3)/2 */
 static const QColor tsslptPen = QColor(0xeb, 0x49, 0xeb);
 static const QColor tsslptBrush = QColor(0xeb, 0x49, 0xeb, 0x80);
-
-static double area(const QVector<Coordinates> &polygon)
-{
-	double area = 0;
-
-	for (int i = 0; i < polygon.size() - 1; i++) {
-		const Coordinates &pi = polygon.at(i);
-		const Coordinates &pj = polygon.at(i+1);
-		area += pi.lon() * pj.lat();
-		area -= pi.lat() * pj.lon();
-	}
-	area /= 2.0;
-
-	return area;
-}
-
-static Coordinates centroid(const QVector<Coordinates> &polygon)
-{
-	Q_ASSERT(polygon.size() > 3);
-	Q_ASSERT(polygon.first() == polygon.last());
-
-	double cx = 0, cy = 0;
-	double factor = 1.0 / (6.0 * area(polygon));
-
-	for (int i = 0; i < polygon.size() - 1; i++) {
-		const Coordinates &pi = polygon.at(i);
-		const Coordinates &pj = polygon.at(i+1);
-		double f = (pi.lon() * pj.lat() - pj.lon() * pi.lat());
-		cx += (pi.lon() + pj.lon()) * f;
-		cy += (pi.lat() + pj.lat()) * f;
-	}
-
-	return Coordinates(cx * factor, cy * factor);
-}
 
 static double angle(uint type, const QVariant &param)
 {
@@ -73,6 +39,31 @@ static bool showLabel(const QImage *img, const Range &range, int zoom, int type)
 		return false;
 
 	return true;
+}
+
+QPointF RasterTile::centroid(const QVector<Coordinates> &polygon) const
+{
+	Q_ASSERT(polygon.size() > 3);
+	Q_ASSERT(polygon.first() == polygon.last());
+
+	double area = 0;
+	double cx = 0, cy = 0;
+	QPointF pi;
+	QPointF pj(ll2xy(polygon.at(0)));
+
+	for (int i = 0; i < polygon.size() - 1; i++) {
+		pi = pj;
+		pj = ll2xy(polygon.at(i + 1));
+
+		double f = pi.x() * pj.y() - pj.x() * pi.y();
+		area += f;
+		cx += (pi.x() + pj.x()) * f;
+		cy += (pi.y() + pj.y()) * f;
+	}
+
+	double factor = 1.0 / (3.0 * area);
+
+	return QPointF(cx * factor, cy * factor);
 }
 
 QPainterPath RasterTile::painterPath(const Polygon &polygon) const
@@ -136,27 +127,26 @@ QVector<QPolygonF> RasterTile::polylineM(const QVector<Coordinates> &path) const
 	return polys;
 }
 
-QPolygonF RasterTile::tsslptArrow(const Coordinates &c, qreal angle) const
+QPolygonF RasterTile::tsslptArrow(const QPointF &p, qreal angle) const
 {
-	Coordinates t[3], r[4];
+	QPointF t[3], r[4];
 	QPolygonF polygon;
 
-	t[0] = c;
-	t[1] = Coordinates(t[0].lon() - qCos(angle - M_PI/3) * TSSLPT_SIZE,
-	  t[0].lat() - qSin(angle - M_PI/3) * TSSLPT_SIZE);
-	t[2] = Coordinates(t[0].lon() - qCos(angle - M_PI + M_PI/3) * TSSLPT_SIZE,
-	  t[0].lat() - qSin(angle - M_PI + M_PI/3) * TSSLPT_SIZE);
+	t[0] = p;
+	t[1] = QPointF(t[0].x() - qCos(angle - M_PI/3) * TSSLPT_SIZE,
+	  t[0].y() - qSin(angle - M_PI/3) * TSSLPT_SIZE);
+	t[2] = QPointF(t[0].x() - qCos(angle - M_PI + M_PI/3) * TSSLPT_SIZE,
+	  t[0].y() - qSin(angle - M_PI + M_PI/3) * TSSLPT_SIZE);
 
-	LineC l(t[1], t[2]);
+	QLineF l(t[1], t[2]);
 	r[0] = l.pointAt(0.25);
 	r[1] = l.pointAt(0.75);
-	r[2] = Coordinates(r[0].lon() - C1 * TSSLPT_SIZE * qCos(angle - M_PI/2),
-	  r[0].lat() - C1 * TSSLPT_SIZE * qSin(angle - M_PI/2));
-	r[3] = Coordinates(r[1].lon() - C1 * TSSLPT_SIZE * qCos(angle - M_PI/2),
-	  r[1].lat() - C1 * TSSLPT_SIZE * qSin(angle - M_PI/2));
+	r[2] = QPointF(r[0].x() - C1 * TSSLPT_SIZE * qCos(angle - M_PI/2),
+	  r[0].y() - C1 * TSSLPT_SIZE * qSin(angle - M_PI/2));
+	r[3] = QPointF(r[1].x() - C1 * TSSLPT_SIZE * qCos(angle - M_PI/2),
+	  r[1].y() - C1 * TSSLPT_SIZE * qSin(angle - M_PI/2));
 
-	polygon << ll2xy(t[0]) << ll2xy(t[2]) << ll2xy(r[1]) << ll2xy(r[3])
-	  << ll2xy(r[2]) << ll2xy(r[0]) << ll2xy(t[1]);
+	polygon << t[0] << t[2] << r[1] << r[3] << r[2] << r[0] << t[1];
 
 	return polygon;
 }
@@ -169,7 +159,7 @@ void RasterTile::drawArrows(QPainter *painter,
 
 		if (poly.type()>>16 == TSSLPT) {
 			QPolygonF polygon(tsslptArrow(centroid(poly.path().first()),
-			  deg2rad(180 - poly.param().toDouble())));
+			  deg2rad(poly.param().toDouble())));
 
 			painter->setPen(QPen(tsslptPen, 1));
 			painter->setBrush(QBrush(tsslptBrush));
@@ -245,6 +235,7 @@ void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
 		const QString *label = 0;
 		const QFont *fnt = 0;
 		const QColor *color = 0, *hColor = 0;
+		QPoint offset(0, 0);
 
 		if (!poly.label().isEmpty()) {
 			const Style::Point &style = _style->point(poly.type());
@@ -257,14 +248,15 @@ void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
 		  || poly.type() == SUBTYPE(I_BERTHS, 6)) {
 			const Style::Point &style = _style->point(poly.type());
 			img = style.img().isNull() ? 0 : &style.img();
+			offset = style.offset();
 		}
 
 		if ((!label || !fnt) && !img)
 			continue;
 
-		TextPointItem *item = new TextPointItem(
-		  ll2xy(centroid(poly.path().first())).toPoint(),
-		  label, fnt, img, color, hColor, 0, 0);
+		TextPointItem *item = new TextPointItem(offset +
+		  centroid(poly.path().first()).toPoint(), label, fnt, img, color,
+		  hColor, 0, 0);
 		if (item->isValid() && _rect.contains(item->boundingRect().toRect())
 		  && !item->collides(textItems))
 			textItems.append(item);

@@ -41,7 +41,8 @@ private:
 	QPainterPath painterPath(const Polygon &polygon) const;
 	QPolygonF polyline(const QVector<Coordinates> &path) const;
 	QVector<QPolygonF> polylineM(const QVector<Coordinates> &path) const;
-	QPolygonF tsslptArrow(const Coordinates &c, qreal angle) const;
+	QPolygonF tsslptArrow(const QPointF &p, qreal angle) const;
+	QPointF centroid(const QVector<Coordinates> &polygon) const;
 	void processPoints(QList<MapData::Point> &points,
 	  QList<TextItem*> &textItems, QList<TextItem *> &lights);
 	void processLines(const QList<MapData::Line> &lines,
