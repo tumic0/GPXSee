@@ -7,11 +7,15 @@ class GCS::Entry {
 public:
 	Entry(int id, int gd, const QString &name, const GCS &gcs)
 	  : _id(id), _gd(gd), _name(name), _gcs(gcs) {}
+	Entry(int id) : _id(id) {}
 
 	int id() const {return _id;}
 	int gd() const {return _gd;}
 	const QString &name() const {return _name;}
 	const GCS &gcs() const {return _gcs;}
+
+	bool operator<(const Entry &other) const
+	  {return _id < other._id;}
 
 private:
 	int _id, _gd;
@@ -59,11 +63,14 @@ QList<GCS::Entry> GCS::defaults()
 
 GCS GCS::gcs(int id)
 {
-	for (int i = 0; i < _gcss.size(); i++)
-		if (_gcss.at(i).id() == id)
-			return _gcss.at(i).gcs();
+	// There are GCSs without EPSG code (id = 0) in the list!
+	if (!id)
+		return GCS();
 
-	return GCS();
+	QList<GCS::Entry>::iterator it = std::lower_bound(
+	  _gcss.begin(), _gcss.end(), id);
+
+	return (it == _gcss.end()) ? GCS() : it->gcs();
 }
 
 GCS GCS::gcs(int geodeticDatum, int primeMeridian, int angularUnits)
@@ -220,6 +227,8 @@ bool GCS::loadList(const QString &path)
 			  qPrintable(path), csv.line() - 1);
 	}
 
+	std::sort(_gcss.begin(), _gcss.end());
+
 	return true;
 }
 
@@ -229,7 +238,7 @@ QList<KV<int, QString> > GCS::list()
 
 	for (int i = 0; i < _gcss.size(); i++) {
 		const Entry &e = _gcss.at(i);
-		if (!e.id() || (i && e.id() == list.last().key()))
+		if (!e.id() || (!list.isEmpty() && e.id() == list.last().key()))
 			continue;
 
 		list.append(KV<int, QString>(e.id(), e.name() + " / Geographic 2D"));
