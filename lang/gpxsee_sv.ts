@@ -860,14 +860,14 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1961"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM-kartrutors nedladdningsgräns har överskridits. Ladda ner filer manuellt, om du verkligen behöver data för ett så stort område.</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1964"/>
         <source>Download %n DEM tiles?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Vill du ladda ner %n DEM-kartruta?</numerusform>
+            <numerusform>Vill du ladda ner %n DEM-kartrutor?</numerusform>
         </translation>
     </message>
     <message>
@@ -966,12 +966,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="458"/>
         <source>Download data DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Ladda ner data DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="464"/>
         <source>Download map DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Ladda ner karta DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="739"/>
@@ -1750,7 +1750,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="265"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="628"/>
         <source>px</source>
-        <translation type="unfinished">px</translation>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="175"/>
@@ -1835,27 +1835,27 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="644"/>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Opacitet:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="646"/>
         <source>Blur radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Oskärperadie:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="648"/>
         <source>Azimuth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Azimut:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="649"/>
         <source>Altitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Altitud:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="650"/>
         <source>Z Factor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Z-faktor:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="655"/>
@@ -1866,7 +1866,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="656"/>
         <source>Hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Bergskuggning</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="676"/>
@@ -1887,7 +1887,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
         <source>Lightening:</source>
-        <translation type="unfinished"></translation>
+        <translation>Belysning:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
