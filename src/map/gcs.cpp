@@ -70,7 +70,7 @@ GCS GCS::gcs(int id)
 	QList<GCS::Entry>::iterator it = std::lower_bound(
 	  _gcss.begin(), _gcss.end(), id);
 
-	return (it == _gcss.end()) ? GCS() : it->gcs();
+	return (it == _gcss.end() || id != it->id()) ? GCS() : it->gcs();
 }
 
 GCS GCS::gcs(int geodeticDatum, int primeMeridian, int angularUnits)
