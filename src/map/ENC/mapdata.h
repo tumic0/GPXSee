@@ -13,8 +13,8 @@ class MapData
 public:
 	class Poly {
 	public:
-		Poly(uint type, const Polygon &path, const QVector<QByteArray> &params,
-		  uint HUNI);
+		Poly(uint type, const Polygon &path, const QString &label,
+		  const QVector<QByteArray> &params, uint HUNI);
 
 		RectC bounds() const {return _path.boundingRect();}
 		const Polygon &path() const {return _path;}

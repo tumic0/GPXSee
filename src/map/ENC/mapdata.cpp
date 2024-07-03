@@ -288,7 +288,7 @@ MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
 	}
 }
 
-MapData::Poly::Poly(uint type, const Polygon &path,
+MapData::Poly::Poly(uint type, const Polygon &path, const QString &label,
   const QVector<QByteArray> &params, uint HUNI) : _type(type), _path(path)
 {
 	if (type == TYPE(DEPARE) && params.size())
@@ -302,7 +302,8 @@ MapData::Poly::Poly(uint type, const Polygon &path,
 			_label = QString::fromUtf8("\xE2\x86\x95") + UNIT_SPACE
 			  + QString::number(clr) + UNIT_SPACE + hUnits(HUNI);
 		}
-	}
+	} else if (type>>16 == LNDARE || type>>16 == SEAARE)
+		_label = label;
 }
 
 MapData::Line::Line(uint type, const QVector<Coordinates> &path,
@@ -647,6 +648,9 @@ MapData::Attr MapData::polyAttr(const ISO8211::Record &r, uint OBJL)
 		const QVector<QVariant> &av = ATTF->data().at(i);
 		uint key = av.at(0).toUInt();
 
+		if (key == OBJNAM)
+			label = QString::fromLatin1(av.at(1).toByteArray());
+
 		if ((OBJL == RESARE && key == CATREA)
 		  || (OBJL == I_RESARE && key == CATREA)
 		  || (OBJL == ACHARE && key == CATACH)
@@ -707,7 +711,7 @@ MapData::Poly *MapData::polyObject(const ISO8211::Record &r,
 	Attr attr(polyAttr(r, OBJL));
 
 	return (path.isEmpty() ? 0 : new Poly(SUBTYPE(OBJL, attr.subtype()), path,
-	  attr.params(), HUNI));
+	  attr.label(), attr.params(), HUNI));
 }
 
 bool MapData::processRecord(const ISO8211::Record &record,

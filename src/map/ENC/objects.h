@@ -78,6 +78,7 @@
 #define RESARE 112
 #define RIVERS 114
 #define ROADWY 116
+#define SEAARE 119
 #define SLCONS 122
 #define SISTAT 123
 #define SILTNK 125
