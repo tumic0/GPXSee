@@ -9,7 +9,7 @@
 #include "common/hash.h"
 #include "common/rectc.h"
 #include "common/kv.h"
-#include "common/downloader.h"
+#include "downloader.h"
 #include "projection.h"
 #include "coordinatesystem.h"
 

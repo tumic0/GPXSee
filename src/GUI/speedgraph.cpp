@@ -69,8 +69,9 @@ GraphItem *SpeedGraph::loadGraph(const Graph &graph, const Track &track,
 	return gi;
 }
 
-QList<GraphItem*> SpeedGraph::loadData(const Data &data)
+QList<GraphItem*> SpeedGraph::loadData(const Data &data, Map *map)
 {
+	Q_UNUSED(map);
 	QList<GraphItem*> graphs;
 
 	for (int i = 0; i < data.tracks().count(); i++) {

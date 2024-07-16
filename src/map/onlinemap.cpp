@@ -3,7 +3,7 @@
 #include <QPixmapCache>
 #include "common/rectc.h"
 #include "common/programpaths.h"
-#include "common/downloader.h"
+#include "downloader.h"
 #include "osm.h"
 #include "onlinemap.h"
 

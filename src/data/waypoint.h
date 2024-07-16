@@ -12,6 +12,8 @@
 #include "link.h"
 #include "style.h"
 
+class Map;
+
 class Waypoint
 {
 public:
@@ -33,7 +35,7 @@ public:
 	qreal elevation() const {return _elevation;}
 	const PointStyle &style() const {return _style;}
 
-	QPair<qreal, qreal> elevations() const;
+	QPair<qreal, qreal> elevations(Map *map) const;
 
 	void setCoordinates(const Coordinates &coordinates)
 	  {_coordinates = coordinates;}

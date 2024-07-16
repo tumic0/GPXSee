@@ -14,7 +14,7 @@ public:
 	~PowerGraph();
 
 	QString label() const {return tr("Power");}
-	QList<GraphItem*> loadData(const Data &data);
+	QList<GraphItem*> loadData(const Data &data, Map *map);
 	void clear();
 	void showTracks(bool show);
 

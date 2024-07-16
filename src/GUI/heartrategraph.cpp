@@ -39,8 +39,9 @@ void HeartRateGraph::setInfo()
 		clearInfo();
 }
 
-QList<GraphItem*> HeartRateGraph::loadData(const Data &data)
+QList<GraphItem*> HeartRateGraph::loadData(const Data &data, Map *map)
 {
+	Q_UNUSED(map);
 	QList<GraphItem*> graphs;
 
 	for (int i = 0; i < data.tracks().count(); i++) {

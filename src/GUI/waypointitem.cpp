@@ -25,7 +25,7 @@ ToolTip WaypointItem::info() const
 		tt.insert(qApp->translate("WaypointItem", "Name"), _waypoint.name());
 	tt.insert(qApp->translate("WaypointItem", "Coordinates"),
 	  Format::coordinates(_waypoint.coordinates(), _format));
-	QPair<qreal, qreal> elevations(_waypoint.elevations());
+	QPair<qreal, qreal> elevations(_waypoint.elevations(_map));
 	if (!std::isnan(elevations.first)) {
 		QString val = Format::elevation(elevations.first, _units);
 		if (!std::isnan(elevations.second))
@@ -71,7 +71,7 @@ ToolTip WaypointItem::info() const
 }
 
 WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
-  QGraphicsItem *parent) : GraphicsItem(parent)
+  QGraphicsItem *parent) : GraphicsItem(parent), _map(map)
 {
 	_waypoint = waypoint;
 	_showLabel = false;
@@ -91,6 +91,12 @@ WaypointItem::WaypointItem(const Waypoint &waypoint, Map *map,
 	setPos(map->ll2xy(waypoint.coordinates()));
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
+}
+
+void WaypointItem::setMap(Map *map)
+{
+	_map = map;
+	setPos(map->ll2xy(_waypoint.coordinates()));
 }
 
 void WaypointItem::updateCache()

@@ -14,7 +14,7 @@ public:
 	~TemperatureGraph();
 
 	QString label() const {return tr("Temperature");}
-	QList<GraphItem*> loadData(const Data &data);
+	QList<GraphItem*> loadData(const Data &data, Map *map);
 	void clear();
 	void setUnits(enum Units units);
 	void showTracks(bool show);

@@ -17,7 +17,7 @@
 #include <QRegularExpression>
 #include <QLocale>
 #include <private/qzipreader_p.h>
-#include "rectc.h"
+#include "common/rectc.h"
 #include "dem.h"
 
 

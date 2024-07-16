@@ -9,6 +9,7 @@
 #include "graph.h"
 #include "path.h"
 
+class Map;
 
 class Track
 {
@@ -17,7 +18,7 @@ public:
 
 	Path path() const;
 
-	GraphPair elevation() const;
+	GraphPair elevation(Map *map) const;
 	GraphPair speed() const;
 	Graph heartRate() const;
 	Graph temperature() const;
@@ -68,7 +69,7 @@ private:
 	qreal lastTime(int seg);
 	bool discardStopPoint(const Segment &seg, int i) const;
 
-	Graph demElevation() const;
+	Graph demElevation(Map *map) const;
 	Graph gpsElevation() const;
 	Graph reportedSpeed() const;
 	Graph computedSpeed() const;

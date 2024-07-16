@@ -13,8 +13,8 @@
 #endif // Q_OS_ANDROID
 #include "common/programpaths.h"
 #include "common/config.h"
-#include "common/downloader.h"
-#include "common/dem.h"
+#include "map/downloader.h"
+#include "map/dem.h"
 #include "map/ellipsoid.h"
 #include "map/gcs.h"
 #include "map/conversion.h"

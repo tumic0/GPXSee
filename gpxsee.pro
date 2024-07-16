@@ -39,12 +39,9 @@ HEADERS += src/common/config.h \
     src/common/greatcircle.h \
     src/common/programpaths.h \
     src/common/tifffile.h \
-    src/common/downloader.h \
     src/common/polygon.h \
     src/common/color.h \
     src/common/csv.h \
-    src/common/dem.h \
-    src/common/demloader.h \
     src/GUI/crosshairitem.h \
     src/GUI/motioninfoitem.h \
     src/GUI/pluginparameters.h \
@@ -122,6 +119,8 @@ HEADERS += src/common/config.h \
     src/data/gpsdumpparser.h \
     src/data/style.h \
     src/data/twonavparser.h \
+    src/map/downloader.h \
+    src/map/demloader.h \
     src/map/ENC/attributes.h \
     src/map/ENC/mapdata.h \
     src/map/ENC/atlasdata.h \
@@ -196,6 +195,7 @@ HEADERS += src/common/config.h \
     src/map/sqlitemap.h \
     src/map/utm.h \
     src/map/map.h \
+    src/map/dem.h \
     src/map/maplist.h \
     src/map/onlinemap.h \
     src/map/tile.h \
@@ -281,10 +281,7 @@ SOURCES += src/main.cpp \
     src/common/greatcircle.cpp \
     src/common/programpaths.cpp \
     src/common/tifffile.cpp \
-    src/common/downloader.cpp \
     src/common/csv.cpp \
-    src/common/dem.cpp \
-    src/common/demloader.cpp \
     src/GUI/crosshairitem.cpp \
     src/GUI/motioninfoitem.cpp \
     src/GUI/pluginparameters.cpp \
@@ -347,6 +344,8 @@ SOURCES += src/main.cpp \
     src/GUI/pngexportdialog.cpp \
     src/GUI/projectioncombobox.cpp \
     src/GUI/passwordedit.cpp \
+    src/map/downloader.cpp \
+    src/map/demloader.cpp \
     src/map/ENC/atlasdata.cpp \
     src/map/ENC/mapdata.cpp \
     src/map/ENC/rastertile.cpp \
@@ -436,6 +435,7 @@ SOURCES += src/main.cpp \
     src/map/geocentric.cpp \
     src/map/jnxmap.cpp \
     src/map/map.cpp \
+    src/map/dem.cpp \
     src/map/geotiffmap.cpp \
     src/map/image.cpp \
     src/map/mbtilesmap.cpp \

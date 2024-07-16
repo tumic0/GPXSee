@@ -16,7 +16,7 @@ public:
 	~SpeedGraph();
 
 	QString label() const {return tr("Speed");}
-	QList<GraphItem*> loadData(const Data &data);
+	QList<GraphItem*> loadData(const Data &data, Map *map);
 	void clear();
 	void setUnits(Units units);
 	void setTimeType(TimeType type);

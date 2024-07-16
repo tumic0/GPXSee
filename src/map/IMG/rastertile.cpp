@@ -1,7 +1,7 @@
 #include <QFont>
 #include <QPainter>
 #include <QCache>
-#include "common/dem.h"
+#include "map/dem.h"
 #include "map/textpathitem.h"
 #include "map/textpointitem.h"
 #include "map/bitmapline.h"

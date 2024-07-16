@@ -1,4 +1,4 @@
-#include "common/dem.h"
+#include "map/map.h"
 #include "track.h"
 
 
@@ -277,11 +277,10 @@ Graph Track::gpsElevation() const
 	return ret;
 }
 
-Graph Track::demElevation() const
+Graph Track::demElevation(Map *map) const
 {
 	Graph ret;
 
-	DEM::lock();
 	for (int i = 0; i < _data.size(); i++) {
 		const SegmentData &sd = _data.at(i);
 		if (sd.size() < 2)
@@ -290,7 +289,7 @@ Graph Track::demElevation() const
 		GraphSegment gs(seg.start);
 
 		for (int j = 0; j < sd.size(); j++) {
-			qreal dem = DEM::elevation(sd.at(j).coordinates());
+			qreal dem = map->elevation(sd.at(j).coordinates());
 			if (std::isnan(dem) || seg.outliers.contains(j))
 				continue;
 			gs.append(GraphPoint(seg.distance.at(j), seg.time.at(j), dem));
@@ -299,7 +298,6 @@ Graph Track::demElevation() const
 		if (gs.size() >= 2)
 			ret.append(filter(gs, _elevationWindow));
 	}
-	DEM::unlock();
 
 	if (_data.style().color().isValid())
 		ret.setColor(_data.style().color());
@@ -307,18 +305,18 @@ Graph Track::demElevation() const
 	return ret;
 }
 
-GraphPair Track::elevation() const
+GraphPair Track::elevation(Map *map) const
 {
 	if (_useDEM) {
-		Graph dem(demElevation());
+		Graph dem(demElevation(map));
 		return (dem.isEmpty())
 		  ? GraphPair(gpsElevation(), Graph())
 		  : GraphPair(dem, _show2ndElevation ? gpsElevation() : Graph());
 	} else {
 		Graph gps(gpsElevation());
 		return (gps.isEmpty())
-		  ? GraphPair(demElevation(), Graph())
-		  : GraphPair(gps, _show2ndElevation ? demElevation() : Graph());
+		  ? GraphPair(demElevation(map), Graph())
+		  : GraphPair(gps, _show2ndElevation ? demElevation(map) : Graph());
 	}
 }
 

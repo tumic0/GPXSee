@@ -14,7 +14,7 @@ public:
 	~CadenceGraph();
 
 	QString label() const {return tr("Cadence");}
-	QList<GraphItem*> loadData(const Data &data);
+	QList<GraphItem*> loadData(const Data &data, Map *map);
 	void clear();
 	void showTracks(bool show);
 

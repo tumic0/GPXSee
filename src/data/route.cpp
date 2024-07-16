@@ -1,4 +1,4 @@
-#include "common/dem.h"
+#include "map/map.h"
 #include "route.h"
 
 bool Route::_useDEM = false;
@@ -49,19 +49,17 @@ Graph Route::gpsElevation() const
 	return graph;
 }
 
-Graph Route::demElevation() const
+Graph Route::demElevation(Map *map) const
 {
 	Graph graph;
 	QDateTime date;
 	GraphSegment gs(date);
 
-	DEM::lock();
 	for (int i = 0; i < _data.size(); i++) {
-		qreal dem = DEM::elevation(_data.at(i).coordinates());
+		qreal dem = map->elevation(_data.at(i).coordinates());
 		if (!std::isnan(dem))
 			gs.append(GraphPoint(_distance.at(i), NAN, dem));
 	}
-	DEM::unlock();
 
 	if (gs.size() >= 2)
 		graph.append(gs);
@@ -72,18 +70,18 @@ Graph Route::demElevation() const
 	return graph;
 }
 
-GraphPair Route::elevation() const
+GraphPair Route::elevation(Map *map) const
 {
 	if (_useDEM) {
-		Graph dem(demElevation());
+		Graph dem(demElevation(map));
 		return (dem.isEmpty())
 		  ? GraphPair(gpsElevation(), Graph())
 		  : GraphPair(dem, _show2ndElevation ? gpsElevation() : Graph());
 	} else {
 		Graph gps(gpsElevation());
 		return (gps.isEmpty())
-		  ? GraphPair(demElevation(), Graph())
-		  : GraphPair(gps, _show2ndElevation ? demElevation() : Graph());
+		  ? GraphPair(demElevation(map), Graph())
+		  : GraphPair(gps, _show2ndElevation ? demElevation(map) : Graph());
 	}
 }
 

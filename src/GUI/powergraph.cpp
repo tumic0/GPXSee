@@ -39,8 +39,9 @@ void PowerGraph::setInfo()
 		clearInfo();
 }
 
-QList<GraphItem*> PowerGraph::loadData(const Data &data)
+QList<GraphItem*> PowerGraph::loadData(const Data &data, Map *map)
 {
+	Q_UNUSED(map);
 	QList<GraphItem*> graphs;
 
 	for (int i = 0; i < data.tracks().count(); i++) {

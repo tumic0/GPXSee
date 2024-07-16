@@ -14,7 +14,7 @@ public:
 	~ElevationGraph();
 
 	QString label() const {return tr("Elevation");}
-	QList<GraphItem*> loadData(const Data &data);
+	QList<GraphItem*> loadData(const Data &data, Map *map);
 	void clear();
 	void setUnits(enum Units units);
 	void showTracks(bool show);

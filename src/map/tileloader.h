@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QString>
-#include "common/downloader.h"
+#include "downloader.h"
 #include "rectd.h"
 
 class TileLoader : public QObject

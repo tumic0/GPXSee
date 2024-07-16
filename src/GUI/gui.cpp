@@ -29,10 +29,10 @@
 #include <QGeoPositionInfoSource>
 #include "common/config.h"
 #include "common/programpaths.h"
-#include "common/downloader.h"
-#include "common/demloader.h"
 #include "data/data.h"
 #include "data/poi.h"
+#include "map/downloader.h"
+#include "map/demloader.h"
 #include "map/maplist.h"
 #include "map/emptymap.h"
 #include "map/crs.h"
@@ -1145,7 +1145,7 @@ void GUI::loadData(const Data &data)
 		_pathName = QString();
 
 	for (int i = 0; i < _tabs.count(); i++)
-		graphs.append(_tabs.at(i)->loadData(data));
+		graphs.append(_tabs.at(i)->loadData(data, _map));
 	if (updateGraphTabs())
 		_splitter->refresh();
 	paths = _mapView->loadData(data);

@@ -17,7 +17,7 @@ public:
 
 	const Waypoint &waypoint() const {return _waypoint;}
 
-	void setMap(Map *map) {setPos(map->ll2xy(_waypoint.coordinates()));}
+	void setMap(Map *map);
 	void setSize(int size);
 	void setColor(const QColor &color);
 	void showLabel(bool show);
@@ -50,6 +50,8 @@ private:
 	const QColor &color() const;
 
 	Waypoint _waypoint;
+
+	Map *_map;
 
 	QColor _color;
 	int _size;

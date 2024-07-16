@@ -1,6 +1,6 @@
 #include <cmath>
 #include <QLineF>
-#include "common/dem.h"
+#include "dem.h"
 #include "map.h"
 
 

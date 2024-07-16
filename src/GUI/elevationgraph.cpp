@@ -118,14 +118,14 @@ GraphItem *ElevationGraph::loadGraph(const Graph &graph, PathType type,
 	return gi;
 }
 
-QList<GraphItem*> ElevationGraph::loadData(const Data &data)
+QList<GraphItem*> ElevationGraph::loadData(const Data &data, Map *map)
 {
 	QList<GraphItem*> graphs;
 	GraphItem *primary, *secondary;
 
 	for (int i = 0; i < data.tracks().count(); i++) {
 		QColor color(_palette.nextColor());
-		const GraphPair &gp = data.tracks().at(i).elevation();
+		const GraphPair &gp = data.tracks().at(i).elevation(map);
 
 		primary = loadGraph(gp.primary(), TrackPath, color, true);
 		secondary = primary
@@ -137,7 +137,7 @@ QList<GraphItem*> ElevationGraph::loadData(const Data &data)
 	}
 	for (int i = 0; i < data.routes().count(); i++) {
 		QColor color(_palette.nextColor());
-		const GraphPair &gp = data.routes().at(i).elevation();
+		const GraphPair &gp = data.routes().at(i).elevation(map);
 
 		primary = loadGraph(gp.primary(), RoutePath, color, true);
 		secondary = primary

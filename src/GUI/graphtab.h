@@ -7,6 +7,7 @@
 #include "units.h"
 #include "timetype.h"
 
+class Map;
 class Data;
 class GraphItem;
 
@@ -24,7 +25,7 @@ public:
 	virtual ~GraphTab() {}
 
 	virtual QString label() const = 0;
-	virtual QList<GraphItem*> loadData(const Data &data) = 0;
+	virtual QList<GraphItem*> loadData(const Data &data, Map *map) = 0;
 	virtual void clear() {GraphView::clear();}
 	virtual void setUnits(enum Units units) {GraphView::setUnits(units);}
 	virtual void setGraphType(GraphType type) {GraphView::setGraphType(type);}
