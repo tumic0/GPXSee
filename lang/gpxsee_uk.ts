@@ -576,7 +576,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Показати затінення пагорба</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
@@ -752,10 +752,10 @@
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1964"/>
         <source>Download %n DEM tiles?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Завантажити %n плитку DEM?</numerusform>
+            <numerusform>Завантажити %n плитки DEM?</numerusform>
+            <numerusform>Завантажити %n плиток DEM?</numerusform>
         </translation>
     </message>
     <message>
@@ -1034,7 +1034,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1961"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевищено ліміт завантаження плиток DEM. Якщо вам дійсно потрібні дані для такої величезної території, завантажте файли вручну.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1977"/>
@@ -1753,7 +1753,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="265"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="628"/>
         <source>px</source>
-        <translation type="unfinished">px</translation>
+        <translation>ап</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="301"/>
@@ -1822,27 +1822,27 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="644"/>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Непрозорість:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="646"/>
         <source>Blur radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Радіус розмиття:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="648"/>
         <source>Azimuth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Азимут:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="649"/>
         <source>Altitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Висота:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="650"/>
         <source>Z Factor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Фактор Z:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="655"/>
@@ -1853,7 +1853,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="656"/>
         <source>Hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Затінення пагорба</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="676"/>
@@ -1874,7 +1874,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
         <source>Lightening:</source>
-        <translation type="unfinished"></translation>
+        <translation>Освітлення:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
