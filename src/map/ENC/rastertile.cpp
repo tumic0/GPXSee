@@ -1,6 +1,5 @@
 #include <QtMath>
 #include <QPainter>
-#include "common/linec.h"
 #include "map/bitmapline.h"
 #include "map/textpathitem.h"
 #include "map/textpointitem.h"
