@@ -1850,7 +1850,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="649"/>
         <source>Altitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Korkeus:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="650"/>
