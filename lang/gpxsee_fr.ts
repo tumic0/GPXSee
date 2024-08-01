@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="180"/>
         <source>GPSDump files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers GPSDump</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="181"/>
@@ -330,7 +330,7 @@
     <message>
         <location filename="../src/GUI/format.cpp" line="64"/>
         <source>nmi</source>
-        <translation>nmi</translation>
+        <translation>NM</translation>
     </message>
     <message>
         <location filename="../src/GUI/format.cpp" line="68"/>
@@ -457,7 +457,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="276"/>
         <source>Clear list</source>
-        <translation type="unfinished"></translation>
+        <translation>Vider la liste</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="288"/>
@@ -589,7 +589,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les ombrages du relief</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="480"/>
@@ -691,7 +691,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="646"/>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers récents</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="698"/>
@@ -818,7 +818,7 @@
         <location filename="../src/GUI/gui.cpp" line="1778"/>
         <location filename="../src/GUI/gui.cpp" line="1878"/>
         <source>Don&apos;t show again</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne plus afficher</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1358"/>
@@ -860,14 +860,14 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1961"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le téléchargement des tuiles MNT a atteint sa limite. Si vous avez vraiment besoin des données pour une zone aussi énorme, téléchargez les fichiers manuellement.</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="1964"/>
         <source>Download %n DEM tiles?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Télécharger %n tuile de MNT&#x202f;?</numerusform>
+            <numerusform>Télécharger %n tuiles de MNT&#x202f;?</numerusform>
         </translation>
     </message>
     <message>
@@ -966,12 +966,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="458"/>
         <source>Download data DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Télécharger les données du MNT</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="464"/>
         <source>Download map DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Télécharger la carte du MNT</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="739"/>
@@ -1147,7 +1147,7 @@
     <message>
         <location filename="../src/GUI/graphview.cpp" line="142"/>
         <source>nmi</source>
-        <translation>nmi</translation>
+        <translation>NM</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="156"/>
@@ -1458,7 +1458,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="70"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
-        <translation type="unfinished">Sélectionnez le système de référence de coordonnée (CRS) approprié pour les cartes sans définition de CRS (JNX, KMZ et World file maps).</translation>
+        <translation>Sélectionnez le système de coordonnées approprié pour les cartes n&apos;en contenant pas (JNX, KMZ et World file maps).</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="73"/>
@@ -1750,7 +1750,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="265"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="628"/>
         <source>px</source>
-        <translation type="unfinished">px</translation>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="175"/>
@@ -1801,7 +1801,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="556"/>
         <source>nmi</source>
-        <translation>nmi</translation>
+        <translation>NM</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="559"/>
@@ -1835,27 +1835,27 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="306"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="644"/>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Opacité&#x202f;:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="646"/>
         <source>Blur radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rayon de flou&#x202f;:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="648"/>
         <source>Azimuth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Azimut&#x202f;:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="649"/>
         <source>Altitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Altitude&#x202f;:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="650"/>
         <source>Z Factor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Facteur Z&#x202f;:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="655"/>
@@ -1866,7 +1866,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="656"/>
         <source>Hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Ombrage du relief</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="676"/>
@@ -1887,7 +1887,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="645"/>
         <source>Lightening:</source>
-        <translation type="unfinished"></translation>
+        <translation>Éclaircissement&#x202f;:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="702"/>
@@ -2309,7 +2309,7 @@
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="111"/>
         <source>nmi</source>
-        <translation>nmi</translation>
+        <translation>NM</translation>
     </message>
     <message>
         <location filename="../src/GUI/scaleitem.cpp" line="114"/>
@@ -2353,7 +2353,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="31"/>
         <source>min/nmi</source>
-        <translation>min/nmi</translation>
+        <translation>min/NM</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="34"/>
@@ -2416,7 +2416,7 @@
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="28"/>
         <source>min/nmi</source>
-        <translation>min/nmi</translation>
+        <translation>min/NM</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraphitem.cpp" line="31"/>
