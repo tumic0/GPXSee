@@ -443,6 +443,38 @@
           significantly speed up rendering of big data sets. You may enable OpenGL in
           the preferences, but be prepared that "strange things" may happen...</p>
 
+          <h3>Qt6</h3>
+          <p>Many Linux distributions compile GPXSee using Qt6, but Qt6 has serious rendering issues
+          that affect GPXSee. See the QT bugs list for details.</p>
+
+          <h3>Qt bugs</h3>
+          <p>This is the list of the most severe Qt bugs that affect GPXSee (some of them are
+          platform/Qt version specific):</p>
+          <ul>
+            <li><a href="https://bugreports.qt.io/browse/QTBUG-127653">QTBUG-127653</a>
+                - QPainter coordinates rounding broken when rendering to QImage</li>
+            <li><a href="https://bugreports.qt.io/browse/QTBUG-123126">QTBUG-123126</a>
+                - QGraphicsView content is blured when fractional scaling and OpenGL is used</li>
+            <li><a href="https://bugreports.qt.io/browse/QTBUG-111499">QTBUG-111499</a>
+                - Multiple QPainter::drawImage() calls are broken when OpenGL is used</li>
+            <li><a href="https://bugreports.qt.io/browse/QTBUG-120498">QTBUG-120498</a>
+                - QOpenGLWidget as QGraphicsView viewport crashes Qt on Android</li>
+            <li><a href="https://bugreports.qt.io/browse/QTBUG-126848">QTBUG-126848</a>
+                - QMenu on Android is completely broken in Qt 6.7.2</li>
+            <li><a href="https://bugreports.qt.io/browse/QTBUG-120455">QTBUG-120455</a>
+                - QPainter coordinates rounding broken when HiDPI scaling is used</li>
+            <li><a href="https://bugreports.qt.io/browse/QTBUG-96467">QTBUG-96467</a>
+                - QFontMetrics unusable in multithreaded applications</li>
+            <li><a href="https://bugreports.qt.io/browse/QTBUG-123125">QTBUG-123125</a>
+                - QMainWindow::devicePixelRatioF() reports wrong ratio on Wayland</li>
+            <li><a href="https://bugreports.qt.io/browse/QTBUG-121460">QTBUG-121460</a>
+                - Broken opening of files with content:// Uri filenames</li>
+            <li><a href="https://bugreports.qt.io/browse/QTBUG-110878">QTBUG-110878</a>
+                - Fullscreen windows rendered behind navigation bar</li>
+            <li><a href="https://bugreports.qt.io/browse/QTBUG-81791">QTBUG-81791</a>
+                - QToolbar rendering broken</li>
+          </ul>
+
 
           <div id="footnote">
           <p id="androidGlobalConfig"><i>[1] The Android global configuration is part of the APK
