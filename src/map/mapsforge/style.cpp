@@ -880,16 +880,11 @@ QList<const Style::Symbol*> Style::areaSymbols(int zoom) const
 
 QPen Style::PathRender::pen(int zoom) const
 {
-	if (!_img.isNull()) {
+	if (!_img.isNull() || _strokeColor.isValid()) {
 		qreal width = (_scale > None && zoom >= 12)
 		  ? pow(1.5, zoom - 12) * _strokeWidth : _strokeWidth;
-		return QPen(QBrush(_img), width, Qt::SolidLine, _strokeCap,
-		  _strokeJoin);
-	} else if (_strokeColor.isValid()) {
-		qreal width = (_scale > None && zoom >= 12)
-		  ? pow(1.5, zoom - 12) * _strokeWidth : _strokeWidth;
-		QPen p(QBrush(_strokeColor), width, Qt::SolidLine, _strokeCap,
-		  _strokeJoin);
+		QBrush brush = _img.isNull() ? QBrush(_strokeColor) : QBrush(_img);
+		QPen p(brush, width, Qt::SolidLine, _strokeCap, _strokeJoin);
 		if (!_strokeDasharray.isEmpty()) {
 			QVector<qreal>pattern(_strokeDasharray);
 			for (int i = 0; i < _strokeDasharray.size(); i++) {
