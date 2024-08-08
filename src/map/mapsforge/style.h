@@ -173,6 +173,7 @@ public:
 		QVector<qreal> _strokeDasharray;
 		Qt::PenCapStyle _strokeCap;
 		Qt::PenJoinStyle _strokeJoin;
+		QImage _img;
 		QBrush _brush;
 		bool _area, _curve;
 		Scale _scale;
@@ -320,7 +321,8 @@ private:
 	  const Rule &parent);
 	void area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	  qreal baseStrokeWidth, const Rule &rule);
-	void line(QXmlStreamReader &reader, qreal baseStrokeWidth, const Rule &rule);
+	void line(QXmlStreamReader &reader, const QString &dir, qreal ratio,
+	  qreal baseStrokeWidth, const Rule &rule);
 	void circle(QXmlStreamReader &reader, qreal baseStrokeWidth,
 	  const Rule &rule);
 	void hillshading(QXmlStreamReader &reader, const QSet<QString> &cats);

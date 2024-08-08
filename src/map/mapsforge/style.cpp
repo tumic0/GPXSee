@@ -241,11 +241,13 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	reader.skipCurrentElement();
 }
 
-void Style::line(QXmlStreamReader &reader, qreal baseStrokeWidth,
-  const Rule &rule)
+void Style::line(QXmlStreamReader &reader, const QString &dir, qreal ratio,
+  qreal baseStrokeWidth, const Rule &rule)
 {
 	PathRender ri(rule, _paths.size() + _circles.size() + _hillShading.isValid());
 	const QXmlStreamAttributes &attr = reader.attributes();
+	QString file;
+	int height = 0, width = 0, percent = 100;
 	bool ok;
 
 	ri._brush = Qt::NoBrush;
@@ -308,6 +310,32 @@ void Style::line(QXmlStreamReader &reader, qreal baseStrokeWidth,
 			return;
 		}
 	}
+
+	if (attr.hasAttribute("src"))
+		file = resourcePath(attr.value("src").toString(), dir);
+	if (attr.hasAttribute("symbol-height")) {
+		height = attr.value("symbol-height").toInt(&ok);
+		if (!ok || height < 0) {
+			reader.raiseError("invalid symbol-height value");
+			return;
+		}
+	}
+	if (attr.hasAttribute("symbol-width")) {
+		width = attr.value("symbol-width").toInt(&ok);
+		if (!ok || width < 0) {
+			reader.raiseError("invalid symbol-width value");
+			return;
+		}
+	}
+	if (attr.hasAttribute("symbol-percent")) {
+		percent = attr.value("symbol-percent").toInt(&ok);
+		if (!ok || percent < 0) {
+			reader.raiseError("invalid symbol-percent value");
+			return;
+		}
+	}
+	if (!file.isNull())
+		ri._img = image(file, width, height, percent, ratio);
 
 	if (ri.rule()._type == Rule::AnyType || ri.rule()._type == Rule::WayType)
 		_paths.append(ri);
@@ -549,7 +577,7 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir,
 		else if (reader.name() == QLatin1String("area"))
 			area(reader, dir, ratio, baseStrokeWidth, r);
 		else if (reader.name() == QLatin1String("line"))
-			line(reader, baseStrokeWidth, r);
+			line(reader, dir, ratio, baseStrokeWidth, r);
 		else if (reader.name() == QLatin1String("circle"))
 			circle(reader, baseStrokeWidth, r);
 		else if (reader.name() == QLatin1String("pathText")) {
@@ -852,7 +880,12 @@ QList<const Style::Symbol*> Style::areaSymbols(int zoom) const
 
 QPen Style::PathRender::pen(int zoom) const
 {
-	if (_strokeColor.isValid()) {
+	if (!_img.isNull()) {
+		qreal width = (_scale > None && zoom >= 12)
+		  ? pow(1.5, zoom - 12) * _strokeWidth : _strokeWidth;
+		return QPen(QBrush(_img), width, Qt::SolidLine, _strokeCap,
+		  _strokeJoin);
+	} else if (_strokeColor.isValid()) {
 		qreal width = (_scale > None && zoom >= 12)
 		  ? pow(1.5, zoom - 12) * _strokeWidth : _strokeWidth;
 		QPen p(QBrush(_strokeColor), width, Qt::SolidLine, _strokeCap,
