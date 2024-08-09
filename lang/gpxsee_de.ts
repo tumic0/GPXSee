@@ -1162,7 +1162,7 @@
     <message>
         <location filename="../src/GUI/graphview.cpp" line="162"/>
         <source>h</source>
-        <translation>tim</translation>
+        <translation>h</translation>
     </message>
     <message>
         <location filename="../src/GUI/graphview.cpp" line="94"/>
