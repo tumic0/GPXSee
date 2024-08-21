@@ -25,7 +25,7 @@ JLS::JLS(quint16 maxval, quint16 near)
 	_near = near;
 
 	_range = ((_maxval + _near * 2) / (_near * 2 + 1)) + 1;
-	_qbpp = ceil(log2(_range));
+	_qbpp = qCeil(log2(_range));
 	quint8 bpp = qMax(2, qCeil(log2(_maxval + 1)));
 	quint8 LIMIT = 2 * (bpp + qMax(8u, bpp));
 	_limit = LIMIT - _qbpp - 1;
