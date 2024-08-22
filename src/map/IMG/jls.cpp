@@ -1,4 +1,5 @@
 #include <cmath>
+#include <QtMath>
 #include "jls.h"
 
 using namespace IMG;
@@ -27,7 +28,7 @@ JLS::JLS(quint16 maxval, quint16 near)
 	_range = ((_maxval + _near * 2) / (_near * 2 + 1)) + 1;
 	_qbpp = qCeil(log2(_range));
 	quint8 bpp = qMax(2, qCeil(log2(_maxval + 1)));
-	quint8 LIMIT = 2 * (bpp + qMax(8u, bpp));
+	quint8 LIMIT = 2 * (bpp + qMax((quint8)8, bpp));
 	_limit = LIMIT - _qbpp - 1;
 }
 
