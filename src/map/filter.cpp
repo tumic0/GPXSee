@@ -95,95 +95,44 @@ static void gaussBlur4(MatrixD &src, MatrixD &dst, int r)
 	boxBlur4(src, dst, (bxs.at(2) - 1) / 2);
 }
 
-static double avg(const MatrixD &m, int pi, int pj, int r)
-{
-	int col, row, cnt = 0;
-	double sum = 0;
-
-	if (r >= qMax(m.h(), m.w()))
-		return NAN;
-
-	row = pi - r;
-	if (row >= 0) {
-		for (int j = qMax(pj - r, 0); j < qMin(pj + r, m.w()); j++) {
-			if (!std::isnan(m.at(row, j))) {
-				sum += m.at(row, j);
-				cnt++;
-			}
-		}
-	}
-	row = pi + r;
-	if (row < m.h()) {
-		for (int j = qMax(pj - r, 0); j < qMin(pj + r, m.w()); j++) {
-			if (!std::isnan(m.at(row, j))) {
-				sum += m.at(row, j);
-				cnt++;
-			}
-		}
-	}
-	col = pj - r;
-	if (col >= 0) {
-		for (int i = qMax(pi - r + 1, 0); i < qMin(pi + r - 1, m.h()); i++) {
-			if (!std::isnan(m.at(i, col))) {
-				sum += m.at(i, col);
-				cnt++;
-			}
-		}
-	}
-	col = pj + r;
-	if (col < m.w()) {
-		for (int i = qMax(pi - r + 1, 0); i < qMin(pi + r - 1, m.h()); i++) {
-			if (!std::isnan(m.at(i, col))) {
-				sum += m.at(i, col);
-				cnt++;
-			}
-		}
-	}
-
-	if (cnt)
-		return sum / cnt;
-	else
-		return avg(m, pi, pj, r + 1);
-}
-
-static bool fillNANs(const MatrixD &m, MatrixD &src)
-{
-	bool hasNAN = false;
-
-	for (int i = 0; i < m.h(); i++) {
-		for (int j = 0; j < m.w(); j++) {
-			if (std::isnan(m.at(i, j))) {
-				hasNAN = true;
-
-				double val = avg(src, i, j, 1);
-				if (std::isnan(val))
-					return false;
-				else
-					src.at(i, j) = val;
-			}
-		}
-	}
-
-	return hasNAN;
-}
-
-static void revertNANs(const MatrixD &m, MatrixD &dst)
+static int hasNANs(const MatrixD &m)
 {
 	for (int i = 0; i < m.size(); i++)
 		if (std::isnan(m.at(i)))
-			dst.at(i) = NAN;
+			return i;
+
+	return -1;
 }
 
 MatrixD Filter::blur(const MatrixD &m, int radius)
 {
 	MatrixD src(m);
 	MatrixD dst(m.h(), m.w());
-	bool hasNAN = fillNANs(m, src);
+	int firstNAN = hasNANs(m);
 
-	gaussBlur4(src, dst, radius);
+	if (firstNAN >= 0) {
+		// https://stackoverflow.com/a/36307291
+		MatrixD z(m.h(), m.w(), 1);
+		MatrixD zdst(m.h(), m.w());
 
-	if (hasNAN)
-		revertNANs(m, dst);
+		for (int i = firstNAN; i < m.size(); i++) {
+			if (std::isnan(m.at(i))) {
+				z.at(i) = 0;
+				src.at(i) = 0;
+			}
+		}
+
+		gaussBlur4(z, zdst, radius);
+		gaussBlur4(src, dst, radius);
+
+		for (int i = 0; i < m.size(); i++)
+			dst.at(i) = dst.at(i) / zdst.at(i);
+
+		for (int i = firstNAN; i < m.size(); i++)
+			if (std::isnan(m.at(i)))
+				dst.at(i) = NAN;
+	} else
+		gaussBlur4(src, dst, radius);
 
 	return dst;
 }

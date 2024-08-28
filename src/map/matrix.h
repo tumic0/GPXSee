@@ -33,6 +33,7 @@ class MatrixD : public Matrix<double>
 public:
 	MatrixD() : Matrix<double>() {}
 	MatrixD(int h, int w) : Matrix<double>(h, w) {}
+	MatrixD(int h, int w, double val) : Matrix<double>(h, w, val) {}
 
 	bool eliminate(double epsilon = DBL_EPSILON);
 	MatrixD augemented(const MatrixD &M) const;
