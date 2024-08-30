@@ -23,8 +23,8 @@ void Transform::simple(const ReferencePoint &p1, const ReferencePoint &p2)
 void Transform::affine(const QList<ReferencePoint> &points)
 {
 	MatrixD c(3, 2);
-	for (int i = 0; i < c.h(); i++) {
-		for (int j = 0; j < c.w(); j++) {
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 2; j++) {
 			for (int k = 0; k < points.size(); k++) {
 				double f[3], t[2];
 
@@ -45,8 +45,8 @@ void Transform::affine(const QList<ReferencePoint> &points)
 		v[0] = points.at(qi).pp().x();
 		v[1] = points.at(qi).pp().y();
 		v[2] = 1.0;
-		for (int i = 0; i < Q.h(); i++)
-			for (int j = 0; j < Q.w(); j++)
+		for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 3; j++)
 				Q.at(i,j) += v[i] * v[j];
 	}
 
