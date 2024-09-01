@@ -230,6 +230,7 @@ SETTING(heartRateFilter,     "heartrateFilter",        3                      );
 SETTING(cadenceFilter,       "cadenceFilter",          3                      );
 SETTING(powerFilter,         "powerFilter",            3                      );
 SETTING(outlierEliminate,    "outlierEliminate",       true                   );
+SETTING(detectPauses,        "detectPauses",           true                   );
 SETTING(automaticPause,      "automaticPause",         true                   );
 SETTING(pauseSpeed,          "pauseSpeed",             0.5                    );
 SETTING(pauseInterval,       "pauseInterval",          10                     );

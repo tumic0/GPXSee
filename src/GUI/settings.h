@@ -182,6 +182,7 @@ public:
 	static const Setting cadenceFilter;
 	static const Setting powerFilter;
 	static const Setting outlierEliminate;
+	static const Setting detectPauses;
 	static const Setting automaticPause;
 	static const Setting pauseSpeed;
 	static const Setting pauseInterval;

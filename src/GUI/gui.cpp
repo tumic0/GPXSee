@@ -2594,6 +2594,7 @@ void GUI::writeSettings()
 	WRITE(cadenceFilter, _options.cadenceFilter);
 	WRITE(powerFilter, _options.powerFilter);
 	WRITE(outlierEliminate, _options.outlierEliminate);
+	WRITE(detectPauses, _options.detectPauses);
 	WRITE(automaticPause, _options.automaticPause);
 	WRITE(pauseSpeed, _options.pauseSpeed);
 	WRITE(pauseInterval, _options.pauseInterval);
@@ -2901,6 +2902,7 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 	_options.powerFilter = READ(powerFilter).toInt();
 	_options.outlierEliminate = READ(outlierEliminate).toBool();
 	_options.pauseSpeed = READ(pauseSpeed).toFloat();
+	_options.detectPauses = READ(detectPauses).toBool();
 	_options.automaticPause = READ(automaticPause).toBool();
 	_options.pauseInterval = READ(pauseInterval).toInt();
 	_options.useReportedSpeed = READ(useReportedSpeed).toBool();
@@ -2993,6 +2995,7 @@ void GUI::loadOptions()
 	Track::setCadenceFilter(_options.cadenceFilter);
 	Track::setPowerFilter(_options.powerFilter);
 	Track::setOutlierElimination(_options.outlierEliminate);
+	Track::detectPauses(_options.detectPauses);
 	Track::setAutomaticPause(_options.automaticPause);
 	Track::setPauseSpeed(_options.pauseSpeed);
 	Track::setPauseInterval(_options.pauseInterval);
@@ -3121,6 +3124,7 @@ void GUI::updateOptions(const Options &options)
 	SET_TRACK_OPTION(cadenceFilter, setCadenceFilter);
 	SET_TRACK_OPTION(powerFilter, setPowerFilter);
 	SET_TRACK_OPTION(outlierEliminate, setOutlierElimination);
+	SET_TRACK_OPTION(detectPauses, detectPauses);
 	SET_TRACK_OPTION(automaticPause, setAutomaticPause);
 	SET_TRACK_OPTION(pauseSpeed, setPauseSpeed);
 	SET_TRACK_OPTION(pauseInterval, setPauseInterval);

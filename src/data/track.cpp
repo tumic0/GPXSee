@@ -8,6 +8,7 @@ int Track::_heartRateWindow = 3;
 int Track::_cadenceWindow = 3;
 int Track::_powerWindow = 3;
 
+bool Track::_detectPauses = true;
 bool Track::_automaticPause = true;
 qreal Track::_pauseSpeed = 0.5;
 int Track::_pauseInterval = 10;
@@ -181,32 +182,33 @@ Track::Track(const TrackData &data) : _pause(0)
 		if (!hasTime)
 			continue;
 
+		if (_detectPauses) {
+			// get stop-points + pause duration
+			int pauseInterval;
+			qreal pauseSpeed;
 
-		// get stop-points + pause duration
-		int pauseInterval;
-		qreal pauseSpeed;
+			if (_automaticPause) {
+				pauseSpeed = (avg(seg.speed) > 2.8) ? 0.40 : 0.15;
+				pauseInterval = 10;
+			} else {
+				pauseSpeed = _pauseSpeed;
+				pauseInterval = _pauseInterval;
+			}
 
-		if (_automaticPause) {
-			pauseSpeed = (avg(seg.speed) > 2.8) ? 0.40 : 0.15;
-			pauseInterval = 10;
-		} else {
-			pauseSpeed = _pauseSpeed;
-			pauseInterval = _pauseInterval;
-		}
+			int ss = 0, la = 0;
+			for (int j = 1; j < seg.time.size(); j++) {
+				if (seg.speed.at(j) > pauseSpeed)
+					ss = -1;
+				else if (ss < 0)
+					ss = j-1;
 
-		int ss = 0, la = 0;
-		for (int j = 1; j < seg.time.size(); j++) {
-			if (seg.speed.at(j) > pauseSpeed)
-				ss = -1;
-			else if (ss < 0)
-				ss = j-1;
-
-			if (ss >= 0 && seg.time.at(j) > seg.time.at(ss) + pauseInterval) {
-				int l = qMax(ss, la);
-				_pause += seg.time.at(j) - seg.time.at(l);
-				for (int k = l; k <= j; k++)
-					seg.stop.insert(k);
-				la = j;
+				if (ss >= 0 && seg.time.at(j) > seg.time.at(ss) + pauseInterval) {
+					int l = qMax(ss, la);
+					_pause += seg.time.at(j) - seg.time.at(l);
+					for (int k = l; k <= j; k++)
+						seg.stop.insert(k);
+					la = j;
+				}
 			}
 		}
 

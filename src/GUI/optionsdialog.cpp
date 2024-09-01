@@ -53,6 +53,14 @@ void OptionsDialog::automaticPauseDetectionSet(bool set)
 	_pauseSpeed->setEnabled(!set);
 }
 
+void OptionsDialog::pauseDetectionSet(bool set)
+{
+	_automaticPause->setEnabled(set);
+	_manualPause->setEnabled(set);
+	_pauseInterval->setEnabled(set && _manualPause->isChecked());
+	_pauseSpeed->setEnabled(set && _manualPause->isChecked());
+}
+
 QWidget *OptionsDialog::createMapPage()
 {
 	ProjectionList outputProjections(GCS::WGS84List() + Conversion::list());
@@ -377,6 +385,9 @@ QWidget *OptionsDialog::createDataPage()
 	filterTab->setLayout(filterTabLayout);
 #endif // Q_OS_MAC
 
+	_detectPauses = new QCheckBox(tr("Detect pauses"));
+	_detectPauses->setChecked(_options.detectPauses);
+
 	_automaticPause = new QRadioButton(tr("Automatic"));
 	_manualPause = new QRadioButton(tr("Custom"));
 	if (_options.automaticPause)
@@ -405,6 +416,10 @@ QWidget *OptionsDialog::createDataPage()
 	_pauseInterval->setValue(_options.pauseInterval);
 	_pauseInterval->setEnabled(_manualPause->isChecked());
 
+	pauseDetectionSet(_options.detectPauses);
+
+	connect(_detectPauses, &QCheckBox::toggled, this,
+	  &OptionsDialog::pauseDetectionSet);
 	connect(_automaticPause, &QRadioButton::toggled, this,
 	  &OptionsDialog::automaticPauseDetectionSet);
 
@@ -516,19 +531,17 @@ QWidget *OptionsDialog::createDataPage()
 
 
 	QHBoxLayout *pauseTypeLayout = new QHBoxLayout();
-#ifdef Q_OS_MAC
-	pauseTypeLayout->addStretch();
-#endif
 	pauseTypeLayout->addWidget(_automaticPause);
 	pauseTypeLayout->addWidget(_manualPause);
 	pauseTypeLayout->addStretch();
 
 	QFormLayout *pauseValuesLayout = new QFormLayout();
+	pauseValuesLayout->addRow(tr("Detection:"), pauseTypeLayout);
 	pauseValuesLayout->addRow(tr("Minimal speed:"), _pauseSpeed);
 	pauseValuesLayout->addRow(tr("Minimal duration:"), _pauseInterval);
 
 	QVBoxLayout *pauseLayout = new QVBoxLayout();
-	pauseLayout->addLayout(pauseTypeLayout);
+	pauseLayout->addWidget(_detectPauses);
 	pauseLayout->addLayout(pauseValuesLayout);
 
 	QWidget *pauseTab = new QWidget();
@@ -960,6 +973,7 @@ void OptionsDialog::accept()
 	_options.cadenceFilter = _cadenceFilter->value();
 	_options.powerFilter = _powerFilter->value();
 	_options.outlierEliminate = _outlierEliminate->isChecked();
+	_options.detectPauses = _detectPauses->isChecked();
 	_options.automaticPause = _automaticPause->isChecked();
 	qreal pauseSpeed = (_units == Imperial)
 		? _pauseSpeed->value() / MS2MIH : (_units == Nautical)
