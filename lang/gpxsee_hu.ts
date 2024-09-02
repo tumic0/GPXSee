@@ -1870,12 +1870,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="388"/>
         <source>Detect pauses</source>
-        <translation type="unfinished"></translation>
+        <translation>Szünetek érzékelése</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="539"/>
         <source>Detection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Érzékelés:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="658"/>
