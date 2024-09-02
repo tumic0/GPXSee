@@ -1790,7 +1790,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="388"/>
         <source>Detect pauses</source>
-        <translation type="unfinished"></translation>
+        <translation>Detectar las pausas</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="392"/>
@@ -1801,7 +1801,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="539"/>
         <source>Detection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Detección:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="566"/>

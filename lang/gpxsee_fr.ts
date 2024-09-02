@@ -1564,7 +1564,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="258"/>
         <source>POIs</source>
-        <translation>POI</translation>
+        <translation>POIs</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="282"/>
