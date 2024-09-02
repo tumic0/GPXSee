@@ -217,7 +217,7 @@ bool FITParser::readField(CTX &ctx, const Field *field, QVariant &val,
 			{QByteArray ba(ctx.file->read(field->size));
 			ctx.len -= field->size;
 			ret = (ba.size() == field->size);
-			val = ret ? ba : QString();
+			val = ret ? QString(ba.left(ba.indexOf('\0'))) : QString();
 			valid = (!ba.isEmpty() && ba.at(0) != 0);}
 			break;
 		default:
