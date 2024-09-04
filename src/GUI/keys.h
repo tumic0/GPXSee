@@ -22,7 +22,7 @@
 #define RELOAD_SHORTCUT         QKeySequence(QKeySequence::Refresh)
 #define PDF_EXPORT_SHORTCUT     QKeySequence(Qt::CTRL | Qt::Key_E)
 #define PNG_EXPORT_SHORTCUT     QKeySequence(Qt::CTRL | Qt::Key_X)
-#define SHOW_POI_SHORTCUT       QKeySequence(Qt::CTRL | Qt::Key_P)
+#define SHOW_POI_SHORTCUT       QKeySequence(Qt::CTRL | Qt::Key_I)
 #define SHOW_MAP_SHORTCUT       QKeySequence(Qt::CTRL | Qt::Key_M)
 #define NEXT_MAP_SHORTCUT       QKeySequence(QKeySequence::Forward)
 #define PREV_MAP_SHORTCUT       QKeySequence(QKeySequence::Back)
@@ -30,6 +30,9 @@
 #define STATISTICS_SHORTCUT     QKeySequence(Qt::CTRL | Qt::Key_S)
 #define DOWNLOAD_DEM_SHORTCUT   QKeySequence(Qt::CTRL | Qt::Key_D)
 #define SHOW_TRACKS_SHORTCUT    QKeySequence(Qt::CTRL | Qt::Key_T)
+#define SHOW_ROUTES_SHORTCUT    QKeySequence(Qt::CTRL | Qt::Key_R)
+#define SHOW_AREAS_SHORTCUT     QKeySequence(Qt::CTRL | Qt::Key_A)
+#define SHOW_WAYPOINTS_SHORTCUT QKeySequence(Qt::CTRL | Qt::Key_P)
 #define FULLSCREEN_SHORTCUT     (QKeySequence(QKeySequence::FullScreen).isEmpty() \
                                   ? QKeySequence(Qt::Key_F11) \
                                   : QKeySequence(QKeySequence::FullScreen))

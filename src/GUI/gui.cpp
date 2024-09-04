@@ -399,15 +399,18 @@ void GUI::createActions()
 	_showRoutesAction = new QAction(tr("Show routes"), this);
 	_showRoutesAction->setMenuRole(QAction::NoRole);
 	_showRoutesAction->setCheckable(true);
+	_showRoutesAction->setShortcut(SHOW_ROUTES_SHORTCUT);
 	connect(_showRoutesAction, &QAction::triggered, this, &GUI::showRoutes);
 	_showWaypointsAction = new QAction(tr("Show waypoints"), this);
 	_showWaypointsAction->setMenuRole(QAction::NoRole);
 	_showWaypointsAction->setCheckable(true);
+	_showWaypointsAction->setShortcut(SHOW_WAYPOINTS_SHORTCUT);
 	connect(_showWaypointsAction, &QAction::triggered, this,
 	  &GUI::showWaypoints);
 	_showAreasAction = new QAction(tr("Show areas"), this);
 	_showAreasAction->setMenuRole(QAction::NoRole);
 	_showAreasAction->setCheckable(true);
+	_showAreasAction->setShortcut(SHOW_AREAS_SHORTCUT);
 	connect(_showAreasAction, &QAction::triggered, this, &GUI::showAreas);
 	_showWaypointIconsAction = new QAction(tr("Waypoint icons"), this);
 	_showWaypointIconsAction->setMenuRole(QAction::NoRole);
