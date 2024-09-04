@@ -1,13 +1,16 @@
 #include <QtEndian>
+#include "GUI/format.h"
 #include "fitparser.h"
 
 #define FIT_MAGIC 0x5449462E // .FIT
 
-#define RECORD_MESSAGE  20
-#define EVENT_MESSAGE   21
-#define LOCATION        29
-#define COURSE_POINT    32
-#define TIMESTAMP_FIELD 253
+#define LAP         19
+#define RECORD      20
+#define EVENT       21
+#define LOCATION    29
+#define COURSEPOINT 32
+
+#define TIMESTAMP   253
 
 static QMap<int, QString> coursePointSymbolsInit()
 {
@@ -250,9 +253,9 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 		if (!valid)
 			continue;
 
-		if (field->id == TIMESTAMP_FIELD)
+		if (field->id == TIMESTAMP)
 			ctx.timestamp = val.toUInt();
-		else if (def->globalId == RECORD_MESSAGE) {
+		else if (def->globalId == RECORD) {
 			switch (field->id) {
 				case 0:
 					ctx.trackpoint.rcoordinates().setLat(
@@ -287,7 +290,7 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 					ctx.trackpoint.setElevation((val.toUInt() / 5.0) - 500);
 					break;
 			}
-		} else if (def->globalId == EVENT_MESSAGE) {
+		} else if (def->globalId == EVENT) {
 			switch (field->id) {
 				case 0:
 					event.id = val.toUInt();
@@ -299,7 +302,7 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 					event.data = val.toUInt();
 					break;
 			}
-		} else if (def->globalId == COURSE_POINT) {
+		} else if (def->globalId == COURSEPOINT) {
 			switch (field->id) {
 				case 1:
 					waypoint.setTimestamp(QDateTime::fromSecsSinceEpoch(
@@ -343,6 +346,23 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 					waypoint.setDescription(val.toString());
 					break;
 			}
+		} else if (def->globalId == LAP) {
+			switch (field->id) {
+				case 5:
+					waypoint.rcoordinates().setLat(
+					  (val.toInt() / (double)0x7fffffff) * 180);
+					break;
+				case 6:
+					waypoint.rcoordinates().setLon(
+					  (val.toInt() / (double)0x7fffffff) * 180);
+					break;
+				case 7:
+					waypoint.setDescription(Format::timeSpan(val.toUInt() / 1000));
+					break;
+				case 254:
+					waypoint.setName("#" + QString::number(val.toUInt()));
+					break;
+			}
 		}
 	}
 
@@ -350,13 +370,13 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 		if (!readField(ctx, &def->devFields.at(i), val, valid))
 			return false;
 
-	if (def->globalId == EVENT_MESSAGE) {
-		if ((event.id == 42 || event.id == 43)  && event.type == 3) {
+	if (def->globalId == EVENT) {
+		if ((event.id == 42 || event.id == 43) && event.type == 3) {
 			quint32 front = ((event.data & 0xFF000000) >> 24);
 			quint32 rear = ((event.data & 0x0000FF00) >> 8);
 			ctx.ratio = ((qreal)front / (qreal)rear);
 		}
-	} else if (def->globalId == RECORD_MESSAGE) {
+	} else if (def->globalId == RECORD) {
 		if (ctx.trackpoint.coordinates().isValid()) {
 			ctx.trackpoint.setTimestamp(QDateTime::fromSecsSinceEpoch(
 			  ctx.timestamp + 631065600, Qt::UTC));
@@ -364,7 +384,7 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 			ctx.segment.append(ctx.trackpoint);
 			ctx.trackpoint = Trackpoint();
 		}
-	} else if (def->globalId == COURSE_POINT) {
+	} else if (def->globalId == COURSEPOINT || def->globalId == LAP) {
 		if (waypoint.coordinates().isValid())
 			ctx.waypoints.append(waypoint);
 	} else if (def->globalId == LOCATION) {
