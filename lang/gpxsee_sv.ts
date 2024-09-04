@@ -1887,12 +1887,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="388"/>
         <source>Detect pauses</source>
-        <translation>Upptäck pauser</translation>
+        <translation>Identifiera pauser</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="539"/>
         <source>Detection:</source>
-        <translation>Detektion:</translation>
+        <translation>Identifiering:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="658"/>
