@@ -2066,7 +2066,7 @@ void GUI::updateRecentFiles(const QString &fileName)
 	if (a)
 		delete a;
 	else if (actions.size() == MAX_RECENT_FILES)
-		delete actions.last();
+		delete actions.first();
 
 	actions = _recentFilesActionGroup->actions();
 	QAction *before = actions.size() ? actions.last() : _recentFilesEnd;
