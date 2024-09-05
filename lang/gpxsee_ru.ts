@@ -1889,12 +1889,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="388"/>
         <source>Detect pauses</source>
-        <translation type="unfinished"></translation>
+        <translation>Обнаруживать паузы</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="539"/>
         <source>Detection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Обнаружение:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="658"/>
@@ -2307,7 +2307,7 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="38"/>
         <source>File</source>
-        <translation type="unfinished">Файл</translation>
+        <translation>Файл</translation>
     </message>
 </context>
 <context>
@@ -2573,7 +2573,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="46"/>
         <source>File</source>
-        <translation type="unfinished">Файл</translation>
+        <translation>Файл</translation>
     </message>
 </context>
 <context>
