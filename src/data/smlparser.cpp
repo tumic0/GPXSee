@@ -136,6 +136,9 @@ void SMLParser::sml(QList<TrackData> &tracks)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("DeviceLog")) {
 			tracks.append(TrackData());
+			QFile *file = qobject_cast<QFile*>(_reader.device());
+			if (file)
+				tracks.last().setFile(file->fileName());
 			deviceLog(tracks.last());
 		} else
 			_reader.skipCurrentElement();

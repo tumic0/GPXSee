@@ -30,7 +30,7 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-	ToolTip info() const;
+	ToolTip info(bool extended) const;
 
 	static void setUnits(Units units) {_units = units;}
 	static void setCoordinatesFormat(CoordinatesFormat format)

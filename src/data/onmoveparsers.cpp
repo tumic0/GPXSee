@@ -276,6 +276,7 @@ bool GHPParser::parse(QFile *file, QList<TrackData> &tracks,
 	}
 
 	tracks.append(TrackData());
+	tracks.last().setFile(file->fileName());
 	tracks.last().append(segment);
 
 	return true;

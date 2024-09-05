@@ -26,8 +26,10 @@ ElevationGraphItem::ElevationGraphItem(const Graph &graph, GraphType type,
 	}
 }
 
-ToolTip ElevationGraphItem::info() const
+ToolTip ElevationGraphItem::info(bool extended) const
 {
+	Q_UNUSED(extended);
+
 	ToolTip tt;
 	qreal scale = (_units == Metric) ? 1.0 : M2FT;
 	QString su = (_units == Metric) ? tr("m") : tr("ft");

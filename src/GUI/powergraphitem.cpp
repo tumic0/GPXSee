@@ -9,8 +9,9 @@ PowerGraphItem::PowerGraphItem(const Graph &graph, GraphType type, int width,
 {
 }
 
-ToolTip PowerGraphItem::info() const
+ToolTip PowerGraphItem::info(bool extended) const
 {
+	Q_UNUSED(extended);
 	ToolTip tt;
 	QLocale l(QLocale::system());
 

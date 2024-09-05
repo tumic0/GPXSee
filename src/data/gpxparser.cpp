@@ -343,6 +343,10 @@ void GPXParser::track(TrackData &track)
 
 	if (!link10.URL().isEmpty())
 		track.addLink(link10);
+
+	QFile *file = qobject_cast<QFile *>(_reader.device());
+	if (file)
+		track.setFile(file->fileName());
 }
 
 void GPXParser::area(Area &area)
@@ -388,6 +392,9 @@ void GPXParser::gpx(QList<TrackData> &tracks, QList<RouteData> &routes,
 			track(tracks.back());
 		} else if (_reader.name() == QLatin1String("rte")) {
 			routes.append(RouteData());
+			QFile *file = qobject_cast<QFile *>(_reader.device());
+			if (file)
+				routes.back().setFile(file->fileName());
 			routepoints(routes.back(), tracks);
 		} else if (_reader.name() == QLatin1String("wpt")) {
 			waypoints.append(Waypoint(coordinates()));

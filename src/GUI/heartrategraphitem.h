@@ -11,7 +11,7 @@ public:
 	HeartRateGraphItem(const Graph &graph, GraphType type, int width,
 	  const QColor &color, QGraphicsItem *parent = 0);
 
-	ToolTip info() const;
+	ToolTip info(bool extended) const;
 };
 
 #endif // HEARTRATEGRAPHITEM_H

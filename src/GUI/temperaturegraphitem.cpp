@@ -12,8 +12,10 @@ TemperatureGraphItem::TemperatureGraphItem(const Graph &graph, GraphType type,
 	_avg = GraphItem::avg();
 }
 
-ToolTip TemperatureGraphItem::info() const
+ToolTip TemperatureGraphItem::info(bool extended) const
 {
+	Q_UNUSED(extended);
+
 	ToolTip tt;
 	qreal scale = (_units == Metric) ? 1.0 : C2FS;
 	qreal offset = (_units == Metric) ? 0 : C2FO;

@@ -15,7 +15,7 @@ class TrackItem : public PathItem
 public:
 	TrackItem(const Track &track, Map *map, QGraphicsItem *parent = 0);
 
-	ToolTip info() const;
+	ToolTip info(bool extended) const;
 	QDateTime date() const {return _date;}
 
 private:
@@ -26,6 +26,7 @@ private:
 	QDateTime _date;
 	qreal _time;
 	qreal _movingTime;
+	QString _file;
 };
 
 #endif // TRACKITEM_H

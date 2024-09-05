@@ -16,8 +16,9 @@ Units WaypointItem::_units = Metric;
 CoordinatesFormat WaypointItem::_format = DecimalDegrees;
 QTimeZone WaypointItem::_timeZone = QTimeZone::utc();
 
-ToolTip WaypointItem::info() const
+ToolTip WaypointItem::info(bool extended) const
 {
+	Q_UNUSED(extended);
 	ToolTip tt;
 	QLocale l;
 
@@ -274,7 +275,10 @@ void WaypointItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void WaypointItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	Popup::show(event->screenPos(), info(), event->widget());
+	GraphicsScene *gs = dynamic_cast<GraphicsScene *>(scene());
+	if (gs)
+		Popup::show(event->screenPos(), info(gs->showExtendedInfo()),
+		  event->widget());
 	/* Do not propagate the event any further as lower stacked items (path
 	   items) would replace the popup with their own popup */
 }

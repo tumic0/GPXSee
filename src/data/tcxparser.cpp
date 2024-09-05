@@ -196,7 +196,10 @@ void TCXParser::courses(QList<TrackData> &tracks, QVector<Waypoint> &waypoints)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Course")) {
 			tracks.append(TrackData());
-			course(waypoints, tracks.back());
+			QFile *file = qobject_cast<QFile*>(_reader.device());
+			if (file)
+				tracks.last().setFile(file->fileName());
+			course(waypoints, tracks.last());
 		} else
 			_reader.skipCurrentElement();
 	}
@@ -207,6 +210,9 @@ void TCXParser::sport(QList<TrackData> &tracks)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Activity")) {
 			tracks.append(TrackData());
+			QFile *file = qobject_cast<QFile*>(_reader.device());
+			if (file)
+				tracks.last().setFile(file->fileName());
 			activity(tracks.last());
 		} else
 			_reader.skipCurrentElement();
@@ -229,6 +235,9 @@ void TCXParser::activities(QList<TrackData> &tracks)
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Activity")) {
 			tracks.append(TrackData());
+			QFile *file = qobject_cast<QFile*>(_reader.device());
+			if (file)
+				tracks.last().setFile(file->fileName());
 			activity(tracks.last());
 		} else if (_reader.name() == QLatin1String("MultiSportSession"))
 			multiSportSession(tracks);

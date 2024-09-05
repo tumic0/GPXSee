@@ -26,7 +26,7 @@ public:
 	void setDigitalZoom(int zoom);
 	void updateStyle();
 
-	ToolTip info() const;
+	ToolTip info(bool extended) const;
 
 protected:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);

@@ -15,8 +15,8 @@ public:
 
 private:
 	bool waypoint(const QByteArrayList &entry, QVector<Waypoint> &waypoints);
-	bool task(const QByteArrayList &entry, const QVector<Waypoint> &waypoints,
-	  QList<RouteData> &routes);
+	bool task(const QString &fileName, const QByteArrayList &entry,
+	  const QVector<Waypoint> &waypoints, QList<RouteData> &routes);
 
 	QString _errorString;
 	int _errorLine;

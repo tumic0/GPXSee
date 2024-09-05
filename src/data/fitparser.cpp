@@ -481,6 +481,7 @@ bool FITParser::parse(QFile *file, QList<TrackData> &tracks,
 			return false;
 
 	tracks.append(ctx.segment);
+	tracks.last().setFile(file->fileName());
 
 	return true;
 }

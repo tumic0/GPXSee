@@ -137,16 +137,14 @@ QString Util::displayName(const QString &path)
 	QUrl url(path);
 
 	// Not an Android URL, return standard filename.
-	if (url.scheme() != "content") {
-		QFileInfo fi(path);
-		return fi.fileName();
+	if (url.scheme() != "content")
+		return QFileInfo(path).fileName();
 	// Directory browsing URLs. Those can not be translated using the Android
 	// content resolver but we can get the filename from the URL path.
-	} else if (url.path().startsWith("/tree/")) {
-		QFileInfo fi(url.fileName());
-		return fi.fileName();
+	else if (url.path().startsWith("/tree/"))
+		return QFileInfo(url.fileName()).fileName();
 	// Translate all "regular" android URLs using the Android content resolver.
-	} else
+	else
 		return documentName(path);
 #else
 	return path;

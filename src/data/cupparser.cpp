@@ -86,7 +86,7 @@ bool CUPParser::waypoint(const QByteArrayList &entry,
 	return true;
 }
 
-bool CUPParser::task(const QByteArrayList &entry,
+bool CUPParser::task(const QString &fileName, const QByteArrayList &entry,
   const QVector<Waypoint> &waypoints, QList<RouteData> &routes)
 {
 	if (entry.size() < 3) {
@@ -96,6 +96,7 @@ bool CUPParser::task(const QByteArrayList &entry,
 
 	RouteData r;
 	r.setName(entry.at(0));
+	r.setFile(fileName);
 	for (int i = 1; i < entry.size(); i++) {
 		if (entry.at(i) == "???")
 			continue;
@@ -155,7 +156,7 @@ bool CUPParser::parse(QFile *file, QList<TrackData> &tracks,
 				return false;
 		} else if (segment == Tasks) {
 			if (entry.at(0) != "Options" && !entry.at(0).startsWith("ObsZone=")
-			  && !task(entry, waypoints, routes))
+			  && !task(file->fileName(), entry, waypoints, routes))
 				return false;
 		}
 

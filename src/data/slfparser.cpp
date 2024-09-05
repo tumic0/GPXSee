@@ -109,6 +109,7 @@ bool SLFParser::parse(QFile *file, QList<TrackData> &tracks,
 	if (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("Activity")) {
 			tracks.append(TrackData());
+			tracks.last().setFile(file->fileName());
 			activity(tracks.last());
 		} else
 			_reader.raiseError("Not a SLF file");

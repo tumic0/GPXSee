@@ -41,6 +41,7 @@ bool PLTParser::parse(QFile *file, QList<TrackData> &tracks,
 
 	tracks.append(TrackData());
 	TrackData &track = tracks.last();
+	track.setFile(file->fileName());
 	track.append(SegmentData());
 	SegmentData &segment = track.last();
 
@@ -159,6 +160,7 @@ bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
 
 			if (list.at(0).trimmed() == "R") {
 				routes.append(RouteData());
+				routes.last().setFile(file->fileName());
 				record = true;
 
 				if (list.size() >= 3) {

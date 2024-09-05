@@ -1,12 +1,12 @@
-#include <QPainter>
-#include "map/map.h"
+#include <QLocale>
+#include "common/util.h"
 #include "data/track.h"
 #include "format.h"
 #include "tooltip.h"
 #include "trackitem.h"
 
 
-ToolTip TrackItem::info() const
+ToolTip TrackItem::info(bool extended) const
 {
 	ToolTip tt;
 	QLocale l;
@@ -39,6 +39,13 @@ ToolTip TrackItem::info() const
 		}
 		tt.insert(tr("Links"), links);
 	}
+#ifdef Q_OS_ANDROID
+	Q_UNUSED(extended);
+#else // Q_OS_ANDROID
+	if (extended && !_file.isEmpty())
+		tt.insert(tr("File"), QString("<a href=\"file:%1\">%2</a>")
+		  .arg(_file, QFileInfo(_file).fileName()));
+#endif // Q_OS_ANDROID
 
 	return tt;
 }
@@ -53,4 +60,5 @@ TrackItem::TrackItem(const Track &track, Map *map, QGraphicsItem *parent)
 	_date = track.date();
 	_time = track.time();
 	_movingTime = track.movingTime();
+	_file = track.file();
 }

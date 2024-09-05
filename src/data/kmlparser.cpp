@@ -594,8 +594,8 @@ void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
 	}
 }
 
-void KMLParser::multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
-  QVector<Waypoint> &waypoints)
+void KMLParser::multiGeometry(const Ctx &ctx, QList<TrackData> &tracks,
+  QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
 	TrackData *tp = 0;
 	Area *ap = 0;
@@ -608,6 +608,7 @@ void KMLParser::multiGeometry(QList<TrackData> &tracks, QList<Area> &areas,
 		} else if (_reader.name() == QLatin1String("LineString")) {
 			if (!tp) {
 				tracks.append(TrackData());
+				tracks.last().setFile(ctx.path);
 				tp = &tracks.last();
 			}
 			tp->append(SegmentData());
@@ -651,21 +652,24 @@ void KMLParser::placemark(const Ctx &ctx, QList<TrackData> &tracks,
 		} else if (_reader.name() == QLatin1String("StyleMap"))
 			styleMap(map);
 		else if (_reader.name() == QLatin1String("MultiGeometry"))
-			multiGeometry(tracks, areas, waypoints);
+			multiGeometry(ctx, tracks, areas, waypoints);
 		else if (_reader.name() == QLatin1String("Point")) {
 			waypoints.append(Waypoint());
 			point(waypoints.last());
 		} else if (_reader.name() == QLatin1String("LineString")
 		  || _reader.name() == QLatin1String("LinearRing")) {
 			tracks.append(TrackData());
+			tracks.last().setFile(ctx.path);
 			tracks.last().append(SegmentData());
 			lineString(tracks.last().last());
 		} else if (_reader.name() == QLatin1String("Track")) {
 			tracks.append(TrackData());
+			tracks.last().setFile(ctx.path);
 			tracks.last().append(SegmentData());
 			track(tracks.last().last());
 		} else if (_reader.name() == QLatin1String("MultiTrack")) {
 			tracks.append(TrackData());
+			tracks.last().setFile(ctx.path);
 			multiTrack(tracks.last());
 		} else if (_reader.name() == QLatin1String("Polygon")) {
 			areas.append(Area());

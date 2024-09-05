@@ -19,7 +19,6 @@
 #include "coordinatesitem.h"
 #include "mapitem.h"
 #include "keys.h"
-#include "graphicsscene.h"
 #include "mapaction.h"
 #include "markerinfoitem.h"
 #include "crosshairitem.h"

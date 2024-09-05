@@ -531,6 +531,7 @@ bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
 
 	if (segment.size()) {
 		tracks.append(TrackData());
+		tracks.last().setFile(file->fileName());
 		tracks.last().append(segment);
 	}
 

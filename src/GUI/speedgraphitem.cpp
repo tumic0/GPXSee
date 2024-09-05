@@ -15,8 +15,10 @@ SpeedGraphItem::SpeedGraphItem(const Graph &graph, GraphType type, int width,
 	_mavg = graph.last().last().s() / movingTime;
 }
 
-ToolTip SpeedGraphItem::info() const
+ToolTip SpeedGraphItem::info(bool extended) const
 {
+	Q_UNUSED(extended);
+
 	ToolTip tt;
 	qreal scale = (_units == Imperial) ? MS2MIH : (_units == Nautical)
 	  ? MS2KN : MS2KMH;

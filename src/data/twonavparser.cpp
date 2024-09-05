@@ -152,6 +152,7 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
 
 				if (!track) {
 					tracks.append(SegmentData());
+					tracks.last().setFile(file->fileName());
 					track = true;
 				}
 
@@ -205,6 +206,7 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
 			case 'R':
 				{QStringList list(codec.toString(line).split(','));
 				routes.append(RouteData());
+				routes.last().setFile(file->fileName());
 				if (list.size() > 1)
 					routes.last().setName(list.at(1));
 				route = true;}

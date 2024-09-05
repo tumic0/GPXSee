@@ -10,7 +10,7 @@ class GraphicsItem : public QGraphicsItem
 public:
 	GraphicsItem(QGraphicsItem *parent = 0) : QGraphicsItem(parent) {}
 
-	virtual ToolTip info() const = 0;
+	virtual ToolTip info(bool extended) const = 0;
 	int type() const {return QGraphicsItem::UserType + 1;}
 
 	static void useStyle(bool use) {_useStyle = use;}
@@ -22,7 +22,11 @@ protected:
 class GraphicsScene : public QGraphicsScene
 {
 public:
-	GraphicsScene(QObject *parent = 0) : QGraphicsScene(parent) {}
+	GraphicsScene(QObject *parent = 0)
+	  : QGraphicsScene(parent), _showExtendedInfo(false) {}
+
+	bool showExtendedInfo() const {return _showExtendedInfo;}
+	void showExtendedInfo(bool show) {_showExtendedInfo = show;}
 
 public slots:
 	void clear();
@@ -31,6 +35,8 @@ protected:
 	void helpEvent(QGraphicsSceneHelpEvent *event);
 
 private:
+	bool _showExtendedInfo;
+
 	QList<QGraphicsItem *> itemsAtPosition(const QPoint &screenPos,
 	  const QPointF &scenePos, QWidget *widget) const;
 };

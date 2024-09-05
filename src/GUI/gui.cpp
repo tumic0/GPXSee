@@ -1069,6 +1069,8 @@ bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 	updateNavigationActions();
 	updateStatusBarInfo();
 	updateWindowTitle();
+	if (_files.count() > 1)
+		_mapView->showExtendedInfo(true);
 #ifndef Q_OS_ANDROID
 	updateRecentFiles(canonicalFileName);
 #endif // Q_OS_ANDROID
@@ -1555,6 +1557,7 @@ void GUI::reloadFiles()
 		_browser->setCurrent(_files.last());
 #endif // Q_OS_ANDROID
 	updateDataDEMDownloadAction();
+	_mapView->showExtendedInfo(_files.size() > 1);
 }
 
 void GUI::closeFiles()
@@ -1575,6 +1578,7 @@ void GUI::closeFiles()
 	_lastTab = 0;
 
 	_mapView->clear();
+	_mapView->showExtendedInfo(false);
 
 	_files.clear();
 }

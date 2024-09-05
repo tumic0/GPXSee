@@ -9,8 +9,9 @@
 #include "areaitem.h"
 
 
-ToolTip AreaItem::info() const
+ToolTip AreaItem::info(bool extended) const
 {
+	Q_UNUSED(extended);
 	ToolTip tt;
 
 	if (!_area.name().isEmpty())

@@ -15,7 +15,7 @@ public:
 	qreal top() const {return _top;}
 	const QMap<qreal, qreal> &map() const {return _map;}
 
-	ToolTip info() const;
+	ToolTip info(bool extended) const;
 
 private:
 	QMap<qreal, qreal> _map;

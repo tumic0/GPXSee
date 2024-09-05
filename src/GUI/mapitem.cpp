@@ -71,8 +71,9 @@ static QRectF bbox(const RectC &rect, Map *map, int samples = 100)
 	return prect;
 }
 
-ToolTip MapItem::info() const
+ToolTip MapItem::info(bool extended) const
 {
+	Q_UNUSED(extended);
 	ToolTip tt;
 
 	if (!_name.isEmpty())

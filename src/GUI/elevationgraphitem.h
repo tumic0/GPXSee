@@ -18,7 +18,7 @@ public:
 	qreal max() const {return _max;}
 	qreal min() const {return _min;}
 
-	ToolTip info() const;
+	ToolTip info(bool extended) const;
 
 private:
 	qreal _ascent, _descent, _min, _max;

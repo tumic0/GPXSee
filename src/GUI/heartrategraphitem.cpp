@@ -9,8 +9,10 @@ HeartRateGraphItem::HeartRateGraphItem(const Graph &graph, GraphType type,
 {
 }
 
-ToolTip HeartRateGraphItem::info() const
+ToolTip HeartRateGraphItem::info(bool extended) const
 {
+	Q_UNUSED(extended);
+
 	ToolTip tt;
 	QLocale l(QLocale::system());
 

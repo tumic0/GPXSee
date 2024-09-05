@@ -330,7 +330,7 @@ bool GeoJSONParser::multiPoint(const QJsonObject &object,
 	return true;
 }
 
-bool GeoJSONParser::lineString(const QJsonObject &object,
+bool GeoJSONParser::lineString(const QJsonObject &object, const QString &file,
   const Projection &parent, const QJsonValue &properties,
   QList<TrackData> &tracks)
 {
@@ -367,6 +367,7 @@ bool GeoJSONParser::lineString(const QJsonObject &object,
 
 	setSegmentProperties(segment, -1, properties);
 	TrackData track(segment);
+	track.setFile(file);
 	setTrackProperties(track, properties);
 	tracks.append(track);
 
@@ -374,7 +375,7 @@ bool GeoJSONParser::lineString(const QJsonObject &object,
 }
 
 bool GeoJSONParser::multiLineString(const QJsonObject &object,
-  const Projection &parent, const QJsonValue &properties,
+  const QString &file, const Projection &parent, const QJsonValue &properties,
   QList<TrackData> &tracks)
 {
 	if (!object.contains("coordinates")) {
@@ -421,6 +422,7 @@ bool GeoJSONParser::multiLineString(const QJsonObject &object,
 		}
 	}
 
+	track.setFile(file);
 	setTrackProperties(track, properties);
 	tracks.append(track);
 
@@ -539,7 +541,7 @@ bool GeoJSONParser::multiPolygon(const QJsonObject &object,
 }
 
 bool GeoJSONParser::geometryCollection(const QJsonObject &object,
-  const Projection &parent, const QJsonValue &properties,
+  const QString &file, const Projection &parent, const QJsonValue &properties,
   QList<TrackData> &tracks, QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
 	if (!object["geometries"].isArray()) {
@@ -567,13 +569,13 @@ bool GeoJSONParser::geometryCollection(const QJsonObject &object,
 					return false;
 				break;
 			case LineString:
-				if (!lineString(geometry, PROJ(proj, parent), properties,
+				if (!lineString(geometry, file, PROJ(proj, parent), properties,
 				  tracks))
 					return false;
 				break;
 			case MultiLineString:
-				if (!multiLineString(geometry, PROJ(proj, parent), properties,
-				  tracks))
+				if (!multiLineString(geometry, file, PROJ(proj, parent),
+				  properties, tracks))
 					return false;
 				break;
 			case Polygon:
@@ -586,7 +588,7 @@ bool GeoJSONParser::geometryCollection(const QJsonObject &object,
 					return false;
 				break;
 			case GeometryCollection:
-				if (!geometryCollection(geometry, PROJ(proj, parent),
+				if (!geometryCollection(geometry, file, PROJ(proj, parent),
 				  properties, tracks, areas, waypoints))
 					return false;
 				break;
@@ -600,8 +602,9 @@ bool GeoJSONParser::geometryCollection(const QJsonObject &object,
 	return true;
 }
 
-bool GeoJSONParser::feature(const QJsonObject &object, const Projection &parent,
-  QList<TrackData> &tracks, QList<Area> &areas, QVector<Waypoint> &waypoints)
+bool GeoJSONParser::feature(const QJsonObject &object, const QString &file,
+  const Projection &parent, QList<TrackData> &tracks, QList<Area> &areas,
+  QVector<Waypoint> &waypoints)
 {
 	if (object["geometry"].isNull())
 		return true;
@@ -623,13 +626,14 @@ bool GeoJSONParser::feature(const QJsonObject &object, const Projection &parent,
 			return multiPoint(geometry, PROJ(proj, parent), properties,
 			  waypoints);
 		case LineString:
-			return lineString(geometry, PROJ(proj, parent), properties, tracks);
-		case MultiLineString:
-			return multiLineString(geometry, PROJ(proj, parent), properties,
+			return lineString(geometry, file, PROJ(proj, parent), properties,
 			  tracks);
+		case MultiLineString:
+			return multiLineString(geometry, file, PROJ(proj, parent),
+			  properties, tracks);
 		case GeometryCollection:
-			return geometryCollection(geometry, PROJ(proj, parent), properties,
-			  tracks, areas, waypoints);
+			return geometryCollection(geometry, file, PROJ(proj, parent),
+			  properties, tracks, areas, waypoints);
 		case Polygon:
 			return polygon(geometry, PROJ(proj, parent), properties, areas);
 		case MultiPolygon:
@@ -642,8 +646,8 @@ bool GeoJSONParser::feature(const QJsonObject &object, const Projection &parent,
 }
 
 bool GeoJSONParser::featureCollection(const QJsonObject &object,
-  const Projection &parent, QList<TrackData> &tracks, QList<Area> &areas,
-  QVector<Waypoint> &waypoints)
+  const QString &file, const Projection &parent, QList<TrackData> &tracks,
+  QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
 	if (!object["features"].isArray()) {
 		_errorString = "Invalid/missing FeatureCollection features array";
@@ -656,8 +660,8 @@ bool GeoJSONParser::featureCollection(const QJsonObject &object,
 		return false;
 
 	for (int i = 0; i < features.size(); i++)
-		if (!feature(features.at(i).toObject(), PROJ(proj, parent), tracks,
-		  areas, waypoints))
+		if (!feature(features.at(i).toObject(), file, PROJ(proj, parent),
+		  tracks, areas, waypoints))
 			return false;
 
 	return true;
@@ -686,6 +690,7 @@ bool GeoJSONParser::parse(QFile *file, QList<TrackData> &tracks,
 
 	QJsonObject object(doc.object());
 	Projection proj(GCS::WGS84());
+	QString fileName(file->fileName());
 
 	switch (type(object)) {
 		case Point:
@@ -693,16 +698,17 @@ bool GeoJSONParser::parse(QFile *file, QList<TrackData> &tracks,
 		case MultiPoint:
 			return multiPoint(object, proj, QJsonValue(), waypoints);
 		case LineString:
-			return lineString(object, proj, QJsonValue(), tracks);
+			return lineString(object, fileName, proj, QJsonValue(), tracks);
 		case MultiLineString:
-			return multiLineString(object, proj, QJsonValue(), tracks);
+			return multiLineString(object, fileName, proj, QJsonValue(), tracks);
 		case GeometryCollection:
-			return geometryCollection(object, proj, QJsonValue(), tracks, areas,
-			  waypoints);
+			return geometryCollection(object, fileName, proj, QJsonValue(),
+			  tracks, areas, waypoints);
 		case Feature:
-			return feature(object, proj, tracks, areas, waypoints);
+			return feature(object, fileName, proj, tracks, areas, waypoints);
 		case FeatureCollection:
-			return featureCollection(object, proj, tracks, areas, waypoints);
+			return featureCollection(object, fileName, proj, tracks, areas,
+			  waypoints);
 		case Polygon:
 			return polygon(object, proj, QJsonValue(), areas);
 		case MultiPolygon:

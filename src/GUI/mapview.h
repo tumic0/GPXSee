@@ -14,6 +14,7 @@
 #include "format.h"
 #include "markerinfoitem.h"
 #include "palette.h"
+#include "graphicsscene.h"
 
 
 class QGeoPositionInfoSource;
@@ -35,7 +36,6 @@ class GraphItem;
 class PlaneItem;
 class MapItem;
 class Area;
-class GraphicsScene;
 class QTimeZone;
 class MapAction;
 class CrosshairItem;
@@ -64,6 +64,7 @@ public:
 	void setMap(Map *map);
 	void setPositionSource(QGeoPositionInfoSource *source);
 	void setGraph(int index);
+	void showExtendedInfo(bool show) {_scene->showExtendedInfo(show);}
 
 	void plot(QPainter *painter, const QRectF &target, qreal scale,
 	  PlotFlags flags);

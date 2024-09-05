@@ -27,7 +27,7 @@ public:
 	void setPenStyle(Qt::PenStyle style);
 	void setDigitalZoom(int zoom);
 
-	ToolTip info() const;
+	ToolTip info(bool extended) const;
 
 signals:
 	void triggered();

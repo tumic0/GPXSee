@@ -27,8 +27,10 @@ GearRatioGraphItem::GearRatioGraphItem(const Graph &graph, GraphType type,
 	_top = key;
 }
 
-ToolTip GearRatioGraphItem::info() const
+ToolTip GearRatioGraphItem::info(bool extended) const
 {
+	Q_UNUSED(extended);
+
 	ToolTip tt;
 	QLocale l(QLocale::system());
 

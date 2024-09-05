@@ -1,14 +1,14 @@
-#include <QPainter>
+#include <QLocale>
+#include <QFileInfo>
 #include "data/waypoint.h"
 #include "data/route.h"
-#include "map/map.h"
 #include "format.h"
 #include "waypointitem.h"
 #include "tooltip.h"
 #include "routeitem.h"
 
 
-ToolTip RouteItem::info() const
+ToolTip RouteItem::info(bool extended) const
 {
 	ToolTip tt;
 
@@ -31,6 +31,13 @@ ToolTip RouteItem::info() const
 		}
 		tt.insert(tr("Links"), links);
 	}
+#ifdef Q_OS_ANDROID
+	Q_UNUSED(extended);
+#else // Q_OS_ANDROID
+	if (extended && !_file.isEmpty())
+		tt.insert(tr("File"), QString("<a href=\"file:%1\">%2</a>")
+		  .arg(_file, QFileInfo(_file).fileName()));
+#endif // Q_OS_ANDROID
 
 	return tt;
 }
@@ -48,6 +55,7 @@ RouteItem::RouteItem(const Route &route, Map *map, QGraphicsItem *parent)
 	_desc = route.description();
 	_comment = route.comment();
 	_links = route.links();
+	_file = route.file();
 }
 
 void RouteItem::setMap(Map *map)

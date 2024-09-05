@@ -379,6 +379,9 @@ void GraphItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void GraphItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	Popup::show(event->screenPos(), info(), event->widget());
+	GraphicsScene *gs = dynamic_cast<GraphicsScene *>(scene());
+	if (gs)
+		Popup::show(event->screenPos(), info(gs->showExtendedInfo()),
+		  event->widget());
 	GraphicsItem::mousePressEvent(event);
 }

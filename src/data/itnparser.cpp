@@ -40,6 +40,7 @@ bool ITNParser::parse(QFile *file, QList<TrackData> &tracks,
 		_errorLine++;
 	}
 
+	rd.setFile(file->fileName());
 	routes.append(rd);
 
 	return true;

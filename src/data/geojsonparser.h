@@ -37,22 +37,25 @@ private:
 	  const QJsonValue &properties, QVector<Waypoint> &waypoints);
 	bool multiPoint(const QJsonObject &object, const Projection &parent,
 	  const QJsonValue &properties, QVector<Waypoint> &waypoints);
-	bool lineString(const QJsonObject &coordinates, const Projection &parent,
-	  const QJsonValue &properties, QList<TrackData> &tracks);
-	bool multiLineString(const QJsonObject &object, const Projection &proj,
-	  const QJsonValue &properties, QList<TrackData> &tracks);
+	bool lineString(const QJsonObject &coordinates, const QString &file,
+	  const Projection &parent, const QJsonValue &properties,
+	  QList<TrackData> &tracks);
+	bool multiLineString(const QJsonObject &object, const QString &file,
+	  const Projection &proj, const QJsonValue &properties,
+	  QList<TrackData> &tracks);
 	bool polygon(const QJsonObject &object, const Projection &parent,
 	  const QJsonValue &properties, QList<Area> &areas);
 	bool multiPolygon(const QJsonObject &object, const Projection &proj,
 	  const QJsonValue &properties, QList<Area> &areas);
-	bool geometryCollection(const QJsonObject &json, const Projection &parent,
-	  const QJsonValue &properties, QList<TrackData> &tracks,
-	  QList<Area> &areas, QVector<Waypoint> &waypoints);
-	bool feature(const QJsonObject &json, const Projection &parent,
-	  QList<TrackData> &tracks, QList<Area> &areas,
-	  QVector<Waypoint> &waypoints);
-	bool featureCollection(const QJsonObject &object, const Projection &parent,
+	bool geometryCollection(const QJsonObject &json, const QString &file,
+	  const Projection &parent, const QJsonValue &properties,
 	  QList<TrackData> &tracks, QList<Area> &areas, QVector<Waypoint> &waypoints);
+	bool feature(const QJsonObject &json, const QString &file,
+	  const Projection &parent, QList<TrackData> &tracks, QList<Area> &areas,
+	  QVector<Waypoint> &waypoints);
+	bool featureCollection(const QJsonObject &object, const QString &file,
+	  const Projection &parent, QList<TrackData> &tracks, QList<Area> &areas,
+	  QVector<Waypoint> &waypoints);
 
 	QString _errorString;
 };

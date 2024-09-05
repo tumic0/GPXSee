@@ -237,6 +237,7 @@ bool IGCParser::parse(QFile *file, QList<TrackData> &tracks,
 				} else {
 					route = true;
 					routes.append(RouteData());
+					routes.last().setFile(file->fileName());
 				}
 			} else if (line[0] == 'B') {
 				if (ctx.date.isNull()) {
@@ -248,6 +249,7 @@ bool IGCParser::parse(QFile *file, QList<TrackData> &tracks,
 				}
 				if (!track) {
 					tracks.append(SegmentData());
+					tracks.last().setFile(file->fileName());
 					ctx.time = QTime(0, 0);
 					track = true;
 				}
