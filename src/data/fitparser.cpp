@@ -238,6 +238,7 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 	bool valid;
 	Event event;
 	Waypoint waypoint;
+	int trigger = -1;
 
 	if (!def->fields.size() && !def->devFields.size()) {
 		_errorString = "Undefined data message";
@@ -359,8 +360,8 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 				case 7:
 					waypoint.setDescription(Format::timeSpan(val.toUInt() / 1000));
 					break;
-				case 254:
-					waypoint.setName("#" + QString::number(val.toUInt()));
+				case 24:
+					trigger = val.toInt();
 					break;
 			}
 		}
@@ -384,7 +385,7 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 			ctx.segment.append(ctx.trackpoint);
 			ctx.trackpoint = Trackpoint();
 		}
-	} else if (def->globalId == COURSEPOINT || def->globalId == LAP) {
+	} else if (def->globalId == COURSEPOINT) {
 		if (waypoint.coordinates().isValid())
 			ctx.waypoints.append(waypoint);
 	} else if (def->globalId == LOCATION) {
@@ -392,6 +393,17 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 			waypoint.setTimestamp(QDateTime::fromSecsSinceEpoch(ctx.timestamp
 			  + 631065600, Qt::UTC));
 			ctx.waypoints.append(waypoint);
+		}
+	} else if (def->globalId == LAP && trigger >= 0) {
+		if (waypoint.coordinates().isValid()) {
+			if (trigger == 7)
+				waypoint.setName("Finish");
+			else
+				waypoint.setName("Lap " + QString::number(++ctx.laps));
+			waypoint.setTimestamp(QDateTime::fromSecsSinceEpoch(ctx.timestamp
+			  + 631065600, Qt::UTC));
+			if (trigger != 7 || ctx.laps > 1)
+				ctx.waypoints.append(waypoint);
 		}
 	}
 

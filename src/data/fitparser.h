@@ -52,7 +52,7 @@ private:
 	struct CTX {
 		CTX(QFile *file, QVector<Waypoint> &waypoints)
 		  : file(file), waypoints(waypoints), len(0), endian(0), timestamp(0),
-		  ratio(NAN) {}
+		  ratio(NAN), laps(0) {}
 
 		QFile *file;
 		QVector<Waypoint> &waypoints;
@@ -63,6 +63,7 @@ private:
 		qreal ratio;
 		Trackpoint trackpoint;
 		SegmentData segment;
+		unsigned laps;
 	};
 
 	bool readData(QFile *file, char *data, size_t size);
