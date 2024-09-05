@@ -23,9 +23,11 @@ ToolTip TrackItem::info() const
 		tt.insert(tr("Total time"), Format::timeSpan(_time));
 	if  (_movingTime > 0)
 		tt.insert(tr("Moving time"), Format::timeSpan(_movingTime));
-	if (!_date.isNull())
-		tt.insert(tr("Date"), l.toString(_date.toTimeZone(_timeZone),
-		  QLocale::ShortFormat));
+	if (!_date.isNull()) {
+		QDateTime date(_date.toTimeZone(_timeZone));
+		tt.insert(tr("Date"), l.toString(date.date(), QLocale::ShortFormat)
+		  + " " + date.time().toString("h:mm:ss"));
+	}
 	if (!_links.isEmpty()) {
 		QString links;
 		for (int i = 0; i < _links.size(); i++) {
