@@ -2305,7 +2305,7 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="38"/>
         <source>File</source>
-        <translation type="unfinished">Dosiero</translation>
+        <translation>Dosiero</translation>
     </message>
 </context>
 <context>
@@ -2571,7 +2571,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="46"/>
         <source>File</source>
-        <translation type="unfinished">Dosiero</translation>
+        <translation>Dosiero</translation>
     </message>
 </context>
 <context>
