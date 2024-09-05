@@ -36,7 +36,7 @@ ToolTip WaypointItem::info() const
 		QDateTime date(_waypoint.timestamp().toTimeZone(_timeZone));
 		tt.insert(qApp->translate("WaypointItem", "Date"),
 		  l.toString(date.date(), QLocale::ShortFormat) + " "
-			+ date.time().toString("h:m:s"));
+			+ date.time().toString("h:mm:ss"));
 	}
 	if (!_waypoint.description().isEmpty())
 		tt.insert(qApp->translate("WaypointItem", "Description"),

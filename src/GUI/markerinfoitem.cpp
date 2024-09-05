@@ -26,7 +26,7 @@ void MarkerInfoItem::setDate(const QDateTime &date)
 
 	QLocale l;
 	_s1 = l.toString(date.date(), QLocale::ShortFormat);
-	_s2 = date.time().toString("h:m:s");
+	_s2 = date.time().toString("h:mm:ss");
 
 	updateBoundingRect();
 }
