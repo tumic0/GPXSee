@@ -32,10 +32,12 @@ ToolTip WaypointItem::info() const
 			val += " (" + Format::elevation(elevations.second, _units) + ")";
 		tt.insert(qApp->translate("WaypointItem", "Elevation"), val);
 	}
-	if (_waypoint.timestamp().isValid())
+	if (_waypoint.timestamp().isValid()) {
+		QDateTime date(_waypoint.timestamp().toTimeZone(_timeZone));
 		tt.insert(qApp->translate("WaypointItem", "Date"),
-		  l.toString(_waypoint.timestamp().toTimeZone(_timeZone),
-		  QLocale::ShortFormat));
+		  l.toString(date.date(), QLocale::ShortFormat) + " "
+			+ date.time().toString("h:m:s"));
+	}
 	if (!_waypoint.description().isEmpty())
 		tt.insert(qApp->translate("WaypointItem", "Description"),
 		  _waypoint.description());
