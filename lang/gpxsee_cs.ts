@@ -1661,7 +1661,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="541"/>
         <source>Minimal duration:</source>
-        <translation>Minimální doba trvání:</translation>
+        <translation>Minimální trvání:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="426"/>

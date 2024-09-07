@@ -529,7 +529,6 @@ QWidget *OptionsDialog::createDataPage()
 	sourceTab->setLayout(sourceTabLayout);
 #endif // Q_OS_MAC
 
-
 	QHBoxLayout *pauseTypeLayout = new QHBoxLayout();
 	pauseTypeLayout->addWidget(_automaticPause);
 	pauseTypeLayout->addWidget(_manualPause);
