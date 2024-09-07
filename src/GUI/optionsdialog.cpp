@@ -529,10 +529,9 @@ QWidget *OptionsDialog::createDataPage()
 	sourceTab->setLayout(sourceTabLayout);
 #endif // Q_OS_MAC
 
-	QHBoxLayout *pauseTypeLayout = new QHBoxLayout();
+	QVBoxLayout *pauseTypeLayout = new QVBoxLayout();
 	pauseTypeLayout->addWidget(_automaticPause);
 	pauseTypeLayout->addWidget(_manualPause);
-	pauseTypeLayout->addStretch();
 
 	QFormLayout *pauseValuesLayout = new QFormLayout();
 	pauseValuesLayout->addRow(tr("Detection:"), pauseTypeLayout);
