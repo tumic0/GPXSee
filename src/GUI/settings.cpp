@@ -5,6 +5,7 @@
 #include <QGeoPositionInfoSource>
 #include "common/config.h"
 #include "data/graph.h"
+#include "GUI/mapview.h"
 #include "format.h"
 #include "units.h"
 #include "timetype.h"
@@ -30,6 +31,8 @@
 	(IMPERIAL_UNITS() \
 	  ? QPageSize::PageSizeId::Letter \
 	  : QPageSize::PageSizeId::A4)
+
+#define ALL_LAYERS (int)(MapView::Layer::Raster | MapView::Layer::Vector)
 
 #ifdef Q_OS_ANDROID
 #define PIXMAP_CACHE 384
@@ -144,6 +147,7 @@ SETTING(showToolbars,        "toolbar",                true                   );
 SETTING(activeMap,           "map",                    "Open Street Map"      );
 SETTING(showMap,             "show",                   true                   );
 SETTING(cursorCoordinates,   "coordinates",            false                  );
+SETTING(layers,              "layers",                 ALL_LAYERS             );
 
 /* Graph */
 SETTING(showGraphs,          "show",                   true                   );

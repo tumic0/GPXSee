@@ -114,8 +114,11 @@ const QFont *RasterTile::poiFont(Style::FontSize size, int zoom,
 	}
 }
 
-void RasterTile::ll2xy(QList<MapData::Poly> &polys) const
+void RasterTile::ll2xy(QList<MapData::Poly> &polys, bool polygons) const
 {
+	if (!_vectors && !polygons)
+		return;
+
 	for (int i = 0; i < polys.size(); i++) {
 		MapData::Poly &poly = polys[i];
 		for (int j = 0; j < poly.points.size(); j++) {
@@ -127,6 +130,9 @@ void RasterTile::ll2xy(QList<MapData::Poly> &polys) const
 
 void RasterTile::ll2xy(QList<MapData::Point> &points) const
 {
+	if (!_vectors)
+		return;
+
 	for (int i = 0; i < points.size(); i++) {
 		QPointF p(ll2xy(points.at(i).coordinates));
 		points[i].coordinates = Coordinates(p.x(), p.y());
@@ -145,6 +151,9 @@ void RasterTile::drawPolygons(QPainter *painter,
 				continue;
 
 			if (poly.raster.isValid()) {
+				if (!_rasters)
+					continue;
+
 				RectC r(poly.raster.rect());
 				QPointF tl(ll2xy(r.topLeft()));
 				QPointF br(ll2xy(r.bottomRight()));
@@ -173,6 +182,9 @@ void RasterTile::drawPolygons(QPainter *painter,
 				//painter->drawRect(QRectF(tl, br));
 				//painter->setRenderHint(QPainter::Antialiasing);
 			} else {
+				if (!_vectors)
+					continue;
+
 				const Style::Polygon &style = _data->style()->polygon(poly.type);
 
 				painter->setPen(style.pen());
@@ -186,6 +198,9 @@ void RasterTile::drawPolygons(QPainter *painter,
 void RasterTile::drawLines(QPainter *painter,
   const QList<MapData::Poly> &lines) const
 {
+	if (!_vectors)
+		return;
+
 	painter->setBrush(Qt::NoBrush);
 
 	for (int i = 0; i < lines.size(); i++) {
@@ -238,6 +253,9 @@ void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
 	QSet<QString> set;
 	QList<TextItem *> labels;
 
+	if (!_vectors)
+		return;
+
 	for (int i = 0; i < polygons.size(); i++) {
 		const MapData::Poly &poly = polygons.at(i);
 		bool exists = set.contains(poly.label.text());
@@ -272,6 +290,9 @@ void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
 void RasterTile::processLines(QList<MapData::Poly> &lines,
   QList<TextItem*> &textItems, const QImage (&arrows)[2])
 {
+	if (!_vectors)
+		return;
+
 	std::stable_sort(lines.begin(), lines.end());
 
 	if (_zoom >= 22)
@@ -390,6 +411,9 @@ void RasterTile::processShields(const QList<MapData::Poly> &lines,
 void RasterTile::processPoints(QList<MapData::Point> &points,
   QList<TextItem*> &textItems)
 {
+	if (!_vectors)
+		return;
+
 	std::sort(points.begin(), points.end());
 
 	for (int i = 0; i < points.size(); i++) {
@@ -511,8 +535,8 @@ void RasterTile::render()
 	arrows[WATER] = HIDPI_IMG(":/map", "water-arrow", _ratio);
 
 	fetchData(polygons, lines, points);
-	ll2xy(polygons);
-	ll2xy(lines);
+	ll2xy(polygons, true);
+	ll2xy(lines, false);
 	ll2xy(points);
 
 	processPoints(points, textItems);

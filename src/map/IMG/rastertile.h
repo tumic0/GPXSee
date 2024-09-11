@@ -19,9 +19,10 @@ class RasterTile
 public:
 	RasterTile(const Projection &proj, const Transform &transform, MapData *data,
 	  int zoom, const QRect &rect, qreal ratio, const QString &key,
-	  bool hillShading)
+	  bool hillShading, bool rasters, bool vectors)
 		: _proj(proj), _transform(transform), _data(data), _zoom(zoom),
-		_rect(rect), _ratio(ratio), _key(key), _hillShading(hillShading) {}
+		_rect(rect), _ratio(ratio), _key(key), _hillShading(hillShading),
+		_rasters(rasters), _vectors(vectors) {}
 
 	const QString &key() const {return _key;}
 	QPoint xy() const {return _rect.topLeft();}
@@ -53,7 +54,7 @@ private:
 	  {return _transform.proj2img(_proj.ll2xy(c));}
 	Coordinates xy2ll(const QPointF &p) const
 	  {return _proj.xy2ll(_transform.img2proj(p));}
-	void ll2xy(QList<MapData::Poly> &polys) const;
+	void ll2xy(QList<MapData::Poly> &polys, bool polygons) const;
 	void ll2xy(QList<MapData::Point> &points) const;
 
 	void drawPolygons(QPainter *painter, const QList<MapData::Poly> &polygons) const;
@@ -86,6 +87,7 @@ private:
 	QString _key;
 	QPixmap _pixmap;
 	bool _hillShading;
+	bool _rasters, _vectors;
 };
 
 }

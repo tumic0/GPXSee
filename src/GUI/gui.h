@@ -68,6 +68,7 @@ private slots:
 	void showGraphGrids(bool show);
 	void showGraphSliderInfo(bool show);
 	void showPathMarkerInfo(QAction *action);
+	void selectMapLayers(QAction *action);
 #ifdef Q_OS_ANDROID
 	void showGraphTabs(bool show);
 #else // Q_OS_ANDROID
@@ -298,6 +299,9 @@ private:
 	QAction *_downloadMapDEMAction;
 	QAction *_showDEMTilesAction;
 	QAction *_drawHillShadingAction;
+	QAction *_drawRastersAction;
+	QAction *_drawVectorsAction;
+	QAction *_drawAllAction;
 	QAction *_mapsEnd;
 	QAction *_poisEnd;
 #ifndef Q_OS_ANDROID

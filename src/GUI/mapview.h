@@ -51,7 +51,14 @@ public:
 		HiRes = 1,
 		Expand = 2
 	};
-	Q_DECLARE_FLAGS(PlotFlags, Flag)
+	Q_DECLARE_FLAGS(Flags, Flag)
+
+	enum Layer {
+		NoLayers = 0,
+		Raster = 1,
+		Vector = 2
+	};
+	Q_DECLARE_FLAGS(Layers, Layer)
 
 	MapView(Map *map, POI *poi, QWidget *parent = 0);
 
@@ -66,8 +73,7 @@ public:
 	void setGraph(int index);
 	void showExtendedInfo(bool show) {_scene->showExtendedInfo(show);}
 
-	void plot(QPainter *painter, const QRectF &target, qreal scale,
-	  PlotFlags flags);
+	void plot(QPainter *painter, const QRectF &target, qreal scale, Flags flags);
 
 	void clear();
 
@@ -130,6 +136,7 @@ public slots:
 	void showMotionInfo(bool show);
 	void useStyles(bool use);
 	void drawHillShading(bool draw);
+	void selectLayers(Layers layers);
 
 private slots:
 	void updatePOI();
@@ -209,6 +216,7 @@ private:
 	bool _infoBackground;
 
 	bool _hillShading;
+	Layers _layers;
 
 	int _digitalZoom;
 	bool _plot;
@@ -221,5 +229,7 @@ private:
 	int _pinchZoom;
 	int _wheelDelta;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(MapView::Layers)
 
 #endif // MAPVIEW_H

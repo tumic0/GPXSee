@@ -62,7 +62,8 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent) : QGraphicsView(parent)
 	_outputProjection = PCS::pcs(3857);
 	_inputProjection = GCS::gcs(4326);
 	_hidpi = true;
-	_hillShading = false;
+	_hillShading = true;
+	_layers = Layer::Raster | Layer::Vector;
 	_map = map;
 	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi);
 	connect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
@@ -683,7 +684,7 @@ void MapView::keyReleaseEvent(QKeyEvent *event)
 }
 
 void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
-  PlotFlags flags)
+  Flags flags)
 {
 	QRect orig, adj;
 	qreal ratio, diff, q, p;
@@ -1115,6 +1116,10 @@ void MapView::drawBackground(QPainter *painter, const QRectF &rect)
 			flags = Map::OpenGL;
 		if (_hillShading)
 			flags |= Map::HillShading;
+		if (_layers & Layer::Raster)
+			flags |= Map::Rasters;
+		if (_layers & Layer::Vector)
+			flags |= Map::Vectors;
 
 		_map->draw(painter, ir, flags);
 	}
@@ -1248,6 +1253,13 @@ void MapView::useAntiAliasing(bool use)
 void MapView::drawHillShading(bool draw)
 {
 	_hillShading = draw;
+
+	setMap(_map);
+}
+
+void MapView::selectLayers(Layers layers)
+{
+	_layers = layers;
 
 	setMap(_map);
 }

@@ -21,7 +21,9 @@ public:
 		NoFlags = 0,
 		Block = 1,
 		OpenGL = 2,
-		HillShading = 4
+		HillShading = 4,
+		Rasters = 8,
+		Vectors = 16
 	};
 	Q_DECLARE_FLAGS(Flags, Flag)
 

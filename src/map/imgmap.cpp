@@ -246,7 +246,8 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				else {
 					tiles.append(RasterTile(_projection, _transform, _data.at(n),
 					  _zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio,
-					  key, !n && flags & Map::HillShading));
+					  key, !n && flags & Map::HillShading, flags & Map::Rasters,
+					  flags & Map::Vectors));
 				}
 			}
 		}

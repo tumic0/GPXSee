@@ -364,6 +364,21 @@ void GUI::createActions()
 	_showCoordinatesAction->setCheckable(true);
 	connect(_showCoordinatesAction, &QAction::triggered, _mapView,
 	  &MapView::showCursorCoordinates);
+	QActionGroup *mapLayersGroup = new QActionGroup(this);
+	connect(mapLayersGroup, &QActionGroup::triggered, this,
+	  &GUI::selectMapLayers);
+	_drawAllAction = new QAction(tr("All"), this);
+	_drawAllAction->setMenuRole(QAction::NoRole);
+	_drawAllAction->setCheckable(true);
+	_drawAllAction->setActionGroup(mapLayersGroup);
+	_drawRastersAction = new QAction(tr("Raster only"), this);
+	_drawRastersAction->setMenuRole(QAction::NoRole);
+	_drawRastersAction->setCheckable(true);
+	_drawRastersAction->setActionGroup(mapLayersGroup);
+	_drawVectorsAction = new QAction(tr("Vector only"), this);
+	_drawVectorsAction->setMenuRole(QAction::NoRole);
+	_drawVectorsAction->setCheckable(true);
+	_drawVectorsAction->setActionGroup(mapLayersGroup);
 
 	// Position
 	_showPositionAction = new QAction(QIcon::fromTheme(SHOW_POS_NAME,
@@ -677,6 +692,11 @@ void GUI::createMenus()
 	_mapMenu->addAction(_loadMapDirAction);
 	_mapMenu->addAction(_clearMapCacheAction);
 	_mapMenu->addSeparator();
+	QMenu *layersMenu = _mapMenu->addMenu(tr("Layers"));
+	layersMenu->menuAction()->setMenuRole(QAction::NoRole);
+	layersMenu->addAction(_drawAllAction);
+	layersMenu->addAction(_drawRastersAction);
+	layersMenu->addAction(_drawVectorsAction);
 	_mapMenu->addAction(_showCoordinatesAction);
 	_mapMenu->addSeparator();
 	_mapMenu->addAction(_showMapAction);
@@ -1462,7 +1482,7 @@ void GUI::plotMainPage(QPainter *painter, const QRectF &rect, qreal ratio,
 		sc = 1;
 	}
 
-	MapView::PlotFlags flags;
+	MapView::Flags flags;
 	if (_options.hiresPrint)
 		flags |= MapView::HiRes;
 	if (expand)
@@ -1716,6 +1736,16 @@ void GUI::showPathMarkerInfo(QAction *action)
 		_mapView->showMarkers(false);
 		_mapView->showMarkerInfo(MarkerInfoItem::None);
 	}
+}
+
+void GUI::selectMapLayers(QAction *action)
+{
+	if (action == _drawVectorsAction)
+		_mapView->selectLayers(MapView::Layer::Vector);
+	else if (action == _drawRastersAction)
+		_mapView->selectLayers(MapView::Layer::Raster);
+	else
+		_mapView->selectLayers(MapView::Layer::Raster | MapView::Layer::Vector);
 }
 
 void GUI::loadMap()
@@ -2478,10 +2508,19 @@ void GUI::writeSettings()
 #endif // Q_OS_ANDROID
 
 	/* Map */
+	MapView::Layers ml;
+	if (_drawRastersAction->isChecked())
+		ml = MapView::Layer::Raster;
+	else if (_drawVectorsAction->isChecked())
+		ml = MapView::Layer::Vector;
+	else
+		ml = MapView::Layer::Raster | MapView::Layer::Vector;
+
 	settings.beginGroup(SETTINGS_MAP);
 	WRITE(activeMap, _map->name());
 	WRITE(showMap, _showMapAction->isChecked());
 	WRITE(cursorCoordinates, _showCoordinatesAction->isChecked());
+	WRITE(layers, (int)ml);
 	settings.endGroup();
 
 	/* Graph */
@@ -2716,6 +2755,15 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 		_showCoordinatesAction->setChecked(true);
 		_mapView->showCursorCoordinates(true);
 	}
+	int layers = READ(layers).toInt();
+	if (layers == MapView::Layer::Raster) {
+		_drawRastersAction->setChecked(true);
+		_mapView->selectLayers(MapView::Layer::Raster);
+	} else if (layers == MapView::Layer::Vector) {
+		_drawVectorsAction->setChecked(true);
+		_mapView->selectLayers(MapView::Layer::Vector);
+	} else
+		_drawAllAction->setChecked(true);
 	activeMap = READ(activeMap).toString();
 	settings.endGroup();
 
@@ -2831,10 +2879,10 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 
 	/* DEM */
 	settings.beginGroup(SETTINGS_DEM);
-	if (READ(drawHillShading).toBool()) {
+	if (READ(drawHillShading).toBool())
 		_drawHillShadingAction->setChecked(true);
-		_mapView->drawHillShading(true);
-	}
+	else
+		_mapView->drawHillShading(false);
 	settings.endGroup();
 
 	/* Position */

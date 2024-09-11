@@ -95,6 +95,7 @@ public:
 	static const Setting activeMap;
 	static const Setting showMap;
 	static const Setting cursorCoordinates;
+	static const Setting layers;
 
 	/* Graph */
 	static const Setting showGraphs;
