@@ -486,17 +486,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="370"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Tümü</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="374"/>
         <source>Raster only</source>
-        <translation type="unfinished"></translation>
+        <translation>Yalnızca raster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="378"/>
         <source>Vector only</source>
-        <translation type="unfinished"></translation>
+        <translation>Yalnızca vektör</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="385"/>
@@ -723,7 +723,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="695"/>
         <source>Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Katmanlar</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="704"/>
