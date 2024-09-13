@@ -282,24 +282,28 @@ void Style::defaultPolygonStyle()
 	_polygons[0x10102] = Polygon(QBrush(QColor(0xd9, 0x8b, 0x21)));
 	_polygons[0x10104] = Polygon(QBrush(QColor(0xff, 0xff, 0xff)));
 	_polygons[0x10105] = Polygon(QBrush(QColor(0xa5, 0x81, 0x40)));
+	_polygons[0x10106] = Polygon(QBrush(QColor(0xf1, 0xf0, 0xe5)));
 	_polygons[0x10301] = Polygon(QBrush(QColor(0x98, 0xc0, 0x64)));
 	_polygons[0x10302] = Polygon(QBrush(QColor(0xa0, 0xa0, 0xff)));
 	_polygons[0x10303] = Polygon(QBrush(QColor(0xb0, 0xb0, 0xff)));
 	_polygons[0x10304] = Polygon(QBrush(QColor(0xc0, 0xc0, 0xff)));
 	_polygons[0x10305] = Polygon(QBrush(QColor(0xc0, 0xd0, 0xff)));
 	_polygons[0x10306] = Polygon(QBrush(QColor(0xc0, 0xe0, 0xff)));
+	_polygons[0x10307] = Polygon(QBrush(QColor(0xff, 0xff, 0xff)));
+	_polygons[0x10308] = Polygon(QBrush(QColor(0xff, 0xff, 0xff)));
 	_polygons[0x10409] = Polygon(QBrush(QColor(0xff, 0x40, 0x40),
 	  Qt::FDiagPattern));
 	_polygons[0x10503] = Polygon(QBrush(QColor(0xff, 0x40, 0x40),
 	  Qt::FDiagPattern));
 	_polygons[0x10601] = Polygon(QBrush(QColor(0xaa, 0xaa, 0xaa)));
 	_polygons[0x1060a] = Polygon(QBrush(QColor(0xfc, 0xb4, 0xfc)));
+	_polygons[0x10614] = Polygon(QBrush(QColor(0xff, 0xff, 0xff)));
 
 	// Draw order
 	_drawOrder
-	  << TYPE(0x4b) << 0x10d01 << 0x10104 << TYPE(0x4a)
+	  << TYPE(0x4b) << 0x10d01 << 0x10106 << 0x10104 << TYPE(0x4a) << 0x10614
 	  << 0x10101 << 0x10102 << 0x10301 << 0x10302 << 0x10303 << 0x10304
-	  << 0x10305 << 0x10306 << 0x10601 << 0x10105
+	  << 0x10305 << 0x10306 << 0x10307 << 0x10308 << 0x10601 << 0x10105
 	  << TYPE(0x01) << 0x10800 << TYPE(0x02) << 0x10801 << TYPE(0x03) << 0x10802
 	  << TYPE(0x17) << 0x10a04 << TYPE(0x18) << 0x1090c << TYPE(0x1a) << 0x1090e
 	  << TYPE(0x28) << 0x10b01 << TYPE(0x32) << 0x10b02 << TYPE(0x3c) << 0x10b03
@@ -690,9 +694,11 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x10205] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
 	_points[0x10206] = Point(QImage(":/marine/beacon.png"), QPoint(0, -8));
 	_points[0x10207] = Point(QImage(":/marine/spar-buoy.png"), QPoint(2, -9));
+	_points[0x10208] = Point(QImage(":/marine/buoy.png"), QPoint(2, -9));
 	_points[0x10209] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
 	_points[0x1020a] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
 	_points[0x1020b] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
+	_points[0x1020c] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
 	_points[0x1020d] = Point(QImage(":/marine/light-platform.png"),
 	  QPoint(8, -8));
 	_points[0x1020e] = Point(QImage(":/marine/beacon.png"), QPoint(0, -8));
