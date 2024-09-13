@@ -504,17 +504,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="370"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Toutes</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="374"/>
         <source>Raster only</source>
-        <translation type="unfinished"></translation>
+        <translation>Raster uniquement</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="378"/>
         <source>Vector only</source>
-        <translation type="unfinished"></translation>
+        <translation>Vecteur uniquement</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="385"/>
@@ -711,7 +711,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="695"/>
         <source>Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Couches</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="721"/>
