@@ -1869,7 +1869,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="667"/>
         <source>Hillshading</source>
-        <translation>Dombárnyékolás</translation>
+        <translation>Domborzatárnyékolás</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="687"/>
