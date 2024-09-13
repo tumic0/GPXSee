@@ -33,7 +33,8 @@ static QString capitalized(const QString &str)
 		QChar last(str.at(i-1));
 		QChar c(str.at(i));
 
-		ret[i] = (last.isSpace() || last == '(') ? c : c.toLower();
+		ret[i] = (last.isSpace() || last == '(' || last == '"')
+			? c : c.toLower();
 	}
 
 	return ret;
