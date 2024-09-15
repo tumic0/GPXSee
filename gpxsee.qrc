@@ -99,7 +99,6 @@
 	<!-- marine stuff (IMG & ENC style) -->
 	<qresource prefix="/marine">
 		<file alias="light-major.png">icons/map/marine/light-major.png</file>
-		<file alias="light-platform.png">icons/map/marine/light-platform.png</file>
 		<file alias="buoy.png">icons/map/marine/buoy.png</file>
 		<file alias="beacon.png">icons/map/marine/beacon.png</file>
 		<file alias="rock-exposed.png">icons/map/marine/rock-exposed.png</file>

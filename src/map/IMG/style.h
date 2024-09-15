@@ -113,6 +113,9 @@ public:
 	const QFont *font(Style::FontSize size, Style::FontSize defaultSize
 	  = Style::Normal) const;
 
+	const QImage *light() const {return &_light;}
+	const QPoint &lightOffset() const {return _lightOffset;}
+
 	static bool isPOI(quint32 type)
 	  {return !((type >= TYPE(0x01) && type <= TYPE(0x1f))
 	  || (type >= 0x11400 && type < 0x11500));}
@@ -143,6 +146,10 @@ public:
 	  {return (type == 0x10301);}
 	static bool isObstructionPoint(quint32 type)
 	  {return (type >= 0x10400 && type <= 0x10401);}
+	static bool isBuoy(quint32 type)
+	  {return (type >= 0x10200 && type < 0x10300);}
+	static bool isLight(quint32 type)
+	  {return (type >= 0x10100 && type < 0x10200);}
 	static bool isMarinePoint(quint32 type)
 	  {return type >= 0x10100 && type < 0x10a00;}
 	static bool isMarina(quint32 type)
@@ -193,6 +200,9 @@ private:
 
 	/* Fonts and images must be initialized after QGuiApplication! */
 	QFont _large, _normal, _small, _extraSmall;
+
+	QImage _light;
+	QPoint _lightOffset;
 };
 
 }

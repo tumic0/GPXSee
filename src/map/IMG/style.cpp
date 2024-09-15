@@ -675,17 +675,17 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x11108] = _points[0x3008];
 
 	// Marine stuff
-	_points[0x10100] = Point(QImage(":/marine/light-major.png"), QPoint(8, -8));
-	_points[0x10101] = Point(QImage(":/marine/light-major.png"), QPoint(8, -8));
-	_points[0x10102] = Point(QImage(":/marine/light-major.png"), QPoint(8, -8));
-	_points[0x10103] = Point(QImage(":/marine/light-major.png"), QPoint(8, -8));
-	_points[0x10104] = Point(QImage(":/marine/light-major.png"), QPoint(8, -8));
-	_points[0x10105] = Point(QImage(":/marine/light-major.png"), QPoint(8, -8));
-	_points[0x10106] = Point(QImage(":/marine/light-major.png"), QPoint(8, -8));
-	_points[0x10107] = Point(QImage(":/marine/light-major.png"), QPoint(8, -8));
-	_points[0x10108] = Point(QImage(":/marine/light-major.png"), QPoint(8, -8));
-	_points[0x10109] = Point(QImage(":/marine/light-major.png"), QPoint(8, -8));
-	_points[0x1010a] = Point(QImage(":/marine/light-major.png"), QPoint(8, -8));
+	_points[0x10100] = Point(QImage(":/marine/light-major.png"));
+	_points[0x10101] = Point(QImage(":/marine/light-major.png"));
+	_points[0x10102] = Point(QImage(":/marine/light-major.png"));
+	_points[0x10103] = Point(QImage(":/marine/light-major.png"));
+	_points[0x10104] = Point(QImage(":/marine/light-major.png"));
+	_points[0x10105] = Point(QImage(":/marine/light-major.png"));
+	_points[0x10106] = Point(QImage(":/marine/light-major.png"));
+	_points[0x10107] = Point(QImage(":/marine/light-major.png"));
+	_points[0x10108] = Point(QImage(":/marine/light-major.png"));
+	_points[0x10109] = Point(QImage(":/marine/light-major.png"));
+	_points[0x1010a] = Point(QImage(":/marine/light-major.png"));
 	_points[0x10200] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
 	_points[0x10201] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
 	_points[0x10202] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
@@ -699,8 +699,7 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x1020a] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
 	_points[0x1020b] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
 	_points[0x1020c] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
-	_points[0x1020d] = Point(QImage(":/marine/light-platform.png"),
-	  QPoint(8, -8));
+	_points[0x1020d] = Point(QImage(":/marine/platform.png"));
 	_points[0x1020e] = Point(QImage(":/marine/beacon.png"), QPoint(0, -8));
 	_points[0x1020f] = Point(QImage(":/marine/beacon.png"), QPoint(0, -8));
 	_points[0x10210] = Point(QImage(":/marine/beacon.png"), QPoint(0, -8));
@@ -1277,6 +1276,9 @@ Style::Style(qreal ratio, SubFile *typ)
 	_normal = pixelSizeFont(14);
 	_small = pixelSizeFont(12);
 	_extraSmall = pixelSizeFont(10);
+
+	_light = QImage(":/marine/light.png");
+	_lightOffset = QPoint(11, 11);
 
 	defaultLineStyle(ratio);
 	defaultPolygonStyle();

@@ -107,6 +107,27 @@ bool RGNFile::readObstructionInfo(Handle &hdl, quint8 flags, quint32 size,
 	return true;
 }
 
+bool RGNFile::readBuoyInfo(Handle &hdl, quint8 flags, MapData::Point *point) const
+{
+	quint16 val;
+	quint8 lc;
+
+	if ((flags & 0xe0) != 0xe0)
+		return true;
+
+	if (!readUInt16(hdl, val))
+		return false;
+
+	lc = (val >> 10) & 0x0f;
+	if (!lc)
+		lc = (val >> 6) & 7;
+
+	if (lc)
+		point->flags |= MapData::Point::Light;
+
+	return true;
+}
+
 bool RGNFile::readLabel(Handle &hdl, LBLFile *lbl, Handle &lblHdl,
   quint8 flags, quint32 size, MapData::Point *point) const
 {
@@ -116,7 +137,7 @@ bool RGNFile::readLabel(Handle &hdl, LBLFile *lbl, Handle &lblHdl,
 		return false;
 
 	point->label = lbl->label(lblHdl, this, hdl, size);
-	point->classLabel = true;
+	point->flags |= MapData::Point::ClassLabel;
 
 	return true;
 }
@@ -154,12 +175,17 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 
 	if (poly && Style::isRaster(poly->type))
 		readRasterInfo(hdl, lbl, rs, poly);
+	if (point && !Style::isMarinePoint(point->type))
+		readLabel(hdl, lbl, lblHdl, flags, rs, point);
+
 	if (point && Style::isDepthPoint(point->type))
 		readDepthInfo(hdl, flags, rs, point);
 	if (point && Style::isObstructionPoint(point->type))
 		readObstructionInfo(hdl, flags, rs, point);
-	if (point && !Style::isMarinePoint(point->type))
-		readLabel(hdl, lbl, lblHdl, flags, rs, point);
+	if (point && Style::isBuoy(point->type))
+		readBuoyInfo(hdl, flags, point);
+	if (point && Style::isLight(point->type))
+		point->flags |= MapData::Point::Light;
 
 	return seek(hdl, off + rs);
 }

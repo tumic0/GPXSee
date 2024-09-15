@@ -418,31 +418,36 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 
 	for (int i = 0; i < points.size(); i++) {
 		const MapData::Point &point = points.at(i);
-		const Style::Point &style = _data->style()->point(point.type);
+		const Style *style = _data->style();
+		const Style::Point &ps = style->point(point.type);
 		bool poi = Style::isPOI(point.type);
 
 		const QString *label = point.label.text().isEmpty()
 		  ? 0 : &(point.label.text());
-		const QImage *img = style.img().isNull() ? 0 : &style.img();
+		const QImage *img = ps.img().isNull() ? 0 : &ps.img();
 		const QFont *fnt = poi
-		  ? poiFont(style.text().size(), _zoom, point.classLabel)
-		  : _data->style()->font(style.text().size());
-		const QColor *color = style.text().color().isValid()
-		  ? &style.text().color() : &textColor;
+		  ? poiFont(ps.text().size(), _zoom, point.flags
+			& MapData::Point::ClassLabel)
+		  : style->font(ps.text().size());
+		const QColor *color = ps.text().color().isValid()
+		  ? &ps.text().color() : &textColor;
 		const QColor *hcolor = Style::isDepthPoint(point.type)
 		  ? 0 : &haloColor;
 
 		if ((!label || !fnt) && !img)
 			continue;
 
-		QPoint offset = img ? style.offset() : QPoint(0, 0);
+		QPoint pos(point.coordinates.lon(), point.coordinates.lat());
+		QPoint offset = img ? ps.offset() : QPoint(0, 0);
 
-		TextPointItem *item = new TextPointItem(QPoint(point.coordinates.lon(),
-		  point.coordinates.lat()) + offset, label, fnt, img, color, hcolor, 0,
-		  ICON_PADDING);
-		if (item->isValid() && !item->collides(textItems))
+		TextPointItem *item = new TextPointItem(pos + offset, label, fnt, img,
+		  color, hcolor, 0, ICON_PADDING);
+		if (item->isValid() && !item->collides(textItems)) {
 			textItems.append(item);
-		else
+			if (point.flags & MapData::Point::Light)
+				textItems.append(new TextPointItem(pos + style->lightOffset(),
+				  0, 0, style->light(), 0, 0, 0, 0));
+		} else
 			delete item;
 	}
 }

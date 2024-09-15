@@ -45,13 +45,19 @@ public:
 	};
 
 	struct Point {
-		Point() : id(0), classLabel(false) {}
+		Point() : id(0), flags(0) {}
+
+		enum Flags {
+			NoFlag = 0,
+			ClassLabel = 1,
+			Light = 2
+		};
 
 		Coordinates coordinates;
 		Label label;
-		quint32 type;
 		quint64 id;
-		bool classLabel;
+		quint32 type;
+		quint32 flags;
 
 		bool operator<(const Point &other) const
 		  {return id < other.id;}

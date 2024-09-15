@@ -64,6 +64,7 @@ private:
 	  MapData::Point *point) const;
 	bool readObstructionInfo(Handle &hdl, quint8 flags, quint32 size,
 	  MapData::Point *point) const;
+	bool readBuoyInfo(Handle &hdl, quint8 flags, MapData::Point *point) const;
 	bool readLabel(Handle &hdl, LBLFile *lbl, Handle &lblHdl,
 	  quint8 flags, quint32 size, MapData::Point *point) const;
 
