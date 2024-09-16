@@ -486,17 +486,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="370"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Все</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="374"/>
         <source>Raster only</source>
-        <translation type="unfinished"></translation>
+        <translation>Лише растр</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="378"/>
         <source>Vector only</source>
-        <translation type="unfinished"></translation>
+        <translation>Лише вектор</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="385"/>
@@ -723,7 +723,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="695"/>
         <source>Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Шари</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="704"/>
@@ -1894,12 +1894,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="388"/>
         <source>Detect pauses</source>
-        <translation type="unfinished"></translation>
+        <translation>Визначити паузи</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="537"/>
         <source>Detection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Визначення:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="656"/>
