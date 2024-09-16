@@ -183,12 +183,14 @@ void VectorTile::polys(const RectC &rect, const Zoom &zoom,
 			}
 
 			copyPolys(rect, &polys->polygons, polygons);
-			copyPolys(rect, &polys->lines, lines);
+			if (lines)
+				copyPolys(rect, &polys->lines, lines);
 
 			cache->insert(subdiv, polys);
 		} else {
 			copyPolys(rect, &polys->polygons, polygons);
-			copyPolys(rect, &polys->lines, lines);
+			if (lines)
+				copyPolys(rect, &polys->lines, lines);
 		}
 	}
 

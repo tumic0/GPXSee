@@ -54,7 +54,7 @@ private:
 	  {return _transform.proj2img(_proj.ll2xy(c));}
 	Coordinates xy2ll(const QPointF &p) const
 	  {return _proj.xy2ll(_transform.img2proj(p));}
-	void ll2xy(QList<MapData::Poly> &polys, bool polygons) const;
+	void ll2xy(QList<MapData::Poly> &polys) const;
 	void ll2xy(QList<MapData::Point> &points) const;
 
 	void drawPolygons(QPainter *painter, const QList<MapData::Poly> &polygons) const;
