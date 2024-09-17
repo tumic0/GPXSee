@@ -184,8 +184,6 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 		readObstructionInfo(hdl, flags, rs, point);
 	if (point && Style::isBuoy(point->type))
 		readBuoyInfo(hdl, flags, point);
-	if (point && Style::isLight(point->type))
-		point->flags |= MapData::Point::Light;
 
 	return seek(hdl, off + rs);
 }

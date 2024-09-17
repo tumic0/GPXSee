@@ -429,7 +429,7 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		  color, hcolor, 0, ICON_PADDING);
 		if (item->isValid() && !item->collides(textItems)) {
 			textItems.append(item);
-			if (point.flags & MapData::Point::Light)
+			if (Style::isLight(point.type) || point.flags & MapData::Point::Light)
 				textItems.append(new TextPointItem(pos + style->lightOffset(),
 				  0, 0, style->light(), 0, 0, 0, 0));
 		} else
