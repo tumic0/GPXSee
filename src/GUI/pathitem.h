@@ -75,7 +75,7 @@ private:
 	QPointF position(qreal distance) const;
 	void updatePainterPath();
 	void updateShape();
-	void addSegment(const Coordinates &c1, const Coordinates &c2);
+	bool addSegment(const Coordinates &c1, const Coordinates &c2);
 	void setMarkerInfo(qreal pos);
 	void updateColor();
 	void updateWidth();

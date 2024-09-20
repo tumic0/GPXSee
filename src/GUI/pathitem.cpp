@@ -69,7 +69,7 @@ void PathItem::updateShape()
 	_shape = s.createStroke(_painterPath);
 }
 
-void PathItem::addSegment(const Coordinates &c1, const Coordinates &c2)
+bool PathItem::addSegment(const Coordinates &c1, const Coordinates &c2)
 {
 	if (fabs(c1.lon() - c2.lon()) > 180.0) {
 		// Split segment on date line crossing
@@ -91,8 +91,21 @@ void PathItem::addSegment(const Coordinates &c1, const Coordinates &c2)
 			_painterPath.moveTo(_map->ll2xy(Coordinates(180, p.y())));
 		}
 		_painterPath.lineTo(_map->ll2xy(c2));
-	} else
-		_painterPath.lineTo(_map->ll2xy(c2));
+
+		return true;
+	} else {
+		QPointF p(_map->ll2xy(c2));
+		const QPainterPath::Element &e = _painterPath.elementAt(
+		  _painterPath.elementCount() - 1);
+		qreal dx = qAbs(p.x() - e.x);
+		qreal dy = qAbs(p.y() - e.y);
+
+		if (dx >= 1.0 || dy >= 1.0) {
+			_painterPath.lineTo(p);
+			return true;
+		} else
+			return false;
+	}
 }
 
 void PathItem::updatePainterPath()
@@ -101,24 +114,29 @@ void PathItem::updatePainterPath()
 
 	for (int i = 0; i < _path.size(); i++) {
 		const PathSegment &segment = _path.at(i);
-		_painterPath.moveTo(_map->ll2xy(segment.first().coordinates()));
+		const PathPoint *p1 = &segment.first();
+
+		_painterPath.moveTo(_map->ll2xy(p1->coordinates()));
 
 		for (int j = 1; j < segment.size(); j++) {
-			const PathPoint &p1 = segment.at(j-1);
-			const PathPoint &p2 = segment.at(j);
-			unsigned n = segments(p2.distance() - p1.distance());
+			const PathPoint *p2 = &segment.at(j);
+			double dist = p2->distance() - p1->distance();
 
-			if (n > 1) {
-				GreatCircle gc(p1.coordinates(), p2.coordinates());
-				Coordinates last = p1.coordinates();
+			if (dist > GEOGRAPHICAL_MILE) {
+				GreatCircle gc(p1->coordinates(), p2->coordinates());
+				Coordinates last(p1->coordinates());
+				unsigned n = segments(dist);
 
 				for (unsigned k = 1; k <= n; k++) {
 					Coordinates c(gc.pointAt(k/(double)n));
 					addSegment(last, c);
 					last = c;
 				}
-			} else
-				addSegment(p1.coordinates(), p2.coordinates());
+				p1 = p2;
+			} else {
+				if (addSegment(p1->coordinates(), p2->coordinates()))
+					p1 = p2;
+			}
 		}
 	}
 }
@@ -289,12 +307,14 @@ QPointF PathItem::position(qreal x) const
 		p1 = seg->at(mid-1).distance(); p2 = seg->at(mid).distance();
 	}
 
-	unsigned n = segments(p2 - p1);
-	if (n > 1) {
+	qreal dist = p2 - p1;
+
+	if (dist > GEOGRAPHICAL_MILE) {
 		GreatCircle gc(c1, c2);
+		unsigned n = segments(dist);
 
 		// Great circle point
-		double f = (x - p1) / (p2 - p1);
+		double f = (x - p1) / (dist);
 		QPointF p(_map->ll2xy(gc.pointAt(f)));
 
 		// Segment line of the great circle path
@@ -310,7 +330,7 @@ QPointF PathItem::position(qreal x) const
 		  + l.p1().y());
 	} else {
 		QLineF l(_map->ll2xy(c1), _map->ll2xy(c2));
-		return l.pointAt((x - p1) / (p2 - p1));
+		return l.pointAt((x - p1) / (dist));
 	}
 }
 
