@@ -264,8 +264,7 @@ QRectF GraphView::bounds() const
 
 void GraphView::redraw()
 {
-	if (!_graphs.isEmpty())
-		redraw(viewport()->size() - QSizeF(MARGIN, MARGIN));
+	redraw(viewport()->size() - QSizeF(MARGIN, MARGIN));
 }
 
 void GraphView::redraw(const QSizeF &size)
@@ -275,7 +274,6 @@ void GraphView::redraw(const QSizeF &size)
 	RangeF rx, ry;
 	qreal sx, sy;
 
-
 	if (_bounds.isNull()) {
 		removeItem(_xAxis);
 		removeItem(_yAxis);
@@ -284,7 +282,10 @@ void GraphView::redraw(const QSizeF &size)
 		removeItem(_slider);
 		removeItem(_info);
 		removeItem(_grid);
-		addItem(_message);
+		if (_graphs.isEmpty())
+			removeItem(_message);
+		else
+			addItem(_message);
 		_scene->setSceneRect(_scene->itemsBoundingRect());
 		return;
 	}
@@ -357,8 +358,7 @@ void GraphView::redraw(const QSizeF &size)
 
 void GraphView::resizeEvent(QResizeEvent *e)
 {
-	if (!_graphs.isEmpty())
-		redraw(e->size() - QSizeF(MARGIN, MARGIN));
+	redraw(e->size() - QSizeF(MARGIN, MARGIN));
 
 	QGraphicsView::resizeEvent(e);
 }
