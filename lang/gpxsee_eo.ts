@@ -486,7 +486,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="370"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Ĉiuj</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="374"/>

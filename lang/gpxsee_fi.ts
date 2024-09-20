@@ -492,17 +492,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="370"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaikki</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="374"/>
         <source>Raster only</source>
-        <translation type="unfinished"></translation>
+        <translation>Vain rasteri</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="378"/>
         <source>Vector only</source>
-        <translation type="unfinished"></translation>
+        <translation>Vain vektori</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="385"/>
