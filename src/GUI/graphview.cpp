@@ -357,7 +357,8 @@ void GraphView::redraw(const QSizeF &size)
 
 void GraphView::resizeEvent(QResizeEvent *e)
 {
-	redraw(e->size() - QSizeF(MARGIN, MARGIN));
+	if (!_graphs.isEmpty())
+		redraw(e->size() - QSizeF(MARGIN, MARGIN));
 
 	QGraphicsView::resizeEvent(e);
 }
