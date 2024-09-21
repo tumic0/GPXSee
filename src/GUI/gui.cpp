@@ -1171,8 +1171,7 @@ void GUI::loadData(const Data &data)
 
 	for (int i = 0; i < _tabs.count(); i++)
 		graphs.append(_tabs.at(i)->loadData(data, _map));
-	if (updateGraphTabs())
-		_splitter->refresh();
+	updateGraphTabs();
 	paths = _mapView->loadData(data);
 
 	GraphTab *gt = static_cast<GraphTab*>(_graphTabWidget->currentWidget());
@@ -1620,7 +1619,7 @@ void GUI::closeAll()
 
 void GUI::showGraphs(bool show)
 {
-	_graphTabWidget->setHidden(!show);
+	_graphTabWidget->setVisible(show);
 }
 
 #ifdef Q_OS_ANDROID
@@ -2220,11 +2219,10 @@ void GUI::updateNavigationActions()
 #endif // Q_OS_ANDROID
 }
 
-bool GUI::updateGraphTabs()
+void GUI::updateGraphTabs()
 {
 	int index;
 	GraphTab *tab;
-	bool hidden = _graphTabWidget->isHidden();
 
 	for (int i = 0; i < _tabs.size(); i++) {
 		tab = _tabs.at(i);
@@ -2242,14 +2240,12 @@ bool GUI::updateGraphTabs()
 	  ((_showTracksAction->isChecked() && _trackCount)
 	  || (_showRoutesAction->isChecked() && _routeCount))) {
 		if (_showGraphsAction->isChecked())
-			_graphTabWidget->setHidden(false);
+			_graphTabWidget->show();
 		_showGraphsAction->setEnabled(true);
 	} else {
-		_graphTabWidget->setHidden(true);
+		_graphTabWidget->hide();
 		_showGraphsAction->setEnabled(false);
 	}
-
-	return (hidden != _graphTabWidget->isHidden());
 }
 
 void GUI::updateDataDEMDownloadAction()
