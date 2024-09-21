@@ -1171,6 +1171,8 @@ void GUI::loadData(const Data &data)
 
 	for (int i = 0; i < _tabs.count(); i++)
 		graphs.append(_tabs.at(i)->loadData(data, _map));
+	/* Refreshing the splitter is necessary to update the map viewport and
+	   properly fit the data! */
 	if (updateGraphTabs())
 		_splitter->refresh();
 	paths = _mapView->loadData(data);
