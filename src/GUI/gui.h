@@ -165,7 +165,7 @@ private:
 	  QMenu *menu, const QList<QAction*> &existingActions, int &showError);
 	void updateStatusBarInfo();
 	void updateWindowTitle();
-	void updateGraphTabs();
+	bool updateGraphTabs();
 	void updateDataDEMDownloadAction();
 	void updateMapDEMDownloadAction();
 #ifndef Q_OS_ANDROID
