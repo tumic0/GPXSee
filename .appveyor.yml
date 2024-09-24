@@ -1,4 +1,4 @@
-version: 13.26.{build}
+version: 13.27.{build}
 
 configuration:
   - Release
