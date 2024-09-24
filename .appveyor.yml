@@ -18,14 +18,14 @@ environment:
 
 install:
 - cmd: |-
-    set PATH=%QTDIR%\bin;%NSISDIR%;%PATH%
+    set PATH=%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin;%NSISDIR%;%PATH%
     call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat
 
 build_script:
 - cmd: |-
     lrelease gpxsee.pro
     qmake gpxsee.pro
-    nmake release
+    jom release
 
     md installer
     copy release\GPXSee.exe installer
