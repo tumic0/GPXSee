@@ -22,7 +22,7 @@ static qint16 limit(const DEMTile *tile, quint16 factor)
 
 void DEMFile::clear()
 {
-	_levels.clear();
+	_levels = QVector<Level>();
 }
 
 bool DEMFile::load(Handle &hdl)

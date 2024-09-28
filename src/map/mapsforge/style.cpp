@@ -763,13 +763,13 @@ void Style::load(const MapData &data, qreal ratio)
 
 void Style::clear()
 {
-	_paths.clear();
-	_circles.clear();
-	_pathLabels.clear();
-	_pointLabels.clear();
-	_areaLabels.clear();
-	_symbols.clear();
-	_lineSymbols.clear();
+	_paths = QList<PathRender>();
+	_circles = QList<CircleRender>();
+	_pathLabels = QList<TextRender>();
+	_pointLabels = QList<TextRender>();
+	_areaLabels = QList<TextRender>();
+	_symbols = QList<Symbol>();
+	_lineSymbols = QList<Symbol>();
 }
 
 QList<const Style::PathRender *> Style::paths(int zoom, bool closed,

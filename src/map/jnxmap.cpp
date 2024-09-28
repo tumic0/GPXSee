@@ -125,7 +125,7 @@ void JNXMap::clearTiles()
 {
 	for (int i = 0; i < _zooms.size(); i++) {
 		Zoom *z = _zooms[i];
-		z->tiles.clear();
+		z->tiles = QVector<Tile>();
 		z->tree.RemoveAll();
 	}
 }

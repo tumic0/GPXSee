@@ -478,7 +478,7 @@ void MapData::clearTiles()
 	}
 
 	qDeleteAll(_tiles);
-	_tiles.clear();
+	_tiles = QList<TileTree*>();
 }
 
 bool MapData::pathCb(VectorTile *tile, void *context)

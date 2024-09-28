@@ -336,8 +336,8 @@ void Atlas::unload()
 	for (int i = 0; i < _maps.count(); i++)
 		_maps.at(i)->unload();
 
-	_zooms.clear();
-	_bounds.clear();
+	_zooms = QVector<Zoom>();
+	_bounds = QVector<Bounds>();
 }
 
 Map *Atlas::createTAR(const QString &path, const Projection &proj, bool *isDir)

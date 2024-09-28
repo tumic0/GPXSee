@@ -445,7 +445,7 @@ void KMZMap::load(const Projection &in, const Projection &out,
 
 void KMZMap::unload()
 {
-	_bounds.clear();
+	_bounds = QVector<Bounds>();
 
 	delete _zip;
 	_zip = 0;
