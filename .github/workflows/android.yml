@@ -26,14 +26,12 @@ jobs:
       - name: Setup NDK path
         run: echo "ANDROID_NDK_ROOT=${ANDROID_HOME}/ndk/23.1.7779620/" >> $GITHUB_ENV
       - name: Install Qt (Desktop)
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
-          aqtversion: '==3.1.*'
           version: '6.4.0'
       - name: Install Qt (Android)
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
-          aqtversion: '==3.1.*'
           version: '6.4.0'
           target: 'android'
           arch: 'android_arm64_v8a'
