@@ -25,7 +25,7 @@ private:
 		{
 			if (!_file->readVUInt32SW(_hdl, 4, _value))
 				return false;
-			_shift = (quint8)-8;
+			_shift = -8;
 			return true;
 		}
 
@@ -36,7 +36,7 @@ private:
 			_value <<= bits;
 			_shift += bits;
 
-			while (-1 < (qint8)_shift) {
+			while (_shift >= 0) {
 				if (!_file->readByte(_hdl, &data))
 					return false;
 
@@ -53,7 +53,7 @@ private:
 		const SubFile *_file;
 		SubFile::Handle &_hdl;
 		quint32 _value;
-		quint8 _shift;
+		qint8 _shift;
 	};
 
 	bool readLine(BitStream &bs);
