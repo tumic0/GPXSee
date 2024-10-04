@@ -416,6 +416,7 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[0x10108] = Line(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
 	_lines[0x10301] = Line(QPen(QColor(0x0e, 0x10, 0x87), 1, Qt::SolidLine));
 	_lines[0x10307] = Line(QPen(QColor(0x05, 0x62, 0x0e), 1, Qt::SolidLine));
+	_lines[0x10309] = Line(QPen(QColor(0x0e, 0x10, 0x87), 1, Qt::SolidLine));
 	_lines[0x10401] = Line(QImage(":/marine/cable.png"));
 	_lines[0x10402] = Line(QImage(":/marine/pipeline.png"));
 	_lines[0x10404] = Line(QImage(":/marine/fishing-farm-line.png"));
