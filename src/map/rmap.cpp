@@ -87,6 +87,10 @@ static Projection parseProjection(const QString &str, const GCS &gcs)
 			return Projection(PCS(gcs, Conversion(9809, Conversion::Setup(
 			  52.15616055555555, 5.38763888888889, 0.9999079, 155000, 463000,
 			  NAN, NAN), 9001)));
+		case 125: // Israeli New grid
+			return Projection(PCS(gcs, Conversion(9807, Conversion::Setup(
+			  31.7343936111111, 35.2045169444444, 1.0000067, 219529.584,
+			  626907.39, NAN, NAN), 9001)));
 		case 184: // Swedish Grid
 			return Projection(PCS(gcs, Conversion(9807, Conversion::Setup(0,
 			  15.808278, 1, 1500000, 0, NAN, NAN), 9001)));
