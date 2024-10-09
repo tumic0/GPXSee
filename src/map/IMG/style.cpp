@@ -161,6 +161,34 @@ static QImage railroad(qreal ratio)
 	return img;
 }
 
+static QImage fence(qreal ratio)
+{
+	QImage img(8 * ratio, 3 * ratio, QImage::Format_ARGB32_Premultiplied);
+	img.setDevicePixelRatio(ratio);
+	img.fill(Qt::transparent);
+	QPainter p(&img);
+	p.setPen(QPen(Qt::gray, 1));
+	p.drawLine(0, 0, 0, 2);
+	p.drawLine(0, 1, 7, 1);
+
+	return img;
+}
+
+static QImage pipeline(qreal ratio)
+{
+	QImage img(10 * ratio, 4 * ratio, QImage::Format_ARGB32_Premultiplied);
+	img.setDevicePixelRatio(ratio);
+	img.fill(Qt::transparent);
+	QPainter p(&img);
+	p.setPen(QPen(Qt::darkGray, 1));
+	p.drawLine(0, 0, 0, 3);
+	p.drawLine(1, 0, 1, 3);
+	p.drawLine(0, 1, 9, 1);
+	p.drawLine(0, 2, 9, 2);
+
+	return img;
+}
+
 void Style::defaultPolygonStyle()
 {
 	_polygons[TYPE(0x01)] = Polygon(QBrush(QColor(0xdf, 0xd3, 0xb5)));
@@ -359,8 +387,11 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[TYPE(0x0c)] = Line(QPen(QColor(0xff, 0xff, 0xff), 3, Qt::SolidLine),
 	  QPen(QColor(0xd5, 0xcd, 0xc0), 5, Qt::SolidLine, Qt::RoundCap,
 	  Qt::RoundJoin));
+	_lines[TYPE(0x11)] = Line(QPen(QColor(0xff, 0xff, 0xff), 2, Qt::SolidLine));
 	_lines[TYPE(0x14)] = Line(railroad(ratio));
 	_lines[TYPE(0x16)] = Line(QPen(QColor(0xab, 0xa0, 0x83), 1, Qt::DotLine));
+	_lines[TYPE(0x17)] = Line(fence(ratio));
+	_lines[TYPE(0x17)].setTextFontSize(None);
 	_lines[TYPE(0x18)] = Line(QPen(QColor(0x9f, 0xc4, 0xe1), 2, Qt::SolidLine));
 	_lines[TYPE(0x18)].setTextColor(QColor(0x9f, 0xc4, 0xe1));
 	//_lines[TYPE(0x1a)] = Line(QPen(QColor(0x76, 0x97, 0xb7), 1, Qt::DashLine));
@@ -389,22 +420,29 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[TYPE(0x27)] = Line(QPen(QColor(0xff, 0xff, 0xff), 4, Qt::SolidLine),
 	  QPen(QColor(0xd5, 0xcd, 0xc0), 5, Qt::SolidLine, Qt::RoundCap,
 	  Qt::RoundJoin));
-	//_lines[TYPE(0x28)] = Line(QPen(QColor(0x5a, 0x5a, 0x5a"), 1, Qt::SolidLine));
+	_lines[TYPE(0x28)] = Line(pipeline(ratio));
 	_lines[TYPE(0x29)] = Line(QPen(QColor(0x5a, 0x5a, 0x5a), 1, Qt::SolidLine));
 	_lines[TYPE(0x29)].setTextFontSize(None);
+	_lines[TYPE(0x30)] = Line(QPen(QColor(0xe4, 0xef, 0xcf), 3, Qt::SolidLine),
+	  QPen(QColor(0xc9, 0xd3, 0xa5), 5, Qt::SolidLine, Qt::RoundCap,
+	  Qt::RoundJoin));
 
 	// NT types
-	_lines[0x10c00] = _lines[TYPE(0x14)];
-	_lines[0x10a00] = _lines[TYPE(0x18)];
-	_lines[0x10b04] = _lines[TYPE(0x1e)];
-	_lines[0x10a01] = _lines[TYPE(0x1f)];
+	_lines[0x10801] = _lines[TYPE(0x02)];
+	_lines[0x10802] = _lines[TYPE(0x03)];
+	_lines[0x10803] = _lines[TYPE(0x04)];
+	_lines[0x10804] = _lines[TYPE(0x05)];
 	_lines[0x10900] = _lines[TYPE(0x20)];
 	_lines[0x10901] = _lines[TYPE(0x21)];
 	_lines[0x10902] = _lines[TYPE(0x22)];
 	_lines[0x10903] = _lines[TYPE(0x23)];
 	_lines[0x10904] = _lines[TYPE(0x24)];
 	_lines[0x10905] = _lines[TYPE(0x25)];
+	_lines[0x10a00] = _lines[TYPE(0x18)];
+	_lines[0x10a01] = _lines[TYPE(0x1f)];
 	_lines[0x10a02] = _lines[TYPE(0x26)];
+	_lines[0x10b04] = _lines[TYPE(0x1e)];
+	_lines[0x10c00] = _lines[TYPE(0x14)];
 	_lines[0x10c02] = _lines[TYPE(0x27)];
 	//_lines[0x10c03] = _lines[TYPE(0x28)];
 	_lines[0x10c04] = _lines[TYPE(0x29)];
