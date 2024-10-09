@@ -441,10 +441,11 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[0x10a00] = _lines[TYPE(0x18)];
 	_lines[0x10a01] = _lines[TYPE(0x1f)];
 	_lines[0x10a02] = _lines[TYPE(0x26)];
+	_lines[0x10b02] = _lines[TYPE(0x1c)];
 	_lines[0x10b04] = _lines[TYPE(0x1e)];
 	_lines[0x10c00] = _lines[TYPE(0x14)];
 	_lines[0x10c02] = _lines[TYPE(0x27)];
-	//_lines[0x10c03] = _lines[TYPE(0x28)];
+	_lines[0x10c03] = _lines[TYPE(0x28)];
 	_lines[0x10c04] = _lines[TYPE(0x29)];
 
 	// Marine stuff
