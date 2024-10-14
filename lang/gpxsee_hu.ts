@@ -374,32 +374,32 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="221"/>
         <source>Open...</source>
-        <translation>Megnyitás...</translation>
+        <translation>Megnyitás…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="228"/>
         <source>Open directory...</source>
-        <translation>Könyvtár megnyitása...</translation>
+        <translation>Könyvtár megnyitása…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="233"/>
         <source>Print...</source>
-        <translation>Nyomtatás...</translation>
+        <translation>Nyomtatás…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="239"/>
         <source>Export to PDF...</source>
-        <translation>Exportálás PDF-be...</translation>
+        <translation>Exportálás PDF-be…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="246"/>
         <source>Export to PNG...</source>
-        <translation>Exportálás PNG-be...</translation>
+        <translation>Exportálás PNG-be…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="253"/>
         <source>Close</source>
-        <translation>Fájl bezárása</translation>
+        <translation>Bezárás</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="260"/>
@@ -409,7 +409,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="266"/>
         <source>Statistics...</source>
-        <translation>Statisztika...</translation>
+        <translation>Statisztika…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="276"/>
@@ -419,7 +419,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="288"/>
         <source>Load POI file...</source>
-        <translation>POI fájl betöltése...</translation>
+        <translation>POI fájl betöltése…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="292"/>
@@ -459,12 +459,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="339"/>
         <source>Load map...</source>
-        <translation>Térkép betöltése...</translation>
+        <translation>Térkép betöltése…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="344"/>
         <source>Load map directory...</source>
-        <translation>Térképmappa megadása...</translation>
+        <translation>Térképmappa megadása…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="347"/>
@@ -683,7 +683,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="604"/>
         <source>Options...</source>
-        <translation>Beállítások...</translation>
+        <translation>Beállítások…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="611"/>
