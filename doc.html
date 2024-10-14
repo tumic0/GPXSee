@@ -389,6 +389,15 @@
           provided by Jonathan de Ferranti and repacked by the
           <a href="https://bailu.ch/aat/">AAT</a> project.</p>
 
+          <h3 id="hillshading">Hillshading</h3>
+          <p>In addition to elevation source, the DEM files can also be used for hillshading
+          rendering on vector maps  which have it as a separate layer (Garmin IMG and
+          Mapsforge maps). If the IMG map contains it's own DEM data, it takes precedence.
+          The Mapsforge style must define a <code>&lt;hillshading&gt;</code> element for
+          the hillshading to be rendered.</p>
+
+          <p>Raster maps (e.g. online maps) are expected to have their own hillshading, enabling
+          hillshading on them has no effect.</p>
 
           <h2 id="positioning">Positioning</h2>
           <p>Since version 10.0, GPXSee is able to show the real-time GPS position
@@ -508,6 +517,7 @@
           <div class="h4l"><a href="#poi">POI files</a></div>
           <div class="h4l"><a href="#dem">DEM files</a></div>
             <div class="h5l"><a href="#dem_downloads">DEM downloads</a></div>
+            <div class="h5l"><a href="#hillshading">Hillshading</a></div>
           <div class="h4l"><a href="#positioning">Positioning</a></div>
             <div class="h5l"><a href="#positioning_winmac">Windows &amp; OS X</a></div>
             <div class="h5l"><a href="#positioning_linux">Linux</a></div>
