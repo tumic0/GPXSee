@@ -1,4 +1,5 @@
 #include <cstring>
+#include <QTimeZone>
 #include "common/util.h"
 #include "igcparser.h"
 
@@ -160,7 +161,7 @@ bool IGCParser::readBRecord(CTX &ctx, const char *line, int len,
 	ctx.time = time;
 
 	Trackpoint t(Coordinates(lon, lat));
-	t.setTimestamp(QDateTime(ctx.date, ctx.time, Qt::UTC));
+	t.setTimestamp(QDateTime(ctx.date, ctx.time, QTimeZone::utc()));
 	t.setElevation(ele);
 	segment.append(t);
 

@@ -1,4 +1,5 @@
 #include <cstring>
+#include <QTimeZone>
 #include "common/util.h"
 #include "nmeaparser.h"
 
@@ -282,7 +283,8 @@ bool NMEAParser::readRMC(CTX &ctx, const char *line, int len,
 
 	if (!date.isNull()) {
 		if (ctx.date.isNull() && !ctx.time.isNull() && !segment.isEmpty())
-			segment.last().setTimestamp(QDateTime(date, ctx.time, Qt::UTC));
+			segment.last().setTimestamp(QDateTime(date, ctx.time,
+			  QTimeZone::utc()));
 		ctx.date = date;
 	}
 
@@ -290,7 +292,7 @@ bool NMEAParser::readRMC(CTX &ctx, const char *line, int len,
 	if (valid && !ctx.GGA && c.isValid()) {
 		Trackpoint t(c);
 		if (!ctx.date.isNull() && !time.isNull())
-			t.setTimestamp(QDateTime(ctx.date, time, Qt::UTC));
+			t.setTimestamp(QDateTime(ctx.date, time, QTimeZone::utc()));
 		segment.append(t);
 	}
 
@@ -363,7 +365,7 @@ bool NMEAParser::readGGA(CTX &ctx, const char *line, int len,
 	if (c.isValid()) {
 		Trackpoint t(c);
 		if (!(ctx.time.isNull() || ctx.date.isNull()))
-			t.setTimestamp(QDateTime(ctx.date, ctx.time, Qt::UTC));
+			t.setTimestamp(QDateTime(ctx.date, ctx.time, QTimeZone::utc()));
 		if (!std::isnan(ele))
 			t.setElevation(ele - gh);
 		segment.append(t);

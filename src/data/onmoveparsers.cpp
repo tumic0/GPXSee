@@ -46,7 +46,7 @@ bool OMDParser::readHeaderFile(const QString &omdPath, Header &hdr)
 	quint8 avgHr = buffer[12];
 	quint8 maxHr = buffer[13];
 
-	QDateTime date(QDate(Y + 2000, M, D), QTime(h, m), Qt::UTC);
+	QDateTime date(QDate(Y + 2000, M, D), QTime(h, m), QTimeZone::utc());
 	if (!date.isValid()) {
 		qWarning("%s: invalid date", qPrintable(path));
 		return false;
@@ -80,7 +80,7 @@ bool OMDParser::readF1(const char *chunk, const Header &hdr, Sequence &seq,
 			return false;
 		}
 		t.setTimestamp(QDateTime(hdr.date.date(),
-		  hdr.date.time().addSecs(sec), Qt::UTC));
+		  hdr.date.time().addSecs(sec), QTimeZone::utc()));
 		if (hdr.elevation)
 			t.setElevation(alt);
 
@@ -200,7 +200,7 @@ bool GHPParser::readHeaderFile(const QString &ghpPath, Header &hdr)
 	quint8 avgHr = buffer[61];
 	quint8 maxHr = buffer[60];
 
-	QDateTime date(QDate(Y + 2000, M, D), QTime(h, m, s), Qt::UTC);
+	QDateTime date(QDate(Y + 2000, M, D), QTime(h, m, s), QTimeZone::utc());
 	if (!date.isValid()) {
 		qWarning("%s: invalid date", qPrintable(path));
 		return false;
@@ -230,7 +230,7 @@ bool GHPParser::readF0(const char *chunk, const Header &hdr, int &time,
 			return false;
 		}
 		t.setTimestamp(QDateTime(hdr.date.date(),
-		  hdr.date.time().addMSecs(time * 100), Qt::UTC));
+		  hdr.date.time().addMSecs(time * 100), QTimeZone::utc()));
 		t.setSpeed(speed / 360.0);
 		t.setElevation(alt);
 		if (hdr.hr)

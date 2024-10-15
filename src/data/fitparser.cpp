@@ -1,4 +1,5 @@
 #include <QtEndian>
+#include <QTimeZone>
 #include "GUI/format.h"
 #include "fitparser.h"
 
@@ -307,7 +308,7 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 			switch (field->id) {
 				case 1:
 					waypoint.setTimestamp(QDateTime::fromSecsSinceEpoch(
-					  val.toUInt() + 631065600, Qt::UTC));
+					  val.toUInt() + 631065600, QTimeZone::utc()));
 					break;
 				case 2:
 					waypoint.rcoordinates().setLat(
@@ -380,7 +381,7 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 	} else if (def->globalId == RECORD) {
 		if (ctx.trackpoint.coordinates().isValid()) {
 			ctx.trackpoint.setTimestamp(QDateTime::fromSecsSinceEpoch(
-			  ctx.timestamp + 631065600, Qt::UTC));
+			  ctx.timestamp + 631065600, QTimeZone::utc()));
 			ctx.trackpoint.setRatio(ctx.ratio);
 			ctx.segment.append(ctx.trackpoint);
 			ctx.trackpoint = Trackpoint();
@@ -391,7 +392,7 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 	} else if (def->globalId == LOCATION) {
 		if (waypoint.coordinates().isValid()) {
 			waypoint.setTimestamp(QDateTime::fromSecsSinceEpoch(ctx.timestamp
-			  + 631065600, Qt::UTC));
+			  + 631065600, QTimeZone::utc()));
 			ctx.waypoints.append(waypoint);
 		}
 	} else if (def->globalId == LAP && trigger >= 0) {
@@ -401,7 +402,7 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 			else
 				waypoint.setName("Lap " + QString::number(++ctx.laps));
 			waypoint.setTimestamp(QDateTime::fromSecsSinceEpoch(ctx.timestamp
-			  + 631065600, Qt::UTC));
+			  + 631065600, QTimeZone::utc()));
 			if (trigger != 7 || ctx.laps > 1)
 				ctx.waypoints.append(waypoint);
 		}

@@ -1,4 +1,5 @@
 #include <QDataStream>
+#include <QTimeZone>
 #include "common/tifffile.h"
 #include "common/util.h"
 #include "exifparser.h"
@@ -213,7 +214,7 @@ bool EXIFParser::parseTIFF(QFile *file, QVector<Waypoint> &waypoints)
 	  GPSIFD.value(GPSAltitudeRef)));
 	wp.setTimestamp(QDateTime(QDate::fromString(text(tiff,
 	  GPSIFD.value(GPSDateStamp)), "yyyy:MM:dd"), time(tiff,
-	  GPSIFD.value(GPSTimeStamp)), Qt::UTC));
+	  GPSIFD.value(GPSTimeStamp)), QTimeZone::utc()));
 	wp.setDescription(text(tiff, IFD0.value(ImageDescription)).trimmed());
 
 	waypoints.append(wp);

@@ -1,6 +1,7 @@
 #ifndef ONMOVEPARSERS_H
 #define ONMOVEPARSERS_H
 
+#include <QTimeZone>
 #include "parser.h"
 
 class OMDParser : public Parser
@@ -14,8 +15,8 @@ public:
 private:
 	struct Header
 	{
-		Header() : date(QDateTime(QDate(1970, 1, 1), QTime(0, 0), Qt::UTC)),
-		  elevation(true), hr(true) {}
+		Header() : date(QDateTime(QDate(1970, 1, 1), QTime(0, 0),
+		  QTimeZone::utc())), elevation(true), hr(true) {}
 
 		QDateTime date;
 		bool elevation;
@@ -50,8 +51,8 @@ public:
 private:
 	struct Header
 	{
-		Header() : date(QDateTime(QDate(1970, 1, 1), QTime(0, 0), Qt::UTC)),
-		  hr(true) {}
+		Header() : date(QDateTime(QDate(1970, 1, 1), QTime(0, 0),
+		  QTimeZone::utc())), hr(true) {}
 
 		QDateTime date;
 		bool hr;
