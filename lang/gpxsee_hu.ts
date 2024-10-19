@@ -117,7 +117,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="169"/>
         <source>JPEG images</source>
-        <translation>JPEG fájlok</translation>
+        <translation>JPEG képek</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="170"/>
@@ -295,7 +295,7 @@
         <location filename="../src/GUI/fileselectwidget.cpp" line="46"/>
         <location filename="../src/GUI/fileselectwidget.cpp" line="51"/>
         <source>Select file</source>
-        <translation>Fájl választása</translation>
+        <translation>Fájl kiválasztása</translation>
     </message>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="61"/>
@@ -305,12 +305,12 @@
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="71"/>
         <source>%1 is a directory.</source>
-        <translation>A(z) %1 egy mappa.</translation>
+        <translation>%1 egy mappa.</translation>
     </message>
     <message>
         <location filename="../src/GUI/fileselectwidget.cpp" line="75"/>
         <source>%1 is not writable.</source>
-        <translation>A(z) %1 írásvédett.</translation>
+        <translation>%1 írásvédett.</translation>
     </message>
 </context>
 <context>
@@ -356,7 +356,7 @@
         <location filename="../src/GUI/gui.cpp" line="974"/>
         <location filename="../src/GUI/gui.cpp" line="992"/>
         <source>Paths</source>
-        <translation>Adatmappák</translation>
+        <translation>Elérési útvonalak</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="211"/>
@@ -369,7 +369,7 @@
         <location filename="../src/GUI/gui.cpp" line="215"/>
         <location filename="../src/GUI/gui.cpp" line="901"/>
         <source>About GPXSee</source>
-        <translation>GPXSee névjegye</translation>
+        <translation>A GPXSee névjegye</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="221"/>
@@ -429,7 +429,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="297"/>
         <source>Unselect all files</source>
-        <translation>Összes kijelölés megszüntetése</translation>
+        <translation>Összes kijelölésének visszavonása</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="302"/>
