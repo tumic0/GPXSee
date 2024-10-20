@@ -342,9 +342,10 @@ SectionEnd
 
 SectionGroup "Localization" SEC_LOCALIZATION
   !insertmacro LOCALIZATION "Catalan" "ca"
-  !insertmacro LOCALIZATION "Chinese (Simplified)" "zh"
+  !insertmacro LOCALIZATION "Chinese (Simplified)" "zh_CN"
   !insertmacro LOCALIZATION "Czech" "cs"
   !insertmacro LOCALIZATION "Danish" "da"
+  !insertmacro LOCALIZATION "English" "en"
   !insertmacro LOCALIZATION "Esperanto" "eo"
   !insertmacro LOCALIZATION "Finnish" "fi"
   !insertmacro LOCALIZATION "French" "fr"
