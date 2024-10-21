@@ -1,6 +1,5 @@
 #include <cmath>
 #include <QLineF>
-#include "dem.h"
 #include "map.h"
 
 
@@ -79,15 +78,4 @@ qreal Map::resolution(const QRectF &rect)
 	qreal ps = QLineF(cl, cr).length();
 
 	return ds/ps;
-}
-
-double Map::elevation(const Coordinates &c)
-{
-	double ele;
-
-	DEM::lock();
-	ele = DEM::elevation(c);
-	DEM::unlock();
-
-	return ele;
 }

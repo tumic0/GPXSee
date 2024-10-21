@@ -2019,10 +2019,7 @@ void GUI::demLoaded()
 	}
 
 	_demRects.clear();
-
-	DEM::lock();
 	DEM::clearCache();
-	DEM::unlock();
 
 	reloadFiles();
 	reloadMap();
@@ -3070,9 +3067,7 @@ void GUI::loadOptions()
 	Downloader::setTimeout(_options.connectionTimeout);
 
 	QPixmapCache::setCacheLimit(_options.pixmapCache * 1024);
-	DEM::lock();
 	DEM::setCacheSize(_options.demCache * 1024);
-	DEM::unlock();
 
 	HillShading::setAlpha(_options.hillshadingAlpha);
 	HillShading::setBlur(_options.hillshadingBlur);
@@ -3211,11 +3206,8 @@ void GUI::updateOptions(const Options &options)
 
 	if (options.pixmapCache != _options.pixmapCache)
 		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
-	if (options.demCache != _options.demCache) {
-		DEM::lock();
+	if (options.demCache != _options.demCache)
 		DEM::setCacheSize(options.demCache * 1024);
-		DEM::unlock();
-	}
 
 	SET_HS_OPTION(hillshadingAlpha, setAlpha);
 	SET_HS_OPTION(hillshadingBlur, setBlur);

@@ -470,26 +470,18 @@ void RasterTile::fetchData(QList<MapData::Path> &paths,
 
 MatrixD RasterTile::elevation(int extend) const
 {
-	MatrixD m(_rect.height() + 2 * extend, _rect.width() + 2 * extend);
-
 	int left = _rect.left() - extend;
 	int right = _rect.right() + extend;
 	int top = _rect.top() - extend;
 	int bottom = _rect.bottom() + extend;
 
-	QVector<Coordinates> ll;
-	ll.reserve(m.w() * m.h());
-	for (int y = top; y <= bottom; y++) {
-		for (int x = left; x <= right; x++)
-			ll.append(xy2ll(QPointF(x, y)));
-	}
+	Matrix<Coordinates> ll(_rect.height() + 2 * extend,
+	  _rect.width() + 2 * extend);
+	for (int y = top, i = 0; y <= bottom; y++)
+		for (int x = left; x <= right; x++, i++)
+			ll.at(i) = xy2ll(QPointF(x, y));
 
-	DEM::lock();
-	for (int i = 0; i < ll.size(); i++)
-		m.at(i) = DEM::elevation(ll.at(i));
-	DEM::unlock();
-
-	return m;
+	return DEM::elevation(ll);
 }
 
 void RasterTile::render()

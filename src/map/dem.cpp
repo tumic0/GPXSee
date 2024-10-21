@@ -75,7 +75,9 @@ DEM::TileCache DEM::_data;
 
 void DEM::setCacheSize(int size)
 {
+	_lock.lock();
 	_data.setMaxCost(size);
+	_lock.unlock();
 }
 
 void DEM::setDir(const QString &path)
@@ -85,7 +87,9 @@ void DEM::setDir(const QString &path)
 
 void DEM::clearCache()
 {
+	_lock.lock();
 	_data.clear();
+	_lock.unlock();
 }
 
 double DEM::height(const Coordinates &c, const Entry *e)
@@ -132,6 +136,27 @@ double DEM::elevation(const Coordinates &c)
 		return NAN;
 
 	Tile tile(floor(c.lon()), floor(c.lat()));
+
+	_lock.lock();
+
+	Entry *e = _data.object(tile);
+	double ele;
+
+	if (!e) {
+		e = loadTile(tile);
+		ele = height(c, e);
+		_data.insert(tile, e, e->data().size() / 1024);
+	} else
+		ele = height(c, e);
+
+	_lock.unlock();
+
+	return ele;
+}
+
+double DEM::elevationLockFree(const Coordinates &c)
+{
+	Tile tile(floor(c.lon()), floor(c.lat()));
 	Entry *e = _data.object(tile);
 	double ele;
 
@@ -143,6 +168,21 @@ double DEM::elevation(const Coordinates &c)
 		ele = height(c, e);
 
 	return ele;
+}
+
+MatrixD DEM::elevation(const Matrix<Coordinates> &m)
+{
+	if (_dir.isEmpty())
+		return MatrixD(m.h(), m.w(), NAN);
+
+	MatrixD ret(m.h(), m.w());
+
+	_lock.lock();
+	for (int i = 0; i < m.size(); i++)
+		ret.at(i) = elevationLockFree(m.at(i));
+	_lock.unlock();
+
+	return ret;
 }
 
 QList<Area> DEM::tiles()

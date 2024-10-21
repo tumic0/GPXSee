@@ -461,18 +461,16 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 
 MatrixD RasterTile::elevation(int extend) const
 {
-	MatrixD m(_rect.height() + 2 * extend, _rect.width() + 2 * extend);
-	QVector<Coordinates> ll;
-
 	int left = _rect.left() - extend;
 	int right = _rect.right() + extend;
 	int top = _rect.top() - extend;
 	int bottom = _rect.bottom() + extend;
 
-	ll.reserve(m.w() * m.h());
-	for (int y = top; y <= bottom; y++)
-		for (int x = left; x <= right; x++)
-			ll.append(xy2ll(QPointF(x, y)));
+	Matrix<Coordinates> ll(_rect.height() + 2 * extend,
+	  _rect.width() + 2 * extend);
+	for (int y = top, i = 0; y <= bottom; y++)
+		for (int x = left; x <= right; x++, i++)
+			ll.at(i) = xy2ll(QPointF(x, y));
 
 	if (_data->hasDEM()) {
 		RectC rect;
@@ -487,16 +485,14 @@ MatrixD RasterTile::elevation(int extend) const
 		  -rect.height() / factor), _zoom, &tiles);
 
 		DEMTree tree(tiles);
+		MatrixD m(ll.h(), ll.w());
+
 		for (int i = 0; i < ll.size(); i++)
 			m.at(i) = tree.elevation(ll.at(i));
-	} else {
-		DEM::lock();
-		for (int i = 0; i < ll.size(); i++)
-			m.at(i) = DEM::elevation(ll.at(i));
-		DEM::unlock();
-	}
 
-	return m;
+		return m;
+	} else
+		return DEM::elevation(ll);
 }
 
 void RasterTile::drawHillShading(QPainter *painter) const

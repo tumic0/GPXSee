@@ -7,6 +7,7 @@
 #include <QFlags>
 #include "common/rectc.h"
 #include "common/util.h"
+#include "dem.h"
 
 
 class QPainter;
@@ -58,7 +59,7 @@ public:
 
 	virtual void draw(QPainter *painter, const QRectF &rect, Flags flags) = 0;
 
-	virtual double elevation(const Coordinates &c);
+	virtual double elevation(const Coordinates &c) {return DEM::elevation(c);}
 
 	virtual void clearCache() {}
 
