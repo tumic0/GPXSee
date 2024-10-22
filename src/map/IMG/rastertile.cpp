@@ -466,8 +466,7 @@ MatrixD RasterTile::elevation(int extend) const
 	int top = _rect.top() - extend;
 	int bottom = _rect.bottom() + extend;
 
-	Matrix<Coordinates> ll(_rect.height() + 2 * extend,
-	  _rect.width() + 2 * extend);
+	MatrixC ll(_rect.height() + 2 * extend, _rect.width() + 2 * extend);
 	for (int y = top, i = 0; y <= bottom; y++)
 		for (int x = left; x <= right; x++, i++)
 			ll.at(i) = xy2ll(QPointF(x, y));
@@ -486,7 +485,6 @@ MatrixD RasterTile::elevation(int extend) const
 
 		DEMTree tree(tiles);
 		MatrixD m(ll.h(), ll.w());
-
 		for (int i = 0; i < ll.size(); i++)
 			m.at(i) = tree.elevation(ll.at(i));
 

@@ -9,8 +9,6 @@
 #include "data/area.h"
 #include "matrix.h"
 
-class Coordinates;
-
 class DEM
 {
 public:
@@ -39,7 +37,7 @@ public:
 	static void clearCache();
 
 	static double elevation(const Coordinates &c);
-	static MatrixD elevation(const Matrix<Coordinates> &m);
+	static MatrixD elevation(const MatrixC &m);
 
 	static QList<Area> tiles();
 

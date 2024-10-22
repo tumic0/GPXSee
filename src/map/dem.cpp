@@ -46,7 +46,6 @@ static double value(int col, int row, int samples, const QByteArray &data)
 	return (val == -32768) ? NAN : val;
 }
 
-QMutex DEM::_lock;
 
 DEM::Entry::Entry(const QByteArray &data) : _data(data)
 {
@@ -70,6 +69,8 @@ QString DEM::Tile::fileName() const
 	return QString("%1%2.hgt").arg(latStr(), lonStr());
 }
 
+
+QMutex DEM::_lock;
 QString DEM::_dir;
 DEM::TileCache DEM::_data;
 
@@ -170,7 +171,7 @@ double DEM::elevationLockFree(const Coordinates &c)
 	return ele;
 }
 
-MatrixD DEM::elevation(const Matrix<Coordinates> &m)
+MatrixD DEM::elevation(const MatrixC &m)
 {
 	if (_dir.isEmpty())
 		return MatrixD(m.h(), m.w(), NAN);

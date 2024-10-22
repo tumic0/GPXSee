@@ -5,6 +5,8 @@
 #include <QVector>
 #include <QDebug>
 
+class Coordinates;
+
 template <class T>
 class Matrix
 {
@@ -38,6 +40,8 @@ public:
 	bool eliminate(double epsilon = DBL_EPSILON);
 	MatrixD augemented(const MatrixD &M) const;
 };
+
+typedef Matrix<Coordinates> MatrixC;
 
 #ifndef QT_NO_DEBUG
 template <class T>
