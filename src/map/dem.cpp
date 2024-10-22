@@ -23,12 +23,20 @@
 
 static unsigned int isqrt(unsigned int x)
 {
-	unsigned int r = 0;
+	unsigned int l = 0;
+	unsigned int m;
+	unsigned int r = x + 1;
 
-	while ((r + 1) * (r + 1) <= x)
-		r++;
+	while (l != r - 1) {
+		m = (l + r) / 2;
 
-	return r;
+		if (m * m <= x)
+			l = m;
+		else
+			r = m;
+	}
+
+	return l;
 }
 
 static double interpolate(double dx, double dy, double p0, double p1, double p2,
