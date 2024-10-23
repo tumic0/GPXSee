@@ -46,6 +46,8 @@ static inline QPoint POS(QMouseEvent *e)
 GraphView::GraphView(QWidget *parent)
 	: QGraphicsView(parent)
 {
+	const QPalette &p = palette();
+
 	_scene = new GraphicsScene(this);
 	setScene(_scene);
 
@@ -53,7 +55,7 @@ GraphView::GraphView(QWidget *parent)
 	setRenderHint(QPainter::Antialiasing, true);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	setBackgroundBrush(QBrush(palette().brush(QPalette::Base)));
+	setBackgroundBrush(QBrush(p.brush(QPalette::Base)));
 	viewport()->setAttribute(Qt::WA_AcceptTouchEvents);
 	grabGesture(Qt::PinchGesture);
 
@@ -72,8 +74,7 @@ GraphView::GraphView(QWidget *parent)
 	_info = new InfoItem();
 	_grid = new GridItem();
 	_message = new QGraphicsSimpleTextItem(tr("Data not available"));
-	_message->setBrush(QPalette().brush(QPalette::Disabled,
-	  QPalette::WindowText));
+	_message->setBrush(p.brush(QPalette::Disabled, QPalette::WindowText));
 
 	connect(_slider, &SliderItem::positionChanged, this,
 	  &GraphView::emitSliderPositionChanged);
@@ -627,9 +628,9 @@ void GraphView::setSliderColor(const QColor &color)
 void GraphView::changeEvent(QEvent *e)
 {
 	if (e->type() == QEvent::PaletteChange) {
-		_message->setBrush(QPalette().brush(QPalette::Disabled,
-		  QPalette::WindowText));
-		setBackgroundBrush(QBrush(palette().brush(QPalette::Base)));
+		const QPalette &p = palette();
+		_message->setBrush(p.brush(QPalette::Disabled, QPalette::WindowText));
+		setBackgroundBrush(QBrush(p.brush(QPalette::Base)));
 	}
 
 	QGraphicsView::changeEvent(e);
