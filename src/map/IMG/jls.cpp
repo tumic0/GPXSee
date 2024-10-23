@@ -322,7 +322,7 @@ bool JLS::decode(const SubFile *file, SubFile::Handle &hdl, Matrix<qint16> &img)
 		if (!readLine(bs))
 			return false;
 
-		memcpy(&img.at(i, 0), _current + 1, _w * sizeof(quint16));
+		memcpy(img.row(i), _current + 1, _w * sizeof(quint16));
 
 		quint16 *tmp = _last;
 		_last = _current;

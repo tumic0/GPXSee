@@ -21,6 +21,7 @@ public:
 	T &at(int n) {return _m[n];}
 	T &at(int i, int j) {return _m[_w * i + j];}
 	T const &at(int i, int j) const {return _m.at(_w * i + j);}
+	T *row(int i) {return &_m[_w * i];}
 
 	bool isNull() const {return (_h == 0 || _w == 0);}
 	int size() const {return _m.size();}
