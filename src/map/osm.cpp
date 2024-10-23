@@ -1,4 +1,5 @@
-#include <QtCore>
+#include <cmath>
+#include <QtMath>
 #include "common/wgs84.h"
 #include "osm.h"
 

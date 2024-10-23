@@ -1,4 +1,4 @@
-#include <QtWidgets>
+#include <QWidget>
 #include "flowlayout.h"
 
 struct FlowLayoutItem

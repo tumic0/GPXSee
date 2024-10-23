@@ -1,4 +1,4 @@
-#include <QtCore>
+#include <QtMath>
 #include <QDir>
 #include <QPainter>
 #include <QPixmapCache>
