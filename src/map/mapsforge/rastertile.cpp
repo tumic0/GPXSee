@@ -200,7 +200,7 @@ void RasterTile::processAreaLabels(const QVector<PainterPath> &paths,
 		QPointF pos = p.p->path->labelPos.isNull()
 		  ? centroid(p.p->pp) : ll2xy(p.p->path->labelPos);
 
-		if (p.ti && set.contains(*p.lbl))
+		if (p.ti && p.lbl && set.contains(*p.lbl))
 			continue;
 
 		PointItem *item = new PointItem(pos.toPoint(), p.lbl, font, img, color,
@@ -208,7 +208,8 @@ void RasterTile::processAreaLabels(const QVector<PainterPath> &paths,
 		if (item->isValid() && _rect.contains(item->boundingRect().toRect())
 		  && !item->collides(textItems)) {
 			textItems.append(item);
-			set.insert(*p.lbl);
+			if (p.ti && p.lbl)
+				set.insert(*p.lbl);
 		} else
 			delete item;
 	}
