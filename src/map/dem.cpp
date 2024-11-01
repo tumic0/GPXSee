@@ -139,30 +139,6 @@ DEM::Entry *DEM::loadTile(const Tile &tile)
 	}
 }
 
-double DEM::elevation(const Coordinates &c)
-{
-	if (_dir.isEmpty())
-		return NAN;
-
-	Tile tile(floor(c.lon()), floor(c.lat()));
-
-	_lock.lock();
-
-	Entry *e = _data.object(tile);
-	double ele;
-
-	if (!e) {
-		e = loadTile(tile);
-		ele = height(c, e);
-		_data.insert(tile, e, e->data().size() / 1024);
-	} else
-		ele = height(c, e);
-
-	_lock.unlock();
-
-	return ele;
-}
-
 double DEM::elevationLockFree(const Coordinates &c)
 {
 	Tile tile(floor(c.lon()), floor(c.lat()));
@@ -175,6 +151,18 @@ double DEM::elevationLockFree(const Coordinates &c)
 		_data.insert(tile, e, e->data().size() / 1024);
 	} else
 		ele = height(c, e);
+
+	return ele;
+}
+
+double DEM::elevation(const Coordinates &c)
+{
+	if (_dir.isEmpty())
+		return NAN;
+
+	_lock.lock();
+	double ele = elevationLockFree(c);
+	_lock.unlock();
 
 	return ele;
 }
