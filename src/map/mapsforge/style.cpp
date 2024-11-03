@@ -770,6 +770,7 @@ void Style::clear()
 	_areaLabels = QList<TextRender>();
 	_symbols = QList<Symbol>();
 	_lineSymbols = QList<Symbol>();
+	_hillShading = HillShadingRender();
 }
 
 QList<const Style::PathRender *> Style::paths(int zoom, bool closed,
