@@ -217,6 +217,9 @@ public:
 		unsigned key() const {return _key;}
 		int priority() const {return _priority;}
 
+		bool operator<(const TextRender &other) const
+		  {return _priority > other._priority;}
+
 	private:
 		friend class Style;
 
@@ -238,6 +241,9 @@ public:
 		const QImage &img() const {return _img;}
 		bool rotate() const {return _rotate;}
 		int priority() const {return _priority;}
+
+		bool operator<(const Symbol &other) const
+		  {return _priority > other._priority;}
 
 	private:
 		friend class Style;
