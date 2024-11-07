@@ -107,20 +107,20 @@ void RasterTile::processPointLabels(const QList<MapData::Point> &points,
 
 		for (int j = 0; j < symbols.size(); j++) {
 			const Style::Symbol *ri = symbols.at(j);
-
-			if (ri->rule().match(point.tags))
-				if (!si || si->priority() < ri->priority())
-					si = ri;
+			if (ri->rule().match(point.tags)) {
+				si = ri;
+				break;
+			}
 		}
 
 		for (int j = 0; j < labels.size(); j++) {
 			const Style::TextRender *ri = labels.at(j);
 			if (ri->rule().match(point.tags)) {
 				if ((lbl = label(ri->key(), point.tags))) {
-					if (si && si->id() != ri->symbolId())
-						continue;
-					if (!ti || ti->priority() < ri->priority())
+					if (!si || si->id() == ri->symbolId()) {
 						ti = ri;
+						break;
+					}
 				}
 			}
 		}
@@ -166,21 +166,20 @@ void RasterTile::processAreaLabels(const QVector<PainterPath> &paths,
 
 		for (int j = 0; j < symbols.size(); j++) {
 			const Style::Symbol *ri = symbols.at(j);
-
-			if (ri->rule().match(path.path->closed, path.path->tags))
-				if (!si || si->priority() < ri->priority())
-					si = ri;
+			if (ri->rule().match(path.path->closed, path.path->tags)) {
+				si = ri;
+				break;
+			}
 		}
 
 		for (int j = 0; j < labels.size(); j++) {
 			const Style::TextRender *ri = labels.at(j);
 			if (ri->rule().match(path.path->closed, path.path->tags)) {
 				if ((lbl = label(ri->key(), path.path->tags))) {
-					if (si && si->id() != ri->symbolId())
-						continue;
-
-					ti = ri;
-					break;
+					if (!si || si->id() == ri->symbolId()) {
+						ti = ri;
+						break;
+					}
 				}
 			}
 		}
@@ -232,20 +231,23 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 		if (path.path->closed)
 			continue;
 
-		for (int j = 0; j < labels.size(); j++) {
-			const Style::TextRender *ri = labels.at(j);
-			if (ri->rule().match(path.path->closed, path.path->tags)) {
-				if ((lbl = label(ri->key(), path.path->tags)))
-					ti = ri;
-				break;
-			}
-		}
-
 		for (int j = 0; j < symbols.size(); j++) {
 			const Style::Symbol *ri = symbols.at(j);
 			if (ri->rule().match(path.path->closed, path.path->tags)) {
 				si = ri;
 				break;
+			}
+		}
+
+		for (int j = 0; j < labels.size(); j++) {
+			const Style::TextRender *ri = labels.at(j);
+			if (ri->rule().match(path.path->closed, path.path->tags)) {
+				if ((lbl = label(ri->key(), path.path->tags))) {
+					if (!si || si->id() == ri->symbolId()) {
+						ti = ri;
+						break;
+					}
+				}
 			}
 		}
 

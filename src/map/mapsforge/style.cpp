@@ -77,6 +77,16 @@ static QList<QByteArray> valList(const QList<QByteArray> &in)
 	return out;
 }
 
+static bool symbolCmp(const Style::Symbol &a, const Style::Symbol &b)
+{
+	return a.priority() > b.priority();
+}
+
+static bool labelCmp(const Style::TextRender &a, const Style::TextRender &b)
+{
+	return a.priority() > b.priority();
+}
+
 const Style::Menu::Layer *Style::Menu::findLayer(const QString &id) const
 {
 	for (int i = 0; i < _layers.size(); i++)
@@ -759,6 +769,12 @@ void Style::load(const MapData &data, qreal ratio)
 
 	if (!QFileInfo::exists(path) || !loadXml(path, data, ratio))
 		loadXml(":/mapsforge/default.xml", data, ratio);
+
+	std::sort(_symbols.begin(), _symbols.end(), symbolCmp);
+	std::sort(_lineSymbols.begin(), _lineSymbols.end(), symbolCmp);
+	std::stable_sort(_pointLabels.begin(), _pointLabels.end(), labelCmp);
+	std::stable_sort(_areaLabels.begin(), _areaLabels.end(), labelCmp);
+	std::stable_sort(_pathLabels.begin(), _pathLabels.end(), labelCmp);
 }
 
 void Style::clear()
