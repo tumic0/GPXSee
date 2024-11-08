@@ -3,6 +3,7 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QImageReader>
+#include <QPainter>
 #include "common/programpaths.h"
 #include "style.h"
 
@@ -388,8 +389,8 @@ void Style::circle(QXmlStreamReader &reader, qreal baseStrokeWidth,
 	reader.skipCurrentElement();
 }
 
-void Style::text(QXmlStreamReader &reader, const MapData &data, const Rule &rule,
-  QList<QList<TextRender>*> &lists)
+void Style::text(QXmlStreamReader &reader, const MapData &data,
+  const Rule &rule, bool line)
 {
 	TextRender ri(rule);
 	const QXmlStreamAttributes &attr = reader.attributes();
@@ -462,21 +463,28 @@ void Style::text(QXmlStreamReader &reader, const MapData &data, const Rule &rule
 	ri._font.setItalic(italic);
 	ri._font.setCapitalization(capitalization);
 
-	if (fontSize)
-		for (int i = 0; i < lists.size(); i++)
-			lists[i]->append(ri);
+	if (fontSize) {
+		if (line)
+			_pathLabels.append(ri);
+		else {
+			if (rule._type == Rule::WayType || rule._type == Rule::AnyType)
+				_areaLabels.append(ri);
+			if (rule._type == Rule::NodeType || rule._type == Rule::AnyType)
+				_pointLabels.append(ri);
+		}
+	}
 
 	reader.skipCurrentElement();
 }
 
 void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
-  const Rule &rule, QList<Symbol> &list)
+  const Rule &rule, bool line)
 {
 	Symbol ri(rule);
 	const QXmlStreamAttributes &attr = reader.attributes();
 	QString file;
 	int height = 0, width = 0, percent = 100;
-	bool ok;
+	bool ok, bitmapLine = false;
 
 	if (attr.hasAttribute("src"))
 		file = resourcePath(attr.value("src").toString(), dir);
@@ -505,23 +513,62 @@ void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 			return;
 		}
 	}
-	if (attr.hasAttribute("priority")) {
-		ri._priority = attr.value("priority").toInt(&ok);
-		if (!ok) {
-			reader.raiseError("invalid priority value");
+
+	// Convert repeating "always-display" lineSymbols to bitmap lines
+	if (line && (rule._type == Rule::AnyType || rule._type == Rule::WayType)) {
+		bool repeat = (attr.value("repeat").toString() == "true");
+		bool always = (attr.value("display").toString() == "always");
+		double start = attr.hasAttribute("repeat-start")
+		  ? attr.value("repeat-start").toDouble(&ok) : 30;
+
+		if (always && repeat && ok && start == 0)
+			bitmapLine = true;
+	}
+
+	if (bitmapLine) {
+		PathRender pr(rule, _paths.size() + _circles.size()
+		  + _hillShading.isValid());
+
+		double gap = attr.hasAttribute("repeat-gap")
+		  ? attr.value("repeat-gap").toDouble(&ok) : 200;
+		if (!ok || gap < 0) {
+			reader.raiseError("invalid repeat-gap value");
 			return;
 		}
-	}
-	if (attr.hasAttribute("rotate")) {
-		if (attr.value("rotate").toString() == "false")
-			ri._rotate = false;
-	}
-	if (attr.hasAttribute("id"))
-		ri._id = attr.value("id").toString();
 
-	ri._img = image(file, width, height, percent, ratio);
+		QImage s(image(file, width, height, percent, ratio));
+		pr._img = QImage(qCeil(gap) + s.width(), s.height(),
+		  QImage::Format_ARGB32_Premultiplied);
+		pr._img.setDevicePixelRatio(s.devicePixelRatio());
+		pr._img.fill(Qt::transparent);
+		QPainter painter(&pr._img);
+		painter.drawImage(QPoint(0, 0), s);
 
-	list.append(ri);
+		pr._brush = Qt::NoBrush;
+
+		_paths.append(pr);
+	} else {
+		ri._img = image(file, width, height, percent, ratio);
+
+		if (attr.hasAttribute("priority")) {
+			ri._priority = attr.value("priority").toInt(&ok);
+			if (!ok) {
+				reader.raiseError("invalid priority value");
+				return;
+			}
+		}
+		if (attr.hasAttribute("rotate")) {
+			if (attr.value("rotate").toString() == "false")
+				ri._rotate = false;
+		}
+		if (attr.hasAttribute("id"))
+			ri._id = attr.value("id").toString();
+
+		if (line)
+			_lineSymbols.append(ri);
+		else
+			_symbols.append(ri);
+	}
 
 	reader.skipCurrentElement();
 }
@@ -580,22 +627,14 @@ void Style::rule(QXmlStreamReader &reader, const QString &dir,
 			line(reader, dir, ratio, baseStrokeWidth, r);
 		else if (reader.name() == QLatin1String("circle"))
 			circle(reader, baseStrokeWidth, r);
-		else if (reader.name() == QLatin1String("pathText")) {
-			QList<QList<TextRender>*> list;
-			list.append(&_pathLabels);
-			text(reader, data, r, list);
-		} else if (reader.name() == QLatin1String("caption")) {
-			QList<QList<TextRender>*> list;
-			if (r._type == Rule::WayType || r._type == Rule::AnyType)
-				list.append(&_areaLabels);
-			if (r._type == Rule::NodeType || r._type == Rule::AnyType)
-				list.append(&_pointLabels);
-			text(reader, data, r, list);
-		}
+		else if (reader.name() == QLatin1String("pathText"))
+			text(reader, data, r, true);
+		else if (reader.name() == QLatin1String("caption"))
+			text(reader, data, r, false);
 		else if (reader.name() == QLatin1String("symbol"))
-			symbol(reader, dir, ratio, r, _symbols);
+			symbol(reader, dir, ratio, r, false);
 		else if (reader.name() == QLatin1String("lineSymbol"))
-			symbol(reader, dir, ratio, r, _lineSymbols);
+			symbol(reader, dir, ratio, r, true);
 		else
 			reader.skipCurrentElement();
 	}

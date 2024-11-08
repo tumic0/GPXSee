@@ -5,6 +5,7 @@
 #include "map/rectd.h"
 #include "map/hillshading.h"
 #include "map/filter.h"
+#include "map/bitmapline.h"
 #include "rastertile.h"
 
 using namespace Mapsforge;
@@ -421,13 +422,21 @@ void RasterTile::drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
 			if (!path->pp.elementCount())
 				path->pp = painterPath(path->path->poly, ri->curve());
 
-			painter->setPen(ri->pen(_zoom));
-			painter->setBrush(ri->brush());
+			if (ri->bitmapLine()) {
+				if (dy != 0)
+					BitmapLine::draw(painter, parallelPath(path->pp, dy),
+					  ri->img());
+				else
+					BitmapLine::draw(painter, path->pp, ri->img());
+			} else {
+				painter->setPen(ri->pen(_zoom));
+				painter->setBrush(ri->brush());
 
-			if (dy != 0)
-				painter->drawPath(parallelPath(path->pp, dy));
-			else
-				painter->drawPath(path->pp);
+				if (dy != 0)
+					painter->drawPath(parallelPath(path->pp, dy));
+				else
+					painter->drawPath(path->pp);
+			}
 		} else if (point) {
 			const Style::CircleRender *ri = is.circleRender();
 			qreal radius = ri->radius(_zoom);

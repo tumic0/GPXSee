@@ -161,6 +161,8 @@ public:
 		bool area() const {return _area;}
 		bool curve() const {return _curve;}
 		qreal dy(int zoom) const;
+		const QImage &img() const {return _img;}
+		bool bitmapLine() const {return !_img.isNull() && _strokeWidth == 0;}
 
 	private:
 		friend class Style;
@@ -333,9 +335,9 @@ private:
 	  const Rule &rule);
 	void hillshading(QXmlStreamReader &reader, const QSet<QString> &cats);
 	void text(QXmlStreamReader &reader, const MapData &data, const Rule &rule,
-	  QList<QList<TextRender> *> &lists);
+	  bool line);
 	void symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
-	  const Rule &rule, QList<Symbol> &list);
+	  const Rule &rule, bool line);
 };
 
 }
