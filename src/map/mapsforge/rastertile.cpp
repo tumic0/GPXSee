@@ -199,7 +199,7 @@ void RasterTile::processAreaLabels(const QVector<PainterPath> &paths,
 		const QColor *hColor = p.ti ? haloColor(p.ti) : 0;
 
 		QPainterPath rp;
-		rp.addRect(_rect.toRectF());
+		rp.addRect(_rect);
 		QPointF pos = p.p->path->labelPos.isNull()
 		  ? centroid(p.p->pp & rp) : ll2xy(p.p->path->labelPos);
 		if (p.ti && p.lbl && set.contains(*p.lbl))
