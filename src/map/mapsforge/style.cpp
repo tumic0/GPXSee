@@ -4,6 +4,7 @@
 #include <QFileInfo>
 #include <QImageReader>
 #include <QPainter>
+#include <QtMath>
 #include "common/programpaths.h"
 #include "style.h"
 
