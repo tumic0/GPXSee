@@ -16,6 +16,13 @@ using namespace Mapsforge;
 
 static double LIMIT = cos(deg2rad(170));
 
+static bool rectNearPolygon(const QPainterPath &path, const QRectF &rect)
+{
+	return (path.boundingRect().contains(rect)
+	  && (path.contains(rect.topLeft()) || path.contains(rect.topRight())
+	  || path.contains(rect.bottomLeft()) || path.contains(rect.bottomRight())));
+}
+
 static QPointF centroid(const QPainterPath &polygon)
 {
 	qreal area = 0;
@@ -208,6 +215,7 @@ void RasterTile::processAreaLabels(const QVector<PainterPath> &paths,
 		PointItem *item = new PointItem(pos.toPoint(), p.lbl, font, img, color,
 		  hColor);
 		if (item->isValid() && _rect.contains(item->boundingRect().toRect())
+		  && rectNearPolygon(p.p->pp, item->boundingRect())
 		  && !item->collides(textItems)) {
 			textItems.append(item);
 			if (p.ti && p.lbl)
