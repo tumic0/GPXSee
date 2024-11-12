@@ -361,6 +361,8 @@ void Style::pointStyle(qreal ratio)
 	  Small);
 	_points[SUBTYPE(BUISGL, 7)] = Point(svg2img(":/POI/lodging-11.svg", ratio),
 	  Small);
+	_points[SUBTYPE(BUISGL, 8)] = Point(svg2img(":/POI/rail-11.svg", ratio),
+	  Small);
 	_points[SUBTYPE(BUISGL, 9)] = Point(svg2img(":/POI/police-11.svg", ratio),
 	  Small);
 	_points[SUBTYPE(BUISGL, 13)] = Point(svg2img(":/POI/bank-11.svg", ratio),
