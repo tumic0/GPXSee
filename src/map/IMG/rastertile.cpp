@@ -1,6 +1,7 @@
 #include <QFont>
 #include <QPainter>
 #include <QCache>
+#include "common/util.h"
 #include "map/dem.h"
 #include "map/textpathitem.h"
 #include "map/textpointitem.h"
@@ -20,11 +21,6 @@ using namespace IMG;
 
 #define AREA(rect) \
 	(rect.size().width() * rect.size().height())
-
-#define HIDPI_IMG(dir, basename, ratio) \
-	(((ratio) > 1.0) \
-		? QImage(dir "/" basename "@2x.png") \
-		: QImage(dir "/" basename ".png"))
 
 #define ROAD  0
 #define WATER 1
@@ -517,8 +513,8 @@ void RasterTile::render()
 	QList<TextItem*> textItems;
 	QImage arrows[2];
 
-	arrows[ROAD] = HIDPI_IMG(":/map", "arrow", _ratio);
-	arrows[WATER] = HIDPI_IMG(":/map", "water-arrow", _ratio);
+	arrows[ROAD] = Util::svg2img(":/map/arrow.svg", _ratio);
+	arrows[WATER] = Util::svg2img(":/map/water-arrow.svg", _ratio);
 
 	fetchData(polygons, lines, points);
 	ll2xy(polygons);
