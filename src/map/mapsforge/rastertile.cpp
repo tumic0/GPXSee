@@ -205,17 +205,14 @@ void RasterTile::processAreaLabels(const QVector<PainterPath> &paths,
 		const QColor *color = p.ti ? &p.ti->fillColor() : 0;
 		const QColor *hColor = p.ti ? haloColor(p.ti) : 0;
 
-		QPainterPath rp;
-		rp.addRect(_rect);
 		QPointF pos = p.p->path->labelPos.isNull()
-		  ? centroid(p.p->pp & rp) : ll2xy(p.p->path->labelPos);
+		  ? centroid(p.p->pp) : ll2xy(p.p->path->labelPos);
 		if (p.ti && p.lbl && set.contains(*p.lbl))
 			continue;
 
 		PointItem *item = new PointItem(pos.toPoint(), p.lbl, font, img, color,
 		  hColor);
-		if (item->isValid() && _rect.contains(item->boundingRect().toRect())
-		  && rectNearPolygon(p.p->pp, item->boundingRect())
+		if (item->isValid() && rectNearPolygon(p.p->pp, item->boundingRect())
 		  && !item->collides(textItems)) {
 			textItems.append(item);
 			if (p.ti && p.lbl)
