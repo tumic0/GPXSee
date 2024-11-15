@@ -27,7 +27,7 @@ TextPointItem::TextPointItem(const QPoint &point, const QString *text,
 		QFontMetrics fm(*_font);
 		int limit = _font->pixelSize() * MAX_TEXT_WIDTH;
 		_textRect = fm.boundingRect(QRect(0, 0, limit, 0), FLAGS, *_text);
-		_textRect.adjust(0, 0, 1, 1);
+		_textRect.adjust(-1, 0, 2, 0);
 
 		if (_bgColor && _textRect.width() < _font->pixelSize() * MIN_BOX_WIDTH)
 			expand(_textRect, _font->pixelSize() * MIN_BOX_WIDTH);
