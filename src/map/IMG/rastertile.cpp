@@ -513,8 +513,8 @@ void RasterTile::render()
 	QList<TextItem*> textItems;
 	QImage arrows[2];
 
-	arrows[ROAD] = Util::svg2img(":/symbols/arrow.svg", _ratio);
-	arrows[WATER] = Util::svg2img(":/symbols/water-arrow.svg", _ratio);
+	arrows[ROAD] = Util::svg2img(":/symbols/oneway.svg", _ratio);
+	arrows[WATER] = Util::svg2img(":/symbols/flow.svg", _ratio);
 
 	fetchData(polygons, lines, points);
 	ll2xy(polygons);

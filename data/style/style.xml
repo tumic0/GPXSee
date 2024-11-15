@@ -93,7 +93,7 @@
         <line stroke="#9fc4e1" stroke-width="1.2"/>
         <pathText fill="#9fc4e1" font-size="12" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1"/>
         <rule e="way" k="*" v="*" zoom-min="12">
-            <lineSymbol src=":/symbols/water-arrow.svg" symbol-width="16" symbol-height="8"/>
+            <lineSymbol src=":/symbols/flow.svg" symbol-width="16" symbol-height="8"/>
         </rule>
     </rule>
     <rule e="way" k="waterway" v="stream|drain|ditch">
@@ -106,7 +106,7 @@
                 <line stroke="#9fc4e1" stroke-width="0.6"/>
                 <pathText fill="#9fc4e1" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1"/>
                 <rule e="way" k="name" v="*">
-                    <lineSymbol src=":/symbols/water-arrow.svg" symbol-width="16" symbol-height="8"/>
+                    <lineSymbol src=":/symbols/flow.svg" symbol-width="16" symbol-height="8"/>
                 </rule>
             </rule>
         </rule>
@@ -293,7 +293,7 @@
         <rule e="way" k="*" v="*" zoom-min="15">
             <pathText fill="#000000" font-size="10" k="name" priority="-7" stroke="#FFFFFF" stroke-width="1"/>
             <rule e="way" k="oneway" v="yes|true|1" zoom-min="16">
-                <lineSymbol priority="-50" src=":/symbols/arrow.svg" symbol-width="16" symbol-height="8"/>
+                <lineSymbol priority="-50" src=":/symbols/oneway.svg" symbol-width="16" symbol-height="8"/>
             </rule>
         </rule>
     </rule>
