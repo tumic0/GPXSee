@@ -5,12 +5,14 @@
 	</qresource>
 
 	<!-- Common map stuff -->
-	<qresource prefix="/map">
-		<file alias="arrow.svg">icons/map/arrow.svg</file>
-		<file alias="water-arrow.svg">icons/map/water-arrow.svg</file>
+	<qresource prefix="/symbols">
+		<file alias="arrow.svg">icons/map/symbols/arrow.svg</file>
+		<file alias="cliff.svg">icons/map/symbols/cliff.svg</file>
+		<file alias="exit.svg">icons/map/symbols/exit.svg</file>
+		<file alias="water-arrow.svg">icons/map/symbols/water-arrow.svg</file>
 	</qresource>
 
-	<!-- POIs (IMG & ENC style) -->
+	<!-- POIs (IMG, Mapsforge & ENC style) -->
 	<qresource prefix="/POI">
 		<file alias="airfield-11.svg">icons/map/POI/airfield-11.svg</file>
 		<file alias="airport-11.svg">icons/map/POI/airport-11.svg</file>
@@ -22,6 +24,7 @@
 		<file alias="barrier-11.svg">icons/map/POI/barrier-11.svg</file>
 		<file alias="bbq-11.svg">icons/map/POI/bbq-11.svg</file>
 		<file alias="beach-11.svg">icons/map/POI/beach-11.svg</file>
+		<file alias="beer-11.svg">icons/map/POI/beer-11.svg</file>
 		<file alias="bowling-alley-11.svg">icons/map/POI/bowling-alley-11.svg</file>
 		<file alias="building-alt1-11.svg">icons/map/POI/building-alt1-11.svg</file>
 		<file alias="bridge-11.svg">icons/map/POI/bridge-11.svg</file>
@@ -42,6 +45,7 @@
 		<file alias="drinking-water-11.svg">icons/map/POI/drinking-water-11.svg</file>
 		<file alias="fast-food-11.svg">icons/map/POI/fast-food-11.svg</file>
 		<file alias="entrance-alt1-11.svg">icons/map/POI/entrance-alt1-11.svg</file>
+		<file alias="ferry-11.svg">icons/map/POI/ferry-11.svg</file>
 		<file alias="fire-station-11.svg">icons/map/POI/fire-station-11.svg</file>
 		<file alias="fitness-centre-11.svg">icons/map/POI/fitness-centre-11.svg</file>
 		<file alias="fuel-11.svg">icons/map/POI/fuel-11.svg</file>
@@ -58,7 +62,9 @@
 		<file alias="information-11.svg">icons/map/POI/information-11.svg</file>
 		<file alias="landmark-11.svg">icons/map/POI/landmark-11.svg</file>
 		<file alias="library-11.svg">icons/map/POI/library-11.svg</file>
+		<file alias="lighthouse-11.svg">icons/map/POI/lighthouse-11.svg</file>
 		<file alias="lodging-11.svg">icons/map/POI/lodging-11.svg</file>
+		<file alias="monument-11.svg">icons/map/POI/monument-11.svg</file>
 		<file alias="mountain-11.svg">icons/map/POI/mountain-11.svg</file>
 		<file alias="museum-11.svg">icons/map/POI/museum-11.svg</file>
 		<file alias="park-11.svg">icons/map/POI/park-11.svg</file>
@@ -69,6 +75,8 @@
 		<file alias="police-11.svg">icons/map/POI/police-11.svg</file>
 		<file alias="post-11.svg">icons/map/POI/post-11.svg</file>
 		<file alias="rail-11.svg">icons/map/POI/rail-11.svg</file>
+		<file alias="rail-light-11.svg">icons/map/POI/rail-light-11.svg</file>
+		<file alias="rail-metro-11.svg">icons/map/POI/rail-metro-11.svg</file>
 		<file alias="religious-christian-11.svg">icons/map/POI/religious-christian-11.svg</file>
 		<file alias="religious-jewish-11.svg">icons/map/POI/religious-jewish-11.svg</file>
 		<file alias="religious-muslim-11.svg">icons/map/POI/religious-muslim-11.svg</file>
@@ -90,12 +98,13 @@
 		<file alias="viewpoint-11.svg">icons/map/POI/viewpoint-11.svg</file>
 		<file alias="village-11.svg">icons/map/POI/village-11.svg</file>
 		<file alias="volcano-11.svg">icons/map/POI/volcano-11.svg</file>
+		<file alias="water-11.svg">icons/map/POI/water-11.svg</file>
 		<file alias="waterfall-11.svg">icons/map/POI/waterfall-11.svg</file>
 		<file alias="wetland-11.svg">icons/map/POI/wetland-11.svg</file>
 		<file alias="zoo-11.svg">icons/map/POI/zoo-11.svg</file>
 	</qresource>
 
-	<!-- marine stuff (IMG & ENC style) -->
+	<!-- Marine stuff (IMG & ENC style) -->
 	<qresource prefix="/marine">
 		<file alias="light-major.png">icons/map/marine/light-major.png</file>
 		<file alias="buoy.png">icons/map/marine/buoy.png</file>
@@ -169,140 +178,18 @@
 		<file alias="dome.png">icons/map/marine/dome.png</file>
 	</qresource>
 
-	<!-- Mapsforge rendertheme -->
-	<qresource prefix="/mapsforge">
-		<file alias="default.xml">data/mapsforge/default.xml</file>
+	<!-- Patterns (Mapsforge) -->
+	<qresource prefix="/patterns">
+		<file alias="cemetery.svg">icons/map/patterns/cemetery.svg</file>
+		<file alias="military-area.svg">icons/map/patterns/military-area.svg</file>
+		<file alias="nature-reserve.svg">icons/map/patterns/nature-reserve.svg</file>
+		<file alias="orchard.svg">icons/map/patterns/orchard.svg</file>
+		<file alias="vineyard.svg">icons/map/patterns/vineyard.svg</file>
+		<file alias="wetland.svg">icons/map/patterns/wetland.svg</file>
+	</qresource>
 
-		<file alias="patterns/hills.svg">icons/map/mapsforge/patterns/hills.svg</file>
-		<file alias="patterns/farmland.svg">icons/map/mapsforge/patterns/farmland.svg</file>
-		<file alias="patterns/coniferous.svg">icons/map/mapsforge/patterns/coniferous.svg</file>
-		<file alias="patterns/marsh.png">icons/map/mapsforge/patterns/marsh.png</file>
-		<file alias="patterns/dot.png">icons/map/mapsforge/patterns/dot.png</file>
-		<file alias="patterns/cemetery.png">icons/map/mapsforge/patterns/cemetery.png</file>
-		<file alias="patterns/rail.png">icons/map/mapsforge/patterns/rail.png</file>
-		<file alias="patterns/access-destination.png">icons/map/mapsforge/patterns/access-destination.png</file>
-		<file alias="patterns/deciduous.svg">icons/map/mapsforge/patterns/deciduous.svg</file>
-		<file alias="patterns/grass.svg">icons/map/mapsforge/patterns/grass.svg</file>
-		<file alias="patterns/wood-mixed.png">icons/map/mapsforge/patterns/wood-mixed.png</file>
-		<file alias="patterns/wood-deciduous.png">icons/map/mapsforge/patterns/wood-deciduous.png</file>
-		<file alias="patterns/pike.png">icons/map/mapsforge/patterns/pike.png</file>
-		<file alias="patterns/wood-coniferous.png">icons/map/mapsforge/patterns/wood-coniferous.png</file>
-		<file alias="patterns/coniferous_and_deciduous.svg">icons/map/mapsforge/patterns/coniferous_and_deciduous.svg</file>
-		<file alias="patterns/arrow.png">icons/map/mapsforge/patterns/arrow.png</file>
-		<file alias="patterns/military.png">icons/map/mapsforge/patterns/military.png</file>
-		<file alias="patterns/scrub.svg">icons/map/mapsforge/patterns/scrub.svg</file>
-		<file alias="patterns/nature-reserve.png">icons/map/mapsforge/patterns/nature-reserve.png</file>
-		<file alias="patterns/swamp.svg">icons/map/mapsforge/patterns/swamp.svg</file>
-		<file alias="patterns/quarry.svg">icons/map/mapsforge/patterns/quarry.svg</file>
-		<file alias="patterns/access-private.png">icons/map/mapsforge/patterns/access-private.png</file>
-		<file alias="symbols/barrier/blocks.svg">icons/map/mapsforge/symbols/barrier/blocks.svg</file>
-		<file alias="symbols/barrier/stile.svg">icons/map/mapsforge/symbols/barrier/stile.svg</file>
-		<file alias="symbols/barrier/cycle_barrier.svg">icons/map/mapsforge/symbols/barrier/cycle_barrier.svg</file>
-		<file alias="symbols/barrier/lift_gate.svg">icons/map/mapsforge/symbols/barrier/lift_gate.svg</file>
-		<file alias="symbols/barrier/bollard.svg">icons/map/mapsforge/symbols/barrier/bollard.svg</file>
-		<file alias="symbols/barrier/gate.svg">icons/map/mapsforge/symbols/barrier/gate.svg</file>
-		<file alias="symbols/dot_blue.svg">icons/map/mapsforge/symbols/dot_blue.svg</file>
-		<file alias="symbols/dot_blue_dark.svg">icons/map/mapsforge/symbols/dot_blue_dark.svg</file>
-		<file alias="symbols/peak.svg">icons/map/mapsforge/symbols/peak.svg</file>
-		<file alias="symbols/traffic_signal.svg">icons/map/mapsforge/symbols/traffic_signal.svg</file>
-		<file alias="symbols/place_of_worship/hindu.svg">icons/map/mapsforge/symbols/place_of_worship/hindu.svg</file>
-		<file alias="symbols/place_of_worship/unknown.svg">icons/map/mapsforge/symbols/place_of_worship/unknown.svg</file>
-		<file alias="symbols/place_of_worship/islamic.svg">icons/map/mapsforge/symbols/place_of_worship/islamic.svg</file>
-		<file alias="symbols/place_of_worship/jewish.svg">icons/map/mapsforge/symbols/place_of_worship/jewish.svg</file>
-		<file alias="symbols/place_of_worship/shinto.svg">icons/map/mapsforge/symbols/place_of_worship/shinto.svg</file>
-		<file alias="symbols/place_of_worship/buddhist.svg">icons/map/mapsforge/symbols/place_of_worship/buddhist.svg</file>
-		<file alias="symbols/place_of_worship/christian.svg">icons/map/mapsforge/symbols/place_of_worship/christian.svg</file>
-		<file alias="symbols/volcano.svg">icons/map/mapsforge/symbols/volcano.svg</file>
-		<file alias="symbols/bench.svg">icons/map/mapsforge/symbols/bench.svg</file>
-		<file alias="symbols/transport/parking_private.svg">icons/map/mapsforge/symbols/transport/parking_private.svg</file>
-		<file alias="symbols/transport/helicopter.svg">icons/map/mapsforge/symbols/transport/helicopter.svg</file>
-		<file alias="symbols/transport/rental_bicycle.svg">icons/map/mapsforge/symbols/transport/rental_bicycle.svg</file>
-		<file alias="symbols/transport/train_station2.svg">icons/map/mapsforge/symbols/transport/train_station2.svg</file>
-		<file alias="symbols/transport/parking.svg">icons/map/mapsforge/symbols/transport/parking.svg</file>
-		<file alias="symbols/transport/slipway.svg">icons/map/mapsforge/symbols/transport/slipway.svg</file>
-		<file alias="symbols/transport/bus_stop.svg">icons/map/mapsforge/symbols/transport/bus_stop.svg</file>
-		<file alias="symbols/transport/bus_station.svg">icons/map/mapsforge/symbols/transport/bus_station.svg</file>
-		<file alias="symbols/transport/airport2.svg">icons/map/mapsforge/symbols/transport/airport2.svg</file>
-		<file alias="symbols/transport/fuel.svg">icons/map/mapsforge/symbols/transport/fuel.svg</file>
-		<file alias="symbols/transport/lighthouse.svg">icons/map/mapsforge/symbols/transport/lighthouse.svg</file>
-		<file alias="symbols/transport/traffic_lights.svg">icons/map/mapsforge/symbols/transport/traffic_lights.svg</file>
-		<file alias="symbols/transport/tram_stop.svg">icons/map/mapsforge/symbols/transport/tram_stop.svg</file>
-		<file alias="symbols/food/bar.svg">icons/map/mapsforge/symbols/food/bar.svg</file>
-		<file alias="symbols/food/cafe.svg">icons/map/mapsforge/symbols/food/cafe.svg</file>
-		<file alias="symbols/food/drinkingtap.svg">icons/map/mapsforge/symbols/food/drinkingtap.svg</file>
-		<file alias="symbols/food/pub.svg">icons/map/mapsforge/symbols/food/pub.svg</file>
-		<file alias="symbols/food/fastfood.svg">icons/map/mapsforge/symbols/food/fastfood.svg</file>
-		<file alias="symbols/food/biergarten.svg">icons/map/mapsforge/symbols/food/biergarten.svg</file>
-		<file alias="symbols/food/restaurant.svg">icons/map/mapsforge/symbols/food/restaurant.svg</file>
-		<file alias="symbols/railway-crossing.svg">icons/map/mapsforge/symbols/railway-crossing.svg</file>
-		<file alias="symbols/accommodation/hotel2.svg">icons/map/mapsforge/symbols/accommodation/hotel2.svg</file>
-		<file alias="symbols/accommodation/camping.svg">icons/map/mapsforge/symbols/accommodation/camping.svg</file>
-		<file alias="symbols/accommodation/chalet.svg">icons/map/mapsforge/symbols/accommodation/chalet.svg</file>
-		<file alias="symbols/accommodation/alpinehut.svg">icons/map/mapsforge/symbols/accommodation/alpinehut.svg</file>
-		<file alias="symbols/accommodation/shelter2.svg">icons/map/mapsforge/symbols/accommodation/shelter2.svg</file>
-		<file alias="symbols/accommodation/caravan_park.svg">icons/map/mapsforge/symbols/accommodation/caravan_park.svg</file>
-		<file alias="symbols/accommodation/hostel.svg">icons/map/mapsforge/symbols/accommodation/hostel.svg</file>
-		<file alias="symbols/health/doctors2.svg">icons/map/mapsforge/symbols/health/doctors2.svg</file>
-		<file alias="symbols/health/hospital.svg">icons/map/mapsforge/symbols/health/hospital.svg</file>
-		<file alias="symbols/health/pharmacy.svg">icons/map/mapsforge/symbols/health/pharmacy.svg</file>
-		<file alias="symbols/chair_lift.svg">icons/map/mapsforge/symbols/chair_lift.svg</file>
-		<file alias="symbols/education/school.svg">icons/map/mapsforge/symbols/education/school.svg</file>
-		<file alias="symbols/education/nursery3.svg">icons/map/mapsforge/symbols/education/nursery3.svg</file>
-		<file alias="symbols/education/university.svg">icons/map/mapsforge/symbols/education/university.svg</file>
-		<file alias="symbols/money/atm2.svg">icons/map/mapsforge/symbols/money/atm2.svg</file>
-		<file alias="symbols/money/bank2.svg">icons/map/mapsforge/symbols/money/bank2.svg</file>
-		<file alias="symbols/shopping/marketplace.svg">icons/map/mapsforge/symbols/shopping/marketplace.svg</file>
-		<file alias="symbols/shopping/bicycle.svg">icons/map/mapsforge/symbols/shopping/bicycle.svg</file>
-		<file alias="symbols/shopping/alcohol.svg">icons/map/mapsforge/symbols/shopping/alcohol.svg</file>
-		<file alias="symbols/shopping/diy.svg">icons/map/mapsforge/symbols/shopping/diy.svg</file>
-		<file alias="symbols/shopping/bakery.svg">icons/map/mapsforge/symbols/shopping/bakery.svg</file>
-		<file alias="symbols/shopping/greengrocer.svg">icons/map/mapsforge/symbols/shopping/greengrocer.svg</file>
-		<file alias="symbols/shopping/laundrette.svg">icons/map/mapsforge/symbols/shopping/laundrette.svg</file>
-		<file alias="symbols/shopping/car_repair.svg">icons/map/mapsforge/symbols/shopping/car_repair.svg</file>
-		<file alias="symbols/shopping/butcher.svg">icons/map/mapsforge/symbols/shopping/butcher.svg</file>
-		<file alias="symbols/shopping/book.svg">icons/map/mapsforge/symbols/shopping/book.svg</file>
-		<file alias="symbols/shopping/convenience.svg">icons/map/mapsforge/symbols/shopping/convenience.svg</file>
-		<file alias="symbols/shopping/supermarket.svg">icons/map/mapsforge/symbols/shopping/supermarket.svg</file>
-		<file alias="symbols/poi/mountain_pass.svg">icons/map/mapsforge/symbols/poi/mountain_pass.svg</file>
-		<file alias="symbols/poi/embassy2.svg">icons/map/mapsforge/symbols/poi/embassy2.svg</file>
-		<file alias="symbols/poi/cave.svg">icons/map/mapsforge/symbols/poi/cave.svg</file>
-		<file alias="symbols/cable_car.svg">icons/map/mapsforge/symbols/cable_car.svg</file>
-		<file alias="symbols/railway-crossing-small.svg">icons/map/mapsforge/symbols/railway-crossing-small.svg</file>
-		<file alias="symbols/dot_magenta.svg">icons/map/mapsforge/symbols/dot_magenta.svg</file>
-		<file alias="symbols/dot_black.svg">icons/map/mapsforge/symbols/dot_black.svg</file>
-		<file alias="symbols/gondola.svg">icons/map/mapsforge/symbols/gondola.svg</file>
-		<file alias="symbols/dot_white.svg">icons/map/mapsforge/symbols/dot_white.svg</file>
-		<file alias="symbols/amenity/recycling.svg">icons/map/mapsforge/symbols/amenity/recycling.svg</file>
-		<file alias="symbols/amenity/firestation3.svg">icons/map/mapsforge/symbols/amenity/firestation3.svg</file>
-		<file alias="symbols/amenity/telephone.svg">icons/map/mapsforge/symbols/amenity/telephone.svg</file>
-		<file alias="symbols/amenity/post_box.svg">icons/map/mapsforge/symbols/amenity/post_box.svg</file>
-		<file alias="symbols/amenity/fountain2.svg">icons/map/mapsforge/symbols/amenity/fountain2.svg</file>
-		<file alias="symbols/amenity/playground.svg">icons/map/mapsforge/symbols/amenity/playground.svg</file>
-		<file alias="symbols/amenity/library.svg">icons/map/mapsforge/symbols/amenity/library.svg</file>
-		<file alias="symbols/amenity/post_office.svg">icons/map/mapsforge/symbols/amenity/post_office.svg</file>
-		<file alias="symbols/amenity/police2.svg">icons/map/mapsforge/symbols/amenity/police2.svg</file>
-		<file alias="symbols/amenity/toilets.svg">icons/map/mapsforge/symbols/amenity/toilets.svg</file>
-		<file alias="symbols/tourist/picnic.svg">icons/map/mapsforge/symbols/tourist/picnic.svg</file>
-		<file alias="symbols/tourist/monument.svg">icons/map/mapsforge/symbols/tourist/monument.svg</file>
-		<file alias="symbols/tourist/archaeological2.svg">icons/map/mapsforge/symbols/tourist/archaeological2.svg</file>
-		<file alias="symbols/tourist/museum.svg">icons/map/mapsforge/symbols/tourist/museum.svg</file>
-		<file alias="symbols/tourist/attraction.svg">icons/map/mapsforge/symbols/tourist/attraction.svg</file>
-		<file alias="symbols/tourist/information.svg">icons/map/mapsforge/symbols/tourist/information.svg</file>
-		<file alias="symbols/tourist/theatre.svg">icons/map/mapsforge/symbols/tourist/theatre.svg</file>
-		<file alias="symbols/tourist/zoo.svg">icons/map/mapsforge/symbols/tourist/zoo.svg</file>
-		<file alias="symbols/tourist/cinema2.svg">icons/map/mapsforge/symbols/tourist/cinema2.svg</file>
-		<file alias="symbols/tourist/castle2.svg">icons/map/mapsforge/symbols/tourist/castle2.svg</file>
-		<file alias="symbols/tourist/ruin.svg">icons/map/mapsforge/symbols/tourist/ruin.svg</file>
-		<file alias="symbols/tourist/memorial.svg">icons/map/mapsforge/symbols/tourist/memorial.svg</file>
-		<file alias="symbols/tourist/view_point.svg">icons/map/mapsforge/symbols/tourist/view_point.svg</file>
-		<file alias="symbols/tourist/windmill.svg">icons/map/mapsforge/symbols/tourist/windmill.svg</file>
-		<file alias="symbols/water/weir.svg">icons/map/mapsforge/symbols/water/weir.svg</file>
-		<file alias="symbols/sport/swimming_outdoor.svg">icons/map/mapsforge/symbols/sport/swimming_outdoor.svg</file>
-		<file alias="symbols/sport/tennis.svg">icons/map/mapsforge/symbols/sport/tennis.svg</file>
-		<file alias="symbols/sport/shooting.svg">icons/map/mapsforge/symbols/sport/shooting.svg</file>
-		<file alias="symbols/sport/stadium.svg">icons/map/mapsforge/symbols/sport/stadium.svg</file>
-		<file alias="symbols/sport/soccer.svg">icons/map/mapsforge/symbols/sport/soccer.svg</file>
-		<file alias="symbols/sport/golf.svg">icons/map/mapsforge/symbols/sport/golf.svg</file>
-		<file alias="symbols/oneway.svg">icons/map/mapsforge/symbols/oneway.svg</file>
+	<!-- Mapsforge style -->
+	<qresource prefix="/style">
+		<file alias="style.xml">data/style/style.xml</file>
 	</qresource>
 </RCC>

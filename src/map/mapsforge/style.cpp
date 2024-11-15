@@ -457,6 +457,10 @@ void Style::text(QXmlStreamReader &reader, const MapData &data,
 	}
 	if (attr.hasAttribute("symbol-id"))
 		ri._symbolId = attr.value("symbol-id").toString();
+	if (line && attr.hasAttribute("text-orientation")) {
+		if (attr.value("text-orientation").toString() == "auto_down")
+			ri._shield = true;
+	}
 
 	ri._font.setFamily(fontFamily);
 	ri._font.setPixelSize(fontSize);
@@ -798,7 +802,7 @@ void Style::load(const MapData &data, qreal ratio)
 	QString path(ProgramPaths::renderthemeFile());
 
 	if (!QFileInfo::exists(path) || !loadXml(path, data, ratio))
-		loadXml(":/mapsforge/default.xml", data, ratio);
+		loadXml(":/style/style.xml", data, ratio);
 
 	std::sort(_symbols.begin(), _symbols.end());
 	std::sort(_lineSymbols.begin(), _lineSymbols.end());

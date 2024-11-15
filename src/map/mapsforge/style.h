@@ -209,7 +209,7 @@ public:
 	public:
 		TextRender(const Rule &rule)
 		  : Render(rule), _priority(0), _fillColor(Qt::black),
-		  _strokeColor(Qt::black), _strokeWidth(0) {}
+		  _strokeColor(Qt::black), _strokeWidth(0), _shield(false) {}
 
 		const QString &symbolId() const {return _symbolId;}
 		const QFont &font() const {return _font;}
@@ -218,6 +218,7 @@ public:
 		qreal strokeWidth() const {return _strokeWidth;}
 		unsigned key() const {return _key;}
 		int priority() const {return _priority;}
+		bool shield() const {return _shield;}
 
 		bool operator<(const TextRender &other) const
 		  {return _priority > other._priority;}
@@ -230,6 +231,7 @@ public:
 		QColor _fillColor, _strokeColor;
 		qreal _strokeWidth;
 		QFont _font;
+		bool _shield;
 		unsigned _key;
 	};
 

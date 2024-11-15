@@ -174,6 +174,10 @@ private:
 		  const QFont *font, const QImage *img, const QColor *color,
 		  const QColor *haloColor) : TextPointItem(point,
 		  label ? new QString(*label) : 0, font, img, color, haloColor, 0) {}
+		PointItem(const QPoint &point, const QByteArray *label,
+		  const QFont *font, const QColor *color, const QColor *bgColor)
+		  : TextPointItem(point, label ? new QString(*label) : 0, font, 0,
+		  color, 0, bgColor) {}
 		~PointItem() {delete _text;}
 	};
 

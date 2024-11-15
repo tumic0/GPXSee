@@ -275,27 +275,47 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 		bool limit = false;
 
 		if (p.ti) {
-			limit = (p.ti->key() == ID_ELE || p.ti->key() == ID_REF);
+			limit = (p.ti->key() == ID_ELE || p.ti->key() == ID_REF
+			  || (!p.si && p.ti->shield()));
 			if (limit && set.contains(*p.lbl))
 				continue;
 		}
 
-		PathItem *item = new PathItem(p.p->pp, p.lbl, img, _rect, font, color,
-		  hColor, rotate);
-		if (item->isValid() && !item->collides(textItems)) {
-			textItems.append(item);
-			if (limit)
-				set.insert(*p.lbl);
-		} else {
-			delete item;
+		if (!p.si && p.ti && p.ti->shield()) {
+			if (p.ti && p.lbl && set.contains(*p.lbl))
+				continue;
+			if (p.p->pp.length() < _rect.width() / 3.0)
+				continue;
 
-			if (img && p.lbl) {
-				PathItem *item = new PathItem(p.p->pp, 0, img, _rect, 0, 0, 0,
-				  rotate);
-				if (item->isValid() && !item->collides(textItems))
-					textItems.append(item);
-				else
-					delete item;
+			QPointF pos = p.p->pp.pointAtPercent(0.5);
+
+			PointItem *item = new PointItem(pos.toPoint(), p.lbl, font, color,
+			  hColor);
+			if (item->isValid() && _rect.contains(item->boundingRect().toRect())
+			  && !item->collides(textItems)) {
+				textItems.append(item);
+				if (p.ti && p.lbl)
+					set.insert(*p.lbl);
+			} else
+				delete item;
+		} else {
+			PathItem *item = new PathItem(p.p->pp, p.lbl, img, _rect, font,
+			  color, hColor, rotate);
+			if (item->isValid() && !item->collides(textItems)) {
+				textItems.append(item);
+				if (limit)
+					set.insert(*p.lbl);
+			} else {
+				delete item;
+
+				if (img && p.lbl) {
+					PathItem *item = new PathItem(p.p->pp, 0, img, _rect, 0, 0,
+					  0, rotate);
+					if (item->isValid() && !item->collides(textItems))
+						textItems.append(item);
+					else
+						delete item;
+				}
 			}
 		}
 	}
