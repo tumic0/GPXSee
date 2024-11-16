@@ -29,7 +29,7 @@
 
     <!-- Landuse -->
     <rule e="way" closed="yes" k="leisure" v="park|garden" zoom-min="10">
-        <area fill="#cadfaf"/>
+        <area fill="#e4efcf"/>
     </rule>
 
     <rule e="way" closed="yes" k="landuse" v="construction|quarry|industrial|farm|farmyard" zoom-min="10">
@@ -42,10 +42,10 @@
     <rule e="way" closed="yes" k="landuse" v="comercial|residential|retail" zoom-min="10">
         <area fill="#e6e2d9"/>
     </rule>
-    <rule e="way" closed="yes" k="landuse" v="forest|wood|village_green" zoom-min="10">
+    <rule e="way" closed="yes" k="landuse" v="forest|wood" zoom-min="10">
         <area fill="#cadfaf"/>
     </rule>
-    <rule e="way" closed="yes" k="landuse" v="meadow|grass|greenfield" zoom-min="10">
+    <rule e="way" closed="yes" k="landuse" v="meadow|grass|greenfield|village_green" zoom-min="10">
         <area fill="#e4efcf"/>
     </rule>
     <rule e="way" closed="yes" k="landuse" v="orchard" zoom-min="10">
