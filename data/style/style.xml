@@ -211,20 +211,6 @@
         <caption fill="#aaaaaa" font-size="9" k="addr:housenumber" priority="-100"/>
     </rule>
 
-    <!-- Walls and fences -->
-    <rule e="way" k="barrier" v="*" zoom-min="13">
-        <rule e="way" k="barrier" v="fence|wall|chain">
-            <line stroke="#666666" stroke-width="0.10" stroke-linecap="butt"/>
-        </rule>
-        <rule e="way" k="barrier" v="hedge">
-            <line stroke="#6eb569" stroke-width="0.15" stroke-linecap="butt"/>
-        </rule>
-        <rule e="way" k="barrier" v="retaining_wall|city_wall">
-            <line stroke="#666666" stroke-width="0.15" stroke-linecap="butt"/>
-            <line stroke="#666666" dy="0.12" stroke-width="0.4" stroke-dasharray="0.1,1.5" stroke-linecap="butt" scale="all"/>
-        </rule>
-    </rule>
-
     <!-- Aeoroways -->
     <rule closed="no" e="way" k="aeroway" v="runway">
         <line stroke="#ffffff" stroke-linecap="butt" stroke-width="4"/>
@@ -480,6 +466,20 @@
     </rule>
     <rule e="way" k="railway" v="subway" zoom-min="15">
         <line stroke="#777777" stroke-width="0.15" stroke-linecap="butt" stroke-dasharray="2,1" scale="all"/>
+    </rule>
+
+    <!-- Walls and fences -->
+    <rule e="way" k="barrier" v="*" zoom-min="13">
+        <rule e="way" k="barrier" v="fence|wall|chain">
+            <line stroke="#666666" stroke-width="0.10" stroke-linecap="butt"/>
+        </rule>
+        <rule e="way" k="barrier" v="hedge">
+            <line stroke="#6eb569" stroke-width="0.15" stroke-linecap="butt"/>
+        </rule>
+        <rule e="way" k="barrier" v="retaining_wall|city_wall">
+            <line stroke="#666666" stroke-width="0.15" stroke-linecap="butt"/>
+            <line stroke="#666666" dy="0.12" stroke-width="0.4" stroke-dasharray="0.1,1.5" stroke-linecap="butt" scale="all"/>
+        </rule>
     </rule>
 
     <!-- Aerialways -->
