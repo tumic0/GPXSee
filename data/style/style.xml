@@ -546,7 +546,7 @@
     </rule>
 
     <!-- City POIs -->
-    <rule e="any" k="amenity|building" v="hospital" zoom-min="13">
+    <rule e="any" k="amenity|building" v="hospital" zoom-min="14">
         <rule e="any" k="name" v="*">
             <symbol id="hospital" src=":/POI/hospital-11.svg" symbol-width="11" priority="20"/>
             <rule e="any" k="*" v="*" zoom-min="15">
@@ -573,7 +573,9 @@
 
     <rule e="any" k="aeroway" v="helipad" zoom-min="14">
         <symbol id="heliport" src=":/POI/heliport-11.svg" symbol-width="11"/>
-        <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="heliport"/>
+        <rule e="any" k="*" v="*" zoom-min="16">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="heliport"/>
+        </rule>
     </rule>
     <rule e="any" k="aeroway" v="aerodrome" zoom-min="12">
         <symbol id="airport" src=":/POI/airport-11.svg" symbol-width="11"/>
@@ -634,11 +636,15 @@
     </rule>
     <rule e="any" k="tourism|building" v="alpine_hut|hotel|hostel|guest_house|chalet|motel" zoom-min="16">
         <symbol id="lodging" src=":/POI/lodging-11.svg" symbol-width="11"/>
-        <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="lodging"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="lodging"/>
+        </rule>
     </rule>
     <rule e="any" k="tourism|accommodation" v="camp_site|caravan_site" zoom-min="16">
         <symbol id="camp" src=":/POI/campsite-11.svg" symbol-width="11"/>
-        <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="camp"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="camp"/>
+        </rule>
     </rule>
 
     <rule e="any" k="man_made" v="lighthouse" zoom-min="16">
@@ -664,7 +670,9 @@
     </rule>
     <rule e="any" k="tourism" v="museum" zoom-min="16">
         <symbol id="museum" src=":/POI/museum-11.svg" symbol-width="11"/>
-        <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="museum"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="museum"/>
+        </rule>
     </rule>
     <rule e="any" k="amenity|building" v="library" zoom-min="16">
         <symbol id="library" src=":/POI/lbrary-11.svg" symbol-width="11"/>
@@ -695,7 +703,9 @@
     </rule>
     <rule e="any" k="information" v="visitor_centre|office" zoom-min="16">
         <symbol id="information" src=":/POI/information-11.svg" symbol-width="11"/>
-        <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="information"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="information"/>
+        </rule>
     </rule>
 
     <rule e="any" k="sport" v="swimming" zoom-min="16">
@@ -764,7 +774,9 @@
     </rule>
     <rule e="any" k="shop" v="supermarket" zoom-min="16">
         <symbol id="supermarket" src=":/POI/grocery-11.svg" symbol-width="11" priority="-5"/>
-        <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="supermarket"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="supermarket"/>
+        </rule>
     </rule>
     <rule e="any" k="shop" v="convenience" zoom-min="16">
         <symbol id="convenience" src=":/POI/shop-11.svg" symbol-width="11" priority="-5"/>
@@ -774,7 +786,9 @@
     </rule>
     <rule e="any" k="shop" v="doityourself|hardware" zoom-min="16">
         <symbol id="hardware" src=":/POI/hardware-11.svg" symbol-width="11" priority="-5"/>
-        <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="hardware"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="hardware"/>
+        </rule>
     </rule>
     <rule e="any" k="shop" v="bakery" zoom-min="16">
         <symbol id="bakery" src=":/POI/bakery-11.svg" symbol-width="11" priority="-5"/>
