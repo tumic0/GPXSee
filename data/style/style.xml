@@ -469,6 +469,9 @@
             <line stroke="#717171" stroke-width="0.2" stroke-linecap="butt" stroke-dasharray="12,4"/>
         </rule>
     </rule>
+    <rule e="way" k="railway" v="subway" zoom-min="15">
+        <line stroke="#777777" stroke-width="0.15" stroke-linecap="butt" stroke-dasharray="2,1" scale="all"/>
+    </rule>
 
     <!-- Aerialways -->
     <rule e="way" closed="no" k="aerialway" v="*">
@@ -533,9 +536,11 @@
         </rule>
     </rule>
     <rule e="node" k="natural" v="spring" zoom-min="15">
-        <symbol id="spring" src=":/POI/water-11.svg" symbol-width="11"/>
-        <rule e="any" k="*" v="*" zoom-min="16">
-            <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" priority="10" stroke="#FFFFFF" stroke-width="1" symbol-id="spring"/>
+        <rule e="any" k="name" v="*">
+            <symbol id="spring" src=":/POI/water-11.svg" symbol-width="11"/>
+            <rule e="any" k="*" v="*" zoom-min="16">
+                <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" priority="10" stroke="#FFFFFF" stroke-width="1" symbol-id="spring"/>
+            </rule>
         </rule>
     </rule>
     <rule e="node" k="tourism" v="viewpoint" zoom-min="15">
