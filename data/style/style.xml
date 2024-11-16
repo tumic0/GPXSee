@@ -236,8 +236,50 @@
         </rule>
     </rule>
 
+    <!-- Bridges -->
+    <rule e="way" k="bridge" v="yes|true|viaduct|aqueduct|suspension|culvert|swing" zoom-min="14">
+        <rule e="way" k="highway" v="footway|path">
+            <line stroke="#666666" stroke-linecap="butt" stroke-width="0.3"/>
+        </rule>
+        <rule e="way" k="highway" v="pedestrian">
+            <line stroke="#666666" stroke-linecap="butt" stroke-width="0.8"/>
+        </rule>
+        <rule e="way" k="highway" v="unclassified|service|cycleway">
+            <rule e="way" k="*" v="*" zoom-max="15">
+                <line stroke="#666666" stroke-linecap="butt" stroke-width="1.0"/>
+            </rule>
+            <rule e="way" k="*" v="*" zoom-min="16">
+                <line stroke="#666666" stroke-linecap="butt" stroke-width="0.6"/>
+            </rule>
+        </rule>
+        <rule e="way" k="highway" v="tertiary|tertiary_link|residential|living_street">
+            <rule e="way" k="*" v="*" zoom-min="13" zoom-max="13">
+                <line stroke="#666666" stroke-linecap="butt" stroke-width="1.7"/>
+            </rule>
+            <rule e="way" k="*" v="*" zoom-min="14">
+                <line stroke="#666666" stroke-linecap="butt" stroke-width="1.2"/>
+            </rule>
+        </rule>
+        <rule e="way" k="highway" v="primary|primary_link|secondary|secondary_link">
+            <rule e="way" k="*" v="*" zoom-min="9" zoom-max="13">
+                <line stroke="#666666" stroke-linecap="butt" stroke-width="3.8"/>
+            </rule>
+            <rule e="way" k="*" v="*" zoom-min="14">
+                <line stroke="#666666" stroke-linecap="butt" stroke-width="2.0"/>
+            </rule>
+        </rule>
+        <rule e="way" k="highway" v="trunk|trunk_link|motorway|motorway_link">
+            <rule e="way" k="*" v="*" zoom-max="13">
+                <line stroke="#666666" stroke-linecap="butt" stroke-width="4.2"/>
+            </rule>
+            <rule e="way" k="*" v="*" zoom-min="14">
+                <line stroke="#666666" stroke-linecap="butt" stroke-width="2.2"/>
+            </rule>
+        </rule>
+    </rule>
+
     <!-- Roads & tracks -->
-    <rule e="way" k="highway" v="footway" zoom-min="16">
+    <rule e="way" k="highway" v="footway|path" zoom-min="16">
         <line stroke="#aba083" stroke-dasharray="2,1" stroke-linecap="butt" stroke-width="0.1"/>
     </rule>
 
