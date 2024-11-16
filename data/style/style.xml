@@ -9,13 +9,34 @@
         <area fill="#f1f0e5"/>
     </rule>
 
-    <!-- Landuse & natural areas -->
-    <rule e="way" closed="yes" k="leisure" v="park" zoom-min="10">
+    <!-- Natural areas -->
+    <rule e="way" closed="yes" k="natural" v="wood" zoom-min="10">
+        <area fill="#cadfaf"/>
+    </rule>
+    <rule e="way" closed="yes" k="natural" v="scrub" zoom-min="10">
+        <area fill="#e4efcf"/>
+    </rule>
+    <rule e="way" closed="yes" k="natural" v="beach" zoom-min="10">
+        <area fill="#fff3c7"/>
+    </rule>
+
+    <rule e="way" closed="yes" k="natural" v="rock|stone|bare_rock|bedrock" zoom-min="14">
+        <area fill="#60000000"/>
+    </rule>
+    <rule e="way" closed="yes" k="natural" v="glacier" zoom-min="12">
+        <area fill="#ddf1fd"/>
+    </rule>
+
+    <!-- Landuse -->
+    <rule e="way" closed="yes" k="leisure" v="park|garden" zoom-min="10">
         <area fill="#cadfaf"/>
     </rule>
 
     <rule e="way" closed="yes" k="landuse" v="construction|quarry|industrial|farm|farmyard" zoom-min="10">
         <area fill="#d6d4ce"/>
+    </rule>
+    <rule e="way" closed="yes" k="landuse" v="allotments" zoom-min="10">
+        <area fill="#f0e7d5"/>
     </rule>
 
     <rule e="way" closed="yes" k="landuse" v="comercial|residential|retail" zoom-min="10">
@@ -32,23 +53,6 @@
     </rule>
     <rule e="way" closed="yes" k="landuse" v="vineyard" zoom-min="10">
         <area src=":/patterns/vineyard.svg" symbol-width="28" symbol-height="32"/>
-    </rule>
-
-    <rule e="way" closed="yes" k="natural" v="wood" zoom-min="10">
-        <area fill="#cadfaf"/>
-    </rule>
-    <rule e="way" closed="yes" k="natural" v="scrub" zoom-min="10">
-        <area fill="#e4efcf"/>
-    </rule>
-    <rule e="way" closed="yes" k="natural" v="beach" zoom-min="10">
-        <area fill="#fff3c7"/>
-    </rule>
-
-    <rule e="way" closed="yes" k="natural" v="rock|stone|bare_rock|bedrock" zoom-min="14">
-        <area fill="#60000000"/>
-    </rule>
-    <rule e="way" closed="yes" k="natural" v="glacier" zoom-min="12">
-        <area fill="#ddf1fd"/>
     </rule>
 
     <!-- Hillshading -->
