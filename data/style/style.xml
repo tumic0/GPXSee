@@ -56,7 +56,7 @@
     </rule>
 
     <!-- Hillshading -->
-    <hillshading zoom-min="10" zoom-max="16"/>
+    <hillshading zoom-min="10" zoom-max="15"/>
 
     <!-- Contour lines -->
     <rule e="way" k="contour_ext" v="*">
