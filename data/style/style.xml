@@ -156,6 +156,9 @@
     <rule e="way" closed="yes" k="amenity" v="grave_yard">
         <area src=":/patterns/cemetery.svg" symbol-width="30" symbol-height="28"/>
     </rule>
+    <rule e="way" closed="yes" k="bridge" v="yes|true|viaduct|aqueduct|suspension|culvert|swing" zoom-min="10">
+        <area fill="#ffffff"/>
+    </rule>
     <rule e="way" closed="yes" k="amenity" v="parking" zoom-min="10">
         <area fill="#ffffff" stroke="#d5cdc0" stroke-width="0.1"/>
         <rule e="way" k="*" v="*" zoom-min="16">
@@ -246,10 +249,14 @@
     <!-- Bridges -->
     <rule e="way" k="bridge" v="yes|true|viaduct|aqueduct|suspension|culvert|swing" zoom-min="14">
         <rule e="way" k="highway" v="footway|path">
-            <line stroke="#666666" stroke-linecap="butt" stroke-width="0.3"/>
+            <rule e="way" k="area" v="~|no">
+                <line stroke="#666666" stroke-linecap="butt" stroke-width="0.3"/>
+            </rule>
         </rule>
         <rule e="way" k="highway" v="pedestrian">
-            <line stroke="#666666" stroke-linecap="butt" stroke-width="0.8"/>
+            <rule e="way" k="area" v="~|no">
+                <line stroke="#666666" stroke-linecap="butt" stroke-width="0.8"/>
+            </rule>
         </rule>
         <rule e="way" k="highway" v="unclassified|service|cycleway">
             <rule e="way" k="*" v="*" zoom-max="15">
@@ -287,7 +294,9 @@
 
     <!-- Roads & tracks -->
     <rule e="way" k="highway" v="footway|path" zoom-min="16">
-        <line stroke="#aba083" stroke-dasharray="2,1" stroke-linecap="butt" stroke-width="0.1"/>
+        <rule e="way" k="area" v="~|no">
+            <line stroke="#aba083" stroke-dasharray="2,1" stroke-linecap="butt" stroke-width="0.1"/>
+        </rule>
     </rule>
 
     <rule e="way" k="highway" v="track">
@@ -317,12 +326,12 @@
         </rule>
     </rule>
 
-    <rule e="way" closed="no" k="highway" v="pedestrian" zoom-min="13">
+    <rule e="way" k="highway" v="pedestrian" zoom-min="13">
         <rule e="way" k="area" v="~|no">
             <line stroke="#ffffff" stroke-width="0.6"/>
         </rule>
     </rule>
-    <rule e="way" closed="no" k="highway" v="unclassified|service|cycleway" zoom-min="13">
+    <rule e="way" k="highway" v="unclassified|service|cycleway" zoom-min="13">
         <rule e="way" k="*" v="*" zoom-max="15">
             <line stroke="#ffffff" stroke-width="0.8"/>
         </rule>
