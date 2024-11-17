@@ -185,16 +185,12 @@
     <!-- Area overlays -->
     <rule e="way" k="landuse" v="military" zoom-min="10">
         <area src=":/patterns/military-area.svg" symbol-height="32"/>
-        <rule e="way" k="military" v="range|base|airfield|training_area" zoom-max="16">
-            <caption fill="#ff4040" font-size="10" font-style="italic" text-transform="uppercase" k="name" stroke="#ffffff" stroke-width="1"/>
-        </rule>
+        <caption fill="#ff4040" font-size="10" font-style="italic" text-transform="uppercase" k="name" stroke="#ffffff" stroke-width="1"/>
     </rule>
     <rule e="way" k="boundary" v="protected_area|national_park" zoom-min="10">
         <rule e="way" k="protect_class" v="pr_2">
             <area src=":/patterns/nature-reserve.svg" symbol-height="32"/>
-            <rule e="way" k="*" v="*" zoom-max="16">
-                <caption fill="#9ac269" font-size="10" font-style="italic" text-transform="uppercase" k="name" stroke="#ffffff" stroke-width="1"/>
-            </rule>
+            <caption fill="#9ac269" font-size="10" font-style="italic" text-transform="uppercase" k="name" stroke="#ffffff" stroke-width="1"/>
         </rule>
     </rule>
 
@@ -204,11 +200,15 @@
     </rule>
     <rule e="way" k="building" v="civic">
         <area fill="#cfc4b3" stroke="#cdccc4" stroke-width="0.1"/>
-        <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1"/>
+        <rule e="way" k="*" v="*" zoom-min="16">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1"/>
+        </rule>
     </rule>
     <rule e="way" k="building" v="cathedral|church|basilica">
         <area fill="#a19d96" stroke="#cdccc4" stroke-width="0.1"/>
-        <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1"/>
+        <rule e="way" k="*" v="*" zoom-min="16">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1"/>
+        </rule>
     </rule>
 
     <rule e="any" k="addr:housenumber" v="*" zoom-min="19">
