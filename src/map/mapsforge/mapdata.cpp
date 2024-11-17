@@ -697,11 +697,12 @@ bool MapData::readPoints(const VectorTile *tile, int zoom, QList<Point> *list)
 
 	for (unsigned i = 0; i < points[zoom - info.min]; i++) {
 		qint32 lat, lon;
+		Point p(subfile.pos());
 
 		if (!(subfile.readVInt32(lat) && subfile.readVInt32(lon)))
 			return false;
-		Point p(Coordinates(tile->pos.lon() + MD(lon),
-		  tile->pos.lat() + MD(lat)));
+		p.coordinates = Coordinates(tile->pos.lon() + MD(lon),
+		  tile->pos.lat() + MD(lat));
 
 		if (!subfile.readByte(sb))
 			return false;

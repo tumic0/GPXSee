@@ -37,7 +37,7 @@ public:
 	};
 
 	struct Point {
-		Point(const Coordinates &c) : id(qHash(c)), coordinates(c) {}
+		Point(quint64 id) : id(id) {}
 
 		quint64 id;
 		Coordinates coordinates;
