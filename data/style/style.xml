@@ -187,10 +187,12 @@
         <area src=":/patterns/military-area.svg" symbol-height="32"/>
         <caption fill="#ff4040" font-size="10" font-style="italic" text-transform="uppercase" k="name" stroke="#ffffff" stroke-width="1"/>
     </rule>
-    <rule e="way" k="boundary" v="protected_area|national_park" zoom-min="10">
+    <rule e="way" k="boundary" v="protected_area|national_park" zoom-min="10" zoom-max="14">
         <rule e="way" k="protect_class" v="pr_2">
             <area src=":/patterns/nature-reserve.svg" symbol-height="32"/>
-            <caption fill="#9ac269" font-size="10" font-style="italic" text-transform="uppercase" k="name" stroke="#ffffff" stroke-width="1"/>
+            <rule e="way" k="*" v="*" zoom-max="12">
+                <caption fill="#9ac269" font-size="10" font-style="italic" text-transform="uppercase" k="name" stroke="#ffffff" stroke-width="1"/>
+            </rule>
         </rule>
     </rule>
 
