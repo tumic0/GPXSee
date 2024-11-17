@@ -161,7 +161,6 @@ void RasterTile::processAreaLabels(const QVector<PainterPath> &paths,
 	QList<const Style::TextRender*> labels(_style->areaLabels(_zoom));
 	QList<const Style::Symbol*> symbols(_style->areaSymbols(_zoom));
 	QList<PathText> items;
-	QSet<QByteArray> set;
 
 	for (int i = 0; i < paths.size(); i++) {
 		const PainterPath &path = paths.at(i);
@@ -207,17 +206,12 @@ void RasterTile::processAreaLabels(const QVector<PainterPath> &paths,
 
 		QPointF pos = p.p->path->labelPos.isNull()
 		  ? centroid(p.p->pp) : ll2xy(p.p->path->labelPos);
-		if (p.ti && p.lbl && set.contains(*p.lbl))
-			continue;
-
 		PointItem *item = new PointItem(pos.toPoint(), p.lbl, font, img, color,
 		  hColor);
 		if (item->isValid() && rectNearPolygon(p.p->pp, item->boundingRect())
-		  && !item->collides(textItems)) {
+		  && !item->collides(textItems))
 			textItems.append(item);
-			if (p.ti && p.lbl)
-				set.insert(*p.lbl);
-		} else
+		else
 			delete item;
 	}
 }
