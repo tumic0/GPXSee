@@ -287,12 +287,22 @@
     <!-- Roads & tracks -->
     <rule e="way" k="highway" v="footway|path" zoom-min="16">
         <rule e="way" k="area" v="~|no">
-            <line stroke="#aba083" stroke-dasharray="2,1" stroke-linecap="butt" stroke-width="0.2"/>
+            <rule e="way" k="tunnel" v="~|no">
+                <line stroke="#aba083" stroke-dasharray="2,1" stroke-linecap="butt" stroke-width="0.2"/>
+            </rule>
+            <rule e="way" k="tunnel" v="yes|true">
+                <line stroke="#eeeeee" stroke-dasharray="2,1" stroke-linecap="butt" stroke-width="0.2"/>
+            </rule>
         </rule>
     </rule>
     <rule e="way" k="highway" v="steps" zoom-min="16">
         <rule e="way" k="area" v="~|no">
-            <line stroke="#38352b" stroke-dasharray="2,1" stroke-linecap="butt" stroke-width="0.2"/>
+            <rule e="way" k="tunnel" v="~|no">
+                <line stroke="#38352b" stroke-dasharray="2,1" stroke-linecap="butt" stroke-width="0.2"/>
+            </rule>
+            <rule e="way" k="tunnel" v="yes|true">
+                <line stroke="#eeeeee" stroke-dasharray="2,1" stroke-linecap="butt" stroke-width="0.2"/>
+            </rule>
         </rule>
     </rule>
 
