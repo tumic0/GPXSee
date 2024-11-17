@@ -608,6 +608,10 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="fire-station"/>
         </rule>
     </rule>
+    <rule e="any" k="barrier" v="border_control|checkpoint" zoom-min="15">
+        <symbol id="checkpoint" src=":/POI/entrance-alt1-11.svg" symbol-width="11" priority="20"/>
+        <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="checkpoint"/>
+    </rule>
 
     <rule e="any" k="aeroway" v="helipad" zoom-min="14">
         <symbol id="heliport" src=":/POI/heliport-11.svg" symbol-width="11"/>
