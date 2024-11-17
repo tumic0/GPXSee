@@ -512,10 +512,13 @@
     </rule>
 
     <!-- Town & vilage names -->
-    <rule e="node" k="place" v="locality" zoom-min="12">
+    <rule e="node" k="place" v="locality" zoom-min="14">
         <caption fill="#000000" font-size="10" k="name" priority="10" stroke="#FFFFFF" stroke-width="1"/>
     </rule>
-    <rule e="node" k="place" v="village|hamlet" zoom-min="11">
+    <rule e="node" k="place" v="hamlet" zoom-min="12">
+        <caption fill="#000000" font-size="12" k="name" priority="20" stroke="#FFFFFF" stroke-width="1"/>
+    </rule>
+    <rule e="node" k="place" v="village" zoom-min="11">
         <caption fill="#000000" font-size="12" k="name" priority="20" stroke="#FFFFFF" stroke-width="1"/>
     </rule>
     <rule e="node" k="place" v="town" zoom-min="9">
