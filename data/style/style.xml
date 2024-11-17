@@ -203,7 +203,7 @@
     <rule e="way" k="building" v="civic">
         <area fill="#cfc4b3" stroke="#cdccc4" stroke-width="0.1"/>
         <rule e="way" k="*" v="*" zoom-min="16">
-            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1"/>
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" priority="-10"/>
         </rule>
     </rule>
     <rule e="way" k="building" v="cathedral|church|basilica">
@@ -717,7 +717,7 @@
         </rule>
     </rule>
     <rule e="any" k="amenity|building" v="library" zoom-min="16">
-        <symbol id="library" src=":/POI/lbrary-11.svg" symbol-width="11"/>
+        <symbol id="library" src=":/POI/library-11.svg" symbol-width="11"/>
         <rule e="any" k="*" v="*" zoom-min="17">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="library"/>
         </rule>
@@ -759,6 +759,12 @@
         <symbol id="townhall" src=":/POI/town-hall-11.svg" symbol-width="11"/>
         <rule e="any" k="*" v="*" zoom-min="17">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="townhall"/>
+        </rule>
+    </rule>
+    <rule e="any" k="amenity" v="school|university" zoom-min="16">
+        <symbol id="school" src=":/POI/school-11.svg" symbol-width="11"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="school"/>
         </rule>
     </rule>
 
