@@ -569,7 +569,7 @@
     </rule>
 
     <!-- City POIs -->
-    <rule e="any" k="amenity|building" v="hospital" zoom-min="14">
+    <rule e="any" k="amenity|building" v="hospital" zoom-min="15">
         <rule e="any" k="name" v="*">
             <symbol id="hospital" src=":/POI/hospital-11.svg" symbol-width="11" priority="20"/>
             <rule e="any" k="*" v="*" zoom-min="15">
@@ -581,13 +581,13 @@
         <symbol id="doctor" src=":/POI/doctor-11.svg" symbol-width="11"/>
         <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="doctor"/>
     </rule>
-    <rule e="any" k="amenity|building" v="police" zoom-min="14">
+    <rule e="any" k="amenity|building" v="police" zoom-min="15">
         <symbol id="police" src=":/POI/police-11.svg" symbol-width="11" priority="19"/>
         <rule e="any" k="*" v="*" zoom-min="17">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="police"/>
         </rule>
     </rule>
-    <rule e="any" k="amenity|building" v="fire_station" zoom-min="14">
+    <rule e="any" k="amenity|building" v="fire_station" zoom-min="15">
         <symbol id="fire-station" src=":/POI/fire-station-11.svg" symbol-width="11" priority="18"/>
         <rule e="any" k="*" v="*" zoom-min="17">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1" symbol-id="fire-station"/>
