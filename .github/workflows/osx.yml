@@ -28,5 +28,4 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: GPXSee-qt6.dmg
           path: GPXSee.dmg
