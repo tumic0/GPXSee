@@ -49,10 +49,10 @@
         <area fill="#e4efcf"/>
     </rule>
     <rule e="way" closed="yes" k="landuse" v="orchard" zoom-min="10">
-        <area src=":/patterns/orchard.svg" symbol-width="28"/>
+        <area src=":/patterns/orchard.svg" symbol-width="7"/>
     </rule>
     <rule e="way" closed="yes" k="landuse" v="vineyard" zoom-min="10">
-        <area src=":/patterns/vineyard.svg" symbol-width="28" symbol-height="32"/>
+        <area src=":/patterns/vineyard.svg" symbol-width="7" symbol-height="8"/>
     </rule>
 
     <!-- Hillshading -->
@@ -90,7 +90,7 @@
         </rule>
     </rule>
     <rule e="way" closed="yes" k="natural" v="marsh|wetland|mud" zoom-min="13">
-        <area src=":/patterns/wetland.svg" symbol-height="32"/>
+        <area src=":/patterns/wetland.svg" symbol-height="4"/>
     </rule>
 
     <rule e="way" k="waterway" v="river" zoom-min="8">
@@ -152,7 +152,7 @@
 
     <!-- City areas -->
     <rule e="way" closed="yes" k="landuse" v="cemetery">
-        <area src=":/patterns/cemetery.svg" symbol-width="30" symbol-height="28"/>
+        <area src=":/patterns/cemetery.svg" symbol-width="6" symbol-height="7"/>
         <rule e="way" k="*" v="*" zoom-min="15">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="1"/>
         </rule>
@@ -184,12 +184,12 @@
 
     <!-- Area overlays -->
     <rule e="way" k="landuse" v="military" zoom-min="10">
-        <area src=":/patterns/military-area.svg" symbol-height="32"/>
+        <area src=":/patterns/military-area.svg" symbol-height="4"/>
         <caption fill="#ff4040" font-size="10" font-style="italic" text-transform="uppercase" k="name" stroke="#ffffff" stroke-width="1"/>
     </rule>
     <rule e="way" k="boundary" v="protected_area|national_park" zoom-min="10" zoom-max="14">
         <rule e="way" k="protect_class" v="pr_2">
-            <area src=":/patterns/nature-reserve.svg" symbol-height="32"/>
+            <area src=":/patterns/nature-reserve.svg" symbol-height="4"/>
             <rule e="way" k="*" v="*" zoom-max="12">
                 <caption fill="#9ac269" font-size="10" font-style="italic" text-transform="uppercase" k="name" stroke="#ffffff" stroke-width="1"/>
             </rule>
