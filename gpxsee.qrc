@@ -10,6 +10,7 @@
 		<file alias="exit.svg">icons/map/symbols/exit.svg</file>
 		<file alias="flow.svg">icons/map/symbols/flow.svg</file>
 		<file alias="oneway.svg">icons/map/symbols/oneway.svg</file>
+		<file alias="saddle.svg">icons/map/symbols/saddle.svg</file>
 	</qresource>
 
 	<!-- POIs (IMG, Mapsforge & ENC style) -->
