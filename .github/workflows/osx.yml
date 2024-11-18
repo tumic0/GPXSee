@@ -6,32 +6,8 @@ on:
       - master
 
 jobs:
-  qt5:
-    name: GPXSee Qt5 build
-    runs-on: macos-12
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: '5.15.2'
-      - name: Create localization
-        run: lrelease gpxsee.pro
-      - name: Configure build
-        run: qmake gpxsee.pro
-      - name: Build project
-        run: make -j3
-      - name: Create DMG
-        run: macdeployqt GPXSee.app -dmg -appstore-compliant
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: GPXSee-qt5.dmg
-          path: GPXSee.dmg
-
-  qt6:
-    name: GPXSee Qt6 build
+  build:
+    name: GPXSee
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -39,7 +15,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.7.2'
+          version: '6.8.0'
           modules: qtpositioning qtserialport qtimageformats
       - name: Create localization
         run: lrelease gpxsee.pro
