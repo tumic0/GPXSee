@@ -547,35 +547,35 @@
     <!-- Nature POIs -->
     <rule e="node" k="natural" v="peak" zoom-min="13">
         <rule e="node" k="name" v="*">
-            <symbol id="peak" src=":/POI/mountain-11.svg" symbol-width="11"/>
-            <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" priority="10" stroke="#FFFFFF" stroke-width="2" symbol-id="peak"/>
+            <symbol id="peak" src=":/POI/mountain-11.svg" symbol-width="11" priority="10"/>
+            <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="peak"/>
         </rule>
     </rule>
     <rule e="node" k="natural" v="saddle" zoom-min="13">
         <rule e="node" k="name" v="*">
-            <symbol id="saddle" src=":/symbols/saddle.svg" symbol-width="9" symbol-height="11"/>
-            <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" priority="10" stroke="#FFFFFF" stroke-width="2" symbol-id="saddle"/>
+            <symbol id="saddle" src=":/symbols/saddle.svg" symbol-width="9" symbol-height="11" priority="9"/>
+            <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="saddle"/>
         </rule>
     </rule>
     <rule e="node" k="natural" v="volcano" zoom-min="13">
         <rule e="node" k="name" v="*">
-            <symbol id="volcano" src=":/POI/volcano-11.svg" symbol-width="11"/>
-            <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" priority="10" stroke="#FFFFFF" stroke-width="2" symbol-id="volcano"/>
+            <symbol id="volcano" src=":/POI/volcano-11.svg" symbol-width="11" priority="10"/>
+            <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="volcano"/>
         </rule>
     </rule>
     <rule e="node" k="waterway" v="waterfall" zoom-min="15">
         <rule e="any" k="name" v="*">
-            <symbol id="waterfall" src=":/POI/waterfall-11.svg" symbol-width="11"/>
+            <symbol id="waterfall" src=":/POI/waterfall-11.svg" symbol-width="11" priority="8"/>
             <rule e="any" k="*" v="*" zoom-min="16">
-                <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" priority="10" stroke="#FFFFFF" stroke-width="2" symbol-id="waterfall"/>
+                <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="waterfall"/>
             </rule>
         </rule>
     </rule>
     <rule e="node" k="natural" v="spring|hot_spring" zoom-min="15">
         <rule e="any" k="name" v="*">
-            <symbol id="spring" src=":/POI/water-11.svg" symbol-width="11"/>
+            <symbol id="spring" src=":/POI/water-11.svg" symbol-width="11" priority="7"/>
             <rule e="any" k="*" v="*" zoom-min="16">
-                <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" priority="10" stroke="#FFFFFF" stroke-width="2" symbol-id="spring"/>
+                <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="spring"/>
             </rule>
         </rule>
     </rule>
