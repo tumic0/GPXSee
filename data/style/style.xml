@@ -158,7 +158,7 @@
         </rule>
     </rule>
     <rule e="way" closed="yes" k="amenity" v="grave_yard">
-        <area src=":/patterns/cemetery.svg" symbol-width="30" symbol-height="28"/>
+        <area src=":/patterns/cemetery.svg" symbol-width="6" symbol-height="7"/>
     </rule>
     <rule e="way" closed="yes" k="bridge" v="yes|true|viaduct|aqueduct|suspension|culvert|swing" zoom-min="10">
         <area fill="#ffffff"/>
