@@ -82,34 +82,33 @@
     <!-- Water -->
     <rule e="way" closed="yes" k="natural" v="water">
         <area fill="#9fc4e1"/>
-        <rule e="way" k="*" v="*" zoom-min="11" zoom-max="13">
-            <caption fill="#9fc4e1" font-size="12" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2"/>
-        </rule>
-        <rule e="way" k="*" v="*" zoom-min="14" zoom-max="19">
-            <caption fill="#9fc4e1" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2"/>
+        <rule e="way" k="*" v="*" zoom-min="10">
+            <caption fill="#ffffff" font-size="12" font-family="serif" font-style="italic" k="name" stroke="#9fc4e1" stroke-width="2"/>
         </rule>
     </rule>
-    <rule e="way" closed="yes" k="natural" v="marsh|wetland|mud" zoom-min="13">
+    <rule e="way" closed="yes" k="natural" v="marsh|wetland|mud" zoom-min="12">
         <area src=":/patterns/wetland.svg" symbol-height="4"/>
     </rule>
 
     <rule e="way" k="waterway" v="river" zoom-min="8">
         <line stroke="#9fc4e1" stroke-width="1.2"/>
-        <pathText fill="#9fc4e1" font-size="12" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2"/>
-        <rule e="way" k="*" v="*" zoom-min="12">
+        <rule e="way" k="*" v="*" zoom-min="10" zoom-max="13">
+            <pathText fill="#ffffff" font-size="12" font-family="serif" font-style="italic" k="name" stroke="#9fc4e1" stroke-width="2"/>
+        </rule>
+        <rule e="way" k="*" v="*" zoom-min="14">
             <lineSymbol src=":/symbols/flow.svg" symbol-width="16" symbol-height="8"/>
+            <pathText fill="#ffffff" font-size="14" font-family="serif" font-style="italic" k="name" stroke="#9fc4e1" stroke-width="2"/>
         </rule>
     </rule>
-    <rule e="way" k="waterway" v="stream|drain|ditch">
+    <rule e="way" k="waterway" v="stream|drain|ditch" zoom-min="10">
         <rule e="way" k="intermittent" v="~|no">
-            <rule e="way" k="*" v="*" zoom-min="10" zoom-max="13">
+            <rule e="way" k="*" v="*" zoom-max="13">
                 <line stroke="#9fc4e1" stroke-width="1"/>
-                <pathText fill="#9fc4e1" font-size="11" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2"/>
             </rule>
             <rule e="way" k="*" v="*" zoom-min="14">
                 <line stroke="#9fc4e1" stroke-width="0.6"/>
-                <pathText fill="#9fc4e1" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2"/>
-                <rule e="way" k="name" v="*">
+                <pathText fill="#ffffff" font-size="12" font-family="serif" font-style="italic" k="name" stroke="#9fc4e1" stroke-width="2"/>
+                <rule e="way" k="name" v="*" zoom-min="16">
                     <lineSymbol src=":/symbols/flow.svg" symbol-width="16" symbol-height="8"/>
                 </rule>
             </rule>
