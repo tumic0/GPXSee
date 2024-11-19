@@ -126,6 +126,9 @@
     <rule e="way" closed="yes" k="waterway" v="dam" zoom-min="10">
         <area fill="#bbbbbb"/>
     </rule>
+    <rule e="way" k="waterway" v="lock_gate" zoom-min="10">
+        <line stroke="#000000" stroke-width="0.1"/>
+    </rule>
     <rule e="way" k="waterway" v="weir" zoom-min="10">
         <lineSymbol src=":/symbols/cliff.svg" repeat="true" display="always" repeat-gap="0" repeat-start="0" symbol-width="4" symbol-height="5"/>
         <pathText fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2"/>
