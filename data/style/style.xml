@@ -681,9 +681,15 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="shelter"/>
         </rule>
     </rule>
-    <rule e="any" k="tourism|building" v="alpine_hut|hotel|hostel|guest_house|chalet|motel" zoom-min="16">
+    <rule e="any" k="tourism|building" v="alpine_hut" zoom-min="16">
         <symbol id="lodging" src=":/POI/lodging-11.svg" symbol-width="11"/>
         <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="lodging"/>
+        </rule>
+    </rule>
+    <rule e="any" k="tourism|building" v="hotel|hostel|guest_house|chalet|motel" zoom-min="17">
+        <symbol id="lodging" src=":/POI/lodging-11.svg" symbol-width="11"/>
+        <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="lodging"/>
         </rule>
     </rule>
@@ -694,7 +700,7 @@
         </rule>
     </rule>
 
-    <rule e="any" k="man_made" v="lighthouse" zoom-min="16">
+    <rule e="any" k="man_made" v="lighthouse" zoom-min="15">
         <symbol id="lighthouse" src=":/POI/lighthouse-11.svg" symbol-width="11"/>
         <rule e="any" k="*" v="*" zoom-min="17">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="lighthouse"/>
@@ -709,11 +715,15 @@
 
     <rule e="any" k="amenity" v="theatre" zoom-min="16">
         <symbol id="theatre" src=":/POI/theatre-11.svg" symbol-width="11"/>
-        <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="theatre"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="theatre"/>
+        </rule>
     </rule>
     <rule e="any" k="amenity" v="cinema" zoom-min="16">
         <symbol id="cinema" src=":/POI/cinema-11.svg" symbol-width="11"/>
-        <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="cinema"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="cinema"/>
+        </rule>
     </rule>
     <rule e="any" k="tourism" v="museum" zoom-min="16">
         <symbol id="museum" src=":/POI/museum-11.svg" symbol-width="11"/>
@@ -739,9 +749,9 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="memorial"/>
         </rule>
     </rule>
-    <rule e="any" k="amenity" v="bank" zoom-min="16">
+    <rule e="any" k="amenity" v="bank" zoom-min="17">
         <symbol id="bank" src=":/POI/bank-11.svg" symbol-width="11"/>
-        <rule e="any" k="*" v="*" zoom-min="17">
+        <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="bank"/>
         </rule>
     </rule>
@@ -779,56 +789,56 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="swimming"/>
         </rule>
     </rule>
-    <rule e="any" k="sport" v="golf" zoom-min="16">
+    <rule e="any" k="sport" v="golf" zoom-min="17">
         <symbol id="golf" src=":/POI/golf-11.svg" symbol-width="11"/>
         <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="golf"/>
     </rule>
-    <rule e="any" k="sport" v="soccer" zoom-min="16">
+    <rule e="any" k="sport" v="soccer" zoom-min="17">
         <symbol id="soccer" src=":/POI/soccer-11.svg" symbol-width="11"/>
         <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="soccer"/>
         </rule>
     </rule>
-    <rule e="any" k="sport" v="tennis" zoom-min="16">
+    <rule e="any" k="sport" v="tennis" zoom-min="17">
         <symbol id="tennis" src=":/POI/tennis-11.svg" symbol-width="11"/>
         <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="tennis"/>
         </rule>
     </rule>
-    <rule e="any" k="sport" v="skateboard" zoom-min="16">
+    <rule e="any" k="sport" v="skateboard" zoom-min="17">
         <symbol id="skateboard" src=":/POI/skateboard-11.svg" symbol-width="11"/>
         <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="skateboard"/>
         </rule>
     </rule>
 
-    <rule e="any" k="amenity" v="restaurant" zoom-min="16">
+    <rule e="any" k="amenity" v="restaurant" zoom-min="17">
         <symbol id="restaurant" src=":/POI/restaurant-11.svg" symbol-width="11" priority="-5"/>
-        <rule e="any" k="*" v="*" zoom-min="17">
+        <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="restaurant"/>
         </rule>
     </rule>
-    <rule e="any" k="amenity" v="fast_food" zoom-min="16">
+    <rule e="any" k="amenity" v="fast_food" zoom-min="17">
         <symbol id="fast-food" src=":/POI/fast-food-11.svg" symbol-width="11" priority="-5"/>
-        <rule e="any" k="*" v="*" zoom-min="17">
+        <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="fast-food"/>
         </rule>
     </rule>
-    <rule e="any" k="amenity" v="cafe" zoom-min="16">
+    <rule e="any" k="amenity" v="cafe" zoom-min="17">
         <symbol id="cafe" src=":/POI/cafe-11.svg" symbol-width="11" priority="-5"/>
-        <rule e="any" k="*" v="*" zoom-min="17">
+        <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="cafe"/>
         </rule>
     </rule>
     <rule e="any" k="amenity" v="bar" zoom-min="17">
         <symbol id="bar" src=":/POI/bar-11.svg" symbol-width="11" priority="-5"/>
-        <rule e="any" k="*" v="*" zoom-min="17">
+        <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="bar"/>
         </rule>
     </rule>
-    <rule e="any" k="amenity" v="pub" zoom-min="16">
+    <rule e="any" k="amenity" v="pub" zoom-min="17">
         <symbol id="pub" src=":/POI/beer-11.svg" symbol-width="11" priority="-5"/>
-        <rule e="any" k="*" v="*" zoom-min="17">
+        <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="pub"/>
         </rule>
     </rule>
@@ -843,21 +853,21 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="supermarket"/>
         </rule>
     </rule>
-    <rule e="any" k="shop" v="convenience" zoom-min="16">
+    <rule e="any" k="shop" v="convenience" zoom-min="17">
         <symbol id="convenience" src=":/POI/shop-11.svg" symbol-width="11" priority="-5"/>
         <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="convenience"/>
         </rule>
     </rule>
-    <rule e="any" k="shop" v="doityourself|hardware" zoom-min="16">
+    <rule e="any" k="shop" v="doityourself|hardware" zoom-min="17">
         <symbol id="hardware" src=":/POI/hardware-11.svg" symbol-width="11" priority="-5"/>
-        <rule e="any" k="*" v="*" zoom-min="17">
+        <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="hardware"/>
         </rule>
     </rule>
-    <rule e="any" k="shop" v="bakery" zoom-min="16">
+    <rule e="any" k="shop" v="bakery" zoom-min="17">
         <symbol id="bakery" src=":/POI/bakery-11.svg" symbol-width="11" priority="-5"/>
-        <rule e="any" k="*" v="*" zoom-min="17">
+        <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="bakery"/>
         </rule>
     </rule>
@@ -867,21 +877,21 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="pharmacy"/>
         </rule>
     </rule>
-    <rule e="any" k="shop" v="bicycle" zoom-min="16">
+    <rule e="any" k="shop" v="bicycle" zoom-min="17">
         <symbol id="bikeshop" src=":/POI/bicycle-11.svg" symbol-width="11" priority="-5"/>
-        <rule e="any" k="*" v="*" zoom-min="17">
+        <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="bikeshop"/>
         </rule>
     </rule>
-    <rule e="any" k="shop" v="hairdresser" zoom-min="16">
+    <rule e="any" k="shop" v="hairdresser" zoom-min="17">
         <symbol id="hairdresser" src=":/POI/hairdresser-11.svg" symbol-width="11" priority="-5"/>
-        <rule e="any" k="*" v="*" zoom-min="17">
+        <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="hairdresser"/>
         </rule>
     </rule>
-    <rule e="any" k="shop" v="beverages|alcohol" zoom-min="16">
+    <rule e="any" k="shop" v="beverages|alcohol" zoom-min="17">
         <symbol id="alcohol" src=":/POI/alcohol-shop-11.svg" symbol-width="11" priority="-5"/>
-        <rule e="any" k="*" v="*" zoom-min="17">
+        <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="alcohol"/>
         </rule>
     </rule>
