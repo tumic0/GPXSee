@@ -785,7 +785,13 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="townhall"/>
         </rule>
     </rule>
-    <rule e="any" k="amenity" v="school|university" zoom-min="16">
+    <rule e="any" k="amenity" v="university" zoom-min="16">
+        <symbol id="university" src=":/POI/college-11.svg" symbol-width="11"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="university"/>
+        </rule>
+    </rule>
+    <rule e="any" k="amenity" v="school" zoom-min="16">
         <symbol id="school" src=":/POI/school-11.svg" symbol-width="11"/>
         <rule e="any" k="*" v="*" zoom-min="17">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="school"/>
