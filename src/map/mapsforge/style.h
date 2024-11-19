@@ -317,7 +317,7 @@ private:
 	HillShadingRender _hillShading;
 	QList<PathRender> _paths;
 	QList<CircleRender> _circles;
-	QList<TextRender> _pathLabels, _pointLabels, _areaLabels;
+	QList<TextRender> _labels, _pathLabels;
 	QList<Symbol> _symbols, _lineSymbols;
 
 	bool loadXml(const QString &path, const MapData &data, qreal ratio);

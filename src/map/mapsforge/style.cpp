@@ -471,12 +471,8 @@ void Style::text(QXmlStreamReader &reader, const MapData &data,
 	if (fontSize) {
 		if (line)
 			_pathLabels.append(ri);
-		else {
-			if (rule._type == Rule::WayType || rule._type == Rule::AnyType)
-				_areaLabels.append(ri);
-			if (rule._type == Rule::NodeType || rule._type == Rule::AnyType)
-				_pointLabels.append(ri);
-		}
+		else
+			_labels.append(ri);
 	}
 
 	reader.skipCurrentElement();
@@ -806,8 +802,7 @@ void Style::load(const MapData &data, qreal ratio)
 
 	std::sort(_symbols.begin(), _symbols.end());
 	std::sort(_lineSymbols.begin(), _lineSymbols.end());
-	std::stable_sort(_pointLabels.begin(), _pointLabels.end());
-	std::stable_sort(_areaLabels.begin(), _areaLabels.end());
+	std::stable_sort(_labels.begin(), _labels.end());
 	std::stable_sort(_pathLabels.begin(), _pathLabels.end());
 }
 
@@ -816,8 +811,7 @@ void Style::clear()
 	_paths = QList<PathRender>();
 	_circles = QList<CircleRender>();
 	_pathLabels = QList<TextRender>();
-	_pointLabels = QList<TextRender>();
-	_areaLabels = QList<TextRender>();
+	_labels = QList<TextRender>();
 	_symbols = QList<Symbol>();
 	_lineSymbols = QList<Symbol>();
 	_hillShading = HillShadingRender();
@@ -868,9 +862,13 @@ QList<const Style::TextRender*> Style::pointLabels(int zoom) const
 {
 	QList<const TextRender*> list;
 
-	for (int i = 0; i < _pointLabels.size(); i++)
-		if (_pointLabels.at(i).rule()._zooms.contains(zoom))
-			list.append(&_pointLabels.at(i));
+	for (int i = 0; i < _labels.size(); i++) {
+		const TextRender &label= _labels.at(i);
+		const Rule &rule = label.rule();
+		if (rule._zooms.contains(zoom) && (rule._type == Rule::AnyType
+		  || rule._type == Rule::NodeType))
+			list.append(&label);
+	}
 
 	return list;
 }
@@ -879,9 +877,26 @@ QList<const Style::TextRender*> Style::areaLabels(int zoom) const
 {
 	QList<const TextRender*> list;
 
-	for (int i = 0; i < _areaLabels.size(); i++)
-		if (_areaLabels.at(i).rule()._zooms.contains(zoom))
-			list.append(&_areaLabels.at(i));
+	for (int i = 0; i < _labels.size(); i++) {
+		const TextRender &label= _labels.at(i);
+		const Rule &rule = label.rule();
+		if (rule._zooms.contains(zoom) && (rule._type == Rule::AnyType
+		  || rule._type == Rule::WayType))
+			list.append(&label);
+	}
+
+	return list;
+}
+
+QList<const Style::Symbol*> Style::lineSymbols(int zoom) const
+{
+	QList<const Symbol*> list;
+
+	for (int i = 0; i < _lineSymbols.size(); i++) {
+		const Symbol &symbol = _lineSymbols.at(i);
+		if (symbol.rule()._zooms.contains(zoom))
+			list.append(&symbol);
+	}
 
 	return list;
 }
@@ -895,19 +910,6 @@ QList<const Style::Symbol*> Style::pointSymbols(int zoom) const
 		const Rule &rule = symbol.rule();
 		if (rule._zooms.contains(zoom) && (rule._type == Rule::AnyType
 		  || rule._type == Rule::NodeType))
-			list.append(&symbol);
-	}
-
-	return list;
-}
-
-QList<const Style::Symbol*> Style::lineSymbols(int zoom) const
-{
-	QList<const Symbol*> list;
-
-	for (int i = 0; i < _lineSymbols.size(); i++) {
-		const Symbol &symbol = _lineSymbols.at(i);
-		if (symbol.rule()._zooms.contains(zoom))
 			list.append(&symbol);
 	}
 
