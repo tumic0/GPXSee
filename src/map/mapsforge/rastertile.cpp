@@ -418,7 +418,6 @@ void RasterTile::drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
 	hillShadingInstructions(instructions);
 	std::sort(instructions.begin(), instructions.end());
 
-	qDebug() << instructions.size();
 	for (int i = 0; i < instructions.size(); i++) {
 		const RenderInstruction &is = instructions.at(i);
 		PainterPath *path = is.path();
