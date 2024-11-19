@@ -613,8 +613,8 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 	paths.reserve(paths[zoom - info.min]);
 
 	for (unsigned i = 0; i < paths[zoom - info.min]; i++) {
-		Path p;
 		qint32 lon = 0, lat = 0;
+		Path p(subfile.pos());
 
 		if (!(subfile.readVUInt32(unused) && subfile.readUInt16(bitmap)
 		  && subfile.readByte(sb)))

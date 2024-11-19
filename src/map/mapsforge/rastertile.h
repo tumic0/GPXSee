@@ -43,44 +43,34 @@ private:
 		const MapData::Path *path;
 	};
 
-	struct PointText {
-		PointText(const MapData::Point *p, const QByteArray *lbl,
+	struct Label {
+		Label(const MapData::Point *p, const QByteArray *lbl,
 		  const Style::Symbol *si, const Style::TextRender *ti)
-		  : p(p), lbl(lbl), ti(ti), si(si)
+		  : point(p), path(0), lbl(lbl), ti(ti), si(si)
+		{
+			Q_ASSERT(si || ti);
+		}
+		Label(const PainterPath *p, const QByteArray *lbl,
+		  const Style::Symbol *si, const Style::TextRender *ti)
+		  : point(0), path(p), lbl(lbl), ti(ti), si(si)
 		{
 			Q_ASSERT(si || ti);
 		}
 
-		bool operator<(const PointText &other) const
+		bool operator<(const Label &other) const
 		{
+			quint64 id = point ? point->id : path->path->id;
+			quint64 oid = other.point ? other.point->id : other.path->path->id;
+
 			if (priority() == other.priority())
-				return p->id < other.p->id;
+				return id < oid;
 			else
 				return (priority() > other.priority());
 		}
 		int priority() const {return si ? si->priority() : ti->priority();}
 
-		const MapData::Point *p;
-		const QByteArray *lbl;
-		const Style::TextRender *ti;
-		const Style::Symbol *si;
-	};
-
-	struct PathText {
-		PathText(const PainterPath *p, const QByteArray *lbl,
-		  const Style::Symbol *si, const Style::TextRender *ti)
-		  : p(p), lbl(lbl), ti(ti), si(si)
-		{
-			Q_ASSERT(si || ti);
-		}
-
-		bool operator<(const PathText &other) const
-		{
-			return (priority() > other.priority());
-		}
-		int priority() const {return si ? si->priority() : ti->priority();}
-
-		const PainterPath *p;
+		const MapData::Point *point;
+		const PainterPath *path;
 		const QByteArray *lbl;
 		const Style::TextRender *ti;
 		const Style::Symbol *si;
@@ -208,10 +198,8 @@ private:
 	  {return _transform.proj2img(_proj.ll2xy(c));}
 	Coordinates xy2ll(const QPointF &p) const
 	  {return _proj.xy2ll(_transform.img2proj(p));}
-	void processPointLabels(const QList<MapData::Point> &points,
-	  QList<TextItem*> &textItems) const;
-	void processAreaLabels(const QVector<PainterPath> &paths,
-	  QList<TextItem*> &textItems) const;
+	void processLabels(const QList<MapData::Point> &points,
+	  const QVector<PainterPath> &paths, QList<TextItem*> &textItems) const;
 	void processLineLabels(const QVector<PainterPath> &paths,
 	  QList<TextItem*> &textItems) const;
 	QPainterPath painterPath(const Polygon &polygon, bool curve) const;

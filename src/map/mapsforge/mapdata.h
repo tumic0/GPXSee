@@ -46,6 +46,9 @@ public:
 	};
 
 	struct Path {
+		Path(quint64 id) : id(id) {}
+
+		quint64 id;
 		Polygon poly;
 		QVector<Tag> tags;
 		Coordinates labelPos;
