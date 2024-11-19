@@ -712,6 +712,12 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="com-tower"/>
         </rule>
     </rule>
+    <rule e="any" k="tower" v="observation" zoom-min="16">
+        <symbol id="obs-tower" src=":/POI/observation-tower.svg" symbol-width="11" priority="5"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="obs-tower"/>
+        </rule>
+    </rule>
 
     <rule e="any" k="amenity" v="theatre" zoom-min="16">
         <symbol id="theatre" src=":/POI/theatre-11.svg" symbol-width="11"/>
