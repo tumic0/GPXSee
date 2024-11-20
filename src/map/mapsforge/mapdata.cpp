@@ -455,8 +455,8 @@ MapData::MapData(const QString &fileName)
 	if (!readHeader(file))
 		return;
 
-	_pathCache.setMaxCost(512);
-	_pointCache.setMaxCost(256);
+	_pathCache.setMaxCost(1024);
+	_pointCache.setMaxCost(1024);
 
 	_valid = true;
 }
