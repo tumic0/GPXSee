@@ -187,7 +187,7 @@
     <!-- Area overlays -->
     <rule e="way" k="landuse" v="military" zoom-min="10">
         <area src=":/patterns/military-area.svg" symbol-height="4"/>
-        <rule e="way" k="*" v="*" zoom-min="12">
+        <rule e="way" k="*" v="*" zoom-min="16">
             <caption fill="#ff4040" font-size="10" font-style="italic" text-transform="uppercase" k="name" stroke="#ffffff" stroke-width="2"/>
         </rule>
     </rule>
