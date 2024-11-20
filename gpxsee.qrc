@@ -64,9 +64,12 @@
 		<file alias="harbor-11.svg">icons/map/POI/harbor-11.svg</file>
 		<file alias="hardware-11.svg">icons/map/POI/hardware-11.svg</file>
 		<file alias="heliport-11.svg">icons/map/POI/heliport-11.svg</file>
+		<file alias="home-11.svg">icons/map/POI/home-11.svg</file>
 		<file alias="hospital-11.svg">icons/map/POI/hospital-11.svg</file>
+		<file alias="hot-spring.svg">icons/map/POI/hot-spring.svg</file>
 		<file alias="information-11.svg">icons/map/POI/information-11.svg</file>
 		<file alias="landmark-11.svg">icons/map/POI/landmark-11.svg</file>
+		<file alias="laundry-11.svg">icons/map/POI/laundry-11.svg</file>
 		<file alias="library-11.svg">icons/map/POI/library-11.svg</file>
 		<file alias="lighthouse-11.svg">icons/map/POI/lighthouse-11.svg</file>
 		<file alias="lodging-11.svg">icons/map/POI/lodging-11.svg</file>
@@ -97,7 +100,9 @@
 		<file alias="shop-11.svg">icons/map/POI/shop-11.svg</file>
 		<file alias="skateboard-11.svg">icons/map/POI/skateboard-11.svg</file>
 		<file alias="skiing-11.svg">icons/map/POI/skiing-11.svg</file>
+		<file alias="slaughterhouse-11.svg">icons/map/POI/slaughterhouse-11.svg</file>
 		<file alias="soccer-11.svg">icons/map/POI/soccer-11.svg</file>
+		<file alias="stadium-11.svg">icons/map/POI/stadium-11.svg</file>
 		<file alias="swimming-11.svg">icons/map/POI/swimming-11.svg</file>
 		<file alias="telephone-11.svg">icons/map/POI/telephone-11.svg</file>
 		<file alias="tennis-11.svg">icons/map/POI/tennis-11.svg</file>

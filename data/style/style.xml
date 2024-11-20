@@ -167,7 +167,7 @@
     </rule>
     <rule e="way" closed="yes" k="amenity" v="parking" zoom-min="10">
         <area fill="#ffffff" stroke="#d5cdc0" stroke-width="0.1"/>
-        <rule e="way" k="*" v="*" zoom-min="16">
+        <rule e="way" k="*" v="*" zoom-min="17">
             <symbol id="parking" src=":/POI/parking-11.svg" symbol-width="11"/>
         </rule>
     </rule>
@@ -350,7 +350,7 @@
             <line stroke="#ffffff" stroke-width="0.4"/>
         </rule>
     </rule>
-    <rule e="way" k="highway" v="tertiary|tertiary_link|residential|living_street">
+    <rule e="way" k="highway" v="tertiary|tertiary_link|residential|living_street|raceway">
         <rule e="way" k="*" v="*" zoom-min="13" zoom-max="13">
             <line stroke="#d5cdc0" stroke-width="1.5"/>
             <line stroke="#ffffff" stroke-width="0.75"/>
@@ -528,7 +528,7 @@
     </rule>
 
     <!-- Town & vilage names -->
-    <rule e="node" k="place" v="locality" zoom-min="14">
+    <rule e="node" k="place" v="locality|isolated_dwelling|farm" zoom-min="14">
         <caption fill="#000000" font-size="10" k="name" priority="10" stroke="#FFFFFF" stroke-width="2"/>
     </rule>
     <rule e="node" k="place" v="hamlet" zoom-min="12">
@@ -576,11 +576,19 @@
             </rule>
         </rule>
     </rule>
-    <rule e="node" k="natural" v="spring|hot_spring" zoom-min="15">
+    <rule e="node" k="natural" v="spring" zoom-min="15">
         <rule e="any" k="name" v="*">
             <symbol id="spring" src=":/POI/water-11.svg" symbol-width="11" priority="7"/>
             <rule e="any" k="*" v="*" zoom-min="16">
                 <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="spring"/>
+            </rule>
+        </rule>
+    </rule>
+    <rule e="node" k="natural" v="hot_spring|geyser" zoom-min="15">
+        <rule e="any" k="name" v="*">
+            <symbol id="hot-spring" src=":/POI/hot-spring.svg" symbol-width="11" priority="7"/>
+            <rule e="any" k="*" v="*" zoom-min="16">
+                <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="hot-spring"/>
             </rule>
         </rule>
     </rule>
@@ -686,10 +694,10 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="shelter"/>
         </rule>
     </rule>
-    <rule e="any" k="tourism|building" v="alpine_hut" zoom-min="16">
-        <symbol id="lodging" src=":/POI/lodging-11.svg" symbol-width="11"/>
-        <rule e="any" k="*" v="*" zoom-min="17">
-            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="lodging"/>
+    <rule e="any" k="tourism|building" v="alpine_hut" zoom-min="15">
+        <symbol id="alpine_hut" src=":/POI/home-11.svg" symbol-width="11" priority="5"/>
+        <rule e="any" k="*" v="*" zoom-min="16">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="alpine_hut"/>
         </rule>
     </rule>
     <rule e="any" k="tourism|building" v="hotel|hostel|guest_house|chalet|motel" zoom-min="17">
@@ -805,6 +813,34 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="embassy"/>
         </rule>
     </rule>
+    <rule e="any" k="leisure" v="stadium" zoom-min="16">
+        <symbol id="stadium" src=":/POI/stadium-11.svg" symbol-width="11"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="stadium"/>
+        </rule>
+    </rule>
+    <rule e="any" k="tourism" v="zoo" zoom-min="16">
+        <symbol id="zoo" src=":/POI/zoo-11.svg" symbol-width="11"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="zoo"/>
+        </rule>
+    </rule>
+    <rule e="any" k="leisure" v="park" zoom-min="16">
+        <rule e="any" k="name" v="*">
+            <symbol id="park" src=":/POI/park-11.svg" symbol-width="11"/>
+            <rule e="any" k="*" v="*" zoom-min="17">
+                <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="park"/>
+            </rule>
+        </rule>
+    </rule>
+    <rule e="any" k="leisure" v="garden" zoom-min="16">
+        <rule e="any" k="name" v="*">
+            <symbol id="garden" src=":/POI/garden-11.svg" symbol-width="11"/>
+            <rule e="any" k="*" v="*" zoom-min="17">
+                <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="garden"/>
+            </rule>
+        </rule>
+    </rule>
 
     <rule e="any" k="sport" v="swimming" zoom-min="16">
         <symbol id="swimming" src=":/POI/swimming-11.svg" symbol-width="11"/>
@@ -812,7 +848,7 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="swimming"/>
         </rule>
     </rule>
-    <rule e="any" k="sport" v="golf" zoom-min="17">
+    <rule e="any" k="sport|leisure" v="golf|golf_course" zoom-min="17">
         <symbol id="golf" src=":/POI/golf-11.svg" symbol-width="11"/>
         <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="golf"/>
     </rule>
@@ -916,6 +952,24 @@
         <symbol id="alcohol" src=":/POI/alcohol-shop-11.svg" symbol-width="11" priority="-5"/>
         <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="alcohol"/>
+        </rule>
+    </rule>
+    <rule e="any" k="shop" v="travel_agency" zoom-min="17">
+        <symbol id="travel-agency" src=":/POI/beach-11.svg" symbol-width="11" priority="-5"/>
+        <rule e="any" k="*" v="*" zoom-min="18">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="travel-agency"/>
+        </rule>
+    </rule>
+    <rule e="any" k="shop" v="laundry" zoom-min="17">
+        <symbol id="laundry" src=":/POI/laundry-11.svg" symbol-width="11" priority="-5"/>
+        <rule e="any" k="*" v="*" zoom-min="18">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="laundry"/>
+        </rule>
+    </rule>
+    <rule e="any" k="shop" v="butcher" zoom-min="17">
+        <symbol id="butcher" src=":/POI/slaughterhouse-11.svg" symbol-width="11" priority="-5"/>
+        <rule e="any" k="*" v="*" zoom-min="18">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="butcher"/>
         </rule>
     </rule>
 
