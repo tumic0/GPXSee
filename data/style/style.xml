@@ -731,6 +731,26 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="obs-tower"/>
         </rule>
     </rule>
+    <rule e="any" k="power" v="generator" zoom-min="16">
+        <rule e="any" k="generator:source" v="wind">
+            <symbol id="wind-turbine" src=":/POI/cross-11.svg" symbol-width="11" priority="5"/>
+            <rule e="any" k="*" v="*" zoom-min="17">
+                <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="wind-turbine"/>
+            </rule>
+        </rule>
+    </rule>
+    <rule e="any" k="man_made" v="watermill" zoom-min="16">
+        <symbol id="watermill" src=":/POI/watermill-11.svg" symbol-width="11" priority="5"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="watermill"/>
+        </rule>
+    </rule>
+    <rule e="any" k="man_made|tower" v="windmill" zoom-min="16">
+        <symbol id="windmill" src=":/POI/windmill-11.svg" symbol-width="11" priority="5"/>
+        <rule e="any" k="*" v="*" zoom-min="17">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="windmill"/>
+        </rule>
+    </rule>
 
     <rule e="any" k="amenity" v="theatre" zoom-min="16">
         <symbol id="theatre" src=":/POI/theatre-11.svg" symbol-width="11"/>
@@ -895,10 +915,16 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="bar"/>
         </rule>
     </rule>
-    <rule e="any" k="amenity" v="pub" zoom-min="17">
+    <rule e="any" k="amenity" v="pub|biergarten" zoom-min="17">
         <symbol id="pub" src=":/POI/beer-11.svg" symbol-width="11" priority="-5"/>
         <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="pub"/>
+        </rule>
+    </rule>
+    <rule e="any" k="amenity" v="ice_cream" zoom-min="17">
+        <symbol id="ice-cream" src=":/POI/ice-cream-11.svg" symbol-width="11" priority="-5"/>
+        <rule e="any" k="*" v="*" zoom-min="18">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="ice-cream"/>
         </rule>
     </rule>
 

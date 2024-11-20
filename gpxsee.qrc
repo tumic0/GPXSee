@@ -44,6 +44,7 @@
 		<file alias="college-11.svg">icons/map/POI/college-11.svg</file>
 		<file alias="communications-tower-11.svg">icons/map/POI/communications-tower-11.svg</file>
 		<file alias="convenience-11.svg">icons/map/POI/convenience-11.svg</file>
+		<file alias="cross-11.svg">icons/map/POI/cross-11.svg</file>
 		<file alias="dam-11.svg">icons/map/POI/dam-11.svg</file>
 		<file alias="danger-11.svg">icons/map/POI/danger-11.svg</file>
 		<file alias="doctor-11.svg">icons/map/POI/doctor-11.svg</file>
@@ -67,6 +68,7 @@
 		<file alias="home-11.svg">icons/map/POI/home-11.svg</file>
 		<file alias="hospital-11.svg">icons/map/POI/hospital-11.svg</file>
 		<file alias="hot-spring.svg">icons/map/POI/hot-spring.svg</file>
+		<file alias="ice-cream-11.svg">icons/map/POI/ice-cream-11.svg</file>
 		<file alias="information-11.svg">icons/map/POI/information-11.svg</file>
 		<file alias="landmark-11.svg">icons/map/POI/landmark-11.svg</file>
 		<file alias="laundry-11.svg">icons/map/POI/laundry-11.svg</file>
@@ -114,7 +116,9 @@
 		<file alias="volcano-11.svg">icons/map/POI/volcano-11.svg</file>
 		<file alias="water-11.svg">icons/map/POI/water-11.svg</file>
 		<file alias="waterfall-11.svg">icons/map/POI/waterfall-11.svg</file>
+		<file alias="watermill-11.svg">icons/map/POI/watermill-11.svg</file>
 		<file alias="wetland-11.svg">icons/map/POI/wetland-11.svg</file>
+		<file alias="windmill-11.svg">icons/map/POI/windmill-11.svg</file>
 		<file alias="zoo-11.svg">icons/map/POI/zoo-11.svg</file>
 	</qresource>
 
