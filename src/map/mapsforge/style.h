@@ -18,11 +18,8 @@ public:
 	public:
 		Rule() : _type(AnyType), _closed(AnyClosed), _zooms(0, 127) {}
 
-		bool match(const QVector<MapData::Tag> &tags) const;
-		bool match(bool closed, const QVector<MapData::Tag> &tags) const;
-		bool match(int zoom, bool closed,
-		  const QVector<MapData::Tag> &tags) const;
-		bool match(int zoom, const QVector<MapData::Tag> &tags) const;
+		bool match(bool path, const QVector<MapData::Tag> &tags) const;
+		bool matchPath(bool closed, const QVector<MapData::Tag> &tags) const;
 
 	private:
 		enum Type {
@@ -109,8 +106,12 @@ public:
 			if (!filter.isTautology())
 				_filters.append(filter);
 		}
+
 		bool match(int zoom, Type type, Closed closed,
 		  const QVector<MapData::Tag> &tags) const;
+		bool match(int zoom, bool closed,
+		  const QVector<MapData::Tag> &tags) const;
+		bool match(int zoom, const QVector<MapData::Tag> &tags) const;
 
 		friend class Style;
 
@@ -266,9 +267,9 @@ public:
 	QList<const CircleRender *> circles(int zoom,
 	  const QVector<MapData::Tag> &tags) const;
 	QList<const TextRender*> pathLabels(int zoom) const;
-	QList<const TextRender*> pointLabels(int zoom) const;
+	QList<const TextRender*> labels(int zoom) const;
 	QList<const TextRender*> areaLabels(int zoom) const;
-	QList<const Symbol*> pointSymbols(int zoom) const;
+	QList<const Symbol*> symbols(int zoom) const;
 	QList<const Symbol*> areaSymbols(int zoom) const;
 	QList<const Symbol*> lineSymbols(int zoom) const;
 	const HillShadingRender *hillShading(int zoom) const;

@@ -39,6 +39,8 @@ public:
 	struct Point {
 		Point(quint64 id) : id(id) {}
 
+		bool center() const {return (id & 1ULL<<63) != 0;}
+
 		quint64 id;
 		Coordinates coordinates;
 		QVector<Tag> tags;
@@ -46,17 +48,14 @@ public:
 	};
 
 	struct Path {
-		Path(quint64 id) : id(id) {}
+		Path(quint64 id) : point(id | 1ULL<<63) {}
 
-		quint64 id;
+		Point point;
 		Polygon poly;
-		QVector<Tag> tags;
-		Coordinates labelPos;
-		int layer;
 		bool closed;
 
 		bool operator<(const Path &other) const
-		  {return layer < other.layer;}
+		  {return point.layer < other.point.layer;}
 	};
 
 	RectC bounds() const;

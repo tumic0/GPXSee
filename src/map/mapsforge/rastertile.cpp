@@ -16,33 +16,6 @@ using namespace Mapsforge;
 
 static double LIMIT = cos(deg2rad(170));
 
-static bool rectNearPolygon(const QRectF &tileRect, const QPainterPath &path,
-  const QRectF &rect)
-{
-	return ((tileRect.contains(rect) || path.boundingRect().contains(rect))
-	  && (path.contains(rect.topLeft()) || path.contains(rect.topRight())
-	  || path.contains(rect.bottomLeft()) || path.contains(rect.bottomRight())));
-}
-
-static QPointF centroid(const QPainterPath &polygon)
-{
-	qreal area = 0;
-	qreal cx = 0, cy = 0;
-
-	for (int i = 0; i < polygon.elementCount(); i++) {
-		int j = (i == polygon.elementCount() - 1) ? 0 : i + 1;
-		qreal f = (polygon.elementAt(i).x * polygon.elementAt(j).y
-		  - polygon.elementAt(j).x * polygon.elementAt(i).y);
-		area += f;
-		cx += (polygon.elementAt(i).x + polygon.elementAt(j).x) * f;
-		cy += (polygon.elementAt(i).y + polygon.elementAt(j).y) * f;
-	}
-
-	qreal factor = 1.0 / (3.0 * area);
-
-	return QPointF(cx * factor, cy * factor);
-}
-
 static const QByteArray *label(unsigned key, const QVector<MapData::Tag> &tags)
 {
 	for (int i = 0; i < tags.size(); i++) {
@@ -102,13 +75,11 @@ static QPainterPath parallelPath(const QPainterPath &p, double dy)
 }
 
 void RasterTile::processLabels(const QList<MapData::Point> &points,
-  const QVector<PainterPath> &paths, QList<TextItem*> &textItems) const
+  QList<TextItem*> &textItems) const
 {
 	QList<Label> items;
-	QList<const Style::TextRender*> pointLabels(_style->pointLabels(_zoom));
-	QList<const Style::Symbol*> pointSymbols(_style->pointSymbols(_zoom));
-	QList<const Style::TextRender*> areaLabels(_style->areaLabels(_zoom));
-	QList<const Style::Symbol*> areaSymbols(_style->areaSymbols(_zoom));
+	QList<const Style::TextRender*> labels(_style->labels(_zoom));
+	QList<const Style::Symbol*> symbols(_style->symbols(_zoom));
 
 	for (int i = 0; i < points.size(); i++) {
 		const MapData::Point &point = points.at(i);
@@ -116,17 +87,17 @@ void RasterTile::processLabels(const QList<MapData::Point> &points,
 		const Style::Symbol *si = 0;
 		const QByteArray *lbl = 0;
 
-		for (int j = 0; j < pointSymbols.size(); j++) {
-			const Style::Symbol *ri = pointSymbols.at(j);
-			if (ri->rule().match(point.tags)) {
+		for (int j = 0; j < symbols.size(); j++) {
+			const Style::Symbol *ri = symbols.at(j);
+			if (ri->rule().match(point.center(), point.tags)) {
 				si = ri;
 				break;
 			}
 		}
 
-		for (int j = 0; j < pointLabels.size(); j++) {
-			const Style::TextRender *ri = pointLabels.at(j);
-			if (ri->rule().match(point.tags)) {
+		for (int j = 0; j < labels.size(); j++) {
+			const Style::TextRender *ri = labels.at(j);
+			if (ri->rule().match(point.center(), point.tags)) {
 				if ((lbl = label(ri->key(), point.tags))) {
 					if (!si || si->id() == ri->symbolId()) {
 						ti = ri;
@@ -140,39 +111,6 @@ void RasterTile::processLabels(const QList<MapData::Point> &points,
 			items.append(Label(&point, lbl, si, ti));
 	}
 
-	for (int i = 0; i < paths.size(); i++) {
-		const PainterPath &path = paths.at(i);
-		const Style::TextRender *ti = 0;
-		const Style::Symbol *si = 0;
-		const QByteArray *lbl = 0;
-
-		if (!path.path->closed)
-			continue;
-
-		for (int j = 0; j < areaSymbols.size(); j++) {
-			const Style::Symbol *ri = areaSymbols.at(j);
-			if (ri->rule().match(path.path->closed, path.path->tags)) {
-				si = ri;
-				break;
-			}
-		}
-
-		for (int j = 0; j < areaLabels.size(); j++) {
-			const Style::TextRender *ri = areaLabels.at(j);
-			if (ri->rule().match(path.path->closed, path.path->tags)) {
-				if ((lbl = label(ri->key(), path.path->tags))) {
-					if (!si || si->id() == ri->symbolId()) {
-						ti = ri;
-						break;
-					}
-				}
-			}
-		}
-
-		if (ti || si)
-			items.append(Label(&path, lbl, si, ti));
-	}
-
 	std::sort(items.begin(), items.end());
 
 	for (int i = 0; i < items.size(); i++) {
@@ -182,24 +120,12 @@ void RasterTile::processLabels(const QList<MapData::Point> &points,
 		const QColor *color = l.ti ? &l.ti->fillColor() : 0;
 		const QColor *hColor = l.ti ? haloColor(l.ti) : 0;
 
-		if (l.point) {
-			PointItem *item = new PointItem(ll2xy(l.point->coordinates).toPoint(),
-			  l.lbl, font, img, color, hColor);
-			if (item->isValid() && !item->collides(textItems))
-				textItems.append(item);
-			else
-				delete item;
-		} else {
-			QPointF pos = l.path->path->labelPos.isNull()
-			  ? centroid(l.path->pp) : ll2xy(l.path->path->labelPos);
-			PointItem *item = new PointItem(pos.toPoint(), l.lbl, font, img,
-			  color, hColor);
-			if (item->isValid() && rectNearPolygon(_rect, l.path->pp,
-			  item->boundingRect()) && !item->collides(textItems))
-				textItems.append(item);
-			else
-				delete item;
-		}
+		PointItem *item = new PointItem(ll2xy(l.point->coordinates).toPoint(),
+		  l.lbl, font, img, color, hColor);
+		if (item->isValid() && !item->collides(textItems))
+			textItems.append(item);
+		else
+			delete item;
 	}
 }
 
@@ -208,7 +134,7 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 {
 	QList<const Style::TextRender*> labels(_style->pathLabels(_zoom));
 	QList<const Style::Symbol*> symbols(_style->lineSymbols(_zoom));
-	QList<Label> items;
+	QList<LineLabel> items;
 	QSet<QByteArray> set;
 
 	for (int i = 0; i < paths.size(); i++) {
@@ -222,7 +148,7 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 
 		for (int j = 0; j < symbols.size(); j++) {
 			const Style::Symbol *ri = symbols.at(j);
-			if (ri->rule().match(path.path->closed, path.path->tags)) {
+			if (ri->rule().matchPath(path.path->closed, path.path->point.tags)) {
 				si = ri;
 				break;
 			}
@@ -230,8 +156,8 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 
 		for (int j = 0; j < labels.size(); j++) {
 			const Style::TextRender *ri = labels.at(j);
-			if (ri->rule().match(path.path->closed, path.path->tags)) {
-				if ((lbl = label(ri->key(), path.path->tags))) {
+			if (ri->rule().matchPath(path.path->closed, path.path->point.tags)) {
+				if ((lbl = label(ri->key(), path.path->point.tags))) {
 					if (!si || si->id() == ri->symbolId()) {
 						ti = ri;
 						break;
@@ -241,13 +167,13 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 		}
 
 		if (ti || si)
-			items.append(Label(&path, lbl, si, ti));
+			items.append(LineLabel(&path, lbl, si, ti));
 	}
 
 	std::sort(items.begin(), items.end());
 
 	for (int i = 0; i < items.size(); i++) {
-		const Label &l = items.at(i);
+		const LineLabel &l = items.at(i);
 		const QImage *img = l.si ? &l.si->img() : 0;
 		const QFont *font = l.ti ? &l.ti->font() : 0;
 		const QColor *color = l.ti ? &l.ti->fillColor() : 0;
@@ -361,13 +287,13 @@ void RasterTile::pathInstructions(const QList<MapData::Path> &paths,
 	for (int i = 0; i < paths.size(); i++) {
 		const MapData::Path &path = paths.at(i);
 		PainterPath &rp = painterPaths[i];
-		PathKey key(_zoom, path.closed, path.tags);
+		PathKey key(_zoom, path.closed, path.point.tags);
 
 		rp.path = &path;
 
 		if (!(ri = cache.object(key))) {
 			ri = new QList<const Style::PathRender*>(_style->paths(_zoom,
-			  path.closed, path.tags));
+			  path.closed, path.point.tags));
 			for (int j = 0; j < ri->size(); j++)
 				instructions.append(RenderInstruction(ri->at(j), &rp));
 			cache.insert(key, ri);
@@ -530,7 +456,7 @@ void RasterTile::render()
 
 	drawPaths(&painter, paths, points, renderPaths);
 
-	processLabels(points, renderPaths, textItems);
+	processLabels(points, textItems);
 	processLineLabels(renderPaths, textItems);
 	drawTextItems(&painter, textItems);
 

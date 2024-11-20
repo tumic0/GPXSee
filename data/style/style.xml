@@ -82,7 +82,7 @@
     <!-- Water -->
     <rule e="way" closed="yes" k="natural" v="water">
         <area fill="#9fc4e1"/>
-        <rule e="way" k="*" v="*" zoom-min="10">
+        <rule e="way" k="*" v="*" zoom-min="14">
             <caption fill="#ffffff" font-size="12" font-family="serif" font-style="italic" k="name" stroke="#9fc4e1" stroke-width="2"/>
         </rule>
     </rule>
@@ -187,12 +187,14 @@
     <!-- Area overlays -->
     <rule e="way" k="landuse" v="military" zoom-min="10">
         <area src=":/patterns/military-area.svg" symbol-height="4"/>
-        <caption fill="#ff4040" font-size="10" font-style="italic" text-transform="uppercase" k="name" stroke="#ffffff" stroke-width="2"/>
+        <rule e="way" k="*" v="*" zoom-min="12">
+            <caption fill="#ff4040" font-size="10" font-style="italic" text-transform="uppercase" k="name" stroke="#ffffff" stroke-width="2"/>
+        </rule>
     </rule>
     <rule e="way" k="boundary" v="protected_area|national_park" zoom-min="10" zoom-max="14">
         <rule e="way" k="protect_class" v="pr_2">
             <area src=":/patterns/nature-reserve.svg" symbol-height="4"/>
-            <rule e="way" k="*" v="*" zoom-max="12">
+            <rule e="way" k="*" v="*" zoom-max="11">
                 <caption fill="#9ac269" font-size="10" font-style="italic" text-transform="uppercase" k="name" stroke="#ffffff" stroke-width="2"/>
             </rule>
         </rule>
