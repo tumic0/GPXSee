@@ -796,7 +796,7 @@ QDebug operator<<(QDebug dbg, const Mapsforge::MapData::Tag &tag)
 QDebug operator<<(QDebug dbg, const MapData::Path &path)
 {
 	dbg.nospace() << "Path(" << path.poly.boundingRect() << ", "
-	  << path.tags << ")";
+	  << path.point.tags << ")";
 	return dbg.space();
 }
 
