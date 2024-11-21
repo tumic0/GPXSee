@@ -19,27 +19,6 @@ using namespace Mapsforge;
 #define KEY_REF   "ref"
 #define KEY_ELE   "ele"
 
-
-static Coordinates centroid(const QVector<Coordinates> &v)
-{
-	double area = 0;
-	double cx = 0, cy = 0;
-
-	for (int i = 0; i < v.count() - 1; i++) {
-		const Coordinates &ci = v.at(i);
-		const Coordinates &cj = v.at(i+1);
-		double f = (ci.lon() * cj.lat() - cj.lon() * ci.lat());
-
-		area += f;
-		cx += (ci.lon() + cj.lon()) * f;
-		cy += (ci.lat() + cj.lat()) * f;
-	}
-
-	double factor = 1.0 / (3.0 * area);
-
-	return Coordinates(cx * factor, cy * factor);
-}
-
 static void copyPaths(const RectC &rect, const QList<MapData::Path> *src,
   QList<MapData::Path> *dst)
 {
@@ -711,7 +690,7 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 			p.point.coordinates = Coordinates(outline.first().lon() + MD(lon),
 			  outline.first().lat() + MD(lat));
 		else if (p.closed)
-			p.point.coordinates = centroid(outline);
+			p.point.coordinates = p.poly.boundingRect().center();
 
 		list->append(p);
 	}
