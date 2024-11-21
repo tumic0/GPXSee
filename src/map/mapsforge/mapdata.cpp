@@ -20,18 +20,19 @@ using namespace Mapsforge;
 #define KEY_ELE   "ele"
 
 
-static Coordinates centroid(const Polygon &polygon)
+static Coordinates centroid(const QVector<Coordinates> &v)
 {
 	double area = 0;
 	double cx = 0, cy = 0;
-	const QVector<Coordinates> &v = polygon.first();
 
-	for (int i = 0; i < v.count(); i++) {
-		int j = (i == v.count() - 1) ? 0 : i + 1;
-		double f = (v.at(i).lon() * v.at(j).lat() - v.at(j).lon() * v.at(i).lat());
+	for (int i = 0; i < v.count() - 1; i++) {
+		const Coordinates &ci = v.at(i);
+		const Coordinates &cj = v.at(i+1);
+		double f = (ci.lon() * cj.lat() - cj.lon() * ci.lat());
+
 		area += f;
-		cx += (v.at(i).lon() + v.at(j).lon()) * f;
-		cy += (v.at(i).lat() + v.at(j).lat()) * f;
+		cx += (ci.lon() + cj.lon()) * f;
+		cy += (ci.lat() + cj.lat()) * f;
 	}
 
 	double factor = 1.0 / (3.0 * area);
@@ -710,7 +711,7 @@ bool MapData::readPaths(const VectorTile *tile, int zoom, QList<Path> *list)
 			p.point.coordinates = Coordinates(outline.first().lon() + MD(lon),
 			  outline.first().lat() + MD(lat));
 		else if (p.closed)
-			p.point.coordinates = centroid(p.poly);
+			p.point.coordinates = centroid(outline);
 
 		list->append(p);
 	}
