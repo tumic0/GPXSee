@@ -220,8 +220,13 @@ void RasterTile::drawLines(QPainter *painter, const QList<MapData::Line> &lines)
 void RasterTile::drawTextItems(QPainter *painter,
   const QList<TextItem*> &textItems)
 {
-	for (int i = 0; i < textItems.size(); i++)
-		textItems.at(i)->paint(painter);
+	QRectF rect(_rect);
+
+	for (int i = 0; i < textItems.size(); i++) {
+		const TextItem *ti = textItems.at(i);
+		if (rect.intersects(ti->boundingRect()))
+			ti->paint(painter);
+	}
 }
 
 void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,

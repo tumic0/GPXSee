@@ -217,8 +217,13 @@ void RasterTile::drawLines(QPainter *painter,
 void RasterTile::drawTextItems(QPainter *painter,
   const QList<TextItem*> &textItems) const
 {
-	for (int i = 0; i < textItems.size(); i++)
-		textItems.at(i)->paint(painter);
+	QRectF rect(_rect);
+
+	for (int i = 0; i < textItems.size(); i++) {
+		const TextItem *ti = textItems.at(i);
+		if (rect.intersects(ti->boundingRect()))
+			ti->paint(painter);
+	}
 }
 
 static void removeDuplicitLabel(QList<TextItem *> &labels, const QString &text,
