@@ -231,8 +231,13 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 void RasterTile::drawTextItems(QPainter *painter,
   const QList<TextItem*> &textItems)
 {
-	for (int i = 0; i < textItems.size(); i++)
-		textItems.at(i)->paint(painter);
+	QRectF rect(_rect);
+
+	for (int i = 0; i < textItems.size(); i++) {
+		const TextItem *ti = textItems.at(i);
+		if (rect.intersects(ti->boundingRect()))
+			ti->paint(painter);
+	}
 }
 
 QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
