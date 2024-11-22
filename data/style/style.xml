@@ -466,7 +466,7 @@
                 <line stroke="#ffffff" stroke-width="0.4608" stroke-dasharray="2,2" stroke-linecap="butt" scale="all"/>
             </rule>
         </rule>
-        <rule e="way" k="railway" v="narrow_gauge|light_rail|funicular" zoom-min="15">
+        <rule e="way" k="railway" v="narrow_gauge|light_rail|funicular" zoom-min="14">
             <line stroke="#414141" stroke-width="0.2" stroke-linecap="butt"/>
         </rule>
         <rule e="way" k="railway" v="tram" zoom-min="15">
@@ -488,7 +488,7 @@
                 <line stroke="#878787" stroke-width="0.4144" stroke-linecap="butt" stroke-dasharray="2,1" scale="all"/>
             </rule>
         </rule>
-        <rule e="way" k="railway" v="narrow_gauge|light_rail|funicular" zoom-min="15">
+        <rule e="way" k="railway" v="narrow_gauge|light_rail|funicular" zoom-min="14">
             <line stroke="#414141" stroke-width="0.2" stroke-linecap="butt" stroke-dasharray="12,4"/>
         </rule>
         <rule e="way" k="railway" v="tram" zoom-min="15">
