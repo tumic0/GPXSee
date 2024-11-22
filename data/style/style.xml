@@ -538,21 +538,39 @@
         <caption fill="#000000" font-size="10" k="name" priority="10" stroke="#FFFFFF" stroke-width="2"/>
     </rule>
     <rule e="node" k="place" v="hamlet" zoom-min="12">
-        <caption fill="#000000" font-size="12" k="name" priority="20" stroke="#FFFFFF" stroke-width="2"/>
+        <caption fill="#000000" font-size="14" k="name" priority="20" stroke="#FFFFFF" stroke-width="2"/>
     </rule>
     <rule e="node" k="place" v="village" zoom-min="11">
-        <caption fill="#000000" font-size="12" k="name" priority="20" stroke="#FFFFFF" stroke-width="2"/>
+        <caption fill="#000000" font-size="14" k="name" priority="20" stroke="#FFFFFF" stroke-width="2"/>
     </rule>
-    <rule e="node" k="place" v="town" zoom-min="9">
-        <caption fill="#000000" font-size="14" k="name" priority="30" stroke="#FFFFFF" stroke-width="2"/>
+    <rule e="node" k="place" v="town" zoom-min="9" zoom-max="14">
+        <rule e="node" k="*" v="*" zoom-max="10">
+            <caption fill="#000000" font-size="14" k="name" priority="30" stroke="#FFFFFF" stroke-width="2"/>
+        </rule>
+        <rule e="node" k="*" v="*" zoom-min="11">
+            <caption fill="#000000" font-size="16" k="name" font-style="bold" priority="30" stroke="#FFFFFF" stroke-width="2"/>
+        </rule>
     </rule>
     <rule e="node" k="place" v="city">
-        <rule e="node" k="capital" v="yes|1|2">
-            <caption fill="#000000" font-size="16" font-style="bold" k="name" priority="40" stroke="#FFFFFF" stroke-width="2" text-transform="uppercase"/>
+        <rule e="node" k="*" v="*" zoom-max="10">
+            <rule e="node" k="capital" v="yes|1|2">
+                <caption fill="#000000" font-size="18" font-style="bold" k="name" priority="40" stroke="#FFFFFF" stroke-width="2" text-transform="uppercase"/>
+            </rule>
+            <rule e="node" k="capital" v="no|~">
+                <caption fill="#000000" font-size="18" font-style="bold" k="name" priority="35" stroke="#FFFFFF" stroke-width="2"/>
+            </rule>
         </rule>
-        <rule e="node" k="capital" v="no|~">
-            <caption fill="#000000" font-size="16" font-style="bold" k="name" priority="35" stroke="#FFFFFF" stroke-width="2"/>
+        <rule e="node" k="*" v="*" zoom-min="11" zoom-max="14">
+            <rule e="node" k="capital" v="yes|1|2">
+                <caption fill="#000000" font-size="22" font-style="bold" k="name" priority="40" stroke="#FFFFFF" stroke-width="2" text-transform="uppercase"/>
+            </rule>
+            <rule e="node" k="capital" v="no|~">
+                <caption fill="#000000" font-size="22" font-style="bold" k="name" priority="35" stroke="#FFFFFF" stroke-width="2"/>
+            </rule>
         </rule>
+    </rule>
+    <rule e="node" k="place" v="suburb" zoom-min="15" zoom-max="17">
+        <caption fill="#000000" font-size="16" k="name" priority="25" stroke="#FFFFFF" stroke-width="2"/>
     </rule>
 
     <!-- Nature POIs -->
