@@ -85,7 +85,7 @@ void RasterTile::processLabels(const QList<MapData::Point> &points,
 		const MapData::Point &point = points.at(i);
 		const Style::TextRender *ti = 0;
 		const Style::Symbol *si = 0;
-		const QByteArray *lbl = 0;
+		QList<const QByteArray *> ll;
 
 		for (int j = 0; j < symbols.size(); j++) {
 			const Style::Symbol *ri = symbols.at(j);
@@ -98,17 +98,23 @@ void RasterTile::processLabels(const QList<MapData::Point> &points,
 		for (int j = 0; j < labels.size(); j++) {
 			const Style::TextRender *ri = labels.at(j);
 			if (ri->rule().match(point.center(), point.tags)) {
+				const QByteArray *lbl;
 				if ((lbl = label(ri->key(), point.tags))) {
-					if (!si || si->id() == ri->symbolId()) {
+					if (!si) {
 						ti = ri;
+						ll.append(lbl);
 						break;
+					} else if (si->id() == ri->symbolId()) {
+						if (!ti)
+							ti = ri;
+						ll.append(lbl);
 					}
 				}
 			}
 		}
 
 		if (ti || si)
-			items.append(Label(&point, lbl, si, ti));
+			items.append(Label(&point, ll, si, ti));
 	}
 
 	std::sort(items.begin(), items.end());

@@ -586,18 +586,27 @@
         <rule e="node" k="name" v="*">
             <symbol id="peak" src=":/POI/mountain-11.svg" symbol-width="11" priority="10"/>
             <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="peak"/>
+            <rule e="node" k="*" v="*" zoom-min="14">
+                <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="ele" stroke="#FFFFFF" stroke-width="2" symbol-id="peak" priority="-1"/>
+            </rule>
         </rule>
     </rule>
     <rule e="node" k="natural" v="saddle" zoom-min="13">
         <rule e="node" k="name" v="*">
             <symbol id="saddle" src=":/symbols/saddle.svg" symbol-width="9" symbol-height="11" priority="9"/>
             <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="saddle"/>
+            <rule e="node" k="*" v="*" zoom-min="14">
+                <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="ele" stroke="#FFFFFF" stroke-width="2" symbol-id="saddle" priority="-1"/>
+            </rule>
         </rule>
     </rule>
     <rule e="node" k="natural" v="volcano" zoom-min="13">
         <rule e="node" k="name" v="*">
             <symbol id="volcano" src=":/POI/volcano-11.svg" symbol-width="11" priority="10"/>
             <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="volcano"/>
+            <rule e="node" k="*" v="*" zoom-min="14">
+                <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="ele" stroke="#FFFFFF" stroke-width="2" symbol-id="volcano" priority="-1"/>
+            </rule>
         </rule>
     </rule>
     <rule e="node" k="waterway" v="waterfall" zoom-min="15">

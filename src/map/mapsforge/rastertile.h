@@ -44,9 +44,9 @@ private:
 	};
 
 	struct Label {
-		Label(const MapData::Point *p, const QByteArray *lbl,
+		Label(const MapData::Point *p, const QList<const QByteArray *> lbl,
 		  const Style::Symbol *si, const Style::TextRender *ti)
-		  : point(p), lbl(lbl), ti(ti), si(si)
+		  : point(p), ti(ti), si(si), lbl(lbl)
 		{
 			Q_ASSERT(si || ti);
 		}
@@ -61,9 +61,9 @@ private:
 		int priority() const {return si ? si->priority() : ti->priority();}
 
 		const MapData::Point *point;
-		const QByteArray *lbl;
 		const Style::TextRender *ti;
 		const Style::Symbol *si;
+		QList<const QByteArray *> lbl;
 	};
 
 	struct LineLabel {
@@ -170,15 +170,28 @@ private:
 	class PointItem : public TextPointItem
 	{
 	public:
-		PointItem(const QPoint &point, const QByteArray *label,
+		PointItem(const QPoint &point, const QList<const QByteArray *> &lbl,
 		  const QFont *font, const QImage *img, const QColor *color,
-		  const QColor *haloColor) : TextPointItem(point,
-		  label ? new QString(*label) : 0, font, img, color, haloColor, 0) {}
+		  const QColor *haloColor) : TextPointItem(point, label(lbl),
+		  font, img, color, haloColor, 0) {}
 		PointItem(const QPoint &point, const QByteArray *label,
 		  const QFont *font, const QColor *color, const QColor *bgColor)
 		  : TextPointItem(point, label ? new QString(*label) : 0, font, 0,
 		  color, 0, bgColor) {}
 		~PointItem() {delete _text;}
+
+	private:
+		static QString *label(const QList<const QByteArray*> &ll)
+		{
+			if (ll.isEmpty())
+				return 0;
+
+			QString *ret = new QString(*ll.first());
+			for (int i = 1; i < ll.size(); i++)
+				ret->append("\n" + *ll.at(i));
+
+			return ret;
+		}
 	};
 
 	class PathItem : public TextPathItem
