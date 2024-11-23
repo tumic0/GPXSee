@@ -553,18 +553,18 @@
     </rule>
     <rule e="node" k="place" v="city">
         <rule e="node" k="*" v="*" zoom-max="10">
-            <rule e="node" k="capital" v="yes|1|2">
+            <rule e="node" k="capital" v="2">
                 <caption fill="#000000" font-size="18" font-style="bold" k="name" priority="40" stroke="#FFFFFF" stroke-width="2" text-transform="uppercase"/>
             </rule>
-            <rule e="node" k="capital" v="no|~">
+            <rule e="node" k="capital" v="4|~">
                 <caption fill="#000000" font-size="18" font-style="bold" k="name" priority="35" stroke="#FFFFFF" stroke-width="2"/>
             </rule>
         </rule>
         <rule e="node" k="*" v="*" zoom-min="11" zoom-max="14">
-            <rule e="node" k="capital" v="yes|1|2">
+            <rule e="node" k="capital" v="2">
                 <caption fill="#000000" font-size="22" font-style="bold" k="name" priority="40" stroke="#FFFFFF" stroke-width="2" text-transform="uppercase"/>
             </rule>
-            <rule e="node" k="capital" v="no|~">
+            <rule e="node" k="capital" v="4|~">
                 <caption fill="#000000" font-size="22" font-style="bold" k="name" priority="35" stroke="#FFFFFF" stroke-width="2"/>
             </rule>
         </rule>
