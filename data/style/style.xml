@@ -569,8 +569,13 @@
             </rule>
         </rule>
     </rule>
-    <rule e="node" k="place" v="suburb" zoom-min="15" zoom-max="17">
-        <caption fill="#000000" font-size="16" k="name" priority="25" stroke="#FFFFFF" stroke-width="2"/>
+    <rule e="node" k="place" v="suburb">
+        <rule e="node" k="*" v="*" zoom-min="12" zoom-max="13">
+            <caption fill="#000000" font-size="14" k="name" priority="25" stroke="#FFFFFF" stroke-width="2"/>
+        </rule>
+        <rule e="node" k="*" v="*" zoom-min="14" zoom-max="17">
+            <caption fill="#000000" font-size="16" k="name" priority="25" stroke="#FFFFFF" stroke-width="2"/>
+        </rule>
     </rule>
 
     <!-- Nature POIs -->
