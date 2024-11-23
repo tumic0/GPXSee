@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 4 5" height="5" width="4" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
-  <g>
-    <path d="M 0.5,0 V 5" stroke-width="1.0" stroke="#666666"/>
-    <path d="M 0,0.5 H 4" stroke-width="1.0" stroke="#666666"/>
-  </g>
+<svg viewBox="0 0 4 5" height="5" width="4" version="1.1">
+	<g stroke-width="1.0" stroke="#666666">
+		<path d="M 0.5,0 V 5"/>
+		<path d="M 0,0.5 H 4"/>
+	</g>
 </svg>
