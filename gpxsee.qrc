@@ -6,6 +6,7 @@
 
 	<!-- Common map stuff -->
 	<qresource prefix="/symbols">
+		<file alias="bunker.svg">icons/map/symbols/bunker.svg</file>
 		<file alias="cliff.svg">icons/map/symbols/cliff.svg</file>
 		<file alias="exit.svg">icons/map/symbols/exit.svg</file>
 		<file alias="flow.svg">icons/map/symbols/flow.svg</file>
