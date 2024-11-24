@@ -449,7 +449,7 @@
 
     <!-- Railways -->
     <rule e="way" k="tunnel" v="~|false|no">
-        <rule e="way" k="railway" v="rail">
+        <rule e="way" k="railway" v="rail|preserved|disused">
             <rule e="way" k="*" v="*" zoom-min="10" zoom-max="12">
                <line stroke="#717171" stroke-width="1" stroke-linecap="butt"/>
             </rule>
@@ -474,7 +474,7 @@
         </rule>
     </rule>
     <rule e="way" k="tunnel" v="yes|true">
-        <rule e="way" k="railway" v="rail">
+        <rule e="way" k="railway" v="rail|preserved|disused">
             <rule e="way" k="*" v="*" zoom-min="10" zoom-max="12">
                <line stroke="#717171" stroke-width="1" stroke-linecap="butt" stroke-dasharray="10,8"/>
             </rule>
