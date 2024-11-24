@@ -82,7 +82,13 @@
     <!-- Water -->
     <rule e="way" closed="yes" k="natural" v="water">
         <area fill="#9fc4e1"/>
-        <rule e="way" k="*" v="*" zoom-min="14">
+        <rule e="way" k="bBoxWeight" v="~|mid|large|xlarge|xxlarge|xxxlarge" zoom-min="14" zoom-max="15">
+            <caption fill="#ffffff" font-size="12" font-family="serif" font-style="italic" k="name" stroke="#9fc4e1" stroke-width="2"/>
+        </rule>
+        <rule e="way" k="bBoxWeight" v="~|xsmall|small|mid|large|xlarge|xxlarge|xxxlarge" zoom-min="16" zoom-max="16">
+            <caption fill="#ffffff" font-size="12" font-family="serif" font-style="italic" k="name" stroke="#9fc4e1" stroke-width="2"/>
+        </rule>
+        <rule e="way" k="*" v="*" zoom-min="17">
             <caption fill="#ffffff" font-size="12" font-family="serif" font-style="italic" k="name" stroke="#9fc4e1" stroke-width="2"/>
         </rule>
     </rule>
