@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="180"/>
         <source>GPSDump files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSDump-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="181"/>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="276"/>
         <source>Clear list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ryd liste</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="288"/>
@@ -486,17 +486,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="370"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="374"/>
         <source>Raster only</source>
-        <translation type="unfinished"></translation>
+        <translation>Kun raster</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="378"/>
         <source>Vector only</source>
-        <translation type="unfinished"></translation>
+        <translation>Kun vektor</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="385"/>
@@ -591,7 +591,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="490"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis terrænskygge</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="498"/>
@@ -713,7 +713,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="664"/>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Åbn seneste</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="689"/>
@@ -723,7 +723,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="695"/>
         <source>Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Lag</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="704"/>
@@ -772,9 +772,9 @@
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="2001"/>
         <source>Download %n DEM tiles?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Download %n DEM-flise?</numerusform>
+            <numerusform>Download %n DEM-fliser?</numerusform>
         </translation>
     </message>
     <message>
@@ -785,12 +785,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="476"/>
         <source>Download data DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Download data-DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="482"/>
         <source>Download map DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Download kort-DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="721"/>
@@ -1053,7 +1053,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1998"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>Downloadgrænsen for DEM-fliser er overskredet. Hvis du virkelig har brug for data for så stort et område, skal du downloade filerne manuelt.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="2014"/>
@@ -1790,7 +1790,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="273"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="639"/>
         <source>px</source>
-        <translation type="unfinished">px</translation>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="309"/>
@@ -1810,7 +1810,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="388"/>
         <source>Detect pauses</source>
-        <translation type="unfinished"></translation>
+        <translation>Registrer pauser</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="392"/>
@@ -1821,7 +1821,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="537"/>
         <source>Detection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Registrering:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="564"/>
@@ -1865,27 +1865,27 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="314"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="655"/>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gennemsigtighed:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="657"/>
         <source>Blur radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sløringsradius:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="659"/>
         <source>Azimuth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Azimut:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="660"/>
         <source>Altitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Højde:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="661"/>
         <source>Z Factor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Z-faktor:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="666"/>
@@ -1896,7 +1896,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="667"/>
         <source>Hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Terrænskygge</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="687"/>
@@ -1917,7 +1917,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="656"/>
         <source>Lightening:</source>
-        <translation type="unfinished"></translation>
+        <translation>Belysning:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="713"/>
@@ -2325,7 +2325,7 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="38"/>
         <source>File</source>
-        <translation type="unfinished">Fil</translation>
+        <translation>Fil</translation>
     </message>
 </context>
 <context>
@@ -2591,7 +2591,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="46"/>
         <source>File</source>
-        <translation type="unfinished">Fil</translation>
+        <translation>Fil</translation>
     </message>
 </context>
 <context>
