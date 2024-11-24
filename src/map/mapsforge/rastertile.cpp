@@ -98,8 +98,8 @@ void RasterTile::processLabels(const QList<MapData::Point> &points,
 		for (int j = 0; j < labels.size(); j++) {
 			const Style::TextRender *ri = labels.at(j);
 			if (ri->rule().match(point.center(), point.tags)) {
-				const QByteArray *lbl;
-				if ((lbl = label(ri->key(), point.tags))) {
+				const QByteArray *lbl = label(ri->key(), point.tags);
+				if (lbl) {
 					if (!si) {
 						ti = ri;
 						ll.append(lbl);
