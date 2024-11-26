@@ -589,11 +589,19 @@
 
     <!-- Nature POIs -->
     <rule e="node" k="natural" v="peak" zoom-min="13">
-        <rule e="node" k="name" v="*">
-            <symbol id="peak" src=":/POI/mountain-11.svg" symbol-width="11" priority="10"/>
-            <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="peak"/>
-            <rule e="node" k="*" v="*" zoom-min="14">
-                <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="ele" stroke="#FFFFFF" stroke-width="2" symbol-id="peak" priority="-1"/>
+        <rule e="node" k="ele" v="*">
+            <rule e="node" k="name" v="*">
+                <symbol id="peak" src=":/POI/triangle-11.svg" symbol-width="11" priority="10"/>
+                <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="peak"/>
+                <rule e="node" k="*" v="*" zoom-min="14">
+                    <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="ele" stroke="#FFFFFF" stroke-width="2" symbol-id="peak" priority="-1"/>
+                </rule>
+            </rule>
+        </rule>
+        <rule e="node" k="ele" v="~" zoom-min="15">
+            <rule e="node" k="name" v="*">
+                <symbol id="peak-minor" src=":/POI/triangle-stroked-11.svg" symbol-width="11" priority="5"/>
+                <caption fill="#000000" font-size="10" font-family="serif" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="peak-minor"/>
             </rule>
         </rule>
     </rule>

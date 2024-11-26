@@ -112,6 +112,8 @@
 		<file alias="theatre-11.svg">icons/map/POI/theatre-11.svg</file>
 		<file alias="toilet-11.svg">icons/map/POI/toilet-11.svg</file>
 		<file alias="town-hall-11.svg">icons/map/POI/town-hall-11.svg</file>
+		<file alias="triangle-11.svg">icons/map/POI/triangle-11.svg</file>
+		<file alias="triangle-stroked-11.svg">icons/map/POI/triangle-stroked-11.svg</file>
 		<file alias="viewpoint-11.svg">icons/map/POI/viewpoint-11.svg</file>
 		<file alias="village-11.svg">icons/map/POI/village-11.svg</file>
 		<file alias="volcano-11.svg">icons/map/POI/volcano-11.svg</file>
