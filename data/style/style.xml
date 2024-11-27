@@ -32,7 +32,7 @@
         <area fill="#e4efcf"/>
     </rule>
 
-    <rule e="way" closed="yes" k="landuse" v="construction|quarry|landfill|industrial|farm|farmyard" zoom-min="10">
+    <rule e="way" closed="yes" k="landuse" v="construction|quarry|landfill|industrial|farm|farmyard|railway" zoom-min="10">
         <area fill="#d6d4ce"/>
     </rule>
     <rule e="way" closed="yes" k="landuse" v="allotments" zoom-min="10">
