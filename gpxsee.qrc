@@ -24,6 +24,8 @@
 		<file alias="bank-11.svg">icons/map/POI/bank-11.svg</file>
 		<file alias="bar-11.svg">icons/map/POI/bar-11.svg</file>
 		<file alias="barrier-11.svg">icons/map/POI/barrier-11.svg</file>
+		<file alias="baseball-11.svg">icons/map/POI/baseball-11.svg</file>
+		<file alias="basketball-11.svg">icons/map/POI/basketball-11.svg</file>
 		<file alias="bbq-11.svg">icons/map/POI/bbq-11.svg</file>
 		<file alias="beach-11.svg">icons/map/POI/beach-11.svg</file>
 		<file alias="beer-11.svg">icons/map/POI/beer-11.svg</file>
@@ -68,6 +70,7 @@
 		<file alias="hardware-11.svg">icons/map/POI/hardware-11.svg</file>
 		<file alias="heliport-11.svg">icons/map/POI/heliport-11.svg</file>
 		<file alias="home-11.svg">icons/map/POI/home-11.svg</file>
+		<file alias="horse-riding-11.svg">icons/map/POI/horse-riding-11.svg</file>
 		<file alias="hospital-11.svg">icons/map/POI/hospital-11.svg</file>
 		<file alias="hot-spring.svg">icons/map/POI/hot-spring.svg</file>
 		<file alias="ice-cream-11.svg">icons/map/POI/ice-cream-11.svg</file>

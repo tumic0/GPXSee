@@ -841,7 +841,7 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="post"/>
         </rule>
     </rule>
-    <rule e="any" k="historic" v="memorial" zoom-min="17">
+    <rule e="any" k="historic" v="memorial|monument" zoom-min="17">
         <symbol id="memorial" src=":/POI/monument-11.svg" symbol-width="11"/>
         <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="memorial"/>
@@ -947,6 +947,24 @@
         <symbol id="skateboard" src=":/POI/skateboard-11.svg" symbol-width="11"/>
         <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="skateboard"/>
+        </rule>
+    </rule>
+    <rule e="any" k="sport" v="baseball" zoom-min="17">
+        <symbol id="baseball" src=":/POI/baseball-11.svg" symbol-width="11"/>
+        <rule e="any" k="*" v="*" zoom-min="18">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="baseball"/>
+        </rule>
+    </rule>
+    <rule e="any" k="sport" v="basketball" zoom-min="17">
+        <symbol id="basketball" src=":/POI/basketball-11.svg" symbol-width="11"/>
+        <rule e="any" k="*" v="*" zoom-min="18">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="basketball"/>
+        </rule>
+    </rule>
+    <rule e="any" k="sport" v="equestrian" zoom-min="17">
+        <symbol id="equestrian" src=":/POI/horse-riding-11.svg" symbol-width="11"/>
+        <rule e="any" k="*" v="*" zoom-min="18">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="equestrian"/>
         </rule>
     </rule>
 
