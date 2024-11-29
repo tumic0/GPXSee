@@ -961,6 +961,12 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="basketball"/>
         </rule>
     </rule>
+    <rule e="any" k="sport" v="volleyball" zoom-min="17">
+        <symbol id="volleyball" src=":/POI/volleyball-11.svg" symbol-width="11"/>
+        <rule e="any" k="*" v="*" zoom-min="18">
+            <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="volleyball"/>
+        </rule>
+    </rule>
     <rule e="any" k="sport" v="equestrian" zoom-min="17">
         <symbol id="equestrian" src=":/POI/horse-riding-11.svg" symbol-width="11"/>
         <rule e="any" k="*" v="*" zoom-min="18">
