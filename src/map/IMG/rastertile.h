@@ -22,7 +22,8 @@ public:
 	  bool hillShading, bool rasters, bool vectors)
 		: _proj(proj), _transform(transform), _data(data), _zoom(zoom),
 		_rect(rect), _ratio(ratio), _key(key), _hillShading(hillShading),
-		_rasters(rasters), _vectors(vectors) {}
+		_rasters(rasters), _vectors(vectors), _file(0) {}
+	~RasterTile() {delete _file;}
 
 	const QString &key() const {return _key;}
 	QPoint xy() const {return _rect.topLeft();}
@@ -88,6 +89,7 @@ private:
 	QPixmap _pixmap;
 	bool _hillShading;
 	bool _rasters, _vectors;
+	QFile *_file;
 };
 
 }

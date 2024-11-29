@@ -18,25 +18,34 @@ public:
 	class Handle
 	{
 	public:
-		Handle(const SubFile *subFile)
-		  : _blockNum(-1), _blockPos(-1), _pos(-1)
+		Handle(QFile *file, const SubFile *subFile)
+		  : _file(file), _blockNum(-1), _blockPos(-1), _pos(-1), _delete(false)
 		{
 			if (!subFile)
 				return;
 
+			if (!_file) {
+				_file = new QFile(subFile->fileName());
+				_file->open(QIODevice::ReadOnly | QIODevice::Unbuffered);
+				_delete = true;
+			}
 			_data.resize(subFile->blockSize());
-			_file.setFileName(subFile->fileName());
-			_file.open(QIODevice::ReadOnly | QIODevice::Unbuffered);
+		}
+		~Handle()
+		{
+			if (_delete)
+				delete _file;
 		}
 
 	private:
 		friend class SubFile;
 
-		QFile _file;
+		QFile *_file;
 		QByteArray _data;
 		int _blockNum;
 		int _blockPos;
 		int _pos;
+		bool _delete;
 	};
 
 	SubFile(const IMGData *img)

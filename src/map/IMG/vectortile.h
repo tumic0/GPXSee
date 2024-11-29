@@ -21,7 +21,7 @@ public:
 		delete _dem; delete _gmp;
 	}
 
-	bool init();
+	bool init(QFile *file);
 	void clear();
 
 	const RectC &bounds() const {return _tre->bounds();}
@@ -30,12 +30,12 @@ public:
 
 	SubFile *file(SubFile::Type type);
 
-	void polys(const RectC &rect, const Zoom &zoom,
+	void polys(QFile *file, const RectC &rect, const Zoom &zoom,
 	  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
 	  MapData::PolyCache *cache, QMutex *lock);
-	void points(const RectC &rect, const Zoom &zoom,
+	void points(QFile *file, const RectC &rect, const Zoom &zoom,
 	  QList<MapData::Point> *points, MapData::PointCache *cache, QMutex *lock);
-	void elevations(const RectC &rect, const Zoom &zoom,
+	void elevations(QFile *file, const RectC &rect, const Zoom &zoom,
 	  QList<MapData::Elevation> *elevations, MapData::ElevationCache *cache,
 	  QMutex *lock);
 
@@ -78,7 +78,7 @@ public:
 	}
 
 private:
-	bool initGMP();
+	bool initGMP(QFile *file);
 	bool load(SubFile::Handle &rgnHdl, SubFile::Handle &lblHdl,
 	  SubFile::Handle &netHdl, SubFile::Handle &nodHdl);
 	bool loadDem(SubFile::Handle &demHdl);

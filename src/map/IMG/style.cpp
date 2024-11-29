@@ -1268,50 +1268,50 @@ bool Style::parseDrawOrder(SubFile *file, SubFile::Handle &hdl,
 	return true;
 }
 
-bool Style::parseTYPFile(SubFile *file)
+bool Style::parseTYPFile(QFile *file, SubFile *typ)
 {
-	SubFile::Handle hdl(file);
+	SubFile::Handle hdl(file, typ);
 	Section points, lines, polygons, order;
 	quint16 tmp16, codepage;
 
-	if (!(file->seek(hdl, 0x15) && file->readUInt16(hdl, codepage)
-	  && file->readUInt32(hdl, points.offset)
-	  && file->readUInt32(hdl, points.size)
-	  && file->readUInt32(hdl, lines.offset)
-	  && file->readUInt32(hdl, lines.size)
-	  && file->readUInt32(hdl, polygons.offset)
-	  && file->readUInt32(hdl, polygons.size)))
+	if (!(typ->seek(hdl, 0x15) && typ->readUInt16(hdl, codepage)
+	  && typ->readUInt32(hdl, points.offset)
+	  && typ->readUInt32(hdl, points.size)
+	  && typ->readUInt32(hdl, lines.offset)
+	  && typ->readUInt32(hdl, lines.size)
+	  && typ->readUInt32(hdl, polygons.offset)
+	  && typ->readUInt32(hdl, polygons.size)))
 		return false;
 
-	if (!(file->readUInt16(hdl, tmp16) && file->readUInt16(hdl, tmp16)))
+	if (!(typ->readUInt16(hdl, tmp16) && typ->readUInt16(hdl, tmp16)))
 		return false;
 
-	if (!(file->readUInt32(hdl, points.arrayOffset)
-	  && file->readUInt16(hdl, points.arrayItemSize)
-	  && file->readUInt32(hdl, points.arraySize)
-	  && file->readUInt32(hdl, lines.arrayOffset)
-	  && file->readUInt16(hdl, lines.arrayItemSize)
-	  && file->readUInt32(hdl, lines.arraySize)
-	  && file->readUInt32(hdl, polygons.arrayOffset)
-	  && file->readUInt16(hdl, polygons.arrayItemSize)
-	  && file->readUInt32(hdl, polygons.arraySize)
-	  && file->readUInt32(hdl, order.arrayOffset)
-	  && file->readUInt16(hdl, order.arrayItemSize)
-	  && file->readUInt32(hdl, order.arraySize)))
+	if (!(typ->readUInt32(hdl, points.arrayOffset)
+	  && typ->readUInt16(hdl, points.arrayItemSize)
+	  && typ->readUInt32(hdl, points.arraySize)
+	  && typ->readUInt32(hdl, lines.arrayOffset)
+	  && typ->readUInt16(hdl, lines.arrayItemSize)
+	  && typ->readUInt32(hdl, lines.arraySize)
+	  && typ->readUInt32(hdl, polygons.arrayOffset)
+	  && typ->readUInt16(hdl, polygons.arrayItemSize)
+	  && typ->readUInt32(hdl, polygons.arraySize)
+	  && typ->readUInt32(hdl, order.arrayOffset)
+	  && typ->readUInt16(hdl, order.arrayItemSize)
+	  && typ->readUInt32(hdl, order.arraySize)))
 		return false;
 
-	if (!(parsePoints(file, hdl, points) && parseLines(file, hdl, lines)
-	  && parsePolygons(file, hdl, polygons)
-	  && parseDrawOrder(file, hdl, order))) {
+	if (!(parsePoints(typ, hdl, points) && parseLines(typ, hdl, lines)
+	  && parsePolygons(typ, hdl, polygons)
+	  && parseDrawOrder(typ, hdl, order))) {
 		qWarning("%s: Invalid TYP file, using default style",
-		  qPrintable(file->fileName()));
+		  qPrintable(typ->fileName()));
 		return false;
 	}
 
 	return true;
 }
 
-Style::Style(qreal ratio, SubFile *typ)
+Style::Style(QFile *file, qreal ratio, SubFile *typ)
 {
 	_large = pixelSizeFont(16);
 	_normal = pixelSizeFont(14);
@@ -1326,7 +1326,7 @@ Style::Style(qreal ratio, SubFile *typ)
 	defaultPointStyle(ratio);
 
 	if (typ)
-		parseTYPFile(typ);
+		parseTYPFile(file, typ);
 }
 
 const Style::Line &Style::line(quint32 type) const

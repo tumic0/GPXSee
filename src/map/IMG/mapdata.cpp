@@ -13,7 +13,7 @@ using namespace IMG;
 bool MapData::polyCb(VectorTile *tile, void *context)
 {
 	PolyCTX *ctx = (PolyCTX*)context;
-	tile->polys(ctx->rect, ctx->zoom, ctx->polygons, ctx->lines,
+	tile->polys(ctx->file, ctx->rect, ctx->zoom, ctx->polygons, ctx->lines,
 	  ctx->cache, ctx->lock);
 	return true;
 }
@@ -21,14 +21,16 @@ bool MapData::polyCb(VectorTile *tile, void *context)
 bool MapData::pointCb(VectorTile *tile, void *context)
 {
 	PointCTX *ctx = (PointCTX*)context;
-	tile->points(ctx->rect, ctx->zoom, ctx->points, ctx->cache, ctx->lock);
+	tile->points(ctx->file, ctx->rect, ctx->zoom, ctx->points, ctx->cache,
+	  ctx->lock);
 	return true;
 }
 
 bool MapData::elevationCb(VectorTile *tile, void *context)
 {
 	ElevationCTX *ctx = (ElevationCTX*)context;
-	tile->elevations(ctx->rect, ctx->zoom, ctx->elevations, ctx->cache, ctx->lock);
+	tile->elevations(ctx->file, ctx->rect, ctx->zoom, ctx->elevations,
+	  ctx->cache, ctx->lock);
 	return true;
 }
 
@@ -50,10 +52,10 @@ MapData::~MapData()
 	delete _style;
 }
 
-void MapData::polys(const RectC &rect, int bits, QList<Poly> *polygons,
-  QList<Poly> *lines)
+void MapData::polys(QFile *file, const RectC &rect, int bits,
+  QList<Poly> *polygons, QList<Poly> *lines)
 {
-	PolyCTX ctx(rect, zoom(bits), polygons, lines, &_polyCache, &_lock);
+	PolyCTX ctx(file, rect, zoom(bits), polygons, lines, &_polyCache, &_lock);
 	double min[2], max[2];
 
 	min[0] = rect.left();
@@ -64,9 +66,10 @@ void MapData::polys(const RectC &rect, int bits, QList<Poly> *polygons,
 	_tileTree.Search(min, max, polyCb, &ctx);
 }
 
-void MapData::points(const RectC &rect, int bits, QList<Point> *points)
+void MapData::points(QFile *file, const RectC &rect, int bits,
+  QList<Point> *points)
 {
-	PointCTX ctx(rect, zoom(bits), points, &_pointCache, &_lock);
+	PointCTX ctx(file, rect, zoom(bits), points, &_pointCache, &_lock);
 	double min[2], max[2];
 
 	min[0] = rect.left();
@@ -77,9 +80,10 @@ void MapData::points(const RectC &rect, int bits, QList<Point> *points)
 	_tileTree.Search(min, max, pointCb, &ctx);
 }
 
-void MapData::elevations(const RectC &rect, int bits, QList<Elevation> *elevations)
+void MapData::elevations(QFile *file, const RectC &rect, int bits,
+  QList<Elevation> *elevations)
 {
-	ElevationCTX ctx(rect, zoom(bits), elevations, &_demCache, &_demLock);
+	ElevationCTX ctx(file, rect, zoom(bits), elevations, &_demCache, &_demLock);
 	double min[2], max[2];
 
 	min[0] = rect.left();
@@ -95,14 +99,14 @@ void MapData::load(qreal ratio)
 	Q_ASSERT(!_style);
 
 	if (_typ)
-		_style = new Style(ratio, _typ);
+		_style = new Style(0, ratio, _typ);
 	else {
 		QString typFile(ProgramPaths::typFile());
 		if (QFileInfo::exists(typFile)) {
 			SubFile typ(&typFile);
-			_style = new Style(ratio, &typ);
+			_style = new Style(0, ratio, &typ);
 		} else
-			_style = new Style(ratio);
+			_style = new Style(0, ratio);
 	}
 }
 

@@ -152,7 +152,7 @@ void RasterTile::drawPolygons(QPainter *painter,
 				bool insert = false;
 				SubFile::Handle *hdl = hc.object(poly.raster.lbl());
 				if (!hdl) {
-					hdl = new SubFile::Handle(poly.raster.lbl());
+					hdl = new SubFile::Handle(_file, poly.raster.lbl());
 					insert = true;
 				}
 				QPixmap pm(poly.raster.lbl()->image(*hdl, poly.raster.id()));
@@ -443,11 +443,16 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 {
 	QPoint ttl(_rect.topLeft());
 
+	if (dynamic_cast<IMGData*>(_data)) {
+		_file = new QFile(_data->fileName());
+		_file->open(QIODevice::ReadOnly | QIODevice::Unbuffered);
+	}
+
 	QRectF polyRect(ttl, QPointF(ttl.x() + _rect.width(), ttl.y()
 	  + _rect.height()));
 	RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
 	  _transform.img2proj(polyRect.bottomRight()));
-	_data->polys(polyRectD.toRectC(_proj, 20), _zoom,
+	_data->polys(_file, polyRectD.toRectC(_proj, 20), _zoom,
 	  &polygons, _vectors ? &lines : 0);
 
 	if (_vectors) {
@@ -456,7 +461,7 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 		  + TEXT_EXTENT));
 		RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
 		  _transform.img2proj(pointRect.bottomRight()));
-		_data->points(pointRectD.toRectC(_proj, 20), _zoom, &points);
+		_data->points(_file, pointRectD.toRectC(_proj, 20), _zoom, &points);
 	}
 }
 
@@ -481,7 +486,7 @@ MatrixD RasterTile::elevation(int extend) const
 		// Extra margin for always including the next DEM tile on the map tile
 		// edges (the DEM tile resolution is usally 0.5-15% of the map tile)
 		double factor = 6 - (_zoom - 24) * 1.7;
-		_data->elevations(rect.adjusted(0, 0, rect.width() / factor,
+		_data->elevations(_file, rect.adjusted(0, 0, rect.width() / factor,
 		  -rect.height() / factor), _zoom, &tiles);
 
 		DEMTree tree(tiles);

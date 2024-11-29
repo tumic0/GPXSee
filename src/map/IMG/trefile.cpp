@@ -49,9 +49,9 @@ TREFile::~TREFile()
 	clear();
 }
 
-bool TREFile::init()
+bool TREFile::init(QFile *file)
 {
-	Handle hdl(this);
+	Handle hdl(file, this);
 	quint8 locked, levels[64];
 	quint16 hdrLen;
 	qint32 north, east, south, west;
@@ -154,9 +154,9 @@ int TREFile::readExtEntry(Handle &hdl, quint32 &polygons, quint32 &lines,
 	return rb;
 }
 
-bool TREFile::load(int idx)
+bool TREFile::load(QFile *file, int idx)
 {
-	Handle hdl(this);
+	Handle hdl(file, this);
 	QList<SubDiv*> sl;
 	SubDiv *s = 0;
 	SubDivTree *tree = new SubDivTree();
@@ -282,7 +282,7 @@ void TREFile::clear()
 	_subdivs.clear();
 }
 
-const TREFile::SubDivTree *TREFile::subdivs(const Zoom &zoom)
+const TREFile::SubDivTree *TREFile::subdivs(QFile *file, const Zoom &zoom)
 {
 	int idx = -1;
 
@@ -296,7 +296,7 @@ const TREFile::SubDivTree *TREFile::subdivs(const Zoom &zoom)
 	if (idx < 0)
 		return 0;
 
-	if (!_subdivs.contains(_levels.at(idx).level) && !load(idx))
+	if (!_subdivs.contains(_levels.at(idx).level) && !load(file, idx))
 		return 0;
 
 	return _subdivs.value(_levels.at(idx).level);
@@ -309,10 +309,10 @@ static bool cb(SubDiv *subdiv, void *context)
 	return true;
 }
 
-QList<SubDiv*> TREFile::subdivs(const RectC &rect, const Zoom &zoom)
+QList<SubDiv*> TREFile::subdivs(QFile *file, const RectC &rect, const Zoom &zoom)
 {
 	QList<SubDiv*> list;
-	const SubDivTree *tree = subdivs(zoom);
+	const SubDivTree *tree = subdivs(file, zoom);
 	double min[2], max[2];
 
 	min[0] = rect.left();

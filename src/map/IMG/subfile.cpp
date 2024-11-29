@@ -27,9 +27,9 @@ bool SubFile::seek(Handle &handle, quint32 pos) const
 		int blockNum = pos >> BLOCK_BITS;
 
 		if (handle._blockNum != blockNum) {
-			if (!handle._file.seek((quint64)blockNum << BLOCK_BITS))
+			if (!handle._file->seek((quint64)blockNum << BLOCK_BITS))
 				return false;
-			if (handle._file.read(handle._data.data(), (1<<BLOCK_BITS)) < 0)
+			if (handle._file->read(handle._data.data(), (1<<BLOCK_BITS)) < 0)
 				return false;
 			handle._blockNum = blockNum;
 		}

@@ -92,7 +92,7 @@ bool GMAPData::loadTile(const QDir &dir)
 		}
 	}
 
-	if (!tile->init()) {
+	if (!tile->init(0)) {
 		qWarning("%s: Invalid map tile", qPrintable(dir.path()));
 		delete tile;
 		return false;

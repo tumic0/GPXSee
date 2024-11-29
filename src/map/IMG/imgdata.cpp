@@ -29,11 +29,11 @@ static SubFile::Type tileType(const char str[3])
 		return SubFile::Unknown;
 }
 
-bool IMGData::readSubFileBlocks(QFile &file, quint64 offset, SubFile *subFile)
+bool IMGData::readSubFileBlocks(QFile *file, quint64 offset, SubFile *subFile)
 {
 	quint16 block;
 
-	if (!file.seek(offset + 0x20))
+	if (!file->seek(offset + 0x20))
 		return false;
 	for (int i = 0; i < 240; i++) {
 		if (!readValue(file, block))
@@ -46,11 +46,11 @@ bool IMGData::readSubFileBlocks(QFile &file, quint64 offset, SubFile *subFile)
 	return true;
 }
 
-bool IMGData::readIMGHeader(QFile &file)
+bool IMGData::readIMGHeader(QFile *file)
 {
 	char signature[7], identifier[7];
-	if (!(file.read((char*)&_key, 1) && file.seek(0x10)
-	  && read(file, signature, sizeof(signature)) && file.seek(0x41)
+	if (!(file->read((char*)&_key, 1) && file->seek(0x10)
+	  && read(file, signature, sizeof(signature)) && file->seek(0x41)
 	  && read(file, identifier, sizeof(identifier)))
 	  || memcmp(signature, "DSKIMG", sizeof(signature))
 	  || memcmp(identifier, "GARMIN", sizeof(identifier))) {
@@ -60,8 +60,8 @@ bool IMGData::readIMGHeader(QFile &file)
 
 	char d1[20], d2[31];
 	quint8 e1, e2;
-	if (!(file.seek(0x49) && read(file, d1, sizeof(d1)) && file.seek(0x61)
-	  && readValue(file, e1) && readValue(file, e2) && file.seek(0x65)
+	if (!(file->seek(0x49) && read(file, d1, sizeof(d1)) && file->seek(0x61)
+	  && readValue(file, e1) && readValue(file, e2) && file->seek(0x65)
 	  && read(file, d2, sizeof(d2)))) {
 		_errorString = "Error reading IMG header";
 		return false;
@@ -74,7 +74,7 @@ bool IMGData::readIMGHeader(QFile &file)
 	return true;
 }
 
-bool IMGData::readFAT(QFile &file, TileMap &tileMap)
+bool IMGData::readFAT(QFile *file, TileMap &tileMap)
 {
 	QByteArray typFile;
 	quint8 flag;
@@ -82,7 +82,7 @@ bool IMGData::readFAT(QFile &file, TileMap &tileMap)
 
 	// Skip unused FAT blocks if any
 	while (true) {
-		if (!(file.seek(offset) && readValue(file, flag)))
+		if (!(file->seek(offset) && readValue(file, flag)))
 			return false;
 		if (flag)
 			break;
@@ -93,14 +93,14 @@ bool IMGData::readFAT(QFile &file, TileMap &tileMap)
 	char name[8], type[3];
 	quint32 size;
 	quint16 part;
-	if (!(file.seek(offset + 12) && readValue(file, size)))
+	if (!(file->seek(offset + 12) && readValue(file, size)))
 		return false;
 	offset += 512;
 	int cnt = (size - offset) / 512;
 
 	// Read FAT blocks describing the IMG sub-files
 	for (int i = 0; i < cnt; i++) {
-		if (!(file.seek(offset) && readValue(file, flag)
+		if (!(file->seek(offset) && readValue(file, flag)
 		  && read(file, name, sizeof(name))
 		  && read(file, type, sizeof(type)) && readValue(file, size)
 		  && readValue(file, part)))
@@ -140,13 +140,13 @@ bool IMGData::readFAT(QFile &file, TileMap &tileMap)
 	return true;
 }
 
-bool IMGData::createTileTree(const TileMap &tileMap)
+bool IMGData::createTileTree(QFile *file, const TileMap &tileMap)
 {
 	for (TileMap::const_iterator it = tileMap.constBegin();
 	  it != tileMap.constEnd(); ++it) {
 		VectorTile *tile = it.value();
 
-		if (!tile->init()) {
+		if (!tile->init(file)) {
 			qWarning("%s: %s: Invalid map tile", qPrintable(_fileName),
 			  qPrintable(it.key()));
 			delete tile;
@@ -177,14 +177,14 @@ IMGData::IMGData(const QString &fileName) : MapData(fileName)
 		return;
 	}
 
-	if (!readIMGHeader(file))
+	if (!readIMGHeader(&file))
 		return;
-	if (!readFAT(file, tileMap)) {
+	if (!readFAT(&file, tileMap)) {
 		_errorString = "Error reading FAT data";
 		qDeleteAll(tileMap);
 		return;
 	}
-	if (!createTileTree(tileMap)) {
+	if (!createTileTree(&file, tileMap)) {
 		_errorString = "No usable map tile found";
 		return;
 	}
@@ -194,16 +194,16 @@ IMGData::IMGData(const QString &fileName) : MapData(fileName)
 	_valid = true;
 }
 
-qint64 IMGData::read(QFile &file, char *data, qint64 maxSize) const
+qint64 IMGData::read(QFile *file, char *data, qint64 maxSize) const
 {
-	qint64 ret = file.read(data, maxSize);
+	qint64 ret = file->read(data, maxSize);
 	if (_key)
 		for (int i = 0; i < ret; i++)
 			data[i] ^= _key;
 	return ret;
 }
 
-template<class T> bool IMGData::readValue(QFile &file, T &val) const
+template<class T> bool IMGData::readValue(QFile *file, T &val) const
 {
 	T data;
 
@@ -215,9 +215,9 @@ template<class T> bool IMGData::readValue(QFile &file, T &val) const
 	return true;
 }
 
-bool IMGData::readBlock(QFile &file, int blockNum, char *data) const
+bool IMGData::readBlock(QFile *file, int blockNum, char *data) const
 {
-	if (!file.seek((quint64)blockNum << _blockBits))
+	if (!file->seek((quint64)blockNum << _blockBits))
 		return false;
 	if (read(file, data, 1ULL<<_blockBits) < (qint64)(1ULL<<_blockBits))
 		return false;

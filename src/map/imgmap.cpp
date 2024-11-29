@@ -276,7 +276,7 @@ double IMGMap::elevation(const Coordinates &c)
 	if (d->hasDEM()) {
 		QList<MapData::Elevation> tiles;
 
-		d->elevations(RectC(c, Coordinates(c.lon() + DELTA, c.lat() - DELTA)),
+		d->elevations(0, RectC(c, Coordinates(c.lon() + DELTA, c.lat() - DELTA)),
 		  d->zooms().max(), &tiles);
 		DEMTree tree(tiles);
 

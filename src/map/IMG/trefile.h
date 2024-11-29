@@ -24,11 +24,11 @@ public:
 	  : SubFile(gmp, offset), _flags(0), _extItemSize(0) {}
 	~TREFile();
 
-	bool init();
+	bool init(QFile *file);
 	void clear();
 
 	const RectC &bounds() const {return _bounds;}
-	QList<SubDiv*> subdivs(const RectC &rect, const Zoom &zoom);
+	QList<SubDiv*> subdivs(QFile *file, const RectC &rect, const Zoom &zoom);
 	quint32 shift(quint8 bits) const
 	  {return (bits == _levels.last().bits) ? (_flags >> 0xb) & 7 : 0;}
 	QVector<Zoom> zooms() const;
@@ -41,8 +41,8 @@ private:
 	};
 	typedef RTree<SubDiv*, double, 2> SubDivTree;
 
-	bool load(int idx);
-	const SubDivTree *subdivs(const Zoom &zoom);
+	bool load(QFile *file, int idx);
+	const SubDivTree *subdivs(QFile *file, const Zoom &zoom);
 	int readExtEntry(Handle &hdl, quint32 &polygons, quint32 &lines,
 	  quint32 &points);
 
