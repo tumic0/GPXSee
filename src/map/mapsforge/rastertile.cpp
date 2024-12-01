@@ -408,6 +408,10 @@ void RasterTile::fetchData(QList<MapData::Path> &paths,
   QList<MapData::Point> &points) const
 {
 	QPoint ttl(_rect.topLeft());
+	QFile file(_data->fileName());
+
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
+		return;
 
 	QRectF pathRect(QPointF(ttl.x() - PATHS_EXTENT, ttl.y() - PATHS_EXTENT),
 	  QPointF(ttl.x() + _rect.width() + PATHS_EXTENT, ttl.y() + _rect.height()
@@ -419,15 +423,15 @@ void RasterTile::fetchData(QList<MapData::Path> &paths,
 	  _transform.img2proj(pathRect.bottomRight()));
 	RectD searchRectD(_transform.img2proj(searchRect.topLeft()),
 	  _transform.img2proj(searchRect.bottomRight()));
-	_data->paths(searchRectD.toRectC(_proj, 20), pathRectD.toRectC(_proj, 20),
-	  _zoom, &paths);
+	_data->paths(file, searchRectD.toRectC(_proj, 20),
+	  pathRectD.toRectC(_proj, 20), _zoom, &paths);
 
 	QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT, ttl.y() - TEXT_EXTENT),
 	  QPointF(ttl.x() + _rect.width() + TEXT_EXTENT, ttl.y() + _rect.height()
 	  + TEXT_EXTENT));
 	RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
 	  _transform.img2proj(pointRect.bottomRight()));
-	_data->points(pointRectD.toRectC(_proj, 20), _zoom, &points);
+	_data->points(file, pointRectD.toRectC(_proj, 20), _zoom, &points);
 }
 
 MatrixD RasterTile::elevation(int extend) const
