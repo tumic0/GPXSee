@@ -32,12 +32,13 @@ public:
 
 	void polys(QFile *file, const RectC &rect, const Zoom &zoom,
 	  QList<MapData::Poly> *polygons, QList<MapData::Poly> *lines,
-	  MapData::PolyCache *cache, QMutex *lock);
+	  MapData::PolyCache *cache, QMutex *cacheLock);
 	void points(QFile *file, const RectC &rect, const Zoom &zoom,
-	  QList<MapData::Point> *points, MapData::PointCache *cache, QMutex *lock);
+	  QList<MapData::Point> *points, MapData::PointCache *cache,
+	  QMutex *cacheLock);
 	void elevations(QFile *file, const RectC &rect, const Zoom &zoom,
 	  QList<MapData::Elevation> *elevations, MapData::ElevationCache *cache,
-	  QMutex *lock);
+	  QMutex *cacheLock);
 
 	static bool isTileFile(SubFile::Type type)
 	{
@@ -92,6 +93,7 @@ private:
 	SubFile *_gmp;
 
 	int _loaded, _demLoaded;
+	QMutex _lock, _demLock;
 };
 
 }
