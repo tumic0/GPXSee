@@ -961,7 +961,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1978"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
-        <translation>Tyhjennetäänkö &quot;% 1&quot; ruutuvälimuisti?</translation>
+        <translation>Tyhjennetäänkö &quot;%1&quot; ruutuvälimuisti?</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="2001"/>
