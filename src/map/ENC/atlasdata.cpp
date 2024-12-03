@@ -39,34 +39,26 @@ bool AtlasData::polyCb(MapEntry *map, void *context)
 {
 	PolyCTX *ctx = (PolyCTX*)context;
 
-start:
+	map->lock.lock();
+
 	ctx->cacheLock.lock();
-
 	MapData *cached = ctx->cache.object(map->path);
-
 	if (!cached) {
 		ctx->cacheLock.unlock();
 
-		if (map->lock.tryLock()) {
-			MapData *data = new MapData(map->path);
-			data->polygons(ctx->rect, ctx->polygons);
-			data->lines(ctx->rect, ctx->lines);
+		MapData *data = new MapData(map->path);
+		data->polygons(ctx->rect, ctx->polygons);
+		data->lines(ctx->rect, ctx->lines);
 
-			ctx->cacheLock.lock();
-			ctx->cache.insert(map->path, data);
-
-			map->lock.unlock();
-		} else {
-			map->lock.lock();
-			map->lock.unlock();
-			goto start;
-		}
+		ctx->cacheLock.lock();
+		ctx->cache.insert(map->path, data);
 	} else {
 		cached->polygons(ctx->rect, ctx->polygons);
 		cached->lines(ctx->rect, ctx->lines);
 	}
 
 	ctx->cacheLock.unlock();
+	map->lock.unlock();
 
 	return true;
 }
