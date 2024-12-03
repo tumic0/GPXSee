@@ -587,7 +587,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="487"/>
         <source>Show local DEM tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Näytä paikalliset DEM-laatat</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="490"/>
@@ -699,7 +699,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="695"/>
         <source>Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Kerrokset</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="721"/>
@@ -850,12 +850,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1998"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM-laattojen latausraja ylitetty. Jos todella tarvitset tietoja niin suurelta alueelta, lataa tiedostot manuaalisesti.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="2014"/>
         <source>Could not download all required DEM files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaikkia vaadittuja DEM-tiedostoja ei voitu ladata.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="2048"/>
@@ -898,12 +898,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="476"/>
         <source>Download data DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Lataa data-DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="482"/>
         <source>Download map DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Lataa kartta-DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="762"/>
@@ -961,7 +961,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1978"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tyhjennetäänkö &quot;% 1&quot; ruutuvälimuisti?</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="2001"/>
