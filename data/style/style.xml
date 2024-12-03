@@ -173,8 +173,11 @@
     </rule>
     <rule e="way" closed="yes" k="amenity" v="parking" zoom-min="10">
         <area fill="#ffffff" stroke="#d5cdc0" stroke-width="0.1"/>
-        <rule e="way" k="*" v="*" zoom-min="17">
+        <rule e="way" k="parking" v="~|surface|street_side|lane" zoom-min="17">
             <symbol id="parking" src=":/POI/parking-11.svg" symbol-width="11"/>
+        </rule>
+        <rule e="way" k="parking" v="underground|multi-storey" zoom-min="17">
+            <symbol id="garage" src=":/POI/parking-garage-11.svg" symbol-width="11"/>
         </rule>
     </rule>
     <rule e="way" closed="yes" k="highway" v="pedestrian" zoom-min="10">

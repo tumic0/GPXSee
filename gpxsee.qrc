@@ -88,6 +88,7 @@
 		<file alias="observation-tower.svg">icons/map/POI/observation-tower.svg</file>
 		<file alias="park-11.svg">icons/map/POI/park-11.svg</file>
 		<file alias="parking-11.svg">icons/map/POI/parking-11.svg</file>
+		<file alias="parking-garage-11.svg">icons/map/POI/parking-garage-11.svg</file>
 		<file alias="pharmacy-11.svg">icons/map/POI/pharmacy-11.svg</file>
 		<file alias="picnic-site-11.svg">icons/map/POI/picnic-site-11.svg</file>
 		<file alias="place-of-worship-11.svg">icons/map/POI/place-of-worship-11.svg</file>
