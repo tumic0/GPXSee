@@ -187,8 +187,11 @@
         <line stroke="#c9d3a5" stroke-width="0.3"/>
         <line stroke="#e3edc6" stroke-width="0.2"/>
     </rule>
-    <rule e="way" closed="yes" k="leisure" v="swimming_pool" zoom-min="10">
+    <rule e="way" closed="yes" k="leisure" v="swimming_pool" zoom-min="12">
         <area fill="#9fc4e1" stroke="#4398d9" stroke-width="1" scale="none"/>
+    </rule>
+    <rule e="way" closed="yes" k="amenity" v="fountain" zoom-min="12">
+        <area fill="#9fc4e1"/>
     </rule>
 
     <!-- Area overlays -->
@@ -1089,13 +1092,13 @@
     </rule>
 
     <rule e="any" k="military" v="bunker|bunker_disused" zoom-min="17">
-        <symbol id="bunker" src=":/symbols/bunker.svg" symbol-width="11" symbol-height="9" priority="-5"/>
+        <symbol id="bunker" src=":/symbols/bunker.svg" symbol-width="11" symbol-height="9"/>
         <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="bunker"/>
         </rule>
     </rule>
     <rule e="any" k="historic" v="wayside_cross|wayside_shrine" zoom-min="17">
-        <symbol id="wayside-cross" src=":/symbols/cross.svg" symbol-width="6" symbol-height="8" priority="-5"/>
+        <symbol id="wayside-cross" src=":/symbols/cross.svg" symbol-width="6" symbol-height="8"/>
         <rule e="any" k="*" v="*" zoom-min="18">
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="wayside-cross"/>
         </rule>
