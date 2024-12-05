@@ -21,7 +21,7 @@
     </rule>
 
     <rule e="way" closed="yes" k="natural" v="rock|stone|bare_rock|bedrock" zoom-min="14">
-        <area fill="#60000000"/>
+        <area fill="#96968f"/>
     </rule>
     <rule e="way" closed="yes" k="natural" v="glacier" zoom-min="10">
         <area fill="#ddf1fd"/>
