@@ -221,7 +221,6 @@ bool MapData::readTags(SubFile &subfile, int count,
 
 bool MapData::readSubFiles(QFile &file)
 {
-	/* both _pointFile and _pathFile can be used here */
 	QDataStream stream(&file);
 
 	for (int i = 0; i < _subFiles.size(); i++) {
