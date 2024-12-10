@@ -146,7 +146,7 @@ int DEMFile::level(const Zoom &zoom) const
 }
 
 MapData::Elevation *DEMFile::elevations(Handle &hdl, int level,
-  const DEMTile *tile)
+  const DEMTile *tile) const
 {
 	const Level &l = _levels.at(level);
 	MapData::Elevation *ele = new MapData::Elevation();

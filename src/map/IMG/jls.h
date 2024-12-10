@@ -12,7 +12,8 @@ class JLS
 public:
 	JLS(quint16 maxval, quint16 near);
 
-	bool decode(const SubFile *file, SubFile::Handle &hdl, Matrix<qint16> &img);
+	bool decode(const SubFile *file, SubFile::Handle &hdl,
+	  Matrix<qint16> &img) const;
 
 private:
 	class BitStream
@@ -56,28 +57,53 @@ private:
 		qint8 _shift;
 	};
 
-	bool readLine(BitStream &bs);
-	bool processRunMode(BitStream &bs, quint16 col, quint16 &samples);
-	bool decodeError(BitStream &bs, quint8 limit, quint8 k, uint &MErrval);
+	struct Context
+	{
+		Context(quint16 width, quint16 range)
+		{
+			w = width;
+			data = QVector<quint16>((w + 3) * 2);
+			last = data.data();
+			current = data.data() + (w + 3);
+
+			runIndex = 0;
+			rk = 0;
+			rg = 1;
+			lrk = 0;
+
+			quint16 A = qMax(2, (range + 32) / 64);
+			for (int i = 0; i < 4; i++) {
+				a[i] = A;
+				b[i] = 0;
+				n[i] = 1;
+			}
+		}
+
+		quint8 runIndex;
+		quint8 rk;
+		quint16 rg;
+		quint16 n[4];
+		quint16 a[4];
+		qint16 b[4];
+		quint8 lrk;
+
+		quint16 w;
+		QVector<quint16> data;
+		quint16 *current;
+		quint16 *last;
+	};
+
+	bool readLine(BitStream &bs, Context &ctx) const;
+	bool processRunMode(BitStream &bs, Context &ctx, quint16 col,
+	  quint16 &samples) const;
+	bool decodeError(BitStream &bs, quint8 limit, quint8 k,
+	  uint &MErrval) const;
 
 	quint16 _maxval;
 	quint16 _near;
 	quint16 _range;
 	quint8 _qbpp;
 	quint8 _limit;
-
-	quint8 _runIndex;
-	quint8 _rk;
-	quint16 _rg;
-	quint16 _n[4];
-	quint16 _a[4];
-	qint16 _b[4];
-	quint8 _lrk;
-
-	quint16 _w;
-	QVector<quint16> _data;
-	quint16 *_current;
-	quint16 *_last;
 };
 
 }

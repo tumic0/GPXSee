@@ -16,7 +16,8 @@ public:
 
 	bool load(Handle &hdl);
 	void clear();
-	MapData::Elevation *elevations(Handle &hdl, int level, const DEMTile *tile);
+	MapData::Elevation *elevations(Handle &hdl, int level,
+	  const DEMTile *tile) const;
 
 	int level(const Zoom &zoom) const;
 	QList<const DEMTile *> tiles(const RectC &rect, int level) const;
@@ -44,7 +45,7 @@ private:
 		QList<DEMTile> tiles;
 	};
 
-	qint16 meters(qint16 val)
+	qint16 meters(qint16 val) const
 	{
 		return (_flags & 1) ? (qint16)qRound(val * 0.3048) : val;
 	}

@@ -32,7 +32,8 @@ JLS::JLS(quint16 maxval, quint16 near)
 	_limit = LIMIT - _qbpp - 1;
 }
 
-bool JLS::processRunMode(BitStream &bs, quint16 col, quint16 &samples)
+bool JLS::processRunMode(BitStream &bs, Context &ctx, quint16 col,
+  quint16 &samples) const
 {
 	quint8 z;
 	quint16 cnt = 0;
@@ -42,12 +43,12 @@ bool JLS::processRunMode(BitStream &bs, quint16 col, quint16 &samples)
 			z = Z[(bs.value() >> 0x18) ^ 0xff];
 
 			for (quint8 i = 0; i < z; i++) {
-				cnt = cnt + _rg;
+				cnt = cnt + ctx.rg;
 
-				if (cnt <= col && _runIndex < 31) {
-					_runIndex++;
-					_rk = J[_runIndex];
-					_rg = 1U << _rk;
+				if (cnt <= col && ctx.runIndex < 31) {
+					ctx.runIndex++;
+					ctx.rk = J[ctx.runIndex];
+					ctx.rg = 1U << ctx.rk;
 				}
 
 				if (cnt >= col) {
@@ -65,18 +66,18 @@ bool JLS::processRunMode(BitStream &bs, quint16 col, quint16 &samples)
 			if (!bs.read(z + 1))
 				return false;
 
-			if (_rk) {
-				samples = (bs.value() >> (32 - _rk)) + cnt;
-				if (!bs.read(_rk))
+			if (ctx.rk) {
+				samples = (bs.value() >> (32 - ctx.rk)) + cnt;
+				if (!bs.read(ctx.rk))
 					return false;
 			} else
 				samples = cnt;
 
-			_lrk = _rk + 1;
-			if (_runIndex != 0) {
-				_runIndex--;
-				_rk = J[_runIndex];
-				_rg = 1U << _rk;
+			ctx.lrk = ctx.rk + 1;
+			if (ctx.runIndex != 0) {
+				ctx.runIndex--;
+				ctx.rk = J[ctx.runIndex];
+				ctx.rg = 1U << ctx.rk;
 			}
 
 			return true;
@@ -87,7 +88,8 @@ bool JLS::processRunMode(BitStream &bs, quint16 col, quint16 &samples)
 	}
 }
 
-bool JLS::decodeError(BitStream &bs, quint8 limit, quint8 k, uint &MErrval)
+bool JLS::decodeError(BitStream &bs, quint8 limit, quint8 k,
+  uint &MErrval) const
 {
 	quint8 cnt = 0;
 	MErrval = 0;
@@ -122,19 +124,19 @@ bool JLS::decodeError(BitStream &bs, quint8 limit, quint8 k, uint &MErrval)
 	return true;
 }
 
-bool JLS::readLine(BitStream &bs)
+bool JLS::readLine(BitStream &bs, Context &ctx) const
 {
 	quint8 ictx, rctx;
 	quint8 k;
 	uint MErrval;
 	int Errval;
 	int Rx;
-	int Ra = _last[1];
-	int Rb = _last[1];
-	int Rc = _last[0];
+	int Ra = ctx.last[1];
+	int Rb = ctx.last[1];
+	int Rc = ctx.last[0];
 	uint col = 1;
 
-	*_current = _last[1];
+	*ctx.current = ctx.last[1];
 
 	do {
 		if (abs(Rb - Ra) > _near) {
@@ -144,7 +146,7 @@ bool JLS::readLine(BitStream &bs)
 			else if (Px > _maxval)
 				Px = _maxval;
 
-			for (k = 0; _n[1] << k < _a[1]; k++)
+			for (k = 0; ctx.n[1] << k < ctx.a[1]; k++)
 				;
 
 			if (!decodeError(bs, _limit, k, MErrval))
@@ -158,7 +160,7 @@ bool JLS::readLine(BitStream &bs)
 				meh = MErrval >> 1;
 				mes = meh;
 			}
-			if ((_near == 0) && (k == 0) && (_b[1] * 2 <= -_n[1])) {
+			if ((_near == 0) && (k == 0) && (ctx.b[1] * 2 <= -ctx.n[1])) {
 				meh = mes + 1;
 				mes = -mes - 1;
 				if (MErrval & 1)
@@ -179,67 +181,67 @@ bool JLS::readLine(BitStream &bs)
 			if (Rx > _maxval)
 				Rx = _maxval;
 
-			_a[1] = _a[1] + meh;
-			_b[1] = _b[1] + mes;
-			if (_n[1] == 0x40) {
-				_a[1] = _a[1] >> 1;
-				if (_b[1] >= 0)
-					_b[1] = _b[1] >> 1;
+			ctx.a[1] = ctx.a[1] + meh;
+			ctx.b[1] = ctx.b[1] + mes;
+			if (ctx.n[1] == 0x40) {
+				ctx.a[1] = ctx.a[1] >> 1;
+				if (ctx.b[1] >= 0)
+					ctx.b[1] = ctx.b[1] >> 1;
 				else
-					_b[1] = -((1 - _b[1]) >> 1);
-				_n[1] = 0x21;
+					ctx.b[1] = -((1 - ctx.b[1]) >> 1);
+				ctx.n[1] = 0x21;
 			} else
-				_n[1] = _n[1] + 1;
+				ctx.n[1] = ctx.n[1] + 1;
 
-			if (_b[1] <= -_n[1]) {
-				_b[1] = _b[1] + _n[1];
-				if (_b[1] <= -_n[1])
-					_b[1] = 1 - _n[1];
-			} else if (_b[1] > 0) {
-				_b[1] = _b[1] - _n[1];
-				if (_b[1] > 0)
-					_b[1] = 0;
+			if (ctx.b[1] <= -ctx.n[1]) {
+				ctx.b[1] = ctx.b[1] + ctx.n[1];
+				if (ctx.b[1] <= -ctx.n[1])
+					ctx.b[1] = 1 - ctx.n[1];
+			} else if (ctx.b[1] > 0) {
+				ctx.b[1] = ctx.b[1] - ctx.n[1];
+				if (ctx.b[1] > 0)
+					ctx.b[1] = 0;
 			}
 
 			Rc = Rb;
-			Rb = _last[col + 1];
+			Rb = ctx.last[col + 1];
 		} else {
 			quint16 samples;
-			if (!processRunMode(bs, _w - col + 1, samples))
+			if (!processRunMode(bs, ctx, ctx.w - col + 1, samples))
 				return false;
 
 			if (samples != 0) {
 				for (int i = 0; i < samples; i++) {
-					if (col > _w)
+					if (col > ctx.w)
 						return false;
-					_current[col] = Ra;
+					ctx.current[col] = Ra;
 					col++;
 				}
 
-				if (col > _w)
+				if (col > ctx.w)
 					break;
 
-				Rc = _last[col];
-				Rb = _last[col + 1];
+				Rc = ctx.last[col];
+				Rb = ctx.last[col + 1];
 			} else {
 				Rc = Rb;
-				Rb = _last[col + 1];
+				Rb = ctx.last[col + 1];
 			}
 
 			rctx = (abs(Rc - Ra) <= _near);
-			quint16 TEMP = _a[rctx + 2];
+			quint16 TEMP = ctx.a[rctx + 2];
 			if (rctx)
-				TEMP += _n[rctx + 2] >> 1;
+				TEMP += ctx.n[rctx + 2] >> 1;
 			ictx = rctx | 2;
 
-			for (k = 0; _n[rctx + 2] << k < TEMP; k++)
+			for (k = 0; ctx.n[rctx + 2] << k < TEMP; k++)
 				;
 
-			if (!decodeError(bs, _limit - _lrk, k, MErrval))
+			if (!decodeError(bs, _limit - ctx.lrk, k, MErrval))
 				return false;
 
 			quint16 s = ((k == 0) && (rctx || MErrval)) ?
-			  (_b[ictx] * 2 < _n[ictx]) : 0;
+			  (ctx.b[ictx] * 2 < ctx.n[ictx]) : 0;
 
 			Errval = MErrval + rctx + s;
 			int evh;
@@ -249,7 +251,7 @@ bool JLS::readLine(BitStream &bs)
 			} else {
 				Errval = s - ((Errval + 1) >> 1);
 				evh = -Errval;
-				_b[ictx] = _b[ictx] + 1;
+				ctx.b[ictx] = ctx.b[ictx] + 1;
 			}
 
 			Errval *= (_near * 2 + 1);
@@ -274,59 +276,45 @@ bool JLS::readLine(BitStream &bs)
 			if (Rx > _maxval)
 				Rx = _maxval;
 
-			_a[ictx] = _a[ictx] + (evh - rctx);
-			if (_n[ictx] == 0x40) {
-				_a[ictx] = _a[ictx] >> 1;
-				if (_b[ictx] >= 0)
-					_b[ictx] = _b[ictx] >> 1;
+			ctx.a[ictx] = ctx.a[ictx] + (evh - rctx);
+			if (ctx.n[ictx] == 0x40) {
+				ctx.a[ictx] = ctx.a[ictx] >> 1;
+				if (ctx.b[ictx] >= 0)
+					ctx.b[ictx] = ctx.b[ictx] >> 1;
 				else
-					_b[ictx] = -((1 - _b[ictx]) >> 1);
-				_n[ictx] = 0x21;
+					ctx.b[ictx] = -((1 - ctx.b[ictx]) >> 1);
+				ctx.n[ictx] = 0x21;
 			} else
-				_n[ictx] = _n[ictx] + 1;
+				ctx.n[ictx] = ctx.n[ictx] + 1;
 		}
 
-		_current[col] = Rx;
+		ctx.current[col] = Rx;
 
 		Ra = Rx;
 		col = col + 1;
-	} while (col <= _w);
+	} while (col <= ctx.w);
 
 	return true;
 }
 
-bool JLS::decode(const SubFile *file, SubFile::Handle &hdl, Matrix<qint16> &img)
+bool JLS::decode(const SubFile *file, SubFile::Handle &hdl,
+  Matrix<qint16> &img) const
 {
+	Context ctx(img.w(), _range);
 	BitStream bs(file, hdl);
+
 	if (!bs.init())
 		return false;
 
-	_w = img.w();
-	_data = QVector<quint16>((_w + 3) * 2);
-	_last = _data.data();
-	_current = _data.data() + (_w + 3);
-
-	_runIndex = 0;
-	_rk = 0;
-	_rg = 1;
-	_lrk = 0;
-
-	quint16 A = qMax(2, (_range + 32) / 64);
-	for (int i = 0; i < 4; i++) {
-		_a[i] = A;
-		_b[i] = 0;
-		_n[i] = 1;
-	}
-
 	for (int i = 0; i < img.h(); i++) {
-		if (!readLine(bs))
+		if (!readLine(bs, ctx))
 			return false;
 
-		memcpy(img.row(i), _current + 1, _w * sizeof(quint16));
+		memcpy(img.row(i), ctx.current + 1, img.w() * sizeof(quint16));
 
-		quint16 *tmp = _last;
-		_last = _current;
-		_current = tmp;
+		quint16 *tmp = ctx.last;
+		ctx.last = ctx.current;
+		ctx.current = tmp;
 	}
 
 	return true;
